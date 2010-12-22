@@ -4782,27 +4782,6 @@ AC_SUBST(CURL_CFLAGS)
 AC_SUBST(CURL_LIBS)
 
 dnl ===================================================================
-dnl Check for system mdds
-dnl ===================================================================
-AC_MSG_CHECKING([which mdds to use])
-if test -n "$with_system_mdds" -o -n "$with_system_headers" && \
-    test "$with_system_mdds" != "no"; then
-    AC_MSG_RESULT([external])
-    SYSTEM_MDDS=YES
-    AC_LANG_PUSH([C++])
-    AC_CHECK_HEADER(mdds/flat_segment_tree.hpp, [],
-        [AC_MSG_ERROR(mdds/flat_segment_tree.hpp not found. install mdds)], [])
-    AC_CHECK_HEADER(mdds/mixed_type_matrix.hpp, [],
-        [AC_MSG_ERROR(mdds/mixed_type_matrix.hpp not found. install mdds >= 0.4.0)], [])
-    AC_LANG_POP([C++])
-else
-   AC_MSG_RESULT([internal])
-   BUILD_TYPE="$BUILD_TYPE MDDS"
-   SYSTEM_MDDS=NO
-fi
-AC_SUBST(SYSTEM_MDDS)
-
-dnl ===================================================================
 dnl Check for system boost
 dnl ===================================================================
 AC_MSG_CHECKING([which boost to use])
@@ -4817,6 +4796,8 @@ if test -n "$with_system_boost" -o -n "$with_system_headers" && \
        [AC_MSG_ERROR(boost/spirit/include/classic_core.hpp not found. install boost >= 1.36)], [])
    AC_CHECK_HEADER(boost/function.hpp, [],
        [AC_MSG_ERROR(boost/function.hpp not found. install boost)], [])
+   AC_CHECK_HEADER([boost/unordered_map.hpp], [HAVE_BOOST_UNORDERED_MAP=TRUE],
+                   [AC_MSG_WARN([boost/unordered_map.hpp not found])], [])
 
    save_CXXFLAGS=$CXXFLAGS
    CXXFLAGS="$CXXFLAGS -fno-exceptions"
@@ -4836,8 +4817,50 @@ else
    AC_MSG_RESULT([internal])
    BUILD_TYPE="$BUILD_TYPE BOOST"
    SYSTEM_BOOST=NO
+   HAVE_BOOST_UNORDERED_MAP=TRUE
 fi
+AC_SUBST([HAVE_BOOST_UNORDERED_MAP])
 AC_SUBST(SYSTEM_BOOST)
+
+dnl ===================================================================
+dnl Determine which hash container mdds shall use
+dnl ===================================================================
+AC_MSG_CHECKING([which hash container mdds shall use])
+if test "x$HAVE_CXX0X" = "xTRUE"; then
+    MDDS_CPPFLAGS="-std=c++0x"
+    AC_MSG_RESULT([std::unordered_map])
+elif test "x$HAVE_BOOST_UNORDERED_MAP" = "xTRUE"; then
+    MDDS_CPPFLAGS="-DMDDS_HASH_CONTAINER_BOOST"
+    AC_MSG_RESULT([boost::unordered_map])
+else
+    MDDS_CPPFLAGS="-DMDDS_HASH_CONTAINER_STLPORT"
+    AC_MSG_RESULT([std::hash_map])
+fi
+AC_SUBST([MDDS_CPPFLAGS])
+
+dnl ===================================================================
+dnl Check for system mdds
+dnl ===================================================================
+AC_MSG_CHECKING([which mdds to use])
+if test -n "$with_system_mdds" -o -n "$with_system_headers" && \
+    test "$with_system_mdds" != "no"; then
+    AC_MSG_RESULT([external])
+    SYSTEM_MDDS=YES
+    AC_LANG_PUSH([C++])
+    save_CPPFLAGS="$CPPFLAGS"
+    CPPFLAGS="$CPPFLAGS $MDDS_CPPFLAGS"
+    AC_CHECK_HEADER(mdds/flat_segment_tree.hpp, [],
+        [AC_MSG_ERROR(mdds/flat_segment_tree.hpp not found. install mdds)], [])
+    AC_CHECK_HEADER(mdds/mixed_type_matrix.hpp, [],
+        [AC_MSG_ERROR(mdds/mixed_type_matrix.hpp not found. install mdds >= 0.4.0)], [])
+    CPPFLAGS="$save_CPPFLAGS"
+    AC_LANG_POP([C++])
+else
+   AC_MSG_RESULT([internal])
+   BUILD_TYPE="$BUILD_TYPE MDDS"
+   SYSTEM_MDDS=NO
+fi
+AC_SUBST(SYSTEM_MDDS)
 
 dnl ===================================================================
 dnl Check for system vigra
