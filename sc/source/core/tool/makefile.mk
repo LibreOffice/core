@@ -41,6 +41,8 @@ AUTOSEG=true
 .INCLUDE :  settings.mk
 .INCLUDE :  $(PRJ)$/util$/makefile.pmk
 
+CDEFS += $(MDDS_CPPFLAGS)
+
 # --- Files --------------------------------------------------------
 
 SLOFILES =  \
