@@ -1879,7 +1879,8 @@ private:
 // ----------------------------------------------------------------------------
 
 ScHTMLTableMap::ScHTMLTableMap( ScHTMLTable& rParentTable ) :
-    mrParentTable( rParentTable )
+    mrParentTable(rParentTable),
+    mpCurrTable(NULL)
 {
 }
 
