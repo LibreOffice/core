@@ -4298,6 +4298,26 @@ void ScGridWindow::PasteSelection( const Point& rPosPixel )
     SCsROW  nPosY;
     pViewData->GetPosFromPixel( rPosPixel.X(), rPosPixel.Y(), eWhich, nPosX, nPosY );
 
+    // If the mouse down was inside a visible note window, ignore it and
+    // leave it up to the ScPostIt to handle it
+    SdrView* pDrawView = pViewData->GetViewShell()->GetSdrView();
+    if (pDrawView)
+    {
+        ULONG nCount = pDrawView->GetMarkedObjectCount();
+        for (ULONG i = 0; i < nCount; ++i)
+        {
+            SdrObject* pObj = pDrawView->GetMarkedObjectByIndex(i);
+            if (pObj && ScDrawLayer::IsNoteCaption(pObj))
+            {
+                if (pObj->GetLogicRect().IsInside(aLogicPos))
+                {
+                    // Inside an active note object.  Bail out.
+                    return;
+                }
+            }
+        }
+    }
+
     ScSelectionTransferObj* pOwnSelection = SC_MOD()->GetSelectionTransfer();
     if ( pOwnSelection )
     {
