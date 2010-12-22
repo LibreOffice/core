@@ -38,7 +38,6 @@
 #include "global.hxx"
 #include "refdata.hxx"
 #include "formula/token.hxx"
-#include "formula/intruref.hxx"
 #include "formula/grammar.hxx"
 #include <unotools/charclass.hxx>
 #include <rtl/ustrbuf.hxx>
@@ -47,8 +46,7 @@
 
 #include <formula/FormulaCompiler.hxx>
 
-
-#include <boost/shared_ptr.hpp>
+#include <boost/intrusive_ptr.hpp>
 
 #ifndef INCLUDED_HASH_MAP
 #include <hash_map>
@@ -111,7 +109,7 @@ class ScTokenArray;
 #define SC_TOKEN_FIX_MEMBERS    \
     OpCode   eOp;               \
     formula::StackVar eType;    \
-    USHORT   nRefCnt;           \
+    mutable USHORT   nRefCnt;   \
     BOOL     bRaw;
 
 struct ScDoubleRawToken
@@ -203,8 +201,17 @@ public:
         { return GetStrLenBytes( GetStrLen( pStr ) ); }
 };
 
+inline void intrusive_ptr_add_ref(ScRawToken* p)
+{
+    p->IncRef();
+}
 
-typedef formula::SimpleIntrusiveReference< struct ScRawToken > ScRawTokenRef;
+inline void intrusive_ptr_release(ScRawToken* p)
+{
+    p->DecRef();
+}
+
+typedef ::boost::intrusive_ptr<ScRawToken> ScRawTokenRef;
 
 class SC_DLLPUBLIC ScCompiler : public formula::FormulaCompiler
 {

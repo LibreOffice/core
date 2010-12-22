@@ -36,7 +36,6 @@
 #include "formula/opcode.hxx"
 #include "refdata.hxx"
 #include "scmatrix.hxx"
-#include "formula/intruref.hxx"
 #include <tools/mempool.hxx>
 #include "scdllapi.h"
 #include "formula/IFunctionDescription.hxx"
