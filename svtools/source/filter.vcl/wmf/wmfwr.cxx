@@ -1584,10 +1584,11 @@ void WMFWriter::WriteRecords( const GDIMetaFile & rMTF )
                     const MetaFontAction* pA = (const MetaFontAction*) pMA;
                     aSrcFont = pA->GetFont();
 
-                    if ( aSrcFont.GetCharSet() == RTL_TEXTENCODING_DONTKNOW )
-                        aSrcFont.SetCharSet( GetExtendedTextEncoding( gsl_getSystemTextEncoding() ) );
-                    if ( aSrcFont.GetCharSet() == RTL_TEXTENCODING_UNICODE )
+                    if ( (aSrcFont.GetCharSet() == RTL_TEXTENCODING_DONTKNOW)
+                         || (aSrcFont.GetCharSet() == RTL_TEXTENCODING_UNICODE) )
+                    {
                         aSrcFont.SetCharSet( RTL_TEXTENCODING_MS_1252 );
+                    }
                     eSrcTextAlign = aSrcFont.GetAlign();
                     aSrcTextColor = aSrcFont.GetColor();
                     aSrcFont.SetAlign( ALIGN_BASELINE );
@@ -1921,7 +1922,7 @@ BOOL WMFWriter::WriteWMF( const GDIMetaFile& rMTF, SvStream& rTargetStream,
     bDstIsClipping = bSrcIsClipping = FALSE;
 
     Font aFont;
-    aFont.SetCharSet( GetExtendedTextEncoding( gsl_getSystemTextEncoding() ) );
+    aFont.SetCharSet( GetExtendedTextEncoding( RTL_TEXTENCODING_MS_1252 ) );
     aFont.SetColor( Color( COL_WHITE ) );
     aFont.SetAlign( ALIGN_BASELINE );
     aDstFont = aSrcFont = aFont;
