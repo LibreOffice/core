@@ -68,6 +68,12 @@ ANT_OPT=on
 .ENDIF
 .ENDIF
 
+.IF "$(VERBOSE)" == "TRUE"
+    ANT_VERBOSE=-v
+.ELSE
+    ANT_VERBOSE=-q
+.ENDIF
+
 .IF "$(JDK)"=="gcj"
 JAVA_HOME=
 .EXPORT : JAVA_HOME
@@ -78,7 +84,8 @@ ANT_FLAGS!:=$(ANT_COMPILER_FLAGS) -Dprj=$(PRJ) -Dprjname=$(PRJNAME) $(ANT_JAVA_V
  -Dout=$(OUT) -Dinpath=$(INPATH) -Dproext="$(PROEXT)" -Dsolar.bin=$(SOLARBINDIR) \
  -Dsolar.jar=$(SOLARBINDIR) -Dsolar.doc=$(SOLARDOCDIR) -Dcommon.jar=$(SOLARCOMMONBINDIR) \
  -Dcommon.doc=$(SOLARCOMMONDOCDIR) -Dsolar.sourceversion=$(SOURCEVERSION) \
- -Dsolar.lastminor=$(LAST_MINOR) -Dsolar.build=$(BUILD) -f $(ANT_BUILDFILE) $(ANT_FLAGS) -emacs
+ -Dsolar.lastminor=$(LAST_MINOR) -Dsolar.build=$(BUILD) -f $(ANT_BUILDFILE) $(ANT_FLAGS) \
+ -emacs $(ANT_VERBOSE)
 .ELSE # No java
 ANT=
 ANT_FLAGS=
