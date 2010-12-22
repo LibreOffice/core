@@ -87,8 +87,6 @@ typedef sal_uInt32          UINT32; /* typedef unsigned int    UINT32; previousl
 
 #define DELETEZ( p )    ( delete p,p = 0 )
 
-#define __READONLY_DATA         const
-
 #ifdef WNT
 #if defined (_MSC_VER) && ( _MSC_VER < 1200 )
 #define __LOADONCALLAPI _cdecl
