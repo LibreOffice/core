@@ -29,7 +29,6 @@ mkdir: %_DEST%\inc%_EXT%\formula
 ..\inc\formula\token.hxx %_DEST%\inc%_EXT%\formula\token.hxx
 ..\inc\formula\tokenarray.hxx %_DEST%\inc%_EXT%\formula\tokenarray.hxx
 ..\inc\formula\errorcodes.hxx %_DEST%\inc%_EXT%\formula\errorcodes.hxx
-..\inc\formula\intruref.hxx %_DEST%\inc%_EXT%\formula\intruref.hxx
 
 
 
