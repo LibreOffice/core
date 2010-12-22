@@ -594,14 +594,14 @@ void ScDPLayoutDlg::MoveField( ScDPFieldType eFromType, size_t nFromIndex, ScDPF
         ScDPFuncDataVec*    rmArr2   = NULL;
         GetOtherDataArrays(eToType, rmArr1, rmArr2);
 
-        size_t nAt = 0;
         bool bDataArr = eToType == TYPE_DATA;
 
         if ( fromArr && toArr && fromWnd && toWnd )
         {
             ScDPFuncData fData( *((*fromArr)[nFromIndex]) );
-
             bool bAllowed = IsOrientationAllowed( fData.mnCol, eToType );
+
+            size_t nAt = 0;
             if ( bAllowed && Contains( fromArr, fData.mnCol, nAt ) )
             {
                 fromWnd->DelField( nAt );
@@ -738,13 +738,13 @@ void ScDPLayoutDlg::MoveFieldToEnd( ScDPFieldType eFromType, size_t nFromIndex, 
         ScDPFuncDataVec*    rmArr2   = NULL;
         GetOtherDataArrays(eToType, rmArr1, rmArr2);
 
-        size_t nAt = 0;
         bool bDataArr = eToType == TYPE_DATA;
 
         if ( fromArr && toArr && fromWnd && toWnd )
         {
             ScDPFuncData fData( *((*fromArr)[nFromIndex]) );
 
+            size_t nAt = 0;
             if ( Contains( fromArr, fData.mnCol, nAt ) )
             {
                 fromWnd->DelField( nAt );
@@ -806,7 +806,6 @@ void ScDPLayoutDlg::MoveFieldToEnd( ScDPFieldType eFromType, size_t nFromIndex, 
         ScDPFieldControlBase* theWnd  = GetFieldWindow(eFromType);
         ScDPFuncDataVec*    theArr   = GetFieldDataArray(eFromType);
         size_t              nAt      = 0;
-        size_t              nToIndex = 0;
         Point               aToPos;
         BOOL                bDataArr = eFromType == TYPE_DATA;
 
@@ -814,6 +813,7 @@ void ScDPLayoutDlg::MoveFieldToEnd( ScDPFieldType eFromType, size_t nFromIndex, 
 
         if ( Contains( theArr, fData.mnCol, nAt ) )
         {
+            size_t nToIndex = 0;
             theWnd->GetExistingIndex( aToPos, nToIndex );
 
             if ( nToIndex != nAt )
