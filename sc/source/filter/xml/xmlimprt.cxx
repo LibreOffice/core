@@ -1894,49 +1894,37 @@ ScXMLImport::~ScXMLImport() throw()
 SvXMLImportContext *ScXMLImport::CreateFontDeclsContext(const USHORT nPrefix, const ::rtl::OUString& rLocalName,
                                                         const uno::Reference<xml::sax::XAttributeList>& xAttrList)
 {
-    SvXMLImportContext *pContext = NULL;
-    if (!pContext)
-    {
-        XMLFontStylesContext *pFSContext(
-            new XMLFontStylesContext( *this, nPrefix,
-            rLocalName, xAttrList,
-            gsl_getSystemTextEncoding() ));
-        SetFontDecls( pFSContext );
-        pContext = pFSContext;
-    }
+    XMLFontStylesContext *pFSContext = new XMLFontStylesContext(
+        *this, nPrefix, rLocalName, xAttrList, gsl_getSystemTextEncoding());
+    SetFontDecls(pFSContext);
+    SvXMLImportContext* pContext = pFSContext;
     return pContext;
 }
 
 SvXMLImportContext *ScXMLImport::CreateStylesContext(const ::rtl::OUString& rLocalName,
                                                      const uno::Reference<xml::sax::XAttributeList>& xAttrList, sal_Bool bIsAutoStyle )
 {
-    SvXMLImportContext *pContext(NULL);
-    if (!pContext)
-    {
-        pContext = new XMLTableStylesContext(*this, XML_NAMESPACE_OFFICE, rLocalName, xAttrList, bIsAutoStyle);
-        if (bIsAutoStyle)
-            //xAutoStyles = pContext;
-            SetAutoStyles((SvXMLStylesContext*)pContext);
-        else
-            //xStyles = pContext;
-            SetStyles((SvXMLStylesContext*)pContext);
-    }
+    SvXMLImportContext* pContext = new XMLTableStylesContext(
+        *this, XML_NAMESPACE_OFFICE, rLocalName, xAttrList, bIsAutoStyle);
+
+    if (bIsAutoStyle)
+        SetAutoStyles((SvXMLStylesContext*)pContext);
+    else
+        SetStyles((SvXMLStylesContext*)pContext);
+
     return pContext;
 }
 
 SvXMLImportContext *ScXMLImport::CreateBodyContext(const ::rtl::OUString& rLocalName,
                                                    const uno::Reference<xml::sax::XAttributeList>& xAttrList)
 {
-    //GetShapeImport()->SetAutoStylesContext((XMLTableStylesContext *)&xAutoStyles);
-    //GetChartImport()->SetAutoStylesContext(GetAutoStyles()/*(XMLTableStylesContext *)&xAutoStyles*/);
-
     return new ScXMLBodyContext(*this, XML_NAMESPACE_OFFICE, rLocalName, xAttrList);
 }
 
 SvXMLImportContext *ScXMLImport::CreateMetaContext(
     const OUString& rLocalName )
 {
-    SvXMLImportContext *pContext(0);
+    SvXMLImportContext* pContext = NULL;
 
     if( !IsStylesOnlyMode() && (getImportFlags() & IMPORT_META))
     {
@@ -1961,7 +1949,7 @@ SvXMLImportContext *ScXMLImport::CreateMetaContext(
 SvXMLImportContext *ScXMLImport::CreateScriptContext(
     const OUString& rLocalName )
 {
-    SvXMLImportContext *pContext(0);
+    SvXMLImportContext* pContext = NULL;
 
     if( !(IsStylesOnlyMode()) )
     {
@@ -2017,10 +2005,7 @@ sal_Int16 ScXMLImport::GetCellType(const OUString& rStrValue) const
 
 XMLShapeImportHelper* ScXMLImport::CreateShapeImport()
 {
-    /*UniReference < XMLPropertySetMapper > xShapeStylesPropertySetMapper = new XMLPropertySetMapper((XMLPropertyMapEntry*)aXMLScShapeStylesProperties, xScPropHdlFactory);
-    SvXMLImportPropertyMapper *pShapeStylesImportPropertySetMapper = new SvXMLImportPropertyMapper( xShapeStylesPropertySetMapper );*/
-
-    return new XMLTableShapeImportHelper( *this/*, pShapeStylesImportPropertySetMapper*/ );
+    return new XMLTableShapeImportHelper(*this);
 }
 
 sal_Bool ScXMLImport::GetValidation(const rtl::OUString& sName, ScMyImportValidation& aValidation)
