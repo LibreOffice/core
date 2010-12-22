@@ -82,7 +82,7 @@ PropertyChgHelper::PropertyChgHelper(
     OUString *pName = aPropNames.getArray();
     for (INT32 i = 0;  i < nCHCount;  ++i)
     {
-        pName[i] = A2OU( aCH[i] );
+        pName[i] = ::rtl::OUString::createFromAscii( aCH[i] );
     }
 
     SetDefaultValues();
@@ -119,7 +119,8 @@ void PropertyChgHelper::AddPropNames( const char *pNewNames[], INT32 nCount )
         OUString *pName = GetPropNames().getArray();
         for (INT32 i = 0;  i < nCount;  ++i)
         {
-            pName[ nLen + i ] = A2OU( pNewNames[ i ] );
+            pName[ nLen + i ] = ::rtl::OUString::createFromAscii( pNewNames[ i ] );
+
         }
     }
 }

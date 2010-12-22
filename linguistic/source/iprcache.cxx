@@ -100,7 +100,7 @@ static void lcl_AddAsPropertyChangeListener(
         for (int i = 0;  i < NUM_FLUSH_PROPS;  ++i)
         {
             rPropSet->addPropertyChangeListener(
-                    A2OU(aFlushProperties[i].pPropName), xListener );
+                    ::rtl::OUString::createFromAscii(aFlushProperties[i].pPropName), xListener );
         }
     }
 }
@@ -115,7 +115,7 @@ static void lcl_RemoveAsPropertyChangeListener(
         for (int i = 0;  i < NUM_FLUSH_PROPS;  ++i)
         {
             rPropSet->removePropertyChangeListener(
-                    A2OU(aFlushProperties[i].pPropName), xListener );
+                    ::rtl::OUString::createFromAscii(aFlushProperties[i].pPropName), xListener );
         }
     }
 }

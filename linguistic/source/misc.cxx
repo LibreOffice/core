@@ -892,7 +892,7 @@ uno::Reference< XInterface > GetOneInstanceService( const char *pServiceName )
         {
             try
             {
-                xRef = xMgr->createInstance( A2OU( pServiceName ) );
+                xRef = xMgr->createInstance( ::rtl::OUString::createFromAscii( pServiceName ) );
             }
             catch (uno::Exception &)
             {

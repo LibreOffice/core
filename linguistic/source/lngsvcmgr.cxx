@@ -1653,7 +1653,7 @@ BOOL LngSvcMgr::SaveCfgSvcs( const String &rServiceName )
         {
             DBG_ASSERT( 0, "node name missing" );
         }
-        OUString aNodeName( A2OU(pNodeName) );
+        OUString aNodeName( ::rtl::OUString::createFromAscii(pNodeName) );
 
         for (INT32 i = 0;  i < nLen;  ++i)
         {

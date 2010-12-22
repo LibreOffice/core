@@ -77,7 +77,7 @@ namespace linguistic
 {
 
 // ascii to OUString conversion
-#define A2OU(x) ::rtl::OUString::createFromAscii( x )
+#define A2OU(x) ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( x ))
 
 /// Flags to be used with the multi-path related functions
 /// @see GetDictionaryPaths, GetLinguisticPaths
