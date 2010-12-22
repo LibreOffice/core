@@ -210,15 +210,15 @@ public:
     const String& GetString( SCSIZE nIndex) const;
     String GetString( SvNumberFormatter& rFormatter, SCSIZE nC, SCSIZE nR) const;
     ScMatrixValue Get(SCSIZE nC, SCSIZE nR) const;
-    BOOL IsString( SCSIZE nIndex ) const;
-    BOOL IsString( SCSIZE nC, SCSIZE nR ) const;
-    BOOL IsEmpty( SCSIZE nC, SCSIZE nR ) const;
-    BOOL IsEmptyPath( SCSIZE nC, SCSIZE nR ) const;
-    BOOL IsValue( SCSIZE nIndex ) const;
-    BOOL IsValue( SCSIZE nC, SCSIZE nR ) const;
-    BOOL IsValueOrEmpty( SCSIZE nC, SCSIZE nR ) const;
-    BOOL IsBoolean( SCSIZE nC, SCSIZE nR ) const;
-    BOOL IsNumeric() const;
+    bool IsString( SCSIZE nIndex ) const;
+    bool IsString( SCSIZE nC, SCSIZE nR ) const;
+    bool IsEmpty( SCSIZE nC, SCSIZE nR ) const;
+    bool IsEmptyPath( SCSIZE nC, SCSIZE nR ) const;
+    bool IsValue( SCSIZE nIndex ) const;
+    bool IsValue( SCSIZE nC, SCSIZE nR ) const;
+    bool IsValueOrEmpty( SCSIZE nC, SCSIZE nR ) const;
+    bool IsBoolean( SCSIZE nC, SCSIZE nR ) const;
+    bool IsNumeric() const;
     void MatCopy(ScMatrixImpl& mRes) const;
     void MatTrans(ScMatrixImpl& mRes) const;
     void FillDouble( double fVal, SCSIZE nC1, SCSIZE nR1, SCSIZE nC2, SCSIZE nR2 );
@@ -556,14 +556,14 @@ ScMatrixValue ScMatrixImpl::Get(SCSIZE nC, SCSIZE nR) const
     return aVal;
 }
 
-BOOL ScMatrixImpl::IsString( SCSIZE nIndex ) const
+bool ScMatrixImpl::IsString( SCSIZE nIndex ) const
 {
     SCSIZE nC, nR;
     CalcPosition(nIndex, nC, nR);
     return IsString(nC, nR);
 }
 
-BOOL ScMatrixImpl::IsString( SCSIZE nC, SCSIZE nR ) const
+bool ScMatrixImpl::IsString( SCSIZE nC, SCSIZE nR ) const
 {
     ValidColRowReplicated( nC, nR );
     switch (maMat.get_type(nR, nC))
@@ -577,7 +577,7 @@ BOOL ScMatrixImpl::IsString( SCSIZE nC, SCSIZE nR ) const
     return false;
 }
 
-BOOL ScMatrixImpl::IsEmpty( SCSIZE nC, SCSIZE nR ) const
+bool ScMatrixImpl::IsEmpty( SCSIZE nC, SCSIZE nR ) const
 {
     // Flag must be zero for this to be an empty element, instead of being an
     // empty path element.
@@ -585,21 +585,21 @@ BOOL ScMatrixImpl::IsEmpty( SCSIZE nC, SCSIZE nR ) const
     return maMat.get_type(nR, nC) == ::mdds::element_empty && maMat.get_flag(nR, nC) == 0;
 }
 
-BOOL ScMatrixImpl::IsEmptyPath( SCSIZE nC, SCSIZE nR ) const
+bool ScMatrixImpl::IsEmptyPath( SCSIZE nC, SCSIZE nR ) const
 {
     // 'Empty path' is empty plus non-zero flag.
     ValidColRowReplicated( nC, nR );
     return maMat.get_type(nR, nC) == ::mdds::element_empty && maMat.get_flag(nR, nC) != 0;
 }
 
-BOOL ScMatrixImpl::IsValue( SCSIZE nIndex ) const
+bool ScMatrixImpl::IsValue( SCSIZE nIndex ) const
 {
     SCSIZE nC, nR;
     CalcPosition(nIndex, nC, nR);
     return IsValue(nC, nR);
 }
 
-BOOL ScMatrixImpl::IsValue( SCSIZE nC, SCSIZE nR ) const
+bool ScMatrixImpl::IsValue( SCSIZE nC, SCSIZE nR ) const
 {
     ValidColRowReplicated(nC, nR);
     switch (maMat.get_type(nR, nC))
@@ -613,7 +613,7 @@ BOOL ScMatrixImpl::IsValue( SCSIZE nC, SCSIZE nR ) const
     return false;
 }
 
-BOOL ScMatrixImpl::IsValueOrEmpty( SCSIZE nC, SCSIZE nR ) const
+bool ScMatrixImpl::IsValueOrEmpty( SCSIZE nC, SCSIZE nR ) const
 {
     ValidColRowReplicated(nC, nR);
     switch (maMat.get_type(nR, nC))
@@ -628,13 +628,13 @@ BOOL ScMatrixImpl::IsValueOrEmpty( SCSIZE nC, SCSIZE nR ) const
     return false;
 }
 
-BOOL ScMatrixImpl::IsBoolean( SCSIZE nC, SCSIZE nR ) const
+bool ScMatrixImpl::IsBoolean( SCSIZE nC, SCSIZE nR ) const
 {
     ValidColRowReplicated( nC, nR );
     return maMat.get_type(nR, nC) == ::mdds::element_boolean;
 }
 
-BOOL ScMatrixImpl::IsNumeric() const
+bool ScMatrixImpl::IsNumeric() const
 {
     return maMat.numeric();
 }
