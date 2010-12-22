@@ -5451,26 +5451,6 @@ AC_SUBST(XRANDR_LIBS)
 AC_SUBST(ENABLE_RANDR)
 
 dnl ===================================================================
-dnl Check for system Mesa
-dnl ===================================================================
-AC_MSG_CHECKING([which Mesa headers to use])
-if test "$with_system_mesa_headers" = "no"; then
-   AC_MSG_RESULT([internal])
-   SYSTEM_MESA_HEADERS=NO
-   BUILD_TYPE="$BUILD_TYPE MESA"
-else
-   AC_MSG_RESULT([external])
-   SYSTEM_MESA_HEADERS=YES
-   AC_LANG_PUSH(C)
-   AC_CHECK_HEADER(GL/glxext.h, [],
-      [ AC_MSG_ERROR(mesa headers not found.)], [#include <GL/glx.h>])
-   AC_MSG_CHECKING([whether GL/glxext.h defines PFNGLXBINDTEXIMAGEEXTPROC])
-   AC_EGREP_HEADER(PFNGLXBINDTEXIMAGEEXTPROC, GL/glxext.h, [AC_MSG_RESULT([yes])], AC_MSG_ERROR(no))
-   AC_LANG_POP(C)
-fi
-AC_SUBST(SYSTEM_MESA_HEADERS)
-
-dnl ===================================================================
 dnl Check for building neon
 dnl ===================================================================
 AC_MSG_CHECKING([whether to use neon])
@@ -6338,22 +6318,45 @@ dnl ===================================================================
 AC_MSG_CHECKING([whether to build the OpenGL Transitions component])
 ENABLE_OPENGL=
 
-if test "x$enable_opengl" != "xno" ; then
-   save_LDFLAGS=$LDFLAGS
-   LDFLAGS="$LDFLAGS -lm"
-   AC_MSG_RESULT([yes])
-   AC_CHECK_HEADER(GL/gl.h, [],
-                   [AC_MSG_ERROR([OpenGL headers not found])], [])
-   AC_CHECK_LIB(GL, main, [],
-     [AC_MSG_ERROR(libGL not installed or functional)], [])
-   AC_CHECK_LIB(GLU, main, [],
-     [AC_MSG_ERROR(libGLU not installed or functional)], [])
-   ENABLE_OPENGL=TRUE
-   LDFLAGS=$save_LDFLAGS
+ if test "x$enable_opengl" != "xno" ; then
+    if test "$_os" != "WINNT"; then
+       save_LDFLAGS=$LDFLAGS
+       LDFLAGS="$LDFLAGS -lm"
+       AC_MSG_RESULT([yes])
+       AC_CHECK_LIB(GL, main, [],
+                    [AC_MSG_ERROR(libGL not installed or functional)], [])
+       AC_CHECK_LIB(GLU, main, [],
+                    [AC_MSG_ERROR(libGLU not installed or functional)], [])
+       ENABLE_OPENGL=TRUE
+       LDFLAGS=$save_LDFLAGS
+
+       dnl ===================================================================
+       dnl Check for system Mesa
+       dnl ===================================================================
+       AC_MSG_CHECKING([which Mesa headers to use])
+       if test -n "$with_system_mesa_headers" -o -n "$with_system_headers" && \
+          test "$with_system_mesa_headers" != "no"; then
+          AC_MSG_RESULT([external])
+          SYSTEM_MESA_HEADERS=YES
+          AC_LANG_PUSH(C)
+          AC_CHECK_HEADER(GL/glxext.h, [],
+             [ AC_MSG_ERROR(mesa headers not found.)], [#include <GL/glx.h>])
+          AC_MSG_CHECKING([whether GL/glxext.h defines PFNGLXBINDTEXIMAGEEXTPROC])
+          AC_EGREP_HEADER(PFNGLXBINDTEXIMAGEEXTPROC, GL/glxext.h, [AC_MSG_RESULT([yes])], AC_MSG_ERROR(no))
+          AC_LANG_POP(C)
+       else
+          AC_MSG_RESULT([internal])
+          SYSTEM_MESA_HEADERS=NO
+          BUILD_TYPE="$BUILD_TYPE MESA"
+       fi
+    else
+      AC_MSG_RESULT([not on windows])
+    fi
 else
-   AC_MSG_RESULT([no])
+    AC_MSG_RESULT([no])
 fi
 
+AC_SUBST(SYSTEM_MESA_HEADERS)
 AC_SUBST(ENABLE_OPENGL)
 
 AC_MSG_CHECKING([whether to build extra presenter ui])
