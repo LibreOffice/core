@@ -87,7 +87,8 @@ SwUndoFieldFromDoc::~SwUndoFieldFromDoc()
 void SwUndoFieldFromDoc::Undo( SwUndoIter& )
 {
     SwTxtFld * pTxtFld = SwDoc::GetTxtFld(GetPosition());
-    const SwField * pField = pTxtFld->GetFld().GetFld();
+
+    const SwField * pField = pTxtFld ? pTxtFld->GetFld().GetFld() : NULL;
 
     if (pField)
     {
@@ -102,7 +103,7 @@ void SwUndoFieldFromDoc::Undo( SwUndoIter& )
 void SwUndoFieldFromDoc::Redo( SwUndoIter& )
 {
     SwTxtFld * pTxtFld = SwDoc::GetTxtFld(GetPosition());
-    const SwField * pField = pTxtFld->GetFld().GetFld();
+    const SwField * pField = pTxtFld ? pTxtFld->GetFld().GetFld() : NULL;
 
     if (pField)
     {
