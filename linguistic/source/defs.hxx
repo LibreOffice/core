@@ -41,8 +41,6 @@ class SvStream;
 
 ///////////////////////////////////////////////////////////////////////////
 
-#define A2OU(x) ::rtl::OUString::createFromAscii( x )
-
 typedef boost::shared_ptr< SvStream > SvStreamPtr;
 
 namespace css = ::com::sun::star;

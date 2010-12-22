@@ -33,7 +33,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <osl/diagnose.h>
 
-#define OUSTR(x) ::rtl::OUString( ::rtl::OUString::createFromAscii(x) )
+#define OUSTR(x) ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(x) )
 
 namespace scripting_util
 {
@@ -43,7 +43,7 @@ namespace scripting_util
 
         if(!xRef.is())
         {
-            throw ::com::sun::star::uno::RuntimeException(OUSTR(Msg), ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >());
+            throw ::com::sun::star::uno::RuntimeException(::rtl::OUString::createFromAscii(Msg), ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >());
         }
     }
 }

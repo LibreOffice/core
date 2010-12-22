@@ -53,7 +53,7 @@ using namespace com::sun::star::linguistic2;
 using namespace linguistic;
 
 
-#define A2OU(x) ::rtl::OUString::createFromAscii( x )
+#define A2OU(x) ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( x ))
 
 ///////////////////////////////////////////////////////////////////////////
 
@@ -70,7 +70,7 @@ PropertyChgHelper::PropertyChgHelper(
     OUString *pName = aPropNames.getArray();
     for (INT32 i = 0;  i < nPropCount;  ++i)
     {
-        pName[i] = A2OU( pPropNames[i] );
+        pName[i] = ::rtl::OUString::createFromAscii( pPropNames[i] );
     }
 }
 
