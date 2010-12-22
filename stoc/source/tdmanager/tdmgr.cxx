@@ -585,7 +585,7 @@ ManagerImpl::createTypeDescriptionEnumeration(
         if ( xEnumAccess.is() )
             aStack.push( xEnumAccess );
 
-        it++;
+        ++it;
     }
 
     return Reference< XTypeDescriptionEnumeration >(
