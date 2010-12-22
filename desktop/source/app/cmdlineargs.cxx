@@ -281,26 +281,6 @@ void CommandLineArgs::ParseCommandLine_Impl( Supplier& supplier )
                         bStartEvent     = sal_False;
                         bDisplaySpec    = sal_False;
                     }
-
-                    #ifdef MACOSX
-                    /* #i84053# ignore -psn on Mac
-                       Platform dependent #ifdef here is ugly, however this is currently
-                       the only platform dependent parameter. Should more appear
-                       we should find a better solution
-                    */
-                    else if ( aArg.matchAsciiL(RTL_CONSTASCII_STRINGPARAM("-psn")))
-                    {
-                        // finder argument from MacOSX
-                        bOpenEvent      = sal_False;
-                           bPrintEvent     = sal_False;
-                        bForceOpenEvent = sal_False;
-                        bPrintToEvent   = sal_False;
-                        bForceNewEvent  = sal_False;
-                        bViewEvent      = sal_False;
-                        bStartEvent     = sal_False;
-                        bDisplaySpec    = sal_False;
-                    }
-                    #endif
                     else if ( oArg.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("convert-to")))
                     {
                         bOpenEvent = sal_False;
