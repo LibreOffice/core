@@ -701,12 +701,22 @@ void SwModule::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
             SwWrtShell* pWrtSh = pDocSh ? pDocSh->GetWrtShell() : 0;
             switch( rEvHint.GetEventId() )
             {
-            case SFX_EVENT_DOCCREATED:
+            case SFX_EVENT_LOADFINISHED:
                 OSL_ASSERT(!pWrtSh);
-                pDocSh->GetDoc()->SetFixFields(false, 0);
+                // if it is a new document created from a template,
+                // update fixed fields
+                if (pDocSh->GetMedium())
+                {
+                    SFX_ITEMSET_ARG( pDocSh->GetMedium()->GetItemSet(),
+                        pTemplateItem, SfxBoolItem,
+                        SID_TEMPLATE, sal_False);
+                    if (pTemplateItem && pTemplateItem->GetValue())
+                    {
+                        pDocSh->GetDoc()->SetFixFields(false, 0);
+                    }
+                }
                 break;
             case SFX_EVENT_CREATEDOC:
-                // alle FIX-Date/Time Felder auf akt. setzen
                 if( pWrtSh )
                 {
                     SFX_ITEMSET_ARG( pDocSh->GetMedium()->GetItemSet(), pUpdateDocItem, SfxUInt16Item, SID_UPDATEDOCMODE, sal_False);
