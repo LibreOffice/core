@@ -206,7 +206,7 @@ static sal_Int64 ImpStringToCurrency( const rtl::OUString &rStr )
         SbxBase::SetError( SbxERR_CONVERSION );
     while( nFractDigit )
     {
-        sNormalisedNumString.append( '0' );
+        sNormalisedNumString.append( sal_Unicode('0') );
         nFractDigit--;
     }
 
