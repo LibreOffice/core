@@ -2079,24 +2079,7 @@ void    SwTableProperties_Impl::ApplyTblAttr(const SwTable& rTbl, SwDoc& rDoc)
         rDoc.SetAttr( aSet, *rTbl.GetFrmFmt() );
     }
 }
-<<<<<<< local
-=======
-/* -----------------------------10.03.00 18:02--------------------------------
->>>>>>> other
 
-<<<<<<< local
-SwXTextTable* SwXTextTable::GetImplementation(uno::Reference< XInterface> xRef )
-{
-    uno::Reference<lang::XUnoTunnel> xTunnel( xRef, uno::UNO_QUERY);
-    if(xTunnel.is())
-        return reinterpret_cast< SwXTextTable * >(
-                sal::static_int_cast< sal_IntPtr >( xTunnel->getSomething(SwXTextTable::getUnoTunnelId()) ));
-    return 0;
-}
-
-=======
- ---------------------------------------------------------------------------*/
->>>>>>> other
 const uno::Sequence< sal_Int8 > & SwXTextTable::getUnoTunnelId()
 {
     static uno::Sequence< sal_Int8 > aSeq = ::CreateUnoTunnelId();

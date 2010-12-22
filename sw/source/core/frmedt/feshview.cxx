@@ -49,12 +49,8 @@
 #include <editeng/protitem.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdpagv.hxx>
-<<<<<<< local
-=======
-
 #include <IDocumentSettingAccess.hxx>
 #include <cmdid.h>
->>>>>>> other
 #include <poolfmt.hrc>      // fuer InitFldTypes
 #include <frmfmt.hxx>
 #include <frmatr.hxx>

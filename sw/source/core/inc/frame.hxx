@@ -55,14 +55,8 @@ class SvxBrushItem;
 class SwSelectionList;
 struct SwPosition;
 struct SwCrsrMoveState;
-<<<<<<< local
-class SwPrtOptions;
 class SwFmt;
-=======
 class SwPrintData;
-
-// --> OD 2004-07-06 #i28701#
->>>>>>> other
 class SwSortedObjs;
 class SwAnchoredObject;
 

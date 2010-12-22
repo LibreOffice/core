@@ -29,11 +29,7 @@
 #include "precompiled_sw.hxx"
 
 #include <com/sun/star/text/HoriOrientation.hpp>
-<<<<<<< local
 #include <hintids.hxx>
-=======
-
->>>>>>> other
 #include <vcl/sound.hxx>
 #include <tools/poly.hxx>
 #define _SVSTDARR_LONGS
@@ -46,19 +42,11 @@
 #include <editeng/boxitem.hxx>
 #include <editeng/shaditem.hxx>
 #include <svx/framelink.hxx>
-<<<<<<< local
-=======
-// <--
->>>>>>> other
 #include <vcl/graph.hxx>
 #include <svx/svdpagv.hxx>
-
 #include <hintids.hxx>
 #include <tgrditem.hxx>
-<<<<<<< local
 #include <switerator.hxx>
-=======
->>>>>>> other
 #include <fmtsrnd.hxx>
 #include <fmtclds.hxx>
 #include <tools/shl.hxx>
@@ -93,15 +81,7 @@
 #include <lineinfo.hxx>
 #include <dbg_lay.hxx>
 #include <accessibilityoptions.hxx>
-<<<<<<< local
-=======
-// OD 20.12.2002 #94627#
->>>>>>> other
 #include <docsh.hxx>
-<<<<<<< local
-=======
-// OD 28.02.2003 #b4779636#, #107692#
->>>>>>> other
 #include <swtable.hxx>
 #include <svx/svdogrp.hxx>
 #include <sortedobjs.hxx>

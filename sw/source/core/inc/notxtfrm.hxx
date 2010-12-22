@@ -56,13 +56,8 @@ public:
     SwNoTxtFrm( SwNoTxtNode * const, SwFrm* );
     ~SwNoTxtFrm();
 
-<<<<<<< local
-    virtual void Paint(const SwRect&, const SwPrtOptions *pPrintData = NULL ) const;
-=======
-    virtual void Modify( SfxPoolItem*, SfxPoolItem* );
     virtual void Paint( SwRect const&,
                         SwPrintData const*const pPrintData = NULL ) const;
->>>>>>> other
     virtual BOOL GetCharRect( SwRect &, const SwPosition&,
                               SwCrsrMoveState* = 0) const;
     BOOL GetCrsrOfst(SwPosition* pPos, Point& aPoint,

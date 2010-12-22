@@ -48,13 +48,7 @@ public:
     ~SwCellFrm();
 
     virtual BOOL GetCrsrOfst( SwPosition *, Point&, SwCrsrMoveState* = 0 ) const;
-<<<<<<< local
-    virtual void Paint( const SwRect&, const SwPrtOptions *pPrintData = NULL ) const;
-=======
-    virtual void Modify( SfxPoolItem*, SfxPoolItem* );
-    virtual void Paint( SwRect const&,
-                        SwPrintData const*const pPrintData = NULL ) const;
->>>>>>> other
+    virtual void Paint( SwRect const&, SwPrintData const*const pPrintData = NULL ) const;
     virtual void CheckDirection( BOOL bVert );
 
     // --> OD 2010-02-17 #i103961#

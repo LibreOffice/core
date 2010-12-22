@@ -295,13 +295,8 @@ public:
 
     void   PaintExtraData( const SwRect & rRect ) const; //Seitennummer usw.
     SwRect Paint();
-<<<<<<< local
-    virtual void Paint( const SwRect &, const SwPrtOptions *pPrintData = NULL ) const;
-=======
     virtual void Paint( SwRect const&,
                         SwPrintData const*const pPrintData = NULL ) const;
-    virtual void Modify( SfxPoolItem*, SfxPoolItem* );
->>>>>>> other
     virtual sal_Bool GetInfo( SfxPoolItem & ) const;
 
     //Layoutorientiertes Cursortravelling: Linker, rechter Rand,

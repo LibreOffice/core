@@ -2735,13 +2735,8 @@ sal_Int32 SAL_CALL SwXTextDocument::getRendererCount(
             m_pRenderData->SetSwPrtOptions( new SwPrintData );
             m_pRenderData->MakeSwPrtOptions( m_pRenderData->GetSwPrtOptionsRef(), pRenderDocShell,
                     m_pPrintUIOptions, m_pRenderData, bIsPDFExport );
-<<<<<<< local
 
             if (pSwView)
-=======
-
-            if (pView->IsA(aSwViewTypeId))
->>>>>>> other
             {
                 // PDF export should not make use of the SwPrtOptions
                 const SwPrintData *pPrtOptions = (bIsPDFExport)

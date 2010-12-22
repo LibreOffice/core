@@ -1190,63 +1190,6 @@ void SwDocShell::Execute(SfxRequest& rReq)
                 SW_MOD()->CheckSpellChanges(FALSE, TRUE, TRUE, FALSE );
             break;
 
-<<<<<<< local
-        case SID_MAIL_EXPORT_FINISHED:
-=======
-            case SID_BROWSER_MODE:
-            case FN_PRINT_LAYOUT:   //Fuer Web, genau umgekehrt zum BrowserMode
-            {
-                int eState = STATE_TOGGLE;
-                BOOL bSet = sal_True;
-                const SfxPoolItem* pAttr=NULL;
-                if ( pArgs && SFX_ITEM_SET == pArgs->GetItemState( nWhich , FALSE, &pAttr ))
-                {
-                    bSet = ((SfxBoolItem*)pAttr)->GetValue();
-                    if ( nWhich == FN_PRINT_LAYOUT )
-                        bSet = !bSet;
-                    eState = bSet ? STATE_ON : STATE_OFF;
-                }
-
-                if ( STATE_TOGGLE == eState )
-                    bSet = !GetDoc()->get(IDocumentSettingAccess::BROWSE_MODE);
-
-                ToggleBrowserMode(bSet, 0);
-
-                // OS: numerische Reihenfolge beachten!
-                static USHORT __READONLY_DATA aInva[] =
-                                    {
-                                        SID_NEWWINDOW,/*5620*/
-                                        SID_BROWSER_MODE, /*6313*/
-                                        SID_RULER_BORDERS, SID_RULER_PAGE_POS,
-                                        SID_ATTR_LONG_LRSPACE,
-                                        SID_HTML_MODE,
-                                        SID_RULER_PROTECT,
-                                        SID_AUTOSPELL_CHECK,
-                                        FN_RULER,       /*20211*/
-                                        FN_VIEW_GRAPHIC,    /*20213*/
-                                        FN_VIEW_BOUNDS,     /**/
-                                        FN_VIEW_FIELDS,     /*20215*/
-                                        FN_VLINEAL,             /*20216*/
-                                        FN_VSCROLLBAR,      /*20217*/
-                                        FN_HSCROLLBAR,      /*20218*/
-                                        FN_VIEW_META_CHARS, /**/
-                                        FN_VIEW_MARKS,      /**/
-                                        FN_VIEW_FIELDNAME,  /**/
-                                        FN_VIEW_TABLEGRID,  /*20227*/
-                                        FN_PRINT_LAYOUT, /*20237*/
-                                        FN_QRY_MERGE,   /*20364*/
-                                        0
-                                    };
-                // the view must not exist!
-                SfxViewFrame *pTmpFrm = SfxViewFrame::GetFirst( this );
-                if( pTmpFrm )
-                    pTmpFrm->GetBindings().Invalidate( aInva );
-                if ( !pAttr )
-                    rReq.AppendItem( SfxBoolItem( nWhich, bSet ) );
-                rReq.Done();
-            }
-            break;
-
         case SID_MAIL_PREPAREEXPORT:
         {
             //pWrtShell is not set in page preview
@@ -1259,8 +1202,8 @@ void SwDocShell::Execute(SfxRequest& rReq)
                 pWrtShell->EndAllAction();
         }
         break;
-          case SID_MAIL_EXPORT_FINISHED:
->>>>>>> other
+
+        case SID_MAIL_EXPORT_FINISHED:
         {
                 if(pWrtShell)
                     pWrtShell->StartAllAction();

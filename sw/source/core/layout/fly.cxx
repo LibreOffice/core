@@ -2935,23 +2935,20 @@ bool SwFlyFrm::IsFormatPossible() const
            !IsLocked() && !IsColLocked();
 }
 
-<<<<<<< local
 void SwFlyFrm::GetAnchoredObjects( std::list<SwAnchoredObject*>& aList, const SwFmt& rFmt )
-=======
-const SwFlyFrmFmt * SwFlyFrm::GetFmt() const
->>>>>>> other
 {
-<<<<<<< local
     SwIterator<SwFlyFrm,SwFmt> aIter( rFmt );
     for( SwFlyFrm* pFlyFrm = aIter.First(); pFlyFrm; pFlyFrm = aIter.Next() )
         aList.push_back( pFlyFrm );
-=======
+}
+
+const SwFlyFrmFmt * SwFlyFrm::GetFmt() const
+{
     return static_cast< const SwFlyFrmFmt * >( GetDep() );
 }
 
 SwFlyFrmFmt * SwFlyFrm::GetFmt()
 {
     return static_cast< SwFlyFrmFmt * >( GetDep() );
->>>>>>> other
 }
 

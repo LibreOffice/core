@@ -2542,20 +2542,14 @@ void SwTxtNode::NumRuleChgd()
     }
     SetInSwFntCache( FALSE );
 
-<<<<<<< local
-
-    SvxLRSpaceItem& rLR = (SvxLRSpaceItem&)GetSwAttrSet().GetLRSpace();
-    NotifyClients( &rLR, &rLR );
-=======
     // Sending "noop" modify in order to cause invalidations of registered
     // <SwTxtFrm> instances to get the list style change respectively the change
     // in the list tree reflected in the layout.
     // Important note:
     {
         SvxLRSpaceItem& rLR = (SvxLRSpaceItem&)GetSwAttrSet().GetLRSpace();
-        SwModify::Modify( &rLR, &rLR );
+        NotifyClients( &rLR, &rLR );
     }
->>>>>>> other
 }
 
 // -> #i27615#

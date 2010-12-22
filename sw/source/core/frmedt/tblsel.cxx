@@ -54,11 +54,8 @@
 #include <mvsave.hxx>
 #include <sectfrm.hxx>
 #include <frmtool.hxx>
-<<<<<<< local
 #include <switerator.hxx>
-=======
 #include <deque>
->>>>>>> other
 
 //siehe auch swtable.cxx
 #define COLFUZZY 20L

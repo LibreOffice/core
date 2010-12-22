@@ -129,13 +129,7 @@ class SfxViewFrame;
 class SwPrintUIOptions;
 class SwPrintData;
 class SwRenderData;
-<<<<<<< local
-class SwPrtOptions;
 class ViewShell;
-=======
-class SwWrtShell;
->>>>>>> other
-
 
 typedef UnoActionContext* UnoActionContextPtr;
 SV_DECL_PTRARR(ActionContextArr, UnoActionContextPtr, 4, 4)
@@ -609,17 +603,8 @@ class SwViewOptionAdjust_Impl
 public:
     SwViewOptionAdjust_Impl( ViewShell& rSh, const SwViewOption &rViewOptions );
     ~SwViewOptionAdjust_Impl();
-<<<<<<< local
-
-    void AdjustViewOptions( const SwPrtOptions *pPrtOptions );
-
+    void AdjustViewOptions( SwPrintData const* const pPrtOptions );
     bool checkShell( const ViewShell& rCompare ) const
-=======
-
-    void AdjustViewOptions( SwPrintData const*const pPrtOptions );
-
-    bool checkShell( const SwWrtShell& rCompare ) const
->>>>>>> other
     { return &rCompare == &m_rShell; }
 };
 

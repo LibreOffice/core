@@ -1110,18 +1110,3 @@ void SwDrawView::DeleteMarked()
         pTmpRoot->EndAllAction();   //swmod 080218
 }
 
-<<<<<<< local
-=======
-/********
-JP 02.10.98: sollte als Fix fuer 57153 gelten, hatte aber Nebenwirkungen,
-            wie Bug 57475
-const SdrMarkList& SwDrawView::GetMarkedObjectList() const
-{
-    FlushComeBackTimer();
-    return FmFormView::GetMarkedObjectList();
-}
-*************/
-
-
-
->>>>>>> other

@@ -38,10 +38,6 @@
 #include <expfld.hxx>
 #include <docfld.hxx>   // fuer _SetGetExpFld
 #include <unofldmid.h>
-<<<<<<< local
-=======
-
->>>>>>> other
 
 using namespace ::com::sun::star;
 using ::rtl::OUString;
