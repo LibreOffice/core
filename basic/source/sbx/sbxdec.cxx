@@ -705,7 +705,6 @@ start:
             double d;
             if( !pDec->getDouble( d ) )
                 SbxBase::SetError( SbxERR_OVERFLOW );
-            pDec->getDouble( d );
             *p->pnInt64 = ImpDoubleToCurrency( d );
             break;
         case SbxBYREF | SbxSALINT64:
@@ -732,7 +731,6 @@ start:
                 SbxBase::SetError( SbxERR_OVERFLOW );
                 *p->pSingle = 0;
             }
-            *p->pSingle = (float) n;
             break;
         case SbxBYREF | SbxDATE:
         case SbxBYREF | SbxDOUBLE:
@@ -742,28 +740,6 @@ start:
                 *p->pDouble = 0;
             }
             break;
-        case SbxBYREF | SbxULONG64:
-        {
-            double d;
-            pDec->getDouble( d );
-            *p->pULong64 = ImpDoubleToUINT64( d );
-            break;
-        }
-        case SbxBYREF | SbxLONG64:
-        {
-            double d;
-            pDec->getDouble( d );
-            *p->pLong64 = ImpDoubleToINT64( d );
-            break;
-        }
-        case SbxBYREF | SbxCURRENCY:
-        {
-            double d;
-            pDec->getDouble( d );
-            *p->pLong64 = ImpDoubleToCurrency( d );
-            break;
-        }
-
         default:
             SbxBase::SetError( SbxERR_CONVERSION );
     }
