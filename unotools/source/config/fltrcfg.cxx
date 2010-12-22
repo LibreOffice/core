@@ -40,7 +40,7 @@ using namespace utl;
 using namespace rtl;
 using namespace com::sun::star::uno;
 
-#define C2U(cChar) OUString::createFromAscii(cChar)
+#define C2U(cChar) OUString(RTL_CONSTASCII_USTRINGPARAM(cChar))
 
 // -----------------------------------------------------------------------
 #define FILTERCFG_WORD_CODE             0x0001
@@ -350,7 +350,7 @@ const Sequence<OUString>& SvtFilterOptions::GetPropertyNames()
         };
         OUString* pNames = aNames.getArray();
         for(int i = 0; i < nCount; i++)
-            pNames[i] = C2U(aPropNames[i]);
+            pNames[i] = OUString::createFromAscii(aPropNames[i]);
     }
     return aNames;
 }

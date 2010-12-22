@@ -49,8 +49,6 @@
 using namespace rtl;
 using namespace com::sun::star::uno;
 
-#define C2U(cChar) OUString::createFromAscii(cChar)
-
 namespace utl
 {
 
@@ -90,7 +88,7 @@ public:
 };
 
 SfxMiscCfg::SfxMiscCfg() :
-    ConfigItem(C2U("Office.Common") ),
+    ConfigItem(OUString(RTL_CONSTASCII_USTRINGPARAM("Office.Common")) ),
     bPaperSize(FALSE),
     bPaperOrientation (FALSE),
     bNotFound (FALSE),

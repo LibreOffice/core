@@ -61,7 +61,7 @@ using namespace com::sun::star::beans;
 using namespace com::sun::star::container;
 using namespace com::sun::star::configuration;
 
-#define C2U(cChar) OUString::createFromAscii(cChar)
+#define C2U(cChar) OUString(RTL_CONSTASCII_USTRINGPARAM(cChar))
 #include <cppuhelper/implbase1.hxx> // helper for implementations
 
 #ifdef DBG_UTIL

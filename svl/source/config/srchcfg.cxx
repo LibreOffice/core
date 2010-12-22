@@ -44,7 +44,7 @@ using namespace com::sun::star;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::beans;
 
-#define C2U(cChar) OUString::createFromAscii(cChar)
+#define C2U(cChar) OUString(RTL_CONSTASCII_USTRINGPARAM(cChar))
 
 //-----------------------------------------------------------------------------
 typedef SvxSearchEngineData* SvxSearchEngineDataPtr;

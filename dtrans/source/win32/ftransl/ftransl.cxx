@@ -58,8 +58,7 @@
 #define CPPUTYPE_DEFAULT          CPPUTYPE_SEQSALINT8
 #define CPPUTYPE_OUSTR            getCppuType( (const ::rtl::OUString*) 0 )
 #define CPPUTYPE_SALINT32         getCppuType( ( sal_Int32 * ) 0 )
-#define OUSTR( str )              OUString::createFromAscii( #str )
-#define OUSTR_( str )             OUString::createFromAscii( str )
+#define OUSTR( str )              OUString(RTL_CONSTASCII_USTRINGPARAM( #str ))
 #define EMPTY_OUSTR               OUString()
 
 const rtl::OUString Windows_FormatName (RTL_CONSTASCII_USTRINGPARAM("windows_formatname"));

@@ -45,10 +45,7 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::lang;
 
-#define C2U(cChar) OUString::createFromAscii(cChar)
-const sal_Char sStartEndCharacters[] = "StartEndCharacters";
-const sal_Char sStartCharacters[] = "StartCharacters";
-const sal_Char sEndCharacters[] = "EndCharacters";
+#define C2U(cChar) OUString(RTL_CONSTASCII_USTRINGPARAM(cChar))
 
 //-----------------------------------------------------------------------------
 struct SvxForbiddenStruct_Impl
@@ -106,7 +103,7 @@ void SvxAsianConfig::Load()
     pValues[1] >>= pImpl->nCharDistanceCompression;
 
     pImpl->aForbiddenArr.DeleteAndDestroy(0, pImpl->aForbiddenArr.Count());
-    OUString sPropPrefix(C2U(sStartEndCharacters));
+    OUString sPropPrefix(C2U("StartEndCharacters"));
     Sequence<OUString> aNodes = GetNodeNames(sPropPrefix);
 
     Sequence<OUString> aPropNames(aNodes.getLength() * 2);
@@ -153,7 +150,7 @@ void SvxAsianConfig::Commit()
     PutProperties(lcl_GetPropertyNames(), aValues);
 
 
-    OUString sNode(C2U(sStartEndCharacters));
+    OUString sNode(C2U("StartEndCharacters"));
     if(!pImpl->aForbiddenArr.Count())
         ClearNodeSet(sNode);
     else
@@ -161,8 +158,8 @@ void SvxAsianConfig::Commit()
         Sequence<PropertyValue> aSetValues(2 * pImpl->aForbiddenArr.Count());
         PropertyValue* pSetValues = aSetValues.getArray();
         sal_Int32 nSetValue = 0;
-        const OUString sStartChars(C2U(sStartCharacters));
-        const OUString sEndChars(C2U(sEndCharacters));
+        const OUString sStartChars(C2U("StartCharacters"));
+        const OUString sEndChars(C2U("EndCharacters"));
         for(sal_uInt16 i = 0; i < pImpl->aForbiddenArr.Count(); i++)
         {
             OUString sPrefix(sNode);

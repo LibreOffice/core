@@ -54,7 +54,7 @@
 using namespace rtl;
 using namespace com::sun::star;
 
-#define A2OU(x)        ::rtl::OUString::createFromAscii( x )
+#define A2OU(x)        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( x ))
 #define EXPAND_PROTOCOL     "vnd.sun.star.expand:"
 #define FILE_PROTOCOL       "file:///"
 
@@ -303,7 +303,7 @@ const uno::Sequence< OUString > & SvtLinguConfigItem::GetPropertyNames()
         {
             const sal_Char *pFullPropName = aNamesToHdl[i].pFullPropName;
             if (pFullPropName)
-                pNames[ nIdx++ ] = A2OU( pFullPropName );
+                pNames[ nIdx++ ] = ::rtl::OUString::createFromAscii( pFullPropName );
         }
         aNames.realloc( nIdx );
         bInitialized = sal_True;

@@ -45,7 +45,7 @@
 using namespace ::com::sun::star::uno;
 using namespace ::rtl;
 
-#define C2U(cChar) OUString::createFromAscii(cChar)
+#define C2U(cChar) OUString(RTL_CONSTASCII_USTRINGPARAM(cChar))
 #define CFG_READONLY_DEFAULT sal_False
 
 class SvtCJKOptions_Impl : public utl::ConfigItem
