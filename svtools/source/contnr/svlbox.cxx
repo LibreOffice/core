@@ -1696,7 +1696,7 @@ sal_Int8 SvLBox::AcceptDrop( const AcceptDropEvent& rEvt )
         }
         else
         {
-            DBG_ASSERT( pDDSource, "SvLBox::QueryDrop(): SourceBox == 0 (__EXPORT?)" );
+            DBG_ASSERT( pDDSource, "SvLBox::QueryDrop(): SourceBox == 0" );
             if( !( pEntry && pDDSource->GetModel() == this->GetModel()
                     && DND_ACTION_MOVE == rEvt.mnAction
                     && ( pEntry->nEntryFlags & SV_ENTRYFLAG_DISABLE_DROP ) ))
