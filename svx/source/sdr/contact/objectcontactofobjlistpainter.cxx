@@ -37,7 +37,7 @@
 #include <drawinglayer/processor2d/vclprocessor2d.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <svx/sdr/contact/objectcontacttools.hxx>
-#include <unoapi.hxx>
+#include <svx/unoapi.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 

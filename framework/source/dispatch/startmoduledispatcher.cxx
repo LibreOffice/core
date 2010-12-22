@@ -36,7 +36,7 @@
 #include <pattern/frame.hxx>
 #include <threadhelp/readguard.hxx>
 #include <threadhelp/writeguard.hxx>
-#include <classes/framelistanalyzer.hxx>
+#include <framework/framelistanalyzer.hxx>
 #include <dispatchcommands.h>
 #include <targets.h>
 #include <services.h>

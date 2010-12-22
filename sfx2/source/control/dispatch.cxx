@@ -57,7 +57,7 @@
 
 // wg. nAutoPageID
 #include "appdata.hxx"
-#include "sfxhelp.hxx"
+#include "sfx2/sfxhelp.hxx"
 #include <sfx2/dispatch.hxx>
 #include <sfx2/minstack.hxx>
 #include <sfx2/msg.hxx>

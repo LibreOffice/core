@@ -33,7 +33,7 @@
 #include "fmservs.hxx"
 
 #ifndef _FM_FMOBJFAC_HXX
-#include "fmobjfac.hxx"
+#include "svx/fmobjfac.hxx"
 #endif
 
 #ifndef _FM_FMGLOB_HXX
@@ -56,7 +56,7 @@
 #include <tools/resid.hxx>
 
 #ifndef _SVX_FMRESIDS_HRC
-#include "fmresids.hrc"
+#include "svx/fmresids.hrc"
 #endif
 #include <tools/shl.hxx>
 #include <svx/dialmgr.hxx>

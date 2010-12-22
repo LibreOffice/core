@@ -33,7 +33,7 @@
 #ifndef SVX_LIGHT
 
 #include <com/sun/star/container/XNameContainer.hpp>
-#include "XPropertyTable.hxx"
+#include "svx/XPropertyTable.hxx"
 #include <unotools/ucbstreamhelper.hxx>
 #include <vcl/svapp.hxx>
 
@@ -50,7 +50,7 @@
 #include <svx/dialmgr.hxx>
 #include <svx/xtable.hxx>
 #include <svx/xpool.hxx>
-#include "dlgutil.hxx"
+#include "svx/dlgutil.hxx"
 #include <svx/xflhtit.hxx>
 #include <svx/xflclit.hxx>
 #include <svx/xfillit0.hxx>

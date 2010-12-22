@@ -439,6 +439,7 @@ SV_DECL_REF(SbxInfo)
 class SfxBroadcaster;
 
 class SbxVariableImpl;
+class StarBASIC;
 
 class SbxVariable : public SbxValue
 {
@@ -499,7 +500,9 @@ public:
 
     const String& GetDeclareClassName( void );
     void SetDeclareClassName( const String& );
-    void SetComListener( ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > xComListener );
+    void SetComListener( ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > xComListener,
+        StarBASIC* pParentBasic );
+    void ClearComListener( void );
 
     static USHORT MakeHashCode( const String& rName );
 };

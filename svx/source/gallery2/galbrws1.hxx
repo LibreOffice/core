@@ -30,7 +30,7 @@
 #include <vcl/menu.hxx>
 #include <svl/lstner.hxx>
 #include <vector>
-#include "galbrws.hxx"
+#include "svx/galbrws.hxx"
 
 // -----------------
 // - GalleryButton -

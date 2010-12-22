@@ -27,7 +27,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
-#include <swframeposstrings.hxx>
+#include <svx/swframeposstrings.hxx>
 #include <tools/rc.hxx>
 #include <tools/debug.hxx>
 #include <svx/dialmgr.hxx>

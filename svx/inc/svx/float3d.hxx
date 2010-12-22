@@ -37,7 +37,7 @@
 #endif
 #include <sfx2/dockwin.hxx>
 #ifndef _IMAGEBTN_HXX //autogen
-#include <vcl/imagebtn.hxx>
+#include <vcl/button.hxx>
 #endif
 #include <svtools/valueset.hxx>
 #include <svtools/stdctrl.hxx>
