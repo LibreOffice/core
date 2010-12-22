@@ -67,15 +67,6 @@ sal_Bool compareSocketAddr( const ::osl::SocketAddr & addr1 , const ::osl::Socke
     return ( ( sal_True == compareUString( addr1.getHostname( 0 ), addr2.getHostname( 0 ) ) ) && ( addr2.getPort( ) == addr2.getPort( ) ) );
 }
 
-/*char * oustring2char( const ::rtl::OUString & str )
-{
-    rtl::OString aString;
-    aString = ::rtl::OUStringToOString( str, RTL_TEXTENCODING_ASCII_US );
-    t_print("oustring2char %s\n", aString.getStr( ) );
-    sal_Char * sStr = aString.getStr( );
-    return (char *)sStr;
-}*/
-
 /** print a UNI_CODE String. And also print some comments of the string.
 */
 void printUString( const ::rtl::OUString & str, const char* msg)
@@ -287,87 +278,6 @@ sal_Bool ifIpv4is( const ::rtl::ByteSequence Ipaddr, sal_Int8 seq1, sal_Int8 seq
         return sal_True;
     return sal_False;
 }
-
-/** if the IP or hostname is availble( alive )
-*/
-/*sal_Bool ifAvailable( const char *  stringAddrOrHostName )
-{
-    sal_Bool result;
-    int  p[2];
-    sal_Char buffer[2000];
-    char stringhost[20];
-    strcpy(stringhost, stringAddrOrHostName );
-
-    result = sal_False;
-    if (pipe (p) == 0)
-    {
-    pid_t pid;
-    int nStatus;
-    pid = fork();
-    if (pid == 0)
-    {
-#if ( defined LINUX )
-        char *argv[] =
-        {
-            "/bin/ping",
-            "-c", "3",
-            "-W", "3",
-            stringhost,
-            NULL
-        };
-#endif
-#if ( defined SOLARIS )
-        char *argv[] =
-            {
-                "/usr/sbin/ping",
-                stringhost,
-                "3",
-                NULL
-            };
-#endif
-        close (p[0]);
-        dup2  (p[1], 1);
-        close (p[1]);
-#if ( defined LINUX )
-        execv ("/bin/ping", argv);
-#endif
-#if ( defined SOLARIS )
-        execv ("/usr/sbin/ping", argv);
-#endif
-        // arriving here means exec failed
-        _exit(-1);
-    }
-    else if (pid > 0)
-    {
-        sal_Int32 k = 0, n = 2000;
-        close (p[1]);
-        if ((k = read (p[0], buffer, n - 1)) > 0)
-        {
-            buffer[k] = 0;
-            if (buffer[k - 1] == '\n')
-            buffer[k - 1] = 0;
-#if ( defined LINUX )
-            char strOK[] = "bytes from";
-#endif
-#if ( defined SOLARIS )
-            char strOK[] = "is alive";
-#endif
-            if (strstr( buffer, strOK ) != NULL )
-                result = sal_True;
-            t_print("buffer is %s\n", buffer );
-        }
-        close (p[0]);
-        waitpid (pid, &nStatus, 0);
-    }
-    else
-    {
-        close (p[0]);
-        close (p[1]);
-    }
-
-    }
-    return result;
-}*/
 
 sal_Bool ifAvailable( rtl::OUString const&  strAddrOrHostName )
 {

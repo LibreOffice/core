@@ -295,15 +295,6 @@ void CunoType::dumpDefaultHIncludes(FileStream& o)
     o << "#ifndef _UNO_CUNO_H_\n"
       << "#include <uno/cuno.h>\n"
       << "#endif\n";
-/*
-    if (m_typeMgr.getTypeClass(m_typeName) == RT_TYPE_INTERFACE &&
-        !m_typeName.equals("com/sun/star/uno/XInterface") )
-    {
-        o << "#ifndef _COM_SUN_STAR_UNO_XINTERFACE_H_\n"
-          << "#include <com/sun/star/uno/XInterface.h>\n"
-          << "#endif\n";
-    }
-*/
 }
 
 void CunoType::dumpDefaultCIncludes(FileStream& o)
@@ -415,12 +406,6 @@ void CunoType::dumpDepIncludes(FileStream& o, const OString& typeName, sal_Char*
 
                             iLastS = outerNamespace.lastIndexOf('/');
                             OString outerClass(outerNamespace.copy(iLastS+1));
-
-//                          o << "\n";
-//                          dumpNameSpace(o, sal_True, sal_False, outerNamespace);
-//                          o << "\nclass " << outerClass << "::" << innerClass << ";\n";
-//                          dumpNameSpace(o, sal_False, sal_False, outerNamespace);
-//                          o << "\n\n";
                         }
                         else
                         {
@@ -1548,27 +1533,6 @@ sal_Bool InterfaceType::dumpHFile(FileStream& o)
           << "#endif\n\n";
     }
 
-/*
-    if (getNestedTypeNames().getLength() > 0)
-    {
-        o << indent() << "// nested types\n\n";
-        for (sal_uInt32 i = 0; i < getNestedTypeNames().getLength(); i++)
-        {
-            OUString s(getNestedTypeNames().getElement(i));
-
-            OString nestedName(s.getStr(), s.getLength(), RTL_TEXTENCODING_UTF8);
-
-            nestedName = checkRealBaseType(nestedName.copy(5));
-
-            if (nestedName.lastIndexOf(']') < 0)
-            {
-                o << "inline const ::com::sun::star::uno::Type& SAL_CALL getCunoType( ";
-                dumpType(o, nestedName, sal_True, sal_False);
-                o << "* ) SAL_THROW( () );\n\n";
-            }
-        }
-    }
-*/
     dumpCloseExternC(o);
 
     o << "#endif /* "<< headerDefine << " */\n";
@@ -1598,65 +1562,7 @@ sal_Bool InterfaceType::dumpDeclaration(FileStream& o)
     OString superType(m_reader.getSuperTypeName());
     if (superType.getLength() > 0)
         dumpInheritedFunctions(o, superType);
-/*
-    if (getNestedTypeNames().getLength() > 0)
-    {
-        inc();
-        o << indent() << "// nested types\n\n";
-        for (sal_uInt32 i = 0; i < getNestedTypeNames().getLength(); i++)
-        {
-            OUString s(getNestedTypeNames().getElement(i));
 
-            OString nestedName(s.getStr(), s.getLength(), RTL_TEXTENCODING_UTF8);
-
-            nestedName = nestedName.copy(5);
-
-            o << indent() << "// " << nestedName.getStr() << "\n";
-
-            TypeReader reader(m_typeMgr.getTypeReader(nestedName));
-
-            if (reader.isValid())
-            {
-                RTTypeClass typeClass = reader.getTypeClass();
-                switch (typeClass) {
-                    case RT_TYPE_INTERFACE:
-                        {
-                            InterfaceType iType(reader, nestedName, m_typeMgr, m_dependencies);
-                            iType.dumpDeclaration(o);
-                        }
-                        break;
-                    case RT_TYPE_STRUCT:
-                        {
-                            StructureType sType(reader, nestedName, m_typeMgr, m_dependencies);
-                            sType.dumpDeclaration(o);
-                        }
-                        break;
-                    case RT_TYPE_ENUM:
-                        {
-                            EnumType enType(reader, nestedName, m_typeMgr, m_dependencies);
-                            enType.dumpDeclaration(o);
-                        }
-                        break;
-                    case RT_TYPE_EXCEPTION:
-                        {
-                            ExceptionType eType(reader, nestedName, m_typeMgr, m_dependencies);
-                            eType.dumpDeclaration(o);
-                        }
-                        break;
-                    case RT_TYPE_TYPEDEF:
-                        {
-                            TypeDefType tdType(reader, nestedName, m_typeMgr, m_dependencies);
-                            tdType.dumpDeclaration(o);
-                        }
-                        break;
-                    default:
-                        break;
-                }
-            }
-        }
-        dec();
-    }
-*/
     dumpAttributes(o, m_name, m_reader);
     dumpMethods(o, m_name, m_reader);
 
@@ -1676,63 +1582,7 @@ sal_Bool InterfaceType::dumpCFile(FileStream& o)
     dumpDepIncludes(o, m_typeName, "h");
     o << "\n";
     dumpGetCunoType(o);
-/*
-    if (getNestedTypeNames().getLength() > 0)
-    {
-        o << indent() << "// nested types\n\n";
-        for (sal_uInt32 i = 0; i < getNestedTypeNames().getLength(); i++)
-        {
-            OUString s(getNestedTypeNames().getElement(i));
 
-            OString nestedName(s.getStr(), s.getLength(), RTL_TEXTENCODING_UTF8);
-
-            nestedName = nestedName.copy(5);
-
-            o << indent() << "// " << nestedName.getStr() << "\n";
-
-            TypeReader reader(m_typeMgr.getTypeReader(nestedName));
-
-            if (reader.isValid())
-            {
-                RTTypeClass typeClass = reader.getTypeClass();
-                switch (typeClass) {
-                    case RT_TYPE_INTERFACE:
-                        {
-                            InterfaceType iType(reader, nestedName, m_typeMgr, m_dependencies);
-                            iType.dumpGetCunoType(o);
-                        }
-                        break;
-                    case RT_TYPE_STRUCT:
-                        {
-                            StructureType sType(reader, nestedName, m_typeMgr, m_dependencies);
-                            sType.dumpGetCunoType(o);
-                        }
-                        break;
-                    case RT_TYPE_ENUM:
-                        {
-                            EnumType enType(reader, nestedName, m_typeMgr, m_dependencies);
-                            enType.dumpGetCunoType(o);
-                        }
-                        break;
-                    case RT_TYPE_EXCEPTION:
-                        {
-                            ExceptionType eType(reader, nestedName, m_typeMgr, m_dependencies);
-                            eType.dumpGetCunoType(o);
-                        }
-                        break;
-                    case RT_TYPE_TYPEDEF:
-                        {
-                            TypeDefType tdType(reader, nestedName, m_typeMgr, m_dependencies);
-                            tdType.dumpGetCunoType(o);
-                        }
-                        break;
-                    default:
-                        break;
-                }
-            }
-        }
-    }
-*/
     return sal_True;
 }
 
@@ -2586,49 +2436,7 @@ sal_Bool ModuleType::dump(CunoOptions* pOptions)
             ret = checkFileContent(hFileName, tmpFileName);
         }
     }
-/*
-    bFileExists = sal_False;
-    bFileCheck = sal_False;
-    OString cFileName = createFileNameFromType(outPath, tmpName, ".c");
 
-    if ( pOptions->isValid("-G") || pOptions->isValid("-Gc") )
-    {
-        bFileExists = fileExists( cFileName );
-        ret = sal_True;
-    }
-
-    if ( bFileExists && pOptions->isValid("-Gc") )
-    {
-        tmpFileName  = createFileNameFromType(outPath, m_typeName, ".tmc");
-        bFileCheck = sal_True;
-    }
-
-
-    if ( !bFileExists || bFileCheck )
-    {
-        FileStream hxxFile;
-
-        if ( bFileCheck )
-            cFile.open(tmpFileName);
-        else
-            cFile.open(cFileName);
-
-        if(!cFile.isValid())
-        {
-            OString message("cannot open ");
-            message += cFileName + " for writing";
-            throw CannotDumpException(message);
-        }
-
-        ret = dumpCFile(cFile);
-
-        cFile.close();
-        if (ret && bFileCheck)
-        {
-            ret = checkFileContent(cFileName, tmpFileName);
-        }
-    }
-*/
     return ret;
 }
 
@@ -2779,48 +2587,7 @@ sal_Bool ConstantsType::dump(CunoOptions* pOptions)
             ret = checkFileContent(hFileName, tmpFileName);
         }
     }
-/*
-    bFileExists = sal_False;
-    bFileCheck = sal_False;
-    OString cFileName = createFileNameFromType(outPath, m_typeName, ".c");
 
-    if ( pOptions->isValid("-G") || pOptions->isValid("-Gc") )
-    {
-        bFileExists = fileExists( cFileName );
-        ret = sal_True;
-    }
-
-    if ( bFileExists && pOptions->isValid("-Gc") )
-    {
-        tmpFileName  = createFileNameFromType(outPath, m_typeName, ".tmc");
-        bFileCheck = sal_True;
-    }
-
-    if ( !bFileExists || bFileCheck )
-    {
-        FileStream cFile;
-
-        if ( bFileCheck )
-            cFile.open(tmpFileName);
-        else
-            cFile.open(cFileName);
-
-        if(!cFile.isValid())
-        {
-            OString message("cannot open ");
-            message += cFileName + " for writing";
-            throw CannotDumpException(message);
-        }
-
-        ret = dumpCFile(cFile);
-
-        cFile.close();
-        if (ret && bFileCheck)
-        {
-            ret = checkFileContent(cFileName, tmpFileName);
-        }
-    }
-*/
     return ret;
 }
 
