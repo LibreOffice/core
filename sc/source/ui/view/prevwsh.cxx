@@ -297,7 +297,6 @@ void ScPreviewShell::UpdateScrollBars()
     Size aWindowSize = pPreview->GetOutputSize();
 
     Point aOfs = pPreview->GetOffset();
-    long nMaxPos;
 
     if( pHorScroll )
     {
@@ -305,7 +304,7 @@ void ScPreviewShell::UpdateScrollBars()
         pHorScroll->SetLineSize( aWindowSize.Width() / 16 );
         pHorScroll->SetPageSize( aWindowSize.Width() );
         pHorScroll->SetVisibleSize( aWindowSize.Width() );
-        nMaxPos = aPageSize.Width() - aWindowSize.Width();
+        long nMaxPos = aPageSize.Width() - aWindowSize.Width();
         if ( nMaxPos<0 )
         {
             //  page smaller than window -> center (but put scrollbar to 0)
@@ -1000,7 +999,6 @@ void ScPreviewShell::ReadUserDataSequence(const uno::Sequence < beans::PropertyV
     sal_Int32 nCount(rSeq.getLength());
     if (nCount)
     {
-        sal_Int32 nTemp = 0;
         const beans::PropertyValue* pSeq = rSeq.getConstArray();
         if(pSeq)
         {
@@ -1009,11 +1007,13 @@ void ScPreviewShell::ReadUserDataSequence(const uno::Sequence < beans::PropertyV
                 rtl::OUString sName(pSeq->Name);
                 if(sName.compareToAscii(SC_ZOOMVALUE) == 0)
                 {
+                    sal_Int32 nTemp = 0;
                     if (pSeq->Value >>= nTemp)
                         pPreview->SetZoom(sal_uInt16(nTemp));
                 }
                 else if (sName.compareToAscii("PageNumber") == 0)
                 {
+                    sal_Int32 nTemp = 0;
                     if (pSeq->Value >>= nTemp)
                         pPreview->SetPageNo(nTemp);
                 }
