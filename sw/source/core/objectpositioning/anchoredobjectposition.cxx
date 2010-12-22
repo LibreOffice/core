@@ -1062,11 +1062,11 @@ bool SwAnchoredObjectPosition::_Minor( sal_Int16 _eRelOrient1,
 
     // draw aside order for left horizontal position
     //! one array entry for each value in text::RelOrientation
-    static USHORT __READONLY_DATA aLeft[ 10 ] =
+    static USHORT const aLeft[ 10 ] =
         { 5, 6, 0, 1, 8, 4, 7, 2, 3, 9 };
     // draw aside order for right horizontal position
     //! one array entry for each value in text::RelOrientation
-    static USHORT __READONLY_DATA aRight[ 10 ] =
+    static USHORT const aRight[ 10 ] =
         { 5, 6, 0, 8, 1, 7, 4, 2, 3, 9 };
 
     // decide depending on given order, which frame has to draw aside another frame
