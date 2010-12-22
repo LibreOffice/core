@@ -313,7 +313,7 @@ public:
                     SfxChildWindow *pWin = new Class(pParent, nId, pBindings, pInfo);\
                     return pWin; \
                 } \
-        sal_uInt16  __EXPORT Class::GetChildWindowId () \
+        sal_uInt16 Class::GetChildWindowId () \
                 { return MyID; } \
         void    Class::RegisterChildWindow (sal_Bool bVis, SfxModule *pMod, sal_uInt16 nFlags)   \
                 {   \
