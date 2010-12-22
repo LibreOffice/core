@@ -235,7 +235,7 @@ SvtAcceleratorConfiguration::~SvtAcceleratorConfiguration()
         nCode = rKeyEvent.KeyFunc;
 
     std::list< SvtAcceleratorConfigItem>::const_iterator p;
-    for ( p = pImp->aList.begin(); p != pImp->aList.end(); p++ )
+    for ( p = pImp->aList.begin(); p != pImp->aList.end(); ++p )
         if ( p->nCode == nCode && p->nModifier == nModifier )
             return p->aCommand;
 
@@ -250,7 +250,7 @@ const SvtAcceleratorItemList& SvtAcceleratorConfiguration::GetItems()
 void SvtAcceleratorConfiguration::SetCommand( const SvtAcceleratorConfigItem& rItem )
 {
     std::list< SvtAcceleratorConfigItem>::iterator p;
-    for ( p = pImp->aList.begin(); p != pImp->aList.end(); p++ )
+    for ( p = pImp->aList.begin(); p != pImp->aList.end(); ++p )
         if ( p->nCode == rItem.nCode && p->nModifier == rItem.nModifier )
         {
             p->aCommand = rItem.aCommand;
@@ -270,7 +270,7 @@ void SvtAcceleratorConfiguration::SetItems( const SvtAcceleratorItemList& rItems
     else
     {
         std::list< SvtAcceleratorConfigItem>::const_iterator p;
-        for ( p = rItems.begin(); p != rItems.end(); p++ )
+        for ( p = rItems.begin(); p != rItems.end(); ++p )
             SetCommand( *p );
     }
 }
