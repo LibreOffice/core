@@ -166,7 +166,6 @@ void LotusToSc::DoFunc( DefTokenId eOc, BYTE nAnz, const sal_Char* pExtString )
 
     if( nAnz > 0 )
     {
-        INT16 nNull = -1;   // gibt einen auszulassenden Parameter an
             // ACHTUNG: 0 ist der letzte Parameter, nAnz-1 der erste
 
         INT16 nLast = nAnz - 1;
@@ -184,6 +183,7 @@ void LotusToSc::DoFunc( DefTokenId eOc, BYTE nAnz, const sal_Char* pExtString )
             // [Parameter{;Parameter}]
             aPool << eParam[ nLast ];
 
+            INT16 nNull = -1;   // gibt einen auszulassenden Parameter an
             for( nLauf = nLast - 1 ; nLauf >= 0 ; nLauf-- )
             {
                 if( nLauf != nNull )
