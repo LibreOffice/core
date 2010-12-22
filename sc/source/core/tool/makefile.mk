@@ -41,7 +41,7 @@ AUTOSEG=true
 .INCLUDE :  settings.mk
 .INCLUDE :  $(PRJ)$/util$/makefile.pmk
 
-CDEFS += $(MDDS_CPPFLAGS)
+CFLAGSCXX+=$(MDDS_CPPFLAGS)
 
 # --- Files --------------------------------------------------------
 
