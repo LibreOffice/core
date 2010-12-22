@@ -4307,13 +4307,10 @@ void ScGridWindow::PasteSelection( const Point& rPosPixel )
         for (ULONG i = 0; i < nCount; ++i)
         {
             SdrObject* pObj = pDrawView->GetMarkedObjectByIndex(i);
-            if (pObj && ScDrawLayer::IsNoteCaption(pObj))
+            if (pObj && pObj->GetLogicRect().IsInside(aLogicPos))
             {
-                if (pObj->GetLogicRect().IsInside(aLogicPos))
-                {
-                    // Inside an active note object.  Bail out.
-                    return;
-                }
+                // Inside an active drawing object.  Bail out.
+                return;
             }
         }
     }
