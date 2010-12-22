@@ -783,7 +783,7 @@ CpAndFc WW8DocumentImpl::getNextCp(const CpAndFc & rCpAndFc) const
 
     if (aIt != mCpAndFcs.end())
     {
-        aIt++;
+        ++aIt;
 
         if (aIt != mCpAndFcs.end())
             aResult = *aIt;
@@ -802,7 +802,7 @@ CpAndFc WW8DocumentImpl::getPrevCp(const CpAndFc & rCpAndFc) const
 
     if (aIt != mCpAndFcs.end() && aIt != mCpAndFcs.begin())
     {
-        aIt--;
+        --aIt;
 
         aResult = *aIt;
     }
@@ -2283,7 +2283,7 @@ void FieldHelper::init()
 {
     Map_t::iterator aIt;
 
-    for (aIt = mMap.begin(); aIt != mMap.end(); aIt++)
+    for (aIt = mMap.begin(); aIt != mMap.end(); ++aIt)
     {
         mpDoc->insertCpAndFc(aIt->first);
     }
@@ -2319,7 +2319,7 @@ void ShapeHelper::init()
 {
     Map_t::iterator aIt;
 
-    for (aIt = mMap.begin(); aIt != mMap.end(); aIt++)
+    for (aIt = mMap.begin(); aIt != mMap.end(); ++aIt)
     {
         mpDoc->insertCpAndFc(aIt->first);
         aIt->second->setDocument(mpDoc);
@@ -2347,7 +2347,7 @@ void BreakHelper::init()
 {
     Map_t::iterator aIt;
 
-    for (aIt = mMap.begin(); aIt != mMap.end(); aIt++)
+    for (aIt = mMap.begin(); aIt != mMap.end(); ++aIt)
     {
         mpDoc->insertCpAndFc(aIt->first);
     }
