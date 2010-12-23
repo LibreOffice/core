@@ -157,8 +157,8 @@ void Process::SetImage( const String &aAppPath, const String &aAppParams, const 
                 aTemp += ::rtl::OUString( (*aIter).second );
                 m_pEnvList[m_nEnvCount] = NULL;
                 rtl_uString_assign( &(m_pEnvList[m_nEnvCount]), aTemp.pData );
-                m_nEnvCount++;
-                aIter++;
+                ++m_nEnvCount;
+                ++aIter;
             }
         }
 
