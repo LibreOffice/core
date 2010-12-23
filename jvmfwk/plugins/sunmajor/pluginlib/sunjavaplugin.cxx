@@ -236,7 +236,7 @@ javaPluginError jfw_plugin_getAllJavaInfos(
     vector<rtl::Reference<VendorBase> > vecVerifiedInfos;
 
     typedef vector<rtl::Reference<VendorBase> >::iterator it;
-    for (it i= vecInfos.begin(); i != vecInfos.end(); i++)
+    for (it i= vecInfos.begin(); i != vecInfos.end(); ++i)
     {
         const rtl::Reference<VendorBase>& cur = *i;
 
@@ -313,7 +313,7 @@ javaPluginError jfw_plugin_getAllJavaInfos(
     arInfo = (JavaInfo**) rtl_allocateMemory(vecVerifiedInfos.size() * sizeof (JavaInfo*));
     int j = 0;
     typedef vector<rtl::Reference<VendorBase> >::const_iterator cit;
-    for (cit ii = vecVerifiedInfos.begin(); ii != vecVerifiedInfos.end(); ii++, j++)
+    for (cit ii = vecVerifiedInfos.begin(); ii != vecVerifiedInfos.end(); ++ii, ++j)
     {
         arInfo[j] = createJavaInfo(*ii);
     }
