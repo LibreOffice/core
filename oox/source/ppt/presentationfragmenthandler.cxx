@@ -201,7 +201,7 @@ void PresentationFragmentHandler::endDocument() throw (SAXException, RuntimeExce
                                 pMasterPersistPtr = *aIter;
                                 break;
                             }
-                            aIter++;
+                            ++aIter;
                         }
                         if ( aIter == rMasterPages.end() )
                         {   // masterpersist not found, we have to load it
