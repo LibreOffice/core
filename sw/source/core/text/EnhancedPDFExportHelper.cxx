@@ -2118,7 +2118,7 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
             else
                 pPDFExtOutDevData->SetLinkURL( aIBeg->nLinkId, aBookmarkName );
 
-            aIBeg++;
+            ++aIBeg;
         }
         rBookmarks.clear();
     }
