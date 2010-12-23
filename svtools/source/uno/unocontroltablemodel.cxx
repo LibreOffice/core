@@ -208,8 +208,8 @@ using namespace ::com::sun::star::awt::grid;
         TableSize                           nRowCount;
         bool                                bHasColumnHeaders;
         bool                                bHasRowHeaders;
-        bool                                bVScroll;
-        bool                                bHScroll;
+        ScrollbarVisibility                 eVScrollMode;
+        ScrollbarVisibility                 eHScrollMode;
         PTableRenderer                      pRenderer;
         PTableInputHandler                  pInputHandler;
         TableMetrics                        nRowHeight;
@@ -230,8 +230,8 @@ using namespace ::com::sun::star::awt::grid;
             ,nRowCount          ( 0         )
             ,bHasColumnHeaders  ( true      )
             ,bHasRowHeaders     ( false     )
-            ,bVScroll           ( false     )
-            ,bHScroll           ( false     )
+            ,eVScrollMode       ( ScrollbarShowNever )
+            ,eHScrollMode       ( ScrollbarShowNever )
             ,pRenderer          (           )
             ,pInputHandler      (           )
             ,nRowHeight         ( 10 )
@@ -438,21 +438,15 @@ using namespace ::com::sun::star::awt::grid;
     }
 
     //--------------------------------------------------------------------
-    ScrollbarVisibility UnoControlTableModel::getVerticalScrollbarVisibility(int overAllHeight, int actHeight) const
+    ScrollbarVisibility UnoControlTableModel::getVerticalScrollbarVisibility() const
     {
-        if(overAllHeight>=actHeight && !m_pImpl->bVScroll)
-            return ScrollbarShowNever;
-        else
-            return ScrollbarShowAlways;
+        return m_pImpl->eVScrollMode;
     }
 
     //--------------------------------------------------------------------
-    ScrollbarVisibility UnoControlTableModel::getHorizontalScrollbarVisibility(int overAllWidth, int actWidth) const
+    ScrollbarVisibility UnoControlTableModel::getHorizontalScrollbarVisibility() const
     {
-        if(overAllWidth>=actWidth && !m_pImpl->bHScroll)
-            return ScrollbarShowNever;
-        else
-            return ScrollbarShowAlways;
+        return m_pImpl->eHScrollMode;
     }
 
     //--------------------------------------------------------------------
@@ -480,25 +474,15 @@ using namespace ::com::sun::star::awt::grid;
     }
 
     //--------------------------------------------------------------------
-    void UnoControlTableModel::setVerticalScrollbarVisibility(bool _bVScroll) const
+    void UnoControlTableModel::setVerticalScrollbarVisibility( ScrollbarVisibility const i_visibility ) const
     {
-        m_pImpl->bVScroll = _bVScroll;
+        m_pImpl->eVScrollMode = i_visibility;
     }
 
     //--------------------------------------------------------------------
-    void UnoControlTableModel::setHorizontalScrollbarVisibility(bool _bHScroll) const
+    void UnoControlTableModel::setHorizontalScrollbarVisibility( ScrollbarVisibility const i_visibility ) const
     {
-        m_pImpl->bHScroll = _bHScroll;
-    }
-    //--------------------------------------------------------------------
-    bool UnoControlTableModel::hasVerticalScrollbar()
-    {
-        return m_pImpl->bVScroll;
-    }
-    //--------------------------------------------------------------------
-    bool UnoControlTableModel::hasHorizontalScrollbar()
-    {
-        return m_pImpl->bHScroll;
+        m_pImpl->eHScrollMode = i_visibility;
     }
     //--------------------------------------------------------------------
     void UnoControlTableModel::setCellContent(const std::vector<std::vector< Any > >& cellContent)

@@ -167,7 +167,7 @@ void SVTXGridControl::setProperty( const ::rtl::OUString& PropertyName, const An
             if( aValue >>= bHScroll )
             {
                 m_bHScroll = bHScroll;
-                m_pTableModel->setHorizontalScrollbarVisibility(bHScroll);
+                m_pTableModel->setHorizontalScrollbarVisibility( bHScroll ? ScrollbarShowAlways : ScrollbarShowSmart );
             }
             break;
         }
@@ -177,7 +177,7 @@ void SVTXGridControl::setProperty( const ::rtl::OUString& PropertyName, const An
             if( aValue >>= bVScroll )
             {
                 m_bVScroll = bVScroll;
-                m_pTableModel->setVerticalScrollbarVisibility(bVScroll);
+                m_pTableModel->setVerticalScrollbarVisibility( bVScroll ? ScrollbarShowAlways : ScrollbarShowSmart );
             }
             break;
         }

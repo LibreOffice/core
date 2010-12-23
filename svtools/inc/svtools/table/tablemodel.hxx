@@ -49,19 +49,6 @@ namespace svt { namespace table
 
 
     //====================================================================
-    //= cell data
-    //====================================================================
-    struct TableContentType
-    {
-        ::rtl::OUString sContent;
-        Image*  pImage;
-        TableContentType() :
-            sContent(),
-            pImage(  )
-            {
-            }
-     };
-    //====================================================================
     //= ScrollbarVisibility
     //====================================================================
     enum ScrollbarVisibility
@@ -402,17 +389,13 @@ namespace svt { namespace table
         */
         virtual TableMetrics    getRowHeaderWidth() const = 0;
 
-        /** determines the visibility of the vertical scrollbar of the table control
-            @param overAllHeight the height of the table with all rows
-            @param actHeight the given height of the table
+        /** returns the visibilit mode of the vertical scrollbar
         */
-        virtual ScrollbarVisibility getVerticalScrollbarVisibility(int overAllHeight,int actHeight) const = 0;
+        virtual ScrollbarVisibility getVerticalScrollbarVisibility() const = 0;
 
-        /** determines the visibility of the horizontal scrollbar of the table control
-            @param overAllWidth the width of the table with all columns
-            @param actWidth the given width of the table
+        /** returns the visibilit mode of the horizontal scrollbar
         */
-        virtual ScrollbarVisibility getHorizontalScrollbarVisibility(int overAllWidth, int actWidth) const = 0;
+        virtual ScrollbarVisibility getHorizontalScrollbarVisibility() const = 0;
 
         /** adds a listener to be notified of changes in the table model
         */
@@ -421,9 +404,6 @@ namespace svt { namespace table
         /** remove a listener to be notified of changes in the table model
         */
         virtual void removeTableModelListener( const PTableModelListener& i_listener ) = 0;
-
-        virtual bool hasVerticalScrollbar() = 0;
-        virtual bool hasHorizontalScrollbar() = 0;
 
         /** gets the content of the cells
         */

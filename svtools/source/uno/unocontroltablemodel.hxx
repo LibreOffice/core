@@ -129,12 +129,10 @@ class UnoControlTableModel : public ITableModel
         virtual TableMetrics    getRowHeight() const;
         virtual TableMetrics    getColumnHeaderHeight() const;
         virtual TableMetrics    getRowHeaderWidth() const;
-        virtual ScrollbarVisibility getVerticalScrollbarVisibility(int overAllHeight,int actHeight) const;
-        virtual ScrollbarVisibility getHorizontalScrollbarVisibility(int overAllWidth, int actWidth) const;
+        virtual ScrollbarVisibility getVerticalScrollbarVisibility() const;
+        virtual ScrollbarVisibility getHorizontalScrollbarVisibility() const;
         virtual void addTableModelListener( const PTableModelListener& i_listener );
         virtual void removeTableModelListener( const PTableModelListener& i_listener );
-        virtual bool hasVerticalScrollbar();
-        virtual bool hasHorizontalScrollbar();
         virtual std::vector< std::vector< ::com::sun::star::uno::Any > >&   getCellContent();
         virtual std::vector<rtl::OUString>&   getRowHeaderName();
         virtual ::com::sun::star::util::Color getLineColor();
@@ -148,8 +146,8 @@ class UnoControlTableModel : public ITableModel
         // other operations
         void    setRowCount(TableSize _nRowCount);
         void    setRowHeaderName(const std::vector<rtl::OUString>& cellColumnContent);
-        void    setVerticalScrollbarVisibility(bool _bVScroll) const;
-        void    setHorizontalScrollbarVisibility(bool _bHScroll) const;
+        void    setVerticalScrollbarVisibility( ScrollbarVisibility const i_visibility ) const;
+        void    setHorizontalScrollbarVisibility( ScrollbarVisibility const i_visibility ) const;
         void    setCellContent(const std::vector<std::vector< ::com::sun::star::uno::Any > >& cellContent);
         void    setColumnCount(TableSize _nColCount);
         void    setRowHeaders(bool _bRowHeaders);

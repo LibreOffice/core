@@ -139,11 +139,11 @@ namespace svt { namespace table
         {
             return 0;
         }
-        virtual ScrollbarVisibility getVerticalScrollbarVisibility(int , int ) const
+        virtual ScrollbarVisibility getVerticalScrollbarVisibility() const
         {
             return ScrollbarShowNever;
         }
-        virtual ScrollbarVisibility getHorizontalScrollbarVisibility(int , int ) const
+        virtual ScrollbarVisibility getHorizontalScrollbarVisibility() const
         {
             return ScrollbarShowNever;
         }
@@ -154,14 +154,6 @@ namespace svt { namespace table
         virtual void removeTableModelListener( const PTableModelListener& i_listener )
         {
             (void)i_listener;
-        }
-        virtual bool hasVerticalScrollbar()
-        {
-            return false;
-        }
-        virtual bool hasHorizontalScrollbar()
-        {
-            return false;
         }
         virtual ::com::sun::star::util::Color getLineColor()
         {
@@ -612,12 +604,6 @@ namespace svt { namespace table
             gridWidth -= m_nRowHeaderWidthPixel;
         }
 
-        if ( m_pModel->hasVerticalScrollbar() && ( gridWidth != 0 ) )
-        {
-            sal_Int32 scrollbarWidth = m_rAntiImpl.GetSettings().GetStyleSettings().GetScrollBarSize();
-            gridWidth-=scrollbarWidth;
-        }
-
         double colWidthsSum = 0.0;
         double colWithoutFixedWidthsSum = 0.0;
         double minColWithoutFixedSum = 0.0;
@@ -732,16 +718,18 @@ namespace svt { namespace table
     {
         //................................................................
         /// determines whether a scrollbar is needed for the given values
-        bool lcl_determineScrollbarNeed( ScrollbarVisibility _eVisibility,
-            long _nVisibleUnits, long _nRange, long const i_nPosition )
+        bool lcl_determineScrollbarNeed( long const i_position, ScrollbarVisibility const i_visibility,
+            long const i_availableSpace, long const i_neededSpace )
         {
-            if ( i_nPosition > 0 )
-                return true;
-            if ( _eVisibility == ScrollbarShowNever )
+            if ( i_visibility == ScrollbarShowNever )
                 return false;
-            if ( _eVisibility == ScrollbarShowAlways )
+            if ( i_visibility == ScrollbarShowAlways )
                 return true;
-            return _nVisibleUnits > _nRange;
+            if ( i_position > 0 )
+                return true;
+            if ( i_availableSpace >= i_neededSpace )
+                return false;
+            return true;
         }
 
         //................................................................
@@ -758,24 +746,21 @@ namespace svt { namespace table
 
         //................................................................
         void lcl_updateScrollbar( Window& _rParent, ScrollBar*& _rpBar,
-            ScrollbarVisibility _eVisibility, long _nVisibleUnits,
+            bool const i_needBar, long _nVisibleUnits,
             long _nPosition, long _nLineSize, long _nRange,
             bool _bHorizontal, const Link& _rScrollHandler )
         {
-            // do we need the scrollbar?
-            bool bNeedBar = lcl_determineScrollbarNeed( _eVisibility, _nVisibleUnits, _nRange, _nPosition );
-
             // do we currently have the scrollbar?
             bool bHaveBar = _rpBar != NULL;
 
             // do we need to correct the scrollbar visibility?
-            if ( bHaveBar && !bNeedBar )
+            if ( bHaveBar && !i_needBar )
             {
                 if ( _rpBar->IsTracking() )
                     _rpBar->EndTracking();
                 DELETEZ( _rpBar );
             }
-            else if ( !bHaveBar && bNeedBar )
+            else if ( !bHaveBar && i_needBar )
             {
                 _rpBar = new ScrollBar(
                     &_rParent,
@@ -859,23 +844,21 @@ namespace svt { namespace table
                                     ?   0
                                     :   m_aColumnWidths[ m_nColumnCount - 1 ].getEnd() - m_aColumnWidths[ 0 ].getStart();
 
+        const ScrollbarVisibility eVertScrollbar = m_pModel->getVerticalScrollbarVisibility();
+        const ScrollbarVisibility eHorzScrollbar = m_pModel->getHorizontalScrollbarVisibility();
+
         // do we need a vertical scrollbar?
+        bool bNeedVerticalScrollbar = lcl_determineScrollbarNeed(
+            m_nTopRow, eVertScrollbar, aDataCellPlayground.GetHeight(), m_nRowHeightPixel * m_nRowCount );
         bool bFirstRoundVScrollNeed = false;
-        if ( lcl_determineScrollbarNeed(
-                m_pModel->getVerticalScrollbarVisibility(aDataCellPlayground.GetHeight(), m_nRowHeightPixel*m_nRowCount),
-                lcl_getRowsFittingInto( aDataCellPlayground.GetHeight(), m_nRowHeightPixel ),
-                m_nRowCount,
-                m_nTopRow ) )
+        if ( bNeedVerticalScrollbar )
         {
             aDataCellPlayground.Right() -= nScrollbarMetrics;
             bFirstRoundVScrollNeed = true;
         }
         // do we need a horizontal scrollbar?
-        if ( lcl_determineScrollbarNeed(
-                m_pModel->getHorizontalScrollbarVisibility( aDataCellPlayground.GetWidth(), nAllColumnsWidth ),
-                lcl_getColumnsVisibleWithin( aDataCellPlayground, m_nLeftColumn, *this, false ),
-                m_nColumnCount,
-                m_nLeftColumn ) )
+        const bool bNeedHorizontalScrollbar = lcl_determineScrollbarNeed( m_nLeftColumn, eHorzScrollbar, aDataCellPlayground.GetWidth(), nAllColumnsWidth );
+        if ( bNeedHorizontalScrollbar )
         {
             aDataCellPlayground.Bottom() -= nScrollbarMetrics;
 
@@ -883,20 +866,21 @@ namespace svt { namespace table
             // the need for a vertical one may have changed, since the horizontal
             // SB might just occupy enough space so that not all rows do fit
             // anymore
-            if ( !bFirstRoundVScrollNeed && lcl_determineScrollbarNeed(
-                    m_pModel->getVerticalScrollbarVisibility(aDataCellPlayground.GetHeight(),m_nRowHeightPixel*m_nRowCount),
-                    lcl_getRowsFittingInto( aDataCellPlayground.GetHeight(), m_nRowHeightPixel ),
-                    m_nRowCount,
-                    m_nTopRow ) )
+            if  ( !bFirstRoundVScrollNeed )
             {
-                aDataCellPlayground.Right() -= nScrollbarMetrics;
+                bNeedVerticalScrollbar = lcl_determineScrollbarNeed(
+                    m_nTopRow, eVertScrollbar, aDataCellPlayground.GetHeight(), m_nRowHeightPixel * m_nRowCount );
+                if ( bNeedVerticalScrollbar )
+                {
+                    aDataCellPlayground.Right() -= nScrollbarMetrics;
+                }
             }
         }
         // create or destroy the vertical scrollbar, as needed
         lcl_updateScrollbar(
             m_rAntiImpl,
             m_pVScroll,
-            m_pModel->getVerticalScrollbarVisibility(aDataCellPlayground.GetHeight(),m_nRowHeightPixel*m_nRowCount),
+            bNeedVerticalScrollbar,
             lcl_getRowsFittingInto( aDataCellPlayground.GetHeight(), m_nRowHeightPixel ),
                                                                     // visible units
             m_nTopRow,                                              // current position
@@ -920,7 +904,7 @@ namespace svt { namespace table
         lcl_updateScrollbar(
             m_rAntiImpl,
             m_pHScroll,
-            m_pModel->getHorizontalScrollbarVisibility(aDataCellPlayground.GetWidth(), nAllColumnsWidth),
+            bNeedHorizontalScrollbar,
             lcl_getColumnsVisibleWithin( aDataCellPlayground, m_nLeftColumn, *this, false ),
                                                                     // visible units
             m_nLeftColumn,                                          // current position
