@@ -186,7 +186,7 @@ void printEntries(SvxEntries* entries)
 {
     SvxEntries::const_iterator iter = entries->begin();
 
-    for ( ; iter != entries->end(); iter++ )
+    for ( ; iter != entries->end(); ++iter )
     {
         SvxConfigEntry* entry = *iter;
 
@@ -281,7 +281,7 @@ generateCustomName(
         {
             break;
         }
-        iter++;
+        ++iter;
     }
 
     if ( iter != entries->end() )
@@ -321,7 +321,7 @@ generateCustomURL(
         {
             break;
         }
-        iter++;
+        ++iter;
     }
 
     if ( iter != entries->end() )
@@ -353,7 +353,7 @@ generateCustomMenuURL(
         {
             break;
         }
-        iter++;
+        ++iter;
     }
 
     if ( iter != entries->end() )
@@ -397,7 +397,7 @@ void RemoveEntry( SvxEntries* pEntries, SvxConfigEntry* pChildEntry )
             pEntries->erase( iter );
             break;
         }
-        iter++;
+        ++iter;
     }
 }
 
@@ -1315,7 +1315,7 @@ void MenuSaveInData::Apply(
     SvxEntries::const_iterator iter = GetEntries()->begin();
     SvxEntries::const_iterator end = GetEntries()->end();
 
-    for ( ; iter != end; iter++ )
+    for ( ; iter != end; ++iter )
     {
         SvxConfigEntry* pEntryData = *iter;
 
@@ -1344,7 +1344,7 @@ void MenuSaveInData::ApplyMenu(
     SvxEntries::const_iterator iter = pMenuData->GetEntries()->begin();
     SvxEntries::const_iterator end = pMenuData->GetEntries()->end();
 
-    for ( ; iter != end; iter++ )
+    for ( ; iter != end; ++iter )
     {
         SvxConfigEntry* pEntry = *iter;
 
@@ -2038,7 +2038,7 @@ void SvxConfigPage::ReloadTopLevelListBox( SvxConfigEntry* pToSelect )
         SvxEntries::const_iterator iter = GetSaveInData()->GetEntries()->begin();
         SvxEntries::const_iterator end = GetSaveInData()->GetEntries()->end();
 
-        for ( ; iter != end; iter++ )
+        for ( ; iter != end; ++iter )
         {
             SvxConfigEntry* pEntryData = *iter;
             USHORT nPos = aTopLevelListBox.InsertEntry( stripHotKey( pEntryData->GetName() ) );
@@ -2072,7 +2072,7 @@ void SvxConfigPage::AddSubMenusToUI(
     SvxEntries::const_iterator iter = pParentData->GetEntries()->begin();
     SvxEntries::const_iterator end = pParentData->GetEntries()->end();
 
-    for ( ; iter != end; iter++ )
+    for ( ; iter != end; ++iter )
     {
         SvxConfigEntry* pEntryData = *iter;
 
@@ -2096,7 +2096,7 @@ SvxEntries* SvxConfigPage::FindParentForChild(
     SvxEntries::const_iterator iter = pRootEntries->begin();
     SvxEntries::const_iterator end = pRootEntries->end();
 
-    for ( ; iter != end; iter++ )
+    for ( ; iter != end; ++iter )
     {
         SvxConfigEntry* pEntryData = *iter;
 
@@ -2155,7 +2155,7 @@ SvLBoxEntry* SvxConfigPage::AddFunction(
                 return NULL;
             }
 
-            iter++;
+            ++iter;
         }
     }
 
@@ -2196,12 +2196,12 @@ SvLBoxEntry* SvxConfigPage::InsertEntry(
         USHORT nPos = 0;
         while (*iter != pEntryData && ++iter != end)
         {
-            nPos++;
+            ++nPos;
         }
 
         // Now step past it to the entry after the currently selected one
-        iter++;
-        nPos++;
+        ++iter;
+        ++nPos;
 
         // Now add the new entry to the UI and to the parent's list
         if ( iter != end )
@@ -2582,7 +2582,7 @@ IMPL_LINK( SvxMenuConfigPage, SelectMenu, ListBox *, pBox )
         SvxEntries* pEntries = pMenuData->GetEntries();
         SvxEntries::const_iterator iter = pEntries->begin();
 
-        for ( ; iter != pEntries->end(); iter++ )
+        for ( ; iter != pEntries->end(); ++iter )
         {
             SvxConfigEntry* pEntry = *iter;
             InsertEntryIntoUI( pEntry );
@@ -2855,7 +2855,7 @@ SvxMainMenuOrganizerDialog::SvxMainMenuOrganizerDialog(
             {
                 aMenuListBox.Select( pLBEntry );
             }
-            iter++;
+            ++iter;
         }
     }
 
@@ -3249,7 +3249,7 @@ SvxConfigEntry::~SvxConfigEntry()
     {
         SvxEntries::const_iterator iter = pEntries->begin();
 
-        for ( ; iter != pEntries->end(); iter++ )
+        for ( ; iter != pEntries->end(); ++iter )
         {
             delete *iter;
         }
@@ -4347,7 +4347,7 @@ ToolbarSaveInData::HasURL( const OUString& rURL )
                 return TRUE;
         }
 
-        iter++;
+        ++iter;
     }
     return FALSE;
 }
@@ -4368,7 +4368,7 @@ void ToolbarSaveInData::Reset()
     SvxEntries::const_iterator end = GetEntries()->end();
 
     // reset each toolbar by calling removeSettings for it's toolbar URL
-    for ( ; toolbars != end; toolbars++ )
+    for ( ; toolbars != end; ++toolbars )
     {
         SvxConfigEntry* pToolbar = *toolbars;
 
@@ -4418,7 +4418,7 @@ void ToolbarSaveInData::ApplyToolbar(
     SvxEntries::const_iterator iter = pToolbarData->GetEntries()->begin();
     SvxEntries::const_iterator end = pToolbarData->GetEntries()->end();
 
-    for ( ; iter != end; iter++ )
+    for ( ; iter != end; ++iter )
     {
         SvxConfigEntry* pEntry = *iter;
 
@@ -4618,7 +4618,7 @@ void ToolbarSaveInData::RestoreToolbar( SvxConfigEntry* pToolbar )
         // in the toolbar
         SvxEntries::const_iterator iter = pToolbar->GetEntries()->begin();
         uno::Sequence< OUString > aURLSeq( 1 );
-        for ( ; iter != pToolbar->GetEntries()->end(); iter++ )
+        for ( ; iter != pToolbar->GetEntries()->end(); ++iter )
         {
             SvxConfigEntry* pEntry = *iter;
             aURLSeq[ 0 ] = pEntry->GetCommand();
@@ -4646,7 +4646,7 @@ void ToolbarSaveInData::ReloadToolbar( const OUString& rResourceURL )
     SvxEntries::const_iterator iter = GetEntries()->begin();
     SvxConfigEntry* pToolbar = NULL;
 
-    for ( ; iter != GetEntries()->end(); iter++ )
+    for ( ; iter != GetEntries()->end(); ++iter )
     {
         SvxConfigEntry* pEntry = *iter;
 
@@ -4890,7 +4890,7 @@ IMPL_LINK( SvxToolbarConfigPage, SelectToolbar, ListBox *, pBox )
     SvxEntries* pEntries = pToolbar->GetEntries();
     SvxEntries::const_iterator iter = pEntries->begin();
 
-    for ( ; iter != pEntries->end(); iter++ )
+    for ( ; iter != pEntries->end(); ++iter )
     {
         SvxConfigEntry* pEntry = *iter;
 
