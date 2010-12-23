@@ -98,7 +98,7 @@ LwpGlobalMgr::~LwpGlobalMgr()
         m_pXFStyleManager = NULL;
     }
     std::map<sal_uInt16,LwpEditorAttr*>::iterator iter;
-    for (iter =m_EditorAttrMap.begin();iter != m_EditorAttrMap.end(); iter++)
+    for (iter =m_EditorAttrMap.begin();iter != m_EditorAttrMap.end(); ++iter)
     {
         delete iter->second;
         iter->second = NULL;
