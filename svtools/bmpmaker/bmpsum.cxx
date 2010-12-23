@@ -191,7 +191,6 @@ sal_uInt64 BmpSum::GetCRC( const BitmapEx& rBmpEx )
     AlphaMask           aAlpha;
     BitmapReadAccess*   pAAcc = NULL;
     sal_uInt64          nRet = 0;
-    sal_uInt32          nCrc = 0;
 
     if( rBmpEx.IsTransparent() )
     {
@@ -202,6 +201,7 @@ sal_uInt64 BmpSum::GetCRC( const BitmapEx& rBmpEx )
     if( pRAcc && pRAcc->Width() && pRAcc->Height() )
     {
         SVBT32 aBT32;
+        sal_uInt32 nCrc = 0;
 
         for( long nY = 0; nY < pRAcc->Height(); ++nY )
         {
