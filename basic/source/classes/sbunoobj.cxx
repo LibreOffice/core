@@ -3309,7 +3309,7 @@ VBAConstantHelper::isVBAConstantType( const String& rName )
     ::rtl::OUString sKey( rName );
     VBAConstantsVector::const_iterator it = aConstCache.begin();
 
-    for( ; it != aConstCache.end(); it++ )
+    for( ; it != aConstCache.end(); ++it )
     {
         if( sKey.equalsIgnoreAsciiCase( *it ) )
         {
