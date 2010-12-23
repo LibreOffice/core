@@ -65,6 +65,9 @@ service UnoControlGridModel
 
         <p>You can implement your own instance of <type>XGridColumnModel</type> or use
         the <type>DefaultGridColumnModel</type>.
+
+        <p>The column model is in the ownership of the grid model: When you set a new column model, or dispose
+        the grid model, then the (old) column model is disposed, too.</p>
     */
     [property] XGridColumnModel ColumnModel;
 
@@ -72,6 +75,9 @@ service UnoControlGridModel
 
         <p>You can implement your own instance of <type>XGridDataModel</type> or use
         the <type>DefaultGridDataModel</type>.
+
+        <p>The data model is in the ownership of the grid model: When you set a new data model, or dispose
+        the grid model, then the (old) data model is disposed, too.</p>
     */
     [property] XGridDataModel GridDataModel;
 
