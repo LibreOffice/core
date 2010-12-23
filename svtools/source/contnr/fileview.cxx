@@ -1909,7 +1909,7 @@ void SvtFileView_Impl::Clear()
 
     std::vector< SortingData_Impl* >::iterator aIt;
 
-    for ( aIt = maContent.begin(); aIt != maContent.end(); aIt++ )
+    for ( aIt = maContent.begin(); aIt != maContent.end(); ++aIt )
         delete (*aIt);
 
     maContent.clear();
@@ -2170,7 +2170,7 @@ void SvtFileView_Impl::OpenFolder_Impl()
 
     std::vector< SortingData_Impl* >::iterator aIt;
 
-    for ( aIt = maContent.begin(); aIt != maContent.end(); aIt++ )
+    for ( aIt = maContent.begin(); aIt != maContent.end(); ++aIt )
     {
         if ( mbOnlyFolder && ! (*aIt)->mbIsFolder )
             continue;
@@ -2304,7 +2304,7 @@ void SvtFileView_Impl::CreateDisplayText_Impl()
 
     std::vector< SortingData_Impl* >::iterator aIt;
 
-    for ( aIt = maContent.begin(); aIt != maContent.end(); aIt++ )
+    for ( aIt = maContent.begin(); aIt != maContent.end(); ++aIt )
     {
         // title, type, size, date
         aValue = (*aIt)->GetTitle();
@@ -2576,7 +2576,7 @@ void SvtFileView_Impl::EntryRemoved( const OUString& rURL )
 
     std::vector< SortingData_Impl* >::iterator aIt;
 
-    for ( aIt = maContent.begin(); aIt != maContent.end(); aIt++ )
+    for ( aIt = maContent.begin(); aIt != maContent.end(); ++aIt )
     {
         if ( (*aIt)->maTargetURL == rURL )
         {
@@ -2594,7 +2594,7 @@ void SvtFileView_Impl::EntryRenamed( OUString& rURL,
 
     std::vector< SortingData_Impl* >::iterator aIt;
 
-    for ( aIt = maContent.begin(); aIt != maContent.end(); aIt++ )
+    for ( aIt = maContent.begin(); aIt != maContent.end(); ++aIt )
     {
         if ( (*aIt)->maTargetURL == rURL )
         {
@@ -2668,7 +2668,7 @@ ULONG SvtFileView_Impl::GetEntryPos( const OUString& rURL )
     std::vector< SortingData_Impl* >::iterator aIt;
     ULONG   nPos = 0;
 
-    for ( aIt = maContent.begin(); aIt != maContent.end(); aIt++ )
+    for ( aIt = maContent.begin(); aIt != maContent.end(); ++aIt )
     {
         if ( (*aIt)->maTargetURL == rURL )
             return nPos;
