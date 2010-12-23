@@ -241,7 +241,7 @@ PackageInformationProvider::isUpdateAvailable( const rtl::OUString& _sExtensionI
     }
 
     int nCount = 0;
-    for (dp_misc::UpdateInfoMap::iterator i(updateInfoMap.begin()); i != updateInfoMap.end(); i++)
+    for (dp_misc::UpdateInfoMap::iterator i(updateInfoMap.begin()); i != updateInfoMap.end(); ++i)
     {
         dp_misc::UpdateInfo const & info = i->second;
 
