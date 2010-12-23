@@ -310,7 +310,7 @@ void TestDialog( OUString const& name )
 void LayoutTest::RunFiles()
 {
     fprintf( stderr, "TEST: loading files\n" );
-    for ( std::list< OUString >::iterator  i = mFiles.begin(); i != mFiles.end(); i++ )
+    for ( std::list< OUString >::iterator  i = mFiles.begin(); i != mFiles.end(); ++i )
         LoadFile( *i );
     fprintf( stderr, "TEST: executing\n" );
     Execute();
