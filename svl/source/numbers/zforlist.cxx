@@ -1384,6 +1384,9 @@ sal_uInt32 SvNumberFormatter::ImpGetDefaultFormat( short nType )
 
 sal_uInt32 SvNumberFormatter::GetStandardFormat( short eType, LanguageType eLnge )
 {
+    if (eLnge == LANGUAGE_DONTKNOW)
+        eLnge = IniLnge;
+
     sal_uInt32 CLOffset = ImpGenerateCL(eLnge);
     switch(eType)
     {
