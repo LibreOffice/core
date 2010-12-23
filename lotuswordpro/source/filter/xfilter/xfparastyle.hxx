@@ -235,10 +235,7 @@ public:
 
     sal_uInt32 GetFlag(){ return m_nFlag; }
 
-    /**
-     * @descr   return margins.
-     */
-    XFMargins GetMargins(){return m_aMargin;}
+    XFMargins& GetMargins(){return m_aMargin;}
 
     virtual enumXFStyle GetStyleFamily();
 
