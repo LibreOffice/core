@@ -47,11 +47,11 @@ namespace DOM { namespace events {
                 if ((iter->second).is() && iter->second == aListener)
                 {
                     ListenerMap::iterator tmp_iter = iter;
-                    iter++;
+                    ++iter;
                     pMap->erase(tmp_iter);
                 }
                 else
-                    iter++;
+                    ++iter;
             }
         }
     }
@@ -67,7 +67,7 @@ namespace DOM { namespace events {
             ListenerMap *pMap = tIter->second;
             ListenerMap::const_iterator iter = pMap->lower_bound(pNode);
             ListenerMap::const_iterator ibound = pMap->upper_bound(pNode);
-            for( ; iter != ibound; iter++ )
+            for( ; iter != ibound; ++iter )
             {
                 if((iter->second).is())
                     (iter->second)->handleEvent(xEvent);
@@ -163,7 +163,7 @@ namespace DOM { namespace events {
 
         // start at the root
         inode = captureVector.end();
-        inode--;
+        --inode;
         if (inode != captureVector.end())
         {
             // capturing phase:
@@ -174,7 +174,7 @@ namespace DOM { namespace events {
                 pEvent->m_currentTarget = Reference< XEventTarget >(DOM::CNode::get(*inode));
                 callListeners(*inode, aType, xEvent, sal_True);
                 if  (pEvent->m_canceled) return sal_True;
-                inode--;
+                --inode;
             }
 
             // target phase
@@ -182,7 +182,7 @@ namespace DOM { namespace events {
             callListeners(*inode, aType, xEvent, sal_False);
             if  (pEvent->m_canceled) return sal_True;
             // bubbeling phase
-            inode++;
+            ++inode;
             if (aEvent->getBubbles()) {
                 pEvent->m_phase = PhaseType_BUBBLING_PHASE;
                 while (inode != captureVector.end())
@@ -190,7 +190,7 @@ namespace DOM { namespace events {
                     pEvent->m_currentTarget = Reference< XEventTarget >(DOM::CNode::get(*inode));
                     callListeners(*inode, aType, xEvent, sal_False);
                     if  (pEvent->m_canceled) return sal_True;
-                    inode++;
+                    ++inode;
                 }
             }
         }
