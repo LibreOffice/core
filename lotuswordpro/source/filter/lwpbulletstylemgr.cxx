@@ -185,24 +185,6 @@ rtl::OUString LwpBulletStyleMgr::RegisterBulletStyle(LwpPara* pPara, LwpBulletOv
     }
     else
     {
-        rtl::OUString aPrefix = rtl::OUString();
-
-        LwpFrib* pFrib = pBulletParaFribs->HasFrib(FRIB_TAG_DOCVAR);
-        LwpFribDocVar* pDocVarFrib = NULL;
-        if (pFrib)
-        {
-            pDocVarFrib = static_cast<LwpFribDocVar*>(pFrib);
-//              ModifierInfo* pInfo = pDocVarFrib->GetModifiers();
-            switch (pDocVarFrib->GetType())
-            {
-            case 0x000D: // division name
-                aPrefix = this->GetDivisionName();
-                break;
-            case 0x000E: // section name
-                aPrefix = this->GetSectionName(pPara);
-                break;
-            }
-        }
         ParaNumbering aParaNumbering;
         pBulletPara->GetParaNumber(1, &aParaNumbering);
         LwpFribParaNumber* pParaNumber = aParaNumbering.pParaNumber;
@@ -210,14 +192,13 @@ rtl::OUString LwpBulletStyleMgr::RegisterBulletStyle(LwpPara* pPara, LwpBulletOv
         {
             for (sal_uInt8 nPos = 1; nPos < 10; nPos++)
             {
-                aPrefix = rtl::OUString();
                 if (pParaNumber->GetStyleID() != NUMCHAR_other)
                 {
+                    rtl::OUString aPrefix;
                     XFNumFmt aFmt;
                     if (aParaNumbering.pPrefix)
                     {
                         aPrefix += aParaNumbering.pPrefix->GetText();
-//                          aFmt.SetPrefix(aParaNumbering.pPrefix->GetText() + aAdditionalInfoName);
                     }
 
                     rtl::OUString aNumber = LwpSilverBullet::GetNumCharByStyleID(pParaNumber);
@@ -257,7 +238,7 @@ rtl::OUString LwpBulletStyleMgr::RegisterBulletStyle(LwpPara* pPara, LwpBulletOv
                 pListStyle->SetListPosition(nPos, 0.0, 0.635, 0.0);
             }
             aStyleName = pXFStyleMgr->AddStyle(pListStyle)->GetStyleName();
-            }
+        }
 
     }
 
