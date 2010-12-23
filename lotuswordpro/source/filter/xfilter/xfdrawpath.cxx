@@ -78,7 +78,7 @@ rtl::OUString XFSvgPathEntry::ToString()
     rtl::OUString str = m_strCommand;
     std::vector<XFPoint>::iterator it;
 
-    for( it = m_aPoints.begin(); it != m_aPoints.end(); it++ )
+    for( it = m_aPoints.begin(); it != m_aPoints.end(); ++it )
     {
         XFPoint aPt= *it;
         str += DoubleToOUString(aPt.GetX()*1000) + A2OUSTR(" ") + DoubleToOUString(aPt.GetY()*1000) + A2OUSTR(" ");
@@ -171,7 +171,7 @@ void    XFDrawPath::ToXml(IXFStream *pStrm)
     //points
     rtl::OUString   strPath;
     std::vector<XFSvgPathEntry>::iterator it;
-    for( it = m_aPaths.begin(); it != m_aPaths.end(); it++ )
+    for( it = m_aPaths.begin(); it != m_aPaths.end(); ++it )
     {
         XFSvgPathEntry  aSvg = *it;
         strPath += aSvg.ToString();
@@ -203,7 +203,7 @@ XFRect  XFDrawPath::CalcViewBox()
         aPath = *itPath;
         points = aPath.m_aPoints;
 
-        for( itPoint = points.begin(); itPoint != points.end(); itPoint++ )
+        for( itPoint = points.begin(); itPoint != points.end(); ++itPoint )
         {
             aPoint = *itPoint;
             if( x1>aPoint.GetX() )
@@ -216,7 +216,7 @@ XFRect  XFDrawPath::CalcViewBox()
             if( y2<aPoint.GetY() )
                 y2 = aPoint.GetY();
         }
-        itPath++;
+        ++itPath;
     }while(itPath!=m_aPaths.end());
 
     return XFRect(x1,y1,x2-x1,y2-y1);
