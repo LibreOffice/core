@@ -108,7 +108,7 @@ Box_Base::ChildData*
 Box_Base::removeChildData( std::list< ChildData* >& lst, css::uno::Reference< css::awt::XLayoutConstrains > const& xChild )
 {
     for ( std::list< ChildData* >::iterator it = lst.begin();
-          it != lst.end(); it++ )
+          it != lst.end(); ++it )
     {
         if ( (*it)->mxChild == xChild )
         {
@@ -143,7 +143,7 @@ Box_Base::getChildren()
     uno::Sequence< uno::Reference< awt::XLayoutConstrains > > children( maChildren.size() );
     unsigned int index = 0;
     for ( std::list< ChildData* >::iterator it = maChildren.begin();
-          it != maChildren.end(); it++, index++ )
+          it != maChildren.end(); ++it, ++index )
         children[index] = ( *it )->mxChild;
 
     return children;
@@ -155,7 +155,7 @@ Box_Base::getChildProperties( const uno::Reference< awt::XLayoutConstrains >& xC
 {
 
     for ( std::list< ChildData * >::iterator it = maChildren.begin();
-          it != maChildren.end(); it++)
+          it != maChildren.end(); ++it)
     {
         if ( ( *it )->mxChild == xChild )
         {
