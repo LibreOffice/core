@@ -416,7 +416,7 @@ BenError LtcBenContainer::CreateGraphicStreams(std::vector<SvStream *> * pStream
 
     /* traverse the found properties and construct the stream vectors */
     std::vector<std::string>::iterator itor;
-    for (itor = aGrPropertyVector.begin(); itor != aGrPropertyVector.end(); itor ++)
+    for (itor = aGrPropertyVector.begin(); itor != aGrPropertyVector.end(); ++itor)
     {
         // get property names with suffix of S&D
         char sSName[32], sDName[32];
@@ -427,7 +427,7 @@ BenError LtcBenContainer::CreateGraphicStreams(std::vector<SvStream *> * pStream
 
         // erase strings in vector
         std::vector<std::string>::iterator itorSearch;
-        for (itorSearch = aGrPropertyVector.begin(); itorSearch != aGrPropertyVector.end(); itorSearch ++)
+        for (itorSearch = aGrPropertyVector.begin(); itorSearch != aGrPropertyVector.end(); ++itorSearch)
         {
             if( (*itorSearch == sSName) || (*itorSearch == sDName) )
             {
