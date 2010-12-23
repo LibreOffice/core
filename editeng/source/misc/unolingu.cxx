@@ -264,9 +264,9 @@ void SvxLinguConfigUpdate::UpdateAll( sal_Bool bForceCheck )
 
         for (int k = 0;  k < nNumServices;  ++k)
         {
-            OUString aService( A2OU( apServices[k] ) );
-            OUString aActiveList( A2OU( apCurLists[k] ) );
-            OUString aLastFoundList( A2OU( apLastFoundLists[k] ) );
+            OUString aService( ::rtl::OUString::createFromAscii( apServices[k] ) );
+            OUString aActiveList( ::rtl::OUString::createFromAscii( apCurLists[k] ) );
+            OUString aLastFoundList( ::rtl::OUString::createFromAscii( apLastFoundLists[k] ) );
             INT32 i;
 
             //
@@ -364,7 +364,7 @@ void SvxLinguConfigUpdate::UpdateAll( sal_Bool bForceCheck )
             for (int i = 0;  i < 2;  ++i)
             {
                 const sal_Char *pSubNodeName = (i == 0) ? apCurLists[k] : apLastFoundLists[k];
-                OUString aSubNodeName( A2OU(pSubNodeName) );
+                OUString aSubNodeName( ::rtl::OUString::createFromAscii(pSubNodeName) );
 
                 list_entry_map_t &rCurMap = (i == 0) ? aCurSvcs[k] : aLastFoundSvcs[k];
                 list_entry_map_t::const_iterator aIt( rCurMap.begin() );
