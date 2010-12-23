@@ -333,8 +333,10 @@ UString AttributeListImpl::getTypeByName( const UString& sName ) THROWS( (UsrSys
 {
     vector<struct TagAttribute>::iterator ii = m_pImpl->vecAttribute.begin();
 
-    for( ; ii != m_pImpl->vecAttribute.end() ; ii ++ ) {
-        if( (*ii).sName == sName ) {
+    for (; ii != m_pImpl->vecAttribute.end(); ++ii)
+    {
+        if( (*ii).sName == sName )
+        {
             return (*ii).sType;
         }
     }
@@ -345,8 +347,10 @@ UString AttributeListImpl::getValueByName(const UString& sName) THROWS( (UsrSyst
 {
     vector<struct TagAttribute>::iterator ii = m_pImpl->vecAttribute.begin();
 
-    for( ; ii != m_pImpl->vecAttribute.end() ; ii ++ ) {
-        if( (*ii).sName == sName ) {
+    for (; ii != m_pImpl->vecAttribute.end(); ++ii)
+    {
+        if( (*ii).sName == sName )
+        {
             return (*ii).sValue;
         }
     }
