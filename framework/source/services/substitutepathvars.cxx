@@ -639,7 +639,7 @@ SubstitutePathVariables::SubstitutePathVariables( const Reference< XMultiService
 
     // Sort user variables to path length
     SubstituteVariables::const_iterator pIter;
-    for ( pIter = m_aSubstVarMap.begin(); pIter != m_aSubstVarMap.end(); pIter++ )
+    for ( pIter = m_aSubstVarMap.begin(); pIter != m_aSubstVarMap.end(); ++pIter )
     {
         ReSubstUserVarOrder aUserOrderVar;
         rtl::OUStringBuffer aStrBuffer( pIter->second.aSubstVariable.getLength() );
@@ -1041,7 +1041,7 @@ throw ( RuntimeException )
     while ( !bResubstitutionCompleted )
     {
         ReSubstFixedVarOrderVector::const_iterator pIterFixed;
-        for ( pIterFixed = m_aReSubstFixedVarOrder.begin(); pIterFixed != m_aReSubstFixedVarOrder.end(); pIterFixed++ )
+        for ( pIterFixed = m_aReSubstFixedVarOrder.begin(); pIterFixed != m_aReSubstFixedVarOrder.end(); ++pIterFixed )
         {
             rtl::OUString aValue = m_aPreDefVars.m_FixedVar[ (sal_Int32)pIterFixed->eVariable ];
             sal_Int32 nPos = aURL.indexOf( aValue );
@@ -1081,7 +1081,7 @@ throw ( RuntimeException )
 
         // This part can be iteratered more than one time as variables can contain variables again!
         ReSubstUserVarOrderVector::const_iterator pIterUser;
-        for ( pIterUser = m_aReSubstUserVarOrder.begin(); pIterUser != m_aReSubstUserVarOrder.end(); pIterUser++ )
+        for ( pIterUser = m_aReSubstUserVarOrder.begin(); pIterUser != m_aReSubstUserVarOrder.end(); ++pIterUser )
         {
             rtl::OUString aVarValue = pIterUser->aVarName;
             sal_Int32 nPos = aURL.indexOf( aVarValue );
