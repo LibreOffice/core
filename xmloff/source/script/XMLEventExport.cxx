@@ -70,7 +70,7 @@ XMLEventExport::~XMLEventExport()
     for( HandlerMap::iterator aIter =
              aHandlerMap.begin();
          aIter != aEnd;
-         aIter++ )
+         ++aIter )
     {
         delete aIter->second;
     }
