@@ -452,7 +452,7 @@ void ZipPackageFolder::saveContents(OUString &rPath, std::vector < Sequence < Pr
                         if ( !bToBeCompressed || bRawStream )
                         {
                             // The raw stream can neither be encrypted nor connected
-                            OSL_ENSURE( !bRawStream || !bToBeCompressed && !bToBeEncrypted, "The stream is already encrypted!\n" );
+                            OSL_ENSURE( !bRawStream || ( !bToBeCompressed && !bToBeEncrypted ), "The stream is already encrypted!\n" );
                             xSeek->seek ( bRawStream ? pStream->GetMagicalHackPos() : 0 );
                             ImplSetStoredData ( *pTempEntry, xStream );
 
