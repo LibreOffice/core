@@ -73,7 +73,8 @@ struct Writer_Impl
 
 Writer_Impl::Writer_Impl()
     : m_pStream(0)
-    , pSrcArr( 0 ), pDestArr( 0 ), pFontRemoveLst( 0 ), pBkmkNodePos( 0 )
+    , pSrcArr( 0 ), pDestArr( 0 ), pFontRemoveLst( 0 )
+    , pBkmkArr( 0 ), pBkmkNodePos( 0 )
 {
 }
 
