@@ -1134,7 +1134,7 @@ void ShapeSortContext::moveShape( sal_Int32 nSourcePos, sal_Int32 nDestPos )
                 DBG_ASSERT( (*aIter).nIs >= nDestPos, "Shape sorting failed" );
                 (*aIter).nIs++;
             }
-            aIter++;
+            ++aIter;
         }
 
         aIter = maUnsortedList.begin();
@@ -1147,7 +1147,7 @@ void ShapeSortContext::moveShape( sal_Int32 nSourcePos, sal_Int32 nDestPos )
                 DBG_ASSERT( (*aIter).nIs >= nDestPos, "shape sorting failed" );
                 (*aIter).nIs++;
             }
-            aIter++;
+            ++aIter;
         }
     }
 }
@@ -1379,7 +1379,7 @@ void XMLShapeImportHelper::moveGluePointMapping( const com::sun::star::uno::Refe
             {
                 if ( (*aShapeIdIter).second != -1 )
                     (*aShapeIdIter).second += n;
-                aShapeIdIter++;
+                ++aShapeIdIter;
             }
         }
     }
