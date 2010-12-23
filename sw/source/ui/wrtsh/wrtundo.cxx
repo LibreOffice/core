@@ -129,7 +129,7 @@ String SwWrtShell::GetDoString( DoType eDoType ) const
     default:;//prevent warning
     }
 
-    ::rtl::OUStringBuffer buf( String( SvtResId( nResStr ) ) );
+    ::rtl::OUStringBuffer buf = ::rtl::OUStringBuffer( String( SvtResId( nResStr ) ) );
     buf.append(aUndoStr);
 
     return buf.makeStringAndClear();
