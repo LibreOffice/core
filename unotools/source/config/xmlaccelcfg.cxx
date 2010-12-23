@@ -377,7 +377,7 @@ void OWriteAccelatorDocumentHandler::WriteAcceleratorDocument()
     m_xWriteDocumentHandler->ignorableWhitespace( OUString() );
 
     std::list< SvtAcceleratorConfigItem>::const_iterator p;
-    for ( p = m_aWriteAcceleratorList.begin(); p != m_aWriteAcceleratorList.end(); p++ )
+    for ( p = m_aWriteAcceleratorList.begin(); p != m_aWriteAcceleratorList.end(); ++p )
         WriteAcceleratorItem( *p );
 
     m_xWriteDocumentHandler->endElement( OUString( RTL_CONSTASCII_USTRINGPARAM( ELEMENT_ACCELERATORLIST )) );
