@@ -502,10 +502,12 @@ namespace
         sal_Char aBuf[2];
         size_t nValueLen = lcl_tryReadConfigString( _pLine, _nLineLen, _pKeyName, aBuf, sizeof( aBuf ) );
         if ( nValueLen )
+        {
             if ( strcmp( aBuf, "1" ) == 0 )
                 *_out_pnAllFlags |= _nCheckFlag;
             else
                 *_out_pnAllFlags &= ~_nCheckFlag;
+        }
     }
     void lcl_tryReadHexByte( const sal_Char* _pLine, size_t _nLineLen, const sal_Char* _pKeyName, BYTE* _out_pnValue )
     {
