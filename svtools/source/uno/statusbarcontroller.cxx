@@ -300,7 +300,7 @@ throw ( RuntimeException )
         Reference< XInterface > xIfac( pIter->second, UNO_QUERY );
         if ( xSource == xIfac )
             pIter->second.clear();
-        pIter++;
+        ++pIter;
     }
 
     Reference< XInterface > xIfac( m_xFrame, UNO_QUERY );
