@@ -441,7 +441,7 @@ void SfxPrinter::UpdateFonts_Impl()
     // Try to add all non-regular fonts. It could be that there was no regular font
     // with the same name added.
     std::vector< Font >::const_iterator pIter;
-    for ( pIter = aNonRegularFonts.begin(); pIter != aNonRegularFonts.end(); pIter++ )
+    for ( pIter = aNonRegularFonts.begin(); pIter != aNonRegularFonts.end(); ++pIter )
     {
         if ( SfxFindFont_Impl( *FONTS(), pIter->GetName() ) == 0 )
         {
