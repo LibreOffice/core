@@ -467,7 +467,7 @@ void generateXDispatchBodies(std::ostream& o, ProgramOptions const & options)
         }
 
         o << "        }\n";
-        iter++;
+        ++iter;
     }
     o << "    }\n\n";
 
@@ -503,7 +503,7 @@ void generateXDispatchProviderBodies(std::ostream& o, ProgramOptions const & opt
         }
 
         o << "        }\n";
-        iter++;
+        ++iter;
     }
     o << "        return null;\n    }\n\n";
 
@@ -532,7 +532,7 @@ void generateMethodBodies(std::ostream& o,
     codemaker::GeneratedTypeSet generated;
     while (iter != interfaces.end()) {
         OString type(*iter);
-        iter++;
+        ++iter;
         if (type.equals("com.sun.star.lang.XServiceInfo")) {
             generateXServiceInfoBodies(o);
             generated.add(type);
@@ -764,7 +764,7 @@ void generateClassDefinition(std::ostream& o,
             interfaces.begin();
         while (iter != interfaces.end()) {
             o << (*iter);
-            iter++;
+            ++iter;
             if (iter != interfaces.end())
                 o << ",\n              ";
         }
@@ -791,7 +791,7 @@ void generateClassDefinition(std::ostream& o,
             services.begin();
         while (iter != services.end()) {
             o << "        \"" << (*iter).replace('/','.') << "\"";
-            iter++;
+            ++iter;
             if (iter != services.end())
                 o << ",\n";
             else
@@ -809,7 +809,7 @@ void generateClassDefinition(std::ostream& o,
             printType(o, options, manager, iter->second.first.replace('.','/'),
                       false, false);
             o << " m_" << iter->first << ";\n";
-            iter++;
+            ++iter;
         }
     } else if (!attributes.empty()) {
         AttributeInfo::const_iterator iter =
@@ -823,7 +823,7 @@ void generateClassDefinition(std::ostream& o,
             printType(o, options, manager, iter->second.first.replace('.','/'),
                       false, true);
             o <<";\n";
-            iter++;
+            ++iter;
         }
     }
 
@@ -875,7 +875,7 @@ void generateSkeleton(ProgramOptions const & options,
     std::vector< OString >::const_iterator iter = types.begin();
     while (iter != types.end()) {
         checkType(manager, *iter, interfaces, services, properties);
-        iter++;
+        ++iter;
     }
 
     if (options.componenttype == 3) {
