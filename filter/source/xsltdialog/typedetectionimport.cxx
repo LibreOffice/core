@@ -153,7 +153,7 @@ Node* TypeDetectionImporter::findTypeNode( const OUString& rType )
         if( (*aIter)->maName == rType )
             return (*aIter);
 
-        aIter++;
+        ++aIter;
     }
 
     return NULL;
