@@ -60,11 +60,17 @@ public:
 
     UnoControlModel* Clone() const;
 
+    // ::com::sun::star::lang::XComponent
+    void SAL_CALL dispose(  ) throw(::com::sun::star::uno::RuntimeException);
+
     // ::com::sun::star::beans::XMultiPropertySet
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException);
 
     // ::com::sun::star::io::XPersistObject
     ::rtl::OUString SAL_CALL getServiceName() throw(::com::sun::star::uno::RuntimeException);
+
+    // OPropertySetHelper
+    void SAL_CALL setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const ::com::sun::star::uno::Any& rValue ) throw (::com::sun::star::uno::Exception);
 
     // XServiceInfo
     DECLIMPL_SERVICEINFO_DERIVED( UnoGridModel, UnoControlModel, szServiceName_GridControlModel )

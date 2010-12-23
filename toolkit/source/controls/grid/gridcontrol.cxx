@@ -76,8 +76,8 @@ UnoGridModel::UnoGridModel( const ::com::sun::star::uno::Reference< ::com::sun::
     ImplRegisterProperty( BASEPROPERTY_TABSTOP );
     ImplRegisterProperty( BASEPROPERTY_GRID_SHOWROWHEADER );
     ImplRegisterProperty( BASEPROPERTY_GRID_SHOWCOLUMNHEADER );
-    ImplRegisterProperty( BASEPROPERTY_GRID_DATAMODEL );
-    ImplRegisterProperty( BASEPROPERTY_GRID_COLUMNMODEL );
+    ImplRegisterProperty( BASEPROPERTY_GRID_DATAMODEL, makeAny( maContext.createComponent( "com.sun.star.awt.grid.DefaultGridDataModel" ) ) );
+    ImplRegisterProperty( BASEPROPERTY_GRID_COLUMNMODEL, makeAny( maContext.createComponent( "com.sun.star.awt.grid.DefaultGridColumnModel" ) ) );
     ImplRegisterProperty( BASEPROPERTY_GRID_SELECTIONMODE );
     ImplRegisterProperty( BASEPROPERTY_FONTRELIEF );
     ImplRegisterProperty( BASEPROPERTY_FONTEMPHASISMARK );
@@ -88,15 +88,6 @@ UnoGridModel::UnoGridModel( const ::com::sun::star::uno::Reference< ::com::sun::
     ImplRegisterProperty( BASEPROPERTY_GRID_HEADER_BACKGROUND );
     ImplRegisterProperty( BASEPROPERTY_GRID_LINE_COLOR );
     ImplRegisterProperty( BASEPROPERTY_GRID_ROW_BACKGROUND );
-
-    osl_incrementInterlockedCount( &m_refCount );
-    {
-        setFastPropertyValue( BASEPROPERTY_GRID_COLUMNMODEL,
-            makeAny( maContext.createComponent( "com.sun.star.awt.grid.DefaultGridColumnModel" ) ) );
-        setFastPropertyValue( BASEPROPERTY_GRID_DATAMODEL,
-            makeAny( maContext.createComponent( "com.sun.star.awt.grid.DefaultGridDataModel" ) ) );
-    }
-    osl_decrementInterlockedCount( &m_refCount );
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -109,6 +100,53 @@ UnoGridModel::UnoGridModel( const UnoGridModel& rModel )
 UnoControlModel* UnoGridModel::Clone() const
 {
     return new UnoGridModel( *this );
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+namespace
+{
+    void lcl_dispose_nothrow( const Any& i_component )
+    {
+        try
+        {
+            const Reference< XComponent > xComponent( i_component, UNO_QUERY_THROW );
+            xComponent->dispose();
+        }
+        catch( const Exception& )
+        {
+            DBG_UNHANDLED_EXCEPTION();
+        }
+    }
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+void SAL_CALL UnoGridModel::dispose(  ) throw(RuntimeException)
+{
+    lcl_dispose_nothrow( getFastPropertyValue( BASEPROPERTY_GRID_COLUMNMODEL ) );
+    lcl_dispose_nothrow( getFastPropertyValue( BASEPROPERTY_GRID_DATAMODEL ) );
+
+    UnoControlModel::dispose();
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+void SAL_CALL UnoGridModel::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const Any& rValue ) throw (Exception)
+{
+    Any aOldSubModel;
+    if ( ( nHandle == BASEPROPERTY_GRID_COLUMNMODEL ) || ( nHandle == BASEPROPERTY_GRID_DATAMODEL ) )
+    {
+        aOldSubModel = getFastPropertyValue( nHandle );
+        if ( aOldSubModel == rValue )
+        {
+            OSL_ENSURE( false, "UnoGridModel::setFastPropertyValue_NoBroadcast: setting the same value, again!" );
+                // shouldn't this have been caught by convertFastPropertyValue?
+            aOldSubModel.clear();
+        }
+    }
+
+    UnoControlModel::setFastPropertyValue_NoBroadcast( nHandle, rValue );
+
+    if ( aOldSubModel.hasValue() )
+        lcl_dispose_nothrow( aOldSubModel );
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -130,10 +168,6 @@ Any UnoGridModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
             return uno::makeAny( (sal_Bool)sal_False );
         case BASEPROPERTY_GRID_SHOWCOLUMNHEADER:
             return uno::makeAny( (sal_Bool)sal_True );
-        case BASEPROPERTY_GRID_DATAMODEL:
-            return uno::makeAny( Reference<XGridDataModel> ());
-        case BASEPROPERTY_GRID_COLUMNMODEL:
-            return uno::makeAny(Reference<XGridColumnModel>() );
         case BASEPROPERTY_GRID_EVEN_ROW_BACKGROUND:
             return uno::makeAny( com::sun::star::util::Color(0xFFFFFF) );
         case BASEPROPERTY_GRID_HEADER_BACKGROUND:
