@@ -329,10 +329,10 @@ void GSIBlock::InsertLine( GSILine* pLine, ByteString aSourceLang)
             return;
         }
     }
-    ULONG nPos = 0;
 
     if ( aSourceLang.Len() ) // only check blockstructure if source lang is given
     {
+        ULONG nPos = 0;
         while ( nPos < Count() )
         {
             if ( GetObject( nPos )->GetLanguageId().Equals( pLine->GetLanguageId() ) )
