@@ -55,6 +55,7 @@
 #include <editeng/flditem.hxx>
 #include <svx/xflclit.hxx>
 #include <filter/msfilter/svxmsbas.hxx>
+#include <oox/xls/excelvbaproject.hxx>
 #include <basic/basmgr.hxx>
 
 #include <vcl/graph.hxx>
@@ -243,6 +244,10 @@ void ImportExcel8::ReadBasic( void )
             SvxImportMSVBasic aBasicImport( *pShell, *xRootStrg, bLoadCode, bLoadStrg );
             bool bAsComment = !bLoadExecutable;
             aBasicImport.Import( EXC_STORAGE_VBA_PROJECT, EXC_STORAGE_VBA, bAsComment );
+
+            uno::Reference< sheet::XSpreadsheetDocument > xDocument( pShell->GetModel(), uno::UNO_QUERY );
+            ::oox::xls::ExcelVbaProject aVbaProject( ::comphelper::getProcessServiceFactory(), xDocument );
+            aVbaProject.createMissingModules();
         }
     }
 }

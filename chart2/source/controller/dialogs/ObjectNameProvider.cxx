@@ -332,7 +332,7 @@ rtl::OUString ObjectNameProvider::getName( ObjectType eObjectType, bool bPlural 
     }
     return aRet;
 }
-//static
+
 rtl::OUString ObjectNameProvider::getAxisName( const rtl::OUString& rObjectCID
                         , const uno::Reference< frame::XModel >& xChartModel  )
 {
@@ -373,7 +373,6 @@ rtl::OUString ObjectNameProvider::getAxisName( const rtl::OUString& rObjectCID
     return aRet;
 }
 
-//static
 OUString ObjectNameProvider::getTitleNameByType( TitleHelper::eTitleType eType )
 {
     OUString aRet;
@@ -412,7 +411,6 @@ OUString ObjectNameProvider::getTitleNameByType( TitleHelper::eTitleType eType )
     return aRet;
 }
 
-//static
 OUString ObjectNameProvider::getTitleName( const OUString& rObjectCID
                         , const Reference< frame::XModel >& xChartModel )
 {
@@ -432,7 +430,6 @@ OUString ObjectNameProvider::getTitleName( const OUString& rObjectCID
     return aRet;
 }
 
-//static
 rtl::OUString ObjectNameProvider::getGridName( const rtl::OUString& rObjectCID
                         , const uno::Reference< frame::XModel >& xChartModel )
 {
@@ -709,7 +706,6 @@ rtl::OUString ObjectNameProvider::getHelpText( const rtl::OUString& rObjectCID, 
     return aRet;
 }
 
-// static
 rtl::OUString ObjectNameProvider::getSelectedObjectText( const rtl::OUString & rObjectCID, const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartDocument >& xChartDocument )
 {
     rtl::OUString aRet;
@@ -762,8 +758,6 @@ rtl::OUString ObjectNameProvider::getSelectedObjectText( const rtl::OUString & r
     return aRet;
 }
 
-
-// static
 rtl::OUString ObjectNameProvider::getNameForCID(
     const rtl::OUString& rObjectCID,
     const uno::Reference< chart2::XChartDocument >& xChartDocument )
@@ -820,7 +814,6 @@ rtl::OUString ObjectNameProvider::getNameForCID(
     return getName( eType );
 }
 
-//static
 rtl::OUString ObjectNameProvider::getName_ObjectForSeries(
         ObjectType eObjectType,
         const rtl::OUString& rSeriesCID,
@@ -839,7 +832,6 @@ rtl::OUString ObjectNameProvider::getName_ObjectForSeries(
         return ObjectNameProvider::getName_ObjectForAllSeries( eObjectType );
 }
 
-//static
 rtl::OUString ObjectNameProvider::getName_ObjectForAllSeries( ObjectType eObjectType )
 {
     OUString aRet = String(SchResId(STR_OBJECT_FOR_ALL_SERIES));

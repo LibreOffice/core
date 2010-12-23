@@ -49,7 +49,7 @@
 #include <svl/zforlist.hxx>
 #include <vcl/msgbox.hxx>
 #include <comphelper/processfactory.hxx>
-
+#include <sfx2/sfxresid.hxx>
 #include "sc.hrc"
 #include "scmod.hxx"
 #include "attrib.hxx"
@@ -251,7 +251,7 @@ IMPL_LINK( ScAutoFormatDlg, AddHdl, void *, EMPTYARG )
 {
     if ( !bFmtInserted && pSelFmtData )
     {
-        String              aStrStandard( ScResId(STR_STANDARD) );
+        String              aStrStandard( SfxResId(STR_STANDARD) );
         String              aFormatName;
         ScStringInputDlg*   pDlg;
         BOOL                bOk = FALSE;

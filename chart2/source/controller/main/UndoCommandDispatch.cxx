@@ -39,9 +39,8 @@
 #include <tools/diagnose_ex.h>
 
 // for ressource strings STR_UNDO and STR_REDO
-#include <sfx2/sfx.hrc>
-
-#include "ResId.hxx"
+#include <svtools/svtools.hrc>
+#include <svtools/svtdata.hxx>
 
 using namespace ::com::sun::star;
 

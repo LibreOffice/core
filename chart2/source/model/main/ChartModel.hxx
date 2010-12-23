@@ -39,6 +39,7 @@
 #include <com/sun/star/document/XFilter.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/util/XCloneable.hpp>
 #include <com/sun/star/embed/XVisualObject.hpp>
@@ -62,9 +63,9 @@
 #include <com/sun/star/embed/XStorage.hpp>
 #include <com/sun/star/datatransfer/XTransferable.hpp>
 
-#if ! defined(INCLUDED_COMPHELPER_IMPLBASE_VAR_HXX_20)
-#define INCLUDED_COMPHELPER_IMPLBASE_VAR_HXX_20
-#define COMPHELPER_IMPLBASE_INTERFACE_NUMBER 20
+#if ! defined(INCLUDED_COMPHELPER_IMPLBASE_VAR_HXX_21)
+#define INCLUDED_COMPHELPER_IMPLBASE_VAR_HXX_21
+#define COMPHELPER_IMPLBASE_INTERFACE_NUMBER 21
 #include "comphelper/implbase_var.hxx"
 #endif
 #include <osl/mutex.hxx>
@@ -75,6 +76,8 @@
 // for auto_ptr
 #include <memory>
 
+class SvNumberFormatter;
+
 //=============================================================================
 
 namespace chart
@@ -84,7 +87,7 @@ namespace impl
 {
 
 // Note: needed for queryInterface (if it calls the base-class implementation)
-typedef ::comphelper::WeakImplHelper20<
+typedef ::comphelper::WeakImplHelper21<
 //       ::com::sun::star::frame::XModel        //comprehends XComponent (required interface), base of XChartDocument
          ::com::sun::star::util::XCloseable     //comprehends XCloseBroadcaster
         ,::com::sun::star::frame::XStorable2    //(extension of XStorable)
@@ -94,6 +97,7 @@ typedef ::comphelper::WeakImplHelper20<
     //  ,::com::sun::star::uno::XInterface      // implemented by WeakImplHelper(optional interface)
     //  ,::com::sun::star::lang::XTypeProvider  // implemented by WeakImplHelper
         ,::com::sun::star::lang::XServiceInfo
+        ,::com::sun::star::lang::XInitialization
         ,::com::sun::star::chart2::XChartDocument  // derived from XModel
         ,::com::sun::star::chart2::data::XDataReceiver   // public API
         ,::com::sun::star::chart2::XTitled
@@ -159,6 +163,7 @@ private:
                                 m_xOwnNumberFormatsSupplier;
     ::com::sun::star::uno::Reference< com::sun::star::util::XNumberFormatsSupplier >
                                 m_xNumberFormatsSupplier;
+    std::auto_ptr< SvNumberFormatter > m_apSvNumberFormatter; // #i113784# avoid memory leak
 
     ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartTypeManager >
         m_xChartTypeManager;
@@ -243,6 +248,12 @@ public:
 
     APPHELPER_XSERVICEINFO_DECL()
     APPHELPER_SERVICE_FACTORY_HELPER(ChartModel)
+
+    //-----------------------------------------------------------------
+    // ::com::sun::star::lang::XInitialization
+    //-----------------------------------------------------------------
+    virtual void SAL_CALL initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments )
+                throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
 
     //-----------------------------------------------------------------
     // ::com::sun::star::frame::XModel (required interface)

@@ -109,11 +109,10 @@ DEF1NAME=		$(SHL1TARGET)
 
 # --- Resources ---------------------------------------------------------------
 
-# sfx.srs is needed for the strings for UNDO and REDO in the UndoCommandDispatch
 RESLIB1LIST=\
     $(SRS)$/chcdialogs.srs \
     $(SRS)$/chcmenus.srs \
-    $(SOLARCOMMONRESDIR)$/sfx.srs
+
 
 RESLIB1NAME=	$(TARGET)
 RESLIB1IMAGES=$(PRJ)$/res
