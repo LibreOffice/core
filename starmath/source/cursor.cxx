@@ -270,7 +270,7 @@ void SmCursor::InsertNodes(SmNodeList* pNewNodes){
     SmNodeList::iterator newIt,
                          patchIt = it, // (pointless default value, fixes compiler warnings)
                          insIt;
-    for(newIt = pNewNodes->begin(); newIt != pNewNodes->end(); newIt++){
+    for(newIt = pNewNodes->begin(); newIt != pNewNodes->end(); ++newIt){
         insIt = pLineList->insert(it, *newIt);
         if(newIt == pNewNodes->begin())
             patchIt = insIt;
@@ -293,7 +293,7 @@ void SmCursor::InsertNodes(SmNodeList* pNewNodes){
 SmNodeList::iterator SmCursor::FindPositionInLineList(SmNodeList* pLineList, SmCaretPos aCaretPos) {
     //Find iterator for position
     SmNodeList::iterator it;
-    for(it = pLineList->begin(); it != pLineList->end(); it++){
+    for(it = pLineList->begin(); it != pLineList->end(); ++it){
         if(*it == aCaretPos.pSelectedNode){
             if((*it)->GetType() == NTEXT){
                 //Split textnode if needed
@@ -328,9 +328,9 @@ SmCaretPos SmCursor::PatchLineList(SmNodeList* pLineList, SmNodeList::iterator a
     if(aIter != pLineList->end())
         next = *aIter;
     if(aIter != pLineList->begin()) {
-        aIter--;
+        --aIter;
         prev = *aIter;
-        aIter++;
+        ++aIter;
     }
 
     //Check if there's textnodes to merge
@@ -354,12 +354,12 @@ SmCaretPos SmCursor::PatchLineList(SmNodeList* pLineList, SmNodeList::iterator a
 
     //Check if there's a SmPlaceNode to remove:
     if(prev && next && prev->GetType() == NPLACE && !SmNodeListParser::IsOperator(next->GetToken())){
-        aIter--;
+        --aIter;
         aIter = pLineList->erase(aIter);
         delete prev;
         //Return caret pos infront of aIter
         if(aIter != pLineList->begin())
-            aIter--; //Thus find node before aIter
+            --aIter; //Thus find node before aIter
         if(aIter == pLineList->begin())
             return SmCaretPos();
         if((*aIter)->GetType() == NTEXT)
@@ -405,7 +405,7 @@ SmNodeList::iterator SmCursor::TakeSelectedNodesFromList(SmNodeList *pLineList,
                     int start1 = 0,
                     String str = aText.Copy(start1, len1);
                     pText->ChangeText(str);
-                    it++;
+                    ++it;
                 } else {//Remove it if not needed
                     it = pLineList->erase(it);
                     delete pText;
@@ -435,7 +435,7 @@ SmNodeList::iterator SmCursor::TakeSelectedNodesFromList(SmNodeList *pLineList,
                     delete pNode;
             }
         } else
-            it++;
+            ++it;
     }
     return retval;
 }
@@ -484,15 +484,15 @@ void SmCursor::InsertSubSup(SmSubSup eSubSup) {
     SmNode* pSubject;
     bool bPatchLine = pSelectedNodesList->size() > 0; //If the line should be patched later
     if(it != pLineList->begin()) {
-        it--;
+        --it;
         pSubject = *it;
-        it++;
+        ++it;
     } else {
         //Create a new place node
         pSubject = new SmPlaceNode();
         pSubject->Prepare(pDocShell->GetFormat(), *pDocShell);
         it = pLineList->insert(it, pSubject);
-        it++;
+        ++it;
         bPatchLine = true;  //We've modified the line it should be patched later.
     }
 
@@ -504,7 +504,7 @@ void SmCursor::InsertSubSup(SmSubSup eSubSup) {
         pSubSup = new SmSubSupNode(token);
         pSubSup->SetBody(pSubject);
         *(--it) = pSubSup;
-        it++;
+        ++it;
     }else
         pSubSup = (SmSubSupNode*)pSubject;
     //pSubject shouldn't be referenced anymore, pSubSup is the SmSubSupNode in pLineList we wish to edit.
@@ -842,7 +842,7 @@ bool SmCursor::InsertRow() {
         //Make sure it is valid again
         it = pLineList->end();
         if(it != pLineList->begin())
-            it--;
+            --it;
         if(pNewLineList->size() == 0)
             pNewLineList->push_front(new SmPlaceNode());
         //Parse new line
@@ -1210,7 +1210,7 @@ SmNodeList* SmCursor::CloneList(SmNodeList* pList){
     SmNodeList* pClones = new SmNodeList();
 
     SmNodeList::iterator it;
-    for(it = pList->begin(); it != pList->end(); it++){
+    for(it = pList->begin(); it != pList->end(); ++it){
         SmNode *pClone = aCloneFactory.Clone(*it);
         pClones->push_back(pClone);
     }
@@ -1223,7 +1223,7 @@ void SmCursor::SetClipboard(SmNodeList* pList){
     if(pClipboard){
         //Delete all nodes on the clipboard
         SmNodeList::iterator it;
-        for(it = pClipboard->begin(); it != pClipboard->end(); it++)
+        for(it = pClipboard->begin(); it != pClipboard->end(); ++it)
             delete (*it);
         delete pClipboard;
     }
@@ -1472,7 +1472,7 @@ SmNode* SmNodeListParser::Parse(SmNodeList* list, bool bDeleteErrorNodes){
                 delete *it;
                 it = pList->erase(it);
             }else
-                it++;
+                ++it;
         }
     }
     SmNode* retval = Expression();
