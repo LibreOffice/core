@@ -93,6 +93,7 @@ ImpRemap3DDepth::ImpRemap3DDepth(sal_uInt32 nOrdNum, double fMinimalDepth)
 
 ImpRemap3DDepth::ImpRemap3DDepth(sal_uInt32 nOrdNum)
 :   mnOrdNum(nOrdNum),
+    mfMinimalDepth(0.0),
     mbIsScene(sal_True)
 {
 }
