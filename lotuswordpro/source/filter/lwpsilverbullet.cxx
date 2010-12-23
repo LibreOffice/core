@@ -189,17 +189,6 @@ void LwpSilverBullet::RegisterStyle()
             }
         }
     }
-    else
-    {
-        //register bullet style-list
-/*      for (sal_uInt8 nC = 1; nC < 11; nC++)
-        {
-            pListStyle->SetListBullet(nC, this->GetBulletChar(), this->GetBulletFontName(),
-                this->GetPrefix(), this->GetSuffix());
-            pListStyle->SetListPosition(nC, 0.0, 0.635, 0.0);
-        }*/
-
-    }
 
     //add style-list to style manager.
     m_strStyleName = pXFStyleManager->AddStyle(pListStyle)->GetStyleName();
