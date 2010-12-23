@@ -211,7 +211,7 @@ sal_uInt32 LwpObjectID::ReadCompressed( LwpObjectStream* pObj, LwpObjectID &prev
 sal_uInt32 LwpObjectID::DiskSizeIndexed() const
 {
     return sizeof(sal_uInt8)
-        + (((0 < m_nIndex) && (m_nIndex <= 255)) ? 0 : sizeof(m_nLow))
+        + ((m_nIndex != 0) ? 0 : sizeof(m_nLow))
         + sizeof(m_nHigh);
 }
 /**
