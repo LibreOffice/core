@@ -403,7 +403,7 @@ SmNodeList::iterator SmCursor::TakeSelectedNodesFromList(SmNodeList *pLineList,
                 USHORT eFontDesc = pText->GetFontDesc();
                 //If we need make segment 1
                 if(len1 > 0) {
-                    int start1 = 0,
+                    int start1 = 0;
                     String str = aText.Copy(start1, len1);
                     pText->ChangeText(str);
                     ++it;
