@@ -126,7 +126,7 @@ bool XMLFilterTabPageBasic::FillInfo( filter_info_impl* pInfo )
                     pInfo->maImportService = (*aIter)->maXMLImporter;
                     break;
                 }
-                aIter++;
+                ++aIter;
             }
         }
     }
