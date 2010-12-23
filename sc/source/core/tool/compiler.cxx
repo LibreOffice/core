@@ -2658,8 +2658,7 @@ BOOL ScCompiler::IsValue( const String& rSym )
     double fVal;
     sal_uInt32 nIndex = ( mxSymbols->isEnglish() ?
         pDoc->GetFormatTable()->GetStandardIndex( LANGUAGE_ENGLISH_US ) : 0 );
-//  ULONG nIndex = 0;
-////    ULONG nIndex = pDoc->GetFormatTable()->GetStandardIndex(ScGlobal::eLnge);
+
     if (pDoc->GetFormatTable()->IsNumberFormat( rSym, nIndex, fVal ) )
     {
         USHORT nType = pDoc->GetFormatTable()->GetType(nIndex);
@@ -2680,10 +2679,6 @@ BOOL ScCompiler::IsValue( const String& rSym )
             if (*p == '(')
                 return FALSE;   // Boolean function instead.
         }
-
-        if( aFormula.GetChar(nSrcPos) == '.' )
-            // numerical sheet name?
-            return FALSE;
 
         if( nType == NUMBERFORMAT_TEXT )
             // HACK: number too big!
