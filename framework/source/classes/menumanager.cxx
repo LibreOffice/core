@@ -329,7 +329,7 @@ void MenuManager::SetHdl()
 MenuManager::~MenuManager()
 {
     std::vector< MenuItemHandler* >::iterator p;
-    for ( p = m_aMenuItemHandlerVector.begin(); p != m_aMenuItemHandlerVector.end(); p++ )
+    for ( p = m_aMenuItemHandlerVector.begin(); p != m_aMenuItemHandlerVector.end(); ++p )
     {
         MenuItemHandler* pItemHandler = *p;
         pItemHandler->xMenuItemDispatch.clear();
@@ -348,7 +348,7 @@ MenuManager::MenuItemHandler* MenuManager::GetMenuItemHandler( USHORT nItemId )
     ResetableGuard aGuard( m_aLock );
 
     std::vector< MenuItemHandler* >::iterator p;
-    for ( p = m_aMenuItemHandlerVector.begin(); p != m_aMenuItemHandlerVector.end(); p++ )
+    for ( p = m_aMenuItemHandlerVector.begin(); p != m_aMenuItemHandlerVector.end(); ++p )
     {
         MenuItemHandler* pItemHandler = *p;
         if ( pItemHandler->nItemId == nItemId )
@@ -369,7 +369,7 @@ throw ( RuntimeException )
         ResetableGuard aGuard( m_aLock );
 
         std::vector< MenuItemHandler* >::iterator p;
-        for ( p = m_aMenuItemHandlerVector.begin(); p != m_aMenuItemHandlerVector.end(); p++ )
+        for ( p = m_aMenuItemHandlerVector.begin(); p != m_aMenuItemHandlerVector.end(); ++p )
         {
             MenuItemHandler* pMenuItemHandler = *p;
             if ( pMenuItemHandler->aMenuItemURL == aFeatureURL )
@@ -436,7 +436,7 @@ void MenuManager::ClearMenuDispatch(const EVENTOBJECT& Source,bool _bRemoveOnly)
 
     // #110897#
     std::vector< MenuItemHandler* >::iterator p;
-    for ( p = m_aMenuItemHandlerVector.begin(); p != m_aMenuItemHandlerVector.end(); p++ )
+    for ( p = m_aMenuItemHandlerVector.begin(); p != m_aMenuItemHandlerVector.end(); ++p )
     {
         MenuItemHandler* pItemHandler = *p;
         if ( pItemHandler->xMenuItemDispatch.is() )
@@ -477,7 +477,7 @@ void SAL_CALL MenuManager::disposing( const EVENTOBJECT& Source ) throw ( RUNTIM
             ResetableGuard aGuard( m_aLock );
 
             std::vector< MenuItemHandler* >::iterator p;
-            for ( p = m_aMenuItemHandlerVector.begin(); p != m_aMenuItemHandlerVector.end(); p++ )
+            for ( p = m_aMenuItemHandlerVector.begin(); p != m_aMenuItemHandlerVector.end(); ++p )
             {
                 MenuItemHandler* pMenuItemHandler = *p;
                 if ( pMenuItemHandler->xMenuItemDispatch == Source.Source )
@@ -552,7 +552,7 @@ void MenuManager::UpdateSpecialFileMenu( Menu* pMenu )
         static const ::rtl::OUString s_sDefault(RTL_CONSTASCII_USTRINGPARAM("_default"));
         // query for dispatcher
         std::vector< MenuItemHandler* >::iterator p;
-        for ( p = aNewPickVector.begin(); p != aNewPickVector.end(); p++ )
+        for ( p = aNewPickVector.begin(); p != aNewPickVector.end(); ++p )
         {
             MenuItemHandler* pMenuItemHandler = *p;
 
@@ -843,7 +843,7 @@ IMPL_LINK( MenuManager, Activate, Menu *, pMenu )
             if ( xDispatchProvider.is() )
             {
                 std::vector< MenuItemHandler* >::iterator p;
-                for ( p = m_aMenuItemHandlerVector.begin(); p != m_aMenuItemHandlerVector.end(); p++ )
+                for ( p = m_aMenuItemHandlerVector.begin(); p != m_aMenuItemHandlerVector.end(); ++p )
                 {
                     MenuItemHandler* pMenuItemHandler = *p;
                     if ( pMenuItemHandler &&
