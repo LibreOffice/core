@@ -169,7 +169,7 @@ TypeDescriptionEnumerationImpl::createInstance(
                         "- Caught InvalidRegistryException!" );
         }
 
-        it++;
+        ++it;
     }
 
     if ( !bOpenKeySucceeded )
@@ -243,7 +243,7 @@ TypeDescriptionEnumerationImpl::~TypeDescriptionEnumerationImpl()
             "- Caught exception!" );
         }
 
-        it++;
+        ++it;
     }
 
     g_moduleCount.modCnt.release( &g_moduleCount.modCnt );
