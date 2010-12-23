@@ -83,7 +83,7 @@ oox::drawingml::ShapePtr findPlaceholder( const sal_Int32 nMasterPlaceholder, sa
         aShapePtr = findPlaceholder( nMasterPlaceholder, nSubTypeIndex, rChildren );
         if ( aShapePtr.get() )
             break;
-        aRevIter++;
+        ++aRevIter;
     }
     return aShapePtr;
 }
