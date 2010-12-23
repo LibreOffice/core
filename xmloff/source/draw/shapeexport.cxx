@@ -360,7 +360,7 @@ void XMLShapeExport::collectShapeAutoStyles(const uno::Reference< drawing::XShap
             {
                 if( aIter->mnIndex != -1 )
                     nCount++;
-                aIter++;
+                ++aIter;
             }
         }
 
@@ -429,7 +429,7 @@ void XMLShapeExport::collectShapeAutoStyles(const uno::Reference< drawing::XShap
             {
                 if( aIter->mnIndex != -1 )
                     nCount++;
-                aIter++;
+                ++aIter;
             }
 
             if( nCount )
