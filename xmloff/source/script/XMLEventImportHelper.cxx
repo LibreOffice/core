@@ -55,7 +55,7 @@ XMLEventImportHelper::~XMLEventImportHelper()
     FactoryMap::iterator aEnd = aFactoryMap.end();
     for(FactoryMap::iterator aIter = aFactoryMap.begin();
         aIter != aEnd;
-        aIter++ )
+        ++aIter)
     {
         delete aIter->second;
     }
