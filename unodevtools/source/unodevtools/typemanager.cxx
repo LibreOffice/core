@@ -142,7 +142,7 @@ sal_Bool UnoTypeManager::init(
                            sal_True, sal_False);
 
             seqArgs[i++] = makeAny(xReg);
-            iter++;
+            ++iter;
         }
 
         Reference< XHierarchicalNameAccess > xTDProvider(
