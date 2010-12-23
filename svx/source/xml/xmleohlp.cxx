@@ -190,7 +190,7 @@ SvXMLEmbeddedObjectHelper::~SvXMLEmbeddedObjectHelper()
     {
         SvXMLEmbeddedObjectHelper_Impl::iterator aIter = mpStreamMap->begin();
         SvXMLEmbeddedObjectHelper_Impl::iterator aEnd = mpStreamMap->end();
-        for( ; aIter != aEnd; aIter++ )
+        for( ; aIter != aEnd; ++aIter )
         {
             if( aIter->second )
             {
