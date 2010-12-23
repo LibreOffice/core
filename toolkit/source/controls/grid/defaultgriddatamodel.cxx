@@ -158,7 +158,7 @@ void SAL_CALL DefaultGridDataModel::setRowHeaders(const ::com::sun::star::uno::S
     int i = 0;
     int sequenceSize = value.getLength();
 
-    for(iterator = rowHeaders.begin(); iterator != rowHeaders.end(); iterator++)
+    for(iterator = rowHeaders.begin(); iterator != rowHeaders.end(); ++iterator)
     {
         if ( sequenceSize > i )
             *iterator = value[i];
@@ -214,7 +214,7 @@ void SAL_CALL DefaultGridDataModel::removeRow(::sal_Int32 index) throw (::com::s
     std::vector< Sequence< Any  > > dummyContainer(0);
 
 
-    for(iterator = data.begin(); iterator != data.end(); iterator++)
+    for(iterator = data.begin(); iterator != data.end(); ++iterator)
     {
         Sequence< Any > cols(comphelper::containerToSequence(*iterator));
         dummyContainer.push_back( cols );
