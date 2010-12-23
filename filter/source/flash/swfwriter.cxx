@@ -153,7 +153,7 @@ void ImplCopySvStreamToXOutputStream( SvStream& rIn, Reference< XOutputStream > 
 
 void Writer::storeTo( Reference< XOutputStream > &xOutStream )
 {
-    for(FontMap::iterator i = maFonts.begin(); i != maFonts.end(); i++)
+    for(FontMap::iterator i = maFonts.begin(); i != maFonts.end(); ++i)
     {
         FlashFont* pFont = (*i);
         pFont->write( *mpFontsStream );
