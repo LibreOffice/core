@@ -707,7 +707,7 @@ void OptimizerDialog::UpdateControlStatesPage4()
                     if (!bVisible )
                         nDeletedSlides++;
                 }
-                aIter++;
+                ++aIter;
             }
         }
         else
@@ -740,7 +740,7 @@ void OptimizerDialog::UpdateControlStatesPage4()
         {
             if ( !aIter->bUsed )
                 nDeletedSlides++;
-            aIter++;
+            ++aIter;
         }
     }
     if ( nDeletedSlides > 1 )
