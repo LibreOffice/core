@@ -976,7 +976,7 @@ void ListsManager::CreateNumberingRules( )
 {
     // Loop over the definitions
     std::vector< ListDef::Pointer >::iterator listIt = m_aLists.begin( );
-    for ( ; listIt != m_aLists.end( ); listIt++ )
+    for ( ; listIt != m_aLists.end( ); ++listIt )
     {
         (*listIt)->CreateNumberingRules( m_rDMapper, m_xFactory );
     }
