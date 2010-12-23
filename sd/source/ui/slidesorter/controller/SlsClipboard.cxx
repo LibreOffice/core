@@ -457,7 +457,7 @@ void Clipboard::DragFinished (sal_Int8 nDropAction)
         PageList::iterator aDraggedPage;
         for (aDraggedPage=maPagesToRemove.begin();
              aDraggedPage!=maPagesToRemove.end();
-             aDraggedPage++)
+             ++aDraggedPage)
         {
             rSelector.SelectPage (*aDraggedPage);
         }
