@@ -171,7 +171,7 @@ TemplateScanner::~TemplateScanner (void)
     // Delete all entries of the template list that have not been
     // transferred to another object.
     std::vector<TemplateDir*>::iterator I;
-    for (I=maFolderList.begin(); I!=maFolderList.end(); I++)
+    for (I=maFolderList.begin(); I!=maFolderList.end(); ++I)
         if (*I != NULL)
             delete *I;
 }
