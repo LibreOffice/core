@@ -61,7 +61,7 @@ void EnhancedCustomShape::FillEquationParameter( const EnhancedCustomShapeParame
     sal_Int32 nValue = 0;
     if ( rSource.Value.getValueTypeClass() == uno::TypeClass_DOUBLE )
     {
-        double fValue;
+        double fValue(0.0);
         if ( rSource.Value >>= fValue )
             nValue = (sal_Int32)fValue;
     }
