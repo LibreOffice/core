@@ -118,22 +118,12 @@ void LwpSilverBullet::RegisterStyle()
 
     if (this->IsBulletOrdered() && this->HasName())
     {
-        ParaNumbering aParaNumbering;
-        XFNumFmt aFmt;
-
         //todo: find the flag in the file
         sal_Bool bCumulative = sal_False;
 
-        //get the numbeing format of level-1
-        m_pBulletPara->GetParaNumber(1, &aParaNumbering);
-        if (aParaNumbering.pPrefix)
-        {
-            aFmt.SetPrefix(aParaNumbering.pPrefix->GetText());
-        }
-
-
         for (sal_uInt8 nPos = 1; nPos < 10; nPos++)
         {
+            ParaNumbering aParaNumbering;
             //get numbering format according to the position.
             m_pBulletPara->GetParaNumber(nPos, &aParaNumbering);
             LwpFribParaNumber* pParaNumber = aParaNumbering.pParaNumber;
