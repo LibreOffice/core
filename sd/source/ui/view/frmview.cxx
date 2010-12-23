@@ -554,7 +554,7 @@ void FrameView::WriteUserDataSequence ( ::com::sun::star::uno::Sequence < ::com:
     PropertyValue* pValue = &(rValues.getArray()[nOldLength]);
 
     std::vector< std::pair< OUString, Any > >::iterator aIter( aUserData.begin() );
-    for( ; aIter != aUserData.end(); aIter++, pValue++ )
+    for( ; aIter != aUserData.end(); ++aIter, ++pValue )
     {
         pValue->Name = (*aIter).first;
         pValue->Value = (*aIter).second;
