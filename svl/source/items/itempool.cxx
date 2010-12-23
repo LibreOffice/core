@@ -407,7 +407,7 @@ void SfxItemPool::Free(SfxItemPool* pPool)
     {
         // tell all the registered SfxItemPoolUsers that the pool is in destruction
         SfxItemPoolUserVector aListCopy(pPool->maSfxItemPoolUsers.begin(), pPool->maSfxItemPoolUsers.end());
-        for(SfxItemPoolUserVector::iterator aIterator = aListCopy.begin(); aIterator != aListCopy.end(); aIterator++)
+        for(SfxItemPoolUserVector::iterator aIterator = aListCopy.begin(); aIterator != aListCopy.end(); ++aIterator)
         {
             SfxItemPoolUser* pSfxItemPoolUser = *aIterator;
             DBG_ASSERT(pSfxItemPoolUser, "corrupt SfxItemPoolUser list (!)");
