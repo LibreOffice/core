@@ -767,7 +767,7 @@ uno::Reference< embed::XStorage > SotStorage::GetUNOAPIDuplicate( const String& 
         return xResult;
 
     for ( UNOStorageHolderList::iterator aIter = pUNOStorageHolderList->begin();
-          aIter != pUNOStorageHolderList->end(); aIter++ )
+          aIter != pUNOStorageHolderList->end(); ++aIter )
         if ( (*aIter) && (*aIter)->GetStorageName().Equals( rEleName ) )
         {
             // the storage is already in use
