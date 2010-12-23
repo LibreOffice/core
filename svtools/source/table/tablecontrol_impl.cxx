@@ -328,7 +328,7 @@ namespace svt { namespace table
         if ( m_pModel->getRowCount() != m_nRowCount )
             return "row counts are inconsistent!";
 
-        if ( ( m_nCurColumn != COL_INVALID ) && !m_aColumnWidthsPixel.empty() && ( m_nCurColumn < 0 ) || ( m_nCurColumn >= (ColPos)m_aColumnWidthsPixel.size() ) )
+        if ( ( ( m_nCurColumn != COL_INVALID ) && !m_aColumnWidthsPixel.empty() && ( m_nCurColumn < 0 ) ) || ( m_nCurColumn >= (ColPos)m_aColumnWidthsPixel.size() ) )
             return "current column is invalid!";
 
         if ( m_aColumnWidthsPixel.size() != m_aAccColumnWidthsPixel.size() )
