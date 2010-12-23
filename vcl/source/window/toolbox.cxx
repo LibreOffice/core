@@ -5393,8 +5393,8 @@ USHORT ToolBox::ImplCountLineBreaks( const ToolBox *pThis )
     while ( it != ((ToolBox*)pThis)->mpData->m_aItems.end() )
     {
         if( it->meType == TOOLBOXITEM_BREAK )
-            nLines++;
-        it++;
+            ++nLines;
+        ++it;
     }
     return nLines;
 }
@@ -5405,7 +5405,7 @@ Size ToolBox::CalcPopupWindowSizePixel() const
     USHORT nLines = ImplCountLineBreaks( this );
 
     if( nLines )
-        nLines++;   // add the first line
+        ++nLines;   // add the first line
     else
     {
         // no breaks found: use quadratic layout
@@ -5425,7 +5425,7 @@ Size ToolBox::CalcPopupWindowSizePixel() const
 Size ToolBox::CalcFloatingWindowSizePixel() const
 {
     USHORT nLines = ImplCountLineBreaks( this );
-    nLines++; // add the first line
+    ++nLines; // add the first line
     return CalcFloatingWindowSizePixel( nLines );
 }
 
@@ -5466,7 +5466,7 @@ Size ToolBox::CalcMinimumWindowSizePixel() const
             pToolBox->CopyItem( *this, it->mnId );
             if( (it->meType != TOOLBOXITEM_BUTTON) ||
                 !it->mbVisible || ImplIsFixedControl( &(*it) ) )
-                it++;
+                ++it;
             else
                 break;
         }
@@ -5909,7 +5909,7 @@ USHORT ToolBox::ImplGetItemLine( ImplToolItem* pCurrentItem )
     while( it != mpData->m_aItems.end() )
     {
         if ( it->mbBreak )
-            nLine++;
+            ++nLine;
         if( &(*it) == pCurrentItem)
             break;
         ++it;
@@ -5989,7 +5989,7 @@ USHORT ToolBox::ImplFindItemPos( const ImplToolItem* pItem, const std::vector< I
     if( pItem )
     {
         USHORT nPos;
-        for( nPos = 0; nPos < rList.size(); nPos++ )
+        for( nPos = 0; nPos < rList.size(); ++nPos )
             if( &rList[ nPos ] == pItem )
                 return nPos;
     }
