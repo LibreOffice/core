@@ -393,8 +393,7 @@ SmNodeList::iterator SmCursor::TakeSelectedNodesFromList(SmNodeList *pLineList,
                 SmTextNode* pText = (SmTextNode*)*it;
                 String aText = pText->GetText();
                 //Start and lengths of the segments, 2 is the selected segment
-                int start1 = 0,
-                    start2 = pText->GetSelectionStart(),
+                int start2 = pText->GetSelectionStart(),
                     start3 = pText->GetSelectionEnd(),
                     len1 = start2 - 0,
                     len2 = start3 - start2,
@@ -403,6 +402,7 @@ SmNodeList::iterator SmCursor::TakeSelectedNodesFromList(SmNodeList *pLineList,
                 USHORT eFontDesc = pText->GetFontDesc();
                 //If we need make segment 1
                 if(len1 > 0) {
+                    int start1 = 0,
                     String str = aText.Copy(start1, len1);
                     pText->ChangeText(str);
                     it++;
