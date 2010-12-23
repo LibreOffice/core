@@ -141,7 +141,7 @@ uno::Sequence<OUString> SwDropDownField::GetItemSequence() const
     int i = 0;
     vector<String>::const_iterator aIt;
 
-    for (aIt = aValues.begin(); aIt != aValues.end(); aIt++)
+    for (aIt = aValues.begin(); aIt != aValues.end(); ++aIt)
     {
         pSeq[i] = rtl::OUString(*aIt);
 
