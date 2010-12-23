@@ -78,9 +78,9 @@ SbiSymDef* SbiParser::VarDecl( SbiDimList** ppDim, BOOL bStatic, BOOL bConst )
 void SbiParser::TypeDecl( SbiSymDef& rDef, BOOL bAsNewAlreadyParsed )
 {
     SbxDataType eType = rDef.GetType();
-    short nSize = 0;
     if( bAsNewAlreadyParsed || Peek() == AS )
     {
+        short nSize = 0;
         if( !bAsNewAlreadyParsed )
             Next();
         rDef.SetDefinedAs();
