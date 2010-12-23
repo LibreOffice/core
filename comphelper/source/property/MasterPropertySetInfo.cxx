@@ -104,7 +104,7 @@ void MasterPropertySetInfo::add( PropertyInfoHash &rHash, sal_uInt8 nMapId )
             OSL_ENSURE( sal_False, "Warning: PropertyInfo added twice, possible error!");
 #endif
         maMap[(*aIter).first] = new PropertyData ( nMapId, (*aIter).second );
-        aIter++;
+        ++aIter;
     }
 }
 
