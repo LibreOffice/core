@@ -3138,7 +3138,7 @@ void DomainMapper::sprm( Sprm& rSprm, PropertyMapPtr rContext, SprmType eSprmTyp
                     pSectionContext->SetColumnDistance( pSectHdl->GetSpace() );
                     pSectionContext->SetColumnCount( (sal_Int16)(pSectHdl->GetColumns().size() -1));
                     std::vector<_Column>::const_iterator tmpIter = pSectHdl->GetColumns().begin();
-                    for (; tmpIter != pSectHdl->GetColumns().end(); tmpIter++)
+                    for (; tmpIter != pSectHdl->GetColumns().end(); ++tmpIter)
                     {
                         pSectionContext->AppendColumnWidth( tmpIter->nWidth );
                         if ((tmpIter != pSectHdl->GetColumns().end() - 1) || (tmpIter->nSpace > 0))
