@@ -1687,7 +1687,7 @@ void ApplyRectangularGradientAsBitmap( const SvxMSDffManager& rManager, SvStream
                                 aColorB = aIter->aColor;
                             }
                         }
-                        aIter++;
+                        ++aIter;
                     }
                     double fRed = aColorA.GetRed(), fGreen = aColorA.GetGreen(), fBlue = aColorA.GetBlue();
                     double fD1 = fB - fA;
