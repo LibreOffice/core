@@ -1869,7 +1869,7 @@ void ImplSdPPTImport::ImportPageEffect( SdPage* pPage, const sal_Bool bNewAnimat
         tAnimationVector::iterator aIter( aAnimationsOnThisPage.begin() );
         const tAnimationVector::iterator aEnd( aAnimationsOnThisPage.end() );
 
-        for( ;aIter != aEnd; aIter++ )
+        for( ;aIter != aEnd; ++aIter )
         {
             Ppt97AnimationPtr pPpt97Animation = (*aIter).second;;
             if( pPpt97Animation.get() )
