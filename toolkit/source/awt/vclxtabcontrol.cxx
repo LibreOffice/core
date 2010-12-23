@@ -155,7 +155,7 @@ void SAL_CALL VCLXTabControl::addTabListener( const uno::Reference< awt::XTabLis
 {
     for ( std::list< uno::Reference
               < awt::XTabListener > >::const_iterator it
-              = mxTabListeners.begin(); it != mxTabListeners.end(); it++ )
+              = mxTabListeners.begin(); it != mxTabListeners.end(); ++it )
     {
         if ( *it == xListener )
             // already added
@@ -168,7 +168,7 @@ void SAL_CALL VCLXTabControl::removeTabListener( const uno::Reference< awt::XTab
 {
     for ( std::list< uno::Reference
               < awt::XTabListener > >::iterator it
-              = mxTabListeners.begin(); it != mxTabListeners.end(); it++ )
+              = mxTabListeners.begin(); it != mxTabListeners.end(); ++it )
     {
         if ( *it == xListener )
         {
@@ -373,7 +373,7 @@ void SAL_CALL VCLXTabControl::allocateArea (awt::Rectangle const &area)
     // it here does makes it easier when changing tabs (just needs a recalc())
     unsigned i = 0;
     for ( std::list<Box_Base::ChildData *>::const_iterator it
-              = maChildren.begin(); it != maChildren.end(); it++, i++ )
+              = maChildren.begin(); it != maChildren.end(); it++, ++i )
     {
         ChildData *child = static_cast<VCLXTabControl::ChildData*> ( *it );
         uno::Reference
@@ -417,7 +417,7 @@ awt::Size SAL_CALL VCLXTabControl::getMinimumSize()
     // calculate size to accomodate all children
     unsigned i = 0;
     for ( std::list<Box_Base::ChildData *>::const_iterator it
-              = maChildren.begin(); it != maChildren.end(); it++, i++ )
+              = maChildren.begin(); it != maChildren.end(); it++, ++i )
     {
         ChildData *child = static_cast<VCLXTabControl::ChildData*> ( *it );
         if ( child->mxChild.is() )
@@ -466,7 +466,7 @@ void VCLXTabControl::ProcessWindowEvent( const VclWindowEvent& _rVclWindowEvent 
             ULONG page = (ULONG) _rVclWindowEvent.GetData();
             for ( std::list< uno::Reference
                       < awt::XTabListener > >::iterator it
-                      = mxTabListeners.begin(); it != mxTabListeners.end(); it++)
+                      = mxTabListeners.begin(); it != mxTabListeners.end(); ++it )
             {
                 uno::Reference
                     < awt::XTabListener > listener = *it;
