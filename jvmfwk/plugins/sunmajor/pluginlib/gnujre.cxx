@@ -104,7 +104,7 @@ bool GnuInfo::initialize(vector<pair<OUString, OUString> > props)
     bool bAccess = false;
 
     typedef vector<pair<OUString, OUString> >::const_iterator it_prop;
-    for (it_prop i = props.begin(); i != props.end(); i++)
+    for (it_prop i = props.begin(); i != props.end(); ++i)
     {
         if(! bVendor && sVendorProperty.equals(i->first))
         {
@@ -171,7 +171,7 @@ bool GnuInfo::initialize(vector<pair<OUString, OUString> > props)
 
     bool bRt = false;
     typedef vector<OUString>::const_iterator i_path;
-    for(i_path ip = libpaths.begin(); ip != libpaths.end(); ip++)
+    for(i_path ip = libpaths.begin(); ip != libpaths.end(); ++ip)
     {
         //Construct an absolute path to the possible runtime
         OUString usRt= m_sHome + *ip;
@@ -188,7 +188,7 @@ bool GnuInfo::initialize(vector<pair<OUString, OUString> > props)
     if (!bRt)
     {
         m_sHome = m_sJavaHome;
-        for(i_path ip = libpaths.begin(); ip != libpaths.end(); ip++)
+        for(i_path ip = libpaths.begin(); ip != libpaths.end(); ++ip)
         {
             //Construct an absolute path to the possible runtime
             OUString usRt= m_sHome + *ip;
@@ -207,7 +207,7 @@ bool GnuInfo::initialize(vector<pair<OUString, OUString> > props)
     if (!bRt && m_sJavaHome != sJavaLibraryPath)
     {
         m_sHome = sJavaLibraryPath;
-        for(i_path ip = libpaths.begin(); ip != libpaths.end(); ip++)
+        for(i_path ip = libpaths.begin(); ip != libpaths.end(); ++ip)
         {
             //Construct an absolute path to the possible runtime
             OUString usRt= m_sHome + *ip;
@@ -227,7 +227,7 @@ bool GnuInfo::initialize(vector<pair<OUString, OUString> > props)
     if (!bRt && m_sJavaHome != rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("file:///usr/lib")))
     {
         m_sHome = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("file:///usr/lib64"));
-        for(i_path ip = libpaths.begin(); ip != libpaths.end(); ip++)
+        for(i_path ip = libpaths.begin(); ip != libpaths.end(); ++ip)
         {
             //Construct an absolute path to the possible runtime
             OUString usRt= m_sHome + *ip;
@@ -256,7 +256,7 @@ bool GnuInfo::initialize(vector<pair<OUString, OUString> > props)
     OUString sPathSep= OUString::createFromAscii(arSep);
     bool bLdPath = true;
     int c = 0;
-    for(i_path il = ld_paths.begin(); il != ld_paths.end(); il ++, c++)
+    for(i_path il = ld_paths.begin(); il != ld_paths.end(); ++il, ++c)
     {
         OUString usAbsUrl= m_sHome + *il;
         // convert to system path
