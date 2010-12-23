@@ -100,10 +100,7 @@ namespace svt { namespace table
     void TableControl::GetFocus()
     {
         if ( !m_pImpl->getInputHandler()->GetFocus( *m_pImpl ) )
-        {
             Control::GetFocus();
-            Control::GrabFocus();
-        }
     }
 
     //--------------------------------------------------------------------
@@ -246,23 +243,26 @@ namespace svt { namespace table
     {
         m_pImpl->removeSelectedRow(_nRowPos);
     }
-    //--------------------------------------------------------------------
 
-    RowPos TableControl::GetCurrentRow(const Point& rPoint)
+    //--------------------------------------------------------------------
+    RowPos TableControl::GetRowAtPoint( const Point& rPoint )
     {
-        return m_pImpl->getCurrentRow( rPoint );
+        return m_pImpl->getRowAtPoint( rPoint );
     }
 
+    //--------------------------------------------------------------------
     SelectionEngine* TableControl::getSelEngine()
     {
         return m_pImpl->getSelEngine();
     }
 
+    //--------------------------------------------------------------------
     TableDataWindow* TableControl::getDataWindow()
     {
         return m_pImpl->getDataWindow();
     }
 
+    //--------------------------------------------------------------------
     Reference< XAccessible > TableControl::CreateAccessible()
     {
         Window* pParent = GetAccessibleParentWindow();
@@ -494,10 +494,10 @@ sal_Int32 TableControl::GetAccessibleControlCount() const
 }
 sal_Bool TableControl::ConvertPointToControlIndex( sal_Int32& _rnIndex, const Point& _rPoint )
 {
-    sal_Int32 nRow = m_pImpl->getCurrentRow(_rPoint);
-    sal_Int32 nCol = GetCurrentColumn();
+    sal_Int32 nRow = m_pImpl->getRowAtPoint( _rPoint );
+    sal_Int32 nCol = m_pImpl->getColAtPoint( _rPoint );
     _rnIndex = nRow * GetColumnCount() + nCol;
-    return nRow>=0 ? sal_True : sal_False;
+    return nRow >= 0 ? sal_True : sal_False;
 }
 
 long TableControl::GetRowCount() const
@@ -523,9 +523,9 @@ bool TableControl::IsRowSelected( long _nRow ) const
 }
 sal_Bool TableControl::ConvertPointToCellAddress( sal_Int32& _rnRow, sal_Int32& _rnColPos, const Point& _rPoint )
 {
-    _rnRow = m_pImpl->getCurrentRow(_rPoint);
-    _rnColPos = GetCurrentColumn();
-    return _rnRow>=0 ? sal_True : sal_False;
+    _rnRow = m_pImpl->getRowAtPoint( _rPoint );
+    _rnColPos = m_pImpl->getColAtPoint( _rPoint );
+    return _rnRow >= 0 ? sal_True : sal_False;
 }
 void TableControl::FillAccessibleStateSetForCell( ::utl::AccessibleStateSetHelper& _rStateSet, sal_Int32 _nRow, sal_uInt16 _nColumnPos ) const
 {
@@ -612,12 +612,12 @@ IMPL_LINK( TableControl, ImplSelectHdl, void*, EMPTYARG )
 IMPL_LINK( TableControl, ImplMouseButtonDownHdl, MouseEvent*, pData )
 {
     CallEventListeners( VCLEVENT_WINDOW_MOUSEBUTTONDOWN, pData );
-     return 1;
+    return 1;
 }
 IMPL_LINK( TableControl, ImplMouseButtonUpHdl, MouseEvent*, pData )
 {
      CallEventListeners( VCLEVENT_WINDOW_MOUSEBUTTONUP, pData );
-     return 1;
+    return 1;
 }
 // -----------------------------------------------------------------------
 void TableControl::Select()

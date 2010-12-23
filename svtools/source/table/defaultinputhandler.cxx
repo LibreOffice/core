@@ -64,9 +64,9 @@ namespace svt { namespace table
     bool DefaultInputHandler::MouseMove( IAbstractTableControl& _rControl, const MouseEvent& _rMEvt )
     {
         Point aPoint = _rMEvt.GetPosPixel();
-        if(m_bResize)
+        if ( m_bResize )
         {
-            _rControl.resizeColumn(aPoint);
+            _rControl.resizeColumn( aPoint );
             return true;
         }
         return false;
@@ -77,25 +77,35 @@ namespace svt { namespace table
     {
         bool bHandled = false;
         Point aPoint = _rMEvt.GetPosPixel();
-        RowPos nRow = _rControl.getCurrentRow(aPoint);
-        if(nRow == -1)
+        RowPos nRow = _rControl.getRowAtPoint( aPoint );
+        if ( nRow == ROW_COL_HEADERS )
         {
-            m_bResize = _rControl.startResizeColumn(aPoint);
+            m_bResize = _rControl.checkResizeColumn(aPoint);
             bHandled = true;
         }
         else if(nRow >= 0)
         {
-            if(_rControl.getSelEngine()->GetSelectionMode() == NO_SELECTION)
+            bool bSetCursor = false;
+            if ( _rControl.getSelEngine()->GetSelectionMode() == NO_SELECTION )
             {
-                _rControl.setCursorAtCurrentCell(aPoint);
-                bHandled = true;
+                bSetCursor = true;
             }
             else
             {
-                if(!_rControl.isRowSelected(nRow))
-                    bHandled = _rControl.getSelEngine()->SelMouseButtonDown(_rMEvt);
+                if ( !_rControl.isRowSelected( nRow ) )
+                {
+                    bHandled = _rControl.getSelEngine()->SelMouseButtonDown( _rMEvt );
+                }
                 else
-                    bHandled = true;
+                {
+                    bSetCursor = true;
+                }
+            }
+
+            if ( bSetCursor )
+            {
+                _rControl.activateCellAt( aPoint );
+                bHandled = true;
             }
         }
         return bHandled;
@@ -104,29 +114,22 @@ namespace svt { namespace table
     bool DefaultInputHandler::MouseButtonUp( IAbstractTableControl& _rControl, const MouseEvent& _rMEvt )
     {
         bool bHandled = false;
-        Point aPoint = _rMEvt.GetPosPixel();
-        if(_rControl.getCurrentRow(aPoint) >= 0)
+        const Point aPoint = _rMEvt.GetPosPixel();
+
+        if ( m_bResize )
         {
-            if(m_bResize)
-            {
-                m_bResize = _rControl.endResizeColumn(aPoint);
-                bHandled = true;
-            }
-            else if(_rControl.getSelEngine()->GetSelectionMode() == NO_SELECTION)
+            m_bResize = _rControl.endResizeColumn( aPoint );
+            bHandled = true;
+        }
+        else if ( _rControl.getRowAtPoint( aPoint ) >= 0 )
+        {
+            if ( _rControl.getSelEngine()->GetSelectionMode() == NO_SELECTION )
             {
                 bHandled = true;
             }
             else
             {
-                bHandled = _rControl.getSelEngine()->SelMouseButtonUp(_rMEvt);
-            }
-        }
-        else
-        {
-            if(m_bResize)
-            {
-                m_bResize = _rControl.endResizeColumn(aPoint);
-                bHandled = true;
+                bHandled = _rControl.getSelEngine()->SelMouseButtonUp( _rMEvt );
             }
         }
         return bHandled;
@@ -158,11 +161,11 @@ namespace svt { namespace table
             { KEY_PAGEDOWN, KEY_MOD1,   cursorToLastLine },
             { KEY_HOME,     KEY_MOD1,   cursorTopLeft },
             { KEY_END,      KEY_MOD1,   cursorBottomRight },
-        { KEY_SPACE,    KEY_MOD1,   cursorSelectRow },
-        { KEY_UP,       KEY_SHIFT,  cursorSelectRowUp },
-        { KEY_DOWN,     KEY_SHIFT,  cursorSelectRowDown },
-        { KEY_END,      KEY_SHIFT,  cursorSelectRowAreaBottom },
-        { KEY_HOME,     KEY_SHIFT,  cursorSelectRowAreaTop },
+            { KEY_SPACE,    KEY_MOD1,   cursorSelectRow },
+            { KEY_UP,       KEY_SHIFT,  cursorSelectRowUp },
+            { KEY_DOWN,     KEY_SHIFT,  cursorSelectRowDown },
+            { KEY_END,      KEY_SHIFT,  cursorSelectRowAreaBottom },
+            { KEY_HOME,     KEY_SHIFT,  cursorSelectRowAreaTop },
 
             { 0, 0, invalidTableControlAction }
         };
@@ -173,7 +176,6 @@ namespace svt { namespace table
             if ( ( pActions->nKeyCode == nKeyCode ) && ( pActions->nKeyModifier == rKeyCode.GetAllModifier() ) )
             {
                 bHandled = _rControl.dispatchAction( pActions->eAction );
-                bHandled = true; // always handled  issue #i114340
                 break;
             }
         }

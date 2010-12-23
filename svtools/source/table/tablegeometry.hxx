@@ -91,6 +91,9 @@ namespace svt { namespace table
         RowPos              getRow() const  { return m_nRowPos; }
         // operations
         bool                moveDown();
+
+    private:
+        void impl_initRect();
     };
 
     //====================================================================
@@ -112,6 +115,9 @@ namespace svt { namespace table
         ColPos              getCol() const  { return m_nColPos; }
         // operations
         bool                moveRight();
+
+    private:
+        void impl_initRect();
     };
 
     //====================================================================

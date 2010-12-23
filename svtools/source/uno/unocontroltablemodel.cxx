@@ -229,7 +229,7 @@ using namespace ::com::sun::star::awt::grid;
             :aColumns           ( )
             ,nRowCount          ( 0         )
             ,bHasColumnHeaders  ( true      )
-            ,bHasRowHeaders     ( true      )
+            ,bHasRowHeaders     ( false     )
             ,bVScroll           ( false     )
             ,bHScroll           ( false     )
             ,pRenderer          (           )
@@ -257,7 +257,7 @@ using namespace ::com::sun::star::awt::grid;
         :m_pImpl( new UnoControlTableModel_Impl )
     {
         m_pImpl->bHasColumnHeaders = true;
-        m_pImpl->bHasRowHeaders = true;
+        m_pImpl->bHasRowHeaders = false;
         m_pImpl->pRenderer.reset( new GridTableRenderer( *this ) );
         m_pImpl->pInputHandler.reset( new DefaultInputHandler );
     }
@@ -340,7 +340,7 @@ using namespace ::com::sun::star::awt::grid;
         ENSURE_OR_RETURN_VOID( ( i_position >= 0 ) && ( i_position <= m_pImpl->aColumns.size() ), "illegal position!" );
         ENSURE_OR_RETURN_VOID( !!i_column, "illegal column" );
 
-        m_pImpl->aColumns.insert( m_pImpl->aColumns.begin(), i_column );
+        m_pImpl->aColumns.insert( m_pImpl->aColumns.begin() + i_position, i_column );
 
         // notify listeners
         ModellListeners aListeners( m_pImpl->m_aListeners );

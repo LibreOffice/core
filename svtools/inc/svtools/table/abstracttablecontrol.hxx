@@ -73,7 +73,6 @@ namespace svt { namespace table
         /// selects the row, from the actual cursor till bottom
         cursorSelectRowAreaBottom,
 
-
         /// invalid and final enumeration value, not to be actually used
         invalidTableControlAction
     };
@@ -113,16 +112,18 @@ namespace svt { namespace table
             @see TableControlAction
         */
         virtual bool    dispatchAction( TableControlAction _eAction ) = 0;
-    /** returns selection engine*/
-    virtual SelectionEngine* getSelEngine() = 0;
-    virtual void setCursorAtCurrentCell(const Point& rPoint) = 0;
-    virtual bool isTooltipActive() = 0;
-    virtual rtl::OUString& setTooltip(const Point& rPoint ) = 0;
-    virtual RowPos getCurrentRow(const Point& rPoint ) = 0;
-    virtual void resizeColumn(const Point& rPoint ) = 0;
-    virtual bool startResizeColumn(const Point& rPoint) = 0;
-    virtual bool endResizeColumn(const Point& rPoint) = 0;
-    virtual bool isRowSelected(RowPos _nRow) = 0;
+
+        /** returns selection engine*/
+        virtual SelectionEngine* getSelEngine() = 0;
+        virtual void activateCellAt( const Point& rPoint ) = 0;
+        virtual bool isTooltipActive() = 0;
+        virtual rtl::OUString& setTooltip(const Point& rPoint ) = 0;
+        virtual RowPos getRowAtPoint( const Point& rPoint ) = 0;
+        virtual ColPos getColAtPoint( const Point& rPoint ) = 0;
+        virtual void resizeColumn(const Point& rPoint ) = 0;
+        virtual bool checkResizeColumn(const Point& rPoint) = 0;
+        virtual bool endResizeColumn(const Point& rPoint) = 0;
+        virtual bool isRowSelected(RowPos _nRow) = 0;
 
         virtual ~IAbstractTableControl() {};
     };

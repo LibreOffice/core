@@ -232,7 +232,7 @@ namespace svt { namespace table
             If there is more than one column with width COLWIDTH_FIT_TO_VIEW in a model,
             they're all layouted equal-width.
 
-            If the columns with a read width (i.e. other than COLWIDTH_FIT_TO_VIEW) are,
+            If the columns with a real width (i.e. other than COLWIDTH_FIT_TO_VIEW) are,
             in sum, wider than the view, then the view is free to choose a real width for any
             columns which return COLWIDTH_FIT_TO_VIEW here.
 

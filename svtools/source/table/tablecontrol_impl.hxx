@@ -43,7 +43,53 @@ namespace svt { namespace table
 {
 //........................................................................
 
-    typedef ::std::vector< long >   ArrayOfLong;
+    struct ColumnWidthInfo
+    {
+        ColumnWidthInfo()
+            :nStartPixel( 0 )
+            ,nEndPixel( 0 )
+        {
+        }
+
+        ColumnWidthInfo( long const i_startPixel, long const i_endPixel )
+            :nStartPixel( i_startPixel )
+            ,nEndPixel( i_endPixel )
+        {
+        }
+
+        long getStart() const { return nStartPixel; }
+        long getEnd() const { return nEndPixel; }
+
+        void setEnd( long const i_end ) { nEndPixel = i_end; }
+        void move( long const i_offset ) { nStartPixel += i_offset; nEndPixel += i_offset; }
+
+        long getWidth() const { return nEndPixel - nStartPixel; }
+
+    private:
+        /** the start of the column, in pixels. Might be negative, in case the column is scrolled out of the visible
+            area.
+        */
+        long    nStartPixel;
+
+        /** the end of the column, in pixels, plus 1. Effectively, this is the accumulated width of a all columns
+            up to the current one.
+        */
+        long    nEndPixel;
+    };
+
+    struct ColumnInfoPositionLess
+    {
+        bool operator()( ColumnWidthInfo const& i_colInfo, long const i_position )
+        {
+            return i_colInfo.getEnd() < i_position;
+        }
+        bool operator()( long const i_position, ColumnWidthInfo const& i_colInfo )
+        {
+            return i_position < i_colInfo.getStart();
+        }
+    };
+
+    typedef ::std::vector< ColumnWidthInfo >    ColumnPositions;
 
     class TableControl;
     class TableDataWindow;
@@ -59,7 +105,8 @@ namespace svt { namespace table
         friend class TableRowGeometry;
         friend class TableColumnGeometry;
         friend class SuspendInvariants;
-    friend class TableFunctionSet;
+        friend class TableFunctionSet;
+
     private:
         /// the control whose impl-instance we implemnt
         TableControl&           m_rAntiImpl;
@@ -67,14 +114,9 @@ namespace svt { namespace table
         PTableModel             m_pModel;
         /// the input handler to use, usually the input handler as provided by ->m_pModel
         PTableInputHandler      m_pInputHandler;
-        /// the widths of the single columns, measured in pixel
-        ArrayOfLong             m_aColumnWidthsPixel;
-        /** the accumulated widths of the single columns, i.e. their exclusive right borders,
-            <strong<not</strong> counting the space for a possible row header column
-        */
-        ArrayOfLong             m_aAccColumnWidthsPixel;
+        /// info about the widths of our columns
+        ColumnPositions         m_aColumnWidths;
 
-        ArrayOfLong     m_aVisibleColumnWidthsPixel;
         /// the height of a single row in the table, measured in pixels
         long                    m_nRowHeightPixel;
         /// the height of the column header row in the table, measured in pixels
@@ -103,7 +145,7 @@ namespace svt { namespace table
         /// the vertical scrollbar, if any
         ScrollBar*              m_pVScroll;
         /// the horizontal scrollbar, if any
-        ScrollBar*          m_pHScroll;
+        ScrollBar*              m_pHScroll;
         ScrollBarBox*           m_pScrollCorner;
         //selection engine - for determining selection range, e.g. single, multiple
         SelectionEngine*        m_pSelEngine;
@@ -112,11 +154,11 @@ namespace svt { namespace table
         //part of selection engine
         TableFunctionSet*       m_pTableFunctionSet;
         //part of selection engine
-        RowPos              m_nAnchor;
-        bool            m_bResizing;
-        ColPos          m_nResizingColumn;
-        bool            m_bResizingGrid;
-        rtl::OUString   m_aTooltipText;
+        RowPos                  m_nAnchor;
+        bool                    m_bResizingColumn;
+        ColPos                  m_nResizingColumn;
+        bool                    m_bResizingGrid;
+        rtl::OUString           m_aTooltipText;
 
 #if DBG_UTIL
     #define INV_SCROLL_POSITION     1
@@ -142,8 +184,6 @@ namespace svt { namespace table
         inline  RowPos  getTopRow() const       { return m_nTopRow; }
         inline  long    getRowCount() const     { return m_nRowCount; }
         inline  long    getColumnCount() const  { return m_nColumnCount; }
-
-        inline  long    getColHeaderHightPixel() const  { return m_nColHeaderHeightPixel; }
 
         inline  const TableControl&   getAntiImpl() const { return m_rAntiImpl; }
         inline        TableControl&   getAntiImpl()       { return m_rAntiImpl; }
@@ -181,10 +221,7 @@ namespace svt { namespace table
                 <TRUE/> if it's okay that the given cooordinate is only partially visible
         */
         void    ensureVisible( ColPos _nColumn, RowPos _nRow, bool _bAcceptPartialVisibility );
-        /** returns the row, which contains the input point*/
-        virtual RowPos  getCurrentRow (const Point& rPoint);
 
-        void setCursorAtCurrentCell(const Point& rPoint);
         /** checks whether the vector with the selected rows contains the current row*/
         BOOL    isRowSelected(const ::std::vector<RowPos>& selectedRows, RowPos current);
 
@@ -201,16 +238,19 @@ namespace svt { namespace table
         void    removeSelectedRow(RowPos _nRowPos);
         void    invalidateRows();
         void    clearSelection();
-            // IAbstractTableControl
-            virtual void    hideCursor();
-            virtual void    showCursor();
-            virtual bool    dispatchAction( TableControlAction _eAction );
-        virtual SelectionEngine* getSelEngine();
-        virtual bool isTooltipActive();
-        virtual rtl::OUString& setTooltip(const Point& rPoint );
-        virtual void resizeColumn(const Point& rPoint);
-        virtual bool startResizeColumn(const Point& rPoint);
-        virtual bool endResizeColumn(const Point& rPoint);
+        // IAbstractTableControl
+        virtual void                hideCursor();
+        virtual void                showCursor();
+        virtual bool                dispatchAction( TableControlAction _eAction );
+        virtual SelectionEngine*    getSelEngine();
+        virtual void                activateCellAt( const Point& rPoint );
+        virtual bool                isTooltipActive();
+        virtual rtl::OUString&      setTooltip(const Point& rPoint );
+        virtual RowPos              getRowAtPoint( const Point& rPoint );
+        virtual ColPos              getColAtPoint( const Point& rPoint );
+        virtual void                resizeColumn(const Point& rPoint);
+        virtual bool                checkResizeColumn(const Point& rPoint);
+        virtual bool                endResizeColumn(const Point& rPoint);
 
         TableDataWindow* getDataWindow();
         ScrollBar* getHorzScrollbar();
@@ -301,6 +341,10 @@ namespace svt { namespace table
         */
         TableSize   impl_ni_ScrollRows( TableSize _nRowDelta );
 
+        /** equivalent to impl_ni_ScrollRows, but checks the instances invariants beforehand (in a non-product build only)
+        */
+        TableSize   impl_scrollRows( TableSize const i_rowDelta );
+
         /** scrolls the view by the given number of columns
 
             The method is not bound to the classes public invariants, as it's used in
@@ -311,8 +355,13 @@ namespace svt { namespace table
                 from the given numbers to scroll in case the begin or the end of the
                 column range were reached.
         */
-        TableSize   impl_ni_ScrollColumns( TableSize _nRowDelta );
-            /** retrieves the area occupied by the totality of (at least partially) visible cells
+        TableSize   impl_ni_ScrollColumns( TableSize _nColumnDelta );
+
+        /** equivalent to impl_ni_ScrollColumns, but checks the instances invariants beforehand (in a non-product build only)
+        */
+        TableSize   impl_scrollColumns( TableSize const i_columnDelta );
+
+        /** retrieves the area occupied by the totality of (at least partially) visible cells
 
             The returned area includes row and column headers. Also, it takes into
             account the the fact that there might be less columns than would normally
@@ -330,11 +379,16 @@ namespace svt { namespace table
         */
         void        impl_getAllVisibleDataCellArea( Rectangle& _rCellArea ) const;
 
-        void impl_ni_getAccVisibleColWidths();
+        /** retrieves the column which covers the given ordinate
+        */
+        ColPos      impl_getColumnForOrdinate( long const i_ordinate ) const;
+
         void impl_updateLeftColumn();
 
         DECL_LINK( OnScroll, ScrollBar* );
+        DECL_LINK( OnUpdateScrollbars, void* );
     };
+
     //see seleng.hxx, seleng.cxx, FunctionSet overridables, part of selection engine
     class TableFunctionSet : public FunctionSet
     {

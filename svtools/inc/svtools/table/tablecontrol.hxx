@@ -111,8 +111,7 @@ namespace svt { namespace table
         sal_Int32 GetCurrentRow() const;
 
         /** returns the row, which contains the input point*/
-
-        ColPos  GetCurrentRow (const Point& rPoint);
+        ColPos  GetRowAtPoint( const Point& rPoint );
 
         /** retrieves the current column
 

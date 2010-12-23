@@ -83,14 +83,14 @@ namespace svt { namespace table
         Point aPoint = rMEvt.GetPosPixel();
         if ( !m_rTableControl.getInputHandler()->MouseMove( m_rTableControl, rMEvt ) )
         {
-            if(m_rTableControl.getCurrentRow(aPoint)>=0 && m_rTableControl.isTooltipActive() )
+            if ( m_rTableControl.isTooltipActive() && m_rTableControl.getRowAtPoint( aPoint ) >= 0 )
             {
                 SetPointer(POINTER_ARROW);
-                rtl::OUString& rHelpText = m_rTableControl.setTooltip(aPoint);
+                const ::rtl::OUString& rHelpText = m_rTableControl.setTooltip(aPoint);
                 Help::EnableBalloonHelp();
-                Window::SetHelpText( rHelpText.getStr());
+                Window::SetHelpText( rHelpText );
             }
-            else if(m_rTableControl.getCurrentRow(aPoint) == -1)
+            else if ( m_rTableControl.getRowAtPoint( aPoint ) == ROW_COL_HEADERS )
             {
                 if(Help::IsBalloonHelpEnabled())
                     Help::DisableBalloonHelp();
@@ -107,8 +107,8 @@ namespace svt { namespace table
     //--------------------------------------------------------------------
     void TableDataWindow::MouseButtonDown( const MouseEvent& rMEvt )
     {
-        Point aPoint = rMEvt.GetPosPixel();
-        RowPos nCurRow = m_rTableControl.getCurrentRow(aPoint);
+        const Point aPoint = rMEvt.GetPosPixel();
+        const RowPos nCurRow = m_rTableControl.getRowAtPoint( aPoint );
         std::vector<RowPos> selectedRows(m_rTableControl.getSelectedRows());
         if ( !m_rTableControl.getInputHandler()->MouseButtonDown( m_rTableControl, rMEvt ) )
             Window::MouseButtonDown( rMEvt );
@@ -125,7 +125,6 @@ namespace svt { namespace table
             }
         }
         m_aMouseButtonDownHdl.Call((MouseEvent*) &rMEvt);
-        m_rTableControl.getAntiImpl().LoseFocus();
     }
     //--------------------------------------------------------------------
     void TableDataWindow::MouseButtonUp( const MouseEvent& rMEvt )
@@ -133,7 +132,7 @@ namespace svt { namespace table
         if ( !m_rTableControl.getInputHandler()->MouseButtonUp( m_rTableControl, rMEvt ) )
             Window::MouseButtonUp( rMEvt );
         m_aMouseButtonUpHdl.Call((MouseEvent*) &rMEvt);
-        m_rTableControl.getAntiImpl().GetFocus();
+        m_rTableControl.getAntiImpl().GrabFocus();
     }
     //--------------------------------------------------------------------
     void TableDataWindow::SetPointer( const Pointer& rPointer )

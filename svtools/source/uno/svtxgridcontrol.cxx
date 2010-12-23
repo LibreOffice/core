@@ -99,7 +99,7 @@ sal_Int32 SAL_CALL SVTXGridControl::getItemIndexAtPoint(::sal_Int32 x, ::sal_Int
 
     TableControl* pTable = dynamic_cast< TableControl* >( GetWindow() );
     ENSURE_OR_RETURN( pTable != NULL, "SVTXGridControl::getItemIndexAtPoint: no control (anymore)!", -1 );
-    return pTable->GetCurrentRow( Point(x,y) );
+    return pTable->GetRowAtPoint( Point( x, y ) );
 }
 
 // ---------------------------------------------------------------------------------------------------------------------
@@ -398,7 +398,6 @@ void SAL_CALL SVTXGridControl::rowAdded(const ::com::sun::star::awt::grid::GridD
     {
         m_xColumnModel->setDefaultColumns(rawRowData.getLength());
             // this will trigger notifications, which in turn will let us update our m_pTableModel
-
     }
     else if((unsigned int)rawRowData.getLength()!=(unsigned)colCount)
         throw GridInvalidDataException( ::rtl::OUString::createFromAscii("The column count doesn't match with the length of row data"), *this );
