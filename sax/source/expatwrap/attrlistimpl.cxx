@@ -112,8 +112,10 @@ OUString AttributeList::getTypeByName( const OUString& sName ) throw (RuntimeExc
 {
     vector<struct TagAttribute>::iterator ii = m_pImpl->vecAttribute.begin();
 
-    for( ; ii != m_pImpl->vecAttribute.end() ; ii ++ ) {
-        if( (*ii).sName == sName ) {
+    for (; ii != m_pImpl->vecAttribute.end(); ++ii )
+    {
+        if( (*ii).sName == sName )
+        {
             return (*ii).sType;
         }
     }
@@ -124,8 +126,10 @@ OUString AttributeList::getValueByName(const OUString& sName) throw (RuntimeExce
 {
     vector<struct TagAttribute>::iterator ii = m_pImpl->vecAttribute.begin();
 
-    for( ; ii != m_pImpl->vecAttribute.end() ; ii ++ ) {
-        if( (*ii).sName == sName ) {
+    for (; ii != m_pImpl->vecAttribute.end(); ++ii)
+    {
+        if( (*ii).sName == sName )
+        {
             return (*ii).sValue;
         }
     }
