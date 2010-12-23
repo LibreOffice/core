@@ -32,9 +32,7 @@
 #ifdef WNT
 # include <stdio.h>
 # include <sys/stat.h>
-# include <tools/prewin.h>
 # include <windows.h>
-# include <tools/postwin.h>
 #endif
 
 #if OSL_DEBUG_LEVEL > 0
