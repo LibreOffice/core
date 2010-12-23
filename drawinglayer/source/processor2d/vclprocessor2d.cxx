@@ -1114,7 +1114,7 @@ namespace drawinglayer
 
                     mpOutputDevice->EnableMapMode(false);
 
-                    for(std::vector< basegfx::B2DPoint >::const_iterator aIter(rPositions.begin()); aIter != rPositions.end(); aIter++)
+                    for(std::vector< basegfx::B2DPoint >::const_iterator aIter(rPositions.begin()); aIter != rPositions.end(); ++aIter)
                     {
                         const basegfx::B2DPoint aDiscreteTopLeft((maCurrentTransformation * (*aIter)) - aDiscreteHalfSize);
                         const Point aDiscretePoint(basegfx::fround(aDiscreteTopLeft.getX()), basegfx::fround(aDiscreteTopLeft.getY()));
@@ -1134,7 +1134,7 @@ namespace drawinglayer
             const basegfx::BColor aRGBColor(maBColorModifierStack.getModifiedColor(rPointArrayCandidate.getRGBColor()));
             const Color aVCLColor(aRGBColor);
 
-            for(std::vector< basegfx::B2DPoint >::const_iterator aIter(rPositions.begin()); aIter != rPositions.end(); aIter++)
+            for(std::vector< basegfx::B2DPoint >::const_iterator aIter(rPositions.begin()); aIter != rPositions.end(); ++aIter)
             {
                 const basegfx::B2DPoint aViewPosition(maCurrentTransformation * (*aIter));
                 const Point aPos(basegfx::fround(aViewPosition.getX()), basegfx::fround(aViewPosition.getY()));
