@@ -77,7 +77,7 @@ DBG_NAME(SdrPageView);
 
 SdrPageWindow* SdrPageView::FindPageWindow(SdrPaintWindow& rPaintWindow) const
 {
-    for(SdrPageWindowVector::const_iterator a = maPageWindows.begin(); a != maPageWindows.end(); a++)
+    for(SdrPageWindowVector::const_iterator a = maPageWindows.begin(); a != maPageWindows.end(); ++a)
     {
         if(&((*a)->GetPaintWindow()) == &rPaintWindow)
         {
@@ -108,7 +108,7 @@ const SdrPageWindow* SdrPageView::FindPatchedPageWindow( const OutputDevice& _rO
 
 SdrPageWindow* SdrPageView::FindPageWindow(const OutputDevice& rOutDev) const
 {
-    for(SdrPageWindowVector::const_iterator a = maPageWindows.begin(); a != maPageWindows.end(); a++)
+    for(SdrPageWindowVector::const_iterator a = maPageWindows.begin(); a != maPageWindows.end(); ++a)
     {
         if(&((*a)->GetPaintWindow().GetOutputDevice()) == &rOutDev)
         {
@@ -133,7 +133,7 @@ SdrPageWindow* SdrPageView::GetPageWindow(sal_uInt32 nIndex) const
 void SdrPageView::ClearPageWindows()
 {
     // #126416#
-    for(SdrPageWindowVector::const_iterator a = maPageWindows.begin(); a != maPageWindows.end(); a++)
+    for(SdrPageWindowVector::const_iterator a = maPageWindows.begin(); a != maPageWindows.end(); ++a)
     {
         delete *a;
     }
