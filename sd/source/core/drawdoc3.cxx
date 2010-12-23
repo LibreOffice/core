@@ -1450,7 +1450,7 @@ void SdDrawDocument::RemoveUnnecessaryMasterPages(SdPage* pMasterPage, BOOL bOnl
                             pUndoMgr->AddUndoAction(pMovStyles);
                     }
 
-                    for( SdStyleSheetVector::iterator iter = aRemove.begin(); iter != aRemove.end(); iter++ )
+                    for( SdStyleSheetVector::iterator iter = aRemove.begin(); iter != aRemove.end(); ++iter )
                         static_cast<SdStyleSheetPool*>( mxStyleSheetPool.get())->Remove((*iter).get());
                 }
             }
