@@ -75,7 +75,7 @@ class LwpFribNote: public LwpFrib
 {
 public:
     LwpFribNote(LwpPara* pPara );
-    ~LwpFribNote(){};
+    ~LwpFribNote(){}
     void Read(LwpObjectStream* pObjStrm, sal_uInt16 len);
     void RegisterStyle();
     void XFConvert(XFContentContainer* pCont);
@@ -95,7 +95,7 @@ public:
     virtual LWP_LAYOUT_TYPE GetLayoutType () { return LWP_NOTE_LAYOUT;}
     virtual void RegisterStyle();
     virtual void XFConvert(XFContentContainer* pCont);
-    sal_uInt32 GetTime(){ return m_nTime;};
+    sal_uInt32 GetTime(){ return m_nTime;}
     OUString GetAuthor();
 
 protected:

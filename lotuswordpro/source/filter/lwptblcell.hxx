@@ -408,8 +408,8 @@ LwpRowSpecifier::IsBad()
 class LwpColumnSpecifier
 {
 public:
-    LwpColumnSpecifier(void){};
-    ~LwpColumnSpecifier(){};
+    LwpColumnSpecifier(void){}
+    ~LwpColumnSpecifier(){}
 
     void QuickRead(LwpObjectStream *pStrm);
     sal_uInt8 Column(){return cColumn;}

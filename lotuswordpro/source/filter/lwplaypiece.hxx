@@ -125,7 +125,7 @@ public:
     sal_uInt16 GetPlacement(){return m_nPlacement;}
     void SetPlacement(sal_uInt16 nVal){m_nPlacement = nVal;}
     // add by , 04/05/2005
-    inline LwpPoint* GetOffset() {return &m_Offset;};
+    inline LwpPoint* GetOffset() {return &m_Offset;}
     // end add
 protected:
     virtual void Read();
@@ -231,7 +231,7 @@ public:
     LwpLayoutColumns(LwpObjectHeader& objHdr, LwpSvStream* pStrm);
     virtual ~LwpLayoutColumns();
     virtual void Parse(IXFStream* pOutputStream);
-    inline sal_uInt16 GetNumCols(){return m_nNumCols;};
+    inline sal_uInt16 GetNumCols(){return m_nNumCols;}
     double GetColWidth(sal_uInt16 nIndex);
     double GetColGap(sal_uInt16 nIndex);
 protected:

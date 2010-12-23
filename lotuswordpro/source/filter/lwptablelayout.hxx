@@ -90,10 +90,10 @@ public:
     LwpTableLayout(LwpObjectHeader &objHdr, LwpSvStream* pStrm);
     virtual ~LwpTableLayout();
     virtual LWP_LAYOUT_TYPE GetLayoutType () { return LWP_TABLE_LAYOUT;}
-    LwpObjectID * GetColumnLayoutHead(){return &m_ColumnLayout;};
+    LwpObjectID * GetColumnLayoutHead(){return &m_ColumnLayout;}
     void RegisterStyle();
     LwpTable *  GetTable();
-    LwpCellLayout * GetDefaultCellLayout(){return m_pDefaultCellLayout;};
+    LwpCellLayout * GetDefaultCellLayout(){return m_pDefaultCellLayout;}
     LwpSuperTableLayout * GetSuperTableLayout();
     LwpObjectID * SearchCellStoryMap(sal_uInt16 nRow, sal_uInt16 nCol);
     LwpCellLayout * GetCellByRowCol(sal_uInt16 nRow, sal_uInt16 nCol);
@@ -202,10 +202,10 @@ public:
     LwpColumnLayout(LwpObjectHeader &objHdr, LwpSvStream* pStrm);
     virtual ~LwpColumnLayout();
     virtual LWP_LAYOUT_TYPE GetLayoutType () { return LWP_COLUMN_LAYOUT;}
-    sal_uInt32 GetColumnID(){return ccolid;};
-    double GetWidth(){return LwpTools::ConvertFromUnitsToMetric(cwidth);};
+    sal_uInt32 GetColumnID(){return ccolid;}
+    double GetWidth(){return LwpTools::ConvertFromUnitsToMetric(cwidth);}
     void RegisterStyle(double dCalculatedWidth);
-    sal_Bool IsJustifiable(){return (( m_nAttributes2 & STYLE2_JUSTIFIABLE) != 0);};
+    sal_Bool IsJustifiable(){return (( m_nAttributes2 & STYLE2_JUSTIFIABLE) != 0);}
 protected:
     void Read();
     sal_uInt8 ccolid;

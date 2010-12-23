@@ -115,7 +115,7 @@ public:
     /**
      * @descr   helper function to assert whether a color is valid.
      */
-    sal_Bool    IsValid() const{ return m_bValid;};
+    sal_Bool    IsValid() const{ return m_bValid;}
 
     rtl::OUString   ToString ()const;
 

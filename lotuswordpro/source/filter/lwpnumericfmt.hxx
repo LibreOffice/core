@@ -246,7 +246,7 @@ class LwpNumericFormat
 {
 public:
     LwpNumericFormat(LwpObjectStream * pStrm);
-    ~LwpNumericFormat(){};
+    ~LwpNumericFormat(){}
     void Read();
     static sal_Bool IsCurrencyFormat(USHORT Format);
     USHORT GetDecimalPlaces(void);
@@ -302,8 +302,8 @@ class LwpLayoutNumerics : public LwpVirtualPiece
 {
 public:
     LwpLayoutNumerics(LwpObjectHeader& objHdr, LwpSvStream* pStrm)
-    :LwpVirtualPiece(objHdr, pStrm),cNumerics(m_pObjStrm){};
-    ~LwpLayoutNumerics(){};
+    :LwpVirtualPiece(objHdr, pStrm),cNumerics(m_pObjStrm){}
+    ~LwpLayoutNumerics(){}
     XFStyle* Convert();
     virtual void Read();
 protected:

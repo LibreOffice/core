@@ -75,7 +75,7 @@ class LwpVerDocument : public LwpObject
 {
 public:
     LwpVerDocument(LwpObjectHeader& objHdr, LwpSvStream* pStrm);
-    ~LwpVerDocument(){};
+    ~LwpVerDocument(){}
     void Read();
     virtual void RegisterStyle();
     sal_uInt32 GetTabSpacing();

@@ -73,7 +73,7 @@ class LwpSLVList
 {
 public:
     LwpSLVList(){}
-    LwpSLVList(LwpObjectStream* pStrm){Read(pStrm);};
+    LwpSLVList(LwpObjectStream* pStrm){Read(pStrm);}
 public:
     void Read(LwpObjectStream* pStrm)
     {

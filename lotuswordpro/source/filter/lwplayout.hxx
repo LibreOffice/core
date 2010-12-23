@@ -97,7 +97,7 @@ class LwpVirtualLayout : public LwpDLNFPVList
 {
 public:
     LwpVirtualLayout(LwpObjectHeader &objHdr, LwpSvStream* pStrm);
-    virtual ~LwpVirtualLayout(){};
+    virtual ~LwpVirtualLayout(){}
     virtual sal_Bool MarginsSameAsParent();
     inline virtual sal_uInt16 GetNumCols(){return 1;}
     virtual double GetColWidth(sal_uInt16 nIndex);
@@ -107,8 +107,8 @@ public:
     virtual sal_Bool IsAutoGrow(){ return sal_False;}
     virtual sal_Bool IsAutoGrowUp(){ return sal_False;}
     virtual sal_Bool IsAutoGrowDown(){ return sal_False;}
-    virtual sal_Bool IsAutoGrowLeft(){ return sal_False;};
-    virtual sal_Bool IsAutoGrowRight(){ return sal_False;};
+    virtual sal_Bool IsAutoGrowLeft(){ return sal_False;}
+    virtual sal_Bool IsAutoGrowRight(){ return sal_False;}
     virtual sal_Bool IsFitGraphic();
     virtual sal_Bool IsAutoGrowWidth();
     virtual sal_Bool IsInlineToMargin();
@@ -157,8 +157,8 @@ public:
         }
         return enumXFAlignTop;
     };
-    virtual void SetStyleName(const OUString & str){ m_StyleName = str;};
-    virtual double GetWidth(){return -1;};
+    virtual void SetStyleName(const OUString & str){ m_StyleName = str;}
+    virtual double GetWidth(){return -1;}
 
     //Check whether there are contents in the layout
     virtual sal_Bool HasContent(){return sal_False;}
@@ -223,8 +223,8 @@ public:
 class LwpAssociatedLayouts
 {
 public:
-    LwpAssociatedLayouts(){};
-    //LwpAssociatedLayouts(LwpObjectStream* pStrm){Read(pStrm);};
+    LwpAssociatedLayouts(){}
+    //LwpAssociatedLayouts(LwpObjectStream* pStrm){Read(pStrm);}
 public:
     void Read(LwpObjectStream* pStrm);
     LwpObjectID* GetOnlyLayout(){return &m_OnlyLayout;}
@@ -239,7 +239,7 @@ class LwpHeadLayout : public LwpVirtualLayout
 {
 public:
     LwpHeadLayout(LwpObjectHeader &objHdr, LwpSvStream* pStrm);
-    virtual ~LwpHeadLayout(){};
+    virtual ~LwpHeadLayout(){}
     void RegisterStyle();
     LwpVirtualLayout* FindEnSuperTableLayout();
 protected:

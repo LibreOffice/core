@@ -122,7 +122,7 @@ class LwpOleObject : public LwpGraphicOleObject
 {
 public:
     LwpOleObject(LwpObjectHeader& objHdr, LwpSvStream* pStrm);
-    ~LwpOleObject(){};
+    ~LwpOleObject(){}
     virtual void Read();
     virtual void Parse(IXFStream* pOutputStream);
     virtual void XFConvert(XFContentContainer * pCont);

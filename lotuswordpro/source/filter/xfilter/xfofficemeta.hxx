@@ -70,8 +70,8 @@
 class XFOfficeMeta : public IXFObject
 {
 public:
-    XFOfficeMeta(){};
-    virtual ~XFOfficeMeta(){};
+    XFOfficeMeta(){}
+    virtual ~XFOfficeMeta(){}
 
     void    SetGenerator(rtl::OUString generator);
     void    SetTitle(rtl::OUString title);

@@ -75,7 +75,7 @@ class LwpPrinterInfo
 {
 public:
     LwpPrinterInfo(LwpObjectStream* pStrm);
-    ~LwpPrinterInfo(){};
+    ~LwpPrinterInfo(){}
 private:
     LwpAtomHolder m_OutputFile;
     LwpAtomHolder cSelectedDivisions;

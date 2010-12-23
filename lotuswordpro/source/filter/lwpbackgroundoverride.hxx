@@ -65,7 +65,7 @@ class LwpBackgroundOverride : public LwpOverride
 {
 
 public:
-    LwpBackgroundOverride(){};
+    LwpBackgroundOverride(){}
     virtual ~LwpBackgroundOverride(){}
 
 

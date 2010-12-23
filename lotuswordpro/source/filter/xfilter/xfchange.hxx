@@ -73,16 +73,16 @@
 class XFChangeList : public XFContentContainer
 {
 public:
-    XFChangeList(){};
-    ~XFChangeList(){};
+    XFChangeList(){}
+    ~XFChangeList(){}
     virtual void ToXml(IXFStream *pStrm);
 };
 
 class XFChangeRegion : public XFContentContainer
 {
 public:
-    XFChangeRegion(){};
-    ~XFChangeRegion(){};
+    XFChangeRegion(){}
+    ~XFChangeRegion(){}
     virtual void ToXml(IXFStream *pStrm);
     void SetChangeID(rtl::OUString sID){m_sID=sID;}
     rtl::OUString GetChangeID(){return m_sID;}
@@ -95,24 +95,24 @@ protected:
 class XFChangeInsert : public XFChangeRegion
 {
 public:
-    XFChangeInsert(){};
-    ~XFChangeInsert(){};
+    XFChangeInsert(){}
+    ~XFChangeInsert(){}
     void ToXml(IXFStream *pStrm);
 };
 
 class XFChangeDelete : public XFChangeRegion
 {
 public:
-    XFChangeDelete(){};
-    ~XFChangeDelete(){};
+    XFChangeDelete(){}
+    ~XFChangeDelete(){}
     void ToXml(IXFStream *pStrm);
 };
 
 class XFChange : public XFContent
 {
 public:
-    XFChange(){};
-    ~XFChange(){};
+    XFChange(){}
+    ~XFChange(){}
     void ToXml(IXFStream *pStrm);
     void SetChangeID(rtl::OUString sID){m_sID=sID;}
     rtl::OUString GetChangeID(){return m_sID;}
@@ -123,8 +123,8 @@ private:
 class XFChangeStart : public XFContent
 {
 public:
-    XFChangeStart(){};
-    ~XFChangeStart(){};
+    XFChangeStart(){}
+    ~XFChangeStart(){}
     void ToXml(IXFStream *pStrm);
     void SetChangeID(rtl::OUString sID){m_sID=sID;}
     rtl::OUString GetChangeID(){return m_sID;}
@@ -135,8 +135,8 @@ private:
 class XFChangeEnd : public XFContent
 {
 public:
-    XFChangeEnd(){};
-    ~XFChangeEnd(){};
+    XFChangeEnd(){}
+    ~XFChangeEnd(){}
     void ToXml(IXFStream *pStrm);
     void SetChangeID(rtl::OUString sID){m_sID=sID;}
     rtl::OUString GetChangeID(){return m_sID;}

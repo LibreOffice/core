@@ -106,7 +106,7 @@ class LwpFribFootnote: public LwpFrib
 
 public:
     LwpFribFootnote(LwpPara* pPara );
-    ~LwpFribFootnote(){};
+    ~LwpFribFootnote(){}
     void Read(LwpObjectStream* pObjStrm, sal_uInt16 len);
     void RegisterStyle();
     void XFConvert(XFContentContainer* pCont);
@@ -160,7 +160,7 @@ class LwpFootnoteTable : public LwpTable
 {
 public:
     LwpFootnoteTable(LwpObjectHeader &objHdr, LwpSvStream* pStrm);
-    ~LwpFootnoteTable(){};
+    ~LwpFootnoteTable(){}
 protected:
     void Read();
 };
@@ -171,8 +171,8 @@ protected:
 class LwpFootnoteNumberOptions
 {
 public:
-    LwpFootnoteNumberOptions(){};
-    ~LwpFootnoteNumberOptions(){};
+    LwpFootnoteNumberOptions(){}
+    ~LwpFootnoteNumberOptions(){}
     void Read(LwpObjectStream* pObjStrm);
 private:
     sal_uInt16 m_nFlag;
@@ -203,8 +203,8 @@ public:
 class LwpFootnoteSeparatorOptions
 {
 public:
-    LwpFootnoteSeparatorOptions(){};
-    ~LwpFootnoteSeparatorOptions(){};
+    LwpFootnoteSeparatorOptions(){}
+    ~LwpFootnoteSeparatorOptions(){}
     void Read(LwpObjectStream* pObjStrm);
 private:
     sal_uInt16 m_nFlag;

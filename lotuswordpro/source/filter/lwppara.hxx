@@ -91,7 +91,7 @@ class LwpBulletStyleMgr;
 class LwpNotifyListPersistent
 {
 public:
-    LwpNotifyListPersistent(){};
+    LwpNotifyListPersistent(){}
     void Read(LwpObjectStream* pObjStrm);
 protected:
     LwpObjectID m_Head;
@@ -100,7 +100,7 @@ protected:
 class LwpForked3NotifyList
 {
 public:
-    LwpForked3NotifyList(){};
+    LwpForked3NotifyList(){}
 protected:
     LwpNotifyListPersistent m_ExtraList;
     LwpNotifyListPersistent m_PersistentList;
@@ -201,7 +201,7 @@ public:
     // add by  04/13/2005
     LwpVirtualLayout* GetLayoutWithMyStory();
     LwpBulletStyleMgr* GetBulletStyleMgr();
-    sal_uInt32 GetOrdinal(){ return m_nOrdinal;};
+    sal_uInt32 GetOrdinal(){ return m_nOrdinal;}
     sal_Bool operator <(LwpPara& Other);
     sal_Bool ComparePagePosition(LwpVirtualLayout* pPreLayout, LwpVirtualLayout* pNextLayout);
 //  rtl::OUString RegisterBulletStyle();

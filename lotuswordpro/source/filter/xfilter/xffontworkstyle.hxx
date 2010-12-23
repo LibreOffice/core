@@ -76,7 +76,7 @@ public:
         m_eStyleType(enumXFFWOff),
         m_eAdjustType(enumXFFWAdjustAutosize),
         m_eShadowType(enumXFFWShadowNone)
-        {};
+        {}
 
     ~XFFontWorkStyle(){}
 

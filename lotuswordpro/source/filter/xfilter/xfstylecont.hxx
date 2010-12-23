@@ -76,7 +76,7 @@ class IXFStyle;
 class XFStyleContainer : public IXFObject
 {
 public:
-    XFStyleContainer(){};
+    XFStyleContainer(){}
 
     XFStyleContainer(const rtl::OUString& strStyleNamePrefix);
 

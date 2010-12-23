@@ -75,8 +75,8 @@
 class LwpFribCHBlock : public LwpFrib
 {
 public:
-    LwpFribCHBlock( LwpPara* pPara ) : LwpFrib(pPara){};
-    ~LwpFribCHBlock(){};
+    LwpFribCHBlock( LwpPara* pPara ) : LwpFrib(pPara){}
+    ~LwpFribCHBlock(){}
     void Read(LwpObjectStream* pObjStrm, sal_uInt16 len);
     LwpCHBlkMarker* GetMarker();
     sal_uInt8 GetType(){return m_nType;}
@@ -91,7 +91,7 @@ class LwpFribBookMark : public LwpFrib
 {
 public:
     LwpFribBookMark( LwpPara* pPara );
-    ~LwpFribBookMark(){};
+    ~LwpFribBookMark(){}
     void Read(LwpObjectStream* pObjStrm, sal_uInt16 len);
     LwpObjectID GetMarkerID(){return m_objMarker;}
     sal_uInt8 GetType(){return m_nType;}
@@ -109,7 +109,7 @@ class LwpFribField : public LwpFrib
 {
 public:
     LwpFribField( LwpPara* pPara );
-    ~LwpFribField(){};
+    ~LwpFribField(){}
     void Read(LwpObjectStream* pObjStrm, sal_uInt16 len);
     LwpFieldMark* GetMarker();
     sal_uInt8 GetType(){return m_nType;}
@@ -150,7 +150,7 @@ class LwpFribRubyMarker : public LwpFrib
 {
 public:
     LwpFribRubyMarker( LwpPara* pPara );
-    ~LwpFribRubyMarker(){};
+    ~LwpFribRubyMarker(){}
     void Read(LwpObjectStream* pObjStrm, sal_uInt16 len);
     LwpRubyMarker* GetMarker();
     sal_uInt8 GetType(){return m_nType;}

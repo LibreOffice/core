@@ -89,8 +89,8 @@ class LwpBookMark;
 class LwpVersionManager
 {
 public:
-    LwpVersionManager(){};
-    ~LwpVersionManager(){};
+    LwpVersionManager(){}
+    ~LwpVersionManager(){}
 public:
     void Read(LwpObjectStream *pStrm);
     void Skip(LwpObjectStream *pStrm);
@@ -99,8 +99,8 @@ public:
 class LwpObjectManager
 {
 public:
-    LwpObjectManager(){};
-    ~LwpObjectManager(){};
+    LwpObjectManager(){}
+    ~LwpObjectManager(){}
 private:
     LwpObjectID m_Division;
 public:
@@ -110,8 +110,8 @@ public:
 class LwpNumberManager
 {
 public:
-    LwpNumberManager(){};
-    ~LwpNumberManager(){};
+    LwpNumberManager(){}
+    ~LwpNumberManager(){}
 private:
     LwpObjectID m_TableRange;
 public:
@@ -122,8 +122,8 @@ public:
 class LwpBulletManager
 {
 public:
-    LwpBulletManager(){};
-    ~LwpBulletManager(){};
+    LwpBulletManager(){}
+    ~LwpBulletManager(){}
 private:
     LwpObjectID m_Head;
 public:
@@ -135,8 +135,8 @@ class LwpContent;
 class LwpContentManager
 {
 public:
-    LwpContentManager(){};
-    ~LwpContentManager(){};
+    LwpContentManager(){}
+    ~LwpContentManager(){}
 private:
     LwpObjectID m_ContentList;
     LwpObjectID m_EnumHead;
@@ -160,8 +160,8 @@ public:
 class LwpPieceManager
 {
 public:
-    LwpPieceManager(){};
-    ~LwpPieceManager(){};
+    LwpPieceManager(){}
+    ~LwpPieceManager(){}
 private:
     LwpObjectID m_GeometryPieceList;
     LwpObjectID m_ScalePieceList;
@@ -197,13 +197,13 @@ class LwpListList;
 class LwpOrderedObjectManager
 {
 public:
-    LwpOrderedObjectManager(){};
-    ~LwpOrderedObjectManager(){};
+    LwpOrderedObjectManager(){}
+    ~LwpOrderedObjectManager(){}
 protected:
     LwpObjectID m_Head;
 public:
     void Read(LwpObjectStream *pStrm);
-    LwpObjectID* GetHeadID() { return &m_Head;};
+    LwpObjectID* GetHeadID() { return &m_Head;}
     LwpOrderedObject* Enumerate(LwpOrderedObject* pLast);
 protected:
     LwpListList* GetNextActiveListList(LwpListList* pLast);

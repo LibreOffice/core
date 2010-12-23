@@ -80,8 +80,8 @@
 class LwpFontTableEntry
 {
 public:
-    LwpFontTableEntry(){};
-    ~LwpFontTableEntry(){};
+    LwpFontTableEntry(){}
+    ~LwpFontTableEntry(){}
 public:
     void Read(LwpObjectStream *pStrm);
     OUString GetFaceName();
@@ -111,12 +111,12 @@ private:
 class LwpFontNameEntry
 {
 public:
-    LwpFontNameEntry(){};
-    ~LwpFontNameEntry(){};
+    LwpFontNameEntry(){}
+    ~LwpFontNameEntry(){}
 public:
     void Read(LwpObjectStream *pStrm);
-    inline sal_uInt16 GetFaceID(){return m_nFaceName;};
-    inline sal_uInt16 GetAltFaceID(){return m_nAltFaceName;};
+    inline sal_uInt16 GetFaceID(){return m_nFaceName;}
+    inline sal_uInt16 GetAltFaceID(){return m_nAltFaceName;}
     void Override(XFFont* pFont);
     inline BOOL IsFaceNameOverridden();
     inline BOOL IsAltFaceNameOverridden();
@@ -173,8 +173,8 @@ public:
 class LwpFontAttrEntry
 {
 public:
-    LwpFontAttrEntry(){};
-    ~LwpFontAttrEntry(){};
+    LwpFontAttrEntry(){}
+    ~LwpFontAttrEntry(){}
 public:
     void Read(LwpObjectStream *pStrm);
     void Override(XFFont*pFont);
@@ -236,7 +236,7 @@ private:
 class LwpFontAttrManager
 {
 public:
-    LwpFontAttrManager():m_pFontAttrs(NULL){};
+    LwpFontAttrManager():m_pFontAttrs(NULL){}
     ~LwpFontAttrManager();
 public:
     void Read(LwpObjectStream *pStrm);
@@ -249,8 +249,8 @@ private:
 class LwpFontManager
 {
 public:
-    LwpFontManager(){};
-    ~LwpFontManager(){};
+    LwpFontManager(){}
+    ~LwpFontManager(){}
 private:
     LwpFontNameManager m_FNMgr;
     LwpFontAttrManager m_AttrMgr;

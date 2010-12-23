@@ -80,7 +80,7 @@ enum STATE
 class LwpOverride
 {
 public:
-    LwpOverride() : m_nValues(0), m_nOverride(0), m_nApply(0) {};
+    LwpOverride() : m_nValues(0), m_nOverride(0), m_nApply(0) {}
 
     virtual ~LwpOverride(){}
 
@@ -104,7 +104,7 @@ protected:
 class LwpTextLanguageOverride : public LwpOverride
 {
 public:
-    LwpTextLanguageOverride() : m_nLanguage(0) {};
+    LwpTextLanguageOverride() : m_nLanguage(0) {}
 
     void Read(LwpObjectStream* pStrm);
 
@@ -116,7 +116,7 @@ private:
 class LwpTextAttributeOverride : public LwpOverride
 {
 public:
-    LwpTextAttributeOverride() : m_nHideLevels(0), m_nBaseLineOffset(0) {};
+    LwpTextAttributeOverride() : m_nHideLevels(0), m_nBaseLineOffset(0) {}
 
     void Read(LwpObjectStream* pStrm);
 
@@ -140,7 +140,7 @@ inline sal_uInt16 LwpTextAttributeOverride::GetHideLevels() const
 class LwpKinsokuOptsOverride : public LwpOverride
 {
 public:
-    LwpKinsokuOptsOverride() : m_nLevels(0) {};
+    LwpKinsokuOptsOverride() : m_nLevels(0) {}
 
     void Read(LwpObjectStream* pStrm);
 
@@ -246,7 +246,7 @@ inline void LwpBulletOverride::RevertRightAligned()
 class LwpAlignmentOverride : public LwpOverride
 {
 public:
-    LwpAlignmentOverride() : m_nAlignType(ALIGN_LEFT), m_nPosition(0), m_nAlignChar(0){};
+    LwpAlignmentOverride() : m_nAlignType(ALIGN_LEFT), m_nPosition(0), m_nAlignChar(0){}
 
     void Read(LwpObjectStream* pStrm);
 
@@ -282,7 +282,7 @@ private:
 class LwpSpacingCommonOverride : public LwpOverride
 {
 public:
-    LwpSpacingCommonOverride() : m_nSpacingType(SPACING_NONE), m_nAmount(0), m_nMultiple(65536){};
+    LwpSpacingCommonOverride() : m_nSpacingType(SPACING_NONE), m_nAmount(0), m_nMultiple(65536){}
 
     void Read(LwpObjectStream* pStrm);
 
@@ -294,9 +294,9 @@ public:
         SPACING_NONE    = 3
     };
 
-    SpacingType GetType() const {return m_nSpacingType;};
-    sal_Int32 GetAmount() const {return m_nAmount;};
-    sal_Int32 GetMultiple() const {return m_nMultiple;};
+    SpacingType GetType() const {return m_nSpacingType;}
+    sal_Int32 GetAmount() const {return m_nAmount;}
+    sal_Int32 GetMultiple() const {return m_nMultiple;}
 
     void Override(LwpSpacingCommonOverride* other);
     void OverrideType(SpacingType val);
@@ -328,10 +328,10 @@ public:
 
     void Override(LwpSpacingOverride* other);
 
-    LwpSpacingCommonOverride* GetSpacing(){return m_pSpacing;};
-    LwpSpacingCommonOverride* GetAboveLineSpacing(){return m_pAboveLineSpacing;};
-    LwpSpacingCommonOverride* GetAboveSpacing(){return m_pParaSpacingAbove;};
-    LwpSpacingCommonOverride* GetBelowSpacing(){return m_pParaSpacingBelow;};
+    LwpSpacingCommonOverride* GetSpacing(){return m_pSpacing;}
+    LwpSpacingCommonOverride* GetAboveLineSpacing(){return m_pAboveLineSpacing;}
+    LwpSpacingCommonOverride* GetAboveSpacing(){return m_pParaSpacingAbove;}
+    LwpSpacingCommonOverride* GetBelowSpacing(){return m_pParaSpacingBelow;}
 private:
     LwpSpacingCommonOverride*   m_pSpacing;
     LwpSpacingCommonOverride*   m_pAboveLineSpacing;
@@ -343,7 +343,7 @@ private:
 class LwpIndentOverride : public LwpOverride
 {
 public:
-    LwpIndentOverride() : m_nAll(0), m_nFirst(0), m_nRest(0), m_nRight(0) {};
+    LwpIndentOverride() : m_nAll(0), m_nFirst(0), m_nRest(0), m_nRight(0) {}
     LwpIndentOverride& operator=(LwpIndentOverride& other);
     void Read(LwpObjectStream* pStrm);
 
