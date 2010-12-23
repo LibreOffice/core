@@ -1974,8 +1974,7 @@ void SmSymDefineDialog::UpdateButtons()
 {
     bool  bAdd    = false,
           bChange = false,
-          bDelete = false,
-          bEqual;
+          bDelete = false;
     XubString aTmpSymbolName    (aSymbols.GetText()),
               aTmpSymbolSetName (aSymbolSets.GetText());
 
@@ -1983,7 +1982,7 @@ void SmSymDefineDialog::UpdateButtons()
     {
         // alle Einstellungen gleich?
         //! (Font-, Style- und SymbolSet Name werden nicht case sensitiv verglichen)
-        bEqual = pOrigSymbol
+        bool bEqual = pOrigSymbol
                     && aTmpSymbolSetName.EqualsIgnoreCaseAscii(aOldSymbolSetName.GetText())
                     && aTmpSymbolName.Equals(pOrigSymbol->GetName())
                     && aFonts.GetSelectEntry().EqualsIgnoreCaseAscii(
@@ -2000,7 +1999,7 @@ void SmSymDefineDialog::UpdateButtons()
 
         // aendern nur falls altes Symbol vorhanden und am neuen etwas anders ist
         bChange = pOrigSymbol && !bEqual;
-}
+    }
 
     aAddBtn   .Enable(bAdd);
     aChangeBtn.Enable(bChange);
