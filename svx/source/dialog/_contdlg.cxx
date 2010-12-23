@@ -286,8 +286,6 @@ void SvxContourDlg::ScaleContour( PolyPolygon& rContour, const Graphic& rGraphic
     const MapMode   aDispMap( eUnit );
     const MapMode   aGrfMap( rGraphic.GetPrefMapMode() );
     const Size      aGrfSize( rGraphic.GetPrefSize() );
-    double          fScaleX;
-    double          fScaleY;
     Size            aOrgSize;
     Point           aNewPoint;
     BOOL            bPixelMap = aGrfMap.GetMapUnit() == MAP_PIXEL;
@@ -299,8 +297,8 @@ void SvxContourDlg::ScaleContour( PolyPolygon& rContour, const Graphic& rGraphic
 
     if ( aOrgSize.Width() && aOrgSize.Height() )
     {
-        fScaleX = (double) rDisplaySize.Width() / aOrgSize.Width();
-        fScaleY = (double) rDisplaySize.Height() / aOrgSize.Height();
+        double fScaleX = (double) rDisplaySize.Width() / aOrgSize.Width();
+        double fScaleY = (double) rDisplaySize.Height() / aOrgSize.Height();
 
         for ( USHORT j = 0, nPolyCount = rContour.Count(); j < nPolyCount; j++ )
         {
