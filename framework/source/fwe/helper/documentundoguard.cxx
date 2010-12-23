@@ -26,7 +26,7 @@
 
 #include "precompiled_framework.hxx"
 
-#include <helper/documentundoguard.hxx>
+#include "framework/documentundoguard.hxx"
 
 /** === begin UNO includes === **/
 #include <com/sun/star/document/XUndoManagerSupplier.hpp>

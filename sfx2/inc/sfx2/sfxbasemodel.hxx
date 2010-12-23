@@ -98,9 +98,9 @@
 #include <com/sun/star/task/XInteractionHandler.hpp>
 
 //________________________________________________________________________________________________________
-#if ! defined(INCLUDED_COMPHELPER_IMPLBASE_VAR_HXX_31)
-#define INCLUDED_COMPHELPER_IMPLBASE_VAR_HXX_31
-#define COMPHELPER_IMPLBASE_INTERFACE_NUMBER 31
+#if ! defined(INCLUDED_COMPHELPER_IMPLBASE_VAR_HXX_32)
+#define INCLUDED_COMPHELPER_IMPLBASE_VAR_HXX_32
+#define COMPHELPER_IMPLBASE_INTERFACE_NUMBER 32
 #include <comphelper/implbase_var.hxx>
 #endif
 
@@ -240,7 +240,7 @@ namespace sfx { namespace intern {
                  SfxListener
 */
 
-typedef ::comphelper::WeakImplHelper31  <   XCHILD
+typedef ::comphelper::WeakImplHelper32  <   XCHILD
                                         ,   XDOCUMENTINFOSUPPLIER
                                         ,   ::com::sun::star::document::XDocumentPropertiesSupplier
                                         ,   ::com::sun::star::rdf::XDocumentMetadataAccess

@@ -26,7 +26,7 @@
 
 #include "precompiled_framework.hxx"
 
-#include "helper/undomanagerhelper.hxx"
+#include "framework/undomanagerhelper.hxx"
 
 /** === begin UNO includes === **/
 #include <com/sun/star/lang/XComponent.hpp>
