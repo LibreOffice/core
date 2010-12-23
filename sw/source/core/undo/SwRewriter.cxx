@@ -71,7 +71,7 @@ String SwRewriter::Apply(const String & rStr) const
     String aResult = rStr;
     vector<SwRewriteRule>::const_iterator aIt;
 
-    for (aIt = mRules.begin(); aIt != mRules.end(); aIt++)
+    for (aIt = mRules.begin(); aIt != mRules.end(); ++aIt)
         aResult.SearchAndReplaceAll(aIt->first, aIt->second);
 
     return aResult;
