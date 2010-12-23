@@ -31,7 +31,7 @@
 #include <svtools/svmedit.hxx>
 #include <svtools/xtextedt.hxx>
 #include <svtools/editsyntaxhighlighter.hxx>
-#include "../../inc/txtattr.hxx"
+#include <svtools/txtattr.hxx>
 
 
 MultiLineEditSyntaxHighlight::MultiLineEditSyntaxHighlight( Window* pParent, WinBits nWinStyle,

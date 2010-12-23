@@ -34,8 +34,8 @@
 
 #include <sot/exchange.hxx>
 #include <sot/formats.hxx>
-#include "filelist.hxx"
-#include "clsids.hxx"
+#include "sot/filelist.hxx"
+#include "sot/clsids.hxx"
 
 #include <tools/globname.hxx>
 #include <com/sun/star/datatransfer/DataFlavor.hpp>

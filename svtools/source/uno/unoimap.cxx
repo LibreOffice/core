@@ -36,23 +36,17 @@
 #include <com/sun/star/awt/Rectangle.hpp>
 #include <com/sun/star/awt/Point.hpp>
 #include <com/sun/star/drawing/PointSequence.hpp>
-
-#ifndef _COMPHELPER_SERVICEHELPER_HXX_
 #include <comphelper/servicehelper.hxx>
-#endif
 #include <comphelper/propertysethelper.hxx>
 #include <comphelper/propertysetinfo.hxx>
 #include <cppuhelper/weakagg.hxx>
-
 #include <cppuhelper/implbase3.hxx>
-
 #include <list>
 #include <rtl/uuid.h>
 #include <vos/mutex.hxx>
 #include <vcl/svapp.hxx>
-
-#include "unoevent.hxx"
-#include "unoimap.hxx"
+#include <svtools/unoevent.hxx>
+#include <svtools/unoimap.hxx>
 #include <svtools/imap.hxx>
 #include <svtools/imapcirc.hxx>
 #include <svtools/imaprect.hxx>

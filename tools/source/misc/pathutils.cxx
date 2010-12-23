@@ -25,7 +25,6 @@
  *
  ************************************************************************/
 
-#include "precompiled_tools.hxx"
 #include "sal/config.h"
 
 #if defined WNT
