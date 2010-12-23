@@ -42,8 +42,7 @@ GEN_HID_OTHER=TRUE
 RESLIB1NAME=sm
 RESLIB1IMAGES=$(PRJ)$/res
 RESLIB1SRSFILES=\
-    $(SRS)$/smres.srs \
-    $(SOLARCOMMONRESDIR)$/sfx.srs
+    $(SRS)$/smres.srs 
 
 SHL1TARGET= sm$(DLLPOSTFIX)
 SHL1IMPLIB= smimp

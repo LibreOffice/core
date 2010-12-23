@@ -25,39 +25,14 @@
 #
 #*************************************************************************
 
-PRJ=..$/..$/..
+ifeq ($(strip $(SOLARENV)),)
+$(error No environment set!)
+endif
 
-PRJNAME=sw
-TARGET=wrtsh
+gb_PARTIALBUILD := T
+GBUILDDIR := $(SOLARENV)/gbuild
+include $(GBUILDDIR)/gbuild.mk
 
-# --- Settings -----------------------------------------------------
+$(eval $(call gb_Module_make_global_targets,$(shell ls $(dir $(realpath $(firstword $(MAKEFILE_LIST))))/Module*.mk)))
 
-.INCLUDE :  $(PRJ)$/inc$/swpre.mk
-.INCLUDE :  settings.mk
-.INCLUDE :  $(PRJ)$/inc$/sw.mk
-
-# --- Files --------------------------------------------------------
-
-SRS1NAME=$(TARGET)
-SRC1FILES =  \
-        wrtsh.src
-
-SLOFILES =  \
-        $(SLO)$/move.obj \
-        $(SLO)$/select.obj \
-        $(SLO)$/wrtsh1.obj \
-        $(SLO)$/wrtsh2.obj \
-        $(SLO)$/wrtsh3.obj \
-        $(SLO)$/wrtsh4.obj \
-        $(SLO)$/delete.obj \
-        $(SLO)$/wrtundo.obj
-
-EXCEPTIONSFILES = \
-        $(SLO)$/wrtsh1.obj \
-        $(SLO)$/wrtsh2.obj \
-        $(SLO)$/wrtundo.obj \
-
-# --- Tagets -------------------------------------------------------
-
-.INCLUDE :  target.mk
-
+# vim: set noet sw=4 ts=4:

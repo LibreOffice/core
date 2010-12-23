@@ -1351,7 +1351,7 @@ void SwHTMLParser::NewForm( sal_Bool bAppend )
     {
         const HTMLOption *pOption = (*pHTMLOptions)[--i];
         ScriptType eScriptType2 = eDfltScriptType;
-        sal_uInt16 nEvent;
+        sal_uInt16 nEvent = 0;
         sal_Bool bSetEvent = sal_False;
 
         switch( pOption->GetToken() )
@@ -1525,7 +1525,7 @@ void SwHTMLParser::InsertInput()
     {
         const HTMLOption *pOption = (*pHTMLOptions)[--i];
         ScriptType eScriptType2 = eDfltScriptType;
-        sal_uInt16 nEvent;
+        sal_uInt16 nEvent = 0;
         sal_Bool bSetEvent = sal_False;
 
         switch( pOption->GetToken() )
@@ -2017,7 +2017,7 @@ void SwHTMLParser::NewTextArea()
     {
         const HTMLOption *pOption = (*pHTMLOptions)[--i];
         ScriptType eScriptType2 = eDfltScriptType;
-        sal_uInt16 nEvent;
+        sal_uInt16 nEvent = 0;
         sal_Bool bSetEvent = sal_False;
 
         switch( pOption->GetToken() )
@@ -2308,7 +2308,7 @@ void SwHTMLParser::NewSelect()
     {
         const HTMLOption *pOption = (*pHTMLOptions)[--i];
         ScriptType eScriptType2 = eDfltScriptType;
-        sal_uInt16 nEvent;
+        sal_uInt16 nEvent = 0;
         sal_Bool bSetEvent = sal_False;
 
         switch( pOption->GetToken() )

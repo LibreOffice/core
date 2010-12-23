@@ -38,7 +38,9 @@
 #include <swundo.hxx>                   // fuer Undo-Ids
 #include <IDocumentUndoRedo.hxx>
 #include <swdtflvr.hxx>
-
+#include <svtools/svtdata.hxx>
+#include <svtools/svtools.hrc>
+#include <svtools/svtdata.hxx>
 #include <wrtsh.hrc>
 #include <sfx2/sfx.hrc>
 
@@ -127,8 +129,7 @@ String SwWrtShell::GetDoString( DoType eDoType ) const
     default:;//prevent warning
     }
 
-    ::rtl::OUStringBuffer buf(
-        String(ResId(nResStr, *SFX_APP()->GetSfxResManager())) );
+    ::rtl::OUStringBuffer buf( String( SvtResId( nResStr ) ) );
     buf.append(aUndoStr);
 
     return buf.makeStringAndClear();
@@ -170,8 +171,7 @@ String SwWrtShell::GetRepeatString() const
         return str;
     }
 
-    ::rtl::OUStringBuffer buf(
-        String(ResId(STR_REPEAT, *SFX_APP()->GetSfxResManager())) );
+    ::rtl::OUStringBuffer buf( String(SvtResId(STR_REPEAT)) );
     buf.append(str);
     return buf.makeStringAndClear();
 }
