@@ -34,7 +34,7 @@
 
 #include <svl/solar.hrc>
 #include <tools/resmgr.hxx>
-#include <bootstrp/sstring.hxx>
+#include <soldep/sstring.hxx>
 #include <vcl/event.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/wrkwin.hxx>
