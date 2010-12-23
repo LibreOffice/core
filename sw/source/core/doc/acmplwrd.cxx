@@ -165,7 +165,7 @@ void SwAutoCompleteClient::Modify(SfxPoolItem *pOld, SfxPoolItem *)
 void SwAutoCompleteWord_Impl::AddDocument(SwDoc& rDoc)
 {
     SwAutoCompleteClientVector::iterator aIt;
-    for(aIt = aClientVector.begin(); aIt != aClientVector.end(); aIt++)
+    for(aIt = aClientVector.begin(); aIt != aClientVector.end(); ++aIt)
     {
         if(&aIt->GetDoc() == &rDoc)
             return;
@@ -176,7 +176,7 @@ void SwAutoCompleteWord_Impl::AddDocument(SwDoc& rDoc)
 void SwAutoCompleteWord_Impl::RemoveDocument(const SwDoc& rDoc)
 {
     SwAutoCompleteClientVector::iterator aIt;
-    for(aIt = aClientVector.begin(); aIt != aClientVector.end(); aIt++)
+    for(aIt = aClientVector.begin(); aIt != aClientVector.end(); ++aIt)
     {
         if(&aIt->GetDoc() == &rDoc)
         {
@@ -204,7 +204,7 @@ SwAutoCompleteString::~SwAutoCompleteString()
 void SwAutoCompleteString::AddDocument(const SwDoc& rDoc)
 {
     SwDocPtrVector::iterator aIt;
-    for(aIt = aSourceDocs.begin(); aIt != aSourceDocs.end(); aIt++)
+    for(aIt = aSourceDocs.begin(); aIt != aSourceDocs.end(); ++aIt)
     {
         if(*aIt == &rDoc)
             return;
@@ -216,7 +216,7 @@ void SwAutoCompleteString::AddDocument(const SwDoc& rDoc)
 sal_Bool SwAutoCompleteString::RemoveDocument(const SwDoc& rDoc)
 {
     SwDocPtrVector::iterator aIt;
-    for(aIt = aSourceDocs.begin(); aIt != aSourceDocs.end(); aIt++)
+    for(aIt = aSourceDocs.begin(); aIt != aSourceDocs.end(); ++aIt)
     {
         if(*aIt == &rDoc)
         {
