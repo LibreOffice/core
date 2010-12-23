@@ -515,10 +515,10 @@ namespace sax_fastparser {
         while ( iter != maData.end( ) )
         {
             fprintf( stderr, "pair: %d, ", iter->first );
-            for ( sal_Int32 i=0, len=iter->second.getLength(); i < len; i++ )
+            for ( sal_Int32 i=0, len=iter->second.getLength(); i < len; ++i )
                 fprintf( stderr, "%c", iter->second[i] );
             fprintf( stderr, "\n" );
-            iter++;
+            ++iter;
         }
 
         sort( );
