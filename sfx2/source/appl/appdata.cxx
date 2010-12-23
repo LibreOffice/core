@@ -57,7 +57,7 @@
 #include <sfx2/request.hxx>
 #include "referers.hxx"
 #include "app.hrc"
-#include "sfxresid.hxx"
+#include "sfx2/sfxresid.hxx"
 #include "objshimp.hxx"
 #include <sfx2/appuno.hxx>
 #include "imestatuswindow.hxx"

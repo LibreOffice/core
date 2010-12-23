@@ -39,7 +39,7 @@
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/container/XNameReplace.hpp>
-#include <com/sun/star/frame/XController.hpp>
+#include <com/sun/star/frame/XController2.hpp>
 #include <com/sun/star/document/XDocumentInfo.hpp>
 #include <com/sun/star/document/XDocumentInfoSupplier.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
@@ -49,6 +49,7 @@
 #include <com/sun/star/rdf/XDocumentMetadataAccess.hpp>
 
 #include <com/sun/star/document/XEventBroadcaster.hpp>
+#include <com/sun/star/document/XDocumentEventBroadcaster.hpp>
 #include <com/sun/star/document/XEventListener.hpp>
 #include <com/sun/star/document/XEventsSupplier.hpp>
 #include <com/sun/star/document/XEmbeddedScripts.hpp>
@@ -144,6 +145,7 @@
 #define XDOCUMENTINFO           ::com::sun::star::document::XDocumentInfo
 #define XDOCUMENTINFOSUPPLIER   ::com::sun::star::document::XDocumentInfoSupplier
 #define XEVENTBROADCASTER       ::com::sun::star::document::XEventBroadcaster
+#define XDOCUMENTEVENTBROADCASTER   ::com::sun::star::document::XDocumentEventBroadcaster
 #define XEVENTSSUPPLIER         ::com::sun::star::document::XEventsSupplier
 #define XEMBEDDEDSCRIPTS        ::com::sun::star::document::XEmbeddedScripts
 #define XSCRIPTINVOCATIONCONTEXT    ::com::sun::star::document::XScriptInvocationContext
@@ -245,6 +247,7 @@ typedef ::comphelper::WeakImplHelper31  <   XCHILD
                                         ,   ::com::sun::star::document::XDocumentRecovery
                                         ,   ::com::sun::star::document::XUndoManagerSupplier
                                         ,   XEVENTBROADCASTER
+                                        ,   XDOCUMENTEVENTBROADCASTER
                                         ,   XEVENTLISTENER
                                         ,   XEVENTSSUPPLIER
                                         ,   XEMBEDDEDSCRIPTS
@@ -1251,6 +1254,18 @@ public:
 
     virtual void SAL_CALL removeEventListener( const REFERENCE< XDOCEVENTLISTENER >& xListener ) throw( RUNTIMEEXCEPTION );
 
+    //____________________________________________________________________________________________________
+    //  XDocumentEventBroadcaster
+    //____________________________________________________________________________________________________
+
+    virtual void SAL_CALL addDocumentEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::document::XDocumentEventListener >& _Listener ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL removeDocumentEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::document::XDocumentEventListener >& _Listener ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL notifyDocumentEvent( const ::rtl::OUString& _EventName, const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController2 >& _ViewController, const ::com::sun::star::uno::Any& _Supplement ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::NoSupportException, ::com::sun::star::uno::RuntimeException);
+
+    //____________________________________________________________________________________________________
+    //  XUnoTunnel
+    //____________________________________________________________________________________________________
+
     virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw(::com::sun::star::uno::RuntimeException);
 
     // css.frame.XModule
@@ -1525,7 +1540,9 @@ private:
     SAL_DLLPRIVATE void impl_store( const   OUSTRING&                   sURL            ,
                         const   SEQUENCE< PROPERTYVALUE >&  seqArguments    ,
                                 sal_Bool                    bSaveTo         ) ;
-    SAL_DLLPRIVATE void postEvent_Impl( ::rtl::OUString );
+
+    SAL_DLLPRIVATE void postEvent_Impl( const ::rtl::OUString& aName, const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController2 >& xController = ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController2 >() );
+
     SAL_DLLPRIVATE String getEventName_Impl( long nID );
     SAL_DLLPRIVATE void NotifyStorageListeners_Impl();
        SAL_DLLPRIVATE bool QuerySaveSizeExceededModules( const com::sun::star::uno::Reference< com::sun::star::task::XInteractionHandler >& xHandler );

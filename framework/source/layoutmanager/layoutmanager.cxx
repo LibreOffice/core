@@ -37,8 +37,11 @@
 #include <panelmanager.hxx>
 #include <threadhelp/resetableguard.hxx>
 #include <services.h>
-#include <classes/sfxhelperfunctions.hxx>
+
+#include <framework/sfxhelperfunctions.hxx>
+#include <framework/sfxhelperfunctions.hxx>
 #include <uielement/menubarwrapper.hxx>
+#include <framework/addonsoptions.hxx>
 #include <uiconfiguration/windowstateconfiguration.hxx>
 #include <classes/fwkresid.hxx>
 #include <classes/resource.hrc>
@@ -519,7 +522,7 @@ sal_Bool LayoutManager::implts_readWindowStateData( const rtl::OUString& aName, 
         try
         {
             Sequence< PropertyValue > aWindowState;
-            if ( xPersistentWindowState->getByName( aName ) >>= aWindowState )
+            if ( xPersistentWindowState->hasByName( aName ) && (xPersistentWindowState->getByName( aName ) >>= aWindowState) )
             {
                 sal_Bool bValue( sal_False );
                 for ( sal_Int32 n = 0; n < aWindowState.getLength(); n++ )

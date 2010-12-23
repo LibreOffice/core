@@ -39,8 +39,10 @@
 #include "dp_gui_theextmgr.hxx"
 #include "dp_gui_extensioncmdqueue.hxx"
 #include "dp_misc.h"
+#include "dp_ucb.h"
 #include "dp_update.hxx"
 #include "dp_identifier.hxx"
+#include "dp_descriptioninfoset.hxx"
 
 #include "vcl/ctrl.hxx"
 #include "vcl/menu.hxx"
@@ -118,7 +120,8 @@ enum MENU_COMMAND
     CMD_REMOVE  = 1,
     CMD_ENABLE,
     CMD_DISABLE,
-    CMD_UPDATE
+    CMD_UPDATE,
+    CMD_SHOW_LICENSE
 };
 
 class ExtBoxWithBtns_Impl : public ExtensionBox_Impl
@@ -224,13 +227,10 @@ const Size ExtBoxWithBtns_Impl::GetMinOutputSizePixel() const
 // -----------------------------------------------------------------------
 void ExtBoxWithBtns_Impl::RecalcAll()
 {
-    ExtensionBox_Impl::RecalcAll();
-
     const sal_Int32 nActive = getSelIndex();
 
     if ( nActive != EXTENSION_LISTBOX_ENTRY_NOTFOUND )
     {
-        SetButtonPos( GetEntryRect( nActive ) );
         SetButtonStatus( GetEntryData( nActive) );
     }
     else
@@ -239,6 +239,11 @@ void ExtBoxWithBtns_Impl::RecalcAll()
         m_pEnableBtn->Hide();
         m_pRemoveBtn->Hide();
     }
+
+    ExtensionBox_Impl::RecalcAll();
+
+    if ( nActive != EXTENSION_LISTBOX_ENTRY_NOTFOUND )
+        SetButtonPos( GetEntryRect( nActive ) );
 }
 
 
@@ -363,28 +368,29 @@ bool ExtBoxWithBtns_Impl::HandleTabKey( bool bReverse )
 // -----------------------------------------------------------------------
 MENU_COMMAND ExtBoxWithBtns_Impl::ShowPopupMenu( const Point & rPos, const long nPos )
 {
-    if ( ( nPos >= 0 ) && ( nPos < (long) getItemCount() ) )
+    if ( nPos >= (long) getItemCount() )
+        return CMD_NONE;
+
+    PopupMenu aPopup;
+
+    aPopup.InsertItem( CMD_UPDATE, DialogHelper::getResourceString( RID_CTX_ITEM_CHECK_UPDATE ) );
+
+    if ( ! GetEntryData( nPos )->m_bLocked )
     {
-        if ( ! GetEntryData( nPos )->m_bLocked )
+        if ( GetEntryData( nPos )->m_bUser )
         {
-            PopupMenu aPopup;
-
-            aPopup.InsertItem( CMD_UPDATE, DialogHelper::getResourceString( RID_CTX_ITEM_CHECK_UPDATE ) );
-
-            if ( GetEntryData( nPos )->m_bUser )
-            {
-                if ( GetEntryData( nPos )->m_eState == REGISTERED )
-                    aPopup.InsertItem( CMD_DISABLE, DialogHelper::getResourceString( RID_CTX_ITEM_DISABLE ) );
-                else if ( GetEntryData( nPos )->m_eState != NOT_AVAILABLE )
-                    aPopup.InsertItem( CMD_ENABLE, DialogHelper::getResourceString( RID_CTX_ITEM_ENABLE ) );
-            }
-
-            aPopup.InsertItem( CMD_REMOVE, DialogHelper::getResourceString( RID_CTX_ITEM_REMOVE ) );
-
-            return (MENU_COMMAND) aPopup.Execute( this, rPos );
+            if ( GetEntryData( nPos )->m_eState == REGISTERED )
+                aPopup.InsertItem( CMD_DISABLE, DialogHelper::getResourceString( RID_CTX_ITEM_DISABLE ) );
+            else if ( GetEntryData( nPos )->m_eState != NOT_AVAILABLE )
+                aPopup.InsertItem( CMD_ENABLE, DialogHelper::getResourceString( RID_CTX_ITEM_ENABLE ) );
         }
+        aPopup.InsertItem( CMD_REMOVE, DialogHelper::getResourceString( RID_CTX_ITEM_REMOVE ) );
     }
-    return CMD_NONE;
+
+    if ( GetEntryData( nPos )->m_sLicenseText.Len() )
+        aPopup.InsertItem( CMD_SHOW_LICENSE, DialogHelper::getResourceString( RID_STR_SHOW_LICENSE_CMD ) );
+
+    return (MENU_COMMAND) aPopup.Execute( this, rPos );
 }
 
 //------------------------------------------------------------------------------
@@ -409,6 +415,12 @@ void ExtBoxWithBtns_Impl::MouseButtonDown( const MouseEvent& rMEvt )
                                 break;
             case CMD_REMOVE:    m_pParent->removePackage( GetEntryData( nPos )->m_xPackage );
                                 break;
+            case CMD_SHOW_LICENSE:
+                {
+                    ShowLicenseDialog aLicenseDlg( m_pParent, GetEntryData( nPos )->m_xPackage );
+                    aLicenseDlg.Execute();
+                    break;
+                }
         }
     }
     else if ( rMEvt.IsLeft() )
@@ -1740,6 +1752,42 @@ void UpdateRequiredDialog::disableAllEntries()
 
     if ( ! hasActiveEntries() )
         m_aCloseBtn.SetText( m_sCloseText );
+}
+
+//------------------------------------------------------------------------------
+//                             ShowLicenseDialog
+//------------------------------------------------------------------------------
+ShowLicenseDialog::ShowLicenseDialog( Window * pParent,
+                                      const uno::Reference< deployment::XPackage > &xPackage ) :
+    ModalDialog( pParent, DialogHelper::getResId( RID_DLG_SHOW_LICENSE ) ),
+    m_aLicenseText( this, DialogHelper::getResId( ML_LICENSE ) ),
+    m_aCloseBtn( this,    DialogHelper::getResId( RID_EM_BTN_CLOSE ) )
+{
+    FreeResource();
+
+    OUString aText = xPackage->getLicenseText();
+    m_aLicenseText.SetText( aText );
+}
+
+//------------------------------------------------------------------------------
+ShowLicenseDialog::~ShowLicenseDialog()
+{}
+
+//------------------------------------------------------------------------------
+void ShowLicenseDialog::Resize()
+{
+    Size aTotalSize( GetOutputSizePixel() );
+    Size aTextSize( aTotalSize.Width() - RSC_SP_DLG_INNERBORDER_LEFT - RSC_SP_DLG_INNERBORDER_RIGHT,
+                    aTotalSize.Height() - RSC_SP_DLG_INNERBORDER_TOP - 2*RSC_SP_DLG_INNERBORDER_BOTTOM
+                                        - m_aCloseBtn.GetSizePixel().Height() );
+
+    m_aLicenseText.SetPosSizePixel( Point( RSC_SP_DLG_INNERBORDER_LEFT, RSC_SP_DLG_INNERBORDER_TOP ),
+                                    aTextSize );
+
+    Point aBtnPos( (aTotalSize.Width() - m_aCloseBtn.GetSizePixel().Width())/2,
+                    aTotalSize.Height() - RSC_SP_DLG_INNERBORDER_BOTTOM
+                                        - m_aCloseBtn.GetSizePixel().Height() );
+    m_aCloseBtn.SetPosPixel( aBtnPos );
 }
 
 //=================================================================================

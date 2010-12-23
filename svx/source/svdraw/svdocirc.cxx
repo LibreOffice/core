@@ -47,8 +47,8 @@
 #include <svx/svdpage.hxx>
 #include <svx/svdopath.hxx> // fuer die Objektkonvertierung
 #include <svx/svdview.hxx>  // Zum Draggen (Ortho)
-#include "svdglob.hxx"   // StringCache
-#include "svdstr.hrc"    // Objektname
+#include "svx/svdglob.hxx"   // StringCache
+#include "svx/svdstr.hrc"    // Objektname
 #include <editeng/eeitem.hxx>
 #include "svdoimp.hxx"
 #include <svx/sdr/properties/circleproperties.hxx>

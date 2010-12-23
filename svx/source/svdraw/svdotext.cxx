@@ -29,15 +29,15 @@
 #include "precompiled_svx.hxx"
 
 #include <svx/svdotext.hxx>
-#include "svditext.hxx"
+#include "svx/svditext.hxx"
 #include <svx/svdpagv.hxx>  // fuer Abfrage im Paint, ob das
 #include <svx/svdview.hxx>  // Objekt gerade editiert wird
 #include <svx/svdpage.hxx>  // und fuer AnimationHandler (Laufschrift)
 #include <svx/svdetc.hxx>
 #include <svx/svdoutl.hxx>
 #include <svx/svdmodel.hxx>  // OutlinerDefaults
-#include "svdglob.hxx"  // Stringcache
-#include "svdstr.hrc"   // Objektname
+#include "svx/svdglob.hxx"  // Stringcache
+#include "svx/svdstr.hrc"   // Objektname
 #include <editeng/writingmodeitem.hxx>
 #include <svx/sdtfchim.hxx>
 #include <svtools/colorcfg.hxx>

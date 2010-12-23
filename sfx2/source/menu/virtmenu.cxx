@@ -36,13 +36,8 @@
 #include <com/sun/star/frame/XDesktop.hpp>
 #include <com/sun/star/frame/XFramesSupplier.hpp>
 #include <comphelper/processfactory.hxx>
-#ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
 #include <toolkit/unohlp.hxx>
-#endif
 #include <tools/urlobj.hxx>
-
-#ifndef GCC
-#endif
 
 #include "virtmenu.hxx"
 #include <sfx2/msgpool.hxx>
@@ -59,9 +54,9 @@
 #include <sfx2/sfx.hrc>
 #include <sfx2/viewsh.hxx>
 #include "sfxpicklist.hxx"
-#include "sfxresid.hxx"
+#include "sfx2/sfxresid.hxx"
 #include "menu.hrc"
-#include "imagemgr.hxx"
+#include "sfx2/imagemgr.hxx"
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/objsh.hxx>
 #include <framework/addonsoptions.hxx>

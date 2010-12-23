@@ -61,7 +61,7 @@
 #include "svx/svdogrp.hxx"
 #include "svx/scene3d.hxx"
 #include "svx/svdmodel.hxx"
-#include "globl3d.hxx"
+#include "svx/globl3d.hxx"
 #include "svx/fmglob.hxx"
 #include "svx/unopage.hxx"
 #include "svx/view3d.hxx"
@@ -72,7 +72,7 @@
 #include "svx/unoshprp.hxx"
 #include "svx/sxciaitm.hxx" // todo: remove
 #include "svx/svdograf.hxx"
-#include "unoapi.hxx"
+#include "svx/unoapi.hxx"
 #include "svx/svdomeas.hxx"
 #include "svx/svdpagv.hxx"
 #include "svx/svdpool.hxx"
@@ -90,9 +90,9 @@
 #include "svx/xlnedit.hxx"
 #include "svx/xlnstit.hxx"
 #include "svx/xlndsit.hxx"
-#include "svdglob.hxx"
-#include "svdstr.hrc"
-#include "unomaster.hxx"
+#include "svx/svdglob.hxx"
+#include "svx/svdstr.hrc"
+#include "svx/unomaster.hxx"
 #include <editeng/outlobj.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>

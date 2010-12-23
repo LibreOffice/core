@@ -51,7 +51,7 @@
 #include <sfx2/dispatch.hxx>
 #include <sfx2/printer.hxx>
 #include "arrdecl.hxx"
-#include "sfxresid.hxx"
+#include "sfx2/sfxresid.hxx"
 #include <sfx2/event.hxx>
 #include <sfx2/mnumgr.hxx>
 #include <sfx2/templdlg.hxx>

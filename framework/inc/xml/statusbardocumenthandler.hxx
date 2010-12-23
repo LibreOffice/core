@@ -29,7 +29,7 @@
 #define __FRAMEWORK_XML_STATUSBARDOCUMENTHANDLER_HXX_
 
 #ifndef __FRAMEWORK_XML_STATUSBARCONFIGURATION_HXX_
-#include <xml/statusbarconfiguration.hxx>
+#include <framework/statusbarconfiguration.hxx>
 #endif
 
 //_________________________________________________________________________________________________________________
@@ -49,6 +49,7 @@
 
 #include <hash_map>
 #include <stdtypes.h>
+#include <framework/fwedllapi.h>
 
 //_________________________________________________________________________________________________________________
 //  namespace
@@ -59,7 +60,7 @@ namespace framework{
 //*****************************************************************************************************************
 // Hash code function for using in all hash maps of follow implementation.
 
-class OReadStatusBarDocumentHandler :   private ThreadHelpBase, // Struct for right initalization of lock member! Must be first of baseclasses.
+class FWE_DLLPUBLIC OReadStatusBarDocumentHandler : private ThreadHelpBase, // Struct for right initalization of lock member! Must be first of baseclasses.
                                         public ::cppu::WeakImplHelper1< ::com::sun::star::xml::sax::XDocumentHandler >
 {
     public:
@@ -148,7 +149,7 @@ class OReadStatusBarDocumentHandler :   private ThreadHelpBase, // Struct for ri
         ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XLocator >            m_xLocator;
 };
 
-class OWriteStatusBarDocumentHandler : private ThreadHelpBase // Struct for right initalization of lock member! Must be first of baseclasses.
+class FWE_DLLPUBLIC OWriteStatusBarDocumentHandler : private ThreadHelpBase // Struct for right initalization of lock member! Must be first of baseclasses.
 {
     public:
         OWriteStatusBarDocumentHandler(

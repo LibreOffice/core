@@ -31,7 +31,7 @@
 #include <svx/svdoashp.hxx>
 #include <svx/sdr/contact/displayinfo.hxx>
 #include <svx/sdr/primitive2d/sdrattributecreator.hxx>
-#include <svditer.hxx>
+#include <svx/svditer.hxx>
 #include <svx/sdr/primitive2d/sdrcustomshapeprimitive2d.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>

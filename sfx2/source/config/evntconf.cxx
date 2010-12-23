@@ -28,26 +28,19 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sfx2.hxx"
 #include <vcl/msgbox.hxx>
-#ifndef _SV_RESARY_HXX
 #include <tools/resary.hxx>
-#endif
 #include <svl/lstner.hxx>
 #include <basic/basmgr.hxx>
 #include <basic/sbmod.hxx>
 #include <tools/urlobj.hxx>
 #include <basic/sbx.hxx>
-
-#include <sot/storage.hxx>
+    #include <sot/storage.hxx>
 #include <unotools/securityoptions.hxx>
 
-#ifndef _RTL_USTRING_
 #include <rtl/ustring.h>
-#endif
-
 #include <com/sun/star/uno/Any.hxx>
 #include <framework/eventsconfiguration.hxx>
 #include <comphelper/processfactory.hxx>
-
 #include <sfx2/evntconf.hxx>
 
 #include <sfx2/docfile.hxx>
@@ -55,7 +48,7 @@
 #include <sfx2/objsh.hxx>
 #include <sfx2/dispatch.hxx>
 #include "config.hrc"
-#include "sfxresid.hxx"
+#include "sfx2/sfxresid.hxx"
 #include "eventsupplier.hxx"
 
 #include <com/sun/star/beans/PropertyValue.hpp>
@@ -67,6 +60,7 @@
 // -----------------------------------------------------------------------
 TYPEINIT1(SfxEventHint, SfxHint);
 TYPEINIT1(SfxEventNamesItem, SfxPoolItem);
+TYPEINIT1(SfxViewEventHint, SfxHint);
 
 using namespace com::sun::star;
 

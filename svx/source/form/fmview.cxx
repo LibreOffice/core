@@ -49,7 +49,7 @@
 #include <basic/sbx.hxx>
 #include "fmitems.hxx"
 #include "fmobj.hxx"
-#include "svditer.hxx"
+#include "svx/svditer.hxx"
 #include <svx/svdpagv.hxx>
 #include <svx/svdogrp.hxx>
 #include <svx/fmview.hxx>
@@ -75,7 +75,7 @@
 #include <vcl/stdtext.hxx>
 #include <svx/fmglob.hxx>
 #include <svx/sdrpagewindow.hxx>
-#include "sdrpaintwindow.hxx"
+#include "svx/sdrpaintwindow.hxx"
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -138,9 +138,7 @@ void FmFormView::Init()
         const SfxPoolItem *pItem=0;
         if ( pObjShell->GetMedium()->GetItemSet()->GetItemState( SID_COMPONENTDATA, sal_False, &pItem ) == SFX_ITEM_SET )
         {
-            Sequence< PropertyValue > aSeq;
-            ( ((SfxUnoAnyItem*)pItem)->GetValue() ) >>= aSeq;
-            ::comphelper::NamedValueCollection aComponentData( aSeq );
+            ::comphelper::NamedValueCollection aComponentData( ((SfxUnoAnyItem*)pItem)->GetValue() );
             bInitDesignMode = aComponentData.getOrDefault( "ApplyFormDesignMode", bInitDesignMode );
         }
     }
