@@ -81,7 +81,7 @@ public:
     rtl::OUString findBuildinToolbar( const rtl::OUString& sToolbarName )
     {
         MSO2OOCommandbarMap::iterator it = maBuildinToolbarMap.begin();
-        for(; it != maBuildinToolbarMap.end(); it++ )
+        for(; it != maBuildinToolbarMap.end(); ++it )
         {
             rtl::OUString sName = it->first;
             if( sName.equalsIgnoreAsciiCase( sToolbarName ) )
