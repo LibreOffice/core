@@ -790,7 +790,7 @@ SlideShowAnimation .uno:CustomAnimation
 SlideShowSlideTransition .uno:SlideChangeWindow
 SlideShowHideSlide SID_HIDE_SLIDE
 SlideShowShowSlide SID_SHOW_SLIDE 
-SlideShowCustomSlideshow SID_CUSTOMSHOW_DLG
+SlideShowCustomSlideshow .uno:CustomShowDialog
 SlideShowCustomAnimation .uno:CustomAnimation
 
 ' ***********************************
