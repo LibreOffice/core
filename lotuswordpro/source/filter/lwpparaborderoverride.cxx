@@ -64,6 +64,7 @@
 
 #include <memory>
 
+#include "clone.hxx"
 #include    "lwpparaborderoverride.hxx"
 #include    "lwpborderstuff.hxx"
 #include    "lwpshadow.hxx"
@@ -105,10 +106,10 @@ LwpParaBorderOverride::LwpParaBorderOverride(LwpParaBorderOverride const& rOther
     , m_nRightWidth(rOther.m_nRightWidth)
     , m_nBetweenMargin(rOther.m_nBetweenMargin)
 {
-    std::auto_ptr<LwpBorderStuff> pBorderStuff(new LwpBorderStuff(*rOther.m_pBorderStuff));
-    std::auto_ptr<LwpBorderStuff> pBetweenStuff(new LwpBorderStuff(*rOther.m_pBetweenStuff));
-    std::auto_ptr<LwpShadow> pShadow(new LwpShadow(*rOther.m_pShadow));
-    std::auto_ptr<LwpMargins> pMargins(new LwpMargins(*rOther.m_pMargins));
+    std::auto_ptr<LwpBorderStuff> pBorderStuff(::clone(rOther.m_pBorderStuff));
+    std::auto_ptr<LwpBorderStuff> pBetweenStuff(::clone(rOther.m_pBetweenStuff));
+    std::auto_ptr<LwpShadow> pShadow(::clone(rOther.m_pShadow));
+    std::auto_ptr<LwpMargins> pMargins(::clone(rOther.m_pMargins));
     m_pBorderStuff = pBorderStuff.release();
     m_pBetweenStuff = pBetweenStuff.release();
     m_pShadow = pShadow.release();

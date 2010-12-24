@@ -64,6 +64,7 @@
 
 #include <memory>
 
+#include "clone.hxx"
 #include "lwpcharborderoverride.hxx"
 #include "lwpborderstuff.hxx"
 #include "lwpmargins.hxx"
@@ -80,8 +81,8 @@ LwpCharacterBorderOverride::LwpCharacterBorderOverride(LwpCharacterBorderOverrid
     , m_nAboveWidth(rOther.m_nAboveWidth)
     , m_nBelowWidth(rOther.m_nBelowWidth)
 {
-    std::auto_ptr<LwpBorderStuff> pBorderStuff(new LwpBorderStuff(*rOther.m_pBorderStuff));
-    std::auto_ptr<LwpMargins> pMargins(new LwpMargins(*rOther.m_pMargins));
+    std::auto_ptr<LwpBorderStuff> pBorderStuff(::clone(rOther.m_pBorderStuff));
+    std::auto_ptr<LwpMargins> pMargins(::clone(rOther.m_pMargins));
     m_pBorderStuff = pBorderStuff.release();
     m_pMargins = pMargins.release();
 }

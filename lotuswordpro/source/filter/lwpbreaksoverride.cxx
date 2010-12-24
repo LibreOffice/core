@@ -64,6 +64,7 @@
 
 #include <memory>
 
+#include "clone.hxx"
 #include    "lwpbreaksoverride.hxx"
 #include    "lwpobjstrm.hxx"
 #include    "lwpatomholder.hxx"
@@ -78,7 +79,7 @@ LwpBreaksOverride::LwpBreaksOverride(LwpBreaksOverride const& rOther)
     : LwpOverride(rOther)
     , m_pNextStyle(0)
 {
-    std::auto_ptr<LwpAtomHolder> pNextStyle(new LwpAtomHolder(*rOther.m_pNextStyle));
+    std::auto_ptr<LwpAtomHolder> pNextStyle(::clone(rOther.m_pNextStyle));
     m_pNextStyle = pNextStyle.release();
 }
 

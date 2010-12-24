@@ -64,6 +64,7 @@
 
 #include <memory>
 
+#include "clone.hxx"
 #include "lwpoverride.hxx"
 #include "lwpfilehdr.hxx"
 #include "lwpatomholder.hxx"
@@ -387,10 +388,10 @@ LwpSpacingOverride::LwpSpacingOverride(LwpSpacingOverride const& rOther)
     , m_pParaSpacingAbove(0)
     , m_pParaSpacingBelow(0)
 {
-    std::auto_ptr<LwpSpacingCommonOverride> pSpacing(rOther.m_pSpacing->clone());
-    std::auto_ptr<LwpSpacingCommonOverride> pAboveLineSpacing(rOther.m_pAboveLineSpacing->clone());
-    std::auto_ptr<LwpSpacingCommonOverride> pParaSpacingAbove(rOther.m_pParaSpacingAbove->clone());
-    std::auto_ptr<LwpSpacingCommonOverride> pParaSpacingBelow(rOther.m_pParaSpacingBelow->clone());
+    std::auto_ptr<LwpSpacingCommonOverride> pSpacing(::clone(rOther.m_pSpacing));
+    std::auto_ptr<LwpSpacingCommonOverride> pAboveLineSpacing(::clone(rOther.m_pAboveLineSpacing));
+    std::auto_ptr<LwpSpacingCommonOverride> pParaSpacingAbove(::clone(rOther.m_pParaSpacingAbove));
+    std::auto_ptr<LwpSpacingCommonOverride> pParaSpacingBelow(::clone(rOther.m_pParaSpacingBelow));
     m_pSpacing = pSpacing.release();
     m_pAboveLineSpacing = pAboveLineSpacing.release();
     m_pParaSpacingAbove = pParaSpacingAbove.release();
@@ -469,8 +470,7 @@ LwpAmikakeOverride::LwpAmikakeOverride(LwpAmikakeOverride const& rOther)
     , m_pBackgroundStuff(0)
     , m_nType(rOther.m_nType)
 {
-    std::auto_ptr<LwpBackgroundStuff> pBackgroundStuff(
-            new LwpBackgroundStuff(*rOther.m_pBackgroundStuff));
+    std::auto_ptr<LwpBackgroundStuff> pBackgroundStuff(::clone(rOther.m_pBackgroundStuff));
     m_pBackgroundStuff = pBackgroundStuff.release();
 }
 
