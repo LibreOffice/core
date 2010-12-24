@@ -3752,7 +3752,7 @@ void PPTWriter::ImplCreateTable( uno::Reference< drawing::XShape >& rXShape, Esc
                     {
                         ImplCreateCellBorder( &*aCellBorderIter, aCellBorderIter->mnPos, nYPos,
                             static_cast< sal_Int32 >( aCellBorderIter->mnPos + aCellBorderIter->mnLength ), nYPos );
-                        aCellBorderIter++;
+                        ++aCellBorderIter;
                     }
                     if ( nLine < xRows->getCount() )
                     {
@@ -3804,7 +3804,7 @@ void PPTWriter::ImplCreateTable( uno::Reference< drawing::XShape >& rXShape, Esc
                     {
                         ImplCreateCellBorder( &*aCellBorderIter, nXPos, aCellBorderIter->mnPos,
                             nXPos, static_cast< sal_Int32 >( aCellBorderIter->mnPos + aCellBorderIter->mnLength ) );
-                        aCellBorderIter++;
+                        ++aCellBorderIter;
                     }
                     if ( nLine < xColumns->getCount() )
                     {
