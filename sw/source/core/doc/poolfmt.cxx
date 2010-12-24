@@ -997,9 +997,7 @@ SwTxtFmtColl* SwDoc::GetTxtCollFromPool( sal_uInt16 nId, bool bRegardLanguage )
         {
             SvxBoxItem aBox( RES_BOX );
             Color aColor( COL_GRAY );
-            SvxBorderLine aNew( &aColor, DEF_DOUBLE_LINE0_OUT,
-                                         DEF_DOUBLE_LINE0_IN,
-                                         DEF_DOUBLE_LINE0_DIST );
+            SvxBorderLine aNew( &aColor, 1, DOUBLE );
             aBox.SetLine( &aNew, BOX_LINE_BOTTOM );
 
             aSet.Put( aBox );

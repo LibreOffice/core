@@ -73,6 +73,7 @@
 #include <com/sun/star/text/VertOrientation.hpp>
 #include <com/sun/star/table/ShadowFormat.hpp>
 #include <com/sun/star/table/TableBorder.hpp>
+#include <com/sun/star/table/BorderLine2.hpp>
 #include <com/sun/star/table/TableBorderDistances.hpp>
 #include <com/sun/star/style/PageStyleLayout.hpp>
 #include <com/sun/star/style/BreakType.hpp>
@@ -118,6 +119,9 @@ table::BorderLine lcl_SvxLineToLine(const SvxBorderLine* pLine)
     if(pLine)
     {
         aLine.Color          = pLine->GetColor().GetColor() ;
+        aLine.LineWidth      = TWIP_TO_MM100_UNSIGNED( pLine->GetWidth() );
+
+        // Set only for backwards compatibility
         aLine.InnerLineWidth = TWIP_TO_MM100_UNSIGNED( pLine->GetInWidth() );
         aLine.OuterLineWidth = TWIP_TO_MM100_UNSIGNED( pLine->GetOutWidth() );
         aLine.LineDistance   = TWIP_TO_MM100_UNSIGNED( pLine->GetDistance() );
@@ -129,11 +133,20 @@ table::BorderLine lcl_SvxLineToLine(const SvxBorderLine* pLine)
 
 sal_Bool lcl_LineToSvxLine(const table::BorderLine& rLine, SvxBorderLine& rSvxLine)
 {
+    const table::BorderLine2& rLine2 = static_cast< const table::BorderLine2& >( rLine );
     rSvxLine.SetColor(   Color(rLine.Color));
-    rSvxLine.SetInWidth( MM100_TO_TWIP( rLine.InnerLineWidth ) );
-    rSvxLine.SetOutWidth(MM100_TO_TWIP( rLine.OuterLineWidth ) );
-    rSvxLine.SetDistance(MM100_TO_TWIP( rLine.LineDistance  ) );
-    sal_Bool bRet = rLine.InnerLineWidth > 0 || rLine.OuterLineWidth > 0;
+
+    if ( rLine2.LineWidth > 0 )
+    {
+        rSvxLine.SetStyle( SvxBorderStyle( rLine2.LineStyle ) );
+        rSvxLine.SetWidth( MM100_TO_TWIP_UNSIGNED( rLine2.LineWidth ) );
+    }
+    else
+        rSvxLine.SetLinesWidths( SvxBorderStyle( rLine2.LineStyle ),
+                                    MM100_TO_TWIP( rLine.InnerLineWidth ),
+                                    MM100_TO_TWIP( rLine.OuterLineWidth ),
+                                    MM100_TO_TWIP( rLine.LineDistance   ) );
+    sal_Bool bRet = rLine.InnerLineWidth > 0 || rLine.OuterLineWidth > 0 || rLine2.LineWidth > 0;
     return bRet;
 }
 

@@ -462,15 +462,10 @@ void ItemSetToTableParam( const SfxItemSet& rSet,
 
 static void lcl_TabGetMaxLineWidth(const SvxBorderLine* pBorderLine, SvxBorderLine& rBorderLine)
 {
-    if(pBorderLine->GetInWidth() > rBorderLine.GetInWidth())
-        rBorderLine.SetInWidth(pBorderLine->GetInWidth());
+    if(pBorderLine->GetWidth() > rBorderLine.GetWidth())
+        rBorderLine.SetWidth(pBorderLine->GetWidth());
 
-    if(pBorderLine->GetOutWidth() > rBorderLine.GetOutWidth())
-        rBorderLine.SetOutWidth(pBorderLine->GetOutWidth());
-
-    if(pBorderLine->GetDistance() > rBorderLine.GetDistance())
-        rBorderLine.SetDistance(pBorderLine->GetDistance());
-
+    rBorderLine.SetStyle(pBorderLine->GetStyle());
     rBorderLine.SetColor(pBorderLine->GetColor());
 }
 
@@ -548,8 +543,8 @@ void SwTableShell::Execute(SfxRequest &rReq)
 
             if(aBorderLine.GetOutWidth() == 0)
             {
-                aBorderLine.SetInWidth(0);
-                aBorderLine.SetOutWidth(DEF_LINE_WIDTH_0);
+                aBorderLine.SetStyle( SOLID );
+                aBorderLine.SetWidth( DEF_LINE_WIDTH_0 );
             }
 
             sal_Bool bLine = sal_False;
