@@ -41,13 +41,13 @@
 #include <cppunit/TestCase.h>
 #include <cppunit/plugin/TestPlugIn.h>
 #include <cppunit/extensions/HelperMacros.h>
+#include <cppunit/TestAssert.h>
 #include "postextstl.h"
 
 #include <sal/config.h>
 
 #include <cppuhelper/bootstrap.hxx>
 #include <comphelper/processfactory.hxx>
-#include <cppunit/TestAssert.h>
 
 #include <vcl/svapp.hxx>
 #include <smdll.hxx>
