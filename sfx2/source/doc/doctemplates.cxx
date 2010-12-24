@@ -71,6 +71,8 @@
 #include <sfx2/docfile.hxx>
 #include "doc.hrc"
 
+#include <vector>
+
 //-----------------------------------------------------------------------------
 
 //=============================================================================
@@ -122,6 +124,8 @@ using namespace ::rtl;
 using namespace ::ucbhelper;
 using namespace ::comphelper;
 
+using ::std::vector;
+
 //=============================================================================
 
 class WaitWindow_Impl : public WorkWindow
@@ -147,7 +151,7 @@ struct NamePair_Impl
     OUString maLongName;
 };
 
-DECLARE_LIST( NameList_Impl, NamePair_Impl* )
+typedef vector< NamePair_Impl* > NameList_Impl;
 
 class Updater_Impl;
 class GroupList_Impl;
@@ -556,7 +560,7 @@ void SfxDocTplService_Impl::readFolderList()
         pPair->maShortName  = aShortNames.GetString( i );
         pPair->maLongName   = aLongNames.GetString( i );
 
-        maNames.Insert( pPair, LIST_APPEND );
+        maNames.push_back( pPair );
     }
 }
 
@@ -564,17 +568,15 @@ void SfxDocTplService_Impl::readFolderList()
 OUString SfxDocTplService_Impl::getLongName( const OUString& rShortName )
 {
     OUString         aRet;
-    NamePair_Impl   *pPair = maNames.First();
 
-    while ( pPair )
+    for ( size_t i = 0, n = maNames.size(); i < n; ++i )
     {
+        NamePair_Impl* pPair = maNames[ i ];
         if ( pPair->maShortName == rShortName )
         {
             aRet = pPair->maLongName;
             break;
         }
-        else
-            pPair = maNames.Next();
     }
 
     if ( !aRet.getLength() )
@@ -1155,6 +1157,10 @@ SfxDocTplService_Impl::~SfxDocTplService_Impl()
         mpUpdater->join();
         delete mpUpdater;
     }
+
+    for ( size_t i = 0, n = maNames.size(); i < n; ++i )
+        delete maNames[ i ];
+    maNames.clear();
 }
 
 //-----------------------------------------------------------------------------
