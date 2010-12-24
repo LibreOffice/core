@@ -176,7 +176,7 @@ sal_Bool DispatchWatcher::executeDispatchRequests( const DispatchList& aDispatch
     sal_Bool                        bSetInputFilter = sal_False;
     ::rtl::OUString                 aForcedInputFilter;
 
-    for ( p = aDispatchRequestsList.begin(); p != aDispatchRequestsList.end(); p++ )
+    for ( p = aDispatchRequestsList.begin(); p != aDispatchRequestsList.end(); ++p )
     {
         const DispatchRequest&  aDispatchRequest = *p;
 
