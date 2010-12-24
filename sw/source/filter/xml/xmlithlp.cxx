@@ -86,45 +86,12 @@ const struct SvXMLEnumMapEntry psXML_NamedBorderWidths[] =
 };
 // mapping tables to map external xml input to intarnal box line widths
 
-// Ein Eintrag besteht aus vier USHORTs. Der erste ist die Gesamtbreite,
-// die anderen sind die 3 Einzelbreiten
 
-#define SBORDER_ENTRY( n ) \
-        DEF_LINE_WIDTH_##n, DEF_LINE_WIDTH_##n, 0, 0
-
-#define DBORDER_ENTRY( n ) \
-        DEF_DOUBLE_LINE##n##_OUT + DEF_DOUBLE_LINE##n##_IN + \
-        DEF_DOUBLE_LINE##n##_DIST, \
-        DEF_DOUBLE_LINE##n##_OUT, \
-        DEF_DOUBLE_LINE##n##_IN, \
-        DEF_DOUBLE_LINE##n##_DIST
-
-#define TDBORDER_ENTRY( n ) \
-        DEF_DOUBLE_LINE##n##_OUT, \
-        DEF_DOUBLE_LINE##n##_OUT, \
-        DEF_DOUBLE_LINE##n##_IN, \
-        DEF_DOUBLE_LINE##n##_DIST
-
-
-const sal_uInt16 aSBorderWidths[] =
+const sal_uInt16 aBorderWidths[] =
 {
-        SBORDER_ENTRY( 0 ), SBORDER_ENTRY( 5 ), SBORDER_ENTRY( 1 ),
-        SBORDER_ENTRY( 2 ), SBORDER_ENTRY( 3 ), SBORDER_ENTRY( 4 )
-};
-
-const sal_uInt16 aDBorderWidths[5*11] =
-{
-        DBORDER_ENTRY( 0 ),
-        DBORDER_ENTRY( 7 ),
-        DBORDER_ENTRY( 1 ),
-        DBORDER_ENTRY( 8 ),
-        DBORDER_ENTRY( 4 ),
-        DBORDER_ENTRY( 9 ),
-        DBORDER_ENTRY( 3 ),
-        DBORDER_ENTRY( 10 ),
-        DBORDER_ENTRY( 2 ),
-        DBORDER_ENTRY( 6 ),
-        DBORDER_ENTRY( 5 )
+        DEF_LINE_WIDTH_0,
+        DEF_LINE_WIDTH_5,
+        DEF_LINE_WIDTH_1,
 };
 
 sal_Bool lcl_frmitems_parseXMLBorder( const OUString& rValue,
@@ -198,29 +165,10 @@ void lcl_frmitems_setXMLBorderStyle( SvxBorderLine& rLine, sal_uInt16 nStyle )
 }
 
 void lcl_frmitems_setXMLBorderWidth( SvxBorderLine& rLine,
-                                     sal_uInt16 nOutWidth, sal_uInt16 nInWidth,
-                                     sal_uInt16 nDistance )
-{
-    rLine.SetOutWidth( nOutWidth );
-    rLine.SetInWidth( nInWidth );
-    rLine.SetDistance( nDistance );
-}
-
-void lcl_frmitems_setXMLBorderWidth( SvxBorderLine& rLine,
                                      sal_uInt16 nWidth, sal_Bool bDouble )
 {
     const sal_uInt16 *aWidths;
     sal_uInt16 nSize;
-    if( !bDouble )
-    {
-        aWidths = aSBorderWidths;
-        nSize = sizeof( aSBorderWidths );
-    }
-    else
-    {
-        aWidths = aDBorderWidths;
-        nSize = sizeof( aDBorderWidths );
-    }
 
     sal_uInt16 i = (nSize / sizeof(sal_uInt16)) - 4;
     while( i>0 &&
@@ -230,9 +178,9 @@ void lcl_frmitems_setXMLBorderWidth( SvxBorderLine& rLine,
         i -= 4;
     }
 
-    rLine.SetOutWidth( aWidths[i+1] );
-    rLine.SetInWidth( aWidths[i+2] );
-    rLine.SetDistance( aWidths[i+3] );
+    if ( bDouble )
+        rLine.SetStyle( DOUBLE );
+    rLine.SetWidth( aBorderWidths[i] );
 }
 
 sal_Bool lcl_frmitems_setXMLBorder( SvxBorderLine*& rpLine,
@@ -278,12 +226,9 @@ sal_Bool lcl_frmitems_setXMLBorder( SvxBorderLine*& rpLine,
        // The width has to be changed
        if( bHasWidth && USHRT_MAX != nNamedWidth )
        {
-           const sal_uInt16 *aWidths = bDouble ? aDBorderWidths :aSBorderWidths;
-
-           sal_uInt16 nNWidth = nNamedWidth * 4;
-           rpLine->SetOutWidth( aWidths[nNWidth+1] );
-           rpLine->SetInWidth( aWidths[nNWidth+2] );
-           rpLine->SetDistance( aWidths[nNWidth+3] );
+           if ( bDouble )
+               rpLine->SetStyle( DOUBLE );
+           rpLine->SetWidth( aBorderWidths[nNamedWidth] );
        }
        else
        {
@@ -313,8 +258,7 @@ void lcl_frmitems_setXMLBorder( SvxBorderLine*& rpLine,
     if( nWidth > 0 )
         lcl_frmitems_setXMLBorderWidth( *rpLine, nWidth, sal_True );
     else
-        lcl_frmitems_setXMLBorderWidth( *rpLine, nOutWidth, nInWidth,
-                                        nDistance );
+        rpLine->SetLinesWidths( DOUBLE, nInWidth, nOutWidth, nDistance );
 }
 
 const struct SvXMLEnumMapEntry psXML_BrushRepeat[] =
