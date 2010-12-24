@@ -288,7 +288,7 @@ void RadioGroups::RadioGroup::handleSelected ()
     throw (uno::RuntimeException)
 {
     for ( RadioButtonsList::iterator it = mxRadios.begin();
-          it != mxRadios.end(); it++ )
+          it != mxRadios.end(); ++it )
         if ( *it != mxSelectedRadio && (*it)->getState() )
         {
             mxSelectedRadio->setState( false );
