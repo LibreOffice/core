@@ -3891,7 +3891,7 @@ BOOL ScDocument::GetColDefault( SCTAB nTab, SCCOL nCol, SCROW nLastRow, SCROW& n
         }
         ScDefaultAttrSet::iterator aDefaultItr = aSet.begin();
         aItr = aDefaultItr;
-        aItr++;
+        ++aItr;
         while (aItr != aSet.end())
         {
             // for entries with equal count, use the one with the lowest start row,
@@ -3899,7 +3899,7 @@ BOOL ScDocument::GetColDefault( SCTAB nTab, SCCOL nCol, SCROW nLastRow, SCROW& n
             if ( aItr->nCount > aDefaultItr->nCount ||
                  ( aItr->nCount == aDefaultItr->nCount && aItr->nFirst < aDefaultItr->nFirst ) )
                 aDefaultItr = aItr;
-            aItr++;
+            ++aItr;
         }
         nDefault = aDefaultItr->nFirst;
         bRet = TRUE;
