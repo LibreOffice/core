@@ -93,7 +93,7 @@ uno::Any SvxUnoTextContentEnumeration::nextElement(void) throw( container::NoSuc
 
     const SvxUnoTextRangeBaseList& rRanges( mpEditSource->getRanges() );
     SvxUnoTextRangeBaseList::const_iterator aIter;
-    for( aIter = rRanges.begin(); (aIter != rRanges.end()) && (pContent == 0); aIter++ )
+    for( aIter = rRanges.begin(); (aIter != rRanges.end()) && (pContent == 0); ++aIter )
     {
         SvxUnoTextContent* pIterContent = dynamic_cast< SvxUnoTextContent* >( (*aIter ) );
         if( pIterContent && (pIterContent->mnParagraph == mnNextParagraph) )
@@ -463,7 +463,7 @@ uno::Any SAL_CALL SvxUnoTextRangeEnumeration::nextElement()
     SvxUnoTextRange* pRange = 0;
 
     SvxUnoTextRangeBaseList::const_iterator aIter;
-    for( aIter = rRanges.begin(); (aIter != rRanges.end()) && (pRange == 0); aIter++ )
+    for( aIter = rRanges.begin(); (aIter != rRanges.end()) && (pRange == 0); ++aIter )
     {
         SvxUnoTextRange* pIterRange = dynamic_cast< SvxUnoTextRange* >( (*aIter ) );
         if( pIterRange && pIterRange->mbPortion && (aSel.IsEqual( pIterRange->maSelection ) ) )
