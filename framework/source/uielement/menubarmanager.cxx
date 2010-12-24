@@ -357,7 +357,7 @@ void MenuBarManager::Destroy()
         RemoveListener();
 
         std::vector< MenuItemHandler* >::iterator p;
-        for ( p = m_aMenuItemHandlerVector.begin(); p != m_aMenuItemHandlerVector.end(); p++ )
+        for ( p = m_aMenuItemHandlerVector.begin(); p != m_aMenuItemHandlerVector.end(); ++p )
         {
             MenuItemHandler* pItemHandler = *p;
             pItemHandler->xMenuItemDispatch.clear();
@@ -489,7 +489,7 @@ throw ( RuntimeException )
     if ( Action.Action == FrameAction_CONTEXT_CHANGED )
     {
         std::vector< MenuItemHandler* >::iterator p;
-        for ( p = m_aMenuItemHandlerVector.begin(); p != m_aMenuItemHandlerVector.end(); p++ )
+        for ( p = m_aMenuItemHandlerVector.begin(); p != m_aMenuItemHandlerVector.end(); ++p )
         {
             // Clear dispatch reference as we will requery it later o
             MenuItemHandler* pItemHandler = *p;
@@ -514,7 +514,7 @@ throw ( RuntimeException )
 
         // We have to check all menu entries as there can be identical entries in a popup menu.
         std::vector< MenuItemHandler* >::iterator p;
-        for ( p = m_aMenuItemHandlerVector.begin(); p != m_aMenuItemHandlerVector.end(); p++ )
+        for ( p = m_aMenuItemHandlerVector.begin(); p != m_aMenuItemHandlerVector.end(); ++p )
         {
             MenuItemHandler* pMenuItemHandler = *p;
             if ( pMenuItemHandler->aMenuItemURL == aFeatureURL )
@@ -605,7 +605,7 @@ MenuBarManager::MenuItemHandler* MenuBarManager::GetMenuItemHandler( USHORT nIte
     ResetableGuard aGuard( m_aLock );
 
     std::vector< MenuItemHandler* >::iterator p;
-    for ( p = m_aMenuItemHandlerVector.begin(); p != m_aMenuItemHandlerVector.end(); p++ )
+    for ( p = m_aMenuItemHandlerVector.begin(); p != m_aMenuItemHandlerVector.end(); ++p )
     {
         MenuItemHandler* pItemHandler = *p;
         if ( pItemHandler->nItemId == nItemId )
@@ -648,7 +648,7 @@ void MenuBarManager::RemoveListener()
     if ( xServiceManager.is() )
     {
         std::vector< MenuItemHandler* >::iterator p;
-        for ( p = m_aMenuItemHandlerVector.begin(); p != m_aMenuItemHandlerVector.end(); p++ )
+        for ( p = m_aMenuItemHandlerVector.begin(); p != m_aMenuItemHandlerVector.end(); ++p )
         {
             MenuItemHandler* pItemHandler = *p;
             if ( pItemHandler->xMenuItemDispatch.is() )
@@ -727,7 +727,7 @@ void SAL_CALL MenuBarManager::disposing( const EventObject& Source ) throw ( Run
     ResetableGuard aGuard( m_aLock );
 
     std::vector< MenuItemHandler* >::iterator p;
-    for ( p = m_aMenuItemHandlerVector.begin(); p != m_aMenuItemHandlerVector.end(); p++ )
+    for ( p = m_aMenuItemHandlerVector.begin(); p != m_aMenuItemHandlerVector.end(); ++p )
     {
         MenuItemHandler* pMenuItemHandler = *p;
         if ( pMenuItemHandler->xMenuItemDispatch.is() &&
@@ -896,7 +896,7 @@ IMPL_LINK( MenuBarManager, Activate, Menu *, pMenu )
         {
             RetrieveShortcuts( m_aMenuItemHandlerVector );
             std::vector< MenuItemHandler* >::iterator p;
-            for ( p = m_aMenuItemHandlerVector.begin(); p != m_aMenuItemHandlerVector.end(); p++ )
+            for ( p = m_aMenuItemHandlerVector.begin(); p != m_aMenuItemHandlerVector.end(); ++p )
             {
                 MenuItemHandler* pMenuItemHandler = *p;
 
@@ -926,7 +926,7 @@ IMPL_LINK( MenuBarManager, Activate, Menu *, pMenu )
             KeyCode             aEmptyKeyCode;
             SvtCommandOptions   aCmdOptions;
             std::vector< MenuItemHandler* >::iterator p;
-            for ( p = m_aMenuItemHandlerVector.begin(); p != m_aMenuItemHandlerVector.end(); p++ )
+            for ( p = m_aMenuItemHandlerVector.begin(); p != m_aMenuItemHandlerVector.end(); ++p )
             {
                 MenuItemHandler* pMenuItemHandler = *p;
                 if ( pMenuItemHandler )
@@ -1502,7 +1502,7 @@ void MenuBarManager::FillMenuManager( Menu* pMenu, const Reference< XFrame >& rF
     {
         RetrieveShortcuts( m_aMenuItemHandlerVector );
         std::vector< MenuItemHandler* >::iterator p;
-        for ( p = m_aMenuItemHandlerVector.begin(); p != m_aMenuItemHandlerVector.end(); p++ )
+        for ( p = m_aMenuItemHandlerVector.begin(); p != m_aMenuItemHandlerVector.end(); ++p )
         {
             MenuItemHandler* pMenuItemHandler = *p;
 
@@ -1931,7 +1931,7 @@ void MenuBarManager::SetItemContainer( const Reference< XIndexAccess >& rItemCon
 
         RemoveListener();
         std::vector< MenuItemHandler* >::iterator p;
-        for ( p = m_aMenuItemHandlerVector.begin(); p != m_aMenuItemHandlerVector.end(); p++ )
+        for ( p = m_aMenuItemHandlerVector.begin(); p != m_aMenuItemHandlerVector.end(); ++p )
         {
             MenuItemHandler* pItemHandler = *p;
             pItemHandler->xMenuItemDispatch.clear();
@@ -1965,7 +1965,7 @@ void MenuBarManager::GetPopupController( PopupControllerCache& rPopupController 
     SolarMutexGuard aSolarMutexGuard;
 
     std::vector< MenuItemHandler* >::iterator p;
-    for ( p = m_aMenuItemHandlerVector.begin(); p != m_aMenuItemHandlerVector.end(); p++ )
+    for ( p = m_aMenuItemHandlerVector.begin(); p != m_aMenuItemHandlerVector.end(); ++p )
     {
         MenuItemHandler* pItemHandler = *p;
         if ( pItemHandler->xPopupMenuController.is() )
