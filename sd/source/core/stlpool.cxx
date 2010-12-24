@@ -630,7 +630,7 @@ void SdStyleSheetPool::CopySheets(SdStyleSheetPool& rSourcePool, SfxStyleFamily 
 
     // set parents on newly added stylesheets
     std::vector< std::pair< rtl::Reference< SfxStyleSheetBase >, String > >::iterator aIter;
-    for( aIter = aNewStyles.begin(); aIter != aNewStyles.end(); aIter++ )
+    for( aIter = aNewStyles.begin(); aIter != aNewStyles.end(); ++aIter )
     {
         DBG_ASSERT( rSourcePool.Find( (*aIter).second, eFamily ), "StyleSheet has invalid parent: Family mismatch" );
         (*aIter).first->SetParent( (*aIter).second );
@@ -1349,7 +1349,7 @@ void SAL_CALL SdStyleSheetPool::dispose() throw (RuntimeException)
         SdStyleFamilyMap aTempMap;
         aTempMap.swap( maStyleFamilyMap );
 
-        for( SdStyleFamilyMap::iterator iter( aTempMap.begin() ); iter != aTempMap.end(); iter++ ) try
+        for( SdStyleFamilyMap::iterator iter( aTempMap.begin() ); iter != aTempMap.end(); ++iter ) try
         {
             (*iter).second->dispose();
         }
