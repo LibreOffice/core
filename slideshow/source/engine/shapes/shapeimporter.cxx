@@ -541,7 +541,7 @@ void ShapeImporter::importPolygons(uno::Reference<beans::XPropertySet> const& xP
                 pPolyPoly->draw();
                 maPolygons.push_back(pPolyPoly);
         }
-        aIter++;
+        ++aIter;
     }
 }
 
