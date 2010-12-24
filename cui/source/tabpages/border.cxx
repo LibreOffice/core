@@ -929,10 +929,7 @@ IMPL_LINK( SvxBorderTabPage, ModifyWidthHdl_Impl, void *, EMPTYARG )
     sal_Int64 nVal = aLineWidthMF.GetValue( );
     aLbLineStyle.SetWidth( nVal );
 
-    aFrameSel.SetStyleToSelection(
-        static_cast< USHORT >( aLbLineStyle.GetSelectEntryLine1() / 5 ),
-        static_cast< USHORT >( aLbLineStyle.GetSelectEntryDistance() / 5 ),
-        static_cast< USHORT >( aLbLineStyle.GetSelectEntryLine2() / 5 ),
+    aFrameSel.SetStyleToSelection( long( nVal / 5 ),
         SvxBorderStyle( aLbLineStyle.GetSelectEntryStyle() ) );
 
     return 0;
@@ -943,10 +940,7 @@ IMPL_LINK( SvxBorderTabPage, ModifyWidthHdl_Impl, void *, EMPTYARG )
 IMPL_LINK( SvxBorderTabPage, SelStyleHdl_Impl, ListBox *, pLb )
 {
     if ( pLb == &aLbLineStyle )
-        aFrameSel.SetStyleToSelection (
-            static_cast< sal_uInt16 >( aLbLineStyle.GetSelectEntryLine1() / 5 ),
-            static_cast< sal_uInt16 >( aLbLineStyle.GetSelectEntryDistance() / 5 ),
-            static_cast< sal_uInt16 >( aLbLineStyle.GetSelectEntryLine2() / 5 ),
+        aFrameSel.SetStyleToSelection ( long( aLineWidthMF.GetValue() / 5 ),
             SvxBorderStyle( aLbLineStyle.GetSelectEntryStyle() ) );
 
     return 0;
