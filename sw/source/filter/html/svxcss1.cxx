@@ -242,8 +242,8 @@ static CSS1PropertyEnum const aPageBreakTable[] =
 static sal_uInt16 const aBorderWidths[] =
 {
     DEF_LINE_WIDTH_0,
-    DEF_LINE_WIDTH_1,
-    DEF_LINE_WIDTH_2
+    DEF_LINE_WIDTH_5,
+    DEF_LINE_WIDTH_1
 };
 
 #undef SBORDER_ENTRY
