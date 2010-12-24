@@ -806,7 +806,7 @@ JavaVirtualMachine::getJavaVM(css::uno::Sequence< sal_Int8 > const & rProcessId)
         rtl::OString sJavaOption("-");
         typedef std::vector<rtl::OUString>::const_iterator cit;
         int index = 0;
-        for (cit i = props.begin(); i != props.end(); i++)
+        for (cit i = props.begin(); i != props.end(); ++i)
         {
             rtl::OString sOption = rtl::OUStringToOString(
                 *i, osl_getThreadTextEncoding());
