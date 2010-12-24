@@ -60,7 +60,7 @@ public:
     BibToolBarListener(BibToolBar *pTB,rtl::OUString aStr,sal_uInt16 nId);
     ~BibToolBarListener();
 
-    rtl::OUString           GetCommand();
+    rtl::OUString           GetCommand() const;
 
     // ::com::sun::star::lang::XEventListener
     // we do not hold References to dispatches, so there is nothing to do on disposal

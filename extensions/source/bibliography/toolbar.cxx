@@ -87,7 +87,7 @@ void BibToolBarListener::statusChanged(const ::com::sun::star::frame::FeatureSta
     }
 };
 
-rtl::OUString   BibToolBarListener::GetCommand()
+rtl::OUString   BibToolBarListener::GetCommand() const
 {
     return aCommand;
 }
