@@ -1536,7 +1536,7 @@ sal_Int32 SwWW8ImplReader::MatchSdrBoxIntoFlyBoxItem(const Color& rLineColor,
             break;
     }
 
-    if (NONE != nIdx)
+    if (NO_STYLE != nIdx)
     {
         SvxBorderLine aLine;
         aLine.SetColor( rLineColor );
