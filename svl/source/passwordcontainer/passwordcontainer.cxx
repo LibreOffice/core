@@ -619,7 +619,7 @@ vector< ::rtl::OUString > PasswordContainer::DecodePasswords( const ::rtl::OUStr
 
 void PasswordContainer::UpdateVector( const ::rtl::OUString& aURL, list< NamePassRecord >& toUpdate, NamePassRecord& aRecord, sal_Bool writeFile ) throw(RuntimeException)
 {
-    for( list< NamePassRecord >::iterator aNPIter = toUpdate.begin(); aNPIter != toUpdate.end(); aNPIter++ )
+    for( list< NamePassRecord >::iterator aNPIter = toUpdate.begin(); aNPIter != toUpdate.end(); ++aNPIter )
         if( aNPIter->GetUserName().equals( aRecord.GetUserName() ) )
         {
             if( aRecord.HasPasswords( MEMORY_RECORD ) )
@@ -684,7 +684,7 @@ Sequence< UserRecord > PasswordContainer::CopyToUserRecordSequence( const list< 
 
     for( list< NamePassRecord >::const_iterator aNPIter = original.begin();
          aNPIter != original.end();
-         aNPIter++, nInd++ )
+         ++aNPIter, ++nInd )
     {
         aResult[nInd] = CopyToUserRecord( *aNPIter, bTryToDecode, aHandler );
     }
@@ -768,7 +768,7 @@ Sequence< UserRecord > PasswordContainer::FindUsr( const list< NamePassRecord >&
     sal_uInt32 nInd = 0;
     for( list< NamePassRecord >::const_iterator aNPIter = userlist.begin();
          aNPIter != userlist.end();
-         aNPIter++, nInd++ )
+         ++aNPIter, ++nInd )
     {
         if( aNPIter->GetUserName().equals( aName ) )
         {
@@ -984,7 +984,7 @@ void SAL_CALL PasswordContainer::remove( const ::rtl::OUString& aURL, const ::rt
 
         if( aIter != m_aContainer.end() )
         {
-            for( list< NamePassRecord >::iterator aNPIter = aIter->second.begin(); aNPIter != aIter->second.end(); aNPIter++ )
+            for( list< NamePassRecord >::iterator aNPIter = aIter->second.begin(); aNPIter != aIter->second.end(); ++aNPIter )
                 if( aNPIter->GetUserName().equals( aName ) )
                 {
                     if( aNPIter->HasPasswords( PERSISTENT_RECORD ) && m_pStorageFile )
@@ -1026,7 +1026,7 @@ void SAL_CALL PasswordContainer::removePersistent( const ::rtl::OUString& aURL, 
 
         if( aIter != m_aContainer.end() )
         {
-            for( list< NamePassRecord >::iterator aNPIter = aIter->second.begin(); aNPIter != aIter->second.end(); aNPIter++ )
+            for( list< NamePassRecord >::iterator aNPIter = aIter->second.begin(); aNPIter != aIter->second.end(); ++aNPIter )
                 if( aNPIter->GetUserName().equals( aName ) )
                 {
                     if( aNPIter->HasPasswords( PERSISTENT_RECORD ) )
@@ -1074,21 +1074,21 @@ void SAL_CALL PasswordContainer::removeAllPersistent() throw(RuntimeException)
             if( !aNPIter->HasPasswords( MEMORY_RECORD ) )
             {
                 list< NamePassRecord >::iterator aIterToDelete( aNPIter );
-                aNPIter++;
+                ++aNPIter;
                 aIter->second.erase( aIterToDelete );
             }
             else
-                aNPIter++;
+                ++aNPIter;
         }
 
         if( aIter->second.begin() == aIter->second.end() )
         {
             PassMap::iterator aIterToDelete( aIter );
-            aIter++;
+            ++aIter;
             m_aContainer.erase( aIterToDelete );
         }
         else
-            aIter++;
+            ++aIter;
     }
 }
 //-------------------------------------------------------------------------
@@ -1098,10 +1098,10 @@ Sequence< UrlRecord > SAL_CALL PasswordContainer::getAllPersistent( const Refere
     Sequence< UrlRecord > aResult;
 
     ::osl::MutexGuard aGuard( mMutex );
-    for( PassMap::iterator aIter = m_aContainer.begin(); aIter != m_aContainer.end(); aIter++ )
+    for( PassMap::iterator aIter = m_aContainer.begin(); aIter != m_aContainer.end(); ++aIter )
     {
         Sequence< UserRecord > aUsers;
-        for( list< NamePassRecord >::iterator aNPIter = aIter->second.begin(); aNPIter != aIter->second.end(); aNPIter++ )
+        for( list< NamePassRecord >::iterator aNPIter = aIter->second.begin(); aNPIter != aIter->second.end(); ++aNPIter )
             if( aNPIter->HasPasswords( PERSISTENT_RECORD ) )
             {
                 sal_Int32 oldLen = aUsers.getLength();
@@ -1396,7 +1396,7 @@ void PasswordContainer::Notify()
     PassMap::iterator aIter;
 
     // remove the cached persistent values in the memory
-    for( aIter = m_aContainer.begin(); aIter != m_aContainer.end(); aIter++ )
+    for( aIter = m_aContainer.begin(); aIter != m_aContainer.end(); ++aIter )
     {
         for( list< NamePassRecord >::iterator aNPIter = aIter->second.begin(); aNPIter != aIter->second.end(); )
         {
@@ -1411,11 +1411,11 @@ void PasswordContainer::Notify()
             if( !aNPIter->HasPasswords( MEMORY_RECORD ) )
             {
                 list< NamePassRecord >::iterator aIterToDelete( aNPIter );
-                aNPIter++;
+                ++aNPIter;
                 aIter->second.erase( aIterToDelete );
             }
             else
-                aNPIter++;
+                ++aNPIter;
         }
     }
 
@@ -1423,11 +1423,11 @@ void PasswordContainer::Notify()
     if( m_pStorageFile )
         addon = m_pStorageFile->getInfo();
 
-    for( aIter = addon.begin(); aIter != addon.end(); aIter++ )
+    for( aIter = addon.begin(); aIter != addon.end(); ++aIter )
     {
         PassMap::iterator aSearchIter = m_aContainer.find( aIter->first );
         if( aSearchIter != m_aContainer.end() )
-            for( list< NamePassRecord >::iterator aNPIter = aIter->second.begin(); aNPIter != aIter->second.end(); aNPIter++ )
+            for( list< NamePassRecord >::iterator aNPIter = aIter->second.begin(); aNPIter != aIter->second.end(); ++aNPIter )
                 UpdateVector( aSearchIter->first, aSearchIter->second, *aNPIter, sal_False );
         else
             m_aContainer.insert( PairUrlRecord( aIter->first, aIter->second ) );
