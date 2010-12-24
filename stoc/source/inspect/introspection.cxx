@@ -1588,7 +1588,7 @@ public:
 
             (*iter).second->release();
             (*iter).second = NULL;
-            iter++;
+            ++iter;
         }
     }
 };
@@ -1686,7 +1686,7 @@ public:
          {
             (*iter).second->release();
             (*iter).second = NULL;
-            iter++;
+            ++iter;
         }
     }
 };
