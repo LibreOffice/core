@@ -430,7 +430,7 @@ bool DocumentSignatureHelper::equalsReferenceUriManifestPath(
         retVal = true;
         typedef std::vector<OUString>::const_iterator CIT;
         for (CIT i = vUriSegments.begin(), j = vPathSegments.begin();
-            i != vUriSegments.end(); i++, j++)
+            i != vUriSegments.end(); ++i, ++j)
         {
             //Decode the uri segment, so that %20 becomes ' ', etc.
             OUString sDecUri = ::rtl::Uri::decode(
