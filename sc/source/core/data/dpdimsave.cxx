@@ -62,7 +62,7 @@ void ScDPSaveGroupItem::AddElementsFromGroup( const ScDPSaveGroupItem& rGroup )
     // add all elements of the other group (used for nested grouping)
 
     for ( std::vector<String>::const_iterator aIter(rGroup.aElements.begin());
-                                aIter != rGroup.aElements.end(); aIter++ )
+                                aIter != rGroup.aElements.end(); ++aIter )
         aElements.push_back( *aIter );
 }
 
