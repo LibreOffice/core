@@ -170,21 +170,20 @@ const ScPatternAttr& LotAttrCache::GetPattAttr( const LotAttrWK3& rAttr )
 
 void LotAttrCache::LotusToScBorderLine( sal_uInt8 nLine, SvxBorderLine& aBL )
 {
-    static const sal_uInt16 pPara[ 4 ][ 3 ] =
-    {
-        { 0,0,0 },
-        { DEF_LINE_WIDTH_1, 0, 0 },
-        { DEF_LINE_WIDTH_2, 0, 0 },
-        { DEF_LINE_WIDTH_1, DEF_LINE_WIDTH_1, DEF_LINE_WIDTH_1 }
-    };
-
     nLine &= 0x03;
 
-    if( nLine )
+    switch ( nLine )
     {
-        aBL.SetOutWidth( pPara[ nLine ][ 0 ] );
-        aBL.SetInWidth( pPara[ nLine ][ 1 ] );
-        aBL.SetDistance( pPara[ nLine ][ 2 ] );
+        default:
+        case 0: aBL.SetStyle( NO_STYLE ); break;
+        case 1: aBL.SetWidth( DEF_LINE_WIDTH_1 ); break;
+        case 2: aBL.SetWidth( DEF_LINE_WIDTH_2 ); break;
+        case 3:
+        {
+            aBL.SetStyle( DOUBLE );
+            aBL.SetWidth( DEF_LINE_WIDTH_1 );
+        }
+        break;
     }
 }
 

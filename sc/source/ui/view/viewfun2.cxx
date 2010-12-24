@@ -2920,18 +2920,14 @@ void ScViewFunc::UpdateLineAttrs( SvxBorderLine&       rLine,
         if ( bColor )
         {
             rLine.SetColor      ( pSrcLine->GetColor() );
-            rLine.SetOutWidth   ( pDestLine->GetOutWidth() );
-            rLine.SetInWidth    ( pDestLine->GetInWidth() );
-            rLine.SetDistance   ( pDestLine->GetDistance() );
             rLine.SetStyle      ( pDestLine->GetStyle() );
+            rLine.SetWidth      ( pDestLine->GetWidth() );
         }
         else
         {
             rLine.SetColor      ( pDestLine->GetColor() );
-            rLine.SetOutWidth   ( pSrcLine->GetOutWidth() );
-            rLine.SetInWidth    ( pSrcLine->GetInWidth() );
-            rLine.SetDistance   ( pSrcLine->GetDistance() );
             rLine.SetStyle      ( pSrcLine->GetStyle() );
+            rLine.SetWidth      ( pSrcLine->GetWidth() );
         }
     }
 }

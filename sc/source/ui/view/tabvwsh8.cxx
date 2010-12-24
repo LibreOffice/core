@@ -48,9 +48,8 @@ void ScTabViewShell::SetDefaultFrameLine( const SvxBorderLine* pLine )
     {
         delete pCurFrameLine;
         pCurFrameLine = new SvxBorderLine( &pLine->GetColor(),
-                                            pLine->GetOutWidth(),
-                                            pLine->GetInWidth(),
-                                            pLine->GetDistance() );
+                                            pLine->GetWidth(),
+                                            pLine->GetStyle() );
     }
     else if ( pCurFrameLine )
     {

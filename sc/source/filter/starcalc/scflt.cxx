@@ -834,16 +834,16 @@ void Sc10PageCollection::PutToDoc( ScDocument* pDoc )
               lcl_ChangeColor(cBottom, ColorBottom);
               SvxBorderLine aLine;
               SvxBoxItem aBox( ATTR_BORDER );
-              aLine.SetOutWidth(nLeft);
+              aLine.SetWidth(nLeft);
               aLine.SetColor(ColorLeft);
               aBox.SetLine(&aLine, BOX_LINE_LEFT);
-              aLine.SetOutWidth(nTop);
+              aLine.SetWidth(nTop);
               aLine.SetColor(ColorTop);
               aBox.SetLine(&aLine, BOX_LINE_TOP);
-              aLine.SetOutWidth(nRight);
+              aLine.SetWidth(nRight);
               aLine.SetColor(ColorRight);
               aBox.SetLine(&aLine, BOX_LINE_RIGHT);
-              aLine.SetOutWidth(nBottom);
+              aLine.SetWidth(nBottom);
               aLine.SetColor(ColorBottom);
               aBox.SetLine(&aLine, BOX_LINE_BOTTOM);
 
@@ -1271,16 +1271,16 @@ void Sc10Import::LoadPatternCollection()
                     SvxBorderLine   aLine;
                     SvxBoxItem      aBox( ATTR_BORDER );
 
-                    aLine.SetOutWidth( nLeft );
+                    aLine.SetWidth( nLeft );
                     aLine.SetColor( ColorLeft );
                     aBox.SetLine( &aLine, BOX_LINE_LEFT );
-                    aLine.SetOutWidth( nTop );
+                    aLine.SetWidth( nTop );
                     aLine.SetColor( ColorTop );
                     aBox.SetLine( &aLine, BOX_LINE_TOP );
-                    aLine.SetOutWidth( nRight );
+                    aLine.SetWidth( nRight );
                     aLine.SetColor( ColorRight );
                     aBox.SetLine( &aLine, BOX_LINE_RIGHT );
-                    aLine.SetOutWidth( nBottom );
+                    aLine.SetWidth( nBottom );
                     aLine.SetColor( ColorBottom );
                     aBox.SetLine( &aLine, BOX_LINE_BOTTOM );
                     rItemSet.Put( aBox );
@@ -1924,19 +1924,19 @@ void Sc10Import::LoadColAttr(SCCOL Col, SCTAB Tab)
             SvxBorderLine   aLine;
             SvxBoxItem      aBox( ATTR_BORDER );
 
-            aLine.SetOutWidth( nLeft );
+            aLine.SetWidth( nLeft );
             aLine.SetColor( ColorLeft );
             aBox.SetLine( &aLine, BOX_LINE_LEFT );
 
-            aLine.SetOutWidth( nTop );
+            aLine.SetWidth( nTop );
             aLine.SetColor( ColorTop );
             aBox.SetLine( &aLine, BOX_LINE_TOP );
 
-            aLine.SetOutWidth( nRight );
+            aLine.SetWidth( nRight );
             aLine.SetColor( ColorRight );
             aBox.SetLine( &aLine, BOX_LINE_RIGHT );
 
-            aLine.SetOutWidth( nBottom );
+            aLine.SetWidth( nBottom );
             aLine.SetColor( ColorBottom );
             aBox.SetLine( &aLine, BOX_LINE_BOTTOM );
 

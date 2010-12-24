@@ -2190,13 +2190,10 @@ void ScHTMLTable::ApplyCellBorders( ScDocument* pDoc, const ScAddress& rFirstPos
     {
         const SCCOL nLastCol = maSize.mnCols - 1;
         const SCROW nLastRow = maSize.mnRows - 1;
-        const sal_uInt16 nOuterLine = DEF_LINE_WIDTH_2;
-        const sal_uInt16 nInnerLine = DEF_LINE_WIDTH_0;
-        SvxBorderLine aOuterLine, aInnerLine;
-        aOuterLine.SetColor( Color( COL_BLACK ) );
-        aOuterLine.SetOutWidth( nOuterLine );
-        aInnerLine.SetColor( Color( COL_BLACK ) );
-        aInnerLine.SetOutWidth( nInnerLine );
+        const long nOuterLine = DEF_LINE_WIDTH_2;
+        const long nInnerLine = DEF_LINE_WIDTH_0;
+        SvxBorderLine aOuterLine( NULL, nOuterLine, SOLID );
+        SvxBorderLine aInnerLine( NULL, nInnerLine, SOLID );
         SvxBoxItem aBorderItem( ATTR_BORDER );
 
         for( SCCOL nCol = 0; nCol <= nLastCol; ++nCol )

@@ -913,21 +913,21 @@ bool lclConvertBorderLine( SvxBorderLine& rLine, const XclImpPalette& rPalette, 
 {
     static const sal_uInt16 ppnLineParam[][ 4 ] =
     {
-        //  outer width,        inner width,        distance              type
-        {   0,                     0,                  0,                    SOLID },  // 0 = none
-        {   XLS_LINE_WIDTH_THIN,   0,                  0,                    SOLID },  // 1 = thin
-        {   XLS_LINE_WIDTH_MEDIUM, 0,                  0,                    SOLID },  // 2 = medium
-        {   XLS_LINE_WIDTH_THIN,   0,                  0,                    DASHED }, // 3 = dashed
-        {   XLS_LINE_WIDTH_THIN,   0,                  0,                    DOTTED }, // 4 = dotted
-        {   XLS_LINE_WIDTH_THICK,  0,                  0,                    SOLID },  // 5 = thick
-        {   XLS_LINE_WIDTH_THIN,   XLS_LINE_WIDTH_THIN, XLS_LINE_WIDTH_THIN, SOLID },  // 6 = double
-        {   XLS_LINE_WIDTH_HAIR,   0,                  0,                    SOLID },  // 7 = hair
-        {   XLS_LINE_WIDTH_MEDIUM, 0,                  0,                    DASHED }, // 8 = med dash
-        {   XLS_LINE_WIDTH_THIN,   0,                  0,                    SOLID },  // 9 = thin dashdot
-        {   XLS_LINE_WIDTH_MEDIUM, 0,                  0,                    SOLID },  // A = med dashdot
-        {   XLS_LINE_WIDTH_THIN,   0,                  0,                    SOLID },  // B = thin dashdotdot
-        {   XLS_LINE_WIDTH_MEDIUM, 0,                  0,                    SOLID },  // C = med dashdotdot
-        {   XLS_LINE_WIDTH_MEDIUM, 0,                  0,                    SOLID }   // D = med slant dashdot
+        //  outer width,           type
+        {   0,                     SOLID },                // 0 = none
+        {   XLS_LINE_WIDTH_THIN,   SOLID },                // 1 = thin
+        {   XLS_LINE_WIDTH_MEDIUM, SOLID },                // 2 = medium
+        {   XLS_LINE_WIDTH_THIN,   DASHED },               // 3 = dashed
+        {   XLS_LINE_WIDTH_THIN,   DOTTED },               // 4 = dotted
+        {   XLS_LINE_WIDTH_THICK,  SOLID },                // 5 = thick
+        {   XLS_LINE_WIDTH_THIN,   DOUBLE },                 // 6 = double
+        {   XLS_LINE_WIDTH_HAIR,   SOLID },                // 7 = hair
+        {   XLS_LINE_WIDTH_MEDIUM, DASHED },               // 8 = med dash
+        {   XLS_LINE_WIDTH_THIN,   SOLID },                // 9 = thin dashdot
+        {   XLS_LINE_WIDTH_MEDIUM, SOLID },                // A = med dashdot
+        {   XLS_LINE_WIDTH_THIN,   SOLID },                // B = thin dashdotdot
+        {   XLS_LINE_WIDTH_MEDIUM, SOLID },                // C = med dashdotdot
+        {   XLS_LINE_WIDTH_MEDIUM, SOLID }                 // D = med slant dashdot
     };
 
     if( nXclLine == EXC_LINE_NONE )
@@ -936,10 +936,8 @@ bool lclConvertBorderLine( SvxBorderLine& rLine, const XclImpPalette& rPalette, 
         nXclLine = EXC_LINE_THIN;
 
     rLine.SetColor( rPalette.GetColor( nXclColor ) );
-    rLine.SetOutWidth( ppnLineParam[ nXclLine ][ 0 ] );
-    rLine.SetInWidth(  ppnLineParam[ nXclLine ][ 1 ] );
-    rLine.SetDistance( ppnLineParam[ nXclLine ][ 2 ] );
-    rLine.SetStyle( (SvxBorderStyle)ppnLineParam[ nXclLine ][ 3 ] );
+    rLine.SetWidth( ppnLineParam[ nXclLine ][ 0 ] );
+    rLine.SetStyle( (SvxBorderStyle)ppnLineParam[ nXclLine ][ 1 ] );
     return true;
 }
 

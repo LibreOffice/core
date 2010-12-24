@@ -951,11 +951,13 @@ ScSubTotalFunc lcl_SummaryToSubTotal( sheet::GeneralFunction eSummary )
 
 const SvxBorderLine* ScHelperFunctions::GetBorderLine( SvxBorderLine& rLine, const table::BorderLine& rStruct )
 {
-    //  Calc braucht Twips, im Uno-Struct sind 1/100mm
-
-    rLine.SetOutWidth( (sal_uInt16)HMMToTwips( rStruct.OuterLineWidth ) );
-    rLine.SetInWidth(  (sal_uInt16)HMMToTwips( rStruct.InnerLineWidth ) );
-    rLine.SetDistance( (sal_uInt16)HMMToTwips( rStruct.LineDistance ) );
+    //  Calc needs Twips, and there are 1/100mm in the Uno structure
+    const table::BorderLine2& rBorder2 = static_cast< const table::BorderLine2& >( rStruct );
+    rLine.SetStyle( SvxBorderStyle( rBorder2.LineStyle ) );
+    rLine.GuessLinesWidths( rLine.GetStyle(),
+        (sal_uInt16)HMMToTwips( rStruct.OuterLineWidth ),
+        (sal_uInt16)HMMToTwips( rStruct.InnerLineWidth ),
+        (sal_uInt16)HMMToTwips( rStruct.LineDistance ) );
     rLine.SetColor( ColorData( rStruct.Color ) );
 
     if ( rLine.GetOutWidth() || rLine.GetInWidth() || rLine.GetDistance() )

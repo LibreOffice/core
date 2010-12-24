@@ -1505,7 +1505,7 @@ void ScTabViewShell::Construct( sal_uInt8 nForceDesignMode )
     SetPool( &SC_MOD()->GetPool() );
     SetWindow( GetActiveWin() );
 
-    pCurFrameLine   = new SvxBorderLine( &aColBlack, 20, 0, 0 );
+    pCurFrameLine   = new SvxBorderLine( &aColBlack, 20, SOLID );
     pPivotSource    = new ScArea;
     StartListening(*GetViewData()->GetDocShell(),sal_True);
     StartListening(*GetViewFrame(),sal_True);

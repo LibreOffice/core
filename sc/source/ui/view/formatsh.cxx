@@ -1511,10 +1511,8 @@ void ScFormatShell::ExecuteAttr( SfxRequest& rReq )
 
                         if ( pDefLine )
                         {
-                            pDefLine->SetOutWidth( pLine->GetOutWidth() );
-                            pDefLine->SetInWidth ( pLine->GetInWidth() );
-                            pDefLine->SetDistance( pLine->GetDistance() );
                             pDefLine->SetStyle( pLine->GetStyle( ) );
+                            pDefLine->SetWidth( pLine->GetWidth( ) );
                             pTabViewShell->SetSelectionFrameLines( pDefLine, false );
                         }
                         else
@@ -1527,7 +1525,7 @@ void ScFormatShell::ExecuteAttr( SfxRequest& rReq )
                     else
                     {
                         Color           aColorBlack( COL_BLACK );
-                        SvxBorderLine   aDefLine( &aColorBlack, 20, 0, 0 );
+                        SvxBorderLine   aDefLine( &aColorBlack, 20, SOLID );
                         pTabViewShell->SetDefaultFrameLine( &aDefLine );
                         pTabViewShell->SetSelectionFrameLines( NULL, false );
                     }
@@ -1549,7 +1547,7 @@ void ScFormatShell::ExecuteAttr( SfxRequest& rReq )
                     }
                     else
                     {
-                        SvxBorderLine   aDefLine( &rColor, 20, 0, 0 );
+                        SvxBorderLine   aDefLine( &rColor, 20, SOLID );
                         pTabViewShell->SetDefaultFrameLine( &aDefLine );
                         pTabViewShell->SetSelectionFrameLines( &aDefLine, false );
                     }
