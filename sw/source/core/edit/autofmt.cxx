@@ -599,30 +599,28 @@ sal_Bool SwAutoFormat::DoUnderline()
         switch( eState )
         {
         case 1:         // einfach, 0,05 pt
-            aLine.SetOutWidth( DEF_LINE_WIDTH_0 );
+            aLine.SetStyle( SOLID );
+            aLine.SetWidth( DEF_LINE_WIDTH_0 );
             break;
         case 2:         // einfach, 1,0 pt
-            aLine.SetOutWidth( DEF_LINE_WIDTH_1 );
+            aLine.SetStyle( SOLID );
+            aLine.SetWidth( DEF_LINE_WIDTH_1 );
             break;
         case 3:         // doppelt, 1,1 pt
-            aLine.SetOutWidth( DEF_DOUBLE_LINE0_OUT );
-            aLine.SetInWidth( DEF_DOUBLE_LINE0_IN );
-            aLine.SetDistance( DEF_DOUBLE_LINE0_DIST );
+            aLine.SetStyle( DOUBLE );
+            aLine.SetWidth( DEF_LINE_WIDTH_0 );
             break;
         case 4:         // doppelt, 4,5 pt
-            aLine.SetOutWidth( DEF_DOUBLE_LINE4_OUT );
-            aLine.SetInWidth( DEF_DOUBLE_LINE4_IN );
-            aLine.SetDistance( DEF_DOUBLE_LINE4_DIST );
+            aLine.SetStyle( THICKTHIN_SMALLGAP );
+            aLine.SetWidth( DEF_LINE_WIDTH_1  );
             break;
         case 5:         // doppelt, 6,0 pt
-            aLine.SetOutWidth( DEF_DOUBLE_LINE5_OUT );
-            aLine.SetInWidth( DEF_DOUBLE_LINE5_IN );
-            aLine.SetDistance( DEF_DOUBLE_LINE5_DIST );
+            aLine.SetStyle( THINTHICK_SMALLGAP );
+            aLine.SetWidth( DEF_LINE_WIDTH_2 );
             break;
         case 6:         // doppelt, 9,0 pt
-            aLine.SetOutWidth( DEF_DOUBLE_LINE6_OUT );
-            aLine.SetInWidth( DEF_DOUBLE_LINE6_IN );
-            aLine.SetDistance( DEF_DOUBLE_LINE6_DIST );
+            aLine.SetStyle( DOUBLE );
+            aLine.SetWidth( DEF_LINE_WIDTH_2 );
             break;
         }
         SfxItemSet aSet(pDoc->GetAttrPool(),
