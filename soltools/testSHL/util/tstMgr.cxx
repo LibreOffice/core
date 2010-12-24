@@ -80,7 +80,7 @@ sal_Bool tstMgr::test_Entries( vector< sal_Char* > entries,
                     bOK &= oRes.getState();
                     log.writeRes( oRes );
                 }
-                iter++;
+                ++iter;
             }
         log.close();
     }
@@ -114,7 +114,7 @@ sal_Bool tstMgr::test_EntriesFromFile( sal_Char* fName, sal_Char* logName ) {
             if ( *iter ) {
                 delete [] *iter;
             }
-            iter++;
+            ++iter;
         }
     }
     else  {
