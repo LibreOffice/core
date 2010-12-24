@@ -284,25 +284,6 @@ enum BRC_Sides
     WW8_TOP = 0, WW8_LEFT = 1, WW8_BOT = 2, WW8_RIGHT = 3, WW8_BETW = 4
 };
 
-class WW8_BordersSO         // for StarOffice-Border Code
-{
-public:
-    sal_uInt16 mnOut;
-    sal_uInt16 mnIn;
-    sal_uInt16 mnDist;
-    SvxBorderStyle mnType;
-public:
-    enum eBorderCode
-    {
-        single0, single1, single2, single3, single4, single5,
-        double0, double1, double2, double3, double4, double5, double6,
-        double7, double8, double9, double10,
-        dashed, dotted, emboss, engrave,
-        none
-    };
-    static const WW8_BordersSO &Get0x01LineMatch(eBorderCode nIdx);
-};
-
 /*
 Document Typography Info (DOPTYPOGRAPHY) These options are Far East only,
 and are accessible through the Typography tab of the Tools/Options dialog.

@@ -1411,97 +1411,6 @@ void SwWW8ImplReader::ReadGrafLayer1( WW8PLCFspecial* pPF, long nGrafAnchorCp )
     }
 }
 
-const WW8_BordersSO &WW8_BordersSO::Get0x01LineMatch(eBorderCode eCode)
-{
-    /*
-    // Linien-Defaults in Twips: fruehere Writer-Defaults,
-    //                           siehe auch <editeng/boxitem.hxx>
-    #define DEF_LINE_WIDTH_0        1
-    #define DEF_LINE_WIDTH_1        20
-    #define DEF_LINE_WIDTH_2        50
-    #define DEF_LINE_WIDTH_3        80
-    #define DEF_LINE_WIDTH_4        100
-    #define DEF_LINE_WIDTH_5        10
-
-    #define DEF_MAX_LINE_WIDHT      DEF_LINE_WIDTH_4
-    #define DEF_MAX_LINE_DIST       DEF_LINE_WIDTH_2
-
-    #define DEF_DOUBLE_LINE0_OUT    DEF_LINE_WIDTH_0
-    #define DEF_DOUBLE_LINE0_IN     DEF_LINE_WIDTH_0
-    #define DEF_DOUBLE_LINE0_DIST   DEF_LINE_WIDTH_1
-
-    #define DEF_DOUBLE_LINE1_OUT    DEF_LINE_WIDTH_1
-    #define DEF_DOUBLE_LINE1_IN     DEF_LINE_WIDTH_1
-    #define DEF_DOUBLE_LINE1_DIST   DEF_LINE_WIDTH_1
-
-    #define DEF_DOUBLE_LINE2_OUT    DEF_LINE_WIDTH_2
-    #define DEF_DOUBLE_LINE2_IN     DEF_LINE_WIDTH_2
-    #define DEF_DOUBLE_LINE2_DIST   DEF_LINE_WIDTH_2
-
-    #define DEF_DOUBLE_LINE3_OUT    DEF_LINE_WIDTH_2
-    #define DEF_DOUBLE_LINE3_IN     DEF_LINE_WIDTH_1
-    #define DEF_DOUBLE_LINE3_DIST   DEF_LINE_WIDTH_2
-
-    #define DEF_DOUBLE_LINE4_OUT    DEF_LINE_WIDTH_1
-    #define DEF_DOUBLE_LINE4_IN     DEF_LINE_WIDTH_2
-    #define DEF_DOUBLE_LINE4_DIST   DEF_LINE_WIDTH_1
-
-    #define DEF_DOUBLE_LINE5_OUT    DEF_LINE_WIDTH_3
-    #define DEF_DOUBLE_LINE5_IN     DEF_LINE_WIDTH_2
-    #define DEF_DOUBLE_LINE5_DIST   DEF_LINE_WIDTH_2
-
-    #define DEF_DOUBLE_LINE6_OUT    DEF_LINE_WIDTH_2
-    #define DEF_DOUBLE_LINE6_IN     DEF_LINE_WIDTH_3
-    #define DEF_DOUBLE_LINE6_DIST   DEF_LINE_WIDTH_2
-
-    #define DEF_DOUBLE_LINE7_OUT    DEF_LINE_WIDTH_0
-    #define DEF_DOUBLE_LINE7_IN     DEF_LINE_WIDTH_0
-    #define DEF_DOUBLE_LINE7_DIST   DEF_LINE_WIDTH_2
-
-    #define DEF_DOUBLE_LINE8_OUT    DEF_LINE_WIDTH_1
-    #define DEF_DOUBLE_LINE8_IN     DEF_LINE_WIDTH_0
-    #define DEF_DOUBLE_LINE8_DIST   DEF_LINE_WIDTH_2
-
-    #define DEF_DOUBLE_LINE9_OUT    DEF_LINE_WIDTH_2
-    #define DEF_DOUBLE_LINE9_IN     DEF_LINE_WIDTH_0
-    #define DEF_DOUBLE_LINE9_DIST   DEF_LINE_WIDTH_2
-
-    #define DEF_DOUBLE_LINE10_OUT   DEF_LINE_WIDTH_3
-    #define DEF_DOUBLE_LINE10_IN    DEF_LINE_WIDTH_0
-    #define DEF_DOUBLE_LINE10_DIST  DEF_LINE_WIDTH_2
-    */
-    // Deklarationen gemaess BOXITEM.HXX
-    static const WW8_BordersSO aLineTabVer8[] =
-    {
-/* 0*/  { DEF_LINE_WIDTH_0, 0, 0, SOLID },
-/* 1*/  { DEF_LINE_WIDTH_1, 0, 0, SOLID },
-/* 2*/  { DEF_LINE_WIDTH_2, 0, 0, SOLID },
-/* 3*/  { DEF_LINE_WIDTH_3, 0, 0, SOLID },
-/* 4*/  { DEF_LINE_WIDTH_4, 0, 0, SOLID },
-/* 5*/  { DEF_LINE_WIDTH_5, 0, 0, SOLID },
-/* 6*/  { DEF_DOUBLE_LINE0_OUT, DEF_DOUBLE_LINE0_IN, DEF_DOUBLE_LINE0_DIST, SOLID },
-/* 7*/  { DEF_DOUBLE_LINE1_OUT, DEF_DOUBLE_LINE1_IN, DEF_DOUBLE_LINE1_DIST, SOLID },
-/* 8*/  { DEF_DOUBLE_LINE2_OUT, DEF_DOUBLE_LINE2_IN, DEF_DOUBLE_LINE2_DIST, SOLID },
-/* 9*/  { DEF_DOUBLE_LINE3_OUT, DEF_DOUBLE_LINE3_IN, DEF_DOUBLE_LINE3_DIST, SOLID },
-/*10*/  { DEF_DOUBLE_LINE4_OUT, DEF_DOUBLE_LINE4_IN, DEF_DOUBLE_LINE4_DIST, SOLID },
-/*11*/  { DEF_DOUBLE_LINE5_OUT, DEF_DOUBLE_LINE5_IN, DEF_DOUBLE_LINE5_DIST, SOLID },
-/*12*/  { DEF_DOUBLE_LINE6_OUT, DEF_DOUBLE_LINE6_IN, DEF_DOUBLE_LINE6_DIST, SOLID },
-/*13*/  { DEF_DOUBLE_LINE7_OUT, DEF_DOUBLE_LINE7_IN, DEF_DOUBLE_LINE7_DIST, SOLID },
-/*14*/  { DEF_DOUBLE_LINE8_OUT, DEF_DOUBLE_LINE8_IN, DEF_DOUBLE_LINE8_DIST, SOLID },
-/*15*/  { DEF_DOUBLE_LINE9_OUT, DEF_DOUBLE_LINE9_IN, DEF_DOUBLE_LINE9_DIST, SOLID },
-/*16*/  { DEF_DOUBLE_LINE10_OUT,DEF_DOUBLE_LINE10_IN,DEF_DOUBLE_LINE10_DIST, SOLID},
-/*17*/  { DEF_LINE_WIDTH_5, 0, 0, DASHED },
-/*18*/  { DEF_LINE_WIDTH_5, 0, 0, DOTTED },
-/*19*/  { DEF_LINE_WIDTH_1, DEF_LINE_WIDTH_1, DEF_LINE_WIDTH_1, EMBOSSED },
-/*20*/  { DEF_LINE_WIDTH_1, DEF_LINE_WIDTH_1, DEF_LINE_WIDTH_1, ENGRAVED }
-    };
-    size_t nPos = static_cast<size_t>(eCode);
-    OSL_ENSURE(nPos < sizeof(aLineTabVer8), "Impossible");
-    if (nPos >= sizeof(aLineTabVer8))
-        eCode = single0;
-    return aLineTabVer8[eCode];
-}
-
 sal_Int32 SwMSDffManager::GetEscherLineMatch(MSO_LineStyle eStyle,
     MSO_SPT eShapeType, sal_Int32 &rThick)
 {
@@ -1569,7 +1478,7 @@ sal_Int32 SwWW8ImplReader::MatchSdrBoxIntoFlyBoxItem(const Color& rLineColor,
     if( !rLineThick )
         return nOutsideThick;
 
-    WW8_BordersSO::eBorderCode nIdx = WW8_BordersSO::none;
+    SvxBorderStyle nIdx = SOLID;
 
     sal_Int32 nLineThick=rLineThick;
     nOutsideThick = SwMSDffManager::GetEscherLineMatch(eLineStyle,
@@ -1590,63 +1499,21 @@ sal_Int32 SwWW8ImplReader::MatchSdrBoxIntoFlyBoxItem(const Color& rLineColor,
     {
     // zuerst die Einzel-Linien
     case mso_lineSimple:
-        if (nLineThick < 10)
-            nIdx = WW8_BordersSO::single0;//   1 Twip bei uns
-        else if (nLineThick < 20)
-            nIdx = WW8_BordersSO::single5;//   10 Twips bei uns
-        else if (nLineThick < 50)
-            nIdx = WW8_BordersSO::single1;//  20 Twips
-        else if (nLineThick < 80)
-            nIdx = WW8_BordersSO::single2;//  50
-        else if (nLineThick < 100)
-            nIdx = WW8_BordersSO::single3;//  80
-        else if (nLineThick <150)
-            nIdx = WW8_BordersSO::single4;// 100
-        // Pfusch: fuer die ganz dicken Linien muessen wir doppelte Linien
-        // malen, weil unsere Einfach-Linie nicht dicker als 5 Punkt wird
-        else if (nLineThick <180)
-            nIdx = WW8_BordersSO::double2;// 150
-        else
-            nIdx = WW8_BordersSO::double5;// 180
+        nIdx = SOLID;
     break;
     // dann die Doppel-Linien, fuer die wir feine Entsprechungen haben :-)))
     case mso_lineDouble:
-        if (nLineThick <  60)
-            nIdx = WW8_BordersSO::double0;//  22 Twips bei uns
-        else if (nLineThick < 135)
-            nIdx = WW8_BordersSO::double7;// some more space
-        else if (nLineThick < 180)
-            nIdx = WW8_BordersSO::double1;//  60
-        else
-            nIdx = WW8_BordersSO::double2;// 150
+        nIdx = DOUBLE;
     break;
     case mso_lineThickThin:
-        if (nLineThick <  87)
-            nIdx = WW8_BordersSO::double8;//  71 Twips bei uns
-        else if (nLineThick < 117)
-            nIdx = WW8_BordersSO::double9;// 101
-        else if (nLineThick < 166)
-            nIdx = WW8_BordersSO::double10;// 131
-        else
-            nIdx = WW8_BordersSO::double5;// 180
+        nIdx = THICKTHIN_SMALLGAP;
     break;
     case mso_lineThinThick:
-        if (nLineThick < 137)
-            nIdx = WW8_BordersSO::double4;//  90 Twips bei uns
-        else
-            nIdx = WW8_BordersSO::double6;// 180
+        nIdx = THINTHICK_SMALLGAP;
     break;
-    // zu guter Letzt die Dreifach-Linien, an deren Stelle wir eine
-    // Doppel-Linie setzen
+    // We have no triple border, use double instead.
     case mso_lineTriple:
-        if (nLineThick < 46)
-            nIdx = WW8_BordersSO::double0;//  22 Twips bei uns
-        else if (nLineThick < 106)
-            nIdx = WW8_BordersSO::double1;//  60
-        else if (nLineThick < 166)
-            nIdx = WW8_BordersSO::double2;// 150
-        else
-            nIdx = WW8_BordersSO::double5;// 180
+        nIdx = DOUBLE;
     break;
     // no line style is set
     case (MSO_LineStyle)USHRT_MAX:
@@ -1660,26 +1527,22 @@ sal_Int32 SwWW8ImplReader::MatchSdrBoxIntoFlyBoxItem(const Color& rLineColor,
     switch( eDashing )
     {
         case mso_lineDashGEL:
-            nIdx = WW8_BordersSO::dashed;
+            nIdx = DASHED;
             break;
         case mso_lineDotGEL:
-            nIdx = WW8_BordersSO::dotted;
+            nIdx = DOTTED;
             break;
         default:
             break;
     }
 
-    if (WW8_BordersSO::none != nIdx)
+    if (NONE != nIdx)
     {
         SvxBorderLine aLine;
         aLine.SetColor( rLineColor );
 
-        const WW8_BordersSO& rBorders = WW8_BordersSO::Get0x01LineMatch(nIdx);
-
-        aLine.SetOutWidth(rBorders.mnOut);
-        aLine.SetInWidth (rBorders.mnIn);
-        aLine.SetDistance(rBorders.mnDist);
-        aLine.SetStyle( rBorders.mnType );
+        aLine.SetWidth( long ( nLineThick / 65 ) ); // Convert EMUs to Twips
+        aLine.SetStyle( nIdx );
 
         for(sal_uInt16 nLine = 0; nLine < 4; ++nLine)
             rBox.SetLine(new SvxBorderLine( aLine ), nLine);

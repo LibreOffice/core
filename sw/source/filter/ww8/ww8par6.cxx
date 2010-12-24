@@ -1276,8 +1276,6 @@ sal_uInt8 lcl_ReadBorders(bool bVer67, WW8_BRC* brc, WW8PLCFx_Cp_FKP* pPap,
 void GetLineIndex(SvxBoxItem &rBox, short nLineThickness, short nSpace, sal_uInt8 nCol, short nIdx,
     sal_uInt16 nOOIndex, sal_uInt16 nWWIndex, short *pSize=0)
 {
-    WW8_BordersSO::eBorderCode eCodeIdx;
-
     //Word mirrors some indexes inside outside depending on its position, we
     //don't do that, so flip them here
     if (nWWIndex == WW8_TOP || nWWIndex == WW8_LEFT)
@@ -1303,18 +1301,9 @@ void GetLineIndex(SvxBoxItem &rBox, short nLineThickness, short nSpace, sal_uInt
         }
     }
 
-    // Map to our border types, we should use of one equal line
-    // thickness, or one of smaller thickness. If too small we
-    // can make the defecit up in additional white space or
-    // object size
+    SvxBorderStyle eStyle = SOLID;
     switch (nIdx)
     {
-        case  6:
-            eCodeIdx = WW8_BordersSO::dotted;
-            break;
-        case  7:
-            eCodeIdx = WW8_BordersSO::dashed;
-            break;
         // First the single lines
         case  1:
         case  2:
@@ -1322,113 +1311,61 @@ void GetLineIndex(SvxBoxItem &rBox, short nLineThickness, short nSpace, sal_uInt
         // and the unsupported special cases which we map to a single line
         case  8:
         case  9:
+        case 20:
         case 22:
-        // or if in necessary by a double line
-        case 24:
-            eCodeIdx = WW8_BordersSO::emboss;
-        case 25:
-            eCodeIdx = WW8_BordersSO::engrave;
-        break;
+            eStyle = SOLID;
+            break;
+        case  6:
+            eStyle = DOTTED;
+            break;
+        case  7:
+            eStyle = DASHED;
+            break;
         // then the shading beams which we represent by a double line
         case 23:
-            eCodeIdx = WW8_BordersSO::double1;
-        break;
+            eStyle = DOUBLE;
+            break;
         // then the double lines, for which we have good matches
         case  3:
         case 10: //Don't have tripple so use double
-            if (nLineThickness < 60)
-                eCodeIdx = WW8_BordersSO::double0;// 22 Twips for us
-            else if (nLineThickness < 135)
-                eCodeIdx = WW8_BordersSO::double7;// some more space
-            else if (nLineThickness < 180)
-                eCodeIdx = WW8_BordersSO::double1;// 60
-            else
-                eCodeIdx = WW8_BordersSO::double2;// 150
+        case 21: //Don't have double wave: use double instead
+            eStyle = DOUBLE;
             break;
         case 11:
-            eCodeIdx = WW8_BordersSO::double4;//  90 Twips for us
+            eStyle = THINTHICK_SMALLGAP;
             break;
         case 12:
         case 13: //Don't have thin thick thin, so use thick thin
-            if (nLineThickness < 87)
-                eCodeIdx = WW8_BordersSO::double8;//  71 Twips for us
-            else if (nLineThickness < 117)
-                eCodeIdx = WW8_BordersSO::double9;// 101
-            else if (nLineThickness < 166)
-                eCodeIdx = WW8_BordersSO::double10;// 131
-            else
-                eCodeIdx = WW8_BordersSO::double5;// 180
+            eStyle = THICKTHIN_SMALLGAP;
             break;
         case 14:
-            if (nLineThickness < 46)
-                eCodeIdx = WW8_BordersSO::double0;//  22 Twips for us
-            else if (nLineThickness < 76)
-                eCodeIdx = WW8_BordersSO::double1;//  60
-            else if (nLineThickness < 121)
-                eCodeIdx = WW8_BordersSO::double4;//  90
-            else if (nLineThickness < 166)
-                eCodeIdx = WW8_BordersSO::double2;// 150
-            else
-                eCodeIdx = WW8_BordersSO::double6;// 180
+            eStyle = THINTHICK_MEDIUMGAP;
             break;
         case 15:
         case 16: //Don't have thin thick thin, so use thick thin
-            if (nLineThickness < 46)
-                eCodeIdx = WW8_BordersSO::double0;//  22 Twips for us
-            else if (nLineThickness < 76)
-                eCodeIdx = WW8_BordersSO::double1;//  60
-            else if (nLineThickness < 121)
-                eCodeIdx = WW8_BordersSO::double3;//  90
-            else if (nLineThickness < 166)
-                eCodeIdx = WW8_BordersSO::double2;// 150
-            else
-                eCodeIdx = WW8_BordersSO::double5;// 180
+            eStyle = THICKTHIN_MEDIUMGAP;
             break;
         case 17:
-            if (nLineThickness < 46)
-                eCodeIdx = WW8_BordersSO::double0;//  22 Twips for us
-            else if (nLineThickness < 72)
-                eCodeIdx = WW8_BordersSO::double7;//  52
-            else if (nLineThickness < 137)
-                eCodeIdx = WW8_BordersSO::double4;//  90
-            else
-                eCodeIdx = WW8_BordersSO::double6;// 180
-        break;
+            eStyle = THINTHICK_LARGEGAP;
+            break;
         case 18:
         case 19: //Don't have thin thick thin, so use thick thin
-            if (nLineThickness < 46)
-                eCodeIdx = WW8_BordersSO::double0;//  22 Twips for us
-            else if (nLineThickness < 62)
-                eCodeIdx = WW8_BordersSO::double7;//  52
-            else if (nLineThickness < 87)
-                eCodeIdx = WW8_BordersSO::double8;//  71
-            else if (nLineThickness < 117)
-                eCodeIdx = WW8_BordersSO::double9;// 101
-            else if (nLineThickness < 156)
-                eCodeIdx = WW8_BordersSO::double10;// 131
-            else
-                eCodeIdx = WW8_BordersSO::double5;// 180
+            eStyle = THICKTHIN_LARGEGAP;
             break;
-        case 20:
-            if (nLineThickness < 46)
-                eCodeIdx = WW8_BordersSO::single1; //  20 Twips for us
-            else
-                eCodeIdx = WW8_BordersSO::double1;//  60
+        case 24:
+            eStyle = EMBOSSED;
             break;
-        case 21:
-            eCodeIdx = WW8_BordersSO::double1;//  60 Twips for us
+        case 25:
+            eStyle = ENGRAVED;
             break;
         default:
-            eCodeIdx = WW8_BordersSO::single0;
+            eStyle = SOLID;
             break;
     }
 
-    const WW8_BordersSO& rBorders = WW8_BordersSO::Get0x01LineMatch(eCodeIdx);
     SvxBorderLine aLine;
-    aLine.SetOutWidth(rBorders.mnOut);
-    aLine.SetInWidth(rBorders.mnIn);
-    aLine.SetDistance(rBorders.mnDist);
-    aLine.SetStyle( rBorders.mnType );
+    aLine.SetStyle( eStyle );
+    aLine.SetWidth( long( nLineThickness * 2.5 ) );  // Convert 1/8th pt into twips
 
     //No AUTO for borders as yet, so if AUTO, use BLACK
     if (nCol == 0)
