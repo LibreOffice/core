@@ -89,7 +89,7 @@ WW8PieceTableImpl::findCp(const Cp & rCp) const
     tEntries::const_iterator aEnd = mEntries.end();
 
     for (tEntries::const_iterator aIt = mEntries.begin(); aIt != aEnd;
-         aIt++)
+         ++aIt)
     {
         if (aIt->getCp() <= rCp)
         {
@@ -115,12 +115,12 @@ WW8PieceTableImpl::findFc(const Fc & rFc) const
         else
         {
             for (tEntries::const_iterator aIt = mEntries.begin();
-                 aIt != aEnd; aIt++)
+                 aIt != aEnd; ++aIt)
             {
                 if (aIt->getFc() <= rFc)
                 {
                     tEntries::const_iterator aItNext = aIt;
-                    aItNext++;
+                    ++aItNext;
 
                     if (aItNext != aEnd)
                     {
