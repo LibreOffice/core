@@ -113,7 +113,7 @@ public:
                 rValue = (*it).second;
                 return true;
             }
-            it++;
+            ++it;
         }
         return false;
     }
@@ -503,7 +503,7 @@ bool InternetProxyDecider_Impl::shouldUseProxy( const rtl::OUString & rHost,
             if ( (*it).first.Matches( aHostAndPort ) )
                 return false;
         }
-        it++;
+        ++it;
     }
 
     return true;
