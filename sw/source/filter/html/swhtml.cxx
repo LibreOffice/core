@@ -5246,18 +5246,18 @@ void SwHTMLParser::InsertHorzRule()
             long nPWidth = 0;
             long nPHeight = (long)nSize;
             SvxCSS1Parser::PixelToTwip( nPWidth, nPHeight );
-            SvxCSS1Parser::SetBorderWidth( aBorderLine, (sal_uInt16)nPHeight,
-                                           !bNoShade );
+            if ( !bNoShade )
+                aBorderLine.SetStyle( DOUBLE );
+            aBorderLine.SetWidth( nPHeight );
         }
         else if( bNoShade )
         {
-            aBorderLine.SetOutWidth( DEF_LINE_WIDTH_2 );
+            aBorderLine.SetWidth( DEF_LINE_WIDTH_2 );
         }
         else
         {
-            aBorderLine.SetOutWidth( DEF_DOUBLE_LINE0_OUT );
-            aBorderLine.SetInWidth( DEF_DOUBLE_LINE0_IN );
-            aBorderLine.SetDistance( DEF_DOUBLE_LINE0_DIST );
+            aBorderLine.SetStyle( DOUBLE );
+            aBorderLine.SetWidth( DEF_LINE_WIDTH_0 );
         }
 
         SvxBoxItem aBoxItem(RES_BOX);

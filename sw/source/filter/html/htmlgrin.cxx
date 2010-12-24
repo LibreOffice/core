@@ -488,21 +488,8 @@ IMAGE_SETEVENT:
         nVBorderWidth = (long)nBorder;
         SvxCSS1Parser::PixelToTwip( nVBorderWidth, nHBorderWidth );
 
-        SvxBorderLine aHBorderLine;
-        SvxBorderLine aVBorderLine;
-
-        SvxCSS1Parser::SetBorderWidth( aHBorderLine,
-                                       (sal_uInt16)nHBorderWidth, sal_False );
-        if( nHBorderWidth == nVBorderWidth )
-            aVBorderLine.SetOutWidth( aHBorderLine.GetOutWidth() );
-        else
-            SvxCSS1Parser::SetBorderWidth( aVBorderLine,
-                                           (sal_uInt16)nVBorderWidth, sal_False );
-
-        // die tatsaechlich gesetzter Rahmenbreite benutzen und nicht die
-        // Wunschbreite!
-        nHBorderWidth = aHBorderLine.GetOutWidth();
-        nVBorderWidth = aVBorderLine.GetOutWidth();
+        SvxBorderLine aHBorderLine( NULL, nHBorderWidth );
+        SvxBorderLine aVBorderLine( NULL, nVBorderWidth );
 
         if( aAttrTab.pINetFmt )
         {

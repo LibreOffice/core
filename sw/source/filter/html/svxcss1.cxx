@@ -239,50 +239,11 @@ static CSS1PropertyEnum const aPageBreakTable[] =
 
 /*  */
 
-// Ein Eintrag besteht aus vier USHORTs. Der erste ist die Gesamtbreite,
-// die anderen sind die 3 Einzelbreiten
-
-#define SBORDER_ENTRY( n ) \
-    DEF_LINE_WIDTH_##n, DEF_LINE_WIDTH_##n, 0, 0
-
-#define DBORDER_ENTRY( n ) \
-    DEF_DOUBLE_LINE##n##_OUT + DEF_DOUBLE_LINE##n##_IN + \
-    DEF_DOUBLE_LINE##n##_DIST, \
-    DEF_DOUBLE_LINE##n##_OUT, \
-    DEF_DOUBLE_LINE##n##_IN, \
-    DEF_DOUBLE_LINE##n##_DIST
-
-#define TDBORDER_ENTRY( n ) \
-    DEF_DOUBLE_LINE##n##_OUT, \
-    DEF_DOUBLE_LINE##n##_OUT, \
-    DEF_DOUBLE_LINE##n##_IN, \
-    DEF_DOUBLE_LINE##n##_DIST
-
-
-static sal_uInt16 aSBorderWidths[] =
+static sal_uInt16 const aBorderWidths[] =
 {
-    SBORDER_ENTRY( 0 ), SBORDER_ENTRY( 1 ), SBORDER_ENTRY( 2 ),
-    SBORDER_ENTRY( 3 ), SBORDER_ENTRY( 4 )
-};
-
-static sal_uInt16 aDBorderWidths[] =
-{
-    DBORDER_ENTRY( 0 ),
-    DBORDER_ENTRY( 7 ),
-    DBORDER_ENTRY( 1 ),
-    DBORDER_ENTRY( 8 ),
-    DBORDER_ENTRY( 4 ),
-    DBORDER_ENTRY( 9 ),
-    DBORDER_ENTRY( 3 ),
-    DBORDER_ENTRY( 10 ),
-    DBORDER_ENTRY( 2 ),
-    DBORDER_ENTRY( 5 )
-};
-
-static sal_uInt16 aTDBorderWidths[] =
-{
-    TDBORDER_ENTRY( 7 ), TDBORDER_ENTRY( 8 ), TDBORDER_ENTRY( 9 ),
-    TDBORDER_ENTRY( 10 )
+    DEF_LINE_WIDTH_0,
+    DEF_LINE_WIDTH_1,
+    DEF_LINE_WIDTH_2
 };
 
 #undef SBORDER_ENTRY
@@ -367,27 +328,20 @@ void SvxCSS1BorderInfo::SetBorderLine( sal_uInt16 nLine, SvxBoxItem &rBoxItem ) 
     SvxBorderLine aBorderLine( &aColor );
 
     // Linien-Stil doppelt oder einfach?
-    sal_Bool bDouble = eStyle == CSS1_BS_DOUBLE;
     if ( eStyle == CSS1_BS_DOTTED )
         aBorderLine.SetStyle( DOTTED );
     else if ( eStyle == CSS1_BS_DASHED )
         aBorderLine.SetStyle( DASHED );
+    else if ( eStyle == CSS1_BS_DOUBLE )
+        aBorderLine.SetStyle( DOUBLE );
     else
         aBorderLine.SetStyle( SOLID );
 
     // benannte Breite umrechnenen, wenn keine absolute gegeben ist
     if( nAbsWidth==USHRT_MAX )
-    {
-        const sal_uInt16 *aWidths = bDouble ? aDBorderWidths : aSBorderWidths;
-        sal_uInt16 nNWidth = nNamedWidth * 4;
-        aBorderLine.SetOutWidth( aWidths[nNWidth+1] );
-        aBorderLine.SetInWidth( aWidths[nNWidth+2] );
-        aBorderLine.SetDistance( aWidths[nNWidth+3] );
-    }
+        aBorderLine.SetWidth( aBorderWidths[ nNamedWidth ] );
     else
-    {
-        SvxCSS1Parser::SetBorderWidth( aBorderLine, nAbsWidth, bDouble );
-    }
+        aBorderLine.SetWidth( nAbsWidth );
 
     rBoxItem.SetLine( &aBorderLine, nLine );
 }
@@ -921,41 +875,6 @@ void SvxCSS1Parser::PixelToTwip( long &rWidth, long &rHeight )
         rWidth = aTwipSz.Width();
         rHeight = aTwipSz.Height();
     }
-}
-
-void SvxCSS1Parser::SetBorderWidth( SvxBorderLine& aBorderLine, sal_uInt16 nWidth,
-                                    sal_Bool bDouble, sal_Bool bTable )
-{
-    const sal_uInt16 *aWidths;
-    sal_uInt16 nSize;
-    if( !bDouble )
-    {
-        aWidths = aSBorderWidths;
-        nSize = sizeof( aSBorderWidths );
-    }
-    else if( bTable )
-    {
-        aWidths = aTDBorderWidths;
-        nSize = sizeof( aTDBorderWidths );
-    }
-    else
-    {
-        aWidths = aDBorderWidths;
-        nSize = sizeof( aDBorderWidths );
-    }
-
-    sal_uInt16 i = (nSize / sizeof(sal_uInt16)) - 4;
-    while( i>0 &&
-           nWidth <= ((aWidths[i] + aWidths[i-4]) / 2)  )
-    {
-        DBG_ASSERT( aWidths[i] > aWidths[i-4],
-                "line widths are not sorted!" );
-        i -= 4;
-    }
-
-    aBorderLine.SetOutWidth( aWidths[i+1] );
-    aBorderLine.SetInWidth( aWidths[i+2] );
-    aBorderLine.SetDistance( aWidths[i+3] );
 }
 
 sal_uInt32 SvxCSS1Parser::GetFontHeight( sal_uInt16 nSize ) const

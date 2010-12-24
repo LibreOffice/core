@@ -1051,8 +1051,9 @@ void HTMLTable::InitCtor( const HTMLTableOptions *pOptions )
         nPHeight = 1;
     }
 
-    SvxCSS1Parser::SetBorderWidth( aTopBorderLine, (sal_uInt16)nPHeight,
-                                   pOptions->nCellSpacing!=0, sal_True );
+    if ( pOptions->nCellSpacing != 0 )
+        aTopBorderLine.SetStyle( DOUBLE );
+    aTopBorderLine.SetWidth( nPHeight );
     aTopBorderLine.SetColor( rBorderColor );
     aBottomBorderLine = aTopBorderLine;
 
@@ -1062,21 +1063,21 @@ void HTMLTable::InitCtor( const HTMLTableOptions *pOptions )
     }
     else
     {
-        SvxCSS1Parser::SetBorderWidth( aLeftBorderLine, (sal_uInt16)nPWidth,
-                                       pOptions->nCellSpacing!=0, sal_True );
+        if ( pOptions->nCellSpacing != 0 )
+            aLeftBorderLine.SetStyle( DOUBLE );
+        aLeftBorderLine.SetWidth( nPWidth );
         aLeftBorderLine.SetColor( rBorderColor );
     }
     aRightBorderLine = aLeftBorderLine;
 
     if( pOptions->nCellSpacing != 0 )
     {
-        aBorderLine.SetOutWidth( DEF_DOUBLE_LINE7_OUT );
-        aBorderLine.SetInWidth( DEF_DOUBLE_LINE7_IN );
-        aBorderLine.SetDistance( DEF_DOUBLE_LINE7_DIST );
+        aBorderLine.SetStyle( DOUBLE );
+        aBorderLine.SetWidth( DEF_LINE_WIDTH_0 );
     }
     else
     {
-        aBorderLine.SetOutWidth( DEF_LINE_WIDTH_1 );
+        aBorderLine.SetWidth( DEF_LINE_WIDTH_0 );
     }
     aBorderLine.SetColor( rBorderColor );
 
@@ -1515,8 +1516,8 @@ void HTMLTable::FixFrameFmt( SwTableBox *pBox,
 
                     sal_uInt16 nBorderWidth = aBorderLine.GetOutWidth();
                     nBorderWidth *= (nEmptyRows + 1);
-                    SvxCSS1Parser::SetBorderWidth( aThickBorderLine,
-                                                   nBorderWidth, sal_False );
+                    aThickBorderLine.SetStyle( SOLID );
+                    aThickBorderLine.SetWidth( nBorderWidth );
                     aBoxItem.SetLine( &aThickBorderLine, BOX_LINE_BOTTOM );
                 }
                 else

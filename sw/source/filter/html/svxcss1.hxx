@@ -314,10 +314,6 @@ public:
     // Pixel in Twips wandeln
     static void PixelToTwip( long &nWidth, long &nHeight );
 
-    // Die Breite einer Umrandung einstellen
-    static void SetBorderWidth( SvxBorderLine& aBorderLine, sal_uInt16 nWidth,
-                                sal_Bool bDouble, sal_Bool bTable=sal_False );
-
     // Die Font-Hoehe fuer eine bestimmte Font-Groesse (0-6) ermitteln
     virtual sal_uInt32 GetFontHeight( sal_uInt16 nSize ) const;
 
