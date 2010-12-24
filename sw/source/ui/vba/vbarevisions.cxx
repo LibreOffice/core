@@ -157,7 +157,7 @@ void SAL_CALL SwVbaRevisions::AcceptAll(  ) throw (css::uno::RuntimeException)
     }
 
     std::vector< uno::Reference< word::XRevision > >::iterator it = aRevisions.begin();
-    for( ; it != aRevisions.end(); it++ )
+    for( ; it != aRevisions.end(); ++it )
     {
         uno::Reference< word::XRevision > xRevision( *it );
         xRevision->Accept();
