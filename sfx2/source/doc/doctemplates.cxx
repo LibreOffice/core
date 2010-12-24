@@ -362,8 +362,7 @@ public:
 
 class GroupData_Impl
 {
-    DECLARE_LIST( EntryList_Impl, DocTemplates_EntryData_Impl* )
-    EntryList_Impl      maEntries;
+    vector< DocTemplates_EntryData_Impl* > maEntries;
     OUString            maTitle;
     OUString            maHierarchyURL;
     OUString            maTargetURL;
@@ -389,8 +388,8 @@ public:
                                   const OUString& rTargetURL,
                                   const OUString& rType,
                                   const OUString& rHierURL );
-    ULONG               count() { return maEntries.Count(); }
-    DocTemplates_EntryData_Impl*     getEntry( ULONG nPos ) { return maEntries.GetObject( nPos ); }
+    size_t                          count() { return maEntries.size(); }
+    DocTemplates_EntryData_Impl*    getEntry( size_t nPos ) { return maEntries[ nPos ]; }
 };
 
 DECLARE_LIST( GroupList_Impl, GroupData_Impl* )
@@ -2766,12 +2765,9 @@ GroupData_Impl::GroupData_Impl( const OUString& rTitle )
 // -----------------------------------------------------------------------
 GroupData_Impl::~GroupData_Impl()
 {
-    DocTemplates_EntryData_Impl *pData = maEntries.First();
-    while ( pData )
-    {
-        delete pData;
-        pData = maEntries.Next();
-    }
+    for ( size_t i = 0, n = maEntries.size(); i < n; ++i )
+        delete maEntries[ i ];
+    maEntries.clear();
 }
 
 // -----------------------------------------------------------------------
@@ -2780,12 +2776,20 @@ DocTemplates_EntryData_Impl* GroupData_Impl::addEntry( const OUString& rTitle,
                                           const OUString& rType,
                                           const OUString& rHierURL )
 {
-    DocTemplates_EntryData_Impl *pData = maEntries.First();
+    DocTemplates_EntryData_Impl* pData = NULL;
+    bool EntryFound = false;
 
-    while ( pData && pData->getTitle() != rTitle )
-        pData = maEntries.Next();
+    for ( size_t i = 0, n = maEntries.size(); i < n; ++i )
+    {
+        pData = maEntries[ i ];
+        if ( pData->getTitle() == rTitle )
+        {
+            EntryFound = true;
+            break;
+        }
+    }
 
-    if ( !pData )
+    if ( !EntryFound )
     {
         pData = new DocTemplates_EntryData_Impl( rTitle );
         pData->setTargetURL( rTargetURL );
@@ -2795,7 +2799,7 @@ DocTemplates_EntryData_Impl* GroupData_Impl::addEntry( const OUString& rTitle,
             pData->setHierarchyURL( rHierURL );
             pData->setHierarchy( sal_True );
         }
-        maEntries.Insert( pData );
+        maEntries.push_back( pData );
     }
     else
     {
