@@ -672,7 +672,7 @@ namespace sw { namespace mark
         // behind it (the iterators in vMarksToDelete are sorted)
         for(vector<const_iterator_t>::reverse_iterator pppMark = vMarksToDelete.rbegin();
             pppMark != vMarksToDelete.rend();
-            pppMark++)
+            ++pppMark)
         {
             deleteMark(*pppMark);
         }
