@@ -127,8 +127,8 @@ Sequence< Property > PropertyMapImpl::getProperties() throw()
             pProperties->Handle = pEntry->mnWhich;
             pProperties->Type = *pEntry->mpType;
             pProperties->Attributes = pEntry->mnFlags;
-            pProperties++;
-            aIter++;
+            ++pProperties;
+            ++aIter;
         }
     }
 
