@@ -71,7 +71,7 @@ void generateIncludes(std::ostream & o,
         o << "#include \""
           << ((*iter).replace('.', '/').getStr())
           << ".hpp\"\n";
-        iter++;
+        ++iter;
     }
 }
 
@@ -168,7 +168,7 @@ void generateCompHelperDefinition(std::ostream & o,
         o << "    s[" << i++ << "] = ::rtl::OUString("
           << "RTL_CONSTASCII_USTRINGPARAM(\n        \""
           << (*iter).replace('/','.') << "\"));\n";
-        iter++;
+        ++iter;
     }
     o << "    return s;\n}\n\n";
 
@@ -449,7 +449,7 @@ void generateXDispatch(std::ostream& o,
         }
 
         o << "    }\n";
-        iter++;
+        ++iter;
     }
     o << "}\n\n";
 
@@ -493,7 +493,7 @@ void generateXDispatchProvider(std::ostream& o,
         }
 
         o << "    }\n";
-        iter++;
+        ++iter;
     }
     o << "    return xRet;\n}\n\n";
 
@@ -662,7 +662,7 @@ OString generateClassDefinition(std::ostream& o,
         while (iter != interfaces.end())
         {
             o << "\n        " << scopedCppName(*iter, false, true);
-            iter++;
+            ++iter;
             if (iter != interfaces.end())
                 o << ",";
             else
@@ -703,7 +703,7 @@ OString generateClassDefinition(std::ostream& o,
         while (iter != interfaces.end())
         {
             buffer.append(scopedCppName(*iter, false, true));
-            iter++;
+            ++iter;
             if (iter != interfaces.end())
                 buffer.append(", ");
             else
@@ -724,7 +724,7 @@ OString generateClassDefinition(std::ostream& o,
         typereg::Reader reader(manager.getTypeReader((*it).replace('.','/')));
         printMethods(o, options, manager, reader, generated, "", "", "    ",
                      true, propertyhelper);
-        it++;
+        ++it;
     }
 
     o << "private:\n    " << classname << "(const " << classname << " &); // not defined\n"
@@ -814,7 +814,7 @@ OString generateClassDefinition(std::ostream& o,
                 interfaces.begin();
             while (iter != interfaces.end()) {
                 o << "\n        " << scopedCppName(*iter, false, true);
-                iter++;
+                ++iter;
                 if (iter != interfaces.end())
                     o << ",";
                 else
@@ -915,7 +915,7 @@ void generateMethodBodies(std::ostream& o,
             printMethods(o, options, manager, reader, generated, "_",
                          name, "", true, propertyhelper);
         }
-        iter++;
+        ++iter;
     }
 }
 
@@ -945,7 +945,7 @@ void generateQueryInterface(std::ostream& o,
     while (iter != interfaces.end())
     {
         o << "\n        " << scopedCppName(*iter, false, true);
-        iter++;
+        ++iter;
         if (iter != interfaces.end())
             o << ",";
         else
@@ -991,7 +991,7 @@ void generateSkeleton(ProgramOptions const & options,
     std::vector< OString >::const_iterator iter = types.begin();
     while (iter != types.end()) {
         checkType(manager, *iter, interfaces, services, properties);
-        iter++;
+        ++iter;
     }
 
     if (options.componenttype == 3) {
@@ -1125,7 +1125,7 @@ void generateCalcAddin(ProgramOptions const & options,
     std::vector< OString >::const_iterator iter = types.begin();
     while (iter != types.end()) {
         checkType(manager, *iter, interfaces, services, properties);
-        iter++;
+        ++iter;
     }
 
     OString sAddinService;
