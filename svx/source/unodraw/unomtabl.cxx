@@ -229,7 +229,7 @@ void SAL_CALL SvxUnoMarkerTable::removeByName( const OUString& aApiName )
             maItemSetVector.erase( aIter );
             return;
         }
-        aIter++;
+        ++aIter;
     }
 
     if( !hasByName( Name ) )
@@ -270,7 +270,7 @@ void SAL_CALL SvxUnoMarkerTable::replaceByName( const OUString& aApiName, const 
             (*aIter)->Put( aStartMarker, XATTR_LINESTART );
             return;
         }
-        aIter++;
+        ++aIter;
     }
 
     // if it is not in our own sets, modify the pool!
