@@ -456,7 +456,7 @@ sal_Bool  InterfaceOleWrapper_Impl::getInvocationInfoForCall( DISPID id, Invocat
         typedef NameToIdMap::const_iterator cit;
         OUString sMemberName;
 
-        for(cit ci1= m_nameToDispIdMap.begin(); ci1 != m_nameToDispIdMap.end(); ci1++)
+        for(cit ci1= m_nameToDispIdMap.begin(); ci1 != m_nameToDispIdMap.end(); ++ci1)
         {
             if( (*ci1).second == id) // iterator is a pair< OUString, DISPID>
             {
