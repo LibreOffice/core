@@ -130,14 +130,14 @@ rtl::OUString LwpBulletStyleMgr::RegisterBulletStyle(LwpPara* pPara, LwpBulletOv
     }
 
     LwpObjectID aBulletID = pBullOver->GetSilverBullet();
-    LwpBulletOverride aBulletOver = *pBullOver;
+    boost::shared_ptr<LwpBulletOverride> pBulletOver(pBullOver->clone());
 
     sal_uInt16 nNameIndex = 0;
     std::vector <OverridePair>::iterator iter;
     for(iter = m_vIDsPairList.begin(); iter != m_vIDsPairList.end(); iter++)
     {
-        if (iter->first.GetSilverBullet() == aBulletID && iter->second == aIndentID
-            && iter->first.IsRightAligned() == pBullOver->IsRightAligned())
+        if (iter->first->GetSilverBullet() == aBulletID && iter->second == aIndentID
+            && iter->first->IsRightAligned() == pBullOver->IsRightAligned())
         {
             return m_vStyleNameList[nNameIndex];
         }
@@ -147,7 +147,7 @@ rtl::OUString LwpBulletStyleMgr::RegisterBulletStyle(LwpPara* pPara, LwpBulletOv
         }
     }
 
-    m_vIDsPairList.push_back(std::make_pair(aBulletOver, aIndentID));
+    m_vIDsPairList.push_back(std::make_pair(pBulletOver, aIndentID));
     rtl::OUString aStyleName;
 
     LwpFribPtr* pBulletParaFribs = pBulletPara->GetFribs();

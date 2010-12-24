@@ -62,6 +62,7 @@
  Jan 2005           Created
  ************************************************************************/
 
+#include <boost/scoped_ptr.hpp>
 
 #include "lwpparastyle.hxx"
 #include "lwpfilehdr.hxx"
@@ -178,12 +179,10 @@ void    LwpParaStyle::Apply(XFParaStyle *pParaStyle)
         {
             if (!m_pBulletOverride->IsInValid())//Add by ,for remove bullet indent in named bullet style
             {
-                LwpIndentOverride* pNewIndent = new LwpIndentOverride;
-                *pNewIndent = *pIndent;
+                boost::scoped_ptr<LwpIndentOverride> pNewIndent(pIndent->clone());
                 pNewIndent->SetMFirst(0);
                 pNewIndent->SetMRest(0);
-                ApplyIndent(NULL,pParaStyle,pNewIndent);
-                delete pNewIndent;
+                ApplyIndent(NULL, pParaStyle, pNewIndent.get());
             }
             else
                 ApplyIndent(NULL,pParaStyle,pIndent);
@@ -444,13 +443,13 @@ void LwpParaStyle::ApplyIndent(LwpPara* pPara, XFParaStyle* pParaStyle, LwpInden
     else
         pParentPara = NULL;
 
-    LwpIndentOverride* pTotalIndent = new LwpIndentOverride;
+    std::auto_ptr<LwpIndentOverride> pTotalIndent(new LwpIndentOverride);
     if (pIndent->IsUseRelative() && pParentPara)
     {
         LwpIndentOverride* pParentIndent = pParentPara->GetIndent();
         if (!pParentIndent)
             return;
-        *pTotalIndent = *pIndent;
+        pTotalIndent.reset(pIndent->clone());
 
         //add by ,for bullet only
         if (pPara)
@@ -461,7 +460,7 @@ void LwpParaStyle::ApplyIndent(LwpPara* pPara, XFParaStyle* pParaStyle, LwpInden
                 pTotalIndent->SetMRight(pParentIndent->GetMRight()+ pTotalIndent->GetMRight());
                 pParaStyle->SetMargins(LwpTools::ConvertToMetric(LwpTools::ConvertFromUnits(
                     pTotalIndent->GetMAll())), pTotalIndent->GetRight());
-                pPara->SetIndent(pTotalIndent);
+                pPara->SetIndent(pTotalIndent.release());
                 return;
             }
         }
@@ -479,12 +478,12 @@ void LwpParaStyle::ApplyIndent(LwpPara* pPara, XFParaStyle* pParaStyle, LwpInden
 
         pParaStyle->SetIndent(pTotalIndent->GetFirst());
         pParaStyle->SetMargins(pTotalIndent->GetLeft(), pTotalIndent->GetRight());
-        pPara->SetIndent(pTotalIndent);
+        pPara->SetIndent(pTotalIndent.release());
 
     }
     else
     {
-        *pTotalIndent = *pIndent;
+        pTotalIndent.reset(pIndent->clone());
         //add by
         if (pPara)
         {
@@ -493,7 +492,7 @@ void LwpParaStyle::ApplyIndent(LwpPara* pPara, XFParaStyle* pParaStyle, LwpInden
 //              pParaStyle->SetIndent(LwpTools::ConvertFromUnits(pIndent->GetMAll()));
                 pParaStyle->SetMargins(LwpTools::ConvertToMetric(
                     LwpTools::ConvertFromUnits(pIndent->GetMAll())), pIndent->GetRight());
-                pPara->SetIndent(pTotalIndent);
+                pPara->SetIndent(pTotalIndent.release());
                 return;
             }
         }
@@ -503,7 +502,7 @@ void LwpParaStyle::ApplyIndent(LwpPara* pPara, XFParaStyle* pParaStyle, LwpInden
         pParaStyle->SetMargins(pIndent->GetLeft(), pIndent->GetRight());
         if (pPara)
         {
-            pPara->SetIndent(pTotalIndent);
+            pPara->SetIndent(pTotalIndent.release());
         }
     }
 }

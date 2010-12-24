@@ -76,6 +76,8 @@ public:
     LwpParaBorderOverride();
     virtual ~LwpParaBorderOverride();
 
+    virtual LwpParaBorderOverride* clone() const;
+
     enum BorderWidthType
     {
         PB_NONE         = 0,        /* No border */
@@ -89,9 +91,6 @@ public:
     LwpShadow*  GetShadow(){ return m_pShadow; }
     LwpBorderStuff* GetBorderStuff(){ return m_pBorderStuff; }
     LwpMargins* GetMargins() { return m_pMargins; };
-
-    //add by , 01/25/2005
-    virtual void operator=(const LwpOverride& rOther);
 
     void Override(LwpParaBorderOverride* pOther);
 
@@ -139,6 +138,13 @@ public:
 
     //end add
     friend class LwpParaBorderPiece;
+
+protected:
+    LwpParaBorderOverride(LwpParaBorderOverride const& rOther);
+
+private:
+    LwpParaBorderOverride& operator=(LwpParaBorderOverride const& rOther); // not implemented
+
 protected:
     enum
     {

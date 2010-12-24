@@ -61,6 +61,9 @@
 * Change History
 * 2005-01-12 Create and implement.
 ************************************************************************/
+
+#include <memory>
+
 #include    "lwpbreaksoverride.hxx"
 #include    "lwpobjstrm.hxx"
 #include    "lwpatomholder.hxx"
@@ -71,10 +74,23 @@ LwpBreaksOverride::LwpBreaksOverride()
     m_pNextStyle = new LwpAtomHolder();
 }
 
+LwpBreaksOverride::LwpBreaksOverride(LwpBreaksOverride const& rOther)
+    : LwpOverride(rOther)
+    , m_pNextStyle(0)
+{
+    std::auto_ptr<LwpAtomHolder> pNextStyle(new LwpAtomHolder(*rOther.m_pNextStyle));
+    m_pNextStyle = pNextStyle.release();
+}
+
 LwpBreaksOverride::~LwpBreaksOverride()
 {
     if( m_pNextStyle )
         delete m_pNextStyle;
+}
+
+LwpBreaksOverride* LwpBreaksOverride::clone() const
+{
+    return new LwpBreaksOverride(*this);
 }
 
 void    LwpBreaksOverride::Read(LwpObjectStream *pStrm)
@@ -180,13 +196,6 @@ void LwpBreaksOverride::Override(LwpBreaksOverride* pOther)
             pOther->RevertUseNextStyle();
         }
     }
-}
-
-void LwpBreaksOverride::operator=(const LwpOverride& rOther)
-{
-    LwpOverride::operator=(rOther);
-
-    // copy m_pNextStyle...
 }
 
 void LwpBreaksOverride::OverridePageBreakBefore(sal_Bool bVal)

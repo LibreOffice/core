@@ -62,6 +62,10 @@
  Jan 2005           Created
  ************************************************************************/
 
+#include <memory>
+
+#include <boost/cast.hpp>
+
 #include "lwppara.hxx"
 #include "lwpglobalmgr.hxx"
 #include "lwpfilehdr.hxx"
@@ -100,6 +104,14 @@
 #include "lwpdropcapmgr.hxx"
 #include "lwptable.hxx"
 #include "lwpcelllayout.hxx"
+
+// for the check in boost::polymorphic_downcast
+#if OSL_DEBUG_LEVEL > 0 && !defined(NDEBUG)
+#   define NDEBUG 1
+#endif
+
+using boost::polymorphic_downcast;
+
 /**
  * @short   get text of paragraph
  */
@@ -340,22 +352,22 @@ void LwpPara::OverrideParaBorder(LwpParaProperty* pProps, XFParaStyle* pOverStyl
     }
 
     LwpOverride* pBorder = pParaStyle->GetParaBorder();
-    LwpParaBorderOverride aFinalBorder;
-    if (pBorder)
-    {
-        aFinalBorder = *pBorder;
-    }
+    std::auto_ptr<LwpParaBorderOverride> pFinalBorder(
+        pBorder
+            ? polymorphic_downcast<LwpParaBorderOverride*>(pBorder->clone())
+            : new LwpParaBorderOverride)
+        ;
 
     // get local border
     pBorder = static_cast<LwpParaBorderProperty*>(pProps)->GetLocalParaBorder();
     if (pBorder)
     {
-        LwpParaBorderOverride aLocalBorder;
-        aLocalBorder =  *pBorder;
-        aLocalBorder.Override(&aFinalBorder);
+        boost::scoped_ptr<LwpParaBorderOverride> pLocalBorder(
+                polymorphic_downcast<LwpParaBorderOverride*>(pBorder->clone()));
+        pLocalBorder->Override(pFinalBorder.get());
     }
 
-    pParaStyle->ApplyParaBorder(pOverStyle, &aFinalBorder);
+    pParaStyle->ApplyParaBorder(pOverStyle, pFinalBorder.release());
 }
 /**
  * @short:   Override parabreaks style.
@@ -372,23 +384,24 @@ void LwpPara::OverrideParaBreaks(LwpParaProperty* pProps, XFParaStyle* pOverStyl
     }
 
     LwpOverride* pBreaks = pParaStyle->GetBreaks();
-    LwpBreaksOverride* pFinalBreaks = new LwpBreaksOverride();
-    if (pBreaks)
-    {
-        *pFinalBreaks = *pBreaks;
-    }
+    std::auto_ptr<LwpBreaksOverride> pFinalBreaks(
+        pBreaks
+            ? polymorphic_downcast<LwpBreaksOverride*>(pBreaks->clone())
+            : new LwpBreaksOverride)
+        ;
 
     // get local breaks
     pBreaks = static_cast<LwpParaBreaksProperty*>(pProps)->GetLocalParaBreaks();
     if (pBreaks)
     {
-        LwpBreaksOverride aLocalBreaks;
-        aLocalBreaks = *pBreaks;
-        aLocalBreaks.Override(pFinalBreaks);
+        boost::scoped_ptr<LwpBreaksOverride> const pLocalBreaks(
+                polymorphic_downcast<LwpBreaksOverride*>(pBreaks->clone()));
+        pLocalBreaks->Override(pFinalBreaks.get());
     }
 
     // save the breaks
-    m_pBreaks = pFinalBreaks;
+    delete m_pBreaks;
+    m_pBreaks = pFinalBreaks.release();
 
 //add by  1/31
     XFStyleManager* pXFStyleManager = LwpGlobalMgr::GetInstance()->GetXFStyleManager();
@@ -458,18 +471,18 @@ void LwpPara::OverrideParaBullet(LwpParaProperty* pProps)
             m_bHasBullet = sal_True;
 
             LwpOverride* pBullet= pParaStyle->GetBulletOverride();
-            LwpBulletOverride aFinalBullet;
-            if (pBullet)
-            {
-                aFinalBullet = *pBullet;
-            }
+            std::auto_ptr<LwpBulletOverride> pFinalBullet(
+                pBullet
+                    ? polymorphic_downcast<LwpBulletOverride*>(pBullet->clone())
+                    : new LwpBulletOverride)
+                ;
 
-            LwpBulletOverride aLocalBullet;
-            aLocalBullet = *pLocalBullet;
-            aLocalBullet.Override(&aFinalBullet);
+            boost::scoped_ptr<LwpBulletOverride> const pLocalBullet2(pLocalBullet->clone());
+            pLocalBullet2->Override(pFinalBullet.get());
 
-            *m_pBullOver = aFinalBullet;
-            aSilverBulletID = aFinalBullet.GetSilverBullet();
+            aSilverBulletID = pFinalBullet->GetSilverBullet();
+            delete m_pBullOver;
+            m_pBullOver = pFinalBullet.release();
             if (!aSilverBulletID.IsNull())
             {
                 m_pSilverBullet = static_cast<LwpSilverBullet*>(aSilverBulletID.obj(VO_SILVERBULLET));
@@ -494,8 +507,9 @@ void LwpPara::OverrideParaBullet(LwpParaProperty* pProps)
                 m_pSilverBullet->SetFoundry(m_pFoundry);
             }
 
-            m_pBullOver = new LwpBulletOverride();
-            *m_pBullOver = *pBullOver;
+            std::auto_ptr<LwpBulletOverride> pBulletOverride(pBullOver->clone());
+            delete m_pBullOver;
+            m_pBullOver = pBulletOverride.release();
         }
     }
 }
@@ -513,31 +527,30 @@ void LwpPara::OverrideParaNumbering(LwpParaProperty* pProps)
     }
 
     LwpNumberingOverride* pParaNumbering = pParaStyle->GetNumberingOverride();
-    LwpNumberingOverride aOver;
+    std::auto_ptr<LwpNumberingOverride> pOver(new LwpNumberingOverride);
     //Override with the local numbering, if any
     if (pProps)
     {
         LwpNumberingOverride* pPropNumbering = static_cast<LwpParaNumberingProperty*>(pProps)->GetLocalNumbering();
         if (pPropNumbering)
         {
-            aOver = *pPropNumbering;
+            pOver.reset(pPropNumbering->clone());
         }
     }
     else
     {
         if (pParaNumbering)
         {
-            aOver = *pParaNumbering;
+            pOver.reset(pParaNumbering->clone());
         }
     }
 
     if (m_nFlags & VALID_LEVEL)
     {
-        aOver.OverrideLevel(m_nLevel);
+        pOver->OverrideLevel(m_nLevel);
     }
 
-    m_aParaNumbering = aOver;
-
+    m_pParaNumbering.reset(pOver.release());
 }
 
 /**************************************************************************

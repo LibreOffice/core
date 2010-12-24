@@ -369,11 +369,10 @@ void LwpPara::RegisterStyle()
 
     if (GetParaStyle()->GetIndent())
     {
-        m_pIndentOverride = new LwpIndentOverride;
-        *m_pIndentOverride = *(GetParaStyle()->GetIndent()); //add by  2-6,for indent hierachy
+        std::auto_ptr<LwpIndentOverride> pIndentOverride(GetParaStyle()->GetIndent()->clone());
+        delete m_pIndentOverride;
+        m_pIndentOverride = pIndentOverride.release();
     }
-//  else
-//      m_pIndentOverride = NULL;
 
     XFParaStyle* pOverStyle = NULL;
     sal_Bool noSpacing = sal_True;
@@ -395,13 +394,15 @@ void LwpPara::RegisterStyle()
             {
             case PP_LOCAL_ALIGN:
             {
-                LwpAlignmentOverride aAlign;
                 if (!pParaStyle->GetAlignment())
                     OverrideAlignment(NULL,static_cast<LwpParaAlignProperty*>(pProps)->GetAlignment(),pOverStyle);
                 else
                 {
-                    aAlign = *(pParaStyle->GetAlignment());
-                    OverrideAlignment(&aAlign,static_cast<LwpParaAlignProperty*>(pProps)->GetAlignment(),pOverStyle);
+                    boost::scoped_ptr<LwpAlignmentOverride> const pAlign(
+                            pParaStyle->GetAlignment()->clone());
+                    OverrideAlignment(pAlign.get(),
+                            static_cast<LwpParaAlignProperty*>(pProps)->GetAlignment(),
+                            pOverStyle);
                 }
             }
                 break;
@@ -419,14 +420,16 @@ void LwpPara::RegisterStyle()
                 break;
             case PP_LOCAL_SPACING:
             {
-                LwpSpacingOverride aSpacing;
                 noSpacing = sal_False;
                 if (!pParaStyle->GetSpacing())
                     OverrideSpacing(NULL,static_cast<LwpParaSpacingProperty*>(pProps)->GetSpacing(),pOverStyle);
                 else
                 {
-                    aSpacing = *(pParaStyle->GetSpacing());
-                    OverrideSpacing(&aSpacing,static_cast<LwpParaSpacingProperty*>(pProps)->GetSpacing(),pOverStyle);
+                    boost::scoped_ptr<LwpSpacingOverride> const
+                        pSpacing(pParaStyle->GetSpacing()->clone());
+                    OverrideSpacing(pSpacing.get(),
+                            static_cast<LwpParaSpacingProperty*>(pProps)->GetSpacing(),
+                            pOverStyle);
                 }
             }
                 break;
@@ -737,13 +740,13 @@ void LwpPara::RegisterStyle()
                     LwpStory* pMyStory = this->GetStory();
                     if (pMyStory)
                     {
-                        if (pMyStory->IsBullStyleUsedBefore(m_aBulletStyleName, m_aParaNumbering.GetPosition()))
+                        if (pMyStory->IsBullStyleUsedBefore(m_aBulletStyleName, m_pParaNumbering->GetPosition()))
                         {
                             //m_bBullContinue = sal_True;
                         }
                         else
                         {
-                            pMyStory->AddBullStyleName2List(m_aBulletStyleName, m_aParaNumbering.GetPosition());
+                            pMyStory->AddBullStyleName2List(m_aBulletStyleName, m_pParaNumbering->GetPosition());
                         }
                     }
 
@@ -965,8 +968,7 @@ XFContentContainer* LwpPara::AddBulletList(XFContentContainer* pCont)
     }
     if (m_pSilverBullet->HasName())
     {
-//      nLevel = m_pParaNumbering->GetPosition();
-        nLevel = m_aParaNumbering.GetPosition();
+        nLevel = m_pParaNumbering->GetPosition();
         m_nLevel = nLevel;//add by ,for get para level
 //      m_aBulletStyleName = m_pSilverBullet->GetBulletStyleName();
     }
@@ -977,7 +979,7 @@ XFContentContainer* LwpPara::AddBulletList(XFContentContainer* pCont)
 
 LwpNumberingOverride* LwpPara::GetParaNumbering()
 {
-    return &m_aParaNumbering;
+    return m_pParaNumbering.get();
 }
 
 void LwpForked3NotifyList::Read(LwpObjectStream* pObjStrm)

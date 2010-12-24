@@ -71,6 +71,18 @@ LwpNumberingOverride::LwpNumberingOverride()
     m_nPosition = 0;
 }
 
+LwpNumberingOverride::LwpNumberingOverride(LwpNumberingOverride const& rOther)
+    : LwpOverride(rOther)
+    , m_nLevel(rOther.m_nLevel)
+    , m_nPosition(rOther.m_nPosition)
+{
+}
+
+LwpNumberingOverride* LwpNumberingOverride::clone() const
+{
+    return new LwpNumberingOverride(*this);
+}
+
 void    LwpNumberingOverride::Read(LwpObjectStream *pStrm)
 {
     if (pStrm->QuickReadBool())
@@ -133,17 +145,6 @@ void LwpNumberingOverride::Override(LwpNumberingOverride* pOther)
             pOther->RevertSmartLevel();
         }
     }
-}
-
-void LwpNumberingOverride::operator=(const LwpOverride& rOther)
-{
-    LwpOverride::operator=(rOther);
-
-    const LwpNumberingOverride* pOther =
-        static_cast<LwpNumberingOverride*>((LwpOverride*)&rOther);
-
-    m_nLevel = pOther->m_nLevel;
-    m_nPosition = pOther->m_nPosition;
 }
 
 void LwpNumberingOverride::OverrideLevel(sal_uInt16 nNewLv)

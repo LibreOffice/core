@@ -68,6 +68,7 @@ public:
     LwpBackgroundOverride(){}
     virtual ~LwpBackgroundOverride(){}
 
+    virtual LwpBackgroundOverride* clone() const;
 
 public:
     virtual void Read(LwpObjectStream *pStrm)
@@ -84,6 +85,12 @@ public:
 
     LwpColor GetBackColor(){ return m_aStuff.m_aFillColor; }
     LwpBackgroundStuff* GetBGStuff() { return &m_aStuff; }
+
+protected:
+    LwpBackgroundOverride(LwpBackgroundOverride const& rOther);
+
+private:
+    LwpBackgroundOverride& operator=(LwpBackgroundOverride const& rOther); // not implemented
 
 private:
     LwpBackgroundStuff  m_aStuff;

@@ -65,6 +65,9 @@
 
 #ifndef _LWPPARAGRAPH_HXX_
 #define _LWPPARAGRAPH_HXX_
+
+#include <boost/scoped_ptr.hpp>
+
 #include "lwpfribheader.hxx"
 #include "lwpobj.hxx"
 #include "lwpobjstrm.hxx"
@@ -243,8 +246,7 @@ protected:
     LwpObjectID m_aSilverBulletID;
     LwpSilverBullet* m_pSilverBullet;
     LwpBulletOverride* m_pBullOver;
-//  LwpNumberingOverride* m_pParaNumbering;
-    LwpNumberingOverride m_aParaNumbering;
+    boost::scoped_ptr<LwpNumberingOverride> m_pParaNumbering;
     rtl::OUString m_aBulletStyleName;
     sal_Bool m_bBullContinue;
     //end add
