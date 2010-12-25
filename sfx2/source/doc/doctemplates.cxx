@@ -151,12 +151,12 @@ struct NamePair_Impl
     OUString maLongName;
 };
 
-typedef vector< NamePair_Impl* > NameList_Impl;
-
 class Updater_Impl;
-class GroupList_Impl;
 class DocTemplates_EntryData_Impl;
 class GroupData_Impl;
+
+typedef vector< NamePair_Impl* > NameList_Impl;
+typedef vector< GroupData_Impl* > GroupList_Impl;
 
 //=============================================================================
 #include <com/sun/star/task/XInteractionHandler.hpp>
@@ -391,8 +391,6 @@ public:
     size_t                          count() { return maEntries.size(); }
     DocTemplates_EntryData_Impl*    getEntry( size_t nPos ) { return maEntries[ nPos ]; }
 };
-
-DECLARE_LIST( GroupList_Impl, GroupData_Impl* )
 
 //=============================================================================
 //=============================================================================
@@ -1240,9 +1238,9 @@ void SfxDocTplService_Impl::doUpdate()
     }
 
     // now check the list
-    GroupData_Impl *pGroup = aGroupList.First();
-    while ( pGroup )
+    for( size_t j = 0, n = aGroupList.size(); j < n; ++j )
     {
+        GroupData_Impl *pGroup = aGroupList[ j ];
         if ( pGroup->getInUse() )
         {
             if ( pGroup->getInHierarchy() )
@@ -1253,8 +1251,8 @@ void SfxDocTplService_Impl::doUpdate()
                                  OUString( RTL_CONSTASCII_USTRINGPARAM( TARGET_DIR_URL ) ),
                                  makeAny( pGroup->getTargetURL() ) );
 
-                ULONG nCount = pGroup->count();
-                for ( ULONG i=0; i<nCount; i++ )
+                size_t nCount = pGroup->count();
+                for ( size_t i=0; i<nCount; i++ )
                 {
                     DocTemplates_EntryData_Impl *pData = pGroup->getEntry( i );
                     if ( ! pData->getInUse() )
@@ -1280,10 +1278,10 @@ void SfxDocTplService_Impl::doUpdate()
             removeFromHierarchy( pGroup ); // delete group from hierarchy
 
         delete pGroup;
-        pGroup = aGroupList.Next();
     }
+    aGroupList.clear();
 
-       aValue <<= sal_False;
+    aValue <<= sal_False;
     setProperty( maRootContent, aPropName, aValue );
 }
 
@@ -2458,7 +2456,7 @@ void SfxDocTplService_Impl::addHierGroup( GroupList_Impl& rList,
         GroupData_Impl *pGroup = new GroupData_Impl( rTitle );
         pGroup->setHierarchy( sal_True );
         pGroup->setHierarchyURL( rOwnURL );
-        rList.Insert( pGroup );
+        rList.push_back( pGroup );
 
         uno::Reference< XContentAccess > xContentAccess( xResultSet, UNO_QUERY );
         uno::Reference< XRow > xRow( xResultSet, UNO_QUERY );
@@ -2523,15 +2521,20 @@ void SfxDocTplService_Impl::addFsysGroup( GroupList_Impl& rList,
     if ( !aTitle.getLength() )
         return;
 
-    GroupData_Impl *pGroup = rList.First();
-
-    while ( pGroup && pGroup->getTitle() != aTitle )
-        pGroup = rList.Next();
+    GroupData_Impl* pGroup = NULL;
+    for ( size_t i = 0, n = rList.size(); i < n; ++i )
+    {
+        if ( rList[ i ]->getTitle() == aTitle )
+        {
+            pGroup = rList[ i ];
+            break;
+        }
+    }
 
     if ( !pGroup )
     {
         pGroup = new GroupData_Impl( aTitle );
-        rList.Insert( pGroup );
+        rList.push_back( pGroup );
     }
 
     if ( bWriteableGroup )
