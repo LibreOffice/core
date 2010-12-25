@@ -222,7 +222,7 @@ OfficeIPCThread*    OfficeIPCThread::pGlobalOfficeIPCThread = 0;
     namespace { struct Security : public rtl::Static<osl::Security, Security> {}; }
 ::osl::Mutex*       OfficeIPCThread::pOfficeIPCThreadMutex = 0;
 
-// Turns a string in aMsg such as file://home/foo/.libreoffice/3
+// Turns a string in aMsg such as file:///home/foo/.libreoffice/3
 // Into a hex string of well known length ff132a86...
 String CreateMD5FromString( const OUString& aMsg )
 {
@@ -908,9 +908,6 @@ void SAL_CALL OfficeIPCThread::run()
             while (
                    (nResult = maStreamPipe.send(sc_aConfirmationSequence+nBytes, sc_nCSeqLength-nBytes))>0 &&
                    ((nBytes += nResult) < sc_nCSeqLength) ) ;
-            // now we can close, don't we?
-            // maStreamPipe.close();
-
         }
         else
         {

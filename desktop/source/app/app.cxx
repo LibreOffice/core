@@ -167,14 +167,10 @@
 using rtl::OUString;
 using rtl::OUStringBuffer;
 
-//Gives an ICE with MSVC6
-//namespace css = ::com::sun::star;
-
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
-//using namespace ::com::sun::star::bridge;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::document;
 using namespace ::com::sun::star::view;
@@ -216,15 +212,6 @@ ResMgr* Desktop::GetDesktopResManager()
             // Use VCL to get the correct language specific message as we
             // are in the bootstrap process and not able to get the installed
             // language!!
-/*
-            LanguageType aLanguageType = LANGUAGE_DONTKNOW;
-
-            Desktop::pResMgr = ResMgr::SearchCreateResMgr( U2S( aMgrName ), aLanguageType );
-            AllSettings as = GetSettings();
-            as.SetUILanguage(aLanguageType);
-            SetSettings(as);
-*/
-            // LanguageSelection langselect;
             OUString aUILocaleString = LanguageSelection::getLanguageString();
             sal_Int32 nIndex = 0;
             OUString aLanguage = aUILocaleString.getToken( 0, '-', nIndex);
@@ -1646,25 +1633,6 @@ int Desktop::Main()
         }
         String aTitle = pLabelResMgr ? String( ResId( RID_APPTITLE, *pLabelResMgr ) ) : String();
         delete pLabelResMgr;
-/*
-        // locale and UI locale in AppSettings are now retrieved from configuration or system directly via SvtSysLocale
-        // no reason to set while starting
-        // set UI language and locale
-        RTL_LOGFILE_CONTEXT_TRACE( aLog, "{ set locale settings" );
-        //LanguageSelection langselect;
-        OUString aUILocaleString = LanguageSelection::getLanguageString();
-        Locale aUILocale = LanguageSelection::IsoStringToLocale(aUILocaleString);
-        LanguageType eLanguage = SvtSysLocale().GetLanguage();
-
-        // #i39040#, do not call anything between GetSettings and SetSettings that might have
-        // a side effect on the settings (like, eg, SvtSysLocaleOptions().GetLocaleLanguageType(),
-        // which changes the MiscSettings !!! )
-        AllSettings aSettings( Application::GetSettings() );
-        aSettings.SetUILocale( aUILocale );
-        aSettings.SetLanguage( eLanguage );
-        Application::SetSettings( aSettings );
-        RTL_LOGFILE_CONTEXT_TRACE( aLog, "} set locale settings" );
-*/
 
         // Check for StarOffice/Suite specific extensions runs also with OpenOffice installation sets
         OUString aTitleString( aTitle );
@@ -1688,8 +1656,6 @@ int Desktop::Main()
         RTL_LOGFILE_CONTEXT_TRACE( aLog, "{ create SvtPathOptions and SvtLanguageOptions" );
         pPathOptions.reset( new SvtPathOptions);
         SetSplashScreenProgress(40);
-//        pLanguageOptions = new SvtLanguageOptions(sal_True);
-//        SetSplashScreenProgress(45);
         RTL_LOGFILE_CONTEXT_TRACE( aLog, "} create SvtPathOptions and SvtLanguageOptions" );
 
         // Check special env variable #111015#
@@ -2195,13 +2161,9 @@ IMPL_LINK( Desktop, OpenClients_Impl, void*, EMPTYARG )
 
     OfficeIPCThread::SetReady();
 
-    // CloseStartupScreen();
     CloseSplashScreen();
 
     CheckFirstRun( );
-
-    // allow ipc interaction
-//    OfficeIPCThread::SetReady();
 
     EnableOleAutomation();
 
@@ -2700,16 +2662,6 @@ void Desktop::OpenClients()
 
     if ( ! bAllowRecoveryAndSessionManagement )
     {
-     /*
-        ::comphelper::ConfigurationHelper::writeDirectKey(
-                ::comphelper::getProcessServiceFactory(),
-                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Office.Recovery")),
-                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AutoSave")),
-                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Enabled")),
-                ::com::sun::star::uno::makeAny(sal_False),
-                ::comphelper::ConfigurationHelper::E_STANDARD);
-
-        */
         try
         {
             Reference< XDispatch > xRecovery(
@@ -2982,7 +2934,7 @@ String GetURL_Impl(
     }
 
     // Add path seperator to these directory and make given URL (rName) absolute by using of current working directory
-    // Attention: "setFianlSlash()" is neccessary for calling "smartRel2Abs()"!!!
+    // Attention: "setFinalSlash()" is necessary for calling "smartRel2Abs()"!!!
     // Otherwhise last part will be ignored and wrong result will be returned!!!
     // "smartRel2Abs()" interpret given URL as file not as path. So he truncate last element to get the base path ...
     // But if we add a seperator - he doesn't do it anymore.

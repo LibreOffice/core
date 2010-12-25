@@ -97,11 +97,6 @@ namespace desktop {
                     theMSF->createInstance(sConfigSrvc), UNO_QUERY_THROW);
 
             // localize the provider to user selection
-//            Reference< XLocalizable > localizable(theConfigProvider, UNO_QUERY_THROW);
-//            LanguageType aUserLanguageType = LanguageSelection::getLanguageType();
-//            Locale aLocale( MsLangId::convertLanguageToIsoString(aUserLanguageType));
-//            localizable->setLocale(aLocale);
-
             Reference< XLocalizable > localizable(theConfigProvider, UNO_QUERY_THROW);
             OUString aUserLanguage = LanguageSelection::getLanguageString();
             Locale aLocale = LanguageSelection::IsoStringToLocale(aUserLanguage);
@@ -275,8 +270,6 @@ namespace desktop {
                 theMSF->createInstance(sConfigSrvc), UNO_QUERY_THROW);
             Sequence< Any > theArgs(1);
             NamedValue v(OUString(RTL_CONSTASCII_USTRINGPARAM("NodePath")), makeAny(OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Setup"))));
-            //v.Name = OUString(RTL_CONSTASCII_USTRINGPARAM("NodePath"));
-            //v.Value = makeAny(OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Setup")));
             theArgs[0] <<= v;
             Reference< XHierarchicalPropertySet> hpset(
                 theConfigProvider->createInstanceWithArguments(sAccessSrvc, theArgs), UNO_QUERY_THROW);

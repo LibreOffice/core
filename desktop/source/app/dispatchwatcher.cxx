@@ -393,7 +393,6 @@ sal_Bool DispatchWatcher::executeDispatchRequests( const DispatchList& aDispatch
             try
             {
                 xDoc = Reference < XPrintable >( ::comphelper::SynchronousDispatch::dispatch( xDesktop, aName, aTarget, 0, aArgs ), UNO_QUERY );
-                //xDoc = Reference < XPrintable >( xDesktop->loadComponentFromURL( aName, aTarget, 0, aArgs ), UNO_QUERY );
             }
             catch ( ::com::sun::star::lang::IllegalArgumentException& iae)
             {
@@ -455,7 +454,6 @@ sal_Bool DispatchWatcher::executeDispatchRequests( const DispatchList& aDispatch
                             rtl::OUString aOutFile = aFilterOut+
                                                      ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "/" ))+
                                                      aOutFilename.getName();
-                            //FileBase::getFileURLFromSystemPath( aOutFile, aOutFile );
 
                             if ( bGuess )
                             {
@@ -639,18 +637,6 @@ void SAL_CALL DispatchWatcher::dispatchFinished( const DispatchResultEvent& ) th
     sal_Int16 nCount = m_nRequestCount;
     aGuard.clear();
     OfficeIPCThread::RequestsCompleted( 1 );
-/*
-    // Find request in our hash map and remove it as a pending request
-    DispatchWatcherHashMap::iterator pDispatchEntry = m_aRequestContainer.find( rEvent.FeatureURL.Complete ) ;
-    if ( pDispatchEntry != m_aRequestContainer.end() )
-    {
-        m_aRequestContainer.erase( pDispatchEntry );
-        aGuard.clear();
-        OfficeIPCThread::RequestsCompleted( 1 );
-    }
-    else
-        aGuard.clear();
-*/
     if ( !nCount && !OfficeIPCThread::AreRequestsPending() )
     {
         // We have to check if we have an open task otherwise we have to shutdown the office.
