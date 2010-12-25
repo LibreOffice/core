@@ -60,7 +60,6 @@ class SvxShape;
 class SvxShapeGroup;
 class SvxShapeConnector;
 class SvxShapeList;
-class SvxDrawPageList;
 
 /***********************************************************************
 * Macros fuer Umrechnung Twips<->100tel mm                             *

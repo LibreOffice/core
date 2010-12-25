@@ -71,13 +71,6 @@ using namespace ::com::sun::star::drawing;
 #define INTERFACE_TYPE( xint ) \
     ::getCppuType((const Reference< xint >*)0)
 
-#define QUERYINT( xint ) \
-    if( rType == ::getCppuType((const Reference< xint >*)0) ) \
-        aAny <<= Reference< xint >(this)
-
-DECLARE_LIST( SvxDrawPageList, SvxDrawPage * )
-
-
 /**********************************************************************
 * class SvxDrawPage                                                   *
 **********************************************************************/
