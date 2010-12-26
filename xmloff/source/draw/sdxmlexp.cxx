@@ -204,8 +204,6 @@ void ImpXMLEXPPageMasterInfo::SetName(const OUString& rStr)
     msName = rStr;
 }
 
-DECLARE_LIST(ImpXMLEXPPageMasterList, ImpXMLEXPPageMasterInfo*)
-
 //////////////////////////////////////////////////////////////////////////////
 
 #define IMP_AUTOLAYOUT_INFO_MAX         (35L)
@@ -418,9 +416,9 @@ SdXMLExport::SdXMLExport(
     mnDocDrawPageCount(0L),
     mnShapeStyleInfoIndex(0L),
     mnObjectCount(0L),
-    mpPageMasterInfoList(new ImpXMLEXPPageMasterList(1, 4, 4)),
-    mpPageMasterUsageList(new ImpXMLEXPPageMasterList(1, 4, 4)),
-    mpNotesPageMasterUsageList(new ImpXMLEXPPageMasterList(1, 4, 4)),
+    mpPageMasterInfoList(new ImpXMLEXPPageMasterList()),
+    mpPageMasterUsageList(new ImpXMLEXPPageMasterList()),
+    mpNotesPageMasterUsageList(new ImpXMLEXPPageMasterList()),
     mpHandoutPageMaster(NULL),
     mpAutoLayoutInfoList(new ImpXMLAutoLayoutInfoList(1, 4, 4)),
     mpSdPropHdlFactory(0L),
@@ -715,22 +713,27 @@ SdXMLExport::~SdXMLExport()
     }
 
     // clear evtl. temporary page master infos
-    if(mpPageMasterInfoList)
-    {
-        while(mpPageMasterInfoList->Count())
-            delete mpPageMasterInfoList->Remove(mpPageMasterInfoList->Count() - 1L);
-        delete mpPageMasterInfoList;
-        mpPageMasterInfoList = 0L;
-    }
     if(mpPageMasterUsageList)
     {
+        // note: all items in this list are also in mpPageMasterInfoList
         delete mpPageMasterUsageList;
         mpPageMasterUsageList = 0L;
     }
+
     if(mpNotesPageMasterUsageList)
     {
+        // note: all items in this list are also in mpPageMasterInfoList
         delete mpNotesPageMasterUsageList;
         mpNotesPageMasterUsageList = 0L;
+    }
+
+    if(mpPageMasterInfoList)
+    {
+        for ( size_t i = 0, n = mpPageMasterInfoList->size(); i < n; ++i )
+            delete mpPageMasterInfoList->at( i );
+        mpPageMasterInfoList->clear();
+        delete mpPageMasterInfoList;
+        mpPageMasterInfoList = 0L;
     }
 
     // clear auto-layout infos
@@ -803,35 +806,6 @@ void SAL_CALL ImpDefaultMapper::removePropertyChangeListener( const OUString&, c
 void SAL_CALL ImpDefaultMapper::addVetoableChangeListener( const OUString&, const Reference< beans::XVetoableChangeListener >& ) throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException) {}
 void SAL_CALL ImpDefaultMapper::removeVetoableChangeListener( const OUString&, const Reference< beans::XVetoableChangeListener >& ) throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException) {}
 
-//////////////////////////////////////////////////////////////////////////////
-
-/* moved to shapeexport.cxx
-void SdXMLExport::ImpWriteObjGraphicStyleInfos()
-{
-    XMLStyleExport aStEx(*this, OUString(), GetAutoStylePool().get());
-    const UniReference< SvXMLExportPropertyMapper > aMapperRef( GetPropertySetMapper() );
-
-    // write graphic family default style
-    Reference< lang::XMultiServiceFactory > xFact( GetModel(), UNO_QUERY );
-    if( xFact.is() )
-    {
-        try
-        {
-            Reference< beans::XPropertySet > xDefaults( xFact->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.Defaults") ) ), UNO_QUERY );
-            if( xDefaults.is() )
-            {
-                aStEx.exportDefaultStyle( xDefaults, OUString(RTL_CONSTASCII_USTRINGPARAM(XML_STYLE_FAMILY_SD_GRAPHICS_NAME)), aMapperRef );
-
-                // write graphic family styles
-                aStEx.exportStyleFamily(XML_STYLE_FAMILY_SD_GRAPHICS_NAME, OUString(RTL_CONSTASCII_USTRINGPARAM(XML_STYLE_FAMILY_SD_GRAPHICS_NAME)), aMapperRef, FALSE, XML_STYLE_FAMILY_SD_GRAPHICS_ID);
-            }
-        }
-        catch( lang::ServiceNotRegisteredException& )
-        {
-        }
-    }
-}
-*/
 //////////////////////////////////////////////////////////////////////////////
 
 void SdXMLExport::ImpPrepAutoLayoutInfos()
@@ -1379,19 +1353,20 @@ ImpXMLEXPPageMasterInfo* SdXMLExport::ImpGetOrCreatePageMasterInfo( Reference< X
     ImpXMLEXPPageMasterInfo* pNewInfo = new ImpXMLEXPPageMasterInfo(*this, xMasterPage);
 
     // compare with prev page-master infos
-    for(sal_uInt32 a = 0; !bDoesExist && a < mpPageMasterInfoList->Count(); a++)
+    for( size_t a = 0; !bDoesExist && a < mpPageMasterInfoList->size(); a++)
     {
-        if(mpPageMasterInfoList->GetObject(a)
-            && *mpPageMasterInfoList->GetObject(a) == *pNewInfo)
+        if (   mpPageMasterInfoList->at(a)
+           && *mpPageMasterInfoList->at(a) == *pNewInfo
+           )
         {
             delete pNewInfo;
-            pNewInfo = mpPageMasterInfoList->GetObject(a);
+            pNewInfo = mpPageMasterInfoList->at(a);
             bDoesExist = true;
         }
     }
     // add entry when not found same page-master infos
     if(!bDoesExist)
-        mpPageMasterInfoList->Insert(pNewInfo, LIST_APPEND);
+        mpPageMasterInfoList->push_back( pNewInfo );
 
     return pNewInfo;
 }
@@ -1423,7 +1398,7 @@ void SdXMLExport::ImpPrepPageMasterInfos()
             if(xMasterPage.is())
                 pNewInfo = ImpGetOrCreatePageMasterInfo(xMasterPage);
 
-            mpPageMasterUsageList->Insert(pNewInfo, LIST_APPEND);
+            mpPageMasterUsageList->push_back( pNewInfo );
 
             // look for page master of handout page
             if(IsImpress())
@@ -1438,7 +1413,7 @@ void SdXMLExport::ImpPrepPageMasterInfos()
                         pNewInfo = ImpGetOrCreatePageMasterInfo(xNotesPage);
                     }
                 }
-                mpNotesPageMasterUsageList->Insert( pNewInfo, LIST_APPEND );
+                mpNotesPageMasterUsageList->push_back( pNewInfo );
             }
         }
     }
@@ -1449,9 +1424,9 @@ void SdXMLExport::ImpPrepPageMasterInfos()
 void SdXMLExport::ImpWritePageMasterInfos()
 {
     // write created page-masters, create names for these
-    for(sal_uInt32 nCnt = 0L; nCnt < mpPageMasterInfoList->Count(); nCnt++)
+    for( size_t nCnt = 0; nCnt < mpPageMasterInfoList->size(); nCnt++)
     {
-        ImpXMLEXPPageMasterInfo* pInfo = mpPageMasterInfoList->GetObject(nCnt);
+        ImpXMLEXPPageMasterInfo* pInfo = mpPageMasterInfoList->at(nCnt);
         if(pInfo)
         {
             // create name
@@ -1510,11 +1485,11 @@ void SdXMLExport::ImpWritePageMasterInfos()
 
 ImpXMLEXPPageMasterInfo* SdXMLExport::ImpGetPageMasterInfoByName(const OUString& rName)
 {
-    if(rName.getLength() && mpPageMasterInfoList->Count())
+    if(rName.getLength() && !mpPageMasterInfoList->empty())
     {
-        for(sal_uInt32 nCnt = 0L; nCnt < mpPageMasterInfoList->Count(); nCnt++)
+        for( size_t nCnt = 0; nCnt < mpPageMasterInfoList->size(); nCnt++)
         {
-            ImpXMLEXPPageMasterInfo* pInfo = mpPageMasterInfoList->GetObject(nCnt);
+            ImpXMLEXPPageMasterInfo* pInfo = mpPageMasterInfoList->at(nCnt);
             if(pInfo)
             {
                 if(pInfo->GetMasterPageName().getLength() && rName.equals(pInfo->GetMasterPageName()))
@@ -2571,7 +2546,7 @@ void SdXMLExport::_ExportMasterStyles()
                         sMasterPageName );
             }
 
-            ImpXMLEXPPageMasterInfo* pInfo = mpPageMasterUsageList->GetObject(nMPageId);
+            ImpXMLEXPPageMasterInfo* pInfo = mpPageMasterUsageList->at( nMPageId );
             if(pInfo)
             {
                 OUString sString = pInfo->GetName();
@@ -2606,7 +2581,7 @@ void SdXMLExport::_ExportMasterStyles()
                         Reference< drawing::XShapes > xShapes(xNotesPage, UNO_QUERY);
                         if(xShapes.is())
                         {
-                            ImpXMLEXPPageMasterInfo* pMasterInfo = mpNotesPageMasterUsageList->GetObject(nMPageId);
+                            ImpXMLEXPPageMasterInfo* pMasterInfo = mpNotesPageMasterUsageList->at( nMPageId );
                             if(pMasterInfo)
                             {
                                 OUString sString = pMasterInfo->GetName();
