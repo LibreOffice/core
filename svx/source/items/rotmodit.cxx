@@ -150,7 +150,7 @@ bool SvxRotateModeItem::QueryValue( uno::Any& rVal, BYTE /*nMemberId*/ ) const
 
 bool SvxRotateModeItem::PutValue( const uno::Any& rVal, BYTE /*nMemberId*/ )
 {
-    sal_Int32 nUno;
+    sal_Int32 nUno(0);
     if(!(rVal >>= nUno))
     {
         nUno = table::CellVertJustify2::STANDARD;
