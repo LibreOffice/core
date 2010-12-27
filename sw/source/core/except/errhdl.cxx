@@ -27,6 +27,9 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
+
+#ifdef DBG_UTIL
+
 #define _ERRHDL_CXX
 
 
@@ -129,4 +132,5 @@ void AssertFail( USHORT nErrorId, const sal_Char* pFileName, USHORT nLine )
     AssertFail( pMsg, pFileName, nLine );
 }
 
+#endif // DBG_UTIL
 

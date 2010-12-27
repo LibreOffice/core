@@ -28,6 +28,8 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
+#ifdef DBG_UTIL
+
 /* -----------------08.01.99 14:55-------------------
  * Und hier die Beschreibung:
  *
@@ -863,4 +865,5 @@ void SwFrmChangesLeave::Leave()
         SwProtocol::Record( pFrm, PROT_FRMCHANGES, 0, &aFrm );
 }
 
+#endif // DBG_UTIL
 

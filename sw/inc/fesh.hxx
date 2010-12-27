@@ -29,6 +29,7 @@
 
 #include <com/sun/star/text/RelOrientation.hpp>
 #include <com/sun/star/embed/XClassifiedObject.hpp>
+#include <com/sun/star/embed/XEmbeddedObject.hpp>
 
 #include <svx/svdobj.hxx>
 #include "swdllapi.h"
@@ -435,6 +436,9 @@ public:
     void SetFlyName( const String& rName );
     const String& GetFlyName() const;
 
+    // get reference to OLE object (if there is one) for selected FlyFrame
+    const com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject > GetOleRef() const;
+
     // erezeuge eindeutige Namen fuer Rahmen
     String GetUniqueGrfName() const;
     String GetUniqueOLEName() const;
@@ -549,6 +553,15 @@ public:
 
     BOOL ReplaceSdrObj( const String& rGrfName, const String& rFltName,
                         const Graphic* pGrf = 0 );
+
+    // --> #i972#
+    // for starmath formulas anchored 'as char' it alignes it baseline to baseline
+    // changing the previous vertical orientation
+    void AlignFormulaToBaseline( const ::com::sun::star::uno::Reference < ::com::sun::star::embed::XEmbeddedObject >& xObj, SwFlyFrm * pFly = 0 );
+
+    // aligns all formulas with anchor 'as char' to baseline
+    void AlignAllFormulasToBaseline();
+    // <--
 
 //------------------------------------------
 

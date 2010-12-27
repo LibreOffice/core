@@ -61,6 +61,7 @@
 #include <txtflcnt.hxx>
 #include <fmtflcnt.hxx>
 #include <fltini.hxx>
+#include <unoframe.hxx>
 #include <deque>
 #include <map>
 #include <utility>
@@ -1293,7 +1294,7 @@ void SwRTFParser::InsPicture( const String& rGrfNm, const Graphic* pGrf,
             aFlySet.Put(aSurroundItem);
         }
 
-        SwFrmFmt* pFlyFmt = pDoc->Insert( *pPam,
+        SwFlyFrmFmt* pFlyFmt = pDoc->Insert( *pPam,
                     rGrfNm, aEmptyStr,      // Name der Graphic !!
                     pGrf,
                     &aFlySet,               // Attribute fuer den FlyFrm
@@ -1305,6 +1306,26 @@ void SwRTFParser::InsPicture( const String& rGrfNm, const Graphic* pGrf,
         _SetPictureSize( *pGrfNd, pPos->nNode,
                         (SfxItemSet&)pFlyFmt->GetAttrSet(),
                         pPicType );
+        if( pPicType )
+        {
+            PictPropertyNameValuePairs::const_iterator aIt = pPicType->aPropertyPairs.begin();
+            PictPropertyNameValuePairs::const_iterator aEnd = pPicType->aPropertyPairs.end();
+            while( aIt != aEnd)
+            {
+                if( aIt->first.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM( "wzDescription") ))
+                {
+                    SwXFrame::GetOrCreateSdrObject( pFlyFmt );
+                    pDoc->SetFlyFrmDescription( *(pFlyFmt), aIt->second );
+                }
+                else if( aIt->first.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM( "wzName") ))
+                {
+                    SwXFrame::GetOrCreateSdrObject( pFlyFmt );
+                    pDoc->SetFlyFrmTitle( *(pFlyFmt), aIt->second );
+                }
+                ++aIt;
+            }
+        }
+
     }
 
     if( pGrfAttrSet )

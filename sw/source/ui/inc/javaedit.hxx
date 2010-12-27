@@ -44,7 +44,7 @@
 #endif
 
 #ifndef _IMAGEBTN_HXX //autogen
-#include <vcl/imagebtn.hxx>
+#include <vcl/button.hxx>
 #endif
 
 class SwWrtShell;

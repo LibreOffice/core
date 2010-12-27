@@ -76,11 +76,6 @@ class DocxExport : public MSWordExportBase
     /// Footer counter.
     sal_Int32 m_nFooters;
 
-    /// Used to split the runs according to the bookmarks start and ends
-    typedef std::vector< ::sw::mark::IMark* > IMarkVector;
-    IMarkVector m_rSortedMarksStart;
-    IMarkVector m_rSortedMarksEnd;
-
     /// Exporter of the VML shapes.
     oox::vml::VMLExport *m_pVMLExport;
 
@@ -162,24 +157,7 @@ protected:
                                      const SwFmtPageDesc* pNewPgDescFmt = 0,
                                      const SwPageDesc* pNewPgDesc = 0 );
 
-    /// Get the next position in the text node to output
-    virtual xub_StrLen GetNextPos( SwAttrIter* pAttrIter, const SwTxtNode& rNode, xub_StrLen nAktPos );
-
-    /// Update the information for GetNextPos().
-    virtual void UpdatePosition( SwAttrIter* pAttrIter, xub_StrLen nAktPos, xub_StrLen nEnd );
-
 private:
-    /// Find the nearest bookmark from the current position.
-    ///
-    /// Returns false when there is no bookmark.
-    bool NearestBookmark( xub_StrLen& rNearest );
-
-    void GetSortedBookmarks( const SwTxtNode& rNd, xub_StrLen nAktPos,
-                xub_StrLen nLen );
-
-    bool GetBookmarks( const SwTxtNode& rNd, xub_StrLen nStt, xub_StrLen nEnd,
-            IMarkVector& rArr );
-
     /// Setup pStyles and write styles.xml
     void InitStyles();
 
