@@ -1,2 +1,4 @@
 mkdir: %_DEST%\bin%_EXT%
+mkdir: %_DEST%\inc%_EXT%
 ..\inc\version.lst %_DEST%\bin%_EXT%\version.lst
+..\%__SRC%\inc\versionlist.hrc %_DEST%\inc%_EXT%\versionlist.hrc

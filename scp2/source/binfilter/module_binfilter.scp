@@ -60,7 +60,7 @@ Module gid_Module_Langpack_Binfilter_Template
     ParentID = gid_Module_Optional_Binfilter;
     Name = "gid_Module_Langpack_Binfilter_Template";
     Description = "gid_Module_Langpack_Binfilter_Template";
-    Default = NO;
+    Default = YES;
     Styles = (TEMPLATEMODULE);
     Files = (gid_File_Res_Bf_Sch,
              gid_File_Res_Bf_Svx,
