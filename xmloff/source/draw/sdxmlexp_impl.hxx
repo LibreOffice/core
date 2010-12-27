@@ -52,7 +52,7 @@ class Rectangle;
 class ImpPresPageDrawStylePropMapper;
 class ImpXMLEXPPageMasterInfo;
 class ImpXMLDrawPageInfoList;
-class ImpXMLAutoLayoutInfoList;
+class ImpXMLAutoLayoutInfo;
 class SvXMLAutoStylePoolP;
 class XMLSdPropHdlFactory;
 class ImpXMLShapeStyleInfo;
@@ -60,6 +60,7 @@ class XMLShapeExportPropertyMapper;
 class XMLPageExportPropertyMapper;
 
 typedef ::std::vector< ImpXMLEXPPageMasterInfo* > ImpXMLEXPPageMasterList;
+typedef ::std::vector< ImpXMLAutoLayoutInfo*    > ImpXMLAutoLayoutInfoList;
 
 //////////////////////////////////////////////////////////////////////////////
 

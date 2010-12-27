@@ -403,8 +403,6 @@ ImpXMLAutoLayoutInfo::ImpXMLAutoLayoutInfo(sal_uInt16 nTyp, ImpXMLEXPPageMasterI
     maPresRect.SetSize(aLayoutSize);
 }
 
-DECLARE_LIST(ImpXMLAutoLayoutInfoList, ImpXMLAutoLayoutInfo*)
-
 //////////////////////////////////////////////////////////////////////////////
 
 // #110680#
@@ -420,7 +418,7 @@ SdXMLExport::SdXMLExport(
     mpPageMasterUsageList(new ImpXMLEXPPageMasterList()),
     mpNotesPageMasterUsageList(new ImpXMLEXPPageMasterList()),
     mpHandoutPageMaster(NULL),
-    mpAutoLayoutInfoList(new ImpXMLAutoLayoutInfoList(1, 4, 4)),
+    mpAutoLayoutInfoList(new ImpXMLAutoLayoutInfoList()),
     mpSdPropHdlFactory(0L),
     mpPropertySetMapper(0L),
     mpPresPagePropsMapper(0L),
@@ -739,8 +737,9 @@ SdXMLExport::~SdXMLExport()
     // clear auto-layout infos
     if(mpAutoLayoutInfoList)
     {
-        while(mpAutoLayoutInfoList->Count())
-            delete mpAutoLayoutInfoList->Remove(mpAutoLayoutInfoList->Count() - 1L);
+        for ( size_t i = 0, n = mpAutoLayoutInfoList->size(); i < n; ++i )
+            delete mpAutoLayoutInfoList->at( i );
+        mpAutoLayoutInfoList->clear();
         delete mpAutoLayoutInfoList;
         mpAutoLayoutInfoList = 0L;
     }
@@ -878,21 +877,21 @@ BOOL SdXMLExport::ImpPrepAutoLayoutInfo(const Reference<XDrawPage>& xPage, OUStr
                 ImpXMLAutoLayoutInfo* pNew = new ImpXMLAutoLayoutInfo(nType, pInfo);
                 BOOL bDidExist(FALSE);
 
-                for(sal_uInt32 nCnt = 0L; !bDidExist && nCnt < mpAutoLayoutInfoList->Count(); nCnt++)
+                for( size_t nCnt = 0; !bDidExist && nCnt < mpAutoLayoutInfoList->size(); nCnt++)
                 {
-                    if(*mpAutoLayoutInfoList->GetObject(nCnt) == *pNew)
+                    if( *mpAutoLayoutInfoList->at( nCnt ) == *pNew)
                     {
                         delete pNew;
-                        pNew = mpAutoLayoutInfoList->GetObject(nCnt);
+                        pNew = mpAutoLayoutInfoList->at( nCnt );
                         bDidExist = TRUE;
                     }
                 }
 
                 if(!bDidExist)
                 {
-                    mpAutoLayoutInfoList->Insert(pNew, LIST_APPEND);
+                    mpAutoLayoutInfoList->push_back( pNew );
                     OUString sNewName = OUString(RTL_CONSTASCII_USTRINGPARAM("AL"));
-                    sNewName += OUString::valueOf(sal_Int32(mpAutoLayoutInfoList->Count() - 1));
+                    sNewName += OUString::valueOf(sal_Int32( mpAutoLayoutInfoList->size() - 1 ));
                     sNewName += OUString(RTL_CONSTASCII_USTRINGPARAM("T"));
                     sNewName += OUString::valueOf(sal_Int32(nType));
                     pNew->SetLayoutName(sNewName);
@@ -911,11 +910,11 @@ BOOL SdXMLExport::ImpPrepAutoLayoutInfo(const Reference<XDrawPage>& xPage, OUStr
 
 void SdXMLExport::ImpWriteAutoLayoutInfos()
 {
-    if(mpAutoLayoutInfoList->Count())
+    if( !mpAutoLayoutInfoList->empty() )
     {
-        for(sal_uInt32 nCnt = 0L; nCnt < mpAutoLayoutInfoList->Count(); nCnt++)
+        for(size_t nCnt = 0; nCnt < mpAutoLayoutInfoList->size(); nCnt++)
         {
-            ImpXMLAutoLayoutInfo* pInfo = mpAutoLayoutInfoList->GetObject(nCnt);
+            ImpXMLAutoLayoutInfo* pInfo = mpAutoLayoutInfoList->at( nCnt );
             if(pInfo)
             {
                 // prepare presentation-page layout attributes, style-name
