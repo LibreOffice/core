@@ -46,7 +46,7 @@
 #include <com/sun/star/embed/VerbAttributes.hpp>
 
 #include "sdattr.hxx"
-
+#include <sfx2/sfxresid.hxx>
 
 #include <vcl/waitobj.hxx>
 #include <osl/file.hxx>
@@ -489,7 +489,7 @@ void SdTPAction::OpenFileDialog()
             // filter makes the (Windows system) open file dialog follow
             // links on the desktop to directories.
             aFileDialog.AddFilter (
-                String (SdResId (STR_SFX_FILTERNAME_ALL)),
+                String (SfxResId (STR_SFX_FILTERNAME_ALL)),
                 String (RTL_CONSTASCII_USTRINGPARAM("*.*")));
 
 
