@@ -1137,11 +1137,11 @@ void SwXTextDocument::printPages(const Sequence< beans::PropertyValue >& xOption
                                     pDocShell->GetDoc()->GetAttrPool());
             aReq.AppendItem(SfxBoolItem(FN_PRINT_PAGEPREVIEW, sal_True));
 
-        OUString sFileName( C2U(SW_PROP_NAME_STR(UNO_NAME_FILE_NAME)));
-        OUString sCopyCount(C2U(SW_PROP_NAME_STR(UNO_NAME_COPY_COUNT)));
-        OUString sCollate(C2U(SW_PROP_NAME_STR(UNO_NAME_COLLATE)));
-        OUString sSort(C2U(SW_PROP_NAME_STR(UNO_NAME_SORT)));
-        OUString sPages(C2U(SW_PROP_NAME_STR(UNO_NAME_PAGES)));
+        OUString sFileName(OUString::createFromAscii(SW_PROP_NAME_STR(UNO_NAME_FILE_NAME)));
+        OUString sCopyCount(OUString::createFromAscii(SW_PROP_NAME_STR(UNO_NAME_COPY_COUNT)));
+        OUString sCollate(OUString::createFromAscii(SW_PROP_NAME_STR(UNO_NAME_COLLATE)));
+        OUString sSort(OUString::createFromAscii(SW_PROP_NAME_STR(UNO_NAME_SORT)));
+        OUString sPages(OUString::createFromAscii(SW_PROP_NAME_STR(UNO_NAME_PAGES)));
 
         for ( int n = 0; n < xOptions.getLength(); ++n )
         {
@@ -2552,7 +2552,7 @@ sal_Int32 SAL_CALL SwXTextDocument::getRendererCount(
                     m_pRenderData->ViewOptionAdjustStart( *pWrtShell, *pWrtShell->GetViewOptions() );
             }
 
-            m_pRenderData->SetSwPrtOptions( new SwPrtOptions( C2U( bIsPDFExport ? "PDF export" : "Printing" ) ) );
+            m_pRenderData->SetSwPrtOptions( new SwPrtOptions( rtl::OUString::createFromAscii( bIsPDFExport ? "PDF export" : "Printing" ) ) );
             m_pRenderData->MakeSwPrtOptions( m_pRenderData->GetSwPrtOptionsRef(), pRenderDocShell,
                     m_pPrintUIOptions, m_pRenderData, bIsPDFExport );
 

@@ -243,15 +243,15 @@ static uno::Sequence<beans::PropertyValue> lcl_GetSuccessorProperties(const SwRe
     if(pNext)
     {
         beans::PropertyValue* pValues = aValues.getArray();
-        pValues[0].Name = C2U(SW_PROP_NAME_STR(UNO_NAME_REDLINE_AUTHOR));
+        pValues[0].Name = rtl::OUString::createFromAscii(SW_PROP_NAME_STR(UNO_NAME_REDLINE_AUTHOR));
         // GetAuthorString(n) walks the SwRedlineData* chain;
         // here we always need element 1
         pValues[0].Value <<= OUString(rRedline.GetAuthorString(1));
-        pValues[1].Name = C2U(SW_PROP_NAME_STR(UNO_NAME_REDLINE_DATE_TIME));
+        pValues[1].Name = rtl::OUString::createFromAscii(SW_PROP_NAME_STR(UNO_NAME_REDLINE_DATE_TIME));
         pValues[1].Value <<= lcl_DateTimeToUno(pNext->GetTimeStamp());
-        pValues[2].Name = C2U(SW_PROP_NAME_STR(UNO_NAME_REDLINE_COMMENT));
+        pValues[2].Name = rtl::OUString::createFromAscii(SW_PROP_NAME_STR(UNO_NAME_REDLINE_COMMENT));
         pValues[2].Value <<= OUString(pNext->GetComment());
-        pValues[3].Name = C2U(SW_PROP_NAME_STR(UNO_NAME_REDLINE_TYPE));
+        pValues[3].Name = rtl::OUString::createFromAscii(SW_PROP_NAME_STR(UNO_NAME_REDLINE_TYPE));
         pValues[3].Value <<= lcl_RedlineTypeToOUString(pNext->GetType());
     }
     return aValues;
@@ -368,25 +368,25 @@ uno::Sequence< beans::PropertyValue > SwXRedlinePortion::CreateRedlineProperties
     sRedlineIdBuf.append( sal::static_int_cast< sal_Int64 >( reinterpret_cast< sal_IntPtr >(&rRedline) ) );
 
     sal_Int32 nPropIdx  = 0;
-    pRet[nPropIdx].Name = C2U(SW_PROP_NAME_STR(UNO_NAME_REDLINE_AUTHOR));
+    pRet[nPropIdx].Name = rtl::OUString::createFromAscii(SW_PROP_NAME_STR(UNO_NAME_REDLINE_AUTHOR));
     pRet[nPropIdx++].Value <<= OUString(rRedline.GetAuthorString());
-    pRet[nPropIdx].Name = C2U(SW_PROP_NAME_STR(UNO_NAME_REDLINE_DATE_TIME));
+    pRet[nPropIdx].Name = rtl::OUString::createFromAscii(SW_PROP_NAME_STR(UNO_NAME_REDLINE_DATE_TIME));
     pRet[nPropIdx++].Value <<= lcl_DateTimeToUno(rRedline.GetTimeStamp());
-    pRet[nPropIdx].Name = C2U(SW_PROP_NAME_STR(UNO_NAME_REDLINE_COMMENT));
+    pRet[nPropIdx].Name = rtl::OUString::createFromAscii(SW_PROP_NAME_STR(UNO_NAME_REDLINE_COMMENT));
     pRet[nPropIdx++].Value <<= OUString(rRedline.GetComment());
-    pRet[nPropIdx].Name = C2U(SW_PROP_NAME_STR(UNO_NAME_REDLINE_TYPE));
+    pRet[nPropIdx].Name = rtl::OUString::createFromAscii(SW_PROP_NAME_STR(UNO_NAME_REDLINE_TYPE));
     pRet[nPropIdx++].Value <<= lcl_RedlineTypeToOUString(rRedline.GetType());
-    pRet[nPropIdx].Name = C2U(SW_PROP_NAME_STR(UNO_NAME_REDLINE_IDENTIFIER));
+    pRet[nPropIdx].Name = rtl::OUString::createFromAscii(SW_PROP_NAME_STR(UNO_NAME_REDLINE_IDENTIFIER));
     pRet[nPropIdx++].Value <<= sRedlineIdBuf.makeStringAndClear();
-    pRet[nPropIdx].Name = C2U(SW_PROP_NAME_STR(UNO_NAME_IS_COLLAPSED));
+    pRet[nPropIdx].Name = rtl::OUString::createFromAscii(SW_PROP_NAME_STR(UNO_NAME_IS_COLLAPSED));
     sal_Bool bTmp = !rRedline.HasMark();
     pRet[nPropIdx++].Value.setValue(&bTmp, ::getBooleanCppuType()) ;
 
-    pRet[nPropIdx].Name = C2U(SW_PROP_NAME_STR(UNO_NAME_IS_START));
+    pRet[nPropIdx].Name = rtl::OUString::createFromAscii(SW_PROP_NAME_STR(UNO_NAME_IS_START));
     pRet[nPropIdx++].Value.setValue(&bIsStart, ::getBooleanCppuType()) ;
 
     bTmp = !rRedline.IsDelLastPara();
-    pRet[nPropIdx].Name = C2U(SW_PROP_NAME_STR(UNO_NAME_MERGE_LAST_PARA));
+    pRet[nPropIdx].Name = rtl::OUString::createFromAscii(SW_PROP_NAME_STR(UNO_NAME_MERGE_LAST_PARA));
     pRet[nPropIdx++].Value.setValue(&bTmp, ::getBooleanCppuType()) ;
 
     SwNodeIndex* pNodeIdx = rRedline.GetContentIdx();
@@ -395,7 +395,7 @@ uno::Sequence< beans::PropertyValue > SwXRedlinePortion::CreateRedlineProperties
         if ( 1 < ( pNodeIdx->GetNode().EndOfSectionIndex() - pNodeIdx->GetNode().GetIndex() ) )
         {
             uno::Reference<text::XText> xRet = new SwXRedlineText(rRedline.GetDoc(), *pNodeIdx);
-            pRet[nPropIdx].Name = C2U(SW_PROP_NAME_STR(UNO_NAME_REDLINE_TEXT));
+            pRet[nPropIdx].Name = rtl::OUString::createFromAscii(SW_PROP_NAME_STR(UNO_NAME_REDLINE_TEXT));
             pRet[nPropIdx++].Value <<= xRet;
         }
         else {
@@ -404,7 +404,7 @@ uno::Sequence< beans::PropertyValue > SwXRedlinePortion::CreateRedlineProperties
     }
     if(pNext)
     {
-        pRet[nPropIdx].Name = C2U(SW_PROP_NAME_STR(UNO_NAME_REDLINE_SUCCESSOR_DATA));
+        pRet[nPropIdx].Name = rtl::OUString::createFromAscii(SW_PROP_NAME_STR(UNO_NAME_REDLINE_SUCCESSOR_DATA));
         pRet[nPropIdx++].Value <<= lcl_GetSuccessorProperties(rRedline);
     }
     aRet.realloc(nPropIdx);

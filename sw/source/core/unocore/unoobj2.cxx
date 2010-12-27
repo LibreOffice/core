@@ -154,7 +154,7 @@ GetSupportedServiceNamesImpl(
     uno::Sequence< ::rtl::OUString > ret(nServices);
     for (size_t i = 0; i < nServices; ++i)
     {
-        ret[i] = C2U(pServices[i]);
+        ret[i] = rtl::OUString::createFromAscii(pServices[i]);
     }
     return ret;
 }

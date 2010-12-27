@@ -2412,8 +2412,8 @@ awt::Size SwWW8ImplReader::MiserableDropDownFormHack(const String &rString,
             break;
         }
 
-        if (bSet && xPropSetInfo->hasPropertyByName(C2U(pMap->pPropNm)))
-            rPropSet->setPropertyValue(C2U(pMap->pPropNm), aTmp);
+        if (bSet && xPropSetInfo->hasPropertyByName(rtl::OUString::createFromAscii(pMap->pPropNm)))
+            rPropSet->setPropertyValue(rtl::OUString::createFromAscii(pMap->pPropNm), aTmp);
     }
     // now calculate the size of the control
     OutputDevice* pOut = Application::GetDefaultDevice();

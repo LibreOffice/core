@@ -482,7 +482,7 @@ OUString    SwXServiceProvider::GetProviderName(sal_uInt16 nObjectType)
     OUString sRet;
     sal_uInt16 nEntries = SAL_N_ELEMENTS(aProvNamesId);
     if(nObjectType < nEntries)
-        sRet = C2U(aProvNamesId[nObjectType].pName);
+        sRet = rtl::OUString::createFromAscii(aProvNamesId[nObjectType].pName);
     return sRet;
 }
 
@@ -494,7 +494,7 @@ uno::Sequence<OUString>     SwXServiceProvider::GetAllServiceNames()
     sal_uInt16 n = 0;
     for(sal_uInt16 i = 0; i < nEntries; i++)
     {
-        String sProv(C2U(aProvNamesId[i].pName));
+        String sProv(rtl::OUString::createFromAscii(aProvNamesId[i].pName));
         if(sProv.Len())
         {
             pArray[n] = sProv;

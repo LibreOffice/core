@@ -515,7 +515,7 @@ Sequence<OUString> SwCursorConfig::GetPropertyNames()
     Sequence<OUString> aNames(nCount);
     OUString* pNames = aNames.getArray();
     for(int i = 0; i < nCount; i++)
-        pNames[i] = C2U(aPropNames[i]);
+        pNames[i] = rtl::OUString::createFromAscii(aPropNames[i]);
     return aNames;
 }
 

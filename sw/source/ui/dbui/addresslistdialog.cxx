@@ -417,7 +417,7 @@ IMPL_LINK(SwAddressListDialog, CreateHdl_Impl, PushButton*, pButton)
             pInfo[2].Name = C2U("Extension");
             pInfo[2].Value <<= ::rtl::OUString(aURL.getExtension());//C2U("csv");
             pInfo[3].Name = C2U("CharSet");
-            pInfo[3].Value <<= C2U(cUTF8);
+            pInfo[3].Value <<= rtl::OUString::createFromAscii(cUTF8);
             aAny <<= aInfo;
             xDataProperties->setPropertyValue(C2U("Info"), aAny);
 

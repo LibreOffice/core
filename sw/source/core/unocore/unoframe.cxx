@@ -2172,22 +2172,19 @@ void SwXFrame::attachToRange(const uno::Reference< text::XTextRange > & xTextRan
             }
             const ::uno::Any* pSurroundContour;
             if(pProps->GetProperty(RES_SURROUND, MID_SURROUND_CONTOUR, pSurroundContour))
-                setPropertyValue(C2U(SW_PROP_NAME_STR(UNO_NAME_SURROUND_CONTOUR)), *pSurroundContour);
+                setPropertyValue(rtl::OUString::createFromAscii(SW_PROP_NAME_STR(UNO_NAME_SURROUND_CONTOUR)), *pSurroundContour);
             const ::uno::Any* pContourOutside;
             if(pProps->GetProperty(RES_SURROUND, MID_SURROUND_CONTOUROUTSIDE, pContourOutside))
-                setPropertyValue(C2U(SW_PROP_NAME_STR(UNO_NAME_CONTOUR_OUTSIDE)), *pContourOutside);
+                setPropertyValue(rtl::OUString::createFromAscii(SW_PROP_NAME_STR(UNO_NAME_CONTOUR_OUTSIDE)), *pContourOutside);
             const ::uno::Any* pContourPoly;
             if(pProps->GetProperty(FN_PARAM_COUNTOUR_PP, 0, pContourPoly))
-                setPropertyValue(C2U(SW_PROP_NAME_STR(UNO_NAME_CONTOUR_POLY_POLYGON)), *pContourPoly);
+                setPropertyValue(rtl::OUString::createFromAscii(SW_PROP_NAME_STR(UNO_NAME_CONTOUR_POLY_POLYGON)), *pContourPoly);
             const ::uno::Any* pPixelContour;
             if(pProps->GetProperty(FN_UNO_IS_PIXEL_CONTOUR, 0, pPixelContour))
-                setPropertyValue(C2U(SW_PROP_NAME_STR(UNO_NAME_IS_PIXEL_CONTOUR)), *pPixelContour);
+                setPropertyValue(rtl::OUString::createFromAscii(SW_PROP_NAME_STR(UNO_NAME_IS_PIXEL_CONTOUR)), *pPixelContour);
             const ::uno::Any* pAutoContour;
             if(pProps->GetProperty(FN_UNO_IS_AUTOMATIC_CONTOUR, 0, pAutoContour))
-                setPropertyValue(C2U(SW_PROP_NAME_STR(UNO_NAME_IS_AUTOMATIC_CONTOUR)), *pAutoContour);
-//            const ::uno::Any* pAltText;
-//            if(pProps->GetProperty(FN_UNO_ALTERNATIVE_TEXT, 0, pAltText))
-//                setPropertyValue(C2U(SW_PROP_NAME_STR(UNO_NAME_ALTERNATIVE_TEXT)), *pAltText);
+                setPropertyValue(rtl::OUString::createFromAscii(SW_PROP_NAME_STR(UNO_NAME_IS_AUTOMATIC_CONTOUR)), *pAutoContour);
         }
         else
         {
@@ -2292,24 +2289,22 @@ void SwXFrame::attachToRange(const uno::Reference< text::XTextRange > & xTextRan
             GetOrCreateSdrObject( pFmt );
         const ::uno::Any* pOrder;
         if( pProps->GetProperty(FN_UNO_Z_ORDER, 0, pOrder) )
-            setPropertyValue(C2U(SW_PROP_NAME_STR(UNO_NAME_Z_ORDER)), *pOrder);
+            setPropertyValue(rtl::OUString::createFromAscii(SW_PROP_NAME_STR(UNO_NAME_Z_ORDER)), *pOrder);
         const ::uno::Any* pReplacement;
         if( pProps->GetProperty(FN_UNO_REPLACEMENT_GRAPHIC, 0, pReplacement) )
-            setPropertyValue(C2U(SW_PROP_NAME_STR(UNO_NAME_GRAPHIC)), *pReplacement);
-        // --> OD 2009-07-13 #i73249#
+            setPropertyValue(rtl::OUString::createFromAscii(SW_PROP_NAME_STR(UNO_NAME_GRAPHIC)), *pReplacement);
         // new attribute Title
         const ::uno::Any* pTitle;
         if ( pProps->GetProperty(FN_UNO_TITLE, 0, pTitle) )
         {
-            setPropertyValue(C2U(SW_PROP_NAME_STR(UNO_NAME_TITLE)), *pTitle);
+            setPropertyValue(rtl::OUString::createFromAscii(SW_PROP_NAME_STR(UNO_NAME_TITLE)), *pTitle);
         }
         // new attribute Description
         const ::uno::Any* pDescription;
         if ( pProps->GetProperty(FN_UNO_DESCRIPTION, 0, pDescription) )
         {
-            setPropertyValue(C2U(SW_PROP_NAME_STR(UNO_NAME_DESCRIPTION)), *pDescription);
+            setPropertyValue(rtl::OUString::createFromAscii(SW_PROP_NAME_STR(UNO_NAME_DESCRIPTION)), *pDescription);
         }
-        // <--
     }
     else
         throw lang::IllegalArgumentException();

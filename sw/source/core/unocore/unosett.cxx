@@ -1623,7 +1623,7 @@ uno::Sequence<beans::PropertyValue> SwXNumberingRules::GetNumberingRuleByIndex(
 
 PropValData* lcl_FindProperty(const char* cName, PropValDataArr&    rPropertyValues)
 {
-    OUString sCmp = C2U(cName);
+    OUString sCmp = rtl::OUString::createFromAscii(cName);
     for(sal_uInt16 i = 0; i < rPropertyValues.Count(); i++)
     {
         PropValData* pTemp = rPropertyValues.GetObject(i);

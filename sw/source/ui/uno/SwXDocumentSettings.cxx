@@ -306,7 +306,7 @@ void SwXDocumentSettings::_setSingleValue( const comphelper::PropertyInfo & rInf
         throw(beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException )
 {
     if (rInfo.mnAttributes & PropertyAttribute::READONLY)
-        throw PropertyVetoException ( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Property is read-only: " ) ) + C2U(rInfo.mpName), static_cast < cppu::OWeakObject * > ( 0 ) );
+        throw PropertyVetoException ( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Property is read-only: " ) ) + rtl::OUString::createFromAscii(rInfo.mpName), static_cast < cppu::OWeakObject * > ( 0 ) );
 
     switch( rInfo.mnHandle )
     {

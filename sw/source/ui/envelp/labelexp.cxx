@@ -73,7 +73,7 @@ void SwVisitingCardPage::InitFrameControl()
 
     uno::Sequence<OUString> aNames = _xAutoText->getElementNames();
     const OUString* pGroups = aNames.getConstArray();
-    OUString uTitleName( C2U(SW_PROP_NAME_STR(UNO_NAME_TITLE)) );
+    OUString uTitleName( rtl::OUString::createFromAscii(SW_PROP_NAME_STR(UNO_NAME_TITLE)) );
 
     for(sal_uInt16 i = 0; i < aNames.getLength(); i++)
     {
@@ -241,7 +241,7 @@ void SwLabDlg::UpdateFieldInformation(uno::Reference< frame::XModel > & xModel, 
     {
         String sFldName( String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM(
                             "com.sun.star.text.FieldMaster.User." )));
-        OUString uCntName( C2U( SW_PROP_NAME_STR(UNO_NAME_CONTENT )));
+        OUString uCntName( rtl::OUString::createFromAscii( SW_PROP_NAME_STR(UNO_NAME_CONTENT )));
         for( const _SwLabItemMap* p = aArr; p->pName; ++p )
         {
             String sCurFldName( sFldName );

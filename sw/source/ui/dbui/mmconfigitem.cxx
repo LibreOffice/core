@@ -302,7 +302,7 @@ SwMailMergeConfigItem_Impl::SwMailMergeConfigItem_Impl() :
         }
     }
     //read the list of data base assignments
-    Sequence<OUString> aAssignments = GetNodeNames(C2U(cAddressDataAssignments));
+    Sequence<OUString> aAssignments = GetNodeNames(rtl::OUString::createFromAscii(cAddressDataAssignments));
     if(aAssignments.getLength())
     {
         //create a list of property names to load the URLs of all data bases
@@ -313,18 +313,18 @@ SwMailMergeConfigItem_Impl::SwMailMergeConfigItem_Impl() :
         OUString sSlash = C2U("/");
         for(nAssign = 0; nAssign < aAssignProperties.getLength(); nAssign += 4)
         {
-            String sAssignPath = C2U(cAddressDataAssignments);
+            String sAssignPath = rtl::OUString::createFromAscii(cAddressDataAssignments);
             sAssignPath += '/';
             sAssignPath += String(pAssignments[nAssign / 4]);
             sAssignPath += '/';
             pAssignProperties[nAssign] = sAssignPath;
-            pAssignProperties[nAssign] += C2U(cDataSourceName);
+            pAssignProperties[nAssign] += rtl::OUString::createFromAscii(cDataSourceName);
             pAssignProperties[nAssign + 1] = sAssignPath;
-            pAssignProperties[nAssign + 1] += C2U(cDataTableName);
+            pAssignProperties[nAssign + 1] += rtl::OUString::createFromAscii(cDataTableName);
             pAssignProperties[nAssign + 2] = sAssignPath;
-            pAssignProperties[nAssign + 2] += C2U(cDataCommandType);
+            pAssignProperties[nAssign + 2] += rtl::OUString::createFromAscii(cDataCommandType);
             pAssignProperties[nAssign + 3] = sAssignPath;
-            pAssignProperties[nAssign + 3] += C2U(cDBColumnAssignments);
+            pAssignProperties[nAssign + 3] += rtl::OUString::createFromAscii(cDBColumnAssignments);
         }
         Sequence<Any> aAssignValues = GetProperties(aAssignProperties);
         const Any* pAssignValues = aAssignValues.getConstArray();
@@ -597,7 +597,7 @@ void  SwMailMergeConfigItem_Impl::Commit()
     //store the changed / new assignments
 
     //load the existing node names to find new names
-    Sequence<OUString> aAssignments = GetNodeNames(C2U(cAddressDataAssignments));
+    Sequence<OUString> aAssignments = GetNodeNames(rtl::OUString::createFromAscii(cAddressDataAssignments));
 
     ::std::vector<DBAddressDataAssignment>::iterator aAssignIter;
     for(aAssignIter = aAddressDataAssignments.begin();
@@ -610,7 +610,7 @@ void  SwMailMergeConfigItem_Impl::Commit()
                         aAssignIter->sConfigNodeName :
                         lcl_CreateNodeName(aAssignments);
             OUString sSlash = C2U("/");
-            OUString sNodePath = C2U(cAddressDataAssignments);
+            OUString sNodePath = rtl::OUString::createFromAscii(cAddressDataAssignments);
             sNodePath += sSlash;
             sNodePath += sNewNode;
             sNodePath += sSlash;
@@ -618,19 +618,19 @@ void  SwMailMergeConfigItem_Impl::Commit()
             Sequence< PropertyValue > aNewValues(4);
             PropertyValue* pNewValues = aNewValues.getArray();
             pNewValues[0].Name = sNodePath;
-            pNewValues[0].Name += C2U(cDataSourceName);
+            pNewValues[0].Name += rtl::OUString::createFromAscii(cDataSourceName);
             pNewValues[0].Value <<= aAssignIter->aDBData.sDataSource;
             pNewValues[1].Name = sNodePath;
-            pNewValues[1].Name += C2U(cDataTableName);
+            pNewValues[1].Name += rtl::OUString::createFromAscii(cDataTableName);
             pNewValues[1].Value <<= aAssignIter->aDBData.sCommand;
             pNewValues[2].Name = sNodePath;
-            pNewValues[2].Name += C2U(cDataCommandType);
+            pNewValues[2].Name += rtl::OUString::createFromAscii(cDataCommandType);
             pNewValues[2].Value <<= aAssignIter->aDBData.nCommandType;
             pNewValues[3].Name = sNodePath;
-            pNewValues[3].Name += C2U(cDBColumnAssignments);
+            pNewValues[3].Name += rtl::OUString::createFromAscii(cDBColumnAssignments);
             pNewValues[3].Value <<= aAssignIter->aDBColumnAssignments;
 
-            SetSetProperties(C2U(cAddressDataAssignments), aNewValues);
+            SetSetProperties(rtl::OUString::createFromAscii(cAddressDataAssignments), aNewValues);
         }
     }
 

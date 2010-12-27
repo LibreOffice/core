@@ -441,8 +441,8 @@ bool    SwAuthorityFieldType::QueryValue( Any& rVal, USHORT nWhichId ) const
         {
             Sequence<PropertyValues> aRet(m_pSortKeyArr->Count());
             PropertyValues* pValues = aRet.getArray();
-            OUString sProp1( C2U(SW_PROP_NAME_STR(UNO_NAME_SORT_KEY)) ),
-                     sProp2( C2U(SW_PROP_NAME_STR(UNO_NAME_IS_SORT_ASCENDING)));
+            OUString sProp1( rtl::OUString::createFromAscii(SW_PROP_NAME_STR(UNO_NAME_SORT_KEY)) ),
+                     sProp2( rtl::OUString::createFromAscii(SW_PROP_NAME_STR(UNO_NAME_IS_SORT_ASCENDING)));
             for(sal_uInt16 i = 0; i < m_pSortKeyArr->Count(); i++)
             {
                 const SwTOXSortKey* pKey = (*m_pSortKeyArr)[i];
@@ -684,7 +684,7 @@ bool    SwAuthorityField::QueryValue( Any& rAny, USHORT /*nWhichId*/ ) const
     PropertyValue* pValues = aRet.getArray();
     for(sal_Int16 i = 0; i < AUTH_FIELD_END; i++)
     {
-        pValues[i].Name = C2U(aFieldNames[i]);
+        pValues[i].Name = rtl::OUString::createFromAscii(aFieldNames[i]);
         const String& rField = pAuthEntry->GetAuthorField((ToxAuthorityField) i);
         if(i == AUTH_FIELD_AUTHORITY_TYPE)
             pValues[i].Value <<= sal_Int16(rField.ToInt32());

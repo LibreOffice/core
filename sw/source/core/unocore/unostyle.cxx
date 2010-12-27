@@ -427,15 +427,15 @@ uno::Sequence< beans::PropertyValue > SwXStyleFamilies::getStyleLoaderOptions(vo
     uno::Any aVal;
     sal_Bool bTemp = sal_True;
     aVal.setValue(&bTemp, ::getCppuBooleanType());
-    pArray[0] = beans::PropertyValue(C2U(SW_PROP_NAME_STR(UNO_NAME_LOAD_TEXT_STYLES)), -1, aVal, beans::PropertyState_DIRECT_VALUE);
+    pArray[0] = beans::PropertyValue(rtl::OUString::createFromAscii(SW_PROP_NAME_STR(UNO_NAME_LOAD_TEXT_STYLES)), -1, aVal, beans::PropertyState_DIRECT_VALUE);
     aVal.setValue(&bTemp, ::getCppuBooleanType());
-    pArray[1] = beans::PropertyValue(C2U(SW_PROP_NAME_STR(UNO_NAME_LOAD_FRAME_STYLES)), -1, aVal, beans::PropertyState_DIRECT_VALUE);
+    pArray[1] = beans::PropertyValue(rtl::OUString::createFromAscii(SW_PROP_NAME_STR(UNO_NAME_LOAD_FRAME_STYLES)), -1, aVal, beans::PropertyState_DIRECT_VALUE);
     aVal.setValue(&bTemp, ::getCppuBooleanType());
-    pArray[2] = beans::PropertyValue(C2U(SW_PROP_NAME_STR(UNO_NAME_LOAD_PAGE_STYLES)), -1, aVal, beans::PropertyState_DIRECT_VALUE);
+    pArray[2] = beans::PropertyValue(rtl::OUString::createFromAscii(SW_PROP_NAME_STR(UNO_NAME_LOAD_PAGE_STYLES)), -1, aVal, beans::PropertyState_DIRECT_VALUE);
     aVal.setValue(&bTemp, ::getCppuBooleanType());
-    pArray[3] = beans::PropertyValue(C2U(SW_PROP_NAME_STR(UNO_NAME_LOAD_NUMBERING_STYLES)), -1, aVal, beans::PropertyState_DIRECT_VALUE);
+    pArray[3] = beans::PropertyValue(rtl::OUString::createFromAscii(SW_PROP_NAME_STR(UNO_NAME_LOAD_NUMBERING_STYLES)), -1, aVal, beans::PropertyState_DIRECT_VALUE);
     aVal.setValue(&bTemp, ::getCppuBooleanType());
-    pArray[4] = beans::PropertyValue(C2U(SW_PROP_NAME_STR(UNO_NAME_OVERWRITE_STYLES)), -1, aVal, beans::PropertyState_DIRECT_VALUE);
+    pArray[4] = beans::PropertyValue(rtl::OUString::createFromAscii(SW_PROP_NAME_STR(UNO_NAME_OVERWRITE_STYLES)), -1, aVal, beans::PropertyState_DIRECT_VALUE);
     return aSeq;
 }
 

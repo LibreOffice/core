@@ -291,7 +291,7 @@ void SwXTextPortion::GetPropertyValue(
 
                 OUString sRet;
                 if( pRet )
-                    sRet = C2U( pRet );
+                    sRet = rtl::OUString::createFromAscii( pRet );
                 rVal <<= sRet;
             }
             break;

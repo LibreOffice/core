@@ -109,7 +109,7 @@ rtl::OUString GetCommandContextByIndex( sal_Int16 nIndex )
     rtl::OUString aRes;
     if (0 <= nIndex  &&  nIndex < COND_COMMAND_COUNT)
     {
-        aRes = C2U( aCommandContext[ nIndex ] );
+        aRes = rtl::OUString::createFromAscii( aCommandContext[ nIndex ] );
     }
     return aRes;
 }

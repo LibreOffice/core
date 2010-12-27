@@ -599,9 +599,9 @@ const Sequence<OUString>& SwInsertConfig::GetPropertyNames()
         OUString* pWebNames = aWebNames.getArray();
         int i;
         for(i = 0; i < nCount; i++)
-            pNames[i] = C2U(aPropNames[i]);
+            pNames[i] = rtl::OUString::createFromAscii(aPropNames[i]);
         for(i = 0; i < nWebCount; i++)
-            pWebNames[i] = C2U(aPropNames[i]);
+            pWebNames[i] = rtl::OUString::createFromAscii(aPropNames[i]);
     }
     return bIsWeb ? aWebNames : aNames;
 }
@@ -1261,7 +1261,7 @@ const Sequence<OUString>& SwMiscConfig::GetPropertyNames()
         };
         OUString* pNames = aNames.getArray();
         for(int i = 0; i < nCount; i++)
-            pNames[i] = C2U(aPropNames[i]);
+            pNames[i] = rtl::OUString::createFromAscii(aPropNames[i]);
     }
     return aNames;
 }

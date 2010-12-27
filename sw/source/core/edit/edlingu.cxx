@@ -72,8 +72,6 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::linguistic2;
 
-#define C2U(cChar) rtl::OUString::createFromAscii(cChar)
-
 extern void repaintTextFrames( SwModify& rModify );
 
 /*************************************************************************
@@ -488,7 +486,7 @@ sal_Bool SwHyphIter::IsAuto()
 {
     uno::Reference< beans::XPropertySet >  xProp( ::GetLinguPropertySet() );
     return xProp.is() ? *(sal_Bool*)xProp->getPropertyValue(
-                                C2U(UPN_IS_HYPH_AUTO) ).getValue()
+                                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(UPN_IS_HYPH_AUTO)) ).getValue()
                       : sal_False;
 }
 
@@ -1043,7 +1041,7 @@ uno::Reference< XSpellAlternatives >
                     // implementation here by providing an additional parameter.
                     Sequence< PropertyValue > aPropVals(1);
                     PropertyValue &rVal = aPropVals.getArray()[0];
-                    rVal.Name = C2U( UPN_MAX_NUMBER_OF_SUGGESTIONS );
+                    rVal.Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( UPN_MAX_NUMBER_OF_SUGGESTIONS ));
                     rVal.Value <<= (INT16) 7;
 
                     xSpellAlt = xSpell->spell( aWord, eActLang, aPropVals );
