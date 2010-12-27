@@ -120,8 +120,7 @@ BOOL SwCrsrShell::GoNextCell( BOOL bAppendLine )
 BOOL SwCrsrShell::GoPrevCell()
 {
     BOOL bRet = FALSE;
-    const SwTableNode* pTblNd;
-    if( IsTableMode() || 0 != ( pTblNd = IsCrsrInTbl() ))
+    if( IsTableMode() || IsCrsrInTbl() )
     {
         SwCursor* pCrsr = pTblCrsr ? pTblCrsr : pCurCrsr;
         SwCallLink aLk( *this );        // Crsr-Moves ueberwachen,

@@ -997,6 +997,7 @@ ULONG SwCursor::FindAll( SwFindParas& rParas,
             }
             else
                 DeleteMark();
+            delete pSav;
             return 0;
         }
 
@@ -1051,6 +1052,7 @@ ULONG SwCursor::FindAll( SwFindParas& rParas,
             }
             else
                 DeleteMark();
+            delete pSav;
             return 0;
         }
         // es  wurde ein- bis mehrmals gefunden. Das steht alles
