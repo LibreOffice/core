@@ -851,13 +851,13 @@ BOOL ScDocFunc::PutCell( const ScAddress& rPos, ScBaseCell* pNewCell, BOOL bApi 
     return TRUE;
 }
 
-void ScDocFunc::NotifyInputHandler( const ScAddress& /* rPos */ )
+void ScDocFunc::NotifyInputHandler( const ScAddress& rPos )
 {
     ScTabViewShell* pViewSh = ScTabViewShell::GetActiveViewShell();
     if ( pViewSh && pViewSh->GetViewData()->GetDocShell() == &rDocShell )
     {
         ScInputHandler* pInputHdl = SC_MOD()->GetInputHdl();
-        if ( pInputHdl )
+        if ( pInputHdl && pInputHdl->GetCursorPos() == rPos )
         {
             sal_Bool bIsEditMode(pInputHdl->IsEditMode());
 
@@ -986,7 +986,7 @@ ScTokenArray* lcl_ScDocFunc_CreateTokenArrayXML( const String& rText, const Stri
 
 
 ScBaseCell* ScDocFunc::InterpretEnglishString( const ScAddress& rPos,
-        const String& rText, const String& rFormulaNmsp, const formula::FormulaGrammar::Grammar eGrammar )
+        const String& rText, const String& rFormulaNmsp, const formula::FormulaGrammar::Grammar eGrammar, short* pRetFormatType )
 {
     ScDocument* pDoc = rDocShell.GetDocument();
     ScBaseCell* pNewCell = NULL;
@@ -1020,7 +1020,12 @@ ScBaseCell* ScDocFunc::InterpretEnglishString( const ScAddress& rPos,
         sal_uInt32 nEnglish = pFormatter->GetStandardIndex(LANGUAGE_ENGLISH_US);
         double fVal;
         if ( pFormatter->IsNumberFormat( rText, nEnglish, fVal ) )
+        {
             pNewCell = new ScValueCell( fVal );
+            // return the format type from the English format, so a localized format can be created
+            if ( pRetFormatType )
+                *pRetFormatType = pFormatter->GetType( nEnglish );
+        }
         else if ( rText.Len() )
             pNewCell = ScBaseCell::CreateTextCell( rText, pDoc );
 

@@ -62,6 +62,7 @@ class ScVbaWorksheet : public WorksheetImpl_BASE
     css::uno::Reference< ov::excel::XChartObjects > mxCharts;
     css::uno::Reference< ov::excel::XHyperlinks > mxHlinks;
     ::rtl::Reference< ScVbaSheetObjectsBase > mxButtons;
+    bool mbVeryHidden;
 
     css::uno::Reference< ov::excel::XWorksheet > getSheetAtOffset(SCTAB offset) throw (css::uno::RuntimeException);
     css::uno::Reference< ov::excel::XRange > getSheetRange() throw (css::uno::RuntimeException);
@@ -91,8 +92,8 @@ public:
     // Attributes
     virtual ::rtl::OUString SAL_CALL getName() throw (css::uno::RuntimeException);
     virtual void SAL_CALL setName( const ::rtl::OUString &rName ) throw (css::uno::RuntimeException);
-    virtual sal_Bool SAL_CALL getVisible() throw (css::uno::RuntimeException);
-    virtual void SAL_CALL setVisible( sal_Bool bVisible ) throw (css::uno::RuntimeException);
+    virtual sal_Int32 SAL_CALL getVisible() throw (css::uno::RuntimeException);
+    virtual void SAL_CALL setVisible( sal_Int32 nVisible ) throw (css::uno::RuntimeException);
     virtual ::sal_Int32 SAL_CALL getStandardWidth() throw (css::uno::RuntimeException);
     virtual ::sal_Int32 SAL_CALL getStandardHeight() throw (css::uno::RuntimeException);
     virtual ::sal_Bool SAL_CALL getProtectionMode() throw (css::uno::RuntimeException);

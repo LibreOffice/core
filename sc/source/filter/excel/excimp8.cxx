@@ -254,10 +254,15 @@ void ImportExcel8::ReadBasic( void )
         SfxItemSet* pItemSet = rMedium.GetItemSet();
         if( pItemSet )
         {
-            if( const SfxStringItem* pItem = static_cast< const SfxStringItem* >( pItemSet->GetItem( SID_FILE_NAME ) ) )
-                aMediaDesc[ MediaDescriptor::PROP_URL() ] <<= ::rtl::OUString( pItem->GetValue() );
-            if( const SfxStringItem* pItem = static_cast< const SfxStringItem* >( pItemSet->GetItem( SID_PASSWORD ) ) )
-                aMediaDesc[ MediaDescriptor::PROP_PASSWORD() ] <<= ::rtl::OUString( pItem->GetValue() );
+            SFX_ITEMSET_ARG( pItemSet, pFileNameItem, SfxStringItem, SID_FILE_NAME, sal_False );
+            if( pFileNameItem )
+                aMediaDesc[ MediaDescriptor::PROP_URL() ] <<= ::rtl::OUString( pFileNameItem->GetValue() );
+            SFX_ITEMSET_ARG( pItemSet, pPasswordItem, SfxStringItem, SID_PASSWORD, sal_False );
+            if( pPasswordItem )
+                aMediaDesc[ MediaDescriptor::PROP_PASSWORD() ] <<= ::rtl::OUString( pPasswordItem->GetValue() );
+            SFX_ITEMSET_ARG( pItemSet, pEncryptionDataItem, SfxUnoAnyItem, SID_ENCRYPTIONDATA, sal_False );
+            if( pEncryptionDataItem )
+                aMediaDesc[ MediaDescriptor::PROP_ENCRYPTIONDATA() ] = pEncryptionDataItem->GetValue();
         }
         aMediaDesc[ MediaDescriptor::PROP_INPUTSTREAM() ] <<= rMedium.GetInputStream();
         aMediaDesc[ MediaDescriptor::PROP_INTERACTIONHANDLER() ] <<= rMedium.GetInteractionHandler();

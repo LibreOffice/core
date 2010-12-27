@@ -145,6 +145,8 @@ ScContentTree::ScContentTree( Window* pParent, const ResId& rResId ) :
     SetNodeDefaultImages();
 
     SetDoubleClickHdl( LINK( this, ScContentTree, ContentDoubleClickHdl ) );
+
+    SetStyle( GetStyle() | WB_QUICK_SEARCH );
 }
 
 ScContentTree::~ScContentTree()
@@ -1327,11 +1329,11 @@ BOOL ScContentTree::LoadFile( const String& rUrl )
 
 void ScContentTree::InitWindowBits( BOOL bButtons )
 {
-    WinBits nFlags = WB_CLIPCHILDREN|WB_HSCROLL;
+    WinBits nFlags = GetStyle()|WB_CLIPCHILDREN|WB_HSCROLL;
     if (bButtons)
         nFlags |= WB_HASBUTTONS|WB_HASBUTTONSATROOT;
 
-    SetWindowBits( nFlags );
+    SetStyle( nFlags );
 }
 
 void ScContentTree::SetRootType( USHORT nNew )

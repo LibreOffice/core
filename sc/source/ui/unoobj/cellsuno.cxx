@@ -6272,6 +6272,53 @@ void ScCellObj::SetFormulaWithGrammar( const ::rtl::OUString& rFormula,
     }
 }
 
+void ScCellObj::InputEnglishString( const ::rtl::OUString& rText )
+{
+    // This is like a mixture of setFormula and property FormulaLocal:
+    // The cell's number format is checked for "text", a new cell format may be set,
+    // but all parsing is in English.
+
+    ScDocShell* pDocSh = GetDocShell();
+    if ( pDocSh )
+    {
+        String aString(rText);
+        ScDocument* pDoc = pDocSh->GetDocument();
+        SvNumberFormatter* pFormatter = pDoc->GetFormatTable();
+        sal_uInt32 nOldFormat = pDoc->GetNumberFormat( aCellPos );
+        if ( pFormatter->GetType( nOldFormat ) == NUMBERFORMAT_TEXT )
+        {
+            SetString_Impl(aString, FALSE, FALSE);      // text cell
+        }
+        else
+        {
+            ScDocFunc aFunc(*pDocSh);
+            short nFormatType = 0;
+            ScBaseCell* pNewCell = aFunc.InterpretEnglishString( aCellPos, aString,
+                                    EMPTY_STRING, formula::FormulaGrammar::GRAM_PODF_A1, &nFormatType );
+            if (pNewCell)
+            {
+                if ( ( nOldFormat % SV_COUNTRY_LANGUAGE_OFFSET ) == 0 && nFormatType != 0 )
+                {
+                    // apply a format for the recognized type and the old format's language
+                    sal_uInt32 nNewFormat = ScGlobal::GetStandardFormat( *pFormatter, nOldFormat, nFormatType );
+                    if ( nNewFormat != nOldFormat )
+                    {
+                        ScPatternAttr aPattern( pDoc->GetPool() );
+                        aPattern.GetItemSet().Put( SfxUInt32Item( ATTR_VALUE_FORMAT, nNewFormat ) );
+                        // ATTR_LANGUAGE_FORMAT remains unchanged
+                        aFunc.ApplyAttributes( *GetMarkData(), aPattern, TRUE, TRUE );
+                    }
+                }
+                // put the cell into the document
+                // (after applying the format, so possible formula recalculation already uses the new format)
+                (void)aFunc.PutCell( aCellPos, pNewCell, TRUE );
+            }
+            else
+                SetString_Impl(aString, FALSE, FALSE);      // no cell from InterpretEnglishString, probably empty string
+        }
+    }
+}
+
 //  XText
 
 uno::Reference<text::XTextCursor> SAL_CALL ScCellObj::createTextCursor()
