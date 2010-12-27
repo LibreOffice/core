@@ -193,7 +193,7 @@ void OCreationList::SelectSearchEntry( const void* _pEntry )
 }
 
 // -----------------------------------------------------------------------------
-void OCreationList::ExecuteSearchEntry( const void* _pEntry )
+void OCreationList::ExecuteSearchEntry( const void* _pEntry ) const
 {
     SvLBoxEntry* pEntry = const_cast< SvLBoxEntry* >( static_cast< const SvLBoxEntry* >( _pEntry ) );
     DBG_ASSERT( pEntry, "OCreationList::ExecuteSearchEntry: invalid entry!" );
