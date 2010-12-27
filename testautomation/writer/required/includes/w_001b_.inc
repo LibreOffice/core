@@ -198,6 +198,7 @@ testcase tFileSendOutlineToClipboard
 
     PrintLog "Paste outline in new document"
     hUseAsyncSlot( "EditPaste" )
+    WaitSlot(1000)
     Call wTypeKeys("<Up>", 6)
     Call wTypeKeys("<Home><Shift End>")
     hUseAsyncSlot( "EditCopy" )

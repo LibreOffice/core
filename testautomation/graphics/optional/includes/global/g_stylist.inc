@@ -38,17 +38,18 @@ testcase tFormatStylistFlyer
     Dim ySize%
 
     printlog "   - Format/Stylist : using all possible things to manipulate the flyer"
-    '/// open application ///'
+    printlog "open application"
     Call  hNewDocument
     Kontext "Gestalter"
-    '/// Check if stylist is there. Expected: not there ///'
+    printlog "Check if stylist is there. Expected: not there"
     if Gestalter.NotExists = false Then
-        qaErrorLog "   - Expected Stylist to be closed; But is Open. Check tests."
+        qaErrorLog "Expected Stylist to be closed; But is Open. Check tests."
     else
         if lcase(gPlatform) = "osx" then
             hTypekeys "<mod1 t>"
         else
-            hTypekeys "<F11>"   '/// open stylist by pressing key [F11] ///'
+            printlog "open stylist by pressing key [F11]"
+            hTypekeys "<F11>"   
         end if
         sleep 1
     end if
@@ -57,51 +58,51 @@ testcase tFormatStylistFlyer
         Warnlog "   No stylist popped up using F11; opening now via slotID"
         FormatStylist
     end if
-    '///+ save stylist position and size ///'
+    printlog "save stylist position and size"
     xPos% = Gestalter.GetPosX
     yPos% = Gestalter.GetPosY
     xSize% = Gestalter.GetSizeX
     ySize% = Gestalter.GetSizeY
-    '///+ if Stylist is docked; undock ///'
+    printlog " if Stylist is docked; undock"
     if Gestalter.IsDocked then Gestalter.UnDock
-    printlog "  -   '///move stylist ///"
-    '///+ move stylist to 10,10 ///'
+    printlog " move stylist"
+    printlog "move stylist to 10,10"
     Gestalter.Move 10, 10
     Sleep 1
-    '///+ move stylist to 300,400 ///'
+    printlog "move stylist to 300,400"
     Gestalter.Move 300, 400
     Sleep 1
-    '///+ move stylist to 590,790 ///'
+    printlog "move stylist to 590,790"
     Gestalter.Move 590, 790
     Sleep 1
-    '///+ move stylist back to saved start position ///'
+    printlog " move stylist back to saved start position"
     Gestalter.Move xPos%, yPos%
     Sleep 1
 
-    printlog "  -   '///size stylist ///"
-    '///+ change size to 200,200 ///'
+    printlog "size stylist"
+    printlog "change size to 200,200"
     Gestalter.Size 200, 200
     Sleep 1
-    '///+ change size to 300,400 ///'
+    printlog "change size to 300,400"
     Gestalter.Size 300, 400
     Sleep 1
-    '///+ change size to 150,250 ///'
+    printlog "change size to 150,250"
     Gestalter.Size 150, 250
     Sleep 1
-    '///+ change size back to saved size ///'
+    printlog "change size back to saved size"
     Gestalter.Size xSize%, ySize%
     Sleep 1
 
-    printlog "  -   Close stylist reopen stylist, check if appearence is same as before"
-    '/// save stylist position and size ///'
+    printlog "Close stylist reopen stylist, check if appearence is same as before"
+    printlog "save stylist position and size"
     xPos% = Gestalter.GetPosX
     yPos% = Gestalter.GetPosY
     xSize% = Gestalter.GetSizeX
     ySize% = Gestalter.GetSizeY
-    '/// close stylist Format->Stylist ///'
+    printlog "close stylist Format->Stylist"
     FormatStylist
     Sleep 1
-    '/// open stylist Format->Stylist ///'
+    printlog "open stylist Format->Stylist"
     FormatStylist
     sleep (1)
     if xPos% <> Gestalter.GetPosX then Warnlog "The x-Pos. has changed : Should be -> '"+ xPos% +  "'  Is -> '"+ Gestalter.GetPosX  +"'."
@@ -110,29 +111,29 @@ testcase tFormatStylistFlyer
     if ySize% <> Gestalter.GetSizeY then Warnlog "The y-Size has changed : Should be -> '"+ ySize% + "'  Is -> '"+ Gestalter.GetSizeY +"'."
 
     printlog "  -   dock stylist"
-    '/// dock stylist ///'
+    printlog "dock stylist"
     Gestalter.Dock
     Sleep 1
     if (NOT Gestalter.IsDocked) then
         warnlog "   stylist not docked but should"
     endif
-    '/// UNdock stylist ///'
+    printlog "UNdock stylist"
     if (Gestalter.IsDocked) Then
         Gestalter.UnDock
     endif
     Sleep 1
 
     printlog "  -   maximize/minimize stylist"
-    '/// minimize stylist ///'
+    printlog "minimize stylist"
     Gestalter.Minimize
     Sleep 1
-    '/// maximize stylist ///'
+    printlog "maximize stylist"
     Gestalter.Maximize
     Sleep 1
     if (NOT Gestalter.IsMax) then
         warnlog "   The stylist did not return to maximized state"
     endif
-    '/// close stylist ///'
+    printlog "close stylist"
     Gestalter.Close
     Call  hCloseDocument
 

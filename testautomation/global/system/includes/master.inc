@@ -84,6 +84,10 @@ sub GetUseFiles
     Call GetIniInformation                '///+<li><b>GetIniInformation</b>: Get all information out of the <i>testtool.ini/.testtoolrc</i> and set it on global variables (iniinfo.inc)</li>
     Call GetOfficeInformation             '///+<li><b>GetOfficeInformation</b>: Set <i>sAppExe</i> for startup (iniinfo.inc)</li>
 
+    gVersionsnummer = FindBuildID
+    ' split versionstring into its parts
+    call hSetBuildVersionInformation(False)
+
     Call LoadDeclaration                  '///+<ul><li><b>LoadDeclaration</b>: Load all declaration files (master.inc)</li>
 
     Call FirstOfficeStart                 '///+<li><b>FirstOfficeStart</b>: Try to start the office for first time (master.inc)</li>

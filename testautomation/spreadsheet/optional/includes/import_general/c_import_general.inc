@@ -57,31 +57,6 @@ end sub
 '
 '-------------------------------------------------------------------------------
 '
-function IsItLoaded as boolean
-    '/// IsItLoaded
-    '/// Wait until document is loaded
-    Dim iLoop as integer
-
-    IsItLoaded = FALSE
-    sleep(3)
-    for iLoop =1 to 20
-        try
-            'Calling slot 'IsDocLoading'
-            IsItLoaded = IsDocLoading
-        catch
-            IsItLoaded = FALSE
-        endcatch
-
-        if IsItLoaded = TRUE then
-            exit for
-        end if
-        sleep(1)
-    next iLoop
-    sleep(2)
-end function
-'
-'-------------------------------------------------------------------------------
-'
 testcase tLoadSpreadsheetDocument (SourceFile)
 
     Dim sOnlyFileName as string
@@ -102,7 +77,7 @@ testcase tLoadSpreadsheetDocument (SourceFile)
     if sOnlyFileName > "" then
         'Some extensions make no sense to load
         if sOnlyFileExtension <> "so" AND sOnlyFileExtension <> "tmp" AND sOnlyFileExtension <> "dbt" then
-            if fCalcFileOpen(SourceFile) AND IsItLoaded()then                
+            if fCalcFileOpen(SourceFile) then
                 if (hIsNamedDocLoaded (SourceFile)) then
                     printlog "-  loaded"
                     sleep(15)

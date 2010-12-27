@@ -126,3 +126,8 @@ OrdnerName sym:fpicker:Edit:DLG_SVT_QUERYFOLDERNAME:ED_SVT_QUERYFOLDERNAME_DLG_N
 ' ****
 *TranslationWindow sym:svtools:WorkWindow:TT_INLINE_TRANSLATION svtools:FloatingWindow:TT_INLINE_TRANSLATION
 
+' **** specal longnames for bas test
+' **** author marc.neumann@oracle.com
+*MSC_Special_Dialog sym:customcontrol1
+*MSC_Special_Dialog2 sym:customcontrol2
+*MSC_Special_Dialog3 sym:customcontrol3

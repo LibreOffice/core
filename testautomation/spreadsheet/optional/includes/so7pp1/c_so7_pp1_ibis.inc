@@ -125,10 +125,10 @@ testcase tIBIS111158
     Kontext "TabGeneralControl"
     '/// Enter in 'Help URL' as value exactly 'HID:123456'
     TabGeneralControl.TypeKeys "<TAB>" , true
-    HelpURL.setText "HID:123456"
+    HelpURL.setText "customcontrol1"
     HelpURL.TypeKeys "<RETURN>",true
-    if HelpURL.GetText <> "HID:123456" then
-        warnlog "'HID:123456' has not been accepted as 'Help URL' value."
+    if HelpURL.GetText <> "customcontrol1" then
+        warnlog "'customcontrol1' has not been accepted as 'Help URL' value."
     end if
 
     Kontext "ControlPropertiesDialog"

@@ -54,19 +54,19 @@ testcase tiShaddow
    dim linewidth as string
    dim cornerstyletype as string
 
-    '/// Set the file-extension we'll be using when opening the saved file ///'
+    printlog "Set the file-extension we'll be using when opening the saved file "
     if (gApplication = "IMPRESS") then
         ExtensionString = "odp"
     else
         ExtensionString = "odg"
     end if
 
-   '/// Open application ///'
+   printlog "Open application "
    Call hNewDocument
    Call sSelectEmptyLayout
    sleep 1
 
-   '/// Import picture ///'
+   printlog "Import picture "
    InsertGraphicsFromFile
       sleep 3
       kontext "Active"
@@ -81,10 +81,10 @@ testcase tiShaddow
       Oeffnen.Click
    printlog "Inserted file"
    sleep 2
-   '/// Select all ///'
+   printlog "Select all"
    EditSelectAll
    sleep 3
-   '/// Check values and save them ///'
+   printlog "Check values and save them"
    FormatPositionAndSize
       kontext
       active.SetPage TabPositionAndSize
@@ -92,11 +92,11 @@ testcase tiShaddow
       ImageWidth = Width.GetText
       ImageHeight = Height.GetText
       printlog "Got values from position and size"
-   '/// Check the "Protect Size"-button. And close dialogue. ///'
+   printlog "Check the Protect Size-button. And close dialogue. "
       ProtectSize.Check
       TabPositionAndSize.Ok
 
-   '/// Add Shaddow via Toolbar-Button ///'
+   printlog "Add Shaddow via Toolbar-Button "
        Kontext "GraphicObjectbar"
        if GraphicObjectbar.Exists = FALSE then 
            ViewToolbarsPicture
@@ -106,21 +106,21 @@ testcase tiShaddow
        end if
        sleep 1
 
-   '/// click button 'Shadow' ///'
-   Schatten.Click
-'  '/// Check and save Shaddow-values via context-menu ///'
-   EditSelectAll
-   hOpenContextMenu
-      sleep(2)
-      if hMenuFindSelect(10142, true, 4) = false then
+    printlog "click button 'Shadow'"
+    Schatten.Click
+    printlog " Check and save Shaddow-values via context-menu "
+    EditSelectAll
+    hOpenContextMenu
+    sleep(2)
+    if hMenuFindSelect(10142, true, 4) = false then
          Warnlog "Context-Menu-entry `Area` was not found. Therefore the test ends."
          Call hCloseDocument
          Goto Endsub
-      endif
-   '/// Select Contextmenu entry "Area" ///'
-      sleep(2)
+    endif
+    printlog " Select Contextmenu entry Area "
+    sleep(2)
    kontext "TabArea"
-   '/// Switch to Shaddow-tabpage, do some changes, save them, close dialogue
+   printlog "Switch to Shaddow-tabpage, do some changes, save them, close dialogue"
    Kontext
    active.SetPage TabSchatten
    kontext "TabSchatten"
@@ -131,20 +131,20 @@ testcase tiShaddow
          Warnlog "'Use Shadow' doesn't exist or isn't visible."
       endif
 
-      '/// Change Distance and Transparency-values ///'
-      Entfernung.More ',2
-      Transparenz.More ',2
-      shadowdistancevalue = Entfernung.GetText
-      shadowcolorvalue = Farbe.GetSelText
-      shadowtransparencyvalue = Transparenz.GetText
-      printlog "Got values from TabArea"
-   TabSchatten.Ok
+    printlog "Change Distance and Transparency-values "
+    Entfernung.More ',2
+    Transparenz.More ',2
+    shadowdistancevalue = Entfernung.GetText
+    shadowcolorvalue = Farbe.GetSelText
+    shadowtransparencyvalue = Transparenz.GetText
+    printlog "Got values from TabArea"
+    TabSchatten.Ok
 
-   '/// Check if it's the same when going over FormatArea ///'
+   printlog "Check if it's the same when going over FormatArea "
    FormatArea
    sleep 1
    kontext "TabArea"
-   '/// Switch to Shaddow-tabpage, do some changes, save them, close dialogue ///'
+   printlog "Switch to Shaddow-tabpage, do some changes, save them, close dialogue "
    Kontext
    active.SetPage TabSchatten
    kontext "TabSchatten"
@@ -165,23 +165,23 @@ testcase tiShaddow
     endif
    TabSchatten.Ok
 
-   '/// Add Cornerstyle via FormatLine ///'
-   FormatLine
-      Kontext
-      Messagebox.SetPage TabLinie
-         kontext "TabLinie"
-         Stil.Select 2    ' Select Continuously.
-         linetype = Stil.GetItemText
-         Farbe.Select 2 ' Select Blue
-         linecolour = Farbe.GetItemText
-         Breite.More 3 ' Set Width to 3
-         linewidth = Breite.Gettext
-         CornerStyle.Select 4 ' Select number four: Beveled
-         cornerstyletype = CornerStyle.GetSelText
-         printlog "Cornerstyle is: " + CornerStyle.GetSelText '+ cornerstyletype
+    printlog "Add Cornerstyle via FormatLine "
+    FormatLine
+    Kontext
+    Messagebox.SetPage TabLinie
+    kontext "TabLinie"
+    Stil.Select 2    ' Select Continuously.
+    linetype = Stil.GetItemText
+    Farbe.Select 2 ' Select Blue
+    linecolour = Farbe.GetItemText
+    Breite.More 3 ' Set Width to 3
+    linewidth = Breite.Gettext
+    CornerStyle.Select 4 ' Select number four: Beveled
+    cornerstyletype = CornerStyle.GetSelText
+    printlog "Cornerstyle is: " + CornerStyle.GetSelText '+ cornerstyletype
       TabLinie.ok
 
-   '/// Check values via PositionAndSize via the Contextmenu ///'
+   printlog "Check values via PositionAndSize via the Contextmenu "
    hOpenContextmenu
       sleep(2)
       if hMenuFindSelect(10087, true, 1) = false then
@@ -189,35 +189,35 @@ testcase tiShaddow
          Call hCloseDocument
          Goto Endsub
       endif
-      'Select "Position and Size"
-      sleep(2)
-      Kontext
-      Active.SetPage TabPositionAndSize
-      Kontext "TabPositionAndSize"
-      if ImageWidth <> Width.GetText then warnlog "Position X differs. Should be: " + ImageWidth + " But is: " + Width.GetText
-      if ImageHeight <> Height.GetText then warnlog "Position Y differs. Should be: " + ImageHeight + " But is: " + Height.GetText
+    printlog "Select Position and Size"
+    sleep(2)
+    Kontext
+    Active.SetPage TabPositionAndSize
+    Kontext "TabPositionAndSize"
+    if ImageWidth <> Width.GetText then warnlog "Position X differs. Should be: " + ImageWidth + " But is: " + Width.GetText
+    if ImageHeight <> Height.GetText then warnlog "Position Y differs. Should be: " + ImageHeight + " But is: " + Height.GetText
    TabPositionAndSize.OK
 
-   '/// Check Cornerstyle via FormatLine ///'
-   FormatLine
-      Kontext
-      Messagebox.SetPage TabLinie
-         kontext "TabLinie"
-         if linetype <> Stil.GetItemText then warnlog "Linetype should be: " + linetype + " But is: " + Stil.GetItemText
-         if linecolour <> Farbe.GetItemText then warnlog "Linecolour should be: " + linetype + " But is: " + Farbe.GetItemText
-         if linewidth <> Breite.GetText then warnlog "Linewidth should be: " + linewidth + " But is: " + Breite.GetText
-         if cornerstyletype <> CornerStyle.GetSelText then warnlog "CornerStyle should be: " + cornerstyletype + " But is: " + CornerStyle.GetSelText 'ItemText
-      TabLinie.ok
+   printlog "Check Cornerstyle via FormatLine "
+    FormatLine
+    Kontext
+    Messagebox.SetPage TabLinie
+    kontext "TabLinie"
+    if linetype <> Stil.GetItemText then warnlog "Linetype should be: " + linetype + " But is: " + Stil.GetItemText
+    if linecolour <> Farbe.GetItemText then warnlog "Linecolour should be: " + linetype + " But is: " + Farbe.GetItemText
+    if linewidth <> Breite.GetText then warnlog "Linewidth should be: " + linewidth + " But is: " + Breite.GetText
+    if cornerstyletype <> CornerStyle.GetSelText then warnlog "CornerStyle should be: " + cornerstyletype + " But is: " + CornerStyle.GetSelText 'ItemText
+    TabLinie.ok
 
-   '/// Check if the Shaddow-button is activated ///'
-      Kontext "GraphicObjectbar"
-      if Schatten.GetState(2) <> 1 then 
-          warnlog "Shaddow-button shouldnt have been checked"
-      endif
+    printlog "Check if the Shaddow-button is activated "
+    Kontext "GraphicObjectbar"
+    if Schatten.GetState(2) <> 1 then
+        warnlog "Shaddow-button shouldnt have been checked"
+    endif
 
-   '/// Save the file. Then close the office and reload the file ///'
+   printlog "Save the file. Then close the office and reload the file "
    sFileName = ( ConvertPath(gOfficePath + "user\work\shaddow-test"))
-   '/// File-Save As with filter as: "user\temp\shaddow-test" ///'
+   printlog "File-Save As with filter as: user\temp\shaddow-test "
    try
       FileSaveAs
          Kontext "SpeichernDlg"
@@ -233,12 +233,12 @@ testcase tiShaddow
       warnlog "Error when saving file."
    endcatch
 
-   '/// Close the office-session ///'
+   printlog "Close the office-session "
    FileClose
       Kontext "Messagebox"
       if Messagebox.Exists(2) then Messagebox.Yes
    Sleep 3
-   '/// Open the saved file ///'
+   printlog "Open the saved file "
    try
       hFileOpen sFileName + "." + ExtensionString
       Sleep 3
@@ -247,11 +247,11 @@ testcase tiShaddow
       warnlog "Error when opening file."
    endcatch
 
-   '/// Select all ///'
+   printlog "Select all "
    EditSelectAll
    sleep 2
 
-   '/// Check if the Shaddow-button still is activated ///'
+   printlog "Check if the Shaddow-button still is activated "
    kontext "GraphicObjectbar"
    if schatten.Getstate(2) <> 1 then
       warnlog "The Shadow-button should be activated"
@@ -259,7 +259,7 @@ testcase tiShaddow
       Printlog "Shaddowbutton activated, good."
    endif
 
-   '/// Check the attributes for the picture ///'
+   printlog "Check the attributes for the picture "
    hOpenContextmenu
       sleep(2)
       if hMenuFindSelect(10087, true, 1) = false then
@@ -267,7 +267,7 @@ testcase tiShaddow
          Call hCloseDocument
          Goto Endsub
       endif
-      'Select "Position and Size"
+      printlog "Position and Size"
       sleep(2)
       Kontext
       Active.SetPage TabPositionAndSize
@@ -279,7 +279,7 @@ testcase tiShaddow
    FormatArea
       sleep 1
       kontext "TabArea"
-      '/// Switch to Shaddow-tabpage, do some changes, save them, close dialogue ///'
+      printlog "Switch to Shaddow-tabpage, do some changes, save them, close dialogue "
       Kontext
       active.SetPage TabSchatten
       kontext "TabSchatten"
@@ -293,7 +293,7 @@ testcase tiShaddow
          if shadowcolorvalue <> Farbe.GetSelText then warnlog "Color value changed. Should be: " + shadowcolorvalue + ". But is: " + Farbe.gettext
          if shadowtransparencyvalue <> Transparenz.GetText then warnlog "Transparency value changed. Should be: " + shadowtransparencyvalue + ". But is: " + Transparenz.gettext
 
-   '/// Check Transparency ///'
+   printlog "Check Transparency"
       Kontext
       Active.SetPage TabTransparenz
       kontext "TabTransparenz"
@@ -306,7 +306,7 @@ testcase tiShaddow
    kontext "TabSchatten"
       TabSchatten.Ok
 
-   '/// Check Cornerstyle via FormatLine ///'
+   printlog "Check Cornerstyle via FormatLine "
    FormatLine
       Kontext
       Messagebox.SetPage TabLinie
@@ -317,7 +317,7 @@ testcase tiShaddow
          if cornerstyletype <> CornerStyle.GetSelText then warnlog "CornerStyle should be: " + cornerstyletype + " But is: " + CornerStyle.GetSelText 'ItemText
       TabLinie.ok
 
-   '/// If Impress: Save as Powerpoint-file. If Draw: Save as usual Draw-file. ///'
+   printlog "If Impress: Save as Powerpoint-file. If Draw: Save as usual Draw-file. "
     if (gApplication = "IMPRESS") then
         ExtensionString = "ppt"
     else
@@ -344,19 +344,19 @@ testcase tiShaddow
          printlog "Saved as: " + sFileName
       Sleep 3
 
-   '/// Close the office and reload the file ///'
+   printlog "Close the office and reload the file"
    FileClose
       Kontext "Messagebox"
       if Messagebox.Exists(2) then Messagebox.Yes
    Sleep 3
-   '/// Open the saved file ///'
+   printlog " Open the saved file "
    hFileOpen (sFileName + "." + ExtensionString)
    printlog "File opened: " + sFileName + "." + ExtensionString
    Sleep 3
-   '/// Select all ///'
+   printlog "Select all"
    EditSelectAll
 
-   '/// Check the attributes for the picture ///'
+   printlog "Check the attributes for the picture"
    hOpenContextmenu
       sleep(2)
       if hMenuFindSelect(10087, true, 1) = false then
@@ -364,7 +364,7 @@ testcase tiShaddow
          Call hCloseDocument
          Goto Endsub
       endif
-      'Select "Position and Size"
+      printlog "Select Position and Size"
       sleep(2)
       Kontext
       Active.SetPage TabPositionAndSize
@@ -373,7 +373,7 @@ testcase tiShaddow
       if ImageHeight <> Height.GetText then warnlog "Position X differs. Should be: " + ImageHeight + " But is: " + Height.GetText
       TabPositionAndSize.OK
 
-   '/// Check if transparency has disappeared and if the cornerstyle has changed ///'
+   printlog "Check if transparency has disappeared and if the cornerstyle has changed"
    FormatArea
       Kontext
       Messagebox.SetPage TabTransparenz
@@ -402,7 +402,7 @@ testcase tiShaddow
 
    TabTransparenz.Cancel
 
-   '/// Check Cornerstyle via FormatLine ///'
+   printlog "Check Cornerstyle via FormatLine "
    FormatLine
       Kontext
       Messagebox.SetPage TabLinie
@@ -413,7 +413,7 @@ testcase tiShaddow
          if cornerstyletype <> CornerStyle.GetSelText then warnlog "CornerStyle should be: " + cornerstyletype + " But is: " + CornerStyle.GetSelText 'ItemText
       TabLinie.ok
 
-   '/// Remove the Shaddow, Transparency and Cornerstyle ///'
+   printlog "Remove the Shaddow, Transparency and Cornerstyle"
    FormatArea
       Kontext
       Messagebox.SetPage TabTransparenz
@@ -421,14 +421,14 @@ testcase tiShaddow
          KeineTransparenz.Check
       sleep 1
       kontext "TabArea"
-         '/// Switch to Shaddow-tabpage, do some changes, save them, close dialogue ///'
+         printlog "Switch to Shaddow-tabpage, do some changes, save them, close dialogue"
          Kontext
          active.SetPage TabSchatten
          kontext "TabSchatten"
          Anzeigen.UnCheck
      TabSchatten.Ok
 
-   '/// If Impress: Save as Powerpoint-file. If Draw: Save as usual Draw-file. ///'
+   printlog "If Impress: Save as Powerpoint-file. If Draw: Save as usual Draw-file."
     if (gApplication = "IMPRESS") then
         ExtensionString = "ppt"
     else
@@ -454,19 +454,19 @@ testcase tiShaddow
          printlog "Saved as: " + sFileName
       Sleep 3
 
-   '/// Close the office-session ///'
+   printlog "Close the office-session"
    FileClose
       Kontext "Messagebox"
       if Messagebox.Exists(2) then Messagebox.Yes
    Sleep 3
-   '/// Open the saved file ///'
+   printlog "Open the saved file"
    hFileOpen (sFileName + "." + ExtensionString)
    printlog "File opened: " + sFileName + "." + ExtensionString
    Sleep 3
-   '/// Select all ///'
+   printlog "Select all"
    EditSelectAll
 
-   '/// Check the attributes for the picture ///'
+   printlog "Check the attributes for the picture"
    hOpenContextmenu
       sleep(2)
       if hMenuFindSelect(10087, true, 1) = false then
@@ -474,7 +474,7 @@ testcase tiShaddow
          Call hCloseDocument
          Goto Endsub
       endif
-      'Select "Position and Size"
+      printlog "Select Position and Size"
       sleep(2)
       Kontext
       Active.SetPage TabPositionAndSize
@@ -483,7 +483,7 @@ testcase tiShaddow
       if ImageHeight <> Height.GetText then warnlog "Position X differs. Should be: " + ImageHeight + " But is: " + Height.GetText
       TabPositionAndSize.OK
 
-   '/// Check if transparency has disappeared ///'
+   printlog "Check if transparency has disappeared "
    FormatArea
       Kontext
       Messagebox.SetPage TabTransparenz
@@ -495,7 +495,7 @@ testcase tiShaddow
          end if
    TabTransparenz.Cancel
 
-   '/// Check if the cornerstyle has changed via FormatLine ///'
+   printlog "Check if the cornerstyle has changed via FormatLine "
    FormatLine
       Kontext
       Messagebox.SetPage TabLinie
@@ -506,7 +506,7 @@ testcase tiShaddow
          if cornerstyletype <> CornerStyle.GetSelText then warnlog "CornerStyle should be: " + cornerstyletype + " But is: " + CornerStyle.GetSelText 'ItemText
       TabLinie.ok
 
-   '/// Close application ///'
+   printlog "Close application"
    Call hCloseDocument
    Printlog "Finished Shaddow-test for " + gApplication
    

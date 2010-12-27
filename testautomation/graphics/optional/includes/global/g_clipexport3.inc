@@ -48,7 +48,7 @@
 
 Sub Get_Position_Size_Attributes
 
-    Printlog "   Get_Position_Size_Attributes Starts"
+    Printlog "Get_Position_Size_Attributes Starts"
 
     FormatPositionAndSize
 
@@ -63,7 +63,7 @@ Sub Get_Position_Size_Attributes
     End Select
     sleep 1
 
-    ' /// Size-values ///'
+    printlog "Size-values"
     PositionWidth = Width.GetText
     PositionHeight = Height.GetText
 
@@ -86,7 +86,7 @@ Sub Get_Position_Size_Attributes
                 sleep 3
                 Printlog "   Get_Position_Size_Attributes Ends"
 
-end sub
+end sub 'Get_Position_Size_Attributes
 
 '-------------------------------------------------------------------------------
 sub Get_Colour_Attributes
@@ -100,7 +100,7 @@ sub Get_Colour_Attributes
     Kontext "TabArea"
 
 
-    ' /// Area ///'
+    printlog "Area"
     FillOptions.Select 2
     if FillOptions.GetSelIndex <> 2 then Errorlog "Couldnt click on 'Color' in FormatArea"
         AreaColourListValue = ColourList.GetSelText
@@ -273,7 +273,7 @@ sub Get_Colour_Attributes
                                     TabArea.Cancel
                                     printlog "   Get_Colour_Attributes ends"
 
-end sub
+end sub 'Get_Colour_Attributes
 
 '-------------------------------------------------------------------------------
 sub Check_Position_Size_Attributes
@@ -355,7 +355,7 @@ sub Check_Position_Size_Attributes
                                             sleep 3
                                             printlog "   Check_Position_Size_Attributes Ends"
 
-end sub
+end sub 'Check_Position_Size_Attributes
 
 '----------------------------------------------------------------------------------------------------
 sub Check_Text_Formatting
@@ -412,8 +412,10 @@ sub Check_Text_Formatting
                                 SetKontextApplication
                                 printlog "   Check_Text_Formatting Ends"
 
-end suB
-                                '----------------------------------------------------------------------------------------------------
+end sub 'Check_Text_Formatting
+
+'-------------------------------------------------------------------------------
+
 sub Check_Colors_Borders_Attributes
 
     printlog "   Check_Colors_Borders_Attributes Starts"
@@ -425,7 +427,7 @@ sub Check_Colors_Borders_Attributes
     Active.setpage TabArea
     Kontext "TabArea"
 
-    ' /// Area ///'
+    printlog "Area"
     FillOptions.Select 2
     if FillOptions.GetSelIndex <> 2 then Errorlog "Couldnt click on 'Color' in FormatArea"
 
@@ -608,7 +610,7 @@ sub Check_Colors_Borders_Attributes
                                                                                                                                                 Printlog "End of one application"
 
 
-end sub
+end sub 'Check_Colors_Borders_Attributes
    '---------------------------------- Set the Kontext to the current Application ----------------------------------'
 sub SetKontextApplication
 
@@ -633,7 +635,7 @@ sub SetKontextApplication
     end select
     sleep 1
 
-end sub
+end sub 'SetKontextApplication
 
 '------------------------- Part with "create new windows" ---------------------
 sub New_Draw
@@ -644,7 +646,7 @@ sub New_Draw
     Call hNewDocument
     SetKontextApplication
 
-end sub
+end sub 'New_Draw
 
 '-------------------------------------------------------------------------------
 sub New_Impress
@@ -656,7 +658,7 @@ sub New_Impress
     Call hNewDocument
     SetKontextApplication
 
-end sub
+end sub 'New_Impress
 
 '-------------------------------------------------------------------------------
 sub New_Calc
@@ -668,7 +670,7 @@ sub New_Calc
     Call hNewDocument
     SetKontextApplication
 
-end sub
+end sub 'New_Calc
 
 '-------------------------------------------------------------------------------
 sub New_Writer
@@ -680,7 +682,7 @@ sub New_Writer
     Call hNewDocument
     SetKontextApplication
 
-end sub
+end sub 'New_Writer
 
 '-------------------------------------------------------------------------------
 testcase Choose_Toapplication
@@ -709,6 +711,6 @@ testcase Choose_Toapplication
     Call hNewDocument
     SetKontextApplication
 
-endcase
+endcase 'Choose_Toapplication
 
 '--------------------------------------------------------------------------------------------------------
