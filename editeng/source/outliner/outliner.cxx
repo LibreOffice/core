@@ -66,6 +66,8 @@
 // #101498# calculate if it's RTL or not
 #include <unicode/ubidi.h>
 
+using ::std::advance;
+
 #define DEFAULT_SCALE   75
 
 static const USHORT nDefStyles = 3; // Sonderbehandlung fuer die ersten 3 Ebenen
@@ -1141,9 +1143,9 @@ void Outliner::InvalidateBullet( Paragraph* /*pPara*/, ULONG nPara )
     DBG_CHKTHIS(Outliner,0);
 
     long nLineHeight = (long)pEditEngine->GetLineHeight((USHORT)nPara );
-    OutlinerView* pView = aViewList.First();
-    while( pView )
+    for ( size_t i = 0, n = aViewList.size(); i < n; ++i )
     {
+        OutlinerView* pView = aViewList[ i ];
         Point aPos( pView->pEditView->GetWindowPosTopLeft((USHORT)nPara ) );
         Rectangle aRect( pView->GetOutputArea() );
         aRect.Right() = aPos.X();
@@ -1152,7 +1154,6 @@ void Outliner::InvalidateBullet( Paragraph* /*pPara*/, ULONG nPara )
         aRect.Bottom() += nLineHeight;
 
         pView->GetWindow()->Invalidate( aRect );
-        pView = aViewList.Next();
     }
 }
 
@@ -1249,8 +1250,6 @@ void Outliner::ImpTextPasted( ULONG nStartPara, USHORT nCount )
     const ULONG nStart = nStartPara;
 
     Paragraph* pPara = pParaList->GetParagraph( nStartPara );
-//  Paragraph* pLastConverted = NULL;
-//    bool bFirst = true;
 
     while( nCount && pPara )
     {
@@ -1365,30 +1364,44 @@ Outliner::~Outliner()
     delete pEditEngine;
 }
 
-ULONG Outliner::InsertView( OutlinerView* pView, ULONG nIndex )
+size_t Outliner::InsertView( OutlinerView* pView, size_t nIndex )
 {
     DBG_CHKTHIS(Outliner,0);
-
-    aViewList.Insert( pView, nIndex );
+    size_t ActualIndex;
+//joe
+    if ( nIndex >= aViewList.size() )
+    {
+        aViewList.push_back( pView );
+        ActualIndex = aViewList.size() - 1;
+    }
+    else
+    {
+        ViewList::iterator it = aViewList.begin();
+        advance( it, nIndex );
+        ActualIndex = nIndex;
+    }
     pEditEngine->InsertView(  pView->pEditView, (USHORT)nIndex );
-    return aViewList.GetPos( pView );
+    return ActualIndex;
 }
 
 OutlinerView* Outliner::RemoveView( OutlinerView* pView )
 {
     DBG_CHKTHIS(Outliner,0);
 
-    ULONG nPos = aViewList.GetPos( pView );
-    if ( nPos != LIST_ENTRY_NOTFOUND )
+    for ( ViewList::iterator it = aViewList.begin(); it < aViewList.end(); ++it )
     {
-        pView->pEditView->HideCursor(); // HACK wg. BugId 10006
-        pEditEngine->RemoveView(  pView->pEditView );
-        aViewList.Remove( nPos );
+        if ( *it == pView )
+        {
+            pView->pEditView->HideCursor(); // HACK wg. BugId 10006
+            pEditEngine->RemoveView(  pView->pEditView );
+            aViewList.erase( it );
+            break;
+        }
     }
     return NULL;    // MT: return ueberfluessig
 }
 
-OutlinerView* Outliner::RemoveView( ULONG nIndex )
+OutlinerView* Outliner::RemoveView( size_t nIndex )
 {
     DBG_CHKTHIS(Outliner,0);
 
@@ -1396,21 +1409,27 @@ OutlinerView* Outliner::RemoveView( ULONG nIndex )
     pEditView->HideCursor(); // HACK wg. BugId 10006
 
     pEditEngine->RemoveView( (USHORT)nIndex );
-    aViewList.Remove( nIndex );
+
+    {
+        ViewList::iterator it = aViewList.begin();
+        advance( it, nIndex );
+        aViewList.erase( it );
+    }
+
     return NULL;    // MT: return ueberfluessig
 }
 
 
-OutlinerView* Outliner::GetView( ULONG nIndex ) const
+OutlinerView* Outliner::GetView( size_t nIndex ) const
 {
     DBG_CHKTHIS(Outliner,0);
-    return aViewList.GetObject( nIndex );
+    return ( nIndex >= aViewList.size() ) ? NULL : aViewList[ nIndex ];
 }
 
-ULONG Outliner::GetViewCount() const
+size_t Outliner::GetViewCount() const
 {
     DBG_CHKTHIS(Outliner,0);
-    return aViewList.Count();
+    return aViewList.size();
 }
 
 void Outliner::ParagraphInsertedHdl()

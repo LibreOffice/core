@@ -395,8 +395,7 @@ public:
 bool EDITENG_DLLPUBLIC  GetStatusValueForThesaurusFromContext( String &rStatusVal, LanguageType &rLang, const EditView &rEditView );
 void EDITENG_DLLPUBLIC  ReplaceTextWithSynonym( EditView &rEditView, const String &rSynonmText );
 
-
-DECLARE_LIST(ViewList,OutlinerView*)
+typedef ::std::vector< OutlinerView* > ViewList;
 
 class EDITENG_DLLPUBLIC DrawPortionInfo
 {
@@ -727,11 +726,11 @@ public:
     void            SetAddExtLeading( BOOL b );
     BOOL            IsAddExtLeading() const;
 
-    ULONG           InsertView( OutlinerView* pView, ULONG nIndex=LIST_APPEND);
+    size_t          InsertView( OutlinerView* pView, size_t nIndex = size_t(-1) );
     OutlinerView*   RemoveView( OutlinerView* pView );
-    OutlinerView*   RemoveView( ULONG nIndex );
-    OutlinerView*   GetView( ULONG nIndex ) const;
-    ULONG           GetViewCount() const;
+    OutlinerView*   RemoveView( size_t nIndex );
+    OutlinerView*   GetView( size_t nIndex ) const;
+    size_t          GetViewCount() const;
 
     Paragraph*      Insert( const String& rText, ULONG nAbsPos = LIST_APPEND, sal_Int16 nDepth = 0 );
     void            SetText( const OutlinerParaObject& );
@@ -768,9 +767,7 @@ public:
     BOOL            HasChilds( Paragraph* pParagraph ) const;
     ULONG           GetChildCount( Paragraph* pParent ) const;
     BOOL            IsExpanded( Paragraph* pPara ) const;
-//  Paragraph*      GetParagraph( Paragraph* pParent, ULONG nRelPos ) const;
     Paragraph*      GetParent( Paragraph* pParagraph ) const;
-//  ULONG           GetRelPos( Paragraph* pParent, Paragraph* pPara ) const;
     ULONG           GetAbsPos( Paragraph* pPara );
 
     sal_Int16       GetDepth( ULONG nPara ) const;
