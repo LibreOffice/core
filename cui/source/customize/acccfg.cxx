@@ -1397,7 +1397,7 @@ IMPL_LINK( SfxAcceleratorConfigPage, SaveHdl, sfx2::FileDialogHelper*, EMPTYARG 
                 a = xUICommandLabels->getByName( aCmdURL );
                 if ( a >>= aPropSeq )
                 {
-                    for ( sal_Int32 i = 0; i < aPropSeq.getLength(); i++ )
+                    for ( sal_Int32 i = 0; i < aPropSeq.getLength(); ++i )
                     {
                         if ( aPropSeq[i].Name.equalsAscii( "Name" ))
                         {

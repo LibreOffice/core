@@ -142,7 +142,7 @@ void printPropertySet(
 
     OSL_TRACE("printPropertySet: %d properties", aPropDetails.getLength());
 
-    for ( sal_Int32 i = 0; i < aPropDetails.getLength(); i++ )
+    for ( sal_Int32 i = 0; i < aPropDetails.getLength(); ++i )
     {
         OUString tmp;
         sal_Int32 ival;
@@ -171,7 +171,7 @@ void printProperties(
     const OUString& prefix,
     const uno::Sequence< beans::PropertyValue >& aProp )
 {
-    for ( sal_Int32 i = 0; i < aProp.getLength(); i++ )
+    for ( sal_Int32 i = 0; i < aProp.getLength(); ++i )
     {
         OUString tmp;
 
@@ -463,7 +463,7 @@ OUString GetUIModuleName( const OUString& aModuleId, const uno::Reference< css::
                 if ( a >>= aSeq )
                 {
                     OUString aUIName;
-                    for ( sal_Int32 i = 0; i < aSeq.getLength(); i++ )
+                    for ( sal_Int32 i = 0; i < aSeq.getLength(); ++i )
                     {
                         if ( aSeq[i].Name.equalsAscii( "ooSetupFactoryUIName" ))
                         {
@@ -503,7 +503,7 @@ bool GetMenuItemData(
         uno::Sequence< beans::PropertyValue > aProp;
         if ( rItemContainer->getByIndex( nIndex ) >>= aProp )
         {
-            for ( sal_Int32 i = 0; i < aProp.getLength(); i++ )
+            for ( sal_Int32 i = 0; i < aProp.getLength(); ++i )
             {
                 if ( aProp[i].Name.equalsAscii( ITEM_DESCRIPTOR_COMMANDURL ))
                 {
@@ -553,7 +553,7 @@ bool GetToolbarItemData(
         uno::Sequence< beans::PropertyValue > aProp;
         if ( rItemContainer->getByIndex( nIndex ) >>= aProp )
         {
-            for ( sal_Int32 i = 0; i < aProp.getLength(); i++ )
+            for ( sal_Int32 i = 0; i < aProp.getLength(); ++i )
             {
                 if ( aProp[i].Name.equalsAscii( ITEM_DESCRIPTOR_COMMANDURL ))
                 {
@@ -637,7 +637,7 @@ ConvertSvxConfigEntry(
             uno::Sequence< beans::PropertyValue > tmpPropSeq;
             if ( a >>= tmpPropSeq )
             {
-                for ( sal_Int32 i = 0; i < tmpPropSeq.getLength(); i++ )
+                for ( sal_Int32 i = 0; i < tmpPropSeq.getLength(); ++i )
                 {
                     if ( tmpPropSeq[i].Name.equals( aDescriptorLabel ) )
                     {
@@ -724,7 +724,7 @@ ConvertToolbarEntry(
             uno::Sequence< beans::PropertyValue > tmpPropSeq;
             if ( a >>= tmpPropSeq )
             {
-                for ( sal_Int32 i = 0; i < tmpPropSeq.getLength(); i++ )
+                for ( sal_Int32 i = 0; i < tmpPropSeq.getLength(); ++i )
                 {
                     if ( tmpPropSeq[i].Name.equals( aDescriptorLabel ) )
                     {
@@ -1158,7 +1158,7 @@ bool MenuSaveInData::LoadSubMenus(
     if ( !xMenuSettings.is() )
         return true;
 
-    for ( sal_Int32 nIndex = 0; nIndex < xMenuSettings->getCount(); nIndex++ )
+    for ( sal_Int32 nIndex = 0; nIndex < xMenuSettings->getCount(); ++nIndex )
     {
         uno::Reference< container::XIndexAccess >   xSubMenu;
         OUString                aCommandURL;
@@ -1193,7 +1193,7 @@ bool MenuSaveInData::LoadSubMenus(
                     uno::Sequence< beans::PropertyValue > aPropSeq;
                     if ( a >>= aPropSeq )
                     {
-                        for ( sal_Int32 i = 0; i < aPropSeq.getLength(); i++ )
+                        for ( sal_Int32 i = 0; i < aPropSeq.getLength(); ++i )
                         {
                             if ( aPropSeq[i].Name.equalsAscii( ITEM_DESCRIPTOR_LABEL ) )
                             {
@@ -1446,7 +1446,7 @@ public:
         while ( n <= nHalfSize )
         {
             rOutDev.DrawRect( Rectangle( nX+n, nY+n, nX+n, nY+nSize-n ) );
-            n++;
+            ++n;
         }
 
         rOutDev.SetFillColor( aOldFillColor );
@@ -1845,7 +1845,7 @@ void SvxConfigPage::Reset( const SfxItemSet& )
                 DBG_UNHANDLED_EXCEPTION();
             }
 
-            for ( sal_Int32 i = 0; i < aFrameList.getLength(); i++ )
+            for ( sal_Int32 i = 0; i < aFrameList.getLength(); ++i )
             {
                 SaveInData* pData = NULL;
                 uno::Reference < frame::XFrame > xf = aFrameList[i];
@@ -1978,7 +1978,7 @@ BOOL SvxConfigPage::FillItemSet( SfxItemSet& )
 {
     bool result = FALSE;
 
-    for ( USHORT i = 0 ; i < aSaveInListBox.GetEntryCount(); i++ )
+    for ( USHORT i = 0 ; i < aSaveInListBox.GetEntryCount(); ++i )
     {
         SaveInData* pData =
             (SaveInData*) aSaveInListBox.GetEntryData( i );
@@ -2426,7 +2426,7 @@ void SvxMenuConfigPage::Init()
 
 SvxMenuConfigPage::~SvxMenuConfigPage()
 {
-    for ( USHORT i = 0 ; i < aSaveInListBox.GetEntryCount(); i++ )
+    for ( USHORT i = 0 ; i < aSaveInListBox.GetEntryCount(); ++i )
     {
         MenuSaveInData* pData =
             (MenuSaveInData*) aSaveInListBox.GetEntryData( i );
@@ -3054,7 +3054,7 @@ SvxConfigEntry::SvxConfigEntry(
     sal_uInt16 nType( css::ui::ItemType::DEFAULT );
     OUString aHelpURL_;
 
-    for ( sal_Int32 i = 0; i < rProperties.getLength(); i++ )
+    for ( sal_Int32 i = 0; i < rProperties.getLength(); ++i )
     {
         if ( rProperties[i].Name.equalsAscii( ITEM_DESCRIPTOR_COMMANDURL ))
         {
@@ -3093,7 +3093,7 @@ SvxConfigEntry::SvxConfigEntry(
             uno::Sequence< beans::PropertyValue > aPropSeq;
             if ( a >>= aPropSeq )
             {
-                for ( sal_Int32 i = 0; i < aPropSeq.getLength(); i++ )
+                for ( sal_Int32 i = 0; i < aPropSeq.getLength(); ++i )
                 {
                     if ( aPropSeq[i].Name.equalsAscii( ITEM_DESCRIPTOR_LABEL ) )
                     {
@@ -3181,7 +3181,7 @@ SvxConfigEntry::GetProperties(
             uno::Sequence< beans::PropertyValue > tmpPropSeq;
             if ( a >>= tmpPropSeq )
             {
-                for ( sal_Int32 i = 0; i < tmpPropSeq.getLength(); i++ )
+                for ( sal_Int32 i = 0; i < tmpPropSeq.getLength(); ++i )
                 {
                     if ( tmpPropSeq[i].Name.equals( aDescriptorLabel ) )
                     {
@@ -3381,7 +3381,7 @@ SvxToolbarConfigPage::SvxToolbarConfigPage(
 
 SvxToolbarConfigPage::~SvxToolbarConfigPage()
 {
-    for ( USHORT i = 0 ; i < aSaveInListBox.GetEntryCount(); i++ )
+    for ( USHORT i = 0 ; i < aSaveInListBox.GetEntryCount(); ++i )
     {
         ToolbarSaveInData* pData =
             (ToolbarSaveInData*) aSaveInListBox.GetEntryData( i );
@@ -3634,7 +3634,7 @@ IMPL_LINK( SvxToolbarConfigPage, EntrySelectHdl, MenuButton *, pButton )
             USHORT nSelectionPos = 0;
 
             // find position of entry within the list
-            for ( USHORT i = 0; i < aContentsListBox->GetEntryCount(); i++ )
+            for ( USHORT i = 0; i < aContentsListBox->GetEntryCount(); ++i )
             {
                 if ( aContentsListBox->GetEntry( 0, i ) == pActEntry )
                 {
@@ -3731,7 +3731,7 @@ IMPL_LINK( SvxToolbarConfigPage, EntrySelectHdl, MenuButton *, pButton )
             USHORT nSelectionPos = 0;
 
             // find position of entry within the list
-            for ( USHORT i = 0; i < aContentsListBox->GetEntryCount(); i++ )
+            for ( USHORT i = 0; i < aContentsListBox->GetEntryCount(); ++i )
             {
                 if ( aContentsListBox->GetEntry( 0, i ) == pActEntry )
                 {
@@ -3814,7 +3814,7 @@ IMPL_LINK( SvxToolbarConfigPage, EntrySelectHdl, MenuButton *, pButton )
             USHORT nSelectionPos = 0;
 
             // find position of entry within the list
-            for ( USHORT i = 0; i < aContentsListBox->GetEntryCount(); i++ )
+            for ( USHORT i = 0; i < aContentsListBox->GetEntryCount(); ++i )
             {
                 if ( aContentsListBox->GetEntry( 0, i ) == pActEntry )
                 {
@@ -3886,7 +3886,7 @@ void SvxToolbarConfigPage::Init()
     USHORT nPos = 0;
     if ( m_aURLToSelect.getLength() != 0 )
     {
-        for ( USHORT i = 0 ; i < aTopLevelListBox.GetEntryCount(); i++ )
+        for ( USHORT i = 0 ; i < aTopLevelListBox.GetEntryCount(); ++i )
         {
             SvxConfigEntry* pData =
                 (SvxConfigEntry*) aTopLevelListBox.GetEntryData( i );
@@ -4017,7 +4017,7 @@ void ToolbarSaveInData::SetSystemStyle(
 
             if ( a >>= aProps )
             {
-                for ( sal_Int32 i = 0; i < aProps.getLength(); i++ )
+                for ( sal_Int32 i = 0; i < aProps.getLength(); ++i )
                 {
                     if ( aProps[ i ].Name.equalsAscii( ITEM_DESCRIPTOR_STYLE) )
                     {
@@ -4055,7 +4055,7 @@ sal_Int32 ToolbarSaveInData::GetSystemStyle( const OUString& rResourceURL )
 
             if ( a >>= aProps )
             {
-                for ( sal_Int32 i = 0; i < aProps.getLength(); i++ )
+                for ( sal_Int32 i = 0; i < aProps.getLength(); ++i )
                 {
                     if ( aProps[ i ].Name.equalsAscii( ITEM_DESCRIPTOR_STYLE) )
                     {
@@ -4089,7 +4089,7 @@ OUString ToolbarSaveInData::GetSystemUIName( const OUString& rResourceURL )
 
             if ( a >>= aProps )
             {
-                for ( sal_Int32 i = 0; i < aProps.getLength(); i++ )
+                for ( sal_Int32 i = 0; i < aProps.getLength(); ++i )
                 {
                     if ( aProps[ i ].Name.equalsAscii( ITEM_DESCRIPTOR_UINAME) )
                     {
@@ -4116,7 +4116,7 @@ OUString ToolbarSaveInData::GetSystemUIName( const OUString& rResourceURL )
             uno::Sequence< beans::PropertyValue > aPropSeq;
             if ( a >>= aPropSeq )
             {
-                for ( sal_Int32 i = 0; i < aPropSeq.getLength(); i++ )
+                for ( sal_Int32 i = 0; i < aPropSeq.getLength(); ++i )
                 {
                     if ( aPropSeq[i].Name.equalsAscii( ITEM_DESCRIPTOR_LABEL ) )
                     {
@@ -4158,7 +4158,7 @@ SvxEntries* ToolbarSaveInData::GetEntries()
             GetConfigManager()->getUIElementsInfo(
                 css::ui::UIElementType::TOOLBAR );
 
-        for ( sal_Int32 i = 0; i < info.getLength(); i++ )
+        for ( sal_Int32 i = 0; i < info.getLength(); ++i )
         {
             uno::Sequence< beans::PropertyValue > props = info[ i ];
 
@@ -4166,7 +4166,7 @@ SvxEntries* ToolbarSaveInData::GetEntries()
             OUString systemname;
             OUString uiname;
 
-            for ( sal_Int32 j = 0; j < props.getLength(); j++ )
+            for ( sal_Int32 j = 0; j < props.getLength(); ++j )
             {
                 if ( props[ j ].Name.equalsAscii( ITEM_DESCRIPTOR_RESOURCEURL) )
                 {
@@ -4235,7 +4235,7 @@ SvxEntries* ToolbarSaveInData::GetEntries()
                 xParentCfgMgr->getUIElementsInfo(
                     css::ui::UIElementType::TOOLBAR );
 
-            for ( sal_Int32 i = 0; i < info_.getLength(); i++ )
+            for ( sal_Int32 i = 0; i < info_.getLength(); ++i )
             {
                 uno::Sequence< beans::PropertyValue > props = info_[ i ];
 
@@ -4243,7 +4243,7 @@ SvxEntries* ToolbarSaveInData::GetEntries()
                 OUString systemname;
                 OUString uiname;
 
-                for ( sal_Int32 j = 0; j < props.getLength(); j++ )
+                for ( sal_Int32 j = 0; j < props.getLength(); ++j )
                 {
                     if ( props[ j ].Name.equalsAscii( ITEM_DESCRIPTOR_RESOURCEURL) )
                     {
@@ -4692,7 +4692,7 @@ bool ToolbarSaveInData::LoadToolbar(
 {
     SvxEntries*         pEntries            = pParentData->GetEntries();
 
-    for ( sal_Int32 nIndex = 0; nIndex < xToolbarSettings->getCount(); nIndex++ )
+    for ( sal_Int32 nIndex = 0; nIndex < xToolbarSettings->getCount(); ++nIndex )
     {
         uno::Reference< container::XIndexAccess >   xSubMenu;
         OUString                aCommandURL;
@@ -4729,7 +4729,7 @@ bool ToolbarSaveInData::LoadToolbar(
                     uno::Sequence< beans::PropertyValue > aPropSeq;
                     if ( a >>= aPropSeq )
                     {
-                        for ( sal_Int32 i = 0; i < aPropSeq.getLength(); i++ )
+                        for ( sal_Int32 i = 0; i < aPropSeq.getLength(); ++i )
                         {
                             if ( aPropSeq[i].Name.equalsAscii( ITEM_DESCRIPTOR_LABEL ) )
                             {
@@ -4929,7 +4929,7 @@ IMPL_LINK( SvxToolbarConfigPage, NewToolbarHdl, Button *, pButton )
     SvxNewToolbarDialog* pNameDialog = new SvxNewToolbarDialog( 0, aNewName );
 
     USHORT nInsertPos;
-    for ( USHORT i = 0 ; i < aSaveInListBox.GetEntryCount(); i++ )
+    for ( USHORT i = 0 ; i < aSaveInListBox.GetEntryCount(); ++i )
     {
         SaveInData* pData =
             (SaveInData*) aSaveInListBox.GetEntryData( i );
@@ -5381,7 +5381,7 @@ SvxIconSelectorDialog::SvxIconSelectorDialog( Window *pWindow,
     if ( m_xImportedImageManager.is() )
     {
         names = m_xImportedImageManager->getAllImageNames( GetImageType() );
-        for ( sal_Int32 n = 0; n < names.getLength(); n++ )
+        for ( sal_Int32 n = 0; n < names.getLength(); ++n )
             mImageInfo.insert( ImageInfo::value_type( names[n], false ));
     }
     USHORT nId = 1;
@@ -5411,12 +5411,12 @@ SvxIconSelectorDialog::SvxIconSelectorDialog( Window *pWindow,
     if ( m_xParentImageManager.is() )
     {
         names = m_xParentImageManager->getAllImageNames( GetImageType() );
-        for ( sal_Int32 n = 0; n < names.getLength(); n++ )
+        for ( sal_Int32 n = 0; n < names.getLength(); ++n )
             aImageInfo.insert( ImageInfo::value_type( names[n], false ));
     }
 
     names = m_xImageManager->getAllImageNames( GetImageType() );
-    for ( sal_Int32 n = 0; n < names.getLength(); n++ )
+    for ( sal_Int32 n = 0; n < names.getLength(); ++n )
     {
         ImageInfo::iterator pIter = aImageInfo.find( names[n] );
         if ( pIter != aImageInfo.end() )
@@ -5476,7 +5476,7 @@ SvxIconSelectorDialog::~SvxIconSelectorDialog()
 {
     USHORT nCount = aTbSymbol.GetItemCount();
 
-    for (USHORT n = 0; n < nCount; n++ )
+    for (USHORT n = 0; n < nCount; ++n)
     {
         USHORT nId = aTbSymbol.GetItemId(n);
 
@@ -5495,7 +5495,7 @@ uno::Reference< graphic::XGraphic> SvxIconSelectorDialog::GetSelectedIcon()
     uno::Reference< graphic::XGraphic > result;
 
     USHORT nId;
-    for ( USHORT n = 0; n < aTbSymbol.GetItemCount(); n++ )
+    for ( USHORT n = 0; n < aTbSymbol.GetItemCount(); ++n )
     {
         nId = aTbSymbol.GetItemId( n );
         if ( aTbSymbol.IsItemChecked( nId ) )
@@ -5515,7 +5515,7 @@ IMPL_LINK( SvxIconSelectorDialog, SelectHdl, ToolBox *, pToolBox )
 
     USHORT nCount = aTbSymbol.GetItemCount();
 
-    for (USHORT n = 0; n < nCount; n++ )
+    for (USHORT n = 0; n < nCount; ++n)
     {
         USHORT nId = aTbSymbol.GetItemId( n );
 
@@ -5582,7 +5582,7 @@ IMPL_LINK( SvxIconSelectorDialog, DeleteHdl, PushButton *, pButton )
     {
         USHORT nCount = aTbSymbol.GetItemCount();
 
-        for (USHORT n = 0; n < nCount; n++ )
+        for (USHORT n = 0; n < nCount; ++n)
         {
             USHORT nId = aTbSymbol.GetItemId( n );
 
@@ -5642,7 +5642,7 @@ bool SvxIconSelectorDialog::ReplaceGraphicItem(
 
     bool   bResult( false );
     USHORT nCount = aTbSymbol.GetItemCount();
-    for (USHORT n = 0; n < nCount; n++ )
+    for (USHORT n = 0; n < nCount; ++n)
     {
         USHORT nId = aTbSymbol.GetItemId( n );
 
@@ -5726,7 +5726,7 @@ void SvxIconSelectorDialog::ImportGraphics(
         if ( rPaths[0].lastIndexOf( '/' ) != rPaths[0].getLength() -1 )
             aSourcePath = rPaths[0] + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "/" ) );
 
-        for ( sal_Int32 i = 1; i < rPaths.getLength(); i++ )
+        for ( sal_Int32 i = 1; i < rPaths.getLength(); ++i )
         {
             ::rtl::OUString aPath = aSourcePath + rPaths[i];
             if ( m_xImportedImageManager->hasImage( GetImageType(), aPath ) )
@@ -5740,7 +5740,7 @@ void SvxIconSelectorDialog::ImportGraphics(
                 }
                 else if ( ret == 5 )
                 {
-                    for ( sal_Int32 k = i; k < rPaths.getLength(); k++ )
+                    for ( sal_Int32 k = i; k < rPaths.getLength(); ++k )
                     {
                         aPath = aSourcePath + rPaths[k];
                         bool bHasReplaced = ReplaceGraphicItem( aPath );
@@ -5751,7 +5751,7 @@ void SvxIconSelectorDialog::ImportGraphics(
                             if ( result == FALSE )
                             {
                                 rejected[ rejectedCount ] = rPaths[i];
-                                rejectedCount++;
+                                ++rejectedCount;
                             }
                         }
                     }
@@ -5764,7 +5764,7 @@ void SvxIconSelectorDialog::ImportGraphics(
                 if ( result == FALSE )
                 {
                     rejected[ rejectedCount ] = rPaths[i];
-                    rejectedCount++;
+                    ++rejectedCount;
                 }
             }
         }
@@ -5777,7 +5777,7 @@ void SvxIconSelectorDialog::ImportGraphics(
         OUString fPath;
         if (rejectedCount > 1)
               fPath = rPaths[0].copy(8) + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "/" ) );
-        for ( sal_Int32 i = 0; i < rejectedCount; i++ )
+        for ( sal_Int32 i = 0; i < rejectedCount; ++i )
         {
             message += fPath + rejected[i];
             message += newLine;

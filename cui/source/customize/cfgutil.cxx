@@ -315,7 +315,7 @@ void SfxConfigFunctionListBox_Impl::ClearAll()
 */
 {
     USHORT nCount = aArr.Count();
-    for ( USHORT i=0; i<nCount; i++ )
+    for ( USHORT i=0; i<nCount; ++i )
     {
         SfxGroupInfo_Impl *pData = aArr[i];
 
@@ -530,7 +530,7 @@ SfxConfigGroupListBox_Impl::~SfxConfigGroupListBox_Impl()
 void SfxConfigGroupListBox_Impl::ClearAll()
 {
     USHORT nCount = aArr.Count();
-    for ( USHORT i=0; i<nCount; i++ )
+    for ( USHORT i=0; i<nCount; ++i )
     {
         SfxGroupInfo_Impl *pData = aArr[i];
         if  (   pData->nKind == SFX_CFGGROUP_SCRIPTCONTAINER
@@ -554,7 +554,8 @@ void SfxConfigGroupListBox_Impl::SetScriptType( const String& rScriptType )
 {
     pImp->m_aScriptType = rScriptType;
     ULONG nPos=0;
-    SvLBoxEntry *pEntry = (SvLBoxEntry*) GetModel()->GetEntryAtAbsPos( nPos++ );
+    SvLBoxEntry *pEntry = (SvLBoxEntry*) GetModel()->GetEntryAtAbsPos( nPos );
+    ++nPos;
     while ( pEntry )
     {
         SfxGroupInfo_Impl *pInfo = (SfxGroupInfo_Impl*) pEntry->GetUserData();
@@ -571,7 +572,8 @@ void SfxConfigGroupListBox_Impl::SetScriptType( const String& rScriptType )
             Expand( pEntry );
         }
 
-        pEntry = (SvLBoxEntry*) GetModel()->GetEntryAtAbsPos( nPos++ );
+        pEntry = (SvLBoxEntry*) GetModel()->GetEntryAtAbsPos( nPos );
+        ++nPos;
     }
 }
 
@@ -876,7 +878,7 @@ void SfxConfigGroupListBox_Impl::Init(const css::uno::Reference< css::lang::XMul
                             currentDocTitle = ::comphelper::DocumentInfo::getDocumentTitle( xDocument );
                         }
 
-                        for ( sal_Int32 n = 0; n < children.getLength(); n++ )
+                        for ( sal_Int32 n = 0; n < children.getLength(); ++n )
                         {
                             Reference< browse::XBrowseNode >& theChild = children[n];
                             BOOL bDisplay = TRUE;
@@ -924,7 +926,7 @@ void SfxConfigGroupListBox_Impl::Init(const css::uno::Reference< css::lang::XMul
                                     Sequence< Reference< browse::XBrowseNode > > grandchildren =
                                         children[n]->getChildNodes();
 
-                                    for ( sal_Int32 m = 0; m < grandchildren.getLength(); m++ )
+                                    for ( sal_Int32 m = 0; m < grandchildren.getLength(); ++m )
                                     {
                                         if ( grandchildren[m]->getType() == browse::BrowseNodeTypes::CONTAINER )
                                         {
@@ -1173,7 +1175,7 @@ void SfxConfigGroupListBox_Impl::GroupSelected()
                 xDoc = static_cast< XModel* >( pBasInfo->pObject );
 
             SbModule *pMod = (SbModule*) pInfo->pObject;
-            for ( USHORT nMeth=0; nMeth < pMod->GetMethods()->Count(); nMeth++ )
+            for ( USHORT nMeth=0; nMeth < pMod->GetMethods()->Count(); ++nMeth )
             {
                 SbxMethod *pMeth = (SbxMethod*)pMod->GetMethods()->Get(nMeth);
                 SfxMacroInfoPtr pInf = new SfxMacroInfo( !xDoc.is(),
@@ -1210,7 +1212,7 @@ void SfxConfigGroupListBox_Impl::GroupSelected()
                         Sequence< Reference< browse::XBrowseNode > > children =
                             rootNode->getChildNodes();
 
-                        for ( sal_Int32 n = 0; n < children.getLength(); n++ )
+                        for ( sal_Int32 n = 0; n < children.getLength(); ++n )
                         {
                             if (children[n]->getType() == browse::BrowseNodeTypes::SCRIPT)
                             {
@@ -1315,7 +1317,7 @@ BOOL SfxConfigGroupListBox_Impl::Expand( SvLBoxEntry* pParent )
             ULONG nParentPos = 0;
             while ( pEntry && pEntry != pParent )
             {
-                nParentPos++;
+                ++nParentPos;
                 pEntry = GetNextEntryInView( pEntry );
             }
 
@@ -1346,7 +1348,7 @@ void SfxConfigGroupListBox_Impl::RequestingChilds( SvLBoxEntry *pEntry )
                 BasicManager* pMgr( GetBasicManager( *pEntry ) );
 
                 SvLBoxEntry *pLibEntry = 0;
-                for ( USHORT nLib=0; nLib<pMgr->GetLibCount(); nLib++)
+                for ( USHORT nLib=0; nLib<pMgr->GetLibCount(); ++nLib )
                 {
                     StarBASIC* pLib = pMgr->GetLib( nLib );
                     pLibEntry = InsertEntry( pMgr->GetLibName( nLib ), pEntry );
@@ -1379,7 +1381,7 @@ void SfxConfigGroupListBox_Impl::RequestingChilds( SvLBoxEntry *pEntry )
                 }
 
                 SvLBoxEntry *pModEntry = 0;
-                for ( USHORT nMod=0; nMod<pLib->GetModules()->Count(); nMod++ )
+                for ( USHORT nMod=0; nMod<pLib->GetModules()->Count(); ++nMod )
                 {
                     SbModule* pMod = (SbModule*)pLib->GetModules()->Get( nMod );
 
@@ -1432,7 +1434,7 @@ void SfxConfigGroupListBox_Impl::RequestingChilds( SvLBoxEntry *pEntry )
                         }
 
                         sal_Int32 nLen = children.getLength();
-                        for ( sal_Int32 n = 0; n < nLen; n++ )
+                        for ( sal_Int32 n = 0; n < nLen; ++n )
                         {
                             Reference< browse::XBrowseNode >& theChild = children[n];
                             ::rtl::OUString aName( theChild->getName() );
@@ -1469,7 +1471,7 @@ void SfxConfigGroupListBox_Impl::RequestingChilds( SvLBoxEntry *pEntry )
                                     Sequence< Reference< browse::XBrowseNode > > grandchildren =
                                         children[n]->getChildNodes();
 
-                                    for ( sal_Int32 m = 0; m < grandchildren.getLength(); m++ )
+                                    for ( sal_Int32 m = 0; m < grandchildren.getLength(); ++m )
                                     {
                                         if ( grandchildren[m]->getType() == browse::BrowseNodeTypes::CONTAINER )
                                         {

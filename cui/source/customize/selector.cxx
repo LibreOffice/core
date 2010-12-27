@@ -145,7 +145,7 @@ IMPL_LINK( SvxConfigFunctionListBox_Impl, TimerHdl, Timer*, EMPTYARG)
 void SvxConfigFunctionListBox_Impl::ClearAll()
 {
     USHORT nCount = aArr.Count();
-    for ( USHORT i=0; i<nCount; i++ )
+    for ( USHORT i=0; i<nCount; ++i )
     {
         SvxGroupInfo_Impl *pData = aArr[i];
         delete pData;
@@ -278,7 +278,7 @@ SvxConfigGroupListBox_Impl::~SvxConfigGroupListBox_Impl()
 void SvxConfigGroupListBox_Impl::ClearAll()
 {
     USHORT nCount = aArr.Count();
-    for ( USHORT i=0; i<nCount; i++ )
+    for ( USHORT i=0; i<nCount; ++i )
     {
         SvxGroupInfo_Impl *pData = aArr[i];
         delete pData;
@@ -370,7 +370,7 @@ void SvxConfigGroupListBox_Impl::fillScriptList( const Reference< browse::XBrows
                 sCurrentDocTitle = ::comphelper::DocumentInfo::getDocumentTitle( xWorkingDocument );
             }
 
-            for ( long n = 0; n < children.getLength(); n++ )
+            for ( long n = 0; n < children.getLength(); ++n )
             {
                 Reference< browse::XBrowseNode >& theChild = children[n];
                 //#139111# some crash reports show that it might be unset
@@ -434,7 +434,7 @@ void SvxConfigGroupListBox_Impl::fillScriptList( const Reference< browse::XBrows
                     Sequence< Reference< browse::XBrowseNode > > grandchildren =
                         children[n]->getChildNodes();
 
-                    for ( sal_Int32 m = 0; m < grandchildren.getLength(); m++ )
+                    for ( sal_Int32 m = 0; m < grandchildren.getLength(); ++m )
                     {
                         if ( grandchildren[m]->getType() == browse::BrowseNodeTypes::CONTAINER )
                         {
@@ -532,7 +532,7 @@ void SvxConfigGroupListBox_Impl::Init()
             Sequence< sal_Int16 > gids =
                 xDIP->getSupportedCommandGroups();
 
-            for ( sal_Int32 i = 0; i < gids.getLength(); i++ )
+            for ( sal_Int32 i = 0; i < gids.getLength(); ++i )
             {
                 Sequence< frame::DispatchInformation > commands;
                 try
@@ -757,7 +757,7 @@ void SvxConfigGroupListBox_Impl::GroupSelected()
                 {
                 }
 
-                for ( sal_Int32 i = 0; i < commands.getLength(); i++ )
+                for ( sal_Int32 i = 0; i < commands.getLength(); ++i )
                 {
                     if ( commands[i].Command.getLength() == 0 )
                     {
@@ -781,7 +781,7 @@ void SvxConfigGroupListBox_Impl::GroupSelected()
 
                         if ( a >>= aPropSeq )
                         {
-                            for ( sal_Int32 k = 0; k < aPropSeq.getLength(); k++ )
+                            for ( sal_Int32 k = 0; k < aPropSeq.getLength(); ++k )
                             {
                                 if ( aPropSeq[k].Name.equalsAscii( "Name" ) )
                                 {
@@ -834,7 +834,7 @@ void SvxConfigGroupListBox_Impl::GroupSelected()
                     Sequence< Reference< browse::XBrowseNode > > children =
                         rootNode->getChildNodes();
 
-                    for ( long n = 0; n < children.getLength(); n++ )
+                    for ( long n = 0; n < children.getLength(); ++n )
                     {
                         if (!children[n].is())
                             continue;
@@ -925,7 +925,7 @@ BOOL SvxConfigGroupListBox_Impl::Expand( SvLBoxEntry* pParent )
             ULONG nParentPos = 0;
             while ( pEntry && pEntry != pParent )
             {
-                nParentPos++;
+                ++nParentPos;
                 pEntry = GetNextEntryInView( pEntry );
             }
 
