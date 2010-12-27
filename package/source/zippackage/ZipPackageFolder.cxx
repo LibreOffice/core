@@ -43,6 +43,7 @@
 #include <com/sun/star/io/XSeekable.hpp>
 #include <EncryptedDataHeader.hxx>
 #include <rtl/random.h>
+#include <rtl/instance.hxx>
 #include <memory>
 
 using namespace com::sun::star::packages::zip::ZipConstants;
@@ -59,7 +60,7 @@ using namespace std;
 using namespace ::com::sun::star;
 using vos::ORef;
 
-Sequence < sal_Int8 > ZipPackageFolder::aImplementationId = Sequence < sal_Int8 > ();
+namespace { struct lcl_CachedImplId : public rtl::Static< Sequence < sal_Int8 >, lcl_CachedImplId > {}; }
 
 ZipPackageFolder::ZipPackageFolder ( const Reference< XMultiServiceFactory >& xFactory,
                                      sal_Int32 nFormat,
@@ -80,10 +81,9 @@ ZipPackageFolder::ZipPackageFolder ( const Reference< XMultiServiceFactory >& xF
     aEntry.nCompressedSize  = 0;
     aEntry.nSize        = 0;
     aEntry.nOffset      = -1;
-    if ( !aImplementationId.getLength() )
-        {
-        aImplementationId = getImplementationId();
-        }
+    Sequence < sal_Int8 > &rCachedImplId = lcl_CachedImplId::get();
+    if ( !rCachedImplId.getLength() )
+        rCachedImplId = getImplementationId();
 }
 
 
@@ -185,6 +185,11 @@ void ZipPackageFolder::copyZipEntry( ZipEntry &rDest, const ZipEntry &rSource)
     rDest.sPath             = rSource.sPath;
     rDest.nPathLen          = rSource.nPathLen;
     rDest.nExtraLen         = rSource.nExtraLen;
+}
+
+const ::com::sun::star::uno::Sequence < sal_Int8 >& ZipPackageFolder::static_getImplementationId()
+{
+    return lcl_CachedImplId::get();
 }
 
     // XNameContainer
