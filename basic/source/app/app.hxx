@@ -39,8 +39,8 @@
 
 class BasicFrame;
 #include <basic/mybasic.hxx>
+#include <vector>
 
-class EditList;
 class AppWin;
 class AppEdit;
 class AppBasEd;
@@ -50,12 +50,12 @@ class StatusLine;
 class BasicPrinter;
 struct TTLogMsg;
 
+typedef ::std::vector< AppWin* > EditList;
+
 class BasicApp : public Application {
     short       nWait;              // Wait-Zaehler
 public:
-//  Help*       pHelp;              // Hilfesystem
     BasicFrame* pFrame;             // Frame Window
-//  MenuBar*    pMainMenu;          // Hauptmenue
     Accelerator*    pMainAccel;     // Acceleratoren
 
     int Main( );
@@ -90,13 +90,13 @@ class BasicFrame : public WorkWindow, public SfxBroadcaster, public SfxListener
 using SystemWindow::Notify;
 using Window::Command;
 
-virtual BOOL Close();
+    virtual BOOL Close();
     BOOL CloseAll();          // Close all windows
     BOOL CompileAll();        // Compile all texts
     AutoTimer aLineNum;       // Show the line numbers
-virtual void Resize();
-virtual void Move();
-virtual void GetFocus();
+    virtual void Resize();
+    virtual void Move();
+    virtual void GetFocus();
     void LoadLibrary();
     void SaveLibrary();
     BOOL bIsAutoRun;

@@ -35,6 +35,8 @@
 #include "app.hxx"
 #include "dataedit.hxx"
 
+#include <vector>
+
 typedef USHORT QueryBits;
 #define QUERY_NONE              ( QueryBits ( 0x00 ) )
 #define QUERY_DIRTY             ( QueryBits ( 0x01 ) )
@@ -75,7 +77,6 @@ protected:
 
     short nId;                      // ID-Nummer( "Unnamed n" )
     BasicFrame* pFrame;             // Parent-Window
-//  Icon* pIcon;                    // Document icon
     String aFind;                   // Search string
     String aReplace;                // Replace string
     BOOL bFind;                     // TRUE if search not replace
@@ -133,7 +134,7 @@ public:
     void SetWinId( USHORT nWId ) { nWinId = nWId; }
 };
 
-DECLARE_LIST( EditList, AppWin* )
+typedef ::std::vector< AppWin* > EditList;
 
 #endif
 

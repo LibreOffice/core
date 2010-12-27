@@ -226,7 +226,7 @@ long AppWin::PreNotify( NotifyEvent& rNEvt )
     if ( rNEvt.GetType() == EVENT_MOUSEBUTTONDOWN )
         Activate();
     if ( rNEvt.GetType() == EVENT_GETFOCUS )
-        if ( pFrame->pList->Last() != this )
+        if ( pFrame->pList->back() != this )
             Activate();
     return FALSE;       // Der event soll weiter verarbeitet werden
 }

@@ -627,17 +627,15 @@ void BasicFrame::LoadIniFile()
     if ( pBasic )
         pBasic->LoadIniFile();
 
-    for ( i = 0 ; i < pList->Count() ; i++ )
-        pList->GetObject( i )->LoadIniFile();
+    for ( i = 0 ; i < pList->size() ; i++ )
+        pList->at( i )->LoadIniFile();
 }
 
 BasicFrame::~BasicFrame()
 {
-    AppWin* p = pList->First();
-    DBG_ASSERT( !p, "Still open FileWindows");
-    if( p )
-        while( (p = pList->Remove() ) != NULL )
-            delete p;
+    for ( size_t i = 0, n = pList->size(); i < n; ++i )
+        delete pList->at( i );
+    pList->clear();
 
     MenuBar *pBar = GetMenuBar();
     SetMenuBar( NULL );
@@ -699,8 +697,8 @@ IMPL_LINK( BasicFrame, CheckAllFiles, Timer*, pTimer )
     {
         AppWin* pStartWin = pWork;
         Window* pFocusWin = Application::GetFocusWindow();
-        for ( int i = pList->Count()-1 ; i >= 0 ; i-- )
-            pList->GetObject( i )->CheckReload();
+        for ( size_t i = pList->size() ; i > 0 ; )
+            pList->at( --i )->CheckReload();
 
         if ( pWork != pStartWin )
         {
@@ -777,11 +775,10 @@ void BasicFrame::Resize()
 
 
     // Resize possibly maximized window
-    ULONG i;
-    for( i = pList->Count(); i > 0 ; i-- )
+    for( size_t i = pList->size(); i > 0 ; i-- )
     {
-        if ( pList->GetObject( i-1 )->GetWinState() == TT_WIN_STATE_MAX )
-            pList->GetObject( i-1 )->Maximize();
+        if ( pList->at( i-1 )->GetWinState() == TT_WIN_STATE_MAX )
+            pList->at( i-1 )->Maximize();
     }
 }
 
@@ -801,42 +798,58 @@ void BasicFrame::GetFocus()
 IMPL_LINK( BasicFrame, CloseButtonClick, void*, EMPTYARG )
 {
     AppWin* p;
-    for ( p = pList->Last() ; p && p->GetWinState() != TT_WIN_STATE_MAX ; p = pList->Prev() )
-    {};
-    if ( p )
-        p->GrabFocus();
+    for ( size_t i = pList->size(); i > 0; --i )
+    {
+        p = pList->at( i - 1 );
+        if ( p->GetWinState() == TT_WIN_STATE_MAX )
+        {
+            p->GrabFocus();
+            break;
+        }
+    }
     return Command( RID_FILECLOSE, FALSE );
 }
 
 IMPL_LINK( BasicFrame, FloatButtonClick, void*, EMPTYARG )
 {
     AppWin* p;
-    for ( p = pList->Last() ; p && p->GetWinState() != TT_WIN_STATE_MAX ; p = pList->Prev() )
-    {};
-    if ( p )
-        p->TitleButtonClick( TITLE_BUTTON_DOCKING );
+    for ( size_t i = pList->size(); i > 0; --i )
+    {
+        p = pList->at( i - 1 );
+        if ( p->GetWinState() == TT_WIN_STATE_MAX )
+        {
+            p->TitleButtonClick( TITLE_BUTTON_DOCKING );
+            break;
+        }
+    }
     return 1;
 }
 
 IMPL_LINK( BasicFrame, HideButtonClick, void*, EMPTYARG )
 {
     AppWin* p;
-    for ( p = pList->Last() ; p && p->GetWinState() != TT_WIN_STATE_MAX ; p = pList->Prev() )
-    {};
-    if ( p )
-        p->TitleButtonClick( TITLE_BUTTON_HIDE );
+    for ( size_t i = pList->size(); i > 0; --i )
+    {
+        p = pList->at( i - 1 );
+        if ( p->GetWinState() == TT_WIN_STATE_MAX )
+        {
+            p->TitleButtonClick( TITLE_BUTTON_HIDE );
+            break;
+        }
+    }
     return 1;
 }
 
 void BasicFrame::WinShow_Hide()
 {
-    if ( !pList->Count() )
+    if ( pList->empty() )
         return;
 
     AppWin* p;
     BOOL bWasFullscreen = FALSE;
-    for ( p = pList->Last() ; p ; p = pList->Prev() )
+    for ( size_t i = pList->size(); i > 0; --i )
     {
+        p = pList->at( i - 1 );
         if ( p->pDataEdit )
         {
             if ( p->GetWinState() & TT_WIN_STATE_HIDE   // Hidden
@@ -855,16 +868,26 @@ void BasicFrame::WinMax_Restore()
     // The application buttons
     AppWin* p;
     BOOL bHasFullscreenWin = FALSE;
-    for( p = pList->First(); p && !bHasFullscreenWin ; p = pList->Next() )
-        bHasFullscreenWin |= ( p->GetWinState() == TT_WIN_STATE_MAX );
+    for ( size_t i = 0, n = pList->size(); i < n && !bHasFullscreenWin; ++i )
+    {
+        p = pList->at( i );
+        bHasFullscreenWin = ( p->GetWinState() == TT_WIN_STATE_MAX );
+    }
     GetMenuBar()->ShowButtons( bHasFullscreenWin, FALSE, FALSE );
     WinShow_Hide();
 }
 
 void BasicFrame::RemoveWindow( AppWin *pWin )
 {
-    pList->Remove( pWin );
-    pWork = pList->Last();
+    for ( EditList::iterator it = pList->begin(); it < pList->end(); ++it )
+    {
+        if ( *it == pWin )
+        {
+            pList->erase( it );
+            break;
+        }
+    }
+    pWork = ( pList->empty() ) ? NULL : pList->back();
 
     WinShow_Hide();
 
@@ -874,7 +897,8 @@ void BasicFrame::RemoveWindow( AppWin *pWin )
     WinMax_Restore();
 
     Menu* pMenu = GetMenuBar();
-    if( pList->Count() == 0 ) {
+    if( pList->empty() )
+    {
         pMenu->EnableItem( RID_APPEDIT,   FALSE );
         pMenu->EnableItem( RID_APPRUN,    FALSE );
         pMenu->EnableItem( RID_APPWINDOW, FALSE );
@@ -893,14 +917,15 @@ void BasicFrame::RemoveWindow( AppWin *pWin )
 
 void BasicFrame::AddWindow( AppWin *pWin )
 {
-    pList->Insert( pWin, LIST_APPEND );
+    pList->push_back( pWin );
     pWork = pWin;
 
     WinMax_Restore();
 
     // Enable main menu
     MenuBar* pMenu = GetMenuBar();
-    if( pList->Count() > 0 ) {
+    if( !pList->empty() )
+    {
         pMenu->EnableItem( RID_APPEDIT,   TRUE );
         pMenu->EnableItem( RID_APPRUN,    TRUE );
         pMenu->EnableItem( RID_APPWINDOW, TRUE );
@@ -938,8 +963,15 @@ void BasicFrame::WindowRenamed( AppWin *pWin )
 void BasicFrame::FocusWindow( AppWin *pWin )
 {
     pWork = pWin;
-    pList->Remove( pWin );
-    pList->Insert( pWin, LIST_APPEND );
+    for ( EditList::iterator it = pList->begin(); it < pList->end(); ++it )
+    {
+        if ( *it == pWin )
+        {
+            pList->erase( it );
+            break;
+        }
+    }
+    pList->push_back( pWin );
     pWin->Minimize( FALSE );
 
     aAppFile = pWin->GetText();
@@ -976,8 +1008,8 @@ BOOL BasicFrame::Close()
 
 BOOL BasicFrame::CloseAll()
 {
-    while ( pList->Count() )
-        if ( !pList->Last()->Close() )
+    while ( !pList->empty() )
+        if ( !pList->back()->Close() )
             return FALSE;
     return TRUE;
 }
@@ -985,8 +1017,11 @@ BOOL BasicFrame::CloseAll()
 BOOL BasicFrame::CompileAll()
 {
     AppWin* p;
-    for( p = pList->First(); p; p = pList->Next() )
-      if( p->ISA(AppBasEd) && !((AppBasEd*)p)->Compile() ) return FALSE;
+    for ( size_t i = 0, n = pList->size(); i < n; ++i )
+    {
+        p = pList->at( i );
+        if ( p->ISA(AppBasEd) && !((AppBasEd*)p)->Compile() ) return FALSE;
+    }
     return TRUE;
 }
 
@@ -1325,7 +1360,14 @@ long BasicFrame::Command( short nID, BOOL bChecked )
                 else
                 {
                     AppWin *w = NULL;
-                    for ( w = pList->Last() ; w ? !w->ISA(AppBasEd) : FALSE ; w = pList->Prev() ) ;
+                    for ( size_t i = pList->size(); i > 0; --i )
+                    {
+                        if ( pList->at( i-1 )->ISA( AppBasEd ) )
+                        {
+                            w = pList->at( i-1 );
+                            break;
+                        }
+                    }
                     if ( w )
                     {
                         p = ((AppBasEd*)w);
@@ -1399,12 +1441,11 @@ long BasicFrame::Command( short nID, BOOL bChecked )
         case RID_WINTILE:
             {
                 WindowArrange aArange;
-                for ( ULONG i = 0 ; i < pList->Count() ; i++ )
+                for ( size_t i = 0, n = pList->size(); i < n ; i++ )
                 {
-                    aArange.AddWindow( pList->GetObject( i ) );
-                    pList->GetObject( i )->Restore();
+                    aArange.AddWindow( pList->at( i ) );
+                    pList->at( i )->Restore();
                 }
-
 
                 sal_Int32 nTitleHeight;
                 {
@@ -1423,10 +1464,10 @@ long BasicFrame::Command( short nID, BOOL bChecked )
         case RID_WINTILEHORZ:
             {
                 WindowArrange aArange;
-                for ( ULONG i = 0 ; i < pList->Count() ; i++ )
+                for ( size_t i = 0, n = pList->size(); i < n ; i++ )
                 {
-                    aArange.AddWindow( pList->GetObject( i ) );
-                    pList->GetObject( i )->Restore();
+                    aArange.AddWindow( pList->at( i ) );
+                    pList->at( i )->Restore();
                 }
 
 
@@ -1447,10 +1488,10 @@ long BasicFrame::Command( short nID, BOOL bChecked )
         case RID_WINTILEVERT:
             {
                 WindowArrange aArange;
-                for ( ULONG i = 0 ; i < pList->Count() ; i++ )
+                for ( size_t i = 0, n = pList->size(); i < n ; i++ )
                 {
-                    aArange.AddWindow( pList->GetObject( i ) );
-                    pList->GetObject( i )->Restore();
+                    aArange.AddWindow( pList->at( i ) );
+                    pList->at( i )->Restore();
                 }
 
 
@@ -1470,9 +1511,9 @@ long BasicFrame::Command( short nID, BOOL bChecked )
             break;
         case RID_WINCASCADE:
             {
-                for ( USHORT i = 0 ; i < pList->Count() ; i++ )
+                for ( size_t i = 0, n = pList->size(); i < n ; i++ )
                 {
-                    pList->GetObject( i )->Cascade( i );
+                    pList->at( i )->Cascade( i );
                 }
             }
             break;
@@ -1523,8 +1564,9 @@ long BasicFrame::Command( short nID, BOOL bChecked )
 BOOL BasicFrame::SaveAll()
 {
     AppWin* p, *q = pWork;
-    for( p = pList->First(); p; p = pList->Next() )
+    for ( size_t i = 0, n = pList->size(); i < n ; i++ )
     {
+        p = pList->at( i );
         USHORT nRes = p->QuerySave( QUERY_DISK_CHANGED );
         if( (( nRes == SAVE_RES_ERROR ) && QueryBox(this,SttResId(IDS_ASKSAVEERROR)).Execute() == RET_NO )
             || ( nRes == SAVE_RES_CANCEL ) )
@@ -1543,8 +1585,9 @@ IMPL_LINK( BasicFrame, ModuleWinExists, String*, pFilename )
 AppBasEd* BasicFrame::FindModuleWin( const String& rName )
 {
     AppWin* p;
-    for( p = pList->First(); p; p = pList->Next() )
+    for ( size_t i = 0, n = pList->size(); i < n ; i++ )
     {
+        p = pList->at( i );
         if( p->ISA(AppBasEd) && ((AppBasEd*)p)->GetModName() == rName )
             return ((AppBasEd*)p);
     }
@@ -1554,8 +1597,9 @@ AppBasEd* BasicFrame::FindModuleWin( const String& rName )
 AppError* BasicFrame::FindErrorWin( const String& rName )
 {
     AppWin* p;
-    for( p = pList->First(); p; p = pList->Next() )
+    for ( size_t i = 0, n = pList->size(); i < n ; i++ )
     {
+        p = pList->at( i );
         if( p->ISA(AppError) && ((AppError*)p)->GetText() == rName )
             return ((AppError*)p);
     }
@@ -1565,8 +1609,9 @@ AppError* BasicFrame::FindErrorWin( const String& rName )
 AppWin* BasicFrame::FindWin( const String& rName )
 {
     AppWin* p;
-    for( p = pList->First(); p; p = pList->Next() )
+    for ( size_t i = 0, n = pList->size(); i < n ; i++ )
     {
+        p = pList->at( i );
         if( p->GetText() == rName )
             return p;
     }
@@ -1576,8 +1621,9 @@ AppWin* BasicFrame::FindWin( const String& rName )
 AppWin* BasicFrame::FindWin( USHORT nWinId )
 {
     AppWin* p;
-    for( p = pList->First(); p; p = pList->Next() )
+    for ( size_t i = 0, n = pList->size(); i < n ; i++ )
     {
+        p = pList->at( i );
         if( p->GetWinId() == nWinId )
             return p;
     }
@@ -1587,8 +1633,9 @@ AppWin* BasicFrame::FindWin( USHORT nWinId )
 AppWin* BasicFrame::IsWinValid( AppWin* pMaybeWin )
 {
     AppWin* p;
-    for( p = pList->First(); p; p = pList->Next() )
+    for ( size_t i = 0, n = pList->size(); i < n ; i++ )
     {
+        p = pList->at( i );
         if( p == pMaybeWin )
             return p;
     }
@@ -1597,9 +1644,9 @@ AppWin* BasicFrame::IsWinValid( AppWin* pMaybeWin )
 
 IMPL_LINK( BasicFrame, WriteString, String*, pString )
 {
-    if ( pList->Last() )
+    if ( !pList->empty() )
     {
-        pList->Last()->pDataEdit->ReplaceSelected( *pString );
+        pList->back()->pDataEdit->ReplaceSelected( *pString );
         return TRUE;
     }
     else

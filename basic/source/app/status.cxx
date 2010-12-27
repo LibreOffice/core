@@ -113,7 +113,7 @@ void StatusLine::LoadTaskToolBox()
         Window* pWin = pFrame->FindWin( pWinMenu->GetItemId( nFirstWinPos ) );
 
         if ( pWin )
-            pTaskToolBox->UpdateTask( Image(), pWin->GetText(), pWin == pFrame->pList->Last() && !( pFrame->pList->Last()->GetWinState() & TT_WIN_STATE_HIDE ) );
+            pTaskToolBox->UpdateTask( Image(), pWin->GetText(), pWin == pFrame->pList->back() && !( pFrame->pList->back()->GetWinState() & TT_WIN_STATE_HIDE ) );
 
         nFirstWinPos++;
     }
