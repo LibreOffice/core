@@ -2495,6 +2495,9 @@ void OutputDevice::DrawLine( const Point& rStartPt, const Point& rEndPt,
     const bool bDashUsed(LINE_DASH == aInfo.GetStyle());
     const bool bLineWidthUsed(aInfo.GetWidth() > 1);
 
+    if ( mbInitLineColor )
+        ImplInitLineColor();
+
     if(bDashUsed || bLineWidthUsed)
     {
         basegfx::B2DPolygon aLinePolygon;
@@ -2505,9 +2508,6 @@ void OutputDevice::DrawLine( const Point& rStartPt, const Point& rEndPt,
     }
     else
     {
-        if ( mbInitLineColor )
-            ImplInitLineColor();
-
         mpGraphics->DrawLine( aStartPt.X(), aStartPt.Y(), aEndPt.X(), aEndPt.Y(), this );
     }
 

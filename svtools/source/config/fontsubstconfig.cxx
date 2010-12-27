@@ -28,7 +28,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svtools.hxx"
 
-#include "fontsubstconfig.hxx"
+#include <svtools/fontsubstconfig.hxx>
 #include <svl/svarray.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/uno/Any.hxx>

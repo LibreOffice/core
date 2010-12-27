@@ -29,7 +29,7 @@
 #include "precompiled_svtools.hxx"
 
 #define _SVT_SCRWIN_CXX
-#include <scrwin.hxx>
+#include <svtools/scrwin.hxx>
 
 //===================================================================
 

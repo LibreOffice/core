@@ -28,6 +28,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_comphelper.hxx"
 #include <comphelper/mediadescriptor.hxx>
+#include <comphelper/namedvaluecollection.hxx>
 #include <comphelper/stillreadwriteinteraction.hxx>
 
 #include <com/sun/star/ucb/XContent.hpp>
@@ -109,6 +110,12 @@ const ::rtl::OUString& MediaDescriptor::PROP_DETECTSERVICE()
 const ::rtl::OUString& MediaDescriptor::PROP_DOCUMENTSERVICE()
 {
     static const ::rtl::OUString sProp(RTL_CONSTASCII_USTRINGPARAM("DocumentService"));
+    return sProp;
+}
+
+const ::rtl::OUString& MediaDescriptor::PROP_ENCRYPTIONDATA()
+{
+    static const ::rtl::OUString sProp(RTL_CONSTASCII_USTRINGPARAM("EncryptionData"));
     return sProp;
 }
 
@@ -477,27 +484,30 @@ sal_Bool MediaDescriptor::isStreamReadOnly() const
 
 css::uno::Any MediaDescriptor::getComponentDataEntry( const ::rtl::OUString& rName ) const
 {
-    SequenceAsHashMap aCompDataMap( getUnpackedValueOrDefault( PROP_COMPONENTDATA(), ComponentDataSequence() ) );
-    SequenceAsHashMap::iterator aIt = aCompDataMap.find( rName );
-    return (aIt == aCompDataMap.end()) ? css::uno::Any() : aIt->second;
+    css::uno::Any aEntry;
+    SequenceAsHashMap::const_iterator aPropertyIter = find( PROP_COMPONENTDATA() );
+    if( aPropertyIter != end() )
+        return NamedValueCollection( aPropertyIter->second ).get( rName );
+    return css::uno::Any();
 }
 
 void MediaDescriptor::setComponentDataEntry( const ::rtl::OUString& rName, const css::uno::Any& rValue )
 {
     if( rValue.hasValue() )
     {
-        // get or craete the 'ComponentData' property entry
+        // get or create the 'ComponentData' property entry
         css::uno::Any& rCompDataAny = operator[]( PROP_COMPONENTDATA() );
-        // check type, insert the value
-        OSL_ENSURE( !rCompDataAny.hasValue() || rCompDataAny.has< ComponentDataSequence >(),
-            "MediaDescriptor::setComponentDataEntry - incompatible 'ComponentData' property in media descriptor" );
-        if( !rCompDataAny.hasValue() || rCompDataAny.has< ComponentDataSequence >() )
+        // insert the value (retain sequence type, create NamedValue elements by default)
+        bool bHasNamedValues = !rCompDataAny.hasValue() || rCompDataAny.has< css::uno::Sequence< css::beans::NamedValue > >();
+        bool bHasPropValues = rCompDataAny.has< css::uno::Sequence< css::beans::PropertyValue > >();
+        OSL_ENSURE( bHasNamedValues || bHasPropValues, "MediaDescriptor::setComponentDataEntry - incompatible 'ComponentData' property in media descriptor" );
+        if( bHasNamedValues || bHasPropValues )
         {
             // insert or overwrite the passed value
             SequenceAsHashMap aCompDataMap( rCompDataAny );
             aCompDataMap[ rName ] = rValue;
-            // write back the sequence (sal_False = use NamedValue instead of PropertyValue)
-            rCompDataAny = aCompDataMap.getAsConstAny( sal_False );
+            // write back the sequence (restore sequence with correct element type)
+            rCompDataAny = aCompDataMap.getAsConstAny( bHasPropValues );
         }
     }
     else
@@ -512,18 +522,20 @@ void MediaDescriptor::clearComponentDataEntry( const ::rtl::OUString& rName )
     SequenceAsHashMap::iterator aPropertyIter = find( PROP_COMPONENTDATA() );
     if( aPropertyIter != end() )
     {
-        OSL_ENSURE( aPropertyIter->second.has< ComponentDataSequence >(),
-            "MediaDescriptor::clearComponentDataEntry - incompatible 'ComponentData' property in media descriptor" );
-        if( aPropertyIter->second.has< ComponentDataSequence >() )
+        css::uno::Any& rCompDataAny = aPropertyIter->second;
+        bool bHasNamedValues = rCompDataAny.has< css::uno::Sequence< css::beans::NamedValue > >();
+        bool bHasPropValues = rCompDataAny.has< css::uno::Sequence< css::beans::PropertyValue > >();
+        OSL_ENSURE( bHasNamedValues || bHasPropValues, "MediaDescriptor::clearComponentDataEntry - incompatible 'ComponentData' property in media descriptor" );
+        if( bHasNamedValues || bHasPropValues )
         {
             // remove the value with the passed name
-            SequenceAsHashMap aCompDataMap( aPropertyIter->second );
+            SequenceAsHashMap aCompDataMap( rCompDataAny );
             aCompDataMap.erase( rName );
             // write back the sequence, or remove it completely if it is empty
             if( aCompDataMap.empty() )
                 erase( aPropertyIter );
             else
-                aPropertyIter->second = aCompDataMap.getAsConstAny( sal_False );
+                rCompDataAny = aCompDataMap.getAsConstAny( bHasPropValues );
         }
     }
 }
