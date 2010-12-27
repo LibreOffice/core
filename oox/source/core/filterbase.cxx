@@ -414,7 +414,7 @@ VbaProject& FilterBase::getVbaProject() const
     return *mxImpl->mxVbaProject;
 }
 
-OUString FilterBase::requestPassword( ::comphelper::IDocPasswordVerifier& rVerifier ) const
+Sequence< NamedValue > FilterBase::requestEncryptionData( ::comphelper::IDocPasswordVerifier& rVerifier ) const
 {
     ::std::vector< OUString > aDefaultPasswords;
     aDefaultPasswords.push_back( CREATE_OUSTRING( "VelvetSweatshop" ) );

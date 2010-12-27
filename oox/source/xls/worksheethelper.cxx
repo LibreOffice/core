@@ -376,7 +376,7 @@ public:
     Size                getCellSize( sal_Int32 nCol, sal_Int32 nRow ) const;
 
     /** Returns the address of the cell that contains the passed point in 1/100 mm. */
-    CellAddress         getCellAddressFromPosition( const Point& rPosition, const CellAddress* pStartAddr = 0 ) const;
+    CellAddress         getCellAddressFromPosition( const Point& rPosition, const Size& rDrawPageSize ) const;
     /** Returns the cell range address that contains the passed rectangle in 1/100 mm. */
     CellRangeAddress    getCellRangeFromRectangle( const Rectangle& rRect ) const;
 
@@ -771,41 +771,117 @@ Size WorksheetData::getCellSize( sal_Int32 nCol, sal_Int32 nRow ) const
     return aSize;
 }
 
-CellAddress WorksheetData::getCellAddressFromPosition( const Point& rPosition, const CellAddress* pStartAddr ) const
+namespace {
+
+inline sal_Int32 lclGetMidAddr( sal_Int32 nBegAddr, sal_Int32 nEndAddr, sal_Int32 nBegPos, sal_Int32 nEndPos, sal_Int32 nSearchPos )
 {
-    // prepare start address for search loop
-    sal_Int32 nCol = pStartAddr ? ::std::min< sal_Int32 >( pStartAddr->Column + 1, mrMaxApiPos.Column ) : 1;
-    sal_Int32 nRow = pStartAddr ? ::std::min< sal_Int32 >( pStartAddr->Row + 1,    mrMaxApiPos.Row )    : 1;
+    // use sal_Int64 to prevent integer overflow
+    return nBegAddr + 1 + static_cast< sal_Int32 >( static_cast< sal_Int64 >( nEndAddr - nBegAddr - 2 ) * (nSearchPos - nBegPos) / (nEndPos - nBegPos) );
+}
+
+bool lclPrepareInterval( sal_Int32 nBegAddr, sal_Int32& rnMidAddr, sal_Int32 nEndAddr,
+        sal_Int32 nBegPos, sal_Int32 nEndPos, sal_Int32 nSearchPos )
+{
+    // searched position before nBegPos -> use nBegAddr
+    if( nSearchPos <= nBegPos )
+    {
+        rnMidAddr = nBegAddr;
+        return false;
+    }
+
+    // searched position after nEndPos, or begin next to end -> use nEndAddr
+    if( (nSearchPos >= nEndPos) || (nBegAddr + 1 >= nEndAddr) )
+    {
+        rnMidAddr = nEndAddr;
+        return false;
+    }
+
+    /*  Otherwise find mid address according to position. lclGetMidAddr() will
+        return an address between nBegAddr and nEndAddr. */
+    rnMidAddr = lclGetMidAddr( nBegAddr, nEndAddr, nBegPos, nEndPos, nSearchPos );
+    return true;
+}
+
+bool lclUpdateInterval( sal_Int32& rnBegAddr, sal_Int32& rnMidAddr, sal_Int32& rnEndAddr,
+        sal_Int32& rnBegPos, sal_Int32 nMidPos, sal_Int32& rnEndPos, sal_Int32 nSearchPos )
+{
+    // nSearchPos < nMidPos: use the interval [begin,mid] in the next iteration
+    if( nSearchPos < nMidPos )
+    {
+        // if rnBegAddr is next to rnMidAddr, the latter is the column/row in question
+        if( rnBegAddr + 1 >= rnMidAddr )
+            return false;
+        // otherwise, set interval end to mid
+        rnEndPos = nMidPos;
+        rnEndAddr = rnMidAddr;
+        rnMidAddr = lclGetMidAddr( rnBegAddr, rnEndAddr, rnBegPos, rnEndPos, nSearchPos );
+        return true;
+    }
+
+    // nSearchPos > nMidPos: use the interval [mid,end] in the next iteration
+    if( nSearchPos > nMidPos )
+    {
+        // if rnMidAddr is next to rnEndAddr, the latter is the column/row in question
+        if( rnMidAddr + 1 >= rnEndAddr )
+        {
+            rnMidAddr = rnEndAddr;
+            return false;
+        }
+        // otherwise, set interval start to mid
+        rnBegPos = nMidPos;
+        rnBegAddr = rnMidAddr;
+        rnMidAddr = lclGetMidAddr( rnBegAddr, rnEndAddr, rnBegPos, rnEndPos, nSearchPos );
+        return true;
+    }
+
+    // nSearchPos == nMidPos: rnMidAddr is the column/row in question, do not loop anymore
+    return false;
+}
+
+} // namespace
+
+CellAddress WorksheetData::getCellAddressFromPosition( const Point& rPosition, const Size& rDrawPageSize ) const
+{
+    // starting cell address and its position in drawing layer (top-left edge)
+    sal_Int32 nBegCol = 0;
+    sal_Int32 nBegRow = 0;
+    Point aBegPos( 0, 0 );
+
+    // end cell address and its position in drawing layer (bottom-right edge)
+    sal_Int32 nEndCol = mrMaxApiPos.Column + 1;
+    sal_Int32 nEndRow = mrMaxApiPos.Row + 1;
+    Point aEndPos( rDrawPageSize.Width, rDrawPageSize.Height );
+
+    // starting point for interval search
+    sal_Int32 nMidCol, nMidRow;
+    bool bLoopCols = lclPrepareInterval( nBegCol, nMidCol, nEndCol, aBegPos.X, aEndPos.X, rPosition.X );
+    bool bLoopRows = lclPrepareInterval( nBegRow, nMidRow, nEndRow, aBegPos.Y, aEndPos.Y, rPosition.Y );
+    Point aMidPos = getCellPosition( nMidCol, nMidRow );
 
     /*  The loop will find the column/row index of the cell right of/below
         the cell containing the passed point, unless the point is located at
         the top or left border of the containing cell. */
-    bool bNextCol = true;
-    bool bNextRow = true;
-    Point aCellPos;
-    do
+    while( bLoopCols || bLoopRows )
     {
-        aCellPos = getCellPosition( nCol, nRow );
-        if( bNextCol && ((bNextCol = (aCellPos.X < rPosition.X) && (nCol < mrMaxApiPos.Column)) == true) )
-            ++nCol;
-        if( bNextRow && ((bNextRow = (aCellPos.Y < rPosition.Y) && (nRow < mrMaxApiPos.Row)) == true) )
-            ++nRow;
+        bLoopCols = bLoopCols && lclUpdateInterval( nBegCol, nMidCol, nEndCol, aBegPos.X, aMidPos.X, aEndPos.X, rPosition.X );
+        bLoopRows = bLoopRows && lclUpdateInterval( nBegRow, nMidRow, nEndRow, aBegPos.Y, aMidPos.Y, aEndPos.Y, rPosition.Y );
+        aMidPos = getCellPosition( nMidCol, nMidRow );
     }
-    while( bNextCol || bNextRow );
 
     /*  The cell left of/above the current search position contains the passed
         point, unless the point is located on the top/left border of the cell,
         or the last column/row of the sheet has been reached. */
-    if( aCellPos.X > rPosition.X ) --nCol;
-    if( aCellPos.Y > rPosition.Y ) --nRow;
-    return CellAddress( getSheetIndex(), nCol, nRow );
+    if( aMidPos.X > rPosition.X ) --nMidCol;
+    if( aMidPos.Y > rPosition.Y ) --nMidRow;
+    return CellAddress( getSheetIndex(), nMidCol, nMidRow );
 }
 
 CellRangeAddress WorksheetData::getCellRangeFromRectangle( const Rectangle& rRect ) const
 {
-    CellAddress aStartAddr = getCellAddressFromPosition( Point( rRect.X, rRect.Y ) );
+    Size aPageSize = getDrawPageSize();
+    CellAddress aStartAddr = getCellAddressFromPosition( Point( rRect.X, rRect.Y ), aPageSize );
     Point aBotRight( rRect.X + rRect.Width, rRect.Y + rRect.Height );
-    CellAddress aEndAddr = getCellAddressFromPosition( aBotRight );
+    CellAddress aEndAddr = getCellAddressFromPosition( aBotRight, aPageSize );
     bool bMultiCols = aStartAddr.Column < aEndAddr.Column;
     bool bMultiRows = aStartAddr.Row < aEndAddr.Row;
     if( bMultiCols || bMultiRows )
@@ -921,17 +997,25 @@ void WorksheetData::extendUsedArea( const CellRangeAddress& rRange )
 
 void WorksheetData::extendShapeBoundingBox( const Rectangle& rShapeRect )
 {
+    // scale EMUs to 1/100 mm
+    const UnitConverter& rUnitConv = getUnitConverter();
+    Rectangle aShapeRectHmm(
+        rUnitConv.scaleToMm100( rShapeRect.X, UNIT_EMU ),
+        rUnitConv.scaleToMm100( rShapeRect.Y, UNIT_EMU ),
+        rUnitConv.scaleToMm100( rShapeRect.Width, UNIT_EMU ),
+        rUnitConv.scaleToMm100( rShapeRect.Height, UNIT_EMU ) );
+
     if( (maShapeBoundingBox.Width == 0) && (maShapeBoundingBox.Height == 0) )
     {
         // width and height of maShapeBoundingBox are assumed to be zero on first cell
-        maShapeBoundingBox = rShapeRect;
+        maShapeBoundingBox = aShapeRectHmm;
     }
     else
     {
-        sal_Int32 nEndX = ::std::max( maShapeBoundingBox.X + maShapeBoundingBox.Width, rShapeRect.X + rShapeRect.Width );
-        sal_Int32 nEndY = ::std::max( maShapeBoundingBox.Y + maShapeBoundingBox.Height, rShapeRect.Y + rShapeRect.Height );
-        maShapeBoundingBox.X = ::std::min( maShapeBoundingBox.X, rShapeRect.X );
-        maShapeBoundingBox.Y = ::std::min( maShapeBoundingBox.Y, rShapeRect.Y );
+        sal_Int32 nEndX = ::std::max( maShapeBoundingBox.X + maShapeBoundingBox.Width, aShapeRectHmm.X + aShapeRectHmm.Width );
+        sal_Int32 nEndY = ::std::max( maShapeBoundingBox.Y + maShapeBoundingBox.Height, aShapeRectHmm.Y + aShapeRectHmm.Height );
+        maShapeBoundingBox.X = ::std::min( maShapeBoundingBox.X, aShapeRectHmm.X );
+        maShapeBoundingBox.Y = ::std::min( maShapeBoundingBox.Y, aShapeRectHmm.Y );
         maShapeBoundingBox.Width = nEndX - maShapeBoundingBox.X;
         maShapeBoundingBox.Height = nEndY - maShapeBoundingBox.Y;
     }

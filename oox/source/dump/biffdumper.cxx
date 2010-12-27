@@ -2422,7 +2422,7 @@ void WorkbookStreamObject::implDumpRecordBody()
             rStrm.seekToStart();
             BiffDecoderRef xDecoder = BiffCodecHelper::implReadFilePass( rStrm, eBiff );
             if( xDecoder.get() )
-                cfg().requestPassword( *xDecoder );
+                cfg().requestEncryptionData( *xDecoder );
             setBinaryOnlyMode( !xDecoder || !xDecoder->isValid() );
         }
         break;

@@ -1583,18 +1583,18 @@ NameListRef SharedConfigData::getNameList( const OUString& rListName ) const
     return xList;
 }
 
-OUString SharedConfigData::requestPassword( ::comphelper::IDocPasswordVerifier& rVerifier )
+Sequence< NamedValue > SharedConfigData::requestEncryptionData( ::comphelper::IDocPasswordVerifier& rVerifier )
 {
-    OUString aPassword;
+    Sequence< NamedValue > aEncryptionData;
     if( !mbPwCancelled )
     {
         ::std::vector< OUString > aDefaultPasswords;
         aDefaultPasswords.push_back( CREATE_OUSTRING( "VelvetSweatshop" ) );
-        aPassword = ::comphelper::DocPasswordHelper::requestAndVerifyDocPassword(
+        aEncryptionData = ::comphelper::DocPasswordHelper::requestAndVerifyDocPassword(
             rVerifier, mrMediaDesc, ::comphelper::DocPasswordRequestType_MS, &aDefaultPasswords );
-        mbPwCancelled = aPassword.getLength() == 0;
+        mbPwCancelled = !aEncryptionData.hasElements();
     }
-    return aPassword;
+    return aEncryptionData;
 }
 
 bool SharedConfigData::implIsValid() const
@@ -1766,9 +1766,9 @@ NameListRef Config::getNameList( const String& rListName ) const
     return implGetNameList( rListName );
 }
 
-OUString Config::requestPassword( ::comphelper::IDocPasswordVerifier& rVerifier )
+Sequence< NamedValue > Config::requestEncryptionData( ::comphelper::IDocPasswordVerifier& rVerifier )
 {
-    return mxCfgData->requestPassword( rVerifier );
+    return mxCfgData->requestEncryptionData( rVerifier );
 }
 
 bool Config::isPasswordCancelled() const

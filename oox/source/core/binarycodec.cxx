@@ -31,6 +31,11 @@
 #include <string.h>
 #include "oox/helper/attributelist.hxx"
 
+#include <comphelper/sequenceashashmap.hxx>
+#include <comphelper/docpasswordhelper.hxx>
+
+using namespace ::com::sun::star;
+
 namespace oox {
 namespace core {
 
@@ -177,6 +182,37 @@ void BinaryCodec_XOR::initKey( const sal_uInt8 pnPassData[ 16 ] )
     }
 }
 
+bool BinaryCodec_XOR::initCodec( const uno::Sequence< beans::NamedValue >& aData )
+{
+    bool bResult = sal_False;
+
+    ::comphelper::SequenceAsHashMap aHashData( aData );
+    uno::Sequence< sal_Int8 > aKey = aHashData.getUnpackedValueOrDefault( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "XOR95EncryptionKey" ) ), uno::Sequence< sal_Int8 >() );
+
+    if ( aKey.getLength() == 16 )
+    {
+        (void)memcpy( mpnKey, aKey.getConstArray(), 16 );
+        bResult = sal_True;
+
+        mnBaseKey = (sal_uInt16)aHashData.getUnpackedValueOrDefault( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "XOR95BaseKey" ) ), (sal_Int16)0 );
+        mnHash = (sal_uInt16)aHashData.getUnpackedValueOrDefault( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "XOR95PasswordHash" ) ), (sal_Int16)0 );
+    }
+    else
+        OSL_ENSURE( sal_False, "Unexpected key size!\n" );
+
+    return bResult;
+}
+
+uno::Sequence< beans::NamedValue > BinaryCodec_XOR::getEncryptionData()
+{
+    ::comphelper::SequenceAsHashMap aHashData;
+    aHashData[ ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "XOR95EncryptionKey" ) ) ] <<= uno::Sequence<sal_Int8>( (sal_Int8*)mpnKey, 16 );
+    aHashData[ ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "XOR95BaseKey" ) ) ] <<= (sal_Int16)mnBaseKey;
+    aHashData[ ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "XOR95PasswordHash" ) ) ] <<= (sal_Int16)mnHash;
+
+    return aHashData.getAsConstNamedValueList();
+}
+
 bool BinaryCodec_XOR::verifyKey( sal_uInt16 nKey, sal_uInt16 nHash ) const
 {
     return (nKey == mnBaseKey) && (nHash == mnHash);
@@ -231,11 +267,6 @@ bool BinaryCodec_XOR::skip( sal_Int32 nBytes )
     return true;
 }
 
-sal_uInt16 BinaryCodec_XOR::getHash( const sal_uInt8* pnPassData, sal_Int32 nSize )
-{
-    return lclGetHash( pnPassData, nSize );
-}
-
 // ============================================================================
 
 BinaryCodec_RCF::BinaryCodec_RCF()
@@ -247,56 +278,62 @@ BinaryCodec_RCF::BinaryCodec_RCF()
     OSL_ENSURE( mhDigest != 0, "BinaryCodec_RCF::BinaryCodec_RCF - cannot create digest" );
 
     (void)memset( mpnDigestValue, 0, sizeof( mpnDigestValue ) );
+    (void)memset (mpnUnique, 0, sizeof(mpnUnique));
 }
 
 BinaryCodec_RCF::~BinaryCodec_RCF()
 {
     (void)memset( mpnDigestValue, 0, sizeof( mpnDigestValue ) );
+    (void)memset (mpnUnique, 0, sizeof(mpnUnique));
     rtl_digest_destroy( mhDigest );
     rtl_cipher_destroy( mhCipher );
 }
 
+bool BinaryCodec_RCF::initCodec( const uno::Sequence< beans::NamedValue >& aData )
+{
+    bool bResult = sal_False;
+
+    ::comphelper::SequenceAsHashMap aHashData( aData );
+    uno::Sequence< sal_Int8 > aKey = aHashData.getUnpackedValueOrDefault( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "STD97EncryptionKey" ) ), uno::Sequence< sal_Int8 >() );
+
+    if ( aKey.getLength() == RTL_DIGEST_LENGTH_MD5 )
+    {
+        (void)memcpy( mpnDigestValue, aKey.getConstArray(), RTL_DIGEST_LENGTH_MD5 );
+        uno::Sequence< sal_Int8 > aUniqueID = aHashData.getUnpackedValueOrDefault( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "STD97UniqueID" ) ), uno::Sequence< sal_Int8 >() );
+        if ( aUniqueID.getLength() == 16 )
+        {
+            (void)memcpy( mpnUnique, aUniqueID.getConstArray(), 16 );
+            bResult = sal_False;
+        }
+        else
+            OSL_ENSURE( sal_False, "Unexpected document ID!\n" );
+    }
+    else
+        OSL_ENSURE( sal_False, "Unexpected key size!\n" );
+
+    return bResult;
+}
+
+uno::Sequence< beans::NamedValue > BinaryCodec_RCF::getEncryptionData()
+{
+    ::comphelper::SequenceAsHashMap aHashData;
+    aHashData[ ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "STD97EncryptionKey" ) ) ] <<= uno::Sequence< sal_Int8 >( (sal_Int8*)mpnDigestValue, RTL_DIGEST_LENGTH_MD5 );
+    aHashData[ ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "STD97UniqueID" ) ) ] <<= uno::Sequence< sal_Int8 >( (sal_Int8*)mpnUnique, 16 );
+
+    return aHashData.getAsConstNamedValueList();
+}
+
 void BinaryCodec_RCF::initKey( const sal_uInt16 pnPassData[ 16 ], const sal_uInt8 pnSalt[ 16 ] )
 {
-    // create little-endian key data array from password data
-    sal_uInt8 pnKeyData[ 64 ];
-    (void)memset( pnKeyData, 0, sizeof( pnKeyData ) );
+    uno::Sequence< sal_Int8 > aKey = ::comphelper::DocPasswordHelper::GenerateStd97Key( pnPassData, uno::Sequence< sal_Int8 >( (sal_Int8*)pnSalt, 16 ) );
+    // Fill raw digest of above updates into DigestValue.
 
-    const sal_uInt16* pnCurrPass = pnPassData;
-    const sal_uInt16* pnPassEnd = pnPassData + 16;
-    sal_uInt8* pnCurrKey = pnKeyData;
-    size_t nPassSize = 0;
-    for( ; (pnCurrPass < pnPassEnd) && (*pnCurrPass != 0); ++pnCurrPass, ++nPassSize )
-    {
-        *pnCurrKey++ = static_cast< sal_uInt8 >( *pnCurrPass );
-        *pnCurrKey++ = static_cast< sal_uInt8 >( *pnCurrPass >> 8 );
-    }
-    pnKeyData[ 2 * nPassSize ] = 0x80;
-    pnKeyData[ 56 ] = static_cast< sal_uInt8 >( nPassSize << 4 );
+    if ( aKey.getLength() == sizeof(mpnDigestValue) )
+        (void)memcpy ( mpnDigestValue, (const sal_uInt8*)aKey.getConstArray(), sizeof(mpnDigestValue) );
+    else
+        memset( mpnDigestValue, 0, sizeof(mpnDigestValue) );
 
-    // fill raw digest of key data into key data
-    (void)rtl_digest_updateMD5( mhDigest, pnKeyData, sizeof( pnKeyData ) );
-    (void)rtl_digest_rawMD5( mhDigest, pnKeyData, RTL_DIGEST_LENGTH_MD5 );
-
-    // update digest with key data and passed salt data
-    for( size_t nIndex = 0; nIndex < 16; ++nIndex )
-    {
-        rtl_digest_updateMD5( mhDigest, pnKeyData, 5 );
-        rtl_digest_updateMD5( mhDigest, pnSalt, 16 );
-    }
-
-    // update digest with padding
-    pnKeyData[ 16 ] = 0x80;
-    (void)memset( pnKeyData + 17, 0, sizeof( pnKeyData ) - 17 );
-    pnKeyData[ 56 ] = 0x80;
-    pnKeyData[ 57 ] = 0x0A;
-    rtl_digest_updateMD5( mhDigest, pnKeyData + 16, sizeof( pnKeyData ) - 16 );
-
-    // fill raw digest of above updates into digest value
-    rtl_digest_rawMD5( mhDigest, mpnDigestValue, sizeof( mpnDigestValue ) );
-
-    // erase key data array and leave
-    (void)memset( pnKeyData, 0, sizeof( pnKeyData ) );
+    (void)memcpy( mpnUnique, pnSalt, 16 );
 }
 
 bool BinaryCodec_RCF::verifyKey( const sal_uInt8 pnVerifier[ 16 ], const sal_uInt8 pnVerifierHash[ 16 ] )
