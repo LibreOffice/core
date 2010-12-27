@@ -68,7 +68,7 @@ interface XTable
     XRange ConvertToText([in] any Separator, [in] any NestedTables)
         raises(com::sun::star::script::BasicErrorException);
 */
-    any Borders( [in] any aIndex );
+    any Borders( [in] any Index );
 
 };
 

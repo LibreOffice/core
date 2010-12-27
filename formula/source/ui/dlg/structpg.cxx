@@ -112,7 +112,7 @@ StructPage::StructPage(Window* pParent):
     maImgErrorHC    ( ModuleRes( BMP_STR_ERROR_H ) ),
     pSelectedToken  ( NULL )
 {
-    aTlbStruct.SetWindowBits(WB_HASLINES|WB_CLIPCHILDREN|
+    aTlbStruct.SetStyle(aTlbStruct.GetStyle()|WB_HASLINES|WB_CLIPCHILDREN|
                         WB_HASBUTTONS|WB_HSCROLL|WB_NOINITIALSELECTION);
 
     aTlbStruct.SetNodeDefaultImages();

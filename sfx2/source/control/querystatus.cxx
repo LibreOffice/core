@@ -44,7 +44,7 @@
 #include <com/sun/star/frame/status/ItemState.hpp>
 #include <com/sun/star/frame/status/Visibility.hpp>
 
-using namespace ::rtl;
+using ::rtl::OUString;
 using namespace ::cppu;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::frame;

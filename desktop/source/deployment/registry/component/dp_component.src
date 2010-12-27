@@ -42,6 +42,11 @@ String RID_STR_PYTHON_COMPONENT
     Text [ en-US ] = "UNO Python Component";
 };
 
+String RID_STR_COMPONENTS
+{
+    Text [ en-US ] = "UNO Components";
+};
+
 String RID_STR_RDB_TYPELIB
 {
     Text [ en-US ] = "UNO RDB Type Library";

@@ -32,12 +32,12 @@
 #include "fmservs.hxx"
 
 #include "datanavi.hrc"
-#include "fmresids.hrc"
+#include "svx/fmresids.hrc"
 #include "fmhelp.hrc"
 #include <svx/svxids.hrc>
 #include <tools/rcid.h>
 #include <tools/diagnose_ex.h>
-#include "xmlexchg.hxx"
+#include "svx/xmlexchg.hxx"
 #include <svx/dialmgr.hxx>
 #include <svx/fmshell.hxx>
 #include <svtools/miscopt.hxx>
@@ -352,7 +352,7 @@ namespace svxform
         WinBits nBits = WB_BORDER | WB_TABSTOP | WB_HIDESELECTION | WB_NOINITIALSELECTION;
         if ( DGTInstance == m_eGroup || DGTSubmission == m_eGroup )
             nBits |= WB_HASBUTTONS | WB_HASLINES | WB_HASLINESATROOT | WB_HASBUTTONSATROOT;
-        m_aItemList.SetWindowBits( m_aItemList.GetStyle() | nBits  );
+        m_aItemList.SetStyle( m_aItemList.GetStyle() | nBits  );
         m_aItemList.Show();
         ItemSelectHdl( &m_aItemList );
     }

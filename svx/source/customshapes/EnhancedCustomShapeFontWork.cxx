@@ -38,7 +38,7 @@
 #include <svx/sdasaitm.hxx>
 #include <svx/sdtfsitm.hxx>
 #include <vcl/virdev.hxx>
-#include <svditer.hxx>
+#include <svx/svditer.hxx>
 #include <vcl/metric.hxx>
 #include <editeng/eeitem.hxx>
 #include <editeng/frmdiritem.hxx>
@@ -46,7 +46,7 @@
 #include <editeng/postitem.hxx>
 #include <editeng/wghtitem.hxx>
 #include <editeng/charscaleitem.hxx>
-#include "EnhancedCustomShapeTypeNames.hxx"
+#include "svx/EnhancedCustomShapeTypeNames.hxx"
 #include <svx/svdorect.hxx>
 #include <svx/svdoashp.hxx>
 #include <editeng/outliner.hxx>

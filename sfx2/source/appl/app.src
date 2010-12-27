@@ -31,6 +31,45 @@
 #include "app.hrc"
 #include "helpid.hrc"
 
+String STR_NONAME
+{
+    Text [ en-US ] = "Untitled" ;
+};
+String STR_CLOSE
+{
+    Text [ en-US ] = "Close" ;
+};
+String STR_STYLE_FILTER_AUTO
+{
+    Text [ en-US ] = "Automatic" ;
+};
+String STR_STANDARD_SHORTCUT
+{
+    Text [ en-US ] = "Standard" ;
+};
+String STR_BYTES
+{
+    Text [ en-US ] = "Bytes" ;
+};
+String STR_KB
+{
+    Text [ en-US ] = "KB" ;
+};
+String STR_MB
+{
+    Text [ en-US ] = "MB" ;
+};
+String STR_GB
+{
+    Text [ en-US ] = "GB" ;
+};
+QueryBox MSG_QUERY_LASTVERSION
+{
+    Buttons = WB_YES_NO ;
+    DefButton = WB_DEF_NO ;
+    Message [ en-US ] = "Cancel all changes?" ;
+};
+
 InfoBox RID_DOCALREADYLOADED_DLG
 {
     Message [ en-US ] = "Document already open." ;
@@ -891,19 +930,37 @@ Image IMG_MISSING_4
     ImageBitmap = Bitmap { File = "sn064.bmp" ; };
 };
 
+String STR_STANDARD
+{
+    Text [ en-US ] = "Standard" ;
+};
+
 String RID_SVXSTR_FILELINK
 {
     Text [ en-US ] = "Document" ;
+};
+
+String STR_NONE
+{
+    Text [ en-US ] = "- None -" ;
 };
 String RID_SVXSTR_GRAFIKLINK
 {
     Text [ en-US ] = "Graphic" ;
 };
+String STR_SFX_FILTERNAME_ALL
+{
+    Text [ en-US ] = "All files (*.*)" ;
+};
 String RID_SVXSTR_EDITGRFLINK
 {
     Text [ en-US ] = "Link graphics" ;
 };
-
+// i66948 used in project scripting
+String STR_ERRUNOEVENTBINDUNG
+{
+    Text [ en-US ] = "An appropriate component method %1\ncould not be found.\n\nCheck spelling of method name.";
+};
 String RID_SVXSTR_GRFILTER_OPENERROR
 {
     Text [ en-US ] = "Graphics file cannot be opened" ;

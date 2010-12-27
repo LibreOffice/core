@@ -28,9 +28,9 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
 
-#include "ParseContext.hxx"
+#include "svx/ParseContext.hxx"
 #include "stringlistresource.hxx"
-#include "fmresids.hrc"
+#include "svx/fmresids.hrc"
 
 #include <svx/dialmgr.hxx>
 
