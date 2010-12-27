@@ -33,8 +33,6 @@ PRJ=..$/..
 
 PRJNAME=sal
 TARGET=qa_ostringbuffer
-# this is removed at the moment because we need some enhancements
-# TESTDIR=TRUE
 
 ENABLE_EXCEPTIONS=TRUE
 

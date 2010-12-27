@@ -24,24 +24,29 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
+#ifndef __com_sun_star_task_PDFExportException_idl__
+#define __com_sun_star_task_PDFExportException_idl__
 
-#ifndef __com_sun_star_script_ModuleInfo_idl__
-#define __com_sun_star_script_ModuleInfo_idl__
-
-#ifndef __com_sun_star_uno_XInterface_idl__
-#include <com/sun/star/uno/XInterface.idl>
+#ifndef __com_sun_star_uno_Exception_idl__
+#include <com/sun/star/uno/Exception.idl>
 #endif
 
-//=============================================================================
-module com {  module sun {  module star { module script {
-struct ModuleInfo
+ module com {  module sun {  module star {  module task {
+
+
+/** is an exception that provides information on an error during PDF export.
+ */
+published exception PDFExportException: com::sun::star::uno::Exception
 {
-    com::sun::star::uno::XInterface ModuleObject;
-    long ModuleType;
+    /** contains a number of errors that occured during PDFExport
+    */
+    sequence< long > ErrorCodes;
 };
 
 //=============================================================================
 
 }; }; }; };
 
+/*===========================================================================
+===========================================================================*/
 #endif

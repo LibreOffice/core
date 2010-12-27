@@ -387,3 +387,9 @@ UDK_3.7 { # OOo 3.3
         __1cDcomDsunEstarDunoTWeakReferenceHelperFclear6M_v_;
         __1cEcppubHcreateOneInstanceComponentFactory6FpFrknDcomDsunEstarDunoJReference4n0ERXComponentContext____n0EJReference4n0EKXInterface___rknDrtlIOUString_rkn0EISequence4n0K___pnQ_rtl_ModuleCount__n0EJReference4n0DElangXXSingleComponentFactory____;
 } UDK_3.6;
+
+UDK_3.8 { # OOo 3.4
+    global:
+        __1cEcppuSOPropertySetHelperbDsetDependentFastPropertyValue6MlrknDcomDsunEstarDunoDAny__v_;
+} UDK_3.7;
+
