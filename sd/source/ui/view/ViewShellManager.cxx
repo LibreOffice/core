@@ -41,6 +41,7 @@
 #include <svx/fmshell.hxx>
 
 #include <hash_map>
+#include <iterator>
 
 #undef VERBOSE
 //#define VERBOSE 2
@@ -938,7 +939,7 @@ void ViewShellManager::Implementation::UpdateShellStack (void)
 
 
     // 4. Find the lowest shell in which the two stacks differ.
-    ShellStack::const_iterator iSfxShell (aSfxShellStack.begin());
+    ShellStack::iterator iSfxShell (aSfxShellStack.begin());
     ShellStack::iterator iTargetShell (aTargetStack.begin());
     while (iSfxShell != aSfxShellStack.end()
         && iTargetShell!=aTargetStack.end()
@@ -951,15 +952,16 @@ void ViewShellManager::Implementation::UpdateShellStack (void)
 
     // 5. Remove all shells above and including the differing shell from the
     // SFX stack starting with the shell on top of the stack.
-    while (iSfxShell != aSfxShellStack.end())
+    for (std::reverse_iterator<ShellStack::const_iterator> i(aSfxShellStack.end()), iLast(iSfxShell);
+            i != iLast; ++i)
     {
-        SfxShell* pShell = aSfxShellStack.back();
-        aSfxShellStack.pop_back();
+        SfxShell* const pShell = *i;
 #ifdef VERBOSE
         OSL_TRACE("removing shell %p from stack\r", pShell);
 #endif
         mrBase.RemoveSubShell(pShell);
     }
+    aSfxShellStack.erase(iSfxShell, aSfxShellStack.end());
 
 
     // 6. Push shells from the given stack onto the SFX stack.
