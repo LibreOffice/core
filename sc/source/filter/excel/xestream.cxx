@@ -32,6 +32,7 @@
 #include <utility>
 
 #include <rtl/ustring.hxx>
+#include <rtl/ustrbuf.hxx>
 #include <rtl/random.h>
 #include <sax/fshelper.hxx>
 #include <unotools/streamwrap.hxx>
@@ -53,6 +54,7 @@
 
 using ::rtl::OString;
 using ::rtl::OUString;
+using ::rtl::OUStringBuffer;
 using ::utl::OStreamWrapper;
 using ::std::vector;
 

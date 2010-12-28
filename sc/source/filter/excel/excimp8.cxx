@@ -41,6 +41,11 @@
 
 #include <sfx2/docfile.hxx>
 #include <sfx2/objsh.hxx>
+#include <sfx2/request.hxx>
+#include <sfx2/app.hxx>
+#include <sfx2/docinf.hxx>
+#include <sfx2/frame.hxx>
+
 #include <editeng/brshitem.hxx>
 #include <editeng/editdata.hxx>
 #include <editeng/editeng.hxx>
@@ -58,8 +63,7 @@
 #include <vcl/bmpacc.hxx>
 #include <sot/exchange.hxx>
 
-#include <sfx2/app.hxx>
-#include <sfx2/docinf.hxx>
+#include <svl/stritem.hxx>
 
 #include <tools/string.hxx>
 #include <tools/urlobj.hxx>
