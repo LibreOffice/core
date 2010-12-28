@@ -456,7 +456,7 @@ BOOL SvxAutoCorrect::FnCptlSttWrd( SvxAutoCorrDoc& rDoc, const String& rTxt,
             sal_Unicode cSave = rTxt.GetChar( nSttPos );
             String sChar( cSave );
             rCC.toLower( sChar );
-            if( sChar.GetChar(0) != cSave && rDoc.Replace( nSttPos, sChar ))
+            if( sChar.GetChar(0) != cSave && rDoc.ReplaceRange( nSttPos, 1, sChar ))
             {
                 if( SaveWordWrdSttLst & nFlags )
                     rDoc.SaveCpltSttWord( CptlSttWrd, nSttPos, sWord, cSave );
@@ -888,7 +888,7 @@ BOOL SvxAutoCorrect::FnCptlSttSntnc( SvxAutoCorrDoc& rDoc,
             String sChar( *pWordStt );
             rCC.toUpper( sChar );
             return  sChar != *pWordStt &&
-                    rDoc.Replace( xub_StrLen( pWordStt - pStart ), sChar );
+                    rDoc.ReplaceRange( xub_StrLen( pWordStt - pStart ), 1, sChar );
         }
 
         aText = *pPrevPara;
@@ -1068,7 +1068,7 @@ BOOL SvxAutoCorrect::FnCptlSttSntnc( SvxAutoCorrDoc& rDoc,
     nSttPos = sal::static_int_cast< xub_StrLen >( pWordStt - rTxt.GetBuffer() );
     String sChar( cSave );
     rCC.toUpper( sChar );
-    BOOL bRet = sChar.GetChar(0) != cSave && rDoc.Replace( nSttPos, sChar );
+    BOOL bRet = sChar.GetChar(0) != cSave && rDoc.ReplaceRange( nSttPos, 1, sChar );
 
     // das Wort will vielleicht jemand haben
     if( bRet && SaveWordCplSttLst & nFlags )
