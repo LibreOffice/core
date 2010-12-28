@@ -129,7 +129,6 @@ static PageDesc aDinTab[] =
     { MM2MM100( 227 ),   MM2MM100( 356 ),    "SuperA",  NULL },
     { MM2MM100( 305 ),   MM2MM100( 487 ),    "SuperB",  NULL },
     { IN2MM100( 8.5 ),   IN2MM100( 12.69 ),  "LetterPlus",  NULL },
-    { IN2MM100( 8.5 ),   IN2MM100( 12.69 ),  "LetterPlus",  NULL },
     { MM2MM100( 210 ),   MM2MM100( 330 ),    "A4Plus",  NULL },
     { MM2MM100( 200 ),   MM2MM100( 148 ),    "DoublePostcard",  NULL },
     { MM2MM100( 105 ),   MM2MM100( 148 ),    "A6",  NULL },
