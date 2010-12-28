@@ -1341,7 +1341,7 @@ STD_LIB_FILE( gid_File_Lib_Svx, svx)
 STD_LIB_FILE( gid_File_Lib_TextConversionDlgs, textconversiondlgs)
 STD_LIB_FILE( gid_File_Lib_Editeng, editeng)
 
-STD_UNO_LIB_FILE( gid_File_Lib_Msfilter, msfilter)
+STD_LIB_FILE( gid_File_Lib_Msfilter, msfilter)
 
 STD_LIB_FILE( gid_File_Lib_Sw , sw)
 STD_LIB_FILE( gid_File_Lib_Swui, swui)
