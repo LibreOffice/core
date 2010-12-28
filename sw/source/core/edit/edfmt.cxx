@@ -39,7 +39,7 @@
 #include <fchrfmt.hxx>
 #include <frmfmt.hxx>
 #include <charfmt.hxx>
-#include "ndtxt.hxx"    // Fuer GetXXXFmt
+#include "ndtxt.hxx"    // for GetXXXFmt
 #include "hints.hxx"
 
 /*************************************
@@ -93,7 +93,7 @@ void SwEditShell::FillByEx(SwCharFmt* pCharFmt, BOOL bReset)
         {
             const SwPosition* pPtPos = pPam->GetPoint();
             const SwPosition* pMkPos = pPam->GetMark();
-            if( pPtPos->nNode == pMkPos->nNode )        // im selben Node ?
+            if( pPtPos->nNode == pMkPos->nNode )        // in the same node?
             {
                 nStt = pPtPos->nContent.GetIndex();
                 if( nStt < pMkPos->nContent.GetIndex() )
@@ -155,7 +155,7 @@ SwCharFmt* SwEditShell::MakeCharFmt( const String& rName,
 }
 
 //----------------------------------
-// inlines im Product
+// inlines in product
 
 
 SwTxtFmtColl* SwEditShell::GetTxtCollFromPool( USHORT nId )
@@ -164,7 +164,7 @@ SwTxtFmtColl* SwEditShell::GetTxtCollFromPool( USHORT nId )
 }
 
 
-    // return das geforderte automatische  Format - Basis-Klasse !
+    // return the demanded automatic format - base-class !
 SwFmt* SwEditShell::GetFmtFromPool( USHORT nId )
 {
     return GetDoc()->GetFmtFromPool( nId );
