@@ -1650,12 +1650,13 @@ xub_StrLen MSWordExportBase::GetNextPos( SwAttrIter* aAttrIter, const SwTxtNode&
 {
     // Get the bookmarks for the normal run
     xub_StrLen nNextPos = aAttrIter->WhereNext();
-
-    GetSortedBookmarks( rNode, nAktPos, nNextPos - nAktPos );
-
     xub_StrLen nNextBookmark = nNextPos;
-    NearestBookmark( nNextPos, nAktPos, false );
 
+    if( nNextBookmark > nAktPos )//no need to search for bookmarks otherwise
+    {
+        GetSortedBookmarks( rNode, nAktPos, nNextBookmark - nAktPos );
+        NearestBookmark( nNextBookmark, nAktPos, false );
+    }
     return std::min( nNextPos, nNextBookmark );
 }
 
@@ -1663,9 +1664,9 @@ void MSWordExportBase::UpdatePosition( SwAttrIter* aAttrIter, xub_StrLen nAktPos
 {
     xub_StrLen nNextPos;
 
-    // go to next attribute if no bookmark is found of if the bookmark is behind the next attribute position
+    // go to next attribute if no bookmark is found and if the next attribute position if at the current position
     bool bNextBookmark = NearestBookmark( nNextPos, nAktPos, true );
-    if( !bNextBookmark || nNextPos < aAttrIter->WhereNext() )
+    if( !bNextBookmark && nAktPos >= aAttrIter->WhereNext() )
         aAttrIter->NextPos();
 }
 
