@@ -60,42 +60,19 @@ enum
 typedef int WriteAttribute;
 
 /******************** Meta Factory **************************************/
-#ifdef IDL_COMPILER
-
-#define PRV_SV_DECL_META_FACTORY( Class )                               \
-    static SvAttributeList * pAttribList;                               \
-    static SvMetaObject * Create() { return new Class; }                \
-    static const char *   GetClassName() { return #Class; }
-
-#define PRV_SV_IMPL_META_FACTORY( Class )                               \
-    SvAttributeList * Class::pAttribList = NULL;
-
-#else
-
-#define PRV_SV_DECL_META_FACTORY( Class )
-
-#define PRV_SV_IMPL_META_FACTORY( Class )
-
-#endif // IDL_COMPILER
-
 #define SV_DECL_META_FACTORY( Class, CLASS_ID )                         \
-    SV_DECL_PERSIST( Class, CLASS_ID )                                  \
-    PRV_SV_DECL_META_FACTORY( Class )
+    SV_DECL_PERSIST( Class, CLASS_ID )
 
 
 #define SV_DECL_META_FACTORY1( Class, Super1, CLASS_ID )                \
-    SV_DECL_PERSIST1( Class, Super1, CLASS_ID )                         \
-    PRV_SV_DECL_META_FACTORY( Class )
+    SV_DECL_PERSIST1( Class, Super1, CLASS_ID )
 
 #define SV_IMPL_META_FACTORY( Class )                                   \
-    PRV_SV_IMPL_META_FACTORY( Class )                                   \
     SV_IMPL_PERSIST( Class )
 
 
 #define SV_IMPL_META_FACTORY1( Class, Super1 )                          \
-    PRV_SV_IMPL_META_FACTORY( Class )                                   \
     SV_IMPL_PERSIST1( Class, Super1 )
-
 
 /******************** class SvMetaObject ********************************/
 class SvMetaObject : public SvPersistBase
@@ -121,7 +98,6 @@ public:
 #endif
 };
 SV_DECL_IMPL_REF(SvMetaObject)
-//SV_DECL_IMPL_PERSIST_LIST(SvMetaObject,SvMetaObject *)
 SV_DECL_PERSIST_LIST(SvMetaObject,SvMetaObject *)
 SV_IMPL_PERSIST_LIST(SvMetaObject,SvMetaObject *)
 

@@ -32,7 +32,6 @@
 #include <ctype.h>
 #include <stdio.h>
 
-#include <attrib.hxx>
 #include <module.hxx>
 #include <globals.hxx>
 #include <database.hxx>

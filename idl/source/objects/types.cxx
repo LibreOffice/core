@@ -34,7 +34,6 @@
 
 #include <tools/debug.hxx>
 
-#include <attrib.hxx>
 #include <types.hxx>
 #include <globals.hxx>
 #include <database.hxx>

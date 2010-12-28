@@ -32,7 +32,6 @@
 #include <ctype.h>
 #include <stdio.h>
 #include <tools/debug.hxx>
-#include <attrib.hxx>
 #include <slot.hxx>
 #include <globals.hxx>
 #include <database.hxx>
