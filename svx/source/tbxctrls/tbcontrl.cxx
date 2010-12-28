@@ -2653,7 +2653,7 @@ SfxPopupWindowType SvxFrameLineStyleToolBoxControl::GetPopupWindowType() const
 SfxPopupWindow* SvxFrameLineStyleToolBoxControl::CreatePopupWindow()
 {
     SvxLineWindow_Impl* pLineWin = new SvxLineWindow_Impl( GetSlotId(), m_xFrame, &GetToolBox() );
-    pLineWin->StartPopupMode( &GetToolBox(), FLOATWIN_POPUPMODE_GRABFOCUS );
+    pLineWin->StartPopupMode( &GetToolBox(), FLOATWIN_POPUPMODE_GRABFOCUS | FLOATWIN_POPUPMODE_ALLOWTEAROFF );
     pLineWin->StartSelection();
     SetPopupWindow( pLineWin );
 
