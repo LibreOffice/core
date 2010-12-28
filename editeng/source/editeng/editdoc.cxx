@@ -2248,33 +2248,47 @@ ULONG SvxFontTable::GetId( const SvxFontItem& rFontItem )
     return 0;
 }
 
+//=============================================================================
 SvxColorList::SvxColorList()
 {
 }
 
 SvxColorList::~SvxColorList()
 {
-    SvxColorItem* pItem = First();
-    while( pItem )
-    {
-        delete pItem;
-        pItem = Next();
-    }
+    for ( size_t i = 0, n = aColorList.size(); i < n; ++i )
+        delete aColorList[ i ];
+    aColorList.clear();
 }
 
-ULONG SvxColorList::GetId( const SvxColorItem& rColorItem )
+size_t SvxColorList::GetId( const SvxColorItem& rColorItem )
 {
-    SvxColorItem* pItem = First();
-    while ( pItem )
-    {
-        if ( *pItem == rColorItem )
-            return GetCurPos();
-        pItem = Next();
-    }
+    for ( size_t i = 0, n = aColorList.size(); i < n; ++i )
+        if ( *aColorList[ i ] == rColorItem )
+            return i;
     DBG_WARNING( "Color nicht gefunden: GetId()" );
     return 0;
 }
 
+void SvxColorList::Insert( SvxColorItem* pItem, size_t nIndex )
+{
+    if ( nIndex >= aColorList.size() )
+    {
+        aColorList.push_back( pItem );
+    }
+    else
+    {
+        DummyColorList::iterator it = aColorList.begin();
+        ::std::advance( it, nIndex );
+        aColorList.insert( it, pItem );
+    }
+}
+
+SvxColorItem* SvxColorList::GetObject( size_t nIndex )
+{
+    return ( nIndex >= aColorList.size() ) ? NULL : aColorList[ nIndex ];
+}
+
+//=============================================================================
 EditEngineItemPool::EditEngineItemPool( BOOL bPersistenRefCounts )
     : SfxItemPool( String( "EditEngineItemPool", RTL_TEXTENCODING_ASCII_US ), EE_ITEMS_START, EE_ITEMS_END,
                     aItemInfos, 0, bPersistenRefCounts )

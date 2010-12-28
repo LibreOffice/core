@@ -38,6 +38,7 @@
 #include <svl/style.hxx>
 #include <svl/itempool.hxx>
 #include <tools/table.hxx>
+#include <vector>
 
 class ImpEditEngine;
 class SvxTabStop;
@@ -138,6 +139,7 @@ SV_DECL_PTRARR( ContentInfoArray, ContentAttribsInfoPtr, 1, 1 )
 //  class SvxFontTable
 //  ----------------------------------------------------------------------
 DECLARE_TABLE( DummyFontTable, SvxFontItem* )
+
 class SvxFontTable : public DummyFontTable
 {
 public:
@@ -151,14 +153,21 @@ public:
 //  class SvxColorList
 //  ----------------------------------------------------------------------
 typedef ContentNode* ContentNodePtr;
-DECLARE_LIST( DummyColorList, SvxColorItem* )
-class SvxColorList : public DummyColorList
+typedef ::std::vector< SvxColorItem* > DummyColorList;
+
+class SvxColorList
 {
+private:
+    DummyColorList aColorList;
+
 public:
             SvxColorList();
             ~SvxColorList();
 
-    ULONG   GetId( const SvxColorItem& rColor );
+    size_t  GetId( const SvxColorItem& rColor );
+    size_t  Count() { return aColorList.size(); };
+    void    Insert( SvxColorItem* pItem, size_t nIndex );
+    SvxColorItem* GetObject( size_t nIndex );
 };
 
 //  ----------------------------------------------------------------------
