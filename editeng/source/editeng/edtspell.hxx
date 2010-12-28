@@ -158,6 +158,7 @@ public:
     virtual BOOL    Delete( USHORT nStt, USHORT nEnd );
     virtual BOOL    Insert( USHORT nPos, const String& rTxt );
     virtual BOOL    Replace( USHORT nPos, const String& rTxt );
+    virtual BOOL    ReplaceRange( xub_StrLen nPos, xub_StrLen nLen, const String& rTxt );
 
     virtual BOOL    SetAttr( USHORT nStt, USHORT nEnd, USHORT nSlotId, SfxPoolItem& );
     virtual BOOL    SetINetAttr( USHORT nStt, USHORT nEnd, const String& rURL );
