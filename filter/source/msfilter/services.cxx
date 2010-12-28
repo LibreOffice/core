@@ -72,9 +72,4 @@ extern "C" SAL_DLLPUBLIC_EXPORT void* SAL_CALL component_getFactory( const char*
     return ::cppu::component_getFactoryHelper( pImplName, pServiceManager, pRegistryKey, spServices );
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL component_writeInfo( void* pServiceManager, void* pRegistryKey )
-{
-    return ::cppu::component_writeInfoHelper( pServiceManager, pRegistryKey, spServices );
-}
-
 // ============================================================================

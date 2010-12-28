@@ -997,25 +997,17 @@ void WorksheetData::extendUsedArea( const CellRangeAddress& rRange )
 
 void WorksheetData::extendShapeBoundingBox( const Rectangle& rShapeRect )
 {
-    // scale EMUs to 1/100 mm
-    const UnitConverter& rUnitConv = getUnitConverter();
-    Rectangle aShapeRectHmm(
-        rUnitConv.scaleToMm100( rShapeRect.X, UNIT_EMU ),
-        rUnitConv.scaleToMm100( rShapeRect.Y, UNIT_EMU ),
-        rUnitConv.scaleToMm100( rShapeRect.Width, UNIT_EMU ),
-        rUnitConv.scaleToMm100( rShapeRect.Height, UNIT_EMU ) );
-
     if( (maShapeBoundingBox.Width == 0) && (maShapeBoundingBox.Height == 0) )
     {
         // width and height of maShapeBoundingBox are assumed to be zero on first cell
-        maShapeBoundingBox = aShapeRectHmm;
+        maShapeBoundingBox = rShapeRect;
     }
     else
     {
-        sal_Int32 nEndX = ::std::max( maShapeBoundingBox.X + maShapeBoundingBox.Width, aShapeRectHmm.X + aShapeRectHmm.Width );
-        sal_Int32 nEndY = ::std::max( maShapeBoundingBox.Y + maShapeBoundingBox.Height, aShapeRectHmm.Y + aShapeRectHmm.Height );
-        maShapeBoundingBox.X = ::std::min( maShapeBoundingBox.X, aShapeRectHmm.X );
-        maShapeBoundingBox.Y = ::std::min( maShapeBoundingBox.Y, aShapeRectHmm.Y );
+        sal_Int32 nEndX = ::std::max( maShapeBoundingBox.X + maShapeBoundingBox.Width, rShapeRect.X + rShapeRect.Width );
+        sal_Int32 nEndY = ::std::max( maShapeBoundingBox.Y + maShapeBoundingBox.Height, rShapeRect.Y + rShapeRect.Height );
+        maShapeBoundingBox.X = ::std::min( maShapeBoundingBox.X, rShapeRect.X );
+        maShapeBoundingBox.Y = ::std::min( maShapeBoundingBox.Y, rShapeRect.Y );
         maShapeBoundingBox.Width = nEndX - maShapeBoundingBox.X;
         maShapeBoundingBox.Height = nEndY - maShapeBoundingBox.Y;
     }

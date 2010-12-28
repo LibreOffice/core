@@ -389,9 +389,8 @@ public:
     void                extendUsedArea( const ::com::sun::star::table::CellAddress& rAddress );
     /** Extends the used area of this sheet by the passed cell range. */
     void                extendUsedArea( const ::com::sun::star::table::CellRangeAddress& rRange );
-    /** Extends the shape bounding box by the position and size of the passed rectangle. */
-    void                extendShapeBoundingBox(
-                            const ::com::sun::star::awt::Rectangle& rShapeRect );
+    /** Extends the shape bounding box by the position and size of the passed rectangle (in 1/100 mm). */
+    void                extendShapeBoundingBox( const ::com::sun::star::awt::Rectangle& rShapeRect );
 
     /** Sets base width for all columns (without padding pixels). This value
         is only used, if width has not been set with setDefaultColumnWidth(). */

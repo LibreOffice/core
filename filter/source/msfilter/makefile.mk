@@ -25,11 +25,12 @@
 #
 #*************************************************************************
 
-PRJ=../..
+PRJ=..$/..
 
 PRJNAME=filter
 TARGET=msfilter
-ENABLE_EXCEPTIONS=true
+
+ENABLE_EXCEPTIONS=TRUE
 LIBTARGET=NO
 
 # --- Settings -----------------------------------------------------
@@ -81,7 +82,14 @@ SHL1STDLIBS= \
 
 SHL1DEF=	$(MISC)$/$(SHL1TARGET).def
 DEF1NAME=	$(SHL1TARGET)
+SHL1VERSIONMAP=$(SOLARENV)/src/component.map
 
 .INCLUDE :  target.mk
 
+ALLTAR : $(MISC)/msfilter.component
 
+$(MISC)/msfilter.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
+        msfilter.component
+    $(XSLTPROC) --nonet --stringparam uri \
+        '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL1TARGETN:f)' -o $@ \
+        $(SOLARENV)/bin/createcomponent.xslt msfilter.component
