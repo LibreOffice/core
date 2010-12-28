@@ -605,6 +605,7 @@ void SvxPageDescPage::Reset( const SfxItemSet& rSet )
     ResStringArray aPaperAry( CUI_RES( nAryId ) );
     sal_uInt32 nCnt = aPaperAry.Count();
 
+    USHORT nUserPos = LISTBOX_ENTRY_NOTFOUND;
     for ( sal_uInt32 i = 0; i < nCnt; ++i )
     {
         String aStr = aPaperAry.GetString(i);
@@ -614,9 +615,11 @@ void SvxPageDescPage::Reset( const SfxItemSet& rSet )
 
         if ( eSize == ePaper )
             nActPos = nPos;
+        if( eSize == PAPER_USER )
+            nUserPos = nPos;
     }
-    // aktuelles Papierformat selektieren
-    aPaperSizeBox.SelectEntryPos( nActPos );
+    // preselect current paper format - #115915#: ePaper might not be in aPaperSizeBox so use PAPER_USER instead
+    aPaperSizeBox.SelectEntryPos( nActPos != LISTBOX_ENTRY_NOTFOUND ? nActPos : nUserPos );
 
     // Applikationsspezifisch
 
