@@ -1206,13 +1206,38 @@ BOOL ContentAttribs::HasItem( USHORT nWhich )
 // ----------------------------------------------------------------------
 //  class ItemList
 //  ----------------------------------------------------------------------
+ItemList::ItemList() : CurrentItem( 0 )
+{
+}
+
 const SfxPoolItem* ItemList::FindAttrib( USHORT nWhich )
 {
-    const SfxPoolItem* pItem = First();
-    while ( pItem && ( pItem->Which() != nWhich ) )
-        pItem = Next();
+    for ( size_t i = 0, n = aItemPool.size(); i < n; ++i )
+        if ( aItemPool[ i ]->Which() == nWhich )
+            return aItemPool[ i ];
+    return NULL;
+}
 
-    return pItem;
+const SfxPoolItem* ItemList::First()
+{
+    CurrentItem = 0;
+    return aItemPool.empty() ? NULL : aItemPool[ 0 ];
+}
+
+const SfxPoolItem* ItemList::Next()
+{
+    if ( CurrentItem + 1 < aItemPool.size() )
+    {
+        ++CurrentItem;
+        return aItemPool[ CurrentItem ];
+    }
+    return NULL;
+}
+
+void ItemList::Insert( const SfxPoolItem* pItem )
+{
+    aItemPool.push_back( pItem );
+    CurrentItem = aItemPool.size() - 1;
 }
 
 // -------------------------------------------------------------------------

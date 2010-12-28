@@ -174,11 +174,22 @@ public:
 //  class ItemList
 //  ----------------------------------------------------------------------
 typedef const SfxPoolItem* ConstPoolItemPtr;
-DECLARE_LIST( DummyItemList, ConstPoolItemPtr )
-class ItemList : public DummyItemList
+typedef ::std::vector< ConstPoolItemPtr > DummyItemList;
+
+class ItemList
 {
+private:
+    DummyItemList aItemPool;
+    size_t  CurrentItem;
+
 public:
+    ItemList();
     const SfxPoolItem*  FindAttrib( USHORT nWhich );
+    const SfxPoolItem*  First();
+    const SfxPoolItem*  Next();
+    size_t              Count() { return aItemPool.size(); };
+    void                Insert( const SfxPoolItem* pItem );
+    void                Clear() { aItemPool.clear(); };
 };
 
 // -------------------------------------------------------------------------
