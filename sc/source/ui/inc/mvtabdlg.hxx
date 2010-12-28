@@ -55,21 +55,27 @@ public:
     void    GetTabNameString( String& rString ) const;
     void    SetCopyTable            (BOOL bFlag=TRUE);
     void    EnableCopyTable         (BOOL bFlag=TRUE);
-    void    SetRenameTable          (BOOL bFlag=TRUE);
     void    EnableRenameTable       (BOOL bFlag=TRUE);
 
 private:
     void ResetRenameInput();
+    void CheckNewNameExists();
     ScDocument* GetSelectedDoc();
 
 private:
+    FixedLine       aFlAction;
+    RadioButton     aBtnMove;
+    RadioButton     aBtnCopy;
+    FixedLine       aFlLocation;
     FixedText       aFtDoc;
     ListBox         aLbDoc;
     FixedText       aFtTable;
     ListBox         aLbTable;
-    CheckBox        aBtnCopy;
-    CheckBox        aBtnRename;
+    FixedLine       aFlName;
+    FixedText       aFtTabName;
     Edit            aEdTabName;
+    FixedText       aFtWarn;
+    FixedLine       aFixedLine;
     OKButton        aBtnOk;
     CancelButton    aBtnCancel;
     HelpButton      aBtnHelp;
@@ -87,6 +93,7 @@ private:
     DECL_LINK( OkHdl, void * );
     DECL_LINK( SelHdl, ListBox * );
     DECL_LINK( CheckBtnHdl, void * );
+    DECL_LINK( CheckNameHdl, Edit * );
 };
 
 #include <layout/layout-post.hxx>

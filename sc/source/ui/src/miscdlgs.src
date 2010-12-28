@@ -439,76 +439,122 @@ ModalDialog RID_SCDLG_MOVETAB
     OutputSize = TRUE ;
     HelpId = FID_TAB_MOVE ;
     SVLook = TRUE ;
-    Size = MAP_APPFONT ( 168 , 145 ) ;
+    Size = MAP_APPFONT ( 158 , 236 ) ;
     Text [ en-US ] = "Move/Copy Sheet" ;
     Moveable = TRUE ;
     Closeable = FALSE ;
     OKButton BTN_OK
     {
-        Pos = MAP_APPFONT ( 112 , 6 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Pos = MAP_APPFONT ( 66 , 216 ) ;
+        Size = MAP_APPFONT ( 42 , 14 ) ;
         TabStop = TRUE ;
         DefButton = TRUE ;
     };
     CancelButton BTN_CANCEL
     {
-        Pos = MAP_APPFONT ( 112 , 23 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Pos = MAP_APPFONT ( 110 , 216 ) ;
+        Size = MAP_APPFONT ( 42 , 14 ) ;
         TabStop = TRUE ;
     };
     HelpButton BTN_HELP
     {
-        Pos = MAP_APPFONT ( 112 , 43 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Pos = MAP_APPFONT ( 6 , 216 ) ;
+        Size = MAP_APPFONT ( 42 , 14 ) ;
         TabStop = TRUE ;
+    };
+    FixedLine FL_SEP1
+    {
+        Pos = MAP_APPFONT ( 0 , 208 ) ;
+        Size = MAP_APPFONT (168 , 4 ) ;
+    };
+    FixedLine FL_ACTION
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 146 , 8 ) ;
+        Text [ en-US ] = "Action" ;
+    };
+    RadioButton BTN_MOVE
+    {
+        Pos = MAP_APPFONT ( 12 , 14 ) ;
+        Size = MAP_APPFONT ( 114 , 10 ) ;
+        Text [ en-US ] = "~Move" ;
+        TabStop = TRUE ;
+    };
+    RadioButton BTN_COPY
+    {
+        Pos = MAP_APPFONT ( 12 , 28 ) ;
+        Size = MAP_APPFONT ( 114 , 10 ) ;
+        Text [ en-US ] = "~Copy" ;
+        TabStop = TRUE ;
+    };
+    FixedLine FL_LOCATION
+    {
+        Pos = MAP_APPFONT ( 6 , 42 ) ;
+        Size = MAP_APPFONT ( 146 , 8 ) ;
+        Text [ en-US ] = "Location" ;
     };
     FixedText FT_DEST
     {
-        Pos = MAP_APPFONT ( 6 , 6 ) ;
+        Pos = MAP_APPFONT ( 12 , 53 ) ;
         Size = MAP_APPFONT ( 100 , 8 ) ;
         Text [ en-US ] = "To ~document" ;
     };
     ListBox LB_DEST
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 6 , 17 ) ;
-        Size = MAP_APPFONT ( 100 , 60 ) ;
+        Pos = MAP_APPFONT ( 12 , 64 ) ;
+        Size = MAP_APPFONT ( 120 , 60 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
     };
     FixedText FT_INSERT
     {
-        Pos = MAP_APPFONT ( 6 , 35 ) ;
+        Pos = MAP_APPFONT ( 12 , 83 ) ;
         Size = MAP_APPFONT ( 100 , 8 ) ;
         Text [ en-US ] = "~Insert before" ;
     };
     ListBox LB_INSERT
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 6 , 46 ) ;
-        Size = MAP_APPFONT ( 100 , 62 ) ;
+        Pos = MAP_APPFONT ( 12 , 93 ) ;
+        Size = MAP_APPFONT ( 120 , 62 ) ;
         TabStop = TRUE ;
     };
-    CheckBox BTN_COPY
+    FixedLine FL_NAME
     {
-        Pos = MAP_APPFONT ( 6 , 114 ) ;
-        Size = MAP_APPFONT ( 100 , 10 ) ;
-        Text [ en-US ] = "~Copy" ;
-        TabStop = TRUE ;
+        Pos = MAP_APPFONT ( 6 , 162 ) ;
+        Size = MAP_APPFONT ( 146 , 8 ) ;
+        Text [ en-US ] = "Name" ;
     };
     CheckBox BTN_RENAME
     {
-        Pos = MAP_APPFONT ( 6 , 128 ) ;
+        Pos = MAP_APPFONT ( 6 , 189 ) ;
         Size = MAP_APPFONT ( 52 , 10 ) ;
         Text [ en-US ] = "~Rename" ;
         TabStop = TRUE ;
     };
+    FixedText FT_TABNAME
+    {
+        Pos = MAP_APPFONT ( 12 , 173 ) ;
+        Size = MAP_APPFONT ( 100 , 8 ) ;
+        Text [ en-US ] = "New ~name" ;
+    };
     Edit ED_INPUT
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 58 , 127 ) ;
-        Size = MAP_APPFONT ( 104 , 12 ) ;
+        Pos = MAP_APPFONT ( 12 , 183 ) ;
+        Size = MAP_APPFONT ( 120 , 12 ) ;
         TabStop = TRUE ;
+    };
+    FixedText FT_WARN
+    {
+        Pos = MAP_APPFONT ( 24 , 194 ) ;
+        Size = MAP_APPFONT ( 122 , 8 ) ;
+        Text [ en-US ] = " ! This name is already used." ;
+    };
+    String STR_CURRENTDOC
+    {
+        Text [ en-US ] = "(Current document)" ;
     };
     String STR_NEWDOC
     {

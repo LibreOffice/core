@@ -98,6 +98,13 @@
 #define LB_INSERT       4
 #define BTN_COPY        5
 #define STR_NEWDOC      6
+#define BTN_MOVE        7
+#define FL_ACTION       8
+#define FL_LOCATION     9
+#define FL_NAME         11
+#define FT_TABNAME      12
+#define FT_WARN         13
+#define STR_CURRENTDOC  14
 
 // Eingabe eines Strings
 #define ED_INPUT        10

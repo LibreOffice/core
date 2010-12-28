@@ -61,13 +61,19 @@ ScMoveTableDlg::ScMoveTableDlg( Window*       pParent,
 
     :   ModalDialog ( pParent, ScResId( RID_SCDLG_MOVETAB ) ),
         //
+        aFlAction   ( this, ScResId( FL_ACTION ) ),
+        aBtnMove    ( this, ScResId( BTN_MOVE ) ),
+        aBtnCopy    ( this, ScResId( BTN_COPY ) ),
+        aFlLocation ( this, ScResId( FL_LOCATION ) ),
         aFtDoc      ( this, ScResId( FT_DEST ) ),
         aLbDoc      ( this, ScResId( LB_DEST ) ),
         aFtTable    ( this, ScResId( FT_INSERT ) ),
         aLbTable    ( this, ScResId( LB_INSERT ) ),
-        aBtnCopy    ( this, ScResId( BTN_COPY ) ),
-        aBtnRename  ( this, ScResId( BTN_RENAME ) ),
+        aFlName     ( this, ScResId( FL_NAME ) ),
+        aFtTabName  ( this, ScResId( FT_TABNAME ) ),
         aEdTabName  ( this, ScResId( ED_INPUT ) ),
+        aFtWarn     ( this, ScResId( FT_WARN ) ),
+        aFixedLine  ( this, ScResId( FL_SEP1 ) ),
         aBtnOk      ( this, ScResId( BTN_OK ) ),
         aBtnCancel  ( this, ScResId( BTN_CANCEL ) ),
         aBtnHelp    ( this, ScResId( BTN_HELP ) ),
@@ -120,21 +126,16 @@ void ScMoveTableDlg::EnableCopyTable(BOOL bFlag)
         aBtnCopy.Disable();
 }
 
-void ScMoveTableDlg::SetRenameTable(BOOL bFlag)
-{
-    aBtnRename.Check(bFlag);
-    aEdTabName.Enable(bFlag);
-}
-
 void ScMoveTableDlg::EnableRenameTable(BOOL bFlag)
 {
-    aBtnRename.Enable(bFlag);
+    bRenameTable = bFlag;
+    aEdTabName.Enable(bFlag);
     ResetRenameInput();
 }
 
 void ScMoveTableDlg::ResetRenameInput()
 {
-    if (!aBtnRename.IsEnabled())
+    if (!aEdTabName.IsEnabled())
     {
         aEdTabName.SetText(String());
         return;
@@ -157,6 +158,33 @@ void ScMoveTableDlg::ResetRenameInput()
     else
         // move
         aEdTabName.SetText(mrDefaultName);
+
+    CheckNewNameExists();
+}
+
+void ScMoveTableDlg::CheckNewNameExists()
+{
+    BOOL   bFound = FALSE;
+    USHORT nLast  = aLbTable.GetEntryCount() - 1;
+    for ( USHORT i=0; i<=nLast; ++i )
+    {
+        if ( aEdTabName.GetText() == aLbTable.GetEntry( i ) )
+        {
+            if( ( aBtnMove.IsChecked() ) &&
+                ( aLbDoc.GetSelectEntryPos() == 0 ) &&
+                ( aEdTabName.GetText() == mrDefaultName) )
+
+                // Move inside same document, thus same name is allowed.
+                bFound = FALSE;
+            else
+                bFound = TRUE;
+
+        }
+    }
+    if ( bFound )
+        aFtWarn.Show();
+    else
+            aFtWarn.Hide();
 }
 
 ScDocument* ScMoveTableDlg::GetSelectedDoc()
@@ -172,10 +200,12 @@ void ScMoveTableDlg::Init()
     aBtnOk.SetClickHdl   ( LINK( this, ScMoveTableDlg, OkHdl ) );
     aLbDoc.SetSelectHdl  ( LINK( this, ScMoveTableDlg, SelHdl ) );
     aBtnCopy.SetToggleHdl( LINK( this, ScMoveTableDlg, CheckBtnHdl ) );
-    aBtnRename.SetToggleHdl( LINK( this, ScMoveTableDlg, CheckBtnHdl ) );
+    aEdTabName.SetModifyHdl( LINK( this, ScMoveTableDlg, CheckNameHdl ) );
+    aBtnMove.Check( TRUE );
     aBtnCopy.Check( FALSE );
-    aBtnRename.Check( FALSE );
     aEdTabName.Enable(false);
+    aFtWarn.SetControlBackground( Color( COL_YELLOW ) );
+    aFtWarn.Hide();
     InitDocListBox();
     SelHdl( &aLbDoc );
 }
@@ -188,6 +218,7 @@ void ScMoveTableDlg::InitDocListBox()
     ScDocShell*     pScSh   = NULL;
     USHORT          nSelPos = 0;
     USHORT          i       = 0;
+    String          aEntryName;
 
     aLbDoc.Clear();
     aLbDoc.SetUpdateMode( FALSE );
@@ -198,10 +229,16 @@ void ScMoveTableDlg::InitDocListBox()
 
         if ( pScSh )
         {
-            if ( pScSh == SfxObjectShell::Current() )
-                nSelPos = i;
+            aEntryName = pScSh->GetTitle();
 
-            aLbDoc.InsertEntry( pScSh->GetTitle(), i );
+            if ( pScSh == SfxObjectShell::Current() )
+            {
+                nSelPos = i;
+                aEntryName += sal_Unicode( ' ' );
+                aEntryName += String( ScResId( STR_CURRENTDOC ) );
+            }
+
+            aLbDoc.InsertEntry( aEntryName, i );
             aLbDoc.SetEntryData( i, (void*)pScSh->GetDocument() );
 
             i++;
@@ -219,9 +256,7 @@ void ScMoveTableDlg::InitDocListBox()
 
 IMPL_LINK( ScMoveTableDlg, CheckBtnHdl, void *, pBtn )
 {
-    if (pBtn == &aBtnRename)
-        aEdTabName.Enable( aBtnRename.IsChecked() );
-    else if (pBtn == &aBtnCopy)
+    if (pBtn == &aBtnCopy)
         ResetRenameInput();
 
     return 0;
@@ -237,7 +272,6 @@ IMPL_LINK( ScMoveTableDlg, OkHdl, void *, EMPTYARG )
     nDocument   = (nDocSel != nDocLast) ? nDocSel : SC_DOC_NEW;
     nTable      = (nTabSel != nTabLast) ? static_cast<SCTAB>(nTabSel) : SC_TAB_APPEND;
     bCopyTable  = aBtnCopy.IsChecked();
-    bRenameTable= aBtnRename.IsChecked();
 
     if (bCopyTable)
     {
@@ -287,6 +321,14 @@ IMPL_LINK( ScMoveTableDlg, SelHdl, ListBox *, pLb )
         aLbTable.SelectEntryPos( 0 );
         ResetRenameInput();
     }
+
+    return 0;
+}
+
+IMPL_LINK( ScMoveTableDlg, CheckNameHdl, Edit *, pEdt )
+{
+    if ( pEdt == &aEdTabName )
+        CheckNewNameExists();
 
     return 0;
 }

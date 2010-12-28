@@ -518,10 +518,6 @@ void    AbstractScMoveTableDlg_Impl::EnableCopyTable(BOOL bFlag)
 {
     return pDlg->EnableCopyTable( bFlag);
 }
-void    AbstractScMoveTableDlg_Impl::SetRenameTable(BOOL bFla)
-{
-    return pDlg->SetRenameTable( bFla );
-}
 void    AbstractScMoveTableDlg_Impl::EnableRenameTable(BOOL bFlag)
 {
     return pDlg->EnableRenameTable( bFlag);
