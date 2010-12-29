@@ -39,13 +39,13 @@ String STR_PDF_EXPORT
 //password dialog title
 String STR_PDF_EXPORT_UDPWD
 {
-    Text[ en-US ] = "Set Open Password";
+    Text[ en-US ] = "Set open password";
 };
 
 //password dialog title
 String STR_PDF_EXPORT_ODPWD
 {
-    Text[ en-US ] = "Set Permission Password";
+    Text[ en-US ] = "Set permission password";
 };
 
 //////////////////////////////////////////////////////////////
@@ -561,20 +561,29 @@ TabPage  RID_PDF_TAB_SECURITY
     TAB_PDF_SIZE;
     Hide = TRUE;
 
-//////////////////////////////////////
-    PushButton BTN_USER_PWD
+    FixedLine FL_PWD_GROUP
     {
-        HelpID = "filter:PushButton:RID_PDF_TAB_SECURITY:BTN_USER_PWD";
+        Pos = MAP_APPFONT( 5, 5 );
+        Size = MAP_APPFONT( 125, 10 );
+        Text[ en-US ] = "File encryption and permission";
+    };
+    PushButton BTN_SET_PWD
+    {
+        HelpID = "filter:PushButton:RID_PDF_TAB_SECURITY:BTN_PWD";
         TabStop = TRUE ;
         Disable = TRUE ;
-        Pos = MAP_APPFONT ( 12, 5 ) ;
+        Pos = MAP_APPFONT ( 12, 20 ) ;
         Size = MAP_APPFONT ( 120 , 13 ) ;
-        Text[ en-US ] = "Set ~open password...";
+        Text[ en-US ] = "Set ~passwords...";
+    };
+    String STR_SET_PWD
+    {
+        Text[ en-US ] = "Set passwords";
     };
 
     FixedText FT_USER_PWD
     {
-        Pos = MAP_APPFONT(12 , 25 );
+        Pos = MAP_APPFONT(12 , 40 );
         Size = MAP_APPFONT( 160, 20 );
     };
 
@@ -596,16 +605,6 @@ TabPage  RID_PDF_TAB_SECURITY
     String  STR_USER_PWD_UNENC
     {
         Text [ en-US ] = "PDF document will not be encrypted";
-    };
-
-    PushButton BTN_OWNER_PWD
-    {
-        HelpID = "filter:PushButton:RID_PDF_TAB_SECURITY:BTN_OWNER_PWD";
-        TabStop = TRUE ;
-        Disable = TRUE ;
-        Pos = MAP_APPFONT ( 12, 45 ) ;
-        Size = MAP_APPFONT ( 120 , 13 ) ;
-        Text[ en-US ] = "Set ~permission password...";
     };
 
     FixedText FT_OWNER_PWD

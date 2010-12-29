@@ -1433,9 +1433,7 @@ XMLFilterListBox::XMLFilterListBox( SvxPathControl_Impl * pParent )
     static long nTabs[] = {3, 0, nTabSize, 2*nTabSize };
     Size aHeadSize( mpHeaderBar->GetSizePixel() );
 
-    WinBits nBits = WB_SORT | WB_HSCROLL | WB_CLIPCHILDREN | WB_TABSTOP;
     pParent->SetFocusControl( this );
-    SetWindowBits( nBits );
 //  SetDoubleClickHdl( aLink );
 //  SetSelectHdl( LINK( this, SvxPathTabPage, PathSelect_Impl ) );
     SetSelectionMode( MULTIPLE_SELECTION );
