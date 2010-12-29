@@ -255,7 +255,7 @@ SwAccessibleChild SwAccessibleFrame::GetChildAtPixel( const SwRect& rVisArea,
                 aRet = GetChildAtPixel( rVisArea, *(rLower.GetSwFrm()), rPixPos,
                                         bInPagePreview, rAccMap );
             }
-            aRIter++;
+            ++aRIter;
         }
     }
     else
