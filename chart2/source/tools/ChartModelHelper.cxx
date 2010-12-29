@@ -54,21 +54,18 @@ namespace chart
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
 
-//static
 uno::Reference< chart2::data::XRangeHighlighter > ChartModelHelper::createRangeHighlighter(
         const uno::Reference< view::XSelectionSupplier > & xSelectionSupplier )
 {
     return new RangeHighlighter( xSelectionSupplier );
 }
 
-//static
 uno::Reference< chart2::data::XDataProvider > ChartModelHelper::createInternalDataProvider(
     const uno::Reference< ::com::sun::star::chart2::XChartDocument >& xChartDoc, bool bConnectToModel )
 {
     return new InternalDataProvider( xChartDoc, bConnectToModel );
 }
 
-//static
 uno::Reference< XDiagram > ChartModelHelper::findDiagram( const uno::Reference< frame::XModel >& xModel )
 {
     uno::Reference< XChartDocument > xChartDoc( xModel, uno::UNO_QUERY );
@@ -77,7 +74,6 @@ uno::Reference< XDiagram > ChartModelHelper::findDiagram( const uno::Reference< 
     return NULL;
 }
 
-// static
 uno::Reference< XDiagram > ChartModelHelper::findDiagram( const uno::Reference< chart2::XChartDocument >& xChartDoc )
 {
     try
@@ -92,7 +88,6 @@ uno::Reference< XDiagram > ChartModelHelper::findDiagram( const uno::Reference< 
     return NULL;
 }
 
-//static
 uno::Reference< XCoordinateSystem > ChartModelHelper::getFirstCoordinateSystem( const uno::Reference< frame::XModel >& xModel )
 {
     uno::Reference< XCoordinateSystem > XCooSys;
@@ -106,7 +101,6 @@ uno::Reference< XCoordinateSystem > ChartModelHelper::getFirstCoordinateSystem( 
     return XCooSys;
 }
 
-// static
 ::std::vector< uno::Reference< XDataSeries > > ChartModelHelper::getDataSeries(
     const uno::Reference< XChartDocument > & xChartDoc )
 {
@@ -119,7 +113,6 @@ uno::Reference< XCoordinateSystem > ChartModelHelper::getFirstCoordinateSystem( 
     return aResult;
 }
 
-// static
 ::std::vector< uno::Reference< XDataSeries > > ChartModelHelper::getDataSeries(
     const uno::Reference< frame::XModel > & xModel )
 {

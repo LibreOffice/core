@@ -107,7 +107,7 @@ void XclImpRoot::SetAppFontEncoding( rtl_TextEncoding eAppFontEnc )
         SetTextEncoding( eAppFontEnc );
 }
 
-void XclImpRoot::InitializeTable( SCTAB /*nScTab*/ )
+void XclImpRoot::InitializeTable( SCTAB nScTab )
 {
     if( GetBiff() <= EXC_BIFF4 )
     {
@@ -119,6 +119,8 @@ void XclImpRoot::InitializeTable( SCTAB /*nScTab*/ )
     GetXFRangeBuffer().Initialize();
     GetPageSettings().Initialize();
     GetTabViewSettings().Initialize();
+    // delete the automatically generated codename
+    GetDoc().SetCodeName( nScTab, String::EmptyString() );
 }
 
 void XclImpRoot::FinalizeTable()

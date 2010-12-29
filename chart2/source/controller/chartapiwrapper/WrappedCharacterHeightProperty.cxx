@@ -62,7 +62,6 @@ WrappedCharacterHeightProperty_Base::~WrappedCharacterHeightProperty_Base()
 {
 }
 
-//static
 void WrappedCharacterHeightProperty::addWrappedProperties( std::vector< WrappedProperty* >& rList
             , ReferenceSizePropertyProvider* pRefSizePropProvider  )
 {
