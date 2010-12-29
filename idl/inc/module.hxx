@@ -40,7 +40,6 @@ struct SvNamePos
         : aUUId( rName )
         , nStmPos( nPos ) {}
 };
-DECLARE_LIST( SvNamePosList, SvNamePos *)
 
 /******************** class SvMetaModule *********************************/
 class SvMetaModule : public SvMetaExtern
@@ -97,7 +96,6 @@ public:
     virtual void        WriteAttributes( SvIdlDataBase & rBase,
                                         SvStream & rOutStm, USHORT nTab,
                                             WriteType, WriteAttribute = 0 );
-//    virtual void        WriteSbx( SvIdlDataBase & rBase, SvStream & rOutStm, SvNamePosList & rList );
     virtual void        Write( SvIdlDataBase & rBase, SvStream & rOutStm, USHORT nTab,
                                     WriteType, WriteAttribute = 0 );
     virtual void        WriteSfx( SvIdlDataBase & rBase, SvStream & rOutStm );

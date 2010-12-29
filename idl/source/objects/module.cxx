@@ -500,28 +500,6 @@ void SvMetaModule::WriteAttributes( SvIdlDataBase & rBase,
 }
 
 /*************************************************************************
-|*    SvMetaModule::WriteSbx()
-*************************************************************************/
-/*
-void SvMetaModule::WriteSbx( SvIdlDataBase & rBase, SvStream & rOutStm,
-                                SvNamePosList & rList )
-{
-    for( ULONG n = 0; n < aClassList.Count(); n++ )
-    {
-        SvMetaClass * pClass = aClassList.GetObject( n );
-        if( !pClass->IsShell() && pClass->GetAutomation() )
-        {
-            rList.Insert( new SvNamePos( pClass->GetUUId(), rOutStm.Tell() ),
-                        LIST_APPEND );
-            SbxObjectRef xSbxObj = new SbxObject( pClass->GetName() );
-            pClass->FillSbxObject( rBase, xSbxObj );
-            xSbxObj->Store( rOutStm );
-        }
-    }
-}
- */
-
-/*************************************************************************
 |*    SvMetaModule::Write()
 *************************************************************************/
 void SvMetaModule::Write( SvIdlDataBase & rBase, SvStream & rOutStm,
@@ -545,27 +523,6 @@ void SvMetaModule::Write( SvIdlDataBase & rBase, SvStream & rOutStm,
         rOutStm << '{' << endl;
         WriteTab( rOutStm, nTab );
         rOutStm << "importlib(\"STDOLE.TLB\");" << endl;
-
-    /*
-        for( ULONG n = 0; n < aTypeList.Count(); n++ )
-        {
-            SvMetaType * pType = aTypeList.GetObject( n );
-            if( !pType ->Write( rBase, rOutStm, nTab +1, nT, nA ) )
-                return FALSE;
-        }
-    */
-        /*
-        for( ULONG n = 0; n < rBase.GetModuleList().Count(); n++ )
-        {
-            SvMetaModule * pModule = rBase.GetModuleList().GetObject( n );
-            const SvMetaTypeMemberList &rTypeList = pModule->GetTypeList();
-            for( ULONG n = 0; n < rTypeList.Count(); n++ )
-            {
-                SvMetaType * pType = rTypeList.GetObject( n );
-                pType->Write( rBase, rOutStm, nTab +1, nT, nA );
-            }
-        }
-        */
 
         for( ULONG n = 0; n < aClassList.Count(); n++ )
         {
