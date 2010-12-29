@@ -47,6 +47,7 @@
 #include <com/sun/star/i18n/UnicodeType.hdl>
 #include <unotools/collatorwrapper.hxx>
 #include <com/sun/star/i18n/CollatorOptions.hpp>
+#include <com/sun/star/i18n/UnicodeScript.hpp>
 #include <unotools/localedatawrapper.hxx>
 #include <unotools/transliterationwrapper.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -137,6 +138,41 @@ inline int IsUpperLetter( sal_Int32 nCharType )
 {
     return CharClass::isLetterType( nCharType ) &&
             0 == ( ::com::sun::star::i18n::KCharacterType::LOWER & nCharType);
+}
+
+bool lcl_IsUnsupportedUnicodeChar( CharClass& rCC, const String& rTxt,
+                           xub_StrLen nStt, xub_StrLen nEnd )
+{
+    for( ; nStt < nEnd; ++nStt )
+    {
+#if OSL_DEBUG_LEVEL > 1
+        sal_Int32 nCharType;
+        sal_Int32 nChType;
+        nCharType = rCC.getCharacterType( rTxt, nStt );
+        nChType = rCC.getType( rTxt, nStt );
+#endif
+        short nScript = rCC.getScript( rTxt, nStt );
+        switch( nScript )
+        {
+            case ::com::sun::star::i18n::UnicodeScript_kCJKRadicalsSupplement:
+            case ::com::sun::star::i18n::UnicodeScript_kHangulJamo:
+            case ::com::sun::star::i18n::UnicodeScript_kCJKSymbolPunctuation:
+            case ::com::sun::star::i18n::UnicodeScript_kHiragana:
+            case ::com::sun::star::i18n::UnicodeScript_kKatakana:
+            case ::com::sun::star::i18n::UnicodeScript_kHangulCompatibilityJamo:
+            case ::com::sun::star::i18n::UnicodeScript_kEnclosedCJKLetterMonth:
+            case ::com::sun::star::i18n::UnicodeScript_kCJKCompatibility:
+            case ::com::sun::star::i18n::UnicodeScript_k_CJKUnifiedIdeographsExtensionA:
+            case ::com::sun::star::i18n::UnicodeScript_kCJKUnifiedIdeograph:
+            case ::com::sun::star::i18n::UnicodeScript_kHangulSyllable:
+            case ::com::sun::star::i18n::UnicodeScript_kCJKCompatibilityIdeograph:
+            case ::com::sun::star::i18n::UnicodeScript_kHalfwidthFullwidthForm:
+                return true;
+            default: ; //do nothing
+        }
+
+    }
+    return false;
 }
 
 BOOL lcl_IsSymbolChar( CharClass& rCC, const String& rTxt,
@@ -1299,7 +1335,7 @@ ULONG SvxAutoCorrect::AutoCorrect( SvxAutoCorrDoc& rDoc, const String& rTxt,
             eLang = MsLangId::getSystemLanguage();
         CharClass& rCC = GetCharClass( eLang );
 
-        // Bug 19285: Symbolzeichen nicht anfassen
+        // no symbol characters
         if( lcl_IsSymbolChar( rCC, rTxt, nCapLttrPos, nInsPos ))
             break;
 
@@ -1368,13 +1404,16 @@ ULONG SvxAutoCorrect::AutoCorrect( SvxAutoCorrDoc& rDoc, const String& rTxt,
         else
         {
             nRet = 0;
+            bool bUnsupported = lcl_IsUnsupportedUnicodeChar( rCC, rTxt, nCapLttrPos, nInsPos );
             // Grossbuchstabe am Satz-Anfang ??
-            if( IsAutoCorrFlag( CptlSttSntnc ) &&
+            if( !bUnsupported &&
+                IsAutoCorrFlag( CptlSttSntnc ) &&
                 FnCptlSttSntnc( rDoc, rTxt, TRUE, nCapLttrPos, nInsPos, eLang ) )
                 nRet |= CptlSttSntnc;
 
             // Zwei Grossbuchstaben am Wort-Anfang ??
-            if( IsAutoCorrFlag( CptlSttWrd ) &&
+            if( !bUnsupported &&
+                IsAutoCorrFlag( CptlSttWrd ) &&
                 FnCptlSttWrd( rDoc, rTxt, nCapLttrPos, nInsPos, eLang ) )
                 nRet |= CptlSttWrd;
 
