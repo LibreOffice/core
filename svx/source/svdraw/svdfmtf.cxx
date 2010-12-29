@@ -445,12 +445,11 @@ void ImpSdrGDIMetaFileImport::InsertObj( SdrObject* pObj, sal_Bool bScale )
 }
 
 /**************************************************************************************************/
-
-void ImpSdrGDIMetaFileImport::DoAction(MetaPixelAction& /*rAct*/)
+void ImpSdrGDIMetaFileImport::DoAction(MetaPixelAction& /*rAct*/) const
 {
 }
 
-void ImpSdrGDIMetaFileImport::DoAction(MetaPointAction& /*rAct*/)
+void ImpSdrGDIMetaFileImport::DoAction(MetaPointAction& /*rAct*/) const
 {
 }
 

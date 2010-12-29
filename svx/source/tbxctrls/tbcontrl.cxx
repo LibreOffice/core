@@ -1979,7 +1979,6 @@ void SvxStyleToolBoxControl::FillStyleBox()
     {
         const SfxStyleFamily    eFamily     = GetActFamily();
         USHORT                  nCount      = pStyleSheetPool->Count();
-        USHORT                  i           = 0;
         SfxStyleSheetBase*      pStyle      = NULL;
         BOOL                    bDoFill     = FALSE;
 
@@ -1998,6 +1997,7 @@ void SvxStyleToolBoxControl::FillStyleBox()
         }
         else
         {
+            USHORT i= 0;
             while ( pStyle && !bDoFill )
             {
                 bDoFill = ( pBox->GetEntry(i) != pStyle->GetName() );
@@ -2014,12 +2014,12 @@ void SvxStyleToolBoxControl::FillStyleBox()
             {
                 USHORT  _i;
                 sal_uInt32  nCnt = pImpl->aDefaultStyles.size();
-                bool    bInsert;
 
                 pStyle = pStyleSheetPool->First();
 
                 if( pImpl->bSpecModeWriter || pImpl->bSpecModeCalc )
                 {
+                    bool bInsert;
                     while ( pStyle )
                     {
                         // sort out default styles

@@ -106,8 +106,8 @@ protected:
     sal_Bool                    bLastObjWasLine;
 
 protected:
-    void DoAction(MetaPixelAction           & rAct);
-    void DoAction(MetaPointAction           & rAct);
+    void DoAction(MetaPixelAction           & rAct) const;
+    void DoAction(MetaPointAction           & rAct) const;
     void DoAction(MetaLineAction            & rAct);
     void DoAction(MetaRectAction            & rAct);
     void DoAction(MetaRoundRectAction       & rAct);

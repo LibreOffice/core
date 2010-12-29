@@ -859,8 +859,6 @@ XPolygon SdrEdgeObj::ImpCalcEdgeTrack(const Point& rPt1, long nAngle1, const Rec
     Rectangle aBewareRect1(rBewareRect1);
     Rectangle aBewareRect2(rBewareRect2);
     Point aMeeting((aPt1.X()+aPt2.X()+1)/2,(aPt1.Y()+aPt2.Y()+1)/2);
-    bool bMeetingXMid = true;
-    bool bMeetingYMid = true;
     if (eKind==SDREDGE_ONELINE) {
         XPolygon aXP(2);
         aXP[0]=rPt1;
@@ -906,7 +904,6 @@ XPolygon SdrEdgeObj::ImpCalcEdgeTrack(const Point& rPt1, long nAngle1, const Rec
         return aXP;
     }
     USHORT nIntersections=0;
-    bool bForceMeeting = false; // Muss die Linie durch den MeetingPoint laufen?
     {
         Point aC1(aBewareRect1.Center());
         Point aC2(aBewareRect2.Center());
@@ -961,23 +958,18 @@ XPolygon SdrEdgeObj::ImpCalcEdgeTrack(const Point& rPt1, long nAngle1, const Rec
             bool bY2Ok=aPt2.Y()<=aBewareRect1.Top() || aPt2.Y()>=aBewareRect1.Bottom();
             if (bLks1 && (bY1Ok || aBewareRect1.Left()<aBewareRect2.Right()) && (bY2Ok || aBewareRect2.Left()<aBewareRect1.Right())) {
                 aMeeting.X()=nXMin;
-                bMeetingXMid = false;
             }
             if (bRts1 && (bY1Ok || aBewareRect1.Right()>aBewareRect2.Left()) && (bY2Ok || aBewareRect2.Right()>aBewareRect1.Left())) {
                 aMeeting.X()=nXMax;
-                bMeetingXMid = false;
             }
             if (bObn1 && (bX1Ok || aBewareRect1.Top()<aBewareRect2.Bottom()) && (bX2Ok || aBewareRect2.Top()<aBewareRect1.Bottom())) {
                 aMeeting.Y()=nYMin;
-                bMeetingYMid = false;
             }
             if (bUnt1 && (bX1Ok || aBewareRect1.Bottom()>aBewareRect2.Top()) && (bX2Ok || aBewareRect2.Bottom()>aBewareRect1.Top())) {
                 aMeeting.Y()=nYMax;
-                bMeetingYMid = false;
             }
         } else if (nMainCase==2) {
             // Fall 2:
-            bForceMeeting = true;
             if (bHor1) { // beide waagerecht
                 /* 9 Moeglichkeiten:                   ù ù ù                    */
                 /*   2.1 Gegenueber, Ueberschneidung   Ã ´ ù                    */
@@ -1032,7 +1024,6 @@ XPolygon SdrEdgeObj::ImpCalcEdgeTrack(const Point& rPt1, long nAngle1, const Rec
                             } else {
                                 aMeeting.Y()=nYMax;
                             }
-                            bMeetingYMid = false;
                             if (bCase29) {
                                 // und nun noch dafuer sorgen, dass das
                                 // umzingelte Obj nicht durchquert wird
@@ -1041,7 +1032,6 @@ XPolygon SdrEdgeObj::ImpCalcEdgeTrack(const Point& rPt1, long nAngle1, const Rec
                                 } else {
                                     aMeeting.X()=aBewR1.Left();
                                 }
-                                bMeetingXMid = false;
                             }
                         } else {
                             // Direkte Verbindung (3-Linien Z-Verbindung), da
@@ -1092,7 +1082,6 @@ XPolygon SdrEdgeObj::ImpCalcEdgeTrack(const Point& rPt1, long nAngle1, const Rec
                             } else {
                                 aMeeting.X()=nXMax;
                             }
-                            bMeetingXMid = false;
                             if (bCase29) {
                                 // und nun noch dafuer sorgen, dass das
                                 // umzingelte Obj nicht durchquert wird
@@ -1101,7 +1090,6 @@ XPolygon SdrEdgeObj::ImpCalcEdgeTrack(const Point& rPt1, long nAngle1, const Rec
                                 } else {
                                     aMeeting.Y()=aBewR1.Top();
                                 }
-                                bMeetingYMid = false;
                             }
                         } else {
                             // Direkte Verbindung (3-Linien Z-Verbindung), da
@@ -1172,9 +1160,6 @@ XPolygon SdrEdgeObj::ImpCalcEdgeTrack(const Point& rPt1, long nAngle1, const Rec
                 (((bRts2 && aTmpR2.Right ()<=aPt1.X()) || (bLks2 && aTmpR2.Left()>=aPt1.X())) &&
                  ((bUnt1 && aTmpR1.Bottom()<=aPt2.Y()) || (bObn1 && aTmpR1.Top ()>=aPt2.Y())))) {
                 // Fall 3.2 trifft zu: Verbindung mit lediglich 2 Linien
-                bForceMeeting = true;
-                bMeetingXMid = false;
-                bMeetingYMid = false;
                 if (bHor1) {
                     aMeeting.X()=aPt2.X();
                     aMeeting.Y()=aPt1.Y();
@@ -1194,11 +1179,10 @@ XPolygon SdrEdgeObj::ImpCalcEdgeTrack(const Point& rPt1, long nAngle1, const Rec
                         ((bUnt1 && aBewareRect1.Bottom()>aBewareRect2.Top   ()) ||
                          (bObn1 && aBewareRect1.Top   ()<aBewareRect2.Bottom())))) {
                 // Fall 3.3
-                bForceMeeting = true;
-                if (bRts1 || bRts2) { aMeeting.X()=nXMax; bMeetingXMid = false; }
-                if (bLks1 || bLks2) { aMeeting.X()=nXMin; bMeetingXMid = false; }
-                if (bUnt1 || bUnt2) { aMeeting.Y()=nYMax; bMeetingYMid = false; }
-                if (bObn1 || bObn2) { aMeeting.Y()=nYMin; bMeetingYMid = false; }
+                if (bRts1 || bRts2) { aMeeting.X()=nXMax; }
+                if (bLks1 || bLks2) { aMeeting.X()=nXMin; }
+                if (bUnt1 || bUnt2) { aMeeting.Y()=nYMax; }
+                if (bObn1 || bObn2) { aMeeting.Y()=nYMin; }
             }
         }
     }
@@ -1220,8 +1204,6 @@ XPolygon SdrEdgeObj::ImpCalcEdgeTrack(const Point& rPt1, long nAngle1, const Rec
         // Sonderbehandlung fuer 'I'-Verbinder
         nXP1Anz--; aXP1.Remove(nXP1Anz,1);
         nXP2Anz--; aXP2.Remove(nXP2Anz,1);
-        bMeetingXMid = false;
-        bMeetingYMid = false;
     }
     if (bInsMeetingPoint) {
         aXP1.Insert(XPOLY_APPEND,aMeeting,XPOLY_NORMAL);
@@ -2096,8 +2078,6 @@ bool SdrEdgeObj::ImpFindConnector(const Point& rPt, const SdrPageView& rPV, SdrO
     bool bFnd = false;
     SdrObjConnection aTestCon;
     SdrObjConnection aBestCon;
-    bool bTestBoundHit = false;
-    //bool bBestBoundHit=FALSE;
 
     while (no>0 && !bFnd) {
         // Problem: Gruppenobjekt mit verschiedenen Layern liefert LayerID 0 !!!!
@@ -2110,7 +2090,6 @@ bool SdrEdgeObj::ImpFindConnector(const Point& rPt, const SdrPageView& rPV, SdrO
             Rectangle aObjBound(pObj->GetCurrentBoundRect());
             if (aObjBound.IsOver(aMouseRect)) {
                 aTestCon.ResetVars();
-                bTestBoundHit = false;
                 bool bEdge=HAS_BASE(SdrEdgeObj,pObj); // kein BestCon fuer Edge
                 // Die Userdefined Konnektoren haben absolute Prioritaet.
                 // Danach kommt Vertex, Corner und Mitte(Best) gleich priorisiert.
@@ -2197,7 +2176,7 @@ bool SdrEdgeObj::ImpFindConnector(const Point& rPt, const SdrPageView& rPV, SdrO
                     aMouseRect.Top()   -=nBoundHitTol;
                     aMouseRect.Right() +=nBoundHitTol;
                     aMouseRect.Bottom()+=nBoundHitTol;
-                    bTestBoundHit=aObjBound.IsOver(aMouseRect2);
+                    aObjBound.IsOver(aMouseRect2);
                 }
 
             }

@@ -156,8 +156,7 @@ bool TableLayouter::getCellArea( const CellPos& rPos, basegfx::B2IRectangle& rAr
 }
 
 // -----------------------------------------------------------------------------
-
-sal_Int32 TableLayouter::getRowHeight( sal_Int32 nRow )
+sal_Int32 TableLayouter::getRowHeight( sal_Int32 nRow ) const
 {
     if( isValidRow(nRow) )
         return maRows[nRow].mnSize;
@@ -180,8 +179,7 @@ void TableLayouter::setRowHeight( sal_Int32 nRow, sal_Int32 nHeight )
 }
 
 // -----------------------------------------------------------------------------
-
-sal_Int32 TableLayouter::getColumnWidth( sal_Int32 nColumn )
+sal_Int32 TableLayouter::getColumnWidth( sal_Int32 nColumn ) const
 {
     if( isValidColumn(nColumn) )
         return maColumns[nColumn].mnSize;
@@ -1204,7 +1202,6 @@ void TableLayouter::DistributeRows( ::Rectangle& rArea, sal_Int32 nFirstRow, sal
 }
 
 // -----------------------------------------------------------------------------
-
 void TableLayouter::SetWritingMode( com::sun::star::text::WritingMode eWritingMode )
 {
     meWritingMode = eWritingMode;

@@ -229,7 +229,7 @@ void SAL_CALL AccessibleTableShapeImpl::modified( const EventObject& /*aEvent*/ 
         // all accessible cell instances still left in aTempChildMap must be disposed
         // as they are no longer part of the table
 
-        for( AccessibleCellMap::iterator iter( aTempChildMap.begin() ); iter != aTempChildMap.end(); iter++ )
+        for( AccessibleCellMap::iterator iter( aTempChildMap.begin() ); iter != aTempChildMap.end(); ++iter )
         {
             (*iter).second->dispose();
         }

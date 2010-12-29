@@ -95,13 +95,12 @@ public:
 
     ::sal_Int32 getRowCount() const { return static_cast< ::sal_Int32 >( maRows.size() ); }
     ::sal_Int32 getColumnCount() const { return static_cast< ::sal_Int32 >( maColumns.size() ); }
-
-    sal_Int32 getRowHeight( sal_Int32 nRow );
+    sal_Int32 getRowHeight( sal_Int32 nRow ) const;
 
     // sets the layout height of the given row hard, LayoutTable must be called directly after calling this method! */
     void setRowHeight( sal_Int32 nRow, sal_Int32 nHeight );
 
-    sal_Int32 getColumnWidth( sal_Int32 nColumn );
+    sal_Int32 getColumnWidth( sal_Int32 nColumn ) const;
 
     // sets the layout width of the given column hard, LayoutTable must be called directly after calling this method! */
     void setColumnWidth( sal_Int32 nColumn, sal_Int32 nWidth );

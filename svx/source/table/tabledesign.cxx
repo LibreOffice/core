@@ -717,7 +717,7 @@ void SAL_CALL TableDesignFamily::dispose(  ) throw (RuntimeException)
     TableDesignStyleVector aDesigns;
     aDesigns.swap( maDesigns );
 
-    for( TableDesignStyleVector::iterator iter( aDesigns.begin() ); iter != aDesigns.end(); iter++ )
+    for( TableDesignStyleVector::iterator iter( aDesigns.begin() ); iter != aDesigns.end(); ++iter )
     {
         Reference< XComponent > xComp( (*iter), UNO_QUERY );
         if( xComp.is() )
