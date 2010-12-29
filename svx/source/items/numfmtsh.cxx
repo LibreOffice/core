@@ -373,14 +373,14 @@ void SvxNumberFormatShell::MakeFormat( String& rFormat,
     if(aCurrencyFormatList.Count()>nCurrencyPos)
     {
         xub_StrLen rErrPos=0;
-        sal_uInt16 rCatLbSelPos=0;
-        short  rFmtSelPos=0;
         SvStrings aFmtEList;
 
         sal_uInt32 nFound = pFormatter->TestNewString( *aCurrencyFormatList[nCurrencyPos], eCurLanguage );
 
         if ( nFound == NUMBERFORMAT_ENTRY_NOT_FOUND )
         {
+            sal_uInt16 rCatLbSelPos=0;
+            short  rFmtSelPos=0;
             AddFormat( *aCurrencyFormatList[nCurrencyPos],rErrPos,rCatLbSelPos,
                     rFmtSelPos,aFmtEList);
         }
@@ -1729,10 +1729,9 @@ sal_uInt16 SvxNumberFormatShell::FindCurrencyFormat( const String& rFmtString )
 
     sal_uInt16 nPos=FindCurrencyTableEntry(rFmtString, bTestBanking);
 
-    sal_uInt16 nStart=0;
-
     if(nPos!=(sal_uInt16)-1)
     {
+        sal_uInt16 nStart=0;
         if(bTestBanking && aCurCurrencyList.Count()>nPos)
         {
             nStart=nCount;

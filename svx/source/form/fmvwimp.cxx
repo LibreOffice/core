@@ -586,7 +586,7 @@ FmWinRecList::const_iterator FmXFormView::findWindow( const Reference< XControlC
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormView::findWindow" );
     for (FmWinRecList::const_iterator i = m_aWinList.begin();
-            i != m_aWinList.end(); i++)
+            i != m_aWinList.end(); ++i)
     {
         if ( _rxCC == (*i)->getControlContainer() )
             return i;
@@ -599,7 +599,7 @@ FmWinRecList::iterator FmXFormView::findWindow( const Reference< XControlContain
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormView::findWindow" );
     for (FmWinRecList::iterator i = m_aWinList.begin();
-            i != m_aWinList.end(); i++)
+            i != m_aWinList.end(); ++i)
     {
         if ( _rxCC == (*i)->getControlContainer() )
             return i;
@@ -733,7 +733,7 @@ IMPL_LINK(FmXFormView, OnActivate, void*, /*EMPTYTAG*/)
         Window* pWindow = const_cast<Window*>(static_cast<const Window*>(m_pView->GetActualOutDev()));
         FmXPageViewWinRec* pFmRec = m_aWinList.size() ? m_aWinList[0] : NULL;
         for (FmWinRecList::const_iterator i = m_aWinList.begin();
-            i != m_aWinList.end(); i++)
+            i != m_aWinList.end(); ++i)
         {
             if (pWindow == (*i)->getWindow())
                 pFmRec =*i;

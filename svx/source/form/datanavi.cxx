@@ -1250,13 +1250,13 @@ namespace svxform
                     if ( xContainer.is() )
                         m_pNaviWin->AddContainerBroadcaster( xContainer );
 
-                    USHORT nIter = 0;
                     Reference< XEnumerationAccess > xNumAccess( _xModel->getInstances(), UNO_QUERY );
                     if ( xNumAccess.is() )
                     {
                         Reference < XEnumeration > xNum = xNumAccess->createEnumeration();
                         if ( xNum.is() && xNum->hasMoreElements() )
                         {
+                            USHORT nIter = 0;
                             while ( xNum->hasMoreElements() )
                             {
                                 if ( nIter == _nPagePos )
@@ -1885,6 +1885,7 @@ namespace svxform
                             m_aTabCtrl.SetPageText( nId, sNewName );
                             bIsDocModified = true;
                         }
+                        delete(pPage);
                     }
                     break;
                 }

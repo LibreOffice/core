@@ -723,7 +723,6 @@ GalleryThemeEntry* GalleryTheme::CreateThemeEntry( const INetURLObject& rURL, BO
         if( pIStm )
         {
             String          aThemeName;
-            sal_uInt32      nThemeId = 0;
             sal_uInt16      nVersion;
             BOOL            bThemeNameFromResource = FALSE;
 
@@ -731,6 +730,7 @@ GalleryThemeEntry* GalleryTheme::CreateThemeEntry( const INetURLObject& rURL, BO
 
             if( nVersion <= 0x00ff )
             {
+                sal_uInt32      nThemeId = 0;
                 ByteString aTmpStr;
 
                 *pIStm >> aTmpStr; aThemeName = String( aTmpStr.GetBuffer(), RTL_TEXTENCODING_UTF8 );

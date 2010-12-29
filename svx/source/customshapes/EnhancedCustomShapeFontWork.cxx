@@ -124,7 +124,7 @@ sal_Bool InitializeFontWorkData( const SdrObject* pCustomShape, const sal_uInt16
             {
                 FWTextArea aTextArea;
                 sal_Int32 i, nParagraphs = ( ( nParagraphsLeft - 1 ) / nTextAreaCount ) + 1;
-                for ( i = 0; i < nParagraphs; i++, j++ )
+                for ( i = 0; i < nParagraphs; ++i, ++j )
                 {
                     FWParagraphData aParagraphData;
                     aParagraphData.aString = rTextObj.GetText( j );
@@ -215,9 +215,9 @@ void CalculateHorizontalScalingFactor( const SdrObject* pCustomShape,
                         fScalingFactor = fScale;
                 }
             }
-            aParagraphIter++;
+            ++aParagraphIter;
         }
-        aTextAreaIter++;
+        ++aTextAreaIter;
     }
     rFWData.fHorizontalTextScaling = fScalingFactor;
 }
@@ -313,7 +313,7 @@ void GetTextAreaOutline( const FWData& rFWData, const SdrObject* pCustomShape, F
                                 // rotating
                                 aOutlineIter->Rotate( Point( nTextWidth / 2, rFWData.nSingleLineHeight / 2 ), 900 );
                                 aCharacterData.aBoundRect.Union( aOutlineIter->GetBoundRect() );
-                                aOutlineIter++;
+                                ++aOutlineIter;
                             }
                             aOutlineIter = aCharacterData.vOutlines.begin();
                             aOutlineIEnd = aCharacterData.vOutlines.end();
@@ -322,7 +322,7 @@ void GetTextAreaOutline( const FWData& rFWData, const SdrObject* pCustomShape, F
                                 sal_Int32 nM = - aCharacterData.aBoundRect.Left() + nHeight;
                                 aOutlineIter->Move( nM, 0 );
                                 aCharacterData.aBoundRect.Move( nM, 0 );
-                                aOutlineIter++;
+                                ++aOutlineIter;
                             }
                             nHeight += aCharacterData.aBoundRect.GetWidth() + ( rFWData.nSingleLineHeight / 5 );
                             aSingleCharacterUnion.Union( aCharacterData.aBoundRect );
@@ -339,9 +339,9 @@ void GetTextAreaOutline( const FWData& rFWData, const SdrObject* pCustomShape, F
                     while ( aOutlineIter != aOutlineIEnd )
                     {
                         aOutlineIter->Move( ( aSingleCharacterUnion.GetWidth() - aCharacterIter->aBoundRect.GetWidth() ) / 2, 0 );
-                        aOutlineIter++;
+                        ++aOutlineIter;
                     }
-                    aCharacterIter++;
+                    ++aCharacterIter;
                 }
             }
             else
@@ -359,25 +359,6 @@ void GetTextAreaOutline( const FWData& rFWData, const SdrObject* pCustomShape, F
                 {
                     aParagraphIter->vCharacters.push_back( aCharacterData );
                 }
-
-/* trying to retrieve each single character _> is not working well
-                sal_Int32 i;
-                for ( i = 0; i < rText.getLength(); i++ )
-                {
-                    FWCharacterData aCharacterData;
-                    if ( aVirDev.GetTextOutlines( aCharacterData.vOutlines, rText, 0, i, 1, TRUE, nWidth, pDXArry ) )
-                    {
-                        std::vector< PolyPolygon >::iterator aOutlineIter = aCharacterData.vOutlines.begin();
-                        std::vector< PolyPolygon >::iterator aOutlineIEnd  = aCharacterData.vOutlines.end();
-                        while ( aOutlineIter != aOutlineIEnd )
-                        {
-                            aCharacterData.aBoundRect.Union( aOutlineIter->GetBoundRect() );
-                            aOutlineIter++;
-                        }
-                    }
-                    aParagraphIter->vCharacters.push_back( aCharacterData );
-                }
-*/
             }
             delete[] pDXArry;
 
@@ -400,7 +381,7 @@ void GetTextAreaOutline( const FWData& rFWData, const SdrObject* pCustomShape, F
                     Rectangle aBoundRect( rPolyPoly.GetBoundRect() );
                     aParagraphIter->aBoundRect.Union( aBoundRect );
                 }
-                aCharacterIter++;
+                ++aCharacterIter;
             }
         }
         // updating the boundrect for the text area by merging the current paragraph boundrect
@@ -433,9 +414,9 @@ void GetTextAreaOutline( const FWData& rFWData, const SdrObject* pCustomShape, F
                         sal_Int32 nMove = aPolyPolyBoundRect.Top() - rParagraphBoundRect.Top();
                         if ( nMove )
                             aOutlineIter->Move( 0, -nMove );
-                        aOutlineIter++;
+                        ++aOutlineIter;
                     }
-                    aCharacterIter++;
+                    ++aCharacterIter;
                 }
             }
         }
@@ -443,7 +424,7 @@ void GetTextAreaOutline( const FWData& rFWData, const SdrObject* pCustomShape, F
             nVerticalOffset -= rFWData.nSingleLineHeight;
         else
             nVerticalOffset += rFWData.nSingleLineHeight;
-        aParagraphIter++;
+        ++aParagraphIter;
     }
 }
 
@@ -489,12 +470,12 @@ void GetFontWorkOutline( FWData& rFWData, const SdrObject* pCustomShape )
                         while( aOutlineIter != aOutlineIEnd )
                         {
                             aOutlineIter->Scale( fScale, 1.0 );
-                            aOutlineIter++;
+                            ++aOutlineIter;
                         }
-                        aCharacterIter++;
+                        ++aCharacterIter;
                     }
                 }
-                aParagraphIter++;
+                ++aParagraphIter;
             }
         }
         else
@@ -524,12 +505,12 @@ void GetFontWorkOutline( FWData& rFWData, const SdrObject* pCustomShape )
                                 while( aOutlineIter != aOutlineIEnd )
                                 {
                                     aOutlineIter->Move( nHorzDiff, 0 );
-                                    aOutlineIter++;
+                                    ++aOutlineIter;
                                 }
-                                aCharacterIter++;
+                                ++aCharacterIter;
                             }
                         }
-                        aParagraphIter++;
+                        ++aParagraphIter;
                     }
                 }
                 break;
@@ -538,7 +519,7 @@ void GetFontWorkOutline( FWData& rFWData, const SdrObject* pCustomShape )
                 case SDRTEXTHORZADJUST_LEFT : break;    // already left aligned -> nothing to do
             }
         }
-        aTextAreaIter++;
+        ++aTextAreaIter;
     }
 }
 
@@ -722,11 +703,11 @@ void FitTextOutlinesToShapeOutlines( const PolyPolygon& aOutlines2d, FWData& rFW
                                 rPolyPoly.Rotate( Point( aBoundRect.Center().X(), aParagraphIter->aBoundRect.Center().Y() ), sin( fAngle ), cos( fAngle ) );
                                 rPolyPoly.Move( (sal_Int32)( ( fx1 + fvx )- aBoundRect.Center().X() ), (sal_Int32)( ( fy1 + fvy ) - aParagraphIter->aBoundRect.Center().Y() ) );
 
-                                aOutlineIter++;
+                                ++aOutlineIter;
                             }
-                            aCharacterIter++;
+                            ++aCharacterIter;
                         }
-                        aParagraphIter++;
+                        ++aParagraphIter;
                     }
                 }
             }
@@ -798,15 +779,15 @@ void FitTextOutlinesToShapeOutlines( const PolyPolygon& aOutlines2d, FWData& rFW
                                 // write back polygon
                                 rPolyPoly[ i ] = aLocalPoly;
                             }
-                            aOutlineIter++;
+                            ++aOutlineIter;
                         }
-                        aCharacterIter++;
+                        ++aCharacterIter;
                     }
-                    aParagraphIter++;
+                    ++aParagraphIter;
                 }
             }
         }
-        aTextAreaIter++;
+        ++aTextAreaIter;
     }
 }
 
@@ -838,13 +819,13 @@ SdrObject* CreateSdrObjectFromParagraphOutlines( const FWData& rFWData, const Sd
     // SJ: not setting model, so we save a lot of broadcasting and the model is not modified any longer
     //                  pPathObj->SetModel( pCustomShape->GetModel() );
                         ((SdrObjGroup*)pRet)->GetSubList()->NbcInsertObject( pPathObj );
-                        aOutlineIter++;
+                        ++aOutlineIter;
                     }
-                    aCharacterIter++;
+                    ++aCharacterIter;
                 }
-                aParagraphIter++;
+                ++aParagraphIter;
             }
-            aTextAreaIter++;
+            ++aTextAreaIter;
         }
 
         Point aP( pCustomShape->GetSnapRect().Center() );

@@ -691,14 +691,12 @@ bool IsItemIneffective(USHORT nWhich, const SfxItemSet* pSet, USHORT& rIndent)
             bool bTileTRUE = false;
             bool bTileFALSE = false;
             bool bStretchTRUE = false;
-            bool bStretchFALSE = false;
             if (ImpGetItem(*pSet,XATTR_FILLBMP_TILE,pItem)) {
                 bTileTRUE=((const XFillBmpTileItem*)pItem)->GetValue();
                 bTileFALSE=!bTileTRUE;
             }
             if (ImpGetItem(*pSet,XATTR_FILLBMP_STRETCH,pItem)) {
                 bStretchTRUE=((const XFillBmpStretchItem*)pItem)->GetValue();
-                bStretchFALSE=!bStretchTRUE;
             }
             // Stretch nicht anwaehlbar, wenn Tile=TRUE
             if (nWhich==XATTR_FILLBMP_STRETCH) return bTileTRUE;
@@ -1198,7 +1196,6 @@ IMPL_LINK(SdrItemBrowser,ChangedHdl,_SdrItemBrowserControl*,pBrowse)
                 if (nLongVal>pEntry->nMax) nLongVal=pEntry->nMax;
                 if (nLongVal<pEntry->nMin) nLongVal=pEntry->nMin;
             }
-            bool bPair = false;
             bool bPairX = true;
             bool bPairY = false;
             USHORT nSepLen=1;
@@ -1209,7 +1206,6 @@ IMPL_LINK(SdrItemBrowser,ChangedHdl,_SdrItemBrowserControl*,pBrowse)
             if (nPos==STRING_NOTFOUND) nPos=aNewText.Search(sal_Unicode(' '));
             if (nPos==STRING_NOTFOUND) { nPos=aNewText.SearchAscii(".."); if (nPos!=STRING_NOTFOUND) nSepLen=2; }
             if (nPos!=STRING_NOTFOUND) {
-                bPair = true;
                 bPairX=nPos>0;
                 XubString s(aNewText);
                 s.Erase(0,nPos+nSepLen);

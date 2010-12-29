@@ -1223,7 +1223,7 @@ void FormController::disposing(void)
 
     // clean up our children
     for (FmFormControllers::const_iterator i = m_aChilds.begin();
-        i != m_aChilds.end(); i++)
+        i != m_aChilds.end(); ++i)
     {
         // search the position of the model within the form
         Reference< XFormComponent >  xForm((*i)->getModel(), UNO_QUERY);

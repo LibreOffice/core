@@ -285,8 +285,6 @@ namespace
                         Color aColor(rand()%255, rand()%255, rand()%255);
                         impPaintStrokePolygon(aResult.getB2DPolygon(a), rOutDev, aColor);
                     }
-
-                    bool bBla = true;
                 }
             }
         }

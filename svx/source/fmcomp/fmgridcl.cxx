@@ -510,11 +510,10 @@ IMPL_LINK( FmGridHeader, OnAsyncExecuteDrop, void*, /*NOTINTERESTEDIN*/ )
             DBG_ERROR("FmGridHeader::ExecuteDrop: Exception occurred!");
         }
 
-        sal_Int32 nPreferedType = -1;
         sal_Bool bDateNTimeCol = sal_False;
         if (aPossibleTypes.Count() != 0)
         {
-            nPreferedType = aPossibleTypes[0];
+            sal_Int32 nPreferedType = aPossibleTypes[0];
             if ((m_pImpl->nDropAction == DND_ACTION_LINK) && (aPossibleTypes.Count() > 1))
             {
                 ImageList aImageList( SVX_RES(RID_SVXIMGLIST_FMEXPL) );

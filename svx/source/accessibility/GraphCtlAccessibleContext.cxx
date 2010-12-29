@@ -824,7 +824,7 @@ void SAL_CALL SvxGraphCtrlAccessibleContext::disposing()
     {
         ShapesMapType::iterator I;
 
-        for (I=mxShapes.begin(); I!=mxShapes.end(); I++)
+        for (I=mxShapes.begin(); I!=mxShapes.end(); ++I)
         {
             XAccessible* pAcc = (*I).second;
             Reference< XComponent > xComp( pAcc, UNO_QUERY );
