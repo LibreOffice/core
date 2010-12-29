@@ -39,7 +39,7 @@
 typedef ::std::vector< String* > StringList;
 #endif
 
-DECLARE_LIST( ByteStringList, ByteString* )
+typedef ::std::vector< ByteString* > ByteStringList;
 
 /******************** class SvCommand ************************************/
 class SvCommand

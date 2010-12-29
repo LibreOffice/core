@@ -167,73 +167,6 @@ void SvMetaClass::Save( SvPersistStream & rStm )
     if( nMask & 0x10 ) rStm << aAutomation;
 }
 
-/*************************************************************************
-|*    SvMetaClass::FillSbxObject()
-|*
-|*    Beschreibung
-*************************************************************************/
-/*
-void SvMetaClass::FillSbxMemberObject( SvIdlDataBase & rBase,
-                                        SbxObject * pObj,
-                                        StringList & rSuperList,
-                                        BOOL bVariable )
-{
-    // alle Attribute der Klasse schreiben
-    ULONG n ;
-    for( n = 0; n < aAttrList.Count(); n++ )
-    {
-        SvMetaAttribute * pAttr = aAttrList.GetObject( n );
-
-        ByteString aMangleName = pAttr->GetMangleName( bVariable );
-        ByteString * pS = SvIdlDataBase::FindName( aMangleName, rSuperList );
-
-        if( !pS && pAttr->GetExport() )
-        {
-            // nicht doppelt
-            if( bVariable && pAttr->IsVariable() )
-            {
-                rSuperList.Insert( new ByteString( aMangleName ), LIST_APPEND );
-                 pAttr->FillSbxObject( rBase, pObj, bVariable );
-            }
-            else if( !bVariable && pAttr->IsMethod() )
-            {
-                rSuperList.Insert( new ByteString( aMangleName ), LIST_APPEND );
-                pAttr->FillSbxObject( rBase, pObj, bVariable );
-            }
-        }
-    }
-    // alle Attribute der importierten Klassen schreiben
-    for( n = 0; n < aClassList.Count(); n++ )
-    {
-        SvClassElement * pEle = aClassList.GetObject( n );
-        SvMetaClass * pClass = pEle->GetClass();
-        pClass->FillSbxMemberObject( rBase, pObj, rSuperList, bVariable );
-    }
-    // alle Attribute der Superklassen schreiben
-    if( aSuperClass.Is() )
-        aSuperClass->FillSbxMemberObject( rBase, pObj, rSuperList, bVariable );
-}
-*/
-/*************************************************************************
-|*    SvMetaClass::FillSbxObject()
-|*
-|*    Beschreibung
-*************************************************************************/
-/*
-void SvMetaClass::FillSbxObject( SvIdlDataBase & rBase, SbxObject * pObj )
-{
-    StringList aSuperList;
-    FillSbxMemberObject( rBase, pObj, aSuperList, TRUE );
-    FillSbxMemberObject( rBase, pObj, aSuperList, FALSE );
-
-    ByteString * pStr = aSuperList.First();
-    while( pStr )
-    {
-        delete pStr;
-        pStr = aSuperList.Next();
-    }
-}
- */
 #ifdef IDL_COMPILER
 /*************************************************************************
 |*    SvMetaClass::ReadAttributesSvIdl()
@@ -524,63 +457,6 @@ void SvMetaClass::WriteSvIdl( SvIdlDataBase & rBase, SvStream & rOutStm,
 }
 
 /*************************************************************************
-|*    SvMetaClass::WriteOdlMember()
-|*
-|*    Beschreibung
-*************************************************************************/
-/*
-void SvMetaClass::WriteOdlMembers( ByteStringList & rSuperList,
-                                    BOOL bVariable, BOOL bWriteTab,
-                                       SvIdlDataBase & rBase,
-                                       SvStream & rOutStm, USHORT nTab )
-{
-    // alle Attribute schreiben
-    ULONG n;
-    for( n = 0; n < aAttrList.Count(); n++ )
-    {
-        SvMetaAttribute * pAttr = aAttrList.GetObject( n );
-
-        ByteString aMangleName = pAttr->GetMangleName( bVariable );
-        ByteString * pS = rBase.FindName( aMangleName, rSuperList );
-
-        if( !pS && pAttr->GetExport() )
-        {
-            // nicht doppelt
-            if( bVariable && pAttr->IsVariable() )
-            {
-                rSuperList.Insert( new ByteString( aMangleName ), LIST_APPEND );
-                pAttr->Write( rBase, rOutStm, nTab +1, WRITE_ODL,
-                                WA_VARIABLE );
-                rOutStm << ';' << endl;
-            }
-            else if( !bVariable && pAttr->IsMethod() )
-            {
-                rSuperList.Insert( new ByteString( aMangleName ), LIST_APPEND );
-                pAttr->Write( rBase, rOutStm, nTab +1, WRITE_ODL,
-                                WA_METHOD );
-                rOutStm << ';' << endl;
-            }
-        }
-        else
-            continue;
-    }
-    // alle Attribute der importierten Klassen schreiben
-    for( n = 0; n < aClassList.Count(); n++ )
-    {
-        SvClassElement * pEle = aClassList.GetObject( n );
-        SvMetaClass * pCl = pEle->GetClass();
-        pCl->WriteOdlMembers( rSuperList, bVariable, bWriteTab,
-                                 rBase, rOutStm, nTab );
-    }
-    // alle Attribute der Superklassen schreiben
-    SvMetaClass * pSC = aSuperClass;
-    if( pSC )
-        pSC->WriteOdlMembers( rSuperList, bVariable, bWriteTab,
-                             rBase, rOutStm, nTab );
-}
- */
-
-/*************************************************************************
 |*    SvMetaClass::Write()
 |*
 |*    Beschreibung
@@ -595,53 +471,12 @@ void SvMetaClass::Write( SvIdlDataBase & rBase, SvStream & rOutStm,
         case WRITE_ODL:
         {
             DBG_ERROR( "Not supported anymore!" );
-/*
-            // Schreibt die Attribute
-            SvMetaName::Write( rBase, rOutStm, nTab, nT, nA );
-
-            WriteTab( rOutStm, nTab );
-            rOutStm << "dispinterface " << GetName().GetBuffer() << endl;
-            WriteTab( rOutStm, nTab );
-            rOutStm << '{' << endl;
-
-            WriteTab( rOutStm, nTab );
-            rOutStm << "properties:";
-            rOutStm << endl;
-
-            StringList aSuperList;
-            WriteOdlMembers( aSuperList, TRUE, TRUE, rBase, rOutStm, nTab );
-
-            WriteTab( rOutStm, nTab );
-            rOutStm << "methods:";
-            rOutStm << endl;
-
-            WriteOdlMembers( aSuperList, FALSE, TRUE, rBase, rOutStm, nTab );
-
-            ByteString * pStr = aSuperList.First();
-            while( pStr )
-            {
-                delete pStr;
-                pStr = aSuperList.Next();
-            }
-
-            WriteTab( rOutStm, 1 );
-            rOutStm << '}' << endl;
- */
             break;
         }
         case WRITE_C_SOURCE:
         case WRITE_C_HEADER:
         {
             DBG_ERROR( "Not supported anymore!" );
-/*
-            StringList aSuperList;
-            if( nT == WRITE_C_SOURCE )
-            {
-                rOutStm << "#pragma code_seg (\"" << GetName().GetBuffer()
-                    << "\",\"CODE\")" << endl;
-            }
-            WriteCFunctions( aSuperList, rBase, rOutStm, nTab, nT );
- */
             break;
         }
         case WRITE_DOCU:
@@ -847,20 +682,6 @@ void SvMetaClass::WriteSfx( SvIdlDataBase & rBase, SvStream & rOutStm )
     rOutStm << "#undef " << GetName().GetBuffer() << endl;
     rOutStm << "#define ShellClass " << GetName().GetBuffer() << endl;
 
-//    rOutStm << "SFX_TYPELIB(" << GetName().GetBuffer() << ',' << endl
-//        << "\t/* library type */"
-//        << '"' << ByteString( GetModule()->GetUUId().GetHexName(), RTL_TEXTENCODING_UTF8 ).GetBuffer() << "\"," << endl
-//        << "\t\"" << GetModule()->GetTypeLibFileName().GetBuffer() << "\","
-//        << ByteString::CreateFromInt32( GetModule()->GetVersion().GetMajorVersion() ).GetBuffer() << ','
-//        << ByteString::CreateFromInt32( GetModule()->GetVersion().GetMinorVersion() ).GetBuffer() << ',' << endl
-//        << "\t/* shell type   */"
-//        << '"';
-//    if( xAutomationInterface.Is() )
-//        rOutStm << ByteString( xAutomationInterface->GetUUId().GetHexName(), RTL_TEXTENCODING_UTF8 ).GetBuffer();
-//    else
-//        rOutStm << ByteString( GetUUId().GetHexName(), RTL_TEXTENCODING_UTF8 ).GetBuffer();
-//    rOutStm << "\");" << endl << endl;
-
     // Fuer Interfaces werden kein Slotmaps geschrieben
     if( !IsShell() )
     {
@@ -868,7 +689,6 @@ void SvMetaClass::WriteSfx( SvIdlDataBase & rBase, SvStream & rOutStm )
         return;
     }
     // Parameter Array schreiben
-    //rOutStm << "SfxArgList " << GetName().GetBuffer() << "ArgMap[] = {" << endl;
     rOutStm << "SFX_ARGUMENTMAP(" << GetName().GetBuffer() << ')' << endl
         << '{' << endl;
 
@@ -900,12 +720,9 @@ void SvMetaClass::WriteSfx( SvIdlDataBase & rBase, SvStream & rOutStm )
 
     ByteStringList aStringList;
     WriteSlotStubs( GetName(), aSlotList, aStringList, rOutStm );
-    ByteString * pStr = aStringList.First();
-    while( pStr )
-    {
-        delete pStr;
-        pStr = aStringList.Next();
-    }
+    for ( size_t i = 0, n = aStringList.size(); i < n; ++i )
+        delete aStringList[ i ];
+    aStringList.clear();
 
     rOutStm << endl;
 

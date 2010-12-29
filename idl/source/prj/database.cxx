@@ -43,19 +43,6 @@
 |*
 |*    Beschreibung
 *************************************************************************/
-/*
-void PrimeNumber(){
-    USHORT i, n;
-    for( i = 5001; i < 5500; i += 2 ){
-        for( n = 2; n < i && ((i % n) != 0); n++ );
-        if( n == i ){
-            printf( "\nPrimzahl: %d\n", i );
-            return;
-        }
-    }
-}
-*/
-
 SvIdlDataBase::SvIdlDataBase( const SvCommand& rCmd )
     : bExport( FALSE )
     , nUniqueId( 0 )
@@ -64,7 +51,6 @@ SvIdlDataBase::SvIdlDataBase( const SvCommand& rCmd )
     , aPersStream( *IDLAPP->pClassMgr, NULL )
     , pIdTable( NULL )
 {
-    //PrimeNumber();
 }
 
 /*************************************************************************
@@ -513,10 +499,7 @@ SvMetaType * SvIdlDataBase::ReadKnownType( SvTokenStream & rInStm )
             }
         }
     }
-/*
-    SvMetaTypeList aTmpTypeList;
-    if( FillTypeList( aTmpTypeList, pTok ) )
-*/
+
     if( pTok->IsIdentifier() )
     {
         ByteString aName = pTok->GetString();
@@ -548,21 +531,7 @@ SvMetaType * SvIdlDataBase::ReadKnownType( SvTokenStream & rInStm )
                     bSet = TRUE;
                 }
             }
-            /*
-            SvMetaType * pMetaType = aTmpTypeList.First();
-            while( pMetaType )
-            {
-                if( pMetaType->GetIn() == bIn
-                  && pMetaType->GetOut() == bOut
-                  && pMetaType->GetCall0() == nCall0
-                  && pMetaType->GetCall1() == nCall1 )
-                {
-                    return pMetaType;
-                }
-                pMetaType = aTmpTypeList.Next();
-            }
-            */
-            //SvMetaType * pType = aTmpTypeList.First();
+
             if( !bSet )
                 // Ist genau dieser Typ
                 return pType;
@@ -602,22 +571,7 @@ SvMetaAttribute * SvIdlDataBase::ReadKnownAttr
     if( !pType )
         pType = ReadKnownType( rInStm );
 
-    if( pType )
-    {
-        // Wenn wir Slots auf die Wiese stellen, d"urfen wir nicht voraussetzen,
-        // da\s jeder Slot einen anderen Namen hat!
-/*
-        SvToken * pTok = rInStm.GetToken_Next();
-        if( pTok->IsIdentifier() )
-            for( ULONG n = 0; n < aAttrList.Count(); n++ )
-            {
-                SvMetaAttribute * pAttr = aAttrList.GetObject( n );
-                if( pAttr->GetName() == pTok->GetString() )
-                    return pAttr;
-            }
-*/
-    }
-    else
+    if( !pType )
     {
         // sonst SlotId?
         SvToken * pTok = rInStm.GetToken_Next();

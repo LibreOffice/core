@@ -1197,18 +1197,6 @@ void SvMetaSlot::WriteSlotStubs( const ByteString & rShellName,
                                 ByteStringList & rList,
                                 SvStream & rOutStm )
 {
-/*
-    ByteString aName = GetName();
-    SvMetaAttribute * pAttr = rAttrList.First();
-    while( pAttr )
-    {
-        if( pAttr->GetName() == aName )
-            break;
-        pAttr = rAttrList.Next();
-    }
-    if( pAttr )
-        return;
-*/
     if ( !GetExport() && !GetHidden() )
         return;
 
@@ -1216,9 +1204,9 @@ void SvMetaSlot::WriteSlotStubs( const ByteString & rShellName,
     if ( aMethodName.Len() && aMethodName != "NoExec" )
     {
         BOOL bIn = FALSE;
-        for( USHORT n = 0; n < rList.Count(); n++ )
+        for( size_t n = 0; n < rList.size(); n++ )
         {
-            if( *(rList.GetObject(n)) == aMethodName )
+            if( *(rList[ n ]) == aMethodName )
             {
                 bIn=TRUE;
                 break;
@@ -1227,7 +1215,7 @@ void SvMetaSlot::WriteSlotStubs( const ByteString & rShellName,
 
         if ( !bIn )
         {
-            rList.Insert( new ByteString(aMethodName), LIST_APPEND );
+            rList.push_back( new ByteString(aMethodName) );
             rOutStm << "SFX_EXEC_STUB("
                     << rShellName.GetBuffer()
                     << ','
@@ -1240,9 +1228,9 @@ void SvMetaSlot::WriteSlotStubs( const ByteString & rShellName,
     if ( aMethodName.Len() && aMethodName != "NoState" )
     {
         BOOL bIn = FALSE;
-        for ( USHORT n=0; n < rList.Count(); n++ )
+        for ( size_t n=0; n < rList.size(); n++ )
         {
-            if ( *(rList.GetObject(n)) == aMethodName )
+            if ( *(rList[ n ]) == aMethodName )
             {
                 bIn=TRUE;
                 break;
@@ -1251,7 +1239,7 @@ void SvMetaSlot::WriteSlotStubs( const ByteString & rShellName,
 
         if ( !bIn )
         {
-            rList.Insert( new ByteString(aMethodName), LIST_APPEND );
+            rList.push_back( new ByteString(aMethodName) );
             rOutStm << "SFX_STATE_STUB("
                     << rShellName.GetBuffer()
                     << ','
