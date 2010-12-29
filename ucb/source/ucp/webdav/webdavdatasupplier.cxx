@@ -110,7 +110,7 @@ DataSupplier_Impl::~DataSupplier_Impl()
     while ( it != end )
     {
         delete (*it);
-        it++;
+        ++it;
     }
 }
 
@@ -375,7 +375,7 @@ sal_Bool DataSupplier::getData()
             if ( (*it).equals( DAVProperties::RESOURCETYPE ) )
                 break;
 
-            it++;
+            ++it;
         }
 
         if ( it == end )
