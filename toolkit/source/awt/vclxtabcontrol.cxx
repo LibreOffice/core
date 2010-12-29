@@ -373,7 +373,7 @@ void SAL_CALL VCLXTabControl::allocateArea (awt::Rectangle const &area)
     // it here does makes it easier when changing tabs (just needs a recalc())
     unsigned i = 0;
     for ( std::list<Box_Base::ChildData *>::const_iterator it
-              = maChildren.begin(); it != maChildren.end(); it++, ++i )
+              = maChildren.begin(); it != maChildren.end(); ++it, ++i )
     {
         ChildData *child = static_cast<VCLXTabControl::ChildData*> ( *it );
         uno::Reference
@@ -417,7 +417,7 @@ awt::Size SAL_CALL VCLXTabControl::getMinimumSize()
     // calculate size to accomodate all children
     unsigned i = 0;
     for ( std::list<Box_Base::ChildData *>::const_iterator it
-              = maChildren.begin(); it != maChildren.end(); it++, ++i )
+              = maChildren.begin(); it != maChildren.end(); ++it, ++i )
     {
         ChildData *child = static_cast<VCLXTabControl::ChildData*> ( *it );
         if ( child->mxChild.is() )
