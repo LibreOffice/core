@@ -45,10 +45,10 @@ interface XGlobals : com::sun::star::uno::XInterface
     [attribute, readonly] ooo::vba::word::XSystem System;
     [attribute, readonly] ooo::vba::word::XOptions Options;
     [attribute, readonly] ooo::vba::word::XSelection Selection;
-    any CommandBars( [in] any aIndex );
-    any Documents( [in] any aIndex );
-    any Addins( [in] any aIndex );
-    any Dialogs( [in] any aIndex );
+    any CommandBars( [in] any Index );
+    any Documents( [in] any Index );
+    any Addins( [in] any Index );
+    any Dialogs( [in] any Index );
     float CentimetersToPoints([in] float Centimeters );
 };
 

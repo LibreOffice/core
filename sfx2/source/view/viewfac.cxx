@@ -30,8 +30,8 @@
 // INCLUDE ---------------------------------------------------------------
 
 #include <sfx2/app.hxx>
+#include "sfx2/viewfac.hxx"
 #include <rtl/ustrbuf.hxx>
-#include "viewfac.hxx"
 
 // STATIC DATA -----------------------------------------------------------
 

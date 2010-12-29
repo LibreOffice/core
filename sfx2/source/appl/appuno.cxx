@@ -52,9 +52,7 @@
 #include <basic/sbxobj.hxx>
 #include <basic/sberrors.hxx>
 #include <basic/basmgr.hxx>
-#ifndef _BASIC_SBUNO_HXX
 #include <basic/sbuno.hxx>
-#endif
 
 #include <basic/sbxcore.hxx>
 #include <svl/ownlist.hxx>
@@ -97,6 +95,7 @@
 #include <osl/mutex.hxx>
 #include <comphelper/sequence.hxx>
 #include <rtl/ustrbuf.hxx>
+#include <comphelper/interaction.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::ucb;
@@ -105,9 +104,6 @@ using namespace ::com::sun::star::registry;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::io;
-
-#ifndef GCC
-#endif
 
 #include "sfxtypes.hxx"
 #include <sfx2/sfxuno.hxx>
@@ -131,14 +127,13 @@ using namespace ::com::sun::star::io;
 #include "fltoptint.hxx"
 #include <sfx2/docfile.hxx>
 #include <sfx2/sfxbasecontroller.hxx>
-#include "brokenpackageint.hxx"
+#include <sfx2/brokenpackageint.hxx>
 #include "eventsupplier.hxx"
 #include "xpackcreator.hxx"
 #include "plugin.hxx"
 #include "iframe.hxx"
 #include <ownsubfilterservice.hxx>
 #include "SfxDocumentMetaData.hxx"
-
 
 #define FRAMELOADER_SERVICENAME         "com.sun.star.frame.FrameLoader"
 #define PROTOCOLHANDLER_SERVICENAME     "com.sun.star.frame.ProtocolHandler"
@@ -165,7 +160,7 @@ static char const sDontEdit[] = "DontEdit";
 static char const sSilent[] = "Silent";
 static char const sJumpMark[] = "JumpMark";
 static char const sFileName[] = "FileName";
-static char const sSalvageURL[] = "SalvagedFile";
+static char const sSalvagedFile[] = "SalvagedFile";
 static char const sStatusInd[] = "StatusIndicator";
 static char const sModel[] = "Model";
 static char const sFrame[] = "Frame";
@@ -191,6 +186,10 @@ static char const sUseSystemDialog[] = "UseSystemDialog";
 static char const sStandardDir[] = "StandardDir";
 static char const sBlackList[] = "BlackList";
 static char const sModifyPasswordInfo[] = "ModifyPasswordInfo";
+static char const sSuggestedSaveAsDir[] = "SuggestedSaveAsDir";
+static char const sSuggestedSaveAsName[] = "SuggestedSaveAsName";
+static char const sEncryptionData[] = "EncryptionData";
+
 
 void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& rArgs, SfxAllItemSet& rSet, const SfxSlot* pSlot )
 {
@@ -685,7 +684,7 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
                 {
                     ::rtl::OUString sVal;
                     sal_Bool bOK = ((rProp.Value >>= sVal) && sVal.getLength());
-                    DBG_ASSERT( bOK, "invalid type or value for StanadardDir" );
+                    DBG_ASSERT( bOK, "invalid type or value for StandardDir" );
                     if (bOK)
                         rSet.Put( SfxStringItem( SID_STANDARD_DIR, sVal ) );
                 }
@@ -709,11 +708,11 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
                     if (bOK)
                         rSet.Put( SfxStringItem( SID_FILE_NAME, sVal ) );
                 }
-                else if ( aName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sSalvageURL)) )
+                else if ( aName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sSalvagedFile)) )
                 {
                     ::rtl::OUString sVal;
                     sal_Bool bOK = (rProp.Value >>= sVal);
-                    DBG_ASSERT( bOK, "invalid type or value for SalvageURL" );
+                    DBG_ASSERT( bOK, "invalid type or value for SalvagedFile" );
                     if (bOK)
                         rSet.Put( SfxStringItem( SID_DOC_SALVAGE, sVal ) );
                 }
@@ -721,7 +720,7 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
                 {
                     ::rtl::OUString sVal;
                     sal_Bool bOK = (rProp.Value >>= sVal);
-                    DBG_ASSERT( bOK, "invalid type or value for SalvageURL" );
+                    DBG_ASSERT( bOK, "invalid type or value for FolderName" );
                     if (bOK)
                         rSet.Put( SfxStringItem( SID_PATH, sVal ) );
                 }
@@ -849,6 +848,26 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
                 else if ( aName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sModifyPasswordInfo)) )
                 {
                     rSet.Put( SfxUnoAnyItem( SID_MODIFYPASSWORDINFO, rProp.Value ) );
+                }
+                else if ( aName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sEncryptionData)) )
+                {
+                    rSet.Put( SfxUnoAnyItem( SID_ENCRYPTIONDATA, rProp.Value ) );
+                }
+                else if ( aName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sSuggestedSaveAsDir)) )
+                {
+                    ::rtl::OUString sVal;
+                    sal_Bool bOK = ((rProp.Value >>= sVal) && sVal.getLength());
+                    DBG_ASSERT( bOK, "invalid type or value for SuggestedSaveAsDir" );
+                    if (bOK)
+                        rSet.Put( SfxStringItem( SID_SUGGESTEDSAVEASDIR, sVal ) );
+                }
+                else if ( aName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sSuggestedSaveAsName)) )
+                {
+                    ::rtl::OUString sVal;
+                    sal_Bool bOK = ((rProp.Value >>= sVal) && sVal.getLength());
+                    DBG_ASSERT( bOK, "invalid type or value for SuggestedSaveAsName" );
+                    if (bOK)
+                        rSet.Put( SfxStringItem( SID_SUGGESTEDSAVEASNAME, sVal ) );
                 }
 #ifdef DBG_UTIL
                 else
@@ -1064,6 +1083,13 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
                 nAdditional++;
             if ( rSet.GetItemState( SID_MODIFYPASSWORDINFO ) == SFX_ITEM_SET )
                 nAdditional++;
+            if ( rSet.GetItemState( SID_SUGGESTEDSAVEASDIR ) == SFX_ITEM_SET )
+                nAdditional++;
+            if ( rSet.GetItemState( SID_ENCRYPTIONDATA ) == SFX_ITEM_SET )
+                nAdditional++;
+                nAdditional++;
+            if ( rSet.GetItemState( SID_SUGGESTEDSAVEASNAME ) == SFX_ITEM_SET )
+                nAdditional++;
 
             // consider additional arguments
             nProps += nAdditional;
@@ -1199,11 +1225,17 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
                         continue;
                     if ( nId == SID_NOAUTOSAVE )
                         continue;
+                     if ( nId == SID_ENCRYPTIONDATA )
+                        continue;
 
                     // used only internally
                     if ( nId == SID_SAVETO )
                         continue;
                      if ( nId == SID_MODIFYPASSWORDINFO )
+                        continue;
+                     if ( nId == SID_SUGGESTEDSAVEASDIR )
+                        continue;
+                     if ( nId == SID_SUGGESTEDSAVEASNAME )
                         continue;
                }
 
@@ -1489,7 +1521,7 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
             }
             if ( rSet.GetItemState( SID_DOC_SALVAGE, sal_False, &pItem ) == SFX_ITEM_SET )
             {
-                pValue[nActProp].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(sSalvageURL));
+                pValue[nActProp].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(sSalvagedFile));
                 pValue[nActProp++].Value <<= (  ::rtl::OUString(((SfxStringItem*)pItem)->GetValue()) );
             }
             if ( rSet.GetItemState( SID_PATH, sal_False, &pItem ) == SFX_ITEM_SET )
@@ -1567,6 +1599,21 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
             {
                 pValue[nActProp].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(sModifyPasswordInfo));
                 pValue[nActProp++].Value = ( ((SfxUnoAnyItem*)pItem)->GetValue() );
+            }
+            if ( rSet.GetItemState( SID_ENCRYPTIONDATA, sal_False, &pItem ) == SFX_ITEM_SET )
+            {
+                pValue[nActProp].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(sEncryptionData));
+                pValue[nActProp++].Value = ( ((SfxUnoAnyItem*)pItem)->GetValue() );
+            }
+            if ( rSet.GetItemState( SID_SUGGESTEDSAVEASDIR, sal_False, &pItem ) == SFX_ITEM_SET )
+            {
+                pValue[nActProp].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(sSuggestedSaveAsDir));
+                pValue[nActProp++].Value <<= ( ::rtl::OUString(((SfxStringItem*)pItem)->GetValue()) );
+            }
+            if ( rSet.GetItemState( SID_SUGGESTEDSAVEASNAME, sal_False, &pItem ) == SFX_ITEM_SET )
+            {
+                pValue[nActProp].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(sSuggestedSaveAsName));
+                pValue[nActProp++].Value <<= ( ::rtl::OUString(((SfxStringItem*)pItem)->GetValue()) );
             }
         }
     }
@@ -1873,8 +1920,8 @@ ErrCode SfxMacroLoader::loadMacro( const ::rtl::OUString& rURL, com::sun::star::
                 }
 
                 if ( pSh && pSh->GetModel().is() )
-                       // remove flag for modal mode
-                       pSh->SetMacroMode_Impl( FALSE );
+                        // remove flag for modal mode
+                        pSh->SetMacroMode_Impl( FALSE );
             }
             else
                 nErr = ERRCODE_BASIC_PROC_UNDEFINED;
@@ -2216,18 +2263,18 @@ RequestFilterOptions::RequestFilterOptions( ::com::sun::star::uno::Reference< ::
     ::rtl::OUString temp;
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > temp2;
     ::com::sun::star::document::FilterOptionsRequest aOptionsRequest( temp,
-                                                                         temp2,
+                                                                      temp2,
                                                                       rModel,
                                                                       rProperties );
 
-       m_aRequest <<= aOptionsRequest;
+    m_aRequest <<= aOptionsRequest;
 
-       m_pAbort  = new ContinuationAbort;
-       m_pOptions = new FilterOptionsContinuation;
+    m_pAbort  = new comphelper::OInteractionAbort;
+    m_pOptions = new FilterOptionsContinuation;
 
-       m_lContinuations.realloc( 2 );
-       m_lContinuations[0] = ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionContinuation >( m_pAbort  );
-       m_lContinuations[1] = ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionContinuation >( m_pOptions );
+    m_lContinuations.realloc( 2 );
+    m_lContinuations[0] = ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionContinuation >( m_pAbort  );
+    m_lContinuations[1] = ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionContinuation >( m_pOptions );
 }
 
 ::com::sun::star::uno::Any SAL_CALL RequestFilterOptions::getRequest()
@@ -2244,107 +2291,139 @@ RequestFilterOptions::RequestFilterOptions( ::com::sun::star::uno::Reference< ::
 }
 
 //=========================================================================
+class RequestPackageReparation_Impl : public ::cppu::WeakImplHelper1< ::com::sun::star::task::XInteractionRequest >
+{
+    ::com::sun::star::uno::Any m_aRequest;
+    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionContinuation > > m_lContinuations;
+    comphelper::OInteractionApprove* m_pApprove;
+    comphelper::OInteractionDisapprove*  m_pDisapprove;
 
-RequestPackageReparation::RequestPackageReparation( ::rtl::OUString aName )
+public:
+    RequestPackageReparation_Impl( ::rtl::OUString aName );
+    sal_Bool    isApproved();
+    virtual ::com::sun::star::uno::Any SAL_CALL getRequest() throw( ::com::sun::star::uno::RuntimeException );
+    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionContinuation > > SAL_CALL getContinuations()
+        throw( ::com::sun::star::uno::RuntimeException );
+};
+
+RequestPackageReparation_Impl::RequestPackageReparation_Impl( ::rtl::OUString aName )
 {
     ::rtl::OUString temp;
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > temp2;
     ::com::sun::star::document::BrokenPackageRequest aBrokenPackageRequest( temp,
                                                                                  temp2,
                                                                               aName );
-
        m_aRequest <<= aBrokenPackageRequest;
-
-       m_pApprove = new ContinuationApprove;
-       m_pDisapprove = new ContinuationDisapprove;
-
+    m_pApprove = new comphelper::OInteractionApprove;
+    m_pDisapprove = new comphelper::OInteractionDisapprove;
        m_lContinuations.realloc( 2 );
        m_lContinuations[0] = ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionContinuation >( m_pApprove );
        m_lContinuations[1] = ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionContinuation >( m_pDisapprove );
 }
 
-/*uno::*/Any SAL_CALL RequestPackageReparation::queryInterface( const /*uno::*/Type& rType ) throw (RuntimeException)
+sal_Bool RequestPackageReparation_Impl::isApproved()
 {
-    return ::cppu::queryInterface ( rType,
-            // OWeakObject interfaces
-            dynamic_cast< XInterface* > ( (XInteractionRequest *) this ),
-            static_cast< XWeak* > ( this ),
-            // my own interfaces
-            static_cast< XInteractionRequest*  > ( this ) );
+    return m_pApprove->wasSelected();
 }
 
-void SAL_CALL RequestPackageReparation::acquire(  ) throw ()
-{
-    OWeakObject::acquire();
-}
-
-void SAL_CALL RequestPackageReparation::release(  ) throw ()
-{
-    OWeakObject::release();
-}
-
-::com::sun::star::uno::Any SAL_CALL RequestPackageReparation::getRequest()
+::com::sun::star::uno::Any SAL_CALL RequestPackageReparation_Impl::getRequest()
         throw( ::com::sun::star::uno::RuntimeException )
 {
     return m_aRequest;
 }
 
 ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionContinuation > >
-    SAL_CALL RequestPackageReparation::getContinuations()
+    SAL_CALL RequestPackageReparation_Impl::getContinuations()
         throw( ::com::sun::star::uno::RuntimeException )
 {
     return m_lContinuations;
 }
 
-//=========================================================================
+RequestPackageReparation::RequestPackageReparation( ::rtl::OUString aName )
+{
+    pImp = new RequestPackageReparation_Impl( aName );
+    pImp->acquire();
+}
 
-NotifyBrokenPackage::NotifyBrokenPackage( ::rtl::OUString aName )
+RequestPackageReparation::~RequestPackageReparation()
+{
+    pImp->release();
+}
+
+sal_Bool RequestPackageReparation::isApproved()
+{
+    return pImp->isApproved();
+}
+
+com::sun::star::uno::Reference < ::com::sun::star::task::XInteractionRequest > RequestPackageReparation::GetRequest()
+{
+    return com::sun::star::uno::Reference < ::com::sun::star::task::XInteractionRequest >(pImp);
+}
+
+//=========================================================================
+class NotifyBrokenPackage_Impl : public ::cppu::WeakImplHelper1< ::com::sun::star::task::XInteractionRequest >
+{
+    ::com::sun::star::uno::Any m_aRequest;
+    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionContinuation > > m_lContinuations;
+    comphelper::OInteractionAbort*  m_pAbort;
+
+public:
+    NotifyBrokenPackage_Impl( ::rtl::OUString aName );
+    sal_Bool    isAborted();
+    virtual ::com::sun::star::uno::Any SAL_CALL getRequest() throw( ::com::sun::star::uno::RuntimeException );
+    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionContinuation > > SAL_CALL getContinuations()
+        throw( ::com::sun::star::uno::RuntimeException );
+};
+
+NotifyBrokenPackage_Impl::NotifyBrokenPackage_Impl( ::rtl::OUString aName )
 {
     ::rtl::OUString temp;
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > temp2;
     ::com::sun::star::document::BrokenPackageRequest aBrokenPackageRequest( temp,
                                                                                  temp2,
                                                                               aName );
-
        m_aRequest <<= aBrokenPackageRequest;
-
-       m_pAbort  = new ContinuationAbort;
-
+    m_pAbort  = new comphelper::OInteractionAbort;
        m_lContinuations.realloc( 1 );
        m_lContinuations[0] = ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionContinuation >( m_pAbort  );
 }
 
-/*uno::*/Any SAL_CALL NotifyBrokenPackage::queryInterface( const /*uno::*/Type& rType ) throw (RuntimeException)
+sal_Bool NotifyBrokenPackage_Impl::isAborted()
 {
-    return ::cppu::queryInterface ( rType,
-            // OWeakObject interfaces
-            dynamic_cast< XInterface* > ( (XInteractionRequest *) this ),
-            static_cast< XWeak* > ( this ),
-            // my own interfaces
-            static_cast< XInteractionRequest*  > ( this ) );
+    return m_pAbort->wasSelected();
 }
 
-void SAL_CALL NotifyBrokenPackage::acquire(  ) throw ()
-{
-    OWeakObject::acquire();
-}
-
-void SAL_CALL NotifyBrokenPackage::release(  ) throw ()
-{
-    OWeakObject::release();
-}
-
-::com::sun::star::uno::Any SAL_CALL NotifyBrokenPackage::getRequest()
+::com::sun::star::uno::Any SAL_CALL NotifyBrokenPackage_Impl::getRequest()
         throw( ::com::sun::star::uno::RuntimeException )
 {
     return m_aRequest;
 }
 
 ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionContinuation > >
-    SAL_CALL NotifyBrokenPackage::getContinuations()
+    SAL_CALL NotifyBrokenPackage_Impl::getContinuations()
         throw( ::com::sun::star::uno::RuntimeException )
 {
     return m_lContinuations;
 }
 
+NotifyBrokenPackage::NotifyBrokenPackage( ::rtl::OUString aName )
+{
+    pImp = new NotifyBrokenPackage_Impl( aName );
+    pImp->acquire();
+}
+
+NotifyBrokenPackage::~NotifyBrokenPackage()
+{
+    pImp->release();
+}
+
+sal_Bool NotifyBrokenPackage::isAborted()
+{
+    return pImp->isAborted();
+}
+
+com::sun::star::uno::Reference < ::com::sun::star::task::XInteractionRequest > NotifyBrokenPackage::GetRequest()
+{
+    return com::sun::star::uno::Reference < ::com::sun::star::task::XInteractionRequest >(pImp);
+}
 

@@ -51,16 +51,16 @@ interface XDocument : com::sun::star::script::XInvocation
     [attribute] any AttachedTemplate;
 
     XRange Range( [in] any Start, [in] any End );
-    any BuiltInDocumentProperties( [in] any index );
-    any CustomDocumentProperties( [in] any index );
-    any Bookmarks( [in] any aIndex );
-    any Variables( [in] any aIndex );
-    any Paragraphs( [in] any aIndex );
-    any Styles( [in] any aIndex );
-    any Tables( [in] any aIndex );
-    any Fields( [in] any aIndex );
-    any Shapes([in] any Index);
-    any Sections([in] any Index);
+    any BuiltInDocumentProperties( [in] any Index );
+    any CustomDocumentProperties( [in] any Index );
+    any Bookmarks( [in] any Index );
+    any Variables( [in] any Index );
+    any Paragraphs( [in] any Index );
+    any Styles( [in] any Index );
+    any Tables( [in] any Index );
+    any Fields( [in] any Index );
+    any Shapes( [in] any Index );
+    any Sections( [in] any Index );
     void Activate();
     any PageSetup();
 };

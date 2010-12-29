@@ -58,6 +58,7 @@ SHL1STDLIBS= \
         $(SFX2LIB) \
         $(BASICLIB) \
         $(VCLLIB) \
+        $(SVLLIB) \
         $(TOOLSLIB) \
         $(UCBHELPERLIB) \
         $(COMPHELPERLIB) \

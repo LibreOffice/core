@@ -47,7 +47,7 @@
 #include <svx/svdouno.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdview.hxx>
-#include "svditer.hxx"
+#include "svx/svditer.hxx"
 #include <svx/svdogrp.hxx>
 #include <svx/svdtypes.hxx>
 
@@ -66,7 +66,7 @@
 using namespace ::rtl;
 using namespace ::com::sun::star;
 #include <svx/sdrpagewindow.hxx>
-#include <sdrpaintwindow.hxx>
+#include <svx/sdrpaintwindow.hxx>
 
 TYPEINIT1(SdrPageView, SfxListener);
 DBG_NAME(SdrPageView);
@@ -354,6 +354,21 @@ void SdrPageView::PrePaint()
         if(pCandidate)
         {
             pCandidate->PrePaint();
+        }
+    }
+}
+
+void SdrPageView::PostPaint()
+{
+    const sal_uInt32 nCount(PageWindowCount());
+
+    for(sal_uInt32 a(0); a < nCount; a++)
+    {
+        SdrPageWindow* pCandidate = GetPageWindow(a);
+
+        if(pCandidate)
+        {
+            pCandidate->PostPaint();
         }
     }
 }

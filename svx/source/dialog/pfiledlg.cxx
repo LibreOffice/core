@@ -35,7 +35,7 @@
 
 #include <comphelper/processfactory.hxx>
 
-#include "pfiledlg.hxx"
+#include "svx/pfiledlg.hxx"
 #include <svx/dialogs.hrc>
 
 #include <svx/dialmgr.hxx>

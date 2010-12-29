@@ -45,8 +45,8 @@
 #include <svx/svdview.hxx> // das
 #include <svx/svdundo.hxx> // Macro-Beispiel
 #include <svx/svdopath.hxx>
-#include "svdglob.hxx"  // Stringcache
-#include "svdstr.hrc"   // Objektname
+#include "svx/svdglob.hxx"  // Stringcache
+#include "svx/svdstr.hrc"   // Objektname
 #include <svx/xflclit.hxx>
 #include <svx/xlnclit.hxx>
 #include <svx/xlnwtit.hxx>

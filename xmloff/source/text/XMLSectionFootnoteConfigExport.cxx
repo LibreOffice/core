@@ -37,7 +37,7 @@
 #include <xmloff/txtprmap.hxx>
 #endif
 #include <xmloff/nmspmap.hxx>
-#include "xmlnmspe.hxx"
+#include "xmloff/xmlnmspe.hxx"
 #include <xmloff/xmluconv.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlnume.hxx>

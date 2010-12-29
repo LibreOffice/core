@@ -46,7 +46,7 @@ interface XFormat
     interface ::ooo::vba::XHelperInterface;
     // void         Clear(  ) raises ( com::sun::star::script::BasicErrorException );
 
-    any Borders( [in] any item )
+    any Borders( [in] any Item )
         raises(com::sun::star::script::BasicErrorException);
 
     XFont Font()

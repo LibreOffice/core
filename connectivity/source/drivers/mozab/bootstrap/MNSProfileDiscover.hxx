@@ -116,9 +116,6 @@ namespace connectivity
         protected:
             ProductStruct m_ProductProfileList[4];
             sal_Int32 LoadProductsInfo();
-#ifndef MINIMAL_PROFILEDISCOVER
-            nsresult  LoadMozillaProfiles();
-#endif
             sal_Int32 LoadXPToolkitProfiles(MozillaProductType product);
 #ifndef MINIMAL_PROFILEDISCOVER
             //used by isProfileLocked

@@ -1,4 +1,4 @@
-dt      desktop :    l10n sfx2 stoc BERKELEYDB:berkeleydb sysui SO:sysui_so BOOST:boost svx xmlhelp sal unoil officecfg offuh NULL
+dt      desktop :    l10n sfx2 stoc BERKELEYDB:berkeleydb sysui SO:sysui_so BOOST:boost svx xmlhelp sal unoil officecfg offuh filter LIBXSLT:libxslt NULL
 dt	desktop									usr1	-	all	dt_mkout NULL
 dt	desktop\inc								nmake	-	all	dt_inc NULL
 dt	desktop\prj								get		-	all	dt_prj NULL
@@ -42,3 +42,6 @@ dt  desktop\source\registration\com\sun\star\servicetag\resources   get     -  a
 dt  desktop\source\registration\com\sun\star\servicetag             nmake   -  all sn_svctag NULL
 dt  desktop\source\registration\com\sun\star\registration           nmake   -  all sn_regjob sn_svctag NULL
 dt desktop\qa\deployment_misc nmake - all sn_qa_deployment_misc dt_dp_misc dt_inc NULL
+dt desktop\test\deployment\active nmake - all dt_test_deployment_active NULL
+dt desktop\test\deployment\boxt nmake - all dt_test_deployment_boxt NULL
+dt desktop\test\deployment\passive nmake - all dt_test_deployment_passive NULL

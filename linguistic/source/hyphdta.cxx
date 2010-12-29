@@ -28,9 +28,9 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_linguistic.hxx"
 
-#include "hyphdta.hxx"
-#include "lngprops.hxx"
-#include "misc.hxx"
+#include "linguistic/hyphdta.hxx"
+#include "linguistic/lngprops.hxx"
+#include "linguistic/misc.hxx"
 #include <osl/mutex.hxx>
 
 

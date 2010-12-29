@@ -37,7 +37,7 @@
 #include "XMLStringBufferImportContext.hxx"
 #include <tools/debug.hxx>
 #include <rtl/math.hxx>
-#include "xmlnmspe.hxx"
+#include "xmloff/xmlnmspe.hxx"
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmluconv.hxx>
@@ -704,6 +704,7 @@ private:
 
 public:
     SchXMLRangeSomewhereContext( SvXMLImport& rImport,
+                            USHORT nPrefix,
                             const ::rtl::OUString& rLocalName,
                             ::rtl::OUString& rRangeString );
     virtual ~SchXMLRangeSomewhereContext();
@@ -818,7 +819,7 @@ SvXMLImportContext* SchXMLTableCellContext::CreateChildContext(
     {
         //#i113950# previously the range was exported to attribute text:id, but that attribute does not allow arbitrary strings anymore
         //so we need to find an alternative to save that range info for copy/paste scenario ... -> use description at an empty group element for now
-        pContext = new SchXMLRangeSomewhereContext( GetImport(), rLocalName, maRangeId );
+        pContext = new SchXMLRangeSomewhereContext( GetImport(), nPrefix, rLocalName, maRangeId );
     }
     else
     {
@@ -1188,9 +1189,10 @@ void SchXMLTableHelper::switchRangesFromOuterToInternalIfNecessary(
 //---------------------------------------------------------------------------------------------------
 
 SchXMLRangeSomewhereContext::SchXMLRangeSomewhereContext( SvXMLImport& rImport,
+                                                USHORT nPrefix,
                                                 const OUString& rLocalName,
                                                 OUString& rRangeString ) :
-        SvXMLImportContext( rImport, XML_NAMESPACE_TEXT, rLocalName ),
+        SvXMLImportContext( rImport, nPrefix, rLocalName ),
         mrRangeString( rRangeString )
 {
 }

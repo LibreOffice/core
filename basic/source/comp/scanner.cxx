@@ -224,6 +224,30 @@ BOOL SbiScanner::NextSym()
         for ( ; (BasicSimpleCharClass::isAlphaNumeric( *pLine, bCompatible ) || ( *pLine == '_' ) ); pLine++ )
             nCol++;
         aSym = aLine.copy( n, nCol - n );
+
+        // Special handling for "go to"
+        if( bCompatible && *pLine && aSym.EqualsIgnoreCaseAscii( "go" ) )
+        {
+            const sal_Unicode* pTestLine = pLine;
+            short nTestCol = nCol;
+            while( *pTestLine && (( *pTestLine == ' ' ) || ( *pTestLine == '\t' )) )
+            {
+                pTestLine++;
+                nTestCol++;
+            }
+
+            if( *pTestLine && *(pTestLine + 1) )
+            {
+                String aTestSym = aLine.copy( nTestCol, 2 );
+                if( aTestSym.EqualsIgnoreCaseAscii( "to" ) )
+                {
+                    aSym = String::CreateFromAscii( "goto" );
+                    pLine = pTestLine + 2;
+                    nCol = nTestCol + 2;
+                }
+            }
+        }
+
         // Abschliessendes '_' durch Space ersetzen, wenn Zeilenende folgt
         // (sonst falsche Zeilenfortsetzung)
         if( !bUsedForHilite && !*pLine && *(pLine-1) == '_' )

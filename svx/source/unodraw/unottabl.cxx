@@ -35,7 +35,7 @@
 
 #include <svx/svdmodel.hxx>
 #include <svx/xflhtit.hxx>
-#include "unofill.hxx"
+#include "svx/unofill.hxx"
 #include <svx/unomid.hxx>
 #include "UnoNameItemTable.hxx"
 

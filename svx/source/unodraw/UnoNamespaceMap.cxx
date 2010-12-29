@@ -30,7 +30,7 @@
 
 #include <set>
 
-#include "UnoNamespaceMap.hxx"
+#include "svx/UnoNamespaceMap.hxx"
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
@@ -41,7 +41,7 @@
 #include <osl/mutex.hxx>
 #include <comphelper/stl_types.hxx>
 #include <svl/itempool.hxx>
-#include "unoapi.hxx"
+#include "svx/unoapi.hxx"
 #include "editeng/xmlcnitm.hxx"
 
 
