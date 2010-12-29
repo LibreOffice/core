@@ -481,9 +481,9 @@ enum FunctionLibraryType
 
 /** Represents information for a spreadsheet function.
 
-    The member mpParamInfos points to an array of type information structures
+    The member mpParamInfos points to a C-array of type information structures
     for all parameters of the function. The last initialized structure
-    describing a regular parameter (member meValid == EXC_PARAMVALID_ALWAYS) in
+    describing a regular parameter (member meValid == FUNC_PARAM_REGULAR) in
     this array is used repeatedly for all following parameters supported by a
     function.
  */
@@ -501,7 +501,7 @@ struct FunctionInfo
     sal_uInt8           mnMaxParamCount;    /// Maximum number of parameters.
     sal_uInt8           mnRetClass;         /// BIFF token class of the return value.
     const FunctionParamInfo* mpParamInfos;  /// Information about all parameters.
-    bool                mbParamPairs;       /// true = optional parameters are expected to appear in pairs.
+    bool                mbParamPairs;       /// True = optional parameters are expected to appear in pairs.
     bool                mbVolatile;         /// True = volatile function.
     bool                mbExternal;         /// True = external function in Calc.
     bool                mbMacroFunc;        /// True = macro sheet function or command.
