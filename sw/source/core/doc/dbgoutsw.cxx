@@ -1063,7 +1063,7 @@ String lcl_dbg_out(const SwFormTokens & rTokens)
 
     SwFormTokens::const_iterator aIt;
 
-    for (aIt = rTokens.begin(); aIt != rTokens.end(); aIt++)
+    for (aIt = rTokens.begin(); aIt != rTokens.end(); ++aIt)
     {
         if (aIt != rTokens.begin())
             aStr += String(", ", RTL_TEXTENCODING_ASCII_US);
