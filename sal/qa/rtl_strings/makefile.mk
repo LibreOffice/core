@@ -28,7 +28,6 @@ PRJ=..$/..
 
 PRJNAME=sal
 TARGET=qa_rtl_strings
-# TESTDIR=TRUE
 
 ENABLE_EXCEPTIONS=TRUE
 

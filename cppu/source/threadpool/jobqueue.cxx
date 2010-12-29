@@ -98,6 +98,10 @@ namespace cppu_threadpool {
                 if( 0 == m_lstCallstack.front() )
                 {
                     // disposed !
+                    if( m_lstJob.empty() )
+                    {
+                        osl_resetCondition( m_cndWait );
+                    }
                     break;
                 }
 
