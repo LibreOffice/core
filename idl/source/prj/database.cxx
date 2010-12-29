@@ -74,12 +74,10 @@ SvIdlDataBase::SvIdlDataBase( const SvCommand& rCmd )
 *************************************************************************/
 SvIdlDataBase::~SvIdlDataBase()
 {
-    String * pStr = aIdFileList.First();
-    while( pStr )
-    {
-        delete pStr;
-        pStr = aIdFileList.Next();
-    }
+    for ( size_t i = 0, n = aIdFileList.size(); i < n; ++i )
+        delete aIdFileList[ i ];
+    aIdFileList.clear();
+
     delete pIdTable;
 }
 
@@ -320,15 +318,11 @@ BOOL SvIdlDataBase::ReadIdFile( const String & rFileName )
     DirEntry aFullName( rFileName );
     aFullName.Find( GetPath() );
 
-    String * pIdFile = aIdFileList.First();
-    while( pIdFile )
-    {
-        if( *pIdFile == rFileName )
-            return TRUE; // schon eingelesen
-        pIdFile = aIdFileList.Next();
-    }
+    for ( size_t i = 0, n = aIdFileList.size(); i < n; ++i )
+        if ( *aIdFileList[ i ] == rFileName )
+            return TRUE;
 
-    aIdFileList.Insert( new String( rFileName ), LIST_APPEND );
+    aIdFileList.push_back( new String( rFileName ) );
 
     SvTokenStream aTokStm( aFullName.GetFull() );
     if( aTokStm.GetStream().GetError() == SVSTREAM_OK )

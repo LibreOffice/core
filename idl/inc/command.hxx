@@ -32,10 +32,11 @@
 
 #include <tools/list.hxx>
 #include <tools/string.hxx>
+#include <vector>
 
 #ifndef STRING_LIST
 #define STRING_LIST
-DECLARE_LIST( StringList, String * )
+typedef ::std::vector< String* > StringList;
 #endif
 
 DECLARE_LIST( ByteStringList, ByteString* )

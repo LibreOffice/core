@@ -172,9 +172,9 @@ void DeInit()
 *************************************************************************/
 BOOL ReadIdl( SvIdlWorkingBase * pDataBase, const SvCommand & rCommand )
 {
-    for( USHORT n = 0; n < rCommand.aInFileList.Count(); n++ )
+    for( size_t n = 0; n < rCommand.aInFileList.size(); ++n )
     {
-        String aFileName ( *rCommand.aInFileList.GetObject( n ) );
+        String aFileName ( *rCommand.aInFileList[ n ] );
         SvFileStream aStm( aFileName, STREAM_STD_READ | STREAM_NOCREATE );
         if( aStm.GetError() == SVSTREAM_OK )
         {
@@ -218,7 +218,7 @@ BOOL ReadIdl( SvIdlWorkingBase * pDataBase, const SvCommand & rCommand )
 static BOOL ResponseFile( StringList * pList, int argc, char ** argv )
 {
     // Programmname
-    pList->Insert( new String( String::CreateFromAscii(*argv) ), LIST_APPEND );
+    pList->push_back( new String( String::CreateFromAscii(*argv) ) );
     for( int i = 1; i < argc; i++ )
     {
         if( '@' == **(argv +i) )
@@ -240,12 +240,12 @@ static BOOL ResponseFile( StringList * pList, int argc, char ** argv )
                     while( aStr.GetChar(n) && !isspace( aStr.GetChar(n) ) )
                         n++;
                     if( n != nPos )
-                        pList->Insert( new String( String::CreateFromAscii( aStr.Copy( nPos, n - nPos ).GetBuffer() ) ), LIST_APPEND );
+                        pList->push_back( new String( String::CreateFromAscii( aStr.Copy( nPos, n - nPos ).GetBuffer() ) ) );
                 }
             }
         }
         else if( argv[ i ] )
-            pList->Insert( new String( String::CreateFromAscii( argv[ i ] ) ), LIST_APPEND );
+            pList->push_back( new String( String::CreateFromAscii( argv[ i ] ) ) );
     }
     return TRUE;
 }
@@ -261,9 +261,9 @@ SvCommand::SvCommand( int argc, char ** argv )
     StringList aList;
 
     if( ResponseFile( &aList, argc, argv ) )
-    for( ULONG i = 1; i < aList.Count(); i++ )
+    for( size_t i = 1; i < aList.size(); i++ )
     {
-        String aParam( *aList.GetObject( i ) );
+        String aParam( *aList[ i ] );
         sal_Unicode aFirstChar( aParam.GetChar(0) );
         if( '-' == aFirstChar )
         {
@@ -374,9 +374,9 @@ SvCommand::SvCommand( int argc, char ** argv )
             }
             else if( aParam.EqualsIgnoreCaseAscii( "rsc", 0, 3 ) )
             { // erste Zeile im *.srs File
-                if( aList.GetObject( i +1 ) )
+                if( aList[ i + 1 ] )
                 {
-                    aSrsLine = ByteString( *aList.GetObject( i +1 ), RTL_TEXTENCODING_UTF8 );
+                    aSrsLine = ByteString( *aList[ i +1 ], RTL_TEXTENCODING_UTF8 );
                     i++;
                 }
             }
@@ -392,7 +392,7 @@ SvCommand::SvCommand( int argc, char ** argv )
         }
         else
         {
-            aInFileList.Insert( new String( aParam ), LIST_APPEND );
+            aInFileList.push_back( new String( aParam ) );
         }
     }
     else
@@ -400,12 +400,9 @@ SvCommand::SvCommand( int argc, char ** argv )
         printf( "%s", CommandLineSyntax );
     }
 
-    String * pStr = aList.First();
-    while( pStr )
-    {
-        delete pStr;
-        pStr = aList.Next();
-    }
+    for ( size_t i = 0, n = aList.size(); i < n; ++i )
+        delete aList[ i ];
+    aList.clear();
 
     ByteString aInc( getenv( "INCLUDE" ) );
     // Include Environmentvariable anhaengen
@@ -427,9 +424,9 @@ SvCommand::SvCommand( int argc, char ** argv )
 SvCommand::~SvCommand()
 {
     // ByteString Liste freigeben
-    String * pStr;
-    while( NULL != (pStr = aInFileList.Remove()) )
-        delete pStr;
+    for ( size_t i = 0, n = aInFileList.size(); i < n; ++i )
+        delete aInFileList[ i ];
+    aInFileList.clear();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
