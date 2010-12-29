@@ -23,7 +23,6 @@ mkdir: %_DEST%\inc%_EXT%\vcl
 ..\inc\vcl\bmpacc.hxx %_DEST%\inc%_EXT%\vcl\bmpacc.hxx
 ..\inc\vcl\btndlg.hxx %_DEST%\inc%_EXT%\vcl\btndlg.hxx
 ..\inc\vcl\button.hxx %_DEST%\inc%_EXT%\vcl\button.hxx
-..\inc\vcl\button.hxx %_DEST%\inc%_EXT%\vcl\imagebtn.hxx
 ..\inc\vcl\cmdevt.h %_DEST%\inc%_EXT%\vcl\cmdevt.h
 ..\inc\vcl\cmdevt.hxx %_DEST%\inc%_EXT%\vcl\cmdevt.hxx
 ..\inc\vcl\combobox.h %_DEST%\inc%_EXT%\vcl\combobox.h
@@ -78,6 +77,7 @@ mkdir: %_DEST%\inc%_EXT%\vcl
 ..\inc\vcl\metric.hxx %_DEST%\inc%_EXT%\vcl\metric.hxx
 ..\inc\vcl\mnemonic.hxx %_DEST%\inc%_EXT%\vcl\mnemonic.hxx
 ..\inc\vcl\mnemonicengine.hxx %_DEST%\inc%_EXT%\vcl\mnemonicengine.hxx
+..\inc\vcl\quickselectionengine.hxx %_DEST%\inc%_EXT%\vcl\quickselectionengine.hxx
 ..\inc\vcl\morebtn.hxx %_DEST%\inc%_EXT%\vcl\morebtn.hxx
 ..\inc\vcl\msgbox.hxx %_DEST%\inc%_EXT%\vcl\msgbox.hxx
 ..\inc\vcl\octree.hxx %_DEST%\inc%_EXT%\vcl\octree.hxx
@@ -153,4 +153,7 @@ mkdir: %_DEST%\inc%_EXT%\vcl
 ..\inc\vcl\helper.hxx %_DEST%\inc%_EXT%\vcl\helper.hxx
 ..\inc\vcl\strhelper.hxx %_DEST%\inc%_EXT%\vcl\strhelper.hxx
 ..\inc\vcl\lazydelete.hxx %_DEST%\inc%_EXT%\vcl\lazydelete.hxx
+..\inc\vcl\arrange.hxx %_DEST%\inc%_EXT%\vcl\arrange.hxx
+..\inc\vcl\wpropset.hxx %_DEST%\inc%_EXT%\vcl\wpropset.hxx
 ..\%__SRC%\misc\vcl.component %_DEST%\xml%_EXT%\vcl.component
+

@@ -29,15 +29,10 @@
 #include "precompiled_svtools.hxx"
 
 #include <string.h>
-
-#ifndef _APP_HXX
 #include <vcl/svapp.hxx>
-#endif
-
 #include <vcl/i18nhelp.hxx>
-
-#include <ctrltool.hxx>
-#include <stdmenu.hxx>
+#include <svtools/ctrltool.hxx>
+#include <svtools/stdmenu.hxx>
 
 // ========================================================================
 

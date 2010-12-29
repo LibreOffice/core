@@ -74,7 +74,6 @@ SLOFILES=   \
             $(SLO)$/officeresourcebundle.obj \
             $(SLO)$/officerestartmanager.obj \
             $(SLO)$/proxyaggregation.obj \
-            $(SLO)$/querydeep.obj \
             $(SLO)$/regpathhelper.obj \
             $(SLO)$/scopeguard.obj \
             $(SLO)$/SelectionMultiplex.obj \

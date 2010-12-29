@@ -102,7 +102,7 @@ void RscLangEnum::Init( RscNameTable& rNames )
     while ( NULL != ( pLangEntry = MsLangId::getIsoLangEntry( nIndex )) && ( pLangEntry->mnLang != LANGUAGE_DONTKNOW ))
     {
 #if OSL_DEBUG_LEVEL > 2
-        fprintf( stderr, "ISO Language in : %d %d %s\n",
+        fprintf( stderr, "ISO Language in : %d\n",
                  (int)nIndex,
                  pLangEntry->mnLang,
                  MsLangId::convertLanguageToIsoByteString( pLangEntry->mnLang ).getStr() );
@@ -200,7 +200,7 @@ Atom RscLangEnum::AddLanguage( const char* pLang, RscNameTable& rNames )
         mnLangId++;
     }
     #if OSL_DEBUG_LEVEL > 2
-    fprintf( stderr, "AddLanguage( %s ) = 0x%lx\n", pLang, nResult );
+    fprintf( stderr, "AddLanguage( %s ) = %d\n", pLang, nResult );
     #endif
     return nResult;
 }
