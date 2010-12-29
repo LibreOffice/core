@@ -29,10 +29,9 @@
 #ifndef _HASH_HXX
 #define _HASH_HXX
 
-
-
 #include <tools/ref.hxx>
 #include <tools/string.hxx>
+#include <vector>
 
 /****************** H a s h - T a b l e **********************************/
 class SvHashTable
@@ -99,11 +98,11 @@ public:
 SV_DECL_IMPL_REF(SvStringHashEntry)
 
 /****************** S t r i n g H a s h T a b l e ************************/
-DECLARE_LIST(SvStringHashList,SvStringHashEntry *)
+typedef ::std::vector< SvStringHashEntry* > SvStringHashList;
 
 class SvStringHashTable : public SvHashTable
 {
-    SvStringHashEntry * pEntries;
+    SvStringHashEntry*      pEntries;
 protected:
     virtual UINT32          HashFunc( const void * pElement ) const;
     virtual StringCompare   Compare( const void * pElement, UINT32 nIndex ) const;

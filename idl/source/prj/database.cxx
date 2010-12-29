@@ -852,15 +852,14 @@ BOOL SvIdlWorkingBase::WriteSvIdl( SvStream & rOutStm )
     if( GetIdTable() )
     {
         GetIdTable()->FillHashList( &aList );
-        SvStringHashEntry * pEntry = aList.First();
-        while( pEntry )
+        for ( size_t i = 0, n = aList.size(); i < n; ++i )
         {
+            SvStringHashEntry* pEntry = aList[ i ];
             rOutStm << "#define " << pEntry->GetName().GetBuffer()
                     << '\t'
                     << ByteString::CreateFromInt64(
                         pEntry->GetValue() ).GetBuffer()
                     << endl;
-            pEntry = aList.Next();
         }
     }
 

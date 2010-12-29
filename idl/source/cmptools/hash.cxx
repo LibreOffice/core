@@ -101,9 +101,6 @@ BOOL SvHashTable::Test_Insert( const void * pElement, BOOL bInsert,
     nHash =  HashFunc( pElement );
     nIndex = nHash % nMax;
 
-//  const char* s = ((ByteString*) pElement)->GetStr();
-//  fprintf(stderr,"### Hash: %lu , Name: %s\n",nIndex,s );
-
     nLoop = 0;                                      // divide to range
     while( (nMax != nLoop) && IsEntry( nIndex ) )
     {                     // is place occupied
@@ -180,14 +177,7 @@ SvStringHashTable::~SvStringHashTable()
     }
 #endif
 
-#ifdef MPW
-    // der MPW-Compiler ruft sonst keine Dtoren!
-    for ( USHORT n = 0; n < GetMax(); ++n )
-        (pEntries+n)->SvStringHashEntry::~SvStringHashEntry();
-    delete (void*) pEntries;
-#else
     delete [] pEntries;
-#endif
 }
 
 /*************************************************************************
@@ -326,7 +316,7 @@ void SvStringHashTable::FillHashList( SvStringHashList * pList ) const
     for( UINT32 n = 0; n < GetMax(); n++ )
     {
         if( IsEntry( n ) )
-            pList->Insert( Get( n ), LIST_APPEND );
+            pList->push_back( Get( n ) );
     }
     // Hash Reihenfolge, jetzt sortieren
 }
