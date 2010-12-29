@@ -522,8 +522,11 @@ void SAL_CALL BackingComp::attachFrame( /*IN*/ const css::uno::Reference< css::f
         xLayoutManager->unlock();
     }
 
-    // set help ID for our canvas
-    pWindow->SetHelpId(HID_BACKINGWINDOW);
+    if (pWindow)
+    {
+        // set help ID for our canvas
+        pWindow->SetHelpId(HID_BACKINGWINDOW);
+    }
 
     // inform BackingWindow about frame
     BackingWindow* pBack = dynamic_cast<BackingWindow*>(pWindow );
