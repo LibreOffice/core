@@ -467,7 +467,7 @@ String SwFileNameFieldType::Expand(ULONG nFmt) const
                 break;
 
             case FF_NAME:
-                aRet = rURLObj.GetLastName( URL_DECODE );
+                aRet = rURLObj.GetLastName( INetURLObject::DECODE_WITH_CHARSET );
                 break;
 
             case FF_NAME_NOEXT:
