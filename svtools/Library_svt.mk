@@ -300,6 +300,25 @@ $(eval $(call gb_Library_add_linked_libs,svt,\
 endif
 
 ifeq ($(OS),WNT)
+ifneq ($(USE_MINGW),)
+$(eval $(call gb_Library_add_linked_libs,svt,\
+    mingwthrd \
+    $(gb_MINGW_LIBSTDCPP) \
+    mingw32 \
+    $(gb_MINGW_LIBGCC) \
+    uwinapi \
+    moldname \
+    mingwex \
+    advapi32 \
+    gdi32 \
+    kernel32 \
+    msvcrt \
+    ole32 \
+    oleaut32 \
+    user32 \
+    uuid \
+))
+else
 $(eval $(call gb_Library_add_linked_libs,svt,\
     advapi32 \
     gdi32 \
@@ -312,5 +331,6 @@ $(eval $(call gb_Library_add_linked_libs,svt,\
     uuid \
     uwinapi \
 ))
+endif
 endif
 # vim: set noet sw=4 ts=4:
