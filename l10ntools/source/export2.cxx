@@ -678,7 +678,8 @@ void Export::getRandomName( const ByteString& sPrefix , ByteString& sRandStr , c
     int                 i;
 
     osl_getSystemTime( &tv );
-    oslProcessInfo  proInfo;
+    oslProcessInfo proInfo;
+    proInfo.Size = sizeof(oslProcessInfo);
     osl_getProcessInfo( 0 , osl_Process_IDENTIFIER , &proInfo );
 
     value += ((sal_uInt64) ( tv.Nanosec / 1000 ) << 16) ^ ( tv.Nanosec / 1000 ) ^ proInfo.Ident;
