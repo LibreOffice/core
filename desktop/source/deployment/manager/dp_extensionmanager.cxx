@@ -1156,7 +1156,7 @@ uno::Sequence< uno::Sequence<Reference<deploy::XPackage> > >
         ::std::vector< ::std::vector<Reference<deploy::XPackage> > >
               vecExtensions;
         id2extensions::const_iterator mapIt = mapExt.begin();
-        for (;mapIt != mapExt.end(); mapIt++)
+        for (;mapIt != mapExt.end(); ++mapIt)
             vecExtensions.push_back(mapIt->second);
 
         //sort the element according to the identifier
