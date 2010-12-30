@@ -942,7 +942,6 @@ FloatingWindow RID_INSERT
     Closeable = TRUE ;
     Hide = TRUE ;
     SVLook = TRUE ;
-    /* ### ACHTUNG: Neuer Text in Resource? Einfügen : Einf³gen */
     Text [ en-US ] = "Insert" ;
     ToolBox RID_INSERT_TBX
     {

@@ -41,7 +41,6 @@
         Text [ en-US ] = "~Distribution..." ; \
     };
 
-/* ### ACHTUNG: Neuer Text in Resource! */
 #define MN_DRAWINGMODE \
     MenuItem\
     {\
@@ -74,11 +73,7 @@
     {\
         Identifier = SID_PRESENTATION ; \
         HelpID = SID_PRESENTATION ; \
-        /* ### ACHTUNG: Neuer Text in Resource? ~Bildschirmpräsentation : ~Bildschirmpräsentation... */\
-        /* ### ACHTUNG: Neuer Text in Resource? ~Bildschirmpräsentation : ~Bildschirmpräsentation... */\
-        /* ### ACHTUNG: Neuer Text in Resource? ~Bildschirmpräsentation : ~Bildschirmprõsentation */\
         Text [ en-US ] = "Slide Sho~w" ; \
-        /* ### ACHTUNG: Neuer Text in Resource? Bildschirmpräsentation starten : Bildschirmprõsentation starten */\
     };
 
 #define MN_CAPTUREPOINT \
@@ -86,8 +81,6 @@
     {\
         Identifier = SID_CAPTUREPOINT ; \
         HelpID = SID_CAPTUREPOINT ; \
-        /* ### ACHTUNG: Neuer Text in Resource? F~angpunkt/-linie einfügen... : F~angpunkt/-linie einf³gen... */\
-        /* ### ACHTUNG: Neuer Text in Resource? Fangpunkt oder -linie einfügen : Fangpunkt oder -linie einf³gen */\
         Text [ en-US ] = "~Insert Snap Point/Line..." ; \
     };
 
@@ -96,7 +89,6 @@
     {\
         Identifier = SID_SET_SNAPITEM ; \
         HelpID = SID_SET_SNAPITEM ; \
-        /* ### ACHTUNG: Neuer Text in Resource? Fangobjekt bearbeiten oder löschen : Fangobjekt bearbeiten oder l÷schen */\
         Text [ en-US ] = "~Edit..." ; \
     };
 
@@ -105,8 +97,6 @@
     {\
         Identifier = SID_DELETE_SNAPITEM ; \
         HelpID = SID_DELETE_SNAPITEM ; \
-        /* ### ACHTUNG: Neuer Text in Resource? ~Löschen : ~L÷schen */\
-        /* ### ACHTUNG: Neuer Text in Resource? Fangobjekt löschen : Fangobjekt l÷schen */\
         Text [ en-US ] = "~Delete" ; \
     };
 
@@ -124,7 +114,6 @@
     {\
         Identifier = SID_PAGESETUP ; \
         HelpID = SID_PAGESETUP ; \
-        /* ### ACHTUNG: Neuer Text in Resource? Seitengröße, Ausrichtung, Rahmen festlegen : Seitengr÷˜e, Ausrichtung, Rahmen festlegen */\
         Text [ en-US ] = "~Page Setup..." ; \
     };
 
@@ -325,7 +314,6 @@
     {\
         Identifier = SID_CONNECTION_NEW_ROUTING ; \
         HelpID = SID_CONNECTION_NEW_ROUTING ; \
-        /* ### ACHTUNG: Neuer Text in Resource? Linienverlauf ~zurücksetzen : Linienverlauf ~zur³cksetzen */\
         Text [ en-US ] = "Reset ~Routing" ; \
     };
 
@@ -334,7 +322,6 @@
     {\
         Identifier = SID_MEASURE_DLG ; \
         HelpID = SID_MEASURE_DLG ; \
-        /* ### ACHTUNG: Neuer Text in Resource? Bema~ßung... : Bema~˜ung... */\
         Text [ en-US ] = "Dimen~sions..." ; \
     };
 
@@ -427,7 +414,6 @@
         Identifier = SID_CHAR_DLG ; \
         HelpID = SID_CHAR_DLG ; \
         Text [ en-US ] = "C~haracter..." ; \
-        /* ### ACHTUNG: Neuer Text in Resource? Zeichenattribute für den selektierten Bereich auswählen : Zeichenattribute f³r den selektierten Bereich auswõhlen */\
     };
 
 #define MN_CHAR_PARAGRAPH \
@@ -449,7 +435,6 @@
     {\
         Identifier = SID_ATTR_CHAR_FONTHEIGHT ; \
         HelpID = SID_ATTR_CHAR_FONTHEIGHT ; \
-        /* ### ACHTUNG: Neuer Text in Resource? ~Größe : ~Gr÷˜e */\
         Text [ en-US ] = "~Size" ; \
     };\
     MenuItem\
@@ -652,7 +637,6 @@
     {\
         Identifier = SID_OBJECT_CLOSE ; \
         HelpID = SID_OBJECT_CLOSE ; \
-        /* ### ACHTUNG: Neuer Text in Resource? ~Objekt schließen : ~Objekt schlie˜en */\
         Text [ en-US ] = "Close ~Object" ; \
     };
 
@@ -674,14 +658,12 @@
     {\
         Identifier = SID_BEZIER_INSERT ; \
         HelpID = SID_BEZIER_INSERT ; \
-        /* ### ACHTUNG: Neuer Text in Resource? Punkte ~einfügen : Punkte ~einf³gen */\
         Text [ en-US ] = "Insert ~Points" ; \
     };\
     MenuItem\
     {\
         Identifier = SID_BEZIER_DELETE ; \
         HelpID = SID_BEZIER_DELETE ; \
-        /* ### ACHTUNG: Neuer Text in Resource? Punkte l~öschen : Punkte l~÷schen */\
         Text [ en-US ] = "~Delete Points" ; \
     };\
     SEPARATOR\
@@ -689,7 +671,6 @@
     {\
         Identifier = SID_BEZIER_CLOSE ; \
         HelpID = SID_BEZIER_CLOSE ; \
-        /* ### ACHTUNG: Neuer Text in Resource? ~Objekt schließen : ~Objekt schlie˜en */\
         Text [ en-US ] = "Close ~Object" ; \
     };\
     MenuItem\
@@ -738,7 +719,6 @@
         Identifier = SID_GROUP ; \
         HelpID = SID_GROUP ; \
         Text [ en-US ] = "~Group" ; \
-        /* ### ACHTUNG: Neuer Text in Resource? Ausgewählte Objekte gruppieren : Ausgewõhlte Objekte gruppieren */\
     };
 
 #define MN_UNGROUP \
@@ -755,7 +735,6 @@
         Identifier = SID_COMBINE ; \
         HelpID = SID_COMBINE ; \
         Text [ en-US ] = "Comb~ine" ; \
-        /* ### ACHTUNG: Neuer Text in Resource? Ausgewählte Objekte kombinieren : Ausgewõhlte Objekte kombinieren */\
     };
 
 #define MN_DISMANTLE \
@@ -772,7 +751,6 @@
         Identifier = SID_ENTER_GROUP ; \
         HelpID = SID_ENTER_GROUP ; \
         Text [ en-US ] = "~Enter Group" ; \
-        /* ### ACHTUNG: Neuer Text in Resource? Objekte der Gruppierung können bearbeitet werden : Objekte der Gruppierung k÷nnen bearbeitet werden */\
     };
 
 #define MN_LEAVE_GROUP \
@@ -781,7 +759,6 @@
         Identifier = SID_LEAVE_GROUP ; \
         HelpID = SID_LEAVE_GROUP ; \
         Text [ en-US ] = "E~xit Group" ; \
-        /* ### ACHTUNG: Neuer Text in Resource? Objekte der Gruppierung können nicht mehr bearbeitet werden : Objekte der Gruppierung k÷nnen nicht mehr bearbeitet werden */\
     };
 
 #define MN_NAME_GROUP \
@@ -831,8 +808,6 @@
     {\
         Identifier = SID_PRESENTATIONOBJECT ; \
         HelpID = SID_PRESENTATIONOBJECT ; \
-        /* ### ACHTUNG: Neuer Text in Resource? ~Präsentationsobjekt... : ~Prõsentationsobjekt... */\
-        /* ### ACHTUNG: Neuer Text in Resource? Selektiertes Präsentationsobjekt bearbeiten : Selektiertes Prõsentationsobjekt bearbeiten */\
         Text [ en-US ] = "Presentation ~Object..." ; \
     };
 
@@ -842,9 +817,7 @@
     {\
         Identifier = SID_DELETE ; \
         HelpID = SID_DELETE ; \
-        /* ### ACHTUNG: Neuer Text in Resource? L~öschen : L~÷schen */\
         Text [ en-US ] = "~Delete" ; \
-        /* ### ACHTUNG: Neuer Text in Resource? Alle selektierten Objekte löschen : Alle selektierten Objekte l÷schen */\
     };
 
 
@@ -910,7 +883,6 @@
     {\
         Identifier = SID_GLUE_INSERT_POINT ; \
         HelpID = SID_GLUE_INSERT_POINT ; \
-        /* ### ACHTUNG: Neuer Text in Resource? ~Punkt einfügen : ~Punkt einf³gen */\
         Text [ en-US ] = "Insert ~Point" ; \
     };
 
@@ -1054,7 +1026,6 @@
     {\
         Identifier = SID_HELPLINES_VISIBLE ; \
         HelpID = SID_HELPLINES_VISIBLE ; \
-        /* ### ACHTUNG: Neuer Text in Resource? ~Fanglinien sichtbar : ~Hilfslinien sichtbar */\
         Text [ en-US ] = "~Snap Lines Visible" ; \
     };
 
@@ -1071,7 +1042,6 @@
     {\
         Identifier = SID_HELPLINES_FRONT ; \
         HelpID = SID_HELPLINES_FRONT ; \
-        /* ### ACHTUNG: Neuer Text in Resource? Fanglini~en vorn : H~ilfslinien vorn */\
         Text [ en-US ] = "Snap Lines to Front" ; \
     };
 
@@ -1161,7 +1131,6 @@
     {\
         Identifier = DUMMY + 4 ; \
         Command = ".uno:ColorResMenu" ; \
-        /* ### ACHTUNG: Neuer Text in Resource? ~Farbauflösung : ~Farbaufl÷sung */\
         SubMenu = Menu\
         {\
             ItemList = \

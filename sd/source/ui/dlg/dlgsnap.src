@@ -59,7 +59,6 @@ ModalDialog DLG_SNAPLINE
     {
         Pos = MAP_APPFONT ( 88 , 63  ) ;
         Size = MAP_APPFONT ( 46 , 14 ) ;
-        /* ### ACHTUNG: Neuer Text in Resource? ~Löschen : ~L÷schen */
         Text [ en-US ] = "~Delete" ;
         TabStop = TRUE ;
     };

@@ -211,7 +211,6 @@
         Text [ en-US ] = "~Rulers" ; \
     };
 
-/* ### ACHTUNG: Neuer Text in Resource! */
 #define MN_NOTESMODE \
     MenuItem\
     {\
@@ -221,7 +220,6 @@
         Text [ en-US ] = "~Notes View" ; \
     };
 
-/* ### ACHTUNG: Neuer Text in Resource! */
 #define MN_HANDOUTMODE \
     MenuItem\
     {\
@@ -668,7 +666,6 @@
  //
  // Praesentations-Menu
  //
-/* ### ACHTUNG: Neuer Text in Resource! */
 #define MN_SLIDESHOW \
     Identifier = 26 ; \
     HelpID = 26 ; \
@@ -715,7 +712,6 @@
         Text [ en-US ] = "~AutoCorrect..." ; \
     };
 
-/* ### ACHTUNG: Neuer Text in Resource! */
 #define MN_PRESENTATION_DLG \
     MenuItem\
     {\
@@ -724,7 +720,6 @@
         Text [ en-US ] = "~Slide Show Settings..." ; \
     };
 
-/* ### ACHTUNG: Neuer Text in Resource! */
 #define MN_CUSTOMSHOW_DLG \
     MenuItem\
     {\
