@@ -562,7 +562,7 @@ sal_Bool Unmarshal::unpack( void *pDestination ,
     while ( it != end )
     {
         typelib_typedescription_release( *it );
-        it++;
+        ++it;
     }
     m_aTypesToRelease.clear();
 
