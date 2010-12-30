@@ -80,8 +80,7 @@ struct lessByteString{
 
 struct hashByteString{
     size_t operator()( const ByteString& rName ) const{
-                std::hash< const char* > myHash;
-                return myHash( rName.GetBuffer() );
+        return rtl_str_hashCode_WithLength(rName.GetBuffer(), rName.Len() );
     }
 };
 
