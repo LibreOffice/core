@@ -2138,7 +2138,7 @@ void ConvertEnhancedCustomShapeEquation( SdrObjCustomShape* pCustoShape,
                     }
                     nMask <<= 1;
                 }
-                aIter++;
+                ++aIter;
             }
         }
     }
@@ -2598,7 +2598,7 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                                      << (sal_Int16)aIter->nPara[ 0 ]
                                      << (sal_Int16)aIter->nPara[ 1 ]
                                      << (sal_Int16)aIter->nPara[ 2 ];
-                                aIter++;
+                                ++aIter;
                             }
                             sal_uInt8* pBuf = new sal_uInt8[ nStreamSize ];
                             memcpy( pBuf, aOut.GetData(), nStreamSize );
