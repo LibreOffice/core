@@ -230,7 +230,7 @@ bool XMLFilterJarHelper::savePackage( const OUString& rPackageURL, const XMLFilt
                         addFile( xFilterRoot, xFactory, pFilter->maImportTemplate );
                 }
 
-                aIter++;
+                ++aIter;
             }
 
             // create TypeDetection.xcu
@@ -328,7 +328,7 @@ void XMLFilterJarHelper::openPackage( const OUString& rPackageURL, XMLFilterVect
                             // failed to copy all files
                             delete (*aIter);
                         }
-                        aIter++;
+                        ++aIter;
                     }
                 }
             }
