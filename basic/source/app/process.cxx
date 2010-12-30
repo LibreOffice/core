@@ -83,6 +83,7 @@ BOOL Process::ImplIsRunning()
     if ( m_pProcess && bHasBeenStarted )
     {
         oslProcessInfo aProcessInfo;
+        aProcessInfo.Size = sizeof(oslProcessInfo);
         osl_getProcessInfo(m_pProcess, osl_Process_EXITCODE, &aProcessInfo );
         if ( !(aProcessInfo.Fields & osl_Process_EXITCODE) )
             return TRUE;
