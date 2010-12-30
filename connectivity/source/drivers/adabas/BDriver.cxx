@@ -1164,6 +1164,7 @@ int ODriver::X_START(const ::rtl::OUString& sDBName)
     OSL_ASSERT(eError == osl_Process_E_None);
 
     oslProcessInfo aInfo;
+    aInfo.Size = sizeof(oslProcessInfo);
 
     if(osl_getProcessInfo(aApp, osl_Process_EXITCODE, &aInfo) == osl_Process_E_None && aInfo.Code)
         return aInfo.Code;
@@ -1199,6 +1200,7 @@ int ODriver::X_STOP(const ::rtl::OUString& sDBName)
         return 1;
 
     oslProcessInfo aInfo;
+    aInfo.Size = sizeof(oslProcessInfo);
 
     if(osl_getProcessInfo(aApp, osl_Process_EXITCODE, &aInfo) == osl_Process_E_None && aInfo.Code)
         return aInfo.Code;
