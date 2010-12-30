@@ -1021,7 +1021,7 @@ void SAL_CALL SdStyleSheet::setParentStyle( const OUString& rParentName  ) throw
         {
             const SfxStyles& rStyles = mxPool->GetStyles();
 
-            for( SfxStyles::const_iterator iter( rStyles.begin() ); iter != rStyles.end(); iter++ )
+            for( SfxStyles::const_iterator iter( rStyles.begin() ); iter != rStyles.end(); ++iter )
             {
                 SdStyleSheet* pStyle = static_cast< SdStyleSheet* >( (*iter).get() );
                 if( pStyle && (pStyle->nFamily == nFamily) && (pStyle->msApiName == rParentName) )
