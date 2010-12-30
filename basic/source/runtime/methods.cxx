@@ -3629,6 +3629,7 @@ RTLFUNC(Shell)
         if ( bSucc && SbiRuntime::isVBAEnabled())
         {
             oslProcessInfo aInfo;
+            aInfo.Size = sizeof(oslProcessInfo);
             osl_getProcessInfo( pApp, osl_Process_IDENTIFIER, &aInfo );
             nResult = aInfo.Ident;
         }
