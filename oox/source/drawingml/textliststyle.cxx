@@ -52,11 +52,11 @@ void applyStyleList( const TextParagraphPropertiesVector& rSourceListStyle, Text
         if ( aDestListStyleIter != rDestListStyle.end() )
         {
             (*aDestListStyleIter)->apply( **aSourceListStyleIter );
-            aDestListStyleIter++;
+            ++aDestListStyleIter;
         }
         else
             rDestListStyle.push_back( TextParagraphPropertiesPtr( new TextParagraphProperties( **aSourceListStyleIter ) ) );
-        aSourceListStyleIter++;
+        ++aSourceListStyleIter;
     }
 }
 
