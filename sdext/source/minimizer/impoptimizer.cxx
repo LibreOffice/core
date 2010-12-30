@@ -120,7 +120,7 @@ void ImpDeleteUnusedMasterPages( const Reference< XModel >& rxModel )
     {
         if ( !aIter->bUsed )
             xMasterPages->remove( aIter->xMasterPage );
-        aIter++;
+        ++aIter;
     }
 }
 
@@ -465,10 +465,10 @@ void CompressGraphics( ImpOptimizer& rOptimizer, const Reference< XComponentCont
                                 aGraphicUserIter->mxPagePropertySet->setPropertyValue( TKGet( TK_Background ), Any( rxPropertySet ) );
                         }
                     }
-                    aGraphicUserIter++;
+                    ++aGraphicUserIter;
                 }
             }
-            aGraphicIter++;
+            ++aGraphicIter;
         }
     }
     catch ( Exception& )
