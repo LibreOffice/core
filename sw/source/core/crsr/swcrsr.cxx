@@ -973,7 +973,7 @@ ULONG SwCursor::FindAll( SwFindParas& rParas,
     {
         // Cursor als Kopie vom akt. und in den Ring aufnehmen
         // Verkettung zeigt immer auf den zuerst erzeugten, also vorwaerts
-        SwCursor* pSav = Create( this );    // sicher den aktuellen Crsr
+        std::auto_ptr< SwCursor > pSav( Create( this ) );   // save the current cursor
 
         // wenn schon ausserhalb vom Bodytext, suche von der Position,
         // ansonsten beginne mit der 1. GrundSection
@@ -1005,7 +1005,6 @@ ULONG SwCursor::FindAll( SwFindParas& rParas,
             return 0;
         }
 
-        delete pSav;
         if( !( FND_IN_SELALL & eFndRngs ))
         {
             // es sollte nur einer gesucht werden, also fuege in dazu
@@ -1031,7 +1030,7 @@ ULONG SwCursor::FindAll( SwFindParas& rParas,
     }
     else if( FND_IN_SELALL & eFndRngs )
     {
-        SwCursor* pSav = Create( this );    // sicher den aktuellen Crsr
+        ::std::auto_ptr< SwCursor> pSav( Create( this ) );  // save the current cursor
 
         const SwNode* pSttNd = ( FND_IN_BODYONLY & eFndRngs )
                             ? rNds.GetEndOfContent().StartOfSectionNode()
@@ -1058,9 +1057,6 @@ ULONG SwCursor::FindAll( SwFindParas& rParas,
                 DeleteMark();
             return 0;
         }
-        // es  wurde ein- bis mehrmals gefunden. Das steht alles
-        // im neuen Crsr-Ring. Darum hebe erstmal den alten Ring auf
-        delete pSav;
 
         while( GetNext() != this )
             delete GetNext();
