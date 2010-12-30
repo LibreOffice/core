@@ -1165,7 +1165,7 @@ void XMLEnhancedCustomShapeContext::EndElement()
         while( aEquationNameIter != aEquationNameEnd )
         {
             (*pH)[ *aEquationNameIter ] = (sal_Int32)( aEquationNameIter - maEquationNames.begin() );
-            aEquationNameIter++;
+            ++aEquationNameIter;
         }
 
         // resolve equation
@@ -1196,7 +1196,7 @@ void XMLEnhancedCustomShapeContext::EndElement()
                 }
             }
             while( nIndexOf != -1 );
-            aEquationIter++;
+            ++aEquationIter;
         }
 
         // Path
@@ -1237,7 +1237,7 @@ void XMLEnhancedCustomShapeContext::EndElement()
                 default:
                     break;
             }
-            aPathIter++;
+            ++aPathIter;
         }
         std::vector< beans::PropertyValues >::iterator aHandleIter = maHandles.begin();
         std::vector< beans::PropertyValues >::iterator aHandleEnd  = maHandles.end();
@@ -1273,7 +1273,7 @@ void XMLEnhancedCustomShapeContext::EndElement()
                 }
                 pValues++;
             }
-            aHandleIter++;
+            ++aHandleIter;
         }
         delete pH;
     }
