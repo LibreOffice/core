@@ -565,10 +565,11 @@ void SvMetaClass::InsertSlots( SvSlotElementList& rList, SvULongs& rSuperList,
                             const ByteString & rPrefix, SvIdlDataBase& rBase)
 {
     // Wurde diese Klasse schon geschrieben ?
-    if ( rClassList.GetPos(this) != LIST_ENTRY_NOTFOUND )
-        return;
+    for ( size_t i = 0, n = rClassList.size(); i < n ; ++i )
+        if ( rClassList[ i ] == this )
+            return;
 
-    rClassList.Insert(this, LIST_APPEND);
+    rClassList.push_back( this );
 
     // alle direkten Attribute schreiben
     ULONG n;
@@ -630,22 +631,23 @@ void SvMetaClass::InsertSlots( SvSlotElementList& rList, SvULongs& rSuperList,
 void SvMetaClass::FillClasses( SvMetaClassList & rList )
 {
     // Bin ich noch nicht drin ?
-    if ( rList.GetPos(this) == LIST_ENTRY_NOTFOUND )
+    for ( size_t i = 0, n = rList.size(); i < n; ++i )
+        if ( rList[ i ] == this )
+            return;
+
+    rList.push_back( this );
+
+    // Meine Imports
+    for( ULONG n = 0; n < aClassList.Count(); n++ )
     {
-        rList.Insert(this, LIST_APPEND);
-
-        // Meine Imports
-        for( ULONG n = 0; n < aClassList.Count(); n++ )
-        {
-            SvClassElement * pEle = aClassList.GetObject( n );
-            SvMetaClass * pCl = pEle->GetClass();
-            pCl->FillClasses( rList );
-        }
-
-        // Meine Superklasse
-        if( aSuperClass.Is() )
-            aSuperClass->FillClasses( rList );
+        SvClassElement * pEle = aClassList.GetObject( n );
+        SvMetaClass * pCl = pEle->GetClass();
+        pCl->FillClasses( rList );
     }
+
+    // Meine Superklasse
+    if( aSuperClass.Is() )
+        aSuperClass->FillClasses( rList );
 }
 
 

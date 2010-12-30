@@ -32,6 +32,7 @@
 #define _SVSTDARR_ULONGS
 #include <types.hxx>
 #include <slot.hxx>
+#include <vector>
 
 struct SvSlotElement
 {
@@ -43,8 +44,9 @@ struct SvSlotElement
              {}
 };
 DECLARE_LIST( SvSlotElementList, SvSlotElement* )
+
 class SvMetaClass;
-DECLARE_LIST( SvMetaClassList, SvMetaClass* )
+typedef ::std::vector< SvMetaClass* > SvMetaClassList;
 
 class SvULongs : public List
 {
@@ -95,9 +97,6 @@ class SvMetaClass : public SvMetaType
     SvBOOL                      aAutomation;
     SvMetaClassRef              xAutomationInterface;
 
-//    void                FillSbxMemberObject( SvIdlDataBase & rBase,
-//                                            SbxObject *, StringList &,
-//                                            BOOL bVariable );
     BOOL                TestAttribute( SvIdlDataBase & rBase, SvTokenStream & rInStm,
                                      SvMetaAttribute & rAttr ) const;
 #ifdef IDL_COMPILER
@@ -141,7 +140,6 @@ public:
                         { return aSuperClass; }
 
     void                FillClasses( SvMetaClassList & rList );
-//    virtual void        FillSbxObject( SvIdlDataBase & rBase, SbxObject * );
 
     const SvClassElementMemberList&
                         GetClassList() const
