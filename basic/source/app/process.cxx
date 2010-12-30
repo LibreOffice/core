@@ -99,6 +99,7 @@ long Process::ImplGetExitCode()
     if ( m_pProcess )
     {
         oslProcessInfo aProcessInfo;
+        aProcessInfo.Size = sizeof(oslProcessInfo);
         osl_getProcessInfo(m_pProcess, osl_Process_EXITCODE, &aProcessInfo );
         if ( !(aProcessInfo.Fields & osl_Process_EXITCODE) )
             SbxBase::SetError( SbxERR_NO_ACTIVE_OBJECT );
