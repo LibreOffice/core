@@ -144,7 +144,7 @@ PrinterGfx::PrinterGfx() :
 PrinterGfx::~PrinterGfx()
 {
     /*
-     *  #95810# the original reasoning why mpFontSubstitutes is a pointer was
+     *  the original reasoning why mpFontSubstitutes is a pointer was
      *  that applications should release all PrinterGfx when printers change
      *  because they are really invalid; the corresponding printers may have
      *  changed their settings or even not exist anymore.
@@ -646,7 +646,7 @@ PrinterGfx::DrawPolyPolygonBezier (sal_uInt32 nPoly, const sal_uInt32 * pPoints,
     for (unsigned int i=0; i<nPoly;i++)
     {
         sal_uInt32 nPoints = pPoints[i];
-        // #112689# sanity check
+        // sanity check
         if( nPoints == 0 || pPtAry[i] == NULL )
             continue;
 

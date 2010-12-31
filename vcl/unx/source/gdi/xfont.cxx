@@ -141,7 +141,6 @@ ExtendedFontStruct::LoadEncoding( rtl_TextEncoding nEncoding )
         return nIdx;
 
     // limit font height that gets requested from the XServer
-    // see BugId #44528# FontWork (-> #45038#) and as well Bug #47127#
     int nReqPixelHeight = maPixelSize.Height();
     if( nReqPixelHeight > GetMaxFontHeight() )
         nReqPixelHeight = GetMaxFontHeight();

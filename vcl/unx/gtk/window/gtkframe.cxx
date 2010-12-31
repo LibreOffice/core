@@ -868,7 +868,6 @@ void GtkSalFrame::Init( SalFrame* pParent, ULONG nStyle )
         {
             /* #i99360# ugly workaround an X11 library bug */
             nUserTime= getDisplay()->GetLastUserEventTime( true );
-            // nUserTime = gdk_x11_get_server_time(GTK_WIDGET (m_pWindow)->window);
         }
         lcl_set_user_time(GTK_WIDGET(m_pWindow)->window, nUserTime);
     }
@@ -2090,7 +2089,6 @@ void GtkSalFrame::ToTop( USHORT nFlags )
                 gtk_window_present( GTK_WINDOW(m_pWindow) );
             else
             {
-                // gdk_window_focus( m_pWindow->window, gdk_x11_get_server_time(GTK_WIDGET (m_pWindow)->window) );
                 /* #i99360# ugly workaround an X11 library bug */
                 guint32 nUserTime= getDisplay()->GetLastUserEventTime( true );
                 gdk_window_focus( m_pWindow->window, nUserTime );
@@ -2213,7 +2211,7 @@ void GtkSalFrame::SetPointerPos( long nX, long nY )
     GdkScreen *pScreen = gtk_window_get_screen( GTK_WINDOW(pFrame->m_pWindow) );
     GdkDisplay *pDisplay = gdk_screen_get_display( pScreen );
 
-    /* #87921# when the application tries to center the mouse in the dialog the
+    /* when the application tries to center the mouse in the dialog the
      * window isn't mapped already. So use coordinates relative to the root window.
      */
     unsigned int nWindowLeft = maGeometry.nX + nX;
@@ -3830,9 +3828,7 @@ gboolean GtkSalFrame::IMHandler::signalIMDeleteSurrounding( GtkIMContext*, gint 
     if (xText.is())
     {
         sal_uInt32 nPosition = xText->getCaretPosition();
-        // --> OD 2010-06-04 #i111768# - apply patch from kstribley:
-        // range checking
-//        xText->deleteText(nPosition + offset, nPosition + offset + nchars);
+        // #i111768# range checking
         sal_Int32 nDeletePos = nPosition + offset;
         sal_Int32 nDeleteEnd = nDeletePos + nchars;
         if (nDeletePos < 0)
@@ -3843,7 +3839,6 @@ gboolean GtkSalFrame::IMHandler::signalIMDeleteSurrounding( GtkIMContext*, gint 
             nDeleteEnd = xText->getCharacterCount();
 
         xText->deleteText(nDeletePos, nDeleteEnd);
-        // <--
         return TRUE;
     }
 

@@ -1245,29 +1245,6 @@ BOOL GtkSalGraphics::NWPaintGTKButton(
                            &clipRect, gWidgetData[m_nScreen].gBtnWidget, "button", xi, yi, wi, hi );
         }
     }
-#if 0 // VCL draws focus rects
-    // Draw focus rect
-    if ( (nState & CTRL_STATE_FOCUSED) && (nState & CTRL_STATE_ENABLED) && bDrawFocus )
-    {
-        if (interiorFocus)
-        {
-            x += gWidgetData[m_nScreen].gBtnWidget->style->xthickness + focusPad;
-            y += gWidgetData[m_nScreen].gBtnWidget->style->ythickness + focusPad;
-            w -= 2 * (gWidgetData[m_nScreen].gBtnWidget->style->xthickness + focusPad);
-            h -=  2 * (gWidgetData[m_nScreen].gBtnWidget->style->xthickness + focusPad);
-        }
-        else
-        {
-            x -= focusWidth + focusPad;
-            y -= focusWidth + focusPad;
-            w += 2 * (focusWidth + focusPad);
-            h += 2 * (focusWidth + focusPad);
-        }
-        if ( !interiorFocus )
-            gtk_paint_focus( gWidgetData[m_nScreen].gBtnWidget->style, gdkDrawable, stateType, &clipRect,
-                             gWidgetData[m_nScreen].gBtnWidget, "button", x, y, w, h );
-    }
-#endif
 
     return( TRUE );
 }
@@ -1920,10 +1897,6 @@ static void NWPaintOneEditBox(  int nScreen,
     NWEnsureGTKScrolledWindow( nScreen );
     NWConvertVCLStateToGTKState( nState, &stateType, &shadowType );
 
-    /* border's shadowType for gtk entries is always GTK_SHADOW_IN (see gtkentry.c)
-    shadowType = GTK_SHADOW_IN;
-    */
-
     switch ( nType )
     {
         case CTRL_SPINBOX:
@@ -2349,7 +2322,7 @@ BOOL GtkSalGraphics::NWPaintGTKTabItem( ControlType nType, ControlPart,
         // Allow the tab to draw a right border if needed
         tabRect.Right() -= 1;
 
-        // #129732# avoid degenerate cases which might lead to crashes
+        // avoid degenerate cases which might lead to crashes
         if( tabRect.GetWidth() <= 1 || tabRect.GetHeight() <= 1 )
             return false;
     }
@@ -2364,9 +2337,6 @@ BOOL GtkSalGraphics::NWPaintGTKTabItem( ControlType nType, ControlPart,
         if( aCachePage.Find( nType, nState, pixmapRect, &pixmap ) )
             return NWRenderPixmapToScreen( pixmap, pixmapRect );
     }
-
-
-//  gtk_widget_set_state( gWidgetData[m_nScreen].gNotebookWidget, stateType );
 
     pixmap = gdk_pixmap_new( NULL, pixmapRect.GetWidth(), pixmapRect.GetHeight(),
                              GetX11SalData()->GetDisplay()->GetVisual( m_nScreen ).GetDepth() );
@@ -2715,7 +2685,7 @@ BOOL GtkSalGraphics::NWPaintGTKMenubar(
             if ( nState & CTRL_STATE_ENABLED )
                 GTK_WIDGET_SET_FLAGS( gWidgetData[m_nScreen].gMenubarWidget, GTK_SENSITIVE );
 
-            // #118704# for translucent menubar styles paint background first
+            // for translucent menubar styles paint background first
             gtk_paint_flat_box( gWidgetData[m_nScreen].gMenubarWidget->style,
                                 gdkDrawable,
                                 GTK_STATE_NORMAL,
@@ -2802,7 +2772,7 @@ BOOL GtkSalGraphics::NWPaintGTKPopupMenu(
 
         if( nPart == PART_ENTIRE_CONTROL )
         {
-            // #118704# for translucent menubar styles paint background first
+            // for translucent menubar styles paint background first
             gtk_paint_flat_box( gWidgetData[m_nScreen].gMenuWidget->style,
                                 gdkDrawable,
                                 GTK_STATE_NORMAL,
@@ -3597,7 +3567,6 @@ void GtkSalGraphics::updateSettings( AllSettings& rSettings )
     const cairo_font_options_t* pNewOptions = NULL;
     if( GdkScreen* pScreen = gdk_display_get_screen( gdk_display_get_default(), m_nScreen ) )
     {
-//#if !GTK_CHECK_VERSION(2,8,1)
 #if !GTK_CHECK_VERSION(2,9,0)
     static cairo_font_options_t* (*gdk_screen_get_font_options)(GdkScreen*) =
         (cairo_font_options_t*(*)(GdkScreen*))osl_getAsciiFunctionSymbol( GetSalData()->m_pPlugin, "gdk_screen_get_font_options" );

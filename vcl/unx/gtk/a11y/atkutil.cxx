@@ -40,7 +40,6 @@
 #include <com/sun/star/accessibility/XAccessibleSelection.hpp>
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
-// --> OD 2009-04-14 #i93269#
 #include <com/sun/star/accessibility/XAccessibleText.hpp>
 // <--
 #include <cppuhelper/implbase1.hxx>
@@ -92,7 +91,7 @@ atk_wrapper_focus_idle_handler (gpointer data)
             fprintf(stderr, "notifying focus event for %p\n", atk_obj);
 #endif
             atk_focus_tracker_notify(atk_obj);
-            // --> OD 2009-04-14 #i93269#
+            // #i93269#
             // emit text_caret_moved event for <XAccessibleText> object,
             // if cursor is inside the <XAccessibleText> object.
             // also emit state-changed:focused event under the same condition.
@@ -119,7 +118,6 @@ atk_wrapper_focus_idle_handler (gpointer data)
                     }
                 }
             }
-            // <--
             g_object_unref(atk_obj);
         }
     }
@@ -196,15 +194,11 @@ public:
 void DocumentFocusListener::disposing( const lang::EventObject& aEvent )
     throw (uno::RuntimeException)
 {
-//    fprintf(stderr, "In DocumentFocusListener::disposing (%p)\n", this);
-//    fprintf(stderr, "m_aRefList has %d entries\n", m_aRefList.size());
 
     // Unref the object here, but do not remove as listener since the object
     // might no longer be in a state that safely allows this.
     if( aEvent.Source.is() )
         m_aRefList.erase(aEvent.Source);
-
-//    fprintf(stderr, "m_aRefList has %d entries\n", m_aRefList.size());
 
 }
 
@@ -242,12 +236,6 @@ void DocumentFocusListener::notifyEvent( const accessibility::AccessibleEventObj
             break;
 
         case accessibility::AccessibleEventId::INVALIDATE_ALL_CHILDREN:
-/*        {
-            uno::Reference< accessibility::XAccessible > xAccessible( getAccessible(aEvent) );
-            detachRecursive(xAccessible);
-            attachRecursive(xAccessible);
-        }
-*/
             g_warning( "Invalidate all children called\n" );
             break;
         default:
@@ -504,27 +492,6 @@ static void handle_toolbox_buttonchange(VclWindowEvent const *pEvent)
     }
 }
 
-/*****************************************************************************/
-
-/* currently not needed anymore...
-static void create_wrapper_for_children(Window *pWindow)
-{
-    if( pWindow && pWindow->IsReallyVisible() )
-    {
-        uno::Reference< accessibility::XAccessible > xAccessible(pWindow->GetAccessible());
-        if( xAccessible.is() )
-        {
-            uno::Reference< accessibility::XAccessibleContext > xContext(xAccessible->getAccessibleContext());
-            if( xContext.is() )
-            {
-                sal_Int32 nChildren = xContext->getAccessibleChildCount();
-                for( sal_Int32 i = 0; i < nChildren; ++i )
-                    create_wrapper_for_child(xContext, i);
-            }
-        }
-    }
-}
-*/
 
 /*****************************************************************************/
 
@@ -633,43 +600,26 @@ long WindowEventHandler(void *, ::VclSimpleEvent const * pEvent)
     switch (pEvent->GetId())
     {
     case VCLEVENT_WINDOW_SHOW:
-//        fprintf(stderr, "got VCLEVENT_WINDOW_SHOW for %p\n",
-//            static_cast< ::VclWindowEvent const * >(pEvent)->GetWindow());
         break;
     case VCLEVENT_WINDOW_HIDE:
-//        fprintf(stderr, "got VCLEVENT_WINDOW_HIDE for %p\n",
-//            static_cast< ::VclWindowEvent const * >(pEvent)->GetWindow());
         break;
     case VCLEVENT_WINDOW_CLOSE:
-//        fprintf(stderr, "got VCLEVENT_WINDOW_CLOSE for %p\n",
-//            static_cast< ::VclWindowEvent const * >(pEvent)->GetWindow());
         break;
     case VCLEVENT_WINDOW_GETFOCUS:
         handle_get_focus(static_cast< ::VclWindowEvent const * >(pEvent));
         break;
     case VCLEVENT_WINDOW_LOSEFOCUS:
-//        fprintf(stderr, "got VCLEVENT_WINDOW_LOSEFOCUS for %p\n",
-//            static_cast< ::VclWindowEvent const * >(pEvent)->GetWindow());
         break;
     case VCLEVENT_WINDOW_MINIMIZE:
-//        fprintf(stderr, "got VCLEVENT_WINDOW_MINIMIZE for %p\n",
-//            static_cast< ::VclWindowEvent const * >(pEvent)->GetWindow());
         break;
     case VCLEVENT_WINDOW_NORMALIZE:
-//        fprintf(stderr, "got VCLEVENT_WINDOW_NORMALIZE for %p\n",
-//            static_cast< ::VclWindowEvent const * >(pEvent)->GetWindow());
         break;
     case VCLEVENT_WINDOW_KEYINPUT:
     case VCLEVENT_WINDOW_KEYUP:
     case VCLEVENT_WINDOW_COMMAND:
     case VCLEVENT_WINDOW_MOUSEMOVE:
         break;
- /*
-        fprintf(stderr, "got VCLEVENT_WINDOW_COMMAND (%d) for %p\n",
-            static_cast< ::CommandEvent const * > (
-                static_cast< ::VclWindowEvent const * >(pEvent)->GetData())->GetCommand(),
-            static_cast< ::VclWindowEvent const * >(pEvent)->GetWindow());
- */
+
     case VCLEVENT_MENU_HIGHLIGHT:
         if (const VclMenuEvent* pMenuEvent = dynamic_cast<const VclMenuEvent*>(pEvent))
         {
@@ -703,7 +653,7 @@ long WindowEventHandler(void *, ::VclSimpleEvent const * pEvent)
         break;
 
     case VCLEVENT_COMBOBOX_SETTEXT:
-        // MT 2010/02: This looks quite strange to me. Stumbled over this when fixing #i104290#.
+        // This looks quite strange to me. Stumbled over this when fixing #i104290#.
         // This kicked in when leaving the combobox in the toolbar, after that the events worked.
         // I guess this was a try to work around missing combobox events, which didn't do the full job, and shouldn't be necessary anymore.
         // Fix for #i104290# was done in toolkit/source/awt/vclxaccessiblecomponent, FOCUSED state for compound controls in general.
@@ -711,7 +661,6 @@ long WindowEventHandler(void *, ::VclSimpleEvent const * pEvent)
         break;
 
     default:
-//        OSL_TRACE("got event %d \n", pEvent->GetId());
         break;
     }
     return 0;

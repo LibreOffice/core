@@ -783,8 +783,7 @@ void SalDisplay::initScreen( int nScreen ) const
 
         XSetFunction( pDisp_, rSD.m_aAndInvertedGC,  GXandInverted );
         XSetFunction( pDisp_, rSD.m_aAndGC,          GXand );
-        // #44556# PowerPC Solaris 2.5 (XSun 3500) Bug: GXor = GXnop
-        //XSetFunction( pDisp_, pOrGC_,         GXor );
+        // PowerPC Solaris 2.5 (XSun 3500) Bug: GXor = GXnop
         XSetFunction( pDisp_, rSD.m_aOrGC,           GXxor );
 
         if( 1 == rSD.m_aVisual.GetDepth() )
@@ -1597,13 +1596,6 @@ USHORT SalDisplay::GetKeyCode( KeySym keysym, char*pcPrintable ) const
             case XK_Menu:
                 nKey = KEY_CONTEXTMENU;
                 break;
-/*
-            case XK_Break:
-            case XK_Select:
-            case XK_Execute:
-            case XK_Print:
-            case XK_Cancel:
-*/
         }
     }
     else if( IsISOKey( keysym ) )  // XK_ISO_
@@ -1685,9 +1677,6 @@ USHORT SalDisplay::GetKeyCode( KeySym keysym, char*pcPrintable ) const
             nKey = KEY_SEMICOLON;
             *pcPrintable = ';';
             break;
-//      case XK_Linefeed:
-//          *pcPrintable = '\n';
-//          break;
         // - - - - - - - - - - - - -  Apollo - - - - - - - - - - - - - 0x1000
         case 0x1000FF02: // apXK_Copy
             nKey = KEY_COPY;
@@ -1809,7 +1798,7 @@ KeySym SalDisplay::GetKeySym( XKeyEvent        *pEvent,
                 /* unhandled error */
                 break;
             case XLookupKeySym:
-                /* #72223# this is a strange one: on exceed sometimes
+                /* this is a strange one: on exceed sometimes
                  * no printable is returned for the first char entered,
                  * just to retry lookup solves the problem. The problem
                  * is not yet fully understood, so restrict 2nd lookup
@@ -2166,7 +2155,7 @@ XLIB_Cursor SalDisplay::GetPointer( int ePointerStyle )
             MAKE_CURSOR( vertcurs_ );
             break;
 
-        // --> FME 2004-07-30 #i32329# Enhanced table selection
+        // #i32329# Enhanced table selection
         case POINTER_TAB_SELECT_S:
             MAKE_CURSOR( tblsels_ );
             break;
@@ -2182,13 +2171,11 @@ XLIB_Cursor SalDisplay::GetPointer( int ePointerStyle )
         case POINTER_TAB_SELECT_SW:
             MAKE_CURSOR( tblselsw_ );
             break;
-        // <--
 
-        // --> FME 2004-08-16 #i20119# Paintbrush tool
+        // #i20119# Paintbrush tool
         case POINTER_PAINTBRUSH :
             MAKE_CURSOR( paintbrush_ );
             break;
-        // <--
 
         default:
             DBG_ERROR("pointer not implemented");
@@ -3120,17 +3107,12 @@ SalColormap::SalColormap( const SalDisplay *pDisplay, Colormap hColormap, int nS
         GetXPixels( aColor, 0xC0, 0xC0, 0xC0 );
 
         // light colors: 3 * 2 = 6
-//      GetXPixels( aColor, 0x00, 0x00, 0x00 );
+
         GetXPixels( aColor, 0x00, 0x00, 0xFF );
         GetXPixels( aColor, 0x00, 0xFF, 0x00 );
         GetXPixels( aColor, 0x00, 0xFF, 0xFF );
-//      GetXPixels( aColor, 0xFF, 0x00, 0x00 );
-//      GetXPixels( aColor, 0xFF, 0x00, 0xFF );
-//      GetXPixels( aColor, 0xFF, 0xFF, 0x00 );
-//      GetXPixels( aColor, 0xFF, 0xFF, 0xFF );
 
         // standard colors: 7 * 2 = 14
-//      GetXPixels( aColor, 0x00, 0x00, 0x00 );
         GetXPixels( aColor, 0x00, 0x00, 0x80 );
         GetXPixels( aColor, 0x00, 0x80, 0x00 );
         GetXPixels( aColor, 0x00, 0x80, 0x80 );
@@ -3138,7 +3120,7 @@ SalColormap::SalColormap( const SalDisplay *pDisplay, Colormap hColormap, int nS
         GetXPixels( aColor, 0x80, 0x00, 0x80 );
         GetXPixels( aColor, 0x80, 0x80, 0x00 );
         GetXPixels( aColor, 0x80, 0x80, 0x80 );
-        GetXPixels( aColor, 0x00, 0xB8, 0xFF ); // Blau 7
+        GetXPixels( aColor, 0x00, 0xB8, 0xFF ); // Blue 7
 
         // cube: 6*6*6 - 8 = 208
         for( r = 0; r < 0x100; r += 0x33 ) // 0x33, 0x66, 0x99, 0xCC, 0xFF

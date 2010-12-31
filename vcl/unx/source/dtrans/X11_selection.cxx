@@ -387,7 +387,6 @@ void SelectionManager::initialize( const Sequence< Any >& arguments ) throw (::c
             m_nCOMPOUNDAtom     = getAtom( OUString(RTL_CONSTASCII_USTRINGPARAM("COMPOUND_TEXT")) );
             m_nMULTIPLEAtom     = getAtom( OUString(RTL_CONSTASCII_USTRINGPARAM("MULTIPLE")) );
             m_nUTF16Atom        = getAtom( OUString(RTL_CONSTASCII_USTRINGPARAM("ISO10646-1")) );
-//            m_nUTF16Atom      = getAtom( OUString(RTL_CONSTASCII_USTRINGPARAM("text/plain;charset=ISO-10646-UCS-2")) );
             m_nImageBmpAtom     = getAtom( OUString(RTL_CONSTASCII_USTRINGPARAM("image/bmp")) );
 
             // Atoms for Xdnd protocol
@@ -604,7 +603,7 @@ OString SelectionManager::convertToCompound( const OUString& rText )
         aRet = (char*)aProp.value;
         XFree( aProp.value );
 #ifdef SOLARIS
-        /*  #97070#
+        /*
          *  for currently unknown reasons XmbTextListToTextProperty on Solaris returns
          *  no data in ISO8859-n encodings (at least for n = 1, 15)
          *  in these encodings the directly converted text does the
@@ -1442,7 +1441,6 @@ bool SelectionManager::getPasteDataTypes( Atom selection, Sequence< DataFlavor >
     }
 
 #if OSL_DEBUG_LEVEL > 1
-//    if( selection != m_nCLIPBOARDAtom )
     {
         fprintf( stderr, "SelectionManager::getPasteDataTypes( %s ) = %s\n", OUStringToOString( getString( selection ), RTL_TEXTENCODING_ISO_8859_1 ).getStr(), bSuccess ? "true" : "false" );
         for( int i = 0; i < rTypes.getLength(); i++ )
@@ -2613,7 +2611,6 @@ bool SelectionManager::handleDragEvent( XEvent& rMessage )
             fprintf( stderr, "handleDragEvent: %s\n", OUStringToOString( getString( rMessage.xclient.message_type ), RTL_TEXTENCODING_ISO_8859_1 ).getStr() );
             break;
         case MotionNotify:
-//          fprintf( stderr, "handleDragEvent: MotionNotify\n" );
             break;
         case EnterNotify:
             fprintf( stderr, "handleDragEvent: EnterNotify\n" );
@@ -3641,7 +3638,7 @@ bool SelectionManager::handleXEvent( XEvent& rEvent )
      *  to get client messages it is essential not to dispatch
      *  events twice that we get on both connections
      *
-     *  #95201# between dispatching ButtonPress and startDrag
+     *  between dispatching ButtonPress and startDrag
      *  the user can already have released the mouse. The ButtonRelease
      *  will then be dispatched in VCLs queue and never turn up here.
      *  Which is not so good, since startDrag will XGrabPointer and

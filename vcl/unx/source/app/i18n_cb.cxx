@@ -126,7 +126,6 @@ Preedit_DeleteText(preedit_text_t *ptext, int from, int howmuch)
         ptext->nLength -= howmuch;
       }
     else
-    // if ( to > pText->nLength )
     {
           // XXX this indicates an error, are we out of sync ?
           fprintf(stderr, "Preedit_DeleteText( from=%i to=%i length=%i )\n",
@@ -326,13 +325,6 @@ Preedit_FeedbackToSAL ( XIMFeedback* pfeedback, int nlength, std::vector<USHORT>
               if (nfeedback & XIMTertiary) // same as 2ery
                 nval |= SAL_EXTTEXTINPUT_ATTR_DASHDOTUNDERLINE;
 
-            /*
-            // visibility feedback not supported now
-              if (   (nfeedback & XIMVisibleToForward)
-                  || (nfeedback & XIMVisibleToBackward)
-                  || (nfeedback & XIMVisibleCenter) )
-            { }
-            */
         }
         // copy in list
         psalattr[npos] = nval;
@@ -353,7 +345,7 @@ PreeditDrawCallback(XIC ic, XPointer client_data,
          || pPreeditData->pFrame == NULL )
         return;
 
-    // #88564# Solaris 7 deletes the preedit buffer after commit
+    // Solaris 7 deletes the preedit buffer after commit
     // since the next call to preeditstart will have the same effect just skip this.
     // if (pPreeditData->eState == ePreeditStatusStartPending && call_data->text == NULL)
     //    return;
@@ -509,8 +501,7 @@ PreeditCaretCallback ( XIC, XPointer,XIMPreeditCaretCallbackStruct* )
 Bool
 IsControlCode(sal_Unicode nChar)
 {
-    if ( nChar <= 0x1F // C0 controls
-     /* || (0x80 <= nChar && nChar <= 0x9F) C1 controls */ )
+    if ( nChar <= 0x1F // C0 controls )
         return True;
     else
         return False;
@@ -524,7 +515,7 @@ CommitStringCallback( XIC ic, XPointer client_data, XPointer call_data )
       XIMUnicodeText *cbtext = (XIMUnicodeText *)call_data;
       sal_Unicode *p_unicode_data = (sal_Unicode*)cbtext->string.utf16_char;
 
-    // #86964# filter unexpected pure control events
+    // filter unexpected pure control events
     if (cbtext->length == 1 && IsControlCode(p_unicode_data[0]) )
     {
         if( pPreeditData->pFrame )

@@ -249,10 +249,8 @@ void X11SalGraphics::SetClipRegion( GC pGC, XLIB_Region pXReg ) const
     int n = 0;
     XLIB_Region Regions[3];
 
-    if( pClipRegion_ /* && !XEmptyRegion( pClipRegion_ ) */ )
+    if( pClipRegion_ )
         Regions[n++] = pClipRegion_;
-//  if( pPaintRegion_ /* && !XEmptyRegion( pPaintRegion_ ) */ )
-//      Regions[n++] = pPaintRegion_;
 
     if( pXReg && !XEmptyRegion( pXReg ) )
         Regions[n++] = pXReg;
@@ -265,8 +263,7 @@ void X11SalGraphics::SetClipRegion( GC pGC, XLIB_Region pXReg ) const
     {
         XLIB_Region pTmpRegion = XCreateRegion();
         XIntersectRegion( Regions[0], Regions[1], pTmpRegion );
-//      if( 3 == n )
-//          XIntersectRegion( Regions[2], pTmpRegion, pTmpRegion );
+
         XSetRegion( pDisplay, pGC, pTmpRegion );
         XDestroyRegion( pTmpRegion );
     }
@@ -311,7 +308,6 @@ GC X11SalGraphics::SelectBrush()
     if( !pBrushGC_ )
     {
         XGCValues values;
-        // values.subwindow_mode        = IncludeInferiors;
         values.subwindow_mode       = ClipByChildren;
         values.fill_rule            = EvenOddRule;      // Pict import/ Gradient
         values.graphics_exposures   = False;
@@ -526,14 +522,11 @@ void X11SalGraphics::GetResolution( sal_Int32 &rDPIX, sal_Int32 &rDPIY ) // cons
     {
         // different x- and y- resolutions are usually artifacts of
         // a wrongly calculated screen size.
-        //if( (13*rDPIX >= 10*rDPIY) && (13*rDPIY >= 10*rDPIX) )  //+-30%
-        {
 #ifdef DEBUG
-            printf("Forcing Resolution from %" SAL_PRIdINT32 "x%" SAL_PRIdINT32 " to %" SAL_PRIdINT32 "x%" SAL_PRIdINT32 "\n",
-                    rDPIX,rDPIY,rDPIY,rDPIY);
+        printf("Forcing Resolution from %" SAL_PRIdINT32 "x%" SAL_PRIdINT32 " to %" SAL_PRIdINT32 "x%" SAL_PRIdINT32 "\n",
+                rDPIX,rDPIY,rDPIY,rDPIY);
 #endif
-            rDPIX = rDPIY; // y-resolution is more trustworthy
-        }
+        rDPIX = rDPIY; // y-resolution is more trustworthy
     }
 }
 

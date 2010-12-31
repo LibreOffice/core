@@ -498,7 +498,7 @@ void X11SalFrame::Init( ULONG nSalFrameStyle, int nScreen, SystemParentData* pPa
                               nAttrMask,
                               &Attributes );
     // FIXME: see above: fake shell window for now to own window
-    if( /*! IsSysChildWindow() &&*/ pParentData == NULL )
+    if( pParentData == NULL )
     {
         mhShellWindow = mhWindow;
     }
@@ -1174,7 +1174,6 @@ void X11SalFrame::Show( BOOL bVisible, BOOL bNoActivate )
             GetDisplay()->getWMAdaptor()->frameIsMapping( this );
 
         /*
-         *  #95097#
          *  Actually this is rather exotic and currently happens only in conjunction
          *  with the basic dialogue editor,
          *  which shows a frame and instantly hides it again. After that the
@@ -1259,7 +1258,6 @@ void X11SalFrame::Show( BOOL bVisible, BOOL bNoActivate )
         if( IsFloatGrabWindow() )
         {
             /*
-             *  #95453#
              *  Sawfish and twm can be switched to enter-exit focus behaviour. In this case
              *  we must grab the pointer else the dumb WM will put the focus to the
              *  override-redirect float window. The application window will be deactivated
@@ -1310,7 +1308,7 @@ void X11SalFrame::Show( BOOL bVisible, BOOL bNoActivate )
             nShowState_ = SHOWSTATE_NORMAL;
 
         /*
-         *  #98107# plugged windows don't necessarily get the
+         *  plugged windows don't necessarily get the
          *  focus on show because the parent may already be mapped
          *  and have the focus. So try to set the focus
          *  to the child on Show(TRUE)
@@ -2449,7 +2447,7 @@ void X11SalFrame::StartPresentation( BOOL bStart )
             }
 #endif
         }
-        else // if( !bStart ) // end of show
+        else
         {
             if( nScreenSaversTimeout_ )
             {
@@ -2491,7 +2489,7 @@ void X11SalFrame::SetPointer( PointerStyle ePointerStyle )
 
 void X11SalFrame::SetPointerPos(long nX, long nY)
 {
-    /* #87921# when the application tries to center the mouse in the dialog the
+    /* when the application tries to center the mouse in the dialog the
      * window isn't mapped already. So use coordinates relative to the root window.
      */
     unsigned int nWindowLeft = maGeometry.nX + nX;
@@ -2929,8 +2927,6 @@ long X11SalFrame::HandleMouseEvent( XEvent *pEvent )
     if( LeaveNotify == pEvent->type || EnterNotify == pEvent->type )
     {
         /*
-         *  #89075# #89335#
-         *
          *  some WMs (and/or) applications  have a passive grab on
          *  mouse buttons (XGrabButton). This leads to enter/leave notifies
          *  with mouse buttons pressed in the state mask before the actual
@@ -2939,7 +2935,6 @@ long X11SalFrame::HandleMouseEvent( XEvent *pEvent )
          *  decides that a pressed button in a MouseMove belongs to
          *  a drag operation which leads to doing things differently.
          *
-         *  #95901#
          *  ignore Enter/LeaveNotify resulting from grabs so that
          *  help windows do not disappear just after appearing
          *
@@ -3460,17 +3455,17 @@ long X11SalFrame::HandleKeyEvent( XKeyEvent *pEvent )
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 long X11SalFrame::HandleFocusEvent( XFocusChangeEvent *pEvent )
 {
-    // #107739# ReflectionX in Windows mode changes focus while mouse is grabbed
+    // ReflectionX in Windows mode changes focus while mouse is grabbed
     if( nVisibleFloats > 0 && GetDisplay()->getWMAdaptor()->getWindowManagerName().EqualsAscii( "ReflectionX Windows" ) )
         return 1;
 
-    /*  #55691# ignore focusout resulting from keyboard grabs
+    /*  ignore focusout resulting from keyboard grabs
      *  we do not grab it and are not interested when
      *  someone else does CDE e.g. does a XGrabKey on arrow keys
-     *  #73179# handle focus events with mode NotifyWhileGrabbed
+     *  handle focus events with mode NotifyWhileGrabbed
      *  because with CDE alt-tab focus changing we do not get
      *  normal focus events
-     *  #71791# cast focus event to the input context, otherwise the
+     *  cast focus event to the input context, otherwise the
      *  status window does not follow the application frame
      */
 
@@ -3735,7 +3730,7 @@ long X11SalFrame::HandleReparentEvent( XReparentEvent *pEvent )
     GetDisplay()->GetXLib()->PushXErrorLevel( true );
 
     /*
-     *  #89186# don't rely on the new parent from the event.
+     *  don't rely on the new parent from the event.
      *  the event may be "out of date", that is the window manager
      *  window may not exist anymore. This can happen if someone
      *  shows a frame and hides it again quickly (not that that would
@@ -3756,7 +3751,7 @@ long X11SalFrame::HandleReparentEvent( XReparentEvent *pEvent )
             hWM_Parent = GetShellWindow();
             break;
         }
-         /* #107048# this sometimes happens if a Show(TRUE) is
+         /* this sometimes happens if a Show(TRUE) is
          *  immediately followed by Show(FALSE) (which is braindead anyway)
          */
         if(  hDummy == hWM_Parent )
@@ -4133,7 +4128,7 @@ long X11SalFrame::Dispatch( XEvent *pEvent )
             break;
 
             case ButtonPress:
-                // #74406# if we loose the focus in presentation mode
+                // if we loose the focus in presentation mode
                 // there are good chances that we never get it back
                 // since the WM ignores us
                  if( IsOverrideRedirect() )
@@ -4165,7 +4160,7 @@ long X11SalFrame::Dispatch( XEvent *pEvent )
                     if( nShowState_ == SHOWSTATE_HIDDEN )
                     {
                         /*
-                         *  #95097# workaround for (at least) KWin 2.2.2
+                         *  workaround for (at least) KWin 2.2.2
                          *  which will map windows that were once transient
                          *  even if they are withdrawn when the respective
                          *  document is mapped.
@@ -4204,12 +4199,12 @@ long X11SalFrame::Dispatch( XEvent *pEvent )
                     }
 
                     bool bSetFocus = m_bSetFocusOnMap;
-                    /*  #99570# another workaround for sawfish: if a transient window for the same parent is shown
+                    /*  another workaround for sawfish: if a transient window for the same parent is shown
                      *  sawfish does not set the focus to it. Applies only for click to focus mode.
                      */
                     if( ! (nStyle_ & SAL_FRAME_STYLE_FLOAT ) && mbInShow && GetDisplay()->getWMAdaptor()->getWindowManagerName().EqualsAscii( "Sawfish" ) )
                     {
-                        // #101775# don't set the focus into the IME status window
+                        // don't set the focus into the IME status window
                         // since this will lead to a parent loose-focus, close status,
                         // reget focus, open status, .... flicker loop
                         if ( (I18NStatus::get().getStatusFrame() != this) )

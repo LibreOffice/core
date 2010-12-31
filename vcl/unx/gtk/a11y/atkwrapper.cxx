@@ -508,64 +508,6 @@ wrapper_ref_relation_set( AtkObject *atk_obj )
     return pSet;
 }
 
-/*****************************************************************************/
-
-#if 0
-
-#include <sal/macros.h>
-struct {
-    sal_Int16       value;
-    const sal_Char* name;
-} aStateTypeTable[] = {
-    { accessibility::AccessibleStateType::INVALID, "INVALID" },
-    { accessibility::AccessibleStateType::ACTIVE, "ACTIVE" },
-    { accessibility::AccessibleStateType::ARMED, "ARMED" },
-    { accessibility::AccessibleStateType::BUSY, "BUSY" },
-    { accessibility::AccessibleStateType::CHECKED, "CHECKED" },
-    { accessibility::AccessibleStateType::DEFUNC, "DEFUNC" },
-    { accessibility::AccessibleStateType::EDITABLE, "EDITABLE" },
-    { accessibility::AccessibleStateType::ENABLED, "ENABLED" },
-    { accessibility::AccessibleStateType::EXPANDABLE, "EXPANDABLE" },
-    { accessibility::AccessibleStateType::EXPANDED, "EXPANDED" },
-    { accessibility::AccessibleStateType::FOCUSABLE, "FOCUSABLE" },
-    { accessibility::AccessibleStateType::FOCUSED, "FOCUSED" },
-    { accessibility::AccessibleStateType::HORIZONTAL, "HORIZONTAL" },
-    { accessibility::AccessibleStateType::ICONIFIED, "ICONIFIED" },
-    { accessibility::AccessibleStateType::INDETERMINATE, "INDETERMINATE" },
-    { accessibility::AccessibleStateType::MANAGES_DESCENDANTS, "MANAGES_DESCENDANTS" },
-    { accessibility::AccessibleStateType::MODAL, "MODAL" },
-    { accessibility::AccessibleStateType::MULTI_LINE, "MULTI_LINE" },
-    { accessibility::AccessibleStateType::MULTI_SELECTABLE, "MULTI_SELECTABLE" },
-    { accessibility::AccessibleStateType::OPAQUE, "OPAQUE" },
-    { accessibility::AccessibleStateType::PRESSED, "PRESSED" },
-    { accessibility::AccessibleStateType::RESIZABLE, "RESIZABLE" },
-    { accessibility::AccessibleStateType::SELECTABLE, "SELECTABLE" },
-    { accessibility::AccessibleStateType::SELECTED, "SELECTED" },
-    { accessibility::AccessibleStateType::SENSITIVE, "SENSITIVE" },
-    { accessibility::AccessibleStateType::SHOWING, "SHOWING" },
-    { accessibility::AccessibleStateType::SINGLE_LINE, "SINGLE_LINE" },
-    { accessibility::AccessibleStateType::STALE, "STALE" },
-    { accessibility::AccessibleStateType::TRANSIENT, "TRANSIENT" },
-    { accessibility::AccessibleStateType::VERTICAL, "VERTICAL" },
-    { accessibility::AccessibleStateType::VISIBLE, "VISIBLE" }
-};
-
-static void printStates(const uno::Sequence<sal_Int16>& rStates)
-{
-    sal_Int32 n = rStates.getLength();
-    size_t nTypes = SAL_N_ELEMENTS(aStateTypeTable);
-    for (sal_Int32 i = 0; i < n; ++i)
-    {
-        for (size_t j = 0; j < nTypes; ++j)
-        {
-            if (aStateTypeTable[j].value == rStates[i])
-                printf("%s ", aStateTypeTable[j].name);
-        }
-    }
-    printf("\n");
-}
-#endif
-
 static AtkStateSet *
 wrapper_ref_state_set( AtkObject *atk_obj )
 {
@@ -782,8 +724,6 @@ ensureTypeFor( uno::XInterface *pAccessible )
             aTypeName += aTypeTable[i].name;
             bTypes[i] = TRUE;
         }
-//      g_message( "Accessible %p has type '%s' (%d)",
-//                 pAccessible, aTypeTable[i].name, bTypes[i] );
     }
 
     GType nType = g_type_from_name( aTypeName );

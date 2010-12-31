@@ -96,7 +96,7 @@ SalKDEDisplay::~SalKDEDisplay()
 
 KDEXLib::~KDEXLib()
 {
-    // #158056# on 64 bit linux using libXRandr.so.2 will crash in
+    // on 64 bit linux using libXRandr.so.2 will crash in
     // XCloseDisplay when freeing extension data
     // no known work around, therefor currently leak. Hopefully
     // this does not make problems since we're shutting down anyway

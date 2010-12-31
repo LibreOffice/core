@@ -1267,7 +1267,7 @@ void PPDParser::parseConstraint( const ByteString& rLine )
             }
             else
                 // constraint for nonexistent keys; this happens
-                // e.g. in HP4PLUS3 (#75636#)
+                // e.g. in HP4PLUS3
                 bFailed = true;
         }
     }
@@ -1315,13 +1315,9 @@ bool PPDParser::getMargins(
     ImLLy = StringToDouble( GetCommandLineToken( 1, aArea ) );
     ImURx = StringToDouble( GetCommandLineToken( 2, aArea ) );
     ImURy = StringToDouble( GetCommandLineToken( 3, aArea ) );
-//  sscanf( m_pImageableAreas->getValue( nImArea )->m_aValue.GetStr(),
-//          "%lg%lg%lg%lg", &ImLLx, &ImLLy, &ImURx, &ImURy );
     aArea = m_pPaperDimensions->getValue( nPDim )->m_aValue;
     PDWidth     = StringToDouble( GetCommandLineToken( 0, aArea ) );
     PDHeight    = StringToDouble( GetCommandLineToken( 1, aArea ) );
-//  sscanf( m_pPaperDimensions->getValue( nPDim )->m_aValue.GetStr(),
-//          "%lg%lg", &PDWidth, &PDHeight );
     rLeft  = (int)(ImLLx + 0.5);
     rLower = (int)(ImLLy + 0.5);
     rUpper = (int)(PDHeight - ImURy + 0.5);
