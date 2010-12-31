@@ -45,6 +45,7 @@
 #include <vcl/svapp.hxx>
 
 #include <sfx2/shell.hxx>
+#include <vector>
 
 class Timer;
 class ApplicationEvent;
@@ -68,7 +69,6 @@ class SfxEventHint;
 class SfxItemSet;
 class SfxMacroConfig;
 class SfxMedium;
-class SfxMediumList;
 class SfxMenuCtrlFactArr_Impl;
 class SfxNewFileDialog;
 class SfxObjectShell;
@@ -99,6 +99,8 @@ struct SfxStbCtrlFactory;
 struct SfxTbxCtrlFactory;
 class SimpleResMgr;
 class ModalDialog;
+
+typedef ::std::vector< SfxMedium* > SfxMediumList;
 
 namespace sfx2
 {

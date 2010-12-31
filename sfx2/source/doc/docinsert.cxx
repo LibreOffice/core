@@ -162,7 +162,7 @@ SfxMediumList* DocumentInserter::CreateMediumList()
                 DELETEZ( pMedium );
 
             if( pMedium && CheckPasswd_Impl( 0, SFX_APP()->GetPool(), pMedium ) != ERRCODE_ABORT )
-                pMediumList->Insert( pMedium );
+                pMediumList->push_back( pMedium );
             else
                 delete pMedium;
         }

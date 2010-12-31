@@ -32,14 +32,16 @@
 #include <tools/errcode.hxx>
 #include <tools/link.hxx>
 #include <tools/string.hxx>
+#include <vector>
 
 #include "sfx2/dllapi.h"
 
 namespace sfx2 { class FileDialogHelper; }
 class SfxMedium;
-class SfxMediumList;
 class SfxItemSet;
 class SvStringsDtor;
+
+typedef ::std::vector< SfxMedium* > SfxMediumList;
 
 // ============================================================================
 
