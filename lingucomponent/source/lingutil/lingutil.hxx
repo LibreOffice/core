@@ -39,7 +39,9 @@
 #include <list>
 
 
-#define A2OU(x) ::rtl::OUString::createFromAscii( x )
+#ifndef A2OU
+#  define A2OU(x) ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( x ))
+#endif
 
 #define OU2A(rtlOUString) \
     ::rtl::OString((rtlOUString).getStr(), (rtlOUString).getLength(), \
