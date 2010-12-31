@@ -199,7 +199,7 @@ class CommandLineArgs
         CommandLineArgs( const CommandLineArgs& );
         CommandLineArgs operator=( const CommandLineArgs& );
 
-        sal_Bool                InterpretCommandLineParameter( const ::rtl::OUString& );
+        sal_Bool                InterpretCommandLineParameter( const ::rtl::OUString&, ::rtl::OUString& );
         void                    ParseCommandLine_Impl( Supplier& supplier );
         void                    ResetParamValues();
         sal_Bool                CheckGroupMembers( GroupParamId nGroup, BoolParam nExcludeMember ) const;

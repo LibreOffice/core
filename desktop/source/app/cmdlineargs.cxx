@@ -179,7 +179,8 @@ void CommandLineArgs::ParseCommandLine_Impl( Supplier& supplier )
         if ( aArg.getLength() > 0 )
         {
             m_eArgumentCount = m_eArgumentCount == NONE ? ONE : MANY;
-            if ( !InterpretCommandLineParameter( aArg ))
+            ::rtl::OUString oArg;
+            if ( !InterpretCommandLineParameter( aArg, oArg ))
             {
                 if ( aArg.toChar() == '-' )
                 {
@@ -208,7 +209,7 @@ void CommandLineArgs::ParseCommandLine_Impl( Supplier& supplier )
                         bStartEvent     = sal_False;
                         bDisplaySpec    = sal_False;
                      }
-                    else if ( aArg.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("-pt")))
+                    else if ( oArg.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("pt")))
                     {
                         // Print to special printer
                         bPrintToEvent   = sal_True;
@@ -233,7 +234,7 @@ void CommandLineArgs::ParseCommandLine_Impl( Supplier& supplier )
                         bStartEvent     = sal_False;
                         bDisplaySpec    = sal_False;
                      }
-                    else if ( aArg.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("-view")))
+                    else if ( oArg.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("view")))
                     {
                         // open in viewmode
                         bOpenEvent      = sal_False;
@@ -245,7 +246,7 @@ void CommandLineArgs::ParseCommandLine_Impl( Supplier& supplier )
                         bStartEvent     = sal_False;
                         bDisplaySpec    = sal_False;
                      }
-                    else if ( aArg.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("-show")))
+                    else if ( oArg.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("show")))
                     {
                         // open in viewmode
                         bOpenEvent      = sal_False;
@@ -257,7 +258,7 @@ void CommandLineArgs::ParseCommandLine_Impl( Supplier& supplier )
                         bForceOpenEvent = sal_False;
                         bDisplaySpec    = sal_False;
                     }
-                    else if ( aArg.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("-display")))
+                    else if ( oArg.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("display")))
                     {
                         // set display
                         bOpenEvent      = sal_False;
@@ -269,7 +270,7 @@ void CommandLineArgs::ParseCommandLine_Impl( Supplier& supplier )
                         bStartEvent     = sal_False;
                         bDisplaySpec    = sal_True;
                     }
-                    else if ( aArg.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("-language")))
+                    else if ( oArg.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("language")))
                     {
                         bOpenEvent      = sal_False;
                            bPrintEvent     = sal_False;
@@ -300,23 +301,23 @@ void CommandLineArgs::ParseCommandLine_Impl( Supplier& supplier )
                         bDisplaySpec    = sal_False;
                     }
                     #endif
-                    else if ( aArg.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("-convert-to")))
+                    else if ( oArg.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("convert-to")))
                     {
                         bOpenEvent = sal_False;
                         bConversionEvent = sal_True;
                         bConversionParamsEvent = sal_True;
                     }
-                    else if ( aArg.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("-print-to-file")))
+                    else if ( oArg.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("print-to-file")))
                     {
                         bOpenEvent = sal_False;
                         bBatchPrintEvent = sal_True;
                     }
-                    else if ( aArg.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("-printer-name")) &&
+                    else if ( oArg.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("printer-name")) &&
                               bBatchPrintEvent )
                     {
                         bBatchPrinterNameEvent = sal_True;
                     }
-                    else if ( aArg.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("-outdir")) &&
+                    else if ( oArg.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("outdir")) &&
                               (bConversionEvent || bBatchPrintEvent) )
                     {
                         bConversionOutEvent = sal_True;
@@ -402,51 +403,59 @@ void CommandLineArgs::SetBoolParam_Impl( BoolParam eParam, sal_Bool bValue )
     m_aBoolParams[eParam] = bValue;
 }
 
-sal_Bool CommandLineArgs::InterpretCommandLineParameter( const ::rtl::OUString& aArg )
+sal_Bool CommandLineArgs::InterpretCommandLineParameter( const ::rtl::OUString& aArg, ::rtl::OUString& oArg )
 {
-    if ( aArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "-minimized" )) == sal_True )
+    if (aArg.matchIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("--"))) {
+        oArg = ::rtl::OUString(aArg.getStr()+2, aArg.getLength()-2);
+    } else if (aArg.toChar() == '-') {
+        oArg = ::rtl::OUString(aArg.getStr()+1, aArg.getLength()-1);
+    } else {
+        return sal_False;
+    }
+
+    if ( oArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "minimized" )) == sal_True )
     {
         SetBoolParam_Impl( CMD_BOOLPARAM_MINIMIZED, sal_True );
         return sal_True;
     }
-    else if ( aArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "-invisible" )) == sal_True )
+    else if ( oArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "invisible" )) == sal_True )
     {
         SetBoolParam_Impl( CMD_BOOLPARAM_INVISIBLE, sal_True );
         return sal_True;
     }
-    else if ( aArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "-norestore" )) == sal_True )
+    else if ( oArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "norestore" )) == sal_True )
     {
         SetBoolParam_Impl( CMD_BOOLPARAM_NORESTORE, sal_True );
         return sal_True;
     }
-    else if ( aArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "-nodefault" )) == sal_True )
+    else if ( oArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "nodefault" )) == sal_True )
     {
         SetBoolParam_Impl( CMD_BOOLPARAM_NODEFAULT, sal_True );
         return sal_True;
     }
-    else if ( aArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "-bean" )) == sal_True )
+    else if ( oArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "bean" )) == sal_True )
     {
         SetBoolParam_Impl( CMD_BOOLPARAM_BEAN, sal_True );
         return sal_True;
     }
-    else if ( aArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "-plugin" )) == sal_True )
+    else if ( oArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "plugin" )) == sal_True )
     {
         SetBoolParam_Impl( CMD_BOOLPARAM_PLUGIN, sal_True );
         return sal_True;
     }
-    else if ( aArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "-server" )) == sal_True )
+    else if ( oArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "server" )) == sal_True )
     {
         SetBoolParam_Impl( CMD_BOOLPARAM_SERVER, sal_True );
         return sal_True;
     }
-    else if ( aArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "-headless" )) == sal_True )
+    else if ( oArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "headless" )) == sal_True )
     {
         // Headless means also invisibile, so set this parameter to true!
         SetBoolParam_Impl( CMD_BOOLPARAM_HEADLESS, sal_True );
         SetBoolParam_Impl( CMD_BOOLPARAM_INVISIBLE, sal_True );
         return sal_True;
     }
-    else if ( aArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "-quickstart" )) == sal_True )
+    else if ( oArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "quickstart" )) == sal_True )
     {
 #if defined(ENABLE_QUICKSTART_APPLET)
         SetBoolParam_Impl( CMD_BOOLPARAM_QUICKSTART, sal_True );
@@ -454,28 +463,28 @@ sal_Bool CommandLineArgs::InterpretCommandLineParameter( const ::rtl::OUString& 
         SetBoolParam_Impl( CMD_BOOLPARAM_NOQUICKSTART, sal_False );
         return sal_True;
     }
-    else if ( aArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "-quickstart=no" )))
+    else if ( oArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "quickstart=no" )))
     {
         SetBoolParam_Impl( CMD_BOOLPARAM_NOQUICKSTART, sal_True );
         SetBoolParam_Impl( CMD_BOOLPARAM_QUICKSTART, sal_False );
         return sal_True;
     }
-    else if ( aArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "-terminate_after_init" )) == sal_True )
+    else if ( oArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "terminate_after_init" )) == sal_True )
     {
         SetBoolParam_Impl( CMD_BOOLPARAM_TERMINATEAFTERINIT, sal_True );
         return sal_True;
     }
-    else if ( aArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "-nofirststartwizard" )) == sal_True )
+    else if ( oArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "nofirststartwizard" )) == sal_True )
     {
         SetBoolParam_Impl( CMD_BOOLPARAM_NOFIRSTSTARTWIZARD, sal_True );
         return sal_True;
     }
-    else if ( aArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "-nologo" )) == sal_True )
+    else if ( oArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "nologo" )) == sal_True )
     {
         SetBoolParam_Impl( CMD_BOOLPARAM_NOLOGO, sal_True );
         return sal_True;
     }
-    else if ( aArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "-nolockcheck" )) == sal_True )
+    else if ( oArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "nolockcheck" )) == sal_True )
     {
         SetBoolParam_Impl( CMD_BOOLPARAM_NOLOCKCHECK, sal_True );
         // Workaround for automated testing
@@ -483,51 +492,51 @@ sal_Bool CommandLineArgs::InterpretCommandLineParameter( const ::rtl::OUString& 
 
         return sal_True;
     }
-    else if ( aArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "-help" ))
+    else if ( oArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "help" ))
         || aArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "-h" ))
         || aArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "-?" )))
     {
         SetBoolParam_Impl( CMD_BOOLPARAM_HELP, sal_True );
         return sal_True;
     }
-    else if ( aArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "-helpwriter" )) == sal_True )
+    else if ( oArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "helpwriter" )) == sal_True )
     {
         SetBoolParam_Impl( CMD_BOOLPARAM_HELPWRITER, sal_True );
         return sal_True;
     }
-    else if ( aArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "-helpcalc" )) == sal_True )
+    else if ( oArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "helpcalc" )) == sal_True )
     {
         SetBoolParam_Impl( CMD_BOOLPARAM_HELPCALC, sal_True );
         return sal_True;
     }
-    else if ( aArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "-helpdraw" )) == sal_True )
+    else if ( oArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "helpdraw" )) == sal_True )
     {
         SetBoolParam_Impl( CMD_BOOLPARAM_HELPDRAW, sal_True );
         return sal_True;
     }
-    else if ( aArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "-helpimpress" )) == sal_True )
+    else if ( oArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "helpimpress" )) == sal_True )
     {
         SetBoolParam_Impl( CMD_BOOLPARAM_HELPIMPRESS, sal_True );
         return sal_True;
     }
-    else if ( aArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "-helpbase" )) == sal_True )
+    else if ( oArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "helpbase" )) == sal_True )
     {
         SetBoolParam_Impl( CMD_BOOLPARAM_HELPBASE, sal_True );
         return sal_True;
     }
-    else if ( aArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "-helpbasic" )) == sal_True )
+    else if ( oArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "helpbasic" )) == sal_True )
     {
         SetBoolParam_Impl( CMD_BOOLPARAM_HELPBASIC, sal_True );
         return sal_True;
     }
-    else if ( aArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "-helpmath" )) == sal_True )
+    else if ( oArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "helpmath" )) == sal_True )
     {
         SetBoolParam_Impl( CMD_BOOLPARAM_HELPMATH, sal_True );
         return sal_True;
     }
-    else if ( aArg.matchIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("-splash-pipe=")) )
+    else if ( oArg.matchIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("splash-pipe=")) )
     {
-        AddStringListParam_Impl( CMD_STRINGPARAM_SPLASHPIPE, aArg.copy(RTL_CONSTASCII_LENGTH("-splash-pipe=")) );
+        AddStringListParam_Impl( CMD_STRINGPARAM_SPLASHPIPE, oArg.copy(RTL_CONSTASCII_LENGTH("splash-pipe=")) );
         return sal_True;
     }
     #ifdef MACOSX
@@ -542,103 +551,103 @@ sal_Bool CommandLineArgs::InterpretCommandLineParameter( const ::rtl::OUString& 
         return sal_True;
     }
     #endif
-    else if ( aArg.matchIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("-infilter=")))
+    else if ( oArg.matchIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("infilter=")))
     {
-        AddStringListParam_Impl( CMD_STRINGPARAM_INFILTER, aArg.copy(RTL_CONSTASCII_LENGTH("-infilter=")) );
+        AddStringListParam_Impl( CMD_STRINGPARAM_INFILTER, oArg.copy(RTL_CONSTASCII_LENGTH("infilter=")) );
         return sal_True;
     }
-    else if ( aArg.matchIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("-accept=")))
+    else if ( oArg.matchIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("accept=")))
     {
-        AddStringListParam_Impl( CMD_STRINGPARAM_ACCEPT, aArg.copy(RTL_CONSTASCII_LENGTH("-accept=")) );
+        AddStringListParam_Impl( CMD_STRINGPARAM_ACCEPT, oArg.copy(RTL_CONSTASCII_LENGTH("accept=")) );
         return sal_True;
     }
-    else if ( aArg.matchIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("-unaccept=")))
+    else if ( oArg.matchIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("unaccept=")))
     {
-        AddStringListParam_Impl( CMD_STRINGPARAM_UNACCEPT, aArg.copy(RTL_CONSTASCII_LENGTH("-unaccept=")) );
+        AddStringListParam_Impl( CMD_STRINGPARAM_UNACCEPT, oArg.copy(RTL_CONSTASCII_LENGTH("unaccept=")) );
         return sal_True;
     }
-    else if ( aArg.matchIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("-portal,")))
+    else if ( oArg.matchIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("portal,")))
     {
-        AddStringListParam_Impl( CMD_STRINGPARAM_PORTAL, aArg.copy(RTL_CONSTASCII_LENGTH("-portal,")) );
+        AddStringListParam_Impl( CMD_STRINGPARAM_PORTAL, oArg.copy(RTL_CONSTASCII_LENGTH("portal,")) );
         return sal_True;
     }
-    else if ( aArg.matchIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("-userid")))
+    else if ( oArg.matchIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("userid")))
     {
-        if ( aArg.getLength() > RTL_CONSTASCII_LENGTH("-userid")+1 )
+        if ( oArg.getLength() > RTL_CONSTASCII_LENGTH("userid")+1 )
         {
             AddStringListParam_Impl(
                 CMD_STRINGPARAM_USERDIR,
-                ::rtl::Uri::decode( aArg.copy(RTL_CONSTASCII_LENGTH("-userid")+1),
+                ::rtl::Uri::decode( oArg.copy(RTL_CONSTASCII_LENGTH("userid")+1),
                                     rtl_UriDecodeWithCharset,
                                     RTL_TEXTENCODING_UTF8 ) );
         }
         return sal_True;
     }
-    else if ( aArg.matchIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("-clientdisplay=")))
+    else if ( oArg.matchIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("clientdisplay=")))
     {
-        AddStringListParam_Impl( CMD_STRINGPARAM_CLIENTDISPLAY, aArg.copy(RTL_CONSTASCII_LENGTH("-clientdisplay=")) );
+        AddStringListParam_Impl( CMD_STRINGPARAM_CLIENTDISPLAY, oArg.copy(RTL_CONSTASCII_LENGTH("clientdisplay=")) );
         return sal_True;
     }
-    else if ( aArg.matchIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("-version=")))
+    else if ( oArg.matchIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("version=")))
     {
-        AddStringListParam_Impl( CMD_STRINGPARAM_VERSION, aArg.copy(RTL_CONSTASCII_LENGTH("-version=")) );
+        AddStringListParam_Impl( CMD_STRINGPARAM_VERSION, oArg.copy(RTL_CONSTASCII_LENGTH("version=")) );
         return sal_True;
     }
-    else if ( aArg.matchIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("-language=")))
+    else if ( oArg.matchIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("language=")))
     {
-        AddStringListParam_Impl( CMD_STRINGPARAM_LANGUAGE, aArg.copy(RTL_CONSTASCII_LENGTH("-language=")) );
+        AddStringListParam_Impl( CMD_STRINGPARAM_LANGUAGE, oArg.copy(RTL_CONSTASCII_LENGTH("language=")) );
         return sal_True;
     }
-    else if ( aArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "-writer" )) == sal_True )
+    else if ( oArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "writer" )) == sal_True )
     {
         sal_Bool bAlreadySet = CheckGroupMembers( CMD_GRPID_MODULE, CMD_BOOLPARAM_WRITER );
         if ( !bAlreadySet )
             SetBoolParam_Impl( CMD_BOOLPARAM_WRITER, sal_True );
         return sal_True;
     }
-    else if ( aArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "-calc" )) == sal_True )
+    else if ( oArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "calc" )) == sal_True )
     {
         sal_Bool bAlreadySet = CheckGroupMembers( CMD_GRPID_MODULE, CMD_BOOLPARAM_CALC );
         if ( !bAlreadySet )
             SetBoolParam_Impl( CMD_BOOLPARAM_CALC, sal_True );
         return sal_True;
     }
-    else if ( aArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "-draw" )) == sal_True )
+    else if ( oArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "draw" )) == sal_True )
     {
         sal_Bool bAlreadySet = CheckGroupMembers( CMD_GRPID_MODULE, CMD_BOOLPARAM_DRAW );
         if ( !bAlreadySet )
             SetBoolParam_Impl( CMD_BOOLPARAM_DRAW, sal_True );
         return sal_True;
     }
-    else if ( aArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "-impress" )) == sal_True )
+    else if ( oArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "impress" )) == sal_True )
     {
         sal_Bool bAlreadySet = CheckGroupMembers( CMD_GRPID_MODULE, CMD_BOOLPARAM_IMPRESS );
         if ( !bAlreadySet )
             SetBoolParam_Impl( CMD_BOOLPARAM_IMPRESS, sal_True );
         return sal_True;
     }
-    else if ( aArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "-base" )) == sal_True )
+    else if ( oArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "base" )) == sal_True )
     {
         sal_Bool bAlreadySet = CheckGroupMembers( CMD_GRPID_MODULE, CMD_BOOLPARAM_BASE );
         if ( !bAlreadySet )
             SetBoolParam_Impl( CMD_BOOLPARAM_BASE, sal_True );
         return sal_True;
     }
-    else if ( aArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "-global" )) == sal_True )
+    else if ( oArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "global" )) == sal_True )
     {
         sal_Bool bAlreadySet = CheckGroupMembers( CMD_GRPID_MODULE, CMD_BOOLPARAM_GLOBAL );
         if ( !bAlreadySet )
             SetBoolParam_Impl( CMD_BOOLPARAM_GLOBAL, sal_True );
         return sal_True;
     }
-    else if ( aArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "-math" )) == sal_True )
+    else if ( oArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "math" )) == sal_True )
     {
         sal_Bool bAlreadySet = CheckGroupMembers( CMD_GRPID_MODULE, CMD_BOOLPARAM_MATH );
         if ( !bAlreadySet )
             SetBoolParam_Impl( CMD_BOOLPARAM_MATH, sal_True );
         return sal_True;
     }
-    else if ( aArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "-web" )) == sal_True )
+    else if ( oArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "web" )) == sal_True )
     {
         sal_Bool bAlreadySet = CheckGroupMembers( CMD_GRPID_MODULE, CMD_BOOLPARAM_WEB );
         if ( !bAlreadySet )

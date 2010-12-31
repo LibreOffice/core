@@ -98,7 +98,7 @@ done
 # test for availability of the fast external splash
 for arg in $@; do
     case "$arg" in
-    -nologo|-no-oosplash|-help|-h|-\?)
+    --nologo|-nologo|--no-oosplash|-no-oosplash|--help|-help|-h|-\?)
         no_oosplash=y
         ;;
     esac
@@ -120,19 +120,19 @@ fi
 sd_pagein_args=@pagein-common
 for sd_arg in "$@"; do
     case ${sd_arg} in
-    -calc)
+    --calc|-calc)
         sd_pagein_args="${sd_pagein_args} @pagein-calc"
         break;
         ;;
-    -draw)
+    --draw|-draw)
         sd_pagein_args="${sd_pagein_args} @pagein-draw"
         break;
         ;;
-    -impress)
+    --impress|-impress)
         sd_pagein_args="${sd_pagein_args} @pagein-impress"
         break;
         ;;
-    -writer)
+    --writer|-writer)
         sd_pagein_args="${sd_pagein_args} @pagein-writer"
         break;
         ;;
