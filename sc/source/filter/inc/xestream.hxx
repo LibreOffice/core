@@ -266,7 +266,7 @@ class ScRangeList;
 class ScTokenArray;
 struct XclAddress;
 struct XclFontData;
-class XclRange;
+struct XclRange;
 class XclRangeList;
 
 class XclXmlUtils
