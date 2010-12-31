@@ -38,8 +38,9 @@
 #include <svtools/stdctrl.hxx>
 #include "svtools/fixedhyper.hxx"
 #include <sfx2/basedlgs.hxx>        // SfxModalDialog
+#include <vector>
 
-DECLARE_LIST( AccelList, Accelerator* )
+typedef ::std::vector< Accelerator* > AccelList;
 
 // class AboutDialog -----------------------------------------------------
 

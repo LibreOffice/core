@@ -129,7 +129,7 @@ AboutDialog::AboutDialog( Window* pParent, const ResId& rId, const String& rVerS
         {
             pPrevAccel = pAccel;
             pAccel = new Accelerator;
-            aAccelList.Insert( pAccel, LIST_APPEND );
+            aAccelList.push_back( pAccel );
             USHORT nKey = aAccelStr.GetChar(i) - 'A' + KEY_A;
             pAccel->InsertItem( 1, KeyCode( nKey, KEY_MOD1 ) );
             if ( i > 0 )
@@ -238,16 +238,13 @@ AboutDialog::AboutDialog( Window* pParent, const ResId& rId, const String& rVerS
 AboutDialog::~AboutDialog()
 {
     // L"oschen des Entwickleraufrufs
-    if ( aAccelList.Count() )
+    if ( !aAccelList.empty() )
     {
-        GetpApp()->RemoveAccel( aAccelList.First() );
-        Accelerator* pAccel = aAccelList.Last();
+        GetpApp()->RemoveAccel( aAccelList.front() );
 
-        while ( pAccel )
-        {
-            delete pAccel;
-            pAccel = aAccelList.Prev();
-        }
+        for ( size_t i = 0, n = aAccelList.size(); i < n; ++i )
+            delete aAccelList[ i ];
+        aAccelList.clear();
     }
 }
 
