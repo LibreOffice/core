@@ -698,8 +698,7 @@ void SvMetaClass::WriteSfx( SvIdlDataBase & rBase, SvStream & rOutStm )
     SvMetaClassList classList;
     SvSlotElementList aSlotList;
     InsertSlots(aSlotList, aSuperList, classList, ByteString(), rBase);
-    ULONG n;
-    for ( n=0; n<aSlotList.Count(); n++ )
+    for (ULONG n=0; n<aSlotList.Count(); n++ )
     {
         SvSlotElement *pEle = aSlotList.GetObject( n );
         SvMetaSlot *pSlot = pEle->xSlot;
@@ -748,7 +747,7 @@ void SvMetaClass::WriteSfx( SvIdlDataBase & rBase, SvStream & rOutStm )
     }
     rOutStm << endl << "};" << endl << "#endif" << endl << endl;
 
-    for( n=0; n<aSlotList.Count(); n++ )
+    for( ULONG n=0; n<aSlotList.Count(); n++ )
     {
         aSlotList.Seek(n);
         SvSlotElement* pEle = aSlotList.GetCurObject();
@@ -756,7 +755,7 @@ void SvMetaClass::WriteSfx( SvIdlDataBase & rBase, SvStream & rOutStm )
         pAttr->ResetSlotPointer();
     }
 
-    for ( n=0; n<aSlotList.Count(); n++ )
+    for ( ULONG n=0; n<aSlotList.Count(); n++ )
         delete aSlotList.GetObject(n);
 }
 
