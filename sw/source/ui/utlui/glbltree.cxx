@@ -1380,18 +1380,17 @@ IMPL_LINK( SwGlobalTree, DialogClosedHdl, sfx2::FileDialogHelper*, _pFileDlg )
         SfxMediumList* pMedList = pDocInserter->CreateMediumList();
         if ( pMedList )
         {
-            Sequence< OUString >aFileNames( pMedList->Count() );
+            Sequence< OUString >aFileNames( pMedList->size() );
             OUString* pFileNames = aFileNames.getArray();
-            SfxMedium* pMed = pMedList->First();
             sal_Int32 nPos = 0;
-            while ( pMed )
+            for ( size_t i = 0, n = pMedList->size(); i < n; ++i )
             {
+                SfxMedium* pMed = pMedList->at( i );
                 String sFileName = pMed->GetURLObject().GetMainURL( INetURLObject::NO_DECODE );
                 sFileName += sfx2::cTokenSeperator;
                 sFileName += pMed->GetFilter()->GetFilterName();
                 sFileName += sfx2::cTokenSeperator;
                 pFileNames[nPos++] = sFileName;
-                pMed = pMedList->Next();
             }
             delete pMedList;
             InsertRegion( pDocContent, aFileNames );
