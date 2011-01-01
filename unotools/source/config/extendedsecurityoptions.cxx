@@ -342,7 +342,7 @@ Sequence< OUString > SvtExtendedSecurityOptions_Impl::GetSecureExtensionList() c
 
     sal_Int32 nIndex = 0;
     for ( ExtensionHashMap::const_iterator pIter = m_aExtensionHashMap.begin();
-            pIter != m_aExtensionHashMap.end(); pIter++ )
+            pIter != m_aExtensionHashMap.end(); ++pIter )
     {
         aResult[nIndex++] = pIter->first;
     }
