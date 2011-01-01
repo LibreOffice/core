@@ -713,7 +713,7 @@ GlyphSet::PSUploadEncoding(osl::File* pOutFile, PrinterGfx &rGfx)
     // loop thru all the font subsets
     sal_Int32               nGlyphSetID = 0;
     char_list_t::iterator   aGlyphSet;
-    for (aGlyphSet = maCharList.begin(); aGlyphSet != maCharList.end(); aGlyphSet++)
+    for (aGlyphSet = maCharList.begin(); aGlyphSet != maCharList.end(); ++aGlyphSet)
     {
         ++nGlyphSetID;
 
@@ -873,7 +873,7 @@ GlyphSet::PSUploadFont (osl::File& rOutFile, PrinterGfx &rGfx, bool bAllowType42
         // loop thru all the chars in the subset
         char_map_t::const_iterator aChar;
         sal_Int32 n = 0;
-        for (aChar = (*aCharSet).begin(); aChar != (*aCharSet).end(); aChar++)
+        for (aChar = (*aCharSet).begin(); aChar != (*aCharSet).end(); ++aChar)
         {
             pUChars [n]   = (*aChar).first;
             pEncoding [n] = (*aChar).second;
@@ -905,7 +905,7 @@ GlyphSet::PSUploadFont (osl::File& rOutFile, PrinterGfx &rGfx, bool bAllowType42
         // loop thru all the glyphs in the subset
         glyph_map_t::const_iterator aGlyph;
         sal_Int32 n = 0;
-        for (aGlyph = (*aGlyphSet).begin(); aGlyph != (*aGlyphSet).end(); aGlyph++)
+        for (aGlyph = (*aGlyphSet).begin(); aGlyph != (*aGlyphSet).end(); ++aGlyph)
         {
             pTTGlyphMapping [n] = (*aGlyph).first;
             pEncoding       [n] = (*aGlyph).second;
