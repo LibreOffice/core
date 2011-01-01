@@ -96,11 +96,11 @@ void classic_loops()
     StlUnoSequence<OUString>::iterator stl_s_it;
 
     cout << "for iteration" << endl;
-    for(stl_s_it = stl_begin(s); stl_s_it != stl_end(s); stl_s_it++)
+    for(stl_s_it = stl_begin(s); stl_s_it != stl_end(s); ++stl_s_it)
         cout << OUStringToOString(*stl_s_it, RTL_TEXTENCODING_ASCII_US).getStr() << endl;
 
     cout << "reverse for iteration" << endl;
-    for(stl_s_it = stl_end(s); stl_s_it != stl_begin(s); stl_s_it--)
+    for(stl_s_it = stl_end(s); stl_s_it != stl_begin(s); --stl_s_it)
         cout << OUStringToOString(*(stl_s_it-1), RTL_TEXTENCODING_ASCII_US).getStr() << endl;
 
     cout << "skipping for iteration" << endl;
@@ -182,7 +182,7 @@ void stl_compare()
 void stl_const_sequence()
 {
     const Sequence<OUString> s(10);
-    for(StlUnoSequence<OUString>::const_iterator stl_s_it = stl_begin(s); stl_s_it != stl_end(s); stl_s_it++)
+    for(StlUnoSequence<OUString>::const_iterator stl_s_it = stl_begin(s); stl_s_it != stl_end(s); ++stl_s_it)
         cout << OUStringToOString(*stl_s_it, RTL_TEXTENCODING_ASCII_US).getStr() << endl;
 }
 
