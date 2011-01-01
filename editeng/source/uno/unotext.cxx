@@ -213,7 +213,7 @@ void check_me::add( SvxUnoTextRangeBase* pRange )
 void check_me::remove( SvxUnoTextRangeBase* pRange )
 {
     std::list< std::pair< sal_uInt32, SvxUnoTextRangeBase* > >::iterator aIter;
-    for( aIter = maRanges.begin(); aIter != maRanges.end(); aIter++ )
+    for( aIter = maRanges.begin(); aIter != maRanges.end(); ++aIter )
     {
         if( pRange == (*aIter).second )
         {
@@ -229,7 +229,7 @@ check_me::~check_me()
     {
         DBG_ERROR("living text range detected!");
         std::list< std::pair< sal_uInt32, SvxUnoTextRangeBase* > >::iterator aIter;
-        for( aIter = maRanges.begin(); aIter != maRanges.end(); aIter++ )
+        for( aIter = maRanges.begin(); aIter != maRanges.end(); ++aIter )
         {
             sal_Int32 nAllocNum;
             SvxUnoTextRangeBase* pRange;
