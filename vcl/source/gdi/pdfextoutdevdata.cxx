@@ -400,7 +400,7 @@ sal_Bool PageSyncData::PlaySyncPageAct( PDFWriter& rWriter, sal_uInt32& rCurGDIM
                         }
                         break;
                     }
-                    aBeg++;
+                    ++aBeg;
                 }
             }
             break;
