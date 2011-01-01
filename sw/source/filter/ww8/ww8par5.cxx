@@ -3049,7 +3049,7 @@ eF_ResT SwWW8ImplReader::Read_F_Tox( WW8FieldDesc* pF, String& rStr )
                                     {
                                         if (TOKEN_TAB_STOP == ePrevType)
                                         {
-                                            aIt--;
+                                            --aIt;
 
                                             if(0x09 == sDelimiter.GetChar(0))
                                                 aIt->eTabAlign = SVX_TAB_ADJUST_END;
@@ -3174,7 +3174,7 @@ eF_ResT SwWW8ImplReader::Read_F_Tox( WW8FieldDesc* pF, String& rStr )
                                     {
                                         if (TOKEN_TAB_STOP == ePrevType)
                                         {
-                                            aIt--;
+                                            --aIt;
 
                                             SwFormToken aToken(TOKEN_TEXT);
                                             aToken.sText = sDelimiter;
@@ -3229,7 +3229,7 @@ eF_ResT SwWW8ImplReader::Read_F_Tox( WW8FieldDesc* pF, String& rStr )
                                 if (eType == TOKEN_PAGE_NUMS)
                                 {
                                     aIt = aPattern.erase(aIt);
-                                    aIt--;
+                                    --aIt;
                                     if (
                                          TOKEN_TAB_STOP ==
                                          aIt->eTokenType
