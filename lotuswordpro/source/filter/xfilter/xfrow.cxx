@@ -104,7 +104,7 @@ XFRow& XFRow::operator=(const XFRow& other)
 XFRow::~XFRow()
 {
     std::map<sal_Int32,XFCell*>::iterator it;
-    for( it=m_aCells.begin(); it!=m_aCells.end(); it++ )
+    for( it=m_aCells.begin(); it!=m_aCells.end(); ++it )
     {
         XFCell *pCell = (*it).second;
         if( pCell )
@@ -165,7 +165,7 @@ void    XFRow::ToXml(IXFStream *pStrm)
     pStrm->StartElement( A2OUSTR("table:table-row") );
 
     std::map<sal_Int32,XFCell*>::iterator   it = m_aCells.begin();
-    for( ; it!=m_aCells.end(); it++ )
+    for( ; it!=m_aCells.end(); ++it )
     {
         int col = (*it).first;
         XFCell  *pCell = (*it).second;
