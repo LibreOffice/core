@@ -473,7 +473,7 @@ sal_Int32 RtfSdrExport::StartShape()
     // Ignore \shpbypage, \shpbymargin, and \shpbycolumn, in favor of the posrelh property.
     m_rAttrOutput.RunText().append(OOO_STRING_SVTOOLS_RTF_SHPBYIGNORE);
 
-    for(std::map<OString,OString>::reverse_iterator i = m_aShapeProps.rbegin(); i != m_aShapeProps.rend(); i++)
+    for(std::map<OString,OString>::reverse_iterator i = m_aShapeProps.rbegin(); i != m_aShapeProps.rend(); ++i)
         lcl_AppendSP(m_rAttrOutput.RunText(), (*i).first, (*i).second );
 
     lcl_AppendSP(m_rAttrOutput.RunText(), "wzDescription", RtfExport::OutString( m_pSdrObject->GetDescription(), m_rExport.eCurrentEncoding));
