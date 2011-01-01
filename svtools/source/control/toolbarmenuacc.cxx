@@ -327,7 +327,7 @@ void SAL_CALL ToolbarMenuAcc::addEventListener( const Reference< XAccessibleEven
             if( *aIter == rxListener )
                 bFound = true;
             else
-                aIter++;
+                ++aIter;
         }
 
         if (!bFound)
@@ -355,7 +355,7 @@ void SAL_CALL ToolbarMenuAcc::removeEventListener( const Reference< XAccessibleE
                 bFound = true;
             }
             else
-                aIter++;
+                ++aIter;
         }
     }
 }
@@ -886,7 +886,7 @@ void SAL_CALL ToolbarMenuEntryAcc::removeEventListener( const Reference< XAccess
                 bFound = true;
             }
             else
-                aIter++;
+                ++aIter;
         }
     }
 }
