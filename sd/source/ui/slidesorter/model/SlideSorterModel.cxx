@@ -258,7 +258,7 @@ void SlideSorterModel::ClearDescriptorList (void)
 
     // Clear the cache of page descriptors.
     DescriptorContainer::iterator I;
-    for (I=maPageDescriptors.begin(); I!=maPageDescriptors.end(); I++)
+    for (I=maPageDescriptors.begin(); I!=maPageDescriptors.end(); ++I)
     {
         if (I->get() != NULL)
         {
