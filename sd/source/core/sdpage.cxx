@@ -814,7 +814,7 @@ void SdPage::CreateTitleAndLayout(BOOL bInit, BOOL bCreate )
                 pPageObj->SetReferencedPage(0L);
 
                 if( bSkip && iter != aAreas.end() )
-                    iter++;
+                    ++iter;
             }
         }
 
