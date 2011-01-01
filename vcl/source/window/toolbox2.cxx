@@ -2178,7 +2178,7 @@ BOOL ToolBox::ImplHasClippedItems()
     {
         if( it->IsClipped() )
             return TRUE;
-        it++;
+        ++it;
     }
     return FALSE;
 }
