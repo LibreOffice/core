@@ -280,9 +280,9 @@ void _SfxMacroTabPage::PageCreated (SfxAllItemSet aSet)
     {
         mpImpl->bGotEvents = TRUE;
         const SfxEventNamesList& rList = ((SfxEventNamesItem*)pEventsItem)->GetEvents();
-        for ( USHORT nNo = 0; nNo < rList.Count(); ++nNo )
+        for ( size_t nNo = 0, nCnt = rList.size(); nNo < nCnt; ++nNo )
         {
-            const SfxEventName *pOwn = rList.GetObject(nNo);
+            const SfxEventName *pOwn = rList.at(nNo);
             AddEvent( pOwn->maUIName, pOwn->mnId );
         }
     }
@@ -299,9 +299,9 @@ void _SfxMacroTabPage::Reset( const SfxItemSet& rSet )
     {
         mpImpl->bGotEvents = TRUE;
         const SfxEventNamesList& rList = ((SfxEventNamesItem*)pEventsItem)->GetEvents();
-        for ( USHORT nNo = 0; nNo < rList.Count(); ++nNo )
+        for ( size_t nNo = 0, nCnt = rList.size(); nNo < nCnt; ++nNo )
         {
-            const SfxEventName *pOwn = rList.GetObject(nNo);
+            const SfxEventName *pOwn = rList.at(nNo);
             AddEvent( pOwn->maUIName, pOwn->mnId );
         }
     }
