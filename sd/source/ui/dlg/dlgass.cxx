@@ -639,11 +639,11 @@ AssistentDlgImpl::AssistentDlgImpl( ::Window* pWindow, const Link& rFinishLink, 
         TemplateEntry* pStandardTemplateEntry = 0;
 
         std::vector<TemplateDir*>::iterator I;
-        for (I=maPresentList.begin(); I!=maPresentList.end(); I++)
+        for (I=maPresentList.begin(); I!=maPresentList.end(); ++I)
         {
             TemplateDir* pDir = *I;
             std::vector<TemplateEntry*>::iterator   J;
-            for (J=pDir->maEntries.begin(); J!=pDir->maEntries.end(); J++)
+            for (J=pDir->maEntries.begin(); J!=pDir->maEntries.end(); ++J)
             {
                 TemplateEntry* pEntry = *J;
                 if(pEntry->msPath == aStandardTemplate)
@@ -680,9 +680,9 @@ AssistentDlgImpl::~AssistentDlgImpl()
     //  Delete the template file infos.
     std::vector<TemplateDir*>::iterator I;
     std::vector<TemplateEntry*>::iterator   J;
-    for (I=maPresentList.begin(); I!=maPresentList.end(); I++)
+    for (I=maPresentList.begin(); I!=maPresentList.end(); ++I)
     {
-        for (J=(*I)->maEntries.begin(); J!=(*I)->maEntries.end(); J++)
+        for (J=(*I)->maEntries.begin(); J!=(*I)->maEntries.end(); ++J)
             delete (*J);
         delete (*I);
     }
@@ -744,7 +744,7 @@ AssistentDlgImpl::~AssistentDlgImpl()
 
     //  Delete the file history list.
     std::vector<String*>::iterator  I2;
-    for (I2=maOpenFilesList.begin(); I2!=maOpenFilesList.end(); I2++)
+    for (I2=maOpenFilesList.begin(); I2!=maOpenFilesList.end(); ++I2)
         delete *I2;
 }
 
@@ -891,7 +891,7 @@ void AssistentDlgImpl::TemplateScanDone (
     mpPage1RegionLB->Clear();
     std::vector<TemplateDir*>::iterator I;
     int i;
-    for (i=0,I=maPresentList.begin(); I!=maPresentList.end(); I++,i++)
+    for (i=0,I=maPresentList.begin(); I!=maPresentList.end(); ++I,++i)
     {
         TemplateDir* pDir = *I;
         if (pDir == NULL)
@@ -916,7 +916,7 @@ void AssistentDlgImpl::TemplateScanDone (
     //  Fill in the list box on the second page.
     nFirstEntry = 0;
     mpPage2RegionLB->Clear();
-    for (i=0,I=maPresentList.begin(); I!=maPresentList.end(); I++,i++)
+    for (i=0,I=maPresentList.begin(); I!=maPresentList.end(); ++I,++i)
     {
         TemplateDir* pDir = *I;
         if (pDir == NULL)
@@ -1372,14 +1372,14 @@ void AssistentDlgImpl::SelectTemplateRegion( const String& rRegion )
 {
     mpPage1TemplateLB->Clear();
     std::vector<TemplateDir*>::iterator I;
-    for (I=maPresentList.begin(); I!=maPresentList.end(); I++)
+    for (I=maPresentList.begin(); I!=maPresentList.end(); ++I)
     {
         TemplateDir * pDir = *I;
         mpTemplateRegion = *I;
         if (pDir->msRegion.Equals( rRegion ) )
         {
             std::vector<TemplateEntry*>::iterator   J;
-            for (J=pDir->maEntries.begin(); J!=pDir->maEntries.end(); J++)
+            for (J=pDir->maEntries.begin(); J!=pDir->maEntries.end(); ++J)
                 mpPage1TemplateLB->InsertEntry ((*J)->msTitle);
             mpPage1TemplateLB->Update();
             if(GetStartType() == ST_TEMPLATE)
@@ -1397,7 +1397,7 @@ void AssistentDlgImpl::SelectLayoutRegion( const String& rRegion )
     mpPage2LayoutLB->Clear();
     mpPage2LayoutLB->InsertEntry(String(SdResId(STR_WIZARD_ORIGINAL)));
     std::vector<TemplateDir*>::iterator I;
-    for (I=maPresentList.begin(); I!=maPresentList.end(); I++)
+    for (I=maPresentList.begin(); I!=maPresentList.end(); ++I)
     {
         TemplateDir * pDir = *I;
         mpLayoutRegion = *I;
@@ -1405,7 +1405,7 @@ void AssistentDlgImpl::SelectLayoutRegion( const String& rRegion )
         if (pDir->msRegion.Equals (rRegion))
         {
             std::vector<TemplateEntry*>::iterator   J;
-            for (J=pDir->maEntries.begin(); J!=pDir->maEntries.end(); J++)
+            for (J=pDir->maEntries.begin(); J!=pDir->maEntries.end(); ++J)
                 mpPage2LayoutLB->InsertEntry ((*J)->msTitle);
             mpPage2LayoutLB->Update();
             break;
