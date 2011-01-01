@@ -73,24 +73,20 @@ using namespace com::sun::star;
 SfxEventNamesList& SfxEventNamesList::operator=( const SfxEventNamesList& rTbl )
 {
     DelDtor();
-    for (USHORT n=0; n<rTbl.Count(); n++ )
+    for ( size_t i = 0, n = rTbl.size(); i < n; ++i )
     {
-        SfxEventName* pTmp = ((SfxEventNamesList&)rTbl).GetObject(n);
-        SfxEventName *pNew = new SfxEventName( *pTmp );
-        Insert( pNew, n );
+        SfxEventName* pTmp = rTbl.at( i );
+        SfxEventName* pNew = new SfxEventName( *pTmp );
+        aEventNamesList.push_back( pNew );
     }
     return *this;
 }
 
 void SfxEventNamesList::DelDtor()
 {
-    SfxEventName* pTmp = First();
-    while( pTmp )
-    {
-        delete pTmp;
-        pTmp = Next();
-    }
-    Clear();
+    for ( size_t i = 0, n = aEventNamesList.size(); i < n; ++i )
+        delete aEventNamesList[ i ];
+    aEventNamesList.clear();
 }
 
 int SfxEventNamesItem::operator==( const SfxPoolItem& rAttr ) const
@@ -100,13 +96,13 @@ int SfxEventNamesItem::operator==( const SfxPoolItem& rAttr ) const
     const SfxEventNamesList& rOwn = aEventsList;
     const SfxEventNamesList& rOther = ( (SfxEventNamesItem&) rAttr ).aEventsList;
 
-    if ( rOwn.Count() != rOther.Count() )
+    if ( rOwn.size() != rOther.size() )
         return FALSE;
 
-    for ( USHORT nNo = 0; nNo < rOwn.Count(); ++nNo )
+    for ( size_t nNo = 0, nCnt = rOwn.size(); nNo < nCnt; ++nNo )
     {
-        const SfxEventName *pOwn = rOwn.GetObject(nNo);
-        const SfxEventName *pOther = rOther.GetObject(nNo);
+        const SfxEventName *pOwn = rOwn.at( nNo );
+        const SfxEventName *pOther = rOther.at( nNo );
         if (    pOwn->mnId != pOther->mnId ||
                 pOwn->maEventName != pOther->maEventName ||
                 pOwn->maUIName != pOther->maUIName )
@@ -152,7 +148,7 @@ USHORT SfxEventNamesItem::GetVersion( USHORT ) const
 
 void SfxEventNamesItem::AddEvent( const String& rName, const String& rUIName, USHORT nID )
 {
-    aEventsList.Insert( new SfxEventName( nID, rName, rUIName.Len() ? rUIName : rName ) );
+    aEventsList.push_back( new SfxEventName( nID, rName, rUIName.Len() ? rUIName : rName ) );
 }
 
 
