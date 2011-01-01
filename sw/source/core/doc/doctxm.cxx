@@ -1874,7 +1874,7 @@ void SwTOXBaseSection::GenerateText( USHORT nArrayIdx,
                 }
             }
 
-            aIt++; // #i21237#
+            ++aIt; // #i21237#
         }
 
         pTOXNd->SetAttr( aTStops );
