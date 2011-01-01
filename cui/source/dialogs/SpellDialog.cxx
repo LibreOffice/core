@@ -1160,7 +1160,7 @@ bool SpellDialog::GetNextSentence_Impl(bool bUseSavedSentence, bool bRecheck)
             // hidden text has to be ignored
             if(!aStart->bIsHidden)
                 sText += aStart->sText;
-            aStart++;
+            ++aStart;
         }
         aSentenceED.SetText(sText);
         aStart = aSentence.begin();
@@ -1202,7 +1202,7 @@ bool SpellDialog::GetNextSentence_Impl(bool bUseSavedSentence, bool bRecheck)
                 aSentenceED.SetAttrib( SpellLanguageAttrib(aStart->eLanguage), 0, (USHORT) nStartPosition, (USHORT) nEndPosition );
                 nStartPosition = nEndPosition;
             }
-            aStart++;
+            ++aStart;
         }
         //the edit field needs to be modified to apply the change from the ApplyChangeAllList
         if(!bHasReplaced)
@@ -1242,7 +1242,7 @@ bool SpellDialog::ApplyChangeAllList_Impl(SpellPortions& rSentence, bool &bHasRe
         }
         else if( aStart->bIsGrammarError )
             bRet = true;
-        aStart++;
+        ++aStart;
     }
     return bRet;
 }
