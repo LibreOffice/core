@@ -46,7 +46,7 @@ CertificateContainer::searchMap( const ::rtl::OUString & url, const ::rtl::OUStr
         ret = (sal_Bool) (*p).second.equals(certificate_name);
         if( ret )
                     break;
-        p++;
+        ++p;
     }
 
     return ret;
