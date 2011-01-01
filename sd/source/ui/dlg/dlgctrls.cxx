@@ -66,7 +66,7 @@ void FadeEffectLB::Fill()
 
     const TransitionPresetList& rPresetList = TransitionPreset::getTransitionPresetList();
     TransitionPresetList::const_iterator aIter;
-    for( aIter = rPresetList.begin(); aIter != rPresetList.end(); aIter++ )
+    for( aIter = rPresetList.begin(); aIter != rPresetList.end(); ++aIter )
     {
         pPreset = (*aIter);
         const OUString aUIName( pPreset->getUIName() );
