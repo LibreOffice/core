@@ -214,7 +214,7 @@ static bool has_states( const std::vector< XMLPropertyState >& xPropStates )
         {
             if( aIter->mnIndex != -1 )
                 return true;
-            aIter++;
+            ++aIter;
         }
     }
     return false;
