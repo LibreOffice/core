@@ -98,7 +98,7 @@ void getOwnUpdateInfos(
         bool & out_allFound)
 {
     bool allHaveOwnUpdateInformation = true;
-    for (UpdateInfoMap::iterator i = inout_map.begin(); i != inout_map.end(); i++)
+    for (UpdateInfoMap::iterator i = inout_map.begin(); i != inout_map.end(); ++i)
     {
         OSL_ASSERT(i->second.extension.is());
         Sequence<OUString> urls(i->second.extension->getUpdateInformationURLs());
@@ -397,7 +397,7 @@ UpdateInfoMap getOnlineUpdateInfos(
     else
     {
         typedef std::vector<Reference<deployment::XPackage > >::const_iterator CIT;
-        for (CIT i = extensionList->begin(); i != extensionList->end(); i++)
+        for (CIT i = extensionList->begin(); i != extensionList->end(); ++i)
         {
             OSL_ASSERT(i->is());
             std::pair<UpdateInfoMap::iterator, bool> insertRet = infoMap.insert(
