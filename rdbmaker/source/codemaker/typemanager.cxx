@@ -116,7 +116,7 @@ sal_Bool RegistryTypeManager::init(sal_Bool bMerged, const StringVector& regFile
             freeRegistries();
             return sal_False;
         }
-        iter++;
+        ++iter;
     }
 
     if (m_pImpl->m_isMerged)
@@ -145,7 +145,7 @@ sal_Bool RegistryTypeManager::init(sal_Bool bMerged, const StringVector& regFile
                         return sal_False;
                     }
                 }
-                iter++;
+                ++iter;
             }
 
             m_pImpl->m_pMergedRegistry = pTmpReg;
@@ -238,7 +238,7 @@ void RegistryTypeManager::freeRegistries()
     {
         delete *iter;
 
-        iter++;
+        ++iter;
     }
 
 }
@@ -265,7 +265,7 @@ RegistryKey RegistryTypeManager::searchTypeKey(const OString& name)
                     break;
             }
 
-            iter++;
+            ++iter;
         }
     }
 
