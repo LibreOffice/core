@@ -217,7 +217,7 @@ void XMLChartExportPropertyMapper::ContextFilter(
     // filter properties
     for( std::vector< XMLPropertyState >::iterator property = rProperties.begin();
          property != rProperties.end();
-         property++ )
+         ++property )
     {
         // find properties with context
         // to prevent writing this property set mnIndex member to -1
