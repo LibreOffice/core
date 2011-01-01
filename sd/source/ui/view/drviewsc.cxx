@@ -962,13 +962,8 @@ void DrawViewShell::UpdateIMapDlg( SdrObject* pObj )
         // TargetListe kann von uns wieder geloescht werden
         if ( pTargetList )
         {
-            String* pEntry = pTargetList->First();
-            while( pEntry )
-            {
-                delete pEntry;
-                pEntry = pTargetList->Next();
-            }
-
+            for ( size_t i = 0, n = pTargetList->size(); i < n; ++i )
+                delete pTargetList->at( i );
             delete pTargetList;
         }
     }
