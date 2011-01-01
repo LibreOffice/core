@@ -338,7 +338,7 @@ MIP Model::queryMIP( const XNode_t& xNode ) const
         MIP aMIP;
         MIPs_t::const_iterator aEnd = maMIPs.upper_bound( xCurrent );
         MIPs_t::const_iterator aIter = maMIPs.lower_bound( xCurrent );
-        for( ; aIter != aEnd; aIter++ )
+        for( ; aIter != aEnd; ++aIter )
           aMIP.join( aIter->second.second );
 
         // inherit from current node (or set if we are at the start node)
