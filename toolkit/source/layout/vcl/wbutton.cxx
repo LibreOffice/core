@@ -491,7 +491,7 @@ protected:
     Window* Remove( std::list< Window*> lst, Window* w )
     {
         for ( std::list< Window*>::iterator it = maAdvanced.begin();
-              it != maAdvanced.end(); it++ )
+              it != maAdvanced.end(); ++it )
             if ( *it == w )
             {
                 lst.erase( it );
@@ -534,10 +534,10 @@ public:
         if (mSimpleLabel.getLength ())
             b->SetText (mSimpleLabel);
         for ( std::list< Window*>::iterator it = maAdvanced.begin();
-              it != maAdvanced.end(); it++ )
+              it != maAdvanced.end(); ++it )
             ( *it )->Show();
         for ( std::list< Window*>::iterator it = maSimple.begin();
-              it != maSimple.end(); it++ )
+              it != maSimple.end(); ++it )
             ( *it )->Hide();
 
         redraw ();
@@ -551,10 +551,10 @@ public:
             b->SetText (mAdvancedLabel);
         setAlign ();
         for ( std::list< Window*>::iterator it = maAdvanced.begin();
-              it != maAdvanced.end(); it++ )
+              it != maAdvanced.end(); ++it )
             ( *it )->Hide();
         for ( std::list< Window*>::iterator it = maSimple.begin();
-              it != maSimple.end(); it++ )
+              it != maSimple.end(); ++it )
             ( *it )->Show();
 
         redraw (true);
