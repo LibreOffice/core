@@ -87,7 +87,7 @@ getFirstExisting( OUString const& aDir, std::list<OUString> const& aSubDirs,
     static OUString const aSlash(RTL_CONSTASCII_USTRINGPARAM("/"));
     String aResult;
     for ( std::list<OUString>::const_iterator i = aSubDirs.begin();
-          i != aSubDirs.end(); i++ )
+          i != aSubDirs.end(); ++i )
     {
         String aFile = aDir + aSlash + *i + aSlash + aXMLName;
         OSL_TRACE( "testing: %s", OUSTRING_CSTR( aFile ) );
