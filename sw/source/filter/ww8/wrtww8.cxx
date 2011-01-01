@@ -3771,7 +3771,7 @@ void MSWordExportBase::OutputStartNode( const SwStartNode & rNode)
             ww8::WW8TableNodeInfoInner::Pointer_t pInner = aIt->second;
 
             AttrOutput().TableNodeInfoInner(pInner);
-            aIt++;
+            ++aIt;
         }
     }
 #ifdef DEBUG
@@ -3802,7 +3802,7 @@ void MSWordExportBase::OutputEndNode( const SwEndNode &rNode )
          {
             ww8::WW8TableNodeInfoInner::Pointer_t pInner = aIt->second;
             AttrOutput().TableNodeInfoInner(pInner);
-            aIt++;
+            ++aIt;
          }
      }
 #ifdef DEBUG
