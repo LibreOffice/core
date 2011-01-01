@@ -191,7 +191,7 @@ namespace oox { namespace ppt {
     {
         Any aAny;
         for( AnimationConditionList::const_iterator iter = l.begin();
-             iter != l.end(); iter++)
+             iter != l.end(); ++iter)
         {
             aAny = addToSequence( aAny, iter->convert(pSlide) );
         }
