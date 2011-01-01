@@ -269,7 +269,7 @@ oox::drawingml::ShapePtr PPTShape::findPlaceholder( const sal_Int32 nMasterPlace
         aShapePtr = findPlaceholder( nMasterPlaceholder, rChildren );
         if ( aShapePtr.get() )
             break;
-        aRevIter++;
+        ++aRevIter;
     }
     return aShapePtr;
 }
@@ -293,7 +293,7 @@ oox::drawingml::ShapePtr PPTShape::findPlaceholderByIndex( const sal_Int32 nIdx,
         aShapePtr = findPlaceholderByIndex( nIdx, rChildren );
         if ( aShapePtr.get() )
             break;
-        aRevIter++;
+        ++aRevIter;
     }
     return aShapePtr;
 }
