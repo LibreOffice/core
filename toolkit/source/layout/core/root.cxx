@@ -246,7 +246,7 @@ uno::Sequence< OUString > SAL_CALL LayoutRoot::getElementNames()
     sal_Int32 nPos = 0;
 
     for ( ItemHash::const_iterator it = maItems.begin();
-          it != maItems.end(); it++ )
+          it != maItems.end(); ++it )
         aNames[ nPos++ ] = it->first;
 
     return aNames;
