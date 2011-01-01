@@ -3228,7 +3228,7 @@ throw (lang::IndexOutOfBoundsException, lang::WrappedTargetException,
                 ;
         }
 
-        aIt++; // #i21237#
+        ++aIt; // #i21237#
     }
 
     uno::Any aRet;
