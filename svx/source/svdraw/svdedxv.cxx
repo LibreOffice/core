@@ -632,7 +632,7 @@ sal_Bool SdrObjEditView::SdrBeginTextEdit(
             // alten Cursor merken
             if (pTextEditOutliner->GetViewCount()!=0)
             {
-                OutlinerView* pTmpOLV=pTextEditOutliner->RemoveView(ULONG(0));
+                OutlinerView* pTmpOLV=pTextEditOutliner->RemoveView(static_cast<size_t>(0));
                 if(pTmpOLV!=NULL && pTmpOLV!=pGivenOutlinerView)
                     delete pTmpOLV;
             }
