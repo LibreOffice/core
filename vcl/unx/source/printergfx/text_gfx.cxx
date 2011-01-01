@@ -179,7 +179,7 @@ void PrinterGfx::drawGlyphs(
     // draw the string
     // search for a glyph set matching the set font
     std::list< GlyphSet >::iterator aIter;
-    for (aIter = maPS3Font.begin(); aIter != maPS3Font.end(); aIter++)
+    for (aIter = maPS3Font.begin(); aIter != maPS3Font.end(); ++aIter)
         if ( ((*aIter).GetFontID()  == mnFontID)
              && ((*aIter).IsVertical() == mbTextVertical))
         {
@@ -622,7 +622,7 @@ PrinterGfx::drawText(
 
     // search for a glyph set matching the set font
     std::list< GlyphSet >::iterator aIter;
-    for (aIter = maPS3Font.begin(); aIter != maPS3Font.end(); aIter++)
+    for (aIter = maPS3Font.begin(); aIter != maPS3Font.end(); ++aIter)
         if (   ((*aIter).GetFontID()  == mnFontID)
             && ((*aIter).IsVertical() == mbTextVertical))
         {
