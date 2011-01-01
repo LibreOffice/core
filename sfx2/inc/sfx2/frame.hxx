@@ -70,6 +70,7 @@ namespace com
 #include <tools/list.hxx>
 #include <svl/poolitem.hxx>
 #include <comphelper/namedvaluecollection.hxx>
+#include <vector>
 
 class SvBorder;
 class SfxWorkWindow;
@@ -94,7 +95,7 @@ class SystemWindow;
 typedef SfxFrame* SfxFramePtr;
 class SfxFrameArr_Impl;
 
-DECLARE_LIST( TargetList, String* )
+typedef ::std::vector< String* > TargetList;
 
 #define SFXFRAME_HASTITLE     0x0001
 

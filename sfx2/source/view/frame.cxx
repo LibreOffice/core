@@ -493,11 +493,11 @@ void SfxFrame::GetTargetList( TargetList& rList ) const
     if ( !GetParentFrame() )
     {
         // Einen Leerstring f"ur 'Kein Target'
-        rList.Insert( new String() );
-        rList.Insert( new String( DEFINE_CONST_UNICODE( "_top" ) ) );
-        rList.Insert( new String( DEFINE_CONST_UNICODE( "_parent" ) ) );
-        rList.Insert( new String( DEFINE_CONST_UNICODE( "_blank" ) ) );
-        rList.Insert( new String( DEFINE_CONST_UNICODE( "_self" ) ) );
+        rList.push_back( new String() );
+        rList.push_back( new String( DEFINE_CONST_UNICODE( "_top" ) ) );
+        rList.push_back( new String( DEFINE_CONST_UNICODE( "_parent" ) ) );
+        rList.push_back( new String( DEFINE_CONST_UNICODE( "_blank" ) ) );
+        rList.push_back( new String( DEFINE_CONST_UNICODE( "_self" ) ) );
     }
 
     SfxViewFrame* pView = GetCurrentViewFrame();

@@ -96,8 +96,8 @@ IMapWindow::IMapWindow( Window* pParent, const ResId& rResId, const Reference< X
 IMapWindow::~IMapWindow()
 {
     // Liste loeschen
-    for( String* pStr = aTargetList.First(); pStr; pStr = aTargetList.Next() )
-        delete pStr;
+    for ( size_t i = 0, n = aTargetList.size(); i < n; ++i )
+        delete aTargetList[ i ];
 
     SfxItemPool::Free(pIMapPool);
     delete[] pItemInfo;
@@ -219,17 +219,14 @@ const ImageMap& IMapWindow::GetImageMap()
 
 void IMapWindow::SetTargetList( TargetList& rTargetList )
 {
-    String* pStr;
-
     // alte Liste loeschen
-    for( pStr = aTargetList.First(); pStr; pStr = aTargetList.Next() )
-        delete pStr;
-
-    aTargetList.Clear();
+    for( size_t i = 0, n = aTargetList.size(); i < n; ++i )
+        delete aTargetList[ i ];
+    aTargetList.clear();
 
     // mit uebergebener Liste fuellen
-    for( pStr = rTargetList.First(); pStr; pStr = rTargetList.Next() )
-        aTargetList.Insert( new String( *pStr ) );
+    for( size_t i = 0, n = rTargetList.size(); i < n; ++i )
+        aTargetList.push_back( new String( *rTargetList[ i ] ) );
 
     pModel->SetChanged( sal_False );
 }

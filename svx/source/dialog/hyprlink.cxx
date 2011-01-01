@@ -460,9 +460,9 @@ void SvxHyperlinkDlg::TargetMenu(const String& rSelEntry, BOOL bExecute)
         TargetList aList;
         pVwFrm->GetTopFrame().GetTargetList(aList);
 
-        USHORT nCount = (USHORT)aList.Count();
-        if( nCount )
+        if ( !aList.empty() )
         {
+            size_t nCount = aList.size();
             BOOL bChecked = FALSE;
 
             if (pTargetMenu != NULL)
@@ -471,10 +471,10 @@ void SvxHyperlinkDlg::TargetMenu(const String& rSelEntry, BOOL bExecute)
             pTargetMenu = new PopupMenu;
             pTargetMenu->SetMenuFlags( pTargetMenu->GetMenuFlags() |
                                        MENU_FLAG_NOAUTOMNEMONICS );
-            USHORT i;
-            for ( i = 0; i < nCount; i++ )
+
+            for ( size_t i = 0; i < nCount; i++ )
             {
-                String sEntry(*aList.GetObject(i));
+                String sEntry( *aList[ i ] );
                 pTargetMenu->InsertItem(i + 1, sEntry, MIB_RADIOCHECK|MIB_AUTOCHECK);
 
                 if (sEntry == rSelEntry)
@@ -483,8 +483,8 @@ void SvxHyperlinkDlg::TargetMenu(const String& rSelEntry, BOOL bExecute)
                     bChecked = TRUE;
                 }
             }
-            for ( i = nCount; i; i-- )
-                delete aList.GetObject( i - 1 );
+            for ( size_t i = nCount; i; )
+                delete aList[ --i ];
 
             if (!bChecked)
                 pTargetMenu->CheckItem(1);

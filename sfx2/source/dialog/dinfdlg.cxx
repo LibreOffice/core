@@ -403,7 +403,6 @@ void SfxDocumentInfoItem::UpdateDocumentInfo(
         i_xDocProps->setAutoloadURL(::rtl::OUString());
     }
     i_xDocProps->setDefaultTarget(getDefaultTarget());
-//    i_xDocProps->setTemplateName(getTemplateName());
     i_xDocProps->setAuthor(getAuthor());
     i_xDocProps->setCreationDate(getCreationDate());
     i_xDocProps->setModifiedBy(getModifiedBy());
@@ -978,20 +977,6 @@ BOOL SfxDocumentPage::FillItemSet( SfxItemSet& rSet )
             SfxDocumentInfoItem* pInfoItem = (SfxDocumentInfoItem*)pItem;
             BOOL bUseData = ( STATE_CHECK == aUseUserDataCB.GetState() );
             pInfoItem->SetUseUserData( bUseData );
-/*
-            if ( !bUseData )
-            {
-                // "Benutzerdaten verwenden" ausgeschaltet ->
-                // den Benutzer aus den Stamps l"oschen
-                String aEmptyUser;
-                aInfo.SetCreated(
-                    SfxStamp( aEmptyUser, aInfo.GetCreated().GetTime() ) );
-                aInfo.SetChanged(
-                    SfxStamp( aEmptyUser, aInfo.GetChanged().GetTime() ) );
-                aInfo.SetPrinted(
-                    SfxStamp( aEmptyUser, aInfo.GetPrinted().GetTime() ) );
-            }
-*/
             rSet.Put( SfxDocumentInfoItem( *pInfoItem ) );
             bRet = TRUE;
         }
@@ -1127,12 +1112,10 @@ void SfxDocumentPage::Reset( const SfxItemSet& rSet )
     aCreateValFt.SetText( ConvertDateTime_Impl( pInfoItem->getAuthor(),
         pInfoItem->getCreationDate(), aLocaleWrapper ) );
     util::DateTime aTime( pInfoItem->getModificationDate() );
-//  if ( aTime.IsValid() )
     if ( aTime.Month > 0 )
         aChangeValFt.SetText( ConvertDateTime_Impl(
             pInfoItem->getModifiedBy(), aTime, aLocaleWrapper ) );
     aTime = pInfoItem->getPrintDate();
-//  if ( aTime.IsValid())
     if ( aTime.Month > 0 )
         aPrintValFt.SetText( ConvertDateTime_Impl( pInfoItem->getPrintedBy(),
             aTime, aLocaleWrapper ) );
@@ -1197,10 +1180,10 @@ SfxInternetPage::SfxInternetPage( Window* pParent, const SfxItemSet& rItemSet ) 
         {
             pFrame->GetTargetList( aList );
 
-            String*         pObj;
-            for( USHORT nPos = ( USHORT ) aList.Count() ; nPos ; )
+            String* pObj;
+            for( size_t nPos = aList.size() ; nPos ; )
             {
-                pObj = aList.GetObject( --nPos );
+                pObj = aList[ --nPos ];
                 aCBFrame.InsertEntry( *pObj );
                 delete pObj;
             }
@@ -2335,7 +2318,6 @@ CustomPropertiesControl::CustomPropertiesControl( Window* pParent, const ResId& 
 
     Link aScrollLink = LINK( this, CustomPropertiesControl, ScrollHdl );
     m_aVertScroll.SetScrollHdl( aScrollLink );
-//    m_aVertScroll.SetEndScrollHdl( aScrollLink );
 }
 
 CustomPropertiesControl::~CustomPropertiesControl()

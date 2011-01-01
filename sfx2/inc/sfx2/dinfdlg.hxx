@@ -254,7 +254,6 @@ public:
 
 // class SfxInternetPage -------------------------------------------------
 
-class TargetList;
 namespace sfx2
 {
     class FileDialogHelper;

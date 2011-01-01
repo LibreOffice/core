@@ -40,6 +40,7 @@ class SdrView;
 #include <com/sun/star/container/XIndexContainer.hpp> //add for FmShowColsDialog
 #include <com/sun/star/container/XNameReplace.hpp> //add for SvxMacroAssignDlg
 #include "svx/svxdllapi.h"
+#include <vector>
 
 namespace com{namespace sun{namespace star{
 namespace linguistic2{
@@ -56,13 +57,14 @@ typedef USHORT*     (*DialogGetRanges)();
 struct ExchangeData;
 class INetURLObject;
 class GalleryTheme;
-class TargetList;
 class SvxHyperlinkTabPageBase;
 class SearchAttrItemList;
 class FmFormShell;
 class Graphic;
 class SdrObject;
 class SvxSpellWrapper;
+
+typedef ::std::vector< String* > TargetList;
 
 namespace svx{ class SpellDialogChildWindow;}
 

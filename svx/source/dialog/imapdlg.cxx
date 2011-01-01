@@ -403,8 +403,8 @@ void SvxIMapDlg::SetTargetList( const TargetList& rTargetList )
 
     maCbbTarget.Clear();
 
-    for( String* pStr = aNewList.First(); pStr; pStr = aNewList.Next() )
-        maCbbTarget.InsertEntry( *pStr );
+    for ( size_t i = 0, n = aNewList.size(); i < n; ++i )
+        maCbbTarget.InsertEntry( *aNewList[ i ] );
 }
 
 
@@ -441,9 +441,9 @@ void SvxIMapDlg::Update( const Graphic& rGraphic, const ImageMap* pImageMap,
     // UpdateTargetList loeschen, da diese Methode
     // vor dem Zuschlagen des Update-Timers noch
     // mehrmals gerufen werden kann( #46540 )
-    for( String* pStr = pOwnData->aUpdateTargetList.First(); pStr; pStr = pOwnData->aUpdateTargetList.Next() )
-        delete pStr;
-    pOwnData->aUpdateTargetList.Clear();
+    for ( size_t i = 0, n = pOwnData->aUpdateTargetList.size(); i < n; ++i )
+        delete pOwnData->aUpdateTargetList[ i ];
+    pOwnData->aUpdateTargetList.clear();
 
     // TargetListe muss kopiert werden, da sie im
     // Besitz des Aufrufers ist und von ihm nach diesem
@@ -453,8 +453,8 @@ void SvxIMapDlg::Update( const Graphic& rGraphic, const ImageMap* pImageMap,
     {
         TargetList aTargetList( *pTargetList );
 
-        for( String* pStr = aTargetList.First(); pStr; pStr = aTargetList.Next() )
-            pOwnData->aUpdateTargetList.Insert( new String( *pStr ) );
+        for ( size_t i = 0, n = aTargetList.size(); i < n; ++i )
+            pOwnData->aUpdateTargetList.push_back( new String( *aTargetList[ i ] ) );
     }
 
     pOwnData->aTimer.Start();
@@ -948,10 +948,9 @@ IMPL_LINK( SvxIMapDlg, UpdateHdl, Timer*, EMPTYARG )
     }
 
     // die in der Update-Methode kopierte Liste wieder loeschen
-    for( String* pStr = pOwnData->aUpdateTargetList.First(); pStr; pStr = pOwnData->aUpdateTargetList.Next() )
-        delete pStr;
-
-    pOwnData->aUpdateTargetList.Clear();
+    for ( size_t i = 0, n = pOwnData->aUpdateTargetList.size(); i < n; ++i )
+        delete pOwnData->aUpdateTargetList[ i ];
+    pOwnData->aUpdateTargetList.clear();
 
     GetBindings().Invalidate( SID_IMAP_EXEC );
 

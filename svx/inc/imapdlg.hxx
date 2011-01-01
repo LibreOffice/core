@@ -45,6 +45,7 @@
 
 #include <vcl/status.hxx>
 #include "svx/svxdllapi.h"
+#include <vector>
 
 
 #ifndef _GOMISC_HXX
@@ -59,7 +60,7 @@ class ImageMap;
 \************************************************************************/
 
 class Graphic;
-class TargetList;
+typedef ::std::vector< String* > TargetList;
 
 class SVX_DLLPUBLIC SvxIMapDlgChildWindow : public SfxChildWindow
 {
