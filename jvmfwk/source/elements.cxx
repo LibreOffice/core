@@ -192,7 +192,7 @@ rtl_uString** VersionInfo::getExcludeVersions()
     int j=0;
     typedef std::vector<rtl::OUString>::const_iterator it;
     for (it i = vecExcludeVersions.begin(); i != vecExcludeVersions.end();
-         i++, j++)
+         ++i, ++j)
     {
         arVersions[j] = vecExcludeVersions[j].pData;
     }
@@ -530,7 +530,7 @@ void NodeJava::write() const
         }
 
         typedef std::vector<rtl::OUString>::const_iterator cit;
-        for (cit i = m_vmParameters->begin(); i != m_vmParameters->end(); i++)
+        for (cit i = m_vmParameters->begin(); i != m_vmParameters->end(); ++i)
         {
             xmlNewTextChild(vmParameters, NULL, (xmlChar*) "param",
                             CXmlCharPtr(*i));
@@ -571,7 +571,7 @@ void NodeJava::write() const
         }
 
         typedef std::vector<rtl::OUString>::const_iterator cit;
-        for (cit i = m_JRELocations->begin(); i != m_JRELocations->end(); i++)
+        for (cit i = m_JRELocations->begin(); i != m_JRELocations->end(); ++i)
         {
             xmlNewTextChild(jreLocationsNode, NULL, (xmlChar*) "location",
                             CXmlCharPtr(*i));
@@ -1206,7 +1206,7 @@ void MergedSettings::getVmParametersArray(
     int j=0;
     typedef std::vector<rtl::OUString>::const_iterator it;
     for (it i = m_vmParams.begin(); i != m_vmParams.end();
-         i++, j++)
+         ++i, ++j)
     {
         (*parParams)[j] = i->pData;
         rtl_uString_acquire(i->pData);
@@ -1228,7 +1228,7 @@ void MergedSettings::getJRELocations(
     int j=0;
     typedef std::vector<rtl::OUString>::const_iterator it;
     for (it i = m_JRELocations.begin(); i != m_JRELocations.end();
-         i++, j++)
+         ++i, ++j)
     {
         (*parLocations)[j] = i->pData;
         rtl_uString_acquire(i->pData);
