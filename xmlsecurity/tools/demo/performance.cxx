@@ -1284,9 +1284,9 @@ void XSecTester::findKeyOrReference(SecurityEntity* pSecurityEntity, const rtl::
             {
                 (*ii_referenceRefNums) = nRefNum;
 
-                ii_referenceURIs++;
-                ii_referenceKeeperIds++;
-                ii_referenceRefNums++;
+                ++ii_referenceURIs;
+                ++ii_referenceKeeperIds;
+                ++ii_referenceRefNums;
             }
 
             if (bIsFindingKey)
@@ -1296,9 +1296,9 @@ void XSecTester::findKeyOrReference(SecurityEntity* pSecurityEntity, const rtl::
         }
         else
         {
-            ii_referenceURIs++;
-            ii_referenceKeeperIds++;
-            ii_referenceRefNums++;
+            ++ii_referenceURIs;
+            ++ii_referenceKeeperIds;
+            ++ii_referenceRefNums;
         }
     }
 }
@@ -1610,7 +1610,7 @@ std::vector< AncestorEvent* >::const_iterator XSecTester::checkAncestorStartElem
 
         if (next != m_vAncestorEvents.end())
         {
-            next++;
+            ++next;
         }
     }
 
@@ -1637,7 +1637,7 @@ void XSecTester::flushAncestorEvents(
             else
             {
                 sendAncestorEndElementEvent((*ii)->ouName, xDocumentHandler);
-                ii++;
+                ++ii;
             }
         }
     }
