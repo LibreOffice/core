@@ -193,7 +193,7 @@ uno::Any anyFromString( OUString const& value, uno::Type const& type )
             uno::Sequence< OUString > seq( values.size() );
             i = 0;
             for ( std::list< OUString >::const_iterator it = values.begin();
-                  it != values.end(); it++, i++ )
+                  it != values.end(); it++, ++i )
                 seq[ i ] = *it;
 
             return uno::makeAny( seq );
@@ -248,7 +248,7 @@ setProperties( uno::Reference< uno::XInterface > const& xPeer,
     {
         DBG_ERROR( "Error: setProperties - bad handle ignoring props:\n" );
         for ( PropList::const_iterator it = rProps.begin(); it != rProps.end();
-              it++ )
+              ++it )
         {
             DBG_ERROR2( "%s=%s\n", OUSTRING_CSTR( it->first ), OUSTRING_CSTR( it->second ) );
         }
@@ -256,7 +256,7 @@ setProperties( uno::Reference< uno::XInterface > const& xPeer,
     }
 
     for ( PropList::const_iterator it = rProps.begin(); it != rProps.end();
-          it++ )
+          ++it )
         setProperty( xPeer, it->first, it->second );
 }
 
@@ -373,7 +373,7 @@ findAndRemove( const char *pAttr, PropList &rProps, OUString &rValue )
     PropList::iterator it;
     OUString aName = OUString::createFromAscii( pAttr );
 
-    for ( it = rProps.begin(); it != rProps.end(); it++ )
+    for ( it = rProps.begin(); it != rProps.end(); ++it )
     {
         if ( it->first.equalsIgnoreAsciiCase( aName )
              || it->first.equalsIgnoreAsciiCase( OUString(RTL_CONSTASCII_USTRINGPARAM ("_")) + aName ) )
