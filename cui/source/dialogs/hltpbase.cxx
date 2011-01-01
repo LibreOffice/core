@@ -67,17 +67,17 @@ SvxFramesComboBox::SvxFramesComboBox ( Window* pParent, const ResId& rResId,
     if ( pFrame )
     {
         pFrame->GetTargetList(*pList);
-        USHORT nCount = (USHORT)pList->Count();
-        if( nCount )
+        if( !pList->empty() )
         {
-            USHORT i;
+            size_t nCount = pList->size();
+            size_t i;
             for ( i = 0; i < nCount; i++ )
             {
-                InsertEntry(*pList->GetObject(i));
+                InsertEntry( *pList->at( i ) );
             }
-            for ( i = nCount; i; i-- )
+            for ( i = nCount; i; )
             {
-                delete pList->GetObject( i - 1 );
+                delete pList->at( --i );
             }
         }
         delete pList;

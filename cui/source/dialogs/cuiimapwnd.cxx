@@ -88,8 +88,8 @@ URLDlg::URLDlg( Window* pWindow, const String& rURL, const String& rAlternativeT
     maEdtDescription.SetText( rDescription );
     maEdtName.SetText( rName );
 
-    for( String* pStr = rTargetList.First(); pStr; pStr = rTargetList.Next() )
-        maCbbTargets.InsertEntry( *pStr );
+    for( size_t i = 0, n = rTargetList.size(); i < n; ++i )
+        maCbbTargets.InsertEntry( *rTargetList[ i ] );
 
     if( !rTarget.Len() )
         maCbbTargets.SetText( String::CreateFromAscii( "_self" ) );
