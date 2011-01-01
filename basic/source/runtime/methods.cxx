@@ -3588,7 +3588,7 @@ RTLFUNC(Shell)
         ::rtl::OUString aOUStrProg( rStr.GetBuffer(), rStr.Len() );
         ::rtl::OUString aOUStrProgUNC = getFullPathUNC( aOUStrProg );
 
-        iter++;
+        ++iter;
 
         USHORT nParamCount = sal::static_int_cast< USHORT >(
             aTokenList.size() - 1 );
