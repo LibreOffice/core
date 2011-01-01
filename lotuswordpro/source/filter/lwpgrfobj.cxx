@@ -224,7 +224,7 @@ void LwpGraphicObject::XFConvert (XFContentContainer* pCont)
 
         //XFParagraph* pPara = new XFParagraph();
         std::vector <XFFrame*>::iterator iter;
-        for (iter = m_vXFDrawObjects.begin(); iter != m_vXFDrawObjects.end(); iter++)
+        for (iter = m_vXFDrawObjects.begin(); iter != m_vXFDrawObjects.end(); ++iter)
         {
             //pPara->Add(*iter);
             pCont->Add(*iter);
