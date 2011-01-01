@@ -224,7 +224,7 @@ namespace basegfx
                 // Loop while new entry is bigger, use operator<
                 while(aCurrent != maTrDeEdgeEntries.end() && (*aCurrent) < rNewEdge)
                 {
-                    aCurrent++;
+                    ++aCurrent;
                 }
 
                 // Insert before first which is smaller or equal or at end
