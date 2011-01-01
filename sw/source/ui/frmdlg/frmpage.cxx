@@ -2554,17 +2554,16 @@ void SwFrmURLPage::Reset( const SfxItemSet &rSet )
     {
         TargetList* pList = new TargetList;
         ((const SfxFrameItem*)pItem)->GetFrame()->GetTargetList(*pList);
-        USHORT nCount = (USHORT)pList->Count();
-        if( nCount )
+        if( !pList->empty() )
         {
-            USHORT i;
-            for ( i = 0; i < nCount; i++ )
+            size_t nCount = pList->size();
+            for ( size_t i = 0; i < nCount; i++ )
             {
-                aFrameCB.InsertEntry(*pList->GetObject(i));
+                aFrameCB.InsertEntry( *pList->at( i ) );
             }
-            for ( i = nCount; i; i-- )
+            for ( size_t i = nCount; i; )
             {
-                delete pList->GetObject( i - 1 );
+                delete pList->at( --i );
             }
         }
         delete pList;

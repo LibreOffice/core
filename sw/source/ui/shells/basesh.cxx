@@ -181,12 +181,8 @@ void lcl_UpdateIMapDlg( SwWrtShell& rSh )
     SvxIMapDlgChildWindow::UpdateIMapDlg(
             aGrf, rURL.GetMap(), pList, pEditObj );
 
-    USHORT nCount = (USHORT)pList->Count();
-    if(nCount)
-        for( USHORT i = nCount; i; i--  )
-        {
-            delete pList->GetObject(i-1);
-        }
+    for ( size_t i = 0, n = pList->size(); i < n; ++i )
+        delete pList->at( i );
     delete pList;
 }
 
