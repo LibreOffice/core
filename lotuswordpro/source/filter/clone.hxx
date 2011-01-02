@@ -43,7 +43,10 @@ struct has_clone
     template<typename U>
     static no check_sig(...);
 
-    static bool const value = sizeof(has_clone<T>::template check_sig<T>(0)) == sizeof(yes);
+    enum
+    {
+        value = sizeof(has_clone<T>::template check_sig<T>(0)) == sizeof(yes)
+    };
 };
 
 template<typename T, bool HasClone>
