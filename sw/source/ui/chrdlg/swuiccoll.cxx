@@ -113,9 +113,8 @@ SwCondCollPage::SwCondCollPage(Window *pParent, const SfxItemSet &rSet)
     SfxStyleFamilies aFamilies(SW_RES(DLG_STYLE_DESIGNER));
     const SfxStyleFamilyItem* pFamilyItem = 0;
     USHORT nCount = aFamilies.Count();
-    USHORT i;
 
-    for( i = 0; i < nCount; ++i)
+    for(USHORT i = 0; i < nCount; ++i)
     {
         if(SFX_STYLE_FAMILY_PARA == (USHORT)(pFamilyItem = aFamilies.GetObject(i))->GetFamily())
             break;
