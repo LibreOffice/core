@@ -92,7 +92,7 @@ class LwpFrib
 {
 public:
     LwpFrib(LwpPara* pPara);
-    ~LwpFrib();
+    virtual ~LwpFrib();
     static LwpFrib* CreateFrib(LwpPara* pPara, LwpObjectStream* pObjStrm, sal_uInt8 fribtag, sal_uInt8 editID);
     virtual void Read(LwpObjectStream* pObjStrm, sal_uInt16 len);
 //  virtual void Parse(IXFStream* pOutputStream);
