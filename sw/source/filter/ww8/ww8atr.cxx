@@ -3464,11 +3464,12 @@ ULONG WW8Export::ReplaceCr( BYTE nChar )
     bool bReplaced = false;
     SvStream& rStrm = Strm();
     ULONG nRetPos = 0, nPos = rStrm.Tell();
-    BYTE nBCode=0;
-    UINT16 nUCode=0;
     //If there is at least two characters already output
     if (nPos - (IsUnicode() ? 2 : 1) >= ULONG(pFib->fcMin))
     {
+        BYTE nBCode=0;
+        UINT16 nUCode=0;
+
         rStrm.SeekRel(IsUnicode() ? -2 : -1);
         if (IsUnicode())
             rStrm >> nUCode;
