@@ -226,9 +226,10 @@ CTRL_GETVALUE_FUNCTION_T SAL_CALL GetCtrlGetValueFunction( CTRL_CLASS aCtrlClass
 CTRL_CLASS SAL_CALL GetCtrlClass( HWND hwndCtrl )
 {
     CTRL_CLASS aCtrlClass = UNKNOWN;
-    TCHAR aClassName[256];
+    const size_t nClassNameSize = 256;
+    TCHAR aClassName[nClassNameSize];
 
-    int nRet = GetClassName(hwndCtrl,aClassName,(sizeof(aClassName)/sizeof(TCHAR)));
+    int nRet = GetClassName(hwndCtrl,aClassName,nClassNameSize);
     if (nRet)
     {
         if (0 == _tcsicmp(aClassName,TEXT("button")))
