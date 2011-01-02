@@ -64,14 +64,14 @@ namespace // private
         CheckboxSetState
     };
     const size_t SIZE_CHECKBOX_SETVALUE_FUNCTION_TABLE =
-        sizeof( CheckboxSetValueFunctionTable ) / sizeof( CTRL_SETVALUE_FUNCTION_T );
+        SAL_N_ELEMENTS( CheckboxSetValueFunctionTable );
 
     CTRL_GETVALUE_FUNCTION_T CheckboxGetValueFunctionTable[] =
     {
         CheckboxGetState
     };
     const size_t SIZE_CHECKBOX_GETVALUE_FUNCTION_TABLE =
-        sizeof( CheckboxGetValueFunctionTable ) / sizeof( CTRL_GETVALUE_FUNCTION_T );
+        SAL_N_ELEMENTS( CheckboxGetValueFunctionTable );
 
     CTRL_SETVALUE_FUNCTION_T ListboxSetValueFunctionTable[] =
     {
@@ -83,7 +83,7 @@ namespace // private
         ListboxSetSelectedItem
     };
     const size_t SIZE_LISTBOX_SETVALUE_FUNCTION_TABLE =
-        sizeof( ListboxSetValueFunctionTable ) / sizeof( CTRL_SETVALUE_FUNCTION_T );
+        SAL_N_ELEMENTS( ListboxSetValueFunctionTable );
 
     CTRL_GETVALUE_FUNCTION_T ListboxGetValueFunctionTable[] =
     {
@@ -98,7 +98,7 @@ namespace // private
         ListboxGetSelectedItemIndex
     };
     const size_t SIZE_LISTBOX_GETVALUE_ACTION_TABLE =
-        sizeof( ListboxGetValueFunctionTable ) / sizeof( CTRL_GETVALUE_FUNCTION_T );
+        SAL_N_ELEMENTS( ListboxGetValueFunctionTable );
 
     struct _ENTRY
     {
