@@ -39,11 +39,9 @@
 //  includes of other projects
 //----------------------------------------------
 #include <cppuhelper/factory.hxx>
-#include <com/sun/star/container/XSet.hpp>
 #include <osl/diagnose.h>
 #include "SalGtkFilePicker.hxx"
 #include "SalGtkFolderPicker.hxx"
-#include <vcl/svapp.hxx>
 #include "FPServiceInfo.hxx"
 
 #include <glib-object.h>
@@ -57,11 +55,9 @@ extern      const guint gtk_minor_version;
 
 using namespace ::rtl;
 using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::registry;
 using namespace ::cppu;
-using ::com::sun::star::ui::dialogs::XFilePicker;
 using ::com::sun::star::ui::dialogs::XFilePicker2;
 using ::com::sun::star::ui::dialogs::XFolderPicker;
 
