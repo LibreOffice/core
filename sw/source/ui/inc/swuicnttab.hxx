@@ -152,7 +152,6 @@ class SwTOXSelectTabPage : public SfxTabPage
     //content
     FixedLine       aCreateFromFL;  // content, user, illustration
     CheckBox        aFromHeadingsCB;
-//  PushButton      aChapterDlgPB;  //#outline level,removed by zhaojianwei
     CheckBox        aAddStylesCB;
     PushButton      aAddStylesPB;
     //user
@@ -223,7 +222,6 @@ class SwTOXSelectTabPage : public SfxTabPage
 
     DECL_LINK(TOXTypeHdl,   ListBox* );
     DECL_LINK(TOXAreaHdl,   ListBox* );
-//  DECL_LINK(ChapterHdl,   PushButton* ); //#outline level,removed by zhaojianwei
     DECL_LINK(AddStylesHdl, PushButton* );
     DECL_LINK(MenuEnableHdl, Menu*);
     DECL_LINK(MenuExecuteHdl, Menu*);
@@ -491,7 +489,6 @@ class SwTOXStylesTabPage : public SfxTabPage
     FixedLine       aFormatFL;
 
     SwForm*         m_pCurrentForm;
-//  void            UpdatePattern();
 
     DECL_LINK( EditStyleHdl, Button *);
     DECL_LINK( StdHdl, Button * );
