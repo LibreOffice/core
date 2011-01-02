@@ -122,10 +122,10 @@ SwCondCollPage::SwCondCollPage(Window *pParent, const SfxItemSet &rSet)
     }
 
     const SfxStyleFilter& rFilterList = pFamilyItem->GetFilterList();
-    for( i = 0; i < rFilterList.Count(); ++i)
+    for( size_t i = 0; i < rFilterList.size(); ++i )
     {
-        aFilterLB.InsertEntry(rFilterList.GetObject(i)->aName);
-        USHORT* pFilter = new USHORT(rFilterList.GetObject(i)->nFlags);
+        aFilterLB.InsertEntry( rFilterList[ i ]->aName);
+        USHORT* pFilter = new USHORT( rFilterList[ i ]->nFlags);
         aFilterLB.SetEntryData(i, pFilter);
     }
     aFilterLB.SelectEntryPos(1);
