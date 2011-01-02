@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * Version: MPL 1.1 / GPLv3+ / LGPLv3+
  *
@@ -37,3 +38,5 @@ LwpBackgroundOverride* LwpBackgroundOverride::clone() const
 {
     return new LwpBackgroundOverride(*this);
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
