@@ -38,26 +38,19 @@
 //------------------------------------------------------------------------
 // includes
 //------------------------------------------------------------------------
-#include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
-#include <com/sun/star/ui/dialogs/ExtendedFilePickerElementIds.hpp>
 #include <com/sun/star/ui/dialogs/CommonFilePickerElementIds.hpp>
 #include <com/sun/star/ui/dialogs/ExtendedFilePickerElementIds.hpp>
-#include <cppuhelper/interfacecontainer.h>
 #include <osl/diagnose.h>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <com/sun/star/uno/Any.hxx>
 #include <FPServiceInfo.hxx>
 #include <osl/mutex.hxx>
-#include <vcl/svapp.hxx>
 #include "SalGtkFolderPicker.hxx"
-
-#include <tools/urlobj.hxx>
-
-#include <iostream>
 #include "resourceprovider.hxx"
-#include <tools/rc.hxx>
+
+#include <string.h>
 
 //------------------------------------------------------------------------
 // namespace directives
