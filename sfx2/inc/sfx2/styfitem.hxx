@@ -36,17 +36,13 @@
 #include <tools/list.hxx>
 #include <tools/rc.hxx>
 #include <rsc/rscsfx.hxx>
+#include <vector>
 
-#ifndef _SFX_STYFITEM_HXX_NOLIST
 struct SfxFilterTupel {
     String aName;
     USHORT nFlags;
 };
-
-DECLARE_LIST(SfxStyleFilter, SfxFilterTupel*)
-#else
-typedef List SfxStyleFilter;
-#endif
+typedef ::std::vector< SfxFilterTupel* > SfxStyleFilter;
 
 // CLASS -----------------------------------------------------------------
 

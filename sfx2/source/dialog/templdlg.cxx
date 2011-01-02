@@ -1253,8 +1253,8 @@ void SfxCommonTemplateDialog_Impl::UpdateStyles_Impl(USHORT nFlags)     // Flags
 
     const SfxStyleFamily eFam = pItem->GetFamily();
 
-    SfxFilterTupel *pT = pItem->GetFilterList().GetObject(nActFilter);
-    USHORT nFilter = pT ? pItem->GetFilterList().GetObject(nActFilter)->nFlags : 0;
+    SfxFilterTupel *pT =      pItem->GetFilterList().at(nActFilter);
+    USHORT nFilter     = pT ? pItem->GetFilterList().at(nActFilter)->nFlags : 0;
     if(!nFilter)    // automatisch
         nFilter = nAppFilter;
 
@@ -1272,10 +1272,10 @@ void SfxCommonTemplateDialog_Impl::UpdateStyles_Impl(USHORT nFlags)     // Flags
             USHORT nPos = aFilterLb.InsertEntry(String(SfxResId(STR_STYLE_FILTER_HIERARCHICAL)), 0);
             aFilterLb.SetEntryData( nPos, (void*)(ULONG)SFXSTYLEBIT_ALL );
             const SfxStyleFilter& rFilter = pItem->GetFilterList();
-            for(USHORT i = 0; i < rFilter.Count(); ++i)
+            for( size_t i = 0; i < rFilter.size(); ++i)
             {
-                ULONG nFilterFlags = rFilter.GetObject(i)->nFlags;
-                nPos = aFilterLb.InsertEntry( rFilter.GetObject(i)->aName );
+                ULONG nFilterFlags = rFilter[ i ]->nFlags;
+                nPos = aFilterLb.InsertEntry( rFilter[ i ]->aName );
                 aFilterLb.SetEntryData( nPos, (void*)nFilterFlags );
             }
             if(nActFilter < aFilterLb.GetEntryCount() - 1)
@@ -1284,8 +1284,8 @@ void SfxCommonTemplateDialog_Impl::UpdateStyles_Impl(USHORT nFlags)     // Flags
             {
                 nActFilter = 0;
                 aFilterLb.SelectEntryPos(1);
-                SfxFilterTupel *pActT = rFilter.GetObject(nActFilter);
-                USHORT nFilterFlags = pActT ? rFilter.GetObject(nActFilter)->nFlags : 0;
+                SfxFilterTupel *pActT = rFilter[ nActFilter ];
+                USHORT nFilterFlags = pActT ? rFilter[ nActFilter ]->nFlags : 0;
                 pStyleSheetPool->SetSearchMask(eFam, nFilterFlags);
             }
 
@@ -1310,7 +1310,6 @@ void SfxCommonTemplateDialog_Impl::UpdateStyles_Impl(USHORT nFlags)     // Flags
 
         if(nFlags & UPDATE_FAMILY_LIST)
         {
-//          EnableEdit(FALSE);
             EnableItem(SID_STYLE_WATERCAN,FALSE);
 
             SfxStyleSheetBase *pStyle = pStyleSheetPool->First();
@@ -1459,7 +1458,6 @@ void SfxCommonTemplateDialog_Impl::Update_Impl()
             pStyleSheetPool = pNewPool;
             bDocChanged=TRUE;
         }
-//      InvalidateBindings();
     }
 
     if (bUpdateFamily)
@@ -1516,7 +1514,7 @@ void SfxCommonTemplateDialog_Impl::Update_Impl()
          SfxFilterTupel *pT;
          pT = pStyleItem->GetFilterList().GetObject(nActFilter);
 #endif
-         if(0 == pStyleItem->GetFilterList().GetObject(nActFilter)->nFlags
+         if(0 == pStyleItem->GetFilterList().at(nActFilter)->nFlags
             && nAppFilter != pItem->GetValue())
          {
              nAppFilter = pItem->GetValue();
@@ -1736,12 +1734,12 @@ BOOL SfxCommonTemplateDialog_Impl::Execute_Impl(
         if(!nFilterFlags)       // Benutzervorlage?
             nFilterFlags = pFilterItem->GetValue();
         const SfxStyleFamilyItem *pFamilyItem = GetFamilyItem_Impl();
-        const USHORT nFilterCount = (USHORT) pFamilyItem->GetFilterList().Count();
+        const size_t nFilterCount = pFamilyItem->GetFilterList().size();
 
-        for ( USHORT i = 0; i < nFilterCount; ++i )
+        for ( size_t i = 0; i < nFilterCount; ++i )
         {
             const SfxFilterTupel *pTupel =
-                pFamilyItem->GetFilterList().GetObject(i);
+                pFamilyItem->GetFilterList().at( i );
 
             if ( ( pTupel->nFlags & nFilterFlags ) == nFilterFlags && pIdx )
                 *pIdx = i;
@@ -1802,7 +1800,6 @@ IMPL_LINK( SfxCommonTemplateDialog_Impl, FilterSelectHdl, ListBox *, pBox )
         // minus one since hierarchical is inserted at the start
         FilterSelect(pBox->GetSelectEntryPos() - 1, bHierarchical );
         bHierarchical=FALSE;
-//      UpdateStyles_Impl(UPDATE_FAMILY_LIST);  // Anzeige aktualisieren
     }
 
     return 0;
@@ -1863,13 +1860,11 @@ void SfxCommonTemplateDialog_Impl::ActionSelect(USHORT nEntry)
             if(pStyleSheetPool && nActFamily != 0xffff)
             {
                 const SfxStyleFamily eFam=GetFamilyItem_Impl()->GetFamily();
-//pStyleSheetPool->GetSearchFamily();
                 const SfxStyleFamilyItem *pItem = GetFamilyItem_Impl();
                 USHORT nFilter;
-                if(pItem&&nActFilter!=0xffff)
+                if( pItem && nActFilter != 0xffff )
                 {
-                    nFilter = pItem->GetFilterList().GetObject(
-                        nActFilter)->nFlags;
+                    nFilter = pItem->GetFilterList().at( nActFilter )->nFlags;
                     if(!nFilter)    // automatisch
                         nFilter = nAppFilter;
                 }
@@ -1998,10 +1993,9 @@ void SfxCommonTemplateDialog_Impl::NewHdl(void *)
         const SfxStyleFamilyItem *pItem = GetFamilyItem_Impl();
         const SfxStyleFamily eFam=pItem->GetFamily();
         USHORT nMask;
-        if(pItem&&nActFilter!=0xffff)
+        if( pItem && nActFilter != 0xffff )
         {
-            nMask = pItem->GetFilterList().GetObject(
-                nActFilter)->nFlags;
+            nMask = pItem->GetFilterList().at( nActFilter )->nFlags;
             if(!nMask)    // automatisch
                 nMask = nAppFilter;
         }
@@ -2017,27 +2011,6 @@ void SfxCommonTemplateDialog_Impl::NewHdl(void *)
 
         Application::SetDefDialogParent( pTmp );
 
-/*              {
-            DBG_ASSERT(nFilter < aFilterLb.GetEntryCount(),
-                       "Filter ueberindiziert");
-
-            if(!pTreeBox)
-            {
-//                              aFilterLb.SelectEntryPos(nFilter);
-                FilterSelect(nActFilter, TRUE);
-            }
-            else
-            {
-                FillTreeBox();
-                SfxTemplateItem *pState = pFamilyState[nActFamily-1];
-                if(pState)
-                {
-                    const String aStyle(pState->GetStyleName());
-                    SelectStyle(aStyle);
-                }
-                EnableDelete();
-            }*/
-//              }
     }
 }
 
@@ -2064,16 +2037,6 @@ void SfxCommonTemplateDialog_Impl::EditHdl(void *)
         if ( Execute_Impl( SID_STYLE_EDIT, aTemplName, String(),
                           (USHORT)GetFamilyItem_Impl()->GetFamily(), 0, &nFilter ) )
         {
-//          DBG_ASSERT(nFilter < aFilterLb.GetEntryCount(), "Filter ueberindiziert");
-//          aTemplName = pStyle->GetName();
-// kann durch Bearbeiten umbenannt worden sein
-/*                      if(!pTreeBox)
-            {
-                //                              aFilterLb.SelectEntryPos(nFilter);
-                //                              FilterSelect(nFilter, TRUE);
-            }
-            else
-                FillTreeBox();*/
         }
         Application::SetDefDialogParent( pTmp );
     }
@@ -2134,8 +2097,8 @@ void    SfxCommonTemplateDialog_Impl::EnableDelete()
         const SfxStyleFamilyItem *pItem = GetFamilyItem_Impl();
         const SfxStyleFamily eFam = pItem->GetFamily();
         USHORT nFilter = 0;
-        if(pItem->GetFilterList().Count() > nActFilter)
-            nFilter = pItem->GetFilterList().GetObject(nActFilter)->nFlags;
+        if(pItem->GetFilterList().size() > nActFilter)
+            nFilter = pItem->GetFilterList().at( nActFilter )->nFlags;
         if(!nFilter)    // automatisch
             nFilter = nAppFilter;
         const SfxStyleSheetBase *pStyle =
@@ -2155,8 +2118,6 @@ void    SfxCommonTemplateDialog_Impl::EnableDelete()
     {
         EnableDel(FALSE);
     }
-//  rBindings.Invalidate( SID_STYLE_DELETE );
-//  rBindings.Update( SID_STYLE_DELETE );
 }
 
 //-------------------------------------------------------------------------
@@ -2218,7 +2179,6 @@ IMPL_LINK( SfxCommonTemplateDialog_Impl, FmtSelectHdl, SvTreeListBox *, pListBox
                          GetSelectedEntry(), aEmpty,
                          ( USHORT )GetFamilyItem_Impl()->GetFamily());
         }
-//      EnableEdit(TRUE);
         EnableItem(SID_STYLE_WATERCAN, !bWaterDisabled);
         EnableDelete();
     }

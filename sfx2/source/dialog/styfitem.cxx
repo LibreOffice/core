@@ -63,7 +63,7 @@ SfxStyleFamilyItem::SfxStyleFamilyItem( const ResId &rResId ) :
             pTupel->aName = ReadStringRes();
             long lFlags = ReadLongRes();
             pTupel->nFlags = (USHORT)lFlags;
-            aFilterList.Insert(pTupel, LIST_APPEND);
+            aFilterList.push_back( pTupel );
         }
     }
     if(nMask & RSC_SFX_STYLE_ITEM_BITMAP)
@@ -100,12 +100,9 @@ SfxStyleFamilyItem::SfxStyleFamilyItem( const ResId &rResId ) :
 
 SfxStyleFamilyItem::~SfxStyleFamilyItem()
 {
-    SfxFilterTupel *pTupel = aFilterList.First();
-    while(pTupel)
-    {
-        delete pTupel;
-        pTupel = aFilterList.Next();
-    }
+    for ( size_t i = 0, n = aFilterList.size(); i < n; ++i )
+        delete aFilterList[ i ];
+    aFilterList.clear();
 }
 
 // -----------------------------------------------------------------------

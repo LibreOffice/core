@@ -193,9 +193,9 @@ SfxManageStyleSheetPage::SfxManageStyleSheetPage( Window* pParent, const SfxItem
         aBaseFt.Disable();
         aBaseLb.Disable();
     }
-    USHORT nCount = pFamilies->Count();
 
-    USHORT i;
+    size_t nCount = pFamilies->Count();
+    size_t i;
     for ( i = 0; i < nCount; ++i )
     {
         pItem = pFamilies->GetObject(i);
@@ -209,7 +209,7 @@ SfxManageStyleSheetPage::SfxManageStyleSheetPage( Window* pParent, const SfxItem
         USHORT nStyleFilterIdx = 0xffff;
         // Filterflags
         const SfxStyleFilter& rList = pItem->GetFilterList();
-        nCount = (USHORT)rList.Count();
+        nCount = rList.size();
         USHORT nIdx = 0;
         USHORT nMask = pStyle->GetMask() & ~SFXSTYLEBIT_USERDEF;
 
@@ -218,11 +218,10 @@ SfxManageStyleSheetPage::SfxManageStyleSheetPage( Window* pParent, const SfxItem
 
         for ( i = 0; i < nCount; ++i )
         {
-            SfxFilterTupel* pTupel = rList.GetObject(i);
+            SfxFilterTupel* pTupel = rList[ i ];
 
             if ( pTupel->nFlags != SFXSTYLEBIT_AUTO     &&
                  pTupel->nFlags != SFXSTYLEBIT_USED     &&
-//               pTupel->nFlags != SFXSTYLEBIT_USERDEF  &&
                  pTupel->nFlags != SFXSTYLEBIT_ALL )
             {
                 aFilterLb.InsertEntry( pTupel->aName, nIdx );
@@ -441,9 +440,8 @@ BOOL SfxManageStyleSheetPage::FillItemSet( SfxItemSet& rSet )
         SfxFilterTupel* p;
         p = pItem->GetFilterList().GetObject( nIdx );
 #endif
-        USHORT nMask = pItem->GetFilterList().GetObject(
-            (USHORT)(long)aFilterLb.GetEntryData( nFilterIdx ) )->nFlags |
-            SFXSTYLEBIT_USERDEF;
+        USHORT nMask = pItem->GetFilterList().at(
+            (size_t)aFilterLb.GetEntryData( nFilterIdx ) )->nFlags | SFXSTYLEBIT_USERDEF;
         pStyle->SetMask( nMask );
     }
     if(aAutoCB.IsVisible() &&
