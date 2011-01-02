@@ -582,7 +582,7 @@ testcase tExtrasIndividuellePraesentation
       Kontext "NavigatorDraw"
       Naechste.Click						'/// switch to next slide ///'
       Kontext "DocumentImpress"
-      hRechteckErstellen (50,50,60,60)		'/// create rectangle ///'
+      hRechteckErstellen (30,30,40,40)		'/// create rectangle ///'
       Printlog "  - Created rectangles on all slides"
    else
       Warnlog "  No Navigator"
