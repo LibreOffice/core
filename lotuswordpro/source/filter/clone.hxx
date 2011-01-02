@@ -39,13 +39,13 @@ struct has_clone
     typedef struct { char a[2]; } no;
 
     template<typename U>
-    static yes check_sig(U*, test<U* (U::*)() const, &U::clone>* = 0);
+    static yes& check_sig(U*, test<U* (U::*)() const, &U::clone>* = 0);
     template<typename U>
-    static no check_sig(...);
+    static no& check_sig(...);
 
     enum
     {
-        value = sizeof(has_clone<T>::template check_sig<T>(0)) == sizeof(yes)
+        value = sizeof(check_sig<T>(0)) == sizeof(yes)
     };
 };
 
