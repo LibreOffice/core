@@ -254,7 +254,8 @@ public:
     void                SetWrtShell(SwWrtShell& rSh);
 };
 
-typedef ::std::vector< Control* > TOXControlList;
+
+DECLARE_LIST( TOXControlList, Control* )
 
 class SwTOXEdit;
 class SwTOXButton;

@@ -112,11 +112,11 @@ SwCondCollPage::SwCondCollPage(Window *pParent, const SfxItemSet &rSet)
 
     SfxStyleFamilies aFamilies(SW_RES(DLG_STYLE_DESIGNER));
     const SfxStyleFamilyItem* pFamilyItem = 0;
-    USHORT nCount = aFamilies.Count();
 
-    for(USHORT i = 0; i < nCount; ++i)
+    size_t nCount = aFamilies.size();
+    for( size_t i = 0; i < nCount; ++i )
     {
-        if(SFX_STYLE_FAMILY_PARA == (USHORT)(pFamilyItem = aFamilies.GetObject(i))->GetFamily())
+        if(SFX_STYLE_FAMILY_PARA == (USHORT)(pFamilyItem = aFamilies.at( i ))->GetFamily())
             break;
     }
 
