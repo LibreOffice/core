@@ -76,7 +76,7 @@ struct cloner<T, true>
 template<typename T>
 T* clone(T* const other)
 {
-    return other ? detail::cloner<T, detail::has_clone<T>::value>::clone(other) : 0;
+    return other ? ::detail::cloner<T, ::detail::has_clone<T>::value>::clone(other) : 0;
 }
 
 // vim: set sts=4 sw=4 et:
