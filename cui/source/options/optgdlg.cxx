@@ -221,7 +221,7 @@ OfaMiscTabPage::OfaMiscTabPage(Window* pParent, const SfxItemSet& rSet ) :
 {
     FreeResource();
 
-#if not ENABLE_HELP_FORMATTING
+#if !defined(ENABLE_HELP_FORMATTING)
     aHelpFormatFT.Hide();
     aHelpFormatLB.Hide();
 #endif
@@ -232,10 +232,10 @@ OfaMiscTabPage::OfaMiscTabPage(Window* pParent, const SfxItemSet& rSet ) :
         aFileDlgCB.Hide();
     }
 
-    #if ! defined(QUARTZ)
+#if !defined(QUARTZ)
     aPrintDlgFL.Hide();
     aPrintDlgCB.Hide();
-    #endif
+#endif
 
 #ifdef WNT
     aFileDlgCB.SetToggleHdl( LINK( this, OfaMiscTabPage, OnFileDlgToggled ) );
