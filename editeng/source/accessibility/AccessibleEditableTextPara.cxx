@@ -1271,7 +1271,6 @@ namespace accessibility
                 aAny >>= d1;
                 aAny >>= f1;
             }
-            int i = 3;
         }
 #endif
 
