@@ -194,11 +194,11 @@ SfxManageStyleSheetPage::SfxManageStyleSheetPage( Window* pParent, const SfxItem
         aBaseLb.Disable();
     }
 
-    size_t nCount = pFamilies->Count();
+    size_t nCount = pFamilies->size();
     size_t i;
     for ( i = 0; i < nCount; ++i )
     {
-        pItem = pFamilies->GetObject(i);
+        pItem = pFamilies->at( i );
 
         if ( pItem->GetFamily() == pStyle->GetFamily() )
             break;

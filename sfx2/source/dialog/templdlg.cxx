@@ -827,7 +827,7 @@ SfxCommonTemplateDialog_Impl::SfxCommonTemplateDialog_Impl( SfxBindings* pB, Mod
 
 USHORT SfxCommonTemplateDialog_Impl::StyleNrToInfoOffset(USHORT nId)
 {
-    const SfxStyleFamilyItem *pItem=pStyleFamilies->GetObject(nId);
+    const SfxStyleFamilyItem *pItem = pStyleFamilies->at( nId );
     return SfxFamilyIdToNId(pItem->GetFamily())-1;
 }
 
@@ -845,8 +845,8 @@ void SfxTemplateDialog_Impl::EnableEdit(BOOL bEnable)
 
 USHORT SfxCommonTemplateDialog_Impl::InfoOffsetToStyleNr(USHORT nId)
 {
-    for ( USHORT i=0;i<pStyleFamilies->Count();i++ )
-        if ( SfxFamilyIdToNId(pStyleFamilies->GetObject(i)->GetFamily()) == nId+1 )
+    for ( size_t i = 0; i < pStyleFamilies->size(); i++ )
+        if ( SfxFamilyIdToNId(pStyleFamilies->at( i )->GetFamily()) == nId+1 )
             return i;
     DBG_ERROR("Style Nummer nicht gefunden");
     return 0;
@@ -858,8 +858,7 @@ USHORT SfxCommonTemplateDialog_Impl::InfoOffsetToStyleNr(USHORT nId)
 void SfxCommonTemplateDialog_Impl::ReadResource()
 {
     // globale Benutzer-Resource auslesen
-    USHORT i;
-    for(i = 0; i < MAX_FAMILIES; ++i)
+    for(USHORT i = 0; i < MAX_FAMILIES; ++i)
         pFamilyState[i] = 0;
 
     SfxViewFrame* pViewFrame = pBindings->GetDispatcher_Impl()->GetFrame();
@@ -880,14 +879,15 @@ void SfxCommonTemplateDialog_Impl::ReadResource()
 
         // Einfuegen in die Toolbox
         // umgekehrte Reihenfolge, da immer vorne eingefuegt wird.
-    USHORT nCount = pStyleFamilies->Count();
+    size_t nCount = pStyleFamilies->size();
 
     pBindings->ENTERREGISTRATIONS();
 
+    size_t i;
     for(i = 0; i < nCount; ++i)
     {
         USHORT nSlot = 0;
-        switch((USHORT)pStyleFamilies->GetObject(i)->GetFamily())
+        switch( (USHORT)pStyleFamilies->at( i )->GetFamily() )
         {
             case SFX_STYLE_FAMILY_CHAR: nSlot = SID_STYLE_FAMILY1; break;
             case SFX_STYLE_FAMILY_PARA: nSlot = SID_STYLE_FAMILY2; break;
@@ -938,7 +938,7 @@ void SfxCommonTemplateDialog_Impl::ReadResource()
 
     for( ; nCount--; )
     {
-        const SfxStyleFamilyItem *pItem = pStyleFamilies->GetObject( nCount );
+        const SfxStyleFamilyItem *pItem = pStyleFamilies->at( nCount );
         USHORT nId = SfxFamilyIdToNId( pItem->GetFamily() );
         InsertFamilyItem( nId, pItem );
     }
@@ -1052,11 +1052,10 @@ void SfxCommonTemplateDialog_Impl::SetAutomaticFilter()
 // Hilfsfunktion: Zugriff auf aktuelles Family-Item
 const SfxStyleFamilyItem *SfxCommonTemplateDialog_Impl::GetFamilyItem_Impl() const
 {
-    const USHORT nCount = pStyleFamilies->Count();
-    for(USHORT i = 0; i < nCount; ++i)
+    const size_t nCount = pStyleFamilies->size();
+    for(size_t i = 0; i < nCount; ++i)
     {
-        const SfxStyleFamilyItem *pItem = pStyleFamilies->GetObject(i);
-//        if(!pItem)continue;
+        const SfxStyleFamilyItem *pItem = pStyleFamilies->at( i );
         USHORT nId = SfxFamilyIdToNId(pItem->GetFamily());
         if(nId == nActFamily)
             return pItem;
@@ -1238,14 +1237,14 @@ void SfxCommonTemplateDialog_Impl::UpdateStyles_Impl(USHORT nFlags)     // Flags
     {
         // Ist beim Vorlagenkatalog der Fall
         SfxTemplateItem **ppItem = pFamilyState;
-        const USHORT nFamilyCount = pStyleFamilies->Count();
-        USHORT n;
-        for(n=0;n<nFamilyCount;n++)
-            if(ppItem[StyleNrToInfoOffset(n)])break;
+        const size_t nFamilyCount = pStyleFamilies->size();
+        size_t n;
+        for( n = 0; n < nFamilyCount; n++ )
+            if( ppItem[ StyleNrToInfoOffset(n) ] ) break;
         if ( n == nFamilyCount )
             // passiert gelegentlich bei Beichten, Formularen etc.; weiss der Teufel warum
             return;
-        ppItem+=StyleNrToInfoOffset(n);
+        ppItem += StyleNrToInfoOffset(n);
         nAppFilter = (*ppItem)->GetValue();
         FamilySelect(  StyleNrToInfoOffset(n)+1 );
         pItem = GetFamilyItem_Impl();
@@ -1389,9 +1388,9 @@ void SfxCommonTemplateDialog_Impl::SetWaterCanState(const SfxBoolItem *pItem)
 
 //Waehrend Giesskannenmodus Statusupdates ignorieren.
 
-    USHORT nCount=pStyleFamilies->Count();
+    size_t nCount = pStyleFamilies->size();
     pBindings->EnterRegistrations();
-    for(USHORT n=0; n<nCount; n++)
+    for(size_t n = 0; n < nCount; n++)
     {
         SfxControllerItem *pCItem=pBoundItems[n];
         BOOL bChecked = pItem && pItem->GetValue();
@@ -1478,10 +1477,10 @@ void SfxCommonTemplateDialog_Impl::Update_Impl()
      {
          CheckItem(nActFamily, FALSE);
          SfxTemplateItem **ppItem = pFamilyState;
-         const USHORT nFamilyCount = pStyleFamilies->Count();
-         USHORT n;
-         for(n=0;n<nFamilyCount;n++)
-             if(ppItem[StyleNrToInfoOffset(n)])break;
+         const size_t nFamilyCount = pStyleFamilies->size();
+         size_t n;
+         for( n = 0; n < nFamilyCount; n++ )
+             if( ppItem[ StyleNrToInfoOffset(n) ] ) break;
          ppItem+=StyleNrToInfoOffset(n);
 
          nAppFilter = (*ppItem)->GetValue();
@@ -2338,10 +2337,10 @@ void SfxTemplateDialog_Impl::updateFamilyImages()
     pStyleFamilies->updateImages( *m_pStyleFamiliesId );
 
     // and set the new images on our toolbox
-    USHORT nLoop = pStyleFamilies->Count();
+    size_t nLoop = pStyleFamilies->size();
     for( ; nLoop--; )
     {
-        const SfxStyleFamilyItem *pItem = pStyleFamilies->GetObject( nLoop );
+        const SfxStyleFamilyItem *pItem = pStyleFamilies->at( nLoop );
         USHORT nId = SfxFamilyIdToNId( pItem->GetFamily() );
         m_aActionTbL.SetItemImage( nId, pItem->GetImage() );
     }

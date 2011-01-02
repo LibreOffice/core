@@ -71,7 +71,7 @@ public:
     void            SetImage( const Image& _rImg ) { aImage = _rImg; }
 };
 
-DECLARE_LIST(SfxStyleFamilyList, SfxStyleFamilyItem*)
+typedef ::std::vector< SfxStyleFamilyItem* > SfxStyleFamilyList;
 
 class SFX2_DLLPUBLIC SfxStyleFamilies: public Resource
 {
@@ -85,11 +85,11 @@ public:
                         SfxStyleFamilies( ) {};
                         ~SfxStyleFamilies();
 
-    USHORT              Count() const
-                        { return (USHORT)aEntryList.Count(); }
+    size_t              size() const
+                        { return aEntryList.size(); }
 
-    const SfxStyleFamilyItem* GetObject(ULONG nIdx) const
-                        { return (SfxStyleFamilyItem*)aEntryList.GetObject(nIdx); }
+    const SfxStyleFamilyItem* at(size_t nIdx) const
+                        { return (SfxStyleFamilyItem*)(aEntryList.empty() ? NULL : aEntryList[nIdx]); }
 
     /** updates the images of all single SfxStyleFamilyItems with new images from the given resource
 

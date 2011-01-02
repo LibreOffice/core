@@ -110,9 +110,7 @@ SfxStyleFamilyItem::~SfxStyleFamilyItem()
 // Implementierung des Resource-Konstruktors
 
 SfxStyleFamilies::SfxStyleFamilies( const ResId& rResId ) :
-
-    Resource( rResId.SetRT( RSC_SFX_STYLE_FAMILIES ).SetAutoRelease( FALSE ) ),
-    aEntryList( 4, 1 )
+    Resource( rResId.SetRT( RSC_SFX_STYLE_FAMILIES ).SetAutoRelease( FALSE ) )
 {
     ULONG nCount = ReadLongRes();
     for( ULONG i = 0; i < nCount; i++ )
@@ -120,7 +118,7 @@ SfxStyleFamilies::SfxStyleFamilies( const ResId& rResId ) :
         const ResId aResId((RSHEADER_TYPE *)GetClassRes(), *rResId.GetResMgr());
         SfxStyleFamilyItem *pItem = new SfxStyleFamilyItem(aResId);
         IncrementRes( GetObjSizeRes( (RSHEADER_TYPE *)GetClassRes() ) );
-        aEntryList.Insert(pItem, LIST_APPEND);
+        aEntryList.push_back( pItem );
     }
 
     FreeResource();
@@ -134,13 +132,9 @@ SfxStyleFamilies::SfxStyleFamilies( const ResId& rResId ) :
 
 SfxStyleFamilies::~SfxStyleFamilies()
 {
-    SfxStyleFamilyItem *pItem = aEntryList.First();
-
-    while(pItem)
-    {
-        delete pItem;
-        pItem = aEntryList.Next();
-    }
+    for ( size_t i = 0, n = aEntryList.size(); i < n; ++i )
+        delete aEntryList[ i ];
+    aEntryList.clear();
 }
 
 
@@ -163,14 +157,14 @@ sal_Bool SfxStyleFamilies::updateImages( const ResId& _rId )
 
             // number of styles items/images
             sal_uInt16 nCount = aImages.GetImageCount( );
-            DBG_ASSERT( Count() == nCount, "SfxStyleFamilies::updateImages: found the image list, but missing some bitmaps!" );
-            if ( nCount > Count() )
-                nCount = Count();
+            DBG_ASSERT( aEntryList.size() == nCount, "SfxStyleFamilies::updateImages: found the image list, but missing some bitmaps!" );
+            if ( nCount > aEntryList.size() )
+                nCount = aEntryList.size();
 
             // set the images on the items
-            for ( sal_uInt16 i = 0; i < nCount; ++i )
+            for ( size_t i = 0; i < nCount; ++i )
             {
-                SfxStyleFamilyItem* pItem = static_cast< SfxStyleFamilyItem* >( aEntryList.GetObject( i ) );
+                SfxStyleFamilyItem* pItem = aEntryList[ i ];
                 pItem->SetImage( aImages.GetImage( aImages.GetImageId( i ) ) );
             }
 
