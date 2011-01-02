@@ -228,6 +228,57 @@ namespace slideshow
             return maHSLTriple.mnLuminance;
         }
 
+        double HSLColor::getRed() const
+        {
+            if( ::basegfx::fTools::equalZero( getSaturation() ) )
+                return getLuminance();
+
+            return hsl2rgbHelper( 2.0*getLuminance() - mnMagicValue,
+                                  mnMagicValue,
+                                  getHue() + 120.0 );
+        }
+
+        double HSLColor::getGreen() const
+        {
+            if( ::basegfx::fTools::equalZero( getSaturation() ) )
+                return getLuminance();
+
+            return hsl2rgbHelper( 2.0*getLuminance() - mnMagicValue,
+                                  mnMagicValue,
+                                  getHue() );
+        }
+
+        double HSLColor::getBlue() const
+        {
+            if( ::basegfx::fTools::equalZero( getSaturation() ) )
+                return getLuminance();
+
+            return hsl2rgbHelper( 2.0*getLuminance() - mnMagicValue,
+                                  mnMagicValue,
+                                  getHue() - 120.0 );
+        }
+
+        RGBColor HSLColor::getRGBColor() const
+        {
+            RGBColor::RGBTriple aColor( hsl2rgb( getHue(),
+                                                 getSaturation(),
+                                                 getLuminance() ) );
+            return RGBColor( aColor.mnRed, aColor.mnGreen, aColor.mnBlue );
+        }
+
+        RGBColor::RGBColor(const RGBColor& rLHS)
+            : maRGBTriple( rLHS.maRGBTriple )
+        {
+        }
+
+        RGBColor& RGBColor::operator=( const RGBColor& rLHS ){
+
+            maRGBTriple.mnRed = rLHS.getRed();
+            maRGBTriple.mnGreen = rLHS.getGreen();
+            maRGBTriple.mnBlue = rLHS.getBlue();
+            return *this;
+        }
+
         HSLColor operator+( const HSLColor& rLHS, const HSLColor& rRHS )
         {
             return HSLColor( rLHS.getHue() + rRHS.getHue(),
