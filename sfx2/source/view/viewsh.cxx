@@ -364,6 +364,24 @@ enum ETypeFamily
 
 //--------------------------------------------------------------------
 
+SAL_DLLPRIVATE void SfxViewShell::IPClientGone_Impl( SfxInPlaceClient *pIPClient )
+{
+    SfxInPlaceClientList* pClientList = GetIPClientList_Impl(TRUE);
+
+    for( SfxInPlaceClientList::iterator it = pClientList->begin(); it < pClientList->end(); ++it )
+    {
+        if ( *it == pIPClient )
+        {
+            pClientList->erase( it );
+            break;
+        }
+    }
+}
+
+
+
+//--------------------------------------------------------------------
+
 void SfxViewShell::ExecMisc_Impl( SfxRequest &rReq )
 {
     const USHORT nId = rReq.GetSlot();
@@ -711,9 +729,9 @@ void SfxViewShell::ExecMisc_Impl( SfxRequest &rReq )
                             SfxInPlaceClientList *pClients = pView->GetIPClientList_Impl(FALSE);
                             if ( pClients )
                             {
-                                for (USHORT n=0; n < pClients->Count(); n++)
+                                for ( size_t n = 0; n < pClients->size(); n++)
                                 {
-                                    SfxInPlaceClient* pIPClient = pClients->GetObject(n);
+                                    SfxInPlaceClient* pIPClient = pClients->at( n );
                                     if ( pIPClient )
                                         pView->CheckIPClient_Impl( pIPClient, aVisArea );
                                 }
@@ -930,9 +948,9 @@ SfxInPlaceClient* SfxViewShell::FindIPClient
 
     if( !pObjParentWin )
         pObjParentWin = GetWindow();
-    for (USHORT n=0; n < pClients->Count(); n++)
+    for ( size_t n = 0; n < pClients->size(); n++)
     {
-        SfxInPlaceClient *pIPClient = (SfxInPlaceClient*) pClients->GetObject(n);
+        SfxInPlaceClient *pIPClient = (SfxInPlaceClient*) pClients->at( n );
         if ( pIPClient->GetObject() == xObj && pIPClient->GetEditWin() == pObjParentWin )
             return pIPClient;
     }
@@ -956,9 +974,9 @@ SfxInPlaceClient* SfxViewShell::GetUIActiveIPClient_Impl() const
     if ( !pClients )
         return 0;
 
-    for (USHORT n=0; n < pClients->Count(); n++)
+    for ( size_t n = 0; n < pClients->size(); n++)
     {
-        SfxInPlaceClient* pIPClient = pClients->GetObject(n);
+        SfxInPlaceClient* pIPClient = pClients->at( n );
         if ( pIPClient->IsUIActive() )
             return pIPClient;
     }
@@ -972,9 +990,9 @@ SfxInPlaceClient* SfxViewShell::GetUIActiveClient() const
     if ( !pClients )
         return 0;
 
-    for (USHORT n=0; n < pClients->Count(); n++)
+    for ( size_t n = 0; n < pClients->size(); n++)
     {
-        SfxInPlaceClient* pIPClient = pClients->GetObject(n);
+        SfxInPlaceClient* pIPClient = pClients->at( n );
         if ( pIPClient->IsObjectUIActive() )
             return pIPClient;
     }
@@ -1763,9 +1781,9 @@ void SfxViewShell::ResetAllClients_Impl( SfxInPlaceClient *pIP )
     if ( !pClients )
         return;
 
-    for ( USHORT n=0; n < pClients->Count(); n++ )
+    for ( size_t n = 0; n < pClients->size(); n++ )
     {
-        SfxInPlaceClient* pIPClient = pClients->GetObject(n);
+        SfxInPlaceClient* pIPClient = pClients->at( n );
         if( pIPClient != pIP )
             pIPClient->ResetObject();
     }
@@ -1779,9 +1797,9 @@ void SfxViewShell::DisconnectAllClients()
     if ( !pClients )
         return;
 
-    for ( USHORT n=0; n<pClients->Count(); )
+    for ( size_t n = 0; n < pClients->size(); )
         // clients will remove themselves from the list
-        delete pClients->GetObject(n);
+        delete pClients->at( n );
 }
 
 //--------------------------------------------------------------------
@@ -1806,9 +1824,9 @@ void SfxViewShell::VisAreaChanged(const Rectangle& /*rVisArea*/)
     if ( !pClients )
         return;
 
-    for (USHORT n=0; n < pClients->Count(); n++)
+    for ( size_t n = 0; n < pClients->size(); n++)
     {
-        SfxInPlaceClient* pIPClient = pClients->GetObject(n);
+        SfxInPlaceClient* pIPClient = pClients->at( n );
         if ( pIPClient->IsObjectInPlaceActive() )
             // client is active, notify client that the VisArea might have changed
             pIPClient->VisAreaChanged();
@@ -1875,8 +1893,8 @@ void SfxViewShell::DiscardClients_Impl()
     if ( !pClients )
         return;
 
-    for (USHORT n=0; n < pClients->Count(); )
-        delete pClients->GetObject(n);
+    for ( size_t n = 0; n < pClients->size(); )
+        delete pClients->at( n );
 }
 
 //--------------------------------------------------------------------
