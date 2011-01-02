@@ -49,6 +49,8 @@
 #include <vcl/menubtn.hxx>
 #include <svx/langbox.hxx>
 #include <cnttab.hxx>
+#include <vector>
+
 class SwWrtShell;
 class SwTOXMgr;
 namespace com{namespace sun{namespace star{
@@ -254,7 +256,7 @@ public:
     void                SetWrtShell(SwWrtShell& rSh);
 };
 
-DECLARE_LIST(TOXControlList, Control*)
+typedef ::std::vector< Control* > TOXControlList;
 
 class SwTOXEdit;
 class SwTOXButton;
@@ -326,6 +328,14 @@ public:
 
     virtual void        Resize();
     virtual void        GetFocus();
+
+private:
+    size_t      currentControlList;
+    size_t      GetControlListPos( Control* pItem );
+    void        InsertControlList( Control* pItem, size_t Index );
+    Control*    FirstControlList();
+    Control*    NextControlList();
+    Control*    RemoveControlList( Control* pItem );
 };
 
 class SwTOXEntryTabPage;
