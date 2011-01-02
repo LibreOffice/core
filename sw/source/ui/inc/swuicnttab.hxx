@@ -327,14 +327,6 @@ public:
 
     virtual void        Resize();
     virtual void        GetFocus();
-
-private:
-    size_t      currentControlList;
-    size_t      GetControlListPos( Control* pItem );
-    void        InsertControlList( Control* pItem, size_t Index );
-    Control*    FirstControlList();
-    Control*    NextControlList();
-    Control*    RemoveControlList( Control* pItem );
 };
 
 class SwTOXEntryTabPage;
