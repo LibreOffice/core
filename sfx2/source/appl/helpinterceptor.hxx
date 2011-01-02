@@ -39,6 +39,7 @@
 #include <tools/string.hxx>
 #include <tools/list.hxx>
 #include <tools/link.hxx>
+#include <vector>
 
 struct HelpHistoryEntry_Impl
 {
@@ -49,7 +50,7 @@ struct HelpHistoryEntry_Impl
         aURL( rURL ), aViewData(rViewData) {}
 };
 
-DECLARE_LIST(HelpHistoryList_Impl,HelpHistoryEntry_Impl*)
+typedef ::std::vector< HelpHistoryEntry_Impl* > HelpHistoryList_Impl;
 
 class SfxHelpWindow_Impl;
 class HelpInterceptor_Impl : public ::cppu::WeakImplHelper3<

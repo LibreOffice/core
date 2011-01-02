@@ -63,9 +63,12 @@ HelpInterceptor_Impl::HelpInterceptor_Impl() :
 
 HelpInterceptor_Impl::~HelpInterceptor_Impl()
 {
-    for ( USHORT i = 0; m_pHistory && i < m_pHistory->Count(); ++i )
-        delete m_pHistory->GetObject(i);
-    delete m_pHistory;
+    if ( m_pHistory )
+    {
+        for ( size_t i = 0, n = m_pHistory->size(); i < n; ++i )
+            delete m_pHistory->at( i );
+        delete m_pHistory;
+    }
 }
 
 // -----------------------------------------------------------------------
@@ -74,26 +77,32 @@ void HelpInterceptor_Impl::addURL( const String& rURL )
 {
   if ( !m_pHistory )
         m_pHistory = new HelpHistoryList_Impl;
-    ULONG nCount = m_pHistory->Count();
+
+    size_t nCount = m_pHistory->size();
     if ( nCount && m_nCurPos < ( nCount - 1 ) )
     {
-        for ( ULONG i = nCount - 1; i > m_nCurPos; i-- )
-            delete m_pHistory->Remove(i);
+        for ( size_t i = nCount - 1; i > m_nCurPos; i-- )
+        {
+            delete m_pHistory->at( i );
+            HelpHistoryList_Impl::iterator it = m_pHistory->begin();
+            ::std::advance( it, i );
+            m_pHistory->erase( it );
+        }
     }
     Reference<XFrame> xFrame(m_xIntercepted, UNO_QUERY);
     Reference<XController> xController;
     if(xFrame.is())
         xController = xFrame->getController();
     Any aViewData;
-    if(xController.is() && m_pHistory->Count())
+    if(xController.is() && !m_pHistory->empty())
     {
-        m_pHistory->GetObject(m_nCurPos)->aViewData = xController->getViewData();
+        m_pHistory->at( m_nCurPos )->aViewData = xController->getViewData();
     }
 
     m_aCurrentURL = rURL;
     Any aEmptyViewData;
-    m_pHistory->Insert( new HelpHistoryEntry_Impl( rURL, aEmptyViewData ), LIST_APPEND );
-    m_nCurPos = m_pHistory->Count() - 1;
+    m_pHistory->push_back( new HelpHistoryEntry_Impl( rURL, aEmptyViewData ) );
+    m_nCurPos = m_pHistory->size() - 1;
 // TODO ?
     if ( m_xListener.is() )
     {
@@ -127,8 +136,8 @@ void HelpInterceptor_Impl::SetStartURL( const String& rURL )
     {
         m_pHistory = new HelpHistoryList_Impl;
         Any aEmptyViewData;
-        m_pHistory->Insert( new HelpHistoryEntry_Impl( rURL, aEmptyViewData ), ((ULONG)0x0) );
-        m_nCurPos = m_pHistory->Count() - 1;
+        m_pHistory->insert( m_pHistory->begin(), new HelpHistoryEntry_Impl( rURL, aEmptyViewData ) );
+        m_nCurPos = m_pHistory->size() - 1;
 
         m_pWindow->UpdateToolbox();
     }
@@ -142,7 +151,7 @@ sal_Bool HelpInterceptor_Impl::HasHistoryPred() const
 
 sal_Bool HelpInterceptor_Impl::HasHistorySucc() const
 {
-    return m_pHistory && ( m_nCurPos < ( m_pHistory->Count() - 1 ) );
+    return m_pHistory && ( m_nCurPos < ( m_pHistory->size() - 1 ) );
 }
 
 
@@ -258,7 +267,7 @@ void SAL_CALL HelpInterceptor_Impl::dispatch(
     {
         if ( m_pHistory )
         {
-            if(m_pHistory->Count() > m_nCurPos)
+            if(m_pHistory->size() > m_nCurPos)
             {
                 Reference<XFrame> xFrame(m_xIntercepted, UNO_QUERY);
                 Reference<XController> xController;
@@ -266,18 +275,18 @@ void SAL_CALL HelpInterceptor_Impl::dispatch(
                     xController = xFrame->getController();
                 if(xController.is())
                 {
-                    m_pHistory->GetObject(m_nCurPos)->aViewData = xController->getViewData();
+                    m_pHistory->at( m_nCurPos )->aViewData = xController->getViewData();
                 }
             }
 
             ULONG nPos = ( bBack && m_nCurPos > 0 ) ? --m_nCurPos
-                                                    : ( !bBack && m_nCurPos < m_pHistory->Count() - 1 )
+                                                    : ( !bBack && m_nCurPos < m_pHistory->size() - 1 )
                                                     ? ++m_nCurPos
                                                     : ULONG_MAX;
 
             if ( nPos < ULONG_MAX )
             {
-                HelpHistoryEntry_Impl* pEntry = m_pHistory->GetObject( nPos );
+                HelpHistoryEntry_Impl* pEntry = m_pHistory->at( nPos );
                 if ( pEntry )
                     m_pWindow->loadHelpContent(pEntry->aURL, sal_False); // false => dont add item to history again!
             }
