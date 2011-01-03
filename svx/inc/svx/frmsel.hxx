@@ -162,8 +162,7 @@ public:
     void                SelectAllVisibleBorders( bool bSelect = true );
 
     /** Sets the passed line widths to all selected frame borders (in twips). */
-    void                SetStyleToSelection( sal_uInt16 nPrim, sal_uInt16 nDist, sal_uInt16 nSec,
-                                             SvxBorderStyle nStyle );
+    void                SetStyleToSelection( long nWidth, SvxBorderStyle nStyle );
     /** Sets the passed color to all selected frame borders. */
     void                SetColorToSelection( const Color& rColor );
 

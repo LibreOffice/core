@@ -969,13 +969,10 @@ void FrameSelector::SelectAllVisibleBorders( bool bSelect )
         mxImpl->SelectBorder( **aIt, bSelect );
 }
 
-void FrameSelector::SetStyleToSelection( sal_uInt16 nPrim, sal_uInt16 nDist, sal_uInt16 nSecn,
-       SvxBorderStyle nStyle )
+void FrameSelector::SetStyleToSelection( long nWidth, SvxBorderStyle nStyle )
 {
-    mxImpl->maCurrStyle.SetOutWidth( nPrim );
-    mxImpl->maCurrStyle.SetDistance( nDist );
-    mxImpl->maCurrStyle.SetInWidth( nSecn );
     mxImpl->maCurrStyle.SetStyle( nStyle );
+    mxImpl->maCurrStyle.SetWidth( nWidth );
     for( SelFrameBorderIter aIt( mxImpl->maEnabBorders ); aIt.Is(); ++aIt )
         mxImpl->SetBorderState( **aIt, FRAMESTATE_SHOW );
 }

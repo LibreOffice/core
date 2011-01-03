@@ -3203,7 +3203,8 @@ SfxPoolItem* SvxLineItem::Create( SvStream& rStrm, sal_uInt16 ) const
     rStrm >> aColor >> nOutline >> nInline >> nDistance;
     if( nOutline )
     {
-        SvxBorderLine aLine( &aColor, nOutline, nInline, nDistance );
+        SvxBorderLine aLine( &aColor );
+        aLine.SetLinesWidths( SOLID, nInline, nOutline, nDistance );
         _pLine->SetLine( &aLine );
     }
     return _pLine;

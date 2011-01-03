@@ -1163,7 +1163,7 @@ IMPL_LINK( SvxFrameWindow_Impl, SelectHdl, void *, EMPTYARG )
     sal_uInt16              nModifier = aFrameSet.GetModifier();
     sal_uInt8               nValidFlags = 0;
 
-    theDefLine.SetOutWidth( DEF_LINE_WIDTH_0 );
+    theDefLine.SetLinesWidths( theDefLine.GetStyle(), 0, DEF_LINE_WIDTH_0, 0 );
     switch ( nSel )
     {
         case 1: nValidFlags |= FRM_VALID_ALL;
@@ -1619,7 +1619,8 @@ IMPL_LINK( SvxLineWindow_Impl, SelectHdl, void *, EMPTYARG )
     }
     if ( bSetLine )
     {
-        SvxBorderLine aTmp( NULL, n1, n2, n3, nStyle );
+        SvxBorderLine aTmp;
+        aTmp.SetLinesWidths( nStyle, n1, n2, n3 );
         aLineItem.SetLine( &aTmp );
     }
     else

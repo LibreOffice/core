@@ -506,8 +506,7 @@ namespace sdr
 
                     if(bMirror)
                     {
-                        aLine.SetOutWidth(pLine->GetInWidth());
-                        aLine.SetInWidth(pLine->GetOutWidth());
+                        aLine.SetMirrorWidths( );
                     }
 
                     return;
