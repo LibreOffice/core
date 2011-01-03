@@ -510,9 +510,9 @@ void AbstractScMoveTableDlg_Impl::GetTabNameString( String& rString ) const
 {
     pDlg->GetTabNameString( rString );
 }
-void    AbstractScMoveTableDlg_Impl::SetCopyTable(BOOL bFla)
+void    AbstractScMoveTableDlg_Impl::SetForceCopyTable()
 {
-    return pDlg->SetCopyTable( bFla );
+    return pDlg->SetForceCopyTable();
 }
 void    AbstractScMoveTableDlg_Impl::EnableCopyTable(BOOL bFlag)
 {

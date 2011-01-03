@@ -265,7 +265,7 @@ class AbstractScMoveTableDlg_Impl : public AbstractScMoveTableDlg  //add for ScM
     virtual BOOL    GetCopyTable            () const;
     virtual bool    GetRenameTable          () const;
     virtual void    GetTabNameString( String& rString ) const;
-    virtual void    SetCopyTable            (BOOL bFlag=TRUE);
+    virtual void    SetForceCopyTable       ();
     virtual void    EnableCopyTable         (BOOL bFlag=TRUE);
     virtual void    EnableRenameTable       (BOOL bFlag=TRUE);
 };

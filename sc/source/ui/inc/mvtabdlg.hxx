@@ -53,7 +53,7 @@ public:
     BOOL    GetCopyTable            () const;
     bool    GetRenameTable          () const;
     void    GetTabNameString( String& rString ) const;
-    void    SetCopyTable            (BOOL bFlag=TRUE);
+    void    SetForceCopyTable       ();
     void    EnableCopyTable         (BOOL bFlag=TRUE);
     void    EnableRenameTable       (BOOL bFlag=TRUE);
 

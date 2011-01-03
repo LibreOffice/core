@@ -215,7 +215,7 @@ public:
     virtual BOOL    GetCopyTable            () const = 0;
     virtual bool    GetRenameTable          () const = 0;
     virtual void    GetTabNameString( String& rString ) const = 0;
-    virtual void    SetCopyTable            (BOOL bFlag=TRUE) = 0;
+    virtual void    SetForceCopyTable       () = 0;
     virtual void    EnableCopyTable         (BOOL bFlag=TRUE) = 0;
     virtual void    EnableRenameTable       (BOOL bFlag=TRUE) = 0;
 };

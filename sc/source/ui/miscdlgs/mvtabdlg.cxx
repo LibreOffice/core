@@ -112,9 +112,11 @@ void ScMoveTableDlg::GetTabNameString( String& rString ) const
     rString = aEdTabName.GetText();
 }
 
-void ScMoveTableDlg::SetCopyTable(BOOL bFlag)
+void ScMoveTableDlg::SetForceCopyTable()
 {
-    aBtnCopy.Check(bFlag);
+    aBtnCopy.Check(true);
+    aBtnMove.Disable();
+    aBtnCopy.Disable();
 }
 
 void ScMoveTableDlg::EnableCopyTable(BOOL bFlag)
@@ -129,6 +131,7 @@ void ScMoveTableDlg::EnableRenameTable(BOOL bFlag)
 {
     bRenameTable = bFlag;
     aEdTabName.Enable(bFlag);
+    aFtTabName.Enable(bFlag);
     ResetRenameInput();
 }
 

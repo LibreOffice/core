@@ -555,8 +555,7 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
 
                     if(nTableCount==nTabSelCount)
                     {
-                        pDlg->SetCopyTable();
-                        pDlg->EnableCopyTable(FALSE);
+                        pDlg->SetForceCopyTable();
                     }
 
                     // We support direct renaming of sheet only when one sheet
