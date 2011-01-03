@@ -68,7 +68,6 @@ SHL1STDLIBS     = $(SVTOOLLIB)		\
                 $(VCLLIB)			\
                 $(UCBHELPERLIB)	\
                 $(SOTLIB)			\
-                $(BTSTRPLIB)		\
                 $(TOOLSLIB) 		\
                 $(VOSLIB)			\
                 $(SALLIB)           \
@@ -109,7 +108,6 @@ APP1STDLIBS= \
             $(UCBHELPERLIB)	\
             $(VCLLIB)			\
             $(SOTLIB)			\
-            $(BTSTRPLIB)		\
             $(TOOLSLIB) 		\
             $(VOSLIB)			\
             $(SALLIB)           \
