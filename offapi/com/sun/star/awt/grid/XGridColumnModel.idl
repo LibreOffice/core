@@ -29,6 +29,7 @@
 
 #include <com/sun/star/uno/XInterface.idl>
 #include <com/sun/star/lang/XComponent.idl>
+#include <com/sun/star/util/XCloneable.idl>
 
 #include <com/sun/star/awt/grid/XGridColumn.idl>
 #include <com/sun/star/container/XContainer.idl>
@@ -56,6 +57,10 @@ interface XGridColumnModel
     /** allows to register listeners to be notified when columns are inserted or removed
     */
     interface ::com::sun::star::container::XContainer;
+
+    /** allows cloning the complete column model
+    */
+    interface ::com::sun::star::util::XCloneable;
 
     /**Specifies the height of column header.
     */

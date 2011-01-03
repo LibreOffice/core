@@ -30,8 +30,8 @@
 
 
 #include <com/sun/star/lang/XComponent.idl>
+#include <com/sun/star/util/XCloneable.idl>
 #include <com/sun/star/awt/grid/XGridDataListener.idl>
-
 
 //=============================================================================
 
@@ -45,8 +45,16 @@ module com {  module sun {  module star {  module awt { module grid {
 
     @since OOo 3.3.0
 */
-interface XGridDataModel: ::com::sun::star::lang::XComponent
+interface XGridDataModel
 {
+    /** implements life time control for the component
+    */
+    interface ::com::sun::star::lang::XComponent;
+
+    /** allows cloning the complete column model
+    */
+    interface ::com::sun::star::util::XCloneable;
+
     /** Specifies the height of each row.
     */
     [attribute] long RowHeight;

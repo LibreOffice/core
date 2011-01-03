@@ -30,7 +30,7 @@
 #include <com/sun/star/lang/XComponent.idl>
 #include <com/sun/star/style/HorizontalAlignment.idl>
 #include <com/sun/star/awt/grid/XGridColumnListener.idl>
-
+#include <com/sun/star/util/XCloneable.idl>
 
 //=============================================================================
 
@@ -41,8 +41,16 @@ module com {  module sun {  module star {  module awt {  module grid {
 /** The <type>XGridColumn</types> defines the properties and behavior of a column in a grid control
     @since OOo 3.3.0
  */
-interface XGridColumn : com::sun::star::lang::XComponent
+interface XGridColumn
 {
+    /** implements life time control for the component
+    */
+    interface ::com::sun::star::lang::XComponent;
+
+    /** allows cloning the complete grid column
+    */
+    interface ::com::sun::star::util::XCloneable;
+
     /** Specifies the an idendifier of the colomn.**/
     [attribute] any Identifier;
 
