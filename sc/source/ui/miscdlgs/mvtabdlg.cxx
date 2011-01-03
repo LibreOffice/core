@@ -76,6 +76,10 @@ ScMoveTableDlg::ScMoveTableDlg( Window*       pParent,
         aBtnOk      ( this, ScResId( BTN_OK ) ),
         aBtnCancel  ( this, ScResId( BTN_CANCEL ) ),
         aBtnHelp    ( this, ScResId( BTN_HELP ) ),
+
+        maStrTabNameUsed( ScResId(STR_TABNAME_WARN_USED) ),
+        maStrTabNameEmpty( ScResId(STR_TABNAME_WARN_EMPTY) ),
+        maStrTabNameInvalid( ScResId(STR_TABNAME_WARN_INVALID) ),
         //
         mrDefaultName( rDefault ),
         nDocument   ( 0 ),
@@ -161,16 +165,35 @@ void ScMoveTableDlg::ResetRenameInput()
         // move
         aEdTabName.SetText(mrDefaultName);
 
-    CheckNewNameExists();
+    CheckNewTabName();
 }
 
-void ScMoveTableDlg::CheckNewNameExists()
+void ScMoveTableDlg::CheckNewTabName()
 {
+    const String& rNewName = aEdTabName.GetText();
+    if (!rNewName.Len())
+    {
+        // New sheet name is empty.  This is not good.
+        aFtWarn.SetText(maStrTabNameEmpty);
+        aFtWarn.Show();
+        aBtnOk.Disable();
+        return;
+    }
+
+    if (!ScDocument::ValidTabName(rNewName))
+    {
+        // New sheet name contains invalid characters.
+        aFtWarn.SetText(maStrTabNameInvalid);
+        aFtWarn.Show();
+        aBtnOk.Disable();
+        return;
+    }
+
     bool   bFound = false;
     USHORT nLast  = aLbTable.GetEntryCount() - 1;
     for ( USHORT i=0; i<=nLast; ++i )
     {
-        if ( aEdTabName.GetText() == aLbTable.GetEntry( i ) )
+        if ( rNewName == aLbTable.GetEntry( i ) )
         {
             if( ( aBtnMove.IsChecked() ) &&
                 ( aLbDoc.GetSelectEntryPos() == 0 ) &&
@@ -180,13 +203,20 @@ void ScMoveTableDlg::CheckNewNameExists()
                 bFound = false;
             else
                 bFound = true;
-
         }
     }
+
     if ( bFound )
+    {
+        aFtWarn.SetText(maStrTabNameUsed);
         aFtWarn.Show();
+        aBtnOk.Disable();
+    }
     else
+    {
         aFtWarn.Hide();
+        aBtnOk.Enable();
+    }
 }
 
 ScDocument* ScMoveTableDlg::GetSelectedDoc()
@@ -330,7 +360,7 @@ IMPL_LINK( ScMoveTableDlg, SelHdl, ListBox *, pLb )
 IMPL_LINK( ScMoveTableDlg, CheckNameHdl, Edit *, pEdt )
 {
     if ( pEdt == &aEdTabName )
-        CheckNewNameExists();
+        CheckNewTabName();
 
     return 0;
 }

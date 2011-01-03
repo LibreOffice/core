@@ -59,7 +59,7 @@ public:
 
 private:
     void ResetRenameInput();
-    void CheckNewNameExists();
+    void CheckNewTabName();
     ScDocument* GetSelectedDoc();
 
 private:
@@ -78,6 +78,10 @@ private:
     OKButton        aBtnOk;
     CancelButton    aBtnCancel;
     HelpButton      aBtnHelp;
+
+    String          maStrTabNameUsed;
+    String          maStrTabNameEmpty;
+    String          maStrTabNameInvalid;
 
     const String&   mrDefaultName;
 

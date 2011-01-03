@@ -543,7 +543,7 @@ ModalDialog RID_SCDLG_MOVETAB
     {
         Pos = MAP_APPFONT ( 12 , 197 ) ;
         Size = MAP_APPFONT ( 134 , 8 ) ;
-        Text [ en-US ] = "This name is already used." ;
+        Text [ en-US ] = "..." ;
     };
     String STR_CURRENTDOC
     {
@@ -552,6 +552,18 @@ ModalDialog RID_SCDLG_MOVETAB
     String STR_NEWDOC
     {
         Text [ en-US ] = "- new document -" ;
+    };
+    String STR_TABNAME_WARN_USED
+    {
+        Text [ en-US ] = "This name is already used." ;
+    };
+    String STR_TABNAME_WARN_EMPTY
+    {
+        Text [ en-US ] = "Name is empty." ;
+    };
+    String STR_TABNAME_WARN_INVALID
+    {
+        Text [ en-US ] = "Name contains one or more invalid characters." ;
     };
 };
 

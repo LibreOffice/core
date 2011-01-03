@@ -105,6 +105,9 @@
 #define FT_TABNAME      12
 #define FT_TABNAME_WARN 13
 #define STR_CURRENTDOC  14
+#define STR_TABNAME_WARN_USED    15
+#define STR_TABNAME_WARN_EMPTY   16
+#define STR_TABNAME_WARN_INVALID 17
 
 // Eingabe eines Strings
 #define ED_INPUT        10

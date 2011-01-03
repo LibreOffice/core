@@ -226,7 +226,7 @@ BOOL ScDocument::GetTable( const String& rName, SCTAB& rTab ) const
 }
 
 
-BOOL ScDocument::ValidTabName( const String& rName ) const
+bool ScDocument::ValidTabName( const String& rName )
 {
     xub_StrLen nLen = rName.Len();
     if (!nLen)

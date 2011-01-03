@@ -569,7 +569,8 @@ public:
     void            SetEmbedded( const Rectangle& rRect );          // aus VisArea (1/100 mm)
     void            SnapVisArea( Rectangle& rRect ) const;          // 1/100 mm
 
-    SC_DLLPUBLIC BOOL           ValidTabName( const String& rName ) const;
+    static SC_DLLPUBLIC bool ValidTabName( const String& rName );
+
     SC_DLLPUBLIC BOOL           ValidNewTabName( const String& rName ) const;
     SC_DLLPUBLIC void           CreateValidTabName(String& rName) const;
     SC_DLLPUBLIC BOOL           InsertTab( SCTAB nPos, const String& rName,
