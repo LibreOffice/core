@@ -37,6 +37,7 @@
 
 #include <cstdio>
 #include <list>
+#include <vector>
 
 // ---------------------
 // - GalleryThemeEntry -
@@ -92,7 +93,7 @@ public:
     void                    SetId( UINT32 nNewId, BOOL bResetThemeName );
 };
 
-DECLARE_LIST( GalleryThemeList, GalleryThemeEntry* )
+typedef ::std::vector< GalleryThemeEntry* > GalleryThemeList;
 
 // ---------------------------
 // - GalleryImportThemeEntry -
@@ -105,7 +106,8 @@ struct GalleryImportThemeEntry
     INetURLObject   aURL;
     String          aImportName;
 };
-DECLARE_LIST( GalleryImportThemeList, GalleryImportThemeEntry* )
+
+typedef ::std::vector< GalleryImportThemeEntry* > GalleryImportThemeList;
 
 // -----------------------------------------------------------------------------
 
@@ -155,8 +157,9 @@ public:
 
     SVX_DLLPUBLIC static Gallery* GetGalleryInstance();
 
-    ULONG                   GetThemeCount() const { return aThemeList.Count(); }
-    const GalleryThemeEntry*    GetThemeInfo( ULONG nPos ) { return aThemeList.GetObject( nPos ); }
+    size_t                      GetThemeCount() const { return aThemeList.size(); }
+    const GalleryThemeEntry*    GetThemeInfo( size_t nPos )
+                                { return nPos < aThemeList.size() ? aThemeList[ nPos ] : NULL; }
     const GalleryThemeEntry*    GetThemeInfo( const String& rThemeName ) { return ImplGetThemeEntry( rThemeName ); }
 
     SVX_DLLPUBLIC BOOL          HasTheme( const String& rThemeName );

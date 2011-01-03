@@ -210,12 +210,14 @@ Gallery::Gallery( const String& rMultiPath )
 Gallery::~Gallery()
 {
     // Themen-Liste loeschen
-    for( GalleryThemeEntry* pThemeEntry = aThemeList.First(); pThemeEntry; pThemeEntry = aThemeList.Next() )
-        delete pThemeEntry;
+    for ( size_t i = 0, n = aThemeList.size(); i < n; ++i )
+        delete aThemeList[ i ];
+    aThemeList.clear();
 
     // Import-Liste loeschen
-    for( GalleryImportThemeEntry* pImportEntry = aImportList.First(); pImportEntry; pImportEntry = aImportList.Next() )
-        delete pImportEntry;
+    for ( size_t i = 0, n = aImportList.size(); i < n; ++i )
+        delete aImportList[ i ];
+    aImportList.clear();
 }
 
 // ------------------------------------------------------------------------
@@ -433,7 +435,7 @@ void Gallery::ImplLoadSubDirs( const INetURLObject& rBaseURL, sal_Bool& rbDirIsR
                                 {
                                     const ULONG nFileNumber = (ULONG) String(aThmURL.GetBase()).Erase( 0, 2 ).Erase( 6 ).ToInt32();
 
-                                    aThemeList.Insert( pEntry, LIST_APPEND );
+                                    aThemeList.push_back( pEntry );
 
                                     if( nFileNumber > nLastFileNumber )
                                         nLastFileNumber = nFileNumber;
@@ -488,10 +490,10 @@ void Gallery::ImplLoadImports()
             UINT16                      i;
             UINT16                      nTempCharSet;
 
-            for( pImportEntry = aImportList.First(); pImportEntry; pImportEntry = aImportList.Next() )
-                delete pImportEntry;
+            for ( size_t j = 0, n = aImportList.size(); j < n; ++j )
+                delete aImportList[ j ];
+            aImportList.clear();
 
-            aImportList.Clear();
             *pIStm >> nInventor;
 
             if( nInventor == COMPAT_FORMAT( 'S', 'G', 'A', '3' ) )
@@ -503,14 +505,14 @@ void Gallery::ImplLoadImports()
                     pImportEntry = new GalleryImportThemeEntry;
 
                     *pIStm >> *pImportEntry;
-                    aImportList.Insert( pImportEntry, LIST_APPEND );
+                    aImportList.push_back( pImportEntry );
                     aFile = INetURLObject( pImportEntry->aURL );
                     pThemeEntry = new GalleryThemeEntry( aFile,
                                                          pImportEntry->aUIName,
                                                          String(aFile.GetBase()).Erase( 0, 2 ).Erase( 6 ).ToInt32(),
                                                          TRUE, TRUE, FALSE, 0, FALSE );
 
-                    aThemeList.Insert( pThemeEntry, LIST_APPEND );
+                    aThemeList.push_back( pThemeEntry );
                 }
             }
 
@@ -532,10 +534,10 @@ void Gallery::ImplWriteImportList()
         const UINT32 nInventor = (UINT32) COMPAT_FORMAT( 'S', 'G', 'A', '3' );
         const UINT16 nId = 0x0004;
 
-        *pOStm << nInventor << nId << (UINT32) aImportList.Count() << (UINT16) gsl_getSystemTextEncoding();
+        *pOStm << nInventor << nId << (UINT32) aImportList.size() << (UINT16) gsl_getSystemTextEncoding();
 
-        for( GalleryImportThemeEntry* pImportEntry = aImportList.First(); pImportEntry; pImportEntry = aImportList.Next() )
-            *pOStm << *pImportEntry;
+        for ( size_t i = 0, n = aImportList.size(); i < n; ++i )
+            *pOStm << *aImportList[ i ];
 
         if( pOStm->GetError() )
             ErrorHandler::HandleError( ERRCODE_IO_GENERAL );
@@ -551,9 +553,9 @@ GalleryThemeEntry* Gallery::ImplGetThemeEntry( const String& rThemeName )
     GalleryThemeEntry* pFound = NULL;
 
     if( rThemeName.Len() )
-        for( GalleryThemeEntry* pEntry = aThemeList.First(); pEntry && !pFound; pEntry = aThemeList.Next() )
-            if( rThemeName == pEntry->GetThemeName() )
-                pFound = pEntry;
+        for ( size_t i = 0, n = aThemeList.size(); i < n && !pFound; ++i )
+            if( rThemeName == aThemeList[ i ]->GetThemeName() )
+                pFound = aThemeList[ i ];
 
     return pFound;
 }
@@ -562,13 +564,10 @@ GalleryThemeEntry* Gallery::ImplGetThemeEntry( const String& rThemeName )
 
 GalleryImportThemeEntry* Gallery::ImplGetImportThemeEntry( const String& rImportName )
 {
-    GalleryImportThemeEntry* pFound = NULL;
-
-    for( GalleryImportThemeEntry* pImportEntry = aImportList.First(); pImportEntry && !pFound; pImportEntry = aImportList.Next() )
-        if ( rImportName == pImportEntry->aUIName )
-            pFound = pImportEntry;
-
-    return pFound;
+    for ( size_t i = 0, n = aImportList.size(); i < n; ++i )
+        if ( rImportName == aImportList[ i ]->aUIName )
+            return aImportList[ i ];
+    return NULL;
 }
 
 // ------------------------------------------------------------------------
@@ -577,10 +576,9 @@ String Gallery::GetThemeName( ULONG nThemeId ) const
 {
     GalleryThemeEntry* pFound = NULL;
 
-    for( ULONG n = 0, nCount = aThemeList.Count(); n < nCount; n++ )
+    for ( size_t i = 0, n = aThemeList.size(); i < n && !pFound; ++i )
     {
-        GalleryThemeEntry* pEntry = aThemeList.GetObject( n );
-
+        GalleryThemeEntry* pEntry = aThemeList[ i ];
         if( nThemeId == pEntry->GetId() )
             pFound = pEntry;
     }
@@ -632,7 +630,7 @@ BOOL Gallery::CreateTheme( const String& rThemeName, UINT32 nNumFrom )
                                                               nLastFileNumber,
                                                               FALSE, FALSE, TRUE, 0, FALSE );
 
-        aThemeList.Insert( pNewEntry, LIST_APPEND );
+        aThemeList.push_back( pNewEntry );
         delete( new GalleryTheme( this, pNewEntry ) );
         Broadcast( GalleryHint( GALLERY_HINT_THEME_CREATED, rThemeName ) );
         bRet = TRUE;
@@ -696,14 +694,14 @@ BOOL Gallery::CreateImportTheme( const INetURLObject& rURL, const String& rImpor
                     }
 
                     pImportTheme->SetImportName( aNewName );
-                    aThemeList.Insert( pThemeEntry, LIST_APPEND );
+                    aThemeList.push_back( pThemeEntry );
 
                     // Thema in Import-Liste eintragen und Import-Liste     speichern
                     GalleryImportThemeEntry* pImportEntry = new GalleryImportThemeEntry;
                     pImportEntry->aThemeName = pImportEntry->aUIName = aNewName;
                     pImportEntry->aURL = rURL;
                     pImportEntry->aImportName = rImportName;
-                    aImportList.Insert( pImportEntry, LIST_APPEND );
+                    aImportList.push_back( pImportEntry );
                     ImplWriteImportList();
                     bRet = TRUE;
                 }
@@ -777,8 +775,15 @@ BOOL Gallery::RemoveTheme( const String& rThemeName )
 
             if( pImportEntry )
             {
-                delete aImportList.Remove( pImportEntry );
-                ImplWriteImportList();
+                for ( GalleryImportThemeList::iterator it = aImportList.begin(); it < aImportList.end(); ++it )
+                {
+                    if ( *it == pImportEntry )
+                    {
+                        delete pImportEntry;
+                        aImportList.erase( it );
+                        break;
+                    }
+                }
             }
         }
         else
@@ -800,7 +805,15 @@ BOOL Gallery::RemoveTheme( const String& rThemeName )
             }
         }
 
-        delete aThemeList.Remove( pThemeEntry );
+        for ( GalleryThemeList::iterator it = aThemeList.begin(); it < aThemeList.end(); ++it )
+        {
+            if ( pThemeEntry == *it ) {
+                delete pThemeEntry;
+                aThemeList.erase( it );
+                break;
+            }
+        }
+
         Broadcast( GalleryHint( GALLERY_HINT_THEME_REMOVED, rThemeName ) );
 
         bRet = TRUE;
