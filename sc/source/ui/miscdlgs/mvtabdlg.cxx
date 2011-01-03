@@ -164,7 +164,7 @@ void ScMoveTableDlg::ResetRenameInput()
 
 void ScMoveTableDlg::CheckNewNameExists()
 {
-    BOOL   bFound = FALSE;
+    bool   bFound = false;
     USHORT nLast  = aLbTable.GetEntryCount() - 1;
     for ( USHORT i=0; i<=nLast; ++i )
     {
@@ -175,16 +175,16 @@ void ScMoveTableDlg::CheckNewNameExists()
                 ( aEdTabName.GetText() == mrDefaultName) )
 
                 // Move inside same document, thus same name is allowed.
-                bFound = FALSE;
+                bFound = false;
             else
-                bFound = TRUE;
+                bFound = true;
 
         }
     }
     if ( bFound )
         aFtWarn.Show();
     else
-            aFtWarn.Hide();
+        aFtWarn.Hide();
 }
 
 ScDocument* ScMoveTableDlg::GetSelectedDoc()
