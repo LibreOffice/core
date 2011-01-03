@@ -28,30 +28,14 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svtools.hxx"
 
-#ifndef _APP_HXX
 #include <vcl/svapp.hxx>
-#endif
-#ifndef _TABLE_HXX
 #include <tools/table.hxx>
-#endif
-#ifndef _HELP_HXX
 #include <vcl/help.hxx>
-#endif
-#ifndef _MENU_HXX
 #include <vcl/menu.hxx>
-#endif
-#ifndef _DECOVIEW_HXX
 #include <vcl/decoview.hxx>
-#endif
-#ifndef _FLOATWIN_HXX
 #include <vcl/floatwin.hxx>
-#endif
-#ifndef _BUTTON_HXX
 #include <vcl/button.hxx>
-#endif
-#ifndef _FIXED_HXX
 #include <vcl/fixed.hxx>
-#endif
 #include <unotools/calendarwrapper.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <com/sun/star/i18n/Weekdays.hpp>
@@ -61,7 +45,7 @@
 #define _SV_CALENDAR_CXX
 #include <svtools/svtools.hrc>
 #include <svtools/svtdata.hxx>
-#include <calendar.hxx>
+#include <svtools/calendar.hxx>
 
 // =======================================================================
 
