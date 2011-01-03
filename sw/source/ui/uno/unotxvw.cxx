@@ -1051,7 +1051,7 @@ OUString SwXTextView::getImplementationName(void) throw( RuntimeException )
     return C2U("SwXTextView");
 }
 
-BOOL SwXTextView::supportsService(const OUString& rServiceName) throw( RuntimeException )
+sal_Bool SwXTextView::supportsService(const OUString& rServiceName) throw( RuntimeException )
 {
     return rServiceName.equalsAscii("com.sun.star.text.TextDocumentView") ||
             rServiceName.equalsAscii("com.sun.star.view.OfficeDocumentView");
@@ -1897,7 +1897,7 @@ OUString SwXTextViewCursor::getImplementationName(void) throw( RuntimeException 
     return C2U("SwXTextViewCursor");
 }
 
-BOOL SwXTextViewCursor::supportsService(const OUString& rServiceName) throw( RuntimeException )
+sal_Bool SwXTextViewCursor::supportsService(const OUString& rServiceName) throw( RuntimeException )
 {
     return !rServiceName.compareToAscii("com.sun.star.text.TextViewCursor") ||
             !rServiceName.compareToAscii("com.sun.star.style.CharacterProperties") ||

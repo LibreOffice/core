@@ -302,7 +302,7 @@ OUString SwXFootnoteProperties::getImplementationName(void) throw( RuntimeExcept
     return C2U("SwXFootnoteProperties");
 }
 
-BOOL SwXFootnoteProperties::supportsService(const OUString& rServiceName) throw( RuntimeException )
+sal_Bool SwXFootnoteProperties::supportsService(const OUString& rServiceName) throw( RuntimeException )
 {
     return C2U("com.sun.star.text.FootnoteSettings") == rServiceName;
 }
@@ -612,7 +612,7 @@ OUString SwXEndnoteProperties::getImplementationName(void) throw( RuntimeExcepti
     return C2U("SwXEndnoteProperties");
 }
 
-BOOL SwXEndnoteProperties::supportsService(const OUString& rServiceName) throw( RuntimeException )
+sal_Bool SwXEndnoteProperties::supportsService(const OUString& rServiceName) throw( RuntimeException )
 {
     return C2U("com.sun.star.text.FootnoteSettings") == rServiceName;
 }
@@ -843,7 +843,7 @@ OUString SwXLineNumberingProperties::getImplementationName(void) throw( RuntimeE
     return C2U("SwXLineNumberingProperties");
 }
 
-BOOL SwXLineNumberingProperties::supportsService(const OUString& rServiceName) throw( RuntimeException )
+sal_Bool SwXLineNumberingProperties::supportsService(const OUString& rServiceName) throw( RuntimeException )
 {
     return C2U("com.sun.star.text.LineNumberingProperties") == rServiceName;
 }
@@ -1152,7 +1152,7 @@ OUString SwXNumberingRules::getImplementationName(void) throw( RuntimeException 
     return C2U("SwXNumberingRules");
 }
 
-BOOL SwXNumberingRules::supportsService(const OUString& rServiceName) throw( RuntimeException )
+sal_Bool SwXNumberingRules::supportsService(const OUString& rServiceName) throw( RuntimeException )
 {
     return C2U("com.sun.star.text.NumberingRules") == rServiceName;
 }
@@ -2331,7 +2331,7 @@ OUString SwXChapterNumbering::getImplementationName(void) throw( RuntimeExceptio
     return C2U("SwXChapterNumbering");
 }
 
-BOOL SwXChapterNumbering::supportsService(const OUString& rServiceName) throw( RuntimeException )
+sal_Bool SwXChapterNumbering::supportsService(const OUString& rServiceName) throw( RuntimeException )
 {
     String sServiceName(rServiceName);
     return sServiceName.EqualsAscii("com.sun.star.text.ChapterNumbering") ||
@@ -2364,7 +2364,7 @@ OUString SwXTextColumns::getImplementationName(void) throw( RuntimeException )
     return C2U("SwXTextColumns");
 }
 
-BOOL SwXTextColumns::supportsService(const OUString& rServiceName) throw( RuntimeException )
+sal_Bool SwXTextColumns::supportsService(const OUString& rServiceName) throw( RuntimeException )
 {
     return C2U("com.sun.star.text.TextColumns") == rServiceName;
 }

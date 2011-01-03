@@ -637,7 +637,7 @@ OUString SwXTextSearch::getImplementationName(void) throw( uno::RuntimeException
     return C2U("SwXTextSearch");
 }
 
-BOOL SwXTextSearch::supportsService(const OUString& rServiceName) throw( uno::RuntimeException )
+sal_Bool SwXTextSearch::supportsService(const OUString& rServiceName) throw( uno::RuntimeException )
 {
     return C2U("com.sun.star.util.SearchDescriptor") == rServiceName ||
             C2U("com.sun.star.util.ReplaceDescriptor") == rServiceName;

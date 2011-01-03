@@ -427,7 +427,7 @@ namespace
 
             //XServiceInfo
             virtual OUString SAL_CALL getImplementationName(void) throw(uno::RuntimeException);
-            virtual BOOL SAL_CALL supportsService(const OUString& ServiceName) throw(uno::RuntimeException);
+            virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) throw(uno::RuntimeException);
             virtual uno::Sequence<OUString> SAL_CALL getSupportedServiceNames(void) throw(uno::RuntimeException);
     };
 }
@@ -466,7 +466,7 @@ OUString SwXShapesEnumeration::getImplementationName(void) throw(uno::RuntimeExc
     return C2U("SwXShapeEnumeration");
 }
 
-BOOL SwXShapesEnumeration::supportsService(const OUString& ServiceName) throw(uno::RuntimeException)
+sal_Bool SwXShapesEnumeration::supportsService(const OUString& ServiceName) throw(uno::RuntimeException)
 {
     return C2U("com.sun.star.container.XEnumeration") == ServiceName;
 }
@@ -491,7 +491,7 @@ rtl::OUString SwXDrawPage::getImplementationName(void) throw( uno::RuntimeExcept
     return C2U("SwXDrawPage");
 }
 
-BOOL SwXDrawPage::supportsService(const rtl::OUString& rServiceName) throw( uno::RuntimeException )
+sal_Bool SwXDrawPage::supportsService(const rtl::OUString& rServiceName) throw( uno::RuntimeException )
 {
     return C2U("com.sun.star.drawing.GenericDrawPage") == rServiceName;
 }

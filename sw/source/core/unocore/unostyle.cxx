@@ -198,7 +198,7 @@ OUString SwXStyleFamilies::getImplementationName(void) throw( uno::RuntimeExcept
     return C2U("SwXStyleFamilies");
 }
 
-BOOL SwXStyleFamilies::supportsService(const OUString& rServiceName) throw( uno::RuntimeException )
+sal_Bool SwXStyleFamilies::supportsService(const OUString& rServiceName) throw( uno::RuntimeException )
 {
     return C2U("com.sun.star.style.StyleFamilies") == rServiceName;
 }
@@ -447,7 +447,7 @@ OUString SwXStyleFamily::getImplementationName(void) throw( uno::RuntimeExceptio
     return C2U("SwXStyleFamily");
 }
 
-BOOL SwXStyleFamily::supportsService(const OUString& rServiceName) throw( uno::RuntimeException )
+sal_Bool SwXStyleFamily::supportsService(const OUString& rServiceName) throw( uno::RuntimeException )
 {
     return C2U("com.sun.star.style.StyleFamily") == rServiceName;
 }
@@ -1216,9 +1216,9 @@ OUString SwXStyle::getImplementationName(void) throw( uno::RuntimeException )
     return C2U("SwXStyle");
 }
 
-BOOL SwXStyle::supportsService(const OUString& rServiceName) throw( uno::RuntimeException )
+sal_Bool SwXStyle::supportsService(const OUString& rServiceName) throw( uno::RuntimeException )
 {
-    BOOL bRet = C2U("com.sun.star.style.Style") == rServiceName;
+    sal_Bool bRet = C2U("com.sun.star.style.Style") == rServiceName;
     if(!bRet && SFX_STYLE_FAMILY_CHAR == eFamily)
         bRet = !rServiceName.compareToAscii("com.sun.star.style.CharacterStyle")||
                !rServiceName.compareToAscii("com.sun.star.style.CharacterProperties")||

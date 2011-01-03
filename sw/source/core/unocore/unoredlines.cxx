@@ -112,11 +112,11 @@ OUString SwXRedlines::getImplementationName(void) throw( uno::RuntimeException )
     return C2U("SwXRedlines");
 }
 
-BOOL SwXRedlines::supportsService(const rtl::OUString& /*ServiceName*/)
+sal_Bool SwXRedlines::supportsService(const rtl::OUString& /*ServiceName*/)
     throw( uno::RuntimeException )
 {
     DBG_ERROR("not implemented");
-    return FALSE;
+    return sal_False;
 }
 
 uno::Sequence< OUString > SwXRedlines::getSupportedServiceNames(void)
@@ -179,9 +179,9 @@ rtl::OUString SwXRedlineEnumeration::getImplementationName(void) throw( uno::Run
     return C2U("SwXRedlineEnumeration");
 }
 
-BOOL SwXRedlineEnumeration::supportsService(const rtl::OUString& /*ServiceName*/) throw( uno::RuntimeException )
+sal_Bool SwXRedlineEnumeration::supportsService(const rtl::OUString& /*ServiceName*/) throw( uno::RuntimeException )
 {
-    return FALSE;
+    return sal_False;
 }
 
 uno::Sequence< OUString > SwXRedlineEnumeration::getSupportedServiceNames(void) throw( uno::RuntimeException )

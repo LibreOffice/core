@@ -240,15 +240,15 @@ OUString SwXAutoTextContainer::getImplementationName(void) throw( uno::RuntimeEx
     return SwXAutoTextContainer_getImplementationName();
 }
 
-BOOL SwXAutoTextContainer::supportsService(const OUString& rServiceName) throw( uno::RuntimeException )
+sal_Bool SwXAutoTextContainer::supportsService(const OUString& rServiceName) throw( uno::RuntimeException )
 {
     const uno::Sequence< OUString > aNames = SwXAutoTextContainer_getSupportedServiceNames();
     for(sal_Int32 nService = 0; nService < aNames.getLength(); nService++)
     {
         if(aNames.getConstArray()[nService] == rServiceName)
-            return TRUE;
+            return sal_True;
     }
-    return FALSE;
+    return sal_False;
 }
 
 uno::Sequence< OUString > SwXAutoTextContainer::getSupportedServiceNames(void) throw( uno::RuntimeException )
@@ -734,7 +734,7 @@ OUString SwXAutoTextGroup::getImplementationName(void) throw( uno::RuntimeExcept
     return C2U("SwXAutoTextGroup");
 }
 
-BOOL SwXAutoTextGroup::supportsService(const OUString& rServiceName) throw( uno::RuntimeException )
+sal_Bool SwXAutoTextGroup::supportsService(const OUString& rServiceName) throw( uno::RuntimeException )
 {
     return C2U("com.sun.star.text.AutoTextGroup") == rServiceName;
 }
@@ -1011,7 +1011,7 @@ OUString SwXAutoTextEntry::getImplementationName(void) throw( uno::RuntimeExcept
     return C2U("SwXAutoTextEntry");
 }
 
-BOOL SwXAutoTextEntry::supportsService(const OUString& rServiceName) throw( uno::RuntimeException )
+sal_Bool SwXAutoTextEntry::supportsService(const OUString& rServiceName) throw( uno::RuntimeException )
 {
     return C2U("com.sun.star.text.AutoTextEntry") == rServiceName;
 }

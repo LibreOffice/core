@@ -1274,7 +1274,7 @@ OUString SwXCell::getImplementationName(void) throw( uno::RuntimeException )
     return C2U("SwXCell");
 }
 
-BOOL SwXCell::supportsService(const OUString& rServiceName) throw( uno::RuntimeException )
+sal_Bool SwXCell::supportsService(const OUString& rServiceName) throw( uno::RuntimeException )
 {
     String sServiceName(rServiceName);
     return sServiceName.EqualsAscii("com.sun.star.text.CellProperties");
@@ -1296,7 +1296,7 @@ OUString SwXTextTableRow::getImplementationName(void) throw( uno::RuntimeExcepti
     return C2U("SwXTextTableRow");
 }
 
-BOOL SwXTextTableRow::supportsService(const OUString& rServiceName) throw( uno::RuntimeException )
+sal_Bool SwXTextTableRow::supportsService(const OUString& rServiceName) throw( uno::RuntimeException )
 {
     return C2U("com.sun.star.text.TextTableRow") == rServiceName;
 }
@@ -1483,7 +1483,7 @@ OUString SwXTextTableCursor::getImplementationName(void) throw( uno::RuntimeExce
     return C2U("SwXTextTableCursor");
 }
 
-BOOL SwXTextTableCursor::supportsService(const OUString& rServiceName) throw( uno::RuntimeException )
+sal_Bool SwXTextTableCursor::supportsService(const OUString& rServiceName) throw( uno::RuntimeException )
 {
     return C2U("com.sun.star.text.TextTableCursor") == rServiceName;
 }
@@ -3628,7 +3628,7 @@ OUString SwXCellRange::getImplementationName(void) throw( uno::RuntimeException 
     return C2U("SwXCellRange");
 }
 
-BOOL SwXCellRange::supportsService(const OUString& rServiceName) throw( uno::RuntimeException )
+sal_Bool SwXCellRange::supportsService(const OUString& rServiceName) throw( uno::RuntimeException )
 {
     return
         rServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( "com.sun.star.text.CellRange" ) ) ||
@@ -4591,7 +4591,7 @@ OUString SwXTableRows::getImplementationName(void) throw( uno::RuntimeException 
     return C2U("SwXTableRows");
 }
 
-BOOL SwXTableRows::supportsService(const OUString& rServiceName) throw( uno::RuntimeException )
+sal_Bool SwXTableRows::supportsService(const OUString& rServiceName) throw( uno::RuntimeException )
 {
     return C2U("com.sun.star.text.TableRows") == rServiceName;
 }
@@ -4808,7 +4808,7 @@ OUString SwXTableColumns::getImplementationName(void) throw( uno::RuntimeExcepti
     return C2U("SwXTableColumns");
 }
 
-BOOL SwXTableColumns::supportsService(const OUString& rServiceName) throw( uno::RuntimeException )
+sal_Bool SwXTableColumns::supportsService(const OUString& rServiceName) throw( uno::RuntimeException )
 {
     return C2U("com.sun.star.text.TableColumns") == rServiceName;
 }
