@@ -2,7 +2,7 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2000, 2010 Oracle and/or its affiliates.
+# Copyright 2009 by Sun Microsystems, Inc.
 #
 # OpenOffice.org - a multi-platform office productivity suite
 #
@@ -14,47 +14,29 @@
 #
 # OpenOffice.org is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	See the
 # GNU Lesser General Public License version 3 for more details
 # (a copy is included in the LICENSE file that accompanied this code).
 #
 # You should have received a copy of the GNU Lesser General Public License
-# version 3 along with OpenOffice.org.  If not, see
+# version 3 along with OpenOffice.org.	If not, see
 # <http://www.openoffice.org/license.html>
 # for a copy of the LGPLv3 License.
 #
 #*************************************************************************
 
-PRJ=..$/..$/..
+$(eval $(call gb_Module_Module,sw))
 
-PRJNAME=sw
-TARGET=except
+$(eval $(call gb_Module_add_targets,sw,\
+    AllLangResTarget_sw \
+    Library_msword \
+    Library_sw \
+    Library_swd \
+    Library_swui \
+    Library_vbaswobj \
+    Package_misc \
+    Package_uiconfig \
+    Package_xml \
+))
 
-# --- Settings -----------------------------------------------------
-
-.INCLUDE :  $(PRJ)$/inc$/swpre.mk
-
-# hier kein PCH!
-prjpch=
-PRJPCH=
-
-.INCLUDE :  settings.mk
-.INCLUDE :  $(PRJ)$/inc$/sw.mk
-
-# --- Files --------------------------------------------------------
-
-CXXFILES =
-
-.IF "$(dbgutil)"!=""
-CXXFILES += \
-        errhdl.cxx			\
-        dbgloop.cxx
-
-SLOFILES +=  \
-        $(SLO)$/errhdl.obj 	\
-        $(SLO)$/dbgloop.obj
-.ENDIF
-# --- Tagets -------------------------------------------------------
-
-.INCLUDE :  target.mk
-
+# vim: set noet ts=4 sw=4:
