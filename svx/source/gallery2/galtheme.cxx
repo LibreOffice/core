@@ -94,12 +94,14 @@ GalleryTheme::~GalleryTheme()
 {
     ImplWrite();
 
-    for( GalleryObject* pEntry = aObjectList.First(); pEntry; pEntry = aObjectList.Next() )
+    for ( size_t i = 0, n = aObjectList.size(); i < n; ++i )
     {
+        GalleryObject* pEntry = aObjectList[ i ];
         Broadcast( GalleryHint( GALLERY_HINT_CLOSE_OBJECT, GetName(), reinterpret_cast< ULONG >( pEntry ) ) );
         delete pEntry;
         Broadcast( GalleryHint( GALLERY_HINT_OBJECT_REMOVED, GetName(), reinterpret_cast< ULONG >( pEntry ) ) );
     }
+    aObjectList.clear();
 }
 
 // ------------------------------------------------------------------------
@@ -119,7 +121,7 @@ void GalleryTheme::ImplCreateSvDrawStorage()
 
 // ------------------------------------------------------------------------
 
-BOOL GalleryTheme::ImplWriteSgaObject( const SgaObject& rObj, ULONG nPos, GalleryObject* pExistentEntry )
+BOOL GalleryTheme::ImplWriteSgaObject( const SgaObject& rObj, size_t nPos, GalleryObject* pExistentEntry )
 {
     SvStream*   pOStm = ::utl::UcbStreamHelper::CreateStream( GetSdgURL().GetMainURL( INetURLObject::NO_DECODE ), STREAM_WRITE );
     BOOL        bRet = FALSE;
@@ -137,7 +139,14 @@ BOOL GalleryTheme::ImplWriteSgaObject( const SgaObject& rObj, ULONG nPos, Galler
             if( !pExistentEntry )
             {
                 pEntry = new GalleryObject;
-                aObjectList.Insert( pEntry, nPos );
+                if ( nPos < aObjectList.size() )
+                {
+                    GalleryObjectList::iterator it = aObjectList.begin();
+                    ::std::advance( it, nPos );
+                    aObjectList.insert( it, pEntry );
+                }
+                else
+                    aObjectList.push_back( pEntry );
             }
             else
                 pEntry = pExistentEntry;
@@ -251,14 +260,10 @@ void GalleryTheme::ImplWrite()
 
 const GalleryObject* GalleryTheme::ImplGetGalleryObject( const INetURLObject& rURL )
 {
-    GalleryObject*  pEntry = aObjectList.First();
-    GalleryObject*  pFoundEntry = NULL;
-
-    for( ; pEntry && !pFoundEntry; pEntry = aObjectList.Next() )
-        if( pEntry->aURL == rURL )
-            pFoundEntry = pEntry;
-
-    return pFoundEntry;
+    for ( size_t i = 0, n = aObjectList.size(); i < n; ++i )
+        if ( aObjectList[ i ]->aURL == rURL )
+            return aObjectList[ i ];
+    return NULL;
 }
 
 // ------------------------------------------------------------------------
@@ -345,9 +350,12 @@ INetURLObject GalleryTheme::ImplCreateUniqueURL( SgaObjKind eObjKind, ULONG nFor
 
             bExists = FALSE;
 
-            for( GalleryObject* pEntry = aObjectList.First(); pEntry && !bExists; pEntry = aObjectList.Next() )
-                if( pEntry->aURL == aNewURL )
+            for ( size_t i = 0, n = aObjectList.size(); i < n; ++i )
+                if ( aObjectList[ i ]->aURL == aNewURL )
+                {
                     bExists = TRUE;
+                    break;
+                }
         }
         else
         {
@@ -424,12 +432,16 @@ BOOL GalleryTheme::InsertObject( const SgaObject& rObj, ULONG nInsertPos )
 
     if( rObj.IsValid() )
     {
-        GalleryObject*  pEntry = aObjectList.First();
         GalleryObject*  pFoundEntry = NULL;
-
-        for( ; pEntry && !pFoundEntry; pEntry = aObjectList.Next() )
-            if( pEntry->aURL == rObj.GetURL() )
-                pFoundEntry = pEntry;
+        size_t iFoundPos = 0;
+        for ( size_t n = aObjectList.size(); iFoundPos < n; ++iFoundPos )
+        {
+            if ( aObjectList[ iFoundPos ]->aURL == rObj.GetURL() )
+            {
+                pFoundEntry = aObjectList[ iFoundPos ];
+                break;
+            }
+        }
 
         if( pFoundEntry )
         {
@@ -456,7 +468,7 @@ BOOL GalleryTheme::InsertObject( const SgaObject& rObj, ULONG nInsertPos )
             ImplWriteSgaObject( rObj, nInsertPos, NULL );
 
         ImplSetModified( bRet = TRUE );
-        ImplBroadcast( pFoundEntry ? aObjectList.GetPos( pFoundEntry ) : nInsertPos );
+        ImplBroadcast( pFoundEntry ? iFoundPos : nInsertPos );
     }
 
     return bRet;
@@ -464,9 +476,9 @@ BOOL GalleryTheme::InsertObject( const SgaObject& rObj, ULONG nInsertPos )
 
 // ------------------------------------------------------------------------
 
-SgaObject* GalleryTheme::AcquireObject( ULONG nPos )
+SgaObject* GalleryTheme::AcquireObject( size_t nPos )
 {
-    return ImplReadSgaObject( aObjectList.GetObject( nPos ) );
+    return ImplReadSgaObject( aObjectList[ nPos ] );
 }
 
 // ------------------------------------------------------------------------
@@ -478,11 +490,18 @@ void GalleryTheme::ReleaseObject( SgaObject* pObject )
 
 // ------------------------------------------------------------------------
 
-BOOL GalleryTheme::RemoveObject( ULONG nPos )
+BOOL GalleryTheme::RemoveObject( size_t nPos )
 {
-    GalleryObject* pEntry = aObjectList.Remove( nPos );
+    GalleryObject* pEntry = NULL;
+    if ( nPos < aObjectList.size() )
+    {
+        GalleryObjectList::iterator it = aObjectList.begin();
+        ::std::advance( it, nPos );
+        pEntry = *it;
+        aObjectList.erase( it );
+    }
 
-    if( !aObjectList.Count() )
+    if( aObjectList.empty() )
         KillFile( GetSdgURL() );
 
     if( pEntry )
@@ -503,25 +522,28 @@ BOOL GalleryTheme::RemoveObject( ULONG nPos )
 
 // ------------------------------------------------------------------------
 
-BOOL GalleryTheme::ChangeObjectPos( ULONG nOldPos, ULONG nNewPos )
+BOOL GalleryTheme::ChangeObjectPos( size_t nOldPos, size_t nNewPos )
 {
     BOOL bRet = FALSE;
 
-    if( nOldPos != nNewPos )
+    if(  nOldPos != nNewPos
+      && nOldPos < aObjectList.size()
+      )
     {
-        GalleryObject* pEntry = aObjectList.GetObject( nOldPos );
+        GalleryObject* pEntry = aObjectList[ nOldPos ];
 
-        if( pEntry )
-        {
-            aObjectList.Insert( pEntry, nNewPos );
+        GalleryObjectList::iterator it = aObjectList.begin();
+        ::std::advance( it, nNewPos );
+        aObjectList.insert( it, pEntry );
 
-            if( nNewPos < nOldPos )
-                nOldPos++;
+        if( nNewPos < nOldPos ) nOldPos++;
 
-            aObjectList.Remove( nOldPos );
-            ImplSetModified( bRet = TRUE );
-            ImplBroadcast( ( nNewPos < nOldPos ) ? nNewPos : ( nNewPos - 1 ) );
-        }
+        it = aObjectList.begin();
+        ::std::advance( it, nOldPos );
+        aObjectList.erase( it );
+
+        ImplSetModified( bRet = TRUE );
+        ImplBroadcast( ( nNewPos < nOldPos ) ? nNewPos : ( nNewPos - 1 ) );
     }
 
     return bRet;
@@ -536,22 +558,22 @@ void GalleryTheme::Actualize( const Link& rActualizeLink, GalleryProgress* pProg
         Graphic         aGraphic;
         String          aFormat;
         GalleryObject*  pEntry;
-        const ULONG     nCount = aObjectList.Count();
-        ULONG           i;
+        const size_t    nCount = aObjectList.size();
+        size_t          i;
 
         LockBroadcaster();
         bAbortActualize = FALSE;
 
         // LoeschFlag zuruecksetzen
         for ( i = 0; i < nCount; i++ )
-            aObjectList.GetObject( i )->bDummy = FALSE;
+            aObjectList[ i ]->bDummy = FALSE;
 
         for( i = 0; ( i < nCount ) && !bAbortActualize; i++ )
         {
             if( pProgress )
                 pProgress->Update( i, nCount - 1 );
 
-            pEntry = aObjectList.GetObject( i );
+            pEntry = aObjectList[ i ];
 
             const INetURLObject aURL( pEntry->aURL );
 
@@ -616,19 +638,19 @@ void GalleryTheme::Actualize( const Link& rActualizeLink, GalleryProgress* pProg
         }
 
         // remove all entries with set flag
-        pEntry = aObjectList.First();
-        while( pEntry )
+        for ( size_t i = 0; i < aObjectList.size(); )
         {
+            pEntry = aObjectList[ i ];
             if( pEntry->bDummy )
             {
                 Broadcast( GalleryHint( GALLERY_HINT_CLOSE_OBJECT, GetName(), reinterpret_cast< ULONG >( pEntry ) ) );
-                delete aObjectList.Remove( pEntry );
+                GalleryObjectList::iterator it = aObjectList.begin();
+                ::std::advance( it, i );
+                aObjectList.erase( it );
+                delete pEntry;
                 Broadcast( GalleryHint( GALLERY_HINT_OBJECT_REMOVED, GetName(), reinterpret_cast< ULONG >( pEntry ) ) );
-
-                pEntry = aObjectList.GetCurObject();
             }
-            else
-                pEntry = aObjectList.Next();
+            else ++i;
         }
 
         // update theme
@@ -644,19 +666,18 @@ void GalleryTheme::Actualize( const Link& rActualizeLink, GalleryProgress* pProg
 
         if( pIStm && pTmpStm )
         {
-            pEntry = aObjectList.First();
-
-            while( pEntry )
+            for ( size_t i = 0, n = aObjectList.size(); i < n; ++i )
             {
+                pEntry = aObjectList[ i ];
                 SgaObject* pObj;
 
                 switch( pEntry->eObjKind )
                 {
-                    case( SGA_OBJ_BMP ):    pObj = new SgaObjectBmp(); break;
-                    case( SGA_OBJ_ANIM ):   pObj = new SgaObjectAnim(); break;
-                    case( SGA_OBJ_INET ):   pObj = new SgaObjectINet(); break;
-                    case( SGA_OBJ_SVDRAW ): pObj = new SgaObjectSvDraw(); break;
-                    case (SGA_OBJ_SOUND):   pObj = new SgaObjectSound(); break;
+                    case( SGA_OBJ_BMP ):    pObj = new SgaObjectBmp();      break;
+                    case( SGA_OBJ_ANIM ):   pObj = new SgaObjectAnim();     break;
+                    case( SGA_OBJ_INET ):   pObj = new SgaObjectINet();     break;
+                    case( SGA_OBJ_SVDRAW ): pObj = new SgaObjectSvDraw();   break;
+                    case (SGA_OBJ_SOUND):   pObj = new SgaObjectSound();    break;
 
                     default:
                         pObj = NULL;
@@ -671,8 +692,6 @@ void GalleryTheme::Actualize( const Link& rActualizeLink, GalleryProgress* pProg
                     *pTmpStm << *pObj;
                     delete pObj;
                 }
-
-                pEntry = aObjectList.Next();
             }
         }
         else
@@ -1456,14 +1475,14 @@ SvStream& GalleryTheme::ReadData( SvStream& rIStm )
         sal_uInt32      nId1, nId2;
         BOOL            bRel;
 
-        for( pObj = aObjectList.First(); pObj; pObj = aObjectList.Next() )
+        for( size_t i = 0, n = aObjectList.size(); i < n; ++i )
         {
+            pObj = aObjectList[ i ];
             Broadcast( GalleryHint( GALLERY_HINT_CLOSE_OBJECT, GetName(), reinterpret_cast< ULONG >( pObj ) ) );
             delete pObj;
             Broadcast( GalleryHint( GALLERY_HINT_OBJECT_REMOVED, GetName(), reinterpret_cast< ULONG >( pObj ) ) );
         }
-
-        aObjectList.Clear();
+        aObjectList.clear();
 
         for( sal_uInt32 i = 0; i < nCount; i++ )
         {
@@ -1527,7 +1546,7 @@ SvStream& GalleryTheme::ReadData( SvStream& rIStm )
                 }
             }
 
-            aObjectList.Insert( pObj, LIST_APPEND );
+            aObjectList.push_back( pObj );
         }
 
         rIStm >> nId1 >> nId2;

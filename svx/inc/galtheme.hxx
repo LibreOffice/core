@@ -42,6 +42,7 @@
 #include <sot/storage.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/galmisc.hxx>
+#include <vector>
 
 // -----------------
 // - GalleryObject -
@@ -58,7 +59,7 @@ struct GalleryObject
     BOOL            bDummy;
 };
 
-DECLARE_LIST( GalleryObjectList, GalleryObject* )
+typedef ::std::vector< GalleryObject* > GalleryObjectList;
 
 class GalleryThemeEntry;
 class SgaObject;
@@ -113,12 +114,20 @@ private:
 
     void                        ImplCreateSvDrawStorage();
     SVX_DLLPUBLIC SgaObject*                    ImplReadSgaObject( GalleryObject* pEntry );
-    BOOL                        ImplWriteSgaObject( const SgaObject& rObj, ULONG nPos, GalleryObject* pExistentEntry );
+    BOOL                        ImplWriteSgaObject( const SgaObject& rObj, size_t nPos, GalleryObject* pExistentEntry );
     void                        ImplRead();
     void                        ImplWrite();
-    const GalleryObject*        ImplGetGalleryObject( ULONG nPos ) const { return aObjectList.GetObject( nPos ); }
+    const GalleryObject*        ImplGetGalleryObject( size_t nPos ) const
+                                { return ( nPos < aObjectList.size() ) ? aObjectList[ nPos ] : NULL; }
     SVX_DLLPUBLIC const GalleryObject*      ImplGetGalleryObject( const INetURLObject& rURL );
-    ULONG                       ImplGetGalleryObjectPos( const GalleryObject* pObj ) const { return aObjectList.GetPos( pObj ); }
+
+    size_t                      ImplGetGalleryObjectPos( const GalleryObject* pObj ) const
+                                {
+                                    for ( size_t i = 0, n = aObjectList.size(); i < n; ++i )
+                                        if ( pObj == aObjectList[ i ] )
+                                            return i;
+                                    return size_t(-1);
+                                }
     INetURLObject               ImplGetURL( const GalleryObject* pObject ) const;
     INetURLObject               ImplCreateUniqueURL( SgaObjKind eObjKind, ULONG nFormat = CVT_UNKNOWN );
     void                        ImplSetModified( BOOL bModified );
@@ -132,14 +141,14 @@ public:
 
     static GalleryThemeEntry*   CreateThemeEntry( const INetURLObject& rURL, BOOL bReadOnly );
 
-    ULONG                   GetObjectCount() const { return aObjectList.Count(); }
+    size_t                      GetObjectCount() const { return aObjectList.size(); }
 
-    SVX_DLLPUBLIC SgaObject*                    AcquireObject( ULONG nPos );
+    SVX_DLLPUBLIC SgaObject*    AcquireObject( size_t nPos );
     SVX_DLLPUBLIC void                      ReleaseObject( SgaObject* pObj );
 
     SVX_DLLPUBLIC BOOL                      InsertObject( const SgaObject& rObj, ULONG nPos = LIST_APPEND );
-    SVX_DLLPUBLIC BOOL                      RemoveObject( ULONG nPos );
-    BOOL                        ChangeObjectPos( ULONG nOldPos, ULONG nNewPos );
+    SVX_DLLPUBLIC BOOL          RemoveObject( size_t nPos );
+    BOOL                        ChangeObjectPos( size_t nOldPos, size_t nNewPos );
 
     SVX_DLLPUBLIC const String& GetName() const;
     const String&               GetRealName() const;
