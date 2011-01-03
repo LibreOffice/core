@@ -90,9 +90,9 @@ class SvStream;
 
 // --- ScChangeActionLinkEntry ---------------------------------------------
 
-// Fuegt sich selbst am Beginn einer Kette ein, bzw. vor einem anderen
-// LinkEntry, on delete selbstaendiges ausklinken auch des gelinkten.
-// ppPrev == &previous->pNext oder Adresse des Pointers auf Beginn der Kette,
+// Inserts itself as the head of a chain (better: linked list?), or before a LinkEntry
+// on delete: automatically remove of what is linked (German original was strange...)
+// ppPrev == &previous->pNext oder address of pointer to head of linked list,
 // *ppPrev == this
 
 class ScChangeAction;
@@ -239,18 +239,15 @@ protected:
 
             ScBigRange          aBigRange;          // Ins/Del/MoveTo/ContentPos
             DateTime            aDateTime;          //! UTC
-            String              aUser;              // wer war's
-            String              aComment;           // Benutzerkommentar
-            ScChangeAction*     pNext;              // naechster in Kette
-            ScChangeAction*     pPrev;              // vorheriger in Kette
-            ScChangeActionLinkEntry*    pLinkAny;   // irgendwelche Links
-            ScChangeActionLinkEntry*    pLinkDeletedIn; // Zuordnung zu
-                                                    // geloeschten oder
-                                                    // druebergemoveten oder
-                                                    // rejecteten Insert
-                                                    // Bereichen
-            ScChangeActionLinkEntry*    pLinkDeleted;   // Links zu geloeschten
-            ScChangeActionLinkEntry*    pLinkDependent; // Links zu abhaengigen
+            String              aUser;              // who?
+            String              aComment;           // user comment
+            ScChangeAction*     pNext;              // next in linked list
+            ScChangeAction*     pPrev;              // previous in linked list
+            ScChangeActionLinkEntry*    pLinkAny;   // arbitrary links
+            ScChangeActionLinkEntry*    pLinkDeletedIn; // access to insert areas which were
+                                                    // deleted or moved or rejected
+            ScChangeActionLinkEntry*    pLinkDeleted;   // links to deleted
+            ScChangeActionLinkEntry*    pLinkDependent; // links to dependent
             ULONG               nAction;
             ULONG               nRejectAction;
             ScChangeActionType  eType;
@@ -371,27 +368,25 @@ public:
             BOOL                IsRejecting() const
                                     { return nRejectAction != 0; }
 
-                                // ob Action im Dokument sichtbar ist
+                                // if action is visible in the document
             BOOL                IsVisible() const;
 
-                                // ob Action anfassbar ist
+                                // if action if touchable
             BOOL                IsTouchable() const;
 
-                                // ob Action ein Eintrag in Dialog-Root ist
+                                // if action is an entry in dialog root
             BOOL                IsDialogRoot() const;
 
-                                // ob ein Eintrag im Dialog aufklappbar sein soll
+                                // if an entry in a dialog shall be a drop down entry
             BOOL                IsDialogParent() const;
 
-                                // ob Action ein Delete ist, unter dem
-                                // aufgeklappt mehrere einzelne Deletes sind
+                                // if action is a delete with subdeletes (aufgeklappt = open ?)
             BOOL                IsMasterDelete() const;
 
-                                // ob Action akzeptiert/selektiert/abgelehnt
-                                // werden kann
+                                // if action is acceptable/selectable/rejectable
             BOOL                IsClickable() const;
 
-                                // ob Action abgelehnt werden kann
+                                // if action is rejectable
             BOOL                IsRejectable() const;
 
             const ScBigRange&   GetBigRange() const { return aBigRange; }
@@ -425,22 +420,21 @@ public:
             BOOL                HasDeleted() const
                                     { return pLinkDeleted != NULL; }
 
-                                // Description wird an String angehaengt.
-                                // Mit bSplitRange wird bei Delete nur
-                                // eine Spalte/Zeile beruecksichtigt (fuer
-                                // Auflistung der einzelnen Eintraege).
+                                // description will be appended to string
+                                // with bSplitRange only one column/row will be considered for delete
+                                // (for a listing of entries)
     virtual void                GetDescription( String&, ScDocument*,
                                     BOOL bSplitRange = FALSE, bool bWarning = true ) const;
 
     virtual void                GetRefString( String&, ScDocument*,
                                     BOOL bFlag3D = FALSE ) const;
 
-                                // fuer DocumentMerge altes Datum einer anderen
-                                // Action setzen, mit GetDateTimeUTC geholt
+                                // for DocumentMerge set old date of the other
+                                // action, fetched by GetDateTimeUTC
             void                SetDateTimeUTC( const DateTime& rDT )
                                     { aDateTime = rDT; }
 
-                                // Benutzerkommentar setzen
+                                // set user comment
             void                SetComment( const String& rStr )
                                     { aComment = rStr; }
 
@@ -546,8 +540,8 @@ class ScChangeActionDel : public ScChangeAction
 
             ScChangeTrack*      pTrack;
             ScChangeActionCellListEntry* pFirstCell;
-            ScChangeActionIns*  pCutOff;        // abgeschnittener Insert
-            short               nCutOff;        // +: Start  -: End
+            ScChangeActionIns*  pCutOff;        // cut insert
+            short               nCutOff;        // +: start  -: end
             ScChangeActionDelMoveEntry* pLinkMove;
             SCsCOL              nDx;
             SCsROW              nDy;
@@ -583,20 +577,18 @@ public:
                                                 const ScChangeActionType eType,
                                                 const SCsCOLROW nD,
                                                 ScChangeTrack* pTrack); // only to use in the XML import
-                                                                        // wich of nDx and nDy is set is depend on the type
+                                                                        // which of nDx and nDy is set is dependend on the type
 
-                                // ob dieses das unterste einer Reihe (oder
-                                // auch einzeln) ist
+                                // is the last in a row (or single)
             BOOL                IsBaseDelete() const;
 
-                                // ob dieses das oberste einer Reihe (oder
-                                // auch einzeln) ist
+                                // is the first in a row (or single)
             BOOL                IsTopDelete() const;
 
-                                // ob dieses ein Teil einer Reihe ist
+                                // is part of a row
             BOOL                IsMultiDelete() const;
 
-                                // ob es eine Col ist, die zu einem TabDelete gehoert
+                                // is col, belonging to a TabDelete
             BOOL                IsTabDeleteCol() const;
 
             SCsCOL              GetDx() const { return nDx; }
@@ -716,9 +708,9 @@ class ScChangeActionContent : public ScChangeAction
             String              aNewValue;
             ScBaseCell*         pOldCell;
             ScBaseCell*         pNewCell;
-        ScChangeActionContent*  pNextContent;   // an gleicher Position
+        ScChangeActionContent*  pNextContent;   // at the same position
         ScChangeActionContent*  pPrevContent;
-        ScChangeActionContent*  pNextInSlot;    // in gleichem Slot
+        ScChangeActionContent*  pNextInSlot;    // in the same slot
         ScChangeActionContent** ppPrevInSlot;
 
             void                InsertInSlot( ScChangeActionContent** pp )
@@ -874,8 +866,8 @@ public:
             void                SetPrevContent( ScChangeActionContent* p )
                                     { pPrevContent = p; }
 
-                                // moeglichst nicht verwenden,
-                                // setzt nur String bzw. generiert Formelzelle
+                                // don't use:
+                                // assigns String / creates forumula cell
             void                SetOldValue( const String& rOld, ScDocument* );
             void                SetNewValue( const String& rNew, ScDocument* );
 
@@ -955,10 +947,10 @@ public:
 enum ScChangeTrackMsgType
 {
     SC_CTM_NONE,
-    SC_CTM_APPEND,      // Actions angehaengt
-    SC_CTM_REMOVE,      // Actions weggenommen
-    SC_CTM_CHANGE,      // Actions geaendert
-    SC_CTM_PARENT       // war kein Parent und ist jetzt einer
+    SC_CTM_APPEND,      // Actions appended
+    SC_CTM_REMOVE,      // Actions removed
+    SC_CTM_CHANGE,      // Actions changed
+    SC_CTM_PARENT       // became a parent (and wasn't before)
 };
 
 struct ScChangeTrackMsgInfo
@@ -970,7 +962,7 @@ struct ScChangeTrackMsgInfo
     ULONG                   nEndAction;
 };
 
-// MsgQueue fuer Benachrichtigung via ModifiedLink
+// MsgQueue for notification via ModifiedLink
 DECLARE_QUEUE( ScChangeTrackMsgQueue, ScChangeTrackMsgInfo* )
 DECLARE_STACK( ScChangeTrackMsgStack, ScChangeTrackMsgInfo* )
 
@@ -983,13 +975,11 @@ enum ScChangeTrackMergeState
     SC_CTMS_OTHER
 };
 
-// zusaetzlich zu pFirst/pNext/pLast/pPrev eine Table, um schnell sowohl
-// per ActionNumber als auch ueber Liste zugreifen zu koennen
+// Table, additionally to pFirst/pNext/pLast/pPrev, to enable fast access by ActionNumber and by list
 DECLARE_TABLE( ScChangeActionTable, ScChangeAction* )
 
-// Intern generierte Actions beginnen bei diesem Wert (fast alle Bits gesetzt)
-// und werden runtergezaehlt, um sich in einer Table wertemaessig nicht mit den
-// "normalen" Actions in die Quere zu kommen.
+// Internally generated actions start at this value (nearly all bits set)
+// and are decremented, to keep values in a table seperated from "normal" actions.
 #define SC_CHGTRACK_GENERATED_START ((UINT32) 0xfffffff0)
 
 class ScChangeTrack : public utl::ConfigurationListener
@@ -1076,7 +1066,7 @@ class ScChangeTrack : public utl::ConfigurationListener
 
             void                SetLastCutMoveRange( const ScRange&, ScDocument* );
 
-                                // ModifyMsg blockweise und nicht einzeln erzeugen
+                                // create block of ModifyMsg
             void                StartBlockModify( ScChangeTrackMsgType,
                                     ULONG nStartAction );
             void                EndBlockModify( ULONG nEndAction );
@@ -1114,11 +1104,11 @@ class ScChangeTrack : public utl::ConfigurationListener
                                     ScChangeActionCellListEntry*&,
                                     ScChangeAction* pDeletor );
 
-                                // Action und alle abhaengigen rejecten,
-                                // Table stammt aus vorherigem GetDependents,
-                                // ist nur bei Insert und Move (MasterType)
-                                // noetig, kann ansonsten NULL sein.
-                                // bRecursion == Aufruf aus Reject mit Table
+                                // Reject action and all dependent actions,
+                                // Table stems from previous GetDependents,
+                                // only needed for Insert and Move (MasterType),
+                                // is NULL otherwise.
+                                // bRecursion == called from reject with table
             BOOL                Reject( ScChangeAction*,
                                     ScChangeActionTable*, BOOL bRecursion );
 
@@ -1201,32 +1191,32 @@ public:
                                     ScDocument* pRefDoc,
                                     ULONG& nStartAction, ULONG& nEndAction,
                                     SCsTAB nDz = 0 );
-                                    // nDz: Multi-TabDel, LookUpContent ist
-                                    // um -nDz verschoben zu suchen
+                                    // nDz: multi TabDel, LookUpContent must be searched
+                                    // with an offset of -nDz
 
-                                // nachdem neuer Wert im Dokument gesetzt wurde,
-                                // alter Wert aus RefDoc/UndoDoc
+                                // after new value was set in the document,
+                                // old value from RefDoc/UndoDoc
             void                AppendContent( const ScAddress& rPos,
                                     ScDocument* pRefDoc );
-                                // nachdem neue Werte im Dokument gesetzt wurden,
-                                // alte Werte aus RefDoc/UndoDoc
+                                // after new values were set in the document,
+                                // old values from RefDoc/UndoDoc
             void                AppendContentRange( const ScRange& rRange,
                                     ScDocument* pRefDoc,
                                     ULONG& nStartAction, ULONG& nEndAction,
                                     ScChangeActionClipMode eMode = SC_CACM_NONE );
-                                // nachdem neuer Wert im Dokument gesetzt wurde,
-                                // alter Wert aus pOldCell, nOldFormat,
+                                // after new value was set in the document,
+                                // old value from pOldCell, nOldFormat,
                                 // RefDoc==NULL => Doc
             void                AppendContent( const ScAddress& rPos,
                                     const ScBaseCell* pOldCell,
                                     ULONG nOldFormat, ScDocument* pRefDoc = NULL );
-                                // nachdem neuer Wert im Dokument gesetzt wurde,
-                                // alter Wert aus pOldCell, Format aus Doc
+                                // after new value was set in the document,
+                                // old value from pOldCell, format from Doc
             void                AppendContent( const ScAddress& rPos,
                                     const ScBaseCell* pOldCell );
-                                // nachdem neue Werte im Dokument gesetzt wurden,
-                                // alte Werte aus RefDoc/UndoDoc.
-                                // Alle Contents, wo im RefDoc eine Zelle steht.
+                                // after new values were set in the document,
+                                // old values from RefDoc/UndoDoc.
+                                // All contents with a cell in RefDoc
             void                AppendContentsIfInRefDoc( ScDocument* pRefDoc,
                                     ULONG& nStartAction, ULONG& nEndAction );
 
@@ -1244,9 +1234,8 @@ public:
                                     ULONG nOldFormat = 0,
                                     ULONG nNewFormat = 0 );
 
-                                // die folgenden beiden nur benutzen wenn's
-                                // nicht anders geht (setzen nur String fuer
-                                // NewValue bzw. Formelerzeugung)
+                                // Only use the following two if there is no different solution!
+                                // (Assign String for NewValue or creation of a formula respectively)
 
     SC_DLLPUBLIC        void                AppendInsert( const ScRange& );
 
@@ -1275,15 +1264,14 @@ public:
 
     SC_DLLPUBLIC        void                Undo( ULONG nStartAction, ULONG nEndAction, bool bMerge = false );
 
-                                // fuer MergeDocument, Referenzen anpassen,
-                                //! darf nur in einem temporaer geoeffneten
-                                //! Dokument verwendet werden, der Track
-                                //! ist danach verhunzt
+                                // for MergeDocument, adjust references,
+                                //! may only be used in a temporary opened document
+                                //! der Track ist danach verhunzt
             void                MergePrepare( ScChangeAction* pFirstMerge, bool bShared = false );
             void                MergeOwn( ScChangeAction* pAct, ULONG nFirstMerge, bool bShared = false );
     static  BOOL                MergeIgnore( const ScChangeAction&, ULONG nFirstMerge );
 
-                                // Abhaengige in Table einfuegen.
+                                // Insert dependents into table.
                                 // Bei Insert sind es echte Abhaengige,
                                 // bei Move abhaengige Contents im FromRange
                                 // und geloeschte im ToRange bzw. Inserts in

@@ -51,8 +51,7 @@ private:
     ScRange         aDestArea;
     BOOL            bAddUndo;
     BOOL            bInCreate;
-    BOOL            bDoInsert;      // wird fuer das erste Update auf FALSE gesetzt
-
+    BOOL            bDoInsert;      // is set to FALSE for first update
     BOOL        FindExtRange( ScRange& rRange, ScDocument* pSrcDoc, const String& rAreaName );
 
 public:

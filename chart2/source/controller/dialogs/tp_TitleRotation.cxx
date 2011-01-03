@@ -91,7 +91,7 @@ SfxTabPage* SchAlignmentTabPage::CreateWithoutRotation(Window* pParent,
 
 BOOL SchAlignmentTabPage::FillItemSet(SfxItemSet& rOutAttrs)
 {
-    //Seit 4/1998 koennen Texte frei gedreht werden: SCHATTR_TEXT_DEGREES
+    //Since 04/1998 text can be rotated by an arbitrary angle: SCHATTR_TEXT_DEGREES
     bool bStacked = aOrientHlp.GetStackedState() == STATE_CHECK;
     rOutAttrs.Put( SfxBoolItem( SCHATTR_TEXT_STACKED, bStacked ) );
 

@@ -50,9 +50,9 @@ class ScChartPositionMap
             SCROW               nRowCount;
 
                                 ScChartPositionMap( SCCOL nChartCols, SCROW nChartRows,
-                                    SCCOL nColAdd,      // Header-Spalten
-                                    SCROW nRowAdd,      // Header-Zeilen
-                                    Table& rCols        // Table mit Col-Tables mit Address*
+                                    SCCOL nColAdd,      // header columns
+                                    SCROW nRowAdd,      // header rows
+                                    Table& rCols        // table with col tables with address*
                                     );
                                 ~ScChartPositionMap();  //! deletes all ScAddress*
 
@@ -68,7 +68,7 @@ public:
 
             BOOL                IsValid( SCCOL nCol, SCROW nRow ) const
                                     { return nCol < nColCount && nRow < nRowCount; }
-                                // Daten spaltenweise
+                                // data column by column
             ULONG               GetIndex( SCCOL nCol, SCROW nRow ) const
                                     { return (ULONG) nCol * nRowCount + nRow; }
 
@@ -79,7 +79,7 @@ public:
                                         return NULL;
                                     }
 
-                                    //! kann NULL sein und damit "kein Wert"
+                                    //! might be NULL indicating "no value"
             const ScAddress*    GetPosition( SCCOL nChartCol, SCROW nChartRow ) const
                                     {
                                         if ( IsValid( nChartCol, nChartRow ) )
@@ -103,15 +103,15 @@ public:
 
 enum ScChartGlue {
     SC_CHARTGLUE_NA,
-    SC_CHARTGLUE_NONE,      // alte Mimik
-    SC_CHARTGLUE_COLS,      // alte Mimik
+    SC_CHARTGLUE_NONE,      // old mimic
+    SC_CHARTGLUE_COLS,      // old mimic
     SC_CHARTGLUE_ROWS,
     SC_CHARTGLUE_BOTH
 };
 
 class ScDocument;
 
-class ScChartPositioner             // nur noch Parameter-Struct
+class ScChartPositioner             // only parameter struct
 {
     ScRangeListRef  aRangeListRef;
     ScDocument* pDocument;
@@ -126,7 +126,7 @@ class ScChartPositioner             // nur noch Parameter-Struct
 private:
     void        CheckColRowHeaders();
 
-    void        GlueState();        // zusammengefasste Bereiche
+    void        GlueState();        // summarised areas
     void        CreatePositionMap();
 
 public:

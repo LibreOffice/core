@@ -252,8 +252,8 @@ class SC_DLLPUBLIC ScEditCell : public ScBaseCell
 {
 private:
     EditTextObject*     pData;
-    String*             pString;        // fuer schnelleren Zugriff von Formeln
-    ScDocument*         pDoc;           // fuer EditEngine Zugriff mit Pool
+    String*             pString;        // for faster access to formulas
+    ScDocument*         pDoc;           // for EditEngine access with Pool
 
     void            SetTextObject( const EditTextObject* pObject,
                                     const SfxItemPool* pFromPool );
@@ -267,12 +267,12 @@ public:
     DECL_FIXEDMEMPOOL_NEWDEL( ScEditCell )
 #endif
 
-                    ~ScEditCell();              // wegen pData immer!
+                    ~ScEditCell();              // always because of pData!
 
                     ScEditCell( const EditTextObject* pObject, ScDocument*,
                                 const SfxItemPool* pFromPool /* = NULL */ );
                     ScEditCell( const ScEditCell& rCell, ScDocument& rDoc );
-                    // fuer Zeilenumbrueche
+                    // for line breaks
                     ScEditCell( const String& rString, ScDocument* );
 
     void            SetData( const EditTextObject* pObject,
@@ -506,13 +506,12 @@ public:
     void            SetMatColsRows( SCCOL nCols, SCROW nRows );
     void            GetMatColsRows( SCCOL& nCols, SCROW& nRows ) const;
 
-                    // ob Zelle im ChangeTrack und nicht im echten Dokument ist
+                    // cell belongs to ChangeTrack and not to the real document
     void            SetInChangeTrack( BOOL bVal ) { bInChangeTrack = bVal; }
     BOOL            IsInChangeTrack() const { return bInChangeTrack; }
 
-                    // Zu Typ und Format das entsprechende Standardformat.
-                    // Bei Format "Standard" evtl. das in die Formelzelle
-                    // uebernommene Format.
+                    // standard format for type and format
+                    // for format "Standard" possibly the format used in the formula cell
     ULONG           GetStandardFormat( SvNumberFormatter& rFormatter, ULONG nFormat ) const;
 
     // For import filters!
@@ -543,7 +542,7 @@ public:
     void            MaybeInterpret();
 };
 
-//          Iterator fuer Referenzen in einer Formelzelle
+//          Iterator for references in a formula cell
 class ScDetectiveRefIter
 {
 private:

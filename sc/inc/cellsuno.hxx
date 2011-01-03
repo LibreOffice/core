@@ -131,10 +131,10 @@ typedef ScNamedEntry* ScNamedEntryPtr;
 SV_DECL_PTRARR_DEL( ScNamedEntryArr_Impl, ScNamedEntryPtr, 4, 4 )
 
 
-//  ScCellRangesBase - Basisklasse fuer ScCellRangesObj (mit Index-Access)
-//                                  und ScCellRangeObj (ohne Index-Access)
+//  ScCellRangesBase - base class for ScCellRangesObj (with access by index)
+//                                and ScCellRangeObj  (without access by index)
 
-//  XServiceInfo ist in den Ableitungen implementiert
+//  XServiceInfo is implemented in derived classes
 
 class ScHelperFunctions
 {
@@ -174,9 +174,9 @@ class SC_DLLPUBLIC ScCellRangesBase : public com::sun::star::beans::XPropertySet
                          public cppu::OWeakObject,
                          public SfxListener
 {
-    friend class ScTabViewObj;      // fuer select()
-    friend class ScTableSheetObj;   // fuer createCursorByRange()
-     friend class ooo::vba::excel::ScVbaCellRangeAccess;
+    friend class ScTabViewObj;      // for select()
+    friend class ScTableSheetObj;   // for createCursorByRange()
+    friend class ooo::vba::excel::ScVbaCellRangeAccess;
 
 private:
     const SfxItemPropertySet* pPropSet;
@@ -245,16 +245,16 @@ public:
     virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
     virtual void            RefChanged();
 
-                            // aus Ableitungen, aber auch per getImplementation
+                            // from derived classes and by getImplementation
     ScDocShell*             GetDocShell() const     { return pDocShell; }
     ScDocument*             GetDocument() const;
     const ScRangeList&      GetRangeList() const    { return aRanges; }
     void                    AddRange(const ScRange& rRange, const sal_Bool bMergeRanges);
 
-                            // per Service erzeugtes Objekt zum Leben erwecken:
+                            // arouse object created via service:
     void                    InitInsertRange(ScDocShell* pDocSh, const ScRange& rR);
 
-    void                    SetNewRange(const ScRange& rNew);   // fuer Cursor
+    void                    SetNewRange(const ScRange& rNew);   // for cursor
     void                    SetNewRanges(const ScRangeList& rNew);
 
     void                    SetCursorOnly(BOOL bSet);
@@ -656,7 +656,7 @@ public:
                                     const formula::FormulaGrammar::Grammar )
                                 throw(::com::sun::star::uno::RuntimeException);
 
-    // XCellRange ist Basisklasse von XSheetCellRange und XSheetOperation
+    // XCellRange is base class of XSheetCellRange and XSheetOperation
 //  operator XCellRangeRef() const  { return (XSheetCellRange*)this; }
 
                             // XCellRangeAddressable
@@ -792,7 +792,7 @@ public:
                             getCellRangeByName( const ::rtl::OUString& aRange,  const ScAddress::Details& rDetails )
                                 throw(::com::sun::star::uno::RuntimeException);
 
-                            // XPropertySet ueberladen wegen Range-Properties
+                            // XPropertySet overloaded due to Range-Properties
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo >
                             SAL_CALL getPropertySetInfo()
                                 throw(::com::sun::star::uno::RuntimeException);
@@ -955,7 +955,7 @@ public:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > SAL_CALL
                             getTextFieldMasters() throw(::com::sun::star::uno::RuntimeException);
 
-                            // XPropertySet ueberladen wegen Zell-Properties
+                            // XPropertySet overloaded due to cell properties
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo >
                             SAL_CALL getPropertySetInfo()
                                 throw(::com::sun::star::uno::RuntimeException);
@@ -1006,7 +1006,7 @@ class ScTableSheetObj : public ScCellRangeObj,
                         public com::sun::star::sheet::XExternalSheetName,
                         public com::sun::star::document::XEventsSupplier
 {
-    friend class ScTableSheetsObj;      // fuer insertByName()
+    friend class ScTableSheetsObj;      // for insertByName()
 
 private:
     const SfxItemPropertySet*       pSheetPropSet;
@@ -1213,7 +1213,7 @@ public:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameReplace > SAL_CALL getEvents()
                                 throw (::com::sun::star::uno::RuntimeException);
 
-                            // XPropertySet ueberladen wegen Sheet-Properties
+                            // XPropertySet overloaded due to sheet properties
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo >
                             SAL_CALL getPropertySetInfo()
                                 throw(::com::sun::star::uno::RuntimeException);
@@ -1274,7 +1274,7 @@ public:
     virtual void SAL_CALL   setName( const ::rtl::OUString& aName )
                                 throw(::com::sun::star::uno::RuntimeException);
 
-                            // XPropertySet ueberladen wegen Spalten-Properties
+                            // XPropertySet overloaded due to column properties
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo >
                             SAL_CALL getPropertySetInfo()
                                 throw(::com::sun::star::uno::RuntimeException);
@@ -1314,7 +1314,7 @@ public:
                             ScTableRowObj(ScDocShell* pDocSh, SCROW nRow, SCTAB nTab);
     virtual                 ~ScTableRowObj();
 
-                            // XPropertySet ueberladen wegen Zeilen-Properties
+                            // XPropertySet overloaded due to row properties
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo >
                             SAL_CALL getPropertySetInfo()
                                 throw(::com::sun::star::uno::RuntimeException);

@@ -38,8 +38,8 @@
 
 //------------------------------------------------------------------------
 
-                                        // Flags fuer durch Merge verdeckte Zellen
-                                        // und Control fuer Auto-Filter
+                                        // flags for cells hidden by merge
+                                        // and control for auto filter
 #define SC_MF_HOR               0x0001
 #define SC_MF_VER               0x0002
 #define SC_MF_AUTO              0x0004  /// autofilter arrow
@@ -161,7 +161,7 @@ public:
 
 
 //----------------------------------------------------------------------------
-// ScRangeItem: verwaltet einen Tabellenbereich
+// ScRangeItem: manages an area of a table
 
 #define SCR_INVALID     0x01
 #define SCR_ALLTABS     0x02
@@ -180,7 +180,7 @@ public:
 
     inline ScRangeItem& operator=( const ScRangeItem &rCpy );
 
-    // "pure virtual Methoden" vom SfxPoolItem
+    // "pure virtual methods" from SfxPoolItem
     virtual int                 operator==( const SfxPoolItem& ) const;
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                                  SfxMapUnit eCoreMetric,
@@ -201,7 +201,7 @@ private:
 };
 
 inline ScRangeItem::ScRangeItem( const USHORT nWhichP )
-    :   SfxPoolItem( nWhichP ), nFlags( SCR_INVALID ) // == ungueltige Area
+    :   SfxPoolItem( nWhichP ), nFlags( SCR_INVALID ) // == invalid area
 {
 }
 
@@ -223,7 +223,7 @@ inline ScRangeItem& ScRangeItem::operator=( const ScRangeItem &rCpy )
 }
 
 //----------------------------------------------------------------------------
-// ScTableListItem: verwaltet eine Liste von Tabellen
+// ScTableListItem: manages a list of tables
 //----------------------------------------------------------------------------
 class ScTableListItem : public SfxPoolItem
 {
@@ -236,7 +236,7 @@ public:
 
     ScTableListItem& operator=( const ScTableListItem &rCpy );
 
-    // "pure virtual Methoden" vom SfxPoolItem
+    // "pure virtual Methoden" from SfxPoolItem
     virtual int                 operator==( const SfxPoolItem& ) const;
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                                  SfxMapUnit eCoreMetric,
@@ -255,7 +255,7 @@ inline ScTableListItem::ScTableListItem( const USHORT nWhichP )
 {}
 
 //----------------------------------------------------------------------------
-// Seitenformat-Item: Kopf-/Fusszeileninhalte
+// page format item: contents of header and footer
 
 #define SC_HF_LEFTAREA   1
 #define SC_HF_CENTERAREA 2
@@ -290,13 +290,13 @@ public:
     void SetCenterArea( const EditTextObject& rNew );
     void SetRightArea( const EditTextObject& rNew );
 
-    //Set mit Uebereignung der Pointer, nArea siehe defines oben
+    // Set method with pointer assignment, nArea see defines above
     void SetArea( EditTextObject *pNew, int nArea );
 };
 
 
 //----------------------------------------------------------------------------
-// Seitenformat-Item: Kopf-/Fusszeileninhalte
+// page format item: contents of header and footer
 
 class SC_DLLPUBLIC ScViewObjectModeItem: public SfxEnumItem
 {

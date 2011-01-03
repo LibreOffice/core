@@ -98,8 +98,8 @@ public:
             BOOL        Call(void** ppParam);
             BOOL        Unadvice(double nHandle);
 
-                        // Name und Beschreibung des Parameters nParam.
-                        // nParam==0 => Desc := Funktions-Beschreibung,
+                        // name and description of parameter nParam.
+                        // nParam==0 => Desc := function description,
                         // Name := n/a
             BOOL        GetParamDesc( String& aName, String& aDesc, USHORT nParam );
 };

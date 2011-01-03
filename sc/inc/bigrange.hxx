@@ -112,7 +112,7 @@ inline void ScBigAddress::PutInOrder( ScBigAddress& r )
 
 
 inline BOOL ScBigAddress::IsValid( const ScDocument* pDoc ) const
-{   //! Min/Max sind ok, kennzeichnen ganze Col/Row/Tab
+{   // min/max interval bounds define whole col/row/tab
     return
         ((0 <= nCol && nCol <= MAXCOL)
             || nCol == nInt32Min || nCol == nInt32Max) &&
