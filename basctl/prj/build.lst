@@ -1,4 +1,4 @@
-bc	basctl	: l10n svx NULL
+bc	basctl	: LIBXSLT:libxslt l10n svx NULL
 bc	basctl									usr1	-	all	bc_mkout NULL
 bc	basctl\inc								nmake	-	all	bc_inc NULL
 bc	basctl\source\inc						get		-	all	bc_sinc NULL

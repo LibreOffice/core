@@ -213,7 +213,7 @@ public class AgendaWizardDialogImpl extends AgendaWizardDialog
         try {
             sTemplatePath = FileAccess.getOfficePath(xMSF, "Template", "share", "/wizard");
             sUserTemplatePath = FileAccess.getOfficePath(xMSF, "Template", "user", "");
-            sBitmapPath = FileAccess.combinePaths(xMSF, sTemplatePath, "/wizard/bitmap");
+            sBitmapPath = FileAccess.combinePaths(xMSF, sTemplatePath, "/../wizard/bitmap");
         } catch (NoValidPathException e) {
             e.printStackTrace();
         }
@@ -302,7 +302,7 @@ public class AgendaWizardDialogImpl extends AgendaWizardDialog
         try {
 
             sUserTemplatePath = FileAccess.getOfficePath(xMSF, "Template", "user");
-            sBitmapPath = FileAccess.combinePaths(xMSF, sTemplatePath, "/wizard/bitmap");
+            sBitmapPath = FileAccess.combinePaths(xMSF, sTemplatePath, "/../wizard/bitmap");
         } catch (NoValidPathException e) {
             e.printStackTrace();
         }
@@ -484,7 +484,7 @@ public class AgendaWizardDialogImpl extends AgendaWizardDialog
 
             xTextDocument = (XTextDocument)UnoRuntime.queryInterface(XTextDocument.class,agendaTemplate.document);
 
-            bSaveSuccess = OfficeDocument.store(xMSF, xTextDocument, sPath , "writer8_template", false, resources.resErrSaveTemplate );
+            bSaveSuccess = OfficeDocument.store(xMSF, xTextDocument, sPath , "writer8_template", false );
         } catch (Exception e) {
             SystemDialog.showMessageBox(xMSF, xControl.getPeer(), "ErrBox", VclWindowPeerAttribute.OK, resources.resErrSaveTemplate);
             //e.printStackTrace();

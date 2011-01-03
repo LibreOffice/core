@@ -1,4 +1,4 @@
-es	embedserv	:	offuh sal cppu cppuhelper comphelper NULL
+es	embedserv	:	offuh sal cppu cppuhelper comphelper LIBXSLT:libxslt NULL
 es	embedserv								usr1	-	w	es_mkout NULL
 es	embedserv\source\embed					nmake	-	w	es_embed NULL
 es	embedserv\source\inprocserv				nmake	-	w	es_inproc NULL
