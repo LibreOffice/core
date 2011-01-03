@@ -20,41 +20,10 @@ mkdir: %COMMON_DEST%\res%_EXT%
 ..\%__SRC%\lib\libsample.a %_DEST%\lib%_EXT%\libsample.a
 
 mkdir: %_DEST%\inc%_EXT%\basic
-..\inc\testtool.hrc %_DEST%\inc%_EXT%\basic\testtool.hrc
-..\inc\ttmsg.hrc %_DEST%\inc%_EXT%\basic\ttmsg.hrc
-..\inc\basic\ttglobal.hrc %_DEST%\inc%_EXT%\basic\ttglobal.hrc
-..\inc\svtmsg.hrc %_DEST%\inc%_EXT%\basic\svtmsg.hrc
+..\inc\basic\*.hxx %_DEST%\inc%_EXT%\basic\*.hxx
+..\inc\basic\*.hrc %_DEST%\inc%_EXT%\basic\*.hrc
+..\inc\basic\*.h %_DEST%\inc%_EXT%\basic\*.h
 
-..\inc\basic\sbdef.hxx %_DEST%\inc%_EXT%\basic\sbdef.hxx
-..\inc\basic\sbmod.hxx %_DEST%\inc%_EXT%\basic\sbmod.hxx
-..\inc\basic\sbjsmod.hxx %_DEST%\inc%_EXT%\basic\sbjsmod.hxx
-..\inc\basic\sbmeth.hxx %_DEST%\inc%_EXT%\basic\sbmeth.hxx
-..\inc\basic\sbprop.hxx %_DEST%\inc%_EXT%\basic\sbprop.hxx
-..\inc\basic\sbstar.hxx %_DEST%\inc%_EXT%\basic\sbstar.hxx
-..\inc\basic\sbuno.hxx %_DEST%\inc%_EXT%\basic\sbuno.hxx
-..\inc\basic\basmgr.hxx %_DEST%\inc%_EXT%\basic\basmgr.hxx
-..\inc\basic\sberrors.hxx %_DEST%\inc%_EXT%\basic\sberrors.hxx
-..\inc\basic\basrdll.hxx %_DEST%\inc%_EXT%\basic\basrdll.hxx
-..\inc\basic\sbstdobj.hxx %_DEST%\inc%_EXT%\basic\sbstdobj.hxx
-..\inc\basic\process.hxx %_DEST%\inc%_EXT%\basic\process.hxx
-..\inc\basic\mybasic.hxx %_DEST%\inc%_EXT%\basic\mybasic.hxx
-..\inc\basic\testtool.hxx %_DEST%\inc%_EXT%\basic\testtool.hxx
-..\inc\basic\basicrt.hxx %_DEST%\inc%_EXT%\basic\basicrt.hxx
-..\inc\basic\dispdefs.hxx %_DEST%\inc%_EXT%\basic\dispdefs.hxx
-..\inc\basic\ttstrhlp.hxx %_DEST%\inc%_EXT%\basic\ttstrhlp.hxx
-
-..\inc\basic\sbx.hxx %_DEST%\inc%_EXT%\basic\sbx.hxx
-..\inc\basic\sbxcore.hxx %_DEST%\inc%_EXT%\basic\sbxcore.hxx
-..\inc\basic\sbxdef.hxx %_DEST%\inc%_EXT%\basic\sbxdef.hxx
-..\inc\basic\sbxform.hxx %_DEST%\inc%_EXT%\basic\sbxform.hxx
-..\inc\basic\sbxmeth.hxx %_DEST%\inc%_EXT%\basic\sbxmeth.hxx
-..\inc\basic\sbxobj.hxx %_DEST%\inc%_EXT%\basic\sbxobj.hxx
-..\inc\basic\sbxprop.hxx %_DEST%\inc%_EXT%\basic\sbxprop.hxx
-..\inc\basic\sbxvar.hxx %_DEST%\inc%_EXT%\basic\sbxvar.hxx
-..\inc\basic\sbxbase.hxx %_DEST%\inc%_EXT%\basic\sbxbase.hxx
-..\inc\basic\sbxfac.hxx %_DEST%\inc%_EXT%\basic\sbxfac.hxx
-..\inc\basic\sbxmstrm.hxx %_DEST%\inc%_EXT%\basic\sbxmstrm.hxx
-
-..\inc\basic\basicmanagerrepository.hxx %_DEST%\inc%_EXT%\basic\basicmanagerrepository.hxx
 ..\inc\modsizeexceeded.hxx %_DEST%\inc%_EXT%\basic\modsizeexceeded.hxx
 ..\%__SRC%\misc\sb.component %_DEST%\xml%_EXT%\sb.component
+

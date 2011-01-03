@@ -33,7 +33,7 @@
 #include "strings.hxx"
 #include <xmloff/xmlexp.hxx>
 #include <xmloff/nmspmap.hxx>
-#include "xmlnmspe.hxx"
+#include "xmloff/xmlnmspe.hxx"
 #include <xmloff/xmluconv.hxx>
 #include <xmloff/xmlprmap.hxx>
 #include <xmloff/prhdlfac.hxx>
@@ -54,7 +54,7 @@
 #include <xmloff/XMLEventExport.hxx>
 #include "formevents.hxx"
 #include <xmloff/xmlnumfe.hxx>
-#include "xformsexport.hxx"
+#include "xmloff/xformsexport.hxx"
 
 /** === begin UNO includes === **/
 #include <com/sun/star/text/XText.hpp>

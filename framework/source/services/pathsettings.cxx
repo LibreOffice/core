@@ -57,6 +57,8 @@
 #include <comphelper/configurationhelper.hxx>
 #include <unotools/configpathes.hxx>
 
+#include <fwkdllapi.h>
+
 // ______________________________________________
 //  non exported const
 
@@ -243,21 +245,24 @@ void PathSettings::impl_readAll()
 OUStringList PathSettings::impl_readOldFormat(const ::rtl::OUString& sPath)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "PathSettings::impl_readOldFormat" );
-    css::uno::Reference< css::container::XNameAccess > xCfg = fa_getCfgOld();
-    css::uno::Any                                      aVal = xCfg->getByName(sPath);
+    css::uno::Reference< css::container::XNameAccess > xCfg( fa_getCfgOld() );
+    OUStringList aPathVal;
 
-    ::rtl::OUString                       sStringVal;
-    css::uno::Sequence< ::rtl::OUString > lStringListVal;
-    OUStringList                          aPathVal;
+    if( xCfg->hasByName(sPath) )
+    {
+        css::uno::Any aVal( xCfg->getByName(sPath) );
 
-    if (aVal >>= sStringVal)
-    {
-        aPathVal.push_back(sStringVal);
-    }
-    else
-    if (aVal >>= lStringListVal)
-    {
-        aPathVal << lStringListVal;
+        ::rtl::OUString                       sStringVal;
+        css::uno::Sequence< ::rtl::OUString > lStringListVal;
+
+        if (aVal >>= sStringVal)
+        {
+            aPathVal.push_back(sStringVal);
+        }
+        else if (aVal >>= lStringListVal)
+        {
+            aPathVal << lStringListVal;
+        }
     }
 
     return aPathVal;

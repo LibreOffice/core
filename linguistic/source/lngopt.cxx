@@ -29,8 +29,8 @@
 #include "precompiled_linguistic.hxx"
 
 #include "lngopt.hxx"
-#include "lngprops.hxx"
-#include "misc.hxx"
+#include "linguistic/lngprops.hxx"
+#include "linguistic/misc.hxx"
 #include <tools/debug.hxx>
 #include <unotools/lingucfg.hxx>
 

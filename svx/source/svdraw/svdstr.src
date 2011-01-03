@@ -26,7 +26,7 @@
  ************************************************************************/
 /* StarView resource file */
 
-#include "svdstr.hrc"
+#include "svx/svdstr.hrc"
  // Ab hier gecachte Strings
 String STR_ObjNameSingulNONE
 {

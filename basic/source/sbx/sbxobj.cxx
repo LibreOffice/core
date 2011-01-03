@@ -112,6 +112,9 @@ SbxObject::~SbxObject()
     CheckParentsOnDelete( this, pProps );
     CheckParentsOnDelete( this, pMethods );
     CheckParentsOnDelete( this, pObjs );
+
+    // avoid handling in ~SbxVariable as SBX_DIM_AS_NEW == SBX_GBLSEARCH
+    ResetFlag( SBX_DIM_AS_NEW );
 }
 
 SbxDataType SbxObject::GetType() const

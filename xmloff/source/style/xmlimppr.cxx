@@ -40,10 +40,10 @@
 #include <xmloff/xmlimppr.hxx>
 #include <xmloff/xmlimp.hxx>
 
-#include "unoatrcn.hxx"
-#include "xmlnmspe.hxx"
+#include "xmloff/unoatrcn.hxx"
+#include "xmloff/xmlnmspe.hxx"
 #include <xmloff/xmltoken.hxx>
-#include "xmlerror.hxx"
+#include "xmloff/xmlerror.hxx"
 #include <tools/debug.hxx>
 
 #include "xmloff/contextid.hxx"
