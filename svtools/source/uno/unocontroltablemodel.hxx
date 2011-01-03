@@ -51,17 +51,16 @@ using namespace ::svt::table;
 class UnoControlTableColumn : public IColumnModel
 {
     private:
-        ColumnID                                        m_nID;
-
         const ::com::sun::star::uno::Reference< ::com::sun::star::awt::grid::XGridColumn >
-                                                        m_xGridColumn;
+                                    m_xGridColumn;
 
     public:
         UnoControlTableColumn( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::grid::XGridColumn >& i_gridColumn );
 
         // IColumnModel overridables
-        virtual ColumnID        getID() const;
-        virtual bool            setID( const ColumnID _nID );
+        virtual ::com::sun::star::uno::Any
+                                getID() const;
+        virtual void            setID( const ::com::sun::star::uno::Any& i_ID );
         virtual String          getName() const;
         virtual void            setName( const String& _rName );
         virtual bool            isResizable() const;

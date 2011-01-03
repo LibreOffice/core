@@ -83,22 +83,36 @@ using namespace ::com::sun::star::awt::grid;
 
     //--------------------------------------------------------------------
     UnoControlTableColumn::UnoControlTableColumn( const Reference< XGridColumn >& i_gridColumn )
-        :m_nID( 0 )
-        ,m_xGridColumn( i_gridColumn, UNO_QUERY_THROW )
+        :m_xGridColumn( i_gridColumn, UNO_QUERY_THROW )
     {
     }
 
     //--------------------------------------------------------------------
-    ColumnID UnoControlTableColumn::getID() const
+    Any UnoControlTableColumn::getID() const
     {
-        return m_nID;
+        Any aID;
+        try
+        {
+            aID = m_xGridColumn->getIdentifier();
+        }
+        catch( const Exception& )
+        {
+            DBG_UNHANDLED_EXCEPTION();
+        }
+        return aID;
     }
 
     //--------------------------------------------------------------------
-    bool UnoControlTableColumn::setID( const ColumnID _nID )
+    void UnoControlTableColumn::setID( const Any& i_ID )
     {
-        m_nID = _nID;
-        return true;
+        try
+        {
+            m_xGridColumn->setIdentifier( i_ID );
+        }
+        catch( const Exception& )
+        {
+            DBG_UNHANDLED_EXCEPTION();
+        }
     }
 
     //--------------------------------------------------------------------

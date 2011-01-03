@@ -49,9 +49,6 @@ namespace svt { namespace table
     */
     typedef sal_Int32   AnyPos;
 
-    /// the ID of a column in a table
-    typedef sal_Int32   ColumnID;
-
     typedef sal_Int32   TableMetrics;
 /** special column width value which indicates that the column should be
     automatically resized to fit the view

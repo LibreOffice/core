@@ -162,7 +162,8 @@ namespace svt { namespace table
 
             @see setID
         */
-        virtual ColumnID    getID() const = 0;
+        virtual ::com::sun::star::uno::Any
+                            getID() const = 0;
 
         /** sets a new column ID
 
@@ -173,7 +174,7 @@ namespace svt { namespace table
 
             @see getID
         */
-        virtual bool        setID( const ColumnID _nID ) = 0;
+        virtual void        setID( const ::com::sun::star::uno::Any& _nID ) = 0;
 
         /** returns the name of the column
 
