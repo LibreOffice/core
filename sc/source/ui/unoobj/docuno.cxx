@@ -590,8 +590,21 @@ void ScModelObj::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
             DELETEZ( pPrintFuncCache );
 
             // handle "OnCalculate" sheet events (search also for VBA event handlers)
-            if ( pDocShell && pDocShell->GetDocument()->HasAnySheetEventScript( SC_SHEETEVENT_CALCULATE, true ) )
-                HandleCalculateEvents();
+            if ( pDocShell )
+            {
+                ScDocument* pDoc = pDocShell->GetDocument();
+                if ( pDoc->GetVbaEventProcessor().is() )
+                {
+                    // If the VBA event processor is set, HasAnyCalcNotification is much faster than HasAnySheetEventScript
+                    if ( pDoc->HasAnyCalcNotification() && pDoc->HasAnySheetEventScript( SC_SHEETEVENT_CALCULATE, true ) )
+                        HandleCalculateEvents();
+                }
+                else
+                {
+                    if ( pDoc->HasAnySheetEventScript( SC_SHEETEVENT_CALCULATE ) )
+                        HandleCalculateEvents();
+                }
+            }
         }
     }
     else if ( rHint.ISA( ScPointerChangedHint ) )
@@ -1959,6 +1972,7 @@ uno::Reference<uno::XInterface> SAL_CALL ScModelObj::createInstance(
             case SC_SERVICE_MARKERTAB:  xRet.set(xDrawMarkerTab);   break;
             case SC_SERVICE_DASHTAB:    xRet.set(xDrawDashTab);     break;
             case SC_SERVICE_CHDATAPROV: xRet.set(xChartDataProv);   break;
+            case SC_SERVICE_VBAOBJECTPROVIDER: xRet.set(xObjProvider); break;
         }
 
         // #i64497# If a chart is in a temporary document during clipoard paste,
@@ -1984,6 +1998,7 @@ uno::Reference<uno::XInterface> SAL_CALL ScModelObj::createInstance(
                 case SC_SERVICE_MARKERTAB:  xDrawMarkerTab.set(xRet);   break;
                 case SC_SERVICE_DASHTAB:    xDrawDashTab.set(xRet);     break;
                 case SC_SERVICE_CHDATAPROV: xChartDataProv.set(xRet);   break;
+                case SC_SERVICE_VBAOBJECTPROVIDER: xObjProvider.set(xRet); break;
             }
         }
     }
