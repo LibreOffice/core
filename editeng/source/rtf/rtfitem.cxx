@@ -1410,12 +1410,146 @@ void SvxRTFParser::ReadBorderAttr( int nToken, SfxItemSet& rSet,
     if( SFX_ITEM_SET == rSet.GetItemState( PARDID->nBox, sal_False, &pItem ) )
         aAttr = *(SvxBoxItem*)pItem;
 
-    SvxBorderLine aBrd( 0, DEF_LINE_WIDTH_0 );  // simple lines
+    SvxBorderLine aBrd( 0, DEF_LINE_WIDTH_0 );  // Simple plain line
     int bWeiter = sal_True, nBorderTyp = 0;
+
+    long nWidth = 1;
+    bool bDoubleWidth = false;
 
     do {
         switch( nToken )
         {
+        case RTF_BOX:
+        case RTF_BRDRT:
+        case RTF_BRDRB:
+        case RTF_BRDRL:
+        case RTF_BRDRR:
+            nBorderTyp = nToken;
+            break;
+
+        case RTF_CLBRDRT:       // Cell top border
+            {
+                if( bTableDef )
+                    nBorderTyp = RTF_BRDRT;
+                break;
+            }
+        case RTF_CLBRDRB:       // Cell bottom border
+            {
+                if( bTableDef )
+                    nBorderTyp = RTF_BRDRB;
+                break;
+            }
+        case RTF_CLBRDRL:       // Cell left border
+            {
+                if( bTableDef )
+                    nBorderTyp = RTF_BRDRL;
+                break;
+            }
+        case RTF_CLBRDRR:       // Cell right border
+            {
+                if( bTableDef )
+                    nBorderTyp = RTF_BRDRR;
+                break;
+            }
+
+        case RTF_BRDRDOT:       // dotted border
+            aBrd.SetStyle( DOTTED );
+            break;
+        case RTF_BRDRDASH:      // dashed border
+            aBrd.SetStyle( DASHED );
+            break;
+        case RTF_BRDRHAIR:      // hairline border
+            {
+                aBrd.SetStyle( SOLID );
+                aBrd.SetWidth( DEF_LINE_WIDTH_0 );
+            }
+            break;
+        case RTF_BRDRDB:        // Double border
+            aBrd.SetStyle( DOUBLE );
+            break;
+        case RTF_BRDRINSET:     // inset border
+            aBrd.SetStyle( INSET );
+            break;
+        case RTF_BRDROUTSET:    // outset border
+            aBrd.SetStyle( OUTSET );
+            break;
+        case RTF_BRDRTNTHSG:    // ThinThick Small gap
+            aBrd.SetStyle( THINTHICK_SMALLGAP );
+            break;
+        case RTF_BRDRTNTHMG:    // ThinThick Medium gap
+            aBrd.SetStyle( THINTHICK_MEDIUMGAP );
+            break;
+        case RTF_BRDRTNTHLG:    // ThinThick Large gap
+            aBrd.SetStyle( THINTHICK_LARGEGAP );
+            break;
+        case RTF_BRDRTHTNSG:    // ThickThin Small gap
+            aBrd.SetStyle( THICKTHIN_SMALLGAP );
+            break;
+        case RTF_BRDRTHTNMG:    // ThickThin Medium gap
+            aBrd.SetStyle( THICKTHIN_MEDIUMGAP );
+            break;
+        case RTF_BRDRTHTNLG:    // ThickThin Large gap
+            aBrd.SetStyle( THICKTHIN_LARGEGAP );
+            break;
+        case RTF_BRDREMBOSS:    // Embossed border
+            aBrd.SetStyle( EMBOSSED );
+            break;
+        case RTF_BRDRENGRAVE:   // Engraved border
+            aBrd.SetStyle( ENGRAVED );
+            break;
+
+        case RTF_BRDRS:         // single thickness border
+            bDoubleWidth = false;
+            break;
+        case RTF_BRDRTH:        // double thickness border width*2
+            bDoubleWidth = true;
+            break;
+        case RTF_BRDRW:         // border width <255
+            nWidth = nTokenValue;
+           break;
+
+        case RTF_BRDRCF:        // Border color
+                aBrd.SetColor( GetColor( sal_uInt16(nTokenValue) ) );
+                break;
+
+        case RTF_BRDRSH:        // Shadowed border
+                rSet.Put( SvxShadowItem( PARDID->nShadow, (Color*) 0, 60 /*3pt*/,
+                                        SVX_SHADOW_BOTTOMRIGHT ) );
+                break;
+
+        case RTF_BRSP:          // Spacing to content in twip
+            {
+                switch( nBorderTyp )
+                {
+                case RTF_BRDRB:
+                    aAttr.SetDistance( (sal_uInt16)nTokenValue, BOX_LINE_BOTTOM );
+                    break;
+
+                case RTF_BRDRT:
+                    aAttr.SetDistance( (sal_uInt16)nTokenValue, BOX_LINE_TOP );
+                    break;
+
+                case RTF_BRDRL:
+                    aAttr.SetDistance( (sal_uInt16)nTokenValue, BOX_LINE_LEFT );
+                    break;
+
+                case RTF_BRDRR:
+                    aAttr.SetDistance( (sal_uInt16)nTokenValue, BOX_LINE_RIGHT );
+                    break;
+
+                case RTF_BOX:
+                    aAttr.SetDistance( (sal_uInt16)nTokenValue );
+                    break;
+                }
+            }
+            break;
+
+        case RTF_BRDRBTW:       // Border formatting group
+        case RTF_BRDRBAR:       // Border outside
+            // TODO unhandled ATM
+            break;
+
+#if 0
         case RTF_BOX:
         case RTF_BRDRT:
         case RTF_BRDRB:
@@ -1447,10 +1581,8 @@ void SvxRTFParser::ReadBorderAttr( int nToken, SfxItemSet& rSet,
 
 SETBORDER:
             {
-                // set to defaults
-                aBrd.SetOutWidth( DEF_LINE_WIDTH_0 );
-                aBrd.SetInWidth( 0 );
-                aBrd.SetDistance( 0 );
+                // Define the default values
+                aBrd.SetLinesWidths( SOLID, 0, 0, DEF_LINE_WIDTH_0  );
                 aBrd.SetColor( Color( COL_BLACK ) );
             }
             break;
@@ -1497,15 +1629,13 @@ SETBORDER:
             break;
 
         case RTF_BRDRTH:
-            aBrd.SetOutWidth( DEF_LINE_WIDTH_1 );
-            aBrd.SetInWidth( 0 );
-            aBrd.SetDistance( 0 );
+            aBrd.SetLinesWidths( SOLID, 0, 0, DEF_LINE_WIDTH_1 );
             SetBorderLine( nBorderTyp, aAttr, aBrd );
 
         case RTF_BRDRDB:
-            aBrd.SetOutWidth( DEF_DOUBLE_LINE0_OUT );
-            aBrd.SetInWidth( DEF_DOUBLE_LINE0_IN );
-            aBrd.SetDistance( DEF_DOUBLE_LINE0_DIST );
+            aBrd.SetLinesWidths( SOLID, DEF_DOUBLE_LINE0_IN,
+                    DEF_DOUBLE_LINE0_OUT,
+                    DEF_DOUBLE_LINE0_DIST );
             SetBorderLine( nBorderTyp, aAttr, aBrd );
 
         case RTF_BRDRSH:
@@ -1529,22 +1659,22 @@ SETBORDER:
                     // WinWord - adapt values to StarOffice
                     if( nTokenValue < DEF_LINE_WIDTH_1 - (DEF_LINE_WIDTH_1/10))
                     {
-                        aBrd.SetOutWidth( DEF_DOUBLE_LINE0_OUT );
-                        aBrd.SetInWidth( DEF_DOUBLE_LINE0_IN );
-                        aBrd.SetDistance( DEF_DOUBLE_LINE0_DIST );
+                        aBrd.SetLinesWidths( SOLID, DEF_DOUBLE_LINE0_IN,
+                            DEF_DOUBLE_LINE0_OUT,
+                            DEF_DOUBLE_LINE0_DIST );
                     }
                     else
                     if( nTokenValue < DEF_LINE_WIDTH_2 - (DEF_LINE_WIDTH_2/10))
                     {
-                        aBrd.SetOutWidth( DEF_DOUBLE_LINE1_OUT );
-                        aBrd.SetInWidth( DEF_DOUBLE_LINE1_IN );
-                        aBrd.SetDistance( DEF_DOUBLE_LINE1_DIST );
+                        aBrd.SetLinesWidths( SOLID, DEF_DOUBLE_LINE1_IN,
+                            DEF_DOUBLE_LINE1_OUT,
+                            DEF_DOUBLE_LINE1_DIST );
                     }
                     else
                     {
-                        aBrd.SetOutWidth( DEF_DOUBLE_LINE2_OUT );
-                        aBrd.SetInWidth( DEF_DOUBLE_LINE2_IN );
-                        aBrd.SetDistance( DEF_DOUBLE_LINE2_DIST );
+                        aBrd.SetLinesWidths( SOLID, DEF_DOUBLE_LINE2_IN,
+                            DEF_DOUBLE_LINE2_OUT,
+                            DEF_DOUBLE_LINE2_DIST );
                     }
                 }
                 else
@@ -1580,7 +1710,7 @@ SETBORDER:
             aBrd.SetStyle( SOLID );
             SetBorderLine( nBorderTyp, aAttr, aBrd );
             break;
-
+#endif
         case BRACELEFT:
             {
                 short nSkip = 0;
@@ -1601,8 +1731,14 @@ SETBORDER:
                         case RTF_BRDRB:
                         case RTF_BRDRR:
                         case RTF_BRDRL:
+                        {
                             nBorderTyp = nToken;
                             bFirstToken = sal_False;
+
+                            sal_uInt16 nInWidth = 0;
+                            sal_uInt16 nOutWidth = 0;
+                            sal_uInt16 nDistWidth = 0;
+
                             if( RTF_BRDLINE_COL != GetNextToken() )
                             {
                                 bSwgControl = sal_False;
@@ -1615,23 +1751,26 @@ SETBORDER:
                                 bSwgControl = sal_False;
                                 break;
                             }
-                            aBrd.SetInWidth( sal_uInt16(nTokenValue));
+                            nInWidth = sal_uInt16( nTokenValue );
 
                             if( RTF_BRDLINE_OUT != GetNextToken() )
                             {
                                 bSwgControl = sal_False;
                                 break;
                             }
-                            aBrd.SetOutWidth( sal_uInt16(nTokenValue));
+                            nOutWidth = sal_uInt16( nTokenValue );
 
                             if( RTF_BRDLINE_DIST != GetNextToken() )
                             {
                                 bSwgControl = sal_False;
                                 break;
                             }
-                            aBrd.SetDistance( sal_uInt16(nTokenValue));
+                            nDistWidth = sal_uInt16( nTokenValue );
+                            aBrd.SetLinesWidths( SOLID, nInWidth,
+                                   nOutWidth, nDistWidth );
                             SetBorderLine( nBorderTyp, aAttr, aBrd );
                             break;
+                        }
 
                         default:
                             bSwgControl = sal_False;
@@ -1674,6 +1813,13 @@ SETBORDER:
         if( bWeiter )
             nToken = GetNextToken();
     } while( bWeiter );
+
+    // Finally compute the border width
+    if ( bDoubleWidth ) nWidth *= 2;
+    aBrd.SetWidth( nWidth );
+
+    SetBorderLine( nBorderTyp, aAttr, aBrd );
+
     rSet.Put( aAttr );
     SkipToken( -1 );
 }
