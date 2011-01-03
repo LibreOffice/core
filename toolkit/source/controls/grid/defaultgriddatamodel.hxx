@@ -57,6 +57,7 @@ class DefaultGridDataModel : public ::cppu::WeakImplHelper2< XGridDataModel, XSe
 {
 public:
     DefaultGridDataModel();
+    DefaultGridDataModel( DefaultGridDataModel const & i_copySource );
     virtual ~DefaultGridDataModel();
 
     // XGridDataModel
@@ -66,7 +67,7 @@ public:
     virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getRowHeaders() throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL setRowHeaders(const ::com::sun::star::uno::Sequence< ::rtl::OUString > & value) throw (::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< Any > > SAL_CALL getData() throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL addRow(const ::rtl::OUString & headername, const ::com::sun::star::uno::Sequence< Any > & data) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL addRow(const ::rtl::OUString & headername, const ::com::sun::star::uno::Sequence< Any > & m_aData) throw (::com::sun::star::uno::RuntimeException);
        virtual void SAL_CALL removeRow(::sal_Int32 index) throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL addGridDataListener( const Reference< XGridDataListener >& xListener ) throw (RuntimeException);
     virtual void SAL_CALL removeGridDataListener( const Reference< XGridDataListener >& xListener ) throw (RuntimeException);
@@ -75,10 +76,14 @@ public:
     virtual sal_Int32 SAL_CALL getRowHeaderWidth() throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL updateCell( ::sal_Int32 row, ::sal_Int32 column, const ::com::sun::star::uno::Any& value ) throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL updateRow( ::sal_Int32 row, const ::com::sun::star::uno::Sequence< ::sal_Int32 >& columns, const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& values ) throw (::com::sun::star::uno::RuntimeException);
+
     // XComponent
     virtual void SAL_CALL dispose(  ) throw (RuntimeException);
     virtual void SAL_CALL addEventListener( const Reference< XEventListener >& xListener ) throw (RuntimeException);
     virtual void SAL_CALL removeEventListener( const Reference< XEventListener >& aListener ) throw (RuntimeException);
+
+    // XCloneable
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::util::XCloneable > SAL_CALL createClone(  ) throw (::com::sun::star::uno::RuntimeException);
 
     // XServiceInfo
     virtual ::rtl::OUString SAL_CALL getImplementationName(  ) throw (RuntimeException);
@@ -92,10 +97,10 @@ private:
     void broadcast_add( sal_Int32 index, const ::rtl::OUString & headerName,  const ::com::sun::star::uno::Sequence< Any  > rowData ) throw (::com::sun::star::uno::RuntimeException);
     void broadcast_remove( sal_Int32 index, const ::rtl::OUString & headerName, const ::com::sun::star::uno::Sequence< Any  > rowData ) throw (::com::sun::star::uno::RuntimeException);
 
-    sal_Int32 rowHeight;
-    std::vector< std::vector < Any > > data;
-    std::vector< ::rtl::OUString > rowHeaders;
-    sal_Int32 m_nRowHeaderWidth;
+    sal_Int32                           m_nRowHeight;
+    std::vector< std::vector < Any > >  m_aData;
+    std::vector< ::rtl::OUString >      m_aRowHeaders;
+    sal_Int32                           m_nRowHeaderWidth;
 };
 
 }

@@ -51,6 +51,7 @@ class GridColumn    :public ::cppu::BaseMutex
 {
 public:
     GridColumn();
+    GridColumn( GridColumn const & i_copySource );
     virtual ~GridColumn();
 
     // ::com::sun::star::awt::grid::XGridColumn
@@ -77,6 +78,9 @@ public:
     virtual void SAL_CALL dispose(  ) throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL addEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL removeEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& aListener ) throw (::com::sun::star::uno::RuntimeException);
+
+    // XCloneable (base of XGridColumn)
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::util::XCloneable > SAL_CALL createClone(  ) throw (::com::sun::star::uno::RuntimeException);
 
     // XServiceInfo
     virtual ::rtl::OUString SAL_CALL getImplementationName(  ) throw (::com::sun::star::uno::RuntimeException);

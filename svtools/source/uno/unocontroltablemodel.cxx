@@ -84,7 +84,7 @@ using namespace ::com::sun::star::awt::grid;
     //--------------------------------------------------------------------
     UnoControlTableColumn::UnoControlTableColumn( const Reference< XGridColumn >& i_gridColumn )
         :m_nID( 0 )
-        ,m_xGridColumn( i_gridColumn, UNO_SET_THROW )
+        ,m_xGridColumn( i_gridColumn, UNO_QUERY_THROW )
     {
     }
 

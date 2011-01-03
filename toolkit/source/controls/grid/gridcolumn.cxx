@@ -46,11 +46,13 @@ namespace toolkit
     using namespace ::com::sun::star::awt;
     using namespace ::com::sun::star::awt::grid;
     using namespace ::com::sun::star::lang;
+    using namespace ::com::sun::star::util;
     using namespace ::com::sun::star::style;
 
     //==================================================================================================================
     //= DefaultGridColumnModel
     //==================================================================================================================
+    //------------------------------------------------------------------------------------------------------------------
     GridColumn::GridColumn()
         :GridColumn_Base( m_aMutex )
         ,m_aIdentifier()
@@ -60,7 +62,21 @@ namespace toolkit
         ,m_nMaxWidth(0)
         ,m_nMinWidth(0)
         ,m_bResizeable(true)
-        ,m_eHorizontalAlign(HorizontalAlignment(0))
+        ,m_eHorizontalAlign( HorizontalAlignment_LEFT )
+    {
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    GridColumn::GridColumn( GridColumn const & i_copySource )
+        :GridColumn_Base( m_aMutex )
+        ,m_aIdentifier( i_copySource.m_aIdentifier )
+        ,m_nIndex( i_copySource.m_nIndex )
+        ,m_nColumnWidth( i_copySource.m_nColumnWidth )
+        ,m_nPreferredWidth( i_copySource.m_nPreferredWidth )
+        ,m_nMaxWidth( i_copySource.m_nMaxWidth )
+        ,m_nMinWidth( i_copySource.m_nMinWidth )
+        ,m_bResizeable( i_copySource.m_bResizeable )
+        ,m_eHorizontalAlign( i_copySource.m_eHorizontalAlign )
     {
     }
 
@@ -282,6 +298,12 @@ namespace toolkit
         const ::rtl::OUString aServiceName( ::rtl::OUString::createFromAscii( szServiceName_GridColumn ) );
         const Sequence< ::rtl::OUString > aSeq( &aServiceName, 1 );
         return aSeq;
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    Reference< XCloneable > SAL_CALL GridColumn::createClone(  ) throw (RuntimeException)
+    {
+        return new GridColumn( *this );
     }
 }
 

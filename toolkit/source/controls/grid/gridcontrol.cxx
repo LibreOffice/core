@@ -92,8 +92,38 @@ UnoGridModel::UnoGridModel( const ::com::sun::star::uno::Reference< ::com::sun::
 
 //----------------------------------------------------------------------------------------------------------------------
 UnoGridModel::UnoGridModel( const UnoGridModel& rModel )
-: UnoControlModel( rModel )
+    :UnoControlModel( rModel )
 {
+    // clone the data model
+    const Reference< XFastPropertySet > xCloneSource( &const_cast< UnoGridModel& >( rModel ) );
+    bool success = false;
+    try
+    {
+        const Reference< XCloneable > xCloneable( xCloneSource->getFastPropertyValue( BASEPROPERTY_GRID_DATAMODEL ), UNO_QUERY_THROW );
+        setFastPropertyValue( BASEPROPERTY_GRID_DATAMODEL, makeAny( xCloneable->createClone() ) );
+        success = true;
+    }
+    catch( const Exception& )
+    {
+        DBG_UNHANDLED_EXCEPTION();
+    }
+    if ( !success )
+        setFastPropertyValue( BASEPROPERTY_GRID_DATAMODEL, makeAny( maContext.createComponent( "com.sun.star.awt.grid.DefaultGridDataModel" ) ) );
+
+    // clone the column model
+    success = false;
+    try
+    {
+        const Reference< XCloneable > xCloneable( xCloneSource->getFastPropertyValue( BASEPROPERTY_GRID_COLUMNMODEL ), UNO_QUERY_THROW );
+        setFastPropertyValue( BASEPROPERTY_GRID_COLUMNMODEL, makeAny( xCloneable->createClone() ) );
+        success = true;
+    }
+    catch( const Exception& )
+    {
+        DBG_UNHANDLED_EXCEPTION();
+    }
+    if ( !success )
+        setFastPropertyValue( BASEPROPERTY_GRID_COLUMNMODEL, makeAny( maContext.createComponent( "com.sun.star.awt.grid.DefaultGridColumnModel" ) ) );
 }
 
 //----------------------------------------------------------------------------------------------------------------------

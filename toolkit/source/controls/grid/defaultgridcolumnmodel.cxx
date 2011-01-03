@@ -59,6 +59,7 @@ namespace toolkit
     using ::com::sun::star::container::ContainerEvent;
     using ::com::sun::star::uno::Exception;
     using ::com::sun::star::lang::IndexOutOfBoundsException;
+    using ::com::sun::star::util::XCloneable;
     /** === end UNO using === **/
 
     //==================================================================================================================
@@ -72,6 +73,35 @@ namespace toolkit
         ,m_aColumns()
         ,m_nColumnHeaderHeight(0)
     {
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    DefaultGridColumnModel::DefaultGridColumnModel( DefaultGridColumnModel const & i_copySource )
+        :DefaultGridColumnModel_Base( m_aMutex )
+        ,m_aContext( i_copySource.m_aContext )
+        ,m_aContainerListeners( m_aMutex )
+        ,m_aColumns()
+        ,m_nColumnHeaderHeight( i_copySource.m_nColumnHeaderHeight )
+    {
+        Columns aColumns;
+        aColumns.reserve( i_copySource.m_aColumns.size() );
+        try
+        {
+            for (   Columns::const_iterator col = i_copySource.m_aColumns.begin();
+                    col != i_copySource.m_aColumns.end();
+                    ++col
+                )
+            {
+                const Reference< XCloneable > xCloneable( *col, UNO_QUERY_THROW );
+                aColumns.push_back( Reference< XGridColumn >( xCloneable->createClone(), UNO_QUERY_THROW ) );
+            }
+        }
+        catch( const Exception& )
+        {
+            DBG_UNHANDLED_EXCEPTION();
+        }
+        if ( aColumns.size() == i_copySource.m_aColumns.size() )
+            m_aColumns.swap( aColumns );
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -210,18 +240,9 @@ namespace toolkit
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    Reference< XGridColumn > SAL_CALL DefaultGridColumnModel::copyColumn(const Reference< XGridColumn > & column)  throw (RuntimeException)
+    Reference< XGridColumn > SAL_CALL DefaultGridColumnModel::copyColumn( const Reference< XGridColumn > & i_column )  throw (RuntimeException)
     {
-        Reference< XGridColumn > xColumn( m_aContext.createComponent( "com.sun.star.awt.grid.GridColumn" ), UNO_QUERY_THROW );
-        xColumn->setColumnWidth(column->getColumnWidth());
-        xColumn->setPreferredWidth(column->getPreferredWidth());
-        xColumn->setMaxWidth(column->getMaxWidth());
-        xColumn->setMinWidth(column->getMinWidth());
-        xColumn->setPreferredWidth(column->getPreferredWidth());
-        xColumn->setResizeable(column->getResizeable());
-        xColumn->setTitle(column->getTitle());
-        xColumn->setHorizontalAlign(column->getHorizontalAlign());
-        return xColumn;
+        return Reference< XGridColumn >( i_column->createClone(), UNO_QUERY_THROW );
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -291,6 +312,12 @@ namespace toolkit
             Columns aEmpty;
             m_aColumns.swap( aEmpty );
         }
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    Reference< XCloneable > SAL_CALL DefaultGridColumnModel::createClone(  ) throw (RuntimeException)
+    {
+        return new DefaultGridColumnModel( *this );
     }
 
 //......................................................................................................................

@@ -28,7 +28,6 @@
 /** === begin UNO includes === **/
 #include <com/sun/star/awt/grid/XGridColumnModel.hpp>
 #include <com/sun/star/awt/grid/XGridColumn.hpp>
-//#include <com/sun/star/awt/grid/GridColumnEvent.hpp>
 #include <com/sun/star/lang/XEventListener.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
@@ -54,7 +53,8 @@ class DefaultGridColumnModel    :public ::cppu::BaseMutex
                                 ,public DefaultGridColumnModel_Base
 {
 public:
-    DefaultGridColumnModel(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xFactory);
+    DefaultGridColumnModel( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xFactory );
+    DefaultGridColumnModel( DefaultGridColumnModel const & i_copySource );
     virtual ~DefaultGridColumnModel();
 
     // XGridColumnModel
@@ -75,6 +75,9 @@ public:
     // XContainer
     virtual void SAL_CALL addContainerListener( const ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainerListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL removeContainerListener( const ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainerListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
+
+    // XCloneable
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::util::XCloneable > SAL_CALL createClone(  ) throw (::com::sun::star::uno::RuntimeException);
 
     // OComponentHelper
     virtual void SAL_CALL disposing();
