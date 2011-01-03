@@ -50,6 +50,12 @@ namespace svt { namespace table
 {
 //........................................................................
 
+    /** === begin UNO using === **/
+    using ::com::sun::star::uno::Reference;
+    using ::com::sun::star::graphic::XGraphic;
+    using ::com::sun::star::uno::Any;
+    /** === end UNO using === **/
+
     //====================================================================
     //= TempHideCursor
     //====================================================================
@@ -179,19 +185,17 @@ namespace svt { namespace table
         {
             return -1;
         }
-        virtual std::vector<std::vector< ::com::sun::star::uno::Any > >& getCellContent()
+        virtual void getCellContent( RowPos const i_row, ColPos const i_col, ::com::sun::star::uno::Any& o_cellContent )
         {
-            return m_aCellContent;
+            (void)i_row;
+            (void)i_col;
+            o_cellContent.clear();
         }
-        virtual std::vector<rtl::OUString>& getRowHeaderName()
+        virtual ::rtl::OUString getRowHeader( RowPos const i_rowPos ) const
         {
-            aRowHeaderNames.clear();
-            aRowHeaderNames.push_back(rtl::OUString::createFromAscii(""));
-            return aRowHeaderNames;
+            (void)i_rowPos;
+            return ::rtl::OUString();
         }
-    private:
-        std::vector<rtl::OUString> aRowHeaderNames;
-        std::vector<std::vector< ::com::sun::star::uno::Any > > m_aCellContent;
     };
 
 
@@ -1094,7 +1098,6 @@ namespace svt { namespace table
         // paint all rows
         Rectangle aAllDataCellsArea;
         impl_getAllVisibleDataCellArea( aAllDataCellsArea );
-        ::std::vector< std::vector< ::com::sun::star::uno::Any > >& aCellContent = m_pModel->getCellContent();
         for ( TableRowGeometry aRowIterator( *this, aAllCellsWithHeaders, getTopRow() );
               aRowIterator.isValid();
               aRowIterator.moveDown() )
@@ -1132,10 +1135,9 @@ namespace svt { namespace table
             // paint the row header
             if ( m_pModel->hasRowHeaders() )
             {
-                Rectangle aCurrentRowHeader( aRowHeaderArea.GetIntersection( aRowIterator.getRect() ) );
-                rtl::OUString rowHeaderName = m_pModel->getRowHeaderName()[aRowIterator.getRow()];
-                pRenderer->PaintRowHeader( isActiveRow, isSelectedRow, *m_pDataWindow, aCurrentRowHeader,
-                    rStyle, rowHeaderName );
+                const Rectangle aCurrentRowHeader( aRowHeaderArea.GetIntersection( aRowIterator.getRect() ) );
+                pRenderer->PaintRowHeader( aRowIterator.getRow(), isActiveRow, isSelectedRow, *m_pDataWindow, aCurrentRowHeader,
+                    rStyle );
             }
             if ( !colCount )
                 continue;
@@ -1146,9 +1148,12 @@ namespace svt { namespace table
                 )
             {
                 bool isSelectedColumn = false;
-                ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic >xGraphic;
-                ::com::sun::star::uno::Any rCellData = aCellContent[aRowIterator.getRow()][aCell.getColumn()];
-                if(rCellData>>=xGraphic)
+
+                Any aCellContent;
+                m_pModel->getCellContent( aRowIterator.getRow(), aCell.getColumn(), aCellContent );
+
+                Reference< XGraphic > xGraphic;
+                if ( aCellContent >>= xGraphic )
                 {
                     Image* pImage = new Image(xGraphic);
                     if(pImage!=NULL)
@@ -1157,7 +1162,7 @@ namespace svt { namespace table
                 }
                 else
                 {
-                    ::rtl::OUString sContent = convertToString(rCellData);
+                    ::rtl::OUString sContent = convertToString( aCellContent );
                     pRenderer->PaintCellString( aCell.getColumn(), isSelectedRow || isSelectedColumn, isActiveRow,
                         *m_pDataWindow, aCell.getRect(), rStyle, sContent );
                 }
@@ -1863,6 +1868,14 @@ namespace svt { namespace table
     }
 
     //--------------------------------------------------------------------
+    ::rtl::OUString TableControl_Impl::getCellContentAsString( RowPos const i_row, ColPos const i_col )
+    {
+        ::com::sun::star::uno::Any content;
+        m_pModel->getCellContent( i_row, i_col, content );
+        return convertToString( content );
+    }
+
+    //--------------------------------------------------------------------
     TableSize TableControl_Impl::impl_ni_ScrollRows( TableSize _nRowDelta )
     {
         // compute new top row
@@ -2043,8 +2056,7 @@ namespace svt { namespace table
         com::sun::star::uno::Sequence< ::rtl::OUString > text = m_rAntiImpl.getTextForTooltip();
         if(text.getLength()==0 && cols.getLength()==0)
         {
-            ::com::sun::star::uno::Any content = m_pModel->getCellContent()[hitRow][hitCol];
-            aTooltipText = convertToString(content);
+            aTooltipText = getCellContentAsString( hitRow, hitCol );
         }
         else if(text.getLength() == 0)
         {
@@ -2052,14 +2064,12 @@ namespace svt { namespace table
             {
                 if(i==0)
                 {
-                    ::com::sun::star::uno::Any content = m_pModel->getCellContent()[hitRow][cols[i]];
-                    aTooltipText = convertToString(content);
+                    aTooltipText = getCellContentAsString( hitRow, cols[i] );
                 }
                 else
                 {
-                    aTooltipText+= ::rtl::OUString::createFromAscii("\n");
-                    ::com::sun::star::uno::Any content = m_pModel->getCellContent()[hitRow][cols[i]];
-                    aTooltipText += convertToString(content);
+                    aTooltipText += ::rtl::OUString::createFromAscii("\n");
+                    aTooltipText += getCellContentAsString( hitRow, cols[i] );
                 }
             }
         }
@@ -2088,8 +2098,7 @@ namespace svt { namespace table
             {
                 if(i==0)
                 {
-                    ::com::sun::star::uno::Any content = m_pModel->getCellContent()[hitRow][cols[i]];
-                    aTooltipText = text[i] + convertToString(content);
+                    aTooltipText = text[i] + getCellContentAsString( hitRow, cols[i] );
                 }
                 else
                 {
@@ -2097,9 +2106,7 @@ namespace svt { namespace table
                     aTooltipText+= text[i];
                     if(nCols > i)
                     {
-                        ::com::sun::star::uno::Any content = m_pModel->getCellContent()[hitRow][cols[i]];
-                        ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic >xGraphic;
-                        aTooltipText += convertToString(content);
+                        aTooltipText += getCellContentAsString( hitRow, cols[i] );
                     }
                 }
             }

@@ -222,22 +222,32 @@ namespace svt { namespace table
         */
         void    ensureVisible( ColPos _nColumn, RowPos _nRow, bool _bAcceptPartialVisibility );
 
+        /** retrieves the content of the given cell, converted to a string
+        */
+        ::rtl::OUString getCellContentAsString( RowPos const i_row, ColPos const i_col );
+
         /** checks whether the vector with the selected rows contains the current row*/
         BOOL    isRowSelected(const ::std::vector<RowPos>& selectedRows, RowPos current);
 
         bool    isRowSelected(RowPos current);
+
         /** returns the position of the current row in the selection vector */
         int getRowSelectedNumber(const ::std::vector<RowPos>& selectedRows, RowPos current);
+
         /** _rCellRect contains the region, which should be invalidate after some action e.g. selecting row*/
         void    invalidateSelectedRegion(RowPos _nPrevRow, RowPos _nCurRow, Rectangle& _rCellRect );
+
         /** to be called when a new row is added to the control*/
         void    invalidateRow(RowPos _nRowPos, Rectangle& _rCellRect );
+
         /** returns the vector, which contains the selected rows*/
         std::vector<RowPos>& getSelectedRows();
+
         /** updates the vector, which contains the selected rows after removing the row nRowPos*/
         void    removeSelectedRow(RowPos _nRowPos);
         void    invalidateRows();
         void    clearSelection();
+
         // IAbstractTableControl
         virtual void                hideCursor();
         virtual void                showCursor();

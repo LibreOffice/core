@@ -405,13 +405,14 @@ namespace svt { namespace table
         */
         virtual void removeTableModelListener( const PTableModelListener& i_listener ) = 0;
 
-        /** gets the content of the cells
+        /** retrieves the content of the given cell
         */
-        virtual std::vector< std::vector< ::com::sun::star::uno::Any > >&   getCellContent() = 0;
+        virtual void getCellContent( RowPos const i_row, ColPos const i_col, ::com::sun::star::uno::Any& o_cellContent ) = 0;
 
-        /** gets title of header rows
+        /** retrieves title of a given row
         */
-        virtual std::vector<rtl::OUString>&   getRowHeaderName() = 0;
+        virtual ::rtl::OUString getRowHeader( RowPos const i_rowPos ) const = 0;
+
         virtual ::com::sun::star::util::Color getLineColor() = 0;
         virtual ::com::sun::star::util::Color getHeaderBackgroundColor() = 0;
         virtual ::com::sun::star::util::Color getTextColor() = 0;

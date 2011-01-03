@@ -133,8 +133,8 @@ class UnoControlTableModel : public ITableModel
         virtual ScrollbarVisibility getHorizontalScrollbarVisibility() const;
         virtual void addTableModelListener( const PTableModelListener& i_listener );
         virtual void removeTableModelListener( const PTableModelListener& i_listener );
-        virtual std::vector< std::vector< ::com::sun::star::uno::Any > >&   getCellContent();
-        virtual std::vector<rtl::OUString>&   getRowHeaderName();
+        virtual void getCellContent( RowPos const i_row, ColPos const i_col, ::com::sun::star::uno::Any& o_cellContent );
+        virtual ::rtl::OUString getRowHeader( RowPos const i_rowPos ) const;
         virtual ::com::sun::star::util::Color getLineColor();
         virtual ::com::sun::star::util::Color getHeaderBackgroundColor();
         virtual ::com::sun::star::util::Color getTextColor();
@@ -143,9 +143,21 @@ class UnoControlTableModel : public ITableModel
         virtual ::com::sun::star::style::VerticalAlignment getVerticalAlign();
 
 
+        // column write access
+        void    appendColumn( const PColumnModel& i_column );
+        void    insertColumn( ColPos const i_position, const PColumnModel& i_column );
+        void    removeAllColumns();
+
+        // row write access
+        void    setRowHeaderNames( const ::com::sun::star::uno::Sequence< ::rtl::OUString >& i_rowHeaders );
+        void    appendRow( ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > const & i_rowData, ::rtl::OUString const & i_rowHeader );
+        void    removeRow( RowPos const i_rowPos );
+        void    clearAllRows();
+
+        // cell data write access
+        void    updateCellContent( RowPos const i_rowPos, ColPos const i_colPos, ::com::sun::star::uno::Any const & i_cellContent );
+
         // other operations
-        void    setRowCount(TableSize _nRowCount);
-        void    setRowHeaderName(const std::vector<rtl::OUString>& cellColumnContent);
         void    setVerticalScrollbarVisibility( ScrollbarVisibility const i_visibility ) const;
         void    setHorizontalScrollbarVisibility( ScrollbarVisibility const i_visibility ) const;
         void    setCellContent(const std::vector<std::vector< ::com::sun::star::uno::Any > >& cellContent);
@@ -158,9 +170,6 @@ class UnoControlTableModel : public ITableModel
         void    setOddRowBackgroundColor(::com::sun::star::util::Color _rColor);
         void    setEvenRowBackgroundColor(::com::sun::star::util::Color _rColor);
         void    setVerticalAlign(::com::sun::star::style::VerticalAlignment _rAlign);
-        void    appendColumn( const PColumnModel& i_column );
-        void    insertColumn( ColPos const i_position, const PColumnModel& i_column );
-        void    removeAllColumns();
 };
 
 inline void UnoControlTableModel::SetColumnWidth( ColPos _nColumn, TableMetrics _nWidth100thMM )

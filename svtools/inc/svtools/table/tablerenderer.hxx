@@ -175,12 +175,10 @@ namespace svt { namespace table
                 the are into which the row header should be painted
             @param _rStyle
                 the style to be used for drawing
-            @param _rText
-                the title of the header row
         */
-        virtual void    PaintRowHeader( bool _bActive, bool _bSelected,
+        virtual void    PaintRowHeader( RowPos const i_rowPos, bool _bActive, bool _bSelected,
                             OutputDevice& _rDevice, const Rectangle& _rArea,
-                const StyleSettings& _rStyle, rtl::OUString& _rText ) = 0;
+                const StyleSettings& _rStyle ) = 0;
 
         /** paints a certain cell
 

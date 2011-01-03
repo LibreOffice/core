@@ -149,24 +149,25 @@ void SAL_CALL DefaultGridDataModel::setRowHeight(::sal_Int32 value) throw (::com
 
 //---------------------------------------------------------------------
 
-void SAL_CALL DefaultGridDataModel::setRowHeaders(const ::com::sun::star::uno::Sequence< ::rtl::OUString > & value) throw (::com::sun::star::uno::RuntimeException)
+void SAL_CALL DefaultGridDataModel::setRowHeaders(const ::com::sun::star::uno::Sequence< ::rtl::OUString > & i_rowHeaders ) throw (::com::sun::star::uno::RuntimeException)
 {
-    ::com::sun::star::uno::Sequence< ::rtl::OUString > oldValue( comphelper::containerToSequence(rowHeaders) );
+    ::com::sun::star::uno::Sequence< ::rtl::OUString > oldValue( comphelper::containerToSequence( rowHeaders ) );
 
-    std::vector< rtl::OUString>::iterator iterator;
-    int i = 0;
-    int sequenceSize = value.getLength();
+    const sal_Int32 sequenceSize = i_rowHeaders.getLength();
 
-    for(iterator = rowHeaders.begin(); iterator != rowHeaders.end(); iterator++)
+    sal_Int32 i = 0;
+    for (   std::vector< rtl::OUString >::iterator iterator = rowHeaders.begin();
+            iterator != rowHeaders.end();
+            ++iterator, ++i
+        )
     {
         if ( sequenceSize > i )
-            *iterator = value[i];
+            *iterator = i_rowHeaders[i];
         else
             *iterator = ::rtl::OUString();
-        i++;
     }
 
-    broadcast_changed( ROWHEADERS, 0, Any(oldValue), Any(comphelper::containerToSequence(rowHeaders)) );
+    broadcast_changed( ROWHEADERS, 0, Any( oldValue ), Any( comphelper::containerToSequence( rowHeaders ) ) );
 }
 
 //---------------------------------------------------------------------

@@ -87,17 +87,18 @@ namespace svt { namespace table
                             OutputDevice& _rDevice, const Rectangle& _rRowArea,
                             const StyleSettings& _rStyle );
         virtual void    PaintRowHeader(
+                            RowPos const i_rowPos,
                             bool _bActive, bool _bSelected,
                             OutputDevice& _rDevice, const Rectangle& _rArea,
-                            const StyleSettings& _rStyle, rtl::OUString& _rText );
+                            const StyleSettings& _rStyle );
         virtual void    PaintCellImage( ColPos _nColumn,
                             bool _bActive, bool _bSelected,
                             OutputDevice& _rDevice, const Rectangle& _rArea,
                 const StyleSettings& _rStyle, Image* _pCellData );
-    virtual void    PaintCellString( ColPos _nColumn,
+        virtual void    PaintCellString( ColPos _nColumn,
                             bool _bActive, bool _bSelected,
                             OutputDevice& _rDevice, const Rectangle& _rArea,
-                const StyleSettings& _rStyle, rtl::OUString& _rText );
+                            const StyleSettings& _rStyle, rtl::OUString& _rText );
         virtual void    ShowCellCursor( Window& _rView, const Rectangle& _rCursorRect);
         virtual void    HideCellCursor( Window& _rView, const Rectangle& _rCursorRect);
     };

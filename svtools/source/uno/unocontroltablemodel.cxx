@@ -27,17 +27,20 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svtools.hxx"
 
-#include "unocontroltablemodel.hxx"
-#include <com/sun/star/view/SelectionType.hpp>
-#include "svtools/table/gridtablerenderer.hxx"
 #include "svtools/table/defaultinputhandler.hxx"
+#include "svtools/table/gridtablerenderer.hxx"
 #include "svtools/table/tablecontrol.hxx"
-#include <comphelper/sequence.hxx>
-#include <rtl/ref.hxx>
-#include <tools/debug.hxx>
-#include <toolkit/helper/property.hxx>
-#include <comphelper/processfactory.hxx>
+#include "unocontroltablemodel.hxx"
+
 #include <com/sun/star/awt/grid/XGridColumn.hpp>
+#include <com/sun/star/view/SelectionType.hpp>
+#include <comphelper/processfactory.hxx>
+
+#include <comphelper/sequence.hxx>
+#include <comphelper/stlunosequence.hxx>
+#include <rtl/ref.hxx>
+#include <toolkit/helper/property.hxx>
+#include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 
 using ::rtl::OUString;
@@ -204,26 +207,26 @@ using namespace ::com::sun::star::awt::grid;
     typedef ::std::vector< PTableModelListener >    ModellListeners;
     struct UnoControlTableModel_Impl
     {
-        ::std::vector< PColumnModel >       aColumns;
-        TableSize                           nRowCount;
-        bool                                bHasColumnHeaders;
-        bool                                bHasRowHeaders;
-        ScrollbarVisibility                 eVScrollMode;
-        ScrollbarVisibility                 eHScrollMode;
-        PTableRenderer                      pRenderer;
-        PTableInputHandler                  pInputHandler;
-        TableMetrics                        nRowHeight;
-        TableMetrics                        nColumnHeaderHeight;
-        TableMetrics                        nRowHeaderWidth;
-        ::std::vector<rtl::OUString >       aRowHeadersTitle;
-        ::std::vector<std::vector< Any > >  aCellContent;
-        ::com::sun::star::util::Color       m_nLineColor;
-        ::com::sun::star::util::Color       m_nHeaderColor;
-        ::com::sun::star::util::Color       m_nTextColor;
-        ::com::sun::star::util::Color       m_nRowColor1;
-        ::com::sun::star::util::Color       m_nRowColor2;
+        ::std::vector< PColumnModel >               aColumns;
+        TableSize                                   nRowCount;
+        bool                                        bHasColumnHeaders;
+        bool                                        bHasRowHeaders;
+        ScrollbarVisibility                         eVScrollMode;
+        ScrollbarVisibility                         eHScrollMode;
+        PTableRenderer                              pRenderer;
+        PTableInputHandler                          pInputHandler;
+        TableMetrics                                nRowHeight;
+        TableMetrics                                nColumnHeaderHeight;
+        TableMetrics                                nRowHeaderWidth;
+        ::std::vector< ::rtl::OUString >            aRowHeadersTitle;
+        ::std::vector< ::std::vector< Any > >       aCellContent;
+        ::com::sun::star::util::Color               m_nLineColor;
+        ::com::sun::star::util::Color               m_nHeaderColor;
+        ::com::sun::star::util::Color               m_nTextColor;
+        ::com::sun::star::util::Color               m_nRowColor1;
+        ::com::sun::star::util::Color               m_nRowColor2;
         ::com::sun::star::style::VerticalAlignment  m_eVerticalAlign;
-        ModellListeners                     m_aListeners;
+        ModellListeners                             m_aListeners;
 
         UnoControlTableModel_Impl()
             :aColumns           ( )
@@ -306,11 +309,6 @@ using namespace ::com::sun::star::awt::grid;
     void UnoControlTableModel::setColumnCount(TableSize _nColCount)
     {
        m_pImpl->aColumns.resize( _nColCount);
-    }
-    //--------------------------------------------------------------------
-    void UnoControlTableModel::setRowCount(TableSize _nRowCount)
-    {
-       m_pImpl->nRowCount = _nRowCount;
     }
     //--------------------------------------------------------------------
     bool UnoControlTableModel::isCellEditable( ColPos col, RowPos row ) const
@@ -490,20 +488,111 @@ using namespace ::com::sun::star::awt::grid;
         m_pImpl->aCellContent = cellContent;
     }
 
-    std::vector<std::vector< Any > >& UnoControlTableModel::getCellContent()
-    {
-        return m_pImpl->aCellContent;
-    }
     //--------------------------------------------------------------------
-    void UnoControlTableModel::setRowHeaderName(const std::vector<rtl::OUString>& cellColumnContent)
+    void UnoControlTableModel::getCellContent( RowPos const i_row, ColPos const i_col, Any& o_cellContent )
     {
-        m_pImpl->aRowHeadersTitle = cellColumnContent;
+        ENSURE_OR_RETURN_VOID( ( i_row >= 0 ) && ( i_row < m_pImpl->aCellContent.size() ),
+            "UnoControlTableModel::getCellContent: illegal row index!" );
+        ::std::vector< Any >& rRowContent( m_pImpl->aCellContent[ i_row ] );
+        ENSURE_OR_RETURN_VOID( ( i_col >= 0 ) && ( i_col < rRowContent.size() ),
+            "UnoControlTableModel::getCellContent: illegal column index" );
+        o_cellContent = rRowContent[ i_col ];
     }
 
-    std::vector<rtl::OUString>& UnoControlTableModel::getRowHeaderName()
+    //--------------------------------------------------------------------
+    void UnoControlTableModel::updateCellContent( RowPos const i_row, ColPos const i_col, Any const & i_cellContent )
     {
-        return m_pImpl->aRowHeadersTitle;
+        ENSURE_OR_RETURN_VOID( ( i_row >= 0 ) && ( i_row < m_pImpl->aCellContent.size() ),
+            "UnoControlTableModel::getCellContent: illegal row index!" );
+        ::std::vector< Any >& rRowContent( m_pImpl->aCellContent[ i_row ] );
+        ENSURE_OR_RETURN_VOID( ( i_col >= 0 ) && ( i_col < rRowContent.size() ),
+            "UnoControlTableModel::getCellContent: illegal column index" );
+        rRowContent[ i_col ] = i_cellContent;
+
+        // TODO: listener notification
     }
+
+    //--------------------------------------------------------------------
+    void UnoControlTableModel::setRowHeaderNames( const Sequence< ::rtl::OUString >& i_rowHeaders )
+    {
+        ENSURE_OR_RETURN_VOID( size_t( i_rowHeaders.getLength() ) == m_pImpl->aRowHeadersTitle.size(),
+            "UnoControlTableModel::setRowHeaderNames: illegal number of row headers!" );
+            // this method is not intended to set a new row count, but only to modify the existing row headers
+
+        ::std::copy(
+            ::comphelper::stl_begin( i_rowHeaders ),
+            ::comphelper::stl_end( i_rowHeaders ),
+            m_pImpl->aRowHeadersTitle.begin()
+        );
+
+        // TODO: listener notification
+    }
+
+    //--------------------------------------------------------------------
+    ::rtl::OUString UnoControlTableModel::getRowHeader( RowPos const i_rowPos ) const
+    {
+        ENSURE_OR_RETURN( ( i_rowPos >= 0 ) && ( i_rowPos < m_pImpl->aRowHeadersTitle.size() ),
+            "UnoControlTableModel::getRowHeader: illegal row position!", ::rtl::OUString() );
+        return m_pImpl->aRowHeadersTitle[ i_rowPos ];
+    }
+
+    //--------------------------------------------------------------------
+    void UnoControlTableModel::appendRow( Sequence< Any > const & i_rowData, ::rtl::OUString const & i_rowHeader )
+    {
+        ENSURE_OR_RETURN_VOID( i_rowData.getLength() == getColumnCount(), "UnoControlTableModel::appendRow: invalid row data!" );
+
+        // add row data
+        ::std::vector< Any > newRow( i_rowData.getLength() );
+        if ( !newRow.empty() )
+            ::std::copy(
+                ::comphelper::stl_begin( i_rowData ),
+                ::comphelper::stl_end( i_rowData ),
+                newRow.begin()
+            );
+
+        m_pImpl->aCellContent.push_back( newRow );
+
+        if ( hasRowHeaders() )
+            m_pImpl->aRowHeadersTitle.push_back( i_rowHeader );
+
+        ++m_pImpl->nRowCount;
+
+        // TODO: listener notification
+    }
+
+    //--------------------------------------------------------------------
+    void UnoControlTableModel::removeRow( RowPos const i_rowPos )
+    {
+        ENSURE_OR_RETURN_VOID( ( i_rowPos >= 0 ) && ( i_rowPos < getRowCount() ), "UnoControlTableModel::removeRow: illegal row position!" );
+
+        if ( hasRowHeaders() )
+            m_pImpl->aRowHeadersTitle.erase( m_pImpl->aRowHeadersTitle.begin() + i_rowPos );
+
+        const ::std::vector< ::std::vector< Any > >::iterator contentPos = m_pImpl->aCellContent.begin() + i_rowPos;
+        m_pImpl->aCellContent.erase( contentPos );
+
+        --m_pImpl->nRowCount;
+
+        // TODO: listener notification
+    }
+
+    //--------------------------------------------------------------------
+    void UnoControlTableModel::clearAllRows()
+    {
+        if ( hasRowHeaders() )
+        {
+            ::std::vector< ::rtl::OUString > aEmpty;
+            m_pImpl->aRowHeadersTitle.swap( aEmpty );
+        }
+
+        ::std::vector< ::std::vector< Any > > aEmptyContent;
+        m_pImpl->aCellContent.swap( aEmptyContent );
+
+        m_pImpl->nRowCount = 0;
+
+        // TODO: listener notification
+    }
+
     //--------------------------------------------------------------------
     ::com::sun::star::util::Color UnoControlTableModel::getLineColor()
     {

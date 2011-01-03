@@ -363,7 +363,7 @@ namespace svt { namespace table
 
 ::rtl::OUString TableControl::GetRowName( sal_Int32 _nIndex) const
 {
-    return GetModel()->getRowHeaderName()[_nIndex];
+    return GetModel()->getRowHeader( _nIndex );
 }
 // -----------------------------------------------------------------------------
 
@@ -381,20 +381,18 @@ namespace svt { namespace table
 
 // -----------------------------------------------------------------------------
 
-::com::sun::star::uno::Any TableControl::GetCellContent( sal_Int32 _nRowPos, sal_Int32 _nColPos) const
+::com::sun::star::uno::Any TableControl::GetCellContent( sal_Int32 _nRowPos, sal_Int32 _nColPos ) const
 {
-    ::com::sun::star::uno::Any cellContent(::com::sun::star::uno::Any(::rtl::OUString::createFromAscii("")));
-    std::vector<std::vector< ::com::sun::star::uno::Any > >& aTableContent = GetModel()->getCellContent();
-    if(&aTableContent)
-        cellContent = aTableContent[_nRowPos][_nColPos];
-    return cellContent;
+    Any aCellContent;
+    GetModel()->getCellContent( _nRowPos, _nColPos, aCellContent );
+    return aCellContent;
 }
+
 // -----------------------------------------------------------------------------
 
 ::rtl::OUString TableControl::GetAccessibleCellText( sal_Int32 _nRowPos, sal_Int32 _nColPos) const
 {
-    const ::com::sun::star::uno::Any cellContent = GetCellContent(_nRowPos, _nColPos);
-    return m_pImpl->convertToString(cellContent);
+    return m_pImpl->getCellContentAsString( _nRowPos, _nColPos );
 }
 // -----------------------------------------------------------------------------
 

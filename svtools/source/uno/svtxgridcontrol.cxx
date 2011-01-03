@@ -271,32 +271,44 @@ void SVTXGridControl::setProperty( const ::rtl::OUString& PropertyName, const An
                 Sequence< Sequence< Any > > cellData = m_xDataModel->getData();
                 if ( cellData.getLength() != 0 )
                 {
-                    for (int i = 0; i < cellData.getLength(); i++)
-                    {
-                        std::vector< Any > newRow;
-                        Sequence< Any > rawRowData = cellData[i];
-                        //check whether the data row vector length matches with the column count
-                        if(m_xColumnModel->getColumnCount() == 0)
-                        {
-                            m_xColumnModel->setDefaultColumns(rawRowData.getLength());
-                            // this will trigger notifications, which in turn will let us update our m_pTableModel
-                        }
-                        else
-                            if((unsigned int)rawRowData.getLength()!=(unsigned)m_pTableModel->getColumnCount())
-                                throw GridInvalidDataException(rtl::OUString::createFromAscii("The column count doesn't match with the length of row data"), m_xDataModel);
+                    const sal_Int32 nDataRowCount = cellData.getLength();
 
-                        for ( int k = 0; k < rawRowData.getLength(); k++)
-                        {
-                            newRow.push_back(rawRowData[k]);
-                        }
-                        m_pTableModel->getCellContent().push_back(newRow);
+                    const Sequence< ::rtl::OUString > rowHeaders = m_xDataModel->getRowHeaders();
+                    const sal_Int32 nRowHeaderCount = rowHeaders.getLength();
+
+                    if ( ( nRowHeaderCount != 0 ) && ( nRowHeaderCount != nDataRowCount ) )
+                        throw GridInvalidDataException(
+                            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "row header / content data inconsistency" ) ), *this );
+
+                    // check data consistency
+                    sal_Int32 nDataColumnCount = 0;
+                    for ( sal_Int32 i=0; i<nDataRowCount; ++i )
+                    {
+                        const Sequence< Any >& rRawRowData = cellData[i];
+                        if ( ( i > 0 ) && ( rRawRowData.getLength() != nDataColumnCount ) )
+                            throw GridInvalidDataException(
+                                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "inconsistent column counts in the row data" ) ), *this );
+                        nDataColumnCount = rRawRowData.getLength();
                     }
 
-                    Sequence< ::rtl::OUString > rowHeaders = m_xDataModel->getRowHeaders();
-                    std::vector< rtl::OUString > newRow(
-                        comphelper::sequenceToContainer< std::vector<rtl::OUString > >(rowHeaders));
-                    m_pTableModel->setRowCount(m_xDataModel->getRowCount());
-                    m_pTableModel->setRowHeaderName(newRow);
+                    // ensure default columns exist, if they have not previously been added
+                    if ( ( nDataColumnCount > 0 ) && ( m_xColumnModel->getColumnCount() == 0 ) )
+                        m_xColumnModel->setDefaultColumns( nDataColumnCount );
+                        // this will trigger notifications, which in turn will let us update our m_pTableModel
+
+                    // ensure the row data has as much columns as indicate by our model
+                    if ( nDataColumnCount != m_pTableModel->getColumnCount() )
+                        throw GridInvalidDataException(
+                            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Grid model's column count doesn't match the row data's column count." ) ),
+                            *this );
+
+                    // finally add the rows
+                    // TODO: suspend the model's notifications for the single rows, do one notification after all
+                    // rows have been inserted
+                    for ( TableSize i = 0; i < nDataRowCount; ++i )
+                    {
+                        m_pTableModel->appendRow( cellData[i], rowHeaders[i] );
+                    }
                 }
 
                 sal_Int32 fontHeight = pTable->PixelToLogic( Size( 0, pTable->GetTextHeight()+3 ), MAP_APPFONT ).Height();
@@ -391,29 +403,23 @@ void SAL_CALL SVTXGridControl::rowAdded(const ::com::sun::star::awt::grid::GridD
 {
     ::vos::OGuard aGuard( GetMutex() );
 
-    std::vector< Any > newRow;
-    Sequence< Any > rawRowData = Event.rowData;
-    int colCount = m_xColumnModel->getColumnCount();
-    if(colCount == 0)
+    const TableSize rowDataLength = (TableSize)Event.rowData.getLength();
+    const TableSize colCount = m_xColumnModel->getColumnCount();
+    if ( colCount == 0 )
     {
-        m_xColumnModel->setDefaultColumns(rawRowData.getLength());
+        m_xColumnModel->setDefaultColumns( rowDataLength );
             // this will trigger notifications, which in turn will let us update our m_pTableModel
     }
-    else if((unsigned int)rawRowData.getLength()!=(unsigned)colCount)
+    if ( rowDataLength != colCount )
         throw GridInvalidDataException( ::rtl::OUString::createFromAscii("The column count doesn't match with the length of row data"), *this );
 
-    for ( int k = 0; k < rawRowData.getLength(); k++)
-        newRow.push_back(rawRowData[k]);
-    m_pTableModel->getCellContent().push_back(newRow);
-    if(m_pTableModel->hasRowHeaders())
-        m_pTableModel->getRowHeaderName().push_back(Event.headerName);
-    m_pTableModel->setRowCount(m_pTableModel->getCellContent().size());
+    m_pTableModel->appendRow( Event.rowData, Event.headerName );
 
     TableControl* pTable = dynamic_cast< TableControl* >( GetWindow() );
     ENSURE_OR_RETURN_VOID( pTable, "SVTXGridControl::rowAdded: no control (anymore)!" );
 
-    pTable->InvalidateDataWindow(m_pTableModel->getCellContent().size()-1, 0, false);
-    if(pTable->isAccessibleAlive())
+    pTable->InvalidateDataWindow( m_pTableModel->getRowCount() - 1, 0, false );
+    if ( pTable->isAccessibleAlive() )
     {
         pTable->commitGridControlEvent(TABLE_MODEL_CHANGED,
              makeAny( AccessibleTableModelChange(INSERT, m_pTableModel->getRowCount()-1, m_pTableModel->getRowCount(), 0, m_pTableModel->getColumnCount())),
@@ -440,33 +446,30 @@ void SAL_CALL SVTXGridControl::rowRemoved(const ::com::sun::star::awt::grid::Gri
 
     if(Event.index == -1)
     {
-        if(!isSelectionEmpty())
+        if ( !isSelectionEmpty() )
             deselectAllRows();
-        if(m_pTableModel->hasRowHeaders())
-            m_pTableModel->getRowHeaderName().clear();
+
+        m_pTableModel->clearAllRows();
+
         pTable->clearSelection();
-        m_pTableModel->getCellContent().clear();
-        if(pTable->isAccessibleAlive())
+
+        if ( pTable->isAccessibleAlive() )
         {
             pTable->commitGridControlEvent(TABLE_MODEL_CHANGED,
                  makeAny( AccessibleTableModelChange(DELETE, 0, m_pTableModel->getColumnCount(), 0, m_pTableModel->getColumnCount())),
                 Any());
         }
     }
-    else if(Event.index >= 0 && Event.index < m_pTableModel->getRowCount())
+    else if ( Event.index >= 0 && Event.index < m_pTableModel->getRowCount() )
     {
-        if(isSelectedIndex(Event.index))
+        if ( isSelectedIndex( Event.index ) )
         {
-            Sequence<sal_Int32> selected(1);
+            Sequence< sal_Int32 > selected(1);
             selected[0]=Event.index;
-            deselectRows(selected);
+            deselectRows( selected );
         }
-        if(m_pTableModel->hasRowHeaders())
-            m_pTableModel->getRowHeaderName().erase(m_pTableModel->getRowHeaderName().begin()+Event.index);
-        std::vector<std::vector<Any> >::iterator rowPos =m_pTableModel->getCellContent().begin() + Event.index;
-        m_pTableModel->getCellContent().erase( rowPos );
+        m_pTableModel->removeRow( Event.index );
     }
-    m_pTableModel->setRowCount(m_pTableModel->getCellContent().size());
     pTable->InvalidateDataWindow(Event.index, Event.index, true);
     if(pTable->isAccessibleAlive())
     {
@@ -521,58 +524,63 @@ void SAL_CALL  SVTXGridControl::columnChanged(const ::com::sun::star::awt::grid:
     }
     pTable->Invalidate();
 }
-void SAL_CALL  SVTXGridControl::dataChanged(const ::com::sun::star::awt::grid::GridDataEvent& Event ) throw (::com::sun::star::uno::RuntimeException)
+
+void SAL_CALL SVTXGridControl::dataChanged(const ::com::sun::star::awt::grid::GridDataEvent& Event ) throw (::com::sun::star::uno::RuntimeException)
 {
     ::vos::OGuard aGuard( GetMutex() );
 
     TableControl* pTable = dynamic_cast< TableControl* >( GetWindow() );
     ENSURE_OR_RETURN_VOID( pTable, "SVTXGridControl::dataChanged: no control (anymore)!" );
 
-    if(Event.valueName == rtl::OUString::createFromAscii("RowHeight"))
+    if ( Event.valueName.equalsAscii( "RowHeight" ) )
     {
         sal_Int32 rowHeight = m_pTableModel->getRowHeight();
         Event.newValue>>=rowHeight;
         m_pTableModel->setRowHeight(rowHeight);
         pTable->Invalidate();
     }
-    else if(Event.valueName == rtl::OUString::createFromAscii("RowHeaderWidth"))
+    else if ( Event.valueName.equalsAscii( "RowHeaderWidth" ) )
     {
         sal_Int32 rowHeaderWidth = m_pTableModel->getRowHeaderWidth();
         Event.newValue>>=rowHeaderWidth;
         m_pTableModel->setRowHeaderWidth(rowHeaderWidth);
         pTable->Invalidate();
     }
-    else if(Event.valueName == rtl::OUString::createFromAscii("RowHeaders"))
+    else if ( Event.valueName.equalsAscii( "RowHeaders" ) )
     {
-        Sequence< rtl::OUString > headers(0);
-        Event.newValue>>=headers;
-        std::vector< rtl::OUString > headerNames( comphelper::sequenceToContainer <std::vector< rtl::OUString > >(headers) );
-        m_pTableModel->setRowHeaderName(headerNames);
+        Sequence< rtl::OUString > rowHeaders;
+        OSL_VERIFY( Event.newValue >>= rowHeaders );
+        m_pTableModel->setRowHeaderNames( rowHeaders );
         pTable->Invalidate();
     }
-    else if(Event.valueName == rtl::OUString::createFromAscii("CellUpdated"))
+    else if ( Event.valueName.equalsAscii( "CellUpdated" ) )
     {
-        std::vector< std::vector< Any > >& rowContent = m_pTableModel->getCellContent();
         sal_Int32 col = -1;
-        Event.oldValue>>=col;
-        rowContent[Event.index][col] = Event.newValue;
-        pTable->InvalidateDataWindow(Event.index, Event.index, false);
+        OSL_VERIFY( Event.oldValue >>= col );
+
+        m_pTableModel->updateCellContent( Event.index, col, Event.newValue );
+        pTable->InvalidateDataWindow( Event.index, Event.index, false );
     }
-    else if(Event.valueName == rtl::OUString::createFromAscii("RowUpdated"))
+    else if ( Event.valueName.equalsAscii( "RowUpdated" ) )
     {
-        std::vector<std::vector< Any > >& rowContent = m_pTableModel->getCellContent();
-        Sequence< sal_Int32 > cols(0);
-        Sequence< Any > values(0);
-        Event.oldValue>>=cols;
-        Event.newValue>>=values;
-        for(int i = 0; i< cols.getLength(); i++)
+        Sequence< sal_Int32 > cols;
+        OSL_VERIFY( Event.oldValue >>= cols );
+
+        Sequence< Any > values;
+        OSL_VERIFY( Event.newValue >>= values );
+
+        ENSURE_OR_RETURN_VOID( cols.getLength() == values.getLength(), "SVTXGridControl::dataChanged: inconsistent array lengths!" );
+
+        const TableSize columnCount = m_pTableModel->getColumnCount();
+        // TODO: suspend listener notification, so that the table model doesn't notify |cols.size()| different events.
+        // Instead, only one event should be broadcasted.
+        for ( ColPos i = 0; i< cols.getLength(); ++i )
         {
-            if(cols[i]>=0 && cols[i]<m_pTableModel->getColumnCount())
-                rowContent[Event.index][cols[i]]=values[i];
-            else
-                break;
+            ENSURE_OR_CONTINUE( ( cols[i] >= 0 ) && ( cols[i] < columnCount ), "illegal column index" );
+            m_pTableModel->updateCellContent( Event.index, cols[i], values[i] );
         }
-        pTable->InvalidateDataWindow(Event.index, Event.index, false);
+
+        pTable->InvalidateDataWindow( Event.index, Event.index, false );
     }
 }
 

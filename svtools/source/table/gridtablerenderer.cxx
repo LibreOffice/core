@@ -197,8 +197,8 @@ namespace svt { namespace table
     }
 
     //--------------------------------------------------------------------
-    void GridTableRenderer::PaintRowHeader( bool _bActive, bool _bSelected, OutputDevice& _rDevice, const Rectangle& _rArea,
-        const StyleSettings& _rStyle, rtl::OUString& _rText )
+    void GridTableRenderer::PaintRowHeader( RowPos const i_rowPos, bool _bActive, bool _bSelected, OutputDevice& _rDevice, const Rectangle& _rArea,
+        const StyleSettings& _rStyle )
     {
         _rDevice.Push( PUSH_LINECOLOR);
         _rDevice.SetLineColor(_rStyle.GetSeparatorColor());
@@ -220,7 +220,7 @@ namespace svt { namespace table
         Rectangle aRect(_rArea);
         aRect.Left()+=4; aRect.Right()-=4;
         aRect.Bottom()-=2;
-        _rDevice.DrawText( aRect, _rText, nHorFlag | nVerFlag | TEXT_DRAW_CLIP);
+        _rDevice.DrawText( aRect, m_pImpl->rModel.getRowHeader( i_rowPos ), nHorFlag | nVerFlag | TEXT_DRAW_CLIP);
         // TODO: active? selected?
         (void)_bActive;
         (void)_bSelected;
