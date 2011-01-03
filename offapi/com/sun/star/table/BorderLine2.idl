@@ -43,6 +43,16 @@ struct BorderLine2 : BorderLine
     /** Style of the border. @see BorderLineStyle
      */
     short LineStyle;
+
+    /** Width of the border, this is the base to compute all the lines
+        and gaps widths. These widths computations are based on the
+        LineStyle property
+
+        This property is prevailing on the old Out, In and Dist width
+        from BorderLine. If this property is set to 0, then the other
+        widths will be used to guess the border width.
+     */
+    unsigned long LineWidth;
 };
 
 //=============================================================================
