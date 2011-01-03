@@ -47,17 +47,12 @@
 #include <comphelper/propmultiplex.hxx>
 #include <svtools/transfer.hxx>
 #include "svx/svxdllapi.h"
+#include <vector>
 
 class DbGridControl;
 class CursorWrapper;
 
 sal_Bool CompareBookmark(const ::com::sun::star::uno::Any& aLeft, const ::com::sun::star::uno::Any& aRight);
-
-namespace svxform
-{
-    class DataColumn;
-}
-DECLARE_LIST(DbDataColumns, ::svxform::DataColumn*)
 
 enum GridRowStatus
 {
@@ -74,7 +69,6 @@ enum GridRowStatus
 class DbGridRow : public SvRefBase
 {
     ::com::sun::star::uno::Any                      m_aBookmark;        // ::com::sun::star::text::Bookmark of the row, can be set
-    DbDataColumns               m_aVariants;
     GridRowStatus               m_eStatus;
     sal_Bool                        m_bIsNew;
                                                     // row is no longer valid
@@ -85,10 +79,6 @@ public:
     void SetState(CursorWrapper* pCur, sal_Bool bPaintCursor);
 
     ~DbGridRow();
-
-    // Because GetField is tuned on speed, always use hasField first
-    sal_Bool HasField(sal_uInt32 nPos) const {return nPos < m_aVariants.Count();}
-    const ::svxform::DataColumn& GetField(sal_uInt32 nPos) const { return *m_aVariants.GetObject(nPos); }
 
     void            SetStatus(GridRowStatus _eStat) { m_eStatus = _eStat; }
     GridRowStatus   GetStatus() const               { return m_eStatus; }
