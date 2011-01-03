@@ -836,7 +836,8 @@ sal_Int32 ZipFile::recover()
 
         aGrabber.seek( 0 );
 
-        for( sal_Int32 nGenPos = 0; aGrabber.readBytes( aBuffer, 32000 ) && aBuffer.getLength() > 30; )
+        // TODO/LATER: let the files > 2Gb handle the 2Gb border correctly ( if header is splitted )
+        for( sal_Int32 nGenPos = 0; aGrabber.readBytes( aBuffer, SAL_MAX_INT32 ) && aBuffer.getLength() > 30; )
         {
             const sal_Int8 *pBuffer = aBuffer.getConstArray();
             sal_Int32 nBufSize = aBuffer.getLength();
