@@ -3502,9 +3502,6 @@ bool SvxLineItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemId )
         switch ( nMemId )
         {
             case MID_FG_COLOR:      pLine->SetColor( Color(nVal) ); break;
-            case MID_OUTER_WIDTH:   pLine->SetOutWidth((sal_uInt16)nVal);   break;
-            case MID_INNER_WIDTH:   pLine->SetInWidth((sal_uInt16)nVal);   break;
-            case MID_DISTANCE:      pLine->SetDistance((sal_uInt16)nVal);   break;
             case MID_LINE_STYLE:    pLine->SetStyle((SvxBorderStyle)nVal); break;
             default:
                 OSL_FAIL( "Wrong MemberId" );
