@@ -559,16 +559,15 @@ void GalleryTheme::Actualize( const Link& rActualizeLink, GalleryProgress* pProg
         String          aFormat;
         GalleryObject*  pEntry;
         const size_t    nCount = aObjectList.size();
-        size_t          i;
 
         LockBroadcaster();
         bAbortActualize = FALSE;
 
         // LoeschFlag zuruecksetzen
-        for ( i = 0; i < nCount; i++ )
+        for (size_t i = 0; i < nCount; i++)
             aObjectList[ i ]->bDummy = FALSE;
 
-        for( i = 0; ( i < nCount ) && !bAbortActualize; i++ )
+        for(size_t i = 0; ( i < nCount ) && !bAbortActualize; i++)
         {
             if( pProgress )
                 pProgress->Update( i, nCount - 1 );
