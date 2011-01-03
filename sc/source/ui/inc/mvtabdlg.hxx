@@ -75,7 +75,6 @@ private:
     FixedText       aFtTabName;
     Edit            aEdTabName;
     FixedText       aFtWarn;
-    FixedLine       aFixedLine;
     OKButton        aBtnOk;
     CancelButton    aBtnCancel;
     HelpButton      aBtnHelp;

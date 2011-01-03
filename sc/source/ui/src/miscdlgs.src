@@ -469,41 +469,41 @@ ModalDialog RID_SCDLG_MOVETAB
     };
     FixedLine FL_ACTION
     {
-        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Pos = MAP_APPFONT ( 6 , 6 ) ;
         Size = MAP_APPFONT ( 146 , 8 ) ;
         Text [ en-US ] = "Action" ;
     };
     RadioButton BTN_MOVE
     {
-        Pos = MAP_APPFONT ( 12 , 14 ) ;
+        Pos = MAP_APPFONT ( 12 , 17 ) ;
         Size = MAP_APPFONT ( 114 , 10 ) ;
         Text [ en-US ] = "~Move" ;
         TabStop = TRUE ;
     };
     RadioButton BTN_COPY
     {
-        Pos = MAP_APPFONT ( 12 , 28 ) ;
+        Pos = MAP_APPFONT ( 12 , 30 ) ;
         Size = MAP_APPFONT ( 114 , 10 ) ;
         Text [ en-US ] = "~Copy" ;
         TabStop = TRUE ;
     };
     FixedLine FL_LOCATION
     {
-        Pos = MAP_APPFONT ( 6 , 42 ) ;
+        Pos = MAP_APPFONT ( 6 , 43 ) ;
         Size = MAP_APPFONT ( 146 , 8 ) ;
         Text [ en-US ] = "Location" ;
     };
     FixedText FT_DEST
     {
-        Pos = MAP_APPFONT ( 12 , 53 ) ;
+        Pos = MAP_APPFONT ( 12 , 54 ) ;
         Size = MAP_APPFONT ( 100 , 8 ) ;
         Text [ en-US ] = "To ~document" ;
     };
     ListBox LB_DEST
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 12 , 64 ) ;
-        Size = MAP_APPFONT ( 120 , 60 ) ;
+        Pos = MAP_APPFONT ( 12 , 65 ) ;
+        Size = MAP_APPFONT ( 134 , 60 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
     };
@@ -517,7 +517,7 @@ ModalDialog RID_SCDLG_MOVETAB
     {
         Border = TRUE ;
         Pos = MAP_APPFONT ( 12 , 93 ) ;
-        Size = MAP_APPFONT ( 120 , 62 ) ;
+        Size = MAP_APPFONT ( 134 , 62 ) ;
         TabStop = TRUE ;
     };
     FixedLine FL_NAME
@@ -525,13 +525,6 @@ ModalDialog RID_SCDLG_MOVETAB
         Pos = MAP_APPFONT ( 6 , 162 ) ;
         Size = MAP_APPFONT ( 146 , 8 ) ;
         Text [ en-US ] = "Name" ;
-    };
-    CheckBox BTN_RENAME
-    {
-        Pos = MAP_APPFONT ( 6 , 189 ) ;
-        Size = MAP_APPFONT ( 52 , 10 ) ;
-        Text [ en-US ] = "~Rename" ;
-        TabStop = TRUE ;
     };
     FixedText FT_TABNAME
     {
@@ -543,18 +536,18 @@ ModalDialog RID_SCDLG_MOVETAB
     {
         Border = TRUE ;
         Pos = MAP_APPFONT ( 12 , 183 ) ;
-        Size = MAP_APPFONT ( 120 , 12 ) ;
+        Size = MAP_APPFONT ( 134 , 12 ) ;
         TabStop = TRUE ;
     };
-    FixedText FT_WARN
+    FixedText FT_TABNAME_WARN
     {
-        Pos = MAP_APPFONT ( 24 , 194 ) ;
-        Size = MAP_APPFONT ( 122 , 8 ) ;
-        Text [ en-US ] = " ! This name is already used." ;
+        Pos = MAP_APPFONT ( 12 , 197 ) ;
+        Size = MAP_APPFONT ( 134 , 8 ) ;
+        Text [ en-US ] = "This name is already used." ;
     };
     String STR_CURRENTDOC
     {
-        Text [ en-US ] = "(Current document)" ;
+        Text [ en-US ] = "(current document)" ;
     };
     String STR_NEWDOC
     {

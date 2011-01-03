@@ -103,7 +103,7 @@
 #define FL_LOCATION     9
 #define FL_NAME         11
 #define FT_TABNAME      12
-#define FT_WARN         13
+#define FT_TABNAME_WARN 13
 #define STR_CURRENTDOC  14
 
 // Eingabe eines Strings
