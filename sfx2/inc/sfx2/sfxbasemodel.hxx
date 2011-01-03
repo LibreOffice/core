@@ -159,7 +159,6 @@
 #define EVENTOBJECT             ::com::sun::star::lang::EventObject
 #define PROPERTYVALUE           ::com::sun::star::beans::PropertyValue
 #define REFERENCE               ::com::sun::star::uno::Reference
-#define SEQUENCE                ::com::sun::star::uno::Sequence
 #define MUTEX                   ::osl::Mutex
 #define OUSTRING                ::rtl::OUString
 #define UNOTYPE                 ::com::sun::star::uno::Type
@@ -382,7 +381,7 @@ public:
         @onerror    A RuntimeException is thrown.
     */
 
-    virtual SEQUENCE< UNOTYPE > SAL_CALL getTypes() throw( RUNTIMEEXCEPTION ) ;
+    virtual ::com::sun::star::uno::Sequence< UNOTYPE > SAL_CALL getTypes() throw( RUNTIMEEXCEPTION ) ;
 
     /**___________________________________________________________________________________________________
         @short      get implementation id
@@ -398,7 +397,7 @@ public:
         @onerror    A RuntimeException is thrown.
     */
 
-    virtual SEQUENCE< sal_Int8 > SAL_CALL getImplementationId() throw( RUNTIMEEXCEPTION ) ;
+    virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() throw( RUNTIMEEXCEPTION ) ;
 
 
     //____________________________________________________________________________________________________
@@ -577,7 +576,7 @@ public:
     */
 
     virtual sal_Bool SAL_CALL attachResource(   const   OUSTRING&                   sURL    ,
-                                                const   SEQUENCE< PROPERTYVALUE >&  aArgs   )
+                                                const   ::com::sun::star::uno::Sequence< PROPERTYVALUE >&   aArgs   )
         throw (::com::sun::star::uno::RuntimeException);
 
     /**___________________________________________________________________________________________________
@@ -608,7 +607,7 @@ public:
         @onerror    -
     */
 
-    virtual SEQUENCE< PROPERTYVALUE > SAL_CALL getArgs() throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< PROPERTYVALUE > SAL_CALL getArgs() throw (::com::sun::star::uno::RuntimeException);
 
     /**___________________________________________________________________________________________________
         @short      -
@@ -858,7 +857,7 @@ public:
         @onerror    -
     */
 
-    virtual SEQUENCE< PROPERTYVALUE > SAL_CALL getPrinter() throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< PROPERTYVALUE > SAL_CALL getPrinter() throw (::com::sun::star::uno::RuntimeException);
 
     /**___________________________________________________________________________________________________
         @short      -
@@ -873,7 +872,7 @@ public:
         @onerror    -
     */
 
-    virtual void SAL_CALL setPrinter( const SEQUENCE< PROPERTYVALUE >& seqPrinter )
+    virtual void SAL_CALL setPrinter( const ::com::sun::star::uno::Sequence< PROPERTYVALUE >& seqPrinter )
         throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
     /**___________________________________________________________________________________________________
         @short      -
@@ -888,14 +887,14 @@ public:
         @onerror    -
     */
 
-    virtual void SAL_CALL print( const SEQUENCE< PROPERTYVALUE >& seqOptions )
+    virtual void SAL_CALL print( const ::com::sun::star::uno::Sequence< PROPERTYVALUE >& seqOptions )
         throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
 
     //____________________________________________________________________________________________________
     //  XStorable2
     //____________________________________________________________________________________________________
 
-    virtual void SAL_CALL storeSelf( const  SEQUENCE< PROPERTYVALUE >&  seqArguments    )
+    virtual void SAL_CALL storeSelf( const  ::com::sun::star::uno::Sequence< PROPERTYVALUE >&   seqArguments    )
         throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
 
     //____________________________________________________________________________________________________
@@ -976,7 +975,7 @@ public:
     */
 
     virtual void SAL_CALL storeAsURL(   const   OUSTRING&                   sURL            ,
-                                        const   SEQUENCE< PROPERTYVALUE >&  seqArguments    )
+                                        const   ::com::sun::star::uno::Sequence< PROPERTYVALUE >&   seqArguments    )
         throw (::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException) ;
 
     /**___________________________________________________________________________________________________
@@ -993,7 +992,7 @@ public:
     */
 
     virtual void SAL_CALL storeToURL(   const   OUSTRING&                   sURL            ,
-                                        const   SEQUENCE< PROPERTYVALUE >&  seqArguments    )
+                                        const   ::com::sun::star::uno::Sequence< PROPERTYVALUE >&   seqArguments    )
         throw (::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
 
 
@@ -1034,7 +1033,7 @@ public:
         @onerror    -
     */
 
-    virtual void SAL_CALL load( const   SEQUENCE< PROPERTYVALUE >&  seqArguments )
+    virtual void SAL_CALL load( const   ::com::sun::star::uno::Sequence< PROPERTYVALUE >&   seqArguments )
         throw (::com::sun::star::frame::DoubleInitializationException,
                ::com::sun::star::io::IOException,
                ::com::sun::star::uno::RuntimeException,
@@ -1055,7 +1054,7 @@ public:
     //____________________________________________________________________________________________________
 
     virtual void SAL_CALL loadFromStorage( const REFERENCE< XSTORAGE >& xStorage,
-                                            const SEQUENCE< PROPERTYVALUE >& aMediaDescriptor )
+                                            const ::com::sun::star::uno::Sequence< PROPERTYVALUE >& aMediaDescriptor )
         throw ( ILLEGALARGUMENTEXCEPTION,
                 DOUBLEINITIALIZATIONEXCEPTION,
                 IOEXCEPTION,
@@ -1063,7 +1062,7 @@ public:
                 RUNTIMEEXCEPTION );
 
     virtual void SAL_CALL storeToStorage( const REFERENCE< XSTORAGE >& xStorage,
-                                            const SEQUENCE< PROPERTYVALUE >& aMediaDescriptor )
+                                            const ::com::sun::star::uno::Sequence< PROPERTYVALUE >& aMediaDescriptor )
         throw ( ILLEGALARGUMENTEXCEPTION,
                 IOEXCEPTION,
                 EXCEPTION,
@@ -1161,7 +1160,7 @@ public:
     */
 
 
-    virtual SEQUENCE< DATAFLAVOR > SAL_CALL getTransferDataFlavors()
+    virtual ::com::sun::star::uno::Sequence< DATAFLAVOR > SAL_CALL getTransferDataFlavors()
         throw (::com::sun::star::uno::RuntimeException);
 
     /**___________________________________________________________________________________________________
@@ -1529,7 +1528,7 @@ private:
     SAL_DLLPRIVATE ::rtl::OUString GetMediumFilterName_Impl();
 
     SAL_DLLPRIVATE void impl_store( const   OUSTRING&                   sURL            ,
-                        const   SEQUENCE< PROPERTYVALUE >&  seqArguments    ,
+                        const   ::com::sun::star::uno::Sequence< PROPERTYVALUE >&   seqArguments    ,
                                 sal_Bool                    bSaveTo         ) ;
     SAL_DLLPRIVATE void postEvent_Impl( ::rtl::OUString );
     SAL_DLLPRIVATE String getEventName_Impl( long nID );

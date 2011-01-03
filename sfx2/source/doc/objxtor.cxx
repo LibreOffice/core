@@ -172,12 +172,7 @@ void SAL_CALL SfxModelListener_Impl::disposing( const com::sun::star::lang::Even
         SfxObjectShell::SetCurrentComponent( Reference< XInterface >() );
     }
 
-    if ( mpDoc->Get_Impl()->bHiddenLockedByAPI )
-    {
-        mpDoc->Get_Impl()->bHiddenLockedByAPI = FALSE;
-        mpDoc->OwnerLock(FALSE);
-    }
-    else if ( !mpDoc->Get_Impl()->bClosing )
+    if ( !mpDoc->Get_Impl()->bClosing )
         // GCC stuerzt ab, wenn schon im dtor, also vorher Flag abfragen
         mpDoc->DoClose();
 }
@@ -813,22 +808,6 @@ void SfxObjectShell::InitBasicManager_Impl()
 }
 
 //--------------------------------------------------------------------
-#if 0 //(mba)
-SotObjectRef SfxObjectShell::CreateAggObj( const SotFactory* pFact )
-{
-    // SvDispatch?
-    SotFactory* pDispFact = SvDispatch::ClassFactory();
-    if( pFact == pDispFact )
-        return( (SfxShellObject*)GetSbxObject() );
-
-    // sonst unbekannte Aggregation
-    DBG_ERROR("unkekannte Factory");
-    SotObjectRef aSvObjectRef;
-    return aSvObjectRef;
-}
-#endif
-
-//--------------------------------------------------------------------
 
 sal_uInt16 SfxObjectShell::Count()
 {
@@ -851,7 +830,7 @@ SfxObjectShell* SfxObjectShell::GetObjectShell()
 
 //--------------------------------------------------------------------
 
-SEQUENCE< OUSTRING > SfxObjectShell::GetEventNames()
+uno::Sequence< ::rtl::OUString > SfxObjectShell::GetEventNames()
 {
     static uno::Sequence< ::rtl::OUString >* pEventNameContainer = NULL;
 

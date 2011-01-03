@@ -345,7 +345,7 @@ void SfxPrintHelper::impl_setPrinter(const uno::Sequence< beans::PropertyValue >
         // Name-Property?
         if ( rProp.Name.compareToAscii( "Name" ) == 0 )
         {
-            OUSTRING sTemp;
+            ::rtl::OUString sTemp;
             if ( ( rProp.Value >>= sTemp ) == sal_False )
                 throw ::com::sun::star::lang::IllegalArgumentException();
 
@@ -619,9 +619,9 @@ void SAL_CALL SfxPrintHelper::print(const uno::Sequence< beans::PropertyValue >&
         if ( rProp.Name.compareToAscii( "FileName" ) == 0 )
         {
             // unpack th URL and check for a valid and well known protocol
-            OUSTRING sTemp;
+            ::rtl::OUString sTemp;
             if (
-                ( rProp.Value.getValueType()!=::getCppuType((const OUSTRING*)0))  ||
+                ( rProp.Value.getValueType()!=::getCppuType((const ::rtl::OUString*)0))  ||
                 (!(rProp.Value>>=sTemp))
                )
             {
@@ -718,7 +718,7 @@ void SAL_CALL SfxPrintHelper::print(const uno::Sequence< beans::PropertyValue >&
         // Pages-Property
         else if ( rProp.Name.compareToAscii( "Pages" ) == 0 )
         {
-            OUSTRING sTemp;
+            ::rtl::OUString sTemp;
             if( rProp.Value >>= sTemp )
             {
                 aCheckedArgs[nProps].Name = rProp.Name;
