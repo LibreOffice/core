@@ -337,7 +337,9 @@ public class ModuleCtrl {
             }
             else {
                 if ( isInstalled ) {
-                    if ( packageData.isJavaPackage() ) {   // only selected checks, because of performance reasons
+                    // Maybe a required core module is installed in an older version from another product
+                    boolean isRequiredCoreModule = checkRequiredCoreModule(packageData);
+                    if (( packageData.isJavaPackage() ) || ( isRequiredCoreModule )) {   // only selected checks, because of performance reasons
                         boolean installedPackageIsOlder = installer.isInstalledPackageOlder(packageData, installData);
                         if ( ! installedPackageIsOlder ) {
                             // The package is already installed in the same or in a newer version
@@ -345,6 +347,7 @@ public class ModuleCtrl {
                         } else {
                             // This is also something like migrating feature states
                             packageData.setSelectionState(PackageDescription.INSTALL);
+                            LogManager.addLogfileComment("<b>Adding required older installed package:</b> " + packageData.getPackageName() + "</br>");
                         }
                     } else {  // no version check done -> so what is a good setting for already installed packages?
                         if ( installData.olderVersionExists() ) {  // should never be the case in this function
