@@ -102,7 +102,6 @@ SwCallLink::~SwCallLink()
     if( !pCNd )
         return;
 
-    bool bUpdatedTable = false;
     SwFrm *myFrm=pCNd->GetFrm();
     if (myFrm!=NULL)
     {
@@ -114,8 +113,6 @@ SwCallLink::~SwCallLink()
             const SwTableLine* pLine = pRow->GetTabLine( );
             SwFmtFrmSize pSize = pLine->GetFrmFmt( )->GetFrmSize( );
             pRow->Modify( NULL, &pSize );
-
-            bUpdatedTable = true;
         }
     }
 
@@ -138,14 +135,9 @@ SwCallLink::~SwCallLink()
                 const SwTableLine* pLine = pRow->GetTabLine( );
                 SwFmtFrmSize pSize = pLine->GetFrmFmt( )->GetFrmSize( );
                 pRow->Modify( NULL, &pSize );
-
-                bUpdatedTable = true;
             }
         }
     }
-
-    if ( bUpdatedTable )
-        rShell.GetWin( )->Invalidate( 0 );
 
     xub_StrLen nCmp, nAktCntnt = pCurCrsr->GetPoint()->nContent.GetIndex();
     USHORT nNdWhich = pCNd->GetNodeType();
