@@ -107,7 +107,8 @@ enum SvxBorderStyle
     EMBOSSED,
     ENGRAVED,
     OUTSET,
-    INSET
+    INSET,
+    NONE = -1
 };
 
 class EDITENG_DLLPUBLIC SvxBorderLine
@@ -115,7 +116,8 @@ class EDITENG_DLLPUBLIC SvxBorderLine
 protected:
     Color  aColor;
 
-    double m_nWidth;
+    long m_nWidth;
+    bool m_bMirrorWidths;
     BorderWidthImpl m_aWidthImpl;
     long m_nMult;
     long m_nDiv;
@@ -148,7 +150,36 @@ public:
     Color           GetColorGap() const;
 
     void            SetWidth( long nWidth = 0 ) { m_nWidth = nWidth; }
+    /** Guess the style and width from the three lines widths values.
+
+        When the value of nStyle is SvxBorderLine::DOUBLE, the style set will be guessed
+        using the three values to match the best possible style among the following:
+            - SvxBorderLine::DOUBLE
+            - SvxBorderLine::THINTHICK_SMALLGAP
+            - SvxBorderLine::THINTHICK_MEDIUMGAP
+            - SvxBorderLine::THINTHICK_LARGEGAP
+            - SvxBorderLine::THICKTHIN_SMALLGAP
+            - SvxBorderLine::THICKTHIN_MEDIUMGAP
+            - SvxBorderLine::THICKTHIN_LARGEGAP
+
+        If no styles matches the width, then the width is set to 0.
+
+        There is one known case that could fit several styles: \a nIn = \a nDist = 0.75 pt,
+        \a nOut = 1.5 pt. This case fits SvxBorderLine::THINTHICK_SMALLGAP and
+        SvxBorderLine::THINTHICK_MEDIUMGAP with a 1.5 pt width and
+        SvxBorderLine::THINTHICK_LARGEGAP with a 0.75 pt width. The same case happens
+        also for thick-thin styles.
+
+        \param nStyle the border style used to guess the width.
+        \param nIn the width of the inner line in 1th pt
+        \param nOut the width of the outer line in 1th pt
+        \param nDist the width of the gap between the lines in 1th pt
+     */
     void            SetLinesWidths( SvxBorderStyle nStyle, sal_uInt16 nIn, sal_uInt16 nOut, sal_uInt16 nDist );
+
+    // TODO Hacky method to mirror lines in only a few cases
+    void            SetMirrorWidths( bool bMirror = true ) { m_bMirrorWidths = bMirror; }
+    long            GetWidth( ) const { return m_nWidth; }
     sal_uInt16      GetOutWidth() const;
     sal_uInt16      GetInWidth() const;
     sal_uInt16      GetDistance() const;
@@ -173,7 +204,7 @@ public:
 
     bool isEmpty() const { return m_aWidthImpl.IsEmpty( ); }
     bool isDouble() const { return m_aWidthImpl.IsDouble(); }
-    sal_uInt16 getWidth() const { return GetOutWidth() + GetInWidth() + GetDistance(); }
+    sal_uInt16 GetScaledWidth() const { return GetOutWidth() + GetInWidth() + GetDistance(); }
 
     static Color darkColor( Color aMain );
     static Color lightColor( Color aMain );

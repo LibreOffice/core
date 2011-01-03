@@ -1,3 +1,2 @@
 ed	editeng	:	L10N:l10n svtools xmloff linguistic NULL
 ed	editeng\prj									nmake	-	all	ed_prj NULL
-

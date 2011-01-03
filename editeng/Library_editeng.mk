@@ -82,6 +82,7 @@ $(eval $(call gb_Library_add_exception_objects,editeng,\
     editeng/source/editeng/impedit4 \
     editeng/source/editeng/impedit5 \
     editeng/source/editeng/textconv \
+    editeng/source/items/borderline \
     editeng/source/items/bulitem \
     editeng/source/items/charhiddenitem \
     editeng/source/items/flditem \

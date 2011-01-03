@@ -2,7 +2,7 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2011 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
 #
@@ -25,43 +25,40 @@
 #
 #*************************************************************************
 
-PRJ=..$/..
+$(eval $(call gb_CppunitTest_CppunitTest,editeng_borderline))
 
-PRJNAME=editeng
-TARGET=items
+$(eval $(call gb_CppunitTest_add_exception_objects,editeng_borderline, \
+    editeng/qa/items/borderline_test \
+))
 
-# --- Settings -----------------------------------------------------
+$(eval $(call gb_CppunitTest_add_linked_libs,editeng_borderline, \
+    xo \
+    basegfx \
+    editeng \
+    lng \
+    svt \
+    tk \
+    vcl \
+    svl \
+    sot \
+    utl \
+    tl \
+    comphelper \
+    ucbhelper \
+    cppuhelper \
+    cppu \
+    sal \
+    salhelper \
+    icuuc \
+    i18nisolang1 \
+    i18npaper \
+    $(gb_STDLIBS) \
+))
 
-.INCLUDE :	settings.mk
-.INCLUDE :  $(PRJ)$/util$/makefile.pmk
+$(eval $(call gb_CppunitTest_set_include,editeng_borderline,\
+    $$(INCLUDE) \
+    -I$(OUTDIR)/inc/offuh \
+    -I$(OUTDIR)/inc \
+))
 
-# --- Files --------------------------------------------------------
-
-SRS1NAME=items
-SRC1FILES =  \
-        page.src \
-        svxitems.src
-
-SLOFILES= \
-	$(EXCEPTIONSFILES) \
-        $(SLO)$/charhiddenitem.obj \
-        $(SLO)$/justifyitem.obj \
-        $(SLO)$/optitems.obj \
-        $(SLO)$/writingmodeitem.obj
-
-EXCEPTIONSFILES= \
-        $(SLO)$/bulitem.obj \
-        $(SLO)$/flditem.obj \
-        $(SLO)$/frmitems.obj \
-        $(SLO)$/borderline.obj \
-        $(SLO)$/itemtype.obj \
-        $(SLO)$/numitem.obj \
-        $(SLO)$/paperinf.obj \
-        $(SLO)$/paraitem.obj \
-        $(SLO)$/svdfield.obj \
-        $(SLO)$/svxfont.obj \
-        $(SLO)$/textitem.obj \
-        $(SLO)$/xmlcnitm.obj
-
-.INCLUDE :	target.mk
-
+# vim: set noet sw=4 ts=4:
