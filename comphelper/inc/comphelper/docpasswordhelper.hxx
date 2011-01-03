@@ -28,6 +28,7 @@
 #ifndef COMPHELPER_DOCPASSWORDHELPR_HXX
 #define COMPHELPER_DOCPASSWORDHELPR_HXX
 
+#include <com/sun/star/beans/NamedValue.hpp>
 #include "comphelper/comphelperdllapi.h"
 #include <vector>
 #include "comphelper/docpasswordrequest.hxx"
@@ -53,7 +54,7 @@ enum DocPasswordVerifierResult
 /** Base class for a password verifier used by the DocPasswordHelper class
     below.
 
-    Users have to implement the virtual function and pass an instance of the
+    Users have to implement the virtual functions and pass an instance of the
     verifier to one of the password request functions.
  */
 class COMPHELPER_DLLPUBLIC IDocPasswordVerifier
@@ -62,6 +63,14 @@ public:
     virtual             ~IDocPasswordVerifier();
 
     /** Will be called everytime a password needs to be verified.
+
+        @param rPassword
+            The password to be verified
+
+        @param o_rEncryptionData
+            Output parameter, that is filled with the EncryptionData generated
+            from the password. The data is filled only if the validation was
+            successful.
 
         @return  The result of the verification.
             - DocPasswordVerifierResult_OK, if and only if the passed password
@@ -72,7 +81,23 @@ public:
               occured while password verification. The password request loop
               will be aborted.
      */
-    virtual DocPasswordVerifierResult verifyPassword( const ::rtl::OUString& rPassword ) = 0;
+    virtual DocPasswordVerifierResult verifyPassword( const ::rtl::OUString& rPassword, ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >& o_rEncryptionData ) = 0;
+
+    /** Will be called everytime an encryption data needs to be verified.
+
+        @param rEncryptionData
+            The data will be validated
+
+        @return  The result of the verification.
+            - DocPasswordVerifierResult_OK, if and only if the passed encryption data
+              is valid and can be used to process the related document.
+            - DocPasswordVerifierResult_WRONG_PASSWORD, if the encryption data is
+              wrong.
+            - DocPasswordVerifierResult_ABORT, if an unrecoverable error
+              occured while data verification. The password request loop
+              will be aborted.
+     */
+    virtual DocPasswordVerifierResult verifyEncryptionData( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >& o_rEncryptionData ) = 0;
 
 };
 
@@ -195,6 +220,35 @@ public:
 
     // ------------------------------------------------------------------------
 
+    /** This helper function generates a random sequence of bytes of
+        requested length.
+      */
+
+    static ::com::sun::star::uno::Sequence< sal_Int8 > GenerateRandomByteSequence(
+                sal_Int32 nLength );
+
+    // ------------------------------------------------------------------------
+
+    /** This helper function generates a byte sequence representing the
+        key digest value used by MSCodec_Std97 codec.
+      */
+
+    static ::com::sun::star::uno::Sequence< sal_Int8 > GenerateStd97Key(
+                const ::rtl::OUString& aPassword,
+                const ::com::sun::star::uno::Sequence< sal_Int8 >& aDocId );
+
+    // ------------------------------------------------------------------------
+
+    /** This helper function generates a byte sequence representing the
+        key digest value used by MSCodec_Std97 codec.
+      */
+
+    static ::com::sun::star::uno::Sequence< sal_Int8 > GenerateStd97Key(
+                const sal_uInt16 pPassData[16],
+                const ::com::sun::star::uno::Sequence< sal_Int8 >& aDocId );
+
+    // ------------------------------------------------------------------------
+
     /** This helper function tries to request and verify a password to load a
         protected document.
 
@@ -248,8 +302,9 @@ public:
             passed password verifier. If empty, no valid password has been
             found, or the user has chossen to cancel password input.
      */
-    static ::rtl::OUString requestAndVerifyDocPassword(
+    static ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue > requestAndVerifyDocPassword(
                             IDocPasswordVerifier& rVerifier,
+                            const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >& rMediaEncData,
                             const ::rtl::OUString& rMediaPassword,
                             const ::com::sun::star::uno::Reference<
                                 ::com::sun::star::task::XInteractionHandler >& rxInteractHandler,
@@ -300,7 +355,7 @@ public:
             passed password verifier. If empty, no valid password has been
             found, or the user has chossen to cancel password input.
      */
-    static ::rtl::OUString requestAndVerifyDocPassword(
+    static ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue > requestAndVerifyDocPassword(
                             IDocPasswordVerifier& rVerifier,
                             MediaDescriptor& rMediaDesc,
                             DocPasswordRequestType eRequestType,

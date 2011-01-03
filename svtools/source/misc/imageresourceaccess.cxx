@@ -28,9 +28,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svtools.hxx"
 
-#ifndef SVTOOLS_SOURCE_MISC_IMAGERESOURCEACCESS_HXX
-#include "imageresourceaccess.hxx"
-#endif
+#include <svtools/imageresourceaccess.hxx>
 
 /** === begin UNO includes === **/
 #include <com/sun/star/io/NotConnectedException.hpp>
