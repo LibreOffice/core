@@ -2924,10 +2924,10 @@ BOOL lcl_InsOtherBox( SwTableLine* pLine, CR_SetBoxWidth& rParam,
             if(
                 rParam.bLeft ? ((nDist + nWidth / 2 ) <= rParam.nSide &&
                                 (TBLFIX_CHGABS != rParam.nMode ||
-                                n < rBoxes.Count() &&
+                                (n < rBoxes.Count() &&
                                 (nDist + nWidth + rBoxes[ n+1 ]->
                                     GetFrmFmt()->GetFrmSize().GetWidth() / 2)
-                                  > rParam.nSide ))
+                                  > rParam.nSide) ))
                              : (nDist + nWidth / 2 ) > rParam.nSide
                 )
             {
@@ -2989,10 +2989,10 @@ BOOL lcl_InsOtherBox( SwTableLine* pLine, CR_SetBoxWidth& rParam,
             if( nLowerDiff ||
                 (rParam.bLeft ? ((nDist + nWidth / 2 ) <= rParam.nSide &&
                                 (TBLFIX_CHGABS != rParam.nMode ||
-                                n < rBoxes.Count() &&
+                                (n < rBoxes.Count() &&
                                 (nDist + nWidth + rBoxes[ n+1 ]->
                                     GetFrmFmt()->GetFrmSize().GetWidth() / 2)
-                                  > rParam.nSide ))
+                                  > rParam.nSide) ))
                               : (nDist + nWidth / 2 ) > rParam.nSide ))
             {
                 if( !nLowerDiff )
@@ -3113,7 +3113,7 @@ void lcl_ChgBoxSize( SwTableBox& rBox, CR_SetBoxWidth& rParam,
                     const SwFmtFrmSize& rOldSz,
                     USHORT& rDelWidth, SwTwips nDist )
 {
-    long nDiff;
+    long nDiff = 0;
     BOOL bSetSize = FALSE;
 
     switch( rParam.nMode )

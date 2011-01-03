@@ -120,7 +120,7 @@ SwVbaDocuments::Add( const uno::Any& Template, const uno::Any& /*NewTemplate*/, 
     {
         return  Open( sFileName, uno::Any(), uno::Any(), uno::Any(), uno::Any(), uno::Any(), uno::Any(), uno::Any(), uno::Any(), uno::Any(), uno::Any(), uno::Any(), uno::Any(), uno::Any(), uno::Any(), uno::Any());
     }
-    uno::Reference <text::XTextDocument> xTextDoc( VbaDocumentsBase::Add() , uno::UNO_QUERY_THROW );
+    uno::Reference <text::XTextDocument> xTextDoc( createDocument() , uno::UNO_QUERY_THROW );
 
     if( xTextDoc.is() )
         return getDocument( mxContext, xTextDoc, Application() );
@@ -131,7 +131,7 @@ SwVbaDocuments::Add( const uno::Any& Template, const uno::Any& /*NewTemplate*/, 
 void SAL_CALL
 SwVbaDocuments::Close( const uno::Any& /*SaveChanges*/, const uno::Any& /*OriginalFormat*/, const uno::Any& /*RouteDocument*/ ) throw (uno::RuntimeException)
 {
-    VbaDocumentsBase::Close();
+    closeDocuments();
 }
 
 // #TODO# #FIXME# can any of the unused params below be used?
@@ -150,31 +150,12 @@ SwVbaDocuments::Open( const ::rtl::OUString& Filename, const uno::Any& /*Confirm
 
     uno::Sequence< beans::PropertyValue > sProps(0);
 
-    uno::Reference <text::XTextDocument> xSpreadDoc( VbaDocumentsBase::Open( Filename, ReadOnly, sProps ), uno::UNO_QUERY_THROW );
+    uno::Reference <text::XTextDocument> xSpreadDoc( openDocument( Filename, ReadOnly, sProps ), uno::UNO_QUERY_THROW );
     uno::Any aRet = getDocument( mxContext, xSpreadDoc, Application() );
     uno::Reference< word::XDocument > xDocument( aRet, uno::UNO_QUERY );
     if ( xDocument.is() )
         xDocument->Activate();
     return aRet;
-}
-
-    // VbaDocumentsBase / XDocumentsBase (to avoid warning C4266 for hiding function on wntmsci)
-uno::Any SAL_CALL
-SwVbaDocuments::Add() throw (uno::RuntimeException)
-{
-    return VbaDocumentsBase::Add();
-}
-
-void SAL_CALL
-SwVbaDocuments::Close(  ) throw (uno::RuntimeException)
-{
-    VbaDocumentsBase::Close();
-}
-
-uno::Any SAL_CALL
-SwVbaDocuments::Open( const ::rtl::OUString& Filename, const uno::Any& ReadOnly, const uno::Sequence< beans::PropertyValue >& rProps ) throw (uno::RuntimeException)
-{
-    return VbaDocumentsBase::Open( Filename, ReadOnly, rProps );
 }
 
 rtl::OUString&
