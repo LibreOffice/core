@@ -853,7 +853,8 @@ IMPL_LINK(SwMailMergeOutputPage, SaveOutputHdl_Impl, PushButton*, pButton)
             aSaveMonitor.aPrintInfo.SetText(sStat);
 
             //now extract a document from the target document
-            SfxObjectShellRef xTempDocShell( new SwDocShell( SFX_CREATE_MODE_STANDARD ) );
+            // the shell will be closed at the end, but it is more safe to use SfxObjectShellLock here
+            SfxObjectShellLock xTempDocShell( new SwDocShell( SFX_CREATE_MODE_STANDARD ) );
             xTempDocShell->DoInitNew( 0 );
             SfxViewFrame* pTempFrame = SfxViewFrame::LoadHiddenDocument( *xTempDocShell, 0 );
 //            pTempFrame->GetFrame().Appear();
@@ -1252,7 +1253,8 @@ IMPL_LINK(SwMailMergeOutputPage, SendDocumentsHdl_Impl, PushButton*, pButton)
         SwDocMergeInfo& rInfo = rConfigItem.GetDocumentMergeInfo(nDoc);
 
         //now extract a document from the target document
-        SfxObjectShellRef xTempDocShell( new SwDocShell( SFX_CREATE_MODE_STANDARD ) );
+        // the shell will be closed at the end, but it is more safe to use SfxObjectShellLock here
+        SfxObjectShellLock xTempDocShell( new SwDocShell( SFX_CREATE_MODE_STANDARD ) );
         xTempDocShell->DoInitNew( 0 );
         SfxViewFrame* pTempFrame = SfxViewFrame::LoadHiddenDocument( *xTempDocShell, 0 );
 //        pTempFrame->GetFrame().Appear();

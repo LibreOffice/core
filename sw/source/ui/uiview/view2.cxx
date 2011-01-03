@@ -2142,14 +2142,15 @@ long SwView::InsertMedium( USHORT nSlotId, SfxMedium* pMedium, INT16 nVersion )
     else
     {
         SfxObjectShellRef xDocSh;
+        SfxObjectShellLock xLockRef;
 
-extern int lcl_FindDocShell( SfxObjectShellRef& xDocSh,
+extern int lcl_FindDocShell( SfxObjectShellRef& xDocSh, SfxObjectShellLock& xLockRef,
                             const String& rFileName, const String& rPasswd,
                             String& rFilter, INT16 nVersion,
                             SwDocShell* pDestSh );
 
         String sFltNm;
-        int nRet = lcl_FindDocShell( xDocSh, pMedium->GetName(), aEmptyStr,
+        int nRet = lcl_FindDocShell( xDocSh, xLockRef, pMedium->GetName(), aEmptyStr,
                                     sFltNm, nVersion, pDocSh );
         if( nRet )
         {

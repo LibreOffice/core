@@ -1898,16 +1898,16 @@ void SwView::NotifyDBChanged()
 /* -----------------------------28.10.02 13:25--------------------------------
 
  ---------------------------------------------------------------------------*/
-SfxObjectShellRef & SwView::GetTmpSelectionDoc()
+SfxObjectShellLock & SwView::GetTmpSelectionDoc()
 {
     return GetViewImpl()->GetTmpSelectionDoc();
 }
 /* -----------------------------31.10.02 13:25--------------------------------
 
  ---------------------------------------------------------------------------*/
-SfxObjectShellRef & SwView::GetOrCreateTmpSelectionDoc()
+SfxObjectShellLock & SwView::GetOrCreateTmpSelectionDoc()
 {
-    SfxObjectShellRef &rxTmpDoc = GetViewImpl()->GetTmpSelectionDoc();
+    SfxObjectShellLock &rxTmpDoc = GetViewImpl()->GetTmpSelectionDoc();
     if (!rxTmpDoc.Is())
     {
         SwXTextView *pImpl = GetViewImpl()->GetUNOObject_Impl();
