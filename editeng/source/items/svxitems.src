@@ -553,7 +553,7 @@ String RID_DASHED
 {
     Text [ en-US ] = "Single, dashed" ;
 };
-String RID_SINGLE_DOUBLE
+String RID_DOUBLE
 {
     Text [ en-US ] = "Double" ;
 };

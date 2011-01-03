@@ -1727,7 +1727,7 @@ sal_Bool
 lcl_lineToSvxLine(const table::BorderLine& rLine, SvxBorderLine& rSvxLine, sal_Bool bConvert)
 {
     rSvxLine.SetColor(   Color(rLine.Color));
-    rSvxLine.SetLinesWidth( rSvxLine.GetStyle(),
+    rSvxLine.SetLinesWidths( rSvxLine.GetStyle(),
             sal_uInt16( bConvert ? MM100_TO_TWIP(rLine.InnerLineWidth) : rLine.InnerLineWidth  ),
             sal_uInt16( bConvert ? MM100_TO_TWIP(rLine.OuterLineWidth) : rLine.OuterLineWidth  ),
             sal_uInt16( bConvert ? MM100_TO_TWIP(rLine.LineDistance )  : rLine.LineDistance  ));
@@ -2223,7 +2223,8 @@ SfxPoolItem* SvxBoxItem::Create( SvStream& rStrm, sal_uInt16 nIVersion ) const
         sal_uInt16 nOutline, nInline, _nDistance;
         Color aColor;
         rStrm >> aColor >> nOutline >> nInline >> _nDistance;
-        SvxBorderLine aBorder( &aColor, nOutline, nInline, _nDistance );
+        SvxBorderLine aBorder( &aColor );
+        aBorder.SetLinesWidths( SOLID, nInline, nOutline, _nDistance );
 
         pAttr->SetLine( &aBorder, aLineMap[cLine] );
     }
@@ -2596,7 +2597,8 @@ SfxPoolItem* SvxBoxInfoItem::Create( SvStream& rStrm, sal_uInt16 ) const
         short nOutline, nInline, nDistance;
         Color aColor;
         rStrm >> aColor >> nOutline >> nInline >> nDistance;
-        SvxBorderLine aBorder( &aColor, nOutline, nInline, nDistance );
+        SvxBorderLine aBorder( &aColor );
+        aBorder.SetLinesWidths( SOLID, nInline, nOutline, nDistance );
 
         switch( cLine )
         {
