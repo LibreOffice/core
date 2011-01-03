@@ -30,7 +30,7 @@
 // include ---------------------------------------------------------------
 
 #ifndef _IMAGEBTN_HXX //autogen
-#include <vcl/imagebtn.hxx>
+#include <vcl/button.hxx>
 #endif
 #ifndef _GROUP_HXX //autogen
 #include <vcl/group.hxx>

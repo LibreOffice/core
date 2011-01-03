@@ -67,7 +67,7 @@
 #include "sdpropls.hxx"
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlimp.hxx>
-#include "xmlnmspe.hxx"
+#include "xmloff/xmlnmspe.hxx"
 #include <xmloff/xmluconv.hxx>
 #include <osl/mutex.hxx>
 #include <xmloff/nmspmap.hxx>

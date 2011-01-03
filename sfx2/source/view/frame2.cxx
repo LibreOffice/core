@@ -30,7 +30,7 @@
 
 #include "impframe.hxx"
 #include "objshimp.hxx"
-#include "sfxhelp.hxx"
+#include "sfx2/sfxhelp.hxx"
 #include "workwin.hxx"
 
 #include "sfx2/app.hxx"

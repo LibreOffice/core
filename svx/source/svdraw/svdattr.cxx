@@ -54,11 +54,11 @@
 
 #include <svx/svxids.hrc>
 #include <svx/xtable.hxx>    // fuer RGB_Color()
-#include "svditext.hxx"
+#include "svx/svditext.hxx"
 #include <svx/svdmodel.hxx>  // fuer DEGREE_CHAR
 #include <svx/svdtrans.hxx>
-#include "svdglob.hxx"  // Stringcache
-#include "svdstr.hrc"
+#include "svx/svdglob.hxx"  // Stringcache
+#include "svx/svdstr.hrc"
 #include <svx/sdgcpitm.hxx>
 #include <editeng/adjitem.hxx>
 #include <svx/sdtfchim.hxx>

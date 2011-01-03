@@ -86,6 +86,32 @@ ModalDialog DLG_PASSWD
         Size = MAP_APPFONT( 132, 8 );
         Text [ en-US ] = "Password" ;
     };
+    FixedText FT_PASSWD_PASSWORD2
+    {
+        Pos = MAP_APPFONT( 12, 30 );
+        Size = MAP_APPFONT( 42, 10 );
+        Text [ en-US ] = "P~assword";
+    };
+    Edit ED_PASSWD_PASSWORD2
+    {
+        Border = TRUE;
+        PassWord = TRUE;
+        Pos = MAP_APPFONT( 57, 29 );
+        Size = MAP_APPFONT( 75, 12 );
+    };
+    FixedText FT_PASSWD_CONFIRM2
+    {
+        Pos = MAP_APPFONT( 12, 45 );
+        Size = MAP_APPFONT( 42, 10 );
+        Text [ en-US ] = "Confir~m";
+    };
+    Edit ED_PASSWD_CONFIRM2
+    {
+        Border = TRUE;
+        PassWord = TRUE;
+        Pos = MAP_APPFONT( 57, 44 );
+        Size = MAP_APPFONT( 75, 12 );
+    };
     OKButton BTN_PASSWD_OK
     {
         Disable = TRUE;
@@ -102,10 +128,6 @@ ModalDialog DLG_PASSWD
     {
         Pos = MAP_APPFONT( 144, 43 );
         Size = MAP_APPFONT( 50, 14 );
-    };
-    String STR_PASSWD_CONFIRM
-    {
-        Text [ en-US ] = "Confirm password" ;
     };
 };
 

@@ -26,7 +26,7 @@
  ************************************************************************/
 
 #include <svx/svxids.hrc>
-#include "fmresids.hrc"
+#include "svx/fmresids.hrc"
 #include "fmhelp.hrc"
 
 Menu RID_FM_FILTER_MENU
@@ -59,31 +59,4 @@ Menu RID_FM_FILTER_MENU
         };
     };
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 

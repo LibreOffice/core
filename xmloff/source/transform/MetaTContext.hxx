@@ -29,7 +29,7 @@
 #define _XMLOFF_METATCONTEXT_HXX
 
 #include <rtl/ref.hxx>
-#include "functional.hxx"
+#include "xmloff/functional.hxx"
 
 #include <map>
 

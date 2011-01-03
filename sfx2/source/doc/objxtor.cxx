@@ -54,7 +54,7 @@
 #include <svl/eitem.hxx>
 #include <tools/rtti.hxx>
 #include <svl/lstner.hxx>
-#include <sfxhelp.hxx>
+#include <sfx2/sfxhelp.hxx>
 #include <basic/sbstar.hxx>
 #include <svl/stritem.hxx>
 #include <basic/sbx.hxx>
@@ -96,7 +96,7 @@
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewsh.hxx>
 #include <sfx2/viewfrm.hxx>
-#include "sfxresid.hxx"
+#include "sfx2/sfxresid.hxx"
 #include "objshimp.hxx"
 #include "appbas.hxx"
 #include "sfxtypes.hxx"
@@ -107,8 +107,8 @@
 #include "appdata.hxx"
 #include <sfx2/appuno.hxx>
 #include <sfx2/sfxsids.hrc>
-#include "basmgr.hxx"
-#include "QuerySaveDocument.hxx"
+#include "sfx2/basmgr.hxx"
+#include "sfx2/QuerySaveDocument.hxx"
 #include "helpid.hrc"
 #include <sfx2/msg.hxx>
 #include "appbaslib.hxx"
@@ -800,11 +800,33 @@ void SfxObjectShell::InitBasicManager_Impl()
 */
 
 {
-    DBG_ASSERT( !pImp->bBasicInitialized && !pImp->pBasicManager->isValid(), "Lokaler BasicManager bereits vorhanden");
-    pImp->bBasicInitialized = TRUE;
+    /*  #163556# (DR) - Handling of recursive calls while creating the Bacic
+        manager.
 
+        It is possible that (while creating the Basic manager) the code that
+        imports the Basic storage wants to access the Basic manager again.
+        Especially in VBA compatibility mode, there is code that wants to
+        access the "VBA Globals" object which is stored as global UNO constant
+        in the Basic manager.
+
+        To achieve correct handling of the recursive calls of this function
+        from lcl_getBasicManagerForDocument(), the implementation of the
+        function BasicManagerRepository::getDocumentBasicManager() has been
+        changed to return the Basic manager currently under construction, when
+        called repeatedly.
+
+        The variable pImp->bBasicInitialized will be set to TRUE after
+        construction now, to ensure that the recursive call of the function
+        lcl_getBasicManagerForDocument() will be routed into this function too.
+
+        Calling BasicManagerHolder::reset() twice is not a big problem, as it
+        does not take ownership but stores only the raw pointer. Owner of all
+        Basic managers is the global BasicManagerRepository instance.
+     */
+    DBG_ASSERT( !pImp->bBasicInitialized && !pImp->pBasicManager->isValid(), "Lokaler BasicManager bereits vorhanden");
     pImp->pBasicManager->reset( BasicManagerRepository::getDocumentBasicManager( GetModel() ) );
     DBG_ASSERT( pImp->pBasicManager->isValid(), "SfxObjectShell::InitBasicManager_Impl: did not get a BasicManager!" );
+    pImp->bBasicInitialized = TRUE;
 }
 
 //--------------------------------------------------------------------
