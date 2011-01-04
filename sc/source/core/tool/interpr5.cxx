@@ -3049,11 +3049,10 @@ void ScInterpreter::CalculateTrendGrowth(bool _bGrowth)
             return;
         }
         double fSlope = fSumXY / fSumX2;
-        double fIntercept = 0.0;
         double fHelp;
         if (bConstant)
         {
-            fIntercept = fMeanY - fSlope * fMeanX;
+            double fIntercept = fMeanY - fSlope * fMeanX;
             for (SCSIZE i = 0; i < nCountXN; i++)
             {
                 fHelp = pMatNewX->GetDouble(i)*fSlope + fIntercept;
