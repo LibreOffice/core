@@ -27,6 +27,7 @@
 #ifndef FRAMEWORK_UNDOMANAGERHELPER_HXX
 #define FRAMEWORK_UNDOMANAGERHELPER_HXX
 
+#include "framework/fwedllapi.h"
 #include "framework/iguard.hxx"
 #include "framework/imutex.hxx"
 
@@ -109,7 +110,7 @@ namespace framework
         the dreaded SolarMutex being locked when they're called, the above behavior is a compromise between "how it should
         be" and "how it can realistically be".
     */
-    class UndoManagerHelper
+    class FWE_DLLPUBLIC UndoManagerHelper
     {
     public:
         UndoManagerHelper( IUndoManagerImplementation& i_undoManagerImpl );

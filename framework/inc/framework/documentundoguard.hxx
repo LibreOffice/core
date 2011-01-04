@@ -27,6 +27,8 @@
 #ifndef FRAMEWORK_DOCUMENTUNDOGUARD_HXX
 #define FRAMEWORK_DOCUMENTUNDOGUARD_HXX
 
+#include "framework/fwedllapi.h"
+
 /** === begin UNO includes === **/
 #include <com/sun/star/uno/XInterface.hpp>
 /** === end UNO includes === **/
@@ -51,7 +53,7 @@ namespace framework
         as many calls to <member scope="com::sun::star::document">XUndoManager::leaveUndoContext</member> as are
         necessary to restore the manager's initial state.
     */
-    class DocumentUndoGuard
+    class FWE_DLLPUBLIC DocumentUndoGuard
     {
     public:
         DocumentUndoGuard( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& i_undoSupplierComponent );
