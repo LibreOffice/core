@@ -168,15 +168,11 @@ void SVGFontExport::implEmbedFont( const ::rtl::OUString& rFontName, const ::std
 
             mrExport.AddAttribute( XML_NAMESPACE_NONE, "horiz-adv-x", SVGActionWriter::GetValueString( aSize.Width() ) );
 
+            mrExport.AddAttribute( XML_NAMESPACE_NONE, "style", B2UCONST( "fill:none;stroke:black;stroke-width:33" ) );
+            mrExport.AddAttribute( XML_NAMESPACE_NONE, "d", SVGActionWriter::GetPathString( aMissingGlyphPolyPoly, sal_False ) );
+
             {
                 SvXMLElementExport aExp3( mrExport, XML_NAMESPACE_NONE, "missing-glyph", TRUE, TRUE );
-
-                mrExport.AddAttribute( XML_NAMESPACE_NONE, "style", B2UCONST( "fill:none;stroke:black;stroke-width:33" ) );
-                mrExport.AddAttribute( XML_NAMESPACE_NONE, "d", SVGActionWriter::GetPathString( aMissingGlyphPolyPoly, sal_False ) );
-
-                {
-                    SvXMLElementExport aExp4( mrExport, XML_NAMESPACE_NONE, "path", TRUE, TRUE );
-                }
             }
 
             while( aIter != rGlyphs.end() )
@@ -213,18 +209,15 @@ void SVGFontExport::implEmbedGlyph( OutputDevice& rOut, const ::rtl::OUString& r
 
         mrExport.AddAttribute( XML_NAMESPACE_NONE, "horiz-adv-x", SVGActionWriter::GetValueString( aBoundRect.GetWidth() ) );
 
+        const ::rtl::OUString aPathString( SVGActionWriter::GetPathString( aPolyPoly, sal_False ) );
+
+        if( aPathString.getLength() )
+        {
+            mrExport.AddAttribute( XML_NAMESPACE_NONE, "d", aPathString );
+        }
+
         {
             SvXMLElementExport    aExp( mrExport, XML_NAMESPACE_NONE, "glyph", TRUE, TRUE );
-            const ::rtl::OUString aPathString( SVGActionWriter::GetPathString( aPolyPoly, sal_False ) );
-
-            if( aPathString.getLength() )
-            {
-                mrExport.AddAttribute( XML_NAMESPACE_NONE, "d", aPathString );
-
-                {
-                    SvXMLElementExport aElem( mrExport, XML_NAMESPACE_NONE, B2UCONST( "path" ), TRUE, TRUE );
-                }
-            }
         }
     }
 }
