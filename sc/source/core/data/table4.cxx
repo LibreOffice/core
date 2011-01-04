@@ -232,7 +232,6 @@ void ScTable::FillAnalyse( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
         {
             if (nCount > 1)
             {
-                long nCmpInc = 0;
                 double nVal;
                 Date aNullDate = *pDocument->GetFormatTable()->GetNullDate();
                 Date aDate1 = aNullDate;
@@ -243,6 +242,7 @@ void ScTable::FillAnalyse( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                 aDate2 += (long)nVal;
                 if ( aDate1 != aDate2 )
                 {
+                    long nCmpInc = 0;
                     FillDateCmd eType;
                     long nDDiff = aDate2.GetDay()   - (long) aDate1.GetDay();
                     long nMDiff = aDate2.GetMonth() - (long) aDate1.GetMonth();
