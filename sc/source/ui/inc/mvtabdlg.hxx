@@ -50,7 +50,7 @@ public:
 
     USHORT  GetSelectedDocument     () const;
     SCTAB   GetSelectedTable        () const;
-    BOOL    GetCopyTable            () const;
+    bool    GetCopyTable            () const;
     bool    GetRenameTable          () const;
     void    GetTabNameString( String& rString ) const;
     void    SetForceCopyTable       ();
@@ -87,8 +87,10 @@ private:
 
     USHORT          nDocument;
     SCTAB           nTable;
-    BOOL            bCopyTable;
-    BOOL            bRenameTable;
+    bool            bCopyTable:1;
+    bool            bRenameTable:1;
+    bool            mbEverEdited:1;
+
     //--------------------------------------
     void    Init            ();
     void    InitBtnRename   ();

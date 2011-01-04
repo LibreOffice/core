@@ -212,7 +212,7 @@ class AbstractScMoveTableDlg : public VclAbstractDialog  //add for ScMoveTableDl
 public:
     virtual USHORT  GetSelectedDocument     () const = 0;
     virtual USHORT  GetSelectedTable        () const = 0;
-    virtual BOOL    GetCopyTable            () const = 0;
+    virtual bool    GetCopyTable            () const = 0;
     virtual bool    GetRenameTable          () const = 0;
     virtual void    GetTabNameString( String& rString ) const = 0;
     virtual void    SetForceCopyTable       () = 0;

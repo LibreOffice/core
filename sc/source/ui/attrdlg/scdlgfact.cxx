@@ -498,7 +498,7 @@ USHORT  AbstractScMoveTableDlg_Impl::GetSelectedTable() const
 {
     return pDlg->GetSelectedTable();
 }
-BOOL    AbstractScMoveTableDlg_Impl::GetCopyTable() const
+bool AbstractScMoveTableDlg_Impl::GetCopyTable() const
 {
     return pDlg->GetCopyTable();
 }

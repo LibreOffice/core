@@ -84,8 +84,9 @@ ScMoveTableDlg::ScMoveTableDlg( Window*       pParent,
         mrDefaultName( rDefault ),
         nDocument   ( 0 ),
         nTable      ( 0 ),
-        bCopyTable  ( FALSE ),
-        bRenameTable( FALSE )
+        bCopyTable  ( false ),
+        bRenameTable( false ),
+        mbEverEdited( false )
 {
 #if ENABLE_LAYOUT
 #undef ScResId
@@ -107,7 +108,7 @@ USHORT ScMoveTableDlg::GetSelectedDocument () const { return nDocument;  }
 
 SCTAB ScMoveTableDlg::GetSelectedTable    () const { return nTable;     }
 
-BOOL   ScMoveTableDlg::GetCopyTable        () const { return bCopyTable; }
+bool   ScMoveTableDlg::GetCopyTable        () const { return bCopyTable; }
 
 bool   ScMoveTableDlg::GetRenameTable        () const { return bRenameTable; }
 
@@ -141,6 +142,10 @@ void ScMoveTableDlg::EnableRenameTable(BOOL bFlag)
 
 void ScMoveTableDlg::ResetRenameInput()
 {
+    if (mbEverEdited)
+        // Don't reset the name when the sheet name has ever been edited.
+        return;
+
     if (!aEdTabName.IsEnabled())
     {
         aEdTabName.SetText(String());
@@ -360,7 +365,10 @@ IMPL_LINK( ScMoveTableDlg, SelHdl, ListBox *, pLb )
 IMPL_LINK( ScMoveTableDlg, CheckNameHdl, Edit *, pEdt )
 {
     if ( pEdt == &aEdTabName )
+    {
+        mbEverEdited = true;
         CheckNewTabName();
+    }
 
     return 0;
 }
