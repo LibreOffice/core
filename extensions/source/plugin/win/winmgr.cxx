@@ -422,7 +422,7 @@ Sequence< PluginDescription > XPluginManager_Impl::impl_getPluginDescriptions(vo
                         rDescr.Description = aComment;
 
                         sal_Int32 nPos = 0, nLen = aExtToken.getLength();
-                        OUString aExtensions( OUString::createFromAscii( nLen ? "*." : "*.*" ) );
+                        OUString aExtensions = nLen ? OUString(RTL_CONSTASCII_USTRINGPARAM("*.")) : OUString(RTL_CONSTASCII_USTRINGPARAM("*.*"));
 
                         for ( ; nPos < nLen; ++nPos )
                         {
