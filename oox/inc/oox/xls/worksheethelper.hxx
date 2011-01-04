@@ -52,6 +52,7 @@ namespace xls {
 
 struct BinAddress;
 struct BinRange;
+class BiffSheetDrawing;
 class BinRangeList;
 class WorksheetSettings;
 class SharedFormulaBuffer;
@@ -318,8 +319,10 @@ public:
     PageSettings&       getPageSettings() const;
     /** Returns the view settings for this sheet. */
     SheetViewSettings&  getSheetViewSettings() const;
-    /** Returns the VML drawing page for this sheet. */
+    /** Returns the VML drawing page for this sheet (OOXML/BIFF12 only). */
     VmlDrawing&         getVmlDrawing() const;
+    /** Returns the BIFF drawing page for this sheet (BIFF2-BIFF8 only). */
+    BiffSheetDrawing&   getBiffDrawing() const;
 
     /** Sets the passed string to the cell. */
     void                setStringCell(

@@ -33,101 +33,11 @@
 #include "oox/drawingml/shape.hxx"
 #include "oox/vml/vmldrawing.hxx"
 #include "oox/vml/vmldrawingfragment.hxx"
+#include "oox/xls/drawingbase.hxx"
 #include "oox/xls/excelhandlers.hxx"
 
 namespace oox {
 namespace xls {
-
-// ============================================================================
-
-/** Absolute position in spreadsheet (in EMUs) independent from cells. */
-struct AnchorPosModel : public ::oox::drawingml::EmuPoint
-{
-    inline explicit     AnchorPosModel() : ::oox::drawingml::EmuPoint( -1, -1 ) {}
-    inline bool         isValid() const { return (X >= 0) && (Y >= 0); }
-};
-
-// ----------------------------------------------------------------------------
-
-/** Absolute size in spreadsheet (in EMUs). */
-struct AnchorSizeModel : public ::oox::drawingml::EmuSize
-{
-    inline explicit     AnchorSizeModel() : ::oox::drawingml::EmuSize( -1, -1 ) {}
-    inline bool         isValid() const { return (Width >= 0) && (Height >= 0); }
-};
-
-// ----------------------------------------------------------------------------
-
-/** Position in spreadsheet (cell position and offset inside cell in EMUs). */
-struct AnchorCellModel
-{
-    sal_Int32           mnCol;              /// Column index.
-    sal_Int32           mnRow;              /// Row index.
-    sal_Int64           mnColOffset;        /// X offset in column mnCol (EMUs).
-    sal_Int64           mnRowOffset;        /// Y offset in row mnRow (EMUs).
-
-    explicit            AnchorCellModel();
-    inline bool         isValid() const { return (mnCol >= 0) && (mnRow >= 0); }
-};
-
-// ----------------------------------------------------------------------------
-
-/** Application-specific client data of a shape. */
-struct AnchorClientDataModel
-{
-    bool                mbLocksWithSheet;
-    bool                mbPrintsWithSheet;
-
-    explicit            AnchorClientDataModel();
-};
-
-// ============================================================================
-
-/** Contains the position of a shape in the spreadsheet. Supports different
-    shape anchor modes (absolute, one-cell, two-cell). */
-class ShapeAnchor : public WorksheetHelper
-{
-public:
-    explicit            ShapeAnchor( const WorksheetHelper& rHelper );
-
-    /** Imports the shape anchor (one of the elements xdr:absoluteAnchor, xdr:oneCellAnchor, xdr:twoCellAnchor). */
-    void                importAnchor( sal_Int32 nElement, const AttributeList& rAttribs );
-    /** Imports the absolute anchor position from the xdr:pos element. */
-    void                importPos( const AttributeList& rAttribs );
-    /** Imports the absolute anchor size from the xdr:ext element. */
-    void                importExt( const AttributeList& rAttribs );
-    /** Imports the shape client data from the xdr:clientData element. */
-    void                importClientData( const AttributeList& rAttribs );
-    /** Sets an attribute of the cell-dependent anchor position from xdr:from and xdr:to elements. */
-    void                setCellPos( sal_Int32 nElement, sal_Int32 nParentContext, const ::rtl::OUString& rValue );
-    void                importVmlAnchor( const ::rtl::OUString& rAnchor );
-
-    /** Returns true, if the anchor contains valid position and size settings. */
-    bool                isValidAnchor() const;
-
-    /** Calculates the resulting shape anchor in 1/100 mm. */
-    ::com::sun::star::awt::Rectangle
-                        calcApiLocation(
-                            const ::com::sun::star::awt::Size& rApiSheetSize,
-                            const AnchorSizeModel& rEmuSheetSize ) const;
-
-    /** Calculates the resulting shape anchor in EMUs. */
-    ::com::sun::star::awt::Rectangle
-                        calcEmuLocation( const AnchorSizeModel& rEmuSheetSize ) const;
-
-private:
-    enum AnchorType { ANCHOR_ABSOLUTE, ANCHOR_ONECELL, ANCHOR_TWOCELL, ANCHOR_VML, ANCHOR_INVALID };
-
-    AnchorType          meType;             /// Type of this shape anchor.
-    AnchorPosModel      maPos;              /// Top-left position, if anchor is of type absolute.
-    AnchorSizeModel     maSize;             /// Anchor size, if anchor is not of type two-cell.
-    AnchorCellModel     maFrom;             /// Top-left position, if anchor is not of type absolute.
-    AnchorCellModel     maTo;               /// Bottom-right position, if anchor is of type two-cell.
-    AnchorClientDataModel maClientData;     /// Shape client data.
-    sal_Int32           mnEditAs;           /// Anchor mode as shown in the UI.
-};
-
-typedef ::boost::shared_ptr< ShapeAnchor > ShapeAnchorRef;
 
 // ============================================================================
 
@@ -146,10 +56,10 @@ protected:
     virtual void        onEndElement( const ::rtl::OUString& rChars );
 
 private:
+    typedef ::std::auto_ptr< ShapeAnchor > ShapeAnchorRef;
+
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >
                         mxDrawPage;             /// Drawing page of this sheet.
-    ::com::sun::star::awt::Size maApiSheetSize; /// Sheet size in 1/100 mm.
-    AnchorSizeModel     maEmuSheetSize;         /// Sheet size in EMU.
     ::oox::drawingml::ShapePtr mxShape;         /// Current top-level shape.
     ShapeAnchorRef      mxAnchor;               /// Current anchor of top-level shape.
 };

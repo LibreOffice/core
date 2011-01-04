@@ -259,7 +259,10 @@ Reference< XShape > Shape::createAndInsert(
 
     OUString aServiceName = rServiceName;
     if( mxCreateCallback.get() )
-        aServiceName = mxCreateCallback->onCreateXShape( aServiceName, awt::Rectangle( aPosition.X / 360, aPosition.Y / 360, aSize.Width / 360, aSize.Height / 360 ) );
+    {
+        awt::Rectangle aShapeRectHmm( convertEmuToHmm( aPosition.X ), convertEmuToHmm( aPosition.Y ), convertEmuToHmm( aSize.Width ), convertEmuToHmm( aSize.Height ) );
+        aServiceName = mxCreateCallback->onCreateXShape( aServiceName, aShapeRectHmm );
+    }
     sal_Bool bIsCustomShape = aServiceName == OUString::createFromAscii( "com.sun.star.drawing.CustomShape" );
 
     basegfx::B2DHomMatrix aTransformation;

@@ -62,6 +62,7 @@
 #include "oox/xls/commentsbuffer.hxx"
 #include "oox/xls/condformatbuffer.hxx"
 #include "oox/xls/drawingfragment.hxx"
+#include "oox/xls/drawingmanager.hxx"
 #include "oox/xls/formulaparser.hxx"
 #include "oox/xls/pagesettings.hxx"
 #include "oox/xls/sharedformulabuffer.hxx"
@@ -396,7 +397,7 @@ public:
     /** Returns the XDrawPage interface of the draw page of the current sheet. */
     Reference< XDrawPage > getDrawPage() const;
     /** Returns the size of the entire drawing page in 1/100 mm. */
-    Size                getDrawPageSize() const;
+    const Size&         getDrawPageSize() const;
 
     /** Returns the absolute position of the top-left corner of the cell in 1/100 mm. */
     Point               getCellPosition( sal_Int32 nCol, sal_Int32 nRow ) const;
@@ -404,7 +405,7 @@ public:
     Size                getCellSize( sal_Int32 nCol, sal_Int32 nRow ) const;
 
     /** Returns the address of the cell that contains the passed point in 1/100 mm. */
-    CellAddress         getCellAddressFromPosition( const Point& rPosition, const Size& rDrawPageSize ) const;
+    CellAddress         getCellAddressFromPosition( const Point& rPosition ) const;
     /** Returns the cell range address that contains the passed rectangle in 1/100 mm. */
     CellRangeAddress    getCellRangeFromRectangle( const Rectangle& rRect ) const;
 
@@ -420,8 +421,10 @@ public:
     inline PageSettings& getPageSettings() { return maPageSett; }
     /** Returns the view settings for this sheet. */
     inline SheetViewSettings& getSheetViewSettings() { return maSheetViewSett; }
-    /** Returns the VML drawing page for this sheet (OOX only!). */
+    /** Returns the VML drawing page for this sheet (OOXML/BIFF12 only). */
     inline VmlDrawing&  getVmlDrawing() { return *mxVmlDrawing; }
+    /** Returns the BIFF drawing page for this sheet (BIFF2-BIFF8 only). */
+    inline BiffSheetDrawing& getBiffDrawing() const { return *mxBiffDrawing; }
 
     /** Changes the current sheet type. */
     inline void         setSheetType( WorksheetType eSheetType ) { meSheetType = eSheetType; }
@@ -543,13 +546,6 @@ private:
     /** Merges the passed merged range and updates right/bottom cell borders. */
     void                finalizeMergedRange( const CellRangeAddress& rRange );
 
-    /** Imports the drawing layer of the sheet (DrawingML part). */
-    void                finalizeDrawing();
-    /** Imports the drawing layer of the sheet (VML part). */
-    void                finalizeVmlDrawing();
-    /** Extends the used cell area with the area used by drawing objects. */
-    void                finalizeUsedArea();
-
     /** Converts column properties for all columns in the sheet. */
     void                convertColumns();
     /** Converts column properties. */
@@ -565,8 +561,12 @@ private:
     /** Groups columns or rows for the given range. */
     void                groupColumnsOrRows( sal_Int32 nFirstColRow, sal_Int32 nLastColRow, bool bCollapsed, bool bRows );
 
+    /** Imports the drawings of the sheet (DML, VML, DFF) and updates the used area. */
+    void                finalizeDrawings();
+
 private:
-    typedef ::std::auto_ptr< VmlDrawing > VmlDrawingPtr;
+    typedef ::std::auto_ptr< VmlDrawing >       VmlDrawingPtr;
+    typedef ::std::auto_ptr< BiffSheetDrawing > BiffSheetDrawingPtr;
 
     const OUString      maTrueFormula;      /// Replacement formula for TRUE boolean cells.
     const OUString      maFalseFormula;     /// Replacement formula for FALSE boolean cells.
@@ -592,8 +592,10 @@ private:
     PageSettings        maPageSett;         /// Page/print settings for this sheet.
     SheetViewSettings   maSheetViewSett;    /// View settings for this sheet.
     VmlDrawingPtr       mxVmlDrawing;       /// Collection of all VML shapes.
+    BiffSheetDrawingPtr mxBiffDrawing;      /// Collection of all BIFF/DFF shapes.
     OUString            maDrawingPath;      /// Path to DrawingML fragment.
     OUString            maVmlDrawingPath;   /// Path to legacy VML drawing fragment.
+    Size                maDrawPageSize;     /// Current size of the drawing page in 1/100 mm.
     Rectangle           maShapeBoundingBox; /// Bounding box for all shapes from all drawings.
     ISegmentProgressBarRef mxProgressBar;   /// Sheet progress bar.
     ISegmentProgressBarRef mxRowProgress;   /// Progress bar for row/cell processing.
@@ -645,8 +647,17 @@ WorksheetData::WorksheetData( const WorkbookHelper& rHelper, ISegmentProgressBar
     maDefRowModel.mbCollapsed = false;
 
     // buffers
-    if( getFilterType() == FILTER_OOX )
-        mxVmlDrawing.reset( new VmlDrawing( *this ) );
+    switch( getFilterType() )
+    {
+        case FILTER_OOX:
+            mxVmlDrawing.reset( new VmlDrawing( *this ) );
+        break;
+        case FILTER_BIFF:
+            mxBiffDrawing.reset( new BiffSheetDrawing( *this ) );
+        break;
+        case FILTER_UNKNOWN:
+        break;
+    }
 
     // prepare progress bars
     if( mxProgressBar.get() )
@@ -771,12 +782,10 @@ Reference< XDrawPage > WorksheetData::getDrawPage() const
     return xDrawPage;
 }
 
-Size WorksheetData::getDrawPageSize() const
+const Size& WorksheetData::getDrawPageSize() const
 {
-    Size aSize;
-    PropertySet aRangeProp( getCellRange( CellRangeAddress( getSheetIndex(), 0, 0, mrMaxApiPos.Column, mrMaxApiPos.Row ) ) );
-    aRangeProp.getProperty( aSize, PROP_Size );
-    return aSize;
+    OSL_ENSURE( (maDrawPageSize.Width > 0) && (maDrawPageSize.Height > 0), "WorksheetData::getDrawPageSize - called too early, size invalid" );
+    return maDrawPageSize;
 }
 
 Point WorksheetData::getCellPosition( sal_Int32 nCol, sal_Int32 nRow ) const
@@ -864,7 +873,7 @@ bool lclUpdateInterval( sal_Int32& rnBegAddr, sal_Int32& rnMidAddr, sal_Int32& r
 
 } // namespace
 
-CellAddress WorksheetData::getCellAddressFromPosition( const Point& rPosition, const Size& rDrawPageSize ) const
+CellAddress WorksheetData::getCellAddressFromPosition( const Point& rPosition ) const
 {
     // starting cell address and its position in drawing layer (top-left edge)
     sal_Int32 nBegCol = 0;
@@ -874,7 +883,7 @@ CellAddress WorksheetData::getCellAddressFromPosition( const Point& rPosition, c
     // end cell address and its position in drawing layer (bottom-right edge)
     sal_Int32 nEndCol = mrMaxApiPos.Column + 1;
     sal_Int32 nEndRow = mrMaxApiPos.Row + 1;
-    Point aEndPos( rDrawPageSize.Width, rDrawPageSize.Height );
+    Point aEndPos( maDrawPageSize.Width, maDrawPageSize.Height );
 
     // starting point for interval search
     sal_Int32 nMidCol, nMidRow;
@@ -902,10 +911,9 @@ CellAddress WorksheetData::getCellAddressFromPosition( const Point& rPosition, c
 
 CellRangeAddress WorksheetData::getCellRangeFromRectangle( const Rectangle& rRect ) const
 {
-    Size aPageSize = getDrawPageSize();
-    CellAddress aStartAddr = getCellAddressFromPosition( Point( rRect.X, rRect.Y ), aPageSize );
+    CellAddress aStartAddr = getCellAddressFromPosition( Point( rRect.X, rRect.Y ) );
     Point aBotRight( rRect.X + rRect.Width, rRect.Y + rRect.Height );
-    CellAddress aEndAddr = getCellAddressFromPosition( aBotRight, aPageSize );
+    CellAddress aEndAddr = getCellAddressFromPosition( aBotRight );
     bool bMultiCols = aStartAddr.Column < aEndAddr.Column;
     bool bMultiRows = aStartAddr.Row < aEndAddr.Row;
     if( bMultiCols || bMultiRows )
@@ -1171,10 +1179,7 @@ void WorksheetData::finalizeWorksheetImport()
     convertColumns();
     convertRows();
     lclUpdateProgressBar( mxFinalProgress, 0.75 );
-    finalizeDrawing();
-    finalizeVmlDrawing();
-    maComments.finalizeImport();    // after VML drawing
-    finalizeUsedArea();             // after DML and VML drawing
+    finalizeDrawings();
     lclUpdateProgressBar( mxFinalProgress, 1.0 );
 
     // reset current sheet index in global data
@@ -1561,42 +1566,6 @@ void WorksheetData::finalizeMergedRange( const CellRangeAddress& rRange )
     }
 }
 
-void WorksheetData::finalizeDrawing()
-{
-    OSL_ENSURE( (getFilterType() == FILTER_OOX) || (maDrawingPath.getLength() == 0),
-        "WorksheetData::finalizeDrawing - unexpected DrawingML path" );
-    if( (getFilterType() == FILTER_OOX) && (maDrawingPath.getLength() > 0) )
-        importOoxFragment( new OoxDrawingFragment( *this, maDrawingPath ) );
-}
-
-void WorksheetData::finalizeVmlDrawing()
-{
-    OSL_ENSURE( (getFilterType() == FILTER_OOX) || (maVmlDrawingPath.getLength() == 0),
-        "WorksheetData::finalizeVmlDrawing - unexpected VML path" );
-    if( (getFilterType() == FILTER_OOX) && (maVmlDrawingPath.getLength() > 0) )
-        importOoxFragment( new OoxVmlDrawingFragment( *this, maVmlDrawingPath ) );
-}
-
-void WorksheetData::finalizeUsedArea()
-{
-    /*  Extend used area of the sheet by cells covered with drawing objects.
-        Needed if the imported document is inserted as "OLE object from file"
-        and thus does not provide an OLE size property by itself. */
-    if( (maShapeBoundingBox.Width > 0) || (maShapeBoundingBox.Height > 0) )
-        extendUsedArea( getCellRangeFromRectangle( maShapeBoundingBox ) );
-
-    // if no used area is set, default to A1
-    if( maUsedArea.StartColumn > maUsedArea.EndColumn )
-        maUsedArea.StartColumn = maUsedArea.EndColumn = 0;
-    if( maUsedArea.StartRow > maUsedArea.EndRow )
-        maUsedArea.StartRow = maUsedArea.EndRow = 0;
-
-    /*  Register the used area of this sheet in global view settings. The
-        global view settings will set the visible area if this document is an
-        embedded OLE object. */
-    getViewSettings().setSheetUsedArea( maUsedArea );
-}
-
 void WorksheetData::convertColumns()
 {
     sal_Int32 nNextCol = 0;
@@ -1759,6 +1728,52 @@ void WorksheetData::groupColumnsOrRows( sal_Int32 nFirstColRow, sal_Int32 nLastC
     catch( Exception& )
     {
     }
+}
+
+void WorksheetData::finalizeDrawings()
+{
+    // calculate the current drawing page size (after rows/columns are imported)
+    PropertySet aRangeProp( getCellRange( CellRangeAddress( getSheetIndex(), 0, 0, mrMaxApiPos.Column, mrMaxApiPos.Row ) ) );
+    aRangeProp.getProperty( maDrawPageSize, PROP_Size );
+
+    switch( getFilterType() )
+    {
+        case FILTER_OOX:
+            // import DML and VML
+            if( maDrawingPath.getLength() > 0 )
+                importOoxFragment( new OoxDrawingFragment( *this, maDrawingPath ) );
+            if( maVmlDrawingPath.getLength() > 0 )
+                importOoxFragment( new OoxVmlDrawingFragment( *this, maVmlDrawingPath ) );
+        break;
+
+        case FILTER_BIFF:
+            // convert BIFF3-BIFF5 drawing objects, or import and convert DFF stream
+            getBiffDrawing().finalizeImport();
+        break;
+
+        case FILTER_UNKNOWN:
+        break;
+    }
+
+    // comments (after callout shapes have been imported from VML/DFF)
+    maComments.finalizeImport();
+
+    /*  Extend used area of the sheet by cells covered with drawing objects.
+        Needed if the imported document is inserted as "OLE object from file"
+        and thus does not provide an OLE size property by itself. */
+    if( (maShapeBoundingBox.Width > 0) || (maShapeBoundingBox.Height > 0) )
+        extendUsedArea( getCellRangeFromRectangle( maShapeBoundingBox ) );
+
+    // if no used area is set, default to A1
+    if( maUsedArea.StartColumn > maUsedArea.EndColumn )
+        maUsedArea.StartColumn = maUsedArea.EndColumn = 0;
+    if( maUsedArea.StartRow > maUsedArea.EndRow )
+        maUsedArea.StartRow = maUsedArea.EndRow = 0;
+
+    /*  Register the used area of this sheet in global view settings. The
+        global view settings will set the visible area if this document is an
+        embedded OLE object. */
+    getViewSettings().setSheetUsedArea( maUsedArea );
 }
 
 // ============================================================================
@@ -1955,6 +1970,11 @@ SheetViewSettings& WorksheetHelper::getSheetViewSettings() const
 VmlDrawing& WorksheetHelper::getVmlDrawing() const
 {
     return mrSheetData.getVmlDrawing();
+}
+
+BiffSheetDrawing& WorksheetHelper::getBiffDrawing() const
+{
+    return mrSheetData.getBiffDrawing();
 }
 
 void WorksheetHelper::setStringCell( const Reference< XCell >& rxCell, const OUString& rText ) const

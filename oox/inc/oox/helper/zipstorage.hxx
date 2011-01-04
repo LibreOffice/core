@@ -83,9 +83,8 @@ private:
     virtual void        implCommit() const;
 
 private:
-    typedef ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage > XStorageRef;
-
-    XStorageRef         mxStorage;      /// Storage based on input or output stream.
+    ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >
+                        mxStorage;      /// Storage based on input or output stream.
 };
 
 // ============================================================================

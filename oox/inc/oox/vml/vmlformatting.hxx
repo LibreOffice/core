@@ -90,7 +90,7 @@ public:
         @param bDefaultAsPixel  Set to true if omitted measure unit means
             pixel. Set to false if omitted measure unit means EMU.
      */
-    static sal_Int32    decodeMeasureToEmu(
+    static sal_Int64    decodeMeasureToEmu(
                             const GraphicHelper& rGraphicHelper,
                             const ::rtl::OUString& rValue,
                             sal_Int32 nRefValue,

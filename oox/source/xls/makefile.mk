@@ -55,7 +55,9 @@ SLOFILES =										\
         $(SLO)$/condformatcontext.obj			\
         $(SLO)$/connectionsfragment.obj			\
         $(SLO)$/defnamesbuffer.obj				\
+        $(SLO)$/drawingbase.obj					\
         $(SLO)$/drawingfragment.obj				\
+        $(SLO)$/drawingmanager.obj				\
         $(SLO)$/excelchartconverter.obj			\
         $(SLO)$/excelfilter.obj					\
         $(SLO)$/excelhandlers.obj				\
