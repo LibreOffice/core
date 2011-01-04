@@ -748,7 +748,6 @@ void ScInputHandler::ShowTipCursor()
         String aFormula = pEngine->GetText( (USHORT) 0 );
         ESelection aSel = pActiveView->GetSelection();
         aSel.Adjust();
-        xub_StrLen  nLeftParentPos = 0;
         if( aSel.nEndPos )
         {
             if ( aFormula.Len() < aSel.nEndPos )
@@ -767,7 +766,7 @@ void ScInputHandler::ShowTipCursor()
             while( !bFound )
             {
                 aSelText.AppendAscii( RTL_CONSTASCII_STRINGPARAM( ")" ) );
-                nLeftParentPos = lcl_MatchParenthesis( aSelText, aSelText.Len()-1 );
+                xub_StrLen nLeftParentPos = lcl_MatchParenthesis( aSelText, aSelText.Len()-1 );
                 if( nLeftParentPos != STRING_NOTFOUND )
                 {
                     sal_Unicode c = ( nLeftParentPos > 0 ) ? aSelText.GetChar( nLeftParentPos-1 ) : 0;
@@ -781,17 +780,12 @@ void ScInputHandler::ShowTipCursor()
                             nArgPos = aHelper.GetArgStart( aSelText, nNextFStart, 0 );
                             nArgs = static_cast<USHORT>(ppFDesc->getParameterCount());
 
-                            USHORT nActive = 0;
-                            USHORT nCount = 0;
-                            USHORT nCountSemicolon = 0;
-                            USHORT nCountDot = 0;
-                            USHORT nStartPosition = 0;
-                            USHORT nEndPosition = 0;
                             BOOL   bFlag = FALSE;
                             String aNew;
                             USHORT nParAutoPos = SCPOS_INVALID;
                             if( pFormulaDataPara->FindText( ppFDesc->getFunctionName(), aNew, nParAutoPos, FALSE ) )
                             {
+                                USHORT nActive = 0;
                                 for( USHORT i=0; i < nArgs; i++ )
                                 {
                                     xub_StrLen nLength = static_cast<xub_StrLen>(aArgs[i].getLength());
@@ -804,8 +798,10 @@ void ScInputHandler::ShowTipCursor()
                                 }
                                 if( bFlag )
                                 {
-                                    nCountSemicolon = aNew.GetTokenCount(cSep)-1;
-                                    nCountDot = aNew.GetTokenCount(cSheetSep)-1;
+                                    USHORT nCountSemicolon = aNew.GetTokenCount(cSep)-1;
+                                    USHORT nCountDot = aNew.GetTokenCount(cSheetSep)-1;
+                                    USHORT nStartPosition = 0;
+                                    USHORT nEndPosition = 0;
 
                                     if( !nCountSemicolon )
                                     {
@@ -820,6 +816,7 @@ void ScInputHandler::ShowTipCursor()
                                     }
                                     else if( !nCountDot )
                                     {
+                                        USHORT nCount = 0;
                                         for( USHORT i = 0; i < aNew.Len(); i++ )
                                         {
                                             sal_Unicode cNext = aNew.GetChar( i );
@@ -841,6 +838,7 @@ void ScInputHandler::ShowTipCursor()
                                     }
                                     else
                                     {
+                                        USHORT nCount = 0;
                                         for( USHORT i = 0; i < aNew.Len(); i++ )
                                         {
                                             sal_Unicode cNext = aNew.GetChar( i );
@@ -1026,17 +1024,12 @@ void ScInputHandler::UseFormulaData()
                         nArgPos = aHelper.GetArgStart( aFormula, nNextFStart, 0 );
                         nArgs = static_cast<USHORT>(ppFDesc->getParameterCount());
 
-                        USHORT nActive = 0;
-                        USHORT nCount = 0;
-                        USHORT nCountSemicolon = 0;
-                        USHORT nCountDot = 0;
-                        USHORT nStartPosition = 0;
-                        USHORT nEndPosition = 0;
                         BOOL   bFlag = FALSE;
                         String aNew;
                         USHORT nParAutoPos = SCPOS_INVALID;
                         if( pFormulaDataPara->FindText( ppFDesc->getFunctionName(), aNew, nParAutoPos, FALSE ) )
                         {
+                            USHORT nActive = 0;
                             for( USHORT i=0; i < nArgs; i++ )
                             {
                                 xub_StrLen nLength = static_cast<xub_StrLen>(aArgs[i].getLength());
@@ -1049,8 +1042,10 @@ void ScInputHandler::UseFormulaData()
                             }
                             if( bFlag )
                             {
-                                nCountSemicolon = aNew.GetTokenCount(cSep)-1;
-                                nCountDot = aNew.GetTokenCount(cSheetSep)-1;
+                                USHORT nCountSemicolon = aNew.GetTokenCount(cSep)-1;
+                                USHORT nCountDot = aNew.GetTokenCount(cSheetSep)-1;
+                                USHORT nStartPosition = 0;
+                                USHORT nEndPosition = 0;
 
                                if( !nCountSemicolon )
                                {
@@ -1065,6 +1060,7 @@ void ScInputHandler::UseFormulaData()
                                 }
                                 else if( !nCountDot )
                                 {
+                                    USHORT nCount = 0;
                                     for( USHORT i = 0; i < aNew.Len(); i++ )
                                     {
                                         sal_Unicode cNext = aNew.GetChar( i );
@@ -1086,6 +1082,7 @@ void ScInputHandler::UseFormulaData()
                                 }
                                 else
                                 {
+                                    USHORT nCount = 0;
                                     for( USHORT i = 0; i < aNew.Len(); i++ )
                                     {
                                         sal_Unicode cNext = aNew.GetChar( i );
