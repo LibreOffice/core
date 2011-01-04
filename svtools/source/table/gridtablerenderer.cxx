@@ -367,7 +367,7 @@ namespace svt { namespace table
     void GridTableRenderer::impl_paintCellContent( CellRenderContext const & i_context )
     {
         Any aCellContent;
-        m_pImpl->rModel.getCellContent( m_pImpl->nCurrentRow, i_context.nColumn, aCellContent );
+        m_pImpl->rModel.getCellContent( i_context.nColumn, m_pImpl->nCurrentRow, aCellContent );
 
         const Reference< XGraphic > xGraphic( aCellContent, UNO_QUERY );
         if ( xGraphic.is() )

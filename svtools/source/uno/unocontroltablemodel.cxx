@@ -503,7 +503,7 @@ using namespace ::com::sun::star::awt::grid;
     }
 
     //--------------------------------------------------------------------
-    void UnoControlTableModel::getCellContent( RowPos const i_row, ColPos const i_col, Any& o_cellContent )
+    void UnoControlTableModel::getCellContent( ColPos const i_col, RowPos const i_row, Any& o_cellContent )
     {
         ENSURE_OR_RETURN_VOID( ( i_row >= 0 ) && ( i_row < m_pImpl->aCellContent.size() ),
             "UnoControlTableModel::getCellContent: illegal row index!" );
@@ -517,10 +517,10 @@ using namespace ::com::sun::star::awt::grid;
     void UnoControlTableModel::updateCellContent( RowPos const i_row, ColPos const i_col, Any const & i_cellContent )
     {
         ENSURE_OR_RETURN_VOID( ( i_row >= 0 ) && ( i_row < m_pImpl->aCellContent.size() ),
-            "UnoControlTableModel::getCellContent: illegal row index!" );
+            "UnoControlTableModel::updateCellContent: illegal row index!" );
         ::std::vector< Any >& rRowContent( m_pImpl->aCellContent[ i_row ] );
         ENSURE_OR_RETURN_VOID( ( i_col >= 0 ) && ( i_col < rRowContent.size() ),
-            "UnoControlTableModel::getCellContent: illegal column index" );
+            "UnoControlTableModel::updateCellContent: illegal column index" );
         rRowContent[ i_col ] = i_cellContent;
 
         // TODO: listener notification

@@ -178,7 +178,7 @@ namespace svt { namespace table
         {
             return -1;
         }
-        virtual void getCellContent( RowPos const i_row, ColPos const i_col, ::com::sun::star::uno::Any& o_cellContent )
+        virtual void getCellContent( ColPos const i_col, RowPos const i_row, ::com::sun::star::uno::Any& o_cellContent )
         {
             (void)i_row;
             (void)i_col;
@@ -1849,7 +1849,7 @@ namespace svt { namespace table
     ::rtl::OUString TableControl_Impl::getCellContentAsString( RowPos const i_row, ColPos const i_col )
     {
         ::com::sun::star::uno::Any content;
-        m_pModel->getCellContent( i_row, i_col, content );
+        m_pModel->getCellContent( i_col, i_row, content );
         return CellValueConversion::convertToString( content );
     }
 

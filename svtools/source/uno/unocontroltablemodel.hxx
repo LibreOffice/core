@@ -132,7 +132,7 @@ class UnoControlTableModel : public ITableModel
         virtual ScrollbarVisibility getHorizontalScrollbarVisibility() const;
         virtual void addTableModelListener( const PTableModelListener& i_listener );
         virtual void removeTableModelListener( const PTableModelListener& i_listener );
-        virtual void getCellContent( RowPos const i_row, ColPos const i_col, ::com::sun::star::uno::Any& o_cellContent );
+        virtual void getCellContent( ColPos const i_col, RowPos const i_row, ::com::sun::star::uno::Any& o_cellContent );
         virtual ::rtl::OUString getRowHeader( RowPos const i_rowPos ) const;
         virtual ::com::sun::star::util::Color getLineColor();
         virtual ::com::sun::star::util::Color getHeaderBackgroundColor();

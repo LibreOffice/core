@@ -408,7 +408,7 @@ namespace svt { namespace table
 
         /** retrieves the content of the given cell
         */
-        virtual void getCellContent( RowPos const i_row, ColPos const i_col, ::com::sun::star::uno::Any& o_cellContent ) = 0;
+        virtual void getCellContent( ColPos const i_col, RowPos const i_row, ::com::sun::star::uno::Any& o_cellContent ) = 0;
 
         /** retrieves title of a given row
         */

@@ -384,7 +384,7 @@ namespace svt { namespace table
 ::com::sun::star::uno::Any TableControl::GetCellContent( sal_Int32 _nRowPos, sal_Int32 _nColPos ) const
 {
     Any aCellContent;
-    GetModel()->getCellContent( _nRowPos, _nColPos, aCellContent );
+    GetModel()->getCellContent( _nColPos, _nRowPos, aCellContent );
     return aCellContent;
 }
 
