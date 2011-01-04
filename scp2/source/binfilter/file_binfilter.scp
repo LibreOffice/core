@@ -39,7 +39,7 @@ File gid_Starregistry_Legacy_Binfilters_Rdb
     TXT_FILE_BODY;
     Name = "legacy_binfilters.rdb";
     Dir = gid_Dir_Program;
-    Styles = (PACKED, STARREGISTRY);
+    Styles = (PACKED);
 End
 
 
@@ -59,8 +59,8 @@ STD_LIB_FILE( gid_File_Lib_Bf_Sw, bf_sw)
 STD_LIB_FILE( gid_File_Lib_Bf_Wrapper, bf_wrapper)
 STD_LIB_FILE( gid_File_Lib_Legacy_Binfilters, legacy_binfilters)
 
-STD_UNO_LIB_FILE( gid_File_Lib_Bf_Migratefilter, bf_migratefilter)
-STD_UNO_LIB_FILE( gid_File_Lib_Bindet, bindet)
+STD_LIB_FILE( gid_File_Lib_Bf_Migratefilter, bf_migratefilter)
+STD_LIB_FILE( gid_File_Lib_Bindet, bindet)
 
 STD_RES_FILE( gid_File_Res_Bf_Sch, bf_sch )
 STD_RES_FILE( gid_File_Res_Bf_Svx, bf_svx )
