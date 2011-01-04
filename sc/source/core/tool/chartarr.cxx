@@ -380,9 +380,6 @@ ScMemChart* ScChartArray::CreateMemChartMulti()
     SCSIZE nColCount = GetPositionMap()->GetColCount();
     SCSIZE nRowCount = GetPositionMap()->GetRowCount();
 
-    SCSIZE nCol = 0;
-    SCSIZE nRow = 0;
-
     // May happen at least with more than 32k rows.
     if (nColCount > SHRT_MAX || nRowCount > SHRT_MAX)
     {
@@ -410,6 +407,8 @@ ScMemChart* ScChartArray::CreateMemChartMulti()
             static_cast<short>(nColCount), static_cast<short>(nRowCount) );
     if (pMemChart)
     {
+        SCSIZE nCol = 0;
+        SCSIZE nRow = 0;
 //      pMemChart->SetNumberFormatter( pDocument->GetFormatTable() );
         BOOL bCalcAsShown = pDocument->GetDocOptions().IsCalcAsShown();
         ULONG nIndex = 0;
