@@ -234,7 +234,6 @@ void ScFillSeriesDlg::Init( USHORT nPossDir )
 BOOL ScFillSeriesDlg::CheckStartVal()
 {
     BOOL bValOk = FALSE;
-    sal_uInt32 nKey = 0;
     String aStr( aEdStartVal.GetText() );
 
     if ( aStr.Len() == 0 || aBtnAutoFill.IsChecked())
@@ -243,8 +242,10 @@ BOOL ScFillSeriesDlg::CheckStartVal()
         bValOk = TRUE;
     }
     else
+    {
+        sal_uInt32 nKey = 0;
         bValOk = rDoc.GetFormatTable()->IsNumberFormat( aStr, nKey, fStartVal );
-
+    }
     return bValOk;
 }
 
@@ -265,7 +266,6 @@ BOOL ScFillSeriesDlg::CheckIncrementVal()
 BOOL ScFillSeriesDlg::CheckEndVal()
 {
     BOOL    bValOk = FALSE;
-    sal_uInt32 nKey = 0;
     String  aStr( aEdEndVal.GetText() );
 
     if ( aStr.Len() == 0 )
@@ -274,8 +274,10 @@ BOOL ScFillSeriesDlg::CheckEndVal()
         bValOk  = TRUE;
     }
     else
+    {
+        sal_uInt32 nKey = 0;
         bValOk = rDoc.GetFormatTable()->IsNumberFormat( aStr, nKey, fEndVal );
-
+    }
     return bValOk;
 }
 
