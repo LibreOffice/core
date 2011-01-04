@@ -139,6 +139,7 @@ struct EnvironmentsData
     ::osl::Mutex mutex;
     OUString2EnvironmentMap aName2EnvMap;
 
+    EnvironmentsData() : isDisposing(false) {}
     ~EnvironmentsData();
 
     inline void getEnvironment(
@@ -147,6 +148,8 @@ struct EnvironmentsData
     inline void getRegisteredEnvironments(
         uno_Environment *** pppEnvs, sal_Int32 * pnLen,
         uno_memAlloc memAlloc, const OUString & rEnvDcp );
+
+    bool isDisposing;
 };
 
 namespace
@@ -595,9 +598,14 @@ static void SAL_CALL defenv_harden(
         *ppHardEnv = 0;
     }
 
+    EnvironmentsData & rData = theEnvironmentsData::get();
+
+    if (rData.isDisposing)
+        return;
+
     uno_DefaultEnvironment * that = (uno_DefaultEnvironment *)pEnv;
     {
-    ::osl::MutexGuard guard( theEnvironmentsData::get().mutex );
+    ::osl::MutexGuard guard( rData.mutex );
     if (1 == ::osl_incrementInterlockedCount( &that->nRef )) // is dead
     {
         that->nRef = 0;
@@ -914,6 +922,7 @@ static void SAL_CALL unoenv_releaseInterface(
 EnvironmentsData::~EnvironmentsData()
 {
     ::osl::MutexGuard guard( mutex );
+    isDisposing = true;
 
     for ( OUString2EnvironmentMap::const_iterator iPos( aName2EnvMap.begin() );
           iPos != aName2EnvMap.end(); ++iPos )
@@ -928,11 +937,7 @@ EnvironmentsData::~EnvironmentsData()
 #if OSL_DEBUG_LEVEL > 1
             ::uno_dumpEnvironment( 0, pHard, 0 );
 #endif
-#if defined CPPU_LEAK_STATIC_DATA
-            pHard->environmentDisposing = 0; // set to null => wont be called
-#else
             (*pHard->dispose)( pHard ); // send explicit dispose
-#endif
             (*pHard->release)( pHard );
         }
     }

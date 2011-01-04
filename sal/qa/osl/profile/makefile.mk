@@ -33,7 +33,6 @@ PRJ=..$/..$/..
 
 PRJNAME=sal
 TARGET=qa_osl_profile
-# TESTDIR=TRUE
 
 ENABLE_EXCEPTIONS=TRUE
 

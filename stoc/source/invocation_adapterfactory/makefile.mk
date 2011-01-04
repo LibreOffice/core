@@ -63,3 +63,11 @@ DEF1NAME=	$(SHL1TARGET)
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :	target.mk
+
+ALLTAR : $(MISC)/invocadapt.component
+
+$(MISC)/invocadapt.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
+        invocadapt.component
+    $(XSLTPROC) --nonet --stringparam uri \
+        '$(COMPONENTPREFIX_URE_NATIVE)$(SHL1TARGETN:f)' -o $@ \
+        $(SOLARENV)/bin/createcomponent.xslt invocadapt.component

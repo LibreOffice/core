@@ -910,6 +910,9 @@ rtl_TextEncoding SAL_CALL rtl_getTextEncodingFromMimeCharset( const sal_Char* pM
         { "csptcp154", RTL_TEXTENCODING_PT154 },
         { "pt154", RTL_TEXTENCODING_PT154 },
         { "cp154", RTL_TEXTENCODING_PT154 },
+        { "xisciide", RTL_TEXTENCODING_ISCII_DEVANAGARI },
+            /* This is no official MIME character set name, but is in use by
+               various windows APIs. */
         { NULL, RTL_TEXTENCODING_DONTKNOW }
     };
 
@@ -1072,6 +1075,7 @@ rtl_getTextEncodingFromWindowsCodePage(sal_uInt32 nCodePage)
     case 51932: return RTL_TEXTENCODING_EUC_JP;
     case 51936: return RTL_TEXTENCODING_EUC_CN;
     case 51949: return RTL_TEXTENCODING_EUC_KR;
+    case 57002: return RTL_TEXTENCODING_ISCII_DEVANAGARI;
     case 65000: return RTL_TEXTENCODING_UTF7;
     case 65001: return RTL_TEXTENCODING_UTF8;
     default: return RTL_TEXTENCODING_DONTKNOW;
@@ -1147,6 +1151,7 @@ rtl_getWindowsCodePageFromTextEncoding(rtl_TextEncoding nEncoding)
     case RTL_TEXTENCODING_EUC_JP: return 51932;
     case RTL_TEXTENCODING_EUC_CN: return 51936;
     case RTL_TEXTENCODING_EUC_KR: return 51949;
+    case RTL_TEXTENCODING_ISCII_DEVANAGARI: return 57002;
     case RTL_TEXTENCODING_UTF7: return 65000;
     case RTL_TEXTENCODING_UTF8: return 65001;
     default: return 0;
