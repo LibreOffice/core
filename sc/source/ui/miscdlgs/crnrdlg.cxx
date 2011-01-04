@@ -155,13 +155,6 @@ ScColRowNameRangesDlg::~ScColRowNameRangesDlg()
 
 void ScColRowNameRangesDlg::Init()
 {
-    SCCOL   nStartCol   = 0;
-    SCROW   nStartRow   = 0;
-    SCTAB   nStartTab   = 0;
-    SCCOL   nEndCol     = 0;
-    SCROW   nEndRow     = 0;
-    SCTAB   nEndTab     = 0;
-
     aBtnOk.SetClickHdl      ( LINK( this, ScColRowNameRangesDlg, OkBtnHdl ) );
     aBtnCancel.SetClickHdl  ( LINK( this, ScColRowNameRangesDlg, CancelBtnHdl ) );
     aBtnAdd.SetClickHdl     ( LINK( this, ScColRowNameRangesDlg, AddBtnHdl ) );
@@ -190,6 +183,12 @@ void ScColRowNameRangesDlg::Init()
 
     if ( pViewData && pDoc )
     {
+        SCCOL nStartCol = 0;
+        SCROW nStartRow = 0;
+        SCTAB nStartTab = 0;
+        SCCOL nEndCol   = 0;
+        SCROW nEndRow   = 0;
+        SCTAB nEndTab   = 0;
         pViewData->GetSimpleArea( nStartCol, nStartRow, nStartTab,
                                   nEndCol,   nEndRow,  nEndTab );
         SetColRowData( ScRange( ScAddress( nStartCol, nStartRow, nStartTab ),
