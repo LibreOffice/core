@@ -423,7 +423,7 @@ void SwMultiTOXTabDialog::CreateOrUpdateExample(
                         pValues[nTokenIndex] = aPropVals;
                         nTokenIndex++;
 
-                        aIt++; // #i24377#
+                        ++aIt; // #i24377#
                     }
                     aSequPropVals.realloc(nTokenIndex);
 

@@ -861,7 +861,7 @@ void SwRedlineAcceptDlg::CallAcceptReject( BOOL bSelect, BOOL bAccept )
     ListBoxEntries_t::iterator aEnd = aRedlines.end();
     for( ListBoxEntries_t::iterator aIter = aRedlines.begin();
          aIter != aEnd;
-         aIter++ )
+         ++aIter )
     {
         USHORT nPosition = GetRedlinePos( **aIter );
         if( nPosition != USHRT_MAX )
