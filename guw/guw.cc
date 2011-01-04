@@ -290,7 +290,7 @@ void init_ignorepara(string fullcommand) {
 bool is_ignorepara(const string &para) {
 
   for( vector<string>::iterator it = ignorepara_vec.begin();
-       it != ignorepara_vec.end(); it++ ) {
+       it != ignorepara_vec.end(); ++it ) {
     if ( para.find(*it) != string::npos ) {
       if ( debug )
         cerr << "Found execption para: " << para << endl;

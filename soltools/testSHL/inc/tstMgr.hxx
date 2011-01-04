@@ -50,7 +50,7 @@ class tstMgr {
     // </private_methods>
 
 public:
-
+    tstMgr() : pImpl(0) {}
     // <dtor>
     ~tstMgr(){
         cleanup();

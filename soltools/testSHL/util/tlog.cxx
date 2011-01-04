@@ -93,7 +93,6 @@ void tLog::initialize( const ::rtl::OString& name ) {
     }
     sal_uInt64 uBytes=0;
     sal_uInt32 len = ln( buf );
-    const sal_Char* ptr = buf;
 
     if ( v ) {
         fprintf( stderr, "%s", buf );

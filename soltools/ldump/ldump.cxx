@@ -755,6 +755,7 @@ main( int argc, char **argv )
     pDump->PrintDefFile();
     pDump->PrintDataBase();
     delete pDump;
+    delete [] pLibName;
     return 0;
 }
 
