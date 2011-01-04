@@ -6112,7 +6112,8 @@ protected:
                                                          ValueOK( aUId, MethodString( nMethodId ), nNr2, pTC->GetRowCount() ))
                                                     {
                                                         ::svt::table::PTableModel pModel = pTC->GetModel();
-                                                        Any aCell = pModel->getCellContent()[nNr2-1][nNr1-1];
+                                                        Any aCell;
+                                                        pModel->getCellContent( nNr1-1, nNr2-1, aCell );
                                                         pRet->GenReturn ( RET_Value, aUId, String( aCell.getValueTypeName() ));
                                                     }
                                                 }
@@ -6123,7 +6124,8 @@ protected:
                                                          ValueOK( aUId, MethodString( nMethodId ), nNr2, pTC->GetRowCount() ))
                                                     {
                                                         ::svt::table::PTableModel pModel = pTC->GetModel();
-                                                        Any aCell = pModel->getCellContent()[nNr2-1][nNr1-1];
+                                                        Any aCell;
+                                                        pModel->getCellContent( nNr1-1, nNr2-1, aCell );
                                                         /* doesn't work ATM since it gets casted to SbxDATE in VCLTestTool unfortunately
                                                         SbxVariableRef xRes = new SbxVariable( SbxVARIANT );
                                                         unoToSbxValue( xRes, aCell );
