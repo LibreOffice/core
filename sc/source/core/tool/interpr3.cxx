@@ -534,7 +534,6 @@ double lcl_getLanczosSum(double fZ)
     double fSumNum;
     double fSumDenom;
     int nI;
-    double fZInv;
     if (fZ<=1.0)
     {
         fSumNum = fNum[12];
@@ -550,7 +549,7 @@ double lcl_getLanczosSum(double fZ)
     else
     // Cancel down with fZ^12; Horner scheme with reverse coefficients
     {
-        fZInv = 1/fZ;
+        double fZInv = 1/fZ;
         fSumNum = fNum[0];
         fSumDenom = fDenom[0];
         for (nI = 1; nI <=12; ++nI)
@@ -693,7 +692,6 @@ double ScInterpreter::GetChiSqDistPDF(double fX, double fDF)
 {
     // you must ensure fDF is positive integer
     double fValue;
-    double fCount;
     if (fX <= 0.0)
         return 0.0; // see ODFF
     if (fDF*fX > 1391000.0)
@@ -703,6 +701,7 @@ double ScInterpreter::GetChiSqDistPDF(double fX, double fDF)
     }
     else // fDF is small in most cases, we can iterate
     {
+        double fCount;
         if (fmod(fDF,2.0)<0.5)
         {
             // even
@@ -732,7 +731,6 @@ void ScInterpreter::ScChiSqDist()
     BYTE nParamCount = GetByte();
     if ( !MustHaveParamCount( nParamCount, 2, 3 ) )
         return;
-    double fX;
     bool bCumulative;
     if (nParamCount == 3)
         bCumulative = GetBool();
@@ -743,7 +741,7 @@ void ScInterpreter::ScChiSqDist()
         PushIllegalArgument();
     else
     {
-        fX = GetDouble();
+        double fX = GetDouble();
         if (bCumulative)
             PushDouble(GetChiSqDistCDF(fX,fDF));
         else
@@ -755,12 +753,11 @@ void ScInterpreter::ScGamma()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScGamma" );
     double x = GetDouble();
-    double fResult;
     if (x <= 0.0 && x == ::rtl::math::approxFloor(x))
         PushIllegalArgument();
     else
     {
-        fResult = GetGamma(x);
+        double fResult = GetGamma(x);
         if (nGlobalError)
         {
             PushError( nGlobalError);
@@ -1317,7 +1314,7 @@ void ScInterpreter::ScBinomDist()
         double p      = GetDouble();                    // p
         double n      = ::rtl::math::approxFloor(GetDouble());              // n
         double x      = ::rtl::math::approxFloor(GetDouble());              // x
-        double fFactor, q, fSum;
+        double fFactor, q;
         if (n < 0.0 || x < 0.0 || x > n || p < 0.0 || p > 1.0)
             PushIllegalArgument();
         else if (kum == 0.0)                        // Dichte
@@ -1351,6 +1348,7 @@ void ScInterpreter::ScBinomDist()
                 PushDouble(1.0);
             else
             {
+                double fSum;
                 q = 1.0 - p;
                 fFactor = pow(q, n);
                 if (fFactor == 0.0)
