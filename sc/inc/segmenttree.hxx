@@ -75,13 +75,14 @@ public:
     ScFlatBoolRowSegments(const ScFlatBoolRowSegments& r);
     ~ScFlatBoolRowSegments();
 
-    void setTrue(SCROW nRow1, SCROW nRow2);
-    void setFalse(SCROW nRow1, SCROW nRow2);
+    bool setTrue(SCROW nRow1, SCROW nRow2);
+    bool setFalse(SCROW nRow1, SCROW nRow2);
     bool getValue(SCROW nRow);
     bool getRangeData(SCROW nRow, RangeData& rData);
     void removeSegment(SCROW nRow1, SCROW nRow2);
     void insertSegment(SCROW nRow, SCROW nSize, bool bSkipStartBoundary);
 
+    void enableTreeSearch(bool bEnable);
     SCROW findLastNotOf(bool bValue) const;
 
 private:
@@ -103,12 +104,13 @@ public:
     ScFlatBoolColSegments(const ScFlatBoolColSegments& r);
     ~ScFlatBoolColSegments();
 
-    void setTrue(SCCOL nCol1, SCCOL nCol2);
-    void setFalse(SCCOL nCol1, SCCOL nCol2);
+    bool setTrue(SCCOL nCol1, SCCOL nCol2);
+    bool setFalse(SCCOL nCol1, SCCOL nCol2);
     bool getRangeData(SCCOL nCol, RangeData& rData);
     void removeSegment(SCCOL nCol1, SCCOL nCol2);
     void insertSegment(SCCOL nCol, SCCOL nSize, bool bSkipStartBoundary);
 
+    void enableTreeSearch(bool bEnable);
     void setInsertFromBack(bool bInsertFromBack);
 
 private:

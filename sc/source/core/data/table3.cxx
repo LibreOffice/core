@@ -60,6 +60,7 @@
 #include "cellform.hxx"
 #include "postit.hxx"
 #include "queryparam.hxx"
+#include "segmenttree.hxx"
 
 #include <vector>
 
@@ -1617,6 +1618,8 @@ static void lcl_PrepareQuery( ScDocument* pDoc, ScTable* pTab, ScQueryParam& rPa
 
 SCSIZE ScTable::Query(ScQueryParam& rParamOrg, BOOL bKeepSub)
 {
+    mpHiddenRows->enableTreeSearch(false);
+
     ScQueryParam    aParam( rParamOrg );
     ScStrCollection aScStrCollection;
     StrData*        pStrData = NULL;
@@ -1722,6 +1725,7 @@ SCSIZE ScTable::Query(ScQueryParam& rParamOrg, BOOL bKeepSub)
 
     delete[] pSpecial;
     SetDrawPageSize();
+    mpHiddenRows->enableTreeSearch(true);
     return nCount;
 }
 

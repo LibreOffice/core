@@ -602,20 +602,26 @@ bool ScTable::ColHidden(SCCOL nCol, SCCOL* pFirstCol, SCCOL* pLastCol) const
     return aData.mbValue;
 }
 
-void ScTable::SetRowHidden(SCROW nStartRow, SCROW nEndRow, bool bHidden)
+bool ScTable::SetRowHidden(SCROW nStartRow, SCROW nEndRow, bool bHidden)
 {
+    bool bChanged = false;
     if (bHidden)
-        mpHiddenRows->setTrue(nStartRow, nEndRow);
+        bChanged = mpHiddenRows->setTrue(nStartRow, nEndRow);
     else
-        mpHiddenRows->setFalse(nStartRow, nEndRow);
+        bChanged = mpHiddenRows->setFalse(nStartRow, nEndRow);
+
+    return bChanged;
 }
 
-void ScTable::SetColHidden(SCCOL nStartCol, SCCOL nEndCol, bool bHidden)
+bool ScTable::SetColHidden(SCCOL nStartCol, SCCOL nEndCol, bool bHidden)
 {
+    bool bChanged = false;
     if (bHidden)
-        mpHiddenCols->setTrue(nStartCol, nEndCol);
+        bChanged = mpHiddenCols->setTrue(nStartCol, nEndCol);
     else
-        mpHiddenCols->setFalse(nStartCol, nEndCol);
+        bChanged = mpHiddenCols->setFalse(nStartCol, nEndCol);
+
+    return bChanged;
 }
 
 void ScTable::CopyColHidden(ScTable& rTable, SCCOL nStartCol, SCCOL nEndCol)

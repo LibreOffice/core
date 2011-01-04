@@ -143,7 +143,7 @@ void XclImpColRowSettings::SetHeight( SCROW nScRow, sal_uInt16 nHeight )
     bool bDefHeight = ::get_flag( nHeight, EXC_ROW_FLAGDEFHEIGHT ) || (nRawHeight == 0);
     maRowHeights.insert_back(nScRow, nScRow+1, nRawHeight);
     sal_uInt8 nFlagVal = 0;
-    if (!maRowFlags.search(nScRow, nFlagVal))
+    if (!maRowFlags.search(nScRow, nFlagVal).second)
         return;
 
     ::set_flag(nFlagVal, EXC_COLROW_USED);
@@ -166,7 +166,7 @@ void XclImpColRowSettings::SetRowSettings( SCROW nScRow, sal_uInt16 nHeight, sal
     SetHeight(nScRow, nHeight);
 
     sal_uInt8 nFlagVal = 0;
-    if (!maRowFlags.search(nScRow, nFlagVal))
+    if (!maRowFlags.search(nScRow, nFlagVal).second)
         return;
 
     if (::get_flag(nFlags, EXC_ROW_UNSYNCED))
@@ -184,7 +184,7 @@ void XclImpColRowSettings::SetManualRowHeight( SCROW nScRow )
         return;
 
     sal_uInt8 nFlagVal = 0;
-    if (!maRowFlags.search(nScRow, nFlagVal))
+    if (!maRowFlags.search(nScRow, nFlagVal).second)
         return;
 
     ::set_flag(nFlagVal, EXC_COLROW_MAN);
@@ -325,7 +325,7 @@ void XclImpColRowSettings::ConvertHiddenFlags( SCTAB nScTab )
     if (nLastXLRow < MAXROW)
     {
         bool bHidden = false;
-        if (!maHiddenRows.search(nLastXLRow, bHidden))
+        if (!maHiddenRows.search(nLastXLRow, bHidden).second)
             return;
 
         maHiddenRows.insert_back(nLastXLRow, MAXROWCOUNT, bHidden);

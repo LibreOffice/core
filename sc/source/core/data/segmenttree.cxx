@@ -57,7 +57,7 @@ public:
     ScFlatSegmentsImpl(const ScFlatSegmentsImpl& r);
     ~ScFlatSegmentsImpl();
 
-    void setValue(SCCOLROW nPos1, SCCOLROW nPos2, ValueType nValue);
+    bool setValue(SCCOLROW nPos1, SCCOLROW nPos2, ValueType nValue);
     ValueType getValue(SCCOLROW nPos);
     ExtValueType getSumValue(SCCOLROW nPos1, SCCOLROW nPos2);
     bool getRangeData(SCCOLROW nPos, RangeData& rData);
@@ -111,12 +111,16 @@ ScFlatSegmentsImpl<_ValueType, _ExtValueType>::~ScFlatSegmentsImpl()
 }
 
 template<typename _ValueType, typename _ExtValueType>
-void ScFlatSegmentsImpl<_ValueType, _ExtValueType>::setValue(SCCOLROW nPos1, SCCOLROW nPos2, ValueType nValue)
+bool ScFlatSegmentsImpl<_ValueType, _ExtValueType>::setValue(SCCOLROW nPos1, SCCOLROW nPos2, ValueType nValue)
 {
+    ::std::pair<typename fst_type::const_iterator, bool> ret;
     if (mbInsertFromBack)
-        maSegments.insert_back(nPos1, nPos2+1, nValue);
+        ret = maSegments.insert_back(nPos1, nPos2+1, nValue);
     else
-        maSegments.insert_front(nPos1, nPos2+1, nValue);
+        ret = maSegments.insert(maItr, nPos1, nPos2+1, nValue);
+
+    maItr = ret.first;
+    return ret.second;
 }
 
 template<typename _ValueType, typename _ExtValueType>
@@ -182,8 +186,13 @@ bool ScFlatSegmentsImpl<_ValueType, _ExtValueType>::getRangeData(SCCOLROW nPos, 
     else
     {
         // Conduct leaf-node only search.  Faster when searching between range insertion.
-        if (!maSegments.search(nPos, nValue, &nPos1, &nPos2))
+        ::std::pair<typename fst_type::const_iterator, bool> ret =
+            maSegments.search(maItr, nPos, nValue, &nPos1, &nPos2);
+
+        if (!ret.second)
             return false;
+
+        maItr = ret.first;
     }
 
     rData.mnPos1 = nPos1;
@@ -268,18 +277,18 @@ public:
     {
     }
 
-    void setTrue(SCCOLROW nPos1, SCCOLROW nPos2);
-    void setFalse(SCCOLROW nPos1, SCCOLROW nPos2);
+    bool setTrue(SCCOLROW nPos1, SCCOLROW nPos2);
+    bool setFalse(SCCOLROW nPos1, SCCOLROW nPos2);
 };
 
-void ScFlatBoolSegmentsImpl::setTrue(SCCOLROW nPos1, SCCOLROW nPos2)
+bool ScFlatBoolSegmentsImpl::setTrue(SCCOLROW nPos1, SCCOLROW nPos2)
 {
-    setValue(nPos1, nPos2, true);
+    return setValue(nPos1, nPos2, true);
 }
 
-void ScFlatBoolSegmentsImpl::setFalse(SCCOLROW nPos1, SCCOLROW nPos2)
+bool ScFlatBoolSegmentsImpl::setFalse(SCCOLROW nPos1, SCCOLROW nPos2)
 {
-    setValue(nPos1, nPos2, false);
+    return setValue(nPos1, nPos2, false);
 }
 
 // ============================================================================
@@ -362,14 +371,14 @@ ScFlatBoolRowSegments::~ScFlatBoolRowSegments()
 {
 }
 
-void ScFlatBoolRowSegments::setTrue(SCROW nRow1, SCROW nRow2)
+bool ScFlatBoolRowSegments::setTrue(SCROW nRow1, SCROW nRow2)
 {
-    mpImpl->setTrue(static_cast<SCCOLROW>(nRow1), static_cast<SCCOLROW>(nRow2));
+    return mpImpl->setTrue(static_cast<SCCOLROW>(nRow1), static_cast<SCCOLROW>(nRow2));
 }
 
-void ScFlatBoolRowSegments::setFalse(SCROW nRow1, SCROW nRow2)
+bool ScFlatBoolRowSegments::setFalse(SCROW nRow1, SCROW nRow2)
 {
-    mpImpl->setFalse(static_cast<SCCOLROW>(nRow1), static_cast<SCCOLROW>(nRow2));
+    return mpImpl->setFalse(static_cast<SCCOLROW>(nRow1), static_cast<SCCOLROW>(nRow2));
 }
 
 bool ScFlatBoolRowSegments::getValue(SCROW nRow)
@@ -399,6 +408,11 @@ void ScFlatBoolRowSegments::insertSegment(SCROW nRow, SCROW nSize, bool bSkipSta
     mpImpl->insertSegment(static_cast<SCCOLROW>(nRow), static_cast<SCCOLROW>(nSize), bSkipStartBoundary);
 }
 
+void ScFlatBoolRowSegments::enableTreeSearch(bool bEnable)
+{
+    mpImpl->enableTreeSearch(bEnable);
+}
+
 SCROW ScFlatBoolRowSegments::findLastNotOf(bool bValue) const
 {
     return static_cast<SCROW>(mpImpl->findLastNotOf(bValue));
@@ -420,14 +434,14 @@ ScFlatBoolColSegments::~ScFlatBoolColSegments()
 {
 }
 
-void ScFlatBoolColSegments::setTrue(SCCOL nCol1, SCCOL nCol2)
+bool ScFlatBoolColSegments::setTrue(SCCOL nCol1, SCCOL nCol2)
 {
-    mpImpl->setTrue(static_cast<SCCOLROW>(nCol1), static_cast<SCCOLROW>(nCol2));
+    return mpImpl->setTrue(static_cast<SCCOLROW>(nCol1), static_cast<SCCOLROW>(nCol2));
 }
 
-void ScFlatBoolColSegments::setFalse(SCCOL nCol1, SCCOL nCol2)
+bool ScFlatBoolColSegments::setFalse(SCCOL nCol1, SCCOL nCol2)
 {
-    mpImpl->setFalse(static_cast<SCCOLROW>(nCol1), static_cast<SCCOLROW>(nCol2));
+    return mpImpl->setFalse(static_cast<SCCOLROW>(nCol1), static_cast<SCCOLROW>(nCol2));
 }
 
 bool ScFlatBoolColSegments::getRangeData(SCCOL nCol, RangeData& rData)
@@ -450,6 +464,11 @@ void ScFlatBoolColSegments::removeSegment(SCCOL nCol1, SCCOL nCol2)
 void ScFlatBoolColSegments::insertSegment(SCCOL nCol, SCCOL nSize, bool bSkipStartBoundary)
 {
     mpImpl->insertSegment(static_cast<SCCOLROW>(nCol), static_cast<SCCOLROW>(nSize), bSkipStartBoundary);
+}
+
+void ScFlatBoolColSegments::enableTreeSearch(bool bEnable)
+{
+    mpImpl->enableTreeSearch(bEnable);
 }
 
 void ScFlatBoolColSegments::setInsertFromBack(bool bInsertFromBack)
