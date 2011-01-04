@@ -1213,10 +1213,10 @@ void ScDrawLayer::DeleteObjectsInArea( SCTAB nTab, SCCOL nCol1,SCROW nRow1,
 
     pPage->RecalcObjOrdNums();
 
-    long    nDelCount = 0;
     ULONG   nObjCount = pPage->GetObjCount();
     if (nObjCount)
     {
+        long nDelCount = 0;
         Rectangle aDelRect = pDoc->GetMMRect( nCol1, nRow1, nCol2, nRow2, nTab );
 
         SdrObject** ppObj = new SdrObject*[nObjCount];
@@ -1269,10 +1269,10 @@ void ScDrawLayer::DeleteObjectsInSelection( const ScMarkData& rMark )
             if (pPage)
             {
                 pPage->RecalcObjOrdNums();
-                long    nDelCount = 0;
                 ULONG   nObjCount = pPage->GetObjCount();
                 if (nObjCount)
                 {
+                    long nDelCount = 0;
                     //  Rechteck um die ganze Selektion
                     Rectangle aMarkBound = pDoc->GetMMRect(
                                 aMarkRange.aStart.Col(), aMarkRange.aStart.Row(),
