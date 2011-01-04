@@ -108,7 +108,7 @@ enum SvxBorderStyle
     ENGRAVED,
     OUTSET,
     INSET,
-    NONE = -1
+    NO_STYLE = -1
 };
 
 class EDITENG_DLLPUBLIC SvxBorderLine

@@ -129,9 +129,8 @@ public:
 
     /** Returns true, if all visible frame borders have equal widths.
         @descr  Ignores hidden and "don't care" frame borders. On success,
-        returns the widths in the passed parameters. */
-    bool                GetVisibleWidth( sal_uInt16& rnPrim, sal_uInt16& rnDist, sal_uInt16& rnSec,
-                                         SvxBorderStyle& rnStyle ) const;
+        returns the width in the passed parameter. */
+    bool                GetVisibleWidth( long& rnWidth, SvxBorderStyle& rnStyle ) const;
     /** Returns true, if all visible frame borders have equal color.
         @descr  Ignores hidden and "don't care" frame borders. On success,
         returns the color in the passed parameter. */

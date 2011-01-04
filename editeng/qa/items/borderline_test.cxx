@@ -33,15 +33,15 @@
 
 #include <editeng/borderline.hxx>
 
-#define TEST_WIDTH long( 200 )
+#define TEST_WIDTH long( 40 )
 
-#define THINTHICKSG_IN_WIDTH long( 200 )
-#define THINTHICKSG_OUT_WIDTH long( 75 )
-#define THINTHICKSG_DIST_WIDTH long( 75 )
+#define THINTHICKSG_IN_WIDTH long( 15 )
+#define THINTHICKSG_OUT_WIDTH long( 40 )
+#define THINTHICKSG_DIST_WIDTH long( 15 )
 
-#define THINTHICKLG_IN_WIDTH long( 75 )
-#define THINTHICKLG_OUT_WIDTH long( 150 )
-#define THINTHICKLG_DIST_WIDTH long( 200 )
+#define THINTHICKLG_IN_WIDTH long( 15 )
+#define THINTHICKLG_OUT_WIDTH long( 30 )
+#define THINTHICKLG_DIST_WIDTH long( 40 )
 
 namespace {
 

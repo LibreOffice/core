@@ -887,8 +887,7 @@ void FrameSelector::HideAllBorders()
         mxImpl->SetBorderState( **aIt, FRAMESTATE_HIDE );
 }
 
-bool FrameSelector::GetVisibleWidth( sal_uInt16& rnPrim, sal_uInt16& rnDist, sal_uInt16& rnSecn,
-                        SvxBorderStyle& rnStyle ) const
+bool FrameSelector::GetVisibleWidth( long& rnWidth, SvxBorderStyle& rnStyle ) const
 {
     VisFrameBorderCIter aIt( mxImpl->maEnabBorders );
     if( !aIt.Is() )
@@ -898,16 +897,12 @@ bool FrameSelector::GetVisibleWidth( sal_uInt16& rnPrim, sal_uInt16& rnDist, sal
     bool bFound = true;
     for( ++aIt; bFound && aIt.Is(); ++aIt )
         bFound =
-            (rStyle.GetOutWidth() == (*aIt)->GetCoreStyle().GetOutWidth()) &&
-            (rStyle.GetDistance() == (*aIt)->GetCoreStyle().GetDistance()) &&
-            (rStyle.GetInWidth()  == (*aIt)->GetCoreStyle().GetInWidth()) &&
+            (rStyle.GetWidth() == (*aIt)->GetCoreStyle().GetWidth()) &&
             (rStyle.GetStyle() == (*aIt)->GetCoreStyle().GetStyle());
 
     if( bFound )
     {
-        rnPrim = rStyle.GetOutWidth();
-        rnDist = rStyle.GetDistance();
-        rnSecn = rStyle.GetInWidth();
+        rnWidth = rStyle.GetWidth();
         rnStyle = rStyle.GetStyle();
     }
     return bFound;

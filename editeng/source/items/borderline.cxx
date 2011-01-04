@@ -112,6 +112,10 @@ SvxBorderLine::SvxBorderLine( const Color *pCol, long nWidth,
         aColor = *pCol;
 }
 
+/** Get the BorderWithImpl object corresponding to the given #nStyle, all the
+    units handled by the resulting object are Twips and the
+    BorderWidthImpl::GetLine1() corresponds to the Outer Line.
+  */
 BorderWidthImpl SvxBorderLine::getWidthImpl( SvxBorderStyle nStyle )
 {
     BorderWidthImpl aImpl;
@@ -119,8 +123,8 @@ BorderWidthImpl SvxBorderLine::getWidthImpl( SvxBorderStyle nStyle )
     switch ( nStyle )
     {
         // No line: no width
-        case NONE:
-            aImpl = BorderWidthImpl( CHANGE_LINE1, 0.0 );
+        case NO_STYLE:
+            aImpl = BorderWidthImpl( 0, 0.0 );
             break;
 
         // Single lines
@@ -139,7 +143,7 @@ BorderWidthImpl SvxBorderLine::getWidthImpl( SvxBorderStyle nStyle )
             break;
 
         case THINTHICK_SMALLGAP:
-            aImpl = BorderWidthImpl( CHANGE_LINE1, 1.0, 75.0, 75.0 );
+            aImpl = BorderWidthImpl( CHANGE_LINE1, 1.0, 15.0, 15.0 );
             break;
 
         case THINTHICK_MEDIUMGAP:
@@ -149,11 +153,11 @@ BorderWidthImpl SvxBorderLine::getWidthImpl( SvxBorderStyle nStyle )
             break;
 
         case THINTHICK_LARGEGAP:
-            aImpl = BorderWidthImpl( CHANGE_DIST, 75.0, 150.0, 1.0 );
+            aImpl = BorderWidthImpl( CHANGE_DIST, 30.0, 15.0, 1.0 );
             break;
 
         case THICKTHIN_SMALLGAP:
-            aImpl = BorderWidthImpl( CHANGE_DIST, 75.0, 1.0, 75.0 );
+            aImpl = BorderWidthImpl( CHANGE_LINE2, 15.0, 1.0, 15.0 );
             break;
 
         case THICKTHIN_MEDIUMGAP:
@@ -163,7 +167,7 @@ BorderWidthImpl SvxBorderLine::getWidthImpl( SvxBorderStyle nStyle )
             break;
 
         case THICKTHIN_LARGEGAP:
-            aImpl = BorderWidthImpl( CHANGE_DIST, 150.0, 75.0, 1.0 );
+            aImpl = BorderWidthImpl( CHANGE_DIST, 15.0, 30.0, 1.0 );
             break;
 
         // Engraved / Embossed
@@ -187,13 +191,13 @@ BorderWidthImpl SvxBorderLine::getWidthImpl( SvxBorderStyle nStyle )
         case OUTSET:
             aImpl = BorderWidthImpl(
                     CHANGE_LINE2 | CHANGE_DIST,
-                    75.0, 1.0, 1.0 );
+                    15.0, 1.0, 1.0 );
             break;
 
         case INSET:
             aImpl = BorderWidthImpl(
                     CHANGE_LINE1 | CHANGE_DIST,
-                    1.0, 75.0, 1.0 );
+                    1.0, 15.0, 1.0 );
             break;
     }
 
@@ -252,7 +256,7 @@ void SvxBorderLine::SetLinesWidths( SvxBorderStyle nStyle, sal_uInt16 nIn, sal_u
         {
             nTestStyle = aDoubleStyles[i];
             BorderWidthImpl aWidthImpl = getWidthImpl( nTestStyle );
-            nWidth = aWidthImpl.GuessWidth( nIn, nOut, nDist );
+            nWidth = aWidthImpl.GuessWidth( nOut, nIn, nDist );
             i++;
         }
 
@@ -266,7 +270,7 @@ void SvxBorderLine::SetLinesWidths( SvxBorderStyle nStyle, sal_uInt16 nIn, sal_u
     else
     {
         SetStyle( nStyle );
-        m_nWidth = m_aWidthImpl.GuessWidth( nIn, nOut, nDist );
+        m_nWidth = m_aWidthImpl.GuessWidth( nOut, nIn, nDist );
     }
 }
 
