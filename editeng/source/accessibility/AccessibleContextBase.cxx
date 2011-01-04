@@ -244,7 +244,7 @@ uno::Reference<XAccessible> SAL_CALL
 {
     ThrowIfDisposed ();
     throw lang::IndexOutOfBoundsException (
-        ::rtl::OUString::createFromAscii ("no child with index " + nIndex),
+        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("no child with index ") + nIndex),
         NULL);
 }
 
