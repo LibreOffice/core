@@ -49,6 +49,7 @@ SLOFILES= \
             $(SLO)$/toolboxcontroller.obj \
             $(SLO)$/treecontrolpeer.obj \
             $(SLO)$/unocontroltablemodel.obj \
+            $(SLO)$/unogridcolumnfacade.obj \
             $(SLO)$/unoevent.obj \
             $(SLO)$/unoiface.obj \
             $(SLO)$/unoimap.obj \

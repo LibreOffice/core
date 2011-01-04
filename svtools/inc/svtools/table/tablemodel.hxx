@@ -69,6 +69,18 @@ namespace svt { namespace table
     //====================================================================
     //= ITableModelListener
     //====================================================================
+    typedef sal_Int32   ColumnAttributeGroup;
+    #define COL_ATTRS_NONE          (0x00000000)
+    /// denotes column attributes related to the width of the column
+    #define COL_ATTRS_WIDTH         (0x00000001)
+    /// denotes column attributes related to the appearance of the column, i.e. those relevant for rendering
+    #define COL_ATTRS_APPEARANCE    (0x00000002)
+    /// denotes the entirety of column attributes
+    #define COL_ATTRS_ALL           (0xFFFFFFFF)
+
+    //====================================================================
+    //= ITableModelListener
+    //====================================================================
     /** declares an interface to be implemented by components interested in
         changes in an ->ITableModel
     */
@@ -136,6 +148,16 @@ namespace svt { namespace table
             cached cell values.
         */
         virtual void    cellsUpdated( ColPos firstCol, ColPos lastCol, RowPos firstRow, RowPos lastRow ) = 0;
+
+        /** notifies the listener that attributes of a given column changed
+
+            @param i_column
+                the position of the column whose attributes changed
+            @param i_attributeGroup
+                a combination of one or more <code>COL_ATTRS_*</code> flags, denoting the attribute group(s)
+                in which changes occurred.
+        */
+        virtual void    columnChanged( ColPos const i_column, ColumnAttributeGroup const i_attributeGroup ) = 0;
 
         /// deletes the listener instance
         virtual ~ITableModelListener(){};

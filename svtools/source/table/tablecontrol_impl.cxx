@@ -36,6 +36,7 @@
 #include "tablegeometry.hxx"
 #include "cellvalueconversion.hxx"
 
+#include <comphelper/scopeguard.hxx>
 #include <vcl/scrbar.hxx>
 #include <vcl/seleng.hxx>
 #include <rtl/ref.hxx>
@@ -381,6 +382,7 @@ namespace svt { namespace table
         ,m_bResizingColumn      ( false                         )
         ,m_nResizingColumn      ( 0                             )
         ,m_bResizingGrid        ( false                         )
+        ,m_bUpdatingColWidths   ( false                         )
 #if DBG_UTIL
         ,m_nRequiredInvariants ( INV_SCROLL_POSITION )
 #endif
@@ -501,6 +503,34 @@ namespace svt { namespace table
     }
 
     //--------------------------------------------------------------------
+    void TableControl_Impl::columnChanged( ColPos const i_column, ColumnAttributeGroup const i_attributeGroup )
+    {
+        ColumnAttributeGroup nGroup( i_attributeGroup );
+        if ( nGroup & COL_ATTRS_APPEARANCE )
+        {
+            Rectangle aAllCellsArea;
+            impl_getAllVisibleCellsArea( aAllCellsArea );
+
+            const TableColumnGeometry aColumn( *this, aAllCellsArea, i_column );
+            if ( aColumn.isValid() )
+                m_rAntiImpl.Invalidate( aColumn.getRect() );
+
+            nGroup &= ~COL_ATTRS_APPEARANCE;
+        }
+
+        if ( nGroup & COL_ATTRS_WIDTH )
+        {
+            if ( !m_bUpdatingColWidths )
+                impl_ni_updateColumnWidths();
+
+            nGroup &= ~COL_ATTRS_WIDTH;
+        }
+
+        OSL_ENSURE( ( nGroup == COL_ATTRS_NONE ) || ( i_attributeGroup == COL_ATTRS_ALL ),
+            "TableControl_Impl::columnChanged: don't know how to handle this change!" );
+    }
+
+    //--------------------------------------------------------------------
     void TableControl_Impl::impl_getAllVisibleCellsArea( Rectangle& _rCellArea ) const
     {
         DBG_CHECK_ME();
@@ -575,6 +605,8 @@ namespace svt { namespace table
     //--------------------------------------------------------------------
     void TableControl_Impl::impl_ni_updateColumnWidths()
     {
+        ENSURE_OR_RETURN_VOID( !m_bUpdatingColWidths, "TableControl_Impl::impl_ni_updateColumnWidths: recursive call detected!" );
+
         m_aColumnWidths.resize( 0 );
         if ( !m_pModel )
             return;
@@ -582,6 +614,9 @@ namespace svt { namespace table
         const TableSize colCount = m_pModel->getColumnCount();
         if ( colCount == 0 )
             return;
+
+        m_bUpdatingColWidths = true;
+        const ::comphelper::FlagGuard aWidthUpdateFlag( m_bUpdatingColWidths );
 
         m_aColumnWidths.reserve( colCount );
 

@@ -32,7 +32,6 @@
 #include <svtools/table/tablecontrol.hxx>
 #include <com/sun/star/awt/grid/XGridControl.hpp>
 #include <com/sun/star/awt/grid/XGridDataListener.hpp>
-#include <com/sun/star/awt/grid/XGridColumnListener.hpp>
 #include <com/sun/star/awt/grid/GridDataEvent.hpp>
 #include <com/sun/star/awt/grid/GridColumnEvent.hpp>
 #include <com/sun/star/awt/grid/XGridColumnModel.hpp>
@@ -48,10 +47,9 @@
 
 using namespace ::svt::table;
 
-typedef ::cppu::ImplInheritanceHelper4  <   VCLXWindow
+typedef ::cppu::ImplInheritanceHelper3  <   VCLXWindow
                                         ,   ::com::sun::star::awt::grid::XGridControl
                                         ,   ::com::sun::star::awt::grid::XGridDataListener
-                                        ,   ::com::sun::star::awt::grid::XGridColumnListener
                                         ,   ::com::sun::star::container::XContainerListener
                                         >   SVTXGridControl_Base;
 class SVTXGridControl : public SVTXGridControl_Base
@@ -86,9 +84,6 @@ public:
     virtual void SAL_CALL elementRemoved( const ::com::sun::star::container::ContainerEvent& Event ) throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL elementReplaced( const ::com::sun::star::container::ContainerEvent& Event ) throw (::com::sun::star::uno::RuntimeException);
 
-    //XGridColumnListener overridables
-    virtual void SAL_CALL columnChanged(const ::com::sun::star::awt::grid::GridColumnEvent & Event) throw (::com::sun::star::uno::RuntimeException);
-
     // XEventListener
     virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw(::com::sun::star::uno::RuntimeException);
 
@@ -122,9 +117,6 @@ protected:
     virtual void    SetWindow( Window* pWindow );
 
 private:
-    void    impl_removeAllColumns_nothrow();
     void    impl_updateColumnsFromModel_nothrow();
-
-    void    impl_setColumnListening( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::grid::XGridColumn >& i_column, bool const i_start );
 };
 #endif // _SVT_GRIDCONTROL_HXX_

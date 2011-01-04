@@ -158,6 +158,7 @@ namespace svt { namespace table
         bool                    m_bResizingColumn;
         ColPos                  m_nResizingColumn;
         bool                    m_bResizingGrid;
+        bool                    m_bUpdatingColWidths;
         rtl::OUString           m_aTooltipText;
 
 #if DBG_UTIL
@@ -276,6 +277,7 @@ namespace svt { namespace table
         virtual void    columnsRemoved( ColPos first, ColPos last );
         virtual void    columnMoved( ColPos oldIndex, ColPos newIndex );
         virtual void    cellsUpdated( ColPos firstCol, ColPos lastCol, RowPos firstRow, RowPos lastRow );
+        virtual void    columnChanged( ColPos const i_column, ColumnAttributeGroup const i_attributeGroup );
 
     private:
         /** toggles the cursor visibility

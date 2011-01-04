@@ -193,7 +193,7 @@ void SVTXGridControl::setProperty( const ::rtl::OUString& PropertyName, const An
         }
         case BASEPROPERTY_GRID_HEADER_BACKGROUND:
         {
-            sal_Int32 colorHeader = 0xFFFFFF;
+            sal_Int32 colorHeader = COL_TRANSPARENT;
             if( aValue >>= colorHeader )
             {
                 m_pTableModel->setHeaderBackgroundColor(colorHeader);
@@ -202,7 +202,7 @@ void SVTXGridControl::setProperty( const ::rtl::OUString& PropertyName, const An
         }
         case BASEPROPERTY_GRID_LINE_COLOR:
         {
-            sal_Int32 colorLine = 0xFFFFFF;
+            sal_Int32 colorLine = COL_TRANSPARENT;
             if( aValue >>= colorLine )
             {
                 m_pTableModel->setLineColor(colorLine);
@@ -211,7 +211,7 @@ void SVTXGridControl::setProperty( const ::rtl::OUString& PropertyName, const An
         }
         case BASEPROPERTY_GRID_EVEN_ROW_BACKGROUND:
         {
-            sal_Int32 colorEvenRow = 0xFFFFFF;
+            sal_Int32 colorEvenRow = COL_TRANSPARENT;
             if( aValue >>= colorEvenRow )
             {
                 m_pTableModel->setEvenRowBackgroundColor(colorEvenRow);
@@ -220,7 +220,7 @@ void SVTXGridControl::setProperty( const ::rtl::OUString& PropertyName, const An
         }
         case BASEPROPERTY_GRID_ROW_BACKGROUND:
         {
-            sal_Int32 colorBackground = 0xFFFFFF;
+            sal_Int32 colorBackground = COL_TRANSPARENT;
             if( aValue >>= colorBackground )
             {
                 m_pTableModel->setOddRowBackgroundColor(colorBackground);
@@ -479,52 +479,6 @@ void SAL_CALL SVTXGridControl::rowRemoved(const ::com::sun::star::awt::grid::Gri
     }
 }
 
-void SAL_CALL  SVTXGridControl::columnChanged(const ::com::sun::star::awt::grid::GridColumnEvent& Event ) throw (::com::sun::star::uno::RuntimeException)
-{
-    ::vos::OGuard aGuard( GetMutex() );
-
-    TableControl* pTable = dynamic_cast< TableControl* >( GetWindow() );
-    ENSURE_OR_RETURN_VOID( pTable, "SVTXGridControl::columnChanged: no control (anymore)!" );
-
-    if(Event.valueName == rtl::OUString::createFromAscii("ColumnResize"))
-    {
-        bool resizable = m_pTableModel->getColumnModel( Event.index )->isResizable();
-        Event.newValue>>=resizable;
-        m_pTableModel->getColumnModel( Event.index )->setResizable(resizable);
-    }
-    else if(Event.valueName == rtl::OUString::createFromAscii("ColWidth"))
-    {
-        sal_Int32 colWidth = m_pTableModel->getColumnModel( Event.index )->getWidth();
-        Event.newValue>>=colWidth;
-        m_pTableModel->getColumnModel( Event.index )->setWidth(colWidth);
-    }
-    else if(Event.valueName == rtl::OUString::createFromAscii("MaxWidth"))
-    {
-        sal_Int32 maxWidth = m_pTableModel->getColumnModel( Event.index )->getMaxWidth();
-        Event.newValue>>=maxWidth;
-        m_pTableModel->getColumnModel( Event.index )->setMaxWidth(maxWidth);
-    }
-    else if(Event.valueName == rtl::OUString::createFromAscii("MinWidth"))
-    {
-        sal_Int32 minWidth = m_pTableModel->getColumnModel( Event.index )->getMinWidth();
-        Event.newValue>>=minWidth;
-        m_pTableModel->getColumnModel( Event.index )->setMinWidth(minWidth);
-    }
-    else if(Event.valueName == rtl::OUString::createFromAscii("PrefWidth"))
-    {
-        sal_Int32 prefWidth = m_pTableModel->getColumnModel( Event.index )->getPreferredWidth();
-        Event.newValue>>=prefWidth;
-        m_pTableModel->getColumnModel( Event.index )->setPreferredWidth(prefWidth);
-    }
-    else if(Event.valueName == rtl::OUString::createFromAscii("HAlign"))
-    {
-        ::com::sun::star::style::HorizontalAlignment hAlign = m_pTableModel->getColumnModel( Event.index )->getHorizontalAlign();
-        Event.newValue>>=hAlign;
-        m_pTableModel->getColumnModel( Event.index )->setHorizontalAlign(hAlign);
-    }
-    pTable->Invalidate();
-}
-
 void SAL_CALL SVTXGridControl::dataChanged(const ::com::sun::star::awt::grid::GridDataEvent& Event ) throw (::com::sun::star::uno::RuntimeException)
 {
     ::vos::OGuard aGuard( GetMutex() );
@@ -591,26 +545,18 @@ void SAL_CALL SVTXGridControl::elementInserted( const ContainerEvent& i_event ) 
     sal_Int32 nIndex( m_pTableModel->getColumnCount() );
     OSL_VERIFY( i_event.Accessor >>= nIndex );
 
-    const PColumnModel tableColumn( new UnoControlTableColumn( xGridColumn ) );
-    m_pTableModel->insertColumn( nIndex, tableColumn );
-
-    impl_setColumnListening( Reference< XGridColumn >( i_event.Element, UNO_QUERY ), true );
+    m_pTableModel->insertColumn( nIndex, xGridColumn );
 }
 
 //----------------------------------------------------------------------------------------------------------------------
 void SAL_CALL SVTXGridControl::elementRemoved( const ContainerEvent& i_event ) throw (RuntimeException)
 {
-    impl_setColumnListening( Reference< XGridColumn >( i_event.Element, UNO_QUERY ), false );
-
     // TODO: remove the respective column from our table model
 }
 
 //----------------------------------------------------------------------------------------------------------------------
 void SAL_CALL SVTXGridControl::elementReplaced( const ContainerEvent& i_event ) throw (RuntimeException)
 {
-    impl_setColumnListening( Reference< XGridColumn >( i_event.ReplacedElement, UNO_QUERY ), false );
-    impl_setColumnListening( Reference< XGridColumn >( i_event.Element, UNO_QUERY ), true );
-
     // TODO: replace the respective column in our table model
 }
 
@@ -947,10 +893,7 @@ void SVTXGridControl::impl_updateColumnsFromModel_nothrow()
             {
                 ENSURE_OR_CONTINUE( colRef->is(), "illegal column!" );
 
-                impl_setColumnListening( *colRef, true );
-
-                UnoControlTableColumn* tableColumn = new UnoControlTableColumn( *colRef );
-                m_pTableModel->appendColumn( PColumnModel( tableColumn ) );
+                m_pTableModel->appendColumn( *colRef );
             }
         }
 
@@ -961,12 +904,3 @@ void SVTXGridControl::impl_updateColumnsFromModel_nothrow()
     }
 }
 
-void SVTXGridControl::impl_setColumnListening( const Reference< XGridColumn >& i_column, bool const i_start )
-{
-    ENSURE_OR_RETURN_VOID( i_column.is(), "SVTXGridControl::impl_setColumnListening: illegal column!" );
-
-    if ( i_start )
-        i_column->addGridColumnListener( this );
-    else
-        i_column->removeGridColumnListener( this );
-}
