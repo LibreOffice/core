@@ -282,7 +282,6 @@ public:
     void                        FlushDocInfo();
     sal_Bool                    HasName() const { return bHasName; }
     virtual String              GetAPIName() const;
-    void                        SetHasName( sal_Bool bSet = sal_True ) { bHasName = bSet; }
     void                        SetReadOnly();
     sal_Bool                    IsReadOnly() const;
     sal_Bool                    IsReadOnlyMedium() const;
