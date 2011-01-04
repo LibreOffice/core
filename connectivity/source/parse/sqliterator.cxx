@@ -1068,9 +1068,9 @@ void OSQLParseTreeIterator::traverseByColumnNames(const OSQLParseNode* pSelectNo
     OSQLParseNode * pTableExp = pSelectNode->getChild(3);
     OSL_ENSURE(pTableExp != NULL,"OSQLParseTreeIterator: error in parse tree!");
     OSL_ENSURE(SQL_ISRULE(pTableExp,table_exp),"OSQLParseTreeIterator:table_exp error in parse tree!");
-    OSL_ENSURE(pTableExp->count() == 5,"OSQLParseTreeIterator: error in parse tree!");
+    OSL_ENSURE(pTableExp->count() == TABLE_EXPRESSION_CHILD_COUNT,"OSQLParseTreeIterator: error in parse tree!");
 
-    sal_uInt32 nPos = ( _bOrder ? 4 : 2 );
+    sal_uInt32 nPos = ( _bOrder ? ORDER_BY_CHILD_POS : 2 );
 
     OSQLParseNode * pOptByClause = pTableExp->getChild(nPos);
     OSL_ENSURE(pOptByClause != NULL,"OSQLParseTreeIterator: error in parse tree!");
@@ -1233,7 +1233,7 @@ bool OSQLParseTreeIterator::traverseSelectionCriteria(const OSQLParseNode* pSele
         OSQLParseNode * pTableExp = pSelectNode->getChild(3);
         OSL_ENSURE(pTableExp != NULL,"OSQLParseTreeIterator: error in parse tree!");
         OSL_ENSURE(SQL_ISRULE(pTableExp,table_exp),"OSQLParseTreeIterator: error in parse tree!");
-        OSL_ENSURE(pTableExp->count() == 5,"OSQLParseTreeIterator: error in parse tree!");
+        OSL_ENSURE(pTableExp->count() == TABLE_EXPRESSION_CHILD_COUNT,"OSQLParseTreeIterator: error in parse tree!");
 
         pWhereClause = pTableExp->getChild(1);
     } else if (SQL_ISRULE(pSelectNode,update_statement_searched)) {
@@ -1967,7 +1967,7 @@ const OSQLParseNode* OSQLParseTreeIterator::getWhereTree() const
         OSQLParseNode * pTableExp = m_pParseTree->getChild(3);
         OSL_ENSURE(pTableExp != NULL,"OSQLParseTreeIterator: error in parse tree!");
         OSL_ENSURE(SQL_ISRULE(pTableExp,table_exp),"OSQLParseTreeIterator: error in parse tree!");
-        OSL_ENSURE(pTableExp->count() == 5,"OSQLParseTreeIterator: error in parse tree!");
+        OSL_ENSURE(pTableExp->count() == TABLE_EXPRESSION_CHILD_COUNT,"OSQLParseTreeIterator: error in parse tree!");
 
         pWhereClause = pTableExp->getChild(1);
     }
@@ -1997,9 +1997,9 @@ const OSQLParseNode* OSQLParseTreeIterator::getOrderTree() const
     OSQLParseNode * pTableExp = m_pParseTree->getChild(3);
     OSL_ENSURE(pTableExp != NULL,"OSQLParseTreeIterator: error in parse tree!");
     OSL_ENSURE(SQL_ISRULE(pTableExp,table_exp),"OSQLParseTreeIterator: error in parse tree!");
-    OSL_ENSURE(pTableExp->count() == 5,"OSQLParseTreeIterator: error in parse tree!");
+    OSL_ENSURE(pTableExp->count() == TABLE_EXPRESSION_CHILD_COUNT,"OSQLParseTreeIterator: error in parse tree!");
 
-    pOrderClause = pTableExp->getChild(4);
+    pOrderClause = pTableExp->getChild(ORDER_BY_CHILD_POS);
     // Wenn es aber eine order_by ist, dann darf sie nicht leer sein:
     if(pOrderClause->count() != 3)
         pOrderClause = NULL;
@@ -2019,7 +2019,7 @@ const OSQLParseNode* OSQLParseTreeIterator::getGroupByTree() const
     OSQLParseNode * pTableExp = m_pParseTree->getChild(3);
     OSL_ENSURE(pTableExp != NULL,"OSQLParseTreeIterator: error in parse tree!");
     OSL_ENSURE(SQL_ISRULE(pTableExp,table_exp),"OSQLParseTreeIterator: error in parse tree!");
-    OSL_ENSURE(pTableExp->count() == 5,"OSQLParseTreeIterator: error in parse tree!");
+    OSL_ENSURE(pTableExp->count() == TABLE_EXPRESSION_CHILD_COUNT,"OSQLParseTreeIterator: error in parse tree!");
 
     pGroupClause = pTableExp->getChild(2);
     // Wenn es aber eine order_by ist, dann darf sie nicht leer sein:
@@ -2040,7 +2040,7 @@ const OSQLParseNode* OSQLParseTreeIterator::getHavingTree() const
     OSQLParseNode * pTableExp = m_pParseTree->getChild(3);
     OSL_ENSURE(pTableExp != NULL,"OSQLParseTreeIterator: error in parse tree!");
     OSL_ENSURE(SQL_ISRULE(pTableExp,table_exp),"OSQLParseTreeIterator: error in parse tree!");
-    OSL_ENSURE(pTableExp->count() == 5,"OSQLParseTreeIterator: error in parse tree!");
+    OSL_ENSURE(pTableExp->count() == TABLE_EXPRESSION_CHILD_COUNT,"OSQLParseTreeIterator: error in parse tree!");
 
     pHavingClause = pTableExp->getChild(3);
     // Wenn es aber eine order_by ist, dann darf sie nicht leer sein:
