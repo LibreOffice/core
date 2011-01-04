@@ -242,7 +242,6 @@ void XclImpColRowSettings::Convert( SCTAB nScTab )
     RowFlagsType::const_iterator itrFlags = maRowFlags.begin(), itrFlagsEnd = maRowFlags.end();
     SCROW nPrevRow = -1;
     sal_uInt8 nPrevFlags = 0;
-    sal_uInt16 nPrevHeight = 0;
     for (; itrFlags != itrFlagsEnd; ++itrFlags)
     {
         SCROW nRow = itrFlags->first;
@@ -274,7 +273,6 @@ void XclImpColRowSettings::Convert( SCTAB nScTab )
 
                         rDoc.SetRowHeightOnly(i, nLast-1, nScTab, nHeight);
                         i = nLast-1;
-                        nPrevHeight = nHeight;
                     }
                 }
 
@@ -286,7 +284,6 @@ void XclImpColRowSettings::Convert( SCTAB nScTab )
                 nHeight = mnDefHeight;
                 rDoc.SetRowHeightOnly(nPrevRow, nRow-1, nScTab, nHeight);
             }
-            nPrevHeight = nHeight;
         }
 
         nPrevRow = nRow;
