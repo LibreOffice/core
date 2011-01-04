@@ -461,8 +461,6 @@ BOOL ScDocument::IdleCalcTextWidth()            // TRUE = demnaechst wieder vers
 // USHORT nIter = 0;
 
     const ULONG         nStart   = Time::GetSystemTicks();
-    double              nPPTX    = 0.0;
-    double              nPPTY    = 0.0;
     OutputDevice*       pDev     = NULL;
     MapMode             aOldMap;
     ScStyleSheet*       pStyle   = NULL;
@@ -473,8 +471,6 @@ BOOL ScDocument::IdleCalcTextWidth()            // TRUE = demnaechst wieder vers
     SCTAB               nTab     = aCurTextWidthCalcPos.Tab();
     SCROW               nRow     = aCurTextWidthCalcPos.Row();
     SCsCOL              nCol     = aCurTextWidthCalcPos.Col();
-    USHORT              nRestart = 0;
-    USHORT              nZoom    = 0;
     BOOL                bNeedMore= FALSE;
 
     if ( !ValidRow(nRow) )
@@ -504,6 +500,8 @@ BOOL ScDocument::IdleCalcTextWidth()            // TRUE = demnaechst wieder vers
     BOOL bProgress = FALSE;
     if ( pStyle && 0 == GET_SCALEVALUE(pStyle->GetItemSet(),ATTR_PAGE_SCALETOPAGES) )
     {
+        USHORT nRestart = 0;
+        USHORT nZoom = 0;
         USHORT nCount = 0;
 
         nZoom    = GET_SCALEVALUE(pStyle->GetItemSet(),ATTR_PAGE_SCALE);
@@ -517,6 +515,8 @@ BOOL ScDocument::IdleCalcTextWidth()            // TRUE = demnaechst wieder vers
             {
                 if ( TEXTWIDTH_DIRTY == pCell->GetTextWidth() )
                 {
+                    double nPPTX = 0.0;
+                    double nPPTY = 0.0;
                     if ( !pDev )
                     {
                         pDev = GetPrinter();
