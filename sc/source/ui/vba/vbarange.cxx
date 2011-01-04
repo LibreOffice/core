@@ -2378,14 +2378,11 @@ ScVbaRange::Activate() throw (uno::RuntimeException)
 uno::Reference< excel::XRange >
 ScVbaRange::Rows(const uno::Any& aIndex ) throw (uno::RuntimeException)
 {
-    SCROW nStartRow = 0;
-    SCROW nEndRow = 0;
-
-    sal_Int32 nValue = 0;
     rtl::OUString sAddress;
 
     if ( aIndex.hasValue() )
     {
+        sal_Int32 nValue = 0;
         ScCellRangesBase* pUnoRangesBase = getCellRangesBase();
         ScRangeList aCellRanges = pUnoRangesBase->GetRangeList();
 
@@ -2400,8 +2397,8 @@ ScVbaRange::Rows(const uno::Any& aIndex ) throw (uno::RuntimeException)
             ScAddress::Details dDetails( formula::FormulaGrammar::CONV_XL_A1, 0, 0 );
             ScRange tmpRange;
             tmpRange.ParseRows( sAddress, excel::GetDocumentFromRange( mxRange ), dDetails );
-            nStartRow = tmpRange.aStart.Row();
-            nEndRow = tmpRange.aEnd.Row();
+            SCROW nStartRow = tmpRange.aStart.Row();
+            SCROW nEndRow = tmpRange.aEnd.Row();
 
             aRange.aStart.SetRow( aRange.aStart.Row() + nStartRow );
             aRange.aEnd.SetRow( aRange.aStart.Row() + ( nEndRow  - nStartRow ));
@@ -2424,10 +2421,6 @@ ScVbaRange::Rows(const uno::Any& aIndex ) throw (uno::RuntimeException)
 uno::Reference< excel::XRange >
 ScVbaRange::Columns(const uno::Any& aIndex ) throw (uno::RuntimeException)
 {
-    SCCOL nStartCol = 0;
-    SCCOL nEndCol = 0;
-
-    sal_Int32 nValue = 0;
     rtl::OUString sAddress;
 
     ScCellRangesBase* pUnoRangesBase = getCellRangesBase();
@@ -2436,6 +2429,7 @@ ScVbaRange::Columns(const uno::Any& aIndex ) throw (uno::RuntimeException)
     ScRange aRange = *aCellRanges.front();
     if ( aIndex.hasValue() )
     {
+        sal_Int32 nValue = 0;
         if ( aIndex >>= nValue )
         {
             aRange.aStart.SetCol( aRange.aStart.Col() + static_cast< SCCOL > ( --nValue ) );
@@ -2447,8 +2441,8 @@ ScVbaRange::Columns(const uno::Any& aIndex ) throw (uno::RuntimeException)
             ScAddress::Details dDetails( formula::FormulaGrammar::CONV_XL_A1, 0, 0 );
             ScRange tmpRange;
             tmpRange.ParseCols( sAddress, excel::GetDocumentFromRange( mxRange ), dDetails );
-            nStartCol = tmpRange.aStart.Col();
-            nEndCol = tmpRange.aEnd.Col();
+            SCCOL nStartCol = tmpRange.aStart.Col();
+            SCCOL nEndCol = tmpRange.aEnd.Col();
 
             aRange.aStart.SetCol( aRange.aStart.Col() + nStartCol );
             aRange.aEnd.SetCol( aRange.aStart.Col() + ( nEndCol  - nStartCol ));
@@ -4901,12 +4895,12 @@ ScVbaRange::TextToColumns( const css::uno::Any& Destination, const css::uno::Any
     }
 
     // Parse the value of parameter FieldInfo.
-    USHORT nCount = 0, nRealCount = 0;
+    USHORT nRealCount = 0;
     xub_StrLen* pColumns = NULL;
     BYTE* pFormats = NULL;
     if ( sFieldInfo.getLength() > 0 )
     {
-        nCount = sFieldInfo.getLength();
+        USHORT nCount = sFieldInfo.getLength();
         pColumns = new xub_StrLen[nCount];
         pFormats = new BYTE[nCount];
         USHORT nFormat = 1;
