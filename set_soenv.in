@@ -1781,6 +1781,11 @@ if ( $platform =~ m/cygwin/ )
    my $tmpdir = qx{cygpath -m "/tmp"};
    chomp($tmpdir);
    ToFile( "TMPDIR",     $tmpdir,            "e" );
+   if ( !defined $ENV{"TMP"} || $ENV{"TMP"} eq "" ) {
+      ToFile( "TMP", $tmpdir, "e" );
+   } else {
+      ToFile( "TMP", "$ENV{'TMP'}", "e" );
+   }
 }
 if ("@WITH_VC_REDIST@" eq "TRUE") {
 ToFile( "WITH_VC_REDIST", "TRUE",  "e" );
