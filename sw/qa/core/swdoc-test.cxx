@@ -43,11 +43,20 @@
 #include <comphelper/processfactory.hxx>
 #include <vcl/svapp.hxx>
 #include <sfx2/app.hxx>
+#include <sfx2/docfile.hxx>
+#include <sfx2/sfxmodelfactory.hxx>
+#include <tools/urlobj.hxx>
+#include <unotools/tempfile.hxx>
 
 #include "init.hxx"
 #include "swtypes.hxx"
 #include "doc.hxx"
+#include "docsh.hxx"
 #include "shellres.hxx"
+#include "docufld.hxx"
+
+SO2_DECL_REF(SwDocShell)
+SO2_IMPL_REF(SwDocShell)
 
 using namespace ::com::sun::star;
 
@@ -62,18 +71,21 @@ public:
     virtual void setUp();
     virtual void tearDown();
 
-    void testPageDescName();
     void randomTest();
+    void testPageDescName();
+    void testFileNameFields();
 
     CPPUNIT_TEST_SUITE(SwDocTest);
     CPPUNIT_TEST(randomTest);
     CPPUNIT_TEST(testPageDescName);
+    CPPUNIT_TEST(testFileNameFields);
     CPPUNIT_TEST_SUITE_END();
 
 private:
     uno::Reference<uno::XComponentContext> m_xContext;
     uno::Reference<lang::XMultiComponentFactory> m_xFactory;
     SwDoc *m_pDoc;
+    SwDocShellRef m_xDocShRef;
 };
 
 void SwDocTest::testPageDescName()
@@ -93,6 +105,56 @@ void SwDocTest::testPageDescName()
     aResults.erase(std::unique(aResults.begin(), aResults.end()), aResults.end());
 
     CPPUNIT_ASSERT_MESSAGE("GetPageDescName results must be unique", aResults.size() == 3);
+}
+
+//See https://bugs.freedesktop.org/show_bug.cgi?id=32463 for motivation
+void SwDocTest::testFileNameFields()
+{
+    //Here's a file name with some chars in it that will be %% encoded, when expanding
+    //SwFileNameFields we want to restore the original readable filename
+    utl::TempFile aTempFile(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("demo [name]")));
+    aTempFile.EnableKillingFile();
+
+    INetURLObject aTempFileURL(aTempFile.GetURL());
+    String sFileURL = aTempFileURL.GetMainURL(INetURLObject::NO_DECODE);
+    SfxMedium* pDstMed = new SfxMedium(sFileURL, STREAM_STD_READWRITE, true);
+
+    m_xDocShRef->DoSaveAs(*pDstMed);
+    m_xDocShRef->DoSaveCompleted(pDstMed);
+
+    const INetURLObject &rUrlObj = m_xDocShRef->GetMedium()->GetURLObject();
+
+    SwFileNameFieldType aNameField(m_pDoc);
+
+    {
+        rtl::OUString sResult(aNameField.Expand(FF_NAME));
+        rtl::OUString sExpected(rUrlObj.getName(INetURLObject::LAST_SEGMENT,
+            true,INetURLObject::DECODE_WITH_CHARSET));
+        CPPUNIT_ASSERT_MESSAGE("Expected Readable FileName", sResult == sExpected);
+    }
+
+    {
+        rtl::OUString sResult(aNameField.Expand(FF_PATHNAME));
+        rtl::OUString sExpected(rUrlObj.GetFull());
+        CPPUNIT_ASSERT_MESSAGE("Expected Readable FileName", sResult == sExpected);
+    }
+
+    {
+        rtl::OUString sResult(aNameField.Expand(FF_PATH));
+        INetURLObject aTemp(rUrlObj);
+        aTemp.removeSegment();
+        rtl::OUString sExpected(aTemp.PathToFileName());
+        CPPUNIT_ASSERT_MESSAGE("Expected Readable FileName", sResult == sExpected);
+    }
+
+    {
+        rtl::OUString sResult(aNameField.Expand(FF_NAME_NOEXT));
+        rtl::OUString sExpected(rUrlObj.getName(INetURLObject::LAST_SEGMENT,
+            true,INetURLObject::DECODE_WITH_CHARSET));
+        //Chop off .tmp
+        sExpected = sExpected.copy(0, sExpected.getLength() - 4);
+        CPPUNIT_ASSERT_MESSAGE("Expected Readable FileName", sResult == sExpected);
+    }
 }
 
 void SwDocTest::randomTest()
@@ -120,6 +182,8 @@ SwDocTest::SwDocTest()
 void SwDocTest::setUp()
 {
     m_pDoc = new SwDoc;
+    m_xDocShRef = new SwDocShell(m_pDoc, SFX_CREATE_MODE_EMBEDDED);
+    m_xDocShRef->DoInitNew(0);
 }
 
 SwDocTest::~SwDocTest()
@@ -128,6 +192,7 @@ SwDocTest::~SwDocTest()
 
 void SwDocTest::tearDown()
 {
+    m_xDocShRef.Clear();
     delete m_pDoc;
 }
 
