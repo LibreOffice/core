@@ -1818,7 +1818,7 @@ void BackendImpl::ComponentsPackageImpl::processPackage_(
             that->componentLiveRemoval(that->readDataFromDb(url));
         }
         that->releaseObject(url);
-        that->deleteDataFromDb(url);
+        that->revokeEntryFromDb(url);
     }
 }
 

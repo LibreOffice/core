@@ -662,9 +662,9 @@ Reference<deploy::XPackage> ExtensionManager::addExtension(
     //Determine the repository to use
     Reference<deploy::XPackageManager> xPackageManager;
     if (repository.equals(OUSTR("user")))
-        xPackageManager = m_userRepository;
+        xPackageManager = getUserRepository();
     else if (repository.equals(OUSTR("shared")))
-        xPackageManager = m_sharedRepository;
+        xPackageManager = getSharedRepository();
     else
         throw lang::IllegalArgumentException(
             OUSTR("No valid repository name provided."),
@@ -677,7 +677,7 @@ Reference<deploy::XPackage> ExtensionManager::addExtension(
         getTempExtension(url, xAbortChannel, xCmdEnv);
     //Make sure the extension is removed from the tmp repository in case
     //of an exception
-    ExtensionRemoveGuard tmpExtensionRemoveGuard(xTmpExtension, m_tmpRepository);
+    ExtensionRemoveGuard tmpExtensionRemoveGuard(xTmpExtension, getTmpRepository());
     const OUString sIdentifier = dp_misc::getIdentifier(xTmpExtension);
     const OUString sFileName = xTmpExtension->getName();
     Reference<deploy::XPackage> xOldExtension;
@@ -721,7 +721,7 @@ Reference<deploy::XPackage> ExtensionManager::addExtension(
                         //the xTmpExtension
                         //no command environment supplied, only this class shall interact
                         //with the user!
-                        xExtensionBackup = getTmpRepository->importExtension(
+                        xExtensionBackup = getTmpRepository()->importExtension(
                             xOldExtension, Reference<task::XAbortChannel>(),
                             Reference<ucb::XCommandEnvironment>());
                         tmpExtensionRemoveGuard.reset(xExtensionBackup);
