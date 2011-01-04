@@ -4493,14 +4493,10 @@ ScVbaRange::AutoFilter( const uno::Any& Field, const uno::Any& Criteria1, const 
     sal_Int32 nOperator = excel::XlAutoFilterOperator::xlAnd;
 
     sal_Bool bVisible = sal_True;
-    bool  bChangeDropDown = false;
     VisibleDropDown >>= bVisible;
 
-    if ( bVisible == bHasAuto ) // dropdown is displayed/notdisplayed as
-                                // required
+    if ( bVisible == bHasAuto ) // dropdown is displayed/notdisplayed as required
         bVisible = sal_False;
-    else
-        bChangeDropDown = true;
     sheet::FilterConnection nConn = sheet::FilterConnection_AND;
     double nCriteria1 = 0;
 
@@ -4652,7 +4648,6 @@ ScVbaRange::AutoFilter( const uno::Any& Field, const uno::Any& Criteria1, const 
         // this is just to toggle autofilter on and off ( not to be confused with
         // a VisibleDropDown option combined with a field, in that case just the
         // button should be disabled ) - currently we don't support that
-        bChangeDropDown = true;
         uno::Reference< beans::XPropertySet > xDBRangeProps( xDataBaseRange, uno::UNO_QUERY_THROW );
         if ( bHasAuto )
         {
