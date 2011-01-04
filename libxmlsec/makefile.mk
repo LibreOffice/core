@@ -145,10 +145,6 @@ xmlsec_LDFLAGS+=-Wl,-rpath,'$$$$ORIGIN:$$$$ORIGIN/../ure-link/lib'
 xmlsec_LDFLAGS+=-Wl,-R'$$$$ORIGIN:$$$$ORIGIN/../ure-link/lib'
 .ENDIF			# "$(OS)$(COM)"=="SOLARISC52"
 
-.IF "$(OS)$(COM)"=="LINUXGCC"
-xmlsec_LDFLAGS+=-Wl,-z,noexecstack
-.ENDIF
-
 LDFLAGS:=$(xmlsec_LDFLAGS)
 .EXPORT: LDFLAGS
 
