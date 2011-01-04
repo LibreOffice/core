@@ -848,7 +848,6 @@ void SVGActionWriter::ImplWriteText( const Point& rPos, const String& rText,
         const Font&         rFont = mpVDev->GetFont();
         const FontMetric    aMetric( mpVDev->GetFontMetric() );
         Point               aBaseLinePos( rPos );
-        SvXMLElementExport* pTransform = NULL;
 
         // always adjust text position to match baseline alignment
         switch( rFont.GetAlign() )
@@ -904,7 +903,6 @@ void SVGActionWriter::ImplWriteText( const Point& rPos, const String& rText,
             aTransform += ')';
 
             mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrTransform, aTransform );
-            pTransform = new SvXMLElementExport( mrExport, XML_NAMESPACE_NONE, aXMLElemG, TRUE, TRUE );
         }
 
         // add additional style if requested
@@ -989,7 +987,6 @@ void SVGActionWriter::ImplWriteText( const Point& rPos, const String& rText,
 #endif // _SVG_USE_NATIVE_TEXTDECORATION
 
         delete[] pOwnArray;
-        delete pTransform;
     }
 }
 
