@@ -477,9 +477,9 @@ void ScDocument::MarkUsedExternalReferences()
     if (!pExternalRefMgr->hasExternalData())
         return;
     // Charts.
-    bool bAllMarked = pExternalRefMgr->markUsedByLinkListeners();
+    pExternalRefMgr->markUsedByLinkListeners();
     // Formula cells.
-    bAllMarked = pExternalRefMgr->markUsedExternalRefCells();
+    pExternalRefMgr->markUsedExternalRefCells();
 
     /* NOTE: Conditional formats and validation objects are marked when
      * collecting them during export. */
