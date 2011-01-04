@@ -248,7 +248,6 @@ String XclImpHyperlink::ReadEmbeddedData( XclImpStream& rStrm )
 
     DBG_ASSERT( aGuid == XclTools::maGuidStdLink, "XclImpHyperlink::ReadEmbeddedData - unknown header GUID" );
 
-    sal_uInt16 nLevel = 0;                  // counter for level to climb down in path
     ::std::auto_ptr< String > xLongName;    // link / file name
     ::std::auto_ptr< String > xShortName;   // 8.3-representation of file name
     ::std::auto_ptr< String > xTextMark;    // text mark
@@ -278,6 +277,7 @@ String XclImpHyperlink::ReadEmbeddedData( XclImpStream& rStrm )
 
         if( aGuid == XclTools::maGuidFileMoniker )
         {
+            sal_uInt16 nLevel = 0; // counter for level to climb down in path
             rStrm >> nLevel;
             xShortName.reset( new String );
             lclAppendString32( *xShortName, rStrm, false );
