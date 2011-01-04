@@ -702,10 +702,10 @@ void ScDetectiveFunc::DeleteArrowsAt( SCCOL nCol, SCROW nRow, BOOL bDestPnt )
 
     pPage->RecalcObjOrdNums();
 
-    long    nDelCount = 0;
-    ULONG   nObjCount = pPage->GetObjCount();
+    ULONG nObjCount = pPage->GetObjCount();
     if (nObjCount)
     {
+        long nDelCount = 0;
         SdrObject** ppObj = new SdrObject*[nObjCount];
 
         SdrObjListIter aIter( *pPage, IM_FLAT );
@@ -777,10 +777,10 @@ void ScDetectiveFunc::DeleteBox( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nR
 
     pPage->RecalcObjOrdNums();
 
-    long    nDelCount = 0;
-    ULONG   nObjCount = pPage->GetObjCount();
+    ULONG nObjCount = pPage->GetObjCount();
     if (nObjCount)
     {
+        long nDelCount = 0;
         SdrObject** ppObj = new SdrObject*[nObjCount];
 
         SdrObjListIter aIter( *pPage, IM_FLAT );
