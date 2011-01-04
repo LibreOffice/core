@@ -364,9 +364,6 @@ lcl_checkRangeDimensions(
 
     if (bOk && aCur == aEnd)
     {
-        bCol = bCol;
-        bRow = bRow;
-        bTab = bTab;
         return true;
     }
     return false;
