@@ -69,6 +69,7 @@ ModalDialog RID_XMLSECTP_MACROWARN
     };
     PushButton PB_VIEWSIGNS
     {
+        HelpID = "xmlsecurity:PushButton:RID_XMLSECTP_MACROWARN:PB_VIEWSIGNS";
         Pos = MAP_APPFONT( MW_COL_3, MW_ROW_2 );
         Size = MAP_APPFONT( RSC_CD_PUSHBUTTON_WIDTH, RSC_CD_PUSHBUTTON_HEIGHT );
         Text [ en-US ] = "View Signatures...";
@@ -82,6 +83,7 @@ ModalDialog RID_XMLSECTP_MACROWARN
     };
     CheckBox CB_ALWAYSTRUST
     {
+        HelpID = "xmlsecurity:CheckBox:RID_XMLSECTP_MACROWARN:CB_ALWAYSTRUST";
         Pos = MAP_APPFONT( MW_COL_1, MW_ROW_4 );
         Size = MAP_APPFONT( MW_COL_4-MW_COL_1, RSC_CD_CHECKBOX_HEIGHT );
         Text [ en-US ] = "Always trust macros from this source";
@@ -93,6 +95,7 @@ ModalDialog RID_XMLSECTP_MACROWARN
     };
     PushButton PB_ENABLE
     {
+        HelpID = "xmlsecurity:PushButton:RID_XMLSECTP_MACROWARN:PB_ENABLE";
         Pos = MAP_APPFONT( DLGS_BOTTOM_OK_X( MW_WIDTH ), DLGS_BOTTOM_BTN_Y( MW_HEIGHT ) );
         Size = MAP_APPFONT( RSC_CD_PUSHBUTTON_WIDTH, RSC_CD_PUSHBUTTON_HEIGHT );
         Text [ en-US ] = "Enable Macros";

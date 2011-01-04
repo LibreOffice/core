@@ -61,6 +61,7 @@ TabPage RID_SVXPAGE_POSITION_SIZE
     };
     MetricField MTR_FLD_POS_X
     {
+        HelpID = "cui:MetricField:RID_SVXPAGE_POSITION_SIZE:MTR_FLD_POS_X";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 56 , 14 + 8  ) ;
         Size = MAP_APPFONT ( 54 , 12 ) ;
@@ -76,6 +77,7 @@ TabPage RID_SVXPAGE_POSITION_SIZE
     };
     MetricField MTR_FLD_POS_Y
     {
+        HelpID = "cui:MetricField:RID_SVXPAGE_POSITION_SIZE:MTR_FLD_POS_Y";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 56 , 30 + 8  ) ;
         Size = MAP_APPFONT ( 54 , 12 ) ;
@@ -127,6 +129,7 @@ TabPage RID_SVXPAGE_POSITION_SIZE
     };
     MetricField MTR_FLD_WIDTH
     {
+        HelpID = "cui:MetricField:RID_SVXPAGE_POSITION_SIZE:MTR_FLD_WIDTH";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 56 , 14 + 61  ) ;
         Size = MAP_APPFONT ( 54 , 12 ) ;
@@ -142,6 +145,7 @@ TabPage RID_SVXPAGE_POSITION_SIZE
     };
     MetricField MTR_FLD_HEIGHT
     {
+        HelpID = "cui:MetricField:RID_SVXPAGE_POSITION_SIZE:MTR_FLD_HEIGHT";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 56 , 30 + 61  ) ;
         Size = MAP_APPFONT ( 54 , 12 ) ;
@@ -172,6 +176,7 @@ TabPage RID_SVXPAGE_POSITION_SIZE
     };
     CheckBox CBX_SCALE
     {
+        HelpID = "cui:CheckBox:RID_SVXPAGE_POSITION_SIZE:CBX_SCALE";
         Pos = MAP_APPFONT ( 12 , 47 + 61 ) ;
         Size = MAP_APPFONT ( 162 , 10 ) ;
         TabStop = TRUE ;
@@ -189,6 +194,7 @@ TabPage RID_SVXPAGE_POSITION_SIZE
 
     TriStateBox TSB_POSPROTECT
     {
+        HelpID = "cui:TriStateBox:RID_SVXPAGE_POSITION_SIZE:TSB_POSPROTECT";
         Pos = MAP_APPFONT ( 12 , 10 + 120 ) ;
         Size = MAP_APPFONT ( 113 , 10 ) ;
         Text [ en-US ] = "Position" ;
@@ -197,6 +203,7 @@ TabPage RID_SVXPAGE_POSITION_SIZE
 
     TriStateBox TSB_SIZEPROTECT
     {
+        HelpID = "cui:TriStateBox:RID_SVXPAGE_POSITION_SIZE:TSB_SIZEPROTECT";
         Pos = MAP_APPFONT ( 12 , 24 + 120 ) ;
         Size = MAP_APPFONT ( 113 , 10 ) ;
         Text [ en-US ] = "~Size" ;
@@ -213,6 +220,7 @@ TabPage RID_SVXPAGE_POSITION_SIZE
     };
     TriStateBox TSB_AUTOGROW_WIDTH
     {
+        HelpID = "cui:TriStateBox:RID_SVXPAGE_POSITION_SIZE:TSB_AUTOGROW_WIDTH";
         Pos = MAP_APPFONT ( 12 + 121 + 8, 10 + 120 ) ;
         Size = MAP_APPFONT ( 113 , 10 ) ;
         Text [ en-US ] = "~Fit width to text" ;
@@ -220,6 +228,7 @@ TabPage RID_SVXPAGE_POSITION_SIZE
     };
     TriStateBox TSB_AUTOGROW_HEIGHT
     {
+        HelpID = "cui:TriStateBox:RID_SVXPAGE_POSITION_SIZE:TSB_AUTOGROW_HEIGHT";
         Pos = MAP_APPFONT ( 12 + 121 + 8, 24 + 120 ) ;
         Size = MAP_APPFONT ( 113 , 10 ) ;
         Text [ en-US ] = "Fit ~height to text" ;
@@ -251,6 +260,7 @@ TabPage RID_SVXPAGE_POSITION_SIZE
     };
     ListBox LB_ANCHOR
     {
+        HelpID = "cui:ListBox:RID_SVXPAGE_POSITION_SIZE:LB_ANCHOR";
         Pos = MAP_APPFONT ( 46 + 121 + 16 , 8 + 120 ) ;
         Size = MAP_APPFONT ( 54 , 60 ) ;
         Hide = TRUE ;
@@ -272,6 +282,7 @@ TabPage RID_SVXPAGE_POSITION_SIZE
     };
     ListBox LB_ORIENT
     {
+        HelpID = "cui:ListBox:RID_SVXPAGE_POSITION_SIZE:LB_ORIENT";
         Pos = MAP_APPFONT ( 46 + 121 + 16 , 22 + 120 );
         Size = MAP_APPFONT ( 54 , 60 ) ;
         Hide = TRUE ;
@@ -319,6 +330,7 @@ TabPage RID_SVXPAGE_ANGLE
     };
     MetricField MTR_FLD_POS_X
     {
+        HelpID = "cui:MetricField:RID_SVXPAGE_ANGLE:MTR_FLD_POS_X";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 56 , 14 + 11  ) ;
         Size = MAP_APPFONT ( 54 , 12 ) ;
@@ -334,6 +346,7 @@ TabPage RID_SVXPAGE_ANGLE
     };
     MetricField MTR_FLD_POS_Y
     {
+        HelpID = "cui:MetricField:RID_SVXPAGE_ANGLE:MTR_FLD_POS_Y";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 56 , 30 + 11 ) ;
         Size = MAP_APPFONT ( 54 , 12 ) ;
@@ -376,6 +389,7 @@ TabPage RID_SVXPAGE_ANGLE
     };
     MetricField MTR_FLD_ANGLE
     {
+        HelpID = "cui:MetricField:RID_SVXPAGE_ANGLE:MTR_FLD_ANGLE";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 56 , 82 + 22  ) ;
         Size = MAP_APPFONT ( 54 , 12 ) ;
@@ -427,6 +441,7 @@ TabPage RID_SVXPAGE_SLANT
     };
     MetricField MTR_FLD_RADIUS
     {
+        HelpID = "cui:MetricField:RID_SVXPAGE_SLANT:MTR_FLD_RADIUS";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 56 , 14  ) ;
         Size = MAP_APPFONT ( 54 , 12 ) ;
@@ -454,6 +469,7 @@ TabPage RID_SVXPAGE_SLANT
     };
     MetricField MTR_FLD_ANGLE
     {
+        HelpID = "cui:MetricField:RID_SVXPAGE_SLANT:MTR_FLD_ANGLE";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 56 , 46  ) ;
         Size = MAP_APPFONT ( 54 , 12 ) ;

@@ -82,7 +82,7 @@ public class FormConfiguration
                 },
                 new Object[]
                 {
-                    UIConsts.INTEGERS[8], "HID:34421", sSelectManually, new Integer(97), new Integer(26), ISubFormStep, new Short(curtabindex++), new Integer(160)
+                    UIConsts.INTEGERS[8], "HID:WIZARDS_HID_DLGFORM_CHKCREATESUBFORM", sSelectManually, new Integer(97), new Integer(26), ISubFormStep, new Short(curtabindex++), new Integer(160)
                 });
         optOnExistingRelation = CurUnoDialog.insertRadioButton("optOnExistingRelation", STOGGLESTEPS, this,
                 new String[]
@@ -91,7 +91,7 @@ public class FormConfiguration
                 },
                 new Object[]
                 {
-                    Boolean.FALSE, UIConsts.INTEGERS[8], "HID:34422", sOnExistingRelation, new Integer(107), new Integer(43), ISubFormStep, new Short(curtabindex++), new Integer(160)
+                    Boolean.FALSE, UIConsts.INTEGERS[8], "HID:WIZARDS_HID_DLGFORM_OPTONEXISTINGRELATION", sOnExistingRelation, new Integer(107), new Integer(43), ISubFormStep, new Short(curtabindex++), new Integer(160)
                 });
         optSelectManually = CurUnoDialog.insertRadioButton("optSelectManually", STOGGLESTEPS, this,
                 new String[]
@@ -100,7 +100,7 @@ public class FormConfiguration
                 },
                 new Object[]
                 {
-                    Boolean.FALSE, UIConsts.INTEGERS[8], "HID:34423", sOnManualRelation, new Integer(107), new Integer(99), new Short((short) 1), ISubFormStep, new Short(curtabindex++), new Integer(160)
+                    Boolean.FALSE, UIConsts.INTEGERS[8], "HID:WIZARDS_HID_DLGFORM_OPTSELECTMANUALLY", sOnManualRelation, new Integer(107), new Integer(99), new Short((short) 1), ISubFormStep, new Short(curtabindex++), new Integer(160)
                 });
         lblRelations = CurUnoDialog.insertLabel("lblSelectRelation",
                 new String[]
@@ -118,7 +118,7 @@ public class FormConfiguration
                 },
                 new Object[]
                 {
-                    Boolean.FALSE, new Integer(37), "HID:34424", new Integer(201), new Integer(55), ISubFormStep, new Short(curtabindex++), new Integer(103)
+                    Boolean.FALSE, new Integer(37), "HID:WIZARDS_HID_DLGFORM_lstRELATIONS", new Integer(201), new Integer(55), ISubFormStep, new Short(curtabindex++), new Integer(103)
                 });
         lblSubFormDescription = CurUnoDialog.insertLabel("lblSubFormDescription",
                 new String[]

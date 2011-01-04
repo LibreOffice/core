@@ -55,6 +55,7 @@ TabPage RID_SVXPAGE_MEASURE
     };
     MetricField MTR_LINE_DIST
     {
+        HelpID = "cui:MetricField:RID_SVXPAGE_MEASURE:MTR_LINE_DIST";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 78 , 14  ) ;
         Size = MAP_APPFONT ( 42 , 12 ) ;
@@ -77,6 +78,7 @@ TabPage RID_SVXPAGE_MEASURE
     };
     MetricField MTR_FLD_HELPLINE_OVERHANG
     {
+        HelpID = "cui:MetricField:RID_SVXPAGE_MEASURE:MTR_FLD_HELPLINE_OVERHANG";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 78 , 30  ) ;
         Size = MAP_APPFONT ( 42 , 12 ) ;
@@ -99,6 +101,7 @@ TabPage RID_SVXPAGE_MEASURE
     };
     MetricField MTR_FLD_HELPLINE_DIST
     {
+        HelpID = "cui:MetricField:RID_SVXPAGE_MEASURE:MTR_FLD_HELPLINE_DIST";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 78 , 46  ) ;
         Size = MAP_APPFONT ( 42 , 12 ) ;
@@ -121,6 +124,7 @@ TabPage RID_SVXPAGE_MEASURE
     };
     MetricField MTR_FLD_HELPLINE1_LEN
     {
+        HelpID = "cui:MetricField:RID_SVXPAGE_MEASURE:MTR_FLD_HELPLINE1_LEN";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 78 , 62 ) ;
         Size = MAP_APPFONT ( 42 , 12 ) ;
@@ -143,6 +147,7 @@ TabPage RID_SVXPAGE_MEASURE
     };
     MetricField MTR_FLD_HELPLINE2_LEN
     {
+        HelpID = "cui:MetricField:RID_SVXPAGE_MEASURE:MTR_FLD_HELPLINE2_LEN";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 78 , 78 ) ;
         Size = MAP_APPFONT ( 42 , 12 ) ;
@@ -159,6 +164,7 @@ TabPage RID_SVXPAGE_MEASURE
     };
     TriStateBox TSB_BELOW_REF_EDGE
     {
+        HelpID = "cui:TriStateBox:RID_SVXPAGE_MEASURE:TSB_BELOW_REF_EDGE";
         Pos = MAP_APPFONT ( 12 , 96  ) ;
         Size = MAP_APPFONT ( 108 , 10 ) ;
         TabStop = TRUE ;
@@ -173,6 +179,7 @@ TabPage RID_SVXPAGE_MEASURE
     };
     MetricField MTR_FLD_DECIMALPLACES
     {
+        HelpID = "cui:MetricField:RID_SVXPAGE_MEASURE:MTR_FLD_DECIMALPLACES";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 78 , 110 ) ;
         Size = MAP_APPFONT ( 42 , 12 ) ;
@@ -213,6 +220,7 @@ TabPage RID_SVXPAGE_MEASURE
     };
     TriStateBox TSB_AUTOPOSV
     {
+        HelpID = "cui:TriStateBox:RID_SVXPAGE_MEASURE:TSB_AUTOPOSV";
         Pos = MAP_APPFONT ( 154 , 54 ) ;
         Size = MAP_APPFONT ( 101 , 10 ) ;
         TabStop = TRUE ;
@@ -220,6 +228,7 @@ TabPage RID_SVXPAGE_MEASURE
     };
     TriStateBox TSB_AUTOPOSH
     {
+        HelpID = "cui:TriStateBox:RID_SVXPAGE_MEASURE:TSB_AUTOPOSH";
         Pos = MAP_APPFONT ( 154 , 68  ) ;
         Size = MAP_APPFONT ( 101 , 10 ) ;
         TabStop = TRUE ;
@@ -227,6 +236,7 @@ TabPage RID_SVXPAGE_MEASURE
     };
     TriStateBox TSB_PARALLEL
     {
+        HelpID = "cui:TriStateBox:RID_SVXPAGE_MEASURE:TSB_PARALLEL";
         Pos = MAP_APPFONT ( 138 , 82 ) ;
         Size = MAP_APPFONT ( 110 , 10 ) ;
         TabStop = TRUE ;
@@ -234,6 +244,7 @@ TabPage RID_SVXPAGE_MEASURE
     };
     TriStateBox TSB_SHOW_UNIT
     {
+        HelpID = "cui:TriStateBox:RID_SVXPAGE_MEASURE:TSB_SHOW_UNIT";
         Pos = MAP_APPFONT ( 138 , 96  ) ;
         Size = MAP_APPFONT ( 64+40 , 10 ) ;
         TabStop = TRUE ;
@@ -241,6 +252,7 @@ TabPage RID_SVXPAGE_MEASURE
     };
     ListBox LB_UNIT
     {
+        HelpID = "cui:ListBox:RID_SVXPAGE_MEASURE:LB_UNIT";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 154 , 110 ) ;
         Size = MAP_APPFONT ( 60 , 80+35 ) ;

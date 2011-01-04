@@ -69,6 +69,7 @@
 #include <rtl/uri.hxx>
 #include <rtl/random.h>
 #include <rtl/logfile.hxx>
+#include <rtl/instance.hxx>
 #include <osl/time.h>
 #include <osl/file.hxx>
 #include "com/sun/star/io/XAsyncOutputMonitor.hpp"
@@ -1607,21 +1608,14 @@ uno::Reference < XSingleServiceFactory > ZipPackage::createServiceFactory( uno::
                                            static_getSupportedServiceNames());
 }
 
+namespace { struct lcl_ImplId : public rtl::Static< ::cppu::OImplementationId, lcl_ImplId > {}; }
+
 // XUnoTunnel
 Sequence< sal_Int8 > ZipPackage::getUnoTunnelImplementationId( void )
     throw (RuntimeException)
 {
-    static ::cppu::OImplementationId * pId = 0;
-    if (! pId)
-    {
-        ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-        if (! pId)
-        {
-            static ::cppu::OImplementationId aId;
-            pId = &aId;
-        }
-    }
-    return pId->getImplementationId();
+    ::cppu::OImplementationId &rId = lcl_ImplId::get();
+    return rId.getImplementationId();
 }
 
 sal_Int64 SAL_CALL ZipPackage::getSomething( const Sequence< sal_Int8 >& aIdentifier )
@@ -1650,7 +1644,7 @@ void SAL_CALL ZipPackage::setPropertyValue( const OUString& aPropertyName, const
         throw PropertyVetoException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
     else if (aPropertyName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("EncryptionKey") ) )
     {
-        if (!( aValue >>= m_aEncryptionKey ) )
+        if (!( aValue >>= m_aEncryptionKey ) || m_aEncryptionKey.getLength() == 0 )
             throw IllegalArgumentException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >(), 2 );
     }
     else if (aPropertyName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("UseManifest") ) )

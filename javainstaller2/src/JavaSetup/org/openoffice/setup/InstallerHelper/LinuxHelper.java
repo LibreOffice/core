@@ -383,21 +383,33 @@ import java.util.Vector;public class LinuxHelper {
 
     public void investigateDebian(InstallData data) {
 
-        // String rpmQuery = "rpm --help;
-        String[] rpmQueryArray = new String[2];
-        rpmQueryArray[0] = "rpm";
-        rpmQueryArray[1] = "--help";
+        // First check: Is this a Debian system?
 
-        Vector returnVector = new Vector();
-        Vector returnErrorVector = new Vector();
-        int returnValue = ExecuteProcess.executeProcessReturnVector(rpmQueryArray, returnVector, returnErrorVector);
+        String dpkgFile = "/usr/bin/dpkg";
 
-        // Checking if the return vector contains the string "force-debian"
+        if ( new File(dpkgFile).exists() ) {
 
-        for (int i = 0; i < returnVector.size(); i++) {
-            String line = (String) returnVector.get(i);
-            if ( line.indexOf("force-debian") > -1 ) {
-                data.setIsDebianSystem(true);
+            data.setIsDebianSystem(true);
+
+            // Second check: If this is a Debian system, is "--force-debian" required? Older
+            // versions do not support "--force-debian".
+
+            // String rpmQuery = "rpm --help;
+            String[] rpmQueryArray = new String[2];
+            rpmQueryArray[0] = "rpm";
+            rpmQueryArray[1] = "--help";
+
+            Vector returnVector = new Vector();
+            Vector returnErrorVector = new Vector();
+            int returnValue = ExecuteProcess.executeProcessReturnVector(rpmQueryArray, returnVector, returnErrorVector);
+
+            // Checking if the return vector contains the string "force-debian"
+
+            for (int i = 0; i < returnVector.size(); i++) {
+                String line = (String) returnVector.get(i);
+                if ( line.indexOf("force-debian") > -1 ) {
+                    data.setUseForceDebian(true);
+                }
             }
         }
     }

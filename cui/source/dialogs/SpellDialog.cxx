@@ -76,6 +76,8 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::linguistic2;
 
+using ::rtl::OUString;
+
 #define C2U(cChar)                  ::rtl::OUString::createFromAscii(cChar)
 // struct SpellDialog_Impl ---------------------------------------------
 
@@ -930,7 +932,7 @@ void SpellDialog::SetTitle_Impl(LanguageType nLang)
   -----------------------------------------------------------------------*/
 void SpellDialog::InitUserDicts()
 {
-    sal_uInt16 nLang = aLanguageLB.GetSelectLanguage();
+    const LanguageType nLang = aLanguageLB.GetSelectLanguage();
 
     const Reference< XDictionary >  *pDic = 0;
 
@@ -948,51 +950,50 @@ void SpellDialog::InitUserDicts()
         pImpl->aDics = xDicList->getDictionaries();
     }
 
-    // Benutzerbuecher anzeigen
+    SvtLinguConfig aCfg;
+    const bool bHC = Application::GetSettings().GetStyleSettings().GetHighContrastMode();
+
+    // list suitable dictionaries
+    bool bEnable = false;
     const sal_Int32 nSize = pImpl->aDics.getLength();
     pDic = pImpl->aDics.getConstArray();
-    sal_Int32 i;
     delete aAddToDictMB.GetPopupMenu();
     PopupMenu* pMenu = new PopupMenu;
-    for (i = 0; i < nSize; ++i )
+    pMenu->SetMenuFlags(MENU_FLAG_NOAUTOMNEMONICS);
+    USHORT nItemId = 1;     // menu items should be enumerated from 1 and not 0
+    for (sal_Int32 i = 0; i < nSize; ++i)
     {
-        Reference< XDictionary >  xDic( pDic[i], UNO_QUERY );
-        if (!xDic.is() || SvxGetIgnoreAllList() == xDic)
+        uno::Reference< linguistic2::XDictionary >  xDicTmp( pDic[i], uno::UNO_QUERY );
+        if (!xDicTmp.is() || SvxGetIgnoreAllList() == xDicTmp)
             continue;
 
-        // add only active and not read-only dictionaries to list
-        // from which to choose from
-        Reference< frame::XStorable > xStor( xDic, UNO_QUERY );
-        if ( xDic->isActive()  &&  (!xStor.is() || !xStor->isReadonly()) )
+        uno::Reference< frame::XStorable > xStor( xDicTmp, uno::UNO_QUERY );
+        LanguageType nActLanguage = SvxLocaleToLanguage( xDicTmp->getLocale() );
+        if( xDicTmp->isActive()
+            &&  xDicTmp->getDictionaryType() != linguistic2::DictionaryType_NEGATIVE
+            && (nLang == nActLanguage || LANGUAGE_NONE == nActLanguage )
+            && (!xStor.is() || !xStor->isReadonly()) )
         {
-            sal_Bool bNegativ = xDic->getDictionaryType() == DictionaryType_NEGATIVE;
-            pMenu->InsertItem( (USHORT)i + 1, ::GetDicInfoStr( xDic->getName(),
-                                SvxLocaleToLanguage( xDic->getLocale() ), bNegativ ) );
+            pMenu->InsertItem( nItemId, xDicTmp->getName() );
+            bEnable = sal_True;
+
+            uno::Reference< lang::XServiceInfo > xSvcInfo( xDicTmp, uno::UNO_QUERY );
+            if (xSvcInfo.is())
+            {
+                OUString aDictionaryImageUrl( aCfg.GetSpellAndGrammarContextDictionaryImage(
+                        xSvcInfo->getImplementationName(), bHC) );
+                if (aDictionaryImageUrl.getLength() > 0)
+                {
+                    Image aImage( lcl_GetImageFromPngUrl( aDictionaryImageUrl ) );
+                    pMenu->SetItemImage( nItemId, aImage );
+                }
+            }
+
+            ++nItemId;
         }
     }
     aAddToDictMB.SetPopupMenu(pMenu);
-
-    aAddToDictMB.Disable();
-
-    sal_uInt16 k;
-    for ( k = 0; k < pMenu->GetItemCount(); ++k )
-    {
-        sal_uInt16 nId = pMenu->GetItemId(k) - 1;
-        sal_Bool bFound = sal_False;
-
-        const sal_uInt16 nDicLang  = SvxLocaleToLanguage( pDic[nId]->getLocale() );
-        const sal_Bool bDicNegativ =
-            pDic[nId]->getDictionaryType() == DictionaryType_NEGATIVE;
-        // Stimmt die Sprache "uberein, dann enable
-        if ((nDicLang == nLang || nDicLang == LANGUAGE_NONE) && !bDicNegativ)
-            bFound = sal_True;
-
-        if (bFound)
-        {
-            aAddToDictMB.Enable();
-            break;
-        }
-    }
+    aAddToDictMB.Enable( bEnable );
 }
 /*-- 20.10.2003 15:31:06---------------------------------------------------
 
@@ -1000,31 +1001,39 @@ void SpellDialog::InitUserDicts()
 IMPL_LINK(SpellDialog, AddToDictionaryHdl, MenuButton*, pButton )
 {
     aSentenceED.UndoActionStart( SPELLUNDO_CHANGE_GROUP );
-    USHORT nItem = pButton->GetCurItemId();
 
     //GetErrorText() returns the current error even if the text is already
     //manually changed
-    String sNewWord= aSentenceED.GetErrorText();
+    const String aNewWord= aSentenceED.GetErrorText();
 
-    Reference< XDictionary >  xDic( pImpl->aDics.getConstArray()[ nItem - 1 ], UNO_QUERY );
+    USHORT nItemId = pButton->GetCurItemId();
+    PopupMenu *pMenu = pButton->GetPopupMenu();
+    String aDicName ( pMenu->GetItemText( nItemId ) );
+
+    uno::Reference< linguistic2::XDictionary >      xDic;
+    uno::Reference< linguistic2::XDictionaryList >  xDicList( SvxGetDictionaryList() );
+    if (xDicList.is())
+        xDic = xDicList->getDictionaryByName( aDicName );
+
     sal_Int16 nAddRes = DIC_ERR_UNKNOWN;
     if (xDic.is())
     {
-        String sTmpTxt( sNewWord );
-        sal_Bool bNegEntry = xDic->getDictionaryType() == DictionaryType_NEGATIVE;
-        nAddRes = linguistic::AddEntryToDic( xDic, sTmpTxt, bNegEntry,
-                ::rtl::OUString(), LANGUAGE_NONE );
+        nAddRes = linguistic::AddEntryToDic( xDic, aNewWord, FALSE, OUString(), LANGUAGE_NONE );
+        // save modified user-dictionary if it is persistent
+        uno::Reference< frame::XStorable >  xSavDic( xDic, uno::UNO_QUERY );
+        if (xSavDic.is())
+            xSavDic->store();
 
-        if(nAddRes == DIC_ERR_NONE)
+        if (nAddRes == DIC_ERR_NONE)
         {
             SpellUndoAction_Impl* pAction = new SpellUndoAction_Impl(
                             SPELLUNDO_CHANGE_ADD_TO_DICTIONARY, aDialogUndoLink);
-            pAction->SetDictionary(xDic);
-            pAction->SetAddedWord(sTmpTxt);
-            aSentenceED.AddUndoAction(pAction);
+            pAction->SetDictionary( xDic );
+            pAction->SetAddedWord( aNewWord );
+            aSentenceED.AddUndoAction( pAction );
         }
         // failed because there is already an entry?
-        if (DIC_ERR_NONE != nAddRes && xDic->getEntry( sTmpTxt ).is())
+        if (DIC_ERR_NONE != nAddRes && xDic->getEntry( aNewWord ).is())
             nAddRes = DIC_ERR_NONE;
     }
     if (DIC_ERR_NONE != nAddRes)
@@ -1032,8 +1041,6 @@ IMPL_LINK(SpellDialog, AddToDictionaryHdl, MenuButton*, pButton )
         SvxDicError( this, nAddRes );
         return 0;   // Nicht weitermachen
     }
-    // nach dem Aufnehmen ggf. '='-Zeichen entfernen
-    sNewWord.EraseAllChars( sal_Unicode( '=' ) );
 
     // go on
     SpellContinue_Impl();

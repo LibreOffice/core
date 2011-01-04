@@ -104,7 +104,8 @@ void OCurrencyModel::implConstruct()
         try
         {
             // get the system international informations
-            const LocaleDataWrapper& aLocaleInfo = SvtSysLocale().GetLocaleData();
+            const SvtSysLocale aSysLocale;
+            const LocaleDataWrapper& aLocaleInfo = aSysLocale.GetLocaleData();
 
             ::rtl::OUString sCurrencySymbol;
             sal_Bool bPrependCurrencySymbol;

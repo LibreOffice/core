@@ -26,6 +26,7 @@
  ************************************************************************/
 package com.sun.star.wizards.agenda;
 
+import com.sun.star.wizards.common.HelpIds;
 import com.sun.star.awt.FontDescriptor;
 import com.sun.star.awt.XButton;
 import com.sun.star.awt.XCheckBox;

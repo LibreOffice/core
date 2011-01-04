@@ -31,6 +31,7 @@
 
 ModalDialog DLG_INS_ROW_COL
 {
+    HelpID = "cui:ModalDialog:DLG_INS_ROW_COL";
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 136 , 84 ) ;
@@ -57,6 +58,7 @@ ModalDialog DLG_INS_ROW_COL
     };
     RadioButton CB_POS_BEFORE
     {
+        HelpID = "cui:RadioButton:DLG_INS_ROW_COL:CB_POS_BEFORE";
         Pos = MAP_APPFONT ( 12 , 49 ) ;
         Size = MAP_APPFONT ( 56 , 10 ) ;
         Text [ en-US ] = "~Before" ;
@@ -64,6 +66,7 @@ ModalDialog DLG_INS_ROW_COL
     };
     RadioButton CB_POS_AFTER
     {
+        HelpID = "cui:RadioButton:DLG_INS_ROW_COL:CB_POS_AFTER";
         Pos = MAP_APPFONT ( 12 , 62 ) ;
         Size = MAP_APPFONT ( 56 , 10 ) ;
         Text [ en-US ] = "A~fter" ;
@@ -72,6 +75,7 @@ ModalDialog DLG_INS_ROW_COL
     };
     NumericField ED_COUNT
     {
+        HelpID = "cui:NumericField:DLG_INS_ROW_COL:ED_COUNT";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 44 , 14 ) ;
         Size = MAP_APPFONT ( 24 , 12 ) ;

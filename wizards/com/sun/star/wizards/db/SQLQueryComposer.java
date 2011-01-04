@@ -47,6 +47,7 @@ import com.sun.star.uno.UnoRuntime;
 import com.sun.star.sdbc.SQLException;
 import com.sun.star.lang.XInitialization;
 import com.sun.star.awt.XWindow;
+import com.sun.star.sdb.SQLFilterOperator;
 
 import com.sun.star.wizards.common.*;
 
@@ -60,7 +61,7 @@ public class SQLQueryComposer
     // String m_sFromClause;
     public XSingleSelectQueryAnalyzer m_xQueryAnalyzer;
     Vector composedCommandNames = new Vector(1);
-    private XSingleSelectQueryComposer m_xQueryComposer;
+    private XSingleSelectQueryComposer m_queryComposer;
     XMultiServiceFactory xMSF;
     boolean bincludeGrouping = true;
 
@@ -72,7 +73,7 @@ public class SQLQueryComposer
             xMSF = (XMultiServiceFactory) UnoRuntime.queryInterface(XMultiServiceFactory.class, CurDBMetaData.DBConnection);
             final Object oQueryComposer = xMSF.createInstance("com.sun.star.sdb.SingleSelectQueryComposer");
             m_xQueryAnalyzer = (XSingleSelectQueryAnalyzer) UnoRuntime.queryInterface(XSingleSelectQueryAnalyzer.class, oQueryComposer);
-            m_xQueryComposer = (XSingleSelectQueryComposer) UnoRuntime.queryInterface(XSingleSelectQueryComposer.class, m_xQueryAnalyzer);
+            m_queryComposer = (XSingleSelectQueryComposer) UnoRuntime.queryInterface(XSingleSelectQueryComposer.class, m_xQueryAnalyzer);
             XSQLQueryComposerFactory xSQLComposerFactory;
             xSQLComposerFactory = (XSQLQueryComposerFactory) UnoRuntime.queryInterface(XSQLQueryComposerFactory.class, CurDBMetaData.DBConnection);
         // /* XSQLQueryComposer */ xSQLQueryComposer = xSQLComposerFactory.createQueryComposer();
@@ -160,7 +161,7 @@ public class SQLQueryComposer
         {
             for (int i = 0; i < CurDBMetaData.getFilterConditions().length; i++)
             {
-                m_xQueryComposer.setStructuredFilter(CurDBMetaData.getFilterConditions());
+                m_queryComposer.setStructuredFilter(CurDBMetaData.getFilterConditions());
             }
         }
         catch (Exception exception)
@@ -172,7 +173,7 @@ public class SQLQueryComposer
     public void prependSortingCriteria() throws SQLException
     {
         XIndexAccess xColumnIndexAccess = m_xQueryAnalyzer.getOrderColumns();
-        m_xQueryComposer.setOrder("");
+        m_queryComposer.setOrder("");
         for (int i = 0; i < CurDBMetaData.getSortFieldNames().length; i++)
         {
             appendSortingCriterion(i, false);
@@ -186,7 +187,7 @@ public class SQLQueryComposer
                 if (JavaTools.FieldInTable(CurDBMetaData.getSortFieldNames(), sName) == -1)
                 {
                     boolean bascend = AnyConverter.toBoolean(xColumnPropertySet.getPropertyValue("IsAscending"));
-                    m_xQueryComposer.appendOrderByColumn(xColumnPropertySet, bascend);
+                    m_queryComposer.appendOrderByColumn(xColumnPropertySet, bascend);
                 }
             }
             catch (Exception e)
@@ -203,13 +204,13 @@ public class SQLQueryComposer
 
         String sSort = CurDBMetaData.getSortFieldNames()[_SortIndex][1];
         boolean bascend = (sSort.equals("ASC"));
-        m_xQueryComposer.appendOrderByColumn(xColumn, bascend);
+        m_queryComposer.appendOrderByColumn(xColumn, bascend);
     }
 
     public void appendSortingcriteria(boolean _baddAliasFieldNames) throws SQLException
     {
         String sOrder = "";
-        m_xQueryComposer.setOrder("");
+        m_queryComposer.setOrder("");
         for (int i = 0; i < CurDBMetaData.getSortFieldNames().length; i++)
         {
             String sSortValue = CurDBMetaData.getSortFieldNames()[i][0];
@@ -223,7 +224,7 @@ public class SQLQueryComposer
                 }
                 sOrder += CurDBMetaData.AggregateFieldNames[iAggregate][1] + "(" + CurDBMetaData.AggregateFieldNames[iAggregate][0] + ")";
                 sOrder += " " + CurDBMetaData.getSortFieldNames()[i][1];
-                m_xQueryComposer.setOrder(sOrder);
+                m_queryComposer.setOrder(sOrder);
             }
             else
             {
@@ -232,7 +233,7 @@ public class SQLQueryComposer
             sOrder = m_xQueryAnalyzer.getOrder();
         }
         // just for debug!
-        sOrder = m_xQueryComposer.getOrder();
+        sOrder = m_queryComposer.getOrder();
         int dummy = 0;
     }
 
@@ -241,7 +242,7 @@ public class SQLQueryComposer
         for (int i = 0; i < CurDBMetaData.GroupFieldNames.length; i++)
         {
             XPropertySet xColumn = CurDBMetaData.getColumnObjectByFieldName(CurDBMetaData.GroupFieldNames[i], _baddAliasFieldNames);
-            m_xQueryComposer.appendGroupByColumn(xColumn);
+            m_queryComposer.appendGroupByColumn(xColumn);
         }
         String s = m_xQueryAnalyzer.getQuery();
     }
@@ -309,7 +310,7 @@ public class SQLQueryComposer
                     if (CurDBMetaData.getFilterConditions().length > 0)
                     {
                         CurDBMetaData.setFilterConditions(replaceConditionsByAlias(CurDBMetaData.getFilterConditions()));
-                        m_xQueryComposer.setStructuredFilter(CurDBMetaData.getFilterConditions());
+                        m_queryComposer.setStructuredFilter(CurDBMetaData.getFilterConditions());
                     }
                 }
             }
@@ -319,7 +320,7 @@ public class SQLQueryComposer
                 appendGroupByColumns(_baddAliasFieldNames);
                 if (CurDBMetaData.GroupByFilterConditions.length > 0)
                 {
-                    m_xQueryComposer.setStructuredHavingClause(CurDBMetaData.GroupByFilterConditions);
+                    m_queryComposer.setStructuredHavingClause(CurDBMetaData.GroupByFilterConditions);
                 }
             }
             appendSortingcriteria(_baddAliasFieldNames);
@@ -426,8 +427,63 @@ public class SQLQueryComposer
             typeexception.printStackTrace(System.out);
         }
     }
+
+    /**
+     * retrieves a normalized structured filter
+     *
+     * <p>XSingleSelectQueryComposer.getStructuredFilter has a strange habit of returning the predicate (equal, not equal, etc)
+     * effectively twice: Once as SQLFilterOperator, and once in the value. That is, if you have a term "column <> 3", then
+     * you'll get an SQLFilterOperator.NOT_EQUAL (which is fine), <strong>and</strong> the textual value of the condition
+     * will read "<> 3". The latter is strange enough, but even more strange is that this behavior is not even consistent:
+     * for SQLFilterOperator.EQUAL, the "=" sign is not include in the textual value.</p>
+     *
+     * <p>To abstract from this weirdness, use this function here, which strips the unwanted tokens from the textual value
+     * representation.</p>
+     */
+    public PropertyValue[][] getNormalizedStructuredFilter()
+    {
+        final PropertyValue[][] structuredFilter = m_queryComposer.getStructuredFilter();
+        for ( int i=0; i<structuredFilter.length; ++i )
+        {
+            for ( int j=0; j<structuredFilter[i].length; ++j )
+            {
+                if ( !( structuredFilter[i][j].Value instanceof String ) )
+                    continue;
+                final StringBuffer textualValue = new StringBuffer( (String)structuredFilter[i][j].Value );
+                switch ( structuredFilter[i][j].Handle )
+                {
+                case SQLFilterOperator.EQUAL:
+                    break;
+                case SQLFilterOperator.NOT_EQUAL:
+                case SQLFilterOperator.LESS_EQUAL:
+                case SQLFilterOperator.GREATER_EQUAL:
+                    textualValue.delete( 0, 2 );
+                    break;
+                case SQLFilterOperator.LESS:
+                case SQLFilterOperator.GREATER:
+                    textualValue.delete( 0, 1 );
+                    break;
+                case SQLFilterOperator.NOT_LIKE:
+                    textualValue.delete( 0, 8 );
+                    break;
+                case SQLFilterOperator.LIKE:
+                    textualValue.delete( 0, 4 );
+                    break;
+                case SQLFilterOperator.SQLNULL:
+                    textualValue.delete( 0, 7 );
+                    break;
+                case SQLFilterOperator.NOT_SQLNULL:
+                    textualValue.delete( 0, 11 );
+                    break;
+                }
+                structuredFilter[i][j].Value = textualValue.toString().trim();
+            }
+        }
+        return structuredFilter;
+    }
+
     public XSingleSelectQueryComposer getQueryComposer()
     {
-        return m_xQueryComposer;
+        return m_queryComposer;
     }
 }

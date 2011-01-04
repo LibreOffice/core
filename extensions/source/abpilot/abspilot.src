@@ -71,6 +71,7 @@ ModalDialog RID_DLG_ADDRESSBOOKSOURCEPILOT
 //........................................................................
 TabPage RID_PAGE_SELECTABTYPE
 {
+    HelpID = "extensions:TabPage:RID_PAGE_SELECTABTYPE";
     SVLook  = TRUE ;
     Size    = MAP_APPFONT ( WINDOW_SIZE_X , WINDOW_SIZE_Y ) ;
 
@@ -93,56 +94,67 @@ TabPage RID_PAGE_SELECTABTYPE
 
     RadioButton RB_EVOLUTION
      {
+        HelpID = "extensions:RadioButton:RID_PAGE_SELECTABTYPE:RB_EVOLUTION";
          Size   = MAP_APPFONT ( WINDOW_SIZE_X - 30, 8 ) ;
         Text [ en-US ] = "Evolution";
     };
     RadioButton RB_EVOLUTION_GROUPWISE
      {
+        HelpID = "extensions:RadioButton:RID_PAGE_SELECTABTYPE:RB_EVOLUTION_GROUPWISE";
          Size   = MAP_APPFONT ( WINDOW_SIZE_X - 30, 8 ) ;
         Text [ en-US ] = "Groupwise";
     };
     RadioButton RB_EVOLUTION_LDAP
      {
+        HelpID = "extensions:RadioButton:RID_PAGE_SELECTABTYPE:RB_EVOLUTION_LDAP";
          Size   = MAP_APPFONT ( WINDOW_SIZE_X - 30, 8 ) ;
         Text [ en-US ] = "Evolution LDAP";
     };
     RadioButton RB_MORK
     {
+        HelpID = "extensions:RadioButton:RID_PAGE_SELECTABTYPE:RB_MORK";
         Size    = MAP_APPFONT ( WINDOW_SIZE_X - 30, 8 ) ;
         Text [ en-US ] = "Mozilla / Netscape";
     };
     RadioButton RB_THUNDERBIRD
     {
+        HelpID = "extensions:RadioButton:RID_PAGE_SELECTABTYPE:RB_THUNDERBIRD";
         Size    = MAP_APPFONT ( WINDOW_SIZE_X - 30, 8 ) ;
         Text [ en-US ] = "Thunderbird";
     };
     RadioButton RB_KAB
      {
+        HelpID = "extensions:RadioButton:RID_PAGE_SELECTABTYPE:RB_KAB";
          Size   = MAP_APPFONT ( WINDOW_SIZE_X - 30, 8 ) ;
         Text [ en-US ] = "KDE address book";
     };
     RadioButton RB_MACAB
     {
+        HelpID = "extensions:RadioButton:RID_PAGE_SELECTABTYPE:RB_MACAB";
         Size    = MAP_APPFONT ( WINDOW_SIZE_X - 30, 8 ) ;
         Text [ en-US ] = "Mac OS X address book";
     };
     RadioButton RB_LDAP
     {
+        HelpID = "extensions:RadioButton:RID_PAGE_SELECTABTYPE:RB_LDAP";
         Size    = MAP_APPFONT ( WINDOW_SIZE_X - 30, 8 ) ;
         Text [ en-US ] = "LDAP address data";
     };
     RadioButton RB_OUTLOOK
     {
+        HelpID = "extensions:RadioButton:RID_PAGE_SELECTABTYPE:RB_OUTLOOK";
         Size    = MAP_APPFONT ( WINDOW_SIZE_X - 30, 8 ) ;
         Text [ en-US ] = "Outlook address book";
     };
     RadioButton RB_OUTLOOKEXPRESS
     {
+        HelpID = "extensions:RadioButton:RID_PAGE_SELECTABTYPE:RB_OUTLOOKEXPRESS";
         Size    = MAP_APPFONT ( WINDOW_SIZE_X - 30, 8 ) ;
         Text [ en-US ] = "Windows system address book";
     };
     RadioButton RB_OTHER
     {
+        HelpID = "extensions:RadioButton:RID_PAGE_SELECTABTYPE:RB_OTHER";
         Size    = MAP_APPFONT ( WINDOW_SIZE_X - 30, 8 ) ;
         Text [ en-US ] = "Other external data source";
     };
@@ -151,6 +163,7 @@ TabPage RID_PAGE_SELECTABTYPE
 //........................................................................
 TabPage RID_PAGE_ADMININVOKATION
 {
+    HelpID = "extensions:TabPage:RID_PAGE_ADMININVOKATION";
     SVLook  = TRUE ;
     Size    = MAP_APPFONT ( WINDOW_SIZE_X , WINDOW_SIZE_Y ) ;
 
@@ -165,6 +178,7 @@ TabPage RID_PAGE_ADMININVOKATION
 
     PushButton PB_INVOKE_ADMIN_DIALOG
     {
+        HelpID = "extensions:PushButton:RID_PAGE_ADMININVOKATION:PB_INVOKE_ADMIN_DIALOG";
         Pos     = MAP_APPFONT ( ( WINDOW_SIZE_X - BUTTON_SIZE_X ) / 2, 60 ) ;
         Size    = MAP_APPFONT ( BUTTON_SIZE_X, BUTTON_SIZE_Y ) ;
 
@@ -185,6 +199,7 @@ TabPage RID_PAGE_ADMININVOKATION
 //........................................................................
 TabPage RID_PAGE_TABLESELECTION_AB
 {
+    HelpID = "extensions:TabPage:RID_PAGE_TABLESELECTION_AB";
     SVLook  = TRUE ;
     Size    = MAP_APPFONT ( WINDOW_SIZE_X , WINDOW_SIZE_Y ) ;
 
@@ -199,6 +214,7 @@ TabPage RID_PAGE_TABLESELECTION_AB
 
     ListBox LB_TABLELIST
     {
+        HelpID = "extensions:ListBox:RID_PAGE_TABLESELECTION_AB:LB_TABLELIST";
         Pos     = MAP_APPFONT ( BORDER_X, 36 ) ;
         Size    = MAP_APPFONT ( WINDOW_SIZE_X - 2 * BORDER_X, 50 ) ;
         SVLook = TRUE;
@@ -212,6 +228,7 @@ TabPage RID_PAGE_TABLESELECTION_AB
 //........................................................................
 TabPage RID_PAGE_FIELDMAPPING
 {
+    HelpID = "extensions:TabPage:RID_PAGE_FIELDMAPPING";
     SVLook  = TRUE ;
     Size    = MAP_APPFONT ( WINDOW_SIZE_X , WINDOW_SIZE_Y ) ;
 
@@ -226,6 +243,7 @@ TabPage RID_PAGE_FIELDMAPPING
 
     PushButton PB_INVOKE_FIELDS_DIALOG
     {
+        HelpID = "extensions:PushButton:RID_PAGE_FIELDMAPPING:PB_INVOKE_FIELDS_DIALOG";
         Pos     = MAP_APPFONT ( ( WINDOW_SIZE_X - BUTTON_SIZE_X ) / 2, 84 ) ;
         Size    = MAP_APPFONT ( BUTTON_SIZE_X, BUTTON_SIZE_Y ) ;
 
@@ -243,6 +261,7 @@ TabPage RID_PAGE_FIELDMAPPING
 //........................................................................
 TabPage RID_PAGE_FINAL
 {
+    HelpID = "extensions:TabPage:RID_PAGE_FINAL";
     SVLook  = TRUE ;
     Size    = MAP_APPFONT ( WINDOW_SIZE_X , WINDOW_SIZE_Y ) ;
 
@@ -266,6 +285,7 @@ TabPage RID_PAGE_FINAL
 
     ComboBox CBB_LOCATION
     {
+        HelpID = "extensions:ComboBox:RID_PAGE_FINAL:CBB_LOCATION";
         Pos     = MAP_APPFONT ( BORDER_X , 64 ) ;
         Size    = MAP_APPFONT ( WINDOW_SIZE_X - 53 - BORDER_X - BORDER_X, 12) ;
         SVLook = TRUE;
@@ -276,6 +296,7 @@ TabPage RID_PAGE_FINAL
 
     PushButton PB_BROWSE
     {
+        HelpID = "extensions:PushButton:RID_PAGE_FINAL:PB_BROWSE";
         Pos     = MAP_APPFONT ( WINDOW_SIZE_X - 50 - BORDER_X  , 63 ) ;
         Size    = MAP_APPFONT ( 50, 14) ;
         SVLook = TRUE;
@@ -286,6 +307,7 @@ TabPage RID_PAGE_FINAL
 
     CheckBox CB_REGISTER_DS
     {
+        HelpID = "extensions:CheckBox:RID_PAGE_FINAL:CB_REGISTER_DS";
         Pos     = MAP_APPFONT ( BORDER_X, 82 ) ;
         Size    = MAP_APPFONT ( WINDOW_SIZE_X - BORDER_X - BORDER_X, 8) ;
         SVLook = TRUE;
@@ -303,6 +325,7 @@ TabPage RID_PAGE_FINAL
 
     Edit ET_DATASOURCENAME
     {
+        HelpID = "extensions:Edit:RID_PAGE_FINAL:ET_DATASOURCENAME";
         Pos     = MAP_APPFONT ( BORDER_X + 10, 104 ) ;
         Size    = MAP_APPFONT ( WINDOW_SIZE_X - 56 - BORDER_X - BORDER_X - 10, 12) ;
         SVLook = TRUE;

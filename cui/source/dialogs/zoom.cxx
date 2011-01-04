@@ -181,7 +181,7 @@ SvxZoomDialog::SvxZoomDialog( Window* pParent, const SfxItemSet& rCoreSet ) :
 
 {
 #if ENABLE_LAYOUT
-    SetHelpId (SID_ATTR_ZOOM);
+    SetHelpId (".uno:Zoom");
 #endif /* ENABLE_LAYOUT */
     Link aLink = LINK( this, SvxZoomDialog, UserHdl );
     a100Btn.SetClickHdl( aLink );

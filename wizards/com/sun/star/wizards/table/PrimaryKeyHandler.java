@@ -99,7 +99,7 @@ public class PrimaryKeyHandler implements XFieldSelectionListener
                 },
                 new Object[]
                 {
-                    UIConsts.INTEGERS[8], "HID:41227", screatePrimaryKey, new Integer(97), new Integer(70), new Short((short) 1), IPRIMEKEYSTEP, new Short(curtabindex++), new Integer(160)
+                    UIConsts.INTEGERS[8], "HID:WIZARDS_HID_DLGTABLE_CHK_USEPRIMEKEY", screatePrimaryKey, new Integer(97), new Integer(70), new Short((short) 1), IPRIMEKEYSTEP, new Short(curtabindex++), new Integer(160)
                 });
 
         optAddAutomatically = CurUnoDialog.insertRadioButton("optAddAutomatically", SPRIMEKEYMODE, this,
@@ -109,7 +109,7 @@ public class PrimaryKeyHandler implements XFieldSelectionListener
                 },
                 new Object[]
                 {
-                    UIConsts.INTEGERS[8], "HID:41228", sAddAutomatically, new Integer(106), new Integer(82), new Short((short) 1), IPRIMEKEYSTEP, new Short(curtabindex++), new Integer(200)
+                    UIConsts.INTEGERS[8], "HID:WIZARDS_HID_DLGTABLE_OPT_PK_AUTOMATIC", sAddAutomatically, new Integer(106), new Integer(82), new Short((short) 1), IPRIMEKEYSTEP, new Short(curtabindex++), new Integer(200)
                 });
 
         optUseExisting = CurUnoDialog.insertRadioButton("optUseExisting", SPRIMEKEYMODE, this,
@@ -119,7 +119,7 @@ public class PrimaryKeyHandler implements XFieldSelectionListener
                 }, //94
                 new Object[]
                 {
-                    UIConsts.INTEGERS[8], "HID:41230", sUseExisting, new Integer(106), new Integer(104), IPRIMEKEYSTEP, new Short(curtabindex++), new Integer(200)
+                    UIConsts.INTEGERS[8], "HID:WIZARDS_HID_DLGTABLE_OPT_PK_SINGLE", sUseExisting, new Integer(106), new Integer(104), IPRIMEKEYSTEP, new Short(curtabindex++), new Integer(200)
                 });
 
         optUseSeveral = CurUnoDialog.insertRadioButton("optUseSeveral", SPRIMEKEYMODE, this,
@@ -129,7 +129,7 @@ public class PrimaryKeyHandler implements XFieldSelectionListener
                 },
                 new Object[]
                 {
-                    UIConsts.INTEGERS[8], "HID:41233", sUseSeveral, new Integer(106), new Integer(132), IPRIMEKEYSTEP, new Short(curtabindex++), new Integer(200)
+                    UIConsts.INTEGERS[8], "HID:WIZARDS_HID_DLGTABLE_OPT_PK_SEVERAL", sUseSeveral, new Integer(106), new Integer(132), IPRIMEKEYSTEP, new Short(curtabindex++), new Integer(200)
                 });
 
         chkApplyAutoValueAutomatic = CurUnoDialog.insertCheckBox("chkApplyAutoValueAutomatic", SPRIMEKEYMODE, this,
@@ -139,7 +139,7 @@ public class PrimaryKeyHandler implements XFieldSelectionListener
                 }, //107
                 new Object[]
                 {
-                    UIConsts.INTEGERS[8], "HID:41229", sApplyAutoValue, new Integer(116), new Integer(92), IPRIMEKEYSTEP, new Short(curtabindex++), new Integer(68)
+                    UIConsts.INTEGERS[8], "HID:WIZARDS_HID_DLGTABLE_CK_PK_AUTOVALUE_AUTOMATIC", sApplyAutoValue, new Integer(116), new Integer(92), IPRIMEKEYSTEP, new Short(curtabindex++), new Integer(68)
                 });
 
         lblPrimeFieldName = CurUnoDialog.insertLabel("lblPrimeFieldName",
@@ -171,7 +171,7 @@ public class PrimaryKeyHandler implements XFieldSelectionListener
                     Boolean.TRUE,
                     Boolean.FALSE,
                     new Integer(12),
-                    "HID:41231",
+                    "HID:WIZARDS_HID_DLGTABLE_LB_PK_FIELDNAME",
                     Short.valueOf(UnoDialog.getListBoxLineCount()),
                     new Integer(162),
                     new Integer(115),
@@ -187,7 +187,7 @@ public class PrimaryKeyHandler implements XFieldSelectionListener
                 }, //107
                 new Object[]
                 {
-                    UIConsts.INTEGERS[8], "HID:41232", sApplyAutoValue, new Integer(248), new Integer(117), IPRIMEKEYSTEP, new Short(curtabindex++), new Integer(66)
+                    UIConsts.INTEGERS[8], "HID:WIZARDS_HID_DLGTABLE_CK_PK_AUTOVALUE", sApplyAutoValue, new Integer(248), new Integer(117), IPRIMEKEYSTEP, new Short(curtabindex++), new Integer(66)
                 });
         curPrimaryKeySelection = new FieldSelection(CurUnoDialog, IPRIMEKEYSTEP.intValue(), 116, 142, 208, 47, slblAvailableFields, slblSelPrimaryFields, 41234, false);
         curPrimaryKeySelection.addFieldSelectionListener(this);

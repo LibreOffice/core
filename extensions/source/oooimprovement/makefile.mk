@@ -102,3 +102,11 @@ $(SPOOLDIR)$/$(PACKAGEDIR)$/Jobs$/Jobs-oooimprovement.xcu : $(XCU_SOURCEDIR)$/Jo
 $(SPOOLDIR)$/$(PACKAGEDIR)$/Logging$/Logging-oooimprovement.xcu : $(XCU_SOURCEDIR)$/Logging.xcu
     @-$(MKDIRHIER) $(@:d)
     @$(COPY) $< $@
+
+ALLTAR : $(MISC)/oooimprovement.component
+
+$(MISC)/oooimprovement.component .ERRREMOVE : \
+        $(SOLARENV)/bin/createcomponent.xslt oooimprovement.component
+    $(XSLTPROC) --nonet --stringparam uri \
+        '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL1TARGETN:f)' -o $@ \
+        $(SOLARENV)/bin/createcomponent.xslt oooimprovement.component

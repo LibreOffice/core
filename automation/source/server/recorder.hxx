@@ -27,7 +27,6 @@
 
 #include <tools/string.hxx>
 #include <tools/link.hxx>
-#include <vcl/smartid.hxx>
 #include <vcl/timer.hxx>
 
 class ToolBox;
@@ -38,7 +37,7 @@ class MacroRecorder
 {
 private:
     Window* GetParentWithID( Window* pThis );
-    SmartId GetParentID( Window* pThis );
+    rtl::OString GetParentID( Window* pThis );
 
     Link aEventListenerHdl;
     DECL_LINK( EventListener, VclSimpleEvent* );
@@ -51,7 +50,7 @@ private:
 
     // record keys
     String aKeyString;
-    SmartId aKeyUniqueID;     // has to be remembered seperately since Window might be gone when needed
+    rtl::OString aKeyUniqueID;     // has to be remembered seperately since Window might be gone when needed
     Window* pKeyWin;
     BOOL bKeyFollowFocus;
 
@@ -60,8 +59,8 @@ private:
     void RemoveEventHooks();
     DECL_LINK( HookRefreshHdl, void* );
 
-    void LogVCL( SmartId aParentID, USHORT nVCLWindowType, SmartId aID, String aMethod, USHORT aParam );
-    void LogVCL( SmartId aParentID, USHORT nVCLWindowType, SmartId aID, String aMethod );
+    void LogVCL( rtl::OString aParentID, USHORT nVCLWindowType, rtl::OString aID, String aMethod, USHORT aParam );
+    void LogVCL( rtl::OString aParentID, USHORT nVCLWindowType, rtl::OString aID, String aMethod );
 
     static MacroRecorder *pMacroRecorder;
 

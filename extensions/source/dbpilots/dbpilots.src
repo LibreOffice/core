@@ -31,6 +31,7 @@
 
 ModalDialog RID_DLG_GROUPBOXWIZARD
 {
+    HelpID = "extensions:ModalDialog:RID_DLG_GROUPBOXWIZARD";
     Text [ en-US ] = "Group Element Wizard";
 
     OutputSize      = TRUE ;
@@ -42,6 +43,7 @@ ModalDialog RID_DLG_GROUPBOXWIZARD
 
 ModalDialog RID_DLG_LISTCOMBOWIZARD
 {
+    HelpID = "extensions:ModalDialog:RID_DLG_LISTCOMBOWIZARD";
     OutputSize      = TRUE ;
     SVLook          = TRUE ;
     Moveable        = TRUE ;
@@ -51,6 +53,7 @@ ModalDialog RID_DLG_LISTCOMBOWIZARD
 
 ModalDialog RID_DLG_GRIDWIZARD
 {
+    HelpID = "extensions:ModalDialog:RID_DLG_GRIDWIZARD";
     OutputSize      = TRUE ;
     SVLook          = TRUE ;
     Moveable        = TRUE ;

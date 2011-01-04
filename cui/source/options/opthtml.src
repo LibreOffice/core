@@ -32,7 +32,7 @@
  // RID_OFAPAGE_HTMLOPT -----------------------------------------------------
 TabPage RID_OFAPAGE_HTMLOPT
 {
-     // HelpId = ;
+    HelpID = "cui:TabPage:RID_OFAPAGE_HTMLOPT";
     OutputSize = TRUE ;
     Size = MAP_APPFONT ( 260 , 185 ) ;
     SVLook = TRUE ;
@@ -45,6 +45,7 @@ TabPage RID_OFAPAGE_HTMLOPT
     };
     NumericField NF_SIZE1
     {
+        HelpID = "cui:NumericField:RID_OFAPAGE_HTMLOPT:NF_SIZE1";
         Pos = MAP_APPFONT ( 45 , 14 ) ;
         Size = MAP_APPFONT ( 30 , 12 ) ;
         Border = TRUE ;
@@ -67,6 +68,7 @@ TabPage RID_OFAPAGE_HTMLOPT
     };
     NumericField NF_SIZE2
     {
+        HelpID = "cui:NumericField:RID_OFAPAGE_HTMLOPT:NF_SIZE2";
         Pos = MAP_APPFONT ( 45 , 30 ) ;
         Size = MAP_APPFONT ( 30 , 12 ) ;
         Border = TRUE ;
@@ -89,6 +91,7 @@ TabPage RID_OFAPAGE_HTMLOPT
     };
     NumericField NF_SIZE3
     {
+        HelpID = "cui:NumericField:RID_OFAPAGE_HTMLOPT:NF_SIZE3";
         Pos = MAP_APPFONT ( 45 , 46 ) ;
         Size = MAP_APPFONT ( 30 , 12 ) ;
         Border = TRUE ;
@@ -111,6 +114,7 @@ TabPage RID_OFAPAGE_HTMLOPT
     };
     NumericField NF_SIZE4
     {
+        HelpID = "cui:NumericField:RID_OFAPAGE_HTMLOPT:NF_SIZE4";
         Pos = MAP_APPFONT ( 45 , 62 ) ;
         Size = MAP_APPFONT ( 30 , 12 ) ;
         Border = TRUE ;
@@ -133,6 +137,7 @@ TabPage RID_OFAPAGE_HTMLOPT
     };
     NumericField NF_SIZE5
     {
+        HelpID = "cui:NumericField:RID_OFAPAGE_HTMLOPT:NF_SIZE5";
         Pos = MAP_APPFONT ( 45 , 78 ) ;
         Size = MAP_APPFONT ( 30 , 12 ) ;
         Border = TRUE ;
@@ -155,6 +160,7 @@ TabPage RID_OFAPAGE_HTMLOPT
     };
     NumericField NF_SIZE6
     {
+        HelpID = "cui:NumericField:RID_OFAPAGE_HTMLOPT:NF_SIZE6";
         Pos = MAP_APPFONT ( 45 , 94 ) ;
         Size = MAP_APPFONT ( 30 , 12 ) ;
         Border = TRUE ;
@@ -177,6 +183,7 @@ TabPage RID_OFAPAGE_HTMLOPT
     };
     NumericField NF_SIZE7
     {
+        HelpID = "cui:NumericField:RID_OFAPAGE_HTMLOPT:NF_SIZE7";
         Pos = MAP_APPFONT ( 45 , 110 ) ;
         Size = MAP_APPFONT ( 30 , 12 ) ;
         Border = TRUE ;
@@ -205,6 +212,7 @@ TabPage RID_OFAPAGE_HTMLOPT
     };
     CheckBox CB_NUMBERS_ENGLISH_US
     {
+        HelpID = "cui:CheckBox:RID_OFAPAGE_HTMLOPT:CB_NUMBERS_ENGLISH_US";
         Pos = MAP_APPFONT ( 93 , 14 ) ;
         Size = MAP_APPFONT ( 161 , 10 ) ;
         TabStop = TRUE ;
@@ -212,6 +220,7 @@ TabPage RID_OFAPAGE_HTMLOPT
     };
     CheckBox CB_UNKNOWN_TAGS
     {
+        HelpID = "cui:CheckBox:RID_OFAPAGE_HTMLOPT:CB_UNKNOWN_TAGS";
         Pos = MAP_APPFONT ( 93 , 28 ) ;
         Size = MAP_APPFONT ( 155 , 10 ) ;
         TabStop = TRUE ;
@@ -219,6 +228,7 @@ TabPage RID_OFAPAGE_HTMLOPT
     };
     CheckBox CB_IGNORE_FONTNAMES
     {
+        HelpID = "cui:CheckBox:RID_OFAPAGE_HTMLOPT:CB_IGNORE_FONTNAMES";
         Pos = MAP_APPFONT ( 93 , 42 ) ;
         Size = MAP_APPFONT ( 155 , 10 ) ;
         TabStop = TRUE ;
@@ -232,6 +242,7 @@ TabPage RID_OFAPAGE_HTMLOPT
     };
     ListBox LB_EXPORT
     {
+        HelpID = "cui:ListBox:RID_OFAPAGE_HTMLOPT:LB_EXPORT";
         Pos = MAP_APPFONT ( 93 , 69 ) ;
         Size = MAP_APPFONT ( 155 , 50 ) ;
         Border = TRUE ;
@@ -246,24 +257,28 @@ TabPage RID_OFAPAGE_HTMLOPT
     };
     CheckBox CB_STARBASIC
     {
+        HelpID = "cui:CheckBox:RID_OFAPAGE_HTMLOPT:CB_STARBASIC";
         Pos = MAP_APPFONT ( 93 , 88 ) ;
         Size = MAP_APPFONT ( 155 , 10 ) ;
         Text = "%PRODUCTNAME ~Basic" ;
     };
     CheckBox CB_STARBASIC_WARNING
     {
+        HelpID = "cui:CheckBox:RID_OFAPAGE_HTMLOPT:CB_STARBASIC_WARNING";
         Pos = MAP_APPFONT ( 99 , 102 ) ;
         Size = MAP_APPFONT ( 149 , 10 ) ;
         Text [ en-US ] = "Display ~warning";
     };
     CheckBox CB_PRINT_EXTENSION
     {
+        HelpID = "cui:CheckBox:RID_OFAPAGE_HTMLOPT:CB_PRINT_EXTENSION";
         Pos = MAP_APPFONT ( 93 , 116 ) ;
         Size = MAP_APPFONT ( 155 , 10 ) ;
         Text [ en-US ] = "~Print layout" ;
     };
     CheckBox CB_LOCAL_GRF
     {
+        HelpID = "cui:CheckBox:RID_OFAPAGE_HTMLOPT:CB_LOCAL_GRF";
         Pos = MAP_APPFONT ( 93 , 130 ) ;
         Size = MAP_APPFONT ( 155 , 10 ) ;
         Text [ en-US ] = "~Copy local graphics to Internet" ;
@@ -277,6 +292,7 @@ TabPage RID_OFAPAGE_HTMLOPT
     };
     ListBox LB_CHARSET
     {
+        HelpID = "cui:ListBox:RID_OFAPAGE_HTMLOPT:LB_CHARSET";
         Pos = MAP_APPFONT ( 162 , 143 ) ;
         Size = MAP_APPFONT ( 86 , 61 ) ;
         TabStop = TRUE ;

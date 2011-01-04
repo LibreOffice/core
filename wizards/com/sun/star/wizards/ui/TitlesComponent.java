@@ -121,7 +121,7 @@ public class TitlesComponent extends ControlScroller
                     },
                     new Object[]
                     {
-                        new Integer(12), "HID:" + curHelpIndex++, new Integer(iLabelPosX + 30), new Integer(_iCompPosY), UIConsts.INVISIBLESTEP, new Short(curtabindex++), new Integer(iCompWidth - 90 - 20)
+                        new Integer(12), HelpIds.getHelpIdString(curHelpIndex++), new Integer(iLabelPosX + 30), new Integer(_iCompPosY), UIConsts.INVISIBLESTEP, new Short(curtabindex++), new Integer(iCompWidth - 90 - 20)
                     });
         }
     }

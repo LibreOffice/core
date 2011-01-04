@@ -1158,7 +1158,7 @@ namespace svx
         ,m_pCheckButtonData     ( NULL )
         ,m_xConversionDictionaryList( NULL )
     {
-        m_aDictsLB.SetWindowBits( WB_CLIPCHILDREN | WB_HSCROLL | WB_FORCE_MAKEVISIBLE );
+        m_aDictsLB.SetStyle( m_aDictsLB.GetStyle() | WB_CLIPCHILDREN | WB_HSCROLL | WB_FORCE_MAKEVISIBLE );
         m_aDictsLB.SetSelectionMode( SINGLE_SELECTION );
         m_aDictsLB.SetHighlightRange();
 //      m_aDictsLB.SetHelpId( xxx );

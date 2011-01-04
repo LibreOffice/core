@@ -54,7 +54,7 @@ ModalDialog GROSSER_TEST_DLG
     };
     OKButton 1
     {
-        HelpID = 1 ;
+        HelpID = "hid1" ;
         Pos = MAP_APPFONT ( 132 , 92 ) ;
         Size = MAP_APPFONT ( 64 , 12 ) ;
         TabStop = TRUE ;

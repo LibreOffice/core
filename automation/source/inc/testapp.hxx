@@ -30,7 +30,6 @@
 
 #include <basic/sbmod.hxx>
 #include <basic/testtool.hxx>
-#include <vcl/smartid.hxx>
 
 class CommunicationLink;
 class CommunicationManagerClientViaSocketTT;
@@ -129,7 +128,7 @@ private:
     BOOL bReturnOK;             // Bricht WaitForAnswer ab
     CRevNames *pShortNames;     // Aktuell verwendete Controls, zur gewinnung des Namens aus Fehlermeldung
     ULONG nSequence;            // Sequence um Antwort und Anfrage zu syncronisieren
-    SmartId aNextReturnId;  // Id des Returnwertes i.e. UId
+    rtl::OString aNextReturnId; // Id des Returnwertes i.e. UId
     void ReplaceNumbers(String &aText); // Zahlen im String mit speziellem Format in Namen umwandeln
 
     String aLastRecordedKontext;//  Keeps the last kontext recorded by the Macro Recorder

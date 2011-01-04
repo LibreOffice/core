@@ -153,7 +153,18 @@ public class LocalOfficeConnection
         {}
     }
 
-    /**
+        /**
+         * protected Constructor
+         * Initialise a LocalOfficeConnection with an already running office.
+         * This C'Tor is only used in complex tests at the moment.
+         * @param xContext
+         */
+        protected LocalOfficeConnection(com.sun.star.uno.XComponentContext xContext)
+        {
+            this.mContext = xContext;
+        }
+
+        /**
      * Sets a connection URL.
      * This implementation accepts a UNO URL with following format:<br />
      * <pre>

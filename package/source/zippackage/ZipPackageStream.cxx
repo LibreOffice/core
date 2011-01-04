@@ -46,6 +46,8 @@
 #include <comphelper/seekableinput.hxx>
 #include <comphelper/storagehelper.hxx>
 
+#include <rtl/instance.hxx>
+
 #include <PackageConstants.hxx>
 
 using namespace com::sun::star::packages::zip::ZipConstants;
@@ -56,8 +58,12 @@ using namespace com::sun::star;
 using namespace cppu;
 using namespace rtl;
 
-Sequence < sal_Int8 > ZipPackageStream::aImplementationId = Sequence < sal_Int8 > ();
+namespace { struct lcl_CachedImplId : public rtl::Static< Sequence < sal_Int8 >, lcl_CachedImplId > {}; }
 
+const ::com::sun::star::uno::Sequence < sal_Int8 >& ZipPackageStream::static_getImplementationId()
+{
+    return lcl_CachedImplId::get();
+}
 
 ZipPackageStream::ZipPackageStream ( ZipPackage & rNewPackage,
                                     const Reference< XMultiServiceFactory >& xFactory,
@@ -92,10 +98,9 @@ ZipPackageStream::ZipPackageStream ( ZipPackage & rNewPackage,
     aEntry.nPathLen     = -1;
     aEntry.nExtraLen    = -1;
 
-    if ( !aImplementationId.getLength() )
-        {
-            aImplementationId = getImplementationId();
-        }
+    Sequence < sal_Int8 > &rCachedImplId = lcl_CachedImplId::get();
+    if ( !rCachedImplId.getLength() )
+        rCachedImplId = getImplementationId();
 }
 
 ZipPackageStream::~ZipPackageStream( void )

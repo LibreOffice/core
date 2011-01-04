@@ -246,7 +246,7 @@ public class FaxWizardDialogImpl extends FaxWizardDialog
             myFaxDoc.killEmptyFrames();
 
 
-            bSaveSuccess = OfficeDocument.store(xMSF, xTextDocument, sPath, "writer8_template", false, "Template could not be saved to" + sPath);
+            bSaveSuccess = OfficeDocument.store(xMSF, xTextDocument, sPath, "writer8_template", false);
             if (bSaveSuccess)
             {
                 saveConfiguration();
@@ -340,7 +340,7 @@ public class FaxWizardDialogImpl extends FaxWizardDialog
     public void insertPathSelectionControl()
     {
         myPathSelection = new PathSelection(xMSF, this, PathSelection.TransferMode.SAVE, PathSelection.DialogTypes.FILE);
-        myPathSelection.insert(5, 97, 70, 205, (short) 45, resources.reslblTemplatePath_value, true, "HID:" + (HID + 34), "HID:" + (HID + 35));
+        myPathSelection.insert(5, 97, 70, 205, (short) 45, resources.reslblTemplatePath_value, true, HelpIds.getHelpIdString(HID + 34), HelpIds.getHelpIdString(HID + 35));
         myPathSelection.sDefaultDirectory = sUserTemplatePath;
         myPathSelection.sDefaultName = "myFaxTemplate.ott";
         myPathSelection.sDefaultFilter = "writer8_template";
@@ -381,7 +381,7 @@ public class FaxWizardDialogImpl extends FaxWizardDialog
         {
             sTemplatePath = FileAccess.getOfficePath(xMSF, "Template", "share", "/wizard");
             sUserTemplatePath = FileAccess.getOfficePath(xMSF, "Template", "user", "");
-            sBitmapPath = FileAccess.combinePaths(xMSF, sTemplatePath, "/wizard/bitmap");
+            sBitmapPath = FileAccess.combinePaths(xMSF, sTemplatePath, "/../wizard/bitmap");
         }
         catch (NoValidPathException e)
         {

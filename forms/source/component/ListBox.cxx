@@ -64,6 +64,8 @@
 #include <unotools/sharedunocomponent.hxx>
 #include <vcl/svapp.hxx>
 
+#include <boost/optional.hpp>
+
 #include <algorithm>
 #include <functional>
 
@@ -647,6 +649,8 @@ namespace frm
         DBG_ASSERT( m_eListSourceType != ListSourceType_VALUELIST, "OListBoxModel::loadData: cannot load value list from DB!" );
         DBG_ASSERT( !hasExternalListSource(), "OListBoxModel::loadData: cannot load from DB when I have an external list source!" );
 
+        const sal_Int16 nNULLPosBackup( m_nNULLPos );
+        const sal_Int32 nBoundColumnTypeBackup( m_nBoundColumnType );
         m_nNULLPos = -1;
         m_nBoundColumnType = DataType::SQLNULL;
 
@@ -675,9 +679,13 @@ namespace frm
             return;
         }
 
-        sal_Int16 nBoundColumn = 0;
-        if (m_aBoundColumn.getValueType().getTypeClass() == TypeClass_SHORT)
+        ::boost::optional< sal_Int16 > aBoundColumn;
+        if ( m_aBoundColumn.getValueType().getTypeClass() == TypeClass_SHORT )
+        {
+            sal_Int16 nBoundColumn( 0 );
             m_aBoundColumn >>= nBoundColumn;
+            aBoundColumn.reset( nBoundColumn );
+        }
 
         ::utl::SharedUNOComponent< XResultSet > xListCursor;
         try
@@ -701,14 +709,14 @@ namespace frm
                     ::rtl::OUString aFieldName;
                     ::rtl::OUString aBoundFieldName;
 
-                    if ((nBoundColumn > 0) && xFieldsByIndex.is())
+                    if ( !!aBoundColumn && ( *aBoundColumn >= 0 ) && xFieldsByIndex.is() )
                     {
-                        if (xFieldsByIndex->getCount() <= nBoundColumn)
+                        if ( *aBoundColumn >= xFieldsByIndex->getCount() )
                             break;
 
-                        Reference<XPropertySet> xFieldAsSet(xFieldsByIndex->getByIndex(nBoundColumn),UNO_QUERY);
+                        Reference<XPropertySet> xFieldAsSet(xFieldsByIndex->getByIndex( *aBoundColumn ),UNO_QUERY);
                         xFieldAsSet->getPropertyValue(PROPERTY_NAME) >>= aBoundFieldName;
-                        nBoundColumn = 1;
+                        aBoundColumn.reset( 1 );
 
                         xFieldAsSet.set(xFieldsByIndex->getByIndex(0),UNO_QUERY);
                         xFieldAsSet->getPropertyValue(PROPERTY_NAME) >>= aFieldName;
@@ -782,6 +790,8 @@ namespace frm
                     // if none of the settings of the row set changed, compared to the last
                     // invocation of loadData, then don't re-fill the list. Instead, assume
                     // the list entries are the same.
+                    m_nNULLPos = nNULLPosBackup;
+                    m_nBoundColumnType = nBoundColumnTypeBackup;
                     return;
                 }
                 xListCursor.reset( m_aListRowSet.execute() );
@@ -836,11 +846,11 @@ namespace frm
 
                     // Feld der BoundColumn des ResultSets holen
                     m_nBoundColumnType = DataType::SQLNULL;
-                    if ( ( nBoundColumn > 0 ) && m_xColumn.is() )
+                    if ( !!aBoundColumn && ( *aBoundColumn >= 0 ) && m_xColumn.is() )
                     {   // don't look for a bound column if we're not connected to a field
                         try
                         {
-                            Reference< XPropertySet > xBoundField( xColumns->getByIndex( nBoundColumn ), UNO_QUERY_THROW );
+                            Reference< XPropertySet > xBoundField( xColumns->getByIndex( *aBoundColumn ), UNO_QUERY_THROW );
                             OSL_VERIFY( xBoundField->getPropertyValue( ::rtl::OUString::createFromAscii( "Type" ) ) >>= m_nBoundColumnType );
                         }
                         catch( const Exception& )
@@ -864,7 +874,7 @@ namespace frm
 
                         if ( impl_hasBoundComponent() )
                         {
-                            aBoundValue.fill( nBoundColumn + 1, m_nBoundColumnType, xCursorRow );
+                            aBoundValue.fill( *aBoundColumn + 1, m_nBoundColumnType, xCursorRow );
                             aValueList.push_back( aBoundValue );
                         }
 

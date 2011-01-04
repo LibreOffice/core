@@ -47,24 +47,28 @@ TabPage RID_SVXPAGE_ONLINEUPDATE
     };
     CheckBox CB_AUTOCHECK
     {
+        HelpID = "cui:CheckBox:RID_SVXPAGE_ONLINEUPDATE:CB_AUTOCHECK";
         Pos = MAP_APPFONT ( 12, 14 ) ;
         Size = MAP_APPFONT ( 210, 10 ) ;
         Text [ en-US ] = "~Check for updates automatically" ;
     };
     RadioButton RB_EVERYDAY
     {
+        HelpID = "cui:RadioButton:RID_SVXPAGE_ONLINEUPDATE:RB_EVERYDAY";
         Pos = MAP_APPFONT ( 18, 27 ) ;
         Size = MAP_APPFONT ( 160, 10 ) ;
         Text [ en-US ] = "Every Da~y" ;
     };
     RadioButton RB_EVERYWEEK
     {
+        HelpID = "cui:RadioButton:RID_SVXPAGE_ONLINEUPDATE:RB_EVERYWEEK";
         Pos = MAP_APPFONT ( 18, 40 ) ;
         Size = MAP_APPFONT ( 160, 10 ) ;
         Text [ en-US ] = "Every ~Week" ;
     };
     RadioButton RB_EVERYMONTH
     {
+        HelpID = "cui:RadioButton:RID_SVXPAGE_ONLINEUPDATE:RB_EVERYMONTH";
         Pos = MAP_APPFONT ( 18, 53 ) ;
         Size = MAP_APPFONT ( 160, 10 ) ;
         Text [ en-US ] = "Every ~Month" ;
@@ -77,12 +81,14 @@ TabPage RID_SVXPAGE_ONLINEUPDATE
     };
     PushButton PB_CHECKNOW
     {
+        HelpID = "cui:PushButton:RID_SVXPAGE_ONLINEUPDATE:PB_CHECKNOW";
         Pos = MAP_APPFONT ( 12, 82 ) ;
         Size = MAP_APPFONT ( 50, 14 ) ;
         Text [ en-US ] = "Check ~now" ;
     };
     CheckBox CB_AUTODOWNLOAD
     {
+        HelpID = "cui:CheckBox:RID_SVXPAGE_ONLINEUPDATE:CB_AUTODOWNLOAD";
         Pos = MAP_APPFONT ( 12, 130 ) ;
         Size = MAP_APPFONT ( 160, 10 ) ;
         Text [ en-US ] = "~Download updates automatically" ;
@@ -100,6 +106,7 @@ TabPage RID_SVXPAGE_ONLINEUPDATE
     };
     PushButton PB_CHANGEPATH
     {
+        HelpID = "cui:PushButton:RID_SVXPAGE_ONLINEUPDATE:PB_CHANGEPATH";
         Pos = MAP_APPFONT ( 162, 151 ) ;
         Size = MAP_APPFONT ( 50, 14 ) ;
         Text [ en-US ] = "Ch~ange..." ;

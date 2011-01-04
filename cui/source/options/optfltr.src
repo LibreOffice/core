@@ -32,7 +32,7 @@
 // RID_OFAPAGE_MSFILTEROPT -----------------------------------------------------
 TabPage RID_OFAPAGE_MSFILTEROPT
 {
-     // HelpId = ;
+    HelpID = "cui:TabPage:RID_OFAPAGE_MSFILTEROPT";
     OutputSize = TRUE ;
     Size = MAP_APPFONT ( 260 , 185 ) ;
     SVLook = TRUE ;
@@ -46,6 +46,7 @@ TabPage RID_OFAPAGE_MSFILTEROPT
     };
     CheckBox CB_WBAS_CODE
     {
+        HelpID = "cui:CheckBox:RID_OFAPAGE_MSFILTEROPT:CB_WBAS_CODE";
         Pos = MAP_APPFONT ( 12 , 14 ) ;
         Size = MAP_APPFONT ( 236 , 10 ) ;
         TabStop = TRUE ;
@@ -53,6 +54,7 @@ TabPage RID_OFAPAGE_MSFILTEROPT
     };
     CheckBox CB_WBAS_STG
     {
+        HelpID = "cui:CheckBox:RID_OFAPAGE_MSFILTEROPT:CB_WBAS_STG";
         Pos = MAP_APPFONT ( 12 , 28 ) ;
         Size = MAP_APPFONT ( 236 , 10 ) ;
         TabStop = TRUE ;
@@ -67,6 +69,7 @@ TabPage RID_OFAPAGE_MSFILTEROPT
     };
     CheckBox CB_EBAS_CODE
     {
+        HelpID = "cui:CheckBox:RID_OFAPAGE_MSFILTEROPT:CB_EBAS_CODE";
         Pos = MAP_APPFONT ( 12 , 55 ) ;
         Size = MAP_APPFONT ( 236 , 10 ) ;
         TabStop = TRUE ;
@@ -74,6 +77,7 @@ TabPage RID_OFAPAGE_MSFILTEROPT
     };
     CheckBox CB_EBAS_EXECTBL
     {
+        HelpID = "cui:CheckBox:RID_OFAPAGE_MSFILTEROPT:CB_EBAS_EXECTBL";
         Pos = MAP_APPFONT ( 22 , 69 ) ;
         Size = MAP_APPFONT ( 236 , 10 ) ;
         TabStop = TRUE ;
@@ -81,6 +85,7 @@ TabPage RID_OFAPAGE_MSFILTEROPT
     };
     CheckBox CB_EBAS_STG
     {
+        HelpID = "cui:CheckBox:RID_OFAPAGE_MSFILTEROPT:CB_EBAS_STG";
         Pos = MAP_APPFONT ( 12 , 83 ) ;
         Size = MAP_APPFONT ( 236 , 10 ) ;
         TabStop = TRUE ;
@@ -95,6 +100,7 @@ TabPage RID_OFAPAGE_MSFILTEROPT
     };
     CheckBox CB_PBAS_CODE
     {
+        HelpID = "cui:CheckBox:RID_OFAPAGE_MSFILTEROPT:CB_PBAS_CODE";
         Pos = MAP_APPFONT ( 12 , 110 ) ;
         Size = MAP_APPFONT ( 236 , 10 ) ;
         TabStop = TRUE ;
@@ -102,6 +108,7 @@ TabPage RID_OFAPAGE_MSFILTEROPT
     };
     CheckBox CB_PBAS_STG
     {
+        HelpID = "cui:CheckBox:RID_OFAPAGE_MSFILTEROPT:CB_PBAS_STG";
         Pos = MAP_APPFONT ( 12 , 124 ) ;
         Size = MAP_APPFONT ( 236 , 10 ) ;
         TabStop = TRUE ;
@@ -112,7 +119,7 @@ TabPage RID_OFAPAGE_MSFILTEROPT
 // RID_OFAPAGE_MSFILTEROPT2 -----------------------------------------------------
 TabPage RID_OFAPAGE_MSFILTEROPT2
 {
-     // HelpId = ;
+    HelpID = "cui:TabPage:RID_OFAPAGE_MSFILTEROPT2";
     OutputSize = TRUE ;
     Size = MAP_APPFONT ( 260 , 185 ) ;
     SVLook = TRUE ;

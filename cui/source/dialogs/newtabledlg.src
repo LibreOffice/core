@@ -30,6 +30,7 @@
 
 ModalDialog RID_SVX_NEWTABLE_DLG
 {
+    HelpID = "cui:ModalDialog:RID_SVX_NEWTABLE_DLG";
     OutputSize = TRUE;
     SVLook = TRUE ;
     Moveable = TRUE ;
@@ -44,6 +45,7 @@ ModalDialog RID_SVX_NEWTABLE_DLG
     };
     NumericField NF_COLUMNS
     {
+        HelpID = "cui:NumericField:RID_SVX_NEWTABLE_DLG:NF_COLUMNS";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 80 , 6 ) ;
         Size = MAP_APPFONT ( 40 , 12 ) ;
@@ -63,6 +65,7 @@ ModalDialog RID_SVX_NEWTABLE_DLG
     };
     NumericField NF_ROWS
     {
+        HelpID = "cui:NumericField:RID_SVX_NEWTABLE_DLG:NF_ROWS";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 80 , 6+15 ) ;
         Size = MAP_APPFONT ( 40 , 12 ) ;

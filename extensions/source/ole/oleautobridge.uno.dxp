@@ -1,4 +1,3 @@
-component_writeInfo @100 
 component_getFactory @101
 component_getImplementationEnvironment @102
 component_canUnload @103
