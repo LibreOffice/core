@@ -2552,7 +2552,7 @@ sal_Int32 SAL_CALL SwXTextDocument::getRendererCount(
                     m_pRenderData->ViewOptionAdjustStart( *pWrtShell, *pWrtShell->GetViewOptions() );
             }
 
-            m_pRenderData->SetSwPrtOptions( new SwPrtOptions( rtl::OUString::createFromAscii( bIsPDFExport ? "PDF export" : "Printing" ) ) );
+            m_pRenderData->SetSwPrtOptions( new SwPrtOptions( bIsPDFExport ? rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PDF export")) : rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Printing") ) ) );
             m_pRenderData->MakeSwPrtOptions( m_pRenderData->GetSwPrtOptionsRef(), pRenderDocShell,
                     m_pPrintUIOptions, m_pRenderData, bIsPDFExport );
 
