@@ -42,6 +42,7 @@
 
 #include <math.h>
 
+#define MDDS_HASH_CONTAINER_STLPORT 1
 #include <mdds/mixed_type_matrix.hpp>
 
 using ::std::pair;
