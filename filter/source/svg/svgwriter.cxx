@@ -265,6 +265,7 @@ NMSP_RTL::OUString SVGAttributeWriter::GetFontStyle( const Font& rFont )
     aStyle += B2UCONST( ";" );
     aStyle += B2UCONST( "font-size:" );
     aStyle += SVGActionWriter::GetValueString( rFont.GetHeight() );
+    aStyle += B2UCONST( "px" );
 
     // font style
 /*
