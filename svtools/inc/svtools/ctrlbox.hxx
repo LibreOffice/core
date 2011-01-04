@@ -394,16 +394,33 @@ SVT_DLLPUBLIC inline Color sameDistColor( Color /*rMain*/, Color rDefault )
     return rDefault;
 }
 
+/**
+    Class computing border widths shared between Line style listbox and the
+    SvxBorderLine implementation.
+
+    This class doesn't know anything about units: it all depends on the different
+    values set. A border is composed of 2 lines separated by a gap. The computed
+    widths are the ones of each line and the gap and they can either be fix or vary.
+
+    The #m_nflags member will define which widths will vary (value 0 means that all
+    widths are fixed). The available flags are:
+     - CHANGE_LINE1
+     - CHANGE_LINE2
+     - CHANGE_DIST
+
+    For each line, the rate member is used as a multiplication factor is the width
+    isn't fixed. Otherwise it is the width in the unit expected by the client code.
+ */
 class SVT_DLLPUBLIC BorderWidthImpl
 {
-    USHORT m_nFlags;
+    sal_uInt16 m_nFlags;
     double m_nRate1;
     double m_nRate2;
     double m_nRateGap;
 
 public:
 
-    BorderWidthImpl( USHORT nFlags = CHANGE_LINE1, double nRate1 = 0.0,
+    BorderWidthImpl( sal_uInt16 nFlags = CHANGE_LINE1, double nRate1 = 0.0,
             double nRate2 = 0.0, double nRateGap = 0.0 );
 
     BorderWidthImpl& operator= ( const BorderWidthImpl& r );
@@ -437,14 +454,14 @@ public:
     void            SetNone( const XubString& sNone );
 
     using LineListBox::InsertEntry;
+    /** Insert a listbox entry with all widths in Twips. */
     void            InsertEntry( BorderWidthImpl aWidthImpl,
                         sal_uInt16 nStyle, long nMinWidth = 0,
                         Color (*pColor1Fn)(Color) = &sameColor,
                         Color (*pColor2Fn)( Color ) = &sameColor,
                         Color (*pColorDistFn)( Color, Color ) = &sameDistColor );
 
-    sal_uInt16      GetSelectedStyle( );
-    long            GetWidthFromStyle( long nLine1, long nLine2, long nDistance, sal_uInt16 nStyle );
+    ULONG           GetSelectedStyle( );
 
     virtual sal_uInt16  GetEntryPos( long nLine1, long nLine2 = 0, long nDistance = 0,
                                  sal_uInt16 nStyle = STYLE_SOLID ) const;

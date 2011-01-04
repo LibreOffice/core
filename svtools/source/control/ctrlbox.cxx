@@ -53,6 +53,9 @@
 #define EXTRAFONTSIZE 5
 #define MAXPREVIEWWIDTH 100
 
+#define TWIPS_TO_PT100(val) (val * 5)
+#define PT100_TO_TWIPS(val) (val / 5)
+
 using namespace ::com::sun::star;
 
 // ========================================================================
@@ -877,6 +880,9 @@ long BorderWidthImpl::GuessWidth( long nLine1, long nLine2, long nGap )
     return long( nWidth );
 }
 
+/** Utility class storing the border line width, style and colors. The widths
+    are defined in Twips.
+  */
 class ImpLineStyleListData
 {
 private:
@@ -894,21 +900,28 @@ public:
             long nMinWidth=0, Color ( *pColor1Fn ) ( Color ) = &sameColor,
             Color ( *pColor2Fn ) ( Color ) = &sameColor, Color ( *pColorDistFn ) ( Color, Color ) = &sameDistColor );
 
-    long GetLine1ForWidth( long nWidth ) { return m_aWidthImpl.GetLine1( nWidth ); }
-    long GetLine2ForWidth( long nWidth ) { return m_aWidthImpl.GetLine2( nWidth ); }
-    long GetDistForWidth( long nWidth ) { return m_aWidthImpl.GetGap( nWidth ); }
+    /** Returns the computed width of the line 1 in 100th of pt. */
+    long GetLine1ForWidth( long nWidth ) { return TWIPS_TO_PT100( m_aWidthImpl.GetLine1( nWidth ) ); }
 
-    long   GetTotalWidth( long nWidth );
+    /** Returns the computed width of the line 2 in 100th of pt. */
+    long GetLine2ForWidth( long nWidth ) { return TWIPS_TO_PT100( m_aWidthImpl.GetLine2( nWidth ) ); }
+
+    /** Returns the computed width of the gap in 100th of pt. */
+    long GetDistForWidth( long nWidth ) { return TWIPS_TO_PT100( m_aWidthImpl.GetGap( nWidth ) ); }
 
     Color  GetColorLine1( const Color& aMain );
     Color  GetColorLine2( const Color& aMain );
     Color  GetColorDist( const Color& aMain, const Color& rDefault );
 
+    /** Returns the minimum width in 100th of pt */
     long   GetMinWidth( );
     sal_uInt16 GetStyle( );
 
+    /** Guess the width based on all the lines computed widths in 100th of pt.
+      The result value is expressed in Twips. */
     long GuessWidth( long nLine1, long nLine2, long nDist )
-        { return m_aWidthImpl.GuessWidth( nLine1, nLine2, nDist ); }
+        { return m_aWidthImpl.GuessWidth( PT100_TO_TWIPS( nLine1 ),
+                PT100_TO_TWIPS( nLine2 ), PT100_TO_TWIPS( nDist ) ); }
 };
 
 ImpLineStyleListData::ImpLineStyleListData( BorderWidthImpl aWidthImpl,
@@ -925,7 +938,7 @@ ImpLineStyleListData::ImpLineStyleListData( BorderWidthImpl aWidthImpl,
 
 long ImpLineStyleListData::GetMinWidth( )
 {
-    return m_nMinWidth;
+    return TWIPS_TO_PT100( m_nMinWidth );
 }
 
 Color ImpLineStyleListData::GetColorLine1( const Color& rMain )
@@ -1034,17 +1047,6 @@ sal_uInt16 LineStyleListBox::GetSelectedStyle( )
     if ( m_sNone.Len( ) > 0 )
         nSelEntry--;
     return GetStylePos( nSelEntry, m_nWidth );
-}
-
-long LineStyleListBox::GetWidthFromStyle( long nLine1, long nLine2, long nDistance, sal_uInt16 nStyle )
-{
-    long nResult = 0;
-    ImpLineStyleListData* pData = m_pStyleList->GetObject( nStyle );
-    if ( pData )
-    {
-        nResult = pData->GuessWidth( nLine1, nLine2, nDistance );
-    }
-    return nResult;
 }
 
 sal_uInt16 LineStyleListBox::GetEntryPos( long /*nLine1*/, long /*nLine2*/,
