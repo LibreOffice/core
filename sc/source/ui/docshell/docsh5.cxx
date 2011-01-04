@@ -949,7 +949,6 @@ BOOL ScDocShell::MoveTable( SCTAB nSrcTab, SCTAB nDestTab, BOOL bCopy, BOOL bRec
             BOOL bVbaEnabled = aDocument.IsInVBAMode();
                         if ( bVbaEnabled )
                         {
-                StarBASIC* pStarBASIC = GetBasic();
                             String aLibName( RTL_CONSTASCII_USTRINGPARAM( "Standard" ) );
                             Reference< XLibraryContainer > xLibContainer = GetBasicContainer();
                             Reference< XVBACompatibility > xVBACompat( xLibContainer, UNO_QUERY );
@@ -957,7 +956,6 @@ BOOL ScDocShell::MoveTable( SCTAB nSrcTab, SCTAB nDestTab, BOOL bCopy, BOOL bRec
                             if ( xVBACompat.is() )
                             {
                                 aLibName = xVBACompat->getProjectName();
-                                pStarBASIC = GetBasicManager()->GetLib( aLibName );
                             }
 
                             SCTAB nTabToUse = nDestTab;
