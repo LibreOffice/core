@@ -424,7 +424,6 @@ IMPL_LINK( ScNameDlg, AddBtnHdl, void *, EMPTYARG )
             {
                 ScRangeData*    pNewEntry   = NULL;
                 RangeType       nType       = RT_NAME;
-                USHORT          nFoundAt    = 0;
                 String          theSymbol   = aEdAssign.GetText();
                 String          aStrPos;
                 String          aStrArea;
@@ -449,6 +448,7 @@ IMPL_LINK( ScNameDlg, AddBtnHdl, void *, EMPTYARG )
                 //    in ein Token-Array uebersetzt werden?)
                 if ( 0 == pNewEntry->GetErrCode() )
                 {
+                    USHORT nFoundAt = 0;
                     // Eintrag bereits vorhanden? Dann vorher entfernen (=Aendern)
                     if ( aLocalRangeName.SearchName( aNewEntry, nFoundAt ) )
                     {                                   // alten Index uebernehmen
