@@ -89,7 +89,6 @@ void ScSolverUtil::GetImplementations( uno::Sequence<rtl::OUString>& rImplNames,
 {
     rImplNames.realloc(0);      // clear
     rDescriptions.realloc(0);
-    sal_Int32 nCount = 0;
 
     uno::Reference<uno::XComponentContext> xCtx;
     uno::Reference<lang::XMultiServiceFactory> xMSF = comphelper::getProcessServiceFactory();
@@ -109,6 +108,7 @@ void ScSolverUtil::GetImplementations( uno::Sequence<rtl::OUString>& rImplNames,
                         xEnAc->createContentEnumeration( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SCSOLVER_SERVICE)) );
         if ( xEnum.is() )
         {
+            sal_Int32 nCount = 0;
             while ( xEnum->hasMoreElements() )
             {
                 uno::Any aAny = xEnum->nextElement();
