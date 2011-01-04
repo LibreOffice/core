@@ -377,7 +377,7 @@ sal_uInt32 ScColumn::GetNumberFormat( SCROW nStartRow, SCROW nEndRow ) const
 }
 
 
-sal_uIntPtr ScColumn::GetNumberFormat( SCROW nRow ) const
+sal_uInt32 ScColumn::GetNumberFormat( SCROW nRow ) const
 {
     return pAttrArray->GetPattern( nRow )->GetNumberFormat( pDocument->GetFormatTable() );
 }
@@ -493,7 +493,7 @@ void ScColumn::ApplyPatternIfNumberformatIncompatible( const ScRange& rRange,
         SCROW nRow1, nRow2;
         const ScPatternAttr* pPattern = pAttrArray->GetPatternRange(
             nRow1, nRow2, nRow );
-        sal_uIntPtr nFormat = pPattern->GetNumberFormat( pFormatter );
+        sal_uInt32 nFormat = pPattern->GetNumberFormat( pFormatter );
         short nOldType = pFormatter->GetType( nFormat );
         if ( nOldType == nNewType || pFormatter->IsCompatible( nOldType, nNewType ) )
             nRow = nRow2;

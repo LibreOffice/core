@@ -142,7 +142,7 @@ public:
     bool    Search( SCROW nRow, SCSIZE& nIndex ) const;
     ScBaseCell* GetCell( SCROW nRow ) const;
     void        Insert( SCROW nRow, ScBaseCell* pCell );
-    void        Insert( SCROW nRow, sal_uIntPtr nFormatIndex, ScBaseCell* pCell );
+    void        Insert( SCROW nRow, sal_uInt32 nFormatIndex, ScBaseCell* pCell );
     void        Append( SCROW nRow, ScBaseCell* pCell );
     void        Delete( SCROW nRow );
     void        DeleteAtIndex( SCSIZE nIndex );
@@ -255,8 +255,8 @@ public:
     void        GetFormula( SCROW nRow, String& rFormula ) const;
     CellType    GetCellType( SCROW nRow ) const;
     SCSIZE      GetCellCount() const { return nCount; }
-    sal_uIntPtr GetWeightedCount() const;
-    sal_uIntPtr GetCodeCount() const;       // RPN-Code in Formeln
+    sal_uInt32 GetWeightedCount() const;
+    sal_uInt32 GetCodeCount() const;       // RPN-Code in Formeln
     sal_uInt16  GetErrCode( SCROW nRow ) const;
 
     bool    HasStringData( SCROW nRow ) const;
@@ -306,7 +306,7 @@ public:
     const ScPatternAttr*    GetPattern( SCROW nRow ) const;
     const ScPatternAttr*    GetMostUsedPattern( SCROW nStartRow, SCROW nEndRow ) const;
 
-    sal_uIntPtr GetNumberFormat( SCROW nRow ) const;
+    sal_uInt32 GetNumberFormat( SCROW nRow ) const;
     sal_uInt32  GetNumberFormat( SCROW nStartRow, SCROW nEndRow ) const;
 
     void        MergeSelectionPattern( ScMergePatternState& rState, const ScMarkData& rMark, bool bDeep ) const;

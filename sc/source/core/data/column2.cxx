@@ -246,7 +246,7 @@ long ScColumn::GetNeededSize( SCROW nRow, OutputDevice* pDev,
             String aValStr;
             Color* pColor;
             SvNumberFormatter* pFormatter = pDocument->GetFormatTable();
-            sal_uIntPtr nFormat = pPattern->GetNumberFormat( pFormatter, pCondSet );
+            sal_uInt32 nFormat = pPattern->GetNumberFormat( pFormatter, pCondSet );
             ScCellFormat::GetString( pCell, nFormat, aValStr, &pColor,
                                         *pFormatter,
                                         true, rOptions.bFormula, ftCheck );
@@ -407,7 +407,7 @@ long ScColumn::GetNeededSize( SCROW nRow, OutputDevice* pDev,
             {
                 Color* pColor;
                 SvNumberFormatter* pFormatter = pDocument->GetFormatTable();
-                sal_uIntPtr nFormat = pPattern->GetNumberFormat( pFormatter, pCondSet );
+                sal_uInt32 nFormat = pPattern->GetNumberFormat( pFormatter, pCondSet );
                 String aString;
                 ScCellFormat::GetString( pCell, nFormat, aString, &pColor,
                                             *pFormatter,
@@ -536,7 +536,7 @@ long ScColumn::GetSimpleTextNeededSize( SCSIZE nIndex, OutputDevice* pDev,
         String aValStr;
         Color* pColor;
         SvNumberFormatter* pFormatter = pDocument->GetFormatTable();
-        sal_uIntPtr nFormat = pPattern->GetNumberFormat( pFormatter );
+        sal_uInt32 nFormat = pPattern->GetNumberFormat( pFormatter );
         ScCellFormat::GetString( pCell, nFormat, aValStr, &pColor,
                                     *pFormatter, true, false, ftCheck );
         if ( aValStr.Len() )
@@ -577,7 +577,7 @@ sal_uInt16 ScColumn::GetOptimalColWidth( OutputDevice* pDev, double nPPTX, doubl
 
         // Try to find the row that has the longest string, and measure the width of that string.
         SvNumberFormatter* pFormatter = pDocument->GetFormatTable();
-        sal_uIntPtr nFormat = pPattern->GetNumberFormat( pFormatter );
+        sal_uInt32 nFormat = pPattern->GetNumberFormat( pFormatter );
         String aLongStr;
         Color* pColor;
         if (pParam->mnMaxTextRow >= 0)
@@ -1005,8 +1005,8 @@ void ScColumn::RemoveEditAttribs( SCROW nStartRow, SCROW nEndRow )
 
             if ( bNeedObject )                                      // bleibt Edit-Zelle
             {
-                sal_uIntPtr nCtrl = pEngine->GetControlWord();
-                sal_uIntPtr nWantBig = bSpellErrors ? EE_CNTRL_ALLOWBIGOBJS : 0;
+                sal_uInt32 nCtrl = pEngine->GetControlWord();
+                sal_uInt32 nWantBig = bSpellErrors ? EE_CNTRL_ALLOWBIGOBJS : 0;
                 if ( ( nCtrl & EE_CNTRL_ALLOWBIGOBJS ) != nWantBig )
                     pEngine->SetControlWord( (nCtrl & ~EE_CNTRL_ALLOWBIGOBJS) | nWantBig );
                 EditTextObject* pNewData = pEngine->CreateTextObject();
@@ -1740,9 +1740,9 @@ void ScColumn::UpdateAreaFunction( ScFunctionData& rData,
     }
 }
 
-sal_uIntPtr ScColumn::GetWeightedCount() const
+sal_uInt32 ScColumn::GetWeightedCount() const
 {
-    sal_uIntPtr nTotal = 0;
+    sal_uInt32 nTotal = 0;
 
     //  Notizen werden nicht gezaehlt
 
@@ -1771,9 +1771,9 @@ sal_uIntPtr ScColumn::GetWeightedCount() const
     return nTotal;
 }
 
-sal_uIntPtr ScColumn::GetCodeCount() const
+sal_uInt32 ScColumn::GetCodeCount() const
 {
-    sal_uIntPtr nCodeCount = 0;
+    sal_uInt32 nCodeCount = 0;
 
     for (SCSIZE i=0; i<nCount; i++)
     {
