@@ -1264,50 +1264,57 @@ public:
 
     SC_DLLPUBLIC        void                Undo( ULONG nStartAction, ULONG nEndAction, bool bMerge = false );
 
-                                // for MergeDocument, adjust references,
-                                //! may only be used in a temporary opened document
-                                //! der Track ist danach verhunzt
+                                // adjust references for MergeDocument
+                                //! may only be used in a temporary opened document.
+                                //! the Track (?) is unclean afterwards
             void                MergePrepare( ScChangeAction* pFirstMerge, bool bShared = false );
             void                MergeOwn( ScChangeAction* pAct, ULONG nFirstMerge, bool bShared = false );
     static  BOOL                MergeIgnore( const ScChangeAction&, ULONG nFirstMerge );
 
+                                // This comment was already really strange in German.
+                                // Tried to structure it a little. Hope no information got lost...
+                                //
                                 // Insert dependents into table.
-                                // Bei Insert sind es echte Abhaengige,
-                                // bei Move abhaengige Contents im FromRange
-                                // und geloeschte im ToRange bzw. Inserts in
-                                // FromRange oder ToRange,
-                                // bei Delete eine Liste der geloeschten,
-                                // bei Content andere Contents an gleicher
-                                // Position oder MatrixReferences zu MatrixOrigin.
-                                // Mit bListMasterDelete werden unter einem
-                                // MasterDelete alle zu diesem Delete gehoerenden
-                                // Deletes einer Reihe gelistet.
-                                // Mit bAllFlat werden auch alle Abhaengigen
-                                // der Abhaengigen flach eingefuegt.
+                                // ScChangeAction is
+                                // - "Insert": really dependents
+                                // - "Move": dependent contents in FromRange /
+                                //           deleted contents in ToRange
+                                //      OR   inserts in FromRange or ToRange
+                                // - "Delete": a list of deleted (what?)
+                                //      OR     for content, different contents at the same position
+                                //      OR     MatrixReferences belonging to MatrixOrigin
+                                //
+                                // With bListMasterDelete (==TRUE ?) all Deletes of a row belonging
+                                // to a MasterDelete are listed (possibly it is
+                                // "all Deletes belonging...are listed in a row?)
+                                //
+                                // With bAllFlat (==TRUE ?) all dependents of dependents
+                                // will be inserted flatly.
+
     SC_DLLPUBLIC        void                GetDependents( ScChangeAction*,
                                     ScChangeActionTable&,
                                     BOOL bListMasterDelete = FALSE,
                                     BOOL bAllFlat = FALSE ) const;
 
-                                // Reject visible Action (und abhaengige)
+                                // Reject visible action (and dependents)
             BOOL                Reject( ScChangeAction*, bool bShared = false );
 
-                                // Accept visible Action (und abhaengige)
+                                // Accept visible action (and dependents)
     SC_DLLPUBLIC        BOOL                Accept( ScChangeAction* );
 
-            void                AcceptAll();    // alle Virgins
-            BOOL                RejectAll();    // alle Virgins
+            void                AcceptAll();    // all Virgins
+            BOOL                RejectAll();    // all Virgins
 
-                                // Selektiert einen Content von mehreren an
-                                // gleicher Position und akzeptiert diesen und
-                                // die aelteren, rejected die neueren.
-                                // Mit bOldest==TRUE wird der erste OldValue
-                                // einer Virgin-Content-Kette restauriert.
+                                // Selects a content of several contents at the same
+                                // position and accepts this one and
+                                // the older ones, rejects the more recent ones.
+                                // If bOldest==TRUE then the first OldValue
+                                // of a Virgin-Content-List will be restored.
             BOOL                SelectContent( ScChangeAction*,
                                     BOOL bOldest = FALSE );
 
-                                // wenn ModifiedLink gesetzt, landen
-                                // Aenderungen in ScChangeTrackMsgQueue
+                                // If ModifiedLink is set, changes go to
+                                // ScChangeTrackMsgQueue
             void                SetModifiedLink( const Link& r )
                                     { aModifiedLink = r; ClearMsgQueue(); }
             const Link&         GetModifiedLink() const { return aModifiedLink; }

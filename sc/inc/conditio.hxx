@@ -47,8 +47,8 @@ class ScRangeList;
 #define SC_COND_NOBLANKS    1
 
 
-            // Reihenfolge von ScConditionMode wie ScQueryOp,
-            // damit einmal zusammengefasst werden kann:
+            // ordering of ScConditionMode and ScQueryOp is equal,
+            // to facilitate the merging of both in the future
 
 enum ScConditionMode
 {
@@ -73,20 +73,20 @@ enum ScConditionValType
 
 class SC_DLLPUBLIC ScConditionEntry
 {
-                                        // gespeicherte Daten:
+                                        // stored data:
     ScConditionMode     eOp;
     USHORT              nOptions;
-    double              nVal1;          // eingegeben oder berechnet
+    double              nVal1;          // input or calculated
     double              nVal2;
-    String              aStrVal1;       // eingegeben oder berechnet
+    String              aStrVal1;       // input or calculated
     String              aStrVal2;
     String              aStrNmsp1;      // namespace to be used on (re)compilation, e.g. in XML import
     String              aStrNmsp2;      // namespace to be used on (re)compilation, e.g. in XML import
     formula::FormulaGrammar::Grammar eTempGrammar1;  // grammar to be used on (re)compilation, e.g. in XML import
     formula::FormulaGrammar::Grammar eTempGrammar2;  // grammar to be used on (re)compilation, e.g. in XML import
-    BOOL                bIsStr1;        // um auch leere Strings zu erkennen
+    BOOL                bIsStr1;        // for recognition of empty strings
     BOOL                bIsStr2;
-    ScTokenArray*       pFormula1;      // eingegebene Formel
+    ScTokenArray*       pFormula1;      // entered formula
     ScTokenArray*       pFormula2;
     ScAddress           aSrcPos;        // source position for formulas
                                         // temporary data:
@@ -119,8 +119,8 @@ public:
             ScConditionEntry( ScConditionMode eOper,
                                 const ScTokenArray* pArr1, const ScTokenArray* pArr2,
                                 ScDocument* pDocument, const ScAddress& rPos );
-            ScConditionEntry( const ScConditionEntry& r );  // flache Kopie der Formeln
-            // echte Kopie der Formeln (fuer Ref-Undo):
+            ScConditionEntry( const ScConditionEntry& r );  // flat copy of formulas
+            // true copy of formulas (for Ref-Undo):
             ScConditionEntry( ScDocument* pDocument, const ScConditionEntry& r );
     virtual ~ScConditionEntry();
 
@@ -161,7 +161,7 @@ protected:
 };
 
 //
-//  einzelner Eintrag fuer bedingte Formatierung
+//  single entry for conditional formatting
 //
 
 class ScConditionalFormat;
@@ -202,24 +202,24 @@ protected:
 };
 
 //
-//  komplette bedingte Formatierung
+//  complete conditional formatting
 //
 
 class SC_DLLPUBLIC ScConditionalFormat
 {
     ScDocument*         pDoc;
-    ScRangeList*        pAreas;             // Bereiche fuer Paint
-    sal_uInt32          nKey;               // Index in Attributen
+    ScRangeList*        pAreas;             // area for Paint
+    sal_uInt32          nKey;               // Index in attributes
     ScCondFormatEntry** ppEntries;
     USHORT              nEntryCount;
-    BOOL                bIsUsed;            // temporaer beim Speichern
+    BOOL                bIsUsed;            // temporary at Save
 
 public:
             ScConditionalFormat(sal_uInt32 nNewKey, ScDocument* pDocument);
             ScConditionalFormat(const ScConditionalFormat& r);
             ~ScConditionalFormat();
 
-    // echte Kopie der Formeln (fuer Ref-Undo / zwischen Dokumenten)
+    // true copy of formulas (for Ref-Undo / between documents)
     ScConditionalFormat* Clone(ScDocument* pNewDoc = NULL) const;
 
     void            AddEntry( const ScCondFormatEntry& rNew );
@@ -246,21 +246,21 @@ public:
     void            InvalidateArea();
 
     sal_uInt32      GetKey() const          { return nKey; }
-    void            SetKey(sal_uInt32 nNew) { nKey = nNew; }    // nur wenn nicht eingefuegt!
+    void            SetKey(sal_uInt32 nNew) { nKey = nNew; }    // only if not inserted!
 
     void            SetUsed(BOOL bSet)      { bIsUsed = bSet; }
     BOOL            IsUsed() const          { return bIsUsed; }
 
     bool            MarkUsedExternalReferences() const;
 
-    //  sortiert (per PTRARR) nach Index
-    //  operator== nur fuer die Sortierung
+    //  sorted (via PTRARR) by Index
+    //  operator== only for sorting
     BOOL operator ==( const ScConditionalFormat& r ) const  { return nKey == r.nKey; }
     BOOL operator < ( const ScConditionalFormat& r ) const  { return nKey <  r.nKey; }
 };
 
 //
-//  Liste der Bereiche und Formate:
+//  List of areas and formats:
 //
 
 typedef ScConditionalFormat* ScConditionalFormatPtr;
@@ -294,7 +294,7 @@ public:
      *  references are marked now. */
     bool    MarkUsedExternalReferences() const;
 
-    BOOL    operator==( const ScConditionalFormatList& r ) const;       // fuer Ref-Undo
+    BOOL    operator==( const ScConditionalFormatList& r ) const;       // for Ref-Undo
 };
 
 #endif

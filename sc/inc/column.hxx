@@ -108,10 +108,10 @@ private:
     SCSIZE          nLimit;
     ColEntry*       pItems;
 
-    ScAttrArray*    pAttrArray;
-    ScDocument*     pDocument;
+    ScAttrArray*       pAttrArray;
+    ScDocument*                pDocument;
 
-friend class ScDocument;                    // fuer FillInfo
+friend class ScDocument;                                       // for FillInfo
 friend class ScDocumentIterator;
 friend class ScValueIterator;
 friend class ScDBQueryDataIterator;
@@ -123,7 +123,7 @@ friend class ScHorizontalCellIterator;
 friend class ScHorizontalAttrIterator;
 
 public:
-    static bool bDoubleAlloc;           // fuer Import: Groesse beim Allozieren verdoppeln
+    static bool bDoubleAlloc;                  // for Import: double size for alloc
 
     class DoubleAllocSwitch
     {
@@ -157,27 +157,26 @@ public:
                                 SCCOL& rPaintCol, SCROW& rPaintRow,
                                 bool bRefresh, bool bAttrs );
 
-    bool    IsEmptyVisData(bool bNotes) const;      // ohne Broadcaster
-    bool    IsEmptyData() const;
-    bool    IsEmptyAttr() const;
-    bool    IsEmpty() const;
+    bool               IsEmptyVisData(bool bNotes) const;              // without Broadcaster
+    bool               IsEmptyData() const;
+    bool               IsEmptyAttr() const;
+    bool               IsEmpty() const;
 
-                // nur Daten:
-    bool    IsEmptyBlock(SCROW nStartRow, SCROW nEndRow, bool bIgnoreNotes = false) const;
-    SCSIZE      GetEmptyLinesInBlock( SCROW nStartRow, SCROW nEndRow, ScDirection eDir ) const;
-    bool    HasDataAt(SCROW nRow) const;
-    bool    HasVisibleDataAt(SCROW nRow) const;
-    SCROW       GetFirstDataPos() const;
-    SCROW       GetLastDataPos() const;
-    SCROW       GetLastVisDataPos(bool bNotes) const;               // ohne Broadcaster
-    SCROW       GetFirstVisDataPos(bool bNotes) const;
-    bool    GetPrevDataPos(SCROW& rRow) const;
-    bool    GetNextDataPos(SCROW& rRow) const;
-    void        FindDataAreaPos(SCROW& rRow, long nMovY) const; // (ohne Broadcaster)
-    void        FindUsed( SCROW nStartRow, SCROW nEndRow, bool* pUsed ) const;
+                // data only:
+    bool               IsEmptyBlock(SCROW nStartRow, SCROW nEndRow, bool bIgnoreNotes = false) const;
+    SCSIZE         GetEmptyLinesInBlock( SCROW nStartRow, SCROW nEndRow, ScDirection eDir ) const;
+    bool               HasDataAt(SCROW nRow) const;
+    bool               HasVisibleDataAt(SCROW nRow) const;
+    SCROW              GetFirstDataPos() const;
+    SCROW              GetLastDataPos() const;
+    SCROW              GetLastVisDataPos(bool bNotes) const;                           // without Broadcaster
+    SCROW              GetFirstVisDataPos(bool bNotes) const;
+    bool               GetPrevDataPos(SCROW& rRow) const;
+    bool               GetNextDataPos(SCROW& rRow) const;
+    void               FindDataAreaPos(SCROW& rRow, long nMovY) const; // (without Broadcaster)
+    void               FindUsed( SCROW nStartRow, SCROW nEndRow, bool* pUsed ) const;
 
-    SCSIZE      VisibleCount( SCROW nStartRow, SCROW nEndRow ) const;
-
+    SCSIZE             VisibleCount( SCROW nStartRow, SCROW nEndRow ) const;
     sal_uInt16  GetBlockMatrixEdges( SCROW nRow1, SCROW nRow2, sal_uInt16 nMask ) const;
     bool    HasSelectionMatrixFragment(const ScMarkData& rMark) const;
 
@@ -202,7 +201,7 @@ public:
 
     void        RemoveEditAttribs( SCROW nStartRow, SCROW nEndRow );
 
-                //  Markierung von diesem Dokument
+                //  Selection (?) of this document
     void        MixMarked( const ScMarkData& rMark, sal_uInt16 nFunction,
                             bool bSkipEmpty, ScColumn& rSrcCol );
     void        MixData( SCROW nRow1, SCROW nRow2, sal_uInt16 nFunction, bool bSkipEmpty,
@@ -213,10 +212,11 @@ public:
 
     ScAttrIterator* CreateAttrIterator( SCROW nStartRow, SCROW nEndRow ) const;
 
-    SCCOL       GetCol() const { return nCol; }
 
-                //  UpdateSelectionFunction: Mehrfachselektion
-    void        UpdateSelectionFunction( const ScMarkData& rMark,
+    SCCOL              GetCol() const { return nCol; }
+
+                //     UpdateSelectionFunction: multi-select
+    void               UpdateSelectionFunction( const ScMarkData& rMark,
                                     ScFunctionData& rData,
                                     ScFlatBoolRowSegments& rHiddenRows,
                                     bool bDoExclude, SCROW nExStartRow, SCROW nExEndRow );
@@ -240,10 +240,11 @@ public:
     void        SwapCol(ScColumn& rCol);
     void        MoveTo(SCROW nStartRow, SCROW nEndRow, ScColumn& rCol);
 
-    bool    HasEditCells(SCROW nStartRow, SCROW nEndRow, SCROW& rFirst) const;
 
-                //  true = Zahlformat gesetzt
-    bool    SetString( SCROW nRow, SCTAB nTab, const String& rString,
+    bool               HasEditCells(SCROW nStartRow, SCROW nEndRow, SCROW& rFirst) const;
+
+                //     TRUE = format for numbers is set
+    bool               SetString( SCROW nRow, SCTAB nTab, const String& rString,
                            formula::FormulaGrammar::AddressConvention conv = formula::FormulaGrammar::CONV_OOO,
                            ScSetStringParam* pParam = NULL );
     void        SetValue( SCROW nRow, const double& rVal);
@@ -256,7 +257,7 @@ public:
     CellType    GetCellType( SCROW nRow ) const;
     SCSIZE      GetCellCount() const { return nCount; }
     sal_uInt32 GetWeightedCount() const;
-    sal_uInt32 GetCodeCount() const;       // RPN-Code in Formeln
+    sal_uInt32 GetCodeCount() const;       // RPN-Code in formulas
     sal_uInt16  GetErrCode( SCROW nRow ) const;
 
     bool    HasStringData( SCROW nRow ) const;
@@ -411,10 +412,10 @@ private:
 };
 
 
-class ScColumnIterator                  // alle Daten eines Bereichs durchgehen
+class ScColumnIterator                                 // walk through all data of a area/range
 {
-    const ScColumn*     pColumn;
-    SCSIZE              nPos;
+    const ScColumn*            pColumn;
+    SCSIZE                             nPos;
     SCROW               nTop;
     SCROW               nBottom;
 public:
@@ -426,10 +427,10 @@ public:
 };
 
 
-class ScMarkedDataIter                  // Daten in selektierten Bereichen durchgehen
+class ScMarkedDataIter                                 // walk through data in a selected area/range
 {
-    const ScColumn*     pColumn;
-    SCSIZE              nPos;
+    const ScColumn*            pColumn;
+    SCSIZE                             nPos;
     ScMarkArrayIter*    pMarkIter;
     SCROW               nTop;
     SCROW               nBottom;

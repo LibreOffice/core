@@ -36,7 +36,7 @@ class ScDocument;
 
 // -----------------------------------------------------------------------
 
-struct ScReferenceEntry             // ohne Constructor !
+struct ScReferenceEntry             // without constructor !
 {
     SCCOL   nCol;
     SCROW   nRow;
@@ -44,13 +44,13 @@ struct ScReferenceEntry             // ohne Constructor !
 };
 
 
-//!     Delta-Wert fuer Daten benutzen?
+//!     Use delta value for data?
 
-class ScReferenceList           // ohne Constructor !
+class ScReferenceList           // without constructor !
 {
 private:
     SCSIZE              nCount;
-    SCSIZE              nFullSize;          // inkl. Fuell-Eintraege
+    SCSIZE              nFullSize;          // incl. fill entries
     ScReferenceEntry*   pData;
 
 public:
@@ -68,18 +68,17 @@ public:
 
 
 //
-//  Reihenfolge:
-//      1)  ScConsData anlegen
+//  Sequence:
+//      1)  create ScConsData
 //      2)  Parameter (Size/Flags)
-//      3)  AddFields fuer alle Bereiche (nur noetig bei bColByName oder bRowByName)
-//      4)  DoneFields                   (      "                       "          )
-//      5)  AddData fuer alle Bereiche
-//          evtl. AddName nach jedem Bereich
+//      3)  AddFields for all areas (only needed for bColByName or bRowByName)
+//      4)  DoneFields              (       "                       "        )
+//      5)  AddData for all areas
+//          perhaps AddName after each area
 //      6)  OutputToDocument
 //
 
-//! ab bestimmter Groesse ScDocument Struktur benutzen?
-
+//! Use structure ScDocument if a certain size is exceeded?
 
 class ScConsData
 {
@@ -103,7 +102,7 @@ private:
     String**            ppTitles;
     SCSIZE**            ppTitlePos;
     BOOL                bCornerUsed;
-    String              aCornerText;        // nur bei bColByName && bRowByName
+    String              aCornerText;        // only for bColByName && bRowByName
 
 public:
                 ScConsData();
