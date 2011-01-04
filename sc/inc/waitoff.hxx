@@ -29,15 +29,15 @@
 #ifndef SC_WAITOFF_HXX
 #define SC_WAITOFF_HXX
 
-#include <tools/solar.h>
+#include <sal/types.h>
 
 class Window;
 
 class ScWaitCursorOff
 {
 private:
-    Window*             pWin;
-    ULONG               nWaiters;
+    Window*                 pWin;
+    sal_uInt32              nWaiters;
 public:
                         ScWaitCursorOff( Window* pWin );
                         ~ScWaitCursorOff();
