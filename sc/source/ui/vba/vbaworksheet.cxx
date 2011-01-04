@@ -577,9 +577,9 @@ ScVbaWorksheet::Copy( const uno::Any& Before, const uno::Any& After ) throw (uno
 
     // set sheet name to be newSheet name
     aSheetName = aCurrSheetName;
-    SCTAB nDummy=0;
     if ( bSheetExists && bDestSheetExists )
     {
+        SCTAB nDummy=0;
         sal_Bool bAfter = After.hasValue();
         if(bAfter)
               nDest++;
