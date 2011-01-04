@@ -42,8 +42,6 @@ sub resolving_subst_filename_flag
 {
     my ($filesarrayref, $variableshashref, $languagestringref) = @_;
 
-    my $diritem = lc($item);
-
     my $replacedirbase = installer::systemactions::create_directories("change_filename", $languagestringref);
 
     installer::logger::include_header_into_logfile("Files with flag SUBST_FILENAME:");
