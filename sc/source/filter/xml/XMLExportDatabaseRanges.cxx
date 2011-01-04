@@ -80,7 +80,6 @@ ScMyEmptyDatabaseRangesContainer ScXMLExportDatabaseRanges::GetEmptyDatabaseRang
     ScMyEmptyDatabaseRangesContainer aSkipRanges;
     if (rExport.GetModel().is())
     {
-        sal_Int32 nSkipRangesCount = 0;
         uno::Reference <beans::XPropertySet> xPropertySet (rExport.GetModel(), uno::UNO_QUERY);
         if (xPropertySet.is())
         {
@@ -118,8 +117,6 @@ ScMyEmptyDatabaseRangesContainer ScXMLExportDatabaseRanges::GetEmptyDatabaseRang
                         }
                     }
                 }
-                if (nSkipRangesCount > 1)
-                    aSkipRanges.Sort();
             }
         }
     }
