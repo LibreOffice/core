@@ -549,18 +549,21 @@ void SvxBorderTabPage::Reset( const SfxItemSet& rSet )
     //-------------------------------------------------------------
     {
         // Do all visible lines show the same line widths?
-        sal_uInt16 nPrim, nDist, nSecn;
+        long nWidth;
         SvxBorderStyle nStyle;
-        bool bWidthEq = aFrameSel.GetVisibleWidth( nPrim, nDist, nSecn, nStyle );
+        bool bWidthEq = aFrameSel.GetVisibleWidth( nWidth, nStyle );
         if( bWidthEq )
         {
             // Determine the width first as some styles can be missing depending on it
-            long nWidth = aLbLineStyle.GetWidthFromStyle( nPrim * 5, nSecn * 5, nDist * 5, nStyle );
-            aLineWidthMF.SetValue( sal_Int64( nWidth ) );
+            aLineWidthMF.SetValue( sal_Int64( nWidth * 5 ) );
             aLbLineStyle.SetWidth( aLineWidthMF.GetValue( ) );
 
             // then set the style
-            aLbLineStyle.SelectEntry( nPrim * 5, nSecn * 5, nDist * 5, nStyle );
+            // TODO Change the SelectEntry method
+            SvxBorderLine aLine( NULL, nWidth, nStyle );
+            aLbLineStyle.SelectEntry( aLine.GetOutWidth() * 5,
+                    aLine.GetInWidth() * 5,
+                    aLine.GetDistance() * 5, nStyle );
         }
         else
             aLbLineStyle.SelectEntryPos( 1 );
@@ -1106,25 +1109,25 @@ void SvxBorderTabPage::FillLineListBox_Impl()
 
     // Double lines
     aLbLineStyle.InsertEntry( SvxBorderLine::getWidthImpl( DOUBLE ), DOUBLE );
-    aLbLineStyle.InsertEntry( SvxBorderLine::getWidthImpl( THINTHICK_SMALLGAP ), THINTHICK_SMALLGAP, 100 );
+    aLbLineStyle.InsertEntry( SvxBorderLine::getWidthImpl( THINTHICK_SMALLGAP ), THINTHICK_SMALLGAP, 20 );
     aLbLineStyle.InsertEntry( SvxBorderLine::getWidthImpl( THINTHICK_MEDIUMGAP ), THINTHICK_MEDIUMGAP );
     aLbLineStyle.InsertEntry( SvxBorderLine::getWidthImpl( THINTHICK_LARGEGAP ), THINTHICK_LARGEGAP );
-    aLbLineStyle.InsertEntry( SvxBorderLine::getWidthImpl( THICKTHIN_SMALLGAP ), THICKTHIN_SMALLGAP, 100 );
+    aLbLineStyle.InsertEntry( SvxBorderLine::getWidthImpl( THICKTHIN_SMALLGAP ), THICKTHIN_SMALLGAP, 20 );
     aLbLineStyle.InsertEntry( SvxBorderLine::getWidthImpl( THICKTHIN_MEDIUMGAP ), THICKTHIN_MEDIUMGAP );
     aLbLineStyle.InsertEntry( SvxBorderLine::getWidthImpl( THICKTHIN_LARGEGAP ), THICKTHIN_LARGEGAP );
 
     // Engraved / Embossed
-    aLbLineStyle.InsertEntry( SvxBorderLine::getWidthImpl( EMBOSSED ), EMBOSSED, 75,
+    aLbLineStyle.InsertEntry( SvxBorderLine::getWidthImpl( EMBOSSED ), EMBOSSED, 15,
             &SvxBorderLine::threeDLightColor, &SvxBorderLine::threeDDarkColor,
             &lcl_mediumColor );
-    aLbLineStyle.InsertEntry( SvxBorderLine::getWidthImpl( ENGRAVED ), ENGRAVED, 75,
+    aLbLineStyle.InsertEntry( SvxBorderLine::getWidthImpl( ENGRAVED ), ENGRAVED, 15,
             &SvxBorderLine::threeDDarkColor, &SvxBorderLine::threeDLightColor,
             &lcl_mediumColor );
 
     // Inset / Outset
-    aLbLineStyle.InsertEntry( SvxBorderLine::getWidthImpl( OUTSET ), OUTSET, 0.5,
+    aLbLineStyle.InsertEntry( SvxBorderLine::getWidthImpl( OUTSET ), OUTSET, 5,
            &SvxBorderLine::lightColor, &SvxBorderLine::darkColor );
-    aLbLineStyle.InsertEntry( SvxBorderLine::getWidthImpl( INSET ), INSET, 0.5,
+    aLbLineStyle.InsertEntry( SvxBorderLine::getWidthImpl( INSET ), INSET, 5,
            &SvxBorderLine::darkColor, &SvxBorderLine::lightColor );
 
     aLbLineStyle.SetWidth( aLineWidthMF.GetValue( ) );
