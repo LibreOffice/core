@@ -339,14 +339,13 @@ IMPL_LINK( ScMoveTableDlg, SelHdl, ListBox *, pLb )
     if ( pLb == &aLbDoc )
     {
         ScDocument* pDoc = GetSelectedDoc();
-        SCTAB      nLast  = 0;
         String      aName;
 
         aLbTable.Clear();
         aLbTable.SetUpdateMode( FALSE );
         if ( pDoc )
         {
-            nLast = pDoc->GetTableCount()-1;
+            SCTAB nLast = pDoc->GetTableCount()-1;
             for ( SCTAB i=0; i<=nLast; i++ )
             {
                 pDoc->GetName( i, aName );
