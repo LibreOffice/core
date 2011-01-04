@@ -47,6 +47,7 @@
 #include <comphelper/propmultiplex.hxx>
 #include <svtools/transfer.hxx>
 #include "svx/svxdllapi.h"
+#include <vector>
 
 class DbGridControl;
 class CursorWrapper;
@@ -57,7 +58,7 @@ namespace svxform
 {
     class DataColumn;
 }
-DECLARE_LIST(DbDataColumns, ::svxform::DataColumn*)
+typedef ::std::vector< ::svxform::DataColumn* > DbDataColumns;
 
 enum GridRowStatus
 {
@@ -73,10 +74,10 @@ enum GridRowStatus
 
 class DbGridRow : public SvRefBase
 {
-    ::com::sun::star::uno::Any                      m_aBookmark;        // ::com::sun::star::text::Bookmark of the row, can be set
+    ::com::sun::star::uno::Any  m_aBookmark;        // ::com::sun::star::text::Bookmark of the row, can be set
     DbDataColumns               m_aVariants;
     GridRowStatus               m_eStatus;
-    sal_Bool                        m_bIsNew;
+    sal_Bool                    m_bIsNew;
                                                     // row is no longer valid
                                                     // is removed on the next positioning
 public:
@@ -86,8 +87,8 @@ public:
 
     ~DbGridRow();
 
-    sal_Bool HasField(sal_uInt32 nPos) const {return nPos < m_aVariants.Count();}
-    const ::svxform::DataColumn& GetField(sal_uInt32 nPos) const { return *m_aVariants.GetObject(nPos); }
+    sal_Bool HasField(sal_uInt32 nPos) const { return nPos < m_aVariants.size(); }
+    const ::svxform::DataColumn& GetField(sal_uInt32 nPos) const { return *m_aVariants[ nPos ]; }
 
     void            SetStatus(GridRowStatus _eStat) { m_eStatus = _eStat; }
     GridRowStatus   GetStatus() const               { return m_eStatus; }

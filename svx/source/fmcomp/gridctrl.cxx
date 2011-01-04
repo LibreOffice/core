@@ -821,7 +821,7 @@ DbGridRow::DbGridRow(CursorWrapper* pCur, sal_Bool bPaintCursor)
             Reference< XPropertySet > xColSet;
             ::cppu::extractInterface(xColSet, xColumns->getByIndex(i));
             pColumn = new DataColumn(xColSet);
-            m_aVariants.Insert(pColumn, LIST_APPEND);
+            m_aVariants.push_back( pColumn );
         }
 
         if (pCur->rowDeleted())
@@ -859,9 +859,9 @@ DbGridRow::DbGridRow(CursorWrapper* pCur, sal_Bool bPaintCursor)
 //------------------------------------------------------------------------------
 DbGridRow::~DbGridRow()
 {
-    sal_uInt32 nCount = m_aVariants.Count();
-    for (sal_uInt32 i = 0; i < nCount; i++)
-        delete m_aVariants.GetObject(i);
+    for ( size_t i = 0, n = m_aVariants.size(); i < n; ++i )
+        delete m_aVariants[ i ];
+    m_aVariants.clear();
 }
 
 //------------------------------------------------------------------------------
