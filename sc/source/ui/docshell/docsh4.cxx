@@ -2092,7 +2092,6 @@ void ScDocShell::Print( SfxProgress& rProgress, PrintDialog* pPrintDialog,
             long nTabStart = 0;
             long nDisplayStart = 0;
             long nAttrPage = 1;
-            long nPrinted = 0;
 
             for ( SCTAB nTab=0; nTab<nTabCount; nTab++ )
             {
@@ -2113,7 +2112,7 @@ void ScDocShell::Print( SfxProgress& rProgress, PrintDialog* pPrintDialog,
 
                     ScPrintFunc aPrintFunc( this, pPrinter, nTab, nAttrPage, nTotalPages, pMarkedRange, &aOptions );
                     aPrintFunc.SetDrawView( pDrawView );
-                    nPrinted += aPrintFunc.DoPrint( aPageRanges, nTabStart, nDisplayStart, TRUE, &rProgress, NULL );
+                    aPrintFunc.DoPrint( aPageRanges, nTabStart, nDisplayStart, TRUE, &rProgress, NULL );
 
                     nTabStart += aPageArr[nTab];
                     if ( aDocument.NeedPageResetAfterTab(nTab) )
