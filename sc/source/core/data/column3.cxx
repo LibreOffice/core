@@ -158,7 +158,7 @@ void ScColumn::Insert( SCROW nRow, ScBaseCell* pNewCell )
 }
 
 
-void ScColumn::Insert( SCROW nRow, ULONG nNumberFormat, ScBaseCell* pCell )
+void ScColumn::Insert( SCROW nRow, sal_uInt32 nNumberFormat, ScBaseCell* pCell )
 {
     Insert(nRow, pCell);
     short eOldType = pDocument->GetFormatTable()->
