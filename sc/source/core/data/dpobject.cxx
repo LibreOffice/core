@@ -2308,7 +2308,6 @@ BOOL ScDPObject::HasRegisteredSources()
 //  static
 uno::Sequence<rtl::OUString> ScDPObject::GetRegisteredSources()
 {
-    long nCount = 0;
     uno::Sequence<rtl::OUString> aSeq(0);
 
     //  use implementation names...
@@ -2321,6 +2320,7 @@ uno::Sequence<rtl::OUString> ScDPObject::GetRegisteredSources()
                                         rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SCDPSOURCE_SERVICE )) );
         if ( xEnum.is() )
         {
+            long nCount = 0;
             while ( xEnum->hasMoreElements() )
             {
                 uno::Any aAddInAny = xEnum->nextElement();
