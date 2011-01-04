@@ -67,7 +67,9 @@ namespace toolkit
     //==================================================================================================================
     //------------------------------------------------------------------------------------------------------------------
     DefaultGridDataModel::DefaultGridDataModel()
-        :m_nRowHeight(0)
+        :DefaultGridDataModel_Base()
+        ,MutexAndBroadcastHelper()
+        ,m_nRowHeight(0)
         ,m_aRowHeaders()
         ,m_nRowHeaderWidth(10)
     {
@@ -75,7 +77,9 @@ namespace toolkit
 
     //------------------------------------------------------------------------------------------------------------------
     DefaultGridDataModel::DefaultGridDataModel( DefaultGridDataModel const & i_copySource )
-        :m_nRowHeight( i_copySource.m_nRowHeight )
+        :DefaultGridDataModel_Base()
+        ,MutexAndBroadcastHelper()
+        ,m_nRowHeight( i_copySource.m_nRowHeight )
         ,m_aData( i_copySource.m_aData )
         ,m_aRowHeaders( i_copySource.m_aRowHeaders )
         ,m_nRowHeaderWidth( i_copySource.m_nRowHeaderWidth )

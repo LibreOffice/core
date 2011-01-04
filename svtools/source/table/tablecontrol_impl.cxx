@@ -836,7 +836,7 @@ namespace svt { namespace table
 
         if ( m_aColumnWidths.empty() )
             impl_ni_updateColumnWidths();
-        OSL_ENSURE( m_aColumnWidths.size() == m_nColumnCount, "TableControl_Impl::impl_ni_updateScrollbars: inconsistency!" );
+        OSL_ENSURE( m_aColumnWidths.size() == size_t( m_nColumnCount ), "TableControl_Impl::impl_ni_updateScrollbars: inconsistency!" );
         const long nAllColumnsWidth =   m_aColumnWidths.empty()
                                     ?   0
                                     :   m_aColumnWidths[ m_nColumnCount - 1 ].getEnd() - m_aColumnWidths[ 0 ].getStart();

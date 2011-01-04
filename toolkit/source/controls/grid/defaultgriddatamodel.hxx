@@ -52,7 +52,8 @@ namespace toolkit
 
 enum broadcast_type { row_added, row_removed, data_changed};
 
-class DefaultGridDataModel : public ::cppu::WeakImplHelper2< XGridDataModel, XServiceInfo >,
+typedef ::cppu::WeakImplHelper2< XGridDataModel, XServiceInfo > DefaultGridDataModel_Base;
+class DefaultGridDataModel : public DefaultGridDataModel_Base,
                              public MutexAndBroadcastHelper
 {
 public:

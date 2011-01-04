@@ -77,7 +77,8 @@ namespace toolkit
 
     //------------------------------------------------------------------------------------------------------------------
     DefaultGridColumnModel::DefaultGridColumnModel( DefaultGridColumnModel const & i_copySource )
-        :DefaultGridColumnModel_Base( m_aMutex )
+        :cppu::BaseMutex()
+        ,DefaultGridColumnModel_Base( m_aMutex )
         ,m_aContext( i_copySource.m_aContext )
         ,m_aContainerListeners( m_aMutex )
         ,m_aColumns()

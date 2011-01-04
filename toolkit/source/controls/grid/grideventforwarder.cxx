@@ -69,13 +69,13 @@ namespace toolkit
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    void SAL_CALL GridEventForwarder::acquire()
+    void SAL_CALL GridEventForwarder::acquire() throw()
     {
         m_parent.acquire();
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    void SAL_CALL GridEventForwarder::release()
+    void SAL_CALL GridEventForwarder::release() throw()
     {
         m_parent.release();
     }

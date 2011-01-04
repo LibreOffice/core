@@ -349,7 +349,7 @@ using namespace ::com::sun::star::awt::grid;
     //--------------------------------------------------------------------
     void UnoControlTableModel::insertColumn( ColPos const i_position, const PColumnModel& i_column )
     {
-        ENSURE_OR_RETURN_VOID( ( i_position >= 0 ) && ( i_position <= m_pImpl->aColumns.size() ), "illegal position!" );
+        ENSURE_OR_RETURN_VOID( ( i_position >= 0 ) && ( size_t( i_position ) <= m_pImpl->aColumns.size() ), "illegal position!" );
         ENSURE_OR_RETURN_VOID( !!i_column, "illegal column" );
 
         m_pImpl->aColumns.insert( m_pImpl->aColumns.begin() + i_position, i_column );
@@ -505,10 +505,10 @@ using namespace ::com::sun::star::awt::grid;
     //--------------------------------------------------------------------
     void UnoControlTableModel::getCellContent( ColPos const i_col, RowPos const i_row, Any& o_cellContent )
     {
-        ENSURE_OR_RETURN_VOID( ( i_row >= 0 ) && ( i_row < m_pImpl->aCellContent.size() ),
+        ENSURE_OR_RETURN_VOID( ( i_row >= 0 ) && ( size_t( i_row ) < m_pImpl->aCellContent.size() ),
             "UnoControlTableModel::getCellContent: illegal row index!" );
         ::std::vector< Any >& rRowContent( m_pImpl->aCellContent[ i_row ] );
-        ENSURE_OR_RETURN_VOID( ( i_col >= 0 ) && ( i_col < rRowContent.size() ),
+        ENSURE_OR_RETURN_VOID( ( i_col >= 0 ) && ( size_t( i_col ) < rRowContent.size() ),
             "UnoControlTableModel::getCellContent: illegal column index" );
         o_cellContent = rRowContent[ i_col ];
     }
@@ -516,10 +516,10 @@ using namespace ::com::sun::star::awt::grid;
     //--------------------------------------------------------------------
     void UnoControlTableModel::updateCellContent( RowPos const i_row, ColPos const i_col, Any const & i_cellContent )
     {
-        ENSURE_OR_RETURN_VOID( ( i_row >= 0 ) && ( i_row < m_pImpl->aCellContent.size() ),
+        ENSURE_OR_RETURN_VOID( ( i_row >= 0 ) && ( size_t( i_row ) < m_pImpl->aCellContent.size() ),
             "UnoControlTableModel::updateCellContent: illegal row index!" );
         ::std::vector< Any >& rRowContent( m_pImpl->aCellContent[ i_row ] );
-        ENSURE_OR_RETURN_VOID( ( i_col >= 0 ) && ( i_col < rRowContent.size() ),
+        ENSURE_OR_RETURN_VOID( ( i_col >= 0 ) && ( size_t( i_col ) < rRowContent.size() ),
             "UnoControlTableModel::updateCellContent: illegal column index" );
         rRowContent[ i_col ] = i_cellContent;
 
@@ -545,7 +545,7 @@ using namespace ::com::sun::star::awt::grid;
     //--------------------------------------------------------------------
     ::rtl::OUString UnoControlTableModel::getRowHeader( RowPos const i_rowPos ) const
     {
-        ENSURE_OR_RETURN( ( i_rowPos >= 0 ) && ( i_rowPos < m_pImpl->aRowHeadersTitle.size() ),
+        ENSURE_OR_RETURN( ( i_rowPos >= 0 ) && ( size_t( i_rowPos ) < m_pImpl->aRowHeadersTitle.size() ),
             "UnoControlTableModel::getRowHeader: illegal row position!", ::rtl::OUString() );
         return m_pImpl->aRowHeadersTitle[ i_rowPos ];
     }

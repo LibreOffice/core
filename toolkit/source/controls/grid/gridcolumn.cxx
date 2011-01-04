@@ -68,7 +68,8 @@ namespace toolkit
 
     //------------------------------------------------------------------------------------------------------------------
     GridColumn::GridColumn( GridColumn const & i_copySource )
-        :GridColumn_Base( m_aMutex )
+        :cppu::BaseMutex()
+        ,GridColumn_Base( m_aMutex )
         ,m_aIdentifier( i_copySource.m_aIdentifier )
         ,m_nIndex( i_copySource.m_nIndex )
         ,m_nColumnWidth( i_copySource.m_nColumnWidth )

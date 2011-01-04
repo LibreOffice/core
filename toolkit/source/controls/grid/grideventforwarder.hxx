@@ -57,8 +57,8 @@ namespace toolkit
 
     public:
         // XInterface
-        virtual void SAL_CALL acquire();
-        virtual void SAL_CALL release();
+        virtual void SAL_CALL acquire() throw();
+        virtual void SAL_CALL release() throw();
 
         // XGridDataListener
         virtual void SAL_CALL rowAdded( const ::com::sun::star::awt::grid::GridDataEvent& Event ) throw (::com::sun::star::uno::RuntimeException);
