@@ -1277,7 +1277,6 @@ bool ScColumn::SetString( SCROW nRow, SCTAB nTabP, const String& rString,
             if (pParam)
                 aParam = *pParam;
 
-            double nVal;
             sal_uInt32 nIndex, nOldIndex = 0;
             sal_Unicode cFirstChar;
             if (!aParam.mpNumFormatter)
@@ -1314,6 +1313,7 @@ bool ScColumn::SetString( SCROW nRow, SCTAB nTabP, const String& rString,
                 pNewCell = new ScStringCell( rString.Copy(1) );
             else
             {
+                double nVal;
                 BOOL bIsText = FALSE;
                 if ( bIsLoading )
                 {
