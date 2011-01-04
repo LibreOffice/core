@@ -61,23 +61,23 @@ namespace desktop
         "\n"\
         "Options:\n";
     const char *aCmdLineHelp_left =
-        "-minimized    \n"\
-        "-invisible    \n"\
-        "-norestore    \n"\
-        "-quickstart   \n"\
-        "-nologo       \n"\
-        "-nolockcheck  \n"\
-        "-nodefault    \n"\
-        "-headless     \n"\
-        "-help/-h/-?   \n"\
-        "-writer       \n"\
-        "-calc         \n"\
-        "-draw         \n"\
-        "-impress      \n"\
-        "-base         \n"\
-        "-math         \n"\
-        "-global       \n"\
-        "-web          \n"\
+        "--minimized    \n"\
+        "--invisible    \n"\
+        "--norestore    \n"\
+        "--quickstart   \n"\
+        "--nologo       \n"\
+        "--nolockcheck  \n"\
+        "--nodefault    \n"\
+        "--headless     \n"\
+        "--help/-h/-?   \n"\
+        "--writer       \n"\
+        "--calc         \n"\
+        "--draw         \n"\
+        "--impress      \n"\
+        "--base         \n"\
+        "--math         \n"\
+        "--global       \n"\
+        "--web          \n"\
         "-o            \n"\
         "-n            \n";
     const char *aCmdLineHelp_right =
@@ -101,31 +101,31 @@ namespace desktop
         "open documents regardless whether they are templates or not.\n"\
         "always open documents as new files (use as template).\n";
     const char *aCmdLineHelp_bottom =
-        "-display <display>\n"\
+        "--display <display>\n"\
         "      Specify X-Display to use in Unix/X11 versions.\n"
         "-p <documents...>\n"\
         "      print the specified documents on the default printer.\n"\
-        "-pt <printer> <documents...>\n"\
+        "--pt <printer> <documents...>\n"\
         "      print the specified documents on the specified printer.\n"\
-        "-view <documents...>\n"\
+        "--view <documents...>\n"\
         "      open the specified documents in viewer-(readonly-)mode.\n"\
-        "-show <presentation>\n"\
+        "--show <presentation>\n"\
         "      open the specified presentation and start it immediately\n"\
-        "-accept=<accept-string>\n"\
+        "--accept=<accept-string>\n"\
         "      Specify an UNO connect-string to create an UNO acceptor through which\n"\
         "      other programs can connect to access the API\n"\
-        "-unaccept=<accept-string>\n"\
+        "--unaccept=<accept-string>\n"\
         "      Close an acceptor that was created with -accept=<accept-string>\n"\
         "      Use -unnaccept=all to close all open acceptors\n"\
-        "-infilter=<filter>\n"\
+        "--infilter=<filter>\n"\
         "      Force an input filter type if possible\n"\
         "      Eg. -infilter=\"Calc Office Open XML\"\n"\
-        "-convert-to output_file_extension[:output_filter_name] [-outdir ouput_dir] files\n"\
+        "--convert-to output_file_extension[:output_filter_name] [-outdir ouput_dir] files\n"\
         "      Batch convert files.\n"\
         "      If -outdir is not specified then current working dir is used as output_dir.\n"\
         "      Eg. -convert-to pdf *.doc\n"\
         "          -convert-to pdf:writer_pdf_Export -outdir /home/user *.doc\n"\
-        "-print-to-file [-printer-name printer_name] [-outdir ouput_dir] files\n"\
+        "--print-to-file [-printer-name printer_name] [-outdir ouput_dir] files\n"\
         "      Batch print files to file.\n"\
         "      If -outdir is not specified then current working dir is used as output_dir.\n"\
         "      Eg. -print-to-file *.doc\n"\

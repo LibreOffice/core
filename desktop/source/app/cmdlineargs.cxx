@@ -405,11 +405,16 @@ void CommandLineArgs::SetBoolParam_Impl( BoolParam eParam, sal_Bool bValue )
 
 sal_Bool CommandLineArgs::InterpretCommandLineParameter( const ::rtl::OUString& aArg, ::rtl::OUString& oArg )
 {
-    if (aArg.matchIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("--"))) {
+    if (aArg.matchIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("--")))
+    {
         oArg = ::rtl::OUString(aArg.getStr()+2, aArg.getLength()-2);
-    } else if (aArg.toChar() == '-') {
+    }
+    else if (aArg.toChar() == '-')
+    {
         oArg = ::rtl::OUString(aArg.getStr()+1, aArg.getLength()-1);
-    } else {
+    }
+    else
+    {
         return sal_False;
     }
 
