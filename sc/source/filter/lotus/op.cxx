@@ -256,12 +256,10 @@ void OP_SymphNamedRange( SvStream& r, UINT16 /*n*/ )
     // POST:    waren Koordinaten ungueltig, wird nicht gespeichert
     UINT16              nColSt, nRowSt, nColEnd, nRowEnd;
     BYTE                nType;
-    sal_Char*           pName;
     sal_Char            cPuffer[ 32 ];
 
     r.Read( cPuffer, 16 );
     cPuffer[ 16 ] = 0;
-    pName = cPuffer;
 
     r >> nColSt >> nRowSt >> nColEnd >> nRowEnd >> nType;
 
