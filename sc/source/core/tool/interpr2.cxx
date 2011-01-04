@@ -352,11 +352,11 @@ void ScInterpreter::ScGetDiffDate360()
             bFlag = FALSE;
         double nDate2 = GetDouble();
         double nDate1 = GetDouble();
-        double fSign;
         if (nGlobalError)
             PushError( nGlobalError);
         else
         {
+            double fSign;
             // #i84934# only for non-US European algorithm swap dates. Else
             // follow Excel's meaningless extrapolation for "interoperability".
             if (bFlag && (nDate2 < nDate1))
@@ -765,12 +765,7 @@ void ScInterpreter::ScMIRR()
     if( MustHaveParamCount( GetByte(), 3 ) )
     {
         double fRate1_reinvest = GetDouble() + 1;
-        double fNPV_reinvest = 0.0;
-        double fPow_reinvest = 1.0;
-
         double fRate1_invest = GetDouble() + 1;
-        double fNPV_invest = 0.0;
-        double fPow_invest = 1.0;
 
         ScRange aRange;
         PopDoubleRef( aRange );
@@ -779,6 +774,10 @@ void ScInterpreter::ScMIRR()
             PushError( nGlobalError);
         else
         {
+            double fNPV_reinvest = 0.0;
+            double fPow_reinvest = 1.0;
+            double fNPV_invest = 0.0;
+            double fPow_invest = 1.0;
             ScValueIterator aValIter( pDok, aRange, glSubTotal );
             double fCellValue;
             ULONG nCount = 0;
@@ -1082,7 +1081,6 @@ void ScInterpreter::ScVDB()
             {
 
                 double fDauer1=fDauer;
-                double fPart;
 
                 //@Die Frage aller Fragen: "Ist das hier richtig"
                 if(!::rtl::math::approxEqual(fAnfang,::rtl::math::approxFloor(fAnfang)))
@@ -1091,7 +1089,7 @@ void ScInterpreter::ScVDB()
                     {
                         if(fAnfang>fDauer/2 || ::rtl::math::approxEqual(fAnfang,fDauer/2))
                         {
-                            fPart=fAnfang-fDauer/2;
+                            double fPart=fAnfang-fDauer/2;
                             fAnfang=fDauer/2;
                             fEnde-=fPart;
                             fDauer1+=1;
@@ -1398,29 +1396,7 @@ double ScInterpreter::ScGetZinsZ(double fZins, double fZr, double fZzr, double f
 void ScInterpreter::ScZinsZ()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScZinsZ" );
-    double nZins, nZr, nRmz, nZzr, nBw, nZw = 0, nFlag = 0;
-    nFuncFmtType = NUMBERFORMAT_CURRENCY;
-    BYTE nParamCount = GetByte();
-    if ( !MustHaveParamCount( nParamCount, 4, 6 ) )
-        return;
-    if (nParamCount == 6)
-        nFlag = GetDouble();
-    if (nParamCount >= 5)
-        nZw   = GetDouble();
-    nBw   = GetDouble();
-    nZzr  = GetDouble();
-    nZr   = GetDouble();
-    nZins = GetDouble();
-    if (nZr < 1.0 || nZr > nZzr)
-        PushIllegalArgument();
-    else
-        PushDouble(ScGetZinsZ(nZins, nZr, nZzr, nBw, nZw, nFlag, nRmz));
-}
-
-void ScInterpreter::ScKapz()
-{
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScKapz" );
-    double nZins, nZr, nZzr, nBw, nZw = 0, nFlag = 0, nRmz, nZinsz;
+    double nZins, nZr, nZzr, nBw, nZw = 0, nFlag = 0;
     nFuncFmtType = NUMBERFORMAT_CURRENCY;
     BYTE nParamCount = GetByte();
     if ( !MustHaveParamCount( nParamCount, 4, 6 ) )
@@ -1437,7 +1413,33 @@ void ScInterpreter::ScKapz()
         PushIllegalArgument();
     else
     {
-        nZinsz = ScGetZinsZ(nZins, nZr, nZzr, nBw, nZw, nFlag, nRmz);
+        double nRmz;
+        PushDouble(ScGetZinsZ(nZins, nZr, nZzr, nBw, nZw, nFlag, nRmz));
+    }
+}
+
+void ScInterpreter::ScKapz()
+{
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScKapz" );
+    double nZins, nZr, nZzr, nBw, nZw = 0, nFlag = 0;
+    nFuncFmtType = NUMBERFORMAT_CURRENCY;
+    BYTE nParamCount = GetByte();
+    if ( !MustHaveParamCount( nParamCount, 4, 6 ) )
+        return;
+    if (nParamCount == 6)
+        nFlag = GetDouble();
+    if (nParamCount >= 5)
+        nZw   = GetDouble();
+    nBw   = GetDouble();
+    nZzr  = GetDouble();
+    nZr   = GetDouble();
+    nZins = GetDouble();
+    if (nZr < 1.0 || nZr > nZzr)
+        PushIllegalArgument();
+    else
+    {
+        double nRmz;
+        double nZinsz = ScGetZinsZ(nZins, nZr, nZzr, nBw, nZw, nFlag, nRmz);
         PushDouble(nRmz - nZinsz);
     }
 }
@@ -1448,7 +1450,7 @@ void ScInterpreter::ScKumZinsZ()
     nFuncFmtType = NUMBERFORMAT_CURRENCY;
     if ( MustHaveParamCount( GetByte(), 6 ) )
     {
-        double fZins, fZzr, fBw, fAnfang, fEnde, fF, fRmz, fZinsZ;
+        double fZins, fZzr, fBw, fAnfang, fEnde, fF;
         fF      = GetDouble();
         fEnde   = ::rtl::math::approxFloor(GetDouble());
         fAnfang = ::rtl::math::approxFloor(GetDouble());
@@ -1462,8 +1464,8 @@ void ScInterpreter::ScKumZinsZ()
         {
             ULONG nAnfang = (ULONG) fAnfang;
             ULONG nEnde = (ULONG) fEnde ;
-            fRmz = ScGetRmz(fZins, fZzr, fBw, 0.0, fF);
-            fZinsZ = 0.0;
+            double fRmz = ScGetRmz(fZins, fZzr, fBw, 0.0, fF);
+            double fZinsZ = 0.0;
             if (nAnfang == 1)
             {
                 if (fF <= 0.0)
@@ -1489,7 +1491,7 @@ void ScInterpreter::ScKumKapZ()
     nFuncFmtType = NUMBERFORMAT_CURRENCY;
     if ( MustHaveParamCount( GetByte(), 6 ) )
     {
-        double fZins, fZzr, fBw, fAnfang, fEnde, fF, fRmz, fKapZ;
+        double fZins, fZzr, fBw, fAnfang, fEnde, fF;
         fF      = GetDouble();
         fEnde   = ::rtl::math::approxFloor(GetDouble());
         fAnfang = ::rtl::math::approxFloor(GetDouble());
@@ -1501,8 +1503,8 @@ void ScInterpreter::ScKumKapZ()
             PushIllegalArgument();
         else
         {
-            fRmz = ScGetRmz(fZins, fZzr, fBw, 0.0, fF);
-            fKapZ = 0.0;
+            double fRmz = ScGetRmz(fZins, fZzr, fBw, 0.0, fF);
+            double fKapZ = 0.0;
             ULONG nAnfang = (ULONG) fAnfang;
             ULONG nEnde = (ULONG) fEnde;
             if (nAnfang == 1)
@@ -2713,7 +2715,6 @@ void ScInterpreter::ScEuroConvert()
             PushError( nGlobalError);
         else
         {
-            double fRes;
             double fFromRate;
             double fToRate;
             int    nFromDec;
@@ -2722,6 +2723,7 @@ void ScInterpreter::ScEuroConvert()
             if ( lclConvertMoney( aFromUnit, fFromRate, nFromDec )
                 && lclConvertMoney( aToUnit, fToRate, nToDec ) )
             {
+                double fRes;
                 if ( aFromUnit.EqualsIgnoreCaseAscii( aToUnit ) )
                     fRes = fVal;
                 else
