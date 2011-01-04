@@ -1648,7 +1648,6 @@ IMPL_LINK(MyWindow, CountHdl, PushButton*, EMPTYARG)
 
 IMPL_LINK(MyWindow, TextHdl, PushButton*, EMPTYARG)
 {
-    USHORT nTab = 0;
     USHORT nCol = (USHORT)aColField.GetValue();
     USHORT nRow = (USHORT)aRowField.GetValue();
     USHORT nPos = (USHORT)aPosField.GetValue();
@@ -1660,8 +1659,9 @@ IMPL_LINK(MyWindow, TextHdl, PushButton*, EMPTYARG)
     XSpreadsheetDocumentRef xDoc = lcl_GetDocument();           // Calc-Model
     if (xDoc)
     {
+        USHORT nTab = 0;
         CellAddress aPos;
-        aPos.Sheet  = nTab;
+        aPos.Sheet  = 0;
         aPos.Column = nCol;
         aPos.Row    = nRow;
         XCellRef xCell = xDoc->getCell(aPos);
