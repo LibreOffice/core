@@ -269,12 +269,12 @@ ScVbaWorkbooks::Open( const rtl::OUString& rFileName, const uno::Any& /*UpdateLi
         osl::FileBase::getFileURLFromSystemPath( rFileName, aURL );
 
     uno::Sequence< beans::PropertyValue > sProps(0);
-    sal_Int32 nIndex = 0;
 
     rtl::OUString sType = getFileFilterType( aURL );
     // A text file means it needs to be processed as a csv file
     if ( isTextFile( sType ) )
     {
+        sal_Int32 nIndex = 0;
         // Values for format
         // 1 Tabs
         // 2 Commas
