@@ -1451,7 +1451,7 @@ void OSQLParseTreeIterator::traverseANDCriteria(OSQLParseNode * pSearchCondition
 }
 //-----------------------------------------------------------------------------
 void OSQLParseTreeIterator::traverseParameter(const OSQLParseNode* _pParseNode
-                                              ,const OSQLParseNode* _pColumnRef
+                                              ,const OSQLParseNode* _pParentNode
                                               ,const ::rtl::OUString& _aColumnName
                                               ,const ::rtl::OUString& _aTableRange
                                               ,const ::rtl::OUString& _rColumnAlias)
@@ -1490,18 +1490,18 @@ void OSQLParseTreeIterator::traverseParameter(const OSQLParseNode* _pParseNode
     }
 
     // found a parameter
-    if ( _pColumnRef && (SQL_ISRULE(_pColumnRef,general_set_fct) || SQL_ISRULE(_pColumnRef,set_fct_spec)) )
+    if ( _pParentNode && (SQL_ISRULE(_pParentNode,general_set_fct) || SQL_ISRULE(_pParentNode,set_fct_spec)) )
     {// found a function as column_ref
         ::rtl::OUString sFunctionName;
-        _pColumnRef->getChild(0)->parseNodeToStr( sFunctionName, m_pImpl->m_xConnection, NULL, sal_False, sal_False );
-        const sal_uInt32 nCount = _pColumnRef->count();
+        _pParentNode->getChild(0)->parseNodeToStr( sFunctionName, m_pImpl->m_xConnection, NULL, sal_False, sal_False );
+        const sal_uInt32 nCount = _pParentNode->count();
         sal_uInt32 i = 0;
         for(; i < nCount;++i)
         {
-            if ( _pColumnRef->getChild(i) == _pParseNode )
+            if ( _pParentNode->getChild(i) == _pParseNode )
                 break;
         }
-        sal_Int32 nType = ::connectivity::OSQLParser::getFunctionParameterType( _pColumnRef->getParent()->getChild(0)->getTokenID(), i+1);
+        sal_Int32 nType = ::connectivity::OSQLParser::getFunctionParameterType( _pParentNode->getChild(0)->getTokenID(), i-1);
 
         OParseColumn* pColumn = new OParseColumn(   sParameterName,
                                                     ::rtl::OUString(),
@@ -1552,14 +1552,14 @@ void OSQLParseTreeIterator::traverseParameter(const OSQLParseNode* _pParseNode
         if ( bNotFound )
         {
             sal_Int32 nType = DataType::VARCHAR;
-            OSQLParseNode* pParent = _pColumnRef ? _pColumnRef->getParent() : NULL;
+            OSQLParseNode* pParent = _pParentNode ? _pParentNode->getParent() : NULL;
             if ( pParent && (SQL_ISRULE(pParent,general_set_fct) || SQL_ISRULE(pParent,set_fct_spec)) )
             {
-                const sal_uInt32 nCount = _pColumnRef->count();
+                const sal_uInt32 nCount = _pParentNode->count();
                 sal_uInt32 i = 0;
                 for(; i < nCount;++i)
                 {
-                    if ( _pColumnRef->getChild(i) == _pParseNode )
+                    if ( _pParentNode->getChild(i) == _pParseNode )
                         break;
                 }
                 nType = ::connectivity::OSQLParser::getFunctionParameterType( pParent->getChild(0)->getTokenID(), i+1);
