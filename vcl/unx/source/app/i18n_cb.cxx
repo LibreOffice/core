@@ -501,7 +501,7 @@ PreeditCaretCallback ( XIC, XPointer,XIMPreeditCaretCallbackStruct* )
 Bool
 IsControlCode(sal_Unicode nChar)
 {
-    if ( nChar <= 0x1F // C0 controls )
+    if ( nChar <= 0x1F /* C0 controls */ )
         return True;
     else
         return False;
