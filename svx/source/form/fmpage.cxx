@@ -145,7 +145,7 @@ void FmFormPage::SetModel(SdrModel* pNewModel)
                 }
             }
         }
-        catch( ::com::sun::star::uno::Exception ex )
+        catch( ::com::sun::star::uno::Exception const& )
         {
             OSL_ENSURE( sal_False, "UNO Exception caught resetting model for m_pImpl (FmFormPageImpl) in FmFormPage::SetModel" );
         }

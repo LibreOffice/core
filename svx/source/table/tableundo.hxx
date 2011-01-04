@@ -76,7 +76,7 @@ private:
         ::sal_Int32     mnRowSpan;
         ::sal_Int32     mnColSpan;
 
-        Data() : mpProperties(0), mpOutlinerParaObject(0) {};
+        Data() : mpProperties(NULL), mpOutlinerParaObject(NULL), mfValue(0) {};
     };
 
     void setDataToCell( const Data& rData );

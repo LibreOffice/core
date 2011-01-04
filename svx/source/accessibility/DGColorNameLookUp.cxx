@@ -112,9 +112,9 @@ DGColorNameLookUp::DGColorNameLookUp (void)
             aNames = xNA->getElementNames();
         }
     }
-    catch (uno::RuntimeException e)
+    catch (uno::RuntimeException const&)
     {
-        // When an excpetion occurred then whe have an empty name sequence
+        // When an exception occurred then whe have an empty name sequence
         // and the loop below is not entered.
     }
 
@@ -130,9 +130,9 @@ DGColorNameLookUp::DGColorNameLookUp (void)
                 aColor >>= nColor;
                 maColorValueToNameMap[nColor] = aNames[i];
             }
-            catch (uno::RuntimeException e)
+            catch (uno::RuntimeException const&)
             {
-                // Ignore the exception: the color who lead to the excpetion
+                // Ignore the exception: the color who lead to the exception
                 // is not included into the map.
             }
         }

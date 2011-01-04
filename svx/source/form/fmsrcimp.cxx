@@ -253,7 +253,7 @@ sal_Bool FmSearchEngine::MoveCursor()
             else
                 m_xSearchCursor.previous();
     }
-    catch(::com::sun::star::sdbc::SQLException  e)
+    catch(::com::sun::star::sdbc::SQLException const& e)
     {
 #if OSL_DEBUG_LEVEL > 0
         String sDebugMessage;
@@ -264,7 +264,7 @@ sal_Bool FmSearchEngine::MoveCursor()
 #endif
         bSuccess = sal_False;
     }
-    catch(Exception  e)
+    catch(Exception const& e)
     {
 #if OSL_DEBUG_LEVEL > 0
         UniString sDebugMessage;

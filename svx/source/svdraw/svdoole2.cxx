@@ -1677,7 +1677,7 @@ void SdrOle2Obj::operator=(const SdrObject& rObj)
                     catch( uno::Exception& e )
                     {
                         (void)e;
-                        DBG_ERROR( "SdrOle2Obj::operator=(), unexcpected exception caught!" );
+                        DBG_ERROR( "SdrOle2Obj::operator=(), unexpected exception caught!" );
                     }
                 }                                                                            */
             }

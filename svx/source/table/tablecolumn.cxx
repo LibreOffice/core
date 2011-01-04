@@ -98,6 +98,8 @@ TableColumn& TableColumn::operator=( const TableColumn& r )
     mbOptimalWidth = r.mbOptimalWidth;
     mbIsVisible = r.mbIsVisible;
     mbIsStartOfNewPage = r.mbIsStartOfNewPage;
+    maName = r.maName;
+    mnColumn = r.mnColumn;
 
     return *this;
 }

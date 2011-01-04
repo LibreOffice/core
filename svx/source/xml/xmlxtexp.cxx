@@ -368,7 +368,7 @@ sal_Bool SvxXMLXTableExportComponent::exportTable() throw()
 
         GetDocHandler()->endDocument();
     }
-    catch( Exception e )
+    catch( Exception const& )
     {
         bRet = sal_False;
     }

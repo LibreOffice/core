@@ -513,7 +513,7 @@ awt::Rectangle SAL_CALL AccessibleShape::getBounds (void)
                         aValue >>= aBoundingBox;
                         bFoundBoundRect = true;
                     }
-                    catch (beans::UnknownPropertyException e)
+                    catch (beans::UnknownPropertyException const&)
                     {
                         // Handled below (bFoundBoundRect stays false).
                     }
@@ -891,7 +891,7 @@ void SAL_CALL
         }
 
     }
-    catch (uno::RuntimeException e)
+    catch (uno::RuntimeException const&)
     {
         OSL_TRACE ("caught exception while disposing");
     }
