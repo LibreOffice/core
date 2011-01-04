@@ -54,7 +54,7 @@ ModalDialog DLG_TITLEPAGE
     RadioButton RB_USE_EXISTING_PAGES
     {
         Pos = MAP_APPFONT ( 12 , 18 ) ;
-        Size = MAP_APPFONT ( 150 , 10 ) ;
+        Size = MAP_APPFONT ( 198 , 10 ) ;
         Text [ en-US ] = "Convert existing pages to title pages" ;
         TabStop = TRUE ;
         Check = TRUE ;
@@ -63,20 +63,20 @@ ModalDialog DLG_TITLEPAGE
     RadioButton RB_INSERT_NEW_PAGES
     {
         Pos = MAP_APPFONT ( 12 , 34 ) ;
-        Size = MAP_APPFONT ( 150 , 10 ) ;
+        Size = MAP_APPFONT ( 198 , 10 ) ;
         Text [ en-US ] = "Insert new title pages" ;
         Text [ x-comment ] = " ";
     };
     FixedText FT_PAGE_COUNT
     {
         Pos = MAP_APPFONT ( 12 , 50 ) ;
-        Size = MAP_APPFONT ( 80 , 8 ) ;
+        Size = MAP_APPFONT ( 82 , 8 ) ;
         Text [ en-US ] = "Number of title pages" ;
         Text [ x-comment ] = " ";
     };
     NumericField NF_PAGE_COUNT
     {
-        Pos = MAP_APPFONT ( 80 , 50 ) ;
+        Pos = MAP_APPFONT ( 100 , 50 ) ;
         Size = MAP_APPFONT ( 30 , 12 ) ;
         Border = TRUE ;
         TabStop = TRUE ;
@@ -91,7 +91,7 @@ ModalDialog DLG_TITLEPAGE
     };
     FixedText FT_PAGE_PAGES
     {
-        Pos = MAP_APPFONT ( 116 , 50 ) ;
+        Pos = MAP_APPFONT ( 136 , 50 ) ;
         Size = MAP_APPFONT ( 80 , 10 ) ;
         Text [ en-US ] = "pages" ;
         Text [ x-comment ] = " ";
@@ -99,14 +99,14 @@ ModalDialog DLG_TITLEPAGE
     FixedText FT_PAGE_START
     {
         Pos = MAP_APPFONT ( 12 , 66 ) ;
-        Size = MAP_APPFONT ( 58 , 8 ) ;
+        Size = MAP_APPFONT ( 82 , 8 ) ;
         Text [ en-US ] = "Place title pages at" ;
         Text [ x-comment ] = " ";
     };
     RadioButton RB_DOCUMENT_START
     {
-        Pos = MAP_APPFONT ( 80 , 66 ) ;
-        Size = MAP_APPFONT ( 80 , 10 ) ;
+        Pos = MAP_APPFONT ( 100 , 66 ) ;
+        Size = MAP_APPFONT ( 110 , 10 ) ;
         Text [ en-US ] = "Document Start" ;
         TabStop = TRUE ;
         Check = TRUE ;
@@ -114,14 +114,14 @@ ModalDialog DLG_TITLEPAGE
     };
     RadioButton RB_PAGE_START
     {
-        Pos = MAP_APPFONT ( 80 , 78 ) ;
+        Pos = MAP_APPFONT ( 100 , 78 ) ;
         Size = MAP_APPFONT ( 30 , 10 ) ;
         Text [ en-US ] = "Page" ;
         Text [ x-comment ] = " ";
     };
     NumericField NF_PAGE_START
     {
-        Pos = MAP_APPFONT ( 111 , 78 ) ;
+        Pos = MAP_APPFONT ( 131 , 78 ) ;
         Size = MAP_APPFONT ( 30 , 12 ) ;
         Border = TRUE ;
         TabStop = TRUE ;
@@ -144,7 +144,7 @@ ModalDialog DLG_TITLEPAGE
     CheckBox CB_RESTART_NUMBERING
     {
         Pos = MAP_APPFONT ( 12, 111  ) ;
-        Size = MAP_APPFONT ( 150 , 10 ) ;
+        Size = MAP_APPFONT ( 198 , 10 ) ;
         TabStop = TRUE ;
         Text [ en-US ] = "Reset Page Numbering after title pages" ;
         Text [ x-comment ] = " ";
@@ -152,13 +152,13 @@ ModalDialog DLG_TITLEPAGE
     FixedText FT_RESTART_NUMBERING
     {
         Pos = MAP_APPFONT ( 20 , 125 ) ;
-        Size = MAP_APPFONT ( 50 , 10 ) ;
+        Size = MAP_APPFONT ( 74 , 10 ) ;
         Text [ en-US ] = "Page Number" ;
         Text [ x-comment ] = " ";
     };
     NumericField NF_RESTART_NUMBERING
     {
-        Pos = MAP_APPFONT ( 60 , 125 ) ;
+        Pos = MAP_APPFONT ( 100 , 125 ) ;
         Size = MAP_APPFONT ( 30 , 12 ) ;
         Border = TRUE ;
         TabStop = TRUE ;
@@ -174,7 +174,7 @@ ModalDialog DLG_TITLEPAGE
     CheckBox CB_SET_PAGE_NUMBER
     {
         Pos = MAP_APPFONT ( 12 , 139 ) ;
-        Size = MAP_APPFONT ( 150 , 10 ) ;
+        Size = MAP_APPFONT ( 198 , 10 ) ;
         TabStop = TRUE ;
         Text [ en-US ] = "Set Page Number for first title page" ;
         Text [ x-comment ] = " ";
@@ -182,13 +182,13 @@ ModalDialog DLG_TITLEPAGE
     FixedText FT_SET_PAGE_NUMBER
     {
         Pos = MAP_APPFONT ( 20 , 153 ) ;
-        Size = MAP_APPFONT ( 50 , 10 ) ;
+        Size = MAP_APPFONT ( 74 , 10 ) ;
         Text [ en-US ] = "Page Number" ;
         Text [ x-comment ] = " ";
     };
     NumericField NF_SET_PAGE_NUMBER
     {
-        Pos = MAP_APPFONT ( 60 , 153 ) ;
+        Pos = MAP_APPFONT ( 100 , 153 ) ;
         Size = MAP_APPFONT ( 30 , 12 ) ;
         Border = TRUE ;
         TabStop = TRUE ;
@@ -212,7 +212,7 @@ ModalDialog DLG_TITLEPAGE
     {
         Border = TRUE ;
         Pos = MAP_APPFONT ( 12 , 182 ) ;
-        Size = MAP_APPFONT ( 150 , 80 ) ;
+        Size = MAP_APPFONT ( 152 , 80 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
         CurPos = 0 ;
