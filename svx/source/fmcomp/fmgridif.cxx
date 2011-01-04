@@ -1352,7 +1352,7 @@ Sequence< sal_Bool > SAL_CALL FmXGridPeer::queryFieldDataType( const Type& xType
         sal_uInt16 nModelPos = pGrid->GetModelColumnPos(pGrid->GetColumnIdFromViewPos((sal_uInt16)i));
         DBG_ASSERT(nModelPos != (sal_uInt16)-1, "FmXGridPeer::queryFieldDataType : no model pos !");
 
-        pCol = aColumns.GetObject(nModelPos);
+        pCol = aColumns[ nModelPos ];
         const DbGridRowRef xRow = pGrid->GetSeekRow();
         xFieldContent = (xRow.Is() && xRow->HasField(pCol->GetFieldPos())) ? xRow->GetField(pCol->GetFieldPos()).getColumn() : Reference< ::com::sun::star::sdb::XColumn > ();
         if (!xFieldContent.is())
@@ -1415,7 +1415,7 @@ Sequence< Any > SAL_CALL FmXGridPeer::queryFieldData( sal_Int32 nRow, const Type
 
         // don't use GetCurrentFieldValue to determine the field content as this isn't affected by the above SeekRow
         // FS - 30.09.99 - 68644
-        pCol = aColumns.GetObject(nModelPos);
+        pCol = aColumns[ nModelPos ];
         xFieldContent = xPaintRow->HasField( pCol->GetFieldPos() )
                     ?   xPaintRow->GetField( pCol->GetFieldPos() ).getColumn()
                     :   Reference< XColumn > ();
@@ -1435,7 +1435,7 @@ Sequence< Any > SAL_CALL FmXGridPeer::queryFieldData( sal_Int32 nRow, const Type
                 // Strings werden direkt ueber das GetFieldText abgehandelt
                 case TypeClass_STRING           :
                 {
-                    String sText = aColumns.GetObject(nModelPos)->GetCellText( xPaintRow, pGrid->getNumberFormatter() );
+                    String sText = aColumns[ nModelPos ]->GetCellText( xPaintRow, pGrid->getNumberFormatter() );
                     pReturnArray[i] <<= ::rtl::OUString(sText);
                 }
                 break;
@@ -1548,7 +1548,7 @@ void FmXGridPeer::propertyChange(const PropertyChangeEvent& evt) throw( RuntimeE
             // it design mode it doesn't matter
             if (!isDesignMode())
             {
-                DbGridColumn* pCol = pGrid->GetColumns().GetObject(i);
+                DbGridColumn* pCol = pGrid->GetColumns().at( i );
 
                 pCol->SetAlignmentFromModel(-1);
                 bInvalidateColumn = sal_True;
@@ -1832,7 +1832,7 @@ void FmXGridPeer::elementInserted(const ContainerEvent& evt) throw( RuntimeExcep
     pGrid->AppendColumn(aName, (sal_uInt16)nWidth, (sal_Int16)::comphelper::getINT32(evt.Accessor));
 
     // jetzt die Spalte setzen
-    DbGridColumn* pCol = pGrid->GetColumns().GetObject(::comphelper::getINT32(evt.Accessor));
+    DbGridColumn* pCol = pGrid->GetColumns().at( ::comphelper::getINT32(evt.Accessor) );
     pCol->setModel(xNewColumn);
 
     Any aHidden = xNewColumn->getPropertyValue(FM_PROP_HIDDEN);
@@ -1876,7 +1876,7 @@ void FmXGridPeer::elementReplaced(const ContainerEvent& evt) throw( RuntimeExcep
     sal_uInt16 nNewPos = pGrid->GetModelColumnPos(nNewId);
 
     // set the model of the new column
-    DbGridColumn* pCol = pGrid->GetColumns().GetObject(nNewPos);
+    DbGridColumn* pCol = pGrid->GetColumns().at( nNewPos );
 
     // for initializong this grid column, we need the fields of the grid's data source
     Reference< XColumnsSupplier > xSuppColumns;
@@ -1941,9 +1941,9 @@ void FmXGridPeer::setProperty( const ::rtl::OUString& PropertyName, const Any& V
 
         // need to forward this to the columns
         DbGridColumns& rColumns = const_cast<DbGridColumns&>(pGrid->GetColumns());
-        DbGridColumn* pLoop = rColumns.First();
-        while (pLoop)
+        for ( size_t i = 0, n = rColumns.size(); i < n; ++i )
         {
+            DbGridColumn* pLoop = rColumns[ i ];
             FmXGridCell* pXCell = pLoop->GetCell();
             if (pXCell)
             {
@@ -1952,8 +1952,6 @@ void FmXGridPeer::setProperty( const ::rtl::OUString& PropertyName, const Any& V
                 else
                     pXCell->SetTextLineColor(aTextLineColor);
             }
-
-            pLoop = rColumns.Next();
         }
 
         if (isDesignMode())
@@ -2442,8 +2440,7 @@ Any FmXGridPeer::getByIndex(sal_Int32 _nIndex) throw( IndexOutOfBoundsException,
     // get the list position
     sal_uInt16 nPos = pGrid->GetModelColumnPos(nId);
 
-    DbGridColumn* pCol = pGrid->GetColumns().GetObject(nPos);
-//  DBG_ASSERT(pCol && pCol->GetCell(), "FmXGridPeer::getByIndex(): Invalid cell");
+    DbGridColumn* pCol = pGrid->GetColumns().at( nPos );
     Reference< ::com::sun::star::awt::XControl >  xControl(pCol->GetCell());
     aElement <<= xControl;
 

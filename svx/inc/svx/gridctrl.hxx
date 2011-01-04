@@ -107,7 +107,7 @@ SV_DECL_REF(DbGridRow)
 // DbGridControl
 //==================================================================
 class DbGridColumn;
-DECLARE_LIST(DbGridColumns, DbGridColumn*)
+typedef ::std::vector< DbGridColumn* > DbGridColumns;
 
 //==================================================================
 class FmGridListener
@@ -422,7 +422,7 @@ public:
 
     // the number of columns in the model
     sal_uInt16 GetViewColCount() const { return ColCount() - 1; }
-    sal_uInt16 GetModelColCount() const { return (sal_uInt16)m_aColumns.Count(); }
+    sal_uInt16 GetModelColCount() const { return (sal_uInt16)m_aColumns.size(); }
     // reverse to GetViewColumnPos: Id of position, the first non-handle column has position 0
     sal_uInt16 GetColumnIdFromViewPos( sal_uInt16 nPos ) const { return GetColumnId(nPos + 1); }
     sal_uInt16 GetColumnIdFromModelPos( sal_uInt16 nPos ) const;

@@ -1551,7 +1551,7 @@ void FmGridControl::ColumnResized(sal_uInt16 nId)
     DbGridControl::ColumnResized(nId);
 
     // Wert ans model uebergeben
-    DbGridColumn* pCol = DbGridControl::GetColumns().GetObject(GetModelColumnPos(nId));
+    DbGridColumn* pCol = DbGridControl::GetColumns().at( GetModelColumnPos(nId) );
     Reference< ::com::sun::star::beans::XPropertySet >  xColModel(pCol->getModel());
     if (xColModel.is())
     {
@@ -1597,7 +1597,7 @@ void FmGridControl::ColumnMoved(sal_uInt16 nId)
     {
         // suchen der Spalte und verschieben im Model
         // ColumnPos holen
-        DbGridColumn* pCol = DbGridControl::GetColumns().GetObject(GetModelColumnPos(nId));
+        DbGridColumn* pCol = DbGridControl::GetColumns().at( GetModelColumnPos(nId) );
         Reference< ::com::sun::star::beans::XPropertySet >  xCol;
 
         // Einfuegen muß sich an den Column Positionen orientieren
@@ -1660,7 +1660,7 @@ void FmGridControl::InitColumnsByModels(const Reference< ::com::sun::star::conta
             nWidth = LogicToPixel(Point(nWidth,0),MAP_10TH_MM).X();
 
         AppendColumn(aName, (sal_uInt16)nWidth);
-        DbGridColumn* pCol = DbGridControl::GetColumns().GetObject(i);
+        DbGridColumn* pCol = DbGridControl::GetColumns().at( i );
         pCol->setModel(xCol);
     }
 
@@ -1738,12 +1738,6 @@ void FmGridControl::InitColumnByField(
             _pColumn->SetObject( (sal_Int16)nFieldPos );
             return;
         }
-/*
-        // handle readonly columns
-        sal_Bool bReadOnly = sal_True;
-        xField->getPropertyValue( FM_PROP_ISREADONLY ) >>= bReadOnly;
-        _pColumn->SetReadOnly( bReadOnly );
-*/
     }
 
     // the control type is determined by the ColumnServiceName
@@ -1773,7 +1767,7 @@ void FmGridControl::InitColumnsByFields(const Reference< ::com::sun::star::conta
     // Einfuegen muss sich an den Column Positionen orientieren
     for (sal_Int32 i = 0; i < xColumns->getCount(); i++)
     {
-        DbGridColumn* pCol = GetColumns().GetObject(i);
+        DbGridColumn* pCol = GetColumns().at( i );
         OSL_ENSURE(pCol,"No grid column!");
         if ( pCol )
         {
@@ -1794,7 +1788,7 @@ void FmGridControl::HideColumn(sal_uInt16 nId)
     if (nPos == (sal_uInt16)-1)
         return;
 
-    DbGridColumn* pColumn = GetColumns().GetObject(nPos);
+    DbGridColumn* pColumn = GetColumns().at( nPos );
     if (pColumn->IsHidden())
         GetPeer()->columnHidden(pColumn);
 
@@ -1826,7 +1820,7 @@ void FmGridControl::ShowColumn(sal_uInt16 nId)
     if (nPos == (sal_uInt16)-1)
         return;
 
-    DbGridColumn* pColumn = GetColumns().GetObject(nPos);
+    DbGridColumn* pColumn = GetColumns().at( nPos );
     if (!pColumn->IsHidden())
         GetPeer()->columnVisible(pColumn);
 
