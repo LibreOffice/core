@@ -34,8 +34,7 @@
 
 #include "tablecontrol_impl.hxx"
 #include "tablegeometry.hxx"
-
-#include <com/sun/star/graphic/XGraphic.hpp>
+#include "cellvalueconversion.hxx"
 
 #include <vcl/scrbar.hxx>
 #include <vcl/seleng.hxx>
@@ -49,12 +48,6 @@
 namespace svt { namespace table
 {
 //........................................................................
-
-    /** === begin UNO using === **/
-    using ::com::sun::star::uno::Reference;
-    using ::com::sun::star::graphic::XGraphic;
-    using ::com::sun::star::uno::Any;
-    /** === end UNO using === **/
 
     //====================================================================
     //= TempHideCursor
@@ -1141,6 +1134,7 @@ namespace svt { namespace table
             }
             if ( !colCount )
                 continue;
+
             // paint all cells in this row
             for ( TableCellGeometry aCell( aRowIterator, m_nLeftColumn );
                   aCell.isValid();
@@ -1148,24 +1142,8 @@ namespace svt { namespace table
                 )
             {
                 bool isSelectedColumn = false;
-
-                Any aCellContent;
-                m_pModel->getCellContent( aRowIterator.getRow(), aCell.getColumn(), aCellContent );
-
-                Reference< XGraphic > xGraphic;
-                if ( aCellContent >>= xGraphic )
-                {
-                    Image* pImage = new Image(xGraphic);
-                    if(pImage!=NULL)
-                        pRenderer->PaintCellImage( aCell.getColumn(), isSelectedRow || isSelectedColumn, isActiveRow,
-                                *m_pDataWindow, aCell.getRect(), rStyle, pImage );
-                }
-                else
-                {
-                    ::rtl::OUString sContent = convertToString( aCellContent );
-                    pRenderer->PaintCellString( aCell.getColumn(), isSelectedRow || isSelectedColumn, isActiveRow,
-                        *m_pDataWindow, aCell.getRect(), rStyle, sContent );
-                }
+                pRenderer->PaintCell( aCell.getColumn(), isSelectedRow || isSelectedColumn, isActiveRow,
+                                *m_pDataWindow, aCell.getRect(), rStyle );
             }
         }
     }
@@ -1872,7 +1850,7 @@ namespace svt { namespace table
     {
         ::com::sun::star::uno::Any content;
         m_pModel->getCellContent( i_row, i_col, content );
-        return convertToString( content );
+        return CellValueConversion::convertToString( content );
     }
 
     //--------------------------------------------------------------------
@@ -2304,24 +2282,8 @@ namespace svt { namespace table
 
         // TODO: isnt' it that this might be done repeatedly?
     }
+
     //--------------------------------------------------------------------
-    rtl::OUString TableControl_Impl::convertToString(const ::com::sun::star::uno::Any& value)
-    {
-        sal_Int32 nInt = 0;
-        sal_Bool bBool = false;
-        double fDouble = 0;
-        ::rtl::OUString sNewString;
-        ::rtl::OUString sConvertString;
-        if(value >>= sConvertString)
-            sNewString = sConvertString;
-        else if(value >>= nInt)
-            sNewString = sConvertString.valueOf(nInt);
-        else if(value >>= bBool)
-            sNewString = sConvertString.valueOf(bBool);
-        else if(value >>= fDouble)
-            sNewString = sConvertString.valueOf(fDouble);
-        return sNewString;
-    }
     Rectangle TableControl_Impl::calcHeaderRect(bool bColHeader)
     {
         Rectangle aRectTable, aRectTableWithHeaders;
@@ -2334,6 +2296,8 @@ namespace svt { namespace table
         else
             return Rectangle(aRectTableWithHeaders.TopLeft(),Size(aSizeTableWithHeaders.Width(), aSizeTableWithHeaders.Height()-aSizeTable.Height()));
     }
+
+    //--------------------------------------------------------------------
     Rectangle TableControl_Impl::calcTableRect()
     {
         Rectangle aRect;

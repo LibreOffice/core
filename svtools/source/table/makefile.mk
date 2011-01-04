@@ -45,7 +45,8 @@ SLOFILES=\
         $(SLO)$/gridtablerenderer.obj \
         $(SLO)$/tablegeometry.obj \
         $(SLO)$/defaultinputhandler.obj \
-        $(SLO)$/tabledatawindow.obj
+        $(SLO)$/tabledatawindow.obj \
+        $(SLO)$/cellvalueconversion.obj
 
 #LIB1TARGET=     $(SLB)$/$(TARGET).lib
 #LIB1OBJFILES=   $(SLOFILES)

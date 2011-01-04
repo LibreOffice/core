@@ -266,7 +266,6 @@ namespace svt { namespace table
         ScrollBar* getHorzScrollbar();
         ScrollBar* getVertScrollbar();
 
-        ::rtl::OUString convertToString(const ::com::sun::star::uno::Any& _value);
         Rectangle calcHeaderRect(bool bColHeader);
         Rectangle calcTableRect();
 

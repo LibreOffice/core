@@ -27,7 +27,10 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svtools.hxx"
 
+#include "cellvalueconversion.hxx"
 #include "svtools/table/gridtablerenderer.hxx"
+
+#include <com/sun/star/graphic/XGraphic.hpp>
 
 #include <tools/debug.hxx>
 #include <vcl/window.hxx>
@@ -37,6 +40,19 @@
 namespace svt { namespace table
 {
 //........................................................................
+
+    using ::com::sun::star::uno::Any;
+    using ::com::sun::star::uno::Reference;
+    using ::com::sun::star::uno::UNO_QUERY;
+    using ::com::sun::star::graphic::XGraphic;
+    using ::com::sun::star::style::HorizontalAlignment;
+    using ::com::sun::star::style::HorizontalAlignment_LEFT;
+    using ::com::sun::star::style::HorizontalAlignment_CENTER;
+    using ::com::sun::star::style::HorizontalAlignment_RIGHT;
+    using ::com::sun::star::style::VerticalAlignment;
+    using ::com::sun::star::style::VerticalAlignment_TOP;
+    using ::com::sun::star::style::VerticalAlignment_MIDDLE;
+    using ::com::sun::star::style::VerticalAlignment_BOTTOM;
 
     struct GridTableRenderer_Impl
     {
@@ -81,11 +97,11 @@ namespace svt { namespace table
 
         _rDevice.Push( PUSH_FILLCOLOR | PUSH_LINECOLOR);
         Color background = m_pImpl->rModel.getHeaderBackgroundColor();
-        if( background != 0xFFFFFF)
-            _rDevice.SetFillColor(background);
+        if ( background != COL_TRANSPARENT )
+            _rDevice.SetFillColor( background );
         else
-            _rDevice.SetFillColor(_rStyle.GetDialogColor());
-        _rDevice.SetLineColor(_rStyle.GetSeparatorColor());
+            _rDevice.SetFillColor( _rStyle.GetDialogColor() );
+        _rDevice.SetLineColor( _rStyle.GetSeparatorColor() );
         _rDevice.DrawRect( _rArea );
         // delimiter lines at bottom/right
         _rDevice.DrawLine( _rArea.BottomLeft(), _rArea.BottomRight() );
@@ -147,44 +163,44 @@ namespace svt { namespace table
         _rDevice.Push( PUSH_FILLCOLOR | PUSH_LINECOLOR);
 
         Color aRowBackground = m_pImpl->rModel.getOddRowBackgroundColor();
-        Color line =  m_pImpl->rModel.getLineColor();
+        const Color lineColor =  m_pImpl->rModel.getLineColor();
         Color aRowBackground2 = m_pImpl->rModel.getEvenRowBackgroundColor();
-        Color fieldColor = _rStyle.GetFieldColor();
-        if(aRowBackground == 0xFFFFFF)
+        const Color fieldColor = _rStyle.GetFieldColor();
+        if ( aRowBackground == COL_TRANSPARENT )
             aRowBackground = fieldColor;
-        if(aRowBackground2 == 0xFFFFFF)
+        if ( aRowBackground2 == COL_TRANSPARENT )
             aRowBackground2 = fieldColor;
         //if row is selected background color becomes blue, and lines should be also blue
         //if they aren't user defined
-        if(_bSelected)
+        if ( _bSelected )
         {
-            Color aSelected(_rStyle.GetHighlightColor());
+            const Color aSelected( _rStyle.GetHighlightColor() );
             aRowBackground = aSelected;
-            if(line == 0xFFFFFF)
-                _rDevice.SetLineColor(aRowBackground);
+            if ( lineColor == COL_TRANSPARENT )
+                _rDevice.SetLineColor( aRowBackground );
             else
-                _rDevice.SetLineColor(line);
+                _rDevice.SetLineColor( lineColor );
         }
-        //if row not selected, check the cases whether user defined backgrounds are set
-        //and set line color to be the same
+        // if row not selected, check the cases whether user defined backgrounds are set
+        // and set line color to be the same
         else
         {
-            if(aRowBackground2 != fieldColor && _nRow%2)
+            if ( ( aRowBackground2 != fieldColor ) && ( _nRow % 2 ) )
             {
                 aRowBackground = aRowBackground2;
-                if(line == 0xFFFFFF)
-                    _rDevice.SetLineColor(aRowBackground);
+                if ( lineColor == COL_TRANSPARENT )
+                    _rDevice.SetLineColor( aRowBackground );
                 else
-                    _rDevice.SetLineColor(line);
+                    _rDevice.SetLineColor( lineColor );
             }
             //fill the rows with alternating background colors if second background color is specified
-            else if(aRowBackground != fieldColor && line == 0xFFFFFF)
-                _rDevice.SetLineColor(aRowBackground);
+            else if ( aRowBackground != fieldColor && lineColor == COL_TRANSPARENT )
+                _rDevice.SetLineColor( aRowBackground );
             else
             {
                 //if Line color is set, then it was user defined and should be visible
                 //if it wasn't set, it'll be the same as the default background color, so lines still won't be visible
-                _rDevice.SetLineColor(line);
+                _rDevice.SetLineColor( lineColor );
             }
         }
         _rDevice.SetFillColor( aRowBackground );
@@ -200,166 +216,207 @@ namespace svt { namespace table
     void GridTableRenderer::PaintRowHeader( RowPos const i_rowPos, bool _bActive, bool _bSelected, OutputDevice& _rDevice, const Rectangle& _rArea,
         const StyleSettings& _rStyle )
     {
-        _rDevice.Push( PUSH_LINECOLOR);
-        _rDevice.SetLineColor(_rStyle.GetSeparatorColor());
+        _rDevice.Push( PUSH_LINECOLOR | PUSH_TEXTCOLOR );
+
+        _rDevice.SetLineColor( _rStyle.GetSeparatorColor() );
         _rDevice.DrawLine( _rArea.BottomLeft(), _rArea.BottomRight() );
-        if(m_pImpl->rModel.getTextColor() != 0x000000)
-            _rDevice.SetTextColor(m_pImpl->rModel.getTextColor());
+
+        if ( m_pImpl->rModel.getTextColor() != 0x000000 )
+            _rDevice.SetTextColor( m_pImpl->rModel.getTextColor() );
         else
-            _rDevice.SetTextColor(_rStyle.GetFieldTextColor());
+            _rDevice.SetTextColor( _rStyle.GetFieldTextColor() );
+
         ULONG nHorFlag = TEXT_DRAW_LEFT;
         ULONG nVerFlag = TEXT_DRAW_TOP;
-        if(m_pImpl->rModel.getVerticalAlign() == 1)
+        if ( m_pImpl->rModel.getVerticalAlign() == 1 )
             nVerFlag = TEXT_DRAW_VCENTER;
-        else if(m_pImpl->rModel.getVerticalAlign() == 2)
+        else if ( m_pImpl->rModel.getVerticalAlign() == 2 )
             nVerFlag = TEXT_DRAW_BOTTOM;
-        if(m_pImpl->rModel.getColumnModel(0)->getHorizontalAlign() == 1)
+        if ( m_pImpl->rModel.getColumnModel(0)->getHorizontalAlign() == 1 )
             nHorFlag = TEXT_DRAW_CENTER;
-        else if(m_pImpl->rModel.getColumnModel(0)->getHorizontalAlign() == 2)
+        else if ( m_pImpl->rModel.getColumnModel(0)->getHorizontalAlign() == 2 )
             nHorFlag = TEXT_DRAW_RIGHT;
-        Rectangle aRect(_rArea);
+
+        Rectangle aRect( _rArea );
         aRect.Left()+=4; aRect.Right()-=4;
         aRect.Bottom()-=2;
-        _rDevice.DrawText( aRect, m_pImpl->rModel.getRowHeader( i_rowPos ), nHorFlag | nVerFlag | TEXT_DRAW_CLIP);
+        _rDevice.DrawText( aRect, m_pImpl->rModel.getRowHeader( i_rowPos ), nHorFlag | nVerFlag | TEXT_DRAW_CLIP );
+
         // TODO: active? selected?
         (void)_bActive;
         (void)_bSelected;
-        //at the moment no special paint for selected row header
         _rDevice.Pop();
     }
 
     //--------------------------------------------------------------------
-    void GridTableRenderer::PaintCellImage( ColPos _nColumn, bool _bSelected, bool _bActive,
-        OutputDevice& _rDevice, const Rectangle& _rArea, const StyleSettings& _rStyle, Image* _pCellData )
-   {
-        _rDevice.Push( PUSH_LINECOLOR | PUSH_FILLCOLOR);
-        Color background1 = m_pImpl->rModel.getOddRowBackgroundColor();
-        Color background2 = m_pImpl->rModel.getEvenRowBackgroundColor();
-        Color line = m_pImpl->rModel.getLineColor();
-        //if row is selected and line color isn't user specified, set it blue
-        if(_bSelected)
-        {
-            if(line == 0xFFFFFF)
-                _rDevice.SetLineColor(_rStyle.GetHighlightColor());
-            else
-                _rDevice.SetLineColor(line);
-        }
-        //else set line color to the color of row background
-        else
-        {
-            if(background2 != 0xFFFFFF && m_pImpl->nCurrentRow%2)
-            {
-                if(line == 0xFFFFFF)
-                    _rDevice.SetLineColor(background2);
-                else
-                    _rDevice.SetLineColor(line);
-            }
-            else if(background1 != 0xFFFFFF && line == 0xFFFFFF)
-                _rDevice.SetLineColor(background1);
-            else
-            {
-                //if line color is set, then it was user defined and should be visible
-                //if it wasn't set, it'll be the same as the default background color, so lines still won't be visible
-                _rDevice.SetLineColor(line);
-            }
-        }
-        _rDevice.DrawLine( _rArea.BottomRight(), _rArea.TopRight() );
+    struct GridTableRenderer::CellRenderContext
+    {
+        OutputDevice&           rDevice;
+        Rectangle const         aContentArea;
+        StyleSettings const &   rStyle;
+        ColPos const            nColumn;
+        bool const              bSelected;
 
-        Rectangle aRect( _rArea );
-        ++aRect.Left(); --aRect.Right();
-        aRect.Top(); aRect.Bottom();
-        Point imagePos(Point(aRect.Left(), aRect.Top()));
-        Size imageSize = _pCellData->GetSizePixel();
-        if(aRect.GetWidth() > imageSize.Width())
+        CellRenderContext( OutputDevice& i_device, Rectangle const & i_contentArea,
+            StyleSettings const & i_style, ColPos const i_column, bool const i_selected )
+            :rDevice( i_device )
+            ,aContentArea( i_contentArea )
+            ,rStyle( i_style )
+            ,nColumn( i_column )
+            ,bSelected( i_selected )
         {
-            if(m_pImpl->rModel.getColumnModel(_nColumn)->getHorizontalAlign() == 1)
-                imagePos.X() = aRect.Left()+((double)(aRect.GetWidth() - imageSize.Width()))/2;
-            else if(m_pImpl->rModel.getColumnModel(_nColumn)->getHorizontalAlign() == 2)
-                imagePos.X() = aRect.Right() - imageSize.Width();
         }
-        else
-            imageSize.Width() = aRect.GetWidth();
-        if(aRect.GetHeight() > imageSize.Height())
-        {
-            if(m_pImpl->rModel.getVerticalAlign() == 1)
-                imagePos.Y() = aRect.Top()+((double)(aRect.GetHeight() - imageSize.Height()))/2;
-            else if(m_pImpl->rModel.getVerticalAlign() == 2)
-                imagePos.Y() = aRect.Bottom() - imageSize.Height();
-        }
-        else
-            imageSize.Height() = aRect.GetHeight()-1;
-        Image& image (*_pCellData);
-        _rDevice.DrawImage(imagePos, imageSize, image, 0);
-        _rDevice.Pop();
-
-        (void)_bActive;
-        // no special painting for the active cell at the moment
-    }
+    };
 
     //--------------------------------------------------------------------
-   void GridTableRenderer::PaintCellString( ColPos _nColumn, bool _bSelected, bool _bActive,
-        OutputDevice& _rDevice, const Rectangle& _rArea, const StyleSettings& _rStyle, rtl::OUString& _rText )
+    void GridTableRenderer::PaintCell( ColPos const i_column, bool _bSelected, bool _bActive,
+        OutputDevice& _rDevice, const Rectangle& _rArea, const StyleSettings& _rStyle )
    {
         _rDevice.Push( PUSH_LINECOLOR | PUSH_FILLCOLOR );
         Color background1 = m_pImpl->rModel.getOddRowBackgroundColor();
         Color background2 = m_pImpl->rModel.getEvenRowBackgroundColor();
-        Color line = m_pImpl->rModel.getLineColor();
-        //if row is selected and line color isn't user specified, set it blue
-        if(_bSelected)
+        Color lineColor = m_pImpl->rModel.getLineColor();
+
+        // if row is selected and line color isn't user specified, use the settings' color
+        if ( _bSelected )
         {
-            if(line == 0xFFFFFF)
-                _rDevice.SetLineColor(_rStyle.GetHighlightColor());
+            if ( lineColor == COL_TRANSPARENT )
+                _rDevice.SetLineColor( _rStyle.GetHighlightColor() );
             else
-                _rDevice.SetLineColor(line);
+                _rDevice.SetLineColor( lineColor );
         }
-        //else set line color to the color of row background
+        // else set line color to the color of row background
         else
         {
-            if(background2 != 0xFFFFFF && m_pImpl->nCurrentRow%2)
+            if ( ( background2 != COL_TRANSPARENT ) && ( m_pImpl->nCurrentRow % 2 ) )
             {
-                if(line == 0xFFFFFF)
-                    _rDevice.SetLineColor(background2);
+                if ( lineColor == COL_TRANSPARENT )
+                    _rDevice.SetLineColor( background2 );
                 else
-                    _rDevice.SetLineColor(line);
+                    _rDevice.SetLineColor( lineColor );
             }
-            else if(background1 != 0xFFFFFF && line == 0xFFFFFF)
-                _rDevice.SetLineColor(background1);
+            else if ( ( background1 != COL_TRANSPARENT ) && ( lineColor == COL_TRANSPARENT ) )
+                _rDevice.SetLineColor( background1 );
             else
             {
-                //if Line color is set, then it was user defined and should be visible
+                //if line color is set, then it was user defined and should be visible
                 //if it wasn't set, it'll be the same as the default background color, so lines still won't be visible
-                _rDevice.SetLineColor(line);
+                _rDevice.SetLineColor( lineColor );
             }
         }
         _rDevice.DrawLine( _rArea.BottomRight(), _rArea.TopRight() );
 
         Rectangle aRect( _rArea );
         ++aRect.Left(); --aRect.Right();
-        aRect.Top(); aRect.Bottom();
-        if(_bSelected)
-            _rDevice.SetTextColor(_rStyle.GetHighlightTextColor());
-        else if(m_pImpl->rModel.getTextColor() != 0x000000)
-            _rDevice.SetTextColor(m_pImpl->rModel.getTextColor());
-        else
-            _rDevice.SetTextColor(_rStyle.GetFieldTextColor());
-        ULONG nHorFlag = TEXT_DRAW_LEFT;
-        ULONG nVerFlag = TEXT_DRAW_TOP;
-        if(m_pImpl->rModel.getVerticalAlign() == 1)
-            nVerFlag = TEXT_DRAW_VCENTER;
-        else if(m_pImpl->rModel.getVerticalAlign() == 2)
-            nVerFlag = TEXT_DRAW_BOTTOM;
-        if(m_pImpl->rModel.getColumnModel(_nColumn)->getHorizontalAlign() == 1)
-            nHorFlag = TEXT_DRAW_CENTER;
-        else if(m_pImpl->rModel.getColumnModel(_nColumn)->getHorizontalAlign() == 2)
-            nHorFlag = TEXT_DRAW_RIGHT;
-        Rectangle textRect(_rArea);
-        textRect.Left()+=4; textRect.Right()-=4;
-        textRect.Bottom()-=2;
-        _rDevice.DrawText( textRect, _rText, nHorFlag | nVerFlag | TEXT_DRAW_CLIP);
+
+        const CellRenderContext aRenderContext( _rDevice, aRect, _rStyle, i_column, _bSelected );
+        impl_paintCellContent( aRenderContext );
 
         _rDevice.Pop();
+
         (void)_bActive;
         // no special painting for the active cell at the moment
+    }
+
+    //--------------------------------------------------------------------
+    void GridTableRenderer::impl_paintCellImage( CellRenderContext const & i_context, Image const & i_image )
+    {
+        Point imagePos( Point( i_context.aContentArea.Left(), i_context.aContentArea.Top() ) );
+        Size imageSize = i_image.GetSizePixel();
+        if ( i_context.aContentArea.GetWidth() > imageSize.Width() )
+        {
+            const HorizontalAlignment eHorzAlign = m_pImpl->rModel.getColumnModel( i_context.nColumn )->getHorizontalAlign();
+            switch ( eHorzAlign )
+            {
+            case HorizontalAlignment_CENTER:
+                imagePos.X() += ( i_context.aContentArea.GetWidth() - imageSize.Width() ) / 2;
+                break;
+            case HorizontalAlignment_RIGHT:
+                imagePos.X() = i_context.aContentArea.Right() - imageSize.Width();
+                break;
+            default:
+                break;
+            }
+
+        }
+        else
+            imageSize.Width() = i_context.aContentArea.GetWidth();
+
+        if ( i_context.aContentArea.GetHeight() > imageSize.Height() )
+        {
+            const VerticalAlignment eVertAlign = m_pImpl->rModel.getVerticalAlign();
+            switch ( eVertAlign )
+            {
+            case VerticalAlignment_MIDDLE:
+                imagePos.Y() += ( i_context.aContentArea.GetHeight() - imageSize.Height() ) / 2;
+                break;
+            case VerticalAlignment_BOTTOM:
+                imagePos.Y() = i_context.aContentArea.Bottom() - imageSize.Height();
+                break;
+            default:
+                break;
+            }
+        }
+        else
+            imageSize.Height() = i_context.aContentArea.GetHeight() - 1;
+
+        i_context.rDevice.DrawImage( imagePos, imageSize, i_image, 0 );
+    }
+
+    //--------------------------------------------------------------------
+    void GridTableRenderer::impl_paintCellContent( CellRenderContext const & i_context )
+    {
+        Any aCellContent;
+        m_pImpl->rModel.getCellContent( m_pImpl->nCurrentRow, i_context.nColumn, aCellContent );
+
+        const Reference< XGraphic > xGraphic( aCellContent, UNO_QUERY );
+        if ( xGraphic.is() )
+        {
+            const Image aImage( xGraphic );
+            impl_paintCellImage( i_context, aImage );
+            return;
+        }
+
+        const ::rtl::OUString sText( CellValueConversion::convertToString( aCellContent ) );
+        impl_paintCellText( i_context, sText );
+    }
+
+    //--------------------------------------------------------------------
+    void GridTableRenderer::impl_paintCellText( CellRenderContext const & i_context, ::rtl::OUString const & i_text )
+    {
+        if ( i_context.bSelected )
+            i_context.rDevice.SetTextColor( i_context.rStyle.GetHighlightTextColor() );
+        else if ( m_pImpl->rModel.getTextColor() != 0x000000 )
+            i_context.rDevice.SetTextColor( m_pImpl->rModel.getTextColor() );
+        else
+            i_context.rDevice.SetTextColor( i_context.rStyle.GetFieldTextColor() );
+
+
+        ULONG nVerFlag = TEXT_DRAW_TOP;
+        const VerticalAlignment eVertAlign = m_pImpl->rModel.getVerticalAlign();
+        switch ( eVertAlign )
+        {
+        case VerticalAlignment_MIDDLE:  nVerFlag = TEXT_DRAW_VCENTER;   break;
+        case VerticalAlignment_BOTTOM:  nVerFlag = TEXT_DRAW_BOTTOM;    break;
+        default:
+            break;
+        }
+
+        ULONG nHorFlag = TEXT_DRAW_LEFT;
+        const HorizontalAlignment eHorzAlign = m_pImpl->rModel.getColumnModel( i_context.nColumn )->getHorizontalAlign();
+        switch ( eHorzAlign )
+        {
+        case HorizontalAlignment_CENTER:    nHorFlag = TEXT_DRAW_CENTER;    break;
+        case HorizontalAlignment_RIGHT:     nHorFlag = TEXT_DRAW_RIGHT;     break;
+        default:
+            break;
+        }
+
+        Rectangle textRect( i_context.aContentArea );
+        textRect.Left() += 2; textRect.Right() -= 2;
+        ++textRect.Top(); --textRect.Bottom();
+
+        i_context.rDevice.DrawText( textRect, i_text, nHorFlag | nVerFlag | TEXT_DRAW_CLIP );
     }
 
     //--------------------------------------------------------------------

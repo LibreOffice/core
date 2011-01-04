@@ -41,6 +41,7 @@
 #include <com/sun/star/awt/XVclWindowPeer.hpp>
 #include <comphelper/processfactory.hxx>
 #include <tools/diagnose_ex.h>
+#include <tools/color.hxx>
 
 using ::rtl::OUString;
 using namespace ::com::sun::star;
@@ -199,13 +200,13 @@ Any UnoGridModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
         case BASEPROPERTY_GRID_SHOWCOLUMNHEADER:
             return uno::makeAny( (sal_Bool)sal_True );
         case BASEPROPERTY_GRID_EVEN_ROW_BACKGROUND:
-            return uno::makeAny( com::sun::star::util::Color(0xFFFFFF) );
+            return uno::makeAny( com::sun::star::util::Color( COL_TRANSPARENT ) );
         case BASEPROPERTY_GRID_HEADER_BACKGROUND:
-            return uno::makeAny( com::sun::star::util::Color(0xFFFFFF) );
+            return uno::makeAny( com::sun::star::util::Color( COL_TRANSPARENT ) );
         case BASEPROPERTY_GRID_LINE_COLOR:
-            return uno::makeAny( com::sun::star::util::Color(0xFFFFFF) );
+            return uno::makeAny( com::sun::star::util::Color( COL_TRANSPARENT ) );
         case BASEPROPERTY_GRID_ROW_BACKGROUND:
-            return uno::makeAny(com::sun::star::util::Color(0xFFFFFF) );
+            return uno::makeAny(com::sun::star::util::Color( COL_TRANSPARENT ) );
         default:
             return UnoControlModel::ImplGetDefaultValue( nPropId );
     }
