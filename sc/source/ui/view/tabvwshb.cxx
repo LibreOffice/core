@@ -227,7 +227,6 @@ ErrCode ScTabViewShell::DoVerb(long nVerb)
         return ERRCODE_SO_NOTIMPL;          // soll nicht sein
 
     SdrOle2Obj* pOle2Obj = NULL;
-    SdrGrafObj* pGrafObj = NULL;
     SdrObject* pObj = NULL;
     ErrCode nErr = ERRCODE_NONE;
 
@@ -237,10 +236,6 @@ ErrCode ScTabViewShell::DoVerb(long nVerb)
         pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
         if (pObj->GetObjIdentifier() == OBJ_OLE2)
             pOle2Obj = (SdrOle2Obj*) pObj;
-        else if (pObj->GetObjIdentifier() == OBJ_GRAF)
-        {
-            pGrafObj = (SdrGrafObj*) pObj;
-        }
     }
 
     if (pOle2Obj)
