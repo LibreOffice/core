@@ -157,8 +157,6 @@ Sequence<OUString> ScInputCfg::GetPropertyNames()
 ScInputCfg::ScInputCfg() :
     ConfigItem( OUString(RTL_CONSTASCII_USTRINGPARAM( CFGPATH_INPUT )) )
 {
-    sal_Int32 nIntVal = 0;
-
     Sequence<OUString> aNames = GetPropertyNames();
     Sequence<Any> aValues = GetProperties(aNames);
     EnableNotification(aNames);
@@ -171,6 +169,7 @@ ScInputCfg::ScInputCfg() :
             DBG_ASSERT(pValues[nProp].hasValue(), "property value missing");
             if(pValues[nProp].hasValue())
             {
+                sal_Int32 nIntVal = 0;
                 switch(nProp)
                 {
                     case SCINPUTOPT_MOVEDIR:
