@@ -29,6 +29,7 @@
 #include "precompiled_chart2.hxx"
 
 #include "UndoCommandDispatch.hxx"
+#include "ResId.hxx"
 #include "macros.hxx"
 
 #include <com/sun/star/util/XModifyBroadcaster.hpp>
