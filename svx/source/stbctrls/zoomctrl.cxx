@@ -39,7 +39,7 @@
 
 #include <svx/dialogs.hrc>
 
-#include "zoomctrl.hxx"
+#include "svx/zoomctrl.hxx"
 //CHINA001 #include "zoom.hxx"
 #include <svx/zoomitem.hxx>
 #include "stbctrls.h"

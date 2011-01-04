@@ -27,36 +27,26 @@
 #ifndef FORMULA_HELPID_HRC
 #define FORMULA_HELPID_HRC
 
-#ifndef _SOLAR_HRC
-#include <svl/solar.hrc>    // HID_FORMULA_START
-#endif
-
-#define HID_FORMULADLG_FORMULA                          (HID_FORMULA_START + 0)
-#define HID_FORMULA_FAP_FORMULA                         (HID_FORMULA_START + 1)
-#define HID_FORMULA_FAP_STRUCT                          (HID_FORMULA_START + 2)
-#define HID_FORMULA_FAP_PAGE                            (HID_FORMULA_START + 3)
-#define HID_FORMULA_FAP_EDIT1                           (HID_FORMULA_START + 4)
-#define HID_FORMULA_FAP_EDIT2                           (HID_FORMULA_START + 5)
-#define HID_FORMULA_FAP_EDIT3                           (HID_FORMULA_START + 6)
-#define HID_FORMULA_FAP_EDIT4                           (HID_FORMULA_START + 7)
-#define HID_FORMULA_FAP_BTN_FX1                         (HID_FORMULA_START + 8)
-#define HID_FORMULA_FAP_BTN_FX2                         (HID_FORMULA_START + 9)
-#define HID_FORMULA_FAP_BTN_FX3                         (HID_FORMULA_START +10)
-#define HID_FORMULA_FAP_BTN_FX4                         (HID_FORMULA_START +11)
-#define HID_FORMULA_FAP_BTN_REF1                        (HID_FORMULA_START +12)
-#define HID_FORMULA_FAP_BTN_REF2                        (HID_FORMULA_START +13)
-#define HID_FORMULA_FAP_BTN_REF3                        (HID_FORMULA_START +14)
-#define HID_FORMULA_FAP_BTN_REF4                        (HID_FORMULA_START +15)
-#define HID_FORMULA_LB_CATEGORY                         (HID_FORMULA_START +16)
-#define HID_FORMULA_LB_FUNCTION                         (HID_FORMULA_START +17)
-#define HID_FORMULATAB_FUNCTION                         (HID_FORMULA_START +18)
-#define HID_FORMULATAB_STRUCT                           (HID_FORMULA_START +19)
-
-
-#if HID_FORMULATAB_STRUCT > HID_FORMULA_END
-#error Help-Id Ueberlauf in #file, #line
-#endif
-// don't forget to update the file util/hidother.src
+#define HID_FORMULADLG_FORMULA                             "FORMULA_HID_FORMULADLG_FORMULA"
+#define HID_FORMULA_FAP_FORMULA                            "FORMULA_HID_FORMULA_FAP_FORMULA"
+#define HID_FORMULA_FAP_STRUCT                             "FORMULA_HID_FORMULA_FAP_STRUCT"
+#define HID_FORMULA_FAP_PAGE                               "FORMULA_HID_FORMULA_FAP_PAGE"
+#define HID_FORMULA_FAP_EDIT1                              "FORMULA_HID_FORMULA_FAP_EDIT1"
+#define HID_FORMULA_FAP_EDIT2                              "FORMULA_HID_FORMULA_FAP_EDIT2"
+#define HID_FORMULA_FAP_EDIT3                              "FORMULA_HID_FORMULA_FAP_EDIT3"
+#define HID_FORMULA_FAP_EDIT4                              "FORMULA_HID_FORMULA_FAP_EDIT4"
+#define HID_FORMULA_FAP_BTN_FX1                            "FORMULA_HID_FORMULA_FAP_BTN_FX1"
+#define HID_FORMULA_FAP_BTN_FX2                            "FORMULA_HID_FORMULA_FAP_BTN_FX2"
+#define HID_FORMULA_FAP_BTN_FX3                            "FORMULA_HID_FORMULA_FAP_BTN_FX3"
+#define HID_FORMULA_FAP_BTN_FX4                            "FORMULA_HID_FORMULA_FAP_BTN_FX4"
+#define HID_FORMULA_FAP_BTN_REF1                           "FORMULA_HID_FORMULA_FAP_BTN_REF1"
+#define HID_FORMULA_FAP_BTN_REF2                           "FORMULA_HID_FORMULA_FAP_BTN_REF2"
+#define HID_FORMULA_FAP_BTN_REF3                           "FORMULA_HID_FORMULA_FAP_BTN_REF3"
+#define HID_FORMULA_FAP_BTN_REF4                           "FORMULA_HID_FORMULA_FAP_BTN_REF4"
+#define HID_FORMULA_LB_CATEGORY                            "FORMULA_HID_FORMULA_LB_CATEGORY"
+#define HID_FORMULA_LB_FUNCTION                            "FORMULA_HID_FORMULA_LB_FUNCTION"
+#define HID_FORMULATAB_FUNCTION                            "FORMULA_HID_FORMULATAB_FUNCTION"
+#define HID_FORMULATAB_STRUCT                              "FORMULA_HID_FORMULATAB_STRUCT"
 
 #endif //FORMULA_HELPID_HRC
 

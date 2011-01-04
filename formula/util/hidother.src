@@ -27,10 +27,6 @@
 
 #include "../inc/helpids.hrc"
 
-#ifndef _SBASLTID_HRC
-#include <svx/svxids.hrc>
-#endif
-
 hidspecial HID_FORMULADLG_FORMULA   { HelpId = HID_FORMULADLG_FORMULA; };
 hidspecial HID_FORMULA_FAP_FORMULA  { HelpId = HID_FORMULA_FAP_FORMULA; };
 hidspecial HID_FORMULA_FAP_STRUCT   { HelpId = HID_FORMULA_FAP_STRUCT; };

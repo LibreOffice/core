@@ -28,12 +28,12 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
 
-#include "dbexch.hrc"
-#include "fmgridif.hxx"
+#include "svx/dbexch.hrc"
+#include "svx/fmgridif.hxx"
 #include "fmitems.hxx"
 #include "fmprop.hrc"
 #include "svx/fmtools.hxx"
-#include "fmresids.hrc"
+#include "svx/fmresids.hrc"
 #include "fmservs.hxx"
 #include "fmurl.hxx"
 #include "formcontrolfactory.hxx"

@@ -38,7 +38,7 @@
                     <value xml:lang="en-US">~Text Mode</value>
                 </prop>
             </node>
-            <node oor:name=".uno:InsertFormula" oor:op="replace">
+            <node oor:name=".uno:ImportFormula" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="en-US">~Import Formula...</value>
                 </prop>

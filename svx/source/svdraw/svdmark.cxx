@@ -34,13 +34,13 @@
 #include <svx/svdetc.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/svdpage.hxx>
-#include "svditer.hxx"
+#include "svx/svditer.hxx"
 #include <svx/svdpagv.hxx>
 #include <svx/svdopath.hxx> // zur Abschaltung
 #include <svx/svdogrp.hxx>  // des Cache bei
 #include <svx/svdorect.hxx> // GetMarkDescription
-#include "svdstr.hrc"   // Namen aus der Resource
-#include "svdglob.hxx"  // StringCache
+#include "svx/svdstr.hrc"   // Namen aus der Resource
+#include "svx/svdglob.hxx"  // StringCache
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 #include <svx/obj3d.hxx>

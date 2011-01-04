@@ -61,12 +61,12 @@ HXX1TARGET=stbctrls
 HXX1EXT=   hxx
 HXX1EXCL=  -E:*include*
 HXX1DEPN=\
-        $(INC)$/insctrl.hxx	\
-        $(INC)$/zoomctrl.hxx	\
-        $(INC)$/pszctrl.hxx	\
-        $(INC)$/selctrl.hxx	\
-        $(INC)$/modctrl.hxx \
-                $(INC)$/xmlsecctrl.hxx \
+        $(INC)$/svx/insctrl.hxx	\
+        $(INC)$/svx/zoomctrl.hxx	\
+        $(INC)$/svx/pszctrl.hxx	\
+        $(INC)$/svx/selctrl.hxx	\
+        $(INC)$/svx/modctrl.hxx \
+                $(INC)$/svx/xmlsecctrl.hxx \
                 $(INC)$/zoomsliderctrl.hxx \
 
 # --- Targets -------------------------------------------------------

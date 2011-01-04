@@ -294,15 +294,15 @@ void ParaWin::SetFunctionDesc(const IFunctionDescription* pFDesc)
         {
             SetEditDesc(aDefaultString);
         }
-        long nHelpId = pFuncDesc->getHelpId();
         nArgs = pFuncDesc->getSuppressedArgumentCount();
         pFuncDesc->fillVisibleArgumentMapping(aVisibleArgMapping);
         aSlider.Hide();
-        SetHelpId( nHelpId );
-        aEdArg1.SetHelpId( nHelpId );
-        aEdArg2.SetHelpId( nHelpId );
-        aEdArg3.SetHelpId( nHelpId );
-        aEdArg4.SetHelpId( nHelpId );
+        rtl::OString sHelpId = pFuncDesc->getHelpId();
+        SetHelpId( sHelpId );
+        aEdArg1.SetHelpId( sHelpId );
+        aEdArg2.SetHelpId( sHelpId );
+        aEdArg3.SetHelpId( sHelpId );
+        aEdArg4.SetHelpId( sHelpId );
 
         //  Unique-IDs muessen gleich bleiben fuer Automatisierung
         SetUniqueId( HID_FORMULA_FAP_PAGE );

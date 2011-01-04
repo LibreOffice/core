@@ -243,7 +243,7 @@ namespace svx{
             int ret = -1;
             rtl::OUString path1(
                 RTL_CONSTASCII_USTRINGPARAM(
-                    "$BRAND_BASE_DIR/program/crash_report.bin"));
+                    "$BRAND_BASE_DIR/program/crashrep"));
             rtl::Bootstrap::expandMacros(path1);
             rtl::OString path2;
             if ((osl::FileBase::getSystemPathFromFileURL(path1, path1) ==

@@ -31,6 +31,8 @@
 #include "com/sun/star/deployment/VersionException.hpp"
 #include "com/sun/star/deployment/LicenseException.hpp"
 #include "com/sun/star/deployment/InstallException.hpp"
+#include "com/sun/star/deployment/DependencyException.hpp"
+#include "com/sun/star/deployment/PlatformException.hpp"
 #include "com/sun/star/task/XInteractionApprove.hpp"
 #include "com/sun/star/task/XInteractionAbort.hpp"
 #include "com/sun/star/task/XInteractionHandler.hpp"
@@ -250,7 +252,43 @@ void NoLicenseCommandEnv::handle(
     handle_(approve, abort, xRequest);
 }
 
+// SilentCheckPrerequisitesCommandEnv::SilentCheckPrerequisitesCommandEnv(
+//     css::uno::Reference< css::task::XInteractionHandler> const & handler):
+//     BaseCommandEnv(handler)
+// {
+// }
+SilentCheckPrerequisitesCommandEnv::SilentCheckPrerequisitesCommandEnv()
+{
+}
 
+void SilentCheckPrerequisitesCommandEnv::handle(
+       Reference< task::XInteractionRequest> const & xRequest )
+    throw (uno::RuntimeException)
+{
+    uno::Any request( xRequest->getRequest() );
+    OSL_ASSERT( request.getValueTypeClass() == uno::TypeClass_EXCEPTION );
+
+    deployment::LicenseException licExc;
+    deployment::PlatformException platformExc;
+    deployment::DependencyException depExc;
+    bool approve = false;
+    bool abort = false;
+
+    if (request >>= licExc)
+    {
+        approve = true;
+        handle_(approve, abort, xRequest);
+    }
+    else if ((request >>= platformExc)
+             || (request >>= depExc))
+    {
+        m_Exception = request;
+    }
+    else
+    {
+        m_UnknownException = request;
+    }
+}
 // NoExceptionCommandEnv::NoExceptionCommandEnv(
 //     css::uno::Reference< css::task::XInteractionHandler> const & handler,
 //     css::uno::Type const & type):

@@ -43,15 +43,14 @@ export SAL_ENABLE_FILE_LOCKING
 #@# export JITC_PROCESSOR_TYPE=6
 
 # resolve installation directory
-sd_cwd="`pwd`"
-if [ -h "$0" ] ; then
-    sd_basename=`basename "$0"`
-     sd_script=`ls -l "$0" | sed "s/.*${sd_basename} -> //g"`
-    cd "`dirname "$0"`"
-    cd "`dirname "$sd_script"`"
-else
-    cd "`dirname "$0"`"
-fi
+sd_cwd=`pwd`
+sd_res=$0
+while [ -h "$sd_res" ] ; do
+    cd "`dirname "$sd_res"`"
+    sd_basename=`basename "$sd_res"`
+    sd_res=`ls -l "$sd_basename" | sed "s/.*$sd_basename -> //g"`
+done
+cd "`dirname "$sd_res"`"
 sd_prog=`pwd`
 cd "$sd_cwd"
 
@@ -96,7 +95,7 @@ if [ -x "$sd_prog/../basis-link/ure-link/bin/javaldx" ] ; then
     my_path=`"$sd_prog/../basis-link/ure-link/bin/javaldx" $BOOTSTRAPVARS \
         "-env:INIFILENAME=vnd.sun.star.pathname:$sd_prog/redirectrc"`
     if [ -n "$my_path" ] ; then
-        LD_LIBRARY_PATH=$my_path${LD_LIBRARY_PATH+:$LD_LIBRARY_PATH}
+        LD_LIBRARY_PATH=$my_path${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}
         export LD_LIBRARY_PATH
     fi
 fi

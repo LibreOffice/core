@@ -40,6 +40,8 @@
 #include <svl/itempool.hxx>
 #include <tools/table.hxx>
 
+#include <deque>
+
 class ImpEditEngine;
 class SvxTabStop;
 class SvtCTLOptions;
@@ -96,7 +98,7 @@ struct ScriptTypePosInfo
     }
 };
 
-SV_DECL_VARARR( ScriptTypePosInfos, ScriptTypePosInfo, 0, 4 )
+typedef std::deque< ScriptTypePosInfo > ScriptTypePosInfos;
 
 struct WritingDirectionInfo
 {
@@ -112,7 +114,8 @@ struct WritingDirectionInfo
     }
 };
 
-SV_DECL_VARARR( WritingDirectionInfos, WritingDirectionInfo, 0, 4 )
+
+typedef std::deque< WritingDirectionInfo > WritingDirectionInfos;
 
 typedef EditCharAttrib* EditCharAttribPtr;
 SV_DECL_PTRARR( CharAttribArray, EditCharAttribPtr, 0, 4 )

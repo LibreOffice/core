@@ -31,6 +31,45 @@
 #include "app.hrc"
 #include "helpid.hrc"
 
+String STR_NONAME
+{
+    Text [ en-US ] = "Untitled" ;
+};
+String STR_CLOSE
+{
+    Text [ en-US ] = "Close" ;
+};
+String STR_STYLE_FILTER_AUTO
+{
+    Text [ en-US ] = "Automatic" ;
+};
+String STR_STANDARD_SHORTCUT
+{
+    Text [ en-US ] = "Standard" ;
+};
+String STR_BYTES
+{
+    Text [ en-US ] = "Bytes" ;
+};
+String STR_KB
+{
+    Text [ en-US ] = "KB" ;
+};
+String STR_MB
+{
+    Text [ en-US ] = "MB" ;
+};
+String STR_GB
+{
+    Text [ en-US ] = "GB" ;
+};
+QueryBox MSG_QUERY_LASTVERSION
+{
+    Buttons = WB_YES_NO ;
+    DefButton = WB_DEF_NO ;
+    Message [ en-US ] = "Cancel all changes?" ;
+};
+
 InfoBox RID_DOCALREADYLOADED_DLG
 {
     Message [ en-US ] = "Document already open." ;
@@ -626,169 +665,6 @@ String RID_ENVTOOLBOX
     Text [ en-US ] = "Function Bar" ;
 };
 
-ToolBox RID_ENVTOOLBOX
-{
-    HelpId = RID_ENVTOOLBOX ;
-    ButtonType = BUTTON_SYMBOL ;
-    LineSpacing = TRUE ;
-    Border = TRUE ;
-    Scroll = TRUE ;
-    SVLook = TRUE ;
-    Dockable = TRUE ;
-    Moveable = TRUE ;
-    Sizeable = TRUE ;
-    Closeable = TRUE ;
-    Zoomable = TRUE ;
-    Customize = TRUE ;
-    FloatingMode = FALSE ;
-    Hide = TRUE ;
-    HideWhenDeactivate = TRUE ;
-    Align = BOXALIGN_TOP ;
-    ItemList =
-    {
-        ToolBoxItem
-        {
-            Identifier = SID_OPENURL ;
-        };
-        ToolBoxItem
-        {
-            Type = TOOLBOXITEM_SEPARATOR ;
-        };
-        ToolBoxItem
-        {
-            Identifier = SID_NEWDOCDIRECT ;
-            DropDown = TRUE;
-        };
-        ToolBoxItem
-        {
-            Identifier = SID_NEWDOC ;
-            Hide = TRUE;
-        };
-        ToolBoxItem
-        {
-            Identifier = SID_OPENDOC ;
-        };
-        ToolBoxItem
-        {
-            Identifier = SID_SAVEDOC ;
-        };
-        ToolBoxItem
-        {
-            Identifier = SID_SAVEASDOC ;
-            Hide = TRUE;
-        };
-        ToolBoxItem
-        {
-            Type = TOOLBOXITEM_SEPARATOR ;
-        };
-        ToolBoxItem
-        {
-            Identifier = SID_EDITDOC ;
-        };
-        ToolBoxItem
-        {
-            Type = TOOLBOXITEM_SEPARATOR ;
-        };
-        ToolBoxItem
-        {
-            Identifier = SID_DIRECTEXPORTDOCASPDF ;
-        };
-        ToolBoxItem
-        {
-            Identifier = SID_PRINTDOCDIRECT ;
-        };
-        ToolBoxItem
-        {
-            Identifier = FN_FAX ;
-            Hide = TRUE;
-        };
-        ToolBoxItem
-        {
-            Type = TOOLBOXITEM_SEPARATOR ;
-        };
-        ToolBoxItem
-        {
-            Identifier = SID_CUT ;
-        };
-        ToolBoxItem
-        {
-            Identifier = SID_COPY ;
-        };
-        ToolBoxItem
-        {
-            Identifier = SID_PASTE ;
-        };
-        ToolBoxItem
-        {
-            Type = TOOLBOXITEM_SEPARATOR ;
-        };
-        ToolBoxItem
-        {
-            Identifier = SID_UNDO ;
-        };
-        ToolBoxItem
-        {
-            Identifier = SID_REDO ;
-        };
-        ToolBoxItem
-        {
-            Type = TOOLBOXITEM_SEPARATOR ;
-        };
-        ToolBoxItem
-        {
-            Identifier = SID_NAVIGATOR ;
-        };
-        ToolBoxItem
-        {
-            Identifier = SID_STYLE_DESIGNER ;
-        };
-        ToolBoxItem
-        {
-            Identifier = SID_HYPERLINK_DIALOG ;
-        };
-        ToolBoxItem
-        {
-            Identifier = SID_HYPERLINK_INSERT ;
-            Hide = TRUE;
-        };
-        ToolBoxItem
-        {
-            Identifier = SID_WIN_FULLSCREEN ;
-            Hide = TRUE;
-        };
-        ToolBoxItem
-        {
-            Type = TOOLBOXITEM_SEPARATOR ;
-        };
-        ToolBoxItem
-        {
-            Identifier = SID_RECORDMACRO;
-            Hide = TRUE;
-        };
-        ToolBoxItem
-        {
-            Type = TOOLBOXITEM_SEPARATOR ;
-        };
-        ToolBoxItem
-        {
-            Identifier = SID_GALLERY ;
-        };
-        ToolBoxItem
-        {
-            Identifier = SID_AVMEDIA_PLAYER ;
-        };
-        ToolBoxItem
-        {
-            Type = TOOLBOXITEM_SEPARATOR ;
-        };
-        ToolBoxItem
-        {
-            Identifier = SID_CLOSEDOC;
-            Hide = TRUE;
-        };
-    };
-};
-
 String RID_SPECIALCONFIG_ERROR
 {
     Text [ en-US ] = "An error has occurred in the special configuration.\nPlease contact your administrator." ;
@@ -1054,19 +930,37 @@ Image IMG_MISSING_4
     ImageBitmap = Bitmap { File = "sn064.bmp" ; };
 };
 
+String STR_STANDARD
+{
+    Text [ en-US ] = "Standard" ;
+};
+
 String RID_SVXSTR_FILELINK
 {
     Text [ en-US ] = "Document" ;
+};
+
+String STR_NONE
+{
+    Text [ en-US ] = "- None -" ;
 };
 String RID_SVXSTR_GRAFIKLINK
 {
     Text [ en-US ] = "Graphic" ;
 };
+String STR_SFX_FILTERNAME_ALL
+{
+    Text [ en-US ] = "All files (*.*)" ;
+};
 String RID_SVXSTR_EDITGRFLINK
 {
     Text [ en-US ] = "Link graphics" ;
 };
-
+// i66948 used in project scripting
+String STR_ERRUNOEVENTBINDUNG
+{
+    Text [ en-US ] = "An appropriate component method %1\ncould not be found.\n\nCheck spelling of method name.";
+};
 String RID_SVXSTR_GRFILTER_OPENERROR
 {
     Text [ en-US ] = "Graphics file cannot be opened" ;

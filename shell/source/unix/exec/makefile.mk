@@ -88,3 +88,11 @@ run_test : $(BIN)$/$(TESTAPP1).sh
 $(BIN)$/$(TESTAPP1).sh : $$(@:f)
     $(COPY) $< $@
     -chmod +x $@ 
+
+ALLTAR : $(MISC)/syssh.component
+
+$(MISC)/syssh.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
+        syssh.component
+    $(XSLTPROC) --nonet --stringparam uri \
+        '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL1TARGETN:f)' -o $@ \
+        $(SOLARENV)/bin/createcomponent.xslt syssh.component

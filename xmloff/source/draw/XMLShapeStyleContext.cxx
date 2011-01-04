@@ -37,9 +37,9 @@
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/xmlnumi.hxx>
-#include <xmlnmspe.hxx>
+#include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmltoken.hxx>
-#include "xmlerror.hxx"
+#include "xmloff/xmlerror.hxx"
 #include <xmloff/maptype.hxx>
 
 #include "sdpropls.hxx"

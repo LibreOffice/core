@@ -41,8 +41,8 @@
 #include <svx/svddrag.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/svdview.hxx>   // fuer RectSnap
-#include "svdglob.hxx"   // StringCache
-#include "svdstr.hrc"    // Objektname
+#include "svx/svdglob.hxx"   // StringCache
+#include "svx/svdstr.hrc"    // Objektname
 #include <svx/svdogrp.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/xflhtit.hxx>

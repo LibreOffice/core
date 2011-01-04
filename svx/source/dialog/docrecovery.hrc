@@ -36,7 +36,7 @@
 
 // TabDialog
 #define TABDLG_WIDTH                290
-#define TABDLG_HEIGHT               278
+#define TABDLG_HEIGHT               238
 
 // TabPage CrashSave
 
@@ -52,7 +52,7 @@
 
 
 #define SAVE_WIDTH                  290
-#define SAVE_HEIGHT                 278
+#define SAVE_HEIGHT                 238
 #define SAVE_TITLEWINHEIGHT         36
 #define SAVE_DESCRHEIGHT            48
 #define SAVE_COL0                   (RSC_SP_DLG_INNERBORDER_LEFT)

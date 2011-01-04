@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+
+<RDF
+  xmlns="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+  xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+  xmlns:s="http://www.w3.org/2000/01/rdf-schema#">
+
+<!--
+  This is the RDF Schema for the RDF data model as described in the
+  Resource Description Framework (RDF) Model and Syntax Specification
+  http://www.w3.org/TR/REC-rdf-syntax -->
+
+</RDF>

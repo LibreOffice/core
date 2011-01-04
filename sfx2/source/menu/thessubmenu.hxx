@@ -46,10 +46,6 @@ namespace css = ::com::sun::star;
 
 ////////////////////////////////////////////////////////////
 
-String GetThesaurusReplaceText_Impl( const ::rtl::OUString &rText );
-
-////////////////////////////////////////////////////////////
-
 class SfxThesSubMenuControl : public SfxMenuControl
 {
     PopupMenu*          pMenu;

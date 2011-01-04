@@ -62,7 +62,7 @@
 #include <vcl/oldprintadaptor.hxx>
 
 #include <sfx2/app.hxx>
-#include "sfxresid.hxx"
+#include "sfx2/sfxresid.hxx"
 #include "appdata.hxx"
 #include <sfx2/dinfdlg.hxx>
 #include "fltfnc.hxx"
@@ -71,11 +71,11 @@
 #include <sfx2/objsh.hxx>
 #include "objshimp.hxx"
 #include <sfx2/evntconf.hxx>
-#include "sfxhelp.hxx"
+#include "sfx2/sfxhelp.hxx"
 #include <sfx2/dispatch.hxx>
 #include <sfx2/printer.hxx>
+#include "sfx2/basmgr.hxx"
 #include <sfx2/viewfrm.hxx>
-#include "basmgr.hxx"
 #include <sfx2/doctempl.hxx>
 #include "doc.hrc"
 #include <sfx2/sfxbasemodel.hxx>
@@ -365,17 +365,6 @@ void  SfxObjectShell::TriggerHelpPI(USHORT nIdx1, USHORT nIdx2, USHORT)
     {
         SfxStyleSheetBasePool *pStylePool = GetStyleSheetPool();
         SetOrganizerSearchMask(pStylePool);
-#ifdef WIR_KOENNEN_WIEDER_HILFE_FUER_STYLESHEETS
-        SfxStyleSheetBase *pStyle = (*pStylePool)[nIdx2];
-        if(pStyle)
-        {
-            String aHelpFile;
-            ULONG nHelpId=pStyle->GetHelpId(aHelpFile);
-            SfxHelpPI* pHelpPI = SFX_APP()->GetHelpPI();
-            if ( pHelpPI && nHelpId )
-                pHelpPI->LoadTopic( nHelpId );
-        }
-#endif
     }
 }
 

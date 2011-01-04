@@ -41,7 +41,7 @@
 #include <vcl/status.hxx>
 
 #include <sfx2/app.hxx>
-#include "stbitem.hxx"
+#include "sfx2/stbitem.hxx"
 #include "sfxtypes.hxx"
 #include <sfx2/msg.hxx>
 #include "arrdecl.hxx"
@@ -132,7 +132,12 @@ svt::StatusbarController* SAL_CALL SfxStatusBarControllerFactory(
     {
         USHORT nSlotId = pSlot->GetSlotId();
         if ( nSlotId > 0 )
+        {
+            rtl::OString aCmd(".uno:");
+            aCmd += pSlot->GetUnoName();
+            pStatusBar->SetHelpId( nSlotId, aCmd );
             return SfxStatusBarControl::CreateControl( nSlotId, nID, pStatusBar, pModule );
+        }
     }
 
     return NULL;

@@ -27,24 +27,48 @@
 
 package complex.framework.autosave;
 
-import com.sun.star.frame.*;
-import com.sun.star.lang.*;
-import com.sun.star.util.*;
-import com.sun.star.beans.*;
-import com.sun.star.uno.*;
-import com.sun.star.sheet.*;
-import com.sun.star.table.*;
 
+
+import com.sun.star.beans.PropertyValue;
+import com.sun.star.frame.FeatureStateEvent;
+import com.sun.star.frame.XDispatch;
+import com.sun.star.frame.XDispatchProvider;
+import com.sun.star.frame.XModel;
+import com.sun.star.frame.XStatusListener;
+import com.sun.star.frame.XStorable;
+import com.sun.star.lang.XMultiServiceFactory;
+import com.sun.star.sheet.FillDirection;
+import com.sun.star.sheet.XCellSeries;
+import com.sun.star.table.XCellRange;
+import com.sun.star.util.XCloseable;
+import com.sun.star.sheet.XSpreadsheet;
+import com.sun.star.sheet.XSpreadsheetDocument;
+import com.sun.star.sheet.XSpreadsheets;
+import com.sun.star.uno.AnyConverter;
+import com.sun.star.uno.Type;
+import com.sun.star.uno.UnoRuntime;
+import com.sun.star.uno.XInterface;
+import com.sun.star.util.URL;
+import com.sun.star.util.XURLTransformer;
 import java.util.*;
+import util.utils;
 
-import complexlib.*;
-import helper.*;
-import util.*;
+
+// ---------- junit imports -----------------
+import org.junit.After;
+import org.junit.AfterClass;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
+import org.openoffice.test.OfficeConnection;
+import util.SOfficeFactory;
+import static org.junit.Assert.*;
+// ------------------------------------------
 
 //-----------------------------------------------
 /** @short  Check some use cases of the AutoSave feature
  */
-public class AutoSave extends ComplexTestCase
+public class AutoSave
 {
     //-------------------------------------------
     class AutoSaveListener implements XStatusListener
@@ -64,9 +88,7 @@ public class AutoSave extends ComplexTestCase
             {
                 m_xAutoSave = xAutoSave;
 
-                XURLTransformer xParser = (XURLTransformer)UnoRuntime.queryInterface(
-                                                XURLTransformer.class,
-                                                xSMGR.createInstance("com.sun.star.util.URLTransformer"));
+                XURLTransformer xParser = UnoRuntime.queryInterface(XURLTransformer.class, xSMGR.createInstance("com.sun.star.util.URLTransformer"));
                 URL[] aURL = new URL[1];
                 aURL[0] = new URL();
                 aURL[0].Complete = "vnd.sun.star.autorecovery:/doAutoSave";
@@ -169,13 +191,13 @@ public class AutoSave extends ComplexTestCase
         @return All test methods.
         @todo   Think about selection of tests from outside ...
      */
-    public String[] getTestMethodNames()
-    {
-        return new String[]
-        {
-            "checkConcurrentAutoSaveToNormalUISave",
-        };
-    }
+//    public String[] getTestMethodNames()
+//    {
+//        return new String[]
+//        {
+//            "checkConcurrentAutoSaveToNormalUISave",
+//        };
+//    }
 
     //-------------------------------------------
     /** @short  Create the environment for following tests.
@@ -183,22 +205,20 @@ public class AutoSave extends ComplexTestCase
         @descr  create an empty test frame, where we can load
                 different components inside.
      */
-    public void before()
+    @Before public void before()
     {
         m_aLog = new Protocol(Protocol.MODE_HTML | Protocol.MODE_STDOUT, Protocol.FILTER_NONE, utils.getUsersTempDir() + "/complex_log_ascii_01.html");
 
         try
         {
             // get uno service manager from global test environment
-            m_xSMGR = (XMultiServiceFactory)param.getMSF();
+            m_xSMGR = getMSF();
 
             // get another helper to e.g. create test documents
             m_aSOF = SOfficeFactory.getFactory(m_xSMGR);
 
             // create AutoSave instance
-            m_xAutoSave = (XDispatch)UnoRuntime.queryInterface(
-                            XDispatch.class,
-                            m_xSMGR.createInstance("com.sun.star.comp.framework.AutoRecovery"));
+            m_xAutoSave = UnoRuntime.queryInterface(XDispatch.class, m_xSMGR.createInstance("com.sun.star.comp.framework.AutoRecovery"));
 
             // prepare AutoSave
             // make sure it will be started every 1 min
@@ -209,22 +229,20 @@ public class AutoSave extends ComplexTestCase
             aConfig = null;
 
             // is needed to parse dispatch commands
-            m_xURLParser = (XURLTransformer)UnoRuntime.queryInterface(
-                                            XURLTransformer.class,
-                                            m_xSMGR.createInstance("com.sun.star.util.URLTransformer"));
+            m_xURLParser = UnoRuntime.queryInterface(XURLTransformer.class, m_xSMGR.createInstance("com.sun.star.util.URLTransformer"));
 
         }
         catch(java.lang.Throwable ex)
         {
             m_aLog.log(ex);
-            failed("Couldn't create test environment");
+            fail("Couldn't create test environment");
         }
     }
 
     //-------------------------------------------
     /** @short  close the environment.
      */
-    public void after()
+    @After public void after()
     {
         // ???
     }
@@ -249,9 +267,7 @@ public class AutoSave extends ComplexTestCase
             xSheet.getCellByPosition(0, 1).setFormula("=a1+1");
             m_aLog.log("Retrieve big range.");
             XCellRange           xRange      = xSheet.getCellRangeByName("A1:Z9999");
-            XCellSeries          xSeries     = (XCellSeries)UnoRuntime.queryInterface(
-                                                     XCellSeries.class,
-                                                     xRange);
+            XCellSeries          xSeries     = UnoRuntime.queryInterface(XCellSeries.class, xRange);
             m_aLog.log("Duplicate cells from top to bottom inside range.");
             xSeries.fillAuto(FillDirection.TO_BOTTOM, 2);
             m_aLog.log("Duplicate cells from left to right inside range.");
@@ -281,12 +297,8 @@ public class AutoSave extends ComplexTestCase
             aURL[0].Complete = ".uno:SaveAs";
             m_xURLParser.parseStrict(aURL);
 
-            XModel xModel = (XModel)UnoRuntime.queryInterface(
-                                XModel.class,
-                                xDoc);
-            XDispatchProvider xProvider = (XDispatchProvider)UnoRuntime.queryInterface(
-                                                XDispatchProvider.class,
-                                                xModel.getCurrentController());
+            XModel xModel = UnoRuntime.queryInterface(XModel.class, xDoc);
+            XDispatchProvider xProvider = UnoRuntime.queryInterface(XDispatchProvider.class, xModel.getCurrentController());
             XDispatch xDispatch = xProvider.queryDispatch(aURL[0], "_self", 0);
 
             PropertyValue[] lArgs = new PropertyValue[3];
@@ -334,9 +346,7 @@ public class AutoSave extends ComplexTestCase
             {
                 try
                 {
-                    XCloseable xClose = (XCloseable)UnoRuntime.queryInterface(
-                                            XCloseable.class,
-                                            xDoc);
+                    XCloseable xClose = UnoRuntime.queryInterface(XCloseable.class, xDoc);
                     if (xClose != null)
                     {
                         xClose.close(false);
@@ -344,7 +354,9 @@ public class AutoSave extends ComplexTestCase
                         nRetry = 0;
                     }
                     else
+                    {
                         m_aLog.log(Protocol.TYPE_ERROR, "closeDoc() = ERROR. Doc doesnt provide needed interface!");
+                    }
                 }
                 catch(com.sun.star.util.CloseVetoException exVeto)
                 {
@@ -402,7 +414,7 @@ public class AutoSave extends ComplexTestCase
      *          from another thread. So these operations should be started at the same time.
      *          It should not crash. The AutoSave request must be postphoned.
      */
-    public void checkConcurrentAutoSaveToNormalUISave()
+    @Test public void checkConcurrentAutoSaveToNormalUISave()
     {
         m_aLog.log(Protocol.TYPE_TESTMARK , "AutoSave");
         m_aLog.log(Protocol.TYPE_SCOPE_OPEN, "checkConcurrentAutoSaveToNormalUISave()");
@@ -451,4 +463,27 @@ public class AutoSave extends ComplexTestCase
             closeDoc(xDoc);
         }
     }
+
+    private XMultiServiceFactory getMSF()
+    {
+        final XMultiServiceFactory xMSF1 = UnoRuntime.queryInterface(XMultiServiceFactory.class, connection.getComponentContext().getServiceManager());
+        return xMSF1;
+    }
+
+    // setup and close connections
+    @BeforeClass
+    public static void setUpConnection() throws Exception
+    {
+        System.out.println("setUpConnection()");
+        connection.setUp();
+    }
+
+    @AfterClass
+    public static void tearDownConnection()
+            throws InterruptedException, com.sun.star.uno.Exception
+    {
+        System.out.println("tearDownConnection()");
+        connection.tearDown();
+    }
+    private static final OfficeConnection connection = new OfficeConnection();
 }

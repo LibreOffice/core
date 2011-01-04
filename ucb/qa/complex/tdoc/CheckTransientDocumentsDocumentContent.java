@@ -34,49 +34,50 @@ import com.sun.star.embed.XStorage;
 import com.sun.star.frame.XModel;
 import com.sun.star.frame.XTransientDocumentsDocumentContentFactory;
 import com.sun.star.lang.XMultiServiceFactory;
-import com.sun.star.lang.XServiceInfo;
 import com.sun.star.sdbc.XResultSet;
 import com.sun.star.sdbc.XRow;
 import com.sun.star.text.XTextDocument;
 import com.sun.star.ucb.Command;
 import com.sun.star.ucb.ContentInfo;
-import com.sun.star.ucb.InsertCommandArgument;
 import com.sun.star.ucb.OpenCommandArgument2;
 import com.sun.star.ucb.OpenMode;
 import com.sun.star.ucb.XCommandProcessor;
 import com.sun.star.ucb.XContent;
-import com.sun.star.ucb.XContentAccess;
-import com.sun.star.ucb.XContentIdentifier;
-import com.sun.star.ucb.XContentIdentifierFactory;
-import com.sun.star.ucb.XContentProvider;
 import com.sun.star.ucb.XDynamicResultSet;
 import com.sun.star.uno.UnoRuntime;
-import complexlib.ComplexTestCase;
 import util.WriterTools;
 import util.utils;
 
-
+import org.junit.After;
+import org.junit.AfterClass;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
+import org.openoffice.test.OfficeConnection;
+import static org.junit.Assert.*;
 /**
  *
  */
-public class CheckTransientDocumentsDocumentContent extends ComplexTestCase {
+public class CheckTransientDocumentsDocumentContent {
+    // TODO: document doesn't exists
     private final String testDocuments = "sForm.sxw";
     private final String folderName = "TestFolder";
     private XMultiServiceFactory xMSF = null;
     private XTextDocument xTextDoc = null;
 
-    public String[] getTestMethodNames() {
-        return new String[]{"checkTransientDocumentsDocumentContent"};
-    }
+//    public String[] getTestMethodNames() {
+//        return new String[]{"checkTransientDocumentsDocumentContent"};
+//    }
 
-    public void before() {
-        xMSF = (XMultiServiceFactory)param.getMSF();
-        log.println("Open a document.");
-        String fileName = utils.getFullTestURL(testDocuments);
+    @Before public void before() {
+        xMSF = getMSF();
+        System.out.println("Open a document.");
+        String fileName = TestDocument.getUrl(testDocuments);
         xTextDoc = WriterTools.loadTextDoc(xMSF, fileName);
+        assertNotNull(xTextDoc);
     }
-    public void after() {
-        log.println("Close all documents.");
+    @After public void after() {
+        System.out.println("Close all documents.");
         xTextDoc.dispose();
     }
 
@@ -84,30 +85,28 @@ public class CheckTransientDocumentsDocumentContent extends ComplexTestCase {
      * Check the provider of document content: open some documents
      * and look if they are accessible.
      */
-    public void checkTransientDocumentsDocumentContent() {
+    @Test public void checkTransientDocumentsDocumentContent() {
         try {
             // create a content provider
             Object o = xMSF.createInstance("com.sun.star.comp.ucb.TransientDocumentsDocumentContentFactory");
 
             XTransientDocumentsDocumentContentFactory xTransientDocumentsDocumentContentFactory =
-                            (XTransientDocumentsDocumentContentFactory)UnoRuntime.queryInterface(
-                            XTransientDocumentsDocumentContentFactory.class, o);
+                            UnoRuntime.queryInterface(XTransientDocumentsDocumentContentFactory.class, o);
             // get the model from the opened document
             XModel xModel = xTextDoc.getCurrentController().getModel();
 
             // a little additional check for 114733
-            XDocumentSubStorageSupplier xDocumentSubStorageSupplier = (XDocumentSubStorageSupplier)
-                            UnoRuntime.queryInterface(XDocumentSubStorageSupplier.class, xModel);
+            XDocumentSubStorageSupplier xDocumentSubStorageSupplier = UnoRuntime.queryInterface(XDocumentSubStorageSupplier.class, xModel);
             String[]names = xDocumentSubStorageSupplier.getDocumentSubStoragesNames();
             for (int i=0; i<names.length; i++) {
-                log.println("SubStorage names " + i + ": " +names[i]);
+                System.out.println("SubStorage names " + i + ": " +names[i]);
             }
             XStorage xStorage = xDocumentSubStorageSupplier.getDocumentSubStorage(names[0], ElementModes.READWRITE);
-            assure("Could not get a storage from the XDocumentStorageSupplier.", xStorage != null);
+            assertTrue("Could not get a storage from the XDocumentStorageSupplier.", xStorage != null);
             // get content
             XContent xContent = xTransientDocumentsDocumentContentFactory.createDocumentContent(xModel);
             // actual test: execute some commands
-            XCommandProcessor xCommandProcessor = (XCommandProcessor)UnoRuntime.queryInterface(XCommandProcessor.class, xContent);
+            XCommandProcessor xCommandProcessor = UnoRuntime.queryInterface(XCommandProcessor.class, xContent);
 
             // create the command and arguments
             Command command = new Command();
@@ -123,19 +122,19 @@ public class CheckTransientDocumentsDocumentContent extends ComplexTestCase {
             command.Argument = cmargs2;
 
             Object result = xCommandProcessor.execute(command, 0, null);
-            XDynamicResultSet xDynamicResultSet = (XDynamicResultSet)UnoRuntime.queryInterface(XDynamicResultSet.class, result);
+            XDynamicResultSet xDynamicResultSet = UnoRuntime.queryInterface(XDynamicResultSet.class, result);
             XResultSet xResultSet = xDynamicResultSet.getStaticResultSet();
-            XRow xRow = (XRow)UnoRuntime.queryInterface(XRow.class, xResultSet);
+            XRow xRow = UnoRuntime.queryInterface(XRow.class, xResultSet);
             // create the new folder 'folderName': first, check if it's already there
             while(xResultSet.next()) {
                 String existingFolderName = xRow.getString(1);
-                log.println("Found existing folder: '" + existingFolderName + "'");
+                System.out.println("Found existing folder: '" + existingFolderName + "'");
                 if (folderName.equals(existingFolderName)) {
-                    failed("Cannot create a new folder: folder already exists: adapt test or choose a different document.");
+                    fail("Cannot create a new folder: folder already exists: adapt test or choose a different document.");
                 }
             }
             // create a folder
-            log.println("Create new folder "+ folderName);
+            System.out.println("Create new folder "+ folderName);
             ContentInfo contentInfo = new ContentInfo();
             contentInfo.Type = "application/vnd.sun.star.tdoc-folder";
 
@@ -143,10 +142,10 @@ public class CheckTransientDocumentsDocumentContent extends ComplexTestCase {
             command.Argument = contentInfo;
 
             result = xCommandProcessor.execute(command, 0, null);
-            XContent xNewFolder = (XContent)UnoRuntime.queryInterface(XContent.class, result);
+            XContent xNewFolder = UnoRuntime.queryInterface(XContent.class, result);
 
-            XCommandProcessor xFolderCommandProcessor = (XCommandProcessor)UnoRuntime.queryInterface(XCommandProcessor.class, xNewFolder);
-            log.println("Got the new folder: " + utils.getImplName(xNewFolder));
+            XCommandProcessor xFolderCommandProcessor = UnoRuntime.queryInterface(XCommandProcessor.class, xNewFolder);
+            System.out.println("Got the new folder: " + utils.getImplName(xNewFolder));
 
             // name the new folder
             PropertyValue[] titleProp = new PropertyValue[1];
@@ -170,10 +169,33 @@ public class CheckTransientDocumentsDocumentContent extends ComplexTestCase {
             xFolderCommandProcessor.execute(commitCommand, 0, null); */
         }
         catch (com.sun.star.uno.Exception e) {
-            e.printStackTrace((java.io.PrintWriter)log);
-            failed("Could not create test objects.");
+            e.printStackTrace();
+            fail("Could not create test objects.");
         }
 
     }
+
+
+    private XMultiServiceFactory getMSF()
+    {
+        final XMultiServiceFactory xMSF1 = UnoRuntime.queryInterface(XMultiServiceFactory.class, connection.getComponentContext().getServiceManager());
+        return xMSF1;
+    }
+
+    // setup and close connections
+    @BeforeClass public static void setUpConnection() throws Exception {
+        System.out.println("setUpConnection()");
+        connection.setUp();
+    }
+
+    @AfterClass public static void tearDownConnection()
+        throws InterruptedException, com.sun.star.uno.Exception
+    {
+        System.out.println("tearDownConnection()");
+        connection.tearDown();
+    }
+
+    private static final OfficeConnection connection = new OfficeConnection();
+
 
 }

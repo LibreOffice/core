@@ -29,7 +29,6 @@
 #include "precompiled_sfx2.hxx"
 
 // include ---------------------------------------------------------------
-#include <aboutbmpnames.hxx>
 
 #ifndef _SV_APP_HXX
 #include <vcl/svapp.hxx>
@@ -55,7 +54,7 @@
 #include "sfxresid.hxx"
 #include <sfx2/sfxdefs.hxx>
 #include <sfx2/app.hxx>
-
+#include <sfx2/sfxcommands.h>
 #include "dialog.hrc"
 
 // defines ---------------------------------------------------------------
@@ -114,7 +113,7 @@ Image SfxApplication::GetApplicationLogo()
 {
     Image aAppLogo;
 
-    rtl::OUString aAbouts( RTL_CONSTASCII_USTRINGPARAM( ABOUT_BITMAP_STRINGLIST ) );
+    rtl::OUString aAbouts;
     bool bLoaded = false;
     sal_Int32 nIndex = 0;
     do
@@ -283,8 +282,7 @@ AboutDialog::AboutDialog( Window* pParent, const ResId& rId, const String& rVerS
 
     FreeResource();
 
-    // explizite Help-Id
-    SetHelpId( SID_ABOUT );
+    SetHelpId( CMD_SID_ABOUT );
 }
 
 // -----------------------------------------------------------------------

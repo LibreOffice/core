@@ -24,110 +24,119 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-
 package complex.dispatches;
 
-import com.sun.star.frame.*;
-import com.sun.star.lang.*;
-import com.sun.star.util.*;
-import com.sun.star.beans.*;
-import com.sun.star.uno.*;
+import com.sun.star.beans.PropertyValue;
+import com.sun.star.frame.DispatchInformation;
+import com.sun.star.frame.XComponentLoader;
+import com.sun.star.frame.XDispatchInformationProvider;
+import com.sun.star.frame.XDispatchProviderInterception;
+import com.sun.star.frame.XDispatchProviderInterceptor;
+import com.sun.star.frame.XFrame;
+import com.sun.star.lang.XComponent;
+import com.sun.star.lang.XMultiServiceFactory;
+import com.sun.star.uno.UnoRuntime;
+import com.sun.star.util.XCloseable;
+import complex.dispatches.Interceptor;
+import java.util.HashMap;
 
-import java.util.*;
 
-import complexlib.ComplexTestCase;
 
-import helper.*;
+
+
+// ---------- junit imports -----------------
+import org.junit.After;
+import org.junit.AfterClass;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
+import org.openoffice.test.OfficeConnection;
+import static org.junit.Assert.*;
+// ------------------------------------------
 
 //-----------------------------------------------
 /** @short  Check the interface XDispatchInformationProvider
 
-    @descr  Because there exists more then one implementation of a dispatch
-            object, we have to test all these implementations ...
+@descr  Because there exists more then one implementation of a dispatch
+object, we have to test all these implementations ...
  */
-public class checkdispatchapi extends ComplexTestCase
+public class checkdispatchapi
 {
     //-------------------------------------------
     // some const
 
     //-------------------------------------------
     // member
-
     /** points to the global uno service manager. */
     private XMultiServiceFactory m_xMSF = null;
     private connectivity.tools.HsqlDatabase db;
-
     /** can be used to create new test frames. */
     private XFrame m_xDesktop = null;
-
     /** provides XDispatchInformationProvider interface. */
     private XFrame m_xFrame = null;
 
     //-------------------------------------------
     // test environment
-
     //-------------------------------------------
     /** @short  A function to tell the framework,
-                which test functions are available.
+    which test functions are available.
 
-        @return All test methods.
-        @todo   Think about selection of tests from outside ...
+    @return All test methods.
+    @todo   Think about selection of tests from outside ...
      */
-    public String[] getTestMethodNames()
-    {
-        return new String[]
-        {
-            "checkDispatchInfoOfWriter",
-            "checkDispatchInfoOfCalc",
-            "checkDispatchInfoOfDraw",
-            "checkDispatchInfoOfImpress",
-            "checkDispatchInfoOfMath",
-            "checkDispatchInfoOfChart",
-            "checkDispatchInfoOfBibliography",
-            "checkDispatchInfoOfQueryDesign",
-            "checkDispatchInfoOfTableDesign",
-            "checkDispatchInfoOfFormGridView",
-            "checkDispatchInfoOfDataSourceBrowser",
-            "checkDispatchInfoOfRelationDesign",
-            "checkDispatchInfoOfBasic",
-            "checkDispatchInfoOfStartModule",
-            "checkInterceptorLifeTime",
-            "checkInterception"
-        };
-    }
+//    public String[] getTestMethodNames()
+//    {
+//        return new String[]
+//                {
+//                    "checkDispatchInfoOfWriter",
+//                    "checkDispatchInfoOfCalc",
+//                    "checkDispatchInfoOfDraw",
+//                    "checkDispatchInfoOfImpress",
+//                    "checkDispatchInfoOfMath",
+//                    "checkDispatchInfoOfChart",
+//                    "checkDispatchInfoOfBibliography",
+//                    "checkDispatchInfoOfQueryDesign",
+//                    "checkDispatchInfoOfTableDesign",
+//                    "checkDispatchInfoOfFormGridView",
+//                    "checkDispatchInfoOfDataSourceBrowser",
+//                    "checkDispatchInfoOfRelationDesign",
+//                    "checkDispatchInfoOfBasic",
+//                    "checkDispatchInfoOfStartModule",
+//                    "checkInterceptorLifeTime",
+//                    "checkInterception"
+//                };
+//    }
 
     //-------------------------------------------
     /** @short  Create the environment for following tests.
 
-        @descr  create an empty test frame, where we can load
-                different components inside.
+    @descr  create an empty test frame, where we can load
+    different components inside.
      */
-    public void before()
+    @Before public void before()
     {
         try
         {
             // get uno service manager from global test environment
-            m_xMSF = (XMultiServiceFactory)param.getMSF();
+            m_xMSF = getMSF();
 
             db = new connectivity.tools.HsqlDatabase(m_xMSF);
 
             // create desktop
-            m_xDesktop = (XFrame)UnoRuntime.queryInterface(
-                                XFrame.class,
-                                m_xMSF.createInstance("com.sun.star.frame.Desktop"));
+            m_xDesktop = UnoRuntime.queryInterface(XFrame.class, m_xMSF.createInstance("com.sun.star.frame.Desktop"));
 
             m_xFrame = impl_createNewFrame();
         }
-        catch(java.lang.Throwable ex)
+        catch (java.lang.Throwable ex)
         {
-            failed("Cant initialize test environment.");
+            fail("Cant initialize test environment.");
         }
     }
 
     //-------------------------------------------
     /** @short  close the environment.
      */
-    public void after()
+    @After public void after()
     {
         db.close();
         impl_closeFrame(m_xFrame);
@@ -135,109 +144,115 @@ public class checkdispatchapi extends ComplexTestCase
     }
 
     //-------------------------------------------
-    public void checkDispatchInfoOfWriter()
+    @Test public void checkDispatchInfoOfWriter()
     {
         impl_checkDispatchInfoOfXXX("private:factory/swriter");
     }
 
     //-------------------------------------------
-    public void checkDispatchInfoOfCalc()
+    @Test public void checkDispatchInfoOfCalc()
     {
         impl_checkDispatchInfoOfXXX("private:factory/scalc");
     }
 
     //-------------------------------------------
-    public void checkDispatchInfoOfDraw()
+    @Test public void checkDispatchInfoOfDraw()
     {
         impl_checkDispatchInfoOfXXX("private:factory/sdraw");
     }
 
     //-------------------------------------------
-    public void checkDispatchInfoOfImpress()
+    @Test public void checkDispatchInfoOfImpress()
     {
         impl_checkDispatchInfoOfXXX("private:factory/simpress");
     }
 
     //-------------------------------------------
-    public void checkDispatchInfoOfChart()
+    @Test public void checkDispatchInfoOfChart()
     {
         impl_checkDispatchInfoOfXXX("private:factory/schart");
     }
 
     //-------------------------------------------
-    public void checkDispatchInfoOfMath()
+    @Test public void checkDispatchInfoOfMath()
     {
         impl_checkDispatchInfoOfXXX("private:factory/smath");
     }
 
     //-------------------------------------------
-    public void checkDispatchInfoOfDataBase()
+    @Test public void checkDispatchInfoOfDataBase()
     {
         impl_checkDispatchInfoOfXXX("private:factory/sdatabase");
     }
 
     //-------------------------------------------
-    public void checkDispatchInfoOfBibliography()
+    @Test public void checkDispatchInfoOfBibliography()
     {
         impl_checkDispatchInfoOfXXX(".component:Bibliography/View1");
     }
 
     //-------------------------------------------
-    public void checkDispatchInfoOfQueryDesign()
+    @Test public void checkDispatchInfoOfQueryDesign()
     {
         callDatabaseDispatch(".component:DB/QueryDesign");
     }
 
     //-------------------------------------------
-    public void checkDispatchInfoOfTableDesign()
+    @Test public void checkDispatchInfoOfTableDesign()
     {
         callDatabaseDispatch(".component:DB/TableDesign");
     }
 
     //-------------------------------------------
-    public void checkDispatchInfoOfFormGridView()
+    @Test public void checkDispatchInfoOfFormGridView()
     {
         impl_checkDispatchInfoOfXXX(".component:DB/FormGridView");
     }
 
     //-------------------------------------------
-    public void checkDispatchInfoOfDataSourceBrowser()
+    @Test public void checkDispatchInfoOfDataSourceBrowser()
     {
         impl_checkDispatchInfoOfXXX(".component:DB/DataSourceBrowser");
     }
 
     //-------------------------------------------
-    public void checkDispatchInfoOfRelationDesign()
+    @Test public void checkDispatchInfoOfRelationDesign()
     {
         callDatabaseDispatch(".component:DB/RelationDesign");
     }
     //-------------------------------------------
+
     private void callDatabaseDispatch(String url)
     {
         try
         {
             final PropertyValue args = new PropertyValue();
             args.Name = "ActiveConnection";
-            args.Value = (Object)db.defaultConnection();
+            args.Value = (Object) db.defaultConnection();
 
             XFrame xFrame = impl_createNewFrame();
 
-            impl_loadIntoFrame(xFrame, url, new PropertyValue[] { args });
+            impl_loadIntoFrame(xFrame, url, new PropertyValue[]
+                    {
+                        args
+                    });
             impl_checkDispatchInfo(xFrame);
             impl_closeFrame(xFrame);
-         } catch(java.lang.Exception e ) {
-         }
+        }
+        catch (java.lang.Exception e)
+        {
+        }
     }
 
     //-------------------------------------------
-    public void checkDispatchInfoOfBasic()
+    @Test public void checkDispatchInfoOfBasic()
     {
         Object aComponent = impl_createUNOComponent("com.sun.star.script.BasicIDE");
         impl_checkDispatchInfo(aComponent);
     }
 
     //-------------------------------------------
-    public void checkDispatchInfoOfStartModule()
+    @Test public void checkDispatchInfoOfStartModule()
     {
         Object aComponent = impl_createUNOComponent("com.sun.star.frame.StartModule");
         impl_checkDispatchInfo(aComponent);
@@ -250,60 +265,56 @@ public class checkdispatchapi extends ComplexTestCase
         // xInterceptor. Otherwhise we cant check some internal states of aInterceptor at the end of this method, because
         // it was already killed .-)
 
-        Interceptor aInterceptor = new Interceptor(log);
-        com.sun.star.frame.XDispatchProviderInterceptor xInterceptor = (com.sun.star.frame.XDispatchProviderInterceptor)UnoRuntime.queryInterface(
-                                                                                com.sun.star.frame.XDispatchProviderInterceptor.class,
-                                                                                aInterceptor);
+        Interceptor aInterceptor = new Interceptor();
+        XDispatchProviderInterceptor xInterceptor = UnoRuntime.queryInterface(XDispatchProviderInterceptor.class, aInterceptor);
 
-        com.sun.star.frame.XFrame xFrame = impl_createNewFrame();
-        com.sun.star.frame.XDispatchProviderInterception xInterception = (com.sun.star.frame.XDispatchProviderInterception)UnoRuntime.queryInterface(
-                                                                                com.sun.star.frame.XDispatchProviderInterception.class,
-                                                                                xFrame);
+        XFrame xFrame = impl_createNewFrame();
+        XDispatchProviderInterception xInterception = UnoRuntime.queryInterface(XDispatchProviderInterception.class, xFrame);
 
         xInterception.registerDispatchProviderInterceptor(xInterceptor);
         impl_closeFrame(xFrame);
 
-        int     nRegCount     = aInterceptor.getRegistrationCount();
+        int nRegCount = aInterceptor.getRegistrationCount();
         boolean bIsRegistered = aInterceptor.isRegistered();
 
-        log.println("registration count = "+nRegCount    );
-        log.println("is registered ?    = "+bIsRegistered);
+        System.out.println("registration count = " + nRegCount);
+        System.out.println("is registered ?    = " + bIsRegistered);
 
         if (nRegCount < 1)
-            failed("Interceptor was never registered.");
+        {
+            fail("Interceptor was never registered.");
+        }
 
         if (bIsRegistered)
-            failed("Interceptor was not deregistered automaticly on closing the corresponding frame.");
+        {
+            fail("Interceptor was not deregistered automaticly on closing the corresponding frame.");
+        }
 
-        log.println("Destruction of interception chain works as designed .-)");
+        System.out.println("Destruction of interception chain works as designed .-)");
     }
 
     //-------------------------------------------
     public void checkInterception()
     {
-        String [] lDisabledURLs    = new String [1];
-                  lDisabledURLs[0] = ".uno:Open";
+        String[] lDisabledURLs = new String[1];
+        lDisabledURLs[0] = ".uno:Open";
 
-        log.println("create and initialize interceptor ...");
-        Interceptor aInterceptor = new Interceptor(log);
+        System.out.println("create and initialize interceptor ...");
+        Interceptor aInterceptor = new Interceptor();
         aInterceptor.setURLs4URLs4Blocking(lDisabledURLs);
 
-        com.sun.star.frame.XDispatchProviderInterceptor xInterceptor = (com.sun.star.frame.XDispatchProviderInterceptor)UnoRuntime.queryInterface(
-                                                                                com.sun.star.frame.XDispatchProviderInterceptor.class,
-                                                                                aInterceptor);
+        XDispatchProviderInterceptor xInterceptor = UnoRuntime.queryInterface(XDispatchProviderInterceptor.class, aInterceptor);
 
-        log.println("create and initialize frame ...");
-        com.sun.star.frame.XFrame xFrame = impl_createNewFrame();
+        System.out.println("create and initialize frame ...");
+        XFrame xFrame = impl_createNewFrame();
         impl_loadIntoFrame(xFrame, "private:factory/swriter", null);
 
-        com.sun.star.frame.XDispatchProviderInterception xInterception = (com.sun.star.frame.XDispatchProviderInterception)UnoRuntime.queryInterface(
-                                                                                com.sun.star.frame.XDispatchProviderInterception.class,
-                                                                                xFrame);
+        XDispatchProviderInterception xInterception = UnoRuntime.queryInterface(XDispatchProviderInterception.class, xFrame);
 
-        log.println("register interceptor ...");
+        System.out.println("register interceptor ...");
         xInterception.registerDispatchProviderInterceptor(xInterceptor);
 
-        log.println("deregister interceptor ...");
+        System.out.println("deregister interceptor ...");
         xInterception.releaseDispatchProviderInterceptor(xInterceptor);
     }
 
@@ -311,7 +322,7 @@ public class checkdispatchapi extends ComplexTestCase
     private void impl_checkDispatchInfoOfXXX(String sXXX)
     {
         XFrame xFrame = impl_createNewFrame();
-        impl_loadIntoFrame(xFrame, sXXX,null);
+        impl_loadIntoFrame(xFrame, sXXX, null);
         impl_checkDispatchInfo(xFrame);
         impl_closeFrame(xFrame);
     }
@@ -319,26 +330,28 @@ public class checkdispatchapi extends ComplexTestCase
     //-------------------------------------------
     /** @short  load an URL into the current test frame.
      */
-    private void impl_loadIntoFrame(XFrame xFrame, String sURL,PropertyValue args[])
+    private void impl_loadIntoFrame(XFrame xFrame, String sURL, PropertyValue args[])
     {
-        XComponentLoader xLoader = (XComponentLoader)UnoRuntime.queryInterface(
-                                        XComponentLoader.class,
-                                        xFrame);
+        XComponentLoader xLoader = UnoRuntime.queryInterface(XComponentLoader.class, xFrame);
         if (xLoader == null)
-            failed("Frame does not provide required interface XComponentLoader.");
+        {
+            fail("Frame does not provide required interface XComponentLoader.");
+        }
 
         XComponent xDoc = null;
         try
         {
             xDoc = xLoader.loadComponentFromURL(sURL, "_self", 0, args);
         }
-        catch(java.lang.Throwable ex)
+        catch (java.lang.Throwable ex)
         {
             xDoc = null;
         }
 
         if (xDoc == null)
-            failed("Could not load \""+sURL+"\".");
+        {
+            fail("Could not load \"" + sURL + "\".");
+        }
     }
 
     //-------------------------------------------
@@ -351,112 +364,135 @@ public class checkdispatchapi extends ComplexTestCase
         {
             aComponent = m_xMSF.createInstance(sName);
         }
-        catch(java.lang.Throwable ex)
+        catch (java.lang.Throwable ex)
         {
             aComponent = null;
         }
 
         if (aComponent == null)
-            failed("Could not create UNO component \""+sName+"\".");
+        {
+            fail("Could not create UNO component \"" + sName + "\".");
+        }
         return aComponent;
     }
 
     //-------------------------------------------
     /** @short  check the interface XDispatchInformationProvider
-                at the specified component.
+    at the specified component.
      */
     private void impl_checkDispatchInfo(Object aComponent)
     {
-        XDispatchInformationProvider xInfoProvider = (XDispatchInformationProvider)UnoRuntime.queryInterface(
-                                                        XDispatchInformationProvider.class,
-                                                        aComponent);
+        XDispatchInformationProvider xInfoProvider = UnoRuntime.queryInterface(XDispatchInformationProvider.class, aComponent);
         if (xInfoProvider == null)
         {
             // Warning
-            log.println("Warning:\tComponent does not provide the [optional!] interface XDispatchInformationProvider.");
+            System.out.println("Warning:\tComponent does not provide the [optional!] interface XDispatchInformationProvider.");
             return;
         }
 
         try
         {
             short[] lGroups = xInfoProvider.getSupportedCommandGroups();
-            int     c1      = lGroups.length;
-            int     i1      = 0;
-            for (i1=0; i1<c1; ++i1)
+            int c1 = lGroups.length;
+            int i1 = 0;
+            for (i1 = 0; i1 < c1; ++i1)
             {
-                short                 nGroup = lGroups[i1];
+                short nGroup = lGroups[i1];
                 DispatchInformation[] lInfos = xInfoProvider.getConfigurableDispatchInformation(nGroup);
-                int                   c2     = lInfos.length;
-                int                   i2     = 0;
+                int c2 = lInfos.length;
+                int i2 = 0;
 
                 // check for empty lists
                 // Warning
                 if (lInfos.length < 1)
-                    log.println("Warning:\tCould not get any DispatchInformation for group ["+nGroup+"].");
+                {
+                    System.out.println("Warning:\tCould not get any DispatchInformation for group [" + nGroup + "].");
+                }
 
                 // check for duplicates (and by the way, if the info item match the requested group)
                 HashMap aCheckMap = new HashMap(c2);
-                for (i2=0; i2<c2; ++i2)
+                for (i2 = 0; i2 < c2; ++i2)
                 {
                     DispatchInformation aInfo = lInfos[i2];
                     if (aInfo.GroupId != nGroup)
                     {
                         // Error
-                        failed("At least one DispatchInformation item does not match the requested group.\n\trequested group=["+nGroup+
-                               "] returned groupd=["+aInfo.GroupId+"] command=\""+aInfo.Command+"\"", true); // true => dont break this test
+                        fail("At least one DispatchInformation item does not match the requested group.\n\trequested group=[" + nGroup
+                                + "] returned groupd=[" + aInfo.GroupId + "] command=\"" + aInfo.Command + "\""); // true => dont break this test
                         continue;
                     }
 
                     if (aCheckMap.containsKey(aInfo.Command))
                     {
                         // Error
-                        failed("Found a duplicate item: group=["+aInfo.GroupId+"] command=\""+aInfo.Command+"\"", true); // true => dont break this test
+                        fail("Found a duplicate item: group=[" + aInfo.GroupId + "] command=\"" + aInfo.Command + "\""); // true => dont break this test
                         continue;
                     }
 
                     aCheckMap.put(aInfo.Command, aInfo.Command);
-                    log.println("\t["+aInfo.GroupId+"] \""+aInfo.Command+"\"");
+                    System.out.println("\t[" + aInfo.GroupId + "] \"" + aInfo.Command + "\"");
                 }
             }
         }
-        catch(java.lang.Throwable ex)
+        catch (java.lang.Throwable ex)
         {
-            failed("Exception caught during using XDispatchInformationProvider.");
-            ex.printStackTrace();
+            fail("Exception caught during using XDispatchInformationProvider.");
+            // ex.printStackTrace();
         }
     }
 
     //-------------------------------------------
-    private synchronized com.sun.star.frame.XFrame impl_createNewFrame()
+    private synchronized XFrame impl_createNewFrame()
     {
-        com.sun.star.frame.XFrame xFrame = null;
+        XFrame xFrame = null;
 
         try
         {
             xFrame = m_xDesktop.findFrame("_blank", 0);
             xFrame.getContainerWindow().setVisible(true);
         }
-        catch(java.lang.Throwable ex)
+        catch (java.lang.Throwable ex)
         {
-            failed("Could not create the frame instance.");
+            fail("Could not create the frame instance.");
         }
 
         return xFrame;
-   }
+    }
 
     //-------------------------------------------
-    private synchronized void impl_closeFrame(com.sun.star.frame.XFrame xFrame)
+    private synchronized void impl_closeFrame(XFrame xFrame)
     {
-        com.sun.star.util.XCloseable xClose = (com.sun.star.util.XCloseable)UnoRuntime.queryInterface(
-                                                    com.sun.star.util.XCloseable.class,
-                                                    xFrame);
+        XCloseable xClose = UnoRuntime.queryInterface(XCloseable.class, xFrame);
         try
         {
             xClose.close(false);
         }
-        catch(com.sun.star.util.CloseVetoException exVeto)
+        catch (com.sun.star.util.CloseVetoException exVeto)
         {
-            failed("Test frame couldn't be closed successfully.");
+            fail("Test frame couldn't be closed successfully.");
         }
     }
+
+    private XMultiServiceFactory getMSF()
+    {
+        final XMultiServiceFactory xMSF1 = UnoRuntime.queryInterface(XMultiServiceFactory.class, connection.getComponentContext().getServiceManager());
+        return xMSF1;
+    }
+
+    // setup and close connections
+    @BeforeClass
+    public static void setUpConnection() throws Exception
+    {
+        System.out.println("setUpConnection()");
+        connection.setUp();
+    }
+
+    @AfterClass
+    public static void tearDownConnection()
+            throws InterruptedException, com.sun.star.uno.Exception
+    {
+        System.out.println("tearDownConnection()");
+        connection.tearDown();
+    }
+    private static final OfficeConnection connection = new OfficeConnection();
 }

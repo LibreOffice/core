@@ -35,7 +35,7 @@
 
 #include <uielement/addonstoolbarwrapper.hxx>
 #include <threadhelp/resetableguard.hxx>
-#include <helper/actiontriggerhelper.hxx>
+#include <framework/actiontriggerhelper.hxx>
 #include <uielement/constitemcontainer.hxx>
 #include <uielement/rootitemcontainer.hxx>
 #include <uielement/addonstoolbarmanager.hxx>

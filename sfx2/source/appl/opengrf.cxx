@@ -54,7 +54,7 @@
 #include <unotools/pathoptions.hxx>
 #include <sfx2/opengrf.hxx>
 #include "app.hrc"
-#include "sfxresid.hxx"
+#include "sfx2/sfxresid.hxx"
 
 //-----------------------------------------------------------------------------
 
@@ -284,12 +284,9 @@ void SvxOpenGraphicDialog::SetCurrentFilter(const String&   rStr)
     mpImpl->aFileDlg.SetCurrentFilter(rStr);
 }
 
-void SvxOpenGraphicDialog::SetControlHelpIds( const INT16* _pControlId, const INT32* _pHelpId )
+void SvxOpenGraphicDialog::SetControlHelpIds( const INT16* _pControlId, const char** _pHelpId )
 {
     mpImpl->aFileDlg.SetControlHelpIds( _pControlId, _pHelpId );
 }
 
-void SvxOpenGraphicDialog::SetDialogHelpId( const INT32 _nHelpId )
-{
-    mpImpl->aFileDlg.SetDialogHelpId( _nHelpId );
-}
+

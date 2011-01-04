@@ -34,7 +34,7 @@
 #include <cppuhelper/implbase4.hxx>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include "misc.hxx"
+#include "linguistic/misc.hxx"
 #include "defs.hxx"
 #include <cppuhelper/factory.hxx>
 #include <com/sun/star/registry/XRegistryKey.hpp>
@@ -274,27 +274,6 @@ OUString SAL_CALL GrammarChecker::getImplementationName(  ) throw(uno::RuntimeEx
 {
     osl::Guard< osl::Mutex > aGuard(GetMutex());
     return getImplementationName_Static();
-}
-
-sal_Bool SAL_CALL GrammarChecker_writeInfo( void * /*pServiceManager*/, registry::XRegistryKey * pRegistryKey )
-{
-    try
-    {
-        String aImpl( '/' );
-        aImpl += GrammarChecker::getImplementationName_Static().getStr();
-        aImpl.AppendAscii( "/UNO/SERVICES" );
-        uno::Reference< registry::XRegistryKey > xNewKey =
-            pRegistryKey->createKey( aImpl );
-        uno::Sequence< OUString > aServices = GrammarChecker::getSupportedServiceNames_Static();
-        for( INT32 i = 0; i < aServices.getLength(); ++i )
-            xNewKey->createKey( aServices.getConstArray()[i] );
-
-        return sal_True;
-    }
-    catch(uno::Exception &)
-    {
-        return sal_False;
-    }
 }
 
 uno::Reference< uno::XInterface > SAL_CALL GrammarChecker_CreateInstance(

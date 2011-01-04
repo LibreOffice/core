@@ -28,7 +28,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
 #include <svx/svdoashp.hxx>
-#include "unoapi.hxx"
+#include "svx/unoapi.hxx"
 #include <svx/unoshape.hxx>
 #include <ucbhelper/content.hxx>
 #include <ucbhelper/contentbroker.hxx>
@@ -52,22 +52,22 @@
 #include <svx/xpoly.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/svdpage.hxx>
-#include "svditer.hxx"
+#include "svx/svditer.hxx"
 #include <svx/svdobj.hxx>
 #include <svx/svdtrans.hxx>
 #include <svx/svdetc.hxx>
 #include <svx/svdattrx.hxx>  // NotPersistItems
 #include <svx/svdoedge.hxx>  // #32383# Die Verbinder nach Move nochmal anbroadcasten
-#include "svdglob.hxx"   // StringCache
-#include "svdstr.hrc"    // Objektname
+#include "svx/svdglob.hxx"   // StringCache
+#include "svx/svdstr.hrc"    // Objektname
 #include <editeng/eeitem.hxx>
 #include "editeng/editstat.hxx"
 #include <svx/svdoutl.hxx>
 #include <editeng/outlobj.hxx>
 #include <svx/sdtfchim.hxx>
-#include "../customshapes/EnhancedCustomShapeGeometry.hxx"
-#include "../customshapes/EnhancedCustomShapeTypeNames.hxx"
-#include "../customshapes/EnhancedCustomShape2d.hxx"
+#include "../svx/EnhancedCustomShapeGeometry.hxx"
+#include "../svx/EnhancedCustomShapeTypeNames.hxx"
+#include "../svx/EnhancedCustomShape2d.hxx"
 #include <com/sun/star/beans/PropertyValues.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeAdjustmentValue.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeParameterPair.hpp>

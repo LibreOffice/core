@@ -7,4 +7,7 @@
 ..\xml\*.xml %_DEST%\xml%_EXT%\*.xml
 
 mkdir: %_DEST%\inc%_EXT%\linguistic
-..\inc\*.hxx %_DEST%\inc%_EXT%\linguistic\*.hxx
+..\inc\linguistic\*.hxx %_DEST%\inc%_EXT%\linguistic\*.hxx
+
+..\%__SRC%\misc\lng.component %_DEST%\xml%_EXT%\lng.component
+

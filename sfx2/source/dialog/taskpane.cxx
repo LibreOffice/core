@@ -60,7 +60,7 @@
 #include <vcl/menu.hxx>
 #include <vcl/svapp.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
-
+#include <tools/urlobj.hxx>
 #include <boost/noncopyable.hpp>
 
 //......................................................................................................................
@@ -310,7 +310,7 @@ namespace sfx2
 
         virtual ::rtl::OUString GetDisplayName() const;
         virtual Image GetImage() const;
-        virtual SmartId GetHelpID() const;
+        virtual rtl::OString GetHelpID() const;
         virtual void Activate( Window& i_rParentWindow );
         virtual void Deactivate();
         virtual void SetSizePixel( const Size& i_rPanelWindowSize );
@@ -409,10 +409,19 @@ namespace sfx2
         return m_aPanelImage;
     }
 
-    //------------------------------------------------------------------------------------------------------------------
-    SmartId CustomToolPanel::GetHelpID() const
+    static rtl::OString lcl_getHelpId( const ::rtl::OUString& _rHelpURL )
     {
-        return SmartId( m_aPanelHelpURL );
+        INetURLObject aHID( _rHelpURL );
+        if ( aHID.GetProtocol() == INET_PROT_HID )
+            return rtl::OUStringToOString( aHID.GetURLPath(), RTL_TEXTENCODING_UTF8 );
+        else
+            return rtl::OUStringToOString( _rHelpURL, RTL_TEXTENCODING_UTF8 );
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    rtl::OString CustomToolPanel::GetHelpID() const
+    {
+        return lcl_getHelpId( m_aPanelHelpURL );
     }
 
     //------------------------------------------------------------------------------------------------------------------

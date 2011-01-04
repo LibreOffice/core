@@ -155,6 +155,7 @@ class Desktop : public Application
 
         sal_Bool                InitializeInstallation( const rtl::OUString& rAppFilename );
         sal_Bool                InitializeConfiguration();
+        void                    FlushConfiguration();
         sal_Bool                InitializeQuickstartMode( com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& rSMgr );
 
         void                    HandleBootstrapPathErrors( ::utl::Bootstrap::Status, const ::rtl::OUString& aMsg );

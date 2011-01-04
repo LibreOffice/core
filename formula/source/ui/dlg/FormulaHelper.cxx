@@ -50,7 +50,7 @@ namespace formula
             virtual void fillVisibleArgumentMapping(::std::vector<USHORT>& ) const {}
             virtual void initArgumentInfo()  const {}
             virtual ::rtl::OUString getSignature() const { return ::rtl::OUString(); }
-            virtual long getHelpId() const { return 0; }
+            virtual rtl::OString getHelpId() const { return ""; }
             virtual sal_uInt32 getParameterCount() const { return 0; }
             virtual ::rtl::OUString getParameterName(sal_uInt32 ) const { return ::rtl::OUString(); }
             virtual ::rtl::OUString getParameterDescription(sal_uInt32 ) const { return ::rtl::OUString(); }

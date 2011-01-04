@@ -37,7 +37,7 @@
 #include <sfx2/linkmgr.hxx>
 #include <vcl/svapp.hxx>
 #include "app.hrc"
-#include "sfxresid.hxx"
+#include "sfx2/sfxresid.hxx"
 #include <sfx2/filedlghelper.hxx>
 #include <tools/debug.hxx>
 #include <svl/svdde.hxx>

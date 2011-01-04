@@ -36,6 +36,7 @@
 #include <cppuhelper/implbase1.hxx>
 
 #include <stack>
+#include <framework/fwedllapi.h>
 
 //_________________________________________________________________________________________________________________
 //  namespace
@@ -44,7 +45,7 @@
 namespace framework
 {
 
-class SaxNamespaceFilter : public ThreadHelpBase,   // Struct for right initalization of mutex member! Must be first of baseclasses.
+class FWE_DLLPUBLIC SaxNamespaceFilter : public ThreadHelpBase, // Struct for right initalization of mutex member! Must be first of baseclasses.
                            public ::cppu::WeakImplHelper1< ::com::sun::star::xml::sax::XDocumentHandler >
 {
     public:

@@ -28,47 +28,91 @@ package complex.disposing;
 
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.uno.UnoRuntime;
-import complexlib.ComplexTestCase;
 import com.sun.star.frame.XDesktop;
+
+// ---------- junit imports -----------------
+import org.junit.After;
+import org.junit.AfterClass;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
+import org.openoffice.test.OfficeConnection;
+import static org.junit.Assert.*;
+// ------------------------------------------
 
 /**
  * This test is for bug110698. The Office is closed and is continually connected
  * while it closes. This did let the Office freeze. Now when the Office is
  * closed, the connection is refused.
  */
-public class GetServiceWhileDisposingOffice extends ComplexTestCase {
+public class GetServiceWhileDisposingOffice
+{
 
-    public String[] getTestMethodNames() {
-        return new String[]{"checkServiceWhileDisposing"};
-    }
+//    public String[] getTestMethodNames()
+//    {
+//        return new String[]
+//                {
+//                    "checkServiceWhileDisposing"
+//                };
+//    }
 
-    public void checkServiceWhileDisposing() {
-        XMultiServiceFactory xMSF = (XMultiServiceFactory)param.getMSF();
+    @Test public void checkServiceWhileDisposing()
+    {
+        XMultiServiceFactory xMSF = getMSF();
         XDesktop xDesktop = null;
 
-        try {
-            xDesktop = (XDesktop)UnoRuntime.queryInterface(XDesktop.class,
-                        xMSF.createInstance("com.sun.star.frame.Desktop"));
+        try
+        {
+            xDesktop = UnoRuntime.queryInterface(XDesktop.class, xMSF.createInstance("com.sun.star.frame.Desktop"));
         }
-        catch(com.sun.star.uno.Exception e) {
-            failed("Could not create a desktop instance.");
+        catch (com.sun.star.uno.Exception e)
+        {
+            fail("Could not create a desktop instance.");
         }
         int step = 0;
-        try {
-            log.println("Start the termination of the Office.");
+        try
+        {
+            System.out.println("Start the termination of the Office.");
             xDesktop.terminate();
-            for ( ; step<10000; step++ ) {
+            for (; step < 10000; step++)
+            {
                 Object o = xMSF.createInstance("com.sun.star.frame.Desktop");
             }
         }
-        catch(com.sun.star.lang.DisposedException e) {
-            log.println("DisposedException in step: " + step);
-            e.printStackTrace();
+        catch (com.sun.star.lang.DisposedException e)
+        {
+            System.out.println("DisposedException in step: " + step);
         }
-        catch(Exception e) {
-            e.printStackTrace();
-            failed(e.getMessage());
+        catch (Exception e)
+        {
+            fail(e.getMessage());
         }
 
     }
+
+
+       private XMultiServiceFactory getMSF()
+    {
+        final XMultiServiceFactory xMSF1 = UnoRuntime.queryInterface(XMultiServiceFactory.class, connection.getComponentContext().getServiceManager());
+        return xMSF1;
+    }
+
+    // setup and close connections
+    @BeforeClass
+    public static void setUpConnection() throws Exception
+    {
+        System.out.println("setUpConnection()");
+        connection.setUp();
+    }
+
+    @AfterClass
+    public static void tearDownConnection()
+            throws InterruptedException, com.sun.star.uno.Exception
+    {
+        System.out.println("tearDownConnection()");
+        // Office is already terminated.
+        // connection.tearDown();
+    }
+    private static final OfficeConnection connection = new OfficeConnection();
+
 }

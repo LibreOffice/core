@@ -28,6 +28,7 @@
 #define _SFXWORKWIN_HXX
 
 #include <vector>
+#include <deque>
 #include <com/sun/star/frame/XDispatch.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
 #ifndef _COM_SUN_STAR_UI_XUILEMENT_HPP_
@@ -175,11 +176,10 @@ enum SfxDockingConfig
 DECL_PTRARRAY( SfxChildList_Impl, SfxChild_Impl*, 2, 2 )
 DECL_PTRARRAY( SfxChildWindows_Impl, SfxChildWin_Impl*, 2, 2 )
 
-SV_DECL_OBJARR( SfxObjectBarArr_Impl, SfxObjectBar_Impl, 1, 2 )
 
 struct SfxObjectBarList_Impl
 {
-    SfxObjectBarArr_Impl    aArr;
+    std::deque<SfxObjectBar_Impl>   aArr;
     USHORT                  nAct;
 
     SfxObjectBar_Impl       operator[] ( USHORT n )

@@ -175,20 +175,20 @@ ModalDialog DLG_UUI_LOGIN
         Size = MAP_APPFONT( 177 , 8 ) ;
     };
 
-    OKButton BTN_LOGIN_OK
+    HelpButton BTN_LOGIN_HELP
     {
         Pos = MAP_APPFONT( 6 , 227 ) ;
+        Size = MAP_APPFONT( 50 , 14 ) ;
+    };
+
+    OKButton BTN_LOGIN_OK
+    {
+        Pos = MAP_APPFONT( 66 , 227 ) ;
         Size = MAP_APPFONT( 50 , 14 ) ;
         DefButton = TRUE ;
     };
 
     CancelButton BTN_LOGIN_CANCEL
-    {
-        Pos = MAP_APPFONT( 66 , 227 ) ;
-        Size = MAP_APPFONT( 50 , 14 ) ;
-    };
-
-    HelpButton BTN_LOGIN_HELP
     {
         Pos = MAP_APPFONT( 121 , 227 ) ;
         Size = MAP_APPFONT( 50 , 14 ) ;

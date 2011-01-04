@@ -69,3 +69,11 @@ DEF1EXPORTFILE=exports.dxp
 .ENDIF
 
 .INCLUDE :  	target.mk
+
+ALLTAR : $(MISC)/avmediagst.component
+
+$(MISC)/avmediagst.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
+        avmediagst.component
+    $(XSLTPROC) --nonet --stringparam uri \
+        '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL1TARGETN:f)' -o $@ \
+        $(SOLARENV)/bin/createcomponent.xslt avmediagst.component

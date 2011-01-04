@@ -27,23 +27,11 @@
 #ifndef _FRAMEWORK_HELPID_HRC
 #define _FRAMEWORK_HELPID_HRC
 
-// include ------------------------------------------------------------------
-
-#include <svl/solar.hrc>
-
-// Help-Ids -----------------------------------------------------------------
-
-#define HID_BACKINGWINDOW                           (HID_FRAMEWORK_START + 0)
-#define HID_LICENSEDIALOG                           (HID_FRAMEWORK_START + 1)
-#define HID_STATUSBAR                               (HID_FRAMEWORK_START + 2)
-
-#define ACT_FRAMEWORK_HID_END HID_BACKINGWINDOW
-
-// "Uberlaufpr"ufung --------------------------------------------------------
-
-#if ACT_FRAMEWORK_HID_END > HID_FRAMEWORK_END
-#error Resource-Ueberlauf in #line, #file
-#endif
+#define HID_BACKINGWINDOW                           "FWK_HID_BACKINGWINDOW"
+#define HID_LICENSEDIALOG                           "FWK_HID_LICENSEDIALOG"
+#define HID_STATUSBAR                               "FWK_HID_STATUSBAR"
+#define HID_SVX_COMMON_MACRO_ORGANIZER              "FWK_HID_SVX_COMMON_MACRO_ORGANIZER"
+#define HID_SVX_BASIC_MACRO_ORGANIZER               "FWK_HID_SVX_BASIC_MACRO_ORGANIZER"
 
 #endif // #ifndef _FRAMEWORK_HELPID_HRC
 

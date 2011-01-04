@@ -88,3 +88,11 @@ $(SRS)$/$(TARGET).srs: $(INCCOM)$/chinese_direction.hrc
 $(SLO)$/chinese_dictionarydialog.obj: $(INCCOM)$/chinese_direction.hrc
 $(SLO)$/chinese_translationdialog.obj: $(INCCOM)$/chinese_direction.hrc
 
+
+ALLTAR : $(MISC)/textconversiondlgs.component
+
+$(MISC)/textconversiondlgs.component .ERRREMOVE : \
+        $(SOLARENV)/bin/createcomponent.xslt textconversiondlgs.component
+    $(XSLTPROC) --nonet --stringparam uri \
+        '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL1TARGETN:f)' -o $@ \
+        $(SOLARENV)/bin/createcomponent.xslt textconversiondlgs.component

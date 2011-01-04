@@ -48,6 +48,12 @@ SHL1TARGET = desktopbe1.uno
 SHL1USE_EXPORTS = name
 DEF1NAME = $(SHL1TARGET)
 
-UNIXTEXT = $(MISC)/desktopbe1-ucd.txt
-
 .INCLUDE: target.mk
+
+ALLTAR : $(MISC)/desktopbe1.component
+
+$(MISC)/desktopbe1.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
+        desktopbe1.component
+    $(XSLTPROC) --nonet --stringparam uri \
+        '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL1TARGETN:f)' -o $@ \
+        $(SOLARENV)/bin/createcomponent.xslt desktopbe1.component

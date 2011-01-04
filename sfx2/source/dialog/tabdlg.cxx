@@ -42,8 +42,8 @@
 #include <sfx2/tabdlg.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/app.hxx>
-#include "sfxresid.hxx"
-#include "sfxhelp.hxx"
+#include "sfx2/sfxresid.hxx"
+#include "sfx2/sfxhelp.hxx"
 #include <sfx2/ctrlitem.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/sfxdlg.hxx>
@@ -1780,15 +1780,15 @@ long SfxTabDialog::Notify( NotifyEvent& rNEvt )
         if ( pViewFrame )
         {
             Window* pWindow = rNEvt.GetWindow();
-            ULONG nHelpId  = 0;
-            while ( !nHelpId && pWindow )
+            rtl::OString sHelpId;
+            while ( !sHelpId.getLength() && pWindow )
             {
-                nHelpId = pWindow->GetHelpId();
+                sHelpId = pWindow->GetHelpId();
                 pWindow = pWindow->GetParent();
             }
 
-            if ( nHelpId )
-                SfxHelp::OpenHelpAgent( &pViewFrame->GetFrame(), nHelpId );
+            if ( sHelpId.getLength() )
+                SfxHelp::OpenHelpAgent( &pViewFrame->GetFrame(), sHelpId );
         }
     }
 

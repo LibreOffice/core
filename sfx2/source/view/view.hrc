@@ -41,12 +41,6 @@
 #define STR_NOSTARTPRINTER                  (RID_SFX_VIEW_START+ 9)
 #define STR_PRINTING                        (RID_SFX_VIEW_START+10)
 
-#ifndef STR_UNDO
-#define STR_UNDO                            (RID_SFX_VIEW_START+11)
-#define STR_REDO                            (RID_SFX_VIEW_START+12)
-#define STR_REPEAT                          (RID_SFX_VIEW_START+13)
-#endif
-
 #define DLG_PRINTMONITOR                    (RID_SFX_VIEW_START)
 #define FT_DOCNAME                      1
 #define FT_PRINTING                     2

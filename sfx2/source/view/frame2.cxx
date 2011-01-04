@@ -30,7 +30,7 @@
 
 #include "impframe.hxx"
 #include "objshimp.hxx"
-#include "sfxhelp.hxx"
+#include "sfx2/sfxhelp.hxx"
 #include "workwin.hxx"
 
 #include "sfx2/app.hxx"
@@ -127,15 +127,15 @@ long SfxFrameWindow_Impl::Notify( NotifyEvent& rNEvt )
 
         // TODO/LATER: do we still need this code?
         Window* pWindow = rNEvt.GetWindow();
-        ULONG nHelpId  = 0;
-        while ( !nHelpId && pWindow )
+        rtl::OString sHelpId;
+        while ( !sHelpId.getLength() && pWindow )
         {
-            nHelpId = pWindow->GetHelpId();
+            sHelpId = pWindow->GetHelpId();
             pWindow = pWindow->GetParent();
         }
 
-        if ( nHelpId )
-            SfxHelp::OpenHelpAgent( pFrame, nHelpId );
+        if ( sHelpId.getLength() )
+            SfxHelp::OpenHelpAgent( pFrame, sHelpId );
 
         // if focus was on an external window, the clipboard content might have been changed
         pView->GetBindings().Invalidate( SID_PASTE );

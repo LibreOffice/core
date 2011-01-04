@@ -45,11 +45,11 @@
 #include <vcl/svapp.hxx>
 #include <comphelper/propertysetinfo.hxx>
 #include <svx/dialmgr.hxx>
-#include "unoapi.hxx"
+#include "svx/unoapi.hxx"
 #include <editeng/unotext.hxx>
 #include <svx/unoshprp.hxx>
 #include <editeng/editeng.hxx>
-#include "globl3d.hxx"
+#include "svx/globl3d.hxx"
 #include <svx/dialogs.hrc>
 #include <svx/svdpool.hxx>
 #include <svx/svdobj.hxx>
@@ -644,8 +644,10 @@ SfxItemPropertyMapEntry* ImplGetSvxControlShapePropertyMap()
         // #i68101#
         { MAP_CHAR_LEN(UNO_NAME_MISC_OBJ_TITLE),        OWN_ATTR_MISC_OBJ_TITLE         , &::getCppuType((const ::rtl::OUString*)0),    0,  0},
         { MAP_CHAR_LEN(UNO_NAME_MISC_OBJ_DESCRIPTION),  OWN_ATTR_MISC_OBJ_DESCRIPTION   , &::getCppuType((const ::rtl::OUString*)0),    0,  0},
+        // #i112587#
+        { MAP_CHAR_LEN(UNO_NAME_MISC_OBJ_PRINTABLE),    SDRATTR_OBJPRINTABLE            , &::getBooleanCppuType(),                      0,  0},
+        { MAP_CHAR_LEN("Visible"),                      SDRATTR_OBJVISIBLE              , &::getBooleanCppuType(),                      0,  0},
         {0,0,0,0,0,0}
-
     };
 
     return aControlPropertyMap_Impl;

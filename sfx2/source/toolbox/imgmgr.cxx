@@ -31,10 +31,10 @@
 #include <stdio.h>
 #include <hash_map>
 
-#include "imgmgr.hxx"
+#include "sfx2/imgmgr.hxx"
 #include <sfx2/sfx.hrc>
 #include <sfx2/app.hxx>
-#include "sfxresid.hxx"
+#include "sfx2/sfxresid.hxx"
 #include <sfx2/bindings.hxx>
 #include "statcach.hxx"
 #include <sfx2/module.hxx>

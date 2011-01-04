@@ -76,7 +76,7 @@ namespace sfx2
             @return
                 the ID of the newly created toolbox item
         */
-        USHORT  AddDropDownToolBoxItem( const String& i_rItemText, ULONG i_nHelpId, const Link& i_rCallback )
+        USHORT  AddDropDownToolBoxItem( const String& i_rItemText, const rtl::OString& i_nHelpId, const Link& i_rCallback )
         {
             return impl_addDropDownToolBoxItem( i_rItemText, i_nHelpId, i_rCallback );
         }
@@ -126,7 +126,7 @@ namespace sfx2
 
         /** internal version of AddDropDownToolBoxItem
         */
-        USHORT  impl_addDropDownToolBoxItem( const String& i_rItemText, ULONG i_nHelpId, const Link& i_rCallback );
+        USHORT  impl_addDropDownToolBoxItem( const String& i_rItemText, const rtl::OString& i_nHelpId, const Link& i_rCallback );
 
         /** returns the current title.
 

@@ -33,9 +33,8 @@
 #include <com/sun/star/ui/dialogs/CommonFilePickerElementIds.hpp>
 #include <com/sun/star/ui/dialogs/ControlActions.hpp>
 #include <vcl/lstbox.hxx>
-#ifndef _COM_SUN_STAR_UNO_SEQUENCE_HPP_
 #include <com/sun/star/uno/Sequence.hxx>
-#endif
+#include <tools/urlobj.hxx>
 
 #include <algorithm>
 #include <functional>
@@ -201,37 +200,36 @@ namespace svt
     }
 
     //---------------------------------------------------------------------
-    void OControlAccess::setHelpURL( Window* _pControl, const ::rtl::OUString& _rURL, sal_Bool _bFileView )
+    void OControlAccess::setHelpURL( Window* _pControl, const ::rtl::OUString& sHelpURL, sal_Bool _bFileView )
     {
-        String sHelpURL( _rURL );
-        if ( COMPARE_EQUAL == sHelpURL.CompareIgnoreCaseToAscii( "HID:", sizeof( "HID:" ) - 1 ) )
-        {
-            String sID = sHelpURL.Copy( sizeof( "HID:" ) - 1 );
-            sal_Int32 nHelpId = sID.ToInt32();
+        rtl::OUString sHelpID( sHelpURL );
+        INetURLObject aHID( sHelpURL );
+        if ( aHID.GetProtocol() == INET_PROT_HID )
+              sHelpID = aHID.GetURLPath();
 
-            if ( _bFileView )
-                // the file view "overloaded" the SetHelpId
-                static_cast< SvtFileView* >( _pControl )->SetHelpId( nHelpId );
-            else
-                _pControl->SetHelpId( nHelpId );
-        }
+        // URLs should always be UTF8 encoded and escaped
+        rtl::OString sID( rtl::OUStringToOString( sHelpID, RTL_TEXTENCODING_UTF8 ) );
+        if ( _bFileView )
+            // the file view "overloaded" the SetHelpId
+            static_cast< SvtFileView* >( _pControl )->SetHelpId( sID );
         else
-        {
-            DBG_ERRORFILE( "OControlAccess::setHelpURL: unsupported help URL type!" );
-        }
+            _pControl->SetHelpId( sID );
     }
 
     //---------------------------------------------------------------------
     ::rtl::OUString OControlAccess::getHelpURL( Window* _pControl, sal_Bool _bFileView )
     {
-        sal_Int32 nHelpId = _pControl->GetHelpId();
+        rtl::OString aHelpId = _pControl->GetHelpId();
         if ( _bFileView )
             // the file view "overloaded" the SetHelpId
-            nHelpId = static_cast< SvtFileView* >( _pControl )->GetHelpId( );
+            aHelpId = static_cast< SvtFileView* >( _pControl )->GetHelpId( );
 
-        ::rtl::OUString sHelpURL( RTL_CONSTASCII_USTRINGPARAM( "HID:" ) );
-        sHelpURL += ::rtl::OUString::valueOf( (sal_Int32)nHelpId );
-
+        ::rtl::OUString sHelpURL;
+        ::rtl::OUString aTmp( rtl::OStringToOUString( aHelpId, RTL_TEXTENCODING_UTF8 ) );
+        INetURLObject aHID( aTmp );
+        if ( aHID.GetProtocol() == INET_PROT_NOT_VALID )
+            sHelpURL = rtl::OUString::createFromAscii( INET_HID_SCHEME );
+        sHelpURL += aTmp;
         return sHelpURL;
     }
 

@@ -982,42 +982,6 @@ extern "C"
     }
 
     /**
-     * This function creates an implementation section in the registry and another subkey
-     *
-     * for each supported service.
-     * @param pServiceManager   the service manager
-     * @param pRegistryKey      the registry key
-     */
-    SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL component_writeInfo(
-            lang::XMultiServiceFactory * pServiceManager,
-            registry::XRegistryKey * pRegistryKey )
-    {
-        if (::cppu::component_writeInfoHelper( pServiceManager, pRegistryKey,
-            ::scripting_runtimemgr::s_entries ))
-        {
-            try
-            {
-                // MasterScriptProviderFactory Mangager singleton
-                registry::XRegistryKey * pKey =
-                    reinterpret_cast< registry::XRegistryKey * >(pRegistryKey);
-
-                Reference< registry::XRegistryKey >xKey = pKey->createKey(
-                    OUSTR("com.sun.star.script.provider.MasterScriptProviderFactory/UNO/SINGLETONS/com.sun.star.script.provider.theMasterScriptProviderFactory"));
-                xKey->setStringValue( OUSTR("com.sun.star.script.provider.MasterScriptProviderFactory") );
-                // BrowseNodeFactory Mangager singleton
-                xKey = pKey->createKey(
-                    OUSTR("com.sun.star.script.browse.BrowseNodeFactory/UNO/SINGLETONS/com.sun.star.script.browse.theBrowseNodeFactory"));
-                xKey->setStringValue( OUSTR("com.sun.star.script.browse.BrowseNodeFactory") );
-                return sal_True;
-            }
-            catch (Exception &)
-            {
-            }
-        }
-        return sal_False;
-    }
-
-    /**
      * This function is called to get service factories for an implementation.
      *
      * @param pImplName       name of implementation

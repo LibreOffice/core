@@ -136,3 +136,11 @@ RESLIB2SRSFILES=$(RES2FILELIST)
 
 .INCLUDE : target.mk
 
+
+ALLTAR : $(MISC)/for.component
+
+$(MISC)/for.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
+        for.component
+    $(XSLTPROC) --nonet --stringparam uri \
+        '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL1TARGETN:f)' -o $@ \
+        $(SOLARENV)/bin/createcomponent.xslt for.component

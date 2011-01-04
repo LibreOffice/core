@@ -30,7 +30,7 @@
 #include <rtl/ustring.hxx>
 #include <tools/debug.hxx>
 #include <svl/svarray.hxx>
-#include "i18nmap.hxx"
+#include "xmloff/i18nmap.hxx"
 
 using namespace rtl;
 

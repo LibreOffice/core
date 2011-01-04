@@ -66,3 +66,11 @@ DEF1NAME=$(SHL1TARGET)
 
 .INCLUDE : target.mk
 
+
+ALLTAR : $(MISC)/wininetbe1.component
+
+$(MISC)/wininetbe1.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
+        wininetbe1.component
+    $(XSLTPROC) --nonet --stringparam uri \
+        '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL1TARGETN:f)' -o $@ \
+        $(SOLARENV)/bin/createcomponent.xslt wininetbe1.component

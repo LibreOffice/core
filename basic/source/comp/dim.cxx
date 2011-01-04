@@ -375,6 +375,9 @@ void SbiParser::DefVar( SbiOpcode eOp, BOOL bStatic )
             if( pDef->IsWithEvents() )
                 nOpnd2 |= SBX_TYPE_WITH_EVENTS_FLAG;
 
+            if( bCompatible && pDef->IsNew() )
+                nOpnd2 |= SBX_TYPE_DIM_AS_NEW_FLAG;
+
             short nFixedStringLength = pDef->GetFixedStringLength();
             if( nFixedStringLength >= 0 )
                 nOpnd2 |= (SBX_FIXED_LEN_STRING_FLAG + (UINT32(nFixedStringLength) << 17));     // len = all bits above 0x10000

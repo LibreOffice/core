@@ -237,6 +237,9 @@ public:
     virtual ::rtl::OUString SAL_CALL getDescription()
         throw (css::deployment::ExtensionRemovedException,
                css::uno::RuntimeException);
+    virtual ::rtl::OUString SAL_CALL getLicenseText()
+        throw (css::deployment::ExtensionRemovedException,
+               css::uno::RuntimeException);
     virtual css::uno::Sequence< ::rtl::OUString > SAL_CALL
     getUpdateInformationURLs()
         throw (css::deployment::ExtensionRemovedException,
@@ -294,7 +297,7 @@ protected:
 
     ::rtl::OUString m_context;
     // currently only for library containers:
-    enum context {
+    enum {
         CONTEXT_UNKNOWN,
         CONTEXT_USER, CONTEXT_SHARED,CONTEXT_BUNDLED, CONTEXT_TMP, CONTEXT_BUNDLED_PREREG,
         CONTEXT_DOCUMENT

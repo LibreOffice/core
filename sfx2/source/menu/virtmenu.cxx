@@ -36,13 +36,8 @@
 #include <com/sun/star/frame/XDesktop.hpp>
 #include <com/sun/star/frame/XFramesSupplier.hpp>
 #include <comphelper/processfactory.hxx>
-#ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
 #include <toolkit/unohlp.hxx>
-#endif
 #include <tools/urlobj.hxx>
-
-#ifndef GCC
-#endif
 
 #include "virtmenu.hxx"
 #include <sfx2/msgpool.hxx>
@@ -60,9 +55,9 @@
 #include <sfx2/viewsh.hxx>
 #include "sfxpicklist.hxx"
 #include <sfx2/macrconf.hxx>
-#include "sfxresid.hxx"
+#include "sfx2/sfxresid.hxx"
 #include "menu.hrc"
-#include "imagemgr.hxx"
+#include "sfx2/imagemgr.hxx"
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/objsh.hxx>
 #include <framework/addonsoptions.hxx>
@@ -345,7 +340,9 @@ void SfxVirtualMenu::CreateFromSVMenu()
     DBG_CHKTHIS(SfxVirtualMenu, 0);
 
     // Merge Addon popup menus into the SV Menu
-    Reference< com::sun::star::frame::XFrame > xFrame( pBindings->GetDispatcher()->GetFrame()->GetFrame().GetFrameInterface() );
+    SfxViewFrame* pViewFrame = pBindings->GetDispatcher()->GetFrame();
+    SfxSlotPool* pSlotPool = pViewFrame->GetObjectShell()->GetModule()->GetSlotPool();
+    Reference< com::sun::star::frame::XFrame > xFrame( pViewFrame->GetFrame().GetFrameInterface() );
 
     if ( pSVMenu->IsMenuBar() )
     {
@@ -448,23 +445,14 @@ void SfxVirtualMenu::CreateFromSVMenu()
             }
             else
             {
-/*
-                if ( nSlotId >= SID_SFX_START && !SfxMenuManager::IsPopupFunction(nSlotId) )
+                const SfxSlot* pSlot = pSlotPool->GetSlot( nSlotId );
+                if ( pSlot )
                 {
-                    // Echte Popups sollen keine SlotIds haben; leider sind
-                    // da noch Altlasten mit herumzuschleppen ...
-                    String aTitle = pSVMenu->GetItemText( nSlotId );
-                    pSVMenu->SetPopupMenu( nSlotId, NULL );
-                    USHORT nPos = pSVMenu->GetItemPos( nSlotId );
-                    pSVMenu->RemoveItem( nPos );
-                    nSlotId = 1;
-                    while ( pSVMenu->GetItemPos(nSlotId) != MENU_ITEM_NOTFOUND )
-                        nSlotId++;
-                    pSVMenu->InsertItem( nSlotId, aTitle, 0, nPos );
-                    pSVMenu->SetPopupMenu( nSlotId, pPopup );
+                    rtl::OString aCmd(".uno:");
+                    aCmd += pSlot->GetUnoName();
+                    pSVMenu->SetHelpId( nSlotId, pSlot->GetUnoName() );
                 }
-*/
-                pSVMenu->SetHelpId( nSlotId, 0L );
+
                 pMnuCtrl = pItems+nPos;
 
                 // normalerweise jetzt erst im Activate-Handler

@@ -64,18 +64,21 @@ ModalDialog DLG_COOKIES
     };
     RadioButton RB_INFUTURE_SEND
     {
+        HelpID = "uui:RadioButton:DLG_COOKIES:RB_INFUTURE_SEND";
         Pos = MAP_APPFONT ( 12 , 171 ) ;
         Size = MAP_APPFONT ( 52 , 10 ) ;
         Text [ en-US ] = "~Send" ;
     };
     RadioButton RB_INFUTURE_IGNORE
     {
+        HelpID = "uui:RadioButton:DLG_COOKIES:RB_INFUTURE_IGNORE";
         Pos = MAP_APPFONT ( 67 , 171 ) ;
         Size = MAP_APPFONT ( 52 , 10 ) ;
         Text [ en-US ] = "I~gnore" ;
     };
     RadioButton RB_INFUTURE_INTERACTIVE
     {
+        HelpID = "uui:RadioButton:DLG_COOKIES:RB_INFUTURE_INTERACTIVE";
         Pos = MAP_APPFONT ( 122 , 171 ) ;
         Size = MAP_APPFONT ( 52 , 10 ) ;
         Text [ en-US ] = "I~nteractive" ;
@@ -90,12 +93,14 @@ ModalDialog DLG_COOKIES
     };
     PushButton BTN_COOKIES_CANCEL
     {
+        HelpID = "uui:PushButton:DLG_COOKIES:BTN_COOKIES_CANCEL";
         Pos = MAP_APPFONT ( 186 , 173 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Text [ en-US ] = "~Ignore" ;
     };
     PushButton BTN_COOKIES_OK
     {
+        HelpID = "uui:PushButton:DLG_COOKIES:BTN_COOKIES_OK";
         Pos = MAP_APPFONT ( 239 , 173 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         DefButton = TRUE ;

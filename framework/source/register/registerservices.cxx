@@ -47,10 +47,6 @@
 
         COMPONENTGETIMPLEMENTATIONENVIRONMENT
 
-        COMPONENTWRITEINFO  (   COMPONENTINFO( Service1 )
-                                 COMPONENTINFO( Service2 )
-                            )
-
         COMPONENTGETFACTORY (   IFFACTORIE( Service1 )
                                  else
                                 IFFACTORIE( Service2 )
@@ -58,7 +54,7 @@
 =================================================================================================================*/
 #include <services/urltransformer.hxx>
 #include <services/desktop.hxx>
-//#include <services/tabwindowservice.hxx>
+#include <services/tabwindowservice.hxx>
 #include <services/frame.hxx>
 #include <services/modulemanager.hxx>
 //#include <dispatch/oxt_handler.hxx>
@@ -117,66 +113,6 @@
 
 COMPONENTGETIMPLEMENTATIONENVIRONMENT
 
-COMPONENTWRITEINFO  (   COMPONENTINFO( ::framework::URLTransformer                          )
-                        COMPONENTINFO( ::framework::Desktop                                 )
-                        COMPONENTINFO( ::framework::Frame                                   )
-                        //COMPONENTINFO( ::framework::Oxt_Handler                             )
-                        COMPONENTINFO( ::framework::JobExecutor                             )
-                        //COMPONENTINFO( ::framework::DispatchRecorderSupplier                )
-                        //COMPONENTINFO( ::framework::DispatchRecorder                        )
-                        //COMPONENTINFO( ::framework::MailToDispatcher                        )
-                        //COMPONENTINFO( ::framework::ServiceHandler                          )
-                        COMPONENTINFO( ::framework::JobDispatch                             )
-                        COMPONENTINFO( ::framework::BackingComp                             )
-                        //COMPONENTINFO( ::framework::DispatchHelper                          )
-                        COMPONENTINFO( ::framework::LayoutManager                           )
-                        //COMPONENTINFO( ::framework::License                                 )
-                        COMPONENTINFO( ::framework::UIElementFactoryManager                 )
-                        COMPONENTINFO( ::framework::PopupMenuControllerFactory              )
-                        //COMPONENTINFO( ::framework::FontMenuController                      )
-                        //COMPONENTINFO( ::framework::FontSizeMenuController                  )
-                        COMPONENTINFO( ::framework::ObjectMenuController                    )
-                        //COMPONENTINFO( ::framework::HeaderMenuController                    )
-                        //COMPONENTINFO( ::framework::FooterMenuController                    )
-                        COMPONENTINFO( ::framework::ControlMenuController                   )
-                        //COMPONENTINFO( ::framework::MacrosMenuController                    )
-                        COMPONENTINFO( ::framework::UICommandDescription                    )
-                        COMPONENTINFO( ::framework::ModuleManager                           )
-                        COMPONENTINFO( ::framework::UIConfigurationManager                  )
-                        COMPONENTINFO( ::framework::ModuleUIConfigurationManagerSupplier    )
-                        COMPONENTINFO( ::framework::ModuleUIConfigurationManager            )
-                        COMPONENTINFO( ::framework::MenuBarFactory                          )
-                        COMPONENTINFO( ::framework::GlobalAcceleratorConfiguration          )
-                        COMPONENTINFO( ::framework::ModuleAcceleratorConfiguration          )
-                        COMPONENTINFO( ::framework::DocumentAcceleratorConfiguration        )
-                        COMPONENTINFO( ::framework::ToolBoxFactory                          )
-                        COMPONENTINFO( ::framework::AddonsToolBoxFactory                    )
-                        COMPONENTINFO( ::framework::WindowStateConfiguration                )
-                        COMPONENTINFO( ::framework::ToolbarControllerFactory                )
-                        //COMPONENTINFO( ::framework::ToolbarsMenuController                  )
-                        COMPONENTINFO( ::framework::AutoRecovery                            )
-                        COMPONENTINFO( ::framework::StatusIndicatorFactory                  )
-                        COMPONENTINFO( ::framework::RecentFilesMenuController               )
-                        COMPONENTINFO( ::framework::StatusBarFactory                        )
-                        COMPONENTINFO( ::framework::UICategoryDescription                   )
-                        COMPONENTINFO( ::framework::StatusbarControllerFactory              )
-                        COMPONENTINFO( ::framework::SessionListener                         )
-                        //COMPONENTINFO( ::framework::LogoImageStatusbarController            )
-                        //COMPONENTINFO( ::framework::LogoTextStatusbarController             )
-                        //COMPONENTINFO( ::framework::NewMenuController                       )
-                        COMPONENTINFO( ::framework::TaskCreatorService                      )
-                        //COMPONENTINFO( ::framework::SimpleTextStatusbarController           )
-                        //COMPONENTINFO( ::framework::UriAbbreviation                         )
-                        //COMPONENTINFO( ::framework::PopupMenuDispatcher                     )
-                        COMPONENTINFO( ::framework::ImageManager                            )
-                        COMPONENTINFO( ::framework::LangSelectionStatusbarController        )
-                        //COMPONENTINFO( ::framework::LanguageSelectionMenuController         )
-                        //COMPONENTINFO( ::framework::TabWindowService                        )
-                        COMPONENTINFO( ::framework::WindowContentFactoryManager             )
-                        COMPONENTINFO( ::framework::SubstitutePathVariables     )
-                        COMPONENTINFO( ::framework::PathSettings                )
-                    )
-
 COMPONENTGETFACTORY (   IFFACTORY( ::framework::URLTransformer                          )   else
                         IFFACTORY( ::framework::Desktop                                 )   else
                         IFFACTORY( ::framework::Frame                                   )   else
@@ -233,7 +169,7 @@ COMPONENTGETFACTORY (   IFFACTORY( ::framework::URLTransformer                  
                         IFFACTORY( ::framework::LangSelectionStatusbarController        )   else
                         //IFFACTORY( ::framework::LanguageSelectionMenuController         )   else
                         IFFACTORY( ::framework::WindowContentFactoryManager             )   else
-                        //IFFACTORY( ::framework::TabWindowService                        )   else
+                        IFFACTORY( ::framework::TabWindowService                        )   else
                         IFFACTORY( ::framework::SubstitutePathVariables                 )   else
                         IFFACTORY( ::framework::PathSettings                            )
             )

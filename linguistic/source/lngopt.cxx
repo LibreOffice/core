@@ -29,8 +29,8 @@
 #include "precompiled_linguistic.hxx"
 
 #include "lngopt.hxx"
-#include "lngprops.hxx"
-#include "misc.hxx"
+#include "linguistic/lngprops.hxx"
+#include "linguistic/misc.hxx"
 #include <tools/debug.hxx>
 #include <unotools/lingucfg.hxx>
 
@@ -663,29 +663,6 @@ uno::Sequence< OUString > LinguProps::getSupportedServiceNames_Static()
     uno::Sequence< OUString > aSNS( 1 );    // auch mehr als 1 Service moeglich
     aSNS.getArray()[0] = A2OU( SN_LINGU_PROPERTIES );
     return aSNS;
-}
-
-
-sal_Bool SAL_CALL LinguProps_writeInfo( void * /*pServiceManager*/,
-            XRegistryKey * pRegistryKey )
-{
-    try
-    {
-        String aImpl( '/' );
-        aImpl += LinguProps::getImplementationName_Static().getStr();
-        aImpl.AppendAscii( "/UNO/SERVICES" );
-        Reference< XRegistryKey > xNewKey =
-            pRegistryKey->createKey(aImpl );
-        uno::Sequence< OUString > aServices = LinguProps::getSupportedServiceNames_Static();
-        for( INT32 i = 0; i < aServices.getLength(); i++ )
-            xNewKey->createKey( aServices.getConstArray()[i]);
-
-        return sal_True;
-    }
-    catch(Exception &)
-    {
-        return sal_False;
-    }
 }
 
 void * SAL_CALL LinguProps_getFactory( const sal_Char * pImplName,

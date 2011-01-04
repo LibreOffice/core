@@ -133,10 +133,10 @@ public:
                                             const String *pUserButtonText=0 ) = 0;
     virtual CreateTabPage               GetTabPageCreatorFunc( USHORT nId ) = 0;
     virtual GetTabPageRanges            GetTabPageRangesFunc( USHORT nId ) = 0;
-    virtual SfxAbstractInsertObjectDialog* CreateInsertObjectDialog( Window* pParent, USHORT nSlotId,
+    virtual SfxAbstractInsertObjectDialog* CreateInsertObjectDialog( Window* pParent, const rtl::OUString& rCommand,
             const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >& xStor,
             const SvObjectServerList* pList = 0 )=0;
-    virtual VclAbstractDialog*          CreateEditObjectDialog( Window* pParent, USHORT nSlotId,
+    virtual VclAbstractDialog*          CreateEditObjectDialog( Window* pParent, const rtl::OUString& rCommand,
             const com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject >& xObj )=0;
     virtual  SfxAbstractPasteDialog*         CreatePasteDialog( Window* pParent )=0;
     virtual  SfxAbstractLinksDialog*         CreateLinksDialog( Window* pParent, sfx2::LinkManager* pMgr, BOOL bHTML=FALSE, sfx2::SvBaseLink* p=0 )=0;

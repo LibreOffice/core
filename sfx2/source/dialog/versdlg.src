@@ -28,6 +28,7 @@
 #include "versdlg.hrc"
 ModalDialog DLG_VERSIONS
 {
+    HelpID = "sfx2:ModalDialog:DLG_VERSIONS";
     OutputSize = TRUE ;
     Size = MAP_APPFONT ( 340 , 184 ) ;
     SvLook = TRUE ;
@@ -41,6 +42,7 @@ ModalDialog DLG_VERSIONS
     };
     PushButton PB_SAVE
     {
+        HelpID = "sfx2:PushButton:DLG_VERSIONS:PB_SAVE";
         Pos = MAP_APPFONT ( 12 , 14 ) ;
         Size = MAP_APPFONT ( 90 , 14 ) ;
         TabStop = TRUE ;
@@ -48,6 +50,7 @@ ModalDialog DLG_VERSIONS
     };
     CheckBox CB_SAVEONCLOSE
     {
+        HelpID = "sfx2:CheckBox:DLG_VERSIONS:CB_SAVEONCLOSE";
         Pos = MAP_APPFONT ( 108 , 16 ) ;
         Size = MAP_APPFONT ( 164 , 10 ) ;
         TabStop = TRUE ;
@@ -93,6 +96,7 @@ ModalDialog DLG_VERSIONS
     };
     PushButton PB_OPEN
     {
+        HelpID = "sfx2:PushButton:DLG_VERSIONS:PB_OPEN";
         Pos = MAP_APPFONT ( 284 , 26 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
@@ -100,6 +104,7 @@ ModalDialog DLG_VERSIONS
     };
     PushButton PB_VIEW
     {
+        HelpID = "sfx2:PushButton:DLG_VERSIONS:PB_VIEW";
         Pos = MAP_APPFONT ( 284 , 43 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
@@ -108,6 +113,7 @@ ModalDialog DLG_VERSIONS
     };
     PushButton PB_DELETE
     {
+        HelpID = "sfx2:PushButton:DLG_VERSIONS:PB_DELETE";
         Pos = MAP_APPFONT ( 284 , 60 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
@@ -115,6 +121,7 @@ ModalDialog DLG_VERSIONS
     };
     PushButton PB_COMPARE
     {
+        HelpID = "sfx2:PushButton:DLG_VERSIONS:PB_COMPARE";
         Pos = MAP_APPFONT ( 284 , 77 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
@@ -130,6 +137,7 @@ ModalDialog DLG_VERSIONS
 };
 ModalDialog DLG_COMMENTS
 {
+    HelpID = "sfx2:ModalDialog:DLG_COMMENTS";
     OutputSize = TRUE ;
     Size = MAP_APPFONT ( 180 , 118 ) ;
     SvLook = TRUE ;
@@ -148,6 +156,7 @@ ModalDialog DLG_COMMENTS
     };
     MultiLineEdit ME_VERSIONS
     {
+        HelpID = "sfx2:MultiLineEdit:DLG_COMMENTS:ME_VERSIONS";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 6 , 32 ) ;
         Size = MAP_APPFONT ( 168 , 60 ) ;
@@ -168,6 +177,7 @@ ModalDialog DLG_COMMENTS
     };
     PushButton PB_CLOSE
     {
+        HelpID = "sfx2:PushButton:DLG_COMMENTS:PB_CLOSE";
         Pos = MAP_APPFONT ( 68 , 98 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;

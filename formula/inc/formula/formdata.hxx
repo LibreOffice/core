@@ -53,7 +53,7 @@ public:
     inline USHORT           GetEdFocus() const  { return nEdFocus; }
     inline const String&    GetUndoStr() const  { return aUndoStr; }
     inline BOOL             GetMatrixFlag()const{ return bMatrix;}
-    inline ULONG            GetUniqueId()const  { return nUniqueId;}
+    inline rtl::OString     GetUniqueId()const  { return aUniqueId;}
     inline const Selection& GetSelection()const { return aSelection;}
 
     inline void             SetMode( USHORT nNew )                  { nMode = nNew; }
@@ -64,7 +64,7 @@ public:
     inline void             SetEdFocus( USHORT nNew )               { nEdFocus = nNew; }
     inline void             SetUndoStr( const String& rNew )        { aUndoStr = rNew; }
     inline void             SetMatrixFlag(BOOL bNew)                { bMatrix=bNew;}
-    inline void             SetUniqueId(ULONG nNew)                 { nUniqueId=nNew;}
+    inline void             SetUniqueId(const rtl::OString nNew)    { aUniqueId=nNew;}
     inline void             SetSelection(const Selection& aSel)     { aSelection=aSel;}
 protected:
     void                Reset();
@@ -81,7 +81,7 @@ private:
     USHORT              nEdFocus;
     String              aUndoStr;
     BOOL                bMatrix;
-    ULONG               nUniqueId;
+    rtl::OString        aUniqueId;
     Selection           aSelection;
 };
 

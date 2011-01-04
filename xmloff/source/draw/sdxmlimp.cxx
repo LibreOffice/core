@@ -40,7 +40,7 @@
 #include <xmloff/xmlmetai.hxx>
 #endif
 #include "ximpstyl.hxx"
-#include "xmlnmspe.hxx"
+#include "xmloff/xmlnmspe.hxx"
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmluconv.hxx>
 #include <xmloff/DocumentSettingsContext.hxx>
@@ -51,7 +51,7 @@
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
 #include "sdpropls.hxx"
 #include <xmloff/xmlexppr.hxx>
-#include "xmlerror.hxx"
+#include "xmloff/xmlerror.hxx"
 #include <tools/debug.hxx>
 #include <com/sun/star/style/XStyle.hpp>
 
@@ -915,10 +915,12 @@ void SdXMLImport::SetViewSettings(const com::sun::star::uno::Sequence<com::sun::
     {
         xPropSet->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "VisibleArea" ) ), uno::makeAny( aVisArea )  );
     }
-    catch( com::sun::star::uno::Exception e )
+    catch( com::sun::star::uno::Exception /*e*/ )
     {
+/* #i79978# since old documents may contain invalid view settings, this is nothing to worry the user about.
         uno::Sequence<OUString> aSeq(0);
         SetError( XMLERROR_FLAG_WARNING | XMLERROR_API, aSeq, e.Message, NULL );
+*/
     }
 }
 

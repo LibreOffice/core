@@ -95,32 +95,6 @@ void SAL_CALL component_getImplementationEnvironment(
 //
 //------------------------------------------------
 
-sal_Bool SAL_CALL component_writeInfo( void* /*pServiceManager*/, void* pRegistryKey )
-{
-    sal_Bool bRetVal = sal_True;
-
-    if ( pRegistryKey )
-    {
-        try
-        {
-            Reference< XRegistryKey > pXNewKey( static_cast< XRegistryKey* >( pRegistryKey ) );
-            pXNewKey->createKey( OUString::createFromAscii( FILE_PICKER_REGKEY_NAME ) );
-            pXNewKey->createKey( OUString::createFromAscii( FOLDER_PICKER_REGKEY_NAME ) );
-        }
-        catch( InvalidRegistryException& )
-        {
-            OSL_ENSURE( sal_False, "InvalidRegistryException caught" );
-            bRetVal = sal_False;
-        }
-    }
-
-    return bRetVal;
-}
-
-//------------------------------------------------
-//
-//------------------------------------------------
-
 void* SAL_CALL component_getFactory(
     const sal_Char* pImplName, uno_Interface* pSrvManager, uno_Interface* /*pRegistryKey*/ )
 {

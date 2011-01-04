@@ -58,8 +58,6 @@
 #include <sfx2/sfxsids.hrc>
 #include <sot/exchange.hxx>
 
-//#include <svtools/agprop.hxx>
-//#include <sj2/sjapplet.hxx>
 #include <svl/isethint.hxx>
 
 #include <unotools/configmgr.hxx>
@@ -80,7 +78,7 @@
 #include <sfx2/app.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/viewfrm.hxx>
-#include "sfxhelp.hxx"
+#include "sfx2/sfxhelp.hxx"
 #include "sfxtypes.hxx"
 #include <sfx2/dispatch.hxx>
 #include <sfx2/objsh.hxx>
@@ -93,7 +91,7 @@
 #include <sfx2/macrconf.hxx>
 #include "helper.hxx"   // SfxContentHelper::...
 #include "app.hrc"
-#include "sfxresid.hxx"
+#include "sfx2/sfxresid.hxx"
 #include "shutdownicon.hxx"
 
 using namespace ::com::sun::star::uno;
@@ -826,22 +824,6 @@ void SfxApplication::SetOptions_Impl( const SfxItemSet& rSet )
 #ifdef ENABLE_MISSINGKEYASSERTIONS//MUSTINI
         DBG_ASSERT(sal_False, "SfxApplication::SetOptions_Impl()\nsoffice.ini key \"MetafilPrint\" not supported any longer!\n");
 #endif
-    }
-
-    // INet Session neu aufsetzen
-    if ( bResetSession )
-    {
-        // no more sj2
-        #if 0
-        try
-        {
-            SjApplet2::settingsChanged();
-        }
-        catch ( ... )
-        {
-            DBG_ERRORFILE( "SjApplet2::settingsChanged() throws an exception" );
-        }
-        #endif
     }
 
     // geaenderte Daten speichern
