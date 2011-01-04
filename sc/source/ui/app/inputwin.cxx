@@ -1167,10 +1167,6 @@ void ScTextWnd::SetTextString( const String& rNewString )
 
         //  Position der Aenderung suchen, nur Rest painten
 
-        long nInvPos = 0;
-        long nStartPos = 0;
-        long nTextSize = 0;
-
         if (!pEditEngine)
         {
             BOOL bPaintAll;
@@ -1199,6 +1195,7 @@ void ScTextWnd::SetTextString( const String& rNewString )
             }
             else
             {
+                long nTextSize = 0;
                 xub_StrLen nDifPos;
                 if (rNewString.Len() > aString.Len())
                     nDifPos = rNewString.Match(aString);
@@ -1217,8 +1214,8 @@ void ScTextWnd::SetTextString( const String& rNewString )
 
                                                 // -1 wegen Rundung und "A"
                 Point aLogicStart = PixelToLogic(Point(TEXT_STARTPOS-1,0));
-                nStartPos = aLogicStart.X();
-                nInvPos = nStartPos;
+                long nStartPos = aLogicStart.X();
+                long nInvPos = nStartPos;
                 if (nDifPos)
                     nInvPos += GetTextWidth(aString,0,nDifPos);
 
