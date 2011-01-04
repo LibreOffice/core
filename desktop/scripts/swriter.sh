@@ -1,4 +1,4 @@
 #!/bin/sh
 
 cmd=`dirname "$0"`/soffice
-exec "$cmd" -writer "$@"
+exec "$cmd" --writer "$@"
