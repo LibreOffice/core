@@ -36,12 +36,15 @@
 #include "fmitems.hxx"
 #include "fmprop.hrc"
 #include "fmresids.hrc"
-#include "gridcell.hxx"
 
 /** === begin UNO includes === **/
+#include <com/sun/star/awt/XControlModel.hpp>
+#include <com/sun/star/awt/XControl.hpp>
+#include <com/sun/star/awt/XTextComponent.hpp>
 #include <com/sun/star/form/runtime/XFormController.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/util/XNumberFormatter.hpp>
+#include <com/sun/star/beans/XFastPropertySet.hpp>
 /** === end UNO includes === **/
 
 #include <comphelper/processfactory.hxx>
@@ -63,6 +66,7 @@
 #include <svx/svxids.hrc>
 #include <tools/shl.hxx>
 #include <vcl/wrkwin.hxx>
+#include <tools/diagnose_ex.h>
 
 #include <functional>
 
