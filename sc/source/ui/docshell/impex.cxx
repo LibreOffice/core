@@ -1456,7 +1456,7 @@ BOOL ScImportExport::Doc2Text( SvStream& rStrm )
                     {
                         if (bFormulas)
                         {
-                            pDoc->GetFormula( nCol, nRow, aRange.aStart.Tab(), aCell, TRUE );
+                            pDoc->GetFormula( nCol, nRow, aRange.aStart.Tab(), aCell );
                             if( aCell.Search( cSep ) != STRING_NOTFOUND )
                                 lcl_WriteString( rStrm, aCell, cStr, cStr );
                             else

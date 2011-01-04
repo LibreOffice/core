@@ -319,8 +319,7 @@ public:
                             0.0;
                     }
     double      GetValue( SCCOL nCol, SCROW nRow );
-    void        GetFormula( SCCOL nCol, SCROW nRow, String& rFormula,
-                            BOOL bAsciiExport = FALSE );
+    void        GetFormula( SCCOL nCol, SCROW nRow, String& rFormula );
 
     CellType    GetCellType( const ScAddress& rPos ) const
                     {

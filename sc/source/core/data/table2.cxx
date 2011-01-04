@@ -1045,11 +1045,10 @@ double ScTable::GetValue( SCCOL nCol, SCROW nRow )
 }
 
 
-void ScTable::GetFormula( SCCOL nCol, SCROW nRow, String& rFormula,
-                          BOOL bAsciiExport )
+void ScTable::GetFormula( SCCOL nCol, SCROW nRow, String& rFormula )
 {
     if (ValidColRow(nCol,nRow))
-        aCol[nCol].GetFormula( nRow, rFormula, bAsciiExport );
+        aCol[nCol].GetFormula( nRow, rFormula );
     else
         rFormula.Erase();
 }
@@ -1920,7 +1919,7 @@ const ScStyleSheet* ScTable::GetSelectionStyle( const ScMarkData& rMark, BOOL& r
     rFound = FALSE;
 
     BOOL    bEqual = TRUE;
-    BOOL    bColFound;
+    bool    bColFound;
 
     const ScStyleSheet* pStyle = NULL;
     const ScStyleSheet* pNewStyle;
@@ -1948,7 +1947,7 @@ const ScStyleSheet* ScTable::GetAreaStyle( BOOL& rFound, SCCOL nCol1, SCROW nRow
     rFound = FALSE;
 
     BOOL    bEqual = TRUE;
-    BOOL    bColFound;
+    bool    bColFound;
 
     const ScStyleSheet* pStyle = NULL;
     const ScStyleSheet* pNewStyle;
@@ -2922,7 +2921,7 @@ void ScTable::DoAutoOutline( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SC
                             // Zeilen
 
     SCROW   nCount = nEndRow-nStartRow+1;
-    BOOL*   pUsed = new BOOL[nCount];
+    bool*   pUsed = new bool[nCount];
     for (i=0; i<nCount; i++)
         pUsed[i] = FALSE;
     for (nCol=nStartCol; nCol<=nEndCol; nCol++)

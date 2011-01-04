@@ -252,8 +252,7 @@ public:
     void        GetString( SCROW nRow, String& rString ) const;
     void        GetInputString( SCROW nRow, String& rString ) const;
     double      GetValue( SCROW nRow ) const;
-    void        GetFormula( SCROW nRow, String& rFormula,
-                            bool bAsciiExport = false ) const;
+    void        GetFormula( SCROW nRow, String& rFormula ) const;
     CellType    GetCellType( SCROW nRow ) const;
     SCSIZE      GetCellCount() const { return nCount; }
     sal_uIntPtr GetWeightedCount() const;

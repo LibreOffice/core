@@ -778,8 +778,7 @@ public:
                         may be NULL. */
     SC_DLLPUBLIC void           GetNumberFormatInfo( short& nType, ULONG& nIndex,
                         const ScAddress& rPos, const ScBaseCell* pCell ) const;
-    void            GetFormula( SCCOL nCol, SCROW nRow, SCTAB nTab, String& rFormula,
-                                BOOL bAsciiExport = FALSE ) const;
+    void            GetFormula( SCCOL nCol, SCROW nRow, SCTAB nTab, String& rFormula ) const;
     SC_DLLPUBLIC void           GetCellType( SCCOL nCol, SCROW nRow, SCTAB nTab, CellType& rCellType ) const;
     SC_DLLPUBLIC CellType       GetCellType( const ScAddress& rPos ) const;
     SC_DLLPUBLIC void           GetCell( SCCOL nCol, SCROW nRow, SCTAB nTab, ScBaseCell*& rpCell ) const;

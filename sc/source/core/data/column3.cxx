@@ -667,7 +667,7 @@ ScFormulaCell* ScColumn::CreateRefCell( ScDocument* pDestDoc, const ScAddress& r
 //  nRow1, nRow2 = Zielposition
 
 void ScColumn::CopyFromClip(SCROW nRow1, SCROW nRow2, long nDy,
-                                USHORT nInsFlag, BOOL bAsLink, BOOL bSkipAttrForEmpty,
+                                USHORT nInsFlag, bool bAsLink, bool bSkipAttrForEmpty,
                                 ScColumn& rColumn)
 {
     if ((nInsFlag & IDF_ATTRIB) != 0)
@@ -941,7 +941,7 @@ ScBaseCell* ScColumn::CloneCell(SCSIZE nIndex, USHORT nFlags, ScDocument& rDestD
 
 
 void ScColumn::MixMarked( const ScMarkData& rMark, USHORT nFunction,
-                            BOOL bSkipEmpty, ScColumn& rSrcCol )
+                            bool bSkipEmpty, ScColumn& rSrcCol )
 {
     SCROW nRow1, nRow2;
 
@@ -999,7 +999,7 @@ void lcl_AddCode( ScTokenArray& rArr, ScFormulaCell* pCell )
 
 
 void ScColumn::MixData( SCROW nRow1, SCROW nRow2,
-                            USHORT nFunction, BOOL bSkipEmpty,
+                            USHORT nFunction, bool bSkipEmpty,
                             ScColumn& rSrcCol )
 {
     SCSIZE nSrcCount = rSrcCol.nCount;
@@ -1262,7 +1262,7 @@ void ScColumn::StartListeningInArea( SCROW nRow1, SCROW nRow2 )
 
 
 //  TRUE = Zahlformat gesetzt
-BOOL ScColumn::SetString( SCROW nRow, SCTAB nTabP, const String& rString,
+bool ScColumn::SetString( SCROW nRow, SCTAB nTabP, const String& rString,
                           formula::FormulaGrammar::AddressConvention eConv,
                           ScSetStringParam* pParam )
 {
@@ -1578,7 +1578,7 @@ void ScColumn::GetFilterEntries(SCROW nStartRow, SCROW nEndRow, TypedScStrCollec
 #define DATENT_SEARCH   2000
 
 
-BOOL ScColumn::GetDataEntries(SCROW nStartRow, TypedScStrCollection& rStrings, BOOL bLimit)
+bool ScColumn::GetDataEntries(SCROW nStartRow, TypedScStrCollection& rStrings, bool bLimit)
 {
     BOOL bFound = FALSE;
     SCSIZE nThisIndex;
@@ -1787,7 +1787,7 @@ double ScColumn::GetValue( SCROW nRow ) const
 }
 
 
-void ScColumn::GetFormula( SCROW nRow, String& rFormula, BOOL ) const
+void ScColumn::GetFormula( SCROW nRow, String& rFormula ) const
 {
     SCSIZE  nIndex;
     if (Search(nRow, nIndex))
@@ -1825,7 +1825,7 @@ USHORT ScColumn::GetErrCode( SCROW nRow ) const
 }
 
 
-BOOL ScColumn::HasStringData( SCROW nRow ) const
+bool ScColumn::HasStringData( SCROW nRow ) const
 {
     SCSIZE  nIndex;
     if (Search(nRow, nIndex))
@@ -1834,7 +1834,7 @@ BOOL ScColumn::HasStringData( SCROW nRow ) const
 }
 
 
-BOOL ScColumn::HasValueData( SCROW nRow ) const
+bool ScColumn::HasValueData( SCROW nRow ) const
 {
     SCSIZE  nIndex;
     if (Search(nRow, nIndex))
@@ -1842,7 +1842,7 @@ BOOL ScColumn::HasValueData( SCROW nRow ) const
     return FALSE;
 }
 
-BOOL ScColumn::HasStringCells( SCROW nStartRow, SCROW nEndRow ) const
+bool ScColumn::HasStringCells( SCROW nStartRow, SCROW nEndRow ) const
 {
     //  TRUE, wenn String- oder Editzellen im Bereich
 

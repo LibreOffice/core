@@ -2862,11 +2862,10 @@ void ScDocument::GetNumberFormatInfo( short& nType, ULONG& nIndex,
 }
 
 
-void ScDocument::GetFormula( SCCOL nCol, SCROW nRow, SCTAB nTab, String& rFormula,
-                             BOOL bAsciiExport ) const
+void ScDocument::GetFormula( SCCOL nCol, SCROW nRow, SCTAB nTab, String& rFormula ) const
 {
     if ( VALIDTAB(nTab) && pTab[nTab] )
-            pTab[nTab]->GetFormula( nCol, nRow, rFormula, bAsciiExport );
+            pTab[nTab]->GetFormula( nCol, nRow, rFormula );
     else
         rFormula.Erase();
 }
