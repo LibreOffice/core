@@ -443,7 +443,6 @@ void FieldParamExporter::Export()
         {
             sal_Bool bValue = false;
             aValue >>= bValue;
-            ExportParameter(*pCurrent,OUString::createFromAscii(bValue ? "true" : "false"));
             ExportParameter(*pCurrent, (bValue ? OUString(RTL_CONSTASCII_USTRINGPARAM( "true" )) : OUString(RTL_CONSTASCII_USTRINGPARAM("false"))) );
         }
         else if(aValueType == aSeqType)
