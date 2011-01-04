@@ -809,6 +809,97 @@ void SVGActionWriter::ImplWriteText( const Point& rPos, const String& rText,
                                      const sal_Int32* pDXArray, long nWidth,
                                      const NMSP_RTL::OUString* pStyle )
 {
+    const FontMetric aMetric( mpVDev->GetFontMetric() );
+
+    bool bTextSpecial = aMetric.IsShadow() || aMetric.IsOutline() || (aMetric.GetRelief() != RELIEF_NONE);
+
+    if( !bTextSpecial )
+    {
+        ImplWriteText( rPos, rText, pDXArray, nWidth, pStyle, mpVDev->GetTextColor() );
+    }
+    else
+    {
+        if( aMetric.GetRelief() != RELIEF_NONE )
+        {
+            Color aReliefColor( COL_LIGHTGRAY );
+            Color aTextColor( mpVDev->GetTextColor() );
+
+            if ( aTextColor.GetColor() == COL_BLACK )
+                aTextColor = Color( COL_WHITE );
+
+            if ( aTextColor.GetColor() == COL_WHITE )
+                aReliefColor = Color( COL_BLACK );
+
+
+            Point aPos( rPos );
+            Point aOffset( 6, 6 );
+
+            if ( aMetric.GetRelief() == RELIEF_ENGRAVED )
+            {
+                aPos -= aOffset;
+            }
+            else
+            {
+                aPos += aOffset;
+            }
+
+            ImplWriteText( aPos, rText, pDXArray, nWidth, pStyle, aReliefColor );
+            ImplWriteText( rPos, rText, pDXArray, nWidth, pStyle, aTextColor );
+        }
+        else
+        {
+            if( aMetric.IsShadow() )
+            {
+                long nOff = 1 + ((aMetric.GetLineHeight()-24)/24);
+                if ( aMetric.IsOutline() )
+                    nOff += 6;
+
+                Color aTextColor( mpVDev->GetTextColor() );
+                Color aShadowColor = Color( COL_BLACK );
+
+                if ( (aTextColor.GetColor() == COL_BLACK) || (aTextColor.GetLuminance() < 8) )
+                    aShadowColor = Color( COL_LIGHTGRAY );
+
+                Point aPos( rPos );
+                aPos += Point( nOff, nOff );
+                ImplWriteText( aPos, rText, pDXArray, nWidth, pStyle, aShadowColor );
+
+                if( !aMetric.IsOutline() )
+                {
+                    ImplWriteText( rPos, rText, pDXArray, nWidth, pStyle, aTextColor );
+                }
+            }
+
+            if( aMetric.IsOutline() )
+            {
+                Point aPos = rPos + Point( -6, -6 );
+                ImplWriteText( aPos, rText, pDXArray, nWidth, pStyle, mpVDev->GetTextColor() );
+                aPos = rPos + Point( +6, +6);
+                ImplWriteText( aPos, rText, pDXArray, nWidth, pStyle, mpVDev->GetTextColor() );
+                aPos = rPos + Point( -6, +0);
+                ImplWriteText( aPos, rText, pDXArray, nWidth, pStyle, mpVDev->GetTextColor() );
+                aPos = rPos + Point( -6, +6);
+                ImplWriteText( aPos, rText, pDXArray, nWidth, pStyle, mpVDev->GetTextColor() );
+                aPos = rPos + Point( +0, +6);
+                ImplWriteText( aPos, rText, pDXArray, nWidth, pStyle, mpVDev->GetTextColor() );
+                aPos = rPos + Point( +0, -6);
+                ImplWriteText( aPos, rText, pDXArray, nWidth, pStyle, mpVDev->GetTextColor() );
+                aPos = rPos + Point( +6, -1);
+                ImplWriteText( aPos, rText, pDXArray, nWidth, pStyle, mpVDev->GetTextColor() );
+                aPos = rPos + Point( +6, +0);
+                ImplWriteText( aPos, rText, pDXArray, nWidth, pStyle, mpVDev->GetTextColor() );
+
+                ImplWriteText( rPos, rText, pDXArray, nWidth, pStyle, Color( COL_WHITE ) );
+            }
+        }
+    }
+}
+
+void SVGActionWriter::ImplWriteText( const Point& rPos, const String& rText,
+                                     const sal_Int32* pDXArray, long nWidth,
+                                     const NMSP_RTL::OUString* pStyle,
+                                     Color aTextColor )
+{
     long nLen = rText.Len(), i;
 
     if( nLen )
@@ -863,6 +954,8 @@ void SVGActionWriter::ImplWriteText( const Point& rPos, const String& rText,
             default:
             break;
         }
+
+        mpContext->SetPaintAttr( COL_TRANSPARENT, aTextColor );
 
         // get mapped text position
         const Point aPt( ImplMap( aBaseLinePos ) );
@@ -1528,7 +1621,6 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
 
                     aFont.SetHeight( ImplMap( Size( 0, aFont.GetHeight() ) ).Height() );
                     mpContext->SetFontAttr( aFont );
-                    mpContext->SetPaintAttr( COL_TRANSPARENT, aFont.GetColor() );
                     ImplWriteText( pA->GetPoint(), String( pA->GetText(), pA->GetIndex(), pA->GetLen() ), NULL, 0, pStyle );
                 }
             }
@@ -1543,7 +1635,6 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
 
                     aFont.SetHeight( ImplMap( Size( 0, aFont.GetHeight() ) ).Height() );
                     mpContext->SetFontAttr( aFont );
-                    mpContext->SetPaintAttr( COL_TRANSPARENT, aFont.GetColor() );
                     ImplWriteText( pA->GetRect().TopLeft(), pA->GetText(), NULL, 0, pStyle );
                 }
             }
@@ -1559,7 +1650,6 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
 
                     aFont.SetHeight( ImplMap( Size( 0, aFont.GetHeight() ) ).Height() );
                     mpContext->SetFontAttr( aFont );
-                    mpContext->SetPaintAttr( COL_TRANSPARENT, aFont.GetColor() );
                     ImplWriteText( pA->GetPoint(), String( pA->GetText(), pA->GetIndex(), pA->GetLen() ), pA->GetDXArray(), 0, pStyle );
                 }
             }
@@ -1574,7 +1664,6 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
 
                     aFont.SetHeight( ImplMap( Size( 0, aFont.GetHeight() ) ).Height() );
                     mpContext->SetFontAttr( aFont );
-                    mpContext->SetPaintAttr( COL_TRANSPARENT, aFont.GetColor() );
                     ImplWriteText( pA->GetPoint(), String( pA->GetText(), pA->GetIndex(), pA->GetLen() ), NULL, pA->GetWidth(), pStyle );
                 }
             }

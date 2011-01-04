@@ -187,6 +187,7 @@ private:
     void                    ImplWritePolyPolygon( const PolyPolygon& rPolyPoly, sal_Bool bLineOnly, const ::rtl::OUString* pStyle = NULL );
     void                    ImplWriteGradientEx( const PolyPolygon& rPolyPoly, const Gradient& rGradient, const ::rtl::OUString* pStyle, sal_uInt32 nWriteFlags );
     void                    ImplWriteText( const Point& rPos, const String& rText, const sal_Int32* pDXArray, long nWidth, const ::rtl::OUString* pStyle = NULL );
+    void                ImplWriteText( const Point& rPos, const String& rText, const sal_Int32* pDXArray, long nWidth, const ::rtl::OUString* pStyle, Color aTextColor );
     void                    ImplWriteBmp( const BitmapEx& rBmpEx, const Point& rPt, const Size& rSz, const Point& rSrcPt, const Size& rSrcSz, const ::rtl::OUString* pStyle = NULL );
 
     void                    ImplCheckFontAttributes();
