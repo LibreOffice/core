@@ -456,13 +456,11 @@ void ScDBFunc::DoSubTotals( const ScSubTotalParam& rParam, BOOL bRecord,
         ScOutlineTable* pUndoTab = NULL;
         ScRangeName*    pUndoRange = NULL;
         ScDBCollection* pUndoDB = NULL;
-        SCTAB           nTabCount = 0;              // fuer Referenz-Undo
 
         if (bRecord)                                        // alte Daten sichern
         {
             BOOL bOldFilter = bDo && rParam.bDoSort;
-
-            nTabCount = pDoc->GetTableCount();
+            SCTAB nTabCount = pDoc->GetTableCount();
             pUndoDoc = new ScDocument( SCDOCMODE_UNDO );
             ScOutlineTable* pTable = pDoc->GetOutlineTable( nTab );
             if (pTable)
