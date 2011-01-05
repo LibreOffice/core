@@ -332,26 +332,17 @@ namespace dbtools
                 OSQLParseNode* pOdbcSpec = pParseNode->getByRule( OSQLParseNode::odbc_fct_spec );
                 if ( pOdbcSpec )
                 {
-                    if ( !_bForStatementUse )
-                    {
-                        if  (   ( pOdbcSpec->count() >= 2 )
-                            &&  ( SQL_NODE_STRING == pOdbcSpec->getChild(1)->getNodeType() )
-                            )
-                        {
-
-                            sReturn = pOdbcSpec->getChild(1)->getTokenValue();
-                        }
-                        else
-                            OSL_ENSURE( sal_False, "OPredicateInputController::getPredicateValue: unknown/invalid structure (odbc + param use)!" );
-                    }
-                    else
+                    if ( _bForStatementUse )
                     {
                         OSQLParseNode* pFuncSpecParent = pOdbcSpec->getParent();
                         OSL_ENSURE( pFuncSpecParent, "OPredicateInputController::getPredicateValue: an ODBC func spec node without parent?" );
                         if ( pFuncSpecParent )
-                            pFuncSpecParent->parseNodeToStr(
-                                sReturn, m_xConnection, &m_aParser.getContext(), sal_False, sal_True
-                            );
+                            pFuncSpecParent->parseNodeToStr(sReturn, m_xConnection, &m_aParser.getContext(), sal_False, sal_True);
+                    }
+                    else
+                    {
+                        pOdbcSpec->getChild(1)->parseNodeToStr(sReturn, m_xConnection, &m_aParser.getContext(), sal_False, sal_True);
+                        // sReturn = pOdbcSpec->getChild(1)->getTokenValue();
                     }
                 }
                 else
