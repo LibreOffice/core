@@ -412,7 +412,7 @@ extern "C" int unopkg_main()
 
         Reference< ::com::sun::star::ucb::XCommandEnvironment > xCmdEnv(
             createCmdEnv( xComponentContext, logFile,
-                          option_force, option_verbose) );
+                          option_force, option_verbose, option_suppressLicense) );
 
         //synchronize bundled/shared extensions
         //Do not synchronize when command is "reinstall". This could add types and services to UNO and
