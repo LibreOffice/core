@@ -33,11 +33,11 @@ TARGET=zipintro
 .INCLUDE :  settings.mk
 
 ZIP1LIST= \
-    $(null,$(INTRO_BITMAPS) $(MISC)$/$(RSCDEFIMG)$/brand$/intro.png $(INTRO_BITMAPS)) \
-    $(null,$(ABOUT_BITMAPS) $(MISC)$/$(RSCDEFIMG)$/brand$/about.png $(ABOUT_BITMAPS))
+    $(MISC)$/$(RSCDEFIMG)$/brand$/intro.png \
+    $(MISC)$/$(RSCDEFIMG)$/brand$/about.png
 ZIP2LIST= \
-    $(null,$(INTRO_BITMAPS) $(MISC)$/$(RSCDEFIMG)$/brand_dev$/intro.png $(INTRO_BITMAPS)) \
-    $(null,$(ABOUT_BITMAPS) $(MISC)$/$(RSCDEFIMG)$/brand_dev$/about.png $(ABOUT_BITMAPS))
+    $(MISC)$/$(RSCDEFIMG)$/brand_dev$/intro.png \
+    $(MISC)$/$(RSCDEFIMG)$/brand_dev$/about.png
 ZIP3LIST= \
     $(MISC)$/$(RSCDEFIMG)$/brand$/shell$/backing_left.png \
     $(MISC)$/$(RSCDEFIMG)$/brand$/shell$/backing_right.png \
@@ -90,3 +90,15 @@ $(MISC)$/%.bmp : $(SOLARSRC)$/%.bmp
 $(MISC)$/%.png : $(SOLARSRC)$/%.png
     @@-$(MKDIRHIER) $(@:d)
     $(COPY) $< $@
+
+.IF "$(INTRO_BITMAP)" != ""
+$(MISC)$/$(RSCDEFIMG)$/brand$/intro.png : $(INTRO_BITMAP)
+    @@-$(MKDIRHIER) $(@:d)
+    $(COPY) $< $@
+.ENDIF
+
+.IF "$(ABOUT_BITMAP)" != ""
+$(MISC)$/$(RSCDEFIMG)$/brand$/about.png : $(ABOUT_BITMAP)
+    @@-$(MKDIRHIER) $(@:d)
+    $(COPY) $< $@
+.ENDIF
