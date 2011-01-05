@@ -39,7 +39,6 @@ PACKAGE=com$/sun$/star$/awt$/grid
 # ------------------------------------------------------------------------
 IDLFILES=\
     GridColumnEvent.idl\
-    GridControlEvent.idl\
     GridDataEvent.idl\
     SelectionEventType.idl\
     GridSelectionEvent.idl\
