@@ -205,7 +205,6 @@ private:
     const ScPatternAttr*    GetCurrentAttrsFlat();
     const ScPatternAttr*    GetCurrentAttrsDeep();
     SfxItemSet*             GetCurrentDataSet(bool bNoDflt = false);
-    const ScMarkData*       GetMarkData();
     void                    ForgetMarkData();
     void                    ForgetCurrentAttrs();
 
@@ -218,6 +217,8 @@ private:
                                     const ScAddress* pLastPos);
 
 protected:
+    const ScMarkData*       GetMarkData();
+
     // GetItemPropertyMap for derived classes must contain all entries, including base class
     virtual const SfxItemPropertyMap* GetItemPropertyMap();
     virtual ::com::sun::star::beans::PropertyState GetOnePropertyState(
@@ -815,7 +816,7 @@ public:
 
 //! really derive cell from range?
 
-class ScCellObj : public ScCellRangeObj,
+class SC_DLLPUBLIC ScCellObj : public ScCellRangeObj,
                   public com::sun::star::text::XText,
                   public com::sun::star::container::XEnumerationAccess,
                   public com::sun::star::table::XCell,
@@ -873,6 +874,8 @@ public:
     void                    SetFormulaWithGrammar( const ::rtl::OUString& rFormula,
                                 const ::rtl::OUString& rFormulaNmsp, const formula::FormulaGrammar::Grammar );
     const ScAddress&        GetPosition() const { return aCellPos; }
+
+    void                    InputEnglishString( const ::rtl::OUString& rText );
 
                             // XText
     virtual void SAL_CALL   insertTextContent( const ::com::sun::star::uno::Reference<

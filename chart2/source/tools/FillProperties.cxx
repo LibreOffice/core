@@ -136,7 +136,6 @@ void lcl_AddPropertiesToVector_without_BitmapProperties( ::std::vector< ::com::s
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 }
 
-//static
 void lcl_AddPropertiesToVector_only_BitmapProperties( ::std::vector< ::com::sun::star::beans::Property > & rOutProperties )
 {
     rOutProperties.push_back(

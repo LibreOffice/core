@@ -96,39 +96,6 @@ protected:
      */
     virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper() = 0;
 
-    // ____ XPropertySet ____
-    /** sample implementation using the InfoHelper:
-
-        <pre>
-        uno::Reference&lt; beans::XPropertySetInfo &gt; SAL_CALL
-            OPropertySet::getPropertySetInfo()
-                throw (uno::RuntimeException)
-        {
-            static uno::Reference&lt; beans::XPropertySetInfo &gt; xInfo;
-
-            // /--
-            ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-            if( !xInfo.is())
-            {
-                xInfo = ::cppu::OPropertySetHelper::createPropertySetInfo(
-                    getInfoHelper());
-            }
-
-            return xInfo;
-            // \--
-        }
-        </pre>
-
-        <p>(The reason why this isn't implemented here is, that the static
-        object is only valid per concrete PropertySet.  Otherwise all
-        PropertySets derived from this base calss would have the same
-        properties.)</p>
-
-        @see ::cppu::OPropertySetHelper
-    */
-//     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL
-//         getPropertySetInfo()
-//         throw (::com::sun::star::uno::RuntimeException) = 0;
 
     /** Try to convert the value <code>rValue</code> to the type required by the
         property associated with <code>nHandle</code>.
