@@ -2186,16 +2186,14 @@ ADD_DEBUG_TEXT("lLastLMargin: ", String::CreateFromInt32(pRuler_Imp->lLastLMargi
                 //This includes the left border when the table is not limited
                 //to a lower frame border.
                 int nLimit;
-                long lLeft;
                 if(GetDragType()==RULER_TYPE_BORDER)
                 {
                     nLimit=nIdx+1;
-                    lLeft=(pBorders[nIdx].nPos+=lDiff);
+                    pBorders[nIdx].nPos+=lDiff;
                 }
                 else
                 {
                     nLimit=0;
-                    lLeft=pRuler_Imp->lLastLMargin+lDiff;
                 }
                 //in vertical tables the left borders have to be moved
                 if(bHorz)

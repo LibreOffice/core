@@ -226,7 +226,6 @@ void SvxSimpleTable::Paint( const Rectangle& rRect )
     SvHeaderTabListBox::Paint(rRect );
 
     USHORT nPrivTabCount = TabCount();
-    USHORT nPos = 0;
     USHORT nNewSize = ( nPrivTabCount > 0 ) ? (USHORT)GetTab(0) : 0;
 
     long nOffset=-GetXOffset();
@@ -240,6 +239,7 @@ void SvxSimpleTable::Paint( const Rectangle& rRect )
         if(nPrivTabCount>aHeaderBar.GetItemCount())
                 nPrivTabCount=aHeaderBar.GetItemCount();
 
+        USHORT nPos = 0;
         for(USHORT i=1;i<nPrivTabCount;i++)
         {
             nNewSize = static_cast< USHORT >( GetTab(i) ) - nPos;
@@ -442,15 +442,14 @@ void SvxSimpleTable::HBarEndDrag()
 {
     HideTracking();
     USHORT nPrivTabCount=TabCount();
-    USHORT nPos=0;
-    USHORT nNewSize=0;
 
     if(nPrivTabCount)
     {
         if(nPrivTabCount>aHeaderBar.GetItemCount())
                 nPrivTabCount=aHeaderBar.GetItemCount();
 
-        //for(USHORT i=1;i<=nPrivTabCount;i++)
+        USHORT nPos=0;
+        USHORT nNewSize=0;
         for(USHORT i=1;i<nPrivTabCount;i++)
         {
             nNewSize = static_cast< USHORT >( aHeaderBar.GetItemSize(i) ) + nPos;

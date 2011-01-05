@@ -50,7 +50,7 @@ public:
     void*           pUpdateEditingObject;
     BOOL            bExecState;
 
-                    IMapOwnData( SvxIMapDlg* pIMapDlg ) : pIMap ( pIMapDlg ) {}
+                    IMapOwnData( SvxIMapDlg* pIMapDlg ) : pIMap ( pIMapDlg ), pUpdateEditingObject( NULL )  {}
 };
 
 

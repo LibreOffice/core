@@ -77,6 +77,8 @@ private:
 DialControlBmp::DialControlBmp( Window& rParent ) :
     VirtualDevice( rParent, 0, 0 ),
     mrParent( rParent ),
+    mnCenterX(0),
+    mnCenterY(0),
     mbEnabled( true )
 {
     EnableRTL( FALSE );
@@ -266,6 +268,8 @@ DialControl_Impl::DialControl_Impl( Window& rParent ) :
     maBmpBuffered( rParent ),
     mpLinkField( 0 ),
     mnAngle( 0 ),
+    mnCenterX( 0 ),
+    mnCenterY( 0 ),
     mbNoRot( false )
 {
 }

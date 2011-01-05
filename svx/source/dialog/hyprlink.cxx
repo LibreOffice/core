@@ -809,6 +809,7 @@ void SvxHyperlinkDlg::SetImages()
 HyperCombo::HyperCombo( SvxHyperlinkDlg* pDialog, const ResId& rResId ) :
         ComboBox( (Window *)pDialog, rResId )
 {
+    nRatio = 0;
     pDlg = pDialog;
 
     nMaxWidth = GetSizePixel().Width();

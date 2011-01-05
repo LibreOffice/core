@@ -385,13 +385,13 @@ void SvxHFPage::Reset( const SfxItemSet& rSet )
     aCntSharedBox.SaveValue();
     RangeHdl( 0 );
 
-    USHORT nHtmlMode = 0;
     const SfxPoolItem* pItem = 0;
     SfxObjectShell* pShell;
     if(SFX_ITEM_SET == rSet.GetItemState(SID_HTML_MODE, FALSE, &pItem) ||
         ( 0 != (pShell = SfxObjectShell::Current()) &&
                     0 != (pItem = pShell->GetItem(SID_HTML_MODE))))
     {
+        USHORT nHtmlMode = 0;
         nHtmlMode = ((SfxUInt16Item*)pItem)->GetValue();
         if(nHtmlMode && HTMLMODE_ON)
         {
