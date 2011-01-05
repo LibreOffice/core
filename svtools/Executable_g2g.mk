@@ -50,20 +50,6 @@ $(eval $(call gb_Executable_add_exception_objects,g2g,\
     svtools/bmpmaker/g2g \
 ))
 ifeq ($(OS),WNT)
-ifneq ($(USE_MINGW),)
-$(eval $(call gb_Executable_add_linked_libs,g2g,\
-    mingwthrd \
-    $(gb_MINGW_LIBSTDCPP) \
-    mingw32 \
-    $(gb_MINGW_LIBGCC) \
-    uwinapi \
-    moldname \
-    mingwex \
-    kernel32 \
-    msvcrt \
-    user32 \
-))
-else
 $(eval $(call gb_Executable_add_linked_libs,g2g,\
     kernel32 \
     msvcrt \
@@ -71,7 +57,6 @@ $(eval $(call gb_Executable_add_linked_libs,g2g,\
     user32 \
     uwinapi \
 ))
-endif
 endif
 ifeq ($(OS),LINUX)
 $(eval $(call gb_Executable_add_linked_libs,g2g,\
