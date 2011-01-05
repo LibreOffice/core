@@ -36,6 +36,8 @@ using ::rtl::OUString;
 using ::rtl::OStringToOUString;
 using ::oox::core::FilterBase;
 
+using namespace ::com::sun::star;
+
 namespace oox {
 namespace xls {
 
@@ -50,9 +52,16 @@ BiffDecoderBase::~BiffDecoderBase()
 {
 }
 
-::comphelper::DocPasswordVerifierResult BiffDecoderBase::verifyPassword( const OUString& rPassword )
+::comphelper::DocPasswordVerifierResult BiffDecoderBase::verifyPassword( const ::rtl::OUString& rPassword, uno::Sequence< beans::NamedValue >& o_rEncryptionData )
 {
-    mbValid = implVerify( rPassword );
+    o_rEncryptionData = implVerifyPassword( rPassword );
+    mbValid = ( o_rEncryptionData.getLength() > 0 );
+    return mbValid ? ::comphelper::DocPasswordVerifierResult_OK : ::comphelper::DocPasswordVerifierResult_WRONG_PASSWORD;
+}
+
+::comphelper::DocPasswordVerifierResult BiffDecoderBase::verifyEncryptionData( const uno::Sequence< beans::NamedValue >& rEncryptionData )
+{
+    mbValid = implVerifyEncryptionData( rEncryptionData );
     return mbValid ? ::comphelper::DocPasswordVerifierResult_OK : ::comphelper::DocPasswordVerifierResult_WRONG_PASSWORD;
 }
 
@@ -71,7 +80,6 @@ void BiffDecoderBase::decode( sal_uInt8* pnDestData, const sal_uInt8* pnSrcData,
 
 BiffDecoder_XOR::BiffDecoder_XOR( sal_uInt16 nKey, sal_uInt16 nHash ) :
     maCodec( ::oox::core::BinaryCodec_XOR::CODEC_EXCEL ),
-    maPassword( 16 ),
     mnKey( nKey ),
     mnHash( nHash )
 {
@@ -80,12 +88,12 @@ BiffDecoder_XOR::BiffDecoder_XOR( sal_uInt16 nKey, sal_uInt16 nHash ) :
 BiffDecoder_XOR::BiffDecoder_XOR( const BiffDecoder_XOR& rDecoder ) :
     BiffDecoderBase(),  // must be called to prevent compiler warning
     maCodec( ::oox::core::BinaryCodec_XOR::CODEC_EXCEL ),
-    maPassword( rDecoder.maPassword ),
+    maEncryptionData( rDecoder.maEncryptionData ),
     mnKey( rDecoder.mnKey ),
     mnHash( rDecoder.mnHash )
 {
     if( isValid() )
-        maCodec.initKey( &maPassword.front() );
+        maCodec.initCodec( maEncryptionData );
 }
 
 BiffDecoder_XOR* BiffDecoder_XOR::implClone()
@@ -93,24 +101,40 @@ BiffDecoder_XOR* BiffDecoder_XOR::implClone()
     return new BiffDecoder_XOR( *this );
 }
 
-bool BiffDecoder_XOR::implVerify( const OUString& rPassword )
+uno::Sequence< beans::NamedValue > BiffDecoder_XOR::implVerifyPassword( const ::rtl::OUString& rPassword )
 {
+    maEncryptionData.realloc( 0 );
+
     /*  Convert password to a byte string. TODO: this needs some finetuning
         according to the spec... */
     OString aBytePassword = OUStringToOString( rPassword, osl_getThreadTextEncoding() );
     sal_Int32 nLen = aBytePassword.getLength();
     if( (0 < nLen) && (nLen < 16) )
     {
-        // copy byte string to sal_uInt8 array
-        maPassword.clear();
-        maPassword.resize( 16, 0 );
-        memcpy( &maPassword.front(), aBytePassword.getStr(), static_cast< size_t >( nLen ) );
-
         // init codec
-        maCodec.initKey( &maPassword.front() );
-        return maCodec.verifyKey( mnKey, mnHash );
+        maCodec.initKey( (sal_uInt8*)aBytePassword.getStr() );
+
+        if ( maCodec.verifyKey( mnKey, mnHash ) )
+            maEncryptionData = maCodec.getEncryptionData();
     }
-    return false;
+
+    return maEncryptionData;
+}
+
+bool BiffDecoder_XOR::implVerifyEncryptionData( const uno::Sequence< beans::NamedValue >& rEncryptionData )
+{
+    maEncryptionData.realloc( 0 );
+
+    if( rEncryptionData.getLength() )
+    {
+        // init codec
+        maCodec.initCodec( rEncryptionData );
+
+        if ( maCodec.verifyKey( mnKey, mnHash ) )
+            maEncryptionData = rEncryptionData;
+    }
+
+    return maEncryptionData.getLength();
 }
 
 void BiffDecoder_XOR::implDecode( sal_uInt8* pnDestData, const sal_uInt8* pnSrcData, sal_Int64 nStreamPos, sal_uInt16 nBytes )
@@ -141,7 +165,6 @@ sal_Int32 lclGetRcfOffset( sal_Int64 nStreamPos )
 // ----------------------------------------------------------------------------
 
 BiffDecoder_RCF::BiffDecoder_RCF( sal_uInt8 pnSalt[ 16 ], sal_uInt8 pnVerifier[ 16 ], sal_uInt8 pnVerifierHash[ 16 ] ) :
-    maPassword( 16, 0 ),
     maSalt( pnSalt, pnSalt + 16 ),
     maVerifier( pnVerifier, pnVerifier + 16 ),
     maVerifierHash( pnVerifierHash, pnVerifierHash + 16 )
@@ -150,13 +173,13 @@ BiffDecoder_RCF::BiffDecoder_RCF( sal_uInt8 pnSalt[ 16 ], sal_uInt8 pnVerifier[ 
 
 BiffDecoder_RCF::BiffDecoder_RCF( const BiffDecoder_RCF& rDecoder ) :
     BiffDecoderBase(),  // must be called to prevent compiler warning
-    maPassword( rDecoder.maPassword ),
+    maEncryptionData( rDecoder.maEncryptionData ),
     maSalt( rDecoder.maSalt ),
     maVerifier( rDecoder.maVerifier ),
     maVerifierHash( rDecoder.maVerifierHash )
 {
     if( isValid() )
-        maCodec.initKey( &maPassword.front(), &maSalt.front() );
+        maCodec.initCodec( maEncryptionData );
 }
 
 BiffDecoder_RCF* BiffDecoder_RCF::implClone()
@@ -164,26 +187,47 @@ BiffDecoder_RCF* BiffDecoder_RCF::implClone()
     return new BiffDecoder_RCF( *this );
 }
 
-bool BiffDecoder_RCF::implVerify( const OUString& rPassword )
+uno::Sequence< beans::NamedValue > BiffDecoder_RCF::implVerifyPassword( const ::rtl::OUString& rPassword )
 {
+    maEncryptionData.realloc( 0 );
+
     sal_Int32 nLen = rPassword.getLength();
     if( (0 < nLen) && (nLen < 16) )
     {
         // copy string to sal_uInt16 array
-        maPassword.clear();
-        maPassword.resize( 16, 0 );
+        ::std::vector< sal_uInt16 > aPassVect( 16 );
         const sal_Unicode* pcChar = rPassword.getStr();
         const sal_Unicode* pcCharEnd = pcChar + nLen;
-        ::std::vector< sal_uInt16 >::iterator aIt = maPassword.begin();
+        ::std::vector< sal_uInt16 >::iterator aIt = aPassVect.begin();
         for( ; pcChar < pcCharEnd; ++pcChar, ++aIt )
             *aIt = static_cast< sal_uInt16 >( *pcChar );
 
         // init codec
-        maCodec.initKey( &maPassword.front(), &maSalt.front() );
-        return maCodec.verifyKey( &maVerifier.front(), &maVerifierHash.front() );
+        maCodec.initKey( &aPassVect.front(), &maSalt.front() );
+        if ( maCodec.verifyKey( &maVerifier.front(), &maVerifierHash.front() ) )
+            maEncryptionData = maCodec.getEncryptionData();
     }
-    return false;
+
+    return maEncryptionData;
 }
+
+bool BiffDecoder_RCF::implVerifyEncryptionData( const uno::Sequence< beans::NamedValue >& rEncryptionData )
+{
+    maEncryptionData.realloc( 0 );
+
+    if( rEncryptionData.getLength() )
+    {
+        // init codec
+        maCodec.initCodec( rEncryptionData );
+
+        if ( maCodec.verifyKey( &maVerifier.front(), &maVerifierHash.front() ) )
+            maEncryptionData = rEncryptionData;
+    }
+
+    return maEncryptionData.getLength();
+}
+
+
 
 void BiffDecoder_RCF::implDecode( sal_uInt8* pnDestData, const sal_uInt8* pnSrcData, sal_Int64 nStreamPos, sal_uInt16 nBytes )
 {
@@ -316,7 +360,7 @@ bool BiffCodecHelper::importFilePass( BiffInputStream& rStrm )
     mxDecoder = implReadFilePass( rStrm, getBiff() );
     // request and verify a password (decoder implements IDocPasswordVerifier)
     if( mxDecoder.get() )
-        getBaseFilter().requestPassword( *mxDecoder );
+        getBaseFilter().requestEncryptionData( *mxDecoder );
     // correct password is indicated by isValid() function of decoder
     return mxDecoder.get() && mxDecoder->isValid();
 }

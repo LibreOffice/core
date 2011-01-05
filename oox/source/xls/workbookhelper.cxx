@@ -43,7 +43,6 @@
 #include "properties.hxx"
 #include "oox/helper/progressbar.hxx"
 #include "oox/helper/propertyset.hxx"
-#include "oox/ole/vbaproject.hxx"
 #include "oox/drawingml/theme.hxx"
 #include "oox/xls/addressconverter.hxx"
 #include "oox/xls/biffinputstream.hxx"
@@ -51,6 +50,7 @@
 #include "oox/xls/defnamesbuffer.hxx"
 #include "oox/xls/excelchartconverter.hxx"
 #include "oox/xls/excelfilter.hxx"
+#include "oox/xls/excelvbaproject.hxx"
 #include "oox/xls/externallinkbuffer.hxx"
 #include "oox/xls/formulaparser.hxx"
 #include "oox/xls/pagesettings.hxx"
@@ -691,7 +691,7 @@ void WorkbookHelper::finalizeWorkbookImport()
     StorageRef xVbaPrjStrg = mrBookData.getVbaProjectStorage();
     if( xVbaPrjStrg.get() && xVbaPrjStrg->isStorage() )
     {
-        ::oox::ole::VbaProject aVbaProject( getGlobalFactory(), getBaseFilter().getModel(), CREATE_OUSTRING( "Calc" ) );
+        ExcelVbaProject aVbaProject( getGlobalFactory(), getDocument() );
         aVbaProject.importVbaProject( *xVbaPrjStrg, getBaseFilter().getGraphicHelper() );
     }
 }
