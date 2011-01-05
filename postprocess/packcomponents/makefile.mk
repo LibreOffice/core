@@ -55,6 +55,23 @@ my_components = \
     charttools \
     chartview \
     comphelp4 \
+    component/framework/util/fwk \
+    component/framework/util/fwl \
+    component/framework/util/fwm \
+    component/sfx2/util/sfx \
+    component/svl/source/fsstor/fsstorage \
+    component/svl/source/passwordcontainer/passwordcontainer \
+    component/svl/util/svl \
+    component/svtools/source/hatchwindow/hatchwindowfactory \
+    component/svtools/source/productregistration/productregistration.uno \
+    component/svtools/util/svt \
+    component/sw/util/msword \
+    component/sw/util/sw \
+    component/sw/util/swd \
+    component/sw/util/vbaswobj \
+    component/toolkit/util/tk \
+    component/xmloff/source/transform/xof \
+    component/xmloff/util/xo \
     configmgr \
     ctl \
     date \
@@ -80,12 +97,7 @@ my_components = \
     fpicker \
     fps_office \
     frm \
-    fsstorage \
-    fwk \
-    fwl \
-    fwm \
     guesslang \
-    hatchwindowfactory \
     hwp \
     hyphen \
     i18npool \
@@ -103,12 +115,10 @@ my_components = \
     oooimprovecore \
     oox \
     package2 \
-    passwordcontainer \
     pcr \
     pdffilter \
     placeware \
     preload \
-    productregistration.uno \
     protocolhandler \
     pythonloader \
     pythonscript \
@@ -126,7 +136,6 @@ my_components = \
     sdbc2 \
     sdbt \
     sdd \
-    sfx \
     simplecanvas \
     slideshow \
     sm \
@@ -138,16 +147,11 @@ my_components = \
     srtrs1 \
     stringresource \
     svgfilter \
-    svl \
-    svt \
     svx \
     svxcore \
-    sw \
-    swd \
     syssh \
     t602filter \
     textconversiondlgs \
-    tk \
     tvhlp1 \
     ucb1 \
     ucpchelp1 \
@@ -166,7 +170,6 @@ my_components = \
     utl \
     uui \
     vbaobj \
-    vbaswobj \
     vcl \
     vclcanvas \
     wpft \
@@ -175,8 +178,6 @@ my_components = \
     xmlfa \
     xmlfd \
     xmx \
-    xo \
-    xof \
     xsltdlg \
     xsltfilter \
     xstor
@@ -364,7 +365,7 @@ $(MISC)/services.rdb .ERRREMOVE : $(SOLARENV)/bin/packcomponents.xslt \
     $(XSLTPROC) --nonet --stringparam prefix $(SOLARXMLDIR)/ -o $@ \
         $(SOLARENV)/bin/packcomponents.xslt $(MISC)/services.input
 
-$(MISC)/services.input :
+$(MISC)/services.input : makefile.mk
     echo \
         '<list>$(my_components:^"<filename>":+".component</filename>")</list>' \
         > $@
@@ -375,7 +376,7 @@ $(MISC)/ooo-services.rdb .ERRREMOVE : $(SOLARENV)/bin/packcomponents.xslt \
     $(XSLTPROC) --nonet --stringparam prefix $(SOLARXMLDIR)/ -o $@ \
         $(SOLARENV)/bin/packcomponents.xslt $(MISC)/ooo-services.input
 
-$(MISC)/ooo-services.input :
+$(MISC)/ooo-services.input : makefile.mk
     echo '<list>' \
         '$(my_ooo_components:^"<filename>":+".component</filename>")' \
         '</list>' > $@
