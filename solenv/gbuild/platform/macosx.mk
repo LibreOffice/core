@@ -33,6 +33,7 @@ gb_MKTEMP := TMPDIR= mktemp -t
 gb_CC := $(CC)
 gb_CXX := $(CXX)
 gb_GCCP := $(CC)
+gb_AWK := awk
 
 
 gb_OSDEFS := \
@@ -370,6 +371,9 @@ gb_TestFixure_get_filename = $(gb_TestFixure_SYSPRE)$(1)$(gb_TestFixure_EXT)
 
 gb_SdiTarget_SVIDLPRECOMMAND := DYLD_LIBRARY_PATH=$(OUTDIR)/lib
 
+# SrsPartMergeTarget
+
+gb_SrsPartMergeTarget_TRANSEXPRECOMMAND := DYLD_LIBRARY_PATH=$(OUTDIR)/lib
 
 # SrsPartTarget class
 

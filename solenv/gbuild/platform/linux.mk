@@ -33,6 +33,12 @@ gb_MKTEMP := mktemp -p
 gb_CC := gcc
 gb_CXX := g++
 gb_GCCP := gcc
+gb_AWK := awk
+
+# normalize setsolar and configure env.
+ifeq ($(CPU),X)
+CPUNAME := X86_64
+endif
 
 # use CC/CXX if they are nondefaults
 ifneq ($(origin CC),default)
@@ -318,6 +324,10 @@ gb_TestFixure_get_filename = $(gb_TestFixure_SYSPRE)$(1)$(gb_TestFixure_EXT)
 # SdiTarget class
 
 gb_SdiTarget_SVIDLPRECOMMAND := LD_LIBRARY_PATH=$(OUTDIR)/lib
+
+# SrsPartMergeTarget
+
+gb_SrsPartMergeTarget_TRANSEXPRECOMMAND := LD_LIBRARY_PATH=$(OUTDIR)/lib
 
 # SrsPartTarget class
 

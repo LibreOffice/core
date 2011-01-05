@@ -466,6 +466,7 @@ $(call gb_LinkTarget_set_auxtargets,$(2),\
 
 $(call gb_Executable_get_target,$(1)) \
 $(call gb_Executable_get_clean_target,$(1)) : AUXTARGETS := $(call gb_Executable_get_target,$(1)).manifest
+$(call gb_Deliver_add_deliverable,$(call gb_Executable_get_target,$(1)).manifest,$(call gb_LinkTarget_get_target,$(2)).manifest)
 
 endef
 
@@ -481,6 +482,9 @@ gb_TestFixure_get_filename = $(gb_TestFixure_SYSPRE)$(1)$(gb_TestFixure_EXT)
 
 gb_SdiTarget_SVIDLPRECOMMAND := PATH="$${PATH}:$(OUTDIR)/bin"
 
+# SrsPartMergeTarget
+
+gb_SrsPartMergeTarget_TRANSEXPRECOMMAND := PATH="$${PATH}:$(OUTDIR)/bin"
 
 # SrsPartTarget class
 

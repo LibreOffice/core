@@ -301,6 +301,9 @@ gb_TestFixure_get_filename = $(gb_TestFixure_SYSPRE)$(1)$(gb_TestFixure_EXT)
 
 gb_SdiTarget_SVIDLPRECOMMAND := LD_LIBRARY_PATH=$(OUTDIR)/lib
 
+# SrsPartMergeTarget
+
+gb_SrsPartMergeTarget_TRANSEXPRECOMMAND := LD_LIBRARY_PATH=$(OUTDIR)/lib
 
 # SrsPartTarget class
 

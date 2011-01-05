@@ -49,7 +49,7 @@ mkdir -p $(dir $(2)) && $(if $(gb_Deliver_CLEARONDELIVER),rm -f $(2) &&) cp -f $
 endef
 else
 define gb_Deliver_deliver
-mkdir -p $(dir $(2)) && $(gb_Deliver_GNUCOPY) $(if $(gb_Deliver_CLEARONDELIVER),--remove-destination) --force --preserve=mode,timestamps $(1) $(2)
+mkdir -p $(dir $(2)) && $(gb_Deliver_GNUCOPY) $(if $(gb_Deliver_CLEARONDELIVER),--remove-destination) --force --preserve=timestamps $(1) $(2)
 endef
 endif
 
@@ -63,7 +63,7 @@ define gb_Deliver_setdeliverlogcommand
 ifeq ($$(words $(gb_Module_ALLMODULES)),1)
 $$(eval $$(call gb_Output_announce,$$(strip $$(gb_Module_ALLMODULES)),$$(true),LOG,1))
 deliverlog : COMMAND := mkdir -p $$(OUTDIR)/inc/$$(strip $$(gb_Module_ALLMODULES)) &&
-deliverlog : COMMAND += echo "$$(sort $$(gb_Deliver_DELIVERABLES)) " | awk -f $$(GBUILDDIR)/processdelivered.awk > $$(OUTDIR)/inc/$$(strip $(gb_Module_ALLMODULES))/gb_deliver.log
+deliverlog : COMMAND += echo "$$(sort $$(gb_Deliver_DELIVERABLES)) " | $(gb_AWK) -f $$(GBUILDDIR)/processdelivered.awk > $$(OUTDIR)/inc/$$(strip $(gb_Module_ALLMODULES))/gb_deliver.log
 else
 $$(eval $$(call gb_Output_announce,more than one module - creating no deliver.log,$$(true),LOG,1))
 deliverlog : COMMAND := true
