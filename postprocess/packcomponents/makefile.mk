@@ -366,7 +366,7 @@ $(MISC)/services.rdb .ERRREMOVE : $(SOLARENV)/bin/packcomponents.xslt \
     $(XSLTPROC) --nonet --stringparam prefix $(SOLARXMLDIR)/ -o $@ \
         $(SOLARENV)/bin/packcomponents.xslt $(MISC)/services.input
 
-$(MISC)/services.input :
+$(MISC)/services.input : makefile.mk
     echo \
         '<list>$(my_components:^"<filename>":+".component</filename>")</list>' \
         > $@
@@ -377,7 +377,7 @@ $(MISC)/ooo-services.rdb .ERRREMOVE : $(SOLARENV)/bin/packcomponents.xslt \
     $(XSLTPROC) --nonet --stringparam prefix $(SOLARXMLDIR)/ -o $@ \
         $(SOLARENV)/bin/packcomponents.xslt $(MISC)/ooo-services.input
 
-$(MISC)/ooo-services.input :
+$(MISC)/ooo-services.input : makefile.mk
     echo '<list>' \
         '$(my_ooo_components:^"<filename>":+".component</filename>")' \
         '</list>' > $@
