@@ -1441,19 +1441,35 @@ void MetaTextArrayAction::Read( SvStream& rIStm, ImplMetaReadData* pData )
     rIStm   >> mnLen;
     rIStm   >> nAryLen;
 
+    if ( mnIndex + mnLen > maStr.Len() )
+    {
+        mnIndex = 0;
+        mpDXAry = 0;
+        return;
+    }
+
     if( nAryLen )
     {
         // #i9762#, #106172# Ensure that DX array is at least mnLen entries long
-        const ULONG nIntAryLen( Max(nAryLen, static_cast<sal_uInt32>(mnLen)) );
-        mpDXAry = new sal_Int32[ nIntAryLen ];
+        if ( mnLen >= nAryLen )
+        {
+            mpDXAry = new (std::nothrow)sal_Int32[ mnLen ];
+            if ( mpDXAry )
+            {
+                   ULONG i;
+                for( i = 0UL; i < nAryLen; i++ )
+                    rIStm >> mpDXAry[ i ];
 
-        ULONG i;
-        for( i = 0UL; i < nAryLen; i++ )
-            rIStm >> mpDXAry[ i ];
-
-        // #106172# setup remainder
-        for( ; i < nIntAryLen; i++ )
-            mpDXAry[ i ] = 0;
+                // #106172# setup remainder
+                for( ; i < mnLen; i++ )
+                    mpDXAry[ i ] = 0;
+            }
+        }
+        else
+        {
+            mpDXAry = NULL;
+            return;
+        }
     }
     else
         mpDXAry = NULL;
@@ -1465,6 +1481,12 @@ void MetaTextArrayAction::Read( SvStream& rIStm, ImplMetaReadData* pData )
         sal_Unicode* pBuffer = maStr.AllocBuffer( nLen );
         while ( nLen-- )
             rIStm >> *pBuffer++;
+
+        if ( mnIndex + mnLen > maStr.Len() )
+        {
+            mnIndex = 0;
+            delete[] mpDXAry, mpDXAry = NULL;
+        }
     }
 }
 
