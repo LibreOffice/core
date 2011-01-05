@@ -70,23 +70,10 @@ $(eval $(call gb_Library_add_exception_objects,swd,\
     sw/source/ui/uno/swdetect \
 ))
 ifeq ($(OS),WNT)
-ifneq ($(USE_MINGW),)
-$(eval $(call gb_Library_add_linked_libs,swd,\
-    mingwthrd \
-    $(gb_MINGW_LIBSTDCPP) \
-    mingw32 \
-    $(gb_MINGW_LIBGCC) \
-    uwinapi \
-    mingwex \
-    kernel32 \
-    msvcrt \
-))
-else
 $(eval $(call gb_Library_add_linked_libs,swd,\
     kernel32 \
     msvcrt \
     uwinapi \
 ))
-endif
 endif
 # vim: set noet sw=4 ts=4:
