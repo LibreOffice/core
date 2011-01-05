@@ -37,7 +37,7 @@ module com { module sun { module star { module java {
 
 /** indicates that no suitable JRE was found.
 
-    @since OOo 2.0.0
+    @since OOo 2.0
  */
 exception JavaNotFoundException: JavaInitializationException
 {

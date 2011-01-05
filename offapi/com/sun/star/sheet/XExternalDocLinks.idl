@@ -39,7 +39,7 @@ module com {  module sun {  module star {  module sheet {
 
     @see com::sun::star::sheet::ExternalDocLinks
 
-    @since OOo 3.1.0
+    @since OOo 3.1
  */
 interface XExternalDocLinks
 {

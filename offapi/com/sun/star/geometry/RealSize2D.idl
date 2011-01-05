@@ -33,7 +33,7 @@ module com {  module sun {  module star {  module geometry {
 
     The data is stored real-valued.<p>
 
-    @since OOo 2.0.0
+    @since OOo 2.0
  */
 struct RealSize2D
 {

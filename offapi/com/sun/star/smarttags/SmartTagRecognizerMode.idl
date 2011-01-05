@@ -37,7 +37,7 @@
 /** specifies the which type of text is passed to
     <method>XSmartTagRecognizer::recognize()</method></p>
 
-    @since OOo 2.3.0
+    @since OOo 2.3
  */
 
 enum SmartTagRecognizerMode

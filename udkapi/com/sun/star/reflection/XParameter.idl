@@ -38,7 +38,7 @@ module com {  module sun {  module star {  module reflection {
    <p>This type supersedes <type>XMethodParameter</type>, which only supports
    parameters of interface methods (which cannot have rest parameters).</p>
 
-   @since OOo 2.0.0
+   @since OOo 2.0
  */
 interface XParameter: XMethodParameter {
     /**

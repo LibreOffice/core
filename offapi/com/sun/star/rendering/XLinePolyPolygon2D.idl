@@ -44,7 +44,7 @@ module com { module sun { module star { module rendering {
 
 /** Specialized interface for a 2D poly-polygon containing only straight line segments.
 
-    @since OOo 2.0.0
+    @since OOo 2.0
  */
 interface XLinePolyPolygon2D : XPolyPolygon2D
 {

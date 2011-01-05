@@ -226,7 +226,7 @@ published constants NumberingType
     //-------------------------------------------------------------------------
     /** Numbering in Hebrew alphabet letters
 
-        @since OOo 2.0.0
+        @since OOo 2.0
      */
     const short CHARS_HEBREW = 33;
 

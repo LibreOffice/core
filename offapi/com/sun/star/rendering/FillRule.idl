@@ -32,7 +32,7 @@ module com { module sun { module star { module rendering {
 /** Determines which algorithm to use when determining inside and
     outside of filled poly-polygons.
 
-    @since OOo 2.0.0
+    @since OOo 2.0
  */
 enum FillRule
 {

@@ -43,7 +43,7 @@ module com { module sun { module star { module frame {
 
     @deprecated
 
-    @since OOo 2.0.0
+    @since OOo 2.0
 */
 
 interface XInplaceLayout : com::sun::star::uno::XInterface

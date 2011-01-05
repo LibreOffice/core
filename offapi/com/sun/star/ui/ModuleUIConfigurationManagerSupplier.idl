@@ -40,7 +40,7 @@ module com { module sun { module star { module ui {
 /** specifies a central user interface configuration provider which gives
     access to module based user interface configuration managers.
 
-    @since OOo 2.0.0
+    @since OOo 2.0
 */
 
 service ModuleUIConfigurationManagerSupplier

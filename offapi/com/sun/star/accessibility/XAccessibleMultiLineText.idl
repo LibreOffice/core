@@ -47,7 +47,7 @@ module com { module sun { module star { module accessibility {
     <type>XAccessibleText</type> interface and extents it with a notion
     of line numbers</p>
 
-    @since OOo 3.0.0
+    @since OOo 3.0
 */
 
 /// not yet published

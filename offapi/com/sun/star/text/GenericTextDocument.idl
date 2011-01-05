@@ -179,22 +179,28 @@ published service GenericTextDocument
 
     [optional] interface com::sun::star::style::XStyleFamiliesSupplier;
 
-    /// @since OOo 1.1.2
+    /** @since OOo 1.1.2
+     */
     [optional] interface com::sun::star::text::XBookmarksSupplier;
 
-    /// @since OOo 1.1.2
+    /** @since OOo 1.1.2
+     */
     [optional] interface com::sun::star::text::XDocumentIndexesSupplier;
 
-    /// @since OOo 1.1.2
+    /** @since OOo 1.1.2
+     */
     [optional] interface com::sun::star::text::XTextFieldsSupplier;
 
-    /// @since OOo 1.1.2
+    /** @since OOo 1.1.2
+     */
     [optional] interface com::sun::star::text::XTextFramesSupplier;
 
-    /// @since OOo 1.1.2
+    /** @since OOo 1.1.2
+     */
     [optional] interface com::sun::star::text::XTextSectionsSupplier;
 
-    /// @since OOo 1.1.2
+    /** @since OOo 1.1.2
+     */
     [optional] interface com::sun::star::util::XNumberFormatsSupplier;
     //-------------------------------------------------------------------------
 

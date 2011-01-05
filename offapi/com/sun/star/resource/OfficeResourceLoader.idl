@@ -70,7 +70,7 @@ module com { module sun { module star { module resource {
     OpenOffice.org build), you are <strong>strongly</strong> discouraged from using the <type>OfficeResoureLoader</type>
     service in a component which targets more than one particular OpenOffice.org build.</p>
 
-    @since OpenOffice.org 2.0.3
+    @since OOo 2.0.3
 */
 singleton OfficeResourceLoader : XResourceBundleLoader;
 

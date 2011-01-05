@@ -106,7 +106,7 @@ published service CellAreaLink
 
     /** specifies the time between two refresh actions in seconds.
 
-        @since OOo 2.0.0
+        @since OOo 2.0
      */
     [optional, property] long RefreshPeriod;
 

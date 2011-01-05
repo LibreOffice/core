@@ -46,7 +46,7 @@ module com {  module sun {  module star {  module ui {
     implementations which provides all commands to a user.
     </p>
 
-    @since OOo 2.0.0
+    @since OOo 2.0
 */
 
 //=============================================================================

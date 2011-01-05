@@ -132,7 +132,6 @@ UNOIDLDBFILES= \
     $(UCR)$/cssgallery.db \
     $(UCR)$/cssxsd.db \
     $(UCR)$/cssinspection.db \
-    $(UCR)$/dcssform.db \
     $(UCR)$/xsec-security.db \
     $(UCR)$/xsec-crypto.db \
     $(UCR)$/xsec-csax.db \

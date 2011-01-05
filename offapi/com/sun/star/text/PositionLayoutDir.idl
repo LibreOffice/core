@@ -37,7 +37,7 @@
 /** These values specify the layout direction, in which the position attributes
     of a shape are given
 
-    @since OOo 2.0.0
+    @since OOo 2.0
  */
 constants PositionLayoutDir
 {

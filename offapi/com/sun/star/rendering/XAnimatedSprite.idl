@@ -54,7 +54,7 @@ module com { module sun { module star { module rendering {
     This interface can be used to control an animated sprite object on
     an XSpriteCanvas. Sprites are moving, animated objects.<p>
 
-    @since OOo 2.0.0
+    @since OOo 2.0
  */
 interface XAnimatedSprite : XSprite
 {

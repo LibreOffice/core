@@ -64,7 +64,7 @@ module com {  module sun {  module star {  module smarttags {
 
 /** provides access to smart tag actions.
 
-    @since OOo 2.3.0
+    @since OOo 2.3
  */
 
 interface XSmartTagAction: com::sun::star::lang::XInitialization

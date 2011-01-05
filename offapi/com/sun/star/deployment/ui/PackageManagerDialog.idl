@@ -38,7 +38,7 @@ module com { module sun { module star { module deployment { module ui {
     packages of the user and shared installation as well as currently open
     documents.
 
-    @since OOo 2.0.0
+    @since OOo 2.0
 */
 service PackageManagerDialog : com::sun::star::ui::dialogs::XAsynchronousExecutableDialog
 {

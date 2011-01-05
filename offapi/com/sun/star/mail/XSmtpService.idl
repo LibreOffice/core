@@ -64,7 +64,7 @@ module com { module sun { module star { module mail {
    @see com::sun::star::mail::XMailService
    @see com::sun::star::mail::XMailMessage
 
-   @since OOo 2.0.0
+   @since OOo 2.0
  */
 interface XSmtpService: ::com::sun::star::mail::XMailService {
 

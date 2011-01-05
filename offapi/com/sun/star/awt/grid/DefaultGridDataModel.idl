@@ -39,7 +39,7 @@
 
 /** If you do not want to implement the <type>XGridDataModel</type> yourself, use this service.
 
-    @since OOo 3.3.0
+    @since OOo 3.3
  */
 service DefaultGridDataModel
 {

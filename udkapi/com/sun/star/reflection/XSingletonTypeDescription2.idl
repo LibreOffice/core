@@ -40,7 +40,7 @@ interface XTypeDescription;
    <p>This type supersedes <type>XSingletonTypeDescription</type>, which only
    supports obsolete, service-based singletons.</p>
 
-   @since OOo 2.0.0
+   @since OOo 2.0
  */
 interface XSingletonTypeDescription2: XSingletonTypeDescription {
     /**

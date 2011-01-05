@@ -56,7 +56,7 @@ module com { module sun { module star { module linguistic2 {
     @see    com::sun::star::linguistic2::XConversionDictionary
     @see    com::sun::star::linguistic2::ConversionPropertyType
 
-    @since OOo 2.0.0
+    @since OOo 2.0
 */
 published interface XConversionPropertyType : com::sun::star::uno::XInterface
 {

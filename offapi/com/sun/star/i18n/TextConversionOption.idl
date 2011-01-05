@@ -59,7 +59,7 @@ published constants TextConversionOption
     /** Use Taiwan, HongKong SAR, and Macao SAR character variants for
         Simplified to Traditionary Chinese conversion
 
-        @since OOo 2.0.0
+        @since OOo 2.0
     */
     const long  USE_CHARACTER_VARIANTS          = 2;    // (1 << 1)
 };

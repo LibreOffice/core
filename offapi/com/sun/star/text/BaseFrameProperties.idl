@@ -335,7 +335,7 @@ published service BaseFrameProperties
         of the shape, if the text document setting ConsiderTextWrapOnObjPos
         is <TRUE/>. Valid values are given by <member>WrapInfluenceOnPosition</member></p>
 
-        @since OOo 2.0.0
+        @since OOo 2.0
      */
     [optional, property] short WrapInfluenceOnPosition;
 

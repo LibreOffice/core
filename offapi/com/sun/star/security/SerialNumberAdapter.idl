@@ -45,7 +45,7 @@ module com { module sun { module star { module security {
     <p>An implementation of this service enables the conversion of certificate
        serial number to and from a string</p>
 
-    @since OOo 3.1.0
+    @since OOo 3.1
  */
 
 service SerialNumberAdapter : XSerialNumberAdapter;

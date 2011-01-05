@@ -38,7 +38,7 @@ module com { module sun { module star { module mail {
    An MailException is the base of all mail related
    exceptions.
 
-   @since OOo 2.0.0
+   @since OOo 2.0
  */
 exception MailException: com::sun::star::uno::Exception
 {

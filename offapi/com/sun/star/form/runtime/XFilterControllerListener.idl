@@ -38,7 +38,7 @@ module com { module sun { module star { module form { module runtime {
 
 /** is implemented by components listening for events fired by an <type>XFilterController</type>.
 
-    @since OpenOffice.org 3.3
+    @since OOo 3.3
 */
 interface XFilterControllerListener : ::com::sun::star::lang::XEventListener
 {

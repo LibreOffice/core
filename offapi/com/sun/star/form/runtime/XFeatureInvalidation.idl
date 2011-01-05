@@ -43,7 +43,7 @@ module com { module sun { module star { module form { module runtime {
 
     @see XFormOperations
 
-    @since OpenOffice.org 2.2.0
+    @since OOo 2.2
 */
 interface XFeatureInvalidation
 {

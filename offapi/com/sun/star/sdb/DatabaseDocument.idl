@@ -43,7 +43,7 @@
  module com {  module sun {  module star {  module sdb {
 
 /** specifies a link to a document associated with a database document
-    @since OOo 2.0.0
+    @since OOo 2.0
     @deprecated
  */
 published service DatabaseDocument

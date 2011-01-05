@@ -54,7 +54,7 @@ module com { module sun { module star { module uri {
    references (that do not include a scheme) are left unmodified by the
    translation process.</p>
 
-   @since OOo 2.0.0
+   @since OOo 2.0
  */
 published interface XExternalUriReferenceTranslator {
     /**

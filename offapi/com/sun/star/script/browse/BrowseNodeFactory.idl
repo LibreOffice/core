@@ -37,7 +37,7 @@ module com { module sun { module star { module script { module browse {
 /**
     This service is used to create Root XBrowseNodes.
 
-    @since OOo 2.0.0
+    @since OOo 2.0
 */
 service BrowseNodeFactory
 {
@@ -52,7 +52,7 @@ service BrowseNodeFactory
     /singletons/com.sun.star.script.theBrowseNodeFactory
     </pre>
 
-    @since OOo 2.0.0
+    @since OOo 2.0
 */
 singleton theBrowseNodeFactory
 {

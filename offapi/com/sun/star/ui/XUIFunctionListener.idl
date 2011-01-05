@@ -39,7 +39,7 @@
 /** special interface to receive notification that a user interface
     element will execute a function.
 
-    @since OOo 2.0.0
+    @since OOo 2.0
  */
 interface XUIFunctionListener : com::sun::star::lang::XEventListener
 {

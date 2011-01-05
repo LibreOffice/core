@@ -85,7 +85,7 @@ published service TextPortion
 
     //-------------------------------------------------------------------------
     /** gives access to a sequence of properties.
-        @since OOo 2.0.0
+        @since OOo 2.0
      */
     [optional]
     interface ::com::sun::star::beans::XTolerantMultiPropertySet;

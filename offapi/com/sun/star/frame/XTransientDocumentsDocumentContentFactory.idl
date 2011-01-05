@@ -56,7 +56,7 @@ module com { module sun { module star { module frame {
      @see      com::sun::star::document::OfficeDocument
      @see      com::sun::star::ucb::TransientDocumentsDocumentContent
 
-     @since OOo 2.0.0
+     @since OOo 2.0
 */
 interface XTransientDocumentsDocumentContentFactory : com::sun::star::uno::XInterface
 {

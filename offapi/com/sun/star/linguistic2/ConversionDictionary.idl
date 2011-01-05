@@ -69,7 +69,7 @@ published service ConversionDictionary
     [optional] interface com::sun::star::util::XFlushable;
 
     /**
-        @since OOo 2.0.0
+        @since OOo 2.0
     */
     [optional] interface com::sun::star::linguistic2::XConversionPropertyType;
 };

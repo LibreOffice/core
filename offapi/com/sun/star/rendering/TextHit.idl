@@ -34,7 +34,7 @@ module com { module sun { module star { module rendering {
     This structure is used from the <type>XTextLayout</type> interface
     to transport information regarding hit tests.<p>
 
-    @since OOo 2.0.0
+    @since OOo 2.0
  */
 struct TextHit
 {

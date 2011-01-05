@@ -45,7 +45,7 @@ module com {  module sun {  module star {  module frame {
 
 //=============================================================================
 /** additional interfaces for dispatch objects: allow to execute with return value
-    @since OOo 2.0.0
+    @since OOo 2.0
     @see XDispatch
  */
 published interface XSynchronousDispatch: com::sun::star::uno::XInterface

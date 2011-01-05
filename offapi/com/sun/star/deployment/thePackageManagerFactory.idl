@@ -42,7 +42,7 @@ module com { module sun { module star { module deployment {
     </code>.
     </p>
 
-    @since OOo 2.0.0
+    @since OOo 2.0
     @deprecated
         Use <type>XExtensionManager</type>.
 */

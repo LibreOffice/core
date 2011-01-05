@@ -44,7 +44,7 @@ constants ConversionDictionaryType
 
     /** Dictionary type for the conversion between Simplified and Traditionary Chinese
 
-        @since OOo 2.0.0
+        @since OOo 2.0
     */
     const short SCHINESE_TCHINESE   = 2;
 };
