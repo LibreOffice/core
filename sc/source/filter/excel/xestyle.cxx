@@ -528,7 +528,7 @@ const Color& XclExpPaletteImpl::GetOriginalColor( sal_uInt32 nColorId ) const
 XclListColor* XclExpPaletteImpl::SearchListEntry( const Color& rColor, sal_uInt32& rnIndex )
 {
     rnIndex = mnLastIdx;
-    XclListColor* pEntry;
+    XclListColor* pEntry=NULL;
 
     // search optimization for equal-colored objects occuring repeatedly
     if (rnIndex < mxColorList->size())
