@@ -2160,6 +2160,7 @@ sub zenity_enabled {
 
 sub zenity_open {
     if (zenity_enabled()) {
+    $SIG{PIPE} = 'IGNORE';
         my $zenity_pid = open3($zenity_in, $zenity_out, $zenity_err,
                                "zenity --notification --listen");
     };
