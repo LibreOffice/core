@@ -57,6 +57,7 @@ JAVATESTFILES = \
     DocumentProperties.java \
     StandaloneDocumentInfo.java \
     DocumentMetadataAccess.java \
+    UndoManager.java \
 
 # disabled: #i115674#
 #    GlobalEventBroadcaster.java \
