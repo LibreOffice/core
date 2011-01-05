@@ -72,7 +72,7 @@
 #include <tools/string.hxx>
 #include <basegfx/vector/b3dvector.hxx>
 
-#include "xmlnmspe.hxx"
+#include "xmloff/xmlnmspe.hxx"
 #include "XMLBase64Export.hxx"
 
 using ::rtl::OUString;

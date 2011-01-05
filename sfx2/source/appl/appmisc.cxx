@@ -64,12 +64,12 @@
 #include <unotools/moduleoptions.hxx>
 #include <osl/file.hxx>
 
-#include "sfxresid.hxx"
+#include "sfx2/sfxresid.hxx"
 #include <sfx2/app.hxx>
 #include "appdata.hxx"
 #include "arrdecl.hxx"
 #include <sfx2/tbxctrl.hxx>
-#include "stbitem.hxx"
+#include "sfx2/stbitem.hxx"
 #include <sfx2/mnuitem.hxx>
 #include <sfx2/docfac.hxx>
 #include <sfx2/docfile.hxx>

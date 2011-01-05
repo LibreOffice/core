@@ -50,7 +50,7 @@
 #endif
 #include <svx/svdview.hxx>
 #include <editeng/colritem.hxx>
-#include "chrtitem.hxx"
+#include "svx/chrtitem.hxx"
 
 #include <svx/extrusionbar.hxx>
 #include "extrusiondepthdialog.hxx"

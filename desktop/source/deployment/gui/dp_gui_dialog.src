@@ -119,6 +119,11 @@ String RID_STR_ERROR_MISSING_LICENSE
     Text [ en-US ] = "This extension is disabled because you haven't accepted the license yet.\n";
 };
 
+String RID_STR_SHOW_LICENSE_CMD
+{
+    Text [ en-US ] = "Show license";
+};
+
 // Dialog layout
 // ---------------------------------------------------
 //  row 1 | multi line edit
@@ -291,6 +296,35 @@ ModalDialog RID_DLG_LICENSE
         TabStop = TRUE;
     };
 
+};
+
+ModalDialog RID_DLG_SHOW_LICENSE
+{
+    Text [ en-US ] = "Extension Software License Agreement";
+    Size = MAP_APPFONT( 300, 200 );
+    OutputSize = TRUE;
+    SVLook = TRUE;
+    Moveable = TRUE;
+    Closeable = TRUE;
+    Sizeable = TRUE;
+
+    MultiLineEdit ML_LICENSE
+    {
+        Pos = MAP_APPFONT( 5, 5 );
+        Size = MAP_APPFONT( 300 - 10, 200 - 15 - RSC_CD_PUSHBUTTON_HEIGHT );
+        Border = TRUE;
+        VScroll = TRUE;
+        ReadOnly = TRUE;
+    };
+
+    OKButton RID_EM_BTN_CLOSE
+    {
+        TabStop = TRUE;
+        DefButton = TRUE;
+        Text [ en-US ] = "Close";
+        Pos = MAP_APPFONT( (300-RSC_CD_PUSHBUTTON_WIDTH)/2, 200 - 5 - RSC_CD_PUSHBUTTON_HEIGHT );
+        Size = MAP_APPFONT( RSC_CD_PUSHBUTTON_WIDTH, RSC_CD_PUSHBUTTON_HEIGHT );
+    };
 };
 
 

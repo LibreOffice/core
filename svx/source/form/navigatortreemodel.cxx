@@ -32,7 +32,7 @@
 #include <svx/fmmodel.hxx>
 #include <svx/fmpage.hxx>
 #include <svx/fmglob.hxx>
-#include "svditer.hxx"
+#include "svx/svditer.hxx"
 #include <svx/svdogrp.hxx>
 #include <svx/svdpagv.hxx>
 
@@ -42,7 +42,7 @@
 #include "fmhelp.hrc"
 #include "fmexpl.hrc"
 #include "fmexpl.hxx"
-#include "fmresids.hrc"
+#include "svx/fmresids.hrc"
 #include "fmshimp.hxx"
 #include "fmobj.hxx"
 #include <sfx2/objsh.hxx>

@@ -31,11 +31,12 @@
 #include <com/sun/star/xml/sax/SAXException.hpp>
 
 #include <map>
+#include <framework/fwedllapi.h>
 
 namespace framework
 {
 
-class XMLNamespaces
+class FWE_DLLPUBLIC XMLNamespaces
 {
     public:
         XMLNamespaces();

@@ -41,6 +41,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
+#include <framework/fwedllapi.h>
 
 #define SERVICENAME_ACTIONTRIGGER "com.sun.star.ui.ActionTrigger"
 #define IMPLEMENTATIONNAME_ACTIONTRIGGER "com.sun.star.comp.ui.ActionTrigger"
@@ -48,7 +49,7 @@
 namespace framework
 {
 
-class ActionTriggerPropertySet :    public ThreadHelpBase                       ,   // Struct for right initalization of mutex member! Must be first of baseclasses.
+class ActionTriggerPropertySet :  public ThreadHelpBase                       ,   // Struct for right initalization of mutex member! Must be first of baseclasses.
                                     public ::com::sun::star::lang::XServiceInfo ,
                                     public ::com::sun::star::lang::XTypeProvider,
                                     public ::cppu::OBroadcastHelper             ,
@@ -56,23 +57,23 @@ class ActionTriggerPropertySet :    public ThreadHelpBase                       
                                     public ::cppu::OWeakObject
 {
     public:
-        ActionTriggerPropertySet( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceManager );
-        virtual ~ActionTriggerPropertySet();
+        FWE_DLLPUBLIC ActionTriggerPropertySet( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceManager );
+        FWE_DLLPUBLIC virtual ~ActionTriggerPropertySet();
 
         // XInterface
-        virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& aType )
+        virtual FWE_DLLPUBLIC ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& aType )
             throw (::com::sun::star::uno::RuntimeException);
-        virtual void SAL_CALL acquire() throw ();
-        virtual void SAL_CALL release() throw ();
+        virtual FWE_DLLPUBLIC void SAL_CALL acquire() throw ();
+        virtual FWE_DLLPUBLIC void SAL_CALL release() throw ();
 
         // XServiceInfo
-        virtual ::rtl::OUString SAL_CALL getImplementationName(  ) throw (::com::sun::star::uno::RuntimeException);
-        virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName ) throw (::com::sun::star::uno::RuntimeException);
-        virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  ) throw (::com::sun::star::uno::RuntimeException);
+        virtual FWE_DLLPUBLIC ::rtl::OUString SAL_CALL getImplementationName(  ) throw (::com::sun::star::uno::RuntimeException);
+        virtual FWE_DLLPUBLIC sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName ) throw (::com::sun::star::uno::RuntimeException);
+        virtual FWE_DLLPUBLIC ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  ) throw (::com::sun::star::uno::RuntimeException);
 
         // XTypeProvider
-        virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes(  ) throw (::com::sun::star::uno::RuntimeException);
-        virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) throw (::com::sun::star::uno::RuntimeException);
+        virtual FWE_DLLPUBLIC ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes(  ) throw (::com::sun::star::uno::RuntimeException);
+        virtual FWE_DLLPUBLIC ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) throw (::com::sun::star::uno::RuntimeException);
 
     private:
         //---------------------------------------------------------------------------------------------------------
