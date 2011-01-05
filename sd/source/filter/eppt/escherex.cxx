@@ -270,9 +270,21 @@ sal_uInt32 PptEscherEx::EnterGroup( Rectangle* pBoundRect, SvMemoryStream* pClie
         else
         {
             AddShape( ESCHER_ShpInst_Min, 0x201, nShapeId );                // Flags: Group | HaveAnchor
-            AddAtom( 8, ESCHER_ClientAnchor );
-            PtReplaceOrInsert( ESCHER_Persist_Grouping_Logic | mnGroupLevel, mpOutStrm->Tell() );
-            *mpOutStrm << (INT16)aRect.Top() << (INT16)aRect.Left() << (INT16)aRect.Right() << (INT16)aRect.Bottom();
+            if ( mnGroupLevel == 1 )
+            {
+                AddAtom( 8, ESCHER_ClientAnchor );
+                PtReplaceOrInsert( ESCHER_Persist_Grouping_Logic | mnGroupLevel, mpOutStrm->Tell() );
+                *mpOutStrm << (INT16)aRect.Top() << (INT16)aRect.Left() << (INT16)aRect.Right() << (INT16)aRect.Bottom();
+            }
+            else
+            {
+                AddAtom( 16, ESCHER_ChildAnchor );
+                PtReplaceOrInsert( ESCHER_Persist_Grouping_Snap | mnGroupLevel, mpOutStrm->Tell() );
+                *mpOutStrm  << (sal_Int32)aRect.Left()
+                            << (sal_Int32)aRect.Top()
+                            << (sal_Int32)aRect.Right()
+                            << (sal_Int32)aRect.Bottom();
+            }
         }
         if ( pClientData )
         {
