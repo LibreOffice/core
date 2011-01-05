@@ -267,7 +267,7 @@ OfaMiscTabPage::OfaMiscTabPage(Window* pParent, const SfxItemSet& rSet ) :
     if ( !aFileDlgCB.IsVisible() )
     {
         // rearrange the following controls
-        Point aNewPos = aDocStatusFL.GetPosPixel();
+        Point aNewPos = aPrintDlgFL.GetPosPixel();
         long nDelta = aNewPos.Y() - aFileDlgFL.GetPosPixel().Y();
 
         Window* pWins[] =
