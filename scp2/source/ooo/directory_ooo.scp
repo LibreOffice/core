@@ -965,6 +965,11 @@ Directory gid_Dir_Share_Template_Wizard
     DosName = "wizard";
 End
 
+Directory gid_Dir_Share_Template_Wizard_Bitmap
+    ParentID = gid_Dir_Share_Template_Wizard;
+    DosName = "bitmap";
+End
+
 Directory gid_Dir_Share_Template_Wizard_Letter
     ParentID = gid_Dir_Share_Template_Wizard;
     DosName = "letter";
@@ -1023,11 +1028,6 @@ End
 Directory gid_Dir_Template_Wizard
     ParentID = gid_Dir_Template_Language;
     DIR_IDENT_ALL_LANG(wizard);
-End
-
-Directory gid_Dir_Template_Wizard_Bitmap
-    ParentID = gid_Dir_Template_Wizard;
-    DIR_IDENT_ALL_LANG(bitmap);
 End
 
 Directory gid_Dir_Template_Wizard_Web

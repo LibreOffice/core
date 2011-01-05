@@ -440,8 +440,10 @@ $(SHL1TARGETN) : \
     @+source $(MISC)/$(TARGET).$(@:b)_1.cmd
     @$(PERL) $(SOLARENV)/bin/macosx-change-install-names.pl \
         shl $(SHL1RPATH) $@
+.IF "$(SHL1CREATEJNILIB)"!=""
     @echo "Making:   " $(@:f).jnilib
     @macosx-create-bundle $@
+.ENDIF          # "$(SHL1CREATEJNILIB)"!=""
 .IF "$(UPDATER)"=="YES"
 .IF "$(SHL1NOCHECK)"==""
     $(SOLARENV)/bin/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS1) $(SHL1TARGETN)
@@ -981,8 +983,10 @@ $(SHL2TARGETN) : \
     @+source $(MISC)/$(TARGET).$(@:b)_2.cmd
     @$(PERL) $(SOLARENV)/bin/macosx-change-install-names.pl \
         shl $(SHL2RPATH) $@
+.IF "$(SHL2CREATEJNILIB)"!=""
     @echo "Making:   " $(@:f).jnilib
     @macosx-create-bundle $@
+.ENDIF          # "$(SHL2CREATEJNILIB)"!=""
 .IF "$(UPDATER)"=="YES"
 .IF "$(SHL2NOCHECK)"==""
     $(SOLARENV)/bin/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS2) $(SHL2TARGETN)
@@ -1522,8 +1526,10 @@ $(SHL3TARGETN) : \
     @+source $(MISC)/$(TARGET).$(@:b)_3.cmd
     @$(PERL) $(SOLARENV)/bin/macosx-change-install-names.pl \
         shl $(SHL3RPATH) $@
+.IF "$(SHL3CREATEJNILIB)"!=""
     @echo "Making:   " $(@:f).jnilib
     @macosx-create-bundle $@
+.ENDIF          # "$(SHL3CREATEJNILIB)"!=""
 .IF "$(UPDATER)"=="YES"
 .IF "$(SHL3NOCHECK)"==""
     $(SOLARENV)/bin/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS3) $(SHL3TARGETN)
@@ -2063,8 +2069,10 @@ $(SHL4TARGETN) : \
     @+source $(MISC)/$(TARGET).$(@:b)_4.cmd
     @$(PERL) $(SOLARENV)/bin/macosx-change-install-names.pl \
         shl $(SHL4RPATH) $@
+.IF "$(SHL4CREATEJNILIB)"!=""
     @echo "Making:   " $(@:f).jnilib
     @macosx-create-bundle $@
+.ENDIF          # "$(SHL4CREATEJNILIB)"!=""
 .IF "$(UPDATER)"=="YES"
 .IF "$(SHL4NOCHECK)"==""
     $(SOLARENV)/bin/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS4) $(SHL4TARGETN)
@@ -2604,8 +2612,10 @@ $(SHL5TARGETN) : \
     @+source $(MISC)/$(TARGET).$(@:b)_5.cmd
     @$(PERL) $(SOLARENV)/bin/macosx-change-install-names.pl \
         shl $(SHL5RPATH) $@
+.IF "$(SHL5CREATEJNILIB)"!=""
     @echo "Making:   " $(@:f).jnilib
     @macosx-create-bundle $@
+.ENDIF          # "$(SHL5CREATEJNILIB)"!=""
 .IF "$(UPDATER)"=="YES"
 .IF "$(SHL5NOCHECK)"==""
     $(SOLARENV)/bin/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS5) $(SHL5TARGETN)
@@ -3145,8 +3155,10 @@ $(SHL6TARGETN) : \
     @+source $(MISC)/$(TARGET).$(@:b)_6.cmd
     @$(PERL) $(SOLARENV)/bin/macosx-change-install-names.pl \
         shl $(SHL6RPATH) $@
+.IF "$(SHL6CREATEJNILIB)"!=""
     @echo "Making:   " $(@:f).jnilib
     @macosx-create-bundle $@
+.ENDIF          # "$(SHL6CREATEJNILIB)"!=""
 .IF "$(UPDATER)"=="YES"
 .IF "$(SHL6NOCHECK)"==""
     $(SOLARENV)/bin/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS6) $(SHL6TARGETN)
@@ -3686,8 +3698,10 @@ $(SHL7TARGETN) : \
     @+source $(MISC)/$(TARGET).$(@:b)_7.cmd
     @$(PERL) $(SOLARENV)/bin/macosx-change-install-names.pl \
         shl $(SHL7RPATH) $@
+.IF "$(SHL7CREATEJNILIB)"!=""
     @echo "Making:   " $(@:f).jnilib
     @macosx-create-bundle $@
+.ENDIF          # "$(SHL7CREATEJNILIB)"!=""
 .IF "$(UPDATER)"=="YES"
 .IF "$(SHL7NOCHECK)"==""
     $(SOLARENV)/bin/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS7) $(SHL7TARGETN)
@@ -4227,8 +4241,10 @@ $(SHL8TARGETN) : \
     @+source $(MISC)/$(TARGET).$(@:b)_8.cmd
     @$(PERL) $(SOLARENV)/bin/macosx-change-install-names.pl \
         shl $(SHL8RPATH) $@
+.IF "$(SHL8CREATEJNILIB)"!=""
     @echo "Making:   " $(@:f).jnilib
     @macosx-create-bundle $@
+.ENDIF          # "$(SHL8CREATEJNILIB)"!=""
 .IF "$(UPDATER)"=="YES"
 .IF "$(SHL8NOCHECK)"==""
     $(SOLARENV)/bin/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS8) $(SHL8TARGETN)
@@ -4768,8 +4784,10 @@ $(SHL9TARGETN) : \
     @+source $(MISC)/$(TARGET).$(@:b)_9.cmd
     @$(PERL) $(SOLARENV)/bin/macosx-change-install-names.pl \
         shl $(SHL9RPATH) $@
+.IF "$(SHL9CREATEJNILIB)"!=""
     @echo "Making:   " $(@:f).jnilib
     @macosx-create-bundle $@
+.ENDIF          # "$(SHL9CREATEJNILIB)"!=""
 .IF "$(UPDATER)"=="YES"
 .IF "$(SHL9NOCHECK)"==""
     $(SOLARENV)/bin/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS9) $(SHL9TARGETN)
@@ -5309,8 +5327,10 @@ $(SHL10TARGETN) : \
     @+source $(MISC)/$(TARGET).$(@:b)_10.cmd
     @$(PERL) $(SOLARENV)/bin/macosx-change-install-names.pl \
         shl $(SHL10RPATH) $@
+.IF "$(SHL10CREATEJNILIB)"!=""
     @echo "Making:   " $(@:f).jnilib
     @macosx-create-bundle $@
+.ENDIF          # "$(SHL10CREATEJNILIB)"!=""
 .IF "$(UPDATER)"=="YES"
 .IF "$(SHL10NOCHECK)"==""
     $(SOLARENV)/bin/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS10) $(SHL10TARGETN)
