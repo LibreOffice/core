@@ -1077,7 +1077,7 @@ static bool lcl_IsInvaLay( const SwFrm *pFrm, long nBottom )
 {
     if (
          !pFrm->IsValid() ||
-         (pFrm->IsCompletePaint() && pFrm->Frm().Top() < nBottom)
+         (pFrm->IsCompletePaint() && ( pFrm->Frm().Top() < nBottom ) )
        )
     {
         return true;
