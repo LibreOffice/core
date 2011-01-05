@@ -734,14 +734,14 @@ void DomainMapperTableHandler::endTable()
             dmapper_logger->chars("failed to import table!");
 #endif
         }
-#ifdef DEBUG_DMAPPER_TABLE_HANDLER
         catch ( uno::Exception e )
         {
+#ifdef DEBUG_DMAPPER_TABLE_HANDLER
             dmapper_logger->startElement("exception");
             dmapper_logger->chars(rtl::OUStringToOString( e.Message, RTL_TEXTENCODING_UTF8 ).getStr( ));
             dmapper_logger->endElement("exeception");
-        }
 #endif
+        }
     }
 
     m_aTableProperties.reset();
