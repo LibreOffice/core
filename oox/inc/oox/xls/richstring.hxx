@@ -74,7 +74,7 @@ public:
     /** Converts the portion and appends it to the passed XText. */
     void                convert(
                             const ::com::sun::star::uno::Reference< ::com::sun::star::text::XText >& rxText,
-                            sal_Int32 nXfId );
+                            sal_Int32 nXfId, bool bReplaceOld = false );
 
 private:
     ::rtl::OUString     maText;         /// Portion text.
@@ -254,13 +254,10 @@ public:
     /** Final processing after import of all strings. */
     void                finalizeImport();
 
-    /** Returns the plain text concatenated from all string portions. */
-    ::rtl::OUString     getPlainText() const;
-
     /** Converts the string and writes it into the passed XText. */
     void                convert(
                             const ::com::sun::star::uno::Reference< ::com::sun::star::text::XText >& rxText,
-                            sal_Int32 nXfId ) const;
+                            sal_Int32 nXfId, bool bReplaceOld = false ) const;
 
 private:
     /** Creates, appends, and returns a new empty string portion. */

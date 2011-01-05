@@ -48,6 +48,7 @@ using ::com::sun::star::sheet::XSheetAnnotationAnchor;
 using ::com::sun::star::sheet::XSheetAnnotationShapeSupplier;
 using ::com::sun::star::sheet::XSheetAnnotations;
 using ::com::sun::star::sheet::XSheetAnnotationsSupplier;
+using ::com::sun::star::text::XText;
 
 namespace oox {
 namespace xls {
@@ -96,30 +97,29 @@ void Comment::finalizeImport()
     CellAddress aNotePos( maModel.maRange.Sheet, maModel.maRange.StartColumn, maModel.maRange.StartRow );
     if( getAddressConverter().checkCellAddress( aNotePos, true ) && maModel.mxText.get() ) try
     {
-        maModel.mxText->finalizeImport();
-        OUString aNoteText = maModel.mxText->getPlainText();
-        // non-empty string required by note implementation
-        if( aNoteText.getLength() > 0 )
+        Reference< XSheetAnnotationsSupplier > xAnnosSupp( getSheet(), UNO_QUERY_THROW );
+        Reference< XSheetAnnotations > xAnnos( xAnnosSupp->getAnnotations(), UNO_SET_THROW );
+        // non-empty string required by note implementation (real text will be added below)
+        xAnnos->insertNew( aNotePos, OUString( sal_Unicode( ' ' ) ) );
+        // receive craeted note from cell (insertNew does not return the note)
+        Reference< XSheetAnnotationAnchor > xAnnoAnchor( getCell( aNotePos ), UNO_QUERY_THROW );
+        Reference< XSheetAnnotation > xAnno( xAnnoAnchor->getAnnotation(), UNO_SET_THROW );
+        Reference< XSheetAnnotationShapeSupplier > xAnnoShapeSupp( xAnno, UNO_QUERY_THROW );
+        Reference< XShape > xAnnoShape( xAnnoShapeSupp->getAnnotationShape(), UNO_SET_THROW );
+        // convert shape formatting
+        if( const ::oox::vml::ShapeBase* pNoteShape = getVmlDrawing().getNoteShape( aNotePos ) )
         {
-            Reference< XSheetAnnotationsSupplier > xAnnosSupp( getSheet(), UNO_QUERY_THROW );
-            Reference< XSheetAnnotations > xAnnos( xAnnosSupp->getAnnotations(), UNO_SET_THROW );
-            xAnnos->insertNew( aNotePos, aNoteText );
-            // receive craeted note from cell (insertNew does not return the note)
-            Reference< XSheetAnnotationAnchor > xAnnoAnchor( getCell( aNotePos ), UNO_QUERY_THROW );
-            Reference< XSheetAnnotation > xAnno( xAnnoAnchor->getAnnotation(), UNO_SET_THROW );
-            Reference< XSheetAnnotationShapeSupplier > xAnnoShapeSupp( xAnno, UNO_QUERY_THROW );
-            Reference< XShape > xAnnoShape( xAnnoShapeSupp->getAnnotationShape(), UNO_SET_THROW );
-            // convert shape formatting
-            if( const ::oox::vml::ShapeBase* pNoteShape = getVmlDrawing().getNoteShape( aNotePos ) )
-            {
-                // position and formatting
-                pNoteShape->convertFormatting( xAnnoShape );
-                // visibility
-                const ::oox::vml::ShapeModel::ShapeClientDataPtr& rxClientData = pNoteShape->getShapeModel().mxClientData;
-                bool bVisible = rxClientData.get() && rxClientData->mbVisible;
-                xAnno->setIsVisible( bVisible );
-            }
+            // position and formatting
+            pNoteShape->convertFormatting( xAnnoShape );
+            // visibility
+            const ::oox::vml::ShapeModel::ShapeClientDataPtr& rxClientData = pNoteShape->getShapeModel().mxClientData;
+            bool bVisible = rxClientData.get() && rxClientData->mbVisible;
+            xAnno->setIsVisible( bVisible );
         }
+        // insert text and convert text formatting
+        maModel.mxText->finalizeImport();
+        Reference< XText > xAnnoText( xAnnoShape, UNO_QUERY_THROW );
+        maModel.mxText->convert( xAnnoText, -1, true );
     }
     catch( Exception& )
     {

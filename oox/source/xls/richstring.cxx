@@ -37,6 +37,7 @@ using ::rtl::OString;
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
 using ::com::sun::star::uno::Reference;
+using ::com::sun::star::uno::UNO_QUERY;
 using ::com::sun::star::text::XText;
 using ::com::sun::star::text::XTextRange;
 
@@ -84,21 +85,30 @@ void RichStringPortion::finalizeImport()
         mxFont = getStyles().getFont( mnFontId );
 }
 
-void RichStringPortion::convert( const Reference< XText >& rxText, sal_Int32 nXfId )
+void RichStringPortion::convert( const Reference< XText >& rxText, sal_Int32 nXfId, bool bReplaceOld )
 {
-    Reference< XTextRange > xRange = rxText->getEnd();
-    xRange->setString( maText );
-    if( mxFont.get() )
+    Reference< XTextRange > xRange;
+    if( bReplaceOld )
+        xRange.set( rxText, UNO_QUERY );
+    else
+        xRange = rxText->getEnd();
+    OSL_ENSURE( xRange.is(), "RichStringPortion::convert - cannot get text range interface" );
+
+    if( xRange.is() )
     {
-        PropertySet aPropSet( xRange );
-        mxFont->writeToPropertySet( aPropSet, FONT_PROPTYPE_TEXT );
-    }
-    if( const Font* pFont = getStyles().getFontFromCellXf( nXfId ).get() )
-    {
-        if( pFont->needsRichTextFormat() )
+        xRange->setString( maText );
+        if( mxFont.get() )
         {
             PropertySet aPropSet( xRange );
-            pFont->writeToPropertySet( aPropSet, FONT_PROPTYPE_TEXT );
+            mxFont->writeToPropertySet( aPropSet, FONT_PROPTYPE_TEXT );
+        }
+        if( const Font* pFont = getStyles().getFontFromCellXf( nXfId ).get() )
+        {
+            if( pFont->needsRichTextFormat() )
+            {
+                PropertySet aPropSet( xRange );
+                pFont->writeToPropertySet( aPropSet, FONT_PROPTYPE_TEXT );
+            }
         }
     }
 }
@@ -489,20 +499,13 @@ void RichString::finalizeImport()
     maFontPortions.forEachMem( &RichStringPortion::finalizeImport );
 }
 
-OUString RichString::getPlainText() const
-{
-    OUStringBuffer aBuffer;
-    for( PortionVec::const_iterator aIt = maFontPortions.begin(), aEnd = maFontPortions.end(); aIt != aEnd; ++aIt )
-        aBuffer.append( (*aIt)->getText() );
-    return aBuffer.makeStringAndClear();
-}
-
-void RichString::convert( const Reference< XText >& rxText, sal_Int32 nXfId ) const
+void RichString::convert( const Reference< XText >& rxText, sal_Int32 nXfId, bool bReplaceOld ) const
 {
     for( PortionVec::const_iterator aIt = maFontPortions.begin(), aEnd = maFontPortions.end(); aIt != aEnd; ++aIt )
     {
-        (*aIt)->convert( rxText, nXfId );
-        nXfId = -1; // use passed XF identifier for first portion only
+        (*aIt)->convert( rxText, nXfId, bReplaceOld );
+        nXfId = -1;             // use passed XF identifier for first portion only
+        bReplaceOld = false;    // do not replace first portion text with following portions
     }
 }
 
