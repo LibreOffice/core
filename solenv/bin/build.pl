@@ -2103,9 +2103,10 @@ sub print_announce {
 };
 
 sub zenity_enabled {
-    return 0 if (!defined $ENV{DISPLAY});
     return 0 if ($ENV{ENABLE_ZENITY} ne "TRUE");
-    return 1;
+    return 0 if (!defined $ENV{DISPLAY});
+    return 1 if ($ENV{DISPLAY} =~ m/^:/); # local displays only
+    return 0;
 }
 
 sub zenity_open {
