@@ -28,8 +28,22 @@
 #include <sal/main.h>
 #include <rtl/ustring.hxx>
 #include <osl/time.h>
+#include <osl/process.h>
 
 #include <iostream>
+#include <sstream>
+#include <fstream>
+
+#ifdef HAVE_CALLGRIND
+#    include <valgrind/callgrind.h>
+int COUNT = 1;
+#else
+#    define CALLGRIND_DUMP_STATS_AT
+#    define CALLGRIND_START_INSTRUMENTATION
+#    define CALLGRIND_STOP_INSTRUMENTATION
+#    define CALLGRIND_ZERO_STATS
+int COUNT = 10000000;
+#endif
 
 #if defined __GXX_EXPERIMENTAL_CXX0X__
 #   define HAVE_CXX_Ox 1
@@ -51,101 +65,144 @@
 #define RTL_CONSTASCII_USTRINGPARAM_CLASSIC(str) \
     str, ((sal_Int32)(SAL_N_ELEMENTS(str)-1)), RTL_TEXTENCODING_ASCII_US
 
+int currenttest = 1;
+oslProcessInfo pidinfo;
+
+class TimerMeasure
+{
+private:
+    const char *m_pMessage;
+    sal_uInt32 m_nStartTime, m_nEndTime;
+public:
+    TimerMeasure(const char *pMessage)
+    : m_pMessage(pMessage)
+    {
+        m_nStartTime = osl_getGlobalTimer();
+        CALLGRIND_START_INSTRUMENTATION
+        CALLGRIND_ZERO_STATS
+    }
+
+    ~TimerMeasure()
+    {
+        CALLGRIND_STOP_INSTRUMENTATION
+        CALLGRIND_DUMP_STATS_AT(m_pMessage);
+        m_nEndTime = osl_getGlobalTimer();
+        std::cout << m_pMessage << std::endl;
+        std::cout << "    callgrind Instruction cost is: " << std::flush;
+
+        std::stringstream aFileName;
+        aFileName << "callgrind.out." << pidinfo.Ident << "." << currenttest;
+
+        std::ifstream myfile(aFileName.str(), std::ios::in);
+        if (myfile.is_open())
+        {
+            std::stringstream aGetGrindStats;
+            aGetGrindStats << "callgrind_annotate " << aFileName.str() <<
+                " | grep TOTALS | sed 's/ PROGRAM TOTALS//'";
+            system(aGetGrindStats.str().c_str());
+            myfile.close();
+        }
+        else
+            std::cout << "Unavailable" << std::endl;
+        currenttest++;
+#ifndef HAVE_CALLGRIND
+        std::cout << "    Elapsed Time is: " << m_nEndTime - m_nStartTime << "ms" << std::endl;
+#endif
+    }
+};
+
+#define TIME(msg, test) \
+{\
+    { test } /*Run the test one to shake out any firsttime lazy loading stuff*/ \
+    TimerMeasure aMeasure(msg);\
+    for (int i = 0; i < COUNT; ++i)\
+        test\
+}
 
 SAL_IMPLEMENT_MAIN()
 {
+    CALLGRIND_STOP_INSTRUMENTATION
+    CALLGRIND_ZERO_STATS
+
+    pidinfo.Size = sizeof(pidinfo);
+    osl_getProcessInfo(0, osl_Process_IDENTIFIER, &pidinfo);
+
+#ifdef HAVE_CALLGRIND
+    std::cout << "Execute using: valgrind --tool=callgrind ./measure_oustrings" << std::endl;
+#else
     //get my cpu fan up to speed :-)
     for (int i = 0; i < 10000000; ++i)
     {
         rtl::OUString sFoo(rtl::OUString::createFromAscii("X"));
         rtl::OUString sBar(RTL_CONSTASCII_USTRINGPARAM_CLASSIC("X"));
-#ifdef SAL_DECLARE_UTF16
-        rtl::OUString sBoo(RTL_CONSTASCII_USTRINGPARAM_WIDE("X"));
-#endif
         rtl::OUString sBaz(static_cast<sal_Unicode>('X'));
         rtl::OUString sNone;
     }
+#endif
 
     std::cout << "--Empty Strings--" << std::endl;
 
-    {
-    sal_uInt32 nStartTime = osl_getGlobalTimer();
-    for (int i = 0; i < 100000000; ++i)
+    TIME
+    (
+        "rtl::OUString()",
         rtl::OUString sFoo;
-    sal_uInt32 nEndTime = osl_getGlobalTimer();
-    std::cout << "rtl::OUString() " << nEndTime - nStartTime << "ms" << std::endl;
-    }
+    )
 
-    {
-    sal_uInt32 nStartTime = osl_getGlobalTimer();
-    for (int i = 0; i < 100000000; ++i)
+    TIME
+    (
+        "rtl::OUString::createFromAscii()",
         rtl::OUString sFoo(rtl::OUString::createFromAscii(""));
-    sal_uInt32 nEndTime = osl_getGlobalTimer();
-    std::cout << "rtl::OUString::createFromAscii() " << nEndTime - nStartTime << "ms" << std::endl;
-    }
+    )
 
     std::cout << "--Single Chars--" << std::endl;
 
-    {
-    sal_uInt32 nStartTime = osl_getGlobalTimer();
-    for (int i = 0; i < 100000000; ++i)
-        rtl::OUString sFoo(rtl::OUString::createFromAscii("X"));
-    sal_uInt32 nEndTime = osl_getGlobalTimer();
-    std::cout << "rtl::OUString::createFromAscii(\"X\") " << nEndTime - nStartTime << "ms" << std::endl;
-    }
-
-    {
-    sal_uInt32 nStartTime = osl_getGlobalTimer();
-    for (int i = 0; i < 100000000; ++i)
-        rtl::OUString sBar(RTL_CONSTASCII_USTRINGPARAM_CLASSIC("X"));
-    sal_uInt32 nEndTime = osl_getGlobalTimer();
-    std::cout << "rtl::OUString(RTL_CONSTASCII_USTRINGPARAM_CLASSIC(\"X\")) " << nEndTime - nStartTime << "ms" << std::endl;
-    }
+    TIME
+    (
+        "rtl::OUString(static_cast<sal_Unicode>('X')",
+        rtl::OUString sBaz(static_cast<sal_Unicode>('X'));
+    )
 
 #ifdef SAL_DECLARE_UTF16
-    {
-    sal_uInt32 nStartTime = osl_getGlobalTimer();
-    for (int i = 0; i < 100000000; ++i)
+    TIME
+    (
+        "rtl::OUString(RTL_CONSTASCII_USTRINGPARAM_WIDE(\"X\"))",
         rtl::OUString sBar(RTL_CONSTASCII_USTRINGPARAM_WIDE("X"));
-    sal_uInt32 nEndTime = osl_getGlobalTimer();
-    std::cout << "rtl::OUString(RTL_CONSTASCII_USTRINGPARAM_WIDE(\"X\")) " << nEndTime - nStartTime<< "ms" << std::endl;
-    }
+    )
 #endif
 
-    {
-    sal_uInt32 nStartTime = osl_getGlobalTimer();
-    for (int i = 0; i < 100000000; ++i)
-        rtl::OUString sBaz(static_cast<sal_Unicode>('X'));
-    sal_uInt32 nEndTime = osl_getGlobalTimer();
-    std::cout << "rtl::OUString(static_cast<sal_Unicode>('X') " << nEndTime - nStartTime << "ms" << std::endl;
-    }
+    TIME
+    (
+        "rtl::OUString(RTL_CONSTASCII_USTRINGPARAM_CLASSIC(\"X\"))",
+        rtl::OUString sBar(RTL_CONSTASCII_USTRINGPARAM_CLASSIC("X"));
+    )
+
+    TIME
+    (
+        "rtl::OUString::createFromAscii(\"X\")",
+        rtl::OUString sFoo(rtl::OUString::createFromAscii("X"));
+    )
 
     std::cout << "--MultiChar Strings--" << std::endl;
-    {
-    sal_uInt32 nStartTime = osl_getGlobalTimer();
-    for (int i = 0; i < 100000000; ++i)
-        rtl::OUString sFoo(rtl::OUString::createFromAscii("XXXXXXXXXXXXXXX"));
-    sal_uInt32 nEndTime = osl_getGlobalTimer();
-    std::cout << "rtl::OUString::createFromAscii(\"XXXXXXXX\") " << nEndTime - nStartTime << "ms" << std::endl;
-    }
-
-    {
-    sal_uInt32 nStartTime = osl_getGlobalTimer();
-    for (int i = 0; i < 100000000; ++i)
-        rtl::OUString sBar(RTL_CONSTASCII_USTRINGPARAM_CLASSIC("XXXXXXXXXXXXXXX"));
-    sal_uInt32 nEndTime = osl_getGlobalTimer();
-    std::cout << "rtl::OUString(RTL_CONSTASCII_USTRINGPARAM_CLASSIC(\"XXXXXXXX\")) " << nEndTime - nStartTime << "ms" << std::endl;
-    }
 
 #ifdef SAL_DECLARE_UTF16
-    {
-    sal_uInt32 nStartTime = osl_getGlobalTimer();
-    for (int i = 0; i < 100000000; ++i)
+    TIME
+    (
+        "rtl::OUString(RTL_CONSTASCII_USTRINGPARAM_WIDE(\"XXXXXXXX\"))",
         rtl::OUString sBar(RTL_CONSTASCII_USTRINGPARAM_WIDE("XXXXXXXXXXXXXXX"));
-    sal_uInt32 nEndTime = osl_getGlobalTimer();
-    std::cout << "rtl::OUString(RTL_CONSTASCII_USTRINGPARAM_WIDE(\"XXXXXXXX\")) " << nEndTime - nStartTime << "ms" << std::endl;
-    }
+    )
 #endif
+
+    TIME
+    (
+        "rtl::OUString(RTL_CONSTASCII_USTRINGPARAM_CLASSIC(\"XXXXXXXX\"))",
+        rtl::OUString sBar(RTL_CONSTASCII_USTRINGPARAM_CLASSIC("XXXXXXXXXXXXXXX"));
+    )
+
+    TIME
+    (
+        "rtl::OUString::createFromAscii(\"XXXXXXXX\")",
+        rtl::OUString sFoo(rtl::OUString::createFromAscii("XXXXXXXXXXXXXXX"));
+    )
 
     return 0;
 }

@@ -118,6 +118,10 @@ APP5DEPN=$(SLB)$/sal.lib
 OBJFILES+=\
     $(OBJ)$/measure_oustrings.obj
 
+.IF "$(HAVE_CALLGRIND)" == "YES"
+CFLAGSCXX+=-DHAVE_CALLGRIND
+.ENDIF
+
 APP6TARGET=measure_oustrings
 APP6OBJS=$(OBJ)$/measure_oustrings.obj
 APP6STDLIBS=$(SALLIB)
