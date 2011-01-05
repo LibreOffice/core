@@ -25,32 +25,14 @@
 #
 #*************************************************************************
 
-$(eval $(call gb_Module_Module,sfx2))
+$(eval $(call gb_Testfixture_TestFixture,metadatable))
 
-$(eval $(call gb_Module_add_targets,sfx2,\
-    AllLangResTarget_sfx2 \
-    Library_sfx \
-    Package_inc \
-    Package_sdi \
-    TestFixture_metadatable \
+$(eval $(call gb_Testfixture_add_exception_objects,metadatable, \
+    sfx2/qa/cppunit/test_metadatable.cxx \
 ))
 
-ifeq ($(OS),LINUX)
-ifeq ($(ENABLE_SYSTRAY_GTK),TRUE)
-$(eval $(call gb_Module_add_targets,sfx2,\
-    Library_qstart \
+$(eval $(call gb_Testfixture_add_linked_libs,metadatable, \
+    sfx \
 ))
-endif
-endif
-
-#todo: map file?
-#todo: source/appl ohne Optimierung?
-#todo: source/control ohne Optimierung?
-#todo: source/dialog BUILD_VER_STRING
-#todo: source/doc SYSTEM_LIBXML2
-#todo: noopt for acldetect.cxx?
-#todo: ENABLE_LAYOUT
-#todo: quickstarter
-#todo: link against cocoa on Mac
 
 # vim: set noet sw=4 ts=4:
