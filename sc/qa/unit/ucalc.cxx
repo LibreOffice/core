@@ -85,7 +85,9 @@ public:
     CPPUNIT_TEST(testSUM);
     CPPUNIT_TEST(testNamedRange);
     CPPUNIT_TEST(testCSV);
+#ifndef WNT
     CPPUNIT_TEST(testMatrix);
+#endif
     CPPUNIT_TEST_SUITE_END();
 
 private:
