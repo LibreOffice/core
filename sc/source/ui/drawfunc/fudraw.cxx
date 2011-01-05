@@ -100,7 +100,7 @@ void FuDraw::DoModifiers(const MouseEvent& rMEvt)
 //    const ScGridOptions& rGrid = rOpt.GetGridOptions();
 //    BOOL bGridOpt = rGrid.GetUseGridSnap();
 
-    BOOL bOrtho     = bShift;
+    bool bOrtho     = bShift;
     BOOL bAngleSnap = bShift;
 //    BOOL bGridSnap  = ( bGridOpt != bCtrl );        // andere Snap's nicht unterstuetzt
     BOOL bCenter    = bAlt;
