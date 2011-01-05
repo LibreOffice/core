@@ -41,7 +41,7 @@
 #include "xiroot.hxx"
 
 class ScDocumentPool;
-class ScAttrEntry;
+struct ScAttrEntry;
 
 /* ============================================================================
 - Buffers for style records (PALETTE, FONT, FORMAT, XF)
