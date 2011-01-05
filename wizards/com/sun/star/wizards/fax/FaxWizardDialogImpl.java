@@ -246,7 +246,7 @@ public class FaxWizardDialogImpl extends FaxWizardDialog
             myFaxDoc.killEmptyFrames();
 
 
-            bSaveSuccess = OfficeDocument.store(xMSF, xTextDocument, sPath, "writer8_template", false, "Template could not be saved to" + sPath);
+            bSaveSuccess = OfficeDocument.store(xMSF, xTextDocument, sPath, "writer8_template", false);
             if (bSaveSuccess)
             {
                 saveConfiguration();
@@ -381,7 +381,7 @@ public class FaxWizardDialogImpl extends FaxWizardDialog
         {
             sTemplatePath = FileAccess.getOfficePath(xMSF, "Template", "share", "/wizard");
             sUserTemplatePath = FileAccess.getOfficePath(xMSF, "Template", "user", "");
-            sBitmapPath = FileAccess.combinePaths(xMSF, sTemplatePath, "/wizard/bitmap");
+            sBitmapPath = FileAccess.combinePaths(xMSF, sTemplatePath, "/../wizard/bitmap");
         }
         catch (NoValidPathException e)
         {

@@ -27,14 +27,8 @@
 
 #include <svl/solar.hrc>
 #include <svx/svxids.hrc>
-#ifndef _GLOBLMN_HRC
 #include <svx/globlmn.hrc>
-#endif
-#ifndef _GLOBALACC_SRC
-#include <svx/globlac.hrc>
-#endif
 #include "bibliography.hrc"
-
 #include "bib.hrc"
 
 /*
