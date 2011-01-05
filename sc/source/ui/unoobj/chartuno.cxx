@@ -232,7 +232,8 @@ void SAL_CALL ScChartsObj::addNewByName( const rtl::OUString& aName,
             //  Rechteck anpassen
             //! Fehler/Exception, wenn leer/ungueltig ???
             Point aRectPos( aRect.X, aRect.Y );
-            if (aRectPos.X() < 0) aRectPos.X() = 0;
+            bool bLayoutRTL = pDoc->IsLayoutRTL( nTab );
+            if ( ( aRectPos.X() < 0 && !bLayoutRTL ) || ( aRectPos.X() > 0 && bLayoutRTL ) ) aRectPos.X() = 0;
             if (aRectPos.Y() < 0) aRectPos.Y() = 0;
             Size aRectSize( aRect.Width, aRect.Height );
             if (aRectSize.Width() <= 0) aRectSize.Width() = 5000;   // Default-Groesse

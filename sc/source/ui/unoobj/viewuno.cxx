@@ -420,10 +420,15 @@ awt::Rectangle ScViewPaneBase::GetVisArea() const
             ScAddress aCell(pViewShell->GetViewData()->GetPosX(eWhichH),
                 pViewShell->GetViewData()->GetPosY(eWhichV),
                 pViewShell->GetViewData()->GetTabNo());
-            Rectangle aVisRect(pDoc->GetMMRect(aCell.Col(), aCell.Row(), aCell.Col(), aCell.Row(), aCell.Tab()));
-
-            aVisRect.SetSize(pWindow->PixelToLogic(pWindow->GetSizePixel(), pWindow->GetDrawMapMode(sal_True)));
-
+            Rectangle aCellRect( pDoc->GetMMRect( aCell.Col(), aCell.Row(), aCell.Col(), aCell.Row(), aCell.Tab() ) );
+            Size aVisSize( pWindow->PixelToLogic( pWindow->GetSizePixel(), pWindow->GetDrawMapMode( sal_True ) ) );
+            Point aVisPos( aCellRect.TopLeft() );
+            if ( pDoc->IsLayoutRTL( aCell.Tab() ) )
+            {
+                aVisPos = aCellRect.TopRight();
+                aVisPos.X() -= aVisSize.Width();
+            }
+            Rectangle aVisRect( aVisPos, aVisSize );
             aVisArea = AWTRectangle(aVisRect);
         }
     }
