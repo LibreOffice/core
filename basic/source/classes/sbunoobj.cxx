@@ -4177,10 +4177,10 @@ void RTL_Impl_CreateUnoValue( StarBASIC* pBasic, SbxArray& rPar, BOOL bWrite )
     if( aTypeName == aTypeTypeString )
     {
         SbxDataType eBaseType = pVal->SbxValue::GetType();
-        String aTypeName;
+        String aValTypeName;
         if( eBaseType == SbxSTRING )
         {
-            aTypeName = pVal->GetString();
+            aValTypeName = pVal->GetString();
         }
         else if( eBaseType == SbxOBJECT )
         {
@@ -4195,10 +4195,10 @@ void RTL_Impl_CreateUnoValue( StarBASIC* pBasic, SbxArray& rPar, BOOL bWrite )
             }
 
             if( xIdlClass.is() )
-                aTypeName = xIdlClass->getName();
+                aValTypeName = xIdlClass->getName();
         }
         Type aType;
-        bool bSuccess = implGetTypeByName( aTypeName, aType );
+        bool bSuccess = implGetTypeByName( aValTypeName, aType );
         if( bSuccess )
         {
             Any aTypeAny( aType );
