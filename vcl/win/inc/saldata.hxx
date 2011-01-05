@@ -213,6 +213,7 @@ void ImplSalYieldMutexAcquire();
 void ImplSalYieldMutexRelease();
 ULONG ImplSalReleaseYieldMutex();
 void ImplSalAcquireYieldMutex( ULONG nCount );
+sal_Bool ImplInterceptChildWindowKeyDown( MSG& rMsg );
 
 // \\WIN\SOURCE\WINDOW\SALFRAME.CXX
 LRESULT CALLBACK SalFrameWndProcA( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lParam );

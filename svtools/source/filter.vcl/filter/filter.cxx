@@ -95,10 +95,6 @@
 
 #endif
 
-// Compilerfehler, wenn Optimierung bei WNT & MSC
-#ifdef _MSC_VER
-#pragma optimize( "", off )
-#endif
 
 // -----------
 // - statics -
