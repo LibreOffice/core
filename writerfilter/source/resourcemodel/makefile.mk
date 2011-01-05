@@ -55,6 +55,7 @@ SLOFILES= \
     $(SLO)$/ResourceModelHelper.obj \
     $(SLO)$/TagLogger.obj \
     $(SLO)$/WW8Analyzer.obj \
+    $(SLO)$/XPathLogger.obj \
     $(SLO)$/qnametostr.obj \
     $(SLO)$/resourcemodel.obj \
     $(SLO)$/sprmcodetostr.obj \

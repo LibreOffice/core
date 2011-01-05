@@ -320,6 +320,11 @@ XMLTag::Pointer_t OOXMLParserState::toTag() const
 
     return pTag;
  }
+
+XPathLogger & OOXMLParserState::getXPathLogger()
+{
+    return m_xPathLogger;
+}
 #endif
 
 }}

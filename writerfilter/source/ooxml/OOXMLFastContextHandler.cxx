@@ -31,6 +31,7 @@
 #include <rtl/uuid.h>
 #include <com/sun/star/drawing/XShapes.hpp>
 #include <resourcemodel/QNameToString.hxx>
+#include <resourcemodel/XPathLogger.hxx>
 #include <resourcemodel/util.hxx>
 #include <ooxml/resourceids.hxx>
 #include <doctok/sprmids.hxx>
@@ -191,8 +192,10 @@ void SAL_CALL OOXMLFastContextHandler::startFastElement
 #ifdef DEBUG_CONTEXT_HANDLER
     debug_logger->startElement("contexthandler.element");
     string sToken = fastTokenToId(Element);
+    mpParserState->getXPathLogger().startElement(sToken);
     debug_logger->attribute("token", sToken);
-    debug_logger->attribute("type",getType());
+    debug_logger->attribute("type", getType());
+    debug_logger->attribute("xpath", mpParserState->getXPathLogger().getXPath());
     debug_logger->startElement("at-start");
     debug_logger->addTag(toTag());
     debug_logger->endElement("at-start");
@@ -210,6 +213,7 @@ throw (uno::RuntimeException, xml::sax::SAXException)
     debug_logger->startElement("contexthandler.unknown-element");
     debug_logger->attribute("namespace", Namespace);
     debug_logger->attribute("name", Name);
+    mpParserState->getXPathLogger().startElement("unknown");
 #else
     (void) Namespace;
     (void) Name;
@@ -231,6 +235,7 @@ throw (uno::RuntimeException, xml::sax::SAXException)
     debug_logger->addTag(toTag());
     debug_logger->endElement("at-end");
     debug_logger->endElement("contexthandler.element");
+    mpParserState->getXPathLogger().endElement();
 #endif
 }
 
@@ -255,6 +260,7 @@ throw (uno::RuntimeException, xml::sax::SAXException)
 {
 #ifdef DEBUG_CONTEXT_HANDLER
     debug_logger->endElement("contexthandler.unknown-element");
+    mpParserState->getXPathLogger().endElement();
 #endif
 }
 

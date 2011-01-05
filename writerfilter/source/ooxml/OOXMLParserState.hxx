@@ -33,6 +33,7 @@
 
 #ifdef DEBUG
 #include <resourcemodel/TagLogger.hxx>
+#include <resourcemodel/XPathLogger.hxx>
 #endif
 
 namespace writerfilter {
@@ -57,6 +58,9 @@ class OOXMLParserState
     stack<OOXMLPropertySet::Pointer_t> mCellProps;
     stack<OOXMLPropertySet::Pointer_t> mRowProps;
     stack<OOXMLPropertySet::Pointer_t> mTableProps;
+#ifdef DEBUG
+    XPathLogger m_xPathLogger;
+#endif
 
 public:
     typedef boost::shared_ptr<OOXMLParserState> Pointer_t;
@@ -109,6 +113,7 @@ public:
     unsigned int getContextCount() const;
     string toString() const;
     XMLTag::Pointer_t toTag() const;
+    XPathLogger & getXPathLogger();
 #endif
 
 };
