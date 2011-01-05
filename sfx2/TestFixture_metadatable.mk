@@ -25,14 +25,21 @@
 #
 #*************************************************************************
 
-$(eval $(call gb_Testfixture_TestFixture,metadatable))
+$(eval $(call gb_TestFixture_TestFixture,sfx2_metadatable))
 
-$(eval $(call gb_Testfixture_add_exception_objects,metadatable, \
-    sfx2/qa/cppunit/test_metadatable.cxx \
+$(eval $(call gb_TestFixture_add_exception_objects,sfx2_metadatable, \
+    sfx2/qa/cppunit/test_metadatable \
 ))
 
-$(eval $(call gb_Testfixture_add_linked_libs,metadatable, \
+$(eval $(call gb_TestFixture_add_linked_libs,sfx2_metadatable, \
+    sal \
     sfx \
+))
+
+$(eval $(call gb_TestFixture_set_include,sfx2_metadatable,\
+    $$(INCLUDE) \
+    -I$(OUTDIR)/inc/offuh \
+    -I$(OUTDIR)/inc \
 ))
 
 # vim: set noet sw=4 ts=4:
