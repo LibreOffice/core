@@ -123,7 +123,7 @@ public class UndoManager
     public void checkWriterUndo() throws Exception
     {
         m_currentTestCase = new WriterDocumentTest( getORB() );
-        impl_checkUndo( false );
+        impl_checkUndo();
     }
 
     // -----------------------------------------------------------------------------------------------------------------
@@ -131,7 +131,7 @@ public class UndoManager
     public void checkCalcUndo() throws Exception
     {
         m_currentTestCase = new CalcDocumentTest( getORB() );
-        impl_checkUndo( false );
+        impl_checkUndo();
     }
 
     // -----------------------------------------------------------------------------------------------------------------
@@ -139,7 +139,7 @@ public class UndoManager
     public void checkDrawUndo() throws Exception
     {
         m_currentTestCase = new DrawDocumentTest( getORB() );
-        impl_checkUndo( false );
+        impl_checkUndo();
     }
 
     // -----------------------------------------------------------------------------------------------------------------
@@ -147,7 +147,7 @@ public class UndoManager
     public void checkImpressUndo() throws Exception
     {
         m_currentTestCase = new ImpressDocumentTest( getORB() );
-        impl_checkUndo( false );
+        impl_checkUndo();
     }
 
     // -----------------------------------------------------------------------------------------------------------------
@@ -155,7 +155,7 @@ public class UndoManager
     public void checkChartUndo() throws Exception
     {
         m_currentTestCase = new ChartDocumentTest( getORB() );
-        impl_checkUndo( false );
+        impl_checkUndo();
     }
 
     // -----------------------------------------------------------------------------------------------------------------
@@ -619,29 +619,12 @@ public class UndoManager
     };
 
     // -----------------------------------------------------------------------------------------------------------------
-    private void impl_checkUndo( final boolean i_fakeTestForNow ) throws Exception
+    private void impl_checkUndo() throws Exception
     {
         System.out.println( "testing: " + m_currentTestCase.getDocumentDescription() );
         m_currentDocument = m_currentTestCase.getDocument();
         m_currentTestCase.initializeDocument();
         m_currentTestCase.verifyInitialDocumentState();
-
-        if ( i_fakeTestForNow )
-        {
-            // Writer does not yet have an UndoManager in the current phase of the implementation. Once it has, we
-            // this complete branch, which barely tests anything (except perhaps the DocumentTest implementation),
-            // can vanish.
-            m_currentTestCase.doSingleModification();
-            m_currentTestCase.verifySingleModificationDocumentState();
-            m_currentTestCase.getDocument().getCurrentView().dispatch( ".uno:Undo" );
-            m_currentTestCase.verifyInitialDocumentState();
-            final int expectedUndoSteps = m_currentTestCase.doMultipleModifications();
-            for ( int i=0; i<expectedUndoSteps; ++i )
-                m_currentTestCase.getDocument().getCurrentView().dispatch( ".uno:Undo" );
-            m_currentTestCase.verifyInitialDocumentState();
-            m_currentTestCase.getDocument().close();
-            return;
-        }
 
         final XUndoManager undoManager = getUndoManager();
         undoManager.clear();
