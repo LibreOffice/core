@@ -2717,7 +2717,6 @@ void ScTable::ShowRows(SCROW nRow1, SCROW nRow2, bool bShow)
         BOOL bChanged = ( bWasVis != bShow );
         if ( bChanged && bHasObjects )
         {
-            ScDrawLayer* pDrawLayer = pDocument->GetDrawLayer();
             if (pDrawLayer)
             {
                 long nHeight = static_cast<long>(mpRowHeights->getSumValue(nStartRow, nEndRow));
