@@ -44,29 +44,29 @@ module com {  module sun {  module star {  module awt {  module grid {
     @see XGridControl
     @see XGridDataListener
 
-    @sonce OOo 3.3.0
+    @since OOo 3.3.0
  */
 struct GridDataEvent: com::sun::star::lang::EventObject
 {
     //-------------------------------------------------------------------------
 
-    /** Contains the property name of the changed value **/
-    string valueName;
+    /** Contains the name of the attribute whose value changed. **/
+    string AttributeName;
 
     /** Contains the old value **/
-    any oldValue;
+    any OldValue;
 
     /** Contains the new value **/
-    any newValue;
+    any NewValue;
 
     /** Contains the index of the changed row**/
-    long index;
+    long RowIndex;
 
     /** Contains the header name of the changed row**/
-    string headerName;
+    string HeaderName;
 
     /** Contains the changed row**/
-    sequence<any> rowData;
+    sequence<any> RowData;
 
 
 };
