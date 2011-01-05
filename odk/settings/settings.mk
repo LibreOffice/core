@@ -210,7 +210,7 @@ SDK_JAVA_INCLUDES = -I"$(OO_SDK_JAVA_HOME)/include" -I"$(OO_SDK_JAVA_HOME)/inclu
 CC_DEFINES=-DUNX -DSOLARIS -DSPARC -DCPPU_ENV=sunpro5
 CC_OUTPUT_SWITCH=-o 
 
-LIBRARY_LINK_FLAGS=-w -mt -z combreloc -PIC -temp=/tmp '-R $$ORIGIN' -z text -norunpath -G -Bdirect -Bdynamic -lpthread -lCrun -lc -lm
+LIBRARY_LINK_FLAGS=-w -mt -z combreloc -PIC -temp=/tmp '-R$$ORIGIN' -z text -norunpath -G -Bdirect -Bdynamic -lpthread -lCrun -lc -lm
 # means if used CC is lower then version 5.5 use option -instance=static
 ifeq ($(OO_SDK_CC_55_OR_HIGHER),)
 LIBRARY_LINK_FLAGS+=-instances=static
@@ -392,9 +392,15 @@ PACKAGE_LIB_DIR=macosx_x86.plt
 UNOPKG_PLATFORM=MacOSX_x86
 JAVA_PROC_TYPE=x86
 else
+ifeq "$(PROCTYPE)" "i386"
+PACKAGE_LIB_DIR=macosx_x86.plt
+UNOPKG_PLATFORM=MacOSX_x86
+JAVA_PROC_TYPE=x86
+else
 PACKAGE_LIB_DIR=macosx_ppc.plt
 UNOPKG_PLATFORM=MacOSX_PowerPC
 JAVA_PROC_TYPE=ppc
+endif
 endif
 JAVABIN=Commands
 
