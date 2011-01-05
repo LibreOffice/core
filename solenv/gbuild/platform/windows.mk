@@ -472,11 +472,11 @@ endef
 
 # TestFixture class
 
-gb_TestFixure_TARGETTYPEFLAGS := $(gb_Library_TARGETTYPEFLAGS)
-gb_TestFixure_CPPTESTPRECOMMAND :=
-gb_TestFixure_SYSPRE := itest_
-gb_TestFixure_EXT := .lib
-gb_TestFixure_get_filename = $(gb_TestFixure_SYSPRE)$(1)$(gb_TestFixure_EXT)
+gb_TestFixture_TARGETTYPEFLAGS := $(gb_Library_TARGETTYPEFLAGS)
+gb_TestFixture_CPPTESTPRECOMMAND :=
+gb_TestFixture_SYSPRE := itest_
+gb_TestFixture_EXT := .lib
+gb_TestFixture_get_filename = $(gb_TestFixture_SYSPRE)$(1)$(gb_TestFixture_EXT)
 
 # SdiTarget class
 

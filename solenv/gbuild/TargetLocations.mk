@@ -120,7 +120,7 @@ $(eval $(call gb_Helper_make_dep_targets,\
 
 gb_Library_get_linktargetname = Library/$(1)
 gb_StaticLibrary_get_linktargetname = StaticLibrary/$(1)
-gb_TestFixure_get_linktargetname = TestFixture/$(1)
+gb_TestFixture_get_linktargetname = TestFixture/$(1)
 
 define gb_Library_get_layer
 $(patsubst $(1):%,%,$(filter $(1):%,$(gb_Library_LAYER)))
