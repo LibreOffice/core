@@ -387,6 +387,7 @@ public:
         nWdt(0),
         nStart(0),
         nEnd(0),
+        nWink(0),
         bRight(FALSE)
     {}
     void SetCreateParams(SdrDragStat& rStat);

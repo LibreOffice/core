@@ -82,6 +82,7 @@ ImpSdrGDIMetaFileImport::ImpSdrGDIMetaFileImport(SdrModel& rModel):
     nLineWidth(0),
     maLineJoin(basegfx::B2DLINEJOIN_NONE),
     maDash(XDASH_RECT, 0, 0, 0, 0, 0),
+    fScaleX(0.0),fScaleY(0.0),
     bFntDirty(TRUE),
     bLastObjWasPolyWithoutLine(FALSE),bNoLine(FALSE),bNoFill(FALSE),bLastObjWasLine(FALSE)
 {

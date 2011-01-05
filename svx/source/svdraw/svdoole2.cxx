@@ -700,6 +700,7 @@ public:
 
     SdrOle2ObjImpl()
     : pGraphicObject( NULL )
+    , pLightClient ( NULL )
     // #107645#
     // init to start situation, loading did not fail
     , mbLoadingOLEObjectFailed( sal_False )

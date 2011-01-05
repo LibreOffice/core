@@ -686,10 +686,7 @@ void getExtrusionDirectionState( SdrView* pSdrView, SfxItemSet& rSet )
 
             sal_Bool    bParallel = sal_True;
             Position3D  aViewPoint( 3472, -3472, 25000 );
-            double      fOriginX = 0.50;
-            double      fOriginY = -0.50;
             double      fSkewAngle = -135;
-            double      fSkew = 50.0;
 
             pAny = aGeometryItem.GetPropertyValueByName( sExtrusion, sProjectionMode );
             sal_Int16 nProjectionMode = sal_Int16();
@@ -698,6 +695,7 @@ void getExtrusionDirectionState( SdrView* pSdrView, SfxItemSet& rSet )
 
             if( bParallel )
             {
+                double      fSkew = 50.0;
                 EnhancedCustomShapeParameterPair aSkewPropPair;
                 pAny = aGeometryItem.GetPropertyValueByName( sExtrusion, sSkew );
                 if( pAny && ( *pAny >>= aSkewPropPair ) )
@@ -712,6 +710,8 @@ void getExtrusionDirectionState( SdrView* pSdrView, SfxItemSet& rSet )
             }
             else
             {
+                double      fOriginX = 0.50;
+                double      fOriginY = -0.50;
                 pAny = aGeometryItem.GetPropertyValueByName( sExtrusion, sViewPoint );
                 if( pAny )
                     *pAny >>= aViewPoint;
