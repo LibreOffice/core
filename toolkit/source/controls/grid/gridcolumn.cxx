@@ -87,10 +87,10 @@ namespace toolkit
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    void GridColumn::broadcast_changed( ::rtl::OUString name, Any oldValue, Any newValue, ::osl::ClearableMutexGuard& i_Guard )
+    void GridColumn::broadcast_changed( ::rtl::OUString name, Any i_oldValue, Any i_newValue, ::osl::ClearableMutexGuard& i_Guard )
     {
         Reference< XInterface > xSource( static_cast< ::cppu::OWeakObject* >( this ) );
-        GridColumnEvent aEvent( xSource, name, oldValue, newValue, m_nIndex);
+        GridColumnEvent aEvent( xSource, name, i_oldValue, i_newValue, m_nIndex);
 
         ::cppu::OInterfaceContainerHelper* pIter = rBHelper.getContainer( XGridColumnListener::static_type() );
 

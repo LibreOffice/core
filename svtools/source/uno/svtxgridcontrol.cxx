@@ -403,7 +403,7 @@ void SAL_CALL SVTXGridControl::rowAdded(const ::com::sun::star::awt::grid::GridD
 {
     ::vos::OGuard aGuard( GetMutex() );
 
-    const TableSize rowDataLength = (TableSize)Event.rowData.getLength();
+    const TableSize rowDataLength = (TableSize)Event.RowData.getLength();
     const TableSize colCount = m_xColumnModel->getColumnCount();
     if ( colCount == 0 )
     {
@@ -413,7 +413,7 @@ void SAL_CALL SVTXGridControl::rowAdded(const ::com::sun::star::awt::grid::GridD
     if ( rowDataLength != colCount )
         throw GridInvalidDataException( ::rtl::OUString::createFromAscii("The column count doesn't match with the length of row data"), *this );
 
-    m_pTableModel->appendRow( Event.rowData, Event.headerName );
+    m_pTableModel->appendRow( Event.RowData, Event.HeaderName );
 
     TableControl* pTable = dynamic_cast< TableControl* >( GetWindow() );
     ENSURE_OR_RETURN_VOID( pTable, "SVTXGridControl::rowAdded: no control (anymore)!" );
@@ -444,7 +444,7 @@ void SAL_CALL SVTXGridControl::rowRemoved(const ::com::sun::star::awt::grid::Gri
     TableControl* pTable = dynamic_cast< TableControl* >( GetWindow() );
     ENSURE_OR_RETURN_VOID( pTable, "SVTXGridControl::rowRemoved: no control (anymore)!" );
 
-    if(Event.index == -1)
+    if(Event.RowIndex == -1)
     {
         if ( !isSelectionEmpty() )
             deselectAllRows();
@@ -460,21 +460,21 @@ void SAL_CALL SVTXGridControl::rowRemoved(const ::com::sun::star::awt::grid::Gri
                 Any());
         }
     }
-    else if ( Event.index >= 0 && Event.index < m_pTableModel->getRowCount() )
+    else if ( Event.RowIndex >= 0 && Event.RowIndex < m_pTableModel->getRowCount() )
     {
-        if ( isSelectedIndex( Event.index ) )
+        if ( isSelectedIndex( Event.RowIndex ) )
         {
             Sequence< sal_Int32 > selected(1);
-            selected[0]=Event.index;
+            selected[0]=Event.RowIndex;
             deselectRows( selected );
         }
-        m_pTableModel->removeRow( Event.index );
+        m_pTableModel->removeRow( Event.RowIndex );
     }
-    pTable->InvalidateDataWindow(Event.index, Event.index, true);
+    pTable->InvalidateDataWindow(Event.RowIndex, Event.RowIndex, true);
     if(pTable->isAccessibleAlive())
     {
         pTable->commitGridControlEvent(TABLE_MODEL_CHANGED,
-             makeAny( AccessibleTableModelChange(DELETE, Event.index, Event.index+1, 0, m_pTableModel->getColumnCount())),
+             makeAny( AccessibleTableModelChange(DELETE, Event.RowIndex, Event.RowIndex+1, 0, m_pTableModel->getColumnCount())),
             Any());
     }
 }
@@ -486,42 +486,42 @@ void SAL_CALL SVTXGridControl::dataChanged(const ::com::sun::star::awt::grid::Gr
     TableControl* pTable = dynamic_cast< TableControl* >( GetWindow() );
     ENSURE_OR_RETURN_VOID( pTable, "SVTXGridControl::dataChanged: no control (anymore)!" );
 
-    if ( Event.valueName.equalsAscii( "RowHeight" ) )
+    if ( Event.AttributeName.equalsAscii( "RowHeight" ) )
     {
         sal_Int32 rowHeight = m_pTableModel->getRowHeight();
-        Event.newValue>>=rowHeight;
+        Event.NewValue>>=rowHeight;
         m_pTableModel->setRowHeight(rowHeight);
         pTable->Invalidate();
     }
-    else if ( Event.valueName.equalsAscii( "RowHeaderWidth" ) )
+    else if ( Event.AttributeName.equalsAscii( "RowHeaderWidth" ) )
     {
         sal_Int32 rowHeaderWidth = m_pTableModel->getRowHeaderWidth();
-        Event.newValue>>=rowHeaderWidth;
+        Event.NewValue>>=rowHeaderWidth;
         m_pTableModel->setRowHeaderWidth(rowHeaderWidth);
         pTable->Invalidate();
     }
-    else if ( Event.valueName.equalsAscii( "RowHeaders" ) )
+    else if ( Event.AttributeName.equalsAscii( "RowHeaders" ) )
     {
         Sequence< rtl::OUString > rowHeaders;
-        OSL_VERIFY( Event.newValue >>= rowHeaders );
+        OSL_VERIFY( Event.NewValue >>= rowHeaders );
         m_pTableModel->setRowHeaderNames( rowHeaders );
         pTable->Invalidate();
     }
-    else if ( Event.valueName.equalsAscii( "CellUpdated" ) )
+    else if ( Event.AttributeName.equalsAscii( "CellUpdated" ) )
     {
         sal_Int32 col = -1;
-        OSL_VERIFY( Event.oldValue >>= col );
+        OSL_VERIFY( Event.OldValue >>= col );
 
-        m_pTableModel->updateCellContent( Event.index, col, Event.newValue );
-        pTable->InvalidateDataWindow( Event.index, Event.index, false );
+        m_pTableModel->updateCellContent( Event.RowIndex, col, Event.NewValue );
+        pTable->InvalidateDataWindow( Event.RowIndex, Event.RowIndex, false );
     }
-    else if ( Event.valueName.equalsAscii( "RowUpdated" ) )
+    else if ( Event.AttributeName.equalsAscii( "RowUpdated" ) )
     {
         Sequence< sal_Int32 > cols;
-        OSL_VERIFY( Event.oldValue >>= cols );
+        OSL_VERIFY( Event.OldValue >>= cols );
 
         Sequence< Any > values;
-        OSL_VERIFY( Event.newValue >>= values );
+        OSL_VERIFY( Event.NewValue >>= values );
 
         ENSURE_OR_RETURN_VOID( cols.getLength() == values.getLength(), "SVTXGridControl::dataChanged: inconsistent array lengths!" );
 
@@ -531,10 +531,10 @@ void SAL_CALL SVTXGridControl::dataChanged(const ::com::sun::star::awt::grid::Gr
         for ( ColPos i = 0; i< cols.getLength(); ++i )
         {
             ENSURE_OR_CONTINUE( ( cols[i] >= 0 ) && ( cols[i] < columnCount ), "illegal column index" );
-            m_pTableModel->updateCellContent( Event.index, cols[i], values[i] );
+            m_pTableModel->updateCellContent( Event.RowIndex, cols[i], values[i] );
         }
 
-        pTable->InvalidateDataWindow( Event.index, Event.index, false );
+        pTable->InvalidateDataWindow( Event.RowIndex, Event.RowIndex, false );
     }
 }
 

@@ -91,8 +91,8 @@ public:
 private:
     void broadcast_changed(
             ::rtl::OUString name,
-            ::com::sun::star::uno::Any oldValue,
-            ::com::sun::star::uno::Any newValue,
+            ::com::sun::star::uno::Any i_oldValue,
+            ::com::sun::star::uno::Any i_newValue,
             ::osl::ClearableMutexGuard& i_Guard
         );
 

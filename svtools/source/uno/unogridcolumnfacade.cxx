@@ -150,14 +150,14 @@ namespace svt { namespace table
     {
         ColumnAttributeGroup nChangedAttributes( COL_ATTRS_NONE );
 
-        if ( i_event.valueName.equalsAscii( "HAlign" ) )
+        if ( i_event.AttributeName.equalsAscii( "HAlign" ) )
             nChangedAttributes |= COL_ATTRS_APPEARANCE;
 
-        if  (   i_event.valueName.equalsAscii( "ColWidth" )
-            ||  i_event.valueName.equalsAscii( "MaxWidth" )
-            ||  i_event.valueName.equalsAscii( "MinWidth" )
-            ||  i_event.valueName.equalsAscii( "PrefWidth" )
-            ||  i_event.valueName.equalsAscii( "ColumnResize" )
+        if  (   i_event.AttributeName.equalsAscii( "ColWidth" )
+            ||  i_event.AttributeName.equalsAscii( "MaxWidth" )
+            ||  i_event.AttributeName.equalsAscii( "MinWidth" )
+            ||  i_event.AttributeName.equalsAscii( "PrefWidth" )
+            ||  i_event.AttributeName.equalsAscii( "ColumnResize" )
             )
             nChangedAttributes |= COL_ATTRS_WIDTH;
 
