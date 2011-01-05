@@ -1,4 +1,4 @@
-uc ucb : cppuhelper CURL:curl OPENSSL:openssl NEON:neon LIBXML2:libxml2 offapi sal salhelper ucbhelper udkapi comphelper tools NULL
+uc ucb : cppuhelper CURL:curl OPENSSL:openssl NEON:neon LIBXML2:libxml2 LIBXSLT:libxslt offapi sal salhelper ucbhelper udkapi comphelper tools NULL
 uc	ucb							usr1	-	all	uc_mkout NULL
 uc	ucb\inc					    nmake	-	all	uc_inc NULL
 uc	ucb\source\regexp		    nmake	-	all	uc_regexp uc_inc NULL

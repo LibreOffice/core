@@ -38,7 +38,7 @@
 #include "svx/gallery1.hxx"
 #include "galbrws1.hxx"
 #include "galbrws2.hxx"
-#include "galbrws.hxx"
+#include "svx/galbrws.hxx"
 
 // -------------------
 // - GallerySplitter -

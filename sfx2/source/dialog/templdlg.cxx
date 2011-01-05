@@ -48,7 +48,7 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/frame/XModuleManager.hpp>
 
-#include "sfxhelp.hxx"
+#include "sfx2/sfxhelp.hxx"
 #include <sfx2/app.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/bindings.hxx>
@@ -60,8 +60,8 @@
 #include <sfx2/objsh.hxx>
 #include <sfx2/viewsh.hxx>
 #include <sfx2/newstyle.hxx>
-#include "tplpitem.hxx"
-#include "sfxresid.hxx"
+#include "sfx2/tplpitem.hxx"
+#include "sfx2/sfxresid.hxx"
 
 #include "templdlg.hrc"
 #include <sfx2/sfx.hrc>
@@ -73,7 +73,7 @@
 #include "docvor.hxx"
 #include <sfx2/doctempl.hxx>
 #include <sfx2/module.hxx>
-#include "imgmgr.hxx"
+#include "sfx2/imgmgr.hxx"
 #include "helpid.hrc"
 #include "appdata.hxx"
 #include <sfx2/viewfrm.hxx>

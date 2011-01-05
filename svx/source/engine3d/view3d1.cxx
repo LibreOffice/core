@@ -29,7 +29,7 @@
 #include "precompiled_svx.hxx"
 
 #include <tools/shl.hxx>
-#include "svditer.hxx"
+#include "svx/svditer.hxx"
 #include <svx/svdpool.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/svxids.hrc>
@@ -37,7 +37,7 @@
 #include <svx/fmview.hxx>
 #include <svx/dialogs.hrc>
 #include <svx/dialmgr.hxx>
-#include "globl3d.hxx"
+#include "svx/globl3d.hxx"
 #include <svx/obj3d.hxx>
 #include <svx/polysc3d.hxx>
 #include <svx/e3ditem.hxx>

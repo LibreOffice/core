@@ -49,12 +49,12 @@
 #include <svx/xflhtit.hxx>
 #include <svx/xlnstit.hxx>
 
-#include "svditext.hxx"
+#include "svx/svditext.hxx"
 #include <editeng/editeng.hxx>   // Fuer EditEngine::CreatePool()
 
 #include <svx/xtable.hxx>
 
-#include "svditer.hxx"
+#include "svx/svditer.hxx"
 #include <svx/svdtrans.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdlayer.hxx>
@@ -65,8 +65,8 @@
 #include <svx/svdetc.hxx>
 #include <svx/svdoutl.hxx>
 #include <svx/svdoole2.hxx>
-#include "svdglob.hxx"  // Stringcache
-#include "svdstr.hrc"   // Objektname
+#include "svx/svdglob.hxx"  // Stringcache
+#include "svx/svdstr.hrc"   // Objektname
 #include "svdoutlinercache.hxx"
 
 
@@ -206,6 +206,8 @@ void SdrModel::ImpCtor(SfxItemPool* pPool, ::comphelper::IEmbeddedHelper* _pEmbe
         nDefTextHgt = ((SvxFontHeightItem*)pPoolItem)->GetHeight();
     else
         nDefTextHgt = SdrEngineDefaults::GetFontHeight();
+
+    pItemPool->SetPoolDefaultItem( SdrTextWordWrapItem( sal_False ) );
 
     SetTextDefaults();
     pLayerAdmin=new SdrLayerAdmin;

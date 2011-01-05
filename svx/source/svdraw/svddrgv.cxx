@@ -29,7 +29,7 @@
 #include "precompiled_svx.hxx"
 
 #include <svx/svddrgv.hxx>
-#include "xattr.hxx"
+#include "svx/xattr.hxx"
 #include <svx/xpoly.hxx>
 #include <svx/svdetc.hxx>
 #include <svx/svdtrans.hxx>
@@ -38,12 +38,12 @@
 #include <svx/svdpagv.hxx>
 #include <svx/svdopath.hxx>
 #include <svx/svdoedge.hxx>
-#include "svdstr.hrc"
-#include "svdglob.hxx"
+#include "svx/svdstr.hrc"
+#include "svx/svdglob.hxx"
 #include "svddrgm1.hxx"
 #include <svx/obj3d.hxx>
 #include <svx/svdoashp.hxx>
-#include <sdrpaintwindow.hxx>
+#include <svx/sdrpaintwindow.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <svx/polypolygoneditor.hxx>

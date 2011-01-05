@@ -28,7 +28,8 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sfx2.hxx"
 
-#include "sfxhelp.hxx"
+#include "sfx2/sfxhelp.hxx"
+
 #include <set>
 #include <algorithm>
 #include <com/sun/star/uno/Reference.h>
@@ -70,7 +71,9 @@
 #include <svl/svstdarr.hxx>
 
 #include "newhelp.hxx"
-#include "sfxresid.hxx"
+#include <sfx2/objsh.hxx>
+#include <sfx2/docfac.hxx>
+#include "sfx2/sfxresid.hxx"
 #include "helper.hxx"
 #include "app.hrc"
 #include <sfx2/sfxuno.hxx>

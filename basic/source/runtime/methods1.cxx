@@ -112,6 +112,126 @@ static Reference< XCalendar > getLocaleCalendar( void )
     return xCalendar;
 }
 
+RTLFUNC(CallByName)
+{
+    (void)pBasic;
+    (void)bWrite;
+
+    const INT16 vbGet       = 2;
+    const INT16 vbLet       = 4;
+    const INT16 vbMethod    = 1;
+    const INT16 vbSet       = 8;
+
+    // At least 3 parameter needed plus function itself -> 4
+    USHORT nParCount = rPar.Count();
+    if ( nParCount < 4 )
+    {
+        StarBASIC::Error( SbERR_BAD_ARGUMENT );
+        return;
+    }
+
+    // 1. parameter is object
+    SbxBase* pObjVar = (SbxObject*)rPar.Get(1)->GetObject();
+    SbxObject* pObj = NULL;
+    if( pObjVar )
+        pObj = PTR_CAST(SbxObject,pObjVar);
+    if( !pObj && pObjVar && pObjVar->ISA(SbxVariable) )
+    {
+        SbxBase* pObjVarObj = ((SbxVariable*)pObjVar)->GetObject();
+        pObj = PTR_CAST(SbxObject,pObjVarObj);
+    }
+    if( !pObj )
+    {
+        StarBASIC::Error( SbERR_BAD_PARAMETER );
+        return;
+    }
+
+    // 2. parameter is ProcedureName
+    String aNameStr = rPar.Get(2)->GetString();
+
+    // 3. parameter is CallType
+    INT16 nCallType = rPar.Get(3)->GetInteger();
+
+    //SbxObject* pFindObj = NULL;
+    SbxVariable* pFindVar = pObj->Find( aNameStr, SbxCLASS_DONTCARE );
+    if( pFindVar == NULL )
+    {
+        StarBASIC::Error( SbERR_PROC_UNDEFINED );
+        return;
+    }
+
+    switch( nCallType )
+    {
+        case vbGet:
+            {
+                SbxValues aVals;
+                aVals.eType = SbxVARIANT;
+                pFindVar->Get( aVals );
+
+                SbxVariableRef refVar = rPar.Get(0);
+                refVar->Put( aVals );
+            }
+            break;
+        case vbLet:
+        case vbSet:
+            {
+                if ( nParCount != 5 )
+                {
+                    StarBASIC::Error( SbERR_BAD_ARGUMENT );
+                    return;
+                }
+                SbxVariableRef pValVar = rPar.Get(4);
+                if( nCallType == vbLet )
+                {
+                    SbxValues aVals;
+                    aVals.eType = SbxVARIANT;
+                    pValVar->Get( aVals );
+                    pFindVar->Put( aVals );
+                }
+                else
+                {
+                    SbxVariableRef rFindVar = pFindVar;
+                    SbiInstance* pInst = pINST;
+                    SbiRuntime* pRT = pInst ? pInst->pRun : NULL;
+                    if( pRT != NULL )
+                        pRT->StepSET_Impl( pValVar, rFindVar, false );
+                }
+            }
+            break;
+        case vbMethod:
+            {
+                SbMethod* pMeth = PTR_CAST(SbMethod,pFindVar);
+                if( pMeth == NULL )
+                {
+                    StarBASIC::Error( SbERR_PROC_UNDEFINED );
+                    return;
+                }
+
+                // Setup parameters
+                SbxArrayRef xArray;
+                USHORT nMethParamCount = nParCount - 4;
+                if( nMethParamCount > 0 )
+                {
+                    xArray = new SbxArray;
+                    for( USHORT i = 0 ; i < nMethParamCount ; i++ )
+                    {
+                        SbxVariable* pPar = rPar.Get( i + 4 );
+                        xArray->Put( pPar, i + 1 );
+                    }
+                }
+
+                // Call method
+                SbxVariableRef refVar = rPar.Get(0);
+                if( xArray.Is() )
+                    pMeth->SetParameters( xArray );
+                pMeth->Call( refVar );
+                pMeth->SetParameters( NULL );
+            }
+            break;
+        default:
+            StarBASIC::Error( SbERR_PROC_UNDEFINED );
+    }
+}
 
 RTLFUNC(CBool) // JSM
 {
@@ -527,6 +647,7 @@ RTLFUNC(DoEvents)
     //aTimer.Start();
     //while ( aTimer.IsActive() )
     //  Application::Reschedule();
+    Application::Reschedule( true );
 }
 
 RTLFUNC(GetGUIVersion)
@@ -1513,6 +1634,12 @@ RTLFUNC(GetDefaultContext)
     RTL_Impl_GetDefaultContext( pBasic, rPar, bWrite );
 }
 
+#ifdef DBG_TRACE_BASIC
+RTLFUNC(TraceCommand)
+{
+    RTL_Impl_TraceCommand( pBasic, rPar, bWrite );
+}
+#endif
 
 RTLFUNC(Join)
 {

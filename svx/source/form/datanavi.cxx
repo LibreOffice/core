@@ -32,12 +32,12 @@
 #include "fmservs.hxx"
 
 #include "datanavi.hrc"
-#include "fmresids.hrc"
+#include "svx/fmresids.hrc"
 #include "fmhelp.hrc"
 #include <svx/svxids.hrc>
 #include <tools/rcid.h>
 #include <tools/diagnose_ex.h>
-#include "xmlexchg.hxx"
+#include "svx/xmlexchg.hxx"
 #include <svx/dialmgr.hxx>
 #include <svx/fmshell.hxx>
 #include <svtools/miscopt.hxx>

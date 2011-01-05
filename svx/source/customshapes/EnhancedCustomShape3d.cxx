@@ -31,7 +31,7 @@
 #include <svx/svdetc.hxx>
 #include <svx/svdmodel.hxx>
 #include <tools/poly.hxx>
-#include <svditer.hxx>
+#include <svx/svditer.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/svdoashp.hxx>
 #include <svl/poolitem.hxx>
