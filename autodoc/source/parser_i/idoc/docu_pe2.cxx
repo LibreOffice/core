@@ -626,8 +626,8 @@ SapiDocu_PE::CheckVersionSyntax_Number(const String & i_versionPart2)
 
     const char
         pt = '.';
-    int countDigit = 0;
-    int countPoint = 0;
+    unsigned int countDigit = 0;
+    unsigned int countPoint = 0;
     const char *
         pFirstPoint = 0;
     const char *
