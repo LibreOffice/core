@@ -1,5 +1,5 @@
     <node oor:name="StarChart 5.0" oor:op="replace">
-        <prop oor:name="Flags"><value>IMPORT OWN ALIEN NOTINFILEDIALOG NOTINCHOOSER 3RDPARTYFILTER SILENTEXPORT</value></prop>
+        <prop oor:name="Flags"><value>IMPORT OWN ALIEN NOTINFILEDIALOG NOTINCHOOSER 3RDPARTYFILTER</value></prop>
         <prop oor:name="UIComponent"/>
         <prop oor:name="FilterService"><value>com.sun.star.comp.office.BF_MigrateFilter</value></prop>
         <prop oor:name="UserData"><value></value></prop>
