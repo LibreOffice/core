@@ -301,6 +301,7 @@
 #define GID_MODIFY                          (RID_GROUPS_SFXOFFSET+23)
 #define GID_DRAWING                         (RID_GROUPS_SFXOFFSET+24)
 #define GID_CONTROLS                        (RID_GROUPS_SFXOFFSET+25)
+#define GID_NAVIGATION                      (RID_GROUPS_SFXOFFSET+26)
 
 // compatibility-#defines
 #define GID_FORMEL                          GID_MATH
