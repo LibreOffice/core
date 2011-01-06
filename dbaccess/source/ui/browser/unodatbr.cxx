@@ -469,7 +469,7 @@ void SbaTableQueryBrowser::impl_sanitizeRowSetClauses_nothrow()
         // check if the order columns apply to tables which really exist in the statement
         const Reference< XIndexAccess > xOrderColumns( xComposer->getOrderColumns(), UNO_SET_THROW );
         const sal_Int32 nOrderColumns( xOrderColumns->getCount() );
-        bool invalidColumn = false;
+        bool invalidColumn = nOrderColumns == 0;
         for ( sal_Int32 c=0; ( c < nOrderColumns ) && !invalidColumn; ++c )
         {
             const Reference< XPropertySet > xOrderColumn( xOrderColumns->getByIndex(c), UNO_QUERY_THROW );
