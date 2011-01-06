@@ -531,16 +531,16 @@ void OSQLParseNode::impl_parseNodeToString_throw(::rtl::OUStringBuffer& rString,
                         {
                             pSubTree = *i;
                             if (pSubTree && pSubTree->getNodeType() == SQL_NODE_EQUAL)
-                                i++;
+                                ++i;
                         }
                     }
                     else
-                        i++;
+                        ++i;
                 }
                 else
                 {
                     pSubTree->impl_parseNodeToString_throw( rString, aNewParam );
-                    i++;
+                    ++i;
 
                     // bei den CommaListen zwischen alle Subtrees Commas setzen
                     if ((m_eNodeType == SQL_NODE_COMMALISTRULE)     && (i != m_aChildren.end()))
@@ -550,7 +550,7 @@ void OSQLParseNode::impl_parseNodeToString_throw(::rtl::OUStringBuffer& rString,
             else
             {
                 pSubTree->impl_parseNodeToString_throw( rString, aNewParam );
-                i++;
+                ++i;
 
                 // bei den CommaListen zwischen alle Subtrees Commas setzen
                 if ((m_eNodeType == SQL_NODE_COMMALISTRULE)     && (i != m_aChildren.end()))
@@ -1638,7 +1638,7 @@ OSQLParseNode::OSQLParseNode(const OSQLParseNode& rParseNode)
 
     // wenn kein Blatt, dann SubTrees bearbeiten
     for (OSQLParseNodes::const_iterator i = rParseNode.m_aChildren.begin();
-         i != rParseNode.m_aChildren.end(); i++)
+         i != rParseNode.m_aChildren.end(); ++i)
         append(new OSQLParseNode(**i));
 }
 // -----------------------------------------------------------------------------
@@ -1653,13 +1653,13 @@ OSQLParseNode& OSQLParseNode::operator=(const OSQLParseNode& rParseNode)
         m_nNodeID    = rParseNode.m_nNodeID;
 
         for (OSQLParseNodes::const_iterator i = m_aChildren.begin();
-            i != m_aChildren.end(); i++)
+            i != m_aChildren.end(); ++i)
             delete *i;
 
         m_aChildren.clear();
 
         for (OSQLParseNodes::const_iterator j = rParseNode.m_aChildren.begin();
-             j != rParseNode.m_aChildren.end(); j++)
+             j != rParseNode.m_aChildren.end(); ++j)
             append(new OSQLParseNode(**j));
     }
     return *this;
@@ -1688,7 +1688,7 @@ sal_Bool OSQLParseNode::operator==(OSQLParseNode& rParseNode) const
 OSQLParseNode::~OSQLParseNode()
 {
     for (OSQLParseNodes::const_iterator i = m_aChildren.begin();
-         i != m_aChildren.end(); i++)
+         i != m_aChildren.end(); ++i)
         delete *i;
     m_aChildren.clear();
 }
@@ -1789,7 +1789,7 @@ OSQLParseNode* OSQLParseNode::getByRule(OSQLParseNode::Rule eRule) const
     else
     {
         for (OSQLParseNodes::const_iterator i = m_aChildren.begin();
-            !pRetNode && i != m_aChildren.end(); i++)
+            !pRetNode && i != m_aChildren.end(); ++i)
             pRetNode = (*i)->getByRule(eRule);
     }
     return pRetNode;
