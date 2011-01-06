@@ -56,8 +56,8 @@ sd_prog=`pwd`
 cd "$sd_cwd"
 
 # linked build needs additional settings
-if [ -e ooenv ] ; then
-    . ./ooenv
+if [ -e $sd_prog/ooenv ] ; then
+    . $sd_prog/ooenv
 fi
 
 if [ "$VALGRIND" != "" ]; then
