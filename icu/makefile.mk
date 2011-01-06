@@ -149,9 +149,9 @@ icu_LDFLAGS+=-shared-libgcc
 icu_LDFLAGS+=-L$(COMPATH)/lib/mingw -L$(COMPATH)/lib/w32api
 .ENDIF
 icu_LDFLAGS+=-L$(COMPATH)$/lib
-icu_LIBS=-lmingwthrd
+icu_LIBS=
 .IF "$(MINGW_SHARED_GXXLIB)"=="YES"
-icu_LIBS+=-lstdc++_s
+icu_LIBS+=$(MINGW_SHARED_LIBSTDCPP)
 .ENDIF
 icu_LDFLAGS+=-Wl,--enable-runtime-pseudo-reloc-v2
 CONFIGURE_ACTION+=sh -c 'CFLAGS="-O -D_MT" CXXFLAGS="-O -D_MT" LDFLAGS="$(icu_LDFLAGS)" LIBS="$(icu_LIBS)" ./configure --build=i586-pc-mingw32 --enable-layout --enable-static --enable-shared=yes --enable-64bit-libs=no'
