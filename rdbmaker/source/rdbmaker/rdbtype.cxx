@@ -98,7 +98,7 @@ sal_Bool produceDependedTypes(const OString& typeName,
                 exit(99);
             }
         }
-        iter++;
+        ++iter;
     }
 
     return ret;
