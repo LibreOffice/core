@@ -53,8 +53,6 @@ class ZipPackageFolder : public cppu::ImplInheritanceHelper2
     ::com::sun::star::container::XEnumerationAccess
 >
 {
-    static com::sun::star::uno::Sequence < sal_Int8 > aImplementationId;
-
 protected:
     ContentHash maContents;
     const ::com::sun::star::uno::Reference < com::sun::star::lang::XMultiServiceFactory > m_xFactory;
@@ -82,10 +80,7 @@ public:
         throw(::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
 
     static void copyZipEntry( ZipEntry &rDest, const ZipEntry &rSource);
-    static ::com::sun::star::uno::Sequence < sal_Int8 > static_getImplementationId()
-    {
-        return aImplementationId;
-    }
+    static const ::com::sun::star::uno::Sequence < sal_Int8 >& static_getImplementationId();
 
     void setPackageFormat_Impl( sal_Int32 nFormat ) { m_nFormat = nFormat; }
     void setRemoveOnInsertMode_Impl( sal_Bool bRemove ) { this->mbAllowRemoveOnInsert = bRemove; }
