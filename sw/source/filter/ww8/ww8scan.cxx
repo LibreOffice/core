@@ -5211,6 +5211,22 @@ WW8_CP WW8Fib::GetBaseCp(ManTypes nType) const
 ww::WordVersion WW8Fib::GetFIBVersion() const
 {
     ww::WordVersion eVer = ww::eWW8;
+    /*
+     * Word for Windows 2 I think (1.X might work too if anyone has an example.
+     * Various pages claim that the fileformats of Word 1 and 2 for Windows are
+     * equivalent to Word for Macintosh 4 and 5. On the other hand
+     *
+     * wIdents for Word for Mac versions...
+     * 0xFE32 for Word 1
+     * 0xFE34 for Word 3
+     * 0xFE37 for Word 4 et 5.
+     *
+     * and this document
+     * http://cmsdoc.cern.ch/documents/docformat/CMS_CERN_LetterHead.word is
+     * claimed to be "Word 5 for Mac" by Office etc and has that wIdent, but
+     * its format isn't the same as that of Word 2 for windows. Nor is it
+     * the same as that of Word for DOS/PCWord 5
+     */
     if (wIdent == 0xa5db)
         eVer = ww::eWW2;
     else
