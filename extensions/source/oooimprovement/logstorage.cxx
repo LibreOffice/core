@@ -135,7 +135,7 @@ namespace oooimprovement
         vector<OUString> files_to_kill = getLogStoragefiles(m_ServiceFactory, &isZipOrLogFile);
         for(vector<OUString>::iterator item = files_to_kill.begin();
             item != files_to_kill.end();
-            item++)
+            ++item)
             file_access->kill(*item);
     }
 
