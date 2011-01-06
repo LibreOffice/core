@@ -205,7 +205,7 @@ void    XFColumns::ToXml(IXFStream *pStrm)
     if(!(m_nFlag&XFCOLUMNS_FLAG_GAP) )
     {
         std::vector<XFColumn>::iterator it;
-        for( it = m_aColumns.begin(); it != m_aColumns.end(); it++ )
+        for( it = m_aColumns.begin(); it != m_aColumns.end(); ++it )
         {
             (*it).ToXml(pStrm);
         }
