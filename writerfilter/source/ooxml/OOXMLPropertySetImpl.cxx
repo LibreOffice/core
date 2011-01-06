@@ -442,7 +442,7 @@ void OOXMLPropertySetImpl::resolve(Properties & rHandler)
         }
 #endif
 
-        aIt++;
+        ++aIt;
     }
 }
 
@@ -498,7 +498,7 @@ void OOXMLPropertySetImpl::add(OOXMLPropertySet::Pointer_t pPropertySet)
         {
             mProperties.resize(mProperties.size() + pSet->mProperties.size());
             for (OOXMLProperties_t::iterator aIt = pSet->mProperties.begin();
-                 aIt != pSet->mProperties.end(); aIt++)
+                 aIt != pSet->mProperties.end(); ++aIt)
                 add(*aIt);
         }
     }
@@ -525,7 +525,7 @@ string OOXMLPropertySetImpl::toString()
     OOXMLProperties_t::iterator aItBegin = begin();
     OOXMLProperties_t::iterator aItEnd = end();
 
-    for (OOXMLProperties_t::iterator aIt = aItBegin; aIt != aItEnd; aIt++)
+    for (OOXMLProperties_t::iterator aIt = aItBegin; aIt != aItEnd; ++aIt)
     {
         if (aIt != aItBegin)
             sResult += ", ";
@@ -718,7 +718,7 @@ void OOXMLTableImpl::resolve(Table & rTable)
             pTable->entry(nPos, pProperties);
 
         ++nPos;
-        it++;
+        ++it;
     }
 }
 
