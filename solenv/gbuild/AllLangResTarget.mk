@@ -216,6 +216,7 @@ $(call gb_ResTarget_get_target,%) : $(gb_Helper_MISCDUMMY) | $(gb_ResTarget_RSCT
         echo "-r -p \
             -lg$(LANGUAGE) \
             -fs=$@ \
+            -lip=$(realpath $(gb_ResTarget_DEFIMAGESLOCATION)$(RESLOCATION)/$(LIBRARY)) \
             -lip=$(realpath $(gb_ResTarget_DEFIMAGESLOCATION)$(RESLOCATION)/imglst/$(LANGUAGE)) \
             -lip=$(realpath $(gb_ResTarget_DEFIMAGESLOCATION)$(RESLOCATION)/imglst) \
             -lip=$(realpath $(gb_ResTarget_DEFIMAGESLOCATION)$(RESLOCATION)/res/$(LANGUAGE)) \
