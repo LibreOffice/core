@@ -581,8 +581,8 @@ const SwCntntFrm * MA_FASTCALL lcl_MissProtectedFrames( const SwCntntFrm *pCnt,
             if ( !pCell ||
                     ( ( bInReadOnly || !pCell->GetFmt()->GetProtect().IsCntntProtected() ) &&
                       ( !bMissHeadline || !lcl_IsInRepeatedHeadline( pCell ) ) &&
-                      ( !bMissFollowFlowLine || !pCell->IsInFollowFlowRow() ) ) &&
-                        !pCell->IsCoveredCell() )
+                      ( !bMissFollowFlowLine || !pCell->IsInFollowFlowRow() ) &&
+                        !pCell->IsCoveredCell() ) )
                 bProtect = FALSE;
             else
                 pCnt = (*fnNxtPrv)( pCnt );
@@ -701,14 +701,14 @@ BOOL MA_FASTCALL lcl_UpDown( SwPaM *pPam, const SwCntntFrm *pStart,
             const long nPrtLeft = bRTL ?
                                 (pTable->*fnRect->fnGetPrtRight)() :
                                 (pTable->*fnRect->fnGetPrtLeft)();
-            if ( bRTL != nX < nPrtLeft )
+            if ( (bRTL != (nX < nPrtLeft)) )
                 nX = nPrtLeft;
             else
             {
                    const long nPrtRight = bRTL ?
                                     (pTable->*fnRect->fnGetPrtLeft)() :
                                     (pTable->*fnRect->fnGetPrtRight)();
-                if ( bRTL != nX > nPrtRight )
+                if ( (bRTL != (nX > nPrtRight)) )
                     nX = nPrtRight;
             }
         }
@@ -2308,12 +2308,14 @@ void SwRootFrm::CalcFrmRects( SwShellCrsr &rCrsr, BOOL bIsTblMode )
                         (aTmp.*fnRectX->fnSetTop)( nTmp );
                         if( (aEndRect.*fnRectX->fnGetTop)() !=
                             (pEnd2Pos->aPortion.*fnRectX->fnGetTop)() )
-                        if( bPorR2L )
-                            (aTmp.*fnRectX->fnSetLeft)(
-                                (pEnd2Pos->aPortion.*fnRectX->fnGetLeft)() );
-                        else
-                            (aTmp.*fnRectX->fnSetRight)(
-                                (pEnd2Pos->aPortion.*fnRectX->fnGetRight)() );
+                        {
+                            if( bPorR2L )
+                                (aTmp.*fnRectX->fnSetLeft)(
+                                    (pEnd2Pos->aPortion.*fnRectX->fnGetLeft)() );
+                            else
+                                (aTmp.*fnRectX->fnSetRight)(
+                                    (pEnd2Pos->aPortion.*fnRectX->fnGetRight)() );
+                        }
                         aTmp.Intersection( aEndFrm );
                         Sub( aRegion, aTmp );
                     }
