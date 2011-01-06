@@ -496,6 +496,7 @@ Reference< XShape > BiffDrawingObjectBase::convertAndInsert( BiffDrawingBase& rD
     if( rxShapes.is() && mbProcessShape && !mbHidden )  // TODO: support for hidden objects?
     {
         // base class 'ShapeAnchor' calculates the shape rectangle in 1/100 mm
+        // in BIFF3-BIFF5, all shapes have absolute anchor (also children of group shapes)
         Rectangle aShapeRect = maAnchor.calcAnchorRectHmm( getDrawPageSize() );
 
         // convert the shape, if the calculated rectangle is not empty
@@ -762,10 +763,26 @@ void BiffGroupObject::implReadObjBiff5( BiffInputStream& rStrm, sal_uInt16 nName
     readMacroBiff5( rStrm, nMacroSize );
 }
 
-Reference< XShape > BiffGroupObject::implConvertAndInsert( BiffDrawingBase& /*rDrawing*/,
-        const Reference< XShapes >& /*rxShapes*/, const Rectangle& /*rShapeRect*/ ) const
+Reference< XShape > BiffGroupObject::implConvertAndInsert( BiffDrawingBase& rDrawing,
+        const Reference< XShapes >& rxShapes, const Rectangle& rShapeRect ) const
 {
-    return Reference< XShape >();
+    Reference< XShape > xGroupShape;
+    if( !maChildren.empty() ) try
+    {
+        xGroupShape = rDrawing.createAndInsertXShape( CREATE_OUSTRING( "com.sun.star.drawing.GroupShape" ), rxShapes, rShapeRect );
+        Reference< XShapes > xChildShapes( xGroupShape, UNO_QUERY_THROW );
+        maChildren.convertAndInsert( rDrawing, xChildShapes, &rShapeRect );
+        // no child shape has been created - delete the group shape
+        if( !xChildShapes->hasElements() )
+        {
+            rxShapes->remove( xGroupShape );
+            xGroupShape.clear();
+        }
+    }
+    catch( Exception& )
+    {
+    }
+    return xGroupShape;
 }
 
 // ============================================================================

@@ -126,6 +126,9 @@ class BiffDrawingObjectContainer
 public:
     explicit            BiffDrawingObjectContainer();
 
+    /** Returns true, if the object list is empty. */
+    inline bool         empty() const { return maObjects.empty(); }
+
     /** Appends the passed object to the list of objects. */
     void                append( const BiffDrawingObjectRef& rxDrawingObj );
     /** Tries to insert the passed object into the last group or appends it. */
