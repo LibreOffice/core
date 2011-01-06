@@ -116,13 +116,6 @@ interface XGridColumnModel
             the number of default columns that should be set.
     */
     void setDefaultColumns([in] long elements);
-
-    /**Creates new XGridColumn with the settings of other column. To be used if the columns which are added to
-        the column model have the same settings.
-        @param column
-            the column, which is already created
-    */
-    XGridColumn copyColumn( [in] XGridColumn column );
 };
 
 //=============================================================================
