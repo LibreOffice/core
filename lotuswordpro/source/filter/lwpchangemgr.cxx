@@ -120,7 +120,7 @@ OUString LwpChangeMgr::GetChangeID(LwpFrib* pFrib)
 void LwpChangeMgr::ConvertAllChange(IXFStream* pStream)
 {
     std::map<LwpFrib*,OUString>::iterator iter;
-    for (iter=m_DocFribMap.begin();iter !=m_DocFribMap.end();iter++)
+    for (iter=m_DocFribMap.begin();iter !=m_DocFribMap.end();++iter)
     {
         if (iter->first->GetRevisionType() == LwpFrib::REV_INSERT)
         {
@@ -147,14 +147,14 @@ void LwpChangeMgr::ConvertAllChange(IXFStream* pStream)
     pStream->GetAttrList()->AddAttribute( A2OUSTR("text:track-changes"),A2OUSTR("false"));
 //Add end
     pStream->StartElement( A2OUSTR("text:tracked-changes") );
-    for (iter1=m_ChangeList.begin();iter1 !=m_ChangeList.end();iter1++)
+    for (iter1=m_ChangeList.begin();iter1 !=m_ChangeList.end();++iter1)
         (*iter1)->ToXml(pStream);
 
     pStream->EndElement(A2OUSTR("text:tracked-changes"));
 
 //  m_DocFribMap.clear();
 
-    for (iter1=m_ChangeList.begin();iter1 !=m_ChangeList.end();iter1++)
+    for (iter1=m_ChangeList.begin();iter1 !=m_ChangeList.end();++iter1)
     {
         delete *iter1;
         *iter1=NULL;
@@ -177,7 +177,7 @@ void LwpChangeMgr::SetHeadFootChange(XFContentContainer* pCont)
     std::map<LwpFrib*,OUString>::iterator iter;
     XFChangeList* pChangeList = new XFChangeList;
 
-    for (iter=m_HeadFootFribMap.begin();iter !=m_HeadFootFribMap.end();iter++)
+    for (iter=m_HeadFootFribMap.begin();iter !=m_HeadFootFribMap.end();++iter)
     {
         if (iter->first->GetRevisionType() == LwpFrib::REV_INSERT)
         {

@@ -145,7 +145,7 @@ void LwpObjectFactory::ClearObjectMap()
     {
         delete (*it).second;
         (*it).second = NULL;
-        it++;
+        ++it;
     }
     m_ObjList.clear();
 }
