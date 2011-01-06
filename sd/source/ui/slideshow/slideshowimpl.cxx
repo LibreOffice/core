@@ -1267,7 +1267,7 @@ void SlideshowImpl::removeShapeEvents()
         WrappedShapeEventImplMap::iterator aIter;
         const WrappedShapeEventImplMap::iterator aEnd( maShapeEventMap.end() );
 
-        for( aIter = maShapeEventMap.begin(); aIter != aEnd; aIter++ )
+        for( aIter = maShapeEventMap.begin(); aIter != aEnd; ++aIter )
         {
             mxListenerProxy->removeShapeEventListener( (*aIter).first );
             mxShow->setShapeCursor( (*aIter).first, awt::SystemPointer::ARROW );
