@@ -139,7 +139,6 @@ void ScPreviewShell::Construct( Window* pParent )
     if (pDrawBC)
         StartListening(*pDrawBC);
 
-//  pPreview->Show();           // wird vom Sfx angezeigt
     pHorScroll->Show();
     pVerScroll->Show();
     pCorner->Show();
