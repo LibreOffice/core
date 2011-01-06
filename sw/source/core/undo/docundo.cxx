@@ -71,7 +71,6 @@ UndoManager::UndoManager(::std::auto_ptr<SwNodes> pUndoNodes,
     ,   m_bGroupUndo(true)
     ,   m_bDrawUndo(true)
     ,   m_bLockUndoNoModifiedPosition(false)
-    ,   m_bClearOnLeave(false)
     ,   m_UndoSaveMark(MARK_INVALID)
 {
     OSL_ASSERT(m_pUndoNodes.get());
@@ -189,13 +188,9 @@ void UndoManager::DelAllUndoObj()
 {
     ::sw::UndoGuard const undoGuard(*this);
 
-    SfxUndoManager::Clear();
+    SfxUndoManager::ClearAllLevels();
 
     m_UndoSaveMark = MARK_INVALID;
-    if (SfxUndoManager::IsInListAction())
-    {
-        m_bClearOnLeave = true;
-    }
 }
 
 
@@ -412,23 +407,6 @@ void UndoManager::EnableUndo(bool bEnable)
     {
         SfxUndoManager::EnableUndo(bEnable);
     }
-}
-
-size_t UndoManager::LeaveListAction()
-{
-    size_t const nCount = SfxUndoManager::LeaveListAction();
-
-    if (m_bClearOnLeave)
-    {
-        SfxUndoManager::Clear();
-        if (!SfxUndoManager::IsInListAction())
-        {
-            m_bClearOnLeave = false;
-        }
-        return 0; // EndUndo() must not access deleted last undo action!
-    }
-
-    return nCount;
 }
 
 void UndoManager::AddUndoAction(SfxUndoAction *pAction, sal_Bool bTryMerge)

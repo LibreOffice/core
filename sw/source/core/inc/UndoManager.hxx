@@ -90,7 +90,6 @@ public:
     virtual sal_Bool Undo();
     virtual sal_Bool Redo();
     virtual void     EnableUndo(bool bEnable);
-    virtual size_t   LeaveListAction();
 
     SwUndo * RemoveLastUndo();
     SwUndo * GetLastUndo();
@@ -109,7 +108,6 @@ private:
     bool m_bGroupUndo       : 1;    // TRUE: Undo grouping enabled
     bool m_bDrawUndo        : 1;    // TRUE: Draw Undo enabled
     bool m_bLockUndoNoModifiedPosition : 1;
-    bool m_bClearOnLeave    : 1;
     /// position in Undo-Array at which Doc was saved (and is not modified)
     UndoStackMark m_UndoSaveMark;
 
