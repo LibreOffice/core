@@ -43,7 +43,8 @@ ADDITIONAL_FILES+=config.h
 PATCH_FILES=\
     hunspell-wntconfig.patch \
     hunspell-solaris.patch \
-    hunspell-stacksmash.patch
+    hunspell-stacksmash.patch \
+    hunspell-1.2.9-crashfix.patch
 
 .IF "$(GUI)"=="UNX"
 
