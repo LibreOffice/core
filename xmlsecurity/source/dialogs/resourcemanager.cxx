@@ -127,7 +127,7 @@ namespace XmlSec
         ::rtl::OUStringBuffer s1, s2;
         OUString sEqual(RTL_CONSTASCII_USTRINGPARAM(" = "));
         typedef vector< pair < OUString, OUString > >::const_iterator CIT;
-        for (CIT i = vecAttrValueOfDN.begin(); i < vecAttrValueOfDN.end(); i ++)
+        for (CIT i = vecAttrValueOfDN.begin(); i < vecAttrValueOfDN.end(); ++i)
         {
             if (i != vecAttrValueOfDN.begin())
             {
@@ -344,7 +344,7 @@ vector< pair< OUString, OUString> > parseDN(const OUString& rRawString)
         {
             OUString sPartId = OUString::createFromAscii( aIDs[i++] );
             typedef vector< pair < OUString, OUString > >::const_iterator CIT;
-            for (CIT idn = vecAttrValueOfDN.begin(); idn != vecAttrValueOfDN.end(); idn++)
+            for (CIT idn = vecAttrValueOfDN.begin(); idn != vecAttrValueOfDN.end(); ++idn)
             {
                 if (idn->first.equals(sPartId))
                 {
