@@ -90,7 +90,7 @@ void ImpAddEntity( std::vector< GraphicCollector::GraphicEntity >& rGraphicEntit
                 aIter->maUser.push_back( rUser );
                 break;
             }
-            aIter++;
+            ++aIter;
         }
         if ( aIter == rGraphicEntities.end() )
         {
@@ -340,12 +340,12 @@ void GraphicCollector::CollectGraphics( const Reference< XComponentContext >& rx
                     }
                     else
                         aGraphicIter->mbRemoveCropArea = sal_False;
-                    aGUIter++;
+                    ++aGUIter;
                 }
             }
             if ( !aGraphicIter->mbRemoveCropArea )
                 aGraphicIter->maGraphicCropLogic = text::GraphicCrop( 0, 0, 0, 0 );
-            aGraphicIter++;
+            ++aGraphicIter;
         }
     }
     catch ( Exception& )
