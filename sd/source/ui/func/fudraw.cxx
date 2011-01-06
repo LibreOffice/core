@@ -130,7 +130,7 @@ BOOL FuDraw::MouseButtonDown(const MouseEvent& rMEvt)
     {
         FrameView* pFrameView = mpViewShell->GetFrameView();
 
-        BOOL bOrtho = FALSE;
+        bool bOrtho = FALSE;
 
         BOOL bRestricted = TRUE;
 
@@ -250,7 +250,7 @@ BOOL FuDraw::MouseMove(const MouseEvent& rMEvt)
     FrameView* pFrameView = mpViewShell->GetFrameView();
     Point aPos = mpWindow->PixelToLogic( rMEvt.GetPosPixel() );
 
-    BOOL bOrtho = FALSE;
+    bool bOrtho = FALSE;
 
     BOOL bRestricted = TRUE;
 
