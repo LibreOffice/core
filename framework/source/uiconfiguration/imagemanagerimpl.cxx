@@ -888,7 +888,7 @@ throw (::com::sun::star::uno::RuntimeException)
     Sequence< OUString > aImageNameSeq( aImageCmdNameMap.size() );
     ImageNameMap::const_iterator pIter;
     i = 0;
-    for ( pIter = aImageCmdNameMap.begin(); pIter != aImageCmdNameMap.end(); pIter++ )
+    for ( pIter = aImageCmdNameMap.begin(); pIter != aImageCmdNameMap.end(); ++pIter )
         aImageNameSeq[i++] = pIter->first;
 
     return aImageNameSeq;
