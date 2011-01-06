@@ -965,7 +965,7 @@ void RtfExport::OutDateTime(const sal_Char* pStr, const util::DateTime& rDT )
 
 USHORT RtfExport::GetColor( const Color& rColor ) const
 {
-    for (RtfColorTbl::const_iterator it=m_aColTbl.begin() ; it != m_aColTbl.end(); it++ )
+    for (RtfColorTbl::const_iterator it=m_aColTbl.begin() ; it != m_aColTbl.end(); ++it )
         if ((*it).second == rColor) {
             OSL_TRACE("%s returning %d (%d,%d,%d)", OSL_THIS_FUNC, (*it).first, rColor.GetRed(), rColor.GetGreen(), rColor.GetBlue());
             return (*it).first;
@@ -978,7 +978,7 @@ void RtfExport::InsColor( const Color& rCol )
 {
     USHORT n;
     bool bContainsAuto = false;
-    for (RtfColorTbl::iterator it=m_aColTbl.begin() ; it != m_aColTbl.end(); it++ )
+    for (RtfColorTbl::iterator it=m_aColTbl.begin() ; it != m_aColTbl.end(); ++it )
         if ((*it).second == rCol)
             return; // Already in the table
         else if ((*it).second == COL_AUTO)
