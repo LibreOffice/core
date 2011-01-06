@@ -98,7 +98,10 @@ namespace dnd {
     class XDropTarget;
 } } } } }
 
-namespace vcl { struct ControlLayoutData; }
+namespace vcl {
+    struct ControlLayoutData;
+    struct ExtWindowImpl;
+}
 
 
 // --------------
@@ -247,6 +250,7 @@ public:
 
     ImplDelData*        mpFirstDel;
     void*               mpUserData;
+    vcl::ExtWindowImpl* mpExtImpl;
     Cursor*             mpCursor;
     Pointer             maPointer;
     Fraction            maZoom;
@@ -363,7 +367,8 @@ public:
                         mbDisableAccessibleLabelForRelation:1,
                         mbDisableAccessibleLabeledByRelation:1,
                         mbHelpTextDynamic:1,
-                        mbFakeFocusSet:1;
+                        mbFakeFocusSet:1,
+                        mbInterceptChildWindowKeyDown:1;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > mxDNDListenerContainer;
 };

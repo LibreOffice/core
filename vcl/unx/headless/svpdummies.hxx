@@ -58,6 +58,8 @@ public:
     virtual void                    SetBackground( SalColor nSalColor );
 
     virtual const SystemEnvData*    GetSystemData() const;
+
+    virtual void InterceptChildWindowKeyDown( sal_Bool bIntercept );
 };
 
 class SvpImeStatus : public SalI18NImeStatus

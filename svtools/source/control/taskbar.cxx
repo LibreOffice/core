@@ -30,16 +30,11 @@
 
 #define _TASKBAR_CXX
 
-#ifndef _TOOLS_LIST_HXX
 #include <tools/list.hxx>
-#endif
 #include <tools/debug.hxx>
-
-#ifndef _VCL_FLOATWIN_HXX
 #include <vcl/floatwin.hxx>
-#endif
 
-#include <taskbar.hxx>
+#include <svtools/taskbar.hxx>
 
 // =======================================================================
 
