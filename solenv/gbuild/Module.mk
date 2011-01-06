@@ -31,6 +31,8 @@
 gb_Module_ALLMODULES :=
 gb_Module_MODULELOCATIONS :=
 gb_Module_TARGETSTACK :=
+gb_Module_CHECKTARGETSTACK :=
+gb_Module_SUBSEQUENTCHECKTARGETSTACK :=
 gb_Module_CLEANTARGETSTACK :=
 
 .PHONY : $(call gb_Module_get_clean_target,%)
@@ -40,6 +42,20 @@ $(call gb_Module_get_clean_target,%) :
     -$(call gb_Helper_abbreviate_dirs,\
         rm -f $(call gb_Module_get_target,$*))
 
+$(call gb_Module_get_check_target,%) :
+    $(call gb_Output_announce,$*,$(true),CHK,5)
+    $(call gb_Output_announce_title,module $* checks done.)
+    -$(call gb_Helper_abbreviate_dirs,\
+        mkdir -p $(dir $@) && \
+        touch $@)
+
+$(call gb_Module_get_subsequentcheck_target,%) :
+    $(call gb_Output_announce,$*,$(true),SCK,5)
+    $(call gb_Output_announce_title,module $* subsequentchecks done.)
+    -$(call gb_Helper_abbreviate_dirs,\
+        mkdir -p $(dir $@) && \
+        touch $@)
+
 $(call gb_Module_get_target,%) :
     $(call gb_Output_announce,$*,$(true),MOD,5)
     $(call gb_Output_announce_title,module $* done.)
@@ -47,13 +63,30 @@ $(call gb_Module_get_target,%) :
         mkdir -p $(dir $@) && \
         touch $@)
 
-.PHONY : all clean
-.DEFAULT_GOAL := all
+.PHONY : all allandcheck clean check subsequentcheck
+.DEFAULT_GOAL := allandcheck
+
+allandcheck : all check
+
+# compatibility with the old build system
+ifneq ($(strip $(OOO_SUBSEQUENT_TESTS)),)
+.DEFAULT_GOAL := subsequentcheck
+endif
 
 all : 
     $(call gb_Output_announce,top level modules: $(foreach module,$(filter-out deliverlog,$^),$(notdir $(module))),$(true),ALL,6)
     $(call gb_Output_announce,loaded modules: $(sort $(gb_Module_ALLMODULES)),$(true),ALL,6)
     $(call gb_Output_announce_title,all done.)
+    $(call gb_Output_announce_bell)
+
+check :
+    $(call gb_Output_announce,loaded modules: $(sort $(gb_Module_ALLMODULES)),$(true),CHK,6)
+    $(call gb_Output_announce_title,all tests checked.)
+    $(call gb_Output_announce_bell)
+
+subsequentcheck : all 
+    $(call gb_Output_announce,loaded modules: $(sort $(gb_Module_ALLMODULES)),$(true),SCK,6)
+    $(call gb_Output_announce_title,all subsequent tests checked.)
     $(call gb_Output_announce_bell)
 
 clean : 
@@ -65,7 +98,10 @@ clean :
 define gb_Module_Module
 gb_Module_ALLMODULES += $(1)
 gb_Module_MODULELOCATIONS += $(1):$(dir $(realpath $(lastword $(MAKEFILE_LIST))))
-$$(eval $$(call gb_Module_register_target,$(call gb_Module_get_target,$(1)),$(call gb_Module_get_clean_target,$(1))))
+gb_Module_TARGETSTACK := $(call gb_Module_get_target,$(1)) $(gb_Module_TARGETSTACK)
+gb_Module_CHECKTARGETSTACK := $(call gb_Module_get_check_target,$(1)) $(gb_Module_CHECKTARGETSTACK)
+gb_Module_SUBSEQUENTCHECKTARGETSTACK := $(call gb_Module_get_subsequentcheck_target,$(1)) $(gb_Module_SUBSEQUENTCHECKTARGETSTACK)
+gb_Module_CLEANTARGETSTACK := $(call gb_Module_get_clean_target,$(1)) $(gb_Module_CLEANTARGETSTACK)
 
 endef
 
@@ -90,12 +126,47 @@ gb_Module_CLEANTARGETSTACK := $$(wordlist 2,$$(words $$(gb_Module_CLEANTARGETSTA
 
 endef
 
+define gb_Module_add_check_target
+include $(patsubst $(1):%,%,$(filter $(1):%,$(gb_Module_MODULELOCATIONS)))/$(2).mk
+$(call gb_Module_get_check_target,$(1)) : $$(firstword $$(gb_Module_TARGETSTACK))
+$(call gb_Module_get_clean_target,$(1)) : $$(firstword $$(gb_Module_CLEANTARGETSTACK))
+gb_Module_TARGETSTACK := $$(wordlist 2,$$(words $$(gb_Module_TARGETSTACK)),$$(gb_Module_TARGETSTACK))
+gb_Module_CLEANTARGETSTACK := $$(wordlist 2,$$(words $$(gb_Module_CLEANTARGETSTACK)),$$(gb_Module_CLEANTARGETSTACK))
+
+endef
+
+define gb_Module_add_subsequentcheck_target
+include $(patsubst $(1):%,%,$(filter $(1):%,$(gb_Module_MODULELOCATIONS)))/$(2).mk
+$(call gb_Module_get_subsequentcheck_target,$(1)) : $$(firstword $$(gb_Module_TARGETSTACK))
+$(call gb_Module_get_clean_target,$(1)) : $$(firstword $$(gb_Module_CLEANTARGETSTACK))
+gb_Module_TARGETSTACK := $$(wordlist 2,$$(words $$(gb_Module_TARGETSTACK)),$$(gb_Module_TARGETSTACK))
+gb_Module_CLEANTARGETSTACK := $$(wordlist 2,$$(words $$(gb_Module_CLEANTARGETSTACK)),$$(gb_Module_CLEANTARGETSTACK))
+
+endef
+
 define gb_Module_add_moduledir
-$(call gb_Module_add_target,$(1),$(2)/Module_$(2))
+include $(patsubst $(1):%,%,$(filter $(1):%,$(gb_Module_MODULELOCATIONS)))/$(2)/Module_$(2).mk
+$(call gb_Module_get_target,$(1)) : $$(firstword $$(gb_Module_TARGETSTACK))
+$(call gb_Module_get_check_target,$(1)) : $$(firstword $$(gb_Module_CHECKTARGETSTACK))
+$(call gb_Module_get_subsequentcheck_target,$(1)) : $$(firstword $$(gb_Module_SUBSEQUENTCHECKTARGETSTACK))
+$(call gb_Module_get_clean_target,$(1)) : $$(firstword $$(gb_Module_CLEANTARGETSTACK))
+gb_Module_TARGETSTACK := $$(wordlist 2,$$(words $$(gb_Module_TARGETSTACK)),$$(gb_Module_TARGETSTACK))
+gb_Module_CHECKTARGETSTACK := $$(wordlist 2,$$(words $$(gb_Module_CHECKTARGETSTACK)),$$(gb_Module_CHECKTARGETSTACK))
+gb_Module_SUBSEQUENTCHECKTARGETSTACK := $$(wordlist 2,$$(words $$(gb_Module_SUBSEQUENTCHECKTARGETSTACK)),$$(gb_Module_SUBSEQUENTCHECKTARGETSTACK))
+gb_Module_CLEANTARGETSTACK := $$(wordlist 2,$$(words $$(gb_Module_CLEANTARGETSTACK)),$$(gb_Module_CLEANTARGETSTACK))
+
 endef
 
 define gb_Module_add_targets
 $(foreach target,$(2),$(call gb_Module_add_target,$(1),$(target)))
+endef
+
+define gb_Module_add_check_targets
+$(foreach target,$(2),$(call gb_Module_add_check_target,$(1),$(target)))
+endef
+
+define gb_Module_add_subsequentcheck_targets
+$(foreach target,$(2),$(call gb_Module_add_subsequentcheck_target,$(1),$(target)))
 endef
 
 define gb_Module_add_moduledirs
@@ -110,6 +181,8 @@ endif
 include $(1)
 
 all : $$(firstword $$(gb_Module_TARGETSTACK))
+check : $$(firstword $$(gb_Module_CHECKTARGETSTACK))
+subsequentcheck : $$(firstword $$(gb_Module_SUBSEQUENTCHECKTARGETSTACK))
 clean : $$(firstword $$(gb_Module_CLEANTARGETSTACK))
 
 ifneq ($$(words $$(gb_Module_TARGETSTACK)),1)
@@ -117,9 +190,11 @@ $$(eval $$(call gb_Output_error,Corrupted module target stack!))
 endif
 
 gb_Module_TARGETSTACK := $$(wordlist 2,$$(words $$(gb_Module_TARGETSTACK)),$$(gb_Module_TARGETSTACK))
+gb_Module_CHECKTARGETSTACK := $$(wordlist 2,$$(words $$(gb_Module_CHECKTARGETSTACK)),$$(gb_Module_CHECKTARGETSTACK))
+gb_Module_SUBSEQUENTCHECKTARGETSTACK := $$(wordlist 2,$$(words $$(gb_Module_SUBSEQUENTCHECKTARGETSTACK)),$$(gb_Module_SUBSEQUENTCHECKTARGETSTACK))
 gb_Module_CLEANTARGETSTACK := $$(wordlist 2,$$(words $$(gb_Module_CLEANTARGETSTACK)),$$(gb_Module_CLEANTARGETSTACK))
 
-ifneq ($$(gb_Module_TARGETSTACK),)
+ifneq ($$(and $$(gb_Module_TARGETSTACK),$$(gb_Module_CHECKTARGETSTACK),$$(gb_Module_SUBSEQUENTCHECKTARGETSTACK)),)
 $$(eval $$(call gb_Output_error,Corrupted module target stack!))
 endif
 
