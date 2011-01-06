@@ -190,6 +190,7 @@ struct SVL_DLLPRIVATE SfxUndoManager_Data
     sal_Int32       mnMarks;
     sal_Int32       mnEmptyMark;
     bool            mbDoing;
+    bool            mbClearUntilTopLevel;
 
     UndoListeners   aListeners;
 
@@ -201,7 +202,7 @@ struct SVL_DLLPRIVATE SfxUndoManager_Data
         ,mnMarks( 0 )
         ,mnEmptyMark(MARK_INVALID)
         ,mbDoing( false )
-
+        ,mbClearUntilTopLevel( false )
     {
         pActUndoArray = pUndoArray;
     }
@@ -500,7 +501,7 @@ size_t SfxUndoManager::GetMaxUndoActionCount() const
 
 //------------------------------------------------------------------------
 
-void SfxUndoManager::ImplClear( UndoManagerGuard& i_guard )
+void SfxUndoManager::ImplClearCurrentLevel_NoNotify( UndoManagerGuard& i_guard )
 {
     // clear array
     while ( !m_pData->pActUndoArray->aUndoActions.empty() )
@@ -515,9 +516,6 @@ void SfxUndoManager::ImplClear( UndoManagerGuard& i_guard )
 
     m_pData->mnMarks = 0;
     m_pData->mnEmptyMark = MARK_INVALID;
-
-    // notify listeners
-    i_guard.scheduleNotification( &SfxUndoListener::cleared );
 }
 
 //------------------------------------------------------------------------
@@ -525,8 +523,29 @@ void SfxUndoManager::ImplClear( UndoManagerGuard& i_guard )
 void SfxUndoManager::Clear()
 {
     UndoManagerGuard aGuard( *m_pData );
+
     OSL_ENSURE( !ImplIsInListAction_Lock(), "SfxUndoManager::Clear: suspicious call - do you really wish to clear the current level?" );
-    ImplClear( aGuard );
+    ImplClearCurrentLevel_NoNotify( aGuard );
+
+    // notify listeners
+    aGuard.scheduleNotification( &SfxUndoListener::cleared );
+}
+
+//------------------------------------------------------------------------
+
+void SfxUndoManager::ClearAllLevels()
+{
+    UndoManagerGuard aGuard( *m_pData );
+    ImplClearCurrentLevel_NoNotify( aGuard );
+
+    if ( ImplIsInListAction_Lock() )
+    {
+        m_pData->mbClearUntilTopLevel = true;
+    }
+    else
+    {
+        aGuard.scheduleNotification( &SfxUndoListener::cleared );
+    }
 }
 
 //------------------------------------------------------------------------
@@ -560,9 +579,9 @@ void SfxUndoManager::Reset()
         ImplLeaveListAction( false, aGuard );
 
     // clear both stacks
-    ImplClear( aGuard );
+    ImplClearCurrentLevel_NoNotify( aGuard );
 
-    // cancel the notifications scheduled by ImplLeaveListAction resp. ImplClear,
+    // cancel the notifications scheduled by ImplLeaveListAction,
     // as we want to do an own, dedicated notification
     aGuard.cancelNotifications();
 
@@ -1053,7 +1072,20 @@ size_t SfxUndoManager::GetListActionDepth() const
 size_t SfxUndoManager::LeaveListAction()
 {
     UndoManagerGuard aGuard( *m_pData );
-    return ImplLeaveListAction( false, aGuard );
+    size_t nCount = ImplLeaveListAction( false, aGuard );
+
+    if ( m_pData->mbClearUntilTopLevel )
+    {
+        ImplClearCurrentLevel_NoNotify( aGuard );
+        if ( !ImplIsInListAction_Lock() )
+        {
+            m_pData->mbClearUntilTopLevel = false;
+            aGuard.scheduleNotification( &SfxUndoListener::cleared );
+        }
+        nCount = 0;
+    }
+
+    return nCount;
 }
 
 //------------------------------------------------------------------------
@@ -1080,7 +1112,7 @@ size_t SfxUndoManager::ImplLeaveListAction( const bool i_merge, UndoManagerGuard
         return 0;
     }
 
-    DBG_ASSERT( m_pData->pActUndoArray->pFatherUndoArray, "svl::SfxUndoManager::ImplLeaveListAction, no father undo array!?" );
+    DBG_ASSERT( m_pData->pActUndoArray->pFatherUndoArray, "SfxUndoManager::ImplLeaveListAction, no father undo array!?" );
 
     // the array/level which we're about to leave
     SfxUndoArray* pArrayToLeave = m_pData->pActUndoArray;

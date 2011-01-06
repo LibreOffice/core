@@ -400,12 +400,23 @@ protected:
 
     void    ImplClearRedo_NoLock( bool const i_currentLevel );
 
+    /** clears all undo actions on the current level, plus all undo actions on superordinate levels,
+        as soon as those levels are reached.
+
+        If no list action is active currently, i.e. we're on the top level already, this method is equivalent to
+        ->Clear.
+
+        Otherwise, the Undo actions on the current level are removed. Upon leaving the current list action, all
+        undo actions on the then-current level are removed, too. This is continued until the top level is reached.
+    */
+    void    ClearAllLevels();
+
 private:
     size_t  ImplLeaveListAction( const bool i_merge, ::svl::undo::impl::UndoManagerGuard& i_guard );
     bool    ImplAddUndoAction_NoNotify( SfxUndoAction* pAction, bool bTryMerge, bool bClearRedo, ::svl::undo::impl::UndoManagerGuard& i_guard );
     void    ImplClearRedo( ::svl::undo::impl::UndoManagerGuard& i_guard, bool const i_currentLevel );
     void    ImplClearUndo( ::svl::undo::impl::UndoManagerGuard& i_guard );
-    void    ImplClear( ::svl::undo::impl::UndoManagerGuard& i_guard );
+    void    ImplClearCurrentLevel_NoNotify( ::svl::undo::impl::UndoManagerGuard& i_guard );
     size_t  ImplGetRedoActionCount_Lock( bool const i_currentLevel = CurrentLevel ) const;
     bool    ImplIsUndoEnabled_Lock() const;
     bool    ImplIsInListAction_Lock() const;
