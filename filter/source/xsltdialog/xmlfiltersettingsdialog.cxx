@@ -1359,7 +1359,7 @@ const application_info_impl* getApplicationInfo( const OUString& rServiceName )
         {
             return (*aIter);
         }
-        aIter++;
+        ++aIter;
     }
     return NULL;
 }
