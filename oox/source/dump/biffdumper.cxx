@@ -2523,7 +2523,8 @@ void WorkbookStreamObject::implDumpRecordBody()
             }
             else
             {
-                sal_uInt16 nTextLen = ::std::min( dumpDec< sal_uInt16 >( "text-len" ), static_cast< sal_uInt16 >( rStrm.getRemaining() ) );
+                sal_uInt16 nTextLen = dumpDec< sal_uInt16 >( "text-len" );
+                nTextLen = ::std::min( nTextLen, static_cast< sal_uInt16 >( rStrm.getRemaining() ) );
                 writeStringItem( "note-text", rStrm.readCharArrayUC( nTextLen, getBiffData().getTextEncoding(), true ) );
             }
         break;

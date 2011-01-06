@@ -823,6 +823,7 @@ bool BiffWorksheetFragment::importFragment()
                         case BIFF_ID_COLUMNDEFAULT: importColumnDefault();                  break;
                         case BIFF_ID_COLWIDTH:      importColWidth();                       break;
                         case BIFF2_ID_DEFROWHEIGHT: importDefRowHeight();                   break;
+                        case BIFF_ID_NOTE:          importNote();                           break;
                         case BIFF2_ID_WINDOW2:      rSheetViewSett.importWindow2( mrStrm ); break;
                     }
                     break;
@@ -833,6 +834,7 @@ bool BiffWorksheetFragment::importFragment()
                         case BIFF_ID_DEFCOLWIDTH:   importDefColWidth();                            break;
                         case BIFF3_ID_DEFROWHEIGHT: importDefRowHeight();                           break;
                         case BIFF_ID_HCENTER:       rPageSett.importHorCenter( mrStrm );            break;
+                        case BIFF_ID_NOTE:          importNote();                                   break;
                         case BIFF_ID_OBJ:           rDrawing.importObj( mrStrm );                   break;
                         case BIFF_ID_OBJECTPROTECT: rWorksheetSett.importObjectProtect( mrStrm );   break;
                         case BIFF_ID_SAVERECALC:    rWorkbookSett.importSaveRecalc( mrStrm );       break;
@@ -849,6 +851,7 @@ bool BiffWorksheetFragment::importFragment()
                         case BIFF_ID_COLINFO:       importColInfo();                                break;
                         case BIFF3_ID_DEFROWHEIGHT: importDefRowHeight();                           break;
                         case BIFF_ID_HCENTER:       rPageSett.importHorCenter( mrStrm );            break;
+                        case BIFF_ID_NOTE:          importNote();                                   break;
                         case BIFF_ID_OBJ:           rDrawing.importObj( mrStrm );                   break;
                         case BIFF_ID_OBJECTPROTECT: rWorksheetSett.importObjectProtect( mrStrm );   break;
                         case BIFF_ID_PAGESETUP:     rPageSett.importPageSetup( mrStrm );            break;
@@ -867,6 +870,7 @@ bool BiffWorksheetFragment::importFragment()
                         case BIFF3_ID_DEFROWHEIGHT: importDefRowHeight();                           break;
                         case BIFF_ID_HCENTER:       rPageSett.importHorCenter( mrStrm );            break;
                         case BIFF_ID_MERGEDCELLS:   importMergedCells();                            break;  // #i62300# also in BIFF5
+                        case BIFF_ID_NOTE:          importNote();                                   break;
                         case BIFF_ID_OBJ:           rDrawing.importObj( mrStrm );                   break;
                         case BIFF_ID_OBJECTPROTECT: rWorksheetSett.importObjectProtect( mrStrm );   break;
                         case BIFF_ID_PAGESETUP:     rPageSett.importPageSetup( mrStrm );            break;
@@ -894,7 +898,7 @@ bool BiffWorksheetFragment::importFragment()
                         case BIFF_ID_HYPERLINK:         importHyperlink();                              break;
                         case BIFF_ID_LABELRANGES:       importLabelRanges();                            break;
                         case BIFF_ID_MERGEDCELLS:       importMergedCells();                            break;
-//                        case BIFF_ID_OBJ:               rDrawing.importObj( mrStrm );                   break;
+                        case BIFF_ID_OBJ:               rDrawing.importObj( mrStrm );                   break;
                         case BIFF_ID_OBJECTPROTECT:     rWorksheetSett.importObjectProtect( mrStrm );   break;
                         case BIFF_ID_PAGESETUP:         rPageSett.importPageSetup( mrStrm );            break;
                         case BIFF_ID_PHONETICPR:        rWorksheetSett.importPhoneticPr( mrStrm );      break;
@@ -1147,6 +1151,11 @@ void BiffWorksheetFragment::importMergedCells()
     getAddressConverter().convertToCellRangeList( aRanges, aBiffRanges, getSheetIndex(), true );
     for( ApiCellRangeList::const_iterator aIt = aRanges.begin(), aEnd = aRanges.end(); aIt != aEnd; ++aIt )
         setMergedRange( *aIt );
+}
+
+void BiffWorksheetFragment::importNote()
+{
+    getComments().createComment()->importNote( mrStrm );
 }
 
 void BiffWorksheetFragment::importPageBreaks( bool bRowBreak )

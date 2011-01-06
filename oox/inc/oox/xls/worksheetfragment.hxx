@@ -173,6 +173,8 @@ private:
     void                importLabelRanges();
     /** Imports the MEREDCELLS record and merges all cells in the document. */
     void                importMergedCells();
+    /** Imports the NOTE record containing a cell note. */
+    void                importNote();
     /** Imports the HORPAGEBREAKS or VERPAGEBREAKS record and inserts page breaks. */
     void                importPageBreaks( bool bRowBreak );
     /** Imports a pivot table. */

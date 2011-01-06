@@ -34,6 +34,7 @@
 #include "oox/helper/recordinputstream.hxx"
 #include "oox/vml/vmlshape.hxx"
 #include "oox/xls/addressconverter.hxx"
+#include "oox/xls/biffinputstream.hxx"
 #include "oox/xls/drawingfragment.hxx"
 
 using ::rtl::OUString;
@@ -82,6 +83,39 @@ void Comment::importComment( RecordInputStream& rStrm )
     getAddressConverter().convertToCellRangeUnchecked( maModel.maRange, aBinRange, getSheetIndex() );
 }
 
+void Comment::importNote( BiffInputStream& rStrm )
+{
+    BinAddress aBinAddr;
+    sal_uInt16 nTotalLen;
+    rStrm >> aBinAddr >> nTotalLen;
+    // cell range will be checked while inserting the comment into the document
+    getAddressConverter().convertToCellRangeUnchecked( maModel.maRange, BinRange( aBinAddr ), getSheetIndex() );
+    RichStringRef xNoteText = createText();
+
+    sal_uInt16 nPartLen = ::std::min( nTotalLen, static_cast< sal_uInt16 >( rStrm.getRemaining() ) );
+    xNoteText->importCharArray( rStrm, nPartLen, getTextEncoding() );
+
+    nTotalLen = nTotalLen - nPartLen;   // operator-=() gives compiler warning
+    while( (nTotalLen > 0) && (rStrm.getNextRecId() == BIFF_ID_NOTE) && rStrm.startNextRecord() )
+    {
+        rStrm >> aBinAddr >> nPartLen;
+        OSL_ENSURE( aBinAddr.mnRow == 0xFFFF, "Comment::importNote - missing continuation NOTE record" );
+        if( aBinAddr.mnRow == 0xFFFF )
+        {
+            OSL_ENSURE( nPartLen <= nTotalLen, "Comment::importNote - string too long" );
+            // call to RichString::importCharArray() appends new text portion
+            xNoteText->importCharArray( rStrm, nPartLen, getTextEncoding() );
+            nTotalLen = nTotalLen - ::std::min( nTotalLen, nPartLen );
+        }
+        else
+        {
+            // seems to be a new note, rewind record, so worksheet fragment loop will find it
+            rStrm.rewindRecord();
+            nTotalLen = 0;
+        }
+    }
+}
+
 RichStringRef Comment::createText()
 {
     maModel.mxText.reset( new RichString( *this ) );
@@ -107,14 +141,25 @@ void Comment::finalizeImport()
         Reference< XSheetAnnotationShapeSupplier > xAnnoShapeSupp( xAnno, UNO_QUERY_THROW );
         Reference< XShape > xAnnoShape( xAnnoShapeSupp->getAnnotationShape(), UNO_SET_THROW );
         // convert shape formatting
-        if( const ::oox::vml::ShapeBase* pNoteShape = getVmlDrawing().getNoteShape( aNotePos ) )
+        switch( getFilterType() )
         {
-            // position and formatting
-            pNoteShape->convertFormatting( xAnnoShape );
-            // visibility
-            const ::oox::vml::ShapeModel::ShapeClientDataPtr& rxClientData = pNoteShape->getShapeModel().mxClientData;
-            bool bVisible = rxClientData.get() && rxClientData->mbVisible;
-            xAnno->setIsVisible( bVisible );
+            case FILTER_OOX:
+                if( const ::oox::vml::ShapeBase* pNoteShape = getVmlDrawing().getNoteShape( aNotePos ) )
+                {
+                    // position and formatting
+                    pNoteShape->convertFormatting( xAnnoShape );
+                    // visibility
+                    const ::oox::vml::ShapeModel::ShapeClientDataPtr& rxClientData = pNoteShape->getShapeModel().mxClientData;
+                    bool bVisible = rxClientData.get() && rxClientData->mbVisible;
+                    xAnno->setIsVisible( bVisible );
+                }
+            break;
+            case FILTER_BIFF:
+                // notes are always hidden and unformatted in BIFF3-BIFF5
+                xAnno->setIsVisible( sal_False );
+            break;
+            case FILTER_UNKNOWN:
+            break;
         }
         // insert text and convert text formatting
         maModel.mxText->finalizeImport();

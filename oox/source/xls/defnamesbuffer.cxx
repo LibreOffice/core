@@ -491,6 +491,10 @@ void DefinedName::createNameObject()
     if( /*maModel.mbHidden ||*/ maModel.mbFunction )
         return;
 
+    // skip BIFF names without stream position (e.g. BIFF3-BIFF4 internal 3D references)
+    if( (getFilterType() == FILTER_BIFF) && !mxBiffStrm.get() )
+        return;
+
     // convert original name to final Calc name
     if( maModel.mbVBName )
         maCalcName = maModel.maName;

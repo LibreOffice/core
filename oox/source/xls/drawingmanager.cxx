@@ -891,7 +891,8 @@ void BiffDrawingBase::importObj( BiffInputStream& rStrm )
             xDrawingObj = BiffDrawingObjectBase::importObjBiff4( *this, rStrm );
         break;
         case BIFF5:
-        case BIFF8:
+// TODO: add BIFF8 when DFF is supported
+//        case BIFF8:
             xDrawingObj = BiffDrawingObjectBase::importObjBiff5( *this, rStrm );
         break;
         default:;

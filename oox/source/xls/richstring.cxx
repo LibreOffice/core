@@ -416,7 +416,12 @@ void RichString::importString( RecordInputStream& rStrm, bool bRich )
     }
 }
 
-void RichString::importByteString( BiffInputStream& rStrm, rtl_TextEncoding eDefaultTextEnc, BiffStringFlags nFlags )
+void RichString::importCharArray( BiffInputStream& rStrm, sal_uInt16 nChars, rtl_TextEncoding eTextEnc )
+{
+    createPortion()->setText( rStrm.readCharArrayUC( nChars, eTextEnc ) );
+}
+
+void RichString::importByteString( BiffInputStream& rStrm, rtl_TextEncoding eTextEnc, BiffStringFlags nFlags )
 {
     OSL_ENSURE( !getFlag( nFlags, BIFF_STR_KEEPFONTS ), "RichString::importString - keep fonts not implemented" );
     OSL_ENSURE( !getFlag( nFlags, static_cast< BiffStringFlags >( ~(BIFF_STR_8BITLENGTH | BIFF_STR_EXTRAFONTS) ) ), "RichString::importByteString - unknown flag" );
@@ -428,11 +433,11 @@ void RichString::importByteString( BiffInputStream& rStrm, rtl_TextEncoding eDef
     {
         FontPortionModelList aPortions;
         aPortions.importPortions( rStrm, false );
-        createFontPortions( aBaseText, eDefaultTextEnc, aPortions );
+        createFontPortions( aBaseText, eTextEnc, aPortions );
     }
     else
     {
-        createPortion()->setText( OStringToOUString( aBaseText, eDefaultTextEnc ) );
+        createPortion()->setText( OStringToOUString( aBaseText, eTextEnc ) );
     }
 }
 
@@ -525,7 +530,7 @@ RichStringPhoneticRef RichString::createPhonetic()
     return xPhonetic;
 }
 
-void RichString::createFontPortions( const OString& rText, rtl_TextEncoding eDefaultTextEnc, FontPortionModelList& rPortions )
+void RichString::createFontPortions( const OString& rText, rtl_TextEncoding eTextEnc, FontPortionModelList& rPortions )
 {
     maFontPortions.clear();
     sal_Int32 nStrLen = rText.getLength();
@@ -545,8 +550,8 @@ void RichString::createFontPortions( const OString& rText, rtl_TextEncoding eDef
             {
                 // convert byte string to unicode string, using current font encoding
                 FontRef xFont = getStyles().getFont( aIt->mnFontId );
-                rtl_TextEncoding eTextEnc = xFont.get() ? xFont->getFontEncoding() : eDefaultTextEnc;
-                OUString aUniStr = OStringToOUString( rText.copy( aIt->mnPos, nPortionLen ), eTextEnc );
+                rtl_TextEncoding eFontEnc = xFont.get() ? xFont->getFontEncoding() : eTextEnc;
+                OUString aUniStr = OStringToOUString( rText.copy( aIt->mnPos, nPortionLen ), eFontEnc );
                 // create string portion
                 RichStringPortionRef xPortion = createPortion();
                 xPortion->setText( aUniStr );

@@ -246,9 +246,11 @@ public:
     /** Imports a Unicode rich-string from the passed record stream. */
     void                importString( RecordInputStream& rStrm, bool bRich );
 
-    /** Imports a byte string from the passed BIFF stream. */
-    void                importByteString( BiffInputStream& rStrm, rtl_TextEncoding eDefaultTextEnc, BiffStringFlags nFlags = BIFF_STR_DEFAULT );
-    /** Imports a Unicode rich-string from the passed BIFF stream. */
+    /** Imports nChars byte characters from the passed BIFF stream and appends a new text portion. */
+    void                importCharArray( BiffInputStream& rStrm, sal_uInt16 nChars, rtl_TextEncoding eTextEnc );
+    /** Imports a byte string from the passed BIFF stream and appends new text portions. */
+    void                importByteString( BiffInputStream& rStrm, rtl_TextEncoding eTextEnc, BiffStringFlags nFlags = BIFF_STR_DEFAULT );
+    /** Imports a Unicode rich-string from the passed BIFF stream and appends new text portions. */
     void                importUniString( BiffInputStream& rStrm, BiffStringFlags nFlags = BIFF_STR_DEFAULT );
 
     /** Final processing after import of all strings. */
@@ -266,7 +268,7 @@ private:
     RichStringPhoneticRef createPhonetic();
 
     /** Create base text portions from the passed string and character formatting. */
-    void                createFontPortions( const ::rtl::OString& rText, rtl_TextEncoding eDefaultTextEnc, FontPortionModelList& rPortions );
+    void                createFontPortions( const ::rtl::OString& rText, rtl_TextEncoding eTextEnc, FontPortionModelList& rPortions );
     /** Create base text portions from the passed string and character formatting. */
     void                createFontPortions( const ::rtl::OUString& rText, FontPortionModelList& rPortions );
     /** Create phonetic text portions from the passed string and portion data. */
