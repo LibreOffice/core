@@ -85,7 +85,7 @@ LwpIndexManager::~LwpIndexManager()
     //Clear m_ObjectKeys
     std::vector<LwpKey*>::iterator it;
 
-    for( it = m_ObjectKeys.begin(); it != m_ObjectKeys.end(); it++ )
+    for( it = m_ObjectKeys.begin(); it != m_ObjectKeys.end(); ++it )
     {
         LwpKey* pKey = *it;
         if( pKey )
