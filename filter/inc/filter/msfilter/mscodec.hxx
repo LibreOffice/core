@@ -28,8 +28,11 @@
 #ifndef SVX_MSCODEC_HXX
 #define SVX_MSCODEC_HXX
 
-#include "rtl/cipher.h"
-#include "rtl/digest.h"
+#include <com/sun/star/uno/Sequence.hxx>
+#include <com/sun/star/beans/NamedValue.hpp>
+
+#include <rtl/cipher.h>
+#include <rtl/digest.h>
 #include "filter/msfilter/msfilterdllapi.h"
 
 namespace msfilter {
@@ -51,6 +54,23 @@ public:
             which results in a maximum length of 15 characters.
      */
     void                InitKey( const sal_uInt8 pnPassData[ 16 ] );
+
+    /** Initializes the algorithm with the encryption data.
+
+        @param aData
+            The sequence contains the necessary data to initialize
+            the codec.
+     */
+    sal_Bool                InitCodec( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >& aData );
+
+    /** Retrieves the encryption data
+
+        @return
+            The sequence contains the necessary data to initialize
+            the codec.
+     */
+    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue > GetEncryptionData();
+
 
     /** Verifies the validity of the password using the passed key and hash.
 
@@ -104,16 +124,6 @@ public:
             Number of bytes to be skipped (cipher "seeks" forward).
      */
     void                Skip( sal_Size nBytes );
-
-    // static -----------------------------------------------------------------
-
-    /** Calculates the 16-bit hash value for the given password.
-
-        The password data may be longer than 16 bytes. The array does not need
-        to be terminated with a NULL byte (but it can without invalidating the
-        result).
-     */
-    static sal_uInt16   GetHash( const sal_uInt8* pnPassData, sal_Size nSize );
 
 protected:
     sal_uInt8           mpnKey[ 16 ];   /// Encryption key.
@@ -185,17 +195,34 @@ public:
     explicit            MSCodec_Std97();
                         ~MSCodec_Std97();
 
+    /** Initializes the algorithm with the encryption data.
+
+        @param aData
+            The sequence contains the necessary data to initialize
+            the codec.
+     */
+    sal_Bool                InitCodec( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >& aData );
+
+    /** Retrieves the encryption data
+
+        @return
+            The sequence contains the necessary data to initialize
+            the codec.
+     */
+    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue > GetEncryptionData();
+
+
     /** Initializes the algorithm with the specified password and document ID.
 
         @param pPassData
             Wide character array containing the password. Must be zero
             terminated, which results in a maximum length of 15 characters.
-        @param pUnique
+        @param pDocId
             Unique document identifier read from or written to the file.
      */
     void                InitKey(
                             const sal_uInt16 pPassData[ 16 ],
-                            const sal_uInt8 pUnique[ 16 ] );
+                            const sal_uInt8 pDocId[ 16 ] );
 
     /** Verifies the validity of the password using the passed salt data.
 
@@ -320,8 +347,17 @@ public:
                             sal_uInt8 pSaltData[16],
                             sal_uInt8 pSaltDigest[16]);
 
-private:
+    /* allows to get the unique document id from the codec
+     */
+    void                GetDocId( sal_uInt8 pDocId[16] );
+
     void                GetDigestFromSalt( const sal_uInt8 pSaltData[16], sal_uInt8 pDigest[16] );
+
+private:
+    void                InitKeyImpl(
+                            const sal_uInt8 pKeyData[64],
+                            const sal_uInt8 pDocId[16] );
+
 
 private:
                         MSFILTER_DLLPRIVATE MSCodec_Std97( const MSCodec_Std97& );
@@ -330,6 +366,7 @@ private:
     rtlCipher           m_hCipher;
     rtlDigest           m_hDigest;
     sal_uInt8           m_pDigestValue[ RTL_DIGEST_LENGTH_MD5 ];
+    sal_uInt8           m_pDocId[16];
 };
 
 // ============================================================================

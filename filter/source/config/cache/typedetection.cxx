@@ -1103,12 +1103,11 @@ void TypeDetection::impl_seekStreamToZero(comphelper::MediaDescriptor& rDescript
     try
     {
         // create a new request to ask user for it's decision about the usable filter
-        ::framework::RequestFilterSelect* pRequest = new ::framework::RequestFilterSelect(sURL);
-        css::uno::Reference< css::task::XInteractionRequest > xRequest(static_cast< css::task::XInteractionRequest* >(pRequest), css::uno::UNO_QUERY_THROW);
-        xInteraction->handle(xRequest);
+        ::framework::RequestFilterSelect aRequest(sURL);
+        xInteraction->handle(aRequest.GetRequest());
 
         // "Cancel" pressed? => return with error
-        if (pRequest->isAbort())
+        if (aRequest.isAbort())
             return ::rtl::OUString();
 
         // "OK" pressed => verify the selected filter, get it's coressponding
@@ -1117,7 +1116,7 @@ void TypeDetection::impl_seekStreamToZero(comphelper::MediaDescriptor& rDescript
         // a type here only. But we must be shure, that the selected filter is used
         // too and no ambigous filter registration disturb us .-)
 
-        ::rtl::OUString sFilter = pRequest->getFilter();
+        ::rtl::OUString sFilter = aRequest.getFilter();
         if (!impl_validateAndSetFilterOnDescriptor(rDescriptor, sFilter))
             return ::rtl::OUString();
 
