@@ -4858,7 +4858,8 @@ void SwLayoutFrm::PaintColLines( const SwRect &rRect, const SwFmtCol &rFmtCol,
         (aLineRect.*fnRect->fnSetPosX)
             ( (pCol->Frm().*fnGetX)() - nPenHalf );
         if ( aRect.IsOver( aLineRect ) )
-            PaintBorderLine( aRect, aLineRect , pPage, &rFmtCol.GetLineColor() );
+            PaintBorderLine( aRect, aLineRect , pPage, &rFmtCol.GetLineColor(),
+                   rFmtCol.GetLineStyle() );
         pCol = pCol->GetNext();
     }
 }

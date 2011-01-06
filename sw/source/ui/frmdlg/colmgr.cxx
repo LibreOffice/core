@@ -155,4 +155,11 @@ SwColMgr::~SwColMgr()
 {
 }
 
+void SwColMgr::SetLineWidthAndColor(SvxBorderStyle eStyle, sal_uLong nLWidth, const Color& rCol)
+{
+    aFmtCol.SetLineStyle(eStyle);
+    aFmtCol.SetLineWidth(nLWidth);
+    aFmtCol.SetLineColor(rCol);
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

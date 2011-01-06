@@ -130,6 +130,10 @@ class SwColumnPage : public SfxTabPage
     FixedLine       aFLLineType;
     FixedText       aLineTypeLbl;
     LineListBox     aLineTypeDLB;
+    FixedText       aLineWidthLbl;
+    MetricField     aLineWidthEdit;
+    FixedText       aLineColorLbl;
+    ColorListBox    aLineColorDLB;
     FixedText       aLineHeightLbl;
     MetricField     aLineHeightEdit;
     FixedText       aLinePosLbl;

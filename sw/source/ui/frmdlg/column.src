@@ -262,7 +262,7 @@ TabPage TP_COLUMN
     {
         Pos = MAP_APPFONT ( 12 , 140 ) ;
         Size = MAP_APPFONT ( 35 , 8 ) ;
-        Text [ en-US ] = "~Line" ;
+        Text [ en-US ] = "St~yle" ;
         Left = TRUE ;
     };
     ListBox LB_STYLE
@@ -272,14 +272,49 @@ TabPage TP_COLUMN
         Size = MAP_APPFONT ( 60 , 66 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
-        StringList [ en-US ] =
-        {
-            < "None" ; Default ; > ;
-        };
+    };
+    FixedText FT_LINEWIDTH
+    {
+        Pos = MAP_APPFONT ( 12 , 156 ) ;
+        Size = MAP_APPFONT ( 35 , 8 ) ;
+        Text [ en-US ] = "~Width" ;
+        Left = TRUE ;
+    };
+    MetricField ED_LINEWIDTH
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 50 , 154 ) ;
+        Size = MAP_APPFONT ( 60 , 12 ) ;
+        TabStop = TRUE ;
+        Spin = TRUE ;
+        Repeat = TRUE ;
+        First = 25 ;
+        Last = 900 ;
+        Minimum = 25 ;
+        Maximum = 900 ;
+        DecimalDigits = 2 ;
+        SpinSize = 25 ;
+        Unit = FUNIT_POINT ;
+    };
+    FixedText FT_COLOR
+    {
+        Pos = MAP_APPFONT ( 12 , 172 ) ;
+        Size = MAP_APPFONT ( 35 , 8 ) ;
+        Text [ en-US ] = "~Color" ;
+        Left = TRUE ;
+    };
+    ListBox LB_COLOR
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 50 , 170 ) ;
+        Size = MAP_APPFONT ( 60 , 68 ) ;
+        DropDown = TRUE ;
+        DDExtraWidth = TRUE ;
+        TabStop = TRUE ;
     };
     FixedText FT_HEIGHT
     {
-        Pos = MAP_APPFONT ( 12 , 156 ) ;
+        Pos = MAP_APPFONT ( 122 , 140 ) ;
         Size = MAP_APPFONT ( 35 , 8 ) ;
         Text [ en-US ] = "H~eight" ;
         Left = TRUE ;
@@ -288,7 +323,7 @@ TabPage TP_COLUMN
     {
         HelpID = "sw:MetricField:TP_COLUMN:ED_HEIGHT";
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 50 , 154 ) ;
+        Pos = MAP_APPFONT ( 160 , 138 ) ;
         Size = MAP_APPFONT ( 60 , 12 ) ;
         TabStop = TRUE ;
         Left = TRUE ;
@@ -304,7 +339,7 @@ TabPage TP_COLUMN
     };
     FixedText FT_POSITION
     {
-        Pos = MAP_APPFONT ( 12 , 172 ) ;
+        Pos = MAP_APPFONT ( 122 , 156 ) ;
         Size = MAP_APPFONT ( 35 , 8 ) ;
         Left = TRUE ;
         Text [ en-US ] = "~Position" ;
@@ -312,7 +347,7 @@ TabPage TP_COLUMN
     ListBox LB_POSITION
     {
         HelpID = "sw:ListBox:TP_COLUMN:LB_POSITION";
-        Pos = MAP_APPFONT ( 50 , 170 ) ;
+        Pos = MAP_APPFONT ( 160 , 154 ) ;
         Size = MAP_APPFONT ( 60 , 40 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;

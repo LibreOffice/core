@@ -28,6 +28,7 @@
 #ifndef _FMTCLDS_HXX
 #define _FMTCLDS_HXX
 
+#include <editeng/borderline.hxx>
 #include <tools/color.hxx>
 #include <svl/poolitem.hxx>
 #include "swdllapi.h"
@@ -77,8 +78,9 @@ enum SwColLineAdj
 
 class SW_DLLPUBLIC SwFmtCol : public SfxPoolItem
 {
+    SvxBorderStyle eLineStyle; //style of the separator line
     sal_uLong   nLineWidth;     // Width of the separator line.
-    Color   aLineColor;     //color of the separator line
+    Color   aLineColor;     // Color of the separator line.
 
     sal_uInt16   nLineHeight;   // Percentile height of lines.
                             // (Based on height of columns including UL).
@@ -119,6 +121,7 @@ public:
           SwColumns &GetColumns()       { return aColumns; }
     sal_uInt16           GetNumCols() const { return aColumns.Count(); }
 
+    SvxBorderStyle  GetLineStyle() const  { return eLineStyle;}
     sal_uLong           GetLineWidth() const  { return nLineWidth;}
     const Color&    GetLineColor() const { return aLineColor;}
 
@@ -132,6 +135,7 @@ public:
     // Return smallest width if bMin is true.
     sal_uInt16 GetGutterWidth( sal_Bool bMin = sal_False ) const;
 
+    void SetLineStyle(SvxBorderStyle eStyle)        { eLineStyle = eStyle;}
     void SetLineWidth(sal_uLong nLWidth)        { nLineWidth = nLWidth;}
     void SetLineColor(const Color& rCol )   { aLineColor = rCol;}
     void SetLineHeight( sal_uInt8 nNew )     { nLineHeight = nNew; }

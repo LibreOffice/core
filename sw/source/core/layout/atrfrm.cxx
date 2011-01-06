@@ -777,6 +777,7 @@ sal_Bool SwColumn::operator==( const SwColumn &rCmp )
 
 SwFmtCol::SwFmtCol( const SwFmtCol& rCpy )
     : SfxPoolItem( RES_COL ),
+    eLineStyle( rCpy.eLineStyle ),
     nLineWidth( rCpy.nLineWidth),
     aLineColor( rCpy.aLineColor),
     nLineHeight( rCpy.GetLineHeight() ),
@@ -796,6 +797,7 @@ SwFmtCol::~SwFmtCol() {}
 
 SwFmtCol& SwFmtCol::operator=( const SwFmtCol& rCpy )
 {
+    eLineStyle  = rCpy.eLineStyle;
     nLineWidth  = rCpy.nLineWidth;
     aLineColor  = rCpy.aLineColor;
     nLineHeight = rCpy.GetLineHeight();
@@ -815,6 +817,7 @@ SwFmtCol& SwFmtCol::operator=( const SwFmtCol& rCpy )
 
 SwFmtCol::SwFmtCol()
     : SfxPoolItem( RES_COL ),
+    eLineStyle( NO_STYLE ),
     nLineWidth(0),
     nLineHeight( 100 ),
     eAdj( COLADJ_NONE ),
@@ -827,7 +830,8 @@ int SwFmtCol::operator==( const SfxPoolItem& rAttr ) const
 {
     OSL_ENSURE( SfxPoolItem::operator==( rAttr ), "keine gleichen Attribute" );
     const SwFmtCol &rCmp = (const SwFmtCol&)rAttr;
-    if( !(nLineWidth        == rCmp.nLineWidth  &&
+    if( !(eLineStyle        == rCmp.eLineStyle  &&
+          nLineWidth        == rCmp.nLineWidth  &&
           aLineColor        == rCmp.aLineColor  &&
           nLineHeight        == rCmp.GetLineHeight() &&
           eAdj               == rCmp.GetLineAdj() &&

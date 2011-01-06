@@ -36,7 +36,11 @@
 #include "column.hxx"
 
 #include "hintids.hxx"
+#include <svx/dialogs.hrc>
+#include <svx/dialmgr.hxx>
 #include <svx/htmlmode.hxx>
+#include <svx/xtable.hxx>
+#include <svx/drawitem.hxx>
 #include <editeng/borderline.hxx>
 #include <editeng/boxitem.hxx>
 #include <editeng/lrspitem.hxx>
@@ -80,15 +84,7 @@ SV_IMPL_PTRARR( SwColumns, SwColumnPtr )
 /*--------------------------------------------------------------------
     Beschreibung:  Statische Daten
  --------------------------------------------------------------------*/
-static const sal_uInt16 nLines[] = {
-    DEF_LINE_WIDTH_0,
-    DEF_LINE_WIDTH_1,
-    DEF_LINE_WIDTH_2,
-    DEF_LINE_WIDTH_3,
-    DEF_LINE_WIDTH_4
-};
 
-static const sal_uInt16 nLineCount = SAL_N_ELEMENTS(nLines);
 static const sal_uInt16 nVisCols = 3;
 
 inline sal_Bool IsMarkInSameSection( SwWrtShell& rWrtSh, const SwSection* pSect )
@@ -399,15 +395,6 @@ static sal_uInt16 aPageRg[] = {
 
 DBG_NAME(columnhdl)
 
-sal_uInt16 lcl_LineWidthToPos(sal_uLong nWidth)
-{
-    const sal_uInt16 nUShortWidth = (sal_uInt16)nWidth;
-    for(sal_uInt16 i = 0; i < nLineCount; ++i)
-        if(nUShortWidth == nLines[i])
-            return i;
-    return 0;
-}
-
 void SwColumnPage::ResetColWidth()
 {
     if( nCols )
@@ -453,6 +440,10 @@ SwColumnPage::SwColumnPage(Window *pParent, const SfxItemSet &rSet)
     aFLLineType(this,       SW_RES(FL_LINETYPE)),
     aLineTypeLbl(this,      SW_RES(FT_STYLE)),
     aLineTypeDLB(this,      SW_RES(LB_STYLE)),
+    aLineWidthLbl(this,     SW_RES(FT_LINEWIDTH)),
+    aLineWidthEdit(this,    SW_RES(ED_LINEWIDTH)),
+    aLineColorLbl(this,     SW_RES(FT_COLOR)),
+    aLineColorDLB(this,     SW_RES(LB_COLOR)),
     aLineHeightLbl(this,    SW_RES(FT_HEIGHT)),
     aLineHeightEdit(this,   SW_RES(ED_HEIGHT)),
     aLinePosLbl(this,       SW_RES(FT_POSITION)),
@@ -476,7 +467,7 @@ SwColumnPage::SwColumnPage(Window *pParent, const SfxItemSet &rSet)
     bHtmlMode(sal_False),
     bLockUpdate(sal_False)
 {
-    sal_uInt16 i;
+    long i;
 
     FreeResource();
     SetExchangeSupport();
@@ -534,14 +525,50 @@ SwColumnPage::SwColumnPage(Window *pParent, const SfxItemSet &rSet)
 
     aLk = LINK( this, SwColumnPage, UpdateColMgr );
     aLineTypeDLB.SetSelectHdl( aLk );
+    aLineWidthEdit.SetModifyHdl( aLk );
+    aLineColorDLB.SetSelectHdl( aLk );
     aLineHeightEdit.SetModifyHdl( aLk );
     aLinePosDLB.SetSelectHdl( aLk );
 
-        // Trennlinie
+    // Separator line
     aLineTypeDLB.SetUnit( FUNIT_POINT );
     aLineTypeDLB.SetSourceUnit( FUNIT_TWIP );
-    for( i = 0; i < nLineCount; ++i )
-        aLineTypeDLB.InsertEntry( 100 * nLines[ i ] );
+
+    // Fill the line styles listbox
+    aLineTypeDLB.SetNone( SVX_RESSTR( RID_SVXSTR_NONE ) );
+    aLineTypeDLB.InsertEntry( SvxBorderLine::getWidthImpl( SOLID ), SOLID );
+    aLineTypeDLB.InsertEntry( SvxBorderLine::getWidthImpl( DOTTED ), DOTTED );
+    aLineTypeDLB.InsertEntry( SvxBorderLine::getWidthImpl( DASHED ), DASHED );
+
+    long nLineWidth = MetricField::ConvertDoubleValue(
+            aLineWidthEdit.GetValue( ),
+            aLineWidthEdit.GetDecimalDigits( ),
+            aLineWidthEdit.GetUnit(), MAP_TWIP );
+    aLineTypeDLB.SetWidth( nLineWidth );
+
+    // Fill the color listbox
+    SfxObjectShell* pDocSh = SfxObjectShell::Current();
+    const SfxPoolItem*  pItem       = NULL;
+    XColorTable*        pColorTable = NULL;
+    if ( pDocSh )
+    {
+        pItem = pDocSh->GetItem( SID_COLOR_TABLE );
+        if ( pItem != NULL )
+            pColorTable = ( (SvxColorTableItem*)pItem )->GetColorTable();
+    }
+
+    if ( pColorTable )
+    {
+        aLineColorDLB.SetUpdateMode( sal_False );
+
+        for ( i = 0; i < pColorTable->Count(); ++i )
+        {
+            XColorEntry* pEntry = pColorTable->GetColor(i);
+            aLineColorDLB.InsertEntry( pEntry->GetColor(), pEntry->GetName() );
+        }
+        aLineColorDLB.SetUpdateMode( sal_True );
+    }
+    aLineColorDLB.SelectEntryPos( 0 );
 }
 
 SwColumnPage::~SwColumnPage()
@@ -705,11 +732,18 @@ IMPL_LINK( SwColumnPage, UpdateColMgr, void *, /*pField*/ )
         sal_Bool bEnable = 0 != nPos;
         aLineHeightEdit.Enable( bEnable );
         aLineHeightLbl.Enable( bEnable );
+        long nLineWidth = MetricField::ConvertDoubleValue(
+                aLineWidthEdit.GetValue( ),
+                aLineWidthEdit.GetDecimalDigits( ),
+                aLineWidthEdit.GetUnit(), MAP_TWIP );
         if( !bEnable )
             pColMgr->SetNoLine();
         else if( LISTBOX_ENTRY_NOTFOUND != nPos )
         {
-            pColMgr->SetLineWidthAndColor(nLines[nPos - 1], Color(COL_BLACK) );
+            pColMgr->SetLineWidthAndColor(
+                    SvxBorderStyle( aLineTypeDLB.GetSelectEntryStyle( ) ),
+                    nLineWidth,
+                    aLineColorDLB.GetSelectEntryColor() );
             pColMgr->SetAdjust( SwColLineAdj(
                                     aLinePosDLB.GetSelectEntryPos() + 1) );
             pColMgr->SetLineHeightPercent((short)aLineHeightEdit.GetValue());
@@ -717,6 +751,9 @@ IMPL_LINK( SwColumnPage, UpdateColMgr, void *, /*pField*/ )
         }
         aLinePosLbl.Enable( bEnable );
         aLinePosDLB.Enable( bEnable );
+
+        aLineTypeDLB.SetWidth( nLineWidth );
+        aLineTypeDLB.SetColor( aLineColorDLB.GetSelectEntryColor( ) );
     }
     else
     {
@@ -785,8 +822,13 @@ void SwColumnPage::Init()
         }
         else
         {
-            aLineTypeDLB.SelectEntryPos( lcl_LineWidthToPos(( pColMgr->GetLineWidth() )) + 1);
+            // Need to multiply by 100 because of the 2 decimals
+            aLineWidthEdit.SetValue( pColMgr->GetLineWidth() * 100, FUNIT_TWIP );
+            aLineColorDLB.SelectEntry( pColMgr->GetLineColor() );
+            aLineTypeDLB.SelectEntry( pColMgr->GetLineStyle() );
+            aLineTypeDLB.SetWidth( pColMgr->GetLineWidth( ) );
             aLineHeightEdit.SetValue( pColMgr->GetLineHeightPercent() );
+
         }
         aLinePosDLB.SelectEntryPos( static_cast< sal_uInt16 >(eAdj - 1) );
     }
@@ -858,6 +900,10 @@ void SwColumnPage::UpdateCols()
     aLineHeightLbl.Enable( bEnable );
     aLineTypeDLB.Enable( bEnable );
     aLineTypeLbl.Enable( bEnable );
+    aLineWidthLbl.Enable( bEnable );
+    aLineWidthEdit.Enable( bEnable );
+    aLineColorDLB.Enable( bEnable );
+    aLineColorLbl.Enable( bEnable );
     aAutoWidthBox.Enable( bEnable && !bHtmlMode );
 }
 

@@ -56,7 +56,8 @@ public:
     inline sal_Bool         HasLine() const;
     inline void         SetNoLine();
 
-    inline void         SetLineWidthAndColor(sal_uLong nWidth, const Color& rCol);
+    void                SetLineWidthAndColor(SvxBorderStyle eStyle, sal_uLong nWidth, const Color& rCol);
+    inline SvxBorderStyle   GetLineStyle() const;
     inline sal_uLong        GetLineWidth() const;
     inline const Color& GetLineColor() const;
 
@@ -87,10 +88,9 @@ inline  sal_uInt16 SwColMgr::GetCount() const
     return aFmtCol.GetNumCols();
 }
 
-inline void         SwColMgr::SetLineWidthAndColor(sal_uLong nLWidth, const Color& rCol)
+inline SvxBorderStyle SwColMgr::GetLineStyle() const
 {
-    aFmtCol.SetLineWidth(nLWidth);
-    aFmtCol.SetLineColor(rCol);
+    return aFmtCol.GetLineStyle();
 }
 inline sal_uLong        SwColMgr::GetLineWidth() const
 {
