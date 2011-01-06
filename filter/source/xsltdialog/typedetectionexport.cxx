@@ -156,7 +156,7 @@ void TypeDetectionExporter::doExport( Reference< XOutputStream > xOS,  const XML
                 xHandler->ignorableWhitespace ( sWhiteSpace );
                 xHandler->endElement( sNode );
 
-                aIter++;
+                ++aIter;
             }
 
             xHandler->ignorableWhitespace ( sWhiteSpace );
@@ -215,7 +215,7 @@ void TypeDetectionExporter::doExport( Reference< XOutputStream > xOS,  const XML
                 addProperty( xHandler, sData, sValue );
                 xHandler->ignorableWhitespace ( sWhiteSpace );
                 xHandler->endElement( sNode );
-                aIter++;
+                ++aIter;
             }
 
             xHandler->endElement( sNode );
