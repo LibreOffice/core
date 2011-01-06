@@ -60,7 +60,7 @@ public:
     void                importComment( const AttributeList& rAttribs );
     /** Imports a cell comment from the passed stream of a COMMENT record. */
     void                importComment( RecordInputStream& rStrm );
-    /** Imports a cell comment from the passed stream of a BIFF3-BIFF5 NOTE record. */
+    /** Imports a cell comment from the passed stream of a NOTE record. */
     void                importNote( BiffInputStream& rStrm );
 
     /** Creates and returns a new rich-string object for the comment text. */
