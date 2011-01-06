@@ -964,7 +964,7 @@ void SdPublishingDlg::GetParameterSequence( Sequence< PropertyValue >& rParams )
     rParams.realloc( aProps.size() );
     PropertyValue* pParams = rParams.getArray();
 
-    for( std::vector< PropertyValue >::iterator i = aProps.begin(); i != aProps.end(); i++ )
+    for( std::vector< PropertyValue >::iterator i = aProps.begin(); i != aProps.end(); ++i )
     {
         *pParams++ = (*i);
     }
