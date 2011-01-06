@@ -373,13 +373,20 @@ public class OpenOfficeDatabaseReportExtractor extends Assurance
                 {
                     String sReportName = sElementNames[i];
                     XComponent xDoc = loadComponent(sReportName, _xNameAccess, _aPropertyList);
-//                     util.utils.shortWait(1000);
-                    // print? or store?
-                    String sDocumentPathName = storeComponent(sReportName, xDoc /*, _nType*/);
-                    aList.add(sDocumentPathName);
-//                    util.utils.shortWait(1000);
-                    closeComponent(xDoc);
-//                    util.utils.shortWait(1000);
+                    if (xDoc != null)
+                    {
+                        // util.utils.shortWait(1000);
+                        // print? or store?
+                        String sDocumentPathName = storeComponent(sReportName, xDoc /*, _nType*/);
+                        aList.add(sDocumentPathName);
+    //                    util.utils.shortWait(1000);
+                        closeComponent(xDoc);
+    //                    util.utils.shortWait(1000);
+                    }
+                    else
+                    {
+                        System.out.println("Leave out maybe due to errors.");
+                    }
                     // sBackPath contains the path where to find the extracted ODB Document
                 }
             }
