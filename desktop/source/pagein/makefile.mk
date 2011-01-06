@@ -106,7 +106,7 @@ $(MISC)$/$(TARGET)-common : makefile.mk
     @-echo $(DLLPRE)icui18n$(ICUDLLPOST) >> $@
     @-echo $(DLLPRE)icule$(ICUDLLPOST)   >> $@
     @-echo $(DLLPRE)icuuc$(ICUDLLPOST)   >> $@
-    @-echo $(DLLPRE)icudata$(ICUDLLPOST) >> $@
+#   @-echo $(DLLPRE)icudata$(ICUDLLPOST) >> $@ - a huge dll, almost none of it used
 .ENDIF # SYSTEM_ICU
 #
     @-echo $(DLLPRE)lng$(DFTDLLPOST)   >> $@
@@ -179,7 +179,6 @@ $(MISC)$/$(TARGET)-common : makefile.mk
     @-echo $(DLLPRE)helplinker$(DFTDLLPOST)      >> $@
     @-echo $(DLLPRE)vclplug_gen$(DFTDLLPOST)     >> $@
     @-echo $(DLLPRE)icule$(ICUDLLPOST)           >> $@
-    @-echo $(DLLPRE)icudata$(ICUDLLPOST)         >> $@
     @-echo sax$(UNODLLPOST)                      >> $@
     @-echo gconfbe1$(UNODLLPOST)                 >> $@
     @-echo fsstorage$(UNODLLPOST)                >> $@
