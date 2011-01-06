@@ -252,14 +252,14 @@ void dumpProfile(FILE *outfile, const char * profileName)
         int n;
         TagEntryList::iterator i;
 
-        for (n=0, i=pIcc->m_Tags->begin(); i!=pIcc->m_Tags->end(); i++, n++)
+        for (n=0, i=pIcc->m_Tags->begin(); i!=pIcc->m_Tags->end(); ++i, ++n)
         {
             fprintf(outfile,"%25s  %s  %8ld\t%8ld\n", Fmt.GetTagSigName(i->TagInfo.sig),
                     icGetSig(buf, i->TagInfo.sig, false),
                     i->TagInfo.offset, i->TagInfo.size);
         }
 
-        for (n=0, i=pIcc->m_Tags->begin(); i!=pIcc->m_Tags->end(); i++, n++)
+        for (n=0, i=pIcc->m_Tags->begin(); i!=pIcc->m_Tags->end(); ++i, ++n)
             dumpTag(outfile, pIcc, i->TagInfo.sig);
     }
     delete pIcc;
