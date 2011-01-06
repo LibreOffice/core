@@ -34,6 +34,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.pentaho.reporting.libraries.resourceloader.ResourceData;
+import org.pentaho.reporting.libraries.resourceloader.ResourceException;
 import org.pentaho.reporting.libraries.resourceloader.ResourceKey;
 import org.pentaho.reporting.libraries.resourceloader.ResourceKeyCreationException;
 import org.pentaho.reporting.libraries.resourceloader.ResourceLoader;
@@ -168,5 +169,20 @@ public class InputRepositoryLoader implements ResourceLoader
     public ResourceManager getResourceManager()
     {
         return resourceManager;
+    }
+
+    public boolean isSupportedDeserializer(String string)
+    {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    public String serialize(ResourceKey rk, ResourceKey rk1) throws ResourceException
+    {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    public ResourceKey deserialize(ResourceKey rk, String string) throws ResourceKeyCreationException
+    {
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 }
