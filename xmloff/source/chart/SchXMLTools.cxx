@@ -49,7 +49,7 @@
 // header for class XMLPropertySetMapper
 #include <xmloff/xmlprmap.hxx>
 #include <xmloff/xmlexp.hxx>
-#include "xmlnmspe.hxx"
+#include "xmloff/xmlnmspe.hxx"
 #include <xmloff/xmlmetai.hxx>
 
 #include <com/sun/star/beans/PropertyAttribute.hpp>

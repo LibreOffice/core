@@ -37,7 +37,7 @@
 #include <xmloff/xmlstyle.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlstyle.hxx>
-#include "xmlnmspe.hxx"
+#include "xmloff/xmlnmspe.hxx"
 #include "ximppage.hxx"
 #include "ximpshap.hxx"
 #include "animimp.hxx"

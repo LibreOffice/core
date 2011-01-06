@@ -44,7 +44,7 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/uno/Reference.h>
 
-#include "misc.hxx"
+#include "linguistic/misc.hxx"
 
 using namespace com::sun::star;
 

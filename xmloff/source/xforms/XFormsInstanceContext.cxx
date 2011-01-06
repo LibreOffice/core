@@ -41,10 +41,10 @@
 #include <com/sun/star/xforms/XModel.hpp>
 #include <tools/debug.hxx>
 
-#include <xmlnmspe.hxx>
+#include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlimp.hxx>
-#include <xmlerror.hxx>
+#include <xmloff/xmlerror.hxx>
 #include <xmloff/nmspmap.hxx>
 
 

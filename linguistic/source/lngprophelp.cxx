@@ -36,10 +36,10 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <osl/mutex.hxx>
 
-#include <misc.hxx>
-#include <lngprops.hxx>
+#include <linguistic/misc.hxx>
+#include <linguistic/lngprops.hxx>
 
-#include <lngprophelp.hxx>
+#include <linguistic/lngprophelp.hxx>
 
 
 //using namespace utl;

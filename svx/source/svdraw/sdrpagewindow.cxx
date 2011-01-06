@@ -39,7 +39,7 @@
 #include <svx/svdpage.hxx>
 #include <svx/svdview.hxx>
 #include <svx/svdpagv.hxx>
-#include <sdrpaintwindow.hxx>
+#include <svx/sdrpaintwindow.hxx>
 #include <svx/sdr/contact/objectcontactofpageview.hxx>
 #include <svx/sdr/contact/displayinfo.hxx>
 #include <vos/mutex.hxx>
@@ -190,6 +190,10 @@ void SdrPageWindow::PrePaint()
     {
         GetObjectContact().PrepareProcessDisplay();
     }
+}
+
+void SdrPageWindow::PostPaint()
+{
 }
 
 void SdrPageWindow::PrepareRedraw(const Region& rReg)

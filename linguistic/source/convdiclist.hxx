@@ -36,7 +36,7 @@
 #include <svl/svarray.hxx>
 #include <tools/debug.hxx>
 
-#include "misc.hxx"
+#include "linguistic/misc.hxx"
 #include "lngopt.hxx"
 
 

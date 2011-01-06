@@ -31,7 +31,7 @@
 #include "XFormsModelContext.hxx"
 #include <vector>
 #include <utility>
-#include "xformsimport.hxx"
+#include "xmloff/xformsimport.hxx"
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/form/binding/XValueBinding.hpp>

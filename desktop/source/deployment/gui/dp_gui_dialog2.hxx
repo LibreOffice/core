@@ -35,6 +35,7 @@
 
 #include "svtools/fixedhyper.hxx"
 #include "svtools/prgsbar.hxx"
+#include "svtools/svmedit.hxx"
 
 #include "osl/conditn.hxx"
 #include "osl/mutex.hxx"
@@ -243,6 +244,20 @@ public:
 
     bool            installForAllUsers( bool &bInstallForAll ) const;
     bool            installExtensionWarn( const ::rtl::OUString &rExtensionURL ) const;
+};
+
+//==============================================================================
+class ShowLicenseDialog : public ModalDialog
+{
+    MultiLineEdit   m_aLicenseText;
+    OKButton        m_aCloseBtn;
+
+public:
+                    ShowLicenseDialog( Window * pParent,
+                                       const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage > &xPackage );
+    virtual        ~ShowLicenseDialog();
+
+    virtual void    Resize();
 };
 
 //==============================================================================

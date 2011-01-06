@@ -48,7 +48,7 @@
 #include "xmloff/prstylei.hxx"
 #include "xmloff/xmlimp.hxx"
 
-#include "xmlnmspe.hxx"
+#include "xmloff/xmlnmspe.hxx"
 #include "table.hxx"
 
 #include <boost/shared_ptr.hpp>

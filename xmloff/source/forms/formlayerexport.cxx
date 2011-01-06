@@ -32,7 +32,7 @@
 #include <xmloff/formlayerexport.hxx>
 #include "strings.hxx"
 #include "elementexport.hxx"
-#include "xmlnmspe.hxx"
+#include "xmloff/xmlnmspe.hxx"
 #include <xmloff/xmlexp.hxx>
 #include "layerexport.hxx"
 #include "propertyexport.hxx"

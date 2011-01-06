@@ -31,7 +31,7 @@
 #include "fmhelp.hrc"
 #include "fmprop.hrc"
 #include "fmPropBrw.hxx"
-#include "fmresids.hrc"
+#include "svx/fmresids.hrc"
 #include "fmservs.hxx"
 #include "fmshimp.hxx"
 #include "fmpgeimp.hxx"

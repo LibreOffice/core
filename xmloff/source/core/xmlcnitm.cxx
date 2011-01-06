@@ -32,7 +32,7 @@
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 
 #include <xmloff/xmlcnimp.hxx>
-#include "unoatrcn.hxx"
+#include "xmloff/unoatrcn.hxx"
 
 using namespace rtl;
 using namespace ::com::sun::star::uno;

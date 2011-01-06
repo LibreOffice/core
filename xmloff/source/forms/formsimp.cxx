@@ -29,7 +29,7 @@
 #include "precompiled_xmloff.hxx"
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
 #include <xmloff/xmlimp.hxx>
-#include "xmlnmspe.hxx"
+#include "xmloff/xmlnmspe.hxx"
 #include <xmloff/nmspmap.hxx>
 
 #ifndef _XMLOFF_ANIMIMP_HXX

@@ -32,20 +32,15 @@
 
 #include "boost/noncopyable.hpp"
 #include "com/sun/star/configuration/XUpdate.hpp"
-#include "com/sun/star/lang/XSingleComponentFactory.hpp"
-#include "com/sun/star/uno/Any.hxx"
-#include "com/sun/star/uno/Exception.hpp"
 #include "com/sun/star/uno/Reference.hxx"
 #include "com/sun/star/uno/RuntimeException.hpp"
 #include "com/sun/star/uno/Sequence.hxx"
 #include "com/sun/star/uno/XComponentContext.hpp"
 #include "com/sun/star/uno/XInterface.hpp"
-#include "cppuhelper/factory.hxx"
 #include "cppuhelper/implbase1.hxx"
 #include "cppuhelper/weak.hxx"
 #include "osl/mutex.hxx"
 #include "rtl/ref.hxx"
-#include "rtl/unload.h"
 #include "rtl/ustring.h"
 #include "rtl/ustring.hxx"
 #include "sal/types.h"
@@ -76,7 +71,11 @@ class Service:
     private boost::noncopyable
 {
 public:
-    Service() {}
+    Service(css::uno::Reference< css::uno::XComponentContext > const context):
+        context_(context)
+    {
+        OSL_ASSERT(context.is());
+    }
 
 private:
     virtual ~Service() {}
@@ -97,6 +96,8 @@ private:
         css::uno::Sequence< rtl::OUString > const & includedPaths,
         css::uno::Sequence< rtl::OUString > const & excludedPaths)
         throw (css::uno::RuntimeException);
+
+    css::uno::Reference< css::uno::XComponentContext > context_;
 };
 
 void Service::insertExtensionXcsFile(
@@ -104,7 +105,7 @@ void Service::insertExtensionXcsFile(
     throw (css::uno::RuntimeException)
 {
     osl::MutexGuard g(lock);
-    Components::getSingleton().insertExtensionXcsFile(shared, fileUri);
+    Components::getSingleton(context_).insertExtensionXcsFile(shared, fileUri);
 }
 
 void Service::insertExtensionXcuFile(
@@ -114,10 +115,10 @@ void Service::insertExtensionXcuFile(
     Broadcaster bc;
     {
         osl::MutexGuard g(lock);
+        Components & components = Components::getSingleton(context_);
         Modifications mods;
-        Components::getSingleton().insertExtensionXcuFile(
-            shared, fileUri, &mods);
-        Components::getSingleton().initGlobalBroadcaster(
+        components.insertExtensionXcuFile(shared, fileUri, &mods);
+        components.initGlobalBroadcaster(
             mods, rtl::Reference< RootAccess >(), &bc);
     }
     bc.send();
@@ -129,9 +130,10 @@ void Service::removeExtensionXcuFile(rtl::OUString const & fileUri)
     Broadcaster bc;
     {
         osl::MutexGuard g(lock);
+        Components & components = Components::getSingleton(context_);
         Modifications mods;
-        Components::getSingleton().removeExtensionXcuFile(fileUri, &mods);
-        Components::getSingleton().initGlobalBroadcaster(
+        components.removeExtensionXcuFile(fileUri, &mods);
+        components.initGlobalBroadcaster(
             mods, rtl::Reference< RootAccess >(), &bc);
     }
     bc.send();
@@ -146,62 +148,22 @@ void Service::insertModificationXcuFile(
     Broadcaster bc;
     {
         osl::MutexGuard g(lock);
+        Components & components = Components::getSingleton(context_);
         Modifications mods;
-        Components::getSingleton().insertModificationXcuFile(
+        components.insertModificationXcuFile(
             fileUri, seqToSet(includedPaths), seqToSet(excludedPaths), &mods);
-        Components::getSingleton().initGlobalBroadcaster(
+        components.initGlobalBroadcaster(
             mods, rtl::Reference< RootAccess >(), &bc);
     }
     bc.send();
 }
 
-class Factory:
-    public cppu::WeakImplHelper1< css::lang::XSingleComponentFactory >,
-    private boost::noncopyable
-{
-public:
-    Factory() {}
-
-private:
-    virtual ~Factory() {}
-
-    virtual css::uno::Reference< css::uno::XInterface > SAL_CALL
-    createInstanceWithContext(
-        css::uno::Reference< css::uno::XComponentContext > const & Context)
-        throw (css::uno::Exception, css::uno::RuntimeException);
-
-    virtual css::uno::Reference< css::uno::XInterface > SAL_CALL
-    createInstanceWithArgumentsAndContext(
-        css::uno::Sequence< css::uno::Any > const & Arguments,
-        css::uno::Reference< css::uno::XComponentContext > const & Context)
-        throw (css::uno::Exception, css::uno::RuntimeException);
-};
-
-css::uno::Reference< css::uno::XInterface > Factory::createInstanceWithContext(
-    css::uno::Reference< css::uno::XComponentContext > const & Context)
-    throw (css::uno::Exception, css::uno::RuntimeException)
-{
-    return createInstanceWithArgumentsAndContext(
-        css::uno::Sequence< css::uno::Any >(), Context);
 }
 
-css::uno::Reference< css::uno::XInterface >
-Factory::createInstanceWithArgumentsAndContext(
-    css::uno::Sequence< css::uno::Any > const & Arguments,
-    css::uno::Reference< css::uno::XComponentContext > const &)
-    throw (css::uno::Exception, css::uno::RuntimeException)
+css::uno::Reference< css::uno::XInterface > create(
+    css::uno::Reference< css::uno::XComponentContext > const & context)
 {
-    if (Arguments.getLength() != 0) {
-        throw css::uno::Exception(
-            rtl::OUString(
-                RTL_CONSTASCII_USTRINGPARAM(
-                    "com.sun.star.comp.configuration.Update must be"
-                    " instantiated without arguments")),
-            static_cast< cppu::OWeakObject * >(this));
-    }
-    return static_cast< cppu::OWeakObject * >(new Service);
-}
-
+    return static_cast< cppu::OWeakObject * >(new Service(context));
 }
 
 rtl::OUString getImplementationName() {
@@ -214,14 +176,6 @@ css::uno::Sequence< rtl::OUString > getSupportedServiceNames() {
         RTL_CONSTASCII_USTRINGPARAM(
             "com.sun.star.configuration.Update_Service"));
     return css::uno::Sequence< rtl::OUString >(&name, 1);
-}
-
-css::uno::Reference< css::lang::XSingleComponentFactory > createFactory(
-    cppu::ComponentFactoryFunc, rtl::OUString const &,
-    css::uno::Sequence< rtl::OUString > const &, rtl_ModuleCount *)
-    SAL_THROW(())
-{
-    return new Factory;
 }
 
 } }

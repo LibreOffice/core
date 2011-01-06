@@ -184,6 +184,9 @@ public:
     // PrePaint call forwarded from app windows
     void PrePaint();
 
+    // PostPaint call forwarded from app windows
+    void PostPaint();
+
     // rReg bezieht sich auf's OutDev, nicht auf die Page
     void CompleteRedraw(SdrPaintWindow& rPaintWindow, const Region& rReg, sdr::contact::ViewObjectContactRedirector* pRedirector = 0L) const;
 

@@ -30,7 +30,7 @@
 #include <tools/debug.hxx>
 #include <osl/mutex.hxx>
 
-#include <misc.hxx>
+#include <linguistic/misc.hxx>
 
 #include "thesdta.hxx"
 

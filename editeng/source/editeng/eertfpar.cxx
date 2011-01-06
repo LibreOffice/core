@@ -54,6 +54,7 @@ void SvxRTFPictureType::ResetValues()
     nBitsPerPixel = nPlanes = 1;
     nScalX = nScalY = 100;      // Skalierung in Prozent
     nCropT = nCropB = nCropL = nCropR = 0;
+    aPropertyPairs.clear();
 }
 
 ImportInfo::ImportInfo( ImportState eSt, SvParser* pPrsrs, const ESelection& rSel )

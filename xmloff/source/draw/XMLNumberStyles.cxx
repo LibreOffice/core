@@ -30,7 +30,7 @@
 #include <tools/debug.hxx>
 #include <XMLNumberStylesExport.hxx>
 #include <XMLNumberStylesImport.hxx>
-#include "xmlnmspe.hxx"
+#include "xmloff/xmlnmspe.hxx"
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmltoken.hxx>

@@ -202,7 +202,11 @@ sal_Bool ReadIdl( SvIdlWorkingBase * pDataBase, const SvCommand & rCommand )
             }
         }
         else
+        {
+            const ByteString aStr( aFileName, RTL_TEXTENCODING_UTF8 );
+            fprintf( stderr, "unable to read input file: %s\n", aStr.GetBuffer() );
             return sal_False;
+        }
     }
     return sal_True;
 }
