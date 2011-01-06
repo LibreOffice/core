@@ -74,7 +74,7 @@ void WrappedPropertySet::clearWrappedPropertySet()
     if(m_pWrappedPropertyMap)
     {
         for( tWrappedPropertyMap::iterator aIt = m_pWrappedPropertyMap->begin()
-            ; aIt!= m_pWrappedPropertyMap->end(); aIt++ )
+            ; aIt!= m_pWrappedPropertyMap->end(); ++aIt )
         {
             const WrappedProperty* pWrappedProperty = (*aIt).second;
             DELETEZ(pWrappedProperty);
