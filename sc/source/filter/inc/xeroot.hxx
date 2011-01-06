@@ -28,6 +28,8 @@
 #ifndef SC_XEROOT_HXX
 #define SC_XEROOT_HXX
 
+#include <com/sun/star/beans/NamedValue.hpp>
+
 #include "xlroot.hxx"
 
 // Forward declarations of objects in public use ==============================
@@ -158,7 +160,9 @@ public:
 
     bool                IsDocumentEncrypted() const;
 
-    String              GetPassword() const;
+    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue > GenerateEncryptionData( const ::rtl::OUString& aPass ) const;
+    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue > GetEncryptionData() const;
+    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue > GenerateDefaultEncryptionData() const;
 
 private:
 

@@ -81,7 +81,6 @@ void NamedLineProperties::AddDefaultsToMap(
 {
 }
 
-// static
 OUString NamedLineProperties::GetPropertyNameForHandle( sal_Int32 nHandle )
 {
     //will return e.g. "LineDashName" for PROP_LINE_DASH_NAME

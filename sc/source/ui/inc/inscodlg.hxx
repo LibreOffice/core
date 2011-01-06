@@ -29,7 +29,7 @@
 #define SC_INSCODLG_HXX
 
 #include <vcl/dialog.hxx>
-#include <vcl/imagebtn.hxx>
+#include <vcl/button.hxx>
 #include <vcl/fixed.hxx>
 #include "global.hxx"
 
