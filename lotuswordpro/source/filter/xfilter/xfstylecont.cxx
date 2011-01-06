@@ -90,7 +90,7 @@ XFStyleContainer& XFStyleContainer::operator=(const XFStyleContainer& other)
 XFStyleContainer::~XFStyleContainer()
 {
     std::vector<IXFStyle*>::iterator it;
-    for( it = m_aStyles.begin(); it != m_aStyles.end(); it++ )
+    for( it = m_aStyles.begin(); it != m_aStyles.end(); ++it )
     {
         IXFStyle *pStyle = *it;
         if( pStyle )
@@ -103,7 +103,7 @@ void    XFStyleContainer::Reset()
 {
     std::vector<IXFStyle*>::iterator it;
 
-    for( it = m_aStyles.begin(); it != m_aStyles.end(); it++ )
+    for( it = m_aStyles.begin(); it != m_aStyles.end(); ++it )
     {
         IXFStyle *pStyle = *it;
         if( pStyle )
@@ -159,7 +159,7 @@ IXFStyle*   XFStyleContainer::AddStyle(IXFStyle *pStyle)
 IXFStyle*   XFStyleContainer::FindSameStyle(IXFStyle *pStyle)
 {
     std::vector<IXFStyle*>::iterator it;
-    for( it = m_aStyles.begin(); it != m_aStyles.end(); it++ )
+    for( it = m_aStyles.begin(); it != m_aStyles.end(); ++it )
     {
         IXFStyle *pConStyle = *it;
         if( !pConStyle )
@@ -175,7 +175,7 @@ IXFStyle*   XFStyleContainer::FindSameStyle(IXFStyle *pStyle)
 IXFStyle*   XFStyleContainer::FindStyle(rtl::OUString name)
 {
     std::vector<IXFStyle*>::iterator it;
-    for( it = m_aStyles.begin(); it != m_aStyles.end(); it++ )
+    for( it = m_aStyles.begin(); it != m_aStyles.end(); ++it )
     {
         IXFStyle *pConStyle = *it;
         if( !pConStyle )
@@ -202,7 +202,7 @@ void    XFStyleContainer::ToXml(IXFStream *pStrm)
 {
     std::vector<IXFStyle*>::iterator it;
 
-    for( it = m_aStyles.begin(); it != m_aStyles.end(); it++ )
+    for( it = m_aStyles.begin(); it != m_aStyles.end(); ++it )
     {
         IXFStyle *pStyle = *it;
 
