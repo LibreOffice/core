@@ -2220,7 +2220,7 @@ UCBStorage_Impl::~UCBStorage_Impl()
     if ( m_pUNOStorageHolderList )
     {
         for ( UNOStorageHolderList::iterator aIter = m_pUNOStorageHolderList->begin();
-              aIter != m_pUNOStorageHolderList->end(); aIter++ )
+              aIter != m_pUNOStorageHolderList->end(); ++aIter )
             if ( *aIter )
             {
                 (*aIter)->InternalDispose();
