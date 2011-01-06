@@ -164,6 +164,7 @@ SAL_IMPLEMENT_MAIN()
     }
 
     printf("}\n");
+    fflush(stdout);
 
     return EXIT_SUCCESS;
 }
