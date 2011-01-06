@@ -93,6 +93,21 @@
 #include "cellsuno.hxx"
 //==================================================================
 
+static void lcl_PostRepaintCondFormat( const ScConditionalFormat *pCondFmt, ScDocShell *pDocSh )
+{
+    if( pCondFmt )
+    {
+        const ScRangeListRef& aRanges = pCondFmt->GetRangeInfo();
+        ULONG nCount = aRanges->Count();
+        ULONG n;
+        for( n = 0 ; n < nCount; n++ )
+            pDocSh->PostPaint( *aRanges->GetObject( n ), PAINT_ALL );
+    }
+}
+
+
+//==================================================================
+
 ScViewFunc::ScViewFunc( Window* pParent, ScDocShell& rDocSh, ScTabViewShell* pViewShell ) :
     ScTabView( pParent, rDocSh, pViewShell ),
     bFormatValid( FALSE )
@@ -667,6 +682,7 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab, const String& rS
         }
 
         aModificator.SetDocumentModified();
+        lcl_PostRepaintCondFormat( pDoc->GetCondFormat( nCol, nRow, nTab ), pDocSh );
     }
     else
     {
@@ -865,6 +881,7 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab, const EditTextOb
 
             aModificator.SetDocumentModified();
         }
+        lcl_PostRepaintCondFormat( pDoc->GetCondFormat( nCol, nRow, nTab ), pDocSh );
 
         delete pCellAttrs;
         delete pNewData;

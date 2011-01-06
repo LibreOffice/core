@@ -29,7 +29,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sc.hxx"
 
-
 #include <sfx2/dispatch.hxx>
 #include <svl/stritem.hxx>
 
@@ -48,6 +47,7 @@
 #include "condfrmt.hxx"
 #undef _CONDFRMT_CXX
 
+#include "rangelst.hxx"
 
 //============================================================================
 //  class ScConditionalFormat
@@ -262,7 +262,6 @@ ScConditionalFormatDlg::ScConditionalFormatDlg(
             }
         }
 
-
         if ( pCurrentFormat->Count() > 1 )
         {
             aCbxCond2.Check( TRUE );
@@ -325,14 +324,12 @@ ScConditionalFormatDlg::ScConditionalFormatDlg(
 //  SFX_APPWINDOW->Disable();
 }
 
-
 //----------------------------------------------------------------------------
 // Destruktor
 
 ScConditionalFormatDlg::~ScConditionalFormatDlg()
 {
 }
-
 
 //----------------------------------------------------------------------------
 
@@ -380,7 +377,6 @@ BOOL ScConditionalFormatDlg::IsRefInputMode() const
     return (pEdActive != NULL);
 }
 
-
 //----------------------------------------------------------------------------
 
 void ScConditionalFormatDlg::SetActive()
@@ -397,7 +393,6 @@ void ScConditionalFormatDlg::SetActive()
     RefInputDone();
 }
 
-
 //----------------------------------------------------------------------------
 // Holt die ausgewaehlte bedingte Formatierung ab
 
@@ -413,6 +408,9 @@ void ScConditionalFormatDlg::GetConditionalFormat( ScConditionalFormat& rCndFmt 
     if (pViewShell)
     {
         ScViewData* pData = pViewShell->GetViewData();
+        ScRangeListRef rRanges;
+        pData->GetMultiArea( rRanges );
+        rCndFmt.AddRangeInfo( rRanges );
         aCurPos = ScAddress( pData->GetCurX(), pData->GetCurY(), pData->GetTabNo() );
     }
 
@@ -456,7 +454,6 @@ void ScConditionalFormatDlg::GetConditionalFormat( ScConditionalFormat& rCndFmt 
     }
 }
 
-
 //----------------------------------------------------------------------------
 // Zerstoert den Dialog
 
@@ -464,7 +461,6 @@ BOOL ScConditionalFormatDlg::Close()
 {
     return DoClose( ScCondFormatDlgWrapper::GetChildWindowId() );
 }
-
 
 //----------------------------------------------------------------------------
 // Handler:
@@ -489,7 +485,6 @@ IMPL_LINK( ScConditionalFormatDlg, ClickCond1Hdl, void *, EMPTYARG )
 
     return( 0L );
 }
-
 
 //----------------------------------------------------------------------------
 // Zellwert/Formel
@@ -518,7 +513,6 @@ IMPL_LINK( ScConditionalFormatDlg, ChangeCond11Hdl, void *, EMPTYARG )
     return( 0L );
 }
 
-
 //----------------------------------------------------------------------------
 // zwischen, gleich, groesser, ...
 
@@ -528,7 +522,17 @@ IMPL_LINK( ScConditionalFormatDlg, ChangeCond12Hdl, void *, EMPTYARG )
     {
         USHORT nPos = aLbCond12.GetSelectEntryPos();
 
-        if( nPos == 6  || nPos == 7 ) // zwischen, n. zwischen
+        aEdtCond11.Show();
+        aRbCond11.Show();
+        if( nPos > 7 )
+        {
+            aEdtCond11.Hide();
+            aRbCond11.Hide();
+            aFtCond1And.Hide();
+            aEdtCond12.Hide();
+            aRbCond12.Hide();
+        }
+        else if( nPos == 6  || nPos == 7 ) // zwischen, n. zwischen
         {
             aEdtCond11.SetSizePixel( aCond1Size3 );
             aRbCond11.SetPosPixel( aRBtn1Pos1 );
@@ -548,7 +552,6 @@ IMPL_LINK( ScConditionalFormatDlg, ChangeCond12Hdl, void *, EMPTYARG )
 
     return( 0L );
 }
-
 
 //----------------------------------------------------------------------------
 // Enabled/Disabled Condition2-Controls
@@ -570,7 +573,6 @@ IMPL_LINK( ScConditionalFormatDlg, ClickCond2Hdl, void *, EMPTYARG )
 
     return( 0L );
 }
-
 
 //----------------------------------------------------------------------------
 // Zellwert/Formel
@@ -599,7 +601,6 @@ IMPL_LINK( ScConditionalFormatDlg, ChangeCond21Hdl, void *, EMPTYARG )
     return( 0L );
 }
 
-
 //----------------------------------------------------------------------------
 // zwischen, gleich, groesser, ...
 
@@ -609,7 +610,17 @@ IMPL_LINK( ScConditionalFormatDlg, ChangeCond22Hdl, void *, EMPTYARG )
     {
         USHORT nPos = aLbCond22.GetSelectEntryPos();
 
-        if( nPos == 6  || nPos == 7 ) // zwischen, n. zwischen
+        aEdtCond21.Show();
+        aRbCond21.Show();
+        if( nPos > 7 )
+        {
+            aEdtCond21.Hide();
+            aRbCond21.Hide();
+            aFtCond2And.Hide();
+            aEdtCond22.Hide();
+            aRbCond22.Hide();
+        }
+        else if( nPos == 6  || nPos == 7 ) // zwischen, n. zwischen
         {
             aEdtCond21.SetSizePixel( aCond2Size3 );
             aRbCond21.SetPosPixel( aRBtn2Pos1 );
@@ -629,7 +640,6 @@ IMPL_LINK( ScConditionalFormatDlg, ChangeCond22Hdl, void *, EMPTYARG )
 
     return( 0L );
 }
-
 
 //----------------------------------------------------------------------------
 // Enabled/Disabled Condition3-Controls
@@ -651,7 +661,6 @@ IMPL_LINK( ScConditionalFormatDlg, ClickCond3Hdl, void *, EMPTYARG )
 
     return( 0L );
 }
-
 
 //----------------------------------------------------------------------------
 // Zellwert/Formel
@@ -680,7 +689,6 @@ IMPL_LINK( ScConditionalFormatDlg, ChangeCond31Hdl, void *, EMPTYARG )
     return( 0L );
 }
 
-
 //----------------------------------------------------------------------------
 // zwischen, gleich, groesser, ...
 
@@ -690,7 +698,17 @@ IMPL_LINK( ScConditionalFormatDlg, ChangeCond32Hdl, void *, EMPTYARG )
     {
         USHORT nPos = aLbCond32.GetSelectEntryPos();
 
-        if( nPos == 6  || nPos == 7 ) // zwischen, n. zwischen
+        aEdtCond31.Show();
+        aRbCond31.Show();
+        if( nPos > 7 )
+        {
+            aEdtCond31.Hide();
+            aRbCond31.Hide();
+            aFtCond3And.Hide();
+            aEdtCond32.Hide();
+            aRbCond32.Hide();
+        }
+        else if( nPos == 6  || nPos == 7 ) // zwischen, n. zwischen
         {
             aEdtCond31.SetSizePixel( aCond3Size3 );
             aRbCond31.SetPosPixel( aRBtn3Pos1 );
@@ -710,7 +728,6 @@ IMPL_LINK( ScConditionalFormatDlg, ChangeCond32Hdl, void *, EMPTYARG )
 
     return( 0L );
 }
-
 
 //----------------------------------------------------------------------------
 
@@ -737,7 +754,6 @@ IMPL_LINK( ScConditionalFormatDlg, GetFocusHdl, Control*, pCtrl )
     return 0;
 }
 
-
 //----------------------------------------------------------------------------
 
 IMPL_LINK( ScConditionalFormatDlg, LoseFocusHdl, Control*, EMPTYARG )
@@ -745,7 +761,6 @@ IMPL_LINK( ScConditionalFormatDlg, LoseFocusHdl, Control*, EMPTYARG )
     bDlgLostFocus = !IsActive();
     return 0;
 }
-
 
 //----------------------------------------------------------------------------
 //  [OK], [Cancel]
@@ -770,7 +785,6 @@ IMPL_LINK( ScConditionalFormatDlg, BtnHdl, PushButton*, pBtn )
 
     return( 0L );
 }
-
 
 //----------------------------------------------------------------------------
 

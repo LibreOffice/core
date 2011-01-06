@@ -73,6 +73,8 @@ ModelessDialog RID_SCDLG_CONDFORMAT
             < "not equal to" ; Default ; > ;
             < "between" ; Default ; > ;
             < "not between" ; Default ; > ;
+            < "duplicated values" ; Default ; > ;
+            < "non duplicated values" ; Default ; > ;
         };
     };
     Edit EDT_COND1_1
@@ -175,6 +177,8 @@ ModelessDialog RID_SCDLG_CONDFORMAT
             < "not equal to" ; Default ; > ;
             < "between" ; Default ; > ;
             < "not between" ; Default ; > ;
+            < "duplicated values" ; Default ; > ;
+            < "non duplicated values" ; Default ; > ;
         };
     };
     Edit EDT_COND2_1
@@ -277,6 +281,8 @@ ModelessDialog RID_SCDLG_CONDFORMAT
             < "not equal to" ; Default ; > ;
             < "between" ; Default ; > ;
             < "not between" ; Default ; > ;
+            < "duplicated values" ; Default ; > ;
+            < "non duplicated values" ; Default ; > ;
         };
     };
     Edit EDT_COND3_1

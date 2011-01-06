@@ -34,11 +34,11 @@
 #include "formula/grammar.hxx"
 #include <svl/svarray.hxx>
 #include "scdllapi.h"
+#include "rangelst.hxx"
 
 class ScBaseCell;
 class ScFormulaCell;
 class ScTokenArray;
-class ScRangeList;
 
 
 #define SC_COND_GROW 16
@@ -47,8 +47,8 @@ class ScRangeList;
 #define SC_COND_NOBLANKS    1
 
 
-            // ordering of ScConditionMode and ScQueryOp is equal,
-            // to facilitate the merging of both in the future
+// ordering of ScConditionMode and ScQueryOp is equal,
+// to facilitate the merging of both in the future
 
 enum ScConditionMode
 {
@@ -60,6 +60,8 @@ enum ScConditionMode
     SC_COND_NOTEQUAL,
     SC_COND_BETWEEN,
     SC_COND_NOTBETWEEN,
+    SC_COND_DUPLICATE,
+    SC_COND_NOTDUPLICATE,
     SC_COND_DIRECT,
     SC_COND_NONE
 };
@@ -70,6 +72,8 @@ enum ScConditionValType
     SC_VAL_STRING,
     SC_VAL_FORMULA
 };
+
+class ScConditionalFormat;
 
 class SC_DLLPUBLIC ScConditionEntry
 {
@@ -106,8 +110,8 @@ class SC_DLLPUBLIC ScConditionEntry
                         BOOL bTextToReal );
     void    Interpret( const ScAddress& rPos );
 
-    BOOL    IsValid( double nArg ) const;
-    BOOL    IsValidStr( const String& rArg ) const;
+    BOOL    IsValid( double nArg, const ScAddress& rAddr ) const;
+    BOOL    IsValidStr( const String& rArg, const ScAddress& rAddr ) const;
 
 public:
             ScConditionEntry( ScConditionMode eOper,
@@ -125,6 +129,8 @@ public:
     virtual ~ScConditionEntry();
 
     int             operator== ( const ScConditionEntry& r ) const;
+
+    void            SetParent( ScConditionalFormat* pNew )  { pCondFormat = pNew; }
 
     BOOL            IsCellValid( ScBaseCell* pCell, const ScAddress& rPos ) const;
 
@@ -158,18 +164,16 @@ public:
 protected:
     virtual void    DataChanged( const ScRange* pModified ) const;
     ScDocument*     GetDocument() const     { return pDoc; }
+    ScConditionalFormat*    pCondFormat;
 };
 
 //
 //  single entry for conditional formatting
 //
 
-class ScConditionalFormat;
-
 class SC_DLLPUBLIC ScCondFormatEntry : public ScConditionEntry
 {
     String                  aStyleName;
-    ScConditionalFormat*    pParent;
 
     using ScConditionEntry::operator==;
 
@@ -189,8 +193,6 @@ public:
             ScCondFormatEntry( const ScCondFormatEntry& r );
             ScCondFormatEntry( ScDocument* pDocument, const ScCondFormatEntry& r );
     virtual ~ScCondFormatEntry();
-
-    void            SetParent( ScConditionalFormat* pNew )  { pParent = pNew; }
 
     int             operator== ( const ScCondFormatEntry& r ) const;
 
@@ -213,6 +215,7 @@ class SC_DLLPUBLIC ScConditionalFormat
     ScCondFormatEntry** ppEntries;
     USHORT              nEntryCount;
     BOOL                bIsUsed;            // temporary at Save
+    ScRangeListRef      pRanges;            // Ranges for conditional format
 
 public:
             ScConditionalFormat(sal_uInt32 nNewKey, ScDocument* pDocument);
@@ -223,6 +226,8 @@ public:
     ScConditionalFormat* Clone(ScDocument* pNewDoc = NULL) const;
 
     void            AddEntry( const ScCondFormatEntry& rNew );
+    void            AddRangeInfo( const ScRangeListRef& rRanges );
+    const ScRangeListRef&  GetRangeInfo() const  { return pRanges; }
 
     BOOL            IsEmpty() const         { return (nEntryCount == 0); }
     USHORT          Count() const           { return nEntryCount; }
