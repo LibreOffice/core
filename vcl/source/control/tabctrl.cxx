@@ -461,15 +461,18 @@ Size TabControl::ImplGetItemSize( ImplTabItem* pItem, long nMaxWidth )
 Rectangle TabControl::ImplGetTabRect( USHORT nItemPos, long nWidth, long nHeight )
 {
     Size aWinSize = Control::GetOutputSizePixel();
-    if ( nWidth == -1 )
+    if ( nWidth < 0 )
         nWidth = aWinSize.Width();
-    if ( nHeight == -1 )
+    if ( nHeight < 0 )
         nHeight = aWinSize.Height();
 
     if ( mpTabCtrlData->maItemList.empty() )
     {
-        return Rectangle( Point( TAB_OFFSET, TAB_OFFSET ),
-                          Size( nWidth-TAB_OFFSET*2, nHeight-TAB_OFFSET*2 ) );
+        long nW = nWidth-TAB_OFFSET*2;
+        long nH = nHeight-TAB_OFFSET*2;
+        return (nW > 0 && nH > 0)
+        ? Rectangle( Point( TAB_OFFSET, TAB_OFFSET ), Size( nW, nH ) )
+        : Rectangle();
     }
 
     if ( nItemPos == TAB_PAGERECT )
@@ -481,9 +484,11 @@ Rectangle TabControl::ImplGetTabRect( USHORT nItemPos, long nWidth, long nHeight
             nLastPos = 0;
 
         Rectangle aRect = ImplGetTabRect( nLastPos, nWidth, nHeight );
-        aRect = Rectangle( Point( TAB_OFFSET, aRect.Bottom()+TAB_OFFSET ),
-                           Size( nWidth-TAB_OFFSET*2,
-                                 nHeight-aRect.Bottom()-TAB_OFFSET*2 ) );
+        long nW = nWidth-TAB_OFFSET*2;
+        long nH = nHeight-aRect.Bottom()-TAB_OFFSET*2;
+        aRect = (nW > 0 && nH > 0)
+        ? Rectangle( Point( TAB_OFFSET, aRect.Bottom()+TAB_OFFSET ), Size( nW, nH ) )
+        : Rectangle();
         return aRect;
     }
 
