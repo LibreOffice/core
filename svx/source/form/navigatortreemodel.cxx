@@ -271,15 +271,7 @@ namespace svxform
 
         //////////////////////////////////////////////////////////////////////
         // RootList loeschen
-        FmEntryData* pChildData;
-        FmEntryDataList* pRootList = GetRootList();
-
-        for( sal_uInt32 i=pRootList->Count(); i>0; i-- )
-        {
-            pChildData = pRootList->GetObject(i-1);
-            pRootList->Remove( pChildData );
-            delete pChildData;
-        }
+        GetRootList()->clear();
 
         //////////////////////////////////////////////////////////////////////
         // UI benachrichtigen
@@ -383,9 +375,9 @@ namespace svxform
         }
 
         if (pFolder)
-            pFolder->GetChildList()->Insert( pEntry, nRelPos );
+            pFolder->GetChildList()->insert( pEntry, nRelPos );
         else
-            GetRootList()->Insert( pEntry, nRelPos );
+            GetRootList()->insert( pEntry, nRelPos );
 
         //////////////////////////////////////////////////////////////////////
         // UI benachrichtigen
@@ -466,13 +458,13 @@ namespace svxform
 
         // beim Vater austragen
         if (pFolder)
-            pFolder->GetChildList()->Remove(pEntry);
+            pFolder->GetChildList()->remove( pEntry );
         else
         {
-            GetRootList()->Remove(pEntry);
+            GetRootList()->remove( pEntry );
             //////////////////////////////////////////////////////////////////////
             // Wenn keine Form mehr in der Root, an der Shell CurForm zuruecksetzen
-            if (!GetRootList()->Count())
+            if ( !GetRootList()->size() )
                 m_pFormShell->GetImpl()->forgetCurrentForm();
         }
 
@@ -498,10 +490,9 @@ namespace svxform
             return;
 
         FmEntryDataList*    pChildList = pFormData->GetChildList();
-        sal_uInt32 nCount = pChildList->Count();
-        for (sal_uInt32 i = nCount; i > 0; i--)
+        for ( size_t i = pChildList->size(); i > 0; )
         {
-            FmEntryData* pEntryData = pChildList->GetObject(i - 1);
+            FmEntryData* pEntryData = pChildList->at( --i );
 
             //////////////////////////////////////////////////////////////////////
             // Child ist Form -> rekursiver Aufruf
@@ -545,15 +536,14 @@ namespace svxform
         //////////////////////////////////////////////////////////////////////
         // Alle Eintraege dieses Zweiges loeschen
         FmEntryDataList* pChildList = pParentData->GetChildList();
-        FmEntryData* pChildData;
 
-        for( sal_uInt32 i=pChildList->Count(); i>0; i-- )
+        for( size_t i = pChildList->size(); i > 0; )
         {
-            pChildData = pChildList->GetObject(i-1);
+            FmEntryData* pChildData = pChildList->at( --i );
             if( pChildData->ISA(FmFormData) )
                 ClearBranch( (FmFormData*)pChildData );
 
-            pChildList->Remove( pChildData );
+            pChildList->remove( pChildData );
         }
     }
 
@@ -695,9 +685,9 @@ namespace svxform
         // normalize
         Reference< XInterface > xIFace( xElement, UNO_QUERY );
 
-        for (sal_uInt16 i=0; i < pDataList->Count(); i++)
+        for ( size_t i = 0; i < pDataList->size(); i++ )
         {
-            FmEntryData* pEntryData = pDataList->GetObject(i);
+            FmEntryData* pEntryData = pDataList->at( i );
             if ( pEntryData->GetElement().get() == xIFace.get() )
                 return pEntryData;
             else if (bRecurs)
@@ -724,9 +714,9 @@ namespace svxform
         FmEntryData* pEntryData;
         FmEntryData* pChildData;
 
-        for( sal_uInt16 i=0; i<pDataList->Count(); i++ )
+        for( size_t i = 0; i < pDataList->size(); i++ )
         {
-            pEntryData = pDataList->GetObject(i);
+            pEntryData = pDataList->at( i );
             aEntryText = pEntryData->GetText();
 
             if (rText == aEntryText)
@@ -991,9 +981,9 @@ namespace svxform
         ::rtl::OUString aChildText;
         FmEntryData* pChildData;
 
-        for( sal_uInt16 i=0; i<pChildList->Count(); i++ )
+        for( size_t i = 0; i < pChildList->size(); i++ )
         {
-            pChildData = pChildList->GetObject(i);
+            pChildData = pChildList->at( i );
             aChildText = pChildData->GetText();
 
             //////////////////////////////////////////////////////////////////////

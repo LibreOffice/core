@@ -724,11 +724,11 @@ namespace svxform
         //////////////////////////////////////////////////////////////////////
         // Childs einfuegen
         FmEntryDataList* pChildList = pEntryData->GetChildList();
-        sal_uInt32 nChildCount = pChildList->Count();
+        size_t nChildCount = pChildList->size();
         FmEntryData* pChildData;
-        for( sal_uInt32 i=0; i<nChildCount; i++ )
+        for( size_t i = 0; i < nChildCount; i++ )
         {
-            pChildData = pChildList->GetObject(i);
+            pChildData = pChildList->at( i );
             Insert( pChildData, LIST_APPEND );
         }
 
@@ -1171,9 +1171,9 @@ namespace svxform
 
             // beim Vater austragen
             if (pCurrentParentUserData)
-                pCurrentParentUserData->GetChildList()->Remove(pCurrentUserData);
+                pCurrentParentUserData->GetChildList()->remove( pCurrentUserData );
             else
-                GetNavModel()->GetRootList()->Remove(pCurrentUserData);
+                GetNavModel()->GetRootList()->remove( pCurrentUserData );
 
             // aus dem Container entfernen
             sal_Int32 nIndex = getElementPos(Reference< XIndexAccess > (xContainer, UNO_QUERY), xCurrentChild);
@@ -1243,9 +1243,9 @@ namespace svxform
 
             // dann dem Parent das neue Child
             if (pTargetData)
-                pTargetData->GetChildList()->Insert(pCurrentUserData, nIndex);
+                pTargetData->GetChildList()->insert( pCurrentUserData, nIndex );
             else
-                GetNavModel()->GetRootList()->Insert(pCurrentUserData, nIndex);
+                GetNavModel()->GetRootList()->insert( pCurrentUserData, nIndex );
 
             // dann bei mir selber bekanntgeben und neu selektieren
             SvLBoxEntry* pNew = Insert( pCurrentUserData, nIndex );
@@ -1895,7 +1895,7 @@ namespace svxform
             // if the entry still has children, we skipped deletion of one of those children.
             // This may for instance be because the shape is in a hidden layer, where we're unable
             // to remove it
-            if ( pCurrent->GetChildList()->Count() )
+            if ( pCurrent->GetChildList()->size() )
                 continue;
 
             // noch ein kleines Problem, bevor ich das ganz loesche : wenn es eine Form ist und die Shell diese als CurrentObject
@@ -2224,9 +2224,9 @@ namespace svxform
         FmEntryDataList* pChildList = pFormData->GetChildList();
         FmEntryData* pEntryData;
         FmControlData* pControlData;
-        for( sal_uInt32 i=0; i < pChildList->Count(); ++i )
+        for( size_t i = 0; i < pChildList->size(); ++i )
         {
-            pEntryData = pChildList->GetObject(i);
+            pEntryData = pChildList->at( i );
             if( pEntryData->ISA(FmControlData) )
             {
                 pControlData = (FmControlData*)pEntryData;

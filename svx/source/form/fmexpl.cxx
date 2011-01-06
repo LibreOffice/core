@@ -210,6 +210,43 @@ FmEntryDataList::~FmEntryDataList()
     DBG_DTOR(FmEntryDataList,NULL);
 }
 
+//------------------------------------------------------------------------
+FmEntryData* FmEntryDataList::remove( FmEntryData* pItem )
+{
+    for ( FmEntryDataBaseList::iterator it = maEntryDataList.begin();
+          it < maEntryDataList.end();
+          ++it
+        )
+    {
+        if ( *it == pItem )
+        {
+            maEntryDataList.erase( it );
+            break;
+        }
+    }
+    return pItem;
+}
+
+//------------------------------------------------------------------------
+void FmEntryDataList::insert( FmEntryData* pItem, size_t Index )
+{
+    if ( Index < maEntryDataList.size() )
+    {
+        FmEntryDataBaseList::iterator it = maEntryDataList.begin();
+        ::std::advance( it, Index );
+        maEntryDataList.insert( it, pItem );
+    }
+    else
+        maEntryDataList.push_back( pItem );
+}
+
+//------------------------------------------------------------------------
+void FmEntryDataList::clear()
+{
+    for ( size_t i = 0, n = maEntryDataList.size(); i < n; ++i )
+        delete maEntryDataList[ i ];
+    maEntryDataList.clear();
+}
 
 //========================================================================
 // class FmEntryData
@@ -255,12 +292,12 @@ FmEntryData::FmEntryData( const FmEntryData& rEntryData )
     pParent = rEntryData.GetParent();
 
     FmEntryData* pChildData;
-    sal_uInt32 nEntryCount = rEntryData.GetChildList()->Count();
-    for( sal_uInt32 i=0; i<nEntryCount; i++ )
+    size_t nEntryCount = rEntryData.GetChildList()->size();
+    for( size_t i = 0; i < nEntryCount; i++ )
     {
-        pChildData = rEntryData.GetChildList()->GetObject(i);
+        pChildData = rEntryData.GetChildList()->at( i );
         FmEntryData* pNewChildData = pChildData->Clone();
-        pChildList->Insert( pNewChildData, LIST_APPEND );
+        pChildList->insert( pNewChildData, size_t(-1) );
     }
 
     m_xNormalizedIFace = rEntryData.m_xNormalizedIFace;
@@ -272,13 +309,7 @@ FmEntryData::FmEntryData( const FmEntryData& rEntryData )
 void FmEntryData::Clear()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmEntryData::Clear" );
-    for (;;)
-    {
-        FmEntryData* pEntryData = GetChildList()->Remove(ULONG(0));
-        if (pEntryData == NULL)
-            break;
-        delete pEntryData;
-    }
+    GetChildList()->clear();
 }
 
 //------------------------------------------------------------------------

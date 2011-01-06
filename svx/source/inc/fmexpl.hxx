@@ -60,6 +60,7 @@
 #include <svx/fmview.hxx>
 
 #include "fmexch.hxx"
+#include <vector>
 
 class SdrObjListIter;
 class FmFormShell;
@@ -204,13 +205,24 @@ public:
 };
 
 //========================================================================
-DECLARE_LIST( FmEntryDataBaseList, FmEntryData* )
+typedef ::std::vector< FmEntryData* > FmEntryDataBaseList;
 
-class FmEntryDataList : public FmEntryDataBaseList
+class FmEntryDataList
 {
+private:
+    FmEntryDataBaseList maEntryDataList;
+
 public:
     FmEntryDataList();
     virtual ~FmEntryDataList();
+
+    FmEntryData*    at( size_t Index )
+        { return ( Index < maEntryDataList.size() ) ? maEntryDataList[ Index ] : NULL; }
+
+    size_t          size() const { return maEntryDataList.size(); }
+    FmEntryData*    remove( FmEntryData* pItem );
+    void            insert( FmEntryData* pItem, size_t Index );
+    void            clear();
 };
 
 //========================================================================
