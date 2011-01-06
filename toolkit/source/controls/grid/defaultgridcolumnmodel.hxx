@@ -65,7 +65,6 @@ public:
     virtual void SAL_CALL setColumnHeaderHeight( sal_Int32 _value) throw (com::sun::star::uno::RuntimeException);
     virtual sal_Int32 SAL_CALL getColumnHeaderHeight() throw (com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL setDefaultColumns(sal_Int32 rowElements) throw (::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::grid::XGridColumn > SAL_CALL copyColumn(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::grid::XGridColumn > & column)  throw (::com::sun::star::uno::RuntimeException);
 
     // XServiceInfo
     virtual ::rtl::OUString SAL_CALL getImplementationName(  ) throw (::com::sun::star::uno::RuntimeException);

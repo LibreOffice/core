@@ -249,12 +249,6 @@ namespace toolkit
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    Reference< XGridColumn > SAL_CALL DefaultGridColumnModel::copyColumn( const Reference< XGridColumn > & i_column )  throw (RuntimeException)
-    {
-        return Reference< XGridColumn >( i_column->createClone(), UNO_QUERY_THROW );
-    }
-
-    //------------------------------------------------------------------------------------------------------------------
     ::rtl::OUString SAL_CALL DefaultGridColumnModel::getImplementationName(  ) throw (RuntimeException)
     {
         return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "org.openoffice.comp.toolkit.DefaultGridColumnModel" ) );
