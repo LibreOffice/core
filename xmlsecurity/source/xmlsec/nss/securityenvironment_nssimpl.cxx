@@ -143,21 +143,21 @@ SecurityEnvironment_NssImpl :: ~SecurityEnvironment_NssImpl() {
     if( !m_tSymKeyList.empty()  ) {
         std::list< PK11SymKey* >::iterator symKeyIt ;
 
-        for( symKeyIt = m_tSymKeyList.begin() ; symKeyIt != m_tSymKeyList.end() ; symKeyIt ++ )
+        for( symKeyIt = m_tSymKeyList.begin() ; symKeyIt != m_tSymKeyList.end() ; ++symKeyIt )
             PK11_FreeSymKey( *symKeyIt ) ;
     }
 
     if( !m_tPubKeyList.empty()  ) {
         std::list< SECKEYPublicKey* >::iterator pubKeyIt ;
 
-        for( pubKeyIt = m_tPubKeyList.begin() ; pubKeyIt != m_tPubKeyList.end() ; pubKeyIt ++ )
+        for( pubKeyIt = m_tPubKeyList.begin() ; pubKeyIt != m_tPubKeyList.end() ; ++pubKeyIt )
             SECKEY_DestroyPublicKey( *pubKeyIt ) ;
     }
 
     if( !m_tPriKeyList.empty()  ) {
         std::list< SECKEYPrivateKey* >::iterator priKeyIt ;
 
-        for( priKeyIt = m_tPriKeyList.begin() ; priKeyIt != m_tPriKeyList.end() ; priKeyIt ++ )
+        for( priKeyIt = m_tPriKeyList.begin() ; priKeyIt != m_tPriKeyList.end() ; ++priKeyIt )
             SECKEY_DestroyPrivateKey( *priKeyIt ) ;
     }
 }
@@ -280,7 +280,7 @@ void SecurityEnvironment_NssImpl :: adoptSymKey( PK11SymKey* aSymKey ) throw( Ex
 
     if( aSymKey != NULL ) {
         //First try to find the key in the list
-        for( keyIt = m_tSymKeyList.begin() ; keyIt != m_tSymKeyList.end() ; keyIt ++ ) {
+        for( keyIt = m_tSymKeyList.begin() ; keyIt != m_tSymKeyList.end() ; ++keyIt ) {
             if( *keyIt == aSymKey )
                 return ;
         }
@@ -303,7 +303,7 @@ void SecurityEnvironment_NssImpl :: rejectSymKey( PK11SymKey* aSymKey ) throw( E
     std::list< PK11SymKey* >::iterator keyIt ;
 
     if( aSymKey != NULL ) {
-        for( keyIt = m_tSymKeyList.begin() ; keyIt != m_tSymKeyList.end() ; keyIt ++ ) {
+        for( keyIt = m_tSymKeyList.begin() ; keyIt != m_tSymKeyList.end() ; ++keyIt ) {
             if( *keyIt == aSymKey ) {
                 symkey = *keyIt ;
                 PK11_FreeSymKey( symkey ) ;
@@ -334,7 +334,7 @@ void SecurityEnvironment_NssImpl :: adoptPubKey( SECKEYPublicKey* aPubKey ) thro
 
     if( aPubKey != NULL ) {
         //First try to find the key in the list
-        for( keyIt = m_tPubKeyList.begin() ; keyIt != m_tPubKeyList.end() ; keyIt ++ ) {
+        for( keyIt = m_tPubKeyList.begin() ; keyIt != m_tPubKeyList.end() ; ++keyIt ) {
             if( *keyIt == aPubKey )
                 return ;
         }
@@ -357,7 +357,7 @@ void SecurityEnvironment_NssImpl :: rejectPubKey( SECKEYPublicKey* aPubKey ) thr
     std::list< SECKEYPublicKey* >::iterator keyIt ;
 
     if( aPubKey != NULL ) {
-        for( keyIt = m_tPubKeyList.begin() ; keyIt != m_tPubKeyList.end() ; keyIt ++ ) {
+        for( keyIt = m_tPubKeyList.begin() ; keyIt != m_tPubKeyList.end() ; ++keyIt ) {
             if( *keyIt == aPubKey ) {
                 pubkey = *keyIt ;
                 SECKEY_DestroyPublicKey( pubkey ) ;
@@ -388,7 +388,7 @@ void SecurityEnvironment_NssImpl :: adoptPriKey( SECKEYPrivateKey* aPriKey ) thr
 
     if( aPriKey != NULL ) {
         //First try to find the key in the list
-        for( keyIt = m_tPriKeyList.begin() ; keyIt != m_tPriKeyList.end() ; keyIt ++ ) {
+        for( keyIt = m_tPriKeyList.begin() ; keyIt != m_tPriKeyList.end() ; ++keyIt ) {
             if( *keyIt == aPriKey )
                 return ;
         }
@@ -411,7 +411,7 @@ void SecurityEnvironment_NssImpl :: rejectPriKey( SECKEYPrivateKey* aPriKey ) th
     std::list< SECKEYPrivateKey* >::iterator keyIt ;
 
     if( aPriKey != NULL ) {
-        for( keyIt = m_tPriKeyList.begin() ; keyIt != m_tPriKeyList.end() ; keyIt ++ ) {
+        for( keyIt = m_tPriKeyList.begin() ; keyIt != m_tPriKeyList.end() ; ++keyIt ) {
             if( *keyIt == aPriKey ) {
                 prikey = *keyIt ;
                 SECKEY_DestroyPrivateKey( prikey ) ;
@@ -538,7 +538,7 @@ SecurityEnvironment_NssImpl::getPersonalCertificates() throw( SecurityException 
     if( !m_tPriKeyList.empty()  ) {
         std::list< SECKEYPrivateKey* >::iterator priKeyIt ;
 
-        for( priKeyIt = m_tPriKeyList.begin() ; priKeyIt != m_tPriKeyList.end() ; priKeyIt ++ ) {
+        for( priKeyIt = m_tPriKeyList.begin() ; priKeyIt != m_tPriKeyList.end() ; ++priKeyIt ) {
             xcert = NssPrivKeyToXCert( *priKeyIt ) ;
             if( xcert != NULL )
                 certsList.push_back( xcert ) ;
@@ -551,7 +551,7 @@ SecurityEnvironment_NssImpl::getPersonalCertificates() throw( SecurityException 
         std::list< X509Certificate_NssImpl* >::iterator xcertIt ;
         Sequence< Reference< XCertificate > > certSeq( length ) ;
 
-        for( i = 0, xcertIt = certsList.begin(); xcertIt != certsList.end(); xcertIt ++, i++ ) {
+        for( i = 0, xcertIt = certsList.begin(); xcertIt != certsList.end(); ++xcertIt, ++i ) {
             certSeq[i] = *xcertIt ;
         }
 
@@ -944,7 +944,7 @@ verifyCertificate( const Reference< csss::XCertificate >& aCert,
 
     //Destroying the temporary certificates
     std::vector<CERTCertificate*>::const_iterator cert_i;
-    for (cert_i = vecTmpNSSCertificates.begin(); cert_i != vecTmpNSSCertificates.end(); cert_i++)
+    for (cert_i = vecTmpNSSCertificates.begin(); cert_i != vecTmpNSSCertificates.end(); ++cert_i)
     {
         xmlsec_trace("Destroying temporary certificate");
         CERT_DestroyCertificate(*cert_i);
