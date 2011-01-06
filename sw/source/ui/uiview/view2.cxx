@@ -1840,8 +1840,10 @@ BOOL SwView::JumpToSwMark( const String& rMark )
             }
             else if( pMarkAccess->getMarksEnd() != (ppMark = pMarkAccess->findMark(sMark)) )
                 pWrtShell->GotoMark( ppMark->get(), FALSE, TRUE ), bRet = TRUE;
-            else if( 0 != ( pINet = pWrtShell->FindINetAttr( sMark ) ))
+            else if( 0 != ( pINet = pWrtShell->FindINetAttr( sMark ) )) {
+                pWrtShell->addCurrentPosition();
                 bRet = pWrtShell->GotoINetAttr( *pINet->GetTxtINetFmt() );
+            }
 
             // fuer alle Arten von Flys
             if( FLYCNTTYPE_ALL != eFlyType && pWrtShell->GotoFly( sName, eFlyType ))

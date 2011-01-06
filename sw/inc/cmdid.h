@@ -861,6 +861,11 @@ included in c-context files, so c++ style stuff will cause problems.
 /* Edit Graphic with External Tool */
 #define FN_EXTERNAL_EDIT                    (FN_EXTRA2 + 114)
 
+/* Navigation buttons */
+#define FN_NAVIGATION_BACK                  (FN_EXTRA2 + 115)
+#define FN_NAVIGATION_FORWARD               (FN_EXTRA2 + 116)
+
+
 /*------------------------------------------------ --------------------
     Area: Help
  -------------------------------------------------- ------------------*/

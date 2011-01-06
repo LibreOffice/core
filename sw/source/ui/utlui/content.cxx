@@ -97,6 +97,8 @@
 #include "globals.hrc"
 #include <unomid.h>
 
+#include "navmgr.hxx"
+
 #define CTYPE_CNT   0
 #define CTYPE_CTT   1
 
@@ -3061,6 +3063,7 @@ void SwContentTree::GotoContent(SwContent* pCnt)
         break;
         case CONTENT_TYPE_DRAWOBJECT:
         {
+            SwPosition aPos = *pActiveShell->GetCrsr()->GetPoint();
             SdrView* pDrawView = pActiveShell->GetDrawView();
             if (pDrawView)
             {
@@ -3082,6 +3085,7 @@ void SwContentTree::GotoContent(SwContent* pCnt)
                         }
                     }
                 }
+                pActiveShell->GetNavigationMgr().addEntry(aPos);
             }
         }
         break;

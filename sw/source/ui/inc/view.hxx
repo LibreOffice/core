@@ -130,7 +130,8 @@ enum ShellModes
     SHELL_MODE_MEDIA,
     SHELL_MODE_EXTRUDED_CUSTOMSHAPE,
     SHELL_MODE_FONTWORK,
-    SHELL_MODE_POSTIT
+    SHELL_MODE_POSTIT,
+    SHELL_MODE_NAVIGATION
 };
 
 /*--------------------------------------------------------------------

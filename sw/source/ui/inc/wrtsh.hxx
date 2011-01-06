@@ -34,6 +34,7 @@
 #include <sortopt.hxx>
 #include <swurl.hxx>
 #include <IMark.hxx>
+#include "navmgr.hxx"
 
 class Window;
 class OutputDevice;
@@ -472,6 +473,21 @@ typedef BOOL (SwWrtShell:: *FNSimpleMove)();
 
     String GetSelDescr() const;
 
+    SwNavigationMgr& GetNavigationMgr();
+    void addCurrentPosition();
+    BOOL GotoFly( const String& rName, FlyCntType eType = FLYCNTTYPE_ALL,
+         BOOL bSelFrame = TRUE );
+    BOOL GotoINetAttr( const SwTxtINetFmt& rAttr );
+    void GotoOutline( USHORT nIdx );
+    BOOL GotoOutline( const String& rName );
+    BOOL GotoRegion( const String& rName );
+    BOOL GotoRefMark( const String& rRefMark, USHORT nSubType = 0,
+        USHORT nSeqNo = 0 );
+    BOOL GotoNextTOXBase( const String* pName = 0);
+    BOOL GotoTable( const String& rName );
+    BOOL GotoFld( const SwFmtFld& rFld );
+    const SwRedline* GotoRedline( USHORT nArrPos, BOOL bSelect = FALSE);
+
 private:
 
     SW_DLLPRIVATE void  OpenMark();
@@ -528,6 +544,7 @@ private:
     } *pCrsrStack;
 
     SwView  &rView;
+    SwNavigationMgr aNavigationMgr;
 
     Point   aDest;
     BOOL    bDestOnStack;

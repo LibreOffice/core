@@ -984,4 +984,6 @@
 
 #define HID_TITLEPAGE                               (HID_BASE + 2281)
 
+#define HID_NAVIGATION_TOOLBOX                      (HID_BASE + 2282)
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

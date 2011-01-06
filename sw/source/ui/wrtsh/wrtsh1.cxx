@@ -122,6 +122,7 @@ using namespace com::sun::star;
         ePageMove(MV_NO),\
         pCrsrStack(0),  \
         rView(rShell),\
+        aNavigationMgr(this), \
         bDestOnStack(FALSE), \
         fnLeaveSelect(&SwWrtShell::SttLeaveSelect)
 
@@ -984,7 +985,7 @@ void SwWrtShell::InsertFootnote(const String &rStr, BOOL bEndNote, BOOL bEdit )
                 SwapPam();
             ClearMark();
         }
-
+        SwPosition aPos = *GetCrsr()->GetPoint();
         SwFmtFtn aFootNote( bEndNote );
         if(rStr.Len())
             aFootNote.SetNumStr( rStr );
@@ -997,6 +998,7 @@ void SwWrtShell::InsertFootnote(const String &rStr, BOOL bEndNote, BOOL bEdit )
             Left(CRSR_SKIP_CHARS, FALSE, 1, FALSE );
             GotoFtnTxt();
         }
+        aNavigationMgr.addEntry(aPos);
     }
 }
 /*------------------------------------------------------------------------
@@ -1562,7 +1564,14 @@ SwFrmFmt *SwWrtShell::GetTblStyle(const String &rFmtName)
     return 0;
 }
 
+SwNavigationMgr& SwWrtShell::GetNavigationMgr() {
+    return aNavigationMgr;
+}
 
+void SwWrtShell::addCurrentPosition() {
+    SwPaM* pPaM = GetCrsr();
+    aNavigationMgr.addEntry(*pPaM->GetPoint());
+}
 /*------------------------------------------------------------------------
  Beschreibung:  Anwenden der Vorlagen
 ------------------------------------------------------------------------*/

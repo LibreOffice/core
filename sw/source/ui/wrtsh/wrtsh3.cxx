@@ -58,6 +58,7 @@ extern sal_Bool bNoInterrupt;       // in mainwn.cxx
 
 BOOL SwWrtShell::MoveBookMark( BookMarkMove eFuncId, const ::sw::mark::IMark* const pMark)
 {
+    addCurrentPosition();
     (this->*fnKillSel)( 0, sal_False );
 
     BOOL bRet = sal_True;

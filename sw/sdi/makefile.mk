@@ -96,6 +96,8 @@ SVSDI1DEPEND= \
         mediash.sdi\
         _annotsh.sdi\
         annotsh.sdi\
+        _navsh.sdi \
+        navsh.sdi \
         swslots.hrc \
         $(INC)$/globals.hrc \
                 $(INC)$/cmdid.h 

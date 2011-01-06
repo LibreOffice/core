@@ -73,6 +73,7 @@
 #include <drformsh.hxx>
 #include <drwtxtsh.hxx>
 #include <beziersh.hxx>
+#include <navsh.hxx>
 #include <globdoc.hxx>
 #include <scroll.hxx>
 #include <globdoc.hxx>
@@ -319,6 +320,10 @@ void SwView::SelectShell()
 
         if ( !( nSelectionType & nsSelectionType::SEL_FOC_FRM_CTRL ) )
             rDispatcher.Push( *pFormShell );
+
+        eShellMode = SHELL_MODE_NAVIGATION;
+        pShell = new SwNavigationShell( *this );
+        rDispatcher.Push( *pShell );
 
         if ( nSelectionType & nsSelectionType::SEL_OLE )
         {

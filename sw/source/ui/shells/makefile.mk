@@ -60,6 +60,7 @@ EXCEPTIONSFILES =  \
         $(SLO)$/grfshex.obj \
         $(SLO)$/langhelper.obj \
         $(SLO)$/listsh.obj \
+        $(SLO)$/navsh.obj \
         $(SLO)$/mediash.obj \
         $(SLO)$/olesh.obj \
         $(SLO)$/slotadd.obj \

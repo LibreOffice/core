@@ -668,7 +668,97 @@ BOOL SwWrtShell::GotoPage(USHORT nPage, BOOL bRecord)
 BOOL SwWrtShell::GotoMark( const ::sw::mark::IMark* const pMark, BOOL bSelect, BOOL bStart )
 {
     ShellMoveCrsr aTmp( this, bSelect );
-    return SwCrsrShell::GotoMark( pMark, bStart );
+    SwPosition aPos = *GetCrsr()->GetPoint();
+    bool bRet = SwCrsrShell::GotoMark( pMark, bStart );
+    if (bRet)
+        aNavigationMgr.addEntry(aPos);
+    return bRet;
+}
+
+BOOL SwWrtShell::GotoFly( const String& rName, FlyCntType eType, BOOL bSelFrame )
+{
+    SwPosition aPos = *GetCrsr()->GetPoint();
+    bool bRet = SwFEShell::GotoFly(rName, eType, bSelFrame);
+    if (bRet)
+        aNavigationMgr.addEntry(aPos);
+    return bRet;
+}
+
+BOOL SwWrtShell::GotoINetAttr( const SwTxtINetFmt& rAttr )
+{
+    SwPosition aPos = *GetCrsr()->GetPoint();
+    bool bRet = SwCrsrShell::GotoINetAttr(rAttr);
+    if (bRet)
+        aNavigationMgr.addEntry(aPos);
+    return bRet;
+}
+
+void SwWrtShell::GotoOutline( USHORT nIdx )
+{
+    addCurrentPosition();
+    return SwCrsrShell::GotoOutline (nIdx);
+}
+
+BOOL SwWrtShell::GotoOutline( const String& rName )
+{
+    SwPosition aPos = *GetCrsr()->GetPoint();
+    bool bRet = SwCrsrShell::GotoOutline (rName);
+    if (bRet)
+        aNavigationMgr.addEntry(aPos);
+    return bRet;
+}
+
+BOOL SwWrtShell::GotoRegion( const String& rName )
+{
+    SwPosition aPos = *GetCrsr()->GetPoint();
+    bool bRet = SwCrsrShell::GotoRegion (rName);
+    if (bRet)
+        aNavigationMgr.addEntry(aPos);
+    return bRet;
+ }
+
+BOOL SwWrtShell::GotoRefMark( const String& rRefMark, USHORT nSubType,
+                                    USHORT nSeqNo )
+{
+    SwPosition aPos = *GetCrsr()->GetPoint();
+    bool bRet = SwCrsrShell::GotoRefMark(rRefMark, nSubType, nSeqNo);
+    if (bRet)
+        aNavigationMgr.addEntry(aPos);
+    return bRet;
+}
+
+BOOL SwWrtShell::GotoNextTOXBase( const String* pName )
+{
+    SwPosition aPos = *GetCrsr()->GetPoint();
+    bool bRet = SwCrsrShell::GotoNextTOXBase(pName);
+    if (bRet)
+        aNavigationMgr.addEntry(aPos);
+    return bRet;
+}
+
+BOOL SwWrtShell::GotoTable( const String& rName )
+{
+   SwPosition aPos = *GetCrsr()->GetPoint();
+    bool bRet = SwCrsrShell::GotoTable(rName);
+    if (bRet)
+        aNavigationMgr.addEntry(aPos);
+    return bRet;
+}
+
+BOOL SwWrtShell::GotoFld( const SwFmtFld& rFld ) {
+    SwPosition aPos = *GetCrsr()->GetPoint();
+    bool bRet = SwCrsrShell::GotoFld(rFld);
+    if (bRet)
+        aNavigationMgr.addEntry(aPos);
+    return bRet;
+}
+
+const SwRedline* SwWrtShell::GotoRedline( USHORT nArrPos, BOOL bSelect ) {
+    SwPosition aPos = *GetCrsr()->GetPoint();
+    const SwRedline *pRedline = SwCrsrShell::GotoRedline(nArrPos, bSelect);
+    if (pRedline)
+        aNavigationMgr.addEntry(aPos);
+    return pRedline;
 }
 
 

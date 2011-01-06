@@ -48,6 +48,7 @@ SLOFILES =  \
 EXCEPTIONSFILES = \
         $(SLO)$/delete.obj \
         $(SLO)$/move.obj \
+        $(SLO)$/navmgr.obj \
         $(SLO)$/select.obj \
         $(SLO)$/wrtsh1.obj \
         $(SLO)$/wrtsh2.obj \

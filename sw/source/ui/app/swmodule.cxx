@@ -44,7 +44,7 @@
 #include <svx/insctrl.hxx>
 #include <svx/selctrl.hxx>
 #include <svx/linectrl.hxx>
-#include <svx/tbxctl.hxx>           //z-Zt falscher includeschutz!
+#include <svx/tbxctl.hxx>            //z-Zt falscher includeschutz!
 #include <svx/fillctrl.hxx>
 #include <svx/tbcontrl.hxx>
 #include <svx/verttexttbxctrl.hxx>
@@ -135,11 +135,12 @@
 #include <avmedia/mediatoolbox.hxx>
 
 #include <annotsh.hxx>
+#include <navsh.hxx>
 
 #include <app.hrc>
 #include <svx/xmlsecctrl.hxx>
 ResMgr *pSwResMgr = 0;
-sal_Bool    bNoInterrupt    = sal_False;
+sal_Bool     bNoInterrupt     = sal_False;
 
 #include <sfx2/app.hxx>
 
@@ -199,10 +200,10 @@ SwModule::SwModule( SfxObjectFactory* pWebFact,
 
     pStdFontConfig = new SwStdFontConfig;
 
-    pAuthorNames = new SvStringsDtor(5, 1); // Alle Redlining-Autoren
+    pAuthorNames = new SvStringsDtor(5, 1);    // Alle Redlining-Autoren
 
     //JP 18.10.96: SvxAutocorrect gegen die SwAutocorrect austauschen
-    SvxAutoCorrCfg* pACfg = SvxAutoCorrCfg::Get();
+    SvxAutoCorrCfg*    pACfg = SvxAutoCorrCfg::Get();
     if( pACfg )
     {
         const SvxAutoCorrect* pOld = pACfg->GetAutoCorrect();
@@ -273,7 +274,7 @@ void SwDLL::RegisterFactories()
     if ( SvtModuleOptions().IsWriter() )
         SwView::RegisterFactory         ( 2 );
 
-    SwWebView::RegisterFactory      ( 5 );
+    SwWebView::RegisterFactory        ( 5 );
 
     if ( SvtModuleOptions().IsWriter() )
     {
@@ -308,6 +309,7 @@ void SwDLL::RegisterInterfaces()
     SwBezierShell::RegisterInterface(pMod);
     SwGrfShell::RegisterInterface(pMod);
     SwOleShell::RegisterInterface(pMod);
+    SwNavigationShell::RegisterInterface(pMod);
     SwWebTextShell::RegisterInterface(pMod);
     SwWebFrameShell::RegisterInterface(pMod);
     SwWebGrfShell::RegisterInterface(pMod);

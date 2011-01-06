@@ -1696,6 +1696,7 @@ void SwTextShell::ChangeHeaderOrFooter(
     const String& rStyleName, BOOL bHeader, BOOL bOn, BOOL bShowWarning)
 {
     SwWrtShell& rSh = GetShell();
+    rSh.addCurrentPosition();
     rSh.StartAllAction();
     rSh.StartUndo( UNDO_HEADER_FOOTER ); // #i7983#
     BOOL bExecute = TRUE;
