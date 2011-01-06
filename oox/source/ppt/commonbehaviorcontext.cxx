@@ -82,7 +82,7 @@ namespace oox { namespace ppt {
             {
                 OUStringBuffer sAttributes;
                 std::list< Attribute >::const_iterator iter;
-                for(iter = maAttributes.begin(); iter != maAttributes.end(); iter++)
+                for(iter = maAttributes.begin(); iter != maAttributes.end(); ++iter)
                 {
                     if( sAttributes.getLength() )
                     {
