@@ -1531,8 +1531,26 @@ void Desktop::AppEvent( const ApplicationEvent& rAppEvent )
     HandleAppEvent( rAppEvent );
 }
 
+struct ExecuteGlobals
+{
+    Reference < css::document::XEventListener > xGlobalBroadcaster;
+    sal_Bool bRestartRequested;
+    sal_Bool bUseSystemFileDialog;
+    std::auto_ptr<SvtLanguageOptions> pLanguageOptions;
+    std::auto_ptr<SvtPathOptions> pPathOptions;
+
+    ExecuteGlobals()
+    : bRestartRequested( sal_False )
+    , bUseSystemFileDialog( sal_True )
+    {}
+};
+
+static ExecuteGlobals* pExecGlobals = NULL;
+
 void Desktop::Main()
 {
+    pExecGlobals = new ExecuteGlobals();
+
     RTL_LOGFILE_CONTEXT( aLog, "desktop (cd100003) ::Desktop::Main" );
 
     // Remember current context object
@@ -1590,14 +1608,8 @@ void Desktop::Main()
     Reference< XMultiServiceFactory > xSMgr =
         ::comphelper::getProcessServiceFactory();
 
-    std::auto_ptr<SvtLanguageOptions> pLanguageOptions;
-    std::auto_ptr<SvtPathOptions> pPathOptions;
-
     Reference< ::com::sun::star::task::XRestartManager > xRestartManager;
-    sal_Bool bRestartRequested( sal_False );
-    sal_Bool bUseSystemFileDialog(sal_True);
     int         nAcquireCount( 0 );
-    Reference < css::document::XEventListener > xGlobalBroadcaster;
     try
     {
         RegisterServices( xSMgr );
@@ -1683,7 +1695,7 @@ void Desktop::Main()
 
         SetDisplayName( aTitle );
         RTL_LOGFILE_CONTEXT_TRACE( aLog, "{ create SvtPathOptions and SvtLanguageOptions" );
-        pPathOptions.reset( new SvtPathOptions);
+        pExecGlobals->pPathOptions.reset( new SvtPathOptions);
         SetSplashScreenProgress(40);
         RTL_LOGFILE_CONTEXT_TRACE( aLog, "} create SvtPathOptions and SvtLanguageOptions" );
 
@@ -1700,7 +1712,7 @@ void Desktop::Main()
         }
 
         // create service for loadin SFX (still needed in startup)
-        xGlobalBroadcaster = Reference < css::document::XEventListener >
+        pExecGlobals->xGlobalBroadcaster = Reference < css::document::XEventListener >
             ( xSMgr->createInstance(
             DEFINE_CONST_UNICODE( "com.sun.star.frame.GlobalEventBroadcaster" ) ), UNO_QUERY );
 
@@ -1756,13 +1768,13 @@ void Desktop::Main()
         }
 
         // keep a language options instance...
-        pLanguageOptions.reset( new SvtLanguageOptions(sal_True));
+        pExecGlobals->pLanguageOptions.reset( new SvtLanguageOptions(sal_True));
 
-        if (xGlobalBroadcaster.is())
+        if (pExecGlobals->xGlobalBroadcaster.is())
         {
             css::document::EventObject aEvent;
             aEvent.EventName = ::rtl::OUString::createFromAscii("OnStartApp");
-            xGlobalBroadcaster->notifyEvent(aEvent);
+            pExecGlobals->xGlobalBroadcaster->notifyEvent(aEvent);
         }
 
         SetSplashScreenProgress(50);
@@ -1782,7 +1794,7 @@ void Desktop::Main()
         }
 
         // check whether the shutdown is caused by restart
-        bRestartRequested = ( xRestartManager.is() && xRestartManager->isRestartRequested( sal_True ) );
+        pExecGlobals->bRestartRequested = ( xRestartManager.is() && xRestartManager->isRestartRequested( sal_True ) );
 
         if ( pCmdLineArgs->IsHeadless() )
         {
@@ -1790,11 +1802,11 @@ void Desktop::Main()
             // headless mode relies on Application::EnableHeadlessMode()
             // which does only work for VCL dialogs!!
             SvtMiscOptions aMiscOptions;
-            bUseSystemFileDialog = aMiscOptions.UseSystemFileDialog();
+            pExecGlobals->bUseSystemFileDialog = aMiscOptions.UseSystemFileDialog();
             aMiscOptions.SetUseSystemFileDialog( sal_False );
         }
 
-        if ( !bRestartRequested )
+        if ( !pExecGlobals->bRestartRequested )
         {
             if ((!pCmdLineArgs->WantsToLoadDocument()                                  ) &&
                 (SvtModuleOptions().IsModuleInstalled(SvtModuleOptions::E_SSTARTMODULE)) &&
@@ -1866,10 +1878,9 @@ void Desktop::Main()
     SvtAccessibilityOptions aOptions;
     aOptions.SetVCLSettings();
 
-    if ( !bRestartRequested )
+    if ( !pExecGlobals->bRestartRequested )
     {
         Application::SetFilterHdl( LINK( this, Desktop, ImplInitFilterHdl ) );
-
         sal_Bool bTerminateRequested = sal_False;
 
         // Preload function depends on an initialized sfx application!
@@ -1925,9 +1936,9 @@ void Desktop::Main()
                 new svt::JavaContext( com::sun::star::uno::getCurrentContext() ) );
 
             // check whether the shutdown is caused by restart just before entering the Execute
-            bRestartRequested = bRestartRequested || ( xRestartManager.is() && xRestartManager->isRestartRequested( sal_True ) );
+            pExecGlobals->bRestartRequested = pExecGlobals->bRestartRequested || ( xRestartManager.is() && xRestartManager->isRestartRequested( sal_True ) );
 
-            if ( !bRestartRequested )
+            if ( !pExecGlobals->bRestartRequested )
             {
                 // if this run of the office is triggered by restart, some additional actions should be done
                 DoRestartActionsIfNecessary( !pCmdLineArgs->IsInvisible() && !pCmdLineArgs->IsNoQuickstart() );
@@ -1946,44 +1957,57 @@ void Desktop::Main()
             FatalError( MakeStartupErrorMessage(exAnyCfg.Message) );
         }
     }
+    // CAUTION: you do not necessarily get here e.g. on the Mac.
+    // please put all deinitialization code into doShutdown
+    doShutdown();
+}
 
-    if ( bRestartRequested )
+void Desktop::doShutdown()
+{
+    if( ! pExecGlobals )
+        return;
+
+    if ( pExecGlobals->bRestartRequested )
         SetRestartState();
 
-    if (xGlobalBroadcaster.is())
+    if (pExecGlobals->xGlobalBroadcaster.is())
     {
         css::document::EventObject aEvent;
         aEvent.EventName = ::rtl::OUString::createFromAscii("OnCloseApp");
-        xGlobalBroadcaster->notifyEvent(aEvent);
+        pExecGlobals->xGlobalBroadcaster->notifyEvent(aEvent);
     }
 
-    delete pResMgr;
+    delete pResMgr, pResMgr = NULL;
     // Restore old value
+    CommandLineArgs* pCmdLineArgs = GetCommandLineArgs();
     if ( pCmdLineArgs->IsHeadless() )
-        SvtMiscOptions().SetUseSystemFileDialog( bUseSystemFileDialog );
+        SvtMiscOptions().SetUseSystemFileDialog( pExecGlobals->bUseSystemFileDialog );
 
     // remove temp directory
     RemoveTemporaryDirectory();
     FlushConfiguration();
     // The acceptors in the AcceptorMap must be released (in DeregisterServices)
     // with the solar mutex unlocked, to avoid deadlock:
-    nAcquireCount = Application::ReleaseSolarMutex();
+    ULONG nAcquireCount = Application::ReleaseSolarMutex();
     DeregisterServices();
     Application::AcquireSolarMutex(nAcquireCount);
     tools::DeInitTestToolLib();
     // be sure that path/language options gets destroyed before
     // UCB is deinitialized
     RTL_LOGFILE_CONTEXT_TRACE( aLog, "-> dispose path/language options" );
-    pLanguageOptions.reset( 0 );
-    pPathOptions.reset( 0 );
+    pExecGlobals->pLanguageOptions.reset( 0 );
+    pExecGlobals->pPathOptions.reset( 0 );
     RTL_LOGFILE_CONTEXT_TRACE( aLog, "<- dispose path/language options" );
 
     RTL_LOGFILE_CONTEXT_TRACE( aLog, "-> deinit ucb" );
     ::ucbhelper::ContentBroker::deinitialize();
     RTL_LOGFILE_CONTEXT_TRACE( aLog, "<- deinit ucb" );
 
+    sal_Bool bRR = pExecGlobals->bRestartRequested;
+    delete pExecGlobals, pExecGlobals = NULL;
+
     RTL_LOGFILE_CONTEXT_TRACE( aLog, "FINISHED WITH Destop::Main" );
-    if ( bRestartRequested )
+    if ( bRR )
     {
         restartOnMac(true);
         // wouldn't the solution be more clean if SalMain returns the exit code to the system?
@@ -2098,9 +2122,9 @@ sal_Bool Desktop::InitializeQuickstartMode( Reference< XMultiServiceFactory >& r
         // unfortunately this broke the QUARTZ behavior which is to always run
         // in quickstart mode since Mac applications do not usually quit
         // when the last document closes
-        #ifndef QUARTZ
+        //#ifndef QUARTZ
         if ( bQuickstart )
-        #endif
+        //#endif
         {
             Reference < XComponent > xQuickstart( rSMgr->createInstanceWithArguments(
                                                 DEFINE_CONST_UNICODE( "com.sun.star.office.Quickstart" ), aSeq ),
@@ -2167,17 +2191,6 @@ void Desktop::SystemSettingsChanging( AllSettings& rSettings, Window* )
             break;
     }
     hStyleSettings.SetUseImagesInMenus(bUseImagesInMenus);
-
-    sal_uInt16 nTabStyle = hStyleSettings.GetTabControlStyle();
-    nTabStyle &= ~STYLE_TABCONTROL_SINGLELINE;
-    if( aAppearanceCfg.IsSingleLineTabCtrl() )
-        nTabStyle |=STYLE_TABCONTROL_SINGLELINE;
-
-    nTabStyle &= ~STYLE_TABCONTROL_COLOR;
-    if( aAppearanceCfg.IsColoredTabCtrl() )
-        nTabStyle |= STYLE_TABCONTROL_COLOR;
-
-    hStyleSettings.SetTabControlStyle(nTabStyle);
 
     hStyleSettings.SetDragFullOptions( nDragFullOptions );
     rSettings.SetStyleSettings ( hStyleSettings );
@@ -3179,6 +3192,13 @@ void Desktop::HandleAppEvent( const ApplicationEvent& rAppEvent )
         }
         catch(const css::uno::Exception&)
         {}
+    }
+    else if( rAppEvent.GetEvent() == "PRIVATE:DOSHUTDOWN" )
+    {
+        Desktop* pD = dynamic_cast<Desktop*>(GetpApp());
+        OSL_ENSURE( pD, "no desktop ?!?" );
+        if( pD )
+            pD->doShutdown();
     }
 }
 
