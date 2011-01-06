@@ -1409,7 +1409,18 @@ void UnoDialogControl::ImplRemoveControl( Reference< XControlModel >& rxModel )
     Sequence< Reference< XControl > > aControls = getControls();
     Reference< XControl > xCtrl = StdTabController::FindControl( aControls, rxModel );
     if ( xCtrl.is() )
+    {
         removeControl( xCtrl );
+        try
+        {
+            Reference< XComponent > const xControlComp( xCtrl, UNO_QUERY_THROW );
+            xControlComp->dispose();
+        }
+        catch( Exception const & )
+        {
+            DBG_UNHANDLED_EXCEPTION();
+        }
+    }
 }
 
 void UnoDialogControl::ImplSetPosSize( Reference< XControl >& rxCtrl )
