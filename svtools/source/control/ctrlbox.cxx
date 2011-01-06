@@ -282,17 +282,209 @@ void ColorListBox::UserDraw( const UserDrawEvent& rUDEvt )
 // LineListBox
 // =======================================================================
 
-// -------------------
-// - ImpListListData -
-// -------------------
-
-struct ImpLineListData
+BorderWidthImpl::BorderWidthImpl( sal_uInt16 nFlags, double nRate1, double nRate2, double nRateGap ):
+    m_nFlags( nFlags ),
+    m_nRate1( nRate1 ),
+    m_nRate2( nRate2 ),
+    m_nRateGap( nRateGap )
 {
-    long    nLine1;
-    long    nLine2;
-    long    nDistance;
-    sal_uInt16  nStyle;
+}
+
+BorderWidthImpl& BorderWidthImpl::operator= ( const BorderWidthImpl& r )
+{
+    m_nFlags = r.m_nFlags;
+    m_nRate1 = r.m_nRate1;
+    m_nRate2 = r.m_nRate2;
+    m_nRateGap = r.m_nRateGap;
+    return *this;
+}
+
+bool BorderWidthImpl::operator== ( const BorderWidthImpl& r ) const
+{
+    return ( m_nFlags == r.m_nFlags ) &&
+           ( m_nRate1 == r.m_nRate1 ) &&
+           ( m_nRate2 == r.m_nRate2 ) &&
+           ( m_nRateGap == r.m_nRateGap );
+}
+
+long BorderWidthImpl::GetLine1( long nWidth ) const
+{
+    long result = m_nRate1;
+    if ( ( m_nFlags & CHANGE_LINE1 ) > 0 )
+        result = m_nRate1 * nWidth;
+    return result;
+}
+
+long BorderWidthImpl::GetLine2( long nWidth ) const
+{
+    long result = m_nRate2;
+    if ( ( m_nFlags & CHANGE_LINE2 ) > 0 )
+        result = m_nRate2 * nWidth;
+    return result;
+}
+
+long BorderWidthImpl::GetGap( long nWidth ) const
+{
+    long result = m_nRateGap;
+    if ( ( m_nFlags & CHANGE_DIST ) > 0 )
+        result = m_nRateGap * nWidth;
+
+    // Avoid having too small distances
+    if ( result < 100 && m_nRate1 > 0 && m_nRate2 > 0 )
+        result = 100;
+
+    return result;
+}
+
+double lcl_getGuessedWidth( long nTested, double nRate, bool nChanging )
+{
+    double nWidth = 0.0;
+    if ( nChanging )
+        nWidth = double( nTested ) / nRate;
+    else
+    {
+        if ( double( nTested ) == nRate )
+            nWidth = nRate;
+        else
+            nWidth = 0.0;
+    }
+
+    return nWidth;
+}
+
+long BorderWidthImpl::GuessWidth( long nLine1, long nLine2, long nGap )
+{
+    std::vector< double > aToCompare;
+    bool bInvalid = false;
+
+    bool bLine1Change = ( m_nFlags & CHANGE_LINE1 ) > 0;
+    double nWidth1 = lcl_getGuessedWidth( nLine1, m_nRate1, bLine1Change );
+    if ( bLine1Change )
+        aToCompare.push_back( nWidth1 );
+    else if ( !bLine1Change && nWidth1 == 0 )
+        bInvalid = true;
+
+    bool bLine2Change = ( m_nFlags & CHANGE_LINE2 ) > 0;
+    double nWidth2 = lcl_getGuessedWidth( nLine2, m_nRate2, bLine2Change );
+    if ( bLine2Change )
+        aToCompare.push_back( nWidth2 );
+    else if ( !bLine2Change && nWidth2 == 0 )
+        bInvalid = true;
+
+    bool bGapChange = ( m_nFlags & CHANGE_DIST ) > 0;
+    double nWidthGap = lcl_getGuessedWidth( nGap, m_nRateGap, bGapChange );
+    if ( bGapChange )
+        aToCompare.push_back( nWidthGap );
+    else if ( !bGapChange && nWidthGap == 0 )
+        bInvalid = true;
+
+    double nWidth = 0.0;
+    if ( !bInvalid && aToCompare.size() > 0 )
+    {
+        nWidth = *aToCompare.begin();
+        std::vector< double >::iterator pIt = aToCompare.begin();
+        while ( pIt != aToCompare.end() && !bInvalid )
+        {
+            bInvalid = ( nWidth != *pIt );
+            pIt++;
+        }
+        if ( bInvalid )
+            nWidth = 0.0;
+    }
+
+    return long( nWidth );
+}
+
+/** Utility class storing the border line width, style and colors. The widths
+    are defined in Twips.
+  */
+class ImpLineListData
+{
+private:
+    BorderWidthImpl m_aWidthImpl;
+
+    Color  ( *m_pColor1Fn )( Color );
+    Color  ( *m_pColor2Fn )( Color );
+    Color  ( *m_pColorDistFn )( Color, Color );
+
+    long   m_nMinWidth;
+    sal_uInt16 m_nStyle;
+
+public:
+    ImpLineListData( BorderWidthImpl aWidthImpl, sal_uInt16 nStyle,
+            long nMinWidth=0, Color ( *pColor1Fn ) ( Color ) = &sameColor,
+            Color ( *pColor2Fn ) ( Color ) = &sameColor, Color ( *pColorDistFn ) ( Color, Color ) = &sameDistColor );
+
+    /** Returns the computed width of the line 1 in twips. */
+    long GetLine1ForWidth( long nWidth ) { return m_aWidthImpl.GetLine1( nWidth ); }
+
+    /** Returns the computed width of the line 2 in twips. */
+    long GetLine2ForWidth( long nWidth ) { return m_aWidthImpl.GetLine2( nWidth ); }
+
+    /** Returns the computed width of the gap in twips. */
+    long GetDistForWidth( long nWidth ) { return m_aWidthImpl.GetGap( nWidth ); }
+
+    Color  GetColorLine1( const Color& aMain );
+    Color  GetColorLine2( const Color& aMain );
+    Color  GetColorDist( const Color& aMain, const Color& rDefault );
+
+    /** Returns the minimum width in twips */
+    long   GetMinWidth( );
+    sal_uInt16 GetStyle( );
 };
+
+ImpLineListData::ImpLineListData( BorderWidthImpl aWidthImpl,
+       sal_uInt16 nStyle, long nMinWidth, Color ( *pColor1Fn )( Color ),
+       Color ( *pColor2Fn )( Color ), Color ( *pColorDistFn )( Color, Color ) ) :
+    m_aWidthImpl( aWidthImpl ),
+    m_pColor1Fn( pColor1Fn ),
+    m_pColor2Fn( pColor2Fn ),
+    m_pColorDistFn( pColorDistFn ),
+    m_nMinWidth( nMinWidth ),
+    m_nStyle( nStyle )
+{
+}
+
+long ImpLineListData::GetMinWidth( )
+{
+    return m_nMinWidth;
+}
+
+Color ImpLineListData::GetColorLine1( const Color& rMain )
+{
+    return ( *m_pColor1Fn )( rMain );
+}
+
+Color ImpLineListData::GetColorLine2( const Color& rMain )
+{
+    return ( *m_pColor2Fn )( rMain );
+}
+
+Color ImpLineListData::GetColorDist( const Color& rMain, const Color& rDefault )
+{
+    return ( *m_pColorDistFn )( rMain, rDefault );
+}
+
+sal_uInt16 LineListBox::GetSelectEntryStyle( sal_uInt16 nSelIndex ) const
+{
+    sal_uInt16 nStyle = STYLE_SOLID;
+    sal_uInt16 nPos = GetSelectEntryPos( nSelIndex );
+    if ( nPos != LISTBOX_ENTRY_NOTFOUND )
+    {
+        if ( m_sNone.Len( ) > 0 )
+            nPos--;
+        nStyle = GetEntryStyle( nPos );
+    }
+
+    return nStyle;
+}
+
+sal_uInt16 ImpLineListData::GetStyle( )
+{
+    return m_nStyle;
+}
+
+DECLARE_LIST( ImpLineList, ImpLineListData* )
 
 // -----------------------------------------------------------------------
 
@@ -420,26 +612,17 @@ void LineListBox::ImpGetLine( long nLine1, long nLine2, long nDistance,
     // SourceUnit nach Twips
     if ( eSourceUnit == FUNIT_POINT )
     {
-        nLine1      *= 20;
-        nLine2      *= 20;
-        nDistance   *= 20;
-    }
-    else if ( eSourceUnit == FUNIT_MM )
-    {
-        nLine1      *= 14440;
-        nLine1      /= 254;
-        nLine2      *= 14440;
-        nLine2      /= 254;
-        nDistance   *= 14440;
-        nDistance   /= 254;
+        nLine1      /= 5;
+        nLine2      /= 5;
+        nDistance   /= 5;
     }
 
     // Linien malen
     aSize = aVirDev.PixelToLogic( aSize );
     long nPix = aVirDev.PixelToLogic( Size( 0, 1 ) ).Height();
-    sal_uInt32 n1 = nLine1 / 100;
-    sal_uInt32 n2 = nLine2 / 100;
-    long nDist  = nDistance / 100;
+    sal_uInt32 n1 = nLine1;
+    sal_uInt32 n2 = nLine2;
+    long nDist  = nDistance;
     n1 += nPix-1;
     n1 -= n1%nPix;
     if ( n2 )
@@ -478,20 +661,10 @@ void LineListBox::ImpGetLine( long nLine1, long nLine2, long nDistance,
     // Twips nach Unit
     if ( eUnit == FUNIT_POINT )
     {
-        nLine1      /= 20;
-        nLine2      /= 20;
-        nDistance   /= 20;
+        nLine1      *= 5;
+        nLine2      *= 5;
+        nDistance   *= 5;
         rStr.AssignAscii( " pt" );
-    }
-    else if ( eUnit == FUNIT_MM )
-    {
-        nLine1      *= 254;
-        nLine1      /= 14400;
-        nLine2      *= 254;
-        nLine2      /= 14400;
-        nDistance   *= 254;
-        nDistance   /= 14400;
-        rStr.AssignAscii( " mm" );
     }
 
     String aNum( GetSettings().GetLocaleI18nHelper().GetNum( nLine1+nLine2+nDistance, 2 ) );
@@ -518,6 +691,8 @@ void LineListBox::ImplInit()
 
 LineListBox::LineListBox( Window* pParent, WinBits nWinStyle ) :
     ListBox( pParent, nWinStyle ),
+    m_nWidth( 5 ),
+    m_sNone( ),
     aColor( COL_BLACK ),
     maPaintCol( COL_BLACK )
 {
@@ -528,6 +703,8 @@ LineListBox::LineListBox( Window* pParent, WinBits nWinStyle ) :
 
 LineListBox::LineListBox( Window* pParent, const ResId& rResId ) :
     ListBox( pParent, rResId ),
+    m_nWidth( 5 ),
+    m_sNone( ),
     aColor( COL_BLACK ),
     maPaintCol( COL_BLACK )
 {
@@ -547,9 +724,34 @@ LineListBox::~LineListBox()
     delete pLineList;
 }
 
-void LineListBox::SelectEntry( long nLine1, long nLine2, long nDistance, sal_uInt16 nStyle, sal_Bool bSelect )
+sal_uInt16 LineListBox::GetStylePos( sal_uInt16 nListPos, long nWidth )
 {
-    sal_uInt16 nPos = GetEntryPos( nLine1, nLine2, nDistance, nStyle );
+    sal_uInt16 nPos = LISTBOX_ENTRY_NOTFOUND;
+    if ( m_sNone.Len( ) > 0 )
+        nListPos--;
+
+    sal_uInt16 i = 0;
+    sal_uInt16 n = 0;
+    sal_uInt16 nCount = pLineList->Count( );
+    while ( nPos == LISTBOX_ENTRY_NOTFOUND && i < nCount )
+    {
+        ImpLineListData* pData = pLineList->GetObject( i );
+        if ( pData && pData->GetMinWidth() <= nWidth )
+        {
+            if ( nListPos == n )
+                nPos = i;
+            n++;
+        }
+        i++;
+    }
+
+    return nPos;
+}
+
+
+void LineListBox::SelectEntry( sal_uInt16 nStyle, sal_Bool bSelect )
+{
+    sal_uInt16 nPos = GetEntryPos( nStyle );
     if ( nPos != LISTBOX_ENTRY_NOTFOUND )
         ListBox::SelectEntryPos( nPos, bSelect );
 }
@@ -573,34 +775,16 @@ sal_uInt16 LineListBox::InsertEntry( const XubString& rStr, sal_uInt16 nPos )
 
 // -----------------------------------------------------------------------
 
-sal_uInt16 LineListBox::InsertEntry( long nLine1, long nLine2, long nDistance,
-                                sal_uInt16 nStyle, sal_uInt16 nPos )
+void LineListBox::InsertEntry(
+        BorderWidthImpl aWidthImpl,
+        sal_uInt16 nStyle, long nMinWidth,
+        Color ( *pColor1Fn )( Color ), Color ( *pColor2Fn )( Color ),
+        Color ( *pColorDistFn )( Color, Color ) )
 {
-    XubString   aStr;
-    Bitmap      aBmp;
-    ImpGetLine( nLine1, nLine2, nDistance,
-            GetColorLine1( GetEntryCount( ) ),
-            GetColorLine2( GetEntryCount( ) ),
-            GetColorDist( GetEntryCount( ) ),
-            nStyle, aBmp, aStr );
-    nPos = ListBox::InsertEntry( aStr, aBmp, nPos );
-    if ( nPos != LISTBOX_ERROR )
-    {
-        ImpLineListData* pData = new ImpLineListData;
-        pData->nLine1    = nLine1;
-        pData->nLine2    = nLine2;
-        pData->nDistance = nDistance;
-        pData->nStyle    = nStyle;
-        if ( nPos < pLineList->size() ) {
-            ImpLineList::iterator it = pLineList->begin();
-            ::std::advance( it, nPos );
-            pLineList->insert( it, pData );
-        } else {
-            pLineList->push_back( pData );
-        }
-    }
-
-    return nPos;
+    ImpLineListData* pData = new ImpLineListData(
+            aWidthImpl, nStyle, nMinWidth,
+           pColor1Fn, pColor2Fn, pColorDistFn );
+    pLineList->push_back( pData );
 }
 
 // -----------------------------------------------------------------------
@@ -633,19 +817,18 @@ void LineListBox::Clear()
 
 // -----------------------------------------------------------------------
 
-sal_uInt16 LineListBox::GetEntryPos( long nLine1, long nLine2,
-                                long nDistance, sal_uInt16 nStyle ) const
+sal_uInt16 LineListBox::GetEntryPos( sal_uInt16 nStyle ) const
 {
     for ( size_t i = 0, n = pLineList->size(); i < n; ++i ) {
         ImpLineListData* pData = (*pLineList)[ i ];
         if ( pData )
         {
-            if (  (pData->nLine1    == nLine1)
-               && (pData->nLine2    == nLine2)
-               && (pData->nDistance == nDistance)
-               && (pData->nStyle    == nStyle)
-            ) {
-                return (sal_uInt16)i;
+            if ( GetEntryStyle( i ) == nStyle )
+            {
+                size_t nPos = i;
+                if ( m_sNone.Len() > 0 )
+                    nPos ++;
+                return (sal_uInt16)nPos;
             }
         }
     }
@@ -657,7 +840,7 @@ sal_uInt16 LineListBox::GetEntryPos( long nLine1, long nLine2,
 long LineListBox::GetEntryLine1( sal_uInt16 nPos ) const
 {
     ImpLineListData* pData = (nPos < pLineList->size()) ? (*pLineList)[ nPos ] : NULL;
-    return ( pData ) ? pData->nLine1 : 0;
+    return ( pData ) ? pData->GetLine1ForWidth( m_nWidth ) : 0;
 }
 
 // -----------------------------------------------------------------------
@@ -665,7 +848,7 @@ long LineListBox::GetEntryLine1( sal_uInt16 nPos ) const
 long LineListBox::GetEntryLine2( sal_uInt16 nPos ) const
 {
     ImpLineListData* pData = (nPos < pLineList->size()) ? (*pLineList)[ nPos ] : NULL;
-    return ( pData ) ? pData->nLine2 : 0;
+    return ( pData ) ? pData->GetLine2ForWidth( m_nWidth ) : 0;
 }
 
 // -----------------------------------------------------------------------
@@ -673,7 +856,7 @@ long LineListBox::GetEntryLine2( sal_uInt16 nPos ) const
 long LineListBox::GetEntryDistance( sal_uInt16 nPos ) const
 {
     ImpLineListData* pData = (nPos < pLineList->size()) ? (*pLineList)[ nPos ] : NULL;
-    return ( pData ) ? pData->nDistance : 0;
+    return ( pData ) ? pData->GetDistForWidth( m_nWidth ) : 0;
 }
 
 // -----------------------------------------------------------------------
@@ -681,45 +864,7 @@ long LineListBox::GetEntryDistance( sal_uInt16 nPos ) const
 sal_uInt16 LineListBox::GetEntryStyle( sal_uInt16 nPos ) const
 {
     ImpLineListData* pData = (nPos < pLineList->size()) ? (*pLineList)[ nPos ] : NULL;
-    return ( pData ) ? pData->nStyle : STYLE_SOLID;
-}
-
-// -----------------------------------------------------------------------
-
-void LineListBox::UpdateLineColors( void )
-{
-    if( UpdatePaintLineColor() )
-    {
-        size_t nCount = pLineList->size();
-        if( !nCount )
-            return;
-
-        XubString   aStr;
-        Bitmap      aBmp;
-
-        // exchange entries which containing lines
-        SetUpdateMode( sal_False );
-
-        sal_uInt16 nSelEntry = GetSelectEntryPos();
-        for( size_t n = 0 ; n < nCount ; ++n )
-        {
-            ImpLineListData* pData = (*pLineList)[ n ];
-            if( pData )
-            {
-                // exchange listbox data
-                ListBox::RemoveEntry( sal_uInt16( n ) );
-                ImpGetLine( pData->nLine1, pData->nLine2, pData->nDistance,
-                        GetColorLine1( n ), GetColorLine2( n ), GetColorDist( n ),
-                        pData->nStyle, aBmp, aStr );
-            }
-        }
-
-        if( nSelEntry != LISTBOX_ENTRY_NOTFOUND )
-            SelectEntryPos( nSelEntry );
-
-        SetUpdateMode( sal_True );
-        Invalidate();
-    }
+    return ( pData ) ? pData->GetStyle() : STYLE_SOLID;
 }
 
 // -----------------------------------------------------------------------
@@ -738,19 +883,88 @@ sal_Bool LineListBox::UpdatePaintLineColor( void )
     return bRet;
 }
 
-Color LineListBox::GetColorLine1( sal_uInt16 )
+void LineListBox::UpdateEntries( long nOldWidth )
 {
-    return GetPaintColor( );
+    SetUpdateMode( sal_False );
+
+    UpdatePaintLineColor( );
+
+    sal_uInt16      nSelEntry = GetSelectEntryPos();
+    sal_uInt16       nTypePos = GetStylePos( nSelEntry, nOldWidth );
+
+    // Remove the old entries
+    while ( GetEntryCount( ) > 0 )
+        ListBox::RemoveEntry( 0 );
+
+    // Add the new entries based on the defined width
+    if ( m_sNone.Len( ) > 0 )
+        ListBox::InsertEntry( m_sNone, LISTBOX_APPEND );
+
+    sal_uInt16 n = 0;
+    sal_uInt16 nCount = pLineList->Count( );
+    while ( n < nCount )
+    {
+        ImpLineListData* pData = pLineList->GetObject( n );
+        if ( pData && pData->GetMinWidth() <= m_nWidth )
+        {
+            XubString   aStr;
+            Bitmap      aBmp;
+            ImpGetLine( pData->GetLine1ForWidth( m_nWidth ),
+                    pData->GetLine2ForWidth( m_nWidth ),
+                    pData->GetDistForWidth( m_nWidth ),
+                    GetColorLine1( GetEntryCount( ) ),
+                    GetColorLine2( GetEntryCount( ) ),
+                    GetColorDist( GetEntryCount( ) ),
+                    pData->GetStyle(), aBmp, aStr );
+            ListBox::InsertEntry( aStr, aBmp, LISTBOX_APPEND );
+            if ( n == nTypePos )
+                SelectEntryPos( GetEntryCount() - 1 );
+        }
+        else if ( n == nTypePos )
+            SetNoSelection();
+        n++;
+    }
+
+    SetUpdateMode( sal_True );
+    Invalidate();
 }
 
-Color LineListBox::GetColorLine2( sal_uInt16 )
+// -----------------------------------------------------------------------
+
+Color LineListBox::GetColorLine1( sal_uInt16 nPos )
 {
-    return GetPaintColor( );
+    Color rResult = GetPaintColor( );
+
+    sal_uInt16 nStyle = GetStylePos( nPos, m_nWidth );
+    ImpLineListData* pData = pLineList->GetObject( nStyle );
+    if ( pData )
+        rResult = pData->GetColorLine1( GetColor( ) );
+
+    return rResult;
 }
 
-Color LineListBox::GetColorDist( sal_uInt16 )
+Color LineListBox::GetColorLine2( sal_uInt16 nPos )
 {
-    return GetSettings().GetStyleSettings().GetFieldColor();
+    Color rResult = GetPaintColor( );
+
+    sal_uInt16 nStyle = GetStylePos( nPos, m_nWidth );
+    ImpLineListData* pData = pLineList->GetObject( nStyle );
+    if ( pData )
+        rResult = pData->GetColorLine2( GetColor( ) );
+
+    return rResult;
+}
+
+Color LineListBox::GetColorDist( sal_uInt16 nPos )
+{
+    Color rResult = GetSettings().GetStyleSettings().GetFieldColor();
+
+    sal_uInt16 nStyle = GetStylePos( nPos, m_nWidth );
+    ImpLineListData* pData = pLineList->GetObject( nStyle );
+    if ( pData )
+        rResult = pData->GetColorDist( GetColor( ), rResult );
+
+    return rResult;
 }
 
 // -----------------------------------------------------------------------
@@ -760,376 +974,9 @@ void LineListBox::DataChanged( const DataChangedEvent& rDCEvt )
     ListBox::DataChanged( rDCEvt );
 
     if( ( rDCEvt.GetType() == DATACHANGED_SETTINGS ) && ( rDCEvt.GetFlags() & SETTINGS_STYLE ) )
-        UpdateLineColors();
+        UpdateEntries( m_nWidth );
 }
 
-// ===================================================================
-// LineStyleNameBox
-// ===================================================================
-
-BorderWidthImpl::BorderWidthImpl( sal_uInt16 nFlags, double nRate1, double nRate2, double nRateGap ):
-    m_nFlags( nFlags ),
-    m_nRate1( nRate1 ),
-    m_nRate2( nRate2 ),
-    m_nRateGap( nRateGap )
-{
-}
-
-BorderWidthImpl& BorderWidthImpl::operator= ( const BorderWidthImpl& r )
-{
-    m_nFlags = r.m_nFlags;
-    m_nRate1 = r.m_nRate1;
-    m_nRate2 = r.m_nRate2;
-    m_nRateGap = r.m_nRateGap;
-    return *this;
-}
-
-bool BorderWidthImpl::operator== ( const BorderWidthImpl& r ) const
-{
-    return ( m_nFlags == r.m_nFlags ) &&
-           ( m_nRate1 == r.m_nRate1 ) &&
-           ( m_nRate2 == r.m_nRate2 ) &&
-           ( m_nRateGap == r.m_nRateGap );
-}
-
-long BorderWidthImpl::GetLine1( long nWidth ) const
-{
-    long result = m_nRate1;
-    if ( ( m_nFlags & CHANGE_LINE1 ) > 0 )
-        result = m_nRate1 * nWidth;
-    return result;
-}
-
-long BorderWidthImpl::GetLine2( long nWidth ) const
-{
-    long result = m_nRate2;
-    if ( ( m_nFlags & CHANGE_LINE2 ) > 0 )
-        result = m_nRate2 * nWidth;
-    return result;
-}
-
-long BorderWidthImpl::GetGap( long nWidth ) const
-{
-    long result = m_nRateGap;
-    if ( ( m_nFlags & CHANGE_DIST ) > 0 )
-        result = m_nRateGap * nWidth;
-
-    // Avoid having too small distances
-    if ( result < 100 && m_nRate1 > 0 && m_nRate2 > 0 )
-        result = 100;
-
-    return result;
-}
-
-double lcl_getGuessedWidth( long nTested, double nRate, bool nChanging )
-{
-    double nWidth = 0.0;
-    if ( nChanging )
-        nWidth = double( nTested ) / nRate;
-    else
-    {
-        if ( double( nTested ) == nRate )
-            nWidth = nRate;
-        else
-            nWidth = 0.0;
-    }
-
-    return nWidth;
-}
-
-long BorderWidthImpl::GuessWidth( long nLine1, long nLine2, long nGap )
-{
-    std::vector< double > aToCompare;
-    bool bInvalid = false;
-
-    bool bLine1Change = ( m_nFlags & CHANGE_LINE1 ) > 0;
-    double nWidth1 = lcl_getGuessedWidth( nLine1, m_nRate1, bLine1Change );
-    if ( bLine1Change )
-        aToCompare.push_back( nWidth1 );
-    else if ( !bLine1Change && nWidth1 == 0 )
-        bInvalid = true;
-
-    bool bLine2Change = ( m_nFlags & CHANGE_LINE2 ) > 0;
-    double nWidth2 = lcl_getGuessedWidth( nLine2, m_nRate2, bLine2Change );
-    if ( bLine2Change )
-        aToCompare.push_back( nWidth2 );
-    else if ( !bLine2Change && nWidth2 == 0 )
-        bInvalid = true;
-
-    bool bGapChange = ( m_nFlags & CHANGE_DIST ) > 0;
-    double nWidthGap = lcl_getGuessedWidth( nGap, m_nRateGap, bGapChange );
-    if ( bGapChange )
-        aToCompare.push_back( nWidthGap );
-    else if ( !bGapChange && nWidthGap == 0 )
-        bInvalid = true;
-
-    double nWidth = 0.0;
-    if ( !bInvalid && aToCompare.size() > 0 )
-    {
-        nWidth = *aToCompare.begin();
-        std::vector< double >::iterator pIt = aToCompare.begin();
-        while ( pIt != aToCompare.end() && !bInvalid )
-        {
-            bInvalid = ( nWidth != *pIt );
-            pIt++;
-        }
-        if ( bInvalid )
-            nWidth = 0.0;
-    }
-
-    return long( nWidth );
-}
-
-/** Utility class storing the border line width, style and colors. The widths
-    are defined in Twips.
-  */
-class ImpLineStyleListData
-{
-private:
-    BorderWidthImpl m_aWidthImpl;
-
-    Color  ( *m_pColor1Fn )( Color );
-    Color  ( *m_pColor2Fn )( Color );
-    Color  ( *m_pColorDistFn )( Color, Color );
-
-    long   m_nMinWidth;
-    sal_uInt16 m_nStyle;
-
-public:
-    ImpLineStyleListData( BorderWidthImpl aWidthImpl, sal_uInt16 nStyle,
-            long nMinWidth=0, Color ( *pColor1Fn ) ( Color ) = &sameColor,
-            Color ( *pColor2Fn ) ( Color ) = &sameColor, Color ( *pColorDistFn ) ( Color, Color ) = &sameDistColor );
-
-    /** Returns the computed width of the line 1 in 100th of pt. */
-    long GetLine1ForWidth( long nWidth ) { return TWIPS_TO_PT100( m_aWidthImpl.GetLine1( nWidth ) ); }
-
-    /** Returns the computed width of the line 2 in 100th of pt. */
-    long GetLine2ForWidth( long nWidth ) { return TWIPS_TO_PT100( m_aWidthImpl.GetLine2( nWidth ) ); }
-
-    /** Returns the computed width of the gap in 100th of pt. */
-    long GetDistForWidth( long nWidth ) { return TWIPS_TO_PT100( m_aWidthImpl.GetGap( nWidth ) ); }
-
-    Color  GetColorLine1( const Color& aMain );
-    Color  GetColorLine2( const Color& aMain );
-    Color  GetColorDist( const Color& aMain, const Color& rDefault );
-
-    /** Returns the minimum width in 100th of pt */
-    long   GetMinWidth( );
-    sal_uInt16 GetStyle( );
-
-    /** Guess the width based on all the lines computed widths in 100th of pt.
-      The result value is expressed in Twips. */
-    long GuessWidth( long nLine1, long nLine2, long nDist )
-        { return m_aWidthImpl.GuessWidth( PT100_TO_TWIPS( nLine1 ),
-                PT100_TO_TWIPS( nLine2 ), PT100_TO_TWIPS( nDist ) ); }
-};
-
-ImpLineStyleListData::ImpLineStyleListData( BorderWidthImpl aWidthImpl,
-       sal_uInt16 nStyle, long nMinWidth, Color ( *pColor1Fn )( Color ),
-       Color ( *pColor2Fn )( Color ), Color ( *pColorDistFn )( Color, Color ) ) :
-    m_aWidthImpl( aWidthImpl ),
-    m_pColor1Fn( pColor1Fn ),
-    m_pColor2Fn( pColor2Fn ),
-    m_pColorDistFn( pColorDistFn ),
-    m_nMinWidth( nMinWidth ),
-    m_nStyle( nStyle )
-{
-}
-
-long ImpLineStyleListData::GetMinWidth( )
-{
-    return TWIPS_TO_PT100( m_nMinWidth );
-}
-
-Color ImpLineStyleListData::GetColorLine1( const Color& rMain )
-{
-    return ( *m_pColor1Fn )( rMain );
-}
-
-Color ImpLineStyleListData::GetColorLine2( const Color& rMain )
-{
-    return ( *m_pColor2Fn )( rMain );
-}
-
-Color ImpLineStyleListData::GetColorDist( const Color& rMain, const Color& rDefault )
-{
-    return ( *m_pColorDistFn )( rMain, rDefault );
-}
-
-sal_uInt16 ImpLineStyleListData::GetStyle( )
-{
-    return m_nStyle;
-}
-
-DECLARE_LIST( ImpLineStyleList, ImpLineStyleListData* )
-
-LineStyleListBox::LineStyleListBox( Window* pParent, WinBits nWinStyle ) :
-    LineListBox( pParent, nWinStyle ),
-    m_nWidth( 5 ),
-    m_sNone( )
-{
-    m_pStyleList = new ImpLineStyleList;
-}
-
-LineStyleListBox::LineStyleListBox( Window* pParent, const ResId& rResId ) :
-    LineListBox( pParent, rResId ),
-    m_nWidth( 0 ),
-    m_sNone( )
-{
-    m_pStyleList = new ImpLineStyleList;
-}
-
-LineStyleListBox::~LineStyleListBox( )
-{
-    sal_uInt16 n = 0;
-    sal_uInt16 nCount = m_pStyleList->Count( );
-    while ( n < nCount )
-    {
-        ImpLineStyleListData* pData = m_pStyleList->GetObject( n );
-        if ( pData )
-            delete pData;
-        n++;
-    }
-    delete m_pStyleList;
-}
-
-void LineStyleListBox::InsertEntry(
-        BorderWidthImpl aWidthImpl,
-        sal_uInt16 nStyle, long nMinWidth,
-        Color ( *pColor1Fn )( Color ), Color ( *pColor2Fn )( Color ),
-        Color ( *pColorDistFn )( Color, Color ) )
-{
-    ImpLineStyleListData* pData = new ImpLineStyleListData(
-            aWidthImpl, nStyle, nMinWidth,
-           pColor1Fn, pColor2Fn, pColorDistFn );
-    m_pStyleList->Insert( pData, m_pStyleList->Count( ) );
-}
-
-Color LineStyleListBox::GetColorLine1( sal_uInt16 nPos )
-{
-    Color rResult = LineListBox::GetColorLine1( );
-
-    sal_uInt16 nStyle = GetStylePos( nPos, m_nWidth );
-    ImpLineStyleListData* pData = m_pStyleList->GetObject( nStyle );
-    if ( pData )
-        rResult = pData->GetColorLine1( GetColor( ) );
-
-    return rResult;
-}
-
-Color LineStyleListBox::GetColorLine2( sal_uInt16 nPos )
-{
-    Color rResult = LineListBox::GetColorLine2( );
-
-    sal_uInt16 nStyle = GetStylePos( nPos, m_nWidth );
-    ImpLineStyleListData* pData = m_pStyleList->GetObject( nStyle );
-    if ( pData )
-        rResult = pData->GetColorLine2( GetColor( ) );
-
-    return rResult;
-}
-
-Color LineStyleListBox::GetColorDist( sal_uInt16 nPos )
-{
-    Color rResult = LineListBox::GetColorDist( );
-
-    sal_uInt16 nStyle = GetStylePos( nPos, m_nWidth );
-    ImpLineStyleListData* pData = m_pStyleList->GetObject( nStyle );
-    if ( pData )
-        rResult = pData->GetColorDist( GetColor( ), rResult );
-
-    return rResult;
-}
-
-sal_uInt16 LineStyleListBox::GetSelectedStyle( )
-{
-    sal_uInt16 nSelEntry = GetSelectEntryPos();
-    if ( m_sNone.Len( ) > 0 )
-        nSelEntry--;
-    return GetStylePos( nSelEntry, m_nWidth );
-}
-
-sal_uInt16 LineStyleListBox::GetEntryPos( long /*nLine1*/, long /*nLine2*/,
-                                long /*nDistance*/, sal_uInt16 nStyle ) const
-{
-    sal_uInt16 nPos = LISTBOX_ENTRY_NOTFOUND;
-    sal_uInt16 n = 0;
-    sal_uInt16 nCount = this->GetEntryCount( );
-    while ( n < nCount )
-    {
-        if ( GetEntryStyle( n ) == nStyle )
-            nPos = (sal_uInt16)n;
-
-        n++;
-    }
-
-    return nPos;
-}
-
-sal_uInt16 LineStyleListBox::GetStylePos( sal_uInt16 nListPos, long nWidth )
-{
-    sal_uInt16 nPos = LISTBOX_ENTRY_NOTFOUND;
-    if ( m_sNone.Len( ) > 0 )
-        nListPos--;
-
-    sal_uInt16 i = 0;
-    sal_uInt16 n = 0;
-    sal_uInt16 nCount = m_pStyleList->Count( );
-    while ( nPos == LISTBOX_ENTRY_NOTFOUND && i < nCount )
-    {
-        ImpLineStyleListData* pData = m_pStyleList->GetObject( i );
-        if ( pData && pData->GetMinWidth() <= nWidth )
-        {
-            if ( nListPos == n )
-                nPos = i;
-            n++;
-        }
-        i++;
-    }
-
-    return nPos;
-}
-
-void LineStyleListBox::UpdateEntries( long nOldWidth )
-{
-    SetUpdateMode( sal_False );
-
-    sal_uInt16      nSelEntry = GetSelectEntryPos();
-    sal_uInt16       nTypePos = GetStylePos( nSelEntry, nOldWidth );
-
-    // Remove the old entries
-    while ( GetEntryCount( ) > 0 )
-        RemoveEntry( 0 );
-
-    // Add the new entries based on the defined width
-    if ( m_sNone.Len( ) > 0 )
-        InsertEntry( m_sNone );
-
-    sal_uInt16 n = 0;
-    sal_uInt16 nCount = m_pStyleList->Count( );
-    while ( n < nCount )
-    {
-        ImpLineStyleListData* pData = m_pStyleList->GetObject( n );
-        if ( pData && pData->GetMinWidth() <= m_nWidth )
-        {
-            InsertEntry(
-                   pData->GetLine1ForWidth( m_nWidth ),
-                   pData->GetLine2ForWidth( m_nWidth ),
-                   pData->GetDistForWidth( m_nWidth ),
-                   pData->GetStyle( ) );
-            if ( n == nTypePos )
-                SelectEntryPos( GetEntryCount() - 1 );
-        }
-        else if ( n == nTypePos )
-            SetNoSelection();
-        n++;
-    }
-
-    SetColor( GetColor( ) );
-
-    SetUpdateMode( sal_True );
-    Invalidate();
-}
 
 // ===================================================================
 // FontNameBox

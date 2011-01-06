@@ -1431,7 +1431,6 @@ double MetricField::ConvertDoubleValue( double nValue, sal_uInt16 nDigits,
     {
         while ( nDecDigits )
         {
-            nValue += 5;
             nValue /= 10;
             nDecDigits--;
         }
