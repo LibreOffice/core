@@ -37,7 +37,7 @@ module com {  module sun {  module star {  module sheet {
     A DDE connection consists of the DDE service name, the DDE topic and a
     list of DDE items which may contain cached result sets.
 
-    @since OOo3.1
+    @since OOo 3.1
  */
 struct DDEItemInfo
 {

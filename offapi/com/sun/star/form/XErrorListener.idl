@@ -51,7 +51,6 @@
     <p>Please do <em><b>not</b></em> use anymore, this interface is superseeded
     by <type scope="com::sun::star::sdb">XSQLErrorListener</type>.</p>
 
-@since foo
     @deprecated
  */
 published interface XErrorListener: com::sun::star::lang::XEventListener
