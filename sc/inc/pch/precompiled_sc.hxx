@@ -218,7 +218,7 @@
 #include <vcl/dndhelp.hxx>
 #include <vcl/edit.hxx>
 #include <vcl/field.hxx>
-#include <vcl/fldunit.hxx>
+#include <tools/fldunit.hxx>
 #include <vcl/gdimtf.hxx>
 #include <vcl/inputctx.hxx>
 #include <vcl/jobset.hxx>
@@ -235,7 +235,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/vclevent.hxx>
 #include <vcl/window.hxx>
-#include <vcl/wintypes.hxx>
+#include <tools/wintypes.hxx>
 #include <vos/macros.hxx>
 #include <vos/object.hxx>
 #include <vos/types.hxx>
