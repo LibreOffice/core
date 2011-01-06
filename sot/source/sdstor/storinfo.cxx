@@ -28,8 +28,8 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sot.hxx"
 
-#include <stg.hxx>
-#include <storinfo.hxx>
+#include <sot/stg.hxx>
+#include <sot/storinfo.hxx>
 #include <sot/exchange.hxx>
 
 

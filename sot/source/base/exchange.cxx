@@ -37,7 +37,7 @@
 #include <sot/sotdata.hxx>
 #include <sot/exchange.hxx>
 #include <sot/formats.hxx>
-#include <clsids.hxx>
+#include <sot/clsids.hxx>
 #include <rtl/instance.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/datatransfer/DataFlavor.hpp>

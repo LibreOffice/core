@@ -28,10 +28,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svtools.hxx"
 
-#ifndef GCC
-#endif
-
-#include "ivctrl.hxx"
+#include <svtools/ivctrl.hxx>
 #include "imivctl.hxx"
 #include <vcl/bitmapex.hxx>
 #include <vcl/controllayout.hxx>

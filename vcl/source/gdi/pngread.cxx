@@ -411,7 +411,9 @@ BitmapEx PNGReaderImpl::GetBitmapEx( const Size& rPreviewSizeHint )
 
             case PNGCHUNK_IDAT :
             {
-                if ( !mbIDAT )      // the gfx is finished, but there may be left a zlibCRC of about 4Bytes
+                if ( !mpInflateInBuf )  // taking care that the header has properly been read
+                    mbStatus = FALSE;
+                else if ( !mbIDAT )     // the gfx is finished, but there may be left a zlibCRC of about 4Bytes
                     ImplReadIDAT();
             }
             break;
@@ -527,7 +529,7 @@ sal_Bool PNGReaderImpl::ImplReadHeader( const Size& rPreviewSizeHint )
     mbIDAT = mbAlphaChannel = mbTransparent = sal_False;
     mbGrayScale = mbRGBTriple = sal_False;
     mnTargetDepth = mnPngDepth;
-    mnScansize = ( ( maOrigSize.Width() * mnPngDepth ) + 7 ) >> 3;
+    sal_uInt64 nScansize64 = ( ( static_cast< sal_uInt64 >( maOrigSize.Width() ) * mnPngDepth ) + 7 ) >> 3;
 
     // valid color types are 0,2,3,4 & 6
     switch ( mnColorType )
@@ -557,7 +559,7 @@ sal_Bool PNGReaderImpl::ImplReadHeader( const Size& rPreviewSizeHint )
         case 2 :    // each pixel is an RGB triple
         {
             mbRGBTriple = sal_True;
-            mnScansize *= 3;
+            nScansize64 *= 3;
             switch ( mnPngDepth )
             {
                 case 16 :           // we have to reduce the bitmap
@@ -590,7 +592,7 @@ sal_Bool PNGReaderImpl::ImplReadHeader( const Size& rPreviewSizeHint )
 
         case 4 :    // each pixel is a grayscale sample followed by an alpha sample
         {
-            mnScansize *= 2;
+            nScansize64 *= 2;
             mbAlphaChannel = sal_True;
             switch ( mnPngDepth )
             {
@@ -608,7 +610,7 @@ sal_Bool PNGReaderImpl::ImplReadHeader( const Size& rPreviewSizeHint )
         case 6 :    // each pixel is an RGB triple followed by an alpha sample
         {
             mbRGBTriple = sal_True;
-            mnScansize *= 4;
+            nScansize64 *= 4;
             mbAlphaChannel = sal_True;
             switch (mnPngDepth )
             {
@@ -626,16 +628,24 @@ sal_Bool PNGReaderImpl::ImplReadHeader( const Size& rPreviewSizeHint )
             return sal_False;
     }
 
-    mnBPP = mnScansize / maOrigSize.Width();
+    mnBPP = static_cast< sal_uInt32 >( nScansize64 / maOrigSize.Width() );
     if ( !mnBPP )
         mnBPP = 1;
 
-    mnScansize++;       // each scanline includes one filterbyte
+    nScansize64++;       // each scanline includes one filterbyte
+
+    if ( nScansize64 > SAL_MAX_UINT32 )
+        return FALSE;
+
+    mnScansize = static_cast< sal_uInt32 >( nScansize64 );
 
     // TODO: switch between both scanlines instead of copying
-    mpInflateInBuf = new sal_uInt8[ mnScansize ];
+    mpInflateInBuf = new (std::nothrow) sal_uInt8[ mnScansize ];
     mpScanCurrent = mpInflateInBuf;
-    mpScanPrior = new sal_uInt8[ mnScansize ];
+    mpScanPrior = new (std::nothrow) sal_uInt8[ mnScansize ];
+
+    if ( !mpInflateInBuf || !mpScanPrior )
+        return sal_False;
 
     // calculate target size from original size and the preview hint
     if( rPreviewSizeHint.Width() || rPreviewSizeHint.Height() )

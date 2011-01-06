@@ -30,7 +30,7 @@
 
 #include <string.h>     // memcpy()
 
-#include "stg.hxx"
+#include "sot/stg.hxx"
 #include "stgelem.hxx"
 #include "stgcache.hxx"
 #include "stgstrms.hxx"
@@ -936,8 +936,11 @@ sal_Bool StgDirStrm::Store()
 
 void* StgDirStrm::GetEntry( sal_Int32 n, sal_Bool bDirty )
 {
+    if( n < 0 )
+        return NULL;
+
     n *= STGENTRY_SIZE;
-    if( n >= nSize )
+    if( n < 0 && n >= nSize )
         return NULL;
     return GetPtr( n, sal_True, bDirty );
 }

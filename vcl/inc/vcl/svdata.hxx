@@ -167,6 +167,8 @@ struct ImplSVAppData
     sal_Bool                    mbDialogCancel;                 // sal_True: Alle Dialog::Execute()-Aufrufe werden mit return sal_False sofort beendet
     sal_Bool                    mbNoYield;                      // Application::Yield will not wait for events if the queue is empty
                                                             // essentially that makes it the same as Application::Reschedule
+    long                    mnDefaultLayoutBorder;          // default value in pixel for layout distances used
+                                                            // in window arrangers
 
     /** Controls whether showing any IME status window is toggled on or off.
 

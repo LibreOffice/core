@@ -153,7 +153,7 @@ private:
     sal_uInt16              nFlags;
     sal_uInt16              nCurTabPos;
 
-    WinBits             nWinBits;
+    WinBits             m_nStyle;
     ExtendedWinBits     nExtendedWinBits;
     sal_Bool                bSimpleTravel : 1; // ist sal_True bei SINGLE_SELECTION
     sal_Bool                bUpdateMode : 1;
@@ -264,7 +264,7 @@ public:
     ~SvImpLBox();
 
     void                Clear();
-    void                SetWindowBits( WinBits nWinStyle );
+    void                SetStyle( WinBits i_nWinStyle );
     void                SetExtendedWindowBits( ExtendedWinBits _nBits );
     ExtendedWinBits     GetExtendedWindowBits() const { return nExtendedWinBits; }
     void                SetModel( SvLBoxTreeList* pModel ) { pTree = pModel;}
@@ -340,7 +340,7 @@ public:
     const Size&         GetOutputSize() const { return aOutputSize;}
     void                KeyUp( sal_Bool bPageUp, sal_Bool bNotifyScroll = sal_True );
     void                KeyDown( sal_Bool bPageDown, sal_Bool bNotifyScroll = sal_True );
-    bool                Command( const CommandEvent& rCEvt );
+    void                Command( const CommandEvent& rCEvt );
 
     void                Invalidate();
     void                DestroyAnchor() { pAnchor=0; aSelEng.Reset(); }

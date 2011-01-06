@@ -34,8 +34,8 @@
 #include <rtl/tencinfo.h>
 #include <tools/stream.hxx>
 #include <tools/debug.hxx>
-#include "rtftoken.h"
-#include "rtfkeywd.hxx"
+#include <svtools/rtftoken.h>
+#include <svtools/rtfkeywd.hxx>
 #include <svtools/parrtf.hxx>
 
 const int MAX_STRING_LEN = 1024;

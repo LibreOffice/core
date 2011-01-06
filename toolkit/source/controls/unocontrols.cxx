@@ -592,7 +592,7 @@ void SAL_CALL GraphicControlModel::setFastPropertyValue_NoBroadcast( sal_Int32 n
                 mbAdjustingGraphic = true;
                 ::rtl::OUString sImageURL;
                 OSL_VERIFY( rValue >>= sImageURL );
-                setPropertyValue( GetPropertyName( BASEPROPERTY_GRAPHIC ), uno::makeAny( getGraphicFromURL_nothrow( sImageURL ) ) );
+                setDependentFastPropertyValue( BASEPROPERTY_GRAPHIC, uno::makeAny( getGraphicFromURL_nothrow( sImageURL ) ) );
                 mbAdjustingGraphic = false;
             }
             break;
@@ -601,7 +601,7 @@ void SAL_CALL GraphicControlModel::setFastPropertyValue_NoBroadcast( sal_Int32 n
             if ( !mbAdjustingGraphic && ImplHasProperty( BASEPROPERTY_IMAGEURL ) )
             {
                 mbAdjustingGraphic = true;
-                setPropertyValue( GetPropertyName( BASEPROPERTY_IMAGEURL ), uno::makeAny( ::rtl::OUString() ) );
+                setDependentFastPropertyValue( BASEPROPERTY_IMAGEURL, uno::makeAny( ::rtl::OUString() ) );
                 mbAdjustingGraphic = false;
             }
             break;
@@ -612,7 +612,7 @@ void SAL_CALL GraphicControlModel::setFastPropertyValue_NoBroadcast( sal_Int32 n
                 mbAdjustingImagePosition = true;
                 sal_Int16 nUNOValue = 0;
                 OSL_VERIFY( rValue >>= nUNOValue );
-                setPropertyValue( GetPropertyName( BASEPROPERTY_IMAGEPOSITION ), uno::makeAny( getExtendedImagePosition( nUNOValue ) ) );
+                setDependentFastPropertyValue( BASEPROPERTY_IMAGEPOSITION, uno::makeAny( getExtendedImagePosition( nUNOValue ) ) );
                 mbAdjustingImagePosition = false;
             }
             break;
@@ -622,7 +622,7 @@ void SAL_CALL GraphicControlModel::setFastPropertyValue_NoBroadcast( sal_Int32 n
                 mbAdjustingImagePosition = true;
                 sal_Int16 nUNOValue = 0;
                 OSL_VERIFY( rValue >>= nUNOValue );
-                setPropertyValue( GetPropertyName( BASEPROPERTY_IMAGEALIGN ), uno::makeAny( getCompatibleImageAlign( translateImagePosition( nUNOValue ) ) ) );
+                setDependentFastPropertyValue( BASEPROPERTY_IMAGEALIGN, uno::makeAny( getCompatibleImageAlign( translateImagePosition( nUNOValue ) ) ) );
                 mbAdjustingImagePosition = false;
             }
             break;
@@ -888,7 +888,7 @@ void SAL_CALL UnoControlImageControlModel::setFastPropertyValue_NoBroadcast( sal
                 mbAdjustingImageScaleMode = true;
                 sal_Int16 nScaleMode( awt::ImageScaleMode::Anisotropic );
                 OSL_VERIFY( _rValue >>= nScaleMode );
-                setPropertyValue( GetPropertyName( BASEPROPERTY_SCALEIMAGE ), uno::makeAny( sal_Bool( nScaleMode != awt::ImageScaleMode::None ) ) );
+                setDependentFastPropertyValue( BASEPROPERTY_SCALEIMAGE, uno::makeAny( sal_Bool( nScaleMode != awt::ImageScaleMode::None ) ) );
                 mbAdjustingImageScaleMode = false;
             }
             break;
@@ -898,7 +898,7 @@ void SAL_CALL UnoControlImageControlModel::setFastPropertyValue_NoBroadcast( sal
                 mbAdjustingImageScaleMode = true;
                 sal_Bool bScale = sal_True;
                 OSL_VERIFY( _rValue >>= bScale );
-                setPropertyValue( GetPropertyName( BASEPROPERTY_IMAGE_SCALE_MODE ), uno::makeAny( bScale ? awt::ImageScaleMode::Anisotropic : awt::ImageScaleMode::None ) );
+                setDependentFastPropertyValue( BASEPROPERTY_IMAGE_SCALE_MODE, uno::makeAny( bScale ? awt::ImageScaleMode::Anisotropic : awt::ImageScaleMode::None ) );
                 mbAdjustingImageScaleMode = false;
             }
             break;
@@ -1917,7 +1917,7 @@ void SAL_CALL UnoControlListBoxModel::setFastPropertyValue_NoBroadcast( sal_Int3
         uno::Sequence<sal_Int16> aSeq;
         uno::Any aAny;
         aAny <<= aSeq;
-        setPropertyValue( GetPropertyName( BASEPROPERTY_SELECTEDITEMS ), aAny );
+        setDependentFastPropertyValue( BASEPROPERTY_SELECTEDITEMS, aAny );
 
         if ( !m_pData->m_bSettingLegacyProperty )
         {

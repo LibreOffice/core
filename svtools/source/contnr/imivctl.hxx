@@ -41,7 +41,7 @@
 
 #include <limits.h>
 
-#include "ivctrl.hxx"
+#include <svtools/ivctrl.hxx>
 #include <svl/svarray.hxx>
 
 class IcnCursor_Impl;

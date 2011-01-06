@@ -28,31 +28,24 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svtools.hxx"
 #include "templwin.hxx"
-#include "templdlg.hxx"
+#include <svtools/templdlg.hxx>
 #include <svtools/svtdata.hxx>
 #include <unotools/pathoptions.hxx>
 #include <unotools/dynamicmenuoptions.hxx>
 #include <unotools/extendedsecurityoptions.hxx>
 #include <svtools/xtextedt.hxx>
 #include <svl/inettype.hxx>
-#include "imagemgr.hxx"
+#include <svtools/imagemgr.hxx>
 #include <svtools/miscopt.hxx>
-#include "templatefoldercache.hxx"
-#include "imgdef.hxx"
-#include "txtattr.hxx"
-#ifndef _SVTOOLS_HRC
+#include <svtools/templatefoldercache.hxx>
+#include <svtools/imgdef.hxx>
+#include <svtools/txtattr.hxx>
 #include <svtools/svtools.hrc>
-#endif
-#ifndef _SVTOOLS_TEMPLWIN_HRC
 #include "templwin.hrc"
-#endif
-#ifndef _SVT_HELPID_HRC
 #include <svtools/helpid.hrc>
-#endif
 #include <unotools/pathoptions.hxx>
 #include <unotools/viewoptions.hxx>
 #include <unotools/ucbhelper.hxx>
-
 #include "unotools/configmgr.hxx"
 #include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -87,7 +80,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/split.hxx>
 #include <vcl/msgbox.hxx>
-#include "DocumentInfoPreview.hxx"
+#include <svtools/DocumentInfoPreview.hxx>
 #include <vcl/mnemonic.hxx>
 
 #include <ucbhelper/content.hxx>

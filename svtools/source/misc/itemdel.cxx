@@ -28,7 +28,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svtools.hxx"
 
-#include "itemdel.hxx"
+#include <svtools/itemdel.hxx>
 #include <vcl/svapp.hxx>
 #include <tools/errcode.hxx>
 #include <limits.h>

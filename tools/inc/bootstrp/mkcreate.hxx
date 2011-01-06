@@ -29,7 +29,9 @@
 #define _MK_CREATE_HXX
 
 #include <tools/string.hxx>
-#include "bootstrp/sstring.hxx"
+//#include "bootstrp/sstring.hxx"
+
+DECLARE_LIST( UniStringList, UniString* )
 
 #include <tools/list.hxx>
 #include "bootstrp/prj.hxx"

@@ -34,11 +34,12 @@
 #include <vcl/jobset.hxx>
 #include <tools/urlobj.hxx>
 #include "printdlg.hrc"
-#include "controldims.hrc"
+#include <svtools/controldims.hrc>
 #include <svtools/prnsetup.hxx>
 #include <svtools/printdlg.hxx>
 #include <svtools/svtdata.hxx>
-#include <filedlg.hxx>
+#include <svtools/filedlg.hxx>
+#include "svl/pickerhelper.hxx"
 #include <svtools/helpid.hrc>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>

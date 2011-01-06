@@ -28,7 +28,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svl.hxx"
 
-#include "folderrestriction.hxx"
+#include <svl/folderrestriction.hxx>
 #include "osl/process.h"
 #include "tools/urlobj.hxx"
 #include "unotools/localfilehelper.hxx"

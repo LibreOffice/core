@@ -28,7 +28,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sot.hxx"
 
-#include <storinfo.hxx>
+#include <sot/storinfo.hxx>
 #include <osl/file.hxx>
 #include <tools/tempfile.hxx>
 #include <tools/ownlist.hxx>
@@ -42,7 +42,7 @@
 #include <tools/pstm.hxx>
 #include <tools/debug.hxx>
 
-#include "stg.hxx"
+#include "sot/stg.hxx"
 #include "stgelem.hxx"
 #include "stgcache.hxx"
 #include "stgstrms.hxx"

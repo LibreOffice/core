@@ -40,7 +40,7 @@
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 
 #include "numfmuno.hxx"
-#include "numuno.hxx"
+#include <svl/numuno.hxx>
 #include <svl/zforlist.hxx>
 #include <svl/zformat.hxx>
 #include <svl/itemprop.hxx>

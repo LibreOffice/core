@@ -96,7 +96,6 @@ class SvImpIconView
                     nGridDY;
     long            nHorSBarHeight,
                     nVerSBarWidth;
-    WinBits         nWinBits;
     int             nViewMode;
     long            nHorDist;
     long            nVerDist;
@@ -171,7 +170,7 @@ public:
                     ~SvImpIconView();
 
     void            Clear( sal_Bool bInCtor = sal_False );
-    void            SetWindowBits( WinBits nWinStyle );
+    void            SetStyle( const WinBits i_nWinStyle );
     void            SetModel( SvLBoxTreeList* pTree, SvLBoxEntry* pParent )
                         { pModel = pTree; SetCurParent(pParent); }
     void            EntryInserted( SvLBoxEntry*);

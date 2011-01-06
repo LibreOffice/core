@@ -66,12 +66,12 @@
 #include <cppuhelper/implbase2.hxx>
 #include <ucbhelper/commandenvironment.hxx>
 
-#include "stg.hxx"
-#include "storinfo.hxx"
+#include "sot/stg.hxx"
+#include "sot/storinfo.hxx"
 #include <sot/storage.hxx>
 #include <sot/exchange.hxx>
 #include <sot/formats.hxx>
-#include "clsids.hxx"
+#include "sot/clsids.hxx"
 
 #include "unostorageholder.hxx"
 
