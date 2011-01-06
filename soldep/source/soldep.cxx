@@ -29,13 +29,13 @@
 #include <osl/file.hxx>
 #include <rtl/ustring.hxx>
 #include <tools/debug.hxx>
-#include <bootstrp/sstring.hxx>
+#include <soldep/sstring.hxx>
 #include <svtools/filedlg.hxx>
 #include <tools/iparser.hxx>
 #include <tools/geninfo.hxx>
 #include <vcl/gdimtf.hxx>
 #include <vcl/bitmap.hxx>
-#include <appdef.hxx>
+#include <soldep/appdef.hxx>
 #include "time.h"
 #include <soldep/depper.hxx>
 #include <soldep/soldep.hxx>

@@ -365,10 +365,9 @@ File gid_File_Extra_Tplpresntimpr_Lang
 End
 
 File gid_File_Extra_Tplwizbitmap
-    Dir = gid_Dir_Template_Wizard_Bitmap;
-    TXT_FILE_BODY;
-    Styles = (ARCHIVE, DONT_OVERWRITE);
-    EXTRA_IDENT_ALL_LANG(tplwizbitmap.zip);
+    Dir = gid_Dir_Share_Template_Wizard_Bitmap;
+    ARCHIVE_TXT_FILE_BODY;
+    Name = "tplwizbitmap.zip";
 End
 
 File gid_File_Extra_Tplwizdesktop_Lang
