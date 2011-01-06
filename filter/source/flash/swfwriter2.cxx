@@ -381,7 +381,7 @@ Sprite::Sprite( sal_uInt16 nId )
 
 Sprite::~Sprite()
 {
-    for(vector< Tag* >::iterator i = maTags.begin(); i != maTags.end(); i++)
+    for(vector< Tag* >::iterator i = maTags.begin(); i != maTags.end(); ++i)
         delete *i;
 }
 
@@ -390,7 +390,7 @@ Sprite::~Sprite()
 void Sprite::write( SvStream& out )
 {
     SvMemoryStream aTmp;
-    for(vector< Tag* >::iterator i = maTags.begin(); i != maTags.end(); i++)
+    for(vector< Tag* >::iterator i = maTags.begin(); i != maTags.end(); ++i)
         (*i)->write( aTmp );
 
     if( !mnFrames )
@@ -516,7 +516,7 @@ void FlashFont::write( SvStream& out )
     sal_uInt16 nGlyphs = _uInt16( maGlyphOffsets.size() );
     sal_uInt16 nOffset = nGlyphs * sizeof( sal_uInt16 );
 
-    for(vector< sal_uInt16 >::iterator i = maGlyphOffsets.begin(); i != maGlyphOffsets.end(); i++)
+    for(vector< sal_uInt16 >::iterator i = maGlyphOffsets.begin(); i != maGlyphOffsets.end(); ++i)
         aTag.addUI16( nOffset + (*i) );
 
     aTag.addBits( maGlyphData );
@@ -684,7 +684,7 @@ void FillStyle::Impl_addGradient( Tag* pTag ) const
 
     pTag->addUI8( static_cast<sal_uInt8>( aGradientRecords.size() ) );
 
-    for(std::vector< GradRecord >::iterator i = aGradientRecords.begin(); i != aGradientRecords.end(); i++)
+    for(std::vector< GradRecord >::iterator i = aGradientRecords.begin(); i != aGradientRecords.end(); ++i)
     {
         pTag->addUI8( (*i).mnRatio );
         pTag->addRGBA( (*i).maColor );
