@@ -37,6 +37,7 @@
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/task/ErrorCodeIOException.hpp>
+#include <com/sun/star/beans/NamedValue.hpp>
 
 
 //________________________________________________________________________________________________________________________
@@ -104,7 +105,7 @@ SFX2_DLLPUBLIC void TransformItems(         sal_uInt16                          
                                     UNOSEQUENCE< UNOPROPERTYVALUE >&    seqArgs     ,
                             const   SfxSlot*                            pSlot = 0   );
 
-sal_Bool GetPasswd_Impl( const SfxItemSet* pSet, ::rtl::OUString& rPasswd );
+bool GetEncryptionData_Impl( const SfxItemSet* pSet, ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >& aEncryptionData );
 
 #define FrameSearchFlags            sal_Int32
 

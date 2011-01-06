@@ -44,7 +44,7 @@
 #include <editeng/tstpitem.hxx>
 #include "editeng/protitem.hxx"
 #include "rlrcitem.hxx"
-#include "rulritem.hxx"
+#include "svx/rulritem.hxx"
 #include <svl/eitem.hxx>
 
 // class SvxRulerItem ----------------------------------------------------

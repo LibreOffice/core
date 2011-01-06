@@ -45,7 +45,7 @@
 
 #include <xmloff/xmlnumfi.hxx>
 #include <xmloff/xmltkmap.hxx>
-#include "xmlnmspe.hxx"
+#include "xmloff/xmlnmspe.hxx"
 #include <xmloff/xmlictxt.hxx>
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/xmluconv.hxx>

@@ -362,9 +362,6 @@
 #define RID_ITEMLIST_LINGU          (RID_OPTIONS_START + 11)
 #define RID_SFXPAGE_PRINTOPTIONS    (RID_OPTIONS_START + 12)
 
-#define STR_UNDO                            (RID_SFX_VIEW_START+11)
-#define STR_REDO                            (RID_SFX_VIEW_START+12)
-#define STR_REPEAT                          (RID_SFX_VIEW_START+13)
 #define RID_STR_NEW_TASK                    (RID_SFX_DOC_START+ 76)
 
 // Member-Ids ------------------------------------------------------------

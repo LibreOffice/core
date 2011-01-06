@@ -32,7 +32,7 @@
 #include <svx/svdogrp.hxx>
 #include <svx/svdopath.hxx>
 #include <tools/shl.hxx>
-#include "svditer.hxx"
+#include "svx/svditer.hxx"
 #include <svx/svdpool.hxx>
 #include <svx/svdorect.hxx>
 #include <svx/svdmodel.hxx>
@@ -43,7 +43,7 @@
 #include <svx/svdview.hxx>
 #include <svx/dialogs.hrc>
 #include <svx/dialmgr.hxx>
-#include "globl3d.hxx"
+#include "svx/globl3d.hxx"
 #include <svx/obj3d.hxx>
 #include <svx/lathe3d.hxx>
 #include <svx/sphere3d.hxx>
@@ -64,7 +64,7 @@
 #include <svx/xlnwtit.hxx>
 #include <svx/sdr/overlay/overlaypolypolygon.hxx>
 #include <svx/sdr/overlay/overlaymanager.hxx>
-#include <sdrpaintwindow.hxx>
+#include <svx/sdrpaintwindow.hxx>
 #include <svx/sdr/contact/viewcontactofe3dscene.hxx>
 #include <drawinglayer/geometry/viewinformation3d.hxx>
 #include <svx/sdrpagewindow.hxx>

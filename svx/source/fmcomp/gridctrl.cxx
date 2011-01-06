@@ -61,7 +61,7 @@
 #include <vcl/menu.hxx>
 
 #ifndef _SVX_FMRESIDS_HRC
-#include "fmresids.hrc"
+#include "svx/fmresids.hrc"
 #endif
 
 #ifndef _SVX_SVXIDS_HRC

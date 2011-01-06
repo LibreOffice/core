@@ -30,7 +30,7 @@
 
 
 #include "fmprop.hrc"
-#include "fmresids.hrc"
+#include "svx/fmresids.hrc"
 #include "svx/fmtools.hxx"
 #include "gridcell.hxx"
 #include "gridcols.hxx"

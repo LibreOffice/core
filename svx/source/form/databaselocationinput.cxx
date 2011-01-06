@@ -31,7 +31,7 @@
 #include "svx/databaselocationinput.hxx"
 #include "svx/dialmgr.hxx"
 
-#include "fmresids.hrc"
+#include "svx/fmresids.hrc"
 
 /** === begin UNO includes === **/
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
