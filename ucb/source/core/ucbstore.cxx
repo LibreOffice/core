@@ -2350,7 +2350,7 @@ void SAL_CALL PersistentPropertySet::setPropertyValues(
             while ( it != end )
             {
                 notifyPropertyChangeEvent( (*it) );
-                it++;
+                ++it;
             }
         }
 
