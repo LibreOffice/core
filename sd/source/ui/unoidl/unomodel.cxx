@@ -2076,7 +2076,7 @@ void SAL_CALL SdXImpressDocument::render( sal_Int32 nRenderer, const uno::Any& r
                                     pPDFExtOutDevData->SetLinkDest( aIBeg->nLinkId, pPDFExtOutDevData->CreateDest( aPageRect, nPage, vcl::PDFWriter::FitRectangle ) );
                                 else
                                     pPDFExtOutDevData->SetLinkURL( aIBeg->nLinkId, aIBeg->aBookmark );
-                                aIBeg++;
+                                ++aIBeg;
                             }
                             rBookmarks.clear();
                             //---> #i56629, #i40318
