@@ -32,6 +32,7 @@
 #include <com/sun/star/lang/XComponent.idl>
 #include <com/sun/star/util/XCloneable.idl>
 #include <com/sun/star/awt/grid/XGridDataListener.idl>
+#include <com/sun/star/lang/IndexOutOfBoundsException.idl>
 
 //=============================================================================
 
@@ -63,19 +64,22 @@ interface XGridDataModel
     */
     [attribute] sequence< string > RowHeaders;
 
-    /** Returns the content of each row.
-    */
-    [attribute,readonly] sequence< sequence< any > > Data;
-
     /**Specifies the width of row header.
     */
     [attribute] long RowHeaderWidth;
 
-    /** Returns the number of rows in in the model.
-        @returns
-                the number of rows.
+    /** denotes the number of rows for which the model can provide data
     */
-    long getRowCount();
+    [attribute, readonly] long RowCount;
+
+    /** denotes the number of columns for which the model can provide data
+    */
+    [attribute, readonly] long ColumnCount;
+
+    /** retrieves the data for a given cell
+    */
+    any getCellData( [in] long Column, [in] long Row )
+        raises ( com::sun::star::lang::IndexOutOfBoundsException );
 
     /** Adds a row to the model.
 
