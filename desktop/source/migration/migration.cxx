@@ -621,9 +621,9 @@ strings_vr MigrationImpl::applyPatterns(const strings_v& vSet, const strings_v& 
             end = (xub_StrLen)(i_set->getLength());
             if (ts.SearchFrwrd(*i_set, &start, &end))
                 vrResult->push_back(*i_set);
-            i_set++;
+            ++i_set;
         }
-        i_pat++;
+        ++i_pat;
     }
     return vrResult;
 }
@@ -660,7 +660,7 @@ strings_vr MigrationImpl::getAllFiles(const OUString& baseURL) const
         {
             vrSubResult = getAllFiles(*i);
             vrResult->insert(vrResult->end(), vrSubResult->begin(), vrSubResult->end());
-            i++;
+            ++i;
         }
     }
     return vrResult;
@@ -690,7 +690,7 @@ strings_vr MigrationImpl::compileFileList()
         vrExclude = applyPatterns(*vrFiles, i_migr->excludeFiles);
         subtract(*vrInclude, *vrExclude);
         vrResult->insert(vrResult->end(), vrInclude->begin(), vrInclude->end());
-        i_migr++;
+        ++i_migr;
     }
     return vrResult;
 }
@@ -824,9 +824,9 @@ void MigrationImpl::subtract(strings_v& va, const strings_v& vb_c) const
                 break;
             }
             else
-                i_in++;
+                ++i_in;
         }
-        i_ex++;
+        ++i_ex;
     }
 }
 
@@ -889,7 +889,7 @@ void MigrationImpl::copyFiles()
                     +  OUStringToOString(destName, RTL_TEXTENCODING_UTF8);
                 OSL_ENSURE(sal_False, msg.getStr());
             }
-            i_file++;
+            ++i_file;
         }
     }
     else
@@ -953,7 +953,7 @@ void MigrationImpl::runServices()
             }
 
         }
-        i_mig++;
+        ++i_mig;
     }
 }
 
