@@ -1,6 +1,6 @@
---- misc/libxml2-2.7.6/xpath.c
-+++ misc/build/libxml2-2.7.6/xpath.c
-@@ -8104,9 +8104,17 @@
+--- misc/libxml2-2.7.6/xpath.c	2009-09-24 17:32:00.000000000 +0200
++++ misc/build/libxml2-2.7.6/xpath.c	2011-01-03 17:21:08.788256100 +0100
+@@ -8106,9 +8106,17 @@
  xmlNodePtr
  xmlXPathNextFollowing(xmlXPathParserContextPtr ctxt, xmlNodePtr cur) {
      if ((ctxt == NULL) || (ctxt->context == NULL)) return(NULL);
@@ -21,7 +21,7 @@
      if (cur == NULL) return(NULL) ; /* ERROR */
      if (cur->next != NULL) return(cur->next) ;
      do {
-@@ -8160,8 +8168,13 @@
+@@ -8162,8 +8170,13 @@
  xmlXPathNextPreceding(xmlXPathParserContextPtr ctxt, xmlNodePtr cur)
  {
      if ((ctxt == NULL) || (ctxt->context == NULL)) return(NULL);
@@ -36,7 +36,7 @@
      if (cur == NULL)
  	return (NULL);
      if ((cur->prev != NULL) && (cur->prev->type == XML_DTD_NODE))
-@@ -8205,8 +8218,8 @@
+@@ -8207,8 +8220,8 @@
          cur = ctxt->context->node;
          if (cur == NULL)
              return (NULL);
@@ -47,3 +47,24 @@
          ctxt->ancestor = cur->parent;
      }
      if ((cur->prev != NULL) && (cur->prev->type == XML_DTD_NODE))
+@@ -11737,11 +11750,16 @@
+ 
+ 	    if ((ctxt->error != XPATH_EXPRESSION_OK) || (res == -1)) {
+ 	        xmlXPathObjectPtr tmp;
+-		/* pop the result */
++		/* pop the result if any */
+ 		tmp = valuePop(ctxt);
+-		xmlXPathReleaseObject(xpctxt, tmp);
+-		/* then pop off contextObj, which will be freed later */
+-		valuePop(ctxt);
++		if (tmp != contextObj) {
++			/*
++			* Free up the result
++			* then pop off contextObj, which will be freed later
++			*/
++			xmlXPathReleaseObject(xpctxt, tmp);
++			valuePop(ctxt);
++		}
+ 		goto evaluation_error;
+ 	    }
+ 

@@ -698,12 +698,15 @@ bool ScDocument::ShrinkToDataArea(SCTAB nTab, SCCOL& rStartCol, SCROW& rStartRow
     return true;  // success!
 }
 
-bool ScDocument::ShrinkToUsedDataArea( SCTAB nTab, SCCOL& rStartCol,
+bool ScDocument::ShrinkToUsedDataArea( bool& o_bShrunk, SCTAB nTab, SCCOL& rStartCol,
         SCROW& rStartRow, SCCOL& rEndCol, SCROW& rEndRow, bool bColumnsOnly ) const
 {
     if (!ValidTab(nTab) || !pTab[nTab])
+    {
+        o_bShrunk = false;
         return false;
-    return pTab[nTab]->ShrinkToUsedDataArea( rStartCol, rStartRow, rEndCol, rEndRow, bColumnsOnly);
+    }
+    return pTab[nTab]->ShrinkToUsedDataArea( o_bShrunk, rStartCol, rStartRow, rEndCol, rEndRow, bColumnsOnly);
 }
 
 //  zusammenhaengender Bereich

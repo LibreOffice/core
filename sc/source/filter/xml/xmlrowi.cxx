@@ -171,6 +171,7 @@ void ScXMLTableRowContext::EndElement()
     sal_Int32 nSheet = rXMLImport.GetTables().GetCurrentSheet();
     sal_Int32 nCurrentRow(rXMLImport.GetTables().GetCurrentRow());
     uno::Reference<sheet::XSpreadsheet> xSheet(rXMLImport.GetTables().GetCurrentXSheet());
+    ScDocument* pDoc = rXMLImport.GetDocument();
     if(xSheet.is())
     {
         sal_Int32 nFirstRow(nCurrentRow - nRepeatedRows + 1);
@@ -218,10 +219,18 @@ void ScXMLTableRowContext::EndElement()
                         bVisible = sal_False;
                         bFiltered = sal_True;
                     }
-                    if (!bVisible)
-                        xRowProperties->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_ISVISIBLE)), uno::makeAny(bVisible));
-                    if (bFiltered)
-                        xRowProperties->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_ISFILTERED)), uno::makeAny(bFiltered));
+
+                    // #i116164# call SetRowHidden/SetRowFiltered directly, so the tree doesn't have to be rebuilt
+                    // to compare with existing hidden flags.
+                    if (!bVisible && pDoc)
+                        pDoc->SetRowHidden((SCROW)nFirstRow, (SCROW)nCurrentRow, (SCTAB)nSheet, true);
+                    if (bFiltered && pDoc)
+                        pDoc->SetRowFiltered((SCROW)nFirstRow, (SCROW)nCurrentRow, (SCTAB)nSheet, true);
+
+                    //if (!bVisible)
+                    //    xRowProperties->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_ISVISIBLE)), uno::makeAny(bVisible));
+                    //if (bFiltered)
+                    //    xRowProperties->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_ISFILTERED)), uno::makeAny(bFiltered));
                 }
             }
         }
