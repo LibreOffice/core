@@ -745,10 +745,10 @@ static BOOL lcl_GetCellContent( ScBaseCell* pCell, BOOL bIsStr1, double& rArg, S
 
 static BOOL lcl_IsDuplicate( ScDocument *pDoc, double nArg, const String& rStr, const ScAddress& rAddr, const ScRangeListRef& rRanges )
 {
-    ULONG nListCount = rRanges->Count();
-    for( ULONG i = 0; i < nListCount; i++ )
+    size_t nListCount = rRanges->size();
+    for( size_t i = 0; i < nListCount; i++ )
     {
-        ScRange *aRange = rRanges->GetObject(i);
+        const ScRange *aRange = (*rRanges)[i];
         SCROW nRow = aRange->aEnd.Row();
         SCCOL nCol = aRange->aEnd.Col();
         for( SCROW r = aRange->aStart.Row(); r <= nRow; r++ )
