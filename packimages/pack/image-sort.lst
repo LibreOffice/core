@@ -309,6 +309,7 @@ uiconfig/modules/swriter/toolbar/graphicobjectbar.xml
 uiconfig/modules/swriter/toolbar/insertbar.xml
 uiconfig/modules/swriter/toolbar/mediaobjectbar.xml
 uiconfig/modules/swriter/toolbar/moreformcontrols.xml
+uiconfig/modules/swriter/toolbar/navigationobjectbar.xml
 uiconfig/modules/swriter/toolbar/numobjectbar.xml
 uiconfig/modules/swriter/toolbar/oleobjectbar.xml
 uiconfig/modules/swriter/toolbar/optimizetablebar.xml
