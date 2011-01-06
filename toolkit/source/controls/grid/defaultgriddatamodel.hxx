@@ -65,10 +65,11 @@ public:
     virtual ::sal_Int32 SAL_CALL getRowHeight() throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL setRowHeight(::sal_Int32 the_value) throw (::com::sun::star::uno::RuntimeException);
     virtual ::sal_Int32 SAL_CALL getRowCount() throw (::com::sun::star::uno::RuntimeException);
+    virtual ::sal_Int32 SAL_CALL getColumnCount() throw (::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getRowHeaders() throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL setRowHeaders(const ::com::sun::star::uno::Sequence< ::rtl::OUString > & value) throw (::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< Any > > SAL_CALL getData() throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL addRow(const ::rtl::OUString & headername, const ::com::sun::star::uno::Sequence< Any > & m_aData) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Any SAL_CALL getCellData( ::sal_Int32 i_column, ::sal_Int32 i_row ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL addRow(const ::rtl::OUString & headername, const ::com::sun::star::uno::Sequence< Any > & _aData) throw (::com::sun::star::uno::RuntimeException);
        virtual void SAL_CALL removeRow(::sal_Int32 index) throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL addGridDataListener( const Reference< XGridDataListener >& xListener ) throw (RuntimeException);
     virtual void SAL_CALL removeGridDataListener( const Reference< XGridDataListener >& xListener ) throw (RuntimeException);

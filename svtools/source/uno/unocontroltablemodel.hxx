@@ -117,19 +117,10 @@ namespace svt { namespace table
         void    insertColumn( ColPos const i_position, ::com::sun::star::uno::Reference< ::com::sun::star::awt::grid::XGridColumn > const & i_column );
         void    removeAllColumns();
 
-        // row write access
-        void    setRowHeaderNames( const ::com::sun::star::uno::Sequence< ::rtl::OUString >& i_rowHeaders );
-        void    appendRow( ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > const & i_rowData, ::rtl::OUString const & i_rowHeader );
-        void    removeRow( RowPos const i_rowPos );
-        void    clearAllRows();
-
-        // cell data write access
-        void    updateCellContent( RowPos const i_rowPos, ColPos const i_colPos, ::com::sun::star::uno::Any const & i_cellContent );
-
         // other operations
         void    setVerticalScrollbarVisibility( ScrollbarVisibility const i_visibility ) const;
         void    setHorizontalScrollbarVisibility( ScrollbarVisibility const i_visibility ) const;
-        void    setCellContent(const std::vector<std::vector< ::com::sun::star::uno::Any > >& cellContent);
+        void    setDataModel( ::com::sun::star::uno::Reference< ::com::sun::star::awt::grid::XGridDataModel > const & i_gridDataModel );
         void    setRowHeaders(bool _bRowHeaders);
         void    setColumnHeaders(bool _bColumnHeaders);
         void    setLineColor(::com::sun::star::util::Color _rColor);

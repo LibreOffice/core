@@ -41,6 +41,7 @@
 /** === end UNO includes === **/
 
 #include <comphelper/stlunosequence.hxx>
+#include <cppuhelper/weakref.hxx>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 #include <vcl/svapp.hxx>
@@ -63,9 +64,11 @@ namespace svt { namespace table
     using ::com::sun::star::awt::grid::XGridColumnListener;
     using ::com::sun::star::lang::EventObject;
     using ::com::sun::star::awt::grid::GridColumnEvent;
+    using ::com::sun::star::awt::grid::XGridDataModel;
     using ::com::sun::star::uno::Any;
     using ::com::sun::star::style::HorizontalAlignment_LEFT;
     using ::com::sun::star::style::HorizontalAlignment;
+    using ::com::sun::star::uno::WeakReference;
     /** === end UNO using === **/
 
     //==================================================================================================================
@@ -76,7 +79,6 @@ namespace svt { namespace table
     struct UnoControlTableModel_Impl
     {
         ColumnModels                                aColumns;
-        TableSize                                   nRowCount;
         bool                                        bHasColumnHeaders;
         bool                                        bHasRowHeaders;
         ScrollbarVisibility                         eVScrollMode;
@@ -86,8 +88,6 @@ namespace svt { namespace table
         TableMetrics                                nRowHeight;
         TableMetrics                                nColumnHeaderHeight;
         TableMetrics                                nRowHeaderWidth;
-        ::std::vector< ::rtl::OUString >            aRowHeadersTitle;
-        ::std::vector< ::std::vector< Any > >       aCellContent;
         ::com::sun::star::util::Color               m_nLineColor;
         ::com::sun::star::util::Color               m_nHeaderColor;
         ::com::sun::star::util::Color               m_nTextColor;
@@ -95,10 +95,10 @@ namespace svt { namespace table
         ::com::sun::star::util::Color               m_nRowColor2;
         ::com::sun::star::style::VerticalAlignment  m_eVerticalAlign;
         ModellListeners                             m_aListeners;
+        WeakReference< XGridDataModel >             m_aDataModel;
 
         UnoControlTableModel_Impl()
             :aColumns           ( )
-            ,nRowCount          ( 0         )
             ,bHasColumnHeaders  ( true      )
             ,bHasRowHeaders     ( false     )
             ,eVScrollMode       ( ScrollbarShowNever )
@@ -108,8 +108,6 @@ namespace svt { namespace table
             ,nRowHeight         ( 10 )
             ,nColumnHeaderHeight( 10 )
             ,nRowHeaderWidth    ( 10 )
-            ,aRowHeadersTitle   ( )
-            ,aCellContent       ( )
             ,m_nLineColor       ( COL_TRANSPARENT )
             ,m_nHeaderColor     ( COL_TRANSPARENT )
             ,m_nTextColor       ( 0 )//black as default
@@ -132,8 +130,9 @@ namespace svt { namespace table
     //------------------------------------------------------------------------------------------------------------------
     const char* UnoControlTableModel::checkInvariants() const
     {
-        if ( m_pImpl->aRowHeadersTitle.size() != m_pImpl->aCellContent.size() )
-            return "inconsistency between data and row header arrays";
+        Reference< XGridDataModel > const xDataModel( m_pImpl->m_aDataModel );
+        if ( !xDataModel.is() )
+            return "data model anymore";
 
         // TODO: more?
 
@@ -175,7 +174,19 @@ namespace svt { namespace table
     TableSize UnoControlTableModel::getRowCount() const
     {
         DBG_CHECK_ME();
-        return m_pImpl->nRowCount;
+
+        TableSize nRowCount = 0;
+        try
+        {
+            Reference< XGridDataModel > const xDataModel( m_pImpl->m_aDataModel );
+            ENSURE_OR_THROW( xDataModel.is(), "no data model anymore!" );
+            nRowCount = xDataModel->getRowCount();
+        }
+        catch( const Exception& )
+        {
+            DBG_UNHANDLED_EXCEPTION();
+        }
+        return nRowCount;
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -413,122 +424,53 @@ namespace svt { namespace table
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    void UnoControlTableModel::setCellContent(const std::vector<std::vector< Any > >& cellContent)
+    void UnoControlTableModel::setDataModel( Reference< XGridDataModel > const & i_gridDataModel )
     {
         DBG_CHECK_ME();
-        m_pImpl->aCellContent = cellContent;
+        m_pImpl->m_aDataModel = i_gridDataModel;
+        // TODO: register as listener, so we're notified of row/data changes, and can multiplex them to our
+        // own listeners
     }
 
     //------------------------------------------------------------------------------------------------------------------
     void UnoControlTableModel::getCellContent( ColPos const i_col, RowPos const i_row, Any& o_cellContent )
     {
         DBG_CHECK_ME();
-        ENSURE_OR_RETURN_VOID( ( i_row >= 0 ) && ( size_t( i_row ) < m_pImpl->aCellContent.size() ),
-            "UnoControlTableModel::getCellContent: illegal row index!" );
-        ::std::vector< Any >& rRowContent( m_pImpl->aCellContent[ i_row ] );
-        ENSURE_OR_RETURN_VOID( ( i_col >= 0 ) && ( size_t( i_col ) < rRowContent.size() ),
-            "UnoControlTableModel::getCellContent: illegal column index" );
-        o_cellContent = rRowContent[ i_col ];
-    }
 
-    //------------------------------------------------------------------------------------------------------------------
-    void UnoControlTableModel::updateCellContent( RowPos const i_row, ColPos const i_col, Any const & i_cellContent )
-    {
-        DBG_CHECK_ME();
-        ENSURE_OR_RETURN_VOID( ( i_row >= 0 ) && ( size_t( i_row ) < m_pImpl->aCellContent.size() ),
-            "UnoControlTableModel::updateCellContent: illegal row index!" );
-        ::std::vector< Any >& rRowContent( m_pImpl->aCellContent[ i_row ] );
-        ENSURE_OR_RETURN_VOID( ( i_col >= 0 ) && ( size_t( i_col ) < rRowContent.size() ),
-            "UnoControlTableModel::updateCellContent: illegal column index" );
-        rRowContent[ i_col ] = i_cellContent;
-
-        // TODO: listener notification
-    }
-
-    //------------------------------------------------------------------------------------------------------------------
-    void UnoControlTableModel::setRowHeaderNames( const Sequence< ::rtl::OUString >& i_rowHeaders )
-    {
-        DBG_CHECK_ME();
-        ENSURE_OR_RETURN_VOID( size_t( i_rowHeaders.getLength() ) == m_pImpl->aRowHeadersTitle.size(),
-            "UnoControlTableModel::setRowHeaderNames: illegal number of row headers!" );
-            // this method is not intended to set a new row count, but only to modify the existing row headers
-
-        ::std::copy(
-            ::comphelper::stl_begin( i_rowHeaders ),
-            ::comphelper::stl_end( i_rowHeaders ),
-            m_pImpl->aRowHeadersTitle.begin()
-        );
-
-        // TODO: listener notification
+        try
+        {
+            Reference< XGridDataModel > const xDataModel( m_pImpl->m_aDataModel );
+            ENSURE_OR_THROW( xDataModel.is(), "no data model anymore!" );
+            o_cellContent = xDataModel->getCellData( i_col, i_row );
+        }
+        catch( const Exception& )
+        {
+            DBG_UNHANDLED_EXCEPTION();
+        }
     }
 
     //------------------------------------------------------------------------------------------------------------------
     ::rtl::OUString UnoControlTableModel::getRowHeader( RowPos const i_rowPos ) const
     {
         DBG_CHECK_ME();
-        ENSURE_OR_RETURN( ( i_rowPos >= 0 ) && ( size_t( i_rowPos ) < m_pImpl->aRowHeadersTitle.size() ),
-            "UnoControlTableModel::getRowHeader: illegal row position!", ::rtl::OUString() );
-        return m_pImpl->aRowHeadersTitle[ i_rowPos ];
-    }
 
-    //------------------------------------------------------------------------------------------------------------------
-    void UnoControlTableModel::appendRow( Sequence< Any > const & i_rowData, ::rtl::OUString const & i_rowHeader )
-    {
-        DBG_CHECK_ME();
-        ENSURE_OR_RETURN_VOID( i_rowData.getLength() == getColumnCount(), "UnoControlTableModel::appendRow: invalid row data!" );
+        ::rtl::OUString sRowHeader;
 
-        // add row data
-        ::std::vector< Any > newRow( i_rowData.getLength() );
-        if ( !newRow.empty() )
-            ::std::copy(
-                ::comphelper::stl_begin( i_rowData ),
-                ::comphelper::stl_end( i_rowData ),
-                newRow.begin()
-            );
+        Reference< XGridDataModel > const xDataModel( m_pImpl->m_aDataModel );
+        ENSURE_OR_RETURN( xDataModel.is(), "UnoControlTableModel::getRowHeader: no data model anymore!", sRowHeader );
 
-        m_pImpl->aCellContent.push_back( newRow );
-
-        if ( hasRowHeaders() )
-            m_pImpl->aRowHeadersTitle.push_back( i_rowHeader );
-
-        ++m_pImpl->nRowCount;
-
-        // TODO: listener notification
-    }
-
-    //------------------------------------------------------------------------------------------------------------------
-    void UnoControlTableModel::removeRow( RowPos const i_rowPos )
-    {
-        DBG_CHECK_ME();
-        ENSURE_OR_RETURN_VOID( ( i_rowPos >= 0 ) && ( i_rowPos < getRowCount() ), "UnoControlTableModel::removeRow: illegal row position!" );
-
-        if ( hasRowHeaders() )
-            m_pImpl->aRowHeadersTitle.erase( m_pImpl->aRowHeadersTitle.begin() + i_rowPos );
-
-        const ::std::vector< ::std::vector< Any > >::iterator contentPos = m_pImpl->aCellContent.begin() + i_rowPos;
-        m_pImpl->aCellContent.erase( contentPos );
-
-        --m_pImpl->nRowCount;
-
-        // TODO: listener notification
-    }
-
-    //------------------------------------------------------------------------------------------------------------------
-    void UnoControlTableModel::clearAllRows()
-    {
-        DBG_CHECK_ME();
-        if ( hasRowHeaders() )
+        try
         {
-            ::std::vector< ::rtl::OUString > aEmpty;
-            m_pImpl->aRowHeadersTitle.swap( aEmpty );
+            Sequence< ::rtl::OUString > const aRowHeaders( xDataModel->getRowHeaders() );
+            ENSURE_OR_RETURN( ( i_rowPos >= 0 ) && ( i_rowPos < aRowHeaders.getLength() ),
+                "UnoControlTableModel::getRowHeader: illegal row position!", sRowHeader );
+            sRowHeader = aRowHeaders[ i_rowPos ];
         }
-
-        ::std::vector< ::std::vector< Any > > aEmptyContent;
-        m_pImpl->aCellContent.swap( aEmptyContent );
-
-        m_pImpl->nRowCount = 0;
-
-        // TODO: listener notification
+        catch( const Exception& )
+        {
+            DBG_UNHANDLED_EXCEPTION();
+        }
+        return sRowHeader;
     }
 
     //------------------------------------------------------------------------------------------------------------------

@@ -159,6 +159,14 @@ namespace toolkit
     }
 
     //------------------------------------------------------------------------------------------------------------------
+    ::sal_Int32 SAL_CALL DefaultGridDataModel::getColumnCount() throw (::com::sun::star::uno::RuntimeException)
+    {
+        if ( m_aData.empty() )
+            return 0;
+        return m_aData[0].size();
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
     ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL DefaultGridDataModel::getRowHeaders() throw (::com::sun::star::uno::RuntimeException)
     {
         return  comphelper::containerToSequence(m_aRowHeaders);
@@ -222,21 +230,19 @@ namespace toolkit
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< Any > > SAL_CALL DefaultGridDataModel::getData() throw (::com::sun::star::uno::RuntimeException)
+    Any SAL_CALL DefaultGridDataModel::getCellData( ::sal_Int32 i_column, ::sal_Int32 i_row ) throw (RuntimeException, IndexOutOfBoundsException)
     {
+        ::osl::MutexGuard aGuard( GetMutex() );
 
-        std::vector< std::vector< Any > >::iterator iterator;
-        std::vector< Sequence< Any  > > dummyContainer(0);
+        if  ( ( i_row < 0 ) || ( size_t( i_row ) > m_aData.size() ) )
+            throw IndexOutOfBoundsException( ::rtl::OUString(), *this );
 
+        ::std::vector< Any > const & rRow( m_aData[ i_row ] );
 
-        for(iterator = m_aData.begin(); iterator != m_aData.end(); iterator++)
-        {
-            Sequence< Any > cols(comphelper::containerToSequence(*iterator));
-            dummyContainer.push_back( cols );
-        }
-        Sequence< Sequence< Any  > > dataSequence(comphelper::containerToSequence(dummyContainer));
+        if  ( ( i_column < 0 ) || ( size_t( i_column ) > rRow.size() ) )
+            throw IndexOutOfBoundsException( ::rtl::OUString(), *this );
 
-        return dataSequence;
+        return rRow[ i_column ];
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -305,8 +311,6 @@ namespace toolkit
     //------------------------------------------------------------------------------------------------------------------
     void SAL_CALL DefaultGridDataModel::dispose() throw (RuntimeException)
     {
-        ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
-
         ::com::sun::star::lang::EventObject aEvent;
         aEvent.Source.set( static_cast< ::cppu::OWeakObject* >( this ) );
         BrdcstHelper.aLC.disposeAndClear( aEvent );
@@ -328,7 +332,6 @@ namespace toolkit
     //------------------------------------------------------------------------------------------------------------------
     ::rtl::OUString SAL_CALL DefaultGridDataModel::getImplementationName(  ) throw (RuntimeException)
     {
-        ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
         static const OUString aImplName( RTL_CONSTASCII_USTRINGPARAM( "toolkit.DefaultGridDataModel" ) );
         return aImplName;
     }
@@ -336,14 +339,12 @@ namespace toolkit
     //------------------------------------------------------------------------------------------------------------------
     sal_Bool SAL_CALL DefaultGridDataModel::supportsService( const ::rtl::OUString& ServiceName ) throw (RuntimeException)
     {
-        ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
         return ServiceName.equalsAscii( szServiceName_DefaultGridDataModel );
     }
 
     //------------------------------------------------------------------------------------------------------------------
     ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL DefaultGridDataModel::getSupportedServiceNames(  ) throw (RuntimeException)
     {
-        ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
         static const OUString aServiceName( OUString::createFromAscii( szServiceName_DefaultGridDataModel ) );
         static const Sequence< OUString > aSeq( &aServiceName, 1 );
         return aSeq;

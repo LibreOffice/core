@@ -268,48 +268,13 @@ void SVTXGridControl::setProperty( const ::rtl::OUString& PropertyName, const An
                 if ( !m_xDataModel.is() )
                     throw GridInvalidDataException( ::rtl::OUString::createFromAscii("The data model isn't set!"), *this );
 
-                Sequence< Sequence< Any > > cellData = m_xDataModel->getData();
-                if ( cellData.getLength() != 0 )
-                {
-                    const sal_Int32 nDataRowCount = cellData.getLength();
+                m_pTableModel->setDataModel( m_xDataModel );
 
-                    const Sequence< ::rtl::OUString > rowHeaders = m_xDataModel->getRowHeaders();
-                    const sal_Int32 nRowHeaderCount = rowHeaders.getLength();
-
-                    if ( ( nRowHeaderCount != 0 ) && ( nRowHeaderCount != nDataRowCount ) )
-                        throw GridInvalidDataException(
-                            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "row header / content data inconsistency" ) ), *this );
-
-                    // check data consistency
-                    sal_Int32 nDataColumnCount = 0;
-                    for ( sal_Int32 i=0; i<nDataRowCount; ++i )
-                    {
-                        const Sequence< Any >& rRawRowData = cellData[i];
-                        if ( ( i > 0 ) && ( rRawRowData.getLength() != nDataColumnCount ) )
-                            throw GridInvalidDataException(
-                                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "inconsistent column counts in the row data" ) ), *this );
-                        nDataColumnCount = rRawRowData.getLength();
-                    }
-
-                    // ensure default columns exist, if they have not previously been added
-                    if ( ( nDataColumnCount > 0 ) && ( m_xColumnModel->getColumnCount() == 0 ) )
-                        m_xColumnModel->setDefaultColumns( nDataColumnCount );
-                        // this will trigger notifications, which in turn will let us update our m_pTableModel
-
-                    // ensure the row data has as much columns as indicate by our model
-                    if ( nDataColumnCount != m_pTableModel->getColumnCount() )
-                        throw GridInvalidDataException(
-                            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Grid model's column count doesn't match the row data's column count." ) ),
-                            *this );
-
-                    // finally add the rows
-                    // TODO: suspend the model's notifications for the single rows, do one notification after all
-                    // rows have been inserted
-                    for ( TableSize i = 0; i < nDataRowCount; ++i )
-                    {
-                        m_pTableModel->appendRow( cellData[i], rowHeaders[i] );
-                    }
-                }
+                // ensure default columns exist, if they have not previously been added
+                sal_Int32 const nDataColumnCount = m_xDataModel->getColumnCount();
+                if ( ( nDataColumnCount > 0 ) && ( m_xColumnModel->getColumnCount() == 0 ) )
+                    m_xColumnModel->setDefaultColumns( nDataColumnCount );
+                    // this will trigger notifications, which in turn will let us update our m_pTableModel
 
                 sal_Int32 fontHeight = pTable->PixelToLogic( Size( 0, pTable->GetTextHeight()+3 ), MAP_APPFONT ).Height();
                 if ( m_xDataModel->getRowHeight() == 0 )
@@ -413,8 +378,6 @@ void SAL_CALL SVTXGridControl::rowAdded(const ::com::sun::star::awt::grid::GridD
     if ( rowDataLength != colCount )
         throw GridInvalidDataException( ::rtl::OUString::createFromAscii("The column count doesn't match with the length of row data"), *this );
 
-    m_pTableModel->appendRow( Event.RowData, Event.HeaderName );
-
     TableControl* pTable = dynamic_cast< TableControl* >( GetWindow() );
     ENSURE_OR_RETURN_VOID( pTable, "SVTXGridControl::rowAdded: no control (anymore)!" );
 
@@ -449,8 +412,6 @@ void SAL_CALL SVTXGridControl::rowRemoved(const ::com::sun::star::awt::grid::Gri
         if ( !isSelectionEmpty() )
             deselectAllRows();
 
-        m_pTableModel->clearAllRows();
-
         pTable->clearSelection();
 
         if ( pTable->isAccessibleAlive() )
@@ -468,10 +429,10 @@ void SAL_CALL SVTXGridControl::rowRemoved(const ::com::sun::star::awt::grid::Gri
             selected[0]=Event.RowIndex;
             deselectRows( selected );
         }
-        m_pTableModel->removeRow( Event.RowIndex );
     }
-    pTable->InvalidateDataWindow(Event.RowIndex, Event.RowIndex, true);
-    if(pTable->isAccessibleAlive())
+
+    pTable->InvalidateDataWindow( Event.RowIndex, Event.RowIndex, true );
+    if ( pTable->isAccessibleAlive() )
     {
         pTable->commitGridControlEvent(TABLE_MODEL_CHANGED,
              makeAny( AccessibleTableModelChange(DELETE, Event.RowIndex, Event.RowIndex+1, 0, m_pTableModel->getColumnCount())),
@@ -502,38 +463,15 @@ void SAL_CALL SVTXGridControl::dataChanged(const ::com::sun::star::awt::grid::Gr
     }
     else if ( Event.AttributeName.equalsAscii( "RowHeaders" ) )
     {
-        Sequence< rtl::OUString > rowHeaders;
-        OSL_VERIFY( Event.NewValue >>= rowHeaders );
-        m_pTableModel->setRowHeaderNames( rowHeaders );
+        // TODO: we could do better than this - invalidate the header area only
         pTable->Invalidate();
     }
-    else if ( Event.AttributeName.equalsAscii( "CellUpdated" ) )
+    else if (   ( Event.AttributeName.equalsAscii( "CellUpdated" ) )
+            ||  ( Event.AttributeName.equalsAscii( "RowUpdated" ) )
+            )
     {
-        sal_Int32 col = -1;
-        OSL_VERIFY( Event.OldValue >>= col );
-
-        m_pTableModel->updateCellContent( Event.RowIndex, col, Event.NewValue );
-        pTable->InvalidateDataWindow( Event.RowIndex, Event.RowIndex, false );
-    }
-    else if ( Event.AttributeName.equalsAscii( "RowUpdated" ) )
-    {
-        Sequence< sal_Int32 > cols;
-        OSL_VERIFY( Event.OldValue >>= cols );
-
-        Sequence< Any > values;
-        OSL_VERIFY( Event.NewValue >>= values );
-
-        ENSURE_OR_RETURN_VOID( cols.getLength() == values.getLength(), "SVTXGridControl::dataChanged: inconsistent array lengths!" );
-
-        const TableSize columnCount = m_pTableModel->getColumnCount();
-        // TODO: suspend listener notification, so that the table model doesn't notify |cols.size()| different events.
-        // Instead, only one event should be broadcasted.
-        for ( ColPos i = 0; i< cols.getLength(); ++i )
-        {
-            ENSURE_OR_CONTINUE( ( cols[i] >= 0 ) && ( cols[i] < columnCount ), "illegal column index" );
-            m_pTableModel->updateCellContent( Event.RowIndex, cols[i], values[i] );
-        }
-
+        // TODO: Our UnoControlTableModel should be a listener at the data model, and multiplex those events,
+        // so the TableControl/_Impl can react on it.
         pTable->InvalidateDataWindow( Event.RowIndex, Event.RowIndex, false );
     }
 }
