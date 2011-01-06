@@ -78,7 +78,7 @@ private:
     FixedLine           aFlSep1;
     FixedLine           aFlLine;
     FixedText           aStyleFT;
-    LineStyleListBox    aLbLineStyle;
+    LineListBox    aLbLineStyle;
     FixedText           aColorFT;
     ColorListBox        aLbLineColor;
     FixedText           aWidthFT;

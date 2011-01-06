@@ -555,15 +555,11 @@ void SvxBorderTabPage::Reset( const SfxItemSet& rSet )
         if( bWidthEq )
         {
             // Determine the width first as some styles can be missing depending on it
-            aLineWidthMF.SetValue( sal_Int64( nWidth * 5 ) );
-            aLbLineStyle.SetWidth( aLineWidthMF.GetValue( ) );
+            aLineWidthMF.SetValue( sal_Int64( nWidth ) );
+            aLbLineStyle.SetWidth( nWidth );
 
             // then set the style
-            // TODO Change the SelectEntry method
-            SvxBorderLine aLine( NULL, nWidth, nStyle );
-            aLbLineStyle.SelectEntry( aLine.GetOutWidth() * 5,
-                    aLine.GetInWidth() * 5,
-                    aLine.GetDistance() * 5, nStyle );
+            aLbLineStyle.SelectEntry( nStyle );
         }
         else
             aLbLineStyle.SelectEntryPos( 1 );
@@ -929,10 +925,13 @@ IMPL_LINK( SvxBorderTabPage, SelColHdl_Impl, ListBox *, pLb )
 
 IMPL_LINK( SvxBorderTabPage, ModifyWidthHdl_Impl, void *, EMPTYARG )
 {
-    sal_Int64 nVal = aLineWidthMF.GetValue( );
+    sal_Int64 nVal = MetricField::ConvertDoubleValue(
+                aLineWidthMF.GetValue( ),
+                aLineWidthMF.GetDecimalDigits( ),
+                aLineWidthMF.GetUnit(), MAP_TWIP );
     aLbLineStyle.SetWidth( nVal );
 
-    aFrameSel.SetStyleToSelection( long( nVal / 5 ),
+    aFrameSel.SetStyleToSelection( nVal,
         SvxBorderStyle( aLbLineStyle.GetSelectEntryStyle() ) );
 
     return 0;
@@ -943,8 +942,14 @@ IMPL_LINK( SvxBorderTabPage, ModifyWidthHdl_Impl, void *, EMPTYARG )
 IMPL_LINK( SvxBorderTabPage, SelStyleHdl_Impl, ListBox *, pLb )
 {
     if ( pLb == &aLbLineStyle )
-        aFrameSel.SetStyleToSelection ( long( aLineWidthMF.GetValue() / 5 ),
+    {
+        sal_Int64 nVal = MetricField::ConvertDoubleValue(
+                    aLineWidthMF.GetValue( ),
+                    aLineWidthMF.GetDecimalDigits( ),
+                    aLineWidthMF.GetUnit(), MAP_TWIP );
+        aFrameSel.SetStyleToSelection ( nVal,
             SvxBorderStyle( aLbLineStyle.GetSelectEntryStyle() ) );
+    }
 
     return 0;
 }
@@ -1100,6 +1105,8 @@ Color lcl_mediumColor( Color aMain, Color /*aDefault*/ )
 
 void SvxBorderTabPage::FillLineListBox_Impl()
 {
+    aLbLineStyle.SetSourceUnit( FUNIT_TWIP );
+
     aLbLineStyle.SetNone( SVX_RESSTR( RID_SVXSTR_NONE ) );
 
     // Simple lines
@@ -1125,12 +1132,16 @@ void SvxBorderTabPage::FillLineListBox_Impl()
             &lcl_mediumColor );
 
     // Inset / Outset
-    aLbLineStyle.InsertEntry( SvxBorderLine::getWidthImpl( OUTSET ), OUTSET, 5,
+    aLbLineStyle.InsertEntry( SvxBorderLine::getWidthImpl( OUTSET ), OUTSET, 10,
            &SvxBorderLine::lightColor, &SvxBorderLine::darkColor );
-    aLbLineStyle.InsertEntry( SvxBorderLine::getWidthImpl( INSET ), INSET, 5,
+    aLbLineStyle.InsertEntry( SvxBorderLine::getWidthImpl( INSET ), INSET, 10,
            &SvxBorderLine::darkColor, &SvxBorderLine::lightColor );
 
-    aLbLineStyle.SetWidth( aLineWidthMF.GetValue( ) );
+    sal_Int64 nVal = MetricField::ConvertDoubleValue(
+                aLineWidthMF.GetValue( ),
+                aLineWidthMF.GetDecimalDigits( ),
+                aLineWidthMF.GetUnit(), MAP_TWIP );
+    aLbLineStyle.SetWidth( nVal );
 }
 
 // -----------------------------------------------------------------------
