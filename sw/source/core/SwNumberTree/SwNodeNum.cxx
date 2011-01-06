@@ -229,7 +229,7 @@ bool SwNodeNum::HasCountedChildren() const
 
     tSwNumberTreeChildren::iterator aIt;
 
-    for (aIt = mChildren.begin(); aIt != mChildren.end(); aIt++)
+    for (aIt = mChildren.begin(); aIt != mChildren.end(); ++aIt)
     {
         SwNodeNum* pChild( dynamic_cast<SwNodeNum*>(*aIt) );
         OSL_ENSURE( pChild,
