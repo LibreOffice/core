@@ -7272,8 +7272,8 @@ void GetRowPositions( const Rectangle& rSnapRect, const std::set< sal_Int32 >& r
             if ( nFlags & LinePositionRight )
                 rPositions.push_back( ( ( nRow * rColumns.size() ) + ( nColumn - 1 ) ) | LinePositionRight );
 
-            nRow++;
-            aRow++;
+            ++nRow;
+            ++aRow;
         }
     }
 }
@@ -7293,8 +7293,8 @@ void GetColumnPositions( const Rectangle& rSnapRect, const std::set< sal_Int32 >
             if ( nFlags & LinePositionBottom )
                 rPositions.push_back( ( ( ( nRow - 1 ) * rColumns.size() ) + nColumn ) | LinePositionBottom );
 
-            nColumn++;
-            aColumn++;
+            ++nColumn;
+            ++aColumn;
         }
     }
 }
@@ -7593,7 +7593,7 @@ void ApplyCellLineAttributes( const SdrObject* pLine, Reference< XTable >& xTabl
                 xPropSet->setPropertyValue( sDiagonalTLBR, Any( sal_True ) );
             if ( nFlags & LinePositionBLTR )
                 xPropSet->setPropertyValue( sDiagonalBLTR, Any( sal_True ) );
-            aIter++;
+            ++aIter;
         }
     }
     catch( Exception& )
