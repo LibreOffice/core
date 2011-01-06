@@ -31,6 +31,7 @@
 
 #include <tools/gen.hxx>
 #include <svx/xpoly.hxx>
+#include <vector>
 
 class ImpXPolygon
 {
@@ -65,7 +66,7 @@ public:
     void Remove( USHORT nPos, USHORT nCount );
 };
 
-DECLARE_LIST( XPolygonList, XPolygon* )
+typedef ::std::vector< XPolygon* > XPolygonList;
 
 class ImpXPolyPolygon
 {
@@ -73,9 +74,7 @@ public:
     XPolygonList aXPolyList;
     USHORT       nRefCount;
 
-                 ImpXPolyPolygon( USHORT nInitSize = 16, USHORT nResize = 16 ) :
-                    aXPolyList( 1024, nInitSize, nResize )
-                    { nRefCount = 1; }
+                ImpXPolyPolygon() { nRefCount = 1; }
                 ImpXPolyPolygon( const ImpXPolyPolygon& rImpXPolyPoly );
                 ~ImpXPolyPolygon();
 

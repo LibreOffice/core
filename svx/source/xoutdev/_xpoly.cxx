@@ -1518,12 +1518,8 @@ ImpXPolyPolygon::ImpXPolyPolygon( const ImpXPolyPolygon& rImpXPolyPoly ) :
     nRefCount = 1;
 
     // Einzelne Elemente duplizieren
-    XPolygon* pXPoly = aXPolyList.First();
-    while ( pXPoly )
-    {
-        aXPolyList.Replace( new XPolygon( *(aXPolyList.GetCurObject()) ) );
-        pXPoly = aXPolyList.Next();
-    }
+    for ( size_t i = 0, n = aXPolyList.size(); i < n; ++i )
+        aXPolyList[ i ] = new XPolygon( *aXPolyList[ i ] );
 }
 
 
@@ -1539,12 +1535,9 @@ ImpXPolyPolygon::ImpXPolyPolygon( const ImpXPolyPolygon& rImpXPolyPoly ) :
 
 ImpXPolyPolygon::~ImpXPolyPolygon()
 {
-    XPolygon* pXPoly = aXPolyList.First();
-    while( pXPoly )
-    {
-        delete pXPoly;
-        pXPoly = aXPolyList.Next();
-    }
+    for ( size_t i = 0, n = aXPolyList.size(); i < n; ++i )
+        delete aXPolyList[ i ];
+    aXPolyList.clear();
 }
 
 /*************************************************************************
@@ -1556,16 +1549,16 @@ ImpXPolyPolygon::~ImpXPolyPolygon()
 |*
 *************************************************************************/
 
-
 bool ImpXPolyPolygon::operator==(const ImpXPolyPolygon& rImpXPolyPoly) const
 {
-    USHORT nAnz=(USHORT)aXPolyList.Count();
-    const XPolygonList& rCmpList=rImpXPolyPoly.aXPolyList;
-    if (nAnz!=(USHORT)rCmpList.Count()) return FALSE;
+    size_t nAnz = aXPolyList.size();
+    const XPolygonList& rCmpList = rImpXPolyPoly.aXPolyList;
+    if ( nAnz != rCmpList.size() ) return FALSE;
     bool bEq=true;
-    for (USHORT i=nAnz; i>0 && bEq;) {
+    for ( size_t i = nAnz; i > 0 && bEq; )
+    {
         i--;
-        bEq= *aXPolyList.GetObject(i) == *rCmpList.GetObject(i);
+        bEq = ( *aXPolyList[ i ] == *rCmpList[ i ] );
     }
     return bEq;
 }
@@ -1580,10 +1573,10 @@ bool ImpXPolyPolygon::operator==(const ImpXPolyPolygon& rImpXPolyPoly) const
 |*
 *************************************************************************/
 
-XPolyPolygon::XPolyPolygon( USHORT nInitSize, USHORT nResize )
+XPolyPolygon::XPolyPolygon( USHORT /* nInitSize */, USHORT /* nResize */ )
 {
     DBG_CTOR(XPolyPolygon,NULL);
-    pImpXPolyPolygon = new ImpXPolyPolygon( nInitSize, nResize );
+    pImpXPolyPolygon = new ImpXPolyPolygon();
 }
 
 
@@ -1600,8 +1593,8 @@ XPolyPolygon::XPolyPolygon( USHORT nInitSize, USHORT nResize )
 XPolyPolygon::XPolyPolygon( const XPolygon& rXPoly )
 {
     DBG_CTOR(XPolyPolygon,NULL);
-    pImpXPolyPolygon = new ImpXPolyPolygon;
-    pImpXPolyPolygon->aXPolyList.Insert( new XPolygon( rXPoly ) );
+    pImpXPolyPolygon = new ImpXPolyPolygon();
+    pImpXPolyPolygon->aXPolyList.push_back( new XPolygon( rXPoly ) );
 }
 
 /*************************************************************************
@@ -1637,7 +1630,7 @@ XPolyPolygon::XPolyPolygon( const PolyPolygon& rPolyPoly )
     pImpXPolyPolygon = new ImpXPolyPolygon;
 
     for (USHORT i = 0; i < rPolyPoly.Count(); i++)
-        pImpXPolyPolygon->aXPolyList.Insert(
+        pImpXPolyPolygon->aXPolyList.push_back(
                                     new XPolygon(rPolyPoly.GetObject(i)) );
 }
 
@@ -1693,7 +1686,14 @@ void XPolyPolygon::Insert( const XPolygon& rXPoly, USHORT nPos )
 {
     CheckReference();
     XPolygon* pXPoly = new XPolygon( rXPoly );
-    pImpXPolyPolygon->aXPolyList.Insert( pXPoly, nPos );
+    if ( nPos < pImpXPolyPolygon->aXPolyList.size() )
+    {
+        XPolygonList::iterator it = pImpXPolyPolygon->aXPolyList.begin();
+        ::std::advance( it, nPos );
+        pImpXPolyPolygon->aXPolyList.insert( it, pXPoly );
+    }
+    else
+        pImpXPolyPolygon->aXPolyList.push_back( pXPoly );
 }
 
 /*************************************************************************
@@ -1710,12 +1710,19 @@ void XPolyPolygon::Insert( const XPolyPolygon& rXPolyPoly, USHORT nPos )
 {
     CheckReference();
 
-    for (USHORT i = 0; i < rXPolyPoly.Count(); i++)
+    for ( size_t i = 0; i < rXPolyPoly.Count(); i++)
     {
-        XPolygon* pXPoly = new XPolygon(rXPolyPoly[i]);
-        pImpXPolyPolygon->aXPolyList.Insert(pXPoly, nPos);
-        if ( nPos != XPOLYPOLY_APPEND )
+        XPolygon* pXPoly = new XPolygon( rXPolyPoly[i] );
+
+        if ( nPos < pImpXPolyPolygon->aXPolyList.size() )
+        {
+            XPolygonList::iterator it = pImpXPolyPolygon->aXPolyList.begin();
+            ::std::advance( it, nPos );
+            pImpXPolyPolygon->aXPolyList.insert( it, pXPoly );
             nPos++;
+        }
+        else
+            pImpXPolyPolygon->aXPolyList.push_back( pXPoly );
     }
 }
 
@@ -1732,7 +1739,10 @@ void XPolyPolygon::Insert( const XPolyPolygon& rXPolyPoly, USHORT nPos )
 XPolygon XPolyPolygon::Remove( USHORT nPos )
 {
     CheckReference();
-    XPolygon* pTmpXPoly = pImpXPolyPolygon->aXPolyList.Remove( nPos );
+    XPolygonList::iterator it = pImpXPolyPolygon->aXPolyList.begin();
+    ::std::advance( it, nPos );
+    XPolygon* pTmpXPoly = *it;
+    pImpXPolyPolygon->aXPolyList.erase( it );
     XPolygon  aXPoly( *pTmpXPoly );
     delete pTmpXPoly;
     return aXPoly;
@@ -1753,7 +1763,8 @@ XPolygon XPolyPolygon::Replace( const XPolygon& rXPoly, USHORT nPos )
 {
     CheckReference();
     XPolygon* pXPoly = new XPolygon( rXPoly );
-    XPolygon* pTmpXPoly = pImpXPolyPolygon->aXPolyList.Replace( pXPoly, nPos );
+    XPolygon* pTmpXPoly = pImpXPolyPolygon->aXPolyList[ nPos ];
+    pImpXPolyPolygon->aXPolyList[ nPos ] = pXPoly;
     XPolygon  aXPoly( *pTmpXPoly );
     delete pTmpXPoly;
     return aXPoly;
@@ -1772,7 +1783,7 @@ XPolygon XPolyPolygon::Replace( const XPolygon& rXPoly, USHORT nPos )
 
 const XPolygon& XPolyPolygon::GetObject( USHORT nPos ) const
 {
-    return *(pImpXPolyPolygon->aXPolyList.GetObject( nPos ));
+    return *(pImpXPolyPolygon->aXPolyList[ nPos ]);
 }
 
 
@@ -1795,13 +1806,9 @@ void XPolyPolygon::Clear()
     }
     else
     {
-        XPolygon* pXPoly = pImpXPolyPolygon->aXPolyList.First();
-        while( pXPoly )
-        {
-            delete pXPoly;
-            pXPoly = pImpXPolyPolygon->aXPolyList.Next();
-        }
-        pImpXPolyPolygon->aXPolyList.Clear();
+        for( size_t i = 0, n = pImpXPolyPolygon->aXPolyList.size(); i < n; ++i )
+            delete pImpXPolyPolygon->aXPolyList[ i ];
+        pImpXPolyPolygon->aXPolyList.clear();
     }
 }
 
@@ -1818,7 +1825,7 @@ void XPolyPolygon::Clear()
 
 USHORT XPolyPolygon::Count() const
 {
-    return (USHORT)(pImpXPolyPolygon->aXPolyList.Count());
+    return (USHORT)( pImpXPolyPolygon->aXPolyList.size() );
 }
 
 
@@ -1842,11 +1849,10 @@ void XPolyPolygon::Move( long nHorzMove, long nVertMove )
     CheckReference();
 
     // Punkte verschieben
-    XPolygon* pXPoly = pImpXPolyPolygon->aXPolyList.First();
-    while( pXPoly )
+    for ( size_t i = 0, n = pImpXPolyPolygon->aXPolyList.size(); i < n; ++i )
     {
+        XPolygon* pXPoly = pImpXPolyPolygon->aXPolyList[ i ];
         pXPoly->Move( nHorzMove, nVertMove );
-        pXPoly = pImpXPolyPolygon->aXPolyList.Next();
     }
 }
 
@@ -1862,12 +1868,12 @@ void XPolyPolygon::Move( long nHorzMove, long nVertMove )
 
 Rectangle XPolyPolygon::GetBoundRect() const
 {
-    USHORT    nXPoly = (USHORT)pImpXPolyPolygon->aXPolyList.Count();
+    size_t nXPoly = pImpXPolyPolygon->aXPolyList.size();
     Rectangle aRect;
 
-    for ( USHORT n = 0; n < nXPoly; n++ )
+    for ( size_t n = 0; n < nXPoly; n++ )
     {
-        const XPolygon* pXPoly = pImpXPolyPolygon->aXPolyList.GetObject( n );
+        const XPolygon* pXPoly = pImpXPolyPolygon->aXPolyList[ n ];
         aRect.Union( pXPoly->GetBoundRect() );
     }
 
@@ -1888,7 +1894,7 @@ Rectangle XPolyPolygon::GetBoundRect() const
 XPolygon& XPolyPolygon::operator[]( USHORT nPos )
 {
     CheckReference();
-    return *(pImpXPolyPolygon->aXPolyList.GetObject( nPos ));
+    return *( pImpXPolyPolygon->aXPolyList[ nPos ] );
 }
 
 /*************************************************************************
@@ -1962,8 +1968,8 @@ void XPolyPolygon::Translate(const Point& rTrans)
 {
     CheckReference();
 
-    for (USHORT i = 0; i < Count(); i++)
-        pImpXPolyPolygon->aXPolyList.GetObject(i)->Translate(rTrans);
+    for (size_t i = 0; i < Count(); i++)
+        pImpXPolyPolygon->aXPolyList[ i ]->Translate(rTrans);
 }
 
 /*************************************************************************
@@ -1981,8 +1987,8 @@ void XPolyPolygon::Rotate(const Point& rCenter, double fSin, double fCos)
 {
     CheckReference();
 
-    for (USHORT i = 0; i < Count(); i++)
-        pImpXPolyPolygon->aXPolyList.GetObject(i)->Rotate(rCenter, fSin, fCos);
+    for (size_t i = 0; i < Count(); i++)
+        pImpXPolyPolygon->aXPolyList[ i ]->Rotate(rCenter, fSin, fCos);
 }
 
 /*************************************************************************
@@ -1996,8 +2002,8 @@ void XPolyPolygon::Rotate20()
 {
     CheckReference();
 
-    for (USHORT i = 0; i < Count(); i++)
-        pImpXPolyPolygon->aXPolyList.GetObject(i)->Rotate20();
+    for (size_t i = 0; i < Count(); i++)
+        pImpXPolyPolygon->aXPolyList[ i ]->Rotate20();
 }
 
 /*************************************************************************
@@ -2038,8 +2044,8 @@ void XPolyPolygon::Scale(double fSx, double fSy)
 {
     CheckReference();
 
-    for (USHORT i = 0; i < Count(); i++)
-        pImpXPolyPolygon->aXPolyList.GetObject(i)->Scale(fSx, fSy);
+    for (size_t i = 0; i < Count(); i++)
+        pImpXPolyPolygon->aXPolyList[ i ]->Scale(fSx, fSy);
 }
 
 /*************************************************************************
@@ -2057,8 +2063,8 @@ void XPolyPolygon::SlantX(long nYRef, double fSin, double fCos)
 {
     CheckReference();
 
-    for (USHORT i = 0; i < Count(); i++)
-        pImpXPolyPolygon->aXPolyList.GetObject(i)->SlantX(nYRef, fSin, fCos);
+    for (size_t i = 0; i < Count(); i++)
+        pImpXPolyPolygon->aXPolyList[ i ]->SlantX(nYRef, fSin, fCos);
 }
 
 /*************************************************************************
@@ -2076,8 +2082,8 @@ void XPolyPolygon::SlantY(long nXRef, double fSin, double fCos)
 {
     CheckReference();
 
-    for (USHORT i = 0; i < Count(); i++)
-        pImpXPolyPolygon->aXPolyList.GetObject(i)->SlantY(nXRef, fSin, fCos);
+    for (size_t i = 0; i < Count(); i++)
+        pImpXPolyPolygon->aXPolyList[ i ]->SlantY(nXRef, fSin, fCos);
 }
 
 /*************************************************************************
@@ -2101,9 +2107,8 @@ void XPolyPolygon::Distort(const Rectangle& rRefRect,
 {
     CheckReference();
 
-    for (USHORT i = 0; i < Count(); i++)
-        pImpXPolyPolygon->aXPolyList.GetObject(i)->Distort(rRefRect,
-                                                           rDistortedRect);
+    for (size_t i = 0; i < Count(); i++)
+        pImpXPolyPolygon->aXPolyList[ i ]->Distort(rRefRect, rDistortedRect);
 }
 
 basegfx::B2DPolyPolygon XPolyPolygon::getB2DPolyPolygon() const
@@ -2122,7 +2127,7 @@ basegfx::B2DPolyPolygon XPolyPolygon::getB2DPolyPolygon() const
 XPolyPolygon::XPolyPolygon(const basegfx::B2DPolyPolygon& rPolyPolygon)
 {
     DBG_CTOR(XPolyPolygon,NULL);
-    pImpXPolyPolygon = new ImpXPolyPolygon( 16, 16 );
+    pImpXPolyPolygon = new ImpXPolyPolygon();
 
     for(sal_uInt32 a(0L); a < rPolyPolygon.count(); a++)
     {
