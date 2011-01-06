@@ -6846,7 +6846,7 @@ throw (::com::sun::star::uno::RuntimeException)
     UIElementVector::iterator pIter;
 
     WriteGuard aWriteLock( m_aLock );
-    for ( pIter = m_aUIElements.begin(); pIter != m_aUIElements.end(); pIter++ )
+    for ( pIter = m_aUIElements.begin(); pIter != m_aUIElements.end(); ++pIter )
     {
         Reference< XUIElement > xUIElement( pIter->m_xUIElement );
         if ( xUIElement.is() )
@@ -7096,12 +7096,12 @@ void LayoutManager::implts_checkElementContainer()
     BaseHash< sal_Int32 > aUIElementHash;
 
     UIElementVector::iterator pIter;
-    for ( pIter = m_aUIElements.begin(); pIter != m_aUIElements.end(); pIter++ )
+    for ( pIter = m_aUIElements.begin(); pIter != m_aUIElements.end(); ++pIter )
         aUIElementHash[pIter->m_aName]++;
 
 
     BaseHash< sal_Int32 >::const_iterator pCheckIter = aUIElementHash.begin();
-    for ( ; pCheckIter != aUIElementHash.end(); pCheckIter++ )
+    for ( ; pCheckIter != aUIElementHash.end(); ++pCheckIter )
     {
         if ( pCheckIter->second > 1 )
         {
