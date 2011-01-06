@@ -36,6 +36,7 @@
 #include "oox/xls/addressconverter.hxx"
 #include "oox/xls/biffinputstream.hxx"
 #include "oox/xls/drawingfragment.hxx"
+#include "oox/xls/drawingmanager.hxx"
 
 using ::rtl::OUString;
 using ::com::sun::star::uno::Reference;
@@ -56,8 +57,18 @@ namespace xls {
 
 // ============================================================================
 
+namespace {
+
+const sal_uInt16 BIFF_NOTE_VISIBLE          = 0x0002;
+
+} // namespace
+
+// ============================================================================
+
 CommentModel::CommentModel() :
-    mnAuthorId( -1 )
+    mnAuthorId( -1 ),
+    mnObjId( BIFF_OBJ_INVALID_ID ),
+    mbVisible( false )
 {
 }
 
@@ -86,33 +97,29 @@ void Comment::importComment( RecordInputStream& rStrm )
 void Comment::importNote( BiffInputStream& rStrm )
 {
     BinAddress aBinAddr;
-    sal_uInt16 nTotalLen;
-    rStrm >> aBinAddr >> nTotalLen;
+    rStrm >> aBinAddr;
     // cell range will be checked while inserting the comment into the document
     getAddressConverter().convertToCellRangeUnchecked( maModel.maRange, BinRange( aBinAddr ), getSheetIndex() );
-    RichStringRef xNoteText = createText();
 
-    sal_uInt16 nPartLen = ::std::min( nTotalLen, static_cast< sal_uInt16 >( rStrm.getRemaining() ) );
-    xNoteText->importCharArray( rStrm, nPartLen, getTextEncoding() );
-
-    nTotalLen = nTotalLen - nPartLen;   // operator-=() gives compiler warning
-    while( (nTotalLen > 0) && (rStrm.getNextRecId() == BIFF_ID_NOTE) && rStrm.startNextRecord() )
+    // remaining record data is BIFF dependent
+    switch( getBiff() )
     {
-        rStrm >> aBinAddr >> nPartLen;
-        OSL_ENSURE( aBinAddr.mnRow == 0xFFFF, "Comment::importNote - missing continuation NOTE record" );
-        if( aBinAddr.mnRow == 0xFFFF )
-        {
-            OSL_ENSURE( nPartLen <= nTotalLen, "Comment::importNote - string too long" );
-            // call to RichString::importCharArray() appends new text portion
-            xNoteText->importCharArray( rStrm, nPartLen, getTextEncoding() );
-            nTotalLen = nTotalLen - ::std::min( nTotalLen, nPartLen );
-        }
-        else
-        {
-            // seems to be a new note, rewind record, so worksheet fragment loop will find it
-            rStrm.rewindRecord();
-            nTotalLen = 0;
-        }
+        case BIFF2:
+        case BIFF3:
+            importNoteBiff2( rStrm );
+        break;
+        case BIFF4:
+        case BIFF5:
+            importNoteBiff2( rStrm );
+            // in BIFF4 and BIFF5, comments can have an associated sound
+            if( (rStrm.getNextRecId() == BIFF_ID_NOTESOUND) && rStrm.startNextRecord() )
+                importNoteSound( rStrm );
+        break;
+        case BIFF8:
+            importNoteBiff8( rStrm );
+        break;
+        case BIFF_UNKNOWN:
+        break;
     }
 }
 
@@ -135,12 +142,15 @@ void Comment::finalizeImport()
         Reference< XSheetAnnotations > xAnnos( xAnnosSupp->getAnnotations(), UNO_SET_THROW );
         // non-empty string required by note implementation (real text will be added below)
         xAnnos->insertNew( aNotePos, OUString( sal_Unicode( ' ' ) ) );
-        // receive craeted note from cell (insertNew does not return the note)
+
+        // receive created note from cell (insertNew does not return the note)
         Reference< XSheetAnnotationAnchor > xAnnoAnchor( getCell( aNotePos ), UNO_QUERY_THROW );
         Reference< XSheetAnnotation > xAnno( xAnnoAnchor->getAnnotation(), UNO_SET_THROW );
         Reference< XSheetAnnotationShapeSupplier > xAnnoShapeSupp( xAnno, UNO_QUERY_THROW );
         Reference< XShape > xAnnoShape( xAnnoShapeSupp->getAnnotationShape(), UNO_SET_THROW );
-        // convert shape formatting
+
+        // convert shape formatting and visibility
+        sal_Bool bVisible = sal_True;
         switch( getFilterType() )
         {
             case FILTER_OOX:
@@ -150,17 +160,17 @@ void Comment::finalizeImport()
                     pNoteShape->convertFormatting( xAnnoShape );
                     // visibility
                     const ::oox::vml::ShapeModel::ShapeClientDataPtr& rxClientData = pNoteShape->getShapeModel().mxClientData;
-                    bool bVisible = rxClientData.get() && rxClientData->mbVisible;
-                    xAnno->setIsVisible( bVisible );
+                    bVisible = rxClientData.get() && rxClientData->mbVisible;
                 }
             break;
             case FILTER_BIFF:
-                // notes are always hidden and unformatted in BIFF3-BIFF5
-                xAnno->setIsVisible( sal_False );
+                bVisible = maModel.mbVisible;
             break;
             case FILTER_UNKNOWN:
             break;
         }
+        xAnno->setIsVisible( bVisible );
+
         // insert text and convert text formatting
         maModel.mxText->finalizeImport();
         Reference< XText > xAnnoText( xAnnoShape, UNO_QUERY_THROW );
@@ -169,6 +179,52 @@ void Comment::finalizeImport()
     catch( Exception& )
     {
     }
+}
+
+// private --------------------------------------------------------------------
+
+void Comment::importNoteBiff2( BiffInputStream& rStrm )
+{
+    sal_uInt16 nTotalLen;
+    rStrm >> nTotalLen;
+    sal_uInt16 nPartLen = ::std::min( nTotalLen, static_cast< sal_uInt16 >( rStrm.getRemaining() ) );
+    RichStringRef xNoteText = createText();
+    xNoteText->importCharArray( rStrm, nPartLen, getTextEncoding() );
+
+    nTotalLen = nTotalLen - nPartLen;   // operator-=() gives compiler warning
+    while( (nTotalLen > 0) && (rStrm.getNextRecId() == BIFF_ID_NOTE) && rStrm.startNextRecord() )
+    {
+        sal_uInt16 nMarker;
+        rStrm >> nMarker;
+        rStrm.skip( 2 );
+        rStrm >> nPartLen;
+        OSL_ENSURE( nMarker == 0xFFFF, "Comment::importNoteBiff2 - missing continuation NOTE record" );
+        if( nMarker == 0xFFFF )
+        {
+            OSL_ENSURE( nPartLen <= nTotalLen, "Comment::importNoteBiff2 - string too long" );
+            // call to RichString::importCharArray() appends new text portion
+            xNoteText->importCharArray( rStrm, nPartLen, getTextEncoding() );
+            nTotalLen = nTotalLen - ::std::min( nTotalLen, nPartLen );
+        }
+        else
+        {
+            // seems to be a new note, rewind record, so worksheet fragment loop will find it
+            rStrm.rewindRecord();
+            nTotalLen = 0;
+        }
+    }
+}
+
+void Comment::importNoteBiff8( BiffInputStream& rStrm )
+{
+    sal_uInt16 nFlags;
+    rStrm >> nFlags >> maModel.mnObjId;
+    maModel.maAuthor = rStrm.readUniString();
+    maModel.mbVisible = getFlag( nFlags, BIFF_NOTE_VISIBLE );
+}
+
+void Comment::importNoteSound( BiffInputStream& /*rStrm*/ )
+{
 }
 
 // ============================================================================

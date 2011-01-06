@@ -2520,12 +2520,29 @@ void WorkbookStreamObject::implDumpRecordBody()
             {
                 dumpHex< sal_uInt16 >( "flags", "NOTE-FLAGS" );
                 dumpDec< sal_uInt16 >( "obj-id" );
+                dumpUniString( "author" );
+                dumpUnused( 1 );
             }
             else
             {
                 sal_uInt16 nTextLen = dumpDec< sal_uInt16 >( "text-len" );
                 nTextLen = ::std::min( nTextLen, static_cast< sal_uInt16 >( rStrm.getRemaining() ) );
                 writeStringItem( "note-text", rStrm.readCharArrayUC( nTextLen, getBiffData().getTextEncoding(), true ) );
+            }
+        break;
+
+        case BIFF_ID_NOTESOUND:
+            dumpHex< sal_uInt32 >( "identifier" );
+            dumpDec< sal_uInt32 >( "total-data-size" );
+            dumpDec< sal_uInt32 >( "wave-data-size" );
+            if( dumpDec< sal_uInt32 >( "fmt-size" ) >= 16 )
+            {
+                dumpDec< sal_uInt16 >( "format", "NOTESOUND-FORMAT" );
+                dumpDec< sal_uInt16 >( "channels" );
+                dumpDec< sal_uInt32 >( "sampling-rate" );
+                dumpDec< sal_uInt32 >( "data-rate" );
+                dumpDec< sal_uInt16 >( "data-block-size" );
+                dumpDec< sal_uInt16 >( "bits-per-sample" );
             }
         break;
 

@@ -804,6 +804,7 @@ bool BiffWorksheetFragment::importFragment()
                 case BIFF_ID_HORPAGEBREAKS:     importPageBreaks( true );                   break;
                 case BIFF_ID_ITERATION:         rWorkbookSett.importIteration( mrStrm );    break;
                 case BIFF_ID_LEFTMARGIN:        rPageSett.importLeftMargin( mrStrm );       break;
+                case BIFF_ID_NOTE:              importNote();                               break;
                 case BIFF_ID_PANE:              rSheetViewSett.importPane( mrStrm );        break;
                 case BIFF_ID_PASSWORD:          rWorksheetSett.importPassword( mrStrm );    break;
                 case BIFF_ID_PRINTGRIDLINES:    rPageSett.importPrintGridLines( mrStrm );   break;
@@ -823,7 +824,6 @@ bool BiffWorksheetFragment::importFragment()
                         case BIFF_ID_COLUMNDEFAULT: importColumnDefault();                  break;
                         case BIFF_ID_COLWIDTH:      importColWidth();                       break;
                         case BIFF2_ID_DEFROWHEIGHT: importDefRowHeight();                   break;
-                        case BIFF_ID_NOTE:          importNote();                           break;
                         case BIFF2_ID_WINDOW2:      rSheetViewSett.importWindow2( mrStrm ); break;
                     }
                     break;
@@ -834,7 +834,6 @@ bool BiffWorksheetFragment::importFragment()
                         case BIFF_ID_DEFCOLWIDTH:   importDefColWidth();                            break;
                         case BIFF3_ID_DEFROWHEIGHT: importDefRowHeight();                           break;
                         case BIFF_ID_HCENTER:       rPageSett.importHorCenter( mrStrm );            break;
-                        case BIFF_ID_NOTE:          importNote();                                   break;
                         case BIFF_ID_OBJ:           rDrawing.importObj( mrStrm );                   break;
                         case BIFF_ID_OBJECTPROTECT: rWorksheetSett.importObjectProtect( mrStrm );   break;
                         case BIFF_ID_SAVERECALC:    rWorkbookSett.importSaveRecalc( mrStrm );       break;
@@ -851,7 +850,6 @@ bool BiffWorksheetFragment::importFragment()
                         case BIFF_ID_COLINFO:       importColInfo();                                break;
                         case BIFF3_ID_DEFROWHEIGHT: importDefRowHeight();                           break;
                         case BIFF_ID_HCENTER:       rPageSett.importHorCenter( mrStrm );            break;
-                        case BIFF_ID_NOTE:          importNote();                                   break;
                         case BIFF_ID_OBJ:           rDrawing.importObj( mrStrm );                   break;
                         case BIFF_ID_OBJECTPROTECT: rWorksheetSett.importObjectProtect( mrStrm );   break;
                         case BIFF_ID_PAGESETUP:     rPageSett.importPageSetup( mrStrm );            break;
@@ -870,7 +868,6 @@ bool BiffWorksheetFragment::importFragment()
                         case BIFF3_ID_DEFROWHEIGHT: importDefRowHeight();                           break;
                         case BIFF_ID_HCENTER:       rPageSett.importHorCenter( mrStrm );            break;
                         case BIFF_ID_MERGEDCELLS:   importMergedCells();                            break;  // #i62300# also in BIFF5
-                        case BIFF_ID_NOTE:          importNote();                                   break;
                         case BIFF_ID_OBJ:           rDrawing.importObj( mrStrm );                   break;
                         case BIFF_ID_OBJECTPROTECT: rWorksheetSett.importObjectProtect( mrStrm );   break;
                         case BIFF_ID_PAGESETUP:     rPageSett.importPageSetup( mrStrm );            break;

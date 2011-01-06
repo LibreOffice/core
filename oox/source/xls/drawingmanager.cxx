@@ -51,8 +51,6 @@ namespace {
 
 // OBJ record -----------------------------------------------------------------
 
-const sal_uInt16 BIFF_OBJ_INVALID_ID        = 0;
-
 const sal_uInt16 BIFF_OBJTYPE_GROUP         = 0;
 const sal_uInt16 BIFF_OBJTYPE_LINE          = 1;
 const sal_uInt16 BIFF_OBJTYPE_RECTANGLE     = 2;

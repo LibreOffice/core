@@ -425,6 +425,7 @@ const sal_uInt16 BIFF_ID_MTHREADSETTINGS    = 0x089A;
 const sal_uInt16 BIFF_ID_MULTBLANK          = 0x00BE;
 const sal_uInt16 BIFF_ID_MULTRK             = 0x00BD;
 const sal_uInt16 BIFF_ID_NOTE               = 0x001C;
+const sal_uInt16 BIFF_ID_NOTESOUND          = 0x0096;
 const sal_uInt16 BIFF2_ID_NUMBER            = 0x0003;
 const sal_uInt16 BIFF3_ID_NUMBER            = 0x0203;
 const sal_uInt16 BIFF_ID_OBJ                = 0x005D;
