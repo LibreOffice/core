@@ -1389,7 +1389,7 @@ void VCLXWindow::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds, bool bWithDe
     // lovely hack from:
     // void UnoControlModel::ImplRegisterProperty( sal_uInt16 nPropId )
     std::list< sal_uInt16 >::const_iterator iter;
-    for( iter = rIds.begin(); iter != rIds.end(); iter++) {
+    for( iter = rIds.begin(); iter != rIds.end(); ++iter) {
         if( *iter == BASEPROPERTY_FONTDESCRIPTOR )
         {
             // some properties are not included in the FontDescriptor, but everytime
