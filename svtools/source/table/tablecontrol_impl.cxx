@@ -467,19 +467,25 @@ namespace svt { namespace table
     }
 
     //--------------------------------------------------------------------
-    void TableControl_Impl::columnsInserted( ColPos first, ColPos last )
+    void TableControl_Impl::columnsInserted( ColPos i_first, ColPos i_last )
     {
+        m_nColumnCount = m_pModel->getColumnCount();
         impl_ni_updateColumnWidths();
-        (void)first;
-        (void)last;
-    }
+        impl_ni_updateScrollbars();
+
+        impl_invalidateColumnsAfter( i_first );
+        OSL_UNUSED( i_last );
+   }
 
     //--------------------------------------------------------------------
-    void TableControl_Impl::columnsRemoved( ColPos first, ColPos last )
+    void TableControl_Impl::columnsRemoved( ColPos i_first, ColPos i_last )
     {
+        m_nColumnCount = m_pModel->getColumnCount();
         impl_ni_updateColumnWidths();
-        (void)first;
-        (void)last;
+        impl_ni_updateScrollbars();
+
+        impl_invalidateColumnsAfter( i_first );
+        OSL_UNUSED( i_last );
     }
 
     //--------------------------------------------------------------------
@@ -503,18 +509,44 @@ namespace svt { namespace table
     }
 
     //--------------------------------------------------------------------
+    void TableControl_Impl::impl_invalidateColumn( ColPos const i_column )
+    {
+        DBG_CHECK_ME();
+
+        Rectangle aAllCellsArea;
+        impl_getAllVisibleCellsArea( aAllCellsArea );
+
+        const TableColumnGeometry aColumn( *this, aAllCellsArea, i_column );
+        if ( aColumn.isValid() )
+            m_rAntiImpl.Invalidate( aColumn.getRect() );
+    }
+
+    //--------------------------------------------------------------------
+    void TableControl_Impl::impl_invalidateColumnsAfter( ColPos const i_column )
+    {
+        DBG_CHECK_ME();
+
+        const ColPos nFirstVisibleCol = m_nLeftColumn;
+        const ColPos nLastVisibleCol = m_nLeftColumn + impl_getVisibleColumns( true ) - 1;
+        if ( ( i_column >= nFirstVisibleCol ) && ( i_column <= nLastVisibleCol ) )
+        {
+            Rectangle aInvalidateArea;
+            impl_getAllVisibleCellsArea( aInvalidateArea );
+
+            const TableColumnGeometry aColumn( *this, aInvalidateArea, i_column );
+            aInvalidateArea.Left() = aColumn.getRect().Left();
+
+            m_rAntiImpl.Invalidate( aInvalidateArea );
+        }
+    }
+
+    //--------------------------------------------------------------------
     void TableControl_Impl::columnChanged( ColPos const i_column, ColumnAttributeGroup const i_attributeGroup )
     {
         ColumnAttributeGroup nGroup( i_attributeGroup );
         if ( nGroup & COL_ATTRS_APPEARANCE )
         {
-            Rectangle aAllCellsArea;
-            impl_getAllVisibleCellsArea( aAllCellsArea );
-
-            const TableColumnGeometry aColumn( *this, aAllCellsArea, i_column );
-            if ( aColumn.isValid() )
-                m_rAntiImpl.Invalidate( aColumn.getRect() );
-
+            impl_invalidateColumn( i_column );
             nGroup &= ~COL_ATTRS_APPEARANCE;
         }
 
@@ -1812,7 +1844,7 @@ namespace svt { namespace table
     }
 
     //--------------------------------------------------------------------
-    TableSize TableControl_Impl::impl_getVisibleColumns( bool _bAcceptPartialRow ) const
+    TableSize TableControl_Impl::impl_getVisibleColumns( bool _bAcceptPartialCol ) const
     {
         DBG_CHECK_ME();
 
@@ -1822,7 +1854,7 @@ namespace svt { namespace table
             Rectangle( Point( 0, 0 ), m_pDataWindow->GetOutputSizePixel() ),
             m_nLeftColumn,
             *this,
-            _bAcceptPartialRow
+            _bAcceptPartialCol
         );
     }
 
@@ -2260,10 +2292,6 @@ namespace svt { namespace table
                 // column has become smaller, check against minimum width
                 if ( ( minWidthLogical != 0 ) && ( requestedWidthLogical < minWidthLogical ) )
                     requestedWidthLogical = minWidthLogical;
-
-                // impl_updateLeftColumn();
-                // does this make sense here? We didn't call impl_ni_updateColumnWidths, yet, so m_aColumnWidths
-                // still contains the old values
             }
             else if ( oldEnd < requestedEnd )
             {
@@ -2283,39 +2311,6 @@ namespace svt { namespace table
 
         m_pDataWindow->ReleaseMouse();
         return m_bResizingColumn;
-    }
-
-    //-------------------------------------------------------------------------------
-    void TableControl_Impl::impl_updateLeftColumn()
-    {
-        DBG_CHECK_ME();
-        if ( m_nLeftColumn == 0 )
-            return;
-
-        // the right end of the last column
-        const long lastColumnEnd = m_aColumnWidths[ m_nColumnCount - 1 ].getEnd();
-
-        // free space at the right of the last column
-        const long freeSpace = m_pDataWindow->GetOutputSizePixel().Width() - lastColumnEnd;
-
-        // if the columnd left of the currently-left-most column would fit into the free
-        // space, then implicitly scroll
-        const long leftNeighbourWidth = m_aColumnWidths[ m_nLeftColumn - 1 ].getWidth();
-        if ( leftNeighbourWidth < freeSpace )
-        {
-            for (   ColumnPositions::iterator colPos = m_aColumnWidths.begin();
-                    colPos != m_aColumnWidths.end();
-                    ++colPos
-                 )
-            {
-                colPos->move( leftNeighbourWidth );
-            }
-
-            --m_nLeftColumn;
-            // TODO: wouldn't this require updating the scrollbar?
-        }
-
-        // TODO: isnt' it that this might be done repeatedly?
     }
 
     //--------------------------------------------------------------------

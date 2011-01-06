@@ -119,11 +119,19 @@ namespace toolkit
     //------------------------------------------------------------------------------------------------------------------
     ::sal_Int32 SAL_CALL DefaultGridColumnModel::addColumn( const Reference< XGridColumn > & i_column ) throw (RuntimeException)
     {
-        ::osl::Guard< ::osl::Mutex > aGuard( m_aMutex );
+        ::osl::ClearableMutexGuard aGuard( m_aMutex );
 
         m_aColumns.push_back( i_column );
         sal_Int32 index = m_aColumns.size() - 1;
         i_column->setIndex( index );
+
+        // fire insertion notifications
+        ContainerEvent aEvent;
+        aEvent.Source = *this;
+        aEvent.Accessor <<= index;
+        aEvent.Element <<= i_column;
+        aGuard.clear();
+        m_aContainerListeners.notifyEach( &XContainerListener::elementInserted, aEvent );
 
         return index;
     }

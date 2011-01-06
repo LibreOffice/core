@@ -307,7 +307,7 @@ namespace svt { namespace table
                 specifies whether a possible only partially visible last row is
                 counted, too.
         */
-        TableSize   impl_getVisibleColumns( bool _bAcceptPartialRow ) const;
+        TableSize   impl_getVisibleColumns( bool _bAcceptPartialCol ) const;
 
         /** determines the rectangle occupied by the given cell
         */
@@ -394,7 +394,10 @@ namespace svt { namespace table
         */
         ColPos      impl_getColumnForOrdinate( long const i_ordinate ) const;
 
-        void impl_updateLeftColumn();
+        /// invalidates the window area occupied by the given column
+        void        impl_invalidateColumn( ColPos const i_column );
+        /// invalidates the window area occupied by the given column, and everything at the right side of it
+        void        impl_invalidateColumnsAfter( ColPos const i_column );
 
         DECL_LINK( OnScroll, ScrollBar* );
         DECL_LINK( OnUpdateScrollbars, void* );
