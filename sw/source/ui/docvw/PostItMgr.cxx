@@ -155,7 +155,7 @@ SwPostItMgr::~SwPostItMgr()
     RemoveSidebarWin();
     EndListening( *mpView->GetDocShell() );
 
-    for(std::vector<SwPostItPageItem*>::iterator i = mPages.begin(); i!= mPages.end() ; i++)
+    for(std::vector<SwPostItPageItem*>::iterator i = mPages.begin(); i!= mPages.end() ; ++i)
         delete (*i);
     mPages.clear();
 
@@ -202,7 +202,7 @@ void SwPostItMgr::InsertItem(SfxBroadcaster* pItem, bool bCheckExistance, bool b
 {
     if (bCheckExistance)
     {
-        for(std::list<SwSidebarItem*>::iterator i = mvPostItFlds.begin(); i!= mvPostItFlds.end() ; i++)
+        for(std::list<SwSidebarItem*>::iterator i = mvPostItFlds.begin(); i!= mvPostItFlds.end() ; ++i)
         {
             if ( (*i)->GetBroadCaster() == pItem )
                 return;
@@ -218,7 +218,7 @@ void SwPostItMgr::InsertItem(SfxBroadcaster* pItem, bool bCheckExistance, bool b
 void SwPostItMgr::RemoveItem( SfxBroadcaster* pBroadcast )
 {
     EndListening(*pBroadcast);
-    for(std::list<SwSidebarItem*>::iterator i = mvPostItFlds.begin(); i!= mvPostItFlds.end() ; i++)
+    for(std::list<SwSidebarItem*>::iterator i = mvPostItFlds.begin(); i!= mvPostItFlds.end() ; ++i)
     {
         if ( (*i)->GetBroadCaster() == pBroadcast )
         {
@@ -343,7 +343,7 @@ void SwPostItMgr::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
             case SWFMTFLD_CHANGED:
             {
                         SwFmtFld* pFmtFld = dynamic_cast<SwFmtFld*>(&rBC);
-                for(std::list<SwSidebarItem*>::iterator i = mvPostItFlds.begin(); i!= mvPostItFlds.end() ; i++)
+                for(std::list<SwSidebarItem*>::iterator i = mvPostItFlds.begin(); i!= mvPostItFlds.end() ; ++i)
                 {
                             if ( pFmtFld == (*i)->GetBroadCaster() )
                     {
@@ -360,7 +360,7 @@ void SwPostItMgr::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
             case SWFMTFLD_LANGUAGE:
             {
                         SwFmtFld* pFmtFld = dynamic_cast<SwFmtFld*>(&rBC);
-                for(std::list<SwSidebarItem*>::iterator i = mvPostItFlds.begin(); i!= mvPostItFlds.end() ; i++)
+                for(std::list<SwSidebarItem*>::iterator i = mvPostItFlds.begin(); i!= mvPostItFlds.end() ; ++i)
                 {
                                 if ( pFmtFld == (*i)->GetBroadCaster() )
                     {
@@ -394,7 +394,7 @@ void SwPostItMgr::Focus(SfxBroadcaster& rBC)
         mpView->ExecViewOptions(aRequest);
     }
 
-    for(std::list<SwSidebarItem*>::iterator i = mvPostItFlds.begin(); i!= mvPostItFlds.end() ; i++)
+    for(std::list<SwSidebarItem*>::iterator i = mvPostItFlds.begin(); i!= mvPostItFlds.end() ; ++i)
     {
         // field to get the focus is the broadcaster
         if ( &rBC == (*i)->GetBroadCaster() )
@@ -428,7 +428,7 @@ bool SwPostItMgr::CalcRects()
     PreparePageContainer();
     if ( !mvPostItFlds.empty() )
     {
-        for(std::list<SwSidebarItem*>::iterator i = mvPostItFlds.begin(); i!= mvPostItFlds.end() ; i++)
+        for(std::list<SwSidebarItem*>::iterator i = mvPostItFlds.begin(); i!= mvPostItFlds.end() ; ++i)
         {
             SwSidebarItem* pItem = (*i);
             if ( !pItem->UseElement() )
@@ -460,7 +460,7 @@ bool SwPostItMgr::CalcRects()
         Sort(SORT_POS);
 
         // sort the items into the right page vector, so layout can be done by page
-        for(std::list<SwSidebarItem*>::iterator i = mvPostItFlds.begin(); i!= mvPostItFlds.end() ; i++)
+        for(std::list<SwSidebarItem*>::iterator i = mvPostItFlds.begin(); i!= mvPostItFlds.end() ; ++i)
         {
             SwSidebarItem* pItem = (*i);
             if( SwPostItHelper::INVISIBLE == pItem->mLayoutStatus )
@@ -518,7 +518,7 @@ bool SwPostItMgr::CalcRects()
 
 bool SwPostItMgr::HasScrollbars() const
 {
-    for(std::list<SwSidebarItem*>::const_iterator i = mvPostItFlds.begin(); i!= mvPostItFlds.end() ; i++)
+    for(std::list<SwSidebarItem*>::const_iterator i = mvPostItFlds.begin(); i!= mvPostItFlds.end() ; ++i)
     {
         if ((*i)->bShow && (*i)->pPostIt && (*i)->pPostIt->HasScrollbar())
             return true;
@@ -547,7 +547,7 @@ void SwPostItMgr::PreparePageContainer()
         }
     }
     // only clear the list, DO NOT delete the objects itself
-    for(std::vector<SwPostItPageItem*>::iterator i = mPages.begin(); i!= mPages.end() ; i++)
+    for(std::vector<SwPostItPageItem*>::iterator i = mPages.begin(); i!= mPages.end() ; ++i)
     {
         (*i)->mList->clear();
         if (mvPostItFlds.empty())
@@ -1135,7 +1135,7 @@ void SwPostItMgr::RemoveSidebarWin()
 {
     if (!mvPostItFlds.empty())
     {
-        for(std::list<SwSidebarItem*>::iterator i = mvPostItFlds.begin(); i!= mvPostItFlds.end() ; i++)
+        for(std::list<SwSidebarItem*>::iterator i = mvPostItFlds.begin(); i!= mvPostItFlds.end() ; ++i)
         {
             EndListening( *((*i)->GetBroadCaster()) );
             if ((*i)->pPostIt)
@@ -1167,12 +1167,12 @@ void SwPostItMgr::Delete(String aAuthor)
 
     std::vector<SwFmtFld*> aTmp;
     aTmp.reserve( mvPostItFlds.size() );
-    for(std::list<SwSidebarItem*>::iterator pPostIt = mvPostItFlds.begin(); pPostIt!= mvPostItFlds.end() ; pPostIt++)
+    for(std::list<SwSidebarItem*>::iterator pPostIt = mvPostItFlds.begin(); pPostIt!= mvPostItFlds.end() ; ++pPostIt)
     {
         if ((*pPostIt)->GetFmtFld() && ((*pPostIt)->pPostIt->GetAuthor() == aAuthor) )
             aTmp.push_back( (*pPostIt)->GetFmtFld() );
     }
-    for(std::vector<SwFmtFld*>::iterator i = aTmp.begin(); i!= aTmp.end() ; i++)
+    for(std::vector<SwFmtFld*>::iterator i = aTmp.begin(); i!= aTmp.end() ; ++i)
     {
         mpWrtShell->GotoField( *(*i) );
         mpWrtShell->DelRight();
@@ -1195,12 +1195,12 @@ void SwPostItMgr::Delete()
 
     std::vector<SwFmtFld*> aTmp;
     aTmp.reserve( mvPostItFlds.size() );
-    for(std::list<SwSidebarItem*>::iterator pPostIt = mvPostItFlds.begin(); pPostIt!= mvPostItFlds.end() ; pPostIt++)
+    for(std::list<SwSidebarItem*>::iterator pPostIt = mvPostItFlds.begin(); pPostIt!= mvPostItFlds.end() ; ++pPostIt)
     {
         if ((*pPostIt)->GetFmtFld())
             aTmp.push_back( (*pPostIt)->GetFmtFld() );
     }
-    for(std::vector<SwFmtFld*>::iterator i = aTmp.begin(); i!= aTmp.end() ; i++)
+    for(std::vector<SwFmtFld*>::iterator i = aTmp.begin(); i!= aTmp.end() ; ++i)
     {
         mpWrtShell->GotoField( *(*i) );
         mpWrtShell->DelRight();
@@ -1261,7 +1261,7 @@ void SwPostItMgr::Sort(const short aType)
 
 SwSidebarWin* SwPostItMgr::GetSidebarWin( const SfxBroadcaster* pBroadcaster) const
 {
-    for(const_iterator i = mvPostItFlds.begin(); i!= mvPostItFlds.end() ; i++)
+    for(const_iterator i = mvPostItFlds.begin(); i!= mvPostItFlds.end() ; ++i)
     {
         if ( (*i)->GetBroadCaster() == pBroadcaster)
             return (*i)->pPostIt;
@@ -1271,7 +1271,7 @@ SwSidebarWin* SwPostItMgr::GetSidebarWin( const SfxBroadcaster* pBroadcaster) co
 
 sw::annotation::SwAnnotationWin* SwPostItMgr::GetAnnotationWin(const SwPostItField* pFld) const
 {
-    for(const_iterator i = mvPostItFlds.begin(); i!= mvPostItFlds.end() ; i++)
+    for(const_iterator i = mvPostItFlds.begin(); i!= mvPostItFlds.end() ; ++i)
     {
         if ( (*i)->GetFmtFld() && ((*i)->GetFmtFld()->GetFld() == pFld))
             return dynamic_cast<sw::annotation::SwAnnotationWin*>((*i)->pPostIt);
@@ -1678,7 +1678,7 @@ IMPL_LINK( SwPostItMgr, CalcHdl, void*, /* pVoid*/  )
 
 void SwPostItMgr::Rescale()
 {
-    for(std::list<SwSidebarItem*>::iterator i = mvPostItFlds.begin(); i!= mvPostItFlds.end() ; i++)
+    for(std::list<SwSidebarItem*>::iterator i = mvPostItFlds.begin(); i!= mvPostItFlds.end() ; ++i)
         if ( (*i)->pPostIt )
             (*i)->pPostIt->Rescale();
 }
@@ -1715,21 +1715,21 @@ sal_Int32 SwPostItMgr::GetSidebarScrollerHeight() const
 
 void SwPostItMgr::SetSpellChecking()
 {
-    for(std::list<SwSidebarItem*>::iterator i = mvPostItFlds.begin(); i!= mvPostItFlds.end() ; i++)
+    for(std::list<SwSidebarItem*>::iterator i = mvPostItFlds.begin(); i!= mvPostItFlds.end() ; ++i)
         if ( (*i)->pPostIt )
             (*i)->pPostIt->SetSpellChecking();
 }
 
 void SwPostItMgr::SetReadOnlyState()
 {
-    for(std::list<SwSidebarItem*>::iterator i = mvPostItFlds.begin(); i!= mvPostItFlds.end() ; i++)
+    for(std::list<SwSidebarItem*>::iterator i = mvPostItFlds.begin(); i!= mvPostItFlds.end() ; ++i)
         if ( (*i)->pPostIt )
             (*i)->pPostIt->SetReadonly( mbReadOnly );
 }
 
 void SwPostItMgr::CheckMetaText()
 {
-        for(std::list<SwSidebarItem*>::iterator i = mvPostItFlds.begin(); i!= mvPostItFlds.end() ; i++)
+        for(std::list<SwSidebarItem*>::iterator i = mvPostItFlds.begin(); i!= mvPostItFlds.end() ; ++i)
                 if ( (*i)->pPostIt )
                        (*i)->pPostIt->CheckMetaText();
 
