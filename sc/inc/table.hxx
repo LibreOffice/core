@@ -86,6 +86,17 @@ class ScFlatBoolRowSegments;
 class ScFlatBoolColSegments;
 
 
+struct ScShowRowsEntry
+{
+    SCROW   mnRow1;
+    SCROW   mnRow2;
+    bool    mbShow;
+
+    ScShowRowsEntry( SCROW nR1, SCROW nR2, bool bS ) :
+        mnRow1(nR1), mnRow2(nR2), mbShow(bS) {}
+};
+
+
 class ScTable
 {
 private:
@@ -658,7 +669,7 @@ public:
     void        DBShowRow(SCROW nRow, bool bShow);
 
     void        ShowRows(SCROW nRow1, SCROW nRow2, bool bShow);
-    void        DBShowRows(SCROW nRow1, SCROW nRow2, bool bShow);
+    void        DBShowRows(SCROW nRow1, SCROW nRow2, bool bShow, bool bSetFlags);   // if bSetFlags=false, no SetRowHidden/SetRowFiltered
 
     void        SetColFlags( SCCOL nCol, BYTE nNewFlags );
     void        SetRowFlags( SCROW nRow, BYTE nNewFlags );
