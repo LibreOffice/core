@@ -53,29 +53,19 @@ SLOFILES=	\
         $(SLO)$/salvd.obj		\
         $(SLO)$/dtint.obj		\
         $(SLO)$/salcvt.obj		\
-        $(SLO)$/xfont.obj		\
-        $(SLO)$/xlfd_attr.obj		\
-        $(SLO)$/xlfd_extd.obj		\
-        $(SLO)$/xlfd_smpl.obj		\
         $(SLO)$/salgdi3.obj		\
         $(SLO)$/gcach_xpeer.obj		\
         $(SLO)$/xrender_peer.obj	\
         $(SLO)$/pspgraphics.obj
         
 EXCEPTIONSFILES=\
-        $(SLO)$/xlfd_extd.obj	\
         $(SLO)$/salgdi.obj		\
         $(SLO)$/salbmp.obj		\
         $(SLO)$/salgdi3.obj		\
         $(SLO)$/salcvt.obj
 
-.IF "$(USE_XPRINT)" == "TRUE"
-CFLAGS+=-D_USE_PRINT_EXTENSION_=1
-SLOFILES+=$(SLO)$/xprintext.obj
-.ELSE
 SLOFILES+=$(SLO)$/salprnpsp.obj
 EXCEPTIONSFILES+=$(SLO)$/salprnpsp.obj
-.ENDIF
 
 .IF "$(OS)"=="SOLARIS"
 SLOFILES+=$(SLO)$/cdeint.obj

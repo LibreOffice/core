@@ -113,10 +113,7 @@ X11SalGraphics::X11SalGraphics()
 
     pFontGC_            = NULL;
     for( int i = 0; i < MAX_FALLBACK; ++i )
-    {
-        mXFont[i]       = NULL;
         mpServerFont[i] = NULL;
-    }
 
     nTextPixel_         = 0;
     nTextColor_         = MAKE_SALCOLOR( 0x00, 0x00, 0x00 ); // Black
@@ -338,13 +335,8 @@ GC X11SalGraphics::SelectBrush()
         {
             XSetFillStyle ( pDisplay, pBrushGC_, FillSolid );
             XSetForeground( pDisplay, pBrushGC_, nBrushPixel_ );
-                        #if defined(_USE_PRINT_EXTENSION_)
-                        XSetBackground( pDisplay, pBrushGC_,
-                                        WhitePixel(pDisplay, DefaultScreen(pDisplay)) );
-                        #else
             if( bPrinter_ )
                 XSetTile( pDisplay, pBrushGC_, None );
-            #endif
         }
         else
         {
@@ -757,6 +749,7 @@ void X11SalGraphics::SetXORMode( bool bSet, bool )
     {
         bXORMode_   = bSet;
         bPenGC_     = FALSE;
+        bFontGC_    = FALSE;
         bBrushGC_   = FALSE;
         bMonoGC_        = FALSE;
         bCopyGC_        = FALSE;

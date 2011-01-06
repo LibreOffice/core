@@ -125,7 +125,6 @@ HXXDEPNLST= $(INC)$/vcl$/accel.hxx       \
             $(INC)$/vcl$/virdev.hxx      \
             $(INC)$/vcl$/wall.hxx        \
             $(INC)$/vcl$/waitobj.hxx     \
-            $(INC)$/vcl$/wintypes.hxx    \
             $(INC)$/vcl$/window.hxx      \
             $(INC)$/vcl$/wrkwin.hxx
 
