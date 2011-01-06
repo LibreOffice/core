@@ -440,8 +440,10 @@ $(SHL1TARGETN) : \
     @+source $(MISC)/$(TARGET).$(@:b)_1.cmd
     @$(PERL) $(SOLARENV)/bin/macosx-change-install-names.pl \
         shl $(SHL1RPATH) $@
+.IF "$(SHL1CREATEJNILIB)"!=""
     @echo "Making:   " $(@:f).jnilib
     @macosx-create-bundle $@
+.ENDIF          # "$(SHL1CREATEJNILIB)"!=""
 .IF "$(UPDATER)"=="YES"
 .IF "$(SHL1NOCHECK)"==""
     $(SOLARENV)/bin/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS1) $(SHL1TARGETN)
@@ -538,16 +540,6 @@ $(SHL1TARGETN) : \
 
 .ENDIF			# "$(GUI)" == "OS2"
 
-
-.IF "$(TESTDIR)"!=""
-.IF "$(NO_TESTS)"==""
-
-ALLTAR : runtest_$(SHL1TARGET)
-
-runtest_$(SHL1TARGET) : $(SHL1TARGETN)
-    testshl $(SHL1TARGETN) sce/$(SHL1TARGET).sce -msg -skip
-.ENDIF			# "$(NO_TESTS)"==""
-.ENDIF			# "$(TESTDIR)"!=""
 .ENDIF			# "$(SHL1TARGETN)"!=""
 
 # unroll begin
@@ -992,8 +984,10 @@ $(SHL2TARGETN) : \
     @+source $(MISC)/$(TARGET).$(@:b)_2.cmd
     @$(PERL) $(SOLARENV)/bin/macosx-change-install-names.pl \
         shl $(SHL2RPATH) $@
+.IF "$(SHL2CREATEJNILIB)"!=""
     @echo "Making:   " $(@:f).jnilib
     @macosx-create-bundle $@
+.ENDIF          # "$(SHL2CREATEJNILIB)"!=""
 .IF "$(UPDATER)"=="YES"
 .IF "$(SHL2NOCHECK)"==""
     $(SOLARENV)/bin/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS2) $(SHL2TARGETN)
@@ -1090,16 +1084,6 @@ $(SHL2TARGETN) : \
 
 .ENDIF			# "$(GUI)" == "OS2"
 
-
-.IF "$(TESTDIR)"!=""
-.IF "$(NO_TESTS)"==""
-
-ALLTAR : runtest_$(SHL2TARGET)
-
-runtest_$(SHL2TARGET) : $(SHL2TARGETN)
-    testshl $(SHL2TARGETN) sce/$(SHL2TARGET).sce -msg -skip
-.ENDIF			# "$(NO_TESTS)"==""
-.ENDIF			# "$(TESTDIR)"!=""
 .ENDIF			# "$(SHL2TARGETN)"!=""
 
 # unroll begin
@@ -1544,8 +1528,10 @@ $(SHL3TARGETN) : \
     @+source $(MISC)/$(TARGET).$(@:b)_3.cmd
     @$(PERL) $(SOLARENV)/bin/macosx-change-install-names.pl \
         shl $(SHL3RPATH) $@
+.IF "$(SHL3CREATEJNILIB)"!=""
     @echo "Making:   " $(@:f).jnilib
     @macosx-create-bundle $@
+.ENDIF          # "$(SHL3CREATEJNILIB)"!=""
 .IF "$(UPDATER)"=="YES"
 .IF "$(SHL3NOCHECK)"==""
     $(SOLARENV)/bin/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS3) $(SHL3TARGETN)
@@ -1642,16 +1628,6 @@ $(SHL3TARGETN) : \
 
 .ENDIF			# "$(GUI)" == "OS2"
 
-
-.IF "$(TESTDIR)"!=""
-.IF "$(NO_TESTS)"==""
-
-ALLTAR : runtest_$(SHL3TARGET)
-
-runtest_$(SHL3TARGET) : $(SHL3TARGETN)
-    testshl $(SHL3TARGETN) sce/$(SHL3TARGET).sce -msg -skip
-.ENDIF			# "$(NO_TESTS)"==""
-.ENDIF			# "$(TESTDIR)"!=""
 .ENDIF			# "$(SHL3TARGETN)"!=""
 
 # unroll begin
@@ -2096,8 +2072,10 @@ $(SHL4TARGETN) : \
     @+source $(MISC)/$(TARGET).$(@:b)_4.cmd
     @$(PERL) $(SOLARENV)/bin/macosx-change-install-names.pl \
         shl $(SHL4RPATH) $@
+.IF "$(SHL4CREATEJNILIB)"!=""
     @echo "Making:   " $(@:f).jnilib
     @macosx-create-bundle $@
+.ENDIF          # "$(SHL4CREATEJNILIB)"!=""
 .IF "$(UPDATER)"=="YES"
 .IF "$(SHL4NOCHECK)"==""
     $(SOLARENV)/bin/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS4) $(SHL4TARGETN)
@@ -2194,16 +2172,6 @@ $(SHL4TARGETN) : \
 
 .ENDIF			# "$(GUI)" == "OS2"
 
-
-.IF "$(TESTDIR)"!=""
-.IF "$(NO_TESTS)"==""
-
-ALLTAR : runtest_$(SHL4TARGET)
-
-runtest_$(SHL4TARGET) : $(SHL4TARGETN)
-    testshl $(SHL4TARGETN) sce/$(SHL4TARGET).sce -msg -skip
-.ENDIF			# "$(NO_TESTS)"==""
-.ENDIF			# "$(TESTDIR)"!=""
 .ENDIF			# "$(SHL4TARGETN)"!=""
 
 # unroll begin
@@ -2648,8 +2616,10 @@ $(SHL5TARGETN) : \
     @+source $(MISC)/$(TARGET).$(@:b)_5.cmd
     @$(PERL) $(SOLARENV)/bin/macosx-change-install-names.pl \
         shl $(SHL5RPATH) $@
+.IF "$(SHL5CREATEJNILIB)"!=""
     @echo "Making:   " $(@:f).jnilib
     @macosx-create-bundle $@
+.ENDIF          # "$(SHL5CREATEJNILIB)"!=""
 .IF "$(UPDATER)"=="YES"
 .IF "$(SHL5NOCHECK)"==""
     $(SOLARENV)/bin/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS5) $(SHL5TARGETN)
@@ -2746,16 +2716,6 @@ $(SHL5TARGETN) : \
 
 .ENDIF			# "$(GUI)" == "OS2"
 
-
-.IF "$(TESTDIR)"!=""
-.IF "$(NO_TESTS)"==""
-
-ALLTAR : runtest_$(SHL5TARGET)
-
-runtest_$(SHL5TARGET) : $(SHL5TARGETN)
-    testshl $(SHL5TARGETN) sce/$(SHL5TARGET).sce -msg -skip
-.ENDIF			# "$(NO_TESTS)"==""
-.ENDIF			# "$(TESTDIR)"!=""
 .ENDIF			# "$(SHL5TARGETN)"!=""
 
 # unroll begin
@@ -3200,8 +3160,10 @@ $(SHL6TARGETN) : \
     @+source $(MISC)/$(TARGET).$(@:b)_6.cmd
     @$(PERL) $(SOLARENV)/bin/macosx-change-install-names.pl \
         shl $(SHL6RPATH) $@
+.IF "$(SHL6CREATEJNILIB)"!=""
     @echo "Making:   " $(@:f).jnilib
     @macosx-create-bundle $@
+.ENDIF          # "$(SHL6CREATEJNILIB)"!=""
 .IF "$(UPDATER)"=="YES"
 .IF "$(SHL6NOCHECK)"==""
     $(SOLARENV)/bin/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS6) $(SHL6TARGETN)
@@ -3298,16 +3260,6 @@ $(SHL6TARGETN) : \
 
 .ENDIF			# "$(GUI)" == "OS2"
 
-
-.IF "$(TESTDIR)"!=""
-.IF "$(NO_TESTS)"==""
-
-ALLTAR : runtest_$(SHL6TARGET)
-
-runtest_$(SHL6TARGET) : $(SHL6TARGETN)
-    testshl $(SHL6TARGETN) sce/$(SHL6TARGET).sce -msg -skip
-.ENDIF			# "$(NO_TESTS)"==""
-.ENDIF			# "$(TESTDIR)"!=""
 .ENDIF			# "$(SHL6TARGETN)"!=""
 
 # unroll begin
@@ -3752,8 +3704,10 @@ $(SHL7TARGETN) : \
     @+source $(MISC)/$(TARGET).$(@:b)_7.cmd
     @$(PERL) $(SOLARENV)/bin/macosx-change-install-names.pl \
         shl $(SHL7RPATH) $@
+.IF "$(SHL7CREATEJNILIB)"!=""
     @echo "Making:   " $(@:f).jnilib
     @macosx-create-bundle $@
+.ENDIF          # "$(SHL7CREATEJNILIB)"!=""
 .IF "$(UPDATER)"=="YES"
 .IF "$(SHL7NOCHECK)"==""
     $(SOLARENV)/bin/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS7) $(SHL7TARGETN)
@@ -3850,16 +3804,6 @@ $(SHL7TARGETN) : \
 
 .ENDIF			# "$(GUI)" == "OS2"
 
-
-.IF "$(TESTDIR)"!=""
-.IF "$(NO_TESTS)"==""
-
-ALLTAR : runtest_$(SHL7TARGET)
-
-runtest_$(SHL7TARGET) : $(SHL7TARGETN)
-    testshl $(SHL7TARGETN) sce/$(SHL7TARGET).sce -msg -skip
-.ENDIF			# "$(NO_TESTS)"==""
-.ENDIF			# "$(TESTDIR)"!=""
 .ENDIF			# "$(SHL7TARGETN)"!=""
 
 # unroll begin
@@ -4304,8 +4248,10 @@ $(SHL8TARGETN) : \
     @+source $(MISC)/$(TARGET).$(@:b)_8.cmd
     @$(PERL) $(SOLARENV)/bin/macosx-change-install-names.pl \
         shl $(SHL8RPATH) $@
+.IF "$(SHL8CREATEJNILIB)"!=""
     @echo "Making:   " $(@:f).jnilib
     @macosx-create-bundle $@
+.ENDIF          # "$(SHL8CREATEJNILIB)"!=""
 .IF "$(UPDATER)"=="YES"
 .IF "$(SHL8NOCHECK)"==""
     $(SOLARENV)/bin/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS8) $(SHL8TARGETN)
@@ -4402,16 +4348,6 @@ $(SHL8TARGETN) : \
 
 .ENDIF			# "$(GUI)" == "OS2"
 
-
-.IF "$(TESTDIR)"!=""
-.IF "$(NO_TESTS)"==""
-
-ALLTAR : runtest_$(SHL8TARGET)
-
-runtest_$(SHL8TARGET) : $(SHL8TARGETN)
-    testshl $(SHL8TARGETN) sce/$(SHL8TARGET).sce -msg -skip
-.ENDIF			# "$(NO_TESTS)"==""
-.ENDIF			# "$(TESTDIR)"!=""
 .ENDIF			# "$(SHL8TARGETN)"!=""
 
 # unroll begin
@@ -4856,8 +4792,10 @@ $(SHL9TARGETN) : \
     @+source $(MISC)/$(TARGET).$(@:b)_9.cmd
     @$(PERL) $(SOLARENV)/bin/macosx-change-install-names.pl \
         shl $(SHL9RPATH) $@
+.IF "$(SHL9CREATEJNILIB)"!=""
     @echo "Making:   " $(@:f).jnilib
     @macosx-create-bundle $@
+.ENDIF          # "$(SHL9CREATEJNILIB)"!=""
 .IF "$(UPDATER)"=="YES"
 .IF "$(SHL9NOCHECK)"==""
     $(SOLARENV)/bin/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS9) $(SHL9TARGETN)
@@ -4954,16 +4892,6 @@ $(SHL9TARGETN) : \
 
 .ENDIF			# "$(GUI)" == "OS2"
 
-
-.IF "$(TESTDIR)"!=""
-.IF "$(NO_TESTS)"==""
-
-ALLTAR : runtest_$(SHL9TARGET)
-
-runtest_$(SHL9TARGET) : $(SHL9TARGETN)
-    testshl $(SHL9TARGETN) sce/$(SHL9TARGET).sce -msg -skip
-.ENDIF			# "$(NO_TESTS)"==""
-.ENDIF			# "$(TESTDIR)"!=""
 .ENDIF			# "$(SHL9TARGETN)"!=""
 
 # unroll begin
@@ -5408,8 +5336,10 @@ $(SHL10TARGETN) : \
     @+source $(MISC)/$(TARGET).$(@:b)_10.cmd
     @$(PERL) $(SOLARENV)/bin/macosx-change-install-names.pl \
         shl $(SHL10RPATH) $@
+.IF "$(SHL10CREATEJNILIB)"!=""
     @echo "Making:   " $(@:f).jnilib
     @macosx-create-bundle $@
+.ENDIF          # "$(SHL10CREATEJNILIB)"!=""
 .IF "$(UPDATER)"=="YES"
 .IF "$(SHL10NOCHECK)"==""
     $(SOLARENV)/bin/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS10) $(SHL10TARGETN)
@@ -5506,16 +5436,6 @@ $(SHL10TARGETN) : \
 
 .ENDIF			# "$(GUI)" == "OS2"
 
-
-.IF "$(TESTDIR)"!=""
-.IF "$(NO_TESTS)"==""
-
-ALLTAR : runtest_$(SHL10TARGET)
-
-runtest_$(SHL10TARGET) : $(SHL10TARGETN)
-    testshl $(SHL10TARGETN) sce/$(SHL10TARGET).sce -msg -skip
-.ENDIF			# "$(NO_TESTS)"==""
-.ENDIF			# "$(TESTDIR)"!=""
 .ENDIF			# "$(SHL10TARGETN)"!=""
 
 # unroll begin
