@@ -939,7 +939,7 @@ void OMarkableInputStream::checkMarksAndFlush()
 
     // find the smallest mark
     sal_Int32 nNextFound = m_nCurrentPos;
-    for( ii = m_mapMarks.begin() ; ii != m_mapMarks.end() ; ii ) {
+    for( ii = m_mapMarks.begin() ; ii != m_mapMarks.end() ; ++ii ) {
         if( (*ii).second <= nNextFound )  {
             nNextFound = (*ii).second;
         }
