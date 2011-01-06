@@ -705,7 +705,7 @@ bool getJREInfoFromBinPath(
             sBinPath = path.copy(0, path.getLength() - 1);
 
         typedef vector<OUString>::const_iterator c_it;
-        for (c_it i = vecPaths.begin(); i != vecPaths.end(); i++)
+        for (c_it i = vecPaths.begin(); i != vecPaths.end(); ++i)
         {
             //the map contains e.g. jre/bin/java.exe
             //get the directory where the executable is contained
@@ -901,7 +901,7 @@ rtl::Reference<VendorBase> getJREInfoByPath(
 
         bool bBreak = false;
         typedef vector<OUString>::const_iterator c_it;
-        for (c_it i = vecPaths.begin(); i != vecPaths.end(); i++)
+        for (c_it i = vecPaths.begin(); i != vecPaths.end(); ++i)
         {
             //if the path is a link, then resolve it
             //check if the executable exists at all
@@ -994,7 +994,7 @@ rtl::Reference<VendorBase> getJREInfoByPath(
     OUString sVendor(RTL_CONSTASCII_USTRINGPARAM("java.vendor"));
     OUString sVendorName;
 
-    for (c_ip i = props.begin(); i != props.end(); i++)
+    for (c_ip i = props.begin(); i != props.end(); ++i)
     {
         if (sVendor.equals(i->first))
         {
