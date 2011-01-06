@@ -242,6 +242,7 @@ void processObject(const std::string& rFile, bool bPreserve, bool bVerbose)
 
     if ( bPreserve ) {
         if ( fstat(fd, &aStatBuf) == -1) {
+            close(fd);
              std::string sMessage("adjustVisibilty() failed: can't stat file ");
              sMessage += rFile;
              sMessage += ": ";
