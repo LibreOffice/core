@@ -1219,7 +1219,7 @@ void DomainMapper_Impl::CheckRedline( uno::Reference< text::XTextRange > xRange 
 {
     vector<RedlineParamsPtr>::iterator pIt = m_aRedlines.begin( );
     vector< RedlineParamsPtr > aCleaned;
-    for (; pIt != m_aRedlines.end( ); pIt++ )
+    for (; pIt != m_aRedlines.end( ); ++pIt )
     {
         CreateRedline( xRange, *pIt );
 
