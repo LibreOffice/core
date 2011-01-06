@@ -377,7 +377,7 @@ void UpdateInstallDialog::Thread::downloadExtensions()
 
         sal_uInt16 count = 0;
         typedef std::vector<UpdateData>::iterator It;
-        for (It i = m_aVecUpdateData.begin(); i != m_aVecUpdateData.end(); i++)
+        for (It i = m_aVecUpdateData.begin(); i != m_aVecUpdateData.end(); ++i)
         {
             UpdateData & curData = *i;
 
@@ -471,7 +471,7 @@ void UpdateInstallDialog::Thread::installExtensions()
 
     sal_uInt16 count = 0;
     typedef std::vector<UpdateData>::iterator It;
-    for (It i = m_aVecUpdateData.begin(); i != m_aVecUpdateData.end(); i++, count++)
+    for (It i = m_aVecUpdateData.begin(); i != m_aVecUpdateData.end(); ++i, ++count)
     {
         //update the name of the extension which is to be installed
         {
