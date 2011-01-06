@@ -1442,13 +1442,6 @@ sal_Bool SbaXDataBrowserController::approveParameter(const ::com::sun::star::for
 
     Reference< ::com::sun::star::container::XIndexAccess >  xParameters = aEvent.Parameters;
     SolarMutexGuard aSolarGuard;
-        // this may be executed in a non-main thread and we want to use vcl ...
-    Window* pParent = Application::GetDefDialogParent();
-        // don't use the content as parent if it isn't visible
-    // (and don't use NULL as parent : this may be displayed in the beamer and really shouldn't be task-local)
-        // 69297 - FS - 25.10.99
-    if (getBrowserView() && getBrowserView()->IsVisible())
-        pParent = getBrowserView();
 
     // default handling: instantiate an interaction handler and let it handle the parameter request
     try

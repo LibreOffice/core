@@ -1,3 +1,4 @@
+
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
@@ -119,8 +120,6 @@ BOOL ORowSetImportExport::Read()
     if(::std::find_if(m_aColumnMapping.begin(),m_aColumnMapping.end(),
                         ::std::bind2nd(::std::greater<sal_Int32>(),0)) == m_aColumnMapping.end())
         return FALSE;
-    sal_Int32 nCurrentRow = 0;
-    sal_Int32 nRowFilterIndex = 0;
     sal_Bool bContinue = sal_True;
     if(m_aSelection.getLength())
     {
@@ -138,6 +137,8 @@ BOOL ORowSetImportExport::Read()
     {
         Reference<XPropertySet> xProp(m_xResultSet,UNO_QUERY);
         sal_Int32 nRowCount = 0;
+        sal_Int32 nCurrentRow = 0;
+        sal_Int32 nRowFilterIndex = 0;
         if ( xProp.is() && xProp->getPropertySetInfo()->hasPropertyByName(PROPERTY_ISROWCOUNTFINAL) )
         {
             sal_Bool bFinal = sal_False;

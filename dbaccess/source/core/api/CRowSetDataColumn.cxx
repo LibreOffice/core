@@ -79,7 +79,6 @@ ORowSetDataColumn::~ORowSetDataColumn()
 {
     const sal_Int32 nDerivedProperties = 21;
     Sequence< Property> aDerivedProperties( nDerivedProperties );
-    Property* pDesc = aDerivedProperties.getArray();
     sal_Int32 nPos = 0;
 
     DECL_PROP1( CATALOGNAME,                ::rtl::OUString,    READONLY );

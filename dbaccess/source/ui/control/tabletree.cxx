@@ -282,8 +282,6 @@ void OTableTreeListBox::UpdateTableList( const Reference< XConnection >& _rxConn
 
     try
     {
-        // the root entry saying "all objects"
-        SvLBoxEntry* pAllObjects = NULL;
         if (haveVirtualRoot())
         {
             String sRootEntryText;
@@ -298,7 +296,7 @@ void OTableTreeListBox::UpdateTableList( const Reference< XConnection >& _rxConn
                 sRootEntryText  = String(ModuleRes(STR_ALL_VIEWS));
             else
                 sRootEntryText  = String(ModuleRes(STR_ALL_TABLES_AND_VIEWS));
-            pAllObjects = InsertEntry( sRootEntryText, NULL, FALSE, LIST_APPEND, reinterpret_cast< void* >( DatabaseObjectContainer::TABLES ) );
+            InsertEntry( sRootEntryText, NULL, FALSE, LIST_APPEND, reinterpret_cast< void* >( DatabaseObjectContainer::TABLES ) );
         }
 
         if ( _rTables.empty() )

@@ -471,7 +471,6 @@ Sequence< ::rtl::OUString > OTableColumnDescriptorWrapper::getSupportedServiceNa
 
     const sal_Int32 nPropertyCount( nHaveAlways + nHaveOptionally );
     Sequence< Property > aTableDescProperties( nPropertyCount );
-    Property* pDesc = aTableDescProperties.getArray();
     sal_Int32 nPos = 0;
 
     DECL_PROP0_BOOL( ISAUTOINCREMENT                );

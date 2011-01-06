@@ -1,3 +1,4 @@
+
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
@@ -256,10 +257,8 @@ void SAL_CALL OptimisticSet::updateRow(const ORowSetRow& _rInsertRow ,const ORow
             sSql.append(s_sSET);
             sSql.append(aSqlIter->second);
             ::rtl::OUStringBuffer& rCondition = aKeyConditions[aSqlIter->first];
-            bool bAddWhere = true;
             if ( rCondition.getLength() )
             {
-                bAddWhere = false;
                 sSql.appendAscii(" WHERE ");
                 sSql.append( rCondition );
             }

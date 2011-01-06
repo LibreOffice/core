@@ -52,7 +52,7 @@ class OXMLCharContent : public XMLCharContext
 {
     OXMLFixedContent* m_pFixedContent;
     OXMLCharContent(const OXMLCharContent&);
-    void operator =(const OXMLCharContent&);
+    OXMLCharContent operator =(const OXMLCharContent&);
 public:
     OXMLCharContent(
             SvXMLImport& rImport,

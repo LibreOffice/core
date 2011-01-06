@@ -564,7 +564,7 @@ public:
     {
         return getMutex();
     }
-    inline ::rtl::Reference< ODatabaseModelImpl > getImpl( GuardAccess )
+    inline ::rtl::Reference< ODatabaseModelImpl > getImpl( GuardAccess ) const
     {
         return m_pImpl;
     }
