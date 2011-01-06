@@ -286,7 +286,7 @@ namespace connectivity
 
             IniSectionMap::iterator iBegin = mAllSection.begin();
             IniSectionMap::iterator iEnd = mAllSection.end();
-            for(;iBegin != iEnd;iBegin++)
+            for(;iBegin != iEnd;++iBegin)
             {
                 ini_Section *aSection = &(*iBegin).second;
                 ::rtl::OUString profileName;
@@ -296,7 +296,7 @@ namespace connectivity
 
                 for(NameValueList::iterator itor=aSection->lList.begin();
                     itor != aSection->lList.end();
-                    itor++)
+                    ++itor)
                 {
                         struct ini_NameValue * aValue = &(*itor);
                         if (aValue->sName.equals(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Name"))))
