@@ -417,7 +417,8 @@ public:
     void        GetDataArea( SCCOL& rStartCol, SCROW& rStartRow, SCCOL& rEndCol, SCROW& rEndRow,
                              BOOL bIncludeOld, bool bOnlyDown ) const;
 
-    bool        ShrinkToUsedDataArea( SCCOL& rStartCol, SCROW& rStartRow, SCCOL& rEndCol, SCROW& rEndRow, bool bColumnsOnly ) const;
+    bool        ShrinkToUsedDataArea( bool& o_bShrunk, SCCOL& rStartCol, SCROW& rStartRow,
+                                      SCCOL& rEndCol, SCROW& rEndRow, bool bColumnsOnly ) const;
 
     SCSIZE      GetEmptyLinesInBlock( SCCOL nStartCol, SCROW nStartRow,
                                         SCCOL nEndCol, SCROW nEndRow, ScDirection eDir );
