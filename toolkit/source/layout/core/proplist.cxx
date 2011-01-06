@@ -193,7 +193,7 @@ uno::Any anyFromString( OUString const& value, uno::Type const& type )
             uno::Sequence< OUString > seq( values.size() );
             i = 0;
             for ( std::list< OUString >::const_iterator it = values.begin();
-                  it != values.end(); it++, ++i )
+                  it != values.end(); ++it, ++i )
                 seq[ i ] = *it;
 
             return uno::makeAny( seq );
