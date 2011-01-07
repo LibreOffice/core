@@ -287,7 +287,7 @@ sub resolving_archive_flag
                     {
                         my $dir = getcwd();
                         chdir($unzipdir);
-                        my $changed = chmod(0755, @dllList);
+                        my $changed = chmod(0775, @dllList);
                         $infoline = "Changed mode of $changed files (of ".scalar(@dllList).")\n";
                         push( @installer::globals::logfileinfo, $infoline);
                         chdir($dir);
@@ -304,7 +304,7 @@ sub resolving_archive_flag
                         my $dir = getcwd();
                         chdir($unzipdir);
                         # Setting unix rights to "775" for all created directories inside the package
-                        my $changed = chmod(0755, @dirs);
+                        my $changed = chmod(0775, @dirs);
                         $infoline = "Changed mode of : $changed; should be: ".scalar(@dirs)."\n";
                         chdir($dir);
 
