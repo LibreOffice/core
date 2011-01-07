@@ -36,7 +36,8 @@ TARGET=templateslayout
 .INCLUDE : $(PRJ)$/util$/target.pmk
 
 ZIP1TARGET      = $(TEMPLATE_LAYOUT_IMPRESS_TARGET)
-ZIP1LIST        = * -x makefile -x delzip
+ZIP1STRIPLANGUAGETAGS=1
+ZIP1LIST        = * -x makefile.* -x delzip
 
 .INCLUDE : target.mk
 
