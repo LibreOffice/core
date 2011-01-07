@@ -129,7 +129,6 @@ static SvXMLTokenMapEntry aTextElemTokenMap[] =
     { XML_NAMESPACE_DRAW, XML_FRAME,            XML_TOK_TEXT_FRAME_PAGE     },
     { XML_NAMESPACE_DRAW, XML_A,                XML_TOK_DRAW_A_PAGE },
     { XML_NAMESPACE_TABLE,XML_TABLE,            XML_TOK_TABLE_TABLE         },
-//  { XML_NAMESPACE_TABLE,XML_SUB_TABLE,        XML_TOK_TABLE_SUBTABLE      },
     { XML_NAMESPACE_TEXT, XML_VARIABLE_DECLS,   XML_TOK_TEXT_VARFIELD_DECLS },
     { XML_NAMESPACE_TEXT, XML_USER_FIELD_DECLS, XML_TOK_TEXT_USERFIELD_DECLS },
     { XML_NAMESPACE_TEXT, XML_SEQUENCE_DECLS,   XML_TOK_TEXT_SEQUENCE_DECLS },
@@ -545,8 +544,6 @@ struct SAL_DLLPRIVATE XMLTextImportHelper::Impl
     SvXMLImportContextRef m_xAutoStyles;
     SvXMLImportContextRef m_xFontDecls;
 
-    XMLSectionList_Impl m_SectionList;
-
     UniReference< SvXMLImportPropertyMapper > m_xParaImpPrMap;
     UniReference< SvXMLImportPropertyMapper > m_xTextImpPrMap;
     UniReference< SvXMLImportPropertyMapper > m_xFrameImpPrMap;
@@ -701,11 +698,6 @@ bool XMLTextImportHelper::IsOrganizerMode() const
 bool XMLTextImportHelper::IsProgress() const
 {
     return m_pImpl->m_bProgress;
-}
-
-XMLSectionList_Impl & XMLTextImportHelper::GetSectionList()
-{
-    return m_pImpl->m_SectionList;
 }
 
 uno::Reference<container::XNameContainer> const&
@@ -2229,7 +2221,6 @@ void XMLTextImportHelper::SetRuby(
                 rImport.GetStyleDisplayName(
                             XML_STYLE_FAMILY_TEXT_TEXT, rTextStyleName ) );
             if( (sDisplayName.getLength() > 0) &&
-//              xPropSetInfo->hasPropertyByName( sRubyCharStyleName ) &&
                 m_pImpl->m_xTextStyles->hasByName( sDisplayName ))
             {
                 xPropSet->setPropertyValue(sRubyCharStyleName, makeAny(sDisplayName));
@@ -2479,9 +2470,6 @@ SvXMLImportContext *XMLTextImportHelper::CreateTextChildContext(
             bContent = sal_False;
         }
     }
-
-//  if( !pContext )
-//      pContext = new SvXMLImportContext( GetImport(), nPrefix, rLocalName );
 
     // handle open redlines
     if ( (XML_TOK_TEXT_CHANGE != nToken) &&

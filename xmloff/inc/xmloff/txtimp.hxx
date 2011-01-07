@@ -375,9 +375,6 @@ enum XMLTextType
 #define XML_TEXT_RENAME_TYPE_FRAME 10
 #define XML_TEXT_RENAME_TYPE_TABLE 20
 
-// create type for section list, XMLSectionList_Impl
-DECLARE_LIST( XMLSectionList_Impl, XMLSectionImportContext* )
-
 class XMLOFF_DLLPUBLIC XMLTextImportHelper : public UniRefBase,
     private boost::noncopyable
 {
@@ -456,8 +453,6 @@ public:
     bool IsBlockMode() const;
     bool IsOrganizerMode() const;
     bool IsProgress() const;
-
-    XMLSectionList_Impl & GetSectionList();
 
     ::rtl::OUString ConvertStarFonts( const ::rtl::OUString& rChars,
                                       const ::rtl::OUString& rStyleName,
