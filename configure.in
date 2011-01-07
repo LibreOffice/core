@@ -4854,6 +4854,26 @@ if test -n "$with_system_mdds" -o -n "$with_system_headers" && \
     AC_CHECK_HEADER(mdds/mixed_type_matrix.hpp, [],
         [AC_MSG_ERROR(mdds/mixed_type_matrix.hpp not found. install mdds >= 0.4.0)], [])
     CPPFLAGS="$save_CPPFLAGS"
+    save_CXXFLAGS="$CXXFLAGS"
+    CXXFLAGS="$CXXFLAGS $MDDS_CPPFLAGS"
+    AC_MSG_CHECKING([for correct signature of ::mdds::flat_segment_tree])
+    AC_TRY_RUN([#include <mdds/flat_segment_tree.hpp>
+
+    int main(int argc, char **argv) {
+        ::mdds::flat_segment_tree<long, short> db(0, 100, 0);
+        short val;
+        if (!db.search(5, val).second)
+            return 1;
+        return 0;
+    }
+], ac_cv_cxx_mdds_flat_segment_tree_correct=yes, ac_cv_cxx_mdds_flat_segment_tree_correct=no)
+
+    if test "$ac_cv_cxx_mdds_flat_segment_tree_correct" = "yes"; then
+      AC_MSG_RESULT([yes])
+    else
+      AC_MSG_ERROR([no, install mdds >= 0.5.0])
+    fi
+    CXXFLAGS=$save_CXXFLAGS
     AC_LANG_POP([C++])
 else
     AC_MSG_RESULT([internal])
