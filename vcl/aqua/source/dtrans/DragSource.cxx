@@ -47,6 +47,7 @@
 using namespace rtl;
 using namespace cppu;
 using namespace osl;
+using namespace com::sun::star;
 using namespace com::sun::star::datatransfer;
 using namespace com::sun::star::datatransfer::clipboard;
 using namespace com::sun::star::datatransfer::dnd;
@@ -61,7 +62,7 @@ using namespace std;
 
 // For OOo internal D&D we provide the Transferable without NSDragPboard
 // interference as a shortcut
-Reference<XTransferable> DragSource::g_XTransferable = Reference<XTransferable>();
+uno::Reference<XTransferable> DragSource::g_XTransferable;
 NSView* DragSource::g_DragSourceView = nil;
 bool DragSource::g_DropSuccessSet = false;
 bool DragSource::g_DropSuccess = false;
@@ -138,7 +139,7 @@ Sequence<OUString> dragSource_getSupportedServiceNames()
                            bDropSuccess );
 
   mDragSource->mXDragSrcListener->dragDropEnd(dsde);
-  mDragSource->mXDragSrcListener = Reference<XDragSourceListener>();
+  mDragSource->mXDragSrcListener = uno::Reference<XDragSourceListener>();
 }
 
 
@@ -242,8 +243,8 @@ void SAL_CALL DragSource::startDrag(const DragGestureEvent& trigger,
                                     sal_Int8 sourceActions,
                                     sal_Int32 cursor,
                                     sal_Int32 image,
-                                    const Reference<XTransferable >& transferable,
-                                    const Reference<XDragSourceListener >& listener )
+                                    const uno::Reference<XTransferable >& transferable,
+                                    const uno::Reference<XDragSourceListener >& listener )
   throw( RuntimeException)
 {
   MutexGuard guard(m_aMutex);
@@ -257,7 +258,7 @@ void SAL_CALL DragSource::startDrag(const DragGestureEvent& trigger,
   mXCurrentContext = static_cast<XDragSourceContext*>(new DragSourceContext(this));
   auto_ptr<AquaClipboard> clipb(new AquaClipboard(NULL, false));
   g_XTransferable = transferable;
-  clipb->setContents(g_XTransferable, Reference<XClipboardOwner>());
+  clipb->setContents(g_XTransferable, uno::Reference<XClipboardOwner>());
   mDragSourceActions = sourceActions;
   g_DragSourceView = mView;
 
@@ -297,7 +298,7 @@ void SAL_CALL DragSource::startDrag(const DragGestureEvent& trigger,
 
   [dragImage release];
 
-  g_XTransferable = Reference<XTransferable>();
+  g_XTransferable = uno::Reference<XTransferable>();
   g_DragSourceView = nil;
 
   // reset drop success flags
