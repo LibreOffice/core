@@ -146,9 +146,14 @@ namespace toolkit
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL DefaultGridDataModel::getRowHeaders() throw (::com::sun::star::uno::RuntimeException)
+    ::rtl::OUString SAL_CALL DefaultGridDataModel::getRowTitle( ::sal_Int32 i_row ) throw (RuntimeException, IndexOutOfBoundsException)
     {
-        return  comphelper::containerToSequence(m_aRowHeaders);
+        ::osl::MutexGuard aGuard( GetMutex() );
+
+        if ( ( i_row < 0 ) || ( size_t( i_row ) >= m_aRowHeaders.size() ) )
+            throw IndexOutOfBoundsException( ::rtl::OUString(), *this );
+
+        return m_aRowHeaders[ i_row ];
     }
 
     //------------------------------------------------------------------------------------------------------------------

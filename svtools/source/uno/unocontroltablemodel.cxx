@@ -532,10 +532,7 @@ namespace svt { namespace table
 
         try
         {
-            Sequence< ::rtl::OUString > const aRowHeaders( xDataModel->getRowHeaders() );
-            ENSURE_OR_RETURN( ( i_rowPos >= 0 ) && ( i_rowPos < aRowHeaders.getLength() ),
-                "UnoControlTableModel::getRowHeader: illegal row position!", sRowHeader );
-            sRowHeader = aRowHeaders[ i_rowPos ];
+            sRowHeader = xDataModel->getRowTitle( i_rowPos );
         }
         catch( const Exception& )
         {
