@@ -45,12 +45,6 @@ TYPEINIT1(GraphicViewShellBase, ViewShellBase);
 // We have to expand the SFX_IMPL_VIEWFACTORY macro to call LateInit() after a
 // new GraphicViewShellBase object has been constructed.
 
-/*
-SFX_IMPL_VIEWFACTORY(GraphicViewShellBase, SdResId(STR_DEFAULTVIEW))
-{
-    SFX_VIEW_REGISTRATION(GraphicDocShell);
-}
-*/
 SfxViewFactory* GraphicViewShellBase::pFactory;
 SfxViewShell* __EXPORT GraphicViewShellBase::CreateInstance (
     SfxViewFrame *pFrame, SfxViewShell *pOldView)
