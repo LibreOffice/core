@@ -29,19 +29,19 @@ PRJ=..$/..
 
 PRJNAME=jfreereport
 TARGET=liblayout
-VERSION=-0.2.9
 
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :	settings.mk
 .INCLUDE : antsettings.mk
+.INCLUDE : $(PRJ)$/version.mk
 
 .IF "$(SOLAR_JAVA)" != ""
 # --- Files --------------------------------------------------------
 .IF "$(L10N_framework)"==""
-TARFILE_NAME=$(TARGET)
-TARFILE_MD5=79600e696a98ff95c2eba976f7a8dfbb
-TARFILE_ROOTDIR=$(TARGET)
+TARFILE_NAME=$(TARGET)-$(LIBLAYOUT_VERSION)
+TARFILE_IS_FLAT=true
+TARFILE_MD5=db60e4fde8dd6d6807523deb71ee34dc
 PATCH_FILES=$(PRJ)$/patches$/$(TARGET).patch
 CONVERTFILES=build.xml
 
@@ -63,9 +63,9 @@ BUILD_ACTION=$(ANT) -Dlib="../../../class" -Dbuild.label="build-$(RSCREVISION)" 
 .IF "$(SOLAR_JAVA)" != ""
 .INCLUDE : tg_ext.mk
 
-ALLTAR : $(CLASSDIR)$/$(TARGET)$(VERSION).jar 
-$(CLASSDIR)$/$(TARGET)$(VERSION).jar : $(PACKAGE_DIR)$/$(INSTALL_FLAG_FILE)
-    $(COPY) $(PACKAGE_DIR)$/$(TARFILE_ROOTDIR)$/build$/lib$/$(TARGET).jar $(CLASSDIR)$/$(TARGET)$(VERSION).jar
+ALLTAR : $(CLASSDIR)$/$(TARGET)-$(LIBLAYOUT_VERSION).jar 
+$(CLASSDIR)$/$(TARGET)-$(LIBLAYOUT_VERSION).jar : $(PACKAGE_DIR)$/$(INSTALL_FLAG_FILE)
+    $(COPY) $(PACKAGE_DIR)$/$(TARFILE_ROOTDIR)$/build$/lib$/$(TARGET).jar $(CLASSDIR)$/$(TARGET)-$(LIBLAYOUT_VERSION).jar
     
 .ENDIF
 .ENDIF
