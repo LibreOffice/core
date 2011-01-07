@@ -1074,9 +1074,9 @@ namespace sfx2
             {
                 std::vector< ExportFilter >::iterator aIter = aImportantFilterGroup.begin();
                 if ( nHTMLIndex != -1 )
-                    aIter++;
+                    ++aIter;
                 if ( nXHTMLIndex != -1 )
-                    aIter++;
+                    ++aIter;
                 aImportantFilterGroup.insert( aIter, aExportFilter );
                 nPDFIndex = 0;
             }
@@ -1084,11 +1084,11 @@ namespace sfx2
             {
                 std::vector< ExportFilter >::iterator aIter = aImportantFilterGroup.begin();
                 if ( nHTMLIndex != -1 )
-                    aIter++;
+                    ++aIter;
                 if ( nXHTMLIndex != -1 )
-                    aIter++;
+                    ++aIter;
                 if ( nPDFIndex != -1 )
-                    aIter++;
+                    ++aIter;
                 aImportantFilterGroup.insert( aIter, aExportFilter );
                 nFlashIndex = 0;
             }

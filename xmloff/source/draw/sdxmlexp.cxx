@@ -1534,7 +1534,7 @@ static OUString findOrAppendImpl( std::vector< OUString >& rVector, const OUStri
     // search rVector if there is already a string that equals rText
     std::vector< OUString >::iterator aIter;
     sal_Int32 nIndex;
-    for( nIndex = 1, aIter = rVector.begin(); aIter != rVector.end(); aIter++, nIndex++ )
+    for( nIndex = 1, aIter = rVector.begin(); aIter != rVector.end(); ++aIter, ++nIndex )
     {
         if( (*aIter) == rText )
             break;
@@ -1556,7 +1556,7 @@ static OUString findOrAppendImpl( std::vector< DateTimeDeclImpl >& rVector, cons
     // search rVector if there is already a DateTimeDeclImpl with rText,bFixed and nFormat
     std::vector< DateTimeDeclImpl >::iterator aIter;
     sal_Int32 nIndex;
-    for( nIndex = 1, aIter = rVector.begin(); aIter != rVector.end(); aIter++, nIndex++ )
+    for( nIndex = 1, aIter = rVector.begin(); aIter != rVector.end(); ++aIter, ++nIndex )
     {
         const DateTimeDeclImpl& rDecl = (*aIter);
         if( (rDecl.mbFixed == bFixed ) &&
@@ -1652,7 +1652,7 @@ void SdXMLExport::ImpWriteHeaderFooterDecls()
         const OUString aPrefix( OUString::createFromAscii( gpStrHeaderTextPrefix ) );
         std::vector< OUString >::iterator aIter;
         sal_Int32 nIndex;
-        for( nIndex = 1, aIter = maHeaderDeclsVector.begin(); aIter != maHeaderDeclsVector.end(); aIter++, nIndex++ )
+        for( nIndex = 1, aIter = maHeaderDeclsVector.begin(); aIter != maHeaderDeclsVector.end(); ++aIter, ++nIndex )
         {
             sBuffer.append( aPrefix );
             sBuffer.append( nIndex );
@@ -1669,7 +1669,7 @@ void SdXMLExport::ImpWriteHeaderFooterDecls()
         const OUString aPrefix( OUString::createFromAscii( gpStrFooterTextPrefix ) );
         std::vector< OUString >::iterator aIter;
         sal_Int32 nIndex;
-        for( nIndex = 1, aIter = maFooterDeclsVector.begin(); aIter != maFooterDeclsVector.end(); aIter++, nIndex++ )
+        for( nIndex = 1, aIter = maFooterDeclsVector.begin(); aIter != maFooterDeclsVector.end(); ++aIter, ++nIndex )
         {
             sBuffer.append( aPrefix );
             sBuffer.append( nIndex );
@@ -1686,7 +1686,7 @@ void SdXMLExport::ImpWriteHeaderFooterDecls()
         const OUString aPrefix( OUString::createFromAscii( gpStrDateTimeTextPrefix ) );
         std::vector< DateTimeDeclImpl >::iterator aIter;
         sal_Int32 nIndex;
-        for( nIndex = 1, aIter = maDateTimeDeclsVector.begin(); aIter != maDateTimeDeclsVector.end(); aIter++, nIndex++ )
+        for( nIndex = 1, aIter = maDateTimeDeclsVector.begin(); aIter != maDateTimeDeclsVector.end(); ++aIter, ++nIndex )
         {
             const DateTimeDeclImpl& rDecl = (*aIter);
 

@@ -338,10 +338,10 @@ void UpdateDialog::Thread::execute()
 
     typedef std::vector<std::pair<css::uno::Reference<css::deployment::XPackage>,
         css::uno::Any> >::const_iterator ITERROR;
-    for (ITERROR ite = errors.begin(); ite != errors.end(); ite ++)
+    for (ITERROR ite = errors.begin(); ite != errors.end(); ++ite )
         handleSpecificError(ite->first, ite->second);
 
-    for (dp_misc::UpdateInfoMap::iterator i(updateInfoMap.begin()); i != updateInfoMap.end(); i++)
+    for (dp_misc::UpdateInfoMap::iterator i(updateInfoMap.begin()); i != updateInfoMap.end(); ++i)
     {
         dp_misc::UpdateInfo const & info = i->second;
         UpdateData updateData(info.extension);

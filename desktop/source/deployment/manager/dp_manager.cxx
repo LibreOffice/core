@@ -1261,7 +1261,7 @@ bool PackageManagerImpl::synchronizeRemovedExtensions(
     typedef ActivePackages::Entries::const_iterator ITActive;
     bool bShared = m_context.equals(OUSTR("shared"));
 
-    for (ITActive i = id2temp.begin(); i != id2temp.end(); i++)
+    for (ITActive i = id2temp.begin(); i != id2temp.end(); ++i)
     {
         try
         {
@@ -1497,7 +1497,7 @@ Sequence< Reference<deployment::XPackage> > PackageManagerImpl::getExtensionsWit
         ActivePackages::Entries::const_iterator i = id2temp.begin();
         bool bShared = m_context.equals(OUSTR("shared"));
 
-        for (; i != id2temp.end(); i++ )
+        for (; i != id2temp.end(); ++i )
         {
             //Get the database entry
             ActivePackages::Data const & dbData = i->second;
