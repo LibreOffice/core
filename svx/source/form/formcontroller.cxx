@@ -36,7 +36,7 @@
 #include "formcontrolling.hxx"
 #include "fmprop.hrc"
 #include "svx/dialmgr.hxx"
-#include "fmresids.hrc"
+#include "svx/fmresids.hrc"
 #include "fmservs.hxx"
 #include "svx/fmtools.hxx"
 #include "fmurl.hxx"

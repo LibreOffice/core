@@ -56,7 +56,7 @@
 #include <toolkit/unohlp.hxx>
 
 #define _SVX_SRCHDLG_CXX
-#include "srchdlg.hxx"
+#include "svx/srchdlg.hxx"
 
 #include <svx/dialogs.hrc>
 #include <svx/svxitems.hrc>
@@ -69,7 +69,7 @@
 #include <svx/pageitem.hxx>
 #include "srchctrl.hxx"
 #include <svx/dialmgr.hxx>
-#include "dlgutil.hxx"
+#include "svx/dlgutil.hxx"
 #include <editeng/brshitem.hxx>
 #include <tools/resary.hxx>
 #include <svx/svxdlg.hxx> //CHINA001

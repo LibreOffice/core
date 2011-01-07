@@ -29,7 +29,7 @@
 #include "precompiled_svx.hxx"
 #include <svx/AccessibleControlShape.hxx>
 #include <svx/AccessibleShapeInfo.hxx>
-#include "DescriptionGenerator.hxx"
+#include "svx/DescriptionGenerator.hxx"
 #include <com/sun/star/drawing/XControlShape.hpp>
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
@@ -39,14 +39,14 @@
 #include <comphelper/processfactory.hxx>
 #include <unotools/accessiblestatesethelper.hxx>
 #include <svx/svdouno.hxx>
-#include "unoapi.hxx"
+#include "svx/unoapi.hxx"
 #include <svx/ShapeTypeHandler.hxx>
 #include <svx/SvxShapeTypes.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <comphelper/accessiblewrapper.hxx>
 #include <svx/svdview.hxx>
 #include <svx/svdpagv.hxx>
-#include "svdstr.hrc"
+#include "svx/svdstr.hrc"
 #include <algorithm>
 
 using namespace ::comphelper;

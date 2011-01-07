@@ -71,6 +71,7 @@ TYPEINIT1(StarBASIC,SbxObject)
 
 #define RTLNAME "@SBRTL"
 //  i#i68894#
+using namespace ::com::sun::star;
 using com::sun::star::uno::Reference;
 using com::sun::star::uno::Any;
 using com::sun::star::uno::UNO_QUERY;
@@ -346,7 +347,18 @@ SbxObject* SbFormFactory::CreateObject( const String& rClassName )
         {
             if( SbUserFormModule* pFormModule = PTR_CAST( SbUserFormModule, pVar->GetObject() ) )
             {
-                pFormModule->Load();
+                bool bInitState = pFormModule->getInitState();
+                if( bInitState )
+                {
+                    // Not the first instantiate, reset
+                    bool bTriggerTerminateEvent = false;
+                    pFormModule->ResetApiObj( bTriggerTerminateEvent );
+                    pFormModule->setInitState( false );
+                }
+                else
+                {
+                    pFormModule->Load();
+                }
                 return pFormModule->CreateInstance();
             }
         }
@@ -564,7 +576,6 @@ SbClassModuleObject::SbClassModuleObject( SbModule* pClassModule )
                     if( pObj != NULL )
                     {
                         String aObjClass = pObj->GetClassName();
-                        (void)aObjClass;
 
                         SbClassModuleObject* pClassModuleObj = PTR_CAST(SbClassModuleObject,pObjBase);
                         if( pClassModuleObj != NULL )
@@ -611,93 +622,7 @@ SbClassModuleObject::~SbClassModuleObject()
 void SbClassModuleObject::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
                            const SfxHint& rHint, const TypeId& rHintType )
 {
-    bool bDone = false;
-
-    const SbxHint* pHint = PTR_CAST(SbxHint,&rHint);
-    if( pHint )
-    {
-        SbxVariable* pVar = pHint->GetVar();
-        SbProcedureProperty* pProcProperty = PTR_CAST( SbProcedureProperty, pVar );
-        if( pProcProperty )
-        {
-            bDone = true;
-
-            if( pHint->GetId() == SBX_HINT_DATAWANTED )
-            {
-                String aProcName;
-                aProcName.AppendAscii( "Property Get " );
-                aProcName += pProcProperty->GetName();
-
-                SbxVariable* pMeth = Find( aProcName, SbxCLASS_METHOD );
-                if( pMeth )
-                {
-                    SbxValues aVals;
-                    aVals.eType = SbxVARIANT;
-
-                    SbxArray* pArg = pVar->GetParameters();
-                    USHORT nVarParCount = (pArg != NULL) ? pArg->Count() : 0;
-                    if( nVarParCount > 1 )
-                    {
-                        SbxArrayRef xMethParameters = new SbxArray;
-                        xMethParameters->Put( pMeth, 0 );   // Method as parameter 0
-                        for( USHORT i = 1 ; i < nVarParCount ; ++i )
-                        {
-                            SbxVariable* pPar = pArg->Get( i );
-                            xMethParameters->Put( pPar, i );
-                        }
-
-                        pMeth->SetParameters( xMethParameters );
-                        pMeth->Get( aVals );
-                        pMeth->SetParameters( NULL );
-                    }
-                    else
-                    {
-                        pMeth->Get( aVals );
-                    }
-
-                    pVar->Put( aVals );
-                }
-            }
-            else if( pHint->GetId() == SBX_HINT_DATACHANGED )
-            {
-                SbxVariable* pMeth = NULL;
-
-                bool bSet = pProcProperty->isSet();
-                if( bSet )
-                {
-                    pProcProperty->setSet( false );
-
-                    String aProcName;
-                    aProcName.AppendAscii( "Property Set " );
-                    aProcName += pProcProperty->GetName();
-                    pMeth = Find( aProcName, SbxCLASS_METHOD );
-                }
-                if( !pMeth )    // Let
-                {
-                    String aProcName;
-                    aProcName.AppendAscii( "Property Let " );
-                    aProcName += pProcProperty->GetName();
-                    pMeth = Find( aProcName, SbxCLASS_METHOD );
-                }
-
-                if( pMeth )
-                {
-                    // Setup parameters
-                    SbxArrayRef xArray = new SbxArray;
-                    xArray->Put( pMeth, 0 );    // Method as parameter 0
-                    xArray->Put( pVar, 1 );
-                    pMeth->SetParameters( xArray );
-
-                    SbxValues aVals;
-                    pMeth->Get( aVals );
-                    pMeth->SetParameters( NULL );
-                }
-            }
-        }
-    }
-
-    if( !bDone )
-        SbModule::SFX_NOTIFY( rBC, rBCType, rHint, rHintType );
+    handleProcedureProperties( rBC, rHint );
 }
 
 SbxVariable* SbClassModuleObject::Find( const XubString& rName, SbxClassType t )
@@ -809,6 +734,9 @@ SbModule* SbClassFactory::FindClass( const String& rClassName )
     return pMod;
 }
 
+typedef std::vector< StarBASIC* > DocBasicVector;
+static DocBasicVector GaDocBasics;
+
 StarBASIC::StarBASIC( StarBASIC* p, BOOL bIsDocBasic  )
     : SbxObject( String( RTL_CONSTASCII_USTRINGPARAM("StarBASIC") ) ), bDocBasic( bIsDocBasic )
 {
@@ -822,8 +750,6 @@ StarBASIC::StarBASIC( StarBASIC* p, BOOL bIsDocBasic  )
     {
         pSBFAC = new SbiFactory;
         AddFactory( pSBFAC );
-        pUNOFAC = new SbUnoFactory;
-        AddFactory( pUNOFAC );
         pTYPEFAC = new SbTypeFactory;
         AddFactory( pTYPEFAC );
         pCLASSFAC = new SbClassFactory;
@@ -832,12 +758,17 @@ StarBASIC::StarBASIC( StarBASIC* p, BOOL bIsDocBasic  )
         AddFactory( pOLEFAC );
         pFORMFAC = new SbFormFactory;
         AddFactory( pFORMFAC );
+        pUNOFAC = new SbUnoFactory;
+        AddFactory( pUNOFAC );
     }
     pRtl = new SbiStdObject( String( RTL_CONSTASCII_USTRINGPARAM(RTLNAME) ), this );
     // Search via StarBasic is always global
     SetFlag( SBX_GBLSEARCH );
     pVBAGlobals = NULL;
     bQuit = FALSE;
+
+    if( bDocBasic )
+        GaDocBasics.push_back( this );
 }
 
 // #51727 Override SetModified so that the modified state
@@ -877,6 +808,29 @@ StarBASIC::~StarBASIC()
     }
 #endif
     }
+    else if( bDocBasic )
+    {
+        SbxError eOld = SbxBase::GetError();
+
+        DocBasicVector::iterator it;
+        for( it = GaDocBasics.begin() ; it != GaDocBasics.end() ; ++it )
+        {
+            if( *it == this )
+            {
+                GaDocBasics.erase( it );
+                break;
+            }
+        }
+        for( it = GaDocBasics.begin() ; it != GaDocBasics.end() ; ++it )
+        {
+            StarBASIC* pBasic = *it;
+            pBasic->implClearDependingVarsOnDelete( this );
+        }
+
+        SbxBase::ResetError();
+        if( eOld != SbxERR_OK )
+            SbxBase::SetError( eOld );
+    }
 
     // #100326 Set Parent NULL in registered listeners
     if( xUnoListeners.Is() )
@@ -889,6 +843,9 @@ StarBASIC::~StarBASIC()
         }
         xUnoListeners = NULL;
     }
+
+    clearUnoMethodsForBasic( this );
+    disposeComVariablesForBasic( this );
 }
 
 // Override new() operator, so that everyone can create a new instance
@@ -906,6 +863,27 @@ void StarBASIC::operator delete( void* p )
 {
     ::operator delete( p );
 }
+
+void StarBASIC::implClearDependingVarsOnDelete( StarBASIC* pDeletedBasic )
+{
+    if( this != pDeletedBasic )
+    {
+        for( USHORT i = 0; i < pModules->Count(); i++ )
+        {
+            SbModule* p = (SbModule*)pModules->Get( i );
+            p->ClearVarsDependingOnDeletedBasic( pDeletedBasic );
+        }
+    }
+
+    for( USHORT nObj = 0; nObj < pObjs->Count(); nObj++ )
+    {
+        SbxVariable* pVar = pObjs->Get( nObj );
+        StarBASIC* pBasic = PTR_CAST(StarBASIC,pVar);
+        if( pBasic && pBasic != pDeletedBasic )
+            pBasic->implClearDependingVarsOnDelete( pDeletedBasic );
+    }
+}
+
 
 /**************************************************************************
 *
@@ -1036,15 +1014,15 @@ struct ClassModuleRunInitItem
     {}
 };
 
-typedef std::hash_map< ::rtl::OUString, ClassModuleRunInitItem,
-    ::rtl::OUStringHash, ::std::equal_to< ::rtl::OUString > > ModuleInitDependencyMap;
+// Derive from has_map type instead of typedef
+// to allow forward declaration in sbmod.hxx
+class ModuleInitDependencyMap : public
+    std::hash_map< ::rtl::OUString, ClassModuleRunInitItem,
+        ::rtl::OUStringHash, ::std::equal_to< ::rtl::OUString > >
+{};
 
-static ModuleInitDependencyMap* GpMIDMap = NULL;
-
-void SbModule::implProcessModuleRunInit( ClassModuleRunInitItem& rItem )
+void SbModule::implProcessModuleRunInit( ModuleInitDependencyMap& rMap, ClassModuleRunInitItem& rItem )
 {
-    ModuleInitDependencyMap& rMIDMap = *GpMIDMap;
-
     rItem.m_bProcessing = true;
 
     //bool bAnyDependencies = true;
@@ -1059,8 +1037,8 @@ void SbModule::implProcessModuleRunInit( ClassModuleRunInitItem& rItem )
                 String& rStr = *it;
 
                 // Is required type a class module?
-                ModuleInitDependencyMap::iterator itFind = rMIDMap.find( rStr );
-                if( itFind != rMIDMap.end() )
+                ModuleInitDependencyMap::iterator itFind = rMap.find( rStr );
+                if( itFind != rMap.end() )
                 {
                     ClassModuleRunInitItem& rParentItem = itFind->second;
                     if( rParentItem.m_bProcessing )
@@ -1071,7 +1049,7 @@ void SbModule::implProcessModuleRunInit( ClassModuleRunInitItem& rItem )
                     }
 
                     if( !rParentItem.m_bRunInitDone )
-                        implProcessModuleRunInit( rParentItem );
+                        implProcessModuleRunInit( rMap, rParentItem );
                 }
             }
         }
@@ -1085,6 +1063,8 @@ void SbModule::implProcessModuleRunInit( ClassModuleRunInitItem& rItem )
 // Run Init-Code of all modules (including inserted libraries)
 void StarBASIC::InitAllModules( StarBASIC* pBasicNotToInit )
 {
+    ::vos::OGuard guard( Application::GetSolarMutex() );
+
     // Init own modules
     for ( USHORT nMod = 0; nMod < pModules->Count(); nMod++ )
     {
@@ -1099,7 +1079,6 @@ void StarBASIC::InitAllModules( StarBASIC* pBasicNotToInit )
     // Consider required types to init in right order. Class modules
     // that are required by other modules have to be initialized first.
     ModuleInitDependencyMap aMIDMap;
-    GpMIDMap = &aMIDMap;
     for ( USHORT nMod = 0; nMod < pModules->Count(); nMod++ )
     {
         SbModule* pModule = (SbModule*)pModules->Get( nMod );
@@ -1112,9 +1091,8 @@ void StarBASIC::InitAllModules( StarBASIC* pBasicNotToInit )
     for( it = aMIDMap.begin() ; it != aMIDMap.end(); ++it )
     {
         ClassModuleRunInitItem& rItem = it->second;
-        SbModule::implProcessModuleRunInit( rItem );
+        SbModule::implProcessModuleRunInit( aMIDMap, rItem );
     }
-    GpMIDMap = NULL;
 
     // Call RunInit on standard modules
     for ( USHORT nMod = 0; nMod < pModules->Count(); nMod++ )
@@ -1143,7 +1121,7 @@ void StarBASIC::DeInitAllModules( void )
     for ( USHORT nMod = 0; nMod < pModules->Count(); nMod++ )
     {
         SbModule* pModule = (SbModule*)pModules->Get( nMod );
-        if( pModule->pImage )
+        if( pModule->pImage && !pModule->isProxyModule() && !pModule->ISA(SbObjModule) )
             pModule->pImage->bInit = false;
     }
 
@@ -1848,6 +1826,54 @@ bool StarBASIC::GetUNOConstant( const sal_Char* _pAsciiName, ::com::sun::star::u
     }
     return bRes;
 }
+
+Reference< frame::XModel > StarBASIC::GetModelFromBasic( SbxObject* pBasic )
+{
+    OSL_PRECOND( pBasic != NULL, "getModelFromBasic: illegal call!" );
+    if ( !pBasic )
+        return NULL;
+
+    // look for the ThisComponent variable, first in the parent (which
+    // might be the document's Basic), then in the parent's parent (which might be
+    // the application Basic)
+    const ::rtl::OUString sThisComponent( RTL_CONSTASCII_USTRINGPARAM( "ThisComponent" ) );
+    SbxVariable* pThisComponent = NULL;
+
+    SbxObject* pLookup = pBasic->GetParent();
+    while ( pLookup && !pThisComponent )
+    {
+        pThisComponent = pLookup->Find( sThisComponent, SbxCLASS_OBJECT );
+        pLookup = pLookup->GetParent();
+    }
+    if ( !pThisComponent )
+    {
+        OSL_TRACE("Failed to get ThisComponent");
+            // the application Basic, at the latest, should have this variable
+        return NULL;
+    }
+
+    Any aThisComponentAny( sbxToUnoValue( pThisComponent ) );
+    Reference< frame::XModel > xModel( aThisComponentAny, UNO_QUERY );
+    if ( !xModel.is() )
+    {
+        // it's no XModel. Okay, ThisComponent nowadays is allowed to be a controller.
+        Reference< frame::XController > xController( aThisComponentAny, UNO_QUERY );
+        if ( xController.is() )
+            xModel = xController->getModel();
+    }
+
+    if ( !xModel.is() )
+        return NULL;
+
+#if OSL_DEBUG_LEVEL > 0
+    OSL_TRACE("Have model ThisComponent points to url %s",
+        ::rtl::OUStringToOString( xModel->getURL(),
+            RTL_TEXTENCODING_ASCII_US ).pData->buffer );
+#endif
+
+    return xModel;
+}
+
 
 //========================================================================
 // #118116 Implementation Collection object

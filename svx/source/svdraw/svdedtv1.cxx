@@ -40,8 +40,8 @@
 #include <svx/rectenum.hxx>
 #include <svx/svxids.hrc>   // fuer SID_ATTR_TRANSFORM_...
 #include <svx/svdattr.hxx>  // fuer Get/SetGeoAttr
-#include "svditext.hxx"
-#include "svditer.hxx"
+#include "svx/svditext.hxx"
+#include "svx/svditer.hxx"
 #include <svx/svdtrans.hxx>
 #include <svx/svdundo.hxx>
 #include <svx/svdpage.hxx>
@@ -50,8 +50,8 @@
 #include <svx/svdattrx.hxx> // fuer MergeNotPersistAttr
 #include <svx/svdetc.hxx>   // fuer SearchOutlinerItems
 #include <svx/svdopath.hxx>  // fuer Crook
-#include "svdstr.hrc"   // Namen aus der Resource
-#include "svdglob.hxx"  // StringCache
+#include "svx/svdstr.hrc"   // Namen aus der Resource
+#include "svx/svdglob.hxx"  // StringCache
 #include <editeng/eeitem.hxx>
 #include <svl/aeitem.hxx>
 #include <svl/whiter.hxx>

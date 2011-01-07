@@ -29,7 +29,7 @@
 #include "precompiled_sfx2.hxx"
 
 #include "srchdlg.hxx"
-#include "sfxresid.hxx"
+#include "sfx2/sfxresid.hxx"
 #include <sfx2/sfxuno.hxx>
 
 #include "srchdlg.hrc"

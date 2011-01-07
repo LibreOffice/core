@@ -56,13 +56,14 @@
 #include <cppuhelper/propshlp.hxx>
 
 #include <vector>
+#include <fwidllapi.h>
 
 namespace framework
 {
 
 class RootItemContainer;
 class ItemContainer;
-class ConstItemContainer :  public ::com::sun::star::lang::XTypeProvider    ,
+class FWI_DLLPUBLIC ConstItemContainer :    public ::com::sun::star::lang::XTypeProvider    ,
                             public com::sun::star::container::XIndexAccess  ,
                             public ::com::sun::star::lang::XUnoTunnel       ,
                             public ::com::sun::star::beans::XFastPropertySet,

@@ -69,7 +69,7 @@
 
 #include <sfx2/app.hxx>
 #include <sfx2/signaturestate.hxx>
-#include "sfxresid.hxx"
+#include "sfx2/sfxresid.hxx"
 #include <sfx2/event.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/printer.hxx>
@@ -91,7 +91,7 @@
 #include <sfx2/docfac.hxx>
 #include <sfx2/fcontnr.hxx>
 #include <sfx2/filedlghelper.hxx>
-#include "sfxhelp.hxx"
+#include "sfx2/sfxhelp.hxx"
 #include <sfx2/msgpool.hxx>
 #include <sfx2/objface.hxx>
 
@@ -599,8 +599,9 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
                 // ========================================================================================================
 
                 sal_Bool bPreselectPassword = sal_False;
+                SFX_ITEMSET_ARG( GetMedium()->GetItemSet(), pOldEncryptionDataItem, SfxUnoAnyItem, SID_ENCRYPTIONDATA, FALSE );
                 SFX_ITEMSET_ARG( GetMedium()->GetItemSet(), pOldPasswordItem, SfxStringItem, SID_PASSWORD, FALSE );
-                if ( pOldPasswordItem )
+                if ( pOldEncryptionDataItem || pOldPasswordItem )
                     bPreselectPassword = sal_True;
 
                 uno::Sequence< beans::PropertyValue > aDispatchArgs;

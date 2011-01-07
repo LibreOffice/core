@@ -35,7 +35,7 @@
 #include "strings.hxx"
 #include "callbacks.hxx"
 #include "attriblistmerge.hxx"
-#include "xmlnmspe.hxx"
+#include "xmloff/xmlnmspe.hxx"
 #include "eventimport.hxx"
 #include "xmloff/txtstyli.hxx"
 #include "formenums.hxx"

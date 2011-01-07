@@ -30,7 +30,7 @@
 
 #include <uielement/toolbarmerger.hxx>
 #include <uielement/generictoolbarcontroller.hxx>
-#include <helper/imageproducer.hxx>
+#include <framework/imageproducer.hxx>
 
 #include <svtools/miscopt.hxx>
 
