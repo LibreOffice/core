@@ -95,9 +95,6 @@ LIB1OBJFILES = \
 
 # --- Targets -------------------------------------------------------
 
-LOCALIZE_ME =  menu_tmpl.src
-
-
 .INCLUDE :  target.mk
 
 $(INCCOM)$/dllname.hxx: makefile.mk

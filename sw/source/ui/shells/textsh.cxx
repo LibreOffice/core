@@ -627,16 +627,18 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
             DBG_ASSERT(pDlg, "Dialogdiet fail!");
             if(pDlg->Execute() && pDlg->GetOutputItemSet())
             {
-                GetShell().LockPaint();
-                GetShell().StartAllAction();
-                GetShell().StartUndo(UNDO_INSERT);
+                //local variable necessary at least after call of .AutoCaption() because this could be deleted at this point
+                SwWrtShell& rShell = GetShell();
+                rShell.LockPaint();
+                rShell.StartAllAction();
+                rShell.StartUndo(UNDO_INSERT);
 
                 const SfxItemSet* pOutSet = pDlg->GetOutputItemSet();
                 aMgr.SetAttrSet(*pOutSet);
 
                 // beim ClickToEditFeld erst die Selektion loeschen
-                if( GetShell().IsInClickToEdit() )
-                    GetShell().DelRight();
+                if( rShell.IsInClickToEdit() )
+                    rShell.DelRight();
 
                 aMgr.InsertFlyFrm();
 
@@ -647,8 +649,8 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
                     //FN_INSERT_FRAME
                     USHORT nAnchor = (USHORT)aMgr.GetAnchor();
                         rReq.AppendItem(SfxUInt16Item(nSlot, nAnchor));
-                        rReq.AppendItem(SfxPointItem(FN_PARAM_1, GetShell().GetObjAbsPos()));
-                        rReq.AppendItem(SvxSizeItem(FN_PARAM_2, GetShell().GetObjSize()));
+                        rReq.AppendItem(SfxPointItem(FN_PARAM_1, rShell.GetObjAbsPos()));
+                        rReq.AppendItem(SvxSizeItem(FN_PARAM_2, rShell.GetObjSize()));
                     rReq.Done();
                 }
 
@@ -659,10 +661,10 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
 
                     aRewriter.AddRule(UNDO_ARG1, SW_RES(STR_FRAME));
 
-                    GetShell().EndUndo(UNDO_INSERT, &aRewriter);
+                    rShell.EndUndo(UNDO_INSERT, &aRewriter);
                 }
-                GetShell().EndAllAction();
-                GetShell().UnlockPaint();
+                rShell.EndAllAction();
+                rShell.UnlockPaint();
             }
 
             DELETEZ(pDlg);
@@ -900,7 +902,7 @@ void SwTextShell::StateInsert( SfxItemSet &rSet )
                 }
             break;
             case FN_INSERT_HRULER :
-                if(rSh.IsReadOnlyAvailable() && rSh.HasReadonlySel() || bCrsrInHidden )
+                if((rSh.IsReadOnlyAvailable() && rSh.HasReadonlySel()) || bCrsrInHidden )
                     rSet.DisableItem(nWhich);
             break;
             case FN_FORMAT_COLUMN :

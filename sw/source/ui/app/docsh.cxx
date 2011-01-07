@@ -209,23 +209,7 @@ Reader* SwDocShell::StartConvertFrom(SfxMedium& rMedium, SwReader** ppRdr,
             return 0;
         }
     }
-    if(rMedium.IsStorage())
-    {
-        //SvStorageRef aStor( rMedium.GetStorage() );
-        const SfxItemSet* pSet = rMedium.GetItemSet();
-        const SfxPoolItem *pItem;
-        if(pSet && SFX_ITEM_SET == pSet->GetItemState(SID_PASSWORD, TRUE, &pItem))
-        {
-            DBG_ASSERT(pItem->IsA( TYPE(SfxStringItem) ), "Fehler Parametertype");
-            comphelper::OStorageHelper::SetCommonStoragePassword( rMedium.GetStorage(), ((const SfxStringItem *)pItem)->GetValue() );
-        }
-        // Fuer's Dokument-Einfuegen noch die FF-Version, wenn's der
-        // eigene Filter ist.
-        ASSERT( /*pRead != ReadSw3 || */pRead != ReadXML || pFlt->GetVersion(),
-                "Am Filter ist keine FF-Version gesetzt" );
-        //if( (pRead == ReadSw3 || pRead == ReadXML) && pFlt->GetVersion() )
-        //    aStor->SetVersion( (long)pFlt->GetVersion() );
-    }
+
     // #i30171# set the UpdateDocMode at the SwDocShell
     SFX_ITEMSET_ARG( rMedium.GetItemSet(), pUpdateDocItem, SfxUInt16Item, SID_UPDATEDOCMODE, sal_False);
     nUpdateDocMode = pUpdateDocItem ? pUpdateDocItem->GetValue() : document::UpdateDocMode::NO_UPDATE;
