@@ -175,7 +175,7 @@ public:
         \param nOut the width of the outer line in 1th pt
         \param nDist the width of the gap between the lines in 1th pt
      */
-    void            SetLinesWidths( SvxBorderStyle nStyle, sal_uInt16 nIn, sal_uInt16 nOut, sal_uInt16 nDist );
+    void            GuessLinesWidths( SvxBorderStyle nStyle, sal_uInt16 nOut, sal_uInt16 nIn = 0, sal_uInt16 nDist = 0 );
 
     // TODO Hacky method to mirror lines in only a few cases
     void            SetMirrorWidths( bool bMirror = true ) { m_bMirrorWidths = bMirror; }

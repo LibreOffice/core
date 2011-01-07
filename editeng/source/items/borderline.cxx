@@ -99,6 +99,7 @@ SvxBorderLine::SvxBorderLine( const Color *pCol, long nWidth,
        Color (*pColorOutFn)( Color ), Color (*pColorInFn)( Color ),
        Color (*pColorGapFn)( Color ) )
 : m_nWidth( nWidth )
+, m_bMirrorWidths( false )
 , m_aWidthImpl( SvxBorderLine::getWidthImpl( nStyle ) )
 , m_nMult( 1 )
 , m_nDiv( 1 )
@@ -216,7 +217,9 @@ SvxBorderLine::SvxBorderLine( const SvxBorderLine& r )
 SvxBorderLine& SvxBorderLine::operator=( const SvxBorderLine& r )
 {
     aColor = r.aColor;
+    m_nWidth = r.m_nWidth;
     m_aWidthImpl = r.m_aWidthImpl;
+    m_bMirrorWidths = r.m_bMirrorWidths;
     m_nStyle = r.m_nStyle;
     m_bUseLeftTop = r.m_bUseLeftTop;
     m_pColorOutFn = r.m_pColorOutFn;
@@ -233,8 +236,14 @@ void SvxBorderLine::ScaleMetrics( long nMult, long nDiv )
     m_nDiv = nDiv;
 }
 
-void SvxBorderLine::SetLinesWidths( SvxBorderStyle nStyle, sal_uInt16 nIn, sal_uInt16 nOut, sal_uInt16 nDist )
+void SvxBorderLine::GuessLinesWidths( SvxBorderStyle nStyle, sal_uInt16 nOut, sal_uInt16 nIn, sal_uInt16 nDist )
 {
+    if ( nStyle == NO_STYLE ) {
+        nStyle = SOLID;
+        if ( nOut > 0 && nIn > 0 )
+            nStyle = DOUBLE;
+    }
+
     if ( nStyle == DOUBLE )
     {
         static SvxBorderStyle aDoubleStyles[] =
@@ -276,17 +285,17 @@ void SvxBorderLine::SetLinesWidths( SvxBorderStyle nStyle, sal_uInt16 nIn, sal_u
 
 sal_uInt16 SvxBorderLine::GetOutWidth() const
 {
-    sal_uInt16 nOut = (sal_uInt16)Scale( m_aWidthImpl.GetLine2( m_nWidth ), m_nMult, m_nDiv );
+    sal_uInt16 nOut = (sal_uInt16)Scale( m_aWidthImpl.GetLine1( m_nWidth ), m_nMult, m_nDiv );
     if ( m_bMirrorWidths )
-        nOut = (sal_uInt16)Scale( m_aWidthImpl.GetLine2( m_nWidth ), m_nMult, m_nDiv );
+        nOut = (sal_uInt16)Scale( m_aWidthImpl.GetLine1( m_nWidth ), m_nMult, m_nDiv );
     return nOut;
 }
 
 sal_uInt16 SvxBorderLine::GetInWidth() const
 {
-    sal_uInt16 nIn = (sal_uInt16)Scale( m_aWidthImpl.GetLine1( m_nWidth ), m_nMult, m_nDiv );
+    sal_uInt16 nIn = (sal_uInt16)Scale( m_aWidthImpl.GetLine2( m_nWidth ), m_nMult, m_nDiv );
     if ( m_bMirrorWidths )
-        nIn = (sal_uInt16)Scale( m_aWidthImpl.GetLine1( m_nWidth ), m_nMult, m_nDiv );
+        nIn = (sal_uInt16)Scale( m_aWidthImpl.GetLine2( m_nWidth ), m_nMult, m_nDiv );
     return nIn;
 }
 
@@ -300,6 +309,8 @@ sal_uInt16 SvxBorderLine::GetDistance() const
 sal_Bool SvxBorderLine::operator==( const SvxBorderLine& rCmp ) const
 {
     return ( ( aColor    == rCmp.aColor )            &&
+             ( m_nWidth == rCmp.m_nWidth )           &&
+             ( m_bMirrorWidths  == rCmp.m_bMirrorWidths )  &&
              ( m_aWidthImpl  == rCmp.m_aWidthImpl )  &&
              ( m_nStyle == rCmp.GetStyle() )         &&
              ( m_bUseLeftTop == rCmp.m_bUseLeftTop ) &&

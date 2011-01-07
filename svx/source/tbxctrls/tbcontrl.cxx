@@ -1163,7 +1163,7 @@ IMPL_LINK( SvxFrameWindow_Impl, SelectHdl, void *, EMPTYARG )
     sal_uInt16              nModifier = aFrameSet.GetModifier();
     sal_uInt8               nValidFlags = 0;
 
-    theDefLine.SetLinesWidths( theDefLine.GetStyle(), 0, DEF_LINE_WIDTH_0, 0 );
+    theDefLine.GuessLinesWidths( theDefLine.GetStyle(), DEF_LINE_WIDTH_0 );
     switch ( nSel )
     {
         case 1: nValidFlags |= FRM_VALID_ALL;
@@ -1557,70 +1557,16 @@ void SvxLineWindow_Impl::MakeLineBitmap( sal_uInt16 nNo, Bitmap& rBmp, const Siz
 IMPL_LINK( SvxLineWindow_Impl, SelectHdl, void *, EMPTYARG )
 {
     SvxLineItem     aLineItem( SID_FRAME_LINESTYLE );
-    sal_uInt16          n1 = 0,
-                    n2 = 0,
-                    n3 = 0;
-    SvxBorderStyle  nStyle = SOLID;
-    sal_Bool            bSetLine = sal_True;
+    SvxBorderStyle  nStyle = NO_STYLE;
 
-    switch ( aLineSet.GetSelectItemId() )
-    {
-        case  1: n1 = DEF_LINE_WIDTH_0; break;
-        case  2: n1 = DEF_LINE_WIDTH_1; break;
-        case  3: n1 = DEF_LINE_WIDTH_2; break;
-        case  4: n1 = DEF_LINE_WIDTH_3; break;
-        case  5: n1 = DEF_LINE_WIDTH_4; break;
+    if ( aLineSet.GetSelectItemId( ) > 0 )
+        nStyle = SvxBorderStyle( aLineSet.GetSelectItemId( ) - 1 );
 
-        case  6: n1 = DEF_DOUBLE_LINE0_OUT;
-                 n2 = DEF_DOUBLE_LINE0_IN;
-                 n3 = DEF_DOUBLE_LINE0_DIST;     break;
-        case  7: n1 = DEF_DOUBLE_LINE7_OUT;
-                 n2 = DEF_DOUBLE_LINE7_IN;
-                 n3 = DEF_DOUBLE_LINE7_DIST;     break;
-        case  8: n1 = DEF_DOUBLE_LINE1_OUT;
-                 n2 = DEF_DOUBLE_LINE1_IN;
-                 n3 = DEF_DOUBLE_LINE1_DIST;     break;
-        case  9: n1 = DEF_DOUBLE_LINE2_OUT;
-                 n2 = DEF_DOUBLE_LINE2_IN;
-                 n3 = DEF_DOUBLE_LINE2_DIST;     break;
-        case 10: n1 = DEF_DOUBLE_LINE8_OUT;
-                 n2 = DEF_DOUBLE_LINE8_IN;
-                 n3 = DEF_DOUBLE_LINE8_DIST;     break;
-        case 11: n1 = DEF_DOUBLE_LINE9_OUT;
-                 n2 = DEF_DOUBLE_LINE9_IN;
-                 n3 = DEF_DOUBLE_LINE9_DIST;     break;
-        case 12: n1 = DEF_DOUBLE_LINE10_OUT;
-                 n2 = DEF_DOUBLE_LINE10_IN;
-                 n3 = DEF_DOUBLE_LINE10_DIST; break;
-        case 13: n1 = DEF_DOUBLE_LINE3_OUT;
-                 n2 = DEF_DOUBLE_LINE3_IN;
-                 n3 = DEF_DOUBLE_LINE3_DIST;     break;
-        case 14: n1 = DEF_DOUBLE_LINE4_OUT;
-                 n2 = DEF_DOUBLE_LINE4_IN;
-                 n3 = DEF_DOUBLE_LINE4_DIST;     break;
-        case 15: n1 = DEF_DOUBLE_LINE5_OUT;
-                 n2 = DEF_DOUBLE_LINE5_IN;
-                 n3 = DEF_DOUBLE_LINE5_DIST;     break;
-        case 16: n1 = DEF_DOUBLE_LINE6_OUT;
-                 n2 = DEF_DOUBLE_LINE6_IN;
-                 n3 = DEF_DOUBLE_LINE6_DIST;     break;
-        case 17:
-                 n1 = DEF_LINE_WIDTH_5;
-                 nStyle = DOTTED;
-                 break;
-        case 18:
-                 n1 = DEF_LINE_WIDTH_5;
-                 nStyle = DASHED;
-                 break;
-        case  0:
-        default:
-            bSetLine = sal_False;
-            break;
-    }
-    if ( bSetLine )
+    if ( nStyle != NO_STYLE )
     {
         SvxBorderLine aTmp;
-        aTmp.SetLinesWidths( nStyle, n1, n2, n3 );
+        // TODO Make it depend on a width field
+        aTmp.SetWidth( DEF_LINE_WIDTH_0 );
         aLineItem.SetLine( &aTmp );
     }
     else

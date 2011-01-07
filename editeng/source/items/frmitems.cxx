@@ -1724,13 +1724,16 @@ namespace
 {
 
 sal_Bool
-lcl_lineToSvxLine(const table::BorderLine& rLine, SvxBorderLine& rSvxLine, sal_Bool bConvert)
+lcl_lineToSvxLine(const table::BorderLine& rLine, SvxBorderLine& rSvxLine, sal_Bool bConvert, sal_Bool bGuessWidth)
 {
     rSvxLine.SetColor(   Color(rLine.Color));
-    rSvxLine.SetLinesWidths( rSvxLine.GetStyle(),
-            sal_uInt16( bConvert ? MM100_TO_TWIP(rLine.InnerLineWidth) : rLine.InnerLineWidth  ),
-            sal_uInt16( bConvert ? MM100_TO_TWIP(rLine.OuterLineWidth) : rLine.OuterLineWidth  ),
-            sal_uInt16( bConvert ? MM100_TO_TWIP(rLine.LineDistance )  : rLine.LineDistance  ));
+    if ( bGuessWidth )
+    {
+        rSvxLine.GuessLinesWidths( rSvxLine.GetStyle(),
+                sal_uInt16( bConvert ? MM100_TO_TWIP(rLine.OuterLineWidth) : rLine.OuterLineWidth  ),
+                sal_uInt16( bConvert ? MM100_TO_TWIP(rLine.InnerLineWidth) : rLine.InnerLineWidth  ),
+                sal_uInt16( bConvert ? MM100_TO_TWIP(rLine.LineDistance )  : rLine.LineDistance  ));
+    }
 
     sal_Bool bRet = rLine.InnerLineWidth > 0 || rLine.OuterLineWidth > 0;
     return bRet;
@@ -1741,7 +1744,7 @@ lcl_lineToSvxLine(const table::BorderLine& rLine, SvxBorderLine& rSvxLine, sal_B
 // -----------------------------------------------------------------------
 sal_Bool SvxBoxItem::LineToSvxLine(const ::com::sun::star::table::BorderLine& rLine, SvxBorderLine& rSvxLine, sal_Bool bConvert)
 {
-    return lcl_lineToSvxLine(rLine, rSvxLine, bConvert);
+    return lcl_lineToSvxLine(rLine, rSvxLine, bConvert, sal_True);
 }
 
 sal_Bool
@@ -1795,7 +1798,14 @@ SvxBoxItem::LineToSvxLine(const ::com::sun::star::table::BorderLine2& rLine, Svx
     }
     rSvxLine.SetStyle( nStyle );
 
-    return lcl_lineToSvxLine(rLine, rSvxLine, bConvert);
+    sal_Bool bGuessWidth = true;
+    if ( rLine->LineWidth )
+    {
+        rSvxLine.SetWidth( bConvert? MM100_TO_TWIP_UNSIGNED( rLine->LineWidth ) : rLine->LineWidth );
+        bGuessWidth = false;
+    }
+
+    return lcl_lineToSvxLine(rLine, rSvxLine, bConvert, bGuessWidth);
 }
 
 // -----------------------------------------------------------------------
@@ -2224,7 +2234,7 @@ SfxPoolItem* SvxBoxItem::Create( SvStream& rStrm, sal_uInt16 nIVersion ) const
         Color aColor;
         rStrm >> aColor >> nOutline >> nInline >> _nDistance;
         SvxBorderLine aBorder( &aColor );
-        aBorder.SetLinesWidths( SOLID, nInline, nOutline, _nDistance );
+        aBorder.GuessLinesWidths( NO_STYLE, nOutline, nInline, _nDistance );
 
         pAttr->SetLine( &aBorder, aLineMap[cLine] );
     }
@@ -2598,7 +2608,7 @@ SfxPoolItem* SvxBoxInfoItem::Create( SvStream& rStrm, sal_uInt16 ) const
         Color aColor;
         rStrm >> aColor >> nOutline >> nInline >> nDistance;
         SvxBorderLine aBorder( &aColor );
-        aBorder.SetLinesWidths( SOLID, nInline, nOutline, nDistance );
+        aBorder.GuessLinesWidths( NO_STYLE, nOutline, nInline, nDistance );
 
         switch( cLine )
         {
@@ -3204,7 +3214,7 @@ SfxPoolItem* SvxLineItem::Create( SvStream& rStrm, sal_uInt16 ) const
     if( nOutline )
     {
         SvxBorderLine aLine( &aColor );
-        aLine.SetLinesWidths( SOLID, nInline, nOutline, nDistance );
+        aLine.GuessLinesWidths( NO_STYLE, nOutline, nInline, nDistance );
         _pLine->SetLine( &aLine );
     }
     return _pLine;

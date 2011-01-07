@@ -1766,8 +1766,9 @@ SETBORDER:
                                 break;
                             }
                             nDistWidth = sal_uInt16( nTokenValue );
-                            aBrd.SetLinesWidths( SOLID, nInWidth,
-                                   nOutWidth, nDistWidth );
+
+                            aBrd.GuessLinesWidths( NO_STYLE, nOutWidth,
+                                   nInWidth, nDistWidth );
                             SetBorderLine( nBorderTyp, aAttr, aBrd );
                             break;
                         }

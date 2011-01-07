@@ -52,12 +52,16 @@ class BorderLineTest : public CppUnit::TestFixture
         void testGuessWidthNoMatch();
         void testGuessWidthThinthickSmallgap();
         void testGuessWidthThinthickLargegap();
+        void testGuessWidthNostyleDouble();
+        void testGuessWidthNostyleSingle();
 
     CPPUNIT_TEST_SUITE(BorderLineTest);
     CPPUNIT_TEST(testGuessWidthDouble);
     CPPUNIT_TEST(testGuessWidthNoMatch);
     CPPUNIT_TEST(testGuessWidthThinthickSmallgap);
     CPPUNIT_TEST(testGuessWidthThinthickLargegap);
+    CPPUNIT_TEST(testGuessWidthNostyleDouble);
+    CPPUNIT_TEST(testGuessWidthNostyleSingle);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -67,7 +71,7 @@ void BorderLineTest::testGuessWidthDouble()
 {
     // Normal double case
     SvxBorderLine line;
-    line.SetLinesWidths( DOUBLE, TEST_WIDTH, TEST_WIDTH, TEST_WIDTH );
+    line.GuessLinesWidths( DOUBLE, TEST_WIDTH, TEST_WIDTH, TEST_WIDTH );
     CPPUNIT_ASSERT_EQUAL( DOUBLE, line.GetStyle() );
     CPPUNIT_ASSERT_EQUAL( TEST_WIDTH, line.GetWidth() );
 }
@@ -75,7 +79,7 @@ void BorderLineTest::testGuessWidthDouble()
 void BorderLineTest::testGuessWidthNoMatch()
 {
     SvxBorderLine line;
-    line.SetLinesWidths( DOUBLE,
+    line.GuessLinesWidths( DOUBLE,
             1, 2, 3 );
     CPPUNIT_ASSERT_EQUAL( DOUBLE, line.GetStyle() );
     CPPUNIT_ASSERT_EQUAL( long( 0 ), line.GetWidth() );
@@ -84,9 +88,9 @@ void BorderLineTest::testGuessWidthNoMatch()
 void BorderLineTest::testGuessWidthThinthickSmallgap()
 {
     SvxBorderLine line;
-    line.SetLinesWidths( DOUBLE,
-            THINTHICKSG_IN_WIDTH,
+    line.GuessLinesWidths( DOUBLE,
             THINTHICKSG_OUT_WIDTH,
+            THINTHICKSG_IN_WIDTH,
             THINTHICKSG_DIST_WIDTH );
     CPPUNIT_ASSERT_EQUAL( THINTHICK_SMALLGAP, line.GetStyle() );
     CPPUNIT_ASSERT_EQUAL( TEST_WIDTH, line.GetWidth() );
@@ -95,11 +99,30 @@ void BorderLineTest::testGuessWidthThinthickSmallgap()
 void BorderLineTest::testGuessWidthThinthickLargegap()
 {
     SvxBorderLine line;
-    line.SetLinesWidths( DOUBLE,
-            THINTHICKLG_IN_WIDTH,
+    line.GuessLinesWidths( DOUBLE,
             THINTHICKLG_OUT_WIDTH,
+            THINTHICKLG_IN_WIDTH,
             THINTHICKLG_DIST_WIDTH );
     CPPUNIT_ASSERT_EQUAL( THINTHICK_LARGEGAP, line.GetStyle() );
+    CPPUNIT_ASSERT_EQUAL( TEST_WIDTH, line.GetWidth() );
+}
+
+void BorderLineTest::testGuessWidthNostyleDouble()
+{
+    SvxBorderLine line;
+    line.GuessLinesWidths( NO_STYLE,
+            THINTHICKLG_OUT_WIDTH,
+            THINTHICKLG_IN_WIDTH,
+            THINTHICKLG_DIST_WIDTH );
+    CPPUNIT_ASSERT_EQUAL( THINTHICK_LARGEGAP, line.GetStyle() );
+    CPPUNIT_ASSERT_EQUAL( TEST_WIDTH, line.GetWidth() );
+}
+
+void BorderLineTest::testGuessWidthNostyleSingle()
+{
+    SvxBorderLine line;
+    line.GuessLinesWidths( NO_STYLE, TEST_WIDTH );
+    CPPUNIT_ASSERT_EQUAL( SOLID, line.GetStyle() );
     CPPUNIT_ASSERT_EQUAL( TEST_WIDTH, line.GetWidth() );
 }
 
