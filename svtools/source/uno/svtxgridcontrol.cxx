@@ -144,18 +144,35 @@ void SVTXGridControl::setProperty( const ::rtl::OUString& PropertyName, const An
 
         case BASEPROPERTY_COLUMN_HEADER_HEIGHT:
         {
+            sal_Int32 columnHeaderHeight = 0;
             if ( !aValue.hasValue() )
             {
-                sal_Int32 const fontHeight = pTable->PixelToLogic( Size( 0, pTable->GetTextHeight() + 3 ), MAP_APPFONT ).Height();
-                m_pTableModel->setColumnHeaderHeight( fontHeight );
+                columnHeaderHeight = pTable->PixelToLogic( Size( 0, pTable->GetTextHeight() + 3 ), MAP_APPFONT ).Height();
             }
             else
             {
-                sal_Int32 nColumnHeaderHeight = 0;
-                aValue >>= nColumnHeaderHeight;
-                ENSURE_OR_BREAK( nColumnHeaderHeight > 0, "SVTXGridControl::setProperty: illegal column header height!" );
-                m_pTableModel->setColumnHeaderHeight( nColumnHeaderHeight );
+                aValue >>= columnHeaderHeight;
             }
+            ENSURE_OR_BREAK( columnHeaderHeight > 0, "SVTXGridControl::setProperty: illegal column header height!" );
+            m_pTableModel->setColumnHeaderHeight( columnHeaderHeight );
+            // TODO: the model should broadcast this change itself, and the table should invalidate itself as needed
+            pTable->Invalidate();
+        }
+        break;
+
+        case BASEPROPERTY_ROW_HEIGHT:
+        {
+            sal_Int32 rowHeight = 0;
+            if ( !aValue.hasValue() )
+            {
+                rowHeight = pTable->PixelToLogic( Size( 0, pTable->GetTextHeight() + 3 ), MAP_APPFONT ).Height();
+            }
+            else
+            {
+                aValue >>= rowHeight;
+            }
+            m_pTableModel->setRowHeight( rowHeight );
+            ENSURE_OR_BREAK( rowHeight > 0, "SVTXGridControl::setProperty: illegal row height!" );
             // TODO: the model should broadcast this change itself, and the table should invalidate itself as needed
             pTable->Invalidate();
         }
@@ -470,14 +487,7 @@ void SAL_CALL SVTXGridControl::dataChanged(const ::com::sun::star::awt::grid::Gr
     TableControl* pTable = dynamic_cast< TableControl* >( GetWindow() );
     ENSURE_OR_RETURN_VOID( pTable, "SVTXGridControl::dataChanged: no control (anymore)!" );
 
-    if ( Event.AttributeName.equalsAscii( "RowHeight" ) )
-    {
-        sal_Int32 rowHeight = m_pTableModel->getRowHeight();
-        Event.NewValue>>=rowHeight;
-        m_pTableModel->setRowHeight(rowHeight);
-        pTable->Invalidate();
-    }
-    else if ( Event.AttributeName.equalsAscii( "RowHeaders" ) )
+    if ( Event.AttributeName.equalsAscii( "RowHeaders" ) )
     {
         // TODO: we could do better than this - invalidate the header area only
         pTable->Invalidate();

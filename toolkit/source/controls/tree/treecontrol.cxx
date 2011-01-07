@@ -75,7 +75,7 @@ UnoTreeModel::UnoTreeModel( const ::com::sun::star::uno::Reference< ::com::sun::
     ImplRegisterProperty( BASEPROPERTY_TREE_ROOTDISPLAYED );
     ImplRegisterProperty( BASEPROPERTY_TREE_SHOWSHANDLES );
     ImplRegisterProperty( BASEPROPERTY_TREE_SHOWSROOTHANDLES );
-    ImplRegisterProperty( BASEPROPERTY_TREE_ROWHEIGHT );
+    ImplRegisterProperty( BASEPROPERTY_ROW_HEIGHT );
     ImplRegisterProperty( BASEPROPERTY_TREE_INVOKESSTOPNODEEDITING );
     ImplRegisterProperty( BASEPROPERTY_HIDEINACTIVESELECTION );
 }
@@ -101,7 +101,7 @@ Any UnoTreeModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
     {
     case BASEPROPERTY_TREE_SELECTIONTYPE:
         return Any( SelectionType_NONE );
-    case BASEPROPERTY_TREE_ROWHEIGHT:
+    case BASEPROPERTY_ROW_HEIGHT:
         return Any( sal_Int32( 0 ) );
     case BASEPROPERTY_TREE_DATAMODEL:
         return Any( Reference< XTreeDataModel >( 0 ) );

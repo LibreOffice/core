@@ -39,7 +39,6 @@ using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::awt::grid;
 using namespace ::com::sun::star::lang;
 
-#define ROWHEIGHT ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "RowHeight" ))
 #define ROWHEADERS ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "RowHeaders" ))
 #define CELLUPDATED ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "CellUpdated" ))
 #define ROWUPDATED ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "RowUpdated" ))
@@ -68,7 +67,6 @@ namespace toolkit
     DefaultGridDataModel::DefaultGridDataModel()
         :DefaultGridDataModel_Base()
         ,MutexAndBroadcastHelper()
-        ,m_nRowHeight(0)
         ,m_aRowHeaders()
     {
     }
@@ -77,7 +75,6 @@ namespace toolkit
     DefaultGridDataModel::DefaultGridDataModel( DefaultGridDataModel const & i_copySource )
         :DefaultGridDataModel_Base()
         ,MutexAndBroadcastHelper()
-        ,m_nRowHeight( i_copySource.m_nRowHeight )
         ,m_aData( i_copySource.m_aData )
         ,m_aRowHeaders( i_copySource.m_aRowHeaders )
     {
@@ -132,21 +129,6 @@ namespace toolkit
         Reference< XInterface > xSource( static_cast< ::cppu::OWeakObject* >( this ) );
         GridDataEvent aEvent( xSource, ::rtl::OUString(), Any(), Any(), index, headerName, rowData );
         broadcast( row_removed, aEvent);
-    }
-
-    //------------------------------------------------------------------------------------------------------------------
-    ::sal_Int32 SAL_CALL DefaultGridDataModel::getRowHeight() throw (::com::sun::star::uno::RuntimeException)
-    {
-        return m_nRowHeight;
-    }
-
-    //------------------------------------------------------------------------------------------------------------------
-    void SAL_CALL DefaultGridDataModel::setRowHeight(::sal_Int32 value) throw (::com::sun::star::uno::RuntimeException)
-    {
-        sal_Int32 oldValue = m_nRowHeight;
-        m_nRowHeight = value;
-
-        broadcast_changed( ROWHEIGHT, 0, Any(oldValue), Any(value));
     }
 
     //------------------------------------------------------------------------------------------------------------------

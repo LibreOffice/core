@@ -62,8 +62,6 @@ public:
     virtual ~DefaultGridDataModel();
 
     // XGridDataModel
-    virtual ::sal_Int32 SAL_CALL getRowHeight() throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL setRowHeight(::sal_Int32 the_value) throw (::com::sun::star::uno::RuntimeException);
     virtual ::sal_Int32 SAL_CALL getRowCount() throw (::com::sun::star::uno::RuntimeException);
     virtual ::sal_Int32 SAL_CALL getColumnCount() throw (::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getRowHeaders() throw (::com::sun::star::uno::RuntimeException);
@@ -97,7 +95,6 @@ private:
     void broadcast_add( sal_Int32 index, const ::rtl::OUString & headerName,  const ::com::sun::star::uno::Sequence< Any  > rowData ) throw (::com::sun::star::uno::RuntimeException);
     void broadcast_remove( sal_Int32 index, const ::rtl::OUString & headerName, const ::com::sun::star::uno::Sequence< Any  > rowData ) throw (::com::sun::star::uno::RuntimeException);
 
-    sal_Int32                           m_nRowHeight;
     std::vector< std::vector < Any > >  m_aData;
     std::vector< ::rtl::OUString >      m_aRowHeaders;
 };
