@@ -146,7 +146,7 @@ void SubToolPanel::Paint (const Rectangle& rRect)
         Point (mnHorizontalBorder,0),
         Size(mnChildrenWidth,0));
     StripeList::const_iterator iStripe;
-    for (iStripe=maStripeList.begin(); iStripe!=maStripeList.end(); iStripe++)
+    for (iStripe=maStripeList.begin(); iStripe!=maStripeList.end(); ++iStripe)
     {
         aStripeArea.Top() = iStripe->first;
         aStripeArea.Bottom() = iStripe->second;
