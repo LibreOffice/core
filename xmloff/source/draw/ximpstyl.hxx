@@ -34,6 +34,7 @@
 #include "ximppage.hxx"
 #include <xmloff/xmlstyle.hxx>
 #include <com/sun/star/view/PaperOrientation.hpp>
+#include <vector>
 
 class SvNumberFormatter;
 class SvXMLNumFmtHelper;
@@ -134,7 +135,7 @@ public:
     const rtl::OUString& GetDisplayName() const { return msDisplayName; }
 
 };
-DECLARE_LIST(ImpMasterPageList, SdXMLMasterPageContext*)
+typedef ::std::vector< SdXMLMasterPageContext* > ImpMasterPageList;
 
 //////////////////////////////////////////////////////////////////////////////
 // presentation:placeholder context
