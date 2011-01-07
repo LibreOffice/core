@@ -35,6 +35,8 @@ gb_Helper_PHONY := $(gb_Helper_MISC)/PHONY
 # general propose empty dummy target
 gb_Helper_MISCDUMMY := $(gb_Helper_MISC)/DUMMY
 
+gb_Helper_REPOSITORYNAMES :=
+
 .PHONY : $(WORKDIR)/Misc/PHONY
 $(gb_Helper_MISCDUMMY) :
     @mkdir -p $(dir $@) && touch $@
@@ -85,6 +87,7 @@ endef
 
 define gb_Helper_register_repository
 gb_Helper_CURRENTREPOSITORY := $(1)
+gb_Helper_REPOSITORYNAMES += $(1)
 
 endef
 

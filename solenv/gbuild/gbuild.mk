@@ -202,6 +202,7 @@ include $(foreach class, \
     Package \
     PrecompiledHeaders \
     TestFixture \
+    JavaClassSet \
     Module \
 ,$(GBUILDDIR)/$(class).mk)
 
