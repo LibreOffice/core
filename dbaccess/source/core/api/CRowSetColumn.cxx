@@ -55,9 +55,7 @@ ORowSetColumn::ORowSetColumn(   const Reference < XResultSetMetaData >& _xMetaDa
 
 ::cppu::IPropertyArrayHelper* ORowSetColumn::createArrayHelper( ) const
 {
-    const sal_Int32 nDerivedProperties = 21;
-    Sequence< Property> aDerivedProperties( nDerivedProperties );
-    sal_Int32 nPos = 0;
+    BEGIN_PROPERTY_SEQUENCE(21)
 
     DECL_PROP1( CATALOGNAME,                ::rtl::OUString,    READONLY );
     DECL_PROP1( DISPLAYSIZE,                sal_Int32,          READONLY );
@@ -85,7 +83,7 @@ ORowSetColumn::ORowSetColumn(   const Reference < XResultSetMetaData >& _xMetaDa
     Sequence< Property > aRegisteredProperties;
     describeProperties( aRegisteredProperties );
 
-    return new ::cppu::OPropertyArrayHelper( ::comphelper::concatSequences( aDerivedProperties, aRegisteredProperties ), sal_False );
+    return new ::cppu::OPropertyArrayHelper( ::comphelper::concatSequences( aDescriptor, aRegisteredProperties ), sal_False );
 }
 
 ::cppu::IPropertyArrayHelper& ORowSetColumn::getInfoHelper()

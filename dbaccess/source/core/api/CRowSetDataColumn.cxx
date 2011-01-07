@@ -77,9 +77,7 @@ ORowSetDataColumn::~ORowSetDataColumn()
 // comphelper::OPropertyArrayUsageHelper
 ::cppu::IPropertyArrayHelper* ORowSetDataColumn::createArrayHelper( ) const
 {
-    const sal_Int32 nDerivedProperties = 21;
-    Sequence< Property> aDerivedProperties( nDerivedProperties );
-    sal_Int32 nPos = 0;
+    BEGIN_PROPERTY_HELPER(21)
 
     DECL_PROP1( CATALOGNAME,                ::rtl::OUString,    READONLY );
     DECL_PROP1( DISPLAYSIZE,                sal_Int32,          READONLY );
@@ -107,7 +105,7 @@ ORowSetDataColumn::~ORowSetDataColumn()
     Sequence< Property > aRegisteredProperties;
     describeProperties( aRegisteredProperties );
 
-    return new ::cppu::OPropertyArrayHelper( ::comphelper::concatSequences( aDerivedProperties, aRegisteredProperties ), sal_False );
+    return new ::cppu::OPropertyArrayHelper( ::comphelper::concatSequences( aDescriptor, aRegisteredProperties ), sal_False );
 }
 
 // cppu::OPropertySetHelper
