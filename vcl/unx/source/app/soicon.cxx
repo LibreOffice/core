@@ -43,13 +43,13 @@
 #include <salbmp.h>
 #include <vcl/svids.hrc>
 
-BOOL SelectAppIconPixmap( SalDisplay *pDisplay, int nScreen,USHORT nIcon, USHORT iconSize,
+sal_Bool SelectAppIconPixmap( SalDisplay *pDisplay, int nScreen,sal_uInt16 nIcon, sal_uInt16 iconSize,
                           Pixmap& icon_pixmap, Pixmap& icon_mask)
 {
     if( ! ImplGetResMgr() )
-        return FALSE;
+        return sal_False;
 
-    USHORT nIconSizeOffset;
+    sal_uInt16 nIconSizeOffset;
 
     if( iconSize >= 48 )
         nIconSizeOffset = SV_ICON_SIZE48_START;
@@ -58,11 +58,11 @@ BOOL SelectAppIconPixmap( SalDisplay *pDisplay, int nScreen,USHORT nIcon, USHORT
     else if( iconSize >= 16 )
         nIconSizeOffset = SV_ICON_SIZE16_START;
     else
-        return FALSE;
+        return sal_False;
 
     BitmapEx aIcon( ResId(nIconSizeOffset + nIcon, *ImplGetResMgr()));
-    if( TRUE == aIcon.IsEmpty() )
-        return FALSE;
+    if( sal_True == aIcon.IsEmpty() )
+        return sal_False;
 
     SalTwoRect aRect;
     aRect.mnSrcX = 0; aRect.mnSrcY = 0;
@@ -110,6 +110,6 @@ BOOL SelectAppIconPixmap( SalDisplay *pDisplay, int nScreen,USHORT nIcon, USHORT
         XFreeGC( pDisplay->GetDisplay(), aMonoGC );
     }
 
-    return TRUE;
+    return sal_True;
 }
 

@@ -65,7 +65,7 @@ void GtkHookedYieldMutex::ThreadsEnter()
     acquire();
     if( !aYieldStack.empty() )
     { /* Previously called ThreadsLeave() */
-        ULONG nCount = aYieldStack.front();
+        sal_uInt32 nCount = aYieldStack.front();
         aYieldStack.pop_front();
         while( nCount-- > 1 )
             acquire();
@@ -188,7 +188,7 @@ GtkInstance::~GtkInstance()
     DeInitAtkBridge();
 }
 
-SalFrame* GtkInstance::CreateFrame( SalFrame* pParent, ULONG nStyle )
+SalFrame* GtkInstance::CreateFrame( SalFrame* pParent, sal_uInt32 nStyle )
 {
     return new GtkSalFrame( pParent, nStyle );
 }

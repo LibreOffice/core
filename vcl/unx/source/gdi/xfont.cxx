@@ -275,16 +275,16 @@ ExtendedFontStruct::Match( const ExtendedXlfd *pXlfd,
         return false;
 
     if( bVertical != mbVertical )
-        return FALSE;
+        return false;
 
     if( rPixelSize.Height() != maPixelSize.Height() )
-        return FALSE;
+        return false;
 
     long nReqWidth = rPixelSize.Width();
     if( !nReqWidth )
         nReqWidth = rPixelSize.Height();
     if( nReqWidth != maPixelSize.Width() )
-        return FALSE;
+        return false;
 
     return true;
 }

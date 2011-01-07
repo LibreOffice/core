@@ -597,7 +597,7 @@ static const keyboard_layout type6_layout[] =
 #include <stdio.h>
 #endif
 
-const char* SalDisplay::GetKeyboardName( BOOL bRefresh )
+const char* SalDisplay::GetKeyboardName( sal_Bool bRefresh )
 {
     if( bRefresh || ! m_aKeyboardName.Len() )
     {

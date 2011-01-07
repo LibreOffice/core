@@ -412,7 +412,7 @@ BitmapEx PNGReaderImpl::GetBitmapEx( const Size& rPreviewSizeHint )
             case PNGCHUNK_IDAT :
             {
                 if ( !mpInflateInBuf )  // taking care that the header has properly been read
-                    mbStatus = FALSE;
+                    mbStatus = sal_False;
                 else if ( !mbIDAT )     // the gfx is finished, but there may be left a zlibCRC of about 4Bytes
                     ImplReadIDAT();
             }
@@ -635,7 +635,7 @@ sal_Bool PNGReaderImpl::ImplReadHeader( const Size& rPreviewSizeHint )
     nScansize64++;       // each scanline includes one filterbyte
 
     if ( nScansize64 > SAL_MAX_UINT32 )
-        return FALSE;
+        return sal_False;
 
     mnScansize = static_cast< sal_uInt32 >( nScansize64 );
 

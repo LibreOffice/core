@@ -44,7 +44,7 @@ class ExtendedXlfd;
 
 struct VerticalTextItem
 {
-    BOOL                mbFixed;
+    sal_Bool                mbFixed;
     XFontStruct*        mpXFontStruct;
     const sal_Unicode*  mpString;
     int                 mnLength;
@@ -59,7 +59,7 @@ struct VerticalTextItem
                         int nTransX,
                         int nTransY,
                         int nFixedAdvance )
-      : mbFixed( TRUE ),
+      : mbFixed( sal_True ),
         mpXFontStruct( pXFontStruct ),
         mpString( pString ),
         mnLength( nLength ),
@@ -74,7 +74,7 @@ struct VerticalTextItem
                         int nTransX,
                         int nTransY,
                         int* pAdvanceAry )
-      : mbFixed( FALSE ),
+      : mbFixed( sal_False ),
         mpXFontStruct( pXFontStruct ),
         mpString( pString ),
         mnLength( nLength ),

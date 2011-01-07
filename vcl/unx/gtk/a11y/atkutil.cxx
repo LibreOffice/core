@@ -598,7 +598,7 @@ static void handle_menu_highlighted(::VclMenuEvent const * pEvent)
     try
     {
         Menu* pMenu = pEvent->GetMenu();
-        USHORT nPos = pEvent->GetItemPos();
+        sal_uInt16 nPos = pEvent->GetItemPos();
 
         if( pMenu &&  nPos != 0xFFFF)
         {

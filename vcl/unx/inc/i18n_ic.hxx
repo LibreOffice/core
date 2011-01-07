@@ -75,7 +75,7 @@ public:
     void HandleDestroyIM();
 
     int  HandleKeyEvent( XKeyEvent *pEvent, SalFrame *pFrame ); // unused
-    void EndExtTextInput( USHORT nFlags );                      // unused
+    void EndExtTextInput( sal_uInt16 nFlags );                      // unused
     int  CommitStringCallback( sal_Unicode* pText, sal_Size nLength );
     int  CommitKeyEvent( sal_Unicode* pText, sal_Size nLength );
     int  UpdateSpotLocation();

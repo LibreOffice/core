@@ -67,21 +67,21 @@ class SalPolyLine
             XPoint              Points_[STATIC_POINTS];
             XPoint             *pFirst_;
 public:
-    inline                      SalPolyLine( ULONG nPoints );
-    inline                      SalPolyLine( ULONG nPoints, const SalPoint *p );
+    inline                      SalPolyLine( sal_uInt32 nPoints );
+    inline                      SalPolyLine( sal_uInt32 nPoints, const SalPoint *p );
     inline                      ~SalPolyLine();
-    inline  XPoint             &operator [] ( ULONG n ) const
+    inline  XPoint             &operator [] ( sal_uInt32 n ) const
                                 { return pFirst_[n]; }
 };
 
-inline SalPolyLine::SalPolyLine( ULONG nPoints )
+inline SalPolyLine::SalPolyLine( sal_uInt32 nPoints )
     : pFirst_( nPoints+1 > STATIC_POINTS ? new XPoint[nPoints+1] : Points_ )
 {}
 
-inline SalPolyLine::SalPolyLine( ULONG nPoints, const SalPoint *p )
+inline SalPolyLine::SalPolyLine( sal_uInt32 nPoints, const SalPoint *p )
     : pFirst_( nPoints+1 > STATIC_POINTS ? new XPoint[nPoints+1] : Points_ )
 {
-    for( ULONG i = 0; i < nPoints; i++ )
+    for( sal_uInt32 i = 0; i < nPoints; i++ )
     {
         pFirst_[i].x = (short)p[i].mnX;
         pFirst_[i].y = (short)p[i].mnY;
@@ -124,7 +124,7 @@ X11SalGraphics::X11SalGraphics()
 #ifdef ENABLE_GRAPHITE
     // check if graphite fonts have been disabled
     static const char* pDisableGraphiteStr = getenv( "SAL_DISABLE_GRAPHITE" );
-    bDisableGraphite_       = pDisableGraphiteStr ? (pDisableGraphiteStr[0]!='0') : FALSE;
+    bDisableGraphite_       = pDisableGraphiteStr ? (pDisableGraphiteStr[0]!='0') : sal_False;
 #endif
 
     pBrushGC_           = NULL;
@@ -140,20 +140,20 @@ X11SalGraphics::X11SalGraphics()
     pStippleGC_         = NULL;
     pTrackingGC_        = NULL;
 
-    bWindow_            = FALSE;
-    bPrinter_           = FALSE;
-    bVirDev_            = FALSE;
-    bPenGC_         = FALSE;
-    bFontGC_            = FALSE;
-    bBrushGC_           = FALSE;
-    bMonoGC_            = FALSE;
-    bCopyGC_            = FALSE;
-    bInvertGC_          = FALSE;
-    bInvert50GC_        = FALSE;
-    bStippleGC_         = FALSE;
-    bTrackingGC_        = FALSE;
-    bXORMode_           = FALSE;
-    bDitherBrush_       = FALSE;
+    bWindow_            = sal_False;
+    bPrinter_           = sal_False;
+    bVirDev_            = sal_False;
+    bPenGC_         = sal_False;
+    bFontGC_            = sal_False;
+    bBrushGC_           = sal_False;
+    bMonoGC_            = sal_False;
+    bCopyGC_            = sal_False;
+    bInvertGC_          = sal_False;
+    bInvert50GC_        = sal_False;
+    bStippleGC_         = sal_False;
+    bTrackingGC_        = sal_False;
+    bXORMode_           = sal_False;
+    bDitherBrush_       = sal_False;
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -241,7 +241,7 @@ void X11SalGraphics::Init( SalFrame *pFrame, Drawable aTarget, int nScreen )
     SetDrawable( aTarget, nScreen );
 #endif
 
-    bWindow_        = TRUE;
+    bWindow_        = sal_True;
     m_pFrame        = pFrame;
     m_pVDev         = NULL;
 }
@@ -306,7 +306,7 @@ GC X11SalGraphics::SelectPen()
             XSetForeground( pDisplay, pPenGC_, nPenPixel_ );
         XSetFunction  ( pDisplay, pPenGC_, bXORMode_ ? GXxor : GXcopy );
         SetClipRegion( pPenGC_ );
-        bPenGC_ = TRUE;
+        bPenGC_ = sal_True;
     }
 
     return pPenGC_;
@@ -359,7 +359,7 @@ GC X11SalGraphics::SelectBrush()
         XSetFunction  ( pDisplay, pBrushGC_, bXORMode_ ? GXxor : GXcopy );
         SetClipRegion( pBrushGC_ );
 
-        bBrushGC_ = TRUE;
+        bBrushGC_ = sal_True;
     }
 
     return pBrushGC_;
@@ -391,26 +391,26 @@ GC X11SalGraphics::GetTrackingGC()
     if( !bTrackingGC_ )
     {
         SetClipRegion( pTrackingGC_ );
-        bTrackingGC_ = TRUE;
+        bTrackingGC_ = sal_True;
     }
 
     return pTrackingGC_;
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-void X11SalGraphics::DrawLines( ULONG              nPoints,
+void X11SalGraphics::DrawLines( sal_uInt32              nPoints,
                                 const SalPolyLine &rPoints,
                                 GC                 pGC,
                                 bool               bClose
                                 )
 {
     // errechne wie viele Linien XWindow auf einmal zeichnen kann
-    ULONG nMaxLines = (GetDisplay()->GetMaxRequestSize() - sizeof(xPolyPointReq))
+    sal_uInt32 nMaxLines = (GetDisplay()->GetMaxRequestSize() - sizeof(xPolyPointReq))
                       / sizeof(xPoint);
     if( nMaxLines > nPoints ) nMaxLines = nPoints;
 
     // gebe alle Linien aus, die XWindows zeichnen kann.
-    ULONG n;
+    sal_uInt32 n;
     for( n = 0; nPoints - n > nMaxLines; n += nMaxLines - 1 )
         XDrawLines( GetXDisplay(),
                     GetDrawable(),
@@ -454,24 +454,24 @@ BOOL X11SalGraphics::GetDitherPixmap( SalColor nSalColor )
 
     // test for correct depth (8bit)
     if( GetColormap().GetVisual().GetDepth() != 8 )
-        return FALSE;
+        return sal_False;
 
     char    pBits[64];
     char   *pBitsPtr = pBits;
 
     // Set the pallette-entries for the dithering tile
-    UINT8 nSalColorRed   = SALCOLOR_RED   ( nSalColor );
-    UINT8 nSalColorGreen = SALCOLOR_GREEN ( nSalColor );
-    UINT8 nSalColorBlue  = SALCOLOR_BLUE  ( nSalColor );
+    sal_uInt8 nSalColorRed   = SALCOLOR_RED   ( nSalColor );
+    sal_uInt8 nSalColorGreen = SALCOLOR_GREEN ( nSalColor );
+    sal_uInt8 nSalColorBlue  = SALCOLOR_BLUE  ( nSalColor );
 
     for( int nY = 0; nY < 8; nY++ )
     {
         for( int nX = 0; nX < 8; nX++ )
         {
             short nMagic = nOrdDither8Bit[nY][nX];
-            UINT8 nR   = P_DELTA * DMAP( nSalColorRed,   nMagic );
-            UINT8 nG   = P_DELTA * DMAP( nSalColorGreen, nMagic );
-            UINT8 nB   = P_DELTA * DMAP( nSalColorBlue,  nMagic );
+            sal_uInt8 nR   = P_DELTA * DMAP( nSalColorRed,   nMagic );
+            sal_uInt8 nG   = P_DELTA * DMAP( nSalColorGreen, nMagic );
+            sal_uInt8 nB   = P_DELTA * DMAP( nSalColorBlue,  nMagic );
 
             *pBitsPtr++ = GetColormap().GetPixel( MAKE_SALCOLOR( nR, nG, nB ) );
         }
@@ -511,7 +511,7 @@ BOOL X11SalGraphics::GetDitherPixmap( SalColor nSalColor )
     pImage->data = NULL;
     XDestroyImage( pImage );
 
-    return TRUE;
+    return sal_True;
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -549,7 +549,7 @@ void X11SalGraphics::GetResolution( sal_Int32 &rDPIX, sal_Int32 &rDPIY ) // cons
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-USHORT X11SalGraphics::GetBitCount() // const
+sal_uInt16 X11SalGraphics::GetBitCount() // const
 {
     return GetVisual().GetDepth();
 }
@@ -581,15 +581,15 @@ void X11SalGraphics::ResetClipRegion()
 {
     if( pClipRegion_ )
     {
-        bPenGC_         = FALSE;
-        bFontGC_        = FALSE;
-        bBrushGC_       = FALSE;
-        bMonoGC_        = FALSE;
-        bCopyGC_        = FALSE;
-        bInvertGC_      = FALSE;
-        bInvert50GC_    = FALSE;
-        bStippleGC_     = FALSE;
-        bTrackingGC_    = FALSE;
+        bPenGC_         = sal_False;
+        bFontGC_        = sal_False;
+        bBrushGC_       = sal_False;
+        bMonoGC_        = sal_False;
+        bCopyGC_        = sal_False;
+        bInvertGC_      = sal_False;
+        bInvert50GC_    = sal_False;
+        bStippleGC_     = sal_False;
+        bTrackingGC_    = sal_False;
 
         XDestroyRegion( pClipRegion_ );
         pClipRegion_    = NULL;
@@ -597,7 +597,7 @@ void X11SalGraphics::ResetClipRegion()
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-void X11SalGraphics::BeginSetClipRegion( ULONG )
+void X11SalGraphics::BeginSetClipRegion( sal_uInt32 )
 {
     if( pClipRegion_ )
         XDestroyRegion( pClipRegion_ );
@@ -608,7 +608,7 @@ void X11SalGraphics::BeginSetClipRegion( ULONG )
 BOOL X11SalGraphics::unionClipRegion( long nX, long nY, long nDX, long nDY )
 {
     if (!nDX || !nDY)
-        return TRUE;
+        return sal_True;
 
     XRectangle aRect;
     aRect.x         = (short)nX;
@@ -618,7 +618,7 @@ BOOL X11SalGraphics::unionClipRegion( long nX, long nY, long nDX, long nDY )
 
     XUnionRectWithRegion( &aRect, pClipRegion_, pClipRegion_ );
 
-    return TRUE;
+    return sal_True;
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -631,15 +631,15 @@ bool X11SalGraphics::unionClipRegion( const ::basegfx::B2DPolyPolygon& )
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void X11SalGraphics::EndSetClipRegion()
 {
-    bPenGC_         = FALSE;
-    bFontGC_        = FALSE;
-    bBrushGC_       = FALSE;
-    bMonoGC_        = FALSE;
-    bCopyGC_        = FALSE;
-    bInvertGC_      = FALSE;
-    bInvert50GC_    = FALSE;
-    bStippleGC_     = FALSE;
-    bTrackingGC_    = FALSE;
+    bPenGC_         = sal_False;
+    bFontGC_        = sal_False;
+    bBrushGC_       = sal_False;
+    bMonoGC_        = sal_False;
+    bCopyGC_        = sal_False;
+    bInvertGC_      = sal_False;
+    bInvert50GC_    = sal_False;
+    bStippleGC_     = sal_False;
+    bTrackingGC_    = sal_False;
 
     if( XEmptyRegion( pClipRegion_ ) )
     {
@@ -654,7 +654,7 @@ void X11SalGraphics::SetLineColor()
     if( nPenColor_ != SALCOLOR_NONE )
     {
         nPenColor_      = SALCOLOR_NONE;
-        bPenGC_         = FALSE;
+        bPenGC_         = sal_False;
     }
 }
 
@@ -665,7 +665,7 @@ void X11SalGraphics::SetLineColor( SalColor nSalColor )
     {
         nPenColor_      = nSalColor;
         nPenPixel_      = GetPixel( nSalColor );
-        bPenGC_         = FALSE;
+        bPenGC_         = sal_False;
     }
 }
 
@@ -674,9 +674,9 @@ void X11SalGraphics::SetFillColor()
 {
     if( nBrushColor_ != SALCOLOR_NONE )
     {
-        bDitherBrush_   = FALSE;
+        bDitherBrush_   = sal_False;
         nBrushColor_    = SALCOLOR_NONE;
-        bBrushGC_       = FALSE;
+        bBrushGC_       = sal_False;
     }
 }
 
@@ -685,7 +685,7 @@ void X11SalGraphics::SetFillColor( SalColor nSalColor )
 {
     if( nBrushColor_ != nSalColor )
     {
-        bDitherBrush_   = FALSE;
+        bDitherBrush_   = sal_False;
         nBrushColor_    = nSalColor;
         nBrushPixel_    = GetPixel( nSalColor );
         if( TrueColor != GetColormap().GetVisual().GetClass()
@@ -707,7 +707,7 @@ void X11SalGraphics::SetFillColor( SalColor nSalColor )
             && nSalColor != MAKE_SALCOLOR( 0xFF, 0xFF, 0x00 ) // light brown
             && nSalColor != MAKE_SALCOLOR( 0xFF, 0xFF, 0xFF ) )
             bDitherBrush_ = GetDitherPixmap(nSalColor);
-        bBrushGC_       = FALSE;
+        bBrushGC_       = sal_False;
     }
 }
 
@@ -727,7 +727,7 @@ void X11SalGraphics::SetROPLineColor( SalROPColor nROPColor )
             break;
     }
     nPenColor_  = GetColormap().GetColor( nPenPixel_ );
-    bPenGC_     = FALSE;
+    bPenGC_     = sal_False;
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -745,9 +745,9 @@ void X11SalGraphics::SetROPFillColor( SalROPColor nROPColor )
             nBrushPixel_ = (Pixel)(1 << GetVisual().GetDepth()) - 1;
             break;
     }
-    bDitherBrush_   = FALSE;
+    bDitherBrush_   = sal_False;
     nBrushColor_    = GetColormap().GetColor( nBrushPixel_ );
-    bBrushGC_       = FALSE;
+    bBrushGC_       = sal_False;
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -756,14 +756,14 @@ void X11SalGraphics::SetXORMode( bool bSet, bool )
     if( !bXORMode_ == bSet )
     {
         bXORMode_   = bSet;
-        bPenGC_     = FALSE;
-        bBrushGC_   = FALSE;
-        bMonoGC_        = FALSE;
-        bCopyGC_        = FALSE;
-        bInvertGC_  = FALSE;
-        bInvert50GC_    = FALSE;
-        bStippleGC_ = FALSE;
-        bTrackingGC_    = FALSE;
+        bPenGC_     = sal_False;
+        bBrushGC_   = sal_False;
+        bMonoGC_        = sal_False;
+        bCopyGC_        = sal_False;
+        bInvertGC_  = sal_False;
+        bInvert50GC_    = sal_False;
+        bStippleGC_ = sal_False;
+        bTrackingGC_    = sal_False;
     }
 }
 
@@ -839,13 +839,13 @@ void X11SalGraphics::drawRect( long nX, long nY, long nDX, long nDY )
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-void X11SalGraphics::drawPolyLine( ULONG nPoints, const SalPoint *pPtAry )
+void X11SalGraphics::drawPolyLine( sal_uInt32 nPoints, const SalPoint *pPtAry )
 {
     drawPolyLine( nPoints, pPtAry, false );
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-void X11SalGraphics::drawPolyLine( ULONG nPoints, const SalPoint *pPtAry, bool bClose )
+void X11SalGraphics::drawPolyLine( sal_uInt32 nPoints, const SalPoint *pPtAry, bool bClose )
 {
     if( nPenColor_ != 0xFFFFFFFF )
     {
@@ -856,7 +856,7 @@ void X11SalGraphics::drawPolyLine( ULONG nPoints, const SalPoint *pPtAry, bool b
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-void X11SalGraphics::drawPolygon( ULONG nPoints, const SalPoint* pPtAry )
+void X11SalGraphics::drawPolygon( sal_uInt32 nPoints, const SalPoint* pPtAry )
 {
     if( nPoints == 0 )
         return;
@@ -929,7 +929,7 @@ void X11SalGraphics::drawPolyPolygon( sal_uInt32        nPoly,
 {
     if( nBrushColor_ != SALCOLOR_NONE )
     {
-        ULONG       i, n;
+        sal_uInt32      i, n;
         XLIB_Region pXRegA  = NULL;
 
         for( i = 0; i < nPoly; i++ ) {
@@ -956,7 +956,7 @@ void X11SalGraphics::drawPolyPolygon( sal_uInt32        nPoly,
             GC pGC = SelectBrush();
             SetClipRegion( pGC, pXRegA ); // ??? doppelt
             XDestroyRegion( pXRegA );
-            bBrushGC_ = FALSE;
+            bBrushGC_ = sal_False;
 
             XFillRectangle( GetXDisplay(),
                             GetDrawable(),
@@ -966,20 +966,20 @@ void X11SalGraphics::drawPolyPolygon( sal_uInt32        nPoly,
    }
 
    if( nPenColor_ != SALCOLOR_NONE )
-       for( ULONG i = 0; i < nPoly; i++ )
+       for( sal_uInt32 i = 0; i < nPoly; i++ )
            drawPolyLine( pPoints[i], pPtAry[i], true );
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
-sal_Bool X11SalGraphics::drawPolyLineBezier( ULONG, const SalPoint*, const BYTE* )
+sal_Bool X11SalGraphics::drawPolyLineBezier( sal_uInt32, const SalPoint*, const BYTE* )
 {
     return sal_False;
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
-sal_Bool X11SalGraphics::drawPolygonBezier( ULONG, const SalPoint*, const BYTE* )
+sal_Bool X11SalGraphics::drawPolygonBezier( sal_uInt32, const SalPoint*, const BYTE* )
 {
     return sal_False;
 }
@@ -994,7 +994,7 @@ sal_Bool X11SalGraphics::drawPolyPolygonBezier( sal_uInt32, const sal_uInt32*,
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
-void X11SalGraphics::invert( ULONG nPoints,
+void X11SalGraphics::invert( sal_uInt32 nPoints,
                              const SalPoint* pPtAry,
                              SalInvert nFlags )
 {
@@ -1021,9 +1021,9 @@ void X11SalGraphics::invert( ULONG nPoints,
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
-BOOL X11SalGraphics::drawEPS( long,long,long,long,void*,ULONG )
+BOOL X11SalGraphics::drawEPS( long,long,long,long,void*,sal_uInt32 )
 {
-    return FALSE;
+    return sal_False;
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -1094,22 +1094,22 @@ bool X11SalGraphics::drawPolyPolygon( const ::basegfx::B2DPolyPolygon& rOrigPoly
     // nothing to do for empty polypolygons
     const int nOrigPolyCount = rOrigPolyPoly.count();
     if( nOrigPolyCount <= 0 )
-        return TRUE;
+        return sal_True;
 
     // nothing to do if everything is transparent
     if( (nBrushColor_ == SALCOLOR_NONE)
     &&  (nPenColor_ == SALCOLOR_NONE) )
-        return TRUE;
+        return sal_True;
 
     // cannot handle pencolor!=brushcolor yet
     if( (nPenColor_ != SALCOLOR_NONE)
     &&  (nPenColor_ != nBrushColor_) )
-        return FALSE;
+        return sal_False;
 
     // TODO: remove the env-variable when no longer needed
     static const char* pRenderEnv = getenv( "SAL_DISABLE_RENDER_POLY" );
     if( pRenderEnv )
-        return FALSE;
+        return sal_False;
 
     // snap to raster if requested
     basegfx::B2DPolyPolygon aPolyPoly = rOrigPolyPoly;

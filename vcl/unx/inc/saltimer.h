@@ -37,7 +37,7 @@ public:
     virtual ~X11SalTimer();
 
     // overload all pure virtual methods
-    void            Start( ULONG nMS );
+    void            Start( sal_uInt32 nMS );
     void            Stop();
 };
 

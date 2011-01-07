@@ -1705,10 +1705,10 @@ sal_Bool ImplListBoxWindow::ProcessKeyInput( const KeyEvent& rKEvt )
 // -----------------------------------------------------------------------
 namespace
 {
-    static ::vcl::StringEntryIdentifier lcl_getEntry( const ImplEntryList& _rList, USHORT _nPos, String& _out_entryText )
+    static ::vcl::StringEntryIdentifier lcl_getEntry( const ImplEntryList& _rList, sal_uInt16 _nPos, String& _out_entryText )
     {
         OSL_PRECOND( ( _nPos != LISTBOX_ENTRY_NOTFOUND ), "lcl_getEntry: invalid position!" );
-        USHORT nEntryCount( _rList.GetEntryCount() );
+        sal_uInt16 nEntryCount( _rList.GetEntryCount() );
         if ( _nPos >= nEntryCount )
             _nPos = 0;
         _out_entryText = _rList.GetEntryText( _nPos );
@@ -1718,10 +1718,10 @@ namespace
         return reinterpret_cast< ::vcl::StringEntryIdentifier >( _nPos + 1 );
     }
 
-    static USHORT lcl_getEntryPos( ::vcl::StringEntryIdentifier _entry )
+    static sal_uInt16 lcl_getEntryPos( ::vcl::StringEntryIdentifier _entry )
     {
         // our pos is 0-based, but StringEntryIdentifier does not allow for a NULL
-        return static_cast< USHORT >( reinterpret_cast< sal_Int64 >( _entry ) ) - 1;
+        return static_cast< sal_uInt16 >( reinterpret_cast< sal_Int64 >( _entry ) ) - 1;
     }
 }
 
@@ -1734,14 +1734,14 @@ namespace
 // -----------------------------------------------------------------------
 ::vcl::StringEntryIdentifier ImplListBoxWindow::NextEntry( ::vcl::StringEntryIdentifier _currentEntry, String& _out_entryText ) const
 {
-    USHORT nNextPos = lcl_getEntryPos( _currentEntry ) + 1;
+    sal_uInt16 nNextPos = lcl_getEntryPos( _currentEntry ) + 1;
     return lcl_getEntry( *GetEntryList(), nNextPos, _out_entryText );
 }
 
 // -----------------------------------------------------------------------
 void ImplListBoxWindow::SelectEntry( ::vcl::StringEntryIdentifier _entry )
 {
-    USHORT nSelect = lcl_getEntryPos( _entry );
+    sal_uInt16 nSelect = lcl_getEntryPos( _entry );
     if ( mpEntryList->IsEntryPosSelected( nSelect ) )
     {
         // ignore that. This method is a callback from the QuickSelectionEngine, which means the user attempted
@@ -1759,12 +1759,12 @@ void ImplListBoxWindow::SelectEntry( ::vcl::StringEntryIdentifier _entry )
 
     // actually select
     mnCurrentPos = nSelect;
-    if ( SelectEntries( nSelect, LET_KEYMOVE, FALSE, FALSE ) )
+    if ( SelectEntries( nSelect, LET_KEYMOVE, sal_False, sal_False ) )
     {
-        mbTravelSelect = TRUE;
+        mbTravelSelect = sal_True;
         mnSelectModifier = 0;
         ImplCallSelect();
-        mbTravelSelect = FALSE;
+        mbTravelSelect = sal_False;
     }
 }
 
