@@ -29,6 +29,7 @@
 #include "precompiled_toolkit.hxx"
 
 #include "defaultgridcolumnmodel.hxx"
+#include "gridcolumn.hxx"
 
 /** === begin UNO includes === **/
 #include <com/sun/star/awt/XVclWindowPeer.hpp>
@@ -60,6 +61,7 @@ namespace toolkit
     using ::com::sun::star::uno::Exception;
     using ::com::sun::star::lang::IndexOutOfBoundsException;
     using ::com::sun::star::util::XCloneable;
+    using ::com::sun::star::lang::IllegalArgumentException;
     /** === end UNO using === **/
 
     //==================================================================================================================
@@ -115,9 +117,12 @@ namespace toolkit
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    ::sal_Int32 SAL_CALL DefaultGridColumnModel::addColumn( const Reference< XGridColumn > & i_column ) throw (RuntimeException)
+    ::sal_Int32 SAL_CALL DefaultGridColumnModel::addColumn( const Reference< XGridColumn > & i_column ) throw (RuntimeException, IllegalArgumentException)
     {
         ::osl::ClearableMutexGuard aGuard( m_aMutex );
+
+        if ( !i_column.is() )
+            throw IllegalArgumentException( ::rtl::OUString(), *this, 1 );
 
         m_aColumns.push_back( i_column );
         sal_Int32 index = m_aColumns.size() - 1;
@@ -132,6 +137,12 @@ namespace toolkit
         m_aContainerListeners.notifyEach( &XContainerListener::elementInserted, aEvent );
 
         return index;
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    Reference< XGridColumn > SAL_CALL DefaultGridColumnModel::createColumn(  ) throw (RuntimeException)
+    {
+        return new GridColumn();
     }
 
     //------------------------------------------------------------------------------------------------------------------
