@@ -338,15 +338,13 @@ long BorderWidthImpl::GetGap( long nWidth ) const
 
 double lcl_getGuessedWidth( long nTested, double nRate, bool nChanging )
 {
-    double nWidth = 0.0;
+    double nWidth = -1.0;
     if ( nChanging )
         nWidth = double( nTested ) / nRate;
     else
     {
         if ( double( nTested ) == nRate )
             nWidth = nRate;
-        else
-            nWidth = 0.0;
     }
 
     return nWidth;
@@ -361,21 +359,21 @@ long BorderWidthImpl::GuessWidth( long nLine1, long nLine2, long nGap )
     double nWidth1 = lcl_getGuessedWidth( nLine1, m_nRate1, bLine1Change );
     if ( bLine1Change )
         aToCompare.push_back( nWidth1 );
-    else if ( !bLine1Change && nWidth1 == 0 )
+    else if ( !bLine1Change && nWidth1 < 0 )
         bInvalid = true;
 
     bool bLine2Change = ( m_nFlags & CHANGE_LINE2 ) > 0;
     double nWidth2 = lcl_getGuessedWidth( nLine2, m_nRate2, bLine2Change );
     if ( bLine2Change )
         aToCompare.push_back( nWidth2 );
-    else if ( !bLine2Change && nWidth2 == 0 )
+    else if ( !bLine2Change && nWidth2 < 0 )
         bInvalid = true;
 
     bool bGapChange = ( m_nFlags & CHANGE_DIST ) > 0;
     double nWidthGap = lcl_getGuessedWidth( nGap, m_nRateGap, bGapChange );
     if ( bGapChange )
         aToCompare.push_back( nWidthGap );
-    else if ( !bGapChange && nWidthGap == 0 )
+    else if ( !bGapChange && nWidthGap < 0 )
         bInvalid = true;
 
     double nWidth = 0.0;
