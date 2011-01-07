@@ -47,42 +47,42 @@ class ARR\
 {\
 private:\
     T*   pData;\
-    USHORT  nUsed;\
-    BYTE    nGrow;\
-    BYTE    nUnused;\
+    sal_uInt16  nUsed;\
+    sal_uInt8   nGrow;\
+    sal_uInt8    nUnused;\
 public:\
-    ARR( BYTE nInitSize = nI, BYTE nGrowSize = nG );\
+    ARR( sal_uInt8 nInitSize = nI, sal_uInt8 nGrowSize = nG );\
     ARR( const ARR& rOrig );\
     ~ARR();\
 \
     ARR& operator= ( const ARR& rOrig );\
 \
-    const T& GetObject( USHORT nPos ) const; \
-    T& GetObject( USHORT nPos ); \
+    const T& GetObject( sal_uInt16 nPos ) const; \
+    T& GetObject( sal_uInt16 nPos ); \
 \
-    void Insert( USHORT nPos, ARR& rIns, USHORT nStart = 0, USHORT nEnd = USHRT_MAX );\
-    void Insert( USHORT nPos, const T& rElem );\
-    void Insert( USHORT nPos, const T& rElems, USHORT nLen );\
+    void Insert( sal_uInt16 nPos, ARR& rIns, sal_uInt16 nStart = 0, sal_uInt16 nEnd = USHRT_MAX );\
+    void Insert( sal_uInt16 nPos, const T& rElem );\
+    void Insert( sal_uInt16 nPos, const T& rElems, sal_uInt16 nLen );\
     void Append( const T& rElem );\
 \
-    BOOL Remove( const T& rElem );\
-    USHORT Remove( USHORT nPos, USHORT nLen );\
+    sal_Bool Remove( const T& rElem );\
+    sal_uInt16 Remove( sal_uInt16 nPos, sal_uInt16 nLen );\
 \
-    USHORT Count() const { return nUsed; }\
+    sal_uInt16 Count() const { return nUsed; }\
     T* operator*();\
-    const T& operator[]( USHORT nPos ) const;\
-    T& operator[]( USHORT nPos );\
+    const T& operator[]( sal_uInt16 nPos ) const;\
+    T& operator[]( sal_uInt16 nPos );\
 \
-    BOOL Contains( const T& rItem ) const;\
+    sal_Bool Contains( const T& rItem ) const;\
     void Clear() { Remove( 0, Count() ); }\
 };\
 \
-inline void ARR::Insert( USHORT nPos, ARR& rIns, USHORT nStart, USHORT nEnd )\
+inline void ARR::Insert( sal_uInt16 nPos, ARR& rIns, sal_uInt16 nStart, sal_uInt16 nEnd )\
 {\
     Insert( nPos, *(rIns.pData+(sizeof(T)*nStart)), nStart-nEnd+1 );\
 }\
 \
-inline void ARR::Insert( USHORT nPos, const T& rElem )\
+inline void ARR::Insert( sal_uInt16 nPos, const T& rElem )\
 {\
     Insert( nPos, rElem, 1 );\
 }\
@@ -91,24 +91,24 @@ inline T* ARR::operator*()\
 {\
     return ( nUsed==0 ? 0 : pData );\
 } \
-inline const T& ARR::operator[]( USHORT nPos ) const\
+inline const T& ARR::operator[]( sal_uInt16 nPos ) const\
 {\
     DBG_ASSERT( nPos < nUsed, "" ); \
     return *(pData+nPos);\
 } \
-inline T& ARR::operator [] (USHORT nPos) \
+inline T& ARR::operator [] (sal_uInt16 nPos) \
 {\
     DBG_ASSERT( nPos < nUsed, "" ); \
     return *(pData+nPos); \
 } \
-inline const T& ARR::GetObject( USHORT nPos ) const { return operator[](nPos); } \
-inline T& ARR::GetObject( USHORT nPos ) { return operator[](nPos); } \
+inline const T& ARR::GetObject( sal_uInt16 nPos ) const { return operator[](nPos); } \
+inline T& ARR::GetObject( sal_uInt16 nPos ) { return operator[](nPos); } \
 
 #ifndef _lint
 // String too long
 
 #define IMPL_OBJARRAY( ARR, T ) \
-ARR::ARR( BYTE nInitSize, BYTE nGrowSize ): \
+ARR::ARR( sal_uInt8 nInitSize, sal_uInt8 nGrowSize ): \
     nUsed(0), \
     nGrow( nGrowSize ? nGrowSize : 1 ), \
     nUnused(nInitSize) \
@@ -134,7 +134,7 @@ ARR::ARR( const ARR& rOrig ) \
         size_t nBytes = (nUsed + nUnused) * sizeof(T); \
         pData = (T*) new char [ nBytes ]; \
         memset( pData, 0, nBytes ); \
-        for ( USHORT n = 0; n < nUsed; ++n ) \
+        for ( sal_uInt16 n = 0; n < nUsed; ++n ) \
             *(pData+n) = *(rOrig.pData+n); \
     } \
     else \
@@ -143,14 +143,14 @@ ARR::ARR( const ARR& rOrig ) \
 \
 ARR::~ARR() \
 { \
-    for ( USHORT n = 0; n < nUsed; ++n ) \
+    for ( sal_uInt16 n = 0; n < nUsed; ++n ) \
         ( pData+n )->T::~T(); \
     delete[] (char*) pData;\
 } \
 \
 ARR& ARR::operator= ( const ARR& rOrig )\
 { \
-    for ( USHORT n = 0; n < nUsed; ++n ) \
+    for ( sal_uInt16 n = 0; n < nUsed; ++n ) \
         ( pData+n )->T::~T(); \
     delete[] (char*) pData;\
 \
@@ -163,7 +163,7 @@ ARR& ARR::operator= ( const ARR& rOrig )\
         size_t nBytes = (nUsed + nUnused) * sizeof(T); \
         pData = (T*) new char[ nBytes ]; \
         memset( pData, 0, nBytes ); \
-        for ( USHORT n = 0; n < nUsed; ++n ) \
+        for ( sal_uInt16 n = 0; n < nUsed; ++n ) \
             *(pData+n) = *(rOrig.pData+n); \
     } \
     else \
@@ -176,7 +176,7 @@ void ARR::Append( const T& aElem ) \
      \
     if ( nUnused == 0 ) \
     { \
-        USHORT nNewSize = (nUsed == 1) ? (nGrow==1 ? 2 : nGrow) : nUsed+nGrow; \
+        sal_uInt16 nNewSize = (nUsed == 1) ? (nGrow==1 ? 2 : nGrow) : nUsed+nGrow; \
         size_t nBytes = nNewSize * sizeof(T); \
         T* pNewData = (T*) new char[ nBytes ]; \
         memset( pNewData, 0, nBytes ); \
@@ -185,7 +185,7 @@ void ARR::Append( const T& aElem ) \
             memcpy( pNewData, pData, nUsed * sizeof(T) ); \
             delete[] (char*) pData;\
         } \
-        nUnused = (BYTE)(nNewSize-nUsed); \
+        nUnused = (sal_uInt8)(nNewSize-nUsed); \
         pData = pNewData; \
     } \
 \
@@ -195,17 +195,17 @@ void ARR::Append( const T& aElem ) \
     --nUnused; \
 } \
 \
-USHORT ARR::Remove( USHORT nPos, USHORT nLen ) \
+sal_uInt16 ARR::Remove( sal_uInt16 nPos, sal_uInt16 nLen ) \
 { \
     DBG_ASSERT( (nPos+nLen) < (nUsed+1), "" ); \
     DBG_ASSERT( nLen > 0, "" ); \
 \
-    nLen = Min( (USHORT)(nUsed-nPos), (USHORT)nLen ); \
+    nLen = Min( (sal_uInt16)(nUsed-nPos), (sal_uInt16)nLen ); \
 \
     if ( nLen == 0 ) \
         return 0; \
 \
-    for ( USHORT n = nPos; n < (nPos+nLen); ++n ) \
+    for ( sal_uInt16 n = nPos; n < (nPos+nLen); ++n ) \
         ( pData+n )->T::~T(); \
 \
     if ( (nUsed-nLen) == 0 ) \
@@ -219,8 +219,8 @@ USHORT ARR::Remove( USHORT nPos, USHORT nLen ) \
 \
     if ( (nUnused+nLen) >= nGrow ) \
     { \
-        USHORT nNewUsed = nUsed-nLen; \
-        USHORT nNewSize = ((nNewUsed+nGrow-1)/nGrow) * nGrow; \
+        sal_uInt16 nNewUsed = nUsed-nLen; \
+        sal_uInt16 nNewSize = ((nNewUsed+nGrow-1)/nGrow) * nGrow; \
         DBG_ASSERT( nNewUsed <= nNewSize && nNewUsed+nGrow > nNewSize, \
                     "shrink size computation failed" ); \
         size_t nBytes = nNewSize * sizeof(T); \
@@ -233,7 +233,7 @@ USHORT ARR::Remove( USHORT nPos, USHORT nLen ) \
         delete[] (char*) pData;\
         pData = pNewData; \
         nUsed = nNewUsed; \
-        nUnused = (BYTE)(nNewSize - nNewUsed); \
+        nUnused = (sal_uInt8)(nNewSize - nNewUsed); \
         return nLen; \
     } \
 \
@@ -243,39 +243,39 @@ USHORT ARR::Remove( USHORT nPos, USHORT nLen ) \
         memmove(pData+nPos, pData+nPos+nLen, (nUsed-nPos-nLen) * sizeof(T));\
     } \
     nUsed = nUsed - nLen; \
-    nUnused = sal::static_int_cast< BYTE >(nUnused + nLen); \
+    nUnused = sal::static_int_cast< sal_uInt8 >(nUnused + nLen); \
     return nLen; \
 } \
 \
-BOOL ARR::Remove( const T& aElem ) \
+sal_Bool ARR::Remove( const T& aElem ) \
 { \
     if ( nUsed == 0 ) \
-        return FALSE; \
+        return sal_False; \
 \
     const T *pIter = pData + nUsed - 1; \
-    for ( USHORT n = 0; n < nUsed; ++n, --pIter ) \
+    for ( sal_uInt16 n = 0; n < nUsed; ++n, --pIter ) \
         if ( *pIter == aElem ) \
         { \
             Remove(nUsed-n-1, 1); \
-            return TRUE; \
+            return sal_True; \
         } \
-    return FALSE; \
+    return sal_False; \
 } \
 \
-BOOL ARR::Contains( const T& rItem ) const \
+sal_Bool ARR::Contains( const T& rItem ) const \
 { \
     if ( !nUsed ) \
-        return FALSE; \
-    for ( USHORT n = 0; n < nUsed; ++n ) \
+        return sal_False; \
+    for ( sal_uInt16 n = 0; n < nUsed; ++n ) \
     { \
         const T& r2ndItem = GetObject(n); \
         if ( r2ndItem == rItem ) \
-            return TRUE; \
+            return sal_True; \
     } \
-    return FALSE; \
+    return sal_False; \
 } \
 \
-void ARR::Insert( USHORT nPos, const T& rElems, USHORT nLen ) \
+void ARR::Insert( sal_uInt16 nPos, const T& rElems, sal_uInt16 nLen ) \
 { \
     DBG_ASSERT( nPos <= nUsed, "" ); \
      \
@@ -283,7 +283,7 @@ void ARR::Insert( USHORT nPos, const T& rElems, USHORT nLen ) \
     { \
         \
         /* auf die naechste Grow-Grenze aufgerundet vergroeszern */ \
-        USHORT nNewSize; \
+        sal_uInt16 nNewSize; \
         for ( nNewSize = nUsed+nGrow; nNewSize < (nUsed + nLen); ++nNewSize ) \
             /* empty loop */; \
         size_t nBytes = nNewSize * sizeof(T); \
@@ -296,7 +296,7 @@ void ARR::Insert( USHORT nPos, const T& rElems, USHORT nLen ) \
             memcpy( pNewData, pData, nUsed * sizeof(T) ); \
             delete (char*) pData;\
         } \
-        nUnused = (BYTE)(nNewSize-nUsed); \
+        nUnused = (sal_uInt8)(nNewSize-nUsed); \
         pData = pNewData; \
     } \
 \
@@ -308,7 +308,7 @@ void ARR::Insert( USHORT nPos, const T& rElems, USHORT nLen ) \
 \
     memmove(pData+nPos, &rElems, sizeof(T) * nLen); \
     nUsed = nUsed + nLen; \
-    nUnused = sal::static_int_cast< BYTE >(nUnused - nLen); \
+    nUnused = sal::static_int_cast< sal_uInt8 >(nUnused - nLen); \
 }
 
 // _lint
@@ -318,26 +318,26 @@ class SFX2_DLLPUBLIC SfxPtrArr
 {
 private:
     void** pData;
-    USHORT nUsed;
-    BYTE nGrow;
-    BYTE nUnused;
+    sal_uInt16 nUsed;
+    sal_uInt8 nGrow;
+    sal_uInt8 nUnused;
 public:
-    SfxPtrArr( BYTE nInitSize = 0, BYTE nGrowSize = 8 );
+    SfxPtrArr( sal_uInt8 nInitSize = 0, sal_uInt8 nGrowSize = 8 );
     SfxPtrArr( const SfxPtrArr& rOrig );
     ~SfxPtrArr();
     SfxPtrArr& operator= ( const SfxPtrArr& rOrig );
-    void* GetObject( USHORT nPos ) const { return operator[](nPos); }
-    void*& GetObject( USHORT nPos ) { return operator[](nPos); }
-    void Insert( USHORT nPos, void* rElem );
+    void* GetObject( sal_uInt16 nPos ) const { return operator[](nPos); }
+    void*& GetObject( sal_uInt16 nPos ) { return operator[](nPos); }
+    void Insert( sal_uInt16 nPos, void* rElem );
     void Append( void* rElem );
-    BOOL Replace( void* pOldElem, void* pNewElem );
-    BOOL Remove( void* rElem );
-    USHORT Remove( USHORT nPos, USHORT nLen );
-    USHORT Count() const { return nUsed; }
+    sal_Bool Replace( void* pOldElem, void* pNewElem );
+    sal_Bool Remove( void* rElem );
+    sal_uInt16 Remove( sal_uInt16 nPos, sal_uInt16 nLen );
+    sal_uInt16 Count() const { return nUsed; }
     inline void** operator*();
-    inline void* operator[]( USHORT nPos ) const;
-    inline void*& operator[]( USHORT nPos );
-    BOOL Contains( const void* rItem ) const;
+    inline void* operator[]( sal_uInt16 nPos ) const;
+    inline void*& operator[]( sal_uInt16 nPos );
+    sal_Bool Contains( const void* rItem ) const;
     void Clear() { Remove( 0, Count() ); }
 };
 
@@ -346,13 +346,13 @@ inline void** SfxPtrArr::operator*()
     return ( nUsed==0 ? 0 : pData );
 }
 
-inline void* SfxPtrArr::operator[]( USHORT nPos ) const
+inline void* SfxPtrArr::operator[]( sal_uInt16 nPos ) const
 {
     DBG_ASSERT( nPos < nUsed, "" );
     return *(pData+nPos);
 }
 
-inline void*& SfxPtrArr::operator [] (USHORT nPos)
+inline void*& SfxPtrArr::operator [] (sal_uInt16 nPos)
 {
     DBG_ASSERT( nPos < nUsed, "" );
     return *(pData+nPos);
@@ -363,35 +363,35 @@ inline void*& SfxPtrArr::operator [] (USHORT nPos)
 class ARR: public SfxPtrArr\
 {\
 public:\
-   ARR( BYTE nIni=nI, BYTE nGrowValue=nG ):\
+   ARR( sal_uInt8 nIni=nI, sal_uInt8 nGrowValue=nG ):\
        SfxPtrArr(nIni,nGrowValue) \
    {}\
    ARR( const ARR& rOrig ):\
        SfxPtrArr(rOrig) \
    {}\
-   T GetObject( USHORT nPos ) const { return operator[](nPos); } \
-   T& GetObject( USHORT nPos ) { return operator[](nPos); } \
-   void Insert( USHORT nPos, T aElement ) {\
+   T GetObject( sal_uInt16 nPos ) const { return operator[](nPos); } \
+   T& GetObject( sal_uInt16 nPos ) { return operator[](nPos); } \
+   void Insert( sal_uInt16 nPos, T aElement ) {\
        SfxPtrArr::Insert(nPos,(void *)aElement);\
    }\
    void Append( T aElement ) {\
        SfxPtrArr::Append((void *)aElement);\
    }\
-   BOOL Replace( T aOldElem, T aNewElem ) {\
+   sal_Bool Replace( T aOldElem, T aNewElem ) {\
        return SfxPtrArr::Replace((void *)aOldElem, (void*) aNewElem);\
    }\
    void Remove( T aElement ) {\
        SfxPtrArr::Remove((void*)aElement);\
    }\
-   void Remove( USHORT nPos, USHORT nLen = 1 ) {\
+   void Remove( sal_uInt16 nPos, sal_uInt16 nLen = 1 ) {\
        SfxPtrArr::Remove( nPos, nLen ); \
    }\
    T* operator *() {\
        return (T*) SfxPtrArr::operator*();\
    }\
-   T operator[]( USHORT nPos ) const { \
+   T operator[]( sal_uInt16 nPos ) const { \
        return (T) SfxPtrArr::operator[](nPos); } \
-   T& operator[]( USHORT nPos ) { \
+   T& operator[]( sal_uInt16 nPos ) { \
        return (T&) SfxPtrArr::operator[](nPos); } \
    void Clear() { Remove( 0, Count() ); }\
 };
@@ -400,25 +400,25 @@ class ByteArr
 {
 private:
     char* pData;
-    USHORT nUsed;
-    BYTE nGrow;
-    BYTE nUnused;
+    sal_uInt16 nUsed;
+    sal_uInt8 nGrow;
+    sal_uInt8 nUnused;
 public:
-    ByteArr( BYTE nInitSize = 0, BYTE nGrowSize = 8 );
+    ByteArr( sal_uInt8 nInitSize = 0, sal_uInt8 nGrowSize = 8 );
     ByteArr( const ByteArr& rOrig );
     ~ByteArr();
     ByteArr& operator= ( const ByteArr& rOrig );
-    char GetObject( USHORT nPos ) const { return operator[](nPos); }
-    char& GetObject( USHORT nPos ) { return operator[](nPos); }
-    void Insert( USHORT nPos, char rElem );
+    char GetObject( sal_uInt16 nPos ) const { return operator[](nPos); }
+    char& GetObject( sal_uInt16 nPos ) { return operator[](nPos); }
+    void Insert( sal_uInt16 nPos, char rElem );
     void Append( char rElem );
-    BOOL Remove( char rElem );
-    USHORT Remove( USHORT nPos, USHORT nLen );
-    USHORT Count() const { return nUsed; }
+    sal_Bool Remove( char rElem );
+    sal_uInt16 Remove( sal_uInt16 nPos, sal_uInt16 nLen );
+    sal_uInt16 Count() const { return nUsed; }
     char* operator*();
-    char operator[]( USHORT nPos ) const;
-    char& operator[]( USHORT nPos );
-    BOOL Contains( const char rItem ) const;
+    char operator[]( sal_uInt16 nPos ) const;
+    char& operator[]( sal_uInt16 nPos );
+    sal_Bool Contains( const char rItem ) const;
     void Clear() { Remove( 0, Count() ); }
 };
 
@@ -431,15 +431,15 @@ inline char* ByteArr::operator*()
 class ARR: public ByteArr\
 {\
 public:\
-        ARR( BYTE nIni=nI, BYTE nGrow=nG ):\
+        ARR( sal_uInt8 nIni=nI, sal_uInt8 nGrow=nG ):\
             ByteArr(nIni,nGrow) \
         {}\
         ARR( const ARR& rOrig ):\
             ByteArr(rOrig) \
         {}\
-        T GetObject( USHORT nPos ) const { return operator[](nPos); } \
-        T& GetObject( USHORT nPos ) { return operator[](nPos); } \
-        void Insert( USHORT nPos, T aElement ) {\
+        T GetObject( sal_uInt16 nPos ) const { return operator[](nPos); } \
+        T& GetObject( sal_uInt16 nPos ) { return operator[](nPos); } \
+        void Insert( sal_uInt16 nPos, T aElement ) {\
             ByteArr::Insert(nPos,(char)aElement);\
         }\
         void Append( T aElement ) {\
@@ -448,15 +448,15 @@ public:\
         void Remove( T aElement ) {\
             ByteArr::Remove((char)aElement);\
         }\
-        void Remove( USHORT nPos, USHORT nLen = 1 ) {\
+        void Remove( sal_uInt16 nPos, sal_uInt16 nLen = 1 ) {\
             ByteArr::Remove( nPos, nLen ); \
         }\
         T* operator *() {\
             return (T*) ByteArr::operator*();\
         }\
-        T operator[]( USHORT nPos ) const { \
+        T operator[]( sal_uInt16 nPos ) const { \
             return (T) ByteArr::operator[](nPos); } \
-        T& operator[]( USHORT nPos ) { \
+        T& operator[]( sal_uInt16 nPos ) { \
             return (T&) ByteArr::operator[](nPos); } \
         void Clear() { Remove( 0, Count() ); }\
 };
@@ -465,25 +465,25 @@ class WordArr
 {
 private:
     short* pData;
-    USHORT nUsed;
-    BYTE nGrow;
-    BYTE nUnused;
+    sal_uInt16 nUsed;
+    sal_uInt8 nGrow;
+    sal_uInt8 nUnused;
 public:
-    WordArr( BYTE nInitSize = 0, BYTE nGrowSize = 8 );
+    WordArr( sal_uInt8 nInitSize = 0, sal_uInt8 nGrowSize = 8 );
     WordArr( const WordArr& rOrig );
     ~WordArr();
     WordArr& operator= ( const WordArr& rOrig );
-    short GetObject( USHORT nPos ) const { return operator[](nPos); }
-    short& GetObject( USHORT nPos ) { return operator[](nPos); }
-    void Insert( USHORT nPos, short rElem );
+    short GetObject( sal_uInt16 nPos ) const { return operator[](nPos); }
+    short& GetObject( sal_uInt16 nPos ) { return operator[](nPos); }
+    void Insert( sal_uInt16 nPos, short rElem );
     void Append( short rElem );
-    BOOL Remove( short rElem );
-    USHORT Remove( USHORT nPos, USHORT nLen );
-    USHORT Count() const { return nUsed; }
+    sal_Bool Remove( short rElem );
+    sal_uInt16 Remove( sal_uInt16 nPos, sal_uInt16 nLen );
+    sal_uInt16 Count() const { return nUsed; }
     short* operator*();
-    short operator[]( USHORT nPos ) const;
-    short& operator[]( USHORT nPos );
-    BOOL Contains( const short rItem ) const;
+    short operator[]( sal_uInt16 nPos ) const;
+    short& operator[]( sal_uInt16 nPos );
+    sal_Bool Contains( const short rItem ) const;
     void Clear() { Remove( 0, Count() ); }
 };
 
@@ -496,15 +496,15 @@ inline short* WordArr::operator*()
 class ARR: public WordArr\
 {\
 public:\
-        ARR( BYTE nIni=nI, BYTE nGrowValue=nG ):\
+        ARR( sal_uInt8 nIni=nI, sal_uInt8 nGrowValue=nG ):\
             WordArr(nIni,nGrowValue) \
         {}\
         ARR( const ARR& rOrig ):\
             WordArr(rOrig) \
         {}\
-        T GetObject( USHORT nPos ) const { return operator[](nPos); } \
-        T& GetObject( USHORT nPos ) { return operator[](nPos); } \
-        void Insert( USHORT nPos, T aElement ) {\
+        T GetObject( sal_uInt16 nPos ) const { return operator[](nPos); } \
+        T& GetObject( sal_uInt16 nPos ) { return operator[](nPos); } \
+        void Insert( sal_uInt16 nPos, T aElement ) {\
             WordArr::Insert(nPos,(short)aElement);\
         }\
         void Append( T aElement ) {\
@@ -513,15 +513,15 @@ public:\
         void Remove( T aElement ) {\
             WordArr::Remove((short)aElement);\
         }\
-        void Remove( USHORT nPos, USHORT nLen = 1 ) {\
+        void Remove( sal_uInt16 nPos, sal_uInt16 nLen = 1 ) {\
             WordArr::Remove( nPos, nLen ); \
         }\
         T* operator *() {\
             return (T*) WordArr::operator*();\
         }\
-        T operator[]( USHORT nPos ) const { \
+        T operator[]( sal_uInt16 nPos ) const { \
             return (T) WordArr::operator[](nPos); } \
-        T& operator[]( USHORT nPos ) { \
+        T& operator[]( sal_uInt16 nPos ) { \
             return (T&) WordArr::operator[](nPos); } \
         void Clear() { Remove( 0, Count() ); }\
 };

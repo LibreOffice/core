@@ -115,7 +115,7 @@ protected:
                             SfxModelessDialog( SfxBindings*, SfxChildWindow*,
                                 Window*, WinBits nWinStyle = WB_STDMODELESS );
                             ~SfxModelessDialog();
-    virtual BOOL            Close();
+    virtual sal_Bool            Close();
     virtual void            Resize();
     virtual void            Move();
     virtual void            StateChanged( StateChangedType nStateChange );
@@ -154,7 +154,7 @@ protected:
                             ~SfxFloatingWindow();
 
     virtual void            StateChanged( StateChangedType nStateChange );
-    virtual BOOL            Close();
+    virtual sal_Bool            Close();
     virtual void            Resize();
     virtual void            Move();
     virtual long            Notify( NotifyEvent& rNEvt );
@@ -186,14 +186,14 @@ struct SingleTabDlgImpl
         m_pTabPage( NULL ), m_pSfxPage( NULL ), m_pLine( NULL ), m_pInfoImage( NULL ) {}
 };
 
-typedef USHORT* (*GetTabPageRanges)(); // liefert internationale Which-Werte
+typedef sal_uInt16* (*GetTabPageRanges)(); // liefert internationale Which-Werte
 
 class SFX2_DLLPUBLIC SfxSingleTabDialog : public SfxModalDialog
 {
 public:
-    SfxSingleTabDialog( Window* pParent, const SfxItemSet& rOptionsSet, USHORT nUniqueId );
-    SfxSingleTabDialog( Window* pParent, USHORT nUniqueId, const SfxItemSet* pInSet = 0 );
-    SfxSingleTabDialog( Window* pParent, USHORT nUniqueId, const String& rInfoURL );
+    SfxSingleTabDialog( Window* pParent, const SfxItemSet& rOptionsSet, sal_uInt16 nUniqueId );
+    SfxSingleTabDialog( Window* pParent, sal_uInt16 nUniqueId, const SfxItemSet* pInSet = 0 );
+    SfxSingleTabDialog( Window* pParent, sal_uInt16 nUniqueId, const String& rInfoURL );
 
     virtual             ~SfxSingleTabDialog();
 
@@ -201,7 +201,7 @@ public:
     void                SetTabPage( SfxTabPage* pTabPage, GetTabPageRanges pRangesFunc = 0 );
     SfxTabPage*         GetTabPage() const { return pImpl->m_pSfxPage; }
 
-    const USHORT*       GetInputRanges( const SfxItemPool& rPool );
+    const sal_uInt16*       GetInputRanges( const SfxItemPool& rPool );
 //  void                SetInputSet( const SfxItemSet* pInSet ) { pOptions = pInSet; }
 //  const SfxItemSet*   GetOutputItemSet() const { return pOutSet; }
     OKButton*           GetOKButton() const { return pOKBtn; }
@@ -210,7 +210,7 @@ public:
 
 private:
     GetTabPageRanges    fnGetRanges;
-    USHORT*             pRanges;
+    sal_uInt16*             pRanges;
 
     OKButton*           pOKBtn;
     CancelButton*       pCancelBtn;

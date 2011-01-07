@@ -114,7 +114,7 @@ public:
     {   return new SfxLinkItem( *this ); }
     virtual int              operator==( const SfxPoolItem& rL) const
     {   return ((SfxLinkItem&)rL).aLink == aLink; }
-    SfxLinkItem( USHORT nWhichId, const Link& rValue ) : SfxPoolItem( nWhichId )
+    SfxLinkItem( sal_uInt16 nWhichId, const Link& rValue ) : SfxPoolItem( nWhichId )
     {   aLink = rValue; }
     const Link&              GetValue() const { return aLink; }
 };
@@ -136,7 +136,7 @@ public:
     SfxItemFactory_Impl* GetFactory_Impl( TypeId ) const;
     const SvGlobalName* GetGlobalName( const SfxPoolItem* pItem ) const;
     SfxPoolItem* Create(
-        const SvGlobalName& rName, USHORT nId, SvStream* pStrm = 0) const;
+        const SvGlobalName& rName, sal_uInt16 nId, SvStream* pStrm = 0) const;
     void         RegisterItemFactory(
         const SvGlobalName& rName, SfxItemCreateFunc );
 };
@@ -161,15 +161,15 @@ class SFX2_DLLPUBLIC SfxApplication: public SfxShell
 
 //#if 0 // _SOLAR__PRIVATE
     DECL_DLLPRIVATE_LINK(       GlobalBasicErrorHdl_Impl, StarBASIC* );
-    SAL_DLLPRIVATE BOOL         SaveAll_Impl(BOOL bPrompt = FALSE, BOOL bAutoSave = FALSE);
-    SAL_DLLPRIVATE short        QuerySave_Impl(SfxObjectShell &, BOOL bAutoSave = FALSE);
+    SAL_DLLPRIVATE sal_Bool         SaveAll_Impl(sal_Bool bPrompt = sal_False, sal_Bool bAutoSave = sal_False);
+    SAL_DLLPRIVATE short        QuerySave_Impl(SfxObjectShell &, sal_Bool bAutoSave = sal_False);
     SAL_DLLPRIVATE void         InitializeDisplayName_Impl();
 //#endif
 
     static SfxApplication*      Create();
     void                        Init();
     void                        Exit();
-    void                        SettingsChange( USHORT, const AppSettings & );
+    void                        SettingsChange( sal_uInt16, const AppSettings & );
     void                        Main( );
     void                        PreInit( );
     void                        Quit();
@@ -201,14 +201,14 @@ public:
                                             const String& rMimeType,
                                 const ::com::sun::star::uno::Any & rValue );
     ::sfx2::SvLinkSource*       DdeCreateLinkSource( const String& rItem );
-    BOOL                        InitializeDde();
+    sal_Bool                        InitializeDde();
     const DdeService*           GetDdeService() const;
     DdeService*                 GetDdeService();
     void                        AddDdeTopic( SfxObjectShell* );
     void                        RemoveDdeTopic( SfxObjectShell* );
 
     // "static" methods
-    ULONG                       LoadTemplate( SfxObjectShellLock& xDoc, const String& rFileName, BOOL bCopy=TRUE, SfxItemSet* pArgs = 0 );
+    sal_uIntPtr                       LoadTemplate( SfxObjectShellLock& xDoc, const String& rFileName, sal_Bool bCopy=sal_True, SfxItemSet* pArgs = 0 );
     ::com::sun::star::uno::Reference< ::com::sun::star::task::XStatusIndicator > GetStatusIndicator() const;
     SfxTemplateDialog*          GetTemplateDialog();
     Window*                     GetTopWindow() const;
@@ -221,40 +221,40 @@ public:
     SfxMacroConfig*             GetMacroConfig() const;
     SfxProgress*                GetProgress() const;
     const String&               GetLastSaveDirectory() const;
-    USHORT                      GetFreeIndex();
-    void                        ReleaseIndex(USHORT i);
+    sal_uInt16                      GetFreeIndex();
+    void                        ReleaseIndex(sal_uInt16 i);
     SfxEventConfiguration*      GetEventConfig() const;
 
     // Basic/Scripting
     static sal_Bool             IsXScriptURL( const String& rScriptURL );
     static ::rtl::OUString      ChooseScript();
-    static void                 MacroOrganizer( INT16 nTabId );
+    static void                 MacroOrganizer( sal_Int16 nTabId );
     BasicManager*               GetBasicManager();
     com::sun::star::uno::Reference< com::sun::star::script::XLibraryContainer >
                                 GetDialogContainer();
     com::sun::star::uno::Reference< com::sun::star::script::XLibraryContainer >
                                 GetBasicContainer();
     StarBASIC*                  GetBasic();
-    USHORT                      SaveBasicManager() const;
-    USHORT                      SaveBasicAndDialogContainer() const;
+    sal_uInt16                      SaveBasicManager() const;
+    sal_uInt16                      SaveBasicAndDialogContainer() const;
     void                        EnterBasicCall();
-    FASTBOOL                    IsInBasicCall() const;
+    int                    IsInBasicCall() const;
     void                        LeaveBasicCall();
     void                        RegisterBasicConstants( const char *pPrefix,
                                                         const SfxConstant *pConsts,
-                                                        USHORT nCount );
+                                                        sal_uInt16 nCount );
 
     // misc.
-    BOOL                        GetOptions(SfxItemSet &);
+    sal_Bool                        GetOptions(SfxItemSet &);
     void                        SetOptions(const SfxItemSet &);
-    virtual void                Invalidate(USHORT nId = 0);
-    void                        NotifyEvent(const SfxEventHint& rEvent, FASTBOOL bSynchron = TRUE );
-    BOOL                        IsDowning() const;
-    BOOL                        IsSecureURL( const INetURLObject &rURL, const String *pReferer ) const;
+    virtual void                Invalidate(sal_uInt16 nId = 0);
+    void                        NotifyEvent(const SfxEventHint& rEvent, int bSynchron = sal_True );
+    sal_Bool                        IsDowning() const;
+    sal_Bool                        IsSecureURL( const INetURLObject &rURL, const String *pReferer ) const;
     static SfxObjectShellRef    DocAlreadyLoaded( const String &rName,
-                                                  BOOL bSilent,
-                                                  BOOL bActivate,
-                                                  BOOL bForbidVisible = FALSE,
+                                                  sal_Bool bSilent,
+                                                  sal_Bool bActivate,
+                                                  sal_Bool bForbidVisible = sal_False,
                                                   const String* pPostStr = 0);
     void                        ResetLastDir();
 
@@ -263,15 +263,15 @@ public:
     SAL_DLLPRIVATE SfxDispatcher* GetAppDispatcher_Impl();
     SAL_DLLPRIVATE SfxDispatcher* GetDispatcher_Impl();
 
-    SAL_DLLPRIVATE BOOL         QueryExit_Impl();
+    SAL_DLLPRIVATE sal_Bool         QueryExit_Impl();
     SAL_DLLPRIVATE void         SetOptions_Impl(const SfxItemSet &);
-    SAL_DLLPRIVATE FASTBOOL     Initialize_Impl();
+    SAL_DLLPRIVATE int     Initialize_Impl();
 
     SAL_DLLPRIVATE SfxAppData_Impl* Get_Impl() const { return pAppData_Impl; }
 
     // Object-Factories/global arrays
     SAL_DLLPRIVATE void         RegisterChildWindow_Impl(SfxModule*, SfxChildWinFactory*);
-    SAL_DLLPRIVATE void         RegisterChildWindowContext_Impl(SfxModule*, USHORT, SfxChildWinContextFactory*);
+    SAL_DLLPRIVATE void         RegisterChildWindowContext_Impl(SfxModule*, sal_uInt16, SfxChildWinContextFactory*);
     SAL_DLLPRIVATE void         RegisterStatusBarControl_Impl(SfxModule*, SfxStbCtrlFactory*);
     SAL_DLLPRIVATE void         RegisterMenuControl_Impl(SfxModule*, SfxMenuCtrlFactory*);
     SAL_DLLPRIVATE void         RegisterToolBoxControl_Impl( SfxModule*, SfxTbxCtrlFactory*);
@@ -306,7 +306,7 @@ public:
     SAL_DLLPRIVATE void         PlayMacro_Impl( SfxRequest &rReq, StarBASIC *pBas );
 
     SAL_DLLPRIVATE void         EnterAsynchronCall_Impl();
-    SAL_DLLPRIVATE FASTBOOL     IsInAsynchronCall_Impl() const;
+    SAL_DLLPRIVATE int     IsInAsynchronCall_Impl() const;
     SAL_DLLPRIVATE void         LeaveAsynchronCall_Impl();
     SAL_DLLPRIVATE void         Registrations_Impl();
     SAL_DLLPRIVATE SfxWorkWindow* GetWorkWindow_Impl(const SfxViewFrame *pFrame=0) const;

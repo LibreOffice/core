@@ -47,7 +47,7 @@ protected:
 public:
 #define ID_TABPAGE_MANAGESTYLES 1
     SfxStyleDialog( Window* pParent, const ResId& rResId, SfxStyleSheetBase&,
-                    BOOL bFreeRes = TRUE, const String* pUserBtnTxt = 0 );
+                    sal_Bool bFreeRes = sal_True, const String* pUserBtnTxt = 0 );
 
     ~SfxStyleDialog();
 

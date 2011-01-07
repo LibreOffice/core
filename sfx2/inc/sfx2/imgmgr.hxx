@@ -50,18 +50,18 @@ public:
                     SfxImageManager( SfxModule* pModule = 0 );
                     ~SfxImageManager();
 
-    void            RegisterToolBox( ToolBox *pBox, USHORT nFlags=0xFFFF);
+    void            RegisterToolBox( ToolBox *pBox, sal_uInt16 nFlags=0xFFFF);
     void            ReleaseToolBox( ToolBox *pBox );
 
                     // get images from resources
     void            SetImages( ToolBox& rToolBox );
-    void            SetImages( ToolBox& rToolBox, BOOL bHiContrast, BOOL bLarge );
-    void            SetImagesForceSize( ToolBox& rToolBox, BOOL bHiContrast, BOOL bLarge );
+    void            SetImages( ToolBox& rToolBox, sal_Bool bHiContrast, sal_Bool bLarge );
+    void            SetImagesForceSize( ToolBox& rToolBox, sal_Bool bHiContrast, sal_Bool bLarge );
 
-    Image           GetImage( USHORT nId, BOOL bLarge, BOOL bHiContrast ) const;
-    Image           GetImage( USHORT nId, BOOL bHiContrast ) const;
-    Image           SeekImage( USHORT nId, BOOL bLarge, BOOL bHiContrast ) const;
-    Image           SeekImage( USHORT nId, BOOL bHiContrast ) const;
+    Image           GetImage( sal_uInt16 nId, sal_Bool bLarge, sal_Bool bHiContrast ) const;
+    Image           GetImage( sal_uInt16 nId, sal_Bool bHiContrast ) const;
+    Image           SeekImage( sal_uInt16 nId, sal_Bool bLarge, sal_Bool bHiContrast ) const;
+    Image           SeekImage( sal_uInt16 nId, sal_Bool bHiContrast ) const;
 };
 
 #endif

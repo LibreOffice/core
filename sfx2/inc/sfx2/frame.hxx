@@ -138,7 +138,7 @@ public:
     static SfxFrame*    Create( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& xFrame );
     static ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >
                         CreateBlankFrame();
-    static SfxFrame*    Create( SfxObjectShell& rDoc, Window& rWindow, USHORT nViewId, bool bHidden );
+    static SfxFrame*    Create( SfxObjectShell& rDoc, Window& rWindow, sal_uInt16 nViewId, bool bHidden );
 
     SvCompatWeakHdl*    GetHdl();
     Window&             GetWindow() const;
@@ -149,7 +149,7 @@ public:
     SfxFrame*           GetParentFrame() const
                         { return pParentFrame; }
 
-    void                SetPresentationMode( BOOL bSet );
+    void                SetPresentationMode( sal_Bool bSet );
     SystemWindow*       GetSystemWindow() const;
 
     static SfxFrame*    GetFirst();
@@ -219,9 +219,9 @@ public:
     SAL_DLLPRIVATE void SetInPlace_Impl( sal_Bool );
 
     SAL_DLLPRIVATE void PrepareForDoc_Impl( SfxObjectShell& i_rDoc );
-    SAL_DLLPRIVATE void LockResize_Impl( BOOL bLock );
-    SAL_DLLPRIVATE void SetMenuBarOn_Impl( BOOL bOn );
-    SAL_DLLPRIVATE BOOL IsMenuBarOn_Impl() const;
+    SAL_DLLPRIVATE void LockResize_Impl( sal_Bool bLock );
+    SAL_DLLPRIVATE void SetMenuBarOn_Impl( sal_Bool bOn );
+    SAL_DLLPRIVATE sal_Bool IsMenuBarOn_Impl() const;
     SAL_DLLPRIVATE SystemWindow* GetTopWindow_Impl() const;
     SAL_DLLPRIVATE void PositionWindow_Impl( const Rectangle& rWinArea ) const;
     SAL_DLLPRIVATE bool IsMarkedHidden_Impl() const;
@@ -267,8 +267,8 @@ public:
     virtual String          GetValueText() const;
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
 
-    virtual sal_Bool        QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
-    virtual sal_Bool        PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
+    virtual sal_Bool        QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
+    virtual sal_Bool        PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
 
     sal_Bool                FrameKilled() const { return &wFrame != pFrame; }
 
@@ -286,8 +286,8 @@ public:
                                 { return aValue; }
     virtual int                 operator==( const SfxPoolItem& ) const;
     virtual SfxPoolItem*        Clone( SfxItemPool *pPool = 0 ) const;
-    virtual sal_Bool            QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
-    virtual sal_Bool            PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
+    virtual sal_Bool            QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
+    virtual sal_Bool            PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
 };
 
 class SFX2_DLLPUBLIC SfxUnoFrameItem : public SfxPoolItem
@@ -304,8 +304,8 @@ public:
                                 { return m_xFrame; }
     virtual int                 operator==( const SfxPoolItem& ) const;
     virtual SfxPoolItem*        Clone( SfxItemPool *pPool = 0 ) const;
-    virtual sal_Bool            QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
-    virtual sal_Bool            PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
+    virtual sal_Bool            QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
+    virtual sal_Bool            PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
 };
 
 typedef SfxUsrAnyItem SfxUnoAnyItem;

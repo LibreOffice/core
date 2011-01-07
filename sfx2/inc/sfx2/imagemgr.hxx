@@ -33,4 +33,4 @@
 #include <rtl/ustring.hxx>
 #include <vcl/image.hxx>
 
-SFX2_DLLPUBLIC Image SAL_CALL GetImage( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame, const ::rtl::OUString& aURL, BOOL bBig, BOOL bHiContrast );
+SFX2_DLLPUBLIC Image SAL_CALL GetImage( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame, const ::rtl::OUString& aURL, sal_Bool bBig, sal_Bool bHiContrast );

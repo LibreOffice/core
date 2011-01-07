@@ -40,27 +40,27 @@ class SfxItemSet;
 
 struct SfxPrinter_Impl;
 
-#define SFX_RANGE_NOTSET    ((USHORT)0xFFFF)
+#define SFX_RANGE_NOTSET    ((sal_uInt16)0xFFFF)
 
 // class SfxFontSizeInfo -------------------------------------------------
 
 class SfxFontSizeInfo
 {
 private:
-    static USHORT           pStaticSizes[];
+    static sal_uInt16           pStaticSizes[];
     Size*                   pSizes;
-    USHORT                  nSizes;
-    BOOL                    bScalable;
+    sal_uInt16                  nSizes;
+    sal_Bool                    bScalable;
 
 public:
     SfxFontSizeInfo( const SfxFont& rFont, const OutputDevice& rDevice );
     ~SfxFontSizeInfo();
 
-    BOOL                    HasSize(const Size &rSize) const;
-    BOOL                    IsScalable() const { return bScalable; }
+    sal_Bool                    HasSize(const Size &rSize) const;
+    sal_Bool                    IsScalable() const { return bScalable; }
 
-    USHORT                  SizeCount() const { return nSizes; }
-    const Size&             GetSize( USHORT nNo ) const
+    sal_uInt16                  SizeCount() const { return nSizes; }
+    const Size&             GetSize( sal_uInt16 nNo ) const
                             { return pSizes[nNo]; }
 };
 
@@ -96,7 +96,7 @@ private:
     JobSetup                aOrigJobSetup;
     SfxItemSet*             pOptions;
     SfxPrinter_Impl*        pImpl;
-    BOOL                    bKnown;
+    sal_Bool                    bKnown;
 
     SAL_DLLPRIVATE void operator =(SfxPrinter &); // not defined
 
@@ -125,19 +125,19 @@ public:
     const SfxItemSet&       GetOptions() const { return *pOptions; }
     void                    SetOptions( const SfxItemSet &rNewOptions );
 
-    void                    EnableRange( USHORT nRange );
-    void                    DisableRange( USHORT nRange );
-    BOOL                    IsRangeEnabled( USHORT nRange ) const;
+    void                    EnableRange( sal_uInt16 nRange );
+    void                    DisableRange( sal_uInt16 nRange );
+    sal_Bool                    IsRangeEnabled( sal_uInt16 nRange ) const;
 
-    BOOL                    IsKnown() const { return bKnown; }
-    BOOL                    IsOriginal() const { return bKnown; }
+    sal_Bool                    IsKnown() const { return bKnown; }
+    sal_Bool                    IsOriginal() const { return bKnown; }
 
         using OutputDevice::GetFont;
-    USHORT                  GetFontCount();
-    const SfxFont*          GetFont( USHORT nNo ) const;
+    sal_uInt16                  GetFontCount();
+    const SfxFont*          GetFont( sal_uInt16 nNo ) const;
     const SfxFont*          GetFontByName( const String &rFontName );
 
-    BOOL                    InitJob( Window* pUIParent, BOOL bAskAboutTransparentObjects );
+    sal_Bool                    InitJob( Window* pUIParent, sal_Bool bAskAboutTransparentObjects );
 };
 
 #endif

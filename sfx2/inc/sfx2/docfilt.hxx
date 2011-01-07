@@ -49,16 +49,16 @@ class SFX2_DLLPUBLIC SfxFilter
 friend class SfxFilterContainer;
 
     WildCard        aWildCard;
-    ULONG           lFormat;
+    sal_uIntPtr         lFormat;
     String          aTypeName;
     String          aUserData;
     SfxFilterFlags  nFormatType;
-    USHORT          nDocIcon;
+    sal_uInt16          nDocIcon;
     String          aServiceName;
     String          aMimeType;
     String          aFilterName;
     String          aPattern;
-    ULONG           nVersion;
+    sal_uIntPtr           nVersion;
     String          aUIName;
     String          aDefaultTemplate;
 
@@ -68,7 +68,7 @@ public:
                                SfxFilterFlags nFormatType,
                                sal_uInt32 lFormat,
                                const String &rTypeName,
-                               USHORT nDocIcon,
+                               sal_uInt16 nDocIcon,
                                const String &rMimeType,
                                const String &rUserData,
                                const String& rServiceName );
@@ -87,19 +87,19 @@ public:
     const String&   GetName() const { return  aFilterName; }
     const WildCard& GetWildcard() const { return aWildCard; }
     const String&   GetRealTypeName() const { return aTypeName; }
-    ULONG           GetFormat() const { return lFormat; }
+    sal_uIntPtr         GetFormat() const { return lFormat; }
     const String&   GetTypeName() const { return aTypeName; }
     const String&   GetUIName() const { return aUIName; }
-    USHORT          GetDocIconId() const { return nDocIcon; }
+    sal_uInt16          GetDocIconId() const { return nDocIcon; }
     const String&   GetUserData() const { return aUserData; }
     const String&   GetDefaultTemplate() const { return aDefaultTemplate; }
     void            SetDefaultTemplate( const String& rStr ) { aDefaultTemplate = rStr; }
-    BOOL            UsesStorage() const { return GetFormat() != 0; }
+    sal_Bool            UsesStorage() const { return GetFormat() != 0; }
     void            SetURLPattern( const String& rStr ) { aPattern = rStr; aPattern.ToLowerAscii(); }
     String          GetURLPattern() const { return aPattern; }
     void            SetUIName( const String& rName ) { aUIName = rName; }
-    void            SetVersion( ULONG nVersionP ) { nVersion = nVersionP; }
-    ULONG           GetVersion() const { return nVersion; }
+    void            SetVersion( sal_uIntPtr nVersionP ) { nVersion = nVersionP; }
+    sal_uIntPtr           GetVersion() const { return nVersion; }
     String          GetSuffixes() const;
     String          GetDefaultExtension() const;
     const String&   GetServiceName() const { return aServiceName; }
@@ -110,7 +110,7 @@ public:
 
     static String   GetTypeFromStorage( const SotStorage& rStg );
     static String   GetTypeFromStorage( const com::sun::star::uno::Reference< com::sun::star::embed::XStorage >& xStorage,
-                                        BOOL bTemplate = FALSE,
+                                        sal_Bool bTemplate = sal_False,
                                         String* pName=0 )
                         throw ( ::com::sun::star::beans::UnknownPropertyException,
                                 ::com::sun::star::lang::WrappedTargetException,

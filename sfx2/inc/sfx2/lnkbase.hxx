@@ -85,18 +85,18 @@ private:
     SvLinkSourceRef         xObj;
     String                  aLinkName;
     BaseLink_Impl*          pImpl;
-    USHORT                  nObjType;
-    BOOL                    bVisible : 1;
-    BOOL                    bSynchron : 1;
-    BOOL                    bUseCache : 1;      // fuer GrafikLinks!
-    BOOL                    bWasLastEditOK : 1;
+    sal_uInt16                  nObjType;
+    sal_Bool                    bVisible : 1;
+    sal_Bool                    bSynchron : 1;
+    sal_Bool                    bUseCache : 1;      // fuer GrafikLinks!
+    sal_Bool                    bWasLastEditOK : 1;
 
     DECL_LINK( EndEditHdl, String* );
 
     bool                    ExecuteEdit( const String& _rNewName );
 
 protected:
-    void            SetObjType( USHORT );
+    void            SetObjType( sal_uInt16 );
 
                     // setzen des LinkSourceName ohne aktion
     void            SetName( const String & rLn );
@@ -110,10 +110,10 @@ protected:
                         m_xInputStreamToLoadFrom;
 
                     SvBaseLink();
-                    SvBaseLink( USHORT nLinkType, ULONG nContentType = FORMAT_STRING );
+                    SvBaseLink( sal_uInt16 nLinkType, sal_uIntPtr nContentType = FORMAT_STRING );
     virtual         ~SvBaseLink();
 
-    void            _GetRealObject( BOOL bConnect = TRUE );
+    void            _GetRealObject( sal_Bool bConnect = sal_True );
 
     SvLinkSource*   GetRealObject()
                     {
@@ -126,10 +126,10 @@ public:
                     TYPEINFO();
                     // ask JP
     virtual void    Closed();
-                    SvBaseLink( const String& rNm, USHORT nObjectType,
+                    SvBaseLink( const String& rNm, sal_uInt16 nObjectType,
                                  SvLinkSource* );
 
-    USHORT          GetObjType() const { return nObjType; }
+    sal_uInt16          GetObjType() const { return nObjType; }
 
     void            SetObj( SvLinkSource * pObj );
     SvLinkSource*   GetObj() const  { return xObj; }
@@ -140,30 +140,30 @@ public:
     virtual void    DataChanged( const String & rMimeType,
                                 const ::com::sun::star::uno::Any & rValue );
 
-    void            SetUpdateMode( USHORT );
-    USHORT          GetUpdateMode() const;
-    ULONG           GetContentType() const;
-    BOOL            SetContentType( ULONG nType );
+    void            SetUpdateMode( sal_uInt16 );
+    sal_uInt16          GetUpdateMode() const;
+    sal_uIntPtr             GetContentType() const;
+    sal_Bool            SetContentType( sal_uIntPtr nType );
 
     LinkManager*          GetLinkManager();
     const LinkManager*    GetLinkManager() const;
     void                    SetLinkManager( LinkManager* _pMgr );
 
-    BOOL            Update();
+    sal_Bool            Update();
     void            Disconnect();
 
     // Link impl: DECL_LINK( MyEndDialogHdl, SvBaseLink* ); <= param is this
     virtual void    Edit( Window*, const Link& rEndEditHdl );
 
         // soll der Link im Dialog angezeigt werden ? (Links im Link im ...)
-    BOOL            IsVisible() const           { return bVisible; }
-    void            SetVisible( BOOL bFlag )    { bVisible = bFlag; }
+    sal_Bool            IsVisible() const           { return bVisible; }
+    void            SetVisible( sal_Bool bFlag )    { bVisible = bFlag; }
         // soll der Link synchron oder asynchron geladen werden?
-    BOOL            IsSynchron() const          { return bSynchron; }
-    void            SetSynchron( BOOL bFlag )   { bSynchron = bFlag; }
+    sal_Bool            IsSynchron() const          { return bSynchron; }
+    void            SetSynchron( sal_Bool bFlag )   { bSynchron = bFlag; }
 
-    BOOL            IsUseCache() const          { return bUseCache; }
-    void            SetUseCache( BOOL bFlag )   { bUseCache = bFlag; }
+    sal_Bool            IsUseCache() const          { return bUseCache; }
+    void            SetUseCache( sal_Bool bFlag )   { bUseCache = bFlag; }
 
     void            setStreamToLoadFrom(
                         const com::sun::star::uno::Reference<com::sun::star::io::XInputStream>& xInputStream,
@@ -174,7 +174,7 @@ public:
     void            clearStreamToLoadFrom();
     // <--
 
-    inline BOOL         WasLastEditOK() const       { return bWasLastEditOK; }
+    inline sal_Bool         WasLastEditOK() const       { return bWasLastEditOK; }
     FileDialogHelper*   GetFileDialog( sal_uInt32 nFlags, const String& rFactory ) const;
 };
 
