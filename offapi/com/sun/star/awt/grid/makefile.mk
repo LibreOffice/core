@@ -52,7 +52,6 @@ IDLFILES=\
     DefaultGridDataModel.idl\
     XGridDataModel.idl\
     XGridColumnModel.idl\
-    ScrollBarMode.idl\
     XGridControl.idl\
     UnoControlGrid.idl\
     UnoControlGridModel.idl\

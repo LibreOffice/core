@@ -29,7 +29,6 @@
 
 #include <com/sun/star/awt/grid/XGridColumnModel.idl>
 #include <com/sun/star/awt/grid/XGridDataModel.idl>
-#include <com/sun/star/awt/grid/ScrollBarMode.idl>
 #include <com/sun/star/awt/UnoControlModel.idl>
 #include <com/sun/star/view/SelectionType.idl>
 #include <com/sun/star/awt/FontDescriptor.idl>
