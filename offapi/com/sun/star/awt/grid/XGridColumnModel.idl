@@ -84,6 +84,9 @@ interface XGridColumnModel
         implementations of the <code>XGridColumnModel</code> interface the possibility to provide own column
         implementations which extend the basic <type>GridColumn</type> type.</p>
 
+        <p>As soon as the column has been inserted into the model, the model takes ownership of it. This means when the
+        column is removed, or when the column model is disposed, the grid column is disposed as well.</p>
+
         @param column
             the column to add to the model.
         @returns
@@ -95,7 +98,9 @@ interface XGridColumnModel
     long addColumn( [in] XGridColumn column )
         raises ( ::com::sun::star::lang::IllegalArgumentException );
 
-    /** retrieves a column from the model
+    /** removes a column from the model
+
+        <p>The column object will be disposed upon removal.</p>
 
         @param ColumnIndex
             denotes the index of the column to remove
