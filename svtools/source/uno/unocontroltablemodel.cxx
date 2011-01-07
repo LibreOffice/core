@@ -248,7 +248,8 @@ namespace svt { namespace table
     void UnoControlTableModel::insertColumn( ColPos const i_position, Reference< XGridColumn > const & i_column )
     {
         DBG_CHECK_ME();
-        ENSURE_OR_RETURN_VOID( ( i_position >= 0 ) && ( size_t( i_position ) <= m_pImpl->aColumns.size() ), "UnoControlTableModel::insertColumn: illegal position!" );
+        ENSURE_OR_RETURN_VOID( ( i_position >= 0 ) && ( size_t( i_position ) <= m_pImpl->aColumns.size() ),
+            "UnoControlTableModel::insertColumn: illegal position!" );
 
         const PColumnModel pColumn( new UnoGridColumnFacade( *this, i_column ) );
         m_pImpl->aColumns.insert( m_pImpl->aColumns.begin() + i_position, pColumn );
@@ -262,6 +263,35 @@ namespace svt { namespace table
         {
             (*loop)->columnsInserted( i_position, i_position );
         }
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    void UnoControlTableModel::removeColumn( ColPos const i_position )
+    {
+        DBG_CHECK_ME();
+        ENSURE_OR_RETURN_VOID( ( i_position >= 0 ) && ( size_t( i_position ) <= m_pImpl->aColumns.size() ),
+            "UnoControlTableModel::removeColumn: illegal position!" );
+
+        // remove the column
+        ColumnModels::iterator pos = m_pImpl->aColumns.begin() + i_position;
+        const PColumnModel pColumn = *pos;
+        m_pImpl->aColumns.erase( pos );
+
+        // notify listeners
+        ModellListeners aListeners( m_pImpl->m_aListeners );
+        for (   ModellListeners::const_iterator loop = aListeners.begin();
+                loop != aListeners.end();
+                ++loop
+            )
+        {
+            (*loop)->columnsRemoved( i_position, i_position );
+        }
+
+        // dispose the column
+        UnoGridColumnFacade* pColumnImpl = dynamic_cast< UnoGridColumnFacade* >( pColumn.get() );
+        OSL_ENSURE( pColumnImpl != NULL, "UnoControlTableModel::removeColumn: illegal column implementation!" );
+        if ( pColumnImpl )
+            pColumnImpl->dispose();
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -435,10 +465,24 @@ namespace svt { namespace table
     }
 
     //------------------------------------------------------------------------------------------------------------------
+    bool UnoControlTableModel::hasDataModel() const
+    {
+        Reference< XGridDataModel > const xDataModel( m_pImpl->m_aDataModel );
+        return xDataModel.is();
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
     void UnoControlTableModel::setColumnModel( Reference< XGridColumnModel > const & i_gridColumnModel )
     {
         DBG_CHECK_ME();
         m_pImpl->m_aColumnModel = i_gridColumnModel;
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    bool UnoControlTableModel::hasColumnModel() const
+    {
+        Reference< XGridColumnModel > const xColumnModel( m_pImpl->m_aColumnModel );
+        return xColumnModel.is();
     }
 
     //------------------------------------------------------------------------------------------------------------------

@@ -117,6 +117,12 @@ namespace toolkit
     }
 
     //------------------------------------------------------------------------------------------------------------------
+    Reference< XGridColumn > SAL_CALL DefaultGridColumnModel::createColumn(  ) throw (RuntimeException)
+    {
+        return new GridColumn();
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
     ::sal_Int32 SAL_CALL DefaultGridColumnModel::addColumn( const Reference< XGridColumn > & i_column ) throw (RuntimeException, IllegalArgumentException)
     {
         ::osl::ClearableMutexGuard aGuard( m_aMutex );
@@ -133,6 +139,7 @@ namespace toolkit
         aEvent.Source = *this;
         aEvent.Accessor <<= index;
         aEvent.Element <<= i_column;
+
         aGuard.clear();
         m_aContainerListeners.notifyEach( &XContainerListener::elementInserted, aEvent );
 
@@ -140,9 +147,25 @@ namespace toolkit
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    Reference< XGridColumn > SAL_CALL DefaultGridColumnModel::createColumn(  ) throw (RuntimeException)
+    void SAL_CALL DefaultGridColumnModel::removeColumn( ::sal_Int32 i_columnIndex )  throw (RuntimeException, IndexOutOfBoundsException)
     {
-        return new GridColumn();
+        ::osl::ClearableMutexGuard aGuard( m_aMutex );
+
+        if ( ( i_columnIndex < 0 ) || ( size_t( i_columnIndex ) >= m_aColumns.size() ) )
+            throw IndexOutOfBoundsException( ::rtl::OUString(), *this );
+
+        Columns::iterator pos = m_aColumns.begin() + i_columnIndex;
+        Reference< XGridColumn > const xColumn( *pos );
+        m_aColumns.erase( pos );
+
+        // fire removal notifications
+        ContainerEvent aEvent;
+        aEvent.Source = *this;
+        aEvent.Accessor <<= i_columnIndex;
+        aEvent.Element <<= xColumn;
+
+        aGuard.clear();
+        m_aContainerListeners.notifyEach( &XContainerListener::elementRemoved, aEvent );
     }
 
     //------------------------------------------------------------------------------------------------------------------

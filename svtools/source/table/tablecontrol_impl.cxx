@@ -484,7 +484,7 @@ namespace svt { namespace table
         impl_ni_updateColumnWidths();
         impl_ni_updateScrollbars();
 
-        impl_invalidateColumnsAfter( i_first );
+        impl_invalidateColumnsAfter( i_first - 1 );
         OSL_UNUSED( i_last );
     }
 

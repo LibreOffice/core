@@ -60,9 +60,7 @@ private:
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::grid::XGridColumnModel >   m_xColumnModel;
     bool                                                                                m_bHasColumnHeaders;
     bool                                                                                m_bHasRowHeaders;
-    bool                                                                                m_bVScroll;
-    bool                                                                                m_bHScroll;
-    bool                                                                                m_bUpdate;
+    bool                                                                                m_bTableModelInitCompleted;
     sal_Int32                                                                           m_nSelectedRowCount;
     SelectionListenerMultiplexer                                                        m_aSelectionListeners;
 
@@ -118,5 +116,6 @@ protected:
 
 private:
     void    impl_updateColumnsFromModel_nothrow();
+    void    impl_checkTableModelInit();
 };
 #endif // _SVT_GRIDCONTROL_HXX_

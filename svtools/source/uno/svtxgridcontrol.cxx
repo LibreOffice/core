@@ -54,6 +54,7 @@ using namespace ::svt::table;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::awt::grid;
 using namespace ::com::sun::star::view;
+using namespace ::com::sun::star::style;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::accessibility;
 using namespace ::com::sun::star::accessibility::AccessibleEventId;
@@ -62,16 +63,14 @@ using ::com::sun::star::accessibility::AccessibleTableModelChange;
 
 
 SVTXGridControl::SVTXGridControl()
-    :m_pTableModel (new UnoControlTableModel()),
-    m_xDataModel(0),
-    m_xColumnModel(0),
-    m_bHasColumnHeaders(false),
-    m_bHasRowHeaders(false),
-    m_bVScroll(false),
-    m_bHScroll(false),
-    m_bUpdate(false),
-    m_nSelectedRowCount(0),
-    m_aSelectionListeners( *this )
+    :m_pTableModel( new UnoControlTableModel() )
+    ,m_xDataModel( 0 )
+    ,m_xColumnModel( 0 )
+    ,m_bHasColumnHeaders( false )
+    ,m_bHasRowHeaders( false )
+    ,m_bTableModelInitCompleted( false )
+    ,m_nSelectedRowCount( 0 )
+    ,m_aSelectionListeners( *this )
 {
 }
 
@@ -83,13 +82,8 @@ SVTXGridControl::~SVTXGridControl()
 // ---------------------------------------------------------------------------------------------------------------------
 void SVTXGridControl::SetWindow( Window* pWindow )
 {
-    TableControl* pTable = dynamic_cast< TableControl* >( pWindow );
-    ENSURE_OR_THROW( ( pTable != NULL ) || ( pWindow == NULL ), "SVTXGridControl::SetWindow: illegal window!" );
-
     SVTXGridControl_Base::SetWindow( pWindow );
-
-    if ( pTable )
-        pTable->SetModel( PTableModel( m_pTableModel ) );
+    impl_checkTableModelInit();
 }
 
 // ---------------------------------------------------------------------------------------------------------------------
@@ -133,7 +127,7 @@ void SVTXGridControl::setProperty( const ::rtl::OUString& PropertyName, const An
     {
     case BASEPROPERTY_ROW_HEADER_WIDTH:
         {
-            sal_Int32 rowHeaderWidth( m_pTableModel->getRowHeaderWidth() );
+            sal_Int32 rowHeaderWidth( -1 );
             aValue >>= rowHeaderWidth;
             ENSURE_OR_BREAK( rowHeaderWidth > 0, "SVTXGridControl::setProperty: illegal row header width!" );
             m_pTableModel->setRowHeaderWidth( rowHeaderWidth );
@@ -212,10 +206,7 @@ void SVTXGridControl::setProperty( const ::rtl::OUString& PropertyName, const An
         {
             sal_Bool bHScroll = true;
             if( aValue >>= bHScroll )
-            {
-                m_bHScroll = bHScroll;
                 m_pTableModel->setHorizontalScrollbarVisibility( bHScroll ? ScrollbarShowAlways : ScrollbarShowSmart );
-            }
             break;
         }
         case BASEPROPERTY_VSCROLL:
@@ -223,7 +214,6 @@ void SVTXGridControl::setProperty( const ::rtl::OUString& PropertyName, const An
             sal_Bool bVScroll = true;
             if( aValue >>= bVScroll )
             {
-                m_bVScroll = bVScroll;
                 m_pTableModel->setVerticalScrollbarVisibility( bVScroll ? ScrollbarShowAlways : ScrollbarShowSmart );
             }
             break;
@@ -285,17 +275,9 @@ void SVTXGridControl::setProperty( const ::rtl::OUString& PropertyName, const An
         }
         case BASEPROPERTY_VERTICALALIGN:
         {
-            com::sun::star::style::VerticalAlignment vAlign(com::sun::star::style::VerticalAlignment(0));
-            if( aValue >>= vAlign )
-            {
-                switch( vAlign )
-                {
-                case com::sun::star::style::VerticalAlignment_TOP:  m_pTableModel->setVerticalAlign(com::sun::star::style::VerticalAlignment(0)); break;
-                case com::sun::star::style::VerticalAlignment_MIDDLE:   m_pTableModel->setVerticalAlign(com::sun::star::style::VerticalAlignment(1)); break;
-                case com::sun::star::style::VerticalAlignment_BOTTOM: m_pTableModel->setVerticalAlign(com::sun::star::style::VerticalAlignment(2)); break;
-                default: m_pTableModel->setVerticalAlign(com::sun::star::style::VerticalAlignment(0)); break;
-                }
-            }
+            VerticalAlignment eAlign( VerticalAlignment_TOP );
+            if ( aValue >>= eAlign )
+                m_pTableModel->setVerticalAlign( eAlign );
             break;
         }
 
@@ -316,6 +298,7 @@ void SVTXGridControl::setProperty( const ::rtl::OUString& PropertyName, const An
                     throw GridInvalidDataException( ::rtl::OUString::createFromAscii("The data model isn't set!"), *this );
 
                 m_pTableModel->setDataModel( m_xDataModel );
+                impl_checkTableModelInit();
 
                 // ensure default columns exist, if they have not previously been added
                 sal_Int32 const nDataColumnCount = m_xDataModel->getColumnCount();
@@ -336,6 +319,9 @@ void SVTXGridControl::setProperty( const ::rtl::OUString& PropertyName, const An
             // announce to the TableModel
             m_pTableModel->setColumnModel( m_xColumnModel );
 
+            // announce the table model to the table control, if we have everything which is needed
+            impl_checkTableModelInit();
+
             // add new columns
             impl_updateColumnsFromModel_nothrow();
 
@@ -344,6 +330,20 @@ void SVTXGridControl::setProperty( const ::rtl::OUString& PropertyName, const An
         default:
             VCLXWindow::setProperty( PropertyName, aValue );
         break;
+    }
+}
+
+
+void SVTXGridControl::impl_checkTableModelInit()
+{
+    if ( !m_bTableModelInitCompleted && m_pTableModel->hasColumnModel() && m_pTableModel->hasDataModel() )
+    {
+        TableControl* pTable = dynamic_cast< TableControl* >( GetWindow() );
+        if ( pTable )
+        {
+            pTable->SetModel( PTableModel( m_pTableModel ) );
+            m_bTableModelInitCompleted = true;
+        }
     }
 }
 
@@ -372,19 +372,28 @@ Any SVTXGridControl::getProperty( const ::rtl::OUString& PropertyName ) throw(Ru
         return Any( eSelectionType );
     }
     case BASEPROPERTY_GRID_SHOWROWHEADER:
-    {
         return Any ((sal_Bool) m_pTableModel->hasRowHeaders());
-    }
+
     case BASEPROPERTY_GRID_SHOWCOLUMNHEADER:
         return Any ((sal_Bool) m_pTableModel->hasColumnHeaders());
+
     case BASEPROPERTY_GRID_DATAMODEL:
         return Any ( m_xDataModel );
+
     case BASEPROPERTY_GRID_COLUMNMODEL:
         return Any ( m_xColumnModel);
+
     case BASEPROPERTY_HSCROLL:
-        return Any ( m_bHScroll);
+        {
+            sal_Bool const bHasScrollbar = ( m_pTableModel->getHorizontalScrollbarVisibility() != ScrollbarShowNever );
+            return makeAny( bHasScrollbar );
+        }
+
     case BASEPROPERTY_VSCROLL:
-        return Any ( m_bVScroll);
+        {
+            sal_Bool const bHasScrollbar = ( m_pTableModel->getVerticalScrollbarVisibility() != ScrollbarShowNever );
+            return makeAny( bHasScrollbar );
+        }
     }
 
     return VCLXWindow::getProperty( PropertyName );
@@ -508,31 +517,41 @@ void SAL_CALL SVTXGridControl::dataChanged(const ::com::sun::star::awt::grid::Gr
 //----------------------------------------------------------------------------------------------------------------------
 void SAL_CALL SVTXGridControl::elementInserted( const ContainerEvent& i_event ) throw (RuntimeException)
 {
-    const Reference< XGridColumn > xGridColumn( i_event.Element, UNO_QUERY_THROW );
+    ::vos::OGuard aGuard( GetMutex() );
+
+    Reference< XGridColumn > const xGridColumn( i_event.Element, UNO_QUERY_THROW );
+
     sal_Int32 nIndex( m_pTableModel->getColumnCount() );
     OSL_VERIFY( i_event.Accessor >>= nIndex );
-
     m_pTableModel->insertColumn( nIndex, xGridColumn );
 }
 
 //----------------------------------------------------------------------------------------------------------------------
 void SAL_CALL SVTXGridControl::elementRemoved( const ContainerEvent& i_event ) throw (RuntimeException)
 {
-    // TODO: remove the respective column from our table model
+    ::vos::OGuard aGuard( GetMutex() );
+
+    sal_Int32 nIndex( -1 );
+    OSL_VERIFY( i_event.Accessor >>= nIndex );
+    m_pTableModel->removeColumn( nIndex );
 }
 
 //----------------------------------------------------------------------------------------------------------------------
 void SAL_CALL SVTXGridControl::elementReplaced( const ContainerEvent& i_event ) throw (RuntimeException)
 {
+    OSL_ENSURE( false, "SVTXGridControl::elementReplaced: not implemented!" );
+        // at the moment, the XGridColumnModel API does not allow replacing columns
     // TODO: replace the respective column in our table model
 }
 
 
+//----------------------------------------------------------------------------------------------------------------------
 void SAL_CALL SVTXGridControl::disposing( const ::com::sun::star::lang::EventObject& Source ) throw(::com::sun::star::uno::RuntimeException)
 {
     VCLXWindow::disposing( Source );
 }
 
+//----------------------------------------------------------------------------------------------------------------------
 ::sal_Int32 SAL_CALL SVTXGridControl::getMinSelectionIndex() throw (::com::sun::star::uno::RuntimeException)
 {
     ::vos::OGuard aGuard( GetMutex() );
