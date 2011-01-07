@@ -165,7 +165,7 @@ public:
     sal_Int32 GetWidth() const { return mnWidth; }
     sal_Int32 GetHeight() const { return mnHeight; }
 };
-DECLARE_LIST(ImpPlaceholderList, SdXMLPresentationPlaceholderContext*)
+typedef ::std::vector< SdXMLPresentationPlaceholderContext* > ImpPlaceholderList;
 
 //////////////////////////////////////////////////////////////////////////////
 // style:presentation-page-layout context

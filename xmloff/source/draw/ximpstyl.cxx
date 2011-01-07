@@ -526,7 +526,7 @@ SvXMLImportContext *SdXMLPresentationPageLayoutContext::CreateChildContext(
         if(pContext)
         {
             pContext->AddRef();
-            maList.Insert((SdXMLPresentationPlaceholderContext*)pContext, LIST_APPEND);
+            maList.push_back( (SdXMLPresentationPlaceholderContext*)pContext );
         }
     }
 
@@ -542,12 +542,12 @@ void SdXMLPresentationPageLayoutContext::EndElement()
     // build presentation page layout type here
     // calc mnTpeId due to content of maList
     // at the moment only use number of types used there
-    if(maList.Count())
+    if( !maList.empty() )
     {
-        SdXMLPresentationPlaceholderContext* pObj0 = maList.GetObject(0);
+        SdXMLPresentationPlaceholderContext* pObj0 = maList[ 0 ];
         if(pObj0->GetName().equals(OUString(RTL_CONSTASCII_USTRINGPARAM("handout"))))
         {
-            switch( maList.Count() )
+            switch( maList.size() )
             {
             case 1:
                 mnTypeId = 22; // AUTOLAYOUT_HANDOUT1
@@ -570,7 +570,7 @@ void SdXMLPresentationPageLayoutContext::EndElement()
         }
         else
         {
-            switch(maList.Count())
+            switch( maList.size() )
             {
                 case 1:
                 {
@@ -586,7 +586,7 @@ void SdXMLPresentationPageLayoutContext::EndElement()
                 }
                 case 2:
                 {
-                    SdXMLPresentationPlaceholderContext* pObj1 = maList.GetObject(1);
+                    SdXMLPresentationPlaceholderContext* pObj1 = maList[ 1 ];
 
                     if(pObj1->GetName().equals(
                         OUString(RTL_CONSTASCII_USTRINGPARAM("subtitle"))))
@@ -635,8 +635,8 @@ void SdXMLPresentationPageLayoutContext::EndElement()
                 }
                 case 3:
                 {
-                    SdXMLPresentationPlaceholderContext* pObj1 = maList.GetObject(1);
-                    SdXMLPresentationPlaceholderContext* pObj2 = maList.GetObject(2);
+                    SdXMLPresentationPlaceholderContext* pObj1 = maList[ 1 ];
+                    SdXMLPresentationPlaceholderContext* pObj2 = maList[ 2 ];
 
                     if(pObj1->GetName().equals(
                         OUString(RTL_CONSTASCII_USTRINGPARAM("outline"))))
@@ -707,8 +707,8 @@ void SdXMLPresentationPageLayoutContext::EndElement()
                 }
                 case 4:
                 {
-                    SdXMLPresentationPlaceholderContext* pObj1 = maList.GetObject(1);
-                    SdXMLPresentationPlaceholderContext* pObj2 = maList.GetObject(2);
+                    SdXMLPresentationPlaceholderContext* pObj1 = maList[ 1 ];
+                    SdXMLPresentationPlaceholderContext* pObj2 = maList[ 2 ];
 
                     if(pObj1->GetName().equals(
                         OUString(RTL_CONSTASCII_USTRINGPARAM("object"))))
@@ -730,7 +730,7 @@ void SdXMLPresentationPageLayoutContext::EndElement()
                 }
                 case 5:
                 {
-                    SdXMLPresentationPlaceholderContext* pObj1 = maList.GetObject(1);
+                    SdXMLPresentationPlaceholderContext* pObj1 = maList[ 1 ];
 
                     if(pObj1->GetName().equals(
                         OUString(RTL_CONSTASCII_USTRINGPARAM("object"))))
@@ -758,8 +758,9 @@ void SdXMLPresentationPageLayoutContext::EndElement()
         }
 
         // release remembered contexts, they are no longer needed
-        while(maList.Count())
-            maList.Remove(maList.Count() - 1)->ReleaseRef();
+        for ( size_t i = maList.size(); i > 0; )
+            maList[ --i ]->ReleaseRef();
+        maList.clear();
     }
 }
 
