@@ -4,4 +4,3 @@ qa  qadevOOo			                         nmake   -   all qa_runner_ant_build NULL
 qa  qadevOOo\runner			                 nmake   -   all qa_make_package qa_runner_ant_build NULL
 
 qa qadevOOo\qa\unoapi nmake - all qa_qa_unoapi qa_make_package NULL
-qa qadevOOo\qa\complex\junitskeleton        nmake - all qa_complex_junitskel qa_make_package NULL
