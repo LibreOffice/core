@@ -478,7 +478,7 @@ void OPreparedStatement::setParameter(sal_Int32 parameterIndex, const ORowSetVal
         *((m_aParameterRow->get())[parameterIndex]) = x;
 }
 // -----------------------------------------------------------------------------
-UINT32 OPreparedStatement::AddParameter(OSQLParseNode * pParameter, const Reference<XPropertySet>& _xCol)
+sal_uInt32 OPreparedStatement::AddParameter(OSQLParseNode * pParameter, const Reference<XPropertySet>& _xCol)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "OPreparedStatement::AddParameter" );
     OSL_UNUSED( pParameter );
@@ -492,7 +492,7 @@ UINT32 OPreparedStatement::AddParameter(OSQLParseNode * pParameter, const Refere
     ::rtl::OUString sParameterName;
     // Parameter-Column aufsetzen:
     sal_Int32 eType = DataType::VARCHAR;
-    UINT32 nPrecision = 255;
+    sal_uInt32 nPrecision = 255;
     sal_Int32 nScale = 0;
     sal_Int32 nNullable = ColumnValue::NULLABLE;
 
@@ -576,20 +576,20 @@ void OPreparedStatement::initializeResultSet(OResultSet* _pResult)
     if (!m_xParamColumns->get().empty())
     {
         // Zunaechst AssignValues
-        USHORT nParaCount=0; // gibt die aktuelle Anzahl der bisher gesetzen Parameter an
+        sal_uInt16 nParaCount=0; // gibt die aktuelle Anzahl der bisher gesetzen Parameter an
 
         // Nach zu substituierenden Parametern suchen:
         size_t nCount = m_aAssignValues.isValid() ? m_aAssignValues->get().size() : 1; // 1 ist wichtig fuer die Kriterien
         for (size_t j = 1; j < nCount; j++)
         {
-            UINT32 nParameter = (*m_aAssignValues).getParameterIndex(j);
+            sal_uInt32 nParameter = (*m_aAssignValues).getParameterIndex(j);
             if (nParameter == SQL_NO_PARAMETER)
                 continue;   // dieser AssignValue ist kein Parameter
 
             ++nParaCount; // ab hier ist der Parameter gueltig
             // Parameter ersetzen. Wenn Parameter nicht verfuegbar,
             //  Value auf NULL setzen.
-            //  (*m_aAssignValues)[j] = (*m_aParameterRow)[(UINT16)nParameter];
+            //  (*m_aAssignValues)[j] = (*m_aParameterRow)[(sal_uInt16)nParameter];
         }
 
         if (m_aParameterRow.isValid() &&  (m_xParamColumns->get().size()+1) != m_aParameterRow->get().size() )
@@ -627,7 +627,7 @@ void OPreparedStatement::parseParamterElem(const String& _sColumnName,OSQLParseN
     if(nParameter == -1)
         nParameter = AddParameter(pRow_Value_Constructor_Elem,xCol);
     // Nr. des Parameters in der Variablen merken:
-    SetAssignValue(_sColumnName, String(), TRUE, nParameter);
+    SetAssignValue(_sColumnName, String(), sal_True, nParameter);
 }
 // -----------------------------------------------------------------------------
 

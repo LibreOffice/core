@@ -204,19 +204,19 @@ void SAL_CALL OFileTable::release() throw()
     OTable_TYPEDEF::release();
 }
 // -----------------------------------------------------------------------------
-BOOL OFileTable::InsertRow(OValueRefVector& /*rRow*/, BOOL /*bFlush*/,const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess>& /*_xCols*/)
+sal_Bool OFileTable::InsertRow(OValueRefVector& /*rRow*/, sal_Bool /*bFlush*/,const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess>& /*_xCols*/)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "OFileTable::InsertRow" );
     return sal_False;
 }
 // -----------------------------------------------------------------------------
-BOOL OFileTable::DeleteRow(const OSQLColumns& /*_rCols*/)
+sal_Bool OFileTable::DeleteRow(const OSQLColumns& /*_rCols*/)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "OFileTable::DeleteRow" );
     return sal_False;
 }
 // -----------------------------------------------------------------------------
-BOOL OFileTable::UpdateRow(OValueRefVector& /*rRow*/, OValueRefRow& /*pOrgRow*/,const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess>& /*_xCols*/)
+sal_Bool OFileTable::UpdateRow(OValueRefVector& /*rRow*/, OValueRefRow& /*pOrgRow*/,const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess>& /*_xCols*/)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "OFileTable::UpdateRow" );
     return sal_False;

@@ -134,8 +134,8 @@ namespace connectivity
             void GetAssignValues();
             void SetAssignValue(const String& aColumnName,
                                    const String& aValue,
-                                   BOOL bSetNull = FALSE,
-                                   UINT32 nParameter=SQL_NO_PARAMETER);
+                                   sal_Bool bSetNull = sal_False,
+                                   sal_uInt32 nParameter=SQL_NO_PARAMETER);
             void ParseAssignValues( const ::std::vector< String>& aColumnNameList,
                                     connectivity::OSQLParseNode* pRow_Value_Constructor_Elem,xub_StrLen nIndex);
 

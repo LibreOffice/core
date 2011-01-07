@@ -72,7 +72,7 @@ using namespace ::com::sun::star::lang;
 void OFlatTable::fillColumns(const ::com::sun::star::lang::Locale& _aLocale)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "flat", "Ocke.Janssen@sun.com", "OFlatTable::fillColumns" );
-    BOOL bRead = TRUE;
+    sal_Bool bRead = sal_True;
 
     QuotedTokenizedString aHeaderLine;
     OFlatConnection* pConnection = (OFlatConnection*)m_pConnection;
@@ -146,11 +146,11 @@ void OFlatTable::fillColumns(const ::com::sun::star::lang::Locale& _aLocale)
             aColumnName += String::CreateFromInt32(i+1);
         }
         sal_Int32 eType;
-        UINT16 nPrecision = 0;
-        UINT16 nScale = 0;
+        sal_uInt16 nPrecision = 0;
+        sal_uInt16 nScale = 0;
 
-        BOOL bNumeric = FALSE;
-        ULONG  nIndex = 0;
+        sal_Bool bNumeric = sal_False;
+        sal_uIntPtr  nIndex = 0;
 
         // first without fielddelimiter
         String aField;
@@ -158,7 +158,7 @@ void OFlatTable::fillColumns(const ::com::sun::star::lang::Locale& _aLocale)
         if (aField.Len() == 0 ||
             (m_cStringDelimiter && m_cStringDelimiter == aField.GetChar(0)))
         {
-            bNumeric = FALSE;
+            bNumeric = sal_False;
             if ( m_cStringDelimiter != '\0' )
                 aFirstLine.GetTokenSpecial(aField,nStartPosFirstLine2,m_cFieldDelimiter,m_cStringDelimiter);
             else
@@ -174,11 +174,11 @@ void OFlatTable::fillColumns(const ::com::sun::star::lang::Locale& _aLocale)
 
             if (aField2.Len() == 0)
             {
-                bNumeric = FALSE;
+                bNumeric = sal_False;
             }
             else
             {
-                bNumeric = TRUE;
+                bNumeric = sal_True;
                 xub_StrLen nDot = 0;
                 xub_StrLen nDecimalDelCount = 0;
                 for (xub_StrLen j = 0; j < aField2.Len(); j++)
@@ -190,7 +190,7 @@ void OFlatTable::fillColumns(const ::com::sun::star::lang::Locale& _aLocale)
                         !aCharClass.isDigit(aField2,j)                      &&
                         ( j != 0 || (c != '+' && c != '-' ) ) )
                     {
-                        bNumeric = FALSE;
+                        bNumeric = sal_False;
                         break;
                     }
                     if (cDecimalDelimiter && c == cDecimalDelimiter)
@@ -204,7 +204,7 @@ void OFlatTable::fillColumns(const ::com::sun::star::lang::Locale& _aLocale)
                 }
 
                 if (nDecimalDelCount > 1 || nDot > 1 ) // if there is more than one dot it isn't a number
-                    bNumeric = FALSE;
+                    bNumeric = sal_False;
                 if (bNumeric && cThousandDelimiter)
                 {
                     // Ist der Trenner richtig angegeben?
@@ -217,7 +217,7 @@ void OFlatTable::fillColumns(const ::com::sun::star::lang::Locale& _aLocale)
                             continue;
                         else
                         {
-                            bNumeric = FALSE;
+                            bNumeric = sal_False;
                             break;
                         }
                     }
@@ -530,7 +530,7 @@ sal_Bool OFlatTable::fetchRow(OValueRefRow& _rRow,const OSQLColumns & _rCols,sal
     *(_rRow->get())[0] = m_nFilePos;
 
     if (!bRetrieveData)
-        return TRUE;
+        return sal_True;
     if ( m_bNeedToReadLine )
     {
         sal_Int32 nCurrentPos = 0;

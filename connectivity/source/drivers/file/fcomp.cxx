@@ -60,7 +60,7 @@ OPredicateCompiler::OPredicateCompiler(OSQLAnalyzer* pAnalyzer)//,OCursor& rCurs
                      // : m_rCursor(rCurs)
                      : m_pAnalyzer(pAnalyzer)
                      , m_nParamCounter(0)
-                     , m_bORCondition(FALSE)
+                     , m_bORCondition(sal_False)
 {
     DBG_CTOR(OPredicateCompiler,NULL);
 }

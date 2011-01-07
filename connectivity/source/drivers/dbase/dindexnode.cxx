@@ -42,19 +42,19 @@ using namespace connectivity::dbase;
 using namespace connectivity::file;
 using namespace com::sun::star::sdbc;
 // -----------------------------------------------------------------------------
-ONDXKey::ONDXKey(UINT32 nRec)
+ONDXKey::ONDXKey(sal_uInt32 nRec)
     :nRecord(nRec)
 {
 }
 // -----------------------------------------------------------------------------
-ONDXKey::ONDXKey(const ORowSetValue& rVal, sal_Int32 eType, UINT32 nRec)
+ONDXKey::ONDXKey(const ORowSetValue& rVal, sal_Int32 eType, sal_uInt32 nRec)
     : ONDXKey_BASE(eType)
     , nRecord(nRec)
     , xValue(rVal)
 {
 }
 // -----------------------------------------------------------------------------
-ONDXKey::ONDXKey(const rtl::OUString& aStr, UINT32 nRec)
+ONDXKey::ONDXKey(const rtl::OUString& aStr, sal_uInt32 nRec)
     : ONDXKey_BASE(::com::sun::star::sdbc::DataType::VARCHAR)
      ,nRecord(nRec)
 {
@@ -66,7 +66,7 @@ ONDXKey::ONDXKey(const rtl::OUString& aStr, UINT32 nRec)
 }
 // -----------------------------------------------------------------------------
 
-ONDXKey::ONDXKey(double aVal, UINT32 nRec)
+ONDXKey::ONDXKey(double aVal, sal_uInt32 nRec)
     : ONDXKey_BASE(::com::sun::star::sdbc::DataType::DOUBLE)
      ,nRecord(nRec)
      ,xValue(aVal)
@@ -79,7 +79,7 @@ ONDXKey::ONDXKey(double aVal, UINT32 nRec)
 //==================================================================
 ONDXPage::ONDXPage(ODbaseIndex& rInd, sal_uInt32 nPos, ONDXPage* pParent)
            :nPagePos(nPos)
-           ,bModified(FALSE)
+           ,bModified(sal_False)
            ,nCount(0)
            ,aParent(pParent)
            ,rIndex(rInd)
@@ -103,16 +103,16 @@ void ONDXPage::QueryDelete()
     if (IsModified() && rIndex.m_pFileStream)
         (*rIndex.m_pFileStream) << *this;
 
-    bModified = FALSE;
+    bModified = sal_False;
     if (rIndex.UseCollector())
     {
         if (aChild.Is())
-            aChild->Release(FALSE);
+            aChild->Release(sal_False);
 
-        for (USHORT i = 0; i < rIndex.getHeader().db_maxkeys;i++)
+        for (sal_uInt16 i = 0; i < rIndex.getHeader().db_maxkeys;i++)
         {
             if (ppNodes[i].GetChild().Is())
-                ppNodes[i].GetChild()->Release(FALSE);
+                ppNodes[i].GetChild()->Release(sal_False);
 
             ppNodes[i] = ONDXNode();
         }
@@ -136,10 +136,10 @@ ONDXPagePtr& ONDXPage::GetChild(ODbaseIndex* pIndex)
 }
 
 //------------------------------------------------------------------
-USHORT ONDXPage::FindPos(const ONDXKey& rKey) const
+sal_uInt16 ONDXPage::FindPos(const ONDXKey& rKey) const
 {
     // sucht nach Platz fuer den vorgegeben key auf einer Seite
-    USHORT i = 0;
+    sal_uInt16 i = 0;
     while (i < nCount && rKey > ((*this)[i]).GetKey())
            i++;
 
@@ -147,18 +147,18 @@ USHORT ONDXPage::FindPos(const ONDXKey& rKey) const
 }
 
 //------------------------------------------------------------------
-BOOL ONDXPage::Find(const ONDXKey& rKey)
+sal_Bool ONDXPage::Find(const ONDXKey& rKey)
 {
     // sucht den vorgegeben key
     // Besonderheit: gelangt der Algorithmus ans Ende
     // wird immer die aktuelle Seite und die Knotenposition vermerkt
     // auf die die Bedingung <= zutrifft
     // dieses findet beim Insert besondere Beachtung
-    USHORT i = 0;
+    sal_uInt16 i = 0;
     while (i < nCount && rKey > ((*this)[i]).GetKey())
            i++;
 
-    BOOL bResult = FALSE;
+    sal_Bool bResult = sal_False;
 
     if (!IsLeaf())
     {
@@ -170,7 +170,7 @@ BOOL ONDXPage::Find(const ONDXKey& rKey)
     {
         rIndex.m_aCurLeaf = this;
         rIndex.m_nCurNode = i - 1;
-        bResult = FALSE;
+        bResult = sal_False;
     }
     else
     {
@@ -182,14 +182,14 @@ BOOL ONDXPage::Find(const ONDXKey& rKey)
 }
 
 //------------------------------------------------------------------
-BOOL ONDXPage::Insert(ONDXNode& rNode, sal_uInt32 nRowsLeft)
+sal_Bool ONDXPage::Insert(ONDXNode& rNode, sal_uInt32 nRowsLeft)
 {
     // beim Erzeugen eines Index koennen auch mehrere Knoten eingefuegt werden
     // diese sin dann aufsteigend sortiert
-    BOOL bAppend = nRowsLeft > 0;
+    sal_Bool bAppend = nRowsLeft > 0;
     if (IsFull())
     {
-        BOOL bResult = TRUE;
+        sal_Bool bResult = sal_True;
         ONDXNode aSplitNode;
         if (bAppend)
             aSplitNode = rNode;
@@ -210,7 +210,7 @@ BOOL ONDXPage::Insert(ONDXNode& rNode, sal_uInt32 nRowsLeft)
                 }
                 else  // Position unbekannt
                 {
-                    USHORT nPos = NODE_NOTFOUND;
+                    sal_uInt16 nPos = NODE_NOTFOUND;
                     while (++nPos < nCount && rNode.GetKey() > ((*this)[nPos]).GetKey()) ;
 
                     --nCount;   // (sonst bekomme ich u.U. Assertions und GPFs - 60593)
@@ -295,7 +295,7 @@ BOOL ONDXPage::Insert(ONDXNode& rNode, sal_uInt32 nRowsLeft)
         }
         else
         {
-            USHORT nNodePos = FindPos(rNode.GetKey());
+            sal_uInt16 nNodePos = FindPos(rNode.GetKey());
             if (IsLeaf())
                 rIndex.m_nCurNode = nNodePos;
 
@@ -305,17 +305,17 @@ BOOL ONDXPage::Insert(ONDXNode& rNode, sal_uInt32 nRowsLeft)
 }
 
 //------------------------------------------------------------------
-BOOL ONDXPage::Insert(USHORT nPos, ONDXNode& rNode)
+sal_Bool ONDXPage::Insert(sal_uInt16 nPos, ONDXNode& rNode)
 {
-    USHORT nMaxCount = rIndex.getHeader().db_maxkeys;
+    sal_uInt16 nMaxCount = rIndex.getHeader().db_maxkeys;
     if (nPos >= nMaxCount)
-        return FALSE;
+        return sal_False;
 
     if (nCount)
     {
         ++nCount;
         // nach rechts verschieben
-        for (USHORT i = std::min((USHORT)(nMaxCount-1), (USHORT)(nCount-1)); nPos < i; --i)
+        for (sal_uInt16 i = std::min((sal_uInt16)(nMaxCount-1), (sal_uInt16)(nCount-1)); nPos < i; --i)
             (*this)[i] = (*this)[i-1];
     }
     else
@@ -331,19 +331,19 @@ BOOL ONDXPage::Insert(USHORT nPos, ONDXNode& rNode)
         rNode.GetChild()->SetParent(this);
     }
 
-    bModified = TRUE;
+    bModified = sal_True;
 
-    return TRUE;
+    return sal_True;
 }
 
 //------------------------------------------------------------------
-BOOL ONDXPage::Append(ONDXNode& rNode)
+sal_Bool ONDXPage::Append(ONDXNode& rNode)
 {
     DBG_ASSERT(!IsFull(), "kein Append moeglich");
     return Insert(nCount, rNode);
 }
 //------------------------------------------------------------------
-void ONDXPage::Release(BOOL bSave)
+void ONDXPage::Release(sal_Bool bSave)
 {
     // freigeben der Pages
     if (aChild.Is())
@@ -352,7 +352,7 @@ void ONDXPage::Release(BOOL bSave)
     // Pointer freigeben
     aChild.Clear();
 
-    for (USHORT i = 0; i < rIndex.getHeader().db_maxkeys;i++)
+    for (sal_uInt16 i = 0; i < rIndex.getHeader().db_maxkeys;i++)
     {
         if (ppNodes[i].GetChild())
             ppNodes[i].GetChild()->Release(bSave);
@@ -362,7 +362,7 @@ void ONDXPage::Release(BOOL bSave)
     aParent = NULL;
 }
 //------------------------------------------------------------------
-void ONDXPage::ReleaseFull(BOOL bSave)
+void ONDXPage::ReleaseFull(sal_Bool bSave)
 {
     ONDXPagePtr aTempParent = aParent;
     Release(bSave);
@@ -371,7 +371,7 @@ void ONDXPage::ReleaseFull(BOOL bSave)
     {
         // Freigeben nicht benoetigter Seiten, danach besteht keine Referenz
         // mehr auf die Seite, danach kann 'this' nicht mehr gueltig sein!!!
-        USHORT nParentPos = aTempParent->Search(this);
+        sal_uInt16 nParentPos = aTempParent->Search(this);
         if (nParentPos != NODE_NOTFOUND)
             (*aTempParent)[nParentPos].GetChild().Clear();
         else
@@ -379,7 +379,7 @@ void ONDXPage::ReleaseFull(BOOL bSave)
     }
 }
 //------------------------------------------------------------------
-BOOL ONDXPage::Delete(USHORT nNodePos)
+sal_Bool ONDXPage::Delete(sal_uInt16 nNodePos)
 {
     if (IsLeaf())
     {
@@ -402,7 +402,7 @@ BOOL ONDXPage::Delete(USHORT nNodePos)
     if (HasParent() && nCount < (rIndex.GetMaxNodes() / 2))
     {
         // Feststellen, welcher Knoten auf die Seite zeigt
-        USHORT nParentNodePos = aParent->Search(this);
+        sal_uInt16 nParentNodePos = aParent->Search(this);
         // letzte Element auf Vaterseite
         // -> zusammenlegen mit vorletzter Seite
         if (nParentNodePos == (aParent->Count() - 1))
@@ -455,7 +455,7 @@ BOOL ONDXPage::Delete(USHORT nNodePos)
     else if (IsRoot())
         // Sicherstellen das die Position der Wurzel festgehalten wird
         rIndex.SetRootPos(nPagePos);
-    return TRUE;
+    return sal_True;
 }
 
 
@@ -476,7 +476,7 @@ ONDXNode ONDXPage::Split(ONDXPage& rPage)
     ONDXNode aResultNode;
     if (IsLeaf())
     {
-        for (USHORT i = (nCount - (nCount / 2)), j = 0 ; i < nCount; i++)
+        for (sal_uInt16 i = (nCount - (nCount / 2)), j = 0 ; i < nCount; i++)
             rPage.Insert(j++,(*this)[i]);
 
         // dieser Knoten enthaelt einen Schluessel der noch einmal im Tree vorkommt
@@ -491,7 +491,7 @@ ONDXNode ONDXPage::Split(ONDXPage& rPage)
     }
     else
     {
-        for (USHORT i = (nCount + 1) / 2 + 1, j = 0 ; i < nCount; i++)
+        for (sal_uInt16 i = (nCount + 1) / 2 + 1, j = 0 ; i < nCount; i++)
             rPage.Insert(j++,(*this)[i]);
 
         aResultNode = (*this)[(nCount + 1) / 2];
@@ -506,31 +506,31 @@ ONDXNode ONDXPage::Split(ONDXPage& rPage)
     // innere Knoten haben keine Recordnummer
     if (rIndex.isUnique())
         aResultNode.GetKey().ResetRecord();
-    bModified = TRUE;
+    bModified = sal_True;
     return aResultNode;
 }
 
 //------------------------------------------------------------------
-void ONDXPage::Merge(USHORT nParentNodePos, ONDXPagePtr xPage)
+void ONDXPage::Merge(sal_uInt16 nParentNodePos, ONDXPagePtr xPage)
 {
     DBG_ASSERT(HasParent(), "kein Vater vorhanden");
     DBG_ASSERT(nParentNodePos != NODE_NOTFOUND, "Falscher Indexaufbau");
 
     /*  Zusammenlegen zweier Seiten */
     ONDXNode aResultNode;
-    USHORT nMaxNodes = rIndex.GetMaxNodes(),
+    sal_uInt16 nMaxNodes = rIndex.GetMaxNodes(),
            nMaxNodes_2 = nMaxNodes / 2;
 
     // Feststellen ob Seite rechter oder linker Nachbar
-    BOOL    bRight    = ((*xPage)[0].GetKey() > (*this)[0].GetKey()); // TRUE, wenn xPage die rechte Seite ist
-    USHORT  nNewCount = (*xPage).Count() + Count();
+    sal_Bool    bRight    = ((*xPage)[0].GetKey() > (*this)[0].GetKey()); // sal_True, wenn xPage die rechte Seite ist
+    sal_uInt16  nNewCount = (*xPage).Count() + Count();
 
     if (IsLeaf())
     {
         // Bedingung fuers zusammenlegen
         if (nNewCount < (nMaxNodes_2 * 2))
         {
-            USHORT nLastNode = bRight ? Count() - 1 : xPage->Count() - 1;
+            sal_uInt16 nLastNode = bRight ? Count() - 1 : xPage->Count() - 1;
             if (bRight)
             {
                 DBG_ASSERT(&xPage != this,"xPage und THIS duerfen nicht gleich sein: Endlosschleife");
@@ -555,7 +555,7 @@ void ONDXPage::Merge(USHORT nParentNodePos, ONDXPagePtr xPage)
                     (*aParent)[nParentNodePos-1].SetChild(this,aParent);
                 else // oder als rechten Knoten setzen
                     aParent->SetChild(this);
-                aParent->SetModified(TRUE);
+                aParent->SetModified(sal_True);
 
             }
 
@@ -571,12 +571,12 @@ void ONDXPage::Merge(USHORT nParentNodePos, ONDXPagePtr xPage)
                 aParent = NULL;
                 rIndex.SetRootPos(nPagePos);
                 rIndex.m_aRoot = this;
-                SetModified(TRUE);
+                SetModified(sal_True);
             }
             else
                 aParent->SearchAndReplace((*this)[nLastNode].GetKey(),(*this)[nCount-1].GetKey());
 
-            xPage->SetModified(FALSE);
+            xPage->SetModified(sal_False);
             xPage->ReleaseFull(); // wird nicht mehr benoetigt
         }
         // Ausgleichen der Elemente   nNewCount >= (nMaxNodes_2 * 2)
@@ -620,7 +620,7 @@ void ONDXPage::Merge(USHORT nParentNodePos, ONDXPagePtr xPage)
                 // erhaelt zunaechst Child von xPage
                 (*aParent)[nParentNodePos].SetChild(xPage->GetChild(),aParent);
                 Append((*aParent)[nParentNodePos]);
-                for (USHORT i = 0 ; i < xPage->Count(); i++)
+                for (sal_uInt16 i = 0 ; i < xPage->Count(); i++)
                     Append((*xPage)[i]);
             }
             else
@@ -645,7 +645,7 @@ void ONDXPage::Merge(USHORT nParentNodePos, ONDXPagePtr xPage)
 
             // danach wird der Vaterknoten zurueckgesetzt
             (*aParent)[nParentNodePos].SetChild();
-            aParent->SetModified(TRUE);
+            aParent->SetModified(sal_True);
 
             if(aParent->IsRoot() && aParent->Count() == 1)
             {
@@ -654,7 +654,7 @@ void ONDXPage::Merge(USHORT nParentNodePos, ONDXPagePtr xPage)
                 aParent = NULL;
                 rIndex.SetRootPos(nPagePos);
                 rIndex.m_aRoot = this;
-                SetModified(TRUE);
+                SetModified(sal_True);
             }
             else if(nParentNodePos)
                 // Austauschen des KnotenWertes
@@ -662,7 +662,7 @@ void ONDXPage::Merge(USHORT nParentNodePos, ONDXPagePtr xPage)
                 // deshalb muss der Knoten auch hier aktualisiert werden
                 aParent->SearchAndReplace((*aParent)[nParentNodePos-1].GetKey(),(*aParent)[nParentNodePos].GetKey());
 
-            xPage->SetModified(FALSE);
+            xPage->SetModified(sal_False);
             xPage->ReleaseFull();
         }
         // Ausgleichen der Elemente
@@ -693,7 +693,7 @@ void ONDXPage::Merge(USHORT nParentNodePos, ONDXPagePtr xPage)
                 (*aParent)[nParentNodePos].SetChild(this,aParent);
 
             }
-            aParent->SetModified(TRUE);
+            aParent->SetModified(sal_True);
         }
     }
 }
@@ -715,7 +715,7 @@ void ONDXNode::Read(SvStream &rStream, ODbaseIndex& rIndex)
     else
     {
         ByteString aBuf;
-        USHORT nLen = rIndex.getHeader().db_keylen;
+        sal_uInt16 nLen = rIndex.getHeader().db_keylen;
         char* pStr = aBuf.AllocBuffer(nLen+1);
 
         rStream.Read(pStr,nLen);
@@ -748,7 +748,7 @@ void ONDXNode::Write(SvStream &rStream, const ONDXPage& rPage) const
         if (aKey.getValue().isNull())
         {
             memset(aNodeData.aData,0,rIndex.getHeader().db_keylen);
-            rStream.Write((BYTE*)aNodeData.aData,rIndex.getHeader().db_keylen);
+            rStream.Write((sal_uInt8*)aNodeData.aData,rIndex.getHeader().db_keylen);
         }
         else
             rStream << (double) aKey.getValue();
@@ -762,7 +762,7 @@ void ONDXNode::Write(SvStream &rStream, const ONDXPage& rPage) const
             ByteString aText(sValue.getStr(), rIndex.m_pTable->getConnection()->getTextEncoding());
             strncpy(aNodeData.aData,aText.GetBuffer(),std::min(rIndex.getHeader().db_keylen, aText.Len()));
         }
-        rStream.Write((BYTE*)aNodeData.aData,rIndex.getHeader().db_keylen);
+        rStream.Write((sal_uInt8*)aNodeData.aData,rIndex.getHeader().db_keylen);
     }
     rStream << aChild;
 }
@@ -782,7 +782,7 @@ ONDXPagePtr& ONDXNode::GetChild(ODbaseIndex* pIndex, ONDXPage* pParent)
 // ONDXKey
 //==================================================================
 //------------------------------------------------------------------
-BOOL ONDXKey::IsText(sal_Int32 eType)
+sal_Bool ONDXKey::IsText(sal_Int32 eType)
 {
     return eType == DataType::VARCHAR || eType == DataType::CHAR;
 }
@@ -809,7 +809,7 @@ StringCompare ONDXKey::Compare(const ONDXKey& rKey) const
     }
     else if (IsText(getDBType()))
     {
-        INT32 nRes = getValue().getString().compareTo(rKey.getValue());
+        sal_Int32 nRes = getValue().getString().compareTo(rKey.getValue());
         eResult = (nRes > 0) ? COMPARE_GREATER : (nRes == 0) ? COMPARE_EQUAL : COMPARE_LESS;
     }
     else
@@ -882,16 +882,16 @@ ONDXPagePtr& ONDXPagePtr::operator= (ONDXPage* pRef)
     return *this;
 }
 // -----------------------------------------------------------------------------
-static UINT32 nValue;
+static sal_uInt32 nValue;
 //------------------------------------------------------------------
 SvStream& connectivity::dbase::operator >> (SvStream &rStream, ONDXPage& rPage)
 {
     rStream.Seek(rPage.GetPagePos() * PAGE_SIZE);
     rStream >> nValue >> rPage.aChild;
-    rPage.nCount = USHORT(nValue);
+    rPage.nCount = sal_uInt16(nValue);
 
 //  DBG_ASSERT(rPage.nCount && rPage.nCount < rPage.GetIndex().GetMaxNodes(), "Falscher Count");
-    for (USHORT i = 0; i < rPage.nCount; i++)
+    for (sal_uInt16 i = 0; i < rPage.nCount; i++)
         rPage[i].Read(rStream, rPage.GetIndex());
     return rStream;
 }
@@ -900,7 +900,7 @@ SvStream& connectivity::dbase::operator >> (SvStream &rStream, ONDXPage& rPage)
 SvStream& connectivity::dbase::operator << (SvStream &rStream, const ONDXPage& rPage)
 {
     // Seite existiert noch nicht
-    ULONG nSize = (rPage.GetPagePos() + 1) * PAGE_SIZE;
+    sal_uIntPtr nSize = (rPage.GetPagePos() + 1) * PAGE_SIZE;
     if (nSize > rStream.Seek(STREAM_SEEK_TO_END))
     {
         rStream.SetStreamSize(nSize);
@@ -908,27 +908,27 @@ SvStream& connectivity::dbase::operator << (SvStream &rStream, const ONDXPage& r
 
         char aEmptyData[PAGE_SIZE];
         memset(aEmptyData,0x00,PAGE_SIZE);
-        rStream.Write((BYTE*)aEmptyData,PAGE_SIZE);
+        rStream.Write((sal_uInt8*)aEmptyData,PAGE_SIZE);
     }
-    ULONG nCurrentPos = rStream.Seek(rPage.GetPagePos() * PAGE_SIZE);
+    sal_uIntPtr nCurrentPos = rStream.Seek(rPage.GetPagePos() * PAGE_SIZE);
     OSL_UNUSED( nCurrentPos );
 
     nValue = rPage.nCount;
     rStream << nValue << rPage.aChild;
 
-    USHORT i = 0;
+    sal_uInt16 i = 0;
     for (; i < rPage.nCount; i++)
         rPage[i].Write(rStream, rPage);
 
     // check if we have to fill the stream with '\0'
     if(i < rPage.rIndex.getHeader().db_maxkeys)
     {
-        ULONG nTell = rStream.Tell() % PAGE_SIZE;
-        USHORT nBufferSize = rStream.GetBufferSize();
-        ULONG nRemainSize = nBufferSize - nTell;
+        sal_uIntPtr nTell = rStream.Tell() % PAGE_SIZE;
+        sal_uInt16 nBufferSize = rStream.GetBufferSize();
+        sal_uIntPtr nRemainSize = nBufferSize - nTell;
         char* pEmptyData = new char[nRemainSize];
         memset(pEmptyData,0x00,nRemainSize);
-        rStream.Write((BYTE*)pEmptyData,nRemainSize);
+        rStream.Write((sal_uInt8*)pEmptyData,nRemainSize);
         rStream.Seek(nTell);
         delete [] pEmptyData;
     }
@@ -942,7 +942,7 @@ void ONDXPage::PrintPage()
     DBG_TRACE4("\nSDB: -----------Page: %d  Parent: %d  Count: %d  Child: %d-----",
         nPagePos, HasParent() ? aParent->GetPagePos() : 0 ,nCount, aChild.GetPagePos());
 
-    for (USHORT i = 0; i < nCount; i++)
+    for (sal_uInt16 i = 0; i < nCount; i++)
     {
         ONDXNode rNode = (*this)[i];
         ONDXKey&  rKey = rNode.GetKey();
@@ -967,7 +967,7 @@ void ONDXPage::PrintPage()
     {
 #if OSL_DEBUG_LEVEL > 1
         GetChild(&rIndex)->PrintPage();
-        for (USHORT i = 0; i < nCount; i++)
+        for (sal_uInt16 i = 0; i < nCount; i++)
         {
             ONDXNode rNode = (*this)[i];
             rNode.GetChild(&rIndex,this)->PrintPage();
@@ -978,16 +978,16 @@ void ONDXPage::PrintPage()
 }
 #endif
 // -----------------------------------------------------------------------------
-BOOL ONDXPage::IsFull() const
+sal_Bool ONDXPage::IsFull() const
 {
     return Count() == rIndex.getHeader().db_maxkeys;
 }
 // -----------------------------------------------------------------------------
 //------------------------------------------------------------------
-USHORT ONDXPage::Search(const ONDXKey& rSearch)
+sal_uInt16 ONDXPage::Search(const ONDXKey& rSearch)
 {
     // binare Suche spaeter
-    USHORT i = NODE_NOTFOUND;
+    sal_uInt16 i = NODE_NOTFOUND;
     while (++i < Count())
         if ((*this)[i].GetKey() == rSearch)
             break;
@@ -996,9 +996,9 @@ USHORT ONDXPage::Search(const ONDXKey& rSearch)
 }
 
 //------------------------------------------------------------------
-USHORT ONDXPage::Search(const ONDXPage* pPage)
+sal_uInt16 ONDXPage::Search(const ONDXPage* pPage)
 {
-    USHORT i = NODE_NOTFOUND;
+    sal_uInt16 i = NODE_NOTFOUND;
     while (++i < Count())
         if (((*this)[i]).GetChild() == pPage)
             break;
@@ -1015,7 +1015,7 @@ void ONDXPage::SearchAndReplace(const ONDXKey& rSearch,
     OSL_ENSURE(rSearch != rReplace,"Invalid here:rSearch == rReplace");
     if (rSearch != rReplace)
     {
-        USHORT nPos = NODE_NOTFOUND;
+        sal_uInt16 nPos = NODE_NOTFOUND;
         ONDXPage* pPage = this;
 
         while (pPage && (nPos = pPage->Search(rSearch)) == NODE_NOTFOUND)
@@ -1024,33 +1024,33 @@ void ONDXPage::SearchAndReplace(const ONDXKey& rSearch,
         if (pPage)
         {
             (*pPage)[nPos].GetKey() = rReplace;
-            pPage->SetModified(TRUE);
+            pPage->SetModified(sal_True);
         }
     }
 }
 // -----------------------------------------------------------------------------
-ONDXNode& ONDXPage::operator[] (USHORT nPos)
+ONDXNode& ONDXPage::operator[] (sal_uInt16 nPos)
 {
     DBG_ASSERT(nCount > nPos, "falscher Indexzugriff");
     return ppNodes[nPos];
 }
 
 //------------------------------------------------------------------
-const ONDXNode& ONDXPage::operator[] (USHORT nPos) const
+const ONDXNode& ONDXPage::operator[] (sal_uInt16 nPos) const
 {
     DBG_ASSERT(nCount > nPos, "falscher Indexzugriff");
     return ppNodes[nPos];
 }
 // -----------------------------------------------------------------------------
-void ONDXPage::Remove(USHORT nPos)
+void ONDXPage::Remove(sal_uInt16 nPos)
 {
     DBG_ASSERT(nCount > nPos, "falscher Indexzugriff");
 
-    for (USHORT i = nPos; i < (nCount-1); i++)
+    for (sal_uInt16 i = nPos; i < (nCount-1); i++)
         (*this)[i] = (*this)[i+1];
 
     nCount--;
-    bModified = TRUE;
+    bModified = sal_True;
 }
 // -----------------------------------------------------------------------------
 
