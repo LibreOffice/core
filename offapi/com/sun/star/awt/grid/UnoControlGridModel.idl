@@ -51,14 +51,35 @@ service UnoControlGridModel
     service com::sun::star::awt::UnoControlModel;
 
     /** Specifies whether the grid control should display a special header column.
-        <p>The default value is <FALSE/></p>
+
+    <p>The default value is <FALSE/></p>
     */
     [property] boolean ShowRowHeader;
 
+    /** specifies the width of the row header column, if applicable.
+
+        <p>The width is specified in application font units - see <type scope="com::sun::star::util">MeasureUnit</type>.</p>
+
+        <p>The value given here is ignored if <member>ShowRowHeader</member> is <FALSE/>.</p>
+    */
+    [property] long RowHeaderWidth;
+
     /** Specifies whether the grid control should display a title row.
-        <p>The default value is <TRUE/></p>
+
+    <p>The default value is <TRUE/></p>
     */
     [property] boolean ShowColumnHeader;
+
+    /** specifies the height of the column header row, if applicable.
+
+        <p>The height is specified in application font units - see <type scope="com::sun::star::util">MeasureUnit</type>.</p>
+
+        <p>The value given here is ignored if <member>ShowColumnHeader</member> is <FALSE/>.</p>
+
+        <p>If the property is <void/>, the grid control shall automatically determine a height which conveniently allows,
+        according to the used font, to display one line of text.</p>
+    */
+    [property, maybevoid] long ColumnHeaderHeight;
 
     /** Specifies the <type>XGridColumnModel</type> that is providing the column structure.
 

@@ -70,12 +70,6 @@ interface XGridColumn
     [attribute] boolean Resizeable;
 
     /** Specifies the horizontal alignment of the content in the control.
-
-        <pre>
-            LEFT
-            CENTER
-            RIGHT
-        </pre>
      */
     [attribute] ::com::sun::star::style::HorizontalAlignment HorizontalAlign;
 

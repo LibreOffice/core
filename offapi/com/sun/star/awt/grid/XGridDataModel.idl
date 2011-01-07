@@ -64,10 +64,6 @@ interface XGridDataModel
     */
     [attribute] sequence< string > RowHeaders;
 
-    /**Specifies the width of row header.
-    */
-    [attribute] long RowHeaderWidth;
-
     /** denotes the number of rows for which the model can provide data
     */
     [attribute, readonly] long RowCount;

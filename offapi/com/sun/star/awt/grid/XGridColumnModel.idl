@@ -62,10 +62,6 @@ interface XGridColumnModel
     */
     interface ::com::sun::star::util::XCloneable;
 
-    /**Specifies the height of column header.
-    */
-    [attribute] long ColumnHeaderHeight;
-
     /** Returns the number of columns.
         @returns
                 the number of columns.
