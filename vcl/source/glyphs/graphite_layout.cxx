@@ -1263,7 +1263,7 @@ void GraphiteLayout::kashidaJustify(std::vector<int>& rDeltaWidths, sal_GlyphId 
         {
             (*(i)).maLinearPos.X() -= nGapWidth;
             nGapWidth -= nKashidaWidth;
-            i++;
+            ++i;
         }
 
         // fixup rightmost kashida for gap remainder
