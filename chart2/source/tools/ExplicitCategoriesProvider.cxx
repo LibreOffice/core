@@ -71,9 +71,9 @@ ExplicitCategoriesProvider::ExplicitCategoriesProvider( const Reference< chart2:
             {
                 uno::Reference< data::XDataProvider > xDataProvider( xChartDoc->getDataProvider() );
 
-                if( xDataProvider.is() )
+                OUString aCatgoriesRange( DataSourceHelper::getRangeFromValues( m_xOriginalCategories ) );
+                if( xDataProvider.is() && aCatgoriesRange.getLength() )
                 {
-                    OUString aCatgoriesRange( DataSourceHelper::getRangeFromValues( m_xOriginalCategories ) );
                     const bool bFirstCellAsLabel = false;
                     const bool bHasCategories = false;
                     const uno::Sequence< sal_Int32 > aSequenceMapping;
@@ -355,7 +355,6 @@ Sequence< OUString > lcl_getExplicitSimpleCategories(
     return aRet;
 }
 
-//static
 Sequence< OUString > ExplicitCategoriesProvider::getExplicitSimpleCategories(
     const SplitCategoriesProvider& rSplitCategoriesProvider )
 {
@@ -401,7 +400,6 @@ std::vector< ComplexCategory >  ExplicitCategoriesProvider::getCategoriesByLevel
     return aRet;
 }
 
-// static
 OUString ExplicitCategoriesProvider::getCategoryByIndex(
           const Reference< XCoordinateSystem >& xCooSysModel
         , const uno::Reference< frame::XModel >& xChartModel
