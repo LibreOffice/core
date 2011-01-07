@@ -101,7 +101,7 @@ void        XFFileStream::StartElement(const rtl::OUString& oustr)
 
     //write attributes:
     std::vector<std::pair<rtl::OUString,rtl::OUString> >::iterator  it;
-    for( it = m_pAttrList->m_aAttrList.begin(); it != m_pAttrList->m_aAttrList.end(); it++ )
+    for( it = m_pAttrList->m_aAttrList.begin(); it != m_pAttrList->m_aAttrList.end(); ++it )
     {
         std::pair<rtl::OUString,rtl::OUString>  pair = *it;
         rtl::OUString   name = pair.first;

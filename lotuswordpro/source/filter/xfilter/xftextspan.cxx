@@ -82,7 +82,7 @@ XFTextSpan::XFTextSpan(rtl::OUString& text,
 XFTextSpan::~XFTextSpan()
 {
     std::vector<IXFContent*>::iterator it;
-    for( it = m_aContents.begin(); it != m_aContents.end(); it++ )
+    for( it = m_aContents.begin(); it != m_aContents.end(); ++it )
     {
         IXFContent  *pContent = *it;
         if( pContent )
@@ -149,7 +149,7 @@ void    XFTextSpan::ToXml(IXFStream *pStrm)
     pStrm->StartElement( A2OUSTR("text:span") );
 
     std::vector<IXFContent*>::iterator it;
-    for( it= m_aContents.begin(); it!= m_aContents.end(); it++ )
+    for( it= m_aContents.begin(); it!= m_aContents.end(); ++it )
     {
         IXFContent *pContent = *it;
         if( pContent )
@@ -172,7 +172,7 @@ void    XFTextSpanStart::ToXml(IXFStream *pStrm)
     pStrm->StartElement( A2OUSTR("text:span") );
 
     std::vector<IXFContent*>::iterator it;
-    for( it= m_aContents.begin(); it!= m_aContents.end(); it++ )
+    for( it= m_aContents.begin(); it!= m_aContents.end(); ++it )
     {
         IXFContent *pContent = *it;
         if( pContent )
@@ -182,7 +182,7 @@ void    XFTextSpanStart::ToXml(IXFStream *pStrm)
 void    XFTextSpanEnd::ToXml(IXFStream *pStrm)
 {
     std::vector<IXFContent*>::iterator it;
-    for( it= m_aContents.begin(); it!= m_aContents.end(); it++ )
+    for( it= m_aContents.begin(); it!= m_aContents.end(); ++it )
     {
         IXFContent *pContent = *it;
         if( pContent )

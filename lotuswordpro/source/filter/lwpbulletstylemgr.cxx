@@ -134,7 +134,7 @@ rtl::OUString LwpBulletStyleMgr::RegisterBulletStyle(LwpPara* pPara, LwpBulletOv
 
     sal_uInt16 nNameIndex = 0;
     std::vector <OverridePair>::iterator iter;
-    for(iter = m_vIDsPairList.begin(); iter != m_vIDsPairList.end(); iter++)
+    for(iter = m_vIDsPairList.begin(); iter != m_vIDsPairList.end(); ++iter)
     {
         if (iter->first->GetSilverBullet() == aBulletID && iter->second == aIndentID
             && iter->first->IsRightAligned() == pBullOver->IsRightAligned())
