@@ -81,6 +81,12 @@ service UnoControlGridModel
     */
     [property, maybevoid] long ColumnHeaderHeight;
 
+    /** Specifies the height of rows in the grid control.
+
+        <p>The height is specified in application font units - see <type scope="com::sun::star::util">MeasureUnit</type>.</p>
+    */
+    [property, maybevoid] long RowHeight;
+
     /** Specifies the <type>XGridColumnModel</type> that is providing the column structure.
 
         <p>You can implement your own instance of <type>XGridColumnModel</type> or use

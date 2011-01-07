@@ -56,10 +56,6 @@ interface XGridDataModel
     */
     interface ::com::sun::star::util::XCloneable;
 
-    /** Specifies the height of each row.
-    */
-    [attribute] long RowHeight;
-
     /** Contains the row header.
     */
     [attribute] sequence< string > RowHeaders;
