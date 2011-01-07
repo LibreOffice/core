@@ -79,7 +79,7 @@ SpellChecker::SpellChecker() :
     aDEncs = NULL;
     aDLocs = NULL;
     aDNames = NULL;
-    bDisposing = FALSE;
+    bDisposing = sal_False;
     pPropHelper = NULL;
     numdict = 0;
 }
@@ -255,17 +255,17 @@ sal_Bool SAL_CALL SpellChecker::hasLocale(const Locale& rLocale)
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
-    BOOL bRes = FALSE;
+    sal_Bool bRes = sal_False;
     if (!aSuppLocales.getLength())
         getLocales();
 
-    INT32 nLen = aSuppLocales.getLength();
-    for (INT32 i = 0;  i < nLen;  ++i)
+    sal_Int32 nLen = aSuppLocales.getLength();
+    for (sal_Int32 i = 0;  i < nLen;  ++i)
     {
         const Locale *pLocale = aSuppLocales.getConstArray();
         if (rLocale == pLocale[i])
         {
-            bRes = TRUE;
+            bRes = sal_True;
             break;
         }
     }
@@ -273,7 +273,7 @@ sal_Bool SAL_CALL SpellChecker::hasLocale(const Locale& rLocale)
 }
 
 
-INT16 SpellChecker::GetSpellFailure( const OUString &rWord, const Locale &rLocale )
+sal_Int16 SpellChecker::GetSpellFailure( const OUString &rWord, const Locale &rLocale )
 {
     Hunspell * pMS = NULL;
     rtl_TextEncoding eEnc = RTL_TEXTENCODING_DONTKNOW;
@@ -281,7 +281,7 @@ INT16 SpellChecker::GetSpellFailure( const OUString &rWord, const Locale &rLocal
     // initialize a myspell object for each dictionary once
     // (note: mutex is held higher up in isValid)
 
-    INT16 nRes = -1;
+    sal_Int16 nRes = -1;
 
     // first handle smart quotes both single and double
     OUStringBuffer rBuf(rWord);
@@ -367,17 +367,17 @@ sal_Bool SAL_CALL SpellChecker::isValid( const OUString& rWord, const Locale& rL
     MutexGuard  aGuard( GetLinguMutex() );
 
      if (rLocale == Locale()  ||  !rWord.getLength())
-        return TRUE;
+        return sal_True;
 
     if (!hasLocale( rLocale ))
 #ifdef LINGU_EXCEPTIONS
         throw( IllegalArgumentException() );
 #else
-        return TRUE;
+        return sal_True;
 #endif
 
-    // return FALSE to process SPELLML requests (they are longer than the header)
-    if (rWord.match(A2OU(SPELLML_HEADER), 0) && (rWord.getLength() > 10)) return FALSE;
+    // return sal_False to process SPELLML requests (they are longer than the header)
+    if (rWord.match(A2OU(SPELLML_HEADER), 0) && (rWord.getLength() > 10)) return sal_False;
 
     // Get property values to be used.
     // These are be the default values set in the SN_LINGU_PROPERTIES
@@ -389,10 +389,10 @@ sal_Bool SAL_CALL SpellChecker::isValid( const OUString& rWord, const Locale& rL
     PropertyHelper_Spell &rHelper = GetPropHelper();
     rHelper.SetTmpPropVals( rProperties );
 
-    INT16 nFailure = GetSpellFailure( rWord, rLocale );
+    sal_Int16 nFailure = GetSpellFailure( rWord, rLocale );
     if (nFailure != -1 && !rWord.match(A2OU(SPELLML_HEADER), 0))
     {
-        INT16 nLang = LocaleToLanguage( rLocale );
+        sal_Int16 nLang = LocaleToLanguage( rLocale );
         // postprocess result for errors that should be ignored
         const bool bIgnoreError =
                 (!rHelper.IsSpellUpperCase()  && IsUpper( rWord, nLang )) ||
@@ -437,7 +437,7 @@ Reference< XSpellAlternatives >
 
     if (n)
     {
-        INT16 nLang = LocaleToLanguage( rLocale );
+        sal_Int16 nLang = LocaleToLanguage( rLocale );
 
         Sequence< OUString > aStr( 0 );
 
@@ -529,7 +529,7 @@ sal_Bool SAL_CALL SpellChecker::addLinguServiceEventListener(
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
-    BOOL bRes = FALSE;
+    sal_Bool bRes = sal_False;
     if (!bDisposing && rxLstnr.is())
     {
         bRes = GetPropHelper().addLinguServiceEventListener( rxLstnr );
@@ -544,7 +544,7 @@ sal_Bool SAL_CALL SpellChecker::removeLinguServiceEventListener(
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
-    BOOL bRes = FALSE;
+    sal_Bool bRes = sal_False;
     if (!bDisposing && rxLstnr.is())
     {
         DBG_ASSERT( xPropHelper.is(), "xPropHelper non existent" );
@@ -569,7 +569,7 @@ void SAL_CALL SpellChecker::initialize( const Sequence< Any >& rArguments )
 
     if (!pPropHelper)
     {
-        INT32 nLen = rArguments.getLength();
+        sal_Int32 nLen = rArguments.getLength();
         if (2 == nLen)
         {
             Reference< XPropertySet >   xPropSet;
@@ -599,7 +599,7 @@ void SAL_CALL SpellChecker::dispose()
 
     if (!bDisposing)
     {
-        bDisposing = TRUE;
+        bDisposing = sal_True;
         EventObject aEvtObj( (XSpellChecker *) this );
         aEvtListeners.disposeAndClear( aEvtObj );
     }
@@ -646,10 +646,10 @@ sal_Bool SAL_CALL SpellChecker::supportsService( const OUString& ServiceName )
 
     Sequence< OUString > aSNL = getSupportedServiceNames();
     const OUString * pArray = aSNL.getConstArray();
-    for( INT32 i = 0; i < aSNL.getLength(); i++ )
+    for( sal_Int32 i = 0; i < aSNL.getLength(); i++ )
         if( pArray[i] == ServiceName )
-            return TRUE;
-    return FALSE;
+            return sal_True;
+    return sal_False;
 }
 
 

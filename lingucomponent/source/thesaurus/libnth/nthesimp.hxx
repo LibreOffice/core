@@ -87,7 +87,7 @@ class Thesaurus :
     ::cppu::OInterfaceContainerHelper       aEvtListeners;
     Reference< XPropertyChangeListener >    xPropHelper;
     linguistic::PropertyHelper_Thes *       pPropHelper;
-    BOOL                                    bDisposing;
+    sal_Bool                                    bDisposing;
     CharClass **                            aCharSetInfo;
     MyThes **                               aThes;
     rtl_TextEncoding *                      aTEncs;
@@ -98,7 +98,7 @@ class Thesaurus :
     // cache for the Thesaurus dialog
     Sequence < Reference < ::com::sun::star::linguistic2::XMeaning > > prevMeanings;
     OUString  prevTerm;
-    INT16 prevLocale;
+    sal_Int16 prevLocale;
 
     // disallow copy-constructor and assignment-operator for now
     Thesaurus(const Thesaurus &);

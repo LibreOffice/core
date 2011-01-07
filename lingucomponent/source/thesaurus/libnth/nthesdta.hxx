@@ -48,11 +48,11 @@ class Meaning :
 {
     ::com::sun::star::uno::Sequence< ::rtl::OUString >  aSyn;   // list of synonyms, may be empty.
     ::rtl::OUString         aTerm;
-    INT16                   nLanguage;
+    sal_Int16                   nLanguage;
 
 #if 0
         // this is for future use by a German thesaurus
-        BOOL                bIsGermanPreReform;
+        sal_Bool                bIsGermanPreReform;
 #endif
 
     // disallow copy-constructor and assignment-operator for now
@@ -61,9 +61,9 @@ class Meaning :
 
 public:
 #if 0
-    Meaning(const ::rtl::OUString &rTerm, INT16 nLang, const PropertyHelper_Thes &rHelper);
+    Meaning(const ::rtl::OUString &rTerm, sal_Int16 nLang, const PropertyHelper_Thes &rHelper);
 #else
-    Meaning(const ::rtl::OUString &rTerm, INT16 nLang);
+    Meaning(const ::rtl::OUString &rTerm, sal_Int16 nLang);
 #endif
     virtual ~Meaning();
 

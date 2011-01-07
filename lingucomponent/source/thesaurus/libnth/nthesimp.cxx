@@ -93,7 +93,7 @@ static uno::Reference< XLinguServiceManager > GetLngSvcMgr_Impl()
 Thesaurus::Thesaurus() :
     aEvtListeners   ( GetLinguMutex() )
 {
-    bDisposing = FALSE;
+    bDisposing = sal_False;
     pPropHelper = NULL;
     aThes = NULL;
     aCharSetInfo = NULL;
@@ -289,16 +289,16 @@ sal_Bool SAL_CALL Thesaurus::hasLocale(const Locale& rLocale)
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
-    BOOL bRes = FALSE;
+    sal_Bool bRes = sal_False;
     if (!aSuppLocales.getLength())
         getLocales();
-    INT32 nLen = aSuppLocales.getLength();
-    for (INT32 i = 0;  i < nLen;  ++i)
+    sal_Int32 nLen = aSuppLocales.getLength();
+    for (sal_Int32 i = 0;  i < nLen;  ++i)
     {
         const Locale *pLocale = aSuppLocales.getConstArray();
         if (rLocale == pLocale[i])
         {
-            bRes = TRUE;
+            bRes = sal_True;
             break;
         }
     }
@@ -324,7 +324,7 @@ Sequence < Reference < ::com::sun::star::linguistic2::XMeaning > > SAL_CALL Thes
     sal_Int32 stem = 0;
     sal_Int32 stem2 = 0;
 
-    INT16 nLanguage = LocaleToLanguage( rLocale );
+    sal_Int16 nLanguage = LocaleToLanguage( rLocale );
 
     if (nLanguage == LANGUAGE_NONE || !rTerm.getLength())
         return noMeanings;
@@ -591,7 +591,7 @@ void SAL_CALL Thesaurus::initialize( const Sequence< Any >& rArguments )
 
     if (!pPropHelper)
     {
-        INT32 nLen = rArguments.getLength();
+        sal_Int32 nLen = rArguments.getLength();
         if (1 == nLen)
         {
             Reference< XPropertySet >   xPropSet;
@@ -619,7 +619,7 @@ sal_uInt16 SAL_CALL Thesaurus::capitalType(const OUString& aTerm, CharClass * pC
         {
             String aStr(aTerm);
             sal_Int32 nc = 0;
-            for (USHORT tindex = 0; tindex < tlen;  tindex++)
+            for (sal_uInt16 tindex = 0; tindex < tlen;  tindex++)
             {
                 if (pCC->getCharacterType(aStr,tindex) &
                    ::com::sun::star::i18n::KCharacterType::UPPER) nc++;
@@ -682,7 +682,7 @@ void SAL_CALL Thesaurus::dispose()
 
     if (!bDisposing)
     {
-        bDisposing = TRUE;
+        bDisposing = sal_True;
         EventObject aEvtObj( (XThesaurus *) this );
         aEvtListeners.disposeAndClear( aEvtObj );
     }
@@ -728,10 +728,10 @@ sal_Bool SAL_CALL Thesaurus::supportsService( const OUString& ServiceName )
 
     Sequence< OUString > aSNL = getSupportedServiceNames();
     const OUString * pArray = aSNL.getConstArray();
-    for( INT32 i = 0; i < aSNL.getLength(); i++ )
+    for( sal_Int32 i = 0; i < aSNL.getLength(); i++ )
         if( pArray[i] == ServiceName )
-            return TRUE;
-    return FALSE;
+            return sal_True;
+    return sal_False;
 }
 
 
