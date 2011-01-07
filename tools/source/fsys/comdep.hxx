@@ -111,8 +111,8 @@ struct DirReader_Impl
                 { if( pDosDir ) closedir( pDosDir ); }
 
                 // die folgenden sind systemabh"angig implementiert
-    USHORT      Init(); // initialisiert, liest ggf. devices
-    USHORT      Read(); // liest 1 Eintrag, F2ugt ein falls ok
+    sal_uInt16      Init(); // initialisiert, liest ggf. devices
+    sal_uInt16      Read(); // liest 1 Eintrag, F2ugt ein falls ok
 };
 
 //--------------------------------------------------------------------

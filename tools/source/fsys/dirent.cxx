@@ -289,12 +289,12 @@ const char* ImpCheckDirEntry( const void* p )
 |*
 *************************************************************************/
 
-ByteString ImplCutPath( const ByteString& rStr, USHORT nMax, char cAccDel )
+ByteString ImplCutPath( const ByteString& rStr, sal_uInt16 nMax, char cAccDel )
 {
-    USHORT  nMaxPathLen = nMax;
+    sal_uInt16  nMaxPathLen = nMax;
     ByteString  aCutPath( rStr );
     sal_Bool    bInsertPrefix = sal_False;
-    USHORT  nBegin = aCutPath.Search( cAccDel );
+    sal_uInt16  nBegin = aCutPath.Search( cAccDel );
 
     if( nBegin == STRING_NOTFOUND )
         nBegin = 0;
@@ -303,8 +303,8 @@ ByteString ImplCutPath( const ByteString& rStr, USHORT nMax, char cAccDel )
 
     while( aCutPath.Len() > nMaxPathLen )
     {
-        USHORT nEnd = aCutPath.Search( cAccDel, nBegin + 1 );
-        USHORT nCount;
+        sal_uInt16 nEnd = aCutPath.Search( cAccDel, nBegin + 1 );
+        sal_uInt16 nCount;
 
         if ( nEnd != STRING_NOTFOUND )
         {
@@ -318,7 +318,7 @@ ByteString ImplCutPath( const ByteString& rStr, USHORT nMax, char cAccDel )
 
     if ( aCutPath.Len() > nMaxPathLen )
     {
-        for ( USHORT n = nMaxPathLen; n > nMaxPathLen/2; --n )
+        for ( sal_uInt16 n = nMaxPathLen; n > nMaxPathLen/2; --n )
             if ( !ByteString(aCutPath.GetChar(n)).IsAlphaNumericAscii() )
             {
                 aCutPath.Erase( n );
@@ -362,7 +362,7 @@ FSysError DirEntry::ImpParseOs2Name( const ByteString& rPfad, FSysPathStyle eSty
         // der Rest immer ohne die fuehrenden '\\'.
         // ein ":" trennt ebenfalls, gehoert aber zum Namen
         // den ersten '\\', '/' oder ':' suchen
-        USHORT nPos;
+        sal_uInt16 nPos;
         for ( nPos = 0;
               nPos < aPfad.Len() &&                             //?O
                   aPfad.GetChar(nPos) != '\\' && aPfad.GetChar(nPos) != '/' &&      //?O
@@ -499,7 +499,7 @@ FSysError DirEntry::ImpParseOs2Name( const ByteString& rPfad, FSysPathStyle eSty
     }
     while ( aPfad.Len() );
 
-    ULONG nErr = ERRCODE_NONE;
+    sal_uInt32 nErr = ERRCODE_NONE;
     // Haupt-Entry (selbst) zuweisen
     if ( aStack.Count() == 0 )
     {
@@ -639,7 +639,7 @@ void DirEntry::ImpTrim( FSysPathStyle eStyle )
     {
         case FSYS_STYLE_FAT:
         {
-            USHORT nPunktPos = aName.Search( '.' );
+            sal_uInt16 nPunktPos = aName.Search( '.' );
             if ( nPunktPos == STRING_NOTFOUND )
             {
                 if ( aName.Len() > 8 )
@@ -1139,7 +1139,7 @@ sal_Bool DirEntry::First()
 *************************************************************************/
 
 String DirEntry::GetFull( FSysPathStyle eStyle, sal_Bool bWithDelimiter,
-                          USHORT nMaxChars ) const
+                          sal_uInt16 nMaxChars ) const
 {
     DBG_CHKTHIS( DirEntry, ImpCheckDirEntry );
 
@@ -1779,11 +1779,11 @@ sal_Bool DirEntry::Find( const String& rPfad, char cDelim )
         if ( !cDelim )
                 cDelim = SEARCHDELIM(DEFSTYLE)[0];
 
-        USHORT nTokenCount = rPfad.GetTokenCount( cDelim );
-        USHORT nIndex = 0;
+        sal_uInt16 nTokenCount = rPfad.GetTokenCount( cDelim );
+        sal_uInt16 nIndex = 0;
         ByteString aThis = ACCESSDELIM(DEFSTYLE);
         aThis += ByteString(GetFull(), osl_getThreadTextEncoding());
-        for ( USHORT nToken = 0; nToken < nTokenCount; ++nToken )
+        for ( sal_uInt16 nToken = 0; nToken < nTokenCount; ++nToken )
         {
             ByteString aPath = ByteString(rPfad, osl_getThreadTextEncoding()).GetToken( 0, cDelim, nIndex );
 
@@ -1831,7 +1831,7 @@ sal_Bool DirEntry::ImpToRel( String aCurStr )
     }
 
     // "Ubereinstimmung pr"ufen
-    USHORT nPos = aThisCompareStr.Match( aCurCompareStr );
+    sal_uInt16 nPos = aThisCompareStr.Match( aCurCompareStr );
     if ( nPos == STRING_MATCH && aThisStr.Len() != aCurStr.Len() )
         nPos = Min( aThisStr.Len(), aCurStr.Len() );
 
@@ -1877,7 +1877,7 @@ sal_Bool DirEntry::ImpToRel( String aCurStr )
 |*
 *************************************************************************/
 
-USHORT DirEntry::CutRelParents()
+sal_uInt16 DirEntry::CutRelParents()
 {
     DBG_CHKTHIS( DirEntry, ImpCheckDirEntry );
 
@@ -1891,7 +1891,7 @@ USHORT DirEntry::CutRelParents()
         pDir = pPar;
 
     // '..' zaehlen
-    USHORT nParCount = 0;
+    sal_uInt16 nParCount = 0;
     while ( pPar && pPar->eFlag == FSYS_FLAG_PARENT )
     {
         ++nParCount;
@@ -2030,7 +2030,7 @@ String DirEntry::GetSearchDelimiter( FSysPathStyle eFormatter )
 |*
 *************************************************************************/
 
-USHORT DirEntry::GetMaxNameLen( FSysPathStyle eFormatter )
+sal_uInt16 DirEntry::GetMaxNameLen( FSysPathStyle eFormatter )
 {
     eFormatter = GetStyle( eFormatter );
     switch ( eFormatter )
@@ -2259,7 +2259,7 @@ DirEntry DirEntry::TempName( DirEntryKind eKind ) const
 |*
 *************************************************************************/
 
-const DirEntry &DirEntry::operator[]( USHORT nParentLevel ) const
+const DirEntry &DirEntry::operator[]( sal_uInt16 nParentLevel ) const
 {
     DBG_CHKTHIS( DirEntry, ImpCheckDirEntry );
 
@@ -2295,7 +2295,7 @@ FSysError DirEntry::ImpParseUnixName( const ByteString& rPfad, FSysPathStyle eSt
         // falls '/' am Anfang, ist der Name '/',
         // der Rest immer ohne die fuehrenden '/'.
         // den ersten '/' suchen
-        USHORT nPos;
+        sal_uInt16 nPos;
         for ( nPos = 0;
               nPos < aPfad.Len() && aPfad.GetChar(nPos) != '/';
               nPos++ )
@@ -2321,8 +2321,8 @@ FSysError DirEntry::ImpParseUnixName( const ByteString& rPfad, FSysPathStyle eSt
                         else if ( aName == "~" )
                         {
                                 DirEntry aHome( String( (const char *) getenv( "HOME" ), osl_getThreadTextEncoding()) );
-                                for ( USHORT n = aHome.Level(); n; --n )
-                                        aStack.Push( new DirEntry( aHome[ (USHORT) n-1 ] ) );
+                                for ( sal_uInt16 n = aHome.Level(); n; --n )
+                                        aStack.Push( new DirEntry( aHome[ (sal_uInt16) n-1 ] ) );
                         }
 #endif
 
@@ -2507,7 +2507,7 @@ sal_Bool DirEntry::MakeShortName( const String& rLongName, DirEntryKind eKind,
 #if 0
         if ( FSYS_STYLE_NWFS == GetPathStyle( ImpGetTopPtr()->GetName() ) )
         {
-                for ( USHORT n = aLongName.Len(); n; --n )
+                for ( sal_uInt16 n = aLongName.Len(); n; --n )
                 {
                         short nChar = aLongName(n-1);
                         if ( nChar < 32 || nChar >= 127 )
@@ -2532,7 +2532,7 @@ sal_Bool DirEntry::MakeShortName( const String& rLongName, DirEntryKind eKind,
         }
 
         // max L"angen feststellen
-        USHORT nMaxExt, nMaxLen;
+        sal_uInt16 nMaxExt, nMaxLen;
         if ( FSYS_STYLE_DETECT == eStyle )
             eStyle = DirEntry::GetPathStyle( GetDevice().GetName() );
         ByteString aInvalidChars;
@@ -2955,7 +2955,7 @@ FSysError DirEntry::Kill(  FSysAction nActions ) const
                 if ( FSYS_ACTION_RECURSIVE == (nActions & FSYS_ACTION_RECURSIVE) )
                 {
                         Dir aDir( *this, FSYS_KIND_DIR|FSYS_KIND_FILE );
-                        for ( USHORT n = 0; eError == FSYS_ERR_OK && n < aDir.Count(); ++n )
+                        for ( sal_uInt16 n = 0; eError == FSYS_ERR_OK && n < aDir.Count(); ++n )
                         {
                                 const DirEntry &rSubDir = aDir[n];
                                 DirEntryFlag flag = rSubDir.GetFlag();
@@ -3062,8 +3062,8 @@ sal_Bool DirEntry::Contains( const DirEntry &rSubEntry ) const
 {
     DBG_ASSERT( IsAbs() && rSubEntry.IsAbs(), "must be absolute entries" );
 
-        USHORT nThisLevel = Level();
-    USHORT nSubLevel = rSubEntry.Level();
+        sal_uInt16 nThisLevel = Level();
+    sal_uInt16 nSubLevel = rSubEntry.Level();
     if ( nThisLevel < nSubLevel )
     {
         for ( ; nThisLevel; --nThisLevel, --nSubLevel )
@@ -3084,11 +3084,11 @@ sal_Bool DirEntry::Contains( const DirEntry &rSubEntry ) const
 |*
 *************************************************************************/
 
-USHORT DirEntry::Level() const
+sal_uInt16 DirEntry::Level() const
 {
     DBG_CHKTHIS( DirEntry, ImpCheckDirEntry );
 
-    USHORT nLevel = 0;
+    sal_uInt16 nLevel = 0;
     const DirEntry *pRes = this;
     while ( pRes )
     {
@@ -3182,7 +3182,7 @@ sal_Bool DirEntry::IsLongNameOnFAT() const
         }
 
         // DirEntry-Kette auf lange Dateinamen pr?fen
-        for( USHORT iLevel = this->Level(); iLevel > 0; iLevel-- )
+        for( sal_uInt16 iLevel = this->Level(); iLevel > 0; iLevel-- )
         {
             const DirEntry& rEntry = (const DirEntry&) (*this)[iLevel-1];
             String  aBase( rEntry.GetBase() );

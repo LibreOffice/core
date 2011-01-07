@@ -1796,13 +1796,13 @@ void DbgOutf( const sal_Char* pFStr, ... )
 
 #else
 
-void* DbgFunc( USHORT, void* ) { return NULL; }
+void* DbgFunc( sal_uInt16, void* ) { return NULL; }
 
-void DbgProf( USHORT, DbgDataType* ) {}
-void DbgXtor( DbgDataType*, USHORT, const void*, DbgUsr ) {}
+void DbgProf( sal_uInt16, DbgDataType* ) {}
+void DbgXtor( DbgDataType*, sal_uInt16, const void*, DbgUsr ) {}
 
-void DbgOut( const sal_Char*, USHORT, const sal_Char*, USHORT ) {}
-void DbgOutTypef( USHORT, const sal_Char*, ... ) {}
+void DbgOut( const sal_Char*, sal_uInt16, const sal_Char*, sal_uInt16 ) {}
+void DbgOutTypef( sal_uInt16, const sal_Char*, ... ) {}
 void DbgOutf( const sal_Char*, ... ) {}
 
 #endif

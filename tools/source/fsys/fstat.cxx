@@ -50,12 +50,12 @@
 
 FileStat::FileStat()
 :   // don't use Default-Ctors!
-    aDateCreated( ULONG(0) ),
-    aTimeCreated( ULONG(0) ),
-    aDateModified( ULONG(0) ),
-    aTimeModified( ULONG(0) ),
-    aDateAccessed( ULONG(0) ),
-    aTimeAccessed( ULONG(0) )
+    aDateCreated( sal_uInt32(0) ),
+    aTimeCreated( sal_uInt32(0) ),
+    aDateModified( sal_uInt32(0) ),
+    aTimeModified( sal_uInt32(0) ),
+    aDateAccessed( sal_uInt32(0) ),
+    aTimeAccessed( sal_uInt32(0) )
 {
     nSize = 0;
     nKindFlags = FSYS_KIND_UNKNOWN;
@@ -74,12 +74,12 @@ FileStat::FileStat()
 
 FileStat::FileStat( const DirEntry& rDirEntry, FSysAccess nAccess )
 :   // don't use Default-Ctors!
-    aDateCreated( ULONG(0) ),
-    aTimeCreated( ULONG(0) ),
-    aDateModified( ULONG(0) ),
-    aTimeModified( ULONG(0) ),
-    aDateAccessed( ULONG(0) ),
-    aTimeAccessed( ULONG(0) )
+    aDateCreated( sal_uInt32(0) ),
+    aTimeCreated( sal_uInt32(0) ),
+    aDateModified( sal_uInt32(0) ),
+    aTimeModified( sal_uInt32(0) ),
+    aDateAccessed( sal_uInt32(0) ),
+    aTimeAccessed( sal_uInt32(0) )
 {
     sal_Bool bCached = FSYS_ACCESS_CACHED == (nAccess & FSYS_ACCESS_CACHED);
     sal_Bool bFloppy = FSYS_ACCESS_FLOPPY == (nAccess & FSYS_ACCESS_FLOPPY);
@@ -212,7 +212,7 @@ sal_Bool FileStat::GetReadOnlyFlag( const DirEntry &rEntry )
 |*
 *************************************************************************/
 
-ULONG FileStat::SetReadOnlyFlag( const DirEntry &rEntry, sal_Bool bRO )
+sal_uInt32 FileStat::SetReadOnlyFlag( const DirEntry &rEntry, sal_Bool bRO )
 {
 
     ByteString aFPath(rEntry.GetFull(), osl_getThreadTextEncoding());

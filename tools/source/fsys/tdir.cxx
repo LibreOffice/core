@@ -48,7 +48,7 @@ DECLARE_LIST( DirEntryList, DirEntry* )
 DECLARE_LIST( FSysSortList, FSysSort* )
 DECLARE_LIST( FileStatList, FileStat* )
 
-#define APPEND (USHORT) 65535
+#define APPEND (sal_uInt16) 65535
 
 /*************************************************************************
 |*
@@ -62,7 +62,7 @@ DECLARE_LIST( FileStatList, FileStat* )
 
 sal_Bool Dir::ImpInsertPointReached( const DirEntry& rNewEntry,
                                  const FileStat& rNewStat,
-                                 ULONG nCurPos, ULONG nSortIndex ) const
+                                 sal_uInt32 nCurPos, sal_uInt32 nSortIndex ) const
 {
 #define VALUE( nKindFlags ) \
     ( ( FSYS_KIND_FILE | FSYS_KIND_DIR | FSYS_KIND_DEV | \
@@ -226,7 +226,7 @@ void Dir::ImpSortedInsert( const DirEntry *pNewEntry, const FileStat *pNewStat )
     pLst->First();
     do {
         if ( ImpInsertPointReached( *pNewEntry, *pNewStat, pLst->GetCurPos(),
-                                    (ULONG)0  ) )
+                                    (sal_uInt32)0  ) )
         {
             if ( pStatLst )
                 pStatLst->Insert( (FileStat*)pNewStat, pLst->GetCurPos() );
@@ -377,10 +377,10 @@ void Dir::Reset()
 |*
 *************************************************************************/
 
-USHORT Dir::Scan( USHORT nCount )
+sal_uInt16 Dir::Scan( sal_uInt16 nCount )
 {
 
-    USHORT nRead = 0; // Anzahl in dieser Runde gelesener Eintr"age
+    sal_uInt16 nRead = 0; // Anzahl in dieser Runde gelesener Eintr"age
     FSysFailOnErrorImpl();
 
     // noch nicht fertig gewesen
@@ -559,8 +559,8 @@ FSysError Dir::ImpSetSort( std::va_list pArgs, int nFirstSort )
         bLast = FSYS_SORT_END == (*pSort & FSYS_SORT_END);
         *pSort &= ~FSYS_SORT_END;
 
-        FSysSort nSort = *pSort & ~(USHORT)FSYS_SORT_ASCENDING
-                              &  ~(USHORT)FSYS_SORT_DESCENDING;
+        FSysSort nSort = *pSort & ~(sal_uInt16)FSYS_SORT_ASCENDING
+                              &  ~(sal_uInt16)FSYS_SORT_DESCENDING;
 
         // g"utliges Sortierkriterium?
         if ( ( nSort ==  FSYS_SORT_NAME ) ||
@@ -692,7 +692,7 @@ FSysError Dir::SetSort( FSysSort nSort, ... )
 |*
 *************************************************************************/
 
-DirEntry& Dir::operator[] ( USHORT nIndex ) const
+DirEntry& Dir::operator[] ( sal_uInt16 nIndex ) const
 {
     DBG_ASSERT( nIndex < Count(), "Dir::operator[] : nIndex > Count()" );
 
@@ -733,7 +733,7 @@ Dir& Dir::operator+=( const Dir& rDir )
         } while ( !bStat && pSortLst->Next() );
     }
     FileStat * stat = NULL;
-    for ( USHORT nNr = 0; nNr < rDir.Count(); nNr++ )
+    for ( sal_uInt16 nNr = 0; nNr < rDir.Count(); nNr++ )
     {
         if ( bStat )
         {
@@ -758,11 +758,11 @@ Dir& Dir::operator+=( const Dir& rDir )
 *************************************************************************/
 
 
-USHORT Dir::Count( sal_Bool bUpdated ) const
+sal_uInt16 Dir::Count( sal_Bool bUpdated ) const
 {
     // ggf. erst den Rest lesen
     if ( bUpdated && pReader )
         ((Dir*)this)->Scan( USHRT_MAX );
 
-    return pLst == NULL ? 0 : (USHORT) pLst->Count();
+    return pLst == NULL ? 0 : (sal_uInt16) pLst->Count();
 }
