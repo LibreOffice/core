@@ -853,7 +853,7 @@ sal_Int32 ZipFile::recover()
             // the buffer should contain at least one header,
             // or if it is end of the file, at least the postheader with sizes and hash
             while( nPos < nBufSize - 30
-                || ( aBuffer.getLength() < nToRead && nPos < nBufSize - 16 ) )
+                || ( nBufSize < nToRead && nPos < nBufSize - 16 ) )
 
             {
                 if ( nPos < nBufSize - 30 && pBuffer[nPos] == 'P' && pBuffer[nPos+1] == 'K' && pBuffer[nPos+2] == 3 && pBuffer[nPos+3] == 4 )
