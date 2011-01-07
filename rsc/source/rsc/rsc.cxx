@@ -855,7 +855,7 @@ ERRTYPE RscCompiler::Link()
                 {
                     pTC->Delete( pTC->aFileTab.GetIndex( pFName ) );
                     pTC->aFileTab.Seek( pFName );
-                    pFName->bLoaded = FALSE;
+                    pFName->bLoaded = sal_False;
                 }
             }
 
