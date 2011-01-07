@@ -201,7 +201,6 @@ void lcl_addWrappedProperties( std::vector< WrappedProperty* >& rList
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
-//static
 void WrappedSymbolProperties::addProperties( ::std::vector< Property > & rOutProperties )
 {
     rOutProperties.push_back(
@@ -236,7 +235,6 @@ void WrappedSymbolProperties::addProperties( ::std::vector< Property > & rOutPro
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
 
-//static
 void WrappedSymbolProperties::addWrappedPropertiesForSeries( std::vector< WrappedProperty* >& rList
                                     , ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact )
 {
@@ -246,7 +244,6 @@ void WrappedSymbolProperties::addWrappedPropertiesForSeries( std::vector< Wrappe
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
 
-//static
 void WrappedSymbolProperties::addWrappedPropertiesForDiagram( std::vector< WrappedProperty* >& rList
                                     , ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact )
 {
@@ -573,8 +570,19 @@ void WrappedSymbolAndLinesProperty::setValueToSeries(
     if(!xSeriesPropertySet.is())
         return;
 
-    drawing::LineStyle eLineStyle( bDrawLines ? drawing::LineStyle_SOLID : drawing::LineStyle_NONE  );
-    xSeriesPropertySet->setPropertyValue( C2U("LineStyle"), uno::makeAny( eLineStyle ) );
+    drawing::LineStyle eOldLineStyle( drawing::LineStyle_SOLID );
+    xSeriesPropertySet->getPropertyValue( C2U("LineStyle") ) >>= eOldLineStyle;
+    if( bDrawLines )
+    {
+        //#i114298# don't overwrite dashed lines with solid lines here
+        if( eOldLineStyle == drawing::LineStyle_NONE )
+            xSeriesPropertySet->setPropertyValue( C2U("LineStyle"), uno::makeAny( drawing::LineStyle_SOLID ) );
+    }
+    else
+    {
+        if( eOldLineStyle != drawing::LineStyle_NONE )
+            xSeriesPropertySet->setPropertyValue( C2U("LineStyle"), uno::makeAny( drawing::LineStyle_NONE ) );
+    }
 }
 
 beans::PropertyState WrappedSymbolAndLinesProperty::getPropertyState( const Reference< beans::XPropertyState >& /*xInnerPropertyState*/ ) const

@@ -57,7 +57,6 @@ using namespace ::com::sun::star::chart2;
 //-------------------------------------------------------------------
 //-------------------------------------------------------------------
 
-// static
 USHORT View3DDialog::m_nLastPageId = 0;
 
 View3DDialog::View3DDialog(Window* pParent, const uno::Reference< frame::XModel > & xChartModel, XColorTable* pColorTable )

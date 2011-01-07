@@ -105,6 +105,7 @@ private:
     com::sun::star::uno::Reference<com::sun::star::uno::XInterface> xDrawMarkerTab;
     com::sun::star::uno::Reference<com::sun::star::uno::XInterface> xDrawDashTab;
     com::sun::star::uno::Reference<com::sun::star::uno::XInterface> xChartDataProv;
+    com::sun::star::uno::Reference<com::sun::star::uno::XInterface> xObjProvider;
 
     ::cppu::OInterfaceContainerHelper maChangesListeners;
 
