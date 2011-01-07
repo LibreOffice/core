@@ -64,10 +64,19 @@ interface XGridColumnModel
     interface ::com::sun::star::util::XCloneable;
 
     /** Returns the number of columns.
+
         @returns
                 the number of columns.
     */
     long getColumnCount();
+
+    /** creates a new column for use with the column model.
+
+        <p>The newly created column is not yet inserted into the column container, you need to call <member>addColumn</member>
+        after you initialized the column object.</p>
+    */
+    XGridColumn
+        createColumn();
 
     /** Adds a column to the model.
 
@@ -86,13 +95,15 @@ interface XGridColumnModel
     long addColumn( [in] XGridColumn column )
         raises ( ::com::sun::star::lang::IllegalArgumentException );
 
-    /** creates a new column for use with the column model.
+    /** retrieves a column from the model
 
-        <p>The newly created column is not yet inserted into the column container, you need to call <member>addColumn</member>
-        after you initialized the column object.</p>
+        @param ColumnIndex
+            denotes the index of the column to remove
+        @throws ::com::sun::star::lang::IndexOutOfBoundsException
+            if <code>ColumnIndex</code> does not denote a valid column index.
     */
-    XGridColumn
-        createColumn();
+    void removeColumn( [in] long ColumnIndex )
+        raises ( ::com::sun::star::lang::IndexOutOfBoundsException );
 
     /** Returns all columns of the model.
         @returns
