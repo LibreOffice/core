@@ -98,7 +98,7 @@ sal_Bool ZipPackageFolder::LookForUnexpectedODF12Streams( const ::rtl::OUString&
 
     for ( ContentHash::const_iterator aCI = maContents.begin(), aEnd = maContents.end();
           !bHasUnexpected && aCI != aEnd;
-          aCI++)
+          ++aCI)
     {
         const OUString &rShortName = (*aCI).first;
         const ContentInfo &rInfo = *(*aCI).second;
@@ -156,7 +156,7 @@ void ZipPackageFolder::setChildStreamsTypeByExtension( const beans::StringPair& 
 
     for ( ContentHash::const_iterator aCI = maContents.begin(), aEnd = maContents.end();
           aCI != aEnd;
-          aCI++)
+          ++aCI)
     {
         const OUString &rShortName = (*aCI).first;
         const ContentInfo &rInfo = *(*aCI).second;
@@ -353,7 +353,7 @@ void ZipPackageFolder::saveContents(OUString &rPath, std::vector < Sequence < Pr
 
     for ( ContentHash::const_iterator aCI = maContents.begin(), aEnd = maContents.end();
           aCI != aEnd;
-          aCI++)
+          ++aCI)
     {
         const OUString &rShortName = (*aCI).first;
         const ContentInfo &rInfo = *(*aCI).second;
