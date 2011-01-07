@@ -704,7 +704,7 @@ private:
 
 public:
     SchXMLRangeSomewhereContext( SvXMLImport& rImport,
-                            USHORT nPrefix,
+                            sal_uInt16 nPrefix,
                             const ::rtl::OUString& rLocalName,
                             ::rtl::OUString& rRangeString );
     virtual ~SchXMLRangeSomewhereContext();
@@ -1189,7 +1189,7 @@ void SchXMLTableHelper::switchRangesFromOuterToInternalIfNecessary(
 //---------------------------------------------------------------------------------------------------
 
 SchXMLRangeSomewhereContext::SchXMLRangeSomewhereContext( SvXMLImport& rImport,
-                                                USHORT nPrefix,
+                                                sal_uInt16 nPrefix,
                                                 const OUString& rLocalName,
                                                 OUString& rRangeString ) :
         SvXMLImportContext( rImport, nPrefix, rLocalName ),
