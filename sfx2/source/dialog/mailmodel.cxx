@@ -158,7 +158,7 @@ void SfxMailModel::ClearList( AddressList_Impl* pList )
 {
     if ( pList )
     {
-        ULONG i, nCount = pList->Count();
+        sal_uIntPtr i, nCount = pList->Count();
         for ( i = 0; i < nCount; ++i )
             delete pList->GetObject(i);
         pList->Clear();
@@ -170,7 +170,7 @@ void SfxMailModel::MakeValueList( AddressList_Impl* pList, String& rValueList )
     rValueList.Erase();
     if ( pList )
     {
-        ULONG i, nCount = pList->Count();
+        sal_uIntPtr i, nCount = pList->Count();
         for ( i = 0; i < nCount; ++i )
         {
             if ( rValueList.Len() > 0 )
@@ -977,7 +977,7 @@ SfxMailModel::SendMailResult SfxMailModel::SaveAndSend( const css::uno::Referenc
 
 // functions -------------------------------------------------------------
 
-BOOL CreateFromAddress_Impl( String& rFrom )
+sal_Bool CreateFromAddress_Impl( String& rFrom )
 
 /*  [Beschreibung]
 
@@ -988,8 +988,8 @@ BOOL CreateFromAddress_Impl( String& rFrom )
 
     [R"uckgabewert]
 
-    TRUE:   Adresse konnte erzeugt werden.
-    FALSE:  Adresse konnte nicht erzeugt werden.
+    sal_True:   Adresse konnte erzeugt werden.
+    sal_False:  Adresse konnte nicht erzeugt werden.
 */
 
 {

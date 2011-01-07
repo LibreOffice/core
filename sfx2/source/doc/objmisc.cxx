@@ -1748,7 +1748,7 @@ ErrCode SfxObjectShell::CallXScript( const Reference< XInterface >& _rxScriptCon
     catch ( const uno::Exception& )
     {
         aException = ::cppu::getCaughtException();
-        bCaughtException = TRUE;
+        bCaughtException = sal_True;
         nErr = ERRCODE_BASIC_INTERNAL_ERROR;
     }
 
@@ -1915,7 +1915,7 @@ void SfxObjectShell::SetFlags( SfxObjectShellFlags eFlags )
 void SfxObjectShell::SetBaseURL( const String& rURL )
 {
     pImp->aBaseURL = rURL;
-    pImp->bNoBaseURL = FALSE;
+    pImp->bNoBaseURL = sal_False;
 }
 
 const String& SfxObjectShell::GetBaseURLForSaving() const
@@ -1934,7 +1934,7 @@ const String& SfxObjectShell::GetBaseURL() const
 
 void SfxObjectShell::SetEmptyBaseURL()
 {
-    pImp->bNoBaseURL = TRUE;
+    pImp->bNoBaseURL = sal_True;
 }
 */
 String SfxObjectShell::QueryTitle( SfxTitleQuery eType ) const
@@ -2106,7 +2106,7 @@ sal_Bool SfxObjectShell::IsSecure()
         if ( GetMedium()->GetContent().is() )
         {
             Any aAny( ::utl::UCBContentHelper::GetProperty( aURL.GetMainURL( INetURLObject::NO_DECODE ), String( RTL_CONSTASCII_USTRINGPARAM("IsProtected")) ) );
-            sal_Bool bIsProtected = FALSE;
+            sal_Bool bIsProtected = sal_False;
             if ( ( aAny >>= bIsProtected ) && bIsProtected )
                 return sal_False;
             else
@@ -2119,7 +2119,7 @@ sal_Bool SfxObjectShell::IsSecure()
         return sal_False;
 }
 
-void SfxObjectShell::SetWaitCursor( BOOL bSet ) const
+void SfxObjectShell::SetWaitCursor( sal_Bool bSet ) const
 {
     for( SfxViewFrame* pFrame = SfxViewFrame::GetFirst( this ); pFrame; pFrame = SfxViewFrame::GetNext( *pFrame, this ) )
     {
@@ -2141,7 +2141,7 @@ String SfxObjectShell::GetAPIName() const
     return aName;
 }
 
-void SfxObjectShell::Invalidate( USHORT nId )
+void SfxObjectShell::Invalidate( sal_uInt16 nId )
 {
     for( SfxViewFrame* pFrame = SfxViewFrame::GetFirst( this ); pFrame; pFrame = SfxViewFrame::GetNext( *pFrame, this ) )
         Invalidate_Impl( pFrame->GetBindings(), nId );
@@ -2164,7 +2164,7 @@ Window* SfxObjectShell::GetDialogParent( SfxMedium* pLoadingMedium )
 {
     Window* pWindow = 0;
     SfxItemSet* pSet = pLoadingMedium ? pLoadingMedium->GetItemSet() : GetMedium()->GetItemSet();
-    SFX_ITEMSET_ARG( pSet, pUnoItem, SfxUnoFrameItem, SID_FILLFRAME, FALSE );
+    SFX_ITEMSET_ARG( pSet, pUnoItem, SfxUnoFrameItem, SID_FILLFRAME, sal_False );
     if ( pUnoItem )
     {
         uno::Reference < frame::XFrame > xFrame( pUnoItem->GetFrame() );
@@ -2174,7 +2174,7 @@ Window* SfxObjectShell::GetDialogParent( SfxMedium* pLoadingMedium )
     if ( !pWindow )
     {
         SfxFrame* pFrame = 0;
-        SFX_ITEMSET_ARG( pSet, pFrameItem, SfxFrameItem, SID_DOCFRAME, FALSE );
+        SFX_ITEMSET_ARG( pSet, pFrameItem, SfxFrameItem, SID_DOCFRAME, sal_False );
         if( pFrameItem && pFrameItem->GetFrame() )
             // get target frame from ItemSet
             pFrame = pFrameItem->GetFrame();
@@ -2208,7 +2208,7 @@ Window* SfxObjectShell::GetDialogParent( SfxMedium* pLoadingMedium )
     return pWindow;
 }
 
-String SfxObjectShell::UpdateTitle( SfxMedium* pMed, USHORT nDocViewNumber )
+String SfxObjectShell::UpdateTitle( SfxMedium* pMed, sal_uInt16 nDocViewNumber )
 {
     // Titel des Fensters
     String aTitle;
@@ -2249,29 +2249,29 @@ void SfxObjectShell::SetCreateMode_Impl( SfxObjectCreateMode nMode )
     eCreateMode = nMode;
 }
 
-BOOL SfxObjectShell::IsInPlaceActive()
+sal_Bool SfxObjectShell::IsInPlaceActive()
 {
     if ( eCreateMode != SFX_CREATE_MODE_EMBEDDED )
-        return FALSE;
+        return sal_False;
 
     SfxViewFrame* pFrame = SfxViewFrame::GetFirst( this );
     return pFrame && pFrame->GetFrame().IsInPlace();
 }
 
-BOOL SfxObjectShell::IsUIActive()
+sal_Bool SfxObjectShell::IsUIActive()
 {
     if ( eCreateMode != SFX_CREATE_MODE_EMBEDDED )
-        return FALSE;
+        return sal_False;
 
     SfxViewFrame* pFrame = SfxViewFrame::GetFirst( this );
     return pFrame && pFrame->GetFrame().IsInPlace() && pFrame->GetFrame().GetWorkWindow_Impl()->IsVisible_Impl();
 }
 
-void SfxObjectShell::UIActivate( BOOL )
+void SfxObjectShell::UIActivate( sal_Bool )
 {
 }
 
-void SfxObjectShell::InPlaceActivate( BOOL )
+void SfxObjectShell::InPlaceActivate( sal_Bool )
 {
 }
 

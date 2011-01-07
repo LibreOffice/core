@@ -55,7 +55,7 @@
 #endif
 
 
-USHORT SfxFontSizeInfo::pStaticSizes[] =
+sal_uInt16 SfxFontSizeInfo::pStaticSizes[] =
 {
     60,
     80,
@@ -79,17 +79,17 @@ SV_DECL_PTRARR_DEL(SfxFontArr_Impl,SfxFont*,10,5)
 struct SfxPrinter_Impl
 {
     SfxFontArr_Impl*    mpFonts;
-    BOOL                mbAll;
-    BOOL                mbSelection;
-    BOOL                mbFromTo;
-    BOOL                mbRange;
+    sal_Bool                mbAll;
+    sal_Bool                mbSelection;
+    sal_Bool                mbFromTo;
+    sal_Bool                mbRange;
 
     SfxPrinter_Impl() :
         mpFonts     ( NULL ),
-        mbAll       ( TRUE ),
-        mbSelection ( TRUE ),
-        mbFromTo    ( TRUE ),
-        mbRange     ( TRUE ) {}
+        mbAll       ( sal_True ),
+        mbSelection ( sal_True ),
+        mbFromTo    ( sal_True ),
+        mbRange     ( sal_True ) {}
     ~SfxPrinter_Impl() { delete mpFonts; }
 };
 
@@ -110,11 +110,11 @@ SfxFontSizeInfo::SfxFontSizeInfo( const SfxFont &rFont,
 
     pSizes(0),
     nSizes(0),
-    bScalable(TRUE)
+    bScalable(sal_True)
 
 {
     if ( 0 == rDevice.GetDevFontCount() )
-        bScalable = FALSE;
+        bScalable = sal_False;
     else
     {
         OutputDevice &rDev = (OutputDevice&) rDevice;
@@ -136,17 +136,17 @@ SfxFontSizeInfo::SfxFontSizeInfo( const SfxFont &rFont,
 
         // Es gibt Fonts mit Bitmaps und skalierbaren Groessen
         // In diesem Fall wird der Fonts als skalierbar behandelt.
-        BOOL bFoundScalable = FALSE;
+        sal_Bool bFoundScalable = sal_False;
         for ( int i = 0; i < nSizeCount; ++i )
         {
             const Size aSize( rDev.GetDevFontSize(aFont, i) );
             if ( aSize.Height() != 0 )
                 pSizes[nSizes++] = aSize;
             else
-                bFoundScalable |= TRUE;
+                bFoundScalable |= sal_True;
         }
         if( !bFoundScalable )
-            bScalable = FALSE;
+            bScalable = sal_False;
         else
         {
             // statische Font-Sizes verwenden
@@ -158,9 +158,9 @@ SfxFontSizeInfo::SfxFontSizeInfo( const SfxFont &rFont,
 
     if ( 0 == nSizes )
     {
-        nSizes = sizeof(pStaticSizes) / sizeof(USHORT);
+        nSizes = sizeof(pStaticSizes) / sizeof(sal_uInt16);
         pSizes = NEW_OBJECTS(Size, nSizes);
-        for ( USHORT nPos = 0; nPos <nSizes; ++nPos )
+        for ( sal_uInt16 nPos = 0; nPos <nSizes; ++nPos )
            pSizes[nPos] = Size( 0, pStaticSizes[nPos] );
     }
 }
@@ -174,14 +174,14 @@ SfxFontSizeInfo::~SfxFontSizeInfo()
 
 //--------------------------------------------------------------------
 
-BOOL SfxFontSizeInfo::HasSize(const Size &rSize) const
+sal_Bool SfxFontSizeInfo::HasSize(const Size &rSize) const
 {
     if ( bScalable )
-        return TRUE;
-    for ( USHORT i = 0; i < nSizes; ++i)
+        return sal_True;
+    for ( sal_uInt16 i = 0; i < nSizes; ++i)
         if ( pSizes[i] == rSize )
-            return TRUE;
-    return FALSE;
+            return sal_True;
+    return sal_False;
 }
 
 //--------------------------------------------------------------------
@@ -335,42 +335,42 @@ void SfxPrinter::SetOptions( const SfxItemSet &rNewOptions )
 
 //--------------------------------------------------------------------
 
-void SfxPrinter::EnableRange( USHORT nRange )
+void SfxPrinter::EnableRange( sal_uInt16 nRange )
 {
     PrintDialogRange eRange = (PrintDialogRange)nRange;
 
     if ( eRange == PRINTDIALOG_ALL )
-        pImpl->mbAll = TRUE;
+        pImpl->mbAll = sal_True;
     else if ( eRange == PRINTDIALOG_SELECTION )
-        pImpl->mbSelection = TRUE;
+        pImpl->mbSelection = sal_True;
     else if ( eRange == PRINTDIALOG_FROMTO )
-        pImpl->mbFromTo = TRUE;
+        pImpl->mbFromTo = sal_True;
     else if ( eRange == PRINTDIALOG_RANGE )
-        pImpl->mbRange = TRUE;
+        pImpl->mbRange = sal_True;
 }
 
 //--------------------------------------------------------------------
 
-void SfxPrinter::DisableRange( USHORT nRange )
+void SfxPrinter::DisableRange( sal_uInt16 nRange )
 {
     PrintDialogRange eRange = (PrintDialogRange)nRange;
 
     if ( eRange == PRINTDIALOG_ALL )
-        pImpl->mbAll = FALSE;
+        pImpl->mbAll = sal_False;
     else if ( eRange == PRINTDIALOG_SELECTION )
-        pImpl->mbSelection = FALSE;
+        pImpl->mbSelection = sal_False;
     else if ( eRange == PRINTDIALOG_FROMTO )
-        pImpl->mbFromTo = FALSE;
+        pImpl->mbFromTo = sal_False;
     else if ( eRange == PRINTDIALOG_RANGE )
-        pImpl->mbRange = FALSE;
+        pImpl->mbRange = sal_False;
 }
 
 //--------------------------------------------------------------------
 
-BOOL SfxPrinter::IsRangeEnabled( USHORT nRange ) const
+sal_Bool SfxPrinter::IsRangeEnabled( sal_uInt16 nRange ) const
 {
     PrintDialogRange eRange = (PrintDialogRange)nRange;
-    BOOL bRet = FALSE;
+    sal_Bool bRet = sal_False;
 
     if ( eRange == PRINTDIALOG_ALL )
         bRet = pImpl->mbAll;
@@ -393,8 +393,8 @@ SV_IMPL_PTRARR(SfxFontArr_Impl,SfxFont*)
 const SfxFont* SfxFindFont_Impl( const SfxFontArr_Impl& rArr,
                                  const String& rName )
 {
-    const USHORT nCount = rArr.Count();
-    for ( USHORT i = 0; i < nCount; ++i )
+    const sal_uInt16 nCount = rArr.Count();
+    for ( sal_uInt16 i = 0; i < nCount; ++i )
     {
         const SfxFont *pFont = rArr[i];
         if ( pFont->GetName() == rName )
@@ -416,7 +416,7 @@ void SfxPrinter::UpdateFonts_Impl()
         pOut = pVirDev = new VirtualDevice;
 
     int nCount = pOut->GetDevFontCount();
-    FONTS() =  new SfxFontArr_Impl((BYTE)nCount);
+    FONTS() =  new SfxFontArr_Impl((sal_uInt8)nCount);
 
     std::vector< Font > aNonRegularFonts;
     for(int i = 0;i < nCount;++i)
@@ -456,7 +456,7 @@ void SfxPrinter::UpdateFonts_Impl()
 
 //--------------------------------------------------------------------
 
-USHORT SfxPrinter::GetFontCount()
+sal_uInt16 SfxPrinter::GetFontCount()
 {
     if ( !FONTS() )
         UpdateFonts_Impl();
@@ -465,7 +465,7 @@ USHORT SfxPrinter::GetFontCount()
 
 //--------------------------------------------------------------------
 
-const SfxFont* SfxPrinter::GetFont( USHORT nNo ) const
+const SfxFont* SfxPrinter::GetFont( sal_uInt16 nNo ) const
 {
     DBG_ASSERT( FONTS(), "bitte erst GetFontCount() abfragen!" );
     return (*FONTS())[ nNo ];
@@ -482,14 +482,14 @@ const SfxFont* SfxPrinter::GetFontByName( const String &rFontName )
 
 //--------------------------------------------------------------------
 
-BOOL SfxPrinter::InitJob( Window* pUIParent, BOOL bAskAboutTransparentObjects )
+sal_Bool SfxPrinter::InitJob( Window* pUIParent, sal_Bool bAskAboutTransparentObjects )
 {
     const SvtPrinterOptions     aPrinterOpt;
     const SvtPrintFileOptions   aPrintFileOpt;
     const SvtBasePrintOptions*  pPrinterOpt = &aPrinterOpt;
     const SvtBasePrintOptions*  pPrintFileOpt = &aPrintFileOpt;
     PrinterOptions              aNewPrinterOptions;
-    BOOL                        bRet = TRUE;
+    sal_Bool                        bRet = sal_True;
 
     ( ( IsPrintFileEnabled() && GetPrintFile().Len() ) ? pPrintFileOpt : pPrinterOpt )->GetPrinterOptions( aNewPrinterOptions );
 
@@ -502,10 +502,10 @@ BOOL SfxPrinter::InitJob( Window* pUIParent, BOOL bAskAboutTransparentObjects )
             if( aWarnOpt.IsTransparency() )
             {
                 TransparencyPrintWarningBox aWarnBox( pUIParent );
-                const USHORT                nRet = aWarnBox.Execute();
+                const sal_uInt16                nRet = aWarnBox.Execute();
 
                 if( nRet == RET_CANCEL )
-                    bRet = FALSE;
+                    bRet = sal_False;
                 else
                 {
                     aNewPrinterOptions.SetReduceTransparency( nRet != RET_NO );

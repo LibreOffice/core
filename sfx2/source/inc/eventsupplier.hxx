@@ -125,7 +125,7 @@ public:
     virtual void SAL_CALL       disposing( const EVENTOBJECT& Source )
                                     throw( RUNTIMEEXCEPTION );
 
-    static SvxMacro*            ConvertToMacro( const ANY& rElement, SfxObjectShell* pDoc, BOOL bBlowUp );
+    static SvxMacro*            ConvertToMacro( const ANY& rElement, SfxObjectShell* pDoc, sal_Bool bBlowUp );
     static void                 BlowUpMacro( const ANY& rIn, ANY& rOut, SfxObjectShell* pDoc );
 };
 

@@ -68,7 +68,7 @@ using namespace ::cppu;
 
 //-----------------------------------------------------------------------------
 
-USHORT  SvxOpenGrfErr2ResId(    short   err     )
+sal_uInt16  SvxOpenGrfErr2ResId(    short   err     )
 {
     switch( err )
     {
@@ -118,10 +118,10 @@ SvxOpenGraphicDialog::~SvxOpenGraphicDialog()
 
 short SvxOpenGraphicDialog::Execute()
 {
-    USHORT  nImpRet;
-    BOOL    bQuitLoop(FALSE);
+    sal_uInt16  nImpRet;
+    sal_Bool    bQuitLoop(sal_False);
 
-    while( bQuitLoop == FALSE &&
+    while( bQuitLoop == sal_False &&
            mpImpl->aFileDlg.Execute() == ERRCODE_NONE )
     {
         if( GetPath().Len() )
@@ -131,14 +131,14 @@ short SvxOpenGraphicDialog::Execute()
 
             // check whether we can load the graphic
             String  aCurFilter( GetCurrentFilter() );
-            USHORT  nFormatNum = pFilter->GetImportFormatNumber( aCurFilter );
-            USHORT  nRetFormat = 0;
-            USHORT  nFound = USHRT_MAX;
+            sal_uInt16  nFormatNum = pFilter->GetImportFormatNumber( aCurFilter );
+            sal_uInt16  nRetFormat = 0;
+            sal_uInt16  nFound = USHRT_MAX;
 
             // non-local?
             if ( INET_PROT_FILE != aObj.GetProtocol() )
             {
-                SfxMedium aMed( aObj.GetMainURL( INetURLObject::NO_DECODE ), STREAM_READ, TRUE );
+                SfxMedium aMed( aObj.GetMainURL( INetURLObject::NO_DECODE ), STREAM_READ, sal_True );
                 aMed.DownLoad();
                 SvStream* pStream = aMed.GetInStream();
 
@@ -169,7 +169,7 @@ short SvxOpenGraphicDialog::Execute()
             if ( nFound == USHRT_MAX )
             {
                 WarningBox aWarningBox( NULL, WB_3DLOOK | WB_RETRY_CANCEL, String( SfxResId( SvxOpenGrfErr2ResId(nImpRet) ) ) );
-                bQuitLoop = aWarningBox.Execute()==RET_RETRY ? FALSE : TRUE;
+                bQuitLoop = aWarningBox.Execute()==RET_RETRY ? sal_False : sal_True;
             }
             else
             {
@@ -284,7 +284,7 @@ void SvxOpenGraphicDialog::SetCurrentFilter(const String&   rStr)
     mpImpl->aFileDlg.SetCurrentFilter(rStr);
 }
 
-void SvxOpenGraphicDialog::SetControlHelpIds( const INT16* _pControlId, const char** _pHelpId )
+void SvxOpenGraphicDialog::SetControlHelpIds( const sal_Int16* _pControlId, const char** _pHelpId )
 {
     mpImpl->aFileDlg.SetControlHelpIds( _pControlId, _pHelpId );
 }

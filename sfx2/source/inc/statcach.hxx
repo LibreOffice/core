@@ -95,7 +95,7 @@ friend class BindDispatch_Impl;
 
 private:
                             SfxStateCache( const SfxStateCache& rOrig ); // n.i.
-    void                    SetState_Impl( SfxItemState, const SfxPoolItem*, BOOL bMaybeDirty=FALSE );
+    void                    SetState_Impl( SfxItemState, const SfxPoolItem*, sal_Bool bMaybeDirty=sal_False );
 
 public:
                             SfxStateCache( sal_uInt16 nFuncId );
@@ -113,11 +113,11 @@ public:
     SfxPoolItem*            GetItem() const { return pLastItem; }
     void                    ClearCache();
 
-    void                    SetState( SfxItemState, const SfxPoolItem*, BOOL bMaybeDirty=FALSE );
-    void                    SetCachedState(BOOL bAlways = FALSE);
+    void                    SetState( SfxItemState, const SfxPoolItem*, sal_Bool bMaybeDirty=sal_False );
+    void                    SetCachedState(sal_Bool bAlways = sal_False);
     void                    DeleteFloatingWindows();
     void                    Invalidate( sal_Bool bWithSlot );
-    void                    SetVisibleState( BOOL bShow=TRUE );
+    void                    SetVisibleState( sal_Bool bShow=sal_True );
 
     SfxControllerItem*      ChangeItemLink( SfxControllerItem* pNewBinding );
     SfxControllerItem*      GetItemLink() const;

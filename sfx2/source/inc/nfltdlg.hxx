@@ -57,7 +57,7 @@ public:
     SfxFilterDialog( Window * pParent,
                      SfxMedium* pMed,
                      const SfxFilterMatcher &rMatcher,
-                     const String *pDefFilter, BOOL bShowConvert = TRUE );
+                     const String *pDefFilter, sal_Bool bShowConvert = sal_True );
 
     String GetSelectEntry() const;
 };

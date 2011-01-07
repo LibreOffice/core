@@ -51,7 +51,7 @@ SfxStyleDialog::SfxStyleDialog
     Window* pParent,            // Parent
     const ResId& rResId,        // ResId
     SfxStyleSheetBase& rStyle,  // zu bearbeitendes StyleSheet
-    BOOL bFreeRes,              // Flag Resourcen freigeben
+    sal_Bool bFreeRes,              // Flag Resourcen freigeben
     const String* pUserBtnTxt
 ) :
 
@@ -64,7 +64,7 @@ SfxStyleDialog::SfxStyleDialog
                   rStyle.GetItemSet().Clone(),
                   // auch ohne ParentSupport TRUE "ubergeben, aber erweitert
                   // um den StandardButton zu unterdr"ucken
-                  rStyle.HasParentSupport() ? TRUE : 2,
+                  rStyle.HasParentSupport() ? sal_True : 2,
                   pUserBtnTxt ),
 
     pStyle( &rStyle )
@@ -72,7 +72,7 @@ SfxStyleDialog::SfxStyleDialog
 {
     AddTabPage( ID_TABPAGE_MANAGESTYLES,
                 String( SfxResId( STR_TABPAGE_MANAGESTYLES ) ),
-                SfxManageStyleSheetPage::Create, 0, FALSE, 0 );
+                SfxManageStyleSheetPage::Create, 0, sal_False, 0 );
 
     // bei neuer Vorlage immer die Verwaltungsseite als aktuelle
     // Seite setzen
@@ -154,11 +154,11 @@ IMPL_LINK( SfxStyleDialog, CancelHdl, Button *, pButton )
 
     const SfxItemSet* pInSet = GetInputSetImpl();
     SfxWhichIter aIter( *pInSet );
-    USHORT nWhich = aIter.FirstWhich();
+    sal_uInt16 nWhich = aIter.FirstWhich();
 
     while ( nWhich )
     {
-        SfxItemState eState = pInSet->GetItemState( nWhich, FALSE );
+        SfxItemState eState = pInSet->GetItemState( nWhich, sal_False );
 
         if ( SFX_ITEM_DEFAULT == eState )
             pExampleSet->ClearItem( nWhich );
