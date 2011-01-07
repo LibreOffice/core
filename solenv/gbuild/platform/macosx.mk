@@ -62,10 +62,10 @@ else # ifeq ($(CPUNAME),POWERPC)
 gb_CPUDEFS := -DPOWERPC -DPPC
 endif
 
-ifeq ($(SYSBASE), "")
-gb_SDKDIR := /Developer/SDKs/MacOSX10.4u.sdk
-else
+ifneq ($(SYSBASE),)
 gb_SDKDIR := $(SYSBASE)/MacOSX10.4u.sdk
+else
+gb_SDKDIR := /Developer/SDKs/MacOSX10.4u.sdk
 endif
 
 
@@ -119,9 +119,10 @@ gb_LinkTarget_NOEXCEPTIONFLAGS := \
 	-fno-exceptions \
 
 gb_LinkTarget_LDFLAGS := \
-	-Wl,-syslibroot,$(gb_SDKDIR) \
 	$(subst -L../lib , ,$(SOLARLIB)) \
+
 #man ld says: obsolete	-Wl,-multiply_defined,suppress \
+# remove temporarily -Wl,-syslibroot,$(gb_SDKDIR) \
 
 ifeq ($(gb_DEBUGLEVEL),2)
 gb_COMPILEROPTFLAGS := -O0
