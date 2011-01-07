@@ -544,22 +544,22 @@ void OReportSection::_propertyChanged(const beans::PropertyChangeEvent& _rEvent)
         else
         {
             uno::Reference<report::XReportDefinition> xReportDefinition = m_xSection->getReportDefinition();
+            const sal_Int32 nLeftMargin  = getStyleProperty<sal_Int32>(xReportDefinition,PROPERTY_LEFTMARGIN);
+            const sal_Int32 nRightMargin = getStyleProperty<sal_Int32>(xReportDefinition,PROPERTY_RIGHTMARGIN);
+            const sal_Int32 nPaperWidth  = getStyleProperty<awt::Size>(xReportDefinition,PROPERTY_PAPERSIZE).Width;
+
             if ( _rEvent.PropertyName == PROPERTY_LEFTMARGIN )
             {
-                const sal_Int32 nLeftMargin = getStyleProperty<sal_Int32>(xReportDefinition,PROPERTY_LEFTMARGIN);
                 m_pPage->SetLftBorder(nLeftMargin);
             }
             else if ( _rEvent.PropertyName == PROPERTY_RIGHTMARGIN )
             {
-                const sal_Int32 nRightMargin = getStyleProperty<sal_Int32>(xReportDefinition,PROPERTY_RIGHTMARGIN);
                 m_pPage->SetRgtBorder(nRightMargin);
             }
 
             try
             {
-                const sal_Int32 nLeftMargin  = getStyleProperty<sal_Int32>(xReportDefinition,PROPERTY_LEFTMARGIN);
-                const sal_Int32 nRightMargin = getStyleProperty<sal_Int32>(xReportDefinition,PROPERTY_RIGHTMARGIN);
-                const sal_Int32 nPaperWidth  = getStyleProperty<awt::Size>(xReportDefinition,PROPERTY_PAPERSIZE).Width;
+                sal_Int32 nRightBorder = nPaperWidth - nRightMargin;
                 const sal_Int32 nCount = m_xSection->getCount();
                 for (sal_Int32 i = 0; i < nCount; ++i)
                 {
@@ -578,9 +578,9 @@ void OReportSection::_propertyChanged(const beans::PropertyChangeEvent& _rEvent)
                             aPos.X  = nLeftMargin;
                             bChanged = true;
                         }
-                        if ( (aPos.X + aSize.Width) > (nPaperWidth - nRightMargin) )
+                        if ( (aPos.X + aSize.Width) > nRightBorder )
                         {
-                            aPos.X = nPaperWidth - nRightMargin - aSize.Width;
+                            aPos.X = nRightBorder - aSize.Width;
                             if ( aPos.X < nLeftMargin )
                             {
                                 aSize.Width += aPos.X - nLeftMargin;
@@ -603,6 +603,8 @@ void OReportSection::_propertyChanged(const beans::PropertyChangeEvent& _rEvent)
                             aRet.setWidth(aRet.getWidth() + 1);
                             if ( m_xSection.is() && (static_cast<sal_uInt32>(aRet.getHeight() + aRet.Top()) > m_xSection->getHeight()) )
                                 m_xSection->setHeight(aRet.getHeight() + aRet.Top());
+
+                            pObject->RecalcBoundRect();
                         }
                         pBase->StartListening();
                     }
