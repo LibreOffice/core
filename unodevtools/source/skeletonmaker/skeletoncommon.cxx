@@ -392,7 +392,7 @@ OString checkPropertyHelper(
                     osl_getThreadTextEncoding());
             }
         }
-        iter++;
+        ++iter;
     }
 
     return (oldStyleWithProperties ? "_" : "");
@@ -443,7 +443,7 @@ bool checkXComponentSupport(TypeManager const & manager,
         typereg::Reader reader(manager.getTypeReader((*iter).replace('.', '/')));
         if ( checkXComponentSupport(manager, reader) )
             return true;
-        iter++;
+        ++iter;
     }
 
     return false;
@@ -715,7 +715,7 @@ void generateFunctionParameterMap(std::ostream& o,
         }
 
         generateFunctionParamterMap(o, options, manager, reader, generated, bFirst);
-        iter++;
+        ++iter;
     }
 }
 
