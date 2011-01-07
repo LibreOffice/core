@@ -258,7 +258,7 @@ void lcl_frmitems_setXMLBorder( SvxBorderLine*& rpLine,
     if( nWidth > 0 )
         lcl_frmitems_setXMLBorderWidth( *rpLine, nWidth, sal_True );
     else
-        rpLine->SetLinesWidths( DOUBLE, nInWidth, nOutWidth, nDistance );
+        rpLine->GuessLinesWidths( DOUBLE, nOutWidth, nInWidth, nDistance );
 }
 
 const struct SvXMLEnumMapEntry psXML_BrushRepeat[] =

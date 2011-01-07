@@ -142,9 +142,9 @@ sal_Bool lcl_LineToSvxLine(const table::BorderLine& rLine, SvxBorderLine& rSvxLi
         rSvxLine.SetWidth( MM100_TO_TWIP_UNSIGNED( rLine2.LineWidth ) );
     }
     else
-        rSvxLine.SetLinesWidths( SvxBorderStyle( rLine2.LineStyle ),
-                                    MM100_TO_TWIP( rLine.InnerLineWidth ),
+        rSvxLine.GuessLinesWidths( SvxBorderStyle( rLine2.LineStyle ),
                                     MM100_TO_TWIP( rLine.OuterLineWidth ),
+                                    MM100_TO_TWIP( rLine.InnerLineWidth ),
                                     MM100_TO_TWIP( rLine.LineDistance   ) );
     sal_Bool bRet = rLine.InnerLineWidth > 0 || rLine.OuterLineWidth > 0 || rLine2.LineWidth > 0;
     return bRet;
