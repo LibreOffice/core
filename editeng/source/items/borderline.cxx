@@ -322,6 +322,8 @@ sal_Bool SvxBorderLine::operator==( const SvxBorderLine& rCmp ) const
 void SvxBorderLine::SetStyle( SvxBorderStyle nNew )
 {
     m_nStyle = nNew;
+    m_aWidthImpl = getWidthImpl( m_nStyle );
+
     switch ( nNew )
     {
         case EMBOSSED:
