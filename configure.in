@@ -4804,9 +4804,9 @@ if test -n "$with_system_boost" -o -n "$with_system_headers" && \
    AC_MSG_CHECKING([whether boost/function.hpp compiles with -fno-exceptions])
    AC_TRY_COMPILE([#include <boost/function.hpp>
 ], [],
-   ac_cv_cxx_boost_no_exceptons_broken=no, ac_cv_cxx_boost_no_exceptons_broken=yes)
+   ac_cv_cxx_boost_no_exceptions_broken=no, ac_cv_cxx_boost_no_exceptions_broken=yes)
 
-   if test "$ac_cv_cxx_boost_no_exceptons_broken" = "yes"; then
+   if test "$ac_cv_cxx_boost_no_exceptions_broken" = "yes"; then
     AC_MSG_ERROR([no, see https://bugzilla.redhat.com/show_bug.cgi?id=477131])
    else
       AC_MSG_RESULT([yes])
