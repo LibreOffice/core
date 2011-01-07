@@ -473,7 +473,9 @@ namespace svt { namespace table
         impl_ni_updateColumnWidths();
         impl_ni_updateScrollbars();
 
-        impl_invalidateColumnsAfter( i_first );
+        m_rAntiImpl.Invalidate();
+
+        OSL_UNUSED( i_first );
         OSL_UNUSED( i_last );
    }
 
@@ -484,7 +486,9 @@ namespace svt { namespace table
         impl_ni_updateColumnWidths();
         impl_ni_updateScrollbars();
 
-        impl_invalidateColumnsAfter( i_first - 1 );
+        m_rAntiImpl.Invalidate();
+
+        OSL_UNUSED( i_first );
         OSL_UNUSED( i_last );
     }
 
@@ -519,25 +523,6 @@ namespace svt { namespace table
         const TableColumnGeometry aColumn( *this, aAllCellsArea, i_column );
         if ( aColumn.isValid() )
             m_rAntiImpl.Invalidate( aColumn.getRect() );
-    }
-
-    //--------------------------------------------------------------------
-    void TableControl_Impl::impl_invalidateColumnsAfter( ColPos const i_column )
-    {
-        DBG_CHECK_ME();
-
-        const ColPos nFirstVisibleCol = m_nLeftColumn;
-        const ColPos nLastVisibleCol = m_nLeftColumn + impl_getVisibleColumns( true ) - 1;
-        if ( ( i_column >= nFirstVisibleCol ) && ( i_column <= nLastVisibleCol ) )
-        {
-            Rectangle aInvalidateArea;
-            impl_getAllVisibleCellsArea( aInvalidateArea );
-
-            const TableColumnGeometry aColumn( *this, aInvalidateArea, i_column );
-            aInvalidateArea.Left() = aColumn.getRect().Left();
-
-            m_rAntiImpl.Invalidate( aInvalidateArea );
-        }
     }
 
     //--------------------------------------------------------------------
