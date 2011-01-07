@@ -88,57 +88,6 @@ sal_Bool SvxBorderTabPage::bSync = sal_True;
 
 //------------------------------------------------------------------------
 
-#define LINE_WIDTH0     (DEF_LINE_WIDTH_0 *100)
-#define LINE_WIDTH1     (DEF_LINE_WIDTH_1 *100)
-#define LINE_WIDTH2     (DEF_LINE_WIDTH_2 *100)
-#define LINE_WIDTH3     (DEF_LINE_WIDTH_3 *100)
-#define LINE_WIDTH4     (DEF_LINE_WIDTH_4 *100)
-#define LINE_WIDTH5     (DEF_LINE_WIDTH_5 *100)
-
-#define DLINE0_OUT      (DEF_DOUBLE_LINE0_OUT  *100)
-#define DLINE0_IN       (DEF_DOUBLE_LINE0_IN   *100)
-#define DLINE0_DIST     (DEF_DOUBLE_LINE0_DIST *100)
-
-#define DLINE1_OUT      (DEF_DOUBLE_LINE1_OUT  *100)
-#define DLINE1_IN       (DEF_DOUBLE_LINE1_IN   *100)
-#define DLINE1_DIST     (DEF_DOUBLE_LINE1_DIST *100)
-
-#define DLINE2_OUT      (DEF_DOUBLE_LINE2_OUT  *100)
-#define DLINE2_IN       (DEF_DOUBLE_LINE2_IN   *100)
-#define DLINE2_DIST     (DEF_DOUBLE_LINE2_DIST *100)
-
-#define DLINE3_OUT      (DEF_DOUBLE_LINE3_OUT  *100)
-#define DLINE3_IN       (DEF_DOUBLE_LINE3_IN   *100)
-#define DLINE3_DIST     (DEF_DOUBLE_LINE3_DIST *100)
-
-#define DLINE4_OUT      (DEF_DOUBLE_LINE4_OUT  *100)
-#define DLINE4_IN       (DEF_DOUBLE_LINE4_IN   *100)
-#define DLINE4_DIST     (DEF_DOUBLE_LINE4_DIST *100)
-
-#define DLINE5_OUT      (DEF_DOUBLE_LINE5_OUT  *100)
-#define DLINE5_IN       (DEF_DOUBLE_LINE5_IN   *100)
-#define DLINE5_DIST     (DEF_DOUBLE_LINE5_DIST *100)
-
-#define DLINE6_OUT      (DEF_DOUBLE_LINE6_OUT  *100)
-#define DLINE6_IN       (DEF_DOUBLE_LINE6_IN   *100)
-#define DLINE6_DIST     (DEF_DOUBLE_LINE6_DIST *100)
-
-#define DLINE7_OUT      (DEF_DOUBLE_LINE7_OUT  *100)
-#define DLINE7_IN       (DEF_DOUBLE_LINE7_IN   *100)
-#define DLINE7_DIST     (DEF_DOUBLE_LINE7_DIST *100)
-
-#define DLINE8_OUT      (DEF_DOUBLE_LINE8_OUT  *100)
-#define DLINE8_IN       (DEF_DOUBLE_LINE8_IN   *100)
-#define DLINE8_DIST     (DEF_DOUBLE_LINE8_DIST *100)
-
-#define DLINE9_OUT      (DEF_DOUBLE_LINE9_OUT  *100)
-#define DLINE9_IN       (DEF_DOUBLE_LINE9_IN   *100)
-#define DLINE9_DIST     (DEF_DOUBLE_LINE9_DIST *100)
-
-#define DLINE10_OUT     (DEF_DOUBLE_LINE10_OUT *100)
-#define DLINE10_IN      (DEF_DOUBLE_LINE10_IN  *100)
-#define DLINE10_DIST    (DEF_DOUBLE_LINE10_DIST*100)
-
 #define RGBCOL(eColorName) (TpBorderRGBColor(eColorName))
 
 // LOKALE FUNKTION
@@ -555,7 +504,10 @@ void SvxBorderTabPage::Reset( const SfxItemSet& rSet )
         if( bWidthEq )
         {
             // Determine the width first as some styles can be missing depending on it
-            aLineWidthMF.SetValue( sal_Int64( nWidth ) );
+            sal_Int64 nWidthPt = MetricField::ConvertDoubleValue(
+                        sal_Int64( nWidth ), aLineWidthMF.GetDecimalDigits( ),
+                        MAP_TWIP, aLineWidthMF.GetUnit() );
+            aLineWidthMF.SetValue( nWidthPt );
             aLbLineStyle.SetWidth( nWidth );
 
             // then set the style
