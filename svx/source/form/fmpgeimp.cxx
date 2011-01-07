@@ -28,7 +28,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
 
-#include "svxerr.hxx"
+#include "svx/svxerr.hxx"
 #include "fmpgeimp.hxx"
 #include "fmundo.hxx"
 #include "svx/fmtools.hxx"
@@ -36,8 +36,8 @@
 #include "fmservs.hxx"
 #include "fmobj.hxx"
 #include "formcontrolfactory.hxx"
-#include "svditer.hxx"
-#include "fmresids.hrc"
+#include "svx/svditer.hxx"
+#include "svx/fmresids.hrc"
 #include "svx/dbtoolsclient.hxx"
 #include "treevisitor.hxx"
 

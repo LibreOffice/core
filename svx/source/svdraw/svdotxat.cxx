@@ -30,7 +30,7 @@
 
 #include <svl/style.hxx>
 #include <svx/svdotext.hxx>
-#include "svditext.hxx"
+#include "svx/svditext.hxx"
 #include <svx/svdmodel.hxx> // fuer GetMaxObjSize und GetStyleSheetPool
 #include <svx/svdoutl.hxx>
 #include <svx/svdorect.hxx> // fuer SetDirty bei NbcAdjustTextFrameWidthAndHeight

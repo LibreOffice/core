@@ -30,7 +30,7 @@
 #include <tools/string.hxx>
 
 #include <svx/dialogs.hrc>
-#include "rulritem.hxx"
+#include "svx/rulritem.hxx"
 #include <com/sun/star/awt/Rectangle.hpp>
 #include <com/sun/star/frame/status/LeftRightMargin.hpp>
 #include <com/sun/star/frame/status/UpperLowerMargin.hpp>

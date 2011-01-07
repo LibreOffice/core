@@ -2525,9 +2525,8 @@ void OSQLParseNode::parseLeaf(::rtl::OUStringBuffer& rString, const SQLParseNode
                 rString.append(aTmp);
 
             }   break;
-
         case SQL_NODE_PUNCTUATION:
-            if ( getParent() && SQL_ISRULE(getParent(),cast_spec) && m_aNodeValue.toChar() == '(' ) // no spaces in front of '(' or after ')'
+            if ( getParent() && SQL_ISRULE(getParent(),cast_spec) && m_aNodeValue.toChar() == '(' ) // no spaces in front of '('
             {
                 rString.append(m_aNodeValue);
                 break;

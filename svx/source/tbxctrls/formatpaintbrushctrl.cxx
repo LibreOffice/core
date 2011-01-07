@@ -28,7 +28,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
 
-#include "formatpaintbrushctrl.hxx"
+#include "svx/formatpaintbrushctrl.hxx"
 
 // header for class SfxBoolItem
 #include <svl/eitem.hxx>

@@ -36,7 +36,7 @@
 #define _STDLIB_H
 #endif
 
-#include "svditext.hxx"
+#include "svx/svditext.hxx"
 #include <editeng/flditem.hxx>
 #include <editeng/editdata.hxx>
 #include <svx/svdpool.hxx>
@@ -66,7 +66,7 @@
 #include <svl/rectitem.hxx>
 
 #include <svl/rngitem.hxx>
-#include <sdrpaintwindow.hxx>
+#include <svx/sdrpaintwindow.hxx>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 

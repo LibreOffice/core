@@ -29,7 +29,7 @@
 #include "precompiled_svx.hxx"
 
 #include <svx/svdcrtv.hxx>
-#include "xattr.hxx"
+#include "svx/xattr.hxx"
 #include <svx/svdundo.hxx>
 #include <svx/svdocapt.hxx> // Spezialbehandlung: Nach dem Create transparente Fuellung
 #include <svx/svdoedge.hxx>
@@ -45,7 +45,7 @@
 #include <svx/svdopath.hxx>
 #include <svx/sdr/overlay/overlaypolypolygon.hxx>
 #include <svx/sdr/overlay/overlaymanager.hxx>
-#include <sdrpaintwindow.hxx>
+#include <svx/sdrpaintwindow.hxx>
 #include "fmobj.hxx"
 #include <svx/svdocirc.hxx>
 #include <svx/sdr/contact/viewcontact.hxx>
