@@ -237,7 +237,7 @@ void CreateTempName_Impl( String& rName, sal_Bool bKeep, sal_Bool bDir = sal_Tru
 /* RW permission for the user only! */
  mode_t old_mode = umask(077);
 #endif
-            FileBase::RC err = aFile.open(osl_File_OpenFlag_Create);
+            FileBase::RC err = aFile.open( osl_File_OpenFlag_Create | osl_File_OpenFlag_NoLock );
 #ifdef UNX
 umask(old_mode);
 #endif
