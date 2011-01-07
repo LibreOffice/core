@@ -40,7 +40,7 @@ TARGET=premiumtemplatescommonpresnt
 
 
 ZIP1TARGET      = $(PREMIUM_TEMPLATES_COMMON_PRESNT_IMPRESS_TARGET)
-
+ZIP1STRIPLANGUAGETAGS=1
 ZIP1LIST	= * -x makefile.*
 
 
