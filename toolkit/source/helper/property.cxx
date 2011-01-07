@@ -48,7 +48,6 @@
 #include <com/sun/star/awt/tree/XTreeDataModel.hpp>
 #include <com/sun/star/awt/grid/XGridDataModel.hpp>
 #include <com/sun/star/awt/grid/XGridColumnModel.hpp>
-#include <com/sun/star/awt/grid/ScrollBarMode.hpp>
 #include <com/sun/star/view/SelectionType.hpp>
 #include <com/sun/star/style/VerticalAlignment.hpp>
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
