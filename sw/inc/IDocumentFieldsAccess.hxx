@@ -54,32 +54,18 @@ namespace com { namespace sun { namespace star { namespace uno { class Any; } } 
  class IDocumentFieldsAccess
  {
  public:
-    /**
-    */
     virtual const SwFldTypes *GetFldTypes() const = 0;
 
-    /**
-    */
     virtual SwFieldType *InsertFldType(const SwFieldType &) = 0;
 
-    /**
-    */
     virtual SwFieldType *GetSysFldType( const sal_uInt16 eWhich ) const = 0;
 
-    /**
-    */
     virtual SwFieldType* GetFldType(sal_uInt16 nResId, const String& rName, bool bDbFieldMatching) const = 0;
 
-    /**
-    */
     virtual void RemoveFldType(sal_uInt16 nFld) = 0;
 
-    /**
-    */
     virtual void UpdateFlds( SfxPoolItem* pNewHt, bool bCloseDB) = 0;
 
-    /**
-    */
     virtual void InsDeletedFldType(SwFieldType &) = 0;
 
     /**
@@ -111,38 +97,21 @@ namespace com { namespace sun { namespace star { namespace uno { class Any; } } 
     */
     virtual bool UpdateFld(SwTxtFld * rDstFmtFld, SwField & rSrcFld, SwMsgPoolItem * pMsgHnt, bool bUpdateTblFlds) = 0;
 
-    /**
-    */
     virtual void UpdateRefFlds(SfxPoolItem* pHt) = 0;
 
-    /**
-    */
     virtual void UpdateTblFlds(SfxPoolItem* pHt) = 0;
 
-    /**
-    */
     virtual void UpdateExpFlds(SwTxtFld* pFld, bool bUpdateRefFlds) = 0;
 
-    /**
-    */
     virtual void UpdateUsrFlds() = 0;
 
-    /**
-    */
     virtual void UpdatePageFlds(SfxPoolItem*) = 0;
 
-    /**
-    */
     virtual void LockExpFlds() = 0;
 
-    /**
-    */
     virtual void UnlockExpFlds() = 0;
 
-    /**
-    */
     virtual bool IsExpFldsLocked() const = 0;
-
 
     virtual SwDocUpdtFld& GetUpdtFlds() const = 0;
 
@@ -152,35 +121,23 @@ namespace com { namespace sun { namespace star { namespace uno { class Any; } } 
     */
     virtual bool SetFieldsDirty(bool b, const SwNode* pChk, ULONG nLen) = 0;
 
-    /**
-    */
     virtual void SetFixFields(bool bOnlyTimeDate, const DateTime* pNewDateTime) = 0;
 
-    // Setze im Calculator alle SetExpresion Felder, die bis zur
-    // angegebenen Position (Node [ + ::com::sun::star::ucb::Content]) gueltig sind. Es kann
-    // eine erzeugte Liste aller Felder mit uebergegeben werden.
-    // (ist die Adresse != 0, und der Pointer == 0 wird eine neue
-    // Liste returnt.)
+
+    // In Calculator set all SetExpression fields that are valid up to the indicated position
+    // (Node [ + ::com::sun::star::ucb::Content]).
+    // A generated list of all fields may be passed along too
+    // (if the addreess != 0 and the pointer == 0 a new list will be returned).
     virtual void FldsToCalc(SwCalc& rCalc, ULONG nLastNd, sal_uInt16 nLastCnt) = 0;
 
-    /**
-    */
     virtual void FldsToCalc(SwCalc& rCalc, const _SetGetExpFld& rToThisFld) = 0;
 
-    /**
-    */
     virtual void FldsToExpand(SwHash**& ppTbl, sal_uInt16& rTblSize, const _SetGetExpFld& rToThisFld) = 0;
 
-    /**
-    */
     virtual bool IsNewFldLst() const = 0;
 
-    /**
-    */
     virtual void SetNewFldLst( bool bFlag) = 0;
 
-    /**
-    */
     virtual void InsDelFldInFldLst(bool bIns, const SwTxtFld& rFld) = 0;
 
 protected:
