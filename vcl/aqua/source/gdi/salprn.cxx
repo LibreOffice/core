@@ -380,14 +380,14 @@ static bool getUseNativeDialog()
     try
     {
         // get service provider
-        Reference< XMultiServiceFactory > xSMgr( unohelper::GetMultiServiceFactory() );
+        uno::Reference< XMultiServiceFactory > xSMgr( unohelper::GetMultiServiceFactory() );
         // create configuration hierachical access name
         if( xSMgr.is() )
         {
             try
             {
-                Reference< XMultiServiceFactory > xConfigProvider(
-                    Reference< XMultiServiceFactory >(
+                uno::Reference< XMultiServiceFactory > xConfigProvider(
+                   uno::Reference< XMultiServiceFactory >(
                         xSMgr->createInstance( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
                                         "com.sun.star.configuration.ConfigurationProvider" ))),
                         UNO_QUERY )
@@ -399,8 +399,8 @@ static bool getUseNativeDialog()
                     aVal.Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "nodepath" ) );
                     aVal.Value <<= OUString( RTL_CONSTASCII_USTRINGPARAM( "/org.openoffice.Office.Common/Misc" ) );
                     aArgs.getArray()[0] <<= aVal;
-                    Reference< XNameAccess > xConfigAccess(
-                        Reference< XNameAccess >(
+                    uno::Reference< XNameAccess > xConfigAccess(
+                        uno::Reference< XNameAccess >(
                             xConfigProvider->createInstanceWithArguments( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
                                                 "com.sun.star.configuration.ConfigurationAccess" )),
                                                                             aArgs ),
