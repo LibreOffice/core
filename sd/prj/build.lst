@@ -1,4 +1,4 @@
-sd      sd      :    filter l10n animations svx sfx2 stoc canvas NULL
+sd      sd      :    filter l10n animations svx sfx2 stoc canvas LIBXSLT:libxslt NULL
 sd	sd										usr1	-	all	sd_mkout NULL
 sd	sd\inc									nmake		-	all	sd_inc NULL
 sd	sd\prj									get		-	all	sd_prj NULL
