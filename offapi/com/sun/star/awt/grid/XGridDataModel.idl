@@ -56,10 +56,6 @@ interface XGridDataModel
     */
     interface ::com::sun::star::util::XCloneable;
 
-    /** Contains the row header.
-    */
-    [attribute] sequence< string > RowHeaders;
-
     /** denotes the number of rows for which the model can provide data
     */
     [attribute, readonly] long RowCount;
@@ -69,9 +65,23 @@ interface XGridDataModel
     [attribute, readonly] long ColumnCount;
 
     /** retrieves the data for a given cell
+
+        @raises ::com::sun::star::lang::IndexOutOfBoundsException
+            if the column or row index do not denote a valid cell position.
     */
     any getCellData( [in] long Column, [in] long Row )
-        raises ( com::sun::star::lang::IndexOutOfBoundsException );
+        raises ( ::com::sun::star::lang::IndexOutOfBoundsException );
+
+    /** retrieves the title of the given row
+
+        <p>A grid control will usually paint a row's title in the header column of the respective row.</p>
+
+        @raises ::com::sun::star::lang::IndexOutOfBoundsException
+            if the given index does not denote a valid row.
+    */
+    string
+        getRowTitle( [in] long Row )
+        raises ( ::com::sun::star::lang::IndexOutOfBoundsException );
 
     /** Adds a row to the model.
 
