@@ -65,6 +65,7 @@ namespace svt { namespace table
     using ::com::sun::star::lang::EventObject;
     using ::com::sun::star::awt::grid::GridColumnEvent;
     using ::com::sun::star::awt::grid::XGridDataModel;
+    using ::com::sun::star::awt::grid::XGridColumnModel;
     using ::com::sun::star::uno::Any;
     using ::com::sun::star::style::HorizontalAlignment_LEFT;
     using ::com::sun::star::style::HorizontalAlignment;
@@ -96,6 +97,7 @@ namespace svt { namespace table
         ::com::sun::star::style::VerticalAlignment  m_eVerticalAlign;
         ModellListeners                             m_aListeners;
         WeakReference< XGridDataModel >             m_aDataModel;
+        WeakReference< XGridColumnModel >           m_aColumnModel;
 
         UnoControlTableModel_Impl()
             :aColumns           ( )
@@ -433,6 +435,13 @@ namespace svt { namespace table
     }
 
     //------------------------------------------------------------------------------------------------------------------
+    void UnoControlTableModel::setColumnModel( Reference< XGridColumnModel > const & i_gridColumnModel )
+    {
+        DBG_CHECK_ME();
+        m_pImpl->m_aColumnModel = i_gridColumnModel;
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
     void UnoControlTableModel::getCellContent( ColPos const i_col, RowPos const i_row, Any& o_cellContent )
     {
         DBG_CHECK_ME();
@@ -441,7 +450,25 @@ namespace svt { namespace table
         {
             Reference< XGridDataModel > const xDataModel( m_pImpl->m_aDataModel );
             ENSURE_OR_THROW( xDataModel.is(), "no data model anymore!" );
-            o_cellContent = xDataModel->getCellData( i_col, i_row );
+
+            if ( i_col >= xDataModel->getColumnCount() )
+            {
+                // this is allowed, in case the column model has been dynamically extended, but the data model does
+                // not (yet?) know about it.
+                // So, handle it gracefully.
+            #if OSL_DEBUG_LEVEL > 0
+                {
+                    Reference< XGridColumnModel > const xColumnModel( m_pImpl->m_aColumnModel );
+                    OSL_ENSURE( xColumnModel.is() && i_col < xColumnModel->getColumnCount(),
+                        "UnoControlTableModel::getCellContent: request a column's value which the ColumnModel doesn't know about!" );
+                }
+            #endif
+                o_cellContent.clear();
+            }
+            else
+            {
+                o_cellContent = xDataModel->getCellData( i_col, i_row );
+            }
         }
         catch( const Exception& )
         {

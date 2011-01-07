@@ -121,6 +121,7 @@ namespace svt { namespace table
         void    setVerticalScrollbarVisibility( ScrollbarVisibility const i_visibility ) const;
         void    setHorizontalScrollbarVisibility( ScrollbarVisibility const i_visibility ) const;
         void    setDataModel( ::com::sun::star::uno::Reference< ::com::sun::star::awt::grid::XGridDataModel > const & i_gridDataModel );
+        void    setColumnModel( ::com::sun::star::uno::Reference< ::com::sun::star::awt::grid::XGridColumnModel > const & i_gridColumnModel );
         void    setRowHeaders(bool _bRowHeaders);
         void    setColumnHeaders(bool _bColumnHeaders);
         void    setLineColor(::com::sun::star::util::Color _rColor);

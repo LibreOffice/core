@@ -333,7 +333,10 @@ void SVTXGridControl::setProperty( const ::rtl::OUString& PropertyName, const An
             // obtain new col model
             m_xColumnModel = Reference< XGridColumnModel >( aValue, UNO_QUERY_THROW );
 
-            // remove new columns
+            // announce to the TableModel
+            m_pTableModel->setColumnModel( m_xColumnModel );
+
+            // add new columns
             impl_updateColumnsFromModel_nothrow();
 
             break;
