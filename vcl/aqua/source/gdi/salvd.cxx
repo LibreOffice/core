@@ -208,18 +208,15 @@ BOOL AquaSalVirtualDevice::SetSize( long nDX, long nDY )
             }
             else
             {
-                // fall back to a virtual device
-                if( mnBitmapDepth > 16 )
-                    mnBitmapDepth = 32;
-                else
-                    mnBitmapDepth = 16;
+                // fall back to a bitmap context
+                mnBitmapDepth = 32;
                 const CGColorSpaceRef aCGColorSpace = GetSalData()->mxRGBSpace;
-                const CGBitmapInfo aCGBmpInfo = kCGImageAlphaNone;
+                const CGBitmapInfo aCGBmpInfo = kCGImageAlphaNoneSkipFirst;
                 const int nBytesPerRow = (mnBitmapDepth * nDX) / 8;
 
                 void* pRawData = rtl_allocateMemory( nBytesPerRow * nDY );
                 mxBitmapContext = ::CGBitmapContextCreate( pRawData, nDX, nDY,
-                                                           mnBitmapDepth, nBytesPerRow, aCGColorSpace, aCGBmpInfo );
+                                                           8, nBytesPerRow, aCGColorSpace, aCGBmpInfo );
                 xCGContext = mxBitmapContext;
             }
         }
