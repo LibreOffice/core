@@ -75,7 +75,9 @@ UnoGridModel::UnoGridModel( const ::com::sun::star::uno::Reference< ::com::sun::
     ImplRegisterProperty( BASEPROPERTY_VSCROLL );
     ImplRegisterProperty( BASEPROPERTY_TABSTOP );
     ImplRegisterProperty( BASEPROPERTY_GRID_SHOWROWHEADER );
+    ImplRegisterProperty( BASEPROPERTY_ROW_HEADER_WIDTH );
     ImplRegisterProperty( BASEPROPERTY_GRID_SHOWCOLUMNHEADER );
+    ImplRegisterProperty( BASEPROPERTY_COLUMN_HEADER_HEIGHT );
     ImplRegisterProperty( BASEPROPERTY_GRID_DATAMODEL, makeAny( maContext.createComponent( "com.sun.star.awt.grid.DefaultGridDataModel" ) ) );
     ImplRegisterProperty( BASEPROPERTY_GRID_COLUMNMODEL, makeAny( maContext.createComponent( "com.sun.star.awt.grid.DefaultGridColumnModel" ) ) );
     ImplRegisterProperty( BASEPROPERTY_GRID_SELECTIONMODE );
@@ -196,8 +198,12 @@ Any UnoGridModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
             return uno::makeAny( SelectionType(1) );
         case BASEPROPERTY_GRID_SHOWROWHEADER:
             return uno::makeAny( (sal_Bool)sal_False );
+        case BASEPROPERTY_ROW_HEADER_WIDTH:
+            return uno::makeAny( sal_Int32( 10 ) );
         case BASEPROPERTY_GRID_SHOWCOLUMNHEADER:
             return uno::makeAny( (sal_Bool)sal_True );
+        case BASEPROPERTY_COLUMN_HEADER_HEIGHT:
+            return Any();
         case BASEPROPERTY_GRID_EVEN_ROW_BACKGROUND:
             return uno::makeAny( com::sun::star::util::Color( COL_TRANSPARENT ) );
         case BASEPROPERTY_GRID_HEADER_BACKGROUND:

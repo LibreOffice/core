@@ -71,7 +71,6 @@ namespace toolkit
         ,m_aContext( i_factory )
         ,m_aContainerListeners( m_aMutex )
         ,m_aColumns()
-        ,m_nColumnHeaderHeight(0)
     {
     }
 
@@ -82,7 +81,6 @@ namespace toolkit
         ,m_aContext( i_copySource.m_aContext )
         ,m_aContainerListeners( m_aMutex )
         ,m_aColumns()
-        ,m_nColumnHeaderHeight( i_copySource.m_nColumnHeaderHeight )
     {
         Columns aColumns;
         aColumns.reserve( i_copySource.m_aColumns.size() );
@@ -139,33 +137,19 @@ namespace toolkit
     //------------------------------------------------------------------------------------------------------------------
     Sequence< Reference< XGridColumn > > SAL_CALL DefaultGridColumnModel::getColumns() throw (RuntimeException)
     {
-        ::osl::Guard< ::osl::Mutex > aGuard( m_aMutex );
+        ::osl::MutexGuard aGuard( m_aMutex );
         return ::comphelper::containerToSequence( m_aColumns );
     }
 
     //------------------------------------------------------------------------------------------------------------------
     Reference< XGridColumn > SAL_CALL DefaultGridColumnModel::getColumn(::sal_Int32 index) throw (IndexOutOfBoundsException, RuntimeException)
     {
-        ::osl::Guard< ::osl::Mutex > aGuard( m_aMutex );
+        ::osl::MutexGuard aGuard( m_aMutex );
 
         if ( index >=0 && index < ((sal_Int32)m_aColumns.size()))
             return m_aColumns[index];
 
         throw IndexOutOfBoundsException();
-    }
-
-    //------------------------------------------------------------------------------------------------------------------
-    void SAL_CALL DefaultGridColumnModel::setColumnHeaderHeight(sal_Int32 _value) throw (RuntimeException)
-    {
-        ::osl::Guard< ::osl::Mutex > aGuard( m_aMutex );
-        m_nColumnHeaderHeight = _value;
-    }
-
-    //------------------------------------------------------------------------------------------------------------------
-    sal_Int32 SAL_CALL DefaultGridColumnModel::getColumnHeaderHeight() throw (RuntimeException)
-    {
-        ::osl::Guard< ::osl::Mutex > aGuard( m_aMutex );
-        return m_nColumnHeaderHeight;
     }
 
     //------------------------------------------------------------------------------------------------------------------

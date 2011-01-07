@@ -131,6 +131,36 @@ void SVTXGridControl::setProperty( const ::rtl::OUString& PropertyName, const An
 
     switch( GetPropertyId( PropertyName ) )
     {
+    case BASEPROPERTY_ROW_HEADER_WIDTH:
+        {
+            sal_Int32 rowHeaderWidth( m_pTableModel->getRowHeaderWidth() );
+            aValue >>= rowHeaderWidth;
+            ENSURE_OR_BREAK( rowHeaderWidth > 0, "SVTXGridControl::setProperty: illegal row header width!" );
+            m_pTableModel->setRowHeaderWidth( rowHeaderWidth );
+            // TODO: the model should broadcast this change itself, and the table should invalidate itself as needed
+            pTable->Invalidate();
+        }
+        break;
+
+        case BASEPROPERTY_COLUMN_HEADER_HEIGHT:
+        {
+            if ( !aValue.hasValue() )
+            {
+                sal_Int32 const fontHeight = pTable->PixelToLogic( Size( 0, pTable->GetTextHeight() + 3 ), MAP_APPFONT ).Height();
+                m_pTableModel->setColumnHeaderHeight( fontHeight );
+            }
+            else
+            {
+                sal_Int32 nColumnHeaderHeight = 0;
+                aValue >>= nColumnHeaderHeight;
+                ENSURE_OR_BREAK( nColumnHeaderHeight > 0, "SVTXGridControl::setProperty: illegal column header height!" );
+                m_pTableModel->setColumnHeaderHeight( nColumnHeaderHeight );
+            }
+            // TODO: the model should broadcast this change itself, and the table should invalidate itself as needed
+            pTable->Invalidate();
+        }
+        break;
+
         case BASEPROPERTY_BACKGROUNDCOLOR:
         {
             // let the base class handle this for the TableControl
@@ -275,13 +305,6 @@ void SVTXGridControl::setProperty( const ::rtl::OUString& PropertyName, const An
                 if ( ( nDataColumnCount > 0 ) && ( m_xColumnModel->getColumnCount() == 0 ) )
                     m_xColumnModel->setDefaultColumns( nDataColumnCount );
                     // this will trigger notifications, which in turn will let us update our m_pTableModel
-
-                sal_Int32 fontHeight = pTable->PixelToLogic( Size( 0, pTable->GetTextHeight()+3 ), MAP_APPFONT ).Height();
-                if ( m_xDataModel->getRowHeight() == 0 )
-                    m_pTableModel->setRowHeight( fontHeight );
-                else
-                    m_pTableModel->setRowHeight( m_xDataModel->getRowHeight() );
-                m_pTableModel->setRowHeaderWidth( m_xDataModel->getRowHeaderWidth() );
             }
             break;
         }
@@ -452,13 +475,6 @@ void SAL_CALL SVTXGridControl::dataChanged(const ::com::sun::star::awt::grid::Gr
         sal_Int32 rowHeight = m_pTableModel->getRowHeight();
         Event.NewValue>>=rowHeight;
         m_pTableModel->setRowHeight(rowHeight);
-        pTable->Invalidate();
-    }
-    else if ( Event.AttributeName.equalsAscii( "RowHeaderWidth" ) )
-    {
-        sal_Int32 rowHeaderWidth = m_pTableModel->getRowHeaderWidth();
-        Event.NewValue>>=rowHeaderWidth;
-        m_pTableModel->setRowHeaderWidth(rowHeaderWidth);
         pTable->Invalidate();
     }
     else if ( Event.AttributeName.equalsAscii( "RowHeaders" ) )
@@ -813,28 +829,16 @@ void SVTXGridControl::impl_updateColumnsFromModel_nothrow()
 
     try
     {
-        if ( m_xColumnModel->getColumnCount() != 0 )
+        const Sequence< Reference< XGridColumn > > columns = m_xColumnModel->getColumns();
+        for (   const Reference< XGridColumn >* colRef = columns.getConstArray();
+                colRef != columns.getConstArray() + columns.getLength();
+                ++colRef
+            )
         {
-            if ( m_xColumnModel->getColumnHeaderHeight() == 0 )
-            {
-                sal_Int32 fontHeight = pTable->PixelToLogic( Size( 0, pTable->GetTextHeight() + 3 ), MAP_APPFONT ).Height();
-                m_pTableModel->setColumnHeaderHeight( fontHeight );
-            }
-            else
-                m_pTableModel->setColumnHeaderHeight( m_xColumnModel->getColumnHeaderHeight() );
+            ENSURE_OR_CONTINUE( colRef->is(), "illegal column!" );
 
-            const Sequence< Reference< XGridColumn > > columns = m_xColumnModel->getColumns();
-            for (   const Reference< XGridColumn >* colRef = columns.getConstArray();
-                    colRef != columns.getConstArray() + columns.getLength();
-                    ++colRef
-                )
-            {
-                ENSURE_OR_CONTINUE( colRef->is(), "illegal column!" );
-
-                m_pTableModel->appendColumn( *colRef );
-            }
+            m_pTableModel->appendColumn( *colRef );
         }
-
     }
     catch( const Exception& )
     {

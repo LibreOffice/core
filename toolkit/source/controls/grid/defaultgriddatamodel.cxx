@@ -43,7 +43,6 @@ using namespace ::com::sun::star::lang;
 #define ROWHEADERS ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "RowHeaders" ))
 #define CELLUPDATED ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "CellUpdated" ))
 #define ROWUPDATED ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "RowUpdated" ))
-#define ROWHEADERWIDTH ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "RowHeaderWidth" ))
 
 //......................................................................................................................
 namespace toolkit
@@ -71,7 +70,6 @@ namespace toolkit
         ,MutexAndBroadcastHelper()
         ,m_nRowHeight(0)
         ,m_aRowHeaders()
-        ,m_nRowHeaderWidth(10)
     {
     }
 
@@ -82,7 +80,6 @@ namespace toolkit
         ,m_nRowHeight( i_copySource.m_nRowHeight )
         ,m_aData( i_copySource.m_aData )
         ,m_aRowHeaders( i_copySource.m_aRowHeaders )
-        ,m_nRowHeaderWidth( i_copySource.m_nRowHeaderWidth )
     {
     }
 
@@ -263,20 +260,6 @@ namespace toolkit
         m_aRowHeaders.clear();
         m_aData.clear();
         broadcast_remove( -1, ::rtl::OUString(), 0);
-    }
-
-    //------------------------------------------------------------------------------------------------------------------
-    void SAL_CALL DefaultGridDataModel::setRowHeaderWidth(sal_Int32 _value) throw (::com::sun::star::uno::RuntimeException)
-    {
-        sal_Int32 oldValue = m_nRowHeaderWidth;
-        m_nRowHeaderWidth = _value;
-        broadcast_changed( ROWHEADERWIDTH, 0, Any(oldValue), Any(_value) );
-    }
-
-    //------------------------------------------------------------------------------------------------------------------
-    sal_Int32 SAL_CALL DefaultGridDataModel::getRowHeaderWidth() throw (::com::sun::star::uno::RuntimeException)
-    {
-        return m_nRowHeaderWidth;
     }
 
     //------------------------------------------------------------------------------------------------------------------

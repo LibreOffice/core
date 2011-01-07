@@ -74,8 +74,6 @@ public:
     virtual void SAL_CALL addGridDataListener( const Reference< XGridDataListener >& xListener ) throw (RuntimeException);
     virtual void SAL_CALL removeGridDataListener( const Reference< XGridDataListener >& xListener ) throw (RuntimeException);
     virtual void SAL_CALL removeAll() throw (RuntimeException);
-    virtual void SAL_CALL setRowHeaderWidth(sal_Int32 _value) throw (::com::sun::star::uno::RuntimeException);
-    virtual sal_Int32 SAL_CALL getRowHeaderWidth() throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL updateCell( ::sal_Int32 row, ::sal_Int32 column, const ::com::sun::star::uno::Any& value ) throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL updateRow( ::sal_Int32 row, const ::com::sun::star::uno::Sequence< ::sal_Int32 >& columns, const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& values ) throw (::com::sun::star::uno::RuntimeException);
 
@@ -102,7 +100,6 @@ private:
     sal_Int32                           m_nRowHeight;
     std::vector< std::vector < Any > >  m_aData;
     std::vector< ::rtl::OUString >      m_aRowHeaders;
-    sal_Int32                           m_nRowHeaderWidth;
 };
 
 }
