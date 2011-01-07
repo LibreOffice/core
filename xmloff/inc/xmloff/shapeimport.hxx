@@ -44,6 +44,7 @@
 
 #include "xmloff/table/XMLTableImport.hxx"
 #include <basegfx/vector/b3dvector.hxx>
+#include <vector>
 
 class SvXMLImport;
 class SvXMLImportContext;
@@ -209,7 +210,7 @@ public:
 
 //////////////////////////////////////////////////////////////////////////////
 
-DECLARE_LIST(Imp3DLightList, SdXML3DLightContext*)
+typedef ::std::vector< SdXML3DLightContext* > Imp3DLightList;
 
 class SdXML3DSceneAttributesHelper
 {
