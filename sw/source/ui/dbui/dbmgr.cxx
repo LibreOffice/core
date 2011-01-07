@@ -1508,7 +1508,8 @@ ULONG SwNewDBMgr::GetColumnFmt( uno::Reference< XDataSource> xSource,
     if(!xSource.is())
     {
         uno::Reference<XChild> xChild(xConnection, UNO_QUERY);
-        xSource = uno::Reference<XDataSource>(xChild->getParent(), UNO_QUERY);
+        if ( xChild.is() )
+            xSource = uno::Reference<XDataSource>(xChild->getParent(), UNO_QUERY);
     }
     if(xSource.is() && xConnection.is() && xColumn.is() && pNFmtr)
     {
@@ -2876,7 +2877,7 @@ sal_Int32 SwNewDBMgr::MergeDocuments( SwMailMergeConfigItem& rMMConfig,
     try
     {
         // create a target docshell to put the merged document into
-        SfxObjectShellLock xTargetDocShell( new SwDocShell( SFX_CREATE_MODE_STANDARD ) );
+        SfxObjectShellRef xTargetDocShell( new SwDocShell( SFX_CREATE_MODE_STANDARD ) );
         xTargetDocShell->DoInitNew( 0 );
         SfxViewFrame* pTargetFrame = SfxViewFrame::LoadHiddenDocument( *xTargetDocShell, 0 );
 
