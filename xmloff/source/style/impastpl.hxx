@@ -39,6 +39,7 @@
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 #include <xmloff/maptype.hxx>
 #include <xmloff/xmlexppr.hxx>
+#include <vector>
 
 class SvXMLAutoStylePoolP;
 class SvXMLAutoStylePoolParentsP_Impl;
@@ -54,8 +55,8 @@ class SvXMLExport;
 // Implementationclass for stylefamily-information
 //
 
-typedef ::rtl::OUString *OUStringPtr;
-DECLARE_LIST( SvXMLAutoStylePoolCache_Impl, OUStringPtr )
+typedef ::rtl::OUString* OUStringPtr;
+typedef ::std::vector< OUStringPtr > SvXMLAutoStylePoolCache_Impl;
 
 class XMLFamilyData_Impl
 {

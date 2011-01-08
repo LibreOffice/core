@@ -221,10 +221,9 @@ sal_Bool SvXMLAutoStylePoolP_Impl::Add(OUString& rName, sal_Int32 nFamily,
         if( bCache )
         {
             if( !pFamily->pCache )
-                pFamily->pCache = new SvXMLAutoStylePoolCache_Impl( 256, 256 );
-            if( pFamily->pCache->Count() < MAX_CACHE_SIZE )
-                pFamily->pCache->Insert( new OUString( rName ),
-                                         pFamily->pCache->Count() );
+                pFamily->pCache = new SvXMLAutoStylePoolCache_Impl();
+            if( pFamily->pCache->size() < MAX_CACHE_SIZE )
+                pFamily->pCache->push_back( new OUString( rName ) );
         }
     }
 
@@ -288,10 +287,9 @@ OUString SvXMLAutoStylePoolP_Impl::AddToCache( sal_Int32 nFamily,
     if( pFamily )
     {
         if( !pFamily->pCache )
-            pFamily->pCache = new SvXMLAutoStylePoolCache_Impl( 256, 256 );
-        if( pFamily->pCache->Count() < MAX_CACHE_SIZE )
-            pFamily->pCache->Insert( new OUString( rParent ),
-                                     pFamily->pCache->Count() );
+            pFamily->pCache = new SvXMLAutoStylePoolCache_Impl();
+        if( pFamily->pCache->size() < MAX_CACHE_SIZE )
+            pFamily->pCache->push_back( new OUString( rParent ) );
     }
 
     return rParent;
@@ -350,9 +348,10 @@ OUString SvXMLAutoStylePoolP_Impl::FindAndRemoveCached( sal_Int32 nFamily ) cons
 
         // The cache may be empty already. This happens if it was filled
         // completly.
-        if( pFamily->pCache && pFamily->pCache->Count() )
+        if( pFamily->pCache && !pFamily->pCache->empty() )
         {
-            OUString *pName = pFamily->pCache->Remove( 0UL );
+            OUString *pName = (*pFamily->pCache)[ 0 ];
+            pFamily->pCache->erase( pFamily->pCache->begin() );
             sName = *pName;
             delete pName;
         }
