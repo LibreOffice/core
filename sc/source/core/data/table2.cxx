@@ -1336,25 +1336,25 @@ bool ScTable::HasAttrib( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, USH
 }
 
 
-BOOL ScTable::HasAttribSelection( const ScMarkData& rMark, USHORT nMask ) const
+bool ScTable::HasAttribSelection( const ScMarkData& rMark, USHORT nMask ) const
 {
-    BOOL bFound=FALSE;
+    bool bFound = false;
     for (SCCOL i=0; i<=MAXCOL && !bFound; i++)
         bFound |= aCol[i].HasAttribSelection( rMark, nMask );
     return bFound;
 }
 
 
-BOOL ScTable::ExtendMerge( SCCOL nStartCol, SCROW nStartRow,
+bool ScTable::ExtendMerge( SCCOL nStartCol, SCROW nStartRow,
                            SCCOL& rEndCol, SCROW& rEndRow,
                            BOOL bRefresh, BOOL bAttrs )
 {
     if (!(ValidCol(nStartCol) && ValidCol(rEndCol)))
     {
         DBG_ERRORFILE("ScTable::ExtendMerge: invalid column number");
-        return FALSE;
+        return false;
     }
-    BOOL bFound=FALSE;
+    bool bFound = false;
     SCCOL nOldEndX = rEndCol;
     SCROW nOldEndY = rEndRow;
     for (SCCOL i=nStartCol; i<=nOldEndX; i++)
@@ -1596,9 +1596,9 @@ BOOL ScTable::HasBlockMatrixFragment( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCR
 }
 
 
-BOOL ScTable::HasSelectionMatrixFragment( const ScMarkData& rMark ) const
+bool ScTable::HasSelectionMatrixFragment( const ScMarkData& rMark ) const
 {
-    BOOL bFound=FALSE;
+    bool bFound = false;
     for (SCCOL i=0; i<=MAXCOL && !bFound; i++)
         bFound |= aCol[i].HasSelectionMatrixFragment(rMark);
     return bFound;
@@ -2002,10 +2002,10 @@ void ScTable::StyleSheetChanged( const SfxStyleSheetBase* pStyleSheet, BOOL bRem
 }
 
 
-BOOL ScTable::ApplyFlags( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow,
+bool ScTable::ApplyFlags( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow,
                                     INT16 nFlags )
 {
-    BOOL bChanged = FALSE;
+    bool bChanged = false;
     if (ValidColRow(nStartCol, nStartRow) && ValidColRow(nEndCol, nEndRow))
         for (SCCOL i = nStartCol; i <= nEndCol; i++)
             bChanged |= aCol[i].ApplyFlags(nStartRow, nEndRow, nFlags);
@@ -2013,10 +2013,10 @@ BOOL ScTable::ApplyFlags( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW
 }
 
 
-BOOL ScTable::RemoveFlags( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow,
+bool ScTable::RemoveFlags( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow,
                                     INT16 nFlags )
 {
-    BOOL bChanged = FALSE;
+    bool bChanged = false;
     if (ValidColRow(nStartCol, nStartRow) && ValidColRow(nEndCol, nEndRow))
         for (SCCOL i = nStartCol; i <= nEndCol; i++)
             bChanged |= aCol[i].RemoveFlags(nStartRow, nEndRow, nFlags);

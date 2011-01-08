@@ -297,7 +297,7 @@ public:
                         BOOL* pOnlyNotBecauseOfMatrix = NULL ) const;
 
     BOOL        HasBlockMatrixFragment( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2 ) const;
-    BOOL        HasSelectionMatrixFragment( const ScMarkData& rMark ) const;
+    bool        HasSelectionMatrixFragment( const ScMarkData& rMark ) const;
 
     BOOL        IsBlockEmpty( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, bool bIgnoreNotes = false ) const;
 
@@ -507,8 +507,8 @@ public:
                                 const SvxBorderLine** ppRight, const SvxBorderLine** ppBottom ) const;
 
     bool        HasAttrib( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, USHORT nMask ) const;
-    BOOL        HasAttribSelection( const ScMarkData& rMark, USHORT nMask ) const;
-    BOOL        ExtendMerge( SCCOL nStartCol, SCROW nStartRow,
+    bool        HasAttribSelection( const ScMarkData& rMark, USHORT nMask ) const;
+    bool        ExtendMerge( SCCOL nStartCol, SCROW nStartRow,
                                 SCCOL& rEndCol, SCROW& rEndRow,
                                 BOOL bRefresh, BOOL bAttrs );
     const SfxPoolItem*      GetAttr( SCCOL nCol, SCROW nRow, USHORT nWhich ) const;
@@ -569,8 +569,8 @@ public:
 
     BOOL        IsStyleSheetUsed( const ScStyleSheet& rStyle, BOOL bGatherAllStyles ) const;
 
-    BOOL        ApplyFlags( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow, INT16 nFlags );
-    BOOL        RemoveFlags( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow, INT16 nFlags );
+    bool        ApplyFlags( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow, INT16 nFlags );
+    bool        RemoveFlags( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow, INT16 nFlags );
 
     void        ApplySelectionCache( SfxItemPoolCache* pCache, const ScMarkData& rMark, ScEditDataArray* pDataArray = NULL );
     void        DeleteSelection( USHORT nDelFlag, const ScMarkData& rMark );
