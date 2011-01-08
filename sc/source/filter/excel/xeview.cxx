@@ -34,7 +34,7 @@
 #include "xelink.hxx"
 #include "xestyle.hxx"
 
-#include <oox/core/tokens.hxx>
+using namespace ::oox;
 
 using ::rtl::OString;
 

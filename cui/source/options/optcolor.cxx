@@ -945,12 +945,14 @@ ColorConfigWindow_Impl::ColorConfigWindow_Impl(Window* pParent, const ResId& rRe
 
     aColorBoxes[0]->SetHelpId( aColorLBHids[0] );
 
+    OSL_ENSURE( nCount < sal_Int32(sizeof(aColorLBHids)/sizeof(aColorLBHids[0])), "too few helpIDs for color listboxes" );
     for( sal_Int32 i = 1; i < nCount; i++ )
     {
         if(aColorBoxes[i])
         {
             aColorBoxes[i]->CopyEntries( *aColorBoxes[0] );
-            aColorBoxes[i]->SetHelpId( aColorLBHids[i] );
+            if( i < sal_Int32(sizeof(aColorLBHids)/sizeof(aColorLBHids[0])) )
+               aColorBoxes[i]->SetHelpId( aColorLBHids[i] );
         }
     }
 }

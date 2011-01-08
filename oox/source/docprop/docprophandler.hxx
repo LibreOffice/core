@@ -34,8 +34,18 @@
 
 #include <cppuhelper/implbase1.hxx>
 
+#include "oox/token/namespaces.hxx"
+#include "oox/token/tokens.hxx"
+
 namespace oox {
 namespace docprop {
+
+#define COREPR_TOKEN( token )   (::oox::NMSP_packageMetaCorePr | XML_##token)
+#define CUSTPR_TOKEN( token )   (::oox::NMSP_officeCustomPr | XML_##token)
+#define EXTPR_TOKEN( token )    (::oox::NMSP_officeExtPr | XML_##token)
+#define VT_TOKEN( token )       (::oox::NMSP_officeDocPropsVT | XML_##token)
+#define DC_TOKEN( token )       (::oox::NMSP_dc | XML_##token)
+#define DCT_TOKEN( token )      (::oox::NMSP_dcTerms | XML_##token)
 
 class OOXMLDocPropHandler : public ::cppu::WeakImplHelper1< ::com::sun::star::xml::sax::XFastDocumentHandler >
 {

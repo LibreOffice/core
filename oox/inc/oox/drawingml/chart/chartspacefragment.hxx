@@ -59,4 +59,3 @@ public:
 } // namespace oox
 
 #endif
-

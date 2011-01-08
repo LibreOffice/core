@@ -26,41 +26,41 @@
  ************************************************************************/
 
 #include "oox/xls/worksheetsettings.hxx"
+
+#include <com/sun/star/util/XProtectable.hpp>
+#include "oox/core/filterbase.hxx"
 #include "oox/helper/attributelist.hxx"
-#include "oox/helper/recordinputstream.hxx"
 #include "oox/xls/biffinputstream.hxx"
 #include "oox/xls/pagesettings.hxx"
 #include "oox/xls/workbooksettings.hxx"
-#include "oox/core/filterbase.hxx"
-#include "properties.hxx"
-
-#include <com/sun/star/util/XProtectable.hpp>
-
-using ::rtl::OUString;
-using ::com::sun::star::beans::XPropertySet;
-using ::com::sun::star::uno::Any;
-using ::com::sun::star::uno::Exception;
-using ::com::sun::star::uno::Reference;
-using ::com::sun::star::uno::UNO_QUERY_THROW;
-using ::com::sun::star::util::XProtectable;
-using ::oox::core::CodecHelper;
 
 namespace oox {
 namespace xls {
 
 // ============================================================================
 
+using namespace ::com::sun::star::beans;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::util;
+
+using ::oox::core::CodecHelper;
+using ::rtl::OUString;
+
+// ============================================================================
+
 namespace {
 
-const sal_uInt8 OOBIN_SHEETPR_FILTERMODE        = 0x01;
-const sal_uInt8 OOBIN_SHEETPR_EVAL_CF           = 0x02;
+const sal_uInt8 BIFF12_SHEETPR_FILTERMODE       = 0x01;
+const sal_uInt8 BIFF12_SHEETPR_EVAL_CF          = 0x02;
+
+const sal_uInt32 BIFF_SHEETEXT_NOTABCOLOR       = 0x7F;
 
 const sal_uInt16 BIFF_SHEETPR_DIALOGSHEET       = 0x0010;
 const sal_uInt16 BIFF_SHEETPR_APPLYSTYLES       = 0x0020;
 const sal_uInt16 BIFF_SHEETPR_SYMBOLSBELOW      = 0x0040;
 const sal_uInt16 BIFF_SHEETPR_SYMBOLSRIGHT      = 0x0080;
 const sal_uInt16 BIFF_SHEETPR_FITTOPAGES        = 0x0100;
-const sal_uInt16 BIFF_SHEETPR_SKIPEXT           = 0x0200;       /// BIFF3-BIFF4
+const sal_uInt16 BIFF_SHEETPR_SKIPEXT           = 0x0200;       // BIFF3-BIFF4
 
 const sal_uInt32 BIFF_SHEETPROT_OBJECTS         = 0x00000001;
 const sal_uInt32 BIFF_SHEETPROT_SCENARIOS       = 0x00000002;
@@ -177,7 +177,7 @@ void WorksheetSettings::importPhoneticPr( const AttributeList& rAttribs )
     maPhoneticSett.importPhoneticPr( rAttribs );
 }
 
-void WorksheetSettings::importSheetPr( RecordInputStream& rStrm )
+void WorksheetSettings::importSheetPr( SequenceInputStream& rStrm )
 {
     sal_uInt16 nFlags1;
     sal_uInt8 nFlags2;
@@ -185,8 +185,8 @@ void WorksheetSettings::importSheetPr( RecordInputStream& rStrm )
     rStrm.skip( 8 );    // sync anchor cell
     rStrm >> maSheetSettings.maCodeName;
     // sheet settings
-    maSheetSettings.mbFilterMode = getFlag( nFlags2, OOBIN_SHEETPR_FILTERMODE );
-    // outline settings, equal flags in BIFF and OOBIN
+    maSheetSettings.mbFilterMode = getFlag( nFlags2, BIFF12_SHEETPR_FILTERMODE );
+    // outline settings, equal flags in all BIFFs
     maSheetSettings.mbApplyStyles  = getFlag( nFlags1, BIFF_SHEETPR_APPLYSTYLES );
     maSheetSettings.mbSummaryRight = getFlag( nFlags1, BIFF_SHEETPR_SYMBOLSRIGHT );
     maSheetSettings.mbSummaryBelow = getFlag( nFlags1, BIFF_SHEETPR_SYMBOLSBELOW );
@@ -195,13 +195,13 @@ void WorksheetSettings::importSheetPr( RecordInputStream& rStrm )
     getPageSettings().setFitToPagesMode( getFlag( nFlags1, BIFF_SHEETPR_FITTOPAGES ) );
 }
 
-void WorksheetSettings::importChartSheetPr( RecordInputStream& rStrm )
+void WorksheetSettings::importChartSheetPr( SequenceInputStream& rStrm )
 {
     rStrm.skip( 2 );    // flags, contains only the 'published' flag
     rStrm >> maSheetSettings.maTabColor >> maSheetSettings.maCodeName;
 }
 
-void WorksheetSettings::importSheetProtection( RecordInputStream& rStrm )
+void WorksheetSettings::importSheetProtection( SequenceInputStream& rStrm )
 {
     rStrm >> maSheetProt.mnPasswordHash;
     // no flags field for all these boolean flags?!?
@@ -223,7 +223,7 @@ void WorksheetSettings::importSheetProtection( RecordInputStream& rStrm )
     maSheetProt.mbSelectUnlocked   = rStrm.readInt32() != 0;
 }
 
-void WorksheetSettings::importChartProtection( RecordInputStream& rStrm )
+void WorksheetSettings::importChartProtection( SequenceInputStream& rStrm )
 {
     rStrm >> maSheetProt.mnPasswordHash;
     // no flags field for all these boolean flags?!?
@@ -231,9 +231,19 @@ void WorksheetSettings::importChartProtection( RecordInputStream& rStrm )
     maSheetProt.mbObjects          = rStrm.readInt32() != 0;
 }
 
-void WorksheetSettings::importPhoneticPr( RecordInputStream& rStrm )
+void WorksheetSettings::importPhoneticPr( SequenceInputStream& rStrm )
 {
     maPhoneticSett.importPhoneticPr( rStrm );
+}
+
+void WorksheetSettings::importSheetExt( BiffInputStream& rStrm )
+{
+    rStrm.skip( 16 );
+    sal_uInt32 nFlags;
+    rStrm >> nFlags;
+    sal_uInt8 nColorIdx = extractValue< sal_uInt8 >( nFlags, 0, 7 );
+    if( nColorIdx != BIFF_SHEETEXT_NOTABCOLOR )
+        maSheetSettings.maTabColor.setPaletteClr( nColorIdx );
 }
 
 void WorksheetSettings::importSheetPr( BiffInputStream& rStrm )
@@ -324,10 +334,11 @@ void WorksheetSettings::finalizeImport()
     PropertySet aPropSet( getSheet() );
     aPropSet.setProperty( PROP_CodeName, maSheetSettings.maCodeName );
 
-    if (!maSheetSettings.maTabColor.isAuto())
+    // sheet tab color
+    if( !maSheetSettings.maTabColor.isAuto() )
     {
-        sal_Int32 nColor = maSheetSettings.maTabColor.getColor(getBaseFilter().getGraphicHelper());
-        aPropSet.setProperty(PROP_TabColor, nColor);
+        sal_Int32 nColor = maSheetSettings.maTabColor.getColor( getBaseFilter().getGraphicHelper() );
+        aPropSet.setProperty( PROP_TabColor, nColor );
     }
 }
 
@@ -335,4 +346,3 @@ void WorksheetSettings::finalizeImport()
 
 } // namespace xls
 } // namespace oox
-

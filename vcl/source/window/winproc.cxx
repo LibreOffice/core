@@ -42,7 +42,6 @@
 #include <unotools/localedatawrapper.hxx>
 #include <vcl/svdata.hxx>
 #include <vcl/dbggui.hxx>
-#include <vcl/windata.hxx>
 #include <vcl/timer.hxx>
 #include <vcl/event.hxx>
 #include <vcl/sound.hxx>

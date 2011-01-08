@@ -533,7 +533,7 @@
 #include "unotools/processfactory.hxx"
 
 
-#include "vcl/fldunit.hxx"
+#include "tools/fldunit.hxx"
 
 #include "vos/conditn.hxx"
 #include "vos/diagnose.hxx"

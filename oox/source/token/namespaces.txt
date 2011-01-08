@@ -1,49 +1,52 @@
-# Relations, XML
-XML
-PACKAGE_RELATIONSHIPS
-RELATIONSHIPS
-CONTENT_TYPES
 
-# Office global
-THEME
-ACTIVATION
-MATH
+# generic XML -----------------------------------------------------------------
 
-#DrawingML
-DRAWINGML
-PICTURE
-DIAGRAM
-CHART
-CDR
-DOC_DRAWINGML
+xml                     http://www.w3.org/XML/1998/namespace
+schema                  http://schemas.openxmlformats.org/schemaLibrary/2006/main
 
-# VML
-VML
-OFFICE
-VML_DOC
-VML_XLS
-VML_PPT
-AX
+# package ---------------------------------------------------------------------
 
-#SpreadsheetML
-XLS
-XDR
-XM
+packageContentTypes     http://schemas.openxmlformats.org/package/2006/content-types
+packageMetaCorePr       http://schemas.openxmlformats.org/package/2006/metadata/core-properties
+packageRel              http://schemas.openxmlformats.org/package/2006/relationships
 
-#PresentationML
-PPT
+# office shared ---------------------------------------------------------------
 
-#WordprocessingML
-DOC
-SML
+officeCustomPr          http://schemas.openxmlformats.org/officeDocument/2006/custom-properties
+officeDocPropsVT        http://schemas.openxmlformats.org/officeDocument/2006/docPropsVTypes
+officeExtPr             http://schemas.openxmlformats.org/officeDocument/2006/extended-properties
+officeMath              http://schemas.openxmlformats.org/officeDocument/2006/math
+officeRel               http://schemas.openxmlformats.org/officeDocument/2006/relationships
+officeRelTheme          http://schemas.openxmlformats.org/officeDocument/2006/relationships/theme
 
-# Document properties
-COREPR
-DC
-DCTERMS
-EXTPR
-CUSTPR
-VT
+# applications ----------------------------------------------------------------
 
-# Other elements: used by writerfilter
-SPRM
+doc                     http://schemas.openxmlformats.org/wordprocessingml/2006/main
+xls                     http://schemas.openxmlformats.org/spreadsheetml/2006/main
+ppt                     http://schemas.openxmlformats.org/presentationml/2006/main
+
+# drawing ---------------------------------------------------------------------
+
+dml                     http://schemas.openxmlformats.org/drawingml/2006/main
+dmlChart                http://schemas.openxmlformats.org/drawingml/2006/chart
+dmlChartDr              http://schemas.openxmlformats.org/drawingml/2006/chartDrawing
+dmlDiagram              http://schemas.openxmlformats.org/drawingml/2006/diagram
+dmlPicture              http://schemas.openxmlformats.org/drawingml/2006/picture
+dmlSpreadDr             http://schemas.openxmlformats.org/drawingml/2006/spreadsheetDrawing
+dmlWordDr               http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing
+
+# VML -------------------------------------------------------------------------
+
+vml                     urn:schemas-microsoft-com:vml
+vmlExcel                urn:schemas-microsoft-com:office:excel
+vmlOffice               urn:schemas-microsoft-com:office:office
+vmlPowerpoint           urn:schemas-microsoft-com:office:powerpoint
+vmlWord                 urn:schemas-microsoft-com:office:word
+
+# other -----------------------------------------------------------------------
+
+ax                      http://schemas.microsoft.com/office/2006/activeX
+dc                      http://purl.org/dc/elements/1.1/
+dcTerms                 http://purl.org/dc/terms/
+xm                      http://schemas.microsoft.com/office/excel/2006/main
+sprm                    http://sprm

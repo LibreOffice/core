@@ -26,16 +26,20 @@
  ************************************************************************/
 
 #include "oox/vml/vmlshapecontainer.hxx"
+
 #include "oox/vml/vmldrawing.hxx"
 #include "oox/vml/vmlshape.hxx"
 
-using ::rtl::OUString;
-using ::com::sun::star::uno::Reference;
-using ::com::sun::star::awt::Rectangle;
-using ::com::sun::star::drawing::XShapes;
-
 namespace oox {
 namespace vml {
+
+// ============================================================================
+
+using namespace ::com::sun::star::awt;
+using namespace ::com::sun::star::drawing;
+using namespace ::com::sun::star::uno;
+
+using ::rtl::OUString;
 
 // ============================================================================
 
@@ -130,4 +134,3 @@ void ShapeContainer::convertAndInsert( const Reference< XShapes >& rxShapes, con
 
 } // namespace vml
 } // namespace oox
-

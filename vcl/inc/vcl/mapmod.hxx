@@ -33,7 +33,7 @@
 #include <vcl/sv.h>
 #include <vcl/dllapi.h>
 #include <tools/resid.hxx>
-#include <vcl/mapunit.hxx>
+#include <tools/mapunit.hxx>
 
 class SvStream;
 

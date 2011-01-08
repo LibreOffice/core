@@ -43,7 +43,7 @@
 #include <svl/numuno.hxx>
 #include <vcl/svapp.hxx>
 #include <tools/debug.hxx>
-#include <vcl/wintypes.hxx>
+#include <tools/wintypes.hxx>
 #include <i18npool/mslangid.hxx>
 #include <rtl/textenc.h>
 #include <com/sun/star/sdbc/DataType.hpp>

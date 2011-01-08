@@ -2,12 +2,15 @@ AbsoluteName
 Action
 ActiveSplitRange
 ActiveTable
+Address
 Adjust
 AdjustContrast
 AdjustLuminance
 AdjustmentValues
 Align
 AnchorPosition
+ApplyFormDesignMode
+AreaLinks
 ArrangeOrder
 Aspect
 AttachedAxisIndex
@@ -87,6 +90,7 @@ ContainsHeader
 Coordinates
 CopyBack
 CopyFormulas
+CopyOutputData
 CopyStyles
 CrossoverPosition
 CrossoverValue
@@ -104,11 +108,11 @@ D3DSceneShadeMode
 DDELinks
 DatabaseRanges
 Decoration
-DefaultContext
 DefaultScrollValue
 DefaultSpinValue
 DefaultState
 DefaultText
+DefaultValue
 DiagonalBLTR
 DiagonalTLBR
 DialogLibraries
@@ -143,6 +147,9 @@ FillGradient
 FillGradientName
 FillStyle
 FillTransparence
+Filter
+FilterCriteriaSource
+FilterOptions
 FirstLineOffset
 FirstPageNumber
 FocusOnClick
@@ -208,6 +215,7 @@ InputMessage
 InputTitle
 IsActive
 IsAdjustHeightEnabled
+IsCaseSensitive
 IsCellBackgroundTransparent
 IsChangeReadOnlyEnabled
 IsDate
@@ -280,6 +288,7 @@ NumberingType
 Offset
 OpCodeMap
 Orientation
+OutputPosition
 OverlapSequence
 PageScale
 PageStyle
@@ -331,6 +340,8 @@ RefX
 RefY
 Reference
 ReferenceDevice
+ReferenceSheet
+RefreshPeriod
 RegularExpressions
 RelId
 RelativeHorizontalTabbarWidth
@@ -350,6 +361,7 @@ RotationHorizontal
 RotationVertical
 RowGrand
 RowLabelRanges
+SaveOutputPosition
 ScaleMode
 ScaleToPages
 ScaleToPagesX
@@ -382,10 +394,14 @@ ShowPositiveError
 ShowZeroValues
 ShrinkToFit
 Size
+Size100thMM
+SizePixel
+SkipDuplicates
 SortInfo
 Sound
 SoundOn
 Speed
+Spin
 SpinIncrement
 SpinValue
 SpinValueMax
@@ -439,11 +455,14 @@ Transparency
 TriState
 Type
 URL
+Url
+UseFilterCriteriaSource
 UseRegularExpressions
 UseRings
 UseSelectedPage
 VScroll
 Validation
+Value
 VaryColorsByPoint
 VertJustify
 VerticalAlign
@@ -458,5 +477,6 @@ Weight
 WhiteDay
 Width
 WritingMode
+XLA1Representation
 ZoomType
 ZoomValue

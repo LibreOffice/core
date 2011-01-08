@@ -28,7 +28,7 @@
 #ifndef _SV_FILTER_OPTIONS_DIALOG_HXX_
 #define _SV_FILTER_OPTIONS_DIALOG_HXX_
 
-#include <vcl/fldunit.hxx>
+#include <tools/fldunit.hxx>
 #include <cppuhelper/implbase5.hxx>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>

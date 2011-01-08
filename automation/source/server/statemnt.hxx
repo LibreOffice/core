@@ -40,7 +40,7 @@
 #ifndef _STATEMNT_HXX
 #define _STATEMNT_HXX
 
-#include <vcl/wintypes.hxx>
+#include <tools/wintypes.hxx>
 #include <tools/string.hxx>
 #include <tools/debug.hxx>
 #include <tools/time.hxx>

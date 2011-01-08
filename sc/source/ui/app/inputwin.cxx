@@ -770,11 +770,11 @@ ScTextWnd::ScTextWnd( Window* pParent )
 
 __EXPORT ScTextWnd::~ScTextWnd()
 {
-    delete pEditView;
-    delete pEditEngine;
     while (!maAccTextDatas.empty()) {
         maAccTextDatas.back()->Dispose();
     }
+    delete pEditView;
+    delete pEditEngine;
 }
 
 void __EXPORT ScTextWnd::Paint( const Rectangle& rRec )

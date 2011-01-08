@@ -93,4 +93,3 @@ struct LegendModel
 } // namespace oox
 
 #endif
-

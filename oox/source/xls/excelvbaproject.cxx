@@ -38,7 +38,6 @@
 #include <rtl/ustrbuf.hxx>
 #include "oox/helper/helper.hxx"
 #include "oox/helper/propertyset.hxx"
-#include "properties.hxx"
 
 namespace oox {
 namespace xls {
@@ -58,23 +57,10 @@ using ::rtl::OUStringBuffer;
 
 // ============================================================================
 
-ExcelVbaProject::ExcelVbaProject( const Reference< XMultiServiceFactory >& rxGlobalFactory, const Reference< XSpreadsheetDocument >& rxDocument ) :
-    ::oox::ole::VbaProject( rxGlobalFactory, Reference< XModel >( rxDocument, UNO_QUERY ), CREATE_OUSTRING( "Calc" ) ),
+ExcelVbaProject::ExcelVbaProject( const Reference< XComponentContext >& rxContext, const Reference< XSpreadsheetDocument >& rxDocument ) :
+    ::oox::ole::VbaProject( rxContext, Reference< XModel >( rxDocument, UNO_QUERY ), CREATE_OUSTRING( "Calc" ) ),
     mxDocument( rxDocument )
 {
-}
-
-void ExcelVbaProject::createMissingModules()
-{
-    /*  !! HACK !! This function is called from old XLS filter only, must be
-        removed when this filter uses the OOX VBA import instead of the old SVX
-        VBA import.
-     */
-
-    // collect and register all sheets without codenames
-    prepareImport();
-    // manually create the registered dummy modules
-    createDummyModules();
 }
 
 // protected ------------------------------------------------------------------

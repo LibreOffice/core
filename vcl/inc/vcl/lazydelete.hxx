@@ -39,6 +39,8 @@
 #include <stdio.h>
 #endif
 
+#include <com/sun/star/lang/XComponent.hpp>
+
 namespace vcl
 {
     /* Helpers for lazy object deletion
@@ -255,6 +257,43 @@ namespace vcl
         // set contents, returning old contents
         // ownership is transfered !
         T* set( T* i_pNew ) { T* pOld = m_pT; m_pT = i_pNew; return pOld; }
+    };
+
+    /** Similar to DeleteOnDeinit, the DeleteUnoReferenceOnDeinit
+        template class makes sure that a static UNO object is disposed
+        and released at the right time.
+
+        Use like
+            static DeleteUnoReferenceOnDeinit<lang::XMultiServiceFactory>
+                xStaticFactory (<create factory object>);
+            Reference<lang::XMultiServiceFactory> xFactory (xStaticFactory.get());
+            if (xFactory.is())
+                <do something with xFactory>
+    */
+    template <typename I>
+    class DeleteUnoReferenceOnDeinit : public ::vcl::DeleteOnDeinitBase
+    {
+        ::com::sun::star::uno::Reference<I> m_xI;
+        virtual void doCleanup() { set(NULL); }
+    public:
+        DeleteUnoReferenceOnDeinit(const ::com::sun::star::uno::Reference<I>& r_xI ) : m_xI( r_xI ) {
+            addDeinitContainer( this ); }
+        virtual ~DeleteUnoReferenceOnDeinit() {}
+
+        ::com::sun::star::uno::Reference<I> get (void) { return m_xI; }
+
+        void set (const ::com::sun::star::uno::Reference<I>& r_xNew )
+        {
+            ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent> xComponent (m_xI, ::com::sun::star::uno::UNO_QUERY);
+            m_xI = r_xNew;
+            if (xComponent.is()) try
+            {
+                xComponent->dispose();
+            }
+            catch( ::com::sun::star::uno::Exception& )
+            {
+            }
+        }
     };
 }
 

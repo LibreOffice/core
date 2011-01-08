@@ -289,7 +289,7 @@ DockingWindow RID_SVXDLG_BMPMASK
                     ImageBitmap = Bitmap { File = "sc10350.bmp" ; };
                     MASKCOLOR
                 };
-                Text [ en-US ] = "Eyedropper" ;
+                Text [ en-US ] = "Pipette" ;
             };
         };
     };
@@ -300,7 +300,7 @@ DockingWindow RID_SVXDLG_BMPMASK
         Pos = MAP_APPFONT ( 22 , 6 ) ;
         Size = MAP_APPFONT ( 43 , 14 ) ;
     };
-    Text [ en-US ] = "Eyedropper" ;
+    Text [ en-US ] = "Color Replacer" ;
 
     Image IMG_PIPETTE
     {

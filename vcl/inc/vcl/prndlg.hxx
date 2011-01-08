@@ -59,6 +59,7 @@ namespace vcl
             VirtualDevice       maPageVDev;
             rtl::OUString       maReplacementString;
             rtl::OUString       maToolTipString;
+            bool                mbGreyscale;
             FixedLine           maHorzDim;
             FixedLine           maVertDim;
 
@@ -73,7 +74,8 @@ namespace vcl
             virtual void DataChanged( const DataChangedEvent& );
 
             void setPreview( const GDIMetaFile&, const Size&, const rtl::OUString&,
-                             sal_Int32 i_nDPIX, sal_Int32 i_nDPIY
+                             sal_Int32 i_nDPIX, sal_Int32 i_nDPIY,
+                             bool i_bGreyscale
                             );
         };
 

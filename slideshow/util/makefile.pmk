@@ -35,7 +35,7 @@ CDEFS += -DBOOST_SP_ENABLE_DEBUG_HOOKS
 
 .IF "$(COM)"=="MSC"
 # disable inlining for MSVC
-CFLAGS += -Ob0
+#CFLAGS += -Ob0
 .ENDIF
 
 .ENDIF # "$(debug)"!="" || "$(DEBUG)"!=""

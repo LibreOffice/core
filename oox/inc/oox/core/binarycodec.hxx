@@ -319,4 +319,3 @@ private:
 } // namespace oox
 
 #endif
-

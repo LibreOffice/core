@@ -702,6 +702,17 @@ BOOL FuText::MouseButtonUp(const MouseEvent& rMEvt)
         mpView->EndDragObj( mpView->IsDragWithCopy() );
         mpView->ForceMarkedToAnotherPage();
         mpView->SetCurrentObj(OBJ_TEXT);
+
+        USHORT nDrgLog = USHORT ( mpWindow->PixelToLogic(Size(DRGPIX,0)).Width() );
+
+        if ( mpView->IsRotateAllowed() && mpViewShell->GetFrameView()->IsClickChangeRotation() && (rMEvt.GetClicks() != 2) &&
+            !rMEvt.IsShift() && !rMEvt.IsMod1() && !rMEvt.IsMod2() && !rMEvt.IsRight() &&
+            Abs(aPnt.X() - aMDPos.X()) < nDrgLog &&
+            Abs(aPnt.Y() - aMDPos.Y()) < nDrgLog)
+        {
+            // toggle to rotation mode
+            mpViewShell->GetViewFrame()->GetDispatcher()->Execute( SID_OBJECT_ROTATE, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD );
+        }
     }
     else if( mpView && mpView->IsCreateObj() && rMEvt.IsLeft())
     {

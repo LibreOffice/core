@@ -1035,7 +1035,6 @@ TabPage TP_OPTSHDWCRSR
     };
 };
 
-
 StringArray STR_PRINTOPTUI
 {
     ItemList [en-US] =
@@ -1043,47 +1042,33 @@ StringArray STR_PRINTOPTUI
         < "%PRODUCTNAME %s"; >;
         < "Contents"; >;
         < "Page ba~ckground"; >;
-        < "Specifies whether to include colors and objects that are inserted to the background of the page (Format - Page - Background) in the printed document."; >;
         < "P~ictures and other graphic objects"; >;
-        < "Specifies whether the graphics and drawing or OLE objects of your text document are printed"; >;
         < "Hidden te~xt"; >;
-        < "Enable this option to print text that is marked as hidden."; >;
         < "~Text placeholders"; >;
-        < "Enable this option to print text placeholders. Disable this option to leave the text placeholders blank in the printout."; >;
         < "Form control~s"; >;
-        < "Specifies whether the form control fields of the text document are printed"; >;
         < "Color"; >;
         < "Print text in blac~k"; >;
-        < "Specifies whether to always print text in black."; >;
         < "Pages"; >;
         < "Print ~automatically inserted blank pages"; >;
-        < "If this option is enabled automatically inserted blank pages are printed. This is best if you are printing double-sided. For example, in a book, a \"chapter\" paragraph style has been set to always start with an odd numbered page. If the previous chapter ends on an odd page, %PRODUCTNAME inserts an even numbered blank page. This option controls whether to print that even numbered page or not"; >;
         < "~Use only paper tray from printer preferences"; >;
-        < "For printers with multiple trays this option specifies whether the paper tray used is specified by the system settings of the printer."; >;
         < "Print"; >;
         < "None (document only)"; >;
         < "Comments only"; >;
         < "Place at end of document"; >;
         < "Place at end of page"; >;
-        < "Specify where to print comments (if any)."; >;
         < "~Comments"; >;
         < "Page sides";>;
         < "All pages"; >;
         < "Back sides / left pages"; >;
         < "Front sides / right pages"; >;
-        < "Specify which pages to include in the output"; >;
         < "Include"; >;
         < "Broch~ure"; >;
-        < "Select the Brochure option to print the document in brochure format."; >;
         < "Left-to-right script"; >;
         < "Right-to-left script"; >;
         < "Range and copies"; >;
         < "~All pages"; >;
-        < "Print the whole document."; >;
         < "Pa~ges"; >;
-        < "Print a range of pages of the document."; >;
         < "~Selection"; >;
-        < "Print only the selected parts of the document"; >;
     };
 };
 

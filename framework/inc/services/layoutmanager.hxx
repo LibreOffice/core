@@ -85,7 +85,7 @@
 #include <cppuhelper/implbase8.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
 #include <comphelper/propertycontainer.hxx>
-#include <vcl/wintypes.hxx>
+#include <tools/wintypes.hxx>
 #include <svtools/miscopt.hxx>
 #include <vcl/toolbox.hxx>
 #include <vcl/timer.hxx>

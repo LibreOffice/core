@@ -26,6 +26,7 @@
  ************************************************************************/
 
 #include "oox/ole/olestorage.hxx"
+
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/embed/XTransactedObject.hpp>
@@ -35,35 +36,24 @@
 #include <com/sun/star/io/XStream.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <cppuhelper/implbase2.hxx>
-#include "oox/helper/helper.hxx"
 #include "oox/helper/binaryinputstream.hxx"
 #include "oox/helper/binaryoutputstream.hxx"
-
-using ::rtl::OUString;
-using ::com::sun::star::container::XNameContainer;
-using ::com::sun::star::beans::PropertyValue;
-using ::com::sun::star::embed::XStorage;
-using ::com::sun::star::embed::XTransactedObject;
-using ::com::sun::star::io::BufferSizeExceededException;
-using ::com::sun::star::io::IOException;
-using ::com::sun::star::io::NotConnectedException;
-using ::com::sun::star::io::XInputStream;
-using ::com::sun::star::io::XOutputStream;
-using ::com::sun::star::io::XSeekable;
-using ::com::sun::star::io::XStream;
-using ::com::sun::star::lang::IllegalArgumentException;
-using ::com::sun::star::lang::XMultiServiceFactory;
-using ::com::sun::star::uno::Any;
-using ::com::sun::star::uno::Exception;
-using ::com::sun::star::uno::Reference;
-using ::com::sun::star::uno::RuntimeException;
-using ::com::sun::star::uno::Sequence;
-using ::com::sun::star::uno::UNO_QUERY;
-using ::com::sun::star::uno::UNO_QUERY_THROW;
-using ::com::sun::star::uno::UNO_SET_THROW;
+#include "oox/helper/containerhelper.hxx"
+#include "oox/helper/helper.hxx"
 
 namespace oox {
 namespace ole {
+
+// ============================================================================
+
+using namespace ::com::sun::star::beans;
+using namespace ::com::sun::star::container;
+using namespace ::com::sun::star::embed;
+using namespace ::com::sun::star::io;
+using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::uno;
+
+using ::rtl::OUString;
 
 // ============================================================================
 

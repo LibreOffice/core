@@ -26,19 +26,22 @@
  ************************************************************************/
 
 #include "oox/drawingml/chart/chartspacefragment.hxx"
+
 #include "oox/drawingml/shapepropertiescontext.hxx"
 #include "oox/drawingml/textbodycontext.hxx"
 #include "oox/drawingml/chart/chartspacemodel.hxx"
 #include "oox/drawingml/chart/plotareacontext.hxx"
 #include "oox/drawingml/chart/titlecontext.hxx"
 
-using ::rtl::OUString;
-using ::oox::core::ContextHandlerRef;
-using ::oox::core::XmlFilterBase;
-
 namespace oox {
 namespace drawingml {
 namespace chart {
+
+// ============================================================================
+
+using namespace ::oox::core;
+
+using ::rtl::OUString;
 
 // ============================================================================
 
@@ -124,4 +127,3 @@ ContextHandlerRef ChartSpaceFragment::onCreateContext( sal_Int32 nElement, const
 } // namespace chart
 } // namespace drawingml
 } // namespace oox
-

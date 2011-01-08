@@ -66,7 +66,7 @@
 
 #include <vcl/msgbox.hxx>
 #include <vcl/waitobj.hxx>
-#include <vcl/fldunit.hxx>
+#include <tools/fldunit.hxx>
 #include <vcl/stdtext.hxx>
 
 #include "ModuleHelper.hxx"

@@ -436,6 +436,12 @@ BOOL FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
                                 mpView->BegMarkObj(aMDPos);
                         }
                     }
+
+                    if( bMarked && bTempRotation && (nSlotId == SID_OBJECT_ROTATE) && !rMEvt.IsShift() && (rMEvt.GetClicks() != 2) )
+                    {
+                        nSlotId = SID_OBJECT_SELECT;
+                        Activate();
+                    }
                 }
             }
         }
@@ -711,6 +717,8 @@ BOOL FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
 
                 if (nSlotId == SID_OBJECT_SELECT
                     && mpView->IsRotateAllowed()
+
+                    && (rMEvt.GetClicks() != 2)
                     && (mpViewShell->GetFrameView()->IsClickChangeRotation()
                         || (pSingleObj
                             && pSingleObj->GetObjInventor()==E3dInventor))

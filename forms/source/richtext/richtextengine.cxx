@@ -38,7 +38,7 @@
 #define ITEMID_LANGUAGE     EE_CHAR_LANGUAGE
 #include <editeng/langitem.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/mapunit.hxx>
+#include <tools/mapunit.hxx>
 #include <vcl/mapmod.hxx>
 #include <vcl/outdev.hxx>
 #include <unotools/lingucfg.hxx>

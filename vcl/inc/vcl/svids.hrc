@@ -31,11 +31,7 @@
 #include "svl/solar.hrc"
 
 #define SV_RESID_STDOFFSET                  0
-#define SV_RESID_WINOFFSET                  1
-#define SV_RESID_OS2OFFSET                  2
-#define SV_RESID_MACOFFSET                  3
-#define SV_RESID_UNIXOFFSET                 4
-#define SV_RESID_MONOOFFSET                 5
+#define SV_RESID_MONOOFFSET                 1
 
 // Achtung: Diese Id's muessen min. 10 Werte auseinanderliegen, da
 // je nach Style noch ein Offset aufgerechnet wird

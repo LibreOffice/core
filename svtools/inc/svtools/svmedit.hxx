@@ -28,7 +28,7 @@
 #ifndef _SVEDIT_HXX
 #define _SVEDIT_HXX
 
-#include <vcl/wintypes.hxx>
+#include <tools/wintypes.hxx>
 #include <vcl/edit.hxx>
 
 #include <svtools/syntaxhighlight.hxx>

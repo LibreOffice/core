@@ -26,20 +26,23 @@
  ************************************************************************/
 
 #include "oox/xls/excelhandlers.hxx"
+
 #include "oox/core/filterbase.hxx"
 #include "oox/xls/biffinputstream.hxx"
-
-using ::rtl::OUString;
-using ::oox::core::FilterBase;
-using ::oox::core::FragmentHandler2;
 
 namespace oox {
 namespace xls {
 
 // ============================================================================
+
+using ::oox::core::FilterBase;
+using ::oox::core::FragmentHandler2;
+using ::rtl::OUString;
+
+// ============================================================================
 // ============================================================================
 
-OoxWorkbookFragmentBase::OoxWorkbookFragmentBase(
+WorkbookFragmentBase::WorkbookFragmentBase(
         const WorkbookHelper& rHelper, const OUString& rFragmentPath ) :
     FragmentHandler2( rHelper.getOoxFilter(), rFragmentPath ),
     WorkbookHelper( rHelper )
@@ -48,14 +51,14 @@ OoxWorkbookFragmentBase::OoxWorkbookFragmentBase(
 
 // ============================================================================
 
-OoxWorksheetFragmentBase::OoxWorksheetFragmentBase( const WorkbookHelper& rHelper,
-        const OUString& rFragmentPath, ISegmentProgressBarRef xProgressBar, WorksheetType eSheetType, sal_Int16 nSheet ) :
+WorksheetFragmentBase::WorksheetFragmentBase( const WorkbookHelper& rHelper,
+        const OUString& rFragmentPath, const ISegmentProgressBarRef& rxProgressBar, WorksheetType eSheetType, sal_Int16 nSheet ) :
     FragmentHandler2( rHelper.getOoxFilter(), rFragmentPath ),
-    WorksheetHelperRoot( rHelper, xProgressBar, eSheetType, nSheet )
+    WorksheetHelperRoot( rHelper, rxProgressBar, eSheetType, nSheet )
 {
 }
 
-OoxWorksheetFragmentBase::OoxWorksheetFragmentBase(
+WorksheetFragmentBase::WorksheetFragmentBase(
         const WorksheetHelper& rHelper, const OUString& rFragmentPath ) :
     FragmentHandler2( rHelper.getOoxFilter(), rFragmentPath ),
     WorksheetHelperRoot( rHelper )
@@ -63,6 +66,32 @@ OoxWorksheetFragmentBase::OoxWorksheetFragmentBase(
 }
 
 // ============================================================================
+// ============================================================================
+
+BiffContextHandler::~BiffContextHandler()
+{
+}
+
+// ----------------------------------------------------------------------------
+
+BiffWorkbookContextBase::BiffWorkbookContextBase( const WorkbookHelper& rHelper ) :
+    WorkbookHelper( rHelper )
+{
+}
+
+// ----------------------------------------------------------------------------
+
+BiffWorksheetContextBase::BiffWorksheetContextBase( const WorkbookHelper& rHelper,
+        const ISegmentProgressBarRef& rxProgressBar, WorksheetType eSheetType, sal_Int16 nSheet ) :
+    WorksheetHelperRoot( rHelper, rxProgressBar, eSheetType, nSheet )
+{
+}
+
+BiffWorksheetContextBase::BiffWorksheetContextBase( const WorksheetHelper& rHelper ) :
+    WorksheetHelperRoot( rHelper )
+{
+}
+
 // ============================================================================
 
 namespace {
@@ -74,99 +103,17 @@ const sal_uInt16 BIFF_BOF_CHART             = 0x0020;   /// BIFF2-BIFF8 chart sh
 const sal_uInt16 BIFF_BOF_MACRO             = 0x0040;   /// BIFF4-BIFF8 macro sheet.
 const sal_uInt16 BIFF_BOF_WORKSPACE         = 0x0100;   /// BIFF3-BIFF8 workspace.
 
-} // namespace
-
-// ============================================================================
-
-BiffHandlerBase::~BiffHandlerBase()
-{
-}
-
-bool BiffHandlerBase::skipRecordBlock( sal_uInt16 nEndRecId )
-{
-    sal_uInt16 nStartRecId = mrStrm.getRecId();
-    while( mrStrm.startNextRecord() && (mrStrm.getRecId() != nEndRecId) )
-        if( mrStrm.getRecId() == nStartRecId )
-            skipRecordBlock( nEndRecId );
-    return !mrStrm.isEof() && (mrStrm.getRecId() == nEndRecId);
-}
-
-bool BiffHandlerBase::isBofRecord() const
-{
-    return
-        (mrStrm.getRecId() == BIFF2_ID_BOF) ||
-        (mrStrm.getRecId() == BIFF3_ID_BOF) ||
-        (mrStrm.getRecId() == BIFF4_ID_BOF) ||
-        (mrStrm.getRecId() == BIFF5_ID_BOF);
-}
-
-// ============================================================================
-
-BiffContextHandler::BiffContextHandler( const BiffHandlerBase& rParent ) :
-    BiffHandlerBase( rParent )
-{
-}
-
-// ============================================================================
-
-namespace prv {
-
-BiffFragmentStreamOwner::BiffFragmentStreamOwner( const FilterBase& rFilter, const OUString& rStrmName )
-{
-    // do not automatically close the root stream (indicated by empty stream name)
-    mxXInStrm.reset( new BinaryXInputStream( rFilter.openInputStream( rStrmName ), rStrmName.getLength() > 0 ) );
-    mxBiffStrm.reset( new BiffInputStream( *mxXInStrm ) );
-}
-
-BiffFragmentStreamOwner::~BiffFragmentStreamOwner()
-{
-}
-
-} // namespace prv
-
-// ----------------------------------------------------------------------------
-
-BiffFragmentHandler::BiffFragmentHandler( const FilterBase& rFilter, const OUString& rStrmName ) :
-    prv::BiffFragmentStreamOwner( rFilter, rStrmName ),
-    BiffHandlerBase( *mxBiffStrm )
-{
-}
-
-BiffFragmentHandler::BiffFragmentHandler( const BiffFragmentHandler& rHandler ) :
-    prv::BiffFragmentStreamOwner( rHandler ),
-    BiffHandlerBase( rHandler )
-{
-}
-
-BiffFragmentType BiffFragmentHandler::startFragment( BiffType eBiff )
-{
-    return mrStrm.startNextRecord() ? implStartFragment( eBiff ) : BIFF_FRAGMENT_UNKNOWN;
-}
-
-BiffFragmentType BiffFragmentHandler::startFragment( BiffType eBiff, sal_Int64 nRecHandle )
-{
-    return mrStrm.startRecordByHandle( nRecHandle ) ? implStartFragment( eBiff ) : BIFF_FRAGMENT_UNKNOWN;
-}
-
-bool BiffFragmentHandler::skipFragment()
-{
-    while( mrStrm.startNextRecord() && (mrStrm.getRecId() != BIFF_ID_EOF) )
-        if( isBofRecord() )
-            skipFragment();
-    return !mrStrm.isEof() && (mrStrm.getRecId() == BIFF_ID_EOF);
-}
-
-BiffFragmentType BiffFragmentHandler::implStartFragment( BiffType eBiff )
+BiffFragmentType lclStartFragment( BiffInputStream& rStrm, BiffType eBiff )
 {
     BiffFragmentType eFragment = BIFF_FRAGMENT_UNKNOWN;
     /*  #i23425# Don't rely on BOF record ID to read BOF contents, but on
         the detected BIFF version. */
-    if( isBofRecord() )
+    if( BiffHelper::isBofRecord( rStrm ) )
     {
         // BOF is always written unencrypted
-        mrStrm.enableDecoder( false );
-        mrStrm.skip( 2 );
-        sal_uInt16 nType = mrStrm.readuInt16();
+        rStrm.enableDecoder( false );
+        rStrm.skip( 2 );
+        sal_uInt16 nType = rStrm.readuInt16();
 
         // decide which fragment types are valid for current BIFF version
         switch( eBiff )
@@ -219,30 +166,64 @@ BiffFragmentType BiffFragmentHandler::implStartFragment( BiffType eBiff )
     return eFragment;
 }
 
-// ============================================================================
+} // namespace
+
+// ----------------------------------------------------------------------------
+
+BiffFragmentHandler::BiffFragmentHandler( const FilterBase& rFilter, const OUString& rStrmName )
+{
+    // do not automatically close the root stream (indicated by empty stream name)
+    bool bRootStrm = rStrmName.getLength() == 0;
+    mxXInStrm.reset( new BinaryXInputStream( rFilter.openInputStream( rStrmName ), !bRootStrm ) );
+    mxBiffStrm.reset( new BiffInputStream( *mxXInStrm ) );
+}
+
+BiffFragmentHandler::~BiffFragmentHandler()
+{
+}
+
+BiffFragmentType BiffFragmentHandler::startFragment( BiffType eBiff )
+{
+    return mxBiffStrm->startNextRecord() ? lclStartFragment( *mxBiffStrm, eBiff ) : BIFF_FRAGMENT_UNKNOWN;
+}
+
+BiffFragmentType BiffFragmentHandler::startFragment( BiffType eBiff, sal_Int64 nRecHandle )
+{
+    return mxBiffStrm->startRecordByHandle( nRecHandle ) ? lclStartFragment( *mxBiffStrm, eBiff ) : BIFF_FRAGMENT_UNKNOWN;
+}
+
+bool BiffFragmentHandler::skipFragment()
+{
+    while( mxBiffStrm->startNextRecord() && (mxBiffStrm->getRecId() != BIFF_ID_EOF) )
+        if( BiffHelper::isBofRecord( *mxBiffStrm ) )
+            skipFragment();
+    return !mxBiffStrm->isEof() && (mxBiffStrm->getRecId() == BIFF_ID_EOF);
+}
+
+// ----------------------------------------------------------------------------
 
 BiffWorkbookFragmentBase::BiffWorkbookFragmentBase( const WorkbookHelper& rHelper, const OUString& rStrmName, bool bCloneDecoder ) :
     BiffFragmentHandler( rHelper.getBaseFilter(), rStrmName ),
     WorkbookHelper( rHelper )
 {
     if( bCloneDecoder )
-        getCodecHelper().cloneDecoder( mrStrm );
+        getCodecHelper().cloneDecoder( getInputStream() );
 }
 
-// ============================================================================
+// ----------------------------------------------------------------------------
 
 BiffWorksheetFragmentBase::BiffWorksheetFragmentBase( const BiffWorkbookFragmentBase& rParent,
-        ISegmentProgressBarRef xProgressBar, WorksheetType eSheetType, sal_Int16 nSheet ) :
+        const ISegmentProgressBarRef& rxProgressBar, WorksheetType eSheetType, sal_Int16 nSheet ) :
     BiffFragmentHandler( rParent ),
-    WorksheetHelperRoot( rParent, xProgressBar, eSheetType, nSheet )
+    WorksheetHelperRoot( rParent, rxProgressBar, eSheetType, nSheet )
 {
 }
 
-// ============================================================================
+// ----------------------------------------------------------------------------
 
-BiffSkipWorksheetFragment::BiffSkipWorksheetFragment(
-        const BiffWorkbookFragmentBase& rParent, ISegmentProgressBarRef xProgressBar, sal_Int16 nSheet ) :
-    BiffWorksheetFragmentBase( rParent, xProgressBar, SHEETTYPE_EMPTYSHEET, nSheet )
+BiffSkipWorksheetFragment::BiffSkipWorksheetFragment( const BiffWorkbookFragmentBase& rParent,
+        const ISegmentProgressBarRef& rxProgressBar, sal_Int16 nSheet ) :
+    BiffWorksheetFragmentBase( rParent, rxProgressBar, SHEETTYPE_EMPTYSHEET, nSheet )
 {
 }
 
@@ -256,4 +237,3 @@ bool BiffSkipWorksheetFragment::importFragment()
 
 } // namespace xls
 } // namespace oox
-

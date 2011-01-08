@@ -34,9 +34,7 @@
 #include <com/sun/star/embed/Aspects.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <vcl/graph.hxx>
-#ifndef _SV_MAPUNIT_HXX
-#include <vcl/mapunit.hxx>
-#endif
+#include <tools/mapunit.hxx>
 #include <rtl/ustring.hxx>
 
 #define NS_UNO ::com::sun::star::uno

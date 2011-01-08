@@ -27,7 +27,6 @@
 
 #include "oox/drawingml/colorchoicecontext.hxx"
 #include "oox/helper/attributelist.hxx"
-#include "oox/core/namespaces.hxx"
 #include "oox/drawingml/color.hxx"
 
 using ::com::sun::star::uno::Reference;

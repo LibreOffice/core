@@ -45,7 +45,7 @@
 #include "sm.hxx"
 
 #include "vcl/salwtype.hxx"
-#include "vcl/salatype.hxx"
+#include "vcl/apptypes.hxx"
 #include "vcl/helper.hxx"
 #include <tools/solarmutex.hxx>
 #include "vos/mutex.hxx"

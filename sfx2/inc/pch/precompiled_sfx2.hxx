@@ -654,7 +654,7 @@
 #include "vcl/stdtext.hxx"
 #include "vcl/timer.hxx"
 #include "vcl/unohelp.hxx"
-#include "vcl/wintypes.hxx"
+#include "tools/wintypes.hxx"
 #include "vos/diagnose.hxx"
 #include "vos/module.hxx"
 #include "vos/mutex.hxx"

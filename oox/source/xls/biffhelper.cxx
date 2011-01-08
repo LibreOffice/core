@@ -26,17 +26,20 @@
  ************************************************************************/
 
 #include "oox/xls/biffhelper.hxx"
+
 #include <rtl/math.hxx>
 #include <rtl/tencinfo.h>
 #include "oox/xls/biffinputstream.hxx"
 #include "oox/xls/biffoutputstream.hxx"
 #include "oox/xls/worksheethelper.hxx"
 
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
-
 namespace oox {
 namespace xls {
+
+// ============================================================================
+
+using ::rtl::OUString;
+using ::rtl::OUStringBuffer;
 
 // ============================================================================
 
@@ -186,6 +189,8 @@ void lclImportImgDataDib( StreamDataSequence& orDataSeq, BiffInputStream& rStrm,
 
 // ============================================================================
 
+// conversion -----------------------------------------------------------------
+
 /*static*/ double BiffHelper::calcDoubleFromRk( sal_Int32 nRkValue )
 {
     DecodedDouble aDecDbl( 0.0 );
@@ -262,6 +267,53 @@ void lclImportImgDataDib( StreamDataSequence& orDataSeq, BiffInputStream& rStrm,
     return static_cast< sal_uInt16 >( (nCodePage == 0) ? 1252 : nCodePage );
 }
 
+// BIFF12 import --------------------------------------------------------------
+
+/*static*/ OUString BiffHelper::readString( SequenceInputStream& rStrm, bool b32BitLen )
+{
+    OUString aString;
+    if( !rStrm.isEof() )
+    {
+        sal_Int32 nCharCount = b32BitLen ? rStrm.readValue< sal_Int32 >() : rStrm.readValue< sal_Int16 >();
+        // string length -1 is often used to indicate a missing string
+        OSL_ENSURE( !rStrm.isEof() && (nCharCount >= -1), "BiffHelper::readString - invalid string length" );
+        if( !rStrm.isEof() && (nCharCount > 0) )
+        {
+            ::std::vector< sal_Unicode > aBuffer;
+            aBuffer.reserve( getLimitedValue< size_t, sal_Int32 >( nCharCount + 1, 0, 0xFFFF ) );
+            for( sal_Int32 nCharIdx = 0; !rStrm.isEof() && (nCharIdx < nCharCount); ++nCharIdx )
+            {
+                sal_uInt16 nChar;
+                rStrm.readValue( nChar );
+                aBuffer.push_back( static_cast< sal_Unicode >( nChar ) );
+            }
+            aBuffer.push_back( 0 );
+            aString = OUString( &aBuffer.front() );
+        }
+    }
+    return aString;
+}
+
+// BIFF2-BIFF8 import ---------------------------------------------------------
+
+/*static*/ bool BiffHelper::isBofRecord( BiffInputStream& rStrm )
+{
+    return
+        (rStrm.getRecId() == BIFF2_ID_BOF) ||
+        (rStrm.getRecId() == BIFF3_ID_BOF) ||
+        (rStrm.getRecId() == BIFF4_ID_BOF) ||
+        (rStrm.getRecId() == BIFF5_ID_BOF);
+}
+
+/*static*/ bool BiffHelper::skipRecordBlock( BiffInputStream& rStrm, sal_uInt16 nEndRecId )
+{
+    sal_uInt16 nStartRecId = rStrm.getRecId();
+    while( rStrm.startNextRecord() && (rStrm.getRecId() != nEndRecId) )
+        if( rStrm.getRecId() == nStartRecId )
+            skipRecordBlock( rStrm, nEndRecId );
+    return !rStrm.isEof() && (rStrm.getRecId() == nEndRecId);
+}
+
 /*static*/ void BiffHelper::importImgData( StreamDataSequence& orDataSeq, BiffInputStream& rStrm, BiffType eBiff )
 {
     sal_uInt16 nFormat, nEnv;
@@ -284,4 +336,3 @@ void lclImportImgDataDib( StreamDataSequence& orDataSeq, BiffInputStream& rStrm,
 
 } // namespace xls
 } // namespace oox
-

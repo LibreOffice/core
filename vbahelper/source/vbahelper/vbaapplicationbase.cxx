@@ -311,8 +311,8 @@ void SAL_CALL VbaApplicationBase::Run( const ::rtl::OUString& MacroName, const u
     if ( !xModel.is() )
         xModel = getCurrentDocument();
 
-    VBAMacroResolvedInfo aMacroInfo = resolveVBAMacro( getSfxObjShell( xModel ), aMacroName );
-    if( aMacroInfo.IsResolved() )
+    MacroResolvedInfo aMacroInfo = resolveVBAMacro( getSfxObjShell( xModel ), aMacroName );
+    if( aMacroInfo.mbFound )
     {
         // handle the arguments
         const uno::Any* aArgsPtrArray[] = { &varg1, &varg2, &varg3, &varg4, &varg5, &varg6, &varg7, &varg8, &varg9, &varg10, &varg11, &varg12, &varg13, &varg14, &varg15, &varg16, &varg17, &varg18, &varg19, &varg20, &varg21, &varg22, &varg23, &varg24, &varg25, &varg26, &varg27, &varg28, &varg29, &varg30 };
@@ -338,7 +338,7 @@ void SAL_CALL VbaApplicationBase::Run( const ::rtl::OUString& MacroName, const u
 
         uno::Any aRet;
         uno::Any aDummyCaller;
-        executeMacro( aMacroInfo.MacroDocContext(), aMacroInfo.ResolvedMacro(), aArgs, aRet, aDummyCaller );
+        executeMacro( aMacroInfo.mpDocContext, aMacroInfo.msResolvedMacro, aArgs, aRet, aDummyCaller );
     }
     else
     {

@@ -42,7 +42,7 @@
 #include <editeng/editobj.hxx>
 #include <svl/itempool.hxx>
 #include <svl/itemset.hxx>
-#include <vcl/mapunit.hxx>
+#include <tools/mapunit.hxx>
 #include <vcl/window.hxx>
 #include <vcl/svapp.hxx>
 

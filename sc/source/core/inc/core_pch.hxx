@@ -125,7 +125,7 @@
 #include <vcl/outdev.hxx>
 #include <vcl/pointr.hxx>
 #include <vcl/ptrstyle.hxx>
-#include <vcl/wintypes.hxx>
+#include <tools/wintypes.hxx>
 #include <vcl/event.hxx>
 #include <tools/ownlist.hxx>
 #include <svl/itempool.hxx>

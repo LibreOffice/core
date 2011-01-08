@@ -33,8 +33,6 @@ StringArray RID_PRINTDLG_STRLIST
     {
         < "Print range"; >;
         < "All ~Pages"; >;
-        < "Print all pages of the printable content."; >;
         < "Pa~ges"; >;
-        < "Print only some pages of the printable content."; >;
     };
 };

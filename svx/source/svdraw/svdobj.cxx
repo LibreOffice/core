@@ -940,7 +940,7 @@ void SdrObject::RecalcBoundRect()
         if(xPrimitives.hasElements())
         {
             // use neutral ViewInformation and get the range of the primitives
-            const drawinglayer::geometry::ViewInformation2D aViewInformation2D(0);
+            const drawinglayer::geometry::ViewInformation2D aViewInformation2D;
             const basegfx::B2DRange aRange(drawinglayer::primitive2d::getB2DRangeFromPrimitive2DSequence(xPrimitives, aViewInformation2D));
 
             if(!aRange.isEmpty())
@@ -1202,7 +1202,7 @@ basegfx::B2DPolyPolygon SdrObject::TakeContour() const
         if(xSequence.hasElements())
         {
             // use neutral ViewInformation
-            const drawinglayer::geometry::ViewInformation2D aViewInformation2D(0);
+            const drawinglayer::geometry::ViewInformation2D aViewInformation2D;
 
             // create extractor, process and get result
             drawinglayer::processor2d::ContourExtractor2D aExtractor(aViewInformation2D);
@@ -2431,7 +2431,7 @@ SdrObject* SdrObject::ImpConvertToContourObj(SdrObject* pRet, BOOL bForceLineDas
         if(xSequence.hasElements())
         {
             // use neutral ViewInformation
-            const drawinglayer::geometry::ViewInformation2D aViewInformation2D(0);
+            const drawinglayer::geometry::ViewInformation2D aViewInformation2D;
 
             // create extractor, process and get result
             drawinglayer::processor2d::LineGeometryExtractor2D aExtractor(aViewInformation2D);

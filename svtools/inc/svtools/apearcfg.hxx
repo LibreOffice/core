@@ -37,14 +37,6 @@ class Application;
      Beschreibung:
  --------------------------------------------------------------------*/
 typedef enum {
-    LookStardivision = 0,
-    LookMotif,
-    LookWindows,
-    LookOSTwo,
-    LookMacintosh
-} SystemLook;
-
-typedef enum {
     SnapToButton = 0,
     SnapToMiddle,
     NoSnap
@@ -59,7 +51,6 @@ typedef enum { // MUST match the order chosen in ListBox LB_DRAG_MODE in optgdlg
 
 class SVT_DLLPUBLIC SvtTabAppearanceCfg : public utl::ConfigItem
 {
-    short           nLookNFeel          ;
     short           nDragMode           ;
     short           nScaleFactor        ;
     short           nSnapMode           ;
@@ -69,8 +60,6 @@ class SVT_DLLPUBLIC SvtTabAppearanceCfg : public utl::ConfigItem
 #endif
 
     BOOL            bMenuMouseFollow        ;
-    BOOL            bSingleLineTabCtrl      ;
-    BOOL            bColoredTabCtrl         ;
 #if defined( UNX ) || defined ( FS_PRIV_DEBUG )
     BOOL            bFontAntialiasing       ;
 #endif
@@ -85,9 +74,6 @@ public:
 
     virtual void    Commit();
     virtual void Notify( const com::sun::star::uno::Sequence< rtl::OUString >& _rPropertyNames);
-
-    USHORT      GetLookNFeel () const { return nLookNFeel; }
-    void        SetLookNFeel ( USHORT nSet );
 
     USHORT      GetDragMode  () const { return nDragMode; }
     void        SetDragMode  ( USHORT nSet );
@@ -106,9 +92,6 @@ public:
     void        SetMenuMouseFollow(BOOL bSet) {bMenuMouseFollow = bSet; SetModified();}
     BOOL        IsMenuMouseFollow() const{return bMenuMouseFollow;}
 
-    void        SetSingleLineTabCtrl(BOOL bSet) {bSingleLineTabCtrl = bSet; SetModified();}
-    BOOL        IsSingleLineTabCtrl()const {return   bSingleLineTabCtrl;}
-
 #if defined( UNX ) || defined ( FS_PRIV_DEBUG )
     void        SetFontAntiAliasing( BOOL bSet )    { bFontAntialiasing = bSet; SetModified(); }
     BOOL        IsFontAntiAliasing() const { return bFontAntialiasing; }
@@ -116,9 +99,6 @@ public:
     USHORT      GetFontAntialiasingMinPixelHeight( ) const { return nAAMinPixelHeight; }
     void        SetFontAntialiasingMinPixelHeight( USHORT _nMinHeight ) { nAAMinPixelHeight = _nMinHeight; SetModified(); }
 #endif
-
-    void        SetColoredTabCtrl(BOOL bSet)   {bColoredTabCtrl = bSet; SetModified();};
-    BOOL        IsColoredTabCtrl()const {return     bColoredTabCtrl;}
 
     static sal_Bool IsInitialized()  { return bInitialized; }
     static void    SetInitialized() { bInitialized = sal_True; }

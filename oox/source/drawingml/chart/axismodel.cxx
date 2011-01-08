@@ -78,4 +78,3 @@ AxisModel::~AxisModel()
 } // namespace chart
 } // namespace drawingml
 } // namespace oox
-

@@ -2277,7 +2277,6 @@ RscTop * RscTypCont::InitClassTabControl( RscTop * pSuper,
         pClassTabControl->SetVariable( nId, pCont, NULL, 0,
                                        RSC_TABCONTROL_ITEMLIST );
 
-        INS_WINBIT( pClassTabControl, SingleLine );
         INS_WINBIT( pClassTabControl, DropDown );
     }
 

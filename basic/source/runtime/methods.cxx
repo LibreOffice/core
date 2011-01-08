@@ -37,7 +37,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/sound.hxx>
-#include <vcl/wintypes.hxx>
+#include <tools/wintypes.hxx>
 #include <vcl/msgbox.hxx>
 #include <basic/sbx.hxx>
 #include <svl/zforlist.hxx>

@@ -88,6 +88,19 @@ ColorData XclImpPalette::GetColorData( sal_uInt16 nXclIndex ) const
     return GetDefColorData( nXclIndex );
 }
 
+::com::sun::star::uno::Sequence< sal_Int32 > XclImpPalette::CreateColorSequence() const
+{
+    sal_Int32 nCount = static_cast< sal_Int32 >( maColorTable.size() );
+    ::com::sun::star::uno::Sequence< sal_Int32 > aSeq( nCount );
+    if( nCount > 0 )
+    {
+        sal_Int32* pnSeqColor = aSeq.getArray();
+        for( ColorDataVec::const_iterator aIt = maColorTable.begin(), aEnd = maColorTable.end(); aIt != aEnd; ++aIt, ++pnSeqColor )
+            *pnSeqColor = static_cast< sal_Int32 >( *aIt );
+    }
+    return aSeq;
+}
+
 void XclImpPalette::ReadPalette( XclImpStream& rStrm )
 {
     sal_uInt16 nCount;

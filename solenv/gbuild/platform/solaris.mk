@@ -53,16 +53,16 @@ gb_COMPILERDEFS := \
 #	-D$(CVER) \
 #	-DCVER=$(CVER) \
 
-ifeq ($(CPUNAME),INTEL)
-gb_CPUDEFS :=
-else # ifeq ($(CPUNAME),SPARC)
-gb_CPUDEFS := -D__sparcv8plus
+gb_CPUDEFS := -D$(CPUNAME)
+ifeq ($(CPUNAME),SPARC)
+gb_CPUDEFS += -D__sparcv8plus
 endif
 
 gb_CFLAGS := \
     -temp=/tmp \
     -KPIC \
     -mt \
+    -xldscope=hidden \
     -xCC \
     -xc99=none \
 
@@ -70,6 +70,7 @@ gb_CXXFLAGS := \
     -temp=/tmp \
     -KPIC \
     -mt \
+    -xldscope=hidden \
     -features=no%altspell \
     -library=no%Cstd \
     +w2 \

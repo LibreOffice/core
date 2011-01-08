@@ -155,4 +155,3 @@ public:
 } // namespace oox
 
 #endif
-

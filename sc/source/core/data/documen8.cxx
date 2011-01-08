@@ -94,6 +94,7 @@
 #include "sc.hrc"
 #include "charthelper.hxx"
 #include "dpobject.hxx"
+#include "docuno.hxx"
 
 #define GET_SCALEVALUE(set,id)  ((const SfxUInt16Item&)(set.Get( id ))).GetValue()
 
@@ -900,6 +901,16 @@ void ScDocument::RemoveAutoSpellObj()
 
     for (SCTAB nTab=0; nTab<=MAXTAB && pTab[nTab]; nTab++)
         pTab[nTab]->RemoveAutoSpellObj();
+}
+
+void ScDocument::RepaintRange( const ScRange& rRange )
+{
+    if ( bIsVisible && pShell )
+    {
+        ScModelObj* pModel = ScModelObj::getImplementation( pShell->GetModel() );
+        if ( pModel )
+            pModel->RepaintRange( rRange );     // locked repaints are checked there
+    }
 }
 
 //------------------------------------------------------------------------

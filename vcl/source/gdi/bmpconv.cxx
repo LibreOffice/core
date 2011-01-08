@@ -28,14 +28,14 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
 
-#include <vcl/bitmap.hxx>
-#include <vcl/impbmpconv.hxx>
-#include <vcl/svapp.hxx>
-#include <vos/mutex.hxx>
-#include <tools/stream.hxx>
-#include <com/sun/star/script/XInvocation.hpp>
-#include <com/sun/star/awt/XBitmap.hpp>
-#include <cppuhelper/compbase1.hxx>
+#include "vcl/bitmap.hxx"
+#include "vcl/svapp.hxx"
+#include "vcl/salctype.hxx"
+#include "vos/mutex.hxx"
+#include "tools/stream.hxx"
+#include "com/sun/star/script/XInvocation.hpp"
+#include "com/sun/star/awt/XBitmap.hpp"
+#include "cppuhelper/compbase1.hxx"
 
 
 using namespace com::sun::star::uno;

@@ -236,14 +236,9 @@ ScTableConditionalFormat::~ScTableConditionalFormat()
 
 void ScTableConditionalFormat::AddEntry_Impl(const ScCondFormatEntryItem& aEntry)
 {
-    ScTableConditionalEntry* pNew = new ScTableConditionalEntry(this, aEntry);
+    ScTableConditionalEntry* pNew = new ScTableConditionalEntry(aEntry);
     pNew->acquire();
     aEntries.Insert( pNew, LIST_APPEND );
-}
-
-void ScTableConditionalFormat::DataChanged()
-{
-    //  wenn's mal das "lebende Objekt" ist, muss hier was passieren...
 }
 
 // XSheetConditionalFormat
@@ -348,7 +343,6 @@ void SAL_CALL ScTableConditionalFormat::addNew(
     }
 
     AddEntry_Impl(aEntry);
-    DataChanged();
 }
 
 void SAL_CALL ScTableConditionalFormat::removeByIndex( sal_Int32 nIndex )
@@ -360,7 +354,6 @@ void SAL_CALL ScTableConditionalFormat::removeByIndex( sal_Int32 nIndex )
     {
         aEntries.Remove(pEntry);
         pEntry->release();
-        DataChanged();
     }
 }
 
@@ -371,8 +364,6 @@ void SAL_CALL ScTableConditionalFormat::clear() throw(uno::RuntimeException)
     aEntries.First();
     while ( ( pEntry = (ScTableConditionalEntry*)aEntries.Remove() ) != NULL )
         pEntry->release();
-
-    DataChanged();
 }
 
 // XEnumerationAccess
@@ -525,19 +516,14 @@ ScTableConditionalFormat* ScTableConditionalFormat::getImplementation(
 //UNUSED2008-05  {
 //UNUSED2008-05  }
 
-ScTableConditionalEntry::ScTableConditionalEntry(ScTableConditionalFormat* pPar,
-                                                 const ScCondFormatEntryItem& aItem) :
-    pParent( pPar ),
+ScTableConditionalEntry::ScTableConditionalEntry(const ScCondFormatEntryItem& aItem) :
     aData( aItem )
 {
-    if (pParent)
-        pParent->acquire();
+    // #i113668# only store the settings, keep no reference to parent object
 }
 
 ScTableConditionalEntry::~ScTableConditionalEntry()
 {
-    if (pParent)
-        pParent->release();
 }
 
 void ScTableConditionalEntry::GetData(ScCondFormatEntryItem& rData) const
@@ -559,8 +545,6 @@ void SAL_CALL ScTableConditionalEntry::setOperator( sheet::ConditionOperator nOp
 {
     ScUnoGuard aGuard;
     aData.meMode = lcl_ConditionOperatorToMode( nOperator );
-    if (pParent)
-        pParent->DataChanged();
 }
 
 rtl::OUString SAL_CALL ScTableConditionalEntry::getFormula1() throw(uno::RuntimeException)
@@ -574,8 +558,6 @@ void SAL_CALL ScTableConditionalEntry::setFormula1( const rtl::OUString& aFormul
 {
     ScUnoGuard aGuard;
     aData.maExpr1 = String( aFormula1 );
-    if (pParent)
-        pParent->DataChanged();
 }
 
 rtl::OUString SAL_CALL ScTableConditionalEntry::getFormula2() throw(uno::RuntimeException)
@@ -589,8 +571,6 @@ void SAL_CALL ScTableConditionalEntry::setFormula2( const rtl::OUString& aFormul
 {
     ScUnoGuard aGuard;
     aData.maExpr2 = String( aFormula2 );
-    if (pParent)
-        pParent->DataChanged();
 }
 
 table::CellAddress SAL_CALL ScTableConditionalEntry::getSourcePosition() throw(uno::RuntimeException)
@@ -608,8 +588,6 @@ void SAL_CALL ScTableConditionalEntry::setSourcePosition( const table::CellAddre
 {
     ScUnoGuard aGuard;
     aData.maPos.Set( (SCCOL)aSourcePosition.Column, (SCROW)aSourcePosition.Row, aSourcePosition.Sheet );
-    if (pParent)
-        pParent->DataChanged();
 }
 
 // XSheetConditionalEntry
@@ -625,8 +603,6 @@ void SAL_CALL ScTableConditionalEntry::setStyleName( const rtl::OUString& aStyle
 {
     ScUnoGuard aGuard;
     aData.maStyle = ScStyleNameConversion::ProgrammaticToDisplayName( aStyleName, SFX_STYLE_FAMILY_PARA );
-    if (pParent)
-        pParent->DataChanged();
 }
 
 //------------------------------------------------------------------------
@@ -739,11 +715,6 @@ ScTableValidationObj::~ScTableValidationObj()
 {
 }
 
-void ScTableValidationObj::DataChanged()
-{
-    //  wenn's mal das "lebende Objekt" ist, muss hier was passieren...
-}
-
 // XSheetCondition
 
 sheet::ConditionOperator SAL_CALL ScTableValidationObj::getOperator()
@@ -758,7 +729,6 @@ void SAL_CALL ScTableValidationObj::setOperator( sheet::ConditionOperator nOpera
 {
     ScUnoGuard aGuard;
     nMode = sal::static_int_cast<USHORT>( lcl_ConditionOperatorToMode( nOperator ) );
-    DataChanged();
 }
 
 rtl::OUString SAL_CALL ScTableValidationObj::getFormula1() throw(uno::RuntimeException)
@@ -772,7 +742,6 @@ void SAL_CALL ScTableValidationObj::setFormula1( const rtl::OUString& aFormula1 
 {
     ScUnoGuard aGuard;
     aExpr1 = String( aFormula1 );
-    DataChanged();
 }
 
 rtl::OUString SAL_CALL ScTableValidationObj::getFormula2() throw(uno::RuntimeException)
@@ -786,7 +755,6 @@ void SAL_CALL ScTableValidationObj::setFormula2( const rtl::OUString& aFormula2 
 {
     ScUnoGuard aGuard;
     aExpr2 = String( aFormula2 );
-    DataChanged();
 }
 
 table::CellAddress SAL_CALL ScTableValidationObj::getSourcePosition() throw(uno::RuntimeException)
@@ -804,7 +772,6 @@ void SAL_CALL ScTableValidationObj::setSourcePosition( const table::CellAddress&
 {
     ScUnoGuard aGuard;
     aSrcPos.Set( (SCCOL)aSourcePosition.Column, (SCROW)aSourcePosition.Row, aSourcePosition.Sheet );
-    DataChanged();
 }
 
 uno::Sequence<sheet::FormulaToken> SAL_CALL ScTableValidationObj::getTokens( sal_Int32 nIndex )
@@ -963,8 +930,6 @@ void SAL_CALL ScTableValidationObj::setPropertyValue(
         if ( aValue >>= nVal )
             meGrammar2 = static_cast< FormulaGrammar::Grammar >(nVal);
     }
-
-    DataChanged();
 }
 
 uno::Any SAL_CALL ScTableValidationObj::getPropertyValue( const rtl::OUString& aPropertyName )

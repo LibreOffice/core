@@ -77,7 +77,7 @@ published interface XDatabaseRange: com::sun::star::uno::XInterface
 
     /** returns the sort descriptor stored with the database range.
 
-        @see com::sun::star::sheet::SheetSortDescriptor2
+        @see SheetSortDescriptor2
      */
     sequence< com::sun::star::beans::PropertyValue > getSortDescriptor();
 
@@ -88,8 +88,10 @@ published interface XDatabaseRange: com::sun::star::uno::XInterface
         <p>If the filter descriptor is modified, the new filtering is
         carried out when <member>XDatabaseRange::refresh()</member> is
         called.</p>
+
+        @see SheetFilterDescriptor
      */
-    com::sun::star::sheet::XSheetFilterDescriptor getFilterDescriptor();
+    XSheetFilterDescriptor getFilterDescriptor();
 
     //-------------------------------------------------------------------------
 
@@ -98,15 +100,17 @@ published interface XDatabaseRange: com::sun::star::uno::XInterface
         <p>If the subtotal descriptor is modified, the new subtotals are
         inserted when <member>XDatabaseRange::refresh()</member> is
         called.</p>
+
+        @see SubTotalDescriptor
      */
-    com::sun::star::sheet::XSubTotalDescriptor getSubTotalDescriptor();
+    XSubTotalDescriptor getSubTotalDescriptor();
 
     //-------------------------------------------------------------------------
 
     /** returns the database import descriptor stored with this database
         range.
 
-        @see com::sun::star::sheet::DatabaseImportDescriptor
+        @see DatabaseImportDescriptor
      */
     sequence< com::sun::star::beans::PropertyValue > getImportDescriptor();
 

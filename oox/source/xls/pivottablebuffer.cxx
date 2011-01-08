@@ -26,6 +26,7 @@
  ************************************************************************/
 
 #include "oox/xls/pivottablebuffer.hxx"
+
 #include <set>
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
@@ -45,34 +46,23 @@
 #include <com/sun/star/sheet/XDataPilotField.hpp>
 #include <com/sun/star/sheet/XDataPilotTablesSupplier.hpp>
 #include <com/sun/star/sheet/XSheetOperation.hpp>
-#include "properties.hxx"
 #include "oox/helper/attributelist.hxx"
+#include "oox/helper/containerhelper.hxx"
 #include "oox/helper/propertyset.hxx"
-#include "oox/helper/recordinputstream.hxx"
 #include "oox/xls/addressconverter.hxx"
 #include "oox/xls/biffinputstream.hxx"
 
-using ::rtl::OUString;
-using ::com::sun::star::uno::Exception;
-using ::com::sun::star::uno::Reference;
-using ::com::sun::star::uno::UNO_QUERY;
-using ::com::sun::star::uno::UNO_QUERY_THROW;
-using ::com::sun::star::uno::UNO_SET_THROW;
-using ::com::sun::star::beans::XPropertySet;
-using ::com::sun::star::container::XIndexAccess;
-using ::com::sun::star::container::XNameAccess;
-using ::com::sun::star::container::XNamed;
-using ::com::sun::star::table::CellAddress;
-using ::com::sun::star::sheet::DataPilotFieldOrientation;
-using ::com::sun::star::sheet::XDataPilotDataLayoutFieldSupplier;
-using ::com::sun::star::sheet::XDataPilotDescriptor;
-using ::com::sun::star::sheet::XDataPilotField;
-using ::com::sun::star::sheet::XDataPilotTables;
-using ::com::sun::star::sheet::XDataPilotTablesSupplier;
-using ::com::sun::star::sheet::XSheetOperation;
-
 namespace oox {
 namespace xls {
+
+// ============================================================================
+
+using namespace ::com::sun::star::container;
+using namespace ::com::sun::star::sheet;
+using namespace ::com::sun::star::table;
+using namespace ::com::sun::star::uno;
+
+using ::rtl::OUString;
 
 // ============================================================================
 
@@ -85,83 +75,90 @@ const sal_Int32 OOX_PT_NEXT_ITEM                    = 0x001000FD;   /// Calculat
 
 // ----------------------------------------------------------------------------
 
-const sal_uInt32 OOBIN_PTFIELD_DATAFIELD            = 0x00000008;
-const sal_uInt32 OOBIN_PTFIELD_DEFAULT              = 0x00000100;
-const sal_uInt32 OOBIN_PTFIELD_SUM                  = 0x00000200;
-const sal_uInt32 OOBIN_PTFIELD_COUNTA               = 0x00000400;
-const sal_uInt32 OOBIN_PTFIELD_AVERAGE              = 0x00000800;
-const sal_uInt32 OOBIN_PTFIELD_MAX                  = 0x00001000;
-const sal_uInt32 OOBIN_PTFIELD_MIN                  = 0x00002000;
-const sal_uInt32 OOBIN_PTFIELD_PRODUCT              = 0x00004000;
-const sal_uInt32 OOBIN_PTFIELD_COUNT                = 0x00008000;
-const sal_uInt32 OOBIN_PTFIELD_STDDEV               = 0x00010000;
-const sal_uInt32 OOBIN_PTFIELD_STDDEVP              = 0x00020000;
-const sal_uInt32 OOBIN_PTFIELD_VAR                  = 0x00040000;
-const sal_uInt32 OOBIN_PTFIELD_VARP                 = 0x00080000;
+const sal_uInt32 BIFF12_PTFIELD_DATAFIELD           = 0x00000008;
+const sal_uInt32 BIFF12_PTFIELD_DEFAULT             = 0x00000100;
+const sal_uInt32 BIFF12_PTFIELD_SUM                 = 0x00000200;
+const sal_uInt32 BIFF12_PTFIELD_COUNTA              = 0x00000400;
+const sal_uInt32 BIFF12_PTFIELD_AVERAGE             = 0x00000800;
+const sal_uInt32 BIFF12_PTFIELD_MAX                 = 0x00001000;
+const sal_uInt32 BIFF12_PTFIELD_MIN                 = 0x00002000;
+const sal_uInt32 BIFF12_PTFIELD_PRODUCT             = 0x00004000;
+const sal_uInt32 BIFF12_PTFIELD_COUNT               = 0x00008000;
+const sal_uInt32 BIFF12_PTFIELD_STDDEV              = 0x00010000;
+const sal_uInt32 BIFF12_PTFIELD_STDDEVP             = 0x00020000;
+const sal_uInt32 BIFF12_PTFIELD_VAR                 = 0x00040000;
+const sal_uInt32 BIFF12_PTFIELD_VARP                = 0x00080000;
 
-const sal_uInt32 OOBIN_PTFIELD_SHOWALL              = 0x00000020;
-const sal_uInt32 OOBIN_PTFIELD_OUTLINE              = 0x00000040;
-const sal_uInt32 OOBIN_PTFIELD_INSERTBLANKROW       = 0x00000080;
-const sal_uInt32 OOBIN_PTFIELD_SUBTOTALTOP          = 0x00000100;
-const sal_uInt32 OOBIN_PTFIELD_INSERTPAGEBREAK      = 0x00000800;
-const sal_uInt32 OOBIN_PTFIELD_AUTOSORT             = 0x00001000;
-const sal_uInt32 OOBIN_PTFIELD_SORTASCENDING        = 0x00002000;
-const sal_uInt32 OOBIN_PTFIELD_AUTOSHOW             = 0x00004000;
-const sal_uInt32 OOBIN_PTFIELD_AUTOSHOWTOP          = 0x00008000;
-const sal_uInt32 OOBIN_PTFIELD_MULTIPAGEITEMS       = 0x00080000;
+const sal_uInt32 BIFF12_PTFIELD_SHOWALL             = 0x00000020;
+const sal_uInt32 BIFF12_PTFIELD_OUTLINE             = 0x00000040;
+const sal_uInt32 BIFF12_PTFIELD_INSERTBLANKROW      = 0x00000080;
+const sal_uInt32 BIFF12_PTFIELD_SUBTOTALTOP         = 0x00000100;
+const sal_uInt32 BIFF12_PTFIELD_INSERTPAGEBREAK     = 0x00000800;
+const sal_uInt32 BIFF12_PTFIELD_AUTOSORT            = 0x00001000;
+const sal_uInt32 BIFF12_PTFIELD_SORTASCENDING       = 0x00002000;
+const sal_uInt32 BIFF12_PTFIELD_AUTOSHOW            = 0x00004000;
+const sal_uInt32 BIFF12_PTFIELD_AUTOSHOWTOP         = 0x00008000;
+const sal_uInt32 BIFF12_PTFIELD_MULTIPAGEITEMS      = 0x00080000;
 
-const sal_uInt16 OOBIN_PTFITEM_HIDDEN               = 0x0001;
-const sal_uInt16 OOBIN_PTFITEM_HIDEDETAILS          = 0x0002;
+const sal_uInt16 BIFF12_PTFITEM_HIDDEN              = 0x0001;
+const sal_uInt16 BIFF12_PTFITEM_HIDEDETAILS         = 0x0002;
 
-const sal_uInt8 OOBIN_PTPAGEFIELD_HASNAME           = 0x01;
-const sal_uInt8 OOBIN_PTPAGEFIELD_HASOLAPCAPTION    = 0x02;
-const sal_Int32 OOBIN_PTPAGEFIELD_MULTIITEMS        = 0x001000FE;
+const sal_uInt8 BIFF12_PTPAGEFIELD_HASNAME          = 0x01;
+const sal_uInt8 BIFF12_PTPAGEFIELD_HASOLAPCAPTION   = 0x02;
+const sal_Int32 BIFF12_PTPAGEFIELD_MULTIITEMS       = 0x001000FE;
 
-const sal_uInt16 OOBIN_PTFILTER_HASNAME             = 0x0001;
-const sal_uInt16 OOBIN_PTFILTER_HASDESCRIPTION      = 0x0002;
-const sal_uInt16 OOBIN_PTFILTER_HASSTRVALUE1        = 0x0004;
-const sal_uInt16 OOBIN_PTFILTER_HASSTRVALUE2        = 0x0008;
+const sal_uInt16 BIFF12_PTFILTER_HASNAME            = 0x0001;
+const sal_uInt16 BIFF12_PTFILTER_HASDESCRIPTION     = 0x0002;
+const sal_uInt16 BIFF12_PTFILTER_HASSTRVALUE1       = 0x0004;
+const sal_uInt16 BIFF12_PTFILTER_HASSTRVALUE2       = 0x0008;
 
-const sal_uInt8 OOBIN_TOP10FILTER_TOP               = 0x01;
-const sal_uInt8 OOBIN_TOP10FILTER_PERCENT           = 0x02;
+const sal_uInt8 BIFF12_TOP10FILTER_TOP              = 0x01;
+const sal_uInt8 BIFF12_TOP10FILTER_PERCENT          = 0x02;
 
-const sal_uInt32 OOBIN_PTDEF_SHOWITEMS              = 0x00000100;
-const sal_uInt32 OOBIN_PTDEF_DISABLEFIELDLIST       = 0x00000400;
-const sal_uInt32 OOBIN_PTDEF_HIDECALCMEMBERS        = 0x00001000;
-const sal_uInt32 OOBIN_PTDEF_WITHHIDDENTOTALS       = 0x00002000;
-const sal_uInt32 OOBIN_PTDEF_HIDEDRILL              = 0x00100000;
-const sal_uInt32 OOBIN_PTDEF_PRINTDRILL             = 0x00200000;
-const sal_uInt32 OOBIN_PTDEF_HIDEHEADERS            = 0x80000000;
+const sal_uInt32 BIFF12_PTDEF_SHOWITEMS             = 0x00000100;
+const sal_uInt32 BIFF12_PTDEF_DISABLEFIELDLIST      = 0x00000400;
+const sal_uInt32 BIFF12_PTDEF_HIDECALCMEMBERS       = 0x00001000;
+const sal_uInt32 BIFF12_PTDEF_WITHHIDDENTOTALS      = 0x00002000;
+const sal_uInt32 BIFF12_PTDEF_HIDEDRILL             = 0x00100000;
+const sal_uInt32 BIFF12_PTDEF_PRINTDRILL            = 0x00200000;
+const sal_uInt32 BIFF12_PTDEF_HIDEHEADERS           = 0x80000000;
 
-const sal_uInt32 OOBIN_PTDEF_SHOWEMPTYROW           = 0x00000004;
-const sal_uInt32 OOBIN_PTDEF_SHOWEMPTYCOL           = 0x00000008;
-const sal_uInt32 OOBIN_PTDEF_ENABLEDRILL            = 0x00000020;
-const sal_uInt32 OOBIN_PTDEF_PRESERVEFORMATTING     = 0x00000080;
-const sal_uInt32 OOBIN_PTDEF_SHOWERROR              = 0x00000200;
-const sal_uInt32 OOBIN_PTDEF_SHOWMISSING            = 0x00000400;
-const sal_uInt32 OOBIN_PTDEF_PAGEOVERTHENDOWN       = 0x00000800;
-const sal_uInt32 OOBIN_PTDEF_SUBTOTALHIDDENITEMS    = 0x00001000;
-const sal_uInt32 OOBIN_PTDEF_ROWGRANDTOTALS         = 0x00002000;
-const sal_uInt32 OOBIN_PTDEF_COLGRANDTOTALS         = 0x00004000;
-const sal_uInt32 OOBIN_PTDEF_FIELDPRINTTITLES       = 0x00008000;
-const sal_uInt32 OOBIN_PTDEF_ITEMPRINTTITLES        = 0x00020000;
-const sal_uInt32 OOBIN_PTDEF_MERGEITEM              = 0x00040000;
-const sal_uInt32 OOBIN_PTDEF_HASDATACAPTION         = 0x00080000;
-const sal_uInt32 OOBIN_PTDEF_HASGRANDTOTALCAPTION   = 0x00100000;
-const sal_uInt32 OOBIN_PTDEF_HASPAGESTYLE           = 0x00200000;
-const sal_uInt32 OOBIN_PTDEF_HASPIVOTTABLESTYLE     = 0x00400000;
-const sal_uInt32 OOBIN_PTDEF_HASVACATEDSTYLE        = 0x00800000;
-const sal_uInt32 OOBIN_PTDEF_HASTAG                 = 0x40000000;
+const sal_uInt32 BIFF12_PTDEF_SHOWEMPTYROW          = 0x00000004;
+const sal_uInt32 BIFF12_PTDEF_SHOWEMPTYCOL          = 0x00000008;
+const sal_uInt32 BIFF12_PTDEF_ENABLEDRILL           = 0x00000020;
+const sal_uInt32 BIFF12_PTDEF_PRESERVEFORMATTING    = 0x00000080;
+const sal_uInt32 BIFF12_PTDEF_USEAUTOFORMAT         = 0x00000100;
+const sal_uInt32 BIFF12_PTDEF_SHOWERROR             = 0x00000200;
+const sal_uInt32 BIFF12_PTDEF_SHOWMISSING           = 0x00000400;
+const sal_uInt32 BIFF12_PTDEF_PAGEOVERTHENDOWN      = 0x00000800;
+const sal_uInt32 BIFF12_PTDEF_SUBTOTALHIDDENITEMS   = 0x00001000;
+const sal_uInt32 BIFF12_PTDEF_ROWGRANDTOTALS        = 0x00002000;
+const sal_uInt32 BIFF12_PTDEF_COLGRANDTOTALS        = 0x00004000;
+const sal_uInt32 BIFF12_PTDEF_FIELDPRINTTITLES      = 0x00008000;
+const sal_uInt32 BIFF12_PTDEF_ITEMPRINTTITLES       = 0x00020000;
+const sal_uInt32 BIFF12_PTDEF_MERGEITEM             = 0x00040000;
+const sal_uInt32 BIFF12_PTDEF_HASDATACAPTION        = 0x00080000;
+const sal_uInt32 BIFF12_PTDEF_HASGRANDTOTALCAPTION  = 0x00100000;
+const sal_uInt32 BIFF12_PTDEF_HASPAGESTYLE          = 0x00200000;
+const sal_uInt32 BIFF12_PTDEF_HASPIVOTTABLESTYLE    = 0x00400000;
+const sal_uInt32 BIFF12_PTDEF_HASVACATEDSTYLE       = 0x00800000;
+const sal_uInt32 BIFF12_PTDEF_APPLYNUMFMT           = 0x01000000;
+const sal_uInt32 BIFF12_PTDEF_APPLYFONT             = 0x02000000;
+const sal_uInt32 BIFF12_PTDEF_APPLYALIGNMENT        = 0x04000000;
+const sal_uInt32 BIFF12_PTDEF_APPLYBORDER           = 0x08000000;
+const sal_uInt32 BIFF12_PTDEF_APPLYFILL             = 0x10000000;
+const sal_uInt32 BIFF12_PTDEF_APPLYPROTECTION       = 0x20000000;
+const sal_uInt32 BIFF12_PTDEF_HASTAG                = 0x40000000;
 
-const sal_uInt32 OOBIN_PTDEF_NOERRORCAPTION         = 0x00000040;
-const sal_uInt32 OOBIN_PTDEF_NOMISSINGCAPTION       = 0x00000080;
-const sal_uInt32 OOBIN_PTDEF_HASROWHEADERCAPTION    = 0x00000400;
-const sal_uInt32 OOBIN_PTDEF_HASCOLHEADERCAPTION    = 0x00000800;
-const sal_uInt32 OOBIN_PTDEF_FIELDLISTSORTASC       = 0x00001000;
-const sal_uInt32 OOBIN_PTDEF_NOCUSTOMLISTSORT       = 0x00004000;
+const sal_uInt32 BIFF12_PTDEF_NOERRORCAPTION        = 0x00000040;
+const sal_uInt32 BIFF12_PTDEF_NOMISSINGCAPTION      = 0x00000080;
+const sal_uInt32 BIFF12_PTDEF_HASROWHEADERCAPTION   = 0x00000400;
+const sal_uInt32 BIFF12_PTDEF_HASCOLHEADERCAPTION   = 0x00000800;
+const sal_uInt32 BIFF12_PTDEF_FIELDLISTSORTASC      = 0x00001000;
+const sal_uInt32 BIFF12_PTDEF_NOCUSTOMLISTSORT      = 0x00004000;
 
-const sal_uInt8 OOBIN_PTDEF_ROWAXIS                 = 1;
-const sal_uInt8 OOBIN_PTDEF_COLAXIS                 = 2;
+const sal_uInt8 BIFF12_PTDEF_ROWAXIS                = 1;
+const sal_uInt8 BIFF12_PTDEF_COLAXIS                = 2;
 
 // ----------------------------------------------------------------------------
 
@@ -233,7 +230,7 @@ PTFieldItemModel::PTFieldItemModel() :
 {
 }
 
-void PTFieldItemModel::setBinType( sal_uInt16 nType )
+void PTFieldItemModel::setBiffType( sal_uInt16 nType )
 {
     static const sal_Int32 spnTypes[] = { XML_data, XML_default,
         XML_sum, XML_countA, XML_avg, XML_max, XML_min, XML_product, XML_count,
@@ -275,7 +272,7 @@ PTFieldModel::PTFieldModel() :
 {
 }
 
-void PTFieldModel::setBinAxis( sal_uInt8 nAxis )
+void PTFieldModel::setBiffAxis( sal_uInt8 nAxis )
 {
     /*  Weird. The axis field is organized as bit field, but only one of the
         row/col/page flags are allowed at the same time and refer to the values
@@ -293,7 +290,7 @@ void PTFieldModel::setBinAxis( sal_uInt8 nAxis )
 
 PTPageFieldModel::PTPageFieldModel() :
     mnField( -1 ),
-    mnItem( OOBIN_PTPAGEFIELD_MULTIITEMS )
+    mnItem( BIFF12_PTPAGEFIELD_MULTIITEMS )
 {
 }
 
@@ -309,13 +306,13 @@ PTDataFieldModel::PTDataFieldModel() :
 {
 }
 
-void PTDataFieldModel::setBinSubtotal( sal_Int32 nSubtotal )
+void PTDataFieldModel::setBiffSubtotal( sal_Int32 nSubtotal )
 {
     static sal_Int32 spnSubtotals[] = { XML_sum, XML_count, XML_average, XML_max, XML_min, XML_product, XML_countNums, XML_stdDev, XML_stdDevp, XML_var, XML_varp };
     mnSubtotal = STATIC_ARRAY_SELECT( spnSubtotals, nSubtotal, XML_TOKEN_INVALID );
 }
 
-void PTDataFieldModel::setBinShowDataAs( sal_Int32 nShowDataAs )
+void PTDataFieldModel::setBiffShowDataAs( sal_Int32 nShowDataAs )
 {
     static sal_Int32 spnShowDataAs[] = { XML_normal, XML_difference, XML_percent, XML_percentDiff, XML_runTotal, XML_percentOfRow, XML_percentOfCol, XML_percentOfTotal, XML_index };
     mnShowDataAs = STATIC_ARRAY_SELECT( spnShowDataAs, nShowDataAs, XML_TOKEN_INVALID );
@@ -386,60 +383,60 @@ void PivotTableField::importReferenceItem( const AttributeList& rAttribs )
     maModel.mnSortRefItem = rAttribs.getInteger( XML_v, -1 );
 }
 
-void PivotTableField::importPTField( RecordInputStream& rStrm )
+void PivotTableField::importPTField( SequenceInputStream& rStrm )
 {
     sal_uInt32 nFlags1, nFlags2;
     rStrm >> nFlags1 >> maModel.mnNumFmtId >> nFlags2 >> maModel.mnAutoShowItems >> maModel.mnAutoShowRankBy;
 
-    maModel.setBinAxis( extractValue< sal_uInt8 >( nFlags1, 0, 3 ) );
-    maModel.mbDataField       = getFlag( nFlags1, OOBIN_PTFIELD_DATAFIELD );
-    maModel.mbDefaultSubtotal = getFlag( nFlags1, OOBIN_PTFIELD_DEFAULT );
-    maModel.mbSumSubtotal     = getFlag( nFlags1, OOBIN_PTFIELD_SUM );
-    maModel.mbCountASubtotal  = getFlag( nFlags1, OOBIN_PTFIELD_COUNTA );
-    maModel.mbAverageSubtotal = getFlag( nFlags1, OOBIN_PTFIELD_AVERAGE );
-    maModel.mbMaxSubtotal     = getFlag( nFlags1, OOBIN_PTFIELD_MAX );
-    maModel.mbMinSubtotal     = getFlag( nFlags1, OOBIN_PTFIELD_MIN );
-    maModel.mbProductSubtotal = getFlag( nFlags1, OOBIN_PTFIELD_PRODUCT );
-    maModel.mbCountSubtotal   = getFlag( nFlags1, OOBIN_PTFIELD_COUNT );
-    maModel.mbStdDevSubtotal  = getFlag( nFlags1, OOBIN_PTFIELD_STDDEV );
-    maModel.mbStdDevPSubtotal = getFlag( nFlags1, OOBIN_PTFIELD_STDDEVP );
-    maModel.mbVarSubtotal     = getFlag( nFlags1, OOBIN_PTFIELD_VAR );
-    maModel.mbVarPSubtotal    = getFlag( nFlags1, OOBIN_PTFIELD_VARP );
+    maModel.setBiffAxis( extractValue< sal_uInt8 >( nFlags1, 0, 3 ) );
+    maModel.mbDataField       = getFlag( nFlags1, BIFF12_PTFIELD_DATAFIELD );
+    maModel.mbDefaultSubtotal = getFlag( nFlags1, BIFF12_PTFIELD_DEFAULT );
+    maModel.mbSumSubtotal     = getFlag( nFlags1, BIFF12_PTFIELD_SUM );
+    maModel.mbCountASubtotal  = getFlag( nFlags1, BIFF12_PTFIELD_COUNTA );
+    maModel.mbAverageSubtotal = getFlag( nFlags1, BIFF12_PTFIELD_AVERAGE );
+    maModel.mbMaxSubtotal     = getFlag( nFlags1, BIFF12_PTFIELD_MAX );
+    maModel.mbMinSubtotal     = getFlag( nFlags1, BIFF12_PTFIELD_MIN );
+    maModel.mbProductSubtotal = getFlag( nFlags1, BIFF12_PTFIELD_PRODUCT );
+    maModel.mbCountSubtotal   = getFlag( nFlags1, BIFF12_PTFIELD_COUNT );
+    maModel.mbStdDevSubtotal  = getFlag( nFlags1, BIFF12_PTFIELD_STDDEV );
+    maModel.mbStdDevPSubtotal = getFlag( nFlags1, BIFF12_PTFIELD_STDDEVP );
+    maModel.mbVarSubtotal     = getFlag( nFlags1, BIFF12_PTFIELD_VAR );
+    maModel.mbVarPSubtotal    = getFlag( nFlags1, BIFF12_PTFIELD_VARP );
 
-    maModel.mbShowAll         = getFlag( nFlags2, OOBIN_PTFIELD_SHOWALL );
-    maModel.mbOutline         = getFlag( nFlags2, OOBIN_PTFIELD_OUTLINE );
-    maModel.mbSubtotalTop     = getFlag( nFlags2, OOBIN_PTFIELD_SUBTOTALTOP );
-    maModel.mbInsertBlankRow  = getFlag( nFlags2, OOBIN_PTFIELD_INSERTBLANKROW );
-    maModel.mbInsertPageBreak = getFlag( nFlags2, OOBIN_PTFIELD_INSERTPAGEBREAK );
-    maModel.mbAutoShow        = getFlag( nFlags2, OOBIN_PTFIELD_AUTOSHOW );
-    maModel.mbTopAutoShow     = getFlag( nFlags2, OOBIN_PTFIELD_AUTOSHOWTOP );
-    maModel.mbMultiPageItems  = getFlag( nFlags2, OOBIN_PTFIELD_MULTIPAGEITEMS );
+    maModel.mbShowAll         = getFlag( nFlags2, BIFF12_PTFIELD_SHOWALL );
+    maModel.mbOutline         = getFlag( nFlags2, BIFF12_PTFIELD_OUTLINE );
+    maModel.mbSubtotalTop     = getFlag( nFlags2, BIFF12_PTFIELD_SUBTOTALTOP );
+    maModel.mbInsertBlankRow  = getFlag( nFlags2, BIFF12_PTFIELD_INSERTBLANKROW );
+    maModel.mbInsertPageBreak = getFlag( nFlags2, BIFF12_PTFIELD_INSERTPAGEBREAK );
+    maModel.mbAutoShow        = getFlag( nFlags2, BIFF12_PTFIELD_AUTOSHOW );
+    maModel.mbTopAutoShow     = getFlag( nFlags2, BIFF12_PTFIELD_AUTOSHOWTOP );
+    maModel.mbMultiPageItems  = getFlag( nFlags2, BIFF12_PTFIELD_MULTIPAGEITEMS );
 
-    bool bAutoSort = getFlag( nFlags2, OOBIN_PTFIELD_AUTOSORT );
-    bool bAscending = getFlag( nFlags2, OOBIN_PTFIELD_SORTASCENDING );
+    bool bAutoSort = getFlag( nFlags2, BIFF12_PTFIELD_AUTOSORT );
+    bool bAscending = getFlag( nFlags2, BIFF12_PTFIELD_SORTASCENDING );
     maModel.mnSortType = bAutoSort ? (bAscending ? XML_ascending : XML_descending) : XML_manual;
 }
 
-void PivotTableField::importPTFItem( RecordInputStream& rStrm )
+void PivotTableField::importPTFItem( SequenceInputStream& rStrm )
 {
     PTFieldItemModel aModel;
     sal_uInt8 nType;
     sal_uInt16 nFlags;
     rStrm >> nType >> nFlags >> aModel.mnCacheItem;
 
-    aModel.setBinType( nType );
-    aModel.mbShowDetails = !getFlag( nFlags, OOBIN_PTFITEM_HIDEDETAILS );
-    aModel.mbHidden      = getFlag( nFlags, OOBIN_PTFITEM_HIDDEN );
+    aModel.setBiffType( nType );
+    aModel.mbShowDetails = !getFlag( nFlags, BIFF12_PTFITEM_HIDEDETAILS );
+    aModel.mbHidden      = getFlag( nFlags, BIFF12_PTFITEM_HIDDEN );
 
     maItems.push_back( aModel );
 }
 
-void PivotTableField::importPTReference( RecordInputStream& rStrm )
+void PivotTableField::importPTReference( SequenceInputStream& rStrm )
 {
     rStrm >> maModel.mnSortRefField;
 }
 
-void PivotTableField::importPTReferenceItem( RecordInputStream& rStrm )
+void PivotTableField::importPTReferenceItem( SequenceInputStream& rStrm )
 {
     rStrm >> maModel.mnSortRefItem;
 }
@@ -450,7 +447,7 @@ void PivotTableField::importPTField( BiffInputStream& rStrm )
     rStrm >> nAxis >> nSubtCount >> nSubtotals;
     rStrm.skip( 2 );    // item count
 
-    maModel.setBinAxis( extractValue< sal_uInt8 >( nAxis, 0, 3 ) );
+    maModel.setBiffAxis( extractValue< sal_uInt8 >( nAxis, 0, 3 ) );
     maModel.mbDataField       = getFlag( nAxis, BIFF_PTFIELD_DATAFIELD );
 
     maModel.mbDefaultSubtotal = getFlag( nSubtotals, BIFF_PTFIELD_DEFAULT );
@@ -509,7 +506,7 @@ void PivotTableField::importPTFItem( BiffInputStream& rStrm )
     sal_Int16 nCacheItem;
     rStrm >> nType >> nFlags >> nCacheItem;
 
-    aModel.setBinType( nType );
+    aModel.setBiffType( nType );
     aModel.mnCacheItem = nCacheItem;
     aModel.mbShowDetails = !getFlag( nFlags, BIFF_PTFITEM_HIDEDETAILS );
     aModel.mbHidden      = getFlag( nFlags, BIFF_PTFITEM_HIDDEN );
@@ -627,7 +624,7 @@ void PivotTableField::convertPageField( const PTPageFieldModel& rPageField )
         if( maModel.mbMultiPageItems )
         {
             // multiple items may be selected
-            OSL_ENSURE( rPageField.mnItem == OOBIN_PTPAGEFIELD_MULTIITEMS, "PivotTableField::convertPageField - unexpected cache item index" );
+            OSL_ENSURE( rPageField.mnItem == BIFF12_PTPAGEFIELD_MULTIITEMS, "PivotTableField::convertPageField - unexpected cache item index" );
             // try to find a single visible item
             bool bHasMultiItems = false;
             for( ItemModelVector::iterator aIt = maItems.begin(), aEnd = maItems.end(); (aIt != aEnd) && !bHasMultiItems; ++aIt )
@@ -799,7 +796,7 @@ Reference< XDataPilotField > PivotTableField::convertRowColPageField( sal_Int32 
             aPropSet.setProperty( PROP_LayoutInfo, aLayoutInfo );
             aPropSet.setProperty( PROP_ShowEmpty, maModel.mbShowAll );
 
-            // auto show (OOXML3/OOBIN3 only)
+            // auto show (OOXML/BIFF12 only)
             if( maModel.mbAutoShow )
             {
                 DataPilotFieldAutoShowInfo aAutoShowInfo;
@@ -909,20 +906,20 @@ void PivotTableFilter::importTop10( const AttributeList& rAttribs )
     maModel.mbTopFilter = rAttribs.getBool( XML_top, true );
 }
 
-void PivotTableFilter::importPTFilter( RecordInputStream& rStrm )
+void PivotTableFilter::importPTFilter( SequenceInputStream& rStrm )
 {
     sal_Int32 nType;
     sal_uInt16 nFlags;
     rStrm >> maModel.mnField >> maModel.mnMemPropField >> nType;
     rStrm.skip( 4 );    // unused
     rStrm >> maModel.mnId >> maModel.mnMeasureField >> maModel.mnMeasureHier >> nFlags;
-    if( getFlag( nFlags, OOBIN_PTFILTER_HASNAME ) )
+    if( getFlag( nFlags, BIFF12_PTFILTER_HASNAME ) )
         rStrm >> maModel.maName;
-    if( getFlag( nFlags, OOBIN_PTFILTER_HASDESCRIPTION ) )
+    if( getFlag( nFlags, BIFF12_PTFILTER_HASDESCRIPTION ) )
         rStrm >> maModel.maDescription;
-    if( getFlag( nFlags, OOBIN_PTFILTER_HASSTRVALUE1 ) )
+    if( getFlag( nFlags, BIFF12_PTFILTER_HASSTRVALUE1 ) )
         rStrm >> maModel.maStrValue1;
-    if( getFlag( nFlags, OOBIN_PTFILTER_HASSTRVALUE2 ) )
+    if( getFlag( nFlags, BIFF12_PTFILTER_HASSTRVALUE2 ) )
         rStrm >> maModel.maStrValue2;
 
     static sal_Int32 spnTypes[] =
@@ -949,14 +946,14 @@ void PivotTableFilter::importPTFilter( RecordInputStream& rStrm )
     maModel.mnType = STATIC_ARRAY_SELECT( spnTypes, nType, XML_TOKEN_INVALID );
 }
 
-void PivotTableFilter::importTop10Filter( RecordInputStream& rStrm )
+void PivotTableFilter::importTop10Filter( SequenceInputStream& rStrm )
 {
     sal_uInt8 nFlags;
     rStrm >> nFlags >> maModel.mfValue;
 
-    OSL_ENSURE( getFlag( nFlags, OOBIN_TOP10FILTER_PERCENT ) == (maModel.mnType == XML_percent),
+    OSL_ENSURE( getFlag( nFlags, BIFF12_TOP10FILTER_PERCENT ) == (maModel.mnType == XML_percent),
         "PivotTableFilter::importTop10 - unexpected value of percent attribute" );
-    maModel.mbTopFilter = getFlag( nFlags, OOBIN_TOP10FILTER_TOP );
+    maModel.mbTopFilter = getFlag( nFlags, BIFF12_TOP10FILTER_TOP );
 }
 
 void PivotTableFilter::finalizeImport()
@@ -1000,6 +997,7 @@ PTDefinitionModel::PTDefinitionModel() :
     mbPrintDrill( false ),
     mbEnableDrill( true ),
     mbPreserveFormatting( true ),
+    mbUseAutoFormat( false ),
     mbPageOverThenDown( false ),
     mbSubtotalHiddenItems( false ),
     mbRowGrandTotals( true ),
@@ -1053,6 +1051,7 @@ void PivotTable::importPivotTableDefinition( const AttributeList& rAttribs )
     maDefModel.mnPageWrap            = rAttribs.getInteger( XML_pageWrap, 0 );
     maDefModel.mnIndent              = rAttribs.getInteger( XML_indent, 1 );
     maDefModel.mnChartFormat         = rAttribs.getInteger( XML_chartFormat, 0 );
+    maDefModel.mnAutoFormatId        = rAttribs.getInteger( XML_autoFormatId, 0 );
     maDefModel.mbDataOnRows          = rAttribs.getBool( XML_dataOnRows, false );
     maDefModel.mbShowError           = rAttribs.getBool( XML_showError, false );
     maDefModel.mbShowMissing         = rAttribs.getBool( XML_showMissing, true );
@@ -1064,6 +1063,7 @@ void PivotTable::importPivotTableDefinition( const AttributeList& rAttribs )
     maDefModel.mbPrintDrill          = rAttribs.getBool( XML_printDrill, false );
     maDefModel.mbEnableDrill         = rAttribs.getBool( XML_enableDrill, true );
     maDefModel.mbPreserveFormatting  = rAttribs.getBool( XML_preserveFormatting, true );
+    maDefModel.mbUseAutoFormat       = rAttribs.getBool( XML_useAutoFormatting, false );
     maDefModel.mbPageOverThenDown    = rAttribs.getBool( XML_pageOverThenDown, false );
     maDefModel.mbSubtotalHiddenItems = rAttribs.getBool( XML_subtotalHiddenItems, false );
     maDefModel.mbRowGrandTotals      = rAttribs.getBool( XML_rowGrandTotals, true );
@@ -1076,6 +1076,13 @@ void PivotTable::importPivotTableDefinition( const AttributeList& rAttribs )
     maDefModel.mbShowHeaders         = rAttribs.getBool( XML_showHeaders, true );
     maDefModel.mbFieldListSortAsc    = rAttribs.getBool( XML_fieldListSortAscending, false );
     maDefModel.mbCustomListSort      = rAttribs.getBool( XML_customListSort, true );
+    maDefModel.mbApplyNumFmt         = rAttribs.getBool( XML_applyNumberFormats, false );
+    maDefModel.mbApplyFont           = rAttribs.getBool( XML_applyFontFormats, false );
+    maDefModel.mbApplyAlignment      = rAttribs.getBool( XML_applyAlignmentFormats, false );
+    maDefModel.mbApplyBorder         = rAttribs.getBool( XML_applyBorderFormats, false );
+    maDefModel.mbApplyFill           = rAttribs.getBool( XML_applyPatternFormats, false );
+    // OOXML and BIFF12 documentation differ: OOXML mentions width/height, BIFF12 mentions protection
+    maDefModel.mbApplyProtection     = rAttribs.getBool( XML_applyWidthHeightFormats, false );
 }
 
 void PivotTable::importLocation( const AttributeList& rAttribs, sal_Int16 nSheet )
@@ -1104,7 +1111,7 @@ void PivotTable::importPageField( const AttributeList& rAttribs )
     aModel.maName      = rAttribs.getXString( XML_name, OUString() );
     aModel.mnField     = rAttribs.getInteger( XML_fld, -1 );
     // specification is wrong, XML_item is not the cache item, but the field item
-    aModel.mnItem      = rAttribs.getInteger( XML_item, OOBIN_PTPAGEFIELD_MULTIITEMS );
+    aModel.mnItem      = rAttribs.getInteger( XML_item, BIFF12_PTPAGEFIELD_MULTIITEMS );
     maPageFields.push_back( aModel );
 }
 
@@ -1121,7 +1128,7 @@ void PivotTable::importDataField( const AttributeList& rAttribs )
     maDataFields.push_back( aModel );
 }
 
-void PivotTable::importPTDefinition( RecordInputStream& rStrm )
+void PivotTable::importPTDefinition( SequenceInputStream& rStrm )
 {
     sal_uInt32 nFlags1, nFlags2, nFlags3;
     sal_uInt8 nDataAxis;
@@ -1129,59 +1136,67 @@ void PivotTable::importPTDefinition( RecordInputStream& rStrm )
     maDefModel.mnPageWrap = rStrm.readuInt8();
     rStrm.skip( 2 );    // refresh versions
     rStrm >> maDefModel.mnDataPosition;
-    rStrm.skip( 4 );    // 2 bytes autoformat id, 2 bytes unused
+    maDefModel.mnAutoFormatId = rStrm.readuInt16();
+    rStrm.skip( 2 );    // unused
     rStrm >> maDefModel.mnChartFormat >> maDefModel.mnCacheId >> maDefModel.maName;
-    if( getFlag( nFlags2, OOBIN_PTDEF_HASDATACAPTION ) )
+    if( getFlag( nFlags2, BIFF12_PTDEF_HASDATACAPTION ) )
         rStrm >> maDefModel.maDataCaption;
-    if( getFlag( nFlags2, OOBIN_PTDEF_HASGRANDTOTALCAPTION ) )
+    if( getFlag( nFlags2, BIFF12_PTDEF_HASGRANDTOTALCAPTION ) )
         rStrm >> maDefModel.maGrandTotalCaption;
-    if( !getFlag( nFlags3, OOBIN_PTDEF_NOERRORCAPTION ) )   // missing flag indicates existing string
+    if( !getFlag( nFlags3, BIFF12_PTDEF_NOERRORCAPTION ) )   // missing flag indicates existing string
         rStrm >> maDefModel.maErrorCaption;
-    if( !getFlag( nFlags3, OOBIN_PTDEF_NOMISSINGCAPTION ) ) // missing flag indicates existing string
+    if( !getFlag( nFlags3, BIFF12_PTDEF_NOMISSINGCAPTION ) ) // missing flag indicates existing string
         rStrm >> maDefModel.maMissingCaption;
-    if( getFlag( nFlags2, OOBIN_PTDEF_HASPAGESTYLE ) )
+    if( getFlag( nFlags2, BIFF12_PTDEF_HASPAGESTYLE ) )
         rStrm >> maDefModel.maPageStyle;
-    if( getFlag( nFlags2, OOBIN_PTDEF_HASPIVOTTABLESTYLE ) )
+    if( getFlag( nFlags2, BIFF12_PTDEF_HASPIVOTTABLESTYLE ) )
         rStrm >> maDefModel.maPivotTableStyle;
-    if( getFlag( nFlags2, OOBIN_PTDEF_HASVACATEDSTYLE ) )
+    if( getFlag( nFlags2, BIFF12_PTDEF_HASVACATEDSTYLE ) )
         rStrm >> maDefModel.maVacatedStyle;
-    if( getFlag( nFlags2, OOBIN_PTDEF_HASTAG ) )
+    if( getFlag( nFlags2, BIFF12_PTDEF_HASTAG ) )
         rStrm >> maDefModel.maTag;
-    if( getFlag( nFlags3, OOBIN_PTDEF_HASCOLHEADERCAPTION ) )   // TODO: right order (col/row)? spec is unclear
+    if( getFlag( nFlags3, BIFF12_PTDEF_HASCOLHEADERCAPTION ) )   // TODO: right order (col/row)? spec is unclear
         rStrm >> maDefModel.maColHeaderCaption;
-    if( getFlag( nFlags3, OOBIN_PTDEF_HASROWHEADERCAPTION ) )
+    if( getFlag( nFlags3, BIFF12_PTDEF_HASROWHEADERCAPTION ) )
         rStrm >> maDefModel.maRowHeaderCaption;
 
-    OSL_ENSURE( (nDataAxis == OOBIN_PTDEF_ROWAXIS) || (nDataAxis == OOBIN_PTDEF_COLAXIS),
+    OSL_ENSURE( (nDataAxis == BIFF12_PTDEF_ROWAXIS) || (nDataAxis == BIFF12_PTDEF_COLAXIS),
         "PivotTable::importPTDefinition - unexpected axis position for data field" );
 
     maDefModel.mnIndent              = extractValue< sal_uInt8 >( nFlags1, 24, 7 );
-    maDefModel.mbDataOnRows          = nDataAxis == OOBIN_PTDEF_ROWAXIS;
-    maDefModel.mbShowError           = getFlag( nFlags2, OOBIN_PTDEF_SHOWERROR );
-    maDefModel.mbShowMissing         = getFlag( nFlags2, OOBIN_PTDEF_SHOWMISSING );
-    maDefModel.mbShowItems           = getFlag( nFlags1, OOBIN_PTDEF_SHOWITEMS );
-    maDefModel.mbDisableFieldList    = getFlag( nFlags1, OOBIN_PTDEF_DISABLEFIELDLIST );
-    maDefModel.mbShowCalcMembers     = !getFlag( nFlags1, OOBIN_PTDEF_HIDECALCMEMBERS );
-    maDefModel.mbVisualTotals        = !getFlag( nFlags1, OOBIN_PTDEF_WITHHIDDENTOTALS );
-    maDefModel.mbShowDrill           = !getFlag( nFlags1, OOBIN_PTDEF_HIDEDRILL );
-    maDefModel.mbPrintDrill          = getFlag( nFlags1, OOBIN_PTDEF_PRINTDRILL );
-    maDefModel.mbEnableDrill         = getFlag( nFlags2, OOBIN_PTDEF_ENABLEDRILL );
-    maDefModel.mbPreserveFormatting  = getFlag( nFlags2, OOBIN_PTDEF_PRESERVEFORMATTING );
-    maDefModel.mbPageOverThenDown    = getFlag( nFlags2, OOBIN_PTDEF_PAGEOVERTHENDOWN );
-    maDefModel.mbSubtotalHiddenItems = getFlag( nFlags2, OOBIN_PTDEF_SUBTOTALHIDDENITEMS );
-    maDefModel.mbRowGrandTotals      = getFlag( nFlags2, OOBIN_PTDEF_ROWGRANDTOTALS );
-    maDefModel.mbColGrandTotals      = getFlag( nFlags2, OOBIN_PTDEF_COLGRANDTOTALS );
-    maDefModel.mbFieldPrintTitles    = getFlag( nFlags2, OOBIN_PTDEF_FIELDPRINTTITLES );
-    maDefModel.mbItemPrintTitles     = getFlag( nFlags2, OOBIN_PTDEF_ITEMPRINTTITLES );
-    maDefModel.mbMergeItem           = getFlag( nFlags2, OOBIN_PTDEF_MERGEITEM );
-    maDefModel.mbShowEmptyRow        = getFlag( nFlags2, OOBIN_PTDEF_SHOWEMPTYROW );
-    maDefModel.mbShowEmptyCol        = getFlag( nFlags2, OOBIN_PTDEF_SHOWEMPTYCOL );
-    maDefModel.mbShowHeaders         = !getFlag( nFlags1, OOBIN_PTDEF_HIDEHEADERS );
-    maDefModel.mbFieldListSortAsc    = getFlag( nFlags3, OOBIN_PTDEF_FIELDLISTSORTASC );
-    maDefModel.mbCustomListSort      = !getFlag( nFlags3, OOBIN_PTDEF_NOCUSTOMLISTSORT );
+    maDefModel.mbDataOnRows          = nDataAxis == BIFF12_PTDEF_ROWAXIS;
+    maDefModel.mbShowError           = getFlag( nFlags2, BIFF12_PTDEF_SHOWERROR );
+    maDefModel.mbShowMissing         = getFlag( nFlags2, BIFF12_PTDEF_SHOWMISSING );
+    maDefModel.mbShowItems           = getFlag( nFlags1, BIFF12_PTDEF_SHOWITEMS );
+    maDefModel.mbDisableFieldList    = getFlag( nFlags1, BIFF12_PTDEF_DISABLEFIELDLIST );
+    maDefModel.mbShowCalcMembers     = !getFlag( nFlags1, BIFF12_PTDEF_HIDECALCMEMBERS );
+    maDefModel.mbVisualTotals        = !getFlag( nFlags1, BIFF12_PTDEF_WITHHIDDENTOTALS );
+    maDefModel.mbShowDrill           = !getFlag( nFlags1, BIFF12_PTDEF_HIDEDRILL );
+    maDefModel.mbPrintDrill          = getFlag( nFlags1, BIFF12_PTDEF_PRINTDRILL );
+    maDefModel.mbEnableDrill         = getFlag( nFlags2, BIFF12_PTDEF_ENABLEDRILL );
+    maDefModel.mbPreserveFormatting  = getFlag( nFlags2, BIFF12_PTDEF_PRESERVEFORMATTING );
+    maDefModel.mbUseAutoFormat       = getFlag( nFlags2, BIFF12_PTDEF_USEAUTOFORMAT );
+    maDefModel.mbPageOverThenDown    = getFlag( nFlags2, BIFF12_PTDEF_PAGEOVERTHENDOWN );
+    maDefModel.mbSubtotalHiddenItems = getFlag( nFlags2, BIFF12_PTDEF_SUBTOTALHIDDENITEMS );
+    maDefModel.mbRowGrandTotals      = getFlag( nFlags2, BIFF12_PTDEF_ROWGRANDTOTALS );
+    maDefModel.mbColGrandTotals      = getFlag( nFlags2, BIFF12_PTDEF_COLGRANDTOTALS );
+    maDefModel.mbFieldPrintTitles    = getFlag( nFlags2, BIFF12_PTDEF_FIELDPRINTTITLES );
+    maDefModel.mbItemPrintTitles     = getFlag( nFlags2, BIFF12_PTDEF_ITEMPRINTTITLES );
+    maDefModel.mbMergeItem           = getFlag( nFlags2, BIFF12_PTDEF_MERGEITEM );
+    maDefModel.mbApplyNumFmt         = getFlag( nFlags2, BIFF12_PTDEF_APPLYNUMFMT );
+    maDefModel.mbApplyFont           = getFlag( nFlags2, BIFF12_PTDEF_APPLYFONT );
+    maDefModel.mbApplyAlignment      = getFlag( nFlags2, BIFF12_PTDEF_APPLYALIGNMENT );
+    maDefModel.mbApplyBorder         = getFlag( nFlags2, BIFF12_PTDEF_APPLYBORDER );
+    maDefModel.mbApplyFill           = getFlag( nFlags2, BIFF12_PTDEF_APPLYFILL );
+    maDefModel.mbApplyProtection     = getFlag( nFlags2, BIFF12_PTDEF_APPLYPROTECTION );
+    maDefModel.mbShowEmptyRow        = getFlag( nFlags2, BIFF12_PTDEF_SHOWEMPTYROW );
+    maDefModel.mbShowEmptyCol        = getFlag( nFlags2, BIFF12_PTDEF_SHOWEMPTYCOL );
+    maDefModel.mbShowHeaders         = !getFlag( nFlags1, BIFF12_PTDEF_HIDEHEADERS );
+    maDefModel.mbFieldListSortAsc    = getFlag( nFlags3, BIFF12_PTDEF_FIELDLISTSORTASC );
+    maDefModel.mbCustomListSort      = !getFlag( nFlags3, BIFF12_PTDEF_NOCUSTOMLISTSORT );
 }
 
-void PivotTable::importPTLocation( RecordInputStream& rStrm, sal_Int16 nSheet )
+void PivotTable::importPTLocation( SequenceInputStream& rStrm, sal_Int16 nSheet )
 {
     BinRange aBinRange;
     rStrm   >> aBinRange >> maLocationModel.mnFirstHeaderRow
@@ -1190,29 +1205,29 @@ void PivotTable::importPTLocation( RecordInputStream& rStrm, sal_Int16 nSheet )
     getAddressConverter().convertToCellRangeUnchecked( maLocationModel.maRange, aBinRange, nSheet );
 }
 
-void PivotTable::importPTRowFields( RecordInputStream& rStrm )
+void PivotTable::importPTRowFields( SequenceInputStream& rStrm )
 {
     importFields( maRowFields, rStrm );
 }
 
-void PivotTable::importPTColFields( RecordInputStream& rStrm )
+void PivotTable::importPTColFields( SequenceInputStream& rStrm )
 {
     importFields( maColFields, rStrm );
 }
 
-void PivotTable::importPTPageField( RecordInputStream& rStrm )
+void PivotTable::importPTPageField( SequenceInputStream& rStrm )
 {
     PTPageFieldModel aModel;
     sal_uInt8 nFlags;
     rStrm >> aModel.mnField >> aModel.mnItem;
     rStrm.skip( 4 );    // hierarchy
     rStrm >> nFlags;
-    if( getFlag( nFlags, OOBIN_PTPAGEFIELD_HASNAME ) )
+    if( getFlag( nFlags, BIFF12_PTPAGEFIELD_HASNAME ) )
         rStrm >> aModel.maName;
     maPageFields.push_back( aModel );
 }
 
-void PivotTable::importPTDataField( RecordInputStream& rStrm )
+void PivotTable::importPTDataField( SequenceInputStream& rStrm )
 {
     PTDataFieldModel aModel;
     sal_Int32 nSubtotal, nShowDataAs;
@@ -1220,8 +1235,8 @@ void PivotTable::importPTDataField( RecordInputStream& rStrm )
     rStrm >> aModel.mnField >> nSubtotal >> nShowDataAs >> aModel.mnBaseField >> aModel.mnBaseItem >> aModel.mnNumFmtId >> nHasName;
     if( nHasName == 1 )
         rStrm >> aModel.maName;
-    aModel.setBinSubtotal( nSubtotal );
-    aModel.setBinShowDataAs( nShowDataAs );
+    aModel.setBiffSubtotal( nSubtotal );
+    aModel.setBiffShowDataAs( nShowDataAs );
     maDataFields.push_back( aModel );
 }
 
@@ -1297,7 +1312,7 @@ void PivotTable::importPTPageFields( BiffInputStream& rStrm )
         rStrm >> nField >> nItem;
         rStrm.skip( 2 );    // dropdown object ID
         aModel.mnField = nField;
-        aModel.mnItem = (nItem == BIFF_PTPAGEFIELDS_ALLITEMS) ? OOBIN_PTPAGEFIELD_MULTIITEMS : nItem;
+        aModel.mnItem = (nItem == BIFF_PTPAGEFIELDS_ALLITEMS) ? BIFF12_PTPAGEFIELD_MULTIITEMS : nItem;
         maPageFields.push_back( aModel );
     }
 }
@@ -1311,8 +1326,8 @@ void PivotTable::importPTDataField( BiffInputStream& rStrm )
     aModel.maName = lclReadPivotString( *this, rStrm, nNameLen );
 
     aModel.mnField = nField;
-    aModel.setBinSubtotal( nSubtotal );
-    aModel.setBinShowDataAs( nShowDataAs );
+    aModel.setBiffSubtotal( nSubtotal );
+    aModel.setBiffShowDataAs( nShowDataAs );
     aModel.mnBaseField = nBaseField;
     switch( nBaseItem )
     {
@@ -1506,7 +1521,7 @@ void PivotTable::importField( IndexVector& orFields, const AttributeList& rAttri
     orFields.push_back( rAttribs.getInteger( XML_x, -1 ) );
 }
 
-void PivotTable::importFields( IndexVector& orFields, RecordInputStream& rStrm )
+void PivotTable::importFields( IndexVector& orFields, SequenceInputStream& rStrm )
 {
     OSL_ENSURE( orFields.empty(), "PivotTable::importFields - multiple record instances" );
     orFields.clear();
@@ -1550,4 +1565,3 @@ void PivotTableBuffer::finalizeImport()
 
 } // namespace xls
 } // namespace oox
-

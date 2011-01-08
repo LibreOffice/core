@@ -26,15 +26,18 @@
  ************************************************************************/
 
 #include "oox/drawingml/chart/datasourcecontext.hxx"
-#include "oox/drawingml/chart/datasourcemodel.hxx"
 
-using ::rtl::OUString;
-using ::oox::core::ContextHandler2Helper;
-using ::oox::core::ContextHandlerRef;
+#include "oox/drawingml/chart/datasourcemodel.hxx"
 
 namespace oox {
 namespace drawingml {
 namespace chart {
+
+// ============================================================================
+
+using ::oox::core::ContextHandler2Helper;
+using ::oox::core::ContextHandlerRef;
+using ::rtl::OUString;
 
 // ============================================================================
 
@@ -87,7 +90,7 @@ ContextHandlerRef DoubleSequenceContext::onCreateContext( sal_Int32 nElement, co
     return 0;
 }
 
-void DoubleSequenceContext::onEndElement( const OUString& rChars )
+void DoubleSequenceContext::onCharacters( const OUString& rChars )
 {
     switch( getCurrentElement() )
     {
@@ -160,7 +163,7 @@ ContextHandlerRef StringSequenceContext::onCreateContext( sal_Int32 nElement, co
     return 0;
 }
 
-void StringSequenceContext::onEndElement( const OUString& rChars )
+void StringSequenceContext::onCharacters( const OUString& rChars )
 {
     switch( getCurrentElement() )
     {
@@ -228,4 +231,3 @@ ContextHandlerRef DataSourceContext::onCreateContext( sal_Int32 nElement, const 
 } // namespace chart
 } // namespace drawingml
 } // namespace oox
-

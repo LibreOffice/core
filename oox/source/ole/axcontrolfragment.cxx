@@ -26,23 +26,27 @@
  ************************************************************************/
 
 #include "oox/ole/axcontrolfragment.hxx"
+
+#include "oox/core/xmlfilterbase.hxx"
 #include "oox/helper/binaryinputstream.hxx"
 #include "oox/helper/binaryoutputstream.hxx"
-#include "oox/core/xmlfilterbase.hxx"
 #include "oox/ole/axcontrol.hxx"
 #include "oox/ole/olehelper.hxx"
 #include "oox/ole/olestorage.hxx"
 
-using ::rtl::OUString;
-using ::com::sun::star::io::XInputStream;
-using ::com::sun::star::uno::Reference;
+namespace oox {
+namespace ole {
+
+// ============================================================================
+
+using namespace ::com::sun::star::io;
+using namespace ::com::sun::star::uno;
+
 using ::oox::core::ContextHandler2;
 using ::oox::core::ContextHandlerRef;
 using ::oox::core::FragmentHandler2;
 using ::oox::core::XmlFilterBase;
-
-namespace oox {
-namespace ole {
+using ::rtl::OUString;
 
 // ============================================================================
 
@@ -105,7 +109,7 @@ ContextHandlerRef AxControlFragment::onCreateContext( sal_Int32 nElement, const 
         switch( rAttribs.getToken( AX_TOKEN( persistence ), XML_TOKEN_INVALID ) )
         {
             case XML_persistPropertyBag:
-                if( ControlModelBase* pModel = mrControl.createModel( aClassId ).get() )
+                if( ControlModelBase* pModel = mrControl.createModelFromGuid( aClassId ) )
                     return new AxControlPropertyContext( *this, *pModel );
             break;
 
@@ -121,7 +125,7 @@ ContextHandlerRef AxControlFragment::onCreateContext( sal_Int32 nElement, const 
                         OUString aStrmClassId = OleHelper::importGuid( aInStrm );
                         OSL_ENSURE( aClassId.equalsIgnoreAsciiCase( aStrmClassId ),
                             "AxControlFragment::importBinaryControl - form control class ID mismatch" );
-                        if( ControlModelBase* pModel = mrControl.createModel( aStrmClassId ).get() )
+                        if( ControlModelBase* pModel = mrControl.createModelFromGuid( aStrmClassId ) )
                             pModel->importBinaryModel( aInStrm );
                     }
                 }
@@ -136,10 +140,10 @@ ContextHandlerRef AxControlFragment::onCreateContext( sal_Int32 nElement, const 
                     Reference< XInputStream > xStrgStrm = getFilter().openInputStream( aFragmentPath );
                     if( xStrgStrm.is() )
                     {
-                        OleStorage aStorage( getFilter().getGlobalFactory(), xStrgStrm, false );
+                        OleStorage aStorage( getFilter().getServiceFactory(), xStrgStrm, false );
                         BinaryXInputStream aInStrm( aStorage.openInputStream( CREATE_OUSTRING( "f" ) ), true );
                         if( !aInStrm.isEof() )
-                            if( AxContainerModelBase* pModel = dynamic_cast< AxContainerModelBase* >( mrControl.createModel( aClassId ).get() ) )
+                            if( AxContainerModelBase* pModel = dynamic_cast< AxContainerModelBase* >( mrControl.createModelFromGuid( aClassId ) ) )
                                 pModel->importBinaryModel( aInStrm );
                     }
                 }

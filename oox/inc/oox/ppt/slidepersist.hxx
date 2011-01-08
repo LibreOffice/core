@@ -28,7 +28,6 @@
 #ifndef OOX_POWERPOINT_SLIDEPERSIST_HXX
 #define OOX_POWERPOINT_SLIDEPERSIST_HXX
 
-#include "tokens.hxx"
 #include <boost/shared_ptr.hpp>
 #include "oox/drawingml/shape.hxx"
 #include "oox/drawingml/theme.hxx"
@@ -112,7 +111,7 @@ public:
 
     oox::vml::Drawing* getDrawing() { return mpDrawingPtr.get(); }
 
-    void createXShapes( const oox::core::XmlFilterBase& rFilterBase );
+    void createXShapes( oox::core::XmlFilterBase& rFilterBase );
     void createBackground( const oox::core::XmlFilterBase& rFilterBase );
     void applyTextStyles( const oox::core::XmlFilterBase& rFilterBase );
 

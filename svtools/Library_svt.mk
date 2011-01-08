@@ -159,7 +159,6 @@ $(eval $(call gb_Library_add_exception_objects,svt,\
     svtools/source/dialogs/filedlg2 \
     svtools/source/dialogs/insdlg \
     svtools/source/dialogs/mcvmath \
-    svtools/source/dialogs/printdlg \
     svtools/source/dialogs/prnsetup \
     svtools/source/dialogs/property \
     svtools/source/dialogs/roadmapwizard \

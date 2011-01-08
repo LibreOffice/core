@@ -26,6 +26,7 @@
  ************************************************************************/
 
 #include "oox/drawingml/chart/seriesconverter.hxx"
+
 #include <com/sun/star/chart/DataLabelPlacement.hpp>
 #include <com/sun/star/chart/ErrorBarStyle.hpp>
 #include <com/sun/star/chart2/DataPointLabel.hpp>
@@ -38,25 +39,20 @@
 #include "oox/drawingml/chart/titleconverter.hxx"
 #include "oox/drawingml/chart/typegroupconverter.hxx"
 #include "oox/drawingml/chart/typegroupmodel.hxx"
-#include "properties.hxx"
-
-using ::rtl::OUString;
-using ::com::sun::star::uno::Reference;
-using ::com::sun::star::uno::Exception;
-using ::com::sun::star::uno::UNO_QUERY;
-using ::com::sun::star::uno::UNO_QUERY_THROW;
-using ::com::sun::star::beans::XPropertySet;
-using ::com::sun::star::chart2::DataPointLabel;
-using ::com::sun::star::chart2::XDataSeries;
-using ::com::sun::star::chart2::XRegressionCurve;
-using ::com::sun::star::chart2::XRegressionCurveContainer;
-using ::com::sun::star::chart2::data::XDataSequence;
-using ::com::sun::star::chart2::data::XDataSink;
-using ::com::sun::star::chart2::data::XLabeledDataSequence;
+#include "oox/helper/containerhelper.hxx"
 
 namespace oox {
 namespace drawingml {
 namespace chart {
+
+// ============================================================================
+
+using namespace ::com::sun::star::beans;
+using namespace ::com::sun::star::chart2;
+using namespace ::com::sun::star::chart2::data;
+using namespace ::com::sun::star::uno;
+
+using ::rtl::OUString;
 
 // ============================================================================
 
@@ -621,4 +617,3 @@ Reference< XLabeledDataSequence > SeriesConverter::createLabeledDataSequence(
 } // namespace chart
 } // namespace drawingml
 } // namespace oox
-

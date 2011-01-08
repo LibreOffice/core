@@ -36,7 +36,7 @@
 #include <com/sun/star/embed/Aspects.hpp>
 
 #include <svtools/embedtransfer.hxx>
-#include <vcl/mapunit.hxx>
+#include <tools/mapunit.hxx>
 #include <vcl/outdev.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <unotools/ucbstreamhelper.hxx>

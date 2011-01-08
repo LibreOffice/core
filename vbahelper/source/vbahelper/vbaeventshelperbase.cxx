@@ -196,8 +196,8 @@ const VbaEventsHelperBase::EventHandlerInfo& VbaEventsHelperBase::getEventHandle
                 append( sal_Unicode( '.' ) ).append( rInfo.maMacroName ).makeStringAndClear();
         break;
     }
-    VBAMacroResolvedInfo aMacroInfo = resolveVBAMacro( mpShell, aMacroName, false );
-    return aMacroInfo.IsResolved() ? ::rtl::OUString( aMacroInfo.ResolvedMacro() ) : ::rtl::OUString();
+    MacroResolvedInfo aMacroInfo = resolveVBAMacro( mpShell, aMacroName, false );
+    return aMacroInfo.mbFound ? ::rtl::OUString( aMacroInfo.msResolvedMacro ) : ::rtl::OUString();
 }
 
 void VbaEventsHelperBase::stopListening()

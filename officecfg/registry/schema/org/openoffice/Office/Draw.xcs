@@ -282,7 +282,7 @@
 					<desc>Indicates whether moving while holding the Control key makes a copy of the moved object.</desc>
 					<label>Copy while moving</label>
 				</info>
-				<value>false</value>
+				<value>true</value>
 			</prop>
 			<prop oor:name="ObjectMoveable" oor:type="xs:boolean">
 				<!-- OldPath: Draw/Other -->
@@ -410,7 +410,7 @@
 						<desc>Indicates whether a simple click on a text object changes it to edit mode.</desc>
 						<label>Allow quick editing</label>
 					</info>
-					<value>false</value>
+					<value>true</value>
 				</prop>
 				<prop oor:name="Selectable" oor:type="xs:boolean">
 					<!-- OldPath: Draw/Other/Text_Objects -->
@@ -824,7 +824,7 @@
 						<desc>Specifies the number of points between two grid points on the X axis.</desc>
 						<label>X Axis Subdivision</label>
 					</info>
-					<value>1</value>
+					<value>9</value>
 				</prop>
 				<prop oor:name="YAxis" oor:type="xs:double">
 					<!-- OldPath: Draw/Grid/Subdivision -->
@@ -836,7 +836,7 @@
 						<desc>Specifies the number of points between two grid points on the Y axis.</desc>
 						<label>Y Axis Subdivision</label>
 					</info>
-					<value>1</value>
+					<value>9</value>
 				</prop>
 			</group>
 			<group oor:name="SnapGrid">

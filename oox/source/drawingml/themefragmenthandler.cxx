@@ -56,23 +56,23 @@ ContextHandlerRef ThemeFragmentHandler::onCreateContext( sal_Int32 nElement, con
         case XML_ROOT_CONTEXT:
             switch( nElement )
             {
-                case NMSP_DRAWINGML|XML_theme:
+                case A_TOKEN( theme ):
                     return this;
             }
         break;
 
-        case NMSP_DRAWINGML|XML_theme:
+        case A_TOKEN( theme ):
             switch( nElement )
             {
-                case NMSP_DRAWINGML|XML_themeElements:              // CT_BaseStyles
+                case A_TOKEN( themeElements ):              // CT_BaseStyles
                     return new ThemeElementsContext( *this, mrTheme );
-                case NMSP_DRAWINGML|XML_objectDefaults:             // CT_ObjectStyleDefaults
+                case A_TOKEN( objectDefaults ):             // CT_ObjectStyleDefaults
                     return new objectDefaultContext( *this, mrTheme );
-                case NMSP_DRAWINGML|XML_extraClrSchemeLst:          // CT_ColorSchemeList
+                case A_TOKEN( extraClrSchemeLst ):          // CT_ColorSchemeList
                     return 0;
-                case NMSP_DRAWINGML|XML_custClrLst:                 // CustomColorList
+                case A_TOKEN( custClrLst ):                 // CustomColorList
                     return 0;
-                case NMSP_DRAWINGML|XML_ext:                        // CT_OfficeArtExtension
+                case A_TOKEN( ext ):                        // CT_OfficeArtExtension
                     return 0;
             }
         break;

@@ -29,7 +29,7 @@
 #define OOX_XLS_TABLEBUFFER_HXX
 
 #include <com/sun/star/table/CellRangeAddress.hpp>
-#include "oox/helper/containerhelper.hxx"
+#include "oox/xls/autofilterbuffer.hxx"
 #include "oox/xls/workbookhelper.hxx"
 
 namespace oox {
@@ -61,16 +61,18 @@ public:
     /** Imports a table definition from the passed attributes. */
     void                importTable( const AttributeList& rAttribs, sal_Int16 nSheet );
     /** Imports a table definition from a TABLE record. */
-    void                importTable( RecordInputStream& rStrm, sal_Int16 nSheet );
+    void                importTable( SequenceInputStream& rStrm, sal_Int16 nSheet );
+    /** Creates a new auto filter and stores it internally. */
+    inline AutoFilter&  createAutoFilter() { return maAutoFilters.createAutoFilter(); }
 
     /** Creates a database range from this tables. */
     void                finalizeImport();
 
-    /** Returns the table identifier. */
+    /** Returns the unique table identifier. */
     inline sal_Int32    getTableId() const { return maModel.mnId; }
     /** Returns the token index used in API token arrays (com.sun.star.sheet.FormulaToken). */
     inline sal_Int32    getTokenIndex() const { return mnTokenIndex; }
-    /** Returns the display name of the table. */
+    /** Returns the original display name of the table. */
     inline const ::rtl::OUString& getDisplayName() const { return maModel.maDisplayName; }
 
     /** Returns the original (unchecked) total range of the table. */
@@ -88,6 +90,8 @@ public:
 
 private:
     TableModel          maModel;
+    AutoFilterBuffer    maAutoFilters;      /// Filter settings for this table.
+    ::rtl::OUString     maDBRangeName;      /// Name of the databae range in the Calc document.
     ::com::sun::star::table::CellRangeAddress
                         maDestRange;        /// Validated range of the table in the worksheet.
     sal_Int32           mnTokenIndex;       /// Token index used in API token array.
@@ -102,10 +106,8 @@ class TableBuffer : public WorkbookHelper
 public:
     explicit            TableBuffer( const WorkbookHelper& rHelper );
 
-    /** Imports a table definition from the passed attributes. */
-    TableRef            importTable( const AttributeList& rAttribs, sal_Int16 nSheet );
-    /** Imports a table definition from a TABLE record. */
-    TableRef            importTable( RecordInputStream& rStrm, sal_Int16 nSheet );
+    /** Creates a new empty table. */
+    Table&              createTable();
 
     /** Creates database ranges from all imported tables. */
     void                finalizeImport();
@@ -116,12 +118,15 @@ public:
     TableRef            getTable( const ::rtl::OUString& rDispName ) const;
 
 private:
-    void                insertTable( TableRef xTable );
+    /** Inserts the passed table into the maps according to its identifier and name. */
+    void                insertTableToMaps( const TableRef& rxTable );
 
 private:
+    typedef RefVector< Table >                  TableVector;
     typedef RefMap< sal_Int32, Table >          TableIdMap;
     typedef RefMap< ::rtl::OUString, Table >    TableNameMap;
 
+    TableVector         maTables;
     TableIdMap          maIdTables;
     TableNameMap        maNameTables;
 };
@@ -132,4 +137,3 @@ private:
 } // namespace oox
 
 #endif
-

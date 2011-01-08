@@ -26,40 +26,39 @@
  ************************************************************************/
 
 #include "oox/ole/vbacontrol.hxx"
+
 #include <algorithm>
 #include <set>
-#include <rtl/ustrbuf.hxx>
 #include <com/sun/star/awt/XControlModel.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/io/XInputStreamProvider.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
+#include <rtl/ustrbuf.hxx>
 #include <xmlscript/xmldlg_imexp.hxx>
-#include "properties.hxx"
-#include "tokens.hxx"
 #include "oox/helper/attributelist.hxx"
 #include "oox/helper/binaryinputstream.hxx"
+#include "oox/helper/containerhelper.hxx"
 #include "oox/helper/propertymap.hxx"
 #include "oox/helper/propertyset.hxx"
 #include "oox/helper/storagebase.hxx"
 #include "oox/helper/textinputstream.hxx"
 #include "oox/ole/vbahelper.hxx"
 
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
-using ::com::sun::star::awt::XControlModel;
-using ::com::sun::star::container::XNameContainer;
-using ::com::sun::star::io::XInputStreamProvider;
-using ::com::sun::star::lang::XMultiServiceFactory;
-using ::com::sun::star::uno::Any;
-using ::com::sun::star::uno::Exception;
-using ::com::sun::star::uno::Reference;
-using ::com::sun::star::uno::UNO_QUERY_THROW;
-using ::com::sun::star::uno::UNO_SET_THROW;
-using ::com::sun::star::uno::XComponentContext;
-
 namespace oox {
 namespace ole {
+
+// ============================================================================
+
+using namespace ::com::sun::star::awt;
+using namespace ::com::sun::star::container;
+using namespace ::com::sun::star::frame;
+using namespace ::com::sun::star::io;
+using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::uno;
+
+using ::rtl::OUString;
+using ::rtl::OUStringBuffer;
 
 // ============================================================================
 
@@ -220,8 +219,8 @@ bool VbaSiteModel::importBinaryModel( BinaryInputStream& rInStrm )
     aReader.skipUndefinedProperty();
     aReader.readStringProperty( maToolTip );
     aReader.skipStringProperty();   // license key
-    aReader.readStringProperty( maLinkedCell );
-    aReader.readStringProperty( maSourceRange );
+    aReader.readStringProperty( maControlSource );
+    aReader.readStringProperty( maRowSource );
     return aReader.finalizeImport();
 }
 
@@ -335,6 +334,11 @@ void VbaSiteModel::convertProperties( PropertyMap& rPropMap,
             rPropMap.setProperty( PROP_Tabstop, getFlag( mnFlags, VBA_SITE_TABSTOP ) );
         rConv.convertPosition( rPropMap, maPos );
     }
+}
+
+void VbaSiteModel::bindToSources( const Reference< XControlModel >& rxCtrlModel, const ControlConverter& rConv ) const
+{
+    rConv.bindToSources( rxCtrlModel, maControlSource, maRowSource );
 }
 
 // ============================================================================
@@ -750,19 +754,21 @@ bool lclEatKeyword( OUString& rCodeLine, const OUString& rKeyword )
 
 // ----------------------------------------------------------------------------
 
-VbaUserForm::VbaUserForm( const Reference< XMultiServiceFactory >& rxGlobalFactory,
-        const GraphicHelper& rGraphicHelper, bool bDefaultColorBgr ) :
-    ControlConverter( rGraphicHelper, bDefaultColorBgr ),
-    mxGlobalFactory( rxGlobalFactory )
+VbaUserForm::VbaUserForm( const Reference< XComponentContext >& rxContext,
+        const Reference< XModel >& rxDocModel, const GraphicHelper& rGraphicHelper, bool bDefaultColorBgr ) :
+    mxCompContext( rxContext ),
+    mxDocModel( rxDocModel ),
+    maConverter( rxDocModel, rGraphicHelper, bDefaultColorBgr )
 {
-    OSL_ENSURE( mxGlobalFactory.is(), "VbaUserForm::VbaUserForm - missing service factory" );
+    OSL_ENSURE( mxCompContext.is(), "VbaUserForm::VbaUserForm - missing component context" );
+    OSL_ENSURE( mxDocModel.is(), "VbaUserForm::VbaUserForm - missing document model" );
 }
 
 void VbaUserForm::importForm( const Reference< XNameContainer >& rxDialogLib,
         StorageBase& rVbaFormStrg, const OUString& rModuleName, rtl_TextEncoding eTextEnc )
 {
     OSL_ENSURE( rxDialogLib.is(), "VbaUserForm::importForm - missing dialog library" );
-    if( !mxGlobalFactory.is() || !rxDialogLib.is() )
+    if( !mxCompContext.is() || !mxDocModel.is() || !rxDialogLib.is() )
         return;
 
     // check that the '03VBFrame' stream exists, this is required for forms
@@ -820,16 +826,15 @@ void VbaUserForm::importForm( const Reference< XNameContainer >& rxDialogLib,
     {
         // create the dialog model
         OUString aServiceName = mxCtrlModel->getServiceName();
-        Reference< XControlModel > xDialogModel( mxGlobalFactory->createInstance( aServiceName ), UNO_QUERY_THROW );
+        Reference< XMultiServiceFactory > xFactory( mxCompContext->getServiceManager(), UNO_QUERY_THROW );
+        Reference< XControlModel > xDialogModel( xFactory->createInstance( aServiceName ), UNO_QUERY_THROW );
         Reference< XNameContainer > xDialogNC( xDialogModel, UNO_QUERY_THROW );
 
         // convert properties and embedded controls
-        if( convertProperties( xDialogModel, *this, 0 ) )
+        if( convertProperties( xDialogModel, maConverter, 0 ) )
         {
             // export the dialog to XML and insert it into the dialog library
-            PropertySet aFactoryProps( mxGlobalFactory );
-            Reference< XComponentContext > xCompContext( aFactoryProps.getAnyProperty( PROP_DefaultContext ), UNO_QUERY_THROW );
-            Reference< XInputStreamProvider > xDialogSource( ::xmlscript::exportDialogModel( xDialogNC, xCompContext ), UNO_SET_THROW );
+            Reference< XInputStreamProvider > xDialogSource( ::xmlscript::exportDialogModel( xDialogNC, mxCompContext ), UNO_SET_THROW );
             OSL_ENSURE( !rxDialogLib->hasByName( aFormName ), "VbaUserForm::importForm - multiple dialogs with equal name" );
             ContainerHelper::insertByName( rxDialogLib, aFormName, Any( xDialogSource ) );
         }

@@ -34,7 +34,7 @@
 #include "accessibility/extended/accessiblebrowseboxcell.hxx"
 #endif
 #include <cppuhelper/implbase2.hxx>
-#include <vcl/wintypes.hxx>
+#include <tools/wintypes.hxx>
 // ============================================================================
 namespace accessibility
 {

@@ -26,24 +26,28 @@
  ************************************************************************/
 
 #include "oox/dump/pptxdumper.hxx"
-#include "oox/helper/zipstorage.hxx"
-#include "oox/ole/olestorage.hxx"
+
 #include "oox/dump/biffdumper.hxx"
 #include "oox/dump/oledumper.hxx"
 #include "oox/dump/xlsbdumper.hxx"
+#include "oox/helper/zipstorage.hxx"
+#include "oox/ole/olestorage.hxx"
 
 #if OOX_INCLUDE_DUMPER
-
-using ::rtl::OUString;
-using ::com::sun::star::uno::Reference;
-using ::com::sun::star::lang::XMultiServiceFactory;
-using ::com::sun::star::io::XInputStream;
-using ::comphelper::MediaDescriptor;
-using ::oox::core::FilterBase;
 
 namespace oox {
 namespace dump {
 namespace pptx {
+
+// ============================================================================
+
+using namespace ::com::sun::star::io;
+using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::uno;
+
+using ::comphelper::MediaDescriptor;
+using ::oox::core::FilterBase;
+using ::rtl::OUString;
 
 // ============================================================================
 
@@ -144,4 +148,3 @@ void Dumper::implDump()
 } // namespace oox
 
 #endif
-

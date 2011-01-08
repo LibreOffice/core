@@ -36,9 +36,6 @@
 #include "oox/drawingml/drawingmltypes.hxx"
 #include "oox/helper/attributelist.hxx"
 #include "oox/helper/propertymap.hxx"
-#include "oox/core/namespaces.hxx"
-#include "properties.hxx"
-#include "tokens.hxx"
 
 using ::rtl::OUString;
 using namespace ::oox::core;
@@ -156,27 +153,27 @@ Reference< XFastContextHandler > TextBodyPropertiesContext::createFastChildConte
     switch( aElementToken )
     {
             // Sequence
-            case NMSP_DRAWINGML|XML_prstTxWarp:     // CT_PresetTextShape
-            case NMSP_DRAWINGML|XML_prot:           // CT_TextProtectionProperty
+            case A_TOKEN( prstTxWarp ):     // CT_PresetTextShape
+            case A_TOKEN( prot ):           // CT_TextProtectionProperty
                 break;
 
             // EG_TextAutofit
-            case NMSP_DRAWINGML|XML_noAutofit:
+            case A_TOKEN( noAutofit ):
                 mrTextBodyProp.maPropertyMap[ PROP_TextAutoGrowHeight ] <<= false;   // CT_TextNoAutofit
                 break;
-            case NMSP_DRAWINGML|XML_normAutofit:    // CT_TextNormalAutofit
+            case A_TOKEN( normAutofit ):    // CT_TextNormalAutofit
                 mrTextBodyProp.maPropertyMap[ PROP_TextFitToSize ] <<= true;
                 mrTextBodyProp.maPropertyMap[ PROP_TextAutoGrowHeight ] <<= false;
                 break;
-            case NMSP_DRAWINGML|XML_spAutoFit:
+            case A_TOKEN( spAutoFit ):
                 mrTextBodyProp.maPropertyMap[ PROP_TextAutoGrowHeight ] <<= true;
                 break;
 
-            case NMSP_DRAWINGML|XML_scene3d:        // CT_Scene3D
+            case A_TOKEN( scene3d ):        // CT_Scene3D
 
             // EG_Text3D
-            case NMSP_DRAWINGML|XML_sp3d:           // CT_Shape3D
-            case NMSP_DRAWINGML|XML_flatTx:         // CT_FlatText
+            case A_TOKEN( sp3d ):           // CT_Shape3D
+            case A_TOKEN( flatTx ):         // CT_FlatText
 
                 break;
     }

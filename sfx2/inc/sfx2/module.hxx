@@ -33,7 +33,7 @@
 #include <sfx2/shell.hxx>
 #include <sfx2/imgdef.hxx>
 #include <sal/types.h>
-#include <vcl/fldunit.hxx>
+#include <tools/fldunit.hxx>
 
 class ImageList;
 

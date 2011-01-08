@@ -60,6 +60,7 @@ mkdir: %_DEST%\inc%_EXT%\filter\msfilter
 ..\%__SRC%\misc\XSLTValidate.component %_DEST%\xml%_EXT%\XSLTValidate.component
 ..\%__SRC%\misc\filterconfig1.component %_DEST%\xml%_EXT%\filterconfig1.component
 ..\%__SRC%\misc\flash.component %_DEST%\xml%_EXT%\flash.component
+..\%__SRC%\misc\msfilter.component %_DEST%\xml%_EXT%\msfilter.component
 ..\%__SRC%\misc\pdffilter.component %_DEST%\xml%_EXT%\pdffilter.component
 ..\%__SRC%\misc\placeware.component %_DEST%\xml%_EXT%\placeware.component
 ..\%__SRC%\misc\svgfilter.component %_DEST%\xml%_EXT%\svgfilter.component

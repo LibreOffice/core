@@ -140,6 +140,7 @@ TabPage RID_SVXPAGE_GRID
         TabStop = TRUE ;
         Repeat = TRUE ;
         Spin = TRUE ;
+        Minimum = 1 ;
         Maximum = 99 ;
         Last = 99 ;
         StrictFormat = TRUE ;
@@ -149,7 +150,7 @@ TabPage RID_SVXPAGE_GRID
     {
         Pos = MAP_APPFONT ( 223 , 56 ) ;
         Size = MAP_APPFONT ( 29 , 8 ) ;
-        Text [ en-US ] = "point(s)" ;
+        Text [ en-US ] = "space(s)" ;
     };
     NumericField NUM_FLD_DIVISION_Y
     {
@@ -160,6 +161,7 @@ TabPage RID_SVXPAGE_GRID
         TabStop = TRUE ;
         Repeat = TRUE ;
         Spin = TRUE ;
+        Minimum = 1 ;
         Maximum = 99 ;
         Last = 99 ;
         StrictFormat = TRUE ;

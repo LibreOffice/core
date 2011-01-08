@@ -26,18 +26,21 @@
  ************************************************************************/
 
 #include "oox/drawingml/chart/axiscontext.hxx"
+
 #include "oox/drawingml/shapepropertiescontext.hxx"
 #include "oox/drawingml/textbodycontext.hxx"
 #include "oox/drawingml/chart/axismodel.hxx"
 #include "oox/drawingml/chart/titlecontext.hxx"
 
-using ::rtl::OUString;
-using ::oox::core::ContextHandlerRef;
-using ::oox::core::ContextHandler2Helper;
-
 namespace oox {
 namespace drawingml {
 namespace chart {
+
+// ============================================================================
+
+using ::oox::core::ContextHandlerRef;
+using ::oox::core::ContextHandler2Helper;
+using ::rtl::OUString;
 
 // ============================================================================
 
@@ -315,4 +318,3 @@ ContextHandlerRef ValAxisContext::onCreateContext( sal_Int32 nElement, const Att
 } // namespace chart
 } // namespace drawingml
 } // namespace oox
-

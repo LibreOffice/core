@@ -784,7 +784,7 @@ String STR_PUBLISH_OUTLINE
 };
 String STR_EYEDROPPER
 {
-    Text [ en-US ] = "Eyedropper" ;
+    Text [ en-US ] = "Color Replacer" ;
 };
 String STR_UNDO_MORPHING
 {

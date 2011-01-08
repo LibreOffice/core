@@ -269,14 +269,9 @@ public:
 
 class SalI18N_InputMethod;
 class SalI18N_KeyboardExtension;
-class XlfdStorage;
-class ExtendedFontStruct;
-class ExtendedXlfd;
 class AttributeProvider;
 class SalUnicodeConverter;
 class SalConverterCache;
-
-DECLARE_LIST( SalFontCache, ExtendedFontStruct* )
 
 extern "C" {
     struct SnDisplay;
@@ -349,8 +344,6 @@ protected:
     SalI18N_KeyboardExtension   *mpKbdExtension;
 
     AttributeProvider           *mpFactory;
-    XlfdStorage                 *mpFontList;
-    const ExtendedXlfd          *mpFallbackFactory;
 
     Display        *pDisp_;             // X Display
     int             m_nDefaultScreen;           // XDefaultScreen
@@ -374,8 +367,6 @@ protected:
     XLIB_Cursor     aPointerCache_[POINTER_COUNT];
     SalFrame*       m_pCapture;
 
-    mutable SalFontCache* m_pFontCache;
-
     // Keyboard
     BOOL            bNumLockFromXS_;    // Num Lock handled by X Server
     int             nNumLockIndex_;     // modifier index in modmap
@@ -397,7 +388,6 @@ protected:
 
     mutable XLIB_Time  m_nLastUserEventTime; // mutable because changed on first access
 
-    void            DestroyFontCache();
     virtual long    Dispatch( XEvent *pEvent ) = 0;
     void            InitXinerama();
     void            InitRandR( XLIB_Window aRoot ) const;
@@ -433,14 +423,6 @@ public:
 
     void            PrintEvent( const ByteString &rComment,
                                 XEvent       *pEvent ) const;
-
-    XlfdStorage*    GetXlfdList() const;
-    ExtendedFontStruct*
-    GetFont( const ExtendedXlfd *pFont,
-             const Size& rPixelSize, sal_Bool bVertical ) const;
-    const ExtendedXlfd*
-    GetFallbackFactory()
-    { return mpFallbackFactory; }
 
     void            Beep() const;
 

@@ -868,7 +868,7 @@ testcase tTextframes_28
     
     printlog "Insert a frame"
     Call fInsertFrame(30, 30, 60, 60)
-    
+    Sleep 2
     printlog "Naming the frame"
     Call fFormatFrame("TabZusaetze")
     ObjektName.SetText sFrameName1
@@ -885,7 +885,7 @@ testcase tTextframes_28
     
     printlog "Insert another frame"
     Call fInsertFrame(50, 50, 80, 80)
-    
+    Sleep 2
     printlog "Naming the frame"
     Call fFormatFrame("TabZusaetze")
     ObjektName.SetText sFrameName2

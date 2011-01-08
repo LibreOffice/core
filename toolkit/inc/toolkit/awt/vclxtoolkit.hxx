@@ -41,7 +41,7 @@
 #include <osl/mutex.hxx>
 #include <osl/module.h>
 #include <tools/link.hxx>
-#include <vcl/wintypes.hxx>
+#include <tools/wintypes.hxx>
 
 #include <toolkit/dllapi.h>
 

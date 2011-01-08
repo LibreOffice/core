@@ -75,4 +75,3 @@ struct ChartSpaceModel
 } // namespace oox
 
 #endif
-

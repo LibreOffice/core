@@ -26,11 +26,9 @@
  ************************************************************************/
 
 #include "diagramdefinitioncontext.hxx"
-#include "oox/core/namespaces.hxx"
 #include "oox/helper/helper.hxx"
 #include "layoutnodecontext.hxx"
 #include "oox/drawingml/diagram/datamodelcontext.hxx"
-#include "tokens.hxx"
 
 using namespace ::oox::core;
 using namespace ::com::sun::star::uno;
@@ -80,29 +78,29 @@ DiagramDefinitionContext::createFastChildContext( ::sal_Int32 aElement,
 
     switch( aElement )
     {
-    case NMSP_DIAGRAM|XML_title:
+    case DGM_TOKEN( title ):
         mpLayout->setTitle( xAttribs->getOptionalValue( XML_val ) );
         break;
-    case NMSP_DIAGRAM|XML_desc:
+    case DGM_TOKEN( desc ):
         mpLayout->setDesc( xAttribs->getOptionalValue( XML_val ) );
         break;
-    case NMSP_DIAGRAM|XML_layoutNode:
+    case DGM_TOKEN( layoutNode ):
         mpLayout->getNode().reset( new LayoutNode() );
         xRet.set( new LayoutNodeContext( *this, xAttribs, mpLayout->getNode() ) );
         break;
-     case NMSP_DIAGRAM|XML_clrData:
+     case DGM_TOKEN( clrData ):
         // TODO, does not matter for the UI. skip.
         return xRet;
-    case NMSP_DIAGRAM|XML_sampData:
+    case DGM_TOKEN( sampData ):
         mpLayout->getSampData().reset( new DiagramData );
         xRet.set( new DataModelContext( *this, mpLayout->getSampData() ) );
         break;
-    case NMSP_DIAGRAM|XML_styleData:
+    case DGM_TOKEN( styleData ):
         mpLayout->getStyleData().reset( new DiagramData );
         xRet.set( new DataModelContext( *this, mpLayout->getStyleData() ) );
         break;
-    case NMSP_DIAGRAM|XML_cat:
-    case NMSP_DIAGRAM|XML_catLst:
+    case DGM_TOKEN( cat ):
+    case DGM_TOKEN( catLst ):
         // TODO, does not matter for the UI
     default:
         break;

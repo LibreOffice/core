@@ -76,6 +76,8 @@ public:
     void addEntry(::rtl::OUString const & url, Data const & data);
 
     ::boost::optional<Data> getEntry(::rtl::OUString const & url);
+    //must also return the data urls for entries with @activ="false". That is,
+    //those are currently revoked.
     ::std::list< ::rtl::OUString> getAllDataUrls();
 
 };

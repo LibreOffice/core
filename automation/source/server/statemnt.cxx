@@ -34,7 +34,7 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/uieventslogger.hxx>
 
-#include <vcl/wintypes.hxx>
+#include <tools/wintypes.hxx>
 #ifndef _DIALOG_HXX //autogen
 #include <vcl/dialog.hxx>
 #endif
@@ -79,7 +79,6 @@
 #include <vcl/fixed.hxx>
 #include <vcl/wrkwin.hxx>
 #include <osl/diagnose.h>
-#include <vcl/wintypes.hxx>
 #include <svtools/valueset.hxx>
 #include <svtools/roadmap.hxx>
 #include <svtools/table/tablecontrol.hxx>

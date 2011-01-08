@@ -87,6 +87,10 @@ MenubarValue::~MenubarValue()
 {
 }
 
+MenupopupValue::~MenupopupValue()
+{
+}
+
 PushButtonValue::~PushButtonValue()
 {
 }
@@ -200,49 +204,20 @@ static boost::shared_ptr< ImplControlValue > lcl_transformControlValue( const Im
     case CTRL_GENERIC:
             aResult.reset( new ImplControlValue( rVal ) );
             break;
+    case CTRL_MENU_POPUP:
+        {
+            const MenupopupValue* pMVal = static_cast<const MenupopupValue*>(&rVal);
+            MenupopupValue* pNew = new MenupopupValue( *pMVal );
+            pNew->maItemRect = rDev.ImplLogicToDevicePixel( pMVal->maItemRect );
+            aResult.reset( pNew );
+        }
+        break;
     default:
         OSL_ENSURE( 0, "unknown ImplControlValue type !" );
         break;
     }
     return aResult;
 }
-
-#if 0
-static void lcl_moveControlValue( ControlType nType, const ImplControlValue& aValue, const Point& rDelta )
-{
-    switch( aValue.getType() )
-    {
-        case CTRL_SLIDER:
-        {
-            SliderValue* pSlVal = static_cast<SliderValue*>(const_cast<ImplControlValue*>(&aValue));
-            pSlVal->maThumbRect.Move( rDelta.X(), rDelta.Y() );
-        }
-        break;
-        case CTRL_SCROLLBAR:
-        {
-            ScrollbarValue* pScVal = static_cast<ScrollbarValue*>(const_cast<ImplControlValue*>(&aValue));
-            pScVal->maThumbRect.Move( rDelta.X(), rDelta.Y() );
-            pScVal->maButton1Rect.Move( rDelta.X(), rDelta.Y() );
-            pScVal->maButton2Rect.Move( rDelta.X(), rDelta.Y() );
-        }
-        break;
-        case CTRL_SPINBOX:
-        case CTRL_SPINBUTTONS:
-        {
-            SpinbuttonValue* pSpVal = static_cast<SpinbuttonValue*>(const_cast<ImplControlValue*>(&aValue));
-            pSpVal->maUpperRect.Move( rDelta.X(), rDelta.Y() );
-            pSpVal->maLowerRect.Move( rDelta.X(), rDelta.Y() );
-        }
-        break;
-        case CTRL_TOOLBAR:
-        {
-            ToolbarValue* pTVal = static_cast<ToolbarValue*>(const_cast<ImplControlValue*>(&aValue));
-            pTVal->maGripRect.Move( rDelta.X(), rDelta.Y() );
-        }
-        break;
-    }
-}
-#endif
 
 BOOL OutputDevice::DrawNativeControl( ControlType nType,
                             ControlPart nPart,
@@ -253,20 +228,6 @@ BOOL OutputDevice::DrawNativeControl( ControlType nType,
 {
     if( !lcl_enableNativeWidget( *this ) )
         return FALSE;
-
-    /*
-    if( !IsInPaint() && IsPaintTransparent() )
-    {
-        // only required if called directly (ie, we're not in Paint() ):
-        // force redraw (Paint()) for transparent controls
-        // to trigger a repaint of the background
-        Region aClipRgn( GetClipRegion() );
-        if( !rControlRegion.IsEmpty() )
-            aClipRgn.Intersect( rControlRegion );
-        Invalidate( aClipRgn, INVALIDATE_UPDATE );
-        return TRUE;
-    }
-    */
 
     // make sure the current clip region is initialized correctly
     if ( !mpGraphics )

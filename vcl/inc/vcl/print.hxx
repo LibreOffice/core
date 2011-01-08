@@ -208,6 +208,11 @@ public:
 
     BOOL                        IsConvertToGreyscales() const { return mbConvertToGreyscales; }
     void                        SetConvertToGreyscales( BOOL bSet ) { mbConvertToGreyscales = bSet; }
+
+    // read printer options from configuration, parameter decides whether the set for
+    // print "to printer" or "to file" should be read.
+    // returns true if config was read, false if an error occured
+    bool                        ReadFromConfig( bool bFile );
 };
 
 // -----------
@@ -313,7 +318,12 @@ public:
     BOOL                        Setup( Window* pWindow = NULL );
     BOOL                        SetPrinterProps( const Printer* pPrinter );
 
-    void                        SetPrinterOptions( const PrinterOptions& rOptions ) { *mpPrinterOptions = rOptions; }
+    // SetPrinterOptions is used internally only now
+    // in earlier times it was used only to set the options loaded directly from the configuration
+    // in SfxPrinter::InitJob, this is now handled internally
+    // should the need arise to set the printer options outside vcl, also a method would have to be devised
+    // to not override these again internally
+    SAL_DLLPRIVATE void         SetPrinterOptions( const PrinterOptions& rOptions );
     const PrinterOptions&       GetPrinterOptions() const { return( *mpPrinterOptions ); }
 
     BOOL                        SetOrientation( Orientation eOrient );
@@ -349,10 +359,6 @@ public:
 
     BOOL                        IsPrinting() const { return mbPrinting; }
 
-    void                        SetPrintFile( const XubString& rFileName ) { maPrintFile = rFileName; }
-    const XubString&            GetPrintFile() const { return maPrintFile; }
-    void                        EnablePrintFile( BOOL bEnable ) { mbPrintFile = bEnable; }
-    BOOL                        IsPrintFileEnabled() const { return mbPrintFile; }
     BOOL                        AbortJob();
     const XubString&            GetCurJobName() const { return maJobName; }
     USHORT                      GetCurPage() const { return mnCurPage; }
@@ -538,6 +544,7 @@ public:
     SAL_DLLPRIVATE com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue > getPageParametersProtected( int i_nPage ) const;
 
     SAL_DLLPRIVATE ULONG removeTransparencies( GDIMetaFile& i_rIn, GDIMetaFile& o_rOut );
+    SAL_DLLPRIVATE void resetPrinterOptions( bool i_bFileOutput );
 };
 
 class VCL_DLLPUBLIC PrinterOptionsHelper
@@ -620,28 +627,34 @@ class VCL_DLLPUBLIC PrinterOptionsHelper
         , mbEnabled( i_bEnabled ) {}
     };
 
+    // note: in the following helper functions HelpIds are expected as an rtl::OUString
+    // the normal HelpId form is rtl::OString (byte string instead of UTF16 string)
+    // this is because the whole interface is base on UNO properties; in fact the structures
+    // are passed over UNO interfaces. UNO does not know a byte string, hence the string is
+    // transported via UTF16 strings.
+
     // general control
     static com::sun::star::uno::Any getUIControlOpt( const rtl::OUString& i_rTitle,
-                                                     const com::sun::star::uno::Sequence< rtl::OUString >& i_rHelpText,
+                                                     const com::sun::star::uno::Sequence< rtl::OUString >& i_rHelpId,
                                                      const rtl::OUString& i_rType,
                                                      const com::sun::star::beans::PropertyValue* i_pValue = NULL,
                                                      const UIControlOptions& i_rControlOptions = UIControlOptions()
                                                      );
     // create a group (e.g. a TabPage); following controls will be grouped in it until the next
     // group begins
-    static com::sun::star::uno::Any getGroupControlOpt( const rtl::OUString& i_rTitle, const rtl::OUString& i_rHelpText );
+    static com::sun::star::uno::Any getGroupControlOpt( const rtl::OUString& i_rTitle, const rtl::OUString& i_rHelpId );
 
     // create a subgroup (e.g. a FixedLine); following controls will be grouped in it until the next
     // subgroup or group begins
     // setting bJobPage = true will make the subgroup appear on the first page of the print dialog
     static com::sun::star::uno::Any getSubgroupControlOpt( const rtl::OUString& i_rTitle,
-                                                           const rtl::OUString& i_rHelpText,
+                                                           const rtl::OUString& i_rHelpId,
                                                            const UIControlOptions& i_rControlOptions = UIControlOptions()
                                                            );
 
     // create a bool option (usually a checkbox)
     static com::sun::star::uno::Any getBoolControlOpt( const rtl::OUString& i_rTitle,
-                                                       const rtl::OUString& i_rHelpText,
+                                                       const rtl::OUString& i_rHelpId,
                                                        const rtl::OUString& i_rProperty,
                                                        sal_Bool i_bValue,
                                                        const UIControlOptions& i_rControlOptions = UIControlOptions()
@@ -649,7 +662,7 @@ class VCL_DLLPUBLIC PrinterOptionsHelper
 
     // create a set of choices (either a radio button group or a list box)
     static com::sun::star::uno::Any getChoiceControlOpt( const rtl::OUString& i_rTitle,
-                                                         const com::sun::star::uno::Sequence< rtl::OUString >& i_rHelpText,
+                                                         const com::sun::star::uno::Sequence< rtl::OUString >& i_rHelpId,
                                                          const rtl::OUString& i_rProperty,
                                                          const com::sun::star::uno::Sequence< rtl::OUString >& i_rChoices,
                                                          sal_Int32 i_nValue,
@@ -661,7 +674,7 @@ class VCL_DLLPUBLIC PrinterOptionsHelper
     // create an integer range (e.g. a spin field)
     // note: max value < min value means do not apply min/max values
     static com::sun::star::uno::Any getRangeControlOpt( const rtl::OUString& i_rTitle,
-                                                        const rtl::OUString& i_rHelpText,
+                                                        const rtl::OUString& i_rHelpId,
                                                         const rtl::OUString& i_rProperty,
                                                         sal_Int32 i_nValue,
                                                         sal_Int32 i_nMinValue = -1,
@@ -672,7 +685,7 @@ class VCL_DLLPUBLIC PrinterOptionsHelper
     // create a string field
     // note: max value < min value means do not apply min/max values
     static com::sun::star::uno::Any getEditControlOpt( const rtl::OUString& i_rTitle,
-                                                       const rtl::OUString& i_rHelpText,
+                                                       const rtl::OUString& i_rHelpId,
                                                        const rtl::OUString& i_rProperty,
                                                        const rtl::OUString& i_rValue,
                                                        const UIControlOptions& i_rControlOptions = UIControlOptions()
