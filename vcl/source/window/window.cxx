@@ -5099,48 +5099,6 @@ long Window::PreNotify( NotifyEvent& rNEvt )
         // #82968# mouse and key events will be notified after processing ( in ImplNotifyKeyMouseCommandEventListeners() )!
         //    see also ImplHandleMouseEvent(), ImplHandleKey()
 
-        /*
-        else if( rNEvt.GetType() == EVENT_MOUSEMOVE )
-        {
-            if ( mpWindowImpl->mbCompoundControl || ( rNEvt.GetWindow() == this ) )
-            {
-                if ( rNEvt.GetWindow() == this )
-                    ImplCallEventListeners( VCLEVENT_WINDOW_MOUSEMOVE, (void*)rNEvt.GetMouseEvent() );
-                else
-                    ImplCallEventListeners( VCLEVENT_WINDOW_MOUSEMOVE, &ImplTranslateMouseEvent( *rNEvt.GetMouseEvent(), rNEvt.GetWindow(), this ) );
-            }
-        }
-        else if( rNEvt.GetType() == EVENT_MOUSEBUTTONUP )
-        {
-            if ( mpWindowImpl->mbCompoundControl || ( rNEvt.GetWindow() == this ) )
-            {
-                if ( rNEvt.GetWindow() == this )
-                    ImplCallEventListeners( VCLEVENT_WINDOW_MOUSEBUTTONUP, (void*)rNEvt.GetMouseEvent() );
-                else
-                    ImplCallEventListeners( VCLEVENT_WINDOW_MOUSEBUTTONUP, &ImplTranslateMouseEvent( *rNEvt.GetMouseEvent(), rNEvt.GetWindow(), this ) );
-            }
-        }
-        else if( rNEvt.GetType() == EVENT_MOUSEBUTTONDOWN )
-        {
-            if ( mpWindowImpl->mbCompoundControl || ( rNEvt.GetWindow() == this ) )
-            {
-                if ( rNEvt.GetWindow() == this )
-                    ImplCallEventListeners( VCLEVENT_WINDOW_MOUSEBUTTONDOWN, (void*)rNEvt.GetMouseEvent() );
-                else
-                    ImplCallEventListeners( VCLEVENT_WINDOW_MOUSEBUTTONDOWN, &ImplTranslateMouseEvent( *rNEvt.GetMouseEvent(), rNEvt.GetWindow(), this ) );
-            }
-        }
-        else if( rNEvt.GetType() == EVENT_KEYINPUT )
-        {
-            if ( mpWindowImpl->mbCompoundControl || ( rNEvt.GetWindow() == this ) )
-                ImplCallEventListeners( VCLEVENT_WINDOW_KEYINPUT, (void*)rNEvt.GetKeyEvent() );
-        }
-        else if( rNEvt.GetType() == EVENT_KEYUP )
-        {
-            if ( mpWindowImpl->mbCompoundControl || ( rNEvt.GetWindow() == this ) )
-                ImplCallEventListeners( VCLEVENT_WINDOW_KEYUP, (void*)rNEvt.GetKeyEvent() );
-        }
-        */
     }
 
     return bDone;

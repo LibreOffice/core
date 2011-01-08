@@ -595,64 +595,6 @@ SfxNumRanges& SfxNumRanges::operator -=
 
     delete [] pTarget;
     return *this;
-
-    /* untested code from MI commented out (MDA, 28.01.97)
-    do
-    {
-        // 1st range is smaller than 2nd range?
-        if ( pRange1[1] < pRange2[0] )
-            // => keep 1st range
-            pRange1 += 2;
-
-        // 2nd range is smaller than 1st range?
-        else if ( pRange2[1] < pRange1[0] )
-            // => skip 2nd range
-            pRange2 += 2;
-
-        // 2nd range totally overlaps the 1st range?
-        else if ( pRange2[0] <= pRange1[0] && pRange2[1] >= pRange1[1] )
-            // => remove 1st range
-            memmove( pRange1, pRange1+2, sizeof(NUMTYPE) * (pEndOfTarget-pRange1+2) );
-
-        // 2nd range overlaps only the beginning of 1st range?
-        else if ( pRange2[0] <= pRange1[0] && pRange2[1] < pRange1[1] )
-        {
-            // => cut the beginning of 1st range and goto next 2nd range
-            pRange1[0] = pRange2[1] + 1;
-            pRange2 += 2;
-        }
-
-        // 2nd range overlaps only the end of 1st range?
-        else if ( pRange2[0] > pRange1[0] && pRange2[1] >= pRange1[0] )
-            // => cut the beginning of 1st range
-            pRange1[0] = pRange2[1]+1;
-
-        // 2nd range is a real subset of 1st range
-        else
-        {
-            // => split 1st range and goto next 2nd range
-            memmove( pRange1+3, pRange1+1, sizeof(NUMTYPE) * (pEndOfTarget-pRange1-1) );
-            pRange1[1] = pRange2[0] - 1;
-            pRange1[2] = pRange2[1] + 1;
-            pRange1 += 2;
-            pRange2 += 2;
-        }
-    }
-    while ( *pRange1 && *pRange2 );
-
-    // assign the differentiated ranges
-    delete[] _pRanges;
-    NUMTYPE nUShorts = Count_Impl(pTarget) + 1;
-    if ( 1 != nUShorts )
-    {
-        _pRanges = new NUMTYPE[ nUShorts ];
-        memcpy( _pRanges, pTarget, nUShorts * sizeof(NUMTYPE) );
-        _pRanges[ nUShorts-1 ] = 0;
-    }
-    else
-        _pRanges = 0;
-    return *this;
-    */
 }
 
 //------------------------------------------------------------------------
