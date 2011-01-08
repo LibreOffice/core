@@ -37,6 +37,7 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 
 my ($prefix, $ext, $key);
 $productname = "LibreOffice";
+$productname_br = "BrOffice";
 $workdir = ".";
 
 while ($_ = $ARGV[0], /^-/) {
@@ -44,6 +45,10 @@ while ($_ = $ARGV[0], /^-/) {
     last if /^--$/;
     if (/^-p/) {
         $productname = $ARGV[0];
+        shift;
+    }
+    if (/^-b/) {
+        $productname_br = $ARGV[0];
         shift;
     }
     if (/^-d/) {
@@ -122,6 +127,7 @@ KEY:    while (<TEMPLATE>) {
             $value = substr($value, index($value, "\"") + 1, rindex($value, "\"") - 1);
 
             # replace resource placeholder
+            $value=~s/%PRODUCTNAME_BR/$productname_br/g;
             $value=~s/%PRODUCTNAME/$productname/g;
 
             $locale=~s/-/_/;
