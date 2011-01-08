@@ -716,16 +716,6 @@ void SwPostItMgr::LayoutPostIts()
                                 OSL_ENSURE(mPages[n]->bScrollbar,"SwPostItMgr::LayoutByPage(): note overlaps, but bScrollbar is not true");
                             }
                         }
-
-                        // do some magic so we really see the focused note
-                        for(SwSidebarWin_iterator i = aVisiblePostItList.begin(); i!= aVisiblePostItList.end() ; i++)
-                        {
-                                            if ((*i)->HasChildPathFocus())
-                            {
-                                MakeVisible((*i),n+1);
-                                break;
-                            }
-                        }
                     }
                     else
                     {
