@@ -135,7 +135,7 @@ void SAL_CALL ODefinitionContainer::disposing()
 
     MutexGuard aGuard(m_aMutex);
 
-    // say our listeners goobye
+    // say goodbye to our listeners
     EventObject aEvt(*this);
     m_aApproveListeners.disposeAndClear(aEvt);
     m_aContainerListeners.disposeAndClear(aEvt);

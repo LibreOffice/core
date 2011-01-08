@@ -47,7 +47,6 @@ namespace rptui
 {
 //........................................................................
 using namespace ::com::sun::star;
-// using namespace comphelper;
 
 ReportComponentHandler::ReportComponentHandler(uno::Reference< uno::XComponentContext > const & context)
     :ReportComponentHandler_Base(m_aMutex)

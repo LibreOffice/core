@@ -432,7 +432,6 @@ namespace
     // -----------------------------------------------------------------------------
     BOOL isScrollAllowed( OJoinTableView* _pView,long nDelta, BOOL bHoriz)
     {
-        BOOL bRet = TRUE;
         //////////////////////////////////////////////////////////////////////
         // adjust ScrollBar-Positions
         ScrollBar* pBar = _pView->GetVScrollBar();
@@ -442,9 +441,9 @@ namespace
         long nOldThumbPos = pBar->GetThumbPos();
         long nNewThumbPos = nOldThumbPos + nDelta;
         if( nNewThumbPos < 0 )
-            nNewThumbPos = 0;// bRet = FALSE;
+            nNewThumbPos = 0;
         else if( nNewThumbPos > pBar->GetRangeMax() )
-            nNewThumbPos = pBar->GetRangeMax();// bRet = FALSE;
+            nNewThumbPos = pBar->GetRangeMax();
 
         if ( bHoriz )
         {
@@ -454,7 +453,7 @@ namespace
         else if ( nNewThumbPos == _pView->GetScrollOffset().Y() )
             return FALSE;
 
-        return bRet;
+        return TRUE;
     }
     // -----------------------------------------------------------------------------
     BOOL getMovementImpl(OJoinTableView* _pView,const Point& _rPoint,const Size& _rSize,long& _nScrollX,long& _nScrollY)
@@ -576,7 +575,7 @@ void OJoinTableView::SetDefaultTabWinPosSize( OTableWindow* pTabWin )
 
         //////////////////////////////////////////////////////////////////
         // Belegte Bereiche dieser Zeile pruefen
-        OTableWindow* pOtherTabWin;// = GetTabWinMap()->First();
+        OTableWindow* pOtherTabWin;
         OTableWindowMapIterator aIter = m_aTableMap.begin();
         OTableWindowMapIterator aEnd = m_aTableMap.end();
         for(;aIter != aEnd;++aIter)

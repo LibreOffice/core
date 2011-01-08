@@ -206,12 +206,10 @@ public class ReportDesignerTest extends ComplexTestCase {
     private static XMultiServiceFactory m_xXMultiServiceFactory = null;
     private void startOffice()
         {
-            // int tempTime = param.getInt("SingleTimeOut");
             param.put("TimeOut", new Integer(300000));
             System.out.println("TimeOut: " + param.getInt("TimeOut"));
             System.out.println("ThreadTimeOut: " + param.getInt("ThreadTimeOut"));
 
-            // OfficeProvider aProvider = null;
             m_aProvider = new OfficeProvider();
             m_xXMultiServiceFactory = (XMultiServiceFactory) m_aProvider.getManager(param);
             param.put("ServiceFactory", m_xXMultiServiceFactory);
@@ -253,17 +251,11 @@ public class ReportDesignerTest extends ComplexTestCase {
 
                 m_sUPDMinor = System.getProperty("UPDMINOR");
                 m_sCWS_WORK_STAMP = System.getProperty("CWS_WORK_STAMP");
-                // createDBEntry();
                 log.println("Current CWS: " + m_sCWS_WORK_STAMP);
                 log.println("Current MWS: " + m_sUPDMinor);
 
-                // System.exit(1);
-
                 sAppExecutionCommand = sAppExecutionCommand.replaceAll( "\\$\\{USERNAME\\}", sUser);
                 log.println("sAppExecutionCommand='" + sAppExecutionCommand + "'");
-
-                // an other way to replace strings
-                // sAppExecutionCommand = utils.replaceAll13(sAppExecutionCommand, "${USERNAME}", sUser);
 
                 checkIfOfficeExists(sAppExecutionCommand);
                 param.put("AppExecutionCommand", new String(sAppExecutionCommand));

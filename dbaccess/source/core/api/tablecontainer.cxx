@@ -130,7 +130,6 @@ OTableContainer::OTableContainer(::cppu::OWeakObject& _rParent,
 OTableContainer::~OTableContainer()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "api", "Ocke.Janssen@sun.com", "OTableContainer::OTableContainer" );
-    //  dispose();
     DBG_DTOR(OTableContainer, NULL);
 }
 
@@ -480,7 +479,7 @@ void SAL_CALL OTableContainer::disposing()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "api", "Ocke.Janssen@sun.com", "OTableContainer::disposing" );
     OFilteredContainer::disposing();
-    // say our listeners goobye
+    // say goodbye to our listeners
     m_xTableDefinitions = NULL;
     m_pTableMediator = NULL;
 }

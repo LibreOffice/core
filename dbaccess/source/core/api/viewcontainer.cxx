@@ -89,7 +89,6 @@ OViewContainer::OViewContainer(::cppu::OWeakObject& _rParent
 
 OViewContainer::~OViewContainer()
 {
-    //  dispose();
     DBG_DTOR(OViewContainer, NULL);
 }
 

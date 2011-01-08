@@ -58,10 +58,6 @@ class OExtensionNotPresentDialog :  public ModalDialog
     ::com::sun::star::lang::Locale          m_nLocale;
     com::sun::star::uno::Reference < com::sun::star::lang::XMultiServiceFactory > m_xMultiServiceFactory;
 
-    /** returns the format string.
-    */
-    // ::rtl::OUString getFormatString(::sal_Int16 _nNumberFormatIndex);
-
     DECL_LINK(Download_Click,PushButton*);
 
     // not CopyCTOR, no self assignment

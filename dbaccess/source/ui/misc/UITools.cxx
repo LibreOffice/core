@@ -211,7 +211,6 @@ SQLExceptionInfo createConnection(  const Reference< ::com::sun::star::beans::XP
                 if (!xHandler.is())
                 {
                     OSL_ENSURE(sal_False, "createConnection: could not instantiate an interaction handler!");
-                    // ShowServiceNotAvailableError(NULL, String(SERVICE_TASK_INTERACTION_HANDLER), sal_True);
                         // TODO: a real parent!
                 }
                 else

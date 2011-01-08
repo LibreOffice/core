@@ -163,7 +163,7 @@ namespace dbaui
         else
         {
             aEnumeration.getDatasourceNames(aOdbcDatasources);
-            // excute the select dialog
+            // execute the select dialog
             ODatasourceSelectDialog aSelector(GetParent(), aOdbcDatasources, false);
             if (_sCurr.getLength())
                 aSelector.Select(_sCurr);

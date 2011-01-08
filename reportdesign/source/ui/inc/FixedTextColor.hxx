@@ -54,8 +54,6 @@ namespace rptui
 
         void setPropertyTextColor(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XVclWindowPeer >& _xVclWindowPeer, sal_Int32 _nFormatKey);
 
-        // sal_Int32 getTextColor();
-
     public:
         FixedTextColor(const OReportController & _aObserver);
         virtual ~FixedTextColor();

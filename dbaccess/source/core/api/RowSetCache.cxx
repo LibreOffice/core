@@ -186,7 +186,6 @@ ORowSetCache::ORowSetCache(const Reference< XResultSet >& _xRs,
                 }
                 catch(const Exception&)
                 {
-                    // DBG_UNHANDLED_EXCEPTION();
                 }
                 m_pCacheSet = NULL;
                 m_xCacheSet.clear();

@@ -488,15 +488,11 @@ sal_Bool OHTMLReader::CreateTable(int nToken)
                 m_sTextToken.Erase();
                 break;
             case HTML_TABLEDATA_ON:
-                // m_bAppendFirstLine = true;
-                // run through
             case HTML_TABLEHEADER_ON:
                 TableDataOn(eVal,nTmpToken2);
                 bTableHeader = TRUE;
                 break;
             case HTML_TABLEDATA_OFF:
-                // m_bAppendFirstLine = true;
-                // run through
             case HTML_TABLEHEADER_OFF:
                 {
                     aColumnName.EraseLeadingChars();

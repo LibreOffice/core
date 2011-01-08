@@ -58,7 +58,6 @@
 #include <com/sun/star/ui/dialogs/XFolderPicker.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
-// #106016# ------------------------------------
 #include <com/sun/star/task/XInteractionHandler.hpp>
 #include <com/sun/star/ucb/XProgressHandler.hpp>
 #include "UITools.hxx"
@@ -328,7 +327,6 @@ DBG_NAME(OConnectionHelper)
                     if (RET_OK == aSelector.Execute())
                     {
                         setURLNoPrefix(aSelector.GetSelected());
-                        //  checkCreateDatabase( ::dbaccess::DST_ADABAS);
                         SetRoadmapStateValue(sal_True);
                         callModifiedHdl();
                     }
@@ -406,7 +404,7 @@ DBG_NAME(OConnectionHelper)
                         aProfiles.insert(pArray[index]);
 
 
-                    // excute the select dialog
+                    // execute the select dialog
                     ODatasourceSelectDialog aSelector(GetParent(), aProfiles, eType);
                     ::rtl::OUString sOldProfile=getURLNoPrefix();
 
@@ -584,7 +582,6 @@ DBG_NAME(OConnectionHelper)
                 break;
 
                 case RET_NO:
-                     // SetRoadmapStateValue(sal_False);
                     callModifiedHdl();
                     return RET_OK;
 
@@ -697,7 +694,7 @@ DBG_NAME(OConnectionHelper)
         }
         return aInstalledDBs;
     }
-    // #106016# -------------------------------------------------------------------
+    // -----------------------------------------------------------------------------
     IS_PATH_EXIST OConnectionHelper::pathExists(const ::rtl::OUString& _rURL, sal_Bool bIsFile) const
     {
         ::ucbhelper::Content aCheckExistence;
@@ -763,7 +760,6 @@ DBG_NAME(OConnectionHelper)
         ::std::vector< ::rtl::OUString > aToBeCreated;  // the to-be-created levels
 
         // search a level which exists
-        // #106016# ---------------------
         IS_PATH_EXIST eParentExists = PATH_NOT_EXIST;
         while ( eParentExists == PATH_NOT_EXIST && aParser.getSegmentCount())
         {
@@ -856,7 +852,7 @@ DBG_NAME(OConnectionHelper)
                 const ::dbaccess::DATASOURCE_TYPE eType = m_pCollection->determineType(m_eType);
 
                 if ( ( ::dbaccess::DST_CALC == eType) || ( ::dbaccess::DST_MSACCESS == eType) || ( ::dbaccess::DST_MSACCESS_2007 == eType) )
-                { // #106016# --------------------------
+                {
                     if( pathExists(sURL, sal_True) == PATH_NOT_EXIST )
                     {
                         String sFile = String( ModuleRes( STR_FILE_DOES_NOT_EXIST ) );

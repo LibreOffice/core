@@ -115,7 +115,7 @@ OReportSection::OReportSection(OSectionWindow* _pParent,const uno::Reference< re
     }
 
     m_pFunc.reset(new DlgEdFuncSelect( this ));
-    m_pFunc->setOverlappedControlColor(lcl_getOverlappedControlColor( /* m_pParent->getViewsWindow()->getView()->getReportView()->getController().getORB() */ ) );
+    m_pFunc->setOverlappedControlColor(lcl_getOverlappedControlColor() );
 }
 //------------------------------------------------------------------------------
 OReportSection::~OReportSection()

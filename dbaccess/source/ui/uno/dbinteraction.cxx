@@ -208,7 +208,7 @@ namespace dbaui
             nDialogStyle = WB_RETRY_CANCEL | WB_DEF_RETRY;
         }
 
-        // excute the dialog
+        // execute the dialog
         OSQLMessageBox aDialog(NULL, _rSqlInfo, nDialogStyle);
             // TODO: need a way to specify the parent window
         sal_Int16 nResult = aDialog.Execute();

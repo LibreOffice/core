@@ -538,7 +538,6 @@ void OXUndoEnvironment::switchListening( const Reference< XIndexAccess >& _rxCon
 
         // be notified of any changes in the container elements
         Reference< XContainer > xSimpleContainer( _rxContainer, UNO_QUERY );
-        // OSL_ENSURE( xSimpleContainer.is(), "OXUndoEnvironment::switchListening: how are we expected to be notified of changes in the container?" );
         if ( xSimpleContainer.is() )
         {
             if ( _bStartListening )
@@ -583,7 +582,6 @@ void OXUndoEnvironment::switchListening( const Reference< XInterface >& _rxObjec
     }
     catch( const Exception& )
     {
-        //OSL_ENSURE( sal_False, "OXUndoEnvironment::switchListening: caught an exception!" );
     }
 }
 

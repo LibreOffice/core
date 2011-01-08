@@ -125,8 +125,6 @@ void OWizColumnSelect::Reset()
         m_lbOrgColumnNames.SetEntryData(nPos,(*aIter)->second);
     }
 
-    // m_pParent->clearDestColumns();
-
     if(m_lbOrgColumnNames.GetEntryCount())
         m_lbOrgColumnNames.SelectEntryPos(0);
 

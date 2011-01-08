@@ -89,7 +89,7 @@ namespace rptui
             If the formula denotes an expression, then the <em>undecorated content</em> is the expression
             itself.
         */
-        const ::rtl::OUString& getUndecoratedContent() const;// { return m_sUndecoratedContent; }
+        const ::rtl::OUString& getUndecoratedContent() const;
 
         /// convenience alias for <code>getUndecoratedContent</code>, which asserts (in a non-product build) when used on an expression
         inline ::rtl::OUString  getFieldName() const;

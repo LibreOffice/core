@@ -87,7 +87,6 @@ DBG_NAME( dbu_OExtensionNotPresentDialog )
 
     // get message string out of the resource
     String sText =          String( ModuleRes( RID_STR_EXTENSION_NOT_PRESENT ) );
-    // String sExtensionName = String( ModuleRes( RID_STR_EXTENSION_NAME ) );
     String sExtensionName = getFromConfigurationExtension("Name");
     sText.SearchAndReplaceAscii("%RPT_EXTENSION_NAME", sExtensionName);
 
