@@ -2,7 +2,7 @@
 
 SHELL=/usr/bin/env bash
 
-all: Makefile dmake/dmake@EXEEXT@ fetch
+all: Makefile dmake/dmake@EXEEXT@ src.downloaded
 	@. ./*[Ee]nv.[Ss]et.sh && \
         cd instsetoo_native && \
         build.pl -P@BUILD_NCPUS@ --all -- -P@BUILD_MAX_JOBS@
@@ -34,11 +34,11 @@ dmake/dmake@EXEEXT@:
 	@. ./*[Ee]nv.[Ss]et.sh && \
         ./bootstrap
 
-src/downloaded: ooo.lst download
+src.downloaded: ooo.lst download
 	@. ./*[Ee]nv.[Ss]et.sh && \
 	$$SRC_ROOT/download $$SRC_ROOT/ooo.lst && touch $@
 
-fetch: src/downloaded
+fetch: src.downloaded
 
 Makefile: configure.in set_soenv.in Makefile.in
 	./autogen.sh

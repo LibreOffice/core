@@ -42,6 +42,9 @@ if [ -d .git ] ; then
         mkdir clone
         for i in $GIT_REPO_NAMES ; do
             bin/git-new-workdir $GIT_LINK_SRC/$i clone/$i
+            for i in clone/$i/* ; do
+                ln -sf $i $(basename $i)
+            done
         done
     fi
 fi
@@ -229,3 +232,4 @@ fi
 [ -x "post_download" ] || { echo "'post_download' script not found, run ./autogen.sh." ; exit 1 ; }
 
 ./post_download || exit 1
+# vim:set shiftwidth=4 softtabstop=4 expandtab:

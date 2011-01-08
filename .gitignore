@@ -32,6 +32,7 @@
 /visibility.cxx
 /post_download
 /bin/repo-list
+/src.downloaded
 
 # misc
 /set_soenv.last
