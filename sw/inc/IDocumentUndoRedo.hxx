@@ -48,35 +48,27 @@ typedef sal_uInt16 SwUndoNoModifiedPosition;
 class IDocumentUndoRedo
 {
 public:
-    /**
-    */
     virtual void SetUndoNoResetModified() = 0;
 
-    /**
-    */
     virtual bool IsUndoNoResetModified() const = 0;
 
-    /** UndoHistory am Dokument pflegen
-        bei Save, SaveAs, Create wird UndoHistory zurueckgesetzt ???
+    /** Care for UndoHistory of document.
+        UndoHistory is reset at Save, SaveAs, Create ???
     */
     virtual void DoUndo(bool bUn) = 0;
 
-    /**
-    */
     virtual bool DoesUndo() const = 0;
 
-    /** Zusammenfassen von Kontinuierlichen Insert/Delete/Overwrite von
-        Charaktern. Default ist ::com::sun::star::sdbcx::Group-Undo.
+    /** Concatenate continuous Insert/Delete/Overwrite of characters.
+        Default is ::com::sun::star::sdbcx::Group-Undo.
     */
     virtual void DoGroupUndo(bool bUn) = 0;
 
-    /**
-    */
     virtual bool DoesGroupUndo() const = 0;
 
-    /** macht rueckgaengig:
-        0 letzte Aktion, sonst Aktionen bis zum Start der Klammerung nUndoId
-        In rUndoRange wird der restaurierte Bereich gesetzt.
+    /* Undo:
+       0 last action, else actions until start of parenthesis nUndoId.
+       Restored range is set in rUndoRange.
     */
     virtual bool Undo( SwUndoIter& ) = 0;
 
@@ -110,28 +102,26 @@ public:
     virtual SwUndoId EndUndo( SwUndoId eUndoId, const SwRewriter * pRewriter) = 0;
 
     /**
-        loescht die gesamten UndoObjecte ( fuer Methoden die am Nodes
-        Array drehen ohne entsprechendes Undo !!)
+        Deletes all UndoObjects (for methods that do something with the Nodes Array
+        without corresponding Undo!)
     */
     virtual void DelAllUndoObj() = 0;
 
-    /** liefert die Id der letzten undofaehigen Aktion zurueck
-        oder USHRT_MAX fuellt ggf. VARARR mit ::com::sun::star::sdbcx::User-UndoIds
+    /** Returns the ID of the last action that can be undone.
+        Alternatively USHRT_MAX is filling VARARR with ::com::sun::star::sdbcx::User-UndoIdDs
     */
     virtual SwUndoId GetUndoIds(String* pStr, SwUndoIds *pUndoIds) const = 0;
 
-    /**
-    */
     virtual String GetUndoIdsStr(String* pStr, SwUndoIds *pUndoIds) const = 0;
 
-    /** gibt es Klammerung mit der Id?
+    /** Are there parentheses with this ID?
     */
     virtual bool HasUndoId(SwUndoId eId) const = 0;
 
     /* @@@MAINTAINABILITY-HORROR@@@
        Implementation details made public.
-       die drei folgenden Methoden werden beim Undo und nur dort
-       benoetigt. Sollten sonst nicht aufgerufen werden.
+       The following three methods are required only for Undo.
+       They should not be called otherwise.
     */
     virtual const SwNodes* GetUndoNds() const = 0;
 
@@ -143,38 +133,29 @@ public:
     */
     virtual bool HasTooManyUndos() const = 0;
 
-    /**
-    */
     virtual bool Redo( SwUndoIter& ) = 0;
 
-    /** liefert die Id der letzten Redofaehigen Aktion zurueck
-        fuellt ggf. VARARR mit RedoIds
+    /** Return the ID of the last undoable action.
+        Fills VARARR with RedoIds if required.
     */
     virtual SwUndoId GetRedoIds( String* pStr, SwUndoIds *pRedoIds) const = 0;
 
-    /**
-    */
     virtual String GetRedoIdsStr( String* pStr, SwUndoIds *pRedoIds) const = 0;
 
-    /**
-    */
     virtual bool Repeat( SwUndoIter&, sal_uInt16 nRepeatCnt) = 0;
 
-    /** liefert die Id der letzten Repeatfaehigen Aktion zurueck
-        fuellt ggf. VARARR mit RedoIds
+    /** Return the ID of the last repeatable action.
+        Fills VARARR mit RedoIds if required.
     */
     virtual SwUndoId GetRepeatIds( String* pStr, SwUndoIds *pRedoIds) const = 0;
 
-    /**
-    */
     virtual String GetRepeatIdsStr( String* pStr, SwUndoIds *pRedoIds) const = 0;
 
-    /** interne Verkuerzung fuer Insert am Ende
+    /** Internal shortcut for Insert at end.
     */
     virtual void AppendUndo(SwUndo*) = 0;
 
-    /** loescht alle UndoObjecte von nUndoPos
-        bis zum Ende des Undo-Arrays
+    /** Delete all UndoObjects of nUndoPos until the end of the Undo-Array.
     */
     virtual void ClearRedo() = 0;
 

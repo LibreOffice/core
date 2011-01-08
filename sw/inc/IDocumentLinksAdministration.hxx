@@ -40,20 +40,14 @@ namespace sfx2 { class SvLinkSource;  class LinkManager; }
  class IDocumentLinksAdministration
  {
  public:
-    /** Links un-/sichtbar in LinkManager einfuegen (gelinkte Bereiche)
+    /** Insert links in-/visibly into LinkManager (linked ranges).
     */
     virtual bool IsVisibleLinks() const = 0;
 
-    /**
-    */
     virtual void SetVisibleLinks(bool bFlag) = 0;
 
-    /**
-    */
     virtual sfx2::LinkManager& GetLinkManager() = 0;
 
-    /**
-    */
     virtual const sfx2::LinkManager& GetLinkManager() const = 0;
 
     /** #i42634# Moved common code of SwReader::Read() and
@@ -61,28 +55,20 @@ namespace sfx2 { class SvLinkSource;  class LinkManager; }
     */
     virtual void UpdateLinks(BOOL bUI) = 0;
 
-    /** SS fuers Linken von Dokumentteilen
+    /** SS fuers Linken von Dokumentteilen  / ?? for linking of parts of documents.
     */
     virtual bool GetData(const String& rItem, const String& rMimeType, ::com::sun::star::uno::Any& rValue) const = 0;
 
-    /**
-    */
     virtual bool SetData(const String& rItem, const String& rMimeType, const ::com::sun::star::uno::Any& rValue) = 0;
 
-    /**
-    */
     virtual ::sfx2::SvLinkSource* CreateLinkSource(const String& rItem) = 0;
 
-    /** embedded alle lokalen Links (Bereiche/Grafiken)
+    /** Embed all local links (ranges/graphics).
     */
     virtual bool EmbedAllLinks() = 0;
 
-    /**
-    */
     virtual void SetLinksUpdated(const bool bNewLinksUpdated) = 0;
 
-    /**
-    */
     virtual bool LinksUpdated() const = 0;
 
 protected:
