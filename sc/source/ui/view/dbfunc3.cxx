@@ -737,8 +737,6 @@ ULONG  ScDBFunc::RecalcPivotTable()
                                                   GetViewData()->GetTabNo() );
     if ( pDPObj )
     {
-        // Wang Xu Ming -- 2009-6-17
-        // DataPilot Migration
         //ScDBDocFunc aFunc( *pDocSh );
         //aFunc.DataPilotUpdate( pDPObj, pDPObj, TRUE, FALSE );
         //CursorPosChanged();      // shells may be switched
@@ -752,7 +750,6 @@ ULONG  ScDBFunc::RecalcPivotTable()
         else if (nErrId <= USHRT_MAX)
             ErrorMessage(static_cast<USHORT>(nErrId));
       return nErrId;
-      // End Comments
     }
     else
         ErrorMessage(STR_PIVOT_NOTFOUND);

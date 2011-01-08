@@ -44,10 +44,7 @@
 #include "dpcachetable.hxx"
 #include "dpobject.hxx"
 #include "globstr.hrc"
-// Wang Xu Ming -- 2009-8-17
-// DataPilot Migration - Cache&&Performance
 #include "dpglobal.hxx"
-// End Comments
 #include <com/sun/star/sheet/DataPilotFieldFilter.hpp>
 
 #include <vector>
@@ -236,8 +233,6 @@ const ScDPCacheTable& ScSheetDPData::GetCacheTable() const
 }
 
 
-// Wang Xu Ming -- 2009-8-5
-// DataPilot Migration - Cache&&Performance
 ScDPTableDataCache* ScSheetSourceDesc::CreateCache( ScDocument* pDoc , long nID ) const
 {
     if ( pDoc )
@@ -304,7 +299,6 @@ ULONG ScSheetSourceDesc::CheckValidate( ScDocument* pDoc ) const
     }
     return 0;
 }
-// End Comments
 
 // -----------------------------------------------------------------------
 

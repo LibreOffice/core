@@ -31,10 +31,7 @@
 
 #include <vector>
 #include <hash_map>
-// Wang Xu Ming -- 2009-8-17
-// DataPilot Migration - Cache&&Performance
 #include <list>
-// End Comments
 #include <memory>
 #include <tools/string.hxx>
 #include <tools/list.hxx>
@@ -62,10 +59,7 @@
 #include <cppuhelper/implbase3.hxx>
 #include <cppuhelper/implbase5.hxx>
 #include <cppuhelper/implbase6.hxx>
-// Wang Xu Ming -- 2009-8-17
-// DataPilot Migration - Cache&&Performance
 #include "dpglobal.hxx"
-// End Comments
 #include "dptabdat.hxx"
 
 namespace com { namespace sun { namespace star {
@@ -79,10 +73,7 @@ namespace com { namespace sun { namespace star {
 
 class ScDPResultMember;
 class ScDPResultData;
-// Wang Xu Ming -- 2009-8-17
-// DataPilot Migration - Cache&&Performance
 class ScDPItemData;
-// End Comments
 class ScDPTableData;
 
 // ------------------------------------------------------------------------
@@ -183,13 +174,10 @@ public:
     long                    GetDataDimensionCount();
     ScDPDimension*          GetDataDimension(long nIndex);
     String                  GetDataDimName(long nIndex);
-    // Wang Xu Ming -- 2009-8-17
-    // DataPilot Migration - Cache&&Performance
     ScDPTableDataCache*         GetCache();
     const ScDPItemData*            GetItemDataById( long nDim, long nId );
     long                                       GetDataLayoutDim(){ return pData->GetColumnCount(); }
     SCROW                                GetMemberId(  long  nDim, const ScDPItemData& rData );
-    // End Comments
     BOOL                    IsDataLayoutDimension(long nDim);
     USHORT                  GetDataLayoutOrientation();
 
@@ -455,10 +443,7 @@ public:
 
     const ::com::sun::star::sheet::DataPilotFieldReference& GetReferenceValue() const;
 
-// Wang Xu Ming -- 2009-8-17
-// DataPilot Migration - Cache&&Performance
     BOOL                      IsVisible( const ScDPItemData& rData );
-// End Comments
 };
 
 class ScDPHierarchies : public cppu::WeakImplHelper2<
@@ -752,12 +737,9 @@ public:
     long                    getMinMembers() const;
 
     sal_Int32               GetIndexFromName( const ::rtl::OUString& rName ) const;     // <0 if not found
-    // Wang Xu Ming -- 2009-8-17
-    // DataPilot Migration - Cache&&Performance
     const std::vector<sal_Int32>&    GetGlobalOrder();
     const ScDPItemData*               GetSrcItemDataByIndex(  SCROW nIndex);
     SCROW                                   GetSrcItemsCount();
-    // End Comments
 };
 
 class ScDPMember : public cppu::WeakImplHelper3<
@@ -771,10 +753,7 @@ private:
     long            nHier;
     long            nLev;
 
-    // Wang Xu Ming -- 2009-8-17
-    // DataPilot Migration - Cache&&Performance
     SCROW       mnDataId;
-    // End Comments
 //  String          aCaption;           // visible name (changeable by user)
     ::std::auto_ptr<rtl::OUString> mpLayoutName;
 
@@ -783,22 +762,16 @@ private:
     BOOL            bShowDet;
 
 public:
-    // Wang Xu Ming -- 2009-8-17
-    // DataPilot Migration - Cache&&Performance
     ScDPMember( ScDPSource* pSrc, long nD, long nH, long nL,
         SCROW nIndex /*const String& rN, double fV, BOOL bHV */);
-    // End Comments
     virtual                 ~ScDPMember();
 
     String                  GetNameStr() const;
     void                    FillItemData( ScDPItemData& rData ) const;
-    // Wang Xu Ming -- 2009-8-17
-    // DataPilot Migration - Cache&&Performance
     //  const ScDPItemData&  GetItemData() const{ return maData; }
     const ScDPItemData&  GetItemData() const;
     inline SCROW               GetItemDataId() const { return mnDataId; }
     BOOL                           IsNamedItem( SCROW    nIndex  ) const;
-    // End Comments
 
     SC_DLLPUBLIC const ::rtl::OUString*  GetLayoutName() const;
 

@@ -77,8 +77,6 @@ using ::com::sun::star::uno::UNO_QUERY;
 #define SC_DBPROP_COMMAND           "Command"
 #define SC_DBPROP_COMMANDTYPE       "CommandType"
 // -----------------------------------------------------------------------
-// Wang Xu Ming -- 2009-9-15
-// DataPilot Migration - Cache&&Performance
  ScDPTableDataCache* ScImportSourceDesc::GetExistDPObjectCache( ScDocument* pDoc ) const
 {
     ScDPTableDataCache* pCache = NULL;
@@ -236,7 +234,6 @@ long ScDatabaseDPData::GetColumnCount()
     return GetCacheTable().getColSize();
 }
 
-// End Comments
 
 String ScDatabaseDPData::getDimensionName(long nColumn)
 {

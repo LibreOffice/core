@@ -120,13 +120,10 @@ private:
     long                        mnCacheId;
 
 public:
-    // Wang Xu Ming -- 2009-8-17
-    // DataPilot Migration - Cache&&Performance
     inline void SetRefresh() { bRefresh = TRUE; }
     long          GetCacheId() const;
     void          SetCacheId( long nCacheId );
     ULONG RefreshCache();
-    // End Comments
                 ScDPObject( ScDocument* pD );
                 ScDPObject(const ScDPObject& r);
     virtual     ~ScDPObject();

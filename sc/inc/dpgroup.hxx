@@ -35,10 +35,7 @@
 
 #include "dptabdat.hxx"
 #include "scdllapi.h"
-// Wang Xu Ming -- 2009-8-17
-// DataPilot Migration - Cache&&Performance
 #include "dpglobal.hxx"
-// End Comments
 class ScDocument;
 class SvNumberFormatter;
 
@@ -77,11 +74,8 @@ public:
     sal_Int32   GetDatePart() const { return nDatePart; }
     const ScDPNumGroupInfo& GetNumInfo() const { return aNumInfo; }
 
-    // Wang Xu Ming -- 2009-9-8
-    // DataPilot Migration - Cache&&Performance
     void        FillColumnEntries( SCCOL nSourceDim, ScDPTableDataCache* pCahe , std::vector< SCROW >& rEntries,
         const std::vector< SCROW >& rOriginal  ) const;
-    // End Comments
 };
 
 // --------------------------------------------------------------------
@@ -115,10 +109,7 @@ class ScDPGroupDimension
     String                      aGroupName;
     ScDPDateGroupHelper*        pDateHelper;
     ScDPGroupItemVec            aItems;
-    // Wang Xu Ming -- 2009-9-4
-    // DataPilot Migration - Cache&&Performance
    mutable  ::std::vector< SCROW >            maMemberEntries;
-    // End Comments
 public:
                 ScDPGroupDimension( long nSource, const String& rNewName );
                 ScDPGroupDimension( const ScDPGroupDimension& rOther );
@@ -133,10 +124,7 @@ public:
     long        GetGroupDim() const     { return nGroupDim; }
     const      String& GetName() const       { return aGroupName; }
 
-// Wang Xu Ming -- 2009-9-2
-// DataPilot Migration - Cache&&Performance
     const std::vector< SCROW >&  GetColumnEntries( const ScDPCacheTable&  rCacheTable, const std::vector< SCROW >& rOriginal ) const;
-// End Comments
     const ScDPGroupItem* GetGroupForData( const ScDPItemData& rData ) const;  // rData = entry in original dim.
     const ScDPGroupItem* GetGroupForName( const ScDPItemData& rName ) const;  // rName = entry in group dim.
     const ScDPGroupItem* GetGroupByIndex( size_t nIndex ) const;
@@ -158,10 +146,7 @@ class SC_DLLPUBLIC ScDPNumGroupDimension
 {
     ScDPNumGroupInfo            aGroupInfo;         // settings
     ScDPDateGroupHelper*        pDateHelper;
-// Wang Xu Ming -- 2009-9-4
-// DataPilot Migration - Cache&&Performance
     mutable  ::std::vector< SCROW >            maMemberEntries;
-// End Comments
     mutable bool                bHasNonInteger;     // initialized in GetNumEntries
     mutable sal_Unicode         cDecSeparator;      // initialized in GetNumEntries
 
@@ -203,11 +188,8 @@ class ScDPGroupTableData : public ScDPTableData
     ScDocument*             pDoc;
     StringHashSet           aGroupNames;
 
-// Wang Xu Ming -- 2009-8-17
-// DataPilot Migration - Cache&&Performance
     void                         FillGroupValues( SCROW* pItemDataIndex, long nCount, const long* pDims );
     virtual long                GetSourceDim( long nDim );
-// End Comments
 
     bool        IsNumGroupDimension( long nDimension ) const;
     void        GetNumGroupInfo( long nDimension, ScDPNumGroupInfo& rInfo,
@@ -227,14 +209,11 @@ public:
     ScDocument* GetDocument()   { return pDoc; }
 
     virtual long                    GetColumnCount();
-// Wang Xu Ming -- 2009-8-17
-// DataPilot Migration - Cache&&Performance
     virtual   long                                          GetMembersCount( long nDim );
     virtual    const std::vector< SCROW >& GetColumnEntries( long nColumn ) ;
     virtual const ScDPItemData* GetMemberById( long nDim, long nId);
     virtual long Compare( long nDim, long nDataId1, long nDataId2);
 
-// End Comments
     virtual String                  getDimensionName(long nColumn);
     virtual BOOL                    getIsDataLayoutDimension(long nColumn);
     virtual BOOL                    IsDateDimension(long nDim);

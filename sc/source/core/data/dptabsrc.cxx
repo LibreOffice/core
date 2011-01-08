@@ -304,7 +304,6 @@ void ScDPSource::SetOrientation(long nColumn, USHORT nNew)
             // DataPilot Migration - Cache&&Performance
         case sheet::DataPilotFieldOrientation_HIDDEN:
             break;
-            // End Comments
         default:
             DBG_ERROR( "ScDPSource::SetOrientation: unexpected orientation" );
             break;
@@ -2386,7 +2385,6 @@ ScDPMembers::ScDPMembers( ScDPSource* pSrc, long nD, long nH, long nL ) :
             {
                 case SC_DAPI_LEVEL_YEAR:
                     {
-                        // Wang Xu Ming - DataPilot migration
                         const ScDPItemData* pLastNumData = NULL;
                         for ( SCROW n = 0 ;n <GetSrcItemsCount() ; n-- )
                         {
@@ -2396,7 +2394,6 @@ ScDPMembers::ScDPMembers( ScDPSource* pSrc, long nD, long nH, long nL ) :
                             else
                                 pLastNumData = pData;
                         }
-                        // End Comments
 
                         if ( pLastNumData )
                         {
@@ -2586,13 +2583,11 @@ ScDPMember* ScDPMembers::getByIndex(long nIndex) const
                 {
                     //! cache year range here!
 
-                    // Wang Xu Ming - DataPilot migration
                     double fFirstVal = pSource->GetData()->GetMemberByIndex( nSrcDim, 0 )->GetValue();
                     long nFirstYear = pSource->GetData()->GetDatePart(
                                         (long)::rtl::math::approxFloor( fFirstVal ),
                                         nHier, nLev );
 
-                    // End Comments
                     nVal = nFirstYear + nIndex;
                 }
                 else if ( nHier == SC_DAPI_HIERARCHY_WEEK && nLev == SC_DAPI_LEVEL_WEEKDAY )
@@ -2877,6 +2872,5 @@ const ScDPItemData* ScDPMembers::GetSrcItemDataByIndex( SCROW nIndex)
  {
     return pSource->GetData()->GetColumnEntries( nDim ).size();
  }
-// End Comments
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -77,11 +77,8 @@
 #include "drwlayer.hxx"
 #include "unoreflist.hxx"
 #include "listenercalls.hxx"
-// Wang Xu Ming -- 2009-8-17
-// DataPilot Migration - Cache&&Performance
 #include "dpshttab.hxx"
 #include "dptablecache.hxx"
-// End Comments
 #include "tabprotection.hxx"
 #include "formulaparserpool.hxx"
 #include "clipparam.hxx"
@@ -2034,8 +2031,6 @@ void ScDocument::DecSizeRecalcLevel( SCTAB nTab, bool bUpdateNoteCaptionPos )
         pTab[nTab]->DecRecalcLevel( bUpdateNoteCaptionPos );
 }
 
-// Wang Xu Ming -- 2009-8-17
-// DataPilot Migration - Cache&&Performance
 ScDPTableDataCache* ScDocument::GetDPObjectCache( long nID )
 {
     for ( std::list<ScDPTableDataCache*>::iterator iter = m_listDPObjectsCaches.begin(); iter!=m_listDPObjectsCaches.end(); ++iter )
@@ -2135,6 +2130,5 @@ void ScDocument::RemoveUnusedDPObjectCaches()
     }
 }
 
-// End Comments
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

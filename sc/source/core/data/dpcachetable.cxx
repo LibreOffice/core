@@ -389,7 +389,6 @@ void ScDPCacheTable::filterTable(const vector<Criterion>& rCriteria, Sequence< S
         {
             Any any;
             bool bRepeatIfEmpty = rRepeatIfEmptyDims.count(nCol) > 0;
-            // Wang Xu Ming - DataPilot migration
             const ScDPItemData* pData= getCell(nCol, nRow, bRepeatIfEmpty);
             if ( pData->IsValue() )
                 any <<= pData->GetValue();

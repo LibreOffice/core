@@ -232,14 +232,12 @@ BOOL ScDPRowMembersOrder::operator()( sal_Int32 nIndex1, sal_Int32 nIndex2 ) con
 {
     const ScDPResultMember* pMember1 = rDimension.GetMember(nIndex1);
     const ScDPResultMember* pMember2 = rDimension.GetMember(nIndex2);
-// Wang Xu Ming -- 3/17/2009
 
 // make the hide item to the largest order.
     if ( !pMember1->IsVisible() || !pMember2->IsVisible() )
         return pMember1->IsVisible();
     const ScDPDataMember* pDataMember1 =  pMember1->GetDataRoot() ;
     const ScDPDataMember* pDataMember2 =  pMember2->GetDataRoot();
-// End Comments
     //  GetDataRoot can be NULL if there was no data.
     //  IsVisible == FALSE can happen after AutoShow.
     return lcl_IsLess( pDataMember1, pDataMember2, nMeasure, bAscending );
@@ -249,12 +247,10 @@ BOOL ScDPColMembersOrder::operator()( sal_Int32 nIndex1, sal_Int32 nIndex2 ) con
 {
     ScDPDataMember* pDataMember1 = rDimension.GetMember(nIndex1);
     ScDPDataMember* pDataMember2 = rDimension.GetMember(nIndex2);
-    // Wang Xu Ming -- 2009-6-17
         BOOL bHide1 = pDataMember1 && !pDataMember1->IsVisible();
         BOOL bHide2 =  pDataMember2 && !pDataMember2->IsVisible();
         if ( bHide1 || bHide2 )
             return !bHide1;
-    // End Comments
     return lcl_IsLess( pDataMember1, pDataMember2, nMeasure, bAscending );
 }
 
@@ -1099,7 +1095,6 @@ void ScDPResultMember::InitFrom( const vector<ScDPDimension*>& ppDim, const vect
     //  skip child dimension if details are not shown
     if ( GetDPMember() && !GetDPMember()->getShowDetails() )
     {
-         // Wang Xu Ming -- 2009-6-16
         // Show DataLayout dimention
         nMemberStep = 1;
         while ( nPos < ppDim.size() )
@@ -1117,7 +1112,6 @@ void ScDPResultMember::InitFrom( const vector<ScDPDimension*>& ppDim, const vect
                 nMemberStep ++;
             }
         }
-        // End Comments
         bHasHiddenDetails = TRUE;   // only if there is a next dimension
         return;
     }
@@ -1146,8 +1140,6 @@ void ScDPResultMember::LateInitFrom( LateInitParams& rParams/*const vector<ScDPD
     //  skip child dimension if details are not shown
     if ( GetDPMember() && !GetDPMember()->getShowDetails() )
     {
-        // Wang Xu Ming -- 2009-6-16
-        // DataPilot Migration
         // Show DataLayout dimention
         nMemberStep = 1;
         while ( !rParams.IsEnd( nPos ) )
@@ -1171,7 +1163,6 @@ void ScDPResultMember::LateInitFrom( LateInitParams& rParams/*const vector<ScDPD
                 nMemberStep ++;
             }
         }
-        // End Comments
         bHasHiddenDetails = TRUE;   // only if there is a next dimension
         return;
     }
@@ -2658,10 +2649,7 @@ private:
     BOOL                 bIncludeAll;
     BOOL                 bIsBase;
     long                 nGroupBase;
-    // Wang Xu Ming -- 2009-8-6
-    // DataPilot Migration - Cache&&Performance
     SCROW          nBaseDataId;
-    // End Comments
 public:
             ScDPGroupCompare( const ScDPResultData* pData, const ScDPInitState& rState, long nDimension );
             ~ScDPGroupCompare() {}
@@ -2851,7 +2839,6 @@ void ScDPResultDimension::InitFrom( const vector<ScDPDimension*>& ppDim, const v
 void ScDPResultDimension::LateInitFrom( LateInitParams& rParams/* const vector<ScDPDimension*>& ppDim, const vector<ScDPLevel*>& ppLev*/,
                                         const vector<SCROW>& pItemData, size_t nPos,
                                         ScDPInitState& rInitState )
-// End Comments
 {
     if ( rParams.IsEnd( nPos ) )
         return;
@@ -3928,8 +3915,6 @@ size_t ScDPResultVisibilityData::MemberHash::operator() (const ScDPItemData& r) 
     else
         return rtl_ustr_hashCode_WithLength(r.GetString().GetBuffer(), r.GetString().Len());
 }
-// Wang Xu Ming -- 2009-6-10
-// DataPilot Migration
 SCROW ScDPResultMember::GetDataId( ) const
 {
  const ScDPMember*   pMemberDesc = GetDPMember();
@@ -4051,9 +4036,6 @@ BOOL LateInitParams::IsEnd( size_t nPos ) const
     return nPos >= mppDim.size();
 }
 
-// End Comments
-// Wang Xu Ming -- 2009-8-4
-// DataPilot Migration - old defects merge
 void ScDPResultDimension::CheckShowEmpty( BOOL bShow )
 {
         long nCount = maMemberArray.size();
@@ -4086,6 +4068,6 @@ void ScDPResultMember::CheckShowEmpty( BOOL bShow )
                                                                                         pChildDim->CheckShowEmpty( TRUE );
                             }
         }
-}// End Comments
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

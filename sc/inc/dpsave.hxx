@@ -201,10 +201,7 @@ private:
     USHORT      nRepeatEmptyMode;
     BOOL        bFilterButton;      // not passed to DataPilotSource
     BOOL        bDrillDown;         // not passed to DataPilotSource
-    // Wang Xu Ming -- 2009-8-17
-    // DataPilot Migration - Cache&&Performance
     long      mnCacheId;
-    // End Comments
 
     /** if true, all dimensions already have all of their member instances
      *  created. */
@@ -261,14 +258,11 @@ public:
 
     void                    WriteToSource( const com::sun::star::uno::Reference<
         com::sun::star::sheet::XDimensionsSupplier>& xSource );
-    // Wang Xu Ming -- 2009-8-17
-    // DataPilot Migration - Cache&&Performance
     void                    Refresh( const com::sun::star::uno::Reference<
                                             com::sun::star::sheet::XDimensionsSupplier>& xSource );
     BOOL                    IsEmpty() const;
     inline long GetCacheId() const{ return mnCacheId; }
     inline void SetCacheId( long nCacheId ){ mnCacheId = nCacheId; }
-    // End Comments
     const ScDPDimensionSaveData* GetExistingDimensionData() const   { return pDimensionData; }
     SC_DLLPUBLIC ScDPDimensionSaveData*  GetDimensionData();     // create if not there
     void                    SetDimensionData( const ScDPDimensionSaveData* pNew );      // copied

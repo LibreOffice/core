@@ -55,15 +55,12 @@
 #include <com/sun/star/sheet/XMembersSupplier.hpp>
 #include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/util/XCloneable.hpp>
-// Wang Xu Ming -- 2009-8-17
-// DataPilot Migration - Cache&&Performance
 #include "dptabsrc.hxx"
 #include "dpglobal.hxx"
 using namespace ScDPGlobal;
 #include <com/sun/star/sheet/DataPilotFieldReferenceType.hpp>
 #include <com/sun/star/sheet/DataPilotFieldReferenceItemType.hpp>
 using namespace com::sun::star::sheet;
-// End Comments
 
 #include <hash_map>
 
@@ -750,10 +747,7 @@ ScDPSaveData::ScDPSaveData() :
     nRepeatEmptyMode( SC_DPSAVEMODE_DONTKNOW ),
     bFilterButton( TRUE ),
     bDrillDown( TRUE ),
-    // Wang Xu Ming -- 2009-8-17
-    // DataPilot Migration - Cache&&Performance
     mnCacheId( -1),
-    // End Comments
     mbDimensionMembersBuilt(false),
     mpGrandTotalName(NULL)
 {
@@ -766,10 +760,7 @@ ScDPSaveData::ScDPSaveData(const ScDPSaveData& r) :
     nRepeatEmptyMode( r.nRepeatEmptyMode ),
     bFilterButton( r.bFilterButton ),
     bDrillDown( r.bDrillDown ),
-    // Wang Xu Ming -- 2009-8-17
-    // DataPilot Migration - Cache&&Performance
     mnCacheId(  r.mnCacheId ),
-    // End Comments
     mbDimensionMembersBuilt(r.mbDimensionMembersBuilt),
     mpGrandTotalName(NULL)
 {
@@ -793,11 +784,8 @@ ScDPSaveData& ScDPSaveData::operator= ( const ScDPSaveData& r )
 {
     if ( &r != this )
     {
-        // Wang Xu Ming -- 2009-8-17
-        // DataPilot Migration - Cache&&Performance
         this->~ScDPSaveData();
         new( this ) ScDPSaveData ( r );
-        // End Comments
     }
     return *this;
 }
@@ -809,7 +797,7 @@ BOOL ScDPSaveData::operator== ( const ScDPSaveData& r ) const
          nIgnoreEmptyMode != r.nIgnoreEmptyMode ||
          nRepeatEmptyMode != r.nRepeatEmptyMode ||
          bFilterButton    != r.bFilterButton    ||
-         mnCacheId        != r.mnCacheId ||/// Wang Xu Ming -- 2009-6-18 DataPilot Migration
+         mnCacheId        != r.mnCacheId ||
          bDrillDown       != r.bDrillDown ||
          mbDimensionMembersBuilt != r.mbDimensionMembersBuilt)
         return FALSE;
@@ -1455,7 +1443,7 @@ void ScDPSaveDimension::Refresh( const com::sun::star::uno::Reference<
         }
     }
 }
-// End Comments
+
 bool operator == (const ::com::sun::star::sheet::DataPilotFieldSortInfo &l, const ::com::sun::star::sheet::DataPilotFieldSortInfo &r )
 {
     return l.Field == r.Field && l.IsAscending == r.IsAscending && l.Mode == r.Mode;

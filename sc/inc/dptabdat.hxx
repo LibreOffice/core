@@ -32,10 +32,7 @@
 #include "address.hxx"
 #include "dpoutput.hxx"
 #include "dpcachetable.hxx"
-// Wang Xu Ming -- 2009-8-17
-// DataPilot Migration - Cache&&Performance
 #include "dptablecache.hxx"
-// End Comments
 #include <tools/string.hxx>
 
 #include <vector>
@@ -100,11 +97,8 @@ class SC_DLLPUBLIC ScDPTableData
     long    nLastHier;
     long    nLastLevel;
     long    nLastRet;
-    // Wang Xu Ming -- 2009-8-17
-    // DataPilot Migration - Cache&&Performance
     long                          mnCacheId;
     const ScDocument*   mpDoc;
-    // End Comments
 public:
 
     /** This structure stores dimension information used when calculating
@@ -130,10 +124,7 @@ public:
         CalcInfo();
     };
 
-    // Wang Xu Ming -- 2009-8-17
-    // DataPilot Migration - Cache&&Performance
     ScDPTableData(ScDocument* pDoc, long nCacheId );
-    // End Comments
     virtual     ~ScDPTableData();
 
     long        GetDatePart( long nDateVal, long nHierarchy, long nLevel );
@@ -142,11 +133,8 @@ public:
                 //! or separate Str and ValueCollection
 
     virtual long                    GetColumnCount() = 0;
-    // Wang Xu Ming -- 2009-8-17
-    // DataPilot Migration - Cache&&Performance
     virtual   const std::vector< SCROW >& GetColumnEntries( long nColumn ) ;
     long                                                     GetCacheId() const;
-    // End Comments
     virtual String                  getDimensionName(long nColumn) = 0;
     virtual BOOL                    getIsDataLayoutDimension(long nColumn) = 0;
     virtual BOOL                    IsDateDimension(long nDim) = 0;
@@ -174,26 +162,20 @@ public:
     virtual BOOL                    HasCommonElement( const ScDPItemData& rFirstData, long nFirstIndex,
                                                       const ScDPItemData& rSecondData, long nSecondIndex ) const;
 
-    // Wang Xu Ming -- 2009-8-17
-    // DataPilot Migration - Cache&&Performance
     virtual long                            GetMembersCount( long nDim );
     virtual const ScDPItemData*   GetMemberByIndex( long nDim, long nIndex );
     virtual const ScDPItemData*   GetMemberById( long nDim, long nId);
     virtual SCROW                        GetIdOfItemData( long  nDim, const ScDPItemData& rData );
     virtual long                GetSourceDim( long nDim );
     virtual long                Compare( long nDim, long nDataId1, long nDataId2);
-    // End Comments
 protected:
     /** This structure stores vector arrays that hold intermediate data for
         each row during cache table iteration. */
     struct CalcRowData
     {
-        // Wang Xu Ming -- 2009-8-17
-        // DataPilot Migration - Cache&&Performance
         ::std::vector< SCROW >  aColData;
         ::std::vector< SCROW >  aRowData;
         ::std::vector< SCROW >  aPageData;
-        // End Comments
         ::std::vector<ScDPValueData> aValues;
     };
 
@@ -202,11 +184,8 @@ protected:
     void            CalcResultsFromCacheTable(const ScDPCacheTable& rCacheTable, CalcInfo& rInfo, bool bAutoShow);
 
 private:
-    // Wang Xu Ming -- 2009-8-17
-    // DataPilot Migration - Cache&&Performance
     void            GetItemData(const ScDPCacheTable& rCacheTable, sal_Int32 nRow,
                                           const ::std::vector<long>& rDims, ::std::vector< SCROW >& rItemData);
-    // End Comments
 };
 #endif
 

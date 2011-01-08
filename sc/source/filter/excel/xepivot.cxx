@@ -539,8 +539,6 @@ void XclExpPCField::InsertNumDateGroupItems( const ScDPObject& rDPObj, const ScD
     {
         // get the string collection with original source elements
         ScSheetDPData aDPData( GetDocPtr(), *pSrcDesc );
-        // Wang Xu Ming - DataPilot migration
-        // 2009-05-08
         const std::vector< SCROW > aOrignial = aDPData.GetColumnEntries( static_cast< long >( GetBaseFieldIndex() ) );
         // get the string collection with generated grouping elements
         ScDPNumGroupDimension aTmpDim( rNumInfo );
@@ -553,7 +551,6 @@ void XclExpPCField::InsertNumDateGroupItems( const ScDPObject& rDPObj, const ScD
             if ( pData )
                 InsertGroupItem( new XclExpPCItem( pData->GetString() ) );
         }
-// End Comments
     }
 }
 

@@ -51,11 +51,8 @@
 #include "attrib.hxx"
 #include "scitems.hxx"
 #include "unonames.hxx"
-// Wang Xu Ming -- 2009-8-17
-// DataPilot Migration - Cache&&Performance
 #include "dpglobal.hxx"
 #include "globstr.hrc"
-// End Comments
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/sheet/GeneralFunction.hpp>
 #include <com/sun/star/sheet/DataPilotFieldFilter.hpp>
@@ -175,8 +172,8 @@ ScDPObject::ScDPObject( ScDocument* pD ) :
     bAllowMove( FALSE ),
     nHeaderRows( 0 ),
     mbHeaderLayout(false),
-    bRefresh( FALSE ), // Wang Xu Ming - DataPilot migration
-    mnCacheId( -1) // Wang Xu Ming - DataPilot migration
+    bRefresh( FALSE ),
+    mnCacheId( -1)
 {
 }
 
@@ -198,8 +195,8 @@ ScDPObject::ScDPObject(const ScDPObject& r) :
     bAllowMove( FALSE ),
     nHeaderRows( r.nHeaderRows ),
     mbHeaderLayout( r.mbHeaderLayout ),
-    bRefresh( r.bRefresh ), // Wang Xu Ming - DataPilot migration
-     mnCacheId ( r.mnCacheId ) // Wang Xu Ming - DataPilot migration
+    bRefresh( r.bRefresh ),
+    mnCacheId ( r.mnCacheId )
 {
     if (r.pSaveData)
         pSaveData = new ScDPSaveData(*r.pSaveData);
@@ -219,7 +216,7 @@ ScDPObject::~ScDPObject()
     delete pSheetDesc;
     delete pImpDesc;
     delete pServDesc;
-    mnCacheId = -1; // Wang Xu Ming - DataPilot migration
+    mnCacheId = -1;
     InvalidateSource();
 }
 
@@ -244,13 +241,10 @@ void ScDPObject::SetSaveData(const ScDPSaveData& rData)
     {
         delete pSaveData;
         pSaveData = new ScDPSaveData( rData );
-        // Wang Xu Ming -- 2009-8-17
-        // DataPilot Migration - Cache&&Performance
         if ( rData.GetCacheId() >= 0 )
             mnCacheId = rData.GetCacheId();
         else if ( mnCacheId >= 0 )
             pSaveData->SetCacheId( mnCacheId );
-        // End Comments
     }
 
     InvalidateData();       // re-init source from SaveData
@@ -434,10 +428,7 @@ ScDPTableData* ScDPObject::GetTableData()
                 DBG_ERROR("no source descriptor");
                 pSheetDesc = new ScSheetSourceDesc;     // dummy defaults
             }
-            // Wang Xu Ming -- 2009-8-17
-            // DataPilot Migration - Cache&&Performance
             pData.reset(new ScSheetDPData(pDoc, *pSheetDesc, GetCacheId()));
-            // End Comments
         }
 
         // grouping (for cell or database data)
@@ -448,11 +439,8 @@ ScDPTableData* ScDPObject::GetTableData()
             pData = pGroupData;
         }
 
-        // Wang Xu Ming -- 2009-8-17
-        // DataPilot Migration - Cache&&Performance
         if ( pData )
            SetCacheId( pData->GetCacheId());        // resets mpTableData
-        // End Comments
 
         mpTableData = pData;                        // after SetCacheId
     }
@@ -2549,8 +2537,6 @@ String ScDPCollection::CreateNewName( USHORT nMin ) const
     return String();                    // should not happen
 }
 
-// Wang Xu Ming -- 2009-8-17
-// DataPilot Migration - Cache&&Performance
 long ScDPObject::GetCacheId() const
 {
     if ( GetSaveData() )
@@ -2619,7 +2605,6 @@ void ScDPObject::SetCacheId( long nCacheId )
         mnCacheId = nCacheId;
     }
 }
-// End Comments
 
 void ScDPCollection::FreeTable(ScDPObject* pDPObj)
 {

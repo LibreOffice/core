@@ -188,8 +188,6 @@ void ScDPTableData::FillRowDataFromCacheTable(sal_Int32 nRow, const ScDPCacheTab
 
 void ScDPTableData::ProcessRowData(CalcInfo& rInfo, CalcRowData& rData, bool bAutoShow)
 {
-        // Wang Xu Ming -- 2009-6-16
-        // DataPilot Migration
     if (!bAutoShow)
     {
             LateInitParams  aColParams( rInfo.aColDims, rInfo.aColLevels, FALSE );
@@ -203,7 +201,6 @@ void ScDPTableData::ProcessRowData(CalcInfo& rInfo, CalcRowData& rData, bool bAu
             rInfo.pColRoot->LateInitFrom( aColParams, rData.aColData,0, *rInfo.pInitState);
             rInfo.pRowRoot->LateInitFrom( aRowParams, rData.aRowData, 0, *rInfo.pInitState);
     }
-        // End Comments
 
     if ( ( !rInfo.pColRoot->GetChildDimension() || rInfo.pColRoot->GetChildDimension()->IsValidEntry(rData.aColData) ) &&
          ( !rInfo.pRowRoot->GetChildDimension() || rInfo.pRowRoot->GetChildDimension()->IsValidEntry(rData.aRowData) ) )
@@ -211,11 +208,8 @@ void ScDPTableData::ProcessRowData(CalcInfo& rInfo, CalcRowData& rData, bool bAu
         //! single process method with ColMembers, RowMembers and data !!!
         if (rInfo.pColRoot->GetChildDimension())
         {
-// Wang Xu Ming -- 2009-6-10
-// DataPilot Migration
             vector</*ScDPItemData*/ SCROW > aEmptyData;
             rInfo.pColRoot->GetChildDimension()->ProcessData(rData.aColData, NULL, aEmptyData, rData.aValues);
-// End Comments
         }
 
         rInfo.pRowRoot->ProcessData(rData.aRowData, rInfo.pColRoot->GetChildDimension(),
@@ -237,11 +231,8 @@ void ScDPTableData::CalcResultsFromCacheTable(const ScDPCacheTable& rCacheTable,
     }
 }
 
-// Wang Xu Ming -- 2009-6-10
-// DataPilot Migration
 void ScDPTableData::GetItemData(const ScDPCacheTable& rCacheTable, sal_Int32 nRow,
                                 const vector<long>& rDims, vector< SCROW/*ScDPItemData*/>& rItemData)
-// End Comments
 {
     sal_Int32 nDimSize = rDims.size();
     for (sal_Int32 i = 0; i < nDimSize; ++i)
@@ -266,8 +257,6 @@ void ScDPTableData::GetItemData(const ScDPCacheTable& rCacheTable, sal_Int32 nRo
 
 // -----------------------------------------------------------------------
 
-// Wang Xu Ming -- 2009-6-8
-// DataPilot Migration
 long ScDPTableData::GetMembersCount( long nDim )
 {
     if ( nDim > MAXCOL )
@@ -326,7 +315,6 @@ long ScDPTableData::GetSourceDim( long nDim )
     else
         return -1;
 }
-// End Comments
 // -----------------------------------------------------------------------
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
