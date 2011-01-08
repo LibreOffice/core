@@ -36,8 +36,8 @@ TARGET=mdds
 
 # --- Files --------------------------------------------------------
 
-TARFILE_NAME=mdds_0.5.0
-TARFILE_MD5=3820d7f394db2f82e195ac5ee63f2a6e
+TARFILE_NAME=mdds_0.5.1
+TARFILE_MD5=5d991377b0ee1ae396c82963bc0084c1
 PATCH_FILES=
 
 CONFIGURE_DIR=
