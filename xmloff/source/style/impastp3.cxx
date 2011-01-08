@@ -46,8 +46,9 @@ using namespace rtl;
 
 SvXMLAutoStylePoolParentP_Impl::~SvXMLAutoStylePoolParentP_Impl()
 {
-    while( maPropertiesList.Count() )
-        delete maPropertiesList.Remove( maPropertiesList.Count() -1 );
+    for( size_t i = maPropertiesList.size(); i > 0;  )
+        delete maPropertiesList[ --i ];
+    maPropertiesList.clear();
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -60,13 +61,13 @@ sal_Bool SvXMLAutoStylePoolParentP_Impl::Add( XMLFamilyData_Impl* pFamilyData, c
 {
     sal_Bool bAdded = sal_False;
     SvXMLAutoStylePoolPropertiesP_Impl *pProperties = 0;
-    sal_uInt32 i = 0;
+    size_t i = 0;
     sal_Int32 nProperties = rProperties.size();
-    sal_uInt32 nCount = maPropertiesList.Count();
+    size_t nCount = maPropertiesList.size();
 
     for( i = 0; i < nCount; i++ )
     {
-        SvXMLAutoStylePoolPropertiesP_Impl *pIS = maPropertiesList.GetObject( i );
+        SvXMLAutoStylePoolPropertiesP_Impl *pIS = maPropertiesList[ i ];
         if( nProperties > (sal_Int32)pIS->GetProperties().size() )
         {
             continue;
@@ -85,7 +86,9 @@ sal_Bool SvXMLAutoStylePoolParentP_Impl::Add( XMLFamilyData_Impl* pFamilyData, c
     if( !pProperties )
     {
         pProperties = new SvXMLAutoStylePoolPropertiesP_Impl( pFamilyData, rProperties );
-        maPropertiesList.Insert( pProperties, i );
+        SvXMLAutoStylePoolPropertiesPList_Impl::iterator it = maPropertiesList.begin();
+        ::std::advance( it, i );
+        maPropertiesList.insert( it, pProperties );
         bAdded = sal_True;
     }
 
@@ -104,13 +107,13 @@ sal_Bool SvXMLAutoStylePoolParentP_Impl::Add( XMLFamilyData_Impl* pFamilyData, c
 sal_Bool SvXMLAutoStylePoolParentP_Impl::AddNamed( XMLFamilyData_Impl* pFamilyData, const vector< XMLPropertyState >& rProperties, const OUString& rName )
 {
     sal_Bool bAdded = sal_False;
-    sal_uInt32 i = 0;
+    size_t i = 0;
     sal_Int32 nProperties = rProperties.size();
-    sal_uInt32 nCount = maPropertiesList.Count();
+    size_t nCount = maPropertiesList.size();
 
     for( i = 0; i < nCount; i++ )
     {
-        SvXMLAutoStylePoolPropertiesP_Impl *pIS = maPropertiesList.GetObject( i );
+        SvXMLAutoStylePoolPropertiesP_Impl *pIS = maPropertiesList[ i ];
         if( nProperties > (sal_Int32)pIS->GetProperties().size() )
         {
             continue;
@@ -127,7 +130,9 @@ sal_Bool SvXMLAutoStylePoolParentP_Impl::AddNamed( XMLFamilyData_Impl* pFamilyDa
                 new SvXMLAutoStylePoolPropertiesP_Impl( pFamilyData, rProperties );
         // ignore the generated name
         pProperties->SetName( rName );
-        maPropertiesList.Insert( pProperties, i );
+        SvXMLAutoStylePoolPropertiesPList_Impl::iterator it = maPropertiesList.begin();
+        ::std::advance( it, i );
+        maPropertiesList.insert( it, pProperties );
         bAdded = sal_True;
     }
 
@@ -143,10 +148,10 @@ OUString SvXMLAutoStylePoolParentP_Impl::Find( const XMLFamilyData_Impl* pFamily
 {
     OUString sName;
     vector< XMLPropertyState>::size_type nItems = rProperties.size();
-    sal_uInt32 nCount = maPropertiesList.Count();
-    for( sal_uInt32 i=0; i < nCount; i++ )
+    size_t nCount = maPropertiesList.size();
+    for( size_t i = 0; i < nCount; i++ )
     {
-        SvXMLAutoStylePoolPropertiesP_Impl *pIS = maPropertiesList.GetObject( i );
+        SvXMLAutoStylePoolPropertiesP_Impl *pIS = maPropertiesList[ i ];
         if( nItems > pIS->GetProperties().size() )
         {
             continue;

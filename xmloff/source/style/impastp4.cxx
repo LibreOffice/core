@@ -410,11 +410,11 @@ void SvXMLAutoStylePoolP_Impl::exportXML(
         {
             const SvXMLAutoStylePoolParentP_Impl* pParent =
                 pParents->GetObject( i );
-            sal_uInt32 nProperties = pParent->GetPropertiesList().Count();
-            for( sal_uInt32 j=0; j < nProperties; j++ )
+            size_t nProperties = pParent->GetPropertiesList().size();
+            for( size_t j = 0; j < nProperties; j++ )
             {
-                const SvXMLAutoStylePoolPropertiesP_Impl *pProperties =
-                    pParent->GetPropertiesList().GetObject( j );
+                const SvXMLAutoStylePoolPropertiesP_Impl* pProperties =
+                    pParent->GetPropertiesList()[ j ];
                 nPos = pProperties->GetPos();
                 DBG_ASSERT( nPos < nCount,
                         "SvXMLAutoStylePool_Impl::exportXML: wrong position" );
