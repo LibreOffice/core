@@ -28,9 +28,18 @@
 #include "oox/xls/drawingmanager.hxx"
 
 #include <com/sun/star/awt/Rectangle.hpp>
+#include <com/sun/star/drawing/CircleKind.hpp>
+#include <com/sun/star/drawing/PointSequenceSequence.hpp>
+#include <com/sun/star/drawing/PolygonKind.hpp>
 #include <com/sun/star/drawing/XShapes.hpp>
+#include "oox/core/filterbase.hxx"
+#include "oox/drawingml/lineproperties.hxx"
+#include "oox/helper/propertymap.hxx"
+#include "oox/helper/propertyset.hxx"
 #include "oox/xls/biffinputstream.hxx"
 #include "oox/xls/unitconverter.hxx"
+#include "properties.hxx"
+#include "tokens.hxx"
 
 namespace oox {
 namespace xls {
@@ -115,6 +124,13 @@ const sal_uInt8 BIFF_OBJ_LINE_TR            = 1;
 const sal_uInt8 BIFF_OBJ_LINE_BR            = 2;
 const sal_uInt8 BIFF_OBJ_LINE_BL            = 3;
 
+const sal_uInt8 BIFF_OBJ_ARC_TR             = 0;
+const sal_uInt8 BIFF_OBJ_ARC_TL             = 1;
+const sal_uInt8 BIFF_OBJ_ARC_BL             = 2;
+const sal_uInt8 BIFF_OBJ_ARC_BR             = 3;
+
+const sal_uInt16 BIFF_OBJ_POLY_CLOSED       = 0x0100;
+
 // fill formatting ------------------------------------------------------------
 
 const sal_uInt8 BIFF_OBJ_FILL_AUTOCOLOR     = 65;
@@ -170,23 +186,21 @@ BiffObjLineModel::BiffObjLineModel() :
     mnColorIdx( BIFF_OBJ_LINE_AUTOCOLOR ),
     mnStyle( BIFF_OBJ_LINE_SOLID ),
     mnWidth( BIFF_OBJ_LINE_HAIR ),
-    mnAuto( BIFF_OBJ_LINE_AUTO )
+    mbAuto( true )
 {
-}
-
-bool BiffObjLineModel::isAuto() const
-{
-    return getFlag( mnAuto, BIFF_OBJ_LINE_AUTO );
 }
 
 bool BiffObjLineModel::isVisible() const
 {
-    return isAuto() || (mnStyle != BIFF_OBJ_LINE_NONE);
+    return mbAuto || (mnStyle != BIFF_OBJ_LINE_NONE);
 }
 
 BiffInputStream& operator>>( BiffInputStream& rStrm, BiffObjLineModel& rModel )
 {
-    return rStrm >> rModel.mnColorIdx >> rModel.mnStyle >> rModel.mnWidth >> rModel.mnAuto;
+    sal_uInt8 nFlags;
+    rStrm >> rModel.mnColorIdx >> rModel.mnStyle >> rModel.mnWidth >> nFlags;
+    rModel.mbAuto = getFlag( nFlags, BIFF_OBJ_LINE_AUTO );
+    return rStrm;
 }
 
 // ============================================================================
@@ -195,23 +209,21 @@ BiffObjFillModel::BiffObjFillModel() :
     mnBackColorIdx( BIFF_OBJ_LINE_AUTOCOLOR ),
     mnPattColorIdx( BIFF_OBJ_FILL_AUTOCOLOR ),
     mnPattern( BIFF_OBJ_PATT_SOLID ),
-    mnAuto( BIFF_OBJ_FILL_AUTO )
+    mbAuto( true )
 {
-}
-
-bool BiffObjFillModel::isAuto() const
-{
-    return getFlag( mnAuto, BIFF_OBJ_FILL_AUTO );
 }
 
 bool BiffObjFillModel::isFilled() const
 {
-    return isAuto() || (mnPattern != BIFF_OBJ_PATT_NONE);
+    return mbAuto || (mnPattern != BIFF_OBJ_PATT_NONE);
 }
 
 BiffInputStream& operator>>( BiffInputStream& rStrm, BiffObjFillModel& rModel )
 {
-    return rStrm >> rModel.mnBackColorIdx >> rModel.mnPattColorIdx >> rModel.mnPattern >> rModel.mnAuto;
+    sal_uInt8 nFlags;
+    rStrm >> rModel.mnBackColorIdx >> rModel.mnPattColorIdx >> rModel.mnPattern >> nFlags;
+    rModel.mbAuto = getFlag( nFlags, BIFF_OBJ_FILL_AUTO );
+    return rStrm;
 }
 
 // ============================================================================
@@ -335,15 +347,17 @@ BiffDrawingObjectBase::~BiffDrawingObjectBase()
             case BIFF_OBJTYPE_LINE:         xDrawingObj.reset( new BiffLineObject( rHelper ) );     break;
             case BIFF_OBJTYPE_RECTANGLE:    xDrawingObj.reset( new BiffRectObject( rHelper ) );     break;
             case BIFF_OBJTYPE_OVAL:         xDrawingObj.reset( new BiffOvalObject( rHelper ) );     break;
+            case BIFF_OBJTYPE_ARC:          xDrawingObj.reset( new BiffArcObject( rHelper ) );      break;
 #if 0
-            case BIFF_OBJTYPE_ARC:          xDrawingObj.reset( new XclImpArcObj( rHelper ) );       break;
             case BIFF_OBJTYPE_CHART:        xDrawingObj.reset( new XclImpChartObj( rHelper ) );     break;
             case BIFF_OBJTYPE_TEXT:         xDrawingObj.reset( new XclImpTextObj( rHelper ) );      break;
             case BIFF_OBJTYPE_BUTTON:       xDrawingObj.reset( new XclImpButtonObj( rHelper ) );    break;
             case BIFF_OBJTYPE_PICTURE:      xDrawingObj.reset( new XclImpPictureObj( rHelper ) );   break;
 #endif
             default:
+#if 0
                 OSL_ENSURE( false, "BiffDrawingObjectBase::importObjBiff3 - unknown object type" );
+#endif
                 xDrawingObj.reset( new BiffPlaceholderObject( rHelper ) );
         }
     }
@@ -367,16 +381,18 @@ BiffDrawingObjectBase::~BiffDrawingObjectBase()
             case BIFF_OBJTYPE_LINE:         xDrawingObj.reset( new BiffLineObject( rHelper ) );     break;
             case BIFF_OBJTYPE_RECTANGLE:    xDrawingObj.reset( new BiffRectObject( rHelper ) );     break;
             case BIFF_OBJTYPE_OVAL:         xDrawingObj.reset( new BiffOvalObject( rHelper ) );     break;
+            case BIFF_OBJTYPE_ARC:          xDrawingObj.reset( new BiffArcObject( rHelper ) );      break;
+            case BIFF_OBJTYPE_POLYGON:      xDrawingObj.reset( new BiffPolygonObject( rHelper ) );  break;
 #if 0
-            case BIFF_OBJTYPE_ARC:          xDrawingObj.reset( new XclImpArcObj( rHelper ) );       break;
             case BIFF_OBJTYPE_CHART:        xDrawingObj.reset( new XclImpChartObj( rHelper ) );     break;
             case BIFF_OBJTYPE_TEXT:         xDrawingObj.reset( new XclImpTextObj( rHelper ) );      break;
             case BIFF_OBJTYPE_BUTTON:       xDrawingObj.reset( new XclImpButtonObj( rHelper ) );    break;
             case BIFF_OBJTYPE_PICTURE:      xDrawingObj.reset( new XclImpPictureObj( rHelper ) );   break;
-            case BIFF_OBJTYPE_POLYGON:      xDrawingObj.reset( new XclImpPolygonObj( rHelper ) );   break;
 #endif
             default:
+#if 0
                 OSL_ENSURE( false, "BiffDrawingObjectBase::importObjBiff4 - unknown object type" );
+#endif
                 xDrawingObj.reset( new BiffPlaceholderObject( rHelper ) );
         }
     }
@@ -399,14 +415,14 @@ BiffDrawingObjectBase::~BiffDrawingObjectBase()
             case BIFF_OBJTYPE_GROUP:        xDrawingObj.reset( new BiffGroupObject( rHelper ) );        break;
             case BIFF_OBJTYPE_LINE:         xDrawingObj.reset( new BiffLineObject( rHelper ) );         break;
             case BIFF_OBJTYPE_RECTANGLE:    xDrawingObj.reset( new BiffRectObject( rHelper ) );         break;
-            case BIFF_OBJTYPE_OVAL:         xDrawingObj.reset( new BiffOvalObject( rHelper ) );     break;
+            case BIFF_OBJTYPE_OVAL:         xDrawingObj.reset( new BiffOvalObject( rHelper ) );         break;
+            case BIFF_OBJTYPE_ARC:          xDrawingObj.reset( new BiffArcObject( rHelper ) );           break;
+            case BIFF_OBJTYPE_POLYGON:      xDrawingObj.reset( new BiffPolygonObject( rHelper ) );      break;
 #if 0
-            case BIFF_OBJTYPE_ARC:          xDrawingObj.reset( new XclImpArcObj( rHelper ) );           break;
             case BIFF_OBJTYPE_CHART:        xDrawingObj.reset( new XclImpChartObj( rHelper ) );         break;
             case BIFF_OBJTYPE_TEXT:         xDrawingObj.reset( new XclImpTextObj( rHelper ) );          break;
             case BIFF_OBJTYPE_BUTTON:       xDrawingObj.reset( new XclImpButtonObj( rHelper ) );        break;
             case BIFF_OBJTYPE_PICTURE:      xDrawingObj.reset( new XclImpPictureObj( rHelper ) );       break;
-            case BIFF_OBJTYPE_POLYGON:      xDrawingObj.reset( new XclImpPolygonObj( rHelper ) );       break;
             case BIFF_OBJTYPE_CHECKBOX:     xDrawingObj.reset( new XclImpCheckBoxObj( rHelper ) );      break;
             case BIFF_OBJTYPE_OPTIONBUTTON: xDrawingObj.reset( new XclImpOptionButtonObj( rHelper ) );  break;
             case BIFF_OBJTYPE_EDIT:         xDrawingObj.reset( new XclImpEditObj( rHelper ) );          break;
@@ -419,7 +435,9 @@ BiffDrawingObjectBase::~BiffDrawingObjectBase()
             case BIFF_OBJTYPE_DROPDOWN:     xDrawingObj.reset( new XclImpDropDownObj( rHelper ) );      break;
 #endif
             default:
+#if 0
                 OSL_ENSURE( false, "BiffDrawingObjectBase::importObjBiff5 - unknown object type" );
+#endif
                 xDrawingObj.reset( new BiffPlaceholderObject( rHelper ) );
         }
     }
@@ -447,7 +465,7 @@ BiffDrawingObjectBase::~BiffDrawingObjectBase()
                 case BIFF_OBJTYPE_ARC:
                     xDrawingObj.reset( new XclImpTextObj( rHelper ) );
                     // lines and arcs may be 2-dimensional
-                    xDrawingObj->SetAreaObj( false );
+                    xDrawingObj->setAreaObj( false );
                 break;
 
                 // in BIFF8, all simple objects support text
@@ -479,7 +497,9 @@ BiffDrawingObjectBase::~BiffDrawingObjectBase()
 #endif
 
                 default:
+#if 0
                     OSL_ENSURE( false, "BiffDrawingObjectBase::importObjBiff8 - unknown object type" );
+#endif
                     xDrawingObj.reset( new BiffPlaceholderObject( rHelper ) );
             }
         }
@@ -572,6 +592,210 @@ void BiffDrawingObjectBase::readMacroBiff8( BiffInputStream& rStrm )
 #endif
         }
     }
+}
+
+void BiffDrawingObjectBase::convertLineProperties( PropertyMap& rPropMap, const BiffObjLineModel& rLineModel, sal_uInt16 nArrows ) const
+{
+    if( rLineModel.mbAuto )
+    {
+        BiffObjLineModel aAutoModel;
+        aAutoModel.mbAuto = false;
+        convertLineProperties( rPropMap, aAutoModel, nArrows );
+        return;
+    }
+
+    /*  Convert line formatting to DrawingML line formatting and let the
+        DrawingML code do the hard work. */
+    LineProperties aLineProps;
+
+    if( rLineModel.mnStyle == BIFF_OBJ_LINE_NONE )
+    {
+        aLineProps.maLineFill.moFillType = XML_noFill;
+    }
+    else
+    {
+        aLineProps.maLineFill.moFillType = XML_solidFill;
+        aLineProps.maLineFill.maFillColor.setPaletteClr( rLineModel.mnColorIdx );
+        aLineProps.moLineCompound = XML_sng;
+        aLineProps.moLineCap = XML_flat;
+        aLineProps.moLineJoint = XML_round;
+
+        // line width: use 0.35 mm per BIFF line width step
+        sal_Int32 nLineWidth = 0;
+        switch( rLineModel.mnWidth )
+        {
+            default:
+            case BIFF_OBJ_LINE_HAIR:    nLineWidth = 0;     break;
+            case BIFF_OBJ_LINE_THIN:    nLineWidth = 20;    break;
+            case BIFF_OBJ_LINE_MEDIUM:  nLineWidth = 40;    break;
+            case BIFF_OBJ_LINE_THICK:   nLineWidth = 60;    break;
+        }
+        aLineProps.moLineWidth = getLimitedValue< sal_Int32, sal_Int64 >( convertHmmToEmu( nLineWidth ), 0, SAL_MAX_INT32 );
+
+        // dash style and transparency
+        switch( rLineModel.mnStyle )
+        {
+            default:
+            case BIFF_OBJ_LINE_SOLID:
+                aLineProps.moPresetDash = XML_solid;
+            break;
+            case BIFF_OBJ_LINE_DASH:
+                aLineProps.moPresetDash = XML_lgDash;
+            break;
+            case BIFF_OBJ_LINE_DOT:
+                aLineProps.moPresetDash = XML_dot;
+            break;
+            case BIFF_OBJ_LINE_DASHDOT:
+                aLineProps.moPresetDash = XML_lgDashDot;
+            break;
+            case BIFF_OBJ_LINE_DASHDOTDOT:
+                aLineProps.moPresetDash = XML_lgDashDotDot;
+            break;
+            case BIFF_OBJ_LINE_MEDTRANS:
+                aLineProps.moPresetDash = XML_solid;
+                aLineProps.maLineFill.maFillColor.addTransformation( XML_alpha, 50 * PER_PERCENT );
+            break;
+            case BIFF_OBJ_LINE_DARKTRANS:
+                aLineProps.moPresetDash = XML_solid;
+                aLineProps.maLineFill.maFillColor.addTransformation( XML_alpha, 75 * PER_PERCENT );
+            break;
+            case BIFF_OBJ_LINE_LIGHTTRANS:
+                aLineProps.moPresetDash = XML_solid;
+                aLineProps.maLineFill.maFillColor.addTransformation( XML_alpha, 25 * PER_PERCENT );
+            break;
+        }
+
+        // line ends
+        bool bLineStart = false;
+        bool bLineEnd = false;
+        bool bFilled = false;
+        switch( extractValue< sal_uInt8 >( nArrows, 0, 4 ) )
+        {
+            case BIFF_OBJ_ARROW_OPEN:       bLineStart = false; bLineEnd = true;  bFilled = false;  break;
+            case BIFF_OBJ_ARROW_OPENBOTH:   bLineStart = true;  bLineEnd = true;  bFilled = false;  break;
+            case BIFF_OBJ_ARROW_FILLED:     bLineStart = false; bLineEnd = true;  bFilled = true;   break;
+            case BIFF_OBJ_ARROW_FILLEDBOTH: bLineStart = true;  bLineEnd = true;  bFilled = true;   break;
+        }
+        if( bLineStart || bLineEnd )
+        {
+            // arrow type (open or closed)
+            sal_Int32 nArrowType = bFilled ? XML_triangle : XML_arrow;
+            aLineProps.maStartArrow.moArrowType = bLineStart ? nArrowType : XML_none;
+            aLineProps.maEndArrow.moArrowType   = bLineEnd   ? nArrowType : XML_none;
+
+            // arrow width
+            sal_Int32 nArrowWidth = XML_med;
+            switch( extractValue< sal_uInt8 >( nArrows, 4, 4 ) )
+            {
+                case BIFF_OBJ_ARROW_NARROW: nArrowWidth = XML_sm;   break;
+                case BIFF_OBJ_ARROW_MEDIUM: nArrowWidth = XML_med;  break;
+                case BIFF_OBJ_ARROW_WIDE:   nArrowWidth = XML_lg;   break;
+            }
+            aLineProps.maStartArrow.moArrowWidth = aLineProps.maEndArrow.moArrowWidth = nArrowWidth;
+
+            // arrow length
+            sal_Int32 nArrowLength = XML_med;
+            switch( extractValue< sal_uInt8 >( nArrows, 8, 4 ) )
+            {
+                case BIFF_OBJ_ARROW_NARROW: nArrowLength = XML_sm;  break;
+                case BIFF_OBJ_ARROW_MEDIUM: nArrowLength = XML_med; break;
+                case BIFF_OBJ_ARROW_WIDE:   nArrowLength = XML_lg;  break;
+            }
+            aLineProps.maStartArrow.moArrowLength = aLineProps.maEndArrow.moArrowLength = nArrowLength;
+        }
+    }
+
+    aLineProps.pushToPropMap( rPropMap, getBaseFilter().getModelObjectHelper(), getBaseFilter().getGraphicHelper() );
+}
+
+void BiffDrawingObjectBase::convertFillProperties( PropertyMap& rPropMap, const BiffObjFillModel& rFillModel ) const
+{
+    if( rFillModel.mbAuto )
+    {
+        BiffObjFillModel aAutoModel;
+        aAutoModel.mbAuto = false;
+        convertFillProperties( rPropMap, aAutoModel );
+        return;
+    }
+
+    /*  Convert fill formatting to DrawingML fill formatting and let the
+        DrawingML code do the hard work. */
+    FillProperties aFillProps;
+
+    if( rFillModel.mnPattern == BIFF_OBJ_PATT_NONE )
+    {
+        aFillProps.moFillType = XML_noFill;
+    }
+    else
+    {
+        const sal_Int32 spnPatternPresets[] = {
+            XML_TOKEN_INVALID, XML_TOKEN_INVALID, XML_pct50, XML_pct50, XML_pct25,
+            XML_dkHorz, XML_dkVert, XML_dkDnDiag, XML_dkUpDiag, XML_smCheck, XML_trellis,
+            XML_ltHorz, XML_ltVert, XML_ltDnDiag, XML_ltUpDiag, XML_smGrid, XML_diagCross,
+            XML_pct20, XML_pct10 };
+        sal_Int32 nPatternPreset = STATIC_ARRAY_SELECT( spnPatternPresets, rFillModel.mnPattern, XML_TOKEN_INVALID );
+        if( nPatternPreset == XML_TOKEN_INVALID )
+        {
+            aFillProps.moFillType = XML_solidFill;
+            aFillProps.maFillColor.setPaletteClr( rFillModel.mnPattColorIdx );
+        }
+        else
+        {
+            aFillProps.moFillType = XML_pattFill;
+            aFillProps.maPatternProps.maPattFgColor.setPaletteClr( rFillModel.mnPattColorIdx );
+            aFillProps.maPatternProps.maPattBgColor.setPaletteClr( rFillModel.mnBackColorIdx );
+            aFillProps.maPatternProps.moPattPreset = nPatternPreset;
+        }
+#if 0
+        static const sal_uInt8 sppnPatterns[][ 8 ] =
+        {
+            { 0xAA, 0x55, 0xAA, 0x55, 0xAA, 0x55, 0xAA, 0x55 },
+            { 0x77, 0xDD, 0x77, 0xDD, 0x77, 0xDD, 0x77, 0xDD },
+            { 0x88, 0x22, 0x88, 0x22, 0x88, 0x22, 0x88, 0x22 },
+            { 0xFF, 0xFF, 0x00, 0x00, 0xFF, 0xFF, 0x00, 0x00 },
+            { 0xCC, 0xCC, 0xCC, 0xCC, 0xCC, 0xCC, 0xCC, 0xCC },
+            { 0x33, 0x66, 0xCC, 0x99, 0x33, 0x66, 0xCC, 0x99 },
+            { 0xCC, 0x66, 0x33, 0x99, 0xCC, 0x66, 0x33, 0x99 },
+            { 0xCC, 0xCC, 0x33, 0x33, 0xCC, 0xCC, 0x33, 0x33 },
+            { 0xCC, 0xFF, 0x33, 0xFF, 0xCC, 0xFF, 0x33, 0xFF },
+            { 0xFF, 0x00, 0x00, 0x00, 0xFF, 0x00, 0x00, 0x00 },
+            { 0x88, 0x88, 0x88, 0x88, 0x88, 0x88, 0x88, 0x88 },
+            { 0x11, 0x22, 0x44, 0x88, 0x11, 0x22, 0x44, 0x88 },
+            { 0x88, 0x44, 0x22, 0x11, 0x88, 0x44, 0x22, 0x11 },
+            { 0xFF, 0x11, 0x11, 0x11, 0xFF, 0x11, 0x11, 0x11 },
+            { 0xAA, 0x44, 0xAA, 0x11, 0xAA, 0x44, 0xAA, 0x11 },
+            { 0x88, 0x00, 0x22, 0x00, 0x88, 0x00, 0x22, 0x00 },
+            { 0x80, 0x00, 0x08, 0x00, 0x80, 0x00, 0x08, 0x00 }
+        };
+        const sal_uInt8* const pnPattern = sppnPatterns[ ::std::min< size_t >( rFillData.mnPattern - 2, STATIC_ARRAY_SIZE( sppnPatterns ) ) ];
+        // create 2-colored 8x8 DIB
+        SvMemoryStream aMemStrm;
+//      { 0x0C, 0x00, 0x00, 0x00, 0x08, 0x00, 0x08, 0x00, 0x01, 0x00, 0x01, 0x00, 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x00 }
+        aMemStrm << sal_uInt32( 12 ) << sal_Int16( 8 ) << sal_Int16( 8 ) << sal_uInt16( 1 ) << sal_uInt16( 1 );
+        aMemStrm << sal_uInt8( 0xFF ) << sal_uInt8( 0xFF ) << sal_uInt8( 0xFF );
+        aMemStrm << sal_uInt8( 0x00 ) << sal_uInt8( 0x00 ) << sal_uInt8( 0x00 );
+        for( size_t nIdx = 0; nIdx < 8; ++nIdx )
+            aMemStrm << sal_uInt32( pnPattern[ nIdx ] ); // 32-bit little-endian
+        aMemStrm.Seek( STREAM_SEEK_TO_BEGIN );
+        Bitmap aBitmap;
+        aBitmap.Read( aMemStrm, FALSE );
+        XOBitmap aXOBitmap( aBitmap );
+        aXOBitmap.Bitmap2Array();
+        aXOBitmap.SetBitmapType( XBITMAP_8X8 );
+        if( aXOBitmap.GetBackgroundColor().GetColor() == COL_BLACK )
+            ::std::swap( aPattColor, aBackColor );
+        aXOBitmap.SetPixelColor( aPattColor );
+        aXOBitmap.SetBackgroundColor( aBackColor );
+        rSdrObj.SetMergedItem( XFillStyleItem( XFILL_BITMAP ) );
+        rSdrObj.SetMergedItem( XFillBitmapItem( EMPTY_STRING, aXOBitmap ) );
+#endif
+    }
+
+    aFillProps.pushToPropMap( rPropMap, getBaseFilter().getModelObjectHelper(), getBaseFilter().getGraphicHelper() );
+}
+
+void BiffDrawingObjectBase::convertFrameProperties( PropertyMap& /*rPropMap*/, sal_uInt16 /*nFrameFlags*/ ) const
+{
 }
 
 void BiffDrawingObjectBase::implReadObjBiff3( BiffInputStream& /*rStrm*/, sal_uInt16 /*nMacroSize*/ )
@@ -820,7 +1044,33 @@ void BiffLineObject::implReadObjBiff5( BiffInputStream& rStrm, sal_uInt16 nNameL
 Reference< XShape > BiffLineObject::implConvertAndInsert( BiffDrawingBase& rDrawing,
         const Reference< XShapes >& rxShapes, const Rectangle& rShapeRect ) const
 {
-    return rDrawing.createAndInsertXShape( CREATE_OUSTRING( "com.sun.star.drawing.LineShape" ), rxShapes, rShapeRect );
+    PropertyMap aPropMap;
+    convertLineProperties( aPropMap, maLineModel, mnArrows );
+
+    // create the line polygon
+    PointSequenceSequence aPoints( 1 );
+    aPoints[ 0 ].realloc( 2 );
+    Point& rBeg = aPoints[ 0 ][ 0 ];
+    Point& rEnd = aPoints[ 0 ][ 1 ];
+    sal_Int32 nL = rShapeRect.X;
+    sal_Int32 nT = rShapeRect.Y;
+    sal_Int32 nR = rShapeRect.X + ::std::max< sal_Int32 >( rShapeRect.Width - 1, 0 );
+    sal_Int32 nB = rShapeRect.Y + ::std::max< sal_Int32 >( rShapeRect.Height - 1, 0 );
+    switch( mnStartPoint )
+    {
+        default:
+        case BIFF_OBJ_LINE_TL: rBeg.X = nL; rBeg.Y = nT; rEnd.X = nR; rEnd.Y = nB; break;
+        case BIFF_OBJ_LINE_TR: rBeg.X = nR; rBeg.Y = nT; rEnd.X = nL; rEnd.Y = nB; break;
+        case BIFF_OBJ_LINE_BR: rBeg.X = nR; rBeg.Y = nB; rEnd.X = nL; rEnd.Y = nT; break;
+        case BIFF_OBJ_LINE_BL: rBeg.X = nL; rBeg.Y = nB; rEnd.X = nR; rEnd.Y = nT; break;
+    }
+    aPropMap.setProperty( PROP_PolyPolygon, aPoints );
+    aPropMap.setProperty( PROP_PolygonKind, PolygonKind_LINE );
+
+    // create the shape
+    Reference< XShape > xShape = rDrawing.createAndInsertXShape( CREATE_OUSTRING( "com.sun.star.drawing.LineShape" ), rxShapes, rShapeRect );
+    PropertySet( xShape ).setProperties( aPropMap );
+    return xShape;
 }
 
 // ============================================================================
@@ -835,6 +1085,13 @@ BiffRectObject::BiffRectObject( const WorksheetHelper& rHelper ) :
 void BiffRectObject::readFrameData( BiffInputStream& rStrm )
 {
     rStrm >> maFillModel >> maLineModel >> mnFrameFlags;
+}
+
+void BiffRectObject::convertRectProperties( PropertyMap& rPropMap ) const
+{
+    convertLineProperties( rPropMap, maLineModel );
+    convertFillProperties( rPropMap, maFillModel );
+    convertFrameProperties( rPropMap, mnFrameFlags );
 }
 
 void BiffRectObject::implReadObjBiff3( BiffInputStream& rStrm, sal_uInt16 nMacroSize )
@@ -859,7 +1116,12 @@ void BiffRectObject::implReadObjBiff5( BiffInputStream& rStrm, sal_uInt16 nNameL
 Reference< XShape > BiffRectObject::implConvertAndInsert( BiffDrawingBase& rDrawing,
         const Reference< XShapes >& rxShapes, const Rectangle& rShapeRect ) const
 {
-    return rDrawing.createAndInsertXShape( CREATE_OUSTRING( "com.sun.star.drawing.RectangleShape" ), rxShapes, rShapeRect );
+    PropertyMap aPropMap;
+    convertRectProperties( aPropMap );
+
+    Reference< XShape > xShape = rDrawing.createAndInsertXShape( CREATE_OUSTRING( "com.sun.star.drawing.RectangleShape" ), rxShapes, rShapeRect );
+    PropertySet( xShape ).setProperties( aPropMap );
+    return xShape;
 }
 
 // ============================================================================
@@ -872,7 +1134,165 @@ BiffOvalObject::BiffOvalObject( const WorksheetHelper& rHelper ) :
 Reference< XShape > BiffOvalObject::implConvertAndInsert( BiffDrawingBase& rDrawing,
         const Reference< XShapes >& rxShapes, const Rectangle& rShapeRect ) const
 {
-    return rDrawing.createAndInsertXShape( CREATE_OUSTRING( "com.sun.star.drawing.EllipseShape" ), rxShapes, rShapeRect );
+    PropertyMap aPropMap;
+    convertRectProperties( aPropMap );
+
+    Reference< XShape > xShape = rDrawing.createAndInsertXShape( CREATE_OUSTRING( "com.sun.star.drawing.EllipseShape" ), rxShapes, rShapeRect );
+    PropertySet( xShape ).setProperties( aPropMap );
+    return xShape;
+}
+
+// ============================================================================
+
+BiffArcObject::BiffArcObject( const WorksheetHelper& rHelper ) :
+    BiffDrawingObjectBase( rHelper ),
+    mnQuadrant( BIFF_OBJ_ARC_TR )
+{
+    setAreaObj( false );    // arc may be 2-dimensional
+}
+
+void BiffArcObject::implReadObjBiff3( BiffInputStream& rStrm, sal_uInt16 nMacroSize )
+{
+    rStrm >> maFillModel >> maLineModel >> mnQuadrant;
+    rStrm.skip( 1 );
+    readMacroBiff3( rStrm, nMacroSize );
+}
+
+void BiffArcObject::implReadObjBiff4( BiffInputStream& rStrm, sal_uInt16 nMacroSize )
+{
+    rStrm >> maFillModel >> maLineModel >> mnQuadrant;
+    rStrm.skip( 1 );
+    readMacroBiff4( rStrm, nMacroSize );
+}
+
+void BiffArcObject::implReadObjBiff5( BiffInputStream& rStrm, sal_uInt16 nNameLen, sal_uInt16 nMacroSize )
+{
+    rStrm >> maFillModel >> maLineModel >> mnQuadrant;
+    rStrm.skip( 1 );
+    readNameBiff5( rStrm, nNameLen );
+    readMacroBiff5( rStrm, nMacroSize );
+}
+
+Reference< XShape > BiffArcObject::implConvertAndInsert( BiffDrawingBase& rDrawing,
+        const Reference< XShapes >& rxShapes, const Rectangle& rShapeRect ) const
+{
+    PropertyMap aPropMap;
+    convertLineProperties( aPropMap, maLineModel );
+    convertFillProperties( aPropMap, maFillModel );
+
+    /*  Simulate arc objects with ellipse sections. While the original arc
+        object uses the entire object rectangle, only one quarter of the
+        ellipse shape will be visible. Thus, the size of the ellipse shape
+        needs to be extended and its position adjusted according to the visible
+        quadrant. */
+    Rectangle aNewRect( rShapeRect.X, rShapeRect.Y, rShapeRect.Width * 2, rShapeRect.Height * 2 );
+    long nStartAngle = 0;
+    switch( mnQuadrant )
+    {
+        default:
+        case BIFF_OBJ_ARC_TR: nStartAngle =     0; aNewRect.X -= rShapeRect.Width;                                  break;
+        case BIFF_OBJ_ARC_TL: nStartAngle =  9000;                                                                  break;
+        case BIFF_OBJ_ARC_BL: nStartAngle = 18000;                                 aNewRect.Y -= rShapeRect.Height; break;
+        case BIFF_OBJ_ARC_BR: nStartAngle = 27000; aNewRect.X -= rShapeRect.Width; aNewRect.Y -= rShapeRect.Height; break;
+    }
+    long nEndAngle = (nStartAngle + 9000) % 36000;
+    aPropMap.setProperty( PROP_CircleKind, maFillModel.isFilled() ? CircleKind_SECTION : CircleKind_ARC );
+    aPropMap.setProperty( PROP_CircleStartAngle, nStartAngle );
+    aPropMap.setProperty( PROP_CircleEndAngle, nEndAngle );
+
+    // create the shape
+    Reference< XShape > xShape = rDrawing.createAndInsertXShape( CREATE_OUSTRING( "com.sun.star.drawing.EllipseShape" ), rxShapes, aNewRect );
+    PropertySet( xShape ).setProperties( aPropMap );
+    return xShape;
+}
+
+// ============================================================================
+
+BiffPolygonObject::BiffPolygonObject( const WorksheetHelper& rHelper ) :
+    BiffRectObject( rHelper ),
+    mnPolyFlags( 0 ),
+    mnPointCount( 0 )
+{
+    setAreaObj( false );    // polygon may be 2-dimensional
+}
+
+void BiffPolygonObject::implReadObjBiff4( BiffInputStream& rStrm, sal_uInt16 nMacroSize )
+{
+    readFrameData( rStrm );
+    rStrm >> mnPolyFlags;
+    rStrm.skip( 10 );
+    rStrm >> mnPointCount;
+    rStrm.skip( 8 );
+    readMacroBiff4( rStrm, nMacroSize );
+    importCoordList( rStrm );
+}
+
+void BiffPolygonObject::implReadObjBiff5( BiffInputStream& rStrm, sal_uInt16 nNameLen, sal_uInt16 nMacroSize )
+{
+    readFrameData( rStrm );
+    rStrm >> mnPolyFlags;
+    rStrm.skip( 10 );
+    rStrm >> mnPointCount;
+    rStrm.skip( 8 );
+    readNameBiff5( rStrm, nNameLen );
+    readMacroBiff5( rStrm, nMacroSize );
+    importCoordList( rStrm );
+}
+
+namespace {
+
+Point lclGetPolyPoint( const Rectangle& rAnchorRect, const Point& rPoint )
+{
+    // polygon coordinates are given in 1/16384 of shape size
+    return Point(
+        rAnchorRect.X + static_cast< sal_Int32 >( rAnchorRect.Width * getLimitedValue< double >( static_cast< double >( rPoint.X ) / 16384.0, 0.0, 1.0 ) + 0.5 ),
+        rAnchorRect.Y + static_cast< sal_Int32 >( rAnchorRect.Height * getLimitedValue< double >( static_cast< double >( rPoint.Y ) / 16384.0, 0.0, 1.0 ) + 0.5 ) );
+}
+
+} // namespace
+
+Reference< XShape > BiffPolygonObject::implConvertAndInsert( BiffDrawingBase& rDrawing,
+        const Reference< XShapes >& rxShapes, const Rectangle& rShapeRect ) const
+{
+    Reference< XShape > xShape;
+    if( maCoords.size() >= 2 )
+    {
+        PropertyMap aPropMap;
+        convertRectProperties( aPropMap );
+
+        // create the polygon
+        PointVector aPolygon;
+        for( PointVector::const_iterator aIt = maCoords.begin(), aEnd = maCoords.end(); aIt != aEnd; ++aIt )
+            aPolygon.push_back( lclGetPolyPoint( rShapeRect, *aIt ) );
+        // close polygon if specified
+        if( getFlag( mnPolyFlags, BIFF_OBJ_POLY_CLOSED ) && ((maCoords.front().X != maCoords.back().X) || (maCoords.front().Y != maCoords.back().Y)) )
+            aPolygon.push_back( aPolygon.front() );
+        PointSequenceSequence aPoints( 1 );
+        aPoints[ 0 ] = ContainerHelper::vectorToSequence( aPolygon );
+        aPropMap.setProperty( PROP_PolyPolygon, aPoints );
+
+        // create the shape
+        OUString aService = maFillModel.isFilled() ?
+            CREATE_OUSTRING( "com.sun.star.drawing.PolyPolygonShape" ) :
+            CREATE_OUSTRING( "com.sun.star.drawing.PolyLineShape" );
+        xShape = rDrawing.createAndInsertXShape( aService, rxShapes, rShapeRect );
+        PropertySet( xShape ).setProperties( aPropMap );
+    }
+    return xShape;
+}
+
+void BiffPolygonObject::importCoordList( BiffInputStream& rStrm )
+{
+    if( (rStrm.getNextRecId() == BIFF_ID_COORDLIST) && rStrm.startNextRecord() )
+    {
+        OSL_ENSURE( rStrm.getRemaining() / 4 == mnPointCount, "BiffPolygonObject::importCoordList - wrong polygon point count" );
+        while( rStrm.getRemaining() >= 4 )
+        {
+            sal_uInt16 nX, nY;
+            rStrm >> nX >> nY;
+            maCoords.push_back( Point( nX, nY ) );
+        }
+    }
 }
 
 // ============================================================================

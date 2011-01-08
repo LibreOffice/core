@@ -251,9 +251,9 @@ void lclPushMarkerProperties( PropertyMap& rPropMap, const LineArrowProperties& 
             case OOX_ARROWSIZE_MEDIUM:  fArrowWidth = (bIsArrow ? 4.5 : 3.0);  break;
             case OOX_ARROWSIZE_LARGE:   fArrowWidth = (bIsArrow ? 6.0 : 5.0);  break;
         }
-        // set arrow width relative to line width (convert line width from EMUs to 1/100 mm)
-        sal_Int32 nApiLineWidth = ::std::max< sal_Int32 >( GetCoordinate( nLineWidth ), 70 );
-        nMarkerWidth = static_cast< sal_Int32 >( fArrowWidth * nApiLineWidth );
+        // set arrow width relative to line width
+        sal_Int32 nBaseLineWidth = ::std::max< sal_Int32 >( nLineWidth, 70 );
+        nMarkerWidth = static_cast< sal_Int32 >( fArrowWidth * nBaseLineWidth );
 
         // test if the arrow already exists, do not create it again in this case
         if( !rPropIds.mbNamedLineMarker || !rModelObjHelper.hasLineMarker( aMarkerName ) )
@@ -403,6 +403,9 @@ void LineProperties::pushToPropMap( PropertyMap& rPropMap, ModelObjectHelper& rM
         // line style (our core only supports none and solid)
         LineStyle eLineStyle = (maLineFill.moFillType.get() == XML_noFill) ? LineStyle_NONE : LineStyle_SOLID;
 
+        // convert line width from EMUs to 1/100mm
+        sal_Int32 nLineWidth = convertEmuToHmm( moLineWidth.get( 0 ) );
+
         // create line dash from preset dash token (not for invisible line)
         if( (eLineStyle != LineStyle_NONE) && (moPresetDash.differsFrom( XML_solid ) || (!moPresetDash && !maCustomDash.empty())) )
         {
@@ -416,10 +419,10 @@ void LineProperties::pushToPropMap( PropertyMap& rPropMap, ModelObjectHelper& rM
                 lclConvertCustomDash( aLineDash, maCustomDash );
 
             // convert relative dash/dot length to absolute length
-            sal_Int32 nLineWidth = GetCoordinate( moLineWidth.get( 103500 ) );
-            aLineDash.DotLen *= nLineWidth;
-            aLineDash.DashLen *= nLineWidth;
-            aLineDash.Distance *= nLineWidth;
+            sal_Int32 nBaseLineWidth = ::std::max< sal_Int32 >( nLineWidth, 35 );
+            aLineDash.DotLen *= nBaseLineWidth;
+            aLineDash.DashLen *= nBaseLineWidth;
+            aLineDash.Distance *= nBaseLineWidth;
 
             if( rPropIds.mbNamedLineDash )
             {
@@ -444,9 +447,8 @@ void LineProperties::pushToPropMap( PropertyMap& rPropMap, ModelObjectHelper& rM
         if( moLineJoint.has() )
             rPropMap.setProperty( rPropIds[ LineJointId ], lclGetLineJoint( moLineJoint.get() ) );
 
-        // convert line width from EMUs to 1/100 mm
-        if( moLineWidth.has() )
-            rPropMap.setProperty( rPropIds[ LineWidthId ], GetCoordinate( moLineWidth.get() ) );
+        // line width in 1/100mm
+        rPropMap.setProperty( rPropIds[ LineWidthId ], nLineWidth );
 
         // line color and transparence
         Color aLineColor = maLineFill.getBestSolidColor();
@@ -458,8 +460,8 @@ void LineProperties::pushToPropMap( PropertyMap& rPropMap, ModelObjectHelper& rM
         }
 
         // line markers
-        lclPushMarkerProperties( rPropMap, maStartArrow, rModelObjHelper, rPropIds, moLineWidth.get( 0 ), false );
-        lclPushMarkerProperties( rPropMap, maEndArrow,   rModelObjHelper, rPropIds, moLineWidth.get( 0 ), true );
+        lclPushMarkerProperties( rPropMap, maStartArrow, rModelObjHelper, rPropIds, nLineWidth, false );
+        lclPushMarkerProperties( rPropMap, maEndArrow,   rModelObjHelper, rPropIds, nLineWidth, true );
     }
 }
 

@@ -53,12 +53,10 @@ struct BiffObjLineModel
     sal_uInt8           mnColorIdx;         /// Index into color palette.
     sal_uInt8           mnStyle;            /// Line dash style.
     sal_uInt8           mnWidth;            /// Line width.
-    sal_uInt8           mnAuto;             /// Automatic line flag.
+    bool                mbAuto;             /// True = automatic line format.
 
     explicit            BiffObjLineModel();
 
-    /** Returns true, if the line formatting is set to automatic. */
-    bool                isAuto() const;
     /** Returns true, if the line formatting is visible (automatic or explicit). */
     bool                isVisible() const;
 };
@@ -71,12 +69,10 @@ struct BiffObjFillModel
     sal_uInt8           mnBackColorIdx;     /// Index to color palette for background color.
     sal_uInt8           mnPattColorIdx;     /// Index to color palette for pattern foreground color.
     sal_uInt8           mnPattern;          /// Fill pattern.
-    sal_uInt8           mnAuto;             /// Automatic fill flag.
+    bool                mbAuto;             /// True = automatic fill format.
 
     explicit            BiffObjFillModel();
 
-    /** Returns true, if the fill formatting is set to automatic. */
-    bool                isAuto() const;
     /** Returns true, if the fill formatting is visible (automatic or explicit). */
     bool                isFilled() const;
 };
@@ -203,6 +199,13 @@ protected:
     void                readMacroBiff5( BiffInputStream& rStrm, sal_uInt16 nMacroSize );
     /** Reads the contents of the ftMacro sub structure in an OBJ record. */
     void                readMacroBiff8( BiffInputStream& rStrm );
+
+    /** Converts the passed line formatting to the passed property map. */
+    void                convertLineProperties( PropertyMap& rPropMap, const BiffObjLineModel& rLineModel, sal_uInt16 nArrows = 0 ) const;
+    /** Converts the passed fill formatting to the passed property map. */
+    void                convertFillProperties( PropertyMap& rPropMap, const BiffObjFillModel& rFillModel ) const;
+    /** Converts the passed frame flags to the passed property map. */
+    void                convertFrameProperties( PropertyMap& rPropMap, sal_uInt16 nFrameFlags ) const;
 
     /** Derived classes read the contents of the a BIFF3 OBJ record from the passed stream. */
     virtual void        implReadObjBiff3( BiffInputStream& rStrm, sal_uInt16 nMacroSize );
@@ -336,6 +339,9 @@ protected:
     /** Reads the fill model, the line model, and frame flags. */
     void                readFrameData( BiffInputStream& rStrm );
 
+    /** Converts fill formatting, line formatting, and frame style. */
+    void                convertRectProperties( PropertyMap& rPropMap ) const;
+
     /** Reads the contents of the a BIFF3 OBJ record from the passed stream. */
     virtual void        implReadObjBiff3( BiffInputStream& rStrm, sal_uInt16 nMacroSize );
     /** Reads the contents of the a BIFF4 OBJ record from the passed stream. */
@@ -369,6 +375,65 @@ protected:
                         implConvertAndInsert( BiffDrawingBase& rDrawing,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& rxShapes,
                             const ::com::sun::star::awt::Rectangle& rShapeRect ) const;
+};
+
+// ============================================================================
+
+/** A simple arc object. */
+class BiffArcObject : public BiffDrawingObjectBase
+{
+public:
+    explicit            BiffArcObject( const WorksheetHelper& rHelper );
+
+protected:
+    /** Reads the contents of the a BIFF3 OBJ record from the passed stream. */
+    virtual void        implReadObjBiff3( BiffInputStream& rStrm, sal_uInt16 nMacroSize );
+    /** Reads the contents of the a BIFF4 OBJ record from the passed stream. */
+    virtual void        implReadObjBiff4( BiffInputStream& rStrm, sal_uInt16 nMacroSize );
+    /** Reads the contents of the a BIFF5 OBJ record from the passed stream. */
+    virtual void        implReadObjBiff5( BiffInputStream& rStrm, sal_uInt16 nNameLen, sal_uInt16 nMacroSize );
+
+    /** Creates the corresponding XShape and insert it into the passed container. */
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >
+                        implConvertAndInsert( BiffDrawingBase& rDrawing,
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& rxShapes,
+                            const ::com::sun::star::awt::Rectangle& rShapeRect ) const;
+
+protected:
+    BiffObjFillModel    maFillModel;    /// Fill formatting.
+    BiffObjLineModel    maLineModel;    /// Line formatting.
+    sal_uInt8           mnQuadrant;     /// Visible quadrant of the circle.
+};
+
+// ============================================================================
+
+/** A simple polygon object. */
+class BiffPolygonObject : public BiffRectObject
+{
+public:
+    explicit            BiffPolygonObject( const WorksheetHelper& rHelper );
+
+protected:
+    /** Reads the contents of the a BIFF4 OBJ record from the passed stream. */
+    virtual void        implReadObjBiff4( BiffInputStream& rStrm, sal_uInt16 nMacroSize );
+    /** Reads the contents of the a BIFF5 OBJ record from the passed stream. */
+    virtual void        implReadObjBiff5( BiffInputStream& rStrm, sal_uInt16 nNameLen, sal_uInt16 nMacroSize );
+
+    /** Creates the corresponding XShape and insert it into the passed container. */
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >
+                        implConvertAndInsert( BiffDrawingBase& rDrawing,
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& rxShapes,
+                            const ::com::sun::star::awt::Rectangle& rShapeRect ) const;
+
+private:
+    /** Reads the COORDLIST record following the OBJ record. */
+    void                importCoordList( BiffInputStream& rStrm );
+
+protected:
+    typedef ::std::vector< ::com::sun::star::awt::Point > PointVector;
+    PointVector         maCoords;       /// Coordinates relative to bounding rectangle.
+    sal_uInt16          mnPolyFlags;    /// Additional flags.
+    sal_uInt16          mnPointCount;   /// Polygon point count.
 };
 
 // ============================================================================

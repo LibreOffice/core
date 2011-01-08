@@ -162,8 +162,6 @@ struct ValueRangeComp
     inline bool         operator()( const ValueRange& rRange, sal_Int32 nValue ) const { return rRange.mnLast < nValue; }
 };
 
-typedef ::std::vector< ValueRange > ValueRangeVector;
-
 // ----------------------------------------------------------------------------
 
 class ValueRangeSet
