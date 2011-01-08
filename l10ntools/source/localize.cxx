@@ -301,6 +301,9 @@ void SourceTreeLocalizer::WorkOnFile(
             ByteString sPath3( "bin" );
             ByteString sPath4( Export::GetEnv("UPDMINOREXT") );
             ByteString sExecutable( sPath1 );
+#if defined(WNT) || defined(OS2)
+            sExecutable.SearchAndReplaceAll( "/", sDel );
+#endif
             sExecutable += sDel ;
             sExecutable += sPath2 ;
             sExecutable += sDel;

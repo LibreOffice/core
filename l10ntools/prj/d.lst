@@ -42,6 +42,7 @@ mkdir: %_DEST%\bin%_EXT%\help\com\sun\star\help
 ..\%__SRC%\class\receditor\receditor.jar %_DEST%\bin%_EXT%\receditor.jar
 
 ..\java\jpropex\jpropex %_DEST%\bin%_EXT%\jpropex
+..\java\jpropex\jpropex.bat %_DEST%\bin%_EXT%\jpropex.bat
 ..\scripts\localize.pl %_DEST%\bin%_EXT%\localize.pl
 ..\scripts\localize_old.pl %_DEST%\bin%_EXT%\localize_old.pl
 ..\scripts\localize %_DEST%\bin%_EXT%\localize
