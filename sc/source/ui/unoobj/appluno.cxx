@@ -952,7 +952,7 @@ uno::Any SAL_CALL ScFunctionListObj::getByName( const rtl::OUString& aName )
                     lang::WrappedTargetException, uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
-    String aNameStr(aName);
+    ::rtl::OUString aNameStr(aName);
     const ScFunctionList* pFuncList = ScGlobal::GetStarCalcFunctionList();
     if ( pFuncList )
     {
@@ -982,10 +982,10 @@ uno::Any SAL_CALL ScFunctionListObj::getByName( const rtl::OUString& aName )
 sal_Int32 SAL_CALL ScFunctionListObj::getCount() throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
-    USHORT nCount = 0;
+    sal_Int32 nCount = 0;
     const ScFunctionList* pFuncList = ScGlobal::GetStarCalcFunctionList();
     if ( pFuncList )
-        nCount = (USHORT)pFuncList->GetCount();
+        nCount = (sal_Int32)pFuncList->GetCount();
     return nCount;
 }
 
@@ -1045,10 +1045,10 @@ uno::Sequence<rtl::OUString> SAL_CALL ScFunctionListObj::getElementNames() throw
     const ScFunctionList* pFuncList = ScGlobal::GetStarCalcFunctionList();
     if ( pFuncList )
     {
-        USHORT nCount = (USHORT)pFuncList->GetCount();
+        sal_uInt32 nCount = pFuncList->GetCount();
         uno::Sequence<rtl::OUString> aSeq(nCount);
         rtl::OUString* pAry = aSeq.getArray();
-        for (USHORT nIndex=0; nIndex<nCount; nIndex++)
+        for (sal_uInt32 nIndex=0; nIndex<nCount; nIndex++)
         {
             const ScFuncDesc* pDesc = pFuncList->GetFunction(nIndex);
             if ( pDesc && pDesc->pFuncName )
@@ -1063,20 +1063,19 @@ sal_Bool SAL_CALL ScFunctionListObj::hasByName( const rtl::OUString& aName )
                                         throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
-    String aNameStr(aName);
     const ScFunctionList* pFuncList = ScGlobal::GetStarCalcFunctionList();
     if ( pFuncList )
     {
-        USHORT nCount = (USHORT)pFuncList->GetCount();
-        for (USHORT nIndex=0; nIndex<nCount; nIndex++)
+        sal_uInt32 nCount = pFuncList->GetCount();
+        for (sal_uInt32 nIndex=0; nIndex<nCount; nIndex++)
         {
             const ScFuncDesc* pDesc = pFuncList->GetFunction(nIndex);
             //! Case-insensitiv ???
-            if ( pDesc && pDesc->pFuncName && aNameStr == *pDesc->pFuncName )
-                return TRUE;
+            if ( pDesc && pDesc->pFuncName && aName == *pDesc->pFuncName )
+                return sal_True;
         }
     }
-    return FALSE;
+    return sal_False;
 }
 
 //------------------------------------------------------------------------

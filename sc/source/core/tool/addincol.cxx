@@ -1048,7 +1048,7 @@ void ScUnoAddInCollection::ReadFromAddIn( const uno::Reference<uno::XInterface>&
 
 void lcl_UpdateFunctionList( ScFunctionList& rFunctionList, const ScUnoAddInFuncData& rFuncData )
 {
-    String aCompare = rFuncData.GetUpperLocal();    // as used in FillFunctionDescFromData
+    ::rtl::OUString aCompare = (::rtl::OUString)rFuncData.GetUpperLocal();    // as used in FillFunctionDescFromData
 
     ULONG nCount = rFunctionList.GetCount();
     for (ULONG nPos=0; nPos<nCount; nPos++)
@@ -1328,14 +1328,14 @@ BOOL ScUnoAddInCollection::FillFunctionDescFromData( const ScUnoAddInFuncData& r
 
     // nFIndex is set from outside
 
-    rDesc.pFuncName = new String( rFuncData.GetUpperLocal() );     //! upper?
+    rDesc.pFuncName = new ::rtl::OUString( rFuncData.GetUpperLocal() );     //! upper?
     rDesc.nCategory = rFuncData.GetCategory();
     rDesc.nHelpId = rFuncData.GetHelpId();
 
     String aDesc = rFuncData.GetDescription();
     if (!aDesc.Len())
         aDesc = rFuncData.GetLocalName();      // use name if no description is available
-    rDesc.pFuncDesc = new String( aDesc );
+    rDesc.pFuncDesc = new ::rtl::OUString( aDesc );
 
     // AddInArgumentType_CALLER is already left out in FuncData
 
@@ -1345,18 +1345,18 @@ BOOL ScUnoAddInCollection::FillFunctionDescFromData( const ScUnoAddInFuncData& r
         BOOL bMultiple = FALSE;
         const ScAddInArgDesc* pArgs = rFuncData.GetArguments();
 
-        rDesc.ppDefArgNames = new String*[nArgCount];
-        rDesc.ppDefArgDescs = new String*[nArgCount];
+        rDesc.ppDefArgNames = new ::rtl::OUString*[nArgCount];
+        rDesc.ppDefArgDescs = new ::rtl::OUString*[nArgCount];
         rDesc.pDefArgFlags   = new ScFuncDesc::ParameterFlags[nArgCount];
         for ( long nArg=0; nArg<nArgCount; nArg++ )
         {
-            rDesc.ppDefArgNames[nArg] = new String( pArgs[nArg].aName );
-            rDesc.ppDefArgDescs[nArg] = new String( pArgs[nArg].aDescription );
+            rDesc.ppDefArgNames[nArg] = new ::rtl::OUString( pArgs[nArg].aName );
+            rDesc.ppDefArgDescs[nArg] = new ::rtl::OUString( pArgs[nArg].aDescription );
             rDesc.pDefArgFlags[nArg].bOptional = pArgs[nArg].bOptional;
             rDesc.pDefArgFlags[nArg].bSuppress = false;
 
             // no empty names...
-            if ( rDesc.ppDefArgNames[nArg]->Len() == 0 )
+            if ( rDesc.ppDefArgNames[nArg]->getLength() == 0 )
             {
                 String aDefName( RTL_CONSTASCII_USTRINGPARAM("arg") );
                 aDefName += String::CreateFromInt32( nArg+1 );

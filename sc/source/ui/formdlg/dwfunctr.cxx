@@ -618,7 +618,7 @@ void ScFunctionDockWin::SetDescription()
             aString += '\n';
         }
 
-        aString+=*(pDesc->pFuncDesc);
+        aString+=(String)*(pDesc->pFuncDesc);
 
         aFiFuncDesc.SetText(aString);
         aFiFuncDesc.StateChanged(STATE_CHANGE_TEXT);

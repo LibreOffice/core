@@ -93,17 +93,17 @@ public:
         suppressed). */
     USHORT  GetSuppressedArgCount() const;
 
-    String          *pFuncName;              // Function name
-    String          *pFuncDesc;              // Description of function
-    String         **ppDefArgNames;          // Parameter name(s)
-    String         **ppDefArgDescs;          // Description(s) of parameter(s)
-    ParameterFlags  *pDefArgFlags;           // Flags for each parameter
-    USHORT           nFIndex;                // Unique function index
-    USHORT           nCategory;              // Function category
-    USHORT           nArgCount;              // All parameter count, suppressed and unsuppressed
-    USHORT           nHelpId;                // HelpID of function
-    bool             bIncomplete         :1; // Incomplete argument info (set for add-in info from configuration)
-    bool             bHasSuppressedArgs  :1; // Whether there is any suppressed parameter.
+    ::rtl::OUString      *pFuncName;              // Function name
+    ::rtl::OUString      *pFuncDesc;              // Description of function
+    ::rtl::OUString     **ppDefArgNames;          // Parameter name(s)
+    ::rtl::OUString     **ppDefArgDescs;          // Description(s) of parameter(s)
+    ParameterFlags       *pDefArgFlags;           // Flags for each parameter
+    USHORT                nFIndex;                // Unique function index
+    USHORT                nCategory;              // Function category
+    USHORT                nArgCount;              // All parameter count, suppressed and unsuppressed
+    USHORT                nHelpId;                // HelpID of function
+    bool                  bIncomplete         :1; // Incomplete argument info (set for add-in info from configuration)
+    bool                  bHasSuppressedArgs  :1; // Whether there is any suppressed parameter.
 };
 
 //============================================================================

@@ -1168,17 +1168,17 @@ ScFuncRes::ScFuncRes( ResId &aRes, ScFuncDesc* pDesc, bool & rbSuppressed )
         }
     }
 
-    pDesc->pFuncName = new String( ScCompiler::GetNativeSymbol( static_cast<OpCode>( aRes.GetId())));
-    pDesc->pFuncDesc = new String(ScResId(1));
+    pDesc->pFuncName = new ::rtl::OUString( ScCompiler::GetNativeSymbol( static_cast<OpCode>( aRes.GetId())));
+    pDesc->pFuncDesc = (::rtl::OUString*)(new String(ScResId(1)));
 
     if (nArgs)
     {
-        pDesc->ppDefArgNames = new String*[nArgs];
-        pDesc->ppDefArgDescs = new String*[nArgs];
+        pDesc->ppDefArgNames = new ::rtl::OUString*[nArgs];
+        pDesc->ppDefArgDescs = new ::rtl::OUString*[nArgs];
         for (USHORT i = 0; i < nArgs; i++)
         {
-            pDesc->ppDefArgNames[i] = new String(ScResId(2*(i+1)  ));
-            pDesc->ppDefArgDescs[i] = new String(ScResId(2*(i+1)+1));
+            pDesc->ppDefArgNames[i] = (::rtl::OUString*)(new String(ScResId(2*(i+1)  )));
+            pDesc->ppDefArgDescs[i] = (::rtl::OUString*)(new String(ScResId(2*(i+1)+1)));
         }
     }
 
@@ -1250,7 +1250,7 @@ ScFunctionList::ScFunctionList() :
                     pDesc->nFIndex = i;
                     aFunctionList.Insert( pDesc, LIST_APPEND );
 
-                    nStrLen = (*(pDesc->pFuncName)).Len();
+                    nStrLen = (*(pDesc->pFuncName)).getLength();
                     if (nStrLen > nMaxFuncNameLen)
                         nMaxFuncNameLen = nStrLen;
                 }
@@ -1283,73 +1283,73 @@ ScFunctionList::ScFunctionList() :
         pAddInFuncData->GetParamDesc( aArgName, aArgDesc, 0 );
           pDesc->nFIndex     = nNextId++;               //  ??? OpCode vergeben
           pDesc->nCategory   = ID_FUNCTION_GRP_ADDINS;
-          pDesc->pFuncName   = new String(pAddInFuncData->GetInternalName());
-          pDesc->pFuncName->ToUpperAscii();
-          pDesc->pFuncDesc   = new String( aArgDesc );
-        *(pDesc->pFuncDesc) += '\n';
-          pDesc->pFuncDesc->AppendAscii(RTL_CONSTASCII_STRINGPARAM( "( AddIn: " ));
+          pDesc->pFuncName   = new ::rtl::OUString(pAddInFuncData->GetInternalName());
+          pDesc->pFuncName->toAsciiUpperCase();
+          pDesc->pFuncDesc   = new ::rtl::OUString( aArgDesc );
+        *(pDesc->pFuncDesc) += *(new ::rtl::OUString( '\n' ));
+        *(pDesc->pFuncDesc) += ::rtl::OUString::createFromAscii("( AddIn: ");
         *(pDesc->pFuncDesc) += pAddInFuncData->GetModuleName();
-          pDesc->pFuncDesc->AppendAscii(RTL_CONSTASCII_STRINGPARAM( " )" ));
+        *(pDesc->pFuncDesc) += ::rtl::OUString::createFromAscii( " )" );
           pDesc->nArgCount   = nArgs;
         if (nArgs)
         {
             pDesc->pDefArgFlags  = new ScFuncDesc::ParameterFlags[nArgs];
-            pDesc->ppDefArgNames = new String*[nArgs];
-            pDesc->ppDefArgDescs = new String*[nArgs];
+            pDesc->ppDefArgNames = new ::rtl::OUString*[nArgs];
+            pDesc->ppDefArgDescs = new ::rtl::OUString*[nArgs];
             for (j = 0; j < nArgs; j++)
             {
                 pDesc->pDefArgFlags[j].bOptional = false;
                 pDesc->pDefArgFlags[j].bSuppress = false;
                 pAddInFuncData->GetParamDesc( aArgName, aArgDesc, j+1 );
                 if ( aArgName.Len() )
-                    pDesc->ppDefArgNames[j] = new String( aArgName );
+                    pDesc->ppDefArgNames[j] = new ::rtl::OUString( aArgName );
                 else
                 {
                     switch (pAddInFuncData->GetParamType(j+1))
                     {
                         case PTR_DOUBLE:
-                            pDesc->ppDefArgNames[j] = new String( aDefArgNameValue );
+                            pDesc->ppDefArgNames[j] = new ::rtl::OUString( aDefArgNameValue );
                             break;
                         case PTR_STRING:
-                            pDesc->ppDefArgNames[j] = new String( aDefArgNameString );
+                            pDesc->ppDefArgNames[j] = new ::rtl::OUString( aDefArgNameString );
                             break;
                         case PTR_DOUBLE_ARR:
-                            pDesc->ppDefArgNames[j] = new String( aDefArgNameValues );
+                            pDesc->ppDefArgNames[j] = new ::rtl::OUString( aDefArgNameValues );
                             break;
                         case PTR_STRING_ARR:
-                            pDesc->ppDefArgNames[j] = new String( aDefArgNameStrings );
+                            pDesc->ppDefArgNames[j] = new ::rtl::OUString( aDefArgNameStrings );
                             break;
                         case PTR_CELL_ARR:
-                            pDesc->ppDefArgNames[j] = new String( aDefArgNameCells );
+                            pDesc->ppDefArgNames[j] = new ::rtl::OUString( aDefArgNameCells );
                             break;
                         default:
-                            pDesc->ppDefArgNames[j] = new String( aDefArgNameNone );
+                            pDesc->ppDefArgNames[j] = new ::rtl::OUString( aDefArgNameNone );
                             break;
                     }
                 }
                 if ( aArgDesc.Len() )
-                    pDesc->ppDefArgDescs[j] = new String( aArgDesc );
+                    pDesc->ppDefArgDescs[j] = new ::rtl::OUString( aArgDesc );
                 else
                 {
                     switch (pAddInFuncData->GetParamType(j+1))
                     {
                         case PTR_DOUBLE:
-                            pDesc->ppDefArgDescs[j] = new String( aDefArgDescValue );
+                            pDesc->ppDefArgDescs[j] = new ::rtl::OUString( aDefArgDescValue );
                             break;
                         case PTR_STRING:
-                            pDesc->ppDefArgDescs[j] = new String( aDefArgDescString );
+                            pDesc->ppDefArgDescs[j] = new ::rtl::OUString( aDefArgDescString );
                             break;
                         case PTR_DOUBLE_ARR:
-                            pDesc->ppDefArgDescs[j] = new String( aDefArgDescValues );
+                            pDesc->ppDefArgDescs[j] = new ::rtl::OUString( aDefArgDescValues );
                             break;
                         case PTR_STRING_ARR:
-                            pDesc->ppDefArgDescs[j] = new String( aDefArgDescStrings );
+                            pDesc->ppDefArgDescs[j] = new ::rtl::OUString( aDefArgDescStrings );
                             break;
                         case PTR_CELL_ARR:
-                            pDesc->ppDefArgDescs[j] = new String( aDefArgDescCells );
+                            pDesc->ppDefArgDescs[j] = new ::rtl::OUString( aDefArgDescCells );
                             break;
                         default:
-                            pDesc->ppDefArgDescs[j] = new String( aDefArgDescNone );
+                            pDesc->ppDefArgDescs[j] = new ::rtl::OUString( aDefArgDescNone );
                             break;
                     }
                 }
@@ -1357,7 +1357,7 @@ ScFunctionList::ScFunctionList() :
         }
 
         aFunctionList.Insert(pDesc, LIST_APPEND);
-        nStrLen = (*(pDesc->pFuncName)).Len();
+        nStrLen = (*(pDesc->pFuncName)).getLength();
         if ( nStrLen > nMaxFuncNameLen)
             nMaxFuncNameLen = nStrLen;
     }
@@ -1374,7 +1374,7 @@ ScFunctionList::ScFunctionList() :
         if ( pUnoAddIns->FillFunctionDesc( nFunc, *pDesc ) )
         {
             aFunctionList.Insert(pDesc, LIST_APPEND);
-            nStrLen = (*(pDesc->pFuncName)).Len();
+            nStrLen = (*(pDesc->pFuncName)).getLength();
             if (nStrLen > nMaxFuncNameLen)
                 nMaxFuncNameLen = nStrLen;
         }
@@ -1476,7 +1476,7 @@ String ScFuncDesc::GetParamList() const
                 else
                 {
                     nLastAdded = i;
-                    aSig += *(ppDefArgNames[i]);
+                    aSig += (String)*(ppDefArgNames[i]);
                     if ( i != nArgCount-1 )
                     {
                         aSig.Append(sep);
@@ -1497,7 +1497,7 @@ String ScFuncDesc::GetParamList() const
             {
                 if (!pDefArgFlags[nArg].bSuppress)
                 {
-                    aSig += *(ppDefArgNames[nArg]);
+                    aSig += (String)*(ppDefArgNames[nArg]);
                     aSig.Append(sep);
                     aSig.AppendAscii(RTL_CONSTASCII_STRINGPARAM( " " ));
                 }
@@ -1506,11 +1506,11 @@ String ScFuncDesc::GetParamList() const
              * there were, we'd have to cope with it here and above for the fix
              * parameters. For now parameters are always added, so no special
              * treatment of a trailing "; " necessary. */
-            aSig += *(ppDefArgNames[nFix]);
+            aSig += (String)*(ppDefArgNames[nFix]);
             aSig += '1';
             aSig.Append(sep);
             aSig.AppendAscii(RTL_CONSTASCII_STRINGPARAM( " " ));
-            aSig += *(ppDefArgNames[nFix]);
+            aSig += (String)*(ppDefArgNames[nFix]);
             aSig += '2';
             aSig.Append(sep);
             aSig.AppendAscii(RTL_CONSTASCII_STRINGPARAM( " ... " ));
@@ -1769,7 +1769,7 @@ const ScFuncDesc* ScFunctionMgr::Get( const String& rFName ) const
     const ScFuncDesc*   pDesc = NULL;
     if (rFName.Len() <= pFuncList->GetMaxFuncNameLen())
         for (pDesc = First(0); pDesc; pDesc = Next())
-            if (rFName.EqualsIgnoreCaseAscii(*(pDesc->pFuncName)))
+            if (rFName.EqualsIgnoreCaseAscii((String)(*(pDesc->pFuncName))))
                 break;
     return pDesc;
 }

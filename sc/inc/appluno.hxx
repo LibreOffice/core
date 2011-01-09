@@ -38,6 +38,7 @@
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <cppuhelper/implbase2.hxx>
 #include <cppuhelper/implbase4.hxx>
+#include <rtl/ustring.hxx>
 
 class ScFunctionDescriptionObj;
 
