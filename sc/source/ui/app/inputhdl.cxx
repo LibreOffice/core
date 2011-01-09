@@ -684,7 +684,7 @@ void ScInputHandler::GetFormulaData()
             if ( pDesc->pFuncName )
             {
                 pDesc->initArgumentInfo();
-                String aEntry = pDesc->GetSignature();
+                String aEntry = (String)pDesc->getSignature();
                 TypedStrData* pData = new TypedStrData( aEntry, 0.0, SC_STRTYPE_FUNCTIONS );
                 if (!pFormulaDataPara->Insert(pData))
                     delete pData;

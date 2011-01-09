@@ -57,6 +57,7 @@ public:
         parameters only one element is added to the end of the sequence. */
     virtual void fillVisibleArgumentMapping(::std::vector<USHORT>& _rArguments) const ;
     virtual void initArgumentInfo()  const;
+    /** Returns the full function signature: "FUNCTIONNAME( parameter list )". */
     virtual ::rtl::OUString getSignature() const ;
     virtual long getHelpId() const ;
 
@@ -81,9 +82,7 @@ public:
     void        Clear();
 
     /** Returns a semicolon separated list of all parameter names. */
-    String  GetParamList        () const;
-    /** Returns the full function signature: "FUNCTIONNAME( parameter list )". */
-    String  GetSignature        () const;
+    ::rtl::OUString  GetParamList        () const;
 
 
 
@@ -158,7 +157,7 @@ public:
             ScFunctionMgr();
     virtual ~ScFunctionMgr();
 
-    static String       GetCategoryName(sal_uInt32 _nCategoryNumber );
+    static ::rtl::OUString       GetCategoryName(sal_uInt32 _nCategoryNumber );
 
     const ScFuncDesc*   Get( const String& rFName ) const;
     const ScFuncDesc*   Get( USHORT nFIndex ) const;

@@ -1457,11 +1457,11 @@ void ScFuncDesc::Clear()
 
 //------------------------------------------------------------------------
 
-String ScFuncDesc::GetParamList() const
+::rtl::OUString ScFuncDesc::GetParamList() const
 {
     const String& sep = ScCompiler::GetNativeSymbol(ocSep);
 
-    String aSig;
+    ::rtl::OUString aSig;
 
     if ( nArgCount > 0 )
     {
@@ -1476,19 +1476,19 @@ String ScFuncDesc::GetParamList() const
                 else
                 {
                     nLastAdded = i;
-                    aSig += (String)*(ppDefArgNames[i]);
+                    aSig += *(ppDefArgNames[i]);
                     if ( i != nArgCount-1 )
                     {
-                        aSig.Append(sep);
-                        aSig.AppendAscii(RTL_CONSTASCII_STRINGPARAM( " " ));
+                        aSig += ::rtl::OUString(sep);
+                        aSig += ::rtl::OUString::createFromAscii( " " );
                     }
                 }
             }
             // If only suppressed parameters follow the last added parameter,
             // remove one "; "
             if (nLastSuppressed < nArgCount && nLastAdded < nLastSuppressed &&
-                    aSig.Len() >= 2)
-                aSig.Erase( aSig.Len() - 2 );
+                    aSig.getLength() >= 2)
+                aSig = aSig.copy(0,aSig.getLength() - 2);
         }
         else
         {
@@ -1497,23 +1497,23 @@ String ScFuncDesc::GetParamList() const
             {
                 if (!pDefArgFlags[nArg].bSuppress)
                 {
-                    aSig += (String)*(ppDefArgNames[nArg]);
-                    aSig.Append(sep);
-                    aSig.AppendAscii(RTL_CONSTASCII_STRINGPARAM( " " ));
+                    aSig += *(ppDefArgNames[nArg]);
+                    aSig += ::rtl::OUString(sep);
+                    aSig += ::rtl::OUString::createFromAscii( " " );
                 }
             }
             /* NOTE: Currently there are no suppressed var args parameters. If
              * there were, we'd have to cope with it here and above for the fix
              * parameters. For now parameters are always added, so no special
              * treatment of a trailing "; " necessary. */
-            aSig += (String)*(ppDefArgNames[nFix]);
-            aSig += '1';
-            aSig.Append(sep);
-            aSig.AppendAscii(RTL_CONSTASCII_STRINGPARAM( " " ));
-            aSig += (String)*(ppDefArgNames[nFix]);
-            aSig += '2';
-            aSig.Append(sep);
-            aSig.AppendAscii(RTL_CONSTASCII_STRINGPARAM( " ... " ));
+            aSig += *(ppDefArgNames[nFix]);
+            aSig += ::rtl::OUString('1');
+            aSig += ::rtl::OUString(sep);
+            aSig += ::rtl::OUString::createFromAscii( " " );
+            aSig += *(ppDefArgNames[nFix]);
+            aSig += ::rtl::OUString('2');
+            aSig += ::rtl::OUString(sep);
+            aSig += ::rtl::OUString::createFromAscii(" ... " );
         }
     }
 
@@ -1522,24 +1522,25 @@ String ScFuncDesc::GetParamList() const
 
 //------------------------------------------------------------------------
 
-String ScFuncDesc::GetSignature() const
+::rtl::OUString ScFuncDesc::getSignature() const
 {
-    String aSig;
+    ::rtl::OUString aSig;
 
     if(pFuncName)
     {
         aSig = *pFuncName;
 
-        String aParamList( GetParamList() );
-        if( aParamList.Len() )
+        ::rtl::OUString aParamList = GetParamList();
+        if( aParamList.getLength() )
         {
-            aSig.AppendAscii(RTL_CONSTASCII_STRINGPARAM( "( " ));
-            aSig.Append( aParamList );
+            aSig += ::rtl::OUString::createFromAscii( "( " );
+            aSig += aParamList;
             // U+00A0 (NBSP) prevents automatic line break
-            aSig.Append( static_cast< sal_Unicode >(0xA0) ).Append( ')' );
+            aSig += ::rtl::OUString( static_cast< sal_Unicode >(0xA0) );
+            aSig += ::rtl::OUString( ')' );
         }
         else
-            aSig.AppendAscii(RTL_CONSTASCII_STRINGPARAM( "()" ));
+            aSig += ::rtl::OUString::createFromAscii( "()" );
     }
     return aSig;
 }
@@ -1677,11 +1678,6 @@ void ScFuncDesc::initArgumentInfo()  const
             const_cast<ScFuncDesc*>(this)->bIncomplete = FALSE;         // even if there was an error, don't try again
         }
     }
-}
-// -----------------------------------------------------------------------------
-::rtl::OUString ScFuncDesc::getSignature() const
-{
-    return GetSignature();
 }
 // -----------------------------------------------------------------------------
 long ScFuncDesc::getHelpId() const
@@ -1846,16 +1842,16 @@ void ScFunctionMgr::fillLastRecentlyUsedFunctions(::std::vector< const formula::
     }
 }
 // -----------------------------------------------------------------------------
-String ScFunctionMgr::GetCategoryName(sal_uInt32 _nCategoryNumber )
+::rtl::OUString ScFunctionMgr::GetCategoryName(sal_uInt32 _nCategoryNumber )
 {
     if ( _nCategoryNumber > SC_FUNCGROUP_COUNT )
     {
         DBG_ERROR("Invalid category number!");
-        return String();
+        return ::rtl::OUString();
     }
 
     ::std::auto_ptr<ScResourcePublisher> pCategories( new ScResourcePublisher( ScResId( RID_FUNCTION_CATEGORIES ) ) );
-    return String(ScResId((USHORT)_nCategoryNumber));
+    return (::rtl::OUString)String(ScResId((USHORT)_nCategoryNumber));
 }
 sal_Unicode ScFunctionMgr::getSingleToken(const formula::IFunctionManager::EToken _eToken) const
 {

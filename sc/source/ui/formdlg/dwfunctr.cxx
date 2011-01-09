@@ -607,7 +607,7 @@ void ScFunctionDockWin::SetDescription()
             aString.AppendAscii(RTL_CONSTASCII_STRINGPARAM( ":   " ));
         }
 
-        aString+=pDesc->GetParamList();
+        aString+=(String)(pDesc->GetParamList());
 
         if(nDockMode==0)
         {
