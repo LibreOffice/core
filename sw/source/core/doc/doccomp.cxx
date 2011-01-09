@@ -695,7 +695,6 @@ ULONG Compare::CompareSequence::CheckDiag( ULONG nStt1, ULONG nEnd1,
     for (c = 1;; ++c)
     {
         long d;         /* Active diagonal. */
-        long big_snake = 0;
 
         /* Extend the top-down search by an edit step in each diagonal. */
         fmin > dmin ? pFDiag[--fmin - 1] = -1 : ++fmin;
@@ -713,8 +712,6 @@ ULONG Compare::CompareSequence::CheckDiag( ULONG nStt1, ULONG nEnd1,
             while( ULONG(x) < nEnd1 && ULONG(y) < nEnd2 &&
                 rMoved1.GetIndex( x ) == rMoved2.GetIndex( y ))
                 ++x, ++y;
-            if (x - oldx > 20)
-                big_snake = 1;
             pFDiag[d] = x;
             if( odd && bmin <= d && d <= bmax && pBDiag[d] <= pFDiag[d] )
             {
@@ -739,8 +736,6 @@ ULONG Compare::CompareSequence::CheckDiag( ULONG nStt1, ULONG nEnd1,
             while( ULONG(x) > nStt1 && ULONG(y) > nStt2 &&
                 rMoved1.GetIndex( x - 1 ) == rMoved2.GetIndex( y - 1 ))
                 --x, --y;
-            if (oldx - x > 20)
-                big_snake = 1;
             pBDiag[d] = x;
             if (!odd && fmin <= d && d <= fmax && pBDiag[d] <= pFDiag[d])
             {

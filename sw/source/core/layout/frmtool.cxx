@@ -2385,10 +2385,10 @@ const SdrObject *SwOrderIter::Top()
     pCurrent = 0;
     if ( pPage->GetSortedObjs() )
     {
-        UINT32 nTopOrd = 0;
         const SwSortedObjs *pObjs = pPage->GetSortedObjs();
         if ( pObjs->Count() )
         {
+            UINT32 nTopOrd = 0;
             (*pObjs)[0]->GetDrawObj()->GetOrdNum();  //Aktualisieren erzwingen!
             for ( USHORT i = 0; i < pObjs->Count(); ++i )
             {
@@ -2495,10 +2495,10 @@ const SdrObject *SwOrderIter::Prev()
     pCurrent = 0;
     if ( pPage->GetSortedObjs() )
     {
-        UINT32 nOrd = 0;
         const SwSortedObjs *pObjs = pPage->GetSortedObjs();
         if ( pObjs->Count() )
         {
+            UINT32 nOrd = 0;
             (*pObjs)[0]->GetDrawObj()->GetOrdNum();  //Aktualisieren erzwingen!
             for ( USHORT i = 0; i < pObjs->Count(); ++i )
             {

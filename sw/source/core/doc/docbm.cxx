@@ -1493,10 +1493,10 @@ void _RestoreCntntIdx(SwDoc* pDoc,
             case 0x0800:
             case 0x0801:
                 {
-                    USHORT nCnt = 0;
                     SwCrsrShell* pShell = pDoc->GetEditShell();
                     if( pShell )
                     {
+                        USHORT nCnt = 0;
                         FOREACHSHELL_START( pShell )
                             SwPaM *_pStkCrsr = PCURSH->GetStkCrsr();
                             if( _pStkCrsr )
@@ -1653,10 +1653,10 @@ void _RestoreCntntIdx(SvULongs& rSaveArr,
             case 0x0800:
             case 0x0801:
                 {
-                    USHORT nCnt = 0;
                     SwCrsrShell* pShell = pDoc->GetEditShell();
                     if( pShell )
                     {
+                        USHORT nCnt = 0;
                         FOREACHSHELL_START( pShell )
                             SwPaM *_pStkCrsr = PCURSH->GetStkCrsr();
                             if( _pStkCrsr )

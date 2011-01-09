@@ -187,7 +187,7 @@ xub_StrLen SwWrongList::NextWrong( xub_StrLen nChk ) const
 
 MSHORT SwWrongList::GetWrongPos( xub_StrLen nValue ) const
 {
-    MSHORT nOben = Count(), nMitte = 0, nUnten = 0;
+    MSHORT nOben = Count(), nUnten = 0;
 
     if( nOben > 0 )
     {
@@ -212,6 +212,7 @@ MSHORT SwWrongList::GetWrongPos( xub_StrLen nValue ) const
         }
 
         --nOben;
+        MSHORT nMitte = 0;
         while( nUnten <= nOben )
         {
             nMitte = nUnten + ( nOben - nUnten ) / 2;

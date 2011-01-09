@@ -937,7 +937,6 @@ bool SwTabFrm::RemoveFollowFlowLine()
     // NEW TABLES
     // If a row span follow flow line is removed, we want to move the whole span
     // to the master:
-    SwTwips nGrow = 0;
     long nRowsToMove = lcl_GetMaximumLayoutRowSpan( *pFollowFlowLine );
 
     if ( nRowsToMove > 1 )
@@ -945,6 +944,7 @@ bool SwTabFrm::RemoveFollowFlowLine()
         SWRECTFN( this )
         SwFrm* pRow = pFollowFlowLine->GetNext();
         SwFrm* pInsertBehind = GetLastLower();
+        SwTwips nGrow = 0;
 
         while ( pRow && nRowsToMove-- > 1 )
         {
@@ -1384,7 +1384,6 @@ bool SwTabFrm::Join()
     OSL_ENSURE( !HasFollowFlowLine(), "Joining follow flow line" );
 
     SwTabFrm *pFoll = GetFollow();
-    SwTwips nHeight = 0;    //Gesamthoehe der eingefuegten Zeilen als Return.
 
     if ( !pFoll->IsJoinLocked() )
     {
@@ -1397,6 +1396,7 @@ bool SwTabFrm::Join()
 
         SwFrm* pPrv = GetLastLower();
 
+        SwTwips nHeight = 0;    //Gesamthoehe der eingefuegten Zeilen als Return.
         while ( pRow )
         {
             pNxt = pRow->GetNext();
@@ -2419,9 +2419,8 @@ void SwTabFrm::MakeAll()
             // We better avoid splitting of a row frame if we are inside a columned
             // section which has a height of 0, because this is not growable and thus
             // all kinds of unexpected things could happen.
-            const SwSectionFrm* pTmpSct = 0;
             if ( IsInSct() &&
-                (pTmpSct = FindSctFrm())->Lower()->IsColumnFrm() &&
+                (FindSctFrm())->Lower()->IsColumnFrm() &&
                 0 == (GetUpper()->Frm().*fnRect->fnGetHeight)()  )
             {
                 bTryToSplit = false;
@@ -3182,10 +3181,9 @@ SwTwips SwTabFrm::GrowFrm( SwTwips nDist, BOOL bTst, BOOL bInfo )
             pFrm = pFrm->GetNext();
         }
 
-        long nTmp = 0;
         if ( nReal < nDist )
         {
-            nTmp = GetUpper()->Grow( nDist - ( nReal > 0 ? nReal : 0), bTst, bInfo );
+            long nTmp = GetUpper()->Grow( nDist - ( nReal > 0 ? nReal : 0), bTst, bInfo );
 
             if ( IsRestrictTableGrowth() )
             {
@@ -5374,10 +5372,10 @@ void SwCellFrm::Format( const SwBorderAttrs *pAttrs )
         if( ( bVertDir && ( nRemaining -= lcl_CalcTopAndBottomMargin( *this, *pAttrs ) ) < nPrtHeight ) ||
             (Lower()->Frm().*fnRect->fnGetTop)() != (this->*fnRect->fnGetPrtTop)() )
         {
-            long lTopOfst = 0,
-                    nDiff = (Prt().*fnRect->fnGetHeight)() - nRemaining;
+               long nDiff = (Prt().*fnRect->fnGetHeight)() - nRemaining;
             if ( nDiff >= 0 )
             {
+                long lTopOfst = 0;
                 if ( bVertDir )
                 {
                     switch ( rOri.GetVertOrient() )

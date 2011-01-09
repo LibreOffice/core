@@ -2712,8 +2712,6 @@ BOOL SwFlyFrm::GetContour( PolyPolygon&   rContour,
                 const MapMode   aDispMap( MAP_TWIP );
                 const MapMode   aGrfMap( pGrfObj->GetPrefMapMode() );
                 const Size      aGrfSize( pGrfObj->GetPrefSize() );
-                double          fScaleX;
-                double          fScaleY;
                 Size            aOrgSize;
                 Point           aNewPoint;
                 BOOL            bPixelMap = aGrfMap.GetMapUnit() == MAP_PIXEL;
@@ -2725,8 +2723,8 @@ BOOL SwFlyFrm::GetContour( PolyPolygon&   rContour,
 
                 if ( aOrgSize.Width() && aOrgSize.Height() )
                 {
-                    fScaleX = (double) aOrig.Width() / aOrgSize.Width();
-                    fScaleY = (double) aOrig.Height() / aOrgSize.Height();
+                    double fScaleX = (double) aOrig.Width() / aOrgSize.Width();
+                    double fScaleY = (double) aOrig.Height() / aOrgSize.Height();
 
                     for ( USHORT j = 0, nPolyCount = rContour.Count(); j < nPolyCount; j++ )
                     {

@@ -2188,7 +2188,7 @@ sal_Bool SwAccessibleParagraph::setAttributes(
     {
         xPortion->setPropertyValues( aNames, aValues );
     }
-    catch( UnknownPropertyException e )
+    catch( UnknownPropertyException &e )
     {
         // error handling through return code!
         bRet = sal_False;

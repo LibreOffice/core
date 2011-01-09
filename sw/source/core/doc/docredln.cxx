@@ -2999,11 +2999,11 @@ void SwRedlineExtraData_Format::Reject( SwPaM& rPam ) const
 int SwRedlineExtraData_Format::operator == ( const SwRedlineExtraData& rCmp ) const
 {
     int nRet = 1;
-    USHORT n = 0, nEnd = aWhichIds.Count();
+    USHORT nEnd = aWhichIds.Count();
     if( nEnd != ((SwRedlineExtraData_Format&)rCmp).aWhichIds.Count() )
         nRet = 0;
     else
-        for( ; n < nEnd; ++n )
+        for(USHORT n=0 ; n < nEnd; ++n )
             if( ((SwRedlineExtraData_Format&)rCmp).aWhichIds[n] != aWhichIds[n])
             {
                 nRet = 0;
@@ -3011,8 +3011,6 @@ int SwRedlineExtraData_Format::operator == ( const SwRedlineExtraData& rCmp ) co
             }
     return nRet;
 }
-
-/*  */
 
 SwRedlineData::SwRedlineData( RedlineType_t eT, USHORT nAut )
     : pNext( 0 ), pExtraData( 0 ), eType( eT ), nAuthor( nAut ), nSeqNo( 0 )
@@ -3065,8 +3063,6 @@ String SwRedlineData::GetDescr() const
 
     return aResult;
 }
-
-/*  */
 
 SwRedline::SwRedline(RedlineType_t eTyp, const SwPaM& rPam )
     : SwPaM( *rPam.GetMark(), *rPam.GetPoint() ),
