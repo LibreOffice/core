@@ -950,9 +950,7 @@ bool SwPostItMgr::LayoutByPage(std::list<SwSidebarWin*> &aVisiblePostItList,cons
     long            lTopBorder      = rBorder.Top() + 5;
     long            lBottomBorder   = rBorder.Bottom() - 5;
     const long      lVisibleHeight  = lBottomBorder - lTopBorder; //rBorder.GetHeight() ;
-    long            lSpaceUsed      = 0;
     long            lTranslatePos   = 0;
-    int             loop            = 0;
     bool            bDone           = false;
     bool            bScrollbars     = false;
 
@@ -982,6 +980,8 @@ bool SwPostItMgr::LayoutByPage(std::list<SwSidebarWin*> &aVisiblePostItList,cons
     //start the real layout so nothing overlaps anymore
     if (aVisiblePostItList.size()>1)
     {
+        long lSpaceUsed = 0;
+        int  loop = 0;
         // if no window is moved anymore we are finished
         while (!bDone)
         {

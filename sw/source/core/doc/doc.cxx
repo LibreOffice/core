@@ -1246,7 +1246,6 @@ void SwDoc::CalculatePagesForPrinting(
 
     USHORT nFirstPageNo = 0;
     USHORT nLastPageNo  = 0;
-    USHORT nPageNo      = 1;
 
     for( USHORT i = 1; i <= (USHORT)aPages.Max(); ++i )
     {
@@ -1293,7 +1292,7 @@ void SwDoc::CalculatePagesForPrinting(
         aMulti = aTmpMulti;
 // Ende des HACKs
 
-        nPageNo = nFirstPageNo;
+        USHORT nPageNo = nFirstPageNo;
 
         std::map< sal_Int32, sal_Int32 > &rPrinterPaperTrays = rData.GetPrinterPaperTrays();
         std::set< sal_Int32 > &rValidPages = rData.GetValidPagesSet();
