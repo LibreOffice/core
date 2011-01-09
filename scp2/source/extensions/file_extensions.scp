@@ -216,7 +216,7 @@ End
 File gid_File_Oxt_Barcode
     TXT_FILE_BODY;
     Styles = (PACKED, ARCHIVE);
-    Dir = gid_Brand_Dir_Share_Extensions_Validator;
+    Dir = gid_Brand_Dir_Share_Extensions_Barcode;
     Name = "Barcode.oxt";
 End
 
