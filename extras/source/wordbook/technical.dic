@@ -198,3 +198,6 @@ endianness
 Kerberos
 debootstrap
 userspace
+FreeBSD
+OpenBSD
+NetBSD
