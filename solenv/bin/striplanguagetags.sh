@@ -6,7 +6,17 @@
 
 #All a bit hacky, but it should work
 
-XSL=`mktemp`
+tempfoo=`basename $0`
+XSL=`mktemp /tmp/${tempfoo}.XXXXXX`
+if [ $? -ne 0 ]; then
+    echo "$0: Can't create temp file, exiting..."
+    exit 1
+fi
+WRKDIR=`mktemp -d /tmp/${tempfoo}.XXXXXX`
+if [ $? -ne 0 ]; then
+    echo "$0: Can't create temp dir, exiting..."
+    exit 1
+fi
 
 cat > $XSL << EOF
 <?xml version="1.0" encoding="UTF-8"?>
@@ -24,7 +34,6 @@ cat > $XSL << EOF
 </xsl:stylesheet>
 EOF
 
-WRKDIR=`mktemp -d`
 unzip -q $1 -d $WRKDIR
 pushd $WRKDIR
 for a in *; do
