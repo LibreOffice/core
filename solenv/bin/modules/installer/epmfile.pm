@@ -2408,7 +2408,7 @@ sub create_packages_without_epm
                 # Setting unix rights to "775" for all created directories inside the package,
                 # that is saved in temp directory
 
-                $systemcall = "cd $packagestempdir; find $packagename -type d -exec chmod 775 \{\} \\\;";
+                $systemcall = "cd $packagestempdir; find $packagename -type d | xargs -i chmod 775 \{\} \;";
                 installer::logger::print_message( "... $systemcall ...\n" );
 
                 $returnvalue = system($systemcall);
@@ -2471,7 +2471,7 @@ sub create_packages_without_epm
 
         # Setting unix rights to "775" for all created directories inside the package
 
-        $systemcall = "cd $destinationdir; find $packagename -type d -exec chmod 775 \{\} \\\;";
+        $systemcall = "cd $destinationdir; find $packagename -type d | xargs -i chmod 775 \{\} \;";
         installer::logger::print_message( "... $systemcall ...\n" );
 
         $returnvalue = system($systemcall);
