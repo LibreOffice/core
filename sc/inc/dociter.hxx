@@ -49,7 +49,7 @@ class ScAttrIterator;
 class ScRange;
 class ScFlatBoolRowSegments;
 
-class ScDocumentIterator                // alle nichtleeren Zellen durchgehen
+class ScDocumentIterator                // walk through all non-empty cells
 {
 private:
     ScDocument*             pDoc;
@@ -83,13 +83,13 @@ public:
     void                    GetPos( SCCOL& rCol, SCROW& rRow, SCTAB& rTab );
 };
 
-class ScValueIterator            // alle Zahlenwerte in einem Bereich durchgehen
+class ScValueIterator            // walk through all values in an area
 {
 private:
     double          fNextValue;
     ScDocument*     pDoc;
     const ScAttrArray*  pAttrArray;
-    ULONG           nNumFormat;     // fuer CalcAsShown
+    ULONG           nNumFormat;     // for CalcAsShown
     ULONG           nNumFmtIndex;
     SCCOL           nStartCol;
     SCROW           nStartRow;
@@ -218,9 +218,9 @@ public:
 
 // ============================================================================
 
-class ScCellIterator            // alle Zellen in einem Bereich durchgehen
-{                               // bei SubTotal aber keine ausgeblendeten und
-private:                        // SubTotalZeilen
+class ScCellIterator            // walk through all cells in an area
+{                               // for SubTotal no hidden and no sub-total lines
+private:
     ScDocument*     pDoc;
     SCCOL           nStartCol;
     SCROW           nStartRow;
@@ -250,8 +250,8 @@ public:
     ScAddress       GetPos() const { return ScAddress( nCol, nRow, nTab ); }
 };
 
-class ScQueryCellIterator           // alle nichtleeren Zellen in einem Bereich
-{                                   // durchgehen
+class ScQueryCellIterator           // walk through all non-empty cells in an area
+{
     enum StopOnMismatchBits
     {
         nStopOnMismatchDisabled = 0x00,
@@ -299,15 +299,15 @@ private:
 public:
                     ScQueryCellIterator(ScDocument* pDocument, SCTAB nTable,
                                         const ScQueryParam& aParam, BOOL bMod = TRUE);
-                                        // fuer bMod = FALSE muss der QueryParam
-                                        // weiter aufgefuellt sein (bIsString)
+                                        // for bMod = FALSE the QueryParam has to be filled
+                                        // (bIsString)
     ScBaseCell*     GetFirst();
     ScBaseCell*     GetNext();
     SCCOL           GetCol() { return nCol; }
     SCROW           GetRow() { return nRow; }
 
-                    // setzt alle Entry.nField einen weiter, wenn Spalte
-                    // wechselt, fuer ScInterpreter ScHLookup()
+                    // increments all Entry.nField, if column
+                    // changes, for ScInterpreter ScHLookup()
     void            SetAdvanceQueryParamEntryField( BOOL bVal )
                         { bAdvanceQuery = bVal; }
     void            AdvanceQueryParamEntryField();
@@ -376,7 +376,7 @@ public:
                         BOOL bIgnoreMismatchOnLeadingStrings = TRUE );
 };
 
-class ScDocAttrIterator             // alle Attribut-Bereiche
+class ScDocAttrIterator             // all attribute areas
 {
 private:
     ScDocument*     pDoc;
@@ -395,7 +395,8 @@ public:
     const ScPatternAttr*    GetNext( SCCOL& rCol, SCROW& rRow1, SCROW& rRow2 );
 };
 
-class ScAttrRectIterator            // alle Attribut-Bereiche, auch Bereiche ueber mehrere Spalten
+class ScAttrRectIterator            // all attribute areas, including areas stretching
+                                    // across more then one column
 {
 private:
     ScDocument*     pDoc;
@@ -416,8 +417,8 @@ public:
     const ScPatternAttr*    GetNext( SCCOL& rCol1, SCCOL& rCol2, SCROW& rRow1, SCROW& rRow2 );
 };
 
-class ScHorizontalCellIterator      // alle nichtleeren Zellen in einem Bereich
-{                                   // zeilenweise durchgehen
+class ScHorizontalCellIterator      // walk through all non empty cells in an area
+{                                   // row by row
 private:
     ScDocument*     pDoc;
     SCTAB           nTab;
@@ -444,7 +445,7 @@ private:
 
 
 //
-//  gibt alle Bereiche mit nicht-Default-Formatierung zurueck (horizontal)
+//  returns all areas with non-default formatting (horizontal)
 //
 
 class ScHorizontalAttrIterator
@@ -473,7 +474,7 @@ public:
 };
 
 //
-//  gibt nichtleere Zellen und Bereiche mit Formatierung zurueck (horizontal)
+//  returns non-empty cells and areas with formatting (horizontal)
 //
 
 class SC_DLLPUBLIC ScUsedAreaIterator
@@ -493,7 +494,7 @@ private:
     SCROW                   nAttrRow;
     const ScPatternAttr*    pPattern;
 
-    SCCOL                   nFoundStartCol;         // Ergebnisse nach GetNext
+    SCCOL                   nFoundStartCol;         // results after GetNext
     SCCOL                   nFoundEndCol;
     SCROW                   nFoundRow;
     const ScPatternAttr*    pFoundPattern;

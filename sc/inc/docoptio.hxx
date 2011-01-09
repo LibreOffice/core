@@ -39,21 +39,21 @@
 
 class SC_DLLPUBLIC ScDocOptions
 {
-    double fIterEps;                // Epsilon-Wert dazu
-    USHORT nIterCount;              // Anzahl
+    double fIterEps;                // epsilon value dazu
+    USHORT nIterCount;              // number
     sal_uInt16 nPrecStandardFormat; // precision for standard format
     ScOptionsUtil::KeyBindingType eKeyBindingType;
-    USHORT nDay;                    // Nulldatum:
+    USHORT nDay;                    // Null date:
     USHORT nMonth;
     USHORT nYear;
-    USHORT nYear2000;               // bis zu welcher zweistelligen Jahreszahl 20xx angenommen wird
-    USHORT nTabDistance;            // Abstand Standardtabulatoren
-    BOOL   bIsIgnoreCase;           // Gross-/Kleinschr. bei Vergleichen
-    BOOL   bIsIter;                 // Iteration bei cirk. Ref
-    BOOL   bCalcAsShown;            // berechnen wie angezeigt (Precision)
-    BOOL   bMatchWholeCell;         // Suchkriterien muessen ganze Zelle matchen
-    BOOL   bDoAutoSpell;            // Auto-Spelling
-    BOOL   bLookUpColRowNames;      // Spalten-/Zeilenbeschriftungen automagisch suchen
+    USHORT nYear2000;               // earlier 19YY is assumed, 20YY otherwise (if only YY of year is given)
+    USHORT nTabDistance;            // distance of standard tabs
+    BOOL   bIsIgnoreCase;           // ignore case for comparisons?
+    BOOL   bIsIter;                 // iterations for circular refs
+    BOOL   bCalcAsShown;            // calculate as shown (wrt precision)
+    BOOL   bMatchWholeCell;         // search criteria must match the whole cell
+    BOOL   bDoAutoSpell;            // auto-spelling
+    BOOL   bLookUpColRowNames;      // determine column-/row titles automagically
     BOOL   bFormulaRegexEnabled;    // regular expressions in formulas enabled
     bool   bUseEnglishFuncName;     // use English function name even if the locale is not English.
     ::formula::FormulaGrammar::Grammar eFormulaGrammar;  // formula grammar used to switch different formula syntax
@@ -189,7 +189,7 @@ inline int ScDocOptions::operator!=( const ScDocOptions& rOpt ) const
 }
 
 //==================================================================
-// Item fuer Einstellungsdialog - Berechnen
+// Item for preferences dialog - calculation
 //==================================================================
 
 class SC_DLLPUBLIC ScTpCalcItem : public SfxPoolItem

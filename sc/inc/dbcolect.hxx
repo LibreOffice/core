@@ -108,18 +108,18 @@ private:
     SCCOL           nSubTotals[MAXSUBTOTAL];
     SCCOL*          pSubTotals[MAXSUBTOTAL];
     ScSubTotalFunc* pFunctions[MAXSUBTOTAL];
-    // Datenbank-Import
+    // data base import
     BOOL            bDBImport;
     String          aDBName;
     String          aDBStatement;
     BOOL            bDBNative;
-    BOOL            bDBSelection;       // nicht im Param: Wenn Selektion, Update sperren
-    BOOL            bDBSql;             // aDBStatement ist SQL und kein Name
-    BYTE            nDBType;            // enum DBObject (bisher nur dbTable, dbQuery)
+    BOOL            bDBSelection;       // not in Param: if selection, block update
+    BOOL            bDBSql;             // aDBStatement is SQL not a name
+    BYTE            nDBType;            // enum DBObject (up to now only dbTable, dbQuery)
 
-    USHORT          nIndex;             // eindeutiger Index fuer Formeln
-    BOOL            bAutoFilter;        // AutoFilter? (nicht gespeichert)
-    BOOL            bModified;          // wird bei UpdateReference gesetzt/geloescht
+    USHORT          nIndex;             // unique index formulas
+    BOOL            bAutoFilter;        // AutoFilter? (not saved)
+    BOOL            bModified;          // is set/cleared for/by(?) UpdateReference
 
     using ScRefreshTimer::operator==;
 
@@ -201,13 +201,13 @@ class SC_DLLPUBLIC ScDBCollection : public ScSortedCollection
 private:
     Link        aRefreshHandler;
     ScDocument* pDoc;
-    USHORT nEntryIndex;         // Zaehler fuer die eindeutigen Indizes
+    USHORT nEntryIndex;         // counter for unique indices
 
 public:
     ScDBCollection(USHORT nLim = 4, USHORT nDel = 4, BOOL bDup = FALSE, ScDocument* pDocument = NULL) :
                     ScSortedCollection  ( nLim, nDel, bDup ),
                     pDoc                ( pDocument ),
-                    nEntryIndex         ( SC_START_INDEX_DB_COLL )  // oberhalb der Namen
+                    nEntryIndex         ( SC_START_INDEX_DB_COLL )  // see above for the names
                     {}
     ScDBCollection(const ScDBCollection& rScDBCollection) :
                     ScSortedCollection  ( rScDBCollection ),

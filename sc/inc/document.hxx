@@ -239,9 +239,9 @@ private:
     VirtualDevice*      pVirtualDevice_100th_mm;
     ScDrawLayer*        pDrawLayer;                     // SdrModel
     XColorTable*        pColorTable;
-    ScConditionalFormatList* pCondFormList;             // bedingte Formate
-    ScValidationDataList* pValidationList;              // Gueltigkeit
-    SvNumberFormatterIndexTable*    pFormatExchangeList;            // zum Umsetzen von Zahlenformaten
+    ScConditionalFormatList* pCondFormList;             // conditional formats
+    ScValidationDataList* pValidationList;              // validity
+    SvNumberFormatterIndexTable*    pFormatExchangeList;    // for application of number formats
     ScTable*            pTab[MAXTABCOUNT];
     ScRangeName*        pRangeName;
     ScDBCollection*     pDBCollection;
@@ -252,12 +252,12 @@ private:
     // End Comments
     ScChartCollection*  pChartCollection;
     std::auto_ptr< ScTemporaryChartLock > apTemporaryChartLock;
-    ScPatternAttr*      pSelectionAttr;                 // Attribute eines Blocks
+    ScPatternAttr*      pSelectionAttr;                 // Attributes of a block
     mutable sfx2::LinkManager*      pLinkManager;
-    ScFormulaCell*      pFormulaTree;                   // Berechnungsbaum Start
-    ScFormulaCell*      pEOFormulaTree;                 // Berechnungsbaum Ende, letzte Zelle
-    ScFormulaCell*      pFormulaTrack;                  // BroadcastTrack Start
-    ScFormulaCell*      pEOFormulaTrack;                // BrodcastTrack Ende, letzte Zelle
+    ScFormulaCell*      pFormulaTree;                   // formula tree (start)
+    ScFormulaCell*      pEOFormulaTree;                 // formula tree (end), last cell
+    ScFormulaCell*      pFormulaTrack;                  // BroadcastTrack (start)
+    ScFormulaCell*      pEOFormulaTrack;                // BrodcastTrack (end), last cell
     ScBroadcastAreaSlotMachine* pBASM;                  // BroadcastAreas
     ScChartListenerCollection* pChartListenerCollection;
     ScStrCollection*        pOtherObjects;                  // non-chart OLE objects
@@ -285,14 +285,14 @@ private:
     mutable ::std::auto_ptr< ScFormulaParserPool >
                         mxFormulaParserPool;            /// Pool for all external formula parsers used by this document.
 
-    String              aDocName;                       // opt: Dokumentname
-    String              aDocCodeName;                       // opt: Dokumentname
+    String              aDocName;                       // optional: name of document
+    String              aDocCodeName;                       // optional: name of document (twice?)
     ScRangePairListRef  xColNameRanges;
     ScRangePairListRef  xRowNameRanges;
 
-    ScViewOptions*      pViewOptions;                   // View-Optionen
-    ScDocOptions*       pDocOptions;                    // Dokument-Optionen
-    ScExtDocOptions*    pExtDocOptions;                 // fuer Import etc.
+    ScViewOptions*      pViewOptions;                   // view options
+    ScDocOptions*       pDocOptions;                    // document options
+    ScExtDocOptions*    pExtDocOptions;                 // for import etc.
     ScConsolidateParam* pConsolidateDlgData;
 
     ScRecursionHelper*  pRecursionHelper;               // information for recursive and iterative cell formulas
@@ -324,7 +324,7 @@ private:
     LanguageType        eLanguage;                      // default language
     LanguageType        eCjkLanguage;                   // default language for asian text
     LanguageType        eCtlLanguage;                   // default language for complex text
-    CharSet             eSrcSet;                        // Einlesen: Quell-Zeichensatz
+    CharSet             eSrcSet;                        // during reading: source character set
 
     /** The compiler grammar used in document storage. GRAM_PODF for ODF 1.1
         documents, GRAM_ODFF for ODF 1.2 documents. */
@@ -337,58 +337,59 @@ private:
 
     ULONG               nFormulaCodeInTree;             // FormelRPN im Formelbaum
     ULONG               nXMLImportedFormulaCount;        // progress count during XML import
-    USHORT              nInterpretLevel;                // >0 wenn im Interpreter
-    USHORT              nMacroInterpretLevel;           // >0 wenn Macro im Interpreter
-    USHORT              nInterpreterTableOpLevel;       // >0 if in Interpreter TableOp
+    USHORT              nInterpretLevel;                // >0 if in interpreter
+    USHORT              nMacroInterpretLevel;           // >0 if macro in interpreter
+    USHORT              nInterpreterTableOpLevel;       // >0 if in interpreter TableOp
     SCTAB               nMaxTableNumber;
-    USHORT              nSrcVer;                        // Dateiversion (Laden/Speichern)
-    SCROW               nSrcMaxRow;                     // Zeilenzahl zum Laden/Speichern
+    USHORT              nSrcVer;                        // file version (load/save)
+    SCROW               nSrcMaxRow;                     // number of lines to load/save
     USHORT              nFormulaTrackCount;
     USHORT              nHardRecalcState;               // 0: soft, 1: hard-warn, 2: hard
-    SCTAB               nVisibleTab;                    // fuer OLE etc.
+    SCTAB               nVisibleTab;                    // for OLE etc.
 
     ScLkUpdMode         eLinkMode;
 
-    BOOL                bAutoCalc;                      // Automatisch Berechnen
-    BOOL                bAutoCalcShellDisabled;         // in/von/fuer ScDocShell disabled
-    // ob noch ForcedFormulas berechnet werden muessen,
-    // im Zusammenspiel mit ScDocShell SetDocumentModified,
-    // AutoCalcShellDisabled und TrackFormulas
+    BOOL                bAutoCalc;                      // calculate automatically
+    BOOL                bAutoCalcShellDisabled;         // in/from/for ScDocShell disabled
+    // are there ForcedFormulas which have to be calculated
+    // in interaction with ScDocShell SetDocumentModified,
+    // AutoCalcShellDisabled and TrackFormulas
     BOOL                bForcedFormulaPending;
     BOOL                bCalculatingFormulaTree;
     BOOL                bIsClip;
     BOOL                bIsUndo;
     BOOL                bIsVisible;                     // set from view ctor
 
-    BOOL                bIsEmbedded;                    // Embedded-Bereich anzeigen/anpassen ?
+    BOOL                bIsEmbedded;                    // display/adjust Embedded area?
 
-    // kein SetDirty bei ScFormulaCell::CompileTokenArray sondern am Ende
-    // von ScDocument::CompileAll[WithFormats], CopyScenario, CopyBlockFromClip
+    // no SetDirty for ScFormulaCell::CompileTokenArray but at the end of
+    // ScDocument::CompileAll[WithFormats], CopyScenario, CopyBlockFromClip
     BOOL                bNoSetDirty;
-    // kein Broadcast, keine Listener aufbauen waehrend aus einem anderen
-    // Doc (per Filter o.ae.) inserted wird, erst bei CompileAll / CalcAfterLoad
+    // no broadcast, construct no listener during insert from a different
+    // Doc (per filter or the like ), not until CompileAll / CalcAfterLoad
     BOOL                bInsertingFromOtherDoc;
     bool                bLoadingMedium;
     bool                bImportingXML;      // special handling of formula text
     BOOL                bXMLFromWrapper;    // distinguish ScXMLImportWrapper from external component
     BOOL                bCalcingAfterLoad;              // in CalcAfterLoad TRUE
-    // wenn temporaer keine Listener auf/abgebaut werden sollen
+    // don't construct/destruct listeners temporarily
     BOOL                bNoListening;
     BOOL                bIdleDisabled;
     BOOL                bInLinkUpdate;                  // TableLink or AreaLink
     BOOL                bChartListenerCollectionNeedsUpdate;
-    // ob RC_FORCED Formelzellen im Dokument sind/waren (einmal an immer an)
+    // are/were there RC_FORCED formula cells in the document (if set once to TRUE then set forever)
     BOOL                bHasForcedFormulas;
-    // ob das Doc gerade zerstoert wird (kein Notify-Tracking etc. mehr)
+    // is the Doc being destroyed? (no Notify-Tracking etc. needed anymore)
     BOOL                bInDtorClear;
-    // ob bei Spalte/Zeile einfuegen am Rand einer Referenz die Referenz
-    // erweitert wird, wird in jedem UpdateReference aus InputOptions geholt,
-    // gesetzt und am Ende von UpdateReference zurueckgesetzt
+    // expand reference if insert column/row takes place at the border
+    // of a reference
+    // is fetched in each UpdateReference from InputOptions,
+    // assigned, and restored at the end of UpdateReference
     BOOL                bExpandRefs;
-    // fuer Detektiv-Update, wird bei jeder Aenderung an Formeln gesetzt
+    // for detective update, is set for each change of a formula
     BOOL                bDetectiveDirty;
 
-    BYTE                nMacroCallMode;     // Makros per Warnung-Dialog disabled?
+    BYTE                nMacroCallMode;     // Macros per warning dialog disabled?
     BOOL                bHasMacroFunc;      // valid only after loading
 
     BYTE                nVisSpellState;
@@ -418,9 +419,9 @@ private:
     ::std::set<ScFormulaCell*> maSubTotalCells;
 
 public:
-    SC_DLLPUBLIC ULONG          GetCellCount() const;       // alle Zellen
+    SC_DLLPUBLIC ULONG          GetCellCount() const;       // all cells
     SCSIZE          GetCellCount(SCTAB nTab, SCCOL nCol) const;
-    ULONG           GetCodeCount() const;       // RPN-Code in Formeln
+    ULONG           GetCodeCount() const;       // RPN-Code in formulas
     DECL_LINK( GetUserDefinedColor, USHORT * );
                                                                 // Numberformatter
 
@@ -566,7 +567,7 @@ public:
     void            SetEmbedded( const ScRange& rRange );
     void            ResetEmbedded();
     Rectangle       GetEmbeddedRect() const;                        // 1/100 mm
-    void            SetEmbedded( const Rectangle& rRect );          // aus VisArea (1/100 mm)
+    void            SetEmbedded( const Rectangle& rRect );          // from VisArea (1/100 mm)
     void            SnapVisArea( Rectangle& rRect ) const;          // 1/100 mm
 
     static SC_DLLPUBLIC bool ValidTabName( const String& rName );
@@ -608,7 +609,7 @@ public:
     SC_DLLPUBLIC bool IsDefaultTabBgColor( SCTAB nTab ) const;
     void            GetScenarioFlags( SCTAB nTab, USHORT& rFlags ) const;
     SC_DLLPUBLIC BOOL           IsActiveScenario( SCTAB nTab ) const;
-    SC_DLLPUBLIC void           SetActiveScenario( SCTAB nTab, BOOL bActive );      // nur fuer Undo etc.
+    SC_DLLPUBLIC void           SetActiveScenario( SCTAB nTab, BOOL bActive );      // only for Undo etc.
     SC_DLLPUBLIC formula::FormulaGrammar::AddressConvention GetAddressConvention() const;
     SC_DLLPUBLIC formula::FormulaGrammar::Grammar GetGrammar() const;
     void            SetGrammar( formula::FormulaGrammar::Grammar eGram );
@@ -652,7 +653,7 @@ public:
     SC_DLLPUBLIC void           CopyDdeLinks( ScDocument* pDestDoc ) const;
     void            DisconnectDdeLinks();
 
-                    // Fuer StarOne Api:
+                    // for StarOne Api:
     USHORT          GetDdeLinkCount() const;
     BOOL            UpdateDdeLink( const String& rAppl, const String& rTopic, const String& rItem );
 
@@ -692,7 +693,7 @@ public:
     SfxBindings*    GetViewBindings();
     SfxObjectShell* GetDocumentShell() const    { return pShell; }
     ScDrawLayer*    GetDrawLayer()              { return pDrawLayer; }
-    SfxBroadcaster* GetDrawBroadcaster();       // zwecks Header-Vermeidung
+    SfxBroadcaster* GetDrawBroadcaster();       // to avoid header
     void            BeginDrawUndo();
 
     void            BeginUnoRefUndo();
@@ -709,7 +710,7 @@ public:
                                     SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
                                     SCCOL nCol2, SCROW nRow2, SCTAB nTab2,
                                     SCsCOL nDx, SCsROW nDy, SCsTAB nDz );
-                    //! setzt nur die neue RangeList, keine ChartListener o.ae.
+                    //! only assigns the new RangeList, no ChartListener or the like
     void            SetChartRangeList( const String& rChartName,
                         const ScRangeListRef& rNewRangeListRef );
 
@@ -746,7 +747,7 @@ public:
                             BOOL bForceTab = FALSE );
     SC_DLLPUBLIC void           PutCell(SCCOL nCol, SCROW nRow, SCTAB nTab, ScBaseCell* pCell,
                             ULONG nFormatIndex, BOOL bForceTab = FALSE);
-                    //  return TRUE = Zahlformat gesetzt
+                    //  return TRUE = number format is set
     SC_DLLPUBLIC BOOL           SetString(
         SCCOL nCol, SCROW nRow, SCTAB nTab, const String& rString,
         ScSetStringParam* pParam = NULL );
@@ -759,7 +760,7 @@ public:
                                         const String& rFormula,
                                         const ScTokenArray* p = NULL,
                                         const formula::FormulaGrammar::Grammar = formula::FormulaGrammar::GRAM_DEFAULT );
-    SC_DLLPUBLIC void           InsertTableOp(const ScTabOpParam& rParam,   // Mehrfachoperation
+    SC_DLLPUBLIC void           InsertTableOp(const ScTabOpParam& rParam,   // multi-operation
                                   SCCOL nCol1, SCROW nRow1,
                                   SCCOL nCol2, SCROW nRow2, const ScMarkData& rMark);
 
@@ -828,7 +829,7 @@ public:
 
     SC_DLLPUBLIC void           DoMergeContents( SCTAB nTab, SCCOL nStartCol, SCROW nStartRow,
                                     SCCOL nEndCol, SCROW nEndRow );
-                    //  ohne Ueberpruefung:
+                    //  without checking:
     SC_DLLPUBLIC void           DoMerge( SCTAB nTab, SCCOL nStartCol, SCROW nStartRow,
                                     SCCOL nEndCol, SCROW nEndRow, bool bDeleteCaptions = true );
     void            RemoveMerge( SCCOL nCol, SCROW nRow, SCTAB nTab );
@@ -880,13 +881,13 @@ public:
                     /** Zap all caches. */
     void            ClearLookupCaches();
 
-                    // Automatisch Berechnen
+                    // calculate automatically
     void            SetAutoCalc( BOOL bNewAutoCalc );
     BOOL            GetAutoCalc() const { return bAutoCalc; }
-                    // Automatisch Berechnen in/von/fuer ScDocShell disabled
+                    // calculate automatically in/from/for ScDocShell disabled
     void            SetAutoCalcShellDisabled( BOOL bNew ) { bAutoCalcShellDisabled = bNew; }
     BOOL            IsAutoCalcShellDisabled() const { return bAutoCalcShellDisabled; }
-                    // ForcedFormulas zu berechnen
+                    // ForcedFormulas are to be calculated
     void            SetForcedFormulaPending( BOOL bNew ) { bForcedFormulaPending = bNew; }
     BOOL            IsForcedFormulaPending() const { return bForcedFormulaPending; }
                     // if CalcFormulaTree() is currently running
@@ -1078,7 +1079,7 @@ public:
     SC_DLLPUBLIC void           InitUndoSelected( ScDocument* pSrcDoc, const ScMarkData& rTabSelection,
                                 BOOL bColInfo = FALSE, BOOL bRowInfo = FALSE );
 
-                    //  nicht mehr benutzen:
+                    //  don't use anymore:
     void            CopyToDocument(SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
                                 SCCOL nCol2, SCROW nRow2, SCTAB nTab2,
                                 USHORT nFlags, BOOL bMarked, ScDocument* pDestDoc,
@@ -1243,8 +1244,9 @@ public:
                                         ScMarkData& rMark,
                                         String& rUndoStr, ScDocument* pUndoDoc = NULL );
 
-                    // Col/Row von Folgeaufrufen bestimmen
-                    // (z.B. nicht gefunden von Anfang, oder folgende Tabellen)
+                    // determine Col/Row of subsequent calls
+                    // (e.g. not found from the beginning, or subsequent tables)
+                    // meaning of explanation in "()" was already unclear in German
     static void     GetSearchAndReplaceStart( const SvxSearchItem& rSearchItem,
                         SCCOL& rCol, SCROW& rRow );
 
@@ -1407,7 +1409,7 @@ public:
 
     SC_DLLPUBLIC BOOL           NeedPageResetAfterTab( SCTAB nTab ) const;
 
-    // war vorher im PageStyle untergracht. Jetzt an jeder Tabelle:
+    // Was stored in PageStyle previously. Now it exists for every table:
     SC_DLLPUBLIC BOOL           HasPrintRange();
     SC_DLLPUBLIC USHORT         GetPrintRangeCount( SCTAB nTab );
     SC_DLLPUBLIC const ScRange* GetPrintRange( SCTAB nTab, USHORT nPos );
@@ -1497,7 +1499,7 @@ public:
     BOOL            IdleCalcTextWidth();
     BOOL            IdleCheckLinks();
 
-    BOOL            ContinueOnlineSpelling();   // TRUE = etwas gefunden
+    BOOL            ContinueOnlineSpelling();   // TRUE = found s.th.
 
     BOOL            IsIdleDisabled() const      { return bIdleDisabled; }
     void            DisableIdle(BOOL bDo)       { bIdleDisabled = bDo; }
@@ -1521,7 +1523,7 @@ public:
     sal_Bool        HasRangeOverflow() const                { return nRangeOverflowType != 0; }
     SC_DLLPUBLIC sal_uInt32      GetRangeOverflowType() const            { return nRangeOverflowType; }
 
-    // fuer Broadcasting/Listening
+    // for broadcasting/listening
     void            SetNoSetDirty( BOOL bVal ) { bNoSetDirty = bVal; }
     BOOL            GetNoSetDirty() const { return bNoSetDirty; }
     void            SetInsertingFromOtherDoc( BOOL bVal ) { bInsertingFromOtherDoc = bVal; }
@@ -1797,7 +1799,7 @@ public:
     void RemoveSubTotalCell(ScFormulaCell* pCell);
     void SetSubTotalCellsDirty(const ScRange& rDirtyRange);
 
-private: // CLOOK-Impl-Methoden
+private: // CLOOK-Impl-methods
 
     /**
      * Use this class as a locale variable to merge number formatter from
@@ -1816,7 +1818,7 @@ private: // CLOOK-Impl-Methoden
 
     void    MergeNumberFormatter(ScDocument* pSrcDoc);
 
-    void    ImplCreateOptions(); // bei Gelegenheit auf on-demand umstellen?
+    void    ImplCreateOptions(); // Suggestion: switch to on-demand?
     void    ImplDeleteOptions();
 
     void    DeleteDrawLayer();
