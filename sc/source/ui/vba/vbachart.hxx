@@ -69,7 +69,6 @@ friend class ScVbaAxis;
     bool hasMarkers() throw ( css::script::BasicErrorException );
     sal_Int32 getMarkerType(sal_Int32 _nWithMarkers, sal_Int32 _nWithoutMarkers) throw ( css::script::BasicErrorException );
     void assignDiagramAttributes();
-    void setDefaultSeriesDescriptionLabels() const {}
 public:
     ScVbaChart( const css::uno::Reference< ov::XHelperInterface >& _xParent, const css::uno::Reference< css::uno::XComponentContext >& _xContext, const css::uno::Reference< css::lang::XComponent >& _xChartComponent, const css::uno::Reference< css::table::XTableChart >& _xTableChart );
 

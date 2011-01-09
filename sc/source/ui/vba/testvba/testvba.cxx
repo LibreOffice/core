@@ -120,11 +120,6 @@ mxCompLoader( _xCompLoader ), msOutDirPath( convertToURL( _outDirPath  ) )
         return sLogLocation;
     }
 
-    void init() const
-    {
-        // blow away previous logs?
-    }
-
     void proccessDocument( const rtl::OUString& sUrl )
     {
             if ( !mxSFA->isFolder( sUrl ) && sUrl.endsWithIgnoreAsciiCaseAsciiL( ".xls", 4 ) )
