@@ -32,9 +32,9 @@ using namespace ::ooo::vba;
 void
 ScVbaOutline::ShowLevels( const uno::Any& RowLevels, const uno::Any& ColumnLevels ) throw (uno::RuntimeException)
 {
-    sal_Int16 nLevel = 0;
     if (mxOutline.is())
     {
+        sal_Int16 nLevel = 0;
         if (RowLevels >>= nLevel)
         {
             mxOutline->showLevel(nLevel, table::TableOrientation_ROWS);

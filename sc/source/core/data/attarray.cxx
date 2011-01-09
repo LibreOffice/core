@@ -234,14 +234,14 @@ BOOL ScAttrArray::Concat(SCSIZE nPos)
 
 BOOL ScAttrArray::Search( SCROW nRow, SCSIZE& nIndex ) const
 {
-    long    nLo         = 0;
     long    nHi         = static_cast<long>(nCount) - 1;
-    long    nStartRow   = 0;
-    long    nEndRow     = 0;
     long    i           = 0;
     BOOL    bFound      = (nCount == 1);
     if (pData)
     {
+        long nLo = 0;
+        long nStartRow = 0;
+        long nEndRow = 0;
         while ( !bFound && nLo <= nHi )
         {
             i = (nLo + nHi) / 2;

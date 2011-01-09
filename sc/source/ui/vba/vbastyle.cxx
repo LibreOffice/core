@@ -133,7 +133,7 @@ ScVbaStyle::getNameLocal() throw (script::BasicErrorException, uno::RuntimeExcep
     {
         mxPropertySet->getPropertyValue(DISPLAYNAME) >>= sName;
     }
-    catch (uno::Exception e)
+    catch (uno::Exception &e)
     {
         DebugHelper::exception(SbERR_METHOD_FAILED, rtl::OUString() );
     }

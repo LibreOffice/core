@@ -69,10 +69,10 @@ private:
 USHORT ScDelimiterTable::GetCode( const String& rDel ) const
 {
     sal_Unicode nCode = 0;
-    xub_StrLen i = 0;
 
     if ( nCount >= 2 )
     {
+        xub_StrLen i = 0;
         while ( i<nCount )
         {
             if ( rDel == theDelTab.GetToken( i, cSep ) )
@@ -93,10 +93,10 @@ USHORT ScDelimiterTable::GetCode( const String& rDel ) const
 String ScDelimiterTable::GetDelimiter( sal_Unicode nCode ) const
 {
     String aStrDel;
-    xub_StrLen i = 0;
 
     if ( nCount >= 2 )
     {
+        xub_StrLen i = 0;
         while ( i<nCount )
         {
             if ( nCode == (sal_Unicode) theDelTab.GetToken( i+1, cSep ).ToInt32() )

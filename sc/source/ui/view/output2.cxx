@@ -193,6 +193,7 @@ ScDrawStringsVars::ScDrawStringsVars(ScOutputData* pData, BOOL bPTL) :
     eAttrOrient ( SVX_ORIENTATION_STANDARD ),
     eAttrHorJust( SVX_HOR_JUSTIFY_STANDARD ),
     eAttrVerJust( SVX_VER_JUSTIFY_BOTTOM ),
+    nAscentPixel(0),
     eAttrHorJustMethod( SVX_JUSTIFY_METHOD_AUTO ),
     eAttrVerJustMethod( SVX_JUSTIFY_METHOD_AUTO ),
     pMargin     ( NULL ),

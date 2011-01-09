@@ -4206,7 +4206,6 @@ static void lcl_GetLastMatch( SCSIZE& rIndex, const VectorMatrixAccessor& rMat,
 void ScInterpreter::ScMatch()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScMatch" );
-    ScMatrixRef pMatSrc = NULL;
 
     BYTE nParamCount = GetByte();
     if ( MustHaveParamCount( nParamCount, 2, 3 ) )
@@ -4222,6 +4221,7 @@ void ScInterpreter::ScMatch()
         SCCOL nCol2 = 0;
         SCROW nRow2 = 0;
         SCTAB nTab2 = 0;
+        ScMatrixRef pMatSrc = NULL;
 
         switch (GetStackType())
         {

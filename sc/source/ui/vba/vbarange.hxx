@@ -197,8 +197,8 @@ public:
     virtual void SAL_CALL setShowDetail(const css::uno::Any& aShowDetail) throw (css::uno::RuntimeException);
     virtual ::com::sun::star::uno::Reference< ::ooo::vba::excel::XQueryTable > SAL_CALL getQueryTable() throw (::com::sun::star::uno::RuntimeException); //09-09-16 add by limingl
     // Methods
-    sal_Bool IsRows() { return mbIsRows; }
-    sal_Bool IsColumns() { return mbIsColumns; }
+    sal_Bool IsRows() const { return mbIsRows; }
+    sal_Bool IsColumns() const { return mbIsColumns; }
     virtual css::uno::Reference< ov::excel::XComment > SAL_CALL AddComment( const css::uno::Any& Text ) throw (css::uno::RuntimeException);
     virtual void SAL_CALL Clear() throw (css::uno::RuntimeException);
     virtual void SAL_CALL ClearComments() throw (css::uno::RuntimeException);

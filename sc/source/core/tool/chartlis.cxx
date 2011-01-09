@@ -336,7 +336,6 @@ public:
                 endListening(aRange);
         }
     }
-
 private:
     void startListening(const ScRange& rRange)
     {
@@ -353,7 +352,6 @@ private:
         else
             mpDoc->EndListeningArea(rRange, &mrParent);
     }
-
 private:
     ScDocument* mpDoc;
     ScChartListener& mrParent;

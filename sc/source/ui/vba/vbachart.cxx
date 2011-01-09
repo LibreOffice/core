@@ -96,7 +96,7 @@ ScVbaChart::getName() throw (css::uno::RuntimeException)
     {
         xProps->getPropertyValue( CHART_NAME ) >>= sName;
     }
-    catch( uno::Exception e ) // swallow exceptions
+    catch( uno::Exception & ) // swallow exceptions
     {
     }
     return sName;

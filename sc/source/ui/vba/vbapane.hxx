@@ -44,7 +44,7 @@ public:
         const css::uno::Reference< css::frame::XModel >& xModel,
         const css::uno::Reference< css::sheet::XViewPane > xViewPane ) throw (css::uno::RuntimeException);
 
-    css::uno::Reference< css::sheet::XViewPane > getViewPane() { return m_xViewPane; }
+    css::uno::Reference< css::sheet::XViewPane > getViewPane() const { return m_xViewPane; }
 
     // XPane attributes
     virtual sal_Int32 SAL_CALL getScrollColumn() throw (css::uno::RuntimeException);

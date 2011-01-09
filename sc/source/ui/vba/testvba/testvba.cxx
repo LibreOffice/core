@@ -120,7 +120,7 @@ mxCompLoader( _xCompLoader ), msOutDirPath( convertToURL( _outDirPath  ) )
         return sLogLocation;
     }
 
-    void init()
+    void init() const
     {
         // blow away previous logs?
     }

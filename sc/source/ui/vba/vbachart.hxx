@@ -69,12 +69,12 @@ friend class ScVbaAxis;
     bool hasMarkers() throw ( css::script::BasicErrorException );
     sal_Int32 getMarkerType(sal_Int32 _nWithMarkers, sal_Int32 _nWithoutMarkers) throw ( css::script::BasicErrorException );
     void assignDiagramAttributes();
-    void setDefaultSeriesDescriptionLabels(){}
+    void setDefaultSeriesDescriptionLabels() const {}
 public:
     ScVbaChart( const css::uno::Reference< ov::XHelperInterface >& _xParent, const css::uno::Reference< css::uno::XComponentContext >& _xContext, const css::uno::Reference< css::lang::XComponent >& _xChartComponent, const css::uno::Reference< css::table::XTableChart >& _xTableChart );
 
     // Non-interface
-    css::uno::Reference< css::beans::XPropertySet > xDiagramPropertySet() { return mxDiagramPropertySet; }
+    css::uno::Reference< css::beans::XPropertySet > xDiagramPropertySet() const { return mxDiagramPropertySet; }
     bool isSeriesIndexValid(sal_Int32 _seriesindex) throw( css::script::BasicErrorException );
     bool areIndicesValid(sal_Int32 _seriesindex, sal_Int32 _valindex) throw ( css::script::BasicErrorException );
     void setSeriesName(sal_Int32 _index, rtl::OUString _sname) throw ( css::script::BasicErrorException );
