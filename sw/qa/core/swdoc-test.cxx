@@ -27,6 +27,12 @@
  */
 #include "precompiled_sw.hxx"
 
+#ifdef WNT
+# include <tools/prewin.h>
+# include <windows.h>
+# include <tools/postwin.h>
+#endif
+
 #include "preextstl.h"
 #include <cppunit/TestSuite.h>
 #include <cppunit/TestFixture.h>
