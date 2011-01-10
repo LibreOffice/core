@@ -211,14 +211,13 @@ $(call gb_ResTarget_get_target,%) : $(gb_Helper_MISCDUMMY) | $(gb_ResTarget_RSCT
 		mkdir -p $(dir $@) $(OUTDIR)/bin \
 			$(dir $(call gb_ResTarget_get_imagelist_target,$(1))) && \
 		RESPONSEFILE=`$(gb_MKTEMP) $(gb_Helper_MISC)` && \
+		EXTRA_LIP=`find $(gb_ResTarget_DEFIMAGESLOCATION)$(RESLOCATION) -type d | sed -e "s/^/-lip=/"` && \
 		echo "-r -p \
 			-lg$(LANGUAGE) \
 			-fs=$@ \
+			$${EXTRA_LIP} \
 			-lip=$(gb_ResTarget_DEFIMAGESLOCATION)$(RESLOCATION)/imglst/$(LANGUAGE) \
-			-lip=$(gb_ResTarget_DEFIMAGESLOCATION)$(RESLOCATION)/imglst \
 			-lip=$(gb_ResTarget_DEFIMAGESLOCATION)$(RESLOCATION)/res/$(LANGUAGE) \
-			-lip=$(gb_ResTarget_DEFIMAGESLOCATION)$(RESLOCATION)/res \
-			-lip=$(gb_ResTarget_DEFIMAGESLOCATION)$(RESLOCATION) \
 			-lip=$(gb_ResTarget_DEFIMAGESLOCATION)res/$(LANGUAGE) \
 			-lip=$(gb_ResTarget_DEFIMAGESLOCATION)res \
 			-subMODULE=$(gb_ResTarget_DEFIMAGESLOCATION) \
