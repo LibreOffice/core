@@ -42,12 +42,12 @@ Dieses Item beschreibt ein Umrandungsattribut (alle vier Kanten und
 Abstand nach innen.
 */
 
-#define BOX_LINE_TOP    ((USHORT)0)
-#define BOX_LINE_BOTTOM ((USHORT)1)
-#define BOX_LINE_LEFT   ((USHORT)2)
-#define BOX_LINE_RIGHT  ((USHORT)3)
+#define BOX_LINE_TOP    ((sal_uInt16)0)
+#define BOX_LINE_BOTTOM ((sal_uInt16)1)
+#define BOX_LINE_LEFT   ((sal_uInt16)2)
+#define BOX_LINE_RIGHT  ((sal_uInt16)3)
 
-#define BOX_4DISTS_VERSION ((USHORT)1)
+#define BOX_4DISTS_VERSION ((sal_uInt16)1)
 
 class EDITENG_DLLPUBLIC SvxBoxItem : public SfxPoolItem
 {
@@ -55,7 +55,7 @@ class EDITENG_DLLPUBLIC SvxBoxItem : public SfxPoolItem
                    *pBottom,
                    *pLeft,
                    *pRight;
-    USHORT          nTopDist,
+    sal_uInt16          nTopDist,
                     nBottomDist,
                     nLeftDist,
                     nRightDist;
@@ -63,15 +63,15 @@ class EDITENG_DLLPUBLIC SvxBoxItem : public SfxPoolItem
 public:
     TYPEINFO();
 
-    SvxBoxItem( const USHORT nId );
+    SvxBoxItem( const sal_uInt16 nId );
     SvxBoxItem( const SvxBoxItem &rCpy );
     ~SvxBoxItem();
     SvxBoxItem &operator=( const SvxBoxItem& rBox );
 
     // "pure virtual Methoden" vom SfxPoolItem
     virtual int              operator==( const SfxPoolItem& ) const;
-    virtual sal_Bool             QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
-    virtual sal_Bool             PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
+    virtual sal_Bool             QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
+    virtual sal_Bool             PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
 
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
@@ -79,9 +79,9 @@ public:
                                     String &rText, const IntlWrapper * = 0 ) const;
 
     virtual SfxPoolItem*     Clone( SfxItemPool *pPool = 0 ) const;
-    virtual SfxPoolItem*     Create(SvStream &, USHORT) const;
-    virtual SvStream&        Store(SvStream &, USHORT nItemVersion ) const;
-    virtual USHORT           GetVersion( USHORT nFileVersion ) const;
+    virtual SfxPoolItem*     Create(SvStream &, sal_uInt16) const;
+    virtual SvStream&        Store(SvStream &, sal_uInt16 nItemVersion ) const;
+    virtual sal_uInt16           GetVersion( sal_uInt16 nFileVersion ) const;
 
     virtual int              ScaleMetrics( long nMult, long nDiv );
     virtual int              HasMetrics() const;
@@ -91,26 +91,26 @@ public:
     const   SvxBorderLine* GetLeft()   const { return pLeft; }
     const   SvxBorderLine* GetRight()  const { return pRight; }
 
-    const   SvxBorderLine* GetLine( USHORT nLine ) const;
+    const   SvxBorderLine* GetLine( sal_uInt16 nLine ) const;
 
         //Die Pointer werden kopiert!
-    void    SetLine( const SvxBorderLine* pNew, USHORT nLine );
+    void    SetLine( const SvxBorderLine* pNew, sal_uInt16 nLine );
 
-    USHORT  GetDistance( USHORT nLine ) const;
-    USHORT  GetDistance() const;
+    sal_uInt16  GetDistance( sal_uInt16 nLine ) const;
+    sal_uInt16  GetDistance() const;
 
-    void    SetDistance( USHORT nNew, USHORT nLine );
-    inline void SetDistance( USHORT nNew );
+    void    SetDistance( sal_uInt16 nNew, sal_uInt16 nLine );
+    inline void SetDistance( sal_uInt16 nNew );
 
         //Breite der Linien plus Zwischenraum plus Abstand nach innen.
-        //JP 09.06.99: bIgnoreLine = TRUE -> Distance auch returnen, wenn
+        //JP 09.06.99: bIgnoreLine = sal_True -> Distance auch returnen, wenn
         //                          keine Line gesetzt ist
-    USHORT  CalcLineSpace( USHORT nLine, BOOL bIgnoreLine = FALSE ) const;
+    sal_uInt16  CalcLineSpace( sal_uInt16 nLine, sal_Bool bIgnoreLine = sal_False ) const;
     static com::sun::star::table::BorderLine SvxLineToLine( const SvxBorderLine* pLine, sal_Bool bConvert );
     static sal_Bool LineToSvxLine(const ::com::sun::star::table::BorderLine& rLine, SvxBorderLine& rSvxLine, sal_Bool bConvert);
 };
 
-inline void SvxBoxItem::SetDistance( USHORT nNew )
+inline void SvxBoxItem::SetDistance( sal_uInt16 nNew )
 {
     nTopDist = nBottomDist = nLeftDist = nRightDist = nNew;
 }
@@ -126,8 +126,8 @@ Andererseits werden ueber dieses Attribut ggf. die BorderLines fuer die
 horizontalen und vertikalen innerern Linien transportiert.
 */
 
-#define BOXINFO_LINE_HORI   ((USHORT)0)
-#define BOXINFO_LINE_VERT   ((USHORT)1)
+#define BOXINFO_LINE_HORI   ((sal_uInt16)0)
+#define BOXINFO_LINE_VERT   ((sal_uInt16)1)
 
 #define VALID_TOP           0x01
 #define VALID_BOTTOM        0x02
@@ -156,10 +156,10 @@ class EDITENG_DLLPUBLIC SvxBoxInfoItem : public SfxPoolItem
      Abstand von der App zum Dialog und zurueck transportiert.
     */
 
-    BOOL    bDist      :1;  // TRUE, Abstand freischalten.
-    BOOL    bMinDist   :1;  // TRUE, Abstand darf nicht unterschritten werden.
+    sal_Bool    bDist      :1;  // sal_True, Abstand freischalten.
+    sal_Bool    bMinDist   :1;  // sal_True, Abstand darf nicht unterschritten werden.
 
-    BYTE    nValidFlags;    // 0000 0000
+    sal_uInt8   nValidFlags;    // 0000 0000
                             // ³³³³ ³³³ÀÄ VALID_TOP
                             // ³³³³ ³³ÀÄÄ VALID_BOTTOM
                             // ³³³³ ³ÀÄÄÄ VALID_LEFT
@@ -169,12 +169,12 @@ class EDITENG_DLLPUBLIC SvxBoxInfoItem : public SfxPoolItem
                             // ³ÀÄÄÄÄÄÄÄÄ VALID_DIST
                             // ÀÄÄÄÄÄÄÄÄÄ VALID_DISABLE
 
-    USHORT  nDefDist;       // Der Default- bzw. Minimalabstand.
+    sal_uInt16  nDefDist;       // Der Default- bzw. Minimalabstand.
 
 public:
     TYPEINFO();
 
-    SvxBoxInfoItem( const USHORT nId );
+    SvxBoxInfoItem( const sal_uInt16 nId );
     SvxBoxInfoItem( const SvxBoxInfoItem &rCpy );
     ~SvxBoxInfoItem();
     SvxBoxInfoItem &operator=( const SvxBoxInfoItem &rCpy );
@@ -185,12 +185,12 @@ public:
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,
                                     String &rText, const IntlWrapper * = 0 ) const;
-    virtual sal_Bool             QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
-    virtual sal_Bool             PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
+    virtual sal_Bool             QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
+    virtual sal_Bool             PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
 
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
-    virtual SfxPoolItem*    Create(SvStream &, USHORT) const;
-    virtual SvStream&       Store(SvStream &, USHORT nItemVersion ) const;
+    virtual SfxPoolItem*    Create(SvStream &, sal_uInt16) const;
+    virtual SvStream&       Store(SvStream &, sal_uInt16 nItemVersion ) const;
     virtual int              ScaleMetrics( long nMult, long nDiv );
     virtual int              HasMetrics() const;
 
@@ -198,26 +198,26 @@ public:
     const SvxBorderLine*    GetVert() const { return pVert; }
 
     //Die Pointer werden kopiert!
-    void                    SetLine( const SvxBorderLine* pNew, USHORT nLine );
+    void                    SetLine( const SvxBorderLine* pNew, sal_uInt16 nLine );
 
-    BOOL    IsTable() const             { return mbEnableHor && mbEnableVer; }
-    void    SetTable( BOOL bNew )       { mbEnableHor = mbEnableVer = bNew; }
+    sal_Bool    IsTable() const             { return mbEnableHor && mbEnableVer; }
+    void    SetTable( sal_Bool bNew )       { mbEnableHor = mbEnableVer = bNew; }
 
     inline bool         IsHorEnabled() const { return mbEnableHor; }
     inline void         EnableHor( bool bEnable ) { mbEnableHor = bEnable; }
     inline bool         IsVerEnabled() const { return mbEnableVer; }
     inline void         EnableVer( bool bEnable ) { mbEnableVer = bEnable; }
 
-    BOOL    IsDist() const              { return bDist; }
-    void    SetDist( BOOL bNew )        { bDist = bNew; }
-    BOOL    IsMinDist() const           { return bMinDist; }
-    void    SetMinDist( BOOL bNew )     { bMinDist = bNew; }
-    USHORT  GetDefDist() const          { return nDefDist; }
-    void    SetDefDist( USHORT nNew )   { nDefDist = nNew; }
+    sal_Bool    IsDist() const              { return bDist; }
+    void    SetDist( sal_Bool bNew )        { bDist = bNew; }
+    sal_Bool    IsMinDist() const           { return bMinDist; }
+    void    SetMinDist( sal_Bool bNew )     { bMinDist = bNew; }
+    sal_uInt16  GetDefDist() const          { return nDefDist; }
+    void    SetDefDist( sal_uInt16 nNew )   { nDefDist = nNew; }
 
-    BOOL                    IsValid( BYTE nValid ) const
+    sal_Bool                    IsValid( sal_uInt8 nValid ) const
                                 { return ( nValidFlags & nValid ) == nValid; }
-    void                    SetValid( BYTE nValid, BOOL bValid = TRUE )
+    void                    SetValid( sal_uInt8 nValid, sal_Bool bValid = sal_True )
                                 { bValid ? ( nValidFlags |= nValid )
                                          : ( nValidFlags &= ~nValid ); }
     void                    ResetFlags();
