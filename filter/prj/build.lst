@@ -11,6 +11,7 @@ fl	filter\source\svg						nmake	-	all	fl_svg				fl_inc NULL
 fl	filter\source\placeware					nmake	-	all	fl_placeware		fl_inc NULL
 fl	filter\source\flash						nmake	-	all	fl_flash fl_pdf			fl_inc NULL
 fl	filter\source\filtertracer				nmake	-	all fl_filtertracer		fl_inc NULL
+fl  filter\source\odfflatxml                nmake   -   all fl_odfflatxml       fl_inc NULL
 fl	filter\source\xsltfilter				nmake	-	all fl_xsltfilter		fl_inc NULL
 fl	filter\source\xsltvalidate				nmake	-	all fl_xsltvalidate fl_xsltfilter	fl_inc NULL
 fl	filter\source\xsltdialog				nmake	-	all fl_xsltdialog fl_flash		fl_inc NULL
