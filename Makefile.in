@@ -2,10 +2,17 @@
 
 SHELL=/usr/bin/env bash
 
+ifeq ($(USE_GMAKE),)
+GBUILD_OPT:=
+else
+GBUILD_OPT:=--gmake
+endif
+
 all: Makefile dmake/dmake@EXEEXT@ src.downloaded
+
 	@. ./*[Ee]nv.[Ss]et.sh && \
         cd instsetoo_native && \
-        build.pl -P@BUILD_NCPUS@ --all -- -P@BUILD_MAX_JOBS@
+        build.pl $(GBUILD_OPT) -P@BUILD_NCPUS@ --all -- -P@BUILD_MAX_JOBS@
 
 install:
 	@. ./*[Ee]nv.[Ss]et.sh && \
@@ -28,7 +35,8 @@ distclean: dmake/dmake@EXEEXT@
 
 clean: dmake/dmake@EXEEXT@
 	@. ./*[Ee]nv.[Ss]et.sh && \
-        dmake clean
+        dmake clean && \
+        if [ -n "$$USE_GMAKE" ] ; then make -f GNUmakefile.mk -sr clean ; fi
 
 dmake/dmake@EXEEXT@:
 	@. ./*[Ee]nv.[Ss]et.sh && \
@@ -47,7 +55,7 @@ check: Makefile dmake/dmake@EXEEXT@ fetch
 	@. ./*[Ee]nv.[Ss]et.sh && \
 	cd smoketestoo_native && \
 	export SAL_USE_VCLPLUGIN="svp" && \
-        build.pl -P@BUILD_NCPUS@ --all -- -P@BUILD_MAX_JOBS@
+        build.pl $(GBUILD_OPT) -P@BUILD_NCPUS@ --all -- -P@BUILD_MAX_JOBS@
 
 id:
 	@. ./*[Ee]nv.[Ss]et.sh && \
