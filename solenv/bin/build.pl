@@ -151,7 +151,7 @@
     %platforms = (); # platforms available or being working with
     %platforms_to_copy = (); # copy output trees for the platforms when --prepare
     $tmp_dir = get_tmp_dir(); # temp directory for checkout and other actions
-    @possible_build_lists = ('build.lst', 'build.xlist'); # build lists names
+    @possible_build_lists = ('gbuild.lst', 'build.lst', 'build.xlist'); # build lists names
     %build_list_paths = (); # build lists names
     %build_lists_hash = (); # hash of arrays $build_lists_hash{$module} = \($path, $xml_list_object)
     $pre_job = 'announce'; # job to add for not-single module build
@@ -210,6 +210,8 @@
     my $zenity_in = '';
     my $zenity_out = '';
     my $zenity_err = '';
+    my $allow_gbuild = 0;
+    %is_gbuild = ();
 ### main ###
 
     get_options();
@@ -546,10 +548,17 @@ sub get_build_list_path {
         my $possible_dir_path = $module_paths{$_}.'/prj/';
         if (-d $possible_dir_path) {
             foreach my $build_list (@possible_build_lists) {
-                my $possible_build_list_path = CorrectPath($possible_dir_path . $build_list);
-                if (-f $possible_build_list_path) {
-                    $build_list_paths{$module} = $possible_build_list_path;
-                    return $possible_build_list_path;
+                # if gbuild are allow we favor gbuild.lst as the build instruction
+                if($build_list ne "gbuild.lst" || $allow_gbuild) {
+                    my $possible_build_list_path = CorrectPath($possible_dir_path . $build_list);
+                    if (-f $possible_build_list_path) {
+                        $build_list_paths{$module} = $possible_build_list_path;
+                        if ($build_list eq "gbuild.lst") {
+#                           print  "Using gmake for module $module\n";
+                            $is_gbuild{$module} = 1;
+                        };
+                        return $possible_build_list_path;
+                    };
                 };
             }
             print_error("There's no build list for $module");
@@ -1469,6 +1478,7 @@ sub get_options {
         $arg =~ /^--checkmodules$/       and $checkparents = 1 and $ignore = 1 and next;
         $arg =~ /^-s$/        and $show = 1                         and next;
         $arg =~ /^--deliver$/    and $deliver = 1                     and next;
+        $arg =~ /^--gmake$/    and $allow_gbuild = 1 and print "ALLOW GBUILD" and next;
         $arg =~ /^(--job=)/       and $custom_job = $' and next;
         $arg =~ /^(--pre_job=)/       and $pre_custom_job = $' and next;
         $arg =~ /^(--post_job=)/       and $post_custom_job = $' and next; #'
@@ -1619,11 +1629,12 @@ sub get_module_and_buildlist_paths {
         $source_config_file = $source_config->get_config_file_path();
         $active_modules{$_}++ foreach ($source_config->get_active_modules());
         my %active_modules_copy = %active_modules;
-        foreach ($source_config->get_all_modules()) {
-            delete $active_modules_copy{$_} if defined($active_modules_copy{$_});
-            next if ($_ eq $initial_module);
-            $module_paths{$_} = $source_config->get_module_path($_);
-            $build_list_paths{$_} = $source_config->get_module_build_list($_)
+        foreach my $module ($source_config->get_all_modules()) {
+            delete $active_modules_copy{$module} if defined($active_modules_copy{$module});
+            next if ($module eq $initial_module);
+            $module_paths{$module} = $source_config->get_module_path($module);
+            $build_list_paths{$module} = $source_config->get_module_build_list($module);
+            $is_gbuild{$module} = $source_config->{GBUILD};
         }
         $dead_parents{$_}++ foreach (keys %active_modules_copy);
     };
@@ -3504,7 +3515,14 @@ sub get_job_string {
     my $full_job_dir = $job_dir;
     if ($job_dir =~ /(\s)/o) {
         $job = $'; #'
-        $job = $deliver_command if ($job eq $post_job);
+        print $echo . "determine if we need to deliver $job_dir\n";
+        if ($job eq $post_job) {
+            if( $is_gbuild{$job_dir} ) {
+                print "Skip deliver for gmake-built module $job_dir\n";
+                return'';
+            };
+            $job = $deliver_command
+        };
         $full_job_dir = $module_paths{$`};
     }
     my $log_dir = File::Basename::dirname($log_file);
