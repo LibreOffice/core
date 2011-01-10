@@ -38,6 +38,10 @@ $(eval $(call gb_Module_add_check_targets,sfx2,\
     TestFixture_sfx2_metadatable \
 ))
 
+$(eval $(call gb_Module_add_subsequentcheck_targets,sfx2,\
+    JunitTest_sfx2_complex \
+))
+
 ifeq ($(OS),LINUX)
 ifeq ($(ENABLE_SYSTRAY_GTK),TRUE)
 $(eval $(call gb_Module_add_targets,sfx2,\
@@ -46,7 +50,12 @@ $(eval $(call gb_Module_add_targets,sfx2,\
 endif
 endif
 
-#todo: map file?
+$(eval $(call gb_JavaClassSet,sfx2_complex))
+$(eval $(call gb_JavaClassSet_add_sourcefiles,sfx2_complex,sfx2/qa/complex/docinfo/DocumentProperties))
+$(eval $(call gb_JavaClassSet_set_classpath,sfx2_complex,$(OUTDIR)/bin/OOoRunner.jar:$(OUTDIR)/bin/ridl.jar:$(OUTDIR)/bin/test.jar:$(OUTDIR)/bin/unoil.jar:/usr/share/java/junit4.jar))
+
+all: $(call gb_JavaClassSet_get_target,sfx2_complex)
+
 #todo: source/appl ohne Optimierung?
 #todo: source/control ohne Optimierung?
 #todo: source/dialog BUILD_VER_STRING
@@ -54,6 +63,5 @@ endif
 #todo: noopt for acldetect.cxx?
 #todo: ENABLE_LAYOUT
 #todo: quickstarter
-#todo: link against cocoa on Mac
 
 # vim: set noet sw=4 ts=4:
