@@ -127,12 +127,13 @@ namespace toolkit
     {
         ::osl::ClearableMutexGuard aGuard( m_aMutex );
 
-        if ( !i_column.is() )
-            throw IllegalArgumentException( ::rtl::OUString(), *this, 1 );
+        GridColumn* const pGridColumn = GridColumn::getImplementation( i_column );
+        if ( pGridColumn == NULL )
+            throw IllegalArgumentException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "invalid column implementation" ) ), *this, 1 );
 
         m_aColumns.push_back( i_column );
         sal_Int32 index = m_aColumns.size() - 1;
-        i_column->setIndex( index );
+        pGridColumn->setIndex( index );
 
         // fire insertion notifications
         ContainerEvent aEvent;
@@ -154,7 +155,7 @@ namespace toolkit
         if ( ( i_columnIndex < 0 ) || ( size_t( i_columnIndex ) >= m_aColumns.size() ) )
             throw IndexOutOfBoundsException( ::rtl::OUString(), *this );
 
-        Columns::iterator pos = m_aColumns.begin() + i_columnIndex;
+        Columns::iterator const pos = m_aColumns.begin() + i_columnIndex;
         Reference< XGridColumn > const xColumn( *pos );
         m_aColumns.erase( pos );
 
@@ -212,12 +213,13 @@ namespace toolkit
             // add new columns
             for ( sal_Int32 i=0; i<rowElements; ++i )
             {
-                const Reference< XGridColumn > xColumn( m_aContext.createComponent( "com.sun.star.awt.grid.GridColumn" ), UNO_QUERY_THROW );
+                ::rtl::Reference< GridColumn > const pGridColumn = new GridColumn();
+                Reference< XGridColumn > const xColumn( pGridColumn.get() );
                 ::rtl::OUStringBuffer colTitle;
                 colTitle.appendAscii( "Column " );
                 colTitle.append( i );
-                xColumn->setTitle( colTitle.makeStringAndClear() );
-                xColumn->setPreferredWidth( 80 /* APPFONT */ );
+                pGridColumn->setTitle( colTitle.makeStringAndClear() );
+                pGridColumn->setPreferredWidth( 80 /* APPFONT */ );
 
                 ContainerEvent aEvent;
                 aEvent.Source = *this;
@@ -226,7 +228,7 @@ namespace toolkit
                 aInsertedColumns.push_back( aEvent );
 
                 m_aColumns.push_back( xColumn );
-                xColumn->setIndex( i );
+                pGridColumn->setIndex( i );
             }
         }
 

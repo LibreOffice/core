@@ -33,7 +33,7 @@
 #include <com/sun/star/lang/XEventListener.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
-#include <cppuhelper/compbase2.hxx>
+#include <cppuhelper/compbase3.hxx>
 #include <cppuhelper/basemutex.hxx>
 #include <rtl/ref.hxx>
 #include <vector>
@@ -43,8 +43,9 @@
 namespace toolkit
 {
 
-typedef ::cppu::WeakComponentImplHelper2    <   ::com::sun::star::awt::grid::XGridColumn
+typedef ::cppu::WeakComponentImplHelper3    <   ::com::sun::star::awt::grid::XGridColumn
                                             ,   ::com::sun::star::lang::XServiceInfo
+                                            ,   ::com::sun::star::lang::XUnoTunnel
                                             >   GridColumn_Base;
 class GridColumn    :public ::cppu::BaseMutex
                     ,public GridColumn_Base
@@ -69,6 +70,7 @@ public:
     virtual void SAL_CALL setResizeable(::sal_Bool the_value) throw (::com::sun::star::uno::RuntimeException);
     virtual ::rtl::OUString SAL_CALL getTitle() throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL setTitle(const ::rtl::OUString & value) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::sal_Int32 SAL_CALL getIndex() throw (::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::style::HorizontalAlignment SAL_CALL getHorizontalAlign() throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL setHorizontalAlign(::com::sun::star::style::HorizontalAlignment align) throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL addGridColumnListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::grid::XGridColumnListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
@@ -87,7 +89,14 @@ public:
     virtual ::sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName ) throw (::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  ) throw (::com::sun::star::uno::RuntimeException);
 
-    virtual void SAL_CALL setIndex(sal_Int32 _nIndex)throw (::com::sun::star::uno::RuntimeException);
+    // XUnoTunnel and friends
+    virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& i_identifier ) throw(::com::sun::star::uno::RuntimeException);
+    static ::com::sun::star::uno::Sequence< sal_Int8 > getUnoTunnelId() throw();
+    static GridColumn* getImplementation( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& i_component );
+
+    // attribute access
+    void setIndex( sal_Int32 const i_index );
+
 private:
     void broadcast_changed(
             ::rtl::OUString name,

@@ -29,6 +29,7 @@
 #include "gridcolumn.hxx"
 
 #include <comphelper/sequence.hxx>
+#include <cppuhelper/typeprovider.hxx>
 #include <toolkit/helper/servicenames.hxx>
 
 #define COLWIDTH ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "ColWidth" ))
@@ -56,7 +57,7 @@ namespace toolkit
     GridColumn::GridColumn()
         :GridColumn_Base( m_aMutex )
         ,m_aIdentifier()
-        ,m_nIndex(0)
+        ,m_nIndex(-1)
         ,m_nColumnWidth(4)
         ,m_nPreferredWidth(0)
         ,m_nMaxWidth(0)
@@ -71,7 +72,7 @@ namespace toolkit
         :cppu::BaseMutex()
         ,GridColumn_Base( m_aMutex )
         ,m_aIdentifier( i_copySource.m_aIdentifier )
-        ,m_nIndex( i_copySource.m_nIndex )
+        ,m_nIndex( -1 )
         ,m_nColumnWidth( i_copySource.m_nColumnWidth )
         ,m_nPreferredWidth( i_copySource.m_nPreferredWidth )
         ,m_nMaxWidth( i_copySource.m_nMaxWidth )
@@ -89,8 +90,8 @@ namespace toolkit
     //------------------------------------------------------------------------------------------------------------------
     void GridColumn::broadcast_changed( ::rtl::OUString name, Any i_oldValue, Any i_newValue, ::osl::ClearableMutexGuard& i_Guard )
     {
-        Reference< XInterface > xSource( static_cast< ::cppu::OWeakObject* >( this ) );
-        GridColumnEvent aEvent( xSource, name, i_oldValue, i_newValue, m_nIndex);
+        Reference< XInterface > const xSource( static_cast< ::cppu::OWeakObject* >( this ) );
+        GridColumnEvent const aEvent( xSource, name, i_oldValue, i_newValue, m_nIndex);
 
         ::cppu::OInterfaceContainerHelper* pIter = rBHelper.getContainer( XGridColumnListener::static_type() );
 
@@ -272,9 +273,17 @@ namespace toolkit
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    void SAL_CALL GridColumn::setIndex(sal_Int32 _nIndex) throw (::com::sun::star::uno::RuntimeException)
+    ::sal_Int32 SAL_CALL GridColumn::getIndex() throw (RuntimeException)
     {
-        m_nIndex = _nIndex;
+        ::osl::MutexGuard aGuard( m_aMutex );
+        return m_nIndex;
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    void GridColumn::setIndex( sal_Int32 const i_index )
+    {
+        ::osl::MutexGuard aGuard( m_aMutex );
+        m_nIndex = i_index;
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -305,6 +314,30 @@ namespace toolkit
     Reference< XCloneable > SAL_CALL GridColumn::createClone(  ) throw (RuntimeException)
     {
         return new GridColumn( *this );
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    sal_Int64 SAL_CALL GridColumn::getSomething( const Sequence< sal_Int8 >& i_identifier ) throw(RuntimeException)
+    {
+        if ( ( i_identifier.getLength() == 16 ) && ( i_identifier == getUnoTunnelId() ) )
+            return ::sal::static_int_cast< sal_Int64 >( reinterpret_cast< sal_IntPtr >( this ) );
+        return 0;
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    Sequence< sal_Int8 > GridColumn::getUnoTunnelId() throw()
+    {
+        static ::cppu::OImplementationId const aId;
+        return aId.getImplementationId();
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    GridColumn* GridColumn::getImplementation( const Reference< XInterface >& i_component )
+    {
+        Reference< XUnoTunnel > const xTunnel( i_component, UNO_QUERY );
+        if ( xTunnel.is() )
+            return reinterpret_cast< GridColumn* >( ::sal::static_int_cast< sal_IntPtr >( xTunnel->getSomething( getUnoTunnelId() ) ) );
+        return NULL;
     }
 }
 
