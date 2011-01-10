@@ -125,99 +125,7 @@ SfxMacroStatement::SfxMacroStatement
     // Workaround Recording nicht exportierter Slots (#25386#)
     if ( !rSlot.pName )
         return;
-/*
-    // Objekt-Typ bestimmen
-    bool bIsApp = rShell.ISA(SfxApplication);
-    bool bIsDoc = rShell.ISA(SfxObjectShell);
-    bool bIsWin = !bIsApp && !bIsDoc &&
-                      ( rShell.ISA(SfxViewShell) || rShell.ISA(SfxViewFrame) );
-    bool bIsSel = !bIsApp && !bIsDoc && !bIsWin;
 
-    // Objekt nicht schon im Slot-Namen enthalten?
-    if ( bIsSel || rSlot.pName[0] == '.' )
-    {
-        // absolutes Aufzeichnen?
-        if ( rSlot.IsMode( SFX_SLOT_RECORDABSOLUTE ) )
-        {
-            // an der Applikation oder am Modul
-            if ( rShell.ISA(SfxApplication) || rShell.ISA(SfxModule) )
-                aStatement = rTarget;
-
-            // am Dokument?
-            // '[' = 5Bh
-            // ']' = 5Dh
-            else if ( rShell.ISA(SfxObjectShell) )
-            {
-                aStatement = 0x005B;
-                aStatement += rTarget;
-                aStatement += 0x005D;
-            }
-
-            else if ( rShell.ISA(SfxViewFrame) )
-            {
-                aStatement = 0x005B;
-                aStatement += String::CreateFromAscii("ViewFrame");//rShell.GetSbxObject()->GetName();
-                aStatement += 0x005D;
-            }
-
-            else
-            {
-                // an der View oder Sub-Shell
-                SfxViewShell *pViewShell = rShell.GetViewShell();
-                aStatement = 0x005B;
-                aStatement += String::CreateFromAscii("ViewShell");//pViewShell->GetViewFrame()->GetSbxObject()->GetName();
-                aStatement += 0x005D;
-                if ( !rShell.ISA(SfxViewFrame) )
-                    // an einer Sub-Shell zus"atlich ".Selection" anh"angen
-                    aStatement += DEFINE_CONST_UNICODE(".Selection");
-            }
-        }
-        else // relatives Aufzeichnen
-        {
-            // an der Application?
-            if ( rShell.ISA(SfxApplication) )
-                aStatement = DEFINE_CONST_UNICODE("Application");
-
-            // am Modul?
-            else if ( rShell.ISA(SfxModule) )
-                aStatement = DEFINE_CONST_UNICODE("ActiveModule");
-
-            // am Dokument
-            else if ( rShell.ISA(SfxObjectShell) )
-                aStatement = DEFINE_CONST_UNICODE("ActiveDocument");
-
-            // am Window
-            else if ( rShell.ISA(SfxViewShell) || rShell.ISA(SfxViewFrame) )
-                aStatement = DEFINE_CONST_UNICODE("ActiveWindow");
-
-            else
-                // an einer Sub-Shell
-                aStatement = DEFINE_CONST_UNICODE("Selection");
-        }
-    }
-
-    if ( bIsSel )
-    {
-        // bei Selection ggf. noch den Namen der SubShell anh"angen
-        const SfxShellObject *pShObj =
-                    (const SfxShellObject*) rShell.GetSbxObject();
-        if ( pShObj )
-        {
-            const SfxShellObject *pParentObj =
-                        (const SfxShellObject*) pShObj->GetParent();
-            SfxShell *pParentSh = pParentObj->GetShell();
-            DBG_ASSERT( pParentSh->ISA(SfxViewFrame),
-                        "parent of SubShell must be a Frame" );
-            if ( rSlot.pName[0] == '.' )
-            {
-                aStatement += '.';
-                aStatement += rShell.GetSbxObject()->GetName();
-            }
-        }
-        else
-            DBG_ASSERT( rSlot.pName[0] != '0', "recording unnamed object" );
-    }
-*/
     aStatement = DEFINE_CONST_UNICODE("Selection");
 
     // an diesen Objekt-Ausdruck den Methoden-/Property-Namen und Parameter
@@ -422,14 +330,6 @@ void SfxMacroStatement::GenerateNameAndArgs_Impl
                     aArg += aRecordable;
                     aArg += '"';
                 }
-/*
-                case SbxBYTE:
-                {
-                    // als Zahl darstellen
-                    aArg = (USHORT) rVar.GetByte();
-                    break;
-                }
-*/
             }
             else
             {

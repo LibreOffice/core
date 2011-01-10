@@ -85,13 +85,6 @@ BOOL FileMove_Impl( const String & rFile1, const String & rFile2, BOOL bImmerVer
             aF2.Kill();
             return FALSE;
         }
-/*
-        else
-        {
-            printf( "%s to %s moved\n",
-                     rFile2.GetStr(), rFile1.GetStr() );
-        }
-*/
         return TRUE;
     }
     return 0 == aF2.Kill();
@@ -109,15 +102,6 @@ int main ( int argc, char ** argv)
 int cdecl main ( int argc, char ** argv)
 {
 #endif
-
-/*
-    pStr = ::ResponseFile( &aCmdLine, argv, argc );
-    if( pStr )
-    {
-        printf( "Cannot open response file <%s>\n", pStr );
-        return( 1 );
-    };
-*/
 
     String aTmpListFile;
     String aTmpSlotMapFile;
@@ -247,66 +231,6 @@ int cdecl main ( int argc, char ** argv)
                 fprintf( stderr, "%s\n", aStr.GetBuffer() );
             }
         }
-/*
-        if( nExit == 0 && aCommand.aCallingFile.Len() )
-        {
-            DirEntry aDE( aCommand.aCallingFile );
-            aDE.ToAbs();
-            aTmpCallingFile = aDE.GetPath().TempName().GetFull();
-            SvFileStream aOutStm( aTmpCallingFile, STREAM_READWRITE | STREAM_TRUNC );
-            pDataBase->WriteSbx( aOutStm );
-            //pDataBase->Save( aOutStm, aCommand.nFlags | IDL_WRITE_CALLING );
-            if( aOutStm.GetError() != SVSTREAM_OK )
-            {
-                nExit = -1;
-                ByteString aStr = "cannot write calling file: ";
-                aStr += aCommand.aCallingFile;
-                fprintf( stderr, "%s\n", aStr.GetStr() );
-            }
-        }
-        if( nExit == 0 && aCommand.aCxxFile.Len() )
-        {
-            DirEntry aDE( aCommand.aCxxFile );
-            aDE.ToAbs();
-            aTmpCxxFile = aDE.GetPath().TempName().GetFull();
-            SvFileStream aOutStm( aTmpCxxFile, STREAM_READWRITE | STREAM_TRUNC );
-
-            aOutStm << "#pragma hdrstop" << endl;
-            aOutStm << "#include <";
-            if( aCommand.aHxxFile.Len() )
-                aOutStm << DirEntry(aCommand.aHxxFile).GetName().GetBuffer();
-            else
-            {
-                DirEntry aDE( aCommand.aCxxFile );
-                aDE.SetExtension( "hxx" );
-                aOutStm << aDE.GetName().GetBuffer);
-            }
-            aOutStm << '>' << endl;
-            if( !pDataBase->WriteCxx( aOutStm ) )
-            {
-                nExit = -1;
-                ByteString aStr = "cannot write cxx file: ";
-                aStr += ByteString( aCommand.aCxxFile, RTL_TEXTENCODING_UTF8 );
-                fprintf( stderr, "%s\n", aStr.GetBuffer() );
-            }
-        }
-        if( nExit == 0 && aCommand.aHxxFile.Len() )
-        {
-            DirEntry aDE( aCommand.aHxxFile );
-            aDE.ToAbs();
-            aTmpHxxFile = aDE.GetPath().TempName().GetFull();
-            SvFileStream aOutStm( aTmpHxxFile, STREAM_READWRITE | STREAM_TRUNC );
-
-            aOutStm << "#include <somisc.hxx>" << endl;
-            if( !pDataBase->WriteHxx( aOutStm ) )
-            {
-                nExit = -1;
-                ByteString aStr = "cannot write cxx file: ";
-                aStr += ByteString( aCommand.aHxxFile, RTL_TEXTENCODING_UTF8 );
-                fprintf( stderr, "%s\n", aStr.GetBuffer() );
-            }
-        }
- */
     }
     else
         nExit = -1;

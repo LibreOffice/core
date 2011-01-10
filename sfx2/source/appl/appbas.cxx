@@ -201,74 +201,7 @@ void SfxApplication::EnterBasicCall()
 
         // zuerst das BASIC laden
         GetBasic();
-/*
-        // als erstes SfxShellObject das SbxObject der SfxApplication erzeugen
-        SbxObject *pSbx = GetSbxObject();
-        DBG_ASSERT( pSbx, "SfxShellObject: can't create SbxObject for SfxApplication" );
 
-        // die SbxObjects aller Module erzeugen
-        SfxModuleArr_Impl& rArr = GetModules_Impl();
-        for ( sal_uInt16 n = 0; n < rArr.Count(); ++n )
-        {
-            SfxModule *pMod = rArr.GetObject(n);
-            if ( pMod->IsLoaded() )
-            {
-                pSbx = pMod->GetSbxObject();
-                DBG_ASSERT( pSbx, "SfxModule: can't create SbxObject" );
-            }
-        }
-
-        // die SbxObjects aller Tasks erzeugen
-        for ( SfxTask *pTask = SfxTask::GetFirst(); pTask; pTask = SfxTask::GetNext( *pTask ) )
-            pTask->GetSbxObject();
-
-        // die SbxObjects aller SfxObjectShells erzeugen (ggf. Frame-los!)
-        for ( SfxObjectShell *pObjSh = SfxObjectShell::GetFirst( NULL, sal_False );
-              pObjSh;
-              pObjSh = SfxObjectShell::GetNext(*pObjSh, NULL, sal_False) )
-        {
-            // kein IP-Object oder wenn doch dann initialisiert?
-            SvStorageRef aStorage;
-            if ( !pObjSh->IsHandsOff() )
-                aStorage = pObjSh->GetStorage();
-            if ( !pObjSh->GetInPlaceObject() || aStorage.Is() )
-            {
-                DBG( DbgOutf( "SfxShellObject: BASIC-on-demand for %s",
-                              pObjSh->SfxShell::GetName().GetBuffer() ) );
-                pSbx = pObjSh->GetSbxObject();
-                DBG_ASSERT( pSbx, "SfxShellObject: can't create SbxObject" );
-            }
-        }
-
-        // die SbxObjects der SfxShells auf den Stacks der Frames erzeugen
-        for ( SfxViewFrame *pFrame = SfxViewFrame::GetFirst(0,sal_False);
-              pFrame;
-              pFrame = SfxViewFrame::GetNext(*pFrame,0,0,sal_False) )
-        {
-            // den Dispatcher des Frames rausholen
-            SfxDispatcher *pDispat = pFrame->GetDispatcher();
-            pDispat->Flush();
-
-            // "uber alle SfxShells auf dem Stack des Dispatchers iterieren
-            // Frame selbst wird ausgespart, da er indirekt angezogen wird,
-            // sofern er ein Dokument enth"alt.
-            for ( sal_uInt16 nStackIdx = pDispat->GetShellLevel(*pFrame);
-                  0 != nStackIdx;
-                  --nStackIdx )
-            {
-                DBG( DbgOutf( "SfxShellObject: BASIC-on-demand for level %u", nStackIdx-1 ); )
-                pSbx = pDispat->GetShell(nStackIdx - 1)->GetSbxObject();
-                DBG_ASSERT( pSbx, "SfxShellObject: can't create SbxObject" );
-            }
-
-            if ( !pFrame->GetObjectShell() )
-            {
-                DBG( DbgOutf( "SfxShellObject: BASIC-on-demand for empty frame" ); )
-                pSbx = pFrame->GetSbxObject();
-                DBG_ASSERT( pSbx, "SfxShellObject: can't create SbxObject" );
-            }
-        }
-*/
         // Factories anmelden
 //        SbxBase::AddFactory( new SfxSbxObjectFactory_Impl );
     }

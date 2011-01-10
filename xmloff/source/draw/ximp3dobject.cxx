@@ -124,66 +124,6 @@ void SdXML3DObjectContext::EndElement()
     SdXMLShapeContext::EndElement();
 }
 
-//////////////////////////////////////////////////////////////////////////////
-/*
-void SdXML3DObjectContext::AddShape(uno::Reference< drawing::XShape >& xShape)
-{
-    if(xShape.is() && mxShapes.is())
-    {
-        // set shape local
-        mxShape = xShape;
-
-        // add new shape to parent
-        mxShapes->add( xShape );
-    }
-}
-*/
-//////////////////////////////////////////////////////////////////////////////
-/*
-void SdXML3DObjectContext::SetStyle()
-{
-    // set style on shape
-    if(maDrawStyleName.getLength() && mxShape.is())
-    {
-        const SvXMLStyleContext* pStyle = 0L;
-        sal_Bool bAutoStyle(FALSE);
-
-        if(GetImport().GetShapeImport()->GetAutoStylesContext())
-            pStyle = GetImport().GetShapeImport()->GetAutoStylesContext()->FindStyleChildContext(
-            XML_STYLE_FAMILY_SD_GRAPHICS_ID, maDrawStyleName);
-
-        if(pStyle)
-            bAutoStyle = TRUE;
-
-        if(!pStyle && GetImport().GetShapeImport()->GetStylesContext())
-            pStyle = GetImport().GetShapeImport()->GetStylesContext()->
-            FindStyleChildContext(XML_STYLE_FAMILY_SD_GRAPHICS_ID, maDrawStyleName);
-
-        if(pStyle && pStyle->ISA(XMLShapeStyleContext))
-        {
-            uno::Reference< beans::XPropertySet > xPropSet(mxShape, uno::UNO_QUERY);
-            if(xPropSet.is())
-            {
-                XMLShapeStyleContext* pDocStyle = (XMLShapeStyleContext*)pStyle;
-
-                if(pDocStyle->GetStyle().is())
-                {
-                    // set style on object
-                    uno::Any aAny;
-                    aAny <<= pDocStyle->GetStyle();
-                    xPropSet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("Style")), aAny);
-                }
-
-                if(bAutoStyle)
-                {
-                    // set PropertySet on object
-                    pDocStyle->FillPropertySet(xPropSet);
-                }
-            }
-        }
-    }
-}
-*/
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 

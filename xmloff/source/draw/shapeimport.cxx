@@ -231,16 +231,7 @@ XMLShapeImportHelper::~XMLShapeImportHelper()
 
     if(mpGroupShapeElemTokenMap) delete mpGroupShapeElemTokenMap;
     if(mpFrameShapeElemTokenMap) delete mpFrameShapeElemTokenMap;
-/*
-    if(mpShapeAttrTokenMap) delete mpShapeAttrTokenMap;
-    if(mpRectShapeAttrTokenMap) delete mpRectShapeAttrTokenMap;
-    if(mpLineShapeAttrTokenMap) delete mpLineShapeAttrTokenMap;
-    if(mpEllipseShapeAttrTokenMap) delete mpEllipseShapeAttrTokenMap;
-    if(mpTextBoxShapeAttrTokenMap) delete mpTextBoxShapeAttrTokenMap;
-    if(mpControlShapeAttrTokenMap) delete mpControlShapeAttrTokenMap;
-    if(mpPageShapeAttrTokenMap) delete mpPageShapeAttrTokenMap;
-    if(mpGraphicObjectShapeAttrTokenMap) delete mpGraphicObjectShapeAttrTokenMap;
-*/
+
     if(mpPolygonShapeAttrTokenMap) delete mpPolygonShapeAttrTokenMap;
     if(mpPathShapeAttrTokenMap) delete mpPathShapeAttrTokenMap;
     if(mp3DSceneShapeElemTokenMap) delete mp3DSceneShapeElemTokenMap;
@@ -358,31 +349,6 @@ const SvXMLTokenMap& XMLShapeImportHelper::Get3DSceneShapeElemTokenMap()
 }
 
 //////////////////////////////////////////////////////////////////////////////
-/*
-
-const SvXMLTokenMap& XMLShapeImportHelper::GetShapeAttrTokenMap()
-{
-    if(!mpShapeAttrTokenMap)
-    {
-    static SvXMLTokenMapEntry aShapeAttrTokenMap[] =
-{
-    { XML_NAMESPACE_DRAW,           XML_NAME,               XML_TOK_SHAPE_NAME                          },
-    { XML_NAMESPACE_DRAW,           XML_STYLE_NAME,         XML_TOK_SHAPE_DRAWSTYLE_NAME_GRAPHICS       },
-    { XML_NAMESPACE_PRESENTATION,   XML_CLASS,              XML_TOK_SHAPE_PRESENTATION_CLASS            },
-    { XML_NAMESPACE_PRESENTATION,   XML_STYLE_NAME,         XML_TOK_SHAPE_DRAWSTYLE_NAME_PRESENTATION   },
-    { XML_NAMESPACE_SVG,            XML_TRANSFORM,          XML_TOK_SHAPE_TRANSFORM                     },
-    { XML_NAMESPACE_PRESENTATION,   XML_PLACEHOLDER,        XML_TOK_SHAPE_IS_PLACEHOLDER                },
-    { XML_NAMESPACE_PRESENTATION,   XML_USER_TRANSFORMED,   XML_TOK_SHAPE_IS_USER_TRANSFORMED           },
-    XML_TOKEN_MAP_END
-};
-
-        mpShapeAttrTokenMap = new SvXMLTokenMap(aShapeAttrTokenMap);
-        }
-
-    return *mpShapeAttrTokenMap;
-}
-*/
-//////////////////////////////////////////////////////////////////////////////
 
 
 const SvXMLTokenMap& XMLShapeImportHelper::Get3DObjectAttrTokenMap()
@@ -463,75 +429,7 @@ const SvXMLTokenMap& XMLShapeImportHelper::Get3DSphereObjectAttrTokenMap()
 }
 
 //////////////////////////////////////////////////////////////////////////////
-/*
 
-const SvXMLTokenMap& XMLShapeImportHelper::GetRectShapeAttrTokenMap()
-{
-    if(!mpRectShapeAttrTokenMap)
-    {
-    static SvXMLTokenMapEntry aRectShapeAttrTokenMap[] =
-{
-    { XML_NAMESPACE_SVG,    XML_X,                  XML_TOK_RECTSHAPE_X                 },
-    { XML_NAMESPACE_SVG,    XML_Y,                  XML_TOK_RECTSHAPE_Y                 },
-    { XML_NAMESPACE_SVG,    XML_WIDTH,              XML_TOK_RECTSHAPE_WIDTH             },
-    { XML_NAMESPACE_SVG,    XML_HEIGHT,             XML_TOK_RECTSHAPE_HEIGHT            },
-    { XML_NAMESPACE_DRAW,   XML_CORNER_RADIUS,      XML_TOK_RECTSHAPE_CORNER_RADIUS     },
-    XML_TOKEN_MAP_END
-};
-
-        mpRectShapeAttrTokenMap = new SvXMLTokenMap(aRectShapeAttrTokenMap);
-        }
-
-    return *mpRectShapeAttrTokenMap;
-}
-
-//////////////////////////////////////////////////////////////////////////////
-
-
-const SvXMLTokenMap& XMLShapeImportHelper::GetLineShapeAttrTokenMap()
-{
-    if(!mpLineShapeAttrTokenMap)
-    {
-    static SvXMLTokenMapEntry aLineShapeAttrTokenMap[] =
-{
-    { XML_NAMESPACE_SVG,    XML_X1,             XML_TOK_LINESHAPE_X1                },
-    { XML_NAMESPACE_SVG,    XML_Y1,             XML_TOK_LINESHAPE_Y1                },
-    { XML_NAMESPACE_SVG,    XML_X2,             XML_TOK_LINESHAPE_X2                },
-    { XML_NAMESPACE_SVG,    XML_Y2,             XML_TOK_LINESHAPE_Y2                },
-    XML_TOKEN_MAP_END
-};
-
-        mpLineShapeAttrTokenMap = new SvXMLTokenMap(aLineShapeAttrTokenMap);
-        }
-
-    return *mpLineShapeAttrTokenMap;
-}
-
-//////////////////////////////////////////////////////////////////////////////
-
-
-const SvXMLTokenMap& XMLShapeImportHelper::GetEllipseShapeAttrTokenMap()
-{
-    if(!mpEllipseShapeAttrTokenMap)
-    {
-    static SvXMLTokenMapEntry aEllipseShapeAttrTokenMap[] =
-{
-    { XML_NAMESPACE_SVG,    XML_RX,             XML_TOK_ELLIPSESHAPE_RX             },
-    { XML_NAMESPACE_SVG,    XML_RY,             XML_TOK_ELLIPSESHAPE_RY             },
-    { XML_NAMESPACE_SVG,    XML_CX,             XML_TOK_ELLIPSESHAPE_CX             },
-    { XML_NAMESPACE_SVG,    XML_CY,             XML_TOK_ELLIPSESHAPE_CY             },
-    { XML_NAMESPACE_SVG,    XML_R,              XML_TOK_ELLIPSESHAPE_R              },
-    XML_TOKEN_MAP_END
-};
-
-        mpEllipseShapeAttrTokenMap = new SvXMLTokenMap(aEllipseShapeAttrTokenMap);
-        }
-
-    return *mpEllipseShapeAttrTokenMap;
-}
-
-//////////////////////////////////////////////////////////////////////////////
-*/
 
 const SvXMLTokenMap& XMLShapeImportHelper::GetPolygonShapeAttrTokenMap()
 {
@@ -569,51 +467,7 @@ const SvXMLTokenMap& XMLShapeImportHelper::GetPathShapeAttrTokenMap()
 
     return *mpPathShapeAttrTokenMap;
 }
-/*
-//////////////////////////////////////////////////////////////////////////////
 
-
-const SvXMLTokenMap& XMLShapeImportHelper::GetTextBoxShapeAttrTokenMap()
-{
-    if(!mpTextBoxShapeAttrTokenMap)
-    {
-    static SvXMLTokenMapEntry aTextBoxShapeAttrTokenMap[] =
-{
-    { XML_NAMESPACE_SVG,    XML_X,                  XML_TOK_TEXTBOXSHAPE_X              },
-    { XML_NAMESPACE_SVG,    XML_Y,                  XML_TOK_TEXTBOXSHAPE_Y              },
-    { XML_NAMESPACE_SVG,    XML_WIDTH,              XML_TOK_TEXTBOXSHAPE_WIDTH          },
-    { XML_NAMESPACE_SVG,    XML_HEIGHT,             XML_TOK_TEXTBOXSHAPE_HEIGHT         },
-    XML_TOKEN_MAP_END
-};
-
-        mpTextBoxShapeAttrTokenMap = new SvXMLTokenMap(aTextBoxShapeAttrTokenMap);
-        }
-
-    return *mpTextBoxShapeAttrTokenMap;
-}
-
-//////////////////////////////////////////////////////////////////////////////
-
-
-const SvXMLTokenMap& XMLShapeImportHelper::GetControlShapeAttrTokenMap()
-{
-    if(!mpControlShapeAttrTokenMap)
-    {
-    static SvXMLTokenMapEntry aControlShapeAttrTokenMap[] =
-{
-    { XML_NAMESPACE_SVG,    XML_X,                  XML_TOK_CONTROLSHAPE_X              },
-    { XML_NAMESPACE_SVG,    XML_Y,                  XML_TOK_CONTROLSHAPE_Y              },
-    { XML_NAMESPACE_SVG,    XML_WIDTH,              XML_TOK_CONTROLSHAPE_WIDTH          },
-    { XML_NAMESPACE_SVG,    XML_HEIGHT,             XML_TOK_CONTROLSHAPE_HEIGHT         },
-    XML_TOKEN_MAP_END
-};
-
-        mpControlShapeAttrTokenMap = new SvXMLTokenMap(aControlShapeAttrTokenMap);
-        }
-
-    return *mpControlShapeAttrTokenMap;
-}
-*/
 //////////////////////////////////////////////////////////////////////////////
 
 
@@ -666,51 +520,7 @@ const SvXMLTokenMap& XMLShapeImportHelper::Get3DLightAttrTokenMap()
 }
 
 //////////////////////////////////////////////////////////////////////////////
-/*
 
-const SvXMLTokenMap& XMLShapeImportHelper::GetPageShapeAttrTokenMap()
-{
-    if(!mpPageShapeAttrTokenMap)
-    {
-    static SvXMLTokenMapEntry aPageShapeAttrTokenMap[] =
-{
-    { XML_NAMESPACE_SVG,    XML_X,                  XML_TOK_PAGESHAPE_X             },
-    { XML_NAMESPACE_SVG,    XML_Y,                  XML_TOK_PAGESHAPE_Y             },
-    { XML_NAMESPACE_SVG,    XML_WIDTH,              XML_TOK_PAGESHAPE_WIDTH         },
-    { XML_NAMESPACE_SVG,    XML_HEIGHT,             XML_TOK_PAGESHAPE_HEIGHT        },
-    XML_TOKEN_MAP_END
-};
-
-        mpPageShapeAttrTokenMap = new SvXMLTokenMap(aPageShapeAttrTokenMap);
-        }
-
-    return *mpPageShapeAttrTokenMap;
-}
-
-//////////////////////////////////////////////////////////////////////////////
-
-
-const SvXMLTokenMap& XMLShapeImportHelper::GetGraphicObjectShapeAttrTokenMap()
-{
-    if(!mpGraphicObjectShapeAttrTokenMap)
-    {
-    static SvXMLTokenMapEntry aGraphicObjectShapeAttrTokenMap[] =
-{
-    { XML_NAMESPACE_SVG,    XML_X,                  XML_TOK_GOSHAPE_X                   },
-    { XML_NAMESPACE_SVG,    XML_Y,                  XML_TOK_GOSHAPE_Y                   },
-    { XML_NAMESPACE_SVG,    XML_WIDTH,              XML_TOK_GOSHAPE_WIDTH               },
-    { XML_NAMESPACE_SVG,    XML_HEIGHT,             XML_TOK_GOSHAPE_HEIGHT              },
-    { XML_NAMESPACE_XLINK,  XML_HREF,               XML_TOK_GOSHAPE_URL                 },
-    XML_TOKEN_MAP_END
-};
-
-        mpGraphicObjectShapeAttrTokenMap = new SvXMLTokenMap(aGraphicObjectShapeAttrTokenMap);
-        }
-
-    return *mpGraphicObjectShapeAttrTokenMap;
-}
-*/
-//////////////////////////////////////////////////////////////////////////////
 
 SvXMLShapeContext* XMLShapeImportHelper::Create3DSceneChildContext(
     SvXMLImport& rImport,

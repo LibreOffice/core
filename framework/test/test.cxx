@@ -369,52 +369,7 @@ void TestApplication::impl_testFilterCache()
     }
     else
     {
-/*
-        // Step over all types and log his values.
-        // These simulate a XNameAccess!
-        const Sequence< OUString > seqAllTypeNames = aCache.getAllTypeNames();
-        sal_uInt32 nCount = seqAllTypeNames.getLength();
-        for( sal_uInt32 nPosition=0; nPosition<nCount; ++nPosition )
-        {
-            sBuffer.appendAscii( "--------------------------------------------------------------------------------\n" );
-            const TType* pType = aCache.getTypeByName( seqAllTypeNames[nPosition] );
-            if( pType == NULL )
-            {
-                sBuffer.appendAscii ( "Type ["                  );
-                sBuffer.append      ( (sal_Int32)nPosition      );
-                sBuffer.appendAscii ( "] \""                    );
-                sBuffer.append      ( seqAllTypeNames[nPosition]);
-                sBuffer.appendAscii ( "\" isn't valid!"         );
-            }
-            else
-            {
-                sBuffer.appendAscii ( "Type ["                      );
-                sBuffer.append      ( (sal_Int32)nPosition          );
-                sBuffer.appendAscii ( "] \""                        );
-                sBuffer.append      ( seqAllTypeNames[nPosition]    );
-                sBuffer.appendAscii ( "\"\n\t\tUIName\t=\t"         );
-                sBuffer.append      ( pType->sUIName                );
-                sBuffer.appendAscii ( "\n\t\tMediaType\t=\t"        );
-                sBuffer.append      ( pType->sMediaType             );
-                sBuffer.appendAscii ( "\n\t\tClipboardFormat\t=\t"  );
-                sBuffer.append      ( pType->sClipboardFormat       );
-                sBuffer.appendAscii ( "\n\t\tURLPattern\t=\t{"      );
-                for( TConstStringIterator aIterator=pType->lURLPattern.begin(); aIterator!=pType->lURLPattern.end(); ++aIterator )
-                {
-                    sBuffer.append      ( *aIterator    );
-                    sBuffer.appendAscii ( ";\n\t\t"     );
-                }
-                sBuffer.appendAscii( "}\nExtensions\t=\t" );
-                for( aIterator=pType->lExtensions.begin(); aIterator!=pType->lExtensions.end(); ++aIterator )
-                {
-                    sBuffer.append      ( *aIterator    );
-                    sBuffer.appendAscii ( ";\n\t\t"     );
-                }
-                sBuffer.appendAscii ( "}\nDocumentIconID\t=\t"          );
-                sBuffer.append      ( (sal_Int32)pType->nDocumentIconID );
-            }
-        }
-*/
+
         // searchFirstType( URL, MediaType, ClipboardFormat, startEntry )
         TCheckedTypeIterator aIterator;
         sBuffer.appendAscii( "search type for \"file://c|/temp/test.sdw\"; no media type; no clipboard format\n" );

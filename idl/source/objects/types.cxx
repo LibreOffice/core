@@ -241,99 +241,6 @@ ByteString SvMetaAttribute::GetMangleName( BOOL ) const
     return GetName();
 }
 
-/*************************************************************************
-|*    SvMetaAttribute::FillSbxObject()
-|*
-|*    Beschreibung
-*************************************************************************/
-/*
-void SvMetaAttribute::FillSbxObject( SbxInfo * pInfo, USHORT nSbxFlags )
-{
-    SvMetaType * pType = GetType();
-    DBG_ASSERT( pType, "no type for attribute" );
-    if( !nSbxFlags )
-    { // Flags koennen vom Aufrufer ueberschrieben werden
-        if( pType->GetOut() )
-        {
-            nSbxFlags |= SBX_WRITE;
-            if( pType->GetIn() )
-                nSbxFlags |= SBX_READ;
-        }
-        else
-            nSbxFlags |= SBX_READ;
-    }
-    SvMetaType * pBaseType = pType->GetBaseType();
-    DBG_ASSERT( pBaseType, "no base type for attribute" );
-    if( pBaseType->GetType() == TYPE_STRUCT )
-    {
-        const SvMetaAttributeMemberList & rList = pBaseType->GetAttrList();
-        ULONG nCount = rList.Count();
-        for( ULONG i = 0; i < nCount; i++ )
-            rList.GetObject( i )->FillSbxObject( pInfo, nSbxFlags );
-    }
-    else
-        //MI: pInfo->AddParam( GetName(), pBaseType->GetSbxDataType(), nSbxFlags );
-        pInfo->AddParam( GetName(), SbxVARIANT, nSbxFlags );
-}
-*/
-
-/*************************************************************************
-|*    SvMetaAttribute::FillSbxObject()
-|*
-|*    Beschreibung
-*************************************************************************/
-/*
-void SvMetaAttribute::FillSbxObject( SvIdlDataBase & rBase,
-                                    SbxObject * pObj, BOOL bVariable )
-{
-    // keine Attribut fuer Automation
-    if( !GetAutomation() || !GetExport() )
-        return;
-
-    if( bVariable && IsVariable() )
-    {
-        SvMetaType * pType = GetType();
-        DBG_ASSERT( pType, "no type for attribute" );
-        SvMetaType * pBaseType = pType->GetBaseType();
-        DBG_ASSERT( pBaseType, "no base type for attribute" );
-
-        if( pBaseType->GetType() == TYPE_STRUCT )
-        {
-            SvNumberIdentifier aSlotId = rBase.aStructSlotId;
-            if ( GetSlotId().Len() )
-                rBase.aStructSlotId = GetSlotId();
-            const SvMetaAttributeMemberList & rList = pBaseType->GetAttrList();
-            ULONG nCount = rList.Count();
-            for( ULONG i = 0; i < nCount; i++ )
-                rList.GetObject( i )->FillSbxObject( rBase, pObj, bVariable );
-            rBase.aStructSlotId = aSlotId;
-        }
-        else
-        {
-            SbxPropertyRef xProp = new SbxProperty( GetName(), SbxVARIANT );
-                                        //MI: pBaseType->GetSbxDataType() );
-            if ( GetReadonly() || IsMethod() )
-                xProp->ResetFlag( SBX_WRITE );
-            xProp->SetUserData( MakeSlotValue( rBase, TRUE ) );
-            pType->FillSbxObject( xProp, bVariable );
-
-            pObj->Insert( &xProp );
-        }
-    }
-    else if( !bVariable && IsMethod() )
-    {
-        SvMetaType * pType = GetType();
-        SvMetaType * pRetBaseType = GetType()->GetReturnType()->GetBaseType();
-        SbxMethodRef xMeth = new SbxMethod( GetName(),
-                            pRetBaseType->GetSbxDataType() );
-        xMeth->ResetFlag( SBX_WRITE );
-        xMeth->SetUserData( MakeSlotValue( rBase, FALSE ) );
-        pType->FillSbxObject( xMeth, bVariable );
-
-        pObj->Insert( &xMeth );
-    }
-}
-*/
 #ifdef IDL_COMPILER
 /*************************************************************************
 |*    SvMetaAttribute::Test()
@@ -350,14 +257,6 @@ BOOL SvMetaAttribute::Test( SvIdlDataBase & rBase,
         rBase.WriteError( rInStm );
         bOk = FALSE;
     }
-    /*
-    if( !GetType()->IsItem() && GetSlotId().IsSet() )
-    {
-        rBase.SetError( "slot without item declared", rInStm.GetToken() );
-        rBase.WriteError( rInStm );
-        bOk = FALSE;
-    }
-    */
     return bOk;
 }
 
@@ -569,14 +468,6 @@ void SvMetaAttribute::WriteParam( SvIdlDataBase & rBase,
             }
         }
     }
-/*
-    else if( nT == WRITE_C_HEADER || nT == WRITE_C_SOURCE )
-    {
-        pBaseType->WriteTypePrefix( rBase, rOutStm, nTab, nT );
-        rOutStm << ' ';
-        rOutStm << GetName().GetBuffer();
-    }
-*/
 }
 
 /*************************************************************************
@@ -661,10 +552,6 @@ void SvMetaAttribute::WriteCSource( SvIdlDataBase & rBase, SvStream & rOutStm,
     // Methoden/Funktions-Body ausgeben
     rOutStm << '{' << endl;
     WriteTab( rOutStm, 1 );
-//  rOutStm << "if( SvIPCIsConnected() )" << endl;
-//  WriteTab( rOutStm, 1 );
-//  rOutStm << '{' << endl;
-//  WriteTab( rOutStm, 2 );
 
     if( !bVoid )
     {
@@ -723,13 +610,6 @@ void SvMetaAttribute::WriteCSource( SvIdlDataBase & rBase, SvStream & rOutStm,
     }
 
     rOutStm << " );" << endl;
-//  WriteTab( rOutStm, 1 );
-//  rOutStm << '}' << endl;
-//  if( !bVoid )
-//  {
-//      WriteTab( rOutStm, 1 );
-//      rOutStm << "return 0;" << endl;
-//  }
     rOutStm << '}' << endl;
 }
 
@@ -862,9 +742,6 @@ void SvMetaAttribute::Write( SvIdlDataBase & rBase, SvStream & rOutStm,
                     // Zuweisung
                     WriteTab( rOutStm, nTab );
                     rOutStm << "void ";
-//                  rOutStm << "SYSCALL ";
-//                  if ( rBase.GetActModulePrefix().Len() )
-//                      rOutStm << rBase.GetActModulePrefix().GetBuffer();
                     rOutStm << rBase.aIFaceName.GetBuffer()
                             << "Set" << name.GetBuffer() << "( " << C_PREF
                             << "Object h" << rBase.aIFaceName.GetBuffer() << ", " << endl;
@@ -881,9 +758,6 @@ void SvMetaAttribute::Write( SvIdlDataBase & rBase, SvStream & rOutStm,
                 WriteTab( rOutStm, nTab );
                 pBaseType->WriteTypePrefix( rBase, rOutStm, nTab, nT );
                 rOutStm << ' ';
-//              rOutStm << "SYSCALL ";
-//              if ( rBase.GetActModulePrefix().Len() )
-//                  rOutStm << rBase.GetActModulePrefix().GetBuffer();
                 rOutStm << rBase.aIFaceName.GetBuffer()
                         << "Get" << name.GetBuffer() << "( " << C_PREF
                         << "Object h" << rBase.aIFaceName.GetBuffer() << " )";
@@ -1223,14 +1097,6 @@ ByteString SvMetaType::GetBasicPostfix() const
     ByteString aRet;
 
     // MBN und Co wollen immer "As xxx"
-/*
-    if( aBasicPostfix.IsSet() || !GetRef() )
-        aRet = aBasicPostfix;
-    else
-        aRet = ((SvMetaType*)GetRef())->GetBasicPostfix();
-
-    if ( !aRet.Len() && GetBasicName().Len() )
-*/
     {
 
         aRet = " As ";
@@ -1401,34 +1267,6 @@ BOOL SvMetaType::SetName( const ByteString & rName, SvIdlDataBase * pBase )
     return SvMetaReference::SetName( rName, pBase );
 }
 
-/*************************************************************************
-|*    SvMetaType::FillSbxObject()
-|*
-|*    Beschreibung
-*************************************************************************/
-/*
-void SvMetaType::FillSbxObject( SbxVariable * pObj, BOOL bVariable )
-{
-    if( PTR_CAST( SbxMethod, pObj ) )
-    {
-        if( GetType() == TYPE_METHOD )
-        {
-            ULONG nCount = GetAttrCount();
-            if( nCount )
-            {
-                SbxInfoRef xInfo = pObj->GetInfo();
-                if( !xInfo.Is() )
-                {
-                    xInfo = new SbxInfo();
-                    pObj->SetInfo( xInfo );
-                }
-                for( ULONG n = nCount; n > 0; n-- )
-                    pAttrList->GetObject( n -1 )->FillSbxObject( xInfo );
-            }
-        }
-    }
-}
-*/
 #ifdef IDL_COMPILER
 /*************************************************************************
 |*    SvMetaType::GetString()
@@ -1690,27 +1528,7 @@ BOOL SvMetaType::ReadNamesSvIdl( SvIdlDataBase & rBase,
                                      SvTokenStream & rInStm )
 {
     BOOL bOk = ReadNameSvIdl( rBase, rInStm );
-/*
-    if( bOk )
-    {
-        UINT32 nTokPos = rInStm.Tell();
-        SvToken * pTok = rInStm.GetToken_Next();
 
-        if( pTok->IsIdentifier() )
-        {
-            aSbxName = pTok->GetString();
-
-            nTokPos = rInStm.Tell();
-            pTok = rInStm.GetToken_Next();
-            if( pTok->IsIdentifier() )
-            {
-                aItemName = pTok->GetString();
-                nTokPos = rInStm.Tell();
-            }
-        }
-        rInStm.Seek( nTokPos );
-    }
-*/
     return bOk;
 }
 
@@ -2443,27 +2261,6 @@ void SvMetaTypeEnum::Save( SvPersistStream & rStm )
     if( nMask & 0x01 ) rStm << aEnumValueList;
     if( nMask & 0x02 ) rStm.WriteByteString( aPrefix );
 }
-
-/*************************************************************************
-|*
-|*    SvMetaTypeEnum::GetMaxValue()
-|*
-|*    Beschreibung
-|*
-*************************************************************************/
-/*
-USHORT SvMetaTypeEnum::GetMaxValue() const
-{
-    USHORT nMax = 0;
-    for( ULONG n = 0; n < aEnumValueList.Count(); n++ )
-    {
-        SvMetaEnumValue * pObj = aEnumValueList.GetObject( n );
-        if( nMax < pObj->GetValue() )
-            nMax = pObj->GetValue();
-    }
-    return nMax;
-}
-*/
 
 #ifdef IDL_COMPILER
 /*************************************************************************
