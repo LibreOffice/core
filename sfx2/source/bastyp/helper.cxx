@@ -335,10 +335,10 @@ uno::Sequence < OUString > SfxContentHelper::GetFolderContents( const String& rF
 
     if ( pFiles )
     {
-        ULONG nCount = pFiles->Count();
+        sal_uIntPtr nCount = pFiles->Count();
         uno::Sequence < OUString > aRet( nCount );
         OUString* pRet = aRet.getArray();
-        for ( ULONG i = 0; i < nCount; ++i )
+        for ( sal_uIntPtr i = 0; i < nCount; ++i )
         {
             OUString* pFile = pFiles->GetObject(i);
             pRet[i] = *( pFile );
@@ -418,7 +418,7 @@ uno::Sequence < OUString > SfxContentHelper::GetFolderContentProperties( const S
             pProperties = new StringList_Impl;
             uno::Reference< sdbc::XRow > xRow( xResultSet, uno::UNO_QUERY );
             uno::Reference< ucb::XContentAccess > xContentAccess( xResultSet, uno::UNO_QUERY );
-            ULONG nFolderPos = LIST_APPEND;
+            sal_uIntPtr nFolderPos = LIST_APPEND;
 
             try
             {
@@ -442,7 +442,7 @@ uno::Sequence < OUString > SfxContentHelper::GetFolderContentProperties( const S
                     aRow += '\t';
                     aRow += bFolder ? '1' : '0';
                     OUString* pRow = new OUString( aRow );
-                    ULONG nPos = LIST_APPEND;
+                    sal_uIntPtr nPos = LIST_APPEND;
                     if ( bFolder )
                     {
                         if ( LIST_APPEND == nFolderPos )
@@ -471,10 +471,10 @@ uno::Sequence < OUString > SfxContentHelper::GetFolderContentProperties( const S
 
     if ( pProperties )
     {
-        ULONG nCount = pProperties->Count();
+        sal_uIntPtr nCount = pProperties->Count();
         uno::Sequence < OUString > aRet( nCount );
         OUString* pRet = aRet.getArray();
-        for ( ULONG i = 0; i < nCount; ++i )
+        for ( sal_uIntPtr i = 0; i < nCount; ++i )
         {
             OUString* pProperty = pProperties->GetObject(i);
             pRet[i] = *( pProperty );
@@ -564,10 +564,10 @@ uno::Sequence < OUString > SfxContentHelper::GetResultSet( const String& rURL )
 
     if ( pList )
     {
-        ULONG nCount = pList->Count();
+        sal_uIntPtr nCount = pList->Count();
         uno::Sequence < OUString > aRet( nCount );
         OUString* pRet = aRet.getArray();
-        for ( ULONG i = 0; i < nCount; ++i )
+        for ( sal_uIntPtr i = 0; i < nCount; ++i )
         {
             OUString* pEntry = pList->GetObject(i);
             pRet[i] = *( pEntry );
@@ -647,10 +647,10 @@ uno::Sequence< OUString > SfxContentHelper::GetHelpTreeViewContents( const Strin
 
     if ( pProperties )
     {
-        ULONG nCount = pProperties->Count();
+        sal_uIntPtr nCount = pProperties->Count();
         uno::Sequence < OUString > aRet( nCount );
         OUString* pRet = aRet.getArray();
-        for ( ULONG i = 0; i < nCount; ++i )
+        for ( sal_uIntPtr i = 0; i < nCount; ++i )
         {
             OUString* pProperty = pProperties->GetObject(i);
             pRet[i] = *( pProperty );
@@ -801,9 +801,9 @@ ErrCode SfxContentHelper::QueryDiskSpace( const String& rPath, sal_Int64& rFreeB
 
 // -----------------------------------------------------------------------
 
-ULONG SfxContentHelper::GetSize( const String& rContent )
+sal_uIntPtr SfxContentHelper::GetSize( const String& rContent )
 {
-    ULONG nSize = 0;
+    sal_uIntPtr nSize = 0;
     sal_Int64 nTemp = 0;
     INetURLObject aObj( rContent );
     DBG_ASSERT( aObj.GetProtocol() != INET_PROT_NOT_VALID, "Invalid URL!" );
@@ -820,7 +820,7 @@ ULONG SfxContentHelper::GetSize( const String& rContent )
     {
         DBG_ERRORFILE( "Any other exception" );
     }
-    nSize = (UINT32)nTemp;
+    nSize = (sal_uInt32)nTemp;
     return nSize;
 }
 

@@ -252,13 +252,13 @@ namespace
 }
 
 // --------------------------------------------------------------------------------------------------------------------
-sal_Bool SfxFrameLoader_Impl::impl_createNewDocWithSlotParam( const USHORT _nSlotID, const Reference< XFrame >& i_rxFrame,
+sal_Bool SfxFrameLoader_Impl::impl_createNewDocWithSlotParam( const sal_uInt16 _nSlotID, const Reference< XFrame >& i_rxFrame,
                                                               const bool i_bHidden )
 {
     SfxRequest aRequest( _nSlotID, SFX_CALLMODE_SYNCHRON, SFX_APP()->GetPool() );
     aRequest.AppendItem( SfxUnoFrameItem( SID_FILLFRAME, i_rxFrame ) );
     if ( i_bHidden )
-        aRequest.AppendItem( SfxBoolItem( SID_HIDDEN, TRUE ) );
+        aRequest.AppendItem( SfxBoolItem( SID_HIDDEN, sal_True ) );
     return lcl_getDispatchResult( SFX_APP()->ExecuteSlot( aRequest ) );
 }
 
@@ -277,8 +277,8 @@ void SfxFrameLoader_Impl::impl_lockHiddenDocument( SfxObjectShell& i_rDocument, 
     // To prevent it from being closed when the loader returns, increase its OwnerLock
     // (the OwnerLock is normally increased by every frame in which the document is displayed, and by this loader)
     i_rDocument.RestoreNoDelete();
-    i_rDocument.OwnerLock( TRUE );
-    i_rDocument.Get_Impl()->bHiddenLockedByAPI = TRUE;
+    i_rDocument.OwnerLock( sal_True );
+    i_rDocument.Get_Impl()->bHiddenLockedByAPI = sal_True;
 }
 
 // --------------------------------------------------------------------------------------------------------------------
@@ -333,7 +333,7 @@ void SfxFrameLoader_Impl::impl_determineFilter( ::comphelper::NamedValueCollecti
 // --------------------------------------------------------------------------------------------------------------------
 SfxObjectShellLock SfxFrameLoader_Impl::impl_findObjectShell( const Reference< XModel2 >& i_rxDocument ) const
 {
-    for ( SfxObjectShell* pDoc = SfxObjectShell::GetFirst( NULL, FALSE ); pDoc; pDoc = SfxObjectShell::GetNext( *pDoc, NULL, FALSE ) )
+    for ( SfxObjectShell* pDoc = SfxObjectShell::GetFirst( NULL, sal_False ); pDoc; pDoc = SfxObjectShell::GetNext( *pDoc, NULL, sal_False ) )
     {
         if ( i_rxDocument == pDoc->GetModel() )
         {
@@ -391,7 +391,7 @@ bool SfxFrameLoader_Impl::impl_determineTemplateDocument( ::comphelper::NamedVal
 }
 
 // --------------------------------------------------------------------------------------------------------------------
-USHORT SfxFrameLoader_Impl::impl_findSlotParam( const ::rtl::OUString& i_rFactoryURL ) const
+sal_uInt16 SfxFrameLoader_Impl::impl_findSlotParam( const ::rtl::OUString& i_rFactoryURL ) const
 {
     ::rtl::OUString sSlotParam;
     const sal_Int32 nParamPos = i_rFactoryURL.indexOf( '?' );
@@ -404,7 +404,7 @@ USHORT SfxFrameLoader_Impl::impl_findSlotParam( const ::rtl::OUString& i_rFactor
     }
 
     if ( sSlotParam.getLength() )
-        return USHORT( sSlotParam.toInt32() );
+        return sal_uInt16( sSlotParam.toInt32() );
 
     return 0;
 }
@@ -571,7 +571,7 @@ sal_Bool SAL_CALL SfxFrameLoader_Impl::load( const Sequence< PropertyValue >& rA
     {
         const ::rtl::OUString sFactory = sURL.copy( sizeof( "private:factory/" ) -1 );
         // special handling for some weird factory URLs a la private:factory/swriter?slot=21053
-        const USHORT nSlotParam = impl_findSlotParam( sFactory );
+        const sal_uInt16 nSlotParam = impl_findSlotParam( sFactory );
         if ( nSlotParam != 0 )
         {
             return impl_createNewDocWithSlotParam( nSlotParam, _rTargetFrame, aDescriptor.getOrDefault( "Hidden", false ) );

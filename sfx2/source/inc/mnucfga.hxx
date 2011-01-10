@@ -38,7 +38,7 @@ class SfxMenuCfgItemArr;
 
 struct SfxMenuCfgItem
 {
-    USHORT             nId;        // id of the binding or 0 if none
+    sal_uInt16             nId;        // id of the binding or 0 if none
     String             aTitle;     // title of the item
     String             aHelpText;  // Hilfetext
     String              aCommand;

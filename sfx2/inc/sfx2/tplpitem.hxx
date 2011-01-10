@@ -39,18 +39,18 @@ class SFX2_DLLPUBLIC SfxTemplateItem: public SfxFlagItem
 public:
     TYPEINFO();
     SfxTemplateItem();
-    SfxTemplateItem( USHORT nWhich,
+    SfxTemplateItem( sal_uInt16 nWhich,
                      const String &rStyle,
-                     USHORT nMask = 0xffff );
+                     sal_uInt16 nMask = 0xffff );
     SfxTemplateItem( const SfxTemplateItem& );
 
     const String&           GetStyleName() const { return aStyle; }
 
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
     virtual int             operator==( const SfxPoolItem& ) const;
-    virtual BYTE            GetFlagCount() const;
-    virtual sal_Bool        QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
-    virtual sal_Bool        PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
+    virtual sal_uInt8           GetFlagCount() const;
+    virtual sal_Bool        QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
+    virtual sal_Bool        PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
 };
 
 #endif

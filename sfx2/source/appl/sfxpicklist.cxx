@@ -100,7 +100,7 @@ osl::Mutex* SfxPickList::GetOrCreateMutex()
     return pMutex;
 }
 
-void SfxPickList::CreatePicklistMenuTitle( Menu* pMenu, USHORT nItemId, const String& aURLString, sal_uInt32 nNo )
+void SfxPickList::CreatePicklistMenuTitle( Menu* pMenu, sal_uInt16 nItemId, const String& aURLString, sal_uInt32 nNo )
 {
     String aPickEntry;
 
@@ -292,8 +292,8 @@ void SfxPickList::CreateMenuEntries( Menu* pMenu )
     {
         PickListEntry* pEntry = GetPickListEntry( i );
 
-        pMenu->InsertItem( (USHORT)(START_ITEMID_PICKLIST + i), aEmptyString );
-        CreatePicklistMenuTitle( pMenu, (USHORT)(START_ITEMID_PICKLIST + i), pEntry->aName, i );
+        pMenu->InsertItem( (sal_uInt16)(START_ITEMID_PICKLIST + i), aEmptyString );
+        CreatePicklistMenuTitle( pMenu, (sal_uInt16)(START_ITEMID_PICKLIST + i), pEntry->aName, i );
     }
 
     bPickListMenuInitializing = sal_False;
@@ -314,7 +314,7 @@ void SfxPickList::ExecuteEntry( sal_uInt32 nIndex )
         String aFilter( pPick->aFilter );
         aGuard.clear();
 
-        USHORT nPos=aFilter.Search('|');
+        sal_uInt16 nPos=aFilter.Search('|');
         if( nPos != STRING_NOTFOUND )
         {
             String aOptions(aFilter.Copy( nPos ).GetBuffer()+1);
@@ -328,7 +328,7 @@ void SfxPickList::ExecuteEntry( sal_uInt32 nIndex )
     }
 }
 
-void SfxPickList::ExecuteMenuEntry( USHORT nId )
+void SfxPickList::ExecuteMenuEntry( sal_uInt16 nId )
 {
     ExecuteEntry( (sal_uInt32)( nId - START_ITEMID_PICKLIST ) );
 }
@@ -446,7 +446,7 @@ void SfxPickList::Notify( SfxBroadcaster&, const SfxHint& rHint )
                     return;
 
                 // ignore hidden documents
-                if ( !SfxViewFrame::GetFirst( pDocSh, TRUE ) )
+                if ( !SfxViewFrame::GetFirst( pDocSh, sal_True ) )
                     return;
 
                 ::rtl::OUString  aTitle = pDocSh->GetTitle(SFX_TITLE_PICKLIST);
