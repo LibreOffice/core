@@ -94,6 +94,8 @@ service UnoControlGridModel
 
         <p>The column model is in the ownership of the grid model: When you set a new column model, or dispose
         the grid model, then the (old) column model is disposed, too.</p>
+
+        <p>The default for this property is an empty instance of the <type>DefaultGridColumnModel</type>.</p>
     */
     [property] XGridColumnModel ColumnModel;
 
@@ -104,6 +106,8 @@ service UnoControlGridModel
 
         <p>The data model is in the ownership of the grid model: When you set a new data model, or dispose
         the grid model, then the (old) data model is disposed, too.</p>
+
+        <p>The default for this property is an empty instance of the <type>DefaultGridDataModel</type>.</p>
     */
     [property] XGridDataModel GridDataModel;
 

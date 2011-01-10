@@ -35,12 +35,9 @@ module com {  module sun {  module star {  module awt {  module grid {
 
 //=============================================================================
 
-/** An event used by a <type>XGridDataModel</type> to notify changes in the data
-    model to the <type>XGridControl</type>.
-    You usually need to fill this event only if you implement the <type>XGridDataModel</type>
-    yourself.
+/** used to notify changes in the data represented by an <type>XMutableGridDataModel</type>.
 
-    @see XGridDataModel
+    @see XMutableGridDataModel
     @see XGridControl
     @see XGridDataListener
 
@@ -48,27 +45,21 @@ module com {  module sun {  module star {  module awt {  module grid {
  */
 struct GridDataEvent: com::sun::star::lang::EventObject
 {
-    //-------------------------------------------------------------------------
+    /** denotes the columns affected by the data change
 
-    /** Contains the name of the attribute whose value changed. **/
-    string AttributeName;
+        <p>The array contains the indexes of the affected columns, in ascending order.</p>
 
-    /** Contains the old value **/
-    any OldValue;
+        <p>If this sequence is empty, the callee should all assume all columns to be affected.</p>
+    */
+    sequence< long >    Columns;
 
-    /** Contains the new value **/
-    any NewValue;
+    /** denotes the rows affected by the data change
 
-    /** Contains the index of the changed row**/
-    long RowIndex;
+        <p>The array contains the indexes of the affected rows, in ascending order.</p>
 
-    /** Contains the header name of the changed row**/
-    string HeaderName;
-
-    /** Contains the changed row**/
-    sequence<any> RowData;
-
-
+        <p>If this sequence is empty, the callee should all assume all rows to be affected.</p>
+    */
+    sequence< long >    Rows;
 };
 
 //=============================================================================

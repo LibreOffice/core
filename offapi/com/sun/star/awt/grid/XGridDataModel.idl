@@ -80,65 +80,8 @@ interface XGridDataModel
             if the given index does not denote a valid row.
     */
     string
-        getRowTitle( [in] long Row )
+        getRowTitle( [in] long RowIndex )
         raises ( ::com::sun::star::lang::IndexOutOfBoundsException );
-
-    /** Adds a row to the model.
-
-        @param headername
-                specifies the name of the row.
-        @param data
-                the content of the row.
-    */
-    void addRow( [in] string headername, [in] sequence< any > data );
-
-    /** Removes a row from the model.
-
-        @param index
-                the index of the row that should be removed.
-    */
-    void removeRow( [in] long index);
-
-    /** Removes all rows from the model.
-    */
-    void removeAll();
-
-    /**Updates the content of a given cell.
-        @param row
-            the row index
-        @param column
-            the column index
-        @param value
-            the new value of the cell.
-    */
-    void updateCell([in] long row, [in] long column, [in] any value );
-
-    /**Updates the content of a given row.
-        @param row
-            the row index
-        @param columns
-            column indexes of the cells, which should be updated
-        @param value
-            the new values of the cells.
-    */
-    void updateRow([in] long row, [in] sequence< long > columns, [in] sequence< any > values);
-
-    //-------------------------------------------------------------------------
-
-    /** Adds a listener for the <type>GridDataEvent</type> posted after the grid changes.
-        @param Listener
-            the listener to add.
-    */
-    [oneway] void addGridDataListener( [in] XGridDataListener  listener);
-
-    //-------------------------------------------------------------------------
-
-    /** Removes a listener previously added with <method>addGridDataListener()</method>.
-        @param Listener
-            the listener to remove.
-    */
-    [oneway] void removeGridDataListener( [in] XGridDataListener listener);
-
 };
 
 //=============================================================================

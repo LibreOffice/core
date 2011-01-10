@@ -51,6 +51,7 @@ IDLFILES=\
     XGridCellRenderer.idl\
     DefaultGridDataModel.idl\
     XGridDataModel.idl\
+    XMutableGridDataModel.idl\
     XGridColumnModel.idl\
     XGridControl.idl\
     UnoControlGrid.idl\
