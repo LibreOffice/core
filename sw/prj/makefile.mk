@@ -24,44 +24,17 @@
 # for a copy of the LGPLv3 License.
 #
 #*************************************************************************
-PRJ=..$/..
 
-PRJNAME=sw
-TARGET=test-bigptrarray
+PRJ=..
+TARGET=prj
 
-ENABLE_EXCEPTIONS=TRUE
+.INCLUDE : settings.mk
 
-# --- Settings -----------------------------------------------------
-
-.INCLUDE :  settings.mk
-
-CFLAGSCXX += $(CPPUNIT_CFLAGS)
-
-# BEGIN ----------------------------------------------------------------
-# auto generated Target:testjob by codegen.pl
-
-.IF "$(GUI)" == "WNT"
-    CFLAGS+=/Ob1
+.IF "$(VERBOSE)"!=""
+VERBOSEFLAG :=
+.ELSE
+VERBOSEFLAG := -s
 .ENDIF
 
-SHL1OBJS=$(SLO)$/Test-BigPtrArray.obj \
-    $(SLO)$/bparr.obj
-
-SHL1TARGET=$(TARGET)
-SHL1STDLIBS=$(SALLIB) $(TOOLSLIB) $(CPPUNITLIB) $(TESTSHL2LIB)
-
-SHL1IMPLIB= i$(SHL1TARGET)
-
-# SHL1DEF=    $(MISC)$/$(SHL1TARGET).def
-
-DEF1NAME    =$(SHL1TARGET)
-
-# DEF1EXPORTFILE= export.exp
-SHL1VERSIONMAP = export.map
-
-# END ------------------------------------------------------------------
-
-# --- Targets ------------------------------------------------------
-
-.INCLUDE :  target.mk
-.INCLUDE : _cppunit.mk
+all:
+    cd $(PRJ) && $(GNUMAKE) $(VERBOSEFLAG) -r -j$(MAXPROCESS) $(gb_MAKETARGET)

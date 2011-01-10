@@ -3113,7 +3113,7 @@ void lcl_ChgBoxSize( SwTableBox& rBox, CR_SetBoxWidth& rParam,
                     const SwFmtFrmSize& rOldSz,
                     USHORT& rDelWidth, SwTwips nDist )
 {
-    long nDiff;
+    long nDiff = 0;
     BOOL bSetSize = FALSE;
 
     switch( rParam.nMode )
