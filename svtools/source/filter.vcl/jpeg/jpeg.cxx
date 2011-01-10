@@ -32,12 +32,10 @@
 
 extern "C"
 {
-    #define INT32 JPEG_INT32
     #include "stdio.h"
     #include "jpeg.h"
     #include "jpeglib.h"
     #include "jerror.h"
-    #undef INT32
 }
 
 #define _JPEGPRIVATE
