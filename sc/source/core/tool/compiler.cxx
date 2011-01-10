@@ -2496,6 +2496,7 @@ Label_MaskStateMachine:
             nLen = MAXSTRLEN-1;
         }
         lcl_UnicodeStrNCpy( cSymbol, aSymbol.GetBuffer(), nLen );
+        pSym = &cSymbol[nLen];
     }
     else
     {
