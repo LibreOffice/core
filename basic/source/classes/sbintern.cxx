@@ -61,13 +61,13 @@ SbiGlobals::SbiGlobals()
     nCode = 0;
     nLine = 0;
     nCol1 = nCol2 = 0;
-    bCompiler = FALSE;
-    bGlobalInitErr = FALSE;
-    bRunInit = FALSE;
+    bCompiler = sal_False;
+    bGlobalInitErr = sal_False;
+    bRunInit = sal_False;
     eLanguageMode = SB_LANG_BASIC;
     pErrStack = NULL;
     pTransliterationWrapper = NULL;
-    bBlockCompilerError = FALSE;
+    bBlockCompilerError = sal_False;
     pAppBasMgr = NULL;
     pMSOMacroRuntimLib = NULL;
 }

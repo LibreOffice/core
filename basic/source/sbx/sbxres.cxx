@@ -80,12 +80,12 @@ static const char* pSbxRes[] = {
     "True"
 };
 
-const char* GetSbxRes( USHORT nId )
+const char* GetSbxRes( sal_uInt16 nId )
 {
     return ( ( nId > SBXRES_MAX ) ? "???" : pSbxRes[ nId ] );
 }
 
-SbxRes::SbxRes( USHORT nId )
+SbxRes::SbxRes( sal_uInt16 nId )
     : ::rtl::OUString( ::rtl::OUString::createFromAscii( GetSbxRes( nId ) ) )
 {}
 

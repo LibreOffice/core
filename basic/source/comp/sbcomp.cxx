@@ -271,7 +271,7 @@ String lcl_dumpMethodParameters( SbMethod* pMethod )
     {
         aStr += '(';
         // 0 is sub itself
-        for ( USHORT nParam = 1; nParam < pParams->Count(); nParam++ )
+        for ( sal_uInt16 nParam = 1; nParam < pParams->Count(); nParam++ )
         {
             SbxVariable* pVar = pParams->Get( nParam );
             DBG_ASSERT( pVar, "Parameter?!" );
@@ -324,9 +324,9 @@ void dbg_DeInitTrace( void )
     GbTraceOn = GbSavTraceOn;
 }
 
-static INT32 GnLastCallLvl = 0;
+static sal_Int32 GnLastCallLvl = 0;
 
-void dbg_traceStep( SbModule* pModule, UINT32 nPC, INT32 nCallLvl )
+void dbg_traceStep( SbModule* pModule, sal_uInt32 nPC, sal_Int32 nCallLvl )
 {
     if( !GbTraceOn )
         return;
@@ -383,7 +383,7 @@ void dbg_traceStep( SbModule* pModule, UINT32 nPC, INT32 nCallLvl )
         lcl_lineOut( GpTraceFileName, rStr_PCode.getStr(), lcl_getSpaces( nIndent ) );
 }
 
-void dbg_traceNotifyCall( SbModule* pModule, SbMethod* pMethod, INT32 nCallLvl, bool bLeave )
+void dbg_traceNotifyCall( SbModule* pModule, SbMethod* pMethod, sal_Int32 nCallLvl, bool bLeave )
 {
     static const char* pSeparator = "' ================================================================================";
 
@@ -448,7 +448,7 @@ void dbg_traceNotifyCall( SbModule* pModule, SbMethod* pMethod, INT32 nCallLvl, 
         lcl_lineOut( GpTraceFileName, "" );
 }
 
-void dbg_traceNotifyError( SbError nTraceErr, const String& aTraceErrMsg, bool bTraceErrHandled, INT32 nCallLvl )
+void dbg_traceNotifyError( SbError nTraceErr, const String& aTraceErrMsg, bool bTraceErrHandled, sal_Int32 nCallLvl )
 {
     if( !GbTraceOn )
         return;
@@ -463,7 +463,7 @@ void dbg_traceNotifyError( SbError nTraceErr, const String& aTraceErrMsg, bool b
     lcl_lineOut( GpTraceFileName, Buffer, lcl_getSpaces( nIndent ) );
 }
 
-void dbg_RegisterTraceTextForPC( SbModule* pModule, UINT32 nPC,
+void dbg_RegisterTraceTextForPC( SbModule* pModule, sal_uInt32 nPC,
     const String& aTraceStr_STMNT, const String& aTraceStr_PCode )
 {
     String aModuleName = pModule->GetName();
@@ -490,7 +490,7 @@ void dbg_RegisterTraceTextForPC( SbModule* pModule, UINT32 nPC,
     (*pInnerMap)[nPC] = aData;
 }
 
-void RTL_Impl_TraceCommand( StarBASIC* pBasic, SbxArray& rPar, BOOL bWrite )
+void RTL_Impl_TraceCommand( StarBASIC* pBasic, SbxArray& rPar, sal_Bool bWrite )
 {
     (void)pBasic;
     (void)bWrite;
@@ -621,13 +621,13 @@ void dbg_SaveDisassembly( SbModule* pModule )
 // Diese Routine ist hier definiert, damit der Compiler als eigenes Segment
 // geladen werden kann.
 
-BOOL SbModule::Compile()
+sal_Bool SbModule::Compile()
 {
     if( pImage )
-        return TRUE;
+        return sal_True;
     StarBASIC* pBasic = PTR_CAST(StarBASIC,GetParent());
     if( !pBasic )
-        return FALSE;
+        return sal_False;
     SbxBase::ResetError();
     // Aktuelles Modul!
     SbModule* pOld = pCMOD;
@@ -646,14 +646,14 @@ BOOL SbModule::Compile()
 
     // Beim Compilieren eines Moduls werden die Modul-globalen
     // Variablen aller Module ungueltig
-    BOOL bRet = IsCompiled();
+    sal_Bool bRet = IsCompiled();
     if( bRet )
     {
         if( !this->ISA(SbObjModule) )
             pBasic->ClearAllModuleVars();
         RemoveVars(); // remove 'this' Modules variables
         // clear all method statics
-        for( USHORT i = 0; i < pMethods->Count(); i++ )
+        for( sal_uInt16 i = 0; i < pMethods->Count(); i++ )
         {
             SbMethod* p = PTR_CAST(SbMethod,pMethods->Get( i ) );
             if( p )

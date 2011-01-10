@@ -47,15 +47,15 @@ class SbMethod : public SbxMethod
 
     SbMethodImpl* mpSbMethodImpl;           // Impl data
     SbModule* pMod;
-    USHORT    nDebugFlags;
-    USHORT    nLine1, nLine2;
-    UINT32    nStart;
-    BOOL      bInvalid;
+    sal_uInt16    nDebugFlags;
+    sal_uInt16    nLine1, nLine2;
+    sal_uInt32    nStart;
+    sal_Bool      bInvalid;
     SbxArrayRef refStatics;
     SbMethod( const String&, SbxDataType, SbModule* );
     SbMethod( const SbMethod& );
-    virtual BOOL LoadData( SvStream&, USHORT );
-    virtual BOOL StoreData( SvStream& ) const;
+    virtual sal_Bool LoadData( SvStream&, sal_uInt16 );
+    virtual sal_Bool StoreData( SvStream& ) const;
     virtual ~SbMethod();
 
 public:
@@ -66,14 +66,14 @@ public:
     SbxArray* GetStatics();
     void      ClearStatics();
     SbModule* GetModule()                { return pMod;        }
-    UINT32    GetId() const              { return nStart;      }
-    USHORT    GetDebugFlags()            { return nDebugFlags; }
-    void      SetDebugFlags( USHORT n )  { nDebugFlags = n;    }
-    void      GetLineRange( USHORT&, USHORT& );
+    sal_uInt32    GetId() const              { return nStart;      }
+    sal_uInt16    GetDebugFlags()            { return nDebugFlags; }
+    void      SetDebugFlags( sal_uInt16 n )  { nDebugFlags = n;    }
+    void      GetLineRange( sal_uInt16&, sal_uInt16& );
 
     // Schnittstelle zum Ausfuehren einer Methode aus den Applikationen
     virtual ErrCode Call( SbxValue* pRet = NULL );
-    virtual void Broadcast( ULONG nHintId );
+    virtual void Broadcast( sal_uIntPtr nHintId );
 };
 
 #ifndef __SB_SBMETHODREF_HXX

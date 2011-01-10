@@ -49,10 +49,10 @@ class SvStream;
 
 class SbiStream {
     SvStream* pStrm;                // der Stream
-    ULONG  nExpandOnWriteTo;        // bei Schreibzugriff, den Stream
+    sal_uIntPtr  nExpandOnWriteTo;      // bei Schreibzugriff, den Stream
                                     // bis zu dieser Groesse aufblasen
     ByteString aLine;               // aktuelle Zeile
-    ULONG  nLine;                   // aktuelle Zeilennummer
+    sal_uIntPtr  nLine;                 // aktuelle Zeilennummer
     short  nLen;                    // Pufferlaenge
     short  nMode;                   // Bits:
     short  nChan;                   // aktueller Kanal
@@ -64,9 +64,9 @@ public:
    ~SbiStream();
     SbError Open( short, const ByteString&, short, short, short );
     SbError Close();
-    SbError Read( ByteString&, USHORT = 0, bool bForceReadingPerByte=false );
+    SbError Read( ByteString&, sal_uInt16 = 0, bool bForceReadingPerByte=false );
     SbError Read( char& );
-    SbError Write( const ByteString&, USHORT = 0 );
+    SbError Write( const ByteString&, sal_uInt16 = 0 );
 
     bool IsText() const     { return (nMode & SBSTRM_BINARY) == 0; }
     bool IsRandom() const   { return (nMode & SBSTRM_RANDOM) != 0; }
@@ -75,8 +75,8 @@ public:
     bool IsAppend() const   { return (nMode & SBSTRM_APPEND) != 0; }
     short GetBlockLen() const          { return nLen;           }
     short GetMode() const              { return nMode;          }
-    ULONG GetLine() const              { return nLine;          }
-    void SetExpandOnWriteTo( ULONG n ) { nExpandOnWriteTo = n;  }
+    sal_uIntPtr GetLine() const            { return nLine;          }
+    void SetExpandOnWriteTo( sal_uIntPtr n ) { nExpandOnWriteTo = n;    }
     void ExpandFile();
     SvStream* GetStrm()                { return pStrm;          }
 };

@@ -111,16 +111,16 @@ class SbxBasicFormater {
     String  BasicFormat( double dNumber, String sFormatStrg );
     String  BasicFormatNull( String sFormatStrg );
 
-    static  BOOL isBasicFormat( String sFormatStrg );
+    static  sal_Bool isBasicFormat( String sFormatStrg );
 
   private:
     //*** some helper methods ***
     //void  ShowError( char *sErrMsg );
-    inline void ShiftString( String& sStrg, USHORT nStartPos );
+    inline void ShiftString( String& sStrg, sal_uInt16 nStartPos );
     inline void StrAppendChar( String& sStrg, sal_Unicode ch );
     void    AppendDigit( String& sStrg, short nDigit );
     void    LeftShiftDecimalPoint( String& sStrg );
-    void    StrRoundDigit( String& sStrg, short nPos, BOOL& bOverflow );
+    void    StrRoundDigit( String& sStrg, short nPos, sal_Bool& bOverflow );
     void    StrRoundDigit( String& sStrg, short nPos );
     void    ParseBack( String& sStrg, const String& sFormatStrg,
                 short nFormatPos );
@@ -128,30 +128,30 @@ class SbxBasicFormater {
     // Methods for string conversion with sprintf():
     void    InitScan( double _dNum );
     void    InitExp( double _dNewExp );
-    short   GetDigitAtPosScan( short nPos, BOOL& bFoundFirstDigit );
+    short   GetDigitAtPosScan( short nPos, sal_Bool& bFoundFirstDigit );
     short   GetDigitAtPosExpScan( double dNewExponent, short nPos,
-                BOOL& bFoundFirstDigit );
-    short   GetDigitAtPosExpScan( short nPos, BOOL& bFoundFirstDigit );
+                sal_Bool& bFoundFirstDigit );
+    short   GetDigitAtPosExpScan( short nPos, sal_Bool& bFoundFirstDigit );
 #else
     // Methods for direct 'calculation' with log10() and pow():
     short   GetDigitAtPos( double dNumber, short nPos, double& dNextNumber,
-                BOOL& bFoundFirstDigit );
+                sal_Bool& bFoundFirstDigit );
     short   RoundDigit( double dNumber );
 #endif
-    String  GetPosFormatString( const String& sFormatStrg, BOOL & bFound );
-    String  GetNegFormatString( const String& sFormatStrg, BOOL & bFound );
-    String  Get0FormatString( const String& sFormatStrg, BOOL & bFound );
-    String  GetNullFormatString( const String& sFormatStrg, BOOL & bFound );
+    String  GetPosFormatString( const String& sFormatStrg, sal_Bool & bFound );
+    String  GetNegFormatString( const String& sFormatStrg, sal_Bool & bFound );
+    String  Get0FormatString( const String& sFormatStrg, sal_Bool & bFound );
+    String  GetNullFormatString( const String& sFormatStrg, sal_Bool & bFound );
     short   AnalyseFormatString( const String& sFormatStrg,
                 short& nNoOfDigitsLeft, short& nNoOfDigitsRight,
                 short& nNoOfOptionalDigitsLeft,
                 short& nNoOfExponentDigits,
                 short& nNoOfOptionalExponentDigits,
-                BOOL& bPercent, BOOL& bCurrency, BOOL& bScientific,
-                BOOL& bGenerateThousandSeparator,
+                sal_Bool& bPercent, sal_Bool& bCurrency, sal_Bool& bScientific,
+                sal_Bool& bGenerateThousandSeparator,
                 short& nMultipleThousandSeparators );
     void    ScanFormatString( double dNumber, const String& sFormatStrg,
-                String& sReturnStrg, BOOL bCreateSign );
+                String& sReturnStrg, sal_Bool bCreateSign );
 
     //*** Data ***
     sal_Unicode cDecPoint;      // sign for the decimal point

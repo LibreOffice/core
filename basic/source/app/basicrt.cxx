@@ -63,7 +63,7 @@ xub_StrLen BasicRuntime::GetCol2()
   return pRun->nCol2;
 }
 
-BOOL BasicRuntime::IsRun()
+sal_Bool BasicRuntime::IsRun()
 {
   return pRun->IsRun();
 }
@@ -117,17 +117,17 @@ bool BasicRuntimeAccess::HasRuntime()
   return pINST && pINST->pRun != NULL;
 }
 
-USHORT BasicRuntimeAccess::GetStackEntryCount()
+sal_uInt16 BasicRuntimeAccess::GetStackEntryCount()
 {
   return GetSbData()->pErrStack->Count();
 }
 
-BasicErrorStackEntry BasicRuntimeAccess::GetStackEntry( USHORT nIndex )
+BasicErrorStackEntry BasicRuntimeAccess::GetStackEntry( sal_uInt16 nIndex )
 {
   return BasicErrorStackEntry( GetSbData()->pErrStack->GetObject( nIndex ) );
 }
 
-BOOL BasicRuntimeAccess::HasStack()
+sal_Bool BasicRuntimeAccess::HasStack()
 {
   return GetSbData()->pErrStack != NULL;
 }
@@ -138,7 +138,7 @@ void BasicRuntimeAccess::DeleteStack()
   GetSbData()->pErrStack = NULL;
 }
 
-BOOL BasicRuntimeAccess::IsRunInit()
+sal_Bool BasicRuntimeAccess::IsRunInit()
 {
   return GetSbData()->bRunInit;
 }

@@ -736,7 +736,7 @@ sal_Bool SfxLibraryContainer::init_Impl(
                 if( nPass == 0 )
                 {
                     SfxErrorContext aEc( ERRCTX_SFX_LOADBASIC, aFileName );
-                    ULONG nErrorCode = ERRCODE_IO_GENERAL;
+                    sal_uIntPtr nErrorCode = ERRCODE_IO_GENERAL;
                     ErrorHandler::HandleError( nErrorCode );
                 }
             }
@@ -758,7 +758,7 @@ sal_Bool SfxLibraryContainer::init_Impl(
                 {
                     xInput.clear();
                     SfxErrorContext aEc( ERRCTX_SFX_LOADBASIC, aFileName );
-                    ULONG nErrorCode = ERRCODE_IO_GENERAL;
+                    sal_uIntPtr nErrorCode = ERRCODE_IO_GENERAL;
                     ErrorHandler::HandleError( nErrorCode );
                 }
             }
@@ -1490,7 +1490,7 @@ void SfxLibraryContainer::implStoreLibrary( SfxLibrary* pLib,
                         throw;
 
                     SfxErrorContext aEc( ERRCTX_SFX_SAVEDOC, aElementPath );
-                    ULONG nErrorCode = ERRCODE_IO_GENERAL;
+                    sal_uIntPtr nErrorCode = ERRCODE_IO_GENERAL;
                     ErrorHandler::HandleError( nErrorCode );
                 }
             }
@@ -1603,7 +1603,7 @@ void SfxLibraryContainer::implStoreLibraryIndexFile( SfxLibrary* pLib,
                 throw;
 
             SfxErrorContext aEc( ERRCTX_SFX_SAVEDOC, aLibInfoPath );
-            ULONG nErrorCode = ERRCODE_IO_GENERAL;
+            sal_uIntPtr nErrorCode = ERRCODE_IO_GENERAL;
             ErrorHandler::HandleError( nErrorCode );
         }
     }
@@ -1678,7 +1678,7 @@ sal_Bool SfxLibraryContainer::implLoadLibraryIndexFile(  SfxLibrary* pLib,
             if( !GbMigrationSuppressErrors )
             {
                 SfxErrorContext aEc( ERRCTX_SFX_LOADBASIC, aLibInfoPath );
-                ULONG nErrorCode = ERRCODE_IO_GENERAL;
+                sal_uIntPtr nErrorCode = ERRCODE_IO_GENERAL;
                 ErrorHandler::HandleError( nErrorCode );
             }
         }
@@ -1705,7 +1705,7 @@ sal_Bool SfxLibraryContainer::implLoadLibraryIndexFile(  SfxLibrary* pLib,
         //                              makeAny( e ) );
         OSL_ENSURE( 0, "Parsing error\n" );
         SfxErrorContext aEc( ERRCTX_SFX_LOADBASIC, aLibInfoPath );
-        ULONG nErrorCode = ERRCODE_IO_GENERAL;
+        sal_uIntPtr nErrorCode = ERRCODE_IO_GENERAL;
         ErrorHandler::HandleError( nErrorCode );
         return sal_False;
     }
@@ -2034,7 +2034,7 @@ void SfxLibraryContainer::storeLibraries_Impl( const uno::Reference< embed::XSto
         }
         catch( uno::Exception& )
         {
-            ULONG nErrorCode = ERRCODE_IO_GENERAL;
+            sal_uIntPtr nErrorCode = ERRCODE_IO_GENERAL;
             ErrorHandler::HandleError( nErrorCode );
         }
     }
@@ -2056,7 +2056,7 @@ void SfxLibraryContainer::storeLibraries_Impl( const uno::Reference< embed::XSto
         {
             xOut.clear();
             SfxErrorContext aEc( ERRCTX_SFX_SAVEDOC, aLibInfoPath );
-            ULONG nErrorCode = ERRCODE_IO_GENERAL;
+            sal_uIntPtr nErrorCode = ERRCODE_IO_GENERAL;
             ErrorHandler::HandleError( nErrorCode );
         }
 
@@ -2086,7 +2086,7 @@ void SfxLibraryContainer::storeLibraries_Impl( const uno::Reference< embed::XSto
     catch( uno::Exception& )
     {
         OSL_ENSURE( sal_False, "Problem during storing of libraries!\n" );
-        ULONG nErrorCode = ERRCODE_IO_GENERAL;
+        sal_uIntPtr nErrorCode = ERRCODE_IO_GENERAL;
         ErrorHandler::HandleError( nErrorCode );
     }
 
