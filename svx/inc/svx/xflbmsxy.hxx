@@ -45,7 +45,7 @@ public:
                             SVX_DLLPRIVATE XFillBmpSizeXItem( SvStream& rIn );
 
     SVX_DLLPRIVATE virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const;
-    SVX_DLLPRIVATE virtual SfxPoolItem*    Create( SvStream& rIn, USHORT nVer ) const;
+    SVX_DLLPRIVATE virtual SfxPoolItem*    Create( SvStream& rIn, sal_uInt16 nVer ) const;
 
     SVX_DLLPRIVATE virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
@@ -55,7 +55,7 @@ public:
     // Dieses Item nimmt sowohl metrische als auch
     // Prozentwerte ( sind negativ ) auf; das muessen
     // wir hier beruecksichtigen
-    SVX_DLLPRIVATE virtual FASTBOOL     HasMetrics() const;
+    SVX_DLLPRIVATE virtual int      HasMetrics() const;
 };
 
 /*************************************************************************
@@ -72,7 +72,7 @@ public:
                             SVX_DLLPRIVATE XFillBmpSizeYItem( SvStream& rIn );
 
     SVX_DLLPRIVATE virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const;
-    SVX_DLLPRIVATE virtual SfxPoolItem*    Create( SvStream& rIn, USHORT nVer ) const;
+    SVX_DLLPRIVATE virtual SfxPoolItem*    Create( SvStream& rIn, sal_uInt16 nVer ) const;
 
     SVX_DLLPRIVATE virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
@@ -82,7 +82,7 @@ public:
     // Dieses Item nimmt sowohl metrische als auch
     // Prozentwerte ( sind negativ ) auf; das muessen
     // wir hier beruecksichtigen
-    SVX_DLLPRIVATE virtual FASTBOOL     HasMetrics() const;
+    SVX_DLLPRIVATE virtual int      HasMetrics() const;
 };
 
 #endif

@@ -79,8 +79,8 @@ using namespace ::com::sun::star;
             // , thus it seems not necessary to make
             // it visible her at all.
             // #58917# Das Show darf nicht am VCL-Fenster landen, weil dann Assertion vom SFX
-            // BOOL bVis = pWindow->IsVisible();
-            // xC->setVisible(TRUE);
+            // sal_Bool bVis = pWindow->IsVisible();
+            // xC->setVisible(sal_True);
             // if ( !bVis )
             //  pWindow->Hide();
             //  if( !mxContext.is() && bVisible )

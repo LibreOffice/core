@@ -47,21 +47,21 @@ class SVX_DLLPUBLIC SvxRotateModeItem: public SfxEnumItem
 public:
                 TYPEINFO();
 
-                SvxRotateModeItem( SvxRotateMode eMode=SVX_ROTATE_MODE_STANDARD, USHORT nWhich=0);
+                SvxRotateModeItem( SvxRotateMode eMode=SVX_ROTATE_MODE_STANDARD, sal_uInt16 nWhich=0);
                 SvxRotateModeItem( const SvxRotateModeItem& rItem );
                 ~SvxRotateModeItem();
 
-    virtual USHORT              GetValueCount() const;
-    virtual String              GetValueText( USHORT nVal ) const;
+    virtual sal_uInt16              GetValueCount() const;
+    virtual String              GetValueText( sal_uInt16 nVal ) const;
     virtual SfxPoolItem*        Clone( SfxItemPool *pPool = 0 ) const;
-    virtual SfxPoolItem*        Create(SvStream &, USHORT) const;
-    virtual USHORT              GetVersion( USHORT nFileVersion ) const;
+    virtual SfxPoolItem*        Create(SvStream &, sal_uInt16) const;
+    virtual sal_uInt16              GetVersion( sal_uInt16 nFileVersion ) const;
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                                  SfxMapUnit eCoreMetric,
                                                  SfxMapUnit ePresMetric,
                                                  String& rText, const IntlWrapper * = 0 ) const;
-    virtual sal_Bool             QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
-    virtual sal_Bool             PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
+    virtual sal_Bool             QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
+    virtual sal_Bool             PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
 };
 
 

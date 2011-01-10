@@ -57,7 +57,7 @@ namespace svxform
         static ::connectivity::simple::createDataAccessToolsFactoryFunction
                                 s_pFactoryCreationFunc;
         //add by BerryJia for fixing Bug97420 Time:2002-9-12-11:00(PRC time)
-        mutable BOOL            m_bCreateAlready;
+        mutable sal_Bool            m_bCreateAlready;
 
     private:
         mutable ::rtl::Reference< ::connectivity::simple::IDataAccessToolsFactory > m_xDataAccessFactory;

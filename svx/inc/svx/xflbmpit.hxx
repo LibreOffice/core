@@ -45,14 +45,14 @@ public:
                             SVX_DLLPRIVATE XFillBmpPosItem( SvStream& rIn );
 
     SVX_DLLPRIVATE virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const;
-    SVX_DLLPRIVATE virtual SfxPoolItem*    Create( SvStream& rIn, USHORT nVer ) const;
+    SVX_DLLPRIVATE virtual SfxPoolItem*    Create( SvStream& rIn, sal_uInt16 nVer ) const;
 
     SVX_DLLPRIVATE virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,
                                     String &rText, const IntlWrapper * = 0 ) const;
 
-    SVX_DLLPRIVATE virtual USHORT           GetValueCount() const;
+    SVX_DLLPRIVATE virtual sal_uInt16           GetValueCount() const;
     SVX_DLLPRIVATE RECT_POINT               GetValue() const { return (RECT_POINT) SfxEnumItem::GetValue(); }
 };
 

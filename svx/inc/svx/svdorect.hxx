@@ -62,8 +62,8 @@ protected:
     XPolygon*                   mpXPoly;
 
 protected:
-    // Liefert TRUE, wenn das Painten ein Polygon erfordert.
-    FASTBOOL PaintNeedsXPoly(long nEckRad) const;
+    // Liefert sal_True, wenn das Painten ein Polygon erfordert.
+    int PaintNeedsXPoly(long nEckRad) const;
 
 protected:
     XPolygon ImpCalcXPoly(const Rectangle& rRect1, long nRad1) const;
@@ -87,12 +87,12 @@ public:
     // Konstruktion eines Textrahmens
     SdrRectObj(SdrObjKind eNewTextKind);
     SdrRectObj(SdrObjKind eNewTextKind, const Rectangle& rRect);
-    // der USHORT eFormat nimmt Werte des enum EETextFormat entgegen
-    SdrRectObj(SdrObjKind eNewTextKind, const Rectangle& rNewRect, SvStream& rInput, const String& rBaseURL, USHORT eFormat);
+    // der sal_uInt16 eFormat nimmt Werte des enum EETextFormat entgegen
+    SdrRectObj(SdrObjKind eNewTextKind, const Rectangle& rNewRect, SvStream& rInput, const String& rBaseURL, sal_uInt16 eFormat);
     virtual ~SdrRectObj();
 
     virtual void TakeObjInfo(SdrObjTransformInfoRec& rInfo) const;
-    virtual UINT16 GetObjIdentifier() const;
+    virtual sal_uInt16 GetObjIdentifier() const;
     virtual void TakeUnrotatedSnapRect(Rectangle& rRect) const;
 
     virtual void TakeObjNameSingul(String& rName) const;
@@ -120,15 +120,15 @@ public:
     virtual void NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact);
     virtual void NbcRotate(const Point& rRef, long nWink, double sn, double cs);
     virtual void NbcMirror(const Point& rRef1, const Point& rRef2);
-    virtual void NbcShear(const Point& rRef, long nWink, double tn, FASTBOOL bVShear);
+    virtual void NbcShear(const Point& rRef, long nWink, double tn, int bVShear);
 
-    virtual FASTBOOL DoMacro(const SdrObjMacroHitRec& rRec);
+    virtual int DoMacro(const SdrObjMacroHitRec& rRec);
     virtual XubString GetMacroPopupComment(const SdrObjMacroHitRec& rRec) const;
 
-    virtual SdrGluePoint GetVertexGluePoint(USHORT nNum) const;
-    virtual SdrGluePoint GetCornerGluePoint(USHORT nNum) const;
+    virtual SdrGluePoint GetVertexGluePoint(sal_uInt16 nNum) const;
+    virtual SdrGluePoint GetCornerGluePoint(sal_uInt16 nNum) const;
 
-    virtual SdrObject* DoConvertToPolyObj(BOOL bBezier) const;
+    virtual SdrObject* DoConvertToPolyObj(sal_Bool bBezier) const;
 
     virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint);
 };

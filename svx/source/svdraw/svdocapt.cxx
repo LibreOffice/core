@@ -77,23 +77,23 @@ public:
     long                        nEscAbs;
     long                        nLineLen;
     SdrCaptionEscDir            eEscDir;
-    FASTBOOL                    bFitLineLen;
-    FASTBOOL                    bEscRel;
-    FASTBOOL                    bFixedAngle;
+    int                 bFitLineLen;
+    int                 bEscRel;
+    int                 bFixedAngle;
 
 public:
     ImpCaptParams()
     {
         eType      =SDRCAPT_TYPE3;
-        bFixedAngle=FALSE;
+        bFixedAngle=sal_False;
         nAngle     =4500;
         nGap       =0;
         eEscDir    =SDRCAPT_ESCHORIZONTAL;
-        bEscRel    =TRUE;
+        bEscRel    =sal_True;
         nEscRel    =5000;
         nEscAbs    =0;
         nLineLen   =0;
-        bFitLineLen=TRUE;
+        bFitLineLen=sal_True;
     }
     void CalcEscPos(const Point& rTail, const Rectangle& rRect, Point& rPt, EscDir& rDir) const;
 };
@@ -115,7 +115,7 @@ void ImpCaptParams::CalcEscPos(const Point& rTailPt, const Rectangle& rRect, Poi
     nY+=rRect.Top();
     Point  aBestPt;
     EscDir eBestDir=LKS;
-    FASTBOOL bTryH=eEscDir==SDRCAPT_ESCBESTFIT;
+    int bTryH=eEscDir==SDRCAPT_ESCBESTFIT;
     if (!bTryH) {
         if (eType!=SDRCAPT_TYPE1) {
             bTryH=eEscDir==SDRCAPT_ESCHORIZONTAL;
@@ -123,7 +123,7 @@ void ImpCaptParams::CalcEscPos(const Point& rTailPt, const Rectangle& rRect, Poi
             bTryH=eEscDir==SDRCAPT_ESCVERTICAL;
         }
     }
-    FASTBOOL bTryV=eEscDir==SDRCAPT_ESCBESTFIT;
+    int bTryV=eEscDir==SDRCAPT_ESCBESTFIT;
     if (!bTryV) {
         if (eType!=SDRCAPT_TYPE1) {
             bTryV=eEscDir==SDRCAPT_ESCVERTICAL;
@@ -135,7 +135,7 @@ void ImpCaptParams::CalcEscPos(const Point& rTailPt, const Rectangle& rRect, Poi
     if (bTryH) {
         Point aLft(rRect.Left()-nGap,nY);
         Point aRgt(rRect.Right()+nGap,nY);
-        FASTBOOL bLft=(aTl.X()-aLft.X()<aRgt.X()-aTl.X());
+        int bLft=(aTl.X()-aLft.X()<aRgt.X()-aTl.X());
         if (bLft) {
             eBestDir=LKS;
             aBestPt=aLft;
@@ -147,7 +147,7 @@ void ImpCaptParams::CalcEscPos(const Point& rTailPt, const Rectangle& rRect, Poi
     if (bTryV) {
         Point aTop(nX,rRect.Top()-nGap);
         Point aBtm(nX,rRect.Bottom()+nGap);
-        FASTBOOL bTop=(aTl.Y()-aTop.Y()<aBtm.Y()-aTl.Y());
+        int bTop=(aTl.Y()-aTop.Y()<aBtm.Y()-aTl.Y());
         Point aBest2;
         EscDir eBest2;
         if (bTop) {
@@ -157,7 +157,7 @@ void ImpCaptParams::CalcEscPos(const Point& rTailPt, const Rectangle& rRect, Poi
             eBest2=UNT;
             aBest2=aBtm;
         }
-        FASTBOOL bTakeIt=eEscDir!=SDRCAPT_ESCBESTFIT;
+        int bTakeIt=eEscDir!=SDRCAPT_ESCBESTFIT;
         if (!bTakeIt) {
             BigInt aHorX(aBestPt.X()-aTl.X()); aHorX*=aHorX;
             BigInt aHorY(aBestPt.Y()-aTl.Y()); aHorY*=aHorY;
@@ -201,24 +201,24 @@ TYPEINIT1(SdrCaptionObj,SdrRectObj);
 SdrCaptionObj::SdrCaptionObj():
     SdrRectObj(OBJ_TEXT),
     aTailPoly(3),  // Default Groesse: 3 Punkte = 2 Linien
-    mbSpecialTextBoxShadow(FALSE),
-    mbFixedTail(FALSE)
+    mbSpecialTextBoxShadow(sal_False),
+    mbFixedTail(sal_False)
 {
 }
 
 SdrCaptionObj::SdrCaptionObj(const Rectangle& rRect):
     SdrRectObj(OBJ_TEXT,rRect),
     aTailPoly(3),  // Default Groesse: 3 Punkte = 2 Linien
-    mbSpecialTextBoxShadow(FALSE),
-    mbFixedTail(FALSE)
+    mbSpecialTextBoxShadow(sal_False),
+    mbFixedTail(sal_False)
 {
 }
 
 SdrCaptionObj::SdrCaptionObj(const Rectangle& rRect, const Point& rTail):
     SdrRectObj(OBJ_TEXT,rRect),
     aTailPoly(3),  // Default Groesse: 3 Punkte = 2 Linien
-    mbSpecialTextBoxShadow(FALSE),
-    mbFixedTail(FALSE)
+    mbSpecialTextBoxShadow(sal_False),
+    mbFixedTail(sal_False)
 {
     aTailPoly[0]=maFixedTailPos=rTail;
 }
@@ -229,25 +229,25 @@ SdrCaptionObj::~SdrCaptionObj()
 
 void SdrCaptionObj::TakeObjInfo(SdrObjTransformInfoRec& rInfo) const
 {
-    rInfo.bRotateFreeAllowed=FALSE;
-    rInfo.bRotate90Allowed  =FALSE;
-    rInfo.bMirrorFreeAllowed=FALSE;
-    rInfo.bMirror45Allowed  =FALSE;
-    rInfo.bMirror90Allowed  =FALSE;
-    rInfo.bTransparenceAllowed = FALSE;
-    rInfo.bGradientAllowed = FALSE;
-    rInfo.bShearAllowed     =FALSE;
-    rInfo.bEdgeRadiusAllowed=FALSE;
-    rInfo.bCanConvToPath    =TRUE;
-    rInfo.bCanConvToPoly    =TRUE;
-    rInfo.bCanConvToPathLineToArea=FALSE;
-    rInfo.bCanConvToPolyLineToArea=FALSE;
+    rInfo.bRotateFreeAllowed=sal_False;
+    rInfo.bRotate90Allowed  =sal_False;
+    rInfo.bMirrorFreeAllowed=sal_False;
+    rInfo.bMirror45Allowed  =sal_False;
+    rInfo.bMirror90Allowed  =sal_False;
+    rInfo.bTransparenceAllowed = sal_False;
+    rInfo.bGradientAllowed = sal_False;
+    rInfo.bShearAllowed     =sal_False;
+    rInfo.bEdgeRadiusAllowed=sal_False;
+    rInfo.bCanConvToPath    =sal_True;
+    rInfo.bCanConvToPoly    =sal_True;
+    rInfo.bCanConvToPathLineToArea=sal_False;
+    rInfo.bCanConvToPolyLineToArea=sal_False;
     rInfo.bCanConvToContour = (rInfo.bCanConvToPoly || LineGeometryUsageIsNecessary());
 }
 
-UINT16 SdrCaptionObj::GetObjIdentifier() const
+sal_uInt16 SdrCaptionObj::GetObjIdentifier() const
 {
-    return UINT16(OBJ_CAPTION);
+    return sal_uInt16(OBJ_CAPTION);
 }
 
 void SdrCaptionObj::operator=(const SdrObject& rObj)
@@ -557,9 +557,9 @@ void SdrCaptionObj::ImpCalcTail(const ImpCaptParams& rPara, Polygon& rPoly, Rect
     }
 }
 
-FASTBOOL SdrCaptionObj::BegCreate(SdrDragStat& rStat)
+int SdrCaptionObj::BegCreate(SdrDragStat& rStat)
 {
-    if (aRect.IsEmpty()) return FALSE; // Create z.Zt. nur mit vorgegebenen Rect
+    if (aRect.IsEmpty()) return sal_False; // Create z.Zt. nur mit vorgegebenen Rect
 
     ImpCaptParams aPara;
     ImpGetCaptParams(aPara);
@@ -567,10 +567,10 @@ FASTBOOL SdrCaptionObj::BegCreate(SdrDragStat& rStat)
     aTailPoly[0]=rStat.GetStart();
     ImpCalcTail(aPara,aTailPoly,aRect);
     rStat.SetActionRect(aRect);
-    return TRUE;
+    return sal_True;
 }
 
-FASTBOOL SdrCaptionObj::MovCreate(SdrDragStat& rStat)
+int SdrCaptionObj::MovCreate(SdrDragStat& rStat)
 {
     ImpCaptParams aPara;
     ImpGetCaptParams(aPara);
@@ -578,11 +578,11 @@ FASTBOOL SdrCaptionObj::MovCreate(SdrDragStat& rStat)
     ImpCalcTail(aPara,aTailPoly,aRect);
     rStat.SetActionRect(aRect);
     SetBoundRectDirty();
-    bSnapRectDirty=TRUE;
-    return TRUE;
+    bSnapRectDirty=sal_True;
+    return sal_True;
 }
 
-FASTBOOL SdrCaptionObj::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
+int SdrCaptionObj::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
 {
     ImpCaptParams aPara;
     ImpGetCaptParams(aPara);
@@ -592,9 +592,9 @@ FASTBOOL SdrCaptionObj::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
     return (eCmd==SDRCREATE_FORCEEND || rStat.GetPointAnz()>=2);
 }
 
-FASTBOOL SdrCaptionObj::BckCreate(SdrDragStat& /*rStat*/)
+int SdrCaptionObj::BckCreate(SdrDragStat& /*rStat*/)
 {
-    return FALSE;
+    return sal_False;
 }
 
 void SdrCaptionObj::BrkCreate(SdrDragStat& /*rStat*/)
@@ -755,18 +755,18 @@ void SdrCaptionObj::RestGeoData(const SdrObjGeoData& rGeo)
     aTailPoly=rCGeo.aTailPoly;
 }
 
-SdrObject* SdrCaptionObj::DoConvertToPolyObj(BOOL bBezier) const
+SdrObject* SdrCaptionObj::DoConvertToPolyObj(sal_Bool bBezier) const
 { // #42334# - Convert implementiert
     SdrObject* pRect=SdrRectObj::DoConvertToPolyObj(bBezier);
     SdrObject* pTail = ImpConvertMakeObj(basegfx::B2DPolyPolygon(aTailPoly.getB2DPolygon()), sal_False, bBezier);
     SdrObject* pRet=(pTail!=NULL) ? pTail : pRect;
     if (pTail!=NULL && pRect!=NULL) {
-        FASTBOOL bInsRect=TRUE;
-        FASTBOOL bInsTail=TRUE;
+        int bInsRect=sal_True;
+        int bInsTail=sal_True;
         SdrObjList* pOL=pTail->GetSubList();
-        if (pOL!=NULL) { pRet=pRect; bInsTail=FALSE; }
+        if (pOL!=NULL) { pRet=pRect; bInsTail=sal_False; }
         if (pOL==NULL) pOL=pRect->GetSubList();
-        if (pOL!=NULL) { pRet=pRect; bInsRect=FALSE; }
+        if (pOL!=NULL) { pRet=pRect; bInsRect=sal_False; }
         if (pOL==NULL) {
             SdrObjGroup* pGrp=new SdrObjGroup;
             pOL=pGrp->GetSubList();

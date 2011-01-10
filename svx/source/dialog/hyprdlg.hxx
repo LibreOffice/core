@@ -96,17 +96,17 @@ private:
     String              sSearchTitle;
     PopupMenu           aLinkPopup;
     PopupMenu           *pTargetMenu;
-    BOOL                bNoDoc;
-    BOOL                bSend;
-    BOOL                bHasOldName;
+    sal_Bool                bNoDoc;
+    sal_Bool                bSend;
+    sal_Bool                bHasOldName;
     long                nMaxWidth;
     long                nMinWidth;
     long                nMaxHeight;
-    BOOL                bHtmlMode;
+    sal_Bool                bHtmlMode;
 
     SfxImageManager*    mpManager;
 
-    virtual void    StateChanged( USHORT nSID, SfxItemState eState, const SfxPoolItem* pState );
+    virtual void    StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState );
     virtual void DataChanged( const DataChangedEvent& rDCEvt );
 
     // DockingWindow
@@ -114,7 +114,7 @@ private:
     virtual void Resizing(Size& rSize);
 
     // Drag&Drop
-    BOOL         GetDragData(USHORT nItem, ULONG nDDFormatId, String& rBuffer);
+    sal_Bool         GetDragData(sal_uInt16 nItem, sal_uIntPtr nDDFormatId, String& rBuffer);
 
     DECL_LINK(TBClickHdl, ToolBox *);
     DECL_LINK(TBSelectHdl, ToolBox *);
@@ -127,9 +127,9 @@ private:
 
     void    OpenDoc( const String& rURL, SfxViewFrame* pViewFrame );
     void    EnableLink();
-    void    SendToApp(USHORT nType);
+    void    SendToApp(sal_uInt16 nType);
     void    AddToHistory(const String& rName, const String& rURL);
-    void    TargetMenu(const String& rSelEntry, BOOL bExecute);
+    void    TargetMenu(const String& rSelEntry, sal_Bool bExecute);
     String  GetSelTarget();
 
     void    SetImages();

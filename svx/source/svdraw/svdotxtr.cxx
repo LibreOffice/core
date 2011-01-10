@@ -125,7 +125,7 @@ long SdrTextObj::GetRotateAngle() const
     return aGeo.nDrehWink;
 }
 
-long SdrTextObj::GetShearAngle(FASTBOOL /*bVertical*/) const
+long SdrTextObj::GetShearAngle(int /*bVertical*/) const
 {
     return aGeo.nShearWink;
 }
@@ -140,14 +140,14 @@ void SdrTextObj::NbcMove(const Size& rSiz)
 
 void SdrTextObj::NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact)
 {
-    FASTBOOL bNoShearMerk=aGeo.nShearWink==0;
-    FASTBOOL bRota90Merk=bNoShearMerk && aGeo.nDrehWink % 9000 ==0;
+    int bNoShearMerk=aGeo.nShearWink==0;
+    int bRota90Merk=bNoShearMerk && aGeo.nDrehWink % 9000 ==0;
     long nHDist=GetTextLeftDistance()+GetTextRightDistance();
     long nVDist=GetTextUpperDistance()+GetTextLowerDistance();
     long nTWdt0=aRect.GetWidth ()-1-nHDist; if (nTWdt0<0) nTWdt0=0;
     long nTHgt0=aRect.GetHeight()-1-nVDist; if (nTHgt0<0) nTHgt0=0;
-    FASTBOOL bXMirr=(xFact.GetNumerator()<0) != (xFact.GetDenominator()<0);
-    FASTBOOL bYMirr=(yFact.GetNumerator()<0) != (yFact.GetDenominator()<0);
+    int bXMirr=(xFact.GetNumerator()<0) != (xFact.GetDenominator()<0);
+    int bYMirr=(yFact.GetNumerator()<0) != (yFact.GetDenominator()<0);
     if (bXMirr || bYMirr) {
         Point aRef1(GetSnapRect().Center());
         if (bXMirr) {
@@ -205,7 +205,7 @@ void SdrTextObj::NbcResize(const Point& rRef, const Fraction& xFact, const Fract
     }
 
     if (bRota90Merk) {
-        FASTBOOL bRota90=aGeo.nDrehWink % 9000 ==0;
+        int bRota90=aGeo.nDrehWink % 9000 ==0;
         if (!bRota90) { // Scheinbar Rundungsfehler: Korregieren
             long a=NormAngle360(aGeo.nDrehWink);
             if (a<4500) a=0;
@@ -239,7 +239,7 @@ void SdrTextObj::NbcResize(const Point& rRef, const Fraction& xFact, const Fract
 
 void SdrTextObj::NbcRotate(const Point& rRef, long nWink, double sn, double cs)
 {
-    SetGlueReallyAbsolute(TRUE);
+    SetGlueReallyAbsolute(sal_True);
     long dx=aRect.Right()-aRect.Left();
     long dy=aRect.Bottom()-aRect.Top();
     Point aP(aRect.TopLeft());
@@ -258,18 +258,18 @@ void SdrTextObj::NbcRotate(const Point& rRef, long nWink, double sn, double cs)
     }
     SetRectsDirty();
     NbcRotateGluePoints(rRef,nWink,sn,cs);
-    SetGlueReallyAbsolute(FALSE);
+    SetGlueReallyAbsolute(sal_False);
 }
 
-void SdrTextObj::NbcShear(const Point& rRef, long nWink, double tn, FASTBOOL bVShear)
+void SdrTextObj::NbcShear(const Point& rRef, long nWink, double tn, int bVShear)
 {
-    SetGlueReallyAbsolute(TRUE);
+    SetGlueReallyAbsolute(sal_True);
 
     // #75889# when this is a SdrPathObj aRect maybe not initialized
     Polygon aPol(Rect2Poly(aRect.IsEmpty() ? GetSnapRect() : aRect, aGeo));
 
-    USHORT nPointCount=aPol.GetSize();
-    for (USHORT i=0; i<nPointCount; i++) {
+    sal_uInt16 nPointCount=aPol.GetSize();
+    for (sal_uInt16 i=0; i<nPointCount; i++) {
          ShearPoint(aPol[i],rRef,tn,bVShear);
     }
     Poly2Rect(aPol,aRect,aGeo);
@@ -280,22 +280,22 @@ void SdrTextObj::NbcShear(const Point& rRef, long nWink, double tn, FASTBOOL bVS
     ImpCheckShear();
     SetRectsDirty();
     NbcShearGluePoints(rRef,nWink,tn,bVShear);
-    SetGlueReallyAbsolute(FALSE);
+    SetGlueReallyAbsolute(sal_False);
 }
 
 void SdrTextObj::NbcMirror(const Point& rRef1, const Point& rRef2)
 {
-    SetGlueReallyAbsolute(TRUE);
-    FASTBOOL bNoShearMerk=aGeo.nShearWink==0;
-    FASTBOOL bRota90Merk=FALSE;
+    SetGlueReallyAbsolute(sal_True);
+    int bNoShearMerk=aGeo.nShearWink==0;
+    int bRota90Merk=sal_False;
     if (bNoShearMerk &&
         (rRef1.X()==rRef2.X() || rRef1.Y()==rRef2.Y() ||
          Abs(rRef1.X()-rRef2.X())==Abs(rRef1.Y()-rRef2.Y()))) {
         bRota90Merk=aGeo.nDrehWink % 9000 ==0;
     }
     Polygon aPol(Rect2Poly(aRect,aGeo));
-    USHORT i;
-    USHORT nPntAnz=aPol.GetSize();
+    sal_uInt16 i;
+    sal_uInt16 nPntAnz=aPol.GetSize();
     for (i=0; i<nPntAnz; i++) {
          MirrorPoint(aPol[i],rRef1,rRef2);
     }
@@ -309,7 +309,7 @@ void SdrTextObj::NbcMirror(const Point& rRef1, const Point& rRef2)
     Poly2Rect(aPol,aRect,aGeo);
 
     if (bRota90Merk) {
-        FASTBOOL bRota90=aGeo.nDrehWink % 9000 ==0;
+        int bRota90=aGeo.nDrehWink % 9000 ==0;
         if (bRota90Merk && !bRota90) { // Scheinbar Rundungsfehler: Korregieren
             long a=NormAngle360(aGeo.nDrehWink);
             if (a<4500) a=0;
@@ -333,7 +333,7 @@ void SdrTextObj::NbcMirror(const Point& rRef1, const Point& rRef2)
     ImpCheckShear();
     SetRectsDirty();
     NbcMirrorGluePoints(rRef1,rRef2);
-    SetGlueReallyAbsolute(FALSE);
+    SetGlueReallyAbsolute(sal_False);
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -461,7 +461,7 @@ SdrObject* SdrTextObj::ImpConvertContainedTextToSdrPathObjs(bool bToPoly) const
 
 //////////////////////////////////////////////////////////////////////////////
 
-SdrObject* SdrTextObj::DoConvertToPolyObj(BOOL bBezier) const
+SdrObject* SdrTextObj::DoConvertToPolyObj(sal_Bool bBezier) const
 {
     return ImpConvertContainedTextToSdrPathObjs(!bBezier);
 }
@@ -515,7 +515,7 @@ SdrObject* SdrTextObj::ImpConvertMakeObj(const basegfx::B2DPolyPolygon& rPolyPol
     return pPathObj;
 }
 
-SdrObject* SdrTextObj::ImpConvertAddText(SdrObject* pObj, FASTBOOL bBezier) const
+SdrObject* SdrTextObj::ImpConvertAddText(SdrObject* pObj, int bBezier) const
 {
     if(!ImpCanConvTextToCurve())
     {

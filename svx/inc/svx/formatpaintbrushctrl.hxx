@@ -49,14 +49,14 @@ class SVX_DLLPUBLIC FormatPaintBrushToolBoxControl : public SfxToolBoxControl
 
 public:
     SFX_DECL_TOOLBOX_CONTROL();
-    FormatPaintBrushToolBoxControl( USHORT nSlotId, USHORT nId, ToolBox& rTbx );
+    FormatPaintBrushToolBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
     ~FormatPaintBrushToolBoxControl();
 
     virtual void    DoubleClick();
     virtual void    Click();
-    virtual void    Select( BOOL bMod1 = FALSE );
+    virtual void    Select( sal_Bool bMod1 = sal_False );
 
-    virtual void    StateChanged( USHORT nSID, SfxItemState eState,
+    virtual void    StateChanged( sal_uInt16 nSID, SfxItemState eState,
                                               const SfxPoolItem* pState );
 private:
     DECL_LINK( WaitDoubleClickHdl, void* );

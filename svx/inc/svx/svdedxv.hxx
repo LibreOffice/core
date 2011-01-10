@@ -105,7 +105,7 @@ protected:
     Link                        aOldCalcFieldValueLink; // Zum rufen des alten Handlers
     Point                       aMacroDownPos;
 
-    USHORT                      nMacroTol;
+    sal_uInt16                      nMacroTol;
 
     unsigned                    bTextEditDontDelete : 1;   // Outliner und View bei SdrEndTextEdit nicht deleten (f. Rechtschreibpruefung)
     unsigned                    bTextEditOnlyOneView : 1;  // Nur eine OutlinerView (f. Rechtschreibpruefung)
@@ -125,13 +125,13 @@ protected:
 
     // Eine neue OutlinerView auf dem Heap anlegen und alle erforderlichen Parameter setzen.
     // pTextEditObj, pTextEditPV und pTextEditOutliner muessen initiallisiert sein.
-    OutlinerView* ImpMakeOutlinerView(Window* pWin, BOOL bNoPaint, OutlinerView* pGivenView) const;
+    OutlinerView* ImpMakeOutlinerView(Window* pWin, sal_Bool bNoPaint, OutlinerView* pGivenView) const;
     void ImpPaintOutlinerView(OutlinerView& rOutlView, const Rectangle& rRect) const;
     void ImpInvalidateOutlinerView(OutlinerView& rOutlView) const;
 
-    // Feststellen, ob der gesamte Text markiert ist. Liefert auch TRUE wenn
+    // Feststellen, ob der gesamte Text markiert ist. Liefert auch sal_True wenn
     // kein Text vorhanden ist.
-    BOOL ImpIsTextEditAllSelected() const;
+    sal_Bool ImpIsTextEditAllSelected() const;
     void ImpMakeTextCursorAreaVisible();
 
     // Handler fuer AutoGrowing Text bei aktivem Outliner
@@ -151,7 +151,7 @@ protected:
 
 public:
     // Actionhandling fuer Macromodus
-    virtual BOOL IsAction() const;
+    virtual sal_Bool IsAction() const;
     virtual void MovAction(const Point& rPnt);
     virtual void EndAction();
     virtual void BrkAction();
@@ -166,8 +166,8 @@ public:
     //************************************************************************
     // QuickTextEditMode bedeutet, dass Objekte mit Text sofort beim Anklicken
     // editiert werden sollen. Default=TRUE. Persistent.
-    void SetQuickTextEditMode(BOOL bOn) { bQuickTextEditMode=bOn; }
-    BOOL IsQuickTextEditMode() const { return bQuickTextEditMode; }
+    void SetQuickTextEditMode(sal_Bool bOn) { bQuickTextEditMode=bOn; }
+    sal_Bool IsQuickTextEditMode() const { return bQuickTextEditMode; }
 
     // Starten des TextEditMode. Ist pWin==NULL, wird das erste an der View
     // angemeldete Win verwendet.
@@ -178,7 +178,7 @@ public:
     // Ueber den Parameter pEditOutliner kann die Applikation einen eigenen
     // Outliner vorgeben, der zum Editieren verwendet wird. Dieser gehoert
     // nach Aufruf von SdrBeginTextEdit der SdrObjEditView und wird von dieser
-    // spaeter via delete zerstoert (falls bDontDeleteOutliner=FALSE). Die
+    // spaeter via delete zerstoert (falls bDontDeleteOutliner=sal_False). Die
     // SdrObjEditView setzt dann das Modusflag (EditEngine/Outliner) an
     // dieser Instanz und ausserdem auch den StatusEventHdl.
     // Ebenso kann eine spezifische OutlinerView vorgegeben werden.
@@ -194,23 +194,23 @@ public:
     virtual SdrEndTextEditKind SdrEndTextEdit(sal_Bool bDontDeleteReally = sal_False);
     virtual bool IsTextEdit() const;
 
-    // TRUE=Es wird ein Textrahmen (OBJ_TEXT,OBJ_OUTLINETEXT,...) editiert
+    // sal_True=Es wird ein Textrahmen (OBJ_TEXT,OBJ_OUTLINETEXT,...) editiert
     // ansonsten handelt es sich um ein beschriftetes Zeichenobjekt, an dem
     // der Text ja bekanntlich hor. und vert. zentriert wird.
-    BOOL IsTextEditFrame() const;
+    sal_Bool IsTextEditFrame() const;
 
-    // Diese Methode liefert TRUE, wenn der Punkt rHit innerhalb der
+    // Diese Methode liefert sal_True, wenn der Punkt rHit innerhalb der
     // des Objektbereichs oder der OutlinerView liegt.
-    BOOL IsTextEditHit(const Point& rHit, short nTol) const;
+    sal_Bool IsTextEditHit(const Point& rHit, short nTol) const;
 
-    // Diese Methode liefert TRUE, wenn der Punkt rHit innerhalb des
+    // Diese Methode liefert sal_True, wenn der Punkt rHit innerhalb des
     // Handle-dicken Rahmens liegt, der die OutlinerView bei TextFrames
     // umschliesst.
-    BOOL IsTextEditFrameHit(const Point& rHit) const;
+    sal_Bool IsTextEditFrameHit(const Point& rHit) const;
 
     // Bei aktiver Selektion, also zwischen MouseButtonDown und
     // MouseButtonUp liefert diese Methode immer TRUE.
-    BOOL IsTextEditInSelectionMode() const;
+    sal_Bool IsTextEditInSelectionMode() const;
 
     // Folgende Methode addiert einen passenden Offset zum MouseEvent
     // um diesen an den Outliner weiterzureichen.
@@ -234,24 +234,24 @@ public:
     const OutlinerView* GetTextEditOutlinerView() const { return pTextEditOutlinerView; }
     OutlinerView* GetTextEditOutlinerView() { return pTextEditOutlinerView; }
 
-    virtual BOOL KeyInput(const KeyEvent& rKEvt, Window* pWin);
-    virtual BOOL MouseButtonDown(const MouseEvent& rMEvt, Window* pWin);
-    virtual BOOL MouseButtonUp(const MouseEvent& rMEvt, Window* pWin);
-    virtual BOOL MouseMove(const MouseEvent& rMEvt, Window* pWin);
-    virtual BOOL Command(const CommandEvent& rCEvt, Window* pWin);
-    BOOL Cut(ULONG nFormat=SDR_ANYFORMAT);
-    BOOL Yank(ULONG nFormat=SDR_ANYFORMAT);
-    BOOL Paste(Window* pWin=NULL, ULONG nFormat=SDR_ANYFORMAT);
+    virtual sal_Bool KeyInput(const KeyEvent& rKEvt, Window* pWin);
+    virtual sal_Bool MouseButtonDown(const MouseEvent& rMEvt, Window* pWin);
+    virtual sal_Bool MouseButtonUp(const MouseEvent& rMEvt, Window* pWin);
+    virtual sal_Bool MouseMove(const MouseEvent& rMEvt, Window* pWin);
+    virtual sal_Bool Command(const CommandEvent& rCEvt, Window* pWin);
+    sal_Bool Cut(sal_uIntPtr nFormat=SDR_ANYFORMAT);
+    sal_Bool Yank(sal_uIntPtr nFormat=SDR_ANYFORMAT);
+    sal_Bool Paste(Window* pWin=NULL, sal_uIntPtr nFormat=SDR_ANYFORMAT);
 
     // #97766# make virtual to change implementation e.g. for SdOutlineView
     virtual sal_uInt16 GetScriptType() const;
 
     /* new interface src537 */
-    BOOL GetAttributes(SfxItemSet& rTargetSet, BOOL bOnlyHardAttr=FALSE) const;
+    sal_Bool GetAttributes(SfxItemSet& rTargetSet, sal_Bool bOnlyHardAttr=sal_False) const;
 
-    BOOL SetAttributes(const SfxItemSet& rSet, BOOL bReplaceAll);
-    SfxStyleSheet* GetStyleSheet() const; // SfxStyleSheet* GetStyleSheet(BOOL& rOk) const;
-    BOOL SetStyleSheet(SfxStyleSheet* pStyleSheet, BOOL bDontRemoveHardAttr);
+    sal_Bool SetAttributes(const SfxItemSet& rSet, sal_Bool bReplaceAll);
+    SfxStyleSheet* GetStyleSheet() const; // SfxStyleSheet* GetStyleSheet(sal_Bool& rOk) const;
+    sal_Bool SetStyleSheet(SfxStyleSheet* pStyleSheet, sal_Bool bDontRemoveHardAttr);
 
     // Intern: Beim Splitteraufziehen neue OutlinerView...
     virtual void AddWindowToPaintView(OutputDevice* pNewWin);
@@ -262,16 +262,16 @@ public:
     //************************************************************************
     // Persistent. Default TRUE. SvDraw wertet das Flag u.a. bei
     // SdrView::GetPreferedPointer() aus. Hat nur Wirkung, wenn das Dokument
-    // Draw-Objekte mit Macrofunktionalitaet hat (SdrObject::HasMacro()==TRUE).
-    void SetMacroMode(BOOL bOn) { bMacroMode=bOn; }
-    BOOL IsMacroMode() const { return bMacroMode; }
-    BOOL BegMacroObj(const Point& rPnt, short nTol, SdrObject* pObj, SdrPageView* pPV, Window* pWin);
-    BOOL BegMacroObj(const Point& rPnt, SdrObject* pObj, SdrPageView* pPV, Window* pWin) { return BegMacroObj(rPnt,-2,pObj,pPV,pWin); }
+    // Draw-Objekte mit Macrofunktionalitaet hat (SdrObject::HasMacro()==sal_True).
+    void SetMacroMode(sal_Bool bOn) { bMacroMode=bOn; }
+    sal_Bool IsMacroMode() const { return bMacroMode; }
+    sal_Bool BegMacroObj(const Point& rPnt, short nTol, SdrObject* pObj, SdrPageView* pPV, Window* pWin);
+    sal_Bool BegMacroObj(const Point& rPnt, SdrObject* pObj, SdrPageView* pPV, Window* pWin) { return BegMacroObj(rPnt,-2,pObj,pPV,pWin); }
     void MovMacroObj(const Point& rPnt);
     void BrkMacroObj();
-    BOOL EndMacroObj();
-    BOOL IsMacroObj() const { return pMacroObj!=NULL; }
-    BOOL IsMacroObjDown() const { return bMacroDown; }
+    sal_Bool EndMacroObj();
+    sal_Bool IsMacroObj() const { return pMacroObj!=NULL; }
+    sal_Bool IsMacroObjDown() const { return bMacroDown; }
 
     /** fills the given any with a XTextCursor for the current text selection.
         Leaves the any untouched if there currently is no text selected */
@@ -282,7 +282,7 @@ public:
     rtl::Reference< sdr::SelectionController > getSelectionController() const { return mxSelectionController; }
 
     /** returns true if the shape identified by its inventor and identifier supports format paint brush operation */
-    virtual bool SupportsFormatPaintbrush( UINT32 nObjectInventor, UINT16 nObjectIdentifier ) const;
+    virtual bool SupportsFormatPaintbrush( sal_uInt32 nObjectInventor, sal_uInt16 nObjectIdentifier ) const;
 
     /** returns a format paint brush set from the current selection */
     virtual bool TakeFormatPaintBrush( boost::shared_ptr< SfxItemSet >& rFormatSet  );

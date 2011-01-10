@@ -60,7 +60,7 @@ protected:
     virtual void StartDrag( sal_Int8 nAction, const Point& rPosPixel );
 
     // SvLBox
-    virtual BOOL DoubleClickHdl();
+    virtual sal_Bool DoubleClickHdl();
 
     using SvLBox::ExecuteDrop;
 };

@@ -95,7 +95,7 @@
 #define SDRATTR_MISC_FIRST              (SDRATTR_CAPTION_LAST + 1)  /* 1097   */ /* 1097   */ /* 1080   */ /* Pool V1: 1053 */
 #define SDRATTR_ECKENRADIUS             (SDRATTR_MISC_FIRST + 0)   /*   1097 */ /*   1097 */ /*   1080 long, def=0       */
 #define SDRATTR_TEXT_MINFRAMEHEIGHT     (SDRATTR_MISC_FIRST + 1)   /*   1098 */ /*   1098 */ /*   1081 long, def=0       */
-#define SDRATTR_TEXT_AUTOGROWHEIGHT     (SDRATTR_MISC_FIRST + 2)   /*   1099 */ /*   1099 */ /*   1082 BOOL, def=TRUE    */
+#define SDRATTR_TEXT_AUTOGROWHEIGHT     (SDRATTR_MISC_FIRST + 2)   /*   1099 */ /*   1099 */ /*   1082 sal_Bool, def=sal_True    */
 #define SDRATTR_TEXT_FITTOSIZE          (SDRATTR_MISC_FIRST + 3)   /*   1100 */ /*   1100 */ /*   1083 enum, def=SDRTEXTFIT_NONE */
 #define SDRATTR_TEXT_LEFTDIST           (SDRATTR_MISC_FIRST + 4)   /*   1101 */ /*   1101 */ /*   1084 long, def=0 */ /* Pool V2 */
 #define SDRATTR_TEXT_RIGHTDIST          (SDRATTR_MISC_FIRST + 5)   /*   1102 */ /*   1102 */ /*   1085 long, def=0 */ /* Pool V2 */
@@ -105,15 +105,15 @@
 #define SDRATTR_TEXT_MAXFRAMEHEIGHT     (SDRATTR_MISC_FIRST + 9)   /*   1106 */ /*   1106 */ /*   1089 long, def=0     - Pool V2 */
 #define SDRATTR_TEXT_MINFRAMEWIDTH      (SDRATTR_MISC_FIRST +10)   /*   1107 */ /*   1107 */ /*   1090 long, def=0     - Pool V2 */
 #define SDRATTR_TEXT_MAXFRAMEWIDTH      (SDRATTR_MISC_FIRST +11)   /*   1108 */ /*   1108 */ /*   1091 long, def=0     - Pool V2 */
-#define SDRATTR_TEXT_AUTOGROWWIDTH      (SDRATTR_MISC_FIRST +12)   /*   1109 */ /*   1109 */ /*   1092 BOOL, def=FALSE - Pool V2 */
+#define SDRATTR_TEXT_AUTOGROWWIDTH      (SDRATTR_MISC_FIRST +12)   /*   1109 */ /*   1109 */ /*   1092 sal_Bool, def=sal_False - Pool V2 */
 #define SDRATTR_TEXT_HORZADJUST         (SDRATTR_MISC_FIRST +13)   /*   1110 */ /*   1110 */ /*   1093 enum, def=SDRTEXTHORZADJUST_LEFT */ /* Pool V2+ (04-12-1995) */
 #define SDRATTR_TEXT_ANIKIND            (SDRATTR_MISC_FIRST +14)   /*   1111 */ /*   1111 */ /*   1094 enum, def=SDRTEXTANI_NONE - Pool V2/V4 */
 #define SDRATTR_TEXT_ANIDIRECTION       (SDRATTR_MISC_FIRST +15)   /*   1112 */ /*   1112 */ /*   1095 enum, def=SDRTEXTANI_LEFT - Pool V2/V4 */
-#define SDRATTR_TEXT_ANISTARTINSIDE     (SDRATTR_MISC_FIRST +16)   /*   1113 */ /*   1113 */ /*   1096 BOOL, def=FALSE - Pool V2/V4 */
-#define SDRATTR_TEXT_ANISTOPINSIDE      (SDRATTR_MISC_FIRST +17)   /*   1114 */ /*   1114 */ /*   1097 BOOL, def=FALSE - Pool V2/V4 */
-#define SDRATTR_TEXT_ANICOUNT           (SDRATTR_MISC_FIRST +18)   /*   1115 */ /*   1115 */ /*   1098 USHORT, def=0   - Pool V2/V4 */
-#define SDRATTR_TEXT_ANIDELAY           (SDRATTR_MISC_FIRST +19)   /*   1116 */ /*   1116 */ /*   1099 USHORT, def=0   - Pool V2/V4 */
-#define SDRATTR_TEXT_ANIAMOUNT          (SDRATTR_MISC_FIRST +20)   /*   1117 */ /*   1117 */ /*   1100 USHORT, def=0   - Pool V2/V4 */
+#define SDRATTR_TEXT_ANISTARTINSIDE     (SDRATTR_MISC_FIRST +16)   /*   1113 */ /*   1113 */ /*   1096 sal_Bool, def=sal_False - Pool V2/V4 */
+#define SDRATTR_TEXT_ANISTOPINSIDE      (SDRATTR_MISC_FIRST +17)   /*   1114 */ /*   1114 */ /*   1097 sal_Bool, def=sal_False - Pool V2/V4 */
+#define SDRATTR_TEXT_ANICOUNT           (SDRATTR_MISC_FIRST +18)   /*   1115 */ /*   1115 */ /*   1098 sal_uInt16, def=0   - Pool V2/V4 */
+#define SDRATTR_TEXT_ANIDELAY           (SDRATTR_MISC_FIRST +19)   /*   1116 */ /*   1116 */ /*   1099 sal_uInt16, def=0   - Pool V2/V4 */
+#define SDRATTR_TEXT_ANIAMOUNT          (SDRATTR_MISC_FIRST +20)   /*   1117 */ /*   1117 */ /*   1100 sal_uInt16, def=0   - Pool V2/V4 */
 #define SDRATTR_TEXT_CONTOURFRAME       (SDRATTR_MISC_FIRST +21)   /*   1118 */ /*   1118 */ /*   1101 */             /* Pool V2 */
 #define SDRATTR_CUSTOMSHAPE_ADJUSTMENT  (SDRATTR_MISC_FIRST +22)   /*   1119 */ /*   1119 */ /*   1102 */             /* Pool V2 */
 #define SDRATTR_XMLATTRIBUTES           (SDRATTR_MISC_FIRST +23)   /*   1120 */ /*   1120 */ /*   1103 */             /* Pool V2 */
@@ -168,10 +168,10 @@
 
 // Nur fuer Interfaceing, not implemented yet.                     /*  V4+   */
 #define SDRATTR_NOTPERSIST_FIRST    (SDRATTR_CIRC_LAST + 1)          /* 1180   */ /* 1172   */ /* 1127   */ /* 1110   */ /* Pool V1: 1058 */
-#define SDRATTR_OBJMOVEPROTECT      (SDRATTR_NOTPERSIST_FIRST+ 0)  /*   1180  BOOL,   def=FALSE */
-#define SDRATTR_OBJSIZEPROTECT      (SDRATTR_NOTPERSIST_FIRST+ 1)  /*   1181  BOOL,   def=FALSE */
-#define SDRATTR_OBJPRINTABLE        (SDRATTR_NOTPERSIST_FIRST+ 2)  /*   1182  BOOL,   def=TRUE  */
-#define SDRATTR_LAYERID             (SDRATTR_NOTPERSIST_FIRST+ 3)  /*   1183  USHORT, def=0     */
+#define SDRATTR_OBJMOVEPROTECT      (SDRATTR_NOTPERSIST_FIRST+ 0)  /*   1180  sal_Bool,   def=sal_False */
+#define SDRATTR_OBJSIZEPROTECT      (SDRATTR_NOTPERSIST_FIRST+ 1)  /*   1181  sal_Bool,   def=sal_False */
+#define SDRATTR_OBJPRINTABLE        (SDRATTR_NOTPERSIST_FIRST+ 2)  /*   1182  sal_Bool,   def=sal_True  */
+#define SDRATTR_LAYERID             (SDRATTR_NOTPERSIST_FIRST+ 3)  /*   1183  sal_uInt16, def=0     */
 #define SDRATTR_LAYERNAME           (SDRATTR_NOTPERSIST_FIRST+ 4)  /*   1184  String, def=""    */
 #define SDRATTR_OBJECTNAME          (SDRATTR_NOTPERSIST_FIRST+ 5)  /*   1185  String, def=""    */
 #define SDRATTR_ALLPOSITIONX        (SDRATTR_NOTPERSIST_FIRST+ 6)  /*   1186  long,   def=0     */

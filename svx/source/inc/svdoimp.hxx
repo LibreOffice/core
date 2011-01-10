@@ -98,9 +98,9 @@ void ImpCalcBmpFillSizes( Size&            rStartOffset,
                           const Size&      rBmpSize,
                           const Size&      rBmpPerCent,
                           const Size&      rBmpOffPerCent,
-                          BOOL             bBmpLogSize,
-                          BOOL             bBmpTile,
-                          BOOL             bBmpStretch,
+                          sal_Bool             bBmpLogSize,
+                          sal_Bool             bBmpTile,
+                          sal_Bool             bBmpStretch,
                           RECT_POINT       eBmpRectPoint );
 
 

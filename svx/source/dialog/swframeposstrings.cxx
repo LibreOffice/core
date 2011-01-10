@@ -43,7 +43,7 @@ public:
 SvxSwFramePosString_Impl::SvxSwFramePosString_Impl() :
     Resource(SVX_RES(RID_SVXSW_FRAMEPOSITIONS))
 {
-    for(USHORT i = 0; i < SvxSwFramePosString::STR_MAX; i++)
+    for(sal_uInt16 i = 0; i < SvxSwFramePosString::STR_MAX; i++)
     {
         //string ids have to start at 1
         aStrings[i] = String(SVX_RES(i + 1));

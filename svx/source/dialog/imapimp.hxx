@@ -47,7 +47,7 @@ public:
     ImageMap        aUpdateImageMap;
     TargetList      aUpdateTargetList;
     void*           pUpdateEditingObject;
-    BOOL            bExecState;
+    sal_Bool            bExecState;
 
                     IMapOwnData( SvxIMapDlg* pIMapDlg ) : pIMap ( pIMapDlg ) {}
 };

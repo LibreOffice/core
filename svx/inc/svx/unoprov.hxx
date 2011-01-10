@@ -43,15 +43,15 @@ class SfxItemPool;
 struct UHashMapEntry
 {
     ::rtl::OUString aIdentifier;
-    UINT32 nId;
+    sal_uInt32 nId;
 
-    UHashMapEntry(const sal_Char * value, sal_Int32 length, UINT32 _nId) : aIdentifier(value,length,RTL_TEXTENCODING_ASCII_US), nId(_nId) { }
+    UHashMapEntry(const sal_Char * value, sal_Int32 length, sal_uInt32 _nId) : aIdentifier(value,length,RTL_TEXTENCODING_ASCII_US), nId(_nId) { }
 };
 
 DECLARE_LIST( UHashMapEntryList, UHashMapEntry* )
 
 #define HASHARRAYSIZE   0x10
-#define UHASHMAP_NOTFOUND sal::static_int_cast< UINT32 >(~0)
+#define UHASHMAP_NOTFOUND sal::static_int_cast< sal_uInt32 >(~0)
 
 class UHashMap
 {
@@ -62,7 +62,7 @@ public:
     UHashMap( UHashMapEntry* pMap );
     ~UHashMap() {};
 
-    UINT32 getId( const ::rtl::OUString& rCompareString );
+    sal_uInt32 getId( const ::rtl::OUString& rCompareString );
 };
 
 /***********************************************************************
@@ -103,12 +103,12 @@ class SVX_DLLPUBLIC SvxUnoPropertyMapProvider
 {
     SfxItemPropertyMapEntry* aMapArr[SVXMAP_END];
     SvxItemPropertySet* aSetArr[SVXMAP_END];
-//  void Sort(USHORT nId);
+//  void Sort(sal_uInt16 nId);
 public:
     SvxUnoPropertyMapProvider();
     ~SvxUnoPropertyMapProvider();
-    const SfxItemPropertyMapEntry* GetMap(UINT16 nPropertyId);
-    const SvxItemPropertySet* GetPropertySet(UINT16 nPropertyId, SfxItemPool& rPool);
+    const SfxItemPropertyMapEntry* GetMap(sal_uInt16 nPropertyId);
+    const SvxItemPropertySet* GetPropertySet(sal_uInt16 nPropertyId, SfxItemPool& rPool);
 };
 
 /***********************************************************************

@@ -55,18 +55,18 @@ class SVX_DLLPUBLIC SvxHyperlinkItem : public SfxPoolItem
     String sIntName;
     SvxMacroTableDtor*  pMacroTable;
 
-    USHORT nMacroEvents;
+    sal_uInt16 nMacroEvents;
 
 public:
     TYPEINFO();
 
-    SvxHyperlinkItem( USHORT _nWhich = SID_HYPERLINK_GETLINK ):
+    SvxHyperlinkItem( sal_uInt16 _nWhich = SID_HYPERLINK_GETLINK ):
                 SfxPoolItem(_nWhich), pMacroTable(NULL) { eType = HLINK_DEFAULT; nMacroEvents=0; };
     SvxHyperlinkItem( const SvxHyperlinkItem& rHyperlinkItem );
-    SvxHyperlinkItem( USHORT nWhich, String& rName, String& rURL,
+    SvxHyperlinkItem( sal_uInt16 nWhich, String& rName, String& rURL,
                                     String& rTarget, String& rIntName,
                                     SvxLinkInsertMode eTyp = HLINK_FIELD,
-                                    USHORT nEvents = 0,
+                                    sal_uInt16 nEvents = 0,
                                     SvxMacroTableDtor *pMacroTbl =NULL );
     virtual ~SvxHyperlinkItem () { delete pMacroTable; }
 
@@ -74,8 +74,8 @@ public:
 
     virtual int              operator==( const SfxPoolItem& ) const;
     virtual SfxPoolItem*     Clone( SfxItemPool *pPool = 0 ) const;
-    virtual BOOL             QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
-    virtual BOOL             PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
+    virtual sal_Bool             QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
+    virtual sal_Bool             PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
 
     const   String& GetName() const { return sName; }
     void    SetName(const String& rName) { sName = rName; }
@@ -92,16 +92,16 @@ public:
     SvxLinkInsertMode GetInsertMode() const { return eType; }
     void    SetInsertMode( SvxLinkInsertMode eNew ) { eType = eNew; }
 
-    void SetMacro( USHORT nEvent, const SvxMacro& rMacro );
+    void SetMacro( sal_uInt16 nEvent, const SvxMacro& rMacro );
 
     void SetMacroTable( const SvxMacroTableDtor& rTbl );
     const SvxMacroTableDtor* GetMacroTbl() const    { return pMacroTable; }
 
-    void SetMacroEvents (const USHORT nEvents) { nMacroEvents = nEvents; }
-    USHORT GetMacroEvents() const { return nMacroEvents; }
+    void SetMacroEvents (const sal_uInt16 nEvents) { nMacroEvents = nEvents; }
+    sal_uInt16 GetMacroEvents() const { return nMacroEvents; }
 
-    virtual SvStream&           Store( SvStream &, USHORT nItemVersion ) const;
-    virtual SfxPoolItem*        Create( SvStream &, USHORT nVer ) const;
+    virtual SvStream&           Store( SvStream &, sal_uInt16 nItemVersion ) const;
+    virtual SfxPoolItem*        Create( SvStream &, sal_uInt16 nVer ) const;
 
 };
 

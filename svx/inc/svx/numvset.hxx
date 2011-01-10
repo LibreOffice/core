@@ -55,7 +55,7 @@ class SvxNumRule;
 struct SvxBmpItemInfo
 {
     SvxBrushItem*   pBrushItem;
-    USHORT          nItemId;
+    sal_uInt16          nItemId;
 };
 
 /*-----------------09/09/97 01:05pm-----------------
@@ -64,8 +64,8 @@ struct SvxBmpItemInfo
 class SVX_DLLPUBLIC SvxNumValueSet : public ValueSet
 {
     Color           aLineColor;
-    USHORT          nPageType;
-    BOOL            bHTMLMode;
+    sal_uInt16          nPageType;
+    sal_Bool            bHTMLMode;
     Rectangle       aOrgRect;
     VirtualDevice*  pVDev;
 
@@ -80,12 +80,12 @@ class SVX_DLLPUBLIC SvxNumValueSet : public ValueSet
         com::sun::star::uno::Reference<
             com::sun::star::container::XIndexAccess> > aOutlineSettings;
     public:
-        SvxNumValueSet( Window* pParent, const ResId& rResId, USHORT nType );
+        SvxNumValueSet( Window* pParent, const ResId& rResId, sal_uInt16 nType );
         ~SvxNumValueSet();
 
     virtual void    UserDraw( const UserDrawEvent& rUDEvt );
 
-    void            SetHTMLMode(BOOL bSet) {bHTMLMode = bSet;}
+    void            SetHTMLMode(sal_Bool bSet) {bHTMLMode = bSet;}
     void            SetNumberingSettings(
         const com::sun::star::uno::Sequence<
             com::sun::star::uno::Sequence<
@@ -109,13 +109,13 @@ class SVX_DLLPUBLIC SvxBmpNumValueSet : public SvxNumValueSet
 {
     String      sBullets;
     Timer       aFormatTimer;
-    BOOL        bGrfNotFound;
+    sal_Bool        bGrfNotFound;
 
     protected:
         DECL_LINK(FormatHdl_Impl, Timer*);
 
-    void            SetGrfNotFound(BOOL bSet) {bGrfNotFound = bSet;}
-    BOOL            IsGrfNotFound()const {return bGrfNotFound;}
+    void            SetGrfNotFound(sal_Bool bSet) {bGrfNotFound = bSet;}
+    sal_Bool            IsGrfNotFound()const {return bGrfNotFound;}
 
     Timer&          GetFormatTimer() {return aFormatTimer;}
 
@@ -136,8 +136,8 @@ class SvxNumberingPreview : public Window
     Font                aStdFont;
     long                nPageWidth;
     const String*       pOutlineNames;
-    BOOL                bPosition;
-    UINT16              nActLevel;
+    sal_Bool                bPosition;
+    sal_uInt16              nActLevel;
 
     protected:
         virtual void        Paint( const Rectangle& rRect );
@@ -145,7 +145,7 @@ class SvxNumberingPreview : public Window
     public:
         SvxNumberingPreview(Window* pParent, const ResId& rResId ) :
             Window(pParent, rResId),
-            pActNum(0),nPageWidth(0), pOutlineNames(0), bPosition(FALSE), nActLevel(USHRT_MAX)
+            pActNum(0),nPageWidth(0), pOutlineNames(0), bPosition(sal_False), nActLevel(USHRT_MAX)
             { SetBorderStyle( WINDOW_BORDER_MONO ); }
 
         void    SetNumRule(const SvxNumRule* pNum)
@@ -155,8 +155,8 @@ class SvxNumberingPreview : public Window
         void    SetOutlineNames(const String* pNames)
                         {pOutlineNames = pNames;}
         void    SetPositionMode()
-                        { bPosition = TRUE;}
-        void    SetLevel(USHORT nSet) {nActLevel = nSet;}
+                        { bPosition = sal_True;}
+        void    SetLevel(sal_uInt16 nSet) {nActLevel = nSet;}
 
 };
 

@@ -400,7 +400,7 @@ void SvxTableController::GetState( SfxItemSet& rSet )
 
     // Iterate over all requested items in the set.
     SfxWhichIter aIter( rSet );
-    USHORT nWhich = aIter.FirstWhich();
+    sal_uInt16 nWhich = aIter.FirstWhich();
     while (nWhich)
     {
         switch (nWhich)
@@ -418,7 +418,7 @@ void SvxTableController::GetState( SfxItemSet& rSet )
                         if( !pSet )
                         {
                             pSet = new SfxItemSet( mxTableObj->GetModel()->GetItemPool() );
-                            MergeAttrFromSelectedCells(*pSet, FALSE);
+                            MergeAttrFromSelectedCells(*pSet, sal_False);
                         }
 
                         SdrTextVertAdjust eAdj = SDRTEXTVERTADJUST_BLOCK;
@@ -504,11 +504,11 @@ void SvxTableController::onInsert( sal_uInt16 nSId, const SfxItemSet* pArgs )
         if( pArgs )
         {
             const SfxPoolItem* pItem = 0;
-            pArgs->GetItemState(nSId, FALSE, &pItem);
+            pArgs->GetItemState(nSId, sal_False, &pItem);
             if (pItem)
             {
                 nCount = ((const SfxInt16Item* )pItem)->GetValue();
-                if(SFX_ITEM_SET == pArgs->GetItemState(SID_TABLE_PARAM_INSERT_AFTER, TRUE, &pItem))
+                if(SFX_ITEM_SET == pArgs->GetItemState(SID_TABLE_PARAM_INSERT_AFTER, sal_True, &pItem))
                     bInsertAfter = ((const SfxBoolItem* )pItem)->GetValue();
             }
         }
@@ -722,14 +722,14 @@ void SvxTableController::onFormatTable( SfxRequest& rReq )
     if( !pArgs && pTableObj->GetModel() )
     {
         SfxItemSet aNewAttr( pTableObj->GetModel()->GetItemPool() );
-        MergeAttrFromSelectedCells(aNewAttr, FALSE);
+        MergeAttrFromSelectedCells(aNewAttr, sal_False);
 
         // merge drawing layer text distance items into SvxBoxItem used by the dialog
         SvxBoxItem aBoxItem( static_cast< const SvxBoxItem& >( aNewAttr.Get( SDRATTR_TABLE_BORDER ) ) );
-        aBoxItem.SetDistance( sal::static_int_cast< USHORT >( ((SdrTextLeftDistItem&)(aNewAttr.Get(SDRATTR_TEXT_LEFTDIST))).GetValue()), BOX_LINE_LEFT );
-        aBoxItem.SetDistance( sal::static_int_cast< USHORT >( ((SdrTextRightDistItem&)(aNewAttr.Get(SDRATTR_TEXT_RIGHTDIST))).GetValue()), BOX_LINE_RIGHT );
-        aBoxItem.SetDistance( sal::static_int_cast< USHORT >( ((SdrTextUpperDistItem&)(aNewAttr.Get(SDRATTR_TEXT_UPPERDIST))).GetValue()), BOX_LINE_TOP );
-        aBoxItem.SetDistance( sal::static_int_cast< USHORT >( ((SdrTextLowerDistItem&)(aNewAttr.Get(SDRATTR_TEXT_LOWERDIST))).GetValue()), BOX_LINE_BOTTOM );
+        aBoxItem.SetDistance( sal::static_int_cast< sal_uInt16 >( ((SdrTextLeftDistItem&)(aNewAttr.Get(SDRATTR_TEXT_LEFTDIST))).GetValue()), BOX_LINE_LEFT );
+        aBoxItem.SetDistance( sal::static_int_cast< sal_uInt16 >( ((SdrTextRightDistItem&)(aNewAttr.Get(SDRATTR_TEXT_RIGHTDIST))).GetValue()), BOX_LINE_RIGHT );
+        aBoxItem.SetDistance( sal::static_int_cast< sal_uInt16 >( ((SdrTextUpperDistItem&)(aNewAttr.Get(SDRATTR_TEXT_UPPERDIST))).GetValue()), BOX_LINE_TOP );
+        aBoxItem.SetDistance( sal::static_int_cast< sal_uInt16 >( ((SdrTextLowerDistItem&)(aNewAttr.Get(SDRATTR_TEXT_LOWERDIST))).GetValue()), BOX_LINE_BOTTOM );
         aNewAttr.Put( aBoxItem );
 
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
@@ -752,7 +752,7 @@ void SvxTableController::onFormatTable( SfxRequest& rReq )
             if( aNewBoxItem.GetDistance( BOX_LINE_BOTTOM ) != aBoxItem.GetDistance( BOX_LINE_BOTTOM ) )
                 aNewSet.Put(SdrTextLowerDistItem( aNewBoxItem.GetDistance( BOX_LINE_BOTTOM ) ) );
 
-            SetAttrToSelectedCells(aNewSet, FALSE);
+            SetAttrToSelectedCells(aNewSet, sal_False);
         }
         UpdateTableShape();
     }
@@ -843,7 +843,7 @@ void SvxTableController::SetTableStyle( const SfxItemSet* pArgs )
     SdrTableObj* pTableObj = dynamic_cast< ::sdr::table::SdrTableObj* >( mxTableObj.get() );
     SdrModel* pModel = pTableObj ? pTableObj->GetModel() : 0;
 
-    if( !pTableObj || !pModel || !pArgs || (SFX_ITEM_SET != pArgs->GetItemState(SID_TABLE_STYLE, FALSE)) )
+    if( !pTableObj || !pModel || !pArgs || (SFX_ITEM_SET != pArgs->GetItemState(SID_TABLE_STYLE, sal_False)) )
         return;
 
     const SfxStringItem* pArg = dynamic_cast< const SfxStringItem* >( &pArgs->Get( SID_TABLE_STYLE ) );
@@ -882,7 +882,7 @@ void SvxTableController::SetTableStyle( const SfxItemSet* pArgs )
                         bool bChanges = false;
                         const SfxItemSet& rStyleAttribs = xCell->GetStyleSheet()->GetItemSet();
 
-                        for ( USHORT nWhich = SDRATTR_START; nWhich <= SDRATTR_TABLE_LAST; nWhich++ )
+                        for ( sal_uInt16 nWhich = SDRATTR_START; nWhich <= SDRATTR_TABLE_LAST; nWhich++ )
                         {
                             if( (rStyleAttribs.GetItemState( nWhich ) == SFX_ITEM_ON) && (aSet.GetItemState( nWhich ) == SFX_ITEM_ON) )
                             {
@@ -930,22 +930,22 @@ void SvxTableController::SetTableStyleSettings( const SfxItemSet* pArgs )
 
     const SfxPoolItem *pPoolItem=NULL;
 
-    if( (SFX_ITEM_SET == pArgs->GetItemState(ID_VAL_USEFIRSTROWSTYLE, FALSE,&pPoolItem)) )
+    if( (SFX_ITEM_SET == pArgs->GetItemState(ID_VAL_USEFIRSTROWSTYLE, sal_False,&pPoolItem)) )
         aSettings.mbUseFirstRow = static_cast< const SfxBoolItem* >(pPoolItem)->GetValue();
 
-    if( (SFX_ITEM_SET == pArgs->GetItemState(ID_VAL_USELASTROWSTYLE, FALSE,&pPoolItem)) )
+    if( (SFX_ITEM_SET == pArgs->GetItemState(ID_VAL_USELASTROWSTYLE, sal_False,&pPoolItem)) )
         aSettings.mbUseLastRow = static_cast< const SfxBoolItem* >(pPoolItem)->GetValue();
 
-    if( (SFX_ITEM_SET == pArgs->GetItemState(ID_VAL_USEBANDINGROWSTYLE, FALSE,&pPoolItem)) )
+    if( (SFX_ITEM_SET == pArgs->GetItemState(ID_VAL_USEBANDINGROWSTYLE, sal_False,&pPoolItem)) )
         aSettings.mbUseRowBanding = static_cast< const SfxBoolItem* >(pPoolItem)->GetValue();
 
-    if( (SFX_ITEM_SET == pArgs->GetItemState(ID_VAL_USEFIRSTCOLUMNSTYLE, FALSE,&pPoolItem)) )
+    if( (SFX_ITEM_SET == pArgs->GetItemState(ID_VAL_USEFIRSTCOLUMNSTYLE, sal_False,&pPoolItem)) )
         aSettings.mbUseFirstColumn = static_cast< const SfxBoolItem* >(pPoolItem)->GetValue();
 
-    if( (SFX_ITEM_SET == pArgs->GetItemState(ID_VAL_USELASTCOLUMNSTYLE, FALSE,&pPoolItem)) )
+    if( (SFX_ITEM_SET == pArgs->GetItemState(ID_VAL_USELASTCOLUMNSTYLE, sal_False,&pPoolItem)) )
         aSettings.mbUseLastColumn = static_cast< const SfxBoolItem* >(pPoolItem)->GetValue();
 
-    if( (SFX_ITEM_SET == pArgs->GetItemState(ID_VAL_USEBANDINGCOLUMNSTYLE, FALSE,&pPoolItem)) )
+    if( (SFX_ITEM_SET == pArgs->GetItemState(ID_VAL_USEBANDINGCOLUMNSTYLE, sal_False,&pPoolItem)) )
         aSettings.mbUseColumnBanding = static_cast< const SfxBoolItem* >(pPoolItem)->GetValue();
 
     if( aSettings == pTableObj->getTableStyleSettings() )
@@ -1677,7 +1677,7 @@ void SvxTableController::EditCell( const CellPos& rPos, ::Window* pWindow, const
         if(!pTableObj->GetOutlinerParaObject() && mpView->GetTextEditOutliner())
         {
             ::Outliner* pOutl = mpView->GetTextEditOutliner();
-            ULONG nParaAnz = pOutl->GetParagraphCount();
+            sal_uIntPtr nParaAnz = pOutl->GetParagraphCount();
             Paragraph* p1stPara = pOutl->GetParagraph( 0 );
 
             if(nParaAnz==1 && p1stPara)
@@ -1703,7 +1703,7 @@ void SvxTableController::EditCell( const CellPos& rPos, ::Window* pWindow, const
             // create new outliner, owner will be the SdrObjEditView
             SdrOutliner* pOutl = SdrMakeOutliner( OUTLINERMODE_OUTLINEOBJECT, mpModel );
             if( pTableObj->IsVerticalWriting() )
-                pOutl->SetVertical( TRUE );
+                pOutl->SetVertical( sal_True );
 
             if(mpView->SdrBeginTextEdit(pTableObj, pPV, pWindow, sal_True, pOutl))
             {
@@ -2020,15 +2020,15 @@ void SvxTableController::MergeAttrFromSelectedCells(SfxItemSet& rAttr, bool bOnl
                     {
                         if(!bOnlyHardAttr)
                         {
-                            if(SFX_ITEM_DONTCARE == rSet.GetItemState(nWhich, FALSE))
+                            if(SFX_ITEM_DONTCARE == rSet.GetItemState(nWhich, sal_False))
                                 rAttr.InvalidateItem(nWhich);
                             else
-                                rAttr.MergeValue(rSet.Get(nWhich), TRUE);
+                                rAttr.MergeValue(rSet.Get(nWhich), sal_True);
                         }
-                        else if(SFX_ITEM_SET == rSet.GetItemState(nWhich, FALSE))
+                        else if(SFX_ITEM_SET == rSet.GetItemState(nWhich, sal_False))
                         {
                             const SfxPoolItem& rItem = rSet.Get(nWhich);
-                            rAttr.MergeValue(rItem, TRUE);
+                            rAttr.MergeValue(rItem, sal_True);
                         }
 
                         nWhich = aIter.NextWhich();
@@ -2057,7 +2057,7 @@ const sal_uInt16 CELL_LOWER  = 0x0080;
 
 // --------------------------------------------------------------------
 
-static void ImplSetLinePreserveColor( SvxBoxItem& rNewFrame, const SvxBorderLine* pNew, USHORT nLine )
+static void ImplSetLinePreserveColor( SvxBoxItem& rNewFrame, const SvxBorderLine* pNew, sal_uInt16 nLine )
 {
     if( pNew )
     {
@@ -2126,14 +2126,14 @@ static void ImplApplyBoxItem( sal_uInt16 nCellFlags, const SvxBoxItem* pBoxItem,
 
         // apply distance to borders
         if( pBoxInfoItem->IsValid( VALID_DISTANCE ) )
-            for( USHORT nLine = 0; nLine < 4; ++nLine )
+            for( sal_uInt16 nLine = 0; nLine < 4; ++nLine )
                 rNewFrame.SetDistance( pBoxItem->GetDistance( nLine ), nLine );
     }
 }
 
 // --------------------------------------------------------------------
 
-static void ImplSetLineColor( SvxBoxItem& rNewFrame, USHORT nLine, const Color& rColor )
+static void ImplSetLineColor( SvxBoxItem& rNewFrame, sal_uInt16 nLine, const Color& rColor )
 {
     const SvxBorderLine* pSourceLine = rNewFrame.GetLine( nLine );
     if( pSourceLine )
@@ -2220,19 +2220,19 @@ void SvxTableController::ApplyBorderAttr( const SfxItemSet& rAttr )
         if( nRowCount && nColCount )
         {
             const SvxBoxItem* pBoxItem = 0;
-            if(SFX_ITEM_SET == rAttr.GetItemState(SDRATTR_TABLE_BORDER, FALSE) )
+            if(SFX_ITEM_SET == rAttr.GetItemState(SDRATTR_TABLE_BORDER, sal_False) )
                 pBoxItem = dynamic_cast< const SvxBoxItem* >( &rAttr.Get( SDRATTR_TABLE_BORDER ) );
 
             const SvxBoxInfoItem* pBoxInfoItem = 0;
-            if(SFX_ITEM_SET == rAttr.GetItemState(SDRATTR_TABLE_BORDER_INNER, FALSE) )
+            if(SFX_ITEM_SET == rAttr.GetItemState(SDRATTR_TABLE_BORDER_INNER, sal_False) )
                 pBoxInfoItem = dynamic_cast< const SvxBoxInfoItem* >( &rAttr.Get( SDRATTR_TABLE_BORDER_INNER ) );
 
             const SvxColorItem* pLineColorItem = 0;
-            if(SFX_ITEM_SET == rAttr.GetItemState(SID_FRAME_LINECOLOR, FALSE) )
+            if(SFX_ITEM_SET == rAttr.GetItemState(SID_FRAME_LINECOLOR, sal_False) )
                 pLineColorItem = dynamic_cast< const SvxColorItem* >( &rAttr.Get( SID_FRAME_LINECOLOR ) );
 
             const SvxBorderLine* pBorderLineItem = 0;
-            if(SFX_ITEM_SET == rAttr.GetItemState(SID_FRAME_LINESTYLE, FALSE) )
+            if(SFX_ITEM_SET == rAttr.GetItemState(SID_FRAME_LINESTYLE, sal_False) )
                 pBorderLineItem = ((const SvxLineItem&)rAttr.Get( SID_FRAME_LINESTYLE )).GetLine();
 
             if( pBoxInfoItem && !pBoxItem )
@@ -2327,7 +2327,7 @@ void SvxTableController::SetAttrToSelectedCells(const SfxItemSet& rAttr, bool bR
         getSelectedCells( aStart, aEnd );
 
         SfxItemSet aAttr(*rAttr.GetPool(), rAttr.GetRanges());
-        aAttr.Put(rAttr, TRUE);
+        aAttr.Put(rAttr, sal_True);
 
         const bool bFrame = (rAttr.GetItemState( SDRATTR_TABLE_BORDER ) == SFX_ITEM_SET) || (rAttr.GetItemState( SDRATTR_TABLE_BORDER_INNER ) == SFX_ITEM_SET);
 
@@ -2381,8 +2381,8 @@ bool SvxTableController::GetAttributes(SfxItemSet& rTargetSet, bool bOnlyHardAtt
             if(pTextEditOutlinerView)
             {
                 // FALSE= InvalidItems nicht al Default, sondern als "Loecher" betrachten
-                rTargetSet.Put(pTextEditOutlinerView->GetAttribs(), FALSE);
-                rTargetSet.Put( SvxScriptTypeItem( pTextEditOutlinerView->GetSelectedScriptType() ), FALSE );
+                rTargetSet.Put(pTextEditOutlinerView->GetAttribs(), sal_False);
+                rTargetSet.Put( SvxScriptTypeItem( pTextEditOutlinerView->GetSelectedScriptType() ), sal_False );
             }
         }
 
@@ -2534,7 +2534,7 @@ bool SvxTableController::ApplyFormatPaintBrush( SfxItemSet& rFormatSet, bool bNo
         getSelectedCells( aStart, aEnd );
 
         SfxItemSet aAttr(*rFormatSet.GetPool(), rFormatSet.GetRanges());
-        aAttr.Put(rFormatSet, TRUE);
+        aAttr.Put(rFormatSet, sal_True);
 
         const bool bFrame = (rFormatSet.GetItemState( SDRATTR_TABLE_BORDER ) == SFX_ITEM_SET) || (rFormatSet.GetItemState( SDRATTR_TABLE_BORDER_INNER ) == SFX_ITEM_SET);
 
@@ -2544,7 +2544,7 @@ bool SvxTableController::ApplyFormatPaintBrush( SfxItemSet& rFormatSet, bool bNo
             aAttr.ClearItem( SDRATTR_TABLE_BORDER_INNER );
         }
 
-        const USHORT* pRanges = rFormatSet.GetRanges();
+        const sal_uInt16* pRanges = rFormatSet.GetRanges();
         bool bTextOnly = true;
 
         while( *pRanges )

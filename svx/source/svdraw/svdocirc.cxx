@@ -152,27 +152,27 @@ SdrCircObj::~SdrCircObj()
 
 void SdrCircObj::TakeObjInfo(SdrObjTransformInfoRec& rInfo) const
 {
-    FASTBOOL bCanConv=!HasText() || ImpCanConvTextToCurve();
-    rInfo.bEdgeRadiusAllowed    = FALSE;
+    int bCanConv=!HasText() || ImpCanConvTextToCurve();
+    rInfo.bEdgeRadiusAllowed    = sal_False;
     rInfo.bCanConvToPath=bCanConv;
     rInfo.bCanConvToPoly=bCanConv;
     rInfo.bCanConvToContour = !IsFontwork() && (rInfo.bCanConvToPoly || LineGeometryUsageIsNecessary());
 }
 
-UINT16 SdrCircObj::GetObjIdentifier() const
+sal_uInt16 SdrCircObj::GetObjIdentifier() const
 {
-    return UINT16(meCircleKind);
+    return sal_uInt16(meCircleKind);
 }
 
-FASTBOOL SdrCircObj::PaintNeedsXPolyCirc() const
+int SdrCircObj::PaintNeedsXPolyCirc() const
 {
     // XPoly ist notwendig fuer alle gedrehten Ellipsenobjekte,
     // fuer alle Kreis- und Ellipsenabschnitte
     // und wenn nicht WIN dann (erstmal) auch fuer Kreis-/Ellipsenausschnitte
     // und Kreis-/Ellipsenboegen (wg. Genauigkeit)
-    FASTBOOL bNeed=aGeo.nDrehWink!=0 || aGeo.nShearWink!=0 || meCircleKind==OBJ_CCUT;
+    int bNeed=aGeo.nDrehWink!=0 || aGeo.nShearWink!=0 || meCircleKind==OBJ_CCUT;
     // Wenn nicht Win, dann fuer alle ausser Vollkreis (erstmal!!!)
-    if (meCircleKind!=OBJ_CIRC) bNeed=TRUE;
+    if (meCircleKind!=OBJ_CIRC) bNeed=sal_True;
 
     const SfxItemSet& rSet = GetObjectItemSet();
     if(!bNeed)
@@ -209,7 +209,7 @@ FASTBOOL SdrCircObj::PaintNeedsXPolyCirc() const
     }
 
     if(!bNeed && meCircleKind != OBJ_CIRC && nStartWink == nEndWink)
-        bNeed=TRUE; // Weil sonst Vollkreis gemalt wird
+        bNeed=sal_True; // Weil sonst Vollkreis gemalt wird
 
     return bNeed;
 }
@@ -295,7 +295,7 @@ void SdrCircObj::RecalcXPoly()
 
 void SdrCircObj::TakeObjNameSingul(XubString& rName) const
 {
-    USHORT nID=STR_ObjNameSingulCIRC;
+    sal_uInt16 nID=STR_ObjNameSingulCIRC;
     if (aRect.GetWidth()==aRect.GetHeight() && aGeo.nShearWink==0) {
         switch (meCircleKind) {
             case OBJ_CIRC: nID=STR_ObjNameSingulCIRC; break;
@@ -327,7 +327,7 @@ void SdrCircObj::TakeObjNameSingul(XubString& rName) const
 
 void SdrCircObj::TakeObjNamePlural(XubString& rName) const
 {
-    USHORT nID=STR_ObjNamePluralCIRC;
+    sal_uInt16 nID=STR_ObjNamePluralCIRC;
     if (aRect.GetWidth()==aRect.GetHeight() && aGeo.nShearWink==0) {
         switch (meCircleKind) {
             case OBJ_CIRC: nID=STR_ObjNamePluralCIRC; break;
@@ -375,7 +375,7 @@ struct ImpCircUser : public SdrDragStatUserData
     long                        nStart;
     long                        nEnd;
     long                        nWink;
-    FASTBOOL                    bRight; // noch nicht implementiert
+    int                 bRight; // noch nicht implementiert
 
 public:
     ImpCircUser()
@@ -384,7 +384,7 @@ public:
         nWdt(0),
         nStart(0),
         nEnd(0),
-        bRight(FALSE)
+        bRight(sal_False)
     {}
     void SetCreateParams(SdrDragStat& rStat);
 };
@@ -595,7 +595,7 @@ String SdrCircObj::getSpecialDragComment(const SdrDragStat& rDrag) const
                 nWink = pU->nEnd;
             }
 
-            aStr += GetWinkStr(nWink,FALSE);
+            aStr += GetWinkStr(nWink,sal_False);
             aStr += sal_Unicode(')');
         }
 
@@ -612,7 +612,7 @@ String SdrCircObj::getSpecialDragComment(const SdrDragStat& rDrag) const
 
             ImpTakeDescriptionStr(STR_DragCircAngle, aStr);
             aStr.AppendAscii(" (");
-            aStr += GetWinkStr(nWink,FALSE);
+            aStr += GetWinkStr(nWink,sal_False);
             aStr += sal_Unicode(')');
 
             return aStr;
@@ -690,7 +690,7 @@ void SdrCircObj::ImpSetCreateParams(SdrDragStat& rStat) const
     pU->SetCreateParams(rStat);
 }
 
-FASTBOOL SdrCircObj::BegCreate(SdrDragStat& rStat)
+int SdrCircObj::BegCreate(SdrDragStat& rStat)
 {
     rStat.SetOrtho4Possible();
     Rectangle aRect1(rStat.GetStart(), rStat.GetNow());
@@ -698,10 +698,10 @@ FASTBOOL SdrCircObj::BegCreate(SdrDragStat& rStat)
     rStat.SetActionRect(aRect1);
     aRect = aRect1;
     ImpSetCreateParams(rStat);
-    return TRUE;
+    return sal_True;
 }
 
-FASTBOOL SdrCircObj::MovCreate(SdrDragStat& rStat)
+int SdrCircObj::MovCreate(SdrDragStat& rStat)
 {
     ImpSetCreateParams(rStat);
     ImpCircUser* pU=(ImpCircUser*)rStat.GetUser();
@@ -711,7 +711,7 @@ FASTBOOL SdrCircObj::MovCreate(SdrDragStat& rStat)
     nStartWink=pU->nStart;
     nEndWink=pU->nEnd;
     SetBoundRectDirty();
-    bSnapRectDirty=TRUE;
+    bSnapRectDirty=sal_True;
     SetXPolyDirty();
 
     // #i103058# push current angle settings to ItemSet to
@@ -721,14 +721,14 @@ FASTBOOL SdrCircObj::MovCreate(SdrDragStat& rStat)
         ImpSetCircInfoToAttr();
     }
 
-    return TRUE;
+    return sal_True;
 }
 
-FASTBOOL SdrCircObj::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
+int SdrCircObj::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
 {
     ImpSetCreateParams(rStat);
     ImpCircUser* pU=(ImpCircUser*)rStat.GetUser();
-    FASTBOOL bRet=FALSE;
+    int bRet=sal_False;
     if (eCmd==SDRCREATE_FORCEEND && rStat.GetPointAnz()<4) meCircleKind=OBJ_CIRC;
     if (meCircleKind==OBJ_CIRC) {
         bRet=rStat.GetPointAnz()>=2;
@@ -765,7 +765,7 @@ void SdrCircObj::BrkCreate(SdrDragStat& rStat)
     rStat.SetUser(NULL);
 }
 
-FASTBOOL SdrCircObj::BckCreate(SdrDragStat& rStat)
+int SdrCircObj::BckCreate(SdrDragStat& rStat)
 {
     rStat.SetNoSnap(rStat.GetPointAnz()>=3);
     rStat.SetOrtho4Possible(rStat.GetPointAnz()<3);
@@ -823,12 +823,12 @@ void SdrCircObj::NbcMove(const Size& aSiz)
 void SdrCircObj::NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact)
 {
     long nWink0=aGeo.nDrehWink;
-    FASTBOOL bNoShearRota=(aGeo.nDrehWink==0 && aGeo.nShearWink==0);
+    int bNoShearRota=(aGeo.nDrehWink==0 && aGeo.nShearWink==0);
     SdrTextObj::NbcResize(rRef,xFact,yFact);
     bNoShearRota|=(aGeo.nDrehWink==0 && aGeo.nShearWink==0);
     if (meCircleKind!=OBJ_CIRC) {
-        FASTBOOL bXMirr=(xFact.GetNumerator()<0) != (xFact.GetDenominator()<0);
-        FASTBOOL bYMirr=(yFact.GetNumerator()<0) != (yFact.GetDenominator()<0);
+        int bXMirr=(xFact.GetNumerator()<0) != (xFact.GetDenominator()<0);
+        int bYMirr=(yFact.GetNumerator()<0) != (yFact.GetDenominator()<0);
         if (bXMirr || bYMirr) {
             // bei bXMirr!=bYMirr muessten eigentlich noch die beiden
             // Linienende vertauscht werden. Das ist jedoch mal wieder
@@ -872,7 +872,7 @@ void SdrCircObj::NbcResize(const Point& rRef, const Fraction& xFact, const Fract
     ImpSetCircInfoToAttr();
 }
 
-void SdrCircObj::NbcShear(const Point& rRef, long nWink, double tn, FASTBOOL bVShear)
+void SdrCircObj::NbcShear(const Point& rRef, long nWink, double tn, int bVShear)
 {
     SdrTextObj::NbcShear(rRef,nWink,tn,bVShear);
     SetXPolyDirty();
@@ -882,7 +882,7 @@ void SdrCircObj::NbcShear(const Point& rRef, long nWink, double tn, FASTBOOL bVS
 void SdrCircObj::NbcMirror(const Point& rRef1, const Point& rRef2)
 {
     //long nWink0=aGeo.nDrehWink;
-    FASTBOOL bFreeMirr=meCircleKind!=OBJ_CIRC;
+    int bFreeMirr=meCircleKind!=OBJ_CIRC;
     Point aTmpPt1;
     Point aTmpPt2;
     if (bFreeMirr) { // bei freier Spiegelachse einige Vorbereitungen Treffen
@@ -1098,8 +1098,8 @@ void SdrCircObj::ImpSetAttrToCircInfo()
     sal_Int32 nNewStart = ((SdrCircStartAngleItem&)rSet.Get(SDRATTR_CIRCSTARTANGLE)).GetValue();
     sal_Int32 nNewEnd = ((SdrCircEndAngleItem&)rSet.Get(SDRATTR_CIRCENDANGLE)).GetValue();
 
-    BOOL bKindChg = meCircleKind != eNewKind;
-    BOOL bWinkChg = nNewStart != nStartWink || nNewEnd != nEndWink;
+    sal_Bool bKindChg = meCircleKind != eNewKind;
+    sal_Bool bWinkChg = nNewStart != nStartWink || nNewEnd != nEndWink;
 
     if(bKindChg || bWinkChg)
     {
@@ -1155,7 +1155,7 @@ void SdrCircObj::ImpSetCircInfoToAttr()
     }
 }
 
-SdrObject* SdrCircObj::DoConvertToPolyObj(BOOL bBezier) const
+SdrObject* SdrCircObj::DoConvertToPolyObj(sal_Bool bBezier) const
 {
     const sal_Bool bFill(OBJ_CARC == meCircleKind ? sal_False : sal_True);
     const basegfx::B2DPolygon aCircPolygon(ImpCalcXPolyCirc(meCircleKind, aRect, nStartWink, nEndWink));

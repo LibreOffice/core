@@ -347,7 +347,7 @@ SfxPoolItem* __EXPORT SdrCustomShapeGeometryItem::Clone( SfxItemPool * /*pPool*/
 #ifdef SDR_ISPOOLABLE
 int __EXPORT SdrCustomShapeGeometryItem::IsPoolable() const
 {
-    USHORT nId=Which();
+    sal_uInt16 nId=Which();
     return nId < SDRATTR_NOTPERSIST_FIRST || nId > SDRATTR_NOTPERSIST_LAST;
 }
 #endif
@@ -355,12 +355,12 @@ sal_uInt16 SdrCustomShapeGeometryItem::GetVersion( sal_uInt16 /*nFileFormatVersi
 {
     return 1;
 }
-sal_Bool SdrCustomShapeGeometryItem::QueryValue( uno::Any& rVal, BYTE /*nMemberId*/ ) const
+sal_Bool SdrCustomShapeGeometryItem::QueryValue( uno::Any& rVal, sal_uInt8 /*nMemberId*/ ) const
 {
     rVal <<= aPropSeq;
     return sal_True;
 }
-sal_Bool SdrCustomShapeGeometryItem::PutValue( const uno::Any& rVal, BYTE /*nMemberId*/ )
+sal_Bool SdrCustomShapeGeometryItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemberId*/ )
 {
     if ( ! ( rVal >>= aPropSeq ) )
         return sal_False;

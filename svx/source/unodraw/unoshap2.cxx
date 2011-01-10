@@ -1717,7 +1717,7 @@ bool SvxGraphicObject::setPropertyValueImpl( const ::rtl::OUString& rName, const
                 // normal link
                 String              aFilterName;
                 const SfxFilter*    pSfxFilter = NULL;
-                SfxMedium           aSfxMedium( aURL, STREAM_READ | STREAM_SHARE_DENYNONE, FALSE );
+                SfxMedium           aSfxMedium( aURL, STREAM_READ | STREAM_SHARE_DENYNONE, sal_False );
 
                 SFX_APP()->GetFilterMatcher().GuessFilter( aSfxMedium, &pSfxFilter, SFX_FILTER_IMPORT, SFX_FILTER_NOTINSTALLED | SFX_FILTER_EXECUTABLE );
 
@@ -1997,8 +1997,8 @@ awt::Point SAL_CALL SvxCustomShape::getPosition() throw(uno::RuntimeException)
 
                 Point aRef1( ( aBoundRect.Left() + aBoundRect.Right() ) >> 1, aBoundRect.Top() );
                 Point aRef2( aRef1.X(), aRef1.Y() + 1000 );
-                USHORT i;
-                USHORT nPntAnz=aPol.GetSize();
+                sal_uInt16 i;
+                sal_uInt16 nPntAnz=aPol.GetSize();
                 for (i=0; i<nPntAnz; i++)
                 {
                     MirrorPoint(aPol[i],aRef1,aRef2);
@@ -2019,8 +2019,8 @@ awt::Point SAL_CALL SvxCustomShape::getPosition() throw(uno::RuntimeException)
 
                 Point aRef1( aBoundRect.Left(), ( aBoundRect.Top() + aBoundRect.Bottom() ) >> 1 );
                 Point aRef2( aRef1.X() + 1000, aRef1.Y() );
-                USHORT i;
-                USHORT nPntAnz=aPol.GetSize();
+                sal_uInt16 i;
+                sal_uInt16 nPntAnz=aPol.GetSize();
                 for (i=0; i<nPntAnz; i++)
                 {
                     MirrorPoint(aPol[i],aRef1,aRef2);

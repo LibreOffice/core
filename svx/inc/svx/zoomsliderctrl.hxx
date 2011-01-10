@@ -42,20 +42,20 @@ private:
     struct SvxZoomSliderControl_Impl;
     SvxZoomSliderControl_Impl* mpImpl;
 
-    USHORT Offset2Zoom( long nOffset ) const;
-    long Zoom2Offset( USHORT nZoom ) const;
+    sal_uInt16 Offset2Zoom( long nOffset ) const;
+    long Zoom2Offset( sal_uInt16 nZoom ) const;
 
 public:
 
     SFX_DECL_STATUSBAR_CONTROL();
 
-    SvxZoomSliderControl( USHORT _nSlotId, USHORT _nId, StatusBar& _rStb );
+    SvxZoomSliderControl( sal_uInt16 _nSlotId, sal_uInt16 _nId, StatusBar& _rStb );
     ~SvxZoomSliderControl();
 
-    virtual void  StateChanged( USHORT nSID, SfxItemState eState, const SfxPoolItem* pState );
+    virtual void  StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState );
     virtual void  Paint( const UserDrawEvent& rEvt );
-    virtual BOOL  MouseButtonDown( const MouseEvent & );
-    virtual BOOL  MouseMove( const MouseEvent & rEvt );
+    virtual sal_Bool  MouseButtonDown( const MouseEvent & );
+    virtual sal_Bool  MouseMove( const MouseEvent & rEvt );
 };
 
 #endif

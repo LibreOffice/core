@@ -60,7 +60,7 @@ TYPEINIT1(SdrVirtObj,SdrObject);
 SdrVirtObj::SdrVirtObj(SdrObject& rNewObj):
     rRefObj(rNewObj)
 {
-    bVirtObj=TRUE; // Ja, ich bin ein virtuelles Objekt
+    bVirtObj=sal_True; // Ja, ich bin ein virtuelles Objekt
     rRefObj.AddReference(*this);
     bClosedObj=rRefObj.IsClosedObj();
 }
@@ -69,7 +69,7 @@ SdrVirtObj::SdrVirtObj(SdrObject& rNewObj, const Point& rAnchorPos):
     rRefObj(rNewObj)
 {
     aAnchor=rAnchorPos;
-    bVirtObj=TRUE; // Ja, ich bin ein virtuelles Objekt
+    bVirtObj=sal_True; // Ja, ich bin ein virtuelles Objekt
     rRefObj.AddReference(*this);
     bClosedObj=rRefObj.IsClosedObj();
 }
@@ -119,12 +119,12 @@ void SdrVirtObj::TakeObjInfo(SdrObjTransformInfoRec& rInfo) const
     rRefObj.TakeObjInfo(rInfo);
 }
 
-UINT32 SdrVirtObj::GetObjInventor() const
+sal_uInt32 SdrVirtObj::GetObjInventor() const
 {
     return rRefObj.GetObjInventor();
 }
 
-UINT16 SdrVirtObj::GetObjIdentifier() const
+sal_uInt16 SdrVirtObj::GetObjIdentifier() const
 {
     return rRefObj.GetObjIdentifier();
 }
@@ -197,7 +197,7 @@ void SdrVirtObj::TakeObjNamePlural(XubString& rName) const
 void operator +=(PolyPolygon& rPoly, const Point& rOfs)
 {
     if (rOfs.X()!=0 || rOfs.Y()!=0) {
-        USHORT i,j;
+        sal_uInt16 i,j;
         for (j=0; j<rPoly.Count(); j++) {
             Polygon aP1(rPoly.GetObject(j));
             for (i=0; i<aP1.GetSize(); i++) {
@@ -347,22 +347,22 @@ String SdrVirtObj::getSpecialDragComment(const SdrDragStat& rDrag) const
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-FASTBOOL SdrVirtObj::BegCreate(SdrDragStat& rStat)
+int SdrVirtObj::BegCreate(SdrDragStat& rStat)
 {
     return rRefObj.BegCreate(rStat);
 }
 
-FASTBOOL SdrVirtObj::MovCreate(SdrDragStat& rStat)
+int SdrVirtObj::MovCreate(SdrDragStat& rStat)
 {
     return rRefObj.MovCreate(rStat);
 }
 
-FASTBOOL SdrVirtObj::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
+int SdrVirtObj::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
 {
     return rRefObj.EndCreate(rStat,eCmd);
 }
 
-FASTBOOL SdrVirtObj::BckCreate(SdrDragStat& rStat)
+int SdrVirtObj::BckCreate(SdrDragStat& rStat)
 {
     return rRefObj.BckCreate(rStat);
 }
@@ -404,7 +404,7 @@ void SdrVirtObj::NbcMirror(const Point& rRef1, const Point& rRef2)
     SetRectsDirty();
 }
 
-void SdrVirtObj::NbcShear(const Point& rRef, long nWink, double tn, FASTBOOL bVShear)
+void SdrVirtObj::NbcShear(const Point& rRef, long nWink, double tn, int bVShear)
 {
     rRefObj.NbcShear(rRef-aAnchor,nWink,tn,bVShear);
     SetRectsDirty();
@@ -452,7 +452,7 @@ void SdrVirtObj::Mirror(const Point& rRef1, const Point& rRef2)
     SendUserCall(SDRUSERCALL_RESIZE,aBoundRect0);
 }
 
-void SdrVirtObj::Shear(const Point& rRef, long nWink, double tn, FASTBOOL bVShear)
+void SdrVirtObj::Shear(const Point& rRef, long nWink, double tn, int bVShear)
 {
     if (nWink!=0) {
         Rectangle aBoundRect0; if (pUserCall!=NULL) aBoundRect0=GetLastBoundRect();
@@ -531,7 +531,7 @@ long SdrVirtObj::GetRotateAngle() const
     return rRefObj.GetRotateAngle();
 }
 
-long SdrVirtObj::GetShearAngle(FASTBOOL bVertical) const
+long SdrVirtObj::GetShearAngle(int bVertical) const
 {
     return rRefObj.GetShearAngle(bVertical);
 }
@@ -620,7 +620,7 @@ void SdrVirtObj::ReformatText()
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-FASTBOOL SdrVirtObj::HasMacro() const
+int SdrVirtObj::HasMacro() const
 {
     return rRefObj.HasMacro();
 }
@@ -640,7 +640,7 @@ void SdrVirtObj::PaintMacro(OutputDevice& rOut, const Rectangle& rDirtyRect, con
     rRefObj.PaintMacro(rOut,rDirtyRect,rRec); // Todo: Positionsversatz
 }
 
-FASTBOOL SdrVirtObj::DoMacro(const SdrObjMacroHitRec& rRec)
+int SdrVirtObj::DoMacro(const SdrObjMacroHitRec& rRec)
 {
     return rRefObj.DoMacro(rRec); // Todo: Positionsversatz
 }

@@ -59,7 +59,7 @@ private:
     DECL_LINK( TbxSelectHdl, ToolBox* );
 
 public:
-    SvxFmConfigWin( USHORT nId, ResId aRIdWin, ResId aRIdTbx );
+    SvxFmConfigWin( sal_uInt16 nId, ResId aRIdWin, ResId aRIdTbx );
     ~SvxFmConfigWin();
 
     void            Update();
@@ -71,7 +71,7 @@ public:
 class SvxFmTbxCtlConfig : public SfxToolBoxControl
 {
 private:
-    UINT16 nLastSlot;
+    sal_uInt16 nLastSlot;
 
 protected:
     using SfxToolBoxControl::Select;
@@ -79,11 +79,11 @@ protected:
 public:
     SFX_DECL_TOOLBOX_CONTROL();
 
-    SvxFmTbxCtlConfig( USHORT nSlotId, USHORT nId, ToolBox& rTbx );
+    SvxFmTbxCtlConfig( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
     ~SvxFmTbxCtlConfig() {}
 
-    virtual void                Select( USHORT nModifier );
-    virtual void                StateChanged( USHORT nSID, SfxItemState eState,
+    virtual void                Select( sal_uInt16 nModifier );
+    virtual void                StateChanged( sal_uInt16 nSID, SfxItemState eState,
                                               const SfxPoolItem* pState );
     virtual SfxPopupWindowType  GetPopupWindowType() const;
     virtual SfxPopupWindow*     CreatePopupWindow();
@@ -96,12 +96,12 @@ class SvxFmTbxCtlAbsRec : public SfxToolBoxControl
 public:
     SFX_DECL_TOOLBOX_CONTROL();
 
-    SvxFmTbxCtlAbsRec( USHORT nSlotId, USHORT nId, ToolBox& rTbx );
+    SvxFmTbxCtlAbsRec( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
     ~SvxFmTbxCtlAbsRec();
 
     virtual Window* CreateItemWindow( Window* pParent );
 
-    virtual void    StateChanged( USHORT nSID, SfxItemState eState,
+    virtual void    StateChanged( sal_uInt16 nSID, SfxItemState eState,
                                   const SfxPoolItem* pState );
 };
 
@@ -111,7 +111,7 @@ class SvxFmTbxCtlRecText : public SfxToolBoxControl
 public:
     SFX_DECL_TOOLBOX_CONTROL();
 
-    SvxFmTbxCtlRecText( USHORT nSlotId, USHORT nId, ToolBox& rTbx );
+    SvxFmTbxCtlRecText( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
     ~SvxFmTbxCtlRecText();
 
     virtual Window* CreateItemWindow( Window* pParent );
@@ -123,7 +123,7 @@ class SvxFmTbxCtlRecFromText : public SfxToolBoxControl
 public:
     SFX_DECL_TOOLBOX_CONTROL();
 
-    SvxFmTbxCtlRecFromText( USHORT nSlotId, USHORT nId, ToolBox& rTbx );
+    SvxFmTbxCtlRecFromText( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
     ~SvxFmTbxCtlRecFromText();
 
     virtual Window* CreateItemWindow( Window* pParent );
@@ -137,11 +137,11 @@ class SvxFmTbxCtlRecTotal : public SfxToolBoxControl
 public:
     SFX_DECL_TOOLBOX_CONTROL();
 
-    SvxFmTbxCtlRecTotal( USHORT nSlotId, USHORT nId, ToolBox& rTbx );
+    SvxFmTbxCtlRecTotal( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
     ~SvxFmTbxCtlRecTotal();
 
     virtual Window* CreateItemWindow( Window* pParent );
-    virtual void    StateChanged( USHORT nSID, SfxItemState eState,
+    virtual void    StateChanged( sal_uInt16 nSID, SfxItemState eState,
                                   const SfxPoolItem* pState );
 };
 
@@ -150,7 +150,7 @@ class SvxFmTbxNextRec : public SfxToolBoxControl
 {
 public:
     SFX_DECL_TOOLBOX_CONTROL();
-    SvxFmTbxNextRec( USHORT nSlotId, USHORT nId, ToolBox& rTbx );
+    SvxFmTbxNextRec( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
 };
 
 //========================================================================
@@ -158,7 +158,7 @@ class SvxFmTbxPrevRec : public SfxToolBoxControl
 {
 public:
     SFX_DECL_TOOLBOX_CONTROL();
-    SvxFmTbxPrevRec( USHORT nSlotId, USHORT nId, ToolBox& rTbx );
+    SvxFmTbxPrevRec( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
 };
 
 

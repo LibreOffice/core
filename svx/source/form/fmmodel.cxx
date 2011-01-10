@@ -112,7 +112,7 @@ FmFormModel::FmFormModel(const XubString& rPath, SfxItemPool* pPool, SfxObjectSh
 |*
 \************************************************************************/
 FmFormModel::FmFormModel(SfxItemPool* pPool, SfxObjectShell* pPers,
-                         FASTBOOL bUseExtColorTable
+                         int bUseExtColorTable
                          )
             :SdrModel(pPool, pPers, bUseExtColorTable, LOADREFCOUNTS)
             ,m_pImpl(NULL)
@@ -133,7 +133,7 @@ FmFormModel::FmFormModel(SfxItemPool* pPool, SfxObjectShell* pPers,
 |*
 \************************************************************************/
 FmFormModel::FmFormModel(const XubString& rPath, SfxItemPool* pPool, SfxObjectShell* pPers,
-                         FASTBOOL bUseExtColorTable)
+                         int bUseExtColorTable)
             :SdrModel(rPath, pPool, pPers, bUseExtColorTable, LOADREFCOUNTS)
             ,m_pImpl( NULL )
             ,m_pObjShell(0)
@@ -173,7 +173,7 @@ FmFormModel::~FmFormModel()
 |* Erzeugt eine neue Seite
 |*
 \************************************************************************/
-SdrPage* FmFormModel::AllocPage(FASTBOOL bMasterPage)
+SdrPage* FmFormModel::AllocPage(int bMasterPage)
 {
     return new FmFormPage(*this, NULL, bMasterPage);
 }
@@ -199,7 +199,7 @@ void FmFormModel::InsertPage(SdrPage* pPage, sal_uInt16 nPos)
 |* MovePage
 |*
 \************************************************************************/
-void FmFormModel::MovePage( USHORT nPgNum, USHORT nNewPos )
+void FmFormModel::MovePage( sal_uInt16 nPgNum, sal_uInt16 nNewPos )
 {
 #ifndef SVX_LIGHT
     m_pImpl->bMovingPage = sal_True;

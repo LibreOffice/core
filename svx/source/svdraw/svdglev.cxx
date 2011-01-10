@@ -57,14 +57,14 @@ SdrGlueEditView::~SdrGlueEditView()
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void SdrGlueEditView::ImpDoMarkedGluePoints(PGlueDoFunc pDoFunc, BOOL bConst, const void* p1, const void* p2, const void* p3, const void* p4, const void* p5)
+void SdrGlueEditView::ImpDoMarkedGluePoints(PGlueDoFunc pDoFunc, sal_Bool bConst, const void* p1, const void* p2, const void* p3, const void* p4, const void* p5)
 {
-    ULONG nMarkAnz=GetMarkedObjectCount();
-    for (ULONG nm=0; nm<nMarkAnz; nm++) {
+    sal_uIntPtr nMarkAnz=GetMarkedObjectCount();
+    for (sal_uIntPtr nm=0; nm<nMarkAnz; nm++) {
         SdrMark* pM=GetSdrMarkByIndex(nm);
         SdrObject* pObj=pM->GetMarkedSdrObj();
         const SdrUShortCont* pPts=pM->GetMarkedGluePoints();
-        ULONG nPtAnz=pPts==NULL ? 0 : pPts->GetCount();
+        sal_uIntPtr nPtAnz=pPts==NULL ? 0 : pPts->GetCount();
         if (nPtAnz!=0) {
             SdrGluePointList* pGPL=NULL;
             if (bConst) {
@@ -78,10 +78,10 @@ void SdrGlueEditView::ImpDoMarkedGluePoints(PGlueDoFunc pDoFunc, BOOL bConst, co
                 if(!bConst && IsUndoEnabled() )
                     AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoGeoObject(*pObj));
 
-                for (ULONG nPtNum=0; nPtNum<nPtAnz; nPtNum++)
+                for (sal_uIntPtr nPtNum=0; nPtNum<nPtAnz; nPtNum++)
                 {
-                    USHORT nPtId=pPts->GetObject(nPtNum);
-                    USHORT nGlueIdx=pGPL->FindGluePoint(nPtId);
+                    sal_uInt16 nPtId=pPts->GetObject(nPtNum);
+                    sal_uInt16 nGlueIdx=pGPL->FindGluePoint(nPtId);
                     if (nGlueIdx!=SDRGLUEPOINT_NOTFOUND)
                     {
                         SdrGluePoint& rGP=(*pGPL)[nGlueIdx];
@@ -103,38 +103,38 @@ void SdrGlueEditView::ImpDoMarkedGluePoints(PGlueDoFunc pDoFunc, BOOL bConst, co
 
 static void ImpGetEscDir(SdrGluePoint& rGP, const SdrObject* /*pObj*/, const void* pbFirst, const void* pnThisEsc, const void* pnRet, const void*, const void*)
 {
-    USHORT& nRet=*(USHORT*)pnRet;
-    BOOL& bFirst=*(BOOL*)pbFirst;
+    sal_uInt16& nRet=*(sal_uInt16*)pnRet;
+    sal_Bool& bFirst=*(sal_Bool*)pbFirst;
     if (nRet!=FUZZY) {
-        USHORT nEsc=rGP.GetEscDir();
-        BOOL bOn=(nEsc & *(USHORT*)pnThisEsc)!=0;
-        if (bFirst) { nRet=bOn; bFirst=FALSE; }
+        sal_uInt16 nEsc=rGP.GetEscDir();
+        sal_Bool bOn=(nEsc & *(sal_uInt16*)pnThisEsc)!=0;
+        if (bFirst) { nRet=bOn; bFirst=sal_False; }
         else if (nRet!=bOn) nRet=FUZZY;
     }
 }
 
-TRISTATE SdrGlueEditView::IsMarkedGluePointsEscDir(USHORT nThisEsc) const
+TRISTATE SdrGlueEditView::IsMarkedGluePointsEscDir(sal_uInt16 nThisEsc) const
 {
     ForceUndirtyMrkPnt();
-    BOOL bFirst=TRUE;
-    USHORT nRet=FALSE;
-    ((SdrGlueEditView*)this)->ImpDoMarkedGluePoints(ImpGetEscDir,TRUE,&bFirst,&nThisEsc,&nRet);
+    sal_Bool bFirst=sal_True;
+    sal_uInt16 nRet=sal_False;
+    ((SdrGlueEditView*)this)->ImpDoMarkedGluePoints(ImpGetEscDir,sal_True,&bFirst,&nThisEsc,&nRet);
     return (TRISTATE)nRet;
 }
 
 static void ImpSetEscDir(SdrGluePoint& rGP, const SdrObject* /*pObj*/, const void* pnThisEsc, const void* pbOn, const void*, const void*, const void*)
 {
-    USHORT nEsc=rGP.GetEscDir();
-    if (*(BOOL*)pbOn) nEsc|=*(USHORT*)pnThisEsc;
-    else nEsc&=~*(USHORT*)pnThisEsc;
+    sal_uInt16 nEsc=rGP.GetEscDir();
+    if (*(sal_Bool*)pbOn) nEsc|=*(sal_uInt16*)pnThisEsc;
+    else nEsc&=~*(sal_uInt16*)pnThisEsc;
     rGP.SetEscDir(nEsc);
 }
 
-void SdrGlueEditView::SetMarkedGluePointsEscDir(USHORT nThisEsc, BOOL bOn)
+void SdrGlueEditView::SetMarkedGluePointsEscDir(sal_uInt16 nThisEsc, sal_Bool bOn)
 {
     ForceUndirtyMrkPnt();
     BegUndo(ImpGetResStr(STR_EditSetGlueEscDir),GetDescriptionOfMarkedGluePoints());
-    ImpDoMarkedGluePoints(ImpSetEscDir,FALSE,&nThisEsc,&bOn);
+    ImpDoMarkedGluePoints(ImpSetEscDir,sal_False,&nThisEsc,&bOn);
     EndUndo();
 }
 
@@ -142,11 +142,11 @@ void SdrGlueEditView::SetMarkedGluePointsEscDir(USHORT nThisEsc, BOOL bOn)
 
 static void ImpGetPercent(SdrGluePoint& rGP, const SdrObject* /*pObj*/, const void* pbFirst, const void* pnRet, const void*, const void*, const void*)
 {
-    USHORT& nRet=*(USHORT*)pnRet;
-    BOOL& bFirst=*(BOOL*)pbFirst;
+    sal_uInt16& nRet=*(sal_uInt16*)pnRet;
+    sal_Bool& bFirst=*(sal_Bool*)pbFirst;
     if (nRet!=FUZZY) {
         bool bOn=rGP.IsPercent();
-        if (bFirst) { nRet=bOn; bFirst=FALSE; }
+        if (bFirst) { nRet=bOn; bFirst=sal_False; }
         else if ((nRet!=0)!=bOn) nRet=FUZZY;
     }
 }
@@ -154,24 +154,24 @@ static void ImpGetPercent(SdrGluePoint& rGP, const SdrObject* /*pObj*/, const vo
 TRISTATE SdrGlueEditView::IsMarkedGluePointsPercent() const
 {
     ForceUndirtyMrkPnt();
-    BOOL bFirst=TRUE;
-    USHORT nRet=TRUE;
-    ((SdrGlueEditView*)this)->ImpDoMarkedGluePoints(ImpGetPercent,TRUE,&bFirst,&nRet);
+    sal_Bool bFirst=sal_True;
+    sal_uInt16 nRet=sal_True;
+    ((SdrGlueEditView*)this)->ImpDoMarkedGluePoints(ImpGetPercent,sal_True,&bFirst,&nRet);
     return (TRISTATE)nRet;
 }
 
 static void ImpSetPercent(SdrGluePoint& rGP, const SdrObject* pObj, const void* pbOn, const void*, const void*, const void*, const void*)
 {
     Point aPos(rGP.GetAbsolutePos(*pObj));
-    rGP.SetPercent(*(BOOL*)pbOn);
+    rGP.SetPercent(*(sal_Bool*)pbOn);
     rGP.SetAbsolutePos(aPos,*pObj);
 }
 
-void SdrGlueEditView::SetMarkedGluePointsPercent(BOOL bOn)
+void SdrGlueEditView::SetMarkedGluePointsPercent(sal_Bool bOn)
 {
     ForceUndirtyMrkPnt();
     BegUndo(ImpGetResStr(STR_EditSetGluePercent),GetDescriptionOfMarkedGluePoints());
-    ImpDoMarkedGluePoints(ImpSetPercent,FALSE,&bOn);
+    ImpDoMarkedGluePoints(ImpSetPercent,sal_False,&bOn);
     EndUndo();
 }
 
@@ -179,61 +179,61 @@ void SdrGlueEditView::SetMarkedGluePointsPercent(BOOL bOn)
 
 static void ImpGetAlign(SdrGluePoint& rGP, const SdrObject* /*pObj*/, const void* pbFirst, const void* pbDontCare, const void* pbVert, const void* pnRet, const void*)
 {
-    USHORT& nRet=*(USHORT*)pnRet;
-    BOOL& bFirst=*(BOOL*)pbFirst;
-    BOOL& bDontCare=*(BOOL*)pbDontCare;
-    BOOL bVert=*(BOOL*)pbVert;
+    sal_uInt16& nRet=*(sal_uInt16*)pnRet;
+    sal_Bool& bFirst=*(sal_Bool*)pbFirst;
+    sal_Bool& bDontCare=*(sal_Bool*)pbDontCare;
+    sal_Bool bVert=*(sal_Bool*)pbVert;
     if (!bDontCare) {
-        USHORT nAlg=0;
+        sal_uInt16 nAlg=0;
         if (bVert) {
             nAlg=rGP.GetVertAlign();
         } else {
             nAlg=rGP.GetHorzAlign();
         }
-        if (bFirst) { nRet=nAlg; bFirst=FALSE; }
+        if (bFirst) { nRet=nAlg; bFirst=sal_False; }
         else if (nRet!=nAlg) {
             if (bVert) {
                 nRet=SDRVERTALIGN_DONTCARE;
             } else {
                 nRet=SDRHORZALIGN_DONTCARE;
             }
-            bDontCare=TRUE;
+            bDontCare=sal_True;
         }
     }
 }
 
-USHORT SdrGlueEditView::GetMarkedGluePointsAlign(BOOL bVert) const
+sal_uInt16 SdrGlueEditView::GetMarkedGluePointsAlign(sal_Bool bVert) const
 {
     ForceUndirtyMrkPnt();
-    BOOL bFirst=TRUE;
-    BOOL bDontCare=FALSE;
-    USHORT nRet=0;
-    ((SdrGlueEditView*)this)->ImpDoMarkedGluePoints(ImpGetAlign,TRUE,&bFirst,&bDontCare,&bVert,&nRet);
+    sal_Bool bFirst=sal_True;
+    sal_Bool bDontCare=sal_False;
+    sal_uInt16 nRet=0;
+    ((SdrGlueEditView*)this)->ImpDoMarkedGluePoints(ImpGetAlign,sal_True,&bFirst,&bDontCare,&bVert,&nRet);
     return nRet;
 }
 
 static void ImpSetAlign(SdrGluePoint& rGP, const SdrObject* pObj, const void* pbVert, const void* pnAlign, const void*, const void*, const void*)
 {
     Point aPos(rGP.GetAbsolutePos(*pObj));
-    if (*(BOOL*)pbVert) { // bVert?
-        rGP.SetVertAlign(*(USHORT*)pnAlign);
+    if (*(sal_Bool*)pbVert) { // bVert?
+        rGP.SetVertAlign(*(sal_uInt16*)pnAlign);
     } else {
-        rGP.SetHorzAlign(*(USHORT*)pnAlign);
+        rGP.SetHorzAlign(*(sal_uInt16*)pnAlign);
     }
     rGP.SetAbsolutePos(aPos,*pObj);
 }
 
-void SdrGlueEditView::SetMarkedGluePointsAlign(BOOL bVert, USHORT nAlign)
+void SdrGlueEditView::SetMarkedGluePointsAlign(sal_Bool bVert, sal_uInt16 nAlign)
 {
     ForceUndirtyMrkPnt();
     BegUndo(ImpGetResStr(STR_EditSetGlueAlign),GetDescriptionOfMarkedGluePoints());
-    ImpDoMarkedGluePoints(ImpSetAlign,FALSE,&bVert,&nAlign);
+    ImpDoMarkedGluePoints(ImpSetAlign,sal_False,&bVert,&nAlign);
     EndUndo();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-BOOL SdrGlueEditView::IsDeleteMarkedGluePointsPossible() const
+sal_Bool SdrGlueEditView::IsDeleteMarkedGluePointsPossible() const
 {
     return HasMarkedGluePoints();
 }
@@ -246,13 +246,13 @@ void SdrGlueEditView::DeleteMarkedGluePoints()
     if( bUndo )
         BegUndo(ImpGetResStr(STR_EditDelete),GetDescriptionOfMarkedGluePoints(),SDRREPFUNC_OBJ_DELETE);
 
-    ULONG nMarkAnz=GetMarkedObjectCount();
-    for (ULONG nm=0; nm<nMarkAnz; nm++)
+    sal_uIntPtr nMarkAnz=GetMarkedObjectCount();
+    for (sal_uIntPtr nm=0; nm<nMarkAnz; nm++)
     {
         SdrMark* pM=GetSdrMarkByIndex(nm);
         SdrObject* pObj=pM->GetMarkedSdrObj();
         const SdrUShortCont* pPts=pM->GetMarkedGluePoints();
-        ULONG nPtAnz=pPts==NULL ? 0 : pPts->GetCount();
+        sal_uIntPtr nPtAnz=pPts==NULL ? 0 : pPts->GetCount();
         if (nPtAnz!=0)
         {
             SdrGluePointList* pGPL=pObj->ForceGluePointList();
@@ -261,10 +261,10 @@ void SdrGlueEditView::DeleteMarkedGluePoints()
                 if( bUndo )
                     AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoGeoObject(*pObj));
 
-                for (ULONG nPtNum=0; nPtNum<nPtAnz; nPtNum++)
+                for (sal_uIntPtr nPtNum=0; nPtNum<nPtAnz; nPtNum++)
                 {
-                    USHORT nPtId=pPts->GetObject(nPtNum);
-                    USHORT nGlueIdx=pGPL->FindGluePoint(nPtId);
+                    sal_uInt16 nPtId=pPts->GetObject(nPtNum);
+                    sal_uInt16 nGlueIdx=pGPL->FindGluePoint(nPtId);
                     if (nGlueIdx!=SDRGLUEPOINT_NOTFOUND)
                     {
                         pGPL->Delete(nGlueIdx);
@@ -291,28 +291,28 @@ void SdrGlueEditView::ImpCopyMarkedGluePoints()
     if( bUndo )
         BegUndo();
 
-    ULONG nMarkAnz=GetMarkedObjectCount();
-    for (ULONG nm=0; nm<nMarkAnz; nm++)
+    sal_uIntPtr nMarkAnz=GetMarkedObjectCount();
+    for (sal_uIntPtr nm=0; nm<nMarkAnz; nm++)
     {
         SdrMark* pM=GetSdrMarkByIndex(nm);
         SdrObject* pObj=pM->GetMarkedSdrObj();
         SdrUShortCont* pPts=pM->GetMarkedGluePoints();
         SdrGluePointList* pGPL=pObj->ForceGluePointList();
-        ULONG nPtAnz=pPts==NULL ? 0 : pPts->GetCount();
+        sal_uIntPtr nPtAnz=pPts==NULL ? 0 : pPts->GetCount();
         if (nPtAnz!=0 && pGPL!=NULL)
         {
             if( bUndo )
                 AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoGeoObject(*pObj));
 
-            for (ULONG nPtNum=0; nPtNum<nPtAnz; nPtNum++)
+            for (sal_uIntPtr nPtNum=0; nPtNum<nPtAnz; nPtNum++)
             {
-                USHORT nPtId=pPts->GetObject(nPtNum);
-                USHORT nGlueIdx=pGPL->FindGluePoint(nPtId);
+                sal_uInt16 nPtId=pPts->GetObject(nPtNum);
+                sal_uInt16 nGlueIdx=pGPL->FindGluePoint(nPtId);
                 if (nGlueIdx!=SDRGLUEPOINT_NOTFOUND)
                 {
                     SdrGluePoint aNewGP((*pGPL)[nGlueIdx]);  // GluePoint klonen
-                    USHORT nNewIdx=pGPL->Insert(aNewGP);     // und einfuegen
-                    USHORT nNewId=(*pGPL)[nNewIdx].GetId();  // Id des neuen GluePoints ermitteln
+                    sal_uInt16 nNewIdx=pGPL->Insert(aNewGP);     // und einfuegen
+                    sal_uInt16 nNewId=(*pGPL)[nNewIdx].GetId();  // Id des neuen GluePoints ermitteln
                     pPts->Replace(nNewId,nPtNum);            // und diesen markieren (anstelle des alten)
                 }
             }
@@ -329,12 +329,12 @@ void SdrGlueEditView::ImpCopyMarkedGluePoints()
 
 void SdrGlueEditView::ImpTransformMarkedGluePoints(PGlueTrFunc pTrFunc, const void* p1, const void* p2, const void* p3, const void* p4, const void* p5)
 {
-    ULONG nMarkAnz=GetMarkedObjectCount();
-    for (ULONG nm=0; nm<nMarkAnz; nm++) {
+    sal_uIntPtr nMarkAnz=GetMarkedObjectCount();
+    for (sal_uIntPtr nm=0; nm<nMarkAnz; nm++) {
         SdrMark* pM=GetSdrMarkByIndex(nm);
         SdrObject* pObj=pM->GetMarkedSdrObj();
         const SdrUShortCont* pPts=pM->GetMarkedGluePoints();
-        ULONG nPtAnz=pPts==NULL ? 0 : pPts->GetCount();
+        sal_uIntPtr nPtAnz=pPts==NULL ? 0 : pPts->GetCount();
         if (nPtAnz!=0) {
             SdrGluePointList* pGPL=pObj->ForceGluePointList();
             if (pGPL!=NULL)
@@ -342,9 +342,9 @@ void SdrGlueEditView::ImpTransformMarkedGluePoints(PGlueTrFunc pTrFunc, const vo
                 if( IsUndoEnabled() )
                     AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoGeoObject(*pObj));
 
-                for (ULONG nPtNum=0; nPtNum<nPtAnz; nPtNum++) {
-                    USHORT nPtId=pPts->GetObject(nPtNum);
-                    USHORT nGlueIdx=pGPL->FindGluePoint(nPtId);
+                for (sal_uIntPtr nPtNum=0; nPtNum<nPtAnz; nPtNum++) {
+                    sal_uInt16 nPtId=pPts->GetObject(nPtNum);
+                    sal_uInt16 nGlueIdx=pGPL->FindGluePoint(nPtId);
                     if (nGlueIdx!=SDRGLUEPOINT_NOTFOUND) {
                         SdrGluePoint& rGP=(*pGPL)[nGlueIdx];
                         Point aPos(rGP.GetAbsolutePos(*pObj));

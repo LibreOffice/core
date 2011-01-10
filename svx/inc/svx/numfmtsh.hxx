@@ -123,14 +123,14 @@ public:
                                               const String*      pNumStr = NULL );
 
 
-    void                GetInitSettings( USHORT&       nCatLbPos,
+    void                GetInitSettings( sal_uInt16&       nCatLbPos,
                                         LanguageType& rLangType,
-                                         USHORT&       nFmtLbSelPos,
+                                         sal_uInt16&       nFmtLbSelPos,
                                          SvStrings&    rFmtEntries,
                                          String&       rPrevString,
                                          Color*&       rpPrevColor );
 
-    void                CategoryChanged( USHORT     nCatLbPos,
+    void                CategoryChanged( sal_uInt16     nCatLbPos,
                                         short&     rFmtSelPos,
                                          SvStrings& rFmtEntries );
 
@@ -138,34 +138,34 @@ public:
                                          short&       rFmtSelPos,
                                          SvStrings&   rFmtEntries );
 
-    void                FormatChanged( USHORT  nFmtLbPos,
+    void                FormatChanged( sal_uInt16  nFmtLbPos,
                                        String& rPreviewStr,
                                        Color*& rpFontColor );
 
-    BOOL                AddFormat( String&    rFormat,
+    sal_Bool                AddFormat( String&    rFormat,
                                    xub_StrLen& rErrPos,
-                                   USHORT&    rCatLbSelPos,
+                                   sal_uInt16&    rCatLbSelPos,
                                    short&     rFmtSelPos,
                                    SvStrings& rFmtEntries );
 
-    BOOL                RemoveFormat( const String& rFormat,
-                                      USHORT&       rCatLbSelPos,
+    sal_Bool                RemoveFormat( const String& rFormat,
+                                      sal_uInt16&       rCatLbSelPos,
                                       short&        rFmtSelPos,
                                       SvStrings&    rFmtEntries );
 
     void                MakeFormat( String& rFormat,
-                                    BOOL    bThousand,
-                                    BOOL    bNegRed,
-                                    USHORT  nPrecision,
-                                    USHORT  nLeadingZeroes,
-                                    USHORT  nCurrencyEntryPos);
+                                    sal_Bool    bThousand,
+                                    sal_Bool    bNegRed,
+                                    sal_uInt16  nPrecision,
+                                    sal_uInt16  nLeadingZeroes,
+                                    sal_uInt16  nCurrencyEntryPos);
 
     void                GetOptions( const String& rFormat,
-                                    BOOL&         rThousand,
-                                    BOOL&         rNegRed,
-                                    USHORT&       rPrecision,
-                                    USHORT&       rLeadingZeroes,
-                                    USHORT&       rCatLbPos );
+                                    sal_Bool&         rThousand,
+                                    sal_Bool&         rNegRed,
+                                    sal_uInt16&       rPrecision,
+                                    sal_uInt16&       rLeadingZeroes,
+                                    sal_uInt16&       rCatLbPos );
 
     void                MakePreviewString( const String& rFormatStr,
                                            String&       rPreviewStr,
@@ -176,11 +176,11 @@ public:
                                                 Color*& rpFontColor,
                                                 double  nValue);
 
-    BOOL                IsUserDefined( const String& rFmtString );
-    BOOL                IsTmpCurrencyFormat( const String& rFmtString );
-    BOOL                FindEntry( const String& rFmtString, sal_uInt32* pAt = NULL );
+    sal_Bool                IsUserDefined( const String& rFmtString );
+    sal_Bool                IsTmpCurrencyFormat( const String& rFmtString );
+    sal_Bool                FindEntry( const String& rFmtString, sal_uInt32* pAt = NULL );
 
-    void                ValidateNewEntries( BOOL bValidate = TRUE ) { bUndoAddList = !bValidate; }
+    void                ValidateNewEntries( sal_Bool bValidate = sal_True ) { bUndoAddList = !bValidate; }
     sal_uInt32          GetUpdateDataCount() const;
     void                GetUpdateData( sal_uInt32* pDelArray, const sal_uInt32 nSize );
 
@@ -195,25 +195,25 @@ public:
 
     String              GetComment4Entry(short nEntry);
     short               GetCategory4Entry(short nEntry);
-    BOOL                GetUserDefined4Entry(short nEntry);
+    sal_Bool                GetUserDefined4Entry(short nEntry);
     String              GetFormat4Entry(short nEntry);
     void                SetComment4Entry(short nEntry,String aCommentString);
 
-    BOOL                IsBankingSymbol(USHORT nPos);
-    void                SetCurrencySymbol(USHORT nPos);
+    sal_Bool                IsBankingSymbol(sal_uInt16 nPos);
+    void                SetCurrencySymbol(sal_uInt16 nPos);
     sal_uInt32          GetCurrencySymbol();
-    USHORT              FindCurrencyFormat( const String& rFmtString );
-    USHORT              FindCurrencyFormat(const NfCurrencyEntry* pTmpCurrencyEntry,BOOL bTmpBanking);
+    sal_uInt16              FindCurrencyFormat( const String& rFmtString );
+    sal_uInt16              FindCurrencyFormat(const NfCurrencyEntry* pTmpCurrencyEntry,sal_Bool bTmpBanking);
     NfCurrencyEntry*    GetCurCurrencyEntry();
     void                SetCurCurrencyEntry(NfCurrencyEntry*);
     short               GetListPos4Entry(sal_uInt32 nIdx);
     short               GetListPos4Entry( const String& rFmtString );
 
-    void                GetCurrencySymbols( SvStringsDtor& rList, USHORT* pPos );
-    void                GetCurrencySymbols( SvStringsDtor& rList, BOOL bFlag );
+    void                GetCurrencySymbols( SvStringsDtor& rList, sal_uInt16* pPos );
+    void                GetCurrencySymbols( SvStringsDtor& rList, sal_Bool bFlag );
 
-    USHORT              FindCurrencyTableEntry( const String& rFmtString, BOOL &bTestBanking );
-    BOOL                IsInTable(USHORT nPos,BOOL bTmpBanking,const String &rFmtString);
+    sal_uInt16              FindCurrencyTableEntry( const String& rFmtString, sal_Bool &bTestBanking );
+    sal_Bool                IsInTable(sal_uInt16 nPos,sal_Bool bTmpBanking,const String &rFmtString);
 
     void                GetCurrencyFormats(SvStrings& rList);
 
@@ -225,7 +225,7 @@ private:
     SvxNumberValueType      eValType;
     String                  aValStr;
     double                  nValNum;
-    BOOL                    bUndoAddList;
+    sal_Bool                    bUndoAddList;
     SvULongs                aAddList;
     SvULongs                aDelList;
     SvULongs                aCurEntryList;
@@ -235,13 +235,13 @@ private:
     LanguageType            eCurLanguage;
     SvUShorts               aCurCurrencyList;
     NfCurrencyEntry*        pCurCurrencyEntry;
-    BOOL                    bBankingSymbol;
-    USHORT                  nCurCurrencyEntryPos;
+    sal_Bool                    bBankingSymbol;
+    sal_uInt16                  nCurCurrencyEntryPos;
     SvStrings               aCurrencyFormatList;
 
 #ifdef _SVX_NUMFMTSH_CXX
     SVX_DLLPRIVATE short                    FillEntryList_Impl( SvStrings& rList );
-    SVX_DLLPRIVATE void                 FillEListWithStd_Impl( SvStrings& rList,USHORT aPrivCat, short &Pos);
+    SVX_DLLPRIVATE void                 FillEListWithStd_Impl( SvStrings& rList,sal_uInt16 aPrivCat, short &Pos);
     SVX_DLLPRIVATE short                    FillEListWithFormats_Impl( SvStrings& rList,short nSelPos,
                                                        NfIndexTableOffset eOffsetStart,
                                                        NfIndexTableOffset eOffsetEnd);
@@ -253,12 +253,12 @@ private:
     SVX_DLLPRIVATE short                    FillEListWithUserCurrencys( SvStrings& rList,short nSelPos);
 
     SVX_DLLPRIVATE short                    FillEListWithUsD_Impl( SvStrings& rList, sal_uInt16 nPrivCat, short Pos );
-    SVX_DLLPRIVATE BOOL                 IsRemoved_Impl( sal_uInt32 nKey );
-    SVX_DLLPRIVATE BOOL                 IsAdded_Impl( sal_uInt32 nKey );
+    SVX_DLLPRIVATE sal_Bool                 IsRemoved_Impl( sal_uInt32 nKey );
+    SVX_DLLPRIVATE sal_Bool                 IsAdded_Impl( sal_uInt32 nKey );
     SVX_DLLPRIVATE void                 GetPreviewString_Impl( String& rString,
                                                    Color*& rpColor );
-    SVX_DLLPRIVATE void                 PosToCategory_Impl( USHORT nPos, short& rCategory );
-    SVX_DLLPRIVATE void                 CategoryToPos_Impl( short nCategory, USHORT& rPos );
+    SVX_DLLPRIVATE void                 PosToCategory_Impl( sal_uInt16 nPos, short& rCategory );
+    SVX_DLLPRIVATE void                 CategoryToPos_Impl( short nCategory, sal_uInt16& rPos );
 #endif
 };
 

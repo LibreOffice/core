@@ -75,7 +75,7 @@ public:
     void                SetKeyboardNeighbors(
                             FrameBorderType eLeft, FrameBorderType eRight,
                             FrameBorderType eTop, FrameBorderType eBottom );
-    FrameBorderType     GetKeyboardNeighbor( USHORT nKeyCode ) const;
+    FrameBorderType     GetKeyboardNeighbor( sal_uInt16 nKeyCode ) const;
 
 private:
     const FrameBorderType meType;       /// Frame border type (position in control).

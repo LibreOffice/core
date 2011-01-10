@@ -128,7 +128,7 @@ public:
     /** Returns true, if all visible frame borders have equal widths.
         @descr  Ignores hidden and "don't care" frame borders. On success,
         returns the widths in the passed parameters. */
-    bool                GetVisibleWidth( USHORT& rnPrim, USHORT& rnDist, USHORT& rnSec ) const;
+    bool                GetVisibleWidth( sal_uInt16& rnPrim, sal_uInt16& rnDist, sal_uInt16& rnSec ) const;
     /** Returns true, if all visible frame borders have equal color.
         @descr  Ignores hidden and "don't care" frame borders. On success,
         returns the color in the passed parameter. */
@@ -159,7 +159,7 @@ public:
     void                SelectAllVisibleBorders( bool bSelect = true );
 
     /** Sets the passed line widths to all selected frame borders (in twips). */
-    void                SetStyleToSelection( USHORT nPrim, USHORT nDist, USHORT nSec );
+    void                SetStyleToSelection( sal_uInt16 nPrim, sal_uInt16 nDist, sal_uInt16 nSec );
     /** Sets the passed color to all selected frame borders. */
     void                SetColorToSelection( const Color& rColor );
 

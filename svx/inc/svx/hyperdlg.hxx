@@ -47,7 +47,7 @@ private:
     AbstractSvxHpLinkDlg*   mpDlg;
 
 public:
-    SvxHlinkDlgWrapper( Window*pParent, USHORT nId,
+    SvxHlinkDlgWrapper( Window*pParent, sal_uInt16 nId,
                         SfxBindings* pBindings, SfxChildWinInfo* pInfo );
 
     SFX_DECL_CHILDWINDOW(SvxHlinkDlgWrapper);

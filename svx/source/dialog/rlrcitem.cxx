@@ -49,7 +49,7 @@
 
 // class SvxRulerItem ----------------------------------------------------
 
-SvxRulerItem::SvxRulerItem(USHORT _nId, SvxRuler &rRul, SfxBindings &rBindings)
+SvxRulerItem::SvxRulerItem(sal_uInt16 _nId, SvxRuler &rRul, SfxBindings &rBindings)
 : SfxControllerItem(_nId, rBindings),
   rRuler(rRul)
 {
@@ -57,7 +57,7 @@ SvxRulerItem::SvxRulerItem(USHORT _nId, SvxRuler &rRul, SfxBindings &rBindings)
 
 // -----------------------------------------------------------------------
 
-void SvxRulerItem::StateChanged( USHORT nSID, SfxItemState eState,
+void SvxRulerItem::StateChanged( sal_uInt16 nSID, SfxItemState eState,
                                  const SfxPoolItem* pState)
 {
     // SFX_ITEM_DONTCARE => pState == -1 => PTR_CAST buff

@@ -71,10 +71,10 @@ protected:
 
     Pointer                     aAktCreatePointer;
 
-    INT32                       nAutoCloseDistPix;
-    INT32                       nFreeHandMinDistPix;
-    UINT32                      nAktInvent;     // Aktuell eingestelltes
-    UINT16                      nAktIdent;      // Obj fuer Neuerzeugung
+    sal_Int32                       nAutoCloseDistPix;
+    sal_Int32                       nFreeHandMinDistPix;
+    sal_uInt32                      nAktInvent;     // Aktuell eingestelltes
+    sal_uInt16                      nAktIdent;      // Obj fuer Neuerzeugung
 
     unsigned                    bAutoTextEdit : 1; // Textedit nach dem erzeugen eines Textrahmens starten
     unsigned                    b1stPointAsCenter : 1;
@@ -92,9 +92,9 @@ protected:
     sal_Bool ImpBegCreateObj(sal_uInt32 nInvent, sal_uInt16 nIdent, const Point& rPnt, OutputDevice* pOut,
         sal_Int16 nMinMov, SdrPageView* pPV, const Rectangle& rLogRect, SdrObject* pPreparedFactoryObject);
 
-    void ShowCreateObj(/*OutputDevice* pOut, BOOL bFull*/);
-    void HideCreateObj(/*OutputDevice* pOut, BOOL bFull*/);
-    BOOL CheckEdgeMode();
+    void ShowCreateObj(/*OutputDevice* pOut, sal_Bool bFull*/);
+    void HideCreateObj(/*OutputDevice* pOut, sal_Bool bFull*/);
+    sal_Bool CheckEdgeMode();
 
 protected:
     // #i71538# make constructors of SdrView sub-components protected to avoid incomplete incarnations which may get casted to SdrView
@@ -102,14 +102,14 @@ protected:
     virtual ~SdrCreateView();
 
 public:
-    virtual BOOL IsAction() const;
+    virtual sal_Bool IsAction() const;
     virtual void MovAction(const Point& rPnt);
     virtual void EndAction();
     virtual void BckAction();
     virtual void BrkAction();
     virtual void TakeActionRect(Rectangle& rRect) const;
 
-    virtual BOOL MouseMove(const MouseEvent& rMEvt, Window* pWin);
+    virtual sal_Bool MouseMove(const MouseEvent& rMEvt, Window* pWin);
 
     void SetActiveLayer(const String& rName) { aAktLayer=rName; }
     const String& GetActiveLayer() const { return aAktLayer; }
@@ -119,70 +119,70 @@ public:
     // Ist der MeasureLayer nicht gesetzt (Leerstring), so
     // wird der ActiveLayer auch fuer Bemassung verwendet.
     void SetEditMode(SdrViewEditMode eMode) { SdrDragView::SetEditMode(eMode); CheckEdgeMode(); }
-    void SetEditMode(BOOL bOn=TRUE) { SdrDragView::SetEditMode(bOn); CheckEdgeMode(); }
-    void SetCreateMode(BOOL bOn=TRUE) { SdrDragView::SetCreateMode(bOn); CheckEdgeMode(); }
-    void SetGluePointEditMode(BOOL bOn=TRUE) { SdrDragView::SetGluePointEditMode(bOn); CheckEdgeMode(); }
+    void SetEditMode(sal_Bool bOn=sal_True) { SdrDragView::SetEditMode(bOn); CheckEdgeMode(); }
+    void SetCreateMode(sal_Bool bOn=sal_True) { SdrDragView::SetCreateMode(bOn); CheckEdgeMode(); }
+    void SetGluePointEditMode(sal_Bool bOn=sal_True) { SdrDragView::SetGluePointEditMode(bOn); CheckEdgeMode(); }
 
     // Feststellen, ob Textwerkzeug aktiviert
-    BOOL IsTextTool() const;
+    sal_Bool IsTextTool() const;
 
     // Feststellen, ob Objektverbinderwerkzeug aktiviert
-    BOOL IsEdgeTool() const;
+    sal_Bool IsEdgeTool() const;
 
     // Feststellen, ob Bemassungswerkzeug aktiviert
-    BOOL IsMeasureTool() const;
+    sal_Bool IsMeasureTool() const;
 
-    void SetCurrentObj(UINT16 nIdent, UINT32 nInvent=SdrInventor);
-    void TakeCurrentObj(UINT16& nIdent, UINT32& nInvent) const  { nInvent=nAktInvent; nIdent=nAktIdent; }
-    UINT32 GetCurrentObjInventor() const { return nAktInvent; }
-    UINT16 GetCurrentObjIdentifier() const { return nAktIdent; }
+    void SetCurrentObj(sal_uInt16 nIdent, sal_uInt32 nInvent=SdrInventor);
+    void TakeCurrentObj(sal_uInt16& nIdent, sal_uInt32& nInvent) const  { nInvent=nAktInvent; nIdent=nAktIdent; }
+    sal_uInt32 GetCurrentObjInventor() const { return nAktInvent; }
+    sal_uInt16 GetCurrentObjIdentifier() const { return nAktIdent; }
 
     // Starten des normalen Create
-    BOOL BegCreateObj(const Point& rPnt, OutputDevice* pOut=NULL, short nMinMov=-3, SdrPageView* pPV=NULL);
+    sal_Bool BegCreateObj(const Point& rPnt, OutputDevice* pOut=NULL, short nMinMov=-3, SdrPageView* pPV=NULL);
     sal_Bool BegCreatePreparedObject(const Point& rPnt, sal_Int16 nMinMov, SdrObject* pPreparedFactoryObject);
     void MovCreateObj(const Point& rPnt);
-    BOOL EndCreateObj(SdrCreateCmd eCmd);
+    sal_Bool EndCreateObj(SdrCreateCmd eCmd);
     void BckCreateObj();  // z.B. wieder 1 Polygonpunkt zurueck.
     void BrkCreateObj();
-    BOOL IsCreateObj() const { return pAktCreate!=NULL; }
+    sal_Bool IsCreateObj() const { return pAktCreate!=NULL; }
     SdrObject* GetCreateObj() const { return pAktCreate; }
 
     // BegCreateCaptionObj() erzeugt ein SdrCaptionObj (Legendenobjekt).
     // rObjSiz ist die anfaengliche Groesse des Legenden-Textrahmens.
     // gedraggd wird lediglich die Laenge des Zipfel.
-    BOOL BegCreateCaptionObj(const Point& rPnt, const Size& rObjSiz, OutputDevice* pOut=NULL, short nMinMov=-3, SdrPageView* pPV=NULL);
+    sal_Bool BegCreateCaptionObj(const Point& rPnt, const Size& rObjSiz, OutputDevice* pOut=NULL, short nMinMov=-3, SdrPageView* pPV=NULL);
 
-    // Wenn TextEditAfterCreate auf TRUE steht (das ist der Default),
+    // Wenn TextEditAfterCreate auf sal_True steht (das ist der Default),
     // dann wird nach dem erzeugen eines Textrahmenobjekts (OBJ_TEXT,
     // OBJ_TEXTEXT, OBJ_OUTLINERTEXT, OBJ_TITLETEXT, OBJ_CAPTION)
     // automatisch ein TextEdit (SdrObjEditView::SdrBeginTextEdit) gestartet.
-    BOOL IsTextEditAfterCreate() const { return bAutoTextEdit; }
-    void SetTextEditAfterCreate(BOOL bOn) { bAutoTextEdit = bOn; }
+    sal_Bool IsTextEditAfterCreate() const { return bAutoTextEdit; }
+    void SetTextEditAfterCreate(sal_Bool bOn) { bAutoTextEdit = bOn; }
 
     // Erzeugen eines Kreises/Rechtecks/Textrahmens wobei der 1. Punkt
     // nicht die linke obere Ecke, sondern das Zentrum des Objekts vorgibt.
     // Persistentes Flag. Default=FALSE.
-    BOOL IsCreate1stPointAsCenter() const { return b1stPointAsCenter; }
-    void SetCreate1stPointAsCenter(BOOL bOn) { b1stPointAsCenter = bOn; }
+    sal_Bool IsCreate1stPointAsCenter() const { return b1stPointAsCenter; }
+    void SetCreate1stPointAsCenter(sal_Bool bOn) { b1stPointAsCenter = bOn; }
 
     // Fuer Polylines (OBJ_PLIN) und Freihandlinien (OBJ_FREELINE). Ist dieses
-    // Flag TRUE, werden diese beiden Objekttypen implizit geschlossen und in
+    // Flag sal_True, werden diese beiden Objekttypen implizit geschlossen und in
     // Polygon (OBJ_POLY) bzw. Freihandflaeche (OBJ_FREEFILL) gewandelt falls
     // zum Ende des Create die Distanz zwischen Startpunkt und Endpunkt des
     // Objekts <=n Pixel ist, wobei SetAutoCloseDistPix vorgegeben wird.
     // Default=TRUE.
-    BOOL IsAutoClosePolys() const { return bAutoClosePolys; }
-    void SetAutoClosePolys(BOOL bOn) { bAutoClosePolys=bOn; }
+    sal_Bool IsAutoClosePolys() const { return bAutoClosePolys; }
+    void SetAutoClosePolys(sal_Bool bOn) { bAutoClosePolys=bOn; }
 
     // Default=5 Pixel.
-    USHORT GetAutoCloseDistPix() const { return USHORT(nAutoCloseDistPix); }
-    void SetAutoCloseDistPix(USHORT nVal) { nAutoCloseDistPix=nVal; }
+    sal_uInt16 GetAutoCloseDistPix() const { return sal_uInt16(nAutoCloseDistPix); }
+    void SetAutoCloseDistPix(sal_uInt16 nVal) { nAutoCloseDistPix=nVal; }
 
     // Vorgabe des minimalen Pixelabstands zwischen 2 Bezierpunkten bei der
     // Erzeugung einer Freihandlinie.
     // Default=10 Pixel.
-    USHORT GetFreeHandMinDistPix() const { return USHORT(nFreeHandMinDistPix); }
-    void SetFreeHandMinDistPix(USHORT nVal) { nFreeHandMinDistPix=nVal; }
+    sal_uInt16 GetFreeHandMinDistPix() const { return sal_uInt16(nFreeHandMinDistPix); }
+    void SetFreeHandMinDistPix(sal_uInt16 nVal) { nFreeHandMinDistPix=nVal; }
 
     // Wer das (zur restlichen Create-Funktionalitaet von SvDraw) inkompatible
     // Create-Interface am PathObj beibehalten moechte muss das nachfolgende
@@ -190,19 +190,19 @@ public:
     //     OBJ_POLY, OBJ_PLIN, OBJ_PATHLINE, OBJ_PATHFILL
     // Dieses Flag hat nur voruebergehenden Character. Die betroffenen
     // Applikationen sollten alsbald umgestellt werden.
-    // Default=FALSE;
-    BOOL IsUseIncompatiblePathCreateInterface() const { return bUseIncompatiblePathCreateInterface; }
-    void SetUseIncompatiblePathCreateInterface(BOOL bOn) { bUseIncompatiblePathCreateInterface = bOn; }
+    // Default=sal_False;
+    sal_Bool IsUseIncompatiblePathCreateInterface() const { return bUseIncompatiblePathCreateInterface; }
+    void SetUseIncompatiblePathCreateInterface(sal_Bool bOn) { bUseIncompatiblePathCreateInterface = bOn; }
     void SetConnectMarker(const SdrObjConnection& rCon, const SdrPageView& rPV);
     void HideConnectMarker();
 
     // Attribute des ggf. gerade in der Erzeugung befindlichen Objekts
     /* new interface src537 */
-    BOOL GetAttributes(SfxItemSet& rTargetSet, BOOL bOnlyHardAttr=FALSE) const;
+    sal_Bool GetAttributes(SfxItemSet& rTargetSet, sal_Bool bOnlyHardAttr=sal_False) const;
 
-    BOOL SetAttributes(const SfxItemSet& rSet, BOOL bReplaceAll);
-    SfxStyleSheet* GetStyleSheet() const; // SfxStyleSheet* GetStyleSheet(BOOL& rOk) const;
-    BOOL SetStyleSheet(SfxStyleSheet* pStyleSheet, BOOL bDontRemoveHardAttr);
+    sal_Bool SetAttributes(const SfxItemSet& rSet, sal_Bool bReplaceAll);
+    SfxStyleSheet* GetStyleSheet() const; // SfxStyleSheet* GetStyleSheet(sal_Bool& rOk) const;
+    sal_Bool SetStyleSheet(SfxStyleSheet* pStyleSheet, sal_Bool bDontRemoveHardAttr);
 };
 
 #endif //_SVDCRTV_HXX

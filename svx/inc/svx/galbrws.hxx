@@ -47,7 +47,7 @@
 class SVX_DLLPUBLIC GalleryChildWindow : public SfxChildWindow
 {
 public:
-                        GalleryChildWindow( Window*, USHORT, SfxBindings*, SfxChildWinInfo* );
+                        GalleryChildWindow( Window*, sal_uInt16, SfxBindings*, SfxChildWinInfo* );
                         ~GalleryChildWindow();
 
                         SFX_DECL_CHILDWINDOW( GalleryChildWindow );
@@ -88,7 +88,7 @@ private:
 
     void                    InitSettings();
 
-    virtual BOOL            Close();
+    virtual sal_Bool            Close();
     virtual void            Resize();
     virtual void            GetFocus();
 
@@ -107,10 +107,10 @@ public:
     INetURLObject           GetURL() const;
     String                  GetFilterName() const;
     Graphic                 GetGraphic() const;
-    BOOL                    GetVCDrawModel( FmFormModel& rModel ) const;
-    BOOL                    IsLinkage() const;
+    sal_Bool                    GetVCDrawModel( FmFormModel& rModel ) const;
+    sal_Bool                    IsLinkage() const;
 
-    BOOL                    KeyInput( const KeyEvent& rKEvt, Window* pWindow );
+    sal_Bool                    KeyInput( const KeyEvent& rKEvt, Window* pWindow );
 };
 
 #endif // _SVX_GALBRWS_HXX_

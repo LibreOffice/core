@@ -80,19 +80,19 @@ struct XmlSecStatusBarControl::XmlSecStatusBarControl_Impl
 {
     Point       maPos;
     Size        maSize;
-    UINT16      mnState;
+    sal_uInt16      mnState;
     Image       maImage;
     Image       maImageBroken;
     Image       maImageNotValidated;
 };
 
 
-XmlSecStatusBarControl::XmlSecStatusBarControl( USHORT _nSlotId,  USHORT _nId, StatusBar& _rStb )
+XmlSecStatusBarControl::XmlSecStatusBarControl( sal_uInt16 _nSlotId,  sal_uInt16 _nId, StatusBar& _rStb )
     :SfxStatusBarControl( _nSlotId, _nId, _rStb )
 
     ,mpImpl( new XmlSecStatusBarControl_Impl )
 {
-    mpImpl->mnState = (UINT16)SIGNATURESTATE_UNKNOWN;
+    mpImpl->mnState = (sal_uInt16)SIGNATURESTATE_UNKNOWN;
 
     sal_Bool bHC = GetStatusBar().GetSettings().GetStyleSettings().GetHighContrastMode();
     mpImpl->maImage = Image( SVX_RES( bHC ? RID_SVXBMP_SIGNET_H : RID_SVXBMP_SIGNET ) );
@@ -107,11 +107,11 @@ XmlSecStatusBarControl::~XmlSecStatusBarControl()
     delete mpImpl;
 }
 
-void XmlSecStatusBarControl::StateChanged( USHORT, SfxItemState eState, const SfxPoolItem* pState )
+void XmlSecStatusBarControl::StateChanged( sal_uInt16, SfxItemState eState, const SfxPoolItem* pState )
 {
     if( SFX_ITEM_AVAILABLE != eState )
     {
-        mpImpl->mnState = (UINT16)SIGNATURESTATE_UNKNOWN;
+        mpImpl->mnState = (sal_uInt16)SIGNATURESTATE_UNKNOWN;
     }
     else if( pState->ISA( SfxUInt16Item ) )
     {
@@ -121,7 +121,7 @@ void XmlSecStatusBarControl::StateChanged( USHORT, SfxItemState eState, const Sf
     else
     {
         DBG_ERRORFILE( "+XmlSecStatusBarControl::StateChanged(): invalid item type" );
-        mpImpl->mnState = (UINT16)SIGNATURESTATE_UNKNOWN;
+        mpImpl->mnState = (sal_uInt16)SIGNATURESTATE_UNKNOWN;
     }
 
     if( GetStatusBar().AreItemsVisible() )              // necessary ?
@@ -129,7 +129,7 @@ void XmlSecStatusBarControl::StateChanged( USHORT, SfxItemState eState, const Sf
 
     GetStatusBar().SetItemText( GetId(), String() );    // necessary ?
 
-    USHORT nResId = RID_SVXSTR_XMLSEC_NO_SIG;
+    sal_uInt16 nResId = RID_SVXSTR_XMLSEC_NO_SIG;
     if ( mpImpl->mnState == SIGNATURESTATE_SIGNATURES_OK )
         nResId = RID_SVXSTR_XMLSEC_SIG_OK;
     else if ( mpImpl->mnState == SIGNATURESTATE_SIGNATURES_BROKEN )

@@ -49,23 +49,23 @@ GalleryCodec::~GalleryCodec()
 
 // -----------------------------------------------------------------------------
 
-BOOL GalleryCodec::IsCoded( SvStream& rStm, UINT32& rVersion )
+sal_Bool GalleryCodec::IsCoded( SvStream& rStm, sal_uInt32& rVersion )
 {
-    const ULONG nPos = rStm.Tell();
-    BOOL        bRet;
-    BYTE        cByte1, cByte2, cByte3, cByte4, cByte5, cByte6;
+    const sal_uIntPtr   nPos = rStm.Tell();
+    sal_Bool        bRet;
+    sal_uInt8       cByte1, cByte2, cByte3, cByte4, cByte5, cByte6;
 
     rStm >> cByte1 >> cByte2 >> cByte3 >> cByte4 >> cByte5 >> cByte6;
 
     if ( cByte1 == 'S' && cByte2 == 'V' && cByte3 == 'R' && cByte4 == 'L' && cByte5 == 'E' && ( cByte6 == '1' || cByte6 == '2' ) )
     {
         rVersion = ( ( cByte6 == '1' ) ? 1 : 2 );
-        bRet = TRUE;
+        bRet = sal_True;
     }
     else
     {
         rVersion = 0;
-        bRet = FALSE;
+        bRet = sal_False;
     }
 
     rStm.Seek( nPos );
@@ -77,10 +77,10 @@ BOOL GalleryCodec::IsCoded( SvStream& rStm, UINT32& rVersion )
 
 void GalleryCodec::Write( SvStream& rStmToWrite )
 {
-    UINT32 nPos, nCompSize;
+    sal_uInt32 nPos, nCompSize;
 
     rStmToWrite.Seek( STREAM_SEEK_TO_END );
-    const UINT32 nSize = rStmToWrite.Tell();
+    const sal_uInt32 nSize = rStmToWrite.Tell();
     rStmToWrite.Seek( 0UL );
 
     rStm << 'S' << 'V' << 'R' << 'L' << 'E' << '2';
@@ -104,11 +104,11 @@ void GalleryCodec::Write( SvStream& rStmToWrite )
 
 void GalleryCodec::Read( SvStream& rStmToRead )
 {
-    UINT32 nVersion = 0;
+    sal_uInt32 nVersion = 0;
 
     if( IsCoded( rStm, nVersion ) )
     {
-        UINT32  nCompressedSize, nUnCompressedSize;
+        sal_uInt32  nCompressedSize, nUnCompressedSize;
 
         rStm.SeekRel( 6 );
         rStm >> nUnCompressedSize >> nCompressedSize;
@@ -116,13 +116,13 @@ void GalleryCodec::Read( SvStream& rStmToRead )
         // decompress
         if( 1 == nVersion )
         {
-            BYTE*   pCompressedBuffer = new BYTE[ nCompressedSize ]; rStm.Read( pCompressedBuffer, nCompressedSize );
-            BYTE*   pInBuf = pCompressedBuffer;
-            BYTE*   pOutBuf = new BYTE[ nUnCompressedSize ];
-            BYTE*   pTmpBuf = pOutBuf;
-            BYTE*   pLast = pOutBuf + nUnCompressedSize - 1;
-            ULONG   nIndex = 0UL, nCountByte, nRunByte;
-            BOOL    bEndDecoding = FALSE;
+            sal_uInt8*   pCompressedBuffer = new sal_uInt8[ nCompressedSize ]; rStm.Read( pCompressedBuffer, nCompressedSize );
+            sal_uInt8*  pInBuf = pCompressedBuffer;
+            sal_uInt8*  pOutBuf = new sal_uInt8[ nUnCompressedSize ];
+            sal_uInt8*  pTmpBuf = pOutBuf;
+            sal_uInt8*  pLast = pOutBuf + nUnCompressedSize - 1;
+            sal_uIntPtr   nIndex = 0UL, nCountByte, nRunByte;
+            sal_Bool    bEndDecoding = sal_False;
 
             do
             {
@@ -144,11 +144,11 @@ void GalleryCodec::Read( SvStream& rStmToRead )
                             pInBuf++;
                     }
                     else if ( nRunByte == 1 )   // Ende des Bildes
-                        bEndDecoding = TRUE;
+                        bEndDecoding = sal_True;
                 }
                 else
                 {
-                    const BYTE cVal = *pInBuf++;
+                    const sal_uInt8 cVal = *pInBuf++;
 
                     memset( &pTmpBuf[ nIndex ], cVal, nCountByte );
                     nIndex += nCountByte;

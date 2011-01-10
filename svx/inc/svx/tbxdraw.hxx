@@ -49,17 +49,17 @@ protected:
     using SfxPopupWindow::StateChanged;
 
 public:
-    SvxPopupWindowTbxMgr(   USHORT nId,
+    SvxPopupWindowTbxMgr(   sal_uInt16 nId,
                             SfxToolBoxControl* pTbxCtl,
                             ResId aRIdWin,
                             ResId aRIdTbx );
-    SvxPopupWindowTbxMgr(   USHORT nId,
+    SvxPopupWindowTbxMgr(   sal_uInt16 nId,
                             WindowAlign eAlign,
                             ResId aRIdWin,
                             ResId aRIdTbx );
     ~SvxPopupWindowTbxMgr();
 
-    virtual void                StateChanged( USHORT nSID, SfxItemState eState,
+    virtual void                StateChanged( sal_uInt16 nSID, SfxItemState eState,
                                               const SfxPoolItem* pState);
     virtual SfxPopupWindow*     Clone() const;
     virtual void                PopupModeEnd();
@@ -67,7 +67,7 @@ public:
     void                        StartSelection();
 
     // toolbox click or execute may chage the default selection in the tools toolbox
-    virtual void                UserEvent( ULONG nEvent, void* pEventData );
+    virtual void                UserEvent( sal_uIntPtr nEvent, void* pEventData );
 };
 
 

@@ -38,9 +38,9 @@
 SvxRelativeField::SvxRelativeField( Window* pParent, WinBits nWinSize ) :
     MetricField( pParent, nWinSize )
 {
-    bNegativeEnabled = FALSE;
-    bRelativeMode = FALSE;
-    bRelative     = FALSE;
+    bNegativeEnabled = sal_False;
+    bRelativeMode = sal_False;
+    bRelative     = sal_False;
 
     SetDecimalDigits( 2 );
     SetMin( 0 );
@@ -52,9 +52,9 @@ SvxRelativeField::SvxRelativeField( Window* pParent, WinBits nWinSize ) :
 SvxRelativeField::SvxRelativeField( Window* pParent, const ResId& rResId ) :
     MetricField( pParent, rResId )
 {
-    bNegativeEnabled = FALSE;
-    bRelativeMode = FALSE;
-    bRelative     = FALSE;
+    bNegativeEnabled = sal_False;
+    bRelativeMode = sal_False;
+    bRelative     = sal_False;
 
     SetDecimalDigits( 2 );
     SetMin( 0 );
@@ -70,7 +70,7 @@ void SvxRelativeField::Modify()
     if ( bRelativeMode )
     {
         String  aStr = GetText();
-        BOOL    bNewMode = bRelative;
+        sal_Bool    bNewMode = bRelative;
 
         if ( bRelative )
         {
@@ -81,7 +81,7 @@ void SvxRelativeField::Modify()
                 if( ( ( *pStr < sal_Unicode( '0' ) ) || ( *pStr > sal_Unicode( '9' ) ) ) &&
                     ( *pStr != sal_Unicode( '%' ) ) )
                 {
-                    bNewMode = FALSE;
+                    bNewMode = sal_False;
                     break;
                 }
                 pStr++;
@@ -92,7 +92,7 @@ void SvxRelativeField::Modify()
             xub_StrLen nPos = aStr.Search( sal_Unicode( '%' ) );
 
             if ( nPos != STRING_NOTFOUND )
-                bNewMode = TRUE;
+                bNewMode = sal_True;
         }
 
         if ( bNewMode != bRelative )
@@ -104,10 +104,10 @@ void SvxRelativeField::Modify()
 
 // -----------------------------------------------------------------------
 
-void SvxRelativeField::EnableRelativeMode( USHORT nMin,
-                                           USHORT nMax, USHORT nStep )
+void SvxRelativeField::EnableRelativeMode( sal_uInt16 nMin,
+                                           sal_uInt16 nMax, sal_uInt16 nStep )
 {
-    bRelativeMode = TRUE;
+    bRelativeMode = sal_True;
     nRelMin       = nMin;
     nRelMax       = nMax;
     nRelStep      = nStep;
@@ -116,14 +116,14 @@ void SvxRelativeField::EnableRelativeMode( USHORT nMin,
 
 // -----------------------------------------------------------------------
 
-void SvxRelativeField::SetRelative( BOOL bNewRelative )
+void SvxRelativeField::SetRelative( sal_Bool bNewRelative )
 {
     Selection aSelection = GetSelection();
     String aStr = GetText();
 
     if ( bNewRelative )
     {
-        bRelative = TRUE;
+        bRelative = sal_True;
         SetDecimalDigits( 0 );
         SetMin( nRelMin );
         SetMax( nRelMax );
@@ -132,7 +132,7 @@ void SvxRelativeField::SetRelative( BOOL bNewRelative )
     }
     else
     {
-        bRelative = FALSE;
+        bRelative = sal_False;
         SetDecimalDigits( 2 );
         SetMin( bNegativeEnabled ? -9999 : 0 );
         SetMax( 9999 );

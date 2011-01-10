@@ -56,7 +56,7 @@ protected:
     long                        nShearWink;
 
     Point                       aRefPoint; // Referenzpunkt innerhalb der Objektgruppe
-    FASTBOOL                    bRefPoint; // Ist ein RefPoint gesetzt?
+    int                 bRefPoint; // Ist ein RefPoint gesetzt?
 
 public:
     TYPEINFO();
@@ -64,14 +64,14 @@ public:
     virtual ~SdrObjGroup();
 
     virtual void SetBoundRectDirty();
-    virtual UINT16 GetObjIdentifier() const;
+    virtual sal_uInt16 GetObjIdentifier() const;
     virtual void TakeObjInfo(SdrObjTransformInfoRec& rInfo) const;
     virtual SdrLayerID GetLayer() const;
     virtual void NbcSetLayer(SdrLayerID nLayer);
     virtual void SetObjList(SdrObjList* pNewObjList);
     virtual void SetPage(SdrPage* pNewPage);
     virtual void SetModel(SdrModel* pNewModel);
-    virtual FASTBOOL HasRefPoint() const;
+    virtual int HasRefPoint() const;
     virtual Point GetRefPoint() const;
     virtual void SetRefPoint(const Point& rPnt);
     virtual SdrObjList* GetSubList() const;
@@ -90,16 +90,16 @@ public:
     // special drag methods
     virtual bool beginSpecialDrag(SdrDragStat& rDrag) const;
 
-    virtual FASTBOOL BegCreate(SdrDragStat& rStat);
+    virtual int BegCreate(SdrDragStat& rStat);
 
     virtual long GetRotateAngle() const;
-    virtual long GetShearAngle(FASTBOOL bVertical=FALSE) const;
+    virtual long GetShearAngle(int bVertical=sal_False) const;
 
     virtual void Move(const Size& rSiz);
     virtual void Resize(const Point& rRef, const Fraction& xFact, const Fraction& yFact);
     virtual void Rotate(const Point& rRef, long nWink, double sn, double cs);
     virtual void Mirror(const Point& rRef1, const Point& rRef2);
-    virtual void Shear(const Point& rRef, long nWink, double tn, FASTBOOL bVShear);
+    virtual void Shear(const Point& rRef, long nWink, double tn, int bVShear);
     virtual void SetAnchorPos(const Point& rPnt);
     virtual void SetRelativePos(const Point& rPnt);
     virtual void SetSnapRect(const Rectangle& rRect);
@@ -109,7 +109,7 @@ public:
     virtual void NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact);
     virtual void NbcRotate(const Point& rRef, long nWink, double sn, double cs);
     virtual void NbcMirror(const Point& rRef1, const Point& rRef2);
-    virtual void NbcShear(const Point& rRef, long nWink, double tn, FASTBOOL bVShear);
+    virtual void NbcShear(const Point& rRef, long nWink, double tn, int bVShear);
     virtual void NbcSetAnchorPos(const Point& rPnt);
     virtual void NbcSetRelativePos(const Point& rPnt);
     virtual void NbcSetSnapRect(const Rectangle& rRect);
@@ -118,7 +118,7 @@ public:
     virtual void NbcReformatText();
     virtual void ReformatText();
 
-    virtual SdrObject* DoConvertToPolyObj(BOOL bBezier) const;
+    virtual SdrObject* DoConvertToPolyObj(sal_Bool bBezier) const;
 };
 
 #endif //_SVDOGRP_HXX

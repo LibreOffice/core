@@ -93,7 +93,7 @@ public:
     virtual ~SdrPathObj();
 
     virtual void TakeObjInfo(SdrObjTransformInfoRec& rInfo) const;
-    virtual UINT16 GetObjIdentifier() const;
+    virtual sal_uInt16 GetObjIdentifier() const;
     virtual void TakeUnrotatedSnapRect(Rectangle& rRect) const;
     virtual void operator=(const SdrObject& rObj);
 
@@ -115,10 +115,10 @@ public:
     virtual String getSpecialDragComment(const SdrDragStat& rDrag) const;
     virtual basegfx::B2DPolyPolygon getSpecialDragPoly(const SdrDragStat& rDrag) const;
 
-    virtual FASTBOOL BegCreate(SdrDragStat& rStat);
-    virtual FASTBOOL MovCreate(SdrDragStat& rStat);
-    virtual FASTBOOL EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd);
-    virtual FASTBOOL BckCreate(SdrDragStat& rStat);
+    virtual int BegCreate(SdrDragStat& rStat);
+    virtual int MovCreate(SdrDragStat& rStat);
+    virtual int EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd);
+    virtual int BckCreate(SdrDragStat& rStat);
     virtual void BrkCreate(SdrDragStat& rStat);
     virtual basegfx::B2DPolyPolygon TakeCreatePoly(const SdrDragStat& rDrag) const;
     Pointer GetCreatePointer() const;
@@ -131,7 +131,7 @@ public:
     virtual void NbcResize(const Point& rRefPnt, const Fraction& aXFact, const Fraction& aYFact);
     virtual void NbcRotate(const Point& rRefPnt, long nAngle, double fSin, double fCos);
     virtual void NbcMirror(const Point& rRefPnt1, const Point& rRefPnt2);
-    virtual void NbcShear(const Point& rRefPnt, long nAngle, double fTan, FASTBOOL bVShear);
+    virtual void NbcShear(const Point& rRefPnt, long nAngle, double fTan, int bVShear);
 
     virtual sal_uInt32 GetSnapPointCount() const;
     virtual Point GetSnapPoint(sal_uInt32 i) const;
@@ -154,7 +154,7 @@ protected:
     virtual void RestGeoData(const SdrObjGeoData& rGeo);
 
 public:
-    virtual SdrObject* DoConvertToPolyObj(BOOL bBezier) const;
+    virtual SdrObject* DoConvertToPolyObj(sal_Bool bBezier) const;
 
     // Bezierpolygon holen/setzen
     const basegfx::B2DPolyPolygon& GetPathPoly() const { return maPathPolygon; }

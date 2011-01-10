@@ -65,7 +65,7 @@ class SVX_DLLPUBLIC SvxRubyChildWindow : public SfxChildWindow
 {
  public:
 
-    SvxRubyChildWindow( Window*, USHORT, SfxBindings*, SfxChildWinInfo* );
+    SvxRubyChildWindow( Window*, sal_uInt16, SfxBindings*, SfxChildWinInfo* );
 
     SFX_DECL_CHILDWINDOW( SvxRubyChildWindow );
 
@@ -128,7 +128,7 @@ class SvxRubyDialog : public SfxModelessDialog
     long                nLastPos;
     long                nCurrentEdit;
 
-    BOOL                bModified;
+    sal_Bool                bModified;
 
     com::sun::star::uno::Reference<com::sun::star::view::XSelectionChangeListener> xImpl;
     SfxBindings*    pBindings;
@@ -152,13 +152,13 @@ class SvxRubyDialog : public SfxModelessDialog
     void                AssertOneEntry();
 
     void                Update();
-    virtual BOOL        Close();
+    virtual sal_Bool        Close();
 
     long                GetLastPos() const {return nLastPos;}
     void                SetLastPos(long nSet) {nLastPos = nSet;}
 
-    BOOL                IsModified() const {return bModified;}
-    void                SetModified(BOOL bSet) {bModified = bSet;}
+    sal_Bool                IsModified() const {return bModified;}
+    void                SetModified(sal_Bool bSet) {bModified = bSet;}
 
     void EnableControls(sal_Bool bEnable)
         {

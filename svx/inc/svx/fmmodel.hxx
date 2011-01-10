@@ -60,16 +60,16 @@ public:
     FmFormModel(SfxItemPool* pPool=NULL, SfxObjectShell* pPers=NULL );
     FmFormModel(const XubString& rPath, SfxItemPool* pPool=NULL,
                 SfxObjectShell* pPers=NULL );
-    FmFormModel(SfxItemPool* pPool, SfxObjectShell* pPers, FASTBOOL bUseExtColorTable);
+    FmFormModel(SfxItemPool* pPool, SfxObjectShell* pPers, int bUseExtColorTable);
     FmFormModel(const XubString& rPath, SfxItemPool* pPool, SfxObjectShell* pPers,
-                FASTBOOL bUseExtColorTable);
+                int bUseExtColorTable);
 
     virtual ~FmFormModel();
 
-    virtual SdrPage* AllocPage(FASTBOOL bMasterPage);
+    virtual SdrPage* AllocPage(int bMasterPage);
     virtual void     InsertPage(SdrPage* pPage, sal_uInt16 nPos=0xFFFF);
     virtual SdrPage* RemovePage(sal_uInt16 nPgNum);
-    virtual void     MovePage(USHORT nPgNum, USHORT nNewPos);
+    virtual void     MovePage(sal_uInt16 nPgNum, sal_uInt16 nNewPos);
     virtual void     InsertMasterPage(SdrPage* pPage, sal_uInt16 nPos=0xFFFF);
     virtual SdrPage* RemoveMasterPage(sal_uInt16 nPgNum);
 
@@ -83,8 +83,8 @@ public:
     sal_Bool    GetAutoControlFocus() const { return m_bAutoControlFocus; }
     void        SetAutoControlFocus( sal_Bool _bAutoControlFocus );
 
-    /** check whether the OpenInDesignMode has been set explicitly or been loaded (<FALSE/>)
-        or if it still has the default value from construction (<TRUE/>)
+    /** check whether the OpenInDesignMode has been set explicitly or been loaded (<sal_False/>)
+        or if it still has the default value from construction (<sal_True/>)
     */
     sal_Bool    OpenInDesignModeIsDefaulted();
 

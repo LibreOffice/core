@@ -77,7 +77,7 @@ protected:
 
     Point                       aPt1;
     Point                       aPt2;
-    FASTBOOL                    bTextDirty;
+    int                 bTextDirty;
 
 protected:
     void ImpTakeAttr(ImpMeasureRec& rRec) const;
@@ -85,7 +85,7 @@ protected:
     void ImpCalcGeometrics(const ImpMeasureRec& rRec, ImpMeasurePoly& rPol) const;
     basegfx::B2DPolyPolygon ImpCalcXPoly(const ImpMeasurePoly& rPol) const;
     void ImpEvalDrag(ImpMeasureRec& rRec, const SdrDragStat& rDrag) const;
-    void SetTextDirty() { bTextDirty=TRUE; SetTextSizeDirty(); if (!aOutRect.IsEmpty()) { SetBoundRectDirty(); SetRectsDirty(sal_True); } }
+    void SetTextDirty() { bTextDirty=sal_True; SetTextSizeDirty(); if (!aOutRect.IsEmpty()) { SetBoundRectDirty(); SetRectsDirty(sal_True); } }
     void UndirtyText() const;
 
     virtual SdrObjGeoData* NewGeoData() const;
@@ -99,7 +99,7 @@ public:
     virtual ~SdrMeasureObj();
 
     virtual void TakeObjInfo(SdrObjTransformInfoRec& rInfo) const;
-    virtual UINT16 GetObjIdentifier() const;
+    virtual sal_uInt16 GetObjIdentifier() const;
     virtual void TakeUnrotatedSnapRect(Rectangle& rRect) const;
     virtual void operator=(const SdrObject& rObj);
 
@@ -116,10 +116,10 @@ public:
     virtual bool applySpecialDrag(SdrDragStat& rDrag);
     virtual String getSpecialDragComment(const SdrDragStat& rDrag) const;
 
-    virtual FASTBOOL BegCreate(SdrDragStat& rStat);
-    virtual FASTBOOL MovCreate(SdrDragStat& rStat);
-    virtual FASTBOOL EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd);
-    virtual FASTBOOL BckCreate(SdrDragStat& rStat);
+    virtual int BegCreate(SdrDragStat& rStat);
+    virtual int MovCreate(SdrDragStat& rStat);
+    virtual int EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd);
+    virtual int BckCreate(SdrDragStat& rStat);
     virtual void BrkCreate(SdrDragStat& rStat);
     virtual basegfx::B2DPolyPolygon TakeCreatePoly(const SdrDragStat& rDrag) const;
     virtual Pointer GetCreatePointer() const;
@@ -128,7 +128,7 @@ public:
     virtual void NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact);
     virtual void NbcRotate(const Point& rRef, long nWink, double sn, double cs);
     virtual void NbcMirror(const Point& rRef1, const Point& rRef2);
-    virtual void NbcShear(const Point& rRef, long nWink, double tn, FASTBOOL bVShear);
+    virtual void NbcShear(const Point& rRef, long nWink, double tn, int bVShear);
     virtual long GetRotateAngle() const;
     virtual void RecalcSnapRect();
 
@@ -140,20 +140,20 @@ public:
     virtual Point GetPoint(sal_uInt32 i) const;
     virtual void NbcSetPoint(const Point& rPnt, sal_uInt32 i);
 
-    virtual SdrObject* DoConvertToPolyObj(BOOL bBezier) const;
+    virtual SdrObject* DoConvertToPolyObj(sal_Bool bBezier) const;
 
     virtual sal_Bool BegTextEdit(SdrOutliner& rOutl);
     virtual const Size& GetTextSize() const;
-    virtual void TakeTextRect( SdrOutliner& rOutliner, Rectangle& rTextRect, FASTBOOL bNoEditText=FALSE,
-        Rectangle* pAnchorRect=NULL, BOOL bLineWidth=TRUE ) const;
+    virtual void TakeTextRect( SdrOutliner& rOutliner, Rectangle& rTextRect, int bNoEditText=sal_False,
+        Rectangle* pAnchorRect=NULL, sal_Bool bLineWidth=sal_True ) const;
     virtual void TakeTextAnchorRect(Rectangle& rAnchorRect) const;
     virtual void TakeTextEditArea(Size* pPaperMin, Size* pPaperMax, Rectangle* pViewInit, Rectangle* pViewMin) const;
-    virtual USHORT GetOutlinerViewAnchorMode() const;
+    virtual sal_uInt16 GetOutlinerViewAnchorMode() const;
     virtual void NbcSetOutlinerParaObject(OutlinerParaObject* pTextObject);
     virtual OutlinerParaObject* GetOutlinerParaObject() const;
 
-    virtual FASTBOOL CalcFieldValue(const SvxFieldItem& rField, USHORT nPara, USHORT nPos,
-        FASTBOOL bEdit, Color*& rpTxtColor, Color*& rpFldColor, String& rRet) const;
+    virtual int CalcFieldValue(const SvxFieldItem& rField, sal_uInt16 nPara, sal_uInt16 nPos,
+        int bEdit, Color*& rpTxtColor, Color*& rpFldColor, String& rRet) const;
 
     // #i97878#
     virtual sal_Bool TRGetBaseGeometry(basegfx::B2DHomMatrix& rMatrix, basegfx::B2DPolyPolygon& rPolyPolygon) const;

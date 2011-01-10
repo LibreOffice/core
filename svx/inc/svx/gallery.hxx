@@ -118,57 +118,57 @@ public:
     INetURLObject               GetURL() const;
     String                      GetFilterName() const;
     Graphic                     GetGraphic() const;
-    BOOL                        GetVCDrawModel( FmFormModel& rModel ) const;
-    BOOL                        IsLinkage() const;
+    sal_Bool                        GetVCDrawModel( FmFormModel& rModel ) const;
+    sal_Bool                        IsLinkage() const;
 
-    static BOOL                 FillThemeList( List& rThemeList );
+    static sal_Bool                 FillThemeList( List& rThemeList );
 
                                 // FillObjList is filling rObjList with Strings of the internal Gallery Object URL
-    static BOOL                 FillObjList( const String& rThemeName, List& rObjList );
-    static BOOL                 FillObjList( ULONG nThemeId, List& rObjList );
+    static sal_Bool                 FillObjList( const String& rThemeName, List& rObjList );
+    static sal_Bool                 FillObjList( sal_uIntPtr nThemeId, List& rObjList );
 
                                 // FillObjTitleList is filling the rList with the title for each gallery object
     static sal_Bool             FillObjListTitle( const sal_uInt32 nThemeId, std::vector< rtl::OUString >& rList );
 
-    static BOOL                 InsertURL( const String& rThemeName, const String& rURL );
-    static BOOL                 InsertURL( ULONG nThemeId, const String& rURL );
+    static sal_Bool                 InsertURL( const String& rThemeName, const String& rURL );
+    static sal_Bool                 InsertURL( sal_uIntPtr nThemeId, const String& rURL );
 
-    static BOOL                 InsertURL( const String& rThemeName, const String& rURL,
-                                           const ULONG nSgaFormat /* = SGA_FORMAT_ALL */ );
-    static BOOL                 InsertURL( ULONG nThemeId, const String& rURL,
-                                           const ULONG nSgaFormat /* = SGA_FORMAT_ALL */ );
+    static sal_Bool                 InsertURL( const String& rThemeName, const String& rURL,
+                                           const sal_uIntPtr nSgaFormat /* = SGA_FORMAT_ALL */ );
+    static sal_Bool                 InsertURL( sal_uIntPtr nThemeId, const String& rURL,
+                                           const sal_uIntPtr nSgaFormat /* = SGA_FORMAT_ALL */ );
 
-    static ULONG                GetObjCount( const String& rThemeName );
-    static ULONG                GetObjCount( ULONG nThemeId );
+    static sal_uIntPtr              GetObjCount( const String& rThemeName );
+    static sal_uIntPtr              GetObjCount( sal_uIntPtr nThemeId );
 
-    static BOOL                 GetGraphicObj( const String& rThemeName, ULONG nPos,
+    static sal_Bool                 GetGraphicObj( const String& rThemeName, sal_uIntPtr nPos,
                                                Graphic* pGraphic = NULL, Bitmap* pThumb = NULL,
-                                               BOOL bProgess = FALSE );
-    static BOOL                 GetGraphicObj( ULONG nThemeId, ULONG nPos,
+                                               sal_Bool bProgess = sal_False );
+    static sal_Bool                 GetGraphicObj( sal_uIntPtr nThemeId, sal_uIntPtr nPos,
                                                Graphic* pGraphic = NULL, Bitmap* pThumb = NULL,
-                                               BOOL bProgess = FALSE );
+                                               sal_Bool bProgess = sal_False );
 
-    static BOOL                 InsertGraphicObj( const String& rThemeName, const Graphic& rGraphic );
-    static BOOL                 InsertGraphicObj( ULONG nThemeId, const Graphic& rGraphic );
+    static sal_Bool                 InsertGraphicObj( const String& rThemeName, const Graphic& rGraphic );
+    static sal_Bool                 InsertGraphicObj( sal_uIntPtr nThemeId, const Graphic& rGraphic );
 
-    static ULONG                GetSdrObjCount( const String& rThemeName );
-    static ULONG                GetSdrObjCount( ULONG nThemeId );
+    static sal_uIntPtr              GetSdrObjCount( const String& rThemeName );
+    static sal_uIntPtr              GetSdrObjCount( sal_uIntPtr nThemeId );
 
-    static BOOL                 GetSdrObj( const String& rThemeName, ULONG nSdrModelPos,
+    static sal_Bool                 GetSdrObj( const String& rThemeName, sal_uIntPtr nSdrModelPos,
                                            SdrModel* pModel = NULL, Bitmap* pThumb = NULL );
-    static BOOL                 GetSdrObj( ULONG nThemeId, ULONG nSdrModelPos,
+    static sal_Bool                 GetSdrObj( sal_uIntPtr nThemeId, sal_uIntPtr nSdrModelPos,
                                            SdrModel* pModel = NULL, Bitmap* pThumb = NULL );
 
-    static BOOL                 InsertSdrObj( const String& rThemeName, FmFormModel& rModel );
-    static BOOL                 InsertSdrObj( ULONG nThemeId, FmFormModel& rModel );
+    static sal_Bool                 InsertSdrObj( const String& rThemeName, FmFormModel& rModel );
+    static sal_Bool                 InsertSdrObj( sal_uIntPtr nThemeId, FmFormModel& rModel );
 
-    static BOOL                 BeginLocking( const String& rThemeName );
-    static BOOL                 BeginLocking( ULONG nThemeId );
+    static sal_Bool                 BeginLocking( const String& rThemeName );
+    static sal_Bool                 BeginLocking( sal_uIntPtr nThemeId );
 
-    static BOOL                 EndLocking( const String& rThemeName );
-    static BOOL                 EndLocking( ULONG nThemeId );
+    static sal_Bool                 EndLocking( const String& rThemeName );
+    static sal_Bool                 EndLocking( sal_uIntPtr nThemeId );
 
-    static BOOL                 DrawCentered( OutputDevice* pOut, const FmFormModel& rModel );
+    static sal_Bool                 DrawCentered( OutputDevice* pOut, const FmFormModel& rModel );
 };
 
 #endif // _GALLERY_HXX_

@@ -82,7 +82,7 @@ public:
 |*  eines Objekts
 |*
 \************************************************************************/
-typedef UINT16 CTL_STATE;
+typedef sal_uInt16 CTL_STATE;
 #define CS_NOHORZ   1       // no horizontal input information is used
 #define CS_NOVERT   2       // no vertikal input information is used
 
@@ -91,15 +91,15 @@ class SvxRectCtlAccessibleContext;
 class SVX_DLLPUBLIC SvxRectCtl : public Control
 {
 private:
-    SVX_DLLPRIVATE void             InitSettings( BOOL bForeground, BOOL bBackground );
+    SVX_DLLPRIVATE void             InitSettings( sal_Bool bForeground, sal_Bool bBackground );
     SVX_DLLPRIVATE void             InitRectBitmap( void );
     SVX_DLLPRIVATE Bitmap&          GetRectBitmap( void );
     SVX_DLLPRIVATE void             Resize_Impl();
 
 protected:
     SvxRectCtlAccessibleContext*    pAccContext;
-    USHORT                          nBorderWidth;
-    USHORT                          nRadius;
+    sal_uInt16                          nBorderWidth;
+    sal_uInt16                          nRadius;
     Size                            aSize;
     Point                           aPtLT, aPtMT, aPtRT;
     Point                           aPtLM, aPtMM, aPtRM;
@@ -124,7 +124,7 @@ protected:
     Point               GetApproxLogPtFromPixPt( const Point& rRoughPixelPoint ) const;
 public:
     SvxRectCtl( Window* pParent, const ResId& rResId, RECT_POINT eRpt = RP_MM,
-                USHORT nBorder = 200, USHORT nCircle = 80, CTL_STYLE eStyle = CS_RECT );
+                sal_uInt16 nBorder = 200, sal_uInt16 nCircle = 80, CTL_STYLE eStyle = CS_RECT );
     virtual ~SvxRectCtl();
 
     virtual void        Paint( const Rectangle& rRect );
@@ -140,7 +140,7 @@ public:
 
     void                SetState( CTL_STATE nState );
 
-    UINT8               GetNumOfChilds( void ) const;   // returns number of usable radio buttons
+    sal_uInt8               GetNumOfChilds( void ) const;   // returns number of usable radio buttons
 
     Rectangle           CalculateFocusRectangle( void ) const;
     Rectangle           CalculateFocusRectangle( RECT_POINT eRectPoint ) const;
@@ -168,7 +168,7 @@ private:
 protected:
     Font    aFont;
     Size    aFontSize;
-    BOOL    bPositive;
+    sal_Bool    bPositive;
 
 public:
             SvxAngleCtl( Window* pParent, const ResId& rResId );
@@ -189,9 +189,9 @@ class SVX_DLLPUBLIC SvxBitmapCtl
 {
 protected:
     Size            aSize;
-    USHORT          nLines;
+    sal_uInt16          nLines;
     Color           aPixelColor, aBackgroundColor;
-    const USHORT*   pBmpArray;
+    const sal_uInt16*   pBmpArray;
 
 public:
             SvxBitmapCtl( Window* pParent, const Size& rSize );
@@ -199,8 +199,8 @@ public:
 
     XOBitmap    GetXBitmap();
 
-    void    SetBmpArray( const USHORT* pPixel ) { pBmpArray = pPixel; }
-    void    SetLines( USHORT nLns ) { nLines = nLns; }
+    void    SetBmpArray( const sal_uInt16* pPixel ) { pBmpArray = pPixel; }
+    void    SetLines( sal_uInt16 nLns ) { nLines = nLns; }
     void    SetPixelColor( Color aColor ) { aPixelColor = aColor; }
     void    SetBackgroundColor( Color aColor ) { aBackgroundColor = aColor; }
 };
@@ -216,19 +216,19 @@ private:
     using OutputDevice::SetLineColor;
 
 protected:
-    USHORT      nLines, nSquares;
+    sal_uInt16      nLines, nSquares;
     Color       aPixelColor;
     Color       aBackgroundColor;
     Color       aLineColor;
     Size        aRectSize;
-    USHORT*     pPixel;
-    BOOL        bPaintable;
+    sal_uInt16*     pPixel;
+    sal_Bool        bPaintable;
 
-    void    ChangePixel( USHORT nPixel );
+    void    ChangePixel( sal_uInt16 nPixel );
 
 public:
             SvxPixelCtl( Window* pParent, const ResId& rResId,
-                        USHORT nNumber = 8 );
+                        sal_uInt16 nNumber = 8 );
             ~SvxPixelCtl();
 
     virtual void Paint( const Rectangle& rRect );
@@ -240,14 +240,14 @@ public:
     void    SetBackgroundColor( const Color& rCol ) { aBackgroundColor = rCol; }
     void    SetLineColor( const Color& rCol ) { aLineColor = rCol; }
 
-    USHORT  GetLineCount() const { return nLines; }
+    sal_uInt16  GetLineCount() const { return nLines; }
     Color   GetPixelColor() const { return aPixelColor; }
     Color   GetBackgroundColor() const { return aBackgroundColor; }
 
-    USHORT  GetBitmapPixel( const USHORT nPixelNumber );
-    USHORT* GetBitmapPixelPtr() { return pPixel; }
+    sal_uInt16  GetBitmapPixel( const sal_uInt16 nPixelNumber );
+    sal_uInt16* GetBitmapPixelPtr() { return pPixel; }
 
-    void    SetPaintable( BOOL bTmp ) { bPaintable = bTmp; }
+    void    SetPaintable( sal_Bool bTmp ) { bPaintable = bTmp; }
     void    Reset();
 };
 
@@ -266,7 +266,7 @@ public:
     virtual void Fill( const XColorTable* pTab );
 
     void Append( XColorEntry* pEntry, Bitmap* pBmp = NULL );
-    void Modify( XColorEntry* pEntry, USHORT nPos, Bitmap* pBmp = NULL );
+    void Modify( XColorEntry* pEntry, sal_uInt16 nPos, Bitmap* pBmp = NULL );
 };
 
 /*************************************************************************
@@ -278,20 +278,20 @@ class SVX_DLLPUBLIC HatchingLB : public ListBox
 {
 
 public:
-         HatchingLB( Window* pParent, ResId Id, BOOL bUserDraw = TRUE );
-         HatchingLB( Window* pParent, WinBits aWB, BOOL bUserDraw = TRUE );
+         HatchingLB( Window* pParent, ResId Id, sal_Bool bUserDraw = sal_True );
+         HatchingLB( Window* pParent, WinBits aWB, sal_Bool bUserDraw = sal_True );
 
     virtual void Fill( const XHatchList* pList );
     virtual void UserDraw( const UserDrawEvent& rUDEvt );
 
     void    Append( XHatchEntry* pEntry, Bitmap* pBmp = NULL );
-    void    Modify( XHatchEntry* pEntry, USHORT nPos, Bitmap* pBmp = NULL );
+    void    Modify( XHatchEntry* pEntry, sal_uInt16 nPos, Bitmap* pBmp = NULL );
     void    SelectEntryByList( const XHatchList* pList, const String& rStr,
-                        const XHatch& rXHatch, USHORT nDist = 0 );
+                        const XHatch& rXHatch, sal_uInt16 nDist = 0 );
 
 private:
     XHatchList*     mpList;
-    BOOL            mbUserDraw;
+    sal_Bool            mbUserDraw;
 };
 
 /*************************************************************************
@@ -302,20 +302,20 @@ private:
 class SVX_DLLPUBLIC GradientLB : public ListBox
 {
 public:
-    GradientLB( Window* pParent, ResId Id, BOOL bUserDraw = TRUE );
-    GradientLB( Window* pParent, WinBits aWB, BOOL bUserDraw = TRUE );
+    GradientLB( Window* pParent, ResId Id, sal_Bool bUserDraw = sal_True );
+    GradientLB( Window* pParent, WinBits aWB, sal_Bool bUserDraw = sal_True );
 
     virtual void Fill( const XGradientList* pList );
     virtual void UserDraw( const UserDrawEvent& rUDEvt );
 
     void    Append( XGradientEntry* pEntry, Bitmap* pBmp = NULL );
-    void    Modify( XGradientEntry* pEntry, USHORT nPos, Bitmap* pBmp = NULL );
+    void    Modify( XGradientEntry* pEntry, sal_uInt16 nPos, Bitmap* pBmp = NULL );
     void    SelectEntryByList( const XGradientList* pList, const String& rStr,
-                        const XGradient& rXGradient, USHORT nDist = 0 );
+                        const XGradient& rXGradient, sal_uInt16 nDist = 0 );
 
 private:
     XGradientList* mpList;
-    BOOL            mbUserDraw;
+    sal_Bool            mbUserDraw;
 };
 
 /*************************************************************************
@@ -326,13 +326,13 @@ private:
 class SVX_DLLPUBLIC BitmapLB : public ListBox
 {
 public:
-         BitmapLB( Window* pParent, ResId Id, BOOL bUserDraw = TRUE );
+         BitmapLB( Window* pParent, ResId Id, sal_Bool bUserDraw = sal_True );
 
     virtual void Fill( const XBitmapList* pList );
     virtual void UserDraw( const UserDrawEvent& rUDEvt );
 
     void    Append( XBitmapEntry* pEntry, Bitmap* pBmp = NULL );
-    void    Modify( XBitmapEntry* pEntry, USHORT nPos, Bitmap* pBmp = NULL );
+    void    Modify( XBitmapEntry* pEntry, sal_uInt16 nPos, Bitmap* pBmp = NULL );
     void    SelectEntryByList( const XBitmapList* pList, const String& rStr,
                         const Bitmap& rBmp);
 
@@ -341,7 +341,7 @@ private:
     Bitmap          aBitmap;
 
     XBitmapList*    mpList;
-    BOOL            mbUserDraw;
+    sal_Bool            mbUserDraw;
 
     SVX_DLLPRIVATE void SetVirtualDevice();
 };
@@ -402,9 +402,9 @@ public:
     virtual void Fill( const XDashList* pList );
 
     void Append( XDashEntry* pEntry, Bitmap* pBmp = NULL );
-    void Modify( XDashEntry* pEntry, USHORT nPos, Bitmap* pBmp = NULL );
+    void Modify( XDashEntry* pEntry, sal_uInt16 nPos, Bitmap* pBmp = NULL );
     void SelectEntryByList( const XDashList* pList, const String& rStr,
-                            const XDash& rDash, USHORT nDist = 0 );
+                            const XDash& rDash, sal_uInt16 nDist = 0 );
     void FillStyles();
 };
 
@@ -420,12 +420,12 @@ public:
          LineEndLB( Window* pParent, ResId Id ) : ListBox( pParent, Id ) {}
          LineEndLB( Window* pParent, WinBits aWB ) : ListBox( pParent, aWB ) {}
 
-    virtual void Fill( const XLineEndList* pList, BOOL bStart = TRUE );
+    virtual void Fill( const XLineEndList* pList, sal_Bool bStart = sal_True );
 
     void    Append( XLineEndEntry* pEntry, Bitmap* pBmp = NULL,
-                    BOOL bStart = TRUE );
-    void    Modify( XLineEndEntry* pEntry, USHORT nPos, Bitmap* pBmp = NULL,
-                    BOOL bStart = TRUE );
+                    sal_Bool bStart = sal_True );
+    void    Modify( XLineEndEntry* pEntry, sal_uInt16 nPos, Bitmap* pBmp = NULL,
+                    sal_Bool bStart = sal_True );
 };
 
 //////////////////////////////////////////////////////////////////////////////
@@ -485,7 +485,7 @@ public:
 
     void SetLineAttributes(const SfxItemSet& rItemSet);
 
-    void ShowSymbol( BOOL b ) { mbWithSymbol = b; };
+    void ShowSymbol( sal_Bool b ) { mbWithSymbol = b; };
     void SetSymbol( Graphic* p, const Size& s );
     void ResizeSymbol( const Size& s );
 

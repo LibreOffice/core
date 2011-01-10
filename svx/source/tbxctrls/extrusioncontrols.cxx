@@ -98,7 +98,7 @@ ExtrusionDirectionWindow::ExtrusionDirectionWindow( svt::ToolboxController& rCon
 {
     SetHelpId( HID_MENU_EXTRUSION_DIRECTION );
 
-    USHORT i;
+    sal_uInt16 i;
     for( i = DIRECTION_NW; i <= DIRECTION_SE; i++ )
     {
         maImgDirection[i] = Image( SVX_RES( IMG_DIRECTION + i ) );
@@ -111,7 +111,7 @@ ExtrusionDirectionWindow::ExtrusionDirectionWindow( svt::ToolboxController& rCon
 
     mpDirectionSet->SetSelectHdl( LINK( this, ExtrusionDirectionWindow, SelectHdl ) );
     mpDirectionSet->SetColCount( 3 );
-    mpDirectionSet->EnableFullItemMode( FALSE );
+    mpDirectionSet->EnableFullItemMode( sal_False );
 
     bool bHighContrast = GetSettings().GetStyleSettings().GetHighContrastMode();
 
@@ -144,7 +144,7 @@ void ExtrusionDirectionWindow::DataChanged( const DataChangedEvent& rDCEvt )
     {
         bool bHighContrast = GetSettings().GetStyleSettings().GetHighContrastMode();
 
-        for( USHORT i = DIRECTION_NW; i <= DIRECTION_SE; i++ )
+        for( sal_uInt16 i = DIRECTION_NW; i <= DIRECTION_SE; i++ )
         {
             mpDirectionSet->SetItemImage( i+1, bHighContrast ? maImgDirectionH[ i ] : maImgDirection[ i ] );
         }
@@ -160,7 +160,7 @@ void ExtrusionDirectionWindow::implSetDirection( sal_Int32 nSkew, bool bEnabled 
 {
     if( mpDirectionSet )
     {
-        USHORT nItemId;
+        sal_uInt16 nItemId;
         for( nItemId = DIRECTION_NW; nItemId <= DIRECTION_SE; nItemId++ )
         {
             if( gSkewList[nItemId] == nSkew )
@@ -406,7 +406,7 @@ void ExtrusionDepthWindow::implSetDepth( double fDepth )
 void ExtrusionDepthWindow::implFillStrings( FieldUnit eUnit )
 {
     meUnit = eUnit;
-    USHORT nResource = IsMetric( eUnit ) ? RID_SVXSTR_DEPTH_0 : RID_SVXSTR_DEPTH_0_INCH;
+    sal_uInt16 nResource = IsMetric( eUnit ) ? RID_SVXSTR_DEPTH_0 : RID_SVXSTR_DEPTH_0_INCH;
 
     for( int i = 0; i < 5; i++ )
     {
@@ -594,7 +594,7 @@ ExtrusionLightingWindow::ExtrusionLightingWindow( svt::ToolboxController& rContr
 , msExtrusionLightingDirection( RTL_CONSTASCII_USTRINGPARAM( ".uno:ExtrusionLightingDirection" ))
 , msExtrusionLightingIntensity( RTL_CONSTASCII_USTRINGPARAM( ".uno:ExtrusionLightingIntensity" ))
 {
-    USHORT i;
+    sal_uInt16 i;
     for( i = FROM_TOP_LEFT; i <= FROM_BOTTOM_RIGHT; i++ )
     {
         if( i != FROM_FRONT )
@@ -616,7 +616,7 @@ ExtrusionLightingWindow::ExtrusionLightingWindow( svt::ToolboxController& rContr
 
     mpLightingSet->SetSelectHdl( LINK( this, ExtrusionLightingWindow, SelectHdl ) );
     mpLightingSet->SetColCount( 3 );
-    mpLightingSet->EnableFullItemMode( FALSE );
+    mpLightingSet->EnableFullItemMode( sal_False );
 
     bool bHighContrast = GetSettings().GetStyleSettings().GetHighContrastMode();
 
@@ -673,7 +673,7 @@ void ExtrusionLightingWindow::implSetDirection( int nDirection, bool bEnabled )
     if( !bEnabled )
         nDirection = FROM_FRONT;
 
-    USHORT nItemId;
+    sal_uInt16 nItemId;
     for( nItemId = FROM_TOP_LEFT; nItemId <= FROM_BOTTOM_RIGHT; nItemId++ )
     {
         if( nItemId == FROM_FRONT )
@@ -684,11 +684,11 @@ void ExtrusionLightingWindow::implSetDirection( int nDirection, bool bEnabled )
         {
             if( bHighContrast )
             {
-                mpLightingSet->SetItemImage( nItemId + 1, (USHORT)nDirection == nItemId ? maImgLightingOnh[nItemId] : maImgLightingOffh[nItemId] );
+                mpLightingSet->SetItemImage( nItemId + 1, (sal_uInt16)nDirection == nItemId ? maImgLightingOnh[nItemId] : maImgLightingOffh[nItemId] );
             }
             else
             {
-                mpLightingSet->SetItemImage( nItemId + 1, (USHORT)nDirection == nItemId ? maImgLightingOn[nItemId] : maImgLightingOff[nItemId] );
+                mpLightingSet->SetItemImage( nItemId + 1, (sal_uInt16)nDirection == nItemId ? maImgLightingOn[nItemId] : maImgLightingOff[nItemId] );
             }
         }
     }
@@ -990,7 +990,7 @@ Sequence< OUString > SAL_CALL ExtrusionSurfaceControl::getSupportedServiceNames(
 SFX_IMPL_TOOLBOX_CONTROL( ExtrusionColorControl, SvxColorItem );
 
 ExtrusionColorControl::ExtrusionColorControl(
-    USHORT nSlotId, USHORT nId, ToolBox& rTbx )
+    sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx )
 : SfxToolBoxControl ( nSlotId, nId, rTbx )
 {
     rTbx.SetItemBits( nId, TIB_DROPDOWNONLY | rTbx.GetItemBits( nId ) );
@@ -1029,9 +1029,9 @@ SfxPopupWindow* ExtrusionColorControl::CreatePopupWindow()
 
 // -----------------------------------------------------------------------
 
-void ExtrusionColorControl::StateChanged( USHORT nSID, SfxItemState eState, const SfxPoolItem* pState )
+void ExtrusionColorControl::StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState )
 {
-    USHORT nId = GetId();
+    sal_uInt16 nId = GetId();
     ToolBox& rTbx = GetToolBox();
 
     if( nSID == SID_EXTRUSION_3D_COLOR )

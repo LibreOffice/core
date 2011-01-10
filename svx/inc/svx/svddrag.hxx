@@ -69,11 +69,11 @@ protected:
     Point     aReservePoint4;
     Rectangle aReserveRect1;
     Rectangle aReserveRect2;
-    FASTBOOL  bEndDragChangesAttributes;
-    FASTBOOL  bEndDragChangesGeoAndAttributes;
-    FASTBOOL  bMouseIsUp;
-    FASTBOOL  aReserveBool3;
-    FASTBOOL  aReserveBool4;
+    int  bEndDragChangesAttributes;
+    int  bEndDragChangesGeoAndAttributes;
+    int  bMouseIsUp;
+    int  aReserveBool3;
+    int  aReserveBool4;
     long      aReserveLong1;
     long      aReserveLong2;
     long      aReserveLong3;
@@ -83,34 +83,34 @@ protected:
     void*     aReservePtr3;
     void*     aReservePtr4;
 
-    FASTBOOL  bShown;    // Xor sichrbar?
-    USHORT    nMinMov;   // Soviel muss erstmal minimal bewegt werden
-    FASTBOOL  bMinMoved; // MinMove durchbrochen?
+    int  bShown;    // Xor sichrbar?
+    sal_uInt16    nMinMov;   // Soviel muss erstmal minimal bewegt werden
+    int  bMinMoved; // MinMove durchbrochen?
 
-    FASTBOOL  bHorFixed; // nur Vertikal draggen
-    FASTBOOL  bVerFixed; // nur Horizontal draggen
-    FASTBOOL  bWantNoSnap; // TRUE=Fuer die Entscheidung ob fuer pObj->MovCreate() NoSnapPos verwendet
+    int  bHorFixed; // nur Vertikal draggen
+    int  bVerFixed; // nur Horizontal draggen
+    int  bWantNoSnap; // sal_True=Fuer die Entscheidung ob fuer pObj->MovCreate() NoSnapPos verwendet
                           // werden soll. Entsprechend wird auch NoSnapPos in den Buffer geschrieben.
-    FASTBOOL  bOrtho4;
-    FASTBOOL  bOrtho8;
+    int  bOrtho4;
+    int  bOrtho8;
 
     SdrDragMethod* pDragMethod;
 
 protected:
-    void Clear(FASTBOOL bLeaveOne);
-    Point& Pnt(ULONG nNum)                           { return *((Point*)aPnts.GetObject(nNum)); }
+    void Clear(int bLeaveOne);
+    Point& Pnt(sal_uIntPtr nNum)                           { return *((Point*)aPnts.GetObject(nNum)); }
 //public:
     SdrDragStatUserData*    pUser;     // Userdata
 public:
     SdrDragStat(): aPnts(1024,16,16)                 { pUser=NULL; Reset(); }
-    ~SdrDragStat()                                   { Clear(FALSE); }
+    ~SdrDragStat()                                   { Clear(sal_False); }
     void         Reset();
     SdrView*     GetView() const                     { return pView; }
     void         SetView(SdrView* pV)                { pView=pV; }
     SdrPageView* GetPageView() const                 { return pPageView; }
     void         SetPageView(SdrPageView* pPV)       { pPageView=pPV; }
-    const Point& GetPoint(ULONG nNum) const          { return *((Point*)aPnts.GetObject(nNum)); }
-    ULONG        GetPointAnz() const                 { return aPnts.Count(); }
+    const Point& GetPoint(sal_uIntPtr nNum) const          { return *((Point*)aPnts.GetObject(nNum)); }
+    sal_uIntPtr        GetPointAnz() const                 { return aPnts.Count(); }
     const Point& GetStart() const                    { return GetPoint(0); }
     Point&       Start()                             { return Pnt(0); }
     const Point& GetPrev() const                     { return GetPoint(GetPointAnz()-(GetPointAnz()>=2 ? 2:1)); }
@@ -129,50 +129,50 @@ public:
     void         SetHdl(SdrHdl* pH)                  { pHdl=pH;       }
     SdrDragStatUserData* GetUser() const             { return pUser;  }
     void SetUser(SdrDragStatUserData* pU)            { pUser=pU; }
-    FASTBOOL     IsShown() const                     { return bShown; }
-    void         SetShown(FASTBOOL bOn)              { bShown=bOn; }
+    int     IsShown() const                     { return bShown; }
+    void         SetShown(int bOn)              { bShown=bOn; }
 
-    FASTBOOL     IsMinMoved() const                  { return bMinMoved; }
-    void         SetMinMoved()                       { bMinMoved=TRUE; }
-    void         ResetMinMoved()                     { bMinMoved=FALSE; }
-    void         SetMinMove(USHORT nDist)            { nMinMov=nDist; if (nMinMov<1) nMinMov=1; }
-    USHORT       GetMinMove() const                  { return nMinMov; }
+    int     IsMinMoved() const                  { return bMinMoved; }
+    void         SetMinMoved()                       { bMinMoved=sal_True; }
+    void         ResetMinMoved()                     { bMinMoved=sal_False; }
+    void         SetMinMove(sal_uInt16 nDist)            { nMinMov=nDist; if (nMinMov<1) nMinMov=1; }
+    sal_uInt16       GetMinMove() const                  { return nMinMov; }
 
-    FASTBOOL     IsHorFixed() const                  { return bHorFixed; }
-    void         SetHorFixed(FASTBOOL bOn)           { bHorFixed=bOn; }
-    FASTBOOL     IsVerFixed() const                  { return bVerFixed; }
-    void         SetVerFixed(FASTBOOL bOn)           { bVerFixed=bOn; }
+    int     IsHorFixed() const                  { return bHorFixed; }
+    void         SetHorFixed(int bOn)           { bHorFixed=bOn; }
+    int     IsVerFixed() const                  { return bVerFixed; }
+    void         SetVerFixed(int bOn)           { bVerFixed=bOn; }
 
     // Hier kann das Obj sagen: "Ich will keinen Koordinatenfang!"
     // z.B. fuer den Winkel des Kreisbogen...
-    FASTBOOL     IsNoSnap() const                     { return bWantNoSnap; }
-    void         SetNoSnap(FASTBOOL bOn=TRUE)         { bWantNoSnap=bOn; }
+    int     IsNoSnap() const                     { return bWantNoSnap; }
+    void         SetNoSnap(int bOn=sal_True)         { bWantNoSnap=bOn; }
 
     // Und hier kann das Obj sagen welches Ortho (wenn ueberhaupt eins)
     // sinnvoll auf ihm angewendet werden kann.
     // Ortho4 bedeutet Ortho in 4 Richtungen (fuer Rect und Cirt)
-    FASTBOOL     IsOrtho4Possible() const             { return bOrtho4; }
-    void         SetOrtho4Possible(FASTBOOL bOn=TRUE) { bOrtho4=bOn; }
+    int     IsOrtho4Possible() const             { return bOrtho4; }
+    void         SetOrtho4Possible(int bOn=sal_True) { bOrtho4=bOn; }
     // Ortho8 bedeutet Ortho in 8 Richtungen (fuer Linien)
-    FASTBOOL     IsOrtho8Possible() const             { return bOrtho8; }
-    void         SetOrtho8Possible(FASTBOOL bOn=TRUE) { bOrtho8=bOn; }
+    int     IsOrtho8Possible() const             { return bOrtho8; }
+    void         SetOrtho8Possible(int bOn=sal_True) { bOrtho8=bOn; }
 
     // Wird vom gedraggten Objekt gesetzt
-    FASTBOOL     IsEndDragChangesAttributes() const   { return bEndDragChangesAttributes; }
-    void         SetEndDragChangesAttributes(FASTBOOL bOn) { bEndDragChangesAttributes=bOn; }
-    FASTBOOL     IsEndDragChangesGeoAndAttributes() const   { return bEndDragChangesGeoAndAttributes; }
-    void         SetEndDragChangesGeoAndAttributes(FASTBOOL bOn) { bEndDragChangesGeoAndAttributes=bOn; }
+    int     IsEndDragChangesAttributes() const   { return bEndDragChangesAttributes; }
+    void         SetEndDragChangesAttributes(int bOn) { bEndDragChangesAttributes=bOn; }
+    int     IsEndDragChangesGeoAndAttributes() const   { return bEndDragChangesGeoAndAttributes; }
+    void         SetEndDragChangesGeoAndAttributes(int bOn) { bEndDragChangesGeoAndAttributes=bOn; }
 
     // Wird von der View gesetzt und kann vom Obj ausgewertet werden
-    FASTBOOL     IsMouseDown() const                  { return !bMouseIsUp; }
-    void         SetMouseDown(FASTBOOL bDown)         { bMouseIsUp=!bDown; }
+    int     IsMouseDown() const                  { return !bMouseIsUp; }
+    void         SetMouseDown(int bDown)         { bMouseIsUp=!bDown; }
 
     Point KorregPos(const Point& rNow, const Point& rPrev) const;
     void  Reset(const Point& rPnt);
     void  NextMove(const Point& rPnt);
-    void  NextPoint(FASTBOOL bSaveReal=FALSE);
+    void  NextPoint(int bSaveReal=sal_False);
     void  PrevPoint();
-    FASTBOOL CheckMinMoved(const Point& rPnt);
+    int CheckMinMoved(const Point& rPnt);
     long  GetDX() const                     { return GetNow().X()-GetPrev().X(); }
     long  GetDY() const                     { return GetNow().Y()-GetPrev().Y(); }
     Fraction GetXFact() const;

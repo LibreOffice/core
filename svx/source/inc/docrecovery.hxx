@@ -591,14 +591,14 @@ class RecovDocListEntry : public SvLBoxString
         //---------------------------------------
         /** @short TODO */
         RecovDocListEntry(      SvLBoxEntry* pEntry,
-                                USHORT       nFlags,
+                                sal_uInt16       nFlags,
                           const String&      sText );
 
         //---------------------------------------
         /** @short TODO */
         virtual void Paint(const Point&       aPos   ,
                                  SvLBox&      aDevice,
-                                 USHORT       nFlags ,
+                                 sal_uInt16       nFlags ,
                                  SvLBoxEntry* pEntry );
 };
 

@@ -45,11 +45,11 @@ class SVX_DLLPUBLIC SvxContourDlgChildWindow : public SfxChildWindow
 {
  public:
 
-    SvxContourDlgChildWindow( Window*, USHORT, SfxBindings*, SfxChildWinInfo* );
+    SvxContourDlgChildWindow( Window*, sal_uInt16, SfxBindings*, SfxChildWinInfo* );
 
     SFX_DECL_CHILDWINDOW( SvxContourDlgChildWindow );
 
-    static void UpdateContourDlg( const Graphic& rGraphic, BOOL bGraphicLinked,
+    static void UpdateContourDlg( const Graphic& rGraphic, sal_Bool bGraphicLinked,
                                   const PolyPolygon* pPolyPoly = NULL,
                                   void* pEditingObj = NULL );
 };
@@ -71,11 +71,11 @@ class SvxContourDlgItem : public SfxControllerItem
 
 protected:
 
-    virtual void        StateChanged( USHORT nSID, SfxItemState eState, const SfxPoolItem* pState );
+    virtual void        StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState );
 
 public:
 
-                        SvxContourDlgItem( USHORT nId, SvxSuperContourDlg& rDlg, SfxBindings& rBindings );
+                        SvxContourDlgItem( sal_uInt16 nId, SvxSuperContourDlg& rDlg, SfxBindings& rBindings );
 };
 
 /*************************************************************************
@@ -104,12 +104,12 @@ public:
                                        Window* pParent, const ResId& rResId );
                         ~SvxContourDlg();
 
-    void                SetExecState( BOOL bEnable );
+    void                SetExecState( sal_Bool bEnable );
 
     void                SetGraphic( const Graphic& rGraphic );
-    void                SetGraphicLinked( BOOL bLinked );
+    void                SetGraphicLinked( sal_Bool bLinked );
     const Graphic&      GetGraphic() const;
-    BOOL                IsGraphicChanged() const;
+    sal_Bool                IsGraphicChanged() const;
 
     void                SetPolyPolygon( const PolyPolygon& rPolyPoly );
     PolyPolygon         GetPolyPolygon();
@@ -117,12 +117,12 @@ public:
     void                SetEditingObject( void* pObj );
     const void*         GetEditingObject() const;
 
-    void                Update( const Graphic& rGraphic, BOOL bGraphicLinked,
+    void                Update( const Graphic& rGraphic, sal_Bool bGraphicLinked,
                                 const PolyPolygon* pPolyPoly = NULL, void* pEditingObj = NULL );
 
     static PolyPolygon  CreateAutoContour(  const Graphic& rGraphic,
                                             const Rectangle* pRect = NULL,
-                                            const ULONG nFlags = 0L );
+                                            const sal_uIntPtr nFlags = 0L );
     static void         ScaleContour( PolyPolygon& rContour, const Graphic& rGraphic,
                                       const MapUnit eUnit, const Size& rDisplaySize );
 };

@@ -53,7 +53,7 @@ ResMgr* ImpGetResMgr();
 
 class SdrResId: ResId {
 public:
-    SdrResId(USHORT nId): ResId(nId,*ImpGetResMgr()) {}
+    SdrResId(sal_uInt16 nId): ResId(nId,*ImpGetResMgr()) {}
 };
 
 // ResourceCache fuer haeuffig benoetigte Strings

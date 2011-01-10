@@ -46,10 +46,10 @@ private:
 public:
     SFX_DECL_STATUSBAR_CONTROL();
 
-    XmlSecStatusBarControl( USHORT _nSlotId, USHORT _nId, StatusBar& _rStb );
+    XmlSecStatusBarControl( sal_uInt16 _nSlotId, sal_uInt16 _nId, StatusBar& _rStb );
     ~XmlSecStatusBarControl();
 
-    virtual void    StateChanged( USHORT nSID, SfxItemState eState, const SfxPoolItem* pState );
+    virtual void    StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState );
     virtual void    Paint( const UserDrawEvent& rEvt );
     virtual void    Command( const CommandEvent& rCEvt );
     static long     GetDefItemWidth( StatusBar& _rStatusBar );

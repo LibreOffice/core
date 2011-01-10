@@ -51,7 +51,7 @@ public:
 //------------------------------------
 class SdrCaptionFitLineLenItem: public SdrYesNoItem {
 public:
-    SdrCaptionFitLineLenItem(BOOL bBestFit=TRUE): SdrYesNoItem(SDRATTR_CAPTIONFITLINELEN,bBestFit) {}
+    SdrCaptionFitLineLenItem(sal_Bool bBestFit=sal_True): SdrYesNoItem(SDRATTR_CAPTIONFITLINELEN,bBestFit) {}
     SdrCaptionFitLineLenItem(SvStream& rIn)     : SdrYesNoItem(SDRATTR_CAPTIONFITLINELEN,rIn)      {}
 };
 

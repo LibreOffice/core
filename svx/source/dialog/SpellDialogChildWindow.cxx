@@ -38,7 +38,7 @@ namespace svx {
   -----------------------------------------------------------------------*/
 SpellDialogChildWindow::SpellDialogChildWindow (
     Window* _pParent,
-    USHORT nId,
+    sal_uInt16 nId,
     SfxBindings* pBindings,
     SfxChildWinInfo* /*pInfo*/)
     : SfxChildWindow (_pParent, nId)
@@ -52,7 +52,7 @@ SpellDialogChildWindow::SpellDialogChildWindow (
                                             this );
     pWindow = m_pAbstractSpellDialog->GetWindow();
     eChildAlignment = SFX_ALIGN_NOALIGNMENT;
-    SetHideNotDelete (TRUE);
+    SetHideNotDelete (sal_True);
 }
 /*-------------------------------------------------------------------------
 

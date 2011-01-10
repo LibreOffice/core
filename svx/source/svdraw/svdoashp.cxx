@@ -632,7 +632,7 @@ SdrObjCustomShape::SdrObjCustomShape() :
     fObjectRotation( 0.0 ),
     mpLastShadowGeometry(0L)
 {
-    bTextFrame = TRUE;
+    bTextFrame = sal_True;
 }
 
 SdrObjCustomShape::~SdrObjCustomShape()
@@ -1623,17 +1623,17 @@ sal_Bool SdrObjCustomShape::IsDefaultGeometry( const DefaultType eDefaultType ) 
 void SdrObjCustomShape::TakeObjInfo(SdrObjTransformInfoRec& rInfo) const
 {
     rInfo.bResizeFreeAllowed=fObjectRotation == 0.0;
-    rInfo.bResizePropAllowed=TRUE;
-    rInfo.bRotateFreeAllowed=TRUE;
-    rInfo.bRotate90Allowed  =TRUE;
-    rInfo.bMirrorFreeAllowed=TRUE;
-    rInfo.bMirror45Allowed  =TRUE;
-    rInfo.bMirror90Allowed  =TRUE;
-    rInfo.bTransparenceAllowed = FALSE;
-    rInfo.bGradientAllowed = FALSE;
-    rInfo.bShearAllowed     =TRUE;
-    rInfo.bEdgeRadiusAllowed=FALSE;
-    rInfo.bNoContortion     =TRUE;
+    rInfo.bResizePropAllowed=sal_True;
+    rInfo.bRotateFreeAllowed=sal_True;
+    rInfo.bRotate90Allowed  =sal_True;
+    rInfo.bMirrorFreeAllowed=sal_True;
+    rInfo.bMirror45Allowed  =sal_True;
+    rInfo.bMirror90Allowed  =sal_True;
+    rInfo.bTransparenceAllowed = sal_False;
+    rInfo.bGradientAllowed = sal_False;
+    rInfo.bShearAllowed     =sal_True;
+    rInfo.bEdgeRadiusAllowed=sal_False;
+    rInfo.bNoContortion     =sal_True;
 
     // #i37011#
     if ( mXRenderedCustomShape.is() )
@@ -1680,9 +1680,9 @@ void SdrObjCustomShape::SetModel(SdrModel* pNewModel)
     mXRenderedCustomShape.clear();
 }
 
-UINT16 SdrObjCustomShape::GetObjIdentifier() const
+sal_uInt16 SdrObjCustomShape::GetObjIdentifier() const
 {
-    return UINT16(OBJ_CUSTOMSHAPE);
+    return sal_uInt16(OBJ_CUSTOMSHAPE);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1972,12 +1972,12 @@ void SdrObjCustomShape::NbcMirror( const Point& rRef1, const Point& rRef2 )
     InvalidateRenderGeometry();
 }
 
-void SdrObjCustomShape::Shear( const Point& rRef, long nWink, double tn, FASTBOOL bVShear )
+void SdrObjCustomShape::Shear( const Point& rRef, long nWink, double tn, int bVShear )
 {
     SdrTextObj::Shear( rRef, nWink, tn, bVShear );
     InvalidateRenderGeometry();
 }
-void SdrObjCustomShape::NbcShear( const Point& rRef, long nWink, double tn, FASTBOOL bVShear )
+void SdrObjCustomShape::NbcShear( const Point& rRef, long nWink, double tn, int bVShear )
 {
     long nDrehWink = aGeo.nDrehWink;
     if ( nDrehWink )
@@ -1998,9 +1998,9 @@ void SdrObjCustomShape::NbcShear( const Point& rRef, long nWink, double tn, FAST
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-SdrGluePoint SdrObjCustomShape::GetVertexGluePoint(USHORT nPosNum) const
+SdrGluePoint SdrObjCustomShape::GetVertexGluePoint(sal_uInt16 nPosNum) const
 {
-    INT32 nWdt = ImpGetLineWdt(); // #i25616# ((XLineWidthItem&)(GetObjectItem(XATTR_LINEWIDTH))).GetValue();
+    sal_Int32 nWdt = ImpGetLineWdt(); // #i25616# ((XLineWidthItem&)(GetObjectItem(XATTR_LINEWIDTH))).GetValue();
 
     // #i25616#
     if(!LineIsOutsideGeometry())
@@ -2020,7 +2020,7 @@ SdrGluePoint SdrObjCustomShape::GetVertexGluePoint(USHORT nPosNum) const
     if (aGeo.nDrehWink!=0) RotatePoint(aPt,aRect.TopLeft(),aGeo.nSin,aGeo.nCos);
     aPt-=GetSnapRect().Center();
     SdrGluePoint aGP(aPt);
-    aGP.SetPercent(FALSE);
+    aGP.SetPercent(sal_False);
     return aGP;
 }
 
@@ -2052,7 +2052,7 @@ void SdrObjCustomShape::ImpCheckCustomGluePointsAreAdded()
                 for(a = 0; a < pSource->GetCount(); a++)
                 {
                     SdrGluePoint aCopy((*pSource)[a]);
-                    aCopy.SetUserDefined(FALSE);
+                    aCopy.SetUserDefined(sal_False);
                     aNewList.Insert(aCopy);
                 }
 
@@ -2067,9 +2067,9 @@ void SdrObjCustomShape::ImpCheckCustomGluePointsAreAdded()
                     Polygon aPoly( aRect );
                     if( nShearWink )
                     {
-                        USHORT nPointCount=aPoly.GetSize();
-                        for (USHORT i=0; i<nPointCount; i++)
-                            ShearPoint(aPoly[i],aRect.Center(), fTan, FALSE );
+                        sal_uInt16 nPointCount=aPoly.GetSize();
+                        for (sal_uInt16 i=0; i<nPointCount; i++)
+                            ShearPoint(aPoly[i],aRect.Center(), fTan, sal_False );
                     }
                     if ( aGeo.nDrehWink )
                         aPoly.Rotate( aRect.Center(), aGeo.nDrehWink / 10 );
@@ -2464,15 +2464,15 @@ void SdrObjCustomShape::DragCreateObject( SdrDragStat& rStat )
     }
 
     SetBoundRectDirty();
-    bSnapRectDirty=TRUE;
+    bSnapRectDirty=sal_True;
 }
 
-FASTBOOL SdrObjCustomShape::BegCreate( SdrDragStat& rDrag )
+int SdrObjCustomShape::BegCreate( SdrDragStat& rDrag )
 {
     return SdrTextObj::BegCreate( rDrag );
 }
 
-FASTBOOL SdrObjCustomShape::MovCreate(SdrDragStat& rStat)
+int SdrObjCustomShape::MovCreate(SdrDragStat& rStat)
 {
     SdrView* pView = rStat.GetView();       // #i37448#
     if( pView && pView->IsSolidDragging() )
@@ -2481,10 +2481,10 @@ FASTBOOL SdrObjCustomShape::MovCreate(SdrDragStat& rStat)
     }
     DragCreateObject( rStat );
     SetRectsDirty();
-    return TRUE;
+    return sal_True;
 }
 
-FASTBOOL SdrObjCustomShape::EndCreate( SdrDragStat& rStat, SdrCreateCmd eCmd )
+int SdrObjCustomShape::EndCreate( SdrDragStat& rStat, SdrCreateCmd eCmd )
 {
     DragCreateObject( rStat );
 
@@ -2522,20 +2522,20 @@ basegfx::B2DPolyPolygon SdrObjCustomShape::TakeCreatePoly(const SdrDragStat& /*r
 
 // in context with the SdrObjCustomShape the SdrTextAutoGrowHeightItem == true -> Resize Shape to fit text,
 //                                     the SdrTextAutoGrowWidthItem  == true -> Word wrap text in Shape
-FASTBOOL SdrObjCustomShape::IsAutoGrowHeight() const
+int SdrObjCustomShape::IsAutoGrowHeight() const
 {
     const SfxItemSet& rSet = GetMergedItemSet();
-    FASTBOOL bIsAutoGrowHeight = ((SdrTextAutoGrowHeightItem&)(rSet.Get(SDRATTR_TEXT_AUTOGROWHEIGHT))).GetValue();
+    int bIsAutoGrowHeight = ((SdrTextAutoGrowHeightItem&)(rSet.Get(SDRATTR_TEXT_AUTOGROWHEIGHT))).GetValue();
     if ( bIsAutoGrowHeight && IsVerticalWriting() )
-        bIsAutoGrowHeight = ((SdrTextWordWrapItem&)(rSet.Get(SDRATTR_TEXT_WORDWRAP))).GetValue() == FALSE;
+        bIsAutoGrowHeight = ((SdrTextWordWrapItem&)(rSet.Get(SDRATTR_TEXT_WORDWRAP))).GetValue() == sal_False;
     return bIsAutoGrowHeight;
 }
-FASTBOOL SdrObjCustomShape::IsAutoGrowWidth() const
+int SdrObjCustomShape::IsAutoGrowWidth() const
 {
     const SfxItemSet& rSet = GetMergedItemSet();
-    FASTBOOL bIsAutoGrowWidth = ((SdrTextAutoGrowHeightItem&)(rSet.Get(SDRATTR_TEXT_AUTOGROWHEIGHT))).GetValue();
+    int bIsAutoGrowWidth = ((SdrTextAutoGrowHeightItem&)(rSet.Get(SDRATTR_TEXT_AUTOGROWHEIGHT))).GetValue();
     if ( bIsAutoGrowWidth && !IsVerticalWriting() )
-        bIsAutoGrowWidth = ((SdrTextWordWrapItem&)(rSet.Get(SDRATTR_TEXT_WORDWRAP))).GetValue() == FALSE;
+        bIsAutoGrowWidth = ((SdrTextWordWrapItem&)(rSet.Get(SDRATTR_TEXT_WORDWRAP))).GetValue() == sal_False;
     return bIsAutoGrowWidth;
 }
 
@@ -2601,12 +2601,12 @@ void SdrObjCustomShape::SetVerticalWriting( sal_Bool bVertical )
         }
     }
 }
-FASTBOOL SdrObjCustomShape::AdjustTextFrameWidthAndHeight(Rectangle& rR, FASTBOOL bHgt, FASTBOOL bWdt) const
+int SdrObjCustomShape::AdjustTextFrameWidthAndHeight(Rectangle& rR, int bHgt, int bWdt) const
 {
      if ( pModel && HasText() && !rR.IsEmpty() )
     {
-        FASTBOOL bWdtGrow=bWdt && IsAutoGrowWidth();
-        FASTBOOL bHgtGrow=bHgt && IsAutoGrowHeight();
+        int bWdtGrow=bWdt && IsAutoGrowWidth();
+        int bHgtGrow=bHgt && IsAutoGrowHeight();
         if ( bWdtGrow || bHgtGrow )
         {
             Rectangle aR0(rR);
@@ -2659,7 +2659,7 @@ FASTBOOL SdrObjCustomShape::AdjustTextFrameWidthAndHeight(Rectangle& rR, FASTBOO
             {
                 Outliner& rOutliner=ImpGetDrawOutliner();
                 rOutliner.SetPaperSize(aSiz);
-                rOutliner.SetUpdateMode(TRUE);
+                rOutliner.SetUpdateMode(sal_True);
                 // !!! hier sollte ich wohl auch noch mal die Optimierung mit
                 // bPortionInfoChecked usw einbauen
                 OutlinerParaObject* pOutlinerParaObject = GetOutlinerParaObject();
@@ -2696,9 +2696,9 @@ FASTBOOL SdrObjCustomShape::AdjustTextFrameWidthAndHeight(Rectangle& rR, FASTBOO
             long nWdtGrow = nWdt-(rR.Right()-rR.Left());
             long nHgtGrow = nHgt-(rR.Bottom()-rR.Top());
             if ( nWdtGrow == 0 )
-                bWdtGrow = FALSE;
+                bWdtGrow = sal_False;
             if ( nHgtGrow == 0 )
-                bHgtGrow=FALSE;
+                bHgtGrow=sal_False;
             if ( bWdtGrow || bHgtGrow )
             {
                 if ( bWdtGrow )
@@ -2738,14 +2738,14 @@ FASTBOOL SdrObjCustomShape::AdjustTextFrameWidthAndHeight(Rectangle& rR, FASTBOO
                     aD2-=aD1;
                     rR.Move(aD2.X(),aD2.Y());
                 }
-                return TRUE;
+                return sal_True;
             }
         }
     }
-    return FALSE;
+    return sal_False;
 }
 
-Rectangle SdrObjCustomShape::ImpCalculateTextFrame( const FASTBOOL bHgt, const FASTBOOL bWdt )
+Rectangle SdrObjCustomShape::ImpCalculateTextFrame( const int bHgt, const int bWdt )
 {
     Rectangle aReturnValue;
 
@@ -2775,7 +2775,7 @@ Rectangle SdrObjCustomShape::ImpCalculateTextFrame( const FASTBOOL bHgt, const F
     return aReturnValue;
 }
 
-FASTBOOL SdrObjCustomShape::NbcAdjustTextFrameWidthAndHeight(FASTBOOL bHgt, FASTBOOL bWdt)
+int SdrObjCustomShape::NbcAdjustTextFrameWidthAndHeight(int bHgt, int bWdt)
 {
     Rectangle aNewTextRect = ImpCalculateTextFrame( bHgt, bWdt );
     sal_Bool bRet = !aNewTextRect.IsEmpty() && ( aNewTextRect != aRect );
@@ -2805,7 +2805,7 @@ FASTBOOL SdrObjCustomShape::NbcAdjustTextFrameWidthAndHeight(FASTBOOL bHgt, FAST
     }
     return bRet;
 }
-FASTBOOL SdrObjCustomShape::AdjustTextFrameWidthAndHeight(FASTBOOL bHgt, FASTBOOL bWdt)
+int SdrObjCustomShape::AdjustTextFrameWidthAndHeight(int bHgt, int bWdt)
 {
     Rectangle aNewTextRect = ImpCalculateTextFrame( bHgt, bWdt );
     sal_Bool bRet = !aNewTextRect.IsEmpty() && ( aNewTextRect != aRect );
@@ -2968,14 +2968,14 @@ void SdrObjCustomShape::TakeTextAnchorRect( Rectangle& rAnchorRect ) const
     else
         SdrTextObj::TakeTextAnchorRect( rAnchorRect );
 }
-void SdrObjCustomShape::TakeTextRect( SdrOutliner& rOutliner, Rectangle& rTextRect, FASTBOOL bNoEditText,
-                               Rectangle* pAnchorRect, BOOL /*bLineWidth*/) const
+void SdrObjCustomShape::TakeTextRect( SdrOutliner& rOutliner, Rectangle& rTextRect, int bNoEditText,
+                               Rectangle* pAnchorRect, sal_Bool /*bLineWidth*/) const
 {
     Rectangle aAnkRect; // Rect innerhalb dem geankert wird
     TakeTextAnchorRect(aAnkRect);
     SdrTextVertAdjust eVAdj=GetTextVerticalAdjust();
     SdrTextHorzAdjust eHAdj=GetTextHorizontalAdjust();
-    ULONG nStat0=rOutliner.GetControlWord();
+    sal_uIntPtr nStat0=rOutliner.GetControlWord();
     Size aNullSize;
 
     rOutliner.SetControlWord(nStat0|EE_CNTRL_AUTOPAGESIZE);
@@ -3012,7 +3012,7 @@ void SdrObjCustomShape::TakeTextRect( SdrOutliner& rOutliner, Rectangle& rTextRe
 
     if (pPara)
     {
-        BOOL bHitTest = FALSE;
+        sal_Bool bHitTest = sal_False;
         if( pModel )
             bHitTest = &pModel->GetHitTestOutliner() == &rOutliner;
 
@@ -3023,7 +3023,7 @@ void SdrObjCustomShape::TakeTextRect( SdrOutliner& rOutliner, Rectangle& rTextRe
             if( bHitTest )
                 rOutliner.SetTextObj( this );
 
-            rOutliner.SetUpdateMode(TRUE);
+            rOutliner.SetUpdateMode(sal_True);
             rOutliner.SetText(*pPara);
         }
     }
@@ -3034,7 +3034,7 @@ void SdrObjCustomShape::TakeTextRect( SdrOutliner& rOutliner, Rectangle& rTextRe
     if (pEdtOutl && !bNoEditText && pPara)
         delete pPara;
 
-    rOutliner.SetUpdateMode(TRUE);
+    rOutliner.SetUpdateMode(sal_True);
     rOutliner.SetControlWord(nStat0);
 
     SdrText* pText = getActiveText();
@@ -3104,7 +3104,7 @@ void SdrObjCustomShape::NbcSetOutlinerParaObject(OutlinerParaObject* pTextObject
 {
     SdrTextObj::NbcSetOutlinerParaObject( pTextObject );
     SetBoundRectDirty();
-    SetRectsDirty(TRUE);
+    SetRectsDirty(sal_True);
     InvalidateRenderGeometry();
 }
 
@@ -3148,7 +3148,7 @@ basegfx::B2DPolyPolygon SdrObjCustomShape::TakeContour() const
     return basegfx::B2DPolyPolygon();
 }
 
-SdrObject* SdrObjCustomShape::DoConvertToPolyObj(BOOL bBezier) const
+SdrObject* SdrObjCustomShape::DoConvertToPolyObj(sal_Bool bBezier) const
 {
     // #i37011#
     SdrObject* pRetval = 0L;
@@ -3319,7 +3319,7 @@ void SdrObjCustomShape::TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, 
         GeoStat aGeoStat;
         aGeoStat.nShearWink = FRound((atan(fShearX) / F_PI180) * 100.0);
         aGeoStat.RecalcTan();
-        Shear(Point(), aGeoStat.nShearWink, aGeoStat.nTan, FALSE);
+        Shear(Point(), aGeoStat.nShearWink, aGeoStat.nTan, sal_False);
     }
 
     // rotation?
@@ -3367,8 +3367,8 @@ sal_Bool SdrObjCustomShape::TRGetBaseGeometry(basegfx::B2DHomMatrix& rMatrix, ba
 
             Point aRef1( ( aBoundRect.Left() + aBoundRect.Right() ) >> 1, aBoundRect.Top() );
             Point aRef2( aRef1.X(), aRef1.Y() + 1000 );
-            USHORT i;
-            USHORT nPntAnz=aPol.GetSize();
+            sal_uInt16 i;
+            sal_uInt16 nPntAnz=aPol.GetSize();
             for (i=0; i<nPntAnz; i++)
             {
                 MirrorPoint(aPol[i],aRef1,aRef2);
@@ -3389,8 +3389,8 @@ sal_Bool SdrObjCustomShape::TRGetBaseGeometry(basegfx::B2DHomMatrix& rMatrix, ba
 
             Point aRef1( aBoundRect.Left(), ( aBoundRect.Top() + aBoundRect.Bottom() ) >> 1 );
             Point aRef2( aRef1.X() + 1000, aRef1.Y() );
-            USHORT i;
-            USHORT nPntAnz=aPol.GetSize();
+            sal_uInt16 i;
+            sal_uInt16 nPntAnz=aPol.GetSize();
             for (i=0; i<nPntAnz; i++)
             {
                 MirrorPoint(aPol[i],aRef1,aRef2);

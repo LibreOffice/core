@@ -36,12 +36,12 @@
 
 //------------------------------------
 // class SdrCaptionFixedAngleItem
-// TRUE=Winkel durch SdrCaptionAngleItem vorgegeben
-// FALSE=Freier Winkel
+// sal_True=Winkel durch SdrCaptionAngleItem vorgegeben
+// sal_False=Freier Winkel
 //------------------------------------
 class SdrCaptionFixedAngleItem: public SdrOnOffItem {
 public:
-    SdrCaptionFixedAngleItem(BOOL bFix=TRUE): SdrOnOffItem(SDRATTR_CAPTIONFIXEDANGLE,bFix) {}
+    SdrCaptionFixedAngleItem(sal_Bool bFix=sal_True): SdrOnOffItem(SDRATTR_CAPTIONFIXEDANGLE,bFix) {}
     SdrCaptionFixedAngleItem(SvStream& rIn) : SdrOnOffItem(SDRATTR_CAPTIONFIXEDANGLE,rIn)  {}
 };
 

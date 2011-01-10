@@ -927,8 +927,8 @@ bool TableLayouter::HasPriority( const SvxBorderLine* pThis, const SvxBorderLine
     if (!pOther || (pOther == &gEmptyBorder))
         return true;
 
-    USHORT nThisSize = pThis->GetOutWidth() + pThis->GetDistance() + pThis->GetInWidth();
-    USHORT nOtherSize = pOther->GetOutWidth() + pOther->GetDistance() + pOther->GetInWidth();
+    sal_uInt16 nThisSize = pThis->GetOutWidth() + pThis->GetDistance() + pThis->GetInWidth();
+    sal_uInt16 nOtherSize = pOther->GetOutWidth() + pOther->GetDistance() + pOther->GetInWidth();
 
     if (nThisSize > nOtherSize)
         return true;

@@ -94,7 +94,7 @@ namespace svx
     using namespace ::com::sun::star::container;
 
     //====================================================================
-    typedef USHORT WhichId;
+    typedef sal_uInt16 WhichId;
 
     //====================================================================
     static SfxSlotId pTextControlSlots[] =

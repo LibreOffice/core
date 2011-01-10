@@ -44,7 +44,7 @@ protected:
     String                  aActionStr;
     SvxPopupWindowListBox * pPopupWin;
 
-    void    Impl_SetInfo( USHORT nCount );
+    void    Impl_SetInfo( sal_uInt16 nCount );
 
     DECL_LINK( PopupModeEndHdl, void * );
     DECL_LINK( SelectHdl, void * );
@@ -52,12 +52,12 @@ protected:
 public:
     SFX_DECL_TOOLBOX_CONTROL();
 
-    SvxListBoxControl( USHORT nSlotId, USHORT nId, ToolBox& rTbx );
+    SvxListBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
     virtual ~SvxListBoxControl();
 
     virtual SfxPopupWindowType  GetPopupWindowType() const;
     virtual SfxPopupWindow*     CreatePopupWindow();
-    virtual void                StateChanged( USHORT nSID,
+    virtual void                StateChanged( sal_uInt16 nSID,
                                               SfxItemState eState,
                                               const SfxPoolItem* pState );
 };
@@ -72,10 +72,10 @@ class SVX_DLLPUBLIC SvxUndoRedoControl : public SvxListBoxControl
 public:
     SFX_DECL_TOOLBOX_CONTROL();
 
-    SvxUndoRedoControl( USHORT nSlotId, USHORT nId, ToolBox& rTbx );
+    SvxUndoRedoControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
 
     virtual ~SvxUndoRedoControl();
-    virtual void StateChanged( USHORT nSID,
+    virtual void StateChanged( sal_uInt16 nSID,
                                SfxItemState eState,
                                const SfxPoolItem* pState );
 

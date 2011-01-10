@@ -81,13 +81,13 @@ class SVX_DLLPUBLIC SvxPageItem: public SfxPoolItem
 private:
     String          aDescName;          // Name der Vorlage
     SvxNumType      eNumType;           // Numerierung
-    BOOL            bLandscape;         // Portrait / Landscape
-    USHORT          eUse;               // Layout
+    sal_Bool            bLandscape;         // Portrait / Landscape
+    sal_uInt16          eUse;               // Layout
 
 public:
 
     TYPEINFO();
-    SvxPageItem( const USHORT nId );
+    SvxPageItem( const sal_uInt16 nId );
     SvxPageItem( const SvxPageItem& rItem );
 
     virtual SfxPoolItem*     Clone( SfxItemPool *pPool = 0 ) const;
@@ -98,17 +98,17 @@ public:
                                     SfxMapUnit ePresMetric,
                                     String &rText, const IntlWrapper * = 0 ) const;
 
-    virtual sal_Bool             QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
-    virtual sal_Bool             PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
-    virtual SfxPoolItem*     Create( SvStream&, USHORT ) const;
-    virtual SvStream&        Store( SvStream& , USHORT nItemVersion ) const;
+    virtual sal_Bool             QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
+    virtual sal_Bool             PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
+    virtual SfxPoolItem*     Create( SvStream&, sal_uInt16 ) const;
+    virtual SvStream&        Store( SvStream& , sal_uInt16 nItemVersion ) const;
 
     // Ausrichtung
-    USHORT          GetPageUsage() const                { return eUse;       }
-    void            SetPageUsage(USHORT eU)             { eUse= eU;          }
+    sal_uInt16          GetPageUsage() const                { return eUse;       }
+    void            SetPageUsage(sal_uInt16 eU)             { eUse= eU;          }
 
-    BOOL            IsLandscape() const                 { return bLandscape; }
-    void            SetLandscape(BOOL bL)               { bLandscape = bL;   }
+    sal_Bool            IsLandscape() const                 { return bLandscape; }
+    void            SetLandscape(sal_Bool bL)               { bLandscape = bL;   }
 
     // Numerierung
     SvxNumType      GetNumType() const                  { return eNumType;   }
@@ -135,9 +135,9 @@ Dieses Item dient als Container fuer Header- und Footer-Attribute.
 class SVX_DLLPUBLIC SvxSetItem: public SfxSetItem
 {
 public:
-    SvxSetItem( const USHORT nId, const SfxItemSet& rSet );
+    SvxSetItem( const sal_uInt16 nId, const SfxItemSet& rSet );
     SvxSetItem( const SvxSetItem& rItem );
-    SvxSetItem( const USHORT nId, SfxItemSet* pSet );
+    SvxSetItem( const sal_uInt16 nId, SfxItemSet* pSet );
 
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
 
@@ -146,8 +146,8 @@ public:
                                     SfxMapUnit ePresMetric,
                                     String &rText, const IntlWrapper * = 0 ) const;
 
-    virtual SfxPoolItem*    Create( SvStream&, USHORT nVersion ) const;
-    virtual SvStream&       Store( SvStream&, USHORT nItemVersion ) const;
+    virtual SfxPoolItem*    Create( SvStream&, sal_uInt16 nVersion ) const;
+    virtual SvStream&       Store( SvStream&, sal_uInt16 nItemVersion ) const;
 };
 
 

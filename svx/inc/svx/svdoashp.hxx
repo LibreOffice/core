@@ -124,7 +124,7 @@ public:
     void ImpCheckCustomGluePointsAreAdded();
 
     // returns the new text rect that corresponds to the current logic rect, the return value can be empty if nothing changed.
-    Rectangle ImpCalculateTextFrame( const FASTBOOL bHgt, const FASTBOOL bWdt );
+    Rectangle ImpCalculateTextFrame( const int bHgt, const int bWdt );
 
 public:
     // #i37011#
@@ -174,7 +174,7 @@ public:
     };
     sal_Bool IsDefaultGeometry( const DefaultType eDefaultType ) const;
 
-    virtual UINT16 GetObjIdentifier() const;
+    virtual sal_uInt16 GetObjIdentifier() const;
     virtual void TakeObjInfo(SdrObjTransformInfoRec& rInfo) const;
 
     virtual void SetModel(SdrModel* pNewModel);
@@ -187,7 +187,7 @@ public:
 
     virtual void Move(const Size& rSiz);
     virtual void Resize(const Point& rRef, const Fraction& xFact, const Fraction& yFact);
-    virtual void Shear(const Point& rRef, long nWink, double tn, FASTBOOL bVShear);
+    virtual void Shear(const Point& rRef, long nWink, double tn, int bVShear);
     virtual void SetSnapRect(const Rectangle& rRect);
     virtual void SetLogicRect(const Rectangle& rRect);
 
@@ -195,11 +195,11 @@ public:
     virtual void NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact);
     virtual void NbcRotate(const Point& rRef, long nWink, double sn, double cs);
     virtual void NbcMirror(const Point& rRef1, const Point& rRef2);
-    virtual void NbcShear(const Point& rRef, long nWink, double tn, FASTBOOL bVShear);
+    virtual void NbcShear(const Point& rRef, long nWink, double tn, int bVShear);
     virtual void NbcSetSnapRect(const Rectangle& rRect);
     virtual void NbcSetLogicRect(const Rectangle& rRect);
 
-    virtual SdrGluePoint GetVertexGluePoint(USHORT nNum) const;
+    virtual SdrGluePoint GetVertexGluePoint(sal_uInt16 nNum) const;
 
     virtual void NbcSetStyleSheet( SfxStyleSheet* pNewStyleSheet, sal_Bool bDontRemoveHardAttr );
 
@@ -208,22 +208,22 @@ public:
     virtual bool beginSpecialDrag(SdrDragStat& rDrag) const;
     virtual bool applySpecialDrag(SdrDragStat& rDrag);
 
-    virtual FASTBOOL BegCreate( SdrDragStat& rStat );
-    virtual FASTBOOL MovCreate(SdrDragStat& rStat); // #i37448#
-    virtual FASTBOOL EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd);
+    virtual int BegCreate( SdrDragStat& rStat );
+    virtual int MovCreate(SdrDragStat& rStat);  // #i37448#
+    virtual int EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd);
 
-    virtual FASTBOOL AdjustTextFrameWidthAndHeight(Rectangle& rR, FASTBOOL bHgt=TRUE, FASTBOOL bWdt=TRUE) const;
-    virtual FASTBOOL NbcAdjustTextFrameWidthAndHeight(FASTBOOL bHgt=TRUE, FASTBOOL bWdt=TRUE);
-    virtual FASTBOOL AdjustTextFrameWidthAndHeight(FASTBOOL bHgt=TRUE, FASTBOOL bWdt=TRUE);
-    virtual FASTBOOL IsAutoGrowHeight() const;
-    virtual FASTBOOL IsAutoGrowWidth() const;
+    virtual int AdjustTextFrameWidthAndHeight(Rectangle& rR, int bHgt=sal_True, int bWdt=sal_True) const;
+    virtual int NbcAdjustTextFrameWidthAndHeight(int bHgt=sal_True, int bWdt=sal_True);
+    virtual int AdjustTextFrameWidthAndHeight(int bHgt=sal_True, int bWdt=sal_True);
+    virtual int IsAutoGrowHeight() const;
+    virtual int IsAutoGrowWidth() const;
     virtual void SetVerticalWriting( sal_Bool bVertical );
     virtual sal_Bool BegTextEdit( SdrOutliner& rOutl );
     virtual void TakeTextEditArea(Size* pPaperMin, Size* pPaperMax, Rectangle* pViewInit, Rectangle* pViewMin) const;
     virtual void EndTextEdit( SdrOutliner& rOutl );
     virtual void TakeTextAnchorRect( Rectangle& rAnchorRect ) const;
-    virtual void TakeTextRect( SdrOutliner& rOutliner, Rectangle& rTextRect, FASTBOOL bNoEditText=FALSE,
-        Rectangle* pAnchorRect=NULL, BOOL bLineWidth=TRUE ) const;
+    virtual void TakeTextRect( SdrOutliner& rOutliner, Rectangle& rTextRect, int bNoEditText=sal_False,
+        Rectangle* pAnchorRect=NULL, sal_Bool bLineWidth=sal_True ) const;
     virtual void operator=(const SdrObject& rObj);
 
     virtual void TakeObjNameSingul(String& rName) const;
@@ -236,7 +236,7 @@ public:
 
     virtual void NbcSetOutlinerParaObject(OutlinerParaObject* pTextObject);
 
-    virtual SdrObject* DoConvertToPolyObj(BOOL bBezier) const;
+    virtual SdrObject* DoConvertToPolyObj(sal_Bool bBezier) const;
 
     virtual void SetPage( SdrPage* pNewPage );
 

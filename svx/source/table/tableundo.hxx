@@ -55,7 +55,7 @@ public:
 
     virtual void            Undo();
     virtual void            Redo();
-    virtual BOOL            Merge( SfxUndoAction *pNextAction );
+    virtual sal_Bool            Merge( SfxUndoAction *pNextAction );
 
     void dispose();
     virtual void ObjectInDestruction(const SdrObject& rObject);
@@ -172,7 +172,7 @@ public:
 
     virtual void            Undo();
     virtual void            Redo();
-    virtual BOOL            Merge( SfxUndoAction *pNextAction );
+    virtual sal_Bool            Merge( SfxUndoAction *pNextAction );
 
 private:
     struct Data
@@ -204,7 +204,7 @@ public:
 
     virtual void            Undo();
     virtual void            Redo();
-    virtual BOOL            Merge( SfxUndoAction *pNextAction );
+    virtual sal_Bool            Merge( SfxUndoAction *pNextAction );
 
 private:
     struct Data
