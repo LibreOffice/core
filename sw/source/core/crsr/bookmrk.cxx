@@ -336,6 +336,14 @@ namespace sw { namespace mark
     void CheckboxFieldmark::SetChecked(bool checked)
     {
         (*GetParameters())[::rtl::OUString::createFromAscii(ODF_FORMCHECKBOX_RESULT)] = makeAny(checked);
+        bool bOld( IsChecked() );
+        if ( bOld != checked )
+        {
+            // mark document as modified
+            SwDoc *const pDoc( GetMarkPos().GetDoc() );
+            if ( pDoc )
+                pDoc->SetModified();
+        }
     }
 
     bool CheckboxFieldmark::IsChecked() const
