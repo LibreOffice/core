@@ -484,7 +484,7 @@ public class AgendaWizardDialogImpl extends AgendaWizardDialog
 
             xTextDocument = (XTextDocument)UnoRuntime.queryInterface(XTextDocument.class,agendaTemplate.document);
 
-            bSaveSuccess = OfficeDocument.store(xMSF, xTextDocument, sPath , "writer8_template", false, resources.resErrSaveTemplate );
+            bSaveSuccess = OfficeDocument.store(xMSF, xTextDocument, sPath , "writer8_template", false );
         } catch (Exception e) {
             SystemDialog.showMessageBox(xMSF, xControl.getPeer(), "ErrBox", VclWindowPeerAttribute.OK, resources.resErrSaveTemplate);
             //e.printStackTrace();
