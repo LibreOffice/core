@@ -78,7 +78,8 @@ ORowSetColumn::ORowSetColumn(   const Reference < XResultSetMetaData >& _xMetaDa
     DECL_PROP1( TYPE,                       sal_Int32,          READONLY );
     DECL_PROP1( TYPENAME,                   ::rtl::OUString,    READONLY );
     DECL_PROP2( VALUE,                      Any,                READONLY, BOUND );
-    OSL_ENSURE( nPos == nDerivedProperties, "ORowSetColumn::createArrayHelper: inconsistency!" );
+
+    END_PROPERTY_SEQUENCE()
 
     Sequence< Property > aRegisteredProperties;
     describeProperties( aRegisteredProperties );

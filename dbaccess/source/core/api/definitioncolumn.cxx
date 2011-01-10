@@ -496,7 +496,7 @@ Sequence< ::rtl::OUString > OTableColumnDescriptorWrapper::getSupportedServiceNa
         DECL_PROP0_BOOL( ISROWVERSION );
     }
 
-    OSL_ENSURE( nPos == nPropertyCount, "OTableColumnDescriptorWrapper::createArrayHelper: something went wrong!" );
+    END_PROPERTY_SEQUENCE()
 
     if ( !m_bIsDescriptor )
     {
