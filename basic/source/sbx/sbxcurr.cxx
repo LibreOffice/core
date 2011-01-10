@@ -189,6 +189,8 @@ static sal_Int64 ImpStringToCurrency( const rtl::OUString &rStr )
             p++;
     }
 
+    bool bRoundUp = false;
+
     if( *p == cDeciPnt )
     {
         p++;
@@ -197,6 +199,16 @@ static sal_Int64 ImpStringToCurrency( const rtl::OUString &rStr )
             sNormalisedNumString.append( *p++ );
             nFractDigit--;
         }
+        // Consume trailing content
+        if ( p != NULL )
+        {
+            // Round up if necessary
+            if( *p >= '5' && *p <= '9' )
+                bRoundUp = true;
+            while( *p >= '0' && *p <= '9' )
+                p++;
+        }
+
     }
     // can we raise error here ? ( previous behaviour was more forgiving )
     // so... not sure that could bread existing code, lets see if anyone
@@ -211,6 +223,9 @@ static sal_Int64 ImpStringToCurrency( const rtl::OUString &rStr )
     }
 
     sal_Int64 result = sNormalisedNumString.makeStringAndClear().toInt64();
+
+    if ( bRoundUp )
+        ++result;
     return result;
 }
 
