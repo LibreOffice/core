@@ -118,7 +118,7 @@ class AnalysisResourcePublisher : public Resource
 {
 public:
                     AnalysisResourcePublisher( const AnalysisResId& rId ) : Resource( rId ) {}
-    BOOL            IsAvailableRes( const ResId& rId ) const { return Resource::IsAvailableRes( rId ); }
+    sal_Bool            IsAvailableRes( const ResId& rId ) const { return Resource::IsAvailableRes( rId ); }
     void            FreeResource() { Resource::FreeResource(); }
 };
 
