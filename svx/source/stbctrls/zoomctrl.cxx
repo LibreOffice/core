@@ -79,7 +79,7 @@ ZoomPopup_Impl::ZoomPopup_Impl( USHORT nZ, USHORT nValueSet )
         SVX_ZOOM_ENABLE_PAGEWIDTH,  ZOOM_PAGE_WIDTH
     };
 
-    for ( USHORT nPos = 0; nPos < sizeof(aTable) / sizeof(USHORT); nPos += 2 )
+    for ( USHORT nPos = 0; nPos < SAL_N_ELEMENTS(aTable); nPos += 2 )
         if ( ( aTable[nPos] != ( aTable[nPos] & nValueSet ) ) )
             EnableItem( aTable[nPos+1], FALSE );
 }
