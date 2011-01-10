@@ -2208,6 +2208,8 @@ void WW8FormulaControl::FormulaRead(SwWw8ControlType nWhich,
                 nChecked = true;
                 break;
             case 25: //undefined, Undefined checkboxes are treated as unchecked
+                     //but it appear that both visually and the value are picked up from the default in that case
+                break;
             case 0:  //unchecked
                 nChecked = false;
                 break;

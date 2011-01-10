@@ -3549,13 +3549,19 @@ void WW8Export::WriteFormData( const ::sw::mark::IFieldmark& rFieldmark )
 
     pChpPlc->AppendFkpEntry( Strm().Tell(), sizeof( aArr1 ), aArr1 );
 
-    sal_uInt8 aFldHeader[] =
+    struct FFDataHeader
     {
-        0xFF, 0xFF, 0xFF, 0xFF, // Unicode Marker...
-        0, 0, 0, 0,// 0, 0, 0, 0
+        sal_uInt32 version;
+        sal_uInt16 bits;
+        sal_uInt16 cch;
+        sal_uInt16 hps;
+        FFDataHeader() : version( 0xFFFFFFFF ), bits(0), cch(0), hps(0) {}
     };
 
-    aFldHeader[4] |= (type & 0x03);
+
+    FFDataHeader aFldHeader;
+    aFldHeader.bits |= (type & 0x03);
+
     sal_Int32 ffres = 0; // rFieldmark.GetFFRes();
     if ( pAsCheckbox && pAsCheckbox->IsChecked() )
         ffres = 1;
@@ -3567,12 +3573,12 @@ void WW8Export::WriteFormData( const ::sw::mark::IFieldmark& rFieldmark )
         else
             ffres = 0;
     }
-    aFldHeader[4] |= ( (ffres<<2) & 0x7C );
+    aFldHeader.bits |= ( (ffres<<2) & 0x7C );
 
     std::vector< ::rtl::OUString > aListItems;
     if (type==2)
     {
-        aFldHeader[5] |= 0x80; // ffhaslistbox
+        aFldHeader.bits |= 0x8000; // ffhaslistbox
         const ::sw::mark::IFieldmark::parameter_map_t* const pParameters = rFieldmark.GetParameters();
         ::sw::mark::IFieldmark::parameter_map_t::const_iterator pListEntries = pParameters->find(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(ODF_FORMDROPDOWN_LISTENTRY)));
         if(pListEntries != pParameters->end())
@@ -3602,7 +3608,7 @@ void WW8Export::WriteFormData( const ::sw::mark::IFieldmark& rFieldmark )
     };
    sal_uInt32 slen = sizeof(sal_uInt32)
         + sizeof(aFldData)
-        + sizeof( aFldHeader )
+        + sizeof( aFldHeader.version ) + sizeof( aFldHeader.bits ) + sizeof( aFldHeader.cch ) + sizeof( aFldHeader.hps )
         + 2*ffname.getLength() + 4
         + 2*ffdeftext.getLength() + 4
         + 2*ffformat.getLength() + 4
@@ -3610,8 +3616,10 @@ void WW8Export::WriteFormData( const ::sw::mark::IFieldmark& rFieldmark )
         + 2*ffstattext.getLength() + 4
         + 2*ffentrymcr.getLength() + 4
         + 2*ffexitmcr.getLength() + 4;
+    if ( type )
+        slen += 2; // wDef
     if ( type==2 ) {
-        slen += 2; // for 0xFF, 0xFF
+        slen += 2; // sttb ( fExtend )
         slen += 4; // for num of list items
         const int items = aListItems.size();
         for( int i = 0; i < items; i++ ) {
@@ -3626,17 +3634,14 @@ void WW8Export::WriteFormData( const ::sw::mark::IFieldmark& rFieldmark )
     OSL_ENSURE( len == 0x44-sizeof(sal_uInt32), "SwWW8Writer::WriteFormData(..) - wrong aFldData length" );
     pDataStrm->Write( aFldData, len );
 
-    len = sizeof( aFldHeader );
-    OSL_ENSURE( len == 8, "SwWW8Writer::WriteFormData(..) - wrong aFldHeader length" );
-
-    pDataStrm->Write( aFldHeader, len );
+    *pDataStrm << aFldHeader.version << aFldHeader.bits << aFldHeader.cch << aFldHeader.hps;
 
     SwWW8Writer::WriteString_xstz( *pDataStrm, ffname, true ); // Form field name
 
-    if ( type == 0 )
-        SwWW8Writer::WriteString_xstz( *pDataStrm, ffdeftext, true );
-    else
-        pDataStrm->WriteNumber( (sal_uInt16)0 );
+    SwWW8Writer::WriteString_xstz( *pDataStrm, ffdeftext, true );
+    if ( type )
+        *pDataStrm << sal_uInt16(0);
+
 
     SwWW8Writer::WriteString_xstz( *pDataStrm, String( ffformat ), true );
     SwWW8Writer::WriteString_xstz( *pDataStrm, String( ffhelptext ), true );
