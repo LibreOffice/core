@@ -50,7 +50,7 @@
 #include "fileobj.hxx"
 #include "impldde.hxx"
 #include "app.hrc"
-#include "sfxresid.hxx"
+#include "sfx2/sfxresid.hxx"
 
 #define _SVSTDARR_STRINGSDTOR
 #include <svl/svstdarr.hxx>

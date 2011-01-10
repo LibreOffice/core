@@ -30,7 +30,7 @@
 
 #include <svx/svdomeas.hxx>
 #include <math.h>
-#include "svditext.hxx" //
+#include "svx/svditext.hxx" //
 #include <svx/xpoly.hxx>
 #include <svx/svdtrans.hxx>
 #include <svx/svdhdl.hxx>
@@ -40,8 +40,8 @@
 #include <svx/svdattrx.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/svdview.hxx>
-#include "svdglob.hxx"   // StringCache
-#include "svdstr.hrc"    // Objektname
+#include "svx/svdglob.hxx"   // StringCache
+#include "svx/svdstr.hrc"    // Objektname
 #include <svl/style.hxx>
 #include <svl/smplhint.hxx>
 #include <editeng/eeitem.hxx>

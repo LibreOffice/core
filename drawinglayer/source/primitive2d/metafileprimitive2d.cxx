@@ -2017,7 +2017,7 @@ namespace
 
                     if(nTextLength + nTextIndex > nStringLength)
                     {
-                        nTextLength = nStringLength - nTextIndex;
+                        nTextLength = nTextIndex > nStringLength ? 0 : nStringLength - nTextIndex;
                     }
 
                     if(nTextLength && rPropertyHolders.Current().getTextColorActive())

@@ -35,9 +35,9 @@
 #include "../customshapes/EnhancedCustomShapeEngine.hxx"
 
 #include <svx/xtable.hxx>
-#include "unoshcol.hxx"
+#include "svx/unoshcol.hxx"
 #include "recoveryui.hxx"
-#include "xmlgrhlp.hxx"
+#include "svx/xmlgrhlp.hxx"
 #include "tbunocontroller.hxx"
 #include "tbunosearchcontrollers.hxx"
 

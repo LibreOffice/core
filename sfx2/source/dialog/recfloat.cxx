@@ -42,13 +42,13 @@
 
 #include "recfloat.hxx"
 #include "dialog.hrc"
-#include "sfxresid.hxx"
+#include "sfx2/sfxresid.hxx"
 #include <sfx2/app.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/viewsh.hxx>
-#include "imagemgr.hxx"
+#include "sfx2/imagemgr.hxx"
 
 using namespace ::com::sun::star;
 

@@ -81,6 +81,7 @@
 #include <unotools/tempfile.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/componentcontext.hxx>
+#include <comphelper/interaction.hxx>
 #include <framework/interaction.hxx>
 #include <unotools/streamhelper.hxx>
 #include <unotools/localedatawrapper.hxx>
@@ -144,7 +145,7 @@ using namespace ::com::sun::star::io;
 #include <sfx2/docfac.hxx>       // GetFilterContainer
 #include "doc.hrc"
 #include "openflag.hxx"     // SFX_STREAM_READONLY etc.
-#include "sfxresid.hxx"
+#include "sfx2/sfxresid.hxx"
 #include <sfx2/appuno.hxx>
 
 //#include "xmlversion.hxx"
@@ -3783,19 +3784,17 @@ sal_Bool SfxMedium::CallApproveHandler( const uno::Reference< task::XInteraction
         {
             uno::Sequence< uno::Reference< task::XInteractionContinuation > > aContinuations( bAllowAbort ? 2 : 1 );
 
-            ::rtl::Reference< ::framework::ContinuationApprove > pApprove( new ::framework::ContinuationApprove() );
+            ::rtl::Reference< ::comphelper::OInteractionApprove > pApprove( new ::comphelper::OInteractionApprove );
             aContinuations[ 0 ] = pApprove.get();
 
             if ( bAllowAbort )
             {
-                ::rtl::Reference< ::framework::ContinuationAbort > pAbort( new ::framework::ContinuationAbort() );
+                ::rtl::Reference< ::comphelper::OInteractionAbort > pAbort( new ::comphelper::OInteractionAbort );
                 aContinuations[ 1 ] = pAbort.get();
             }
 
-            uno::Reference< task::XInteractionRequest > xRequest( new ::framework::InteractionRequest( aRequest, aContinuations ) );
-            xHandler->handle( xRequest );
-
-            bResult = pApprove->isSelected();
+            xHandler->handle(::framework::InteractionRequest::CreateRequest (aRequest,aContinuations));
+            bResult = pApprove->wasSelected();
         }
         catch( const Exception& )
         {
