@@ -1578,6 +1578,7 @@ STD_UNO_LIB_FILE( gid_File_Lib_Xsltdlg, xsltdlg )
 STD_UNO_LIB_FILE( gid_File_Lib_Xsltfilter, xsltfilter )
 STD_UNO_LIB_FILE( gid_File_Lib_Xmlfa, xmlfa )
 STD_UNO_LIB_FILE( gid_File_Lib_Xmlfd, xmlfd )
+STD_UNO_LIB_FILE( gid_File_Lib_Odfflatxml, odfflatxml )
 
 #ifdef SOLAR_JAVA
 UNO_JAR_FILE( gid_File_Jar_Xsltfilter, XSLTFilter )

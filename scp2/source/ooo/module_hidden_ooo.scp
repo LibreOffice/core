@@ -277,6 +277,7 @@ Module gid_Module_Root_Files_4
 	gid_File_Lib_Xof,
 	gid_File_Lib_Xsltdlg,
 	gid_File_Lib_Xsltfilter,
+	gid_File_Lib_Odfflatxml,
 	gid_File_Lib_Zip,
 	gid_File_Lib_Vclplug_Gen,
 	gid_File_Lib_Vclplug_Gtk,
