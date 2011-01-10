@@ -76,11 +76,17 @@ interface XGridColumn
     /** A title is displayed in the colum header row if <method>UnoControlGridModel::ShowRowHeader</method> is set to <true/>**/
     [attribute] string Title;
 
+    /** denotes the index of the column within the grid column model it belongs to
+
+        <p>If the column is not yet part of a column model, <code>Index</code> is -1.</p>
+    */
+    [attribute, readonly] long Index;
+
     /** Adds a listener for the <type>GridColumnEvent</type> posted after the grid changes.
         @param Listener
             the listener to add.
     */
-    [oneway] void addGridColumnListener( [in] XGridColumnListener  listener);
+    void addGridColumnListener( [in] XGridColumnListener  listener);
 
     //-------------------------------------------------------------------------
 
@@ -88,13 +94,7 @@ interface XGridColumn
         @param Listener
             the listener to remove.
     */
-    [oneway] void removeGridColumnListener( [in] XGridColumnListener listener);
-
-    /**Sets column index
-        @param index
-            index, which is the index of the column in the column array of the column model
-    */
-    void setIndex( [in] long index );
+    void removeGridColumnListener( [in] XGridColumnListener listener);
 };
 
 //=============================================================================
