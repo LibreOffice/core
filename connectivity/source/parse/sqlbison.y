@@ -2447,11 +2447,16 @@ odbc_fct_spec:
 			$$->append($1);
 			$$->append($2);
 		}
+	|	SQL_TOKEN_FN set_fct_spec
+		{
+			$$ = SQL_NEW_RULE;
+			$$->append($1);
+			$$->append($2);
+		}
 	;
 
 odbc_fct_type:
-		SQL_TOKEN_FN
-	| 	SQL_TOKEN_D
+		SQL_TOKEN_D
 	| 	SQL_TOKEN_T
 	| 	SQL_TOKEN_TS
 	;

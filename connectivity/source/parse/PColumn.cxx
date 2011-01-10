@@ -155,13 +155,15 @@ OParseColumn* OParseColumn::createColumnForResultSet( const Reference< XResultSe
         _rxResMetaData->isCurrency( _nColumnPos ),
         _rxDBMetaData->supportsMixedCaseQuotedIdentifiers()
     );
-    pColumn->setTableName(  ::dbtools::composeTableName( _rxDBMetaData,
-        _rxResMetaData->getCatalogName( _nColumnPos ),
-        _rxResMetaData->getSchemaName( _nColumnPos ),
-        _rxResMetaData->getTableName( _nColumnPos ),
-        sal_False,
-        eComplete
-    ) );
+    const ::rtl::OUString sTableName = _rxResMetaData->getTableName( _nColumnPos );
+    if ( sTableName.getLength() )
+        pColumn->setTableName(  ::dbtools::composeTableName( _rxDBMetaData,
+            _rxResMetaData->getCatalogName( _nColumnPos ),
+            _rxResMetaData->getSchemaName( _nColumnPos ),
+            sTableName,
+            sal_False,
+            eComplete
+        ) );
     pColumn->setIsSearchable( _rxResMetaData->isSearchable( _nColumnPos ) );
     pColumn->setRealName(_rxResMetaData->getColumnName( _nColumnPos ));
     pColumn->setLabel(sLabel);
