@@ -44,6 +44,8 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
 	cui \
 	drawinglayer \
 	editeng \
+	for \
+	forui \
 	fwe \
 	fwi \
 	fwk \
@@ -56,6 +58,8 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
 	qstart_gtk \
 	sax \
 	sb \
+	sc \
+	scui \
 	sfx \
 	sot \
 	svl \
@@ -106,6 +110,7 @@ $(eval $(call gb_Helper_register_libraries,UNOLIBS_OOO, \
 	hatchwindowfactory \
 	passwordcontainer \
 	productregistration \
+	vbaobj \
 	vbaswobj \
 ))
 
