@@ -435,7 +435,8 @@ ReferenceNameRecord() : Id( 0x16 ), SizeOfName( 0 ), Reserved( 0x3E ), SizeOfNam
 
 void read( SvStream* pStream )
 {
-    OSL_TRACE("NameRecord [0x%x]", pStream->Tell() );
+    long nPos =  pStream->Tell();
+    OSL_TRACE("NameRecord [0x%x]", nPos );
     *pStream >> Id >> SizeOfName;
 
     boost::scoped_array< sal_uInt8 > pName( new sal_uInt8[ SizeOfName ] );
@@ -443,7 +444,19 @@ void read( SvStream* pStream )
     pStream->Read( pName.get(), SizeOfName );
     Name = svt::BinFilterUtils::CreateOUStringFromStringArray( reinterpret_cast< const char* >( pName.get() ), SizeOfName );
 
-    *pStream >> Reserved >> SizeOfNameUnicode;
+    nPos =  pStream->Tell();
+    *pStream >> Reserved;
+
+    if ( Reserved != 0x3E )
+    {
+        // it seems the spec here is incorrect and the Unicode portion
+        // looks like it can be optional ( if 'Reserved' isn't the expected
+        // 0x34 ) - return stream here to point before Reserved
+        pStream->Seek( nPos );
+        return;
+    }
+
+    *pStream >> SizeOfNameUnicode;
 
     boost::scoped_array< sal_uInt8 > pNameUnicode( new sal_uInt8[ SizeOfNameUnicode ] );
     pStream->Read( pNameUnicode.get(), SizeOfNameUnicode );
