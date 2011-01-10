@@ -318,7 +318,7 @@ void SAL_CALL CPreviewAdapterImpl::rearrangeLayout()
 
         // resize the filelistbox to the half of the
         // available space
-        sal_Bool bRet = SetWindowPos(flb_new,
+        bool bRet = SetWindowPos(flb_new,
             NULL, 0, 0, cx, height,
             SWP_NOMOVE | SWP_NOZORDER | SWP_NOACTIVATE);
 

@@ -332,7 +332,7 @@ STDMETHODIMP VistaFilePickerEventHandler::OnButtonClicked(IFileDialogCustomize* 
 //-----------------------------------------------------------------------------------------
 STDMETHODIMP VistaFilePickerEventHandler::OnCheckButtonToggled(IFileDialogCustomize* /*pCustomize*/,
                                                                DWORD                 nIDCtl    ,
-                                                               sal_Bool                  bChecked  )
+                                                               BOOL                  bChecked  )
 {
     /*
     if (nIDCtl == css::ui::dialogs::ExtendedFilePickerElementIds::CHECKBOX_AUTOEXTENSION)

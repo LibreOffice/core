@@ -74,7 +74,7 @@ namespace /* private */
 
         ~CurDirGuard()
         {
-            sal_Bool bDirSet = sal_False;
+            bool bDirSet = false;
 
             if ( m_pBuffer )
             {
