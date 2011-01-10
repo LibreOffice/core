@@ -137,8 +137,7 @@ void MakeBorderLine( sal_Int32 nLineThickness,   sal_Int32 nLineType,
     //no auto color for borders
     if(!nLineColor)
         ++nLineColor;
-    if(!bIsOOXML && sal::static_int_cast<sal_uInt32>(nLineColor) <
-       sizeof(aBorderDefColor) / sizeof(nLineColor))
+    if(!bIsOOXML && sal::static_int_cast<sal_uInt32>(nLineColor) < SAL_N_ELEMENTS(aBorderDefColor))
         nLineColor = aBorderDefColor[nLineColor];
 
     enum eBorderCode
