@@ -27,14 +27,12 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svl.hxx"
-
-#include <lngmisc.hxx>
+#include <svl/lngmisc.hxx>
 #include <tools/solar.h>
 #include <tools/string.hxx>
 #include <tools/debug.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/ustring.hxx>
-
 
 using namespace rtl;
 

@@ -1,4 +1,4 @@
-ut	unotools	:	comphelper cppuhelper offuh tools ucbhelper NULL
+ut	unotools	: LIBXSLT:libxslt comphelper cppuhelper offuh tools ucbhelper NULL
 ut	unotools								usr1	-	all	ut_mkout NULL
 ut	unotools\inc							nmake	-	all	ut_inc NULL
 ut	unotools\source\misc					nmake	-	all	ut_misc ut_config ut_inc NULL
