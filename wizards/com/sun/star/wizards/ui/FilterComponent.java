@@ -113,6 +113,7 @@ public class FilterComponent
     final int SO_FOURTHBOOLFIELDNAME = 256 + 4;
     int SO_BOOLEANLIST[] =
 
+
     {
         SO_FIRSTBOOLFIELDNAME, SO_SECONDBOOLFIELDNAME, SO_THIRDBOOLFIELDNAME, SO_FOURTHBOOLFIELDNAME
     };
@@ -254,11 +255,10 @@ public class FilterComponent
 
                 if (composer.getQuery().length() == 0)
                 {
-                    final String fromClause = composer.getFromClause();
                     StringBuilder sql = new StringBuilder();
                     sql.append(composer.getSelectClause(true));
                     sql.append(' ');
-                    sql.append(fromClause);
+                    sql.append(composer.getFromClause());
                     composer.getQueryComposer().setElementaryQuery(sql.toString());
                 }
                 composer.getQueryComposer().setStructuredFilter(new PropertyValue[][]
@@ -267,39 +267,36 @@ public class FilterComponent
                 for (int i = 0; i < RowCount; i++)
                 {
                     ControlRow currentControlRow = oControlRows[i];
-                    if (currentControlRow.isEnabled())
+                    if (currentControlRow.isEnabled() && currentControlRow.isConditionComplete())
                     {
-                        if (currentControlRow.isConditionComplete())
+                        String sFieldName = currentControlRow.getSelectedFieldName();
+                        int nOperator = (int) currentControlRow.getSelectedOperator();
+                        FieldColumn aFieldColumn = oQueryMetaData.getFieldColumnByDisplayName(sFieldName);
+                        columnSet.setPropertyValue(PropertyNames.PROPERTY_NAME, aFieldColumn.getFieldName());
+                        columnSet.setPropertyValue("Type", aFieldColumn.getXColumnPropertySet().getPropertyValue("Type"));
+                        Object value = currentControlRow.getValue();
+                        switch (aFieldColumn.getFieldType())
                         {
-                            String sFieldName = currentControlRow.getSelectedFieldName();
-                            int nOperator = (int) currentControlRow.getSelectedOperator();
-                            FieldColumn aFieldColumn = oQueryMetaData.getFieldColumnByDisplayName(sFieldName);
-                            columnSet.setPropertyValue(PropertyNames.PROPERTY_NAME, aFieldColumn.getFieldName());
-                            columnSet.setPropertyValue("Type", aFieldColumn.getXColumnPropertySet().getPropertyValue("Type"));
-                            Object value = currentControlRow.getValue();
-                            switch (aFieldColumn.getFieldType())
-                            {
-                                case DataType.TIMESTAMP:
-                                case DataType.DATE:
-                                    value = ((Double) value) - oQueryMetaData.getNullDateCorrection();
-                                    break;
-                            }
-                            column.removeProperty("Value");
-                            final short operator = currentControlRow.getSelectedOperator();
-                            if ((operator == SQLFilterOperator.SQLNULL)
-                                    || (operator == SQLFilterOperator.NOT_SQLNULL)
-                                    || AnyConverter.isVoid(value))
-                            {
-                                column.addProperty("Value", (short) (PropertyAttribute.MAYBEVOID | PropertyAttribute.REMOVABLE), new String());
-                                value = new Any(new Type(TypeClass.VOID), null);
-                            }
-                            else
-                            {
-                                column.addProperty("Value", (short) (PropertyAttribute.MAYBEVOID | PropertyAttribute.REMOVABLE), value);
-                            }
-                            columnSet.setPropertyValue("Value", value);
-                            composer.getQueryComposer().appendFilterByColumn(columnSet, getfilterstate() == this.SOI_MATCHALL, nOperator);
+                            case DataType.TIMESTAMP:
+                            case DataType.DATE:
+                                value = ((Double) value) - oQueryMetaData.getNullDateCorrection();
+                                break;
                         }
+                        column.removeProperty("Value");
+                        final short operator = currentControlRow.getSelectedOperator();
+                        if ((operator == SQLFilterOperator.SQLNULL)
+                                || (operator == SQLFilterOperator.NOT_SQLNULL)
+                                || AnyConverter.isVoid(value))
+                        {
+                            column.addProperty("Value", (short) (PropertyAttribute.MAYBEVOID | PropertyAttribute.REMOVABLE), new String());
+                            value = new Any(new Type(TypeClass.VOID), null);
+                        }
+                        else
+                        {
+                            column.addProperty("Value", (short) (PropertyAttribute.MAYBEVOID | PropertyAttribute.REMOVABLE), value);
+                        }
+                        columnSet.setPropertyValue("Value", value);
+                        composer.getQueryComposer().appendFilterByColumn(columnSet, getfilterstate() == this.SOI_MATCHALL, nOperator);
                     }
                 }
                 filterconditions = composer.getNormalizedStructuredFilter();
@@ -342,7 +339,7 @@ public class FilterComponent
                 FieldName = _filtercondition.Name;
             }
             String sreturn = JavaTools.replaceSubString(_BaseString, FieldName, "<FIELDNAME>");
-            String soperator = sLogicOperators[_filtercondition.Handle-1];
+            String soperator = sLogicOperators[_filtercondition.Handle - 1];
             sreturn = JavaTools.replaceSubString(sreturn, soperator, "<LOGICOPERATOR>");
             String sDisplayValue = "";
             if ((_filtercondition.Handle != SQLFilterOperator.SQLNULL)

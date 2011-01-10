@@ -205,9 +205,7 @@ public class CommandName
         {
             sName = "";
         }
-        String ReturnQuote = "";
-        ReturnQuote = _sIdentifierQuote + sName + _sIdentifierQuote;
-        return ReturnQuote;
+        return new StringBuilder(_sIdentifierQuote).append(sName).append(_sIdentifierQuote).toString();
     }
 
     public void setAliasName(String _AliasName)
