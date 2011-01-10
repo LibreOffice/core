@@ -75,3 +75,4 @@ sw      sw\source\core                      nmake   -       all     sw_core sw_a
 sw      sw\source\filter                    nmake   -       all     sw_flt sw_ascii sw_bsflt sw_html sw_rtf sw_wrtr sw_ww1 sw_ww8 sw_xml NULL
 sw      sw\util                             nmake   -       all     sw_util sw_core sw_flt sw_sdi sw_ui NULL
 sw sw\qa\unoapi nmake - all sw_qa_unoapi NULL
+sw sw\qa\core	nmake - all sw_qa_cppunit sw_util NULL
