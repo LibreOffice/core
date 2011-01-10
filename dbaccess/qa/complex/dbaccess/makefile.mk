@@ -40,7 +40,6 @@ PACKAGE = complex/dbaccess
 JAVATESTFILES = \
     ApplicationController.java \
     Beamer.java \
-    CRMBasedTestCase.java \
     CopyTableWizard.java \
     DataSource.java \
     DatabaseDocument.java \
@@ -51,14 +50,15 @@ JAVATESTFILES = \
     RowSet.java \
     SingleSelectQueryComposer.java \
     UISettings.java \
-    TestCase.java 
 
 # put here all other files
 JAVAFILES = $(JAVATESTFILES) \
+    CRMBasedTestCase.java \
     CopyTableInterActionHandler.java \
     DatabaseApplication.java \
     FileHelper.java \
-    RowSetEventListener.java 
+    RowSetEventListener.java \
+    TestCase.java \
 
 
 JARFILES = OOoRunner.jar ridl.jar test.jar unoil.jar ConnectivityTools.jar
