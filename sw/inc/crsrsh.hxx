@@ -40,7 +40,7 @@
 #include <cshtyp.hxx>           // for CursorShell types
 #include <crstate.hxx>          // for CursorMove-States
 #include <toxe.hxx>             // SwTOXSearchDir
-#include <tblsel.hxx>               //SwTblSearchType
+#include <tblsel.hxx>           // SwTblSearchType
 #include <viscrs.hxx>
 #include <node.hxx>
 #include <tblsel.hxx>
@@ -228,7 +228,7 @@ private:
                                 // TRUE -> everything protected / hidden
     BOOL bInCMvVisportChgd : 1; // Flag for CrsrMoves
                                 // TRUE -> view was moved
-    BOOL bGCAttr : 1;           // TRUE -> es existieren nichtaufgespannte Attr.
+    BOOL bGCAttr : 1;           // TRUE -> non expanded attributes exist.
     BOOL bIgnoreReadonly : 1;   // TRUE -> make the cursor visible on next
                                 // EndAction in spite of Readonly
     BOOL bSelTblCells : 1;      // TRUE -> select cells over the InputWin
@@ -452,101 +452,98 @@ public:
 #endif
 
     /*
-     * Beim Abgeben des Focuses werden die selektierten Bereiche nicht mehr
-     * angezeigt; andererseits beim Erhalten des Focuses, werden alle selek-
-     * tierten Bereiche wieder angezeigt. (Bereiche muessen neu berechnet
-     * werden!)
+     * When the focus is lost the selected ranges are not displayed anymore.
+     * On the other hand, on receiving the focus all selected ranges are displayed again
+     * (ranges must be recalculated!).
      */
     BOOL HasShFcs() const { return bHasFocus; }
     void ShLooseFcs();
     void ShGetFcs( BOOL bUpdate = TRUE );
 
-    // Methoden zum Anzeigen bzw. Verstecken des sichtbaren Text-Cursors
+    // Methods for displaying or hiding the visible text cursor.
     void ShowCrsr();
     void HideCrsr();
-    // Methoden zum Anzeigen bzw. Verstecken der selektierten Bereiche mit
-    // dem sichtbaren Cursor
+    // Methods for displaying or hiding the selected ranges with visible cursor.
     void ShowCrsrs( BOOL bCrsrVis );
     void HideCrsrs();
 
     BOOL IsOverwriteCrsr() const { return bOverwriteCrsr; }
     void SetOverwriteCrsr( BOOL bFlag ) { bOverwriteCrsr = bFlag; }
 
-    // gebe den aktuellen Frame, in dem der Cursor steht, zurueck
+    // Return current frame in which the cursor is placed.
     SwCntntFrm *GetCurrFrm( const BOOL bCalcFrm = TRUE ) const;
 
-    //TRUE wenn der Crsr wenn der Crsr wegen Readonly gehidet ist,
-    //FALSE wenn der arbeitet (trotz Readonly).
+    //TRUE if cursor is hidden because of readonly.
+    //FALSE if it is working despite readonly.
     BOOL IsCrsrReadonly() const;
-    // Cursor steht in etwas geschuetztem oder in die Selektion umspannt
-    // etwas geschuetztes.
+
+    // Cursor is placed in something that is protected or selection contains
+    // something that is protected.
     BOOL HasReadonlySel() const;
-    // darf der Cursor in ReadOnlyBereiche?
+
+    // Can the cursor be set to read only ranges?
     BOOL IsReadOnlyAvailable() const { return bSetCrsrInReadOnly; }
     void SetReadOnlyAvailable( BOOL bFlag );
     BOOL IsOverReadOnlyPos( const Point& rPt ) const;
 
-    // Methoden fuer aFlyMacroLnk
+    // Methods for aFlyMacroLnk.
     void        SetFlyMacroLnk( const Link& rLnk ) { aFlyMacroLnk = rLnk; }
     const Link& GetFlyMacroLnk() const             { return aFlyMacroLnk; }
 
-    // Methoden geben/aendern den Link fuer die Attribut/Format-Aenderungen
+    // Methods returning/altering link for changes of attributes/formates.
     void        SetChgLnk( const Link &rLnk ) { aChgLnk = rLnk; }
     const Link& GetChgLnk() const             { return aChgLnk; }
 
-    // Methoden geben/aendern den Link fuers "Grafik vollstaendig geladen"
+    // Methods returning/altering ling for "graphic completely loaded".
     void        SetGrfArrivedLnk( const Link &rLnk ) { aGrfArrivedLnk = rLnk; }
     const Link& GetGrfArrivedLnk() const             { return aGrfArrivedLnk; }
 
-    //ChgLink callen, innerhalb einer Action wird der Ruf verzoegert.
+    //Call ChgLink. When within an action calling will be delayed.
     void CallChgLnk();
 
-    // Abfrage, ob der aktuelle Cursor eine Selektion aufspannt,
-    // also, ob Mark gesetzt und SPoint und Mark unterschiedlich sind.
+    // Check if the current cursor contains a selection, i.e.
+    // if Mark is set and SPoint and Mark are different.
     BOOL HasSelection() const;
 
-    // Abfrage, ob ueberhaupt eine Selektion existiert, sprich der akt. Cursor
-    // aufgespannt oder nicht der einzigste ist.
+    // Check if a selection exists, i.e. if the current cursor comprises a selection.
     inline BOOL IsSelection() const;
     // returns if multiple cursors are available
     inline BOOL IsMultiSelection() const;
 
-    // Abfrage, ob ein kompletter Absatz selektiert wurde
+    // Check if a complete paragraph was selected.
     BOOL IsSelFullPara() const;
-    // Abfrage, ob die Selektion in einem Absatz ist
+
+    // Check if selection is within one paragraph.
     inline BOOL IsSelOnePara() const;
 
-    //Sollte fuer das Clipboard der WaitPtr geschaltet werden.
+    //Should WaitPtr be activated for Clipboard.
     BOOL ShouldWait() const;
 
     /*
-     * liefert das SRectangle, auf dem der Cursor steht.
+     * Returns SRectangle, at which the cursor is located.
      */
     const SwRect &GetCharRect() const { return aCharRect; }
     /*
-     * liefert zurueck, ob der Cursor sich ganz oder teilweise im
-     * sichtbaren Bereich befindet.
+     * Returns if cursor is wholly or partly within visible range.
      */
     BOOL IsCrsrVisible() const { return VisArea().IsOver( GetCharRect() ); }
 
-    // gebe die aktuelle Seitennummer zurueck:
-    // TRUE:  in der der Cursor steht
-    // FALSE: die am oberen Rand sichtbar ist
+    // Return current page number:
+    // TRUE:  in which cursor is located.
+    // FALSE: which is visible at the upper margin.
     void GetPageNum( USHORT &rnPhyNum, USHORT &rnVirtNum,
                      BOOL bAtCrsrPos = TRUE, const BOOL bCalcFrm = TRUE );
-    // bestimme in welche Richtung "leere Seiten" behandelt werden!
-    // (wird benutzt im PhyPage.. )
+    // Determine how "empty pages" are handled
+    // (used in PhyPage).
     USHORT GetNextPrevPageNum( BOOL bNext = TRUE );
 
-    // setze den Cursor auf die Seite "nPage" an den Anfang
+    // Move cursor at the bginning of page "nPage".
     BOOL GotoPage( USHORT nPage );
 
-    // gebe alle Dokumentseiten zurueck
     USHORT GetPageCnt();
 
-    // Gehe zur naechsten Selection
     BOOL GoNextCrsr();
-    // gehe zur vorherigen Selection
+
     BOOL GoPrevCrsr();
 
     // at CurCrsr.SPoint
@@ -577,9 +574,9 @@ public:
     // end of the node)
     String GetText() const;
 
-    // pruefe ob vom aktuellen Crsr der SPoint/Mark in einer Tabelle stehen
+    // Check of SPoint or Mark of current cursor are placed within a table.
     inline const SwTableNode* IsCrsrInTbl( BOOL bIsPtInTbl = TRUE ) const;
-    //
+
     inline Point& GetCrsrDocPos( BOOL bPoint = TRUE ) const;
     inline BOOL IsCrsrPtAtEnd() const;
 
@@ -686,9 +683,10 @@ public:
     // get the nth character from the start or end of the  current selection
     sal_Unicode GetChar( BOOL bEnd = TRUE, long nOffset = 0 );
     BOOL ExtendSelection( BOOL bEnd = TRUE, xub_StrLen nCount = 1 );
-    // setze nur den sichtbaren Cursor an die angegebene Dokument-Pos.
-    // returnt FALSE: wenn der ob der SPoint vom Layout korrigiert wurde.
-    // (wird zum Anzeigen von Drag&Drop/Copy-Cursor benoetigt)
+
+    // Place only the visible cursor at the given position in the document.
+    // Return FALSE if SPoint was corrected by layout.
+    // (This is needed for displaying the Drag&Drop/Copy-Cursor.)
     BOOL SetVisCrsr( const Point &rPt );
     inline void UnSetVisCrsr();
 
@@ -698,8 +696,8 @@ public:
                                             USHORT nResType = USHRT_MAX );
     BOOL GotoFld( const SwFmtFld& rFld );
 
-    // returne die Anzahl der Cursor im Ring (Flag besagt ob man nur
-    // aufgepspannte haben will - sprich etwas selektiert ist (Basic))
+    // Return number of cursors in ring (The flag indicates whether
+    // only cursors containing selections are requested).
     USHORT GetCrsrCnt( BOOL bAll = TRUE ) const;
 
     // Char Travelling - methods (in crstrvl1.cxx)
@@ -734,7 +732,7 @@ public:
     // Used for Drag&Drop/Clipboard-Paste in tables
     BOOL ParkTblCrsr();
 
-    // gibt es nicht aufgespannte Attribute?
+    // Non expanded attributes?
     BOOL IsGCAttr() const { return bGCAttr; }
     void ClearGCAttr() { bGCAttr = FALSE; }
     void    UpdateAttr() {  bGCAttr = TRUE; }
@@ -743,8 +741,8 @@ public:
     BOOL IsAllProtect() const { return bAllProtect; }
 
 #ifdef SW_CRSR_TIMER
-    // setze das Flag am VisCrsr, ob dieser ueber Timer getriggert (TRUE)
-    // oder direkt (FALSE) angezeigt wird. (default ist Timer getriggert)
+    // Set flag at VisCrsr. Is it triggered by Timer (TRUE) or directly (FALSE).
+    // Default is triggert by Timer.
     BOOL ChgCrsrTimerFlag( BOOL bTimerOn = TRUE );
 #endif
 
