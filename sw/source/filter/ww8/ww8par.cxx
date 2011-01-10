@@ -4557,13 +4557,13 @@ namespace
     void DecryptRC4(msfilter::MSCodec_Std97& rCtx, SvStream &rIn, SvStream &rOut)
     {
         rIn.Seek(STREAM_SEEK_TO_END);
-        ULONG nLen = rIn.Tell();
+        const sal_Size nLen = rIn.Tell();
         rIn.Seek(0);
 
         sal_uInt8 in[WW_BLOCKSIZE];
-        for (ULONG nI = 0, nBlock = 0; nI < nLen; nI += WW_BLOCKSIZE, ++nBlock)
+        for (sal_Size nI = 0, nBlock = 0; nI < nLen; nI += WW_BLOCKSIZE, ++nBlock)
         {
-            ULONG nBS = (nLen - nI > WW_BLOCKSIZE) ? WW_BLOCKSIZE : nLen - nI;
+            sal_Size nBS = (nLen - nI > WW_BLOCKSIZE) ? WW_BLOCKSIZE : nLen - nI;
             rIn.Read(in, nBS);
             rCtx.InitCipher(nBlock);
             rCtx.Decode(in, nBS, in, nBS);
@@ -4768,12 +4768,23 @@ ULONG SwWW8ImplReader::LoadThroughDecryption(SwPaM& rPaM ,WW8Glossary *pGloss)
                     {
                         nErrRet = 0;
 
+                        pTempMain = MakeTemp(aDecryptMain);
+
+                        pStrm->Seek(0);
+                        const sal_Size nUnencryptedHdr = 0x44;
+                        sal_uInt8 *pIn = new sal_uInt8[nUnencryptedHdr];
+                        pStrm->Read(pIn, nUnencryptedHdr);
+
+                        DecryptRC4(aCtx, *pStrm, aDecryptMain);
+
+                        aDecryptMain.Seek(0);
+                        aDecryptMain.Write(pIn, nUnencryptedHdr);
+                        delete [] pIn;
+
+
                         pTempTable = MakeTemp(aDecryptTable);
                         DecryptRC4(aCtx, *pTableStream, aDecryptTable);
                         pTableStream = &aDecryptTable;
-
-                        pTempMain = MakeTemp(aDecryptMain);
-                        DecryptRC4(aCtx, *pStrm, aDecryptMain);
 
                         if (!pDataStream || pDataStream == pStrm)
                             pDataStream = &aDecryptMain;
