@@ -43,7 +43,7 @@ $(call gb_TestFixture_get_clean_target,%) : $(call gb_LinkTarget_get_clean_targe
 
 .PHONY : $(call gb_TestFixture_get_target,%)
 $(call gb_TestFixture_get_target,%) : $(gb_TestFixture_CPPTESTTARGET)
-    $(call gb_Output_announce,$*,$(true),TF ,2)
+    $(call gb_Output_announce,$*,$(true),CUT,2)
     $(call gb_Helper_abbreviate_dirs_native,\
         $(gb_TestFixture_CPPTESTCOMMAND) $(call gb_LinkTarget_get_target,$(call gb_TestFixture_get_linktargetname,$(call gb_TestFixture_get_filename,$*))))
 

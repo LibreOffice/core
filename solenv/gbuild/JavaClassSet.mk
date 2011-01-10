@@ -29,17 +29,16 @@ gb_JavaClassSet_REPOSITORYNAMES := $(gb_Helper_REPOSITORYNAMES)
 gb_JavaClassSet_JAVACCOMMAND := $(JAVACOMPILER)
 
 define gb_JavaClassSet__command
-$(info $(1) $(2))
 $(call gb_Helper_abbreviate_dirs_native,\
     mkdir -p $(dir $(1)) && \
-    $(gb_JavaClassSet_JAVACCOMMAND) -cp $(CLASSPATH) -d $(dir $(1)) $(2) && \
+    $(gb_JavaClassSet_JAVACCOMMAND) -cp $(CLASSPATH) -d $(call gb_JavaClassSet_get_classdir,$(2)) $(3) && \
     touch $(1))
 
 endef
 
 define gb_JavaClassSet__rules
 $$(call gb_JavaClassSet_get_repo_target,$(1),%) :
-    $$(call gb_JavaClassSet__command,$$@,$$?)
+    $$(call gb_JavaClassSet__command,$$@,$$*,$$?)
 
 $$(call gb_JavaClassSet_get_target,%) : $$(call gb_JavaClassSet_get_repo_target,$(1),%)
     $$(call gb_Output_announce,$$*,$$(true),JCS,3)

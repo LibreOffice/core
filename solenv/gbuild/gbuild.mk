@@ -203,6 +203,7 @@ include $(foreach class, \
     PrecompiledHeaders \
     TestFixture \
     JavaClassSet \
+    JunitTest \
     Module \
 ,$(GBUILDDIR)/$(class).mk)
 
