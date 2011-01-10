@@ -1169,7 +1169,7 @@ ScFuncRes::ScFuncRes( ResId &aRes, ScFuncDesc* pDesc, bool & rbSuppressed )
     }
 
     pDesc->pFuncName = new ::rtl::OUString( ScCompiler::GetNativeSymbol( static_cast<OpCode>( aRes.GetId())));
-    pDesc->pFuncDesc = (::rtl::OUString*)(new String(ScResId(1)));
+    pDesc->pFuncDesc = ResId::toString(ScResId(1));
 
     if (nArgs)
     {
@@ -1177,8 +1177,8 @@ ScFuncRes::ScFuncRes( ResId &aRes, ScFuncDesc* pDesc, bool & rbSuppressed )
         pDesc->ppDefArgDescs = new ::rtl::OUString*[nArgs];
         for (USHORT i = 0; i < nArgs; i++)
         {
-            pDesc->ppDefArgNames[i] = (::rtl::OUString*)(new String(ScResId(2*(i+1)  )));
-            pDesc->ppDefArgDescs[i] = (::rtl::OUString*)(new String(ScResId(2*(i+1)+1)));
+            pDesc->ppDefArgNames[i] = ResId::toString(ScResId(2*(i+1)  ));
+            pDesc->ppDefArgDescs[i] = ResId::toString(ScResId(2*(i+1)+1));
         }
     }
 
@@ -1459,9 +1459,9 @@ void ScFuncDesc::Clear()
 
 ::rtl::OUString ScFuncDesc::GetParamList() const
 {
-    const String& sep = ScCompiler::GetNativeSymbol(ocSep);
+    ::rtl::OUString sep(ScCompiler::GetNativeSymbol(ocSep));
 
-    ::rtl::OUString aSig;
+    ::rtl::OUStringBuffer aSig;
 
     if ( nArgCount > 0 )
     {
@@ -1476,11 +1476,11 @@ void ScFuncDesc::Clear()
                 else
                 {
                     nLastAdded = i;
-                    aSig += *(ppDefArgNames[i]);
+                    aSig.append(*(ppDefArgNames[i]));
                     if ( i != nArgCount-1 )
                     {
-                        aSig += ::rtl::OUString(sep);
-                        aSig += ::rtl::OUString::createFromAscii( " " );
+                        aSig.append(sep);
+                        aSig.appendAscii( " " );
                     }
                 }
             }
@@ -1488,7 +1488,7 @@ void ScFuncDesc::Clear()
             // remove one "; "
             if (nLastSuppressed < nArgCount && nLastAdded < nLastSuppressed &&
                     aSig.getLength() >= 2)
-                aSig = aSig.copy(0,aSig.getLength() - 2);
+                aSig.setLength(aSig.getLength() - 2);
         }
         else
         {
@@ -1497,52 +1497,52 @@ void ScFuncDesc::Clear()
             {
                 if (!pDefArgFlags[nArg].bSuppress)
                 {
-                    aSig += *(ppDefArgNames[nArg]);
-                    aSig += ::rtl::OUString(sep);
-                    aSig += ::rtl::OUString::createFromAscii( " " );
+                    aSig.append(*(ppDefArgNames[nArg]));
+                    aSig.append(sep);
+                    aSig.appendAscii( " " );
                 }
             }
             /* NOTE: Currently there are no suppressed var args parameters. If
              * there were, we'd have to cope with it here and above for the fix
              * parameters. For now parameters are always added, so no special
              * treatment of a trailing "; " necessary. */
-            aSig += *(ppDefArgNames[nFix]);
-            aSig += ::rtl::OUString('1');
-            aSig += ::rtl::OUString(sep);
-            aSig += ::rtl::OUString::createFromAscii( " " );
-            aSig += *(ppDefArgNames[nFix]);
-            aSig += ::rtl::OUString('2');
-            aSig += ::rtl::OUString(sep);
-            aSig += ::rtl::OUString::createFromAscii(" ... " );
+            aSig.append(*(ppDefArgNames[nFix]));
+            aSig.appendAscii("1");
+            aSig.append(sep);
+            aSig.appendAscii( " " );
+            aSig.append(*(ppDefArgNames[nFix]));
+            aSig.appendAscii("2");
+            aSig.append(sep);
+            aSig.appendAscii(" ... " );
         }
     }
 
-    return aSig;
+    return aSig.makeStringAndClear();
 }
 
 //------------------------------------------------------------------------
 
 ::rtl::OUString ScFuncDesc::getSignature() const
 {
-    ::rtl::OUString aSig;
+    ::rtl::OUStringBuffer aSig;
 
     if(pFuncName)
     {
-        aSig = *pFuncName;
+        aSig.append(*pFuncName);
 
         ::rtl::OUString aParamList = GetParamList();
         if( aParamList.getLength() )
         {
-            aSig += ::rtl::OUString::createFromAscii( "( " );
-            aSig += aParamList;
+            aSig.appendAscii( "( " );
+            aSig.append(aParamList);
             // U+00A0 (NBSP) prevents automatic line break
-            aSig += ::rtl::OUString( static_cast< sal_Unicode >(0xA0) );
-            aSig += ::rtl::OUString( ')' );
+            aSig.append( static_cast< sal_Unicode >(0xA0) );
+            aSig.appendAscii( ")" );
         }
         else
-            aSig += ::rtl::OUString::createFromAscii( "()" );
+            aSig.appendAscii( "()" );
     }
-    return aSig;
+    return aSig.makeStringAndClear();
 }
 
 //------------------------------------------------------------------------
@@ -1851,7 +1851,7 @@ void ScFunctionMgr::fillLastRecentlyUsedFunctions(::std::vector< const formula::
     }
 
     ::std::auto_ptr<ScResourcePublisher> pCategories( new ScResourcePublisher( ScResId( RID_FUNCTION_CATEGORIES ) ) );
-    return (::rtl::OUString)String(ScResId((USHORT)_nCategoryNumber));
+    return *ResId::toString(ScResId((USHORT)_nCategoryNumber));
 }
 sal_Unicode ScFunctionMgr::getSingleToken(const formula::IFunctionManager::EToken _eToken) const
 {
