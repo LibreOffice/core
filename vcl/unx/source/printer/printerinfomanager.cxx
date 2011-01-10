@@ -328,7 +328,7 @@ void PrinterInfoManager::initialize()
                         m_aGlobalDefaults.m_aContext.
                         setValue( pKey,
                         aValue.Equals( "*nil" ) ? NULL : pKey->getValue( String( aValue, RTL_TEXTENCODING_ISO_8859_1 ) ),
-                        TRUE );
+                        sal_True );
                     }
                 }
                 else if( aKey.Len() > 10 && aKey.CompareTo("SubstFont_", 10 ) == COMPARE_EQUAL )
@@ -533,7 +533,7 @@ void PrinterInfoManager::initialize()
                             aPrinter.m_aInfo.m_aContext.
                             setValue( pKey,
                             aValue.Equals( "*nil" ) ? NULL : pKey->getValue( String( aValue, RTL_TEXTENCODING_ISO_8859_1 ) ),
-                            TRUE );
+                            sal_True );
                         }
                     }
                     else if( aKey.Len() > 10 && aKey.CompareTo("SubstFont_", 10 ) == COMPARE_EQUAL )

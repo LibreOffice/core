@@ -193,14 +193,14 @@ SalFrame* GtkInstance::CreateFrame( SalFrame* pParent, sal_uInt32 nStyle )
     return new GtkSalFrame( pParent, nStyle );
 }
 
-SalFrame* GtkInstance::CreateChildFrame( SystemParentData* pParentData, ULONG )
+SalFrame* GtkInstance::CreateChildFrame( SystemParentData* pParentData, sal_uInt32 )
 {
     SalFrame* pFrame = new GtkSalFrame( pParentData );
 
     return pFrame;
 }
 
-SalObject* GtkInstance::CreateObject( SalFrame* pParent, SystemWindowData* pWindowData, BOOL bShow )
+SalObject* GtkInstance::CreateObject( SalFrame* pParent, SystemWindowData* pWindowData, sal_Bool bShow )
 {
     // there is no method to set a visual for a GtkWidget
     // so we need the X11SalObject in that case

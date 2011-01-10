@@ -410,7 +410,7 @@ PrinterJob::StartJob (
     rtl::OUString aFilterWS;
 
     // Creator (this application)
-    aFilterWS = WhitespaceToSpace( rAppName, FALSE );
+    aFilterWS = WhitespaceToSpace( rAppName, sal_False );
     WritePS (mpJobHeader, "%%Creator: (");
     WritePS (mpJobHeader, aFilterWS);
     WritePS (mpJobHeader, ")\n");
@@ -448,14 +448,14 @@ PrinterJob::StartJob (
     * use the filename, if it contains only ascii
     * else omit %%Title
     */
-    aFilterWS = WhitespaceToSpace( rJobName, FALSE );
+    aFilterWS = WhitespaceToSpace( rJobName, sal_False );
     rtl::OUString aTitle( aFilterWS );
     if( ! isAscii( aTitle ) )
     {
         sal_Int32 nIndex = 0;
         while( nIndex != -1 )
             aTitle = rFileName.getToken( 0, '/', nIndex );
-        aTitle = WhitespaceToSpace( aTitle, FALSE );
+        aTitle = WhitespaceToSpace( aTitle, sal_False );
         if( ! isAscii( aTitle ) )
             aTitle = rtl::OUString();
     }
