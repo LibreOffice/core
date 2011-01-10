@@ -881,7 +881,7 @@ sub get_prj_platform {
         s/\r\n//;
         $line++;
         if ($_ =~ /\snmake\s/) {
-            if ($' =~ /\s*-\s+(\w+)[,\S+]*\s+(\S+)/ ) {
+            if ($' =~ /\s*-\s+(\w+)[,\S+]*\s+(\S+)/ ) { #'
                 my $platform = $1;
                 my $alias = $2;
                 print_error ("There is no correct alias set in the line $line!") if ($alias eq 'NULL');
@@ -973,7 +973,7 @@ sub get_deps_hash {
                 $Platform = $1;
                 $Dependencies = $';
                 while ($Dependencies =~ /,(\w+)/o) {
-                    $Dependencies = $';
+                    $Dependencies = $'; #'
                 };
                 $Dependencies =~ /\s+(\S+)\s+/o;
                 $DirAlias = $1;
@@ -985,7 +985,7 @@ sub get_deps_hash {
                 delete $DeadDependencies{$DirAlias} if (defined $DeadDependencies{$DirAlias});
                 print_error("Directory alias $DirAlias is defined at least twice!! Please, correct build.lst in module $module_to_build") if (defined $$dependencies_hash{$DirAlias});
                 $PlatformHash{$DirAlias}++;
-                $Dependencies = $';
+                $Dependencies = $'; #'
                 print_error("$module_to_build/prj/build.lst has wrongly written dependencies string:\n$_\n") if (!$Dependencies);
                 $deps_hash{$_}++ foreach (GetDependenciesArray($Dependencies));
                 $$dependencies_hash{$DirAlias} = \%deps_hash;
@@ -1349,7 +1349,7 @@ sub GetDependenciesArray {
         print_error("Project $prj has wrongly written dependencies string:\n $string") if (!$DepString);
         $DepString =~ /(\S+)\s*/o;
         $ParentPrj = $1;
-        $DepString = $';
+        $DepString = $'; #'
         if ($ParentPrj =~ /\.(\w+)$/o) {
             $ParentPrj = $`;
             if (($prj_platform{$ParentPrj} ne $1) &&
@@ -1471,7 +1471,7 @@ sub get_options {
         $arg =~ /^--deliver$/    and $deliver = 1                     and next;
         $arg =~ /^(--job=)/       and $custom_job = $' and next;
         $arg =~ /^(--pre_job=)/       and $pre_custom_job = $' and next;
-        $arg =~ /^(--post_job=)/       and $post_custom_job = $' and next;
+        $arg =~ /^(--post_job=)/       and $post_custom_job = $' and next; #'
         $arg =~ /^-d$/    and $deliver = 1                     and next;
         $arg =~ /^--dlv_switch$/    and $dlv_switch = shift @ARGV    and next;
         $arg =~ /^--file$/        and $cmd_file = shift @ARGV             and next;
@@ -2036,7 +2036,7 @@ sub do_custom_job {
     my ($module_job, $dependencies_hash) = @_;
     $module_job =~ /(\s)/o;
     my $module = $`;
-    my $job = $';
+    my $job = $'; #'
     html_store_job_info($dependencies_hash, $module_job);
     my $error_code = 0;
     if ($job eq $pre_job) {
@@ -2490,7 +2490,7 @@ sub get_modules_passed {
             if ($option =~ /(:)/) {
                 $option = $`;
                 print_error("\'--from\' switch collision") if ($build_all_cont);
-                $build_all_cont = $';
+                $build_all_cont = $'; #'
             };
             $$hash_ref{$option}++;
         };
@@ -3396,7 +3396,7 @@ sub run_server {
         my %client_hash = ();
         foreach (@client_data) {
             /(=)/;
-            $client_hash{$`} = $';
+            $client_hash{$`} = $'; #'
         }
         my $pid = $client_hash{pid} . '@' . $client_host;
         if (defined $client_hash{platform}) {
@@ -3503,7 +3503,7 @@ sub get_job_string {
     my $log_file = $jobs_hash{$job_dir}->{LONG_LOG_PATH};
     my $full_job_dir = $job_dir;
     if ($job_dir =~ /(\s)/o) {
-        $job = $';
+        $job = $'; #'
         $job = $deliver_command if ($job eq $post_job);
         $full_job_dir = $module_paths{$`};
     }
