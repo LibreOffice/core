@@ -245,7 +245,7 @@ namespace sfx2 {
     class LinkManager;
 }
 
-//PageDescriptor-Schnittstelle, Array hier wegen inlines.
+// PageDescriptor-interface, Array because of inlines.
 typedef SwPageDesc* SwPageDescPtr;
 SV_DECL_PTRARR_DEL( SwPageDescs, SwPageDescPtr, 4, 4 )
 
@@ -288,16 +288,16 @@ class SW_DLLPUBLIC SwDoc :
     SwNodes     aUndoNodes;             // content for undo
     SwAttrPool* mpAttrPool;             // attribute pool
     SwPageDescs aPageDescs;             // PageDescriptors
-    Link        aOle2Link;              // OLE 2.0-Benachrichtigung
+    Link        aOle2Link;              // OLE 2.0-notification
     /* @@@MAINTAINABILITY-HORROR@@@
        Timer should not be members of the model
     */
-    Timer       aIdleTimer;             // der eigene IdleTimer
+    Timer       aIdleTimer;             // Own IdleTimer
     Timer       aOLEModifiedTimer;      // Timer for update modified OLE-Objecs
     SwDBData    aDBData;                // database descriptor
     ::com::sun::star::uno::Sequence <sal_Int8 > aRedlinePasswd;
     String      sTOIAutoMarkURL;        // ::com::sun::star::util::URL of table of index AutoMark file
-    SvStringsDtor aPatternNms;          // Array fuer die Namen der Dokument-Vorlagen
+    SvStringsDtor aPatternNms;          // Array for names of document-templates
     com::sun::star::uno::Reference<com::sun::star::container::XNameContainer>
         xXForms;                        // container with XForms models
     mutable com::sun::star::uno::Reference< com::sun::star::linguistic2::XProofreadingIterator > m_xGCIterator;
@@ -306,11 +306,11 @@ class SW_DLLPUBLIC SwDoc :
     const ::boost::scoped_ptr< ::sw::MetaFieldManager > m_pMetaFieldManager;
 
     // -------------------------------------------------------------------
-    // die Pointer
-                                //Defaultformate
+    // Pointer
+                                //Default formats.
     SwFrmFmt        *pDfltFrmFmt;
      SwFrmFmt       *pEmptyPageFmt;     // Format for the default empty page
-    SwFrmFmt        *pColumnContFmt;    // Format fuer Spaltencontainer
+    SwFrmFmt        *pColumnContFmt;    // Format for column container
     SwCharFmt       *pDfltCharFmt;
     SwTxtFmtColl    *pDfltTxtFmtColl;   // Defaultformatcollections
     SwGrfFmtColl    *pDfltGrfFmtColl;
@@ -319,51 +319,49 @@ class SW_DLLPUBLIC SwDoc :
     SwCharFmts      *pCharFmtTbl;
     SwSpzFrmFmts    *pSpzFrmFmtTbl;
     SwSectionFmts   *pSectionFmtTbl;
-    SwFrmFmts       *pTblFrmFmtTbl;     // spz. fuer Tabellen
+    SwFrmFmts       *pTblFrmFmtTbl;     // For tables
     SwTxtFmtColls   *pTxtFmtCollTbl;    // FormatCollections
     SwGrfFmtColls   *pGrfFmtCollTbl;
 
-    SwTOXTypes      *pTOXTypes;         // Verzeichnisse
+    SwTOXTypes      *pTOXTypes;         // Tables/indices
     SwDefTOXBase_Impl * pDefTOXBases;   // defaults of SwTOXBase's
 
-    SwRootFrm       *pLayout;           // Rootframe des spezifischen Layouts.
+    SwRootFrm       *pLayout;           // Rootframe of the specific layout.
     SdrModel        *pDrawModel;        // StarView Drawing
 
     SwUndos         *pUndos;            // Undo/Redo History
 
-    SwDocUpdtFld    *pUpdtFlds;         // Struktur zum Field-Update
-    SwFldTypes      *pFldTypes;         // Feldtypen
-    SwNewDBMgr      *pNewDBMgr;         // Pointer auf den neuen DBMgr fuer
-                                        // Evaluierung der DB-Fields
+    SwDocUpdtFld    *pUpdtFlds;         // Struct for updating fields
+    SwFldTypes      *pFldTypes;
+    SwNewDBMgr      *pNewDBMgr;         // Pointer to the new DBMgr for
+                                        // evaluation of DB-fields.
 
     VirtualDevice   *pVirDev;           // can be used for formatting
     SfxPrinter      *pPrt;              // can be used for formatting
     SwPrintData     *pPrtData;          // Print configuration
 
-    SwDoc           *pGlossaryDoc;      // Pointer auf das Glossary-Dokument. Dieses
+    SwDoc           *pGlossaryDoc;      // Pointer to glossary-document.
 
     SwNumRule       *pOutlineRule;
     SwFtnInfo       *pFtnInfo;
     SwEndNoteInfo   *pEndNoteInfo;
     SwLineNumberInfo*pLineNumberInfo;
     SwFtnIdxs       *pFtnIdxs;
-    SwDocStat       *pDocStat;          // Statistic Informationen
-    SvxMacroTableDtor *pMacroTable;     // Tabelle der dokumentglobalen Macros
+    SwDocStat       *pDocStat;          // Statistics information.
+    SvxMacroTableDtor *pMacroTable;     // table of macros.
 
-    SwDocShell      *pDocShell;         // Ptr auf die SfxDocShell vom Doc
-    SfxObjectShellRef* pDocShRef;     // fuers Kopieren von OLE-Nodes (wenn keine
-                                        // DocShell gesetzt ist, muss dieser
-                                        // Ref-Pointer gesetzt sein!!!!)
-    sfx2::LinkManager   *pLinkMgr;          // Liste von Verknuepften (Grafiken/DDE/OLE)
+    SwDocShell      *pDocShell;         // Ptr to SfxDocShell of Doc.
+    SfxObjectShellRef* pDocShRef;       // For copying OLE-nodes. (If no DocShell
+                                        // is set, this Ref-Pointer must be set!!).
 
-    SwAutoCorrExceptWord *pACEWord;     // fuer die automatische Uebernahme von
-                                        // autokorrigierten Woertern, die "zurueck"
-                                        // verbessert werden
-    SwURLStateChanged *pURLStateChgd;   // SfxClient fuer Aenderungen in der
-                                        // INetHistory
-    SvNumberFormatter *pNumberFormatter;    // NumFormatter fuer die Tabellen/Felder
+    sfx2::LinkManager   *pLinkMgr;      // List of linked stuff (graphics/DDE/OLE).
 
-    mutable SwNumRuleTbl    *pNumRuleTbl;           // Liste aller benannten NumRules
+    SwAutoCorrExceptWord *pACEWord;     // For the automated takeover of
+                                        // auto-corrected words that are "re-corrected".
+    SwURLStateChanged *pURLStateChgd;   // SfxClient for changes in INetHistory
+    SvNumberFormatter *pNumberFormatter;// NumFormatter for tables / fields
+
+    mutable SwNumRuleTbl    *pNumRuleTbl;   // List of all named NumRules.
 
     // Hash map to find numrules by name
     mutable std::hash_map<String, SwNumRule *, StringHash> maNumRuleMap;
@@ -374,13 +372,12 @@ class SW_DLLPUBLIC SwDoc :
     // relation between list style and its default list
     tHashMapForLists maListStyleLists;
 
-    SwRedlineTbl    *pRedlineTbl;           // Liste aller Redlines
-    String          *pAutoFmtRedlnComment;  // Kommentar fuer Redlines, die
-                                        // uebers Autoformat eingefuegt werden
+    SwRedlineTbl    *pRedlineTbl;           // List of all Redlines.
+    String          *pAutoFmtRedlnComment;  // Comment for Redlines inserted via AutoFormat.
+
     SwUnoCrsrTbl    *pUnoCrsrTbl;
 
-    SwPagePreViewPrtData *pPgPViewPrtData;      // Einzuege/Abstaende fuers
-                                        // Drucken der Seitenansicht
+    SwPagePreViewPrtData *pPgPViewPrtData;  // Indenting / spacing for printing of page view.
     SwPaM           *pExtInputRing;
 
     SwLayouter      *pLayouter;     // ::com::sun::star::frame::Controller for complex layout formatting
@@ -416,28 +413,29 @@ private:
 
     // -------------------------------------------------------------------
     // other
-    sal_uInt16  nUndoPos;           // akt. Undo-InsertPosition (for Redo!)
-    sal_uInt16  nUndoSavePos;       // Position im Undo-Array, ab der das Doc
-                                    // nicht als modifiziert gilt
-    sal_uInt16  nUndoCnt;           // Anzahl von Undo Aktionen
-    sal_uInt16  nUndoSttEnd;        // != 0 -> innerhalb einer Klammerung
+    sal_uInt16  nUndoPos;           // act. Undo-InsertPosition (for Redo!).
+    sal_uInt16  nUndoSavePos;       // Position in Undo-Array, at which document.
+                                    // is regarded as not modified.
 
-    sal_uInt16 nAutoFmtRedlnCommentNo;  // SeqNo fuers UI-seitige zusammenfassen
-                                    // von AutoFmt-Redlines. Wird vom SwAutoFmt
-                                    // verwaltet!
-    sal_uInt16  nLinkUpdMode;       // UpdateMode fuer Links
-    SwFldUpdateFlags    eFldUpdMode;        // Mode fuer Felder/Charts automatisch aktualisieren
-    RedlineMode_t eRedlineMode;     // aktueller Redline Modus
+    sal_uInt16  nUndoCnt;           // Count of Undo Actions.
+    sal_uInt16  nUndoSttEnd;        // != 0 -> within parentheses.
+
+    sal_uInt16 nAutoFmtRedlnCommentNo;  // SeqNo for conjoining of AutoFmt-Redlines.
+                                        // by the UI. Managed by SwAutoFmt!
+
+    sal_uInt16  nLinkUpdMode;           // UpdateMode for links.
+    SwFldUpdateFlags    eFldUpdMode;    // Automatically Update Mode for fields/charts.
+    RedlineMode_t eRedlineMode;         // Current Redline Mode.
     SwCharCompressType eChrCmprType;    // for ASIAN: compress punctuation/kana
 
     sal_Int32   mReferenceCount;
     sal_Int32   mIdleBlockCount;
-    sal_Int8    nLockExpFld;        // Wenn != 0 hat UpdateExpFlds() keine Wirkung
+    sal_Int8    nLockExpFld;        // If != 0 UpdateExpFlds() has no effect!
 
     /* Draw Model Layer IDs
-     * LayerIds, Heaven == ueber dem Dokument
-     * Hell   == unter dem Dokument
-     * Controls == ganz oben
+     * LayerIds, Heaven == above document
+     *           Hell   == below document
+     *         Controls == at the very top
      */
     SdrLayerID  nHeaven;
     SdrLayerID  nHell;
@@ -446,47 +444,47 @@ private:
     SdrLayerID  nInvisibleHell;
     SdrLayerID  nInvisibleControls;
 
-    bool mbGlossDoc              : 1;    //TRUE: ist ein Textbaustein Dokument
-    bool mbModified              : 1;    //TRUE: Dokument ist veraendert
-    bool mbDtor                  : 1;    //TRUE: ist im SwDoc DTOR
-                                         //      leider auch temporaer von
-                                         //      SwSwgReader::InLayout(), wenn fehlerhafte
-                                         //      Frames geloescht werden muessen
-    bool mbUndo                  : 1;    // TRUE: Undo eingeschaltet
-    bool mbGroupUndo             : 1;    // TRUE: Undos werden gruppiert
-    bool mbPageNums              : 1;    // TRUE: es gibt virtuelle Seitennummern
-    bool mbLoaded                : 1;    // TRUE: ein geladenes Doc
-    bool mbUpdateExpFld          : 1;    // TRUE: Expression-Felder updaten
-    bool mbNewDoc                : 1;    // TRUE: neues Doc
-    bool mbNewFldLst             : 1;    // TRUE: Felder-Liste neu aufbauen
-    bool mbCopyIsMove            : 1;    // TRUE: Copy ist ein verstecktes Move
-    bool mbNoDrawUndoObj         : 1;    // TRUE: keine DrawUndoObjecte speichern
-    bool mbVisibleLinks          : 1;    // TRUE: Links werden sichtbar eingefuegt
-    bool mbBrowseMode            : 1;    // TRUE: Dokument im BrowseModus anzeigen
-    bool mbInReading             : 1;    // TRUE: Dokument wird gerade gelesen
-    bool mbInXMLImport           : 1;    // TRUE: During xml import, attribute portion building is not necessary
-    bool mbUpdateTOX             : 1;    // TRUE: nach Dokument laden die TOX Updaten
-    bool mbInLoadAsynchron       : 1;    // TRUE: Dokument wird gerade asynchron geladen
-    bool mbHTMLMode              : 1;    // TRUE: Dokument ist im HTMLMode
-    bool mbInCallModified        : 1;    // TRUE: im Set/Reset-Modified Link
-    bool mbIsGlobalDoc           : 1;    // TRUE: es ist ein GlobalDokument
-    bool mbGlblDocSaveLinks      : 1;    // TRUE: im GlobalDoc. gelinkte Sect. mit speichern
-    bool mbIsLabelDoc            : 1;    // TRUE: es ist ein Etiketten-Dokument
-    bool mbIsAutoFmtRedline      : 1;    // TRUE: die Redlines werden vom Autoformat aufgezeichnet
-    bool mbOLEPrtNotifyPending   : 1;    // TRUE: Printer  ist geaendert und beim
-                                         //       Erzeugen der ::com::sun::star::sdbcx::View ist eine Benachrichtigung
-                                         //       der OLE-Objekte PrtOLENotify() notwendig.
-    bool mbAllOLENotify          : 1;    // True: Benachrichtigung aller Objekte ist notwendig
-    bool mbIsRedlineMove         : 1;    // True: die Redlines werden in/aus der Section verschoben
+    bool mbGlossDoc              : 1;    //TRUE: glossary document.
+    bool mbModified              : 1;    //TRUE: document has changed.
+    bool mbDtor                  : 1;    //TRUE: is in SwDoc DTOR.
+                                         //      and unfortunately temorarily also in
+                                         //      SwSwgReader::InLayout() when flawed
+                                         //      frames need deletion.
+    bool mbUndo                  : 1;    // TRUE: Undo switched on.
+    bool mbGroupUndo             : 1;    // TRUE: Undos are grouped.
+    bool mbPageNums              : 1;    // TRUE: There are virtual page numbers.
+    bool mbLoaded                : 1;    // TRUE: Doc loaded.
+    bool mbUpdateExpFld          : 1;    // TRUE: Update expression fields.
+    bool mbNewDoc                : 1;    // TRUE: new Doc.
+    bool mbNewFldLst             : 1;    // TRUE: Rebuild field-list.
+    bool mbCopyIsMove            : 1;    // TRUE: Copy is a hidden Move.
+    bool mbNoDrawUndoObj         : 1;    // TRUE: Do not save DrawUndoObjects.
+    bool mbVisibleLinks          : 1;    // TRUE: Links are inserted visibly.
+    bool mbBrowseMode            : 1;    // TRUE: Show document in browser mode.
+    bool mbInReading             : 1;    // TRUE: Document is in the process of being read.
+    bool mbInXMLImport           : 1;    // TRUE: During xml import, attribute portion building is not necessary.
+    bool mbUpdateTOX             : 1;    // TRUE: After loading document, update TOX.
+    bool mbInLoadAsynchron       : 1;    // TRUE: Document is in the process of being loaded asynchronously.
+    bool mbHTMLMode              : 1;    // TRUE: Document is in HTMLMode.
+    bool mbInCallModified        : 1;    // TRUE: in Set/Reset-Modified link.
+    bool mbIsGlobalDoc           : 1;    // TRUE: It's a global document.
+    bool mbGlblDocSaveLinks      : 1;    // TRUE: Save sections linked in global document.
+    bool mbIsLabelDoc            : 1;    // TRUE: It's a label document.
+    bool mbIsAutoFmtRedline      : 1;    // TRUE: Redlines are recorded by Autoformat.
+    bool mbOLEPrtNotifyPending   : 1;    // TRUE: Printer has changed. At creation of
+                                         //       ::com::sun::star::sdbcx::View
+                                         //       notification of OLE-Objects PrtOLENotify() is required.
+    bool mbAllOLENotify          : 1;    // True: Notification of all objects is required.
+    bool mbIsRedlineMove         : 1;    // True: Redlines are moved into to / out of the section.
     bool mbInsOnlyTxtGlssry      : 1;    // True: insert 'only text' glossary into doc
     bool mbContains_MSVBasic     : 1;    // True: MS-VBasic exist is in our storage
-    bool mbPurgeOLE              : 1;    // TRUE: Purge OLE-Objects
-    bool mbKernAsianPunctuation  : 1;    // TRUE: kerning also for ASIAN punctuation
-    bool mbReadlineChecked       : 1;    // TRUE: if the query was already shown
+    bool mbPurgeOLE              : 1;    // TRUE: Purge OLE-Objects.
+    bool mbKernAsianPunctuation  : 1;    // TRUE: kerning also for ASIAN punctuation.
+    bool mbReadlineChecked       : 1;    // TRUE: if the query was already shown.
     bool mbLinksUpdated          : 1;    // #i38810#
                                          // flag indicating, that the links have been updated.
-    bool mbClipBoard             : 1;    // true: this document represents the clipboard
-    bool mbColumnSelection       : 1;    // true: this content has bee created by a column selection
+    bool mbClipBoard             : 1;    // TRUE: this document represents the clipboard
+    bool mbColumnSelection       : 1;    // TRUE: this content has bee created by a column selection
                                          //       (clipboard docs only)
 
 #if OSL_DEBUG_LEVEL > 1
@@ -573,7 +571,10 @@ private:
     bool mbUseFormerObjectPos               : 1;    // #i11860#
     bool mbUseFormerTextWrapping            : 1;
     bool mbConsiderWrapOnObjPos             : 1;    // #i28701#
-                                                    // TRUE: object positioning algorithm has consider the wrapping style of                                                    //       the floating screen objects as given by its attribute 'WrapInfluenceOnObjPos'
+                                                    // TRUE: object positioning algorithm has
+                                                    // to consider the wrapping style of
+                                                    // floating screen objects as given by its
+                                                    // attribute 'WrapInfluenceOnObjPos'.
 
     // non-ui-compatibility flags:
     bool mbOldNumbering                             : 1;
@@ -599,23 +600,24 @@ private:
     // COMPATIBILITY FLAGS END
     //
 
-    sal_Bool    mbStartIdleTimer                 ;    // idle timer mode start/stop
+    sal_Bool    mbStartIdleTimer;               // idle timer mode start/stop
 
-    static SwAutoCompleteWord *pACmpltWords;    // Liste aller Worte fuers AutoComplete
-    static sal_uInt16 nUndoActions;     // anzahl von Undo ::com::sun::star::chaos::Action
+    static SwAutoCompleteWord *pACmpltWords;    // List of all words for AutoComplete
+    static sal_uInt16 nUndoActions;             // Count of Undo ::com::sun::star::chaos::Action
 
-    //---------------- private Methods ------------------------------
+    //---------------- private methods ------------------------------
     void checkRedlining(RedlineMode_t& _rReadlineMode);
 
-    sal_Bool DelUndoObj( sal_uInt16 nEnde  );   // loescht alle UndoObjecte vom Anfang
-                                        // bis zum angegebenen Ende
+    sal_Bool DelUndoObj( sal_uInt16 nEnde  );   // Deletes all UndoObjects from the beginning
+                                                // up to the indicated point.
+
     DECL_LINK( AddDrawUndo, SdrUndoAction * );
                                         // DrawModel
-    void DrawNotifyUndoHdl();   // wegen CLOOKs
+    void DrawNotifyUndoHdl();           // Because of CLOOKs
 
-        // nur fuer den internen Gebrauch deshalb privat.
-        // Kopieren eines Bereiches im oder in ein anderes Dokument !
-        // Die Position darf nicht im Bereich liegen !!
+    // Only for internal use and therefore private.
+    // Copy a range within the same or to another document.
+    // Position may not lie within range!
     bool CopyImpl( SwPaM&, SwPosition&, const bool MakeNewFrms /*= true */,
             const bool bCopyAll, SwPaM *const pCpyRng /*= 0*/ ) const;
 
@@ -647,18 +649,18 @@ private:
 
     VirtualDevice& CreateVirtualDevice_() const;
     SfxPrinter& CreatePrinter_() const;
-    void        PrtDataChanged();   //Printer oder JobSetup geandert, es muss
-                                    //fuer entsprechende Invalidierungen und
-                                    //Benachrichtigungen gesorgt werden.
+    void        PrtDataChanged();   // Printer or JobSetup altered.
+                                    // Care has to be taken of the necessary
+                                    // invalidations and notifications.
 
-    // gcc: aFtnInfo::CopyCtor ist private, also muessen wir uns auch schuetzen
+    // gcc: aFtnInfo::CopyCtor is private, therefore we too have to protect ourselves.
     SwDoc( const SwDoc &);
 
-    // fuer Felder:
-    void _InitFieldTypes();     // wird vom CTOR gerufen!!
+    // For fields:
+    void _InitFieldTypes();     // Called by CTOR!!
     void _MakeFldList( int eMode );
 
-    // Datenbankfelder:
+    // Database fields:
     void UpdateDBNumFlds( SwDBNameInfField& rDBFld, SwCalc& rCalc );
     void AddUsedDBToList( SvStringsDtor& rDBNameList,
                           const SvStringsDtor& rUsedDBNames );
@@ -678,21 +680,21 @@ private:
 
     sal_Bool _UnProtectTblCells( SwTable& rTbl );
 
-    // erzeuge Anhand der vorgebenen Collection Teildokumente
-    // falls keine angegeben ist, nehme die Kapitelvorlage der 1. Ebene
+    // Create sub-documents according to the given collection.
+    // If no collection is given, take chapter style of the 1st level.
     sal_Bool SplitDoc( sal_uInt16 eDocType, const String& rPath,
                         const SwTxtFmtColl* pSplitColl );
     sal_Bool SplitDoc( sal_uInt16 eDocType, const String& rPath, int nOutlineLevel = 0 );
 
-    // Charts der angegebenen Tabelle updaten
+    // Update charts of given table.
     void _UpdateCharts( const SwTable& rTbl, ViewShell& rVSh ) const;
 
     BOOL _SelectNextRubyChars( SwPaM& rPam, SwRubyListEntry& rRubyEntry,
                                 USHORT nMode );
 
-    // unser eigener 'IdlTimer' ruft folgende Methode
+    // Our own 'IdleTimer' calls the following method
     DECL_LINK( DoIdleJobs, Timer * );
-    // der CharTimer ruft diese Methode
+    // CharTimer calls this method.
     DECL_LINK( DoUpdateAllCharts, Timer * );
     DECL_LINK( DoUpdateModifiedOLE, Timer * );
 
@@ -822,7 +824,7 @@ public:
     virtual void setUndoNoModifiedPosition( SwUndoNoModifiedPosition );
     virtual SwUndoNoModifiedPosition getUndoNoModifiedPosition() const;
 
-    /** abfragen/setzen der Anzahl von wiederherstellbaren Undo-Actions */
+    /** Query / set count of Undo-Actions. */
     static sal_uInt16 GetUndoActionCount();
     static void SetUndoActionCount(sal_uInt16 nNew);
 
@@ -1054,22 +1056,22 @@ public:
     void SetXMLExport( bool bFlag )     { mbXMLExport = bFlag; }
 #endif
 
-    // liefert zu allen fliegenden Rahmen die Position im Dokument.
-    // Wird ein Pam-Pointer uebergeben, muessen die absatzgebundenen
-    // FlyFrames von der ::com::sun::star::awt::Selection vollstaendig umschlossen sein
+    // Returns positions of all FlyFrames in the document.
+    // If a Pam-Pointer is passed the FlyFrames attached to paragraphes
+    // have to be surrounded completely by ::com::sun::star::awt::Selection.
     // ( Start < Pos < End ) !!!
-    // (wird fuer die Writer benoetigt)
+    // (Required for Writers.)
     void GetAllFlyFmts( SwPosFlyFrms& rPosFlyFmts, const SwPaM* = 0,
                         sal_Bool bDrawAlso = sal_False ) const;
 
-    // wegen swrtf.cxx und define private public, jetzt hier
+    // Because swrtf.cxx and define private public here now.
     SwFlyFrmFmt  *MakeFlyFrmFmt (const String &rFmtName, SwFrmFmt *pDerivedFrom);
     SwDrawFrmFmt *MakeDrawFrmFmt(const String &rFmtName, SwFrmFmt *pDerivedFrom);
 
-    // fuer Flys muss jetzt diese Schnittstelle benutzt
-    // werden. pAnchorPos muss gesetzt sein, wenn keine
-    // Seitenbindung vorliegt UND der ::com::sun::star::chaos::Anchor nicht schon
-    // im FlySet/FrmFmt mit gueltiger CntntPos gesetzt ist
+    // From now on this interface has to be used for Flys.
+    // pAnchorPos must be set, if they are not attached to pages AND
+    // ::com::sun::star::chaos::Anchor is not already set at valid CntntPos
+    // in FlySet/FrmFmt.
     /* new parameter bCalledFromShell
 
        TRUE: An existing adjust item at pAnchorPos is propagated to
@@ -1134,13 +1136,10 @@ public:
     // count words in pam
     void CountWords( const SwPaM& rPaM, SwDocStat& rStat ) const;
 
-    /** ???
-    */
-    // Textbaustein Dokument?
+    // Glossary Document
     void SetGlossDoc( bool bGlssDc = true ) { mbGlossDoc = bGlssDc; }
     bool IsInsOnlyTextGlossary() const      { return mbInsOnlyTxtGlssry; }
 
-    // Abstakt fuellen
     void Summary( SwDoc* pExtDoc, sal_uInt8 nLevel, sal_uInt8 nPara, sal_Bool bImpress );
 
     void ChangeAuthorityData(const SwAuthEntry* pNewData);
@@ -1151,16 +1150,16 @@ public:
                             const Point* pPt = 0 ) const;
     sal_Bool IsInVerticalText( const SwPosition& rPos,
                                const Point* pPt = 0 ) const;
-    /** Database ???
-    */
 
-    /*  Datenbank &&  DB-Manager */
+    /** Database  and DB-Manager
+    */
     void SetNewDBMgr( SwNewDBMgr* pNewMgr )     { pNewDBMgr = pNewMgr; }
     SwNewDBMgr* GetNewDBMgr() const             { return pNewDBMgr; }
     void ChangeDBFields( const SvStringsDtor& rOldNames,
                         const String& rNewName );
     void SetInitDBFields(sal_Bool b);
-    // Von Feldern verwendete Datenbanken herausfinden
+
+    // Find out which databases are used by fields.
     void GetAllUsedDB( SvStringsDtor& rDBNameList,
                        const SvStringsDtor* pAllDBNames = 0 );
 
@@ -1181,13 +1180,12 @@ public:
     void GetGrfNms( const SwFlyFrmFmt& rFmt, String* pGrfName,
                     String* pFltName ) const;
 
-    // setze bei allen Flys ohne Namen einen gueltigen (Wird von den Readern
-    // nach dem Einlesen gerufen )
+    // Set a valid name for all Flys that have none (Called by Readers after reading).
     void SetAllUniqueFlyNames();
 
-        //Zuruecksetzen der Attribute; es werden alle TxtHints und bei
-        //vollstaendiger Selektion harte Formatierung (AUTO-Formate) entfernt
-    // introduce new optional parameter <bSendDataChangedEvents> in order to
+    // Reset attributes. All TxtHints and (if completely selected) all hard-
+    // formated stuff (auto-formats) are removed.
+    // Introduce new optional parameter <bSendDataChangedEvents> in order to
     // control, if the side effect "send data changed events" is triggered or not.
     void ResetAttrs( const SwPaM &rRg,
                      sal_Bool bTxtAttr = sal_True,
@@ -1195,8 +1193,8 @@ public:
                      const bool bSendDataChangedEvents = true );
     void RstTxtAttrs(const SwPaM &rRg, BOOL bInclRefToxMark = FALSE );
 
-        // Setze das Attribut im angegebenen Format. Ist Undo aktiv, wird
-        // das alte in die Undo-History aufgenommen
+    // Set attribute in given format.
+    // If Undo is activated, the old one is listed in Undo-History.
     void SetAttr( const SfxPoolItem&, SwFmt& );
     void SetAttr( const SfxItemSet&, SwFmt& );
 
@@ -1204,22 +1202,23 @@ public:
     void ResetAttrAtFormat( const USHORT nWhichId,
                             SwFmt& rChangedFormat );
 
-        // Setze das Attribut als neues default Attribut in diesem Dokument.
-        // Ist Undo aktiv, wird das alte in die Undo-History aufgenommen
+    // Set attribute as new default attribute in current document.
+    // If Undo is activated, the old one is listed in Undo-History.
     void SetDefault( const SfxPoolItem& );
     void SetDefault( const SfxItemSet& );
 
-    // Erfrage das Default Attribut in diesem Dokument.
+    // Query default attribute in this document.
     const SfxPoolItem& GetDefault( sal_uInt16 nFmtHint ) const;
-    // TextAttribute nicht mehr aufspannen lassen
+
+    // Do not expand text attributes.
     sal_Bool DontExpandFmt( const SwPosition& rPos, sal_Bool bFlag = sal_True );
 
-    /* Formate */
+    /* Formats */
     const SwFrmFmts* GetFrmFmts() const     { return pFrmFmtTbl; }
           SwFrmFmts* GetFrmFmts()           { return pFrmFmtTbl; }
     const SwCharFmts* GetCharFmts() const   { return pCharFmtTbl;}
 
-    /* LayoutFormate (Rahmen, DrawObjecte), mal const mal nicht */
+    /* LayoutFormats (frames, DrawObjects), sometimes const sometimes not  */
     const SwSpzFrmFmts* GetSpzFrmFmts() const   { return pSpzFrmFmtTbl; }
           SwSpzFrmFmts* GetSpzFrmFmts()         { return pSpzFrmFmtTbl; }
 
@@ -1252,7 +1251,7 @@ public:
     SwCharFmt* FindCharFmtByName( const String& rName ) const
         {   return (SwCharFmt*)FindFmtByName( (SvPtrarr&)*pCharFmtTbl, rName ); }
 
-    /* Formatcollections (Vorlagen) */
+    /* Formatcollections (styles) */
     // TXT
     const SwTxtFmtColl* GetDfltTxtFmtColl() const { return pDfltTxtFmtColl; }
     const SwTxtFmtColls *GetTxtFmtColls() const { return pTxtFmtCollTbl; }
@@ -1280,7 +1279,7 @@ public:
 
     void ChkCondColls();
 
-        // GRF
+    // GRF
     const SwGrfFmtColl* GetDfltGrfFmtColl() const   { return pDfltGrfFmtColl; }
     const SwGrfFmtColls *GetGrfFmtColls() const     { return pGrfFmtCollTbl; }
     SwGrfFmtColl *MakeGrfFmtColl(const String &rFmtName,
@@ -1288,7 +1287,7 @@ public:
     SwGrfFmtColl* FindGrfFmtCollByName( const String& rName ) const
         {   return (SwGrfFmtColl*)FindFmtByName( (SvPtrarr&)*pGrfFmtCollTbl, rName ); }
 
-        // Tabellen-Formate
+    // Table formating
     const SwFrmFmts* GetTblFrmFmts() const  { return pTblFrmFmtTbl; }
           SwFrmFmts* GetTblFrmFmts()        { return pTblFrmFmtTbl; }
     sal_uInt16 GetTblFrmFmtCount( sal_Bool bUsed ) const;
@@ -1297,33 +1296,34 @@ public:
     void        DelTblFrmFmt( SwTableFmt* pFmt );
     SwTableFmt* FindTblFmtByName( const String& rName, sal_Bool bAll = sal_False ) const;
 
-    //Rahmenzugriff
-    //iterieren ueber Flys - fuer Basic-Collections
+    //Access to frames.
+    //Iterate over Flys - forr Basic-Collections.
     sal_uInt16 GetFlyCount( FlyCntType eType = FLYCNTTYPE_ALL) const;
     SwFrmFmt* GetFlyNum(sal_uInt16 nIdx, FlyCntType eType = FLYCNTTYPE_ALL);
 
-    // kopiere die Formate in die eigenen Arrays und returne diese
+    // Copy formats in own arrays and return them.
     SwFrmFmt  *CopyFrmFmt ( const SwFrmFmt& );
     SwCharFmt *CopyCharFmt( const SwCharFmt& );
     SwTxtFmtColl* CopyTxtColl( const SwTxtFmtColl& rColl );
     SwGrfFmtColl* CopyGrfColl( const SwGrfFmtColl& rColl );
 
-        // ersetze alle Formate mit denen aus rSource
+    // Replace all formats with those from rSource.
     void ReplaceStyles( SwDoc& rSource );
 
-    // erfrage ob die Absatz-/Zeichen-/Rahmen-/Seiten - Vorlage benutzt wird
+    // Query if style (paragraph- / character- / frame- / page-) is used.
     sal_Bool IsUsed( const SwModify& ) const;
     sal_Bool IsUsed( const SwNumRule& ) const;
 
-        // setze den Namen der neu geladenen Dokument-Vorlage
+    // Set name of newly loaded document template.
     sal_uInt16 SetDocPattern( const String& rPatternName );
-        // gebe den Dok-VorlagenNamen zurueck. !!! Kann auch 0 sein !!!
+
+    // Return name of document template. Can be 0!
     String* GetDocPattern( sal_uInt16 nPos ) const { return aPatternNms[nPos]; }
 
-        // Loesche alle nicht referenzierten FeldTypen
-    void GCFieldTypes();                // impl. in docfld.cxx
+    // Delete all unreferenced field types.
+    void GCFieldTypes();    // impl. in docfld.cxx
 
-        // akt. Dokument mit Textbausteindokument verbinden/erfragen
+    // Query / connect current document with glossary document.
     void SetGlossaryDoc( SwDoc* pDoc ) { pGlossaryDoc = pDoc; }
 
     // travel over PaM Ring
@@ -1342,27 +1342,28 @@ public:
     sal_uInt16 GetPageCount() const;
     const Size GetPageSize( sal_uInt16 nPageNum, bool bSkipEmptyPages ) const;
 
-        //PageDescriptor-Schnittstelle
+    // PageDescriptor interface.
     sal_uInt16 GetPageDescCnt() const { return aPageDescs.Count(); }
     const SwPageDesc& GetPageDesc( const sal_uInt16 i ) const { return *aPageDescs[i]; }
     SwPageDesc* FindPageDescByName( const String& rName,
                                     sal_uInt16* pPos = 0 ) const;
 
-        // kopiere den gesamten PageDesc - ueber Dokumentgrenzen und "tief"!
-        // optional kann das kopieren der PoolFmtId, -HlpId verhindert werden
+    // Copy the complete PageDesc - beyond document and "deep"!
+    // Optionally copying of PoolFmtId, -HlpId can be prevented.
     void CopyPageDesc( const SwPageDesc& rSrcDesc, SwPageDesc& rDstDesc,
                         sal_Bool bCopyPoolIds = sal_True );
 
-        // kopiere die Kopzeile (mit dem Inhalt!) aus dem SrcFmt
-        // ins DestFmt ( auch ueber Doc grenzen hinaus!)
+    // Copy header (with contents) from SrcFmt to DestFmt
+    // (can also be copied into other document).
     void CopyHeader( const SwFrmFmt& rSrcFmt, SwFrmFmt& rDestFmt )
         { CopyPageDescHeaderFooterImpl( true, rSrcFmt, rDestFmt ); }
-        // kopiere die Fusszeile (mit dem Inhalt!) aus dem SrcFmt
-        // ins DestFmt ( auch ueber Doc grenzen hinaus!)
+
+    // Copy footer (with contents) from SrcFmt to DestFmt.
+    // (can also be copied into other document).
     void CopyFooter( const SwFrmFmt& rSrcFmt, SwFrmFmt& rDestFmt )
         { CopyPageDescHeaderFooterImpl( false, rSrcFmt, rDestFmt ); }
 
-        //fuer Reader
+    //For Reader.
 
     SwPageDesc * GetPageDesc( const String & rName );
     SwPageDesc& _GetPageDesc( sal_uInt16 i ) const { return *aPageDescs[i]; }
@@ -1383,14 +1384,14 @@ public:
     // correct this.
     void CheckDefaultPageFmt();
 
-        // Methoden fuer die Verzeichnisse:
-        // - Verzeichnismarke einfuegen loeschen travel
+    // Methods for tables/indices.
+
     sal_uInt16 GetCurTOXMark( const SwPosition& rPos, SwTOXMarks& ) const;
     void DeleteTOXMark( const SwTOXMark* pTOXMark );
     const SwTOXMark& GotoTOXMark( const SwTOXMark& rCurTOXMark,
                                 SwTOXSearch eDir, sal_Bool bInReadOnly );
 
-        // - Verzeichnis einfuegen, und bei Bedarf erneuern
+    //Insert/Renew table/indes.
     const SwTOXBaseSection* InsertTableOf( const SwPosition& rPos,
                                             const SwTOXBase& rTOX,
                                             const SfxItemSet* pSet = 0,
@@ -1408,7 +1409,7 @@ public:
     sal_Bool SetTOXBaseName(const SwTOXBase& rTOXBase, const String& rName);
     void SetTOXBaseProtection(const SwTOXBase& rTOXBase, sal_Bool bProtect);
 
-    // nach einlesen einer Datei alle Verzeichnisse updaten
+    // After reading file update all tables/indices.
     void SetUpdateTOX( bool bFlag = true )     { mbUpdateTOX = bFlag; }
     bool IsUpdateTOX() const                   { return mbUpdateTOX; }
 
@@ -1429,7 +1430,7 @@ public:
     bool IsInXMLImport() const { return mbInXMLImport; }
     void SetInXMLImport( bool bNew ) { mbInXMLImport = bNew; }
 
-    // - Verzeichnis-Typen verwalten
+    // Manage types of tables/indices.
     sal_uInt16 GetTOXTypeCount( TOXTypes eTyp ) const;
     const SwTOXType* GetTOXType( TOXTypes eTyp, sal_uInt16 nId ) const;
     sal_Bool DeleteTOXType( TOXTypes eTyp, sal_uInt16 nId );
@@ -1439,31 +1440,34 @@ public:
     const SwTOXBase*    GetDefaultTOXBase( TOXTypes eTyp, sal_Bool bCreate = sal_False );
     void                SetDefaultTOXBase(const SwTOXBase& rBase);
 
-    // - Schluessel fuer die Indexverwaltung
+    // Key for management of index.
     sal_uInt16 GetTOIKeys( SwTOIKeyType eTyp, SvStringsSort& rArr ) const;
 
-    // Sortieren Tabellen Text
+    // Sort table text.
     sal_Bool SortTbl(const SwSelBoxes& rBoxes, const SwSortOptions&);
     sal_Bool SortText(const SwPaM&, const SwSortOptions&);
 
-        // korrigiere die im Dokument angemeldeten SwPosition-Objecte,
-        // wie z.B. die ::com::sun::star::text::Bookmarks oder die Verzeichnisse.
-        // ist bMoveCrsr gesetzt, verschiebe auch die Crsr
+    // Correct the SwPosition-Objects that are registered with the document
+    // e. g. ::com::sun::star::text::Bookmarks or tables/indices.
+    // If bMoveCrsr is set move Crsr too.
 
-        // Setzt alles in rOldNode auf rNewPos + Offset
+    // Set everything in rOldNode on rNewPos + Offset.
     void CorrAbs( const SwNodeIndex& rOldNode, const SwPosition& rNewPos,
                     const xub_StrLen nOffset = 0, sal_Bool bMoveCrsr = sal_False );
-        // Setzt alles im Bereich von [rStartNode, rEndNode] nach rNewPos
+
+    // Set everything in the range of [rStartNode, rEndNode] to rNewPos.
     void CorrAbs( const SwNodeIndex& rStartNode, const SwNodeIndex& rEndNode,
                     const SwPosition& rNewPos, sal_Bool bMoveCrsr = sal_False );
-        // Setzt alles im Bereich von rRange nach rNewPos
+
+    // Set everything in this range from rRange to rNewPos.
     void CorrAbs( const SwPaM& rRange, const SwPosition& rNewPos,
                     sal_Bool bMoveCrsr = sal_False );
-        // Setzt alles in rOldNode auf relative Pos
+
+    // Set everything in rOldNode to relative Pos.
     void CorrRel( const SwNodeIndex& rOldNode, const SwPosition& rNewPos,
                     const xub_StrLen nOffset = 0, sal_Bool bMoveCrsr = sal_False );
 
-        // GliederungsRegeln erfragen / setzen
+    // Query / set rules for Outline.
     inline SwNumRule* GetOutlineNumRule() const
     {
         return pOutlineRule;
@@ -1471,16 +1475,15 @@ public:
     void SetOutlineNumRule( const SwNumRule& rRule );
     void PropagateOutlineRule();
 
-    // Gliederung - hoch-/runterstufen
+    // Outline - promote / demote.
     sal_Bool OutlineUpDown( const SwPaM& rPam, short nOffset = 1 );
-    // Gliederung - hoch-/runtermoven
-    sal_Bool MoveOutlinePara( const SwPaM& rPam, short nOffset = 1);
-        // zu diesem Gliederungspunkt
-    sal_Bool GotoOutline( SwPosition& rPos, const String& rName ) const;
-    // die Aenderungen an den Gliederungsvorlagen in die OutlineRule uebernehmen
 
-        // setzt, wenn noch keine Numerierung, sonst wird geaendert
-        // arbeitet mit alten und neuen Regeln, nur Differenzen aktualisieren
+    // Ountline - move up / move down.
+    sal_Bool MoveOutlinePara( const SwPaM& rPam, short nOffset = 1);
+
+    sal_Bool GotoOutline( SwPosition& rPos, const String& rName ) const;
+
+    // Accept changes of outline styles for OUtlineRule.
     // re-use unused 3rd parameter
     // Add optional parameter <bResetIndentAttrs> - default value FALSE.
     // If <bResetIndentAttrs> equals true, the indent attributes "before text"
@@ -1522,18 +1525,18 @@ public:
     sal_uInt16 FindNumRule( const String& rName ) const;
     SwNumRule* FindNumRulePtr( const String& rName ) const;
 
-    // loeschen geht nur, wenn die ::com::sun::star::chaos::Rule niemand benutzt!
+    // Deletion only possible if ::com::sun::star::chaos::Rule is not used!
     sal_Bool RenameNumRule(const String & aOldName, const String & aNewName,
                            BOOL bBroadcast = FALSE);
     sal_Bool DelNumRule( const String& rName, BOOL bBroadCast = FALSE );
     String GetUniqueNumRuleName( const String* pChkStr = 0, sal_Bool bAutoNum = sal_True ) const;
 
-    void UpdateNumRule();   // alle invaliden Updaten
+    void UpdateNumRule();   // Update all invalids.
     void ChgNumRuleFmts( const SwNumRule& rRule, const String * pOldName = 0 );
     sal_Bool ReplaceNumRule( const SwPosition& rPos, const String& rOldRule,
                         const String& rNewRule );
 
-        // zum naechsten/vorhergehenden Punkt auf gleicher Ebene
+    // Goto next/previous on same level.
     sal_Bool GotoNextNum( SwPosition&, sal_Bool bOverUpper = sal_True,
                         sal_uInt8* pUpper = 0, sal_uInt8* pLower = 0 );
     sal_Bool GotoPrevNum( SwPosition&, sal_Bool bOverUpper = sal_True,
@@ -1570,29 +1573,28 @@ public:
                                     String& sListId,
                                     const bool bInvestigateStartNode = false );
 
-        // Absaetze ohne Numerierung, aber mit Einzuegen
+    // Paragraphs without numbering but with indents.
     sal_Bool NoNum( const SwPaM& );
-        // Loeschen, Splitten der Aufzaehlungsliste
+
+    // Delete, splitting of numbering list.
     void DelNumRules( const SwPaM& );
 
     // Invalidates all numrules
     void InvalidateNumRules();
 
-        // Hoch-/Runterstufen
     sal_Bool NumUpDown( const SwPaM&, sal_Bool bDown = sal_True );
-        // Bewegt selektierte Absaetze (nicht nur Numerierungen)
-        // entsprechend des Offsets. (negativ: zum Doc-Anf.)
+
+    // Move selected paragraphes (not only numberings)
+    // according to offsets. (if negative: go to doc start).
     sal_Bool MoveParagraph( const SwPaM&, long nOffset = 1, sal_Bool bIsOutlMv = sal_False );
-        // No-/Numerierung ueber Delete/Backspace ein/abschalten
+
     sal_Bool NumOrNoNum( const SwNodeIndex& rIdx, sal_Bool bDel = sal_False);
-        // Animation der Grafiken stoppen
+
     void StopNumRuleAnimations( OutputDevice* );
 
-        // fuege eine neue Tabelle auf der Position rPos ein. (es
-        // wird vor dem Node eingefuegt !!)
-        //  fuer AutoFormat bei der Eingabe: dann muessen die Spalten
-        //  auf die vordefinierten Breite gesetzt werden. Im Array stehen die
-        //  Positionen der Spalten!! (nicht deren Breite!)
+    // Insert new table at position rPos (will be inserted before Node!).
+    // For AutoFormat at input: columns have to be set at predefined width.
+    // The array holds the positions of the columns (not their widths).
     /* new parameter bCalledFromShell:
 
        TRUE: called from shell -> propagate existing adjust item at
@@ -1610,20 +1612,22 @@ public:
                                 BOOL bCalledFromShell = FALSE,
                                 BOOL bNewModel = TRUE );
 
-    // steht der Index in einer Tabelle, dann returne den TableNode sonst 0
+    // If index is in a table, return TableNode, else 0.
                  SwTableNode* IsIdxInTbl( const SwNodeIndex& rIdx );
     inline const SwTableNode* IsIdxInTbl( const SwNodeIndex& rIdx ) const;
 
-        // erzeuge aus dem makierten Bereich eine ausgeglichene Tabelle
+    // Create a balanced table out of the selected range.
     const SwTable* TextToTable( const SwInsertTableOptions& rInsTblOpts, // HEADLINE_NO_BORDER,
                                 const SwPaM& rRange, sal_Unicode cCh,
                                 short eAdjust,
                                 const SwTableAutoFmt* = 0 );
+
     // text to table conversion - API support
     const SwTable* TextToTable( const std::vector< std::vector<SwNodeRange> >& rTableNodes );
-        // erzeuge aus der Tabelle wieder normalen Text
+
     sal_Bool TableToText( const SwTableNode* pTblNd, sal_Unicode cCh );
-        // einfuegen von Spalten/Zeilen in der Tabelle
+
+    // Create columns / rows in table.
     sal_Bool InsertCol( const SwCursor& rCursor,
                     sal_uInt16 nCnt = 1, sal_Bool bBehind = sal_True );
     sal_Bool InsertCol( const SwSelBoxes& rBoxes,
@@ -1632,21 +1636,24 @@ public:
                     sal_uInt16 nCnt = 1, sal_Bool bBehind = sal_True );
     sal_Bool InsertRow( const SwSelBoxes& rBoxes,
                     sal_uInt16 nCnt = 1, sal_Bool bBehind = sal_True );
-        // loeschen von Spalten/Zeilen in der Tabelle
+
+    // Delete Colums/Rows in table.
     sal_Bool DeleteRowCol( const SwSelBoxes& rBoxes, bool bColumn = false );
     sal_Bool DeleteRow( const SwCursor& rCursor );
     sal_Bool DeleteCol( const SwCursor& rCursor );
-        // teilen / zusammenfassen von Boxen in der Tabelle
+
+    // Split / concatenate boxes in table.
     sal_Bool SplitTbl( const SwSelBoxes& rBoxes, sal_Bool bVert = sal_True,
                        sal_uInt16 nCnt = 1, sal_Bool bSameHeight = sal_False );
-        // returnt den enum TableMergeErr
+
+    // Return enum TableMergeErr.
     sal_uInt16 MergeTbl( SwPaM& rPam );
     String GetUniqueTblName() const;
     sal_Bool IsInsTblFormatNum() const;
     sal_Bool IsInsTblChangeNumFormat() const;
     sal_Bool IsInsTblAlignNum() const;
 
-        // aus der FEShell wg.. Undo und bModified
+    // From FEShell (for Undo and BModified).
     void GetTabCols( SwTabCols &rFill, const SwCursor* pCrsr,
                     const SwCellFrm* pBoxFrm = 0 ) const;
     void SetTabCols( const SwTabCols &rNew, sal_Bool bCurRowOnly,
@@ -1656,25 +1663,27 @@ public:
     void SetTabRows( const SwTabCols &rNew, BOOL bCurColOnly, const SwCursor* pCrsr,
                      const SwCellFrm* pBoxFrm = 0 );
 
-    // Direktzugriff fuer Uno
+    // Direct access for UNO.
     void SetTabCols(SwTable& rTab, const SwTabCols &rNew, const SwTabCols &rOld,
                                     const SwTableBox *pStart, sal_Bool bCurRowOnly);
 
     void SetRowsToRepeat( SwTable &rTable, USHORT nSet );
 
-        // AutoFormat fuer die Tabelle/TabellenSelection
+    // AutoFormat for table/table selection.
     sal_Bool SetTableAutoFmt( const SwSelBoxes& rBoxes, const SwTableAutoFmt& rNew );
-        // Erfrage wie attributiert ist
+
+    // Query attributes.
     sal_Bool GetTableAutoFmt( const SwSelBoxes& rBoxes, SwTableAutoFmt& rGet );
-        // setze das InsertDB als Tabelle Undo auf:
+
+    // Set up InsertDB as table Undo:
     void AppendUndoForInsertFromDB( const SwPaM& rPam, BOOL bIsTable );
-        // setze die Spalten/Zeilen/ZTellen Breite/Hoehe
+
     sal_Bool SetColRowWidthHeight( SwTableBox& rAktBox, sal_uInt16 eType,
                                 SwTwips nAbsDiff, SwTwips nRelDiff );
     SwTableBoxFmt* MakeTableBoxFmt();
     SwTableLineFmt* MakeTableLineFmt();
-    // teste ob die Box ein numerischen Wert darstellt und aender dann ggfs.
-    // das Format der Box
+
+    // Check if box has numerical valule. Change format of box if required.
     void ChkBoxNumFmt( SwTableBox& rAktBox, sal_Bool bCallUpdate );
     void SetTblBoxFormulaAttrs( SwTableBox& rBox, const SfxItemSet& rSet );
     void ClearBoxNumAttrs( const SwNodeIndex& rNode );
@@ -1691,34 +1700,35 @@ public:
                               const String* pTblName = 0,
                               sal_Bool* pFullTblProtection = 0 );
 
-    // Tabelle an der Position in der GrundLine aufsplitten, sprich eine
-    // neue Tabelle erzeugen.
+    // Split table at baseline position, i.e. create a new table.
     sal_Bool SplitTable( const SwPosition& rPos, sal_uInt16 eMode = 0,
                         sal_Bool bCalcNewSize = sal_False );
-    // und die Umkehrung davon. rPos muss in der Tabelle stehen, die bestehen
-    // bleibt. Das Flag besagt ob die aktuelle mit der davor oder dahinter
-    // stehenden vereint wird.
+
+    // And vice versa: rPos must be in the table that remains. The flag indicates
+    // whether the current table is merged with the one before or behind it.
     sal_Bool MergeTable( const SwPosition& rPos, sal_Bool bWithPrev = sal_True,
                         sal_uInt16 nMode = 0 );
 
-    // Charts der angegebenen Tabelle zum Update bewegen
+    // Make charts of given table update.
     void UpdateCharts( const String &rName ) const;
-    // update all charts, for that exists any table
+
+    // Update all charts, for that exists any table.
     void UpdateAllCharts()          { DoUpdateAllCharts( 0 ); }
-    // Tabelle wird umbenannt und aktualisiert die Charts
+
+    // Table is renamed and refreshes charts.
     void SetTableName( SwFrmFmt& rTblFmt, const String &rNewName );
 
-    // returne zum Namen die im Doc gesetzte Referenz
+    // Return the reference in document that is set for name.
     const SwFmtRefMark* GetRefMark( const String& rName ) const;
-    // returne die RefMark per Index - fuer Uno
+
+    // Return RefMark via index - for UNO.
     const SwFmtRefMark* GetRefMark( sal_uInt16 nIndex ) const;
-    // returne die Namen aller im Doc gesetzten Referenzen.
-    //  Ist der ArrayPointer 0 dann returne nur, ob im Doc. eine RefMark
-    //  gesetzt ist
+
+    // Return names of all references that are set in document.
+    // If array pointer is 0 return only whether a RefMark is set in document.
     sal_uInt16 GetRefMarks( SvStringsDtor* = 0 ) const;
 
-    //Einfuegen einer Beschriftung - falls ein FlyFormat erzeugt wird, so
-    // returne dieses.
+    // Insert label. If a FlyFormat is created, return it.
     SwFlyFrmFmt* InsertLabel( const SwLabelType eType, const String &rTxt, const String& rSeparator,
                     const String& rNumberingSeparator,
                     const sal_Bool bBefore, const sal_uInt16 nId, const ULONG nIdx,
@@ -1728,14 +1738,14 @@ public:
         const String &rTxt, const String& rSeparator, const String& rNumberSeparator,
         const sal_uInt16 nId, const String& rCharacterStyle, SdrObject& rObj );
 
-    // erfrage den Attribut Pool
+    // Query attribute pool.
     const SwAttrPool& GetAttrPool() const   { return *mpAttrPool; }
           SwAttrPool& GetAttrPool()         { return *mpAttrPool; }
 
-    // suche ueber das Layout eine EditShell und ggfs. eine ViewShell
+    // Search an EditShell or, if appropriate, a ViewShell via layout.
     SwEditShell* GetEditShell( ViewShell** ppSh = 0 ) const;
 
-    // OLE 2.0-Benachrichtung
+    // OLE 2.0-notification.
     inline       void  SetOle2Link(const Link& rLink) {aOle2Link = rLink;}
     inline const Link& GetOle2Link() const {return aOle2Link;}
 
@@ -1758,86 +1768,89 @@ public:
        The model should not have anything to do with a shell.
        Unnecessary compile/link time dependency.
     */
-    // Pointer auf die SfxDocShell vom Doc, kann 0 sein !!!
+
+    // Pointer to SfxDocShell from Doc. Can be 0!!
           SwDocShell* GetDocShell()         { return pDocShell; }
     const SwDocShell* GetDocShell() const   { return pDocShell; }
     void SetDocShell( SwDocShell* pDSh );
 
-    // falls beim Kopieren von OLE-Nodes eine DocShell angelegt werden muss,
-    // dann MUSS der Ref-Pointer besetzt sein!!!!
+    // If a DocShell has to be created during copying of OLE-Nodes
+    // the Ref-Pointer MUST be set!
     SfxObjectShellRef* GetRefForDocShell()            { return pDocShRef; }
     void SetRefForDocShell( SfxObjectShellRef* p )    { pDocShRef = p; }
 
-    // fuer die TextBausteine - diese habe nur ein SvPersist zur
-    // Verfuegung
+    // For Autotexts? (Textbausteine) They have only one SVPersist at their disposal.
     SfxObjectShell* GetPersist() const;
 
-    // Pointer auf den Storage des SfxDocShells, kann 0 sein !!!
+    // Pointer to storage of SfxDocShells. Can be 0!!!
     ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage > GetDocStorage();
 
-        // abfrage/setze Flag, ob das Dokument im asynchronen Laden ist
+    // Query / set flag indicating if document is loaded asynchronously at this moment.
     bool IsInLoadAsynchron() const             { return mbInLoadAsynchron; }
     void SetInLoadAsynchron( bool bFlag )       { mbInLoadAsynchron = bFlag; }
 
-    // erzeuge um das zu Servende Object eine Selektion
     sal_Bool SelectServerObj( const String& rStr, SwPaM*& rpPam,
                             SwNodeRange*& rpRange ) const;
 
-    // fuer Drag&Move: ( z.B. RefMarks "verschieben" erlauben )
+    // For Drag&Move: (e.g. allow "moving" of RefMarks)
     bool IsCopyIsMove() const              { return mbCopyIsMove; }
     void SetCopyIsMove( bool bFlag )        { mbCopyIsMove = bFlag; }
 
-    // fuers Draw-Undo: Aktionen auf Flys wollen wir selbst behandeln
+    // For Draw-Undo: actions on Flys we want to handle ourselves.
     bool IsNoDrawUndoObj() const           { return mbNoDrawUndoObj; }
     void SetNoDrawUndoObj( bool bFlag )    { mbNoDrawUndoObj = bFlag; }
     SwDrawContact* GroupSelection( SdrView& );
     void UnGroupSelection( SdrView& );
     sal_Bool DeleteSelection( SwDrawView& );
 
-    // Invalidiert OnlineSpell-WrongListen
+    // Invalidates OnlineSpell-WrongLists.
     void SpellItAgainSam( sal_Bool bInvalid, sal_Bool bOnlyWrong, sal_Bool bSmartTags );
     void InvalidateAutoCompleteFlag();
 
     void SetCalcFieldValueHdl(Outliner* pOutliner);
 
-    // erfrage ob die ::com::sun::star::util::URL besucht war. Uebers Doc, falls nur ein ::com::sun::star::text::Bookmark
-    // angegeben ist. Dann muss der Doc. Name davor gesetzt werden!
+    // Query if ::com::sun::star::util::URL was visited.
+    // Query via Doc, if only a ::com::sun::star::text::Bookmark has been given.
+    // In this case the document name has to be set in front.
     sal_Bool IsVisitedURL( const String& rURL ) const;
 
-    // speicher die akt. Werte fuer die automatische Aufnahme von Ausnahmen
-    // in die Autokorrektur
+    // Save current values for automatic registration of exceptions in Autocorrection.
     void SetAutoCorrExceptWord( SwAutoCorrExceptWord* pNew );
     SwAutoCorrExceptWord* GetAutoCorrExceptWord()       { return pACEWord; }
 
     const SwFmtINetFmt* FindINetAttr( const String& rName ) const;
 
-    // rufe ins dunkle Basic, mit evt. Return String
+    // Call into intransparent Basic; expect possible Return String.
     sal_Bool ExecMacro( const SvxMacro& rMacro, String* pRet = 0, SbxArray* pArgs = 0 );
-    // rufe ins dunkle Basic/JavaScript
+
+    // Call into intransparent Basic / JavaScript.
     sal_uInt16 CallEvent( sal_uInt16 nEvent, const SwCallMouseEvent& rCallEvent,
                         sal_Bool bChkPtr = sal_False, SbxArray* pArgs = 0,
                         const Link* pCallBack = 0 );
 
+    // Adjust left margin via object bar.
     // linken Rand ueber Objectleiste einstellen (aenhlich dem Stufen von
     // Numerierungen), optional kann man "um" den Offset stufen oder "auf"
-    // die Position gestuft werden (bModulus = sal_True)
+    // die Position gestuft werden (bModulus = sal_True).
     void MoveLeftMargin( const SwPaM& rPam, sal_Bool bRight = sal_True,
                         sal_Bool bModulus = sal_True );
 
-    // Numberformatter erfragen
+    // Query NumberFormatter.
     inline       SvNumberFormatter* GetNumberFormatter( sal_Bool bCreate = sal_True );
     inline const SvNumberFormatter* GetNumberFormatter( sal_Bool bCreate = sal_True ) const;
 
-    // loesche den nicht sichtbaren ::com::sun::star::ucb::Content aus dem Document, wie z.B.:
-    // versteckte Bereiche, versteckte Absaetze
+    // Delete non-visible ::com::sun::star::ucb::Content from document, e.g.
+    // hidden ranges, hidden paragraphes.
     sal_Bool RemoveInvisibleContent();
+
     //restore the invisible content if it's available on the undo stack
     sal_Bool RestoreInvisibleContent();
-    // replace fields by text - mailmerge support
+
+    // Replace fields by text - mailmerge support.
     BOOL ConvertFieldsToText();
 
-    // erzeuge Anhand der vorgebenen Collection Teildokumente
-    // falls keine angegeben ist, nehme die Kapitelvorlage der 1. Ebene
+    // Create sub-documents according to given collection.
+    // If no collection is given, use chapter styles for 1st level.
     sal_Bool GenerateGlobalDoc( const String& rPath,
                                 const SwTxtFmtColl* pSplitColl = 0 );
     sal_Bool GenerateGlobalDoc( const String& rPath, int nOutlineLevel = 0 );
@@ -1845,32 +1858,34 @@ public:
                                 const SwTxtFmtColl* pSplitColl = 0 );
     sal_Bool GenerateHTMLDoc( const String& rPath, int nOutlineLevel = 0 );
 
-    //  vergleiche zwei Dokument miteinander
+    //  Compare two documents.
     long CompareDoc( const SwDoc& rDoc );
-    // merge zweier Dokumente
+
+    // Merge two documents.
     long MergeDoc( const SwDoc& rDoc );
-    // setze Kommentar-Text fuers Redline, das dann per AppendRedline
-    // hereinkommt. Wird vom Autoformat benutzt. 0-Pointer setzt den Modus
-    // wieder zurueck. Die SequenceNummer ist fuers UI-seitige zusammen-
-    // fassen von Redlines.
+
+    // Set comment-text for Redline. It then comes in via AppendRedLine.
+    // Used by AutoFormat. 0-pointer resets mode.
+    // Sequence number is for conjoining of Redlines by the UI.
     void SetAutoFmtRedlineComment( const String* pTxt, sal_uInt16 nSeqNo = 0 );
 
     bool IsAutoFmtRedline() const           { return mbIsAutoFmtRedline; }
     void SetAutoFmtRedline( bool bFlag )    { mbIsAutoFmtRedline = bFlag; }
 
-    // fuer AutoFormat: mit Undo/Redlining - Behandlung
+    // For AutoFormat: with Undo/Redlining.
     void SetTxtFmtCollByAutoFmt( const SwPosition& rPos, sal_uInt16 nPoolId,
                                 const SfxItemSet* pSet = 0 );
     void SetFmtItemByAutoFmt( const SwPaM& rPam, const SfxItemSet& );
 
-    // !!!NUR fuer die SW-Textblocks!! beachtet kein LAYOUT!!!
-    void ClearDoc();        // loescht den gesamten Inhalt.
+    // Only for SW-textbloxks! Does not pay any attention to layout!
+    void ClearDoc();        // Deletes all content!
 
-    // erfrage / setze die Daten fuer die PagePreView
+    // Query /set data for PagePreView.
     const SwPagePreViewPrtData* GetPreViewPrtData() const { return pPgPViewPrtData; }
-    // wenn der Pointer == 0 ist, dann wird im Doc der Pointer zerstoert,
-    // ansonsten wird das Object kopiert.
-    // Der Pointer geht NICHT in den Besitz des Doc's!!
+
+    // If pointer == 0 destroy pointer in document.
+    // Else copy object.
+    // Pointer is not transferred to ownership by document!
     void SetPreViewPrtData( const SwPagePreViewPrtData* pData );
 
     // update all modified OLE-Objects. The modification is called over the
@@ -1878,13 +1893,12 @@ public:
     void SetOLEObjModified()
     {   if( GetRootFrm() ) aOLEModifiedTimer.Start(); }
 
-    // -------------------- Uno - Schnittstellen ---------------------------
+    // -------------------- Uno - Interfaces ---------------------------
     const SwUnoCrsrTbl& GetUnoCrsrTbl() const       { return *pUnoCrsrTbl; }
     SwUnoCrsr* CreateUnoCrsr( const SwPosition& rPos, sal_Bool bTblCrsr = sal_False );
-    // -------------------- Uno - Schnittstellen ---------------------------
 
-    // -------------------- FeShell - Schnittstellen -----------------------
-    // !!!!! diese gehen immer davon aus, das ein Layout existiert  !!!!
+    // -------------------- FeShell - Interfaces -----------------------
+    // !!! These assume always an existing layout !!!
     sal_Bool ChgAnchor( const SdrMarkList& _rMrkList,
                         RndStdIds _eAnchorType,
                         const sal_Bool _bSameOnly,
@@ -1912,22 +1926,21 @@ public:
     int Chain( SwFrmFmt &rSource, const SwFrmFmt &rDest );
     void Unchain( SwFrmFmt &rFmt );
 
-    // fuers Copy/Move aus der FrmShell
+    // For Copy/Move from FrmShell.
     SdrObject* CloneSdrObj( const SdrObject&, sal_Bool bMoveWithinDoc = sal_False,
                             sal_Bool bInsInPage = sal_True );
 
     //
-    // -------------------- FeShell - Schnittstellen Ende ------------------
+    // -------------------- FeShell - Interface end ------------------
 
-    // Schnittstelle fuer die TextInputDaten - ( fuer die Texteingabe
-    // von japanischen/chinesischen Zeichen)
+    // Interface for TextInputData - for text input of Chinese and Japanese.
     SwExtTextInput* CreateExtTextInput( const SwPaM& rPam );
     void DeleteExtTextInput( SwExtTextInput* pDel );
     SwExtTextInput* GetExtTextInput( const SwNode& rNd,
                                 xub_StrLen nCntntPos = STRING_NOTFOUND) const;
     SwExtTextInput* GetExtTextInput() const;
 
-    // Schnistelle fuer den Zugriff auf die AutoComplete-Liste
+    // Interface for access to AutoComplete-List.
     static SwAutoCompleteWord& GetAutoCompleteWords() { return *pACmpltWords; }
 
     bool ContainsMSVBasic() const          { return mbContains_MSVBasic; }
@@ -2059,8 +2072,7 @@ public:
     SfxObjectShell* CreateCopy(bool bCallInitNew) const;
 };
 
-// Diese Methode wird im Dtor vom SwDoc gerufen und loescht den Cache
-// der Konturobjekte
+// This method is called in Dtor of SwDoc and deletes cache of ContourObjects.
 void ClrContourCache();
 
 inline const SwTableNode* SwDoc::IsIdxInTbl( const SwNodeIndex& rIdx ) const
