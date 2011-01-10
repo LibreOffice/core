@@ -158,7 +158,7 @@ public:
 
     USHORT          GetModifier() const
                         { return (mnCode & (KEY_SHIFT | KEY_MOD1 | KEY_MOD2)); }
-    BOOL            IsShift() const
+    bool            IsShift() const
                         { return ((mnCode & KEY_SHIFT) != 0); }
     BOOL            IsMod1() const
                         { return ((mnCode & KEY_MOD1) != 0); }
@@ -279,7 +279,7 @@ public:
                     CommandModKeyData();
                     CommandModKeyData( USHORT nCode );
 
-    BOOL            IsShift()   const { return (mnCode & MODKEY_SHIFT) ? TRUE : FALSE; }
+    bool            IsShift()   const { return (mnCode & MODKEY_SHIFT) ? true : false; }
     BOOL            IsMod1()    const { return (mnCode & MODKEY_MOD1) ? TRUE : FALSE; }
     BOOL            IsMod2()    const { return (mnCode & MODKEY_MOD2) ? TRUE : FALSE; }
     BOOL            IsMod3()    const { return (mnCode & MODKEY_MOD3) ? TRUE : FALSE; }

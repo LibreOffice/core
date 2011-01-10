@@ -168,7 +168,7 @@ public:
 
     USHORT          GetModifier() const
                         { return (mnCode & (KEY_SHIFT | KEY_MOD1 | KEY_MOD2)); }
-    BOOL            IsShift() const
+    bool            IsShift() const
                         { return ((mnCode & KEY_SHIFT) != 0); }
     BOOL            IsMod1() const
                         { return ((mnCode & KEY_MOD1) != 0); }

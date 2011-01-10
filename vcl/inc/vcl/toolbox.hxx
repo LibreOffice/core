@@ -606,7 +606,7 @@ public:
     void                ExecuteCustomMenu();
 
     // allow Click Handler to detect special key
-    BOOL                IsShift() const { return mbIsShift; }
+    bool                IsShift() const { return mbIsShift; }
     // allow Click Handler to distinguish between mouse and key input
     BOOL                IsKeyEvent() const { return mbIsKeyEvent; }
 
