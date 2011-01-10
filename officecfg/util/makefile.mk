@@ -37,7 +37,6 @@ TARGET=util
 
 $(MISC)$/$(TARGET)_delzip :
     -$(RM) $(BIN)$/registry_{$(alllangiso)}.zip	
-    -$(RM) $(COMMON_OUTPUT)$/bin$/registry_{$(alllangiso)}.zip
 
 $(BIN)$/registry_{$(alllangiso)}.zip : $(MISC)$/$(TARGET)_delzip
     cd $(MISC)$/registry$/res$/$(@:b:s/registry_//) && zip -ru ..$/..$/..$/..$/bin$/registry_$(@:b:s/registry_//).zip org/*
