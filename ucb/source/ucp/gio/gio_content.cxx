@@ -1026,7 +1026,8 @@ void Content::insert(const uno::Reference< io::XInputStream > &xInputStream,
     GError *pError = NULL;
     GFileInfo *pInfo = getGFileInfo(xEnv);
 
-    if ( g_file_info_has_attribute(pInfo, G_FILE_ATTRIBUTE_STANDARD_TYPE) &&
+    if ( pInfo &&
+         g_file_info_has_attribute(pInfo, G_FILE_ATTRIBUTE_STANDARD_TYPE) &&
          g_file_info_get_file_type(pInfo) == G_FILE_TYPE_DIRECTORY )
     {
 #ifdef DEBUG
