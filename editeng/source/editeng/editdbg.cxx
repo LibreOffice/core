@@ -298,7 +298,7 @@ ByteString DbgOutItem( const SfxItemPool& rPool, const SfxPoolItem& rItem )
     return aDebStr;
 }
 
-void DbgOutItemSet( FILE* fp, const SfxItemSet& rSet, BOOL bSearchInParent, BOOL bShowALL )
+void DbgOutItemSet( FILE* fp, const SfxItemSet& rSet, sal_Bool bSearchInParent, sal_Bool bShowALL )
 {
     for ( USHORT nWhich = EE_PARA_START; nWhich <= EE_CHAR_END; nWhich++ )
     {
@@ -319,7 +319,7 @@ void DbgOutItemSet( FILE* fp, const SfxItemSet& rSet, BOOL bSearchInParent, BOOL
     }
 }
 
-void EditDbg::ShowEditEngineData( EditEngine* pEE, BOOL bInfoBox )
+void EditDbg::ShowEditEngineData( EditEngine* pEE, sal_Bool bInfoBox )
 {
 #if defined UNX
     FILE* fp = fopen( "/tmp/debug.log", "w" );
@@ -347,10 +347,10 @@ void EditDbg::ShowEditEngineData( EditEngine* pEE, BOOL bInfoBox )
         if ( pStyle )
             fprintf( fp, " %s", ByteString( pStyle->GetName(), RTL_TEXTENCODING_ASCII_US ).GetBuffer() );
         fprintf( fp, "\nAbsatzattribute:" );
-        DbgOutItemSet( fp, pPPortion->GetNode()->GetContentAttribs().GetItems(), FALSE, FALSE );
+        DbgOutItemSet( fp, pPPortion->GetNode()->GetContentAttribs().GetItems(), sal_False, sal_False );
 
         fprintf( fp, "\nZeichenattribute:" );
-        BOOL bZeroAttr = FALSE;
+        sal_Bool bZeroAttr = sal_False;
         USHORT z;
         for ( z = 0; z < pPPortion->GetNode()->GetCharAttribs().Count(); z++ )
         {
@@ -365,7 +365,7 @@ void EditDbg::ShowEditEngineData( EditEngine* pEE, BOOL bInfoBox )
             aCharAttribs += '\t';
             aCharAttribs += ByteString::CreateFromInt32( pAttr->GetEnd() );
             if ( pAttr->IsEmpty() )
-                bZeroAttr = TRUE;
+                bZeroAttr = sal_True;
             fprintf( fp, "%s => ", aCharAttribs.GetBuffer() );
 
             ByteString aDebStr = DbgOutItem( rPool, *pAttr->GetItem() );
@@ -443,7 +443,7 @@ void EditDbg::ShowEditEngineData( EditEngine* pEE, BOOL bInfoBox )
             fprintf( fp, "\nVorlage:   %s", ByteString( pStyle->GetName(), RTL_TEXTENCODING_ASCII_US ).GetBuffer() );
             fprintf( fp, "\nParent:    %s", ByteString( pStyle->GetParent(), RTL_TEXTENCODING_ASCII_US ).GetBuffer() );
             fprintf( fp, "\nFollow:    %s", ByteString( pStyle->GetFollow(), RTL_TEXTENCODING_ASCII_US ).GetBuffer() );
-            DbgOutItemSet( fp, pStyle->GetItemSet(), FALSE, FALSE );
+            DbgOutItemSet( fp, pStyle->GetItemSet(), sal_False, sal_False );
             fprintf( fp, "\n----------------------------------" );
 
             pStyle = aIter.Next();
@@ -453,7 +453,7 @@ void EditDbg::ShowEditEngineData( EditEngine* pEE, BOOL bInfoBox )
     fprintf( fp, "\n\n================================================================================" );
     fprintf( fp, "\n==================   Defaults   ================================================" );
     fprintf( fp, "\n================================================================================" );
-    DbgOutItemSet( fp, pEE->pImpEditEngine->GetEmptyItemSet(), TRUE, TRUE );
+    DbgOutItemSet( fp, pEE->pImpEditEngine->GetEmptyItemSet(), sal_True, sal_True );
 
     fprintf( fp, "\n\n================================================================================" );
     fprintf( fp, "\n==================   EditEngine & Views   ======================================" );
@@ -482,7 +482,7 @@ void EditDbg::ShowEditEngineData( EditEngine* pEE, BOOL bInfoBox )
         fprintf( fp, "\n\n================================================================================" );
         fprintf( fp, "\n==================   Aktuelle View   ===========================================" );
         fprintf( fp, "\n================================================================================" );
-        DbgOutItemSet( fp, pEE->GetActiveView()->GetAttribs(), TRUE, FALSE );
+        DbgOutItemSet( fp, pEE->GetActiveView()->GetAttribs(), sal_True, sal_False );
     }
     fclose( fp );
     if ( bInfoBox )
@@ -558,16 +558,16 @@ void EditDbg::ShowPortionData( ParaPortion* pPortion )
 }
 
 
-BOOL ParaPortion::DbgCheckTextPortions()
+sal_Bool ParaPortion::DbgCheckTextPortions()
 {
     // pruefen, ob Portionlaenge ok:
     USHORT nXLen = 0;
     for ( USHORT nPortion = 0; nPortion < aTextPortionList.Count(); nPortion++  )
         nXLen = nXLen + aTextPortionList[nPortion]->GetLen();
-    return nXLen == pNode->Len() ? TRUE : FALSE;
+    return nXLen == pNode->Len() ? sal_True : sal_False;
 }
 
-BOOL CheckOrderedList( CharAttribArray& rAttribs, BOOL bStart )
+sal_Bool CheckOrderedList( CharAttribArray& rAttribs, sal_Bool bStart )
 {
     USHORT nPrev = 0;
     for ( USHORT nAttr = 0; nAttr < rAttribs.Count(); nAttr++ )
@@ -575,11 +575,11 @@ BOOL CheckOrderedList( CharAttribArray& rAttribs, BOOL bStart )
         EditCharAttrib* pAttr = rAttribs[nAttr];
         USHORT nCur = bStart ? pAttr->GetStart() : pAttr->GetEnd();
         if ( nCur < nPrev )
-            return FALSE;
+            return sal_False;
 
         nPrev = nCur;
     }
-    return TRUE;
+    return sal_True;
 }
 
 #endif
