@@ -855,18 +855,28 @@ void ScTable::GetDataArea( SCCOL& rStartCol, SCROW& rStartRow, SCCOL& rEndCol, S
 }
 
 
-bool ScTable::ShrinkToUsedDataArea( SCCOL& rStartCol, SCROW& rStartRow,
+bool ScTable::ShrinkToUsedDataArea( bool& o_bShrunk, SCCOL& rStartCol, SCROW& rStartRow,
         SCCOL& rEndCol, SCROW& rEndRow, bool bColumnsOnly ) const
 {
-    bool bRet = false;
-    bool bChanged;
+    o_bShrunk = false;
 
+    PutInOrder( rStartCol, rEndCol);
+    PutInOrder( rStartRow, rEndRow);
+    if (rStartCol < 0)
+        rStartCol = 0, o_bShrunk = true;
+    if (rStartRow < 0)
+        rStartRow = 0, o_bShrunk = true;
+    if (rEndCol > MAXCOL)
+        rEndCol = MAXCOL, o_bShrunk = true;
+    if (rEndRow > MAXROW)
+        rEndRow = MAXROW, o_bShrunk = true;
+
+    bool bChanged;
     do
     {
         bChanged = false;
 
-        bool bCont = true;
-        while (rEndCol > 0 && bCont && rStartCol < rEndCol)
+        while (rStartCol < rEndCol)
         {
             if (aCol[rEndCol].IsEmptyBlock( rStartRow, rEndRow))
             {
@@ -874,11 +884,10 @@ bool ScTable::ShrinkToUsedDataArea( SCCOL& rStartCol, SCROW& rStartRow,
                 bChanged = true;
             }
             else
-                bCont = false;
+                break;  // while
         }
 
-        bCont = true;
-        while (rStartCol < MAXCOL && bCont && rStartCol < rEndCol)
+        while (rStartCol < rEndCol)
         {
             if (aCol[rStartCol].IsEmptyBlock( rStartRow, rEndRow))
             {
@@ -886,12 +895,12 @@ bool ScTable::ShrinkToUsedDataArea( SCCOL& rStartCol, SCROW& rStartRow,
                 bChanged = true;
             }
             else
-                bCont = false;
+                break;  // while
         }
 
         if (!bColumnsOnly)
         {
-            if (rStartRow < MAXROW && rStartRow < rEndRow)
+            if (rStartRow < rEndRow)
             {
                 bool bFound = false;
                 for (SCCOL i=rStartCol; i<=rEndCol && !bFound; i++)
@@ -904,7 +913,7 @@ bool ScTable::ShrinkToUsedDataArea( SCCOL& rStartCol, SCROW& rStartRow,
                 }
             }
 
-            if (rEndRow > 0 && rStartRow < rEndRow)
+            if (rStartRow < rEndRow)
             {
                 bool bFound = false;
                 for (SCCOL i=rStartCol; i<=rEndCol && !bFound; i++)
@@ -919,9 +928,12 @@ bool ScTable::ShrinkToUsedDataArea( SCCOL& rStartCol, SCROW& rStartRow,
         }
 
         if (bChanged)
-            bRet = true;
+            o_bShrunk = true;
     } while( bChanged );
-    return bRet;
+
+    return rStartCol != rEndCol || (bColumnsOnly ?
+            !aCol[rStartCol].IsEmptyBlock( rStartRow, rEndRow) :
+            (rStartRow != rEndRow || aCol[rStartCol].HasDataAt( rStartRow)));
 }
 
 

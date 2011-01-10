@@ -1339,12 +1339,8 @@ void SwDoc::CalculatePagesForPrinting(
 
     // get PageRange value to use
     OUString aPageRange;
-    if (bIsPDFExport)
-    {
-        // ?? rOptions.getValue( C2U("Selection") );
-        aPageRange = rOptions.getStringValue( "PageRange", OUString() );
-    }
-    else
+    // PL, OD #i116085# - adjusting fix for i113919
+    if ( !bIsPDFExport )
     {
         // PageContent :
         // 0 -> print all pages (default if aPageRange is empty)

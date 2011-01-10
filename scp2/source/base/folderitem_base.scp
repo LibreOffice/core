@@ -29,6 +29,7 @@
 
 FolderItem gid_Folderitem_Sbase
     Name = "%PRODUCTNAME Base";
+    Name (pt-BR) = "%PRODUCTNAME_BR Base";
     ModuleID = gid_Module_Prg_Base_Bin;
     FolderID = gid_Folder_Staroffice51;
     FileID = gid_File_Exe_Sbase;

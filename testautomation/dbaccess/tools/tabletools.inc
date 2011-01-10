@@ -342,13 +342,12 @@ function fCreateTable(aFieldTypeContent(),sTableName,optional sCatalog,optional 
         Description.TypeKeys "<RETURN>" , TRUE
         printlog "-------------------------------"
     next 
+
     sleep(1)    
+
     Kontext "TableDesignTable"         
-        TableDesignTable.usemenu
-        MenuSelect MenuGetItemId (1)
-        sleep(1)
-        menuselect MenuGetItemId (7)
-        sleep(1)	
+        DatabaseSaveas
+
     Kontext "DatabaseTableSaveAs"
         printlog "save table as "+ sTableName
         TableName.setText sTableName

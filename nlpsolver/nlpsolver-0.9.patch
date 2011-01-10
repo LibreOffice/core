@@ -49,3 +49,14 @@
      <dependencies>
          <OpenOffice.org-minimal-version xmlns:d="http://openoffice.org/extensions/description/2006" d:name="OpenOffice.org 3.0" value="3.0"/>
      </dependencies>
+--- misc/build/nlpsolver-0.9/src/locale/NLPSolverCommon_en_US.properties.old	2009-03-30 18:20:06.000000000 +0200
++++ misc/build/nlpsolver-0.9/src/locale/NLPSolverCommon_en_US.properties	2010-12-18 22:08:47.084693100 +0100
+@@ -2,7 +2,7 @@
+ NLPSolverCommon.Properties.AssumeNonNegative=Assume Non-Negative Variables
+ 
+ #BaseEvolutionarySolver
+-NLPSolverCommon.Properties.SwarmSize=Size of Swam
++NLPSolverCommon.Properties.SwarmSize=Size of Swarm
+ NLPSolverCommon.Properties.LibrarySize=Size of Library
+ NLPSolverCommon.Properties.LearningCycles=Learning Cycles
+ NLPSolverCommon.Properties.GuessVariableRange=Variable Bounds Guessing

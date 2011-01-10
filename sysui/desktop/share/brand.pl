@@ -39,6 +39,7 @@ $destdir = pop @ARGV;
 mkdir $destdir,0777;
 
 $productname = "LibreOffice";
+$productname_br = "BrOffice";
 $productfilename = "libreoffice";
 $prefix = "";
 $iconprefix = "";
@@ -48,6 +49,10 @@ while ($_ = $ARGV[0], /^-/) {
     last if /^--$/;
     if (/^-p/) {
         $productname = $ARGV[0];
+        shift;
+    }
+    if (/^-b/) {
+        $productname_br = $ARGV[0];
         shift;
     }
     if (/^-u/) {
@@ -115,6 +120,9 @@ while (<>) {
                 $_ = "$_$category;";
             }
         }
+
+        # replace %PRODUCTNAME_BR placeholders
+        s/%PRODUCTNAME_BR/$productname_br/g;
 
         # replace %PRODUCTNAME placeholders
         s/%PRODUCTNAME/$productname/g;

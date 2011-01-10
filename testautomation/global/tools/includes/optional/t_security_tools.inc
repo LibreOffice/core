@@ -144,17 +144,8 @@ function hOpenDigitalSignaturesDialog() as boolean
     '///+<li>Open the file-menu</li>
     call hUseMenu()
     call hMenuSelectNr( FILE_MENU_POSITION )
-                                                                                
-    '///+<li>Select &quot;Digital signatures...&quot;</li>
-    try
-        if ( gApplication = "MATH" ) then
-            call hMenuSelectNr( SIGNATURES_MENU_POSITION_MATH )
-        else
-            call hMenuSelectNr( SIGNATURES_MENU_POSITION_OTHER )
-        endif
-    catch
-        warnlog( CFN & "Failed to execute menuitem <Digital Signature...>" )
-    endcatch
+
+    FileDigitalSignatures
 
     ' At this stage either the digital signatures dialog or the messagebox
     ' <The document needs to be saved> is open. In the latter case the function

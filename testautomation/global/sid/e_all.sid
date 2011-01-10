@@ -35,6 +35,7 @@ FileSendDocumentAsPDF SID_MAIL_SENDDOCASPDF
 FileVersions SID_VERSION
 FileReload SID_RELOAD SID_LASTVERSIONDOC
 FileProperties SID_DOCINFO
+FileDigitalSignatures .uno:Signature
 FileTemplatesOrganize SID_ORGANIZER
 FileTemplatesSave SID_DOCTEMPLATE
 FileTemplatesEdit SID_OPENTEMPLATE
@@ -789,7 +790,7 @@ SlideShowAnimation .uno:CustomAnimation
 SlideShowSlideTransition .uno:SlideChangeWindow
 SlideShowHideSlide SID_HIDE_SLIDE
 SlideShowShowSlide SID_SHOW_SLIDE 
-SlideShowCustomSlideshow SID_CUSTOMSHOW_DLG
+SlideShowCustomSlideshow .uno:CustomShowDialog
 SlideShowCustomAnimation .uno:CustomAnimation
 
 ' ***********************************

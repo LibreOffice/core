@@ -30,6 +30,7 @@
 FolderItem gid_Folderitem_Exe_Quickstart
     ModuleID = gid_Module_Optional_Quickstart;
     Name = "%PRODUCTNAME %PRODUCTVERSION";
+    Name (pt-BR) = "%PRODUCTNAME_BR %PRODUCTVERSION";
     FolderID = PREDEFINED_AUTOSTART;
     FileID = gid_File_Exe_Install_Quickstart;
 End

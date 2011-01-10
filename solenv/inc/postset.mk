@@ -33,6 +33,7 @@ defaultlangiso=en-US
 completelangiso=af \
 ar \
 as \
+ast \
 be-BY \
 bo \
 bg \
@@ -41,6 +42,7 @@ brx \
 bn \
 bs \
 ca \
+ca-XV \
 cs \
 cy \
 da \
@@ -66,6 +68,7 @@ he \
 hi \
 hr \
 hu \
+id \
 is \
 it \
 ja \
@@ -111,7 +114,6 @@ rw \
 sat \
 sa-IN \
 si \
-sc \
 sd \
 sq \
 sk \

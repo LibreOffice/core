@@ -93,7 +93,7 @@ TabPage OFA_TP_MISC
     PushButton PB_HELPAGENT_RESET
     {
         Pos = MAP_APPFONT( COL3, ROW3 );
-        Size = MAP_APPFONT( RSC_CD_PUSHBUTTON_WIDTH, RSC_CD_PUSHBUTTON_HEIGHT );
+        Size = MAP_APPFONT( RSC_CD_PUSHBUTTON_WIDTH + 20, RSC_CD_PUSHBUTTON_HEIGHT );
         Text [ en-US ] = "~Reset Help Agent";
     };
     FixedLine FL_FILEDLG

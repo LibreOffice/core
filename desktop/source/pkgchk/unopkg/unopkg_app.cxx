@@ -103,8 +103,7 @@ const char s_usingText [] =
 " -V, --version           version information\n"
 " -v, --verbose           verbose output to stdout\n"
 " -f, --force             force overwriting existing extensions\n"
-" -s, --suppress-license  prevents showing the license provided that\n"
-"                         the extension allows it\n"
+" -s, --suppress-license  prevents showing the license\n"
 " --log-file <file>       custom log file; default: <cache-dir>/log.txt\n"
 " --shared                expert feature: operate on shared installation\n"
 "                                         deployment context;\n"
@@ -412,7 +411,7 @@ extern "C" int unopkg_main()
 
         Reference< ::com::sun::star::ucb::XCommandEnvironment > xCmdEnv(
             createCmdEnv( xComponentContext, logFile,
-                          option_force, option_verbose) );
+                          option_force, option_verbose, option_suppressLicense) );
 
         //synchronize bundled/shared extensions
         //Do not synchronize when command is "reinstall". This could add types and services to UNO and

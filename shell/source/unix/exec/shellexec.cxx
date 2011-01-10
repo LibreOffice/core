@@ -282,7 +282,13 @@ void SAL_CALL ShellExec::execute( const OUString& aCommand, const OUString& aPar
         pDesktopLaunch = NULL;
     }
 
-    OString cmd = aBuffer.makeStringAndClear();
+    OString cmd =
+#ifdef LINUX
+        // avoid blocking (call it in background)
+        OStringBuffer().append( "( " ).append( aBuffer ).append( " ) &" ).makeStringAndClear();
+#else
+        aBuffer.makeStringAndClear();
+#endif
     if ( 0 != pclose(popen(cmd.getStr(), "w")) )
     {
         int nerr = errno;

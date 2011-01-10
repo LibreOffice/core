@@ -1150,7 +1150,7 @@ void ScDrawLayer::HeightChanged( SCTAB nTab, SCROW nRow, long nDifTwips )
     MoveAreaTwips( nTab, aRect, Point( 0,nDifTwips ), aTopLeft );
 }
 
-BOOL ScDrawLayer::HasObjectsInRows( SCTAB nTab, SCROW nStartRow, SCROW nEndRow )
+BOOL ScDrawLayer::HasObjectsInRows( SCTAB nTab, SCROW nStartRow, SCROW nEndRow, bool bIncludeNotes )
 {
     DBG_ASSERT( pDoc, "ScDrawLayer::HasObjectsInRows without document" );
     if ( !pDoc )
@@ -1191,7 +1191,9 @@ BOOL ScDrawLayer::HasObjectsInRows( SCTAB nTab, SCROW nStartRow, SCROW nEndRow )
     while ( pObject && !bFound )
     {
         aObjRect = pObject->GetSnapRect();  //! GetLogicRect ?
-        if (aTestRect.IsInside(aObjRect.TopLeft()) || aTestRect.IsInside(aObjRect.BottomLeft()))
+        // #i116164# note captions are handled separately, don't have to be included for each single row height change
+        if ( (aTestRect.IsInside(aObjRect.TopLeft()) || aTestRect.IsInside(aObjRect.BottomLeft())) &&
+             (bIncludeNotes || !IsNoteCaption(pObject)) )
             bFound = TRUE;
 
         pObject = aIter.Next();

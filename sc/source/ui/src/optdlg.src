@@ -232,42 +232,42 @@ TabPage RID_SCPAGE_FORMULA
     FixedText FT_FORMULA_SEP_ARG
     {
         Pos = MAP_APPFONT ( 21, 59 );
-        Size = MAP_APPFONT ( 40, 8 );
+        Size = MAP_APPFONT ( 60, 8 );
         Text [ en-US ] = "~Function";
     };
 
     Edit ED_FORMULA_SEP_ARG
     {
         Border = TRUE;
-        Pos = MAP_APPFONT ( 65, 57 );
+        Pos = MAP_APPFONT ( 75, 57 );
         Size = MAP_APPFONT ( 10, 12 );
     };
 
     FixedText FT_FORMULA_SEP_ARRAY_C
     {
         Pos = MAP_APPFONT ( 21, 77 );
-        Size = MAP_APPFONT ( 40, 8 );
+        Size = MAP_APPFONT ( 60, 8 );
         Text [ en-US ] = "Array co~lumn";
     };
 
     Edit ED_FORMULA_SEP_ARRAY_C
     {
         Border = TRUE;
-        Pos = MAP_APPFONT ( 65, 75 );
+        Pos = MAP_APPFONT ( 75, 75 );
         Size = MAP_APPFONT ( 10, 12 );
     };
 
     FixedText FT_FORMULA_SEP_ARRAY_R
     {
         Pos = MAP_APPFONT ( 21, 95 );
-        Size = MAP_APPFONT ( 40, 8 );
+        Size = MAP_APPFONT ( 60, 8 );
         Text [ en-US ] = "Array ~row";
     };
 
     Edit ED_FORMULA_SEP_ARRAY_R
     {
         Border = TRUE;
-        Pos = MAP_APPFONT ( 65, 93 );
+        Pos = MAP_APPFONT ( 75, 93 );
         Size = MAP_APPFONT ( 10, 12 );
     };
 

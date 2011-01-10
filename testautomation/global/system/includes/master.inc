@@ -61,7 +61,8 @@
 sub GetUseFiles
 '///<i>GetUseFiles</i>: The first routine which will be called automatically by starting a testscript.
 '/// Include all important libraries (.inc) for the startup.
-    Dim bQuickstarterStatus as boolean
+    Dim bQuickstarterStatus as Boolean
+    Dim bSmallIconTheme As Boolean
     Dim sTemp as string
     Dim sPrivateEnvironmentLocation as string
     Dim sEnvironmentVersion as string
@@ -96,7 +97,12 @@ sub GetUseFiles
    '///+<li>Disabling the Quickstarter.
         'This can't be done via API right now.
         bQuickstarterStatus = hDisableQuickstarter
-        printlog "**  Quickstarter disabled         : " & bQuickstarterStatus      
+        printlog "**  Quickstarter disabled         : " & bQuickstarterStatus
+
+        'Small icon theme set
+        bSmallIconTheme = hSetSmallIconTheme
+        printlog "**  Small icon theme set          : " & bSmallIconTheme
+
     printlog    "----------------------------------------------------------------------------------------------------"
     printlog    ""
 
@@ -113,22 +119,22 @@ sub GetUseFiles
 '/// The checking can be disabled, by using  Current=HEAD, or removing the file version.txt
     sPrivateEnvironmentLocation = ConvertPath (gTestToolPath + "global\version.txt")
     if fileExists(sPrivateEnvironmentLocation) then
-	sEnvironmentVersion = getIniValue(sPrivateEnvironmentLocation, "EnvironmentVersion", "Current")
-	sEnvironmentDisplayVersion = getIniValue(sPrivateEnvironmentLocation, "EnvironmentVersion", "DisplayName")
-	sEnvironmentVersionMinor =  getIniValue(sPrivateEnvironmentLocation, "EnvironmentVersion", "Minor")
+        sEnvironmentVersion = getIniValue(sPrivateEnvironmentLocation, "EnvironmentVersion", "Current")
+        sEnvironmentDisplayVersion = getIniValue(sPrivateEnvironmentLocation, "EnvironmentVersion", "DisplayName")
+        sEnvironmentVersionMinor =  getIniValue(sPrivateEnvironmentLocation, "EnvironmentVersion", "Minor")
     else
         sEnvironmentVersion = "HEAD"
         sEnvironmentDisplayVersion = "Developer"
     end if
     if sEnvironmentVersion <> "HEAD" then
         if (len(gMajor) > 5) then
-	    if lCase(left(gMajor,6)) <> lCase(left(sEnvironmentVersion,6)) OR (lCase(gMinor) <> lCase(sEnvironmentVersionMinor)) then
+            if lCase(left(gMajor,6)) <> lCase(left(sEnvironmentVersion,6)) OR (lCase(gMinor) <> lCase(sEnvironmentVersionMinor)) then
                 warnlog "This environment '" + sEnvironmentVersion + sEnvironmentVersionMinor + "' is not suitable for this OOo version '" + left(gMajor,6) + gMinor + "'!"+chr(13)+"Please get the environment suitable for this OOo version!"+chr(13)+"This Environment only works with OOo " + sEnvironmentDisplayVersion + "!"
                 if MsgBox ("This environment '" + sEnvironmentVersion + sEnvironmentVersionMinor +"' is not suitable for this OOo version '" + left(gMajor,6) + gMinor + "'! Please get the environment suitable for this OOo version! This Environment only works with OOo " + sEnvironmentDisplayVersion + "!", 16, "Error at startup") = 1 then 
-		    end
-	        end if
-	    end if
-	end if
+                    end
+                end if
+            end if
+        end if
     end if
 end sub
 
@@ -477,10 +483,10 @@ sub hStartTheOffice (optional sProfPath as String, optional sProfParameter as St
             end if
             Kontext "TabFirstStartOnlineUpdate"
             if TabFirstStartOnlineUpdate.Exists(1) then
-	        try
-		    checkForUpdates.uncheck
-		catch
-		endcatch
+                try
+                    checkForUpdates.uncheck
+                catch
+                endcatch
                 Kontext "WelcomeDialog"
                 '///+<li>If the next tabpage will be visible clicking on 'Next'-button.</li>
                 NextBtn.Click
@@ -719,7 +725,7 @@ sub hFirstOutput
         printlog "**  Build type                    : CWS"
     end if
     if isStatusEnabled() then
-	'http://wiki.services.openoffice.org/wiki/QUASTe
+        'http://wiki.services.openoffice.org/wiki/QUASTe
         printlog "**  Status feature (QUASTe)       : Enabled " + gLocalStatusDatabase  
     end if
     printlog    "**  HID.LST based on milestone    : " + sHidVersion
@@ -895,7 +901,7 @@ sub mMakeGeneralOptionsAPI
         else
             gOOoImprovementIsEnabled = FALSE
         endif
-	    
+
         '///+<li>Setting the <i>work</i> directory in Tools / Options,
         sTempPath = ConvertPath (gOfficePath + "user\work")
         '///+<li>If the temp-path does not exist it will be created. 
@@ -1012,19 +1018,19 @@ sub hDetectStatusDatabase as Boolean
         if fileExists(sPrivateEnvironmentLocation) then
             gStatusFeatureLevel = getIniValue(sPrivateEnvironmentLocation, "StatusFeatureLevel", "Current")
         else
-	    ' manual submitting status from errorlog directory
+            ' manual submitting status from errorlog directory
             gStatusFeatureLevel = 2
         end if
     else
         gStatusFeatureLevel = sTemp
     end if
     if gStatusFeatureLevel = 0 then
-	' automatical submitting status; filespace location defined in privateenvironment.inc
+        ' automatical submitting status; filespace location defined in privateenvironment.inc
         hDetectStatusDatabase = TRUE
         gLocalStatusDatabase = ""
     else
         if gStatusFeatureLevel = 1 then
-	    ' automatical submitting status; filespace location defined in testtoolrc
+            ' automatical submitting status; filespace location defined in testtoolrc
             hDetectStatusDatabase = TRUE
             sOOoLocalStatusDatabase = GetIniValue ( gTesttoolIni, "OOoLocalStatusDatabase" , "Current" )
             if sOOoLocalStatusDatabase <> "" then
@@ -1084,28 +1090,28 @@ function hDisableQuickstarter as boolean
         ' if quickstart.exe exists, it might run, else no need to open options UI
         bVeto = fileExists(gNetzOfficePath + "program\quickstart.exe")
     else
-	if  (lcase(gPlatform) = "osx") then
-	    bVeto = FALSE
+        if  (lcase(gPlatform) = "osx") then
+            bVeto = FALSE
         else
             ' Not needed if StarOffice/Suite
-	    bVeto = gOOo
+            bVeto = gOOo
         end if
     end if
     bVeto = FALSE ' For now LibreOffice struggles with some hid/whatever mismatch here
     if bVeto then
-	    'First, disabling the Quickstarter via UI
-	    ToolsOptions
-	    call hToolsOptions ("STAROFFICE", "MEMORY")
-	    try        
-		bTemp = LoadQuickstarter.isChecked
-		if bTemp then
-		    LoadQuickstarter.uncheck                
-		end if                   
-	    catch
-		bResult = FALSE
-	    endcatch
-	    Kontext "ExtrasOptionenDlg"
-	    ExtrasOptionenDlg.OK
+            'First, disabling the Quickstarter via UI
+            ToolsOptions
+            call hToolsOptions ("STAROFFICE", "MEMORY")
+            try
+                bTemp = LoadQuickstarter.isChecked
+                if bTemp then
+                    LoadQuickstarter.uncheck
+                end if
+            catch
+                bResult = FALSE
+            endcatch
+            Kontext "ExtrasOptionenDlg"
+            ExtrasOptionenDlg.OK
     else
         bResult = FALSE
     end if
@@ -1215,3 +1221,26 @@ sub StartTheOffice
     gStartTheOffice = TRUE
 end sub
 
+function hSetSmallIconTheme as Boolean
+    ' Set default icon theme to small
+
+    Dim bResult as Boolean
+
+    bResult = FALSE
+
+    ToolsOptions
+
+    call hToolsOptions ("STAROFFICE", "View")
+    IconScale.Select(2)
+    ' Verify the icon scale has been set
+    If (IconScale.GetSelIndex = 2) Then
+        bResult = TRUE
+    End If
+
+    Kontext "ExtrasOptionenDlg"
+    ExtrasOptionenDlg.OK
+    Sleep (2)
+
+    hSetSmallIconTheme = bResult
+
+end function
