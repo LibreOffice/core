@@ -3190,6 +3190,21 @@ void SwRTFParser::SkipPageDescTbl()
     SkipToken( -1 );
 }
 
+
+#define SETPAGEDESC_DEFAULTS() \
+    do {\
+        aSz.SetWidth( a4.Width() ); aSz.SetHeight( a4.Height() );\
+        aLR.SetLeft( 0 );   aLR.SetRight( 0 ); \
+        aUL.SetLower( 0 );  aUL.SetUpper( 0 ); \
+        aHLR.SetLeft( 0 );  aHLR.SetRight( 0 ); \
+        aHUL.SetLower( 0 ); aHUL.SetUpper( 0 ); \
+        aFLR.SetLeft( 0 );  aFLR.SetRight( 0 ); \
+        aFUL.SetLower( 0 ); aFUL.SetUpper( 0 ); \
+        nCols = USHRT_MAX; nColSpace = USHRT_MAX; nAktCol = 0; \
+        aFSz.SetHeightSizeType( ATT_MIN_SIZE ); aFSz.SetHeight( 0 ); \
+        aHSz.SetHeightSizeType( ATT_MIN_SIZE ); aHSz.SetHeight( 0 ); \
+    } while (0)
+
 void SwRTFParser::ReadPageDescTbl()
 {
     // dann erzeuge aus der SvxStyle-Tabelle die Swg-Collections, damit
@@ -3274,17 +3289,8 @@ void SwRTFParser::ReadPageDescTbl()
             pPg = &pDoc->_GetPageDesc(nPos);
             pPg->SetLandscape( FALSE );
             pPgFmt = &pPg->GetMaster();
-    SETPAGEDESC_DEFAULTS:
-            aSz.SetWidth( a4.Width() ); aSz.SetHeight( a4.Height() );
-            aLR.SetLeft( 0 );   aLR.SetRight( 0 );
-            aUL.SetLower( 0 );  aUL.SetUpper( 0 );
-            aHLR.SetLeft( 0 );  aHLR.SetRight( 0 );
-            aHUL.SetLower( 0 ); aHUL.SetUpper( 0 );
-            aFLR.SetLeft( 0 );  aFLR.SetRight( 0 );
-            aFUL.SetLower( 0 ); aFUL.SetUpper( 0 );
-            nCols = USHRT_MAX; nColSpace = USHRT_MAX; nAktCol = 0;
-            aFSz.SetHeightSizeType( ATT_MIN_SIZE ); aFSz.SetHeight( 0 );
-            aHSz.SetHeightSizeType( ATT_MIN_SIZE ); aHSz.SetHeight( 0 );
+
+            SETPAGEDESC_DEFAULTS();
             break;
 
         case RTF_PGDSCUSE:
@@ -3322,19 +3328,9 @@ void SwRTFParser::ReadPageDescTbl()
             }
 
             pPgFmt = &pPg->GetLeft();
-            goto SETPAGEDESC_DEFAULTS;
-            aLR.SetLeft( 0 );   aLR.SetRight( 0 );
-            aUL.SetLower( 0 );  aUL.SetUpper( 0 );
-            aHLR.SetLeft( 0 );  aHLR.SetRight( 0 );
-            aHUL.SetLower( 0 ); aHUL.SetUpper( 0 );
-            aFLR.SetLeft( 0 );  aFLR.SetRight( 0 );
-            aFUL.SetLower( 0 ); aFUL.SetUpper( 0 );
-            aSz.SetWidth( a4.Width() ); aSz.SetHeight( a4.Height() ); // DIN A4 default
-            nCols = USHRT_MAX; nColSpace = USHRT_MAX; nAktCol = 0;
-            aFSz.SetHeightSizeType( ATT_MIN_SIZE ); aFSz.SetHeight( 0 );
-            aHSz.SetHeightSizeType( ATT_MIN_SIZE ); aHSz.SetHeight( 0 );
+
+            SETPAGEDESC_DEFAULTS();
             break;
-#endif
 
         case RTF_RTLSECT:
             aFrmDir.SetValue(FRMDIR_HORI_RIGHT_TOP);
