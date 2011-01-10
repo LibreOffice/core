@@ -35,7 +35,7 @@
 class SwDoc;
 
 /*--------------------------------------------------------------------
-    Beschreibung: FieldType fuer DDE
+    FieldType for DDE
  --------------------------------------------------------------------*/
 
 class SW_DLLPUBLIC SwDDEFieldType : public SwFieldType
@@ -93,7 +93,7 @@ public:
 };
 
 /*--------------------------------------------------------------------
-    Beschreibung: DDE-Feld
+    DDE-field
  --------------------------------------------------------------------*/
 
 class SwDDEField : public SwField
@@ -105,11 +105,11 @@ public:
     virtual String   Expand() const;
     virtual SwField* Copy() const;
 
-    // ueber Typen Parameter ermitteln
-    // Name kann nicht geaendert werden
+    // Get parameter via types.
+    // Name cannot be changed.
     virtual const String& GetPar1() const;
 
-    // Commando
+    // Command
     virtual String  GetPar2() const;
     virtual void    SetPar2(const String& rStr);
 };

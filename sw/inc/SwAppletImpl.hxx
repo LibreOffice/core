@@ -53,7 +53,7 @@ class SfxItemSet;
 class SwApplet_Impl
 {
     com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject > xApplet;
-    SvCommandList     aCommandList; // und die szugehorige Command-List
+    SvCommandList     aCommandList;
     SfxItemSet        aItemSet;
     String            sAlt;
 

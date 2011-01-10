@@ -82,8 +82,7 @@ namespace com { namespace sun { namespace star { namespace uno { class Any; } } 
     */
     virtual bool PutValueToField(const SwPosition & rPos, const com::sun::star::uno::Any& rVal, USHORT nWhich) = 0;
 
-    // rufe das Update der Expression Felder auf; alle Ausdruecke werden
-    // neu berechnet.
+    // Call update of expression fields. All expressions are re-evaluated.
 
     /** Updates a field.
 
