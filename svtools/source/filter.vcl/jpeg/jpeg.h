@@ -50,7 +50,6 @@ struct JPEGCreateBitmapParam
 };
 
 typedef struct my_error_mgr*    my_error_ptr;
-typedef unsigned char           sal_uInt8;
 typedef unsigned char*          HPBYTE;
 
 void*   JPEGMalloc( size_t size );
