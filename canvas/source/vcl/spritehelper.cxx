@@ -376,7 +376,7 @@ namespace vclcanvas
                         // here
 
                         // draw semi-transparent
-                        BYTE nColor( static_cast<UINT8>( ::basegfx::fround( 255.0*(1.0 - fAlpha) + .5) ) );
+                        sal_uInt8 nColor( static_cast<sal_uInt8>( ::basegfx::fround( 255.0*(1.0 - fAlpha) + .5) ) );
                         AlphaMask aAlpha( maContent->GetSizePixel(),
                                           &nColor );
 
@@ -408,7 +408,7 @@ namespace vclcanvas
 
                     for( int i=0; i<aMarkerPoly.Count(); ++i )
                     {
-                        rTargetSurface.DrawPolyLine( aMarkerPoly.GetObject((USHORT)i) );
+                        rTargetSurface.DrawPolyLine( aMarkerPoly.GetObject((sal_uInt16)i) );
                     }
 
                     // paint sprite prio

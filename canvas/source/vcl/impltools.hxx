@@ -168,7 +168,7 @@ namespace vclcanvas
                 if( mpOutDev )
                 {
                     mpOutDev->Push();
-                    mpOutDev->EnableMapMode(FALSE);
+                    mpOutDev->EnableMapMode(sal_False);
                 }
             }
 

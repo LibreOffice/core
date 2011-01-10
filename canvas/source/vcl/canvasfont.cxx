@@ -58,7 +58,7 @@ namespace vclcanvas
     {
         maFont->SetAlign( ALIGN_BASELINE );
         maFont->SetCharSet( (rFontRequest.FontDescription.IsSymbolFont==com::sun::star::util::TriState_YES) ? RTL_TEXTENCODING_SYMBOL : RTL_TEXTENCODING_UNICODE );
-        maFont->SetVertical( (rFontRequest.FontDescription.IsVertical==com::sun::star::util::TriState_YES) ? TRUE : FALSE );
+        maFont->SetVertical( (rFontRequest.FontDescription.IsVertical==com::sun::star::util::TriState_YES) ? sal_True : sal_False );
 
         // TODO(F2): improve panose->vclenum conversion
         maFont->SetWeight( static_cast<FontWeight>(rFontRequest.FontDescription.FontDescription.Weight) );
@@ -72,7 +72,7 @@ namespace vclcanvas
             OutputDevice& rOutDev( rOutDevProvider->getOutDev() );
 
             const bool bOldMapState( rOutDev.IsMapModeEnabled() );
-            rOutDev.EnableMapMode(FALSE);
+            rOutDev.EnableMapMode(sal_False);
 
             const Size aSize = rOutDev.GetFontMetric( *maFont ).GetSize();
 

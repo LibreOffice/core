@@ -101,10 +101,10 @@ namespace vclcanvas
                 {
                     // update return value. This method should return true, if
                     // at least one of the looped Draws succeeded.
-                    bRet |= rGraphic.Draw( &rOutDev,
+                    bRet |= ( sal_True == rGraphic.Draw( &rOutDev,
                                            aCurrPos,
                                            rTileSize,
-                                           &rAttr );
+                                           &rAttr ) );
 
                     aCurrPos.X() += rNextTileX.Width();
                     aCurrPos.Y() += rNextTileX.Height();

@@ -49,7 +49,7 @@ namespace vclcanvas
     {
         // create bitmap for given reference device
         // ========================================
-        const USHORT nBitCount( (USHORT)24U );
+        const sal_uInt16 nBitCount( (sal_uInt16)24U );
         const BitmapPalette*    pPalette = NULL;
 
         Bitmap aBitmap( rSize, nBitCount, pPalette );
