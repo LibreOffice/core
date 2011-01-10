@@ -42,14 +42,14 @@ Dieses Item enthaelt einen Namen einer Seitenvorlage.
 class EDITENG_DLLPUBLIC SvxPageModelItem : public SfxStringItem
 {
 private:
-    BOOL bAuto;
+    sal_Bool bAuto;
 
 public:
     TYPEINFO();
 
-    inline SvxPageModelItem( USHORT nWh  );
-    inline SvxPageModelItem( const String& rModel, BOOL bA /*= FALSE*/,
-                             USHORT nWh  );
+    inline SvxPageModelItem( sal_uInt16 nWh  );
+    inline SvxPageModelItem( const String& rModel, sal_Bool bA /*= sal_False*/,
+                             sal_uInt16 nWh  );
     inline SvxPageModelItem& operator=( const SvxPageModelItem& rModel );
 
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
@@ -59,19 +59,19 @@ public:
                                     SfxMapUnit ePresMetric,
                                     String &rText, const IntlWrapper * = 0 ) const;
 
-    virtual sal_Bool             QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
-    virtual sal_Bool             PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
-    BOOL IsAuto() const { return bAuto; }
+    virtual sal_Bool             QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
+    virtual sal_Bool             PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
+    sal_Bool IsAuto() const { return bAuto; }
 };
 
-inline SvxPageModelItem::SvxPageModelItem( USHORT nWh )
-    : bAuto( FALSE )
+inline SvxPageModelItem::SvxPageModelItem( sal_uInt16 nWh )
+    : bAuto( sal_False )
 {
     SetWhich( nWh );
 }
 
-inline SvxPageModelItem::SvxPageModelItem( const String& rModel, BOOL bA,
-                                           USHORT nWh ) :
+inline SvxPageModelItem::SvxPageModelItem( const String& rModel, sal_Bool bA,
+                                           sal_uInt16 nWh ) :
     SfxStringItem( nWh, rModel ),
     bAuto( bA )
 {}
