@@ -48,21 +48,21 @@ SbxValues::SbxValues( const BigInt &rBig ) : eType(SbxCURRENCY)
 #pragma warning(disable: 4273)
 #endif
 
-BOOL BigInt::INT64( SbxINT64 *p ) const
+sal_Bool BigInt::INT64( SbxINT64 *p ) const
 {
     if( bIsBig ) {
         if( nLen > 4 || (nNum[3] & 0x8000) )
-            return FALSE;
+            return sal_False;
 
-        p->nLow  = ((UINT32)nNum[1] << 16) | (UINT32)nNum[0];
-        p->nHigh = ((UINT32)nNum[3] << 16) | (UINT32)nNum[2];
+        p->nLow  = ((sal_uInt32)nNum[1] << 16) | (sal_uInt32)nNum[0];
+        p->nHigh = ((sal_uInt32)nNum[3] << 16) | (sal_uInt32)nNum[2];
         if( bIsNeg )
             p->CHS();
     }
     else
-        p->Set( (INT32)nVal );
+        p->Set( (sal_Int32)nVal );
 
-    return TRUE;
+    return sal_True;
 }
 
 BigInt::BigInt( const SbxINT64 &r )
@@ -72,28 +72,28 @@ BigInt::BigInt( const SbxINT64 &r )
     *this = r.nHigh;
     if( r.nHigh )
         *this *= a10000;
-    *this += (USHORT)(r.nLow >> 16);
+    *this += (sal_uInt16)(r.nLow >> 16);
     *this *= a10000;
-    *this += (USHORT)r.nLow;
+    *this += (sal_uInt16)r.nLow;
 }
 
-BOOL BigInt::UINT64( SbxUINT64 *p ) const
+sal_Bool BigInt::UINT64( SbxUINT64 *p ) const
 {
     if( bIsBig ) {
         if( bIsNeg || nLen > 4 )
-            return FALSE;
+            return sal_False;
 
-        p->nLow  = ((UINT32)nNum[1] << 16) | (UINT32)nNum[0];
-        p->nHigh = ((UINT32)nNum[3] << 16) | (UINT32)nNum[2];
+        p->nLow  = ((sal_uInt32)nNum[1] << 16) | (sal_uInt32)nNum[0];
+        p->nHigh = ((sal_uInt32)nNum[3] << 16) | (sal_uInt32)nNum[2];
     }
     else {
         if( nVal < 0 )
-            return FALSE;
+            return sal_False;
 
-        p->Set( (UINT32)nVal );
+        p->Set( (sal_uInt32)nVal );
     }
 
-    return TRUE;
+    return sal_True;
 }
 
 BigInt::BigInt( const SbxUINT64 &r )
@@ -103,7 +103,7 @@ BigInt::BigInt( const SbxUINT64 &r )
     *this = BigInt(r.nHigh);
     if( r.nHigh )
         *this *= a10000;
-    *this += (USHORT)(r.nLow >> 16);
+    *this += (sal_uInt16)(r.nLow >> 16);
     *this *= a10000;
-    *this += (USHORT)r.nLow;
+    *this += (sal_uInt16)r.nLow;
 }

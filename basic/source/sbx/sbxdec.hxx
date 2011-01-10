@@ -61,7 +61,7 @@ class SbxDecimal
 #ifdef WIN32
     DECIMAL     maDec;
 #endif
-    INT32       mnRefCount;
+    sal_Int32       mnRefCount;
 
 public:
     SbxDecimal( void );
@@ -76,11 +76,11 @@ public:
     void fillAutomationDecimal( com::sun::star::bridge::oleautomation::Decimal& rAutomationDec );
 
     void setChar( sal_Unicode val );
-    void setByte( BYTE val );
-    void setShort( INT16 val );
-    void setLong( INT32 val );
-    void setUShort( UINT16 val );
-    void setULong( UINT32 val );
+    void setByte( sal_uInt8 val );
+    void setShort( sal_Int16 val );
+    void setLong( sal_Int32 val );
+    void setUShort( sal_uInt16 val );
+    void setULong( sal_uInt32 val );
     bool setSingle( float val );
     bool setDouble( double val );
     void setInt( int val );
@@ -97,11 +97,11 @@ public:
     }
 
     bool getChar( sal_Unicode& rVal );
-    bool getByte( BYTE& rVal );
-    bool getShort( INT16& rVal );
-    bool getLong( INT32& rVal );
-    bool getUShort( UINT16& rVal );
-    bool getULong( UINT32& rVal );
+    bool getByte( sal_uInt8& rVal );
+    bool getShort( sal_Int16& rVal );
+    bool getLong( sal_Int32& rVal );
+    bool getUShort( sal_uInt16& rVal );
+    bool getULong( sal_uInt32& rVal );
     bool getSingle( float& rVal );
     bool getDouble( double& rVal );
     bool getInt( int& rVal );

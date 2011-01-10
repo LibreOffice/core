@@ -37,12 +37,12 @@
 
 // defines ---------------------------------------------------------------
 
-#define SHOWEXTRAS_NONE      ((USHORT)0x0000)
-#define SHOWEXTRAS_USER      ((USHORT)0x0001)
-#define SHOWEXTRAS_CONFIRM   ((USHORT)0x0002)
-#define SHOWEXTRAS_PASSWORD2 ((USHORT)0x0004)
-#define SHOWEXTRAS_CONFIRM2  ((USHORT)0x0008)
-#define SHOWEXTRAS_ALL       ((USHORT)(SHOWEXTRAS_USER | SHOWEXTRAS_CONFIRM))
+#define SHOWEXTRAS_NONE      ((sal_uInt16)0x0000)
+#define SHOWEXTRAS_USER      ((sal_uInt16)0x0001)
+#define SHOWEXTRAS_CONFIRM   ((sal_uInt16)0x0002)
+#define SHOWEXTRAS_PASSWORD2 ((sal_uInt16)0x0004)
+#define SHOWEXTRAS_CONFIRM2  ((sal_uInt16)0x0008)
+#define SHOWEXTRAS_ALL       ((sal_uInt16)(SHOWEXTRAS_USER | SHOWEXTRAS_CONFIRM))
 
 // class SfxPasswordDialog -----------------------------------------------
 
@@ -66,8 +66,8 @@ private:
     CancelButton    maCancelBtn;
     HelpButton      maHelpBtn;
 
-    USHORT          mnMinLen;
-    USHORT          mnExtras;
+    sal_uInt16          mnMinLen;
+    sal_uInt16          mnExtras;
 
     bool            mbAsciiOnly;
     DECL_DLLPRIVATE_LINK( EditModifyHdl, Edit* );
@@ -84,10 +84,10 @@ public:
     String          GetConfirm2() const { return maConfirm2ED.GetText(); }
     void            SetGroup2Text( const String& i_rText ) { maPassword2Box.SetText( i_rText ); }
 
-    void            SetMinLen( USHORT Len );
-    void            SetMaxLen( USHORT Len );
+    void            SetMinLen( sal_uInt16 Len );
+    void            SetMaxLen( sal_uInt16 Len );
     void            SetEditHelpId( const rtl::OString& rId ) { maPasswordED.SetHelpId( rId ); }
-    void            ShowExtras( USHORT nExtras ) { mnExtras = nExtras; }
+    void            ShowExtras( sal_uInt16 nExtras ) { mnExtras = nExtras; }
     void            AllowAsciiOnly( bool i_bAsciiOnly = true ) { mbAsciiOnly = i_bAsciiOnly; }
 
     virtual short   Execute();

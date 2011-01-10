@@ -49,7 +49,7 @@ class TextEditImp : public Window, public SfxListener
 using Window::Notify;
 
 protected:
-    void            DoSyntaxHighlight( ULONG nPara );
+    void            DoSyntaxHighlight( sal_uIntPtr nPara );
 
 
 private:
@@ -63,10 +63,10 @@ private:
 
     void Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 
-    void            ImpDoHighlight( const String& rSource, ULONG nLineOff );
-    BOOL            bHighlightning;
-    BOOL            bDoSyntaxHighlight;
-    BOOL            bDelayHighlight;
+    void            ImpDoHighlight( const String& rSource, sal_uIntPtr nLineOff );
+    sal_Bool            bHighlightning;
+    sal_Bool            bDoSyntaxHighlight;
+    sal_Bool            bDelayHighlight;
 
 
     SbxBase* GetSbxAtMousePos( String &aWord );
@@ -75,12 +75,12 @@ private:
     DECL_LINK( ShowVarContents, void* );
     Point aTipPos;
     String aTipWord;
-    ULONG nTipId;
+    sal_uIntPtr nTipId;
 
     Timer HideTipTimer;
     Timer ShowTipTimer;
 
-    BOOL bViewMoved;
+    sal_Bool bViewMoved;
 
 public:
     TextEditImp( AppEdit *pParent, const WinBits& aBits );
@@ -90,7 +90,7 @@ public:
     TextView *pTextView;
 
     void SetFont( const Font& rNewFont );
-    BOOL IsModified();
+    sal_Bool IsModified();
     void SetModifyHdl( Link l ){ ModifyHdl = l; }
 
     void                KeyInput( const KeyEvent& rKeyEvent );
@@ -99,14 +99,14 @@ public:
     void                MouseButtonDown( const MouseEvent& rMouseEvent );
 //  void                MouseMove( const MouseEvent& rMouseEvent );
     void                Command( const CommandEvent& rCEvt );
-    //BOOL              Drop( const DropEvent& rEvt );
-    //BOOL              QueryDrop( DropEvent& rEvt );
+    //sal_Bool              Drop( const DropEvent& rEvt );
+    //sal_Bool              QueryDrop( DropEvent& rEvt );
 
-    BOOL                ViewMoved();
+    sal_Bool                ViewMoved();
 
     void DoDelayedSyntaxHighlight( xub_StrLen nPara );
     void InvalidateSyntaxHighlight();
-    void SyntaxHighlight( BOOL bNew );
+    void SyntaxHighlight( sal_Bool bNew );
     void BuildKontextMenu( PopupMenu *&pMenu );
 };
 
@@ -116,13 +116,13 @@ DBG_NAMEEX(TextEdit)
 class TextEdit : public DataEdit {
 
     BreakpointWindow    *pBreakpointWindow;
-    BOOL bFileWasUTF8;
-    BOOL bSaveAsUTF8;
+    sal_Bool bFileWasUTF8;
+    sal_Bool bSaveAsUTF8;
 
 public:
     TextEdit( AppEdit*, const WinBits& );
     ~TextEdit();
-    void Highlight( ULONG nLine, xub_StrLen nCol1, xub_StrLen nCol2 );
+    void Highlight( sal_uIntPtr nLine, xub_StrLen nCol1, xub_StrLen nCol2 );
     TextEditImp& GetTextEditImp() { return aEdit; }
 
     void                SetBreakpointWindow( BreakpointWindow *pBPWindow ){ pBreakpointWindow = pBPWindow; }
@@ -132,7 +132,7 @@ public:
 
     virtual void BuildKontextMenu( PopupMenu *&pMenu );
 
-    void SaveAsUTF8( BOOL bUTF8 ) { bSaveAsUTF8 = bUTF8; }
+    void SaveAsUTF8( sal_Bool bUTF8 ) { bSaveAsUTF8 = bUTF8; }
 };
 
 #endif

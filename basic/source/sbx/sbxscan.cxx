@@ -72,7 +72,7 @@ void ImpGetIntntlSep( sal_Unicode& rcDecimalSep, sal_Unicode& rcThousandSep )
 // Fixed ist und das ganze nicht hineinpasst!
 
 SbxError ImpScan( const ::rtl::OUString& rWSrc, double& nVal, SbxDataType& rType,
-                  USHORT* pLen, BOOL bAllowIntntl, BOOL bOnlyIntntl )
+                  sal_uInt16* pLen, sal_Bool bAllowIntntl, sal_Bool bOnlyIntntl )
 {
     ::rtl::OString aBStr( ::rtl::OUStringToOString( rWSrc, RTL_TEXTENCODING_ASCII_US ) );
 
@@ -103,15 +103,15 @@ SbxError ImpScan( const ::rtl::OUString& rWSrc, double& nVal, SbxDataType& rType
     const char* pStart = aBStr.getStr();
     const char* p = pStart;
     char buf[ 80 ], *q = buf;
-    BOOL bRes = TRUE;
-    BOOL bMinus = FALSE;
+    sal_Bool bRes = sal_True;
+    sal_Bool bMinus = sal_False;
     nVal = 0;
     SbxDataType eScanType = SbxSINGLE;
     // Whitespace wech
     while( *p &&( *p == ' ' || *p == '\t' ) ) p++;
     // Zahl? Dann einlesen und konvertieren.
     if( *p == '-' )
-        p++, bMinus = TRUE;
+        p++, bMinus = sal_True;
     if( isdigit( *p ) ||( (*p == cNonIntntlComma || *p == cIntntlComma ||
             *p == cIntntl1000) && isdigit( *(p+1 ) ) ) )
     {
@@ -172,7 +172,7 @@ SbxError ImpScan( const ::rtl::OUString& rWSrc, double& nVal, SbxDataType& rType
         *q = 0;
         // Komma, Exponent mehrfach vorhanden?
         if( comma > 1 || exp > 1 )
-            bRes = FALSE;
+            bRes = sal_False;
         // Kann auf Integer gefaltet werden?
         if( !comma && !exp )
         {
@@ -204,7 +204,7 @@ SbxError ImpScan( const ::rtl::OUString& rWSrc, double& nVal, SbxDataType& rType
         {
             case 'O': cmp = "01234567"; base = 8; ndig = 11; break;
             case 'H': break;
-            default : bRes = FALSE;
+            default : bRes = sal_False;
         }
         long l = 0;
         int i;
@@ -213,7 +213,7 @@ SbxError ImpScan( const ::rtl::OUString& rWSrc, double& nVal, SbxDataType& rType
             char ch = sal::static_int_cast< char >( toupper( *p ) );
             p++;
             if( strchr( cmp, ch ) ) *q++ = ch;
-            else bRes = FALSE;
+            else bRes = sal_False;
         }
         *q = 0;
         for( q = buf; *q; q++ )
@@ -222,7 +222,7 @@ SbxError ImpScan( const ::rtl::OUString& rWSrc, double& nVal, SbxDataType& rType
             if( i > 9 ) i -= 7;
             l =( l * base ) + i;
             if( !ndig-- )
-                bRes = FALSE;
+                bRes = sal_False;
         }
         if( *p == '&' ) p++;
         nVal = (double) l;
@@ -235,7 +235,7 @@ SbxError ImpScan( const ::rtl::OUString& rWSrc, double& nVal, SbxDataType& rType
         return SbxERR_CONVERSION;
     }
     if( pLen )
-        *pLen = (USHORT) ( p - pStart );
+        *pLen = (sal_uInt16) ( p - pStart );
     if( !bRes )
         return SbxERR_CONVERSION;
     if( bMinus )
@@ -245,12 +245,12 @@ SbxError ImpScan( const ::rtl::OUString& rWSrc, double& nVal, SbxDataType& rType
 }
 
 // Schnittstelle fuer CDbl im Basic
-SbxError SbxValue::ScanNumIntnl( const String& rSrc, double& nVal, BOOL bSingle )
+SbxError SbxValue::ScanNumIntnl( const String& rSrc, double& nVal, sal_Bool bSingle )
 {
     SbxDataType t;
-    USHORT nLen = 0;
+    sal_uInt16 nLen = 0;
     SbxError nRetError = ImpScan( rSrc, nVal, t, &nLen,
-        /*bAllowIntntl*/FALSE, /*bOnlyIntntl*/TRUE );
+        /*bAllowIntntl*/sal_False, /*bOnlyIntntl*/sal_True );
     // Komplett gelesen?
     if( nRetError == SbxERR_OK && nLen != rSrc.Len() )
         nRetError = SbxERR_CONVERSION;
@@ -271,20 +271,20 @@ static double roundArray[] = {
 
 /***************************************************************************
 |*
-|*  void myftoa( double, char *, short, short, BOOL, BOOL )
+|*  void myftoa( double, char *, short, short, sal_Bool, sal_Bool )
 |*
 |*  Beschreibung:       Konversion double --> ASCII
 |*  Parameter:          double              die Zahl.
 |*                      char *              der Zielpuffer
 |*                      short               Anzahl Nachkommastellen
 |*                      short               Weite des Exponenten( 0=kein E )
-|*                      BOOL                TRUE: mit 1000er Punkten
-|*                      BOOL                TRUE: formatfreie Ausgabe
+|*                      sal_Bool                sal_True: mit 1000er Punkten
+|*                      sal_Bool                sal_True: formatfreie Ausgabe
 |*
 ***************************************************************************/
 
 static void myftoa( double nNum, char * pBuf, short nPrec, short nExpWidth,
-                    BOOL bPt, BOOL bFix, sal_Unicode cForceThousandSep = 0 )
+                    sal_Bool bPt, sal_Bool bFix, sal_Unicode cForceThousandSep = 0 )
 {
 
     short nExp = 0;                     // Exponent
@@ -391,7 +391,7 @@ static void myftoa( double nNum, char * pBuf, short nPrec, short nExpWidth,
 #pragma warning(disable: 4748) // "... because optimizations are disabled ..."
 #endif
 
-void ImpCvtNum( double nNum, short nPrec, ::rtl::OUString& rRes, BOOL bCoreString )
+void ImpCvtNum( double nNum, short nPrec, ::rtl::OUString& rRes, sal_Bool bCoreString )
 {
     char *q;
     char cBuf[ 40 ], *p = cBuf;
@@ -407,7 +407,7 @@ void ImpCvtNum( double nNum, short nPrec, ::rtl::OUString& rRes, BOOL bCoreStrin
     }
     double dMaxNumWithoutExp = (nPrec == 6) ? 1E6 : 1E14;
     myftoa( nNum, p, nPrec,( nNum &&( nNum < 1E-1 || nNum > dMaxNumWithoutExp ) ) ? 4:0,
-        FALSE, TRUE, cDecimalSep );
+        sal_False, sal_True, cDecimalSep );
     // Trailing Zeroes weg:
     for( p = cBuf; *p &&( *p != 'E' ); p++ ) {}
     q = p; p--;
@@ -422,10 +422,10 @@ void ImpCvtNum( double nNum, short nPrec, ::rtl::OUString& rRes, BOOL bCoreStrin
 #pragma optimize( "", on )
 #endif
 
-BOOL ImpConvStringExt( ::rtl::OUString& rSrc, SbxDataType eTargetType )
+sal_Bool ImpConvStringExt( ::rtl::OUString& rSrc, SbxDataType eTargetType )
 {
     // Merken, ob ueberhaupt was geaendert wurde
-    BOOL bChanged = FALSE;
+    sal_Bool bChanged = sal_False;
     ::rtl::OUString aNewString;
 
     // Nur Spezial-Fälle behandeln, als Default tun wir nichts
@@ -451,25 +451,25 @@ BOOL ImpConvStringExt( ::rtl::OUString& rSrc, SbxDataType eTargetType )
                 {
                     sal_Unicode* pStr = (sal_Unicode*)aNewString.getStr();
                     pStr[nPos] = (sal_Unicode)'.';
-                    bChanged = TRUE;
+                    bChanged = sal_True;
                 }
             }
             break;
         }
 
-        // Bei BOOL TRUE und FALSE als String pruefen
+        // Bei sal_Bool sal_True und sal_False als String pruefen
         case SbxBOOL:
         {
             if( rSrc.equalsIgnoreAsciiCaseAscii( "true" ) )
             {
                 aNewString = ::rtl::OUString::valueOf( (sal_Int32)SbxTRUE );
-                bChanged = TRUE;
+                bChanged = sal_True;
             }
             else
             if( rSrc.equalsIgnoreAsciiCaseAscii( "false" ) )
             {
                 aNewString = ::rtl::OUString::valueOf( (sal_Int32)SbxFALSE );
-                bChanged = TRUE;
+                bChanged = sal_True;
             }
             break;
         }
@@ -490,7 +490,7 @@ BOOL ImpConvStringExt( ::rtl::OUString& rSrc, SbxDataType eTargetType )
 // lasse diesen Code vorl"aufig drin, zum 'abgucken'
 // der bisherigen Implementation
 
-static USHORT printfmtnum( double nNum, XubString& rRes, const XubString& rWFmt )
+static sal_uInt16 printfmtnum( double nNum, XubString& rRes, const XubString& rWFmt )
 {
     const String& rFmt = rWFmt;
     char    cFill  = ' ';           // Fuellzeichen
@@ -499,10 +499,10 @@ static USHORT printfmtnum( double nNum, XubString& rRes, const XubString& rWFmt 
     short   nPrec  = 0;             // Anzahl Nachkommastellen
     short   nWidth = 0;             // Zahlenweite gesamnt
     short   nLen;                   // Laenge konvertierte Zahl
-    BOOL    bPoint = FALSE;         // TRUE: mit 1000er Kommas
-    BOOL    bTrail = FALSE;         // TRUE, wenn folgendes Minus
-    BOOL    bSign  = FALSE;         // TRUE: immer mit Vorzeichen
-    BOOL    bNeg   = FALSE;         // TRUE: Zahl ist negativ
+    sal_Bool    bPoint = sal_False;         // sal_True: mit 1000er Kommas
+    sal_Bool    bTrail = sal_False;         // sal_True, wenn folgendes Minus
+    sal_Bool    bSign  = sal_False;         // sal_True: immer mit Vorzeichen
+    sal_Bool    bNeg   = sal_False;         // sal_True: Zahl ist negativ
     char    cBuf [1024];            // Zahlenpuffer
     char  * p;
     const char* pFmt = rFmt;
@@ -518,7 +518,7 @@ static USHORT printfmtnum( double nNum, XubString& rRes, const XubString& rWFmt 
         case 0:
             break;
         case '+':
-            bSign = TRUE; nWidth++; break;
+            bSign = sal_True; nWidth++; break;
         case '*':
             nWidth++; cFill = '*';
             if( *pFmt == '$' ) nWidth++, pFmt++, cPre = '$';
@@ -537,7 +537,7 @@ static USHORT printfmtnum( double nNum, XubString& rRes, const XubString& rWFmt 
         // 1000er Kommas?
         if( *pFmt == ',' )
         {
-            nWidth++; pFmt++; bPoint = TRUE;
+            nWidth++; pFmt++; bPoint = sal_True;
         } else break;
     }
     // Nachkomma:
@@ -551,14 +551,14 @@ static USHORT printfmtnum( double nNum, XubString& rRes, const XubString& rWFmt 
         pFmt++, nExpDig++, nWidth++;
     // Folgendes Minus:
     if( !bSign && *pFmt == '-' )
-        pFmt++, bTrail = TRUE;
+        pFmt++, bTrail = sal_True;
 
     // Zahl konvertieren:
     if( nPrec > 15 ) nPrec = 15;
-    if( nNum < 0.0 ) nNum = -nNum, bNeg = TRUE;
+    if( nNum < 0.0 ) nNum = -nNum, bNeg = sal_True;
     p = cBuf;
     if( bSign ) *p++ = bNeg ? '-' : '+';
-    myftoa( nNum, p, nPrec, nExpDig, bPoint, FALSE );
+    myftoa( nNum, p, nPrec, nExpDig, bPoint, sal_False );
     nLen = strlen( cBuf );
 
     // Ueberlauf?
@@ -573,12 +573,12 @@ static USHORT printfmtnum( double nNum, XubString& rRes, const XubString& rWFmt 
     if( bTrail )
         rRes += bNeg ? '-' : ' ';
 
-    return (USHORT) ( pFmt - (const char*) rFmt );
+    return (sal_uInt16) ( pFmt - (const char*) rFmt );
 }
 
 #endif //_old_format_code_
 
-static USHORT printfmtstr( const XubString& rStr, XubString& rRes, const XubString& rFmt )
+static sal_uInt16 printfmtstr( const XubString& rStr, XubString& rRes, const XubString& rFmt )
 {
     const xub_Unicode* pStr = rStr.GetBuffer();
     const xub_Unicode* pFmtStart = rFmt.GetBuffer();
@@ -603,12 +603,12 @@ static USHORT printfmtstr( const XubString& rStr, XubString& rRes, const XubStri
             rRes = rStr;
             break;
     }
-    return (USHORT) ( pFmt - pFmtStart );
+    return (sal_uInt16) ( pFmt - pFmtStart );
 }
 
 /////////////////////////////////////////////////////////////////////////
 
-BOOL SbxValue::Scan( const XubString& rSrc, USHORT* pLen )
+sal_Bool SbxValue::Scan( const XubString& rSrc, sal_uInt16* pLen )
 {
     SbxError eRes = SbxERR_OK;
     if( !CanWrite() )
@@ -627,10 +627,10 @@ BOOL SbxValue::Scan( const XubString& rSrc, USHORT* pLen )
     }
     if( eRes )
     {
-        SetError( eRes ); return FALSE;
+        SetError( eRes ); return sal_False;
     }
     else
-        return TRUE;
+        return sal_True;
 }
 
 
@@ -648,7 +648,7 @@ ResMgr* implGetResMgr( void )
 class SbxValueFormatResId : public ResId
 {
 public:
-    SbxValueFormatResId( USHORT nId )
+    SbxValueFormatResId( sal_uInt16 nId )
         : ResId( nId, *implGetResMgr() )
     {}
 };
@@ -693,7 +693,7 @@ static VbaFormatInfo pFormatInfoTable[] =
 VbaFormatInfo* getFormatInfo( const String& rFmt )
 {
     VbaFormatInfo* pInfo = NULL;
-    INT16 i = 0;
+    sal_Int16 i = 0;
     while( (pInfo = pFormatInfoTable + i )->mpVbaFormat != NULL )
     {
         if( rFmt.EqualsIgnoreCaseAscii( pInfo->mpVbaFormat ) )
@@ -713,11 +713,11 @@ VbaFormatInfo* getFormatInfo( const String& rFmt )
 #define VBAFORMAT_UPPERCASE         ">"
 
 // From methods1.cxx
-INT16 implGetWeekDay( double aDate, bool bFirstDayParam = false, INT16 nFirstDay = 0 );
+sal_Int16 implGetWeekDay( double aDate, bool bFirstDayParam = false, sal_Int16 nFirstDay = 0 );
 // from methods.cxx
-INT16 implGetMinute( double dDate );
-INT16 implGetDateYear( double aDate );
-BOOL implDateSerial( INT16 nYear, INT16 nMonth, INT16 nDay, double& rdRet );
+sal_Int16 implGetMinute( double dDate );
+sal_Int16 implGetDateYear( double aDate );
+sal_Bool implDateSerial( sal_Int16 nYear, sal_Int16 nMonth, sal_Int16 nDay, double& rdRet );
 
 void SbxValue::Format( XubString& rRes, const XubString* pFmt ) const
 {
@@ -753,7 +753,7 @@ void SbxValue::Format( XubString& rRes, const XubString* pFmt ) const
         double nNumber;
         Color* pCol;
 
-        BOOL bSuccess = aFormatter.IsNumberFormat( aStr, nIndex, nNumber );
+        sal_Bool bSuccess = aFormatter.IsNumberFormat( aStr, nIndex, nNumber );
 
         // number format, use SvNumberFormatter to handle it.
         if( bSuccess )
@@ -804,7 +804,7 @@ void SbxValue::Format( XubString& rRes, const XubString* pFmt ) const
             else if( aFmtStr.EqualsIgnoreCaseAscii( VBAFORMAT_N )
                     || aFmtStr.EqualsIgnoreCaseAscii( VBAFORMAT_NN ))
             {
-                INT32 nMin = implGetMinute( nNumber );
+                sal_Int32 nMin = implGetMinute( nNumber );
                 if( nMin < 10 && aFmtStr.EqualsIgnoreCaseAscii( VBAFORMAT_NN ) )
                 {
                     // Minute in two digits
@@ -819,15 +819,15 @@ void SbxValue::Format( XubString& rRes, const XubString* pFmt ) const
             }
             else if( aFmtStr.EqualsIgnoreCaseAscii( VBAFORMAT_W ))
             {
-                INT32 nWeekDay = implGetWeekDay( nNumber );
+                sal_Int32 nWeekDay = implGetWeekDay( nNumber );
                 rRes = String::CreateFromInt32( nWeekDay );
             }
             else if( aFmtStr.EqualsIgnoreCaseAscii( VBAFORMAT_Y ))
             {
-                INT16 nYear = implGetDateYear( nNumber );
+                sal_Int16 nYear = implGetDateYear( nNumber );
                 double dBaseDate;
                 implDateSerial( nYear, 1, 1, dBaseDate );
-                INT32 nYear32 = 1 + INT32( nNumber - dBaseDate );
+                sal_Int32 nYear32 = 1 + sal_Int32( nNumber - dBaseDate );
                 rRes = String::CreateFromInt32( nYear32 );
             }
             else
@@ -948,7 +948,7 @@ void SbxValue::Format( XubString& rRes, const XubString* pFmt ) const
                 // #45355 wenn es numerisch ist, muss gewandelt werden
                 if( IsNumericRTL() )
                 {
-                    ScanNumIntnl( GetString(), d, /*bSingle*/FALSE );
+                    ScanNumIntnl( GetString(), d, /*bSingle*/sal_False );
                     goto cvt2;
                 }
                 else

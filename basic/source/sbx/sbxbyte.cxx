@@ -31,10 +31,10 @@
 #include <basic/sbx.hxx>
 #include "sbxconv.hxx"
 
-BYTE ImpGetByte( const SbxValues* p )
+sal_uInt8 ImpGetByte( const SbxValues* p )
 {
     SbxValues aTmp;
-    BYTE nRes;
+    sal_uInt8 nRes;
 start:
     switch( +p->eType )
     {
@@ -48,10 +48,10 @@ start:
                 SbxBase::SetError( SbxERR_OVERFLOW ); nRes = 0;
             }
             else
-                nRes = (BYTE) p->nChar;
+                nRes = (sal_uInt8) p->nChar;
             break;
         case SbxBYTE:
-            nRes = (BYTE) p->nByte; break;
+            nRes = (sal_uInt8) p->nByte;    break;
         case SbxINTEGER:
         case SbxBOOL:
             if( p->nInteger > SbxMAXBYTE )
@@ -63,16 +63,16 @@ start:
                 SbxBase::SetError( SbxERR_OVERFLOW ); nRes = 0;
             }
             else
-                nRes = (BYTE) p->nInteger;
+                nRes = (sal_uInt8) p->nInteger;
             break;
         case SbxERROR:
         case SbxUSHORT:
-            if( p->nUShort > (USHORT) SbxMAXBYTE )
+            if( p->nUShort > (sal_uInt16) SbxMAXBYTE )
             {
                 SbxBase::SetError( SbxERR_OVERFLOW ); nRes = SbxMAXBYTE;
             }
             else
-                nRes = (BYTE) p->nUShort;
+                nRes = (sal_uInt8) p->nUShort;
             break;
         case SbxLONG:
             if( p->nLong > SbxMAXBYTE )
@@ -84,7 +84,7 @@ start:
                 SbxBase::SetError( SbxERR_OVERFLOW ); nRes = 0;
             }
             else
-                nRes = (BYTE) p->nLong;
+                nRes = (sal_uInt8) p->nLong;
             break;
         case SbxULONG:
             if( p->nULong > SbxMAXBYTE )
@@ -92,7 +92,7 @@ start:
                 SbxBase::SetError( SbxERR_OVERFLOW ); nRes = SbxMAXBYTE;
             }
             else
-                nRes = (BYTE) p->nULong;
+                nRes = (sal_uInt8) p->nULong;
             break;
         case SbxSALINT64:
             if( p->nInt64 > SbxMAXBYTE )
@@ -104,7 +104,7 @@ start:
                 SbxBase::SetError( SbxERR_OVERFLOW ); nRes = 0;
             }
             else
-                nRes = (BYTE) p->nInt64;
+                nRes = (sal_uInt8) p->nInt64;
             break;
         case SbxSALUINT64:
             if( p->uInt64 > SbxMAXBYTE )
@@ -112,7 +112,7 @@ start:
                 SbxBase::SetError( SbxERR_OVERFLOW ); nRes = SbxMAXBYTE;
             }
             else
-                nRes = (BYTE) p->uInt64;
+                nRes = (sal_uInt8) p->uInt64;
             break;
         case SbxSINGLE:
             if( p->nSingle > SbxMAXBYTE )
@@ -124,7 +124,7 @@ start:
                 SbxBase::SetError( SbxERR_OVERFLOW ); nRes = 0;
             }
             else
-                nRes = (BYTE) ImpRound( p->nSingle );
+                nRes = (sal_uInt8) ImpRound( p->nSingle );
             break;
         case SbxDATE:
         case SbxDOUBLE:
@@ -159,7 +159,7 @@ start:
                 SbxBase::SetError( SbxERR_OVERFLOW ); nRes = 0;
             }
             else
-                nRes = (BYTE) ImpRound( dVal );
+                nRes = (sal_uInt8) ImpRound( dVal );
             break;
             }
         case SbxBYREF | SbxSTRING:
@@ -182,7 +182,7 @@ start:
                     SbxBase::SetError( SbxERR_OVERFLOW ); nRes = 0;
                 }
                 else
-                    nRes = (BYTE) ( d + 0.5 );
+                    nRes = (sal_uInt8) ( d + 0.5 );
             }
             break;
         case SbxOBJECT:
@@ -237,7 +237,7 @@ start:
     return nRes;
 }
 
-void ImpPutByte( SbxValues* p, BYTE n )
+void ImpPutByte( SbxValues* p, sal_uInt8 n )
 {
     switch( +p->eType )
     {

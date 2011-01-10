@@ -36,8 +36,8 @@
 
 class SbJScriptModule : public SbModule
 {
-    virtual BOOL LoadData( SvStream&, USHORT );
-    virtual BOOL StoreData( SvStream& ) const;
+    virtual sal_Bool LoadData( SvStream&, sal_uInt16 );
+    virtual sal_Bool StoreData( SvStream& ) const;
 public:
     SBX_DECL_PERSIST_NODATA(SBXCR_SBX,SBXID_JSCRIPTMOD,1);
     TYPEINFO();

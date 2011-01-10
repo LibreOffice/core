@@ -386,10 +386,10 @@ SbiTokenizer::SbiTokenizer( const ::rtl::OUString& rSrc, StarBASIC* pb )
     //if( StarBASIC::GetGlobalLanguageMode() == SB_LANG_JAVASCRIPT )
     //  pTokTable = aTokTable_Java;
     TokenTable *tp;
-    bEof = bAs = FALSE;
+    bEof = bAs = sal_False;
     eCurTok = NIL;
     ePush = NIL;
-    bEos = bKeywords = bErrorIsSymbol = TRUE;
+    bEos = bKeywords = bErrorIsSymbol = sal_True;
     if( !nToken )
         for( nToken = 0, tp = pTokTable; tp->t; nToken++, tp++ ) {}
 }
@@ -431,9 +431,9 @@ SbiToken SbiTokenizer::Peek()
 {
     if( ePush == NIL )
     {
-        USHORT nOldLine = nLine;
-        USHORT nOldCol1 = nCol1;
-        USHORT nOldCol2 = nCol2;
+        sal_uInt16 nOldLine = nLine;
+        sal_uInt16 nOldCol1 = nCol1;
+        sal_uInt16 nOldCol2 = nCol2;
         ePush = Next();
         nPLine = nLine; nLine = nOldLine;
         nPCol1 = nCol1; nCol1 = nOldCol1;
@@ -498,15 +498,15 @@ SbiToken SbiTokenizer::Next()
     // Sonst einlesen:
     if( !NextSym() )
     {
-        bEof = bEos = TRUE;
+        bEof = bEos = sal_True;
         return eCurTok = EOLN;
     }
     // Zeilenende?
     if( aSym.GetBuffer()[0] == '\n' )
     {
-        bEos = TRUE; return eCurTok = EOLN;
+        bEos = sal_True; return eCurTok = EOLN;
     }
-    bEos = FALSE;
+    bEos = sal_False;
 
     // Zahl?
     if( bNumber )
@@ -573,10 +573,10 @@ special:
     {
         // AB, 15.3.96, Spezialbehandlung fuer END, beim Peek() geht die
         // aktuelle Zeile verloren, daher alles merken und danach restaurieren
-        USHORT nOldLine = nLine;
-        USHORT nOldCol  = nCol;
-        USHORT nOldCol1 = nCol1;
-        USHORT nOldCol2 = nCol2;
+        sal_uInt16 nOldLine = nLine;
+        sal_uInt16 nOldCol  = nCol;
+        sal_uInt16 nOldCol1 = nCol1;
+        sal_uInt16 nOldCol2 = nCol2;
         String aOldSym = aSym;
         SaveLine();             // pLine im Scanner sichern
 
@@ -612,11 +612,11 @@ special:
     eCurTok = tp->t;
     // AS: Datentypen sind Keywords
     if( tp->t == AS )
-        bAs = TRUE;
+        bAs = sal_True;
     else
     {
         if( bAs )
-            bAs = FALSE;
+            bAs = sal_False;
         else if( eCurTok >= DATATYPE1 && eCurTok <= DATATYPE2 && (bErrorIsSymbol || eCurTok != _ERROR_) )
             eCurTok = SYMBOL;
     }
@@ -653,12 +653,12 @@ special:
 
 // Kann das aktuell eingelesene Token ein Label sein?
 
-BOOL SbiTokenizer::MayBeLabel( BOOL bNeedsColon )
+sal_Bool SbiTokenizer::MayBeLabel( sal_Bool bNeedsColon )
 {
     if( eCurTok == SYMBOL || m_aTokenLabelInfo.canTokenBeLabel( eCurTok ) )
-        return bNeedsColon ? DoesColonFollow() : TRUE;
+        return bNeedsColon ? DoesColonFollow() : sal_True;
     else
-        return BOOL( eCurTok == NUMBER
+        return sal_Bool( eCurTok == NUMBER
                   && eScanType == SbxINTEGER
                   && nVal >= 0 );
 }
@@ -670,8 +670,8 @@ BOOL SbiTokenizer::MayBeLabel( BOOL bNeedsColon )
 
 void SbiTokenizer::Hilite( SbTextPortions& rList )
 {
-    bErrors = FALSE;
-    bUsedForHilite = TRUE;
+    bErrors = sal_False;
+    bUsedForHilite = sal_True;
     SbiToken eLastTok = NIL;
     for( ;; )
     {
@@ -709,6 +709,6 @@ void SbiTokenizer::Hilite( SbTextPortions& rList )
             break;
         eLastTok = eCurTok;
     }
-    bUsedForHilite = FALSE;
+    bUsedForHilite = sal_False;
 }
 

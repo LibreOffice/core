@@ -101,7 +101,7 @@ void SfxObjectShell::OnDocumentPrinterChanged( Printer* /*pNewPrinter*/ )
 }
 
 // -----------------------------------------------------------------------
-Rectangle SfxObjectShell::GetVisArea( USHORT nAspect ) const
+Rectangle SfxObjectShell::GetVisArea( sal_uInt16 nAspect ) const
 {
     if( nAspect == ASPECT_CONTENT )
         return pImp->m_aVisArea;
@@ -131,7 +131,7 @@ void SfxObjectShell::SetVisArea( const Rectangle & rVisArea )
         if ( GetCreateMode() == SFX_CREATE_MODE_EMBEDDED )
         {
             if ( IsEnableSetModified() )
-                SetModified( TRUE );
+                SetModified( sal_True );
 
                SFX_APP()->NotifyEvent(SfxEventHint( SFX_EVENT_VISAREACHANGED, GlobalEventConfig::GetEventName(STR_EVENT_VISAREACHANGED), this));
 
@@ -184,7 +184,7 @@ void SfxObjectShell::SetVisAreaSize( const Size & rVisSize )
 }
 
 // -----------------------------------------------------------------------
-ULONG SfxObjectShell::GetMiscStatus() const
+sal_uIntPtr SfxObjectShell::GetMiscStatus() const
 {
     return 0;
 }
@@ -213,7 +213,7 @@ void SfxObjectShell::FillTransferableObjectDescriptor( TransferableObjectDescrip
     rDesc.maSize = OutputDevice::LogicToLogic( GetVisArea().GetSize(), GetMapUnit(), MAP_100TH_MM );
     rDesc.maDragStartPos = Point();
     rDesc.maDisplayName = String();
-    rDesc.mbCanLink = FALSE;
+    rDesc.mbCanLink = sal_False;
 }
 
 // -----------------------------------------------------------------------
@@ -221,7 +221,7 @@ void SfxObjectShell::DoDraw( OutputDevice* pDev,
                             const Point & rObjPos,
                             const Size & rSize,
                             const JobSetup & rSetup,
-                            USHORT nAspect )
+                            sal_uInt16 nAspect )
 {
     MapMode aMod = pDev->GetMapMode();
     Size aSize = GetVisArea( nAspect ).GetSize();
@@ -245,7 +245,7 @@ void SfxObjectShell::DoDraw_Impl( OutputDevice* pDev,
                                const Fraction & rScaleX,
                                const Fraction & rScaleY,
                                const JobSetup & rSetup,
-                               USHORT nAspect )
+                               sal_uInt16 nAspect )
 {
     Rectangle aVisArea  = GetVisArea( nAspect );
     // MapUnit des Ziels

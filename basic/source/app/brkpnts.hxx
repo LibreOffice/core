@@ -50,27 +50,27 @@ public:
     void        SetModule( SbModule *pMod );
     void        SetBPsInModule();
 
-    void        InsertBreakpoint( USHORT nLine );
-    void        ToggleBreakpoint( USHORT nLine );
-    void        AdjustBreakpoints( ULONG nLine, BOOL bInserted );
+    void        InsertBreakpoint( sal_uInt16 nLine );
+    void        ToggleBreakpoint( sal_uInt16 nLine );
+    void        AdjustBreakpoints( sal_uIntPtr nLine, sal_Bool bInserted );
 
     void        LoadBreakpoints( String aFilename );
     void        SaveBreakpoints( String aFilename );
 
 protected:
-    Breakpoint* FindBreakpoint( ULONG nLine );
+    Breakpoint* FindBreakpoint( sal_uIntPtr nLine );
 
 private:
     long            nCurYOffset;
-    USHORT          nMarkerPos;
+    sal_uInt16          nMarkerPos;
     SbModule*       pModule;
-    BOOL            bErrorMarker;
+    sal_Bool            bErrorMarker;
     static ImageList *pImages;
 
 protected:
     virtual void    Paint( const Rectangle& );
     Breakpoint*     FindBreakpoint( const Point& rMousePos );
-    void            ShowMarker( BOOL bShow );
+    void            ShowMarker( sal_Bool bShow );
     virtual void    MouseButtonDown( const MouseEvent& rMEvt );
 
 public:
@@ -78,10 +78,10 @@ public:
 //  void            SetModulWindow( ModulWindow* pWin )
 //                      { pModulWindow = pWin; }
 
-    void            SetMarkerPos( USHORT nLine, BOOL bErrorMarker = FALSE );
+    void            SetMarkerPos( sal_uInt16 nLine, sal_Bool bErrorMarker = sal_False );
 
     virtual void        Scroll( long nHorzScroll, long nVertScroll,
-                                USHORT nFlags = 0 );
+                                sal_uInt16 nFlags = 0 );
     long&           GetCurYOffset()         { return nCurYOffset; }
 };
 

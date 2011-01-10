@@ -55,7 +55,7 @@ void SampleElement::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
     {
         SbxVariable* pVar = pHint->GetVar();
         SbxArray* pPar_ = pVar->GetParameters();
-        ULONG t = pHint->GetId();
+        sal_uIntPtr t = pHint->GetId();
         if( t == SBX_HINT_DATAWANTED && pVar->GetUserData() == 0x12345678 )
         {
             // Die Say-Methode:

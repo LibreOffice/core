@@ -57,23 +57,23 @@ enum SbxClassType {         // SBX-class-IDs (order is important!)
 enum SbxDataType {
     SbxEMPTY      =  0, // * Uninitialized
     SbxNULL       =  1, // * Contains no valid data
-    SbxINTEGER    =  2, // * Integer (INT16)
-    SbxLONG       =  3, // * Long integer (INT32)
+    SbxINTEGER    =  2, // * Integer (sal_Int16)
+    SbxLONG       =  3, // * Long integer (sal_Int32)
     SbxSINGLE     =  4, // * Single-precision floating point number (float)
     SbxDOUBLE     =  5, // * Double-precision floating point number (double)
-    SbxCURRENCY   =  6, //   Currency (INT64)
+    SbxCURRENCY   =  6, //   Currency (sal_Int64)
     SbxDATE       =  7, // * Date (double)
     SbxSTRING     =  8, // * String (StarView)
     SbxOBJECT     =  9, // * SbxBase object pointer
-    SbxERROR      = 10, // * Error (UINT16)
+    SbxERROR      = 10, // * Error (sal_uInt16)
     SbxBOOL       = 11, // * Boolean (0 or -1)
     SbxVARIANT    = 12, // * Anzeige fuer varianten Datentyp
     SbxDATAOBJECT = 13, // * Common data object w/o ref count
 
     SbxCHAR       = 16, // * signed char
     SbxBYTE       = 17, // * unsigned char
-    SbxUSHORT     = 18, // * unsigned short (UINT16)
-    SbxULONG      = 19, // * unsigned long (UINT32)
+    SbxUSHORT     = 18, // * unsigned short (sal_uInt16)
+    SbxULONG      = 19, // * unsigned long (sal_uInt32)
     SbxLONG64     = 20, //   signed 64-bit int
     SbxULONG64    = 21, //   unsigned 64-bit int
     SbxINT        = 22, // * signed machine-dependent int
@@ -105,9 +105,9 @@ enum SbxDataType {
     SbxUSERn  = 2047    // last user defined data type
 };
 
-const UINT32 SBX_TYPE_WITH_EVENTS_FLAG = 0x10000;
-const UINT32 SBX_TYPE_DIM_AS_NEW_FLAG  = 0x20000;
-const UINT32 SBX_FIXED_LEN_STRING_FLAG = 0x10000;   // same value as above as no conflict possible
+const sal_uInt32 SBX_TYPE_WITH_EVENTS_FLAG = 0x10000;
+const sal_uInt32 SBX_TYPE_DIM_AS_NEW_FLAG  = 0x20000;
+const sal_uInt32 SBX_FIXED_LEN_STRING_FLAG = 0x10000;   // same value as above as no conflict possible
 
 #endif
 
@@ -123,8 +123,8 @@ enum SbxOperator {
     SbxPLUS,            // this + var
     SbxMINUS,           // this - var
     SbxNEG,             // -this (var is ignored)
-    SbxIDIV,            // this / var (both operands max. INT32!)
-                        // Boolean operators (max INT32!):
+    SbxIDIV,            // this / var (both operands max. sal_Int32!)
+                        // Boolean operators (max sal_Int32!):
     SbxAND,             // this & var
     SbxOR,              // this | var
     SbxXOR,             // this ^ var
@@ -157,7 +157,7 @@ enum SbxNameType {              // Type of the questioned name of a variable
 #endif
 
 // AB: 20.3.96: New error messages
-typedef ULONG SbxError;         // Preserve old type
+typedef sal_uIntPtr SbxError;           // Preserve old type
 
 #endif
 // von #ifndef __RSC
@@ -356,10 +356,10 @@ enum SbxError {                 // Ergebnis einer Rechenoperation/Konversion
 #define SbxMAXBYTE          ( 255)
 #define SbxMAXINT           ( 32767)
 #define SbxMININT           (-32768)
-#define SbxMAXUINT          ((UINT16) 65535)
+#define SbxMAXUINT          ((sal_uInt16) 65535)
 #define SbxMAXLNG           ( 2147483647)
-#define SbxMINLNG           ((INT32)(-2147483647-1))
-#define SbxMAXULNG          ((UINT32) 0xffffffff)
+#define SbxMINLNG           ((sal_Int32)(-2147483647-1))
+#define SbxMAXULNG          ((sal_uInt32) 0xffffffff)
 
 #define SbxMAXSALINT64      SAL_MAX_INT64
 #define SbxMINSALINT64      SAL_MIN_INT64
@@ -379,7 +379,7 @@ enum SbxError {                 // Ergebnis einer Rechenoperation/Konversion
 #define SBX_MAXINDEX        0x3FF0
 #define SBX_MAXINDEX32      SbxMAXLNG
 
-// The numeric values of TRUE and FALSE
+// The numeric values of sal_True and FALSE
 enum SbxBOOL { SbxFALSE = 0, SbxTRUE = -1 };
 
 #endif // __RSC

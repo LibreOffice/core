@@ -52,11 +52,11 @@ class SfxThesSubMenuControl : public SfxMenuControl
     Menu&               rParent;
 
 private:
-    virtual void    StateChanged( USHORT, SfxItemState, const SfxPoolItem* pState );
+    virtual void    StateChanged( sal_uInt16, SfxItemState, const SfxPoolItem* pState );
     DECL_LINK( MenuSelect, Menu * );
 
 public:
-    SfxThesSubMenuControl(USHORT, Menu&, SfxBindings&);
+    SfxThesSubMenuControl(sal_uInt16, Menu&, SfxBindings&);
     ~SfxThesSubMenuControl();
 
     virtual PopupMenu*  GetPopup() const;

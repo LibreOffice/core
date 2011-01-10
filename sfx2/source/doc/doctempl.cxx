@@ -906,8 +906,8 @@ sal_Bool SfxDocumentTemplates::CopyOrMove
                                     Aktion konnte nicht ausgef2uhrt werden
     [Querverweise]
 
-    <SfxDocumentTemplates::Move(sal_uInt16,USHORT,sal_uInt16,USHORT)>
-    <SfxDocumentTemplates::Copy(sal_uInt16,USHORT,sal_uInt16,USHORT)>
+    <SfxDocumentTemplates::Move(sal_uInt16,sal_uInt16,sal_uInt16,sal_uInt16)>
+    <SfxDocumentTemplates::Copy(sal_uInt16,sal_uInt16,sal_uInt16,sal_uInt16)>
 */
 
 {
@@ -1032,7 +1032,7 @@ sal_Bool SfxDocumentTemplates::Move
 
     [Querverweise]
 
-    <SfxDocumentTemplates::CopyOrMove(sal_uInt16,USHORT,sal_uInt16,USHORT,sal_Bool)>
+    <SfxDocumentTemplates::CopyOrMove(sal_uInt16,sal_uInt16,sal_uInt16,sal_uInt16,sal_Bool)>
 */
 {
     DocTemplLocker_Impl aLocker( *pImp );
@@ -1067,7 +1067,7 @@ sal_Bool SfxDocumentTemplates::Copy
 
     [Querverweise]
 
-    <SfxDocumentTemplates::CopyOrMove(sal_uInt16,USHORT,sal_uInt16,USHORT,sal_Bool)>
+    <SfxDocumentTemplates::CopyOrMove(sal_uInt16,sal_uInt16,sal_uInt16,sal_uInt16,sal_Bool)>
 */
 
 {
@@ -1105,7 +1105,7 @@ sal_Bool SfxDocumentTemplates::CopyTo
 
     [Querverweise]
 
-    <SfxDocumentTemplates::CopyFrom(sal_uInt16,USHORT,String&)>
+    <SfxDocumentTemplates::CopyFrom(sal_uInt16,sal_uInt16,String&)>
 */
 
 {
@@ -1184,7 +1184,7 @@ sal_Bool SfxDocumentTemplates::CopyFrom
 
     [Querverweise]
 
-    <SfxDocumentTemplates::CopyTo(sal_uInt16,USHORT,const String&)>
+    <SfxDocumentTemplates::CopyTo(sal_uInt16,sal_uInt16,const String&)>
 */
 
 {

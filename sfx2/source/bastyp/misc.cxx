@@ -46,7 +46,7 @@ String SearchAndReplace( const String &rSource,
                          const String &rReplacement )
 {
     String aTarget( rSource );
-    USHORT nPos = rSource.Search( rToReplace );
+    sal_uInt16 nPos = rSource.Search( rToReplace );
     if ( nPos != STRING_NOTFOUND )
     {
         aTarget.Erase( nPos, rToReplace.Len() );

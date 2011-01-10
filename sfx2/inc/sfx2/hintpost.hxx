@@ -52,7 +52,7 @@ class SfxHintPoster: public SvRefBase
 */
 
 {
-    ULONG           nId;
+    sal_uIntPtr         nId;
     GenLink         aLink;
 
 private:

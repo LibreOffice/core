@@ -34,17 +34,17 @@ class SfxCommonTemplateDialog_Impl;
 
 class SfxTemplateControllerItem: public SfxControllerItem {
     SfxCommonTemplateDialog_Impl  &rTemplateDlg;
-    BYTE                            nWaterCanState;
+    sal_uInt8                            nWaterCanState;
     long                            nUserEventId;
 
     DECL_STATIC_LINK(SfxTemplateControllerItem, SetWaterCanStateHdl_Impl,
                                 SfxTemplateControllerItem*);
 
 protected:
-    virtual void    StateChanged( USHORT, SfxItemState, const SfxPoolItem* pState );
+    virtual void    StateChanged( sal_uInt16, SfxItemState, const SfxPoolItem* pState );
 
 public:
-    SfxTemplateControllerItem( USHORT nId, SfxCommonTemplateDialog_Impl &rDlg, SfxBindings &);
+    SfxTemplateControllerItem( sal_uInt16 nId, SfxCommonTemplateDialog_Impl &rDlg, SfxBindings &);
     ~SfxTemplateControllerItem();
 };
 

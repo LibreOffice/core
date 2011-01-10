@@ -61,7 +61,7 @@ struct SfxViewShell_Impl
     SvBorder                    aBorder;
     Size                        aOptimalSize;
     Size                        aMargin;
-    USHORT                      m_nPrinterLocks;
+    sal_uInt16                      m_nPrinterLocks;
     bool                        m_bCanPrint;
     bool                        m_bHasPrintOptions;
     bool                        m_bPlugInsActive;
@@ -71,14 +71,14 @@ struct SfxViewShell_Impl
     bool                        m_bGotOwnership;
     bool                        m_bGotFrameOwnership;
     SfxScrollingMode            m_eScroll;
-    USHORT                      m_nFamily;
+    sal_uInt16                      m_nFamily;
     ::rtl::Reference<SfxBaseController> m_pController;
     ::std::auto_ptr< ::svt::AcceleratorExecute >    m_pAccExec;
     com::sun::star::uno::Sequence < com::sun::star::beans::PropertyValue > aPrintOpts;
     ::rtl::Reference< SfxClipboardChangeListener > xClipboardListener;
     ::boost::shared_ptr< vcl::PrinterController > m_pPrinterController;
 
-    SfxViewShell_Impl(USHORT const nFlags);
+    SfxViewShell_Impl(sal_uInt16 const nFlags);
 };
 
 #endif
