@@ -1363,7 +1363,7 @@ XubString EditDoc::GetSepStr( LineEnd eEnd )
 
 XubString EditDoc::GetText( LineEnd eEnd ) const
 {
-    sal_uInt32 nLen = GetTextLen();
+    sal_uIntPtr nLen = GetTextLen();
     sal_uInt16 nNodes = Count();
 
     String aSep = EditDoc::GetSepStr( eEnd );
@@ -1445,9 +1445,9 @@ XubString EditDoc::GetParaAsString( ContentNode* pNode, sal_uInt16 nStartPos, sa
     return aStr;
 }
 
-sal_uInt32 EditDoc::GetTextLen() const
+sal_uIntPtr EditDoc::GetTextLen() const
 {
-    sal_uInt32 nLen = 0;
+    sal_uIntPtr nLen = 0;
     for ( sal_uInt16 nNode = 0; nNode < Count(); nNode++ )
     {
         ContentNode* pNode = GetObject( nNode );
@@ -2229,7 +2229,7 @@ SvxFontTable::~SvxFontTable()
     }
 }
 
-sal_uInt32 SvxFontTable::GetId( const SvxFontItem& rFontItem )
+sal_uIntPtr SvxFontTable::GetId( const SvxFontItem& rFontItem )
 {
     SvxFontItem* pItem = First();
     while ( pItem )
@@ -2256,7 +2256,7 @@ SvxColorList::~SvxColorList()
     }
 }
 
-sal_uInt32 SvxColorList::GetId( const SvxColorItem& rColorItem )
+sal_uIntPtr SvxColorList::GetId( const SvxColorItem& rColorItem )
 {
     SvxColorItem* pItem = First();
     while ( pItem )

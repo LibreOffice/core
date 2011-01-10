@@ -102,7 +102,7 @@ public:
     //  - FnCptlSttSntnc
     // gerufen. Dann koennen die Worte ggfs. in die Ausnahmelisten
     // aufgenommen werden.
-    virtual void SaveCpltSttWord( sal_uInt32 nFlag, xub_StrLen nPos,
+    virtual void SaveCpltSttWord( sal_uIntPtr nFlag, xub_StrLen nPos,
                                     const String& rExceptWord,
                                     sal_Unicode cChar );
 
@@ -249,7 +249,7 @@ public:
 
     // fuehre eine AutoKorrektur aus.
     // returnt was ausgefuehrt wurde; entsprechend den obigen Flags
-    sal_uInt32 AutoCorrect( SvxAutoCorrDoc& rDoc, const String& rTxt,
+    sal_uIntPtr AutoCorrect( SvxAutoCorrDoc& rDoc, const String& rTxt,
                         xub_StrLen nPos, sal_Unicode cInsChar, sal_Bool bInsert );
 
     // return fuer die Autotext Expandierung das vorherige Wort, was dem

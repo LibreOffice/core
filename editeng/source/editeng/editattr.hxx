@@ -56,7 +56,7 @@ class SvxCharReliefItem;
 
 class SfxVoidItem;
 
-#define CH_FEATURE_OLD  (BYTE)          0xFF
+#define CH_FEATURE_OLD  (sal_uInt8)         0xFF
 #define CH_FEATURE      (sal_Unicode)   0x01
 
 // DEF_METRIC: Bei meinem Pool sollte immer die DefMetric bei

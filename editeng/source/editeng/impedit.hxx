@@ -236,7 +236,7 @@ private:
 
 
     long                nInvMore;
-    sal_uInt32              nControl;
+    sal_uIntPtr             nControl;
     sal_uInt32          nTravelXPos;
     sal_uInt16          nExtraCursorFlags;
     sal_uInt16          nCursorBidiLevel;
@@ -670,7 +670,7 @@ private:
     void                ForceAutoColor( sal_Bool b ) { bForceAutoColor = b; }
     sal_Bool                IsForceAutoColor() const { return bForceAutoColor; }
 
-    inline VirtualDevice*   GetVirtualDevice( const MapMode& rMapMode, sal_uInt32 nDrawMode );
+    inline VirtualDevice*   GetVirtualDevice( const MapMode& rMapMode, sal_uIntPtr nDrawMode );
     inline void             EraseVirtualDevice();
 
     DECL_LINK( StatusTimerHdl, Timer * );
@@ -1071,7 +1071,7 @@ inline EditSelection ImpEditEngine::CreateSel( const ESelection& rSel )
     return aSel;
 }
 
-inline VirtualDevice* ImpEditEngine::GetVirtualDevice( const MapMode& rMapMode, sal_uInt32 nDrawMode )
+inline VirtualDevice* ImpEditEngine::GetVirtualDevice( const MapMode& rMapMode, sal_uIntPtr nDrawMode )
 {
     if ( !pVirtDev )
         pVirtDev = new VirtualDevice;

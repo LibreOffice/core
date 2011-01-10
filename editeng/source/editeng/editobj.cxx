@@ -448,13 +448,13 @@ void EditTextObject::SetUserType( sal_uInt16 )
     DBG_ERROR( "V-Methode direkt vom EditTextObject!" );
 }
 
-sal_uInt32 EditTextObject::GetObjectSettings() const
+sal_uIntPtr EditTextObject::GetObjectSettings() const
 {
     DBG_ERROR( "V-Methode direkt vom EditTextObject!" );
     return 0;
 }
 
-void EditTextObject::SetObjectSettings( sal_uInt32 )
+void EditTextObject::SetObjectSettings( sal_uIntPtr )
 {
     DBG_ERROR( "V-Methode direkt vom EditTextObject!" );
 }
@@ -506,7 +506,7 @@ sal_Bool EditTextObject::Store( SvStream& rOStream ) const
 
 EditTextObject* EditTextObject::Create( SvStream& rIStream, SfxItemPool* pGlobalTextObjectPool )
 {
-    sal_uInt32 nStartPos = rIStream.Tell();
+    sal_uIntPtr nStartPos = rIStream.Tell();
 
     // Ertmal sehen, was fuer ein Object...
     sal_uInt16 nWhich;
@@ -746,12 +746,12 @@ void BinTextObject::SetUserType( sal_uInt16 n )
     nUserType = n;
 }
 
-sal_uInt32 BinTextObject::GetObjectSettings() const
+sal_uIntPtr BinTextObject::GetObjectSettings() const
 {
     return nObjSettings;
 }
 
-void BinTextObject::SetObjectSettings( sal_uInt32 n )
+void BinTextObject::SetObjectSettings( sal_uIntPtr n )
 {
     nObjSettings = n;
 }
@@ -1334,7 +1334,7 @@ void __EXPORT BinTextObject::StoreData( SvStream& rOStream ) const
 
             // #91575# StyleSheetName must be Unicode too!
             // Copy/Paste from EA3 to BETA or from BETA to EA3 not possible, not needed...
-            // If needed, change nL back to sal_uInt32 and increase version...
+            // If needed, change nL back to sal_uIntPtr and increase version...
             nL = pC->GetStyle().Len();
             rOStream << nL;
             rOStream.Write( pC->GetStyle().GetBuffer(), nL*sizeof(sal_Unicode) );
@@ -1379,7 +1379,7 @@ void __EXPORT BinTextObject::CreateData( SvStream& rIStream )
     rIStream >> nParagraphs;
 
     // Die einzelnen Absaetze...
-    for ( sal_uInt32 nPara = 0; nPara < nParagraphs; nPara++ )
+    for ( sal_uIntPtr nPara = 0; nPara < nParagraphs; nPara++ )
     {
         ContentInfo* pC = CreateAndInsertContent();
 
@@ -1673,7 +1673,7 @@ void __EXPORT BinTextObject::CreateData300( SvStream& rIStream )
     rIStream >> nParagraphs;
 
     // Die einzelnen Absaetze...
-    for ( sal_uInt32 nPara = 0; nPara < nParagraphs; nPara++ )
+    for ( sal_uIntPtr nPara = 0; nPara < nParagraphs; nPara++ )
     {
         ContentInfo* pC = CreateAndInsertContent();
 
@@ -1696,7 +1696,7 @@ void __EXPORT BinTextObject::CreateData300( SvStream& rIStream )
         // Und die einzelnen Attribute
         // Items als Surregate => immer 8 Byte pro Attrib
         // Which = 2; Surregat = 2; Start = 2; End = 2;
-        for ( sal_uInt32 nAttr = 0; nAttr < nAttribs; nAttr++ )
+        for ( sal_uIntPtr nAttr = 0; nAttr < nAttribs; nAttr++ )
         {
             sal_uInt16 _nWhich, nStart, nEnd;
             const SfxPoolItem* pItem;

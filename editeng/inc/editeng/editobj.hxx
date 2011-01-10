@@ -66,8 +66,8 @@ public:
     virtual sal_uInt16      GetUserType() const;    // Fuer OutlinerMode, der kann das aber nicht kompatibel speichern
     virtual void        SetUserType( sal_uInt16 n );
 
-    virtual sal_uInt32      GetObjectSettings() const;
-    virtual void        SetObjectSettings( sal_uInt32 n );
+    virtual sal_uIntPtr     GetObjectSettings() const;
+    virtual void        SetObjectSettings( sal_uIntPtr n );
 
     virtual sal_Bool        IsVertical() const;
     virtual void        SetVertical( sal_Bool bVertical );

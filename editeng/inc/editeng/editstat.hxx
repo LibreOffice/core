@@ -88,7 +88,7 @@
     EE_STAT_CRSRLEFTPARA zur Zeit bei Cursorbewegungen und Return.
 */
 
-inline void SetFlags( sal_uInt32& rBits, const sal_uInt32 nMask, sal_Bool bOn )
+inline void SetFlags( sal_uIntPtr& rBits, const sal_uInt32 nMask, sal_Bool bOn )
 {
     if ( bOn )
         rBits |= nMask;
@@ -99,22 +99,22 @@ inline void SetFlags( sal_uInt32& rBits, const sal_uInt32 nMask, sal_Bool bOn )
 class EditStatus
 {
 protected:
-    sal_uInt32  nStatusBits;
-    sal_uInt32  nControlBits;
+    sal_uIntPtr nStatusBits;
+    sal_uIntPtr nControlBits;
     sal_uInt16  nPrevPara;                  // fuer EE_STAT_CRSRLEFTPARA
 
 public:
             EditStatus()                { nStatusBits = 0; nControlBits = 0; nPrevPara = 0xFFFF; }
 
     void    Clear()                     { nStatusBits = 0; }
-    void    SetControlBits( sal_uInt32 nMask, sal_Bool bOn )
+    void    SetControlBits( sal_uIntPtr nMask, int bOn )
                 { SetFlags( nControlBits, nMask, bOn ); }
 
-    sal_uInt32  GetStatusWord() const       { return nStatusBits; }
-    sal_uInt32& GetStatusWord()             { return nStatusBits; }
+    sal_uIntPtr GetStatusWord() const       { return nStatusBits; }
+    sal_uIntPtr&    GetStatusWord()             { return nStatusBits; }
 
-    sal_uInt32  GetControlWord() const      { return nControlBits; }
-    sal_uInt32& GetControlWord()            { return nControlBits; }
+    sal_uIntPtr GetControlWord() const      { return nControlBits; }
+    sal_uIntPtr&    GetControlWord()            { return nControlBits; }
 
     sal_uInt16  GetPrevParagraph() const    { return nPrevPara; }
     sal_uInt16& GetPrevParagraph()          { return nPrevPara; }

@@ -109,22 +109,22 @@ SV_DECL_PTRARR( XBaseParaPortionList, XParaPortionPtr, 0, 4 )
 
 class XParaPortionList : public  XBaseParaPortionList
 {
-    sal_uInt32      nRefDevPtr;
+    sal_uIntPtr         nRefDevPtr;
     OutDevType  eRefDevType;
     MapMode     aRefMapMode;
-    sal_uInt32      nPaperWidth;
+    sal_uIntPtr     nPaperWidth;
 
 
 public:
-            XParaPortionList( OutputDevice* pRefDev, sal_uInt32 nPW ) :
+            XParaPortionList( OutputDevice* pRefDev, sal_uIntPtr nPW ) :
                 aRefMapMode( pRefDev->GetMapMode() )
                 {
-                    nRefDevPtr = (sal_uInt32)pRefDev; nPaperWidth = nPW;
+                    nRefDevPtr = (sal_uIntPtr)pRefDev; nPaperWidth = nPW;
                     eRefDevType = pRefDev->GetOutDevType();
                 }
 
-    sal_uInt32          GetRefDevPtr() const        { return nRefDevPtr; }
-    sal_uInt32          GetPaperWidth() const       { return nPaperWidth; }
+    sal_uIntPtr         GetRefDevPtr() const        { return nRefDevPtr; }
+    sal_uIntPtr         GetPaperWidth() const       { return nPaperWidth; }
     OutDevType      GetRefDevType() const       { return eRefDevType; }
     const MapMode&  GetRefMapMode() const       { return aRefMapMode; }
 };
@@ -226,8 +226,8 @@ public:
     sal_uInt16                  GetUserType() const;
     void                    SetUserType( sal_uInt16 n );
 
-    sal_uInt32                  GetObjectSettings() const;
-    void                    SetObjectSettings( sal_uInt32 n );
+    sal_uIntPtr                 GetObjectSettings() const;
+    void                    SetObjectSettings( sal_uIntPtr n );
 
     sal_Bool                    IsVertical() const;
     void                    SetVertical( sal_Bool b );

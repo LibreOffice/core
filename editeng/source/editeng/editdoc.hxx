@@ -148,7 +148,7 @@ public:
             SvxFontTable();
             ~SvxFontTable();
 
-    sal_uInt32  GetId( const SvxFontItem& rFont );
+    sal_uIntPtr GetId( const SvxFontItem& rFont );
 };
 
 //  ----------------------------------------------------------------------
@@ -162,7 +162,7 @@ public:
             SvxColorList();
             ~SvxColorList();
 
-    sal_uInt32  GetId( const SvxColorItem& rColor );
+    sal_uIntPtr GetId( const SvxColorItem& rColor );
 };
 
 //  ----------------------------------------------------------------------
@@ -677,15 +677,15 @@ public:
 class DeletedNodeInfo
 {
 private:
-    sal_uInt32  nInvalidAdressPtr;
+    sal_uIntPtr     nInvalidAdressPtr;
     sal_uInt16  nInvalidParagraph;
 
 public:
-            DeletedNodeInfo( sal_uInt32 nInvAdr, sal_uInt16 nPos )
+            DeletedNodeInfo( sal_uIntPtr nInvAdr, sal_uInt16 nPos )
                                             {   nInvalidAdressPtr = nInvAdr;
                                                 nInvalidParagraph = nPos; }
 
-    sal_uInt32  GetInvalidAdress()              {   return nInvalidAdressPtr; }
+    sal_uIntPtr GetInvalidAdress()              {   return nInvalidAdressPtr; }
     sal_uInt16  GetPosition()                   {   return nInvalidParagraph; }
 };
 
@@ -744,7 +744,7 @@ public:
     EditPaM         ConnectParagraphs( ContentNode* pLeft, ContentNode* pRight );
 
     String          GetText( LineEnd eEnd ) const;
-    sal_uInt32          GetTextLen() const;
+    sal_uIntPtr         GetTextLen() const;
 
     XubString       GetParaAsString( sal_uInt16 nNode ) const;
     XubString       GetParaAsString( ContentNode* pNode, sal_uInt16 nStartPos = 0, sal_uInt16 nEndPos = 0xFFFF, sal_Bool bResolveFields = sal_True ) const;
