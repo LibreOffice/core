@@ -27,80 +27,114 @@
 
 package com.sun.star.lib.uno.protocols.urp;
 
-import complexlib.ComplexTestCase;
+import org.junit.Test;
+import static org.junit.Assert.*;
 
-public final class Cache_Test extends ComplexTestCase {
-    public String[] getTestMethodNames() {
-        return new String[] { "test0", "test1", "test2", "test3" };
-    }
-
-    public void test0() {
+public final class Cache_Test {
+    @Test public void test0() {
         Cache c = new Cache(0);
         boolean[] f = new boolean[1];
         int i;
         i = c.add(f, "a");
-        assure("1", i == Cache.NOT_CACHED && !f[0]);
+        assertTrue(i == Cache.NOT_CACHED && !f[0]);
         i = c.add(f, "a");
-        assure("2", i == Cache.NOT_CACHED && !f[0]);
+        assertTrue(i == Cache.NOT_CACHED && !f[0]);
         i = c.add(f, "b");
-        assure("3", i == Cache.NOT_CACHED && !f[0]);
+        assertTrue(i == Cache.NOT_CACHED && !f[0]);
         i = c.add(f, "a");
-        assure("4", i == Cache.NOT_CACHED && !f[0]);
+        assertTrue(i == Cache.NOT_CACHED && !f[0]);
     }
 
-    public void test1() {
+    @Test public void test1() {
         Cache c = new Cache(1);
         boolean[] f = new boolean[1];
         int i;
         i = c.add(f, "a");
-        assure("1", i == 0 && !f[0]);
+        assertTrue(i == 0 && !f[0]);
         i = c.add(f, "a");
-        assure("2", i == 0 && f[0]);
+        assertTrue(i == 0 && f[0]);
         i = c.add(f, "b");
-        assure("3", i == 0 && !f[0]);
+        assertTrue(i == 0 && !f[0]);
         i = c.add(f, "b");
-        assure("4", i == 0 && f[0]);
+        assertTrue(i == 0 && f[0]);
         i = c.add(f, "a");
-        assure("5", i == 0 && !f[0]);
+        assertTrue(i == 0 && !f[0]);
     }
 
-    public void test2() {
+    @Test public void test2() {
         Cache c = new Cache(2);
         boolean[] f = new boolean[1];
         int i;
         i = c.add(f, "a");
-        assure("1", i == 0 && !f[0]);
+        assertTrue(i == 0 && !f[0]);
         i = c.add(f, "a");
-        assure("2", i == 0 && f[0]);
+        assertTrue(i == 0 && f[0]);
         i = c.add(f, "b");
-        assure("3", i == 1 && !f[0]);
+        assertTrue(i == 1 && !f[0]);
         i = c.add(f, "b");
-        assure("4", i == 1 && f[0]);
+        assertTrue(i == 1 && f[0]);
         i = c.add(f, "a");
-        assure("5", i == 0 && f[0]);
+        assertTrue(i == 0 && f[0]);
         i = c.add(f, "c");
-        assure("6", i == 1 && !f[0]);
+        assertTrue(i == 1 && !f[0]);
         i = c.add(f, "b");
-        assure("7", i == 0 && !f[0]);
+        assertTrue(i == 0 && !f[0]);
     }
 
-    public void test3() {
+    @Test public void test3() {
         Cache c = new Cache(3);
         boolean[] f = new boolean[1];
         int i;
         i = c.add(f, "a");
-        assure("1", i == 0 && !f[0]);
+        assertTrue(i == 0 && !f[0]);
         i = c.add(f, "a");
-        assure("3", i == 0 && f[0]);
+        assertTrue(i == 0 && f[0]);
         i = c.add(f, "b");
-        assure("5", i == 1 && !f[0]);
+        assertTrue(i == 1 && !f[0]);
         i = c.add(f, "a");
-        assure("3", i == 0 && f[0]);
+        assertTrue(i == 0 && f[0]);
         i = c.add(f, "c");
-        assure("7", i == 2 && !f[0]);
+        assertTrue(i == 2 && !f[0]);
         i = c.add(f, "d");
-        assure("9", i == 1 && !f[0]);
+        assertTrue(i == 1 && !f[0]);
         i = c.add(f, "d");
-        assure("11", i == 1 && f[0]);
+        assertTrue(i == 1 && f[0]);
+    }
+
+    @Test public void testNothingLostFromLruList() {
+        // Regardless in what order arbitrary values from 0, ..., 3 are inserted
+        // into a size-4 cache, afterwards adding -1, ..., -4 must return each
+        // possible index in the range from 0, ..., 3 exactly once (so their sum
+        // must be 6); this code systematically tests all such arbitrary ways up
+        // to length 8 (the code arguably violates recommendations for writing
+        // good tests, but actually helped track down an error in the Cache
+        // implementation):
+        int[] a = new int[8];
+        for (int i = 0; i < a.length; ++i) {
+            for (int j = 0; j < i; ++j) {
+                a[j] = 0;
+            }
+            for (;;) {
+                Cache c = new Cache(4);
+                for (int k = 0; k < i; ++k) {
+                    c.add(new boolean[1], a[k]);
+                }
+                assertEquals(
+                    6,
+                    (c.add(new boolean[1], -1) + c.add(new boolean[1], -2) +
+                     c.add(new boolean[1], -3) + c.add(new boolean[1], -4)));
+                int j = i - 1;
+                while (j >= 0 && a[j] == 3) {
+                    --j;
+                }
+                if (j < 0) {
+                    break;
+                }
+                ++a[j];
+                for (int k = j + 1; k < i; ++k) {
+                    a[k] = 0;
+                }
+            }
+        }
     }
 }
