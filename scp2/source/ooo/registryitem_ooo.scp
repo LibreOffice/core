@@ -627,6 +627,7 @@ RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabi
 	ModuleID = gid_Module_Root;
 	Name = "ApplicationName";
     Value = "%PRODUCTNAME %PRODUCTVERSION";
+    Value (pt-BR) = "%PRODUCTNAME_BR %PRODUCTVERSION";
 	Styles = ();
 End
 

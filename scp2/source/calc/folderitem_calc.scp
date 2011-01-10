@@ -29,6 +29,7 @@
 
 FolderItem gid_Folderitem_Scalc
     Name = "%PRODUCTNAME Calc";
+    Name (pt-BR) = "%PRODUCTNAME_BR Calc";
     ModuleID = gid_Module_Prg_Calc_Bin;
     FolderID = gid_Folder_Staroffice51;
     FileID = gid_File_Exe_Scalc;

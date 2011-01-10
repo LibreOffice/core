@@ -29,6 +29,7 @@
 
 FolderItem gid_Folderitem_Sdraw
     Name = "%PRODUCTNAME Draw";
+    Name (pt-BR) = "%PRODUCTNAME_BR Draw";
     ModuleID = gid_Module_Prg_Draw_Bin;
     FolderID = gid_Folder_Staroffice51;
     FileID = gid_File_Exe_Sdraw;

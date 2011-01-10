@@ -29,6 +29,7 @@
 
 FolderItem gid_Folderitem_Swriter
     Name = "%PRODUCTNAME Writer";
+    Name (pt-BR) = "%PRODUCTNAME_BR Writer";
     ModuleID = gid_Module_Prg_Wrt_Bin;
     FolderID = gid_Folder_Staroffice51;
     FileID = gid_File_Exe_Swriter;
