@@ -53,12 +53,11 @@ struct SwPosition;
 class SwIndex;
 #include <anchoreddrawobject.hxx>
 
-//Der Umgekehrte Weg: Sucht das Format zum angegebenen Objekt.
-//Wenn das Object ein SwVirtFlyDrawObj ist so wird das Format von
-//selbigem besorgt.
-//Anderfalls ist es eben ein einfaches Zeichenobjekt. Diese hat einen
-//UserCall und der ist Client vom gesuchten Format.
-//Implementierung in dcontact.cxx
+// The other way round: Search format for given object.
+// If object is a SwVirtFlyDrawObj the format will be obtained from it.
+// If not it is a simple DrawObject. It has a UserCall which
+// is client of the format we are looking for.
+// Implementation in dcontact.cxx.
 SW_DLLPUBLIC SwFrmFmt *FindFrmFmt( SdrObject *pObj );
 inline const SwFrmFmt *FindFrmFmt( const SdrObject *pObj )
 {   return ::FindFrmFmt( (SdrObject*)pObj ); }
@@ -66,20 +65,20 @@ sal_Bool HasWrap( const SdrObject* pObj );
 
 void setContextWritingMode( SdrObject* pObj, SwFrm* pAnchor );
 
-//Bei Aenderungen das Objekt aus dem ContourCache entfernen.
-//Implementierung in TxtFly.Cxx
+// When changes occur remove object from ContourCache.
+// Implementation in TxtFly.cxx.
 void ClrContourCache( const SdrObject *pObj );
 
-// liefert BoundRect inklusive Abstand
+// Returns BoundRect plus distance.
 SwRect GetBoundRectOfAnchoredObj( const SdrObject* pObj );
 
-//Liefert den UserCall ggf. vom Gruppenobjekt
+// Returns UserCall of goup object (if applicable).
 SwContact* GetUserCall( const SdrObject* );
 
-// liefert TRUE falls das SrdObject ein Marquee-Object (Lauftext) ist
+// Returns TRUE if the SrdObject is a Marquee object.
 BOOL IsMarqueeTextObj( const SdrObject& rObj );
 
-//Basisklasse fuer die folgenden KontaktObjekte (Rahmen+Zeichenobjekte)
+// Base class for the following contact objects (frame + draw objects).
 class SwContact : public SdrObjUserCall, public SwClient
 {
     // boolean, indicating destruction of contact object
@@ -118,7 +117,7 @@ protected:
 public:
     TYPEINFO();
 
-    //Fuer den Reader, es wir nur die Verbindung hergestellt.
+    //For reader. Only the connection is created.
     SwContact( SwFrmFmt *pToRegisterIn );
     virtual ~SwContact();
 
@@ -203,8 +202,8 @@ public:
     sal_uInt32 GetMaxOrdNum() const;
 };
 
-//KontactObjekt fuer die Verbindung zwischen Rahmen bzw. deren Formaten
-//im StarWriter (SwClient) und den Zeichenobjekten des Drawing (SdrObjUserCall)
+// ContactObject for connection between frames (or their formats respectively)
+// in SwClient and the drawobjects of Drawing (DsrObjUserCall).
 
 class SW_DLLPUBLIC SwFlyDrawContact : public SwContact
 {
@@ -222,7 +221,7 @@ private:
 public:
     TYPEINFO();
 
-    //Legt das DrawObjekt an und meldet es beim Model an.
+    // Creates DrawObject and registers it with the Model.
     SwFlyDrawContact( SwFlyFrmFmt* pToRegisterIn, SdrModel* pMod );
     virtual ~SwFlyDrawContact();
 
@@ -245,7 +244,6 @@ public:
     virtual void MoveObjToInvisibleLayer( SdrObject* _pDrawObj );
 
     /** get data collection of anchored objects handled by with contact
-
     */
     virtual void GetAnchoredObjs( std::vector<SwAnchoredObject*>& _roAnchoredObjs ) const;
 };
@@ -347,10 +345,9 @@ class SwDrawVirtObj : public SdrVirtObj
 
 bool CheckControlLayer( const SdrObject *pObj );
 
-//KontactObjekt fuer die Verbindung von Formaten als Repraesentanten der
-//Zeichenobjekte im StarWriter (SwClient) und den Objekten selbst im Drawing
-//(SdrObjUserCall).
 
+// ContactObject for connection of formats as representatives of draw objects
+// in SwClient and the objects themselves in Drawing (SDrObjUserCall).
 class NestedUserCallHdl;
 
 class SwDrawContact : public SwContact
@@ -450,9 +447,9 @@ class SwDrawContact : public SwContact
         void ChkPage();
         SwPageFrm* FindPage( const SwRect &rRect );
 
-        //Fuegt das SdrObject in die Arrays (SwPageFrm und SwFrm) des Layouts ein.
-        //Der Anker wird Anhand des Attributes SwFmtAnchor bestimmt.
-        //Das Objekt wird ggf. beim alten Anker abgemeldet.
+        // Inserts SdrObject in the arrays of the layout ((SwPageFrm and SwFrm).
+        // The anchor is determined according to the attribute SwFmtAnchor.
+        // If required the object gets unregistered with the old anchor.
         void ConnectToLayout( const SwFmtAnchor *pAnch = 0 );
         // method to insert 'master' drawing object
         // into drawing page
@@ -474,17 +471,17 @@ class SwDrawContact : public SwContact
         // by frame.
         SdrObject* GetDrawObjectByAnchorFrm( const SwFrm& _rAnchorFrm );
 
-        // virtuelle Methoden von SwClient
+        // Virtual methods of SwClient.
         virtual void Modify( SfxPoolItem *pOld, SfxPoolItem *pNew );
 
-        // virtuelle Methoden von SdrObjUserCall
+        // Virtual methods of SdrObjUserCall.
         virtual void Changed(const SdrObject& rObj, SdrUserCallType eType, const Rectangle& rOldBoundRect);
 
-        // wird von Changed() und auch vom UndoDraw benutzt, uebernimmt
-        // das Notifien von Absaetzen, die ausweichen muessen
+        // Used by Changed() and by UndoDraw.
+        // Notifies paragraphs that have to get out of the way.
         void _Changed(const SdrObject& rObj, SdrUserCallType eType, const Rectangle* pOldBoundRect);
 
-        //Moved alle SW-Verbindungen zu dem neuen Master.
+        //Moves all SW-connections to new Master)
         void ChangeMasterObject( SdrObject *pNewMaster );
 
         SwDrawVirtObj* AddVirtObj();
@@ -492,7 +489,6 @@ class SwDrawContact : public SwContact
         void NotifyBackgrdOfAllVirtObjs( const Rectangle* pOldBoundRect );
 
         /** get data collection of anchored objects, handled by with contact
-
         */
         virtual void GetAnchoredObjs( std::vector<SwAnchoredObject*>& _roAnchoredObjs ) const;
 };

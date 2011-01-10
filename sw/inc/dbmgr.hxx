@@ -87,19 +87,19 @@ class SwMailMergeConfigItem;
 
 enum DBMgrOptions
 {
-    DBMGR_MERGE,            // Datensaetze in Felder
-    DBMGR_INSERT,           // Datensaetze in Text
-    DBMGR_MERGE_MAILMERGE,  // Serienbriefe drucken
-    DBMGR_MERGE_MAILING,    // Serienbriefe als email versenden
-    DBMGR_MERGE_MAILFILES,  // Serienbriefe als Datei(en) speichern
-    DBMGR_MERGE_DOCUMENTS,   // Print merged documents
-    DBMGR_MERGE_SINGLE_FILE  // save merge as single file
+    DBMGR_MERGE,             // Data records in fields.
+    DBMGR_INSERT,            // Data records in text.
+    DBMGR_MERGE_MAILMERGE,   // Print mail merge.
+    DBMGR_MERGE_MAILING,     // Send mail merge as email.
+    DBMGR_MERGE_MAILFILES,   // Save mail merg as files.
+    DBMGR_MERGE_DOCUMENTS,   // Print merged documents.
+    DBMGR_MERGE_SINGLE_FILE  // Save merge as single file.
 };
 
 // -----------------------------------------------------------------------
 
 /*--------------------------------------------------------------------
-     Beschreibung: (neue) Logische Datenbanken verwalten
+     Administration of (new) logical databases.
  --------------------------------------------------------------------*/
 #define SW_DB_SELECT_UNKNOWN    0
 #define SW_DB_SELECT_TABLE      1
@@ -154,7 +154,7 @@ struct SwMergeDescriptor
     SwWrtShell&                                         rSh;
     const ::svx::ODataAccessDescriptor&                 rDescriptor;
     String                                              sSaveToFilter; //export filter to save resulting files
-    String                                              sSaveToFilterOptions; //
+    String                                              sSaveToFilterOptions;
     com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > aSaveToFilterData;
 
     String                                              sSubject;
@@ -199,13 +199,13 @@ friend class SwConnectionDisposedListener_Impl;
 
     static SwDbtoolsClient* pDbtoolsClient;
 
-    String              sEMailAddrFld;  // Mailing: Spaltenname der E-Mail Adresse
-    String              sSubject;       // Mailing: Subject
-    String              sAttached;      // Mailing: Attachte Files
+    String              sEMailAddrFld;      // Mailing: Column name of email address.
+    String              sSubject;           // Mailing: Subject
+    String              sAttached;          // Mailing: Attached Files.
     USHORT              nMergeType;
-    BOOL                bInitDBFields : 1;  // TRUE: Datenbank an Feldern beim Mergen
-    BOOL                bSingleJobs : 1;    // Einzelne Druckjobs bei Aufruf aus Basic
-    BOOL                bCancel : 1;        // Serienbrief-Save abgebrochen
+    BOOL                bInitDBFields : 1;
+    BOOL                bSingleJobs : 1;    // Printing job when called from Basic.
+    BOOL                bCancel : 1;        // Mail merge save canceled.
 
     BOOL                bInMerge    : 1;    //merge process active
     BOOL                bMergeSilent : 1;   // suppress display of dialogs/boxes (used when called over API)
@@ -221,10 +221,10 @@ friend class SwConnectionDisposedListener_Impl;
 
     SW_DLLPRIVATE DECL_LINK( PrtCancelHdl, Button * );
 
-    // Datensaetze als Text ins Dokument einfuegen
+    // Insert data record as text into document.
     SW_DLLPRIVATE void ImportFromConnection( SwWrtShell* pSh);
 
-    // Einzelnen Datensatz als Text ins Dokument einfuegen
+    // Insert a single data record as text into document.
     SW_DLLPRIVATE void ImportDBEntry(SwWrtShell* pSh);
 
     // merge to file _and_ merge to e-Mail
@@ -236,7 +236,7 @@ public:
     SwNewDBMgr();
     ~SwNewDBMgr();
 
-    // Art des aktellen Mergens. Siehe DBMgrOptions-enum
+    // Current merge type. Cf. DBMgrOptions-enum.
     inline USHORT   GetMergeType() const            { return nMergeType; }
     inline void     SetMergeType( USHORT nTyp )     { nMergeType = nTyp; }
 
@@ -247,29 +247,28 @@ public:
     inline BOOL     IsMergeSilent() const           { return bMergeSilent != 0; }
     inline void     SetMergeSilent( BOOL bVal )     { bMergeSilent = bVal; }
 
-    // Mischen von Datensaetzen in Felder
+    // Merging of data records into fields.
     BOOL            MergeNew( const SwMergeDescriptor& rMergeDesc );
     BOOL            Merge(SwWrtShell* pSh);
 
-    // Datenbankfelder mit fehlendem Datenbankname initialisieren
+    // Initialize data fields that lack name of database.
     inline BOOL     IsInitDBFields() const  { return bInitDBFields; }
     inline void     SetInitDBFields(BOOL b) { bInitDBFields = b;    }
 
-    // Serienbriefe einzelnd oder alle zusammen drucken/speichern
+    // Print / Save mail merge one by one or all together.
     inline BOOL     IsSingleJobs() const    { return bSingleJobs;   }
     inline void     SetSingleJobs(BOOL b)   { bSingleJobs = b;  }
 
-    // Mailing
-    // email-Daten setzen
+    // Mailing: Set email data.
     inline void     SetEMailColumn(const String& sColName) { sEMailAddrFld = sColName; }
     inline void     SetSubject(const String& sSbj) { sSubject = sSbj; }
     inline void     SetAttachment(const String& sAtt) { sAttached = sAtt; }
 
 
-    // Listbox mit allen Tabellennamen einer Datenbank fuellen
+    // Fill listbox with all table names of a database.
     BOOL            GetTableNames(ListBox* pListBox, const String& rDBName );
 
-    // Listbox mit allen Spaltennamen einer Datenbanktabelle fuellen
+    // Fill listbox with all column names of a database table.
     BOOL            GetColumnNames(ListBox* pListBox,
                         const String& rDBName, const String& rTableName, BOOL bAppend = FALSE);
     BOOL            GetColumnNames(ListBox* pListBox,

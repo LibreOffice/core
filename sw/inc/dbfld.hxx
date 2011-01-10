@@ -37,7 +37,7 @@ class SwTxtFld;
 class SwFrm;
 
 /*--------------------------------------------------------------------
-    Beschreibung: Datenbankfeld
+    Database field.
  --------------------------------------------------------------------*/
 
 class SW_DLLPUBLIC SwDBFieldType : public SwValueFieldType
@@ -66,9 +66,8 @@ public:
 };
 
 /*--------------------------------------------------------------------
-    Beschreibung:
-    von SwFields abgeleitete Klassen. Sie ueberlagern die Expand-Funktion.
-    Der Inhalt wird entsprechend dem Format, soweit vorhanden, formatiert.
+    Classes derived from SwFields. They overlay the expand-function.
+    Content is formated according to the format (if available).
  --------------------------------------------------------------------*/
 
 class SW_DLLPUBLIC SwDBField : public SwValueField
@@ -86,7 +85,7 @@ public:
 
     virtual SwFieldType*    ChgTyp( SwFieldType* );
 
-    // Der aktuelle Text
+    // Current text.
     inline  void        SetExpansion(const String& rStr);
     virtual String      Expand() const;
     virtual SwField*    Copy() const;
@@ -94,16 +93,16 @@ public:
     virtual USHORT      GetSubType() const;
     virtual void        SetSubType(USHORT nType);
 
-    // Name oder Inhalt
+    // Name or content.
     virtual String      GetCntnt(BOOL bName = FALSE) const;
 
-    // fuer Berechnungen in Ausdruecken
+    // For calculations in expressions.
     void                ChgValue( double d, BOOL bVal );
 
-    // Evaluierung ueber den DBMgr String rauspulen
+    // Get the evaluation via DBMgr string.
     void                Evaluate();
 
-    // Evaluierung fuer Kopf und Fusszeilen
+    // Evaluation for header and footer.
     void                ChangeExpansion( const SwFrm*, const SwTxtFld* );
     void                InitContent();
     void                InitContent(const String& rExpansion);
@@ -114,7 +113,7 @@ public:
     inline void         ClearInitialized()      { bInitialized = FALSE; }
     inline void         SetInitialized()        { bInitialized = TRUE; }
 
-    // Name erfragen
+    // Get name.
     virtual const String& GetPar1() const;
 
     // access to the command string
@@ -137,7 +136,7 @@ inline void SwDBField::ChgBodyTxtFlag( BOOL bIsInBody )
     { bIsInBodyTxt = bIsInBody; }
 
 /*--------------------------------------------------------------------
-    Beschreibung: Basisklasse fuer alle weiteren Datenbankfelder
+    Base class for all other database fields.
  --------------------------------------------------------------------*/
 
 class SW_DLLPUBLIC SwDBNameInfField : public SwField
@@ -158,7 +157,7 @@ public:
     SwDBData                GetDBData(SwDoc* pDoc);
     void                    SetDBData(const SwDBData& rDBData);
 
-    // Name oder Inhalt
+    // Name or content.
     virtual String          GetCntnt(BOOL bName = FALSE) const;
     virtual bool            QueryValue( com::sun::star::uno::Any& rVal, USHORT nWhich ) const;
     virtual bool            PutValue( const com::sun::star::uno::Any& rVal, USHORT nWhich );
@@ -167,7 +166,7 @@ public:
 };
 
 /*--------------------------------------------------------------------
-    Beschreibung: Datenbankfeld Naechster Satz
+    Database field next record.
  --------------------------------------------------------------------*/
 
 class SW_DLLPUBLIC SwDBNextSetFieldType : public SwFieldType
@@ -179,7 +178,7 @@ public:
 };
 
 /*--------------------------------------------------------------------
-    Beschreibung: Naechsten Datensatz mit Bedingung
+    Next data record with condition.
  --------------------------------------------------------------------*/
 
 class SW_DLLPUBLIC SwDBNextSetField : public SwDBNameInfField
@@ -212,7 +211,7 @@ inline void SwDBNextSetField::SetCondValid(BOOL bCond)
     { bCondValid = bCond; }
 
 /*--------------------------------------------------------------------
-    Beschreibung: Datenbankfeld Naechster Satz
+    Database field next record.
  --------------------------------------------------------------------*/
 
 class SwDBNumSetFieldType : public SwFieldType
@@ -224,9 +223,8 @@ public:
 };
 
 /*--------------------------------------------------------------------
-    Beschreibung: Datensatz mit Nummer xxx
-                  Die Nummer steht in nFormat
-                  ! kleiner Missbrauch
+    Data record with number xxx.
+    Number is in nFormat (bit of a misuse!)
  --------------------------------------------------------------------*/
 
 class SwDBNumSetField : public SwDBNameInfField
@@ -249,11 +247,11 @@ public:
     virtual const String&   GetPar1() const;
     virtual void            SetPar1(const String& rStr);
 
-    // Datensatznummer
+    // Number of data record.
     virtual String          GetPar2()   const;
     virtual void            SetPar2(const String& rStr);
 
-    // Die Datensatznummer steht in nFormat !!
+    // Number of data record is in nFormat!!
     virtual bool        QueryValue( com::sun::star::uno::Any& rVal, USHORT nWhich ) const;
     virtual bool        PutValue( const com::sun::star::uno::Any& rVal, USHORT nWhich );
 };
@@ -265,7 +263,7 @@ inline void SwDBNumSetField::SetCondValid(BOOL bCond)
     { bCondValid = bCond; }
 
 /*--------------------------------------------------------------------
-    Beschreibung: Datenbankname
+    Database name.
  --------------------------------------------------------------------*/
 
 class SwDBNameFieldType : public SwFieldType
@@ -279,7 +277,7 @@ public:
 };
 
 /*--------------------------------------------------------------------
-    Beschreibung: Datenbankfeld
+    Database field.
  --------------------------------------------------------------------*/
 
 class SW_DLLPUBLIC SwDBNameField : public SwDBNameInfField
@@ -294,7 +292,7 @@ public:
 };
 
 /*--------------------------------------------------------------------
-    Beschreibung: Datensatznummer
+    Number of data record.
  --------------------------------------------------------------------*/
 
 class SW_DLLPUBLIC SwDBSetNumberFieldType : public SwFieldType
@@ -306,7 +304,7 @@ public:
 };
 
 /*--------------------------------------------------------------------
-    Beschreibung: Datenbankfeld
+    Database field.
  --------------------------------------------------------------------*/
 
 class SW_DLLPUBLIC SwDBSetNumberField : public SwDBNameInfField
