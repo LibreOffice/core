@@ -1638,7 +1638,6 @@ SCSIZE ScTable::Query(ScQueryParam& rParamOrg, BOOL bKeepSub)
     BOOL* pSpecial = new BOOL[nEntryCount];
     lcl_PrepareQuery( pDocument, this, aParam, pSpecial );
 
-    SCROW nEndRow = aParam.bUseDynamicRange ? aParam.nDynamicEndRow : aParam.nRow2;
     if (!aParam.bInplace)
     {
         nOutRow = aParam.nDestRow + nHeader;
@@ -1655,7 +1654,8 @@ SCSIZE ScTable::Query(ScQueryParam& rParamOrg, BOOL bKeepSub)
     ScDrawLayer* pDrawLayer = pDocument->GetDrawLayer();
     bool bHasObjects = pDrawLayer && pDrawLayer->HasObjectsInRows( nTab, aParam.nRow1 + nHeader, aParam.nRow2, false );
 
-    for (SCROW j=aParam.nRow1 + nHeader; j<=aParam.nRow2; j++)
+    SCROW nRealRow2 = aParam.bUseDynamicRange ? aParam.nDynamicEndRow : aParam.nRow2;
+    for (SCROW j = aParam.nRow1 + nHeader; j <= nRealRow2; ++j)
     {
         BOOL bResult;                                   // Filterergebnis
         BOOL bValid = ValidQuery(j, aParam, pSpecial);

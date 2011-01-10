@@ -781,8 +781,12 @@ void ScTable::CopyToTable(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                     std::vector<ScShowRowsEntry> aEntries;
                     for (SCROW i = nRow1; i <= nRow2; ++i)
                     {
-                        SCROW nLastRow;
-                        bool bHidden = RowHidden(i, NULL, &nLastRow);
+                        SCROW nThisLastRow, nDestLastRow;
+                        bool bThisHidden = RowHidden(i, NULL, &nThisLastRow);
+                        bool bDestHidden = pDestTab->RowHidden(i, NULL, &nDestLastRow);
+
+                        // If the segment sizes differ, we take the shorter segment of the two.
+                        SCROW nLastRow = ::std::min(nThisLastRow, nDestLastRow);
                         if (nLastRow >= nRow2)
                             // the last row shouldn't exceed the upper bound the caller specified.
                             nLastRow = nRow2;
@@ -795,10 +799,12 @@ void ScTable::CopyToTable(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                         {
                             // Hidden flags differ.
                             pCharts->SetRangeDirty(ScRange(0, i, nTab, MAXCOL, nLastRow, nTab));
+                        }
 
-                        if (bHiddenChanged)
+                        if (bThisHiddenChange)
                             bFlagChange = true;
 
+                        // Jump to the last row of the identical flag segment.
                         i = nLastRow;
                     }
 

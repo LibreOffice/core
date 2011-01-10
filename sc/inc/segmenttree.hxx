@@ -83,6 +83,7 @@ public:
     void insertSegment(SCROW nRow, SCROW nSize, bool bSkipStartBoundary);
 
     void enableTreeSearch(bool bEnable);
+    void setInsertFromBack(bool bInsertFromBack);
     SCROW findLastNotOf(bool bValue) const;
 
 private:
