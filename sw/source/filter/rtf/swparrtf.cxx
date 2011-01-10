@@ -3274,9 +3274,7 @@ void SwRTFParser::ReadPageDescTbl()
             pPg = &pDoc->_GetPageDesc(nPos);
             pPg->SetLandscape( FALSE );
             pPgFmt = &pPg->GetMaster();
-#ifndef CFRONT
     SETPAGEDESC_DEFAULTS:
-#endif
             aSz.SetWidth( a4.Width() ); aSz.SetHeight( a4.Height() );
             aLR.SetLeft( 0 );   aLR.SetRight( 0 );
             aUL.SetLower( 0 );  aUL.SetUpper( 0 );
@@ -3324,9 +3322,7 @@ void SwRTFParser::ReadPageDescTbl()
             }
 
             pPgFmt = &pPg->GetLeft();
-#ifndef CFRONT
             goto SETPAGEDESC_DEFAULTS;
-#else
             aLR.SetLeft( 0 );   aLR.SetRight( 0 );
             aUL.SetLower( 0 );  aUL.SetUpper( 0 );
             aHLR.SetLeft( 0 );  aHLR.SetRight( 0 );

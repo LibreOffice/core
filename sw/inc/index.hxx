@@ -71,10 +71,8 @@ public:
 
     INLINE xub_StrLen operator++();
     INLINE xub_StrLen operator--();
-#ifndef CFRONT
     INLINE xub_StrLen operator++(int);
     INLINE xub_StrLen operator--(int);
-#endif
 
     INLINE xub_StrLen operator+=( xub_StrLen );
     INLINE xub_StrLen operator-=( xub_StrLen );
@@ -158,7 +156,6 @@ inline xub_StrLen SwIndex::operator--()
 {
     return ChgValue( *this, nIndex-1 ).nIndex;
 }
-#ifndef CFRONT
 inline xub_StrLen SwIndex::operator++(int)
 {
     xub_StrLen nOldIndex = nIndex;
@@ -171,7 +168,6 @@ inline xub_StrLen SwIndex::operator--(int)
     ChgValue( *this, nIndex-1 );
     return nOldIndex;
 }
-#endif
 
 inline xub_StrLen SwIndex::operator+=( xub_StrLen nWert )
 {

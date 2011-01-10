@@ -213,10 +213,8 @@ public:
 
     const SwModify& GetModify() const       { return rRoot; }
 
-#ifndef CFRONT
     SwClient* operator++(int);
     SwClient* operator--(int);
-#endif
     SwClient* operator++();
     SwClient* operator--();
 

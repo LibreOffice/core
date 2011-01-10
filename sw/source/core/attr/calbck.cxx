@@ -506,13 +506,9 @@ SwClientIter::~SwClientIter()
 }
 
 
-#ifndef CFRONT
     // Postfix Operator
 SwClient* SwClientIter::operator++(int)
 {
-// solange der CFRONT Prefix und PostFix nicht unterscheiden kann, immer
-// als Prefix-Operator arbeiten. Wenn der CFRONT es kann, muss auch der
-// Code entsprechen umgestellt werden !!!
     if( pDelNext == pAkt )
     {
         pAkt = pAkt->pRight;
@@ -522,7 +518,6 @@ SwClient* SwClientIter::operator++(int)
         pAkt = pDelNext;
     return pAkt;
 }
-#endif
 
 
     // Prefix Operator
@@ -539,7 +534,6 @@ SwClient* SwClientIter::operator++()
 }
 
 
-#ifndef CFRONT
     // Postfix Operator
 SwClient* SwClientIter::operator--(int)
 {
@@ -553,7 +547,6 @@ SwClient* SwClientIter::operator--(int)
     pDelNext = pAkt;
     return pAkt;
 }
-#endif
 
 
     // Prefix Operator

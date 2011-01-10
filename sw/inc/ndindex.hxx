@@ -65,10 +65,8 @@ public:
 
     inline ULONG operator++();
     inline ULONG operator--();
-#ifndef CFRONT
     inline ULONG operator++(int);
     inline ULONG operator--(int);
-#endif
 
     inline ULONG operator+=( ULONG );
     inline ULONG operator-=( ULONG );
@@ -202,7 +200,6 @@ inline ULONG SwNodeIndex::operator--()
 {
     return ( pNd = GetNodes()[ pNd->GetIndex()-1 ] )->GetIndex();
 }
-#ifndef CFRONT
 inline ULONG SwNodeIndex::operator++(int)
 {
     ULONG nOldIndex = pNd->GetIndex();
@@ -215,7 +212,6 @@ inline ULONG SwNodeIndex::operator--(int)
     pNd = GetNodes()[ nOldIndex - 1 ];
     return nOldIndex;
 }
-#endif
 
 inline ULONG SwNodeIndex::operator+=( ULONG nWert )
 {

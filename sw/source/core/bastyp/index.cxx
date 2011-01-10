@@ -370,7 +370,6 @@ ARR_CHK_ARRAY
 }
 
 #if OSL_DEBUG_LEVEL > 1
-#ifndef CFRONT
 
 /*************************************************************************
 |*
@@ -390,7 +389,6 @@ xub_StrLen SwIndex::operator++(int)
     return nOldIndex;
 }
 
-#endif
 
 xub_StrLen SwIndex::operator++()
 {
@@ -410,7 +408,6 @@ xub_StrLen SwIndex::operator++()
 |*
 *************************************************************************/
 
-#ifndef CFRONT
 
 xub_StrLen SwIndex::operator--(int)
 {
@@ -421,7 +418,6 @@ xub_StrLen SwIndex::operator--(int)
     return nOldIndex;
 }
 
-#endif
 
 xub_StrLen SwIndex::operator--()
 {

@@ -285,67 +285,6 @@ void SwTextShell::ExecCharAttrArgs(SfxRequest &rReq)
     }
 }
 
-
-
-#ifdef CFRONT
-
-void lcl_SetAdjust(SvxAdjust eAdjst, SfxItemSet& rSet)
-{
-    rSet.Put(SvxAdjustItem(eAdjst,RES_PARATR_ADJUST ));
-}
-
-
-
-void lcl_SetLineSpace(BYTE ePropL,SfxItemSet& rSet)
-{
-    SvxLineSpacingItem aLineSpacing(ePropL, RES_PARATR_LINESPACING );
-    aLineSpacing.GetLineSpaceRule() = SVX_LINE_SPACE_AUTO;
-    if( 100 == ePropL )
-        aLineSpacing.GetInterLineSpaceRule() = SVX_INTER_LINE_SPACE_OFF;
-    else
-        aLineSpacing.SetPropLineSpace(ePropL);
-    rSet.Put( aLineSpacing );
-}
-
-
-
-void SwTextShell::ExecParaAttr(SfxRequest &rReq)
-{
-    // gleiche beide Attribute holen, ist nicht teuerer !!
-    SfxItemSet aSet( GetPool(), RES_PARATR_LINESPACING, RES_PARATR_ADJUST );
-
-    switch (rReq.GetSlot())
-    {
-    case FN_SET_LEFT_PARA:          lcl_SetAdjust(ADJLEFT,aSet);    break;
-    case FN_SET_RIGHT_PARA:         lcl_SetAdjust(ADJRIGHT,aSet);   break;
-    case FN_SET_CENTER_PARA:        lcl_SetAdjust(ADJCENTER,aSet);  break;
-    case SID_ATTR_PARA_ADJUST_BLOCK:lcl_SetAdjust(ADJBLOCK,aSet);   break;
-
-    case FN_SET_LINE_SPACE_1:   lcl_SetLineSpace(100,aSet);     break;
-    case FN_SET_LINE_SPACE_15:  lcl_SetLineSpace(150,aSet);     break;
-    case FN_SET_LINE_SPACE_2:   lcl_SetLineSpace(200,aSet);     break;
-
-    default:
-        OSL_ENSURE(false, "SwTextShell::ExecParaAttr wrong Dispatcher");
-        return;
-    }
-    SwWrtShell& rWrtSh = GetShell();
-    SwTxtFmtColl* pColl = rWrtSh.GetCurTxtFmtColl();
-    if(pColl && pColl->IsAutoUpdateFmt())
-    {
-        rWrtSh.AutoUpdatePara(pColl, *pSet);
-    }
-    else
-    {
-        rWrtSh.SetAttr( aSet );
-        rReq.Done( aSet );
-    }
-}
-
-#else
-
-
-
 void SwTextShell::ExecParaAttr(SfxRequest &rReq)
 {
     SvxAdjust eAdjst;
@@ -495,10 +434,6 @@ SET_LINESPACE:
         rWrtSh.SetAttr( aSet );
     rReq.Done();
 }
-
-#endif
-
-
 
 void SwTextShell::ExecParaAttrArgs(SfxRequest &rReq)
 {
