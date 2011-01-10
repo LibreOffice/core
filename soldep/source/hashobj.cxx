@@ -30,7 +30,7 @@
 class ObjectWin;
 
 
-MyHashObject::MyHashObject( ULONG nId, ObjectWin* pWin )
+MyHashObject::MyHashObject( sal_uIntPtr nId, ObjectWin* pWin )
 {
     mnId = nId;
     mpWin = pWin;
