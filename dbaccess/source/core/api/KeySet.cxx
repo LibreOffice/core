@@ -154,7 +154,8 @@ OKeySet::OKeySet(const connectivity::OSQLTable& _xTable,
                  const ::rtl::OUString& _rUpdateTableName,    // this can be the alias or the full qualified name
                  const Reference< XSingleSelectQueryAnalyzer >& _xComposer,
                  const ORowSetValueVector& _aParameterValueForCache,
-                 sal_Int32 i_nMaxRows)
+                 sal_Int32 i_nMaxRows,
+                 sal_Int32& o_nRowCount)
             :OCacheSet(i_nMaxRows)
             ,m_aParameterValueForCache(_aParameterValueForCache)
             ,m_pKeyColumnNames(NULL)
@@ -165,6 +166,7 @@ OKeySet::OKeySet(const connectivity::OSQLTable& _xTable,
             ,m_xTableKeys(_xTableKeys)
             ,m_xComposer(_xComposer)
             ,m_sUpdateTableName(_rUpdateTableName)
+            ,m_rRowCount(o_nRowCount)
             ,m_bRowCountFinal(sal_False)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OKeySet::OKeySet" );
@@ -1239,8 +1241,8 @@ sal_Bool SAL_CALL OKeySet::first(  ) throw(SQLException, RuntimeException)
     ++m_aKeyIter;
     if(m_aKeyIter == m_aKeyMap.end() && !fetchRow())
         m_aKeyIter = m_aKeyMap.end();
-
-    refreshRow();
+    else
+        refreshRow();
     return m_aKeyIter != m_aKeyMap.end() && m_aKeyIter != m_aKeyMap.begin();
 }
 // -----------------------------------------------------------------------------
@@ -1403,9 +1405,18 @@ void SAL_CALL OKeySet::refreshRow() throw(SQLException, RuntimeException)
     OSL_ENSURE(m_xSet.is(),"No resultset form statement!");
     sal_Bool bOK = m_xSet->next();
     if ( !bOK )
-        m_aKeyIter = m_aKeyMap.end();
-    m_xRow.set(m_xSet,UNO_QUERY);
-    OSL_ENSURE(m_xRow.is(),"No row form statement!");
+    {
+        OKeySetMatrix::iterator aTemp = m_aKeyIter;
+        ++m_aKeyIter;
+        m_aKeyMap.erase(aTemp);
+        --m_rRowCount;
+        refreshRow();
+    }
+    else
+    {
+        m_xRow.set(m_xSet,UNO_QUERY);
+        OSL_ENSURE(m_xRow.is(),"No row form statement!");
+    }
 }
 // -----------------------------------------------------------------------------
 sal_Bool OKeySet::fetchRow()

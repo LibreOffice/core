@@ -176,7 +176,7 @@ ORowSetCache::ORowSetCache(const Reference< XResultSet >& _xRs,
             if ( aTableNames.getLength() > 1 && !_rUpdateTableName.getLength() && bNeedKeySet )
             {// here we have a join or union and nobody told us which table to update, so we update them all
                 m_nPrivileges = Privilege::SELECT|Privilege::DELETE|Privilege::INSERT|Privilege::UPDATE;
-                OptimisticSet* pCursor = new OptimisticSet(m_aContext,xConnection,_xAnalyzer,_aParameterValueForCache,i_nMaxRows);
+                OptimisticSet* pCursor = new OptimisticSet(m_aContext,xConnection,_xAnalyzer,_aParameterValueForCache,i_nMaxRows,m_nRowCount);
                 m_pCacheSet = pCursor;
                 m_xCacheSet = m_pCacheSet;
                 try
@@ -309,7 +309,7 @@ ORowSetCache::ORowSetCache(const Reference< XResultSet >& _xRs,
                 }
             }
 
-            OKeySet* pKeySet = new OKeySet(m_aUpdateTable,xUpdateTableKeys,aUpdateTableName ,_xAnalyzer,_aParameterValueForCache,i_nMaxRows);
+            OKeySet* pKeySet = new OKeySet(m_aUpdateTable,xUpdateTableKeys,aUpdateTableName ,_xAnalyzer,_aParameterValueForCache,i_nMaxRows,m_nRowCount);
             try
             {
                 m_pCacheSet = pKeySet;
@@ -825,7 +825,6 @@ sal_Bool ORowSetCache::moveWindow()
             if ( nNewStartPos < 1 )
             {
                 bCheck = m_pCacheSet->first();
-                //  aEnd = m_pMatrix->begin() + (sal_Int32)(m_nFetchSize*0.5);
                 OSL_ENSURE((nNewEndPos - m_nStartPos - nNewStartPos) < (sal_Int32)m_pMatrix->size(),"Position is behind end()!");
                 aEnd = m_pMatrix->begin() + (nNewEndPos - m_nStartPos - nNewStartPos);
                 aIter = aEnd;
@@ -958,9 +957,6 @@ sal_Bool ORowSetCache::moveWindow()
             sal_Bool bCheck = m_pCacheSet->absolute(nPos);
             bCheck = fill(aIter,aEnd,nPos,bCheck); // refill the region wew don't need anymore
 
-//          // we know that this is the current maximal rowcount here
-//          if ( !m_bRowCountFinal && bCheck )
-//              m_nRowCount = std::max(nPos,m_nRowCount);
             // we have to read one row forward to enshure that we know when we are on last row
             // but only when we don't know it already
             sal_Bool bOk = sal_True;
