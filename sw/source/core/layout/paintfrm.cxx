@@ -4124,7 +4124,7 @@ sal_uInt16 lcl_GetLineWidth( const SvxBorderLine* pLine )
     sal_uInt16 result = 0;
 
     if ( pLine != NULL )
-        result = pLine->GetInWidth() + pLine->GetOutWidth() + pLine->GetDistance();
+        result = pLine->GetScaledWidth();
 
     return result;
 }
