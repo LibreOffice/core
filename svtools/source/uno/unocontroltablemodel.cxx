@@ -465,10 +465,16 @@ namespace svt { namespace table
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    bool UnoControlTableModel::hasDataModel() const
+    Reference< XGridDataModel > UnoControlTableModel::getDataModel() const
     {
         Reference< XGridDataModel > const xDataModel( m_pImpl->m_aDataModel );
-        return xDataModel.is();
+        return xDataModel;
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    bool UnoControlTableModel::hasDataModel() const
+    {
+        return getDataModel().is();
     }
 
     //------------------------------------------------------------------------------------------------------------------

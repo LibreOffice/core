@@ -34,6 +34,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/view/SelectionType.hpp>
 #include <com/sun/star/awt/grid/XGridDataModel.hpp>
+#include <com/sun/star/awt/grid/XMutableGridDataModel.hpp>
 #include <com/sun/star/awt/grid/XGridColumnModel.hpp>
 #include <toolkit/helper/unopropertyarrayhelper.hxx>
 #include <toolkit/helper/property.hxx>
@@ -293,7 +294,7 @@ namespace
 
         try
         {
-            const Reference< XContainer > xColModel(
+            Reference< XContainer > const xColModel(
                 xModelProps->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ColumnModel" ) ) ),
                 UNO_QUERY_THROW );
             if ( i_add )
@@ -301,14 +302,18 @@ namespace
             else
                 xColModel->removeContainerListener( i_listener.get() );
 
-            const Reference< XGridDataModel > xDataModel(
+            Reference< XGridDataModel > const xDataModel(
                 xModelProps->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "GridDataModel" ) ) ),
                 UNO_QUERY_THROW
             );
-            if ( i_add )
-                xDataModel->addGridDataListener( i_listener.get() );
-            else
-                xDataModel->removeGridDataListener( i_listener.get() );
+            Reference< XMutableGridDataModel > const xMutableDataModel( xDataModel, UNO_QUERY );
+            if ( xMutableDataModel.is() )
+            {
+                if ( i_add )
+                    xMutableDataModel->addGridDataListener( i_listener.get() );
+                else
+                    xMutableDataModel->removeGridDataListener( i_listener.get() );
+            }
         }
         catch( const Exception& )
         {

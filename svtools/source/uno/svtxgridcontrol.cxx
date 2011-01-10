@@ -64,12 +64,12 @@ using ::com::sun::star::accessibility::AccessibleTableModelChange;
 
 SVTXGridControl::SVTXGridControl()
     :m_pTableModel( new UnoControlTableModel() )
-    ,m_xDataModel( 0 )
     ,m_xColumnModel( 0 )
     ,m_bHasColumnHeaders( false )
     ,m_bHasRowHeaders( false )
     ,m_bTableModelInitCompleted( false )
     ,m_nSelectedRowCount( 0 )
+    ,m_nKnowRowCount( 0 )
     ,m_aSelectionListeners( *this )
 {
 }
@@ -292,22 +292,21 @@ void SVTXGridControl::setProperty( const ::rtl::OUString& PropertyName, const An
         }
         case BASEPROPERTY_GRID_DATAMODEL:
         {
-            {
-                m_xDataModel = Reference< XGridDataModel >( aValue, UNO_QUERY );
-                if ( !m_xDataModel.is() )
-                    throw GridInvalidDataException( ::rtl::OUString::createFromAscii("The data model isn't set!"), *this );
+            Reference< XGridDataModel > const xDataModel( aValue, UNO_QUERY );
+            if ( !xDataModel.is() )
+                throw GridInvalidDataException( ::rtl::OUString::createFromAscii("The data model isn't set!"), *this );
 
-                m_pTableModel->setDataModel( m_xDataModel );
-                impl_checkTableModelInit();
+            m_pTableModel->setDataModel( xDataModel );
+            impl_checkTableModelInit();
 
-                // ensure default columns exist, if they have not previously been added
-                sal_Int32 const nDataColumnCount = m_xDataModel->getColumnCount();
-                if ( ( nDataColumnCount > 0 ) && ( m_xColumnModel->getColumnCount() == 0 ) )
-                    m_xColumnModel->setDefaultColumns( nDataColumnCount );
-                    // this will trigger notifications, which in turn will let us update our m_pTableModel
-            }
-            break;
+            // ensure default columns exist, if they have not previously been added
+            sal_Int32 const nDataColumnCount = xDataModel->getColumnCount();
+            if ( ( nDataColumnCount > 0 ) && ( m_xColumnModel->getColumnCount() == 0 ) )
+                m_xColumnModel->setDefaultColumns( nDataColumnCount );
+                // this will trigger notifications, which in turn will let us update our m_pTableModel
         }
+        break;
+
         case BASEPROPERTY_GRID_COLUMNMODEL:
         {
             // remove all old columns
@@ -342,6 +341,7 @@ void SVTXGridControl::impl_checkTableModelInit()
         if ( pTable )
         {
             pTable->SetModel( PTableModel( m_pTableModel ) );
+            m_nKnowRowCount = m_pTableModel->getRowCount();
             m_bTableModelInitCompleted = true;
         }
     }
@@ -378,7 +378,7 @@ Any SVTXGridControl::getProperty( const ::rtl::OUString& PropertyName ) throw(Ru
         return Any ((sal_Bool) m_pTableModel->hasColumnHeaders());
 
     case BASEPROPERTY_GRID_DATAMODEL:
-        return Any ( m_xDataModel );
+        return Any ( m_pTableModel->getDataModel() );
 
     case BASEPROPERTY_GRID_COLUMNMODEL:
         return Any ( m_xColumnModel);
@@ -416,22 +416,26 @@ void SVTXGridControl::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
     VCLXWindow::ImplGetPropertyIds( rIds, true );
 }
 
-void SAL_CALL SVTXGridControl::rowAdded(const ::com::sun::star::awt::grid::GridDataEvent& Event ) throw (::com::sun::star::uno::RuntimeException)
+//----------------------------------------------------------------------------------------------------------------------
+void SAL_CALL SVTXGridControl::rowsAdded( const GridDataEvent& i_event ) throw (RuntimeException)
 {
     ::vos::OGuard aGuard( GetMutex() );
 
-    const TableSize rowDataLength = (TableSize)Event.RowData.getLength();
-    const TableSize colCount = m_xColumnModel->getColumnCount();
-    if ( colCount == 0 )
+    sal_Int32 const affectedRows = i_event.Rows.getLength();
+    ENSURE_OR_RETURN_VOID( affectedRows > 0, "SVTXGridControl::rowsAdded: invalid row count!" );
+
+    Reference< XGridDataModel > const xDataModel( m_pTableModel->getDataModel(), UNO_QUERY_THROW );
+    sal_Int32 const affectedColumns = i_event.Columns.getLength() ? i_event.Columns.getLength() : xDataModel->getColumnCount();
+    ENSURE_OR_RETURN_VOID( affectedColumns > 0, "SVTXGridControl::rowsAdded: no columns at all?" );
+    TableSize const columnCount = m_xColumnModel->getColumnCount();
+    if ( columnCount == 0 )
     {
-        m_xColumnModel->setDefaultColumns( rowDataLength );
+        m_xColumnModel->setDefaultColumns( affectedColumns );
             // this will trigger notifications, which in turn will let us update our m_pTableModel
     }
-    if ( rowDataLength != colCount )
-        throw GridInvalidDataException( ::rtl::OUString::createFromAscii("The column count doesn't match with the length of row data"), *this );
 
     TableControl* pTable = dynamic_cast< TableControl* >( GetWindow() );
-    ENSURE_OR_RETURN_VOID( pTable, "SVTXGridControl::rowAdded: no control (anymore)!" );
+    ENSURE_OR_RETURN_VOID( pTable, "SVTXGridControl::rowsAdded: no control (anymore)!" );
 
     pTable->InvalidateDataWindow( m_pTableModel->getRowCount() - 1, 0, false );
     if ( pTable->isAccessibleAlive() )
@@ -452,14 +456,15 @@ void SAL_CALL SVTXGridControl::rowAdded(const ::com::sun::star::awt::grid::GridD
     }
 }
 
-void SAL_CALL SVTXGridControl::rowRemoved(const ::com::sun::star::awt::grid::GridDataEvent& Event ) throw (::com::sun::star::uno::RuntimeException)
+//----------------------------------------------------------------------------------------------------------------------
+void SAL_CALL SVTXGridControl::rowsRemoved( const GridDataEvent& i_event ) throw (RuntimeException)
 {
     ::vos::OGuard aGuard( GetMutex() );
 
     TableControl* pTable = dynamic_cast< TableControl* >( GetWindow() );
-    ENSURE_OR_RETURN_VOID( pTable, "SVTXGridControl::rowRemoved: no control (anymore)!" );
+    ENSURE_OR_RETURN_VOID( pTable, "SVTXGridControl::rowsRemoved: no control (anymore)!" );
 
-    if(Event.RowIndex == -1)
+    if ( i_event.Rows.getLength() == 0 )
     {
         if ( !isSelectionEmpty() )
             deselectAllRows();
@@ -468,51 +473,87 @@ void SAL_CALL SVTXGridControl::rowRemoved(const ::com::sun::star::awt::grid::Gri
 
         if ( pTable->isAccessibleAlive() )
         {
-            pTable->commitGridControlEvent(TABLE_MODEL_CHANGED,
-                 makeAny( AccessibleTableModelChange(DELETE, 0, m_pTableModel->getColumnCount(), 0, m_pTableModel->getColumnCount())),
-                Any());
+            pTable->commitGridControlEvent(
+                TABLE_MODEL_CHANGED,
+                 makeAny( AccessibleTableModelChange( DELETE, 0, m_pTableModel->getColumnCount(), 0, m_pTableModel->getColumnCount() ) ),
+                Any()
+            );
         }
     }
-    else if ( Event.RowIndex >= 0 && Event.RowIndex < m_pTableModel->getRowCount() )
+    else
     {
-        if ( isSelectedIndex( Event.RowIndex ) )
+    #if OSL_DEBUG_LEVEL > 0
+        for ( sal_Int32 row = 0; row < i_event.Rows.getLength() - 1; ++row )
         {
-            Sequence< sal_Int32 > selected(1);
-            selected[0]=Event.RowIndex;
-            deselectRows( selected );
+            OSL_ENSURE( i_event.Rows[row] < i_event.Rows[row], "SVTXGridControl::rowsRemoved: row indexes not sorted!" );
         }
+    #endif
+        sal_Int32 removedRowCount = 0;
+        for ( sal_Int32 row = 0; row < i_event.Rows.getLength(); ++row )
+        {
+            sal_Int32 const rowIndex = i_event.Rows[row];
+            ENSURE_OR_CONTINUE( ( rowIndex >= 0 ) && ( rowIndex < m_nKnowRowCount ),
+                "SVTXGridControl::rowsRemoved: illegal row index!" );
+
+            if ( isSelectedIndex( rowIndex ) )
+            {
+                Sequence< sal_Int32 > selected(1);
+                selected[0] = rowIndex;
+                deselectRows( selected );
+            }
+
+            if ( pTable->isAccessibleAlive() )
+            {
+                pTable->commitGridControlEvent(TABLE_MODEL_CHANGED,
+                     makeAny( AccessibleTableModelChange(
+                        DELETE, rowIndex - removedRowCount, rowIndex - removedRowCount + 1, 0, m_pTableModel->getColumnCount()
+                        // the adjustment via removedRowCount is necessary here, since with every removed row, the
+                        // *actual* index of all subsequent rows changes, but i_event.Rows still contains the original row indexes
+                    ) ),
+                    Any()
+                );
+            }
+            ++removedRowCount;
+        }
+
+        // TODO: I don't think that the selected rows of the TableControl properly survive this - they might contain
+        // too large indexes now.
+        // Really, the ITableModel should broadcast the "rowsRemoved" event to its listeners, and the TableControl/_Impl
+        // should do all necessary adjustments, including for its selection, itself.
     }
 
-    pTable->InvalidateDataWindow( Event.RowIndex, Event.RowIndex, true );
-    if ( pTable->isAccessibleAlive() )
-    {
-        pTable->commitGridControlEvent(TABLE_MODEL_CHANGED,
-             makeAny( AccessibleTableModelChange(DELETE, Event.RowIndex, Event.RowIndex+1, 0, m_pTableModel->getColumnCount())),
-            Any());
-    }
+    m_nKnowRowCount = m_pTableModel->getRowCount();
+    pTable->InvalidateDataWindow( 0, m_nKnowRowCount, true );
 }
 
-void SAL_CALL SVTXGridControl::dataChanged(const ::com::sun::star::awt::grid::GridDataEvent& Event ) throw (::com::sun::star::uno::RuntimeException)
+//----------------------------------------------------------------------------------------------------------------------
+void SAL_CALL SVTXGridControl::dataChanged( const GridDataEvent& i_event ) throw (RuntimeException)
 {
     ::vos::OGuard aGuard( GetMutex() );
 
     TableControl* pTable = dynamic_cast< TableControl* >( GetWindow() );
     ENSURE_OR_RETURN_VOID( pTable, "SVTXGridControl::dataChanged: no control (anymore)!" );
 
-    if ( Event.AttributeName.equalsAscii( "RowHeaders" ) )
-    {
-        // TODO: we could do better than this - invalidate the header area only
-        pTable->Invalidate();
-    }
-    else if (   ( Event.AttributeName.equalsAscii( "CellUpdated" ) )
-            ||  ( Event.AttributeName.equalsAscii( "RowUpdated" ) )
-            )
-    {
-        // TODO: Our UnoControlTableModel should be a listener at the data model, and multiplex those events,
-        // so the TableControl/_Impl can react on it.
-        pTable->InvalidateDataWindow( Event.RowIndex, Event.RowIndex, false );
-    }
+    // TODO: Our UnoControlTableModel should be a listener at the data model, and multiplex those events,
+    // so the TableControl/_Impl can react on it.
+    if ( i_event.Rows.getLength() == 0 )
+        pTable->InvalidateDataWindow( 0, m_pTableModel->getRowCount(), false );
+    else
+        pTable->InvalidateDataWindow( i_event.Rows[0], i_event.Rows[ i_event.Rows.getLength() - 1 ], false );
 }
+
+//----------------------------------------------------------------------------------------------------------------------
+void SAL_CALL SVTXGridControl::rowTitleChanged( const GridDataEvent& Event ) throw (RuntimeException)
+{
+    ::vos::OGuard aGuard( GetMutex() );
+
+    TableControl* pTable = dynamic_cast< TableControl* >( GetWindow() );
+    ENSURE_OR_RETURN_VOID( pTable, "SVTXGridControl::rowTitleChanged: no control (anymore)!" );
+
+    // TODO: we could do better than this - invalidate the header area only
+    pTable->Invalidate();
+}
+
 
 //----------------------------------------------------------------------------------------------------------------------
 void SAL_CALL SVTXGridControl::elementInserted( const ContainerEvent& i_event ) throw (RuntimeException)
@@ -721,7 +762,7 @@ void SAL_CALL SVTXGridControl::deselectAllRows() throw (::com::sun::star::uno::R
         return sal_False;
 }
 
-::sal_Bool SAL_CALL SVTXGridControl::isSelectedIndex(::sal_Int32 index) throw (::com::sun::star::uno::RuntimeException)
+::sal_Bool SAL_CALL SVTXGridControl::isSelectedIndex( ::sal_Int32 index ) throw (::com::sun::star::uno::RuntimeException)
 {
     ::vos::OGuard aGuard( GetMutex() );
 

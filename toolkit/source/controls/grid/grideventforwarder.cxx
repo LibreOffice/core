@@ -81,19 +81,19 @@ namespace toolkit
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    void SAL_CALL GridEventForwarder::rowAdded( const GridDataEvent& i_event ) throw (RuntimeException)
+    void SAL_CALL GridEventForwarder::rowsAdded( const GridDataEvent& i_event ) throw (RuntimeException)
     {
         Reference< XGridDataListener > xPeer( m_parent.getPeer(), UNO_QUERY );
         if ( xPeer.is() )
-            xPeer->rowAdded( i_event );
+            xPeer->rowsAdded( i_event );
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    void SAL_CALL GridEventForwarder::rowRemoved( const GridDataEvent& i_event ) throw (RuntimeException)
+    void SAL_CALL GridEventForwarder::rowsRemoved( const GridDataEvent& i_event ) throw (RuntimeException)
     {
         Reference< XGridDataListener > xPeer( m_parent.getPeer(), UNO_QUERY );
         if ( xPeer.is() )
-            xPeer->rowRemoved( i_event );
+            xPeer->rowsRemoved( i_event );
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -102,6 +102,14 @@ namespace toolkit
         Reference< XGridDataListener > xPeer( m_parent.getPeer(), UNO_QUERY );
         if ( xPeer.is() )
             xPeer->dataChanged( i_event );
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    void SAL_CALL GridEventForwarder::rowTitleChanged( const GridDataEvent& i_event ) throw (RuntimeException)
+    {
+        Reference< XGridDataListener > xPeer( m_parent.getPeer(), UNO_QUERY );
+        if ( xPeer.is() )
+            xPeer->rowTitleChanged( i_event );
     }
 
     //------------------------------------------------------------------------------------------------------------------

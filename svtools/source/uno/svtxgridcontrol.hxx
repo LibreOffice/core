@@ -56,12 +56,12 @@ class SVTXGridControl : public SVTXGridControl_Base
 {
 private:
     ::boost::shared_ptr< UnoControlTableModel >                                         m_pTableModel;
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::grid::XGridDataModel >     m_xDataModel;
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::grid::XGridColumnModel >   m_xColumnModel;
     bool                                                                                m_bHasColumnHeaders;
     bool                                                                                m_bHasRowHeaders;
     bool                                                                                m_bTableModelInitCompleted;
     sal_Int32                                                                           m_nSelectedRowCount;
+    sal_Int32                                                                           m_nKnowRowCount;
     SelectionListenerMultiplexer                                                        m_aSelectionListeners;
 
 protected:
@@ -73,9 +73,10 @@ public:
     ~SVTXGridControl();
 
     // XGridDataListener
-    virtual void SAL_CALL rowAdded( const ::com::sun::star::awt::grid::GridDataEvent& Event ) throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL rowRemoved( const ::com::sun::star::awt::grid::GridDataEvent& Event ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL rowsAdded( const ::com::sun::star::awt::grid::GridDataEvent& Event ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL rowsRemoved( const ::com::sun::star::awt::grid::GridDataEvent& Event ) throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL dataChanged( const ::com::sun::star::awt::grid::GridDataEvent& Event ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL rowTitleChanged( const ::com::sun::star::awt::grid::GridDataEvent& Event ) throw (::com::sun::star::uno::RuntimeException);
 
     // XContainerListener
     virtual void SAL_CALL elementInserted( const ::com::sun::star::container::ContainerEvent& Event ) throw (::com::sun::star::uno::RuntimeException);

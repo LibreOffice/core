@@ -33,7 +33,6 @@
 
 /** === begin UNO includes === **/
 #include <com/sun/star/awt/grid/XGridControl.hpp>
-#include <com/sun/star/awt/grid/XGridDataListener.hpp>
 #include <com/sun/star/awt/grid/GridDataEvent.hpp>
 #include <com/sun/star/awt/grid/XGridColumnModel.hpp>
 #include <com/sun/star/awt/grid/XGridDataModel.hpp>
@@ -123,6 +122,8 @@ namespace svt { namespace table
         void    setHorizontalScrollbarVisibility( ScrollbarVisibility const i_visibility ) const;
         void    setDataModel( ::com::sun::star::uno::Reference< ::com::sun::star::awt::grid::XGridDataModel > const & i_gridDataModel );
         bool    hasDataModel() const;
+        ::com::sun::star::uno::Reference< ::com::sun::star::awt::grid::XGridDataModel >
+                getDataModel() const;
         void    setColumnModel( ::com::sun::star::uno::Reference< ::com::sun::star::awt::grid::XGridColumnModel > const & i_gridColumnModel );
         bool    hasColumnModel() const;
         void    setRowHeaders(bool _bRowHeaders);

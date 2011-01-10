@@ -28,20 +28,22 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_toolkit.hxx"
 #include "defaultgriddatamodel.hxx"
-#include <comphelper/sequence.hxx>
+
+#include <comphelper/stlunosequence.hxx>
 #include <toolkit/helper/servicenames.hxx>
+#include <tools/diagnose_ex.h>
 #include <rtl/ref.hxx>
 
+#include <algorithm>
+
 using ::rtl::OUString;
+using ::comphelper::stl_begin;
+using ::comphelper::stl_end;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::awt::grid;
 using namespace ::com::sun::star::lang;
-
-#define ROWHEADERS ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "RowHeaders" ))
-#define CELLUPDATED ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "CellUpdated" ))
-#define ROWUPDATED ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "RowUpdated" ))
 
 //......................................................................................................................
 namespace toolkit
@@ -68,6 +70,7 @@ namespace toolkit
         :DefaultGridDataModel_Base()
         ,MutexAndBroadcastHelper()
         ,m_aRowHeaders()
+        ,m_nColumnCount(0)
     {
     }
 
@@ -86,63 +89,68 @@ namespace toolkit
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    void DefaultGridDataModel::broadcast( broadcast_type eType, const GridDataEvent& aEvent ) throw (::com::sun::star::uno::RuntimeException)
+    namespace
     {
-        ::cppu::OInterfaceContainerHelper* pIter = BrdcstHelper.getContainer( XGridDataListener::static_type() );
-        if( pIter )
+        Sequence< sal_Int32 > lcl_buildSingleElementSequence( sal_Int32 const i_index )
         {
-            ::cppu::OInterfaceIteratorHelper aListIter(*pIter);
-            while(aListIter.hasMoreElements())
-            {
-                XGridDataListener* pListener = static_cast<XGridDataListener*>(aListIter.next());
-                switch( eType )
-                {
-                case row_added:     pListener->rowAdded(aEvent); break;
-                case row_removed:   pListener->rowRemoved(aEvent); break;
-                case data_changed:  pListener->dataChanged(aEvent); break;
-                }
-            }
+            Sequence< sal_Int32 > aIndexes(1);
+            aIndexes[0] = i_index;
+            return aIndexes;
+        }
+        Sequence< sal_Int32 > lcl_buildIndexSequence( sal_Int32 const i_start, sal_Int32 const i_end )
+        {
+            Sequence< sal_Int32 > aIndexes;
+            ENSURE_OR_RETURN( i_end >= i_start, "lcl_buildIndexSequence: illegal indexes!", aIndexes );
+
+            aIndexes.realloc( i_end - i_start + 1 );
+            for ( sal_Int32 i = i_start; i <= i_end; ++i )
+                aIndexes[ i - i_start ] = i;
+
+            return aIndexes;
         }
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    void DefaultGridDataModel::broadcast_changed( ::rtl::OUString name, sal_Int32 index, Any oldValue, Any newValue) throw (::com::sun::star::uno::RuntimeException)
+    void DefaultGridDataModel::broadcast( GridDataEvent const & i_event,
+        void ( SAL_CALL XGridDataListener::*i_listenerMethod )( GridDataEvent const & ), ::osl::ClearableMutexGuard & i_instanceLock )
     {
-        Reference< XInterface > xSource( static_cast< ::cppu::OWeakObject* >( this ) );
-        GridDataEvent aEvent( xSource, name, oldValue, newValue, index, ::rtl::OUString(), Sequence< Any >());
-        broadcast( data_changed, aEvent);
-    }
+        ::cppu::OInterfaceContainerHelper* pListeners = BrdcstHelper.getContainer( XGridDataListener::static_type() );
+        if ( !pListeners )
+            return;
 
-    //------------------------------------------------------------------------------------------------------------------
-    void DefaultGridDataModel::broadcast_add( sal_Int32 index, const ::rtl::OUString & headerName,
-                                             ::com::sun::star::uno::Sequence< Any > rowData ) throw (::com::sun::star::uno::RuntimeException)
-    {
-        Reference< XInterface > xSource( static_cast< ::cppu::OWeakObject* >( this ) );
-        GridDataEvent aEvent( xSource, ::rtl::OUString(), Any(), Any(), index, headerName, (const ::com::sun::star::uno::Sequence< Any >&)rowData );
-        broadcast( row_added, aEvent);
-    }
-
-    //------------------------------------------------------------------------------------------------------------------
-    void DefaultGridDataModel::broadcast_remove( sal_Int32 index, const ::rtl::OUString & headerName,
-                                                ::com::sun::star::uno::Sequence< Any > rowData ) throw (::com::sun::star::uno::RuntimeException)
-    {
-        Reference< XInterface > xSource( static_cast< ::cppu::OWeakObject* >( this ) );
-        GridDataEvent aEvent( xSource, ::rtl::OUString(), Any(), Any(), index, headerName, rowData );
-        broadcast( row_removed, aEvent);
+        i_instanceLock.clear();
+        pListeners->notifyEach( i_listenerMethod, i_event );
     }
 
     //------------------------------------------------------------------------------------------------------------------
     ::sal_Int32 SAL_CALL DefaultGridDataModel::getRowCount() throw (::com::sun::star::uno::RuntimeException)
     {
+        ::osl::MutexGuard aGuard( GetMutex() );
         return m_aData.size();
     }
 
     //------------------------------------------------------------------------------------------------------------------
     ::sal_Int32 SAL_CALL DefaultGridDataModel::getColumnCount() throw (::com::sun::star::uno::RuntimeException)
     {
-        if ( m_aData.empty() )
-            return 0;
-        return m_aData[0].size();
+        ::osl::MutexGuard aGuard( GetMutex() );
+        return m_nColumnCount;
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    Any SAL_CALL DefaultGridDataModel::getCellData( ::sal_Int32 i_column, ::sal_Int32 i_row ) throw (RuntimeException, IndexOutOfBoundsException)
+    {
+        ::osl::MutexGuard aGuard( GetMutex() );
+
+        if  (   ( i_row < 0 ) || ( size_t( i_row ) > m_aData.size() )
+            ||  ( i_column < 0 ) || ( i_column > m_nColumnCount )
+            )
+            throw IndexOutOfBoundsException( ::rtl::OUString(), *this );
+
+        ::std::vector< Any > const & rRow( m_aData[ i_row ] );
+        if ( size_t( i_column ) < rRow.size() )
+            return rRow[ i_column ];
+
+        return Any();
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -157,125 +165,228 @@ namespace toolkit
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    void SAL_CALL DefaultGridDataModel::setRowHeaders(const ::com::sun::star::uno::Sequence< ::rtl::OUString > & i_rowHeaders ) throw (::com::sun::star::uno::RuntimeException)
+    void SAL_CALL DefaultGridDataModel::addRow( const ::rtl::OUString& i_title, const Sequence< Any >& i_data ) throw (RuntimeException)
     {
-        ::com::sun::star::uno::Sequence< ::rtl::OUString > oldValue( comphelper::containerToSequence( m_aRowHeaders ) );
+        ::osl::ClearableMutexGuard aGuard( GetMutex() );
 
-        const sal_Int32 sequenceSize = i_rowHeaders.getLength();
+        sal_Int32 const columnCount = i_data.getLength();
 
-        sal_Int32 i = 0;
-        for (   std::vector< rtl::OUString >::iterator iterator = m_aRowHeaders.begin();
-                iterator != m_aRowHeaders.end();
-                ++iterator, ++i
-            )
-        {
-            if ( sequenceSize > i )
-                *iterator = i_rowHeaders[i];
-            else
-                *iterator = ::rtl::OUString();
-        }
-
-        broadcast_changed( ROWHEADERS, 0, Any( oldValue ), Any( comphelper::containerToSequence( m_aRowHeaders ) ) );
-    }
-
-    //------------------------------------------------------------------------------------------------------------------
-    void SAL_CALL DefaultGridDataModel::addRow(const ::rtl::OUString & headername, const ::com::sun::star::uno::Sequence< Any > & rRowdata) throw (::com::sun::star::uno::RuntimeException)
-    {
         // store header name
-        m_aRowHeaders.push_back(headername);
+        m_aRowHeaders.push_back( i_title );
 
         // store row m_aData
-        std::vector< Any > newRow;
-        for ( int i = 0; i < rRowdata.getLength();i++)
-        {
-            newRow.push_back(rRowdata[i]);
-        }
-
+        ::std::vector< Any > newRow( columnCount );
+        ::std::copy( i_data.getConstArray(), i_data.getConstArray() + columnCount, newRow.begin() );
         m_aData.push_back( newRow );
 
-        broadcast_add( m_aData.size()-1, headername, comphelper::containerToSequence(newRow));
+        // update column count
+        if ( columnCount > m_nColumnCount )
+            m_nColumnCount = columnCount;
 
+        broadcast(
+            GridDataEvent( *this, Sequence< sal_Int32 >(), lcl_buildSingleElementSequence( m_aData.size() - 1 ) ),
+            &XGridDataListener::rowsAdded,
+            aGuard
+        );
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    void SAL_CALL DefaultGridDataModel::removeRow(::sal_Int32 index) throw (::com::sun::star::uno::RuntimeException)
+    void SAL_CALL DefaultGridDataModel::addRows( const Sequence< ::rtl::OUString >& i_titles, const Sequence< Sequence< Any > >& i_data ) throw (IllegalArgumentException, RuntimeException)
     {
-        if ( index >= 0 && index <= getRowCount()-1)
-        {
-            ::rtl::OUString headerName( (::rtl::OUString) m_aRowHeaders[index] );
-            m_aRowHeaders.erase(m_aRowHeaders.begin() + index);
+        if ( i_titles.getLength() != i_data.getLength() )
+            throw IllegalArgumentException( ::rtl::OUString(), *this, -1 );
 
-            Sequence< Any >& rowData ( (Sequence< Any >&)m_aData[index] );
-            m_aData.erase(m_aData.begin() + index);
-            broadcast_remove( index, headerName, rowData);
-        }
-        else
+        ::osl::ClearableMutexGuard aGuard( GetMutex() );
+
+        sal_Int32 const rowCount = i_titles.getLength();
+        if ( rowCount == 0 )
             return;
+
+        // determine max col count in the new data
+        sal_Int32 maxColCount = 0;
+        for ( sal_Int32 row=0; row<rowCount; ++row )
+            if ( i_data[row].getLength() > maxColCount )
+                maxColCount = i_data[row].getLength();
+
+        if ( maxColCount < m_nColumnCount )
+            maxColCount = m_nColumnCount;
+
+        for ( sal_Int32 row=0; row<rowCount;  ++row )
+        {
+            m_aRowHeaders.push_back( i_titles[row] );
+
+            ::std::vector< Any > newRow( maxColCount );
+            Sequence< Any > const & rRowData = i_data[row];
+            ::std::copy( rRowData.getConstArray(), rRowData.getConstArray() + rRowData.getLength(), newRow.begin() );
+            m_aData.push_back( newRow );
+        }
+
+        if ( maxColCount > m_nColumnCount )
+            m_nColumnCount = maxColCount;
+
+        broadcast(
+            GridDataEvent( *this, Sequence< sal_Int32 >(), lcl_buildIndexSequence( m_aData.size() - rowCount, m_aData.size() - 1 ) ),
+            &XGridDataListener::rowsAdded,
+            aGuard
+        );
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    Any SAL_CALL DefaultGridDataModel::getCellData( ::sal_Int32 i_column, ::sal_Int32 i_row ) throw (RuntimeException, IndexOutOfBoundsException)
+    void SAL_CALL DefaultGridDataModel::removeRow( ::sal_Int32 i_rowIndex ) throw (IndexOutOfBoundsException, RuntimeException)
     {
-        ::osl::MutexGuard aGuard( GetMutex() );
+        ::osl::ClearableMutexGuard aGuard( GetMutex() );
 
-        if  ( ( i_row < 0 ) || ( size_t( i_row ) > m_aData.size() ) )
+        if ( ( i_rowIndex < 0 ) || ( size_t( i_rowIndex ) >= m_aData.size() ) )
             throw IndexOutOfBoundsException( ::rtl::OUString(), *this );
 
-        ::std::vector< Any > const & rRow( m_aData[ i_row ] );
+        m_aRowHeaders.erase( m_aRowHeaders.begin() + i_rowIndex );
+        m_aData.erase( m_aData.begin() + i_rowIndex );
 
-        if  ( ( i_column < 0 ) || ( size_t( i_column ) > rRow.size() ) )
-            throw IndexOutOfBoundsException( ::rtl::OUString(), *this );
-
-        return rRow[ i_column ];
+        broadcast(
+            GridDataEvent( *this, Sequence< sal_Int32 >(), lcl_buildSingleElementSequence( i_rowIndex ) ),
+            &XGridDataListener::rowsRemoved,
+            aGuard
+        );
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    void SAL_CALL DefaultGridDataModel::addGridDataListener( const Reference< XGridDataListener >& xListener ) throw (RuntimeException)
+    void SAL_CALL DefaultGridDataModel::removeRows( const Sequence< ::sal_Int32 >& i_rowIndexes ) throw (IndexOutOfBoundsException, RuntimeException)
     {
-        BrdcstHelper.addListener( XGridDataListener::static_type(), xListener );
+        ::osl::ClearableMutexGuard aGuard( GetMutex() );
+
+        sal_Int32 const rowCount = i_rowIndexes.getLength();
+        if ( rowCount == 0 )
+            return;
+
+        for ( sal_Int32 row=0; row<rowCount; ++row )
+        {
+            if ( ( i_rowIndexes[row] < 0 ) || ( size_t( i_rowIndexes[row] ) >= m_aData.size() ) )
+                throw IndexOutOfBoundsException( ::rtl::OUString(), *this );
+        }
+
+        Sequence< sal_Int32 > rowIndexes( i_rowIndexes );
+        ::std::sort( stl_begin( rowIndexes ), stl_end( rowIndexes ) );
+
+        for ( sal_Int32 row = rowCount; row > 0; )
+        {
+            sal_Int32 const rowIndex = rowIndexes[--row];
+            m_aRowHeaders.erase( m_aRowHeaders.begin() + rowIndex );
+            m_aData.erase( m_aData.begin() + rowIndex );
+        }
+
+        broadcast(
+            GridDataEvent( *this, Sequence< sal_Int32 >(), rowIndexes ),
+            &XGridDataListener::rowsRemoved,
+            aGuard
+        );
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    void SAL_CALL DefaultGridDataModel::removeGridDataListener( const Reference< XGridDataListener >& xListener ) throw (RuntimeException)
+    void SAL_CALL DefaultGridDataModel::removeAllRows(  ) throw (RuntimeException)
     {
-        BrdcstHelper.removeListener( XGridDataListener::static_type(), xListener );
-    }
+        ::osl::ClearableMutexGuard aGuard( GetMutex() );
 
-    //------------------------------------------------------------------------------------------------------------------
-    void SAL_CALL DefaultGridDataModel::removeAll() throw (RuntimeException)
-    {
         m_aRowHeaders.clear();
         m_aData.clear();
-        broadcast_remove( -1, ::rtl::OUString(), 0);
+
+        broadcast(
+            GridDataEvent( *this, Sequence< sal_Int32 >(), Sequence< sal_Int32 >() ),
+            &XGridDataListener::rowsRemoved,
+            aGuard
+        );
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    void SAL_CALL DefaultGridDataModel::updateCell(::sal_Int32 row, ::sal_Int32 column, const Any& value) throw (::com::sun::star::uno::RuntimeException)
+    void SAL_CALL DefaultGridDataModel::updateCell( ::sal_Int32 i_rowIndex, ::sal_Int32 i_columnIndex, const Any& i_value ) throw (IndexOutOfBoundsException, RuntimeException)
     {
-        if(row >= 0 && row < (signed)m_aData.size())
-        {
-            if(column >= 0 && column < (signed)m_aData[0].size())
-            {
-                m_aData[row][column] = value;
-                Sequence< Any >dataSeq(comphelper::containerToSequence(m_aData[row]));
-                broadcast_changed( CELLUPDATED, row, Any(column), value );
-            }
-        }
+        ::osl::ClearableMutexGuard aGuard( GetMutex() );
+
+        if  (   ( i_rowIndex < 0 ) || ( size_t( i_rowIndex ) >= m_aData.size() )
+            ||  ( i_columnIndex < 0 ) || ( i_columnIndex >= m_nColumnCount )
+            )
+            throw IndexOutOfBoundsException( ::rtl::OUString(), *this );
+
+        ::std::vector< Any >& rRowData( m_aData[ i_rowIndex ] );
+        if ( size_t( i_columnIndex ) >= rRowData.size() )
+            rRowData.resize( i_columnIndex + 1 );
+        rRowData[ i_columnIndex ] = i_value;
+
+        broadcast(
+            GridDataEvent( *this, lcl_buildSingleElementSequence( i_columnIndex ), lcl_buildSingleElementSequence( i_rowIndex ) ),
+            &XGridDataListener::dataChanged,
+            aGuard
+        );
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    void SAL_CALL DefaultGridDataModel::updateRow(::sal_Int32 row, const ::com::sun::star::uno::Sequence< ::sal_Int32 > & columns, const ::com::sun::star::uno::Sequence< Any > & values) throw (::com::sun::star::uno::RuntimeException)
+    void SAL_CALL DefaultGridDataModel::updateRow( const Sequence< ::sal_Int32 >& i_columnIndexes, ::sal_Int32 i_rowIndex, const Sequence< Any >& i_values ) throw (IndexOutOfBoundsException, IllegalArgumentException, RuntimeException)
     {
-        if(row >= 0 && row < (signed)m_aData.size())
+        ::osl::ClearableMutexGuard aGuard( GetMutex() );
+
+        if  ( ( i_rowIndex < 0 ) || ( size_t( i_rowIndex ) >= m_aData.size() ) )
+            throw IndexOutOfBoundsException( ::rtl::OUString(), *this );
+
+        if ( i_columnIndexes.getLength() != i_values.getLength() )
+            throw IllegalArgumentException( ::rtl::OUString(), *this, 1 );
+
+        sal_Int32 const columnCount = i_columnIndexes.getLength();
+        if ( columnCount == 0 )
+            return;
+
+        for ( sal_Int32 col = 0; col < columnCount; ++col )
         {
-            if(columns.getLength() == values.getLength())
-            {
-                for(int i = 0; i < columns.getLength(); i++)
-                    m_aData[row][i] = values[i];
-                Sequence< Any >dataSeq(comphelper::containerToSequence(m_aData[row]));
-                broadcast_changed( ROWUPDATED, row, Any(columns), Any(values) );
-            }
+            if ( ( i_columnIndexes[col] < 0 ) || ( i_columnIndexes[col] > m_nColumnCount ) )
+                throw IndexOutOfBoundsException( ::rtl::OUString(), *this );
         }
+
+        ::std::vector< Any >& rDataRow = m_aData[ i_rowIndex ];
+        for ( sal_Int32 col = 0; col < columnCount; ++col )
+        {
+            sal_Int32 const columnIndex = i_columnIndexes[ col ];
+            if ( size_t( columnIndex ) >= rDataRow.size() )
+                rDataRow.resize( columnIndex + 1 );
+
+            rDataRow[ columnIndex ] = i_values[ col ];
+        }
+
+        // by definition, the indexes in the notified sequences shall be sorted
+        Sequence< sal_Int32 > columnIndexes( i_columnIndexes );
+        ::std::sort( stl_begin( columnIndexes ), stl_end( columnIndexes ) );
+
+        broadcast(
+            GridDataEvent( *this, columnIndexes, lcl_buildSingleElementSequence( i_rowIndex ) ),
+            &XGridDataListener::dataChanged,
+            aGuard
+        );
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    void SAL_CALL DefaultGridDataModel::setRowTitle( ::sal_Int32 i_rowIndex, const ::rtl::OUString& i_title ) throw (IndexOutOfBoundsException, RuntimeException)
+    {
+        ::osl::ClearableMutexGuard aGuard( GetMutex() );
+
+        if  ( ( i_rowIndex < 0 ) || ( size_t( i_rowIndex ) >= m_aData.size() ) )
+            throw IndexOutOfBoundsException( ::rtl::OUString(), *this );
+
+        m_aRowHeaders[ i_rowIndex ] = i_title;
+
+        broadcast(
+            GridDataEvent( *this, Sequence< sal_Int32 >(), lcl_buildSingleElementSequence( i_rowIndex ) ),
+            &XGridDataListener::rowTitleChanged,
+            aGuard
+        );
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    void SAL_CALL DefaultGridDataModel::addGridDataListener( const Reference< grid::XGridDataListener >& i_listener ) throw (RuntimeException)
+    {
+        BrdcstHelper.addListener( XGridDataListener::static_type(), i_listener );
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    void SAL_CALL DefaultGridDataModel::removeGridDataListener( const Reference< grid::XGridDataListener >& i_listener ) throw (RuntimeException)
+    {
+        BrdcstHelper.removeListener( XGridDataListener::static_type(), i_listener );
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -313,7 +424,7 @@ namespace toolkit
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL DefaultGridDataModel::getSupportedServiceNames(  ) throw (RuntimeException)
+    Sequence< ::rtl::OUString > SAL_CALL DefaultGridDataModel::getSupportedServiceNames(  ) throw (RuntimeException)
     {
         static const OUString aServiceName( OUString::createFromAscii( szServiceName_DefaultGridDataModel ) );
         static const Sequence< OUString > aSeq( &aServiceName, 1 );
