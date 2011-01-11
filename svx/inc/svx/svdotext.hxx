@@ -261,7 +261,7 @@ private:
     // #101029#: Extracted from ImpGetDrawOutliner()
     SVX_DLLPRIVATE void ImpInitDrawOutliner( SdrOutliner& rOutl ) const;
     // #101029#: Extracted from Paint()
-    SVX_DLLPRIVATE void ImpSetupDrawOutlinerForPaint( int       bContourFrame,
+    SVX_DLLPRIVATE void ImpSetupDrawOutlinerForPaint( FASTBOOL      bContourFrame,
                                        SdrOutliner&     rOutliner,
                                        Rectangle&       rTextRect,
                                        Rectangle&       rAnchorRect,
@@ -276,7 +276,7 @@ private:
 protected:
     bool ImpCanConvTextToCurve() const;
     SdrObject* ImpConvertMakeObj(const basegfx::B2DPolyPolygon& rPolyPolygon, sal_Bool bClosed, sal_Bool bBezier, sal_Bool bNoSetAttr = sal_False) const;
-    SdrObject* ImpConvertAddText(SdrObject* pObj, int bBezier) const;
+    SdrObject* ImpConvertAddText(SdrObject* pObj, FASTBOOL bBezier) const;
     void ImpSetTextStyleSheetListeners();
     void ImpSetCharStretching(SdrOutliner& rOutliner, const Rectangle& rTextRect, const Rectangle& rAnchorRect, Fraction& rFitXKorreg) const;
     void ImpJustifyRect(Rectangle& rRect) const;
@@ -291,14 +291,14 @@ protected:
     virtual SdrObjGeoData* NewGeoData() const;
     virtual void SaveGeoData(SdrObjGeoData& rGeo) const;
     virtual void RestGeoData(const SdrObjGeoData& rGeo);
-    int NbcSetEckenradius(long nRad);
-    int NbcSetAutoGrowHeight(bool bAuto);
-    int NbcSetMinTextFrameHeight(long nHgt);
-    int NbcSetMaxTextFrameHeight(long nHgt);
-    int NbcSetAutoGrowWidth(bool bAuto);
-    int NbcSetMinTextFrameWidth(long nWdt);
-    int NbcSetMaxTextFrameWidth(long nWdt);
-    int NbcSetFitToSize(SdrFitToSizeType eFit);
+    FASTBOOL NbcSetEckenradius(long nRad);
+    FASTBOOL NbcSetAutoGrowHeight(bool bAuto);
+    FASTBOOL NbcSetMinTextFrameHeight(long nHgt);
+    FASTBOOL NbcSetMaxTextFrameHeight(long nHgt);
+    FASTBOOL NbcSetAutoGrowWidth(bool bAuto);
+    FASTBOOL NbcSetMinTextFrameWidth(long nWdt);
+    FASTBOOL NbcSetMaxTextFrameWidth(long nWdt);
+    FASTBOOL NbcSetFitToSize(SdrFitToSizeType eFit);
 
     // Konstruktoren fuer beschriftete Zeichenobjekte
     SdrTextObj();
@@ -330,20 +330,20 @@ public:
     // Eine Attributierung kann nur am Textrahmen vollzogen werden.
     void SetTextLink(const String& rFileName, const String& rFilterName, rtl_TextEncoding eCharSet);
     void ReleaseTextLink();
-    int IsLinkedText() const { return pPlusData!=NULL && GetLinkUserData()!=NULL; }
-    int ReloadLinkedText(int bForceLoad=sal_False);
-    int LoadText(const String& rFileName, const String& rFilterName, rtl_TextEncoding eCharSet);
+    FASTBOOL IsLinkedText() const { return pPlusData!=NULL && GetLinkUserData()!=NULL; }
+    FASTBOOL ReloadLinkedText(FASTBOOL bForceLoad=sal_False);
+    FASTBOOL LoadText(const String& rFileName, const String& rFilterName, rtl_TextEncoding eCharSet);
 
-    virtual int AdjustTextFrameWidthAndHeight(Rectangle& rR, int bHgt=sal_True, int bWdt=sal_True) const;
-    virtual int NbcAdjustTextFrameWidthAndHeight(int bHgt=sal_True, int bWdt=sal_True);
-    virtual int AdjustTextFrameWidthAndHeight(int bHgt=sal_True, int bWdt=sal_True);
+    virtual FASTBOOL AdjustTextFrameWidthAndHeight(Rectangle& rR, FASTBOOL bHgt=sal_True, FASTBOOL bWdt=sal_True) const;
+    virtual FASTBOOL NbcAdjustTextFrameWidthAndHeight(FASTBOOL bHgt=sal_True, FASTBOOL bWdt=sal_True);
+    virtual FASTBOOL AdjustTextFrameWidthAndHeight(FASTBOOL bHgt=sal_True, FASTBOOL bWdt=sal_True);
     void NbcResizeTextAttributes(const Fraction& xFact, const Fraction& yFact);
-    int IsTextFrame() const { return bTextFrame; }
-    int IsOutlText() const { return bTextFrame && (eTextKind==OBJ_OUTLINETEXT || eTextKind==OBJ_TITLETEXT); }
+    FASTBOOL IsTextFrame() const { return bTextFrame; }
+    FASTBOOL IsOutlText() const { return bTextFrame && (eTextKind==OBJ_OUTLINETEXT || eTextKind==OBJ_TITLETEXT); }
     SdrObjKind GetTextKind() const { return eTextKind; }
 
     virtual bool HasText() const;
-    int HasEditText() const;
+    FASTBOOL HasEditText() const;
     sal_Bool IsTextEditActive() const { return (pEdtOutl != 0L); }
 
     /** returns the currently active text. */
@@ -364,8 +364,8 @@ public:
     /** returns the index of the text that contains the given point or -1 */
     virtual sal_Int32 CheckTextHit(const Point& rPnt) const;
 
-    void SetDisableAutoWidthOnDragging(int bOn) { bDisableAutoWidthOnDragging=bOn; }
-    int IsDisableAutoWidthOnDragging() { return bDisableAutoWidthOnDragging; }
+    void SetDisableAutoWidthOnDragging(FASTBOOL bOn) { bDisableAutoWidthOnDragging=bOn; }
+    FASTBOOL IsDisableAutoWidthOnDragging() { return bDisableAutoWidthOnDragging; }
     void NbcSetText(const String& rStr);
     void SetText(const String& rStr);
     void NbcSetText(SvStream& rInput, const String& rBaseURL, sal_uInt16 eFormat);
@@ -377,16 +377,16 @@ public:
 
     // Gleichzeitig wird der Text in den Outliner gesetzt (ggf.
     // der des EditOutliners) und die PaperSize gesetzt.
-    virtual void TakeTextRect( SdrOutliner& rOutliner, Rectangle& rTextRect, int bNoEditText=sal_False,
+    virtual void TakeTextRect( SdrOutliner& rOutliner, Rectangle& rTextRect, FASTBOOL bNoEditText=sal_False,
         Rectangle* pAnchorRect=NULL, sal_Bool bLineWidth=sal_True ) const;
     virtual void TakeTextAnchorRect(::Rectangle& rAnchorRect) const;
     const GeoStat& GetGeoStat() const { return aGeo; }
 
     long GetEckenradius() const;
-    virtual int IsAutoGrowHeight() const;
+    virtual FASTBOOL IsAutoGrowHeight() const;
     long GetMinTextFrameHeight() const;
     long GetMaxTextFrameHeight() const;
-    virtual int IsAutoGrowWidth() const;
+    virtual FASTBOOL IsAutoGrowWidth() const;
     long GetMinTextFrameWidth() const;
     long GetMaxTextFrameWidth() const;
 
@@ -394,13 +394,13 @@ public:
     const Rectangle &GetGeoRect() const { return aRect; }
 
     // Feststellen, ob TextFontwork
-    virtual int IsFontwork() const;
+    virtual FASTBOOL IsFontwork() const;
 
     // Soll die Fontwork-Kontour versteckt werden?
-    int IsHideContour() const;
+    FASTBOOL IsHideContour() const;
 
     // Textfluss innerhalb Kontur
-    int IsContourTextFrame() const;
+    FASTBOOL IsContourTextFrame() const;
 
     // Horizontale Textausrichtung
     SdrTextHorzAdjust GetTextHorizontalAdjust(const SfxItemSet& rSet) const;
@@ -435,7 +435,7 @@ public:
     virtual void NbcSetLogicRect(const Rectangle& rRect);
     virtual const Rectangle& GetLogicRect() const;
     virtual long GetRotateAngle() const;
-    virtual long GetShearAngle(int bVertical=sal_False) const;
+    virtual long GetShearAngle(FASTBOOL bVertical=sal_False) const;
 
     virtual sal_uInt32 GetSnapPointCount() const;
     virtual Point GetSnapPoint(sal_uInt32 i) const;
@@ -448,10 +448,10 @@ public:
     virtual bool applySpecialDrag(SdrDragStat& rDrag);
     virtual String getSpecialDragComment(const SdrDragStat& rDrag) const;
 
-    virtual int BegCreate(SdrDragStat& rStat);
-    virtual int MovCreate(SdrDragStat& rStat);
-    virtual int EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd);
-    virtual int BckCreate(SdrDragStat& rStat);
+    virtual FASTBOOL BegCreate(SdrDragStat& rStat);
+    virtual FASTBOOL MovCreate(SdrDragStat& rStat);
+    virtual FASTBOOL EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd);
+    virtual FASTBOOL BckCreate(SdrDragStat& rStat);
     virtual void BrkCreate(SdrDragStat& rStat);
     virtual basegfx::B2DPolyPolygon TakeCreatePoly(const SdrDragStat& rDrag) const;
     virtual Pointer GetCreatePointer() const;
@@ -460,9 +460,9 @@ public:
     virtual void NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact);
     virtual void NbcRotate(const Point& rRef, long nWink, double sn, double cs);
     virtual void NbcMirror(const Point& rRef1, const Point& rRef2);
-    virtual void NbcShear(const Point& rRef, long nWink, double tn, int bVShear);
+    virtual void NbcShear(const Point& rRef, long nWink, double tn, FASTBOOL bVShear);
 
-    virtual int HasTextEdit() const;
+    virtual FASTBOOL HasTextEdit() const;
     virtual sal_Bool BegTextEdit(SdrOutliner& rOutl);
     virtual void TakeTextEditArea(Size* pPaperMin, Size* pPaperMax, Rectangle* pViewInit, Rectangle* pViewMin) const;
     virtual void EndTextEdit(SdrOutliner& rOutl);
@@ -480,8 +480,8 @@ public:
     virtual void NbcReformatText();
     virtual void ReformatText();
 
-    virtual int CalcFieldValue(const SvxFieldItem& rField, sal_uInt16 nPara, sal_uInt16 nPos,
-        int bEdit, Color*& rpTxtColor, Color*& rpFldColor, String& rRet) const;
+    virtual FASTBOOL CalcFieldValue(const SvxFieldItem& rField, sal_uInt16 nPara, sal_uInt16 nPos,
+        FASTBOOL bEdit, Color*& rpTxtColor, Color*& rpFldColor, String& rRet) const;
 
     virtual SdrObject* DoConvertToPolyObj(sal_Bool bBezier) const;
 

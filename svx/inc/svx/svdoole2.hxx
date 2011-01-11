@@ -85,10 +85,10 @@ protected:
 public:
     TYPEINFO();
 
-    SdrOle2Obj(int bFrame_=sal_False);
-    SdrOle2Obj(const svt::EmbeddedObjectRef& rNewObjRef, int bFrame_=sal_False);
-    SdrOle2Obj(const svt::EmbeddedObjectRef& rNewObjRef, const String& rNewObjName, int bFrame_=sal_False);
-    SdrOle2Obj(const svt::EmbeddedObjectRef& rNewObjRef, const String& rNewObjName, const Rectangle& rNewRect, int bFrame_=sal_False);
+    SdrOle2Obj(FASTBOOL bFrame_=sal_False);
+    SdrOle2Obj(const svt::EmbeddedObjectRef& rNewObjRef, FASTBOOL bFrame_=sal_False);
+    SdrOle2Obj(const svt::EmbeddedObjectRef& rNewObjRef, const String& rNewObjName, FASTBOOL bFrame_=sal_False);
+    SdrOle2Obj(const svt::EmbeddedObjectRef& rNewObjRef, const String& rNewObjName, const Rectangle& rNewRect, FASTBOOL bFrame_=sal_False);
     virtual ~SdrOle2Obj();
 
     // access to svt::EmbeddedObjectRef
@@ -117,7 +117,7 @@ public:
     // spaeter wieder abfragen kann (SD braucht das fuer Praesentationsobjekte).
     void SetProgName(const String& rNam) { aProgName=rNam; }
     const String& GetProgName() const { return aProgName; }
-    int IsEmpty() const;
+    FASTBOOL IsEmpty() const;
 
     void SetObjRef(const com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject >& rNewObjRef);
     com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject > GetObjRef() const;

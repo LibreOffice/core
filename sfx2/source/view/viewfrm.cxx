@@ -3028,7 +3028,6 @@ void SfxViewFrame::AddDispatchMacroToBasic_Impl( const ::rtl::OUString& sMacro )
 void SfxViewFrame::MiscExec_Impl( SfxRequest& rReq )
 {
     DBG_MEMTEST();
-    int bDone = sal_False;
     switch ( rReq.GetSlot() )
     {
         case SID_STOP_RECORDING :
@@ -3207,9 +3206,6 @@ void SfxViewFrame::MiscExec_Impl( SfxRequest& rReq )
             break;
         }
     }
-
-    if ( bDone )
-        rReq.Done();
 }
 
 void SfxViewFrame::MiscState_Impl(SfxItemSet &rSet)

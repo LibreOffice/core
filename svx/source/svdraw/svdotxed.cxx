@@ -52,7 +52,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-int SdrTextObj::HasTextEdit() const
+FASTBOOL SdrTextObj::HasTextEdit() const
 {
     // lt. Anweisung von MB duerfen gelinkte Textobjekte nun doch
     // geaendert werden (kein automatisches Reload)
@@ -74,8 +74,8 @@ sal_Bool SdrTextObj::BegTextEdit(SdrOutliner& rOutl)
     rOutl.SetRefDevice( pModel->GetRefDevice() );
 
     SdrFitToSizeType eFit=GetFitToSize();
-    int bFitToSize=(eFit==SDRTEXTFIT_PROPORTIONAL || eFit==SDRTEXTFIT_ALLLINES);
-    int bContourFrame=IsContourTextFrame();
+    FASTBOOL bFitToSize=(eFit==SDRTEXTFIT_PROPORTIONAL || eFit==SDRTEXTFIT_ALLLINES);
+    FASTBOOL bContourFrame=IsContourTextFrame();
     ImpSetTextEditParams();
 
     if (!bContourFrame) {
@@ -147,7 +147,7 @@ sal_Bool SdrTextObj::BegTextEdit(SdrOutliner& rOutl)
 void SdrTextObj::TakeTextEditArea(Size* pPaperMin, Size* pPaperMax, Rectangle* pViewInit, Rectangle* pViewMin) const
 {
     SdrFitToSizeType eFit=GetFitToSize();
-    int bFitToSize=(eFit==SDRTEXTFIT_PROPORTIONAL || eFit==SDRTEXTFIT_ALLLINES);
+    FASTBOOL bFitToSize=(eFit==SDRTEXTFIT_PROPORTIONAL || eFit==SDRTEXTFIT_ALLLINES);
     Size aPaperMin,aPaperMax;
     Rectangle aViewInit;
     TakeTextAnchorRect(aViewInit);
@@ -325,15 +325,15 @@ sal_uInt16 SdrTextObj::GetOutlinerViewAnchorMode() const
 void SdrTextObj::ImpSetTextEditParams() const
 {
     if (pEdtOutl!=NULL) {
-        int bUpdMerk=pEdtOutl->GetUpdateMode();
+        FASTBOOL bUpdMerk=pEdtOutl->GetUpdateMode();
         if (bUpdMerk) pEdtOutl->SetUpdateMode(sal_False);
         Size aPaperMin;
         Size aPaperMax;
         Rectangle aEditArea;
         TakeTextEditArea(&aPaperMin,&aPaperMax,&aEditArea,NULL);
         //SdrFitToSizeType eFit=GetFitToSize();
-        //int bFitToSize=(eFit==SDRTEXTFIT_PROPORTIONAL || eFit==SDRTEXTFIT_ALLLINES);
-        int bContourFrame=IsContourTextFrame();
+        //FASTBOOL bFitToSize=(eFit==SDRTEXTFIT_PROPORTIONAL || eFit==SDRTEXTFIT_ALLLINES);
+        FASTBOOL bContourFrame=IsContourTextFrame();
         //EVAnchorMode eAM=(EVAnchorMode)GetOutlinerViewAnchorMode();
         //sal_uIntPtr nViewAnz=pEdtOutl->GetViewCount();
         pEdtOutl->SetMinAutoPaperSize(aPaperMin);

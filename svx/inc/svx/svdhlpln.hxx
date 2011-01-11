@@ -68,7 +68,7 @@ public:
     const Point&    GetPos() const                    { return aPos; }
 
     Pointer         GetPointer() const;
-    int        IsHit(const Point& rPnt, sal_uInt16 nTolLog, const OutputDevice& rOut) const;
+    FASTBOOL        IsHit(const Point& rPnt, sal_uInt16 nTolLog, const OutputDevice& rOut) const;
     // OutputDevice wird benoetigt, da Fangpunkte eine feste Pixelgroesse haben
     Rectangle       GetBoundRect(const OutputDevice& rOut) const;
 

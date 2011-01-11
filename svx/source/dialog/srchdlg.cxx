@@ -979,7 +979,7 @@ void SvxSearchDialog::Init_Impl( int bSearchPattern )
 
     CalculateDelta_Impl();
 
-    int bDraw = sal_False;
+    bool bDraw = sal_False;
     if ( pSearchItem->GetAppFlag() == SVX_SEARCHAPP_CALC )
     {
         Link aLink = LINK( this, SvxSearchDialog, FlagHdl_Impl );
@@ -1083,7 +1083,7 @@ void SvxSearchDialog::Init_Impl( int bSearchPattern )
     FlagHdl_Impl( &aJapOptionsCB );
     pImpl->bSaveToModule = sal_True;
 
-    int bDisableSearch = sal_False;
+    bool bDisableSearch = sal_False;
     SfxViewShell* pViewShell = SfxViewShell::Current();
 
     if ( pViewShell )
@@ -1142,14 +1142,14 @@ void SvxSearchDialog::Init_Impl( int bSearchPattern )
     }
     else
     {
-        int bSetSearch = ( ( nModifyFlag & MODIFY_SEARCH ) == 0 );
-        int bSetReplace = ( ( nModifyFlag & MODIFY_REPLACE ) == 0 );
+        bool bSetSearch = ( ( nModifyFlag & MODIFY_SEARCH ) == 0 );
+        bool bSetReplace = ( ( nModifyFlag & MODIFY_REPLACE ) == 0 );
 
         if ( pSearchItem->GetSearchString().Len() && bSetSearch )
             aSearchLB.SetText( pSearchItem->GetSearchString() );
         else if ( aSearchStrings.Count() )
         {
-            int bAttributes =
+            bool bAttributes =
                 ( ( pSearchList && pSearchList->Count() ) ||
                   ( pReplaceList && pReplaceList->Count() ) );
 
@@ -1434,7 +1434,7 @@ IMPL_LINK( SvxSearchDialog, FlagHdl_Impl, Control *, pCtrl )
 
 IMPL_LINK( SvxSearchDialog, CommandHdl_Impl, Button *, pBtn )
 {
-    int bInclusive = ( aLayoutBtn.GetText() == aLayoutStr );
+    bool bInclusive = ( aLayoutBtn.GetText() == aLayoutStr );
 
     if ( ( pBtn == &aSearchBtn )    ||
          ( pBtn == &aSearchAllBtn ) ||
@@ -1842,7 +1842,7 @@ void SvxSearchDialog::EnableControls_Impl( const sal_uInt16 nFlags )
     }
     else if ( !IsVisible() )
         Show();
-    int bNoSearch = sal_True;
+    bool bNoSearch = sal_True;
 
     sal_Bool bEnableSearch = ( SEARCH_OPTIONS_SEARCH & nOptions ) != 0;
     aSearchBtn.Enable(bEnableSearch);

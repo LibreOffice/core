@@ -612,7 +612,7 @@ long SvxMetricField::Notify( NotifyEvent& rNEvt )
             pSh->KeyInput( *pKEvt );
         else
         {
-            int bHandled = sal_False;
+            bool bHandled = sal_False;
 
             switch ( rKey.GetCode() )
             {

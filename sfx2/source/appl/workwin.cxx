@@ -1292,7 +1292,7 @@ void SfxWorkWindow::SetObjectBar_Impl( sal_uInt16 nPos, sal_uInt32 nResId,
 
 //------------------------------------------------------------------------
 
-int SfxWorkWindow::KnowsObjectBar_Impl( sal_uInt16 nPos ) const
+bool SfxWorkWindow::KnowsObjectBar_Impl( sal_uInt16 nPos ) const
 
 /*  [Beschreibung]
 
@@ -1309,10 +1309,10 @@ int SfxWorkWindow::KnowsObjectBar_Impl( sal_uInt16 nPos ) const
     for ( sal_uInt16 n=0; n<aObjBarList.size(); n++ )
     {
         if ( aObjBarList[n].nPos == nRealPos )
-            return sal_True;
+            return true;
     }
 
-    return sal_False;
+    return false;
 }
 
 //------------------------------------------------------------------------
@@ -1487,13 +1487,13 @@ void SfxWorkWindow::UpdateObjectBars_Impl()
 
         // die Modi bestimmen, f"ur die die ToolBox gilt
         sal_uInt16 nTbxMode = aObjBarList[n].nMode;
-        int bFullScreenTbx = SFX_VISIBILITY_FULLSCREEN ==
+        bool bFullScreenTbx = SFX_VISIBILITY_FULLSCREEN ==
                                   ( nTbxMode & SFX_VISIBILITY_FULLSCREEN );
         nTbxMode &= ~SFX_VISIBILITY_FULLSCREEN;
         nTbxMode &= ~SFX_VISIBILITY_VIEWER;
 
         // wird in diesem Kontext eine ToolBox gefordert?
-        int bModesMatching = ( nUpdateMode && ( nTbxMode & nUpdateMode) == nUpdateMode );
+        bool bModesMatching = ( nUpdateMode && ( nTbxMode & nUpdateMode) == nUpdateMode );
         if ( bDestroy )
         {
             rtl::OUString aTbxId( m_aTbxTypeName );

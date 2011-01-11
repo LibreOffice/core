@@ -245,7 +245,7 @@ SdrUndoObj::SdrUndoObj(SdrObject& rNewObj):
 {
 }
 
-void SdrUndoObj::GetDescriptionStringForObject( const SdrObject& _rForObject, sal_uInt16 nStrCacheID, String& rStr, int bRepeat )
+void SdrUndoObj::GetDescriptionStringForObject( const SdrObject& _rForObject, sal_uInt16 nStrCacheID, String& rStr, FASTBOOL bRepeat )
 {
     rStr = ImpGetResStr(nStrCacheID);
     sal_Char aSearchText[] = "%1";
@@ -271,7 +271,7 @@ void SdrUndoObj::GetDescriptionStringForObject( const SdrObject& _rForObject, sa
     }
 }
 
-void SdrUndoObj::ImpTakeDescriptionStr(sal_uInt16 nStrCacheID, XubString& rStr, int bRepeat) const
+void SdrUndoObj::ImpTakeDescriptionStr(sal_uInt16 nStrCacheID, XubString& rStr, FASTBOOL bRepeat) const
 {
     if ( pObj )
         GetDescriptionStringForObject( *pObj, nStrCacheID, rStr, bRepeat );
@@ -294,7 +294,7 @@ void SdrUndoObj::ImpShowPageOfThisObject()
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-SdrUndoAttrObj::SdrUndoAttrObj(SdrObject& rNewObj, int bStyleSheet1, int bSaveText)
+SdrUndoAttrObj::SdrUndoAttrObj(SdrObject& rNewObj, FASTBOOL bStyleSheet1, FASTBOOL bSaveText)
 :   SdrUndoObj(rNewObj),
     pUndoSet(NULL),
     pRedoSet(NULL),
@@ -1209,7 +1209,7 @@ void SdrUndoObjSetText::SdrRepeat(SdrView& rView)
 
 bool SdrUndoObjSetText::CanSdrRepeat(SdrView& rView) const
 {
-    int bOk=sal_False;
+    bool bOk=sal_False;
     if (bNewTextAvailable && rView.AreObjectsMarked()) {
         bOk=sal_True;
     }
@@ -1470,7 +1470,7 @@ void SdrUndoPage::ImpMovePage(sal_uInt16 nOldNum, sal_uInt16 nNewNum)
     }
 }
 
-void SdrUndoPage::ImpTakeDescriptionStr(sal_uInt16 nStrCacheID, XubString& rStr, sal_uInt16 /*n*/, int /*bRepeat*/) const
+void SdrUndoPage::ImpTakeDescriptionStr(sal_uInt16 nStrCacheID, XubString& rStr, sal_uInt16 /*n*/, FASTBOOL /*bRepeat*/) const
 {
     rStr=ImpGetResStr(nStrCacheID);
 }

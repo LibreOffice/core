@@ -1351,14 +1351,14 @@ void SdrTableObj::FitFrameToTextSize()
 
 // --------------------------------------------------------------------
 
-int SdrTableObj::IsAutoGrowHeight() const
+FASTBOOL SdrTableObj::IsAutoGrowHeight() const
 {
     return sal_True;
 }
 
 // --------------------------------------------------------------------
 
-int SdrTableObj::IsAutoGrowWidth() const
+FASTBOOL SdrTableObj::IsAutoGrowWidth() const
 {
     return sal_True;
 }
@@ -1460,7 +1460,7 @@ void SdrTableObj::SetModel(SdrModel* pNewModel)
 
 // --------------------------------------------------------------------
 
-void SdrTableObj::TakeTextRect( SdrOutliner& rOutliner, Rectangle& rTextRect, int bNoEditText, Rectangle* pAnchorRect, sal_Bool bLineWidth ) const
+void SdrTableObj::TakeTextRect( SdrOutliner& rOutliner, Rectangle& rTextRect, FASTBOOL bNoEditText, Rectangle* pAnchorRect, sal_Bool bLineWidth ) const
 {
     if( mpImpl )
         TakeTextRect( mpImpl->maEditPos, rOutliner, rTextRect, bNoEditText, pAnchorRect, bLineWidth );
@@ -1468,7 +1468,7 @@ void SdrTableObj::TakeTextRect( SdrOutliner& rOutliner, Rectangle& rTextRect, in
 
 // --------------------------------------------------------------------
 
-void SdrTableObj::TakeTextRect( const CellPos& rPos, SdrOutliner& rOutliner, Rectangle& rTextRect, int bNoEditText, Rectangle* pAnchorRect, sal_Bool /*bLineWidth*/ ) const
+void SdrTableObj::TakeTextRect( const CellPos& rPos, SdrOutliner& rOutliner, Rectangle& rTextRect, FASTBOOL bNoEditText, Rectangle* pAnchorRect, sal_Bool /*bLineWidth*/ ) const
 {
     if( !mpImpl )
         return;
@@ -2050,7 +2050,7 @@ sal_Bool SdrTableObj::BegTextEdit(SdrOutliner& rOutl)
     rOutl.SetRefDevice( pModel->GetRefDevice() );
 
 // --
-        int bUpdMerk=rOutl.GetUpdateMode();
+        FASTBOOL bUpdMerk=rOutl.GetUpdateMode();
         if (bUpdMerk) rOutl.SetUpdateMode(sal_False);
         Size aPaperMin;
         Size aPaperMax;
@@ -2212,10 +2212,10 @@ void SdrTableObj::NbcResize(const Point& rRef, const Fraction& xFact, const Frac
 
 // --------------------------------------------------------------------
 
-int SdrTableObj::AdjustTextFrameWidthAndHeight(int bHgt, int bWdt)
+FASTBOOL SdrTableObj::AdjustTextFrameWidthAndHeight(FASTBOOL bHgt, FASTBOOL bWdt)
 {
     Rectangle aNeuRect(maLogicRect);
-    int bRet=AdjustTextFrameWidthAndHeight(aNeuRect,bHgt,bWdt);
+    FASTBOOL bRet=AdjustTextFrameWidthAndHeight(aNeuRect,bHgt,bWdt);
     if (bRet)
     {
         Rectangle aBoundRect0;
@@ -2232,7 +2232,7 @@ int SdrTableObj::AdjustTextFrameWidthAndHeight(int bHgt, int bWdt)
 
 // --------------------------------------------------------------------
 
-int SdrTableObj::AdjustTextFrameWidthAndHeight(Rectangle& rR, int bHeight, int bWidth) const
+FASTBOOL SdrTableObj::AdjustTextFrameWidthAndHeight(Rectangle& rR, FASTBOOL bHeight, FASTBOOL bWidth) const
 {
     if((pModel == NULL) || rR.IsEmpty() || !mpImpl || !mpImpl->mxTable.is() )
         return sal_False;
@@ -2328,7 +2328,7 @@ bool SdrTableObj::IsRealyEdited() const
 
 // --------------------------------------------------------------------
 
-int SdrTableObj::IsFontwork() const
+FASTBOOL SdrTableObj::IsFontwork() const
 {
     return sal_False;
 }
@@ -2599,7 +2599,7 @@ basegfx::B2DPolyPolygon SdrTableObj::getSpecialDragPoly(const SdrDragStat& rDrag
 // Create
 // --------------------------------------------------------------------
 
-int SdrTableObj::BegCreate(SdrDragStat& rStat)
+FASTBOOL SdrTableObj::BegCreate(SdrDragStat& rStat)
 {
     rStat.SetOrtho4Possible();
     Rectangle aRect1(rStat.GetStart(), rStat.GetNow());
@@ -2611,7 +2611,7 @@ int SdrTableObj::BegCreate(SdrDragStat& rStat)
 
 // --------------------------------------------------------------------
 
-int SdrTableObj::MovCreate(SdrDragStat& rStat)
+FASTBOOL SdrTableObj::MovCreate(SdrDragStat& rStat)
 {
     Rectangle aRect1;
     rStat.TakeCreateRect(aRect1);
@@ -2625,7 +2625,7 @@ int SdrTableObj::MovCreate(SdrDragStat& rStat)
 
 // --------------------------------------------------------------------
 
-int SdrTableObj::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
+FASTBOOL SdrTableObj::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
 {
     rStat.TakeCreateRect(aRect);
     ImpJustifyRect(aRect);
@@ -2638,7 +2638,7 @@ void SdrTableObj::BrkCreate(SdrDragStat& /*rStat*/)
 
 // --------------------------------------------------------------------
 
-int SdrTableObj::BckCreate(SdrDragStat& /*rStat*/)
+FASTBOOL SdrTableObj::BckCreate(SdrDragStat& /*rStat*/)
 {
     return sal_True;
 }

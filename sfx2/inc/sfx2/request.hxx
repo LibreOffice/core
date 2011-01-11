@@ -96,7 +96,7 @@ public:
     static const SfxPoolItem* GetItem( const SfxItemSet*, sal_uInt16 nSlotId,
                                        bool bDeep = false,
                                        TypeId aType = 0 );
-    const SfxPoolItem*  GetArg( sal_uInt16 nSlotId, int bDeep = sal_False, TypeId aType = 0 ) const;
+    const SfxPoolItem*  GetArg( sal_uInt16 nSlotId, bool bDeep = false, TypeId aType = 0 ) const;
     void                ReleaseArgs();
     void                SetReturnValue(const SfxPoolItem &);
     const SfxPoolItem*  GetReturnValue() const;
@@ -105,7 +105,7 @@ public:
     static com::sun::star::uno::Reference< com::sun::star::frame::XDispatchRecorder > GetMacroRecorder( SfxViewFrame* pFrame=NULL );
     static sal_Bool         HasMacroRecorder( SfxViewFrame* pFrame=NULL );
     sal_uInt16              GetCallMode() const;
-    int         IsRecording() const;
+    bool            IsRecording() const;
     void                AllowRecording( sal_Bool );
     sal_Bool                AllowsRecording() const;
     sal_Bool                IsAPI() const;
@@ -119,7 +119,7 @@ public:
     void                Ignore();
     void                Cancel();
     sal_Bool                IsCancelled() const;
-    void                Done(const SfxItemSet &, int bKeep = sal_True );
+    void                Done(const SfxItemSet &, bool bKeep = true );
 
     void                ForgetAllArgs();
 

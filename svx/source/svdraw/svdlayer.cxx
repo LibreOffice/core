@@ -196,7 +196,7 @@ void SetOfByte::QueryValue( com::sun::star::uno::Any & rAny ) const
 // SdrLayer
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void SdrLayer::SetStandardLayer(int bStd)
+void SdrLayer::SetStandardLayer(FASTBOOL bStd)
 {
     nType=(sal_uInt16)bStd;
     if (bStd) {
@@ -291,7 +291,7 @@ bool SdrLayerAdmin::operator==(const SdrLayerAdmin& rCmpLayerAdmin) const
     if (pParent!=rCmpLayerAdmin.pParent ||
         aLayer.Count()!=rCmpLayerAdmin.aLayer.Count() ||
         aLSets.Count()!=rCmpLayerAdmin.aLSets.Count()) return sal_False;
-    int bOk=sal_True;
+    FASTBOOL bOk=sal_True;
     sal_uInt16 nAnz=GetLayerCount();
     sal_uInt16 i=0;
     while (bOk && i<nAnz) {
@@ -383,7 +383,7 @@ sal_uInt16 SdrLayerAdmin::GetLayerPos(SdrLayer* pLayer) const
     return sal_uInt16(nRet);
 }
 
-const SdrLayer* SdrLayerAdmin::GetLayer(const XubString& rName, int /*bInherited*/) const
+const SdrLayer* SdrLayerAdmin::GetLayer(const XubString& rName, FASTBOOL /*bInherited*/) const
 {
     sal_uInt16 i(0);
     const SdrLayer* pLay = NULL;
@@ -404,7 +404,7 @@ const SdrLayer* SdrLayerAdmin::GetLayer(const XubString& rName, int /*bInherited
     return pLay;
 }
 
-SdrLayerID SdrLayerAdmin::GetLayerID(const XubString& rName, int bInherited) const
+SdrLayerID SdrLayerAdmin::GetLayerID(const XubString& rName, FASTBOOL bInherited) const
 {
     SdrLayerID nRet=SDRLAYER_NOTFOUND;
     const SdrLayer* pLay=GetLayer(rName,bInherited);

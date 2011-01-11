@@ -75,19 +75,19 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-int SdrTextObj::AdjustTextFrameWidthAndHeight(Rectangle& rR, int bHgt, int bWdt) const
+FASTBOOL SdrTextObj::AdjustTextFrameWidthAndHeight(Rectangle& rR, FASTBOOL bHgt, FASTBOOL bWdt) const
 {
     if (bTextFrame && pModel!=NULL && !rR.IsEmpty())
     {
         SdrFitToSizeType eFit=GetFitToSize();
-        int bFitToSize=(eFit==SDRTEXTFIT_PROPORTIONAL || eFit==SDRTEXTFIT_ALLLINES);
-        int bWdtGrow=bWdt && IsAutoGrowWidth();
-        int bHgtGrow=bHgt && IsAutoGrowHeight();
+        FASTBOOL bFitToSize=(eFit==SDRTEXTFIT_PROPORTIONAL || eFit==SDRTEXTFIT_ALLLINES);
+        FASTBOOL bWdtGrow=bWdt && IsAutoGrowWidth();
+        FASTBOOL bHgtGrow=bHgt && IsAutoGrowHeight();
         SdrTextAniKind eAniKind=GetTextAniKind();
         SdrTextAniDirection eAniDir=GetTextAniDirection();
-        int bScroll=eAniKind==SDRTEXTANI_SCROLL || eAniKind==SDRTEXTANI_ALTERNATE || eAniKind==SDRTEXTANI_SLIDE;
-        int bHScroll=bScroll && (eAniDir==SDRTEXTANI_LEFT || eAniDir==SDRTEXTANI_RIGHT);
-        int bVScroll=bScroll && (eAniDir==SDRTEXTANI_UP || eAniDir==SDRTEXTANI_DOWN);
+        FASTBOOL bScroll=eAniKind==SDRTEXTANI_SCROLL || eAniKind==SDRTEXTANI_ALTERNATE || eAniKind==SDRTEXTANI_SLIDE;
+        FASTBOOL bHScroll=bScroll && (eAniDir==SDRTEXTANI_LEFT || eAniDir==SDRTEXTANI_RIGHT);
+        FASTBOOL bVScroll=bScroll && (eAniDir==SDRTEXTANI_UP || eAniDir==SDRTEXTANI_DOWN);
         if (!bFitToSize && (bWdtGrow || bHgtGrow))
         {
             Rectangle aR0(rR);
@@ -210,9 +210,9 @@ int SdrTextObj::AdjustTextFrameWidthAndHeight(Rectangle& rR, int bHgt, int bWdt)
     return sal_False;
 }
 
-int SdrTextObj::NbcAdjustTextFrameWidthAndHeight(int bHgt, int bWdt)
+FASTBOOL SdrTextObj::NbcAdjustTextFrameWidthAndHeight(FASTBOOL bHgt, FASTBOOL bWdt)
 {
-    int bRet=AdjustTextFrameWidthAndHeight(aRect,bHgt,bWdt);
+    FASTBOOL bRet=AdjustTextFrameWidthAndHeight(aRect,bHgt,bWdt);
     if (bRet) {
         SetRectsDirty();
         if (HAS_BASE(SdrRectObj,this)) { // mal wieder 'nen Hack
@@ -225,10 +225,10 @@ int SdrTextObj::NbcAdjustTextFrameWidthAndHeight(int bHgt, int bWdt)
     return bRet;
 }
 
-int SdrTextObj::AdjustTextFrameWidthAndHeight(int bHgt, int bWdt)
+FASTBOOL SdrTextObj::AdjustTextFrameWidthAndHeight(FASTBOOL bHgt, FASTBOOL bWdt)
 {
     Rectangle aNeuRect(aRect);
-    int bRet=AdjustTextFrameWidthAndHeight(aNeuRect,bHgt,bWdt);
+    FASTBOOL bRet=AdjustTextFrameWidthAndHeight(aNeuRect,bHgt,bWdt);
     if (bRet) {
         Rectangle aBoundRect0; if (pUserCall!=NULL) aBoundRect0=GetLastBoundRect();
         // #110094#-14 SendRepaintBroadcast();

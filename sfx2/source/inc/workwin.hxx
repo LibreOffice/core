@@ -335,7 +335,7 @@ public:
     void                    SetObjectBar_Impl( sal_uInt16 nPos, sal_uInt32 nResId,
                                     SfxInterface *pIFace, const String* pName=0 );
     Window*                 GetObjectBar_Impl( sal_uInt16 nPos, sal_uInt32 nResId );
-    int                 KnowsObjectBar_Impl( sal_uInt16 nPos ) const;
+    bool                    KnowsObjectBar_Impl( sal_uInt16 nPos ) const;
     sal_Bool                    IsVisible_Impl();
     void                    MakeVisible_Impl( sal_Bool );
     void                    SetObjectBarVisibility_Impl( sal_uInt16 nVis );

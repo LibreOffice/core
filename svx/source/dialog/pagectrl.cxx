@@ -45,7 +45,7 @@ struct PageWindow_Impl
 {
     SvxBoxItem*     pBorder;
     Bitmap          aBitmap;
-    int     bBitmap;
+    FASTBOOL        bBitmap;
     sal_Bool        bResetBackground;
     sal_Bool        bFrameDirection;
     sal_Int32       nFrameDirection;

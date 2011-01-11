@@ -3273,7 +3273,7 @@ sal_Bool SvtFileDialog::AddControl( Window* pControl, sal_Bool bNewLine )
     Point aNewControlPos;
     Size* pNewDlgSize = NULL;
     sal_Bool bNewRow = bNewLine;
-    int bFirstNewRow = sal_False;
+    sal_Bool bFirstNewRow = sal_False;
 
     if ( nType == WINDOW_WINDOW )
     {

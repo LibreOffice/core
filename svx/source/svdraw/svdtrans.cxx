@@ -51,7 +51,7 @@ void MoveXPoly(XPolyPolygon& rPoly, const Size& S)
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void ResizeRect(Rectangle& rRect, const Point& rRef, const Fraction& rxFact, const Fraction& ryFact, int bNoJustify)
+void ResizeRect(Rectangle& rRect, const Point& rRef, const Fraction& rxFact, const Fraction& ryFact, FASTBOOL bNoJustify)
 {
     Fraction xFact(rxFact);
     Fraction yFact(ryFact);
@@ -159,7 +159,7 @@ void RotateXPoly(XPolyPolygon& rPoly, const Point& rRef, double sn, double cs)
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void MirrorRect(Rectangle& rRect, const Point& /*rRef1*/, const Point& /*rRef2*/, int bNoJustify)
+void MirrorRect(Rectangle& rRect, const Point& /*rRef1*/, const Point& /*rRef2*/, FASTBOOL bNoJustify)
 {
     // !!! fehlende Implementation !!!
     if (!bNoJustify) rRect.Justify();
@@ -234,7 +234,7 @@ void MirrorXPoly(XPolyPolygon& rPoly, const Point& rRef1, const Point& rRef2)
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void ShearPoly(Polygon& rPoly, const Point& rRef, double tn, int bVShear)
+void ShearPoly(Polygon& rPoly, const Point& rRef, double tn, FASTBOOL bVShear)
 {
     sal_uInt16 nAnz=rPoly.GetSize();
     for (sal_uInt16 i=0; i<nAnz; i++) {
@@ -242,7 +242,7 @@ void ShearPoly(Polygon& rPoly, const Point& rRef, double tn, int bVShear)
     }
 }
 
-void ShearXPoly(XPolygon& rPoly, const Point& rRef, double tn, int bVShear)
+void ShearXPoly(XPolygon& rPoly, const Point& rRef, double tn, FASTBOOL bVShear)
 {
     sal_uInt16 nAnz=rPoly.GetPointCount();
     for (sal_uInt16 i=0; i<nAnz; i++) {
@@ -250,7 +250,7 @@ void ShearXPoly(XPolygon& rPoly, const Point& rRef, double tn, int bVShear)
     }
 }
 
-void ShearPoly(PolyPolygon& rPoly, const Point& rRef, double tn, int bVShear)
+void ShearPoly(PolyPolygon& rPoly, const Point& rRef, double tn, FASTBOOL bVShear)
 {
     sal_uInt16 nAnz=rPoly.Count();
     for (sal_uInt16 i=0; i<nAnz; i++) {
@@ -258,7 +258,7 @@ void ShearPoly(PolyPolygon& rPoly, const Point& rRef, double tn, int bVShear)
     }
 }
 
-void ShearXPoly(XPolyPolygon& rPoly, const Point& rRef, double tn, int bVShear)
+void ShearXPoly(XPolyPolygon& rPoly, const Point& rRef, double tn, FASTBOOL bVShear)
 {
     sal_uInt16 nAnz=rPoly.Count();
     for (sal_uInt16 i=0; i<nAnz; i++) {
@@ -279,10 +279,10 @@ void ShearXPoly(XPolyPolygon& rPoly, const Point& rRef, double tn, int bVShear)
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 double CrookRotateXPoint(Point& rPnt, Point* pC1, Point* pC2, const Point& rCenter,
-                         const Point& rRad, double& rSin, double& rCos, int bVert)
+                         const Point& rRad, double& rSin, double& rCos, FASTBOOL bVert)
 {
-    int bC1=pC1!=NULL;
-    int bC2=pC2!=NULL;
+    FASTBOOL bC1=pC1!=NULL;
+    FASTBOOL bC2=pC2!=NULL;
     long x0=rPnt.X();
     long y0=rPnt.Y();
     long cx=rCenter.X();
@@ -333,10 +333,10 @@ double CrookRotateXPoint(Point& rPnt, Point* pC1, Point* pC2, const Point& rCent
 }
 
 double CrookSlantXPoint(Point& rPnt, Point* pC1, Point* pC2, const Point& rCenter,
-                        const Point& rRad, double& rSin, double& rCos, int bVert)
+                        const Point& rRad, double& rSin, double& rCos, FASTBOOL bVert)
 {
-    int bC1=pC1!=NULL;
-    int bC2=pC2!=NULL;
+    FASTBOOL bC1=pC1!=NULL;
+    FASTBOOL bC2=pC2!=NULL;
     long x0=rPnt.X();
     long y0=rPnt.Y();
     long dx1=0,dy1=0;
@@ -388,11 +388,11 @@ double CrookSlantXPoint(Point& rPnt, Point* pC1, Point* pC2, const Point& rCente
 }
 
 double CrookStretchXPoint(Point& rPnt, Point* pC1, Point* pC2, const Point& rCenter,
-                          const Point& rRad, double& rSin, double& rCos, int bVert,
+                          const Point& rRad, double& rSin, double& rCos, FASTBOOL bVert,
                           const Rectangle rRefRect)
 {
-    //int bC1=pC1!=NULL;
-    //int bC2=pC2!=NULL;
+    //FASTBOOL bC1=pC1!=NULL;
+    //FASTBOOL bC2=pC2!=NULL;
     //long x0=rPnt.X();
     long y0=rPnt.Y();
     CrookSlantXPoint(rPnt,pC1,pC2,rCenter,rRad,rSin,rCos,bVert);
@@ -403,7 +403,7 @@ double CrookStretchXPoint(Point& rPnt, Point* pC1, Point* pC2, const Point& rCen
         long nBtm=rRefRect.Bottom();
         long nHgt=nBtm-nTop;
         long dy=rPnt.Y()-y0;
-        //int bOben=rRad.Y()<0;
+        //FASTBOOL bOben=rRad.Y()<0;
         double a=((double)(y0-nTop))/nHgt;
         a*=dy;
         rPnt.Y()=y0+Round(a);
@@ -412,7 +412,7 @@ double CrookStretchXPoint(Point& rPnt, Point* pC1, Point* pC2, const Point& rCen
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void CrookRotatePoly(XPolygon& rPoly, const Point& rCenter, const Point& rRad, int bVert)
+void CrookRotatePoly(XPolygon& rPoly, const Point& rCenter, const Point& rRad, FASTBOOL bVert)
 {
     double nSin,nCos;
     sal_uInt16 nPointAnz=rPoly.GetPointCount();
@@ -435,7 +435,7 @@ void CrookRotatePoly(XPolygon& rPoly, const Point& rCenter, const Point& rRad, i
     }
 }
 
-void CrookSlantPoly(XPolygon& rPoly, const Point& rCenter, const Point& rRad, int bVert)
+void CrookSlantPoly(XPolygon& rPoly, const Point& rCenter, const Point& rRad, FASTBOOL bVert)
 {
     double nSin,nCos;
     sal_uInt16 nPointAnz=rPoly.GetPointCount();
@@ -458,7 +458,7 @@ void CrookSlantPoly(XPolygon& rPoly, const Point& rCenter, const Point& rRad, in
     }
 }
 
-void CrookStretchPoly(XPolygon& rPoly, const Point& rCenter, const Point& rRad, int bVert, const Rectangle rRefRect)
+void CrookStretchPoly(XPolygon& rPoly, const Point& rCenter, const Point& rRad, FASTBOOL bVert, const Rectangle rRefRect)
 {
     double nSin,nCos;
     sal_uInt16 nPointAnz=rPoly.GetPointCount();
@@ -483,7 +483,7 @@ void CrookStretchPoly(XPolygon& rPoly, const Point& rCenter, const Point& rRad, 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void CrookRotatePoly(XPolyPolygon& rPoly, const Point& rCenter, const Point& rRad, int bVert)
+void CrookRotatePoly(XPolyPolygon& rPoly, const Point& rCenter, const Point& rRad, FASTBOOL bVert)
 {
     sal_uInt16 nPolyAnz=rPoly.Count();
     for (sal_uInt16 nPolyNum=0; nPolyNum<nPolyAnz; nPolyNum++) {
@@ -491,7 +491,7 @@ void CrookRotatePoly(XPolyPolygon& rPoly, const Point& rCenter, const Point& rRa
     }
 }
 
-void CrookSlantPoly(XPolyPolygon& rPoly, const Point& rCenter, const Point& rRad, int bVert)
+void CrookSlantPoly(XPolyPolygon& rPoly, const Point& rCenter, const Point& rRad, FASTBOOL bVert)
 {
     sal_uInt16 nPolyAnz=rPoly.Count();
     for (sal_uInt16 nPolyNum=0; nPolyNum<nPolyAnz; nPolyNum++) {
@@ -499,7 +499,7 @@ void CrookSlantPoly(XPolyPolygon& rPoly, const Point& rCenter, const Point& rRad
     }
 }
 
-void CrookStretchPoly(XPolyPolygon& rPoly, const Point& rCenter, const Point& rRad, int bVert, const Rectangle rRefRect)
+void CrookStretchPoly(XPolyPolygon& rPoly, const Point& rCenter, const Point& rRad, FASTBOOL bVert, const Rectangle rRefRect)
 {
     sal_uInt16 nPolyAnz=rPoly.Count();
     for (sal_uInt16 nPolyNum=0; nPolyNum<nPolyAnz; nPolyNum++) {
@@ -644,7 +644,7 @@ void Poly2Rect(const Polygon& rPol, Rectangle& rRect, GeoStat& rGeo)
     nShW-=27000; // ShearWink wird zur Senkrechten gemessen
     nShW=-nShW;  // Negieren, denn '+' ist Rechtskursivierung
 
-    int bMirr=aPt3.Y()<0;
+    FASTBOOL bMirr=aPt3.Y()<0;
     if (bMirr) { // "Punktetausch" bei Spiegelung
         nHgt=-nHgt;
         nShW+=18000;
@@ -666,7 +666,7 @@ void Poly2Rect(const Polygon& rPol, Rectangle& rRect, GeoStat& rGeo)
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void OrthoDistance8(const Point& rPt0, Point& rPt, int bBigOrtho)
+void OrthoDistance8(const Point& rPt0, Point& rPt, FASTBOOL bBigOrtho)
 {
     long dx=rPt.X()-rPt0.X();
     long dy=rPt.Y()-rPt0.Y();
@@ -682,7 +682,7 @@ void OrthoDistance8(const Point& rPt0, Point& rPt, int bBigOrtho)
     }
 }
 
-void OrthoDistance4(const Point& rPt0, Point& rPt, int bBigOrtho)
+void OrthoDistance4(const Point& rPt0, Point& rPt, FASTBOOL bBigOrtho)
 {
     long dx=rPt.X()-rPt0.X();
     long dy=rPt.Y()-rPt0.Y();
@@ -718,7 +718,7 @@ void Kuerzen(Fraction& rF, unsigned nDigits)
 {
     sal_Int32 nMul=rF.GetNumerator();
     sal_Int32 nDiv=rF.GetDenominator();
-    int bNeg=sal_False;
+    FASTBOOL bNeg=sal_False;
     if (nMul<0) { nMul=-nMul; bNeg=!bNeg; }
     if (nDiv<0) { nDiv=-nDiv; bNeg=!bNeg; }
     if (nMul==0 || nDiv==0) return;
@@ -809,8 +809,8 @@ FrPair GetMapFactor(MapUnit eS, MapUnit eD)
     if (eS==eD) return FrPair(1,1,1,1);
     FrPair aS(GetInchOrMM(eS));
     FrPair aD(GetInchOrMM(eD));
-    int bSInch=IsInch(eS);
-    int bDInch=IsInch(eD);
+    FASTBOOL bSInch=IsInch(eS);
+    FASTBOOL bDInch=IsInch(eD);
     FrPair aRet(aD.X()/aS.X(),aD.Y()/aS.Y());
     if (bSInch && !bDInch) { aRet.X()*=Fraction(127,5); aRet.Y()*=Fraction(127,5); }
     if (!bSInch && bDInch) { aRet.X()*=Fraction(5,127); aRet.Y()*=Fraction(5,127); }
@@ -821,8 +821,8 @@ FrPair GetMapFactor(MapUnit eS, FieldUnit eD)
 {
     FrPair aS(GetInchOrMM(eS));
     FrPair aD(GetInchOrMM(eD));
-    int bSInch=IsInch(eS);
-    int bDInch=IsInch(eD);
+    FASTBOOL bSInch=IsInch(eS);
+    FASTBOOL bDInch=IsInch(eD);
     FrPair aRet(aD.X()/aS.X(),aD.Y()/aS.Y());
     if (bSInch && !bDInch) { aRet.X()*=Fraction(127,5); aRet.Y()*=Fraction(127,5); }
     if (!bSInch && bDInch) { aRet.X()*=Fraction(5,127); aRet.Y()*=Fraction(5,127); }
@@ -833,8 +833,8 @@ FrPair GetMapFactor(FieldUnit eS, MapUnit eD)
 {
     FrPair aS(GetInchOrMM(eS));
     FrPair aD(GetInchOrMM(eD));
-    int bSInch=IsInch(eS);
-    int bDInch=IsInch(eD);
+    FASTBOOL bSInch=IsInch(eS);
+    FASTBOOL bDInch=IsInch(eD);
     FrPair aRet(aD.X()/aS.X(),aD.Y()/aS.Y());
     if (bSInch && !bDInch) { aRet.X()*=Fraction(127,5); aRet.Y()*=Fraction(127,5); }
     if (!bSInch && bDInch) { aRet.X()*=Fraction(5,127); aRet.Y()*=Fraction(5,127); }
@@ -846,8 +846,8 @@ FrPair GetMapFactor(FieldUnit eS, FieldUnit eD)
     if (eS==eD) return FrPair(1,1,1,1);
     FrPair aS(GetInchOrMM(eS));
     FrPair aD(GetInchOrMM(eD));
-    int bSInch=IsInch(eS);
-    int bDInch=IsInch(eD);
+    FASTBOOL bSInch=IsInch(eS);
+    FASTBOOL bDInch=IsInch(eD);
     FrPair aRet(aD.X()/aS.X(),aD.Y()/aS.Y());
     if (bSInch && !bDInch) { aRet.X()*=Fraction(127,5); aRet.Y()*=Fraction(127,5); }
     if (!bSInch && bDInch) { aRet.X()*=Fraction(5,127); aRet.Y()*=Fraction(5,127); }
@@ -867,7 +867,7 @@ void GetMeterOrInch(MapUnit eMU, short& rnKomma, long& rnMul, long& rnDiv, int& 
 {
     rnMul=1; rnDiv=1;
     short nKomma=0;
-    int bMetr=sal_False,bInch=sal_False;
+    FASTBOOL bMetr=sal_False,bInch=sal_False;
     switch (eMU) {
         // Metrisch
         case MAP_100TH_MM   : bMetr=sal_True; nKomma=5; break;
@@ -897,7 +897,7 @@ void GetMeterOrInch(FieldUnit eFU, short& rnKomma, long& rnMul, long& rnDiv, int
 {
     rnMul=1; rnDiv=1;
     short nKomma=0;
-    int bMetr=sal_False,bInch=sal_False;
+    FASTBOOL bMetr=sal_False,bInch=sal_False;
     switch (eFU) {
         case FUNIT_NONE     : break;
         // Metrisch
@@ -925,7 +925,7 @@ void GetMeterOrInch(FieldUnit eFU, short& rnKomma, long& rnMul, long& rnDiv, int
 void SdrFormatter::Undirty()
 {
     if (aScale.GetNumerator()==0 || aScale.GetDenominator()==0) aScale=Fraction(1,1);
-    int bSrcMetr,bSrcInch,bDstMetr,bDstInch;
+    FASTBOOL bSrcMetr,bSrcInch,bDstMetr,bDstInch;
     long nMul1,nDiv1,nMul2,nDiv2;
     short nKomma1,nKomma2;
     // Zunaechst normalisieren auf m bzw. "

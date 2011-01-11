@@ -651,7 +651,7 @@ void SfxApplication::LeaveAsynchronCall_Impl()
 
 //--------------------------------------------------------------------
 
-int SfxApplication::IsInAsynchronCall_Impl() const
+FASTBOOL SfxApplication::IsInAsynchronCall_Impl() const
 {
     return pAppData_Impl->nAsynchronCalls > 0;
 }

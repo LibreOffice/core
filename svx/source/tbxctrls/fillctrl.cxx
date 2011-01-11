@@ -109,7 +109,7 @@ void SvxFillToolBoxControl::StateChanged(
     sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState )
 
 {
-    int bEnableControls = sal_False;
+    bool bEnableControls = sal_False;
 
     if ( bIgnoreStatusUpdate )
         return;

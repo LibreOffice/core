@@ -616,7 +616,7 @@ void GraphCtrl::KeyInput( const KeyEvent& rKEvt )
 
                         if(pView->IsDragObj())
                         {
-                            int bWasNoSnap = rDragStat.IsNoSnap();
+                            FASTBOOL bWasNoSnap = rDragStat.IsNoSnap();
                             sal_Bool bWasSnapEnabled = pView->IsSnapEnabled();
 
                             // switch snapping off

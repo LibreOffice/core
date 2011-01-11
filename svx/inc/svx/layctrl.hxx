@@ -38,7 +38,7 @@
 class SVX_DLLPUBLIC SvxTableToolBoxControl : public SfxToolBoxControl
 {
 private:
-    int bEnabled;
+    FASTBOOL    bEnabled;
 
 public:
     virtual SfxPopupWindowType  GetPopupWindowType() const;
@@ -58,7 +58,7 @@ public:
 
 class SVX_DLLPUBLIC SvxColumnsToolBoxControl : public SfxToolBoxControl
 {
-    int bEnabled;
+    FASTBOOL    bEnabled;
 public:
     virtual SfxPopupWindowType  GetPopupWindowType() const;
     virtual SfxPopupWindow*     CreatePopupWindow();

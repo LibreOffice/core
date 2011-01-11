@@ -50,11 +50,11 @@ friend class ImpItemEdit;
     sal_uInt16 nLastWhich;
     sal_uInt16 nLastWhichOben;
     sal_uInt16 nLastWhichUnten;
-    int bWhichesButNames;
-    int bDontHideIneffectiveItems;
-    int bDontSortItems;
-    int bShowWhichIds;
-    int bShowRealValues;
+    FASTBOOL bWhichesButNames;
+    FASTBOOL bDontHideIneffectiveItems;
+    FASTBOOL bDontSortItems;
+    FASTBOOL bShowWhichIds;
+    FASTBOOL bShowRealValues;
 private:
 #if _SOLAR__PRIVATE
     void ImpCtor();
@@ -80,8 +80,8 @@ public:
     void SetAttributes(const SfxItemSet* pAttr, const SfxItemSet* p2ndSet=NULL);
     sal_uIntPtr GetCurrentPos() const;
     sal_uInt16 GetCurrentWhich() const;
-    virtual int BegChangeEntry(sal_uIntPtr nPos);
-    virtual int EndChangeEntry();
+    virtual FASTBOOL BegChangeEntry(sal_uIntPtr nPos);
+    virtual FASTBOOL EndChangeEntry();
     virtual void     BrkChangeEntry();
 
     /** GetCellText returns the text at the given position
@@ -114,7 +114,7 @@ public:
     virtual void GetFocus();
     void Clear()                                            { aBrowse.Clear(); }
     void SetAttributes(const SfxItemSet* pAttr, const SfxItemSet* p2ndSet=NULL) { aBrowse.SetAttributes(pAttr,p2ndSet); }
-    void SetFloatingMode(int /*bOn*/) {}
+    void SetFloatingMode(FASTBOOL /*bOn*/) {}
     const _SdrItemBrowserControl& GetBrowserControl() const { return aBrowse; }
     _SdrItemBrowserControl& GetBrowserControl()             { return aBrowse; }
 };
@@ -124,7 +124,7 @@ class SdrView;
 class SdrItemBrowser: public _SdrItemBrowserWindow {
     Timer aIdleTimer;
     SdrView* pView;
-    int bDirty;
+    FASTBOOL bDirty;
 private:
     static Window* ImpGetViewWin(SdrView& rView);
     DECL_LINK(IdleHdl,Timer*);

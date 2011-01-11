@@ -471,7 +471,7 @@ void SfxRequest::RemoveItem( sal_uInt16 nID )
 const SfxPoolItem* SfxRequest::GetArg
 (
     sal_uInt16          nSlotId,    // Slot-Id oder Which-Id des Parameters
-    int         bDeep,      // sal_False: nicht in Parent-ItemSets suchen
+    bool        bDeep,      // false: nicht in Parent-ItemSets suchen
     TypeId          aType       // != 0:  RTTI Pruefung mit Assertion
 )   const
 {
@@ -574,11 +574,11 @@ void SfxRequest::Done
                                     erfragt wurden, ggf. 0 falls keine
                                     Parameter gesetzt wurden */
 
-    int             bKeep   /*  sal_True (default)
+    bool            bKeep   /*  true (default)
                                     'rSet' wird gepeichert und ist "uber
                                     GetArgs() abfragbar
 
-                                    FALSE
+                                    false
                                     'rSet' wird nicht kopiert (schneller) */
 )
 
@@ -904,7 +904,7 @@ sal_Bool SfxRequest::IsAPI() const
 //--------------------------------------------------------------------
 
 
-int SfxRequest::IsRecording() const
+bool SfxRequest::IsRecording() const
 
 /*  [Beschreibung]
 
