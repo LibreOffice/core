@@ -31,6 +31,7 @@
 
 #include <tools/solar.h>
 #include <osl/diagnose.h>
+#include "tools/toolsdllapi.h"
 
 struct RSHEADER_TYPE;
 typedef sal_uInt32 RESOURCE_TYPE;
