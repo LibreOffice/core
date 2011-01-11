@@ -46,12 +46,16 @@ namespace svt
     //------------------------------------------------------------------------------------------------------------------
     ::rtl::OUString CellValueConversion::convertToString( const Any& i_value )
     {
+        ::rtl::OUString sConvertString;
+        if ( !i_value.hasValue() )
+            return sConvertString;
+
+
         // TODO: use css.script.XTypeConverter?
 
         sal_Int32 nInt = 0;
         sal_Bool bBool = false;
         double fDouble = 0;
-        ::rtl::OUString sConvertString;
 
         ::rtl::OUString sStringValue;
         if ( i_value >>= sConvertString )

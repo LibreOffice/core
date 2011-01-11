@@ -527,6 +527,15 @@ namespace svt { namespace table
     }
 
     //------------------------------------------------------------------------------------------------------------------
+    void UnoControlTableModel::getCellToolTip( ColPos const i_col, RowPos const i_row, Any& o_cellToolTip )
+    {
+        DBG_CHECK_ME();
+        OSL_UNUSED( i_col );
+        OSL_UNUSED( i_row );
+        OSL_UNUSED( o_cellToolTip );
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
     ::rtl::OUString UnoControlTableModel::getRowHeader( RowPos const i_rowPos ) const
     {
         DBG_CHECK_ME();

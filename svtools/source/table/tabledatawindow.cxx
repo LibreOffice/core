@@ -29,14 +29,21 @@
 
 #include "svtools/table/tablecontrol.hxx"
 #include "svtools/table/tabledatawindow.hxx"
+
 #include "tablecontrol_impl.hxx"
+#include "tablegeometry.hxx"
+#include "cellvalueconversion.hxx"
+
 #include <vcl/help.hxx>
 
 //........................................................................
 namespace svt { namespace table
 {
-     class TableControl_Impl;
 //........................................................................
+
+    /** === begin UNO using === **/
+    using ::com::sun::star::uno::Any;
+    /** === end UNO using === **/
 
     //====================================================================
     //= TableDataWindow
@@ -77,29 +84,62 @@ namespace svt { namespace table
     {
         Window::SetControlBackground();
     }
+
+    //--------------------------------------------------------------------
+    void TableDataWindow::RequestHelp( const HelpEvent& rHEvt )
+    {
+        USHORT const nHelpMode = rHEvt.GetMode();
+        if ( ( nHelpMode & HELPMODE_QUICK ) != 0 )
+        {
+            Point const aMousePos( m_rTableControl.getAntiImpl().ScreenToOutputPixel( rHEvt.GetMousePosPixel() ) );
+
+            RowPos const hitRow = m_rTableControl.getRowAtPoint( aMousePos );
+            ColPos const hitCol = m_rTableControl.getColAtPoint( aMousePos );
+            if  (   ( hitRow >= 0 ) && ( hitRow < m_rTableControl.getRowCount() )
+                &&  ( hitCol >= 0 ) && ( hitCol < m_rTableControl.getColumnCount() )
+                )
+            {
+                PTableModel const pTableModel( m_rTableControl.getAntiImpl().GetModel() );
+
+                Any aCellToolTip;
+                pTableModel->getCellToolTip( hitCol, hitRow, aCellToolTip );
+                if ( !aCellToolTip.hasValue() )
+                {
+                    // use the cell content
+                    pTableModel->getCellContent( hitCol, hitRow, aCellToolTip );
+                    // TODO: use the cell content as tool tip only if it doesn't fit into the cell. Need to
+                    // ask the renderer for this.
+                }
+
+                ::rtl::OUString const sHelpText( CellValueConversion::convertToString( aCellToolTip ) );
+                if ( sHelpText.getLength() > 0 )
+                {
+                    Rectangle const aControlScreenRect(
+                        m_rTableControl.getAntiImpl().OutputToScreenPixel( Point( 0, 0 ) ),
+                        m_rTableControl.getAntiImpl().GetOutputSizePixel()
+                    );
+                    Help::ShowQuickHelp( &m_rTableControl.getAntiImpl(), aControlScreenRect, sHelpText );
+                }
+            }
+        }
+        else
+        {
+            Window::RequestHelp( rHEvt );
+        }
+    }
+
     //--------------------------------------------------------------------
     void TableDataWindow::MouseMove( const MouseEvent& rMEvt )
     {
         Point aPoint = rMEvt.GetPosPixel();
         if ( !m_rTableControl.getInputHandler()->MouseMove( m_rTableControl, rMEvt ) )
         {
-            if ( m_rTableControl.isTooltipActive() && m_rTableControl.getRowAtPoint( aPoint ) >= 0 )
+            if ( m_rTableControl.getRowAtPoint( aPoint ) == ROW_COL_HEADERS )
             {
-                SetPointer(POINTER_ARROW);
-                const ::rtl::OUString& rHelpText = m_rTableControl.setTooltip(aPoint);
-                Help::EnableBalloonHelp();
-                Window::SetHelpText( rHelpText );
-            }
-            else if ( m_rTableControl.getRowAtPoint( aPoint ) == ROW_COL_HEADERS )
-            {
-                if(Help::IsBalloonHelpEnabled())
-                    Help::DisableBalloonHelp();
-                m_rTableControl.resizeColumn(aPoint);
+                m_rTableControl.resizeColumn( aPoint );
             }
             else
             {
-                if(Help::IsBalloonHelpEnabled())
-                    Help::DisableBalloonHelp();
                 Window::MouseMove( rMEvt );
             }
         }

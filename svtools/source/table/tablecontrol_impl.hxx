@@ -159,7 +159,6 @@ namespace svt { namespace table
         ColPos                  m_nResizingColumn;
         bool                    m_bResizingGrid;
         bool                    m_bUpdatingColWidths;
-        rtl::OUString           m_aTooltipText;
 
 #if DBG_UTIL
     #define INV_SCROLL_POSITION     1
@@ -255,8 +254,6 @@ namespace svt { namespace table
         virtual bool                dispatchAction( TableControlAction _eAction );
         virtual SelectionEngine*    getSelEngine();
         virtual void                activateCellAt( const Point& rPoint );
-        virtual bool                isTooltipActive();
-        virtual rtl::OUString&      setTooltip(const Point& rPoint );
         virtual RowPos              getRowAtPoint( const Point& rPoint );
         virtual ColPos              getColAtPoint( const Point& rPoint );
         virtual void                resizeColumn(const Point& rPoint);

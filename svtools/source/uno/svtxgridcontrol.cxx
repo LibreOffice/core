@@ -30,8 +30,7 @@
 #include "svtxgridcontrol.hxx"
 #include "accessibletableimp.hxx"
 #include <com/sun/star/view/SelectionType.hpp>
-#include "svtools/table/gridtablerenderer.hxx"
-#include "svtools/table/defaultinputhandler.hxx"
+#include "svtools/table/abstracttablecontrol.hxx"
 #include "svtools/table/tablecontrol.hxx"
 #include "unocontroltablemodel.hxx"
 #include <comphelper/sequence.hxx>
@@ -93,17 +92,7 @@ sal_Int32 SAL_CALL SVTXGridControl::getItemIndexAtPoint(::sal_Int32 x, ::sal_Int
 
     TableControl* pTable = dynamic_cast< TableControl* >( GetWindow() );
     ENSURE_OR_RETURN( pTable != NULL, "SVTXGridControl::getItemIndexAtPoint: no control (anymore)!", -1 );
-    return pTable->GetRowAtPoint( Point( x, y ) );
-}
-
-// ---------------------------------------------------------------------------------------------------------------------
-void SAL_CALL SVTXGridControl::setToolTip(const ::com::sun::star::uno::Sequence< ::rtl::OUString >& text, const com::sun::star::uno::Sequence< sal_Int32 >& columns) throw (::com::sun::star::uno::RuntimeException)
-{
-    ::vos::OGuard aGuard( GetMutex() );
-
-    TableControl* pTable = dynamic_cast< TableControl* >( GetWindow() );
-    ENSURE_OR_RETURN_VOID( pTable != NULL, "SVTXGridControl::setToolTip: no control (anymore)!" );
-    pTable->setTooltip(text, columns);
+    return pTable->getTableControlInterface().getRowAtPoint( Point( x, y ) );
 }
 
 void SAL_CALL SVTXGridControl::addSelectionListener(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::grid::XGridSelectionListener > & listener) throw (::com::sun::star::uno::RuntimeException)

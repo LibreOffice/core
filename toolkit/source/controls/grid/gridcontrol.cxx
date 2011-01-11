@@ -340,12 +340,6 @@ sal_Bool SAL_CALL UnoGridControl::setModel( const Reference< XControlModel >& i_
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-void SAL_CALL UnoGridControl::setToolTip(const ::com::sun::star::uno::Sequence< ::rtl::OUString >& text, const ::com::sun::star::uno::Sequence< ::sal_Int32 >& columns) throw (::com::sun::star::uno::RuntimeException)
-{
-    Reference< XGridControl >( getPeer(), UNO_QUERY_THROW )->setToolTip( text, columns );
-}
-
-//----------------------------------------------------------------------------------------------------------------------
 ::sal_Int32 SAL_CALL UnoGridControl::getMinSelectionIndex() throw (::com::sun::star::uno::RuntimeException)
 {
     return Reference< XGridControl >( getPeer(), UNO_QUERY_THROW )->getMinSelectionIndex();

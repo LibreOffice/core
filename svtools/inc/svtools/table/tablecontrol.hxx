@@ -77,11 +77,8 @@ namespace svt { namespace table
         DECL_DLLPRIVATE_LINK( ImplSelectHdl, void* );
 
         ::boost::shared_ptr< TableControl_Impl >    m_pImpl;
-        ::com::sun::star::uno::Sequence< sal_Int32 > m_nCols;
-        ::com::sun::star::uno::Sequence< ::rtl::OUString > m_aText;
         Link m_aSelectHdl;
         bool m_bSelectionChanged;
-        bool m_bTooltip;
 
     public:
         ::std::auto_ptr< AccessibleTableControl_Impl > m_pAccessTable;
@@ -110,8 +107,8 @@ namespace svt { namespace table
         */
         sal_Int32 GetCurrentRow() const;
 
-        /** returns the row, which contains the input point*/
-        ColPos  GetRowAtPoint( const Point& rPoint );
+        IAbstractTableControl&
+                getTableControlInterface();
 
         /** retrieves the current column
 
@@ -194,6 +191,7 @@ namespace svt { namespace table
         virtual void FillAccessibleStateSet(
             ::utl::AccessibleStateSetHelper& rStateSet,
         AccessibleTableControlObjType eObjType ) const;
+
         //// Window
         virtual Rectangle GetWindowExtentsRelative( Window *pRelativeWindow ) const;
         virtual void GrabFocus();
@@ -224,12 +222,9 @@ namespace svt { namespace table
         virtual void commitGridControlEvent( sal_Int16 _nEventId, const com::sun::star::uno::Any& _rNewValue, const com::sun::star::uno::Any& _rOldValue );
         virtual void RemoveSelectedRow(RowPos _nRowPos);
         virtual ::rtl::OUString GetAccessibleCellText(sal_Int32 _nRowPos, sal_Int32 _nColPos) const;
-        ::com::sun::star::uno::Sequence< sal_Int32 >& getColumnsForTooltip();
-        ::com::sun::star::uno::Sequence< ::rtl::OUString >& getTextForTooltip();
-        void setTooltip(const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aText, const ::com::sun::star::uno::Sequence< sal_Int32 >& nCols);
+
         void clearSelection();
         void selectionChanged(bool _bChanged);
-        bool isTooltip();
 
     protected:
         ::svt::IAccessibleFactory&   getAccessibleFactory();

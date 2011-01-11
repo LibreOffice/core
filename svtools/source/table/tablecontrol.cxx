@@ -70,7 +70,6 @@ namespace svt { namespace table
         :Control( _pParent, _nStyle )
         ,m_pImpl( new TableControl_Impl( *this ) )
         ,m_bSelectionChanged(false)
-        ,m_bTooltip(false)
     {
         TableDataWindow* aTableData = m_pImpl->getDataWindow();
         aTableData->SetMouseButtonDownHdl( LINK( this, TableControl, ImplMouseButtonDownHdl ) );
@@ -245,9 +244,9 @@ namespace svt { namespace table
     }
 
     //--------------------------------------------------------------------
-    RowPos TableControl::GetRowAtPoint( const Point& rPoint )
+    IAbstractTableControl& TableControl::getTableControlInterface()
     {
-        return m_pImpl->getRowAtPoint( rPoint );
+        return *m_pImpl;
     }
 
     //--------------------------------------------------------------------
@@ -574,32 +573,10 @@ Rectangle TableControl::calcTableRect(BOOL _bOnScreen)
     (void)_bOnScreen;
     return m_pImpl->calcTableRect();
 }
-//--------------------------------------------------------------------
-::com::sun::star::uno::Sequence< sal_Int32 >& TableControl::getColumnsForTooltip()
-{
-    return  m_nCols;
-}
-//--------------------------------------------------------------------
-::com::sun::star::uno::Sequence< ::rtl::OUString >& TableControl::getTextForTooltip()
-{
-    return  m_aText;
-}
-//--------------------------------------------------------------------
-void TableControl::setTooltip(const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aText, const ::com::sun::star::uno::Sequence< sal_Int32 >& nCols )
-{
-    m_aText = aText;
-    m_nCols = nCols;
-    m_bTooltip = true;
-}
 // -----------------------------------------------------------------------
 void TableControl::selectionChanged(bool _bChanged)
 {
     m_bSelectionChanged = _bChanged;
-}
-// -----------------------------------------------------------------------
-bool TableControl::isTooltip()
-{
-    return m_bTooltip;
 }
 // -----------------------------------------------------------------------
 IMPL_LINK( TableControl, ImplSelectHdl, void*, EMPTYARG )

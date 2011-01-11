@@ -185,6 +185,9 @@ namespace svt { namespace table
             (void)i_col;
             o_cellContent.clear();
         }
+        virtual void getCellToolTip( ColPos const, RowPos const, ::com::sun::star::uno::Any& )
+        {
+        }
         virtual ::rtl::OUString getRowHeader( RowPos const i_rowPos ) const
         {
             (void)i_rowPos;
@@ -2070,78 +2073,6 @@ namespace svt { namespace table
             return it - selectedRows.begin();
         }
         return -1;
-    }
-    //-------------------------------------------------------------------------------
-    bool TableControl_Impl::isTooltipActive()
-    {
-        return m_rAntiImpl.isTooltip();
-    }
-    //-------------------------------------------------------------------------------
-    ::rtl::OUString& TableControl_Impl::setTooltip(const Point& rPoint )
-    {
-        ::rtl::OUString aTooltipText;
-        const RowPos hitRow = getRowAtPoint( rPoint );
-        const ColPos hitCol = getColAtPoint( rPoint );
-        com::sun::star::uno::Sequence< sal_Int32 > cols = m_rAntiImpl.getColumnsForTooltip();
-        com::sun::star::uno::Sequence< ::rtl::OUString > text = m_rAntiImpl.getTextForTooltip();
-        if(text.getLength()==0 && cols.getLength()==0)
-        {
-            aTooltipText = getCellContentAsString( hitRow, hitCol );
-        }
-        else if(text.getLength() == 0)
-        {
-            for(int i=0; i<cols.getLength(); i++)
-            {
-                if(i==0)
-                {
-                    aTooltipText = getCellContentAsString( hitRow, cols[i] );
-                }
-                else
-                {
-                    aTooltipText += ::rtl::OUString::createFromAscii("\n");
-                    aTooltipText += getCellContentAsString( hitRow, cols[i] );
-                }
-            }
-        }
-        else if(cols.getLength() == 0)
-        {
-            for(int i=0; i<text.getLength(); i++)
-            {
-                if(i==0)
-                    aTooltipText = text[i];
-                else
-                {
-                    aTooltipText+= ::rtl::OUString::createFromAscii("\n");
-                    aTooltipText+= text[i];
-                }
-            }
-        }
-        else
-        {
-            int nCols = cols.getLength();
-            int mText = text.getLength();
-            if(nCols < mText )
-                cols.realloc(mText);
-            else if(mText < nCols)
-                text.realloc(nCols);
-            for(int i=0; i<cols.getLength(); i++)
-            {
-                if(i==0)
-                {
-                    aTooltipText = text[i] + getCellContentAsString( hitRow, cols[i] );
-                }
-                else
-                {
-                    aTooltipText+= ::rtl::OUString::createFromAscii("\n");
-                    aTooltipText+= text[i];
-                    if(nCols > i)
-                    {
-                        aTooltipText += getCellContentAsString( hitRow, cols[i] );
-                    }
-                }
-            }
-        }
-        return m_aTooltipText = aTooltipText;
     }
 
     //--------------------------------------------------------------------

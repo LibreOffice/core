@@ -103,6 +103,7 @@ namespace svt { namespace table
         virtual void addTableModelListener( const PTableModelListener& i_listener );
         virtual void removeTableModelListener( const PTableModelListener& i_listener );
         virtual void getCellContent( ColPos const i_col, RowPos const i_row, ::com::sun::star::uno::Any& o_cellContent );
+        virtual void getCellToolTip( ColPos const i_col, RowPos const i_row, ::com::sun::star::uno::Any & o_cellToolTip );
         virtual ::rtl::OUString getRowHeader( RowPos const i_rowPos ) const;
         virtual ::com::sun::star::util::Color getLineColor();
         virtual ::com::sun::star::util::Color getHeaderBackgroundColor();

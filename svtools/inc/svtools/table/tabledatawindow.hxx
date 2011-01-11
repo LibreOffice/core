@@ -75,6 +75,7 @@ namespace svt { namespace table
         virtual long        Notify(NotifyEvent& rNEvt);
         virtual void        SetControlBackground(const Color& rColor);
         virtual void        SetControlBackground();
+        virtual void        RequestHelp( const HelpEvent& rHEvt );
 
         void                SetBackground(const Wallpaper& rColor);
         void                SetBackground();

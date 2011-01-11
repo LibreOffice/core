@@ -432,6 +432,23 @@ namespace svt { namespace table
         */
         virtual void getCellContent( ColPos const i_col, RowPos const i_row, ::com::sun::star::uno::Any& o_cellContent ) = 0;
 
+        /** returns an object which should be displayed as tooltip for the given cell
+
+            At the moment, only string-convertible values are supported here. In the future, one might imagine displaying
+            scaled-down versions of a graphic in a cell, and a larger version of that very graphic as tooltip.
+
+            If no tooltip object is provided, then the cell content is used, and displayed as tooltip for the cell
+            if and only if it doesn't fit into the cell's space itself.
+
+            @param i_col
+                The column index of the cell in question. COL_ROW_HEADERS is a valid argument here.
+            @param i_row
+                The row index of the cell in question. ROW_COL_HEADERS is a valid argument.
+            @param o_cellToolTip
+                takes the tooltip object upon return.
+        */
+        virtual void getCellToolTip( ColPos const i_col, RowPos const i_row, ::com::sun::star::uno::Any & o_cellToolTip ) = 0;
+
         /** retrieves title of a given row
         */
         virtual ::rtl::OUString getRowHeader( RowPos const i_rowPos ) const = 0;
