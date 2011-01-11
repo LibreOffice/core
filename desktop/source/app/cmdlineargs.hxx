@@ -41,7 +41,7 @@ class CommandLineArgs
     public:
         enum BoolParam  // must be zero based!
         {
-            CMD_BOOLPARAM_MINIMIZED,
+            CMD_BOOLPARAM_MINIMIZED = 0,
             CMD_BOOLPARAM_INVISIBLE,
             CMD_BOOLPARAM_NORESTORE,
             CMD_BOOLPARAM_BEAN,
@@ -72,12 +72,13 @@ class CommandLineArgs
             CMD_BOOLPARAM_HELPIMPRESS,
             CMD_BOOLPARAM_HELPBASE,
             CMD_BOOLPARAM_PSN,
+            CMD_BOOLPARAM_VERSION,
             CMD_BOOLPARAM_COUNT             // must be last element!
         };
 
         enum StringParam // must be zero based!
         {
-            CMD_STRINGPARAM_PORTAL,
+            CMD_STRINGPARAM_PORTAL = 0,
             CMD_STRINGPARAM_SPLASHPIPE,
             CMD_STRINGPARAM_ACCEPT,
             CMD_STRINGPARAM_UNACCEPT,
@@ -103,7 +104,7 @@ class CommandLineArgs
 
         enum GroupParamId
         {
-            CMD_GRPID_MODULE,
+            CMD_GRPID_MODULE = 0,
             CMD_GRPID_COUNT
         };
 
@@ -161,6 +162,7 @@ class CommandLineArgs
         sal_Bool                IsGlobal() const;
         sal_Bool                IsMath() const;
         sal_Bool                IsWeb() const;
+        sal_Bool                IsVersion() const;
         sal_Bool                HasModuleParam() const;
 
         // Access to string parameters

@@ -172,6 +172,12 @@ namespace desktop
         aDlg.Execute();
 #endif
     }
+
+    void displayVersion()
+    {
+        fprintf(stdout, "Display version here\n");
+    }
+
 #ifndef UNX
     CmdlineHelpDialog::CmdlineHelpDialog (void)
     : ModalDialog( NULL, DesktopResId( DLG_CMDLINEHELP ) )

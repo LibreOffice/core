@@ -519,6 +519,11 @@ sal_Bool CommandLineArgs::InterpretCommandLineParameter( const ::rtl::OUString& 
         SetBoolParam_Impl( CMD_BOOLPARAM_HELPMATH, sal_True );
         return sal_True;
     }
+    else if ( oArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "version" )) == sal_True )
+    {
+        SetBoolParam_Impl( CMD_BOOLPARAM_VERSION, sal_True );
+        return sal_True;
+    }
     else if ( oArg.matchIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("splash-pipe=")) )
     {
         AddStringListParam_Impl( CMD_STRINGPARAM_SPLASHPIPE, oArg.copy(RTL_CONSTASCII_LENGTH("splash-pipe=")) );
@@ -846,6 +851,12 @@ sal_Bool CommandLineArgs::IsWeb() const
 {
     osl::MutexGuard  aMutexGuard( m_aMutex );
     return m_aBoolParams[ CMD_BOOLPARAM_WEB ];
+}
+
+sal_Bool CommandLineArgs::IsVersion() const
+{
+    osl::MutexGuard  aMutexGuard( m_aMutex );
+    return m_aBoolParams[ CMD_BOOLPARAM_VERSION ];
 }
 
 sal_Bool CommandLineArgs::HasModuleParam() const

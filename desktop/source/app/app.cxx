@@ -707,6 +707,11 @@ void Desktop::Init()
         displayCmdlineHelp();
         SetBootstrapStatus(BS_TERMINATE);
     }
+    else if ( pCmdLineArgs->IsVersion() )
+    {
+        displayVersion();
+        SetBootstrapStatus(BS_TERMINATE);
+    }
 #endif
         // start ipc thread only for non-remote offices
         RTL_LOGFILE_CONTEXT( aLog2, "desktop (cd100003) ::OfficeIPCThread::EnableOfficeIPCThread" );
