@@ -28,7 +28,7 @@
 #define SVTOOLS_TABLECONTROL_IMPL_HXX
 
 #include <svtools/table/tablemodel.hxx>
-#include <svtools/table/abstracttablecontrol.hxx>
+#include <svtools/table/tablecontrolinterface.hxx>
 #include <svtools/table/tablemodel.hxx>
 
 #include <vcl/seleng.hxx>
@@ -98,7 +98,7 @@ namespace svt { namespace table
     //====================================================================
     //= TableControl_Impl
     //====================================================================
-    class TableControl_Impl :public IAbstractTableControl
+    class TableControl_Impl :public ITableControl
                             ,public ITableModelListener
     {
         friend class TableGeometry;
@@ -173,7 +173,6 @@ namespace svt { namespace table
     public:
 
 
-        PTableModel getModel() const;
         void        setModel( PTableModel _pModel );
 
         inline  const PTableInputHandler&   getInputHandler() const { return m_pInputHandler; }
@@ -182,8 +181,6 @@ namespace svt { namespace table
         inline  RowPos  getCurRow() const       { return m_nCurRow; }
         inline  void    setCurRow(RowPos curRow){ m_nCurRow = curRow; }
         inline  RowPos  getTopRow() const       { return m_nTopRow; }
-        inline  long    getRowCount() const     { return m_nRowCount; }
-        inline  long    getColumnCount() const  { return m_nColumnCount; }
 
         inline  const TableControl&   getAntiImpl() const { return m_rAntiImpl; }
         inline        TableControl&   getAntiImpl()       { return m_rAntiImpl; }
@@ -248,11 +245,12 @@ namespace svt { namespace table
         void    invalidateRows();
         void    clearSelection();
 
-        // IAbstractTableControl
+        // ITableControl
         virtual void                hideCursor();
         virtual void                showCursor();
         virtual bool                dispatchAction( TableControlAction _eAction );
         virtual SelectionEngine*    getSelEngine();
+        virtual PTableModel         getModel() const;
         virtual void                activateCellAt( const Point& rPoint );
         virtual RowPos              getRowAtPoint( const Point& rPoint );
         virtual ColPos              getColAtPoint( const Point& rPoint );

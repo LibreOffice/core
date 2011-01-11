@@ -30,7 +30,10 @@
 #include <sal/types.h>
 #include <vcl/event.hxx>
 #include <vcl/seleng.hxx>
-#include "tabletypes.hxx"
+
+#include "svtools/table/tabletypes.hxx"
+#include "svtools/table/tablemodel.hxx"
+
 //........................................................................
 namespace svt { namespace table
 {
@@ -78,11 +81,11 @@ namespace svt { namespace table
     };
 
     //====================================================================
-    //= IAbstractTableControl
+    //= ITableControl
     //====================================================================
     /** defines a callback interface to be implemented by a concrete table control
     */
-    class SAL_NO_VTABLE IAbstractTableControl
+    class SAL_NO_VTABLE ITableControl
     {
     public:
         /** hides the cell cursor
@@ -115,6 +118,13 @@ namespace svt { namespace table
 
         /** returns selection engine*/
         virtual SelectionEngine* getSelEngine() = 0;
+
+        /** returns the table model
+
+            The returned model is guaranteed to not be <NULL/>.
+        */
+        virtual PTableModel getModel() const = 0;
+
         virtual void activateCellAt( const Point& rPoint ) = 0;
         virtual RowPos getRowAtPoint( const Point& rPoint ) = 0;
         virtual ColPos getColAtPoint( const Point& rPoint ) = 0;
@@ -123,7 +133,7 @@ namespace svt { namespace table
         virtual bool endResizeColumn(const Point& rPoint) = 0;
         virtual bool isRowSelected(RowPos _nRow) = 0;
 
-        virtual ~IAbstractTableControl() {};
+        virtual ~ITableControl() {};
     };
 
 //........................................................................

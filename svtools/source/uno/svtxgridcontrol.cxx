@@ -30,7 +30,7 @@
 #include "svtxgridcontrol.hxx"
 #include "accessibletableimp.hxx"
 #include <com/sun/star/view/SelectionType.hpp>
-#include "svtools/table/abstracttablecontrol.hxx"
+#include "svtools/table/tablecontrolinterface.hxx"
 #include "svtools/table/tablecontrol.hxx"
 #include "unocontroltablemodel.hxx"
 #include <comphelper/sequence.hxx>

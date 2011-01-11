@@ -28,7 +28,7 @@
 #include "precompiled_svtools.hxx"
 
 #include "svtools/table/defaultinputhandler.hxx"
-#include "svtools/table/abstracttablecontrol.hxx"
+#include "svtools/table/tablecontrolinterface.hxx"
 
 #include <tools/debug.hxx>
 #include <vcl/event.hxx>
@@ -61,7 +61,7 @@ namespace svt { namespace table
     }
 
     //--------------------------------------------------------------------
-    bool DefaultInputHandler::MouseMove( IAbstractTableControl& _rControl, const MouseEvent& _rMEvt )
+    bool DefaultInputHandler::MouseMove( ITableControl& _rControl, const MouseEvent& _rMEvt )
     {
         Point aPoint = _rMEvt.GetPosPixel();
         if ( m_bResize )
@@ -73,7 +73,7 @@ namespace svt { namespace table
     }
 
     //--------------------------------------------------------------------
-    bool DefaultInputHandler::MouseButtonDown( IAbstractTableControl& _rControl, const MouseEvent& _rMEvt )
+    bool DefaultInputHandler::MouseButtonDown( ITableControl& _rControl, const MouseEvent& _rMEvt )
     {
         bool bHandled = false;
         Point aPoint = _rMEvt.GetPosPixel();
@@ -111,7 +111,7 @@ namespace svt { namespace table
         return bHandled;
     }
     //--------------------------------------------------------------------
-    bool DefaultInputHandler::MouseButtonUp( IAbstractTableControl& _rControl, const MouseEvent& _rMEvt )
+    bool DefaultInputHandler::MouseButtonUp( ITableControl& _rControl, const MouseEvent& _rMEvt )
     {
         bool bHandled = false;
         const Point aPoint = _rMEvt.GetPosPixel();
@@ -135,7 +135,7 @@ namespace svt { namespace table
         return bHandled;
     }
     //--------------------------------------------------------------------
-    bool DefaultInputHandler::KeyInput( IAbstractTableControl& _rControl, const KeyEvent& rKEvt )
+    bool DefaultInputHandler::KeyInput( ITableControl& _rControl, const KeyEvent& rKEvt )
     {
         bool bHandled = false;
 
@@ -184,21 +184,21 @@ namespace svt { namespace table
     }
 
     //--------------------------------------------------------------------
-    bool DefaultInputHandler::GetFocus( IAbstractTableControl& _rControl )
+    bool DefaultInputHandler::GetFocus( ITableControl& _rControl )
     {
         _rControl.showCursor();
         return false;   // continue processing
     }
 
     //--------------------------------------------------------------------
-    bool DefaultInputHandler::LoseFocus( IAbstractTableControl& _rControl )
+    bool DefaultInputHandler::LoseFocus( ITableControl& _rControl )
     {
         _rControl.hideCursor();
         return false;   // continue processing
     }
 
     //--------------------------------------------------------------------
-    bool DefaultInputHandler::RequestHelp( IAbstractTableControl& _rControl, const HelpEvent& _rHEvt )
+    bool DefaultInputHandler::RequestHelp( ITableControl& _rControl, const HelpEvent& _rHEvt )
     {
         (void)_rControl;
         (void)_rHEvt;
@@ -207,7 +207,7 @@ namespace svt { namespace table
     }
 
     //--------------------------------------------------------------------
-    bool DefaultInputHandler::Command( IAbstractTableControl& _rControl, const CommandEvent& _rCEvt )
+    bool DefaultInputHandler::Command( ITableControl& _rControl, const CommandEvent& _rCEvt )
     {
         (void)_rControl;
         (void)_rCEvt;
@@ -216,7 +216,7 @@ namespace svt { namespace table
     }
 
     //--------------------------------------------------------------------
-    bool DefaultInputHandler::PreNotify( IAbstractTableControl& _rControl, NotifyEvent& _rNEvt )
+    bool DefaultInputHandler::PreNotify( ITableControl& _rControl, NotifyEvent& _rNEvt )
     {
         (void)_rControl;
         (void)_rNEvt;
@@ -225,7 +225,7 @@ namespace svt { namespace table
     }
 
     //--------------------------------------------------------------------
-    bool DefaultInputHandler::Notify( IAbstractTableControl& _rControl, NotifyEvent& _rNEvt )
+    bool DefaultInputHandler::Notify( ITableControl& _rControl, NotifyEvent& _rNEvt )
     {
         (void)_rControl;
         (void)_rNEvt;

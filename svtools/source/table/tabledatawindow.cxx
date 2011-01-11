@@ -51,7 +51,7 @@ namespace svt { namespace table
     //--------------------------------------------------------------------
     TableDataWindow::TableDataWindow( TableControl_Impl& _rTableControl )
         :Window( &_rTableControl.getAntiImpl() )
-        ,m_rTableControl        ( _rTableControl )
+        ,m_rTableControl( _rTableControl )
     {
         // by default, use the background as determined by the style settings
         const Color aWindowColor( GetSettings().GetStyleSettings().GetFieldColor() );
@@ -91,22 +91,23 @@ namespace svt { namespace table
         USHORT const nHelpMode = rHEvt.GetMode();
         if ( ( nHelpMode & HELPMODE_QUICK ) != 0 )
         {
+            ITableControl& rTableControl = m_rTableControl;
+            PTableModel const pTableModel( rTableControl.getModel() );
+
             Point const aMousePos( m_rTableControl.getAntiImpl().ScreenToOutputPixel( rHEvt.GetMousePosPixel() ) );
 
-            RowPos const hitRow = m_rTableControl.getRowAtPoint( aMousePos );
-            ColPos const hitCol = m_rTableControl.getColAtPoint( aMousePos );
+            RowPos const hitRow = rTableControl.getRowAtPoint( aMousePos );
+            ColPos const hitCol = rTableControl.getColAtPoint( aMousePos );
 
-            if ( ( hitCol >= 0 ) && ( hitCol < m_rTableControl.getColumnCount() ) )
+            if ( ( hitCol >= 0 ) && ( hitCol < pTableModel->getColumnCount() ) )
             {
                 ::rtl::OUString sHelpText;
-
-                PTableModel const pTableModel( m_rTableControl.getAntiImpl().GetModel() );
 
                 if ( hitRow == ROW_COL_HEADERS )
                 {
                     sHelpText = pTableModel->getColumnModel( hitCol )->getHelpText();
                 }
-                else if ( ( hitRow >= 0 ) && ( hitRow < m_rTableControl.getRowCount() ) )
+                else if ( ( hitRow >= 0 ) && ( hitRow < pTableModel->getRowCount() ) )
                 {
                     Any aCellToolTip;
                     pTableModel->getCellToolTip( hitCol, hitRow, aCellToolTip );

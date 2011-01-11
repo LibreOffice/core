@@ -107,7 +107,7 @@ namespace svt { namespace table
         */
         sal_Int32 GetCurrentRow() const;
 
-        IAbstractTableControl&
+        ITableControl&
                 getTableControlInterface();
 
         /** retrieves the current column
@@ -192,7 +192,8 @@ namespace svt { namespace table
             ::utl::AccessibleStateSetHelper& rStateSet,
         AccessibleTableControlObjType eObjType ) const;
 
-        //// Window
+        // .............................................................................................................
+        // IAccessibleTable
         virtual Rectangle GetWindowExtentsRelative( Window *pRelativeWindow ) const;
         virtual void GrabFocus();
         virtual XACC GetAccessible( BOOL bCreate = TRUE );
@@ -222,6 +223,7 @@ namespace svt { namespace table
         virtual void commitGridControlEvent( sal_Int16 _nEventId, const com::sun::star::uno::Any& _rNewValue, const com::sun::star::uno::Any& _rOldValue );
         virtual void RemoveSelectedRow(RowPos _nRowPos);
         virtual ::rtl::OUString GetAccessibleCellText(sal_Int32 _nRowPos, sal_Int32 _nColPos) const;
+        // .............................................................................................................
 
         void clearSelection();
         void selectionChanged(bool _bChanged);

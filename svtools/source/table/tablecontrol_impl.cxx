@@ -45,10 +45,10 @@
 
 #include <functional>
 
-//........................................................................
+//......................................................................................................................
 namespace svt { namespace table
 {
-//........................................................................
+//......................................................................................................................
 
     //====================================================================
     //= TempHideCursor
@@ -56,10 +56,10 @@ namespace svt { namespace table
     class TempHideCursor
     {
     private:
-        IAbstractTableControl&  m_rTable;
+        ITableControl&  m_rTable;
 
     public:
-        TempHideCursor( IAbstractTableControl& _rTable )
+        TempHideCursor( ITableControl& _rTable )
             :m_rTable( _rTable )
         {
             m_rTable.hideCursor();
@@ -258,7 +258,7 @@ namespace svt { namespace table
         }
     }
 
-    //--------------------------------------------------------------------
+    //------------------------------------------------------------------------------------------------------------------
     const sal_Char* TableControl_Impl::impl_checkInvariants() const
     {
         if ( !m_pModel )
@@ -359,7 +359,7 @@ namespace svt { namespace table
 #define DBG_CHECK_ME() \
     DBG_CHKTHIS( TableControl_Impl, TableControl_Impl_checkInvariants )
 
-    //--------------------------------------------------------------------
+    //------------------------------------------------------------------------------------------------------------------
     TableControl_Impl::TableControl_Impl( TableControl& _rAntiImpl )
         :m_rAntiImpl            ( _rAntiImpl                    )
         ,m_pModel               ( new EmptyTableModel           )
@@ -397,7 +397,7 @@ namespace svt { namespace table
         m_pDataWindow->Show();
     }
 
-    //--------------------------------------------------------------------
+    //------------------------------------------------------------------------------------------------------------------
     TableControl_Impl::~TableControl_Impl()
     {
         DBG_DTOR( TableControl_Impl, TableControl_Impl_checkInvariants );
@@ -410,17 +410,7 @@ namespace svt { namespace table
         DELETEZ( m_pDataWindow );
     }
 
-    //--------------------------------------------------------------------
-    PTableModel TableControl_Impl::getModel() const
-    {
-        if ( dynamic_cast< const EmptyTableModel* >( m_pModel.get() ) != NULL )
-            // if it's an EmptyTableModel, pretend that there is no model
-            return PTableModel();
-
-        return m_pModel;
-    }
-
-    //--------------------------------------------------------------------
+    //------------------------------------------------------------------------------------------------------------------
     void TableControl_Impl::setModel( PTableModel _pModel )
     {
         DBG_CHECK_ME();
@@ -451,7 +441,7 @@ namespace svt { namespace table
         if ( m_nColumnCount ) m_nCurColumn = 0;
     }
 
-    //--------------------------------------------------------------------
+    //------------------------------------------------------------------------------------------------------------------
     void TableControl_Impl::rowsInserted( RowPos first, RowPos last )
     {
         OSL_ENSURE( false, "TableControl_Impl::rowsInserted: not implemented!" );
@@ -460,7 +450,7 @@ namespace svt { namespace table
         OSL_UNUSED( last );
     }
 
-    //--------------------------------------------------------------------
+    //------------------------------------------------------------------------------------------------------------------
     void TableControl_Impl::rowsRemoved( RowPos first, RowPos last )
     {
         OSL_ENSURE( false, "TableControl_Impl::rowsRemoved: not implemented!" );
@@ -469,7 +459,7 @@ namespace svt { namespace table
         OSL_UNUSED( last );
     }
 
-    //--------------------------------------------------------------------
+    //------------------------------------------------------------------------------------------------------------------
     void TableControl_Impl::columnsInserted( ColPos i_first, ColPos i_last )
     {
         m_nColumnCount = m_pModel->getColumnCount();
@@ -482,7 +472,7 @@ namespace svt { namespace table
         OSL_UNUSED( i_last );
    }
 
-    //--------------------------------------------------------------------
+    //------------------------------------------------------------------------------------------------------------------
     void TableControl_Impl::columnsRemoved( ColPos i_first, ColPos i_last )
     {
         m_nColumnCount = m_pModel->getColumnCount();
@@ -495,7 +485,7 @@ namespace svt { namespace table
         OSL_UNUSED( i_last );
     }
 
-    //--------------------------------------------------------------------
+    //------------------------------------------------------------------------------------------------------------------
     void TableControl_Impl::columnMoved( ColPos oldIndex, ColPos newIndex )
     {
         OSL_ENSURE( false, "TableControl_Impl::columnMoved: not implemented!" );
@@ -504,7 +494,7 @@ namespace svt { namespace table
         OSL_UNUSED( newIndex );
     }
 
-    //--------------------------------------------------------------------
+    //------------------------------------------------------------------------------------------------------------------
     void TableControl_Impl::cellsUpdated( ColPos firstCol, ColPos lastCol, RowPos firstRow, RowPos lastRow )
     {
         OSL_ENSURE( false, "TableControl_Impl::cellsUpdated: not implemented!" );
@@ -515,7 +505,7 @@ namespace svt { namespace table
         OSL_UNUSED( lastRow );
     }
 
-    //--------------------------------------------------------------------
+    //------------------------------------------------------------------------------------------------------------------
     void TableControl_Impl::impl_invalidateColumn( ColPos const i_column )
     {
         DBG_CHECK_ME();
@@ -528,7 +518,7 @@ namespace svt { namespace table
             m_rAntiImpl.Invalidate( aColumn.getRect() );
     }
 
-    //--------------------------------------------------------------------
+    //------------------------------------------------------------------------------------------------------------------
     void TableControl_Impl::columnChanged( ColPos const i_column, ColumnAttributeGroup const i_attributeGroup )
     {
         ColumnAttributeGroup nGroup( i_attributeGroup );
@@ -550,7 +540,7 @@ namespace svt { namespace table
             "TableControl_Impl::columnChanged: don't know how to handle this change!" );
     }
 
-    //--------------------------------------------------------------------
+    //------------------------------------------------------------------------------------------------------------------
     void TableControl_Impl::impl_getAllVisibleCellsArea( Rectangle& _rCellArea ) const
     {
         DBG_CHECK_ME();
@@ -587,7 +577,7 @@ namespace svt { namespace table
             -   1;
     }
 
-    //--------------------------------------------------------------------
+    //------------------------------------------------------------------------------------------------------------------
     void TableControl_Impl::impl_getAllVisibleDataCellArea( Rectangle& _rCellArea ) const
     {
         DBG_CHECK_ME();
@@ -597,7 +587,7 @@ namespace svt { namespace table
         _rCellArea.Top() = m_nColHeaderHeightPixel;
     }
 
-    //--------------------------------------------------------------------
+    //------------------------------------------------------------------------------------------------------------------
     void TableControl_Impl::impl_ni_updateCachedModelValues()
     {
         m_nRowHeightPixel = 15;
@@ -622,7 +612,7 @@ namespace svt { namespace table
         m_nRowCount = m_pModel->getRowCount();
     }
 
-    //--------------------------------------------------------------------
+    //------------------------------------------------------------------------------------------------------------------
     void TableControl_Impl::impl_ni_updateColumnWidths()
     {
         ENSURE_OR_RETURN_VOID( !m_bUpdatingColWidths, "TableControl_Impl::impl_ni_updateColumnWidths: recursive call detected!" );
@@ -765,10 +755,10 @@ namespace svt { namespace table
         }
     }
 
-    //--------------------------------------------------------------------
+    //------------------------------------------------------------------------------------------------------------------
     namespace
     {
-        //................................................................
+        //..............................................................................................................
         /// determines whether a scrollbar is needed for the given values
         bool lcl_determineScrollbarNeed( long const i_position, ScrollbarVisibility const i_visibility,
             long const i_availableSpace, long const i_neededSpace )
@@ -784,7 +774,7 @@ namespace svt { namespace table
             return true;
         }
 
-        //................................................................
+        //..............................................................................................................
         void lcl_setButtonRepeat( Window& _rWindow, ULONG _nDelay )
         {
             AllSettings aSettings = _rWindow.GetSettings();
@@ -796,7 +786,7 @@ namespace svt { namespace table
             _rWindow.SetSettings( aSettings, TRUE );
         }
 
-        //................................................................
+        //..............................................................................................................
         void lcl_updateScrollbar( Window& _rParent, ScrollBar*& _rpBar,
             bool const i_needBar, long _nVisibleUnits,
             long _nPosition, long _nLineSize, long _nRange,
@@ -834,7 +824,7 @@ namespace svt { namespace table
             }
         }
 
-        //................................................................
+        //..............................................................................................................
         /** returns the number of rows fitting into the given range,
             for the given row height. Partially fitting rows are counted, too, if the
             respective parameter says so.
@@ -846,7 +836,7 @@ namespace svt { namespace table
                 :   _nOverallHeight / _nRowHeightPixel;
         }
 
-        //................................................................
+        //..............................................................................................................
         /** returns the number of columns fitting into the given area,
             with the first visible column as given. Partially fitting columns are counted, too,
             if the respective parameter says so.
@@ -871,7 +861,7 @@ namespace svt { namespace table
 
     }
 
-    //--------------------------------------------------------------------
+    //------------------------------------------------------------------------------------------------------------------
     void TableControl_Impl::impl_ni_updateScrollbars()
     {
         TempHideCursor aHideCursor( *this );
@@ -1013,7 +1003,7 @@ namespace svt { namespace table
         ) );
     }
 
-    //--------------------------------------------------------------------
+    //------------------------------------------------------------------------------------------------------------------
     void TableControl_Impl::onResize()
     {
         DBG_CHECK_ME();
@@ -1046,7 +1036,7 @@ namespace svt { namespace table
         }
     }
 
-    //--------------------------------------------------------------------
+    //------------------------------------------------------------------------------------------------------------------
     void TableControl_Impl::doPaintContent( const Rectangle& _rUpdateRect )
     {
         DBG_CHECK_ME();
@@ -1202,7 +1192,7 @@ namespace svt { namespace table
             }
         }
     }
-    //--------------------------------------------------------------------
+    //------------------------------------------------------------------------------------------------------------------
     void TableControl_Impl::hideCursor()
     {
         DBG_CHECK_ME();
@@ -1211,7 +1201,7 @@ namespace svt { namespace table
             impl_ni_doSwitchCursor( false );
     }
 
-    //--------------------------------------------------------------------
+    //------------------------------------------------------------------------------------------------------------------
     void TableControl_Impl::showCursor()
     {
         DBG_CHECK_ME();
@@ -1221,7 +1211,7 @@ namespace svt { namespace table
             impl_ni_doSwitchCursor( true );
     }
 
-    //--------------------------------------------------------------------
+    //------------------------------------------------------------------------------------------------------------------
     bool TableControl_Impl::dispatchAction( TableControlAction _eAction )
     {
         DBG_CHECK_ME();
@@ -1600,7 +1590,7 @@ namespace svt { namespace table
         return bSuccess;
     }
 
-    //--------------------------------------------------------------------
+    //------------------------------------------------------------------------------------------------------------------
     void TableControl_Impl::impl_ni_doSwitchCursor( bool _bShow )
     {
         PTableRenderer pRenderer = !!m_pModel ? m_pModel->getRenderer() : PTableRenderer();
@@ -1617,7 +1607,7 @@ namespace svt { namespace table
         }
     }
 
-    //--------------------------------------------------------------------
+    //------------------------------------------------------------------------------------------------------------------
     void TableControl_Impl::impl_getCellRect( ColPos _nColumn, RowPos _nRow, Rectangle& _rCellRect ) const
     {
         DBG_CHECK_ME();
@@ -1638,7 +1628,8 @@ namespace svt { namespace table
         _rCellRect = aCell.getRect();
         _rCellRect.Top()--;_rCellRect.Left()--;
     }
-    //-------------------------------------------------------------------------------
+
+    //------------------------------------------------------------------------------------------------------------------
     RowPos TableControl_Impl::getRowAtPoint( const Point& rPoint )
     {
         DBG_CHECK_ME();
@@ -1659,7 +1650,7 @@ namespace svt { namespace table
         return ROW_INVALID;
     }
 
-    //-------------------------------------------------------------------------------
+    //------------------------------------------------------------------------------------------------------------------
     ColPos TableControl_Impl::getColAtPoint( const Point& rPoint )
     {
         DBG_CHECK_ME();
@@ -1681,7 +1672,13 @@ namespace svt { namespace table
         return COL_INVALID;
     }
 
-    //-------------------------------------------------------------------------------
+    //------------------------------------------------------------------------------------------------------------------
+    PTableModel TableControl_Impl::getModel() const
+    {
+        return m_pModel;
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
     void TableControl_Impl::activateCellAt(const Point& rPoint)
     {
         DBG_CHECK_ME();
@@ -1698,7 +1695,7 @@ namespace svt { namespace table
             ensureVisible( m_nCurColumn, m_nCurRow, true );
         }
     }
-    //-------------------------------------------------------------------------------
+    //------------------------------------------------------------------------------------------------------------------
     void TableControl_Impl::invalidateSelectedRegion(RowPos _nPrevRow, RowPos _nCurRow, Rectangle& _rCellRect)
     {
         DBG_CHECK_ME();
@@ -1735,7 +1732,7 @@ namespace svt { namespace table
         }
         m_pDataWindow->Invalidate(_rCellRect);
     }
-    //-------------------------------------------------------------------------------
+    //------------------------------------------------------------------------------------------------------------------
     //this method is to be called, when a new row is added
     void TableControl_Impl::invalidateRow(RowPos _nRowPos, Rectangle& _rCellRect)
     {
@@ -1748,7 +1745,7 @@ namespace svt { namespace table
         impl_ni_updateScrollbars();
         m_pDataWindow->Invalidate(_rRow.getRect());
     }
-    //-------------------------------------------------------------------------------
+    //------------------------------------------------------------------------------------------------------------------
     std::vector<RowPos>& TableControl_Impl::getSelectedRows()
     {
         return m_nRowSelected;
@@ -1759,7 +1756,7 @@ namespace svt { namespace table
         m_nRowSelected.clear();
     }
     //--------------------------------------------------------------------
-    //-------------------------------------------------------------------------------
+    //------------------------------------------------------------------------------------------------------------------
     void TableControl_Impl::removeSelectedRow(RowPos _nRowPos)
     {
         int i =0;
@@ -2027,44 +2024,44 @@ namespace svt { namespace table
         return (TableSize)( m_nLeftColumn - nOldLeftColumn );
     }
 
-    //-------------------------------------------------------------------------------
+    //------------------------------------------------------------------------------------------------------------------
     TableSize TableControl_Impl::impl_scrollColumns( TableSize const i_columnDelta )
     {
         DBG_CHECK_ME();
         return impl_ni_ScrollColumns( i_columnDelta );
     }
 
-    //-------------------------------------------------------------------------------
+    //------------------------------------------------------------------------------------------------------------------
     SelectionEngine* TableControl_Impl::getSelEngine()
     {
         return m_pSelEngine;
     }
-    //-------------------------------------------------------------------------------
+    //------------------------------------------------------------------------------------------------------------------
     TableDataWindow* TableControl_Impl::getDataWindow()
     {
         return m_pDataWindow;
     }
-    //-------------------------------------------------------------------------------
+    //------------------------------------------------------------------------------------------------------------------
     ScrollBar* TableControl_Impl::getHorzScrollbar()
     {
         return m_pHScroll;
     }
-    //-------------------------------------------------------------------------------
+    //------------------------------------------------------------------------------------------------------------------
     ScrollBar* TableControl_Impl::getVertScrollbar()
     {
         return m_pVScroll;
     }
-    //-------------------------------------------------------------------------------
+    //------------------------------------------------------------------------------------------------------------------
     BOOL TableControl_Impl::isRowSelected(const ::std::vector<RowPos>& selectedRows, RowPos current)
     {
         return ::std::find(selectedRows.begin(),selectedRows.end(),current) != selectedRows.end();
     }
-        //-------------------------------------------------------------------------------
+        //------------------------------------------------------------------------------------------------------------------
     bool TableControl_Impl::isRowSelected(RowPos current)
     {
         return ::std::find(m_nRowSelected.begin(),m_nRowSelected.end(),current) != m_nRowSelected.end();
     }
-    //-------------------------------------------------------------------------------
+    //------------------------------------------------------------------------------------------------------------------
     int TableControl_Impl::getRowSelectedNumber(const ::std::vector<RowPos>& selectedRows, RowPos current)
     {
         std::vector<RowPos>::const_iterator it = ::std::find(selectedRows.begin(),selectedRows.end(),current);
@@ -2272,31 +2269,31 @@ namespace svt { namespace table
 
         return 0L;
     }
-    //---------------------------------------------------------------------------------------
+    //------------------------------------------------------------------------------------------------------------------
     TableFunctionSet::TableFunctionSet(TableControl_Impl* _pTableControl)
         :m_pTableControl( _pTableControl)
     ,m_nCurrentRow (-2)
     {
     }
-    //-------------------------------------------------------------------------------
+    //------------------------------------------------------------------------------------------------------------------
     TableFunctionSet::~TableFunctionSet()
     {
     }
-    //-------------------------------------------------------------------------------
+    //------------------------------------------------------------------------------------------------------------------
     void TableFunctionSet::BeginDrag()
     {
     }
-    //-------------------------------------------------------------------------------
+    //------------------------------------------------------------------------------------------------------------------
     void TableFunctionSet::CreateAnchor()
     {
         m_pTableControl->m_nAnchor = m_pTableControl->m_nCurRow;
     }
-    //-------------------------------------------------------------------------------
+    //------------------------------------------------------------------------------------------------------------------
     void TableFunctionSet::DestroyAnchor()
     {
         m_pTableControl->m_nAnchor = -1;
     }
-    //-------------------------------------------------------------------------------
+    //------------------------------------------------------------------------------------------------------------------
     BOOL TableFunctionSet::SetCursorAtPoint(const Point& rPoint, BOOL bDontSelectAtCursor)
     {
         BOOL bHandled = FALSE;
@@ -2379,7 +2376,7 @@ namespace svt { namespace table
         m_pTableControl->ensureVisible( newCol, newRow, true );
         return bHandled;
     }
-    //-------------------------------------------------------------------------------
+    //------------------------------------------------------------------------------------------------------------------
     BOOL TableFunctionSet::IsSelectionAtPoint( const Point& rPoint )
     {
         m_pTableControl->m_pSelEngine->AddAlways(FALSE);
@@ -2394,7 +2391,7 @@ namespace svt { namespace table
             return selected;
         }
     }
-    //-------------------------------------------------------------------------------
+    //------------------------------------------------------------------------------------------------------------------
     void TableFunctionSet::DeselectAtPoint( const Point& rPoint )
     {
         (void)rPoint;
@@ -2413,7 +2410,7 @@ namespace svt { namespace table
         }
         m_pTableControl->m_nRowSelected.erase(m_pTableControl->m_nRowSelected.begin()+pos);
     }
-    //-------------------------------------------------------------------------------
+    //------------------------------------------------------------------------------------------------------------------
     void TableFunctionSet::DeselectAll()
     {
         if(!m_pTableControl->m_nRowSelected.empty())
@@ -2428,6 +2425,6 @@ namespace svt { namespace table
         }
     }
 
-//........................................................................
+//......................................................................................................................
 } } // namespace svt::table
-//........................................................................
+//......................................................................................................................

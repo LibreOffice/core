@@ -50,16 +50,16 @@ namespace svt { namespace table
         DefaultInputHandler();
         ~DefaultInputHandler();
 
-        virtual bool    MouseMove       ( IAbstractTableControl& _rControl, const MouseEvent& rMEvt );
-        virtual bool    MouseButtonDown ( IAbstractTableControl& _rControl, const MouseEvent& rMEvt );
-        virtual bool    MouseButtonUp   ( IAbstractTableControl& _rControl, const MouseEvent& rMEvt );
-        virtual bool    KeyInput        ( IAbstractTableControl& _rControl, const KeyEvent& rKEvt );
-        virtual bool    GetFocus        ( IAbstractTableControl& _rControl );
-        virtual bool    LoseFocus       ( IAbstractTableControl& _rControl );
-        virtual bool    RequestHelp     ( IAbstractTableControl& _rControl, const HelpEvent& rHEvt );
-        virtual bool    Command         ( IAbstractTableControl& _rControl, const CommandEvent& rCEvt );
-        virtual bool    PreNotify       ( IAbstractTableControl& _rControl, NotifyEvent& rNEvt );
-        virtual bool    Notify          ( IAbstractTableControl& _rControl, NotifyEvent& rNEvt );
+        virtual bool    MouseMove       ( ITableControl& _rControl, const MouseEvent& rMEvt );
+        virtual bool    MouseButtonDown ( ITableControl& _rControl, const MouseEvent& rMEvt );
+        virtual bool    MouseButtonUp   ( ITableControl& _rControl, const MouseEvent& rMEvt );
+        virtual bool    KeyInput        ( ITableControl& _rControl, const KeyEvent& rKEvt );
+        virtual bool    GetFocus        ( ITableControl& _rControl );
+        virtual bool    LoseFocus       ( ITableControl& _rControl );
+        virtual bool    RequestHelp     ( ITableControl& _rControl, const HelpEvent& rHEvt );
+        virtual bool    Command         ( ITableControl& _rControl, const CommandEvent& rCEvt );
+        virtual bool    PreNotify       ( ITableControl& _rControl, NotifyEvent& rNEvt );
+        virtual bool    Notify          ( ITableControl& _rControl, NotifyEvent& rNEvt );
     };
 
 //........................................................................
