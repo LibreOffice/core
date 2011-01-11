@@ -45,9 +45,9 @@ namespace oox {
 /** Contains tables for named drawing objects for a document model.
 
     Contains tables for named line markers, line dashes, fill gradients, and
-    fill bitmaps. The class is needed to handle different document models in
-    the same filter (e.g. embedded charts) which carry their own drawing object
-    tables.
+    fill bitmap URLs. The class is needed to handle different document models
+    in the same filter (e.g. embedded charts) which carry their own drawing
+    object tables.
  */
 class ModelObjectHelper
 {
@@ -72,18 +72,18 @@ public:
         an internal constant name with a new unused index appended. */
     ::rtl::OUString     insertFillGradient( const ::com::sun::star::awt::Gradient& rGradient );
 
-    /** Inserts a new named fill bitmap, returns the bitmap name, based on an
-        internal constant name with a new unused index appended. */
-    ::rtl::OUString     insertFillBitmap( const ::rtl::OUString& rGraphicUrl );
+    /** Inserts a new named fill bitmap URL, returns the bitmap name, based on
+        an internal constant name with a new unused index appended. */
+    ::rtl::OUString     insertFillBitmapUrl( const ::rtl::OUString& rGraphicUrl );
 
 private:
     ObjectContainer     maMarkerContainer;
     ObjectContainer     maDashContainer;
     ObjectContainer     maGradientContainer;
-    ObjectContainer     maBitmapContainer;
+    ObjectContainer     maBitmapUrlContainer;
     const ::rtl::OUString maDashNameBase;
     const ::rtl::OUString maGradientNameBase;
-    const ::rtl::OUString maBitmapNameBase;
+    const ::rtl::OUString maBitmapUrlNameBase;
 };
 
 // ============================================================================

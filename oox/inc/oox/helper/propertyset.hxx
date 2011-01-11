@@ -84,21 +84,19 @@ public:
     // Get properties ---------------------------------------------------------
 
     /** Gets the specified property from the property set.
-        @return  true, if the any could be filled with the property value. */
-    bool                getAnyProperty( ::com::sun::star::uno::Any& orValue, sal_Int32 nPropId ) const;
+        @return  the property value, or an empty Any, if the property is missing. */
+    ::com::sun::star::uno::Any getAnyProperty( sal_Int32 nPropId ) const;
 
     /** Gets the specified property from the property set.
         @return  true, if the passed variable could be filled with the property value. */
     template< typename Type >
-    inline bool         getProperty( Type& orValue, sal_Int32 nPropId ) const;
-
-    /** Gets the specified property from the property set.
-        @return  the property value, or an empty Any, if the property is missing. */
-    ::com::sun::star::uno::Any getAnyProperty( sal_Int32 nPropId ) const;
+    inline bool         getProperty( Type& orValue, sal_Int32 nPropId ) const
+                            { return getAnyProperty( nPropId ) >>= orValue; }
 
     /** Gets the specified boolean property from the property set.
         @return  true = property contains true; false = property contains false or error occured. */
-    bool                getBoolProperty( sal_Int32 nPropId ) const;
+    inline bool         getBoolProperty( sal_Int32 nPropId ) const
+                            { bool bValue = false; return getProperty( bValue, nPropId ) && bValue; }
 
     /** Gets the specified properties from the property set. Tries to use the XMultiPropertySet interface.
         @param orValues  (out-parameter) The related property values.
@@ -110,11 +108,12 @@ public:
     // Set properties ---------------------------------------------------------
 
     /** Puts the passed any into the property set. */
-    void                setAnyProperty( sal_Int32 nPropId, const ::com::sun::star::uno::Any& rValue );
+    bool                setAnyProperty( sal_Int32 nPropId, const ::com::sun::star::uno::Any& rValue );
 
     /** Puts the passed value into the property set. */
     template< typename Type >
-    inline void         setProperty( sal_Int32 nPropId, const Type& rValue );
+    inline bool         setProperty( sal_Int32 nPropId, const Type& rValue )
+                            { return setAnyProperty( nPropId, ::com::sun::star::uno::Any( rValue ) ); }
 
     /** Puts the passed properties into the property set. Tries to use the XMultiPropertySet interface.
         @param rPropNames  The property names. MUST be ordered alphabetically.
@@ -135,10 +134,10 @@ public:
 private:
     /** Gets the specified property from the property set.
         @return  true, if the any could be filled with the property value. */
-    bool                getAnyProperty( ::com::sun::star::uno::Any& orValue, const ::rtl::OUString& rPropName ) const;
+    bool                implGetPropertyValue( ::com::sun::star::uno::Any& orValue, const ::rtl::OUString& rPropName ) const;
 
     /** Puts the passed any into the property set. */
-    void                setAnyProperty( const ::rtl::OUString& rPropName, const ::com::sun::star::uno::Any& rValue );
+    bool                implSetPropertyValue( const ::rtl::OUString& rPropName, const ::com::sun::star::uno::Any& rValue );
 
 private:
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
@@ -146,21 +145,6 @@ private:
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XMultiPropertySet >
                         mxMultiPropSet;     /// The optional multi property set interface.
 };
-
-// ----------------------------------------------------------------------------
-
-template< typename Type >
-inline bool PropertySet::getProperty( Type& orValue, sal_Int32 nPropId ) const
-{
-    ::com::sun::star::uno::Any aAny;
-    return getAnyProperty( aAny, nPropId ) && (aAny >>= orValue);
-}
-
-template< typename Type >
-inline void PropertySet::setProperty( sal_Int32 nPropId, const Type& rValue )
-{
-    setAnyProperty( nPropId, ::com::sun::star::uno::Any( rValue ) );
-}
 
 // ============================================================================
 

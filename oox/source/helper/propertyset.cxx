@@ -52,22 +52,10 @@ void PropertySet::set( const Reference< XPropertySet >& rxPropSet )
 
 // Get properties -------------------------------------------------------------
 
-bool PropertySet::getAnyProperty( Any& orValue, sal_Int32 nPropId ) const
-{
-    return getAnyProperty( orValue, PropertyMap::getPropertyName( nPropId ) );
-}
-
 Any PropertySet::getAnyProperty( sal_Int32 nPropId ) const
 {
     Any aValue;
-    return getAnyProperty( aValue, nPropId ) ? aValue : Any();
-}
-
-bool PropertySet::getBoolProperty( sal_Int32 nPropId ) const
-{
-    Any aAny;
-    bool bValue = false;
-    return getAnyProperty( aAny, nPropId ) && (aAny >>= bValue) && bValue;
+    return implGetPropertyValue( aValue, PropertyMap::getPropertyName( nPropId ) ) ? aValue : Any();
 }
 
 void PropertySet::getProperties( Sequence< Any >& orValues, const Sequence< OUString >& rPropNames ) const
@@ -90,15 +78,15 @@ void PropertySet::getProperties( Sequence< Any >& orValues, const Sequence< OUSt
         orValues.realloc( nLen );
         Any* pValue = orValues.getArray();
         for( ; pPropName != pPropNameEnd; ++pPropName, ++pValue )
-            getAnyProperty( *pValue, *pPropName );
+            implGetPropertyValue( *pValue, *pPropName );
     }
 }
 
 // Set properties -------------------------------------------------------------
 
-void PropertySet::setAnyProperty( sal_Int32 nPropId, const Any& rValue )
+bool PropertySet::setAnyProperty( sal_Int32 nPropId, const Any& rValue )
 {
-    setAnyProperty( PropertyMap::getPropertyName( nPropId ), rValue );
+    return implSetPropertyValue( PropertyMap::getPropertyName( nPropId ), rValue );
 }
 
 void PropertySet::setProperties( const Sequence< OUString >& rPropNames, const Sequence< Any >& rValues )
@@ -122,7 +110,7 @@ void PropertySet::setProperties( const Sequence< OUString >& rPropNames, const S
         const OUString* pPropNameEnd = pPropName + rPropNames.getLength();
         const Any* pValue = rValues.getConstArray();
         for( ; pPropName != pPropNameEnd; ++pPropName, ++pValue )
-            setAnyProperty( *pPropName, *pValue );
+            implSetPropertyValue( *pPropName, *pValue );
     }
 }
 
@@ -139,37 +127,34 @@ void PropertySet::setProperties( const PropertyMap& rPropertyMap )
 
 // private --------------------------------------------------------------------
 
-bool PropertySet::getAnyProperty( Any& orValue, const OUString& rPropName ) const
+bool PropertySet::implGetPropertyValue( Any& orValue, const OUString& rPropName ) const
 {
-    bool bHasValue = false;
-    try
+    if( mxPropSet.is() ) try
     {
-        if( mxPropSet.is() )
-        {
-            orValue = mxPropSet->getPropertyValue( rPropName );
-            bHasValue = true;
-        }
+        orValue = mxPropSet->getPropertyValue( rPropName );
+        return true;
     }
     catch( Exception& )
     {
-        OSL_ENSURE( false, OStringBuffer( "PropertySet::getAnyProperty - cannot get property \"" ).
+        OSL_ENSURE( false, OStringBuffer( "PropertySet::implGetPropertyValue - cannot get property \"" ).
             append( OUStringToOString( rPropName, RTL_TEXTENCODING_ASCII_US ) ).append( '"' ).getStr() );
     }
-    return bHasValue;
+    return false;
 }
 
-void PropertySet::setAnyProperty( const OUString& rPropName, const Any& rValue )
+bool PropertySet::implSetPropertyValue( const OUString& rPropName, const Any& rValue )
 {
-    try
+    if( mxPropSet.is() ) try
     {
-        if( mxPropSet.is() )
-            mxPropSet->setPropertyValue( rPropName, rValue );
+        mxPropSet->setPropertyValue( rPropName, rValue );
+        return true;
     }
     catch( Exception& )
     {
-        OSL_ENSURE( false, OStringBuffer( "PropertySet::setAnyProperty - cannot set property \"" ).
+        OSL_ENSURE( false, OStringBuffer( "PropertySet::implSetPropertyValue - cannot set property \"" ).
             append( OUStringToOString( rPropName, RTL_TEXTENCODING_ASCII_US ) ).append( '"' ).getStr() );
     }
+    return false;
 }
 
 #if OSL_DEBUG_LEVEL > 0

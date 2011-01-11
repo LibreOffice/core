@@ -45,13 +45,13 @@ namespace oox {
 // ============================================================================
 
 ModelObjectHelper::ModelObjectHelper( const Reference< XMultiServiceFactory >& rxModelFactory ) :
-    maMarkerContainer(   rxModelFactory, CREATE_OUSTRING( "com.sun.star.drawing.MarkerTable" ) ),
-    maDashContainer(     rxModelFactory, CREATE_OUSTRING( "com.sun.star.drawing.DashTable" ) ),
-    maGradientContainer( rxModelFactory, CREATE_OUSTRING( "com.sun.star.drawing.GradientTable" ) ),
-    maBitmapContainer(   rxModelFactory, CREATE_OUSTRING( "com.sun.star.drawing.BitmapTable" ) ),
-    maDashNameBase( CREATE_OUSTRING( "msLineDash " ) ),
-    maGradientNameBase( CREATE_OUSTRING( "msFillGradient " ) ),
-    maBitmapNameBase( CREATE_OUSTRING( "msFillBitmap " ) )
+    maMarkerContainer(    rxModelFactory, CREATE_OUSTRING( "com.sun.star.drawing.MarkerTable" ) ),
+    maDashContainer(      rxModelFactory, CREATE_OUSTRING( "com.sun.star.drawing.DashTable" ) ),
+    maGradientContainer(  rxModelFactory, CREATE_OUSTRING( "com.sun.star.drawing.GradientTable" ) ),
+    maBitmapUrlContainer( rxModelFactory, CREATE_OUSTRING( "com.sun.star.drawing.BitmapTable" ) ),
+    maDashNameBase(      CREATE_OUSTRING( "msLineDash " ) ),
+    maGradientNameBase(  CREATE_OUSTRING( "msFillGradient " ) ),
+    maBitmapUrlNameBase( CREATE_OUSTRING( "msFillBitmap " ) )
 {
 }
 
@@ -78,10 +78,10 @@ OUString ModelObjectHelper::insertFillGradient( const Gradient& rGradient )
     return maGradientContainer.insertObject( maGradientNameBase, Any( rGradient ), true );
 }
 
-OUString ModelObjectHelper::insertFillBitmap( const OUString& rGraphicUrl )
+OUString ModelObjectHelper::insertFillBitmapUrl( const OUString& rGraphicUrl )
 {
     if( rGraphicUrl.getLength() > 0 )
-        return maBitmapContainer.insertObject( maBitmapNameBase, Any( rGraphicUrl ), true );
+        return maBitmapUrlContainer.insertObject( maBitmapUrlNameBase, Any( rGraphicUrl ), true );
     return OUString();
 }
 

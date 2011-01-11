@@ -36,6 +36,8 @@ namespace com { namespace sun { namespace star {
     namespace drawing { class XShapes; }
 } } }
 
+namespace oox { namespace drawingml { class ShapePropertyMap; } }
+
 namespace oox {
 namespace xls {
 
@@ -201,11 +203,11 @@ protected:
     void                readMacroBiff8( BiffInputStream& rStrm );
 
     /** Converts the passed line formatting to the passed property map. */
-    void                convertLineProperties( PropertyMap& rPropMap, const BiffObjLineModel& rLineModel, sal_uInt16 nArrows = 0 ) const;
+    void                convertLineProperties( ::oox::drawingml::ShapePropertyMap& rPropMap, const BiffObjLineModel& rLineModel, sal_uInt16 nArrows = 0 ) const;
     /** Converts the passed fill formatting to the passed property map. */
-    void                convertFillProperties( PropertyMap& rPropMap, const BiffObjFillModel& rFillModel ) const;
+    void                convertFillProperties( ::oox::drawingml::ShapePropertyMap& rPropMap, const BiffObjFillModel& rFillModel ) const;
     /** Converts the passed frame flags to the passed property map. */
-    void                convertFrameProperties( PropertyMap& rPropMap, sal_uInt16 nFrameFlags ) const;
+    void                convertFrameProperties( ::oox::drawingml::ShapePropertyMap& rPropMap, sal_uInt16 nFrameFlags ) const;
 
     /** Derived classes read the contents of the a BIFF3 OBJ record from the passed stream. */
     virtual void        implReadObjBiff3( BiffInputStream& rStrm, sal_uInt16 nMacroSize );
@@ -340,7 +342,7 @@ protected:
     void                readFrameData( BiffInputStream& rStrm );
 
     /** Converts fill formatting, line formatting, and frame style. */
-    void                convertRectProperties( PropertyMap& rPropMap ) const;
+    void                convertRectProperties( ::oox::drawingml::ShapePropertyMap& rPropMap ) const;
 
     /** Reads the contents of the a BIFF3 OBJ record from the passed stream. */
     virtual void        implReadObjBiff3( BiffInputStream& rStrm, sal_uInt16 nMacroSize );

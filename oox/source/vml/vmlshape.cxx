@@ -36,8 +36,8 @@
 #include <com/sun/star/drawing/XShapes.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include "properties.hxx"
+#include "oox/drawingml/shapepropertymap.hxx"
 #include "oox/helper/graphichelper.hxx"
-#include "oox/helper/propertymap.hxx"
 #include "oox/helper/propertyset.hxx"
 #include "oox/core/xmlfilterbase.hxx"
 #include "oox/ole/axcontrol.hxx"
@@ -313,15 +313,11 @@ Rectangle ShapeBase::calcShapeRectangle( const ShapeParentAnchor* pParentAnchor 
 
 void ShapeBase::convertShapeProperties( const Reference< XShape >& rxShape ) const
 {
-    ModelObjectHelper& rModelObjectHelper = mrDrawing.getFilter().getModelObjectHelper();
+    ::oox::drawingml::ShapePropertyMap aPropMap( mrDrawing.getFilter().getModelObjectHelper() );
     const GraphicHelper& rGraphicHelper = mrDrawing.getFilter().getGraphicHelper();
-
-    PropertyMap aPropMap;
-    maTypeModel.maStrokeModel.pushToPropMap( aPropMap, rModelObjectHelper, rGraphicHelper );
-    maTypeModel.maFillModel.pushToPropMap( aPropMap, rModelObjectHelper, rGraphicHelper );
-
-    PropertySet aPropSet( rxShape );
-    aPropSet.setProperties( aPropMap );
+    maTypeModel.maStrokeModel.pushToPropMap( aPropMap, rGraphicHelper );
+    maTypeModel.maFillModel.pushToPropMap( aPropMap, rGraphicHelper );
+    PropertySet( rxShape ).setProperties( aPropMap );
 }
 
 // ============================================================================

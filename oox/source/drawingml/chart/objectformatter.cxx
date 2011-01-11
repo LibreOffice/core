@@ -32,14 +32,15 @@
 #include <com/sun/star/util/XNumberFormatTypes.hpp>
 #include "properties.hxx"
 #include "tokens.hxx"
-#include "oox/helper/modelobjecthelper.hxx"
 #include "oox/core/xmlfilterbase.hxx"
 #include "oox/drawingml/fillproperties.hxx"
 #include "oox/drawingml/lineproperties.hxx"
+#include "oox/drawingml/shapepropertymap.hxx"
 #include "oox/drawingml/textbody.hxx"
 #include "oox/drawingml/textparagraph.hxx"
 #include "oox/drawingml/theme.hxx"
 #include "oox/drawingml/chart/chartspacemodel.hxx"
+#include "oox/helper/modelobjecthelper.hxx"
 
 using ::rtl::OStringBuffer;
 using ::rtl::OUString;
@@ -494,19 +495,50 @@ const AutoTextEntry* lclGetAutoTextEntry( const AutoTextEntry* pEntries, sal_Int
 
 // ----------------------------------------------------------------------------
 
-/** Enumerates different sets of property names for chart object formatting. */
-enum PropertyType
+/** Property identifiers for common chart objects, to be used in ShapePropertyInfo. */
+static const sal_Int32 spnCommonPropIds[] =
 {
-    PROPERTYTYPE_COMMON,            /// Common objects, no special handling.
-    PROPERTYTYPE_LINEARSERIES,      /// Specific to linear data series.
-    PROPERTYTYPE_FILLEDSERIES       /// Specific to filled data series.
+    PROP_LineStyle, PROP_LineWidth, PROP_LineColor, PROP_LineTransparence, PROP_LineDashName,
+    PROP_INVALID, PROP_INVALID, PROP_INVALID, PROP_INVALID, PROP_INVALID, PROP_INVALID, PROP_INVALID,
+    PROP_FillStyle, PROP_FillColor, PROP_FillTransparence, PROP_FillGradientName,
+    PROP_FillBitmapName, PROP_FillBitmapMode, PROP_FillBitmapSizeX, PROP_FillBitmapSizeY,
+    PROP_FillBitmapPositionOffsetX, PROP_FillBitmapPositionOffsetY, PROP_FillBitmapRectanglePoint
 };
+
+/** Property identifiers for linear data series, to be used in ShapePropertyInfo. */
+static const sal_Int32 spnLinearPropIds[] =
+{
+    PROP_LineStyle, PROP_LineWidth, PROP_Color, PROP_Transparency, PROP_LineDashName,
+    PROP_INVALID, PROP_INVALID, PROP_INVALID, PROP_INVALID, PROP_INVALID, PROP_INVALID, PROP_INVALID,
+    PROP_INVALID, PROP_INVALID, PROP_INVALID, PROP_INVALID,
+    PROP_INVALID, PROP_INVALID, PROP_INVALID, PROP_INVALID,
+    PROP_INVALID, PROP_INVALID, PROP_INVALID
+};
+
+/** Property identifiers for filled data series, to be used in ShapePropertyInfo. */
+static const sal_Int32 spnFilledPropIds[] =
+{
+    PROP_BorderStyle, PROP_BorderWidth, PROP_BorderColor, PROP_BorderTransparency, PROP_BorderDashName,
+    PROP_INVALID, PROP_INVALID, PROP_INVALID, PROP_INVALID, PROP_INVALID, PROP_INVALID, PROP_INVALID,
+    PROP_FillStyle, PROP_Color, PROP_Transparency, PROP_GradientName,
+    PROP_FillBitmapName, PROP_FillBitmapMode, PROP_FillBitmapSizeX, PROP_FillBitmapSizeY,
+    PROP_FillBitmapPositionOffsetX, PROP_FillBitmapPositionOffsetY, PROP_FillBitmapRectanglePoint
+};
+
+/** Property info for common chart objects, to be used in ShapePropertyMap. */
+static const ShapePropertyInfo saCommonPropInfo( spnCommonPropIds, false, true, true, true );
+/** Property info for linear data series, to be used in ShapePropertyMap. */
+static const ShapePropertyInfo saLinearPropInfo( spnLinearPropIds, false, true, true, true );
+/** Property info for filled data series, to be used in ShapePropertyMap. */
+static const ShapePropertyInfo saFilledPropInfo( spnFilledPropIds, false, true, true, true );
+
+// ----------------------------------------------------------------------------
 
 /** Contains information about formatting of a specific chart object type. */
 struct ObjectTypeFormatEntry
 {
     ObjectType          meObjType;          /// Object type for automatic format.
-    PropertyType        mePropType;         /// Property type for property names.
+    const ShapePropertyInfo* mpPropInfo;    /// Property info for the ShapePropertyMap class.
     const AutoFormatEntry* mpAutoLines;     /// Automatic line formatting for all chart styles.
     const AutoFormatEntry* mpAutoFills;     /// Automatic fill formatting for all chart styles.
     const AutoFormatEntry* mpAutoEffects;   /// Automatic effect formatting for all chart styles.
@@ -522,37 +554,38 @@ struct ObjectTypeFormatEntry
 
 static const ObjectTypeFormatEntry spObjTypeFormatEntries[] =
 {
-    //                object type                property type              auto text          auto line            auto fill              auto effect
-    TYPEFORMAT_FRAME( OBJECTTYPE_CHARTSPACE,     PROPERTYTYPE_COMMON,       0,                 spChartSpaceLines,   spChartSpaceFills,     0 /* eq to Ch2 */ ),
-    TYPEFORMAT_FRAME( OBJECTTYPE_CHARTTITLE,     PROPERTYTYPE_COMMON,       spChartTitleTexts, 0 /* eq to Ch2 */,   0 /* eq to Ch2 */,     0 /* eq to Ch2 */ ),
-    TYPEFORMAT_FRAME( OBJECTTYPE_LEGEND,         PROPERTYTYPE_COMMON,       spOtherTexts,      spNoFormats,         spNoFormats,           0 /* eq to Ch2 */ ),
-    TYPEFORMAT_FRAME( OBJECTTYPE_PLOTAREA2D,     PROPERTYTYPE_COMMON,       0,                 0 /* eq to Ch2 */,   spPlotArea2dFills,     0 /* eq to Ch2 */ ),
-    TYPEFORMAT_FRAME( OBJECTTYPE_PLOTAREA3D,     PROPERTYTYPE_COMMON,       0,                 0 /* eq to Ch2 */,   0 /* eq to Ch2 */,     0 /* eq to Ch2 */ ),
-    TYPEFORMAT_FRAME( OBJECTTYPE_WALL,           PROPERTYTYPE_COMMON,       0,                 0 /* eq to Ch2 */,   spWallFloorFills,      0 /* eq to Ch2 */ ),
-    TYPEFORMAT_FRAME( OBJECTTYPE_FLOOR,          PROPERTYTYPE_COMMON,       0,                 spFloorLines,        spWallFloorFills,      0 /* eq to Ch2 */ ),
-    TYPEFORMAT_LINE(  OBJECTTYPE_AXIS,           PROPERTYTYPE_COMMON,       spOtherTexts,      spAxisLines ),
-    TYPEFORMAT_FRAME( OBJECTTYPE_AXISTITLE,      PROPERTYTYPE_COMMON,       spAxisTitleTexts,  0 /* eq to Ch2 */,   0 /* eq to Ch2 */,     0 /* eq to Ch2 */ ),
-    TYPEFORMAT_FRAME( OBJECTTYPE_AXISUNIT,       PROPERTYTYPE_COMMON,       spAxisTitleTexts,  0 /* eq in Ch2 */,   0 /* eq in Ch2 */,     0 /* eq in Ch2 */ ),
-    TYPEFORMAT_LINE(  OBJECTTYPE_MAJORGRIDLINE,  PROPERTYTYPE_COMMON,       0,                 spMajorGridLines ),
-    TYPEFORMAT_LINE(  OBJECTTYPE_MINORGRIDLINE,  PROPERTYTYPE_COMMON,       0,                 spMinorGridLines ),
-    TYPEFORMAT_LINE(  OBJECTTYPE_LINEARSERIES2D, PROPERTYTYPE_LINEARSERIES, 0,                 spLinearSeriesLines ),
-    TYPEFORMAT_FRAME( OBJECTTYPE_FILLEDSERIES2D, PROPERTYTYPE_FILLEDSERIES, 0,                 spFilledSeriesLines, spFilledSeries2dFills, spFilledSeriesEffects ),
-    TYPEFORMAT_FRAME( OBJECTTYPE_FILLEDSERIES3D, PROPERTYTYPE_FILLEDSERIES, 0,                 spFilledSeriesLines, spFilledSeries3dFills, spFilledSeriesEffects ),
-    TYPEFORMAT_FRAME( OBJECTTYPE_DATALABEL,      PROPERTYTYPE_COMMON,       spOtherTexts,      0 /* eq to Ch2 */,   0 /* eq to Ch2 */,     0 /* eq to Ch2 */ ),
-    TYPEFORMAT_LINE(  OBJECTTYPE_TRENDLINE,      PROPERTYTYPE_COMMON,       0,                 spOtherLines ),
-    TYPEFORMAT_FRAME( OBJECTTYPE_TRENDLINELABEL, PROPERTYTYPE_COMMON,       spOtherTexts,      0 /* eq to Ch2 */,   0 /* eq to Ch2 */,     0 /* eq to Ch2 */ ),
-    TYPEFORMAT_LINE(  OBJECTTYPE_ERRORBAR,       PROPERTYTYPE_COMMON,       0,                 spOtherLines ),
-    TYPEFORMAT_LINE(  OBJECTTYPE_SERLINE,        PROPERTYTYPE_COMMON,       0,                 spOtherLines ),
-    TYPEFORMAT_LINE(  OBJECTTYPE_LEADERLINE,     PROPERTYTYPE_COMMON,       0,                 spOtherLines ),
-    TYPEFORMAT_LINE(  OBJECTTYPE_DROPLINE,       PROPERTYTYPE_COMMON,       0,                 spOtherLines ),
-    TYPEFORMAT_LINE(  OBJECTTYPE_HILOLINE,       PROPERTYTYPE_LINEARSERIES, 0,                 spOtherLines ),
-    TYPEFORMAT_FRAME( OBJECTTYPE_UPBAR,          PROPERTYTYPE_COMMON,       0,                 spUpDownBarLines,    spUpBarFills,          spUpDownBarEffects ),
-    TYPEFORMAT_FRAME( OBJECTTYPE_DOWNBAR,        PROPERTYTYPE_COMMON,       0,                 spUpDownBarLines,    spDownBarFills,        spUpDownBarEffects ),
-    TYPEFORMAT_LINE(  OBJECTTYPE_DATATABLE,      PROPERTYTYPE_COMMON,       spOtherTexts,      spChartSpaceLines )
+    //                object type                property info      auto text          auto line            auto fill              auto effect
+    TYPEFORMAT_FRAME( OBJECTTYPE_CHARTSPACE,     &saCommonPropInfo, 0,                 spChartSpaceLines,   spChartSpaceFills,     0 /* eq to Ch2 */ ),
+    TYPEFORMAT_FRAME( OBJECTTYPE_CHARTTITLE,     &saCommonPropInfo, spChartTitleTexts, 0 /* eq to Ch2 */,   0 /* eq to Ch2 */,     0 /* eq to Ch2 */ ),
+    TYPEFORMAT_FRAME( OBJECTTYPE_LEGEND,         &saCommonPropInfo, spOtherTexts,      spNoFormats,         spNoFormats,           0 /* eq to Ch2 */ ),
+    TYPEFORMAT_FRAME( OBJECTTYPE_PLOTAREA2D,     &saCommonPropInfo, 0,                 0 /* eq to Ch2 */,   spPlotArea2dFills,     0 /* eq to Ch2 */ ),
+    TYPEFORMAT_FRAME( OBJECTTYPE_PLOTAREA3D,     &saCommonPropInfo, 0,                 0 /* eq to Ch2 */,   0 /* eq to Ch2 */,     0 /* eq to Ch2 */ ),
+    TYPEFORMAT_FRAME( OBJECTTYPE_WALL,           &saCommonPropInfo, 0,                 0 /* eq to Ch2 */,   spWallFloorFills,      0 /* eq to Ch2 */ ),
+    TYPEFORMAT_FRAME( OBJECTTYPE_FLOOR,          &saCommonPropInfo, 0,                 spFloorLines,        spWallFloorFills,      0 /* eq to Ch2 */ ),
+    TYPEFORMAT_LINE(  OBJECTTYPE_AXIS,           &saCommonPropInfo, spOtherTexts,      spAxisLines ),
+    TYPEFORMAT_FRAME( OBJECTTYPE_AXISTITLE,      &saCommonPropInfo, spAxisTitleTexts,  0 /* eq to Ch2 */,   0 /* eq to Ch2 */,     0 /* eq to Ch2 */ ),
+    TYPEFORMAT_FRAME( OBJECTTYPE_AXISUNIT,       &saCommonPropInfo, spAxisTitleTexts,  0 /* eq in Ch2 */,   0 /* eq in Ch2 */,     0 /* eq in Ch2 */ ),
+    TYPEFORMAT_LINE(  OBJECTTYPE_MAJORGRIDLINE,  &saCommonPropInfo, 0,                 spMajorGridLines ),
+    TYPEFORMAT_LINE(  OBJECTTYPE_MINORGRIDLINE,  &saCommonPropInfo, 0,                 spMinorGridLines ),
+    TYPEFORMAT_LINE(  OBJECTTYPE_LINEARSERIES2D, &saLinearPropInfo, 0,                 spLinearSeriesLines ),
+    TYPEFORMAT_FRAME( OBJECTTYPE_FILLEDSERIES2D, &saFilledPropInfo, 0,                 spFilledSeriesLines, spFilledSeries2dFills, spFilledSeriesEffects ),
+    TYPEFORMAT_FRAME( OBJECTTYPE_FILLEDSERIES3D, &saFilledPropInfo, 0,                 spFilledSeriesLines, spFilledSeries3dFills, spFilledSeriesEffects ),
+    TYPEFORMAT_FRAME( OBJECTTYPE_DATALABEL,      &saCommonPropInfo, spOtherTexts,      0 /* eq to Ch2 */,   0 /* eq to Ch2 */,     0 /* eq to Ch2 */ ),
+    TYPEFORMAT_LINE(  OBJECTTYPE_TRENDLINE,      &saCommonPropInfo, 0,                 spOtherLines ),
+    TYPEFORMAT_FRAME( OBJECTTYPE_TRENDLINELABEL, &saCommonPropInfo, spOtherTexts,      0 /* eq to Ch2 */,   0 /* eq to Ch2 */,     0 /* eq to Ch2 */ ),
+    TYPEFORMAT_LINE(  OBJECTTYPE_ERRORBAR,       &saCommonPropInfo, 0,                 spOtherLines ),
+    TYPEFORMAT_LINE(  OBJECTTYPE_SERLINE,        &saCommonPropInfo, 0,                 spOtherLines ),
+    TYPEFORMAT_LINE(  OBJECTTYPE_LEADERLINE,     &saCommonPropInfo, 0,                 spOtherLines ),
+    TYPEFORMAT_LINE(  OBJECTTYPE_DROPLINE,       &saCommonPropInfo, 0,                 spOtherLines ),
+    TYPEFORMAT_LINE(  OBJECTTYPE_HILOLINE,       &saLinearPropInfo, 0,                 spOtherLines ),
+    TYPEFORMAT_FRAME( OBJECTTYPE_UPBAR,          &saCommonPropInfo, 0,                 spUpDownBarLines,    spUpBarFills,          spUpDownBarEffects ),
+    TYPEFORMAT_FRAME( OBJECTTYPE_DOWNBAR,        &saCommonPropInfo, 0,                 spUpDownBarLines,    spDownBarFills,        spUpDownBarEffects ),
+    TYPEFORMAT_LINE(  OBJECTTYPE_DATATABLE,      &saCommonPropInfo, spOtherTexts,      spChartSpaceLines )
 };
 
 #undef TYPEFORMAT_FRAME
 #undef TYPEFORMAT_LINE
+
 // ----------------------------------------------------------------------------
 
 void lclConvertPictureOptions( FillProperties& orFillProps, const PictureOptionsModel& rPicOptions )
@@ -560,15 +593,6 @@ void lclConvertPictureOptions( FillProperties& orFillProps, const PictureOptions
     bool bStacked = (rPicOptions.mnPictureFormat == XML_stack) || (rPicOptions.mnPictureFormat == XML_stackScale);
     orFillProps.maBlipProps.moBitmapMode = bStacked ? XML_tile : XML_stretch;
 }
-
-// ----------------------------------------------------------------------------
-
-const sal_Int32 spnCommonLineIds[ LineId_END ] = { PROP_LineStyle,   PROP_LineWidth,   PROP_LineColor,   PROP_LineTransparence,   PROP_LineDashName,   PROP_INVALID, PROP_INVALID, PROP_INVALID, PROP_INVALID, PROP_INVALID, PROP_INVALID, PROP_INVALID };
-const sal_Int32 spnLinearLineIds[ LineId_END ] = { PROP_LineStyle,   PROP_LineWidth,   PROP_Color,       PROP_Transparency,       PROP_LineDashName,   PROP_INVALID, PROP_INVALID, PROP_INVALID, PROP_INVALID, PROP_INVALID, PROP_INVALID, PROP_INVALID };
-const sal_Int32 spnFilledLineIds[ LineId_END ] = { PROP_BorderStyle, PROP_BorderWidth, PROP_BorderColor, PROP_BorderTransparency, PROP_BorderDashName, PROP_INVALID, PROP_INVALID, PROP_INVALID, PROP_INVALID, PROP_INVALID, PROP_INVALID, PROP_INVALID };
-
-const sal_Int32 spnCommonFillIds[ FillId_END ] = { PROP_FillStyle, PROP_FillColor, PROP_FillTransparence, PROP_FillGradientName, PROP_FillBitmapName, PROP_FillBitmapMode, PROP_FillBitmapSizeX, PROP_FillBitmapSizeY, PROP_FillBitmapPositionOffsetX, PROP_FillBitmapPositionOffsetY, PROP_FillBitmapRectanglePoint };
-const sal_Int32 spnFilledFillIds[ FillId_END ] = { PROP_FillStyle, PROP_Color,     PROP_Transparency,     PROP_GradientName,     PROP_FillBitmapName, PROP_FillBitmapMode, PROP_FillBitmapSizeX, PROP_FillBitmapSizeY, PROP_FillBitmapPositionOffsetX, PROP_FillBitmapPositionOffsetY, PROP_FillBitmapRectanglePoint };
 
 } // namespace
 
@@ -611,18 +635,16 @@ class LineFormatter : public DetailFormatterBase
 public:
     explicit            LineFormatter(
                             ObjectFormatterData& rData,
-                            const AutoFormatEntry* pAutoFormatEntry,
-                            PropertyType ePropType );
+                            const AutoFormatEntry* pAutoFormatEntry );
 
     /** Converts line formatting to the passed property set. */
     void                convertFormatting(
-                            PropertySet& rPropSet,
+                            ShapePropertyMap& rPropMap,
                             const ModelRef< Shape >& rxShapeProp,
                             sal_Int32 nSeriesIdx );
 
 private:
     LinePropertiesPtr   mxAutoLine;         /// Automatic line properties.
-    LinePropertyIds&    mrLinePropIds;      /// Property identifiers for border/line formatting.
 };
 
 // ----------------------------------------------------------------------------
@@ -632,19 +654,17 @@ class FillFormatter : public DetailFormatterBase
 public:
     explicit            FillFormatter(
                             ObjectFormatterData& rData,
-                            const AutoFormatEntry* pAutoFormatEntry,
-                            PropertyType ePropType );
+                            const AutoFormatEntry* pAutoFormatEntry );
 
     /** Converts area formatting to the passed property set. */
     void                convertFormatting(
-                            PropertySet& rPropSet,
+                            ShapePropertyMap& rPropMap,
                             const ModelRef< Shape >& rxShapeProp,
                             const PictureOptionsModel* pPicOptions,
                             sal_Int32 nSeriesIdx );
 
 private:
     FillPropertiesPtr   mxAutoFill;         /// Automatic fill properties.
-    FillPropertyIds&    mrFillPropIds;      /// Property identifiers for fill formatting.
 };
 
 // ----------------------------------------------------------------------------
@@ -654,12 +674,11 @@ class EffectFormatter : public DetailFormatterBase
 public:
     explicit            EffectFormatter(
                             ObjectFormatterData& rData,
-                            const AutoFormatEntry* pAutoFormatEntry,
-                            PropertyType ePropType );
+                            const AutoFormatEntry* pAutoFormatEntry );
 
     /** Converts effect formatting to the passed property set. */
     void                convertFormatting(
-                            PropertySet& rPropSet,
+                            ShapePropertyMap& rPropMap,
                             const ModelRef< Shape >& rxShapeProp,
                             sal_Int32 nSeriesIdx );
 };
@@ -736,6 +755,7 @@ private:
     FillFormatter       maFillFormatter;    /// Converter for fill formatting.
     EffectFormatter     maEffectFormatter;  /// Converter for effect formatting.
     TextFormatter       maTextFormatter;    /// Converter for text formatting.
+    ModelObjectHelper&  mrModelObjHelper;   /// Helper for named drawing formatting.
     const ObjectTypeFormatEntry& mrEntry;   /// Additional settings.
 };
 
@@ -748,11 +768,6 @@ struct ObjectFormatterData
     const XmlFilterBase& mrFilter;              /// Base filter object.
     ObjectTypeFormatterMap maTypeFormatters;    /// Formatters for all types of objects in a chart.
     ModelObjectHelper   maModelObjHelper;       /// Helper for named drawing formatting (dashes, gradients, bitmaps).
-    LinePropertyIds     maCommonLineIds;        /// Property identifiers for common border formatting.
-    LinePropertyIds     maLinearLineIds;        /// Property identifiers for line formatting of linear series.
-    LinePropertyIds     maFilledLineIds;        /// Property identifiers for line formatting of filled series.
-    FillPropertyIds     maCommonFillIds;        /// Property identifiers for common area fill.
-    FillPropertyIds     maFilledFillIds;        /// Property identifiers for area fill of filled series.
     Reference< XNumberFormats > mxNumFmts;      /// Number formats collection of container document.
     Reference< XNumberFormatTypes > mxNumTypes; /// Number format types collection of container document.
     Locale              maEnUsLocale;           /// Locale struct containing en-US.
@@ -765,9 +780,6 @@ struct ObjectFormatterData
                             const ChartSpaceModel& rChartSpace );
 
     ObjectTypeFormatter* getTypeFormatter( ObjectType eObjType );
-
-    LinePropertyIds&    getLinePropertyIds( PropertyType ePropType );
-    FillPropertyIds&    getFillPropertyIds( PropertyType ePropType );
 };
 
 // ============================================================================
@@ -864,9 +876,8 @@ sal_Int32 DetailFormatterBase::getSchemeColor( sal_Int32 nColorToken, sal_Int32 
 
 // ============================================================================
 
-LineFormatter::LineFormatter( ObjectFormatterData& rData, const AutoFormatEntry* pAutoFormatEntry, PropertyType ePropType ) :
-    DetailFormatterBase( rData, pAutoFormatEntry ),
-    mrLinePropIds( rData.getLinePropertyIds( ePropType ) )
+LineFormatter::LineFormatter( ObjectFormatterData& rData, const AutoFormatEntry* pAutoFormatEntry ) :
+    DetailFormatterBase( rData, pAutoFormatEntry )
 {
     if( pAutoFormatEntry )
     {
@@ -881,21 +892,20 @@ LineFormatter::LineFormatter( ObjectFormatterData& rData, const AutoFormatEntry*
     }
 }
 
-void LineFormatter::convertFormatting( PropertySet& rPropSet, const ModelRef< Shape >& rxShapeProp, sal_Int32 nSeriesIdx )
+void LineFormatter::convertFormatting( ShapePropertyMap& rPropMap, const ModelRef< Shape >& rxShapeProp, sal_Int32 nSeriesIdx )
 {
     LineProperties aLineProps;
     if( mxAutoLine.get() )
         aLineProps.assignUsed( *mxAutoLine );
     if( rxShapeProp.is() )
         aLineProps.assignUsed( rxShapeProp->getLineProperties() );
-    aLineProps.pushToPropSet( rPropSet, mrData.maModelObjHelper, mrData.mrFilter.getGraphicHelper(), mrLinePropIds, getPhColor( nSeriesIdx ) );
+    aLineProps.pushToPropMap( rPropMap, mrData.mrFilter.getGraphicHelper(), getPhColor( nSeriesIdx ) );
 }
 
 // ============================================================================
 
-FillFormatter::FillFormatter( ObjectFormatterData& rData, const AutoFormatEntry* pAutoFormatEntry, PropertyType ePropType ) :
-    DetailFormatterBase( rData, pAutoFormatEntry ),
-    mrFillPropIds( rData.getFillPropertyIds( ePropType ) )
+FillFormatter::FillFormatter( ObjectFormatterData& rData, const AutoFormatEntry* pAutoFormatEntry ) :
+    DetailFormatterBase( rData, pAutoFormatEntry )
 {
     if( pAutoFormatEntry )
     {
@@ -907,7 +917,7 @@ FillFormatter::FillFormatter( ObjectFormatterData& rData, const AutoFormatEntry*
     }
 }
 
-void FillFormatter::convertFormatting( PropertySet& rPropSet, const ModelRef< Shape >& rxShapeProp, const PictureOptionsModel* pPicOptions, sal_Int32 nSeriesIdx )
+void FillFormatter::convertFormatting( ShapePropertyMap& rPropMap, const ModelRef< Shape >& rxShapeProp, const PictureOptionsModel* pPicOptions, sal_Int32 nSeriesIdx )
 {
     FillProperties aFillProps;
     if( mxAutoFill.get() )
@@ -916,17 +926,17 @@ void FillFormatter::convertFormatting( PropertySet& rPropSet, const ModelRef< Sh
         aFillProps.assignUsed( rxShapeProp->getFillProperties() );
     if( pPicOptions )
         lclConvertPictureOptions( aFillProps, *pPicOptions );
-    aFillProps.pushToPropSet( rPropSet, mrData.maModelObjHelper, mrData.mrFilter.getGraphicHelper(), mrFillPropIds, 0, getPhColor( nSeriesIdx ) );
+    aFillProps.pushToPropMap( rPropMap, mrData.mrFilter.getGraphicHelper(), 0, getPhColor( nSeriesIdx ) );
 }
 
 // ============================================================================
 
-EffectFormatter::EffectFormatter( ObjectFormatterData& rData, const AutoFormatEntry* pAutoFormatEntry, PropertyType /*ePropType*/ ) :
+EffectFormatter::EffectFormatter( ObjectFormatterData& rData, const AutoFormatEntry* pAutoFormatEntry ) :
     DetailFormatterBase( rData, pAutoFormatEntry )
 {
 }
 
-void EffectFormatter::convertFormatting( PropertySet& /*rPropSet*/, const ModelRef< Shape >& /*rxShapeProp*/, sal_Int32 /*nSeriesIdx*/ )
+void EffectFormatter::convertFormatting( ShapePropertyMap& /*rPropMap*/, const ModelRef< Shape >& /*rxShapeProp*/, sal_Int32 /*nSeriesIdx*/ )
 {
 }
 
@@ -984,20 +994,23 @@ void TextFormatter::convertFormatting( PropertySet& rPropSet, const ModelRef< Te
 // ============================================================================
 
 ObjectTypeFormatter::ObjectTypeFormatter( ObjectFormatterData& rData, const ObjectTypeFormatEntry& rEntry, const ChartSpaceModel& rChartSpace ) :
-    maLineFormatter(   rData, lclGetAutoFormatEntry( rEntry.mpAutoLines,   rChartSpace.mnStyle ), rEntry.mePropType ),
-    maFillFormatter(   rData, lclGetAutoFormatEntry( rEntry.mpAutoFills,   rChartSpace.mnStyle ), rEntry.mePropType ),
-    maEffectFormatter( rData, lclGetAutoFormatEntry( rEntry.mpAutoEffects, rChartSpace.mnStyle ), rEntry.mePropType ),
+    maLineFormatter(   rData, lclGetAutoFormatEntry( rEntry.mpAutoLines,   rChartSpace.mnStyle ) ),
+    maFillFormatter(   rData, lclGetAutoFormatEntry( rEntry.mpAutoFills,   rChartSpace.mnStyle ) ),
+    maEffectFormatter( rData, lclGetAutoFormatEntry( rEntry.mpAutoEffects, rChartSpace.mnStyle ) ),
     maTextFormatter(   rData, lclGetAutoTextEntry(   rEntry.mpAutoTexts,   rChartSpace.mnStyle ), rChartSpace.mxTextProp ),
+    mrModelObjHelper( rData.maModelObjHelper ),
     mrEntry( rEntry )
 {
 }
 
 void ObjectTypeFormatter::convertFrameFormatting( PropertySet& rPropSet, const ModelRef< Shape >& rxShapeProp, const PictureOptionsModel* pPicOptions, sal_Int32 nSeriesIdx )
 {
-    maLineFormatter.convertFormatting( rPropSet, rxShapeProp, nSeriesIdx );
+    ShapePropertyMap aPropMap( mrModelObjHelper, *mrEntry.mpPropInfo );
+    maLineFormatter.convertFormatting( aPropMap, rxShapeProp, nSeriesIdx );
     if( mrEntry.mbIsFrame )
-        maFillFormatter.convertFormatting( rPropSet, rxShapeProp, pPicOptions, nSeriesIdx );
-    maEffectFormatter.convertFormatting( rPropSet, rxShapeProp, nSeriesIdx );
+        maFillFormatter.convertFormatting( aPropMap, rxShapeProp, pPicOptions, nSeriesIdx );
+    maEffectFormatter.convertFormatting( aPropMap, rxShapeProp, nSeriesIdx );
+    rPropSet.setProperties( aPropMap );
 }
 
 void ObjectTypeFormatter::convertTextFormatting( PropertySet& rPropSet, const ModelRef< TextBody >& rxTextProp )
@@ -1018,16 +1031,20 @@ void ObjectTypeFormatter::convertTextFormatting( PropertySet& rPropSet, const Te
 
 void ObjectTypeFormatter::convertAutomaticLine( PropertySet& rPropSet, sal_Int32 nSeriesIdx )
 {
+    ShapePropertyMap aPropMap( mrModelObjHelper, *mrEntry.mpPropInfo );
     ModelRef< Shape > xShapeProp;
-    maLineFormatter.convertFormatting( rPropSet, xShapeProp, nSeriesIdx );
-    maEffectFormatter.convertFormatting( rPropSet, xShapeProp, nSeriesIdx );
+    maLineFormatter.convertFormatting( aPropMap, xShapeProp, nSeriesIdx );
+    maEffectFormatter.convertFormatting( aPropMap, xShapeProp, nSeriesIdx );
+    rPropSet.setProperties( aPropMap );
 }
 
 void ObjectTypeFormatter::convertAutomaticFill( PropertySet& rPropSet, sal_Int32 nSeriesIdx )
 {
+    ShapePropertyMap aPropMap( mrModelObjHelper, *mrEntry.mpPropInfo );
     ModelRef< Shape > xShapeProp;
-    maFillFormatter.convertFormatting( rPropSet, xShapeProp, 0, nSeriesIdx );
-    maEffectFormatter.convertFormatting( rPropSet, xShapeProp, nSeriesIdx );
+    maFillFormatter.convertFormatting( aPropMap, xShapeProp, 0, nSeriesIdx );
+    maEffectFormatter.convertFormatting( aPropMap, xShapeProp, nSeriesIdx );
+    rPropSet.setProperties( aPropMap );
 }
 
 // ============================================================================
@@ -1035,11 +1052,6 @@ void ObjectTypeFormatter::convertAutomaticFill( PropertySet& rPropSet, sal_Int32
 ObjectFormatterData::ObjectFormatterData( const XmlFilterBase& rFilter, const Reference< XChartDocument >& rxChartDoc, const ChartSpaceModel& rChartSpace ) :
     mrFilter( rFilter ),
     maModelObjHelper( Reference< XMultiServiceFactory >( rxChartDoc, UNO_QUERY ) ),
-    maCommonLineIds( spnCommonLineIds, true, false ),
-    maLinearLineIds( spnLinearLineIds, true, false ),
-    maFilledLineIds( spnFilledLineIds, true, false ),
-    maCommonFillIds( spnCommonFillIds, true, true ),
-    maFilledFillIds( spnFilledFillIds, true, true ),
     maEnUsLocale( CREATE_OUSTRING( "en" ), CREATE_OUSTRING( "US" ), OUString() ),
     mnMaxSeriesIdx( -1 )
 {
@@ -1063,28 +1075,6 @@ ObjectTypeFormatter* ObjectFormatterData::getTypeFormatter( ObjectType eObjType 
 {
     OSL_ENSURE( maTypeFormatters.has( eObjType ), "ObjectFormatterData::getTypeFormatter - unknown object type" );
     return maTypeFormatters.get( eObjType ).get();
-}
-
-LinePropertyIds& ObjectFormatterData::getLinePropertyIds( PropertyType ePropType )
-{
-    switch( ePropType )
-    {
-        case PROPERTYTYPE_COMMON:       return maCommonLineIds;
-        case PROPERTYTYPE_LINEARSERIES: return maLinearLineIds;
-        case PROPERTYTYPE_FILLEDSERIES: return maFilledLineIds;
-    }
-    return maCommonLineIds;
-}
-
-FillPropertyIds& ObjectFormatterData::getFillPropertyIds( PropertyType ePropType )
-{
-    switch( ePropType )
-    {
-        case PROPERTYTYPE_COMMON:       return maCommonFillIds;
-        case PROPERTYTYPE_LINEARSERIES: return maCommonFillIds;
-        case PROPERTYTYPE_FILLEDSERIES: return maFilledFillIds;
-    }
-    return maCommonFillIds;
 }
 
 // ============================================================================
@@ -1165,7 +1155,7 @@ void ObjectFormatter::convertNumberFormat( PropertySet& rPropSet, const NumberFo
         sal_Int32 nPropId = bPercentFormat ? PROP_PercentageNumberFormat : PROP_NumberFormat;
         if( rNumberFormat.mbSourceLinked || (rNumberFormat.maFormatCode.getLength() == 0) )
         {
-            rPropSet.setProperty( nPropId, Any() );
+            rPropSet.setAnyProperty( nPropId, Any() );
         }
         else try
         {

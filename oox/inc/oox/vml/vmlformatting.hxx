@@ -30,11 +30,8 @@
 
 #include "oox/helper/helper.hxx"
 
-namespace oox {
-    class GraphicHelper;
-    class ModelObjectHelper;
-    class PropertyMap;
-}
+namespace oox { class GraphicHelper; }
+namespace oox { namespace drawingml { class ShapePropertyMap; } }
 
 namespace oox {
 namespace vml {
@@ -149,8 +146,7 @@ struct StrokeModel
 
     /** Writes the properties to the passed property map. */
     void                pushToPropMap(
-                            PropertyMap& rPropMap,
-                            ModelObjectHelper& rModelObjectHelper,
+                            ::oox::drawingml::ShapePropertyMap& rPropMap,
                             const GraphicHelper& rGraphicHelper ) const;
 };
 
@@ -176,8 +172,7 @@ struct FillModel
 
     /** Writes the properties to the passed property map. */
     void                pushToPropMap(
-                            PropertyMap& rPropMap,
-                            ModelObjectHelper& rModelObjectHelper,
+                            ::oox::drawingml::ShapePropertyMap& rPropMap,
                             const GraphicHelper& rGraphicHelper ) const;
 };
 

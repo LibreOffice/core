@@ -43,6 +43,7 @@ using ::oox::drawingml::Color;
 using ::oox::drawingml::FillProperties;
 using ::oox::drawingml::LineArrowProperties;
 using ::oox::drawingml::LineProperties;
+using ::oox::drawingml::ShapePropertyMap;
 
 namespace oox {
 namespace vml {
@@ -430,8 +431,7 @@ void StrokeModel::assignUsed( const StrokeModel& rSource )
     moJoinStyle.assignIfUsed( rSource.moJoinStyle );
 }
 
-void StrokeModel::pushToPropMap( PropertyMap& rPropMap,
-        ModelObjectHelper& rModelObjectHelper, const GraphicHelper& rGraphicHelper ) const
+void StrokeModel::pushToPropMap( ShapePropertyMap& rPropMap, const GraphicHelper& rGraphicHelper ) const
 {
     /*  Convert VML line formatting to DrawingML line formatting and let the
         DrawingML code do the hard work. */
@@ -454,7 +454,7 @@ void StrokeModel::pushToPropMap( PropertyMap& rPropMap,
         aLineProps.maLineFill.moFillType = XML_noFill;
     }
 
-    aLineProps.pushToPropMap( rPropMap, rModelObjectHelper, rGraphicHelper );
+    aLineProps.pushToPropMap( rPropMap, rGraphicHelper );
 }
 
 // ============================================================================
@@ -475,8 +475,7 @@ void FillModel::assignUsed( const FillModel& rSource )
     moRotate.assignIfUsed( rSource.moRotate );
 }
 
-void FillModel::pushToPropMap( PropertyMap& rPropMap,
-        ModelObjectHelper& rModelObjectHelper, const GraphicHelper& rGraphicHelper ) const
+void FillModel::pushToPropMap( ShapePropertyMap& rPropMap, const GraphicHelper& rGraphicHelper ) const
 {
     /*  Convert VML fill formatting to DrawingML fill formatting and let the
         DrawingML code do the hard work. */
@@ -594,7 +593,7 @@ void FillModel::pushToPropMap( PropertyMap& rPropMap,
         aFillProps.moFillType = XML_noFill;
     }
 
-    aFillProps.pushToPropMap( rPropMap, rModelObjectHelper, rGraphicHelper );
+    aFillProps.pushToPropMap( rPropMap, rGraphicHelper );
 }
 
 // ============================================================================

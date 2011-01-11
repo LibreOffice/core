@@ -33,9 +33,9 @@
 #include <com/sun/star/drawing/PolygonKind.hpp>
 #include <com/sun/star/drawing/XShapes.hpp>
 #include "oox/core/filterbase.hxx"
+#include "oox/drawingml/fillproperties.hxx"
 #include "oox/drawingml/lineproperties.hxx"
-#include "oox/helper/propertymap.hxx"
-#include "oox/helper/propertyset.hxx"
+#include "oox/drawingml/shapepropertymap.hxx"
 #include "oox/xls/biffinputstream.hxx"
 #include "oox/xls/unitconverter.hxx"
 #include "properties.hxx"
@@ -594,7 +594,7 @@ void BiffDrawingObjectBase::readMacroBiff8( BiffInputStream& rStrm )
     }
 }
 
-void BiffDrawingObjectBase::convertLineProperties( PropertyMap& rPropMap, const BiffObjLineModel& rLineModel, sal_uInt16 nArrows ) const
+void BiffDrawingObjectBase::convertLineProperties( ShapePropertyMap& rPropMap, const BiffObjLineModel& rLineModel, sal_uInt16 nArrows ) const
 {
     if( rLineModel.mbAuto )
     {
@@ -705,10 +705,10 @@ void BiffDrawingObjectBase::convertLineProperties( PropertyMap& rPropMap, const 
         }
     }
 
-    aLineProps.pushToPropMap( rPropMap, getBaseFilter().getModelObjectHelper(), getBaseFilter().getGraphicHelper() );
+    aLineProps.pushToPropMap( rPropMap, getBaseFilter().getGraphicHelper() );
 }
 
-void BiffDrawingObjectBase::convertFillProperties( PropertyMap& rPropMap, const BiffObjFillModel& rFillModel ) const
+void BiffDrawingObjectBase::convertFillProperties( ShapePropertyMap& rPropMap, const BiffObjFillModel& rFillModel ) const
 {
     if( rFillModel.mbAuto )
     {
@@ -791,10 +791,10 @@ void BiffDrawingObjectBase::convertFillProperties( PropertyMap& rPropMap, const 
 #endif
     }
 
-    aFillProps.pushToPropMap( rPropMap, getBaseFilter().getModelObjectHelper(), getBaseFilter().getGraphicHelper() );
+    aFillProps.pushToPropMap( rPropMap, getBaseFilter().getGraphicHelper() );
 }
 
-void BiffDrawingObjectBase::convertFrameProperties( PropertyMap& /*rPropMap*/, sal_uInt16 /*nFrameFlags*/ ) const
+void BiffDrawingObjectBase::convertFrameProperties( ShapePropertyMap& /*rPropMap*/, sal_uInt16 /*nFrameFlags*/ ) const
 {
 }
 
@@ -1044,7 +1044,7 @@ void BiffLineObject::implReadObjBiff5( BiffInputStream& rStrm, sal_uInt16 nNameL
 Reference< XShape > BiffLineObject::implConvertAndInsert( BiffDrawingBase& rDrawing,
         const Reference< XShapes >& rxShapes, const Rectangle& rShapeRect ) const
 {
-    PropertyMap aPropMap;
+    ShapePropertyMap aPropMap( getBaseFilter().getModelObjectHelper() );
     convertLineProperties( aPropMap, maLineModel, mnArrows );
 
     // create the line polygon
@@ -1087,7 +1087,7 @@ void BiffRectObject::readFrameData( BiffInputStream& rStrm )
     rStrm >> maFillModel >> maLineModel >> mnFrameFlags;
 }
 
-void BiffRectObject::convertRectProperties( PropertyMap& rPropMap ) const
+void BiffRectObject::convertRectProperties( ShapePropertyMap& rPropMap ) const
 {
     convertLineProperties( rPropMap, maLineModel );
     convertFillProperties( rPropMap, maFillModel );
@@ -1116,7 +1116,7 @@ void BiffRectObject::implReadObjBiff5( BiffInputStream& rStrm, sal_uInt16 nNameL
 Reference< XShape > BiffRectObject::implConvertAndInsert( BiffDrawingBase& rDrawing,
         const Reference< XShapes >& rxShapes, const Rectangle& rShapeRect ) const
 {
-    PropertyMap aPropMap;
+    ShapePropertyMap aPropMap( getBaseFilter().getModelObjectHelper() );
     convertRectProperties( aPropMap );
 
     Reference< XShape > xShape = rDrawing.createAndInsertXShape( CREATE_OUSTRING( "com.sun.star.drawing.RectangleShape" ), rxShapes, rShapeRect );
@@ -1134,7 +1134,7 @@ BiffOvalObject::BiffOvalObject( const WorksheetHelper& rHelper ) :
 Reference< XShape > BiffOvalObject::implConvertAndInsert( BiffDrawingBase& rDrawing,
         const Reference< XShapes >& rxShapes, const Rectangle& rShapeRect ) const
 {
-    PropertyMap aPropMap;
+    ShapePropertyMap aPropMap( getBaseFilter().getModelObjectHelper() );
     convertRectProperties( aPropMap );
 
     Reference< XShape > xShape = rDrawing.createAndInsertXShape( CREATE_OUSTRING( "com.sun.star.drawing.EllipseShape" ), rxShapes, rShapeRect );
@@ -1176,7 +1176,7 @@ void BiffArcObject::implReadObjBiff5( BiffInputStream& rStrm, sal_uInt16 nNameLe
 Reference< XShape > BiffArcObject::implConvertAndInsert( BiffDrawingBase& rDrawing,
         const Reference< XShapes >& rxShapes, const Rectangle& rShapeRect ) const
 {
-    PropertyMap aPropMap;
+    ShapePropertyMap aPropMap( getBaseFilter().getModelObjectHelper() );
     convertLineProperties( aPropMap, maLineModel );
     convertFillProperties( aPropMap, maFillModel );
 
@@ -1257,7 +1257,7 @@ Reference< XShape > BiffPolygonObject::implConvertAndInsert( BiffDrawingBase& rD
     Reference< XShape > xShape;
     if( maCoords.size() >= 2 )
     {
-        PropertyMap aPropMap;
+        ShapePropertyMap aPropMap( getBaseFilter().getModelObjectHelper() );
         convertRectProperties( aPropMap );
 
         // create the polygon
