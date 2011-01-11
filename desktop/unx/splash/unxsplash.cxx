@@ -103,7 +103,7 @@ void SAL_CALL UnxSplashScreen::setValue( sal_Int32 nValue )
 {
     if ( m_pOutFd )
     {
-        fprintf( m_pOutFd, "%ld%%\n", nValue );
+        fprintf( m_pOutFd, "%"SAL_PRIdINT32"%%\n", nValue );
         fflush( m_pOutFd );
     }
 }
