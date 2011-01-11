@@ -76,6 +76,12 @@ interface XGridColumn
     /** A title is displayed in the colum header row if <method>UnoControlGridModel::ShowRowHeader</method> is set to <true/>**/
     [attribute] string Title;
 
+    /** is the help text associated with the column.
+
+        <p>A grid control will usually display a column's help text as tooltip.</p>
+    */
+    [attribute] string HelpText;
+
     /** denotes the index of the column within the grid column model it belongs to
 
         <p>If the column is not yet part of a column model, <code>Index</code> is -1.</p>
