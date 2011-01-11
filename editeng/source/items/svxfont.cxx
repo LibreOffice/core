@@ -46,9 +46,6 @@
 // Minimum: Prozentwert fuers kernen
 #define MINKERNPERCENT 5
 
-// prop. Groesse der Kleinbuchstaben bei Kapitaelchen
-#define KAPITAELCHENPROP 80
-
 #ifndef REDUCEDSVXFONT
     const sal_Unicode CH_BLANK = sal_Unicode(' ');      // ' ' Leerzeichen
     static sal_Char const sDoubleSpace[] = "  ";
@@ -709,7 +706,7 @@ void SvxDoGetCapitalSize::Do( const XubString &_rTxt, const xub_StrLen _nIdx,
     if ( !bUpper )
     {
         BYTE nProp = pFont->GetPropr();
-        pFont->SetProprRel( KAPITAELCHENPROP );
+        pFont->SetProprRel( SMALL_CAPS_PERCENTAGE );
         pFont->SetPhysFont( pOut );
         aPartSize.setWidth( pOut->GetTextWidth( _rTxt, _nIdx, _nLen ) );
         aPartSize.setHeight( pOut->GetTextHeight() );
@@ -817,7 +814,7 @@ void SvxDoDrawCapital::Do( const XubString &_rTxt, const xub_StrLen _nIdx,
     if ( !bUpper )
     {
         nProp = pFont->GetPropr();
-        pFont->SetProprRel( KAPITAELCHENPROP );
+        pFont->SetProprRel( SMALL_CAPS_PERCENTAGE );
     }
     pFont->SetPhysFont( pOut );
 

@@ -34,6 +34,10 @@
 #include <vcl/font.hxx>
 #include "editeng/editengdllapi.h"
 
+// Percentage of height of lower case small capital letters compared to upper case letters
+// See i#1526# for full explanation
+#define SMALL_CAPS_PERCENTAGE 80
+
 class SvxDoCapitals;
 class OutputDevice;
 class Printer;
