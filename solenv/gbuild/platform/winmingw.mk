@@ -55,11 +55,11 @@ gb_MINGW_LIBGCC := \
         gcc
 else
 ifeq ($(MINGW_GCCLIB_EH),YES)
-gb_STDLIBCPP := \
+gb_MINGW_LIBGCC := \
         gcc \
         gcc_eh
 else
-gb_STDLIBCPP := gcc
+gb_MINGW_LIBGCC := gcc
 endif
 endif
 
