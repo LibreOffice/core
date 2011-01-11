@@ -37,6 +37,10 @@
 #include <poolfmt.hxx>
 #include <rcid.hrc>
 #include <tools/debug.hxx>
+#ifdef _NEED_TO_DEBUG_MAPPING
+#include <stdlib.h>
+#endif
+
 extern ResMgr* pSwResMgr;
 // Initialise UI names to 0
 SvStringsDtor   *SwStyleNameMapper::pTextUINameArray = 0,
@@ -484,7 +488,7 @@ const NameToIdHash & SwStyleNameMapper::getHashTable ( SwGetPoolIdFromName eFlag
                 bString = GetUIName ( aString, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL );
                 nNewId = GetPoolIdFromUIName ( aString, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL );
                 if ( nNewId != nId )
-                    *((sal_Int32*)0) = 42;
+                    abort();
             }
             for ( nIndex = 0, nId = RES_POOLCOLL_LISTS_BEGIN ; nId < RES_POOLCOLL_LISTS_END ; nId++,nIndex++ )
             {
@@ -496,7 +500,7 @@ const NameToIdHash & SwStyleNameMapper::getHashTable ( SwGetPoolIdFromName eFlag
                 bString = GetUIName ( aString, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL );
                 nNewId = GetPoolIdFromUIName ( aString, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL );
                 if ( nNewId != nId )
-                    *((sal_Int32*)0) = 42;
+                    abort();
             }
             for ( nIndex = 0, nId = RES_POOLCOLL_EXTRA_BEGIN ; nId < RES_POOLCOLL_EXTRA_END ; nId++,nIndex++ )
             {
@@ -508,7 +512,7 @@ const NameToIdHash & SwStyleNameMapper::getHashTable ( SwGetPoolIdFromName eFlag
                 bString = GetUIName ( aString, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL );
                 nNewId = GetPoolIdFromUIName ( aString, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL );
                 if ( nNewId != nId )
-                    *((sal_Int32*)0) = 42;
+                    abort();
             }
             for ( nIndex = 0, nId = RES_POOLCOLL_REGISTER_BEGIN ; nId < RES_POOLCOLL_REGISTER_END ; nId++,nIndex++ )
             {
@@ -520,7 +524,7 @@ const NameToIdHash & SwStyleNameMapper::getHashTable ( SwGetPoolIdFromName eFlag
                 bString = GetUIName ( aString, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL );
                 nNewId = GetPoolIdFromUIName ( aString, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL );
                 if ( nNewId != nId )
-                    *((sal_Int32*)0) = 42;
+                    abort();
             }
             for ( nIndex = 0, nId = RES_POOLCOLL_DOC_BEGIN ; nId < RES_POOLCOLL_DOC_END ; nId++,nIndex++ )
             {
@@ -532,7 +536,7 @@ const NameToIdHash & SwStyleNameMapper::getHashTable ( SwGetPoolIdFromName eFlag
                 bString = GetUIName ( aString, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL );
                 nNewId = GetPoolIdFromUIName ( aString, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL );
                 if ( nNewId != nId )
-                    *((sal_Int32*)0) = 42;
+                    abort();
             }
             for ( nIndex = 0, nId = RES_POOLCOLL_HTML_BEGIN ; nId < RES_POOLCOLL_HTML_END ; nId++,nIndex++ )
             {
@@ -544,7 +548,7 @@ const NameToIdHash & SwStyleNameMapper::getHashTable ( SwGetPoolIdFromName eFlag
                 bString = GetUIName ( aString, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL );
                 nNewId = GetPoolIdFromUIName ( aString, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL );
                 if ( nNewId != nId )
-                    *((sal_Int32*)0) = 42;
+                    abort();
             }
         }
         {
@@ -558,7 +562,7 @@ const NameToIdHash & SwStyleNameMapper::getHashTable ( SwGetPoolIdFromName eFlag
                 bString = GetUIName ( aString, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL );
                 nNewId = GetPoolIdFromUIName ( aString, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL );
                 if ( nNewId != nId )
-                    *((sal_Int32*)0) = 42;
+                    abort();
             }
             for ( nIndex = 0, nId = RES_POOLCHR_HTML_BEGIN ; nId < RES_POOLCHR_HTML_END ; nId++,nIndex++ )
             {
@@ -570,7 +574,7 @@ const NameToIdHash & SwStyleNameMapper::getHashTable ( SwGetPoolIdFromName eFlag
                 bString = GetUIName ( aString, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL );
                 nNewId = GetPoolIdFromUIName ( aString, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL );
                 if ( nNewId != nId )
-                    *((sal_Int32*)0) = 42;
+                    abort();
             }
         }
         {
@@ -584,7 +588,7 @@ const NameToIdHash & SwStyleNameMapper::getHashTable ( SwGetPoolIdFromName eFlag
                 bString = GetUIName ( aString, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL );
                 nNewId = GetPoolIdFromUIName ( aString, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL );
                 if ( nNewId != nId )
-                    *((sal_Int32*)0) = 42;
+                    abort();
             }
         }
         {
@@ -598,7 +602,7 @@ const NameToIdHash & SwStyleNameMapper::getHashTable ( SwGetPoolIdFromName eFlag
                 bString = GetUIName ( aString, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL );
                 nNewId = GetPoolIdFromUIName ( aString, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL );
                 if ( nNewId != nId )
-                    *((sal_Int32*)0) = 42;
+                    abort();
             }
         }
         {
@@ -612,7 +616,7 @@ const NameToIdHash & SwStyleNameMapper::getHashTable ( SwGetPoolIdFromName eFlag
                 bString = GetUIName ( aString, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL );
                 nNewId = GetPoolIdFromUIName ( aString, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL );
                 if ( nNewId != nId )
-                    *((sal_Int32*)0) = 42;
+                    abort();
             }
         }
     }
