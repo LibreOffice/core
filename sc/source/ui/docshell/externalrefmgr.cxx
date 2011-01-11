@@ -1640,8 +1640,18 @@ ScExternalRefCache::TokenRef ScExternalRefManager::getSingleRefToken(
         if (pTab)
             *pTab = nTab;
 
-        return getSingleRefTokenFromSrcDoc(
-            nFileId, pSrcDoc, ScAddress(rCell.Col(),rCell.Row(),nTab), pFmt);
+        ScExternalRefCache::TokenRef pToken =
+            getSingleRefTokenFromSrcDoc(
+                nFileId, pSrcDoc, ScAddress(rCell.Col(),rCell.Row(),nTab), pFmt);
+
+        // Now, insert the token into cache table but don't cache empty cells.
+        if (pToken->GetType() != formula::svEmptyCell)
+        {
+            sal_uInt32 nFmtIndex = pFmt->mbIsSet ? pFmt->mnIndex : 0;
+            maRefCache.setCellData(nFileId, rTabName, rCell.Col(), rCell.Row(), pToken, nFmtIndex);
+        }
+
+        return pToken;
     }
 
     // Check if the given table name and the cell position is cached.
@@ -1697,7 +1707,10 @@ ScExternalRefCache::TokenRef ScExternalRefManager::getSingleRefToken(
 
     // Now, insert the token into cache table but don't cache empty cells.
     if (pToken->GetType() != formula::svEmptyCell)
+    {
+        nFmtIndex = pFmt->mbIsSet ? pFmt->mnIndex : 0;
         maRefCache.setCellData(nFileId, rTabName, rCell.Col(), rCell.Row(), pToken, nFmtIndex);
+    }
 
     return pToken;
 }
@@ -1801,7 +1814,14 @@ ScExternalRefCache::TokenArrayRef ScExternalRefManager::getRangeNameTokens(sal_u
     if (pSrcDoc)
     {
         // Document already loaded in memory.
-        return getRangeNameTokensFromSrcDoc(nFileId, pSrcDoc, aName);
+        ScExternalRefCache::TokenArrayRef pArray =
+            getRangeNameTokensFromSrcDoc(nFileId, pSrcDoc, aName);
+
+        if (pArray)
+            // Cache this range name array.
+            maRefCache.setRangeNameTokens(nFileId, aName, pArray);
+
+        return pArray;
     }
 
     ScExternalRefCache::TokenArrayRef pArray = maRefCache.getRangeNameTokens(nFileId, rName);
