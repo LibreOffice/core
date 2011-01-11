@@ -1694,9 +1694,17 @@ KEYINPUT_CHECKTABLE_INSDEL:
                     break;
 
                 case KEY_DELETE:
-                    if (rSh.IsInFrontOfLabel() &&
-                        rSh.NumOrNoNum(FALSE))
-                        eKeyState = KS_NumOrNoNum;
+                    if ( !rSh.HasReadonlySel() )
+                    {
+                        if (rSh.IsInFrontOfLabel() &&
+                            rSh.NumOrNoNum(FALSE))
+                            eKeyState = KS_NumOrNoNum;
+                    }
+                    else
+                    {
+                        InfoBox( this, SW_RES( MSG_READONLY_CONTENT )).Execute();
+                        eKeyState = KS_Ende;
+                    }
                     break;
 
                 case KEY_DELETE | KEY_MOD2:
@@ -1851,6 +1859,11 @@ KEYINPUT_CHECKTABLE_INSDEL:
                                 eKeyState = KS_NumOrNoNum;
                             }
                         }
+                    }
+                    else
+                    {
+                        InfoBox( this, SW_RES( MSG_READONLY_CONTENT )).Execute();
+                        eKeyState = KS_Ende;
                     }
                     break;
 
