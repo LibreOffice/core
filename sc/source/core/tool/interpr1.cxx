@@ -4793,14 +4793,34 @@ void ScInterpreter::ScSumIf()
                     pSumExtraMatrix = PopMatrix();
                     //! nCol3, nRow3, nTab3 remain 0
                 break;
+                case svExternalSingleRef:
+                {
+                    pSumExtraMatrix = new ScMatrix(1, 1);
+                    ScExternalRefCache::TokenRef pToken;
+                    PopExternalSingleRef(pToken);
+                    if (!pToken)
+                    {
+                        PushIllegalParameter();
+                        return;
+                    }
+
+                    if (pToken->GetType() == svDouble)
+                        pSumExtraMatrix->PutDouble(pToken->GetDouble(), 0, 0);
+                    else
+                        pSumExtraMatrix->PutString(pToken->GetString(), 0, 0);
+                }
+                break;
+                case svExternalDoubleRef:
+                    PopExternalDoubleRef(pSumExtraMatrix);
+                break;
                 default:
                     PushIllegalParameter();
                     return ;
             }
         }
-        String rString;
+        String aString;
         double fVal = 0.0;
-        BOOL bIsString = TRUE;
+        bool bIsString = true;
         switch ( GetStackType() )
         {
             case svDoubleRef :
@@ -4817,41 +4837,57 @@ void ScInterpreter::ScSumIf()
                 {
                     case CELLTYPE_VALUE :
                         fVal = GetCellValue( aAdr, pCell );
-                        bIsString = FALSE;
+                        bIsString = false;
                         break;
                     case CELLTYPE_FORMULA :
                         if( ((ScFormulaCell*)pCell)->IsValue() )
                         {
                             fVal = GetCellValue( aAdr, pCell );
-                            bIsString = FALSE;
+                            bIsString = false;
                         }
                         else
-                            GetCellString(rString, pCell);
+                            GetCellString(aString, pCell);
                         break;
                     case CELLTYPE_STRING :
                     case CELLTYPE_EDIT :
-                        GetCellString(rString, pCell);
+                        GetCellString(aString, pCell);
                         break;
                     default:
                         fVal = 0.0;
-                        bIsString = FALSE;
+                        bIsString = false;
                 }
             }
             break;
             case svString:
-                rString = GetString();
+                aString = GetString();
             break;
             case svMatrix :
+            case svExternalDoubleRef:
             {
-                ScMatValType nType = GetDoubleOrStringFromMatrix( fVal,
-                        rString);
+                ScMatValType nType = GetDoubleOrStringFromMatrix(fVal, aString);
                 bIsString = ScMatrix::IsNonValueType( nType);
+            }
+            break;
+            case svExternalSingleRef:
+            {
+                ScExternalRefCache::TokenRef pToken;
+                PopExternalSingleRef(pToken);
+                if (pToken)
+                {
+                    if (pToken->GetType() == svDouble)
+                    {
+                        fVal = pToken->GetDouble();
+                        bIsString = false;
+                    }
+                    else
+                        aString = pToken->GetString();
+                }
             }
             break;
             default:
             {
                 fVal = GetDouble();
-                bIsString = FALSE;
+                bIsString = false;
             }
         }
 
@@ -4894,23 +4930,43 @@ void ScInterpreter::ScSumIf()
                     nTab2 = nTab1;
                     break;
                 case svMatrix:
-                    {
+                case svExternalSingleRef:
+                case svExternalDoubleRef:
+                {
+                    if (GetStackType() == svMatrix)
                         pQueryMatrix = PopMatrix();
-                        if (!pQueryMatrix)
+                    else if (GetStackType() == svExternalDoubleRef)
+                        PopExternalDoubleRef(pQueryMatrix);
+                    else
+                    {
+                        OSL_ENSURE(GetStackType() == svExternalSingleRef, "external single ref is expected, but that's not what we found.");
+                        ScExternalRefCache::TokenRef pToken;
+                        PopExternalSingleRef(pToken);
+                        if (pToken)
                         {
-                            PushIllegalParameter();
-                            return;
+                            pQueryMatrix = new ScMatrix(1, 1);
+                            if (pToken->GetType() == svDouble)
+                                pQueryMatrix->PutDouble(pToken->GetDouble(), 0, 0);
+                            else
+                                pQueryMatrix->PutString(pToken->GetString(), 0, 0);
                         }
-                        nCol1 = 0;
-                        nRow1 = 0;
-                        nTab1 = 0;
-                        SCSIZE nC, nR;
-                        pQueryMatrix->GetDimensions( nC, nR);
-                        nCol2 = static_cast<SCCOL>(nC - 1);
-                        nRow2 = static_cast<SCROW>(nR - 1);
-                        nTab2 = 0;
                     }
-                    break;
+
+                    if (!pQueryMatrix)
+                    {
+                        PushIllegalParameter();
+                        return;
+                    }
+                    nCol1 = 0;
+                    nRow1 = 0;
+                    nTab1 = 0;
+                    SCSIZE nC, nR;
+                    pQueryMatrix->GetDimensions( nC, nR);
+                    nCol2 = static_cast<SCCOL>(nC - 1);
+                    nRow2 = static_cast<SCROW>(nR - 1);
+                    nTab2 = 0;
+                }
+                break;
                 default:
                     PushIllegalParameter();
                     return ;
@@ -4982,7 +5038,7 @@ void ScInterpreter::ScSumIf()
                 }
                 else
                 {
-                    rParam.FillInExcelSyntax(rString, 0);
+                    rParam.FillInExcelSyntax(aString, 0);
                     sal_uInt32 nIndex = 0;
                     rEntry.bQueryByString =
                         !(pFormatter->IsNumberFormat(

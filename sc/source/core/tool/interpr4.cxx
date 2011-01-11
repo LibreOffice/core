@@ -2335,48 +2335,57 @@ ScMatValType ScInterpreter::GetDoubleOrStringFromMatrix( double& rDouble,
     rString.Erase();
     ScMatValType nMatValType = SC_MATVAL_EMPTY;
 
-    switch ( GetStackType() )
+    ScMatrixRef pMat;
+    StackVar eType = GetStackType();
+    if (eType == svExternalDoubleRef)
     {
-        case svMatrix:
-            {
-                ScMatrixValue nMatVal;
-                ScMatrixRef pMat = PopMatrix();
-                if (!pMat)
-                    ;   // nothing
-                else if (!pJumpMatrix)
-                {
-                    nMatVal = pMat->Get(0, 0);
-                    nMatValType = nMatVal.nType;
-                }
-                else
-                {
-                    SCSIZE nCols, nRows, nC, nR;
-                    pMat->GetDimensions( nCols, nRows);
-                    pJumpMatrix->GetPos( nC, nR);
-                    if ( nC < nCols && nR < nRows )
-                    {
-                        nMatVal = pMat->Get( nC, nR);
-                        nMatValType = nMatVal.nType;
-                    }
-                    else
-                        SetError( errNoValue);
-                }
-
-                if (nMatValType == SC_MATVAL_VALUE)
-                    rDouble = nMatVal.fVal;
-                else if (nMatValType == SC_MATVAL_BOOLEAN)
-                {
-                    rDouble = nMatVal.fVal;
-                    nMatValType = SC_MATVAL_VALUE;
-                }
-                else
-                    rString = nMatVal.GetString();
-            }
-            break;
-        default:
-            PopError();
-            SetError( errIllegalParameter);
+        PopExternalDoubleRef(pMat);
     }
+    else if (eType == svMatrix)
+    {
+        pMat = PopMatrix();
+    }
+    else
+    {
+        PopError();
+        SetError( errIllegalParameter);
+        return nMatValType;
+    }
+
+    ScMatrixValue nMatVal;
+    if (!pMat)
+    {
+        // nothing
+    }
+    else if (!pJumpMatrix)
+    {
+        nMatVal = pMat->Get(0, 0);
+        nMatValType = nMatVal.nType;
+    }
+    else
+    {
+        SCSIZE nCols, nRows, nC, nR;
+        pMat->GetDimensions( nCols, nRows);
+        pJumpMatrix->GetPos( nC, nR);
+        if ( nC < nCols && nR < nRows )
+        {
+            nMatVal = pMat->Get( nC, nR);
+            nMatValType = nMatVal.nType;
+        }
+        else
+            SetError( errNoValue);
+    }
+
+    if (nMatValType == SC_MATVAL_VALUE)
+        rDouble = nMatVal.fVal;
+    else if (nMatValType == SC_MATVAL_BOOLEAN)
+    {
+        rDouble = nMatVal.fVal;
+        nMatValType = SC_MATVAL_VALUE;
+    }
+    else
+        rString = nMatVal.GetString();
+
     return nMatValType;
 }
 
