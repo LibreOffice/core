@@ -217,7 +217,7 @@ namespace toolkit
                 Reference< XGridColumn > const xColumn( pGridColumn.get() );
                 ::rtl::OUStringBuffer colTitle;
                 colTitle.appendAscii( "Column " );
-                colTitle.append( i );
+                colTitle.append( i + 1 );
                 pGridColumn->setTitle( colTitle.makeStringAndClear() );
                 pGridColumn->setPreferredWidth( 80 /* APPFONT */ );
 

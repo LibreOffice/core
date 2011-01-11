@@ -70,6 +70,8 @@ public:
     virtual void SAL_CALL setResizeable(::sal_Bool the_value) throw (::com::sun::star::uno::RuntimeException);
     virtual ::rtl::OUString SAL_CALL getTitle() throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL setTitle(const ::rtl::OUString & value) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::rtl::OUString SAL_CALL getHelpText() throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setHelpText(const ::rtl::OUString & value) throw (::com::sun::star::uno::RuntimeException);
     virtual ::sal_Int32 SAL_CALL getIndex() throw (::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::style::HorizontalAlignment SAL_CALL getHorizontalAlign() throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL setHorizontalAlign(::com::sun::star::style::HorizontalAlignment align) throw (::com::sun::star::uno::RuntimeException);
@@ -99,11 +101,24 @@ public:
 
 private:
     void broadcast_changed(
-            ::rtl::OUString name,
+            sal_Char const * const i_asciiAttributeName,
             ::com::sun::star::uno::Any i_oldValue,
             ::com::sun::star::uno::Any i_newValue,
             ::osl::ClearableMutexGuard& i_Guard
         );
+
+    template< class TYPE >
+    void impl_set( TYPE & io_attribute, TYPE const & i_newValue, sal_Char const * i_attributeName )
+    {
+        ::osl::ClearableMutexGuard aGuard( m_aMutex );
+        if ( io_attribute == i_newValue )
+            return;
+
+        TYPE const aOldValue( io_attribute );
+        io_attribute = i_newValue;
+        broadcast_changed( i_attributeName, ::com::sun::star::uno::makeAny( aOldValue ), ::com::sun::star::uno::makeAny( io_attribute ), aGuard );
+    }
+
 
     ::com::sun::star::uno::Any                      m_aIdentifier;
     sal_Int32                                       m_nIndex;
@@ -113,6 +128,7 @@ private:
     sal_Int32                                       m_nMinWidth;
     sal_Bool                                        m_bResizeable;
     ::rtl::OUString                                 m_sTitle;
+    ::rtl::OUString                                 m_sHelpText;
     ::com::sun::star::style::HorizontalAlignment    m_eHorizontalAlign;
 };
 

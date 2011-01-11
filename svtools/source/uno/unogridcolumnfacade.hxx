@@ -68,6 +68,8 @@ namespace svt { namespace table
         virtual void            setID( const ::com::sun::star::uno::Any& i_ID );
         virtual String          getName() const;
         virtual void            setName( const String& _rName );
+        virtual String          getHelpText() const;
+        virtual void            setHelpText( const String& i_helpText );
         virtual bool            isResizable() const;
         virtual void            setResizable( bool _bResizable );
         virtual TableMetrics    getWidth() const;

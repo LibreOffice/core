@@ -95,23 +95,32 @@ namespace svt { namespace table
 
             RowPos const hitRow = m_rTableControl.getRowAtPoint( aMousePos );
             ColPos const hitCol = m_rTableControl.getColAtPoint( aMousePos );
-            if  (   ( hitRow >= 0 ) && ( hitRow < m_rTableControl.getRowCount() )
-                &&  ( hitCol >= 0 ) && ( hitCol < m_rTableControl.getColumnCount() )
-                )
+
+            if ( ( hitCol >= 0 ) && ( hitCol < m_rTableControl.getColumnCount() ) )
             {
+                ::rtl::OUString sHelpText;
+
                 PTableModel const pTableModel( m_rTableControl.getAntiImpl().GetModel() );
 
-                Any aCellToolTip;
-                pTableModel->getCellToolTip( hitCol, hitRow, aCellToolTip );
-                if ( !aCellToolTip.hasValue() )
+                if ( hitRow == ROW_COL_HEADERS )
                 {
-                    // use the cell content
-                    pTableModel->getCellContent( hitCol, hitRow, aCellToolTip );
-                    // TODO: use the cell content as tool tip only if it doesn't fit into the cell. Need to
-                    // ask the renderer for this.
+                    sHelpText = pTableModel->getColumnModel( hitCol )->getHelpText();
+                }
+                else if ( ( hitRow >= 0 ) && ( hitRow < m_rTableControl.getRowCount() ) )
+                {
+                    Any aCellToolTip;
+                    pTableModel->getCellToolTip( hitCol, hitRow, aCellToolTip );
+                    if ( !aCellToolTip.hasValue() )
+                    {
+                        // use the cell content
+                        pTableModel->getCellContent( hitCol, hitRow, aCellToolTip );
+                        // TODO: use the cell content as tool tip only if it doesn't fit into the cell. Need to
+                        // ask the renderer for this.
+                    }
+
+                    sHelpText = CellValueConversion::convertToString( aCellToolTip );
                 }
 
-                ::rtl::OUString const sHelpText( CellValueConversion::convertToString( aCellToolTip ) );
                 if ( sHelpText.getLength() > 0 )
                 {
                     Rectangle const aControlScreenRect(

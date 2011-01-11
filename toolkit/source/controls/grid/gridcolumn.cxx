@@ -32,14 +32,6 @@
 #include <cppuhelper/typeprovider.hxx>
 #include <toolkit/helper/servicenames.hxx>
 
-#define COLWIDTH ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "ColWidth" ))
-#define MAXWIDTH ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "MaxWidth" ))
-#define MINWIDTH ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "MinWidth" ))
-#define PREFWIDTH ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "PrefWidth" ))
-#define HALIGN ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "HAlign" ))
-#define TITLE ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Title" ))
-#define COLRESIZE ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "ColumnResize" ))
-
 namespace toolkit
 {
     using namespace ::com::sun::star;
@@ -88,10 +80,13 @@ namespace toolkit
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    void GridColumn::broadcast_changed( ::rtl::OUString name, Any i_oldValue, Any i_newValue, ::osl::ClearableMutexGuard& i_Guard )
+    void GridColumn::broadcast_changed( sal_Char const * const i_asciiAttributeName, Any i_oldValue, Any i_newValue, ::osl::ClearableMutexGuard& i_Guard )
     {
         Reference< XInterface > const xSource( static_cast< ::cppu::OWeakObject* >( this ) );
-        GridColumnEvent const aEvent( xSource, name, i_oldValue, i_newValue, m_nIndex);
+        GridColumnEvent const aEvent(
+            xSource, ::rtl::OUString::createFromAscii( i_asciiAttributeName ),
+            i_oldValue, i_newValue, m_nIndex
+        );
 
         ::cppu::OInterfaceContainerHelper* pIter = rBHelper.getContainer( XGridColumnListener::static_type() );
 
@@ -110,7 +105,8 @@ namespace toolkit
     //------------------------------------------------------------------------------------------------------------------
     void SAL_CALL GridColumn::setIdentifier(const ::com::sun::star::uno::Any & value) throw (::com::sun::star::uno::RuntimeException)
     {
-        value >>= m_aIdentifier;
+        ::osl::MutexGuard aGuard( m_aMutex );
+        m_aIdentifier = value;
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -123,12 +119,7 @@ namespace toolkit
     //------------------------------------------------------------------------------------------------------------------
     void SAL_CALL GridColumn::setColumnWidth(::sal_Int32 value) throw (::com::sun::star::uno::RuntimeException)
     {
-        ::osl::ClearableMutexGuard aGuard( m_aMutex );
-        if ( m_nColumnWidth == value )
-            return;
-
-        m_nColumnWidth = value;
-        broadcast_changed( COLWIDTH, Any( m_nColumnWidth ), Any( value ), aGuard );
+        impl_set( m_nColumnWidth, value, "ColumnWidth" );
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -141,12 +132,7 @@ namespace toolkit
     //------------------------------------------------------------------------------------------------------------------
     void SAL_CALL GridColumn::setPreferredWidth(::sal_Int32 value) throw (::com::sun::star::uno::RuntimeException)
     {
-        ::osl::ClearableMutexGuard aGuard( m_aMutex );
-        if ( m_nPreferredWidth == value )
-            return;
-
-        m_nPreferredWidth = value;
-        broadcast_changed( PREFWIDTH, Any( m_nPreferredWidth ), Any( value ), aGuard );
+        impl_set( m_nPreferredWidth, value, "PreferredWidth" );
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -159,12 +145,7 @@ namespace toolkit
     //------------------------------------------------------------------------------------------------------------------
     void SAL_CALL GridColumn::setMaxWidth(::sal_Int32 value) throw (::com::sun::star::uno::RuntimeException)
     {
-        ::osl::ClearableMutexGuard aGuard( m_aMutex );
-        if ( m_nMaxWidth == value )
-            return;
-
-        m_nMaxWidth = value;
-        broadcast_changed( MAXWIDTH, Any( m_nMaxWidth ), Any( value ), aGuard );
+        impl_set( m_nMaxWidth, value, "MaxWidth" );
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -177,12 +158,7 @@ namespace toolkit
     //------------------------------------------------------------------------------------------------------------------
     void SAL_CALL GridColumn::setMinWidth(::sal_Int32 value) throw (::com::sun::star::uno::RuntimeException)
     {
-        ::osl::ClearableMutexGuard aGuard( m_aMutex );
-        if ( m_nMinWidth == value )
-            return;
-
-        m_nMinWidth = value;
-        broadcast_changed( MINWIDTH, Any( m_nMinWidth ), Any( value ), aGuard );
+        impl_set( m_nMinWidth, value, "MinWidth" );
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -195,12 +171,20 @@ namespace toolkit
     //------------------------------------------------------------------------------------------------------------------
     void SAL_CALL GridColumn::setTitle(const ::rtl::OUString & value) throw (::com::sun::star::uno::RuntimeException)
     {
-        ::osl::ClearableMutexGuard aGuard( m_aMutex );
-        if ( m_sTitle == value )
-            return;
+        impl_set( m_sTitle, value, "Title" );
+    }
 
-        m_sTitle = value;
-        broadcast_changed( TITLE, Any( m_sTitle ), Any( value ), aGuard );
+    //------------------------------------------------------------------------------------------------------------------
+    ::rtl::OUString SAL_CALL GridColumn::getHelpText() throw (RuntimeException)
+    {
+        ::osl::MutexGuard aGuard( m_aMutex );
+        return m_sHelpText;
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    void SAL_CALL GridColumn::setHelpText( const ::rtl::OUString & value ) throw (RuntimeException)
+    {
+        impl_set( m_sHelpText, value, "HelpText" );
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -213,12 +197,7 @@ namespace toolkit
     //------------------------------------------------------------------------------------------------------------------
     void SAL_CALL GridColumn::setResizeable(sal_Bool value) throw (::com::sun::star::uno::RuntimeException)
     {
-        ::osl::ClearableMutexGuard aGuard( m_aMutex );
-        if ( m_bResizeable == value )
-            return;
-
-        m_bResizeable = value;
-        broadcast_changed( COLRESIZE, Any( m_bResizeable ), Any( value ), aGuard );
+        impl_set( m_bResizeable, value, "Resizeable" );
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -231,12 +210,7 @@ namespace toolkit
     //------------------------------------------------------------------------------------------------------------------
     void SAL_CALL GridColumn::setHorizontalAlign(HorizontalAlignment align) throw (::com::sun::star::uno::RuntimeException)
     {
-        ::osl::ClearableMutexGuard aGuard( m_aMutex );
-        if ( m_eHorizontalAlign == align )
-            return;
-
-        m_eHorizontalAlign = align;
-        broadcast_changed( HALIGN, Any( m_eHorizontalAlign ), Any( align ), aGuard );
+        impl_set( m_eHorizontalAlign, value, "HorizontalAlign" );
     }
 
     //------------------------------------------------------------------------------------------------------------------

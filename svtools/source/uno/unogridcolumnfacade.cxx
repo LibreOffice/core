@@ -150,14 +150,14 @@ namespace svt { namespace table
     {
         ColumnAttributeGroup nChangedAttributes( COL_ATTRS_NONE );
 
-        if ( i_event.AttributeName.equalsAscii( "HAlign" ) )
+        if ( i_event.AttributeName.equalsAscii( "HorizontalAlign" ) )
             nChangedAttributes |= COL_ATTRS_APPEARANCE;
 
-        if  (   i_event.AttributeName.equalsAscii( "ColWidth" )
+        if  (   i_event.AttributeName.equalsAscii( "ColumnWidth" )
             ||  i_event.AttributeName.equalsAscii( "MaxWidth" )
             ||  i_event.AttributeName.equalsAscii( "MinWidth" )
-            ||  i_event.AttributeName.equalsAscii( "PrefWidth" )
-            ||  i_event.AttributeName.equalsAscii( "ColumnResize" )
+            ||  i_event.AttributeName.equalsAscii( "PreferredWidth" )
+            ||  i_event.AttributeName.equalsAscii( "Resizeable" )
             )
             nChangedAttributes |= COL_ATTRS_WIDTH;
 
@@ -266,6 +266,36 @@ namespace svt { namespace table
         try
         {
             m_xGridColumn->setTitle( _rName );
+        }
+        catch( const Exception& )
+        {
+            DBG_UNHANDLED_EXCEPTION();
+        }
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    String UnoGridColumnFacade::getHelpText() const
+    {
+        ::rtl::OUString sHelpText;
+        ENSURE_OR_RETURN( m_xGridColumn.is(), "UnoGridColumnFacade: already disposed!", sHelpText );
+        try
+        {
+            sHelpText = m_xGridColumn->getHelpText();
+        }
+        catch( const Exception& )
+        {
+            DBG_UNHANDLED_EXCEPTION();
+        }
+        return sHelpText;
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    void UnoGridColumnFacade::setHelpText( const String& i_helpText )
+    {
+        ENSURE_OR_RETURN_VOID( m_xGridColumn.is(), "UnoGridColumnFacade: already disposed!" );
+        try
+        {
+            m_xGridColumn->setHelpText( i_helpText );
         }
         catch( const Exception& )
         {

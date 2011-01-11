@@ -213,6 +213,14 @@ namespace svt { namespace table
         */
         virtual void        setName( const String& _rName ) = 0;
 
+        /** retrieves the help text to be displayed for the column.
+        */
+        virtual String      getHelpText() const = 0;
+
+        /** sets a new the help text to be displayed for the column.
+        */
+        virtual void        setHelpText( const String& i_helpText ) = 0;
+
         /** determines whether the column can be resized
 
             @see getMinWidth
@@ -443,7 +451,7 @@ namespace svt { namespace table
             @param i_col
                 The column index of the cell in question. COL_ROW_HEADERS is a valid argument here.
             @param i_row
-                The row index of the cell in question. ROW_COL_HEADERS is a valid argument.
+                The row index of the cell in question.
             @param o_cellToolTip
                 takes the tooltip object upon return.
         */
