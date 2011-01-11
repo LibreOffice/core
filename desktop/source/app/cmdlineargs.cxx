@@ -41,6 +41,8 @@
 
 #include <svl/documentlockfile.hxx>
 
+#include <cstdio>
+
 using namespace rtl;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::uri;
@@ -391,6 +393,8 @@ sal_Bool CommandLineArgs::InterpretCommandLineParameter( const ::rtl::OUString& 
     }
     else if (aArg.toChar() == '-')
     {
+        const sal_Char* s = rtl::OUStringToOString(aArg, RTL_TEXTENCODING_UTF8).getStr();
+        fprintf(stderr, "Warning: %s is deprecated.  Use -%s instead.\n", s, s);
         oArg = ::rtl::OUString(aArg.getStr()+1, aArg.getLength()-1);
     }
     else

@@ -98,7 +98,7 @@ done
 # test for availability of the fast external splash
 for arg in $@; do
     case "$arg" in
-    --nologo|-nologo|--no-oosplash|-no-oosplash|--version|--help|-help|-h|-\?)
+    --nologo|-nologo|--no-oosplash|-no-oosplash|--version|-version|--help|-help|-h|-\?)
         no_oosplash=y
         ;;
     esac
