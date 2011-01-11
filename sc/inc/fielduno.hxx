@@ -142,7 +142,7 @@ private:
     SvxEditSource*          pEditSource;
     ESelection              aSelection;
 
-    String                  aUrl;               // Inhalt, wenn noch nicht eingefuegt (nur dann!)
+    String                  aUrl;               // content, only iff not already inserted
     String                  aRepresentation;
     String                  aTarget;
 
@@ -154,7 +154,7 @@ public:
 
     virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 
-                            // per getImplementation gerufen:
+                            // called by getImplementation:
     void                    DeleteField();
     BOOL                    IsInserted() const      { return pEditSource != NULL; }
     SvxFieldItem            CreateFieldItem();
@@ -349,7 +349,7 @@ public:
                                             USHORT nT, const ESelection& rSel);
     virtual                 ~ScHeaderFieldObj();
 
-                            // per getImplementation gerufen:
+                            // called by getImplementation:
     void                    DeleteField();
     BOOL                    IsInserted() const      { return pEditSource != NULL; }
     SvxFieldItem            CreateFieldItem();

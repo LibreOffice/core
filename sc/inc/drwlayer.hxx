@@ -74,8 +74,8 @@ public:
 
 // -----------------------------------------------------------------------
 //
-//  Das Anpassen der Detektiv-UserData muss zusammen mit den Draw-Undo's
-//  in der SdrUndoGroup liegen, darum von SdrUndoAction abgeleitet:
+//  Adjusting of detective UserData and draw undo's both have to be in SdrUndoGroup;
+//  therefore derived from SdrUndoAction
 
 class ScUndoObjData : public SdrUndoObj
 {
@@ -133,17 +133,17 @@ public:
     void            ScRemovePage( SCTAB nTab );
     void            ScRenamePage( SCTAB nTab, const String& rNewName );
     void            ScMovePage( USHORT nOldPos, USHORT nNewPos );
-                    // inkl. Inhalt, bAlloc=FALSE -> nur Inhalt
+                    // incl. content, bAlloc=FALSE -> only content
     void            ScCopyPage( USHORT nOldPos, USHORT nNewPos, BOOL bAlloc );
 
     ScDocument*     GetDocument() const { return pDoc; }
 
-    void            UpdateBasic();              // DocShell-Basic in DrawPages setzen
+    void            UpdateBasic();              // set DocShell Basic in DrawPages
     void            UseHyphenator();
 
     BOOL            GetPrintArea( ScRange& rRange, BOOL bSetHor, BOOL bSetVer ) const;
 
-                    //      automatische Anpassungen
+                    //      automatic adjustments
 
     void            EnableAdjust( BOOL bSet = TRUE )    { bAdjustEnabled = bSet; }
 
@@ -188,11 +188,10 @@ public:
     String          GetNewGraphicName( long* pnCounter = NULL ) const;
     void            EnsureGraphicNames();
 
-    // Verankerung setzen und ermitteln
     static void     SetAnchor( SdrObject*, ScAnchorType );
     static ScAnchorType GetAnchor( const SdrObject* );
 
-    // Positionen fuer Detektivlinien
+    // positions for detektive lines
     static ScDrawObjData* GetObjData( SdrObject* pObj, BOOL bCreate=FALSE );
 
     // The sheet information in ScDrawObjData isn't updated when sheets are inserted/deleted.
@@ -215,7 +214,7 @@ public:
     static ScMacroInfo* GetMacroInfo( SdrObject* pObj, BOOL bCreate = FALSE );
 
 private:
-    static SfxObjectShell* pGlobalDrawPersist;          // fuer AllocModel
+    static SfxObjectShell* pGlobalDrawPersist;          // for AllocModel
 public:
     static void     SetGlobalDrawPersist(SfxObjectShell* pPersist);
 protected:

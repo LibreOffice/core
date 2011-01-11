@@ -51,7 +51,7 @@ class ScEditUtil
     SCROW           nRow;
     SCTAB           nTab;
     Point           aScrPos;
-    OutputDevice*   pDev;           // MapMode muss eingestellt sein
+    OutputDevice*   pDev;           // MapMode has to be set
     double          nPPTX;
     double          nPPTY;
     Fraction        aZoomX;
@@ -178,8 +178,6 @@ private:
     void    Init(const ScPatternAttr& rPattern);
 public:
     ScTabEditEngine( ScDocument* pDoc );            // Default
-    // pEnginePool = ScDocument.GetEnginePool()
-    // pTextObjectPool = ScDocument.GetEditPool()
     ScTabEditEngine( const ScPatternAttr& rPattern,
                     SfxItemPool* pEnginePool,
                     SfxItemPool* pTextObjectPool = NULL );
@@ -188,9 +186,9 @@ public:
 
 struct ScHeaderFieldData
 {
-    String      aTitle;             // Titel oder Dateiname wenn kein Titel
-    String      aLongDocName;       // Pfad und Dateiname
-    String      aShortDocName;      // nur Dateiname
+    String      aTitle;             // title or file name (if no title)
+    String      aLongDocName;       // path and file name
+    String      aShortDocName;      // pure file name
     String      aTabName;
     Date        aDate;
     Time        aTime;
@@ -202,15 +200,13 @@ struct ScHeaderFieldData
 };
 
 
-// fuer Feldbefehle in der Tabelle
+// for field commands (or just fields?) in a table
 class SC_DLLPUBLIC ScFieldEditEngine : public ScEditEngineDefaulter
 {
 private:
     BOOL    bExecuteURL;
 
 public:
-    // pEnginePool = ScDocument.GetEnginePool()
-    // pTextObjectPool = ScDocument.GetEditPool()
     ScFieldEditEngine( SfxItemPool* pEnginePool,
                         SfxItemPool* pTextObjectPool = NULL,
                         BOOL bDeleteEnginePool = FALSE );
@@ -249,15 +245,13 @@ class ScNoteEditEngine : public ScEditEngineDefaulter
 {
 
 public:
-    // pEnginePool = ScDocument.GetEnginePool()
-    // pTextObjectPool = ScDocument.GetEditPool()
     ScNoteEditEngine( SfxItemPool* pEnginePool,
                 SfxItemPool* pTextObjectPool = NULL,
                 BOOL bDeleteEnginePool = FALSE );
 
 };
 
-//  SvxFieldData-Ableitungen sind nach Svx verschoben
+//  SvxFieldData derivations were moved to Svx (comment can be deleted?)
 
 
 #endif
