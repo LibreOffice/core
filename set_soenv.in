@@ -1698,6 +1698,16 @@ ToFile( "DYNAMIC_CRT",       $DYNAMIC_CRT,       "e" );
 ToFile( "SET_EXCEPTIONS",    $SET_EXCEPTIONS,    "e" );
 ToFile( "use_shl_versions",  $use_shl_versions,  "e" );
 ToFile( "FLIPCMD",           $FLIPCMD,           "e" );
+if ( $platform =~ m/darwin/ )
+{
+# MAXOSX_DEPLOYMENT_TARGET : The minimum version required to run the build,
+# build can assume functions/libraries of that version to be available
+# unless you want to do runtime checks for 10.5 api, you also want to use the 10.4 sdk
+# (safer/easier than dealing with the MAC_OS_X_VERSION_MAX_ALLOWED macro)
+# http://developer.apple.com/technotes/tn2002/tn2064.html
+    ToFile( "MACOSX_DEPLOYMENT_TARGET",       "10.4",       "e" );
+}
+
 #
 # Writing the variables to file.
 # (c = comment, e = environment variable, a = alias, n = newline )
