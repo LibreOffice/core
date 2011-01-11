@@ -94,7 +94,7 @@ namespace svt { namespace table
             ITableControl& rTableControl = m_rTableControl;
             PTableModel const pTableModel( rTableControl.getModel() );
 
-            Point const aMousePos( m_rTableControl.getAntiImpl().ScreenToOutputPixel( rHEvt.GetMousePosPixel() ) );
+            Point const aMousePos( ScreenToOutputPixel( rHEvt.GetMousePosPixel() ) );
 
             RowPos const hitRow = rTableControl.getRowAtPoint( aMousePos );
             ColPos const hitCol = rTableControl.getColAtPoint( aMousePos );
@@ -115,21 +115,30 @@ namespace svt { namespace table
                     {
                         // use the cell content
                         pTableModel->getCellContent( hitCol, hitRow, aCellToolTip );
-                        // TODO: use the cell content as tool tip only if it doesn't fit into the cell. Need to
-                        // ask the renderer for this.
+
+                        // use the cell content as tool tip only if it doesn't fit into the cell.
+                        bool const activeCell = ( hitRow == rTableControl.getCurrentRow() ) && ( hitCol == rTableControl.getCurrentColumn() );
+                        bool const selectedCell = rTableControl.isRowSelected( hitRow );
+
+                        Rectangle const aWindowRect( Point( 0, 0 ), GetOutputSizePixel() );
+                        TableCellGeometry const aCell( m_rTableControl, aWindowRect, hitCol, hitRow );
+                        Rectangle const aCellRect( aCell.getRect() );
+
+                        PTableRenderer const pRenderer = pTableModel->getRenderer();
+                        if ( pRenderer->FitsIntoCell( aCellToolTip, hitCol, hitRow, activeCell, selectedCell, *this, aCellRect ) )
+                            aCellToolTip.clear();
                     }
 
                     sHelpText = CellValueConversion::convertToString( aCellToolTip );
                 }
 
-                if ( sHelpText.getLength() > 0 )
-                {
-                    Rectangle const aControlScreenRect(
-                        m_rTableControl.getAntiImpl().OutputToScreenPixel( Point( 0, 0 ) ),
-                        m_rTableControl.getAntiImpl().GetOutputSizePixel()
-                    );
-                    Help::ShowQuickHelp( &m_rTableControl.getAntiImpl(), aControlScreenRect, sHelpText, String(), QUICKHELP_FORCE_REPOSITION );
-                }
+                Rectangle const aControlScreenRect(
+                    OutputToScreenPixel( Point( 0, 0 ) ),
+                    GetOutputSizePixel()
+                );
+                Help::ShowQuickHelp( this, aControlScreenRect, sHelpText, String(), QUICKHELP_FORCE_REPOSITION | QUICKHELP_NO_DELAY );
+                    // also do this when the help text is empty - in this case, a previously active tip help window
+                    // (possible displaying the tooltip for another cell) will be hidden, which is intended here.
             }
         }
         else

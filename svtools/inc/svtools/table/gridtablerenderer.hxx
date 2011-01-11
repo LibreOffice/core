@@ -93,6 +93,12 @@ namespace svt { namespace table
                             const StyleSettings& _rStyle );
         virtual void    ShowCellCursor( Window& _rView, const Rectangle& _rCursorRect);
         virtual void    HideCellCursor( Window& _rView, const Rectangle& _rCursorRect);
+        virtual bool    FitsIntoCell(
+                            ::com::sun::star::uno::Any const & i_cellContent,
+                            ColPos const i_colPos, RowPos const i_rowPos,
+                            bool const i_active, bool const i_selected,
+                            OutputDevice& i_targetDevice, Rectangle const & i_targetArea
+                        );
 
     private:
         struct CellRenderContext;

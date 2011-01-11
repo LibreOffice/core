@@ -33,6 +33,7 @@
 #include <com/sun/star/graphic/XGraphic.hpp>
 
 #include <tools/debug.hxx>
+#include <tools/diagnose_ex.h>
 #include <vcl/window.hxx>
 #include <vcl/image.hxx>
 
@@ -269,9 +270,27 @@ namespace svt { namespace table
     };
 
     //--------------------------------------------------------------------
+    namespace
+    {
+        /** transforms a rectangle denoting a cell area so that afterwards, it denotes the area we
+            can use for rendering the cell's content.
+        */
+        static void lcl_convertCellToContentArea( Rectangle & io_area )
+        {
+            ++io_area.Left(); --io_area.Right();
+        }
+
+        static void lcl_convertContentToTextRenderingArea( Rectangle & io_area )
+        {
+            io_area.Left() += 2; io_area.Right() -= 2;
+            ++io_area.Top(); --io_area.Bottom();
+        }
+    }
+
+    //--------------------------------------------------------------------
     void GridTableRenderer::PaintCell( ColPos const i_column, bool _bSelected, bool _bActive,
         OutputDevice& _rDevice, const Rectangle& _rArea, const StyleSettings& _rStyle )
-   {
+    {
         _rDevice.Push( PUSH_LINECOLOR | PUSH_FILLCOLOR );
         Color background1 = m_pImpl->rModel.getOddRowBackgroundColor();
         Color background2 = m_pImpl->rModel.getEvenRowBackgroundColor();
@@ -299,15 +318,15 @@ namespace svt { namespace table
                 _rDevice.SetLineColor( background1 );
             else
             {
-                //if line color is set, then it was user defined and should be visible
-                //if it wasn't set, it'll be the same as the default background color, so lines still won't be visible
+                // if line color is set, then it was user defined and should be visible
+                // if it wasn't set, it'll be the same as the default background color, so lines still won't be visible
                 _rDevice.SetLineColor( lineColor );
             }
         }
         _rDevice.DrawLine( _rArea.BottomRight(), _rArea.TopRight() );
 
         Rectangle aRect( _rArea );
-        ++aRect.Left(); --aRect.Right();
+        lcl_convertCellToContentArea( aRect );
 
         const CellRenderContext aRenderContext( _rDevice, aRect, _rStyle, i_column, _bSelected );
         impl_paintCellContent( aRenderContext );
@@ -413,8 +432,7 @@ namespace svt { namespace table
         }
 
         Rectangle textRect( i_context.aContentArea );
-        textRect.Left() += 2; textRect.Right() -= 2;
-        ++textRect.Top(); --textRect.Bottom();
+        lcl_convertContentToTextRenderingArea( textRect );
 
         i_context.rDevice.DrawText( textRect, i_text, nHorFlag | nVerFlag | TEXT_DRAW_CLIP );
     }
@@ -428,9 +446,41 @@ namespace svt { namespace table
     //--------------------------------------------------------------------
     void GridTableRenderer::HideCellCursor( Window& _rView, const Rectangle& _rCursorRect)
     {
-    (void)_rCursorRect;
+        (void)_rCursorRect;
         _rView.HideFocus();
+    }
 
+    //--------------------------------------------------------------------
+    bool GridTableRenderer::FitsIntoCell( Any const & i_cellContent, ColPos const i_colPos, RowPos const i_rowPos,
+        bool const i_active, bool const i_selected, OutputDevice& i_targetDevice, Rectangle const & i_targetArea )
+    {
+        if ( !i_cellContent.hasValue() )
+            return true;
+
+        Reference< XGraphic > const xGraphic( i_cellContent, UNO_QUERY );
+        if ( xGraphic.is() )
+            // for the moment, assume it fits. We can always scale it down during painting ...
+            return true;
+
+        ::rtl::OUString const sText( CellValueConversion::convertToString( i_cellContent ) );
+        if ( sText.getLength() == 0 )
+            return true;
+
+        Rectangle aTargetArea( i_targetArea );
+        lcl_convertCellToContentArea( aTargetArea );
+        lcl_convertContentToTextRenderingArea( aTargetArea );
+
+        long const nTextHeight = i_targetDevice.GetTextHeight();
+        if ( nTextHeight > aTargetArea.GetHeight() )
+            return false;
+
+        long const nTextWidth = i_targetDevice.GetTextWidth( sText );
+        if ( nTextWidth > aTargetArea.GetWidth() )
+            return false;
+
+        OSL_UNUSED( i_active );
+        OSL_UNUSED( i_selected );
+        return true;
     }
 
 //........................................................................
