@@ -92,6 +92,9 @@
 
 // -----------------------------------------------------------------------
 
+using ::rtl::OUString;
+using ::rtl::OUStringBuffer;
+
 #define CLIPST_AVAILABLE    0
 #define CLIPST_CAPTURED     1
 #define CLIPST_DELETE       2
@@ -1281,16 +1284,19 @@ ScFunctionList::ScFunctionList() :
         FuncData *pAddInFuncData = (FuncData*)pFuncColl->At(i);
         USHORT nArgs = pAddInFuncData->GetParamCount() - 1;
         pAddInFuncData->GetParamDesc( aArgName, aArgDesc, 0 );
-          pDesc->nFIndex     = nNextId++;               //  ??? OpCode vergeben
-          pDesc->nCategory   = ID_FUNCTION_GRP_ADDINS;
-          pDesc->pFuncName   = new ::rtl::OUString(pAddInFuncData->GetInternalName());
-          pDesc->pFuncName->toAsciiUpperCase();
-          pDesc->pFuncDesc   = new ::rtl::OUString( aArgDesc );
-        *(pDesc->pFuncDesc) += *(new ::rtl::OUString( '\n' ));
-        *(pDesc->pFuncDesc) += ::rtl::OUString::createFromAscii("( AddIn: ");
-        *(pDesc->pFuncDesc) += pAddInFuncData->GetModuleName();
-        *(pDesc->pFuncDesc) += ::rtl::OUString::createFromAscii( " )" );
-          pDesc->nArgCount   = nArgs;
+        pDesc->nFIndex     = nNextId++;             //  ??? OpCode vergeben
+        pDesc->nCategory   = ID_FUNCTION_GRP_ADDINS;
+        pDesc->pFuncName   = new ::rtl::OUString(pAddInFuncData->GetInternalName());
+        pDesc->pFuncName->toAsciiUpperCase();
+
+        OUStringBuffer aBuf(aArgDesc);
+        aBuf.append(sal_Unicode('\n'));
+        aBuf.appendAscii("( AddIn: ");
+        aBuf.append(pAddInFuncData->GetModuleName());
+        aBuf.appendAscii(" )");
+        pDesc->pFuncDesc = new OUString(aBuf.makeStringAndClear());
+
+        pDesc->nArgCount   = nArgs;
         if (nArgs)
         {
             pDesc->pDefArgFlags  = new ScFuncDesc::ParameterFlags[nArgs];
@@ -1507,13 +1513,13 @@ void ScFuncDesc::Clear()
              * parameters. For now parameters are always added, so no special
              * treatment of a trailing "; " necessary. */
             aSig.append(*(ppDefArgNames[nFix]));
-            aSig.appendAscii("1");
+            aSig.append(sal_Unicode('1'));
             aSig.append(sep);
-            aSig.appendAscii( " " );
+            aSig.append(sal_Unicode(' '));
             aSig.append(*(ppDefArgNames[nFix]));
-            aSig.appendAscii("2");
+            aSig.append(sal_Unicode('2'));
             aSig.append(sep);
-            aSig.appendAscii(" ... " );
+            aSig.appendAscii(" ... ");
         }
     }
 

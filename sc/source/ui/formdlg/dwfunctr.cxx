@@ -597,30 +597,30 @@ void ScFunctionDockWin::SetDescription()
     {
         pDesc->initArgumentInfo();      // full argument info is needed
 
-        String  aString=pAllFuncList->GetSelectEntry();
+        ::rtl::OUStringBuffer aBuf(pAllFuncList->GetSelectEntry());
         if(nDockMode==0)
         {
-            aString.AppendAscii(RTL_CONSTASCII_STRINGPARAM( ":\n\n" ));
+            aBuf.appendAscii(":\n\n");
         }
         else
         {
-            aString.AppendAscii(RTL_CONSTASCII_STRINGPARAM( ":   " ));
+            aBuf.appendAscii(":   ");
         }
 
-        aString+=(String)(pDesc->GetParamList());
+        aBuf.append(pDesc->GetParamList());
 
         if(nDockMode==0)
         {
-            aString.AppendAscii(RTL_CONSTASCII_STRINGPARAM( "\n\n" ));
+            aBuf.appendAscii("\n\n");
         }
         else
         {
-            aString += '\n';
+            aBuf.appendAscii("\n");
         }
 
-        aString+=(String)*(pDesc->pFuncDesc);
+        aBuf.append(*pDesc->pFuncDesc);
 
-        aFiFuncDesc.SetText(aString);
+        aFiFuncDesc.SetText(aBuf.makeStringAndClear());
         aFiFuncDesc.StateChanged(STATE_CHANGE_TEXT);
         aFiFuncDesc.Invalidate();
         aFiFuncDesc.Update();

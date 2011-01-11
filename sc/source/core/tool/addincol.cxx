@@ -1048,7 +1048,7 @@ void ScUnoAddInCollection::ReadFromAddIn( const uno::Reference<uno::XInterface>&
 
 void lcl_UpdateFunctionList( ScFunctionList& rFunctionList, const ScUnoAddInFuncData& rFuncData )
 {
-    ::rtl::OUString aCompare = (::rtl::OUString)rFuncData.GetUpperLocal();    // as used in FillFunctionDescFromData
+    ::rtl::OUString aCompare = rFuncData.GetUpperLocal();    // as used in FillFunctionDescFromData
 
     ULONG nCount = rFunctionList.GetCount();
     for (ULONG nPos=0; nPos<nCount; nPos++)

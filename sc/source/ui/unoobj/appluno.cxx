@@ -1048,7 +1048,7 @@ uno::Sequence<rtl::OUString> SAL_CALL ScFunctionListObj::getElementNames() throw
         sal_uInt32 nCount = pFuncList->GetCount();
         uno::Sequence<rtl::OUString> aSeq(nCount);
         rtl::OUString* pAry = aSeq.getArray();
-        for (sal_uInt32 nIndex=0; nIndex<nCount; nIndex++)
+        for (sal_uInt32 nIndex=0; nIndex<nCount; ++nIndex)
         {
             const ScFuncDesc* pDesc = pFuncList->GetFunction(nIndex);
             if ( pDesc && pDesc->pFuncName )
@@ -1067,7 +1067,7 @@ sal_Bool SAL_CALL ScFunctionListObj::hasByName( const rtl::OUString& aName )
     if ( pFuncList )
     {
         sal_uInt32 nCount = pFuncList->GetCount();
-        for (sal_uInt32 nIndex=0; nIndex<nCount; nIndex++)
+        for (sal_uInt32 nIndex=0; nIndex<nCount; ++nIndex)
         {
             const ScFuncDesc* pDesc = pFuncList->GetFunction(nIndex);
             //! Case-insensitiv ???
