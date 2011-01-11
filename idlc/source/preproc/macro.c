@@ -233,7 +233,7 @@ void
     expandrow(Tokenrow * trp, char *flag)
 {
     Token *tp;
-    Nlist *np;
+    Nlist *np=NULL;
 
     if (flag)
         setsource(flag, -1, -1, "", 0);
