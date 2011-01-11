@@ -680,6 +680,13 @@ XFastAttributeListRef DocxExport::MainXmlNamespaces( FSHelperPtr serializer )
     return XFastAttributeListRef( pAttr );
 }
 
+bool DocxExport::ignoreAttributeForStyles( USHORT nWhich ) const
+{
+    if( nWhich == RES_TEXTGRID )
+        return true; // w:docGrid is written only to document.xml, not to styles.xml
+    return MSWordExportBase::ignoreAttributeForStyles( nWhich );
+}
+
 DocxExport::DocxExport( DocxExportFilter *pFilter, SwDoc *pDocument, SwPaM *pCurrentPam, SwPaM *pOriginalPam )
     : MSWordExportBase( pDocument, pCurrentPam, pOriginalPam ),
       m_pFilter( pFilter ),

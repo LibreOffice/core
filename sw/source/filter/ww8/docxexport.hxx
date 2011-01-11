@@ -99,6 +99,8 @@ public:
     /// FIXME remove it when possible.
     virtual bool HackIsWW8OrHigher() const { return true; }
 
+    virtual bool ignoreAttributeForStyles( USHORT nWhich ) const;
+
     /// Guess the script (asian/western).
     virtual bool CollapseScriptsforWordOk( USHORT nScript, USHORT nWhich );
 

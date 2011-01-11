@@ -623,6 +623,9 @@ public:
     /// FIXME remove it when possible.
     virtual bool HackIsWW8OrHigher() const = 0;
 
+    /// Used to filter out attributes that can be e.g. written to .doc but not to .docx
+    virtual bool ignoreAttributeForStyles( USHORT /*nWhich*/ ) const { return false; }
+
     /// Guess the script (asian/western).
     ///
     /// Sadly word does not have two different sizes for asian font size and
