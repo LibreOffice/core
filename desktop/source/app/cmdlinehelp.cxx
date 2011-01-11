@@ -71,6 +71,7 @@ namespace desktop
         "--nodefault    \n"\
         "--headless     \n"\
         "--help/-h/-?   \n"\
+        "--version      \n"\
         "--writer       \n"\
         "--calc         \n"\
         "--draw         \n"\
@@ -91,6 +92,7 @@ namespace desktop
         "don't start with an empty document\n"\
         "like invisible but no userinteraction at all.\n"\
         "show this message and exit.\n"\
+        "display the version information.\n"\
         "create new text document.\n"\
         "create new spreadsheet document.\n"\
         "create new drawing.\n"\
