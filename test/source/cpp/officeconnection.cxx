@@ -73,14 +73,14 @@ void OfficeConnection::setUp() {
         desc = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("pipe,name=oootest")) +
             rtl::OUString::valueOf(static_cast< sal_Int64 >(info.Ident));
         rtl::OUString noquickArg(
-            RTL_CONSTASCII_USTRINGPARAM("-quickstart=no"));
+            RTL_CONSTASCII_USTRINGPARAM("--quickstart=no"));
         rtl::OUString nofirstArg(
-            RTL_CONSTASCII_USTRINGPARAM("-nofirststartwizard"));
-        rtl::OUString norestoreArg(RTL_CONSTASCII_USTRINGPARAM("-norestore"));
+            RTL_CONSTASCII_USTRINGPARAM("--nofirststartwizard"));
+        rtl::OUString norestoreArg(RTL_CONSTASCII_USTRINGPARAM("--norestore"));
         //Disable use of the unix standalone splash screen app for the tests
-        rtl::OUString noSplashArg(RTL_CONSTASCII_USTRINGPARAM("-no-oosplash"));
+        rtl::OUString noSplashArg(RTL_CONSTASCII_USTRINGPARAM("--no-oosplash"));
         rtl::OUString acceptArg(
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("-accept=")) + desc +
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("--accept=")) + desc +
             rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(";urp")));
         rtl::OUString argUser;
         CPPUNIT_ASSERT(
