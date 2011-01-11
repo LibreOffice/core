@@ -43,9 +43,27 @@ module com {  module sun {  module star {  module awt { module grid {
  */
 interface XGridControl : XGridSelection
 {
-    /** Converting
+    /** retrieves the row which a given point belongs to
+
+        @param X
+            the ordinate of the point, in pixel coordinates.
+        @param Y
+            the abscissa of the point, in pixel coordinates.
+        @return
+            the index of the row which the point lies in, or -1 if no row is under the given point.
     */
-    long getItemIndexAtPoint( [in] long x, [in] long y);
+    long getRowAtPoint( [in] long X, [in] long Y );
+
+    /** retrieves the column which a given point belongs to
+
+        @param X
+            the ordinate of the point, in pixel coordinates.
+        @param Y
+            the abscissa of the point, in pixel coordinates.
+        @return
+            the index of the column which the point lies in, or -1 if no column is under the given point.
+    */
+    long getColumnAtPoint( [in] long X, [in] long Y );
 };
 
 //=============================================================================
