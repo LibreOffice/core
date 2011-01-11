@@ -33,7 +33,7 @@ import org.openoffice.test.Argument;
 
 final class TestDocument {
     public static String getUrl(String name) {
-        return OfficeFileUrl.getAbsolute(new File(org.openoffice.test.Argument.get("docpath"), name));
+        return OfficeFileUrl.getAbsolute(new File(Argument.get("tdoc"), name));
     }
 
     private TestDocument() {}

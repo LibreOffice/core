@@ -29,7 +29,7 @@ $(eval $(call gb_JunitTest_JunitTest,sfx2_complex))
 
 $(eval $(call gb_JunitTest_set_defs,sfx2_complex,\
     $$(DEFS) \
-    -Dorg.openoffice.test.arg.docpath=$(SRCDIR)/sfx2/qa/complex/framework/testdocuments \
+    -Dorg.openoffice.test.arg.tdoc=$(SRCDIR)/sfx2/qa/complex/framework/testdocuments \
 ))
 
 $(eval $(call gb_JunitTest_add_sourcefiles,sfx2_complex,\
