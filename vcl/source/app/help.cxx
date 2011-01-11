@@ -629,7 +629,9 @@ void ImplShowHelpWindow( Window* pParent, USHORT nHelpWinStyle, USHORT nStyle,
     if ( !pHelpWin && rHelpText.Len() )
     {
         ULONG nCurTime = Time::GetSystemTicks();
-        if( (nCurTime - pSVData->maHelpData.mnLastHelpHideTime) < pParent->GetSettings().GetHelpSettings().GetTipDelay() )
+        if  (   ( ( nCurTime - pSVData->maHelpData.mnLastHelpHideTime ) < pParent->GetSettings().GetHelpSettings().GetTipDelay() )
+            ||  ( ( nStyle & QUICKHELP_NO_DELAY ) != 0 )
+            )
             nDelayMode = HELPDELAY_NONE;
 
         DBG_ASSERT( !pHelpWin, "Noch ein HelpWin ?!" );
