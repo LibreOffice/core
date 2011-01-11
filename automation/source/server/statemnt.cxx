@@ -83,7 +83,7 @@
 #include <svtools/valueset.hxx>
 #include <svtools/roadmap.hxx>
 #include <svtools/table/tablecontrol.hxx>
-#include <svtools/table/abstracttablecontrol.hxx>
+#include <svtools/table/tablecontrolinterface.hxx>
 #include <svl/poolitem.hxx>
 #include <svtools/extensionlistbox.hxx>
 // Hat keinen Includeschutz
