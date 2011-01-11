@@ -114,6 +114,7 @@ Test::Test()
     : m_pDispatcher(NULL)
     , m_pSmCmdBoxWindow(NULL)
     , m_pEditWindow(NULL)
+    , m_pViewShell(NULL)
 {
     m_xContext = cppu::defaultBootstrap_InitialComponentContext();
     m_xFactory = m_xContext->getServiceManager();
