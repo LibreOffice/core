@@ -2012,13 +2012,13 @@ bool WW8_WrPlcSubDoc::WriteGenericTxt( WW8Export& rWrt, BYTE nTTyp,
                     // --> OD 2008-08-07 #156757#
                     {
                         SwNodeIndex aContentIdx = *pNdIdx;
-                        aContentIdx++;
+                        ++aContentIdx;
                         if ( aContentIdx.GetNode().IsTableNode() )
                         {
                             bool bContainsOnlyTables = true;
                             do {
                                 aContentIdx = *(aContentIdx.GetNode().EndOfSectionNode());
-                                aContentIdx++;
+                                ++aContentIdx;
                                 if ( !aContentIdx.GetNode().IsTableNode() &&
                                      aContentIdx.GetIndex() != pNdIdx->GetNode().EndOfSectionIndex() )
                                 {

@@ -336,7 +336,6 @@ SwNumRulesWithName::_SwNumFmtGlobal::_SwNumFmtGlobal( SvStream& rStream,
     {
         USHORT nUS;
         sal_Char cChar;
-        short nShort;
         BOOL bFlag;
         String sStr;
 
@@ -367,6 +366,7 @@ SwNumRulesWithName::_SwNumFmtGlobal::_SwNumFmtGlobal( SvStream& rStream,
         }
         else                // alter StartWert war ein Byte
         {
+            short nShort;
             rStream >> nUS;         aFmt.SetStart( nUS );
             rStream.ReadByteString(sStr, eEncoding);
             aFmt.SetPrefix( sStr );
