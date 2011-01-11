@@ -87,7 +87,6 @@ gb_CXXFLAGS := \
 	-Wno-non-virtual-dtor \
 	-Wreturn-type \
 	-Wshadow \
-	-Wuninitialized \
 	-fmessage-length=0 \
 	-fno-strict-aliasing \
 	-fno-use-cxa-atexit \
@@ -100,6 +99,7 @@ ifneq ($(SYSBASE),)
 gb_CXXFLAGS += --sysroot=$(SYSBASE)
 gb_CFLAGS += --sysroot=$(SYSBASE)
 endif
+
 gb_LinkTarget_EXCEPTIONFLAGS := \
 	-DEXCEPTIONS_ON \
 	-fexceptions \
@@ -129,6 +129,7 @@ ifeq ($(gb_DEBUGLEVEL),2)
 gb_COMPILEROPTFLAGS := -O0
 else
 gb_COMPILEROPTFLAGS := -Os
+gb_CXXFLAGS += -Wuninitialized
 endif
 
 
