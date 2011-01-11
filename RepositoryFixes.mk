@@ -38,6 +38,13 @@ gb_Library_FILENAMES := $(patsubst salhelper:libsalhelper%,salhelper:libuno_salh
 gb_Library_FILENAMES := $(patsubst salhelper:libsalhelper%,salhelper:libuno_salhelper%,$(gb_Library_FILENAMES))
 gb_Library_FILENAMES := $(patsubst ucbhelper:libucbhelper%,ucbhelper:libucbhelper4%,$(gb_Library_FILENAMES))
 
+gb_Library_FILENAMES := $(patsubst vbaswobj:vbaswobj%,vbaswobj:libvbaswobj%,$(gb_Library_FILENAMES))
+gb_Library_FILENAMES := $(patsubst vbaobj:vbaobj%,vbaobj:libvbaobj%,$(gb_Library_FILENAMES))
+gb_Library_FILENAMES := $(patsubst fsstorage:fsstoragelx%,fsstorage:fsstorage%,$(gb_Library_FILENAMES))
+gb_Library_FILENAMES := $(patsubst hatchwindowfactory:hatchwindowfactorylx%,hatchwindowfactory:hatchwindowfactory%,$(gb_Library_FILENAMES))
+gb_Library_FILENAMES := $(patsubst passwordcontainer:passwordcontainerlx%,passwordcontainer:passwordcontainer%,$(gb_Library_FILENAMES))
+gb_Library_FILENAMES := $(patsubst productregistration:productregistrationlx%,productregistration:productregistration%,$(gb_Library_FILENAMES))
+
 ifeq ($(USE_SYSTEM_STL),YES)
 gb_Library_FILENAMES := $(patsubst stl:%,stl:libstdc++.so,$(gb_Library_FILENAMES))
 gb_Library_TARGETS := $(filter-out stl,$(gb_Library_TARGETS))
