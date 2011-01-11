@@ -1583,11 +1583,11 @@ void DocxAttributeOutput::TableBackgrounds( ww8::WW8TableNodeInfoInner::Pointer_
     else
         aColor = COL_AUTO;
 
-        OString sColor = impl_ConvertColor( aColor );
-        m_pSerializer->singleElementNS( XML_w, XML_shd,
-                FSNS( XML_w, XML_fill ), sColor.getStr( ),
-                FSNS( XML_w, XML_val ), "clear",
-                FSEND );
+    OString sColor = impl_ConvertColor( aColor );
+    m_pSerializer->singleElementNS( XML_w, XML_shd,
+            FSNS( XML_w, XML_fill ), sColor.getStr( ),
+            FSNS( XML_w, XML_val ), "clear",
+            FSEND );
 }
 
 void DocxAttributeOutput::TableHeight( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner )
