@@ -333,10 +333,17 @@ sal_Bool SAL_CALL UnoGridControl::setModel( const Reference< XControlModel >& i_
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-::sal_Int32 UnoGridControl::getItemIndexAtPoint(::sal_Int32 x, ::sal_Int32 y) throw (::com::sun::star::uno::RuntimeException)
+::sal_Int32 UnoGridControl::getRowAtPoint(::sal_Int32 x, ::sal_Int32 y) throw (::com::sun::star::uno::RuntimeException)
 {
-    Reference< XGridControl > xGrid ( getPeer(), UNO_QUERY_THROW );
-    return xGrid->getItemIndexAtPoint( x, y );
+    Reference< XGridControl > const xGrid ( getPeer(), UNO_QUERY_THROW );
+    return xGrid->getRowAtPoint( x, y );
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+::sal_Int32 UnoGridControl::getColumnAtPoint(::sal_Int32 x, ::sal_Int32 y) throw (::com::sun::star::uno::RuntimeException)
+{
+    Reference< XGridControl > const xGrid ( getPeer(), UNO_QUERY_THROW );
+    return xGrid->getColumnAtPoint( x, y );
 }
 
 //----------------------------------------------------------------------------------------------------------------------

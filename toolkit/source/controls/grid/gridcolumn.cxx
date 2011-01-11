@@ -210,7 +210,7 @@ namespace toolkit
     //------------------------------------------------------------------------------------------------------------------
     void SAL_CALL GridColumn::setHorizontalAlign(HorizontalAlignment align) throw (::com::sun::star::uno::RuntimeException)
     {
-        impl_set( m_eHorizontalAlign, value, "HorizontalAlign" );
+        impl_set( m_eHorizontalAlign, align, "HorizontalAlign" );
     }
 
     //------------------------------------------------------------------------------------------------------------------

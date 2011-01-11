@@ -86,25 +86,40 @@ void SVTXGridControl::SetWindow( Window* pWindow )
 }
 
 // ---------------------------------------------------------------------------------------------------------------------
-sal_Int32 SAL_CALL SVTXGridControl::getItemIndexAtPoint(::sal_Int32 x, ::sal_Int32 y) throw (::com::sun::star::uno::RuntimeException)
+sal_Int32 SAL_CALL SVTXGridControl::getRowAtPoint(::sal_Int32 x, ::sal_Int32 y) throw (::com::sun::star::uno::RuntimeException)
 {
     ::vos::OGuard aGuard( GetMutex() );
 
     TableControl* pTable = dynamic_cast< TableControl* >( GetWindow() );
-    ENSURE_OR_RETURN( pTable != NULL, "SVTXGridControl::getItemIndexAtPoint: no control (anymore)!", -1 );
-    return pTable->getTableControlInterface().getRowAtPoint( Point( x, y ) );
+    ENSURE_OR_RETURN( pTable != NULL, "SVTXGridControl::getRowAtPoint: no control (anymore)!", -1 );
+    sal_Int32 const nRow = pTable->getTableControlInterface().getRowAtPoint( Point( x, y ) );
+    return ( nRow >= 0 ) ? nRow : -1;
 }
 
+// ---------------------------------------------------------------------------------------------------------------------
+sal_Int32 SAL_CALL SVTXGridControl::getColumnAtPoint(::sal_Int32 x, ::sal_Int32 y) throw (::com::sun::star::uno::RuntimeException)
+{
+    ::vos::OGuard aGuard( GetMutex() );
+
+    TableControl* pTable = dynamic_cast< TableControl* >( GetWindow() );
+    ENSURE_OR_RETURN( pTable != NULL, "SVTXGridControl::getColumnAtPoint: no control (anymore)!", -1 );
+    sal_Int32 const nColumn = pTable->getTableControlInterface().getColAtPoint( Point( x, y ) );
+    return ( nColumn >= 0 ) ? nColumn : -1;
+}
+
+// ---------------------------------------------------------------------------------------------------------------------
 void SAL_CALL SVTXGridControl::addSelectionListener(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::grid::XGridSelectionListener > & listener) throw (::com::sun::star::uno::RuntimeException)
 {
     m_aSelectionListeners.addInterface(listener);
 }
 
+// ---------------------------------------------------------------------------------------------------------------------
 void SAL_CALL SVTXGridControl::removeSelectionListener(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::grid::XGridSelectionListener > & listener) throw (::com::sun::star::uno::RuntimeException)
 {
     m_aSelectionListeners.removeInterface(listener);
 }
 
+// ---------------------------------------------------------------------------------------------------------------------
 void SVTXGridControl::setProperty( const ::rtl::OUString& PropertyName, const Any& aValue) throw(RuntimeException)
 {
     ::vos::OGuard aGuard( GetMutex() );
