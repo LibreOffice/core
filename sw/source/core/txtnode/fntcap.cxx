@@ -32,6 +32,7 @@
 
 #include <hintids.hxx>
 #include <editeng/cmapitem.hxx>
+#include <editeng/svxfont.hxx>
 
 #include <vcl/outdev.hxx>
 #include <com/sun/star/i18n/CharType.hdl>
@@ -46,9 +47,6 @@
 #include <scriptinfo.hxx>
 
 using namespace ::com::sun::star::i18n;
-
-
-#define KAPITAELCHENPROP 80
 
 /*************************************************************************
  *                      class SwCapitalInfo
@@ -626,7 +624,7 @@ void SwSubFont::DoOnCapitals( SwDoCapitals &rDo )
         pBigFont = pLastFont;
 
     // Hier entsteht der Kleinbuchstabenfont:
-    aFont.SetProportion( BYTE( (aFont.GetPropr()*KAPITAELCHENPROP) / 100L) );
+    aFont.SetProportion( BYTE( (aFont.GetPropr() * SMALL_CAPS_PERCENTAGE ) / 100L) );
     pMagic2 = NULL;
     nIndex2 = 0;
     SwFntAccess *pSmallFontAccess = new SwFntAccess( pMagic2, nIndex2, &aFont,
