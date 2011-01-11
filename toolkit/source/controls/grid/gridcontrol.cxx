@@ -347,6 +347,20 @@ sal_Bool SAL_CALL UnoGridControl::setModel( const Reference< XControlModel >& i_
 }
 
 //----------------------------------------------------------------------------------------------------------------------
+::sal_Int32 SAL_CALL UnoGridControl::getCurrentColumn(  ) throw (RuntimeException)
+{
+    Reference< XGridControl > const xGrid ( getPeer(), UNO_QUERY_THROW );
+    return xGrid->getCurrentColumn();
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+::sal_Int32 SAL_CALL UnoGridControl::getCurrentRow(  ) throw (RuntimeException)
+{
+    Reference< XGridControl > const xGrid ( getPeer(), UNO_QUERY_THROW );
+    return xGrid->getCurrentRow();
+}
+
+//----------------------------------------------------------------------------------------------------------------------
 ::sal_Int32 SAL_CALL UnoGridControl::getMinSelectionIndex() throw (::com::sun::star::uno::RuntimeException)
 {
     return Reference< XGridControl >( getPeer(), UNO_QUERY_THROW )->getMinSelectionIndex();

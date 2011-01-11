@@ -125,13 +125,19 @@ namespace svt { namespace table
         */
         virtual PTableModel getModel() const = 0;
 
+        /// returns the index of the currently active column
+        virtual ColPos getCurrentColumn() const = 0;
+
+        /// returns the index of the currently active row
+        virtual RowPos getCurrentRow() const = 0;
+
         virtual void activateCellAt( const Point& rPoint ) = 0;
-        virtual RowPos getRowAtPoint( const Point& rPoint ) = 0;
-        virtual ColPos getColAtPoint( const Point& rPoint ) = 0;
+        virtual RowPos getRowAtPoint( const Point& rPoint ) const = 0;
+        virtual ColPos getColAtPoint( const Point& rPoint ) const = 0;
         virtual void resizeColumn(const Point& rPoint ) = 0;
         virtual bool checkResizeColumn(const Point& rPoint) = 0;
         virtual bool endResizeColumn(const Point& rPoint) = 0;
-        virtual bool isRowSelected(RowPos _nRow) = 0;
+        virtual bool isRowSelected( RowPos _nRow ) const = 0;
 
         virtual ~ITableControl() {};
     };

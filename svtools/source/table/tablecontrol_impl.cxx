@@ -379,7 +379,7 @@ namespace svt { namespace table
         ,m_pHScroll             ( NULL                          )
         ,m_pScrollCorner        ( NULL                          )
         ,m_pSelEngine           (                               )
-        ,m_nRowSelected         (                               )
+        ,m_aSelectedRows        (                               )
         ,m_pTableFunctionSet    ( new TableFunctionSet( this  ) )
         ,m_nAnchor              (-1                             )
         ,m_bResizingColumn      ( false                         )
@@ -1085,7 +1085,7 @@ namespace svt { namespace table
                 if ( _rUpdateRect.GetIntersection( aCell.getRect() ).IsEmpty() )
                     continue;
 
-                bool isActiveColumn = ( aCell.getColumn() == getCurColumn() );
+                bool isActiveColumn = ( aCell.getColumn() == getCurrentColumn() );
                 bool isSelectedColumn = false;
                 pRenderer->PaintColumnHeader( aCell.getColumn(), isActiveColumn, isSelectedColumn,
                     *m_pDataWindow, aCell.getRect(), rStyle );
@@ -1142,12 +1142,12 @@ namespace svt { namespace table
         {
             if ( _rUpdateRect.GetIntersection( aRowIterator.getRect() ).IsEmpty() )
                 continue;
-            bool isActiveRow = ( aRowIterator.getRow() == getCurRow() );
+            bool isActiveRow = ( aRowIterator.getRow() == getCurrentRow() );
             bool isSelectedRow = false;
-            if(!m_nRowSelected.empty())
+            if(!m_aSelectedRows.empty())
             {
-                for(std::vector<RowPos>::iterator itSel=m_nRowSelected.begin();
-                    itSel!=m_nRowSelected.end();++itSel)
+                for(std::vector<RowPos>::iterator itSel=m_aSelectedRows.begin();
+                    itSel!=m_aSelectedRows.end();++itSel)
                 {
                     if(*itSel == aRowIterator.getRow())
                         isSelectedRow = true;
@@ -1224,22 +1224,22 @@ namespace svt { namespace table
         if(m_pSelEngine->GetSelectionMode() == SINGLE_SELECTION)
         {
             //if other rows already selected, deselect them
-            if(m_nRowSelected.size()>0)
+            if(m_aSelectedRows.size()>0)
             {
-                for(std::vector<RowPos>::iterator it=m_nRowSelected.begin();
-                        it!=m_nRowSelected.end();++it)
+                for(std::vector<RowPos>::iterator it=m_aSelectedRows.begin();
+                        it!=m_aSelectedRows.end();++it)
                 {
                     invalidateSelectedRegion(*it, *it, rCells);
                 }
-                m_nRowSelected.clear();
+                m_aSelectedRows.clear();
             }
             if(m_nCurRow < m_nRowCount-1)
             {
                 ++m_nCurRow;
-                m_nRowSelected.push_back(m_nCurRow);
+                m_aSelectedRows.push_back(m_nCurRow);
             }
             else
-                m_nRowSelected.push_back(m_nCurRow);
+                m_aSelectedRows.push_back(m_nCurRow);
             invalidateSelectedRegion(m_nCurRow, m_nCurRow, rCells);
             ensureVisible(m_nCurColumn,m_nCurRow,false);
             m_rAntiImpl.selectionChanged(true);
@@ -1255,24 +1255,24 @@ namespace svt { namespace table
         case cursorUp:
         if(m_pSelEngine->GetSelectionMode() == SINGLE_SELECTION)
         {
-            if(m_nRowSelected.size()>0)
+            if(m_aSelectedRows.size()>0)
             {
-                for(std::vector<RowPos>::iterator it=m_nRowSelected.begin();
-                    it!=m_nRowSelected.end();++it)
+                for(std::vector<RowPos>::iterator it=m_aSelectedRows.begin();
+                    it!=m_aSelectedRows.end();++it)
                 {
                     invalidateSelectedRegion(*it, *it, rCells);
                 }
-                m_nRowSelected.clear();
+                m_aSelectedRows.clear();
             }
             if(m_nCurRow>0)
             {
                 --m_nCurRow;
-                m_nRowSelected.push_back(m_nCurRow);
+                m_aSelectedRows.push_back(m_nCurRow);
                 invalidateSelectedRegion(m_nCurRow, m_nCurRow, rCells);
             }
             else
             {
-                m_nRowSelected.push_back(m_nCurRow);
+                m_aSelectedRows.push_back(m_nCurRow);
                 invalidateSelectedRegion(m_nCurRow, m_nCurRow, rCells);
             }
             ensureVisible(m_nCurColumn,m_nCurRow,false);
@@ -1343,17 +1343,17 @@ namespace svt { namespace table
         if(m_pSelEngine->GetSelectionMode() == NO_SELECTION)
             return bSuccess = false;
         //pos is the position of the current row in the vector of selected rows, if current row is selected
-        int pos = getRowSelectedNumber(m_nRowSelected, m_nCurRow);
+        int pos = getRowSelectedNumber(m_aSelectedRows, m_nCurRow);
         //if current row is selected, it should be deselected, when ALT+SPACE are pressed
         if(pos>-1)
         {
-            m_nRowSelected.erase(m_nRowSelected.begin()+pos);
-            if(m_nRowSelected.empty() && m_nAnchor != -1)
+            m_aSelectedRows.erase(m_aSelectedRows.begin()+pos);
+            if(m_aSelectedRows.empty() && m_nAnchor != -1)
                 m_nAnchor = -1;
         }
         //else select the row->put it in the vector
         else
-            m_nRowSelected.push_back(m_nCurRow);
+            m_aSelectedRows.push_back(m_nCurRow);
         invalidateSelectedRegion(m_nCurRow, m_nCurRow, rCells);
         m_rAntiImpl.selectionChanged(true);
         bSuccess = true;
@@ -1371,26 +1371,26 @@ namespace svt { namespace table
         else
         {
             //there are other selected rows
-            if(m_nRowSelected.size()>0)
+            if(m_aSelectedRows.size()>0)
             {
                 //the anchor wasn't set -> a region is not selected, that's why clear all selection
                 //and select the current row
                 if(m_nAnchor==-1)
                 {
-                    for(std::vector<RowPos>::iterator it=m_nRowSelected.begin();
-                        it!=m_nRowSelected.end();++it)
+                    for(std::vector<RowPos>::iterator it=m_aSelectedRows.begin();
+                        it!=m_aSelectedRows.end();++it)
                     {
                         invalidateSelectedRegion(*it, *it, rCells);
                     }
-                    m_nRowSelected.clear();
-                    m_nRowSelected.push_back(m_nCurRow);
+                    m_aSelectedRows.clear();
+                    m_aSelectedRows.push_back(m_nCurRow);
                     invalidateSelectedRegion(m_nCurRow, m_nCurRow, rCells);
                 }
                 else
                 {
                     //a region is already selected, prevRow is last selected row and the row above - nextRow - should be selected
-                    int prevRow = getRowSelectedNumber(m_nRowSelected, m_nCurRow);
-                    int nextRow = getRowSelectedNumber(m_nRowSelected, m_nCurRow-1);
+                    int prevRow = getRowSelectedNumber(m_aSelectedRows, m_nCurRow);
+                    int nextRow = getRowSelectedNumber(m_aSelectedRows, m_nCurRow-1);
                     if(prevRow>-1)
                      {
                          //if m_nCurRow isn't the upper one, can move up, otherwise not
@@ -1399,14 +1399,14 @@ namespace svt { namespace table
                          else
                              return bSuccess = true;
                          //if nextRow already selected, deselect it, otherwise select it
-                         if(nextRow>-1 && m_nRowSelected[nextRow] == m_nCurRow)
+                         if(nextRow>-1 && m_aSelectedRows[nextRow] == m_nCurRow)
                          {
-                             m_nRowSelected.erase(m_nRowSelected.begin()+prevRow);
+                             m_aSelectedRows.erase(m_aSelectedRows.begin()+prevRow);
                              invalidateSelectedRegion(m_nCurRow+1, m_nCurRow+1, rCells);
                          }
                          else
                         {
-                             m_nRowSelected.push_back(m_nCurRow);
+                             m_aSelectedRows.push_back(m_nCurRow);
                              invalidateSelectedRegion(m_nCurRow, m_nCurRow, rCells);
                          }
                      }
@@ -1414,9 +1414,9 @@ namespace svt { namespace table
                     {
                         if(m_nCurRow>0)
                         {
-                            m_nRowSelected.push_back(m_nCurRow);
+                            m_aSelectedRows.push_back(m_nCurRow);
                             m_nCurRow--;
-                            m_nRowSelected.push_back(m_nCurRow);
+                            m_aSelectedRows.push_back(m_nCurRow);
                             invalidateSelectedRegion(m_nCurRow+1, m_nCurRow, rCells);
                         }
                     }
@@ -1429,14 +1429,14 @@ namespace svt { namespace table
                 //otherwise select only the upper row
                 if(m_nCurRow>0)
                 {
-                    m_nRowSelected.push_back(m_nCurRow);
+                    m_aSelectedRows.push_back(m_nCurRow);
                     m_nCurRow--;
-                    m_nRowSelected.push_back(m_nCurRow);
+                    m_aSelectedRows.push_back(m_nCurRow);
                     invalidateSelectedRegion(m_nCurRow+1, m_nCurRow, rCells);
                 }
                 else
                 {
-                    m_nRowSelected.push_back(m_nCurRow);
+                    m_aSelectedRows.push_back(m_nCurRow);
                     invalidateSelectedRegion(m_nCurRow, m_nCurRow, rCells);
                 }
             }
@@ -1458,26 +1458,26 @@ namespace svt { namespace table
         }
         else
         {
-            if(m_nRowSelected.size()>0)
+            if(m_aSelectedRows.size()>0)
             {
                 //the anchor wasn't set -> a region is not selected, that's why clear all selection
                 //and select the current row
                 if(m_nAnchor==-1)
                 {
-                    for(std::vector<RowPos>::iterator it=m_nRowSelected.begin();
-                        it!=m_nRowSelected.end();++it)
+                    for(std::vector<RowPos>::iterator it=m_aSelectedRows.begin();
+                        it!=m_aSelectedRows.end();++it)
                     {
                         invalidateSelectedRegion(*it, *it, rCells);
                     }
-                    m_nRowSelected.clear();
-                    m_nRowSelected.push_back(m_nCurRow);
+                    m_aSelectedRows.clear();
+                    m_aSelectedRows.push_back(m_nCurRow);
                     invalidateSelectedRegion(m_nCurRow, m_nCurRow, rCells);
                     }
                 else
                 {
                     //a region is already selected, prevRow is last selected row and the row beneath - nextRow - should be selected
-                    int prevRow = getRowSelectedNumber(m_nRowSelected, m_nCurRow);
-                    int nextRow = getRowSelectedNumber(m_nRowSelected, m_nCurRow+1);
+                    int prevRow = getRowSelectedNumber(m_aSelectedRows, m_nCurRow);
+                    int nextRow = getRowSelectedNumber(m_aSelectedRows, m_nCurRow+1);
                     if(prevRow>-1)
                      {
                          //if m_nCurRow isn't the last one, can move down, otherwise not
@@ -1486,14 +1486,14 @@ namespace svt { namespace table
                          else
                             return bSuccess = true;
                          //if next row already selected, deselect it, otherwise select it
-                         if(nextRow>-1 && m_nRowSelected[nextRow] == m_nCurRow)
+                         if(nextRow>-1 && m_aSelectedRows[nextRow] == m_nCurRow)
                          {
-                             m_nRowSelected.erase(m_nRowSelected.begin()+prevRow);
+                             m_aSelectedRows.erase(m_aSelectedRows.begin()+prevRow);
                              invalidateSelectedRegion(m_nCurRow-1, m_nCurRow-1, rCells);
                          }
                          else
                          {
-                             m_nRowSelected.push_back(m_nCurRow);
+                             m_aSelectedRows.push_back(m_nCurRow);
                              invalidateSelectedRegion(m_nCurRow, m_nCurRow, rCells);
                          }
                     }
@@ -1501,9 +1501,9 @@ namespace svt { namespace table
                     {
                         if(m_nCurRow<m_nRowCount-1)
                         {
-                            m_nRowSelected.push_back(m_nCurRow);
+                            m_aSelectedRows.push_back(m_nCurRow);
                             m_nCurRow++;
-                            m_nRowSelected.push_back(m_nCurRow);
+                            m_aSelectedRows.push_back(m_nCurRow);
                             invalidateSelectedRegion(m_nCurRow-1, m_nCurRow, rCells);
                         }
                     }
@@ -1514,14 +1514,14 @@ namespace svt { namespace table
                 //there wasn't any selection, select current and row beneath, otherwise only row beneath
                 if(m_nCurRow<m_nRowCount-1)
                 {
-                    m_nRowSelected.push_back(m_nCurRow);
+                    m_aSelectedRows.push_back(m_nCurRow);
                     m_nCurRow++;
-                    m_nRowSelected.push_back(m_nCurRow);
+                    m_aSelectedRows.push_back(m_nCurRow);
                     invalidateSelectedRegion(m_nCurRow-1, m_nCurRow, rCells);
                 }
                 else
                 {
-                    m_nRowSelected.push_back(m_nCurRow);
+                    m_aSelectedRows.push_back(m_nCurRow);
                     invalidateSelectedRegion(m_nCurRow, m_nCurRow, rCells);
                 }
             }
@@ -1547,8 +1547,8 @@ namespace svt { namespace table
             //put the rows in vector
             while(iter>=0)
             {
-                if(!isRowSelected(m_nRowSelected, iter))
-                    m_nRowSelected.push_back(iter);
+                if ( !isRowSelected( iter ) )
+                    m_aSelectedRows.push_back(iter);
                 --iter;
             }
             m_nCurRow = 0;
@@ -1572,8 +1572,8 @@ namespace svt { namespace table
         //put the rows in the vector
         while(iter<=m_nRowCount)
         {
-            if(!isRowSelected(m_nRowSelected, iter))
-                m_nRowSelected.push_back(iter);
+            if ( !isRowSelected( iter ) )
+                m_aSelectedRows.push_back(iter);
             ++iter;
         }
         m_nCurRow = m_nRowCount-1;
@@ -1630,7 +1630,7 @@ namespace svt { namespace table
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    RowPos TableControl_Impl::getRowAtPoint( const Point& rPoint )
+    RowPos TableControl_Impl::getRowAtPoint( const Point& rPoint ) const
     {
         DBG_CHECK_ME();
 
@@ -1651,7 +1651,7 @@ namespace svt { namespace table
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    ColPos TableControl_Impl::getColAtPoint( const Point& rPoint )
+    ColPos TableControl_Impl::getColAtPoint( const Point& rPoint ) const
     {
         DBG_CHECK_ME();
 
@@ -1676,6 +1676,18 @@ namespace svt { namespace table
     PTableModel TableControl_Impl::getModel() const
     {
         return m_pModel;
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    RowPos TableControl_Impl::getCurrentColumn() const
+    {
+        return m_nCurColumn;
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    RowPos TableControl_Impl::getCurrentRow() const
+    {
+        return m_nCurRow;
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -1748,12 +1760,12 @@ namespace svt { namespace table
     //------------------------------------------------------------------------------------------------------------------
     std::vector<RowPos>& TableControl_Impl::getSelectedRows()
     {
-        return m_nRowSelected;
+        return m_aSelectedRows;
     }
     //--------------------------------------------------------------------
     void TableControl_Impl::clearSelection()
     {
-        m_nRowSelected.clear();
+        m_aSelectedRows.clear();
     }
     //--------------------------------------------------------------------
     //------------------------------------------------------------------------------------------------------------------
@@ -1761,20 +1773,20 @@ namespace svt { namespace table
     {
         int i =0;
         //if the row is selected, remove it from the selection vector
-        if(isRowSelected(m_nRowSelected, _nRowPos))
+        if ( isRowSelected( _nRowPos ) )
         {
-            if(m_nRowSelected.size()>1)
-                m_nRowSelected.erase(m_nRowSelected.begin()+_nRowPos);
+            if(m_aSelectedRows.size()>1)
+                m_aSelectedRows.erase(m_aSelectedRows.begin()+_nRowPos);
             else
-                m_nRowSelected.clear();
+                m_aSelectedRows.clear();
         }
         //after removing a row, row positions must be updated, so selected rows could stay selected
-        if(m_nRowSelected.size()>1)
+        if(m_aSelectedRows.size()>1)
         {
-            for(std::vector<RowPos>::iterator it=m_nRowSelected.begin();it!=m_nRowSelected.end();++it)
+            for(std::vector<RowPos>::iterator it=m_aSelectedRows.begin();it!=m_aSelectedRows.end();++it)
             {
                 if(*it > _nRowPos)
-                    m_nRowSelected[i]=*it-1;
+                    m_aSelectedRows[i]=*it-1;
                 ++i;
             }
         }
@@ -2046,21 +2058,19 @@ namespace svt { namespace table
     {
         return m_pHScroll;
     }
+
     //------------------------------------------------------------------------------------------------------------------
     ScrollBar* TableControl_Impl::getVertScrollbar()
     {
         return m_pVScroll;
     }
+
     //------------------------------------------------------------------------------------------------------------------
-    BOOL TableControl_Impl::isRowSelected(const ::std::vector<RowPos>& selectedRows, RowPos current)
+    bool TableControl_Impl::isRowSelected( RowPos i_row ) const
     {
-        return ::std::find(selectedRows.begin(),selectedRows.end(),current) != selectedRows.end();
+        return ::std::find( m_aSelectedRows.begin(), m_aSelectedRows.end(), i_row ) != m_aSelectedRows.end();
     }
-        //------------------------------------------------------------------------------------------------------------------
-    bool TableControl_Impl::isRowSelected(RowPos current)
-    {
-        return ::std::find(m_nRowSelected.begin(),m_nRowSelected.end(),current) != m_nRowSelected.end();
-    }
+
     //------------------------------------------------------------------------------------------------------------------
     int TableControl_Impl::getRowSelectedNumber(const ::std::vector<RowPos>& selectedRows, RowPos current)
     {
@@ -2305,7 +2315,7 @@ namespace svt { namespace table
 
         if ( bDontSelectAtCursor )
         {
-            if ( m_pTableControl->m_nRowSelected.size()>1 )
+            if ( m_pTableControl->m_aSelectedRows.size()>1 )
                 m_pTableControl->m_pSelEngine->AddAlways(TRUE);
             bHandled = TRUE;
         }
@@ -2319,10 +2329,10 @@ namespace svt { namespace table
                 //put selected rows in vector
                 while ( m_pTableControl->m_nAnchor >= newRow )
                 {
-                    bool isAlreadySelected = m_pTableControl->isRowSelected(m_pTableControl->m_nRowSelected, m_pTableControl->m_nAnchor);
+                    bool isAlreadySelected = m_pTableControl->isRowSelected( m_pTableControl->m_nAnchor );
                     //if row isn't selected, put it in vector, otherwise don't put it there, because it will be twice there
                     if(!isAlreadySelected)
-                        m_pTableControl->m_nRowSelected.push_back(m_pTableControl->m_nAnchor);
+                        m_pTableControl->m_aSelectedRows.push_back(m_pTableControl->m_nAnchor);
                     m_pTableControl->m_nAnchor--;
                     diff--;
                 }
@@ -2333,9 +2343,9 @@ namespace svt { namespace table
             {
                 while ( m_pTableControl->m_nAnchor <= newRow )
                 {
-                    bool isAlreadySelected = m_pTableControl->isRowSelected(m_pTableControl->m_nRowSelected, m_pTableControl->m_nAnchor);
+                    bool isAlreadySelected = m_pTableControl->isRowSelected( m_pTableControl->m_nAnchor );
                     if(!isAlreadySelected)
-                        m_pTableControl->m_nRowSelected.push_back(m_pTableControl->m_nAnchor);
+                        m_pTableControl->m_aSelectedRows.push_back(m_pTableControl->m_nAnchor);
                     m_pTableControl->m_nAnchor++;
                     diff++;
                 }
@@ -2348,23 +2358,23 @@ namespace svt { namespace table
         //no region selected
         else
         {
-            if(m_pTableControl->m_nRowSelected.empty())
-                m_pTableControl->m_nRowSelected.push_back( newRow );
+            if(m_pTableControl->m_aSelectedRows.empty())
+                m_pTableControl->m_aSelectedRows.push_back( newRow );
             else
             {
                 if(m_pTableControl->m_pSelEngine->GetSelectionMode()==SINGLE_SELECTION)
                 {
                     DeselectAll();
-                    m_pTableControl->m_nRowSelected.push_back( newRow );
+                    m_pTableControl->m_aSelectedRows.push_back( newRow );
                 }
                 else
                 {
-                    bool isAlreadySelected = m_pTableControl->isRowSelected( m_pTableControl->m_nRowSelected, newRow );
+                    bool isAlreadySelected = m_pTableControl->isRowSelected( newRow );
                     if ( !isAlreadySelected )
-                        m_pTableControl->m_nRowSelected.push_back( newRow );
+                        m_pTableControl->m_aSelectedRows.push_back( newRow );
                 }
             }
-            if(m_pTableControl->m_nRowSelected.size()>1 && m_pTableControl->m_pSelEngine->GetSelectionMode()!=SINGLE_SELECTION)
+            if(m_pTableControl->m_aSelectedRows.size()>1 && m_pTableControl->m_pSelEngine->GetSelectionMode()!=SINGLE_SELECTION)
                 m_pTableControl->m_pSelEngine->AddAlways(TRUE);
 
             Rectangle aCellRect;
@@ -2380,13 +2390,13 @@ namespace svt { namespace table
     BOOL TableFunctionSet::IsSelectionAtPoint( const Point& rPoint )
     {
         m_pTableControl->m_pSelEngine->AddAlways(FALSE);
-        if(m_pTableControl->m_nRowSelected.empty())
+        if(m_pTableControl->m_aSelectedRows.empty())
             return FALSE;
         else
         {
             RowPos curRow = m_pTableControl->getRowAtPoint( rPoint );
             m_pTableControl->m_nAnchor = -1;
-            bool selected = m_pTableControl->isRowSelected(m_pTableControl->m_nRowSelected, curRow);
+            bool selected = m_pTableControl->isRowSelected( curRow );
             m_nCurrentRow = curRow;
             return selected;
         }
@@ -2398,8 +2408,8 @@ namespace svt { namespace table
         long pos = 0;
         long i = 0;
         Rectangle rCells;
-        for(std::vector<RowPos>::iterator it=m_pTableControl->m_nRowSelected.begin();
-            it!=m_pTableControl->m_nRowSelected.end();++it)
+        for(std::vector<RowPos>::iterator it=m_pTableControl->m_aSelectedRows.begin();
+            it!=m_pTableControl->m_aSelectedRows.end();++it)
         {
             if(*it == m_nCurrentRow)
             {
@@ -2408,20 +2418,20 @@ namespace svt { namespace table
             }
             ++i;
         }
-        m_pTableControl->m_nRowSelected.erase(m_pTableControl->m_nRowSelected.begin()+pos);
+        m_pTableControl->m_aSelectedRows.erase(m_pTableControl->m_aSelectedRows.begin()+pos);
     }
     //------------------------------------------------------------------------------------------------------------------
     void TableFunctionSet::DeselectAll()
     {
-        if(!m_pTableControl->m_nRowSelected.empty())
+        if(!m_pTableControl->m_aSelectedRows.empty())
         {
             Rectangle rCells;
-            for(std::vector<RowPos>::iterator it=m_pTableControl->m_nRowSelected.begin();
-                it!=m_pTableControl->m_nRowSelected.end();++it)
+            for(std::vector<RowPos>::iterator it=m_pTableControl->m_aSelectedRows.begin();
+                it!=m_pTableControl->m_aSelectedRows.end();++it)
             {
                 m_pTableControl->invalidateSelectedRegion(*it, *it, rCells);
             }
-            m_pTableControl->m_nRowSelected.clear();
+            m_pTableControl->m_aSelectedRows.clear();
         }
     }
 

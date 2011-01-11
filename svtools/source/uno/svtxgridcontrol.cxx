@@ -92,6 +92,7 @@ sal_Int32 SAL_CALL SVTXGridControl::getRowAtPoint(::sal_Int32 x, ::sal_Int32 y) 
 
     TableControl* pTable = dynamic_cast< TableControl* >( GetWindow() );
     ENSURE_OR_RETURN( pTable != NULL, "SVTXGridControl::getRowAtPoint: no control (anymore)!", -1 );
+
     sal_Int32 const nRow = pTable->getTableControlInterface().getRowAtPoint( Point( x, y ) );
     return ( nRow >= 0 ) ? nRow : -1;
 }
@@ -103,8 +104,33 @@ sal_Int32 SAL_CALL SVTXGridControl::getColumnAtPoint(::sal_Int32 x, ::sal_Int32 
 
     TableControl* pTable = dynamic_cast< TableControl* >( GetWindow() );
     ENSURE_OR_RETURN( pTable != NULL, "SVTXGridControl::getColumnAtPoint: no control (anymore)!", -1 );
+
     sal_Int32 const nColumn = pTable->getTableControlInterface().getColAtPoint( Point( x, y ) );
     return ( nColumn >= 0 ) ? nColumn : -1;
+}
+
+// ---------------------------------------------------------------------------------------------------------------------
+sal_Int32 SAL_CALL SVTXGridControl::getCurrentColumn(  ) throw (RuntimeException)
+{
+    ::vos::OGuard aGuard( GetMutex() );
+
+    TableControl* pTable = dynamic_cast< TableControl* >( GetWindow() );
+    ENSURE_OR_RETURN( pTable != NULL, "SVTXGridControl::getCurrentColumn: no control (anymore)!", -1 );
+
+    sal_Int32 const nColumn = pTable->GetCurrentColumn();
+    return ( nColumn >= 0 ) ? nColumn : -1;
+}
+
+// ---------------------------------------------------------------------------------------------------------------------
+sal_Int32 SAL_CALL SVTXGridControl::getCurrentRow(  ) throw (RuntimeException)
+{
+    ::vos::OGuard aGuard( GetMutex() );
+
+    TableControl* pTable = dynamic_cast< TableControl* >( GetWindow() );
+    ENSURE_OR_RETURN( pTable != NULL, "SVTXGridControl::getCurrentRow: no control (anymore)!", -1 );
+
+    sal_Int32 const nRow = pTable->GetCurrentRow();
+    return ( nRow >= 0 ) ? nRow : -1;
 }
 
 // ---------------------------------------------------------------------------------------------------------------------

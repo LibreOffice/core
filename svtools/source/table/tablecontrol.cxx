@@ -197,13 +197,13 @@ namespace svt { namespace table
     // -----------------------------------------------------------------------------------------------------------------
     sal_Int32 TableControl::GetCurrentRow() const
     {
-        return m_pImpl->getCurRow();
+        return m_pImpl->getCurrentRow();
     }
 
     // -----------------------------------------------------------------------------------------------------------------
     sal_Int32 TableControl::GetCurrentColumn() const
     {
-        return m_pImpl->getCurColumn();
+        return m_pImpl->getCurrentColumn();
     }
 
     // -----------------------------------------------------------------------------------------------------------------
@@ -543,7 +543,7 @@ namespace svt { namespace table
     //------------------------------------------------------------------------------------------------------------------
     bool TableControl::IsRowSelected( long _nRow ) const
     {
-        return m_pImpl->isRowSelected(m_pImpl->getSelectedRows(), _nRow);
+        return m_pImpl->isRowSelected( _nRow );
     }
 
     //------------------------------------------------------------------------------------------------------------------

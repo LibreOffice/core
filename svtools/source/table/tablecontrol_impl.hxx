@@ -150,7 +150,7 @@ namespace svt { namespace table
         //selection engine - for determining selection range, e.g. single, multiple
         SelectionEngine*        m_pSelEngine;
         //vector which contains the selected rows
-        std::vector<RowPos>     m_nRowSelected;
+        std::vector<RowPos>     m_aSelectedRows;
         //part of selection engine
         TableFunctionSet*       m_pTableFunctionSet;
         //part of selection engine
@@ -177,8 +177,6 @@ namespace svt { namespace table
 
         inline  const PTableInputHandler&   getInputHandler() const { return m_pInputHandler; }
 
-        inline  ColPos  getCurColumn() const    { return m_nCurColumn; }
-        inline  RowPos  getCurRow() const       { return m_nCurRow; }
         inline  void    setCurRow(RowPos curRow){ m_nCurRow = curRow; }
         inline  RowPos  getTopRow() const       { return m_nTopRow; }
 
@@ -223,11 +221,6 @@ namespace svt { namespace table
         */
         ::rtl::OUString getCellContentAsString( RowPos const i_row, ColPos const i_col );
 
-        /** checks whether the vector with the selected rows contains the current row*/
-        BOOL    isRowSelected(const ::std::vector<RowPos>& selectedRows, RowPos current);
-
-        bool    isRowSelected(RowPos current);
-
         /** returns the position of the current row in the selection vector */
         int getRowSelectedNumber(const ::std::vector<RowPos>& selectedRows, RowPos current);
 
@@ -251,12 +244,16 @@ namespace svt { namespace table
         virtual bool                dispatchAction( TableControlAction _eAction );
         virtual SelectionEngine*    getSelEngine();
         virtual PTableModel         getModel() const;
+        virtual ColPos              getCurrentColumn() const;
+        virtual RowPos              getCurrentRow() const;
         virtual void                activateCellAt( const Point& rPoint );
-        virtual RowPos              getRowAtPoint( const Point& rPoint );
-        virtual ColPos              getColAtPoint( const Point& rPoint );
+        virtual RowPos              getRowAtPoint( const Point& rPoint ) const;
+        virtual ColPos              getColAtPoint( const Point& rPoint ) const;
         virtual void                resizeColumn(const Point& rPoint);
         virtual bool                checkResizeColumn(const Point& rPoint);
         virtual bool                endResizeColumn(const Point& rPoint);
+        virtual bool                isRowSelected( RowPos i_row ) const;
+
 
         TableDataWindow* getDataWindow();
         ScrollBar* getHorzScrollbar();
