@@ -74,7 +74,7 @@ const SfxPoolItem* SfxItemPool::GetPoolDefaultItem( sal_uInt16 nWhich ) const
 
 // -----------------------------------------------------------------------
 
-inline int SfxItemPool::IsItemFlag_Impl( sal_uInt16 nPos, sal_uInt16 nFlag ) const
+inline FASTBOOL SfxItemPool::IsItemFlag_Impl( sal_uInt16 nPos, sal_uInt16 nFlag ) const
 {
     sal_uInt16 nItemFlag = pItemInfos[nPos]._nFlags;
     return nFlag == (nItemFlag & nFlag);
@@ -82,7 +82,7 @@ inline int SfxItemPool::IsItemFlag_Impl( sal_uInt16 nPos, sal_uInt16 nFlag ) con
 
 // -----------------------------------------------------------------------
 
-int SfxItemPool::IsItemFlag( sal_uInt16 nWhich, sal_uInt16 nFlag ) const
+FASTBOOL SfxItemPool::IsItemFlag( sal_uInt16 nWhich, sal_uInt16 nFlag ) const
 {
     for ( const SfxItemPool *pPool = this; pPool; pPool = pPool->pSecondary )
     {
@@ -118,7 +118,7 @@ SfxItemPool::SfxItemPool
 #ifndef TF_POOLABLE
     sal_uInt16*             pSlotIdArray,   /* Zuordnung von Slot-Ids zu Which-Ids */
 #endif
-    int            bLoadRefCounts  /* Ref-Counts mitladen oder auf 1 setzen */
+    FASTBOOL            bLoadRefCounts  /* Ref-Counts mitladen oder auf 1 setzen */
 )
 
 /*  [Beschreibung]

@@ -42,6 +42,7 @@
 
 /*** misc. macros to leverage platform and compiler differences ********/
 
+typedef int             FASTBOOL;
 #define DELETEZ( p )    ( delete p,p = 0 )
 
 #define __FAR_DATA

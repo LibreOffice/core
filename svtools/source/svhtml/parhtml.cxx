@@ -1906,7 +1906,7 @@ int HTMLParser::FilterListing( int nToken )
     return nToken;
 }
 
-int HTMLParser::IsHTMLFormat( const sal_Char* pHeader,
+FASTBOOL HTMLParser::IsHTMLFormat( const sal_Char* pHeader,
                                    sal_Bool bSwitchToUCS2,
                                    rtl_TextEncoding eEnc )
 {

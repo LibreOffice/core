@@ -133,21 +133,21 @@ public:
     String          aRealRowCount;  // zur Anzeige im VScrollBar
 
     RectangleList   aInvalidRegion; // invalidated Rectangles during !UpdateMode
-    int     bInPaint;       // sal_True while in Paint
-    int     bInCommand;     // sal_True while in Command
-    int        bNoScrollBack;  // nur vorwaerts scrollen
-    int        bNoHScroll;     // kein horizontaler Scrollbar
-    int        bNoVScroll;     // no vertical scrollbar
-    int     bAutoHScroll;   // autohide horizontaler Scrollbar
-    int     bAutoVScroll;   // autohide horizontaler Scrollbar
-    int     bUpdateMode;    // nicht SV-UpdateMode wegen Invalidate()
-    int     bAutoSizeLastCol;// last column always fills up window
-    int     bResizeOnPaint; // outstanding resize-event
-    int     bUpdateOnUnlock;    // Update() while locked
-    int     bInUpdateScrollbars;    // Rekursionsschutz
-    int     bHadRecursion;          // Rekursion war aufgetreten
-    int     bOwnDataChangedHdl;     // dont change colors in DataChanged
-    int     bCallingDropCallback;   // we're in a callback to AcceptDrop or ExecuteDrop curently
+    FASTBOOL        bInPaint;       // sal_True while in Paint
+    FASTBOOL        bInCommand;     // sal_True while in Command
+    FASTBOOL        bNoScrollBack;  // nur vorwaerts scrollen
+    FASTBOOL        bNoHScroll;     // kein horizontaler Scrollbar
+    FASTBOOL        bNoVScroll;     // no vertical scrollbar
+    FASTBOOL        bAutoHScroll;   // autohide horizontaler Scrollbar
+    FASTBOOL        bAutoVScroll;   // autohide horizontaler Scrollbar
+    FASTBOOL        bUpdateMode;    // nicht SV-UpdateMode wegen Invalidate()
+    FASTBOOL        bAutoSizeLastCol;// last column always fills up window
+    FASTBOOL        bResizeOnPaint; // outstanding resize-event
+    FASTBOOL        bUpdateOnUnlock;    // Update() while locked
+    FASTBOOL        bInUpdateScrollbars;    // Rekursionsschutz
+    FASTBOOL        bHadRecursion;          // Rekursion war aufgetreten
+    FASTBOOL        bOwnDataChangedHdl;     // dont change colors in DataChanged
+    FASTBOOL        bCallingDropCallback;   // we're in a callback to AcceptDrop or ExecuteDrop curently
     sal_uInt16          nUpdateLock;    // lock count, dont call Control::Update()!
     short           nCursorHidden;  // new conuter for DoHide/ShowCursor
 
@@ -185,7 +185,7 @@ public:
     const String&   GetRealRowCount() const { return aRealRowCount; }
 
     void            SetUpdateMode( sal_Bool bMode );
-    int        GetUpdateMode() const { return bUpdateMode; }
+    FASTBOOL        GetUpdateMode() const { return bUpdateMode; }
     void            EnterUpdateLock() { ++nUpdateLock; }
     void            LeaveUpdateLock();
     void            Update();
