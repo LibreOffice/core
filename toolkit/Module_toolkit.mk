@@ -35,4 +35,8 @@ $(eval $(call gb_Module_add_targets,toolkit,\
     Package_util \
 ))
 
+$(eval $(call gb_Module_add_subsequentcheck_targets,toolkit,\
+    JunitTest_toolkit_unoapi \
+))
+
 # vim: set noet sw=4 ts=4:
