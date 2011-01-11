@@ -30,8 +30,11 @@
 
 namespace XPath
 {
-    CNodeList::CNodeList(boost::shared_ptr<xmlXPathObject>& rxpathObj)
-        : m_pNodeSet(0)
+    CNodeList::CNodeList(
+                Reference<XNode> const& xContextNode,
+                boost::shared_ptr<xmlXPathObject>& rxpathObj)
+        : m_xContextNode(xContextNode)
+        , m_pNodeSet(0)
     {
         if (rxpathObj != NULL && rxpathObj->type == XPATH_NODESET)
         {

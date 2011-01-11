@@ -52,11 +52,15 @@ namespace XPath
     class CNodeList : public cppu::WeakImplHelper1< XNodeList >
     {
     private:
+        /// #i115995# retain context node to keep document alive
+        const Reference< XNode > m_xContextNode;
         boost::shared_ptr<xmlXPathObject> m_pXPathObj;
         xmlNodeSetPtr m_pNodeSet;
 
     public:
-        CNodeList(boost::shared_ptr<xmlXPathObject> &rxpathObj);
+        CNodeList(
+                Reference<XNode> const& xContextNode,
+                boost::shared_ptr<xmlXPathObject> &rxpathObj);
         /**
         The number of nodes in the list.
         */
