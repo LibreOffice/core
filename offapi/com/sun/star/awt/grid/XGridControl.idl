@@ -43,6 +43,17 @@ module com {  module sun {  module star {  module awt { module grid {
  */
 interface XGridControl : XGridSelection
 {
+    /** retrieves the column which a given point belongs to
+
+        @param X
+            the ordinate of the point, in pixel coordinates.
+        @param Y
+            the abscissa of the point, in pixel coordinates.
+        @return
+            the index of the column which the point lies in, or -1 if no column is under the given point.
+    */
+    long getColumnAtPoint( [in] long X, [in] long Y );
+
     /** retrieves the row which a given point belongs to
 
         @param X
@@ -54,16 +65,19 @@ interface XGridControl : XGridSelection
     */
     long getRowAtPoint( [in] long X, [in] long Y );
 
-    /** retrieves the column which a given point belongs to
+    /** returns the column index of the currently active cell
 
-        @param X
-            the ordinate of the point, in pixel coordinates.
-        @param Y
-            the abscissa of the point, in pixel coordinates.
-        @return
-            the index of the column which the point lies in, or -1 if no column is under the given point.
+        <p>If the grid control's does not contain any cells (which happens if the grid column model does not contain any
+        columns, or if grid data model does not contain any rows), then <code>-1</code> is returned.</p>
     */
-    long getColumnAtPoint( [in] long X, [in] long Y );
+    long getCurrentColumn();
+
+    /** returns the row index of the currently active cell
+
+        <p>If the grid control's does not contain any cells (which happens if the grid column model does not contain any
+        columns, or if grid data model does not contain any rows), then <code>-1</code> is returned.</p>
+    */
+    long getCurrentRow();
 };
 
 //=============================================================================
