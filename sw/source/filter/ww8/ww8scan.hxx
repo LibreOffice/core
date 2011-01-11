@@ -683,7 +683,7 @@ public:
     long Count() const { return ( pRef ) ? pRef->GetIMax() : 0; }
 };
 
-/// Iterator for footnotes and endnotes
+/// Iterator for fields
 class WW8PLCFx_FLD : public WW8PLCFx
 {
 private:

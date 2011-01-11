@@ -88,7 +88,7 @@ namespace
         SwPaM aStartPaM(rStart);
         SwPaM aEndPaM(rEnd);
         io_pDoc->StartUndo(UNDO_UI_REPLACE, NULL);
-        if( ( ch_start != aStartMark ) && ( rStart != rEnd ) )
+        if( ( ch_start != aStartMark ) && ( aEndMark != CH_TXT_ATR_FORMELEMENT ) )
         {
             io_pDoc->InsertString(aStartPaM, aStartMark);
             rStart.nContent--;

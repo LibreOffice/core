@@ -1821,7 +1821,7 @@ void MSWordExportBase::OutputTextNode( const SwTxtNode& rNode )
             IDocumentMarkAccess* const pMarkAccess = pDoc->getIDocumentMarkAccess();
             if ( ch == CH_TXT_ATR_FIELDSTART )
             {
-                SwPosition aPosition( rNode, SwIndex( const_cast< SwTxtNode* >( &rNode ), nAktPos + 1 ) );
+                SwPosition aPosition( rNode, SwIndex( const_cast< SwTxtNode* >( &rNode ), nAktPos ) );
                 ::sw::mark::IFieldmark const * const pFieldmark = pMarkAccess->getFieldmarkFor( aPosition );
                 OSL_ENSURE( pFieldmark, "Looks like this doc is broken...; where is the Fieldmark for the FIELDSTART??" );
 
@@ -1873,9 +1873,9 @@ void MSWordExportBase::OutputTextNode( const SwTxtNode& rNode )
             }
             else if ( ch == CH_TXT_ATR_FIELDEND )
             {
-                SwPosition aPosition( rNode, SwIndex( const_cast< SwTxtNode* >( &rNode ), nAktPos ) );
+                SwPosition aPosition( rNode, SwIndex( const_cast< SwTxtNode* >( &rNode ), nAktPos - 1 ) );
                 ::sw::mark::IFieldmark const * const pFieldmark = pMarkAccess->getFieldmarkFor( aPosition );
-                OSL_ENSURE( pFieldmark, "Looks like this doc is broken...; where is the Fieldmark for the FIELDSTART??" );
+                OSL_ENSURE( pFieldmark, "Looks like this doc is broken...; where is the Fieldmark for the FIELDEND??" );
 
                 ww::eField eFieldId = lcl_getFieldId( pFieldmark );
                 if ( pFieldmark->GetFieldname().equalsAscii( ODF_UNHANDLED ) )
