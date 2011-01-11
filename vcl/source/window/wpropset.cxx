@@ -293,7 +293,7 @@ IMPL_LINK( vcl::WindowPropertySet, ChildEventListener, VclWindowEvent*, pEvent )
     = mpImpl->maProperties.find( pEvent->GetWindow()->getIdentifier() );
     if( it != mpImpl->maProperties.end() ) // this is valid, some unnamed child may have sent an event
     {
-        sal_uInt32 nId = pEvent->GetId();
+        sal_uIntPtr nId = pEvent->GetId();
         // check if anything interesting happened
         if(
            // general windowy things

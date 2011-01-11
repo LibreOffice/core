@@ -465,13 +465,13 @@ Pixmap X11GlyphPeer::GetPixmap( ServerFont& rServerFont, int nGlyphIndex, int nR
         if( rServerFont.GetGlyphBitmap1( nGlyphIndex, maRawBitmap ) )
         {
             // #94666# circumvent bug in some X11 systems, e.g. XF410.LynxEM.v163
-            sal_uInt32 nPixmapWidth = 8 * maRawBitmap.mnScanlineSize - 1;
+            sal_uIntPtr nPixmapWidth = 8 * maRawBitmap.mnScanlineSize - 1;
             nPixmapWidth = Max( nPixmapWidth, maRawBitmap.mnWidth );
 
             rGlyphData.SetSize( Size( nPixmapWidth, maRawBitmap.mnHeight ) );
             rGlyphData.SetOffset( +maRawBitmap.mnXOffset, +maRawBitmap.mnYOffset );
 
-            const sal_uInt32 nBytes = maRawBitmap.mnHeight * maRawBitmap.mnScanlineSize;
+            const sal_uIntPtr nBytes = maRawBitmap.mnHeight * maRawBitmap.mnScanlineSize;
             if( nBytes > 0 )
             {
                 // conversion table LSB<->MSB (for XCreatePixmapFromData)
@@ -621,7 +621,7 @@ Glyph X11GlyphPeer::GetGlyphId( ServerFont& rServerFont, int nGlyphIndex )
             GlyphSet aGlyphSet = GetGlyphSet( rServerFont, -1 );
 
             aGlyphId = nGlyphIndex & 0x00FFFFFF;
-            const sal_uInt32 nBytes = maRawBitmap.mnScanlineSize * maRawBitmap.mnHeight;
+            const sal_uIntPtr nBytes = maRawBitmap.mnScanlineSize * maRawBitmap.mnHeight;
             XRenderPeer::GetInstance().AddGlyph( aGlyphSet, aGlyphId,
                 aGlyphInfo, (char*)maRawBitmap.mpBits, nBytes );
             mnBytesUsed += nBytes;

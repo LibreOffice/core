@@ -40,9 +40,9 @@ class SvpSalGraphics;
 class SvpSalFrame : public SalFrame, public SvpElement
 {
     SvpSalInstance*                     m_pInstance;
-    SvpSalFrame*                        m_pParent;       // pointer to parent frame
+    SvpSalFrame*                    m_pParent;       // pointer to parent frame
     std::list< SvpSalFrame* >           m_aChildren;     // List of child frames
-    sal_uInt32                               m_nStyle;
+    sal_uIntPtr                         m_nStyle;
     bool                                m_bVisible;
     long                                m_nMinWidth;
     long                                m_nMinHeight;
@@ -58,7 +58,7 @@ class SvpSalFrame : public SalFrame, public SvpElement
 public:
     SvpSalFrame( SvpSalInstance* pInstance,
                  SalFrame* pParent,
-                 sal_uInt32 nSalFrameStyle,
+                 sal_uIntPtr nSalFrameStyle,
                  SystemParentData* pSystemParent = NULL );
     virtual ~SvpSalFrame();
 
@@ -116,7 +116,7 @@ public:
     virtual bool                SetPluginParent( SystemParentData* pNewParent );
     virtual void                SetBackgroundBitmap( SalBitmap* pBitmap );
     virtual void                ResetClipRegion();
-    virtual void                BeginSetClipRegion( sal_uInt32 nRects );
+    virtual void                BeginSetClipRegion( sal_uIntPtr nRects );
     virtual void                UnionClipRegion( long nX, long nY, long nWidth, long nHeight );
     virtual void                EndSetClipRegion();
 

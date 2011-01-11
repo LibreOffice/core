@@ -41,7 +41,7 @@ public:
                 SalClipRegion();
                ~SalClipRegion();
 
-    void        BeginSetClipRegion( sal_uInt32 nRects );
+    void        BeginSetClipRegion( sal_uIntPtr nRects );
     void        UnionClipRegion( long nX, long nY, long nWidth, long nHeight );
 
     XRectangle *EndSetClipRegion()  {
@@ -84,7 +84,7 @@ public:
     // overload all pure virtual methods
      virtual void                   ResetClipRegion();
     virtual sal_uInt16                  GetClipRegionType();
-    virtual void                    BeginSetClipRegion( sal_uInt32 nRects );
+    virtual void                    BeginSetClipRegion( sal_uIntPtr nRects );
     virtual void                    UnionClipRegion( long nX, long nY, long nWidth, long nHeight );
     virtual void                    EndSetClipRegion();
 

@@ -1777,14 +1777,14 @@ X11SalGraphics::GetFontMetric( ImplFontMetricData *pMetric, int nFallbackLevel )
 // ---------------------------------------------------------------------------
 
 sal_uInt32
-X11SalGraphics::GetKernPairs( sal_uInt32 nPairs, ImplKernPairData *pKernPairs )
+X11SalGraphics::GetKernPairs( sal_uIntPtr nPairs, ImplKernPairData *pKernPairs )
 {
     if( ! bPrinter_ )
     {
         if( mpServerFont[0] != NULL )
         {
             ImplKernPairData* pTmpKernPairs;
-            sal_uInt32 nGotPairs = mpServerFont[0]->GetKernPairs( &pTmpKernPairs );
+            sal_uIntPtr nGotPairs = mpServerFont[0]->GetKernPairs( &pTmpKernPairs );
             for( unsigned int i = 0; i < nPairs && i < nGotPairs; ++i )
                 pKernPairs[ i ] = pTmpKernPairs[ i ];
             delete[] pTmpKernPairs;

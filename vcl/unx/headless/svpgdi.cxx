@@ -152,7 +152,7 @@ void SvpSalGraphics::ResetClipRegion()
     m_aClipMap.reset();
 }
 
-void SvpSalGraphics::BeginSetClipRegion( sal_uInt32 n )
+void SvpSalGraphics::BeginSetClipRegion( sal_uIntPtr n )
 {
     if( n <= 1 )
     {
@@ -309,13 +309,13 @@ void SvpSalGraphics::drawRect( long nX, long nY, long nWidth, long nHeight )
     dbgOut( m_aDevice );
 }
 
-void SvpSalGraphics::drawPolyLine( sal_uInt32 nPoints, const SalPoint* pPtAry )
+void SvpSalGraphics::drawPolyLine( sal_uIntPtr nPoints, const SalPoint* pPtAry )
 {
     if( m_bUseLineColor && nPoints )
     {
         B2DPolygon aPoly;
         aPoly.append( B2DPoint( pPtAry->mnX, pPtAry->mnY ), nPoints );
-        for( sal_uInt32 i = 1; i < nPoints; i++ )
+        for( sal_uIntPtr i = 1; i < nPoints; i++ )
             aPoly.setB2DPoint( i, B2DPoint( pPtAry[i].mnX, pPtAry[i].mnY ) );
         aPoly.setClosed( false );
         m_aDevice->drawPolygon( aPoly, m_aLineColor, m_aDrawMode, m_aClipMap );
@@ -323,13 +323,13 @@ void SvpSalGraphics::drawPolyLine( sal_uInt32 nPoints, const SalPoint* pPtAry )
     dbgOut( m_aDevice );
 }
 
-void SvpSalGraphics::drawPolygon( sal_uInt32 nPoints, const SalPoint* pPtAry )
+void SvpSalGraphics::drawPolygon( sal_uIntPtr nPoints, const SalPoint* pPtAry )
 {
     if( ( m_bUseLineColor || m_bUseFillColor ) && nPoints )
     {
         B2DPolygon aPoly;
         aPoly.append( B2DPoint( pPtAry->mnX, pPtAry->mnY ), nPoints );
-        for( sal_uInt32 i = 1; i < nPoints; i++ )
+        for( sal_uIntPtr i = 1; i < nPoints; i++ )
             aPoly.setB2DPoint( i, B2DPoint( pPtAry[i].mnX, pPtAry[i].mnY ) );
         if( m_bUseFillColor )
         {
@@ -388,14 +388,14 @@ bool SvpSalGraphics::drawPolyLine( const ::basegfx::B2DPolygon&, double /*fTrans
         return false;
 }
 
-sal_Bool SvpSalGraphics::drawPolyLineBezier( sal_uInt32,
+sal_Bool SvpSalGraphics::drawPolyLineBezier( sal_uIntPtr,
                                              const SalPoint*,
                                              const sal_uInt8* )
 {
     return sal_False;
 }
 
-sal_Bool SvpSalGraphics::drawPolygonBezier( sal_uInt32,
+sal_Bool SvpSalGraphics::drawPolygonBezier( sal_uIntPtr,
                                             const SalPoint*,
                                             const sal_uInt8* )
 {
@@ -538,19 +538,19 @@ void SvpSalGraphics::invert( long nX, long nY, long nWidth, long nHeight, SalInv
     dbgOut( m_aDevice );
 }
 
-void SvpSalGraphics::invert( sal_uInt32 nPoints, const SalPoint* pPtAry, SalInvert /*nFlags*/ )
+void SvpSalGraphics::invert( sal_uIntPtr nPoints, const SalPoint* pPtAry, SalInvert /*nFlags*/ )
 {
     // FIXME: handle SAL_INVERT_50 and SAL_INVERT_TRACKFRAME
     B2DPolygon aPoly;
     aPoly.append( B2DPoint( pPtAry->mnX, pPtAry->mnY ), nPoints );
-    for( sal_uInt32 i = 1; i < nPoints; i++ )
+    for( sal_uIntPtr i = 1; i < nPoints; i++ )
         aPoly.setB2DPoint( i, B2DPoint( pPtAry[i].mnX, pPtAry[i].mnY ) );
     aPoly.setClosed( true );
     m_aDevice->fillPolyPolygon( B2DPolyPolygon(aPoly), basebmp::Color( 0xffffff ), DrawMode_XOR, m_aClipMap );
     dbgOut( m_aDevice );
 }
 
-sal_Bool SvpSalGraphics::drawEPS( long, long, long, long, void*, sal_uInt32 )
+sal_Bool SvpSalGraphics::drawEPS( long, long, long, long, void*, sal_uIntPtr )
 {
     return sal_False;
 }

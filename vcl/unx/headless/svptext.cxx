@@ -254,15 +254,15 @@ void SvpSalGraphics::GetFontMetric( ImplFontMetricData* pMetric, int nFallbackLe
 
 // ---------------------------------------------------------------------------
 
-sal_uInt32 SvpSalGraphics::GetKernPairs( sal_uInt32 nPairs, ImplKernPairData* pKernPairs )
+sal_uIntPtr SvpSalGraphics::GetKernPairs( sal_uIntPtr nPairs, ImplKernPairData* pKernPairs )
 {
-    sal_uInt32 nGotPairs = 0;
+    sal_uIntPtr nGotPairs = 0;
 
     if( m_pServerFont[0] != NULL )
     {
         ImplKernPairData* pTmpKernPairs = NULL;
         nGotPairs = m_pServerFont[0]->GetKernPairs( &pTmpKernPairs );
-        for( sal_uInt32 i = 0; i < nPairs && i < nGotPairs; ++i )
+        for( sal_uIntPtr i = 0; i < nPairs && i < nGotPairs; ++i )
             pKernPairs[ i ] = pTmpKernPairs[ i ];
         delete[] pTmpKernPairs;
     }

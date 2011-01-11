@@ -67,21 +67,21 @@ class SalPolyLine
             XPoint              Points_[STATIC_POINTS];
             XPoint             *pFirst_;
 public:
-    inline                      SalPolyLine( sal_uInt32 nPoints );
-    inline                      SalPolyLine( sal_uInt32 nPoints, const SalPoint *p );
+    inline                      SalPolyLine( sal_uIntPtr nPoints );
+    inline                      SalPolyLine( sal_uIntPtr nPoints, const SalPoint *p );
     inline                      ~SalPolyLine();
-    inline  XPoint             &operator [] ( sal_uInt32 n ) const
+    inline  XPoint             &operator [] ( sal_uIntPtr n ) const
                                 { return pFirst_[n]; }
 };
 
-inline SalPolyLine::SalPolyLine( sal_uInt32 nPoints )
+inline SalPolyLine::SalPolyLine( sal_uIntPtr nPoints )
     : pFirst_( nPoints+1 > STATIC_POINTS ? new XPoint[nPoints+1] : Points_ )
 {}
 
-inline SalPolyLine::SalPolyLine( sal_uInt32 nPoints, const SalPoint *p )
+inline SalPolyLine::SalPolyLine( sal_uIntPtr nPoints, const SalPoint *p )
     : pFirst_( nPoints+1 > STATIC_POINTS ? new XPoint[nPoints+1] : Points_ )
 {
-    for( sal_uInt32 i = 0; i < nPoints; i++ )
+    for( sal_uIntPtr i = 0; i < nPoints; i++ )
     {
         pFirst_[i].x = (short)p[i].mnX;
         pFirst_[i].y = (short)p[i].mnY;
@@ -398,19 +398,19 @@ GC X11SalGraphics::GetTrackingGC()
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-void X11SalGraphics::DrawLines( sal_uInt32              nPoints,
+void X11SalGraphics::DrawLines( sal_uIntPtr              nPoints,
                                 const SalPolyLine &rPoints,
                                 GC                 pGC,
                                 bool               bClose
                                 )
 {
     // errechne wie viele Linien XWindow auf einmal zeichnen kann
-    sal_uInt32 nMaxLines = (GetDisplay()->GetMaxRequestSize() - sizeof(xPolyPointReq))
+    sal_uIntPtr nMaxLines = (GetDisplay()->GetMaxRequestSize() - sizeof(xPolyPointReq))
                       / sizeof(xPoint);
     if( nMaxLines > nPoints ) nMaxLines = nPoints;
 
     // gebe alle Linien aus, die XWindows zeichnen kann.
-    sal_uInt32 n;
+    sal_uIntPtr n;
     for( n = 0; nPoints - n > nMaxLines; n += nMaxLines - 1 )
         XDrawLines( GetXDisplay(),
                     GetDrawable(),
@@ -597,7 +597,7 @@ void X11SalGraphics::ResetClipRegion()
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-void X11SalGraphics::BeginSetClipRegion( sal_uInt32 )
+void X11SalGraphics::BeginSetClipRegion( sal_uIntPtr )
 {
     if( pClipRegion_ )
         XDestroyRegion( pClipRegion_ );
@@ -839,13 +839,13 @@ void X11SalGraphics::drawRect( long nX, long nY, long nDX, long nDY )
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-void X11SalGraphics::drawPolyLine( sal_uInt32 nPoints, const SalPoint *pPtAry )
+void X11SalGraphics::drawPolyLine( sal_uIntPtr nPoints, const SalPoint *pPtAry )
 {
     drawPolyLine( nPoints, pPtAry, false );
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-void X11SalGraphics::drawPolyLine( sal_uInt32 nPoints, const SalPoint *pPtAry, bool bClose )
+void X11SalGraphics::drawPolyLine( sal_uIntPtr nPoints, const SalPoint *pPtAry, bool bClose )
 {
     if( nPenColor_ != 0xFFFFFFFF )
     {
@@ -856,7 +856,7 @@ void X11SalGraphics::drawPolyLine( sal_uInt32 nPoints, const SalPoint *pPtAry, b
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-void X11SalGraphics::drawPolygon( sal_uInt32 nPoints, const SalPoint* pPtAry )
+void X11SalGraphics::drawPolygon( sal_uIntPtr nPoints, const SalPoint* pPtAry )
 {
     if( nPoints == 0 )
         return;
@@ -972,14 +972,14 @@ void X11SalGraphics::drawPolyPolygon( sal_uInt32        nPoly,
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
-sal_Bool X11SalGraphics::drawPolyLineBezier( sal_uInt32, const SalPoint*, const BYTE* )
+sal_Bool X11SalGraphics::drawPolyLineBezier( sal_uIntPtr, const SalPoint*, const BYTE* )
 {
     return sal_False;
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
-sal_Bool X11SalGraphics::drawPolygonBezier( sal_uInt32, const SalPoint*, const BYTE* )
+sal_Bool X11SalGraphics::drawPolygonBezier( sal_uIntPtr, const SalPoint*, const BYTE* )
 {
     return sal_False;
 }
@@ -994,7 +994,7 @@ sal_Bool X11SalGraphics::drawPolyPolygonBezier( sal_uInt32, const sal_uInt32*,
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
-void X11SalGraphics::invert( sal_uInt32 nPoints,
+void X11SalGraphics::invert( sal_uIntPtr nPoints,
                              const SalPoint* pPtAry,
                              SalInvert nFlags )
 {
@@ -1021,7 +1021,7 @@ void X11SalGraphics::invert( sal_uInt32 nPoints,
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
-BOOL X11SalGraphics::drawEPS( long,long,long,long,void*,sal_uInt32 )
+BOOL X11SalGraphics::drawEPS( long,long,long,long,void*,sal_uIntPtr )
 {
     return sal_False;
 }

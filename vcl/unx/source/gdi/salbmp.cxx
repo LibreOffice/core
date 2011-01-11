@@ -64,7 +64,7 @@ SalBitmap* X11SalInstance::CreateSalBitmap()
 }
 
 ImplSalBitmapCache* X11SalBitmap::mpCache = NULL;
-sal_uInt32              X11SalBitmap::mnCacheInstCount = 0;
+sal_uIntPtr             X11SalBitmap::mnCacheInstCount = 0;
 
 // -----------------------------------------------------------------------------
 
@@ -214,7 +214,7 @@ BitmapBuffer* X11SalBitmap::ImplCreateDIB( Drawable aDrawable,
         {
             const SalTwoRect        aTwoRect = { 0, 0, nWidth, nHeight, 0, 0, nWidth, nHeight };
             BitmapBuffer            aSrcBuf;
-            sal_uInt32                  nDstFormat = BMP_FORMAT_BOTTOM_UP;
+            sal_uIntPtr                 nDstFormat = BMP_FORMAT_BOTTOM_UP;
             const BitmapPalette*    pDstPal = NULL;
 
             aSrcBuf.mnFormat = BMP_FORMAT_TOP_DOWN;
@@ -304,7 +304,7 @@ BitmapBuffer* X11SalBitmap::ImplCreateDIB( Drawable aDrawable,
             else if( aSrcBuf.mnBitCount <= 8 )
             {
                 const SalColormap& rColMap = pSalDisp->GetColormap( nScreen );
-                const sal_uInt16 nCols = Min( (sal_uInt32)rColMap.GetUsed(), (sal_uInt32)(1 << nDrawableDepth) );
+                const sal_uInt16 nCols = Min( (sal_uIntPtr)rColMap.GetUsed(), (sal_uIntPtr)(1 << nDrawableDepth) );
 
                 rPal.SetEntryCount( nCols );
                 pDstPal = &rPal;
@@ -363,7 +363,7 @@ XImage* X11SalBitmap::ImplCreateXImage( SalDisplay *pSalDisp, int nScreen, long 
         if( pImage )
         {
             BitmapBuffer*   pDstBuf;
-            sal_uInt32          nDstFormat = BMP_FORMAT_TOP_DOWN;
+            sal_uIntPtr         nDstFormat = BMP_FORMAT_TOP_DOWN;
             BitmapPalette*  pPal = NULL;
             ColorMask*      pMask = NULL;
 
@@ -430,7 +430,7 @@ XImage* X11SalBitmap::ImplCreateXImage( SalDisplay *pSalDisp, int nScreen, long 
             else if( pImage->depth <= 8 )
             {
                 const SalColormap& rColMap = pSalDisp->GetColormap( nScreen );
-                const sal_uInt16 nCols = Min( (sal_uInt32)rColMap.GetUsed(), (sal_uInt32)(1 << pImage->depth) );
+                const sal_uInt16 nCols = Min( (sal_uIntPtr)rColMap.GetUsed(), (sal_uIntPtr)(1 << pImage->depth) );
 
                 pPal = new BitmapPalette( nCols );
 
@@ -1018,10 +1018,10 @@ void ImplSalDDB::ImplDraw( Drawable aSrcDrawable, long nSrcDrawableDepth,
 struct ImplBmpObj
 {
     X11SalBitmap*   mpBmp;
-    sal_uInt32      mnMemSize;
-    sal_uInt32      mnFlags;
+    sal_uIntPtr     mnMemSize;
+    sal_uIntPtr     mnFlags;
 
-                ImplBmpObj( X11SalBitmap* pBmp, sal_uInt32 nMemSize, sal_uInt32 nFlags ) :
+                ImplBmpObj( X11SalBitmap* pBmp, sal_uIntPtr nMemSize, sal_uIntPtr nFlags ) :
                     mpBmp( pBmp ), mnMemSize( nMemSize ), mnFlags( nFlags ) {}
 };
 
@@ -1041,7 +1041,7 @@ ImplSalBitmapCache::~ImplSalBitmapCache()
 
 // -----------------------------------------------------------------------------
 
-void ImplSalBitmapCache::ImplAdd( X11SalBitmap* pBmp, sal_uInt32 nMemSize, sal_uInt32 nFlags )
+void ImplSalBitmapCache::ImplAdd( X11SalBitmap* pBmp, sal_uIntPtr nMemSize, sal_uIntPtr nFlags )
 {
     ImplBmpObj* pObj;
     bool        bFound = sal_False;

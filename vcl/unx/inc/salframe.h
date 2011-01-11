@@ -98,7 +98,7 @@ class VCL_DLLPUBLIC X11SalFrame : public SalFrame
     int             nWidth_;            // client width
     int             nHeight_;           // client height
     Rectangle       maRestorePosSize;
-    sal_uInt32          nStyle_;
+    sal_uIntPtr         nStyle_;
     SalExtStyle     mnExtStyle;
     sal_Bool            bAlwaysOnTop_;
     sal_Bool            bViewable_;
@@ -172,11 +172,11 @@ class VCL_DLLPUBLIC X11SalFrame : public SalFrame
     void            setXEmbedInfo();
     void            askForXEmbedFocus( sal_Int32 i_nTimeCode );
 public:
-    X11SalFrame( SalFrame* pParent, sal_uInt32 nSalFrameStyle, SystemParentData* pSystemParent = NULL );
+    X11SalFrame( SalFrame* pParent, sal_uIntPtr nSalFrameStyle, SystemParentData* pSystemParent = NULL );
     virtual ~X11SalFrame();
 
     long            Dispatch( XEvent *pEvent );
-    void            Init( sal_uInt32 nSalFrameStyle, int nScreen = -1,
+    void            Init( sal_uIntPtr nSalFrameStyle, int nScreen = -1,
                           SystemParentData* pParentData = NULL, bool bUseGeometry = false );
 
     SalDisplay*             GetDisplay() const { return pDisplay_; }
@@ -189,7 +189,7 @@ public:
     XLIB_Window             GetStackingWindow() const { return mhStackingWindow; }
     long                    ShutDown() const { return CallCallback( SALEVENT_SHUTDOWN, 0 ); }
     long                    Close() const { return CallCallback( SALEVENT_CLOSE, 0 ); }
-              sal_uInt32           GetStyle() const { return nStyle_; }
+              sal_uIntPtr           GetStyle() const { return nStyle_; }
 
     inline  XLIB_Cursor     GetCursor() const { return hCursor_; }
     inline  sal_Bool            IsCaptured() const { return nCaptured_ == 1; }
@@ -268,7 +268,7 @@ public:
     // set clip region to none (-> rectangular windows, normal state)
     virtual void                    ResetClipRegion();
     // start setting the clipregion consisting of nRects rectangles
-    virtual void                    BeginSetClipRegion( sal_uInt32 nRects );
+    virtual void                    BeginSetClipRegion( sal_uIntPtr nRects );
     // add a rectangle to the clip region
     virtual void                    UnionClipRegion( long nX, long nY, long nWidth, long nHeight );
     // done setting up the clipregion

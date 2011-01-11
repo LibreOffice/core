@@ -63,7 +63,7 @@ class GtkHookedYieldMutex : public GtkYieldMutex
 {
     virtual int      Grab()             { return 0; };
     virtual void     Ungrab(int )       {};
-    std::list<sal_uInt32> aYieldStack;
+    std::list<sal_uIntPtr> aYieldStack;
 public:
     GtkHookedYieldMutex();
     virtual void      acquire();
@@ -84,8 +84,8 @@ public:
     {}
     virtual ~GtkInstance();
 
-    virtual SalFrame*           CreateFrame( SalFrame* pParent, sal_uInt32 nStyle );
-    virtual SalFrame*           CreateChildFrame( SystemParentData* pParent, sal_uInt32 nStyle );
+    virtual SalFrame*           CreateFrame( SalFrame* pParent, sal_uIntPtr nStyle );
+    virtual SalFrame*           CreateChildFrame( SystemParentData* pParent, sal_uIntPtr nStyle );
     virtual SalObject*          CreateObject( SalFrame* pParent, SystemWindowData* pWindowData, sal_Bool bShow = sal_True );
     virtual SalSystem*          CreateSalSystem();
     virtual void                AddToRecentDocumentList(const rtl::OUString& rFileUrl, const rtl::OUString& rMimeType);

@@ -68,7 +68,7 @@ public:
     virtual long            GetGraphicsWidth() const;
 
     virtual void            ResetClipRegion();
-    virtual void            BeginSetClipRegion( sal_uInt32 nCount );
+    virtual void            BeginSetClipRegion( sal_uIntPtr nCount );
     virtual sal_Bool            unionClipRegion( long nX, long nY, long nWidth, long nHeight );
     virtual bool            unionClipRegion(  const ::basegfx::B2DPolyPolygon& );
     virtual void            EndSetClipRegion();
@@ -87,7 +87,7 @@ public:
     virtual void            SetTextColor( SalColor nSalColor );
     virtual sal_uInt16                  SetFont( ImplFontSelectData*, int nFallbackLevel );
     virtual void            GetFontMetric( ImplFontMetricData*, int nFallbackLevel );
-    virtual sal_uInt32          GetKernPairs( sal_uInt32 nPairs, ImplKernPairData* pKernPairs );
+    virtual sal_uIntPtr         GetKernPairs( sal_uIntPtr nPairs, ImplKernPairData* pKernPairs );
     virtual const ImplFontCharMap* GetImplFontCharMap() const;
     virtual void            GetDevFontList( ImplDevFontList* );
     virtual void            GetDevFontSubstList( OutputDevice* );
@@ -122,15 +122,15 @@ public:
     virtual void            drawRect( long nX, long nY, long nWidth, long nHeight );
     virtual bool            drawPolyPolygon( const ::basegfx::B2DPolyPolygon&, double fTransparency );
     virtual bool            drawPolyLine( const ::basegfx::B2DPolygon&, double fTransparency, const ::basegfx::B2DVector& rLineWidths, basegfx::B2DLineJoin );
-    virtual void            drawPolyLine( sal_uInt32 nPoints, const SalPoint* pPtAry );
-    virtual void            drawPolygon( sal_uInt32 nPoints, const SalPoint* pPtAry );
+    virtual void            drawPolyLine( sal_uIntPtr nPoints, const SalPoint* pPtAry );
+    virtual void            drawPolygon( sal_uIntPtr nPoints, const SalPoint* pPtAry );
     virtual void            drawPolyPolygon( sal_uInt32 nPoly,
                                              const sal_uInt32* pPoints,
                                              PCONSTSALPOINT* pPtAry );
-    virtual sal_Bool        drawPolyLineBezier( sal_uInt32 nPoints,
+    virtual sal_Bool        drawPolyLineBezier( sal_uIntPtr nPoints,
                                                 const SalPoint* pPtAry,
                                                 const sal_uInt8* pFlgAry );
-    virtual sal_Bool        drawPolygonBezier( sal_uInt32 nPoints,
+    virtual sal_Bool        drawPolygonBezier( sal_uIntPtr nPoints,
                                                const SalPoint* pPtAry,
                                                const sal_uInt8* pFlgAry );
     virtual sal_Bool        drawPolyPolygonBezier( sal_uInt32 nPoly,
@@ -161,9 +161,9 @@ public:
     virtual SalBitmap*      getBitmap( long nX, long nY, long nWidth, long nHeight );
     virtual SalColor        getPixel( long nX, long nY );
     virtual void            invert( long nX, long nY, long nWidth, long nHeight, SalInvert nFlags );
-    virtual void            invert( sal_uInt32 nPoints, const SalPoint* pPtAry, SalInvert nFlags );
+    virtual void            invert( sal_uIntPtr nPoints, const SalPoint* pPtAry, SalInvert nFlags );
 
-    virtual sal_Bool            drawEPS( long nX, long nY, long nWidth, long nHeight, void* pPtr, sal_uInt32 nSize );
+    virtual sal_Bool            drawEPS( long nX, long nY, long nWidth, long nHeight, void* pPtr, sal_uIntPtr nSize );
 
     virtual SystemGraphicsData GetGraphicsData() const;
     virtual SystemFontData     GetSysFontData( int nFallbacklevel ) const;

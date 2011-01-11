@@ -49,7 +49,7 @@
 class SvpSalYieldMutex : public vos::OMutex
 {
 protected:
-    sal_uInt32                                      mnCount;
+    sal_uIntPtr                                     mnCount;
     vos::OThread::TThreadIdentifier mnThreadId;
 
 public:
@@ -59,7 +59,7 @@ public:
     virtual void                                release();
     virtual sal_Bool                            tryToAcquire();
 
-    sal_uInt32                                      GetAcquireCount() const { return mnCount; }
+    sal_uIntPtr                                     GetAcquireCount() const { return mnCount; }
     vos::OThread::TThreadIdentifier GetThreadId() const { return mnThreadId; }
 };
 
@@ -75,7 +75,7 @@ public:
     virtual ~SvpSalTimer();
 
     // overload all pure virtual methods
-    virtual void Start( sal_uInt32 nMS );
+    virtual void Start( sal_uIntPtr nMS );
     virtual void Stop();
 };
 
@@ -86,7 +86,7 @@ class SvpSalFrame;
 class SvpSalInstance : public SalInstance
 {
     timeval             m_aTimeout;
-    sal_uInt32               m_nTimeoutMS;
+    sal_uIntPtr               m_nTimeoutMS;
     int                 m_pTimeoutFDS[2];
     SvpSalYieldMutex    m_aYieldMutex;
 
@@ -120,7 +120,7 @@ public:
     void PostEvent( const SalFrame* pFrame, void* pData, sal_uInt16 nEvent );
     void CancelEvent( const SalFrame* pFrame, void* pData, sal_uInt16 nEvent );
 
-    void StartTimer( sal_uInt32 nMS );
+    void StartTimer( sal_uIntPtr nMS );
     void StopTimer();
     void Wakeup();
 
@@ -131,8 +131,8 @@ public:
     bool            CheckTimeout( bool bExecuteTimers = true );
 
     // Frame
-    virtual SalFrame*       CreateChildFrame( SystemParentData* pParent, sal_uInt32 nStyle );
-    virtual SalFrame*       CreateFrame( SalFrame* pParent, sal_uInt32 nStyle );
+    virtual SalFrame*       CreateChildFrame( SystemParentData* pParent, sal_uIntPtr nStyle );
+    virtual SalFrame*       CreateFrame( SalFrame* pParent, sal_uIntPtr nStyle );
     virtual void            DestroyFrame( SalFrame* pFrame );
 
     // Object (System Child Window)
@@ -174,8 +174,8 @@ public:
 
     // YieldMutex
     virtual vos::IMutex*    GetYieldMutex();
-    virtual sal_uInt32          ReleaseYieldMutex();
-    virtual void            AcquireYieldMutex( sal_uInt32 nCount );
+    virtual sal_uIntPtr         ReleaseYieldMutex();
+    virtual void            AcquireYieldMutex( sal_uIntPtr nCount );
     virtual bool            CheckYieldMutex();
 
     // wait next event and dispatch

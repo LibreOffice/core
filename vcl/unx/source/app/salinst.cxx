@@ -227,14 +227,14 @@ vos::IMutex* X11SalInstance::GetYieldMutex()
 
 // -----------------------------------------------------------------------
 
-sal_uInt32 X11SalInstance::ReleaseYieldMutex()
+sal_uIntPtr X11SalInstance::ReleaseYieldMutex()
 {
     SalYieldMutex* pYieldMutex = mpSalYieldMutex;
     if ( pYieldMutex->GetThreadId() ==
          vos::OThread::getCurrentIdentifier() )
     {
-        sal_uInt32 nCount = pYieldMutex->GetAcquireCount();
-        sal_uInt32 n = nCount;
+        sal_uIntPtr nCount = pYieldMutex->GetAcquireCount();
+        sal_uIntPtr n = nCount;
         while ( n )
         {
             pYieldMutex->release();
@@ -249,7 +249,7 @@ sal_uInt32 X11SalInstance::ReleaseYieldMutex()
 
 // -----------------------------------------------------------------------
 
-void X11SalInstance::AcquireYieldMutex( sal_uInt32 nCount )
+void X11SalInstance::AcquireYieldMutex( sal_uIntPtr nCount )
 {
     SalYieldMutex* pYieldMutex = mpSalYieldMutex;
     while ( nCount )
@@ -288,14 +288,14 @@ void* X11SalInstance::GetConnectionIdentifier( ConnectionIdentifierType& rReturn
     return pDisplay ? (void*)pDisplay : (void*)"";
 }
 
-SalFrame *X11SalInstance::CreateFrame( SalFrame *pParent, sal_uInt32 nSalFrameStyle )
+SalFrame *X11SalInstance::CreateFrame( SalFrame *pParent, sal_uIntPtr nSalFrameStyle )
 {
     SalFrame *pFrame = new X11SalFrame( pParent, nSalFrameStyle );
 
     return pFrame;
 }
 
-SalFrame* X11SalInstance::CreateChildFrame( SystemParentData* pParentData, sal_uInt32 nStyle )
+SalFrame* X11SalInstance::CreateChildFrame( SystemParentData* pParentData, sal_uIntPtr nStyle )
 {
     SalFrame* pFrame = new X11SalFrame( NULL, nStyle, pParentData );
 

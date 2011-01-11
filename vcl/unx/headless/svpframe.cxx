@@ -39,7 +39,7 @@ SvpSalFrame* SvpSalFrame::s_pFocusFrame = NULL;
 
 SvpSalFrame::SvpSalFrame( SvpSalInstance* pInstance,
                           SalFrame* pParent,
-                          sal_uInt32 nSalFrameStyle,
+                          sal_uIntPtr nSalFrameStyle,
                           SystemParentData* ) :
     m_pInstance( pInstance ),
     m_pParent( static_cast<SvpSalFrame*>(pParent) ),
@@ -435,7 +435,7 @@ void SvpSalFrame::ResetClipRegion()
 {
 }
 
-void SvpSalFrame::BeginSetClipRegion( sal_uInt32 )
+void SvpSalFrame::BeginSetClipRegion( sal_uIntPtr )
 {
 }
 

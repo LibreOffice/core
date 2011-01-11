@@ -219,7 +219,7 @@ SalClipRegion::~SalClipRegion()
 
 
 void
-SalClipRegion::BeginSetClipRegion( sal_uInt32 nRects )
+SalClipRegion::BeginSetClipRegion( sal_uIntPtr nRects )
 {
     if (ClipRectangleList)
         delete [] ClipRectangleList;
@@ -324,7 +324,7 @@ X11SalObject::ResetClipRegion()
 
 
 void
-X11SalObject::BeginSetClipRegion( sal_uInt32 nRectCount )
+X11SalObject::BeginSetClipRegion( sal_uIntPtr nRectCount )
 {
     maClipRegion.BeginSetClipRegion ( nRectCount );
 }

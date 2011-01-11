@@ -79,7 +79,7 @@ public:
     void updateSettings( AllSettings& rSettings );
 
     virtual void            ResetClipRegion();
-    virtual void            BeginSetClipRegion( sal_uInt32 nCount );
+    virtual void            BeginSetClipRegion( sal_uIntPtr nCount );
     virtual sal_Bool            unionClipRegion( long nX, long nY, long nWidth, long nHeight );
     virtual bool            unionClipRegion(  const ::basegfx::B2DPolyPolygon& );
     virtual void            EndSetClipRegion();

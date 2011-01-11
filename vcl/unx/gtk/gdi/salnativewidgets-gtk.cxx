@@ -479,7 +479,7 @@ void GtkSalGraphics::ResetClipRegion()
     X11SalGraphics::ResetClipRegion();
 }
 
-void GtkSalGraphics::BeginSetClipRegion( sal_uInt32 nCount )
+void GtkSalGraphics::BeginSetClipRegion( sal_uIntPtr nCount )
 {
     m_aClipRegion.SetNull();
     X11SalGraphics::BeginSetClipRegion( nCount );

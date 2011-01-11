@@ -293,7 +293,7 @@ void PspGraphics::ResetClipRegion()
     m_pPrinterGfx->ResetClipRegion ();
 }
 
-void PspGraphics::BeginSetClipRegion( sal_uInt32 n )
+void PspGraphics::BeginSetClipRegion( sal_uIntPtr n )
 {
     m_pPrinterGfx->BeginSetClipRegion(n);
 }
@@ -379,12 +379,12 @@ void PspGraphics::drawRect( long nX, long nY, long nDX, long nDY )
     m_pPrinterGfx->DrawRect (Rectangle(Point(nX, nY), Size(nDX, nDY)));
 }
 
-void PspGraphics::drawPolyLine( sal_uInt32 nPoints, const SalPoint *pPtAry )
+void PspGraphics::drawPolyLine( sal_uIntPtr nPoints, const SalPoint *pPtAry )
 {
     m_pPrinterGfx->DrawPolyLine (nPoints, (Point*)pPtAry);
 }
 
-void PspGraphics::drawPolygon( sal_uInt32 nPoints, const SalPoint* pPtAry )
+void PspGraphics::drawPolygon( sal_uIntPtr nPoints, const SalPoint* pPtAry )
 {
     // Point must be equal to SalPoint! see vcl/inc/salgtype.hxx
     m_pPrinterGfx->DrawPolygon (nPoints, (Point*)pPtAry);
@@ -409,13 +409,13 @@ bool PspGraphics::drawPolyLine( const basegfx::B2DPolygon&, double /*fTransparen
     return false;
 }
 
-sal_Bool PspGraphics::drawPolyLineBezier( sal_uInt32 nPoints, const SalPoint* pPtAry, const sal_uInt8* pFlgAry )
+sal_Bool PspGraphics::drawPolyLineBezier( sal_uIntPtr nPoints, const SalPoint* pPtAry, const sal_uInt8* pFlgAry )
 {
     m_pPrinterGfx->DrawPolyLineBezier (nPoints, (Point*)pPtAry, pFlgAry);
     return sal_True;
 }
 
-sal_Bool PspGraphics::drawPolygonBezier( sal_uInt32 nPoints, const SalPoint* pPtAry, const sal_uInt8* pFlgAry )
+sal_Bool PspGraphics::drawPolygonBezier( sal_uIntPtr nPoints, const SalPoint* pPtAry, const sal_uInt8* pFlgAry )
 {
     m_pPrinterGfx->DrawPolygonBezier (nPoints, (Point*)pPtAry, pFlgAry);
     return sal_True;
@@ -431,13 +431,13 @@ sal_Bool PspGraphics::drawPolyPolygonBezier( sal_uInt32 nPoly,
     return sal_True;
 }
 
-void PspGraphics::invert( sal_uInt32,
+void PspGraphics::invert( sal_uIntPtr,
                           const SalPoint*,
                           SalInvert )
 {
     DBG_ASSERT( 0, "Error: PrinterGfx::Invert() not implemented" );
 }
-sal_Bool PspGraphics::drawEPS( long nX, long nY, long nWidth, long nHeight, void* pPtr, sal_uInt32 nSize )
+sal_Bool PspGraphics::drawEPS( long nX, long nY, long nWidth, long nHeight, void* pPtr, sal_uIntPtr nSize )
 {
     return m_pPrinterGfx->DrawEPS( Rectangle( Point( nX, nY ), Size( nWidth, nHeight ) ), pPtr, nSize );
 }
@@ -915,10 +915,10 @@ void PspGraphics::GetFontMetric( ImplFontMetricData *pMetric, int )
     }
 }
 
-sal_uInt32 PspGraphics::GetKernPairs( sal_uInt32 nPairs, ImplKernPairData *pKernPairs )
+sal_uInt32 PspGraphics::GetKernPairs( sal_uIntPtr nPairs, ImplKernPairData *pKernPairs )
 {
     const ::std::list< ::psp::KernPair >& rPairs( m_pPrinterGfx->getKernPairs() );
-    sal_uInt32 nHavePairs = rPairs.size();
+    sal_uIntPtr nHavePairs = rPairs.size();
     if( pKernPairs && nPairs )
     {
         ::std::list< ::psp::KernPair >::const_iterator it;

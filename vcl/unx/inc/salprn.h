@@ -50,14 +50,14 @@ public:
     virtual void                    ReleaseGraphics( SalGraphics* pGraphics );
     virtual sal_Bool                    Setup( SalFrame* pFrame, ImplJobSetup* pSetupData );
     virtual sal_Bool                    SetPrinterData( ImplJobSetup* pSetupData );
-    virtual sal_Bool                    SetData( sal_uInt32 nFlags, ImplJobSetup* pSetupData );
+    virtual sal_Bool                    SetData( sal_uIntPtr nFlags, ImplJobSetup* pSetupData );
     virtual void                    GetPageInfo( const ImplJobSetup* pSetupData,
                                                  long& rOutWidth, long& rOutHeight,
                                                  long& rPageOffX, long& rPageOffY,
                                                  long& rPageWidth, long& rPageHeight );
-    virtual sal_uInt32                  GetCapabilities( const ImplJobSetup* pSetupData, sal_uInt16 nType );
-    virtual sal_uInt32                  GetPaperBinCount( const ImplJobSetup* pSetupData );
-    virtual String                  GetPaperBinName( const ImplJobSetup* pSetupData, sal_uInt32 nPaperBin );
+    virtual sal_uIntPtr                 GetCapabilities( const ImplJobSetup* pSetupData, sal_uInt16 nType );
+    virtual sal_uIntPtr                 GetPaperBinCount( const ImplJobSetup* pSetupData );
+    virtual String                  GetPaperBinName( const ImplJobSetup* pSetupData, sal_uIntPtr nPaperBin );
     virtual void                    InitPaperFormats( const ImplJobSetup* pSetupData );
     virtual int                 GetLandscapeAngle( const ImplJobSetup* pSetupData );
 };
@@ -76,7 +76,7 @@ public:
     psp::PrinterJob         m_aPrintJob;
     psp::JobData            m_aJobData;
     psp::PrinterGfx         m_aPrinterGfx;
-    sal_uInt32                  m_nCopies;
+    sal_uIntPtr                 m_nCopies;
     bool                    m_bCollate;
     SalInfoPrinter*         m_pInfoPrinter;
 
@@ -88,7 +88,7 @@ public:
     virtual sal_Bool                    StartJob( const XubString* pFileName,
                                               const XubString& rJobName,
                                               const XubString& rAppName,
-                                              sal_uInt32 nCopies,
+                                              sal_uIntPtr nCopies,
                                               bool bCollate,
                                               bool bDirect,
                                               ImplJobSetup* pSetupData );
@@ -101,7 +101,7 @@ public:
     virtual sal_Bool                    AbortJob();
     virtual SalGraphics*            StartPage( ImplJobSetup* pSetupData, sal_Bool bNewJobData );
     virtual sal_Bool                    EndPage();
-    virtual sal_uInt32                  GetErrorCode();
+    virtual sal_uIntPtr                 GetErrorCode();
 };
 
 class Timer;

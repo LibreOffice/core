@@ -95,7 +95,7 @@ inline timeval &operator += ( timeval &t1, const timeval &t2 )
     return t1;
 }
 
-inline timeval &operator += ( timeval &t1, sal_uInt32 t2 )
+inline timeval &operator += ( timeval &t1, sal_uIntPtr t2 )
 {
     t1.tv_sec  += t2 / 1000;
     t1.tv_usec += t2 ? (t2 % 1000) * 1000 : 500;
@@ -113,7 +113,7 @@ inline timeval operator + ( const timeval &t1, const timeval &t2 )
     return t0 += t2;
 }
 
-inline timeval operator + ( const timeval &t1, sal_uInt32 t2 )
+inline timeval operator + ( const timeval &t1, sal_uIntPtr t2 )
 {
     timeval t0 = t1;
     return t0 += t2;

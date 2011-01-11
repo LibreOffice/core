@@ -62,7 +62,7 @@ private:
 public:
 
     static ImplSalBitmapCache*  mpCache;
-    static sal_uInt32               mnCacheInstCount;
+    static sal_uIntPtr              mnCacheInstCount;
 
     static void                 ImplCreateCache();
     static void                 ImplDestroyCache();
@@ -161,7 +161,7 @@ public:
     long            ImplGetWidth() const { return maTwoRect.mnDestWidth; }
     long            ImplGetHeight() const { return maTwoRect.mnDestHeight; }
     long            ImplGetDepth() const { return mnDepth; }
-    sal_uInt32          ImplGetMemSize() const { return( ( maTwoRect.mnDestWidth * maTwoRect.mnDestHeight * mnDepth ) >> 3 ); }
+    sal_uIntPtr         ImplGetMemSize() const { return( ( maTwoRect.mnDestWidth * maTwoRect.mnDestHeight * mnDepth ) >> 3 ); }
     int             ImplGetScreen() const { return mnScreen; }
 
     bool            ImplMatches( int nScreen, long nDepth, const SalTwoRect& rTwoRect ) const;
@@ -178,14 +178,14 @@ class ImplSalBitmapCache
 private:
 
     List            maBmpList;
-    sal_uInt32          mnTotalSize;
+    sal_uIntPtr         mnTotalSize;
 
 public:
 
                     ImplSalBitmapCache();
                     ~ImplSalBitmapCache();
 
-    void            ImplAdd( X11SalBitmap* pBmp, sal_uInt32 nMemSize = 0UL, sal_uInt32 nFlags = 0UL );
+    void            ImplAdd( X11SalBitmap* pBmp, sal_uIntPtr nMemSize = 0UL, sal_uIntPtr nFlags = 0UL );
     void            ImplRemove( X11SalBitmap* pBmp );
     void            ImplClear();
 };

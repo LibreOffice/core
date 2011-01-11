@@ -209,7 +209,7 @@ void X11SalFrame::askForXEmbedFocus( sal_Int32 i_nTimeCode )
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
-void X11SalFrame::Init( sal_uInt32 nSalFrameStyle, int nScreen, SystemParentData* pParentData, bool bUseGeometry )
+void X11SalFrame::Init( sal_uIntPtr nSalFrameStyle, int nScreen, SystemParentData* pParentData, bool bUseGeometry )
 {
     if( nScreen < 0 || nScreen >= GetDisplay()->GetScreenCount() )
         nScreen = GetDisplay()->GetDefaultScreenNumber();
@@ -645,7 +645,7 @@ void X11SalFrame::Init( sal_uInt32 nSalFrameStyle, int nScreen, SystemParentData
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-X11SalFrame::X11SalFrame( SalFrame *pParent, sal_uInt32 nSalFrameStyle, SystemParentData* pSystemParent )
+X11SalFrame::X11SalFrame( SalFrame *pParent, sal_uIntPtr nSalFrameStyle, SystemParentData* pSystemParent )
 {
     X11SalData* pSalData = GetX11SalData();
 
@@ -3062,7 +3062,7 @@ long X11SalFrame::HandleMouseEvent( XEvent *pEvent )
             if( pEvent->type == ButtonRelease )
                 return 0;
 
-            static sal_uInt32       nLines = 0;
+            static sal_uIntPtr      nLines = 0;
             if( ! nLines )
             {
                 char* pEnv = getenv( "SAL_WHEELLINES" );
@@ -3600,7 +3600,7 @@ long X11SalFrame::HandleFocusEvent( XFocusChangeEvent *pEvent )
             if ((mpParent != NULL && nStyle_ == 0)
                 && pSVData->maWinData.mpFirstFloat )
             {
-                sal_uInt32 nMode = pSVData->maWinData.mpFirstFloat->GetPopupModeFlags();
+                sal_uIntPtr nMode = pSVData->maWinData.mpFirstFloat->GetPopupModeFlags();
                 pSVData->maWinData.mpFirstFloat->SetPopupModeFlags(
                                         nMode & ~(FLOATWIN_POPUPMODE_NOAPPFOCUSCLOSE));
             }
@@ -4477,7 +4477,7 @@ void X11SalFrame::ResetClipRegion()
                               op, ordering );
 }
 
-void X11SalFrame::BeginSetClipRegion( sal_uInt32 nRects )
+void X11SalFrame::BeginSetClipRegion( sal_uIntPtr nRects )
 {
     if( m_pClipRectangles )
         delete [] m_pClipRectangles;

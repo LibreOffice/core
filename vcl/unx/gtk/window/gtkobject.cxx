@@ -109,7 +109,7 @@ sal_uInt16 GtkSalObject::GetClipRegionType()
     return SAL_OBJECT_CLIP_INCLUDERECTS;
 }
 
-void GtkSalObject::BeginSetClipRegion( sal_uInt32 )
+void GtkSalObject::BeginSetClipRegion( sal_uIntPtr )
 {
     if( m_pRegion )
         gdk_region_destroy( m_pRegion );

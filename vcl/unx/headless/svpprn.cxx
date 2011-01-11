@@ -558,7 +558,7 @@ sal_Bool PspSalInfoPrinter::SetPrinterData( ImplJobSetup* pJobSetup )
 // Only the data must be changed, where the bit
 // in nGetDataFlags is set
 sal_Bool PspSalInfoPrinter::SetData(
-    sal_uInt32 nSetDataFlags,
+    sal_uIntPtr nSetDataFlags,
     ImplJobSetup* pJobSetup )
 {
     JobData aData;
@@ -707,7 +707,7 @@ void PspSalInfoPrinter::GetPageInfo(
 
 // -----------------------------------------------------------------------
 
-sal_uInt32 PspSalInfoPrinter::GetPaperBinCount( const ImplJobSetup* pJobSetup )
+sal_uIntPtr PspSalInfoPrinter::GetPaperBinCount( const ImplJobSetup* pJobSetup )
 {
     if( ! pJobSetup )
         return 0;
@@ -721,7 +721,7 @@ sal_uInt32 PspSalInfoPrinter::GetPaperBinCount( const ImplJobSetup* pJobSetup )
 
 // -----------------------------------------------------------------------
 
-String PspSalInfoPrinter::GetPaperBinName( const ImplJobSetup* pJobSetup, sal_uInt32 nPaperBin )
+String PspSalInfoPrinter::GetPaperBinName( const ImplJobSetup* pJobSetup, sal_uIntPtr nPaperBin )
 {
     JobData aData;
     JobData::constructFromStreamBuffer( pJobSetup->mpDriverData, pJobSetup->mnDriverDataLen, aData );
@@ -745,7 +745,7 @@ String PspSalInfoPrinter::GetPaperBinName( const ImplJobSetup* pJobSetup, sal_uI
 
 // -----------------------------------------------------------------------
 
-sal_uInt32 PspSalInfoPrinter::GetCapabilities( const ImplJobSetup* pJobSetup, sal_uInt16 nType )
+sal_uIntPtr PspSalInfoPrinter::GetCapabilities( const ImplJobSetup* pJobSetup, sal_uInt16 nType )
 {
     switch( nType )
     {
@@ -845,7 +845,7 @@ sal_Bool PspSalPrinter::StartJob(
     const XubString* pFileName,
     const XubString& rJobName,
     const XubString& rAppName,
-    sal_uInt32 nCopies,
+    sal_uIntPtr nCopies,
     bool bCollate,
     bool /*bDirect*/,
     ImplJobSetup* pJobSetup )
@@ -990,7 +990,7 @@ sal_Bool PspSalPrinter::EndPage()
 
 // -----------------------------------------------------------------------
 
-sal_uInt32 PspSalPrinter::GetErrorCode()
+sal_uIntPtr PspSalPrinter::GetErrorCode()
 {
     return 0;
 }
