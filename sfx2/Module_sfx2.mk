@@ -35,7 +35,7 @@ $(eval $(call gb_Module_add_targets,sfx2,\
 ))
 
 $(eval $(call gb_Module_add_check_targets,sfx2,\
-    TestFixture_sfx2_metadatable \
+    CppunitTest_sfx2_metadatable \
 ))
 
 $(eval $(call gb_Module_add_subsequentcheck_targets,sfx2,\

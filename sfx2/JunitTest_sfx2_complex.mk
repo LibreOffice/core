@@ -31,13 +31,6 @@ $(eval $(call gb_JunitTest_set_defs,sfx2_complex,\
     $$(DEFS) \
     -Dorg.openoffice.test.arg.docpath=$(SRCDIR)/sfx2/qa/complex/framework/testdocuments \
 ))
-$(info $(call gb_JunitTest_set_defs,sfx2_complex,\
-    -Dorg.openoffice.test.arg.soffice=path:$(OUTDIR)/installation/opt/openoffice.org3/program/soffice \
-    -Dorg.openoffice.test.arg.env=LD_LIBRARY_PATH \
-    -Dorg.openoffice.test.arg.user=file://$(call gb_JunitTest_get_userdir,$*) \
-    -Dorg.openoffice.test.arg.docpath=$(SRCDIR)/sfx2/qa/complex/framework/testdocuments \
-    $$(DEFS) \
-))
 
 $(eval $(call gb_JunitTest_add_sourcefiles,sfx2_complex,\
     sfx2/qa/complex/framework/CheckGlobalEventBroadcaster_writer1 \
