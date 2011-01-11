@@ -31,7 +31,7 @@ gb_JavaClassSet_JAVACCOMMAND := $(JAVACOMPILER)
 define gb_JavaClassSet__command
 $(call gb_Helper_abbreviate_dirs_native,\
     mkdir -p $(dir $(1)) && \
-    $(gb_JavaClassSet_JAVACCOMMAND) -cp $(CLASSPATH) -d $(call gb_JavaClassSet_get_classdir,$(2)) $(3) && \
+    $(gb_JavaClassSet_JAVACCOMMAND) -cp "$(CLASSPATH)" -d $(call gb_JavaClassSet_get_classdir,$(2)) $(3) && \
     touch $(1))
 
 endef
@@ -63,7 +63,6 @@ $(1)/$(2).java
 endef
 
 define gb_JavaClassSet_add_sourcefile
-$(info $(1) $(2) $(foreach reponame,$(gb_Helper_REPOSITORYNAMES),$(reponame):$(call gb_JavaClassSet__get_sourcefile,$($(reponame)),$(2))))
 $(foreach reponame,$(gb_JavaClassSet_REPOSITORYNAMES),\
     $(eval $(call gb_JavaClassSet_get_repo_target,$(reponame),$(1)) : $(call gb_JavaClassSet__get_sourcefile,$($(reponame)),$(2))))
 
