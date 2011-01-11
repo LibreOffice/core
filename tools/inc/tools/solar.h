@@ -51,6 +51,7 @@ typedef sal_uIntPtr    sal_uLong; /* Replaces type ULONG */
 
 /*** misc. macros to leverage platform and compiler differences ********/
 
+typedef int             FASTBOOL;
 #define DELETEZ( p )    ( delete p,p = 0 )
 
 #define __FAR_DATA

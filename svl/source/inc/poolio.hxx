@@ -82,8 +82,8 @@ struct SfxItemPool_Impl
     sal_uInt16                          nStoringStart, nStoringEnd; // zu speichernder Range
     sal_uInt8                           nMajorVer, nMinorVer; // Pool selbst
     SfxMapUnit                      eDefMetric;
-    int                     bInSetItem;
-    int                     bStreaming; // in Load() bzw. Store()
+    FASTBOOL                        bInSetItem;
+    FASTBOOL                        bStreaming; // in Load() bzw. Store()
 
     SfxItemPool_Impl( sal_uInt16 nStart, sal_uInt16 nEnd )
         : ppPoolItems (new SfxPoolItemArray_Impl*[ nEnd - nStart + 1])

@@ -121,7 +121,7 @@ class SVL_DLLPUBLIC SfxItemPool
     SfxItemPool*                    pSecondary;
     SfxItemPool*                    pMaster;
     sal_uInt16*                         _pPoolRanges;
-    int                     bPersistentRefCounts;
+    FASTBOOL                        bPersistentRefCounts;
 
 private:
     // ObjectUser section
@@ -141,14 +141,14 @@ private:
     inline  sal_uInt16                  GetSize_Impl() const { return nEnd - nStart + 1; }
 
     SVL_DLLPRIVATE SvStream&                        Load1_Impl( SvStream &rStream );
-    SVL_DLLPRIVATE int                      IsItemFlag_Impl( sal_uInt16 nWhich, sal_uInt16 nFlag ) const;
+    SVL_DLLPRIVATE FASTBOOL                     IsItemFlag_Impl( sal_uInt16 nWhich, sal_uInt16 nFlag ) const;
 
 public:
     // fuer dflt. SfxItemSet::CTOR, setze dflt. WhichRanges
     void                            FillItemIdRanges_Impl( sal_uInt16*& pWhichRanges ) const;
     const sal_uInt16*                   GetFrozenIdRanges() const
                                     { return _pPoolRanges; }
-    int                     IsVer2_Impl() const;
+    FASTBOOL                        IsVer2_Impl() const;
 
 #endif
     //---------------------------------------------------------------------
@@ -170,7 +170,7 @@ public:
 #ifndef TF_POOLABLE
                                                  sal_uInt16 *pSlotIds = 0,
 #endif
-                                                 int bLoadRefCounts = sal_True );
+                                                 FASTBOOL bLoadRefCounts = sal_True );
 protected:
     virtual                         ~SfxItemPool();
 public:
@@ -202,11 +202,11 @@ public:
     virtual const SfxPoolItem&      GetDefaultItem( sal_uInt16 nWhich ) const;
 
     const SfxPoolItem*              LoadItem( SvStream &rStream,
-                                              int bDirect = sal_False,
+                                              FASTBOOL bDirect = sal_False,
                                               const SfxItemPool *pRefPool = 0 );
-    int                     StoreItem( SvStream &rStream,
+    FASTBOOL                        StoreItem( SvStream &rStream,
                                                const SfxPoolItem &rItem,
-                                               int bDirect = sal_False ) const;
+                                               FASTBOOL bDirect = sal_False ) const;
 
     sal_uInt32                      GetSurrogate(const SfxPoolItem *) const;
     const SfxPoolItem *             GetItem2(sal_uInt16 nWhich, sal_uInt32 nSurrogate) const;
@@ -214,7 +214,7 @@ public:
     const SfxPoolItem*              LoadSurrogate(SvStream& rStream,
                                             sal_uInt16 &rWhich, sal_uInt16 nSlotId,
                                             const SfxItemPool* pRefPool = 0 );
-    int                     StoreSurrogate(SvStream& rStream,
+    FASTBOOL                        StoreSurrogate(SvStream& rStream,
                                             const SfxPoolItem *pItem ) const;
 
     virtual SvStream &              Load(SvStream &);
@@ -225,11 +225,11 @@ public:
 
     sal_uInt16                          GetFirstWhich() const { return nStart; }
     sal_uInt16                          GetLastWhich() const { return nEnd; }
-    int                     IsInRange( sal_uInt16 nWhich ) const {
+    FASTBOOL                        IsInRange( sal_uInt16 nWhich ) const {
                                         return nWhich >= nStart &&
                                                nWhich <= nEnd; }
-    int                     IsInVersionsRange( sal_uInt16 nWhich ) const;
-    int                     IsInStoringRange( sal_uInt16 nWhich ) const;
+    FASTBOOL                        IsInVersionsRange( sal_uInt16 nWhich ) const;
+    FASTBOOL                        IsInStoringRange( sal_uInt16 nWhich ) const;
     void                            SetStoringRange( sal_uInt16 nFrom, sal_uInt16 nTo );
     void                            SetSecondaryPool( SfxItemPool *pPool );
     SfxItemPool*                    GetSecondaryPool() const {
@@ -242,8 +242,8 @@ public:
     void                            Delete();
 
 #ifdef TF_POOLABLE
-    int                     IsItemFlag( sal_uInt16 nWhich, sal_uInt16 nFlag ) const;
-    int                        IsItemFlag( const SfxPoolItem &rItem, sal_uInt16 nFlag ) const
+    FASTBOOL                        IsItemFlag( sal_uInt16 nWhich, sal_uInt16 nFlag ) const;
+    FASTBOOL                        IsItemFlag( const SfxPoolItem &rItem, sal_uInt16 nFlag ) const
                                     { return IsItemFlag( rItem.Which(), nFlag ); }
     void                            SetItemInfos( const SfxItemInfo *pInfos )
                                     { pItemInfos = pInfos; }
@@ -266,7 +266,7 @@ public:
                                     { return _nFileFormatVersion; }
     void                            SetFileFormatVersion( sal_uInt16 nFileFormatVersion );
     sal_uInt16                          GetLoadingVersion() const;
-    int                     IsCurrentVersionLoading() const;
+    FASTBOOL                        IsCurrentVersionLoading() const;
 
     static int                      IsWhich(sal_uInt16 nId) {
                                         return nId && nId <= SFX_WHICH_MAX; }
