@@ -50,12 +50,6 @@ $(eval $(call gb_Module_add_targets,sfx2,\
 endif
 endif
 
-$(eval $(call gb_JavaClassSet,sfx2_complex))
-$(eval $(call gb_JavaClassSet_add_sourcefiles,sfx2_complex,sfx2/qa/complex/docinfo/DocumentProperties))
-$(eval $(call gb_JavaClassSet_set_classpath,sfx2_complex,$(OUTDIR)/bin/OOoRunner.jar:$(OUTDIR)/bin/ridl.jar:$(OUTDIR)/bin/test.jar:$(OUTDIR)/bin/unoil.jar:/usr/share/java/junit4.jar))
-
-all: $(call gb_JavaClassSet_get_target,sfx2_complex)
-
 #todo: source/appl ohne Optimierung?
 #todo: source/control ohne Optimierung?
 #todo: source/dialog BUILD_VER_STRING
