@@ -745,12 +745,6 @@ en-US = "Scottish Gaelic"
 [STR_DESC_MODULE_HELPPACK_GD]
 en-US = "Installs Scottish Gaelic help in %PRODUCTNAME %PRODUCTVERSION"
 
-[STR_NAME_MODULE_HELPPACK_KID]
-en-US = "Koshin"
-
-[STR_DESC_MODULE_HELPPACK_KID]
-en-US = "Installs Koshin help in %PRODUCTNAME %PRODUCTVERSION"
-
 [STR_NAME_MODULE_HELPPACK_KK]
 en-US = "Kazakh"
 
