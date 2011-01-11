@@ -38,7 +38,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <rtl/math.hxx>
 
-#define PIPE_ARG "-splash-pipe="
+#define PIPE_ARG "--splash-pipe="
 
 using namespace ::rtl;
 using namespace ::com::sun::star::registry;
@@ -103,7 +103,7 @@ void SAL_CALL UnxSplashScreen::setValue( sal_Int32 nValue )
 {
     if ( m_pOutFd )
     {
-        fprintf( m_pOutFd, "%d%%\n", nValue );
+        fprintf( m_pOutFd, "%ld%%\n", nValue );
         fflush( m_pOutFd );
     }
 }
@@ -124,7 +124,7 @@ UnxSplashScreen::initialize( const ::com::sun::star::uno::Sequence< ::com::sun::
             int fd = aNum.toInt32();
             m_pOutFd = fdopen( fd, "w" );
 #if OSL_DEBUG_LEVEL > 1
-            fprintf( stderr, "Got argument '-splash-pipe=%d ('%s') (%p)\n",
+            fprintf( stderr, "Got argument '--splash-pipe=%d ('%s') (%p)\n",
                      fd, (const sal_Char *)rtl::OUStringToOString( aNum, RTL_TEXTENCODING_UTF8 ),
                      m_pOutFd );
 #endif

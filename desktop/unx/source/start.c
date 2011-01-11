@@ -685,7 +685,7 @@ fork_app( rtl_uString *pAppPath, int *status_fd )
     sal_Unicode pUnicode[RTL_USTR_MAX_VALUEOFINT32];
     rtl_ustr_valueOfInt32( pUnicode, status_pipe[1], 10 );
 
-    rtl_uString_newFromAscii( &pArg, "-splash-pipe=" );
+    rtl_uString_newFromAscii( &pArg, "--splash-pipe=" );
     rtl_uString_newFromStr( &pTmp, pUnicode );
     rtl_uString_newConcat( &pArg, pArg, pTmp );
 
