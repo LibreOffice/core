@@ -1766,12 +1766,12 @@ ScFunctionMgr::~ScFunctionMgr()
 
 //------------------------------------------------------------------------
 
-const ScFuncDesc* ScFunctionMgr::Get( const String& rFName ) const
+const ScFuncDesc* ScFunctionMgr::Get( const ::rtl::OUString& rFName ) const
 {
     const ScFuncDesc*   pDesc = NULL;
-    if (rFName.Len() <= pFuncList->GetMaxFuncNameLen())
+    if (rFName.getLength() <= pFuncList->GetMaxFuncNameLen())
         for (pDesc = First(0); pDesc; pDesc = Next())
-            if (rFName.EqualsIgnoreCaseAscii((String)(*(pDesc->pFuncName))))
+            if (rFName.equalsIgnoreAsciiCase(*pDesc->pFuncName))
                 break;
     return pDesc;
 }

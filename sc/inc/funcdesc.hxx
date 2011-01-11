@@ -159,7 +159,7 @@ public:
 
     static ::rtl::OUString       GetCategoryName(sal_uInt32 _nCategoryNumber );
 
-    const ScFuncDesc*   Get( const String& rFName ) const;
+    const ScFuncDesc*   Get( const ::rtl::OUString& rFName ) const;
     const ScFuncDesc*   Get( USHORT nFIndex ) const;
     const ScFuncDesc*   First( USHORT nCategory = 0 ) const;
     const ScFuncDesc*   Next() const;

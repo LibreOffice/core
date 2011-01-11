@@ -985,7 +985,7 @@ sal_Int32 SAL_CALL ScFunctionListObj::getCount() throw(uno::RuntimeException)
     sal_Int32 nCount = 0;
     const ScFunctionList* pFuncList = ScGlobal::GetStarCalcFunctionList();
     if ( pFuncList )
-        nCount = (sal_Int32)pFuncList->GetCount();
+        nCount = static_cast<sal_Int32>(pFuncList->GetCount());
     return nCount;
 }
 
