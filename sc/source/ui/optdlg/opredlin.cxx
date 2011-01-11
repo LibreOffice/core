@@ -221,54 +221,6 @@ void ScRedlineOptionsTabPage::Reset( const SfxItemSet& /* rSet */ )
 
 IMPL_LINK( ScRedlineOptionsTabPage, ColorHdl, ColorListBox *, EMPTYARG )
 {
-/*
-    SvxFontPrevWindow *pPrev;
-    ListBox *pLB;
-
-    if (pColorLB == &aInsertColorLB)
-    {
-        pPrev = &aInsertPreviewWN;
-        pLB = &aInsertLB;
-    }
-    else
-    {
-        pPrev = &aDeletedPreviewWN;
-        pLB = &aDeletedLB;
-    }
-
-    SvxFont& rFont = pPrev->GetFont();
-    USHORT nPos = pLB->GetSelectEntryPos();
-    if (nPos == LISTBOX_ENTRY_NOTFOUND)
-        nPos = 0;
-
-    CharAttr *pAttr = (CharAttr *)pLB->GetEntryData(nPos);
-
-    if (pAttr->nItemId == SID_ATTR_BRUSH)
-    {
-        rFont.SetColor(Color(COL_BLACK));
-        nPos = pColorLB->GetSelectEntryPos();
-        if (nPos && nPos != LISTBOX_ENTRY_NOTFOUND)
-        {
-            Brush aBrush(Color(pColorLB->GetSelectEntryColor()));
-            pPrev->SetBrush(aBrush);
-        }
-        else
-        {
-            Brush aBrush(Color(COL_LIGHTGRAY));
-            pPrev->SetBrush(aBrush);
-        }
-    }
-    else
-    {
-        nPos = pColorLB->GetSelectEntryPos();
-        if (nPos && nPos != LISTBOX_ENTRY_NOTFOUND)
-            rFont.SetColor(pColorLB->GetEntryColor(nPos));
-        else
-            rFont.SetColor(Color(COL_RED));
-    }
-
-    pPrev->Invalidate();
-*/
     return 0;
 }
 

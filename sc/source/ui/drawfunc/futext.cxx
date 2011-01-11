@@ -366,9 +366,6 @@ BOOL FuText::MouseMove(const MouseEvent& rMEvt)
 
     if ( pView->IsAction() )
     {
-/*      aNewPointer = Pointer(POINTER_TEXT);
-        pViewShell->SetActivePointer(aNewPointer);
-*/
         Point aPix(rMEvt.GetPosPixel());
         Point aPnt(pWindow->PixelToLogic(aPix));
 
@@ -524,49 +521,6 @@ BOOL FuText::MouseButtonUp(const MouseEvent& rMEvt)
 void FuText::ForcePointer(const MouseEvent* /* pMEvt */)
 {
     pViewShell->SetActivePointer( aNewPointer );
-
-/*
-    if ( !pView->IsAction() )
-    {
-        Point aPnt(pWindow->PixelToLogic( pWindow->ScreenToOutputPixel(
-                   Pointer::GetPosPixel() ) ) );
-        SdrHdl* pHdl=pView->HitHandle(aPnt, *pWindow);
-
-        if (pHdl!=NULL)
-        {
-            pViewShell->SetActivePointer(pHdl->GetPointer() );
-        }
-        else
-        {
-            SdrObject* pObj;
-            SdrPageView* pPV;
-
-            if ( pView->IsMarkedHit(aPnt) )
-            {
-                if ( pView->TakeTextEditObject(aPnt, pObj, pPV) )
-                {
-                    pViewShell->SetActivePointer(Pointer(POINTER_TEXT));
-                }
-                else
-                {
-                    pViewShell->SetActivePointer(Pointer(POINTER_MOVE));
-                }
-            }
-            else
-            {
-//              if ( pView->TakeMacroObject(aPnt, pObj, pPV) )
-                if ( pView->PickObj(aPnt, pObj, pPV, SDRSEARCH_PICKMACRO) )
-                {
-                    pViewShell->SetActivePointer( pObj->GetMacroPointer() );
-                }
-                else
-                {
-                    pViewShell->SetActivePointer( aNewPointer );
-                }
-            }
-        }
-    }
-*/
 }
 
 
@@ -622,17 +576,12 @@ void FuText::Activate()
         **********************************************************************/
         USHORT nObj = OBJ_TEXT;
 
-/*      UINT16 nIdent;
-        UINT32 nInvent;
-        pView->TakeCurrentObj(nIdent, nInvent);
-*/
         pView->SetCurrentObj(nObj);
 
         pView->SetCreateMode();
     }
 
     aNewPointer = Pointer(POINTER_TEXT);
-//  aNewPointer = Pointer(POINTER_CROSS);               //! ???
 
     aOldPointer = pWindow->GetPointer();
     pViewShell->SetActivePointer( aNewPointer );
@@ -700,22 +649,6 @@ void FuText::SelectionHasChanged()
         UINT16 nIdent;
         UINT32 nInvent;
         pView->TakeCurrentObj(nIdent, nInvent);
-
-//        if (! pView->IsEditMode() )
-//        {
-//            if (nIdent == OBJ_TEXT)
-//            {
-//                nObj = OBJ_TEXT;
-//            }
-//            else if (nIdent == OBJ_OUTLINETEXT)
-//            {
-//                nObj = OBJ_OUTLINETEXT;
-//            }
-//            else if (nIdent == OBJ_TITLETEXT)
-//            {
-//                nObj = OBJ_TITLETEXT;
-//            }
-//        }
 
         pView->SetCurrentObj(nObj);
 

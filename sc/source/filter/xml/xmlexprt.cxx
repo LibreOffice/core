@@ -1967,10 +1967,6 @@ void ScXMLExport::_ExportStyles( sal_Bool bUsed )
             if (pSharedData->HasShapes())
             {
                 GetShapeExport()->ExportGraphicDefaults();
-/*              xInterface = xMultiServiceFactory->createInstance(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.Defaults")));
-                uno::Reference <beans::XPropertySet> xDrawProperties(xInterface, uno::UNO_QUERY);
-                if (xDrawProperties.is())
-                    aStylesExp.exportDefaultStyle(xDrawProperties, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(XML_STYLE_FAMILY_SD_GRAPHICS_NAME)), GetShapeExport()->CreateShapePropMapper(*this));*/
             }
         }
         uno::Reference <style::XStyleFamiliesSupplier> xStyleFamiliesSupplier (GetModel(), uno::UNO_QUERY);
@@ -2849,44 +2845,6 @@ sal_Bool ScXMLExport::IsMatrix (const ScAddress& aCell,
     }
 
     return sal_False;
-
-/*  uno::Reference <sheet::XArrayFormulaRange> xArrayFormulaRange (xCell, uno::UNO_QUERY);
-    if (xArrayFormulaRange.is())
-    {
-        rtl::OUString sArrayFormula(xArrayFormulaRange->getArrayFormula());
-        if (sArrayFormula.getLength())
-        {
-            uno::Reference<sheet::XSheetCellRange> xMatrixSheetCellRange (xCell, uno::UNO_QUERY);
-            if (xMatrixSheetCellRange.is())
-            {
-                uno::Reference<sheet::XSheetCellCursor> xMatrixSheetCursor(xTable->createCursorByRange(xMatrixSheetCellRange));
-                if (xMatrixSheetCursor.is())
-                {
-                    xMatrixSheetCursor->collapseToCurrentArray();
-                    uno::Reference<sheet::XCellRangeAddressable> xMatrixCellAddress (xMatrixSheetCursor, uno::UNO_QUERY);
-                    if (xMatrixCellAddress.is())
-                    {
-                        aCellAddress = xMatrixCellAddress->getRangeAddress();
-                        if ((aCellAddress.StartColumn == nCol && aCellAddress.StartRow == nRow) &&
-                            (aCellAddress.EndColumn > nCol || aCellAddress.EndRow > nRow))
-                        {
-                            bIsFirst = sal_True;
-                            return sal_True;
-                        }
-                        else if (aCellAddress.StartColumn != nCol || aCellAddress.StartRow != nRow ||
-                            aCellAddress.EndColumn != nCol || aCellAddress.EndRow != nRow)
-                            return sal_True;
-                        else
-                        {
-                            bIsFirst = sal_True;
-                            return sal_True;
-                        }
-                    }
-                }
-            }
-        }
-    }
-    return sal_False;*/
 }
 
 sal_Bool ScXMLExport::GetCellText (ScMyCell& rMyCell, const ScAddress& aPos) const
@@ -2895,17 +2853,9 @@ sal_Bool ScXMLExport::GetCellText (ScMyCell& rMyCell, const ScAddress& aPos) con
         return sal_True;
     else
     {
-/*      if (!rMyCell.bHasXText)
-        {
-            rMyCell.xText.set(xCurrentTableCellRange->getCellByPosition(rMyCell.aCellAddress.Column, rMyCell.aCellAddress.Row), uno::UNO_QUERY);
-            rMyCell.bHasXText = sal_True;
-        }*/
-//      if (rMyCell.xText.is())
-//      {
             rMyCell.sStringValue = ScCellObj::GetOutputString_Impl(pDoc, aPos);
             rMyCell.bHasStringValue = sal_True;
             return sal_True;
-//      }
     }
 }
 
@@ -3199,15 +3149,6 @@ void ScXMLExport::ExportShape(const uno::Reference < drawing::XShape >& xShape, 
 //BM                        }
 //BM                    }
 
-/*                  SchMemChart* pMemChart = pDoc->FindChartData(sName);
-                    if (pMemChart && pMemChart->GetSeriesAddresses().getLength())
-                    {
-                        bMemChart = sal_True;
-                        rtl::OUString sRanges(pMemChart->getXMLStringForChartRange());
-                        if (sRanges.getLength())
-                            AddAttribute(XML_NAMESPACE_DRAW, XML_NOTIFY_ON_UPDATE_OF_RANGES, sRanges);
-                        GetShapeExport()->exportShape(xShape, SEF_EXPORT_NO_CHART_DATA | SEF_DEFAULT, pPoint);
-                    }*/
                 }
             }
         }
@@ -3403,46 +3344,6 @@ void ScXMLExport::WriteAnnotation(ScMyCell& rMyCell)
 {
     if( rMyCell.bHasAnnotation && rMyCell.xAnnotation.is())
     {
-/*      rtl::OUString sAuthor(rMyCell.xAnnotation->getAuthor());
-        if (sAuthor.getLength())
-        {
-            SvXMLElementExport aCreatorElem( *this, XML_NAMESPACE_DC,
-                                                XML_CREATOR, sal_True,
-                                                sal_False );
-            rtl::OUString sAuthor(sAuthor);
-            Characters(sAuthor);
-        }
-
-        String aDate(rMyCell.xAnnotation->getDate());
-        if (pDoc)
-        {
-            SvNumberFormatter* pNumForm(pDoc->GetFormatTable());
-            double fDate;
-            sal_uInt32 nfIndex = pNumForm->GetFormatIndex(NF_DATE_SYS_DDMMYYYY, LANGUAGE_SYSTEM);
-            if (pNumForm->IsNumberFormat(aDate, nfIndex, fDate))
-            {
-                rtl::OUStringBuffer sBuf;
-                GetMM100UnitConverter().convertDateTime(sBuf, fDate);
-                SvXMLElementExport aDateElem( *this, XML_NAMESPACE_DC,
-                                                XML_DATE, sal_True,
-                                                sal_False );
-                Characters(sBuf.makeStringAndClear());
-            }
-            else
-            {
-                SvXMLElementExport aDateElem( *this, XML_NAMESPACE_META,
-                                                XML_DATE_STRING, sal_True,
-                                                sal_False );
-                Characters(rtl::OUString(aDate));
-            }
-        }
-        else
-        {
-            SvXMLElementExport aDateElem( *this, XML_NAMESPACE_META,
-                                            XML_DATE_STRING, sal_True,
-                                            sal_False );
-            Characters(rtl::OUString(aDate));
-        }*/
 
         if (rMyCell.xAnnotation->getIsVisible())
             AddAttribute(XML_NAMESPACE_OFFICE, XML_DISPLAY, XML_TRUE);
