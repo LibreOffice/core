@@ -1758,7 +1758,7 @@ sal_Bool SfxViewShell::ExecKey_Impl(const KeyEvent& aKey)
 
 //--------------------------------------------------------------------
 
-int SfxViewShell::KeyInput( const KeyEvent &rKeyEvent )
+FASTBOOL SfxViewShell::KeyInput( const KeyEvent &rKeyEvent )
 
 /*  [Beschreibung]
 
@@ -1769,7 +1769,7 @@ int SfxViewShell::KeyInput( const KeyEvent &rKeyEvent )
 
         [R"uckgabewert]
 
-        int                TRUE
+        FASTBOOL                sal_True
                                                         die Taste ist konfiguriert, der betreffende
                                                         Handler wurde gerufen
 
@@ -1785,14 +1785,14 @@ int SfxViewShell::KeyInput( const KeyEvent &rKeyEvent )
     return ExecKey_Impl(rKeyEvent);
 }
 
-int SfxViewShell::GlobalKeyInput_Impl( const KeyEvent &rKeyEvent )
+bool SfxViewShell::GlobalKeyInput_Impl( const KeyEvent &rKeyEvent )
 {
     return ExecKey_Impl(rKeyEvent);
 }
 
 //--------------------------------------------------------------------
 
-void SfxViewShell::ShowCursor( int /*bOn*/ )
+void SfxViewShell::ShowCursor( FASTBOOL /*bOn*/ )
 
 /*  [Beschreibung]
 

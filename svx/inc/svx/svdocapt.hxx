@@ -118,10 +118,10 @@ public:
     virtual bool applySpecialDrag(SdrDragStat& rDrag);
     virtual String getSpecialDragComment(const SdrDragStat& rDrag) const;
 
-    virtual int BegCreate(SdrDragStat& rStat);
-    virtual int MovCreate(SdrDragStat& rStat);
-    virtual int EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd);
-    virtual int BckCreate(SdrDragStat& rStat);
+    virtual FASTBOOL BegCreate(SdrDragStat& rStat);
+    virtual FASTBOOL MovCreate(SdrDragStat& rStat);
+    virtual FASTBOOL EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd);
+    virtual FASTBOOL BckCreate(SdrDragStat& rStat);
     virtual void BrkCreate(SdrDragStat& rStat);
     virtual basegfx::B2DPolyPolygon TakeCreatePoly(const SdrDragStat& rDrag) const;
     virtual Pointer GetCreatePointer() const;

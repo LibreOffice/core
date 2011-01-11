@@ -62,8 +62,8 @@ public:
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,
                                     String &rText, const IntlWrapper * = 0 ) const;
-    virtual int     HasMetrics() const;
-    virtual int     ScaleMetrics(long nMul, long nDiv);
+    virtual FASTBOOL        HasMetrics() const;
+    virtual FASTBOOL        ScaleMetrics(long nMul, long nDiv);
 
     const XHatch&           GetHatchValue(const XHatchTable* pTable = 0) const; // GetValue -> GetHatchValue
     void                    SetHatchValue(const XHatch& rNew)  { aHatch = rNew; Detach(); } // SetValue -> SetHatchValue

@@ -152,7 +152,7 @@ SdrCircObj::~SdrCircObj()
 
 void SdrCircObj::TakeObjInfo(SdrObjTransformInfoRec& rInfo) const
 {
-    int bCanConv=!HasText() || ImpCanConvTextToCurve();
+    FASTBOOL bCanConv=!HasText() || ImpCanConvTextToCurve();
     rInfo.bEdgeRadiusAllowed    = sal_False;
     rInfo.bCanConvToPath=bCanConv;
     rInfo.bCanConvToPoly=bCanConv;
@@ -164,13 +164,13 @@ sal_uInt16 SdrCircObj::GetObjIdentifier() const
     return sal_uInt16(meCircleKind);
 }
 
-int SdrCircObj::PaintNeedsXPolyCirc() const
+FASTBOOL SdrCircObj::PaintNeedsXPolyCirc() const
 {
     // XPoly ist notwendig fuer alle gedrehten Ellipsenobjekte,
     // fuer alle Kreis- und Ellipsenabschnitte
     // und wenn nicht WIN dann (erstmal) auch fuer Kreis-/Ellipsenausschnitte
     // und Kreis-/Ellipsenboegen (wg. Genauigkeit)
-    int bNeed=aGeo.nDrehWink!=0 || aGeo.nShearWink!=0 || meCircleKind==OBJ_CCUT;
+    FASTBOOL bNeed=aGeo.nDrehWink!=0 || aGeo.nShearWink!=0 || meCircleKind==OBJ_CCUT;
     // Wenn nicht Win, dann fuer alle ausser Vollkreis (erstmal!!!)
     if (meCircleKind!=OBJ_CIRC) bNeed=sal_True;
 
@@ -375,7 +375,7 @@ struct ImpCircUser : public SdrDragStatUserData
     long                        nStart;
     long                        nEnd;
     long                        nWink;
-    int                 bRight; // noch nicht implementiert
+    FASTBOOL                    bRight; // noch nicht implementiert
 
 public:
     ImpCircUser()
@@ -690,7 +690,7 @@ void SdrCircObj::ImpSetCreateParams(SdrDragStat& rStat) const
     pU->SetCreateParams(rStat);
 }
 
-int SdrCircObj::BegCreate(SdrDragStat& rStat)
+FASTBOOL SdrCircObj::BegCreate(SdrDragStat& rStat)
 {
     rStat.SetOrtho4Possible();
     Rectangle aRect1(rStat.GetStart(), rStat.GetNow());
@@ -701,7 +701,7 @@ int SdrCircObj::BegCreate(SdrDragStat& rStat)
     return sal_True;
 }
 
-int SdrCircObj::MovCreate(SdrDragStat& rStat)
+FASTBOOL SdrCircObj::MovCreate(SdrDragStat& rStat)
 {
     ImpSetCreateParams(rStat);
     ImpCircUser* pU=(ImpCircUser*)rStat.GetUser();
@@ -724,11 +724,11 @@ int SdrCircObj::MovCreate(SdrDragStat& rStat)
     return sal_True;
 }
 
-int SdrCircObj::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
+FASTBOOL SdrCircObj::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
 {
     ImpSetCreateParams(rStat);
     ImpCircUser* pU=(ImpCircUser*)rStat.GetUser();
-    int bRet=sal_False;
+    FASTBOOL bRet=sal_False;
     if (eCmd==SDRCREATE_FORCEEND && rStat.GetPointAnz()<4) meCircleKind=OBJ_CIRC;
     if (meCircleKind==OBJ_CIRC) {
         bRet=rStat.GetPointAnz()>=2;
@@ -765,7 +765,7 @@ void SdrCircObj::BrkCreate(SdrDragStat& rStat)
     rStat.SetUser(NULL);
 }
 
-int SdrCircObj::BckCreate(SdrDragStat& rStat)
+FASTBOOL SdrCircObj::BckCreate(SdrDragStat& rStat)
 {
     rStat.SetNoSnap(rStat.GetPointAnz()>=3);
     rStat.SetOrtho4Possible(rStat.GetPointAnz()<3);
@@ -823,12 +823,12 @@ void SdrCircObj::NbcMove(const Size& aSiz)
 void SdrCircObj::NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact)
 {
     long nWink0=aGeo.nDrehWink;
-    int bNoShearRota=(aGeo.nDrehWink==0 && aGeo.nShearWink==0);
+    FASTBOOL bNoShearRota=(aGeo.nDrehWink==0 && aGeo.nShearWink==0);
     SdrTextObj::NbcResize(rRef,xFact,yFact);
     bNoShearRota|=(aGeo.nDrehWink==0 && aGeo.nShearWink==0);
     if (meCircleKind!=OBJ_CIRC) {
-        int bXMirr=(xFact.GetNumerator()<0) != (xFact.GetDenominator()<0);
-        int bYMirr=(yFact.GetNumerator()<0) != (yFact.GetDenominator()<0);
+        FASTBOOL bXMirr=(xFact.GetNumerator()<0) != (xFact.GetDenominator()<0);
+        FASTBOOL bYMirr=(yFact.GetNumerator()<0) != (yFact.GetDenominator()<0);
         if (bXMirr || bYMirr) {
             // bei bXMirr!=bYMirr muessten eigentlich noch die beiden
             // Linienende vertauscht werden. Das ist jedoch mal wieder
@@ -872,7 +872,7 @@ void SdrCircObj::NbcResize(const Point& rRef, const Fraction& xFact, const Fract
     ImpSetCircInfoToAttr();
 }
 
-void SdrCircObj::NbcShear(const Point& rRef, long nWink, double tn, int bVShear)
+void SdrCircObj::NbcShear(const Point& rRef, long nWink, double tn, FASTBOOL bVShear)
 {
     SdrTextObj::NbcShear(rRef,nWink,tn,bVShear);
     SetXPolyDirty();
@@ -882,7 +882,7 @@ void SdrCircObj::NbcShear(const Point& rRef, long nWink, double tn, int bVShear)
 void SdrCircObj::NbcMirror(const Point& rRef1, const Point& rRef2)
 {
     //long nWink0=aGeo.nDrehWink;
-    int bFreeMirr=meCircleKind!=OBJ_CIRC;
+    FASTBOOL bFreeMirr=meCircleKind!=OBJ_CIRC;
     Point aTmpPt1;
     Point aTmpPt2;
     if (bFreeMirr) { // bei freier Spiegelachse einige Vorbereitungen Treffen

@@ -457,10 +457,10 @@ void SfxStateCache::SetState_Impl
     DBG_PROFSTART(SfxStateCacheSetState);
 
     // m"ussen die Controller "uberhaupt benachrichtigt werden?
-    int bNotify = bItemDirty;
+    bool bNotify = bItemDirty;
     if ( !bItemDirty )
     {
-        int bBothAvailable = pLastItem && pState &&
+        bool bBothAvailable = pLastItem && pState &&
                     !IsInvalidItem(pState) && !IsInvalidItem(pLastItem);
         DBG_ASSERT( !bBothAvailable || pState != pLastItem, "setting state with own item" );
         if ( bBothAvailable )

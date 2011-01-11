@@ -61,7 +61,7 @@ public:
 
     void                    SetValueSet( sal_uInt16 nValues ) { nValueSet = nValues; }
     sal_uInt16                  GetValueSet() const { return nValueSet; }
-    int             IsValueAllowed( sal_uInt16 nValue ) const
+    FASTBOOL                IsValueAllowed( sal_uInt16 nValue ) const
                             { return nValue == ( nValue & nValueSet ); }
 
     SvxZoomType             GetType() const { return eType; }

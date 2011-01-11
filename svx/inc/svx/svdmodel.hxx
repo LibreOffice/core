@@ -171,7 +171,7 @@ public:
 
 struct SdrDocumentStreamInfo
 {
-    int     mbDeleteAfterUse;
+    FASTBOOL        mbDeleteAfterUse;
     String          maUserData;
     com::sun::star::uno::Reference < com::sun::star::embed::XStorage > mxStorageRef;
     sal_Bool            mbDummy1 : 1;
@@ -196,11 +196,11 @@ protected:
     String         aUIUnitStr;   // see above
     Fraction       aUIUnitFact;  // see above
     int            nUIUnitKomma; // see above
-    int       bUIOnlyKomma; // see above
+    FASTBOOL       bUIOnlyKomma; // see above
 
     SdrLayerAdmin*  pLayerAdmin;
     SfxItemPool*    pItemPool;
-    int        bMyPool;        // zum Aufraeumen von pMyPool ab 303a
+    FASTBOOL        bMyPool;        // zum Aufraeumen von pMyPool ab 303a
     comphelper::IEmbeddedHelper*
                     m_pEmbeddedHelper; // helper for embedded objects to get rid of the SfxObjectShell
     SdrOutliner*    pDrawOutliner;  // ein Outliner zur Textausgabe
@@ -220,25 +220,25 @@ protected:
     bool            mbUndoEnabled;  // If false no undo is recorded or we are during the execution of an undo action
     sal_uInt16          nProgressPercent; // fuer den ProgressBar-Handler
     sal_uInt16          nLoadVersion;   // Versionsnummer der geladenen Datei
-    int        bExtColorTable; // Keinen eigenen ColorTable
+    FASTBOOL        bExtColorTable; // Keinen eigenen ColorTable
     sal_Bool        mbChanged;
-    int        bInfoChanged;
-    int        bPagNumsDirty;
-    int        bMPgNumsDirty;
-    int        bPageNotValid;  // sal_True=Doc ist nur ObjektTraeger. Page ist nicht gueltig.
-    int        bSavePortable;  // Metafiles portabel speichern
-    int        bNoBitmapCaching;   // Bitmaps fuer Screenoutput cachen
-    int        bReadOnly;
-    int        bTransparentTextFrames;
-    int        bSaveCompressed;
-    int        bSwapGraphics;
-    int        bPasteResize; // Objekte werden gerade resized wegen Paste mit anderem MapMode
-    int     bSaveOLEPreview;      // save preview metafile of OLE objects
+    FASTBOOL        bInfoChanged;
+    FASTBOOL        bPagNumsDirty;
+    FASTBOOL        bMPgNumsDirty;
+    FASTBOOL        bPageNotValid;  // sal_True=Doc ist nur ObjektTraeger. Page ist nicht gueltig.
+    FASTBOOL        bSavePortable;  // Metafiles portabel speichern
+    FASTBOOL        bNoBitmapCaching;   // Bitmaps fuer Screenoutput cachen
+    FASTBOOL        bReadOnly;
+    FASTBOOL        bTransparentTextFrames;
+    FASTBOOL        bSaveCompressed;
+    FASTBOOL        bSwapGraphics;
+    FASTBOOL        bPasteResize; // Objekte werden gerade resized wegen Paste mit anderem MapMode
+    FASTBOOL        bSaveOLEPreview;      // save preview metafile of OLE objects
     sal_uInt16          nStreamCompressMode;  // Komprimiert schreiben?
     sal_uInt16          nStreamNumberFormat;
     sal_uInt16          nDefaultTabulator;
     sal_uInt32          nMaxUndoCount;
-    int        bSaveNative;
+    FASTBOOL        bSaveNative;
     sal_Bool            bStarDrawPreviewMode;
 
 
@@ -279,10 +279,10 @@ public:
     sal_uInt16          mnHandoutPageCount;
     sal_uInt16          nReserveUInt6;
     sal_uInt16          nReserveUInt7;
-    int        mbModelLocked;
-    int        mbKernAsianPunctuation;
-    int        mbAddExtLeading;
-    int        mbInDestruction;
+    FASTBOOL        mbModelLocked;
+    FASTBOOL        mbKernAsianPunctuation;
+    FASTBOOL        mbAddExtLeading;
+    FASTBOOL        mbInDestruction;
 
     // Zeiger auf Paletten, Listen und Tabellen
     XColorTable*    pColorTable;
@@ -310,7 +310,7 @@ private:
     // Nicht implementiert:
     SVX_DLLPRIVATE SdrModel(const SdrModel& rSrcModel);
     SVX_DLLPRIVATE void operator=(const SdrModel& rSrcModel);
-    SVX_DLLPRIVATE int operator==(const SdrModel& rCmpModel) const;
+    SVX_DLLPRIVATE FASTBOOL operator==(const SdrModel& rCmpModel) const;
 //#if 0 // _SOLAR__PRIVATE
     SVX_DLLPRIVATE void ImpPostUndoAction(SdrUndoAction* pUndo);
     SVX_DLLPRIVATE void ImpSetUIUnit();
@@ -328,8 +328,8 @@ private:
 
 public:
 //#if 0 // _SOLAR__PRIVATE
-    int IsPasteResize() const        { return bPasteResize; }
-    void     SetPasteResize(int bOn) { bPasteResize=bOn; }
+    FASTBOOL IsPasteResize() const        { return bPasteResize; }
+    void     SetPasteResize(FASTBOOL bOn) { bPasteResize=bOn; }
 //#endif // __PRIVATE
     TYPEINFO();
     // Steckt man hier seinen eigenen Pool rein, so wird die Klasse auch
@@ -345,13 +345,13 @@ public:
     // Wahl des Pools.
     SdrModel(SfxItemPool* pPool=NULL, ::comphelper::IEmbeddedHelper* pPers=NULL, sal_Bool bLoadRefCounts = LOADREFCOUNTS);
     SdrModel(const String& rPath, SfxItemPool* pPool=NULL, ::comphelper::IEmbeddedHelper* pPers=NULL, sal_Bool bLoadRefCounts = LOADREFCOUNTS);
-    SdrModel(SfxItemPool* pPool, ::comphelper::IEmbeddedHelper* pPers, int bUseExtColorTable, sal_Bool bLoadRefCounts = LOADREFCOUNTS);
-    SdrModel(const String& rPath, SfxItemPool* pPool, ::comphelper::IEmbeddedHelper* pPers, int bUseExtColorTable, sal_Bool bLoadRefCounts = LOADREFCOUNTS);
+    SdrModel(SfxItemPool* pPool, ::comphelper::IEmbeddedHelper* pPers, FASTBOOL bUseExtColorTable, sal_Bool bLoadRefCounts = LOADREFCOUNTS);
+    SdrModel(const String& rPath, SfxItemPool* pPool, ::comphelper::IEmbeddedHelper* pPers, FASTBOOL bUseExtColorTable, sal_Bool bLoadRefCounts = LOADREFCOUNTS);
     virtual ~SdrModel();
     void ClearModel(sal_Bool bCalledFromDestructor);
 
     // Hier kann man erfragen, ob das Model gerade eingrstreamt wird
-    int IsLoading() const                  { return sal_False /*BFS01 bLoading */; }
+    FASTBOOL IsLoading() const                  { return sal_False /*BFS01 bLoading */; }
     // Muss z.B. ueberladen werden, um das Swappen/LoadOnDemand von Grafiken
     // zu ermoeglichen. Wird rbDeleteAfterUse auf sal_True gesetzt, so wird
     // die SvStream-Instanz vom Aufrufer nach Gebrauch destruiert.
@@ -364,7 +364,7 @@ public:
     void BurnInStyleSheetAttributes();
     // Wer sich von SdrPage ableitet muss sich auch von SdrModel ableiten
     // und diese beiden VM AllocPage() und AllocModel() ueberladen...
-    virtual SdrPage*  AllocPage(int bMasterPage);
+    virtual SdrPage*  AllocPage(FASTBOOL bMasterPage);
     virtual SdrModel* AllocModel() const;
 
     // Aenderungen an den Layern setzen das Modified-Flag und broadcasten am Model!
@@ -449,17 +449,17 @@ public:
     const Fraction&  GetUIUnitFact() const                      { return aUIUnitFact; }
     const String&    GetUIUnitStr() const                       { return aUIUnitStr; }
     int              GetUIUnitKomma() const                     { return nUIUnitKomma; }
-    int         IsUIOnlyKomma() const                      { return bUIOnlyKomma; }
+    FASTBOOL         IsUIOnlyKomma() const                      { return bUIOnlyKomma; }
 
     static void      TakeUnitStr(FieldUnit eUnit, String& rStr);
-    void             TakeMetricStr(long nVal, String& rStr, int bNoUnitChars=sal_False, sal_Int32 nNumDigits = -1) const;
-    void             TakeWinkStr(long nWink, String& rStr, int bNoDegChar=sal_False) const;
-    void             TakePercentStr(const Fraction& rVal, String& rStr, int bNoPercentChar=sal_False) const;
+    void             TakeMetricStr(long nVal, String& rStr, FASTBOOL bNoUnitChars=sal_False, sal_Int32 nNumDigits = -1) const;
+    void             TakeWinkStr(long nWink, String& rStr, FASTBOOL bNoDegChar=sal_False) const;
+    void             TakePercentStr(const Fraction& rVal, String& rStr, FASTBOOL bNoPercentChar=sal_False) const;
 
     // RecalcPageNums wird idR. nur von der Page gerufen.
-    int         IsPagNumsDirty() const                     { return bPagNumsDirty; };
-    int         IsMPgNumsDirty() const                     { return bMPgNumsDirty; };
-    void             RecalcPageNums(int bMaster);
+    FASTBOOL         IsPagNumsDirty() const                     { return bPagNumsDirty; };
+    FASTBOOL         IsMPgNumsDirty() const                     { return bMPgNumsDirty; };
+    void             RecalcPageNums(FASTBOOL bMaster);
     // Nach dem Insert gehoert die Page dem SdrModel.
     virtual void     InsertPage(SdrPage* pPage, sal_uInt16 nPos=0xFFFF);
     virtual void     DeletePage(sal_uInt16 nPgNum);
@@ -493,28 +493,28 @@ public:
     // PageNotValid bedeutet, dass das Model lediglich Objekte traegt die zwar
     // auf einer Page verankert sind, die Page aber nicht gueltig ist. Diese
     // Kennzeichnung wird fuers Clipboard/Drag&Drop benoetigt.
-    int        IsPageNotValid() const                     { return bPageNotValid; }
-    void            SetPageNotValid(int bJa=sal_True)         { bPageNotValid=bJa; }
+    FASTBOOL        IsPageNotValid() const                     { return bPageNotValid; }
+    void            SetPageNotValid(FASTBOOL bJa=sal_True)         { bPageNotValid=bJa; }
 
     // Schaltet man dieses Flag auf sal_True, so werden Grafikobjekte
     // portabel gespeichert. Es findet dann beim Speichern ggf.
     // eine implizite Wandlung von Metafiles statt.
     // Default=FALSE. Flag ist nicht persistent.
-    int        IsSavePortable() const                     { return bSavePortable; }
-    void            SetSavePortable(int bJa=sal_True)         { bSavePortable=bJa; }
+    FASTBOOL        IsSavePortable() const                     { return bSavePortable; }
+    void            SetSavePortable(FASTBOOL bJa=sal_True)         { bSavePortable=bJa; }
 
     // Schaltet man dieses Flag auf sal_True, so werden
     // Pixelobjekte (stark) komprimiert gespeichert.
     // Default=FALSE. Flag ist nicht persistent.
-    int        IsSaveCompressed() const                   { return bSaveCompressed; }
-    void            SetSaveCompressed(int bJa=sal_True)       { bSaveCompressed=bJa; }
+    FASTBOOL        IsSaveCompressed() const                   { return bSaveCompressed; }
+    void            SetSaveCompressed(FASTBOOL bJa=sal_True)       { bSaveCompressed=bJa; }
 
     // Schaltet man dieses Flag auf sal_True, so werden
     // Grafikobjekte mit gesetztem Native-Link
     // native gespeichert.
     // Default=FALSE. Flag ist nicht persistent.
-    int        IsSaveNative() const                       { return bSaveNative; }
-    void            SetSaveNative(int bJa=sal_True)           { bSaveNative=bJa; }
+    FASTBOOL        IsSaveNative() const                       { return bSaveNative; }
+    void            SetSaveNative(FASTBOOL bJa=sal_True)           { bSaveNative=bJa; }
 
     // Schaltet man dieses Flag auf sal_True, so werden die Grafiken
     // von Grafikobjekten:
@@ -525,13 +525,13 @@ public:
     // Damit das funktioniert, muss die virtuelle Methode
     // GetDocumentStream() ueberladen werden.
     // Default=FALSE. Flag ist nicht persistent.
-    int        IsSwapGraphics() const { return bSwapGraphics; }
-    void            SetSwapGraphics(int bJa=sal_True);
+    FASTBOOL        IsSwapGraphics() const { return bSwapGraphics; }
+    void            SetSwapGraphics(FASTBOOL bJa=sal_True);
     void            SetSwapGraphicsMode(sal_uIntPtr nMode) { nSwapGraphicsMode = nMode; }
     sal_uIntPtr         GetSwapGraphicsMode() const { return nSwapGraphicsMode; }
 
-    int        IsSaveOLEPreview() const          { return bSaveOLEPreview; }
-    void            SetSaveOLEPreview( int bSet) { bSaveOLEPreview = bSet; }
+    FASTBOOL        IsSaveOLEPreview() const          { return bSaveOLEPreview; }
+    void            SetSaveOLEPreview( FASTBOOL bSet) { bSaveOLEPreview = bSet; }
 
     // Damit die Bildschirmausgabe von Bitmaps (insbesondere bei gedrehten)
     // etwas schneller wird, werden sie gecachet. Diesen Cache kann man mit
@@ -540,14 +540,14 @@ public:
     // in's Undo, so wird der Cache fuer dieses Objekt sofort ausgeschaltet
     // (Speicher sparen).
     // Default=Cache eingeschaltet. Flag ist nicht persistent.
-    int        IsBitmapCaching() const                     { return !bNoBitmapCaching; }
-    void            SetBitmapCaching(int bJa=sal_True)         { bNoBitmapCaching=!bJa; }
+    FASTBOOL        IsBitmapCaching() const                     { return !bNoBitmapCaching; }
+    void            SetBitmapCaching(FASTBOOL bJa=sal_True)         { bNoBitmapCaching=!bJa; }
 
     // Defaultmaessig (sal_False) kann man Textrahmen ohne Fuellung durch
     // Mausklick selektieren. Nach Aktivierung dieses Flags trifft man sie
     // nur noch in dem Bereich, wo sich auch tatsaechlich Text befindet.
-    int        IsPickThroughTransparentTextFrames() const  { return bTransparentTextFrames; }
-    void            SetPickThroughTransparentTextFrames(int bOn) { bTransparentTextFrames=bOn; }
+    FASTBOOL        IsPickThroughTransparentTextFrames() const  { return bTransparentTextFrames; }
+    void            SetPickThroughTransparentTextFrames(FASTBOOL bOn) { bTransparentTextFrames=bOn; }
 
     // Darf denn das Model ueberhaupt veraendert werden?
     // Wird nur von den Possibility-Methoden der View ausgewerdet.
@@ -555,8 +555,8 @@ public:
     // Sollte ueberladen werden und entsprechend des ReadOnly-Status des Files
     // sal_True oder sal_False liefern (Methode wird oeffters gerufen, also ein Flag
     // verwenden!).
-    virtual int IsReadOnly() const;
-    virtual void     SetReadOnly(int bYes);
+    virtual FASTBOOL IsReadOnly() const;
+    virtual void     SetReadOnly(FASTBOOL bYes);
 
     // Vermischen zweier SdrModel. Zu beachten sei, dass rSourceModel nicht
     // const ist. Die Pages werden beim einfuegen nicht kopiert, sondern gemoved.
@@ -576,13 +576,13 @@ public:
     virtual void Merge(SdrModel& rSourceModel,
                sal_uInt16 nFirstPageNum=0, sal_uInt16 nLastPageNum=0xFFFF,
                sal_uInt16 nDestPos=0xFFFF,
-               int bMergeMasterPages=sal_False, int bAllMasterPages=sal_False,
-               int bUndo=sal_True, int bTreadSourceAsConst=sal_False);
+               FASTBOOL bMergeMasterPages=sal_False, FASTBOOL bAllMasterPages=sal_False,
+               FASTBOOL bUndo=sal_True, FASTBOOL bTreadSourceAsConst=sal_False);
 
     // Ist wie Merge(SourceModel=DestModel,nFirst,nLast,nDest,sal_False,FALSE,bUndo,!bMoveNoCopy);
     void CopyPages(sal_uInt16 nFirstPageNum, sal_uInt16 nLastPageNum,
                    sal_uInt16 nDestPos,
-                   int bUndo=sal_True, int bMoveNoCopy=sal_False);
+                   FASTBOOL bUndo=sal_True, FASTBOOL bMoveNoCopy=sal_False);
 
     // Mit BegUndo() / EndUndo() ist es moeglich beliebig viele UndoActions
     // beliebig tief zu klammern. Als Kommentar der
@@ -617,9 +617,9 @@ public:
     sal_uIntPtr GetRedoActionCount() const                      { return pRedoStack!=NULL ? pRedoStack->Count() : 0; }
     const SfxUndoAction* GetRedoAction(sal_uIntPtr nNum) const  { return (SfxUndoAction*)(pRedoStack!=NULL ? pRedoStack->GetObject(nNum) : NULL); }
 
-    int Undo();
-    int Redo();
-    int Repeat(SfxRepeatTarget&);
+    FASTBOOL Undo();
+    FASTBOOL Redo();
+    FASTBOOL Repeat(SfxRepeatTarget&);
 
     // Hier kann die Applikation einen Handler setzen, der die auflaufenden
     // UndoActions einsammelt. Der Handler hat folgendes Aussehen:
@@ -681,7 +681,7 @@ public:
     // Methode sal_True, andernfalls FALSE.
     // Dieser Check steht nur zur Verfuegung, wenn die Engine mit DBG_UTIL
     // uebersetzt wurde. Andernfalls liefert die Methode immer TRUE. (ni)
-    int CheckConsistence() const;
+    FASTBOOL CheckConsistence() const;
 
     void    SetStarDrawPreviewMode(sal_Bool bPreview);
     sal_Bool    IsStarDrawPreviewMode() { return bStarDrawPreviewMode; }
@@ -711,7 +711,7 @@ public:
 
     void ReformatAllTextObjects();
 
-    int HasTransparentObjects( sal_Bool bCheckForAlphaChannel = sal_False ) const;
+    FASTBOOL HasTransparentObjects( sal_Bool bCheckForAlphaChannel = sal_False ) const;
 
     SdrOutliner* createOutliner( sal_uInt16 nOutlinerMode );
     void disposeOutliner( SdrOutliner* pOutliner );

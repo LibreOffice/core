@@ -768,7 +768,7 @@ void SfxVirtualMenu::RemoveMenuImages( Menu* pMenu )
 
 //--------------------------------------------------------------------
 
-int SfxVirtualMenu::Bind_Impl( Menu *pMenu )
+bool SfxVirtualMenu::Bind_Impl( Menu *pMenu )
 {
     // Selber suchen, da SV mit 'sal_uInt16 nSID = pSVMenu->GetCurItemId();' immer
     // 0 liefert. Das ist so, weil die Event-Weiterleitung lt. TH nichts mit
@@ -778,7 +778,7 @@ int SfxVirtualMenu::Bind_Impl( Menu *pMenu )
     for ( sal_uInt16 nPos = 0; nPos < nCount; ++nPos )
     {
         // angesprochenes Sub-Menu gefunden?
-        int bFound = sal_False;
+        bool bFound = false;
         sal_uInt16 nSID = pSVMenu->GetItemId(nPos);
         SfxMenuControl &rCtrl = pItems[nPos];
         bFound = pSVMenu->GetPopupMenu(nSID) == pMenu;
@@ -824,11 +824,11 @@ int SfxVirtualMenu::Bind_Impl( Menu *pMenu )
 
         // gefunden, dann abbrechen
         if ( bFound )
-            return sal_True;
+            return true;
     }
 
     // nicht in diesem Untermenu gefunden
-    return sal_False;
+    return false;
 }
 
 void SfxVirtualMenu::BindControllers()

@@ -1089,14 +1089,14 @@ SfxItemPresentation XLineDashItem::GetPresentation
 
 //------------------------------------------------------------------------
 
-int XLineDashItem::HasMetrics() const
+FASTBOOL XLineDashItem::HasMetrics() const
 {
     return sal_True;
 }
 
 //------------------------------------------------------------------------
 
-int XLineDashItem::ScaleMetrics(long nMul, long nDiv)
+FASTBOOL XLineDashItem::ScaleMetrics(long nMul, long nDiv)
 {
     aDash.SetDotLen( ScaleMetricValue( aDash.GetDotLen(), nMul, nDiv ) );
     aDash.SetDashLen( ScaleMetricValue( aDash.GetDashLen(), nMul, nDiv ) );
@@ -4465,14 +4465,14 @@ SfxItemPresentation XFillHatchItem::GetPresentation
 
 //------------------------------------------------------------------------
 
-int XFillHatchItem::HasMetrics() const
+FASTBOOL XFillHatchItem::HasMetrics() const
 {
     return sal_True;
 }
 
 //------------------------------------------------------------------------
 
-int XFillHatchItem::ScaleMetrics(long nMul, long nDiv)
+FASTBOOL XFillHatchItem::ScaleMetrics(long nMul, long nDiv)
 {
     aHatch.SetDistance( ScaleMetricValue( aHatch.GetDistance(), nMul, nDiv ) );
     return sal_True;

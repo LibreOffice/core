@@ -177,7 +177,7 @@ sal_uInt16 SdrObjGroup::GetObjIdentifier() const
 
 SdrLayerID SdrObjGroup::GetLayer() const
 {
-    int b1st=sal_True;
+    FASTBOOL b1st=sal_True;
     SdrLayerID nLay=SdrLayerID(SdrObject::GetLayer());
     SdrObjList* pOL=pSub;
     sal_uIntPtr nObjAnz=pOL->GetObjCount();
@@ -245,7 +245,7 @@ void SdrObjGroup::SetModel(SdrModel* pNewModel)
 }
 
 
-int SdrObjGroup::HasRefPoint() const
+FASTBOOL SdrObjGroup::HasRefPoint() const
 {
     return bRefPoint;
 }
@@ -385,7 +385,7 @@ bool SdrObjGroup::beginSpecialDrag(SdrDragStat& /*rDrag*/) const
 }
 
 
-int SdrObjGroup::BegCreate(SdrDragStat& /*rStat*/)
+FASTBOOL SdrObjGroup::BegCreate(SdrDragStat& /*rStat*/)
 {
     return sal_False;
 }
@@ -397,7 +397,7 @@ long SdrObjGroup::GetRotateAngle() const
 }
 
 
-long SdrObjGroup::GetShearAngle(int /*bVertical*/) const
+long SdrObjGroup::GetShearAngle(FASTBOOL /*bVertical*/) const
 {
     return nShearWink;
 }
@@ -448,8 +448,8 @@ void SdrObjGroup::NbcMove(const Size& rSiz)
 
 void SdrObjGroup::NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact)
 {
-    int bXMirr=(xFact.GetNumerator()<0) != (xFact.GetDenominator()<0);
-    int bYMirr=(yFact.GetNumerator()<0) != (yFact.GetDenominator()<0);
+    FASTBOOL bXMirr=(xFact.GetNumerator()<0) != (xFact.GetDenominator()<0);
+    FASTBOOL bYMirr=(yFact.GetNumerator()<0) != (yFact.GetDenominator()<0);
     if (bXMirr || bYMirr) {
         Point aRef1(GetSnapRect().Center());
         if (bXMirr) {
@@ -509,7 +509,7 @@ void SdrObjGroup::NbcMirror(const Point& rRef1, const Point& rRef2)
 }
 
 
-void SdrObjGroup::NbcShear(const Point& rRef, long nWink, double tn, int bVShear)
+void SdrObjGroup::NbcShear(const Point& rRef, long nWink, double tn, FASTBOOL bVShear)
 {
     SetGlueReallyAbsolute(sal_True);
     nShearWink+=nWink;
@@ -604,8 +604,8 @@ void SdrObjGroup::Move(const Size& rSiz)
 void SdrObjGroup::Resize(const Point& rRef, const Fraction& xFact, const Fraction& yFact)
 {
     if (xFact.GetNumerator()!=xFact.GetDenominator() || yFact.GetNumerator()!=yFact.GetDenominator()) {
-        int bXMirr=(xFact.GetNumerator()<0) != (xFact.GetDenominator()<0);
-        int bYMirr=(yFact.GetNumerator()<0) != (yFact.GetDenominator()<0);
+        FASTBOOL bXMirr=(xFact.GetNumerator()<0) != (xFact.GetDenominator()<0);
+        FASTBOOL bYMirr=(yFact.GetNumerator()<0) != (yFact.GetDenominator()<0);
         if (bXMirr || bYMirr) {
             Point aRef1(GetSnapRect().Center());
             if (bXMirr) {
@@ -700,7 +700,7 @@ void SdrObjGroup::Mirror(const Point& rRef1, const Point& rRef2)
 }
 
 
-void SdrObjGroup::Shear(const Point& rRef, long nWink, double tn, int bVShear)
+void SdrObjGroup::Shear(const Point& rRef, long nWink, double tn, FASTBOOL bVShear)
 {
     if (nWink!=0) {
         SetGlueReallyAbsolute(sal_True);
@@ -731,7 +731,7 @@ void SdrObjGroup::Shear(const Point& rRef, long nWink, double tn, int bVShear)
 void SdrObjGroup::SetAnchorPos(const Point& rPnt)
 {
     Rectangle aBoundRect0; if (pUserCall!=NULL) aBoundRect0=GetLastBoundRect();
-    int bChg=aAnchor!=rPnt;
+    FASTBOOL bChg=aAnchor!=rPnt;
     aAnchor=rPnt;
     Size aSiz(rPnt.X()-aAnchor.X(),rPnt.Y()-aAnchor.Y());
     MovePoint(aRefPoint,aSiz);

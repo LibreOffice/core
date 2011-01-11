@@ -804,7 +804,7 @@ XubString SbxObject::GenerateSource( const XubString &rLinePrefix,
     // Properties in einem String einsammeln
     XubString aSource;
     SbxArrayRef xProps( GetProperties() );
-    int bLineFeed = sal_False;
+    bool bLineFeed = false;
     for ( sal_uInt16 nProp = 0; nProp < xProps->Count(); ++nProp )
     {
         SbxPropertyRef xProp = (SbxProperty*) xProps->Get(nProp);
@@ -817,7 +817,7 @@ XubString SbxObject::GenerateSource( const XubString &rLinePrefix,
             if ( bLineFeed )
                 aSource.AppendAscii( "\n" );
             else
-                bLineFeed = sal_True;
+                bLineFeed = true;
 
             aSource += rLinePrefix;
             aSource += '.';

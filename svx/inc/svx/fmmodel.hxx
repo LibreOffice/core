@@ -60,13 +60,13 @@ public:
     FmFormModel(SfxItemPool* pPool=NULL, SfxObjectShell* pPers=NULL );
     FmFormModel(const XubString& rPath, SfxItemPool* pPool=NULL,
                 SfxObjectShell* pPers=NULL );
-    FmFormModel(SfxItemPool* pPool, SfxObjectShell* pPers, int bUseExtColorTable);
+    FmFormModel(SfxItemPool* pPool, SfxObjectShell* pPers, FASTBOOL bUseExtColorTable);
     FmFormModel(const XubString& rPath, SfxItemPool* pPool, SfxObjectShell* pPers,
-                int bUseExtColorTable);
+                FASTBOOL bUseExtColorTable);
 
     virtual ~FmFormModel();
 
-    virtual SdrPage* AllocPage(int bMasterPage);
+    virtual SdrPage* AllocPage(FASTBOOL bMasterPage);
     virtual void     InsertPage(SdrPage* pPage, sal_uInt16 nPos=0xFFFF);
     virtual SdrPage* RemovePage(sal_uInt16 nPgNum);
     virtual void     MovePage(sal_uInt16 nPgNum, sal_uInt16 nNewPos);

@@ -735,7 +735,7 @@ void SfxProgress::LeaveLock()
 
 // -----------------------------------------------------------------------
 
-int SfxProgress::StatusBarManagerGone_Impl
+FASTBOOL SfxProgress::StatusBarManagerGone_Impl
 (
     SfxStatusBarManager *   // dieser <SfxStatusBarManager> wird zerst"ort
 )

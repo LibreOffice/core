@@ -112,7 +112,7 @@ FmFormModel::FmFormModel(const XubString& rPath, SfxItemPool* pPool, SfxObjectSh
 |*
 \************************************************************************/
 FmFormModel::FmFormModel(SfxItemPool* pPool, SfxObjectShell* pPers,
-                         int bUseExtColorTable
+                         FASTBOOL bUseExtColorTable
                          )
             :SdrModel(pPool, pPers, bUseExtColorTable, LOADREFCOUNTS)
             ,m_pImpl(NULL)
@@ -133,7 +133,7 @@ FmFormModel::FmFormModel(SfxItemPool* pPool, SfxObjectShell* pPers,
 |*
 \************************************************************************/
 FmFormModel::FmFormModel(const XubString& rPath, SfxItemPool* pPool, SfxObjectShell* pPers,
-                         int bUseExtColorTable)
+                         FASTBOOL bUseExtColorTable)
             :SdrModel(rPath, pPool, pPers, bUseExtColorTable, LOADREFCOUNTS)
             ,m_pImpl( NULL )
             ,m_pObjShell(0)
@@ -173,7 +173,7 @@ FmFormModel::~FmFormModel()
 |* Erzeugt eine neue Seite
 |*
 \************************************************************************/
-SdrPage* FmFormModel::AllocPage(int bMasterPage)
+SdrPage* FmFormModel::AllocPage(FASTBOOL bMasterPage)
 {
     return new FmFormPage(*this, NULL, bMasterPage);
 }

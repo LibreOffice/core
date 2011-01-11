@@ -63,7 +63,7 @@ protected:
 
 protected:
     // Liefert sal_True, wenn das Painten ein Polygon erfordert.
-    int PaintNeedsXPoly(long nEckRad) const;
+    FASTBOOL PaintNeedsXPoly(long nEckRad) const;
 
 protected:
     XPolygon ImpCalcXPoly(const Rectangle& rRect1, long nRad1) const;
@@ -120,9 +120,9 @@ public:
     virtual void NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact);
     virtual void NbcRotate(const Point& rRef, long nWink, double sn, double cs);
     virtual void NbcMirror(const Point& rRef1, const Point& rRef2);
-    virtual void NbcShear(const Point& rRef, long nWink, double tn, int bVShear);
+    virtual void NbcShear(const Point& rRef, long nWink, double tn, FASTBOOL bVShear);
 
-    virtual int DoMacro(const SdrObjMacroHitRec& rRec);
+    virtual FASTBOOL DoMacro(const SdrObjMacroHitRec& rRec);
     virtual XubString GetMacroPopupComment(const SdrObjMacroHitRec& rRec) const;
 
     virtual SdrGluePoint GetVertexGluePoint(sal_uInt16 nNum) const;

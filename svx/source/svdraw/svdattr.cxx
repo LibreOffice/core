@@ -991,12 +991,12 @@ SfxPoolItem* __EXPORT SdrMetricItem::Create(SvStream& rIn, sal_uInt16 /*nVer*/) 
     return new SdrMetricItem(Which(),rIn);
 }
 
-int __EXPORT SdrMetricItem::HasMetrics() const
+FASTBOOL __EXPORT SdrMetricItem::HasMetrics() const
 {
     return sal_True;
 }
 
-int __EXPORT SdrMetricItem::ScaleMetrics(long nMul, long nDiv)
+FASTBOOL __EXPORT SdrMetricItem::ScaleMetrics(long nMul, long nDiv)
 {
     if (GetValue()!=0) {
         BigInt aVal(GetValue());
@@ -1387,12 +1387,12 @@ SfxPoolItem* __EXPORT SdrTextAniAmountItem::Clone(SfxItemPool* /*pPool*/) const 
 
 SfxPoolItem* __EXPORT SdrTextAniAmountItem::Create(SvStream& rIn, sal_uInt16 /*nVer*/) const   { return new SdrTextAniAmountItem(rIn); }
 
-int __EXPORT SdrTextAniAmountItem::HasMetrics() const
+FASTBOOL __EXPORT SdrTextAniAmountItem::HasMetrics() const
 {
     return GetValue()>0;
 }
 
-int __EXPORT SdrTextAniAmountItem::ScaleMetrics(long nMul, long nDiv)
+FASTBOOL __EXPORT SdrTextAniAmountItem::ScaleMetrics(long nMul, long nDiv)
 {
     if (GetValue()>0) {
         BigInt aVal(GetValue());

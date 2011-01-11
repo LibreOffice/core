@@ -1003,7 +1003,7 @@ SfxEventConfiguration* SfxApplication::GetEventConfig() const
 //--------------------------------------------------------------------
 
 //--------------------------------------------------------------------
-void SfxApplication::NotifyEvent( const SfxEventHint& rEventHint, int bSynchron )
+void SfxApplication::NotifyEvent( const SfxEventHint& rEventHint, FASTBOOL bSynchron )
 {
     //DBG_ASSERT(pAppData_Impl->pEventConfig,"Keine Events angemeldet!");
 

@@ -47,11 +47,11 @@ Pointer SdrHelpLine::GetPointer() const
     } // switch
 }
 
-int SdrHelpLine::IsHit(const Point& rPnt, sal_uInt16 nTolLog, const OutputDevice& rOut) const
+FASTBOOL SdrHelpLine::IsHit(const Point& rPnt, sal_uInt16 nTolLog, const OutputDevice& rOut) const
 {
     Size a1Pix(rOut.PixelToLogic(Size(1,1)));
-    int bXHit=rPnt.X()>=aPos.X()-nTolLog && rPnt.X()<=aPos.X()+nTolLog+a1Pix.Width();
-    int bYHit=rPnt.Y()>=aPos.Y()-nTolLog && rPnt.Y()<=aPos.Y()+nTolLog+a1Pix.Height();
+    FASTBOOL bXHit=rPnt.X()>=aPos.X()-nTolLog && rPnt.X()<=aPos.X()+nTolLog+a1Pix.Width();
+    FASTBOOL bYHit=rPnt.Y()>=aPos.Y()-nTolLog && rPnt.Y()<=aPos.Y()+nTolLog+a1Pix.Height();
     switch (eKind) {
         case SDRHELPLINE_VERTICAL  : return bXHit;
         case SDRHELPLINE_HORIZONTAL: return bYHit;
@@ -123,7 +123,7 @@ void SdrHelpLineList::operator=(const SdrHelpLineList& rSrcList)
 
 bool SdrHelpLineList::operator==(const SdrHelpLineList& rSrcList) const
 {
-    int bEqual=sal_False;
+    FASTBOOL bEqual=sal_False;
     sal_uInt16 nAnz=GetCount();
     if (nAnz==rSrcList.GetCount()) {
         bEqual=sal_True;

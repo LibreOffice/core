@@ -184,7 +184,7 @@ void SdrObjList::CopyObjects(const SdrObjList& rSrcList)
     // Aehnliche Implementation an folgenden Stellen:
     //    void SdrObjList::CopyObjects(const SdrObjList& rSrcList)
     //    SdrModel* SdrExchangeView::GetMarkedObjModel() const
-    //    int SdrExchangeView::Paste(const SdrModel& rMod,...)
+    //    FASTBOOL SdrExchangeView::Paste(const SdrModel& rMod,...)
     //    void SdrEditView::CopyMarked()
     if (nCloneErrCnt==0) {
         for (no=0; no<nAnz; no++) {
@@ -772,9 +772,9 @@ SdrObject* SdrObjList::GetObj(sal_uIntPtr nNum) const
 
 
 
-int SdrObjList::IsReadOnly() const
+FASTBOOL SdrObjList::IsReadOnly() const
 {
-    int bRet=sal_False;
+    FASTBOOL bRet=sal_False;
     if (pPage!=NULL && pPage!=this) bRet=pPage->IsReadOnly();
     return bRet;
 }
@@ -1859,9 +1859,9 @@ SfxStyleSheet* SdrPage::GetTextStyleSheetForObject( SdrObject* pObj ) const
     return pObj->GetStyleSheet();
 }
 
-int SdrPage::HasTransparentObjects( sal_Bool bCheckForAlphaChannel ) const
+FASTBOOL SdrPage::HasTransparentObjects( sal_Bool bCheckForAlphaChannel ) const
 {
-    int bRet = sal_False;
+    FASTBOOL bRet = sal_False;
 
     for( sal_uIntPtr n = 0, nCount = GetObjCount(); ( n < nCount ) && !bRet; n++ )
         if( GetObj( n )->IsTransparent( bCheckForAlphaChannel ) )
@@ -1936,12 +1936,12 @@ void SdrPage::ActionChanged() const
 }
 
 // NYI: Dummy implementations for declarations in svdpage.hxx
-Bitmap      SdrPage::GetBitmap(const SetOfByte& /*rVisibleLayers*/, int /*bTrimBorders*/) const
+Bitmap      SdrPage::GetBitmap(const SetOfByte& /*rVisibleLayers*/, FASTBOOL /*bTrimBorders*/) const
 {
     DBG_ASSERT(0, "SdrPage::GetBitmap(): not yet implemented.");
     return Bitmap();
 }
-GDIMetaFile SdrPage::GetMetaFile(const SetOfByte& /*rVisibleLayers*/, int /*bTrimBorders*/)
+GDIMetaFile SdrPage::GetMetaFile(const SetOfByte& /*rVisibleLayers*/, FASTBOOL /*bTrimBorders*/)
 {
     DBG_ASSERT(0, "SdrPage::GetMetaFile(): not yet implemented.");
     return GDIMetaFile();

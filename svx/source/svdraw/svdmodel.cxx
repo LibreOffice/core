@@ -234,7 +234,7 @@ SdrModel::SdrModel(SfxItemPool* pPool, ::comphelper::IEmbeddedHelper* pPers, sal
 #endif
 
     DBG_CTOR(SdrModel,NULL);
-    ImpCtor(pPool,pPers,sal_False, (int)bLoadRefCounts);
+    ImpCtor(pPool,pPers,sal_False, (FASTBOOL)bLoadRefCounts);
 }
 
 SdrModel::SdrModel(const String& rPath, SfxItemPool* pPool, ::comphelper::IEmbeddedHelper* pPers, sal_Bool bLoadRefCounts):
@@ -247,10 +247,10 @@ SdrModel::SdrModel(const String& rPath, SfxItemPool* pPool, ::comphelper::IEmbed
 #endif
 
     DBG_CTOR(SdrModel,NULL);
-    ImpCtor(pPool,pPers,sal_False, (int)bLoadRefCounts);
+    ImpCtor(pPool,pPers,sal_False, (FASTBOOL)bLoadRefCounts);
 }
 
-SdrModel::SdrModel(SfxItemPool* pPool, ::comphelper::IEmbeddedHelper* pPers, int bUseExtColorTable, sal_Bool bLoadRefCounts):
+SdrModel::SdrModel(SfxItemPool* pPool, ::comphelper::IEmbeddedHelper* pPers, FASTBOOL bUseExtColorTable, sal_Bool bLoadRefCounts):
     maMaPag(1024,32,32),
     maPages(1024,32,32)
 {
@@ -259,10 +259,10 @@ SdrModel::SdrModel(SfxItemPool* pPool, ::comphelper::IEmbeddedHelper* pPers, int
 #endif
 
     DBG_CTOR(SdrModel,NULL);
-    ImpCtor(pPool,pPers,bUseExtColorTable, (int)bLoadRefCounts);
+    ImpCtor(pPool,pPers,bUseExtColorTable, (FASTBOOL)bLoadRefCounts);
 }
 
-SdrModel::SdrModel(const String& rPath, SfxItemPool* pPool, ::comphelper::IEmbeddedHelper* pPers, int bUseExtColorTable, sal_Bool bLoadRefCounts):
+SdrModel::SdrModel(const String& rPath, SfxItemPool* pPool, ::comphelper::IEmbeddedHelper* pPers, FASTBOOL bUseExtColorTable, sal_Bool bLoadRefCounts):
     maMaPag(1024,32,32),
     maPages(1024,32,32),
     aTablePath(rPath)
@@ -272,7 +272,7 @@ SdrModel::SdrModel(const String& rPath, SfxItemPool* pPool, ::comphelper::IEmbed
 #endif
 
     DBG_CTOR(SdrModel,NULL);
-    ImpCtor(pPool,pPers,bUseExtColorTable, (int)bLoadRefCounts);
+    ImpCtor(pPool,pPers,bUseExtColorTable, (FASTBOOL)bLoadRefCounts);
 }
 
 SdrModel::SdrModel(const SdrModel& /*rSrcModel*/):
@@ -398,23 +398,23 @@ void SdrModel::operator=(const SdrModel& /*rSrcModel*/)
     DBG_ERROR("SdrModel::operator=() ist noch nicht implementiert");
 }
 
-int SdrModel::operator==(const SdrModel& /*rCmpModel*/) const
+FASTBOOL SdrModel::operator==(const SdrModel& /*rCmpModel*/) const
 {
     DBG_ERROR("SdrModel::operator==() ist noch nicht implementiert");
     return sal_False;
 }
 
-void SdrModel::SetSwapGraphics( int bSwap )
+void SdrModel::SetSwapGraphics( FASTBOOL bSwap )
 {
     bSwapGraphics = bSwap;
 }
 
-int SdrModel::IsReadOnly() const
+FASTBOOL SdrModel::IsReadOnly() const
 {
     return bReadOnly;
 }
 
-void SdrModel::SetReadOnly(int bYes)
+void SdrModel::SetReadOnly(FASTBOOL bYes)
 {
     bReadOnly=bYes;
 }
@@ -450,9 +450,9 @@ void SdrModel::ClearUndoBuffer()
     }
 }
 
-int SdrModel::Undo()
+FASTBOOL SdrModel::Undo()
 {
-    int bRet=sal_False;
+    FASTBOOL bRet=sal_False;
     if( mpImpl->mpUndoManager )
     {
         DBG_ERROR("svx::SdrModel::Undo(), method not supported with application undo manager!");
@@ -474,9 +474,9 @@ int SdrModel::Undo()
     return bRet;
 }
 
-int SdrModel::Redo()
+FASTBOOL SdrModel::Redo()
 {
-    int bRet=sal_False;
+    FASTBOOL bRet=sal_False;
     if( mpImpl->mpUndoManager )
     {
         DBG_ERROR("svx::SdrModel::Redo(), method not supported with application undo manager!");
@@ -498,9 +498,9 @@ int SdrModel::Redo()
     return bRet;
 }
 
-int SdrModel::Repeat(SfxRepeatTarget& rView)
+FASTBOOL SdrModel::Repeat(SfxRepeatTarget& rView)
 {
-    int bRet=sal_False;
+    FASTBOOL bRet=sal_False;
     if( mpImpl->mpUndoManager )
     {
         DBG_ERROR("svx::SdrModel::Redo(), method not supported with application undo manager!");
@@ -808,7 +808,7 @@ SdrModel* SdrModel::AllocModel() const
     return pModel;
 }
 
-SdrPage* SdrModel::AllocPage(int bMasterPage)
+SdrPage* SdrModel::AllocPage(FASTBOOL bMasterPage)
 {
     return new SdrPage(*this,bMasterPage);
 }
@@ -1294,7 +1294,7 @@ void SdrModel::TakeUnitStr(FieldUnit eUnit, XubString& rStr)
     }
 }
 
-void SdrModel::TakeMetricStr(long nVal, XubString& rStr, int bNoUnitChars, sal_Int32 nNumDigits) const
+void SdrModel::TakeMetricStr(long nVal, XubString& rStr, FASTBOOL bNoUnitChars, sal_Int32 nNumDigits) const
 {
     // #i22167#
     // change to double precision usage to not loose decimal places after comma
@@ -1408,7 +1408,7 @@ void SdrModel::TakeMetricStr(long nVal, XubString& rStr, int bNoUnitChars, sal_I
         rStr += aUIUnitStr;
 }
 
-void SdrModel::TakeWinkStr(long nWink, XubString& rStr, int bNoDegChar) const
+void SdrModel::TakeWinkStr(long nWink, XubString& rStr, FASTBOOL bNoDegChar) const
 {
     sal_Bool bNeg(nWink < 0);
 
@@ -1436,7 +1436,7 @@ void SdrModel::TakeWinkStr(long nWink, XubString& rStr, int bNoDegChar) const
         rStr += DEGREE_CHAR;
 }
 
-void SdrModel::TakePercentStr(const Fraction& rVal, XubString& rStr, int bNoPercentChar) const
+void SdrModel::TakePercentStr(const Fraction& rVal, XubString& rStr, FASTBOOL bNoPercentChar) const
 {
     sal_Int32 nMul(rVal.GetNumerator());
     sal_Int32 nDiv(rVal.GetDenominator());
@@ -1469,7 +1469,7 @@ void SdrModel::SetChanged(sal_Bool bFlg)
     mbChanged = bFlg;
 }
 
-void SdrModel::RecalcPageNums(int bMaster)
+void SdrModel::RecalcPageNums(FASTBOOL bMaster)
 {
     Container& rPL=*(bMaster ? &maMaPag : &maPages);
     sal_uInt16 nAnz=sal_uInt16(rPL.Count());
@@ -1604,9 +1604,9 @@ void SdrModel::MoveMasterPage(sal_uInt16 nPgNum, sal_uInt16 nNewPos)
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-int SdrModel::CheckConsistence() const
+FASTBOOL SdrModel::CheckConsistence() const
 {
-    int bRet=sal_True;
+    FASTBOOL bRet=sal_True;
 #ifdef DBG_UTIL
     DBG_CHKTHIS(SdrModel,NULL);
 #endif
@@ -1618,7 +1618,7 @@ int SdrModel::CheckConsistence() const
 // #48289#
 void SdrModel::CopyPages(sal_uInt16 nFirstPageNum, sal_uInt16 nLastPageNum,
                          sal_uInt16 nDestPos,
-                         int bUndo, int bMoveNoCopy)
+                         FASTBOOL bUndo, FASTBOOL bMoveNoCopy)
 {
     if( bUndo && !IsUndoEnabled() )
         bUndo = false;
@@ -1635,7 +1635,7 @@ void SdrModel::CopyPages(sal_uInt16 nFirstPageNum, sal_uInt16 nLastPageNum,
         nFirstPageNum=nMaxPage;
     if (nLastPageNum>nMaxPage)
         nLastPageNum =nMaxPage;
-    int bReverse=nLastPageNum<nFirstPageNum;
+    FASTBOOL bReverse=nLastPageNum<nFirstPageNum;
     if (nDestPos>nPageAnz)
         nDestPos=nPageAnz;
 
@@ -1696,8 +1696,8 @@ void SdrModel::CopyPages(sal_uInt16 nFirstPageNum, sal_uInt16 nLastPageNum,
 void SdrModel::Merge(SdrModel& rSourceModel,
                      sal_uInt16 nFirstPageNum, sal_uInt16 nLastPageNum,
                      sal_uInt16 nDestPos,
-                     int bMergeMasterPages, int bAllMasterPages,
-                     int bUndo, int bTreadSourceAsConst)
+                     FASTBOOL bMergeMasterPages, FASTBOOL bAllMasterPages,
+                     FASTBOOL bUndo, FASTBOOL bTreadSourceAsConst)
 {
     if (&rSourceModel==this)
     { // #48289#
@@ -1714,11 +1714,11 @@ void SdrModel::Merge(SdrModel& rSourceModel,
     sal_uInt16 nSrcPageAnz=rSourceModel.GetPageCount();
     sal_uInt16 nSrcMasterPageAnz=rSourceModel.GetMasterPageCount();
     sal_uInt16 nDstMasterPageAnz=GetMasterPageCount();
-    int bInsPages=(nFirstPageNum<nSrcPageAnz || nLastPageNum<nSrcPageAnz);
+    FASTBOOL bInsPages=(nFirstPageNum<nSrcPageAnz || nLastPageNum<nSrcPageAnz);
     sal_uInt16 nMaxSrcPage=nSrcPageAnz; if (nMaxSrcPage!=0) nMaxSrcPage--;
     if (nFirstPageNum>nMaxSrcPage) nFirstPageNum=nMaxSrcPage;
     if (nLastPageNum>nMaxSrcPage)  nLastPageNum =nMaxSrcPage;
-    int bReverse=nLastPageNum<nFirstPageNum;
+    FASTBOOL bReverse=nLastPageNum<nFirstPageNum;
 
     sal_uInt16*   pMasterMap=NULL;
     int* pMasterNeed=NULL;
@@ -1729,9 +1729,9 @@ void SdrModel::Merge(SdrModel& rSourceModel,
         pMasterNeed=new int[nSrcMasterPageAnz];
         memset(pMasterMap,0xFF,nSrcMasterPageAnz*sizeof(sal_uInt16));
         if (bAllMasterPages) {
-            memset(pMasterNeed,sal_True,nSrcMasterPageAnz*sizeof(int));
+            memset(pMasterNeed,sal_True,nSrcMasterPageAnz*sizeof(FASTBOOL));
         } else {
-            memset(pMasterNeed,sal_False,nSrcMasterPageAnz*sizeof(int));
+            memset(pMasterNeed,sal_False,nSrcMasterPageAnz*sizeof(FASTBOOL));
             sal_uInt16 nAnf= bReverse ? nLastPageNum : nFirstPageNum;
             sal_uInt16 nEnd= bReverse ? nFirstPageNum : nLastPageNum;
             for (sal_uInt16 i=nAnf; i<=nEnd; i++) {
@@ -2024,9 +2024,9 @@ void SdrModel::ReformatAllTextObjects()
     ImpReformatAllTextObjects();
 }
 
-int SdrModel::HasTransparentObjects( sal_Bool bCheckForAlphaChannel ) const
+FASTBOOL SdrModel::HasTransparentObjects( sal_Bool bCheckForAlphaChannel ) const
 {
-    int bRet = sal_False;
+    FASTBOOL    bRet = sal_False;
     sal_uInt16      n, nCount;
 
     for( n = 0, nCount = GetMasterPageCount(); ( n < nCount ) && !bRet; n++ )

@@ -752,7 +752,7 @@ sdr::contact::ViewContact* SdrOle2Obj::CreateObjectSpecificViewContact()
 
 TYPEINIT1(SdrOle2Obj,SdrRectObj);
 DBG_NAME(SdrOle2Obj)
-SdrOle2Obj::SdrOle2Obj(int bFrame_) : m_bTypeAsked(false)
+SdrOle2Obj::SdrOle2Obj(FASTBOOL bFrame_) : m_bTypeAsked(false)
 ,m_bChart(false)
 {
     DBG_CTOR( SdrOle2Obj,NULL);
@@ -762,7 +762,7 @@ SdrOle2Obj::SdrOle2Obj(int bFrame_) : m_bTypeAsked(false)
 }
 
 // -----------------------------------------------------------------------------
-SdrOle2Obj::SdrOle2Obj( const svt::EmbeddedObjectRef& rNewObjRef, int bFrame_)
+SdrOle2Obj::SdrOle2Obj( const svt::EmbeddedObjectRef& rNewObjRef, FASTBOOL bFrame_)
     : xObjRef( rNewObjRef )
     , m_bTypeAsked(false)
     , m_bChart(false)
@@ -783,7 +783,7 @@ SdrOle2Obj::SdrOle2Obj( const svt::EmbeddedObjectRef& rNewObjRef, int bFrame_)
 
 // -----------------------------------------------------------------------------
 
-SdrOle2Obj::SdrOle2Obj( const svt::EmbeddedObjectRef& rNewObjRef, const XubString& rNewObjName, int bFrame_)
+SdrOle2Obj::SdrOle2Obj( const svt::EmbeddedObjectRef& rNewObjRef, const XubString& rNewObjName, FASTBOOL bFrame_)
     : xObjRef( rNewObjRef )
     , m_bTypeAsked(false)
     , m_bChart(false)
@@ -805,7 +805,7 @@ SdrOle2Obj::SdrOle2Obj( const svt::EmbeddedObjectRef& rNewObjRef, const XubStrin
 
 // -----------------------------------------------------------------------------
 
-SdrOle2Obj::SdrOle2Obj( const svt::EmbeddedObjectRef&  rNewObjRef, const XubString& rNewObjName, const Rectangle& rNewRect, int bFrame_)
+SdrOle2Obj::SdrOle2Obj( const svt::EmbeddedObjectRef&  rNewObjRef, const XubString& rNewObjName, const Rectangle& rNewRect, FASTBOOL bFrame_)
     : SdrRectObj(rNewRect)
     , xObjRef( rNewObjRef )
     , m_bTypeAsked(false)
@@ -911,7 +911,7 @@ void SdrOle2Obj::SetGraphic(const Graphic* pGrf)
 
 // -----------------------------------------------------------------------------
 
-int SdrOle2Obj::IsEmpty() const
+FASTBOOL SdrOle2Obj::IsEmpty() const
 {
     return !(xObjRef.is());
 }
@@ -1419,8 +1419,8 @@ void SdrOle2Obj::SetModel(SdrModel* pNewModel)
 
 void SdrOle2Obj::SetPage(SdrPage* pNewPage)
 {
-    int bRemove=pNewPage==NULL && pPage!=NULL;
-    int bInsert=pNewPage!=NULL && pPage==NULL;
+    FASTBOOL bRemove=pNewPage==NULL && pPage!=NULL;
+    FASTBOOL bInsert=pNewPage!=NULL && pPage==NULL;
 
     if (bRemove && mpImpl->mbConnected )
         Disconnect();

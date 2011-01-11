@@ -79,7 +79,7 @@ void SfxTemplateControllerItem::StateChanged( sal_uInt16 nSID, SfxItemState eSta
         case SID_STYLE_FAMILY4:
         case SID_STYLE_FAMILY5:
         {
-            int bAvailable = SFX_ITEM_AVAILABLE == eState;
+            bool bAvailable = SFX_ITEM_AVAILABLE == eState;
             if ( !bAvailable )
                 rTemplateDlg.SetFamilyState(GetId(), 0);
             else {

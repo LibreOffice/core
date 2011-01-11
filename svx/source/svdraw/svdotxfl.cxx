@@ -50,8 +50,8 @@ void SdrRegisterFieldClasses()
 
 ///////////////////////////////////////////////////////////////////////////////////////////////// */
 
-int SdrTextObj::CalcFieldValue(const SvxFieldItem& /*rField*/, sal_uInt16 /*nPara*/, sal_uInt16 /*nPos*/,
-    int /*bEdit*/,  Color*& /*rpTxtColor*/, Color*& /*rpFldColor*/, XubString& /*rRet*/) const
+FASTBOOL SdrTextObj::CalcFieldValue(const SvxFieldItem& /*rField*/, sal_uInt16 /*nPara*/, sal_uInt16 /*nPos*/,
+    FASTBOOL /*bEdit*/, Color*& /*rpTxtColor*/, Color*& /*rpFldColor*/, XubString& /*rRet*/) const
 {
     return sal_False;
 }

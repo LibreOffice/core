@@ -55,7 +55,7 @@ public:
     // Dieses Item nimmt sowohl metrische als auch
     // Prozentwerte ( sind negativ ) auf; das muessen
     // wir hier beruecksichtigen
-    SVX_DLLPRIVATE virtual int      HasMetrics() const;
+    SVX_DLLPRIVATE virtual FASTBOOL     HasMetrics() const;
 };
 
 /*************************************************************************
@@ -82,7 +82,7 @@ public:
     // Dieses Item nimmt sowohl metrische als auch
     // Prozentwerte ( sind negativ ) auf; das muessen
     // wir hier beruecksichtigen
-    SVX_DLLPRIVATE virtual int      HasMetrics() const;
+    SVX_DLLPRIVATE virtual FASTBOOL     HasMetrics() const;
 };
 
 #endif

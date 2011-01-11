@@ -473,8 +473,8 @@ Graphic SdrGrafObj::GetTransformedGraphic( sal_uIntPtr nTransformFlags ) const
         if( bMirror )
         {
             sal_uInt16      nMirrorCase = ( aGeo.nDrehWink == 18000 ) ? ( bMirrored ? 3 : 4 ) : ( bMirrored ? 2 : 1 );
-            int bHMirr = nMirrorCase == 2 || nMirrorCase == 4;
-            int bVMirr = nMirrorCase == 3 || nMirrorCase == 4;
+            FASTBOOL    bHMirr = nMirrorCase == 2 || nMirrorCase == 4;
+            FASTBOOL    bVMirr = nMirrorCase == 3 || nMirrorCase == 4;
 
             aActAttr.SetMirrorFlags( ( bHMirr ? BMP_MIRROR_HORZ : 0 ) | ( bVMirr ? BMP_MIRROR_VERT : 0 ) );
         }
@@ -657,8 +657,8 @@ void SdrGrafObj::ReleaseGraphicLink()
 
 void SdrGrafObj::TakeObjInfo(SdrObjTransformInfoRec& rInfo) const
 {
-    int bAnim = pGraphic->IsAnimated();
-    int bNoPresGrf = ( pGraphic->GetType() != GRAPHIC_NONE ) && !bEmptyPresObj;
+    FASTBOOL bAnim = pGraphic->IsAnimated();
+    FASTBOOL bNoPresGrf = ( pGraphic->GetType() != GRAPHIC_NONE ) && !bEmptyPresObj;
 
     rInfo.bResizeFreeAllowed = aGeo.nDrehWink % 9000 == 0 ||
                                aGeo.nDrehWink % 18000 == 0 ||
@@ -884,8 +884,8 @@ void SdrGrafObj::NbcResize(const Point& rRef, const Fraction& xFact, const Fract
 {
     SdrRectObj::NbcResize( rRef, xFact, yFact );
 
-    int bMirrX = xFact.GetNumerator() < 0;
-    int bMirrY = yFact.GetNumerator() < 0;
+    FASTBOOL bMirrX = xFact.GetNumerator() < 0;
+    FASTBOOL bMirrY = yFact.GetNumerator() < 0;
 
     if( bMirrX != bMirrY )
         bMirrored = !bMirrored;
@@ -908,7 +908,7 @@ void SdrGrafObj::NbcMirror(const Point& rRef1, const Point& rRef2)
 
 // -----------------------------------------------------------------------------
 
-void SdrGrafObj::NbcShear(const Point& rRef, long nWink, double tn, int bVShear)
+void SdrGrafObj::NbcShear(const Point& rRef, long nWink, double tn, FASTBOOL bVShear)
 {
     SdrRectObj::NbcRotate( rRef, nWink, tn, bVShear );
 }
@@ -962,8 +962,8 @@ void SdrGrafObj::RestGeoData(const SdrObjGeoData& rGeo)
 
 void SdrGrafObj::SetPage( SdrPage* pNewPage )
 {
-    int bRemove = pNewPage == NULL && pPage != NULL;
-    int bInsert = pNewPage != NULL && pPage == NULL;
+    FASTBOOL bRemove = pNewPage == NULL && pPage != NULL;
+    FASTBOOL bInsert = pNewPage != NULL && pPage == NULL;
 
     if( bRemove )
     {
@@ -985,7 +985,7 @@ void SdrGrafObj::SetPage( SdrPage* pNewPage )
 
 void SdrGrafObj::SetModel( SdrModel* pNewModel )
 {
-    int bChg = pNewModel != pModel;
+    FASTBOOL bChg = pNewModel != pModel;
 
     if( bChg )
     {
@@ -1026,7 +1026,7 @@ void SdrGrafObj::StopAnimation(OutputDevice* /*pOutDev*/, long /*nExtraData*/)
 
 // -----------------------------------------------------------------------------
 
-int SdrGrafObj::HasGDIMetaFile() const
+FASTBOOL SdrGrafObj::HasGDIMetaFile() const
 {
     return( pGraphic->GetType() == GRAPHIC_GDIMETAFILE );
 }

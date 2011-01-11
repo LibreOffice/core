@@ -275,17 +275,17 @@ struct ImpMeasureRec : public SdrDragStatUserData
     long                        nHelplineDist;
     long                        nHelpline1Len;
     long                        nHelpline2Len;
-    int                 bBelowRefEdge;
-    int                 bTextRota90;
-    int                 bTextUpsideDown;
+    FASTBOOL                    bBelowRefEdge;
+    FASTBOOL                    bTextRota90;
+    FASTBOOL                    bTextUpsideDown;
     long                        nMeasureOverhang;
     FieldUnit                   eMeasureUnit;
     Fraction                    aMeasureScale;
-    int                 bShowUnit;
+    FASTBOOL                    bShowUnit;
     String                      aFormatString;
-    int                 bTextAutoAngle;
+    FASTBOOL                    bTextAutoAngle;
     long                        nTextAutoAngleView;
-    int                 bTextIsFixedAngle;
+    FASTBOOL                    bTextIsFixedAngle;
     long                        nTextFixedAngle;
 };
 
@@ -321,11 +321,11 @@ struct ImpMeasurePoly
     long                        nArrow1Wdt; // Breite des 1. Pfeils
     long                        nArrow2Wdt; // Breite des 2. Pfeils
     long                        nShortLineLen; // Linienlaenge, wenn PfeileAussen
-    int                 bArrow1Center; // Pfeil 1 zentriert?
-    int                 bArrow2Center; // Pfeil 2 zentriert?
-    int                 bAutoUpsideDown; // UpsideDown durch Automatik
-    int                 bPfeileAussen;
-    int                 bBreakedLine;
+    FASTBOOL                    bArrow1Center; // Pfeil 1 zentriert?
+    FASTBOOL                    bArrow2Center; // Pfeil 2 zentriert?
+    FASTBOOL                    bAutoUpsideDown; // UpsideDown durch Automatik
+    FASTBOOL                    bPfeileAussen;
+    FASTBOOL                    bBreakedLine;
 };
 
 void SdrMeasureObj::ImpTakeAttr(ImpMeasureRec& rRec) const
@@ -389,7 +389,7 @@ void SdrMeasureObj::ImpCalcGeometrics(const ImpMeasureRec& rRec, ImpMeasurePoly&
     rPol.nArrow2Wdt=0;
     long nArrowNeed=0;
     long nShortLen=0;
-    int bPfeileAussen=sal_False;
+    FASTBOOL bPfeileAussen=sal_False;
 
     const SfxItemSet& rSet = GetObjectItemSet();
     sal_Int32 nLineWdt = ((XLineWidthItem&)(rSet.Get(XATTR_LINEWIDTH))).GetValue(); // Strichstaerke
@@ -419,7 +419,7 @@ void SdrMeasureObj::ImpCalcGeometrics(const ImpMeasureRec& rRec, ImpMeasurePoly&
     rPol.eUsedTextHPos=rRec.eWantTextHPos;
     rPol.eUsedTextVPos=rRec.eWantTextVPos;
     if (rPol.eUsedTextVPos==SDRMEASURE_TEXTVAUTO) rPol.eUsedTextVPos=SDRMEASURE_ABOVE;
-    int bBrkLine=rPol.eUsedTextVPos==SDRMEASURETEXT_BREAKEDLINE;
+    FASTBOOL bBrkLine=rPol.eUsedTextVPos==SDRMEASURETEXT_BREAKEDLINE;
     if (rPol.eUsedTextVPos==SDRMEASURETEXT_VERTICALCENTERED)
     {
         OutlinerParaObject* pOutlinerParaObject = SdrTextObj::GetOutlinerParaObject();
@@ -430,7 +430,7 @@ void SdrMeasureObj::ImpCalcGeometrics(const ImpMeasureRec& rRec, ImpMeasurePoly&
     }
     rPol.bBreakedLine=bBrkLine;
     if (rPol.eUsedTextHPos==SDRMEASURE_TEXTHAUTO) { // bei zu breitem Text diesen eventuell nach aussen schieben
-        int bOutside=sal_False;
+        FASTBOOL bOutside=sal_False;
         long nNeedSiz=!rRec.bTextRota90 ? rPol.aTextSize.Width() : rPol.aTextSize.Height();
         if (nNeedSiz>rPol.nLineLen) bOutside=sal_True; // Text passt nicht in die Mitte
         if (bBrkLine) {
@@ -581,8 +581,8 @@ basegfx::B2DPolyPolygon SdrMeasureObj::ImpCalcXPoly(const ImpMeasurePoly& rPol) 
     return aRetval;
 }
 
-int SdrMeasureObj::CalcFieldValue(const SvxFieldItem& rField, sal_uInt16 nPara, sal_uInt16 nPos,
-    int bEdit,
+FASTBOOL SdrMeasureObj::CalcFieldValue(const SvxFieldItem& rField, sal_uInt16 nPara, sal_uInt16 nPos,
+    FASTBOOL bEdit,
     Color*& rpTxtColor, Color*& rpFldColor, XubString& rRet) const
 {
     const SvxFieldData* pField=rField.GetField();
@@ -667,9 +667,9 @@ void SdrMeasureObj::TakeUnrotatedSnapRect(Rectangle& rRect) const
     }
 
     Point aTextPos;
-    int bRota90=aRec.bTextRota90;
-    int bUpsideDown=aRec.bTextUpsideDown!=aMPol.bAutoUpsideDown;
-    int bBelowRefEdge=aRec.bBelowRefEdge;
+    FASTBOOL bRota90=aRec.bTextRota90;
+    FASTBOOL bUpsideDown=aRec.bTextUpsideDown!=aMPol.bAutoUpsideDown;
+    FASTBOOL bBelowRefEdge=aRec.bBelowRefEdge;
     SdrMeasureTextHPos eMH=aMPol.eUsedTextHPos;
     SdrMeasureTextVPos eMV=aMPol.eUsedTextVPos;
     if (!bRota90) {
@@ -910,9 +910,9 @@ void SdrMeasureObj::ImpEvalDrag(ImpMeasureRec& rRec, const SdrDragStat& rDrag) c
 
     const SdrHdl* pHdl=rDrag.GetHdl();
     sal_uInt32 nHdlNum(pHdl->GetObjHdlNum());
-    int bOrtho=rDrag.GetView()!=NULL && rDrag.GetView()->IsOrtho();
-    int bBigOrtho=bOrtho && rDrag.GetView()->IsBigOrtho();
-    int bBelow=rRec.bBelowRefEdge;
+    FASTBOOL bOrtho=rDrag.GetView()!=NULL && rDrag.GetView()->IsOrtho();
+    FASTBOOL bBigOrtho=bOrtho && rDrag.GetView()->IsBigOrtho();
+    FASTBOOL bBelow=rRec.bBelowRefEdge;
     Point aPt(rDrag.GetNow());
 
     switch (nHdlNum) {
@@ -929,22 +929,22 @@ void SdrMeasureObj::ImpEvalDrag(ImpMeasureRec& rRec, const SdrDragStat& rDrag) c
             if (bOrtho) rRec.nHelpline1Len=rRec.nHelpline2Len;
         } break;
         case 2: case 3: {
-            int bAnf=nHdlNum==2;
+            FASTBOOL bAnf=nHdlNum==2;
             Point& rMov=bAnf ? rRec.aPt1 : rRec.aPt2;
             Point aMov(rMov);
             Point aFix(bAnf ? rRec.aPt2 : rRec.aPt1);
             if (bOrtho) {
                 long ndx0=aMov.X()-aFix.X();
                 long ndy0=aMov.Y()-aFix.Y();
-                int bHLin=ndy0==0;
-                int bVLin=ndx0==0;
+                FASTBOOL bHLin=ndy0==0;
+                FASTBOOL bVLin=ndx0==0;
                 if (!bHLin || !bVLin) { // sonst ist aPt1==aPt2
                     long ndx=aPt.X()-aFix.X();
                     long ndy=aPt.Y()-aFix.Y();
                     double nXFact=0; if (!bVLin) nXFact=(double)ndx/(double)ndx0;
                     double nYFact=0; if (!bHLin) nYFact=(double)ndy/(double)ndy0;
-                    int bHor=bHLin || (!bVLin && (nXFact>nYFact) ==bBigOrtho);
-                    int bVer=bVLin || (!bHLin && (nXFact<=nYFact)==bBigOrtho);
+                    FASTBOOL bHor=bHLin || (!bVLin && (nXFact>nYFact) ==bBigOrtho);
+                    FASTBOOL bVer=bVLin || (!bHLin && (nXFact<=nYFact)==bBigOrtho);
                     if (bHor) ndy=long(ndy0*nXFact);
                     if (bVer) ndx=long(ndx0*nYFact);
                     aPt=aFix;
@@ -971,7 +971,7 @@ void SdrMeasureObj::ImpEvalDrag(ImpMeasureRec& rRec, const SdrDragStat& rDrag) c
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-int SdrMeasureObj::BegCreate(SdrDragStat& rStat)
+FASTBOOL SdrMeasureObj::BegCreate(SdrDragStat& rStat)
 {
     rStat.SetOrtho8Possible();
     aPt1=rStat.GetStart();
@@ -980,7 +980,7 @@ int SdrMeasureObj::BegCreate(SdrDragStat& rStat)
     return sal_True;
 }
 
-int SdrMeasureObj::MovCreate(SdrDragStat& rStat)
+FASTBOOL SdrMeasureObj::MovCreate(SdrDragStat& rStat)
 {
     SdrView* pView=rStat.GetView();
     aPt1=rStat.GetStart();
@@ -995,14 +995,14 @@ int SdrMeasureObj::MovCreate(SdrDragStat& rStat)
     return sal_True;
 }
 
-int SdrMeasureObj::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
+FASTBOOL SdrMeasureObj::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
 {
     SetTextDirty();
     SetRectsDirty();
     return (eCmd==SDRCREATE_FORCEEND || rStat.GetPointAnz()>=2);
 }
 
-int SdrMeasureObj::BckCreate(SdrDragStat& /*rStat*/)
+FASTBOOL SdrMeasureObj::BckCreate(SdrDragStat& /*rStat*/)
 {
     return sal_False;
 }
@@ -1073,7 +1073,7 @@ void SdrMeasureObj::NbcMirror(const Point& rRef1, const Point& rRef2)
     SetRectsDirty();
 }
 
-void SdrMeasureObj::NbcShear(const Point& rRef, long nWink, double tn, int bVShear)
+void SdrMeasureObj::NbcShear(const Point& rRef, long nWink, double tn, FASTBOOL bVShear)
 {
     SdrTextObj::NbcShear(rRef,nWink,tn,bVShear);
     ShearPoint(aPt1,rRef,tn,bVShear);
@@ -1298,7 +1298,7 @@ void SdrMeasureObj::NbcSetOutlinerParaObject(OutlinerParaObject* pTextObject)
         SetTextDirty(); // Text neu berechnen!
 }
 
-void SdrMeasureObj::TakeTextRect( SdrOutliner& rOutliner, Rectangle& rTextRect, int bNoEditText,
+void SdrMeasureObj::TakeTextRect( SdrOutliner& rOutliner, Rectangle& rTextRect, FASTBOOL bNoEditText,
     Rectangle* pAnchorRect, sal_Bool bLineWidth ) const
 {
     if (bTextDirty) UndirtyText();
@@ -1329,9 +1329,9 @@ sal_uInt16 SdrMeasureObj::GetOutlinerViewAnchorMode() const
     SdrTextVertAdjust eTV=GetTextVerticalAdjust();
     SdrMeasureTextHPos eMH=aMPol.eUsedTextHPos;
     SdrMeasureTextVPos eMV=aMPol.eUsedTextVPos;
-    int bTextRota90=aRec.bTextRota90;
+    FASTBOOL bTextRota90=aRec.bTextRota90;
     //int bTextUpsideDown=aRec.bTextUpsideDown;
-    int bBelowRefEdge=aRec.bBelowRefEdge;
+    FASTBOOL bBelowRefEdge=aRec.bBelowRefEdge;
 
     // bTextUpsideDown muss hier noch ausgewertet werden!!!!
     if (!bTextRota90) {

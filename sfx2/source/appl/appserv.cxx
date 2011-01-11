@@ -157,7 +157,7 @@ long QuitAgain_Impl( void* pObj, void* pArg )
 void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
 {
     DBG_MEMTEST();
-    int bDone = sal_False;
+    bool bDone = sal_False;
     switch ( rReq.GetSlot() )
     {
         case SID_SETOPTIONS:

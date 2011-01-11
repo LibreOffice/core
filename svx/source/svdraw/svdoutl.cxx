@@ -111,7 +111,7 @@ void SdrOutliner::SetTextObjNoInit( const SdrTextObj* pObj )
 XubString SdrOutliner::CalcFieldValue(const SvxFieldItem& rField, sal_uInt16 nPara, sal_uInt16 nPos,
                                      Color*& rpTxtColor, Color*& rpFldColor)
 {
-    int bOk = sal_False;
+    FASTBOOL bOk = sal_False;
     XubString aRet;
 
     if(mpTextObj.is())

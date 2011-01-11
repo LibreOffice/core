@@ -126,11 +126,11 @@ SfxMacroStatement::SfxMacroStatement
         return;
 /*
     // Objekt-Typ bestimmen
-    int bIsApp = rShell.ISA(SfxApplication);
-    int bIsDoc = rShell.ISA(SfxObjectShell);
-    int bIsWin = !bIsApp && !bIsDoc &&
+    bool bIsApp = rShell.ISA(SfxApplication);
+    bool bIsDoc = rShell.ISA(SfxObjectShell);
+    bool bIsWin = !bIsApp && !bIsDoc &&
                       ( rShell.ISA(SfxViewShell) || rShell.ISA(SfxViewFrame) );
-    int bIsSel = !bIsApp && !bIsDoc && !bIsWin;
+    bool bIsSel = !bIsApp && !bIsDoc && !bIsWin;
 
     // Objekt nicht schon im Slot-Namen enthalten?
     if ( bIsSel || rSlot.pName[0] == '.' )
@@ -387,7 +387,7 @@ void SfxMacroStatement::GenerateNameAndArgs_Impl
                 }
 
                 // nicht druckbare Zeichen werden als chr$(...) geschrieben
-                int bPrevReplaced = sal_False;
+                bool bPrevReplaced = sal_False;
                 for ( sal_uInt16 n = 0; n < aRecordable.Len(); ++n )
                 {
                     sal_Unicode cChar = aRecordable.GetChar(n);

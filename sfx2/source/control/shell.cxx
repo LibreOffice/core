@@ -853,7 +853,7 @@ ResMgr* SfxShell::GetResMgr() const
 
 //--------------------------------------------------------------------
 
-int SfxShell::CanExecuteSlot_Impl( const SfxSlot &rSlot )
+bool SfxShell::CanExecuteSlot_Impl( const SfxSlot &rSlot )
 
 /*  [Beschreibung]
 

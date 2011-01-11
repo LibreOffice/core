@@ -254,7 +254,7 @@ public:
     virtual void                ApplyItemSet( sal_uInt16 nId, const SfxItemSet& rSet );
 
 #ifndef _SFXSH_HXX
-    SAL_DLLPRIVATE int     CanExecuteSlot_Impl( const SfxSlot &rSlot );
+    SAL_DLLPRIVATE bool     CanExecuteSlot_Impl( const SfxSlot &rSlot );
     SAL_DLLPRIVATE void DoActivate_Impl( SfxViewFrame *pFrame, sal_Bool bMDI);
     SAL_DLLPRIVATE void DoDeactivate_Impl( SfxViewFrame *pFrame, sal_Bool bMDI);
 #endif

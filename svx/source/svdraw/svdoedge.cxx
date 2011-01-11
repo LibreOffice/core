@@ -76,9 +76,9 @@ void SdrObjConnection::ResetVars()
     bAutoCorner=sal_False;
 }
 
-int SdrObjConnection::TakeGluePoint(SdrGluePoint& rGP, int bSetAbsPos) const
+FASTBOOL SdrObjConnection::TakeGluePoint(SdrGluePoint& rGP, FASTBOOL bSetAbsPos) const
 {
-    int bRet=sal_False;
+    FASTBOOL bRet=sal_False;
     if (pObj!=NULL) { // Ein Obj muss schon angedockt sein!
         if (bAutoVertex) {
             rGP=pObj->GetVertexGluePoint(nConId);
@@ -129,10 +129,10 @@ sal_uInt16 SdrEdgeInfoRec::ImpGetPolyIdx(SdrEdgeLineCode eLineCode, const XPolyg
     return 0;
 }
 
-int SdrEdgeInfoRec::ImpIsHorzLine(SdrEdgeLineCode eLineCode, const XPolygon& rXP) const
+FASTBOOL SdrEdgeInfoRec::ImpIsHorzLine(SdrEdgeLineCode eLineCode, const XPolygon& rXP) const
 {
     sal_uInt16 nIdx=ImpGetPolyIdx(eLineCode,rXP);
-    int bHorz=nAngle1==0 || nAngle1==18000;
+    FASTBOOL bHorz=nAngle1==0 || nAngle1==18000;
     if (eLineCode==OBJ2LINE2 || eLineCode==OBJ2LINE3) {
         nIdx=rXP.GetPointCount()-nIdx; // #36314#
         bHorz=nAngle2==0 || nAngle2==18000; // #52000#
@@ -373,7 +373,7 @@ void SdrEdgeObj::TakeObjInfo(SdrObjTransformInfoRec& rInfo) const
     rInfo.bGradientAllowed = sal_False;
     rInfo.bShearAllowed     =sal_False;
     rInfo.bEdgeRadiusAllowed=sal_False;
-    int bCanConv=!HasText() || ImpCanConvTextToCurve();
+    FASTBOOL bCanConv=!HasText() || ImpCanConvTextToCurve();
     rInfo.bCanConvToPath=bCanConv;
     rInfo.bCanConvToPoly=bCanConv;
     rInfo.bCanConvToContour = (rInfo.bCanConvToPoly || LineGeometryUsageIsNecessary());
@@ -414,7 +414,7 @@ void SdrEdgeObj::TakeUnrotatedSnapRect(Rectangle& rRect) const
     rRect=GetSnapRect();
 }
 
-int SdrEdgeObj::IsNode() const
+FASTBOOL SdrEdgeObj::IsNode() const
 {
     return sal_True;
 }
@@ -462,12 +462,12 @@ SdrGluePointList* SdrEdgeObj::ForceGluePointList()
     return NULL; // Keine benutzerdefinierten Klebepunkte fuer Verbinder #31671#
 }
 
-int SdrEdgeObj::IsEdge() const
+FASTBOOL SdrEdgeObj::IsEdge() const
 {
     return sal_True;
 }
 
-void SdrEdgeObj::ConnectToNode(int bTail1, SdrObject* pObj)
+void SdrEdgeObj::ConnectToNode(FASTBOOL bTail1, SdrObject* pObj)
 {
     SdrObjConnection& rCon=GetConnection(bTail1);
     DisconnectFromNode(bTail1);
@@ -478,7 +478,7 @@ void SdrEdgeObj::ConnectToNode(int bTail1, SdrObject* pObj)
     }
 }
 
-void SdrEdgeObj::DisconnectFromNode(int bTail1)
+void SdrEdgeObj::DisconnectFromNode(FASTBOOL bTail1)
 {
     SdrObjConnection& rCon=GetConnection(bTail1);
     if (rCon.pObj!=NULL) {
@@ -487,16 +487,16 @@ void SdrEdgeObj::DisconnectFromNode(int bTail1)
     }
 }
 
-SdrObject* SdrEdgeObj::GetConnectedNode(int bTail1) const
+SdrObject* SdrEdgeObj::GetConnectedNode(FASTBOOL bTail1) const
 {
     SdrObject* pObj=GetConnection(bTail1).pObj;
     if (pObj!=NULL && (pObj->GetPage()!=pPage || !pObj->IsInserted())) pObj=NULL;
     return pObj;
 }
 
-int SdrEdgeObj::CheckNodeConnection(int bTail1) const
+FASTBOOL SdrEdgeObj::CheckNodeConnection(FASTBOOL bTail1) const
 {
-    int bRet=sal_False;
+    FASTBOOL bRet=sal_False;
     const SdrObjConnection& rCon=GetConnection(bTail1);
     sal_uInt16 nPtAnz=pEdgeTrack->GetPointCount();
     if (rCon.pObj!=NULL && rCon.pObj->GetPage()==pPage && nPtAnz!=0) {
@@ -519,7 +519,7 @@ int SdrEdgeObj::CheckNodeConnection(int bTail1) const
     return bRet;
 }
 
-void SdrEdgeObj::ImpSetTailPoint(int bTail1, const Point& rPt)
+void SdrEdgeObj::ImpSetTailPoint(FASTBOOL bTail1, const Point& rPt)
 {
     sal_uInt16 nPtAnz=pEdgeTrack->GetPointCount();
     if (nPtAnz==0) {
@@ -605,11 +605,11 @@ sal_uInt16 SdrEdgeObj::ImpCalcEscAngle(SdrObject* pObj, const Point& rPt) const
     long dyo=rPt.Y()-aR.Top();
     long dxr=aR.Right()-rPt.X();
     long dyu=aR.Bottom()-rPt.Y();
-    int bxMitt=Abs(dxl-dxr)<2;
-    int byMitt=Abs(dyo-dyu)<2;
+    FASTBOOL bxMitt=Abs(dxl-dxr)<2;
+    FASTBOOL byMitt=Abs(dyo-dyu)<2;
     long dx=Min(dxl,dxr);
     long dy=Min(dyo,dyu);
-    int bDiag=Abs(dx-dy)<2;
+    FASTBOOL bDiag=Abs(dx-dy)<2;
     if (bxMitt && byMitt) return SDRESC_ALL; // In der Mitte
     if (bDiag) {  // diagonal
         sal_uInt16 nRet=0;
@@ -635,7 +635,7 @@ sal_uInt16 SdrEdgeObj::ImpCalcEscAngle(SdrObject* pObj, const Point& rPt) const
     }
 }
 
-int SdrEdgeObj::ImpStripPolyPoints(XPolygon& /*rXP*/) const
+FASTBOOL SdrEdgeObj::ImpStripPolyPoints(XPolygon& /*rXP*/) const
 {
     // fehlende Implementation !!!
     return sal_False;
@@ -645,10 +645,10 @@ XPolygon SdrEdgeObj::ImpCalcObjToCenter(const Point& rStPt, long nEscAngle, cons
 {
     XPolygon aXP;
     aXP.Insert(XPOLY_APPEND,rStPt,XPOLY_NORMAL);
-    int bRts=nEscAngle==0;
-    int bObn=nEscAngle==9000;
-    int bLks=nEscAngle==18000;
-    int bUnt=nEscAngle==27000;
+    FASTBOOL bRts=nEscAngle==0;
+    FASTBOOL bObn=nEscAngle==9000;
+    FASTBOOL bLks=nEscAngle==18000;
+    FASTBOOL bUnt=nEscAngle==27000;
 
     Point aP1(rStPt); // erstmal den Pflichtabstand
     if (bLks) aP1.X()=rRect.Left();
@@ -656,7 +656,7 @@ XPolygon SdrEdgeObj::ImpCalcObjToCenter(const Point& rStPt, long nEscAngle, cons
     if (bObn) aP1.Y()=rRect.Top();
     if (bUnt) aP1.Y()=rRect.Bottom();
 
-    int bFinish=sal_False;
+    FASTBOOL bFinish=sal_False;
     if (!bFinish) {
         Point aP2(aP1); // Und nun den Pflichtabstand ggf. bis auf Meetinghoehe erweitern
         if (bLks && rMeeting.X()<=aP2.X()) aP2.X()=rMeeting.X();
@@ -724,8 +724,8 @@ XPolygon SdrEdgeObj::ImpCalcEdgeTrack(const XPolygon& rTrack0, SdrObjConnection&
             aPt2=aOutRect.BottomRight();
         }
     }
-    int bCon1=rCon1.pObj!=NULL && rCon1.pObj->GetPage()==pPage && rCon1.pObj->IsInserted();
-    int bCon2=rCon2.pObj!=NULL && rCon2.pObj->GetPage()==pPage && rCon2.pObj->IsInserted();
+    FASTBOOL bCon1=rCon1.pObj!=NULL && rCon1.pObj->GetPage()==pPage && rCon1.pObj->IsInserted();
+    FASTBOOL bCon2=rCon2.pObj!=NULL && rCon2.pObj->GetPage()==pPage && rCon2.pObj->IsInserted();
     const SfxItemSet& rSet = GetObjectItemSet();
 
     if (bCon1) {
@@ -779,8 +779,8 @@ XPolygon SdrEdgeObj::ImpCalcEdgeTrack(const XPolygon& rTrack0, SdrObjConnection&
     XPolygon aBestXP;
     sal_uIntPtr nBestQual=0xFFFFFFFF;
     SdrEdgeInfoRec aBestInfo;
-    int bAuto1=bCon1 && rCon1.bBestVertex;
-    int bAuto2=bCon2 && rCon2.bBestVertex;
+    FASTBOOL bAuto1=bCon1 && rCon1.bBestVertex;
+    FASTBOOL bAuto2=bCon2 && rCon2.bBestVertex;
     if (bAuto1) rCon1.bAutoVertex=sal_True;
     if (bAuto2) rCon2.bAutoVertex=sal_True;
     sal_uInt16 nBestAuto1=0;
@@ -833,19 +833,19 @@ XPolygon SdrEdgeObj::ImpCalcEdgeTrack(const Point& rPt1, long nAngle1, const Rec
     sal_uIntPtr* pnQuality, SdrEdgeInfoRec* pInfo) const
 {
     SdrEdgeKind eKind=((SdrEdgeKindItem&)(GetObjectItem(SDRATTR_EDGEKIND))).GetValue();
-    int bRts1=nAngle1==0;
-    int bObn1=nAngle1==9000;
-    int bLks1=nAngle1==18000;
-    int bUnt1=nAngle1==27000;
-    int bHor1=bLks1 || bRts1;
-    int bVer1=bObn1 || bUnt1;
-    int bRts2=nAngle2==0;
-    int bObn2=nAngle2==9000;
-    int bLks2=nAngle2==18000;
-    int bUnt2=nAngle2==27000;
-    int bHor2=bLks2 || bRts2;
-    int bVer2=bObn2 || bUnt2;
-    int bInfo=pInfo!=NULL;
+    FASTBOOL bRts1=nAngle1==0;
+    FASTBOOL bObn1=nAngle1==9000;
+    FASTBOOL bLks1=nAngle1==18000;
+    FASTBOOL bUnt1=nAngle1==27000;
+    FASTBOOL bHor1=bLks1 || bRts1;
+    FASTBOOL bVer1=bObn1 || bUnt1;
+    FASTBOOL bRts2=nAngle2==0;
+    FASTBOOL bObn2=nAngle2==9000;
+    FASTBOOL bLks2=nAngle2==18000;
+    FASTBOOL bUnt2=nAngle2==27000;
+    FASTBOOL bHor2=bLks2 || bRts2;
+    FASTBOOL bVer2=bObn2 || bUnt2;
+    FASTBOOL bInfo=pInfo!=NULL;
     if (bInfo) {
         pInfo->cOrthoForm=0;
         pInfo->nAngle1=nAngle1;
@@ -861,8 +861,8 @@ XPolygon SdrEdgeObj::ImpCalcEdgeTrack(const Point& rPt1, long nAngle1, const Rec
     Rectangle aBewareRect1(rBewareRect1);
     Rectangle aBewareRect2(rBewareRect2);
     Point aMeeting((aPt1.X()+aPt2.X()+1)/2,(aPt1.Y()+aPt2.Y()+1)/2);
-    int bMeetingXMid=sal_True;
-    int bMeetingYMid=sal_True;
+    FASTBOOL bMeetingXMid=sal_True;
+    FASTBOOL bMeetingYMid=sal_True;
     if (eKind==SDREDGE_ONELINE) {
         XPolygon aXP(2);
         aXP[0]=rPt1;
@@ -908,7 +908,7 @@ XPolygon SdrEdgeObj::ImpCalcEdgeTrack(const Point& rPt1, long nAngle1, const Rec
         return aXP;
     }
     sal_uInt16 nIntersections=0;
-    int bForceMeeting=sal_False; // Muss die Linie durch den MeetingPoint laufen?
+    FASTBOOL bForceMeeting=sal_False; // Muss die Linie durch den MeetingPoint laufen?
     {
         Point aC1(aBewareRect1.Center());
         Point aC2(aBewareRect2.Center());
@@ -948,7 +948,7 @@ XPolygon SdrEdgeObj::ImpCalcEdgeTrack(const Point& rPt1, long nAngle1, const Rec
         long nYMax=Max(aBewareRect1.Bottom(),aBewareRect2.Bottom());
         //int bBoundOverlap=aBoundRect1.Right()>aBoundRect2.Left() && aBoundRect1.Left()<aBoundRect2.Right() &&
                                aBoundRect1.Bottom()>aBoundRect2.Top() && aBoundRect1.Top()<aBoundRect2.Bottom();
-        int bBewareOverlap=aBewareRect1.Right()>aBewareRect2.Left() && aBewareRect1.Left()<aBewareRect2.Right() &&
+        FASTBOOL bBewareOverlap=aBewareRect1.Right()>aBewareRect2.Left() && aBewareRect1.Left()<aBewareRect2.Right() &&
                                 aBewareRect1.Bottom()>aBewareRect2.Top() && aBewareRect1.Top()<aBewareRect2.Bottom();
         unsigned nMainCase=3;
         if (nAngle1==nAngle2) nMainCase=1;
@@ -957,10 +957,10 @@ XPolygon SdrEdgeObj::ImpCalcEdgeTrack(const Point& rPt1, long nAngle1, const Rec
             if (bVer1) aMeeting.X()=(aPt1.X()+aPt2.X()+1)/2; // ist hier besser, als der
             if (bHor1) aMeeting.Y()=(aPt1.Y()+aPt2.Y()+1)/2; // Mittelpunkt des Freiraums
             // bX1Ok bedeutet, dass die Vertikale, die aus Obj1 austritt, keinen Konflikt mit Obj2 bildet, ...
-            int bX1Ok=aPt1.X()<=aBewareRect2.Left() || aPt1.X()>=aBewareRect2.Right();
-            int bX2Ok=aPt2.X()<=aBewareRect1.Left() || aPt2.X()>=aBewareRect1.Right();
-            int bY1Ok=aPt1.Y()<=aBewareRect2.Top() || aPt1.Y()>=aBewareRect2.Bottom();
-            int bY2Ok=aPt2.Y()<=aBewareRect1.Top() || aPt2.Y()>=aBewareRect1.Bottom();
+            FASTBOOL bX1Ok=aPt1.X()<=aBewareRect2.Left() || aPt1.X()>=aBewareRect2.Right();
+            FASTBOOL bX2Ok=aPt2.X()<=aBewareRect1.Left() || aPt2.X()>=aBewareRect1.Right();
+            FASTBOOL bY1Ok=aPt1.Y()<=aBewareRect2.Top() || aPt1.Y()>=aBewareRect2.Bottom();
+            FASTBOOL bY2Ok=aPt2.Y()<=aBewareRect1.Top() || aPt2.Y()>=aBewareRect1.Bottom();
             if (bLks1 && (bY1Ok || aBewareRect1.Left()<aBewareRect2.Right()) && (bY2Ok || aBewareRect2.Left()<aBewareRect1.Right())) {
                 aMeeting.X()=nXMin;
                 bMeetingXMid=sal_False;
@@ -1019,8 +1019,8 @@ XPolygon SdrEdgeObj::ImpCalcEdgeTrack(const Point& rPt1, long nAngle1, const Rec
                         // Ueberschneidung der BewareRects ohne Ueberschneidung der
                         // Boundrects wenn die Linienaustritte sonst das BewareRect
                         // des jeweils anderen Objekts verletzen wuerden.
-                        int bCase29Direct=sal_False;
-                        int bCase29=aBewR1.Right()>aBewR2.Left();
+                        FASTBOOL bCase29Direct=sal_False;
+                        FASTBOOL bCase29=aBewR1.Right()>aBewR2.Left();
                         if (aBndR1.Right()<=aBndR2.Left()) { // Fall 2.9 und keine Boundrectueberschneidung
                             if ((aPt1.Y()>aBewareRect2.Top() && aPt1.Y()<aBewareRect2.Bottom()) ||
                                 (aPt2.Y()>aBewareRect1.Top() && aPt2.Y()<aBewareRect1.Bottom())) {
@@ -1028,7 +1028,7 @@ XPolygon SdrEdgeObj::ImpCalcEdgeTrack(const Point& rPt1, long nAngle1, const Rec
                             }
                         }
                         if (!bCase29Direct) {
-                            int bObenLang=Abs(nYMin-aMeeting.Y())<=Abs(nYMax-aMeeting.Y());
+                            FASTBOOL bObenLang=Abs(nYMin-aMeeting.Y())<=Abs(nYMax-aMeeting.Y());
                             if (bObenLang) {
                                 aMeeting.Y()=nYMin;
                             } else {
@@ -1079,8 +1079,8 @@ XPolygon SdrEdgeObj::ImpCalcEdgeTrack(const Point& rPt1, long nAngle1, const Rec
                         // Ueberschneidung der BewareRects ohne Ueberschneidung der
                         // Boundrects wenn die Linienaustritte sonst das BewareRect
                         // des jeweils anderen Objekts verletzen wuerden.
-                        int bCase29Direct=sal_False;
-                        int bCase29=aBewR1.Bottom()>aBewR2.Top();
+                        FASTBOOL bCase29Direct=sal_False;
+                        FASTBOOL bCase29=aBewR1.Bottom()>aBewR2.Top();
                         if (aBndR1.Bottom()<=aBndR2.Top()) { // Fall 2.9 und keine Boundrectueberschneidung
                             if ((aPt1.X()>aBewareRect2.Left() && aPt1.X()<aBewareRect2.Right()) ||
                                 (aPt2.X()>aBewareRect1.Left() && aPt2.X()<aBewareRect1.Right())) {
@@ -1088,7 +1088,7 @@ XPolygon SdrEdgeObj::ImpCalcEdgeTrack(const Point& rPt1, long nAngle1, const Rec
                             }
                         }
                         if (!bCase29Direct) {
-                            int bLinksLang=Abs(nXMin-aMeeting.X())<=Abs(nXMax-aMeeting.X());
+                            FASTBOOL bLinksLang=Abs(nXMin-aMeeting.X())<=Abs(nXMax-aMeeting.X());
                             if (bLinksLang) {
                                 aMeeting.X()=nXMin;
                             } else {
@@ -1215,9 +1215,9 @@ XPolygon SdrEdgeObj::ImpCalcEdgeTrack(const Point& rPt1, long nAngle1, const Rec
     }
     Point aEP1(aXP1[nXP1Anz-1]);
     Point aEP2(aXP2[nXP2Anz-1]);
-    int bInsMeetingPoint=aEP1.X()!=aEP2.X() && aEP1.Y()!=aEP2.Y();
-    int bHorzE1=aEP1.Y()==aXP1[nXP1Anz-2].Y(); // letzte Linie von XP1 horizontal?
-    int bHorzE2=aEP2.Y()==aXP2[nXP2Anz-2].Y(); // letzte Linie von XP2 horizontal?
+    FASTBOOL bInsMeetingPoint=aEP1.X()!=aEP2.X() && aEP1.Y()!=aEP2.Y();
+    FASTBOOL bHorzE1=aEP1.Y()==aXP1[nXP1Anz-2].Y(); // letzte Linie von XP1 horizontal?
+    FASTBOOL bHorzE2=aEP2.Y()==aXP2[nXP2Anz-2].Y(); // letzte Linie von XP2 horizontal?
     if (aEP1==aEP2 && (bHorzE1 && bHorzE2 && aEP1.Y()==aEP2.Y()) || (!bHorzE1 && !bHorzE2 && aEP1.X()==aEP2.X())) {
         // Sonderbehandlung fuer 'I'-Verbinder
         nXP1Anz--; aXP1.Remove(nXP1Anz,1);
@@ -1303,7 +1303,7 @@ XPolygon SdrEdgeObj::ImpCalcEdgeTrack(const Point& rPt1, long nAngle1, const Rec
     if (pnQuality!=NULL) {
         sal_uIntPtr nQual=0;
         sal_uIntPtr nQual0=nQual; // Ueberlaeufe vorbeugen
-        int bOverflow=sal_False;
+        FASTBOOL bOverflow=sal_False;
         Point aPt0(aXP1[0]);
         for (sal_uInt16 nPntNum=1; nPntNum<nPntAnz; nPntNum++) {
             Point aPt1b(aXP1[nPntNum]);
@@ -1353,9 +1353,9 @@ XPolygon SdrEdgeObj::ImpCalcEdgeTrack(const Point& rPt1, long nAngle1, const Rec
 
         for (sal_uInt16 i=0; i<nPntAnz; i++) {
             Point aPt1b(aXP1[i]);
-            int b1=aPt1b.X()>aBewareRect1.Left() && aPt1b.X()<aBewareRect1.Right() &&
+            FASTBOOL b1=aPt1b.X()>aBewareRect1.Left() && aPt1b.X()<aBewareRect1.Right() &&
                         aPt1b.Y()>aBewareRect1.Top() && aPt1b.Y()<aBewareRect1.Bottom();
-            int b2=aPt1b.X()>aBewareRect2.Left() && aPt1b.X()<aBewareRect2.Right() &&
+            FASTBOOL b2=aPt1b.X()>aBewareRect2.Left() && aPt1b.X()<aBewareRect2.Right() &&
                         aPt1b.Y()>aBewareRect2.Top() && aPt1b.Y()<aBewareRect2.Bottom();
             sal_uInt16 nInt0=nIntersections;
             if (i==0 || i==nPntAnz-1) {
@@ -1553,10 +1553,10 @@ void __EXPORT SdrEdgeObj::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
 {
     SfxSimpleHint* pSimple=PTR_CAST(SfxSimpleHint,&rHint);
     sal_uIntPtr nId=pSimple==0 ? 0 : pSimple->GetId();
-    int bDataChg=nId==SFX_HINT_DATACHANGED;
-    int bDying=nId==SFX_HINT_DYING;
-    int bObj1=aCon1.pObj!=NULL && aCon1.pObj->GetBroadcaster()==&rBC;
-    int bObj2=aCon2.pObj!=NULL && aCon2.pObj->GetBroadcaster()==&rBC;
+    FASTBOOL bDataChg=nId==SFX_HINT_DATACHANGED;
+    FASTBOOL bDying=nId==SFX_HINT_DYING;
+    FASTBOOL bObj1=aCon1.pObj!=NULL && aCon1.pObj->GetBroadcaster()==&rBC;
+    FASTBOOL bObj2=aCon2.pObj!=NULL && aCon2.pObj->GetBroadcaster()==&rBC;
     if (bDying && (bObj1 || bObj2)) {
         // #35605# Dying vorher abfangen, damit AttrObj nicht
         // wg. vermeintlicher Vorlagenaenderung rumbroadcastet
@@ -2004,7 +2004,7 @@ basegfx::B2DPolygon SdrEdgeObj::ImplAddConnectorOverlay(SdrDragMethod& rDragMeth
     return aResult;
 }
 
-int SdrEdgeObj::BegCreate(SdrDragStat& rDragStat)
+FASTBOOL SdrEdgeObj::BegCreate(SdrDragStat& rDragStat)
 {
     rDragStat.SetNoSnap(sal_True);
     pEdgeTrack->SetPointCount(2);
@@ -2018,7 +2018,7 @@ int SdrEdgeObj::BegCreate(SdrDragStat& rDragStat)
     return sal_True;
 }
 
-int SdrEdgeObj::MovCreate(SdrDragStat& rDragStat)
+FASTBOOL SdrEdgeObj::MovCreate(SdrDragStat& rDragStat)
 {
     sal_uInt16 nMax=pEdgeTrack->GetPointCount();
     (*pEdgeTrack)[nMax-1]=rDragStat.GetNow();
@@ -2034,9 +2034,9 @@ int SdrEdgeObj::MovCreate(SdrDragStat& rDragStat)
     return sal_True;
 }
 
-int SdrEdgeObj::EndCreate(SdrDragStat& rDragStat, SdrCreateCmd eCmd)
+FASTBOOL SdrEdgeObj::EndCreate(SdrDragStat& rDragStat, SdrCreateCmd eCmd)
 {
-    int bOk=(eCmd==SDRCREATE_FORCEEND || rDragStat.GetPointAnz()>=2);
+    FASTBOOL bOk=(eCmd==SDRCREATE_FORCEEND || rDragStat.GetPointAnz()>=2);
     if (bOk) {
         ConnectToNode(sal_True,aCon1.pObj);
         ConnectToNode(sal_False,aCon2.pObj);
@@ -2049,7 +2049,7 @@ int SdrEdgeObj::EndCreate(SdrDragStat& rDragStat, SdrCreateCmd eCmd)
     return bOk;
 }
 
-int SdrEdgeObj::BckCreate(SdrDragStat& rDragStat)
+FASTBOOL SdrEdgeObj::BckCreate(SdrDragStat& rDragStat)
 {
     if (rDragStat.GetView()!=NULL) {
         rDragStat.GetView()->HideConnectMarker();
@@ -2076,7 +2076,7 @@ Pointer SdrEdgeObj::GetCreatePointer() const
     return Pointer(POINTER_DRAW_CONNECT);
 }
 
-int SdrEdgeObj::ImpFindConnector(const Point& rPt, const SdrPageView& rPV, SdrObjConnection& rCon, const SdrEdgeObj* pThis, OutputDevice* pOut)
+FASTBOOL SdrEdgeObj::ImpFindConnector(const Point& rPt, const SdrPageView& rPV, SdrObjConnection& rCon, const SdrEdgeObj* pThis, OutputDevice* pOut)
 {
     rCon.ResetVars();
     if (pOut==NULL) pOut=rPV.GetView().GetFirstOutputDevice(); // GetWin(0);
@@ -2095,10 +2095,10 @@ int SdrEdgeObj::ImpFindConnector(const Point& rPt, const SdrPageView& rPV, SdrOb
     aMouseRect.Bottom()+=aHalfConSiz.Height();
     sal_uInt16 nBoundHitTol=(sal_uInt16)aHalfConSiz.Width()/2; if (nBoundHitTol==0) nBoundHitTol=1;
     sal_uIntPtr no=pOL->GetObjCount();
-    int bFnd=sal_False;
+    FASTBOOL bFnd=sal_False;
     SdrObjConnection aTestCon;
     SdrObjConnection aBestCon;
-    int bTestBoundHit=sal_False;
+    FASTBOOL bTestBoundHit=sal_False;
     //int bBestBoundHit=sal_False;
 
     while (no>0 && !bFnd) {
@@ -2113,22 +2113,22 @@ int SdrEdgeObj::ImpFindConnector(const Point& rPt, const SdrPageView& rPV, SdrOb
             if (aObjBound.IsOver(aMouseRect)) {
                 aTestCon.ResetVars();
                 bTestBoundHit=sal_False;
-                int bEdge=HAS_BASE(SdrEdgeObj,pObj); // kein BestCon fuer Edge
+                FASTBOOL bEdge=HAS_BASE(SdrEdgeObj,pObj); // kein BestCon fuer Edge
                 // Die Userdefined Konnektoren haben absolute Prioritaet.
                 // Danach kommt Vertex, Corner und Mitte(Best) gleich priorisiert.
                 // Zum Schluss kommt noch ein HitTest aufs Obj.
                 const SdrGluePointList* pGPL=pObj->GetGluePointList();
                 sal_uInt16 nConAnz=pGPL==NULL ? 0 : pGPL->GetCount();
                 sal_uInt16 nGesAnz=nConAnz+9;
-                int bUserFnd=sal_False;
+                FASTBOOL bUserFnd=sal_False;
                 sal_uIntPtr nBestDist=0xFFFFFFFF;
                 for (sal_uInt16 i=0; i<nGesAnz; i++)
                 {
-                    int bUser=i<nConAnz;
-                    int bVertex=i>=nConAnz+0 && i<nConAnz+4;
-                    int bCorner=i>=nConAnz+4 && i<nConAnz+8;
-                    int bCenter=i==nConAnz+8;
-                    int bOk=sal_False;
+                    FASTBOOL bUser=i<nConAnz;
+                    FASTBOOL bVertex=i>=nConAnz+0 && i<nConAnz+4;
+                    FASTBOOL bCorner=i>=nConAnz+4 && i<nConAnz+8;
+                    FASTBOOL bCenter=i==nConAnz+8;
+                    FASTBOOL bOk=sal_False;
                     Point aConPos;
                     sal_uInt16 nConNum=i;
                     if (bUser) {

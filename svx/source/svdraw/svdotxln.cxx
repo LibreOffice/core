@@ -101,7 +101,7 @@ void ImpSdrObjTextLink::Closed()
 void ImpSdrObjTextLink::DataChanged( const String& /*rMimeType*/,
                                 const ::com::sun::star::uno::Any & /*rValue */)
 {
-    int bForceReload=sal_False;
+    FASTBOOL bForceReload=sal_False;
     SdrModel* pModel = pSdrObj ? pSdrObj->GetModel() : 0;
     sfx2::LinkManager* pLinkManager= pModel ? pModel->GetLinkManager() : 0;
     if( pLinkManager )
@@ -208,10 +208,10 @@ void SdrTextObj::ReleaseTextLink()
     }
 }
 
-int SdrTextObj::ReloadLinkedText( int bForceLoad)
+FASTBOOL SdrTextObj::ReloadLinkedText( FASTBOOL bForceLoad)
 {
     ImpSdrObjTextLinkUserData*  pData = GetLinkUserData();
-    int                 bRet = sal_True;
+    FASTBOOL                    bRet = sal_True;
 
     if( pData )
     {
@@ -260,7 +260,7 @@ int SdrTextObj::ReloadLinkedText( int bForceLoad)
     return bRet;
 }
 
-int SdrTextObj::LoadText(const String& rFileName, const String& /*rFilterName*/, rtl_TextEncoding eCharSet)
+FASTBOOL SdrTextObj::LoadText(const String& rFileName, const String& /*rFilterName*/, rtl_TextEncoding eCharSet)
 {
     INetURLObject   aFileURL( rFileName );
     sal_Bool            bRet = sal_False;

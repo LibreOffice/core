@@ -68,7 +68,7 @@ private:
 
 private:
     void            Construct_Impl();
-    int        Bind_Impl( Menu *pMenu );
+    bool        Bind_Impl( Menu *pMenu );
     inline SfxMenuCtrlArr_Impl& GetAppCtrl_Impl()
     {
         return pAppCtrl? *pAppCtrl: *(pAppCtrl = new SfxMenuCtrlArr_Impl) ;

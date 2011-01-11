@@ -321,7 +321,7 @@ void UShortCont::Sort()
 
 class ImpClipMerk {
     Region aClip;
-    int   bClip;
+    FASTBOOL   bClip;
 public:
     ImpClipMerk(const OutputDevice& rOut): aClip(rOut.GetClipRegion()),bClip(rOut.IsClipRegion()) {}
     void Restore(OutputDevice& rOut)
@@ -385,7 +385,7 @@ public:
     const Color& GetLineColor() const { return aLineColor; }
 };
 
-ImpSdrHdcMerk::ImpSdrHdcMerk(const OutputDevice& rOut, sal_uInt16 nNewMode, int bAutoMerk):
+ImpSdrHdcMerk::ImpSdrHdcMerk(const OutputDevice& rOut, sal_uInt16 nNewMode, FASTBOOL bAutoMerk):
     pFarbMerk(NULL),
     pClipMerk(NULL),
     pLineColorMerk(NULL),
@@ -498,10 +498,10 @@ void SdrLinkList::RemoveLink(const Link& rLink)
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // #98988# Re-implement GetDraftFillColor(...)
 
-int GetDraftFillColor(const SfxItemSet& rSet, Color& rCol)
+FASTBOOL GetDraftFillColor(const SfxItemSet& rSet, Color& rCol)
 {
     XFillStyle eFill=((XFillStyleItem&)rSet.Get(XATTR_FILLSTYLE)).GetValue();
-    int bRetval(sal_False);
+    FASTBOOL bRetval(sal_False);
 
     switch(eFill)
     {

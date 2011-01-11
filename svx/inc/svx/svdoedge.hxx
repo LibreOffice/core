@@ -73,7 +73,7 @@ public:
     SVX_DLLPUBLIC ~SdrObjConnection();
 
     void ResetVars();
-    int TakeGluePoint(SdrGluePoint& rGP, int bSetAbsolutePos) const;
+    FASTBOOL TakeGluePoint(SdrGluePoint& rGP, FASTBOOL bSetAbsolutePos) const;
 
     inline void SetBestConnection( sal_Bool rB ) { bBestConn = rB; };
     inline void SetBestVertex( sal_Bool rB ) { bBestVertex = rB; };
@@ -126,7 +126,7 @@ public:
     Point& ImpGetLineVersatzPoint(SdrEdgeLineCode eLineCode);
     const Point& ImpGetLineVersatzPoint(SdrEdgeLineCode eLineCode) const { return ((SdrEdgeInfoRec*)this)->ImpGetLineVersatzPoint(eLineCode); }
     sal_uInt16 ImpGetPolyIdx(SdrEdgeLineCode eLineCode, const XPolygon& rXP) const;
-    int ImpIsHorzLine(SdrEdgeLineCode eLineCode, const XPolygon& rXP) const;
+    FASTBOOL ImpIsHorzLine(SdrEdgeLineCode eLineCode, const XPolygon& rXP) const;
     void ImpSetLineVersatz(SdrEdgeLineCode eLineCode, const XPolygon& rXP, long nVal);
     long ImpGetLineVersatz(SdrEdgeLineCode eLineCode, const XPolygon& rXP) const;
 };
@@ -208,10 +208,10 @@ protected:
     XPolygon ImpCalcEdgeTrack(const Point& rPt1, long nAngle1, const Rectangle& rBoundRect1, const Rectangle& rBewareRect1,
         const Point& rPt2, long nAngle2, const Rectangle& rBoundRect2, const Rectangle& rBewareRect2,
         sal_uIntPtr* pnQuality, SdrEdgeInfoRec* pInfo) const;
-    static int ImpFindConnector(const Point& rPt, const SdrPageView& rPV, SdrObjConnection& rCon, const SdrEdgeObj* pThis, OutputDevice* pOut=NULL);
+    static FASTBOOL ImpFindConnector(const Point& rPt, const SdrPageView& rPV, SdrObjConnection& rCon, const SdrEdgeObj* pThis, OutputDevice* pOut=NULL);
     sal_uInt16 ImpCalcEscAngle(SdrObject* pObj, const Point& aPt2) const;
-    int ImpStripPolyPoints(XPolygon& rXP) const; // entfernen ueberfluessiger Punkte
-    void ImpSetTailPoint(int bTail1, const Point& rPt);
+    FASTBOOL ImpStripPolyPoints(XPolygon& rXP) const; // entfernen ueberfluessiger Punkte
+    void ImpSetTailPoint(FASTBOOL bTail1, const Point& rPt);
     void ImpUndirtyEdgeTrack();  // eventuelle Neuberechnung des Verbindungsverlaufs
     void ImpDirtyEdgeTrack();   // invalidate connector path, so it will be recalculated next time
     void ImpSetAttrToEdgeInfo(); // Werte vom Pool nach aEdgeInfo kopieren
@@ -223,26 +223,26 @@ public:
     SdrEdgeObj();
     virtual ~SdrEdgeObj();
 
-    SdrObjConnection& GetConnection(int bTail1) { return *(bTail1 ? &aCon1 : &aCon2); }
+    SdrObjConnection& GetConnection(FASTBOOL bTail1) { return *(bTail1 ? &aCon1 : &aCon2); }
     virtual void TakeObjInfo(SdrObjTransformInfoRec& rInfo) const;
     virtual sal_uInt16 GetObjIdentifier() const;
     virtual const Rectangle& GetCurrentBoundRect() const;
     virtual const Rectangle& GetSnapRect() const;
-    virtual int IsNode() const;
+    virtual FASTBOOL IsNode() const;
     virtual SdrGluePoint GetVertexGluePoint(sal_uInt16 nNum) const;
     virtual SdrGluePoint GetCornerGluePoint(sal_uInt16 nNum) const;
     virtual const SdrGluePointList* GetGluePointList() const;
     virtual SdrGluePointList* ForceGluePointList();
-    virtual int IsEdge() const;
+    virtual FASTBOOL IsEdge() const;
 
     // bTail1=TRUE: Linienanfang, sonst LinienEnde
     // pObj=NULL: Disconnect
     void SetEdgeTrackDirty() { bEdgeTrackDirty=sal_True; }
-    void ConnectToNode(int bTail1, SdrObject* pObj);
-    void DisconnectFromNode(int bTail1);
-    SdrObject* GetConnectedNode(int bTail1) const;
-    const SdrObjConnection& GetConnection(int bTail1) const { return *(bTail1 ? &aCon1 : &aCon2); }
-    int CheckNodeConnection(int bTail1) const;
+    void ConnectToNode(FASTBOOL bTail1, SdrObject* pObj);
+    void DisconnectFromNode(FASTBOOL bTail1);
+    SdrObject* GetConnectedNode(FASTBOOL bTail1) const;
+    const SdrObjConnection& GetConnection(FASTBOOL bTail1) const { return *(bTail1 ? &aCon1 : &aCon2); }
+    FASTBOOL CheckNodeConnection(FASTBOOL bTail1) const;
 
     virtual void RecalcSnapRect();
     virtual void TakeUnrotatedSnapRect(Rectangle& rRect) const;
@@ -273,10 +273,10 @@ public:
     // #102344# Added missing implementation
     virtual void NbcSetAnchorPos(const Point& rPnt);
 
-    virtual int BegCreate(SdrDragStat& rStat);
-    virtual int MovCreate(SdrDragStat& rStat);
-    virtual int EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd);
-    virtual int BckCreate(SdrDragStat& rStat);
+    virtual FASTBOOL BegCreate(SdrDragStat& rStat);
+    virtual FASTBOOL MovCreate(SdrDragStat& rStat);
+    virtual FASTBOOL EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd);
+    virtual FASTBOOL BckCreate(SdrDragStat& rStat);
     virtual void BrkCreate(SdrDragStat& rStat);
     virtual basegfx::B2DPolyPolygon TakeCreatePoly(const SdrDragStat& rDrag) const;
     virtual Pointer GetCreatePointer() const;

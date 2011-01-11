@@ -218,9 +218,9 @@ private:
     sal_Bool            bSearch;
     sal_Bool            bFormat;
     sal_uInt16          nOptions;
-    int     bSet;
-    int     bReadOnly;
-    int     bConstruct;
+    FASTBOOL        bSet;
+    FASTBOOL        bReadOnly;
+    FASTBOOL        bConstruct;
     sal_uIntPtr         nModifyFlag;
     String          aStylesStr;
     String          aLayoutStr;

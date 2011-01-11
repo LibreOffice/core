@@ -238,7 +238,7 @@ public:
     sal_uInt16                      SaveBasicManager() const;
     sal_uInt16                      SaveBasicAndDialogContainer() const;
     void                        EnterBasicCall();
-    int                    IsInBasicCall() const;
+    bool                        IsInBasicCall() const;
     void                        LeaveBasicCall();
     void                        RegisterBasicConstants( const char *pPrefix,
                                                         const SfxConstant *pConsts,
@@ -248,7 +248,7 @@ public:
     sal_Bool                        GetOptions(SfxItemSet &);
     void                        SetOptions(const SfxItemSet &);
     virtual void                Invalidate(sal_uInt16 nId = 0);
-    void                        NotifyEvent(const SfxEventHint& rEvent, int bSynchron = sal_True );
+    void                        NotifyEvent(const SfxEventHint& rEvent, bool bSynchron = true );
     sal_Bool                        IsDowning() const;
     sal_Bool                        IsSecureURL( const INetURLObject &rURL, const String *pReferer ) const;
     static SfxObjectShellRef    DocAlreadyLoaded( const String &rName,
@@ -265,7 +265,7 @@ public:
 
     SAL_DLLPRIVATE sal_Bool         QueryExit_Impl();
     SAL_DLLPRIVATE void         SetOptions_Impl(const SfxItemSet &);
-    SAL_DLLPRIVATE int     Initialize_Impl();
+    SAL_DLLPRIVATE bool         Initialize_Impl();
 
     SAL_DLLPRIVATE SfxAppData_Impl* Get_Impl() const { return pAppData_Impl; }
 
@@ -306,7 +306,7 @@ public:
     SAL_DLLPRIVATE void         PlayMacro_Impl( SfxRequest &rReq, StarBASIC *pBas );
 
     SAL_DLLPRIVATE void         EnterAsynchronCall_Impl();
-    SAL_DLLPRIVATE int     IsInAsynchronCall_Impl() const;
+    SAL_DLLPRIVATE bool         IsInAsynchronCall_Impl() const;
     SAL_DLLPRIVATE void         LeaveAsynchronCall_Impl();
     SAL_DLLPRIVATE void         Registrations_Impl();
     SAL_DLLPRIVATE SfxWorkWindow* GetWorkWindow_Impl(const SfxViewFrame *pFrame=0) const;
