@@ -110,38 +110,43 @@ endef
 # should never be inlined ($(call )) as the calls defining it might be sourced
 # before gb_Module.
 define gb_Module_register_target
-gb_Module_TARGETSTACK := $(1) $(gb_Module_TARGETSTACK)
-gb_Module_CLEANTARGETSTACK := $(2) $(gb_Module_CLEANTARGETSTACK)
+gb_Module_CURRENTTARGET := $(1)
+gb_Module_CURRENTCLEANTARGET := $(2)
 
 endef
 
-# Here we include the file (in it there will be a call to
-# gb_Module_register_target) and pop one target from each stack afterwards.
-define gb_Module_add_target
+# Here we include the file (in it there will be a call to gb_Module_register_target)
+define gb_Module__read_targetfile
+gb_Module_CURRENTTARGET :=
+gb_Module_CURRENTCLEANTARGET :=
 include $(patsubst $(1):%,%,$(filter $(1):%,$(gb_Module_MODULELOCATIONS)))$(2).mk
-$(call gb_Module_get_target,$(1)) : $$(firstword $$(gb_Module_TARGETSTACK))
-$(call gb_Module_get_clean_target,$(1)) : $$(firstword $$(gb_Module_CLEANTARGETSTACK))
-gb_Module_TARGETSTACK := $$(wordlist 2,$$(words $$(gb_Module_TARGETSTACK)),$$(gb_Module_TARGETSTACK))
-gb_Module_CLEANTARGETSTACK := $$(wordlist 2,$$(words $$(gb_Module_CLEANTARGETSTACK)),$$(gb_Module_CLEANTARGETSTACK))
+ifneq ($$(words $$(gb_Module_CURRENTTARGET)) $$(words $$(gb_Module_CURRENTCLEANTARGET)),1 1)
+$$(eval $$(call gb_Output_error,No $(3) registered while reading $(patsubst $(1):%,%,$(filter $(1):%,$(gb_Module_MODULELOCATIONS)))$(2).mk!))
+endif
+
+endef
+
+define gb_Module_add_target
+$(call gb_Module__read_targetfile,$(1),$(2),target)
+
+$(call gb_Module_get_target,$(1)) : $$(gb_Module_CURRENTTARGET)
+$(call gb_Module_get_clean_target,$(1)) : $$(gb_Module_CURRENTCLEANTARGET)
 
 endef
 
 define gb_Module_add_check_target
-include $(patsubst $(1):%,%,$(filter $(1):%,$(gb_Module_MODULELOCATIONS)))/$(2).mk
-$(call gb_Module_get_check_target,$(1)) : $$(firstword $$(gb_Module_TARGETSTACK))
-$(call gb_Module_get_clean_target,$(1)) : $$(firstword $$(gb_Module_CLEANTARGETSTACK))
-gb_Module_TARGETSTACK := $$(wordlist 2,$$(words $$(gb_Module_TARGETSTACK)),$$(gb_Module_TARGETSTACK))
-gb_Module_CLEANTARGETSTACK := $$(wordlist 2,$$(words $$(gb_Module_CLEANTARGETSTACK)),$$(gb_Module_CLEANTARGETSTACK))
+$(call gb_Module__read_targetfile,$(1),$(2),check target)
+
+$(call gb_Module_get_check_target,$(1)) : $$(gb_Module_CURRENTTARGET)
+$(call gb_Module_get_clean_target,$(1)) : $$(gb_Module_CURRENTCLEANTARGET)
 
 endef
 
 define gb_Module_add_subsequentcheck_target
-include $(patsubst $(1):%,%,$(filter $(1):%,$(gb_Module_MODULELOCATIONS)))/$(2).mk
-$(call gb_Module_get_subsequentcheck_target,$(1)) : $$(firstword $$(gb_Module_TARGETSTACK))
-$(call gb_Module_get_clean_target,$(1)) : $$(firstword $$(gb_Module_CLEANTARGETSTACK))
-gb_Module_TARGETSTACK := $$(wordlist 2,$$(words $$(gb_Module_TARGETSTACK)),$$(gb_Module_TARGETSTACK))
-gb_Module_CLEANTARGETSTACK := $$(wordlist 2,$$(words $$(gb_Module_CLEANTARGETSTACK)),$$(gb_Module_CLEANTARGETSTACK))
+$(call gb_Module__read_targetfile,$(1),$(2),subsequentcheck target)
 
+$(call gb_Module_get_subsequentcheck_target,$(1)) : $$(gb_Module_CURRENTTARGET)
+$(call gb_Module_get_clean_target,$(1)) : $$(gb_Module_CURRENTCLEANTARGET)
 endef
 
 define gb_Module_add_moduledir
