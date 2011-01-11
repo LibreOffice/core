@@ -171,7 +171,12 @@ double SAL_CALL InverseDateScaling::doScaling( double value )
                 }
                 Date aDate;
                 double fYear = ::rtl::math::approxFloor(value/lcl_fNumberOfMonths);
-                double fMonth =  ::rtl::math::approxFloor(value-(fYear*lcl_fNumberOfMonths));
+                double fMonth = ::rtl::math::approxFloor(value-(fYear*lcl_fNumberOfMonths));
+                if( fMonth==0.0 )
+                {
+                    fYear--;
+                    fMonth=12.0;
+                }
                 aDate.SetYear( static_cast<USHORT>(fYear) );
                 aDate.SetMonth( static_cast<USHORT>(fMonth) );
                 aDate.SetDay( 1 );
