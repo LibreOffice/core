@@ -590,10 +590,14 @@ void ImplShowHelpWindow( Window* pParent, USHORT nHelpWinStyle, USHORT nStyle,
     {
         DBG_ASSERT( pHelpWin != pParent, "HelpInHelp ?!" );
 
-            if ( (( pHelpWin->GetHelpText() != rHelpText ) ||
-                 ( pHelpWin->GetWinStyle() != nHelpWinStyle ) ||
-                 ( pHelpArea && ( pHelpWin->GetHelpArea() != *pHelpArea ) ) )
-                 && pSVData->maHelpData.mbRequestingHelp )
+        if  (   (   ( pHelpWin->GetHelpText() != rHelpText )
+                ||  ( pHelpWin->GetWinStyle() != nHelpWinStyle )
+                ||  (   pHelpArea
+                    &&  ( pHelpWin->GetHelpArea() != *pHelpArea )
+                    )
+                )
+            &&  pSVData->maHelpData.mbRequestingHelp
+            )
         {
             // remove help window if no HelpText or other HelpText or
             // other help mode. but keep it if we are scrolling, ie not requesting help
@@ -605,8 +609,8 @@ void ImplShowHelpWindow( Window* pParent, USHORT nHelpWinStyle, USHORT nStyle,
         }
         else
         {
-            bool bTextChanged = rHelpText != pHelpWin->GetHelpText();
-            if( bTextChanged )
+            bool const bTextChanged = rHelpText != pHelpWin->GetHelpText();
+            if ( bTextChanged || ( ( nStyle & QUICKHELP_FORCE_REPOSITION ) != 0 ) )
             {
                 Window * pWindow = pHelpWin->GetParent()->ImplGetFrameWindow();
                 Rectangle aInvRect( pHelpWin->GetWindowExtentsRelative( pWindow ) );

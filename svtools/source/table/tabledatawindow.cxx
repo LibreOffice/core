@@ -128,7 +128,7 @@ namespace svt { namespace table
                         m_rTableControl.getAntiImpl().OutputToScreenPixel( Point( 0, 0 ) ),
                         m_rTableControl.getAntiImpl().GetOutputSizePixel()
                     );
-                    Help::ShowQuickHelp( &m_rTableControl.getAntiImpl(), aControlScreenRect, sHelpText );
+                    Help::ShowQuickHelp( &m_rTableControl.getAntiImpl(), aControlScreenRect, sHelpText, String(), QUICKHELP_FORCE_REPOSITION );
                 }
             }
         }
