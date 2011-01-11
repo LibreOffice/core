@@ -75,7 +75,6 @@ getCertError(PRErrorCode errNum)
 void
 printChainFailure(CERTVerifyLog *log)
 {
-    unsigned long errorFlags  = 0;
     unsigned int       depth  = (unsigned int)-1;
     const char * specificError = NULL;
     const char * issuer = NULL;
@@ -84,6 +83,7 @@ printChainFailure(CERTVerifyLog *log)
     if (log->count > 0)
     {
         xmlsec_trace("Bad certifcation path:");
+        unsigned long errorFlags  = 0;
         for (node = log->head; node; node = node->next)
         {
             if (depth != node->depth)

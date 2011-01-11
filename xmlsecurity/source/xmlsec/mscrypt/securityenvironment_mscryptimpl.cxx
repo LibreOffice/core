@@ -154,21 +154,21 @@ SecurityEnvironment_MSCryptImpl :: ~SecurityEnvironment_MSCryptImpl() {
     if( !m_tSymKeyList.empty()  ) {
         std::list< HCRYPTKEY >::iterator symKeyIt ;
 
-        for( symKeyIt = m_tSymKeyList.begin() ; symKeyIt != m_tSymKeyList.end() ; symKeyIt ++ )
+        for( symKeyIt = m_tSymKeyList.begin() ; symKeyIt != m_tSymKeyList.end() ; ++symKeyIt )
             CryptDestroyKey( *symKeyIt ) ;
     }
 
     if( !m_tPubKeyList.empty()  ) {
         std::list< HCRYPTKEY >::iterator pubKeyIt ;
 
-        for( pubKeyIt = m_tPubKeyList.begin() ; pubKeyIt != m_tPubKeyList.end() ; pubKeyIt ++ )
+        for( pubKeyIt = m_tPubKeyList.begin() ; pubKeyIt != m_tPubKeyList.end() ; ++pubKeyIt )
             CryptDestroyKey( *pubKeyIt ) ;
     }
 
     if( !m_tPriKeyList.empty()  ) {
         std::list< HCRYPTKEY >::iterator priKeyIt ;
 
-        for( priKeyIt = m_tPriKeyList.begin() ; priKeyIt != m_tPriKeyList.end() ; priKeyIt ++ )
+        for( priKeyIt = m_tPriKeyList.begin() ; priKeyIt != m_tPriKeyList.end() ; ++priKeyIt )
             CryptDestroyKey( *priKeyIt ) ;
     }
 
@@ -266,12 +266,6 @@ void SecurityEnvironment_MSCryptImpl :: setCryptoProvider( HCRYPTPROV aProv ) th
     }
 
     if( aProv != NULL ) {
-        /*- Replaced by direct adopt for WINNT support ----
-        if( !CryptContextAddRef( aProv, NULL, NULL ) )
-            throw Exception() ;
-        else
-            m_hProv = aProv ;
-        ----*/
         m_hProv = aProv ;
     }
 }
@@ -322,16 +316,12 @@ void SecurityEnvironment_MSCryptImpl :: adoptSymKey( HCRYPTKEY aSymKey ) throw( 
 
     if( aSymKey != NULL ) {
         //First try to find the key in the list
-        for( keyIt = m_tSymKeyList.begin() ; keyIt != m_tSymKeyList.end() ; keyIt ++ ) {
+        for( keyIt = m_tSymKeyList.begin() ; keyIt != m_tSymKeyList.end() ; ++keyIt ) {
             if( *keyIt == aSymKey )
                 return ;
         }
 
         //If we do not find the key in the list, add a new node
-        /*- Replaced with directly adopt for WINNT 4.0 support ----
-        if( !CryptDuplicateKey( aSymKey, NULL, 0, &symkey ) )
-            throw RuntimeException() ;
-        ----*/
         symkey = aSymKey ;
 
         try {
@@ -347,7 +337,7 @@ void SecurityEnvironment_MSCryptImpl :: rejectSymKey( HCRYPTKEY aSymKey ) throw(
     std::list< HCRYPTKEY >::iterator keyIt ;
 
     if( aSymKey != NULL ) {
-        for( keyIt = m_tSymKeyList.begin() ; keyIt != m_tSymKeyList.end() ; keyIt ++ ) {
+        for( keyIt = m_tSymKeyList.begin() ; keyIt != m_tSymKeyList.end() ; ++keyIt ) {
             if( *keyIt == aSymKey ) {
                 symkey = *keyIt ;
                 CryptDestroyKey( symkey ) ;
@@ -364,7 +354,7 @@ HCRYPTKEY SecurityEnvironment_MSCryptImpl :: getSymKey( unsigned int position ) 
     unsigned int pos ;
 
     symkey = NULL ;
-    for( pos = 0, keyIt = m_tSymKeyList.begin() ; pos < position && keyIt != m_tSymKeyList.end() ; pos ++ , keyIt ++ ) ;
+    for( pos = 0, keyIt = m_tSymKeyList.begin() ; pos < position && keyIt != m_tSymKeyList.end() ; ++pos , ++keyIt ) ;
 
     if( pos == position && keyIt != m_tSymKeyList.end() )
         symkey = *keyIt ;
@@ -378,16 +368,12 @@ void SecurityEnvironment_MSCryptImpl :: adoptPubKey( HCRYPTKEY aPubKey ) throw( 
 
     if( aPubKey != NULL ) {
         //First try to find the key in the list
-        for( keyIt = m_tPubKeyList.begin() ; keyIt != m_tPubKeyList.end() ; keyIt ++ ) {
+        for( keyIt = m_tPubKeyList.begin() ; keyIt != m_tPubKeyList.end() ; ++keyIt ) {
             if( *keyIt == aPubKey )
                 return ;
         }
 
         //If we do not find the key in the list, add a new node
-        /*- Replaced with directly adopt for WINNT 4.0 support ----
-        if( !CryptDuplicateKey( aPubKey, NULL, 0, &pubkey ) )
-            throw RuntimeException() ;
-        ----*/
         pubkey = aPubKey ;
 
         try {
@@ -403,7 +389,7 @@ void SecurityEnvironment_MSCryptImpl :: rejectPubKey( HCRYPTKEY aPubKey ) throw(
     std::list< HCRYPTKEY >::iterator keyIt ;
 
     if( aPubKey != NULL ) {
-        for( keyIt = m_tPubKeyList.begin() ; keyIt != m_tPubKeyList.end() ; keyIt ++ ) {
+        for( keyIt = m_tPubKeyList.begin() ; keyIt != m_tPubKeyList.end() ; ++keyIt ) {
             if( *keyIt == aPubKey ) {
                 pubkey = *keyIt ;
                 CryptDestroyKey( pubkey ) ;
@@ -420,7 +406,7 @@ HCRYPTKEY SecurityEnvironment_MSCryptImpl :: getPubKey( unsigned int position ) 
     unsigned int pos ;
 
     pubkey = NULL ;
-    for( pos = 0, keyIt = m_tPubKeyList.begin() ; pos < position && keyIt != m_tPubKeyList.end() ; pos ++ , keyIt ++ ) ;
+    for( pos = 0, keyIt = m_tPubKeyList.begin() ; pos < position && keyIt != m_tPubKeyList.end() ; ++pos , ++keyIt ) ;
 
     if( pos == position && keyIt != m_tPubKeyList.end() )
         pubkey = *keyIt ;
@@ -434,16 +420,12 @@ void SecurityEnvironment_MSCryptImpl :: adoptPriKey( HCRYPTKEY aPriKey ) throw( 
 
     if( aPriKey != NULL ) {
         //First try to find the key in the list
-        for( keyIt = m_tPriKeyList.begin() ; keyIt != m_tPriKeyList.end() ; keyIt ++ ) {
+        for( keyIt = m_tPriKeyList.begin() ; keyIt != m_tPriKeyList.end() ; ++keyIt ) {
             if( *keyIt == aPriKey )
                 return ;
         }
 
         //If we do not find the key in the list, add a new node
-        /*- Replaced with directly adopt for WINNT 4.0 support ----
-        if( !CryptDuplicateKey( aPriKey, NULL, 0, &prikey ) )
-            throw RuntimeException() ;
-        ----*/
         prikey = aPriKey ;
 
         try {
@@ -459,7 +441,7 @@ void SecurityEnvironment_MSCryptImpl :: rejectPriKey( HCRYPTKEY aPriKey ) throw(
     std::list< HCRYPTKEY >::iterator keyIt ;
 
     if( aPriKey != NULL ) {
-        for( keyIt = m_tPriKeyList.begin() ; keyIt != m_tPriKeyList.end() ; keyIt ++ ) {
+        for( keyIt = m_tPriKeyList.begin() ; keyIt != m_tPriKeyList.end() ; ++keyIt ) {
             if( *keyIt == aPriKey ) {
                 prikey = *keyIt ;
                 CryptDestroyKey( prikey ) ;
@@ -476,7 +458,7 @@ HCRYPTKEY SecurityEnvironment_MSCryptImpl :: getPriKey( unsigned int position ) 
     unsigned int pos ;
 
     prikey = NULL ;
-    for( pos = 0, keyIt = m_tPriKeyList.begin() ; pos < position && keyIt != m_tPriKeyList.end() ; pos ++ , keyIt ++ ) ;
+    for( pos = 0, keyIt = m_tPriKeyList.begin() ; pos < position && keyIt != m_tPriKeyList.end() ; ++pos , ++keyIt ) ;
 
     if( pos == position && keyIt != m_tPriKeyList.end() )
         prikey = *keyIt ;
@@ -515,15 +497,6 @@ Sequence< Reference < XCertificate > > SecurityEnvironment_MSCryptImpl :: getPer
         DWORD      dwKeySpec;
         HCRYPTPROV hCryptProv;
 
-        /*
-        hSystemKeyStore = CertOpenStore(
-                CERT_STORE_PROV_SYSTEM ,
-                0 ,
-                NULL ,
-                CERT_SYSTEM_STORE_CURRENT_USER | CERT_STORE_READONLY_FLAG | CERT_STORE_OPEN_EXISTING_FLAG ,
-                L"MY"
-            ) ;
-        */
         hSystemKeyStore = CertOpenSystemStore( 0, "MY" ) ;
         if( hSystemKeyStore != NULL ) {
             pCertContext = CertEnumCertificatesInStore( hSystemKeyStore, pCertContext );
@@ -560,7 +533,7 @@ Sequence< Reference < XCertificate > > SecurityEnvironment_MSCryptImpl :: getPer
         std::list< X509Certificate_MSCryptImpl* >::iterator xcertIt ;
         Sequence< Reference< XCertificate > > certSeq( length ) ;
 
-        for( i = 0, xcertIt = certsList.begin(); xcertIt != certsList.end(); xcertIt ++, i++ ) {
+        for( i = 0, xcertIt = certsList.begin(); xcertIt != certsList.end(); ++xcertIt, ++i ) {
             certSeq[i] = *xcertIt ;
         }
 
@@ -573,7 +546,6 @@ Sequence< Reference < XCertificate > > SecurityEnvironment_MSCryptImpl :: getPer
 
 Reference< XCertificate > SecurityEnvironment_MSCryptImpl :: getCertificate( const OUString& issuerName, const Sequence< sal_Int8 >& serialNumber ) throw( SecurityException , RuntimeException ) {
     unsigned int i ;
-//  sal_Int8 found = 0 ;
     LPSTR   pszName ;
     X509Certificate_MSCryptImpl *xcert = NULL ;
     PCCERT_CONTEXT pCertContext = NULL ;
