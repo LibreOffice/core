@@ -201,7 +201,7 @@ include $(foreach class, \
     SdiTarget \
     Package \
     PrecompiledHeaders \
-    TestFixture \
+    CppunitTest \
     JavaClassSet \
     JunitTest \
     Module \

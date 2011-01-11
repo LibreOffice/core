@@ -26,46 +26,43 @@
 #*************************************************************************
 
 
-# TestFixture class
+# CppunitTest class
 
 # defined globally in TargetLocations.mk
-#  gb_TestFixture_get_linktargetname
+#  gb_CppunitTest_get_linktargetname
 # defined by platform
-#  gb_TestFixture_TARGETTYPEFLAGS
-#  gb_TestFixture_get_filename
-gb_TestFixture_CPPTESTTARGET := $(call gb_Executable_get_target,cppunittester)
-gb_TestFixture_CPPTESTCOMMAND := $(gb_TestFixture_CPPTESTPRECOMMAND) $(gb_TestFixture_CPPTESTTARGET)
+#  gb_CppunitTest_TARGETTYPEFLAGS
+#  gb_CppunitTest_get_filename
+gb_CppunitTest_CPPTESTTARGET := $(call gb_Executable_get_target,cppunittester)
+gb_CppunitTest_CPPTESTCOMMAND := $(gb_CppunitTest_CPPTESTPRECOMMAND) $(gb_CppunitTest_CPPTESTTARGET)
 
-.PHONY : $(call gb_TestFixture_get_clean_target,%)
-$(call gb_TestFixture_get_clean_target,%) : $(call gb_LinkTarget_get_clean_target,$(call gb_Library_get_linktargetname,%))
+.PHONY : $(call gb_CppunitTest_get_clean_target,%)
+$(call gb_CppunitTest_get_clean_target,%) : $(call gb_LinkTarget_get_clean_target,$(call gb_Library_get_linktargetname,%))
     $(call gb_Helper_abbreviate_dirs,\
         rm -f $@)
 
-.PHONY : $(call gb_TestFixture_get_target,%)
-$(call gb_TestFixture_get_target,%) : $(gb_TestFixture_CPPTESTTARGET)
+.PHONY : $(call gb_CppunitTest_get_target,%)
+$(call gb_CppunitTest_get_target,%) : $(gb_CppunitTest_CPPTESTTARGET)
     $(call gb_Output_announce,$*,$(true),CUT,2)
     $(call gb_Helper_abbreviate_dirs_native,\
-        $(gb_TestFixture_CPPTESTCOMMAND) $(call gb_LinkTarget_get_target,$(call gb_TestFixture_get_linktargetname,$(call gb_TestFixture_get_filename,$*))))
+        $(gb_CppunitTest_CPPTESTCOMMAND) $(call gb_LinkTarget_get_target,$(call gb_CppunitTest_get_linktargetname,$(call gb_CppunitTest_get_filename,$*))))
 
-#		mkdir -p $(dir $@) && \
-#		$(gb_TestFixture_CPPTESTCOMMAND) $(call gb_LinkTarget_get_target,$(call gb_TestFixture_get_linktargetname,$(call gb_TestFixture_get_filename,$*))) > $@)
-
-define gb_TestFixture_TestFixture
-$(call gb_TestFixture__TestFixture_impl,$(1),$(call gb_TestFixture_get_linktargetname,$(call gb_TestFixture_get_filename,$(1))))
+define gb_CppunitTest_CppunitTest
+$(call gb_CppunitTest__CppunitTest_impl,$(1),$(call gb_CppunitTest_get_linktargetname,$(call gb_CppunitTest_get_filename,$(1))))
 
 endef
 
-define gb_TestFixture__TestFixture_impl
+define gb_CppunitTest__CppunitTest_impl
 $(call gb_LinkTarget_LinkTarget,$(2))
-$(call gb_LinkTarget_set_targettype_flags,$(2),$(gb_TestFixture_TARGETTYPEFLAGS))
+$(call gb_LinkTarget_set_targettype_flags,$(2),$(gb_CppunitTest_TARGETTYPEFLAGS))
 $(call gb_LinkTarget_add_linked_libs,$(2),cppunit)
-$(call gb_TestFixture_get_target,$(1)) : $(call gb_LinkTarget_get_target,$(2))
-$$(eval $$(call gb_Module_register_target,$(call gb_TestFixture_get_target,$(1)),$(call gb_TestFixture_get_clean_target,$(1))))
+$(call gb_CppunitTest_get_target,$(1)) : $(call gb_LinkTarget_get_target,$(2))
+$$(eval $$(call gb_Module_register_target,$(call gb_CppunitTest_get_target,$(1)),$(call gb_CppunitTest_get_clean_target,$(1))))
 
 endef
 
-define gb_TestFixture__forward_to_Linktarget
-gb_TestFixture_$(1) = $$(call gb_LinkTarget_$(1),$(call gb_TestFixture_get_linktargetname,$$(call gb_TestFixture_get_filename,$$(1))),$$(2),$$(3))
+define gb_CppunitTest__forward_to_Linktarget
+gb_CppunitTest_$(1) = $$(call gb_LinkTarget_$(1),$(call gb_CppunitTest_get_linktargetname,$$(call gb_CppunitTest_get_filename,$$(1))),$$(2),$$(3))
 
 endef
 
@@ -91,7 +88,7 @@ $(eval $(foreach method,\
     add_sdi_headers \
     add_precompiled_header \
 ,\
-    $(call gb_TestFixture__forward_to_Linktarget,$(method))\
+    $(call gb_CppunitTest__forward_to_Linktarget,$(method))\
 ))
 
 # vim: set noet sw=4 ts=4:

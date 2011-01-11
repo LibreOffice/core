@@ -470,13 +470,13 @@ $(call gb_Deliver_add_deliverable,$(call gb_Executable_get_target,$(1)).manifest
 
 endef
 
-# TestFixture class
+# CppunitTest class
 
-gb_TestFixture_TARGETTYPEFLAGS := $(gb_Library_TARGETTYPEFLAGS)
-gb_TestFixture_CPPTESTPRECOMMAND :=
-gb_TestFixture_SYSPRE := itest_
-gb_TestFixture_EXT := .lib
-gb_TestFixture_get_filename = $(gb_TestFixture_SYSPRE)$(1)$(gb_TestFixture_EXT)
+gb_CppunitTest_TARGETTYPEFLAGS := $(gb_Library_TARGETTYPEFLAGS)
+gb_CppunitTest_CPPTESTPRECOMMAND :=
+gb_CppunitTest_SYSPRE := itest_
+gb_CppunitTest_EXT := .lib
+gb_CppunitTest_get_filename = $(gb_CppunitTest_SYSPRE)$(1)$(gb_CppunitTest_EXT)
 
 # SdiTarget class
 

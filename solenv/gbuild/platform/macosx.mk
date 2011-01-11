@@ -359,13 +359,13 @@ gb_Executable_LAYER := \
     $(foreach exe,$(gb_Executable_BRAND),$(exe):BRAND) \
     $(foreach exe,$(gb_Executable_NONE),$(exe):NONEBIN) \
 
-# TestFixture class
+# CppunitTest class
 
-gb_TestFixture_TARGETTYPEFLAGS := $(gb_Library_TARGETTYPEFLAGS)
-gb_TestFixture_CPPTESTPRECOMMAND :=
-gb_TestFixture_SYSPRE := libtest_
-gb_TestFixture_EXT := .dylib
-gb_TestFixture_get_filename = $(gb_TestFixture_SYSPRE)$(1)$(gb_TestFixture_EXT)
+gb_CppunitTest_TARGETTYPEFLAGS := $(gb_Library_TARGETTYPEFLAGS)
+gb_CppunitTest_CPPTESTPRECOMMAND :=
+gb_CppunitTest_SYSPRE := libtest_
+gb_CppunitTest_EXT := .dylib
+gb_CppunitTest_get_filename = $(gb_CppunitTest_SYSPRE)$(1)$(gb_CppunitTest_EXT)
 
 # SdiTarget class
 

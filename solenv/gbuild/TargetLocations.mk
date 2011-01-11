@@ -73,7 +73,7 @@ gb_SdiTarget_get_target = $(WORKDIR)/SdiTarget/$(1)
 gb_SrsPartMergeTarget_get_target = $(WORKDIR)/SrsPartMergeTarget/$(1)
 gb_SrsPartTarget_get_target = $(WORKDIR)/SrsPartTarget/$(1)
 gb_SrsTarget_get_target = $(WORKDIR)/SrsTarget/$(1).srs
-gb_TestFixture_get_target = $(WORKDIR)/TestFixture/$(1).test
+gb_CppunitTest_get_target = $(WORKDIR)/CppunitTest/$(1).test
 
 define gb_Library_get_external_headers_target
 $(patsubst $(1):%,$(WORKDIR)/ExternalHeaders/Library/%,$(filter $(1):%,$(gb_Library_FILENAMES)))
@@ -104,7 +104,7 @@ $(eval $(call gb_Helper_make_clean_targets,\
     ResTarget \
     SdiTarget \
     SrsTarget \
-    TestFixture \
+    CppunitTest \
 ))
 
 $(eval $(call gb_Helper_make_outdir_clean_targets,\
@@ -130,7 +130,7 @@ $(eval $(call gb_Helper_make_dep_targets,\
 
 gb_Library_get_linktargetname = Library/$(1)
 gb_StaticLibrary_get_linktargetname = StaticLibrary/$(1)
-gb_TestFixture_get_linktargetname = TestFixture/$(1)
+gb_CppunitTest_get_linktargetname = CppunitTest/$(1)
 
 define gb_Library_get_layer
 $(patsubst $(1):%,%,$(filter $(1):%,$(gb_Library_LAYER)))

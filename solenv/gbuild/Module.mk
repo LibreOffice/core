@@ -175,7 +175,7 @@ endef
 
 define gb_Module_make_global_targets
 ifneq ($$(gb_Module_TARGETSTACK),)
-$$(eval $$(call gb_Output_error,Corrupted module target stack!))
+$$(eval $$(call gb_Output_error,Corrupted module target stack!1))
 endif
 
 include $(1)
@@ -186,7 +186,7 @@ subsequentcheck : $$(firstword $$(gb_Module_SUBSEQUENTCHECKTARGETSTACK))
 clean : $$(firstword $$(gb_Module_CLEANTARGETSTACK))
 
 ifneq ($$(words $$(gb_Module_TARGETSTACK)),1)
-$$(eval $$(call gb_Output_error,Corrupted module target stack!))
+$$(eval $$(call gb_Output_error,Corrupted module target stack! $(gb_Module_TARGETSTACK)))
 endif
 
 gb_Module_TARGETSTACK := $$(wordlist 2,$$(words $$(gb_Module_TARGETSTACK)),$$(gb_Module_TARGETSTACK))
@@ -195,7 +195,7 @@ gb_Module_SUBSEQUENTCHECKTARGETSTACK := $$(wordlist 2,$$(words $$(gb_Module_SUBS
 gb_Module_CLEANTARGETSTACK := $$(wordlist 2,$$(words $$(gb_Module_CLEANTARGETSTACK)),$$(gb_Module_CLEANTARGETSTACK))
 
 ifneq ($$(and $$(gb_Module_TARGETSTACK),$$(gb_Module_CHECKTARGETSTACK),$$(gb_Module_SUBSEQUENTCHECKTARGETSTACK)),)
-$$(eval $$(call gb_Output_error,Corrupted module target stack!))
+$$(eval $$(call gb_Output_error,Corrupted module target stack!3))
 endif
 
 endef
