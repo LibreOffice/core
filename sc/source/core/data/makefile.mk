@@ -90,6 +90,7 @@ EXCEPTIONSFILES= \
     $(SLO)$/drawpage.obj \
     $(SLO)$/drwlayer.obj \
     $(SLO)$/fillinfo.obj \
+    $(SLO)$/funcdesc.obj \
     $(SLO)$/global.obj \
     $(SLO)$/global2.obj \
     $(SLO)$/globalx.obj \

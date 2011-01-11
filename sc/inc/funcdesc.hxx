@@ -34,39 +34,160 @@
  * global.cxx
  */
 
+#include "scfuncs.hrc"
+
 #include <tools/list.hxx>
-#include <tools/string.hxx>
 #include <formula/IFunctionDescription.hxx>
+#include <sal/types.h>
+#include <rtl/ustring.hxx>
 
 #define MAX_FUNCCAT 12  /* maximum number of categories for functions */
 
+class ScFuncDesc;
+class ScFunctionList;
+class ScFunctionCategory;
+class ScFunctionMgr;
+
+/**
+  Stores and generates human readable descriptions for spreadsheet-functions,
+  e.g. functions used in formulas in calc
+*/
 class ScFuncDesc : public formula::IFunctionDescription
 {
 public:
+    ScFuncDesc();
+    virtual ~ScFuncDesc();
 
-    virtual ::rtl::OUString getFunctionName() const ;
+    /**
+      Clears the object
+
+      Deletes all objets referenced by the pointers in the class,
+      sets pointers to NULL, and all numerical variables to 0
+    */
+    void Clear();
+
+    /**
+      Fills a mapping with indexes for non-suppressed arguments
+
+      Fills mapping from visible arguments to real arguments, e.g. if of 4
+      parameters the second one is suppressed {0,2,3}. For VAR_ARGS
+      parameters only one element is added to the end of the sequence.
+
+      @param _rArgumens
+      Vector, which the indices are written to
+    */
+    virtual void fillVisibleArgumentMapping(::std::vector<sal_uInt16>& _rArguments) const ;
+
+    /**
+      Returns the category of the function
+
+      @return    the category of the function
+    */
     virtual const formula::IFunctionCategory* getCategory() const ;
+
+    /**
+      Returns the description of the function
+
+      @return    the description of the function, or an empty OUString if there is no description
+    */
     virtual ::rtl::OUString getDescription() const ;
-    // GetSuppressedArgCount
-    virtual xub_StrLen getSuppressedArgumentCount() const ;
-    /** Returns the function signature with parameters from the passed string array. */
+
+    /**
+      Returns the function signature with parameters from the passed string array.
+
+      @return    function signature with parameters
+    */
     virtual ::rtl::OUString getFormula(const ::std::vector< ::rtl::OUString >& _aArguments) const ;
-    // GetVisibleArgMapping
-    /** Returns mapping from visible arguments to real arguments, e.g. if of 4
-        parameters the second one is suppressed {0,2,3}. For VAR_ARGS
-        parameters only one element is added to the end of the sequence. */
-    virtual void fillVisibleArgumentMapping(::std::vector<USHORT>& _rArguments) const ;
-    virtual void initArgumentInfo()  const;
-    /** Returns the full function signature: "FUNCTIONNAME( parameter list )". */
-    virtual ::rtl::OUString getSignature() const ;
+
+    /**
+      Returns the name of the function
+
+      @return    the name of the function, or an empty OUString if there is no name
+    */
+    virtual ::rtl::OUString getFunctionName() const ;
+
+    /**
+      Returns the help id of the function
+
+      @return   help id of the function
+    */
     virtual long getHelpId() const ;
 
-    // parameter
+    /**
+      Returns number of arguments
+
+      @return   help id of the function
+    */
     virtual sal_uInt32 getParameterCount() const ;
-    virtual ::rtl::OUString getParameterName(sal_uInt32 _nPos) const ;
+
+    /**
+      Returns description of parameter at given position
+
+      @param _nPos
+      Position of the parameter
+
+      @return   OUString description of the parameter
+    */
     virtual ::rtl::OUString getParameterDescription(sal_uInt32 _nPos) const ;
+
+    /**
+      Returns name of parameter at given position
+
+      @param _nPos
+      Position of the parameter
+
+      @return   OUString name of the parameter
+    */
+    virtual ::rtl::OUString getParameterName(sal_uInt32 _nPos) const ;
+
+    /**
+      Returns list of all parameter names
+
+      @return OUString containing separated list of all parameter names
+    */
+    ::rtl::OUString GetParamList() const;
+
+    /**
+      Returns the full function signature
+
+      @return   OUString of the form "FUNCTIONNAME( parameter list )"
+    */
+    virtual ::rtl::OUString getSignature() const ;
+
+    /**
+      Returns the number of non-suppressed arguments
+
+      In case there are variable arguments the number of fixed non-suppressed
+      arguments plus VAR_ARGS, same as for nArgCount (variable arguments can't
+      be suppressed). The two functions are equal apart from return type and
+      name.
+
+      @return    number of non-suppressed arguments
+    */
+    sal_uInt16  GetSuppressedArgCount() const;
+    virtual xub_StrLen getSuppressedArgumentCount() const ;
+
+    /**
+      Requests function data from AddInCollection
+
+      Logs error message on failure for debugging purposes
+    */
+    virtual void initArgumentInfo()  const;
+
+    /**
+      Returns true if parameter at given position is optional
+
+      @param _nPos
+      Position of the parameter
+
+      @return   true if optional, false if not optional
+    */
     virtual bool isParameterOptional(sal_uInt32 _nPos) const ;
 
+
+    /**
+      Stores whether a parameter is optional or suppressed
+    */
     struct ParameterFlags
     {
         bool    bOptional   :1;     // Parameter is optional
@@ -76,34 +197,21 @@ public:
     };
 
 
-    ScFuncDesc();
-    virtual ~ScFuncDesc();
-
-    void        Clear();
-
-    /** Returns a semicolon separated list of all parameter names. */
-    ::rtl::OUString  GetParamList        () const;
-
-
-
-    /** Returns the number of non-suppressed arguments. In case there are
-        variable arguments the number of fixed non-suppressed arguments plus
-        VAR_ARGS, same as for nArgCount (variable arguments can't be
-        suppressed). */
-    USHORT  GetSuppressedArgCount() const;
 
     ::rtl::OUString      *pFuncName;              // Function name
     ::rtl::OUString      *pFuncDesc;              // Description of function
     ::rtl::OUString     **ppDefArgNames;          // Parameter name(s)
     ::rtl::OUString     **ppDefArgDescs;          // Description(s) of parameter(s)
     ParameterFlags       *pDefArgFlags;           // Flags for each parameter
-    USHORT                nFIndex;                // Unique function index
-    USHORT                nCategory;              // Function category
-    USHORT                nArgCount;              // All parameter count, suppressed and unsuppressed
-    USHORT                nHelpId;                // HelpID of function
+    sal_uInt16            nFIndex;                // Unique function index
+    sal_uInt16            nCategory;              // Function category
+    sal_uInt16            nArgCount;              // All parameter count, suppressed and unsuppressed
+    sal_uInt16            nHelpId;                // HelpId of function
     bool                  bIncomplete         :1; // Incomplete argument info (set for add-in info from configuration)
     bool                  bHasSuppressedArgs  :1; // Whether there is any suppressed parameter.
 };
+
+
 
 //============================================================================
 
