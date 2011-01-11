@@ -66,7 +66,7 @@ Writer& Out_SfxItemSet( const SwAttrFnTab pTab, Writer& rWrt,
         if( !pSet )
             return rWrt;
     }
-    const SfxPoolItem* pItem;
+    const SfxPoolItem* pItem(0);
     FnAttrOut pOut;
     if( !bDeep || !pSet->GetParent() )
     {
