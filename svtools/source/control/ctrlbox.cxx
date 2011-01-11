@@ -600,7 +600,7 @@ namespace svtools
 
 void LineListBox::ImpGetLine( long nLine1, long nLine2, long nDistance,
                             Color aColor1, Color aColor2, Color aColorDist,
-                            sal_uInt16 nStyle, Bitmap& rBmp, XubString& rStr )
+                            sal_uInt16 nStyle, Bitmap& rBmp )
 {
     Size aSize = GetOutputSizePixel();
     aSize.Width() -= 20;
@@ -655,25 +655,13 @@ void LineListBox::ImpGetLine( long nLine1, long nLine2, long nDistance,
         }
         rBmp = aVirDev.GetBitmap( Point(), Size( aSize.Width(), n1+nDist+n2 ) );
     }
-
-    // Twips nach Unit
-    if ( eUnit == FUNIT_POINT )
-    {
-        nLine1      *= 5;
-        nLine2      *= 5;
-        nDistance   *= 5;
-        rStr.AssignAscii( " pt" );
-    }
-
-    String aNum( GetSettings().GetLocaleI18nHelper().GetNum( nLine1+nLine2+nDistance, 2 ) );
-    rStr.Insert( aNum, 0 );
 }
 
 // -----------------------------------------------------------------------
 
 void LineListBox::ImplInit()
 {
-    aTxtSize.Width()  = GetTextWidth( XubString( RTL_CONSTASCII_USTRINGPARAM( "99,99 mm" ) ) );
+    aTxtSize.Width()  = GetTextWidth( XubString( RTL_CONSTASCII_USTRINGPARAM( " " )  ) );
     aTxtSize.Height() = GetTextHeight();
     pLineList   = new ImpLineList();
     eUnit       = FUNIT_POINT;
@@ -905,7 +893,6 @@ void LineListBox::UpdateEntries( long nOldWidth )
         ImpLineListData* pData = pLineList->GetObject( n );
         if ( pData && pData->GetMinWidth() <= m_nWidth )
         {
-            XubString   aStr;
             Bitmap      aBmp;
             ImpGetLine( pData->GetLine1ForWidth( m_nWidth ),
                     pData->GetLine2ForWidth( m_nWidth ),
@@ -913,8 +900,8 @@ void LineListBox::UpdateEntries( long nOldWidth )
                     GetColorLine1( GetEntryCount( ) ),
                     GetColorLine2( GetEntryCount( ) ),
                     GetColorDist( GetEntryCount( ) ),
-                    pData->GetStyle(), aBmp, aStr );
-            ListBox::InsertEntry( aStr, aBmp, LISTBOX_APPEND );
+                    pData->GetStyle(), aBmp );
+            ListBox::InsertEntry( XubString( RTL_CONSTASCII_USTRINGPARAM( " " )  ), aBmp, LISTBOX_APPEND );
             if ( n == nTypePos )
                 SelectEntryPos( GetEntryCount() - 1 );
         }

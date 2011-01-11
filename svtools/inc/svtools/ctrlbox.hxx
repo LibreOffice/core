@@ -315,7 +315,7 @@ class SVT_DLLPUBLIC LineListBox : public ListBox
 
     SVT_DLLPRIVATE void         ImpGetLine( long nLine1, long nLine2, long nDistance,
                                     Color nColor1, Color nColor2, Color nColorDist,
-                                    sal_uInt16 nStyle, Bitmap& rBmp, XubString& rStr );
+                                    sal_uInt16 nStyle, Bitmap& rBmp );
     using Window::ImplInit;
     SVT_DLLPRIVATE void         ImplInit();
     sal_Bool        UpdatePaintLineColor( void );       // returns sal_True if maPaintCol has changed
