@@ -757,12 +757,6 @@ en-US = "Scottish Gaelic"
 [STR_DESC_MODULE_LANGPACK_GD]
 en-US = "Installs Scottish Gaelic support in %PRODUCTNAME %PRODUCTVERSION"
 
-[STR_NAME_MODULE_LANGPACK_KID]
-en-US = "Koshin"
-
-[STR_DESC_MODULE_LANGPACK_KID]
-en-US = "Installs Koshin support in %PRODUCTNAME %PRODUCTVERSION"
-
 [STR_NAME_MODULE_LANGPACK_KK]
 en-US = "Kazakh"
 
