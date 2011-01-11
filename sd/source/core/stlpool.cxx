@@ -265,7 +265,6 @@ void SdStyleSheetPool::CreateLayoutStyleSheets(const String& rLayoutName, sal_Bo
             }
 
             ULONG nFontSize = 20;
-            short nFirstIndent = -600;
             USHORT nLower = 100;
 
             switch (nLevel)
@@ -274,7 +273,6 @@ void SdStyleSheetPool::CreateLayoutStyleSheets(const String& rLayoutName, sal_Bo
                 {
                     nFontSize = 32;
                     nLower = 500;
-                    nFirstIndent = -900;
                 }
                 break;
 
@@ -282,7 +280,6 @@ void SdStyleSheetPool::CreateLayoutStyleSheets(const String& rLayoutName, sal_Bo
                 {
                     nFontSize = 28;
                     nLower = 400;
-                    nFirstIndent = -800;
                 }
                 break;
 
