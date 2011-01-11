@@ -1169,7 +1169,7 @@ ScFuncRes::ScFuncRes( ResId &aRes, ScFuncDesc* pDesc, bool & rbSuppressed )
     }
 
     pDesc->pFuncName = new ::rtl::OUString( ScCompiler::GetNativeSymbol( static_cast<OpCode>( aRes.GetId())));
-    pDesc->pFuncDesc = ResId::toString(ScResId(1));
+    pDesc->pFuncDesc = new ::rtl::OUString( ResId::toString(ScResId(1)));
 
     if (nArgs)
     {
@@ -1177,8 +1177,8 @@ ScFuncRes::ScFuncRes( ResId &aRes, ScFuncDesc* pDesc, bool & rbSuppressed )
         pDesc->ppDefArgDescs = new ::rtl::OUString*[nArgs];
         for (USHORT i = 0; i < nArgs; i++)
         {
-            pDesc->ppDefArgNames[i] = ResId::toString(ScResId(2*(i+1)  ));
-            pDesc->ppDefArgDescs[i] = ResId::toString(ScResId(2*(i+1)+1));
+            pDesc->ppDefArgNames[i] = new ::rtl::OUString(ResId::toString(ScResId(2*(i+1)  )));
+            pDesc->ppDefArgDescs[i] = new ::rtl::OUString(ResId::toString(ScResId(2*(i+1)+1)));
         }
     }
 
@@ -1851,7 +1851,7 @@ void ScFunctionMgr::fillLastRecentlyUsedFunctions(::std::vector< const formula::
     }
 
     ::std::auto_ptr<ScResourcePublisher> pCategories( new ScResourcePublisher( ScResId( RID_FUNCTION_CATEGORIES ) ) );
-    return *ResId::toString(ScResId((USHORT)_nCategoryNumber));
+    return ResId::toString(ScResId((USHORT)_nCategoryNumber));
 }
 sal_Unicode ScFunctionMgr::getSingleToken(const formula::IFunctionManager::EToken _eToken) const
 {
