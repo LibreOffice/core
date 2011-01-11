@@ -83,6 +83,7 @@
 #include <svtools/valueset.hxx>
 #include <svtools/roadmap.hxx>
 #include <svtools/table/tablecontrol.hxx>
+#include <svtools/table/abstracttablecontrol.hxx>
 #include <svl/poolitem.hxx>
 #include <svtools/extensionlistbox.hxx>
 // Hat keinen Includeschutz
@@ -6209,7 +6210,7 @@ protected:
                                                             Point aPos( aSize.Width() / 2, aSize.Height() / 2 );
                                                             long nStep = aSize.Height() / 4;
                                                             ::svt::table::RowPos nLastPos;
-                                                            while ( ( nLastPos = pTC->GetRowAtPoint( aPos ) ) != nNr1-1 && nStep > 0 )
+                                                            while ( ( nLastPos = pTC->getTableControlInterface().getRowAtPoint( aPos ) ) != nNr1-1 && nStep > 0 )
                                                             {
                                                                 if ( nLastPos > nNr1-1 || nLastPos == ROW_INVALID )
                                                                     aPos.Y() -= nStep;
@@ -6217,7 +6218,7 @@ protected:
                                                                     aPos.Y() += nStep;
                                                                 nStep /= 2;
                                                             }
-                                                            if ( pTC->GetRowAtPoint( aPos ) == nNr1-1 )
+                                                            if ( pTC->getTableControlInterface().getRowAtPoint( aPos ) == nNr1-1 )
                                                             {
                                                                 MouseEvent aMEvnt(aPos,1,MOUSE_SIMPLECLICK|MOUSE_SELECT,MOUSE_LEFT,KEY_MOD1);
                                                                 pTC->getSelEngine()->SelMouseButtonDown( aMEvnt );
