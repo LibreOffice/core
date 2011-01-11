@@ -46,6 +46,7 @@ namespace svt { namespace table
     class SAL_NO_VTABLE ITableRenderer
     {
         public:
+
         /** paints a (part of) header area
 
             There are two header areas in a table control:
@@ -176,7 +177,7 @@ namespace svt { namespace table
             @param _rStyle
                 the style to be used for drawing
         */
-        virtual void    PaintRowHeader( RowPos const i_rowPos, bool _bActive, bool _bSelected,
+        virtual void    PaintRowHeader( bool _bActive, bool _bSelected,
                             OutputDevice& _rDevice, const Rectangle& _rArea,
                 const StyleSettings& _rStyle ) = 0;
 

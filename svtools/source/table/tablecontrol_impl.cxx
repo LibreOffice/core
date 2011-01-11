@@ -1174,7 +1174,7 @@ namespace svt { namespace table
             if ( m_pModel->hasRowHeaders() )
             {
                 const Rectangle aCurrentRowHeader( aRowHeaderArea.GetIntersection( aRowIterator.getRect() ) );
-                pRenderer->PaintRowHeader( aRowIterator.getRow(), isActiveRow, isSelectedRow, *m_pDataWindow, aCurrentRowHeader,
+                pRenderer->PaintRowHeader( isActiveRow, isSelectedRow, *m_pDataWindow, aCurrentRowHeader,
                     rStyle );
             }
             if ( !colCount )
