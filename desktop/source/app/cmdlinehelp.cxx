@@ -149,7 +149,7 @@ namespace desktop
         aHelpMessage_head.SearchAndReplaceAscii( "%CMDNAME", String( "soffice", RTL_TEXTENCODING_ASCII_US) );
 #ifdef UNX
         // on unix use console for output
-        fprintf(stderr, "%s\n", ByteString(aHelpMessage_head,
+        fprintf(stdout, "%s\n", ByteString(aHelpMessage_head,
                     RTL_TEXTENCODING_ASCII_US).GetBuffer());
         // merge left and right column
         int n = aHelpMessage_left.GetTokenCount ('\n');
@@ -157,10 +157,10 @@ namespace desktop
         ByteString bsRight(aHelpMessage_right, RTL_TEXTENCODING_ASCII_US);
         for ( int i = 0; i < n; i++ )
         {
-            fprintf(stderr, "%s", bsLeft.GetToken(i, '\n').GetBuffer());
-            fprintf(stderr, "%s\n", bsRight.GetToken(i, '\n').GetBuffer());
+            fprintf(stdout, "%s", bsLeft.GetToken(i, '\n').GetBuffer());
+            fprintf(stdout, "%s\n", bsRight.GetToken(i, '\n').GetBuffer());
         }
-        fprintf(stderr, "%s", ByteString(aHelpMessage_bottom,
+        fprintf(stdout, "%s", ByteString(aHelpMessage_bottom,
                     RTL_TEXTENCODING_ASCII_US).GetBuffer());
 #else
         // rest gets a dialog box
