@@ -251,7 +251,7 @@ public:
         ScMatrixRef mpRangeData;
     };
     void setCellRangeData(sal_uInt16 nFileId, const ScRange& rRange, const ::std::vector<SingleRangeData>& rData,
-                          TokenArrayRef pArray);
+                          const TokenArrayRef& pArray);
 
     bool isDocInitialized(sal_uInt16 nFileId);
     void initializeDoc(sal_uInt16 nFileId, const ::std::vector<String>& rTabNames);

@@ -696,7 +696,7 @@ void ScExternalRefCache::setCellData(sal_uInt16 nFileId, const String& rTabName,
 }
 
 void ScExternalRefCache::setCellRangeData(sal_uInt16 nFileId, const ScRange& rRange, const vector<SingleRangeData>& rData,
-                                          TokenArrayRef pArray)
+                                          const TokenArrayRef& pArray)
 {
     using ::std::pair;
     if (rData.empty() || !isDocInitialized(nFileId))
@@ -1702,6 +1702,47 @@ ScExternalRefCache::TokenRef ScExternalRefManager::getSingleRefToken(
     return pToken;
 }
 
+namespace {
+
+/**
+ * Put the data into our internal cache table.
+ *
+ * @param rRefCache cache table set.
+ * @param pArray single range data to be returned.
+ * @param nFileId external file ID
+ * @param rTabName name of the table where the data should be cached.
+ * @param rCacheData range data to be cached.
+ * @param rCacheRange original cache range, including the empty region if
+ *                    any.
+ * @param rDataRange reduced cache range that includes only the non-empty
+ *                   data area.
+ */
+void putRangeDataIntoCache(
+    ScExternalRefCache& rRefCache, ScExternalRefCache::TokenArrayRef& pArray,
+    sal_uInt16 nFileId, const String& rTabName,
+    const vector<ScExternalRefCache::SingleRangeData>& rCacheData,
+    const ScRange& rCacheRange, const ScRange& rDataRange)
+{
+    if (pArray)
+        // Cache these values.
+        rRefCache.setCellRangeData(nFileId, rDataRange, rCacheData, pArray);
+    else
+    {
+        // Array is empty.  Fill it with an empty matrix of the required size.
+        pArray.reset(lcl_fillEmptyMatrix(rCacheRange));
+
+        // Make sure to set this range 'cached', to prevent unnecessarily
+        // accessing the src document time and time again.
+        ScExternalRefCache::TableTypeRef pCacheTab =
+            rRefCache.getCacheTable(nFileId, rTabName, true, NULL);
+        if (pCacheTab)
+            pCacheTab->setCachedCellRange(
+                rCacheRange.aStart.Col(), rCacheRange.aStart.Row(), rCacheRange.aEnd.Col(), rCacheRange.aEnd.Row());
+    }
+}
+
+}
+
 ScExternalRefCache::TokenArrayRef ScExternalRefManager::getDoubleRefTokens(
     sal_uInt16 nFileId, const String& rTabName, const ScRange& rRange, const ScAddress* pCurPos)
 {
@@ -1710,13 +1751,18 @@ ScExternalRefCache::TokenArrayRef ScExternalRefManager::getDoubleRefTokens(
 
     maybeLinkExternalFile(nFileId);
 
-    ScRange aRange(rRange);
+    ScRange aDataRange(rRange);
     const ScDocument* pSrcDoc = getInMemorySrcDocument(nFileId);
     if (pSrcDoc)
     {
-        // Document already loaded.
+        // Document already loaded in memory.
         vector<ScExternalRefCache::SingleRangeData> aCacheData;
-        return getDoubleRefTokensFromSrcDoc(pSrcDoc, rTabName, aRange, aCacheData);
+        ScExternalRefCache::TokenArrayRef pArray =
+            getDoubleRefTokensFromSrcDoc(pSrcDoc, rTabName, aDataRange, aCacheData);
+
+        // Put the data into cache.
+        putRangeDataIntoCache(maRefCache, pArray, nFileId, rTabName, aCacheData, rRange, aDataRange);
+        return pArray;
     }
 
     // Check if the given table name and the cell position is cached.
@@ -1736,25 +1782,10 @@ ScExternalRefCache::TokenArrayRef ScExternalRefManager::getDoubleRefTokens(
     }
 
     vector<ScExternalRefCache::SingleRangeData> aCacheData;
-    pArray = getDoubleRefTokensFromSrcDoc(pSrcDoc, rTabName, aRange, aCacheData);
+    pArray = getDoubleRefTokensFromSrcDoc(pSrcDoc, rTabName, aDataRange, aCacheData);
 
-    if (pArray)
-        // Cache these values.
-        maRefCache.setCellRangeData(nFileId, aRange, aCacheData, pArray);
-    else
-    {
-        // Array is empty.  Fill it with an empty matrix of the required size.
-        pArray.reset(lcl_fillEmptyMatrix(rRange));
-
-        // Make sure to set this range 'cached', to prevent unnecessarily
-        // accessing the src document time and time again.
-        ScExternalRefCache::TableTypeRef pCacheTab =
-            maRefCache.getCacheTable(nFileId, rTabName, true, NULL);
-        if (pCacheTab)
-            pCacheTab->setCachedCellRange(
-                rRange.aStart.Col(), rRange.aStart.Row(), rRange.aEnd.Col(), rRange.aEnd.Row());
-    }
-
+    // Put the data into cache.
+    putRangeDataIntoCache(maRefCache, pArray, nFileId, rTabName, aCacheData, rRange, aDataRange);
     return pArray;
 }
 
