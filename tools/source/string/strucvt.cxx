@@ -212,4 +212,10 @@ UniString::UniString( const ResId& rResId )
         pImplResHookProc( *this );
 }
 
+rtl::OUString ResId::toString(const ResId& aId)
+{
+    // TODO: Optimize this.
+    return rtl::OUString(UniString(aId));
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

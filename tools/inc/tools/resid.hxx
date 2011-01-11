@@ -43,6 +43,10 @@ class ResMgr;
 //- ResId -
 //---------
 
+namespace rtl {
+    class OUString;
+}
+
 class ResId
 {
     /*
@@ -158,6 +162,8 @@ class ResId
 
     sal_uInt32     GetId()          const { return m_nResId & ~RSC_DONTRELEASE; }
     RSHEADER_TYPE* GetpResource()   const { return m_pResource; }
+
+    static TOOLS_DLLPUBLIC rtl::OUString toString(const ResId& aId);
 };
 
 #endif // _RESID_HXX
