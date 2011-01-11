@@ -133,7 +133,7 @@ namespace desktop
         "      If -outdir is not specified then current working dir is used as output_dir.\n"\
         "      Eg. -print-to-file *.doc\n"\
         "          -print-to-file -printer-name nasty_lowres_printer -outdir /home/user *.doc\n"\
-        "\nRemaining arguments will be treated as filenames or URLs of documents to open.\n";
+        "\nRemaining arguments will be treated as filenames or URLs of documents to open.\n\n";
 
     void ReplaceStringHookProc( UniString& rStr );
 
@@ -187,7 +187,14 @@ namespace desktop
         ::rtl::OUString aDefault;
         String aVerId = ::utl::Bootstrap::getBuildIdData(aDefault);
         aVersionMsg.SearchAndReplaceAscii("%BUILDID", aVerId);
+#ifdef UNX
         fprintf(stdout, "%s", ByteString(aVersionMsg, RTL_TEXTENCODING_ASCII_US).GetBuffer());
+#else
+        // Just re-use the help dialog for now.
+        CmdlineHelpDialog aDlg;
+        aDlg.m_ftHead.SetText(aVersionMsg);
+        aDlg.Execute();
+#endif
     }
 
 #ifndef UNX
