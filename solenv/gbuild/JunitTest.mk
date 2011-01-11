@@ -33,22 +33,22 @@ gb_JunitTest_JAVACOMMAND := $(JAVAINTERPRETER)
 .PHONY : $(call gb_JunitTest_get_clean_target,%)
 $(call gb_JunitTest_get_clean_target,%) : $(call gb_LinkTarget_get_clean_target,$(call gb_Library_get_linktargetname,%))
     $(call gb_Helper_abbreviate_dirs,\
-        rm -f $@)
+        rm -f $@ $@.log)
 
-.PHONY : $(call gb_JunitTest_get_target,%)
+.PHONY : $(call gb_JunitTest_get_target,$(1))
 $(call gb_JunitTest_get_target,%) : $(gb_JunitTest_JAVACOMMAND)
     $(call gb_Output_announce,$*,$(true),JUT,2)
     $(call gb_Helper_abbreviate_dirs_native,\
         mkdir -p $(call gb_JunitTest_get_userdir,$*) && \
-        $(gb_JunitTest_JAVACOMMAND) -cp "$(CLASSPATH)" $(DEFS) org.junit.runner.JUnitCore $(CLASSES))
+        $(gb_JunitTest_JAVACOMMAND) -cp "$(CLASSPATH)" $(DEFS) org.junit.runner.JUnitCore $(CLASSES) 2>&1 > $@.log || (cat $@.log && false))
 
 define gb_JunitTest_JunitTest
-$(call gb_JunitTest_get_target,$(1)) : CLASSPATH := $(value XCLASSPATH):$(OOO_JUNIT_JAR):$(OUTDIR)/bin/OOoRunner.jar:$(OUTDIR)/bin/ridl.jar:$(OUTDIR)/bin/test.jar:$(OUTDIR)/bin/unoil.jar:$(OUTDIR)/bin/jurt.jar:$(OUTDIR)/lib:$(call gb_JavaClassSet_get_classdir,$(call gb_JunitTest_get_classsetname,$(1)))
+$(call gb_JunitTest_get_target,$(1)) : CLASSPATH := $(value XCLASSPATH):$(OOO_JUNIT_JAR):$(OUTDIR)/bin/OOoRunner.jar:$(OUTDIR)/bin/ridl.jar:$(OUTDIR)/bin/test.jar:$(OUTDIR)/bin/unoil.jar:$(OUTDIR)/bin/jurt.jar:$(OUTDIR)/lib:$(OUTDIR)/bin/ConnectivityTools.jar:$(call gb_JavaClassSet_get_classdir,$(call gb_JunitTest_get_classsetname,$(1)))
 $(call gb_JunitTest_get_target,$(1)) : CLASSES :=
 $(call gb_JunitTest_get_target,$(1)) : DEFS := \
     -Dorg.openoffice.test.arg.soffice=path:$(OUTDIR)/installation/opt/openoffice.org3/program/soffice \
     -Dorg.openoffice.test.arg.env=LD_LIBRARY_PATH \
-    -Dorg.openoffice.test.arg.user=file://$(call gb_JunitTest_get_userdir,$*) \
+    -Dorg.openoffice.test.arg.user=file://$(call gb_JunitTest_get_userdir,$(1)) \
 
 $(call gb_JavaClassSet_JavaClassSet,$(call gb_JunitTest_get_classsetname,$(1)))
 $(call gb_JunitTest_get_target,$(1)) : $(call gb_JavaClassSet_get_target,$(call gb_JunitTest_get_classsetname,$(1)))

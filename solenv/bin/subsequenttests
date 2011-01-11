@@ -69,6 +69,7 @@ while (@ARGV) {
 my @testpaths = ();
 my $sc = SourceConfig->new($ENV{'SOLARSRC'});
 my $module;
+my $gbuildpath = "$ENV{'SOLARSRC'}/GNUmakefile";
 foreach $module ($sc->get_active_modules()) {
     my $buildlst = $sc->get_module_build_list($module);
     next unless defined($buildlst);
@@ -106,7 +107,20 @@ if ($dry_run) {
     foreach $path (@testpaths) {
         print "$path\n";
     }
+    print "$gbuildpath\n";
     exit(0);
+}
+
+my @failedpaths = ();
+my @gbuildargs = ("-j$max_running", "-s");
+if ($keep_going) {
+    push(@gbuildargs,"-k");
+}
+push(@gbuildargs, "--file=$gbuildpath");
+push(@gbuildargs, "subsequentcheck");
+if (system($ENV{'GNUMAKE'}, @gbuildargs) != 0) {
+	push(@failedpaths,$gbuildpath);
+	@testpaths = () unless $keep_going;
 }
 
 my $cmd = 'dmake';
@@ -117,7 +131,6 @@ foreach (@ARGV) {
 $cmd .= ' 2>&1 |';
 
 my %pids = ();
-my @failedpaths = ();
 my $running = 0;
 my $counter = 0;
 while (@testpaths || $running > 0) {
