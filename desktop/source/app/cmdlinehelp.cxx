@@ -54,9 +54,10 @@ namespace desktop
     //  __BOTTOM__
     //     [OK]
 
-    const char *aCmdLineHelp_head =
+    const char *aCmdLineHelp_version =
         "%PRODUCTNAME %PRODUCTVERSION %PRODUCTEXTENSION %BUILDID\n"\
-        "\n"\
+        "\n";
+    const char *aCmdLineHelp_head =
         "Usage: %CMDNAME [options] [documents...]\n"\
         "\n"\
         "Options:\n";
@@ -138,19 +139,21 @@ namespace desktop
     {
         // if you put variables in other chunks don't forget to call the replace routines
         // for those chunks...
+        String aHelpMessage_version(aCmdLineHelp_version, RTL_TEXTENCODING_ASCII_US);
         String aHelpMessage_head(aCmdLineHelp_head, RTL_TEXTENCODING_ASCII_US);
         String aHelpMessage_left(aCmdLineHelp_left, RTL_TEXTENCODING_ASCII_US);
         String aHelpMessage_right(aCmdLineHelp_right, RTL_TEXTENCODING_ASCII_US);
         String aHelpMessage_bottom(aCmdLineHelp_bottom, RTL_TEXTENCODING_ASCII_US);
-        ReplaceStringHookProc(aHelpMessage_head);
+        ReplaceStringHookProc(aHelpMessage_version);
         ::rtl::OUString aDefault;
         String aVerId( ::utl::Bootstrap::getBuildIdData( aDefault ));
-        aHelpMessage_head.SearchAndReplaceAscii( "%BUILDID", aVerId );
+        aHelpMessage_version.SearchAndReplaceAscii( "%BUILDID", aVerId );
         aHelpMessage_head.SearchAndReplaceAscii( "%CMDNAME", String( "soffice", RTL_TEXTENCODING_ASCII_US) );
 #ifdef UNX
         // on unix use console for output
-        fprintf(stdout, "%s\n", ByteString(aHelpMessage_head,
-                    RTL_TEXTENCODING_ASCII_US).GetBuffer());
+        fprintf(stdout, "%s%s",
+                ByteString(aHelpMessage_version, RTL_TEXTENCODING_ASCII_US).GetBuffer(),
+                ByteString(aHelpMessage_head, RTL_TEXTENCODING_ASCII_US).GetBuffer());
         // merge left and right column
         int n = aHelpMessage_left.GetTokenCount ('\n');
         ByteString bsLeft(aHelpMessage_left, RTL_TEXTENCODING_ASCII_US);
@@ -165,7 +168,9 @@ namespace desktop
 #else
         // rest gets a dialog box
         CmdlineHelpDialog aDlg;
-        aDlg.m_ftHead.SetText(aHelpMessage_head);
+        String head = aHelpMessage_version;
+        head.Append(aHelpMessage_head);
+        aDlg.m_ftHead.SetText(head);
         aDlg.m_ftLeft.SetText(aHelpMessage_left);
         aDlg.m_ftRight.SetText(aHelpMessage_right);
         aDlg.m_ftBottom.SetText(aHelpMessage_bottom);
@@ -175,7 +180,12 @@ namespace desktop
 
     void displayVersion()
     {
-        fprintf(stdout, "Display version here\n");
+        String aVersionMsg(aCmdLineHelp_version, RTL_TEXTENCODING_ASCII_US);
+        ReplaceStringHookProc(aVersionMsg);
+        ::rtl::OUString aDefault;
+        String aVerId = ::utl::Bootstrap::getBuildIdData(aDefault);
+        aVersionMsg.SearchAndReplaceAscii("%BUILDID", aVerId);
+        fprintf(stdout, "%s", ByteString(aVersionMsg, RTL_TEXTENCODING_ASCII_US).GetBuffer());
     }
 
 #ifndef UNX
