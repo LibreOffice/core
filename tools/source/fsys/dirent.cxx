@@ -499,7 +499,7 @@ FSysError DirEntry::ImpParseOs2Name( const ByteString& rPfad, FSysPathStyle eSty
     }
     while ( aPfad.Len() );
 
-    sal_uInt32 nErr = ERRCODE_NONE;
+    sal_uIntPtr nErr = ERRCODE_NONE;
     // Haupt-Entry (selbst) zuweisen
     if ( aStack.Count() == 0 )
     {

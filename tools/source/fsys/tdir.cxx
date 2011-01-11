@@ -62,7 +62,7 @@ DECLARE_LIST( FileStatList, FileStat* )
 
 sal_Bool Dir::ImpInsertPointReached( const DirEntry& rNewEntry,
                                  const FileStat& rNewStat,
-                                 sal_uInt32 nCurPos, sal_uInt32 nSortIndex ) const
+                                 sal_uIntPtr nCurPos, sal_uIntPtr nSortIndex ) const
 {
 #define VALUE( nKindFlags ) \
     ( ( FSYS_KIND_FILE | FSYS_KIND_DIR | FSYS_KIND_DEV | \
@@ -226,7 +226,7 @@ void Dir::ImpSortedInsert( const DirEntry *pNewEntry, const FileStat *pNewStat )
     pLst->First();
     do {
         if ( ImpInsertPointReached( *pNewEntry, *pNewStat, pLst->GetCurPos(),
-                                    (sal_uInt32)0  ) )
+                                    (sal_uIntPtr)0  ) )
         {
             if ( pStatLst )
                 pStatLst->Insert( (FileStat*)pNewStat, pLst->GetCurPos() );
