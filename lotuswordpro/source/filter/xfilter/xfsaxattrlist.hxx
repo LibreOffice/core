@@ -84,7 +84,7 @@ public:
 
     virtual void    Clear();
 
-    Reference<XAttributeList>   GetAttributeList();
+    Reference<XAttributeList>   GetAttributeList() const;
 
     friend class XFSaxStream;
 private:
@@ -93,7 +93,7 @@ private:
 
 };
 
-inline Reference<XAttributeList>    XFSaxAttrList::GetAttributeList()
+inline Reference<XAttributeList>    XFSaxAttrList::GetAttributeList() const
 {
     return m_xAttrList;
 }
