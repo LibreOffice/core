@@ -124,6 +124,7 @@
 
 #include <svl/aeitem.hxx>
 #include <avmedia/mediaitem.hxx>
+#include <sfx2/frame.hxx>
 #include "attrib.hxx"
 
 #define SvxDrawToolItem             SfxAllEnumItem
