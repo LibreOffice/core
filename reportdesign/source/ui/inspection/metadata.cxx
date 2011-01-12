@@ -173,7 +173,7 @@ namespace rptui
         };
 
         s_pPropertyInfos = aPropertyInfos;
-
+        s_nCount = SAL_N_ELEMENTS(aPropertyInfos);
         ::std::sort( aPropertyInfos, aPropertyInfos + SAL_N_ELEMENTS(aPropertyInfos), PropertyInfoLessByName() );
 
         return s_pPropertyInfos;
