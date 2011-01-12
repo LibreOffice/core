@@ -78,10 +78,10 @@ ScVbaCommandBarControl::setOnAction( const ::rtl::OUString& _onaction ) throw (u
 {
     // get the current model
     uno::Reference< frame::XModel > xModel( pCBarHelper->getModel() );
-    VBAMacroResolvedInfo aResolvedMacro = ooo::vba::resolveVBAMacro( getSfxObjShell( xModel ), _onaction, true );
-    if ( aResolvedMacro.IsResolved() )
+    MacroResolvedInfo aResolvedMacro = ooo::vba::resolveVBAMacro( getSfxObjShell( xModel ), _onaction, true );
+    if ( aResolvedMacro.mbFound )
     {
-        rtl::OUString aCommandURL = ooo::vba::makeMacroURL( aResolvedMacro.ResolvedMacro() );
+        rtl::OUString aCommandURL = ooo::vba::makeMacroURL( aResolvedMacro.msResolvedMacro );
         OSL_TRACE(" ScVbaCommandBarControl::setOnAction: %s", rtl::OUStringToOString( aCommandURL, RTL_TEXTENCODING_UTF8 ).getStr() );
         setPropertyValue( m_aPropertyValues, rtl::OUString::createFromAscii("CommandURL"), uno::makeAny( aCommandURL ) );
         ApplyChange();
@@ -91,27 +91,33 @@ ScVbaCommandBarControl::setOnAction( const ::rtl::OUString& _onaction ) throw (u
 ::sal_Bool SAL_CALL
 ScVbaCommandBarControl::getVisible() throw (uno::RuntimeException)
 {
-    sal_Bool bVisible = sal_True;
+    /*sal_Bool bVisible = sal_True;
     uno::Any aValue = getPropertyValue( m_aPropertyValues, rtl::OUString::createFromAscii("IsVisible") );
     if( aValue.hasValue() )
         aValue >>= bVisible;
-    return bVisible;
+    return bVisible;*/
+    return getEnabled();
+
 }
 void SAL_CALL
 ScVbaCommandBarControl::setVisible( ::sal_Bool _visible ) throw (uno::RuntimeException)
 {
-    uno::Any aValue = getPropertyValue( m_aPropertyValues, rtl::OUString::createFromAscii("IsVisible") );
+    /*uno::Any aValue = getPropertyValue( m_aPropertyValues, rtl::OUString::createFromAscii("IsVisible") );
     if( aValue.hasValue() )
     {
         setPropertyValue( m_aPropertyValues, rtl::OUString::createFromAscii("IsVisible"), uno::makeAny( _visible ) );
         ApplyChange();
-    }
+    }*/
+    setEnabled( _visible);
 }
 
 ::sal_Bool SAL_CALL
 ScVbaCommandBarControl::getEnabled() throw (uno::RuntimeException)
 {
     sal_Bool bEnabled = sal_True;
+    rtl::OUString aCommandURLappendix = rtl::OUString::createFromAscii("___");
+    rtl::OUString aCommandURL ;
+
     if( m_xParentMenu.is() )
     {
         // currently only the menu in the MenuBat support Enable/Disable
@@ -121,7 +127,14 @@ ScVbaCommandBarControl::getEnabled() throw (uno::RuntimeException)
     else
     {
         // emulated with Visible
-        bEnabled = getVisible();
+        //bEnabled = getVisible();
+        uno::Any aValue = getPropertyValue( m_aPropertyValues, rtl::OUString::createFromAscii("CommandURL") );
+        if (aValue >>= aCommandURL){
+            if (0 == aCommandURL.indexOf(aCommandURLappendix)){
+                    bEnabled = sal_False;
+                }
+            }
+
     }
     return bEnabled;
 }
@@ -129,6 +142,9 @@ ScVbaCommandBarControl::getEnabled() throw (uno::RuntimeException)
 void SAL_CALL
 ScVbaCommandBarControl::setEnabled( sal_Bool _enabled ) throw (uno::RuntimeException)
 {
+    rtl::OUString aCommandURL ;
+    rtl::OUString aCommandURLappendix = rtl::OUString::createFromAscii("___");
+    rtl::OUStringBuffer aCommandURLSringBuffer;
     if( m_xParentMenu.is() )
     {
         // currently only the menu in the MenuBat support Enable/Disable
@@ -136,8 +152,20 @@ ScVbaCommandBarControl::setEnabled( sal_Bool _enabled ) throw (uno::RuntimeExcep
     }
     else
     {
+        uno::Any aValue = getPropertyValue( m_aPropertyValues, rtl::OUString::createFromAscii("CommandURL") );
+        if (aValue >>= aCommandURL){
+            if (0 == aCommandURL.indexOf(aCommandURLappendix)){
+                aCommandURL = aCommandURL.copy(3);
+                }
+            if (false == _enabled){
+                aCommandURLSringBuffer = aCommandURLappendix;
+            }
+            aCommandURLSringBuffer.append(aCommandURL);
+            setPropertyValue( m_aPropertyValues, rtl::OUString::createFromAscii("CommandURL"), uno::makeAny( aCommandURLSringBuffer.makeStringAndClear()) );
+            ApplyChange();
+        }
         // emulated with Visible
-        setVisible( _enabled );
+        //setVisible( _enabled );
     }
 }
 

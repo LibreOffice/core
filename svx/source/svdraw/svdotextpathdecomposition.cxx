@@ -64,7 +64,7 @@
 #include <drawinglayer/primitive2d/polygonprimitive2d.hxx>
 #include <drawinglayer/primitive2d/unifiedtransparenceprimitive2d.hxx>
 #include <editeng/editstat.hxx>
-#include <unoapi.hxx>
+#include <svx/unoapi.hxx>
 #include <drawinglayer/geometry/viewinformation2d.hxx>
 #include <svx/sdr/attribute/sdrformtextoutlineattribute.hxx>
 

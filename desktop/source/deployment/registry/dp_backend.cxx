@@ -39,6 +39,7 @@
 #include "ucbhelper/content.hxx"
 #include "com/sun/star/lang/WrappedTargetRuntimeException.hpp"
 #include "com/sun/star/deployment/InvalidRemovedParameterException.hpp"
+#include "com/sun/star/deployment/thePackageManagerFactory.hpp"
 #include "com/sun/star/ucb/InteractiveAugmentedIOException.hpp"
 #include "com/sun/star/ucb/IOErrorCode.hpp"
 #include "com/sun/star/beans/StringPair.hpp"
@@ -99,6 +100,8 @@ PackageRegistryBackend::PackageRegistryBackend(
         m_eContext = CONTEXT_BUNDLED;
     else if (m_context.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("tmp") ))
         m_eContext = CONTEXT_TMP;
+    else if (m_context.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("bundled_prereg") ))
+        m_eContext = CONTEXT_BUNDLED_PREREG;
     else if (m_context.matchIgnoreAsciiCaseAsciiL(
                  RTL_CONSTASCII_STRINGPARAM("vnd.sun.star.tdoc:/") ))
         m_eContext = CONTEXT_DOCUMENT;
@@ -121,6 +124,9 @@ void PackageRegistryBackend::check()
 void PackageRegistryBackend::disposing()
 {
     try {
+        for ( t_string2ref::const_iterator i = m_bound.begin(); i != m_bound.end(); i++)
+            i->second->removeEventListener(this);
+        m_bound.clear();
         m_xComponentContext.clear();
         WeakComponentImplHelperBase::disposing();
     }
@@ -512,6 +518,15 @@ OUString Package::getDisplayName() throw (
 
 //______________________________________________________________________________
 OUString Package::getDescription() throw (
+    deployment::ExtensionRemovedException,RuntimeException)
+{
+    if (m_bRemoved)
+        throw deployment::ExtensionRemovedException();
+    return OUString();
+}
+
+//______________________________________________________________________________
+OUString Package::getLicenseText() throw (
     deployment::ExtensionRemovedException,RuntimeException)
 {
     if (m_bRemoved)

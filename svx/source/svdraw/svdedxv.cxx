@@ -50,12 +50,12 @@
 #include <editeng/editobj.hxx>
 #include <editeng/outlobj.hxx>
 #include <editeng/scripttypeitem.hxx>
-#include "svditext.hxx"
+#include "svx/svditext.hxx"
 #include <svx/svdoutl.hxx>
 #include <svx/sdtfchim.hxx>
 #include <svx/svdotext.hxx>
 #include <svx/svdundo.hxx>
-#include "svditer.hxx"
+#include "svx/svditer.hxx"
 #include "svx/svdpagv.hxx"
 #include "svx/svdpage.hxx"
 #include "svx/svdetc.hxx"   // fuer GetDraftFillColor
@@ -67,16 +67,16 @@
 
 #include <svx/svdoutl.hxx>
 #include <svx/svddrgv.hxx>  // fuer SetSolidDragging()
-#include "svdstr.hrc"   // Namen aus der Resource
-#include "svdglob.hxx"  // StringCache
-#include "globl3d.hxx"
+#include "svx/svdstr.hrc"   // Namen aus der Resource
+#include "svx/svdglob.hxx"  // StringCache
+#include "svx/globl3d.hxx"
 #include <editeng/outliner.hxx>
 #include <editeng/adjitem.hxx>
 
 // #98988#
 #include <svtools/colorcfg.hxx>
 #include <vcl/svapp.hxx> //add CHINA001
-#include <sdrpaintwindow.hxx>
+#include <svx/sdrpaintwindow.hxx>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 

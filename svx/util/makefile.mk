@@ -75,30 +75,33 @@ SHL1LIBS= \
 
 
 SHL1STDLIBS= \
-             $(EDITENGLIB) \
-             $(AVMEDIALIB) \
-             $(SFX2LIB) \
-             $(XMLOFFLIB) \
-             $(BASEGFXLIB) \
-             $(DRAWINGLAYERLIB) \
-             $(LNGLIB) \
-             $(BASICLIB) \
-             $(SVTOOLLIB) \
-             $(TKLIB) \
-             $(VCLLIB) \
-             $(SVLLIB) \
-             $(SOTLIB) \
-             $(UNOTOOLSLIB) \
-             $(TOOLSLIB) \
-             $(I18NISOLANGLIB) \
-             $(I18NPAPERLIB) \
-             $(COMPHELPERLIB) \
-             $(UCBHELPERLIB) \
-             $(CPPUHELPERLIB) \
-             $(CPPULIB) \
-             $(VOSLIB) \
-             $(SALLIB) \
-             $(ICUUCLIB)
+    $(AVMEDIALIB) \
+    $(BASEGFXLIB) \
+    $(BASICLIB) \
+    $(COMPHELPERLIB) \
+    $(CPPUHELPERLIB) \
+    $(CPPULIB) \
+    $(DRAWINGLAYERLIB) \
+    $(EDITENGLIB) \
+    $(FWELIB) \
+    $(GOODIESLIB) \
+    $(I18NISOLANGLIB) \
+    $(I18NPAPERLIB) \
+    $(ICUUCLIB) \
+    $(LNGLIB) \
+    $(SALLIB) \
+    $(SFX2LIB) \
+    $(SOTLIB) \
+    $(SVLLIB) \
+    $(SVTOOLLIB) \
+    $(TKLIB) \
+    $(TOOLSLIB) \
+    $(UCBHELPERLIB) \
+    $(UNOTOOLSLIB) \
+    $(VCLLIB) \
+    $(VOSLIB) \
+    $(XMLOFFLIB) \
+
 
 SHL1DEF=	$(MISC)$/$(SHL1TARGET).def
 DEF1NAME=	$(SHL1TARGET)
@@ -132,29 +135,31 @@ SHL2LIBS+=$(SLB)$/ibrwimp.lib
 .ENDIF # (WIN)
 
 SHL2STDLIBS= \
-            $(EDITENGLIB) \
-            $(SVXCORELIB) \
-            $(SFX2LIB) \
-            $(XMLOFFLIB) \
-            $(BASEGFXLIB) \
-            $(DRAWINGLAYERLIB) \
-            $(BASICLIB) \
-            $(SVTOOLLIB) \
-            $(TKLIB) \
-            $(VCLLIB) \
-            $(SVLLIB) \
-            $(SOTLIB) \
-            $(UNOTOOLSLIB) \
-            $(TOOLSLIB) \
-            $(I18NISOLANGLIB) \
-            $(XMLSCRIPTLIB) \
-            $(COMPHELPERLIB) \
-            $(UCBHELPERLIB)	\
-            $(CPPUHELPERLIB)	\
-            $(CPPULIB) \
-            $(VOSLIB) \
-            $(SALLIB) \
-            $(ICUUCLIB)
+    $(BASEGFXLIB) \
+    $(BASICLIB) \
+    $(COMPHELPERLIB) \
+    $(CPPUHELPERLIB)	\
+    $(CPPULIB) \
+    $(DRAWINGLAYERLIB) \
+    $(EDITENGLIB) \
+    $(GOODIESLIB) \
+    $(I18NISOLANGLIB) \
+    $(ICUUCLIB) \
+    $(SALLIB) \
+    $(SFX2LIB) \
+    $(SOTLIB) \
+    $(SVLLIB) \
+    $(SVTOOLLIB) \
+    $(SVXCORELIB) \
+    $(TKLIB) \
+    $(TOOLSLIB) \
+    $(UCBHELPERLIB)	\
+    $(UNOTOOLSLIB) \
+    $(VCLLIB) \
+    $(VOSLIB) \
+    $(XMLOFFLIB) \
+    $(XMLSCRIPTLIB) \
+
 
 .IF "$(GUI)"=="WNT"
 SHL2STDLIBS+=$(SHELLLIB)
@@ -185,8 +190,7 @@ SRSFILELIST=\
         $(SRS)$/unodraw.srs \
         $(SRS)$/accessibility.srs \
         $(SRS)$/table.srs \
-        $(SRS)$/toolbars.srs \
-        $(SOLARCOMMONRESDIR)$/sfx.srs
+        $(SRS)$/toolbars.srs
 
 RESLIB1NAME=svx
 RESLIB1IMAGES=$(PRJ)$/res $(PRJ)$/source/svdraw

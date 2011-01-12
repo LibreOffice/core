@@ -45,7 +45,7 @@
 #include <map>
 
 #include "lngopt.hxx"
-#include "misc.hxx"
+#include "linguistic/misc.hxx"
 #include "defs.hxx"
 
 class LngSvcMgr;

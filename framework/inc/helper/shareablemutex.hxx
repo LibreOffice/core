@@ -30,11 +30,12 @@
 
 #include <osl/interlck.h>
 #include <osl/mutex.hxx>
+#include <fwidllapi.h>
 
 namespace framework
 {
 
-class ShareableMutex
+class FWI_DLLPUBLIC ShareableMutex
 {
     public:
         ShareableMutex();

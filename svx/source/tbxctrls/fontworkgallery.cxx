@@ -53,10 +53,10 @@
 #include <svx/svdview.hxx>
 #include <svx/svdoutl.hxx>
 
-#include "gallery.hxx"
-#include <dlgutil.hxx>
+#include "svx/gallery.hxx"
+#include <svx/dlgutil.hxx>
 
-#include "fontworkgallery.hxx"
+#include <svx/fontworkgallery.hxx>
 #include "fontworkgallery.hrc"
 
 #include <algorithm>

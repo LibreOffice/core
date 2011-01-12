@@ -60,7 +60,7 @@
 #include "xmloff/ImageStyle.hxx"
 #include "xmloff/MarkerStyle.hxx"
 #include <xmloff/xmlictxt.hxx>
-#include "xmlgrhlp.hxx"
+#include "svx/xmlgrhlp.hxx"
 #include "xmloff/attrlist.hxx"
 
 #include "xmlxtimp.hxx"

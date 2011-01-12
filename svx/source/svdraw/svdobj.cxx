@@ -47,8 +47,8 @@
 #include <svx/svdpage.hxx>
 #include <svx/svdovirt.hxx>  // Fuer Add/Del Ref
 #include <svx/svdview.hxx>   // fuer Dragging (Ortho abfragen)
-#include "svdglob.hxx"   // StringCache
-#include "svdstr.hrc"    // Objektname
+#include "svx/svdglob.hxx"   // StringCache
+#include <svx/svdstr.hrc>    // Objektname
 #include <svx/svdogrp.hxx>   // Factory
 #include <svx/svdopath.hxx>  // Factory
 #include <svx/svdoedge.hxx>  // Factory
@@ -74,7 +74,7 @@
 #include <svx/xlndsit.hxx>
 #include <svx/xlnclit.hxx>
 #include <svx/xflclit.hxx>
-#include "svditer.hxx"
+#include <svx/svditer.hxx>
 #include <svx/xlntrit.hxx>
 #include <svx/xfltrit.hxx>
 #include <svx/xfltrit.hxx>
@@ -940,7 +940,7 @@ void SdrObject::RecalcBoundRect()
         if(xPrimitives.hasElements())
         {
             // use neutral ViewInformation and get the range of the primitives
-            const drawinglayer::geometry::ViewInformation2D aViewInformation2D(0);
+            const drawinglayer::geometry::ViewInformation2D aViewInformation2D;
             const basegfx::B2DRange aRange(drawinglayer::primitive2d::getB2DRangeFromPrimitive2DSequence(xPrimitives, aViewInformation2D));
 
             if(!aRange.isEmpty())
@@ -1202,7 +1202,7 @@ basegfx::B2DPolyPolygon SdrObject::TakeContour() const
         if(xSequence.hasElements())
         {
             // use neutral ViewInformation
-            const drawinglayer::geometry::ViewInformation2D aViewInformation2D(0);
+            const drawinglayer::geometry::ViewInformation2D aViewInformation2D;
 
             // create extractor, process and get result
             drawinglayer::processor2d::ContourExtractor2D aExtractor(aViewInformation2D);
@@ -2431,7 +2431,7 @@ SdrObject* SdrObject::ImpConvertToContourObj(SdrObject* pRet, BOOL bForceLineDas
         if(xSequence.hasElements())
         {
             // use neutral ViewInformation
-            const drawinglayer::geometry::ViewInformation2D aViewInformation2D(0);
+            const drawinglayer::geometry::ViewInformation2D aViewInformation2D;
 
             // create extractor, process and get result
             drawinglayer::processor2d::LineGeometryExtractor2D aExtractor(aViewInformation2D);

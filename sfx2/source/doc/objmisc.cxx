@@ -118,6 +118,7 @@ using namespace ::com::sun::star::container;
 #include <rtl/bootstrap.hxx>
 #include <vcl/svapp.hxx>
 #include <framework/interaction.hxx>
+#include <comphelper/interaction.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/documentconstants.hxx>
 
@@ -126,7 +127,7 @@ using namespace ::com::sun::star::container;
 #include "appdata.hxx"
 #include <sfx2/request.hxx>
 #include <sfx2/bindings.hxx>
-#include "sfxresid.hxx"
+#include "sfx2/sfxresid.hxx"
 #include <sfx2/docfile.hxx>
 #include <sfx2/docfilt.hxx>
 #include <sfx2/objsh.hxx>
@@ -1162,9 +1163,9 @@ void SfxObjectShell::PostActivateEvent_Impl( SfxViewFrame* pFrame )
             sal_uInt16 nId = pImp->nEventId;
             pImp->nEventId = 0;
             if ( nId == SFX_EVENT_OPENDOC )
-                pSfxApp->NotifyEvent(SfxEventHint( nId, GlobalEventConfig::GetEventName(STR_EVENT_OPENDOC), this ), sal_False);
+                pSfxApp->NotifyEvent(SfxViewEventHint( nId, GlobalEventConfig::GetEventName(STR_EVENT_OPENDOC), this, pFrame->GetFrame().GetController() ), sal_False);
             else if (nId == SFX_EVENT_CREATEDOC )
-                pSfxApp->NotifyEvent(SfxEventHint( nId, GlobalEventConfig::GetEventName(STR_EVENT_CREATEDOC), this ), sal_False);
+                pSfxApp->NotifyEvent(SfxViewEventHint( nId, GlobalEventConfig::GetEventName(STR_EVENT_CREATEDOC), this, pFrame->GetFrame().GetController() ), sal_False);
         }
     }
 }
@@ -2286,8 +2287,8 @@ sal_Bool SfxObjectShell::UseInteractionToHandleError(
         {
             uno::Any aInteraction;
             uno::Sequence< uno::Reference< task::XInteractionContinuation > > lContinuations(2);
-            ::framework::ContinuationAbort* pAbort = new ::framework::ContinuationAbort();
-            ::framework::ContinuationApprove* pApprove = new ::framework::ContinuationApprove();
+            ::comphelper::OInteractionAbort* pAbort = new ::comphelper::OInteractionAbort();
+            ::comphelper::OInteractionApprove* pApprove = new ::comphelper::OInteractionApprove();
             lContinuations[0] = uno::Reference< task::XInteractionContinuation >(
                                  static_cast< task::XInteractionContinuation* >( pAbort ), uno::UNO_QUERY );
             lContinuations[1] = uno::Reference< task::XInteractionContinuation >(
@@ -2296,14 +2297,8 @@ sal_Bool SfxObjectShell::UseInteractionToHandleError(
             task::ErrorCodeRequest aErrorCode;
             aErrorCode.ErrCode = nError;
             aInteraction <<= aErrorCode;
-
-            ::framework::InteractionRequest* pRequest = new ::framework::InteractionRequest(aInteraction,lContinuations);
-            uno::Reference< task::XInteractionRequest > xRequest(
-                             static_cast< task::XInteractionRequest* >( pRequest ),
-                             uno::UNO_QUERY);
-
-            xHandler->handle(xRequest);
-            bResult = pAbort->isSelected();
+            xHandler->handle(::framework::InteractionRequest::CreateRequest (aInteraction,lContinuations));
+            bResult = pAbort->wasSelected();
         }
         catch( uno::Exception& )
         {}
