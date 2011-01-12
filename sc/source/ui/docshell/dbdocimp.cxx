@@ -44,6 +44,7 @@
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/sdbc/XRowSet.hpp>
 #include <com/sun/star/sdbc/XResultSetMetaDataSupplier.hpp>
+#include <com/sun/star/sdbcx/XRowLocate.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
@@ -65,6 +66,7 @@
 #include "dbdocutl.hxx"
 #include "editable.hxx"
 #include "hints.hxx"
+#include "miscuno.hxx"
 
 using namespace com::sun::star;
 
@@ -121,99 +123,22 @@ void ScDBDocFunc::ShowInBeamer( const ScImportParam& rParam, SfxViewFrame* pFram
 BOOL ScDBDocFunc::DoImportUno( const ScAddress& rPos,
                                 const uno::Sequence<beans::PropertyValue>& aArgs )
 {
-    BOOL bDone = FALSE;
+    svx::ODataAccessDescriptor aDesc( aArgs );      // includes selection and result set
 
-    ScImportParam aImParam;
-    aImParam.nCol1 = aImParam.nCol2 = rPos.Col();
-    aImParam.nRow1 = aImParam.nRow2 = rPos.Row();
-    aImParam.bImport = TRUE;
+    //  create database range
+    ScDBData* pDBData = rDocShell.GetDBData( ScRange(rPos), SC_DB_IMPORT, SC_DBSEL_KEEP );
+    DBG_ASSERT(pDBData, "can't create DB data");
+    String sTarget = pDBData->GetName();
 
-    uno::Reference<sdbc::XResultSet> xResSet;
-    uno::Sequence<uno::Any> aSelection;
+    UpdateImport( sTarget, aDesc );
 
-    rtl::OUString aStrVal;
-    const beans::PropertyValue* pPropArray = aArgs.getConstArray();
-    long nPropCount = aArgs.getLength();
-    long i;
-    for (i = 0; i < nPropCount; i++)
-    {
-        const beans::PropertyValue& rProp = pPropArray[i];
-        String aPropName = rProp.Name;
-
-        if ( aPropName.EqualsAscii( SC_DBPROP_DATASOURCENAME ))
-        {
-            if ( rProp.Value >>= aStrVal )
-                aImParam.aDBName = aStrVal;
-        }
-        else if ( aPropName.EqualsAscii( SC_DBPROP_COMMAND ))
-        {
-            if ( rProp.Value >>= aStrVal )
-                aImParam.aStatement = aStrVal;
-        }
-        else if ( aPropName.EqualsAscii( SC_DBPROP_COMMANDTYPE ))
-        {
-            sal_Int32 nType = 0;
-            if ( rProp.Value >>= nType )
-            {
-                aImParam.bSql = ( nType == sdb::CommandType::COMMAND );
-                aImParam.nType = sal::static_int_cast<BYTE>( ( nType == sdb::CommandType::QUERY ) ? ScDbQuery : ScDbTable );
-                // nType is ignored if bSql is set
-            }
-        }
-        else if ( aPropName.EqualsAscii( SC_DBPROP_SELECTION ))
-        {
-            rProp.Value >>= aSelection;
-        }
-        else if ( aPropName.EqualsAscii( SC_DBPROP_CURSOR ))
-        {
-            rProp.Value >>= xResSet;
-        }
-    }
-
-    SbaSelectionList aList;
-    long nSelLen = aSelection.getLength();
-    for (i = 0; i < nSelLen; i++)
-    {
-        sal_Int32 nEntry = 0;
-        if ( aSelection[i] >>= nEntry )
-            aList.Insert( (void*)nEntry, LIST_APPEND );
-    }
-
-    BOOL bAddrInsert = FALSE;       //!???
-    if ( bAddrInsert )
-    {
-        bDone = DoImport( rPos.Tab(), aImParam, xResSet, &aList, TRUE, bAddrInsert );
-    }
-    else
-    {
-        //  create database range
-        //! merge this with SID_SBA_IMPORT execute in docsh4.cxx
-
-        ScDBData* pDBData = rDocShell.GetDBData( ScRange(rPos), SC_DB_IMPORT, SC_DBSEL_KEEP );
-        DBG_ASSERT(pDBData, "can't create DB data");
-        String sTarget = pDBData->GetName();
-
-        //! change UpdateImport to use only one of rTableName, rStatement
-
-        String aTableName, aStatement;
-        if ( aImParam.bSql )
-            aStatement = aImParam.aStatement;
-        else
-            aTableName = aImParam.aStatement;
-
-        UpdateImport( sTarget, aImParam.aDBName, aTableName, aStatement,
-                aImParam.bNative, aImParam.nType, xResSet, &aList );
-        bDone = TRUE;
-    }
-
-    return bDone;
+    return TRUE;
 }
 
 // -----------------------------------------------------------------
 
 BOOL ScDBDocFunc::DoImport( SCTAB nTab, const ScImportParam& rParam,
-        const uno::Reference< sdbc::XResultSet >& xResultSet,
-        const SbaSelectionList* pSelection, BOOL bRecord, BOOL bAddrInsert )
+        const svx::ODataAccessDescriptor* pDescriptor, BOOL bRecord, BOOL bAddrInsert )
 {
     ScDocument* pDoc = rDocShell.GetDocument();
 
@@ -251,16 +176,33 @@ BOOL ScDBDocFunc::DoImport( SCTAB nTab, const ScImportParam& rParam,
 
     BOOL bDoSelection = FALSE;
     BOOL bRealSelection = FALSE;            // TRUE if not everything is selected
-    ULONG nListPos = 0;
-    ULONG nRowsRead = 0;
-    ULONG nListCount = 0;
+    sal_Bool bBookmarkSelection = sal_False;
+    sal_Int32 nListPos = 0;
+    sal_Int32 nRowsRead = 0;
+    sal_Int32 nListCount = 0;
 
-    //  -1 is special
-    if ( pSelection && pSelection->Count() && (long)pSelection->GetObject(0) != -1L )
+    uno::Sequence<uno::Any> aSelection;
+    if ( pDescriptor && pDescriptor->has(svx::daSelection) )
     {
-        bDoSelection = TRUE;
-        nListCount = pSelection->Count();
+        (*pDescriptor)[svx::daSelection] >>= aSelection;
+        nListCount = aSelection.getLength();
+        if ( nListCount > 0 )
+        {
+            bDoSelection = TRUE;
+            if ( pDescriptor->has(svx::daBookmarkSelection) )
+                bBookmarkSelection = ScUnoHelpFunctions::GetBoolFromAny( (*pDescriptor)[svx::daBookmarkSelection] );
+            if ( bBookmarkSelection )
+            {
+                // From bookmarks, there's no way to detect if all records are selected.
+                // Rely on base to pass no selection in that case.
+                bRealSelection = TRUE;
+            }
+        }
     }
+
+    uno::Reference<sdbc::XResultSet> xResultSet;
+    if ( pDescriptor && pDescriptor->has(svx::daCursor) )
+        xResultSet.set((*pDescriptor)[svx::daCursor], uno::UNO_QUERY);
 
     // ImportDoc - also used for Redo
     ScDocument* pImportDoc = new ScDocument( SCDOCMODE_UNDO );
@@ -346,6 +288,17 @@ BOOL ScDBDocFunc::DoImport( SCTAB nTab, const ScImportParam& rParam,
                 //! error message
             }
 
+            uno::Reference<sdbcx::XRowLocate> xLocate;
+            if ( bBookmarkSelection )
+            {
+                xLocate.set( xRowSet, uno::UNO_QUERY );
+                if ( !xLocate.is() )
+                {
+                    DBG_ERRORFILE("can't get XRowLocate");
+                    bDoSelection = bRealSelection = bBookmarkSelection = sal_False;
+                }
+            }
+
             uno::Reference<sdbc::XRow> xRow( xRowSet, uno::UNO_QUERY );
             if ( nColCount > 0 && xRow.is() )
             {
@@ -388,16 +341,25 @@ BOOL ScDBDocFunc::DoImport( SCTAB nTab, const ScImportParam& rParam,
                     {
                         if (nListPos < nListCount)
                         {
-                            ULONG nNextRow = (ULONG) pSelection->GetObject(nListPos);
-                            if ( nRowsRead+1 < nNextRow )
-                                bRealSelection = TRUE;
-                            bEnd = !xRowSet->absolute(nRowsRead = nNextRow);
+                            if ( bBookmarkSelection )
+                            {
+                                bEnd = !xLocate->moveToBookmark(aSelection[nListPos]);
+                            }
+                            else    // use record numbers
+                            {
+                                sal_Int32 nNextRow = 0;
+                                aSelection[nListPos] >>= nNextRow;
+                                if ( nRowsRead+1 < nNextRow )
+                                    bRealSelection = TRUE;
+                                bEnd = !xRowSet->absolute(nRowsRead = nNextRow);
+                            }
                             ++nListPos;
                         }
                         else
                         {
-                            bRealSelection = xRowSet->next();
-                            bEnd = TRUE; // more data available but not used
+                            if ( !bBookmarkSelection && xRowSet->next() )
+                                bRealSelection = TRUE;                      // more data available but not used
+                            bEnd = TRUE;
                         }
                     }
 

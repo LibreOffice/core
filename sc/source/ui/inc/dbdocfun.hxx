@@ -40,7 +40,6 @@ struct ScSortParam;
 struct ScSubTotalParam;
 
 class SfxViewFrame;
-class SbaSelectionList;
 class ScDBData;
 class ScDocShell;
 class ScAddress;
@@ -51,21 +50,14 @@ namespace com { namespace sun { namespace star {
     namespace beans {
         struct PropertyValue;
     }
-    namespace sdbc {
-        class XResultSet;
-    }
 } } }
+
+namespace svx {
+    class ODataAccessDescriptor;
+}
 
 // ---------------------------------------------------------------------------
 // -----------------------------------------------------------------
-class SbaSelectionList: public List , public SvRefBase
-{
-public:
-    SbaSelectionList():
-        List(CONTAINER_MAXBLOCKSIZE,100,100){}
-};
-
-SV_DECL_IMPL_REF(SbaSelectionList)
 
 
 class ScDBDocFunc
@@ -79,17 +71,11 @@ public:
                     ScDBDocFunc( ScDocShell& rDocSh ): rDocShell(rDocSh) {}
                     ~ScDBDocFunc() {}
 
-    void            UpdateImport( const String& rTarget, const String& rDBName,
-                        const String& rTableName, const String& rStatement,
-                        BOOL bNative, BYTE nType,
-                        const ::com::sun::star::uno::Reference<
-                        ::com::sun::star::sdbc::XResultSet >& xResultSet,
-                        const SbaSelectionList* pSelection );
+    void            UpdateImport( const String& rTarget, const svx::ODataAccessDescriptor& rDescriptor );
 
     BOOL            DoImport( SCTAB nTab, const ScImportParam& rParam,
-                        const ::com::sun::star::uno::Reference<
-                        ::com::sun::star::sdbc::XResultSet >& xResultSet,
-                        const SbaSelectionList* pSelection, BOOL bRecord,
+                        const svx::ODataAccessDescriptor* pDescriptor,      // used for selection and existing ResultSet
+                        BOOL bRecord,
                         BOOL bAddrInsert = FALSE );
 
     BOOL            DoImportUno( const ScAddress& rPos,

@@ -504,8 +504,7 @@ BOOL ScDBFunc::ImportData( const ScImportParam& rParam, BOOL bRecord )
     }
 
     ScDBDocFunc aDBDocFunc( *GetViewData()->GetDocShell() );
-    ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet > xResultSet;
-    return aDBDocFunc.DoImport( GetViewData()->GetTabNo(), rParam, xResultSet, NULL, bRecord );
+    return aDBDocFunc.DoImport( GetViewData()->GetTabNo(), rParam, NULL, bRecord );
 }
 
 
