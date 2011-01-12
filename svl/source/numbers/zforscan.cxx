@@ -1627,6 +1627,8 @@ xub_StrLen ImpSvNumberformatScan::FinalScan( String& rString, String& rComment )
                                 nCounter = nCntPost;
                             else if (nCntPre)
                                 nCounter = nCntPre;
+                            if (!nCntPre)
+                                nCntPre++;
                         }
                     }
                     else
