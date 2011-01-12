@@ -46,11 +46,12 @@ using namespace ::xmloff::token;
 
 //______________________________________________________________________________
 
-inline sal_Bool lcl_HasSameLineWidth( const table::BorderLine& rLine1, const table::BorderLine& rLine2 )
+inline sal_Bool lcl_HasSameLineWidth( const table::BorderLine2& rLine1, const table::BorderLine2& rLine2 )
 {
     return  (rLine1.InnerLineWidth == rLine2.InnerLineWidth) &&
             (rLine1.OuterLineWidth == rLine2.OuterLineWidth) &&
-            (rLine1.LineDistance == rLine2.LineDistance);
+            (rLine1.LineDistance == rLine2.LineDistance) &&
+            (rLine1.LineWidth == rLine2.LineWidth);
 }
 
 inline sal_Bool operator==( const table::BorderLine2& rLine1, const table::BorderLine2& rLine2 )

@@ -446,6 +446,7 @@ void XMLTextImportPropertyMapper::finished(
             aBorderLine.OuterLineWidth = aBorderLineWidth.OuterLineWidth;
             aBorderLine.InnerLineWidth = aBorderLineWidth.InnerLineWidth;
             aBorderLine.LineDistance = aBorderLineWidth.LineDistance;
+            aBorderLine.LineWidth = aBorderLineWidth.LineWidth;
 
             pBorders[i]->maValue <<= aBorderLine;
         }
