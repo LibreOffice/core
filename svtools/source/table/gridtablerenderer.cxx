@@ -92,6 +92,32 @@ namespace svt { namespace table
             ++aTextArea.Top(); --aTextArea.Bottom();
             return aTextArea;
         }
+
+        static ULONG lcl_getAlignmentTextDrawFlags( GridTableRenderer_Impl const & i_impl, ColPos const i_columnPos )
+        {
+            ULONG nVertFlag = TEXT_DRAW_TOP;
+            VerticalAlignment const eVertAlign = i_impl.rModel.getVerticalAlign();
+            switch ( eVertAlign )
+            {
+            case VerticalAlignment_MIDDLE:  nVertFlag = TEXT_DRAW_VCENTER;  break;
+            case VerticalAlignment_BOTTOM:  nVertFlag = TEXT_DRAW_BOTTOM;   break;
+            default:
+                break;
+            }
+
+            ULONG nHorzFlag = TEXT_DRAW_LEFT;
+            HorizontalAlignment const eHorzAlign = i_impl.rModel.getColumnModel( i_columnPos )->getHorizontalAlign();
+            switch ( eHorzAlign )
+            {
+            case HorizontalAlignment_CENTER:    nHorzFlag = TEXT_DRAW_CENTER;   break;
+            case HorizontalAlignment_RIGHT:     nHorzFlag = TEXT_DRAW_RIGHT;    break;
+            default:
+                break;
+            }
+
+            return nVertFlag | nHorzFlag;
+        }
+
     }
 
     //==================================================================================================================
@@ -184,19 +210,9 @@ namespace svt { namespace table
         ::Color const textColor = lcl_getEffectiveColor( m_pImpl->rModel.getTextColor(), _rStyle, &StyleSettings::GetFieldTextColor );
         _rDevice.SetTextColor( textColor );
 
-        ULONG nHorFlag = TEXT_DRAW_LEFT;
-        ULONG nVerFlag = TEXT_DRAW_TOP;
-        if ( m_pImpl->rModel.getVerticalAlign() == 1 )
-            nVerFlag = TEXT_DRAW_VCENTER;
-        else if ( m_pImpl->rModel.getVerticalAlign() == 2 )
-            nVerFlag = TEXT_DRAW_BOTTOM;
-        if ( m_pImpl->rModel.getColumnModel(_nCol)->getHorizontalAlign() == 1 )
-            nHorFlag = TEXT_DRAW_CENTER;
-        else if ( m_pImpl->rModel.getColumnModel(_nCol)->getHorizontalAlign() == 2 )
-            nHorFlag = TEXT_DRAW_RIGHT;
-
         Rectangle const aTextRect( lcl_getTextRenderingArea( lcl_getContentArea( *m_pImpl, _rArea ) ) );
-        _rDevice.DrawText( aTextRect, sHeaderText, nHorFlag | nVerFlag | TEXT_DRAW_CLIP);
+        ULONG const nDrawTextFlags = lcl_getAlignmentTextDrawFlags( *m_pImpl, _nCol ) | TEXT_DRAW_CLIP;
+        _rDevice.DrawText( aTextRect, sHeaderText, nDrawTextFlags );
 
         ::boost::optional< ::Color > aLineColor( m_pImpl->rModel.getLineColor() );
         ::Color const lineColor = !aLineColor ? _rStyle.GetSeparatorColor() : *aLineColor;
@@ -293,19 +309,10 @@ namespace svt { namespace table
         ::Color const textColor = lcl_getEffectiveColor( m_pImpl->rModel.getHeaderTextColor(), _rStyle, &StyleSettings::GetFieldTextColor );
         _rDevice.SetTextColor( textColor );
 
-        ULONG nHorFlag = TEXT_DRAW_LEFT;
-        ULONG nVerFlag = TEXT_DRAW_TOP;
-        if ( m_pImpl->rModel.getVerticalAlign() == 1 )
-            nVerFlag = TEXT_DRAW_VCENTER;
-        else if ( m_pImpl->rModel.getVerticalAlign() == 2 )
-            nVerFlag = TEXT_DRAW_BOTTOM;
-        if ( m_pImpl->rModel.getColumnModel(0)->getHorizontalAlign() == 1 )
-            nHorFlag = TEXT_DRAW_CENTER;
-        else if ( m_pImpl->rModel.getColumnModel(0)->getHorizontalAlign() == 2 )
-            nHorFlag = TEXT_DRAW_RIGHT;
-
         Rectangle const aTextRect( lcl_getTextRenderingArea( lcl_getContentArea( *m_pImpl, _rArea ) ) );
-        _rDevice.DrawText( aTextRect, m_pImpl->rModel.getRowHeader( m_pImpl->nCurrentRow ), nHorFlag | nVerFlag | TEXT_DRAW_CLIP );
+        ULONG const nDrawTextFlags = lcl_getAlignmentTextDrawFlags( *m_pImpl, 0 ) | TEXT_DRAW_CLIP;
+            // TODO: is using the horizontal alignment of the 0'th column a good idea here? This is pretty ... arbitray ..
+        _rDevice.DrawText( aTextRect, m_pImpl->rModel.getRowHeader( m_pImpl->nCurrentRow ), nDrawTextFlags );
 
         // TODO: active? selected?
         (void)_bActive;
@@ -439,29 +446,9 @@ namespace svt { namespace table
             i_context.rDevice.SetTextColor( textColor );
         }
 
-
-        ULONG nVerFlag = TEXT_DRAW_TOP;
-        const VerticalAlignment eVertAlign = m_pImpl->rModel.getVerticalAlign();
-        switch ( eVertAlign )
-        {
-        case VerticalAlignment_MIDDLE:  nVerFlag = TEXT_DRAW_VCENTER;   break;
-        case VerticalAlignment_BOTTOM:  nVerFlag = TEXT_DRAW_BOTTOM;    break;
-        default:
-            break;
-        }
-
-        ULONG nHorFlag = TEXT_DRAW_LEFT;
-        const HorizontalAlignment eHorzAlign = m_pImpl->rModel.getColumnModel( i_context.nColumn )->getHorizontalAlign();
-        switch ( eHorzAlign )
-        {
-        case HorizontalAlignment_CENTER:    nHorFlag = TEXT_DRAW_CENTER;    break;
-        case HorizontalAlignment_RIGHT:     nHorFlag = TEXT_DRAW_RIGHT;     break;
-        default:
-            break;
-        }
-
         Rectangle const textRect( lcl_getTextRenderingArea( i_context.aContentArea ) );
-        i_context.rDevice.DrawText( textRect, i_text, nHorFlag | nVerFlag | TEXT_DRAW_CLIP );
+        ULONG const nDrawTextFlags = lcl_getAlignmentTextDrawFlags( *m_pImpl, i_context.nColumn ) | TEXT_DRAW_CLIP;
+        i_context.rDevice.DrawText( textRect, i_text, nDrawTextFlags );
     }
 
     //------------------------------------------------------------------------------------------------------------------
