@@ -361,15 +361,8 @@ SfxApplication::SfxApplication()
 #endif
 #endif
 
-    if ( !InitLabelResMgr( "iso" ) )
-        // no "iso" resource -> search for "ooo" resource
-        InitLabelResMgr( "ooo", true );
     pBasic   = new BasicDLL;
-
     StarBASIC::SetGlobalErrorHdl( LINK( this, SfxApplication, GlobalBasicErrorHdl_Impl ) );
-
-
-
     RTL_LOGFILE_CONTEXT_TRACE( aLog, "} initialize DDE" );
 }
 
@@ -581,13 +574,6 @@ SimpleResMgr* SfxApplication::CreateSimpleResManager()
 ResMgr* SfxApplication::GetSfxResManager()
 {
     return SfxResId::GetResMgr();
-}
-
-//--------------------------------------------------------------------
-
-ResMgr* SfxApplication::GetLabelResManager() const
-{
-    return pAppData_Impl->pLabelResMgr;
 }
 
 //--------------------------------------------------------------------

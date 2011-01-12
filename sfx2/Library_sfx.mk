@@ -54,7 +54,6 @@ $(eval $(call gb_Library_set_include,sfx,\
 $(eval $(call gb_Library_set_defs,sfx,\
     $$(DEFS) \
     -DSFX2_DLLIMPLEMENTATION \
-    -DABOUTBMPNAMES="$(ABOUTBITMAPS)" \
 ))
 
 $(eval $(call gb_Library_add_linked_libs,sfx,\
@@ -150,7 +149,6 @@ $(eval $(call gb_Library_add_exception_objects,sfx,\
     sfx2/source/control/sorgitm \
     sfx2/source/control/statcach \
     sfx2/source/control/unoctitm \
-    sfx2/source/dialog/about \
     sfx2/source/dialog/alienwarn \
     sfx2/source/dialog/basedlgs \
     sfx2/source/dialog/dinfdlg \

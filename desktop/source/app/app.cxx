@@ -1608,14 +1608,8 @@ void Desktop::Main()
         // create title string
         sal_Bool bCheckOk = sal_False;
         ::com::sun::star::lang::Locale aLocale;
-        String aMgrName = String::CreateFromAscii( "iso" );
+        String aMgrName = String::CreateFromAscii( "ofa" );
         ResMgr* pLabelResMgr = ResMgr::SearchCreateResMgr( U2S( aMgrName ), aLocale );
-        if ( !pLabelResMgr )
-        {
-            // no "iso" resource -> search for "ooo" resource
-            aMgrName = String::CreateFromAscii( "ooo" );
-            pLabelResMgr = ResMgr::SearchCreateResMgr( U2S( aMgrName ), aLocale);
-        }
         String aTitle = pLabelResMgr ? String( ResId( RID_APPTITLE, *pLabelResMgr ) ) : String();
         delete pLabelResMgr;
 

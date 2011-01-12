@@ -27,40 +27,23 @@
 PRJ=..$/..$
 
 PRJNAME=svx
-TARGET=intro
+TARGET=about
 
 # --- Settings ------------------------------------------------------------
 
 .INCLUDE :  settings.mk
 .INCLUDE :  $(PRJ)$/util$/makefile.pmk
 
-RSCLOCINC!:=$(RSCLOCINC);$(PRJ)$/RES
-
 # --- Allgemein -----------------------------------------------------------
 
-LOCALIZE_ME=intro_tmpl.hrc
-
-SRS1NAME= iso
+SRS1NAME= ooo
 SRC1FILES=	\
-    $(SRS1NAME).src
+    about_ooo.src
 
-RESLIB1NAME=$(SRS1NAME)
+RESLIB1NAME=$(TARGET)
 RESLIB1IMAGES=$(PRJ)$/res
 RESLIB1SRSFILES= \
-    $(SRS)$/$(SRS1NAME).srs
-
-# Version "OpenOffice.org"
-SRS2NAME= ooo
-SRC2FILES=  \
-    $(SRS2NAME).src
-
-RESLIB2NAME=$(SRS2NAME)
-RESLIB2IMAGES=$(PRJ)$/res
-RESLIB2SRSFILES= \
-    $(SRS)$/$(SRS2NAME).srs
+    $(SRS)$/ooo.srs
 
 .INCLUDE :  target.mk
-
-$(SRS)$/iso.srs: $(INCCOM)$/intro.hrc
-$(SRS)$/ooo.srs: $(INCCOM)$/intro.hrc
 
