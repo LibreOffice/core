@@ -49,8 +49,8 @@ class ImpBitmap
 {
 private:
 
-    sal_uIntPtr             mnRefCount;
-    sal_uIntPtr             mnChecksum;
+    sal_uLong               mnRefCount;
+    sal_uLong               mnChecksum;
     SalBitmap*          mpSalBitmap;
     Size                maSourceSize;
 
@@ -85,12 +85,12 @@ public:
 
 public:
 
-    sal_uIntPtr             ImplGetRefCount() const { return mnRefCount; }
+    sal_uLong               ImplGetRefCount() const { return mnRefCount; }
     void                ImplIncRefCount() { mnRefCount++; }
     void                ImplDecRefCount() { mnRefCount--; }
 
-    inline void         ImplSetChecksum( sal_uIntPtr nChecksum ) { mnChecksum = nChecksum; }
-    inline sal_uIntPtr      ImplGetChecksum() const { return mnChecksum; }
+    inline void         ImplSetChecksum( sal_uLong nChecksum ) { mnChecksum = nChecksum; }
+    inline sal_uLong        ImplGetChecksum() const { return mnChecksum; }
 
 #endif // PRIVATE
 };

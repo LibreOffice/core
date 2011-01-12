@@ -87,7 +87,7 @@ protected:
             if the Control instance has been destroyed in any of the call
     */
     sal_Bool        ImplCallEventListenersAndHandler(
-                    sal_uIntPtr nEvent, const Link& rHandler, void* pCaller
+                    sal_uLong nEvent, const Link& rHandler, void* pCaller
                 );
 
     /** draws the given text onto the given device

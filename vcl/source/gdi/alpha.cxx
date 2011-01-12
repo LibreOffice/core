@@ -114,7 +114,7 @@ sal_Bool AlphaMask::Crop( const Rectangle& rRectPixel )
 
 // -----------------------------------------------------------------------------
 
-sal_Bool AlphaMask::Expand( sal_uIntPtr nDX, sal_uIntPtr nDY, sal_uInt8* pInitTransparency )
+sal_Bool AlphaMask::Expand( sal_uLong nDX, sal_uLong nDY, sal_uInt8* pInitTransparency )
 {
     Color aColor;
 
@@ -279,14 +279,14 @@ sal_Bool AlphaMask::Invert()
 
 // -----------------------------------------------------------------------------
 
-sal_Bool AlphaMask::Mirror( sal_uIntPtr nMirrorFlags )
+sal_Bool AlphaMask::Mirror( sal_uLong nMirrorFlags )
 {
     return Bitmap::Mirror( nMirrorFlags );
 }
 
 // -----------------------------------------------------------------------------
 
-sal_Bool AlphaMask::Scale( const Size& rNewSize, sal_uIntPtr nScaleFlag )
+sal_Bool AlphaMask::Scale( const Size& rNewSize, sal_uLong nScaleFlag )
 {
     sal_Bool bRet = Bitmap::Scale( rNewSize, nScaleFlag );
 
@@ -298,7 +298,7 @@ sal_Bool AlphaMask::Scale( const Size& rNewSize, sal_uIntPtr nScaleFlag )
 
 // -----------------------------------------------------------------------------
 
-sal_Bool AlphaMask::Scale( const double& rScaleX, const double& rScaleY, sal_uIntPtr nScaleFlag )
+sal_Bool AlphaMask::Scale( const double& rScaleX, const double& rScaleY, sal_uLong nScaleFlag )
 {
     sal_Bool bRet = Bitmap::Scale( rScaleX, rScaleY, nScaleFlag );
 
@@ -344,7 +344,7 @@ sal_Bool AlphaMask::Replace( const Bitmap& rMask, sal_uInt8 cReplaceTransparency
 
 // -----------------------------------------------------------------------------
 
-sal_Bool AlphaMask::Replace( sal_uInt8 cSearchTransparency, sal_uInt8 cReplaceTransparency, sal_uIntPtr
+sal_Bool AlphaMask::Replace( sal_uInt8 cSearchTransparency, sal_uInt8 cReplaceTransparency, sal_uLong
 #ifdef DBG_UTIL
 nTol
 #endif
@@ -398,13 +398,13 @@ nTol
 // -----------------------------------------------------------------------------
 
 sal_Bool AlphaMask::Replace( sal_uInt8* pSearchTransparencies, sal_uInt8* pReplaceTransparencies,
-                         sal_uIntPtr nColorCount, sal_uIntPtr* pTols )
+                         sal_uLong nColorCount, sal_uLong* pTols )
 {
     Color*  pSearchColors = new Color[ nColorCount ];
     Color*  pReplaceColors = new Color[ nColorCount ];
     sal_Bool    bRet;
 
-    for( sal_uIntPtr i = 0; i < nColorCount; i++ )
+    for( sal_uLong i = 0; i < nColorCount; i++ )
     {
         const sal_uInt8 cSearchTransparency = pSearchTransparencies[ i ];
         const sal_uInt8 cReplaceTransparency = pReplaceTransparencies[ i ];

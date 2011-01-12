@@ -199,8 +199,8 @@ MessBox::MessBox( Window* pParent, const ResId& rResId ) :
     rtl::OString aHelpId( ReadByteStringRes() );
     /* sal_uInt16 bSysModal = */ ReadShortRes();
     SetHelpId( aHelpId );
-    WinBits nBits = (((sal_uIntPtr)nHiButtons << 16) + nLoButtons) |
-                    (((sal_uIntPtr)nHiDefButton << 16) + nLoDefButton);
+    WinBits nBits = (((sal_uLong)nHiButtons << 16) + nLoButtons) |
+                    (((sal_uLong)nHiDefButton << 16) + nLoDefButton);
     ImplInit( pParent, nBits | WB_MOVEABLE | WB_HORZ | WB_CENTER );
 
     ImplLoadRes( rResId );

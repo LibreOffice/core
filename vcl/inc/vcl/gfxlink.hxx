@@ -39,10 +39,10 @@
 
 struct ImpBuffer
 {
-    sal_uIntPtr     mnRefCount;
+    sal_uLong       mnRefCount;
     sal_uInt8*      mpBuffer;
 
-                ImpBuffer( sal_uIntPtr nSize )
+                ImpBuffer( sal_uLong nSize )
                 {
                     mnRefCount = 1UL;
                     mpBuffer = nSize ? new sal_uInt8[ nSize ] : NULL;
@@ -60,10 +60,10 @@ struct ImpBuffer
 struct ImpSwap
 {
     rtl::OUString   maURL;
-    sal_uIntPtr         mnDataSize;
-    sal_uIntPtr         mnRefCount;
+    sal_uLong           mnDataSize;
+    sal_uLong           mnRefCount;
 
-                    ImpSwap( sal_uInt8* pData, sal_uIntPtr nDataSize );
+                    ImpSwap( sal_uInt8* pData, sal_uLong nDataSize );
                     ~ImpSwap();
 
     sal_uInt8*          GetData() const;
@@ -134,7 +134,7 @@ private:
     sal_uInt32          mnBufSize;
     sal_uInt32          mnUserId;
     ImpGfxLink*         mpImpData;
-    sal_uIntPtr             mnExtra2;
+    sal_uLong               mnExtra2;
 
     SAL_DLLPRIVATE void ImplCopy( const GfxLink& rGfxLink );
 

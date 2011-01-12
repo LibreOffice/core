@@ -62,13 +62,13 @@ class ImplDockFloatWin2 : public FloatingWindow
 {
 private:
     ImplDockingWindowWrapper*  mpDockWin;
-    sal_uIntPtr         mnLastTicks;
+    sal_uLong           mnLastTicks;
     Timer           maDockTimer;
     Timer           maEndDockTimer;
     Point           maDockPos;
     Rectangle       maDockRect;
     sal_Bool            mbInMove;
-    sal_uIntPtr         mnLastUserEvent;
+    sal_uLong           mnLastUserEvent;
 
     DECL_LINK( DockingHdl, ImplDockFloatWin2* );
     DECL_LINK( DockTimerHdl, ImplDockFloatWin2* );
@@ -91,7 +91,7 @@ public:
                                      long nWidth, long nHeight,
                                      sal_uInt16 nFlags = WINDOW_POSSIZE_ALL );
 
-    sal_uIntPtr GetLastTicks() const { return mnLastTicks; }
+    sal_uLong GetLastTicks() const { return mnLastTicks; }
 };
 
 // =======================================================================
@@ -426,7 +426,7 @@ void DockingManager::SetFloatingMode( const Window *pWindow, sal_Bool bFloating 
         pWrapper->SetFloatingMode( bFloating );
 }
 
-void DockingManager::StartPopupMode( ToolBox *pParentToolBox, const Window *pWindow, sal_uIntPtr nFlags )
+void DockingManager::StartPopupMode( ToolBox *pParentToolBox, const Window *pWindow, sal_uLong nFlags )
 {
     ImplDockingWindowWrapper* pWrapper = GetDockingWindowWrapper( pWindow );
     if( pWrapper )
@@ -1241,7 +1241,7 @@ sal_Bool ImplDockingWindowWrapper::IsTitleButtonVisible( sal_uInt16 nButton ) co
 
 // -----------------------------------------------------------------------
 
-void ImplDockingWindowWrapper::StartPopupMode( ToolBox *pParentToolBox, sal_uIntPtr nFlags )
+void ImplDockingWindowWrapper::StartPopupMode( ToolBox *pParentToolBox, sal_uLong nFlags )
 {
     // do nothing if window is floating
     if( IsFloatingMode() )

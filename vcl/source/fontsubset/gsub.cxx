@@ -41,9 +41,7 @@
 namespace vcl
 {
 
-typedef sal_uInt32 sal_uIntPtr;
-typedef sal_uInt32 sal_uInt32;
-typedef sal_uInt16 sal_uInt16;
+typedef sal_uIntPtr sal_uLong;
 typedef sal_uInt8 FT_Byte;
 
 typedef std::map<sal_uInt16,sal_uInt16> GlyphSubstitution;
@@ -77,7 +75,7 @@ int ReadGSUB( struct _TrueTypeFont* pTTFile,
 
     // parse GSUB header
     const FT_Byte* pGsubHeader = pGsubBase;
-    const sal_uIntPtr nVersion            = NEXT_Long( pGsubHeader );
+    const sal_uLong nVersion            = NEXT_Long( pGsubHeader );
     const sal_uInt16 nOfsScriptList     = NEXT_UShort( pGsubHeader );
     const sal_uInt16 nOfsFeatureTable   = NEXT_UShort( pGsubHeader );
     const sal_uInt16 nOfsLookupList     = NEXT_UShort( pGsubHeader );
@@ -87,7 +85,7 @@ int ReadGSUB( struct _TrueTypeFont* pTTFile,
         if( nVersion != 0x00001000 )    // workaround for SunBatang etc.
             return -1;                  // unknown format or broken
 
-    typedef std::vector<sal_uIntPtr> ReqFeatureTagList;
+    typedef std::vector<sal_uLong> ReqFeatureTagList;
     ReqFeatureTagList aReqFeatureTagList;
 
     aReqFeatureTagList.push_back( MKTAG("vert") );
@@ -103,7 +101,7 @@ int ReadGSUB( struct _TrueTypeFont* pTTFile,
         return false;
     for( sal_uInt16 nScriptIndex = 0; nScriptIndex < nCntScript; ++nScriptIndex )
     {
-        const sal_uIntPtr nTag            = NEXT_Long( pScriptHeader ); // e.g. hani/arab/kana/hang
+        const sal_uLong nTag            = NEXT_Long( pScriptHeader ); // e.g. hani/arab/kana/hang
         const sal_uInt16 nOfsScriptTable= NEXT_UShort( pScriptHeader );
         if( (nTag != (sal_uInt16)nRequestedScript) && (nRequestedScript != 0) )
             continue;
@@ -118,7 +116,7 @@ int ReadGSUB( struct _TrueTypeFont* pTTFile,
             return false;
         for( sal_uInt16 nLangsysIndex = 0; nLangsysIndex < nCntLangSystem; ++nLangsysIndex )
         {
-            const sal_uIntPtr nInnerTag = NEXT_Long( pScriptTable );    // e.g. KOR/ZHS/ZHT/JAN
+            const sal_uLong nInnerTag = NEXT_Long( pScriptTable );    // e.g. KOR/ZHS/ZHT/JAN
             const sal_uInt16 nOffset= NEXT_UShort( pScriptTable );
             if( (nInnerTag != (sal_uInt16)nRequestedLangsys) && (nRequestedLangsys != 0) )
                 continue;
@@ -178,7 +176,7 @@ int ReadGSUB( struct _TrueTypeFont* pTTFile,
           return false;
     for( sal_uInt16 nFeatureIndex = 0; nFeatureIndex < nCntFeature; ++nFeatureIndex )
     {
-        const sal_uIntPtr nTag    = NEXT_Long( pFeatureHeader ); // e.g. locl/vert/trad/smpl/liga/fina/...
+        const sal_uLong nTag    = NEXT_Long( pFeatureHeader ); // e.g. locl/vert/trad/smpl/liga/fina/...
         const sal_uInt16 nOffset= NEXT_UShort( pFeatureHeader );
 
         // ignore unneeded feature lookups

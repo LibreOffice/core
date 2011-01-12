@@ -89,8 +89,8 @@ public:
 
     // Frame
     // DisplayName for Unix ???
-    virtual SalFrame*       CreateChildFrame( SystemParentData* pParent, sal_uIntPtr nStyle ) = 0;
-    virtual SalFrame*       CreateFrame( SalFrame* pParent, sal_uIntPtr nStyle ) = 0;
+    virtual SalFrame*       CreateChildFrame( SystemParentData* pParent, sal_uLong nStyle ) = 0;
+    virtual SalFrame*       CreateFrame( SalFrame* pParent, sal_uLong nStyle ) = 0;
     virtual void                DestroyFrame( SalFrame* pFrame ) = 0;
 
     // Object (System Child Window)
@@ -132,8 +132,8 @@ public:
 
     // YieldMutex
     virtual vos::IMutex*        GetYieldMutex() = 0;
-    virtual sal_uIntPtr             ReleaseYieldMutex() = 0;
-    virtual void                AcquireYieldMutex( sal_uIntPtr nCount ) = 0;
+    virtual sal_uLong               ReleaseYieldMutex() = 0;
+    virtual void                AcquireYieldMutex( sal_uLong nCount ) = 0;
     // return true, if yield mutex is owned by this thread, else false
     virtual bool                CheckYieldMutex() = 0;
 

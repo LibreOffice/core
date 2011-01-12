@@ -290,7 +290,7 @@ sal_uIntPtr Help::ShowTip( Window* pParent, const Rectangle& rRect,
 
 // -----------------------------------------------------------------------
 
-void Help::HideTip( sal_uIntPtr nId )
+void Help::HideTip( sal_uLong nId )
 {
     HelpTextWindow* pHelpWin = (HelpTextWindow*)nId;
     Window* pFrameWindow = pHelpWin->ImplGetFrameWindow();
@@ -338,7 +338,7 @@ HelpTextWindow::HelpTextWindow( Window* pParent, const XubString& rText, sal_uIn
 
     if( mnStyle & QUICKHELP_BIDI_RTL )
     {
-        sal_uIntPtr nLayoutMode = GetLayoutMode();
+        sal_uLong nLayoutMode = GetLayoutMode();
         nLayoutMode |= TEXT_LAYOUT_BIDI_RTL | TEXT_LAYOUT_TEXTORIGIN_LEFT;
         SetLayoutMode( nLayoutMode );
     }
@@ -481,7 +481,7 @@ void HelpTextWindow::Paint( const Rectangle& )
 
 void HelpTextWindow::ShowHelp( sal_uInt16 nDelayMode )
 {
-    sal_uIntPtr nTimeout = 0;
+    sal_uLong nTimeout = 0;
     if ( nDelayMode != HELPDELAY_NONE )
     {
         // Im ExtendedHelp-Fall die Hilfe schneller anzeigen
@@ -624,7 +624,7 @@ void ImplShowHelpWindow( Window* pParent, sal_uInt16 nHelpWinStyle, sal_uInt16 n
 
     if ( !pHelpWin && rHelpText.Len() )
     {
-        sal_uIntPtr nCurTime = Time::GetSystemTicks();
+        sal_uLong nCurTime = Time::GetSystemTicks();
         if( (nCurTime - pSVData->maHelpData.mnLastHelpHideTime) < pParent->GetSettings().GetHelpSettings().GetTipDelay() )
             nDelayMode = HELPDELAY_NONE;
 

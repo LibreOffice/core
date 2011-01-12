@@ -75,7 +75,7 @@ public:
 
 protected:
                     Dialog( WindowType nType );
-    virtual void    Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal_uIntPtr nFlags );
+    virtual void    Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal_uLong nFlags );
 
 public:
                     Dialog( Window* pParent, WinBits nStyle = WB_STDDIALOG );

@@ -150,7 +150,7 @@ private:
 
     XubString           aTitleText;         // PopupMenu-Text
 
-    sal_uIntPtr             nEventId;
+    sal_uLong               nEventId;
     sal_uInt16              mnHighlightedItemPos; // for native menues: keeps track of the highlighted item
     sal_uInt16              nMenuFlags;
     sal_uInt16              nDefaultItem;       // Id vom Default-Item
@@ -186,7 +186,7 @@ protected:
     SAL_DLLPRIVATE void             ImplPaint( Window* pWin, sal_uInt16 nBorder, long nOffY = 0, MenuItemData* pThisDataOnly = 0, sal_Bool bHighlighted = sal_False, bool bLayout = false ) const;
     SAL_DLLPRIVATE void             ImplSelect();
     SAL_DLLPRIVATE void             ImplCallHighlight( sal_uInt16 nHighlightItem );
-    SAL_DLLPRIVATE void             ImplCallEventListeners( sal_uIntPtr nEvent, sal_uInt16 nPos );
+    SAL_DLLPRIVATE void             ImplCallEventListeners( sal_uLong nEvent, sal_uInt16 nPos );
     DECL_DLLPRIVATE_LINK(           ImplCallSelect, Menu* );
 
     SAL_DLLPRIVATE void             ImplFillLayoutData() const;
@@ -253,8 +253,8 @@ public:
     void                SetItemBits( sal_uInt16 nItemId, MenuItemBits nBits );
     MenuItemBits        GetItemBits( sal_uInt16 nItemId ) const;
 
-    void                SetUserValue( sal_uInt16 nItemId, sal_uIntPtr nValue );
-    sal_uIntPtr             GetUserValue( sal_uInt16 nItemId ) const;
+    void                SetUserValue( sal_uInt16 nItemId, sal_uLong nValue );
+    sal_uLong               GetUserValue( sal_uInt16 nItemId ) const;
 
     void                SetPopupMenu( sal_uInt16 nItemId, PopupMenu* pMenu );
     PopupMenu*          GetPopupMenu( sal_uInt16 nItemId ) const;
@@ -497,7 +497,7 @@ private:
     SAL_DLLPRIVATE MenuFloatingWindow*   ImplGetFloatingWindow() const { return (MenuFloatingWindow*)Menu::ImplGetWindow(); }
 
 protected:
-    SAL_DLLPRIVATE sal_uInt16                ImplExecute( Window* pWindow, const Rectangle& rRect, sal_uIntPtr nPopupFlags, Menu* pStaredFrom, sal_Bool bPreSelectFirst );
+    SAL_DLLPRIVATE sal_uInt16                ImplExecute( Window* pWindow, const Rectangle& rRect, sal_uLong nPopupFlags, Menu* pStaredFrom, sal_Bool bPreSelectFirst );
     SAL_DLLPRIVATE long                  ImplCalcHeight( sal_uInt16 nEntries ) const;
     SAL_DLLPRIVATE sal_uInt16                ImplCalcVisEntries( long nMaxHeight, sal_uInt16 nStartEntry = 0, sal_uInt16* pLastVisible = NULL ) const;
 

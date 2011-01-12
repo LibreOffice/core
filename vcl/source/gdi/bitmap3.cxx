@@ -40,7 +40,7 @@
 // - Defines -
 // -----------
 
-#define RGB15( _def_cR, _def_cG, _def_cB )  (((sal_uIntPtr)(_def_cR)<<10UL)|((sal_uIntPtr)(_def_cG)<<5UL)|(sal_uIntPtr)(_def_cB))
+#define RGB15( _def_cR, _def_cG, _def_cB )  (((sal_uLong)(_def_cR)<<10UL)|((sal_uLong)(_def_cG)<<5UL)|(sal_uLong)(_def_cB))
 #define GAMMA( _def_cVal, _def_InvGamma )   ((sal_uInt8)MinMax(FRound(pow( _def_cVal/255.0,_def_InvGamma)*255.0),0L,255L))
 
 #define CALC_ERRORS                                                             \
@@ -76,13 +76,13 @@
 // - Statics -
 // -----------
 
-sal_uIntPtr nVCLRLut[ 6 ] = { 16, 17, 18, 19, 20, 21 };
-sal_uIntPtr nVCLGLut[ 6 ] = { 0, 6, 12, 18, 24, 30 };
-sal_uIntPtr nVCLBLut[ 6 ] = { 0, 36, 72, 108, 144, 180 };
+sal_uLong nVCLRLut[ 6 ] = { 16, 17, 18, 19, 20, 21 };
+sal_uLong nVCLGLut[ 6 ] = { 0, 6, 12, 18, 24, 30 };
+sal_uLong nVCLBLut[ 6 ] = { 0, 36, 72, 108, 144, 180 };
 
 // ------------------------------------------------------------------------
 
-sal_uIntPtr nVCLDitherLut[ 256 ] =
+sal_uLong nVCLDitherLut[ 256 ] =
 {
        0, 49152, 12288, 61440,  3072, 52224, 15360, 64512,   768, 49920, 13056,
    62208,  3840, 52992, 16128, 65280, 32768, 16384, 45056, 28672, 35840, 19456,
@@ -112,7 +112,7 @@ sal_uIntPtr nVCLDitherLut[ 256 ] =
 
 // ------------------------------------------------------------------------
 
-sal_uIntPtr nVCLLut[ 256 ] =
+sal_uLong nVCLLut[ 256 ] =
 {
          0,  1286,  2572,  3858,  5144,  6430,  7716,  9002,
      10288, 11574, 12860, 14146, 15432, 16718, 18004, 19290,
@@ -521,7 +521,7 @@ sal_Bool Bitmap::ImplMakeGreyscales( sal_uInt16 nGreys )
     if( pReadAcc )
     {
         const BitmapPalette&    rPal = GetGreyPalette( nGreys );
-        sal_uIntPtr                     nShift = ( ( nGreys == 16 ) ? 4UL : 0UL );
+        sal_uLong                   nShift = ( ( nGreys == 16 ) ? 4UL : 0UL );
         sal_Bool                    bPalDiffers = !pReadAcc->HasPalette() || ( rPal.GetEntryCount() != pReadAcc->GetPaletteEntryCount() );
 
         if( !bPalDiffers )
@@ -561,9 +561,9 @@ sal_Bool Bitmap::ImplMakeGreyscales( sal_uInt16 nGreys )
 
                         for( long nX = 0L; nX < nWidth; nX++ )
                         {
-                            const sal_uIntPtr nB = *pReadScan++;
-                            const sal_uIntPtr nG = *pReadScan++;
-                            const sal_uIntPtr nR = *pReadScan++;
+                            const sal_uLong nB = *pReadScan++;
+                            const sal_uLong nG = *pReadScan++;
+                            const sal_uLong nR = *pReadScan++;
 
                             *pWriteScan++ = (sal_uInt8) ( ( nB * 28UL + nG * 151UL + nR * 77UL ) >> nShift );
                         }
@@ -581,9 +581,9 @@ sal_Bool Bitmap::ImplMakeGreyscales( sal_uInt16 nGreys )
 
                         for( long nX = 0L; nX < nWidth; nX++ )
                         {
-                            const sal_uIntPtr nR = *pReadScan++;
-                            const sal_uIntPtr nG = *pReadScan++;
-                            const sal_uIntPtr nB = *pReadScan++;
+                            const sal_uLong nR = *pReadScan++;
+                            const sal_uLong nG = *pReadScan++;
+                            const sal_uLong nB = *pReadScan++;
 
                             *pWriteScan++ = (sal_uInt8) ( ( nB * 28UL + nG * 151UL + nR * 77UL ) >> nShift );
                         }
@@ -903,7 +903,7 @@ sal_Bool Bitmap::ImplConvertGhosted()
 
 // ------------------------------------------------------------------------
 
-sal_Bool Bitmap::Scale( const double& rScaleX, const double& rScaleY, sal_uIntPtr nScaleFlag )
+sal_Bool Bitmap::Scale( const double& rScaleX, const double& rScaleY, sal_uLong nScaleFlag )
 {
     sal_Bool bRet;
 
@@ -924,7 +924,7 @@ sal_Bool Bitmap::Scale( const double& rScaleX, const double& rScaleY, sal_uIntPt
 
 // ------------------------------------------------------------------------
 
-sal_Bool Bitmap::Scale( const Size& rNewSize, sal_uIntPtr nScaleFlag )
+sal_Bool Bitmap::Scale( const Size& rNewSize, sal_uLong nScaleFlag )
 {
     const Size  aSize( GetSizePixel() );
     sal_Bool        bRet;
@@ -1247,7 +1247,7 @@ sal_Bool Bitmap::ImplScaleInterpolate( const double& rScaleX, const double& rSca
 
 // ------------------------------------------------------------------------
 
-sal_Bool Bitmap::Dither( sal_uIntPtr nDitherFlags )
+sal_Bool Bitmap::Dither( sal_uLong nDitherFlags )
 {
     sal_Bool bRet = sal_False;
 
@@ -1276,21 +1276,21 @@ sal_Bool Bitmap::ImplDitherMatrix()
 
     if( pReadAcc && pWriteAcc )
     {
-        const sal_uIntPtr   nWidth = pReadAcc->Width();
-        const sal_uIntPtr   nHeight = pReadAcc->Height();
+        const sal_uLong nWidth = pReadAcc->Width();
+        const sal_uLong nHeight = pReadAcc->Height();
         BitmapColor aIndex( (sal_uInt8) 0 );
 
         if( pReadAcc->HasPalette() )
         {
-            for( sal_uIntPtr nY = 0UL; nY < nHeight; nY++ )
+            for( sal_uLong nY = 0UL; nY < nHeight; nY++ )
             {
-                for( sal_uIntPtr nX = 0UL, nModY = ( nY & 0x0FUL ) << 4UL; nX < nWidth; nX++ )
+                for( sal_uLong nX = 0UL, nModY = ( nY & 0x0FUL ) << 4UL; nX < nWidth; nX++ )
                 {
                     const BitmapColor   aCol( pReadAcc->GetPaletteColor( pReadAcc->GetPixel( nY, nX ) ) );
-                    const sal_uIntPtr           nD = nVCLDitherLut[ nModY + ( nX & 0x0FUL ) ];
-                    const sal_uIntPtr           nR = ( nVCLLut[ aCol.GetRed() ] + nD ) >> 16UL;
-                    const sal_uIntPtr           nG = ( nVCLLut[ aCol.GetGreen() ] + nD ) >> 16UL;
-                    const sal_uIntPtr           nB = ( nVCLLut[ aCol.GetBlue() ] + nD ) >> 16UL;
+                    const sal_uLong         nD = nVCLDitherLut[ nModY + ( nX & 0x0FUL ) ];
+                    const sal_uLong         nR = ( nVCLLut[ aCol.GetRed() ] + nD ) >> 16UL;
+                    const sal_uLong         nG = ( nVCLLut[ aCol.GetGreen() ] + nD ) >> 16UL;
+                    const sal_uLong         nB = ( nVCLLut[ aCol.GetBlue() ] + nD ) >> 16UL;
 
                     aIndex.SetIndex( (sal_uInt8) ( nVCLRLut[ nR ] + nVCLGLut[ nG ] + nVCLBLut[ nB ] ) );
                     pWriteAcc->SetPixel( nY, nX, aIndex );
@@ -1299,15 +1299,15 @@ sal_Bool Bitmap::ImplDitherMatrix()
         }
         else
         {
-            for( sal_uIntPtr nY = 0UL; nY < nHeight; nY++ )
+            for( sal_uLong nY = 0UL; nY < nHeight; nY++ )
             {
-                for( sal_uIntPtr nX = 0UL, nModY = ( nY & 0x0FUL ) << 4UL; nX < nWidth; nX++ )
+                for( sal_uLong nX = 0UL, nModY = ( nY & 0x0FUL ) << 4UL; nX < nWidth; nX++ )
                 {
                     const BitmapColor   aCol( pReadAcc->GetPixel( nY, nX ) );
-                    const sal_uIntPtr           nD = nVCLDitherLut[ nModY + ( nX & 0x0FUL ) ];
-                    const sal_uIntPtr           nR = ( nVCLLut[ aCol.GetRed() ] + nD ) >> 16UL;
-                    const sal_uIntPtr           nG = ( nVCLLut[ aCol.GetGreen() ] + nD ) >> 16UL;
-                    const sal_uIntPtr           nB = ( nVCLLut[ aCol.GetBlue() ] + nD ) >> 16UL;
+                    const sal_uLong         nD = nVCLDitherLut[ nModY + ( nX & 0x0FUL ) ];
+                    const sal_uLong         nR = ( nVCLLut[ aCol.GetRed() ] + nD ) >> 16UL;
+                    const sal_uLong         nG = ( nVCLLut[ aCol.GetGreen() ] + nD ) >> 16UL;
+                    const sal_uLong         nB = ( nVCLLut[ aCol.GetBlue() ] + nD ) >> 16UL;
 
                     aIndex.SetIndex( (sal_uInt8) ( nVCLRLut[ nR ] + nVCLGLut[ nG ] + nVCLBLut[ nB ] ) );
                     pWriteAcc->SetPixel( nY, nX, aIndex );
@@ -1573,7 +1573,7 @@ sal_Bool Bitmap::ReduceColors( sal_uInt16 nColorCount, BmpReduce eReduce )
 {
     sal_Bool bRet;
 
-    if( GetColorCount() <= (sal_uIntPtr) nColorCount )
+    if( GetColorCount() <= (sal_uLong) nColorCount )
         bRet = sal_True;
     else if( nColorCount )
     {
@@ -1851,8 +1851,8 @@ sal_Bool Bitmap::ImplReduceMedian( sal_uInt16 nColCount )
 
         if( pWAcc )
         {
-            const sal_uIntPtr   nSize = 32768UL * sizeof( sal_uIntPtr );
-            sal_uIntPtr*        pColBuf = (sal_uIntPtr*) rtl_allocateMemory( nSize );
+            const sal_uLong nSize = 32768UL * sizeof( sal_uLong );
+            sal_uLong*      pColBuf = (sal_uLong*) rtl_allocateMemory( nSize );
             const long  nWidth = pWAcc->Width();
             const long  nHeight = pWAcc->Height();
             long        nIndex = 0L;
@@ -1918,7 +1918,7 @@ sal_Bool Bitmap::ImplReduceMedian( sal_uInt16 nColCount )
 
 // ------------------------------------------------------------------------
 
-void Bitmap::ImplMedianCut( sal_uIntPtr* pColBuf, BitmapPalette& rPal,
+void Bitmap::ImplMedianCut( sal_uLong* pColBuf, BitmapPalette& rPal,
                             long nR1, long nR2, long nG1, long nG2, long nB1, long nB2,
                             long nColors, long nPixels, long& rIndex )
 {
@@ -1930,7 +1930,7 @@ void Bitmap::ImplMedianCut( sal_uIntPtr* pColBuf, BitmapPalette& rPal,
     const long  nGLen = nG2 - nG1;
     const long  nBLen = nB2 - nB1;
     long        nR, nG, nB;
-    sal_uIntPtr*        pBuf = pColBuf;
+    sal_uLong*      pBuf = pColBuf;
 
     if( !nRLen && !nGLen && !nBLen )
     {
@@ -2052,14 +2052,14 @@ void Bitmap::ImplMedianCut( sal_uIntPtr* pColBuf, BitmapPalette& rPal,
 
 // ------------------------------------------------------------------------
 
-sal_Bool Bitmap::Vectorize( PolyPolygon& rPolyPoly, sal_uIntPtr nFlags, const Link* pProgress )
+sal_Bool Bitmap::Vectorize( PolyPolygon& rPolyPoly, sal_uLong nFlags, const Link* pProgress )
 {
     return ImplVectorizer().ImplVectorize( *this, rPolyPoly, nFlags, pProgress );
 }
 
 // ------------------------------------------------------------------------
 
-sal_Bool Bitmap::Vectorize( GDIMetaFile& rMtf, sal_uInt8 cReduce, sal_uIntPtr nFlags, const Link* pProgress )
+sal_Bool Bitmap::Vectorize( GDIMetaFile& rMtf, sal_uInt8 cReduce, sal_uLong nFlags, const Link* pProgress )
 {
     return ImplVectorizer().ImplVectorize( *this, rMtf, cReduce, nFlags, pProgress );
 }

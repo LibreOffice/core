@@ -352,7 +352,7 @@ void ImplSalGetWorkArea( HWND hWnd, RECT *pRect, const RECT *pParentRect )
 // =======================================================================
 
 SalFrame* ImplSalCreateFrame( WinSalInstance* pInst,
-                              HWND hWndParent, sal_uIntPtr nSalFrameStyle )
+                              HWND hWndParent, sal_uLong nSalFrameStyle )
 {
     WinSalFrame*   pFrame = new WinSalFrame;
     HWND        hWnd;
@@ -608,8 +608,8 @@ SalFrame* ImplSalCreateFrame( WinSalInstance* pInst,
 HWND ImplSalReCreateHWND( HWND hWndParent, HWND oldhWnd, sal_Bool bAsChild )
 {
     HINSTANCE hInstance = GetSalData()->mhInst;
-    sal_uIntPtr nSysStyle     = GetWindowLong( oldhWnd, GWL_STYLE );
-    sal_uIntPtr nExSysStyle   = GetWindowLong( oldhWnd, GWL_EXSTYLE );
+    ULONG nSysStyle     = GetWindowLong( oldhWnd, GWL_STYLE );
+    ULONG nExSysStyle   = GetWindowLong( oldhWnd, GWL_EXSTYLE );
 
     if( bAsChild )
     {
@@ -2622,26 +2622,26 @@ XubString WinSalFrame::GetKeyName( sal_uInt16 nKeyCode )
     if ( nKeyCode & KEY_MOD1 )
     {
         nSysCode = MapVirtualKey( VK_CONTROL, 0 );
-        nSysCode = (nSysCode << 16) | (((sal_uIntPtr)1) << 25);
+        nSysCode = (nSysCode << 16) | (((sal_uLong)1) << 25);
         ImplGetKeyNameText( nSysCode, aKeyBuf, nKeyBufLen, nMaxKeyLen, "Ctrl" );
     }
 
     if ( nKeyCode & KEY_MOD2 )
     {
         nSysCode = MapVirtualKey( VK_MENU, 0 );
-        nSysCode = (nSysCode << 16) | (((sal_uIntPtr)1) << 25);
+        nSysCode = (nSysCode << 16) | (((sal_uLong)1) << 25);
         ImplGetKeyNameText( nSysCode, aKeyBuf, nKeyBufLen, nMaxKeyLen, "Alt" );
     }
 
     if ( nKeyCode & KEY_SHIFT )
     {
         nSysCode = MapVirtualKey( VK_SHIFT, 0 );
-        nSysCode = (nSysCode << 16) | (((sal_uIntPtr)1) << 25);
+        nSysCode = (nSysCode << 16) | (((sal_uLong)1) << 25);
         ImplGetKeyNameText( nSysCode, aKeyBuf, nKeyBufLen, nMaxKeyLen, "Shift" );
     }
 
     sal_uInt16      nCode = nKeyCode & 0x0FFF;
-    sal_uIntPtr       nSysCode2 = 0;
+    sal_uLong       nSysCode2 = 0;
     sal_Char*   pReplace = NULL;
     sal_Unicode cSVCode = 0;
     sal_Char    aFBuf[4];
@@ -2680,42 +2680,42 @@ XubString WinSalFrame::GetKeyName( sal_uInt16 nKeyCode )
         {
             case KEY_DOWN:
                 nSysCode = VK_DOWN;
-                nSysCode2 = (((sal_uIntPtr)1) << 24);
+                nSysCode2 = (((sal_uLong)1) << 24);
                 pReplace = "Down";
                 break;
             case KEY_UP:
                 nSysCode = VK_UP;
-                nSysCode2 = (((sal_uIntPtr)1) << 24);
+                nSysCode2 = (((sal_uLong)1) << 24);
                 pReplace = "Up";
                 break;
             case KEY_LEFT:
                 nSysCode = VK_LEFT;
-                nSysCode2 = (((sal_uIntPtr)1) << 24);
+                nSysCode2 = (((sal_uLong)1) << 24);
                 pReplace = "Left";
                 break;
             case KEY_RIGHT:
                 nSysCode = VK_RIGHT;
-                nSysCode2 = (((sal_uIntPtr)1) << 24);
+                nSysCode2 = (((sal_uLong)1) << 24);
                 pReplace = "Right";
                 break;
             case KEY_HOME:
                 nSysCode = VK_HOME;
-                nSysCode2 = (((sal_uIntPtr)1) << 24);
+                nSysCode2 = (((sal_uLong)1) << 24);
                 pReplace = "Home";
                 break;
             case KEY_END:
                 nSysCode = VK_END;
-                nSysCode2 = (((sal_uIntPtr)1) << 24);
+                nSysCode2 = (((sal_uLong)1) << 24);
                 pReplace = "End";
                 break;
             case KEY_PAGEUP:
                 nSysCode = VK_PRIOR;
-                nSysCode2 = (((sal_uIntPtr)1) << 24);
+                nSysCode2 = (((sal_uLong)1) << 24);
                 pReplace = "Page Up";
                 break;
             case KEY_PAGEDOWN:
                 nSysCode = VK_NEXT;
-                nSysCode2 = (((sal_uIntPtr)1) << 24);
+                nSysCode2 = (((sal_uLong)1) << 24);
                 pReplace = "Page Down";
                 break;
             case KEY_RETURN:
@@ -2740,12 +2740,12 @@ XubString WinSalFrame::GetKeyName( sal_uInt16 nKeyCode )
                 break;
             case KEY_INSERT:
                 nSysCode = VK_INSERT;
-                nSysCode2 = (((sal_uIntPtr)1) << 24);
+                nSysCode2 = (((sal_uLong)1) << 24);
                 pReplace = "Insert";
                 break;
             case KEY_DELETE:
                 nSysCode = VK_DELETE;
-                nSysCode2 = (((sal_uIntPtr)1) << 24);
+                nSysCode2 = (((sal_uLong)1) << 24);
                 pReplace = "Delete";
                 break;
 
@@ -2908,7 +2908,7 @@ void WinSalFrame::UpdateSettings( AllSettings& rSettings )
                               &nType, aValueBuf, &nValueSize ) == ERROR_SUCCESS )
         {
             if ( nType == REG_SZ )
-                aMouseSettings.SetMenuDelay( (sal_uIntPtr)ImplA2I( aValueBuf ) );
+                aMouseSettings.SetMenuDelay( (sal_uLong)ImplA2I( aValueBuf ) );
         }
 
         RegCloseKey( hRegKey );
@@ -3101,7 +3101,7 @@ void WinSalFrame::UpdateSettings( AllSettings& rSettings )
     BOOL bDragFull;
     if ( SystemParametersInfo( SPI_GETDRAGFULLWINDOWS, 0, &bDragFull, 0 ) )
     {
-        sal_uIntPtr nDragFullOptions = aStyleSettings.GetDragFullOptions();
+        sal_uLong nDragFullOptions = aStyleSettings.GetDragFullOptions();
         if ( bDragFull )
             nDragFullOptions |=  DRAGFULL_OPTION_WINDOWMOVE | DRAGFULL_OPTION_WINDOWSIZE | DRAGFULL_OPTION_DOCKING | DRAGFULL_OPTION_SPLIT;
         else
@@ -3124,7 +3124,7 @@ void WinSalFrame::UpdateSettings( AllSettings& rSettings )
         {
             if ( nType == REG_SZ )
             {
-                nValue = (sal_uIntPtr)ImplA2I( aValueBuf );
+                nValue = (sal_uLong)ImplA2I( aValueBuf );
                 if ( (nValue > 1000) && (nValue < 10000) )
                 {
                     MiscSettings aMiscSettings = rSettings.GetMiscSettings();
@@ -3240,11 +3240,11 @@ void WinSalFrame::ResetClipRegion()
 
 // -----------------------------------------------------------------------
 
-void WinSalFrame::BeginSetClipRegion( sal_uIntPtr nRects )
+void WinSalFrame::BeginSetClipRegion( sal_uLong nRects )
 {
     if( mpClipRgnData )
         delete [] (BYTE*)mpClipRgnData;
-    sal_uIntPtr nRectBufSize = sizeof(RECT)*nRects;
+    sal_uLong nRectBufSize = sizeof(RECT)*nRects;
     mpClipRgnData = (RGNDATA*)new BYTE[sizeof(RGNDATA)-1+nRectBufSize];
     mpClipRgnData->rdh.dwSize     = sizeof( RGNDATAHEADER );
     mpClipRgnData->rdh.iType      = RDH_RECTANGLES;
@@ -3316,7 +3316,7 @@ void WinSalFrame::EndSetClipRegion()
     }
     else
     {
-        sal_uIntPtr nSize = mpClipRgnData->rdh.nRgnSize+sizeof(RGNDATAHEADER);
+        sal_uLong nSize = mpClipRgnData->rdh.nRgnSize+sizeof(RGNDATAHEADER);
         hRegion = ExtCreateRegion( NULL, nSize, mpClipRgnData );
     }
     delete [] (BYTE*)mpClipRgnData;
@@ -5816,8 +5816,8 @@ static LRESULT ImplHandleIMEConfirmReconvertString( HWND hWnd, LPARAM lParam )
 
     pFrame->CallCallback( SALEVENT_SURROUNDINGTEXTREQUEST, (void*)&aEvt );
 
-    sal_uIntPtr nTmpStart = pReconvertString->dwCompStrOffset / sizeof(WCHAR);
-    sal_uIntPtr nTmpEnd = nTmpStart + pReconvertString->dwCompStrLen;
+    sal_uLong nTmpStart = pReconvertString->dwCompStrOffset / sizeof(WCHAR);
+    sal_uLong nTmpEnd = nTmpStart + pReconvertString->dwCompStrLen;
 
     if( nTmpStart != aEvt.mnStart || nTmpEnd != aEvt.mnEnd )
     {
@@ -6217,7 +6217,7 @@ LRESULT CALLBACK SalFrameWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lP
             rDef = FALSE;
             break;
         case SAL_MSG_ENDEXTTEXTINPUT:
-            ImplSalFrameEndExtTextInput( hWnd, (sal_uInt16)(sal_uIntPtr)(void*)wParam );
+            ImplSalFrameEndExtTextInput( hWnd, (sal_uInt16)(sal_uLong)(void*)wParam );
             rDef = FALSE;
             break;
 

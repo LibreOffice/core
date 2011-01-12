@@ -711,7 +711,7 @@ The following structure describes the permissions used in PDF security
 
     void               SetAntialiasing( sal_uInt16 nMode =  0 );
 
-    void               SetLayoutMode( sal_uIntPtr nMode );
+    void               SetLayoutMode( sal_uLong nMode );
     void               SetDigitLanguage( LanguageType eLang );
 
     void               SetLineColor( const Color& rColor );
@@ -747,7 +747,7 @@ The following structure describes the permissions used in PDF security
                                        const sal_Int32* pDXAry = NULL,
                                        xub_StrLen nIndex = 0,
                                        xub_StrLen nLen = STRING_LEN );
-    void                DrawStretchText( const Point& rStartPt, sal_uIntPtr nWidth,
+    void                DrawStretchText( const Point& rStartPt, sal_uLong nWidth,
                                          const XubString& rStr,
                                          xub_StrLen nIndex = 0, xub_StrLen nLen = STRING_LEN );
     void                DrawText( const Rectangle& rRect,
@@ -771,7 +771,7 @@ The following structure describes the permissions used in PDF security
     void                DrawPolyPolygon( const PolyPolygon& rPolyPoly );
     void                DrawRect( const Rectangle& rRect );
     void                DrawRect( const Rectangle& rRect,
-                                  sal_uIntPtr nHorzRount, sal_uIntPtr nVertRound );
+                                  sal_uLong nHorzRount, sal_uLong nVertRound );
     void                DrawEllipse( const Rectangle& rRect );
     void                DrawArc( const Rectangle& rRect,
                                  const Point& rStartPt, const Point& rEndPt );

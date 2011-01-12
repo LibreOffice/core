@@ -57,10 +57,10 @@ GraphicConverter::~GraphicConverter()
 
 // ------------------------------------------------------------------------
 
-sal_uIntPtr GraphicConverter::ImplConvert( sal_uIntPtr nInFormat, void* pInBuffer, sal_uIntPtr nInBufSize,
-                                     void** ppOutBuffer, sal_uIntPtr nOutFormat )
+sal_uLong GraphicConverter::ImplConvert( sal_uLong nInFormat, void* pInBuffer, sal_uLong nInBufSize,
+                                     void** ppOutBuffer, sal_uLong nOutFormat )
 {
-    sal_uIntPtr nRetBufSize = 0UL;
+    sal_uLong nRetBufSize = 0UL;
 
     if( ( nInFormat != nOutFormat ) && pInBuffer )
     {
@@ -133,10 +133,10 @@ sal_uIntPtr GraphicConverter::ImplConvert( sal_uIntPtr nInFormat, void* pInBuffe
 
 // ------------------------------------------------------------------------
 
-sal_uIntPtr GraphicConverter::Import( SvStream& rIStm, Graphic& rGraphic, sal_uIntPtr nFormat )
+sal_uLong GraphicConverter::Import( SvStream& rIStm, Graphic& rGraphic, sal_uLong nFormat )
 {
     GraphicConverter*   pCvt = ImplGetSVData()->maGDIData.mpGrfConverter;
-    sal_uIntPtr             nRet = ERRCODE_IO_GENERAL;
+    sal_uLong               nRet = ERRCODE_IO_GENERAL;
 
     if( pCvt && pCvt->GetFilterHdl().IsSet() )
     {
@@ -156,10 +156,10 @@ sal_uIntPtr GraphicConverter::Import( SvStream& rIStm, Graphic& rGraphic, sal_uI
 
 // ------------------------------------------------------------------------
 
-sal_uIntPtr GraphicConverter::Export( SvStream& rOStm, const Graphic& rGraphic, sal_uIntPtr nFormat )
+sal_uLong GraphicConverter::Export( SvStream& rOStm, const Graphic& rGraphic, sal_uLong nFormat )
 {
     GraphicConverter*   pCvt = ImplGetSVData()->maGDIData.mpGrfConverter;
-    sal_uIntPtr             nRet = ERRCODE_IO_GENERAL;
+    sal_uLong               nRet = ERRCODE_IO_GENERAL;
 
     if( pCvt && pCvt->GetFilterHdl().IsSet() )
     {

@@ -245,7 +245,7 @@ sal_Bool GfxLink::LoadNative( Graphic& rGraphic )
         if( pData )
         {
             SvMemoryStream  aMemStm;
-            sal_uIntPtr         nCvtType;
+            sal_uLong           nCvtType;
 
             aMemStm.SetBuffer( (char*) pData, mnBufSize, sal_False, mnBufSize );
 
@@ -391,7 +391,7 @@ SvStream& operator>>( SvStream& rIStream, GfxLink& rGfxLink)
 // - ImpSwap -
 // -----------
 
-ImpSwap::ImpSwap( sal_uInt8* pData, sal_uIntPtr nDataSize ) :
+ImpSwap::ImpSwap( sal_uInt8* pData, sal_uLong nDataSize ) :
             mnDataSize( nDataSize ),
             mnRefCount( 1UL )
 {

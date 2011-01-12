@@ -754,7 +754,7 @@ void WinSalGraphics::invert( long nX, long nY, long nWidth, long nHeight, SalInv
 
 // -----------------------------------------------------------------------
 
-void WinSalGraphics::invert( sal_uIntPtr nPoints, const SalPoint* pPtAry, SalInvert nSalFlags )
+void WinSalGraphics::invert( sal_uLong nPoints, const SalPoint* pPtAry, SalInvert nSalFlags )
 {
     HPEN        hPen;
     HPEN        hOldPen;

@@ -184,16 +184,16 @@ struct ImplEventHook
 
 struct ImplPostEventData
 {
-    sal_uIntPtr         mnEvent;
+    sal_uLong           mnEvent;
     const Window*   mpWin;
-    sal_uIntPtr         mnEventId;
+    sal_uLong           mnEventId;
     KeyEvent        maKeyEvent;
     MouseEvent      maMouseEvent;
 
 
-       ImplPostEventData( sal_uIntPtr nEvent, const Window* pWin, const KeyEvent& rKeyEvent ) :
+       ImplPostEventData( sal_uLong nEvent, const Window* pWin, const KeyEvent& rKeyEvent ) :
         mnEvent( nEvent ), mpWin( pWin ), mnEventId( 0 ), maKeyEvent( rKeyEvent ) {}
-       ImplPostEventData( sal_uIntPtr nEvent, const Window* pWin, const MouseEvent& rMouseEvent ) :
+       ImplPostEventData( sal_uLong nEvent, const Window* pWin, const MouseEvent& rMouseEvent ) :
         mnEvent( nEvent ), mpWin( pWin ), mnEventId( 0 ), maMouseEvent( rMouseEvent ) {}
 
     ~ImplPostEventData() {}
@@ -255,7 +255,7 @@ sal_Bool Application::QueryExit()
 
 // -----------------------------------------------------------------------
 
-void Application::UserEvent( sal_uIntPtr, void* )
+void Application::UserEvent( sal_uLong, void* )
 {
 }
 
@@ -410,12 +410,12 @@ void Application::Abort( const XubString& rErrorText )
 
 // -----------------------------------------------------------------------
 
-sal_uIntPtr   Application::GetReservedKeyCodeCount()
+sal_uLong   Application::GetReservedKeyCodeCount()
 {
     return ImplReservedKeys::get()->second;
 }
 
-const KeyCode*  Application::GetReservedKeyCode( sal_uIntPtr i )
+const KeyCode*  Application::GetReservedKeyCode( sal_uLong i )
 {
     if( i >= GetReservedKeyCodeCount() )
         return NULL;
@@ -423,7 +423,7 @@ const KeyCode*  Application::GetReservedKeyCode( sal_uIntPtr i )
         return &ImplReservedKeys::get()->first[i].mKeyCode;
 }
 
-String Application::GetReservedKeyCodeDescription( sal_uIntPtr i )
+String Application::GetReservedKeyCodeDescription( sal_uLong i )
 {
     ResMgr* pResMgr = ImplGetResMgr();
     if( ! pResMgr )
@@ -537,7 +537,7 @@ vos::OThread::TThreadIdentifier Application::GetMainThreadIdentifier()
 
 // -----------------------------------------------------------------------
 
-sal_uIntPtr Application::ReleaseSolarMutex()
+sal_uLong Application::ReleaseSolarMutex()
 {
     ImplSVData* pSVData = ImplGetSVData();
     return pSVData->mpDefInst->ReleaseYieldMutex();
@@ -545,7 +545,7 @@ sal_uIntPtr Application::ReleaseSolarMutex()
 
 // -----------------------------------------------------------------------
 
-void Application::AcquireSolarMutex( sal_uIntPtr nCount )
+void Application::AcquireSolarMutex( sal_uLong nCount )
 {
     ImplSVData* pSVData = ImplGetSVData();
     pSVData->mpDefInst->AcquireYieldMutex( nCount );
@@ -602,7 +602,7 @@ sal_Bool Application::AnyInput( sal_uInt16 nType )
 
 // -----------------------------------------------------------------------
 
-sal_uIntPtr Application::GetLastInputInterval()
+sal_uLong Application::GetLastInputInterval()
 {
     return (Time::GetSystemTicks()-ImplGetSVData()->maAppData.mnLastInputTime);
 }
@@ -719,7 +719,7 @@ void Application::SetSettings( const AllSettings& rSettings )
         }
         ResMgr::SetDefaultLocale( rSettings.GetUILocale() );
         *pSVData->maAppData.mpSettings = rSettings;
-        sal_uIntPtr nChangeFlags = aOldSettings.GetChangeFlags( *pSVData->maAppData.mpSettings );
+        sal_uLong nChangeFlags = aOldSettings.GetChangeFlags( *pSVData->maAppData.mpSettings );
         if ( nChangeFlags )
         {
             DataChangedEvent aDCEvt( DATACHANGED_SETTINGS, &aOldSettings, nChangeFlags );
@@ -839,7 +839,7 @@ void Application::NotifyAllWindows( DataChangedEvent& rDCEvt )
 
 // -----------------------------------------------------------------------
 
-void Application::ImplCallEventListeners( sal_uIntPtr nEvent, Window *pWin, void* pData )
+void Application::ImplCallEventListeners( sal_uLong nEvent, Window *pWin, void* pData )
 {
     ImplSVData* pSVData = ImplGetSVData();
     VclWindowEvent aEvent( pWin, nEvent, pData );
@@ -899,7 +899,7 @@ void Application::RemoveKeyListener( const Link& rKeyListener )
 
 // -----------------------------------------------------------------------
 
-sal_Bool Application::HandleKey( sal_uIntPtr nEvent, Window *pWin, KeyEvent* pKeyEvent )
+sal_Bool Application::HandleKey( sal_uLong nEvent, Window *pWin, KeyEvent* pKeyEvent )
 {
     // let listeners process the key event
     VclWindowEvent aEvent( pWin, nEvent, (void *) pKeyEvent );
@@ -916,10 +916,10 @@ sal_Bool Application::HandleKey( sal_uIntPtr nEvent, Window *pWin, KeyEvent* pKe
 
 // -----------------------------------------------------------------------------
 
-sal_uIntPtr Application::PostKeyEvent( sal_uIntPtr nEvent, Window *pWin, KeyEvent* pKeyEvent )
+sal_uLong Application::PostKeyEvent( sal_uLong nEvent, Window *pWin, KeyEvent* pKeyEvent )
 {
     const ::vos::OGuard aGuard( GetSolarMutex() );
-    sal_uIntPtr                 nEventId = 0;
+    sal_uLong               nEventId = 0;
 
     if( pWin && pKeyEvent )
     {
@@ -943,10 +943,10 @@ sal_uIntPtr Application::PostKeyEvent( sal_uIntPtr nEvent, Window *pWin, KeyEven
 
 // -----------------------------------------------------------------------------
 
-sal_uIntPtr Application::PostMouseEvent( sal_uIntPtr nEvent, Window *pWin, MouseEvent* pMouseEvent )
+sal_uLong Application::PostMouseEvent( sal_uLong nEvent, Window *pWin, MouseEvent* pMouseEvent )
 {
     const ::vos::OGuard aGuard( GetSolarMutex() );
-    sal_uIntPtr                 nEventId = 0;
+    sal_uLong               nEventId = 0;
 
     if( pWin && pMouseEvent )
     {
@@ -983,8 +983,8 @@ IMPL_STATIC_LINK_NOINSTANCE( Application, PostEventHandler, void*, pCallData )
     const ::vos::OGuard aGuard( GetSolarMutex() );
     ImplPostEventData*  pData = static_cast< ImplPostEventData * >( pCallData );
     const void*         pEventData;
-    sal_uIntPtr               nEvent;
-    const sal_uIntPtr           nEventId = pData->mnEventId;
+    sal_uLong               nEvent;
+    const sal_uLong         nEventId = pData->mnEventId;
 
     switch( pData->mnEvent )
     {
@@ -1065,7 +1065,7 @@ void Application::RemoveMouseAndKeyEvents( Window* pWin )
 
 // -----------------------------------------------------------------------
 
-sal_Bool Application::IsProcessedMouseOrKeyEvent( sal_uIntPtr nEventId )
+sal_Bool Application::IsProcessedMouseOrKeyEvent( sal_uLong nEventId )
 {
     const ::vos::OGuard aGuard( GetSolarMutex() );
 
@@ -1085,25 +1085,25 @@ sal_Bool Application::IsProcessedMouseOrKeyEvent( sal_uIntPtr nEventId )
 
 // -----------------------------------------------------------------------
 
-sal_uIntPtr Application::PostUserEvent( sal_uIntPtr nEvent, void* pEventData )
+sal_uLong Application::PostUserEvent( sal_uLong nEvent, void* pEventData )
 {
-    sal_uIntPtr nEventId;
+    sal_uLong nEventId;
     PostUserEvent( nEventId, nEvent, pEventData );
     return nEventId;
 }
 
 // -----------------------------------------------------------------------
 
-sal_uIntPtr Application::PostUserEvent( const Link& rLink, void* pCaller )
+sal_uLong Application::PostUserEvent( const Link& rLink, void* pCaller )
 {
-    sal_uIntPtr nEventId;
+    sal_uLong nEventId;
     PostUserEvent( nEventId, rLink, pCaller );
     return nEventId;
 }
 
 // -----------------------------------------------------------------------
 
-sal_Bool Application::PostUserEvent( sal_uIntPtr& rEventId, sal_uIntPtr nEvent, void* pEventData )
+sal_Bool Application::PostUserEvent( sal_uLong& rEventId, sal_uLong nEvent, void* pEventData )
 {
     ImplSVEvent* pSVEvent = new ImplSVEvent;
     pSVEvent->mnEvent   = nEvent;
@@ -1111,7 +1111,7 @@ sal_Bool Application::PostUserEvent( sal_uIntPtr& rEventId, sal_uIntPtr nEvent, 
     pSVEvent->mpLink    = NULL;
     pSVEvent->mpWindow  = NULL;
     pSVEvent->mbCall    = sal_True;
-    rEventId = (sal_uIntPtr)pSVEvent;
+    rEventId = (sal_uLong)pSVEvent;
     Window* pDefWindow = ImplGetDefaultWindow();
     if ( pDefWindow && pDefWindow->ImplGetFrame()->PostEvent( pSVEvent ) )
         return sal_True;
@@ -1125,7 +1125,7 @@ sal_Bool Application::PostUserEvent( sal_uIntPtr& rEventId, sal_uIntPtr nEvent, 
 
 // -----------------------------------------------------------------------
 
-sal_Bool Application::PostUserEvent( sal_uIntPtr& rEventId, const Link& rLink, void* pCaller )
+sal_Bool Application::PostUserEvent( sal_uLong& rEventId, const Link& rLink, void* pCaller )
 {
     ImplSVEvent* pSVEvent = new ImplSVEvent;
     pSVEvent->mnEvent   = 0;
@@ -1133,7 +1133,7 @@ sal_Bool Application::PostUserEvent( sal_uIntPtr& rEventId, const Link& rLink, v
     pSVEvent->mpLink    = new Link( rLink );
     pSVEvent->mpWindow  = NULL;
     pSVEvent->mbCall    = sal_True;
-    rEventId = (sal_uIntPtr)pSVEvent;
+    rEventId = (sal_uLong)pSVEvent;
     Window* pDefWindow = ImplGetDefaultWindow();
     if ( pDefWindow && pDefWindow->ImplGetFrame()->PostEvent( pSVEvent ) )
         return sal_True;
@@ -1147,7 +1147,7 @@ sal_Bool Application::PostUserEvent( sal_uIntPtr& rEventId, const Link& rLink, v
 
 // -----------------------------------------------------------------------
 
-void Application::RemoveUserEvent( sal_uIntPtr nUserEvent )
+void Application::RemoveUserEvent( sal_uLong nUserEvent )
 {
     if(nUserEvent)
     {

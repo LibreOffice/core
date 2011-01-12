@@ -154,7 +154,7 @@ void BitmapReadAccess::ImplDestroy()
 
 // ------------------------------------------------------------------
 
-sal_Bool BitmapReadAccess::ImplSetAccessPointers( sal_uIntPtr nFormat )
+sal_Bool BitmapReadAccess::ImplSetAccessPointers( sal_uLong nFormat )
 {
     sal_Bool bRet = sal_True;
 
@@ -196,7 +196,7 @@ void BitmapReadAccess::ImplZeroInitUnusedBits()
         sal_uInt32 nBits;
         bool       bMsb;
 
-        const sal_uIntPtr nScanlineFormat = GetScanlineFormat();
+        const sal_uLong nScanlineFormat = GetScanlineFormat();
         switch( nScanlineFormat )
         {
             case( BMP_FORMAT_1BIT_MSB_PAL ):
@@ -366,16 +366,16 @@ void BitmapWriteAccess::CopyScanline( long nY, const BitmapReadAccess& rReadAcc 
 // ------------------------------------------------------------------
 
 void BitmapWriteAccess::CopyScanline( long nY, ConstScanline aSrcScanline,
-                                      sal_uIntPtr nSrcScanlineFormat, sal_uIntPtr nSrcScanlineSize )
+                                      sal_uLong nSrcScanlineFormat, sal_uLong nSrcScanlineSize )
 {
-    const sal_uIntPtr nFormat = BMP_SCANLINE_FORMAT( nSrcScanlineFormat );
+    const sal_uLong nFormat = BMP_SCANLINE_FORMAT( nSrcScanlineFormat );
 
     DBG_ASSERT( ( nY >= 0 ) && ( nY < mpBuffer->mnHeight ), "y-coordinate in destination out of range!" );
     DBG_ASSERT( ( HasPalette() && nFormat <= BMP_FORMAT_8BIT_PAL ) ||
                 ( !HasPalette() && nFormat > BMP_FORMAT_8BIT_PAL ),
                 "No copying possible between palette and non palette scanlines!" );
 
-    const sal_uIntPtr nCount = Min( GetScanlineSize(), nSrcScanlineSize );
+    const sal_uLong nCount = Min( GetScanlineSize(), nSrcScanlineSize );
 
     if( nCount )
     {
@@ -437,7 +437,7 @@ void BitmapWriteAccess::CopyBuffer( const BitmapReadAccess& rReadAcc )
         ( GetScanlineSize() == rReadAcc.GetScanlineSize() ) )
     {
         const long  nHeight = Min( mpBuffer->mnHeight, rReadAcc.Height() );
-        const sal_uIntPtr nCount = nHeight * mpBuffer->mnScanlineSize;
+        const sal_uLong nCount = nHeight * mpBuffer->mnScanlineSize;
 
         memcpy( mpBuffer->mpBits, rReadAcc.GetBuffer(), nCount );
     }

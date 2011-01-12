@@ -197,13 +197,13 @@ namespace com { namespace sun { namespace star {
 class VCL_DLLPUBLIC VclSimpleEvent
 {
 private:
-    sal_uIntPtr nId;
+    sal_uLong nId;
 
 public:
-    VclSimpleEvent( sal_uIntPtr n ) { nId = n; }
+    VclSimpleEvent( sal_uLong n ) { nId = n; }
     TYPEINFO();
 
-    sal_uIntPtr GetId() const { return nId; }
+    sal_uLong GetId() const { return nId; }
 };
 
 class VCL_DLLPUBLIC VclWindowEvent : public VclSimpleEvent
@@ -213,7 +213,7 @@ private:
     void*   pData;
 
 public:
-    VclWindowEvent( Window* pWin, sal_uIntPtr n, void* pDat = NULL ) : VclSimpleEvent(n) { pWindow = pWin; pData = pDat; }
+    VclWindowEvent( Window* pWin, sal_uLong n, void* pDat = NULL ) : VclSimpleEvent(n) { pWindow = pWin; pData = pDat; }
     TYPEINFO();
 
     Window* GetWindow() const { return pWindow; }
@@ -227,7 +227,7 @@ private:
     MouseEvent aEvent;
 
 public:
-    VclMouseEvent( Window* pWin, sal_uIntPtr n, const MouseEvent& rEvent ) : VclWindowEvent( pWin, n ), aEvent(rEvent) { ; }
+    VclMouseEvent( Window* pWin, sal_uLong n, const MouseEvent& rEvent ) : VclWindowEvent( pWin, n ), aEvent(rEvent) { ; }
     TYPEINFO();
 
     const MouseEvent& GetEvent() const { return aEvent; }
@@ -241,7 +241,7 @@ private:
     sal_uInt16 mnPos;
 
 public:
-    VclMenuEvent( Menu* pM, sal_uIntPtr n, sal_uInt16 nPos ) : VclSimpleEvent(n) { pMenu = pM; mnPos = nPos; }
+    VclMenuEvent( Menu* pM, sal_uLong n, sal_uInt16 nPos ) : VclSimpleEvent(n) { pMenu = pM; mnPos = nPos; }
     TYPEINFO();
 
     Menu* GetMenu() const { return pMenu; }
@@ -251,7 +251,7 @@ public:
 class VCL_DLLPUBLIC VclAccessibleEvent: public VclSimpleEvent
 {
 public:
-    VclAccessibleEvent( sal_uIntPtr n, const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >& rxAccessible );
+    VclAccessibleEvent( sal_uLong n, const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >& rxAccessible );
     virtual ~VclAccessibleEvent();
     ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > GetAccessible() const;
 

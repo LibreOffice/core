@@ -97,8 +97,8 @@ public:
     long*                   mpDitherDiff;           // Dither mapping table
     BYTE*                   mpDitherLow;            // Dither mapping table
     BYTE*                   mpDitherHigh;           // Dither mapping table
-    sal_uIntPtr                   mnTimerMS;              // Current Time (in MS) of the Timer
-    sal_uIntPtr                   mnTimerOrgMS;           // Current Original Time (in MS)
+    sal_uLong                   mnTimerMS;              // Current Time (in MS) of the Timer
+    sal_uLong                   mnTimerOrgMS;           // Current Original Time (in MS)
     DWORD                   mnNextTimerTime;
     DWORD                   mnLastEventTime;
     UINT                    mnTimerId;              // windows timer id
@@ -184,8 +184,8 @@ struct HDCCache
 };
 
 void ImplClearHDCCache( SalData* pData );
-HDC ImplGetCachedDC( sal_uIntPtr nID, HBITMAP hBmp = 0 );
-void ImplReleaseCachedDC( sal_uIntPtr nID );
+HDC ImplGetCachedDC( sal_uLong nID, HBITMAP hBmp = 0 );
+void ImplReleaseCachedDC( sal_uLong nID );
 
 bool ImplAddTempFont( SalData&, const String& rFontFileURL );
 void ImplReleaseTempFonts( SalData& );
@@ -211,8 +211,8 @@ void ImplSalYieldMutexAcquireWithWait();
 sal_Bool ImplSalYieldMutexTryToAcquire();
 void ImplSalYieldMutexAcquire();
 void ImplSalYieldMutexRelease();
-sal_uIntPtr ImplSalReleaseYieldMutex();
-void ImplSalAcquireYieldMutex( sal_uIntPtr nCount );
+sal_uLong ImplSalReleaseYieldMutex();
+void ImplSalAcquireYieldMutex( sal_uLong nCount );
 sal_Bool ImplInterceptChildWindowKeyDown( MSG& rMsg );
 
 // \\WIN\SOURCE\WINDOW\SALFRAME.CXX

@@ -35,10 +35,10 @@
 // -----------
 
 #define COMPAT_FORMAT( char1, char2, char3, char4 ) \
-    ((sal_uIntPtr)((((sal_uIntPtr)(char)(char1)))|              \
-    (((sal_uIntPtr)(char)(char2))<<8UL)|                    \
-    (((sal_uIntPtr)(char)(char3))<<16UL)|                   \
-    ((sal_uIntPtr)(char)(char4))<<24UL))
+    ((sal_uLong)((((sal_uLong)(char)(char1)))|              \
+    (((sal_uLong)(char)(char2))<<8UL)|                  \
+    (((sal_uLong)(char)(char3))<<16UL)|                 \
+    ((sal_uLong)(char)(char4))<<24UL))
 
 
 class SvStream;

@@ -43,7 +43,7 @@ class VCL_DLLPUBLIC MoreButton : public PushButton
 {
 private:
     ImplMoreButtonData* mpMBData;
-    sal_uIntPtr               mnDelta;
+    sal_uLong               mnDelta;
     MapUnit             meUnit;
     sal_Bool                mbState;
 
@@ -67,8 +67,8 @@ public:
     void                AddWindow( Window* pWindow );
     void                RemoveWindow( Window* pWindow );
 
-    void                SetDelta( sal_uIntPtr nNewDelta ) { mnDelta = nNewDelta; }
-    sal_uIntPtr               GetDelta() const { return mnDelta; }
+    void                SetDelta( sal_uLong nNewDelta ) { mnDelta = nNewDelta; }
+    sal_uLong               GetDelta() const { return mnDelta; }
 
     void                SetMapUnit( MapUnit eNewUnit = MAP_PIXEL ) { meUnit = eNewUnit; }
     MapUnit             GetMapUnit() const { return meUnit; }

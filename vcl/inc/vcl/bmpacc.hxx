@@ -105,7 +105,7 @@ protected:
 
 SAL_DLLPRIVATE  void            ImplCreate( Bitmap& rBitmap );
 SAL_DLLPRIVATE  void            ImplDestroy();
-SAL_DLLPRIVATE  sal_Bool            ImplSetAccessPointers( sal_uIntPtr nFormat );
+SAL_DLLPRIVATE  sal_Bool            ImplSetAccessPointers( sal_uLong nFormat );
 
 public:
 
@@ -150,8 +150,8 @@ public:
     inline sal_Bool                 IsTopDown() const;
     inline sal_Bool                 IsBottomUp() const;
 
-    inline sal_uIntPtr                GetScanlineFormat() const;
-    inline sal_uIntPtr                GetScanlineSize() const;
+    inline sal_uLong                GetScanlineFormat() const;
+    inline sal_uLong                GetScanlineSize() const;
 
     inline sal_uInt16               GetBitCount() const;
     inline BitmapColor          GetBestMatchingColor( const BitmapColor& rBitmapColor );
@@ -189,7 +189,7 @@ public:
 
     void                        CopyScanline( long nY, const BitmapReadAccess& rReadAcc );
     void                        CopyScanline( long nY, ConstScanline aSrcScanline,
-                                              sal_uIntPtr nSrcScanlineFormat, sal_uIntPtr nSrcScanlineSize );
+                                              sal_uLong nSrcScanlineFormat, sal_uLong nSrcScanlineSize );
 
     void                        CopyBuffer( const BitmapReadAccess& rReadAcc );
 
@@ -350,7 +350,7 @@ inline sal_Bool BitmapReadAccess::IsBottomUp() const
 
 // ------------------------------------------------------------------
 
-inline sal_uIntPtr BitmapReadAccess::GetScanlineFormat() const
+inline sal_uLong BitmapReadAccess::GetScanlineFormat() const
 {
     DBG_ASSERT( mpBuffer, "Access is not valid!" );
     return( mpBuffer ? BMP_SCANLINE_FORMAT( mpBuffer->mnFormat ) : 0UL );
@@ -358,7 +358,7 @@ inline sal_uIntPtr BitmapReadAccess::GetScanlineFormat() const
 
 // ------------------------------------------------------------------
 
-inline sal_uIntPtr BitmapReadAccess::GetScanlineSize() const
+inline sal_uLong BitmapReadAccess::GetScanlineSize() const
 {
     DBG_ASSERT( mpBuffer, "Access is not valid!" );
     return( mpBuffer ? mpBuffer->mnScanlineSize : 0UL );
@@ -444,7 +444,7 @@ inline const BitmapColor& BitmapReadAccess::GetBestPaletteColor( const BitmapCol
 inline sal_Bool BitmapReadAccess::HasColorMask() const
 {
     DBG_ASSERT( mpBuffer, "Access is not valid!" );
-    const sal_uIntPtr nFormat = BMP_SCANLINE_FORMAT( mpBuffer->mnFormat );
+    const sal_uLong nFormat = BMP_SCANLINE_FORMAT( mpBuffer->mnFormat );
 
     return( nFormat == BMP_FORMAT_8BIT_TC_MASK  ||
             nFormat == BMP_FORMAT_16BIT_TC_MSB_MASK ||

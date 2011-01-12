@@ -167,7 +167,7 @@ void TabPage::Paint( const Rectangle& )
 }
 
 // -----------------------------------------------------------------------
-void TabPage::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal_uIntPtr )
+void TabPage::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal_uLong )
 {
     Point aPos = pDev->LogicToPixel( rPos );
     Size aSize = pDev->LogicToPixel( rSize );

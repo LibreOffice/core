@@ -119,7 +119,7 @@ void MoreButton::ImplLoadRes( const ResId& rResId )
 {
     PushButton::ImplLoadRes( rResId );
 
-    sal_uIntPtr nObjMask = ReadLongRes();
+    sal_uLong nObjMask = ReadLongRes();
 
     if ( nObjMask & RSC_MOREBUTTON_STATE )
     {

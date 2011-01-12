@@ -105,7 +105,7 @@ struct VCL_DLLPUBLIC AnimationBitmap
                             rAnimBmp.aBmpEx.IsEqual( aBmpEx ) );
                 }
 
-    sal_uIntPtr     GetChecksum() const;
+    sal_uLong       GetChecksum() const;
 };
 
 // -------------------
@@ -140,7 +140,7 @@ struct AInfo
 
 class VCL_DLLPUBLIC Animation
 {
-    SAL_DLLPRIVATE static sal_uIntPtr           mnAnimCount;
+    SAL_DLLPRIVATE static sal_uLong         mnAnimCount;
 
     List                    maList;
     List                    maAInfoList;
@@ -163,14 +163,14 @@ class VCL_DLLPUBLIC Animation
 
 //#if 0 // _SOLAR__PRIVATE
 
-    SAL_DLLPRIVATE void     ImplRestartTimer( sal_uIntPtr nTimeout );
+    SAL_DLLPRIVATE void     ImplRestartTimer( sal_uLong nTimeout );
     DECL_DLLPRIVATE_LINK(   ImplTimeoutHdl, Timer* );
 
 public:
 
     SAL_DLLPRIVATE static void  ImplIncAnimCount() { mnAnimCount++; }
     SAL_DLLPRIVATE static void  ImplDecAnimCount() { mnAnimCount--; }
-    SAL_DLLPRIVATE sal_uIntPtr        ImplGetCurPos() const { return mnPos; }
+    SAL_DLLPRIVATE sal_uLong        ImplGetCurPos() const { return mnPos; }
 
 //#endif
 
@@ -209,8 +209,8 @@ public:
     const BitmapEx&         GetBitmapEx() const { return maBitmapEx; }
     void                    SetBitmapEx( const BitmapEx& rBmpEx ) { maBitmapEx = rBmpEx; }
 
-    sal_uIntPtr                 GetLoopCount() const { return mnLoopCount; }
-    void                    SetLoopCount( const sal_uIntPtr nLoopCount );
+    sal_uLong                   GetLoopCount() const { return mnLoopCount; }
+    void                    SetLoopCount( const sal_uLong nLoopCount );
     void                    ResetLoopCount();
 
     void                    SetCycleMode( CycleMode eMode );
@@ -225,8 +225,8 @@ public:
     void                    Replace( const AnimationBitmap& rNewAnimationBmp, sal_uInt16 nAnimation );
 
     List*                   GetAInfoList() { return &maAInfoList; }
-    sal_uIntPtr                 GetSizeBytes() const;
-    sal_uIntPtr                 GetChecksum() const;
+    sal_uLong                   GetSizeBytes() const;
+    sal_uLong                   GetChecksum() const;
 
 public:
 
@@ -234,8 +234,8 @@ public:
     sal_Bool                    ReduceColors( sal_uInt16 nNewColorCount,
                                           BmpReduce eReduce = BMP_REDUCE_SIMPLE );
     sal_Bool                    Invert();
-    sal_Bool                    Mirror( sal_uIntPtr nMirrorFlags );
-    sal_Bool                    Dither( sal_uIntPtr nDitherFlags = BMP_DITHER_MATRIX );
+    sal_Bool                    Mirror( sal_uLong nMirrorFlags );
+    sal_Bool                    Dither( sal_uLong nDitherFlags = BMP_DITHER_MATRIX );
     sal_Bool                    Adjust( short nLuminancePercent = 0,
                                     short nContrastPercent = 0,
                                     short nChannelRPercent = 0,

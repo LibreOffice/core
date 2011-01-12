@@ -86,7 +86,7 @@ Image::Image( const ResId& rResId ) :
         pResMgr->Increment( sizeof( RSHEADER_TYPE ) );
 
         BitmapEx    aBmpEx;
-        sal_uIntPtr         nObjMask = pResMgr->ReadLong();
+        sal_uLong       nObjMask = pResMgr->ReadLong();
 
         if( nObjMask & RSC_IMAGE_IMAGEBITMAP )
         {
@@ -293,7 +293,7 @@ Image Image::GetColorTransformedImage( ImageColorTransform eColorTransform ) con
         {
             Color*  pSrcColors = NULL;
             Color*  pDstColors = NULL;
-            sal_uIntPtr   nColorCount = 0;
+            sal_uLong   nColorCount = 0;
 
             Image::GetColorTransformArrays( eColorTransform, pSrcColors, pDstColors, nColorCount );
 
@@ -334,7 +334,7 @@ void Image::Invert()
 // -----------------------------------------------------------------------
 
 void Image::GetColorTransformArrays( ImageColorTransform eColorTransform,
-                                     Color*& rpSrcColor, Color*& rpDstColor, sal_uIntPtr& rColorCount )
+                                     Color*& rpSrcColor, Color*& rpDstColor, sal_uLong& rColorCount )
 {
     if( IMAGECOLORTRANSFORM_HIGHCONTRAST == eColorTransform )
     {
@@ -446,7 +446,7 @@ ImageList::ImageList( const ResId& rResId ) :
     {
         pResMgr->Increment( sizeof( RSHEADER_TYPE ) );
 
-        sal_uIntPtr                                 nObjMask = pResMgr->ReadLong();
+        sal_uLong                               nObjMask = pResMgr->ReadLong();
         const String                        aPrefix( pResMgr->ReadString() );
         ::boost::scoped_ptr< Color >        spMaskColor;
 
@@ -646,7 +646,7 @@ void ImageList::InsertFromHorizontalBitmap( const ResId& rResId,
                                             const Color *pMaskColor,
                                             const Color *pSearchColors,
                                             const Color *pReplaceColors,
-                                            sal_uIntPtr        nColorCount)
+                                            sal_uLong        nColorCount)
 {
     BitmapEx aBmpEx( rResId );
     if (!aBmpEx.IsTransparent())
@@ -742,8 +742,8 @@ void ImageList::ReplaceImage( sal_uInt16 nId, sal_uInt16 nReplaceId )
     DBG_ASSERT( GetImagePos( nId ) != IMAGELIST_IMAGE_NOTFOUND, "ImageList::ReplaceImage(): Unknown nId" );
     DBG_ASSERT( GetImagePos( nReplaceId ) != IMAGELIST_IMAGE_NOTFOUND, "ImageList::ReplaceImage(): Unknown nReplaceId" );
 
-    sal_uIntPtr nPosDest = GetImagePos( nId );
-    sal_uIntPtr nPosSrc = GetImagePos( nReplaceId );
+    sal_uLong nPosDest = GetImagePos( nId );
+    sal_uLong nPosSrc = GetImagePos( nReplaceId );
     if( nPosDest != IMAGELIST_IMAGE_NOTFOUND &&
         nPosSrc != IMAGELIST_IMAGE_NOTFOUND )
     {

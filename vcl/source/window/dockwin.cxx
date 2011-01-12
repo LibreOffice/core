@@ -82,12 +82,12 @@ class ImplDockFloatWin : public FloatingWindow
 {
 private:
     DockingWindow*  mpDockWin;
-    sal_uIntPtr         mnLastTicks;
+    sal_uLong           mnLastTicks;
     Timer           maDockTimer;
     Point           maDockPos;
     Rectangle       maDockRect;
     sal_Bool            mbInMove;
-    sal_uIntPtr         mnLastUserEvent;
+    sal_uLong           mnLastUserEvent;
 
     DECL_LINK( DockingHdl, ImplDockFloatWin* );
     DECL_LINK( DockTimerHdl, ImplDockFloatWin* );
@@ -105,7 +105,7 @@ public:
     virtual void    Resizing( Size& rSize );
     virtual sal_Bool    Close();
 
-    sal_uIntPtr GetLastTicks() const { return mnLastTicks; }
+    sal_uLong GetLastTicks() const { return mnLastTicks; }
 };
 
 
@@ -408,7 +408,7 @@ void DockingWindow::ImplLoadRes( const ResId& rResId )
 {
     Window::ImplLoadRes( rResId );
 
-    sal_uIntPtr  nMask = ReadLongRes();
+    sal_uLong  nMask = ReadLongRes();
 
     if ( (RSC_DOCKINGWINDOW_XYMAPMODE | RSC_DOCKINGWINDOW_X |
           RSC_DOCKINGWINDOW_Y) & nMask )

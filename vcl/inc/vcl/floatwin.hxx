@@ -39,24 +39,24 @@ class PopupModeEvent;
 // - FloatingWindow-Types -
 // ------------------------
 
-#define FLOATWIN_POPUPMODE_ALLOWTEAROFF         ((sal_uIntPtr)0x00000001)
-#define FLOATWIN_POPUPMODE_ANIMATIONSLIDE       ((sal_uIntPtr)0x00000002)
-#define FLOATWIN_POPUPMODE_NOAUTOARRANGE        ((sal_uIntPtr)0x00000004)
-#define FLOATWIN_POPUPMODE_NOANIMATION          ((sal_uIntPtr)0x00000008)
-#define FLOATWIN_POPUPMODE_DOWN                 ((sal_uIntPtr)0x00000010)
-#define FLOATWIN_POPUPMODE_UP                   ((sal_uIntPtr)0x00000020)
-#define FLOATWIN_POPUPMODE_LEFT                 ((sal_uIntPtr)0x00000040)
-#define FLOATWIN_POPUPMODE_RIGHT                ((sal_uIntPtr)0x00000080)
-#define FLOATWIN_POPUPMODE_NOFOCUSCLOSE         ((sal_uIntPtr)0x00000100)
-#define FLOATWIN_POPUPMODE_NOKEYCLOSE           ((sal_uIntPtr)0x00000200)
-#define FLOATWIN_POPUPMODE_NOMOUSECLOSE         ((sal_uIntPtr)0x00000400)
-#define FLOATWIN_POPUPMODE_NOMOUSERECTCLOSE     ((sal_uIntPtr)0x00000800)
-#define FLOATWIN_POPUPMODE_ALLMOUSEBUTTONCLOSE  ((sal_uIntPtr)0x00001000)
-#define FLOATWIN_POPUPMODE_NOAPPFOCUSCLOSE      ((sal_uIntPtr)0x00002000)
-#define FLOATWIN_POPUPMODE_PATHMOUSECANCELCLICK ((sal_uIntPtr)0x00004000)
-#define FLOATWIN_POPUPMODE_NEWLEVEL             ((sal_uIntPtr)0x00008000)
-#define FLOATWIN_POPUPMODE_NOMOUSEUPCLOSE       ((sal_uIntPtr)0x00010000)
-#define FLOATWIN_POPUPMODE_GRABFOCUS            ((sal_uIntPtr)0x00020000)
+#define FLOATWIN_POPUPMODE_ALLOWTEAROFF         ((sal_uLong)0x00000001)
+#define FLOATWIN_POPUPMODE_ANIMATIONSLIDE       ((sal_uLong)0x00000002)
+#define FLOATWIN_POPUPMODE_NOAUTOARRANGE        ((sal_uLong)0x00000004)
+#define FLOATWIN_POPUPMODE_NOANIMATION          ((sal_uLong)0x00000008)
+#define FLOATWIN_POPUPMODE_DOWN                 ((sal_uLong)0x00000010)
+#define FLOATWIN_POPUPMODE_UP                   ((sal_uLong)0x00000020)
+#define FLOATWIN_POPUPMODE_LEFT                 ((sal_uLong)0x00000040)
+#define FLOATWIN_POPUPMODE_RIGHT                ((sal_uLong)0x00000080)
+#define FLOATWIN_POPUPMODE_NOFOCUSCLOSE         ((sal_uLong)0x00000100)
+#define FLOATWIN_POPUPMODE_NOKEYCLOSE           ((sal_uLong)0x00000200)
+#define FLOATWIN_POPUPMODE_NOMOUSECLOSE         ((sal_uLong)0x00000400)
+#define FLOATWIN_POPUPMODE_NOMOUSERECTCLOSE     ((sal_uLong)0x00000800)
+#define FLOATWIN_POPUPMODE_ALLMOUSEBUTTONCLOSE  ((sal_uLong)0x00001000)
+#define FLOATWIN_POPUPMODE_NOAPPFOCUSCLOSE      ((sal_uLong)0x00002000)
+#define FLOATWIN_POPUPMODE_PATHMOUSECANCELCLICK ((sal_uLong)0x00004000)
+#define FLOATWIN_POPUPMODE_NEWLEVEL             ((sal_uLong)0x00008000)
+#define FLOATWIN_POPUPMODE_NOMOUSEUPCLOSE       ((sal_uLong)0x00010000)
+#define FLOATWIN_POPUPMODE_GRABFOCUS            ((sal_uLong)0x00020000)
 
 #define FLOATWIN_POPUPMODEEND_CANCEL            ((sal_uInt16)0x0001)
 #define FLOATWIN_POPUPMODEEND_TEAROFF           ((sal_uInt16)0x0002)
@@ -79,8 +79,8 @@ private:
     Window*         mpFirstPopupModeWin;
     ImplData*       mpImplData;
     Rectangle       maFloatRect;
-    sal_uIntPtr         mnPostId;
-    sal_uIntPtr         mnPopupModeFlags;
+    sal_uLong           mnPostId;
+    sal_uLong           mnPopupModeFlags;
     sal_uInt16          mnTitle;
     sal_uInt16          mnOldTitle;
     sal_Bool            mbInPopupMode;
@@ -117,9 +117,9 @@ public:
     SAL_DLLPRIVATE void             ImplSetMouseDown() { mbMouseDown = sal_True; }
     SAL_DLLPRIVATE sal_Bool             ImplIsMouseDown() const  { return mbMouseDown; }
     SAL_DLLPRIVATE static Point     ImplCalcPos( Window* pWindow,
-                                                 const Rectangle& rRect, sal_uIntPtr nFlags,
+                                                 const Rectangle& rRect, sal_uLong nFlags,
                                                  sal_uInt16& rArrangeIndex );
-    SAL_DLLPRIVATE void             ImplEndPopupMode( sal_uInt16 nFlags = 0, sal_uIntPtr nFocusId = 0 );
+    SAL_DLLPRIVATE void             ImplEndPopupMode( sal_uInt16 nFlags = 0, sal_uLong nFocusId = 0 );
     SAL_DLLPRIVATE Rectangle&       ImplGetItemEdgeClipRect();
     SAL_DLLPRIVATE sal_Bool             ImplIsInPrivatePopupMode() const { return mbInPopupMode; }
 //#endif
@@ -138,13 +138,13 @@ public:
     void            SetTitleType( sal_uInt16 nTitle );
     sal_uInt16          GetTitleType() const { return mnTitle; }
 
-    void            StartPopupMode( const Rectangle& rRect, sal_uIntPtr nFlags = 0 );
-    void            StartPopupMode( ToolBox* pBox, sal_uIntPtr nFlags = 0  );
+    void            StartPopupMode( const Rectangle& rRect, sal_uLong nFlags = 0 );
+    void            StartPopupMode( ToolBox* pBox, sal_uLong nFlags = 0  );
     void            EndPopupMode( sal_uInt16 nFlags = 0 );
     void            AddPopupModeWindow( Window* pWindow );
     void            RemovePopupModeWindow( Window* pWindow );
-    sal_uIntPtr         GetPopupModeFlags() const { return mnPopupModeFlags; }
-    void            SetPopupModeFlags( sal_uIntPtr nFlags ) { mnPopupModeFlags = nFlags; }
+    sal_uLong           GetPopupModeFlags() const { return mnPopupModeFlags; }
+    void            SetPopupModeFlags( sal_uLong nFlags ) { mnPopupModeFlags = nFlags; }
     sal_Bool            IsInPopupMode() const { return mbPopupMode; }
     sal_Bool            IsInCleanUp() const { return mbInCleanUp; }
     sal_Bool            IsPopupModeCanceled() const { return mbPopupModeCanceled; }
@@ -155,7 +155,7 @@ public:
 
     sal_Bool            GrabsFocus() const { return mbGrabFocus; }
 
-    static Point    CalcFloatingPosition( Window* pWindow, const Rectangle& rRect, sal_uIntPtr nFlags, sal_uInt16& rArrangeIndex );
+    static Point    CalcFloatingPosition( Window* pWindow, const Rectangle& rRect, sal_uLong nFlags, sal_uInt16& rArrangeIndex );
 };
 
 #endif // _SV_FLOATWIN_HXX

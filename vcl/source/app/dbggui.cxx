@@ -457,7 +457,7 @@ namespace
     }
 
     // -------------------------------------------------------------------
-    void ImplSelectChannel( ListBox& rList, sal_uIntPtr nChannelToSelect, sal_uInt16 nPositionOffset )
+    void ImplSelectChannel( ListBox& rList, sal_uLong nChannelToSelect, sal_uInt16 nPositionOffset )
     {
         if ( nChannelToSelect < DBG_OUT_USER_CHANNEL_0 )
             rList.SelectEntryPos( (sal_uInt16)( nChannelToSelect - nPositionOffset ) );
@@ -2002,7 +2002,7 @@ void DbgGUIStart()
     {
         DbgDialog* pDialog = new DbgDialog;
         // Fuer den Debug-Dialog schalten wir Dialogtests aus
-        sal_uIntPtr nOldFlags = pData->nTestFlags;
+        sal_uLong nOldFlags = pData->nTestFlags;
         pData->nTestFlags &= ~DBG_TEST_DIALOG;
         if ( !pDialog->Execute() )
             pData->nTestFlags |= (nOldFlags & DBG_TEST_DIALOG);

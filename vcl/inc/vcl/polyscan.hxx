@@ -148,8 +148,8 @@ public:
 
     Rectangle       GetBoundRect() const { return Rectangle( mnLeft, mnTop, mnRight, mnBottom ); }
 
-    sal_uIntPtr         Count() const { return Height(); }
-    PolyScanline*   operator[]( sal_uIntPtr nPos ) const;
+    sal_uLong           Count() const { return Height(); }
+    PolyScanline*   operator[]( sal_uLong nPos ) const;
 };
 
 #endif // _SV_POLYSCAN_HXX

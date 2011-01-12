@@ -343,7 +343,7 @@ const char* ImplDbgTestRegion( const void* pObj )
 
     if ( (pImplRegion != &aImplEmptyRegion) && (pImplRegion != &aImplNullRegion) )
     {
-        sal_uIntPtr                 nCount = 0;
+        sal_uLong                   nCount = 0;
         const ImplRegionBand*   pBand = pImplRegion->ImplGetFirstRegionBand();
         while ( pBand )
         {
@@ -2733,14 +2733,14 @@ void Region::ImplEndAddRect()
 
 // -----------------------------------------------------------------------
 
-sal_uIntPtr Region::GetRectCount() const
+sal_uLong Region::GetRectCount() const
 {
     DBG_CHKTHIS( Region, ImplDbgTestRegion );
 
     ((Region*)this)->ImplPolyPolyRegionToBandRegion();
 
 #ifdef DBG_UTIL
-    sal_uIntPtr nCount = 0;
+    sal_uLong nCount = 0;
 
     // all bands if not null or empty
     if ( (mpImplRegion != &aImplEmptyRegion) && (mpImplRegion != &aImplNullRegion) )

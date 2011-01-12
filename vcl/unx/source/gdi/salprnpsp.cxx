@@ -662,7 +662,7 @@ sal_Bool PspSalInfoPrinter::SetPrinterData( ImplJobSetup* pJobSetup )
 // Only the data must be changed, where the bit
 // in nGetDataFlags is set
 sal_Bool PspSalInfoPrinter::SetData(
-    sal_uIntPtr nSetDataFlags,
+    sal_uLong nSetDataFlags,
     ImplJobSetup* pJobSetup )
 {
     JobData aData;
@@ -823,7 +823,7 @@ void PspSalInfoPrinter::GetPageInfo(
 
 // -----------------------------------------------------------------------
 
-sal_uIntPtr PspSalInfoPrinter::GetPaperBinCount( const ImplJobSetup* pJobSetup )
+sal_uLong PspSalInfoPrinter::GetPaperBinCount( const ImplJobSetup* pJobSetup )
 {
     if( ! pJobSetup )
         return 0;
@@ -837,7 +837,7 @@ sal_uIntPtr PspSalInfoPrinter::GetPaperBinCount( const ImplJobSetup* pJobSetup )
 
 // -----------------------------------------------------------------------
 
-String PspSalInfoPrinter::GetPaperBinName( const ImplJobSetup* pJobSetup, sal_uIntPtr nPaperBin )
+String PspSalInfoPrinter::GetPaperBinName( const ImplJobSetup* pJobSetup, sal_uLong nPaperBin )
 {
     JobData aData;
     JobData::constructFromStreamBuffer( pJobSetup->mpDriverData, pJobSetup->mnDriverDataLen, aData );
@@ -846,7 +846,7 @@ String PspSalInfoPrinter::GetPaperBinName( const ImplJobSetup* pJobSetup, sal_uI
     if( aData.m_pParser )
     {
         const PPDKey* pKey = aData.m_pParser ? aData.m_pParser->getKey( String( RTL_CONSTASCII_USTRINGPARAM( "InputSlot" ) ) ): NULL;
-        if( ! pKey || nPaperBin >= (sal_uIntPtr)pKey->countValues() )
+        if( ! pKey || nPaperBin >= (sal_uLong)pKey->countValues() )
             aRet = aData.m_pParser->getDefaultInputSlot();
         else
         {
@@ -861,7 +861,7 @@ String PspSalInfoPrinter::GetPaperBinName( const ImplJobSetup* pJobSetup, sal_uI
 
 // -----------------------------------------------------------------------
 
-sal_uIntPtr PspSalInfoPrinter::GetCapabilities( const ImplJobSetup* pJobSetup, sal_uInt16 nType )
+sal_uLong PspSalInfoPrinter::GetCapabilities( const ImplJobSetup* pJobSetup, sal_uInt16 nType )
 {
     switch( nType )
     {
@@ -959,7 +959,7 @@ sal_Bool PspSalPrinter::StartJob(
     const XubString* pFileName,
     const XubString& rJobName,
     const XubString& rAppName,
-    sal_uIntPtr nCopies,
+    sal_uLong nCopies,
     bool bCollate,
     bool bDirect,
     ImplJobSetup* pJobSetup )
@@ -1111,7 +1111,7 @@ sal_Bool PspSalPrinter::EndPage()
 
 // -----------------------------------------------------------------------
 
-sal_uIntPtr PspSalPrinter::GetErrorCode()
+sal_uLong PspSalPrinter::GetErrorCode()
 {
     return 0;
 }

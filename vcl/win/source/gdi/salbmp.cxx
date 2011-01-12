@@ -315,7 +315,7 @@ HGLOBAL WinSalBitmap::ImplCreateDIB( const Size& rSize, sal_uInt16 nBits, const 
 
     if ( rSize.Width() && rSize.Height() )
     {
-        const sal_uIntPtr   nImageSize = AlignedWidth4Bytes( nBits * rSize.Width() ) * rSize.Height();
+        const sal_uLong     nImageSize = AlignedWidth4Bytes( nBits * rSize.Width() ) * rSize.Height();
         const sal_uInt16    nColors = ( nBits <= 8 ) ? ( 1 << nBits ) : 0;
 
         hDIB = GlobalAlloc( GHND, sizeof( BITMAPINFOHEADER ) + nColors * sizeof( RGBQUAD ) + nImageSize );
@@ -360,7 +360,7 @@ HANDLE WinSalBitmap::ImplCopyDIBOrDDB( HANDLE hHdl, bool bDIB )
 
     if ( bDIB && hHdl )
     {
-        const sal_uIntPtr nSize = GlobalSize( hHdl );
+        const sal_uLong nSize = GlobalSize( hHdl );
 
         if ( (hCopy = GlobalAlloc( GHND, nSize  )) != 0 )
         {
@@ -419,7 +419,7 @@ BitmapBuffer* WinSalBitmap::AcquireBuffer( bool /*bReadOnly*/ )
                 PBITMAPINFO         pNewBI = (PBITMAPINFO) GlobalLock( hNewDIB );
                 PBITMAPINFOHEADER   pNewBIH = (PBITMAPINFOHEADER) pNewBI;
                 const sal_uInt16        nColorCount = ImplGetDIBColorCount( hNewDIB );
-                const sal_uIntPtr       nOffset = *(DWORD*) pBI + nColorCount * sizeof( RGBQUAD );
+                const sal_uLong         nOffset = *(DWORD*) pBI + nColorCount * sizeof( RGBQUAD );
                 BYTE*               pOldBits = (PBYTE) pBI + nOffset;
                 BYTE*               pNewBits = (PBYTE) pNewBI + nOffset;
 
@@ -464,7 +464,7 @@ BitmapBuffer* WinSalBitmap::AcquireBuffer( bool /*bReadOnly*/ )
                 }
                 else if( ( pBIH->biBitCount == 16 ) || ( pBIH->biBitCount == 32 ) )
                 {
-                    sal_uIntPtr nOffset = 0UL;
+                    sal_uLong nOffset = 0UL;
 
                     if( pBIH->biCompression == BI_BITFIELDS )
                     {
@@ -529,12 +529,12 @@ void WinSalBitmap::ImplDecodeRLEBuffer( const BYTE* pSrcBuf, BYTE* pDstBuf,
     HPBYTE          pRLE = (HPBYTE) pSrcBuf;
     HPBYTE          pDIB = (HPBYTE) pDstBuf;
     HPBYTE          pRow = (HPBYTE) pDstBuf;
-    sal_uIntPtr         nWidthAl = AlignedWidth4Bytes( rSizePixel.Width() * ( bRLE4 ? 4UL : 8UL ) );
+    sal_uLong           nWidthAl = AlignedWidth4Bytes( rSizePixel.Width() * ( bRLE4 ? 4UL : 8UL ) );
     HPBYTE          pLast = pDIB + rSizePixel.Height() * nWidthAl - 1;
-    sal_uIntPtr         nCountByte;
-    sal_uIntPtr         nRunByte;
-    sal_uIntPtr         nX = 0;
-    sal_uIntPtr         i;
+    sal_uLong           nCountByte;
+    sal_uLong           nRunByte;
+    sal_uLong           nX = 0;
+    sal_uLong           i;
     BYTE            cTmp;
     bool            bEndDecoding = FALSE;
 

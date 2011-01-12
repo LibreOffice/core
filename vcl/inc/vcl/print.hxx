@@ -234,7 +234,7 @@ private:
     JobSetup                    maJobSetup;
     Point                       maPageOffset;
     Size                        maPaperSize;
-    sal_uIntPtr                     mnError;
+    sal_uLong                       mnError;
     sal_uInt16                      mnCurPage;
     sal_uInt16                      mnCurPrintPage;
     sal_uInt16                      mnPageQueueSize;
@@ -263,7 +263,7 @@ private:
 
     SAL_DLLPRIVATE bool StartJob( const rtl::OUString& rJobName, boost::shared_ptr<vcl::PrinterController>& );
 
-    static SAL_DLLPRIVATE sal_uIntPtr ImplSalPrinterErrorCodeToVCL( sal_uIntPtr nError );
+    static SAL_DLLPRIVATE sal_uLong ImplSalPrinterErrorCodeToVCL( sal_uLong nError );
 
 private:
     SAL_DLLPRIVATE void         ImplEndPrint();
@@ -302,7 +302,7 @@ public:
     sal_Bool                        IsDisplayPrinter() const    { return mpDisplayDev != NULL; }
     sal_Bool                        IsValid() const             { return !IsDisplayPrinter(); }
 
-    sal_uIntPtr                     GetCapabilities( sal_uInt16 nType ) const;
+    sal_uLong                       GetCapabilities( sal_uInt16 nType ) const;
     sal_Bool                        HasSupport( PrinterSupport eFeature ) const;
 
     sal_Bool                        SetJobSetup( const JobSetup& rSetup );
@@ -358,8 +358,8 @@ public:
     sal_uInt16                      GetCurPage() const { return mnCurPage; }
     sal_Bool                        IsJobActive() const { return mbJobActive; }
 
-    sal_uIntPtr                     GetError() const { return ERRCODE_TOERROR(mnError); }
-    sal_uIntPtr                     GetErrorCode() const { return mnError; }
+    sal_uLong                       GetError() const { return ERRCODE_TOERROR(mnError); }
+    sal_uLong                       GetErrorCode() const { return mnError; }
 
     void                        SetErrorHdl( const Link& rLink ) { maErrorHdl = rLink; }
     const Link&                 GetErrorHdl() const { return maErrorHdl; }
@@ -537,7 +537,7 @@ public:
     SAL_DLLPRIVATE int getPageCountProtected() const;
     SAL_DLLPRIVATE com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue > getPageParametersProtected( int i_nPage ) const;
 
-    SAL_DLLPRIVATE sal_uIntPtr removeTransparencies( GDIMetaFile& i_rIn, GDIMetaFile& o_rOut );
+    SAL_DLLPRIVATE sal_uLong removeTransparencies( GDIMetaFile& i_rIn, GDIMetaFile& o_rOut );
 };
 
 class VCL_DLLPUBLIC PrinterOptionsHelper

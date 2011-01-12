@@ -49,7 +49,7 @@ private:
     SAL_DLLPRIVATE void    ImplInit( Window* pParent, WinBits nStyle );
     SAL_DLLPRIVATE WinBits ImplInitStyle( WinBits nStyle );
     SAL_DLLPRIVATE void    ImplInitSettings( sal_Bool bFont, sal_Bool bForeground, sal_Bool bBackground );
-    SAL_DLLPRIVATE void    ImplDraw( OutputDevice* pDev, sal_uIntPtr nDrawFlags,
+    SAL_DLLPRIVATE void    ImplDraw( OutputDevice* pDev, sal_uLong nDrawFlags,
                               const Point& rPos, const Size& rSize, bool bFillLayout = false ) const;
 public:
     SAL_DLLPRIVATE static sal_uInt16   ImplGetTextStyle( WinBits nWinBits );
@@ -67,7 +67,7 @@ public:
                     FixedText( Window* pParent, const ResId& rResId, bool bDisableAccessibleLabelForRelation );
 
     virtual void    Paint( const Rectangle& rRect );
-    virtual void    Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal_uIntPtr nFlags );
+    virtual void    Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal_uLong nFlags );
     virtual void    Resize();
     virtual void    StateChanged( StateChangedType nType );
     virtual void    DataChanged( const DataChangedEvent& rDCEvt );
@@ -103,7 +103,7 @@ public:
                     FixedLine( Window* pParent, const ResId& rResId );
 
     virtual void    Paint( const Rectangle& rRect );
-    virtual void    Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal_uIntPtr nFlags );
+    virtual void    Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal_uLong nFlags );
     virtual void    Resize();
     virtual void    StateChanged( StateChangedType nType );
     virtual void    DataChanged( const DataChangedEvent& rDCEvt );
@@ -126,7 +126,7 @@ private:
     SAL_DLLPRIVATE void    ImplInit( Window* pParent, WinBits nStyle );
     SAL_DLLPRIVATE WinBits ImplInitStyle( WinBits nStyle );
     SAL_DLLPRIVATE void    ImplInitSettings();
-    SAL_DLLPRIVATE void    ImplDraw( OutputDevice* pDev, sal_uIntPtr nDrawFlags,
+    SAL_DLLPRIVATE void    ImplDraw( OutputDevice* pDev, sal_uLong nDrawFlags,
                               const Point& rPos, const Size& rSize );
 
 protected:
@@ -138,7 +138,7 @@ public:
                     ~FixedBitmap();
 
     virtual void    Paint( const Rectangle& rRect );
-    virtual void    Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal_uIntPtr nFlags );
+    virtual void    Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal_uLong nFlags );
     virtual void    Resize();
     virtual void    StateChanged( StateChangedType nType );
     virtual void    DataChanged( const DataChangedEvent& rDCEvt );
@@ -167,7 +167,7 @@ private:
     SAL_DLLPRIVATE void    ImplInit( Window* pParent, WinBits nStyle );
     SAL_DLLPRIVATE WinBits ImplInitStyle( WinBits nStyle );
     SAL_DLLPRIVATE void    ImplInitSettings();
-    SAL_DLLPRIVATE void    ImplDraw( OutputDevice* pDev, sal_uIntPtr nDrawFlags,
+    SAL_DLLPRIVATE void    ImplDraw( OutputDevice* pDev, sal_uLong nDrawFlags,
                               const Point& rPos, const Size& rSize );
 
 protected:
@@ -179,7 +179,7 @@ public:
                     ~FixedImage();
 
     virtual void    Paint( const Rectangle& rRect );
-    virtual void    Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal_uIntPtr nFlags );
+    virtual void    Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal_uLong nFlags );
     virtual void    Resize();
     virtual void    StateChanged( StateChangedType nType );
     virtual void    DataChanged( const DataChangedEvent& rDCEvt );

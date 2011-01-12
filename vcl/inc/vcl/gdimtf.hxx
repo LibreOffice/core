@@ -49,8 +49,8 @@ class Gradient;
 // - GDIMetaFile-Types -
 // ---------------------
 
-#define GDI_METAFILE_END                ((sal_uIntPtr)0xFFFFFFFF)
-#define GDI_METAFILE_LABEL_NOTFOUND     ((sal_uIntPtr)0xFFFFFFFF)
+#define GDI_METAFILE_END                ((sal_uLong)0xFFFFFFFF)
+#define GDI_METAFILE_LABEL_NOTFOUND     ((sal_uLong)0xFFFFFFFF)
 
 #ifndef METAFILE_END
 #define METAFILE_END                    GDI_METAFILE_END
@@ -156,7 +156,7 @@ public:
 
     void            Clear();
     sal_Bool        IsEqual( const GDIMetaFile& rMtf ) const;
-    sal_Bool            Mirror( sal_uIntPtr nMirrorFlags );
+    sal_Bool            Mirror( sal_uLong nMirrorFlags );
     void            Move( long nX, long nY );
     // additional Move method getting specifics how to handle MapMode( MAP_PIXEL )
     void            Move( long nX, long nY, long nDPIX, long nDPIY );
@@ -177,19 +177,19 @@ public:
                             short nChannelRPercent = 0, short nChannelGPercent = 0,
                             short nChannelBPercent = 0, double fGamma = 1.0, sal_Bool bInvert = sal_False );
     void            Convert( MtfConversion eConversion );
-    void            ReplaceColors( const Color& rSearchColor, const Color& rReplaceColor, sal_uIntPtr nTol = 0 );
+    void            ReplaceColors( const Color& rSearchColor, const Color& rReplaceColor, sal_uLong nTol = 0 );
     void            ReplaceColors( const Color* pSearchColors, const Color* rReplaceColors,
-                                   sal_uIntPtr nColorCount, sal_uIntPtr* pTols = NULL );
+                                   sal_uLong nColorCount, sal_uLong* pTols = NULL );
 
     GDIMetaFile     GetMonochromeMtf( const Color& rCol ) const;
 
     void            Record( OutputDevice* pOutDev );
     sal_Bool            IsRecord() const { return bRecord; }
 
-    void            Play( GDIMetaFile& rMtf, sal_uIntPtr nPos = GDI_METAFILE_END );
-    void            Play( OutputDevice* pOutDev, sal_uIntPtr nPos = GDI_METAFILE_END );
+    void            Play( GDIMetaFile& rMtf, sal_uLong nPos = GDI_METAFILE_END );
+    void            Play( OutputDevice* pOutDev, sal_uLong nPos = GDI_METAFILE_END );
     void            Play( OutputDevice* pOutDev, const Point& rPos,
-                          const Size& rSize, sal_uIntPtr nPos = GDI_METAFILE_END );
+                          const Size& rSize, sal_uLong nPos = GDI_METAFILE_END );
 
     void            Pause( sal_Bool bPause );
     sal_Bool            IsPause() const { return bPause; }
@@ -198,27 +198,27 @@ public:
 
     void            WindStart();
     void            WindEnd();
-    void            Wind( sal_uIntPtr nAction );
+    void            Wind( sal_uLong nAction );
     void            WindPrev();
     void            WindNext();
 
-    sal_uIntPtr           GetActionCount() const { return Count(); }
+    sal_uLong           GetActionCount() const { return Count(); }
     void            AddAction( MetaAction* pAction );
-    void            AddAction( MetaAction* pAction, sal_uIntPtr nPos );
-    void            RemoveAction( sal_uIntPtr nPos );
-    MetaAction*     CopyAction( sal_uIntPtr nPos ) const;
+    void            AddAction( MetaAction* pAction, sal_uLong nPos );
+    void            RemoveAction( sal_uLong nPos );
+    MetaAction*     CopyAction( sal_uLong nPos ) const;
     MetaAction*     GetCurAction() const { return (MetaAction*) GetCurObject(); }
-    MetaAction*     GetAction( sal_uIntPtr nAction ) const { return (MetaAction*) GetObject( nAction ); }
+    MetaAction*     GetAction( sal_uLong nAction ) const { return (MetaAction*) GetObject( nAction ); }
     MetaAction*     FirstAction() { return (MetaAction*) First(); }
     MetaAction*     NextAction() {  return (MetaAction*) Next(); }
-    MetaAction*     ReplaceAction( MetaAction* pAction, sal_uIntPtr nAction ) { return (MetaAction*) Replace( pAction, nAction ); }
+    MetaAction*     ReplaceAction( MetaAction* pAction, sal_uLong nAction ) { return (MetaAction*) Replace( pAction, nAction ); }
 
-    sal_uIntPtr           GetActionPos( const String& rLabel );
-    sal_Bool            InsertLabel( const String& rLabel, sal_uIntPtr nActionPos );
+    sal_uLong           GetActionPos( const String& rLabel );
+    sal_Bool            InsertLabel( const String& rLabel, sal_uLong nActionPos );
     void            RemoveLabel( const String& rLabel );
     void            RenameLabel( const String& rLabel, const String& rNewLabel );
-    sal_uIntPtr           GetLabelCount() const;
-    String          GetLabel( sal_uIntPtr nLabel );
+    sal_uLong           GetLabelCount() const;
+    String          GetLabel( sal_uLong nLabel );
 
     sal_Bool            SaveStatus();
 
@@ -231,8 +231,8 @@ public:
     void            SetHookHdl( const Link& rLink ) { aHookHdlLink = rLink; }
     const Link&     GetHookHdl() const { return aHookHdlLink; }
 
-    sal_uIntPtr         GetChecksum() const;
-    sal_uIntPtr           GetSizeBytes() const;
+    sal_uLong           GetChecksum() const;
+    sal_uLong           GetSizeBytes() const;
 
     // Methoden zum Lesen und Schreiben des neuen Formats;
     // die Read-Methode kann auch das alte Format lesen

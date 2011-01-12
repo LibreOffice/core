@@ -92,7 +92,7 @@ public:
     virtual void    MouseButtonUp( const MouseEvent& rMEvt );
     virtual void    MouseMove( const MouseEvent& rMEvt );
     virtual void    Paint( const Rectangle& rRect );
-    virtual void    Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal_uIntPtr nFlags );
+    virtual void    Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal_uLong nFlags );
     virtual void    Resize();
     virtual void    StateChanged( StateChangedType nType );
     virtual void    DataChanged( const DataChangedEvent& rDCEvt );

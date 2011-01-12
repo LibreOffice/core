@@ -57,7 +57,7 @@ private:
     Region          maClip;
     VirtualDevice*  mpBackground;
     VirtualDevice*  mpRestore;
-    sal_uIntPtr         mnActPos;
+    sal_uLong           mnActPos;
     Disposal        meLastDisposal;
     sal_Bool            mbPause;
     sal_Bool            mbFirst;
@@ -66,18 +66,18 @@ private:
     sal_Bool            mbVMirr;
 
     void            ImplGetPosSize( const AnimationBitmap& rAnm, Point& rPosPix, Size& rSizePix );
-    void            ImplDraw( sal_uIntPtr nPos, VirtualDevice* pVDev );
+    void            ImplDraw( sal_uLong nPos, VirtualDevice* pVDev );
 
 public:
 
                     ImplAnimView( Animation* pParent, OutputDevice* pOut,
-                                  const Point& rPt, const Size& rSz, sal_uIntPtr nExtraData,
+                                  const Point& rPt, const Size& rSz, sal_uLong nExtraData,
                                   OutputDevice* pFirstFrameOutDev = NULL );
                     ~ImplAnimView();
 
     sal_Bool            ImplMatches( OutputDevice* pOut, long nExtraData ) const;
-    void            ImplDrawToPos( sal_uIntPtr nPos );
-    void            ImplDraw( sal_uIntPtr nPos );
+    void            ImplDrawToPos( sal_uLong nPos );
+    void            ImplDraw( sal_uLong nPos );
     void            ImplRepaint();
     AInfo*          ImplCreateAInfo() const;
 

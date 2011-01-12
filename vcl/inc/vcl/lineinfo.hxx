@@ -42,7 +42,7 @@ namespace basegfx { class B2DPolyPolygon; }
 
 struct ImplLineInfo
 {
-    sal_uIntPtr                 mnRefCount;
+    sal_uLong                   mnRefCount;
     LineStyle               meStyle;
     long                    mnWidth;
     sal_uInt16                  mnDashCount;

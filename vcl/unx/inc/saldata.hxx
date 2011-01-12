@@ -85,7 +85,7 @@ public:
     inline  SalXLib*        GetLib() const { return pXLib_; }
     inline  pthread_t       GetMainThread() const { return hMainThread_; }
 
-    void                    StartTimer( sal_uIntPtr nMS );
+    void                    StartTimer( sal_uLong nMS );
     inline  void            StopTimer();
     void                    Timeout() const;
 
@@ -114,7 +114,7 @@ inline void X11SalData::XError( Display *pDisplay,  XErrorEvent *pEvent ) const
 
 class YieldMutexReleaser
 {
-    sal_uIntPtr             m_nYieldCount;
+    sal_uLong               m_nYieldCount;
 public:
     inline YieldMutexReleaser();
     inline ~YieldMutexReleaser();

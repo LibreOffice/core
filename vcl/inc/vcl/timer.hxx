@@ -43,7 +43,7 @@ class VCL_DLLPUBLIC Timer
 {
 protected:
     ImplTimerData*  mpTimerData;
-    sal_uIntPtr           mnTimeout;
+    sal_uLong           mnTimeout;
     sal_Bool            mbActive;
     sal_Bool            mbAuto;
     Link            maTimeoutHdl;
@@ -58,8 +58,8 @@ public:
     void            Start();
     void            Stop();
 
-    void            SetTimeout( sal_uIntPtr nTimeout );
-    sal_uIntPtr           GetTimeout() const { return mnTimeout; }
+    void            SetTimeout( sal_uLong nTimeout );
+    sal_uLong           GetTimeout() const { return mnTimeout; }
     sal_Bool            IsActive() const { return mbActive; }
 
     void            SetTimeoutHdl( const Link& rLink ) { maTimeoutHdl = rLink; }

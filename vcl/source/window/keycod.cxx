@@ -101,9 +101,9 @@ KeyCode::KeyCode( const ResId& rResId )
     {
         pResMgr->Increment( sizeof( RSHEADER_TYPE ) );
 
-        sal_uIntPtr nKeyCode    = pResMgr->ReadLong();
-        sal_uIntPtr nModifier   = pResMgr->ReadLong();
-        sal_uIntPtr nKeyFunc    = pResMgr->ReadLong();
+        sal_uLong nKeyCode  = pResMgr->ReadLong();
+        sal_uLong nModifier = pResMgr->ReadLong();
+        sal_uLong nKeyFunc  = pResMgr->ReadLong();
 
         eFunc = (KeyFuncType)nKeyFunc;
         if ( eFunc != KEYFUNC_DONTKNOW )

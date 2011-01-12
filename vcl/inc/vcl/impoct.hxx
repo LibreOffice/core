@@ -132,14 +132,14 @@ inline BitmapColor ImpErrorQuad::ImplGetColor()
 class ImpNodeCache
 {
     OctreeNode*         pActNode;
-    sal_uIntPtr             nNew;
-    sal_uIntPtr             nDelete;
-    sal_uIntPtr             nGet;
-    sal_uIntPtr             nRelease;
+    sal_uLong               nNew;
+    sal_uLong               nDelete;
+    sal_uLong               nGet;
+    sal_uLong               nRelease;
 
 public:
 
-                        ImpNodeCache( const sal_uIntPtr nInitSize );
+                        ImpNodeCache( const sal_uLong nInitSize );
                         ~ImpNodeCache();
 
     inline OctreeNode*  ImplGetFreeNode();

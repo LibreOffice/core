@@ -1899,7 +1899,7 @@ void Edit::Resize()
 
 // -----------------------------------------------------------------------
 
-void Edit::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal_uIntPtr nFlags )
+void Edit::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal_uLong nFlags )
 {
     ImplInitSettings( sal_True, sal_True, sal_True );
 
@@ -2009,7 +2009,7 @@ void Edit::GetFocus()
     {
         maUndoText = maText;
 
-        sal_uIntPtr nSelOptions = GetSettings().GetStyleSettings().GetSelectionOptions();
+        sal_uLong nSelOptions = GetSettings().GetStyleSettings().GetSelectionOptions();
         if ( !( GetStyle() & (WB_NOHIDESELECTION|WB_READONLY) )
                 && ( GetGetFocusFlags() & (GETFOCUS_INIT|GETFOCUS_TAB|GETFOCUS_CURSOR|GETFOCUS_MNEMONIC) ) )
         {
@@ -2535,7 +2535,7 @@ IMPL_LINK( Edit, ImplUpdateDataHdl, Timer*, EMPTYARG )
 
 // -----------------------------------------------------------------------
 
-void Edit::EnableUpdateData( sal_uIntPtr nTimeout )
+void Edit::EnableUpdateData( sal_uLong nTimeout )
 {
     if ( !nTimeout )
         DisableUpdateData();

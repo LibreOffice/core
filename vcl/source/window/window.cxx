@@ -778,7 +778,7 @@ void Window::ImplInit( Window* pParent, WinBits nStyle, SystemParentData* pSyste
     if ( mpWindowImpl->mbFrame )
     {
         // create frame
-        sal_uIntPtr nFrameStyle = 0;
+        sal_uLong nFrameStyle = 0;
 
         if ( nStyle & WB_MOVEABLE )
             nFrameStyle |= SAL_FRAME_STYLE_MOVEABLE;
@@ -1209,7 +1209,7 @@ WinBits Window::ImplInitRes( const ResId& rResId )
 
 void Window::ImplLoadRes( const ResId& rResId )
 {
-    sal_uIntPtr nObjMask = ReadLongRes();
+    sal_uLong nObjMask = ReadLongRes();
 
     // we need to calculate auto helpids before the resource gets closed
     // if the resource  only contains flags, it will be closed before we try to read a help id
@@ -1218,7 +1218,7 @@ void Window::ImplLoadRes( const ResId& rResId )
     rtl::OString aHelpId = ImplAutoHelpID( rResId.GetResMgr() );
 
     // ResourceStyle
-    sal_uIntPtr nRSStyle = ReadLongRes();
+    sal_uLong nRSStyle = ReadLongRes();
     // WinBits
     ReadLongRes();
 
@@ -1799,7 +1799,7 @@ sal_Bool Window::ImplSysObjClip( const Region* pOldRegion )
                     long                nY;
                     long                nWidth;
                     long                nHeight;
-                    sal_uIntPtr               nRectCount;
+                    sal_uLong               nRectCount;
                     ImplRegionInfo      aInfo;
                     sal_Bool                bRegionRect;
 
@@ -3784,7 +3784,7 @@ void Window::ImplCallMouseMove( sal_uInt16 nMouseCode, sal_Bool bModChanged )
 {
     if ( mpWindowImpl->mpFrameData->mbMouseIn && mpWindowImpl->mpFrameWindow->mpWindowImpl->mbReallyVisible )
     {
-        sal_uIntPtr   nTime   = Time::GetSystemTicks();
+        sal_uLong   nTime   = Time::GetSystemTicks();
         long    nX      = mpWindowImpl->mpFrameData->mnLastMouseX;
         long    nY      = mpWindowImpl->mpFrameData->mnLastMouseY;
         sal_uInt16  nCode   = nMouseCode;
@@ -4882,7 +4882,7 @@ void Window::PostPaint()
 
 // -----------------------------------------------------------------------
 
-void Window::Draw( OutputDevice*, const Point&, const Size&, sal_uIntPtr )
+void Window::Draw( OutputDevice*, const Point&, const Size&, sal_uLong )
 {
     DBG_CHKTHIS( Window, ImplDbgCheckWindow );
 }
@@ -5031,7 +5031,7 @@ void Window::Tracking( const TrackingEvent& rTEvt )
 
 // -----------------------------------------------------------------------
 
-void Window::UserEvent( sal_uIntPtr, void* )
+void Window::UserEvent( sal_uLong, void* )
 {
     DBG_CHKTHIS( Window, ImplDbgCheckWindow );
 }
@@ -5355,7 +5355,7 @@ long Window::Notify( NotifyEvent& rNEvt )
 
 // -----------------------------------------------------------------------
 
-void Window::ImplCallEventListeners( sal_uIntPtr nEvent, void* pData )
+void Window::ImplCallEventListeners( sal_uLong nEvent, void* pData )
 {
     // The implementation was moved to CallEventListeners(),
     // because derived classes in svtools must be able to
@@ -5368,7 +5368,7 @@ void Window::ImplCallEventListeners( sal_uIntPtr nEvent, void* pData )
 
 // -----------------------------------------------------------------------
 
-void Window::CallEventListeners( sal_uIntPtr nEvent, void* pData )
+void Window::CallEventListeners( sal_uLong nEvent, void* pData )
 {
     VclWindowEvent aEvent( this, nEvent, pData );
 
@@ -5440,25 +5440,25 @@ void Window::RemoveChildEventListener( const Link& rEventListener )
 
 // -----------------------------------------------------------------------
 
-sal_uIntPtr Window::PostUserEvent( sal_uIntPtr nEvent, void* pEventData )
+sal_uLong Window::PostUserEvent( sal_uLong nEvent, void* pEventData )
 {
-    sal_uIntPtr nEventId;
+    sal_uLong nEventId;
     PostUserEvent( nEventId, nEvent, pEventData );
     return nEventId;
 }
 
 // -----------------------------------------------------------------------
 
-sal_uIntPtr Window::PostUserEvent( const Link& rLink, void* pCaller )
+sal_uLong Window::PostUserEvent( const Link& rLink, void* pCaller )
 {
-    sal_uIntPtr nEventId;
+    sal_uLong nEventId;
     PostUserEvent( nEventId, rLink, pCaller );
     return nEventId;
 }
 
 // -----------------------------------------------------------------------
 
-sal_Bool Window::PostUserEvent( sal_uIntPtr& rEventId, sal_uIntPtr nEvent, void* pEventData )
+sal_Bool Window::PostUserEvent( sal_uLong& rEventId, sal_uLong nEvent, void* pEventData )
 {
     DBG_CHKTHIS( Window, ImplDbgCheckWindow );
 
@@ -5469,7 +5469,7 @@ sal_Bool Window::PostUserEvent( sal_uIntPtr& rEventId, sal_uIntPtr nEvent, void*
     pSVEvent->mpWindow  = this;
     pSVEvent->mbCall    = sal_True;
     ImplAddDel( &(pSVEvent->maDelData) );
-    rEventId = (sal_uIntPtr)pSVEvent;
+    rEventId = (sal_uLong)pSVEvent;
     if ( mpWindowImpl->mpFrame->PostEvent( pSVEvent ) )
         return sal_True;
     else
@@ -5483,7 +5483,7 @@ sal_Bool Window::PostUserEvent( sal_uIntPtr& rEventId, sal_uIntPtr nEvent, void*
 
 // -----------------------------------------------------------------------
 
-sal_Bool Window::PostUserEvent( sal_uIntPtr& rEventId, const Link& rLink, void* pCaller )
+sal_Bool Window::PostUserEvent( sal_uLong& rEventId, const Link& rLink, void* pCaller )
 {
     DBG_CHKTHIS( Window, ImplDbgCheckWindow );
 
@@ -5494,7 +5494,7 @@ sal_Bool Window::PostUserEvent( sal_uIntPtr& rEventId, const Link& rLink, void* 
     pSVEvent->mpWindow  = this;
     pSVEvent->mbCall    = sal_True;
     ImplAddDel( &(pSVEvent->maDelData) );
-    rEventId = (sal_uIntPtr)pSVEvent;
+    rEventId = (sal_uLong)pSVEvent;
     if ( mpWindowImpl->mpFrame->PostEvent( pSVEvent ) )
         return sal_True;
     else
@@ -5508,7 +5508,7 @@ sal_Bool Window::PostUserEvent( sal_uIntPtr& rEventId, const Link& rLink, void* 
 
 // -----------------------------------------------------------------------
 
-void Window::RemoveUserEvent( sal_uIntPtr nUserEvent )
+void Window::RemoveUserEvent( sal_uLong nUserEvent )
 {
     DBG_CHKTHIS( Window, ImplDbgCheckWindow );
 
@@ -5532,7 +5532,7 @@ void Window::RemoveUserEvent( sal_uIntPtr nUserEvent )
 
 IMPL_LINK( Window, ImplAsyncStateChangedHdl, void*, pState )
 {
-    StateChanged( (StateChangedType)(sal_uIntPtr)pState );
+    StateChanged( (StateChangedType)(sal_uLong)pState );
     return 0;
 }
 
@@ -5542,7 +5542,7 @@ void Window::PostStateChanged( StateChangedType nState )
 {
     DBG_CHKTHIS( Window, ImplDbgCheckWindow );
 
-    PostUserEvent( LINK( this, Window, ImplAsyncStateChangedHdl ), (void*)(sal_uIntPtr)nState );
+    PostUserEvent( LINK( this, Window, ImplAsyncStateChangedHdl ), (void*)(sal_uLong)nState );
 }
 
 // -----------------------------------------------------------------------
@@ -5841,7 +5841,7 @@ void Window::SetSettings( const AllSettings& rSettings, sal_Bool bChild )
 
     AllSettings aOldSettings = maSettings;
     OutputDevice::SetSettings( rSettings );
-    sal_uIntPtr nChangeFlags = aOldSettings.GetChangeFlags( rSettings );
+    sal_uLong nChangeFlags = aOldSettings.GetChangeFlags( rSettings );
 
     // AppFont-Aufloesung und DPI-Aufloesung neu berechnen
     ImplInitResolutionSettings();
@@ -5878,7 +5878,7 @@ void Window::UpdateSettings( const AllSettings& rSettings, sal_Bool bChild )
     }
 
     AllSettings aOldSettings = maSettings;
-    sal_uIntPtr nChangeFlags = maSettings.Update( maSettings.GetWindowUpdate(), rSettings );
+    sal_uLong nChangeFlags = maSettings.Update( maSettings.GetWindowUpdate(), rSettings );
     nChangeFlags |= SETTINGS_IN_UPDATE_SETTINGS; // Set this flag so the receiver of the data changed
                                                  // event can distinguish between the changing of global
                                                  // setting and a local change ( with SetSettings )
@@ -6066,7 +6066,7 @@ void Window::SetWindowRegionPixel( const Region& rRegion )
                 long                nY;
                 long                nWidth;
                 long                nHeight;
-                sal_uIntPtr               nRectCount;
+                sal_uLong               nRectCount;
                 ImplRegionInfo      aInfo;
                 sal_Bool                bRegionRect;
 

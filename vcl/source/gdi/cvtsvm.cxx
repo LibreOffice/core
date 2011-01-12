@@ -355,12 +355,12 @@ void ImplReadUnicodeComment( sal_uInt32 nStrmPos, SvStream& rIStm, String& rStri
 
 // ------------------------------------------------------------------------
 
-void ImplSkipActions( SvStream& rIStm, sal_uIntPtr nSkipCount )
+void ImplSkipActions( SvStream& rIStm, sal_uLong nSkipCount )
 {
     sal_Int32 nActionSize;
     sal_Int16 nType;
 
-    for( sal_uIntPtr i = 0UL; i < nSkipCount; i++ )
+    for( sal_uLong i = 0UL; i < nSkipCount; i++ )
     {
         rIStm >> nType >> nActionSize;
         rIStm.SeekRel( nActionSize - 4L );
@@ -493,7 +493,7 @@ void ImplReadExtendedPolyPolygonAction(SvStream& rIStm, PolyPolygon& rPolyPoly)
 // - SVMConverter -
 // ----------------
 
-SVMConverter::SVMConverter( SvStream& rStm, GDIMetaFile& rMtf, sal_uIntPtr nConvertMode )
+SVMConverter::SVMConverter( SvStream& rStm, GDIMetaFile& rMtf, sal_uLong nConvertMode )
 {
     if( !rStm.GetError() )
     {
@@ -508,7 +508,7 @@ SVMConverter::SVMConverter( SvStream& rStm, GDIMetaFile& rMtf, sal_uIntPtr nConv
 
 void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
 {
-    const sal_uIntPtr           nPos = rIStm.Tell();
+    const sal_uLong         nPos = rIStm.Tell();
     const sal_uInt16        nOldFormat = rIStm.GetNumberFormatInt();
 
     rIStm.SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
@@ -1379,8 +1379,8 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
 
 void SVMConverter::ImplConvertToSVM1( SvStream& rOStm, GDIMetaFile& rMtf )
 {
-    sal_uIntPtr             nPos;
-    sal_uIntPtr             nCountPos;
+    sal_uLong               nPos;
+    sal_uLong               nCountPos;
     Font                aSaveFont;
     const sal_uInt16        nOldFormat = rOStm.GetNumberFormatInt();
     rtl_TextEncoding    eActualCharSet = gsl_getSystemTextEncoding();
@@ -1406,7 +1406,7 @@ void SVMConverter::ImplConvertToSVM1( SvStream& rOStm, GDIMetaFile& rMtf )
     rOStm.SeekRel( 4L );
 
     const sal_Int32 nActCount = ImplWriteActions( rOStm, rMtf, aSaveVDev, bRop_0_1, aLineCol, aLineColStack, eActualCharSet );
-    const sal_uIntPtr nActPos = rOStm.Tell();
+    const sal_uLong nActPos = rOStm.Tell();
 
     rOStm.Seek( nCountPos );
     rOStm << nActCount;
@@ -1420,13 +1420,13 @@ void SVMConverter::ImplConvertToSVM1( SvStream& rOStm, GDIMetaFile& rMtf )
 
 // ------------------------------------------------------------------------
 
-sal_uIntPtr SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
+sal_uLong SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
                                       VirtualDevice& rSaveVDev, sal_Bool& rRop_0_1,
                                       Color& rLineCol, Stack& rLineColStack,
                                       rtl_TextEncoding& rActualCharSet )
 {
-    sal_uIntPtr nCount = 0;
-    for( sal_uIntPtr i = 0, nActionCount = rMtf.GetActionCount(); i < nActionCount; i++ )
+    sal_uLong nCount = 0;
+    for( sal_uLong i = 0, nActionCount = rMtf.GetActionCount(); i < nActionCount; i++ )
     {
         const MetaAction* pAction = rMtf.GetAction( i );
 
@@ -1710,7 +1710,7 @@ sal_uIntPtr SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
                 MetaTextAction* pAct = (MetaTextAction*) pAction;
                 String          aUniText( pAct->GetText() );
                 ByteString      aText( aUniText, rActualCharSet );
-                const sal_uIntPtr   nStrLen = aText.Len();
+                const sal_uLong     nStrLen = aText.Len();
 
                 if ( ImplWriteUnicodeComment( rOStm, aUniText ) )
                     nCount++;
@@ -1731,9 +1731,9 @@ sal_uIntPtr SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
                 MetaTextArrayAction*    pAct = (MetaTextArrayAction*)pAction;
                 ByteString              aText( pAct->GetText(), rActualCharSet );
                 String                  aUniText( pAct->GetText(), pAct->GetIndex(), pAct->GetLen() );
-                sal_uIntPtr                 nAryLen;
-                sal_uIntPtr                 nLen = pAct->GetLen();
-                const sal_uIntPtr           nTextLen = aText.Len();
+                sal_uLong                   nAryLen;
+                sal_uLong                   nLen = pAct->GetLen();
+                const sal_uLong             nTextLen = aText.Len();
                 sal_Int32*              pDXArray = pAct->GetDXArray();
 
                 if ( ImplWriteUnicodeComment( rOStm, aUniText ) )
@@ -1761,7 +1761,7 @@ sal_uIntPtr SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
                 rOStm << (sal_Int32) nAryLen;
                 rOStm.Write( aText.GetBuffer()+pAct->GetIndex(), nLen + 1 );
 
-                for( sal_uIntPtr n = 0UL ; n < nAryLen; n++ )
+                for( sal_uLong n = 0UL ; n < nAryLen; n++ )
                     rOStm << (sal_Int32) pDXArray[ n ];
 
                 nCount++;
@@ -1773,7 +1773,7 @@ sal_uIntPtr SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
                 MetaStretchTextAction*  pAct = (MetaStretchTextAction*) pAction;
                 String                  aUniText( pAct->GetText() );
                 ByteString              aText( aUniText, rActualCharSet );
-                const sal_uIntPtr           nStrLen = aText.Len();
+                const sal_uLong             nStrLen = aText.Len();
 
                 if ( ImplWriteUnicodeComment( rOStm, aUniText ) )
                     nCount++;
@@ -1897,7 +1897,7 @@ sal_uIntPtr SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
             case( META_GRADIENTEX_ACTION ):
             {
                 const MetaGradientExAction* pA = (MetaGradientExAction*) pAction;
-                sal_uIntPtr                     nOldPos, nNewPos;
+                sal_uLong                       nOldPos, nNewPos;
 
                 // write RefPoint comment
                 rOStm << (sal_Int16) GDI_GRADIENTEX_COMMENT;
@@ -2145,7 +2145,7 @@ sal_uIntPtr SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
                 const PolyPolygon&  rPolyPoly = ( (MetaTransparentAction*) pAction )->GetPolyPolygon();
                 const sal_Int16         nTrans = ( (MetaTransparentAction*) pAction )->GetTransparence();
                 const sal_Int16         nBrushStyle = ( nTrans < 38 ) ? 8 : ( nTrans < 63 ) ? 9 : 10;
-                sal_uIntPtr             nOldPos, nNewPos;
+                sal_uLong               nOldPos, nNewPos;
 
                 // write transparence comment
                 rOStm << (sal_Int16) GDI_TRANSPARENT_COMMENT;
@@ -2208,7 +2208,7 @@ sal_uIntPtr SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
                 const Point&                        rPos = pA->GetPoint();
                 const Size&                         rSize = pA->GetSize();
                 const Gradient&                     rGradient = pA->GetGradient();
-                sal_uIntPtr                             nOldPos, nNewPos;
+                sal_uLong                               nOldPos, nNewPos;
 
                 // write RefPoint comment
                 rOStm << (sal_Int16) GDI_FLOATTRANSPARENT_COMMENT;
@@ -2228,7 +2228,7 @@ sal_uIntPtr SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
 
                 {
                     // write actions for float transparence
-                    sal_uIntPtr         nAddCount;
+                    sal_uLong           nAddCount;
                     GDIMetaFile     aMtf( rTransMtf );
                     const Size      aSrcSize( rTransMtf.GetPrefSize() );
                     Point           aSrcPt( rTransMtf.GetPrefMapMode().GetOrigin() );
@@ -2267,7 +2267,7 @@ sal_uIntPtr SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
                 const MetaHatchAction*  pA = (MetaHatchAction*) pAction;
                 const PolyPolygon&      rPolyPoly = pA->GetPolyPolygon();
                 const Hatch&            rHatch = pA->GetHatch();
-                sal_uIntPtr                 nOldPos, nNewPos, nAddCount;
+                sal_uLong                   nOldPos, nNewPos, nAddCount;
 
                 // write hatch comment
                 rOStm << (sal_Int16) GDI_HATCH_COMMENT;
@@ -2312,7 +2312,7 @@ sal_uIntPtr SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
                 const MetaRefPointAction*   pA = (MetaRefPointAction*) pAction;
                 const Point&                rRefPoint = pA->GetRefPoint();
                 const sal_Bool                  bSet = pA->IsSetting();
-                sal_uIntPtr                     nOldPos, nNewPos;
+                sal_uLong                       nOldPos, nNewPos;
 
                 // write RefPoint comment
                 rOStm << (sal_Int16) GDI_REFPOINT_COMMENT;
@@ -2340,7 +2340,7 @@ sal_uIntPtr SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
                 const MetaTextLineColorAction*  pA = (MetaTextLineColorAction*) pAction;
                 const Color&                    rColor = pA->GetColor();
                 const sal_Bool                      bSet = pA->IsSetting();
-                sal_uIntPtr                         nOldPos, nNewPos;
+                sal_uLong                           nOldPos, nNewPos;
 
                 // write RefPoint comment
                 rOStm << (sal_Int16) GDI_TEXTLINECOLOR_COMMENT;
@@ -2375,7 +2375,7 @@ sal_uIntPtr SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
                 const long                  nWidth = pA->GetWidth();
                 const FontStrikeout         eStrikeout = pA->GetStrikeout();
                 const FontUnderline         eUnderline = pA->GetUnderline();
-                sal_uIntPtr                     nOldPos, nNewPos;
+                sal_uLong                       nOldPos, nNewPos;
 
                 // write RefPoint comment
                 rOStm << (sal_Int16) GDI_TEXTLINE_COMMENT;
@@ -2407,7 +2407,7 @@ sal_uIntPtr SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
             {
                 const MetaCommentAction*    pA = (MetaCommentAction*) pAction;
                 const sal_uInt32            nDataSize = pA->GetDataSize();
-                sal_uIntPtr                     nOldPos, nNewPos;
+                sal_uLong                       nOldPos, nNewPos;
 
                 // write RefPoint comment
                 rOStm << (sal_Int16) GDI_COMMENT_COMMENT;

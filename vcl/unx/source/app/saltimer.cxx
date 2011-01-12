@@ -58,7 +58,7 @@ void SalXLib::StopTimer()
     m_nTimeoutMS        = 0;
 }
 
-void SalXLib::StartTimer( sal_uIntPtr nMS )
+void SalXLib::StartTimer( sal_uLong nMS )
 {
     timeval Timeout (m_aTimeout); // previous timeout.
     gettimeofday (&m_aTimeout, 0);
@@ -89,7 +89,7 @@ void X11SalTimer::Stop()
     GetX11SalData()->GetLib()->StopTimer();
 }
 
-void X11SalTimer::Start( sal_uIntPtr nMS )
+void X11SalTimer::Start( sal_uLong nMS )
 {
     GetX11SalData()->GetLib()->StartTimer( nMS );
 }

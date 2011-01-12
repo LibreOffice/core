@@ -40,7 +40,7 @@ TYPEINIT0(VclSimpleEvent);
 TYPEINIT1(VclWindowEvent, VclSimpleEvent);
 TYPEINIT1(VclMenuEvent, VclSimpleEvent);
 
-VclAccessibleEvent::VclAccessibleEvent( sal_uIntPtr n, const Reference<XAccessible>& rxAccessible ) :
+VclAccessibleEvent::VclAccessibleEvent( sal_uLong n, const Reference<XAccessible>& rxAccessible ) :
     VclSimpleEvent(n),
     mxAccessible(rxAccessible)
 {

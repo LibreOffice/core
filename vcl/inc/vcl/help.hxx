@@ -113,10 +113,10 @@ public:
                                        sal_uInt16 nStyle = 0 )
                             { return Help::ShowQuickHelp( pParent, rScreenRect, rHelpText, XubString(), nStyle ); }
 
-    static sal_uIntPtr      ShowTip( Window* pParent,
+    static sal_uLong        ShowTip( Window* pParent,
                                  const Rectangle& rScreenRect,
                                  const XubString& rText, sal_uInt16 nStyle = 0 );
-    static void         HideTip( sal_uIntPtr nId );
+    static void         HideTip( sal_uLong nId );
 };
 
 #endif  // _SV_HELP_HXX

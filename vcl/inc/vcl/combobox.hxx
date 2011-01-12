@@ -90,7 +90,7 @@ public:
                     ComboBox( Window* pParent, const ResId& rResId );
                     ~ComboBox();
 
-    virtual void    Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal_uIntPtr nFlags );
+    virtual void    Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal_uLong nFlags );
     virtual void    Resize();
     virtual long    PreNotify( NotifyEvent& rNEvt );
     virtual long    Notify( NotifyEvent& rNEvt );

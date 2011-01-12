@@ -127,14 +127,14 @@ inline CommandInputContextData::CommandInputContextData( LanguageType eLang )
 #define COMMAND_WHEEL_ZOOM              ((sal_uInt16)0x0002)
 #define COMMAND_WHEEL_DATAZOOM          ((sal_uInt16)0x0004)
 
-#define COMMAND_WHEEL_PAGESCROLL        ((sal_uIntPtr)0xFFFFFFFF)
+#define COMMAND_WHEEL_PAGESCROLL        ((sal_uLong)0xFFFFFFFF)
 
 class VCL_DLLPUBLIC CommandWheelData
 {
 private:
     long            mnDelta;
     long            mnNotchDelta;
-    sal_uIntPtr           mnLines;
+    sal_uLong           mnLines;
     sal_uInt16          mnMode;
     sal_uInt16          mnCode;
     sal_Bool            mbHorz;
@@ -143,13 +143,13 @@ private:
 public:
                     CommandWheelData();
                     CommandWheelData( long nWheelDelta, long nWheelNotchDelta,
-                                      sal_uIntPtr nScrollLines,
+                                      sal_uLong nScrollLines,
                                       sal_uInt16 nWheelMode, sal_uInt16 nKeyModifier,
                                       sal_Bool bHorz = sal_False, sal_Bool bDeltaIsPixel = sal_False );
 
     long            GetDelta() const { return mnDelta; }
     long            GetNotchDelta() const { return mnNotchDelta; }
-    sal_uIntPtr           GetScrollLines() const { return mnLines; }
+    sal_uLong           GetScrollLines() const { return mnLines; }
     sal_Bool            IsHorz() const { return mbHorz; }
     sal_Bool            IsDeltaPixel() const { return mbDeltaIsPixel; }
 
@@ -179,7 +179,7 @@ inline CommandWheelData::CommandWheelData()
 }
 
 inline CommandWheelData::CommandWheelData( long nWheelDelta, long nWheelNotchDelta,
-                                           sal_uIntPtr nScrollLines,
+                                           sal_uLong nScrollLines,
                                            sal_uInt16 nWheelMode, sal_uInt16 nKeyModifier,
                                            sal_Bool bHorz, sal_Bool bDeltaIsPixel )
 {
@@ -357,15 +357,15 @@ class VCL_DLLPUBLIC CommandDialogData
 class VCL_DLLPUBLIC CommandSelectionChangeData
 {
 private:
-    sal_uIntPtr          mnStart;
-    sal_uIntPtr          mnEnd;
+    sal_uLong          mnStart;
+    sal_uLong          mnEnd;
 
 public:
     CommandSelectionChangeData();
-    CommandSelectionChangeData( sal_uIntPtr nStart, sal_uIntPtr nEnd );
+    CommandSelectionChangeData( sal_uLong nStart, sal_uLong nEnd );
 
-    sal_uIntPtr          GetStart() const { return mnStart; }
-    sal_uIntPtr          GetEnd() const { return mnEnd; }
+    sal_uLong          GetStart() const { return mnStart; }
+    sal_uLong          GetEnd() const { return mnEnd; }
 };
 
 inline CommandSelectionChangeData::CommandSelectionChangeData()
@@ -373,8 +373,8 @@ inline CommandSelectionChangeData::CommandSelectionChangeData()
     mnStart = mnEnd = 0;
 }
 
-inline CommandSelectionChangeData::CommandSelectionChangeData( sal_uIntPtr nStart,
-                                   sal_uIntPtr nEnd )
+inline CommandSelectionChangeData::CommandSelectionChangeData( sal_uLong nStart,
+                                   sal_uLong nEnd )
 {
     mnStart = nStart;
     mnEnd = nEnd;

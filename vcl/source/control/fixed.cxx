@@ -223,7 +223,7 @@ sal_uInt16 FixedText::ImplGetTextStyle( WinBits nWinStyle )
 
 // -----------------------------------------------------------------------
 
-void FixedText::ImplDraw( OutputDevice* pDev, sal_uIntPtr nDrawFlags,
+void FixedText::ImplDraw( OutputDevice* pDev, sal_uLong nDrawFlags,
                           const Point& rPos, const Size& rSize,
                           bool bFillLayout
                           ) const
@@ -279,7 +279,7 @@ void FixedText::Paint( const Rectangle& )
 // -----------------------------------------------------------------------
 
 void FixedText::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize,
-                      sal_uIntPtr nFlags )
+                      sal_uLong nFlags )
 {
     ImplInitSettings( sal_True, sal_True, sal_True );
 
@@ -609,7 +609,7 @@ void FixedLine::Paint( const Rectangle& )
 
 // -----------------------------------------------------------------------
 
-void FixedLine::Draw( OutputDevice*, const Point&, const Size&, sal_uIntPtr )
+void FixedLine::Draw( OutputDevice*, const Point&, const Size&, sal_uLong )
 {
 }
 
@@ -737,7 +737,7 @@ void FixedBitmap::ImplLoadRes( const ResId& rResId )
 {
     Control::ImplLoadRes( rResId );
 
-    sal_uIntPtr nObjMask = ReadLongRes();
+    sal_uLong nObjMask = ReadLongRes();
 
     if ( RSC_FIXEDBITMAP_BITMAP & nObjMask )
     {
@@ -776,7 +776,7 @@ FixedBitmap::~FixedBitmap()
 
 // -----------------------------------------------------------------------
 
-void FixedBitmap::ImplDraw( OutputDevice* pDev, sal_uIntPtr /* nDrawFlags */,
+void FixedBitmap::ImplDraw( OutputDevice* pDev, sal_uLong /* nDrawFlags */,
                             const Point& rPos, const Size& rSize )
 {
     sal_uInt16 nStyle = 0;
@@ -829,7 +829,7 @@ void FixedBitmap::Paint( const Rectangle& )
 // -----------------------------------------------------------------------
 
 void FixedBitmap::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize,
-                        sal_uIntPtr nFlags )
+                        sal_uLong nFlags )
 {
     Point       aPos  = pDev->LogicToPixel( rPos );
     Size        aSize = pDev->LogicToPixel( rSize );
@@ -982,7 +982,7 @@ void FixedImage::ImplLoadRes( const ResId& rResId )
 {
     Control::ImplLoadRes( rResId );
 
-    sal_uIntPtr nObjMask = ReadLongRes();
+    sal_uLong nObjMask = ReadLongRes();
 
     if ( RSC_FIXEDIMAGE_IMAGE & nObjMask )
     {
@@ -1021,7 +1021,7 @@ FixedImage::~FixedImage()
 
 // -----------------------------------------------------------------------
 
-void FixedImage::ImplDraw( OutputDevice* pDev, sal_uIntPtr nDrawFlags,
+void FixedImage::ImplDraw( OutputDevice* pDev, sal_uLong nDrawFlags,
                            const Point& rPos, const Size& rSize )
 {
     sal_uInt16 nStyle = 0;
@@ -1081,7 +1081,7 @@ void FixedImage::UserDraw( const UserDrawEvent& )
 // -----------------------------------------------------------------------
 
 void FixedImage::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize,
-                       sal_uIntPtr nFlags )
+                       sal_uLong nFlags )
 {
     Point       aPos  = pDev->LogicToPixel( rPos );
     Size        aSize = pDev->LogicToPixel( rSize );

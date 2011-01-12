@@ -222,7 +222,7 @@ int VirtDevServerFont::GetGlyphKernValue( int, int ) const
 
 // -----------------------------------------------------------------------
 
-sal_uIntPtr VirtDevServerFont::GetKernPairs( ImplKernPairData** ppImplKernPairs ) const
+sal_uLong VirtDevServerFont::GetKernPairs( ImplKernPairData** ppImplKernPairs ) const
 {
     Font aFont;
     aFont.SetName       ( GetFontSelData().maName );
@@ -235,7 +235,7 @@ sal_uIntPtr VirtDevServerFont::GetKernPairs( ImplKernPairData** ppImplKernPairs 
     VirtualDevice vdev( 1 );
     vdev.SetFont( aFont );
 
-    sal_uIntPtr nPairs = vdev.GetKerningPairCount();
+    sal_uLong nPairs = vdev.GetKerningPairCount();
     if( nPairs > 0 )
     {
         KerningPair* const pKernPairs = new KerningPair[ nPairs ];
@@ -244,7 +244,7 @@ sal_uIntPtr VirtDevServerFont::GetKernPairs( ImplKernPairData** ppImplKernPairs 
         *ppImplKernPairs = new ImplKernPairData[ nPairs ];
         ImplKernPairData* pTo = *ppImplKernPairs;
         KerningPair* pFrom = pKernPairs;
-        for ( sal_uIntPtr n = 0; n < nPairs; n++ )
+        for ( sal_uLong n = 0; n < nPairs; n++ )
         {
             pTo->mnChar1    = pFrom->nChar1;
             pTo->mnChar2    = pFrom->nChar2;

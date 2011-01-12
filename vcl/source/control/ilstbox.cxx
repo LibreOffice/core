@@ -177,7 +177,7 @@ sal_uInt16 ImplEntryList::InsertEntry( sal_uInt16 nPos, ImplEntryType* pNewEntry
         uno::Reference< i18n::XCollator > xCollator = ImplGetCollator(aLocale);
 
         const XubString& rStr = pNewEntry->maStr;
-        sal_uIntPtr nLow, nHigh, nMid;
+        sal_uLong nLow, nHigh, nMid;
 
         nHigh = Count();
 
@@ -204,7 +204,7 @@ sal_uInt16 ImplEntryList::InsertEntry( sal_uInt16 nPos, ImplEntryType* pNewEntry
                 eComp = (StringCompare)xCollator->compareString (rStr, pTemp->maStr);
                 if ( eComp != COMPARE_GREATER )
                 {
-                    Insert( pNewEntry, (sal_uIntPtr)0 );
+                    Insert( pNewEntry, (sal_uLong)0 );
                 }
                 else
                 {
@@ -242,7 +242,7 @@ sal_uInt16 ImplEntryList::InsertEntry( sal_uInt16 nPos, ImplEntryType* pNewEntry
             // garbage you wouldn't insert it. If the exception occured because the
             // Collator implementation is garbage then give the user a chance to see
             // his stuff
-            Insert( pNewEntry, (sal_uIntPtr)0 );
+            Insert( pNewEntry, (sal_uLong)0 );
         }
 
     }

@@ -1012,7 +1012,7 @@ void StatusBar::UserDraw( const UserDrawEvent& )
 
 // -----------------------------------------------------------------------
 
-void StatusBar::InsertItem( sal_uInt16 nItemId, sal_uIntPtr nWidth,
+void StatusBar::InsertItem( sal_uInt16 nItemId, sal_uLong nWidth,
                             StatusBarItemBits nBits,
                             long nOffset, sal_uInt16 nPos )
 {
@@ -1164,7 +1164,7 @@ void StatusBar::CopyItems( const StatusBar& rStatusBar )
     mpItemList->Clear();
 
     // Items kopieren
-    sal_uIntPtr i = 0;
+    sal_uLong i = 0;
     pItem = rStatusBar.mpItemList->GetObject( i );
     while ( pItem )
     {
@@ -1311,7 +1311,7 @@ Point StatusBar::GetItemTextPos( sal_uInt16 nItemId ) const
 
 // -----------------------------------------------------------------------
 
-sal_uIntPtr StatusBar::GetItemWidth( sal_uInt16 nItemId ) const
+sal_uLong StatusBar::GetItemWidth( sal_uInt16 nItemId ) const
 {
     sal_uInt16 nPos = GetItemPos( nItemId );
 
@@ -1709,8 +1709,8 @@ void StatusBar::SetText( const XubString& rText )
 
 Size StatusBar::CalcWindowSizePixel() const
 {
-    sal_uIntPtr i = 0;
-    sal_uIntPtr nCount = mpItemList->Count();
+    sal_uLong   i = 0;
+    sal_uLong   nCount = mpItemList->Count();
     long    nOffset = 0;
     long    nCalcWidth = (STATUSBAR_OFFSET_X*2);
     long    nCalcHeight;

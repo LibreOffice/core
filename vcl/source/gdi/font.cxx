@@ -170,7 +170,7 @@ void Impl_Font::AskConfig()
 
     String      aShortName;
     String      aFamilyName;
-    sal_uIntPtr       nType = 0;
+    sal_uLong       nType = 0;
     FontWeight  eWeight = WEIGHT_DONTKNOW;
     FontWidth   eWidthType = WIDTH_DONTKNOW;
     String      aMapName = maFamilyName;

@@ -48,8 +48,8 @@ private:
 
 //#if 0 // _SOLAR__PRIVATE
 public:
-    SAL_DLLPRIVATE sal_uIntPtr    ImplConvert( sal_uIntPtr nInFormat, void* pInBuffer, sal_uIntPtr nInBufSize,
-                                     void** ppOutBuffer, sal_uIntPtr nOutFormat );
+    SAL_DLLPRIVATE sal_uLong    ImplConvert( sal_uLong nInFormat, void* pInBuffer, sal_uLong nInBufSize,
+                                     void** ppOutBuffer, sal_uLong nOutFormat );
 //#endif // __PRIVATE
 
 public:
@@ -57,8 +57,8 @@ public:
                         GraphicConverter();
                         ~GraphicConverter();
 
-    static sal_uIntPtr      Import( SvStream& rIStm, Graphic& rGraphic, sal_uIntPtr nFormat = CVT_UNKNOWN );
-    static sal_uIntPtr      Export( SvStream& rOStm, const Graphic& rGraphic, sal_uIntPtr nFormat );
+    static sal_uLong        Import( SvStream& rIStm, Graphic& rGraphic, sal_uLong nFormat = CVT_UNKNOWN );
+    static sal_uLong        Export( SvStream& rOStm, const Graphic& rGraphic, sal_uLong nFormat );
 
     ConvertData*        GetConvertData() { return mpConvertData; }
 

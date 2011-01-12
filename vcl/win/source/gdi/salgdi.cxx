@@ -241,7 +241,7 @@ void ImplInitSalGDI()
         PALETTEENTRY*   pPalEntry;
         LOGPALETTE*     pLogPal;
         const sal_uInt16    nDitherPalCount = DITHER_PAL_COUNT;
-        sal_uIntPtr         nTotalCount = DITHER_MAX_SYSCOLOR + nDitherPalCount + DITHER_EXTRA_COLORS;
+        sal_uLong           nTotalCount = DITHER_MAX_SYSCOLOR + nDitherPalCount + DITHER_EXTRA_COLORS;
 
         // create logical palette
         pLogPal = (LOGPALETTE*) new char[ sizeof( LOGPALETTE ) + ( nTotalCount * sizeof( PALETTEENTRY ) ) ];
@@ -551,7 +551,7 @@ void ImplSalDeInitGraphics( WinSalGraphics* pData )
 
 // =======================================================================
 
-HDC ImplGetCachedDC( sal_uIntPtr nID, HBITMAP hBmp )
+HDC ImplGetCachedDC( sal_uLong nID, HBITMAP hBmp )
 {
     SalData*    pSalData = GetSalData();
     HDCCache*   pC = &pSalData->mpHDCCache[ nID ];
@@ -585,7 +585,7 @@ HDC ImplGetCachedDC( sal_uIntPtr nID, HBITMAP hBmp )
 
 // =======================================================================
 
-void ImplReleaseCachedDC( sal_uIntPtr nID )
+void ImplReleaseCachedDC( sal_uLong nID )
 {
     SalData*    pSalData = GetSalData();
     HDCCache*   pC = &pSalData->mpHDCCache[ nID ];
@@ -598,7 +598,7 @@ void ImplReleaseCachedDC( sal_uIntPtr nID )
 
 void ImplClearHDCCache( SalData* pData )
 {
-    for( sal_uIntPtr i = 0; i < CACHESIZE_HDC; i++ )
+    for( sal_uLong i = 0; i < CACHESIZE_HDC; i++ )
     {
         HDCCache* pC = &pData->mpHDCCache[ i ];
 
@@ -621,21 +621,21 @@ void ImplClearHDCCache( SalData* pData )
 // might also contain bezier control points for the PolyDraw() GDI method
 // Make sure pWinPointAry and pWinFlagAry are big enough
 void ImplPreparePolyDraw( bool                      bCloseFigures,
-                          sal_uIntPtr                   nPoly,
-                          const sal_uIntPtr*                pPoints,
+                          sal_uLong                     nPoly,
+                          const sal_uLong*              pPoints,
                           const SalPoint* const*    pPtAry,
                           const BYTE* const*        pFlgAry,
                           POINT*                    pWinPointAry,
                           BYTE*                     pWinFlagAry     )
 {
-    sal_uIntPtr nCurrPoly;
+    sal_uLong nCurrPoly;
     for( nCurrPoly=0; nCurrPoly<nPoly; ++nCurrPoly )
     {
         const POINT* pCurrPoint = reinterpret_cast<const POINT*>( *pPtAry++ );
         const BYTE* pCurrFlag = *pFlgAry++;
-        const sal_uIntPtr nCurrPoints = *pPoints++;
+        const sal_uLong nCurrPoints = *pPoints++;
         const bool bHaveFlagArray( pCurrFlag );
-        sal_uIntPtr nCurrPoint;
+        sal_uLong nCurrPoint;
 
         if( nCurrPoints )
         {
@@ -691,7 +691,7 @@ void ImplPreparePolyDraw( bool                      bCloseFigures,
 // =======================================================================
 
 // #100127# draw an array of points which might also contain bezier control points
-void ImplRenderPath( HDC hdc, sal_uIntPtr nPoints, const SalPoint* pPtAry, const BYTE* pFlgAry )
+void ImplRenderPath( HDC hdc, sal_uLong nPoints, const SalPoint* pPtAry, const BYTE* pFlgAry )
 {
     if( nPoints )
     {
@@ -849,7 +849,7 @@ void WinSalGraphics::ResetClipRegion()
 
 // -----------------------------------------------------------------------
 
-void WinSalGraphics::BeginSetClipRegion( sal_uIntPtr nRectCount )
+void WinSalGraphics::BeginSetClipRegion( sal_uLong nRectCount )
 {
     if ( mhRegion )
     {
@@ -857,7 +857,7 @@ void WinSalGraphics::BeginSetClipRegion( sal_uIntPtr nRectCount )
         mhRegion = 0;
     }
 
-    sal_uIntPtr nRectBufSize = sizeof(RECT)*nRectCount;
+    sal_uLong nRectBufSize = sizeof(RECT)*nRectCount;
     if ( nRectCount < SAL_CLIPRECT_COUNT )
     {
         if ( !mpStdClipRgnData )
@@ -946,7 +946,7 @@ void WinSalGraphics::EndSetClipRegion()
     }
     else
     {
-        sal_uIntPtr nSize = mpClipRgnData->rdh.nRgnSize+sizeof(RGNDATAHEADER);
+        sal_uLong nSize = mpClipRgnData->rdh.nRgnSize+sizeof(RGNDATAHEADER);
         mhRegion = ExtCreateRegion( NULL, nSize, mpClipRgnData );
 
         // if ExtCreateRegion(...) is not supported
@@ -960,7 +960,7 @@ void WinSalGraphics::EndSetClipRegion()
                 mhRegion = CreateRectRgn( pRect->left, pRect->top, pRect->right, pRect->bottom );
                 pRect++;
 
-                for( sal_uIntPtr n = 1; n < pHeader->nCount; n++, pRect++ )
+                for( sal_uLong n = 1; n < pHeader->nCount; n++, pRect++ )
                 {
                     HRGN hRgn = CreateRectRgn( pRect->left, pRect->top, pRect->right, pRect->bottom );
                     CombineRgn( mhRegion, mhRegion, hRgn, RGN_OR );
@@ -1318,7 +1318,7 @@ void WinSalGraphics::drawRect( long nX, long nY, long nWidth, long nHeight )
 
 // -----------------------------------------------------------------------
 
-void WinSalGraphics::drawPolyLine( sal_uIntPtr nPoints, const SalPoint* pPtAry )
+void WinSalGraphics::drawPolyLine( sal_uLong nPoints, const SalPoint* pPtAry )
 {
     // Unter NT koennen wir das Array direkt weiterreichen
     DBG_ASSERT( sizeof( POINT ) == sizeof( SalPoint ),
@@ -1333,7 +1333,7 @@ void WinSalGraphics::drawPolyLine( sal_uIntPtr nPoints, const SalPoint* pPtAry )
 
 // -----------------------------------------------------------------------
 
-void WinSalGraphics::drawPolygon( sal_uIntPtr nPoints, const SalPoint* pPtAry )
+void WinSalGraphics::drawPolygon( sal_uLong nPoints, const SalPoint* pPtAry )
 {
     // Unter NT koennen wir das Array direkt weiterreichen
     DBG_ASSERT( sizeof( POINT ) == sizeof( SalPoint ),
@@ -1421,7 +1421,7 @@ void WinSalGraphics::drawPolyPolygon( sal_uInt32 nPoly, const sal_uInt32* pPoint
 
 // -----------------------------------------------------------------------
 
-sal_Bool WinSalGraphics::drawPolyLineBezier( sal_uIntPtr nPoints, const SalPoint* pPtAry, const BYTE* pFlgAry )
+sal_Bool WinSalGraphics::drawPolyLineBezier( sal_uLong nPoints, const SalPoint* pPtAry, const BYTE* pFlgAry )
 {
 #ifdef USE_GDI_BEZIERS
     // Unter NT koennen wir das Array direkt weiterreichen
@@ -1438,7 +1438,7 @@ sal_Bool WinSalGraphics::drawPolyLineBezier( sal_uIntPtr nPoints, const SalPoint
 
 // -----------------------------------------------------------------------
 
-sal_Bool WinSalGraphics::drawPolygonBezier( sal_uIntPtr nPoints, const SalPoint* pPtAry, const BYTE* pFlgAry )
+sal_Bool WinSalGraphics::drawPolygonBezier( sal_uLong nPoints, const SalPoint* pPtAry, const BYTE* pFlgAry )
 {
 #ifdef USE_GDI_BEZIERS
     // Unter NT koennen wir das Array direkt weiterreichen
@@ -1497,8 +1497,8 @@ sal_Bool WinSalGraphics::drawPolyPolygonBezier( sal_uInt32 nPoly, const sal_uInt
     DBG_ASSERT( sizeof( POINT ) == sizeof( SalPoint ),
                 "WinSalGraphics::DrawPolyPolygonBezier(): POINT != SalPoint" );
 
-    sal_uIntPtr nCurrPoly, nTotalPoints;
-    const sal_uIntPtr* pCurrPoints = pPoints;
+    sal_uLong nCurrPoly, nTotalPoints;
+    const sal_uLong* pCurrPoints = pPoints;
     for( nCurrPoly=0, nTotalPoints=0; nCurrPoly<nPoly; ++nCurrPoly )
         nTotalPoints += *pCurrPoints++;
 
@@ -1550,11 +1550,11 @@ sal_Bool WinSalGraphics::drawPolyPolygonBezier( sal_uInt32 nPoly, const sal_uInt
 #define POSTSCRIPT_BOUNDINGSEARCH 0x1000    // we only try to get the BoundingBox
                                             // in the first 4096 bytes
 
-static BYTE* ImplSearchEntry( BYTE* pSource, BYTE* pDest, sal_uIntPtr nComp, sal_uIntPtr nSize )
+static BYTE* ImplSearchEntry( BYTE* pSource, BYTE* pDest, sal_uLong nComp, sal_uLong nSize )
 {
     while ( nComp-- >= nSize )
     {
-        sal_uIntPtr i;
+        sal_uLong i;
         for ( i = 0; i < nSize; i++ )
         {
             if ( ( pSource[i]&~0x20 ) != ( pDest[i]&~0x20 ) )
@@ -1567,7 +1567,7 @@ static BYTE* ImplSearchEntry( BYTE* pSource, BYTE* pDest, sal_uIntPtr nComp, sal
     return NULL;
 }
 
-static sal_Bool ImplGetBoundingBox( double* nNumb, BYTE* pSource, sal_uIntPtr nSize )
+static sal_Bool ImplGetBoundingBox( double* nNumb, BYTE* pSource, sal_uLong nSize )
 {
     sal_Bool    bRetValue = FALSE;
     BYTE* pDest = ImplSearchEntry( pSource, (BYTE*)"%%BoundingBox:", nSize, 14 );
@@ -1629,7 +1629,7 @@ static sal_Bool ImplGetBoundingBox( double* nNumb, BYTE* pSource, sal_uIntPtr nS
     return bRetValue;
 }
 
-sal_Bool WinSalGraphics::drawEPS( long nX, long nY, long nWidth, long nHeight, void* pPtr, sal_uIntPtr nSize )
+sal_Bool WinSalGraphics::drawEPS( long nX, long nY, long nWidth, long nHeight, void* pPtr, sal_uLong nSize )
 {
     sal_Bool bRetValue = FALSE;
 
@@ -1749,8 +1749,8 @@ sal_Bool WinSalGraphics::drawEPS( long nX, long nY, long nWidth, long nHeight, v
 
                 // #107797# Write out actual EPS content
                 // ----------------------------------------------------------------------------------
-                sal_uIntPtr nToDo = nSize;
-                sal_uIntPtr nDoNow;
+                sal_uLong   nToDo = nSize;
+                sal_uLong   nDoNow;
                 while ( nToDo )
                 {
                     nDoNow = nToDo;
@@ -1760,7 +1760,7 @@ sal_Bool WinSalGraphics::drawEPS( long nX, long nY, long nWidth, long nHeight, v
                     // of size POSTSCRIPT_BUFSIZE at construction time of aBuf
                     *((sal_uInt16*)aBuf.getStr()) = (sal_uInt16)nDoNow;
                     memcpy( (void*)(aBuf.getStr() + 2), (BYTE*)pPtr + nSize - nToDo, nDoNow );
-                    sal_uIntPtr nResult = Escape ( mhDC, nEscape, nDoNow + 2, (LPTSTR)aBuf.getStr(), 0 );
+                    sal_uLong nResult = Escape ( mhDC, nEscape, nDoNow + 2, (LPTSTR)aBuf.getStr(), 0 );
                     if (!nResult )
                         break;
                     nToDo -= nResult;

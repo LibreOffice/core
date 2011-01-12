@@ -676,7 +676,7 @@ void Printer::Compat_OldPrinterMetrics( bool bSet )
 
 // -----------------------------------------------------------------------
 
-sal_uIntPtr Printer::GetCapabilities( sal_uInt16 nType ) const
+sal_uLong Printer::GetCapabilities( sal_uInt16 nType ) const
 {
     if ( IsDisplayPrinter() )
         return sal_False;
@@ -1286,9 +1286,9 @@ void Printer::Error()
 // -----------------------------------------------------------------------
 
 
-sal_uIntPtr Printer::ImplSalPrinterErrorCodeToVCL( sal_uIntPtr nError )
+sal_uLong Printer::ImplSalPrinterErrorCodeToVCL( sal_uLong nError )
 {
-    sal_uIntPtr nVCLError;
+    sal_uLong nVCLError;
     switch ( nError )
     {
         case 0:

@@ -167,7 +167,7 @@ class GtkSalFrame : public SalFrame
     GdkWindow*                      m_pForeignTopLevel;
     GdkNativeWindow                 m_aForeignTopLevelWindow;
     Pixmap                          m_hBackgroundPixmap;
-    sal_uIntPtr                     m_nStyle;
+    sal_uLong                     m_nStyle;
     SalExtStyle                     m_nExtStyle;
     GtkFixed*                       m_pFixedContainer;
     GtkSalFrame*                    m_pParent;
@@ -199,7 +199,7 @@ class GtkSalFrame : public SalFrame
 
     GdkRegion*                      m_pRegion;
 
-    void Init( SalFrame* pParent, sal_uIntPtr nStyle );
+    void Init( SalFrame* pParent, sal_uLong nStyle );
     void Init( SystemParentData* pSysData );
     void InitCommon();
 
@@ -251,7 +251,7 @@ class GtkSalFrame : public SalFrame
 
     bool isChild( bool bPlug = true, bool bSysChild = true )
     {
-        sal_uIntPtr nMask = 0;
+        sal_uLong nMask = 0;
         if( bPlug )
             nMask |= SAL_FRAME_STYLE_PLUG;
         if( bSysChild )
@@ -270,7 +270,7 @@ class GtkSalFrame : public SalFrame
 
     DECL_LINK( ImplDelayedFullScreenHdl, void* );
 public:
-    GtkSalFrame( SalFrame* pParent, sal_uIntPtr nStyle );
+    GtkSalFrame( SalFrame* pParent, sal_uLong nStyle );
     GtkSalFrame( SystemParentData* pSysData );
 
     // dispatches an event, returns true if dispatched
@@ -386,7 +386,7 @@ public:
     // set clip region to none (-> rectangular windows, normal state)
     virtual void                    ResetClipRegion();
     // start setting the clipregion consisting of nRects rectangles
-    virtual void                    BeginSetClipRegion( sal_uIntPtr nRects );
+    virtual void                    BeginSetClipRegion( sal_uLong nRects );
     // add a rectangle to the clip region
     virtual void                    UnionClipRegion( long nX, long nY, long nWidth, long nHeight );
     // done setting up the clipregion

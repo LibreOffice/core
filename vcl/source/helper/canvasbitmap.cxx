@@ -65,7 +65,7 @@ namespace
     }
 }
 
-void VclCanvasBitmap::setComponentInfo( sal_uIntPtr redShift, sal_uIntPtr greenShift, sal_uIntPtr blueShift )
+void VclCanvasBitmap::setComponentInfo( sal_uLong redShift, sal_uLong greenShift, sal_uLong blueShift )
 {
     // sort channels in increasing order of appearance in the pixel
     // (starting with the least significant bits)

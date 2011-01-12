@@ -87,7 +87,7 @@ public:
                         ListBox( Window* pParent, const ResId& rResId );
                         ~ListBox();
 
-    virtual void        Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal_uIntPtr nFlags );
+    virtual void        Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal_uLong nFlags );
     virtual void        Resize();
     virtual long        PreNotify( NotifyEvent& rNEvt );
     virtual void        StateChanged( StateChangedType nType );

@@ -102,7 +102,7 @@ namespace
                ( nInputCount <= 8 ) ? 8 : 24;
     }
 
-    inline bool isBitfieldCompression( sal_uIntPtr nScanlineFormat )
+    inline bool isBitfieldCompression( sal_uLong nScanlineFormat )
     {
         return nScanlineFormat == BMP_FORMAT_16BIT_TC_LSB_MASK ||
             nScanlineFormat == BMP_FORMAT_32BIT_TC_MASK;
@@ -132,8 +132,8 @@ SvStream& operator<<( SvStream& rOStm, const Bitmap& rBitmap )
 sal_Bool Bitmap::Read( SvStream& rIStm, sal_Bool bFileHeader )
 {
     const sal_uInt16    nOldFormat = rIStm.GetNumberFormatInt();
-    const sal_uIntPtr   nOldPos = rIStm.Tell();
-    sal_uIntPtr         nOffset = 0UL;
+    const sal_uLong     nOldPos = rIStm.Tell();
+    sal_uLong           nOffset = 0UL;
     sal_Bool            bRet = sal_False;
 
     rIStm.SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
@@ -161,10 +161,10 @@ sal_Bool Bitmap::Read( SvStream& rIStm, sal_Bool bFileHeader )
 
 // ------------------------------------------------------------------
 
-sal_Bool Bitmap::ImplReadDIB( SvStream& rIStm, Bitmap& rBmp, sal_uIntPtr nOffset )
+sal_Bool Bitmap::ImplReadDIB( SvStream& rIStm, Bitmap& rBmp, sal_uLong nOffset )
 {
     DIBInfoHeader   aHeader;
-    const sal_uIntPtr   nStmPos = rIStm.Tell();
+    const sal_uLong     nStmPos = rIStm.Tell();
     sal_Bool            bRet = sal_False;
     sal_Bool        bTopDown = sal_False;
 
@@ -198,7 +198,7 @@ sal_Bool Bitmap::ImplReadDIB( SvStream& rIStm, Bitmap& rBmp, sal_uIntPtr nOffset
             {
                 ZCodec  aCodec;
                 sal_uInt32 nCodedSize, nUncodedSize;
-                sal_uIntPtr nCodedPos;
+                sal_uLong   nCodedPos;
 
                 // read coding information
                 rIStm >> nCodedSize >> nUncodedSize >> aHeader.nCompression;
@@ -264,7 +264,7 @@ sal_Bool Bitmap::ImplReadDIB( SvStream& rIStm, Bitmap& rBmp, sal_uIntPtr nOffset
 
 // ------------------------------------------------------------------
 
-sal_Bool Bitmap::ImplReadDIBFileHeader( SvStream& rIStm, sal_uIntPtr& rOffset )
+sal_Bool Bitmap::ImplReadDIBFileHeader( SvStream& rIStm, sal_uLong& rOffset )
 {
     sal_uInt32  nTmp32;
     sal_uInt16  nTmp16 = 0;
@@ -319,7 +319,7 @@ sal_Bool Bitmap::ImplReadDIBInfoHeader( SvStream& rIStm, DIBInfoHeader& rHeader,
         // unknown Header
         if( rHeader.nSize < DIBINFOHEADERSIZE )
         {
-            sal_uIntPtr nUnknownSize = sizeof( rHeader.nSize );
+            sal_uLong nUnknownSize = sizeof( rHeader.nSize );
 
             rIStm >> rHeader.nWidth; nUnknownSize += sizeof( rHeader.nWidth );
             rIStm >> rHeader.nHeight; nUnknownSize += sizeof( rHeader.nHeight );
@@ -403,7 +403,7 @@ sal_Bool Bitmap::ImplReadDIBInfoHeader( SvStream& rIStm, DIBInfoHeader& rHeader,
 sal_Bool Bitmap::ImplReadDIBPalette( SvStream& rIStm, BitmapWriteAccess& rAcc, sal_Bool bQuad )
 {
     const sal_uInt16    nColors = rAcc.GetPaletteEntryCount();
-    const sal_uIntPtr   nPalSize = nColors * ( bQuad ? 4UL : 3UL );
+    const sal_uLong     nPalSize = nColors * ( bQuad ? 4UL : 3UL );
     BitmapColor     aPalColor;
 
     sal_uInt8* pEntries = new sal_uInt8[ nPalSize ];
@@ -431,7 +431,7 @@ sal_Bool Bitmap::ImplReadDIBPalette( SvStream& rIStm, BitmapWriteAccess& rAcc, s
 
 sal_Bool Bitmap::ImplReadDIBBits( SvStream& rIStm, DIBInfoHeader& rHeader, BitmapWriteAccess& rAcc, sal_Bool bTopDown )
 {
-    const sal_uIntPtr nAlignedWidth = AlignedWidth4Bytes( rHeader.nWidth * rHeader.nBitCount );
+    const sal_uLong nAlignedWidth = AlignedWidth4Bytes( rHeader.nWidth * rHeader.nBitCount );
     sal_uInt32      nRMask = 0;
     sal_uInt32      nGMask = 0;
     sal_uInt32      nBMask = 0;
@@ -487,7 +487,7 @@ sal_Bool Bitmap::ImplReadDIBBits( SvStream& rIStm, DIBInfoHeader& rHeader, Bitma
         {
             if ( !rHeader.nSizeImage )
             {
-                const sal_uIntPtr nOldPos = rIStm.Tell();
+                const sal_uLong nOldPos = rIStm.Tell();
 
                 rIStm.Seek( STREAM_SEEK_TO_END );
                 rHeader.nSizeImage = rIStm.Tell() - nOldPos;
@@ -657,7 +657,7 @@ sal_Bool Bitmap::Write( SvStream& rOStm, sal_Bool bCompressed, sal_Bool bFileHea
     {
         BitmapReadAccess*   pAcc = ( (Bitmap*) this)->AcquireReadAccess();
         const sal_uInt16        nOldFormat = rOStm.GetNumberFormatInt();
-        const sal_uIntPtr       nOldPos = rOStm.Tell();
+        const sal_uLong         nOldPos = rOStm.Tell();
 
         rOStm.SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
 
@@ -692,8 +692,8 @@ sal_Bool Bitmap::ImplWriteDIB( SvStream& rOStm, BitmapReadAccess& rAcc, sal_Bool
 {
     const MapMode   aMapPixel( MAP_PIXEL );
     DIBInfoHeader   aHeader;
-    sal_uIntPtr         nImageSizePos;
-    sal_uIntPtr         nEndPos;
+    sal_uLong           nImageSizePos;
+    sal_uLong           nEndPos;
     sal_uInt32      nCompression = 0;
     sal_Bool            bRet = sal_False;
 
@@ -790,7 +790,7 @@ sal_Bool Bitmap::ImplWriteDIB( SvStream& rOStm, BitmapReadAccess& rAcc, sal_Bool
     {
         ZCodec          aCodec;
         SvMemoryStream  aMemStm( aHeader.nSizeImage + 4096, 65535 );
-        sal_uIntPtr         nCodedPos = rOStm.Tell(), nLastPos;
+        sal_uLong           nCodedPos = rOStm.Tell(), nLastPos;
         sal_uInt32      nCodedSize, nUncodedSize;
 
         // write uncoded data palette
@@ -858,7 +858,7 @@ sal_Bool Bitmap::ImplWriteDIBFileHeader( SvStream& rOStm, BitmapReadAccess& rAcc
 sal_Bool Bitmap::ImplWriteDIBPalette( SvStream& rOStm, BitmapReadAccess& rAcc )
 {
     const sal_uInt16    nColors = rAcc.GetPaletteEntryCount();
-    const sal_uIntPtr   nPalSize = nColors * 4UL;
+    const sal_uLong     nPalSize = nColors * 4UL;
     sal_uInt8*          pEntries = new sal_uInt8[ nPalSize ];
     sal_uInt8*          pTmpEntry = pEntries;
     BitmapColor     aPalColor;
@@ -882,7 +882,7 @@ sal_Bool Bitmap::ImplWriteDIBPalette( SvStream& rOStm, BitmapReadAccess& rAcc )
 // ------------------------------------------------------------------
 
 sal_Bool Bitmap::ImplWriteDIBBits( SvStream& rOStm, BitmapReadAccess& rAcc,
-                               sal_uIntPtr nCompression, sal_uInt32& rImageSize )
+                               sal_uLong nCompression, sal_uInt32& rImageSize )
 {
     if( BITFIELDS == nCompression )
     {
@@ -924,7 +924,7 @@ sal_Bool Bitmap::ImplWriteDIBBits( SvStream& rOStm, BitmapReadAccess& rAcc,
         // #i59239# discretize bitcount for aligned width to 1,4,8,24
         // (other cases are not written below)
         const sal_uInt16 nBitCount( sal::static_int_cast<sal_uInt16>(rAcc.GetBitCount()) );
-        const sal_uIntPtr  nAlignedWidth = AlignedWidth4Bytes( rAcc.Width() *
+        const sal_uLong  nAlignedWidth = AlignedWidth4Bytes( rAcc.Width() *
                                                          discretizeBitcount(nBitCount));
         sal_Bool         bNative = sal_False;
 
@@ -1062,10 +1062,10 @@ void Bitmap::ImplDecodeRLE( sal_uInt8* pBuffer, DIBInfoHeader& rHeader,
 {
     Scanline    pRLE = pBuffer;
     long        nY = rHeader.nHeight - 1L;
-    const sal_uIntPtr   nWidth = rAcc.Width();
-    sal_uIntPtr     nCountByte;
-    sal_uIntPtr     nRunByte;
-    sal_uIntPtr     nX = 0UL;
+    const sal_uLong nWidth = rAcc.Width();
+    sal_uLong       nCountByte;
+    sal_uLong       nRunByte;
+    sal_uLong       nX = 0UL;
     sal_uInt8       cTmp;
     sal_Bool        bEndDecoding = sal_False;
 
@@ -1081,7 +1081,7 @@ void Bitmap::ImplDecodeRLE( sal_uInt8* pBuffer, DIBInfoHeader& rHeader,
                 {
                     nCountByte = nRunByte >> 1;
 
-                    for( sal_uIntPtr i = 0UL; i < nCountByte; i++ )
+                    for( sal_uLong i = 0UL; i < nCountByte; i++ )
                     {
                         cTmp = *pRLE++;
 
@@ -1105,7 +1105,7 @@ void Bitmap::ImplDecodeRLE( sal_uInt8* pBuffer, DIBInfoHeader& rHeader,
                 }
                 else
                 {
-                    for( sal_uIntPtr i = 0UL; i < nRunByte; i++ )
+                    for( sal_uLong i = 0UL; i < nRunByte; i++ )
                     {
                         if( nX < nWidth )
                             rAcc.SetPixel( nY, nX++, *pRLE );
@@ -1138,7 +1138,7 @@ void Bitmap::ImplDecodeRLE( sal_uInt8* pBuffer, DIBInfoHeader& rHeader,
             {
                 nRunByte = nCountByte >> 1;
 
-                for( sal_uIntPtr i = 0UL; i < nRunByte; i++ )
+                for( sal_uLong i = 0UL; i < nRunByte; i++ )
                 {
                     if( nX < nWidth )
                         rAcc.SetPixel( nY, nX++, cTmp >> 4 );
@@ -1152,7 +1152,7 @@ void Bitmap::ImplDecodeRLE( sal_uInt8* pBuffer, DIBInfoHeader& rHeader,
             }
             else
             {
-                for( sal_uIntPtr i = 0UL; ( i < nCountByte ) && ( nX < nWidth ); i++ )
+                for( sal_uLong i = 0UL; ( i < nCountByte ) && ( nX < nWidth ); i++ )
                     rAcc.SetPixel( nY, nX++, cTmp );
             }
         }
@@ -1164,12 +1164,12 @@ void Bitmap::ImplDecodeRLE( sal_uInt8* pBuffer, DIBInfoHeader& rHeader,
 
 sal_Bool Bitmap::ImplWriteRLE( SvStream& rOStm, BitmapReadAccess& rAcc, sal_Bool bRLE4 )
 {
-    const sal_uIntPtr nWidth = rAcc.Width();
-    const sal_uIntPtr nHeight = rAcc.Height();
-    sal_uIntPtr     nX;
-    sal_uIntPtr     nSaveIndex;
-    sal_uIntPtr     nCount;
-    sal_uIntPtr     nBufCount;
+    const sal_uLong nWidth = rAcc.Width();
+    const sal_uLong nHeight = rAcc.Height();
+    sal_uLong       nX;
+    sal_uLong       nSaveIndex;
+    sal_uLong       nCount;
+    sal_uLong       nBufCount;
     sal_uInt8*      pBuf = new sal_uInt8[ ( nWidth << 1 ) + 2 ];
     sal_uInt8*      pTmp;
     sal_uInt8       cPix;
@@ -1221,7 +1221,7 @@ sal_Bool Bitmap::ImplWriteRLE( SvStream& rOStm, BitmapReadAccess& rAcc, sal_Bool
 
                     if( bRLE4 )
                     {
-                        for ( sal_uIntPtr i = 0; i < nCount; i++, pTmp++ )
+                        for ( sal_uLong i = 0; i < nCount; i++, pTmp++ )
                         {
                             *pTmp = (sal_uInt8) rAcc.GetPixel( nY, nSaveIndex++ ) << 4;
 
@@ -1233,7 +1233,7 @@ sal_Bool Bitmap::ImplWriteRLE( SvStream& rOStm, BitmapReadAccess& rAcc, sal_Bool
                     }
                     else
                     {
-                        for( sal_uIntPtr i = 0UL; i < nCount; i++ )
+                        for( sal_uLong i = 0UL; i < nCount; i++ )
                             *pTmp++ = rAcc.GetPixel( nY, nSaveIndex++ );
                     }
 

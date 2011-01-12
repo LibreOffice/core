@@ -249,7 +249,7 @@ public:
 
     virtual sal_Bool                QueryExit();
 
-    virtual void                UserEvent( sal_uIntPtr nEvent, void* pEventData );
+    virtual void                UserEvent( sal_uLong nEvent, void* pEventData );
 
     virtual void                ActivateExtHelp();
     virtual void                DeactivateExtHelp();
@@ -282,8 +282,8 @@ public:
     static void                 EndYield();
     static vos::IMutex&                     GetSolarMutex();
     static vos::OThread::TThreadIdentifier  GetMainThreadIdentifier();
-    static sal_uIntPtr                ReleaseSolarMutex();
-    static void                 AcquireSolarMutex( sal_uIntPtr nCount );
+    static sal_uLong                ReleaseSolarMutex();
+    static void                 AcquireSolarMutex( sal_uLong nCount );
     static void                 EnableNoYieldMode( bool i_bNoYield );
     static void                 AddPostYieldListener( const Link& i_rListener );
     static void                 RemovePostYieldListener( const Link& i_rListener );
@@ -296,7 +296,7 @@ public:
 
     static sal_uInt16               GetDispatchLevel();
     static sal_Bool                 AnyInput( sal_uInt16 nType = INPUT_ANY );
-    static sal_uIntPtr                GetLastInputInterval();
+    static sal_uLong                GetLastInputInterval();
     static sal_Bool                 IsUICaptured();
     static sal_Bool                 IsUserActive( sal_uInt16 nTest = USERACTIVE_ALL );
 
@@ -325,20 +325,20 @@ public:
     static void                 RemoveEventListener( const Link& rEventListener );
     static void                 AddKeyListener( const Link& rKeyListener );
     static void                 RemoveKeyListener( const Link& rKeyListener );
-    static void                 ImplCallEventListeners( sal_uIntPtr nEvent, Window* pWin, void* pData );
+    static void                 ImplCallEventListeners( sal_uLong nEvent, Window* pWin, void* pData );
     static void                 ImplCallEventListeners( VclSimpleEvent* pEvent );
-    static sal_Bool                 HandleKey( sal_uIntPtr nEvent, Window *pWin, KeyEvent* pKeyEvent );
+    static sal_Bool                 HandleKey( sal_uLong nEvent, Window *pWin, KeyEvent* pKeyEvent );
 
-    static sal_uIntPtr                PostKeyEvent( sal_uIntPtr nEvent, Window *pWin, KeyEvent* pKeyEvent );
-    static sal_uIntPtr                PostMouseEvent( sal_uIntPtr nEvent, Window *pWin, MouseEvent* pMouseEvent );
+    static sal_uLong                PostKeyEvent( sal_uLong nEvent, Window *pWin, KeyEvent* pKeyEvent );
+    static sal_uLong                PostMouseEvent( sal_uLong nEvent, Window *pWin, MouseEvent* pMouseEvent );
     static void                 RemoveMouseAndKeyEvents( Window *pWin );
-    static sal_Bool                 IsProcessedMouseOrKeyEvent( sal_uIntPtr nEventId );
+    static sal_Bool                 IsProcessedMouseOrKeyEvent( sal_uLong nEventId );
 
-    static sal_uIntPtr                PostUserEvent( sal_uIntPtr nEvent, void* pEventData = NULL );
-    static sal_uIntPtr                PostUserEvent( const Link& rLink, void* pCaller = NULL );
-    static sal_Bool                 PostUserEvent( sal_uIntPtr& rEventId, sal_uIntPtr nEvent, void* pEventData = NULL );
-    static sal_Bool                 PostUserEvent( sal_uIntPtr& rEventId, const Link& rLink, void* pCaller = NULL );
-    static void                 RemoveUserEvent( sal_uIntPtr nUserEvent );
+    static sal_uLong                PostUserEvent( sal_uLong nEvent, void* pEventData = NULL );
+    static sal_uLong                PostUserEvent( const Link& rLink, void* pCaller = NULL );
+    static sal_Bool                 PostUserEvent( sal_uLong& rEventId, sal_uLong nEvent, void* pEventData = NULL );
+    static sal_Bool                 PostUserEvent( sal_uLong& rEventId, const Link& rLink, void* pCaller = NULL );
+    static void                 RemoveUserEvent( sal_uLong nUserEvent );
 
     static sal_Bool                 InsertIdleHdl( const Link& rLink, sal_uInt16 nPriority );
     static void                 RemoveIdleHdl( const Link& rLink );
@@ -393,10 +393,10 @@ public:
     static void                 FlushAccel();
     static sal_Bool                 CallAccel( const KeyCode& rKeyCode, sal_uInt16 nRepeat = 0 );
 
-    static sal_uIntPtr                AddHotKey( const KeyCode& rKeyCode, const Link& rLink, void* pData = NULL );
-    static void                 RemoveHotKey( sal_uIntPtr nId );
-    static sal_uIntPtr                AddEventHook( VCLEventHookProc pProc, void* pData = NULL );
-    static void                 RemoveEventHook( sal_uIntPtr nId );
+    static sal_uLong                AddHotKey( const KeyCode& rKeyCode, const Link& rLink, void* pData = NULL );
+    static void                 RemoveHotKey( sal_uLong nId );
+    static sal_uLong                AddEventHook( VCLEventHookProc pProc, void* pData = NULL );
+    static void                 RemoveEventHook( sal_uLong nId );
     static long                 CallEventHooks( NotifyEvent& rEvt );
     static long                 CallPreNotify( NotifyEvent& rEvt );
     static long                 CallEvent( NotifyEvent& rEvt );
@@ -410,9 +410,9 @@ public:
     static void                 EnableAutoMnemonic( sal_Bool bEnabled = sal_True );
     static sal_Bool                 IsAutoMnemonicEnabled();
 
-    static sal_uIntPtr                GetReservedKeyCodeCount();
-    static const KeyCode*       GetReservedKeyCode( sal_uIntPtr i );
-    static String               GetReservedKeyCodeDescription( sal_uIntPtr i );
+    static sal_uLong                GetReservedKeyCodeCount();
+    static const KeyCode*       GetReservedKeyCode( sal_uLong i );
+    static String               GetReservedKeyCodeDescription( sal_uLong i );
 
     static void                 SetDefDialogParent( Window* pWindow );
     static Window*              GetDefDialogParent();

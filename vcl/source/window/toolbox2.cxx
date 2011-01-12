@@ -570,7 +570,7 @@ void ToolBox::UserDraw( const UserDrawEvent& )
 
 void ToolBox::InsertItem( const ResId& rResId, sal_uInt16 nPos )
 {
-    sal_uIntPtr                 nObjMask;
+    sal_uLong                   nObjMask;
     sal_Bool                    bImage = sal_False;     // Wurde Image gesetzt
 
     // Item anlegen
@@ -980,10 +980,10 @@ const Size& ToolBox::GetDefaultImageSize() const
 {
     static Size aSmallButtonSize( TB_SMALLIMAGESIZE, TB_SMALLIMAGESIZE );
 
-    static sal_uIntPtr s_nSymbolsStyle = STYLE_SYMBOLS_DEFAULT;
+    static sal_uLong s_nSymbolsStyle = STYLE_SYMBOLS_DEFAULT;
     static Size aLargeButtonSize( TB_LARGEIMAGESIZE, TB_LARGEIMAGESIZE );
 
-    sal_uIntPtr nSymbolsStyle = Application::GetSettings().GetStyleSettings().GetCurrentSymbolsStyle();
+    sal_uLong nSymbolsStyle = Application::GetSettings().GetStyleSettings().GetCurrentSymbolsStyle();
     if ( s_nSymbolsStyle != nSymbolsStyle )
     {
         s_nSymbolsStyle = nSymbolsStyle;
@@ -2040,7 +2040,7 @@ Rectangle ToolBox::GetCharacterBounds( sal_uInt16 nItemID, long nIndex ) const
         ImplFillLayoutData();
     if( mpData->m_pLayoutData )
     {
-        for( sal_uIntPtr i = 0; i < mpData->m_pLayoutData->m_aLineItemIds.size(); i++ )
+        for( sal_uLong i = 0; i < mpData->m_pLayoutData->m_aLineItemIds.size(); i++ )
         {
             if( mpData->m_pLayoutData->m_aLineItemIds[i] == nItemID )
             {
@@ -2063,7 +2063,7 @@ long ToolBox::GetIndexForPoint( const Point& rPoint, sal_uInt16& rItemID ) const
     if( mpData->m_pLayoutData )
     {
         nIndex = mpData->m_pLayoutData->GetIndexForPoint( rPoint );
-        for( sal_uIntPtr i = 0; i < mpData->m_pLayoutData->m_aLineIndices.size(); i++ )
+        for( sal_uLong i = 0; i < mpData->m_pLayoutData->m_aLineIndices.size(); i++ )
         {
             if( mpData->m_pLayoutData->m_aLineIndices[i] <= nIndex &&
                 (i == mpData->m_pLayoutData->m_aLineIndices.size()-1 || mpData->m_pLayoutData->m_aLineIndices[i+1] > nIndex) )
@@ -2101,7 +2101,7 @@ sal_uInt16 ToolBox::GetDisplayItemId( long nText ) const
     sal_uInt16 nItemId = 0;
     if( ! mpData->m_pLayoutData )
         ImplFillLayoutData();
-    if( mpData->m_pLayoutData && nText >= 0 && (sal_uIntPtr)nText < mpData->m_pLayoutData->m_aLineItemIds.size() )
+    if( mpData->m_pLayoutData && nText >= 0 && (sal_uLong)nText < mpData->m_pLayoutData->m_aLineItemIds.size() )
         nItemId = mpData->m_pLayoutData->m_aLineItemIds[nText];
     return nItemId;
 }

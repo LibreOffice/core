@@ -119,7 +119,7 @@ public:
     // or created from the constituent rectangles
     basegfx::B2DPolyPolygon ConvertToB2DPolyPolygon();
 
-    sal_uIntPtr         GetRectCount() const;
+    sal_uLong           GetRectCount() const;
     RegionHandle    BeginEnumRects();
     sal_Bool            GetEnumRects( RegionHandle hRegionHandle, Rectangle& rRect );
     sal_Bool            GetNextEnumRect( RegionHandle hRegionHandle, Rectangle& rRect )

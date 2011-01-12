@@ -348,7 +348,7 @@ void Button::ImplSetSymbolRect( const Rectangle& i_rRect )
 // -----------------------------------------------------------------------
 
 sal_uInt16 Button::ImplGetTextStyle( XubString& rText, WinBits nWinStyle,
-                                 sal_uIntPtr nDrawFlags )
+                                 sal_uLong nDrawFlags )
 {
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
     sal_uInt16 nTextStyle = FixedText::ImplGetTextStyle( nWinStyle & ~WB_DEFBUTTON );
@@ -379,7 +379,7 @@ sal_uInt16 Button::ImplGetTextStyle( XubString& rText, WinBits nWinStyle,
 
 void Button::ImplDrawAlignedImage( OutputDevice* pDev, Point& rPos,
                                    Size& rSize, sal_Bool bLayout,
-                                   sal_uIntPtr nImageSep, sal_uIntPtr nDrawFlags,
+                                   sal_uLong nImageSep, sal_uLong nDrawFlags,
                                    sal_uInt16 nTextStyle, Rectangle *pSymbolRect,
                                    bool bAddImageSep )
 {
@@ -1089,7 +1089,7 @@ sal_Bool PushButton::ImplHitTestPushButton( Window* pDev,
 
 // -----------------------------------------------------------------------
 
-sal_uInt16 PushButton::ImplGetTextStyle( sal_uIntPtr nDrawFlags ) const
+sal_uInt16 PushButton::ImplGetTextStyle( sal_uLong nDrawFlags ) const
 {
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
 
@@ -1154,7 +1154,7 @@ static void ImplDrawBtnDropDownArrow( OutputDevice* pDev,
 
 // -----------------------------------------------------------------------
 
-void PushButton::ImplDrawPushButtonContent( OutputDevice* pDev, sal_uIntPtr nDrawFlags,
+void PushButton::ImplDrawPushButtonContent( OutputDevice* pDev, sal_uLong nDrawFlags,
                                             const Rectangle& rRect,
                                             bool bLayout,
                                             bool bMenuBtnSep
@@ -1192,7 +1192,7 @@ void PushButton::ImplDrawPushButtonContent( OutputDevice* pDev, sal_uIntPtr nDra
     Size aSize = rRect.GetSize();
     Point aPos = rRect.TopLeft();
 
-    sal_uIntPtr nImageSep = 1 + (pDev->GetTextHeight()-10)/2;
+    sal_uLong nImageSep = 1 + (pDev->GetTextHeight()-10)/2;
     if( nImageSep < 1 )
         nImageSep = 1;
     if ( mnDDStyle == PUSHBUTTON_DROPDOWN_MENUBUTTON )
@@ -1726,7 +1726,7 @@ void PushButton::Paint( const Rectangle& )
 // -----------------------------------------------------------------------
 
 void PushButton::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize,
-                       sal_uIntPtr nFlags )
+                       sal_uLong nFlags )
 {
     Point       aPos  = pDev->LogicToPixel( rPos );
     Size        aSize = pDev->LogicToPixel( rSize );
@@ -2038,7 +2038,7 @@ Size PushButton::CalcMinimumSize( long nMaxWidth ) const
         aSize = GetModeImage().GetSizePixel();
     if ( PushButton::GetText().Len() && ! (ImplGetButtonState() & BUTTON_DRAW_NOTEXT) )
     {
-        sal_uIntPtr nDrawFlags = 0;
+        sal_uLong nDrawFlags = 0;
         Size textSize = GetTextRect( Rectangle( Point(), Size( nMaxWidth ? nMaxWidth : 0x7fffffff, 0x7fffffff ) ),
                                      PushButton::GetText(), ImplGetTextStyle( nDrawFlags ) ).GetSize();
        aSize.Width() += int( textSize.Width () * 1.15 );
@@ -2474,7 +2474,7 @@ if ( bNativeOK == sal_False )
 
 // -----------------------------------------------------------------------
 
-void RadioButton::ImplDraw( OutputDevice* pDev, sal_uIntPtr nDrawFlags,
+void RadioButton::ImplDraw( OutputDevice* pDev, sal_uLong nDrawFlags,
                             const Point& rPos, const Size& rSize,
                             const Size& rImageSize, Rectangle& rStateRect,
                             Rectangle& rMouseRect, bool bLayout )
@@ -2918,7 +2918,7 @@ void RadioButton::Paint( const Rectangle& )
 // -----------------------------------------------------------------------
 
 void RadioButton::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize,
-                        sal_uIntPtr nFlags )
+                        sal_uLong nFlags )
 {
     if ( !maImage )
     {
@@ -3575,7 +3575,7 @@ void CheckBox::ImplDrawCheckBoxState()
 
 // -----------------------------------------------------------------------
 
-void CheckBox::ImplDraw( OutputDevice* pDev, sal_uIntPtr nDrawFlags,
+void CheckBox::ImplDraw( OutputDevice* pDev, sal_uLong nDrawFlags,
                          const Point& rPos, const Size& rSize,
                          const Size& rImageSize, Rectangle& rStateRect,
                          Rectangle& rMouseRect, bool bLayout )
@@ -3864,7 +3864,7 @@ void CheckBox::Paint( const Rectangle& )
 // -----------------------------------------------------------------------
 
 void CheckBox::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize,
-                     sal_uIntPtr nFlags )
+                     sal_uLong nFlags )
 {
     MapMode     aResMapMode( MAP_100TH_MM );
     Point       aPos  = pDev->LogicToPixel( rPos );
@@ -4347,7 +4347,7 @@ ImageButton::ImageButton( Window* pParent, WinBits nStyle ) :
 ImageButton::ImageButton( Window* pParent, const ResId& rResId ) :
     PushButton( pParent, rResId.SetRT( RSC_IMAGEBUTTON ) )
 {
-    sal_uIntPtr nObjMask = ReadLongRes();
+    sal_uLong nObjMask = ReadLongRes();
 
     if ( RSC_IMAGEBUTTON_IMAGE & nObjMask )
     {
@@ -4396,7 +4396,7 @@ ImageRadioButton::ImageRadioButton( Window* pParent, WinBits nStyle ) :
 ImageRadioButton::ImageRadioButton( Window* pParent, const ResId& rResId ) :
     RadioButton( pParent, rResId.SetRT( RSC_IMAGERADIOBUTTON ) )
 {
-    sal_uIntPtr nObjMask = ReadLongRes();
+    sal_uLong nObjMask = ReadLongRes();
 
     if ( RSC_IMAGERADIOBUTTON_IMAGE & nObjMask )
     {
@@ -4426,7 +4426,7 @@ TriStateBox::TriStateBox( Window* pParent, const ResId& rResId ) :
 {
     EnableTriState( sal_True );
 
-    sal_uIntPtr  nTriState        = ReadLongRes();
+    sal_uLong  nTriState        = ReadLongRes();
     sal_uInt16 bDisableTriState = ReadShortRes();
     //anderer Wert als Default ?
     if ( (TriState)nTriState != STATE_NOCHECK )

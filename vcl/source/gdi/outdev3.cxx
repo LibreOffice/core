@@ -497,7 +497,7 @@ static void ImplFontSubstitute( String& rFontName,
 // -----------------------------------------------------------------------
 
 Font OutputDevice::GetDefaultFont( sal_uInt16 nType, LanguageType eLang,
-                                   sal_uIntPtr nFlags, const OutputDevice* pOutDev )
+                                   sal_uLong nFlags, const OutputDevice* pOutDev )
 {
     DBG_TRACE( "OutputDevice::GetDefaultFont()" );
 
@@ -730,7 +730,7 @@ static unsigned ImplIsCJKFont( const String& rFontName )
 
 // -----------------------------------------------------------------------
 
-static void ImplCalcType( sal_uIntPtr& rType, FontWeight& rWeight, FontWidth& rWidth,
+static void ImplCalcType( sal_uLong& rType, FontWeight& rWeight, FontWidth& rWidth,
                           FontFamily eFamily, const FontNameAttr* pFontAttr )
 {
     if ( eFamily != FAMILY_DONTKNOW )
@@ -1646,7 +1646,7 @@ ImplDevFontListData* ImplDevFontList::ImplFindBySubstFontAttr( const utl::FontNa
     }
 
     // use known attributes from the configuration to find a matching substitute
-    const sal_uIntPtr nSearchType = rFontAttr.Type;
+    const sal_uLong nSearchType = rFontAttr.Type;
     if( nSearchType != 0 )
     {
         const FontWeight eSearchWeight = rFontAttr.Weight;
@@ -1699,7 +1699,7 @@ ImplDevFontListData* ImplDevFontList::ImplFindByLocale(com::sun::star::lang::Loc
 
 // -----------------------------------------------------------------------
 
-ImplDevFontListData* ImplDevFontList::ImplFindByAttributes( sal_uIntPtr nSearchType,
+ImplDevFontListData* ImplDevFontList::ImplFindByAttributes( sal_uLong nSearchType,
     FontWeight eSearchWeight, FontWidth eSearchWidth, FontFamily /*eSearchFamily*/,
     FontItalic eSearchItalic, const String& rSearchFamilyName ) const
 {
@@ -1717,7 +1717,7 @@ ImplDevFontListData* ImplDevFontList::ImplFindByAttributes( sal_uIntPtr nSearchT
 
     long    nTestMatch;
     long    nBestMatch = 40000;
-    sal_uIntPtr   nBestType = 0;
+    sal_uLong   nBestType = 0;
 
     DevFontList::const_iterator it = maDevFontList.begin();
     for(; it != maDevFontList.end(); ++it )
@@ -1725,7 +1725,7 @@ ImplDevFontListData* ImplDevFontList::ImplFindByAttributes( sal_uIntPtr nSearchT
         ImplDevFontListData* pData = (*it).second;
 
         // Get all information about the matching font
-        sal_uIntPtr       nMatchType  = pData->mnMatchType;
+        sal_uLong       nMatchType  = pData->mnMatchType;
         FontWeight  eMatchWeight= pData->meMatchWeight;
         FontWidth   eMatchWidth = pData->meMatchWidth;
 
@@ -2565,7 +2565,7 @@ ImplDevFontListData* ImplDevFontList::ImplFindByFont( ImplFontSelectData& rFSD,
     String      aSearchFamilyName;
     FontWeight  eSearchWeight   = rFSD.meWeight;
     FontWidth   eSearchWidth    = rFSD.meWidthType;
-    sal_uIntPtr       nSearchType     = 0;
+    sal_uLong       nSearchType     = 0;
     FontSubstConfiguration::getMapName( aSearchName, aSearchShortName, aSearchFamilyName,
                                         eSearchWeight, eSearchWidth, nSearchType );
 
@@ -2637,7 +2637,7 @@ ImplDevFontListData* ImplDevFontList::ImplFindByFont( ImplFontSelectData& rFSD,
 
         String      aTempShortName;
         String      aTempFamilyName;
-        sal_uIntPtr       nTempType   = 0;
+        sal_uLong       nTempType   = 0;
         FontWeight  eTempWeight = rFSD.meWeight;
         FontWidth   eTempWidth  = WIDTH_DONTKNOW;
         FontSubstConfiguration::getMapName( aSearchName, aTempShortName, aTempFamilyName,
@@ -4057,7 +4057,7 @@ void OutputDevice::ImplDrawStrikeoutChar( long nBaseX, long nBaseY,
     nBaseY += nDistY;
 
     // strikeout text has to be left aligned
-    sal_uIntPtr nOrigTLM = mnTextLayoutMode;
+    sal_uLong nOrigTLM = mnTextLayoutMode;
     mnTextLayoutMode = TEXT_LAYOUT_BIDI_STRONG | TEXT_LAYOUT_COMPLEX_DISABLED;
     pLayout = ImplLayout( aStrikeoutText, 0, STRING_LEN );
     mnTextLayoutMode = nOrigTLM;
@@ -5133,7 +5133,7 @@ void OutputDevice::SetFont( const Font& rNewFont )
 
 // -----------------------------------------------------------------------
 
-void OutputDevice::SetLayoutMode( sal_uIntPtr nTextLayoutMode )
+void OutputDevice::SetLayoutMode( sal_uLong nTextLayoutMode )
 {
     DBG_TRACE( "OutputDevice::SetTextLayoutMode()" );
 
@@ -5714,7 +5714,7 @@ long OutputDevice::GetTextArray( const String& rStr, sal_Int32* pDXAry,
 
     if( nIndex >= rStr.Len() )
         return 0;
-    if( (sal_uIntPtr)nIndex+nLen >= rStr.Len() )
+    if( (sal_uLong)nIndex+nLen >= rStr.Len() )
         nLen = rStr.Len() - nIndex;
 
     // do layout
@@ -5763,7 +5763,7 @@ bool OutputDevice::GetCaretPositions( const XubString& rStr, sal_Int32* pCaretXA
 
     if( nIndex >= rStr.Len() )
         return false;
-    if( (sal_uIntPtr)nIndex+nLen >= rStr.Len() )
+    if( (sal_uLong)nIndex+nLen >= rStr.Len() )
         nLen = rStr.Len() - nIndex;
 
     // layout complex text
@@ -5822,7 +5822,7 @@ bool OutputDevice::GetCaretPositions( const XubString& rStr, sal_Int32* pCaretXA
 
 // -----------------------------------------------------------------------
 
-void OutputDevice::DrawStretchText( const Point& rStartPt, sal_uIntPtr nWidth,
+void OutputDevice::DrawStretchText( const Point& rStartPt, sal_uLong nWidth,
                                     const String& rStr,
                                     xub_StrLen nIndex, xub_StrLen nLen )
 {
@@ -5854,7 +5854,7 @@ ImplLayoutArgs OutputDevice::ImplPrepareLayoutArgs( String& rStr,
 {
     // get string length for calculating extents
     xub_StrLen nEndIndex = rStr.Len();
-    if( (sal_uIntPtr)nMinIndex + nLen < nEndIndex )
+    if( (sal_uLong)nMinIndex + nLen < nEndIndex )
         nEndIndex = nMinIndex + nLen;
 
     // don't bother if there is nothing to do
@@ -6983,7 +6983,7 @@ void OutputDevice::DrawCtrlText( const Point& rPos, const XubString& rStr,
 
     if( nIndex >= rStr.Len() )
         return;
-    if( (sal_uIntPtr)nIndex+nLen >= rStr.Len() )
+    if( (sal_uLong)nIndex+nLen >= rStr.Len() )
         nLen = rStr.Len() - nIndex;
 
     XubString   aStr = rStr;
@@ -7111,7 +7111,7 @@ long OutputDevice::GetCtrlTextWidth( const String& rStr,
             if ( nMnemonicPos < nIndex )
                 nIndex--;
             else if ( (nLen < STRING_LEN) &&
-                      (nMnemonicPos >= nIndex) && (nMnemonicPos < (sal_uIntPtr)(nIndex+nLen)) )
+                      (nMnemonicPos >= nIndex) && (nMnemonicPos < (sal_uLong)(nIndex+nLen)) )
                 nLen--;
         }
         return GetTextWidth( aStr, nIndex, nLen );
@@ -7496,7 +7496,7 @@ xub_StrLen OutputDevice::ValidateKashidas ( const String& rTxt,
 
 
 // TODO: best is to get rid of this method completely
-sal_uIntPtr OutputDevice::GetKerningPairCount() const
+sal_uLong OutputDevice::GetKerningPairCount() const
 {
     DBG_TRACE( "OutputDevice::GetKerningPairCount()" );
     DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
@@ -7522,7 +7522,7 @@ inline bool CmpKernData( const KerningPair& a, const KerningPair& b )
 }
 
 // TODO: best is to get rid of this method completely
-void OutputDevice::GetKerningPairs( sal_uIntPtr nRequestedPairs, KerningPair* pKernPairs ) const
+void OutputDevice::GetKerningPairs( sal_uLong nRequestedPairs, KerningPair* pKernPairs ) const
 {
     DBG_TRACE( "OutputDevice::GetKerningPairs()" );
     DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
@@ -7571,7 +7571,7 @@ sal_Bool OutputDevice::GetGlyphBoundRects( const Point& rOrigin, const String& r
 
 sal_Bool OutputDevice::GetTextBoundRect( Rectangle& rRect,
     const String& rStr, xub_StrLen nBase, xub_StrLen nIndex, xub_StrLen nLen,
-    sal_uIntPtr nLayoutWidth, const sal_Int32* pDXAry ) const
+    sal_uLong nLayoutWidth, const sal_Int32* pDXAry ) const
 {
     DBG_TRACE( "OutputDevice::GetTextBoundRect()" );
     DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
@@ -7749,7 +7749,7 @@ sal_Bool OutputDevice::GetTextBoundRect( Rectangle& rRect,
 
 sal_Bool OutputDevice::GetTextOutlines( ::basegfx::B2DPolyPolygonVector& rVector,
     const String& rStr, xub_StrLen nBase, xub_StrLen nIndex, xub_StrLen nLen,
-    sal_Bool bOptimize, sal_uIntPtr nTWidth, const sal_Int32* pDXArray ) const
+    sal_Bool bOptimize, sal_uLong nTWidth, const sal_Int32* pDXArray ) const
 {
     // the fonts need to be initialized
     if( mbNewFont )
@@ -7978,7 +7978,7 @@ sal_Bool OutputDevice::GetTextOutlines( ::basegfx::B2DPolyPolygonVector& rVector
 
 sal_Bool OutputDevice::GetTextOutlines( PolyPolyVector& rResultVector,
     const String& rStr, xub_StrLen nBase, xub_StrLen nIndex,
-    xub_StrLen nLen, sal_Bool bOptimize, sal_uIntPtr nTWidth, const sal_Int32* pDXArray ) const
+    xub_StrLen nLen, sal_Bool bOptimize, sal_uLong nTWidth, const sal_Int32* pDXArray ) const
 {
     rResultVector.clear();
 
@@ -8001,7 +8001,7 @@ sal_Bool OutputDevice::GetTextOutlines( PolyPolyVector& rResultVector,
 
 sal_Bool OutputDevice::GetTextOutline( PolyPolygon& rPolyPoly,
     const String& rStr, xub_StrLen nBase, xub_StrLen nIndex, xub_StrLen nLen,
-    sal_Bool bOptimize, sal_uIntPtr nTWidth, const sal_Int32* pDXArray ) const
+    sal_Bool bOptimize, sal_uLong nTWidth, const sal_Int32* pDXArray ) const
 {
     rPolyPoly.Clear();
 
@@ -8087,7 +8087,7 @@ xub_StrLen OutputDevice::HasGlyphs( const Font& rTempFont, const String& rStr,
     if( nIndex >= rStr.Len() )
         return nIndex;
     xub_StrLen nEnd = nIndex + nLen;
-    if( (sal_uIntPtr)nIndex+nLen > rStr.Len() )
+    if( (sal_uLong)nIndex+nLen > rStr.Len() )
         nEnd = rStr.Len();
 
     DBG_ASSERT( nIndex < nEnd, "StartPos >= EndPos?" );

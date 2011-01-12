@@ -172,7 +172,7 @@ void Window::ImplSaveOverlapBackground()
 
     if ( !mpWindowImpl->mbFrame )
     {
-        sal_uIntPtr nSaveBackSize = mnOutWidth*mnOutHeight;
+        sal_uLong nSaveBackSize = mnOutWidth*mnOutHeight;
         if ( nSaveBackSize <= IMPL_MAXSAVEBACKSIZE )
         {
             if ( nSaveBackSize+mpWindowImpl->mpFrameData->mnAllSaveBackSize <= IMPL_MAXALLSAVEBACKSIZE )
@@ -1214,7 +1214,7 @@ sal_Bool Window::HandleScrollCommand( const CommandEvent& rCmd,
 
                 if ( pData && (COMMAND_WHEEL_SCROLL == pData->GetMode()) )
                 {
-                    sal_uIntPtr nScrollLines = pData->GetScrollLines();
+                    sal_uLong nScrollLines = pData->GetScrollLines();
                     long nLines;
                     if ( nScrollLines == COMMAND_WHEEL_PAGESCROLL )
                     {

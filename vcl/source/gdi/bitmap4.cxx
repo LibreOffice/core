@@ -767,9 +767,9 @@ sal_Bool Bitmap::ImplSepia( const BmpFilterParam* pFilterParam, const Link* /*pP
 
 sal_Bool Bitmap::ImplMosaic( const BmpFilterParam* pFilterParam, const Link* /*pProgress*/ )
 {
-    sal_uIntPtr             nTileWidth = ( pFilterParam && pFilterParam->meFilter == BMP_FILTER_MOSAIC ) ?
+    sal_uLong               nTileWidth = ( pFilterParam && pFilterParam->meFilter == BMP_FILTER_MOSAIC ) ?
                                      pFilterParam->maMosaicTileSize.mnTileWidth : 4;
-    sal_uIntPtr             nTileHeight = ( pFilterParam && pFilterParam->meFilter == BMP_FILTER_MOSAIC ) ?
+    sal_uLong               nTileHeight = ( pFilterParam && pFilterParam->meFilter == BMP_FILTER_MOSAIC ) ?
                                       pFilterParam->maMosaicTileSize.mnTileHeight : 4;
     sal_Bool                bRet = sal_False;
 
@@ -962,8 +962,8 @@ sal_Bool Bitmap::ImplPopArt( const BmpFilterParam* /*pFilterParam*/, const Link*
         {
             const long      nWidth = pWriteAcc->Width();
             const long      nHeight = pWriteAcc->Height();
-            const sal_uIntPtr       nEntryCount = 1 << pWriteAcc->GetBitCount();
-            sal_uIntPtr         n;
+            const sal_uLong     nEntryCount = 1 << pWriteAcc->GetBitCount();
+            sal_uLong           n;
             PopArtEntry*    pPopArtTable = new PopArtEntry[ nEntryCount ];
 
             for( n = 0; n < nEntryCount; n++ )
@@ -982,8 +982,8 @@ sal_Bool Bitmap::ImplPopArt( const BmpFilterParam* /*pFilterParam*/, const Link*
             qsort( pPopArtTable, nEntryCount, sizeof( PopArtEntry ), ImplPopArtCmpFnc );
 
             // get last used entry
-            sal_uIntPtr nFirstEntry;
-            sal_uIntPtr nLastEntry = 0;
+            sal_uLong nFirstEntry;
+            sal_uLong nLastEntry = 0;
 
             for( n = 0; n < nEntryCount; n++ )
                 if( pPopArtTable[ n ].mnCount )

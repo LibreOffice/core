@@ -67,7 +67,7 @@ sal_Bool ImplAccelManager::InsertAccel( Accelerator* pAccel )
     }
 
     // Am Anfang der Liste einfuegen
-    mpAccelList->Insert( pAccel, (sal_uIntPtr)0 );
+    mpAccelList->Insert( pAccel, (sal_uLong)0 );
 
     return sal_True;
 }
@@ -168,7 +168,7 @@ sal_Bool ImplAccelManager::IsAccelKey( const KeyCode& rKeyCode, sal_uInt16 nRepe
             {
                 DBG_CHKOBJ( pNextAccel, Accelerator, NULL );
 
-                mpSequenceList->Insert( pNextAccel, (sal_uIntPtr)0 );
+                mpSequenceList->Insert( pNextAccel, (sal_uLong)0 );
 
                 // Activate-Handler vom Neuen rufen
                 pNextAccel->Activate();
@@ -239,8 +239,8 @@ sal_Bool ImplAccelManager::IsAccelKey( const KeyCode& rKeyCode, sal_uInt16 nRepe
 
                 // Sequenz-Liste erzeugen
                 mpSequenceList = new ImplAccelList;
-                mpSequenceList->Insert( pAccel, (sal_uIntPtr)0 );
-                mpSequenceList->Insert( pNextAccel, (sal_uIntPtr)0 );
+                mpSequenceList->Insert( pAccel, (sal_uLong)0 );
+                mpSequenceList->Insert( pNextAccel, (sal_uLong)0 );
 
                 // Activate-Handler vom Neuen rufen
                 pNextAccel->Activate();

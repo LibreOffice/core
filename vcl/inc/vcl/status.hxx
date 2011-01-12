@@ -137,7 +137,7 @@ public:
     virtual void        DoubleClick();
     virtual void        UserDraw( const UserDrawEvent& rUDEvt );
 
-    void                InsertItem( sal_uInt16 nItemId, sal_uIntPtr nWidth,
+    void                InsertItem( sal_uInt16 nItemId, sal_uLong nWidth,
                                     StatusBarItemBits nBits = SIB_CENTER | SIB_IN,
                                     long nOffset = STATUSBAR_OFFSET,
                                     sal_uInt16 nPos = STATUSBAR_APPEND );
@@ -162,7 +162,7 @@ public:
     Point               GetItemTextPos( sal_uInt16 nItemId ) const;
     sal_uInt16              GetCurItemId() const { return mnCurItemId; }
 
-    sal_uIntPtr             GetItemWidth( sal_uInt16 nItemId ) const;
+    sal_uLong               GetItemWidth( sal_uInt16 nItemId ) const;
     StatusBarItemBits   GetItemBits( sal_uInt16 nItemId ) const;
     long                GetItemOffset( sal_uInt16 nItemId ) const;
 

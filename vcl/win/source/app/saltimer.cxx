@@ -42,7 +42,7 @@
 
 // =======================================================================
 
-void ImplSalStartTimer( sal_uIntPtr nMS, sal_Bool bMutex )
+void ImplSalStartTimer( sal_uLong nMS, sal_Bool bMutex )
 {
     SalData* pSalData = GetSalData();
 
@@ -70,7 +70,7 @@ WinSalTimer::~WinSalTimer()
 {
 }
 
-void WinSalTimer::Start( sal_uIntPtr nMS )
+void WinSalTimer::Start( sal_uLong nMS )
 {
     // switch to main thread
     SalData* pSalData = GetSalData();

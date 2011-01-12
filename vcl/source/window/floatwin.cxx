@@ -194,7 +194,7 @@ void FloatingWindow::ImplLoadRes( const ResId& rResId )
 {
     SystemWindow::ImplLoadRes( rResId );
 
-    sal_uIntPtr nObjMask = ReadLongRes();
+    sal_uLong nObjMask = ReadLongRes();
 
     if ( (RSC_FLOATINGWINDOW_WHMAPMODE | RSC_FLOATINGWINDOW_WIDTH |
           RSC_FLOATINGWINDOW_HEIGHT) & nObjMask )
@@ -240,7 +240,7 @@ FloatingWindow::~FloatingWindow()
 
 // -----------------------------------------------------------------------
 
-Point FloatingWindow::CalcFloatingPosition( Window* pWindow, const Rectangle& rRect, sal_uIntPtr nFlags, sal_uInt16& rArrangeIndex )
+Point FloatingWindow::CalcFloatingPosition( Window* pWindow, const Rectangle& rRect, sal_uLong nFlags, sal_uInt16& rArrangeIndex )
 {
     return ImplCalcPos( pWindow, rRect, nFlags, rArrangeIndex );
 }
@@ -248,7 +248,7 @@ Point FloatingWindow::CalcFloatingPosition( Window* pWindow, const Rectangle& rR
 // -----------------------------------------------------------------------
 
 Point FloatingWindow::ImplCalcPos( Window* pWindow,
-                                   const Rectangle& rRect, sal_uIntPtr nFlags,
+                                   const Rectangle& rRect, sal_uLong nFlags,
                                    sal_uInt16& rArrangeIndex )
 {
     // Fenster-Position ermitteln
@@ -661,7 +661,7 @@ void FloatingWindow::SetTitleType( sal_uInt16 nTitle )
 
 // -----------------------------------------------------------------------
 
-void FloatingWindow::StartPopupMode( const Rectangle& rRect, sal_uIntPtr nFlags )
+void FloatingWindow::StartPopupMode( const Rectangle& rRect, sal_uLong nFlags )
 {
     // avoid flickering
     if ( IsVisible() )
@@ -731,7 +731,7 @@ void FloatingWindow::StartPopupMode( const Rectangle& rRect, sal_uIntPtr nFlags 
 
 // -----------------------------------------------------------------------
 
-void FloatingWindow::StartPopupMode( ToolBox* pBox, sal_uIntPtr nFlags )
+void FloatingWindow::StartPopupMode( ToolBox* pBox, sal_uLong nFlags )
 {
     // get selected button
     sal_uInt16 nItemId = pBox->GetDownItemId();
@@ -778,7 +778,7 @@ void FloatingWindow::StartPopupMode( ToolBox* pBox, sal_uIntPtr nFlags )
 
 // -----------------------------------------------------------------------
 
-void FloatingWindow::ImplEndPopupMode( sal_uInt16 nFlags, sal_uIntPtr nFocusId )
+void FloatingWindow::ImplEndPopupMode( sal_uInt16 nFlags, sal_uLong nFocusId )
 {
     if ( !mbInPopupMode )
         return;
@@ -796,7 +796,7 @@ void FloatingWindow::ImplEndPopupMode( sal_uInt16 nFlags, sal_uIntPtr nFocusId )
     pSVData->maWinData.mpFirstFloat = mpNextFloat;
     mpNextFloat = NULL;
 
-    sal_uIntPtr nPopupModeFlags = mnPopupModeFlags;
+    sal_uLong nPopupModeFlags = mnPopupModeFlags;
 
     // Wenn nicht abgerissen wurde, dann Fenster wieder Hiden
     if ( !(nFlags & FLOATWIN_POPUPMODEEND_TEAROFF) ||

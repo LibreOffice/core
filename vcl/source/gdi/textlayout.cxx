@@ -315,7 +315,7 @@ namespace vcl
             return Rectangle();
 
         // determine text layout mode from the RTL-ness of the control whose text we render
-        sal_uIntPtr nTextLayoutMode = m_bRTLEnabled ? TEXT_LAYOUT_BIDI_RTL : TEXT_LAYOUT_BIDI_LTR;
+        sal_uLong nTextLayoutMode = m_bRTLEnabled ? TEXT_LAYOUT_BIDI_RTL : TEXT_LAYOUT_BIDI_LTR;
         m_rReferenceDevice.SetLayoutMode( nTextLayoutMode );
         m_rTargetDevice.SetLayoutMode( nTextLayoutMode | TEXT_LAYOUT_TEXTORIGIN_LEFT );
             // TEXT_LAYOUT_TEXTORIGIN_LEFT is because when we do actually draw the text (in DrawText( Point, ... )), then

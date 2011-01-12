@@ -152,7 +152,7 @@ PolyScanner::PolyScanner( const Rectangle& rRect )
     if( !rRect.IsEmpty() )
     {
         Rectangle   aRect( rRect );
-        sal_uIntPtr     nHeight;
+        sal_uLong       nHeight;
 
         aRect.Justify();
         mnLeft = aRect.Left();
@@ -161,7 +161,7 @@ PolyScanner::PolyScanner( const Rectangle& rRect )
         mnBottom = aRect.Bottom();
         mpArray = new PolyScanline[ nHeight = Height() ];
 
-        for( sal_uIntPtr i = 0UL; i < nHeight; i++ )
+        for( sal_uLong i = 0UL; i < nHeight; i++ )
             mpArray[ i ].Set( mnLeft, mnRight );
     }
     else
@@ -197,7 +197,7 @@ PolyScanner::PolyScanner( const Polygon& rPoly )
         else
         {
             const Rectangle aRect( rPoly.GetBoundRect() );
-            sal_uIntPtr         nHeight;
+            sal_uLong           nHeight;
 
             mnLeft = aRect.Left();
             mnTop = aRect.Top();
@@ -240,7 +240,7 @@ PolyScanner::~PolyScanner()
 
 // ------------------------------------------------------------------------
 
-PolyScanline* PolyScanner::operator[]( sal_uIntPtr nPos ) const
+PolyScanline* PolyScanner::operator[]( sal_uLong nPos ) const
 {
     DBG_ASSERT( nPos < Count(), "nPos out of range!" );
     return( mpArray ? ( mpArray + nPos ) : NULL );

@@ -50,8 +50,8 @@ struct VCL_DLLPUBLIC SalPrinterQueueInfo
     XubString               maDriver;
     XubString               maLocation;
     XubString               maComment;
-    sal_uIntPtr                 mnStatus;
-    sal_uIntPtr                 mnJobs;
+    sal_uLong                   mnStatus;
+    sal_uLong                   mnJobs;
     void*                   mpSysData;
 
                             SalPrinterQueueInfo();
@@ -85,15 +85,15 @@ public:
     // and set the new indepen data in pSetupData
     // Only the data must changed, where the bit
     // in nFlags is set
-    virtual sal_Bool                    SetData( sal_uIntPtr nFlags, ImplJobSetup* pSetupData ) = 0;
+    virtual sal_Bool                    SetData( sal_uLong nFlags, ImplJobSetup* pSetupData ) = 0;
 
     virtual void                    GetPageInfo( const ImplJobSetup* pSetupData,
                                                  long& rOutWidth, long& rOutHeight,
                                                  long& rPageOffX, long& rPageOffY,
                                                  long& rPageWidth, long& rPageHeight ) = 0;
-    virtual sal_uIntPtr                 GetCapabilities( const ImplJobSetup* pSetupData, sal_uInt16 nType ) = 0;
-    virtual sal_uIntPtr                 GetPaperBinCount( const ImplJobSetup* pSetupData ) = 0;
-    virtual String                  GetPaperBinName( const ImplJobSetup* pSetupData, sal_uIntPtr nPaperBin ) = 0;
+    virtual sal_uLong                   GetCapabilities( const ImplJobSetup* pSetupData, sal_uInt16 nType ) = 0;
+    virtual sal_uLong                   GetPaperBinCount( const ImplJobSetup* pSetupData ) = 0;
+    virtual String                  GetPaperBinName( const ImplJobSetup* pSetupData, sal_uLong nPaperBin ) = 0;
     // fills m_aPaperFormats and sets m_bPapersInit to true
     virtual void                    InitPaperFormats( const ImplJobSetup* pSetupData ) = 0;
     // returns angle that a landscape page will be turned counterclockwise wrt to portrait
@@ -113,7 +113,7 @@ public:                     // public for Sal Implementation
     virtual sal_Bool                    StartJob( const String* pFileName,
                                               const String& rJobName,
                                               const String& rAppName,
-                                              sal_uIntPtr nCopies,
+                                              sal_uLong nCopies,
                                               bool bCollate,
                                               bool bDirect,
                                               ImplJobSetup* pSetupData ) = 0;
@@ -130,7 +130,7 @@ public:                     // public for Sal Implementation
     virtual sal_Bool                    AbortJob() = 0;
     virtual SalGraphics*            StartPage( ImplJobSetup* pSetupData, sal_Bool bNewJobData ) = 0;
     virtual sal_Bool                    EndPage() = 0;
-    virtual sal_uIntPtr                 GetErrorCode() = 0;
+    virtual sal_uLong                   GetErrorCode() = 0;
 
 };
 

@@ -211,52 +211,52 @@ struct KerningPair
 #define WAVE_NORMAL                     3
 
 // Grid
-#define GRID_DOTS                       ((sal_uIntPtr)0x00000001)
-#define GRID_HORZLINES                  ((sal_uIntPtr)0x00000002)
-#define GRID_VERTLINES                  ((sal_uIntPtr)0x00000004)
+#define GRID_DOTS                       ((sal_uLong)0x00000001)
+#define GRID_HORZLINES                  ((sal_uLong)0x00000002)
+#define GRID_VERTLINES                  ((sal_uLong)0x00000004)
 #define GRID_LINES                      (GRID_HORZLINES | GRID_VERTLINES)
 
 // LayoutModes for Complex Text Layout
-#define TEXT_LAYOUT_DEFAULT             ((sal_uIntPtr)0x00000000)
-#define TEXT_LAYOUT_BIDI_LTR            ((sal_uIntPtr)0x00000000)
-#define TEXT_LAYOUT_BIDI_RTL            ((sal_uIntPtr)0x00000001)
-#define TEXT_LAYOUT_BIDI_STRONG         ((sal_uIntPtr)0x00000002)
-#define TEXT_LAYOUT_TEXTORIGIN_LEFT     ((sal_uIntPtr)0x00000004)
-#define TEXT_LAYOUT_TEXTORIGIN_RIGHT    ((sal_uIntPtr)0x00000008)
-#define TEXT_LAYOUT_COMPLEX_DISABLED    ((sal_uIntPtr)0x00000100)
-#define TEXT_LAYOUT_ENABLE_LIGATURES    ((sal_uIntPtr)0x00000200)
-#define TEXT_LAYOUT_SUBSTITUTE_DIGITS   ((sal_uIntPtr)0x00000400)
+#define TEXT_LAYOUT_DEFAULT             ((sal_uLong)0x00000000)
+#define TEXT_LAYOUT_BIDI_LTR            ((sal_uLong)0x00000000)
+#define TEXT_LAYOUT_BIDI_RTL            ((sal_uLong)0x00000001)
+#define TEXT_LAYOUT_BIDI_STRONG         ((sal_uLong)0x00000002)
+#define TEXT_LAYOUT_TEXTORIGIN_LEFT     ((sal_uLong)0x00000004)
+#define TEXT_LAYOUT_TEXTORIGIN_RIGHT    ((sal_uLong)0x00000008)
+#define TEXT_LAYOUT_COMPLEX_DISABLED    ((sal_uLong)0x00000100)
+#define TEXT_LAYOUT_ENABLE_LIGATURES    ((sal_uLong)0x00000200)
+#define TEXT_LAYOUT_SUBSTITUTE_DIGITS   ((sal_uLong)0x00000400)
 
 // DrawModes
-#define DRAWMODE_DEFAULT                ((sal_uIntPtr)0x00000000)
-#define DRAWMODE_BLACKLINE              ((sal_uIntPtr)0x00000001)
-#define DRAWMODE_BLACKFILL              ((sal_uIntPtr)0x00000002)
-#define DRAWMODE_BLACKTEXT              ((sal_uIntPtr)0x00000004)
-#define DRAWMODE_BLACKBITMAP            ((sal_uIntPtr)0x00000008)
-#define DRAWMODE_BLACKGRADIENT          ((sal_uIntPtr)0x00000010)
-#define DRAWMODE_GRAYLINE               ((sal_uIntPtr)0x00000020)
-#define DRAWMODE_GRAYFILL               ((sal_uIntPtr)0x00000040)
-#define DRAWMODE_GRAYTEXT               ((sal_uIntPtr)0x00000080)
-#define DRAWMODE_GRAYBITMAP             ((sal_uIntPtr)0x00000100)
-#define DRAWMODE_GRAYGRADIENT           ((sal_uIntPtr)0x00000200)
-#define DRAWMODE_NOFILL                 ((sal_uIntPtr)0x00000400)
-#define DRAWMODE_NOBITMAP               ((sal_uIntPtr)0x00000800)
-#define DRAWMODE_NOGRADIENT             ((sal_uIntPtr)0x00001000)
-#define DRAWMODE_GHOSTEDLINE            ((sal_uIntPtr)0x00002000)
-#define DRAWMODE_GHOSTEDFILL            ((sal_uIntPtr)0x00004000)
-#define DRAWMODE_GHOSTEDTEXT            ((sal_uIntPtr)0x00008000)
-#define DRAWMODE_GHOSTEDBITMAP          ((sal_uIntPtr)0x00010000)
-#define DRAWMODE_GHOSTEDGRADIENT        ((sal_uIntPtr)0x00020000)
-#define DRAWMODE_WHITELINE              ((sal_uIntPtr)0x00100000)
-#define DRAWMODE_WHITEFILL              ((sal_uIntPtr)0x00200000)
-#define DRAWMODE_WHITETEXT              ((sal_uIntPtr)0x00400000)
-#define DRAWMODE_WHITEBITMAP            ((sal_uIntPtr)0x00800000)
-#define DRAWMODE_WHITEGRADIENT          ((sal_uIntPtr)0x01000000)
-#define DRAWMODE_SETTINGSLINE           ((sal_uIntPtr)0x02000000)
-#define DRAWMODE_SETTINGSFILL           ((sal_uIntPtr)0x04000000)
-#define DRAWMODE_SETTINGSTEXT           ((sal_uIntPtr)0x08000000)
-#define DRAWMODE_SETTINGSGRADIENT       ((sal_uIntPtr)0x10000000)
-#define DRAWMODE_NOTRANSPARENCY         ((sal_uIntPtr)0x80000000)
+#define DRAWMODE_DEFAULT                ((sal_uLong)0x00000000)
+#define DRAWMODE_BLACKLINE              ((sal_uLong)0x00000001)
+#define DRAWMODE_BLACKFILL              ((sal_uLong)0x00000002)
+#define DRAWMODE_BLACKTEXT              ((sal_uLong)0x00000004)
+#define DRAWMODE_BLACKBITMAP            ((sal_uLong)0x00000008)
+#define DRAWMODE_BLACKGRADIENT          ((sal_uLong)0x00000010)
+#define DRAWMODE_GRAYLINE               ((sal_uLong)0x00000020)
+#define DRAWMODE_GRAYFILL               ((sal_uLong)0x00000040)
+#define DRAWMODE_GRAYTEXT               ((sal_uLong)0x00000080)
+#define DRAWMODE_GRAYBITMAP             ((sal_uLong)0x00000100)
+#define DRAWMODE_GRAYGRADIENT           ((sal_uLong)0x00000200)
+#define DRAWMODE_NOFILL                 ((sal_uLong)0x00000400)
+#define DRAWMODE_NOBITMAP               ((sal_uLong)0x00000800)
+#define DRAWMODE_NOGRADIENT             ((sal_uLong)0x00001000)
+#define DRAWMODE_GHOSTEDLINE            ((sal_uLong)0x00002000)
+#define DRAWMODE_GHOSTEDFILL            ((sal_uLong)0x00004000)
+#define DRAWMODE_GHOSTEDTEXT            ((sal_uLong)0x00008000)
+#define DRAWMODE_GHOSTEDBITMAP          ((sal_uLong)0x00010000)
+#define DRAWMODE_GHOSTEDGRADIENT        ((sal_uLong)0x00020000)
+#define DRAWMODE_WHITELINE              ((sal_uLong)0x00100000)
+#define DRAWMODE_WHITEFILL              ((sal_uLong)0x00200000)
+#define DRAWMODE_WHITETEXT              ((sal_uLong)0x00400000)
+#define DRAWMODE_WHITEBITMAP            ((sal_uLong)0x00800000)
+#define DRAWMODE_WHITEGRADIENT          ((sal_uLong)0x01000000)
+#define DRAWMODE_SETTINGSLINE           ((sal_uLong)0x02000000)
+#define DRAWMODE_SETTINGSFILL           ((sal_uLong)0x04000000)
+#define DRAWMODE_SETTINGSTEXT           ((sal_uLong)0x08000000)
+#define DRAWMODE_SETTINGSGRADIENT       ((sal_uLong)0x10000000)
+#define DRAWMODE_NOTRANSPARENCY         ((sal_uLong)0x80000000)
 
 // Antialiasing
 #define ANTIALIASING_DISABLE_TEXT       ((sal_uInt16)0x0001)
@@ -267,7 +267,7 @@ struct KerningPair
 #define FONT_SUBSTITUTE_ALWAYS          ((sal_uInt16)0x0001)
 #define FONT_SUBSTITUTE_SCREENONLY      ((sal_uInt16)0x0002)
 
-#define DEFAULTFONT_FLAGS_ONLYONE       ((sal_uIntPtr)0x00000001)
+#define DEFAULTFONT_FLAGS_ONLYONE       ((sal_uLong)0x00000001)
 
 enum OutDevType { OUTDEV_DONTKNOW, OUTDEV_WINDOW, OUTDEV_PRINTER, OUTDEV_VIRDEV };
 
@@ -338,8 +338,8 @@ private:
     mutable long        mnTextOffY;
     mutable long        mnEmphasisAscent;
     mutable long        mnEmphasisDescent;
-    sal_uIntPtr               mnDrawMode;
-    sal_uIntPtr               mnTextLayoutMode;
+    sal_uLong               mnDrawMode;
+    sal_uLong               mnTextLayoutMode;
     ImplMapRes          maMapRes;
     ImplThresholdRes    maThresRes;
     OutDevType          meOutDevType;
@@ -490,14 +490,14 @@ public:
     SAL_DLLPRIVATE void         ImplDrawOutDevDirect( const OutputDevice* pSrcDev, void* pPosAry );
     SAL_DLLPRIVATE void         ImplDrawBitmap( const Point& rDestPt, const Size& rDestSize,
                                         const Point& rSrcPtPixel, const Size& rSrcSizePixel,
-                                        const Bitmap& rBitmap, const sal_uIntPtr nAction );
+                                        const Bitmap& rBitmap, const sal_uLong nAction );
     SAL_DLLPRIVATE void         ImplDrawBitmapEx( const Point& rDestPt, const Size& rDestSize,
                                         const Point& rSrcPtPixel, const Size& rSrcSizePixel,
-                                        const BitmapEx& rBitmapEx, const sal_uIntPtr nAction );
+                                        const BitmapEx& rBitmapEx, const sal_uLong nAction );
     SAL_DLLPRIVATE void         ImplDrawMask( const Point& rDestPt, const Size& rDestSize,
                                         const Point& rSrcPtPixel, const Size& rSrcSizePixel,
                                         const Bitmap& rBitmap, const Color& rMaskColor,
-                                        const sal_uIntPtr nAction );
+                                        const sal_uLong nAction );
     SAL_DLLPRIVATE void         ImplDrawAlpha( const Bitmap& rBmp, const AlphaMask& rAlpha,
                                         const Point& rDestPt, const Size& rDestSize,
                                         const Point& rSrcPtPixel, const Size& rSrcSizePixel );
@@ -614,7 +614,7 @@ public:
                                       xub_StrLen nIndex, xub_StrLen nLen,
                                       sal_Int32* pDXAry = NULL, long nWidth = 0,
                                       sal_Bool bCellBreaking = sal_True ) const;
-    void                DrawStretchText( const Point& rStartPt, sal_uIntPtr nWidth,
+    void                DrawStretchText( const Point& rStartPt, sal_uLong nWidth,
                                          const XubString& rStr,
                                          xub_StrLen nIndex = 0, xub_StrLen nLen = STRING_LEN );
     xub_StrLen          GetTextBreak( const XubString& rStr, long nTextWidth,
@@ -656,24 +656,24 @@ public:
     static XubString    GetNonMnemonicString( const XubString& rStr )
                             { xub_StrLen nDummy; return GetNonMnemonicString( rStr, nDummy ); }
 
-    sal_uIntPtr               GetKerningPairCount() const;
-    void                GetKerningPairs( sal_uIntPtr nPairs, KerningPair* pKernPairs ) const;
+    sal_uLong               GetKerningPairCount() const;
+    void                GetKerningPairs( sal_uLong nPairs, KerningPair* pKernPairs ) const;
 
     sal_Bool                GetTextBoundRect( Rectangle& rRect,
                             const String& rStr, xub_StrLen nBase = 0, xub_StrLen nIndex = 0, xub_StrLen nLen = STRING_LEN,
-                            sal_uIntPtr nLayoutWidth = 0, const sal_Int32* pDXArray = NULL ) const;
+                            sal_uLong nLayoutWidth = 0, const sal_Int32* pDXArray = NULL ) const;
     sal_Bool                GetTextOutline( PolyPolygon&,
                             const String& rStr, xub_StrLen nBase = 0, xub_StrLen nIndex = 0,
                             xub_StrLen nLen = STRING_LEN, sal_Bool bOptimize = sal_True,
-                            sal_uIntPtr nLayoutWidth = 0, const sal_Int32* pDXArray = NULL ) const;
+                            sal_uLong nLayoutWidth = 0, const sal_Int32* pDXArray = NULL ) const;
     sal_Bool                GetTextOutlines( PolyPolyVector&,
                             const String& rStr, xub_StrLen nBase = 0, xub_StrLen nIndex = 0,
                             xub_StrLen nLen = STRING_LEN, sal_Bool bOptimize = sal_True,
-                            sal_uIntPtr nLayoutWidth = 0, const sal_Int32* pDXArray = NULL ) const;
+                            sal_uLong nLayoutWidth = 0, const sal_Int32* pDXArray = NULL ) const;
     sal_Bool                GetTextOutlines( ::basegfx::B2DPolyPolygonVector&,
                             const String& rStr, xub_StrLen nBase = 0, xub_StrLen nIndex = 0,
                             xub_StrLen nLen = STRING_LEN, sal_Bool bOptimize = sal_True,
-                            sal_uIntPtr nLayoutWidth = 0, const sal_Int32* pDXArray = NULL ) const;
+                            sal_uLong nLayoutWidth = 0, const sal_Int32* pDXArray = NULL ) const;
     sal_Bool                GetGlyphBoundRects( const Point& rOrigin, const String& rStr, int nIndex,
                             int nLen, int nBase, MetricVector& rVector );
 
@@ -738,7 +738,7 @@ public:
 
     void                DrawRect( const Rectangle& rRect );
     void                DrawRect( const Rectangle& rRect,
-                                  sal_uIntPtr nHorzRount, sal_uIntPtr nVertRound );
+                                  sal_uLong nHorzRount, sal_uLong nVertRound );
     void                DrawEllipse( const Rectangle& rRect );
     void                DrawArc( const Rectangle& rRect,
                                  const Point& rStartPt, const Point& rEndPt );
@@ -805,7 +805,7 @@ public:
 
     void                DrawWallpaper( const Rectangle& rRect, const Wallpaper& rWallpaper );
     void                DrawWaveLine( const Point& rStartPos, const Point& rEndPos, sal_uInt16 nStyle );
-    void                DrawGrid( const Rectangle& rRect, const Size& rDist, sal_uIntPtr nFlags );
+    void                DrawGrid( const Rectangle& rRect, const Size& rDist, sal_uLong nFlags );
 
     void                DrawTransparent( const PolyPolygon& rPolyPoly, sal_uInt16 nTransparencePercent );
     void                DrawTransparent( const basegfx::B2DPolyPolygon& rB2DPolyPoly, double fTransparency);
@@ -850,11 +850,11 @@ public:
     void                SetAntialiasing( sal_uInt16 nMode =  0 );
     sal_uInt16              GetAntialiasing() const { return mnAntialiasing; }
 
-    void                SetDrawMode( sal_uIntPtr nDrawMode );
-    sal_uIntPtr               GetDrawMode() const { return mnDrawMode; }
+    void                SetDrawMode( sal_uLong nDrawMode );
+    sal_uLong               GetDrawMode() const { return mnDrawMode; }
 
-    void                SetLayoutMode( sal_uIntPtr nTextLayoutMode );
-    sal_uIntPtr               GetLayoutMode() const { return mnTextLayoutMode; }
+    void                SetLayoutMode( sal_uLong nTextLayoutMode );
+    sal_uLong               GetLayoutMode() const { return mnTextLayoutMode; }
 
     void                SetDigitLanguage( LanguageType );
     LanguageType        GetDigitLanguage() const { return meTextLanguage; }
@@ -1104,7 +1104,7 @@ public:
         the alpha channel otherwise.
      */
     sal_uInt16              GetAlphaBitCount() const;
-    sal_uIntPtr               GetColorCount() const;
+    sal_uLong               GetColorCount() const;
 
     void                Push( sal_uInt16 nFlags = PUSH_ALL );
     void                Pop();
@@ -1145,7 +1145,7 @@ public:
 
     static Font         GetDefaultFont( sal_uInt16 nType,
                                         LanguageType eLang,
-                                        sal_uIntPtr nFlags,
+                                        sal_uLong nFlags,
                                         const OutputDevice* pOutDev = NULL );
 
     /** helper method removing transparencies from a metafile (e.g. for printing)

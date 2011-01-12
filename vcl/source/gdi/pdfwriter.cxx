@@ -107,7 +107,7 @@ void PDFWriter::DrawTextArray(
 
 void PDFWriter::DrawStretchText(
                                 const Point& rStartPt,
-                                sal_uIntPtr nWidth,
+                                sal_uLong nWidth,
                                 const XubString& rStr,
                                 xub_StrLen nIndex,
                                 xub_StrLen nLen )
@@ -148,7 +148,7 @@ void PDFWriter::DrawRect( const Rectangle& rRect )
     ((PDFWriterImpl*)pImplementation)->drawRectangle( rRect );
 }
 
-void PDFWriter::DrawRect( const Rectangle& rRect, sal_uIntPtr nHorzRound, sal_uIntPtr nVertRound )
+void PDFWriter::DrawRect( const Rectangle& rRect, sal_uLong nHorzRound, sal_uLong nVertRound )
 {
     ((PDFWriterImpl*)pImplementation)->drawRectangle( rRect, nHorzRound, nVertRound );
 }
@@ -361,7 +361,7 @@ void PDFWriter::SetAntialiasing( sal_uInt16 nMode )
     ((PDFWriterImpl*)pImplementation)->setAntiAlias( (sal_Int32)nMode );
 }
 
-void PDFWriter::SetLayoutMode( sal_uIntPtr nMode )
+void PDFWriter::SetLayoutMode( sal_uLong nMode )
 {
     ((PDFWriterImpl*)pImplementation)->setLayoutMode( (sal_Int32)nMode );
 }

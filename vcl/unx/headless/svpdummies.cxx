@@ -51,7 +51,7 @@ SvpSalObject::~SvpSalObject()
 
 void SvpSalObject::ResetClipRegion() {}
 sal_uInt16 SvpSalObject::GetClipRegionType() { return 0; }
-void SvpSalObject::BeginSetClipRegion( sal_uIntPtr ) {}
+void SvpSalObject::BeginSetClipRegion( sal_uLong ) {}
 void SvpSalObject::UnionClipRegion( long, long, long, long ) {}
 void SvpSalObject::EndSetClipRegion() {}
 void SvpSalObject::SetPosSize( long, long, long, long ) {}

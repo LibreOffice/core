@@ -129,7 +129,7 @@ void MenuButton::ImplLoadRes( const ResId& rResId )
 {
     Control::ImplLoadRes( rResId );
 
-    sal_uIntPtr nObjMask = ReadLongRes();
+    sal_uLong nObjMask = ReadLongRes();
 
     if ( RSCMENUBUTTON_MENU & nObjMask )
     {

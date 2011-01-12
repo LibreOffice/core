@@ -86,7 +86,7 @@ public:
     ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic > GetXGraphic() const;
 
     Image           GetColorTransformedImage( ImageColorTransform eColorTransform ) const;
-    static void     GetColorTransformArrays( ImageColorTransform eColorTransform, Color*& rpSrcColor, Color*& rpDstColor, sal_uIntPtr& rColorCount );
+    static void     GetColorTransformArrays( ImageColorTransform eColorTransform, Color*& rpSrcColor, Color*& rpDstColor, sal_uLong& rColorCount );
 
     void            Invert();
 
@@ -125,7 +125,7 @@ public:
                                     const Color *pNonAlphaMaskColor,
                                     const Color *pSearchColors = NULL,
                                     const Color *pReplaceColors = NULL,
-                                    sal_uIntPtr        nColorCount = 0);
+                                    sal_uLong        nColorCount = 0);
     BitmapEx        GetAsHorizontalStrip() const;
     sal_uInt16          GetImageCount() const;
     Size            GetImageSize() const;

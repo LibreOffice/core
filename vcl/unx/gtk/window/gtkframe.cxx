@@ -392,7 +392,7 @@ GtkSalFrame::GraphicsHolder::~GraphicsHolder()
     delete pGraphics;
 }
 
-GtkSalFrame::GtkSalFrame( SalFrame* pParent, sal_uIntPtr nStyle )
+GtkSalFrame::GtkSalFrame( SalFrame* pParent, sal_uLong nStyle )
 {
     m_nScreen = getDisplay()->GetDefaultScreenNumber();
     getDisplay()->registerFrame( this );
@@ -755,7 +755,7 @@ GtkSalFrame *GtkSalFrame::getFromWindow( GtkWindow *pWindow )
     return (GtkSalFrame *) g_object_get_data( G_OBJECT( pWindow ), "SalFrame" );
 }
 
-void GtkSalFrame::Init( SalFrame* pParent, sal_uIntPtr nStyle )
+void GtkSalFrame::Init( SalFrame* pParent, sal_uLong nStyle )
 {
     if( nStyle & SAL_FRAME_STYLE_DEFAULT ) // ensure default style
     {
@@ -1043,7 +1043,7 @@ void GtkSalFrame::SetTitle( const String& rTitle )
 }
 
 static inline sal_uInt8 *
-getRow( BitmapBuffer *pBuffer, sal_uIntPtr nRow )
+getRow( BitmapBuffer *pBuffer, sal_uLong nRow )
 {
     if( BMP_SCANLINE_ADJUSTMENT( pBuffer->mnFormat ) == BMP_FORMAT_TOP_DOWN )
         return pBuffer->mpBits + nRow * pBuffer->mnScanlineSize;
@@ -1602,7 +1602,7 @@ void GtkSalFrame::SetWindowState( const SalFrameState* pState )
     if( ! m_pWindow || ! pState || isChild( true, false ) )
         return;
 
-    const sal_uIntPtr nMaxGeometryMask =
+    const sal_uLong nMaxGeometryMask =
         SAL_FRAMESTATE_MASK_X | SAL_FRAMESTATE_MASK_Y |
         SAL_FRAMESTATE_MASK_WIDTH | SAL_FRAMESTATE_MASK_HEIGHT |
         SAL_FRAMESTATE_MASK_MAXIMIZED_X | SAL_FRAMESTATE_MASK_MAXIMIZED_Y |
@@ -2462,7 +2462,7 @@ void GtkSalFrame::ResetClipRegion()
         gdk_window_shape_combine_region( m_pWindow->window, NULL, 0, 0 );
 }
 
-void GtkSalFrame::BeginSetClipRegion( sal_uIntPtr )
+void GtkSalFrame::BeginSetClipRegion( sal_uLong )
 {
     if( m_pRegion )
         gdk_region_destroy( m_pRegion );
@@ -2702,7 +2702,7 @@ gboolean GtkSalFrame::signalScroll( GtkWidget*, GdkEvent* pEvent, gpointer frame
     GtkSalFrame* pThis = (GtkSalFrame*)frame;
     GdkEventScroll* pSEvent = (GdkEventScroll*)pEvent;
 
-    static sal_uIntPtr      nLines = 0;
+    static sal_uLong        nLines = 0;
     if( ! nLines )
     {
         char* pEnv = getenv( "SAL_WHEELLINES" );
@@ -2714,8 +2714,8 @@ gboolean GtkSalFrame::signalScroll( GtkWidget*, GdkEvent* pEvent, gpointer frame
     bool bNeg = (pSEvent->direction == GDK_SCROLL_DOWN || pSEvent->direction == GDK_SCROLL_RIGHT );
     SalWheelMouseEvent aEvent;
     aEvent.mnTime           = pSEvent->time;
-    aEvent.mnX              = (sal_uIntPtr)pSEvent->x;
-    aEvent.mnY              = (sal_uIntPtr)pSEvent->y;
+    aEvent.mnX              = (sal_uLong)pSEvent->x;
+    aEvent.mnY              = (sal_uLong)pSEvent->y;
     aEvent.mnDelta          = bNeg ? -120 : 120;
     aEvent.mnNotchDelta     = bNeg ? -1 : 1;
     aEvent.mnScrollLines    = nLines;

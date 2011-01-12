@@ -276,7 +276,7 @@ IMPL_LINK( ListBox, ImplSelectionChangedHdl, void*, n )
 {
     if ( !mpImplLB->IsTrackingSelect() )
     {
-        sal_uInt16 nChanged = (sal_uInt16)(sal_uIntPtr)n;
+        sal_uInt16 nChanged = (sal_uInt16)(sal_uLong)n;
         const ImplEntryList* pEntryList = mpImplLB->GetEntryList();
         if ( pEntryList->IsEntryPosSelected( nChanged ) )
         {
@@ -382,7 +382,7 @@ void ListBox::ToggleDropDown()
 
 // -----------------------------------------------------------------------
 
-void ListBox::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal_uIntPtr nFlags )
+void ListBox::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal_uLong nFlags )
 {
     mpImplLB->GetMainWindow()->ImplInitSettings( sal_True, sal_True, sal_True );
 

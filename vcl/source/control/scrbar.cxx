@@ -476,7 +476,7 @@ void ScrollBar::ImplCalc( sal_Bool bUpdate )
 
 // -----------------------------------------------------------------------
 
-void ScrollBar::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal_uIntPtr nFlags )
+void ScrollBar::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal_uLong nFlags )
 {
     Point       aPos  = pDev->LogicToPixel( rPos );
     Size        aSize = pDev->LogicToPixel( rSize );

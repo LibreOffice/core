@@ -44,10 +44,10 @@
 
 typedef struct OctreeNode
 {
-    sal_uIntPtr     nCount;
-    sal_uIntPtr     nRed;
-    sal_uIntPtr     nGreen;
-    sal_uIntPtr     nBlue;
+    sal_uLong       nCount;
+    sal_uLong       nRed;
+    sal_uLong       nGreen;
+    sal_uLong       nBlue;
     OctreeNode* pChild[ 8 ];
     OctreeNode* pNext;
     OctreeNode* pNextInCache;
@@ -70,9 +70,9 @@ class VCL_DLLPUBLIC Octree
 private:
 
     BitmapPalette               aPal;
-    sal_uIntPtr                     nMax;
-    sal_uIntPtr                     nLeafCount;
-    sal_uIntPtr                     nLevel;
+    sal_uLong                       nMax;
+    sal_uLong                       nLeafCount;
+    sal_uLong                       nLevel;
     PNODE                       pTree;
     PNODE                       pReduce[ OCTREE_BITS + 1 ];
     BitmapColor*                pColor;
@@ -92,8 +92,8 @@ private:
 
 public:
 
-                                Octree( const BitmapReadAccess& rReadAcc, sal_uIntPtr nColors );
-                                Octree( sal_uIntPtr nColors );
+                                Octree( const BitmapReadAccess& rReadAcc, sal_uLong nColors );
+                                Octree( sal_uLong nColors );
                                 ~Octree();
 
     void                        AddColor( const BitmapColor& rColor );
@@ -133,11 +133,11 @@ private:
 
     sal_uInt8*              pBuffer;
     sal_uInt8*              pMap;
-    const sal_uIntPtr           nBits;
+    const sal_uLong         nBits;
 
 //#if 0 // _SOLAR__PRIVATE
 
-    SAL_DLLPRIVATE void ImplCreateBuffers( const sal_uIntPtr nMax );
+    SAL_DLLPRIVATE void ImplCreateBuffers( const sal_uLong nMax );
 
 //#endif // __PRIVATE
 
@@ -153,9 +153,9 @@ public:
 
 inline sal_uInt16 InverseColorMap::GetBestPaletteIndex( const BitmapColor& rColor )
 {
-    return pMap[ ( ( (sal_uIntPtr) rColor.GetRed() >> nBits ) << OCTREE_BITS_1 ) |
-                 ( ( (sal_uIntPtr) rColor.GetGreen() >> nBits ) << OCTREE_BITS ) |
-                 ( (sal_uIntPtr) rColor.GetBlue() >> nBits ) ];
+    return pMap[ ( ( (sal_uLong) rColor.GetRed() >> nBits ) << OCTREE_BITS_1 ) |
+                 ( ( (sal_uLong) rColor.GetGreen() >> nBits ) << OCTREE_BITS ) |
+                 ( (sal_uLong) rColor.GetBlue() >> nBits ) ];
 }
 
 #endif // _SV_OCTREE_HXX

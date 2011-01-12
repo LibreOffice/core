@@ -54,7 +54,7 @@ class SvStream;
 class Impl_Gradient
 {
 public:
-    sal_uIntPtr           mnRefCount;
+    sal_uLong           mnRefCount;
     GradientStyle   meStyle;
     Color           maStartColor;
     Color           maEndColor;

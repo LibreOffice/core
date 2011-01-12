@@ -114,7 +114,7 @@ class ImplFontSelectData;
 // MAC: Ctrl+Button is MOUSE_RIGHT
 struct SalMouseEvent
 {
-    sal_uIntPtr           mnTime;         // Time in ms, when event is created
+    sal_uLong           mnTime;         // Time in ms, when event is created
     long            mnX;            // X-Position (Pixel, TopLeft-Output)
     long            mnY;            // Y-Position (Pixel, TopLeft-Output)
     sal_uInt16          mnButton;       // 0-MouseMove/MouseLeave, MOUSE_LEFT, MOUSE_RIGHT, MOUSE_MIDDLE
@@ -124,7 +124,7 @@ struct SalMouseEvent
 // KEYINPUT and KEYUP
 struct SalKeyEvent
 {
-    sal_uIntPtr           mnTime;         // Time in ms, when event is created
+    sal_uLong           mnTime;         // Time in ms, when event is created
     sal_uInt16          mnCode;         // SV-KeyCode (KEY_xxx | KEY_SHIFT | KEY_MOD1 | KEY_MOD2)
     sal_uInt16          mnCharCode;     // SV-CharCode
     sal_uInt16          mnRepeat;       // Repeat-Count (KeyInputs-1)
@@ -144,7 +144,7 @@ struct SalMenuEvent
 // KEYMODCHANGE
 struct SalKeyModEvent
 {
-    sal_uIntPtr           mnTime;         // Time in ms, when event is created
+    sal_uLong           mnTime;         // Time in ms, when event is created
     sal_uInt16          mnCode;         // SV-ModifierCode (KEY_SHIFT | KEY_MOD1 | KEY_MOD2)
     sal_uInt16          mnModKeyCode;   // extended Modifier (MODKEY_LEFT, MODKEY_RIGHT, MODKEY_PRESS, MODKEY_RELEASE)
 };
@@ -169,15 +169,15 @@ struct SalPaintEvent
 // pEvent == pData
 
 // WHEELMOUSE
-#define SAL_WHEELMOUSE_EVENT_PAGESCROLL     ((sal_uIntPtr)0xFFFFFFFF)
+#define SAL_WHEELMOUSE_EVENT_PAGESCROLL     ((sal_uLong)0xFFFFFFFF)
 struct SalWheelMouseEvent
 {
-    sal_uIntPtr           mnTime;         // Time in ms, when event is created
+    sal_uLong           mnTime;         // Time in ms, when event is created
     long            mnX;            // X-Position (Pixel, TopLeft-Output)
     long            mnY;            // Y-Position (Pixel, TopLeft-Output)
     long            mnDelta;        // Anzahl Drehungen
     long            mnNotchDelta;   // Anzahl feste Drehungen
-    sal_uIntPtr           mnScrollLines;  // Aktuelle Anzahl zu scrollende Zeilen
+    sal_uLong           mnScrollLines;  // Aktuelle Anzahl zu scrollende Zeilen
     sal_uInt16          mnCode;         // SV-ModifierCode (KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | MOUSE_LEFT | MOUSE_MIDDLE | MOUSE_RIGHT)
     sal_Bool            mbHorz;         // Horizontal
     sal_Bool            mbDeltaIsPixel; // delta value is a pixel value (on mac)
@@ -199,11 +199,11 @@ struct SalMouseActivateEvent
 // EXTTEXTINPUT
 struct SalExtTextInputEvent
 {
-    sal_uIntPtr           mnTime;         // Time in ms, when event is created
+    sal_uLong           mnTime;         // Time in ms, when event is created
     UniString       maText;         // Text
     const sal_uInt16*   mpTextAttr;     // Text-Attribute
-    sal_uIntPtr           mnCursorPos;    // Cursor-Position
-    sal_uIntPtr           mnDeltaStart;   // Start-Position der letzten Aenderung
+    sal_uLong           mnCursorPos;    // Cursor-Position
+    sal_uLong           mnDeltaStart;   // Start-Position der letzten Aenderung
     sal_uInt8            mnCursorFlags;  // SAL_EXTTEXTINPUT_CURSOR_xxx
     sal_Bool            mbOnlyCursor;   // sal_True: Nur Cursor-Position wurde geaendert
 };
@@ -237,8 +237,8 @@ struct SalInputContextChangeEvent
 struct SalSurroundingTextRequestEvent
 {
     UniString       maText;         // Text
-    sal_uIntPtr           mnStart;        // The beggining index of selected range
-    sal_uIntPtr           mnEnd;          // The end index of selected range
+    sal_uLong           mnStart;        // The beggining index of selected range
+    sal_uLong           mnEnd;          // The end index of selected range
 };
 
 #endif // __cplusplus
@@ -248,8 +248,8 @@ struct SalSurroundingTextRequestEvent
 // SURROUNDINGTEXTSELECTIONCHANGE
 struct SalSurroundingTextSelectionChangeEvent
 {
-    sal_uIntPtr           mnStart;        // The beggining index of selected range
-    sal_uIntPtr           mnEnd;          // The end index of selected range
+    sal_uLong           mnStart;        // The beggining index of selected range
+    sal_uLong           mnEnd;          // The end index of selected range
 };
 
 #endif // __cplusplus
@@ -282,27 +282,27 @@ typedef long (*SALOBJECTPROC)( void* pInst, SalObject* pObject,
 // -----------------
 
 // Must be the same as in syswin.hxx
-#define SAL_FRAMESTATE_MASK_X                   ((sal_uIntPtr)0x00000001)
-#define SAL_FRAMESTATE_MASK_Y                   ((sal_uIntPtr)0x00000002)
-#define SAL_FRAMESTATE_MASK_WIDTH               ((sal_uIntPtr)0x00000004)
-#define SAL_FRAMESTATE_MASK_HEIGHT              ((sal_uIntPtr)0x00000008)
-#define SAL_FRAMESTATE_MASK_MAXIMIZED_X         ((sal_uIntPtr)0x00000100)
-#define SAL_FRAMESTATE_MASK_MAXIMIZED_Y         ((sal_uIntPtr)0x00000200)
-#define SAL_FRAMESTATE_MASK_MAXIMIZED_WIDTH     ((sal_uIntPtr)0x00000400)
-#define SAL_FRAMESTATE_MASK_MAXIMIZED_HEIGHT    ((sal_uIntPtr)0x00000800)
-#define SAL_FRAMESTATE_MASK_STATE               ((sal_uIntPtr)0x00000010)
+#define SAL_FRAMESTATE_MASK_X                   ((sal_uLong)0x00000001)
+#define SAL_FRAMESTATE_MASK_Y                   ((sal_uLong)0x00000002)
+#define SAL_FRAMESTATE_MASK_WIDTH               ((sal_uLong)0x00000004)
+#define SAL_FRAMESTATE_MASK_HEIGHT              ((sal_uLong)0x00000008)
+#define SAL_FRAMESTATE_MASK_MAXIMIZED_X         ((sal_uLong)0x00000100)
+#define SAL_FRAMESTATE_MASK_MAXIMIZED_Y         ((sal_uLong)0x00000200)
+#define SAL_FRAMESTATE_MASK_MAXIMIZED_WIDTH     ((sal_uLong)0x00000400)
+#define SAL_FRAMESTATE_MASK_MAXIMIZED_HEIGHT    ((sal_uLong)0x00000800)
+#define SAL_FRAMESTATE_MASK_STATE               ((sal_uLong)0x00000010)
 
-#define SAL_FRAMESTATE_NORMAL               ((sal_uIntPtr)0x00000001)
-#define SAL_FRAMESTATE_MINIMIZED            ((sal_uIntPtr)0x00000002)
-#define SAL_FRAMESTATE_MAXIMIZED            ((sal_uIntPtr)0x00000004)
-#define SAL_FRAMESTATE_ROLLUP               ((sal_uIntPtr)0x00000008)
-#define SAL_FRAMESTATE_MAXIMIZED_HORZ       ((sal_uIntPtr)0x00000010)
-#define SAL_FRAMESTATE_MAXIMIZED_VERT       ((sal_uIntPtr)0x00000020)
-#define SAL_FRAMESTATE_SYSTEMMASK           ((sal_uIntPtr)0x0000FFFF)
+#define SAL_FRAMESTATE_NORMAL               ((sal_uLong)0x00000001)
+#define SAL_FRAMESTATE_MINIMIZED            ((sal_uLong)0x00000002)
+#define SAL_FRAMESTATE_MAXIMIZED            ((sal_uLong)0x00000004)
+#define SAL_FRAMESTATE_ROLLUP               ((sal_uLong)0x00000008)
+#define SAL_FRAMESTATE_MAXIMIZED_HORZ       ((sal_uLong)0x00000010)
+#define SAL_FRAMESTATE_MAXIMIZED_VERT       ((sal_uLong)0x00000020)
+#define SAL_FRAMESTATE_SYSTEMMASK           ((sal_uLong)0x0000FFFF)
 
 struct SalFrameState
 {
-    sal_uIntPtr           mnMask;
+    sal_uLong           mnMask;
     long            mnX;
     long            mnY;
     long            mnWidth;
@@ -311,7 +311,7 @@ struct SalFrameState
     long            mnMaximizedY;
     long            mnMaximizedWidth;
     long            mnMaximizedHeight;
-    sal_uIntPtr           mnState;
+    sal_uLong           mnState;
 };
 
 // -------------------
@@ -320,11 +320,11 @@ struct SalFrameState
 
 // Muessen mit den Defines in inputctx.hxx uebereinstimmen, da diese
 // nicht konvertiert werden
-#define SAL_INPUTCONTEXT_TEXT               ((sal_uIntPtr)0x00000001)
-#define SAL_INPUTCONTEXT_EXTTEXTINPUT       ((sal_uIntPtr)0x00000002)
-#define SAL_INPUTCONTEXT_EXTTEXTINPUT_ON    ((sal_uIntPtr)0x00000004)
-#define SAL_INPUTCONTEXT_EXTTEXTINPUT_OFF   ((sal_uIntPtr)0x00000008)
-#define SAL_INPUTCONTEXT_CHANGELANGUAGE     ((sal_uIntPtr)0x00000010)
+#define SAL_INPUTCONTEXT_TEXT               ((sal_uLong)0x00000001)
+#define SAL_INPUTCONTEXT_EXTTEXTINPUT       ((sal_uLong)0x00000002)
+#define SAL_INPUTCONTEXT_EXTTEXTINPUT_ON    ((sal_uLong)0x00000004)
+#define SAL_INPUTCONTEXT_EXTTEXTINPUT_OFF   ((sal_uLong)0x00000008)
+#define SAL_INPUTCONTEXT_CHANGELANGUAGE     ((sal_uLong)0x00000010)
 
 #ifdef __cplusplus
 
@@ -332,7 +332,7 @@ struct SalInputContext
 {
     ImplFontSelectData*     mpFont;
     LanguageType            meLanguage;
-    sal_uIntPtr                   mnOptions;
+    sal_uLong                   mnOptions;
 };
 
 #endif // __cplusplus

@@ -47,7 +47,7 @@
 
 // =======================================================================
 
-inline sal_uIntPtr ImplCreateKey( sal_uInt16 nPos )
+inline sal_uLong ImplCreateKey( sal_uInt16 nPos )
 {
     // Key = Pos+1, wegen Pos 0
     return nPos+1;
@@ -250,7 +250,7 @@ void ComboBox::ImplLoadRes( const ResId& rResId )
 {
     Edit::ImplLoadRes( rResId );
 
-    sal_uIntPtr nNumber = ReadLongRes();
+    sal_uLong nNumber = ReadLongRes();
 
     if( nNumber )
     {
@@ -491,7 +491,7 @@ IMPL_LINK( ComboBox, ImplSelectionChangedHdl, void*, n )
 {
     if ( !mpImplLB->IsTrackingSelect() )
     {
-        sal_uInt16 nChanged = (sal_uInt16)(sal_uIntPtr)n;
+        sal_uInt16 nChanged = (sal_uInt16)(sal_uLong)n;
         if ( !mpSubEdit->IsReadOnly() && mpImplLB->GetEntryList()->IsEntryPosSelected( nChanged ) )
             mpSubEdit->SetText( mpImplLB->GetEntryList()->GetEntryText( nChanged ) );
     }
@@ -1210,7 +1210,7 @@ void ComboBox::GetMaxVisColumnsAndLines( sal_uInt16& rnCols, sal_uInt16& rnLines
 
 // -----------------------------------------------------------------------
 
-void ComboBox::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal_uIntPtr nFlags )
+void ComboBox::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal_uLong nFlags )
 {
     mpImplLB->GetMainWindow()->ImplInitSettings( sal_True, sal_True, sal_True );
 

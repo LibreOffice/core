@@ -202,7 +202,7 @@ sal_Bool ImplSVMain()
     Reference< XComponent > xComponent(pSVData->mxAccessBridge, UNO_QUERY);
     if( xComponent.is() )
     {
-      sal_uIntPtr nCount = Application::ReleaseSolarMutex();
+      sal_uLong nCount = Application::ReleaseSolarMutex();
       xComponent->dispose();
       Application::AcquireSolarMutex(nCount);
       pSVData->mxAccessBridge.clear();

@@ -95,7 +95,7 @@ static sal_Unicode* ImplAddString( sal_Unicode* pBuf, const String& rStr )
 
 // -----------------------------------------------------------------------
 
-static sal_Unicode* ImplAddNum( sal_Unicode* pBuf, sal_uIntPtr nNumber, int nMinLen )
+static sal_Unicode* ImplAddNum( sal_Unicode* pBuf, sal_uLong nNumber, int nMinLen )
 {
     // fill temp buffer with digits
     sal_Unicode aTempBuf[30];
@@ -424,7 +424,7 @@ static void ImplPatternProcessStrictModify( Edit* pEdit,
         // Selection so anpassen, das diese wenn sie vorher am Ende
         // stand, immer noch am Ende steht
         Selection aSel = pEdit->GetSelection();
-        sal_uIntPtr nMaxSel = Max( aSel.Min(), aSel.Max() );
+        sal_uLong nMaxSel = Max( aSel.Min(), aSel.Max() );
         if ( nMaxSel >= aText.Len() )
         {
             xub_StrLen nMaxPos = aNewText.Len();
@@ -838,7 +838,7 @@ void PatternFormatter::ImplLoadRes( const ResId& rResId )
     ResMgr*     pMgr = rResId.GetResMgr();
     if( pMgr )
     {
-        sal_uIntPtr       nMask = pMgr->ReadLong();
+        sal_uLong       nMask = pMgr->ReadLong();
 
         if ( PATTERNFORMATTER_STRICTFORMAT & nMask )
             SetStrictFormat( (sal_Bool)pMgr->ReadShort() );
@@ -1441,7 +1441,7 @@ XubString DateFormatter::ImplGetDateAsText( const Date& rDate,
         }
     }
 
-    return String( aBuf, (xub_StrLen)(sal_uIntPtr)(pBuf-aBuf) );
+    return String( aBuf, (xub_StrLen)(sal_uLong)(pBuf-aBuf) );
 }
 
 // -----------------------------------------------------------------------
@@ -1649,7 +1649,7 @@ void DateFormatter::ImplLoadRes( const ResId& rResId )
     ResMgr*     pMgr = rResId.GetResMgr();
     if( pMgr )
     {
-        sal_uIntPtr       nMask = pMgr->ReadLong();
+        sal_uLong       nMask = pMgr->ReadLong();
 
         if ( DATEFORMATTER_MIN & nMask )
         {
@@ -2092,7 +2092,7 @@ void DateField::ImplLoadRes( const ResId& rResId )
     {
         DateFormatter::ImplLoadRes( ResId( (RSHEADER_TYPE *)GetClassRes(), *pMgr ) );
 
-        sal_uIntPtr  nMask = ReadLongRes();
+        sal_uLong  nMask = ReadLongRes();
         if ( DATEFIELD_FIRST & nMask )
         {
             maFirst = Date( ResId( (RSHEADER_TYPE *)GetClassRes(), *pMgr ) );
@@ -2683,7 +2683,7 @@ sal_Bool TimeFormatter::ImplTimeReformat( const XubString& rStr, XubString& rOut
 
     if ( meFormat == TIMEF_SEC_CS )
     {
-        sal_uIntPtr n  = aTempTime.GetHour() * 3600L;
+        sal_uLong n  = aTempTime.GetHour() * 3600L;
         n       += aTempTime.GetMin()  * 60L;
         n       += aTempTime.GetSec();
         rOutStr  = String::CreateFromInt32( n );
@@ -2818,7 +2818,7 @@ void TimeFormatter::ImplLoadRes( const ResId& rResId )
     ResMgr* pMgr = rResId.GetResMgr();
     if( pMgr )
     {
-        sal_uIntPtr   nMask = pMgr->ReadLong();
+        sal_uLong   nMask = pMgr->ReadLong();
 
         if ( TIMEFORMATTER_MIN & nMask )
         {
@@ -2977,7 +2977,7 @@ void TimeFormatter::ImplSetUserTime( const Time& rNewTime, Selection* pNewSelect
             b100Sec = sal_True;
         if ( meFormat == TIMEF_SEC_CS )
         {
-            sal_uIntPtr n  = aNewTime.GetHour() * 3600L;
+            sal_uLong n  = aNewTime.GetHour() * 3600L;
             n       += aNewTime.GetMin()  * 60L;
             n       += aNewTime.GetSec();
             aStr     = String::CreateFromInt32( n );
@@ -3141,7 +3141,7 @@ void TimeField::ImplLoadRes( const ResId& rResId )
     {
         TimeFormatter::ImplLoadRes( ResId( (RSHEADER_TYPE *)GetClassRes(), *pMgr ) );
 
-        sal_uIntPtr      nMask = ReadLongRes();
+        sal_uLong      nMask = ReadLongRes();
 
         if ( TIMEFIELD_FIRST & nMask )
         {

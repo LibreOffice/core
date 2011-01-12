@@ -1889,12 +1889,12 @@ static void ImplGetAllFontCharSets( WinSalGraphics* pData )
 
 static void ImplAddKerningPairs( WinSalGraphics* pData )
 {
-    sal_uIntPtr nPairs = ::GetKerningPairsA( pData->mhDC, 0, NULL );
+    sal_uLong nPairs = ::GetKerningPairsA( pData->mhDC, 0, NULL );
     if ( !nPairs )
         return;
 
     CHARSETINFO aInfo;
-    if ( !TranslateCharsetInfo( (DWORD*)(sal_uIntPtr)GetTextCharset( pData->mhDC ), &aInfo, TCI_SRCCHARSET ) )
+    if ( !TranslateCharsetInfo( (DWORD*)(sal_uLong)GetTextCharset( pData->mhDC ), &aInfo, TCI_SRCCHARSET ) )
         return;
 
     if ( !pData->mpFontKernPairs )
@@ -1909,10 +1909,10 @@ static void ImplAddKerningPairs( WinSalGraphics* pData )
     }
 
     UINT            nCP = aInfo.ciACP;
-    sal_uIntPtr           nOldPairs = pData->mnFontKernPairCount;
+    sal_uLong           nOldPairs = pData->mnFontKernPairCount;
     KERNINGPAIR*    pTempPair = pData->mpFontKernPairs+pData->mnFontKernPairCount;
     nPairs = ::GetKerningPairsA( pData->mhDC, nPairs, pTempPair );
-    for ( sal_uIntPtr i = 0; i < nPairs; i++ )
+    for ( sal_uLong i = 0; i < nPairs; i++ )
     {
         unsigned char   aBuf[2];
         wchar_t         nChar;
@@ -1961,7 +1961,7 @@ static void ImplAddKerningPairs( WinSalGraphics* pData )
 
         // TODO: get rid of linear search!
         KERNINGPAIR* pTempPair2 = pData->mpFontKernPairs;
-        for ( sal_uIntPtr j = 0; j < nOldPairs; j++ )
+        for ( sal_uLong j = 0; j < nOldPairs; j++ )
         {
             if ( (pTempPair2->wFirst == pTempPair->wFirst) &&
                  (pTempPair2->wSecond == pTempPair->wSecond) )
@@ -1986,7 +1986,7 @@ static void ImplAddKerningPairs( WinSalGraphics* pData )
 
 // -----------------------------------------------------------------------
 
-sal_uIntPtr WinSalGraphics::GetKernPairs( sal_uIntPtr nPairs, ImplKernPairData* pKernPairs )
+sal_uLong WinSalGraphics::GetKernPairs( sal_uLong nPairs, ImplKernPairData* pKernPairs )
 {
     DBG_ASSERT( sizeof( KERNINGPAIR ) == sizeof( ImplKernPairData ),
                 "WinSalGraphics::GetKernPairs(): KERNINGPAIR != ImplKernPairData" );

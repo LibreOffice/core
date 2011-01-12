@@ -49,7 +49,7 @@ class ImplMapMode
     friend class    OutputDevice;
 
 private:
-    sal_uIntPtr         mnRefCount;
+    sal_uLong           mnRefCount;
     MapUnit         meUnit;
     Point           maOrigin;
     Fraction        maScaleX;

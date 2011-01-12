@@ -98,22 +98,22 @@ struct ImplBmpMonoParam
 
 struct ImplColReplaceParam
 {
-    sal_uIntPtr*            pMinR;
-    sal_uIntPtr*            pMaxR;
-    sal_uIntPtr*            pMinG;
-    sal_uIntPtr*            pMaxG;
-    sal_uIntPtr*            pMinB;
-    sal_uIntPtr*            pMaxB;
+    sal_uLong*          pMinR;
+    sal_uLong*          pMaxR;
+    sal_uLong*          pMinG;
+    sal_uLong*          pMaxG;
+    sal_uLong*          pMinB;
+    sal_uLong*          pMaxB;
     const Color*    pDstCols;
-    sal_uIntPtr         nCount;
+    sal_uLong           nCount;
 };
 
 struct ImplBmpReplaceParam
 {
     const Color*    pSrcCols;
     const Color*    pDstCols;
-    sal_uIntPtr         nCount;
-    const sal_uIntPtr*  pTols;
+    sal_uLong           nCount;
+    const sal_uLong*    pTols;
 };
 
 
@@ -124,9 +124,9 @@ struct ImplBmpReplaceParam
 struct ImpLabel
 {
     String  aLabelName;
-    sal_uIntPtr nActionPos;
+    sal_uLong   nActionPos;
 
-            ImpLabel( const String& rLabelName, sal_uIntPtr _nActionPos ) :
+            ImpLabel( const String& rLabelName, sal_uLong _nActionPos ) :
                 aLabelName( rLabelName ),
                 nActionPos( _nActionPos ) {}
 };
@@ -144,13 +144,13 @@ public:
                 ~ImpLabelList();
 
     void        ImplInsert( ImpLabel* p ) { Insert( p, LIST_APPEND ); }
-    ImpLabel*   ImplRemove( sal_uIntPtr nPos ) { return (ImpLabel*) Remove( nPos ); }
+    ImpLabel*   ImplRemove( sal_uLong nPos ) { return (ImpLabel*) Remove( nPos ); }
     void        ImplReplace( ImpLabel* p ) { Replace( (void*)p ); }
     ImpLabel*   ImplFirst() { return (ImpLabel*) First(); }
     ImpLabel*   ImplNext() { return (ImpLabel*) Next(); }
-    ImpLabel*   ImplGetLabel( sal_uIntPtr nPos ) const { return (ImpLabel*) GetObject( nPos ); }
-    sal_uIntPtr     ImplGetLabelPos( const String& rLabelName );
-    sal_uIntPtr     ImplCount() const { return Count(); }
+    ImpLabel*   ImplGetLabel( sal_uLong nPos ) const { return (ImpLabel*) GetObject( nPos ); }
+    sal_uLong       ImplGetLabelPos( const String& rLabelName );
+    sal_uLong       ImplCount() const { return Count(); }
 };
 
 // ------------------------------------------------------------------------
@@ -172,9 +172,9 @@ ImpLabelList::~ImpLabelList()
 
 // ------------------------------------------------------------------------
 
-sal_uIntPtr ImpLabelList::ImplGetLabelPos( const String& rLabelName )
+sal_uLong ImpLabelList::ImplGetLabelPos( const String& rLabelName )
 {
-    sal_uIntPtr nLabelPos = METAFILE_LABEL_NOTFOUND;
+    sal_uLong nLabelPos = METAFILE_LABEL_NOTFOUND;
 
     for( ImpLabel* pLabel = ImplFirst(); pLabel; pLabel = ImplNext() )
     {
@@ -286,7 +286,7 @@ GDIMetaFile& GDIMetaFile::operator=( const GDIMetaFile& rMtf )
 
 sal_Bool GDIMetaFile::operator==( const GDIMetaFile& rMtf ) const
 {
-    const sal_uIntPtr nObjCount = Count();
+    const sal_uLong nObjCount = Count();
     sal_Bool        bRet = sal_False;
 
     if( this == &rMtf )
@@ -297,7 +297,7 @@ sal_Bool GDIMetaFile::operator==( const GDIMetaFile& rMtf ) const
     {
         bRet = sal_True;
 
-        for( sal_uIntPtr n = 0UL; n < nObjCount; n++ )
+        for( sal_uLong n = 0UL; n < nObjCount; n++ )
         {
             if( GetObject( n ) != rMtf.GetObject( n ) )
             {
@@ -314,7 +314,7 @@ sal_Bool GDIMetaFile::operator==( const GDIMetaFile& rMtf ) const
 
 sal_Bool GDIMetaFile::IsEqual( const GDIMetaFile& rMtf ) const
 {
-    const sal_uIntPtr nObjCount = Count();
+    const sal_uLong nObjCount = Count();
     sal_Bool        bRet = sal_False;
 
     if( this == &rMtf )
@@ -325,7 +325,7 @@ sal_Bool GDIMetaFile::IsEqual( const GDIMetaFile& rMtf ) const
     {
         bRet = sal_True;
 
-        for( sal_uIntPtr n = 0UL; n < nObjCount; n++ )
+        for( sal_uLong n = 0UL; n < nObjCount; n++ )
         {
             if(!((MetaAction*)GetObject( n ))->IsEqual(*((MetaAction*)rMtf.GetObject( n ))))
             {
@@ -411,17 +411,17 @@ void GDIMetaFile::Record( OutputDevice* pOut )
 
 // ------------------------------------------------------------------------
 
-void GDIMetaFile::Play( GDIMetaFile& rMtf, sal_uIntPtr nPos )
+void GDIMetaFile::Play( GDIMetaFile& rMtf, sal_uLong nPos )
 {
     if ( !bRecord && !rMtf.bRecord )
     {
         MetaAction* pAction = GetCurAction();
-        const sal_uIntPtr nObjCount = Count();
+        const sal_uLong nObjCount = Count();
 
         if( nPos > nObjCount )
             nPos = nObjCount;
 
-        for( sal_uIntPtr nCurPos = GetCurPos(); nCurPos < nPos; nCurPos++ )
+        for( sal_uLong nCurPos = GetCurPos(); nCurPos < nPos; nCurPos++ )
         {
             if( !Hook() )
             {
@@ -436,13 +436,13 @@ void GDIMetaFile::Play( GDIMetaFile& rMtf, sal_uIntPtr nPos )
 
 // ------------------------------------------------------------------------
 
-void GDIMetaFile::Play( OutputDevice* pOut, sal_uIntPtr nPos )
+void GDIMetaFile::Play( OutputDevice* pOut, sal_uLong nPos )
 {
     if( !bRecord )
     {
         MetaAction* pAction = GetCurAction();
-        const sal_uIntPtr nObjCount = Count();
-        sal_uIntPtr     i  = 0, nSyncCount = ( pOut->GetOutDevType() == OUTDEV_WINDOW ) ? 0x000000ff : 0xffffffff;
+        const sal_uLong nObjCount = Count();
+        sal_uLong       i  = 0, nSyncCount = ( pOut->GetOutDevType() == OUTDEV_WINDOW ) ? 0x000000ff : 0xffffffff;
 
         if( nPos > nObjCount )
             nPos = nObjCount;
@@ -455,7 +455,7 @@ void GDIMetaFile::Play( OutputDevice* pOut, sal_uIntPtr nPos )
         pOut->SetLayoutMode( 0 );
         pOut->SetDigitLanguage( 0 );
 
-        for( sal_uIntPtr nCurPos = GetCurPos(); nCurPos < nPos; nCurPos++ )
+        for( sal_uLong nCurPos = GetCurPos(); nCurPos < nPos; nCurPos++ )
         {
             if( !Hook() )
             {
@@ -476,7 +476,7 @@ void GDIMetaFile::Play( OutputDevice* pOut, sal_uIntPtr nPos )
 // ------------------------------------------------------------------------
 
 void GDIMetaFile::Play( OutputDevice* pOut, const Point& rPos,
-                        const Size& rSize, sal_uIntPtr nPos )
+                        const Size& rSize, sal_uLong nPos )
 {
     Region  aDrawClipRegion;
     MapMode aDrawMap( GetPrefMapMode() );
@@ -589,7 +589,7 @@ void GDIMetaFile::WindEnd()
 
 // ------------------------------------------------------------------------
 
-void GDIMetaFile::Wind( sal_uIntPtr nActionPos )
+void GDIMetaFile::Wind( sal_uLong nActionPos )
 {
     if( !bRecord )
         Seek( nActionPos );
@@ -626,7 +626,7 @@ void GDIMetaFile::AddAction( MetaAction* pAction )
 
 // ------------------------------------------------------------------------
 
-void GDIMetaFile::AddAction( MetaAction* pAction, sal_uIntPtr nPos )
+void GDIMetaFile::AddAction( MetaAction* pAction, sal_uLong nPos )
 {
     Insert( pAction, nPos );
 
@@ -640,7 +640,7 @@ void GDIMetaFile::AddAction( MetaAction* pAction, sal_uIntPtr nPos )
 // ------------------------------------------------------------------------
 
 // @since #110496#
-void GDIMetaFile::RemoveAction( sal_uIntPtr nPos )
+void GDIMetaFile::RemoveAction( sal_uLong nPos )
 {
     Remove( nPos );
 
@@ -650,14 +650,14 @@ void GDIMetaFile::RemoveAction( sal_uIntPtr nPos )
 
 // ------------------------------------------------------------------------
 
-MetaAction* GDIMetaFile::CopyAction( sal_uIntPtr nPos ) const
+MetaAction* GDIMetaFile::CopyAction( sal_uLong nPos ) const
 {
     return ( (MetaAction*) GetObject( nPos ) )->Clone();
 }
 
 // ------------------------------------------------------------------------
 
-sal_uIntPtr GDIMetaFile::GetActionPos( const String& rLabel )
+sal_uLong GDIMetaFile::GetActionPos( const String& rLabel )
 {
     ImpLabel* pLabel = NULL;
 
@@ -671,7 +671,7 @@ sal_uIntPtr GDIMetaFile::GetActionPos( const String& rLabel )
 
 // ------------------------------------------------------------------------
 
-sal_Bool GDIMetaFile::InsertLabel( const String& rLabel, sal_uIntPtr nActionPos )
+sal_Bool GDIMetaFile::InsertLabel( const String& rLabel, sal_uLong nActionPos )
 {
     sal_Bool bRet = sal_False;
 
@@ -693,7 +693,7 @@ void GDIMetaFile::RemoveLabel( const String& rLabel )
 {
     if( pLabelList )
     {
-        const sal_uIntPtr nLabelPos = pLabelList->ImplGetLabelPos( rLabel );
+        const sal_uLong nLabelPos = pLabelList->ImplGetLabelPos( rLabel );
 
         if( nLabelPos != METAFILE_LABEL_NOTFOUND )
             delete pLabelList->ImplRemove( nLabelPos );
@@ -706,7 +706,7 @@ void GDIMetaFile::RenameLabel( const String& rLabel, const String& rNewLabel )
 {
     if( pLabelList )
     {
-        const sal_uIntPtr nLabelPos = pLabelList->ImplGetLabelPos( rLabel );
+        const sal_uLong nLabelPos = pLabelList->ImplGetLabelPos( rLabel );
 
         if ( nLabelPos != METAFILE_LABEL_NOTFOUND )
             pLabelList->ImplGetLabel( nLabelPos )->aLabelName = rNewLabel;
@@ -715,14 +715,14 @@ void GDIMetaFile::RenameLabel( const String& rLabel, const String& rNewLabel )
 
 // ------------------------------------------------------------------------
 
-sal_uIntPtr GDIMetaFile::GetLabelCount() const
+sal_uLong GDIMetaFile::GetLabelCount() const
 {
     return( pLabelList ? pLabelList->ImplCount() : 0UL );
 }
 
 // ------------------------------------------------------------------------
 
-String GDIMetaFile::GetLabel( sal_uIntPtr nLabel )
+String GDIMetaFile::GetLabel( sal_uLong nLabel )
 {
     String aString;
 
@@ -775,7 +775,7 @@ sal_Bool GDIMetaFile::SaveStatus()
 
 // ------------------------------------------------------------------------
 
-sal_Bool GDIMetaFile::Mirror( sal_uIntPtr nMirrorFlags )
+sal_Bool GDIMetaFile::Mirror( sal_uLong nMirrorFlags )
 {
     const Size  aOldPrefSize( GetPrefSize() );
     long        nMoveX, nMoveY;
@@ -1985,9 +1985,9 @@ BitmapEx GDIMetaFile::ImplBmpMonoFnc( const BitmapEx& rBmpEx, const void* pBmpPa
 
 Color GDIMetaFile::ImplColReplaceFnc( const Color& rColor, const void* pColParam )
 {
-    const sal_uIntPtr nR = rColor.GetRed(), nG = rColor.GetGreen(), nB = rColor.GetBlue();
+    const sal_uLong nR = rColor.GetRed(), nG = rColor.GetGreen(), nB = rColor.GetBlue();
 
-    for( sal_uIntPtr i = 0; i < ( (const ImplColReplaceParam*) pColParam )->nCount; i++ )
+    for( sal_uLong i = 0; i < ( (const ImplColReplaceParam*) pColParam )->nCount; i++ )
     {
         if( ( ( (const ImplColReplaceParam*) pColParam )->pMinR[ i ] <= nR ) &&
             ( ( (const ImplColReplaceParam*) pColParam )->pMaxR[ i ] >= nR ) &&
@@ -2376,41 +2376,41 @@ void GDIMetaFile::Convert( MtfConversion eConversion )
 
 // ------------------------------------------------------------------------
 
-void GDIMetaFile::ReplaceColors( const Color& rSearchColor, const Color& rReplaceColor, sal_uIntPtr nTol )
+void GDIMetaFile::ReplaceColors( const Color& rSearchColor, const Color& rReplaceColor, sal_uLong nTol )
 {
     ReplaceColors( &rSearchColor, &rReplaceColor, 1, &nTol );
 }
 
 // ------------------------------------------------------------------------
 
-void GDIMetaFile::ReplaceColors( const Color* pSearchColors, const Color* pReplaceColors, sal_uIntPtr nColorCount, sal_uIntPtr* pTols )
+void GDIMetaFile::ReplaceColors( const Color* pSearchColors, const Color* pReplaceColors, sal_uLong nColorCount, sal_uLong* pTols )
 {
     ImplColReplaceParam aColParam;
     ImplBmpReplaceParam aBmpParam;
 
-    aColParam.pMinR = new sal_uIntPtr[ nColorCount ];
-    aColParam.pMaxR = new sal_uIntPtr[ nColorCount ];
-    aColParam.pMinG = new sal_uIntPtr[ nColorCount ];
-    aColParam.pMaxG = new sal_uIntPtr[ nColorCount ];
-    aColParam.pMinB = new sal_uIntPtr[ nColorCount ];
-    aColParam.pMaxB = new sal_uIntPtr[ nColorCount ];
+    aColParam.pMinR = new sal_uLong[ nColorCount ];
+    aColParam.pMaxR = new sal_uLong[ nColorCount ];
+    aColParam.pMinG = new sal_uLong[ nColorCount ];
+    aColParam.pMaxG = new sal_uLong[ nColorCount ];
+    aColParam.pMinB = new sal_uLong[ nColorCount ];
+    aColParam.pMaxB = new sal_uLong[ nColorCount ];
 
-    for( sal_uIntPtr i = 0; i < nColorCount; i++ )
+    for( sal_uLong i = 0; i < nColorCount; i++ )
     {
         const long  nTol = pTols ? ( pTols[ i ] * 255 ) / 100 : 0;
         long        nVal;
 
         nVal = pSearchColors[ i ].GetRed();
-        aColParam.pMinR[ i ] = (sal_uIntPtr) Max( nVal - nTol, 0L );
-        aColParam.pMaxR[ i ] = (sal_uIntPtr) Min( nVal + nTol, 255L );
+        aColParam.pMinR[ i ] = (sal_uLong) Max( nVal - nTol, 0L );
+        aColParam.pMaxR[ i ] = (sal_uLong) Min( nVal + nTol, 255L );
 
         nVal = pSearchColors[ i ].GetGreen();
-        aColParam.pMinG[ i ] = (sal_uIntPtr) Max( nVal - nTol, 0L );
-        aColParam.pMaxG[ i ] = (sal_uIntPtr) Min( nVal + nTol, 255L );
+        aColParam.pMinG[ i ] = (sal_uLong) Max( nVal - nTol, 0L );
+        aColParam.pMaxG[ i ] = (sal_uLong) Min( nVal + nTol, 255L );
 
         nVal = pSearchColors[ i ].GetBlue();
-        aColParam.pMinB[ i ] = (sal_uIntPtr) Max( nVal - nTol, 0L );
-        aColParam.pMaxB[ i ] = (sal_uIntPtr) Min( nVal + nTol, 255L );
+        aColParam.pMinB[ i ] = (sal_uLong) Max( nVal - nTol, 0L );
+        aColParam.pMaxB[ i ] = (sal_uLong) Min( nVal + nTol, 255L );
     }
 
     aColParam.pDstCols = pReplaceColors;
@@ -2450,16 +2450,16 @@ GDIMetaFile GDIMetaFile::GetMonochromeMtf( const Color& rColor ) const
 
 // ------------------------------------------------------------------------
 
-sal_uIntPtr GDIMetaFile::GetChecksum() const
+sal_uLong GDIMetaFile::GetChecksum() const
 {
     GDIMetaFile         aMtf;
     SvMemoryStream      aMemStm( 65535, 65535 );
     ImplMetaWriteData   aWriteData; aWriteData.meActualCharSet = aMemStm.GetStreamCharSet();
     SVBT16              aBT16;
     SVBT32              aBT32;
-    sal_uIntPtr             nCrc = 0;
+    sal_uLong               nCrc = 0;
 
-    for( sal_uIntPtr i = 0, nObjCount = GetActionCount(); i < nObjCount; i++ )
+    for( sal_uLong i = 0, nObjCount = GetActionCount(); i < nObjCount; i++ )
     {
         MetaAction* pAction = GetAction( i );
 
@@ -2730,11 +2730,11 @@ sal_uIntPtr GDIMetaFile::GetChecksum() const
 
 // ------------------------------------------------------------------------
 
-sal_uIntPtr GDIMetaFile::GetSizeBytes() const
+sal_uLong GDIMetaFile::GetSizeBytes() const
 {
-    sal_uIntPtr nSizeBytes = 0;
+    sal_uLong nSizeBytes = 0;
 
-    for( sal_uIntPtr i = 0, nObjCount = GetActionCount(); i < nObjCount; ++i )
+    for( sal_uLong i = 0, nObjCount = GetActionCount(); i < nObjCount; ++i )
     {
         MetaAction* pAction = GetAction( i );
 
@@ -2796,7 +2796,7 @@ SvStream& operator>>( SvStream& rIStm, GDIMetaFile& rGDIMetaFile )
     if( !rIStm.GetError() )
     {
         char    aId[ 7 ];
-        sal_uIntPtr nStmPos = rIStm.Tell();
+        sal_uLong   nStmPos = rIStm.Tell();
         sal_uInt16  nOldFormat = rIStm.GetNumberFormatInt();
 
         rIStm.SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );

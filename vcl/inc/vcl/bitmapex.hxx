@@ -125,8 +125,8 @@ public:
     void                SetTransparentColor( const Color& rColor ) { aTransparentColor = rColor; }
 
     sal_uInt16              GetBitCount() const { return aBitmap.GetBitCount(); }
-    sal_uIntPtr             GetSizeBytes() const;
-    sal_uIntPtr             GetChecksum() const;
+    sal_uLong               GetSizeBytes() const;
+    sal_uLong               GetChecksum() const;
 
 public:
 
@@ -161,7 +161,7 @@ public:
         @param nDitherFlags
         The algorithm to be used for dithering
      */
-    sal_Bool                Dither( sal_uIntPtr nDitherFlags = BMP_DITHER_MATRIX );
+    sal_Bool                Dither( sal_uLong nDitherFlags = BMP_DITHER_MATRIX );
 
     /** Crop the bitmap
 
@@ -194,7 +194,7 @@ public:
         not only returned when the operation failed, but also if
         nothing had to be done, e.g. because nDX and nDY were zero.
      */
-    sal_Bool                Expand( sal_uIntPtr nDX, sal_uIntPtr nDY,
+    sal_Bool                Expand( sal_uLong nDX, sal_uLong nDY,
                                 const Color* pInitColor = NULL,
                                 sal_Bool bExpandTransparent = sal_False );
 
@@ -247,7 +247,7 @@ public:
 
         @return sal_True, if the operation was completed successfully.
      */
-    sal_Bool                Mirror( sal_uIntPtr nMirrorFlags );
+    sal_Bool                Mirror( sal_uLong nMirrorFlags );
 
     /** Scale the bitmap
 
@@ -259,7 +259,7 @@ public:
 
         @return sal_True, if the operation was completed successfully.
      */
-    sal_Bool                Scale( const Size& rNewSize, sal_uIntPtr nScaleFlag = BMP_SCALE_FAST );
+    sal_Bool                Scale( const Size& rNewSize, sal_uLong nScaleFlag = BMP_SCALE_FAST );
 
     /** Scale the bitmap
 
@@ -271,7 +271,7 @@ public:
 
         @return sal_True, if the operation was completed successfully.
      */
-    sal_Bool                Scale( const double& rScaleX, const double& rScaleY, sal_uIntPtr nScaleFlag = BMP_SCALE_FAST );
+    sal_Bool                Scale( const double& rScaleX, const double& rScaleY, sal_uLong nScaleFlag = BMP_SCALE_FAST );
 
     /** Rotate bitmap by the specified angle
 
@@ -303,7 +303,7 @@ public:
 
         @return sal_True, if the operation was completed successfully.
      */
-    sal_Bool                Replace( const Color& rSearchColor, const Color& rReplaceColor, sal_uIntPtr nTol = 0 );
+    sal_Bool                Replace( const Color& rSearchColor, const Color& rReplaceColor, sal_uLong nTol = 0 );
 
     /** Replace all pixel having one the search colors with the corresponding replace color
 
@@ -324,7 +324,7 @@ public:
         @return sal_True, if the operation was completed successfully.
      */
     sal_Bool                Replace( const Color* pSearchColors, const Color* pReplaceColors,
-                                 sal_uIntPtr nColorCount, const sal_uIntPtr* pTols = NULL );
+                                 sal_uLong nColorCount, const sal_uLong* pTols = NULL );
 
     /** Change various global color characteristics
 

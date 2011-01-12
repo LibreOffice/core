@@ -46,8 +46,8 @@
 
 // =======================================================================
 
-#define WORKWIN_WINDOWSTATE_FULLSCREEN          ((sal_uIntPtr)0x00010000)
-#define WORKWIN_WINDOWSTATE_ALL                 ((sal_uIntPtr)0x00FF0000)
+#define WORKWIN_WINDOWSTATE_FULLSCREEN          ((sal_uLong)0x00010000)
+#define WORKWIN_WINDOWSTATE_ALL                 ((sal_uLong)0x00FF0000)
 
 // =======================================================================
 
@@ -272,7 +272,7 @@ sal_Bool WorkWindow::SetPluginParent( SystemParentData* pParent )
     return bRet;
 }
 
-void WorkWindow::ImplSetFrameState( sal_uIntPtr aFrameState )
+void WorkWindow::ImplSetFrameState( sal_uLong aFrameState )
 {
     SalFrameState   aState;
     aState.mnMask   = SAL_FRAMESTATE_MASK_STATE;

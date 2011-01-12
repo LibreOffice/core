@@ -65,25 +65,25 @@ class TaskPaneList;
 // - WindowStateData -
 // -------------------
 
-#define WINDOWSTATE_MASK_X                  ((sal_uIntPtr)0x00000001)
-#define WINDOWSTATE_MASK_Y                  ((sal_uIntPtr)0x00000002)
-#define WINDOWSTATE_MASK_WIDTH              ((sal_uIntPtr)0x00000004)
-#define WINDOWSTATE_MASK_HEIGHT             ((sal_uIntPtr)0x00000008)
-#define WINDOWSTATE_MASK_STATE              ((sal_uIntPtr)0x00000010)
-#define WINDOWSTATE_MASK_MINIMIZED          ((sal_uIntPtr)0x00000020)
-#define WINDOWSTATE_MASK_MAXIMIZED_X        ((sal_uIntPtr)0x00000100)
-#define WINDOWSTATE_MASK_MAXIMIZED_Y        ((sal_uIntPtr)0x00000200)
-#define WINDOWSTATE_MASK_MAXIMIZED_WIDTH    ((sal_uIntPtr)0x00000400)
-#define WINDOWSTATE_MASK_MAXIMIZED_HEIGHT   ((sal_uIntPtr)0x00000800)
+#define WINDOWSTATE_MASK_X                  ((sal_uLong)0x00000001)
+#define WINDOWSTATE_MASK_Y                  ((sal_uLong)0x00000002)
+#define WINDOWSTATE_MASK_WIDTH              ((sal_uLong)0x00000004)
+#define WINDOWSTATE_MASK_HEIGHT             ((sal_uLong)0x00000008)
+#define WINDOWSTATE_MASK_STATE              ((sal_uLong)0x00000010)
+#define WINDOWSTATE_MASK_MINIMIZED          ((sal_uLong)0x00000020)
+#define WINDOWSTATE_MASK_MAXIMIZED_X        ((sal_uLong)0x00000100)
+#define WINDOWSTATE_MASK_MAXIMIZED_Y        ((sal_uLong)0x00000200)
+#define WINDOWSTATE_MASK_MAXIMIZED_WIDTH    ((sal_uLong)0x00000400)
+#define WINDOWSTATE_MASK_MAXIMIZED_HEIGHT   ((sal_uLong)0x00000800)
 #define WINDOWSTATE_MASK_POS  (WINDOWSTATE_MASK_X | WINDOWSTATE_MASK_Y)
 #define WINDOWSTATE_MASK_ALL  (WINDOWSTATE_MASK_X | WINDOWSTATE_MASK_Y | WINDOWSTATE_MASK_WIDTH | WINDOWSTATE_MASK_HEIGHT | WINDOWSTATE_MASK_MAXIMIZED_X | WINDOWSTATE_MASK_MAXIMIZED_Y | WINDOWSTATE_MASK_MAXIMIZED_WIDTH | WINDOWSTATE_MASK_MAXIMIZED_HEIGHT | WINDOWSTATE_MASK_STATE | WINDOWSTATE_MASK_MINIMIZED)
 
-#define WINDOWSTATE_STATE_NORMAL         ((sal_uIntPtr)0x00000001)
-#define WINDOWSTATE_STATE_MINIMIZED      ((sal_uIntPtr)0x00000002)
-#define WINDOWSTATE_STATE_MAXIMIZED      ((sal_uIntPtr)0x00000004)
-#define WINDOWSTATE_STATE_ROLLUP         ((sal_uIntPtr)0x00000008)
-#define WINDOWSTATE_STATE_MAXIMIZED_HORZ ((sal_uIntPtr)0x00000010)
-#define WINDOWSTATE_STATE_MAXIMIZED_VERT ((sal_uIntPtr)0x00000020)
+#define WINDOWSTATE_STATE_NORMAL         ((sal_uLong)0x00000001)
+#define WINDOWSTATE_STATE_MINIMIZED      ((sal_uLong)0x00000002)
+#define WINDOWSTATE_STATE_MAXIMIZED      ((sal_uLong)0x00000004)
+#define WINDOWSTATE_STATE_ROLLUP         ((sal_uLong)0x00000008)
+#define WINDOWSTATE_STATE_MAXIMIZED_HORZ ((sal_uLong)0x00000010)
+#define WINDOWSTATE_STATE_MAXIMIZED_VERT ((sal_uLong)0x00000020)
 
 class VCL_DLLPUBLIC WindowStateData
 {
@@ -106,7 +106,7 @@ public:
                     mnMaximizedX = mnMaximizedY = mnMaximizedWidth = mnMaximizedHeight = 0;
                 }
 
-    void        SetMask( sal_uIntPtr nValidMask ) { mnValidMask = nValidMask; }
+    void        SetMask( sal_uLong nValidMask ) { mnValidMask = nValidMask; }
     sal_uInt32  GetMask() const { return mnValidMask; }
 
     void         SetX( int nX ) { mnX = nX; }
@@ -231,7 +231,7 @@ public:
     Size            GetResizeOutputSizePixel() const;
 
     void            SetWindowState( const ByteString& rStr );
-    ByteString      GetWindowState( sal_uIntPtr nMask = WINDOWSTATE_MASK_ALL ) const;
+    ByteString      GetWindowState( sal_uLong nMask = WINDOWSTATE_MASK_ALL ) const;
 
     void            SetMenuBar( MenuBar* pMenuBar );
     MenuBar*        GetMenuBar() const { return mpMenuBar; }

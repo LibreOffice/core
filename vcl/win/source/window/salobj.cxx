@@ -731,9 +731,9 @@ sal_uInt16 WinSalObject::GetClipRegionType()
 
 // -----------------------------------------------------------------------
 
-void WinSalObject::BeginSetClipRegion( sal_uIntPtr nRectCount )
+void WinSalObject::BeginSetClipRegion( sal_uLong nRectCount )
 {
-    sal_uIntPtr nRectBufSize = sizeof(RECT)*nRectCount;
+    sal_uLong nRectBufSize = sizeof(RECT)*nRectCount;
     if ( nRectCount < SAL_CLIPRECT_COUNT )
     {
         if ( !mpStdClipRgnData )
@@ -805,7 +805,7 @@ void WinSalObject::EndSetClipRegion()
     }
     else
     {
-        sal_uIntPtr nSize = mpClipRgnData->rdh.nRgnSize+sizeof(RGNDATAHEADER);
+        sal_uLong nSize = mpClipRgnData->rdh.nRgnSize+sizeof(RGNDATAHEADER);
         hRegion = ExtCreateRegion( NULL, nSize, mpClipRgnData );
         if ( mpClipRgnData != mpStdClipRgnData )
             delete [] (BYTE*)mpClipRgnData;
@@ -819,7 +819,7 @@ void WinSalObject::EndSetClipRegion()
 
 void WinSalObject::SetPosSize( long nX, long nY, long nWidth, long nHeight )
 {
-    sal_uIntPtr nStyle = 0;
+    sal_uLong nStyle = 0;
     sal_Bool bVisible = (GetWindowStyle( mhWnd ) & WS_VISIBLE) != 0;
     if ( bVisible )
     {

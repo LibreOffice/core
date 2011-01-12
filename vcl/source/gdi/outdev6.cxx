@@ -59,7 +59,7 @@ DBG_NAMEEX( OutputDevice )
 
 // ------------------------------------------------------------------------
 
-void OutputDevice::DrawGrid( const Rectangle& rRect, const Size& rDist, sal_uIntPtr nFlags )
+void OutputDevice::DrawGrid( const Rectangle& rRect, const Size& rDist, sal_uLong nFlags )
 {
     DBG_TRACE( "OutputDevice::DrawGrid()" );
     DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );

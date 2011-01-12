@@ -39,7 +39,7 @@
 
 ImplAnimView::ImplAnimView( Animation* pParent, OutputDevice* pOut,
                             const Point& rPt, const Size& rSz,
-                            sal_uIntPtr nExtraData,
+                            sal_uLong nExtraData,
                             OutputDevice* pFirstFrameOutDev ) :
         mpParent        ( pParent ),
         mpOut           ( pFirstFrameOutDev ? pFirstFrameOutDev : pOut ),
@@ -174,15 +174,15 @@ void ImplAnimView::ImplGetPosSize( const AnimationBitmap& rAnm, Point& rPosPix, 
 
 // ------------------------------------------------------------------------
 
-void ImplAnimView::ImplDrawToPos( sal_uIntPtr nPos )
+void ImplAnimView::ImplDrawToPos( sal_uLong nPos )
 {
     VirtualDevice   aVDev;
     Region*         pOldClip = !maClip.IsNull() ? new Region( mpOut->GetClipRegion() ) : NULL;
 
     aVDev.SetOutputSizePixel( maSzPix, sal_False );
-    nPos = Min( nPos, (sal_uIntPtr) mpParent->Count() - 1UL );
+    nPos = Min( nPos, (sal_uLong) mpParent->Count() - 1UL );
 
-    for( sal_uIntPtr i = 0UL; i <= nPos; i++ )
+    for( sal_uLong i = 0UL; i <= nPos; i++ )
         ImplDraw( i, &aVDev );
 
     if( pOldClip )
@@ -199,14 +199,14 @@ void ImplAnimView::ImplDrawToPos( sal_uIntPtr nPos )
 
 // ------------------------------------------------------------------------
 
-void ImplAnimView::ImplDraw( sal_uIntPtr nPos )
+void ImplAnimView::ImplDraw( sal_uLong nPos )
 {
     ImplDraw( nPos, NULL );
 }
 
 // ------------------------------------------------------------------------
 
-void ImplAnimView::ImplDraw( sal_uIntPtr nPos, VirtualDevice* pVDev )
+void ImplAnimView::ImplDraw( sal_uLong nPos, VirtualDevice* pVDev )
 {
     Rectangle aOutRect( mpOut->PixelToLogic( Point() ), mpOut->GetOutputSize() );
 
@@ -220,7 +220,7 @@ void ImplAnimView::ImplDraw( sal_uIntPtr nPos, VirtualDevice* pVDev )
         Point                   aBmpPosPix;
         Size                    aSizePix;
         Size                    aBmpSizePix;
-        const sal_uIntPtr               nLastPos = mpParent->Count() - 1;
+        const sal_uLong             nLastPos = mpParent->Count() - 1;
         const AnimationBitmap&  rAnm = mpParent->Get( (sal_uInt16) ( mnActPos = Min( nPos, nLastPos ) ) );
 
         ImplGetPosSize( rAnm, aPosPix, aSizePix );

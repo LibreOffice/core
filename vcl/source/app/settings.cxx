@@ -683,12 +683,12 @@ void StyleSettings::Set3DColors( const Color& rColor )
         mpData->maShadowColor   = rColor;
         mpData->maLightColor.IncreaseLuminance( 64 );
         mpData->maShadowColor.DecreaseLuminance( 64 );
-        sal_uIntPtr   nRed    = mpData->maLightColor.GetRed();
-        sal_uIntPtr   nGreen  = mpData->maLightColor.GetGreen();
-        sal_uIntPtr   nBlue   = mpData->maLightColor.GetBlue();
-        nRed   += (sal_uIntPtr)(mpData->maShadowColor.GetRed());
-        nGreen += (sal_uIntPtr)(mpData->maShadowColor.GetGreen());
-        nBlue  += (sal_uIntPtr)(mpData->maShadowColor.GetBlue());
+        sal_uLong   nRed    = mpData->maLightColor.GetRed();
+        sal_uLong   nGreen  = mpData->maLightColor.GetGreen();
+        sal_uLong   nBlue   = mpData->maLightColor.GetBlue();
+        nRed   += (sal_uLong)(mpData->maShadowColor.GetRed());
+        nGreen += (sal_uLong)(mpData->maShadowColor.GetGreen());
+        nBlue  += (sal_uLong)(mpData->maShadowColor.GetBlue());
         mpData->maCheckedColor = Color( (sal_uInt8)(nRed/2), (sal_uInt8)(nGreen/2), (sal_uInt8)(nBlue/2) );
     }
     else
@@ -701,7 +701,7 @@ void StyleSettings::Set3DColors( const Color& rColor )
 
 // -----------------------------------------------------------------------
 
-::rtl::OUString StyleSettings::ImplSymbolsStyleToName( sal_uIntPtr nStyle ) const
+::rtl::OUString StyleSettings::ImplSymbolsStyleToName( sal_uLong nStyle ) const
 {
     switch ( nStyle )
     {
@@ -719,7 +719,7 @@ void StyleSettings::Set3DColors( const Color& rColor )
 
 // -----------------------------------------------------------------------
 
-sal_uIntPtr StyleSettings::ImplNameToSymbolsStyle( const ::rtl::OUString &rName ) const
+sal_uLong StyleSettings::ImplNameToSymbolsStyle( const ::rtl::OUString &rName ) const
 {
     if ( rName == ::rtl::OUString::createFromAscii( "default" ) )
         return STYLE_SYMBOLS_DEFAULT;
@@ -761,22 +761,22 @@ void StyleSettings::SetPreferredSymbolsStyleName( const ::rtl::OUString &rName )
 
 // -----------------------------------------------------------------------
 
-sal_uIntPtr StyleSettings::GetCurrentSymbolsStyle() const
+sal_uLong StyleSettings::GetCurrentSymbolsStyle() const
 {
     // style selected in Tools -> Options... -> OpenOffice.org -> View
-    sal_uIntPtr nStyle = GetSymbolsStyle();
+    sal_uLong nStyle = GetSymbolsStyle();
 
     if ( nStyle == STYLE_SYMBOLS_AUTO || ( !CheckSymbolStyle (nStyle) ) )
     {
         // the preferred style can be read from the desktop setting by the desktop native widgets modules
-        sal_uIntPtr nPreferredStyle = GetPreferredSymbolsStyle();
+        sal_uLong nPreferredStyle = GetPreferredSymbolsStyle();
 
         if ( nPreferredStyle == STYLE_SYMBOLS_AUTO || ( !CheckSymbolStyle (nPreferredStyle) ) )
         {
 
             // use a hardcoded desktop-specific fallback if no preferred style has been detected
             static bool sbFallbackDesktopChecked = false;
-            static sal_uIntPtr snFallbackDesktopStyle = STYLE_SYMBOLS_DEFAULT;
+            static sal_uLong snFallbackDesktopStyle = STYLE_SYMBOLS_DEFAULT;
 
             if ( !sbFallbackDesktopChecked )
             {
@@ -798,10 +798,10 @@ sal_uIntPtr StyleSettings::GetCurrentSymbolsStyle() const
 
 // -----------------------------------------------------------------------
 
-sal_uIntPtr StyleSettings::GetAutoSymbolsStyle() const
+sal_uLong StyleSettings::GetAutoSymbolsStyle() const
 {
     const ::rtl::OUString&      rDesktopEnvironment = Application::GetDesktopEnvironment();
-    sal_uIntPtr                       nRet = STYLE_SYMBOLS_DEFAULT;
+    sal_uLong                       nRet = STYLE_SYMBOLS_DEFAULT;
     bool                        bCont = true;
 
     try
@@ -831,9 +831,9 @@ sal_uIntPtr StyleSettings::GetAutoSymbolsStyle() const
     // falback to any existing style
     if ( ! CheckSymbolStyle (nRet) )
     {
-        for ( sal_uIntPtr n = 0 ; n <= STYLE_SYMBOLS_THEMES_MAX  ; n++ )
+        for ( sal_uLong n = 0 ; n <= STYLE_SYMBOLS_THEMES_MAX  ; n++ )
         {
-            sal_uIntPtr nStyleToCheck = n;
+            sal_uLong nStyleToCheck = n;
 
             // auto is not a real theme => can't be fallback
             if ( nStyleToCheck == STYLE_SYMBOLS_AUTO )
@@ -858,7 +858,7 @@ sal_uIntPtr StyleSettings::GetAutoSymbolsStyle() const
 
 // -----------------------------------------------------------------------
 
-bool StyleSettings::CheckSymbolStyle( sal_uIntPtr nStyle ) const
+bool StyleSettings::CheckSymbolStyle( sal_uLong nStyle ) const
 {
     static ImplImageTreeSingletonRef aImageTree;
     return aImageTree->checkStyle( ImplSymbolsStyleToName( nStyle ) );
@@ -1689,12 +1689,12 @@ void AllSettings::CopyData()
 
 // -----------------------------------------------------------------------
 
-sal_uIntPtr AllSettings::Update( sal_uIntPtr nFlags, const AllSettings& rSet )
+sal_uLong AllSettings::Update( sal_uLong nFlags, const AllSettings& rSet )
 {
     DBG_CHKTHIS( AllSettings, NULL );
     DBG_CHKOBJ( &rSet, AllSettings, NULL );
 
-    sal_uIntPtr nChangeFlags = 0;
+    sal_uLong nChangeFlags = 0;
 
     if ( nFlags & SETTINGS_MACHINE )
     {
@@ -1791,12 +1791,12 @@ sal_uIntPtr AllSettings::Update( sal_uIntPtr nFlags, const AllSettings& rSet )
 
 // -----------------------------------------------------------------------
 
-sal_uIntPtr AllSettings::GetChangeFlags( const AllSettings& rSet ) const
+sal_uLong AllSettings::GetChangeFlags( const AllSettings& rSet ) const
 {
     DBG_CHKTHIS( AllSettings, NULL );
     DBG_CHKOBJ( &rSet, AllSettings, NULL );
 
-    sal_uIntPtr nChangeFlags = 0;
+    sal_uLong nChangeFlags = 0;
 
     if ( mpData->maMachineSettings != rSet.mpData->maMachineSettings )
         nChangeFlags |= SETTINGS_MACHINE;

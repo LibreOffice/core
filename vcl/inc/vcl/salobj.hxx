@@ -59,7 +59,7 @@ public:
 
     virtual void                    ResetClipRegion() = 0;
     virtual sal_uInt16                  GetClipRegionType() = 0;
-    virtual void                    BeginSetClipRegion( sal_uIntPtr nRects ) = 0;
+    virtual void                    BeginSetClipRegion( sal_uLong nRects ) = 0;
     virtual void                    UnionClipRegion( long nX, long nY, long nWidth, long nHeight ) = 0;
     virtual void                    EndSetClipRegion() = 0;
 

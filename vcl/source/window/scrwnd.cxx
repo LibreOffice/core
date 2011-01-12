@@ -82,7 +82,7 @@ ImplWheelWindow::ImplWheelWindow( Window* pParent ) :
     const sal_Bool      bVert = ( nFlags & AUTOSCROLL_VERT ) != 0;
 
     // calculate maximum speed distance
-    mnMaxWidth = (sal_uIntPtr) ( 0.4 * hypot( (double) aSize.Width(), aSize.Height() ) );
+    mnMaxWidth = (sal_uLong) ( 0.4 * hypot( (double) aSize.Width(), aSize.Height() ) );
 
     // create wheel window
     SetTitleType( FLOATWIN_TITLE_NONE );
@@ -156,7 +156,7 @@ void ImplWheelWindow::ImplCreateImageList()
 
 // ------------------------------------------------------------------------
 
-void ImplWheelWindow::ImplSetWheelMode( sal_uIntPtr nWheelMode )
+void ImplWheelWindow::ImplSetWheelMode( sal_uLong nWheelMode )
 {
     if( nWheelMode != mnWheelMode )
     {
@@ -209,13 +209,13 @@ void ImplWheelWindow::ImplRecalcScrollValues()
     }
     else
     {
-        sal_uIntPtr nCurTime;
+        sal_uLong nCurTime;
 
         // calc current time
         if( mnMaxWidth )
         {
             const double fExp = ( (double) mnActDist / mnMaxWidth ) * log10( (double) MAX_TIME / MIN_TIME );
-            nCurTime = (sal_uIntPtr) ( MAX_TIME / pow( 10., fExp ) );
+            nCurTime = (sal_uLong) ( MAX_TIME / pow( 10., fExp ) );
         }
         else
             nCurTime = MAX_TIME;
@@ -339,7 +339,7 @@ void ImplWheelWindow::MouseMove( const MouseEvent& rMEvt )
     const long  nDistX = aMousePos.X() - maCenter.X();
     const long  nDistY = aMousePos.Y() - maCenter.Y();
 
-    mnActDist = (sal_uIntPtr) hypot( (double) nDistX, nDistY );
+    mnActDist = (sal_uLong) hypot( (double) nDistX, nDistY );
 
     const PointerStyle  eActStyle = ImplGetMousePointer( nDistX, nDistY );
     const sal_uInt16        nFlags = ImplGetSVData()->maWinData.mnAutoScrollFlags;
@@ -402,7 +402,7 @@ IMPL_LINK( ImplWheelWindow, ImplScrollHdl, Timer*, EMPTYARG )
 
         if ( !ImplCallPreNotify( aNCmdEvt ) )
         {
-            const sal_uIntPtr nTime = Time::GetSystemTicks();
+            const sal_uLong nTime = Time::GetSystemTicks();
             ImplDelData aDel( this );
             pWindow->Command( aCEvt );
             if( aDel.IsDead() )

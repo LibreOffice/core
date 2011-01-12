@@ -435,18 +435,18 @@ class VCL_DLLPUBLIC DataChangedEvent
 {
 private:
     void*                   mpData;
-    sal_uIntPtr                   mnFlags;
+    sal_uLong                   mnFlags;
     sal_uInt16                  mnType;
 
 public:
                             DataChangedEvent();
                             DataChangedEvent( sal_uInt16 nType,
                                               const void* pData = NULL,
-                                              sal_uIntPtr nFlags = 0 );
+                                              sal_uLong nFlags = 0 );
 
     sal_uInt16                  GetType() const { return mnType; }
     void*                   GetData() const { return mpData; }
-    sal_uIntPtr                   GetFlags() const { return mnFlags; }
+    sal_uLong                   GetFlags() const { return mnFlags; }
 
     const AllSettings*      GetOldSettings() const;
 };
@@ -460,7 +460,7 @@ inline DataChangedEvent::DataChangedEvent()
 
 inline DataChangedEvent::DataChangedEvent( sal_uInt16 nType,
                                            const void* pData,
-                                           sal_uIntPtr nChangeFlags )
+                                           sal_uLong nChangeFlags )
 {
     mpData  = (void*)pData;
     mnFlags = nChangeFlags;

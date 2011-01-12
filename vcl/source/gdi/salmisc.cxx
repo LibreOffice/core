@@ -293,7 +293,7 @@ static void ImplTCToPAL( const BitmapBuffer& rSrcBuffer, BitmapBuffer& rDstBuffe
 // ---------------------
 
 BitmapBuffer* StretchAndConvert( const BitmapBuffer& rSrcBuffer, const SalTwoRect& rTwoRect,
-                                 sal_uIntPtr nDstBitmapFormat, BitmapPalette* pDstPal, ColorMask* pDstMask )
+                                 sal_uLong nDstBitmapFormat, BitmapPalette* pDstPal, ColorMask* pDstMask )
 {
     FncGetPixel     pFncGetPixel;
     FncSetPixel     pFncSetPixel;
@@ -330,7 +330,7 @@ BitmapBuffer* StretchAndConvert( const BitmapBuffer& rSrcBuffer, const SalTwoRec
     }
 
     // set function for setting pixels
-    const sal_uIntPtr nDstScanlineFormat = BMP_SCANLINE_FORMAT( nDstBitmapFormat );
+    const sal_uLong nDstScanlineFormat = BMP_SCANLINE_FORMAT( nDstBitmapFormat );
     switch( nDstScanlineFormat )
     {
         IMPL_CASE_SET_FORMAT( _1BIT_MSB_PAL, 1 );

@@ -36,13 +36,13 @@ namespace vcl
 {
     struct UserEvent
     {
-        sal_uIntPtr           m_nWhich;
+        sal_uLong           m_nWhich;
         void*           m_pData;
     };
 
     class VCL_DLLPUBLIC EventPoster
     {
-        sal_uIntPtr           m_nId;
+        sal_uLong           m_nId;
         Link            m_aLink;
 
 //#if 0 // _SOLAR__PRIVATE

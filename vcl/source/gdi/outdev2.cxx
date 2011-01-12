@@ -87,17 +87,17 @@ DBG_NAMEEX( OutputDevice )
 // - externals -
 // -------------
 
-extern sal_uIntPtr nVCLRLut[ 6 ];
-extern sal_uIntPtr nVCLGLut[ 6 ];
-extern sal_uIntPtr nVCLBLut[ 6 ];
-extern sal_uIntPtr nVCLDitherLut[ 256 ];
-extern sal_uIntPtr nVCLLut[ 256 ];
+extern sal_uLong nVCLRLut[ 6 ];
+extern sal_uLong nVCLGLut[ 6 ];
+extern sal_uLong nVCLBLut[ 6 ];
+extern sal_uLong nVCLDitherLut[ 256 ];
+extern sal_uLong nVCLLut[ 256 ];
 
 // =======================================================================
 
-sal_uIntPtr ImplAdjustTwoRect( TwoRect& rTwoRect, const Size& rSizePix )
+sal_uLong ImplAdjustTwoRect( TwoRect& rTwoRect, const Size& rSizePix )
 {
-    sal_uIntPtr nMirrFlags = 0;
+    sal_uLong nMirrFlags = 0;
 
     if ( rTwoRect.mnDestWidth < 0 )
     {
@@ -578,7 +578,7 @@ void OutputDevice::DrawBitmap( const Point& rDestPt, const Size& rDestSize,
 
 void OutputDevice::ImplDrawBitmap( const Point& rDestPt, const Size& rDestSize,
                                    const Point& rSrcPtPixel, const Size& rSrcSizePixel,
-                                   const Bitmap& rBitmap, const sal_uIntPtr nAction )
+                                   const Bitmap& rBitmap, const sal_uLong nAction )
 {
     DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
 
@@ -655,7 +655,7 @@ void OutputDevice::ImplDrawBitmap( const Point& rDestPt, const Size& rDestSize,
         aPosAry.mnDestWidth = ImplLogicWidthToDevicePixel( rDestSize.Width() );
         aPosAry.mnDestHeight = ImplLogicHeightToDevicePixel( rDestSize.Height() );
 
-        const sal_uIntPtr nMirrFlags = ImplAdjustTwoRect( aPosAry, aBmp.GetSizePixel() );
+        const sal_uLong nMirrFlags = ImplAdjustTwoRect( aPosAry, aBmp.GetSizePixel() );
 
         if ( aPosAry.mnSrcWidth && aPosAry.mnSrcHeight && aPosAry.mnDestWidth && aPosAry.mnDestHeight )
         {
@@ -789,7 +789,7 @@ void OutputDevice::DrawBitmapEx( const Point& rDestPt, const Size& rDestSize,
 
 void OutputDevice::ImplDrawBitmapEx( const Point& rDestPt, const Size& rDestSize,
                                      const Point& rSrcPtPixel, const Size& rSrcSizePixel,
-                                     const BitmapEx& rBitmapEx, const sal_uIntPtr nAction )
+                                     const BitmapEx& rBitmapEx, const sal_uLong nAction )
 {
     DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
 
@@ -902,7 +902,7 @@ void OutputDevice::ImplDrawBitmapEx( const Point& rDestPt, const Size& rDestSize
         aPosAry.mnDestWidth = ImplLogicWidthToDevicePixel( rDestSize.Width() );
         aPosAry.mnDestHeight = ImplLogicHeightToDevicePixel( rDestSize.Height() );
 
-        const sal_uIntPtr nMirrFlags = ImplAdjustTwoRect( aPosAry, aBmpEx.GetSizePixel() );
+        const sal_uLong nMirrFlags = ImplAdjustTwoRect( aPosAry, aBmpEx.GetSizePixel() );
 
         if( aPosAry.mnSrcWidth && aPosAry.mnSrcHeight && aPosAry.mnDestWidth && aPosAry.mnDestHeight )
         {
@@ -1096,7 +1096,7 @@ void OutputDevice::DrawMask( const Point& rDestPt, const Size& rDestSize,
 void OutputDevice::ImplDrawMask( const Point& rDestPt, const Size& rDestSize,
                                  const Point& rSrcPtPixel, const Size& rSrcSizePixel,
                                  const Bitmap& rBitmap, const Color& rMaskColor,
-                                 const sal_uIntPtr nAction )
+                                 const sal_uLong nAction )
 {
     DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
 
@@ -1150,7 +1150,7 @@ void OutputDevice::ImplDrawMask( const Point& rDestPt, const Size& rDestSize,
         aPosAry.mnDestHeight = ImplLogicHeightToDevicePixel( rDestSize.Height() );
 
         // spiegeln via Koordinaten wollen wir nicht
-        const sal_uIntPtr nMirrFlags = ImplAdjustTwoRect( aPosAry, pImpBmp->ImplGetSize() );
+        const sal_uLong nMirrFlags = ImplAdjustTwoRect( aPosAry, pImpBmp->ImplGetSize() );
 
         // check if output is necessary
         if( aPosAry.mnSrcWidth && aPosAry.mnSrcHeight && aPosAry.mnDestWidth && aPosAry.mnDestHeight )
@@ -1667,7 +1667,7 @@ Bitmap OutputDevice::ImplBlendWithAlpha( Bitmap              aBmp,
                 for( nX = 0, nOutX = nOffX; nX < nDstWidth; nX++, nOutX++ )
                 {
                     const long  nMapX = pMapX[ nX ];
-                    const sal_uIntPtr nD = nVCLDitherLut[ nModY | ( nOutX & 0x0FL ) ];
+                    const sal_uLong nD = nVCLDitherLut[ nModY | ( nOutX & 0x0FL ) ];
 
                     aSrcCol = pP->GetColor( nMapY, nMapX );
                     aDstCol = pB->GetColor( nY, nX );
@@ -1784,7 +1784,7 @@ Bitmap OutputDevice::ImplBlend( Bitmap              aBmp,
                 for( nX = 0, nOutX = nOffX; nX < nDstWidth; nX++, nOutX++ )
                 {
                     const long  nMapX = pMapX[ nX ];
-                    const sal_uIntPtr nD = nVCLDitherLut[ nModY | ( nOutX & 0x0FL ) ];
+                    const sal_uLong nD = nVCLDitherLut[ nModY | ( nOutX & 0x0FL ) ];
 
                     aDstCol = pB->GetColor( nY, nX );
                     aDstCol.Merge( pP->GetColor( nMapY, nMapX ), (sal_uInt8) pA->GetPixel( nMapY, nMapX ) );
@@ -2097,7 +2097,7 @@ void OutputDevice::ImplPrintTransparent( const Bitmap& rBmp, const Bitmap& rMask
     if( !rBmp.IsEmpty() && aSrcRect.GetWidth() && aSrcRect.GetHeight() && aDestSz.Width() && aDestSz.Height() )
     {
         Bitmap  aPaint( rBmp ), aMask( rMask );
-        sal_uIntPtr nMirrFlags = 0UL;
+        sal_uLong   nMirrFlags = 0UL;
 
         if( aMask.GetBitCount() > 1 )
             aMask.Convert( BMP_CONVERSION_1BIT_THRESHOLD );
@@ -2195,7 +2195,7 @@ void OutputDevice::ImplPrintMask( const Bitmap& rMask, const Color& rMaskColor,
     if( !rMask.IsEmpty() && aSrcRect.GetWidth() && aSrcRect.GetHeight() && aDestSz.Width() && aDestSz.Height() )
     {
         Bitmap  aMask( rMask );
-        sal_uIntPtr nMirrFlags = 0UL;
+        sal_uLong   nMirrFlags = 0UL;
 
         if( aMask.GetBitCount() > 1 )
             aMask.Convert( BMP_CONVERSION_1BIT_THRESHOLD );

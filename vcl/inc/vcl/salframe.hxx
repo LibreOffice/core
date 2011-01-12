@@ -78,42 +78,42 @@ struct SystemEnvData;
 // - SalFrameStyle -
 // -----------------
 
-#define SAL_FRAME_STYLE_DEFAULT             ((sal_uIntPtr)0x00000001)
-#define SAL_FRAME_STYLE_MOVEABLE            ((sal_uIntPtr)0x00000002)
-#define SAL_FRAME_STYLE_SIZEABLE            ((sal_uIntPtr)0x00000004)
-#define SAL_FRAME_STYLE_CLOSEABLE           ((sal_uIntPtr)0x00000008)
+#define SAL_FRAME_STYLE_DEFAULT             ((sal_uLong)0x00000001)
+#define SAL_FRAME_STYLE_MOVEABLE            ((sal_uLong)0x00000002)
+#define SAL_FRAME_STYLE_SIZEABLE            ((sal_uLong)0x00000004)
+#define SAL_FRAME_STYLE_CLOSEABLE           ((sal_uLong)0x00000008)
 
 // no shadow effect on WindowsXP
-#define SAL_FRAME_STYLE_NOSHADOW            ((sal_uIntPtr)0x00000010)
+#define SAL_FRAME_STYLE_NOSHADOW            ((sal_uLong)0x00000010)
 // indicate tooltip windows, so they can always be topmost
-#define SAL_FRAME_STYLE_TOOLTIP             ((sal_uIntPtr)0x00000020)
+#define SAL_FRAME_STYLE_TOOLTIP             ((sal_uLong)0x00000020)
 // windows without windowmanager decoration, this typically only applies to floating windows
-#define SAL_FRAME_STYLE_OWNERDRAWDECORATION ((sal_uIntPtr)0x00000040)
+#define SAL_FRAME_STYLE_OWNERDRAWDECORATION ((sal_uLong)0x00000040)
 // dialogs
-#define SAL_FRAME_STYLE_DIALOG              ((sal_uIntPtr)0x00000080)
+#define SAL_FRAME_STYLE_DIALOG              ((sal_uLong)0x00000080)
 // partial fullscreen: fullscreen on one monitor of a multimonitor display
-#define SAL_FRAME_STYLE_PARTIAL_FULLSCREEN  ((sal_uIntPtr)0x00800000)
+#define SAL_FRAME_STYLE_PARTIAL_FULLSCREEN  ((sal_uLong)0x00800000)
 // plugged system child window
-#define SAL_FRAME_STYLE_PLUG                ((sal_uIntPtr)0x10000000)
+#define SAL_FRAME_STYLE_PLUG                ((sal_uLong)0x10000000)
 // system child window inside another SalFrame
-#define SAL_FRAME_STYLE_SYSTEMCHILD         ((sal_uIntPtr)0x08000000)
+#define SAL_FRAME_STYLE_SYSTEMCHILD         ((sal_uLong)0x08000000)
 // floating window
-#define SAL_FRAME_STYLE_FLOAT               ((sal_uIntPtr)0x20000000)
+#define SAL_FRAME_STYLE_FLOAT               ((sal_uLong)0x20000000)
 // floating window that needs to be focusable
-#define SAL_FRAME_STYLE_FLOAT_FOCUSABLE     ((sal_uIntPtr)0x04000000)
+#define SAL_FRAME_STYLE_FLOAT_FOCUSABLE     ((sal_uLong)0x04000000)
 // toolwindows should be painted with a smaller decoration
-#define SAL_FRAME_STYLE_TOOLWINDOW          ((sal_uIntPtr)0x40000000)
+#define SAL_FRAME_STYLE_TOOLWINDOW          ((sal_uLong)0x40000000)
 // the window containing the intro bitmap, aka splashscreen
-#define SAL_FRAME_STYLE_INTRO               ((sal_uIntPtr)0x80000000)
+#define SAL_FRAME_STYLE_INTRO               ((sal_uLong)0x80000000)
 
 /*
-#define SAL_FRAME_STYLE_MINABLE             ((sal_uIntPtr)0x00000008)
-#define SAL_FRAME_STYLE_MAXABLE             ((sal_uIntPtr)0x00000010)
-#define SAL_FRAME_STYLE_BORDER              ((sal_uIntPtr)0x00000040)
-#define SAL_FRAME_STYLE_DOC                 ((sal_uIntPtr)0x00004000)
-#define SAL_FRAME_STYLE_DIALOG              ((sal_uIntPtr)0x00008000)
-#define SAL_FRAME_STYLE_TOOL                ((sal_uIntPtr)0x00010000)
-#define SAL_FRAME_STYLE_FULLSIZE            ((sal_uIntPtr)0x00020000)
+#define SAL_FRAME_STYLE_MINABLE             ((sal_uLong)0x00000008)
+#define SAL_FRAME_STYLE_MAXABLE             ((sal_uLong)0x00000010)
+#define SAL_FRAME_STYLE_BORDER              ((sal_uLong)0x00000040)
+#define SAL_FRAME_STYLE_DOC                 ((sal_uLong)0x00004000)
+#define SAL_FRAME_STYLE_DIALOG              ((sal_uLong)0x00008000)
+#define SAL_FRAME_STYLE_TOOL                ((sal_uLong)0x00010000)
+#define SAL_FRAME_STYLE_FULLSIZE            ((sal_uLong)0x00020000)
 */
 
 // ----------------------------------------
@@ -244,7 +244,7 @@ public:
     // get current modifier, button mask and mouse position
     struct SalPointerState
     {
-        sal_uIntPtr   mnState;
+        sal_uLong   mnState;
         Point   maPos;      // in frame coordinates
     };
 
@@ -264,7 +264,7 @@ public:
     // set clip region to none (-> rectangular windows, normal state)
     virtual void                    ResetClipRegion() = 0;
     // start setting the clipregion consisting of nRects rectangles
-    virtual void                    BeginSetClipRegion( sal_uIntPtr nRects ) = 0;
+    virtual void                    BeginSetClipRegion( sal_uLong nRects ) = 0;
     // add a rectangle to the clip region
     virtual void                    UnionClipRegion( long nX, long nY, long nWidth, long nHeight ) = 0;
     // done setting up the clipregion

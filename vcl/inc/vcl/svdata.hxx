@@ -152,7 +152,7 @@ struct ImplSVAppData
     ImplHotKey*             mpFirstHotKey;      // HotKey-Verwaltung
     ImplEventHook*          mpFirstEventHook;   // Event-Hooks
     VclEventListeners2*     mpPostYieldListeners;           // post yield listeners
-    sal_uIntPtr                   mnLastInputTime;                // GetLastInputTime()
+    sal_uLong                   mnLastInputTime;                // GetLastInputTime()
     sal_uInt16                  mnDispatchLevel;                // DispatchLevel
     sal_uInt16                  mnModalMode;                    // ModalMode Count
     sal_uInt16                  mnModalDialog;                  // ModalDialog Count
@@ -266,13 +266,13 @@ struct ImplSVCtrlData
     ImplTBDragMgr*          mpTBDragMgr;        // DragMgr for ToolBox
     sal_uInt16                  mnCheckStyle;       // CheckBox-Style for ImageList-Update
     sal_uInt16                  mnRadioStyle;       // Radio-Style for ImageList-Update
-    sal_uIntPtr                   mnLastCheckFColor;  // Letzte FaceColor fuer CheckImage
-    sal_uIntPtr                   mnLastCheckWColor;  // Letzte WindowColor fuer CheckImage
-    sal_uIntPtr                   mnLastCheckWTextColor;  // Letzte WindowTextColor fuer CheckImage
-    sal_uIntPtr                   mnLastCheckLColor;  // Letzte LightColor fuer CheckImage
-    sal_uIntPtr                   mnLastRadioFColor;  // Letzte FaceColor fuer RadioImage
-    sal_uIntPtr                   mnLastRadioWColor;  // Letzte WindowColor fuer RadioImage
-    sal_uIntPtr                   mnLastRadioLColor;  // Letzte LightColor fuer RadioImage
+    sal_uLong                   mnLastCheckFColor;  // Letzte FaceColor fuer CheckImage
+    sal_uLong                   mnLastCheckWColor;  // Letzte WindowColor fuer CheckImage
+    sal_uLong                   mnLastCheckWTextColor;  // Letzte WindowTextColor fuer CheckImage
+    sal_uLong                   mnLastCheckLColor;  // Letzte LightColor fuer CheckImage
+    sal_uLong                   mnLastRadioFColor;  // Letzte FaceColor fuer RadioImage
+    sal_uLong                   mnLastRadioWColor;  // Letzte WindowColor fuer RadioImage
+    sal_uLong                   mnLastRadioLColor;  // Letzte LightColor fuer RadioImage
     FieldUnitStringList*    mpFieldUnitStrings; // list with field units
     FieldUnitStringList*    mpCleanUnitStrings; // same list but with some "fluff" like spaces removed
 };
@@ -295,7 +295,7 @@ struct ImplSVHelpData
     sal_Bool                    mbAutoHelpId        : 1;    // generate HelpIds
     sal_Bool                    mbRequestingHelp    : 1;    // In Window::RequestHelp
     HelpTextWindow*         mpHelpWin;                  // HelpWindow
-    sal_uIntPtr                   mnLastHelpHideTime;         // ticks of last show
+    sal_uLong                   mnLastHelpHideTime;         // ticks of last show
 };
 
 struct ImplSVNWFData
@@ -338,15 +338,15 @@ struct ImplSVData
     Application*            mpApp;              // pApp
     WorkWindow*             mpDefaultWin;       // Default-Window
     sal_Bool                    mbDeInit;             // Is VCL deinitializing
-    sal_uIntPtr                   mnThreadCount;      // is VCL MultiThread enabled
+    sal_uLong                   mnThreadCount;      // is VCL MultiThread enabled
     ImplConfigData*         mpFirstConfigData;  // Zeiger auf ersten Config-Block
     ImplTimerData*          mpFirstTimerData;   // list of all running timers
     SalTimer*               mpSalTimer;         // interface to sal event loop/timers
     SalI18NImeStatus*       mpImeStatus;        // interface to ime status window
     SalSystem*              mpSalSystem;        // SalSystem interface
     ResMgr*                 mpResMgr;           // SV-Resource-Manager
-    sal_uIntPtr                   mnTimerPeriod;      // current timer period
-    sal_uIntPtr                   mnTimerUpdate;      // TimerCallbackProcs on stack
+    sal_uLong                   mnTimerPeriod;      // current timer period
+    sal_uLong                   mnTimerUpdate;      // TimerCallbackProcs on stack
     sal_Bool                    mbNotAllTimerCalled;// sal_True: Es muessen noch Timer abgearbeitet werden
     sal_Bool                    mbNoCallTimer;      // sal_True: No Timeout calls
     ImplSVAppData           maAppData;          // indepen data for class Application
@@ -452,7 +452,7 @@ private:
 
 struct ImplSVEvent
 {
-    sal_uIntPtr               mnEvent;
+    sal_uLong               mnEvent;
     void*               mpData;
     Link*               mpLink;
     Window*             mpWindow;

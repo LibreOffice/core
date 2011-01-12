@@ -149,7 +149,7 @@ static sal_Bool ImplHandleMouseFloatMode( Window* pChild, const Point& rMousePos
         sal_uInt16          nHitTest = IMPL_FLOATWIN_HITTEST_OUTSIDE;
         FloatingWindow* pFloat = pSVData->maWinData.mpFirstFloat->ImplFloatHitTest( pChild, rMousePos, nHitTest );
         FloatingWindow* pLastLevelFloat;
-        sal_uIntPtr           nPopupFlags;
+        sal_uLong           nPopupFlags;
         if ( nSVEvent == EVENT_MOUSEMOVE )
         {
             if ( bMouseLeave )
@@ -351,7 +351,7 @@ static long ContextMenuEventLink( void* pCEvent, void* )
 }
 
 long ImplHandleMouseEvent( Window* pWindow, sal_uInt16 nSVEvent, sal_Bool bMouseLeave,
-                           long nX, long nY, sal_uIntPtr nMsgTime,
+                           long nX, long nY, sal_uLong nMsgTime,
                            sal_uInt16 nCode, sal_uInt16 nMode )
 {
     ImplSVData* pSVData = ImplGetSVData();
@@ -592,7 +592,7 @@ long ImplHandleMouseEvent( Window* pWindow, sal_uInt16 nSVEvent, sal_Bool bMouse
                                     nClicks,
                                     sal_False );
 
-                                sal_uIntPtr nCount = Application::ReleaseSolarMutex();
+                                sal_uLong nCount = Application::ReleaseSolarMutex();
 
                                 // FIXME: where do I get Action from ?
                                 ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::dnd::XDragSource > xDragSource = pMouseDownWin->GetDragSource();
@@ -670,7 +670,7 @@ long ImplHandleMouseEvent( Window* pWindow, sal_uInt16 nSVEvent, sal_Bool bMouse
         if ( nSVEvent == EVENT_MOUSEBUTTONDOWN )
         {
             const MouseSettings& rMSettings = pChild->GetSettings().GetMouseSettings();
-            sal_uIntPtr   nDblClkTime = rMSettings.GetDoubleClickTime();
+            sal_uLong   nDblClkTime = rMSettings.GetDoubleClickTime();
             long    nDblClkW    = rMSettings.GetDoubleClickWidth();
             long    nDblClkH    = rMSettings.GetDoubleClickHeight();
             //long    nMouseX     = nX;
@@ -1254,7 +1254,7 @@ static long ImplHandleKey( Window* pWindow, sal_uInt16 nSVEvent,
 static long ImplHandleExtTextInput( Window* pWindow,
                                     const XubString& rText,
                                     const sal_uInt16* pTextAttr,
-                                    sal_uIntPtr nCursorPos, sal_uInt16 nCursorFlags )
+                                    sal_uLong nCursorPos, sal_uInt16 nCursorFlags )
 {
     ImplSVData* pSVData = ImplGetSVData();
     Window*     pChild = NULL;
@@ -1551,7 +1551,7 @@ static long ImplHandleWheelEvent( Window* pWindow, const SalWheelMouseEvent& rEv
         FloatingWindow* pLastLevelFloat = pSVData->maWinData.mpFirstFloat->ImplFindLastLevelFloat();
         if( pLastLevelFloat )
         {
-            sal_uIntPtr nPopupFlags = pLastLevelFloat->GetPopupModeFlags();
+            sal_uLong nPopupFlags = pLastLevelFloat->GetPopupModeFlags();
             if ( nPopupFlags & FLOATWIN_POPUPMODE_ALLMOUSEBUTTONCLOSE )
             {
                 pLastLevelFloat->EndPopupMode( FLOATWIN_POPUPMODEEND_CANCEL | FLOATWIN_POPUPMODEEND_CLOSEALL );
@@ -2339,8 +2339,8 @@ static void ImplHandleSalSurroundingTextRequest( Window *pWindow,
 // -----------------------------------------------------------------------
 
 static void ImplHandleSurroundingTextSelectionChange( Window *pWindow,
-                              sal_uIntPtr nStart,
-                              sal_uIntPtr nEnd )
+                              sal_uLong nStart,
+                              sal_uLong nEnd )
 {
     Window* pChild = ImplGetKeyInputWindow( pWindow );
     if( pChild )
@@ -2609,7 +2609,7 @@ long ImplWindowFrameProc( Window* pWindow, SalFrame* /*pFrame*/,
             break;
 #ifdef DBG_UTIL
         default:
-            DBG_ERROR1( "ImplWindowFrameProc(): unknown event (%lu)", (sal_uIntPtr)nEvent );
+            DBG_ERROR1( "ImplWindowFrameProc(): unknown event (%lu)", (sal_uLong)nEvent );
             break;
 #endif
     }

@@ -43,7 +43,7 @@
 
 // =======================================================================
 
-#define MAX_TIMER_PERIOD    ((sal_uIntPtr)0xFFFFFFFF)
+#define MAX_TIMER_PERIOD    ((sal_uLong)0xFFFFFFFF)
 
 // ---------------------
 // - TimeManager-Types -
@@ -53,8 +53,8 @@ struct ImplTimerData
 {
     ImplTimerData*  mpNext;         // Pointer to the next Instance
     Timer*          mpSVTimer;      // Pointer to SV Timer instance
-    sal_uIntPtr         mnUpdateTime;   // Last Update Time
-    sal_uIntPtr         mnTimerUpdate;  // TimerCallbackProcs on stack
+    sal_uLong           mnUpdateTime;   // Last Update Time
+    sal_uLong           mnTimerUpdate;  // TimerCallbackProcs on stack
     sal_Bool            mbDelete;       // Wurde Timer waehren Update() geloescht
     sal_Bool            mbInTimeout;    // Befinden wir uns im Timeout-Handler
 };
@@ -90,7 +90,7 @@ void Timer::ImplDeInitTimer()
 
 // -----------------------------------------------------------------------
 
-static void ImplStartTimer( ImplSVData* pSVData, sal_uIntPtr nMS )
+static void ImplStartTimer( ImplSVData* pSVData, sal_uLong nMS )
 {
     if ( !nMS )
         nMS = 1;
@@ -109,9 +109,9 @@ void Timer::ImplTimerCallbackProc()
     ImplSVData*     pSVData = ImplGetSVData();
     ImplTimerData*  pTimerData;
     ImplTimerData*  pPrevTimerData;
-    sal_uIntPtr         nMinPeriod = MAX_TIMER_PERIOD;
-    sal_uIntPtr         nDeltaTime;
-    sal_uIntPtr         nTime = Time::GetSystemTicks();
+    sal_uLong           nMinPeriod = MAX_TIMER_PERIOD;
+    sal_uLong           nDeltaTime;
+    sal_uLong           nTime = Time::GetSystemTicks();
 
     if ( pSVData->mbNoCallTimer )
         return;
@@ -153,7 +153,7 @@ void Timer::ImplTimerCallbackProc()
     }
 
     // Neue Zeit ermitteln
-    sal_uIntPtr nNewTime = Time::GetSystemTicks();
+    sal_uLong nNewTime = Time::GetSystemTicks();
     pPrevTimerData = NULL;
     pTimerData = pSVData->mpFirstTimerData;
     while ( pTimerData )
@@ -261,7 +261,7 @@ void Timer::Timeout()
 
 // -----------------------------------------------------------------------
 
-void Timer::SetTimeout( sal_uIntPtr nNewTimeout )
+void Timer::SetTimeout( sal_uLong nNewTimeout )
 {
     mnTimeout = nNewTimeout;
 

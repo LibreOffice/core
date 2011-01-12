@@ -164,7 +164,7 @@ public:
     virtual void        KeyInput( const KeyEvent& rKEvt );
     virtual void        Paint( const Rectangle& rRect );
     virtual void        Resize();
-    virtual void        Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal_uIntPtr nFlags );
+    virtual void        Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal_uLong nFlags );
     virtual void        GetFocus();
     virtual void        LoseFocus();
     virtual void        Tracking( const TrackingEvent& rTEvt );
@@ -182,9 +182,9 @@ public:
     virtual void        ClearModifyFlag();
     virtual sal_Bool        IsModified() const { return mpSubEdit ? mpSubEdit->mbModified : mbModified; }
 
-    virtual void        EnableUpdateData( sal_uIntPtr nTimeout = EDIT_UPDATEDATA_TIMEOUT );
+    virtual void        EnableUpdateData( sal_uLong nTimeout = EDIT_UPDATEDATA_TIMEOUT );
     virtual void        DisableUpdateData() { delete mpUpdateDataTimer; mpUpdateDataTimer = NULL; }
-    virtual sal_uIntPtr     IsUpdateDataEnabled() const;
+    virtual sal_uLong       IsUpdateDataEnabled() const;
 
     void                SetEchoChar( xub_Unicode c );
     xub_Unicode         GetEchoChar() const { return mcEchoChar; }
@@ -253,7 +253,7 @@ public:
     static Size GetMinimumEditSize();
 };
 
-inline sal_uIntPtr Edit::IsUpdateDataEnabled() const
+inline sal_uLong Edit::IsUpdateDataEnabled() const
 {
     if ( mpUpdateDataTimer )
         return mpUpdateDataTimer->GetTimeout();

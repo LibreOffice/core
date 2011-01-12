@@ -507,7 +507,7 @@ void NumericFormatter::ImplLoadRes( const ResId& rResId )
 
     if( pMgr )
     {
-        sal_uIntPtr nMask = pMgr->ReadLong();
+        sal_uLong nMask = pMgr->ReadLong();
 
         if ( NUMERICFORMATTER_MIN & nMask )
             mnMin = pMgr->ReadLong();
@@ -834,7 +834,7 @@ void NumericField::ImplLoadRes( const ResId& rResId )
     SpinField::ImplLoadRes( rResId );
     NumericFormatter::ImplLoadRes( ResId( (RSHEADER_TYPE *)GetClassRes(), *rResId.GetResMgr() ) );
 
-    sal_uIntPtr      nMask = ReadLongRes();
+    sal_uLong      nMask = ReadLongRes();
 
     if ( NUMERICFIELD_FIRST & nMask )
         mnFirst = ReadLongRes();
@@ -1521,7 +1521,7 @@ void MetricFormatter::ImplLoadRes( const ResId& rResId )
     ResMgr*     pMgr = rResId.GetResMgr();
     if( pMgr )
     {
-        sal_uIntPtr       nMask = pMgr->ReadLong();
+        sal_uLong       nMask = pMgr->ReadLong();
 
         if ( METRICFORMATTER_UNIT & nMask )
             meUnit = (FieldUnit)pMgr->ReadLong();
@@ -1752,7 +1752,7 @@ void MetricField::ImplLoadRes( const ResId& rResId )
     SpinField::ImplLoadRes( rResId );
     MetricFormatter::ImplLoadRes( ResId( (RSHEADER_TYPE *)GetClassRes(), *rResId.GetResMgr() ) );
 
-    sal_uIntPtr      nMask = ReadLongRes();
+    sal_uLong      nMask = ReadLongRes();
 
     if ( METRICFIELD_FIRST & nMask )
         mnFirst = ReadLongRes();
@@ -2257,7 +2257,7 @@ void CurrencyField::ImplLoadRes( const ResId& rResId )
     SpinField::ImplLoadRes( rResId );
     CurrencyFormatter::ImplLoadRes( ResId( (RSHEADER_TYPE *)GetClassRes(), *rResId.GetResMgr() ) );
 
-    sal_uIntPtr      nMask = ReadLongRes();
+    sal_uLong      nMask = ReadLongRes();
 
     if ( CURRENCYFIELD_FIRST & nMask )
         mnFirst = ReadLongRes();

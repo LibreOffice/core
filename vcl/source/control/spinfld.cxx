@@ -1030,7 +1030,7 @@ IMPL_LINK( SpinField, ImplTimeout, Timer*, pTimer )
 
 // -----------------------------------------------------------------------
 
-void SpinField::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal_uIntPtr nFlags )
+void SpinField::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal_uLong nFlags )
 {
     Edit::Draw( pDev, rPos, rSize, nFlags );
 

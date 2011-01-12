@@ -133,7 +133,7 @@ GroupBox::GroupBox( Window* pParent, const ResId& rResId ) :
 
 // -----------------------------------------------------------------------
 
-void GroupBox::ImplDraw( OutputDevice* pDev, sal_uIntPtr nDrawFlags,
+void GroupBox::ImplDraw( OutputDevice* pDev, sal_uLong nDrawFlags,
                          const Point& rPos, const Size& rSize, bool bLayout )
 {
     long                    nTop;
@@ -241,7 +241,7 @@ void GroupBox::Paint( const Rectangle& )
 // -----------------------------------------------------------------------
 
 void GroupBox::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize,
-                     sal_uIntPtr nFlags )
+                     sal_uLong nFlags )
 {
     Point       aPos  = pDev->LogicToPixel( rPos );
     Size        aSize = pDev->LogicToPixel( rSize );

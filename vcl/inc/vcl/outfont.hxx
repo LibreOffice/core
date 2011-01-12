@@ -235,7 +235,7 @@ protected:
     ImplDevFontListData*    ImplFindByTokenNames( const String& ) const;
     ImplDevFontListData*    ImplFindByAliasName( const String& rSearchName, const String& rShortName ) const;
     ImplDevFontListData*    ImplFindBySubstFontAttr( const utl::FontNameAttr& ) const;
-    ImplDevFontListData*    ImplFindByAttributes( sal_uIntPtr nSearchType, FontWeight, FontWidth,
+    ImplDevFontListData*    ImplFindByAttributes( sal_uLong nSearchType, FontWeight, FontWidth,
                                 FontFamily, FontItalic, const String& rSearchFamily ) const;
     ImplDevFontListData*    FindDefaultFont() const;
 
@@ -335,7 +335,7 @@ public: // TODO: make data members private
     ImplFontMetricData  maMetric;           // Font Metric
     const ConvertChar*  mpConversion;       // used e.g. for StarBats->StarSymbol
     long                mnLineHeight;
-    sal_uIntPtr               mnRefCount;
+    sal_uLong               mnRefCount;
     sal_uInt16              mnSetFontFlags;     // Flags returned by SalGraphics::SetFont()
     short               mnOwnOrientation;   // text angle if lower layers don't rotate text themselves
     short               mnOrientation;      // text angle in 3600 system

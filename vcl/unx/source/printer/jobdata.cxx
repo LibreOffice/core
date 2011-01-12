@@ -167,7 +167,7 @@ bool JobData::getStreamBuffer( void*& pData, int& bytes )
 
     // now append the PPDContext stream buffer
     aStream.WriteLine( "PPDContexData" );
-    sal_uIntPtr nBytes;
+    sal_uLong nBytes;
     void* pContextBuffer = m_aContext.getStreamableBuffer( nBytes );
     if( nBytes )
         aStream.Write( pContextBuffer, nBytes );

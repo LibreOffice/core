@@ -2058,7 +2058,7 @@ bool PDFWriterImpl::compressStream( SvMemoryStream* pStream )
 {
 #ifndef DEBUG_DISABLE_PDFCOMPRESSION
     pStream->Seek( STREAM_SEEK_TO_END );
-    sal_uIntPtr nEndPos = pStream->Tell();
+    sal_uLong nEndPos = pStream->Tell();
     pStream->Seek( STREAM_SEEK_TO_BEGIN );
     ZCodec* pCodec = new ZCodec( 0x4000, 0x4000 );
     SvMemoryStream aStream;
@@ -2122,7 +2122,7 @@ bool PDFWriterImpl::writeBuffer( const void* pBuffer, sal_uInt64 nBytes )
     sal_uInt64 nWritten;
     if( m_pCodec )
     {
-        m_pCodec->Write( *m_pMemStream, static_cast<const sal_uInt8*>(pBuffer), (sal_uIntPtr)nBytes );
+        m_pCodec->Write( *m_pMemStream, static_cast<const sal_uInt8*>(pBuffer), (sal_uLong)nBytes );
         nWritten = nBytes;
     }
     else
@@ -7723,7 +7723,7 @@ void PDFWriterImpl::drawTextArray( const Point& rPos, const String& rText, const
     }
 }
 
-void PDFWriterImpl::drawStretchText( const Point& rPos, sal_uIntPtr nWidth, const String& rText, xub_StrLen nIndex, xub_StrLen nLen, bool bTextLines )
+void PDFWriterImpl::drawStretchText( const Point& rPos, sal_uLong nWidth, const String& rText, xub_StrLen nIndex, xub_StrLen nLen, bool bTextLines )
 {
     MARK( "drawStretchText" );
 
@@ -8293,7 +8293,7 @@ void PDFWriterImpl::drawStrikeoutChar( const Point& rPos, long nWidth, FontStrik
     }
 
     // strikeout string is left aligned non-CTL text
-    sal_uIntPtr nOrigTLM = m_pReferenceDevice->GetLayoutMode();
+    sal_uLong nOrigTLM = m_pReferenceDevice->GetLayoutMode();
     m_pReferenceDevice->SetLayoutMode( TEXT_LAYOUT_BIDI_STRONG|TEXT_LAYOUT_COMPLEX_DISABLED );
     drawText( rPos, aStrikeout, 0, aStrikeout.Len(), false );
     m_pReferenceDevice->SetLayoutMode( nOrigTLM );
@@ -9249,7 +9249,7 @@ bool PDFWriterImpl::writeTransparentObject( TransparencyEmit& rObject )
 
     bool bFlateFilter = compressStream( rObject.m_pContentStream );
     rObject.m_pContentStream->Seek( STREAM_SEEK_TO_END );
-    sal_uIntPtr nSize = rObject.m_pContentStream->Tell();
+    sal_uLong nSize = rObject.m_pContentStream->Tell();
     rObject.m_pContentStream->Seek( STREAM_SEEK_TO_BEGIN );
 #if OSL_DEBUG_LEVEL > 1
     {

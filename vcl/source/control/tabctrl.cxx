@@ -270,14 +270,14 @@ void TabControl::ImplLoadRes( const ResId& rResId )
 {
     Control::ImplLoadRes( rResId );
 
-    sal_uIntPtr nObjMask = ReadLongRes();
+    sal_uLong nObjMask = ReadLongRes();
 
     if ( nObjMask & RSC_TABCONTROL_ITEMLIST )
     {
-        sal_uIntPtr nEle = ReadLongRes();
+        sal_uLong nEle = ReadLongRes();
 
         // Item hinzufuegen
-        for( sal_uIntPtr i = 0; i < nEle; i++ )
+        for( sal_uLong i = 0; i < nEle; i++ )
         {
             InsertPage( ResId( (RSHEADER_TYPE *)GetClassRes(), *rResId.GetResMgr() ) );
             IncrementRes( GetObjSizeRes( (RSHEADER_TYPE *)GetClassRes() ) );
@@ -1755,7 +1755,7 @@ void TabControl::InsertPage( const ResId& rResId, sal_uInt16 nPos )
 {
     GetRes( rResId.SetRT( RSC_TABCONTROLITEM ) );
 
-    sal_uIntPtr nObjMask = ReadLongRes();
+    sal_uLong nObjMask = ReadLongRes();
     sal_uInt16 nItemId  = 1;
 
     // ID
@@ -1828,7 +1828,7 @@ void TabControl::InsertPage( sal_uInt16 nPageId, const XubString& rText,
     if( mpTabCtrlData->mpListBox ) // reposition/resize listbox
         Resize();
 
-    ImplCallEventListeners( VCLEVENT_TABPAGE_INSERTED, (void*) (sal_uIntPtr)nPageId );
+    ImplCallEventListeners( VCLEVENT_TABPAGE_INSERTED, (void*) (sal_uLong)nPageId );
 }
 
 // -----------------------------------------------------------------------
@@ -1875,7 +1875,7 @@ void TabControl::RemovePage( sal_uInt16 nPageId )
 
         ImplFreeLayoutData();
 
-        ImplCallEventListeners( VCLEVENT_TABPAGE_REMOVED, (void*) (sal_uIntPtr) nPageId );
+        ImplCallEventListeners( VCLEVENT_TABPAGE_REMOVED, (void*) (sal_uLong) nPageId );
     }
 }
 
@@ -2026,7 +2026,7 @@ void TabControl::SelectTabPage( sal_uInt16 nPageId )
     {
         ImplFreeLayoutData();
 
-        ImplCallEventListeners( VCLEVENT_TABPAGE_DEACTIVATE, (void*) (sal_uIntPtr) mnCurPageId );
+        ImplCallEventListeners( VCLEVENT_TABPAGE_DEACTIVATE, (void*) (sal_uLong) mnCurPageId );
         if ( DeactivatePage() )
         {
             mnActPageId = nPageId;
@@ -2037,7 +2037,7 @@ void TabControl::SelectTabPage( sal_uInt16 nPageId )
             SetCurPageId( nPageId );
             if( mpTabCtrlData->mpListBox )
                 mpTabCtrlData->mpListBox->SelectEntryPos( GetPagePos( nPageId ) );
-            ImplCallEventListeners( VCLEVENT_TABPAGE_ACTIVATE, (void*) (sal_uIntPtr) nPageId );
+            ImplCallEventListeners( VCLEVENT_TABPAGE_ACTIVATE, (void*) (sal_uLong) nPageId );
         }
     }
 }
@@ -2110,7 +2110,7 @@ void TabControl::SetPageText( sal_uInt16 nPageId, const XubString& rText )
         if ( IsUpdateMode() )
             Invalidate();
         ImplFreeLayoutData();
-        ImplCallEventListeners( VCLEVENT_TABPAGE_PAGETEXTCHANGED, (void*) (sal_uIntPtr) nPageId );
+        ImplCallEventListeners( VCLEVENT_TABPAGE_PAGETEXTCHANGED, (void*) (sal_uLong) nPageId );
     }
 }
 

@@ -134,7 +134,7 @@ static void ImplCalcBigIntThreshold( long nDPIX, long nDPIY,
     {
         // Schwellenwerte fuer BigInt Arithmetik berechnen
         long    nDenomHalfX = rMapRes.mnMapScDenomX / 2;
-        sal_uIntPtr nDenomX     = rMapRes.mnMapScDenomX;
+        sal_uLong   nDenomX     = rMapRes.mnMapScDenomX;
         long    nProductX   = nDPIX * rMapRes.mnMapScNumX;
 
         if ( !nProductX )
@@ -145,9 +145,9 @@ static void ImplCalcBigIntThreshold( long nDPIX, long nDPIY,
         if ( !nDenomX )
             rThresRes.mnThresPixToLogX = LONG_MAX;
         else if ( nProductX >= 0 )
-            rThresRes.mnThresPixToLogX = (long)(((sal_uIntPtr)LONG_MAX - (sal_uIntPtr)( nProductX/2)) / nDenomX);
+            rThresRes.mnThresPixToLogX = (long)(((sal_uLong)LONG_MAX - (sal_uLong)( nProductX/2)) / nDenomX);
         else
-            rThresRes.mnThresPixToLogX = (long)(((sal_uIntPtr)LONG_MAX + (sal_uIntPtr)(-nProductX/2)) / nDenomX);
+            rThresRes.mnThresPixToLogX = (long)(((sal_uLong)LONG_MAX + (sal_uLong)(-nProductX/2)) / nDenomX);
     }
 
     if ( nDPIY && (LONG_MAX / nDPIY < Abs( rMapRes.mnMapScNumY ) ) ) // #111139# avoid div by zero
@@ -159,7 +159,7 @@ static void ImplCalcBigIntThreshold( long nDPIX, long nDPIY,
     {
         // Schwellenwerte fuer BigInt Arithmetik berechnen
         long    nDenomHalfY = rMapRes.mnMapScDenomY / 2;
-        sal_uIntPtr nDenomY     = rMapRes.mnMapScDenomY;
+        sal_uLong   nDenomY     = rMapRes.mnMapScDenomY;
         long    nProductY   = nDPIY * rMapRes.mnMapScNumY;
 
         if ( !nProductY )
@@ -170,9 +170,9 @@ static void ImplCalcBigIntThreshold( long nDPIX, long nDPIY,
         if ( !nDenomY )
             rThresRes.mnThresPixToLogY = LONG_MAX;
         else if ( nProductY >= 0 )
-            rThresRes.mnThresPixToLogY = (long)(((sal_uIntPtr)LONG_MAX - (sal_uIntPtr)( nProductY/2)) / nDenomY);
+            rThresRes.mnThresPixToLogY = (long)(((sal_uLong)LONG_MAX - (sal_uLong)( nProductY/2)) / nDenomY);
         else
-            rThresRes.mnThresPixToLogY = (long)(((sal_uIntPtr)LONG_MAX + (sal_uIntPtr)(-nProductY/2)) / nDenomY);
+            rThresRes.mnThresPixToLogY = (long)(((sal_uLong)LONG_MAX + (sal_uLong)(-nProductY/2)) / nDenomY);
     }
 
 #ifdef USE_64BIT_INTS

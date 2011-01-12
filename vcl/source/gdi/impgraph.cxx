@@ -70,7 +70,7 @@
 struct ImpSwapFile
 {
     INetURLObject   aSwapURL;
-    sal_uIntPtr         nRefCount;
+    sal_uLong           nRefCount;
 };
 
 // -----------------
@@ -252,7 +252,7 @@ ImpGraphic::~ImpGraphic()
 {
     ImplClear();
 
-    if( (sal_uIntPtr) mpContext > 1UL )
+    if( (sal_uLong) mpContext > 1UL )
         delete mpContext;
 }
 
@@ -729,7 +729,7 @@ void ImpGraphic::ImplSetPrefMapMode( const MapMode& rPrefMapMode )
 
 // ------------------------------------------------------------------------
 
-sal_uIntPtr ImpGraphic::ImplGetSizeBytes() const
+sal_uLong ImpGraphic::ImplGetSizeBytes() const
 {
     if( 0 == mnSizeBytes )
     {
@@ -856,7 +856,7 @@ Link ImpGraphic::ImplGetAnimationNotifyHdl() const
 
 // ------------------------------------------------------------------------
 
-sal_uIntPtr ImpGraphic::ImplGetAnimationLoopCount() const
+sal_uLong ImpGraphic::ImplGetAnimationLoopCount() const
 {
     return( mpAnimation ? mpAnimation->GetLoopCount() : 0UL );
 }
@@ -892,7 +892,7 @@ void ImpGraphic::ImplSetContext( GraphicReader* pReader )
 
 // ------------------------------------------------------------------------
 
-void ImpGraphic::ImplSetDocFileName( const String& rName, sal_uIntPtr nFilePos )
+void ImpGraphic::ImplSetDocFileName( const String& rName, sal_uLong nFilePos )
 {
     const INetURLObject aURL( rName );
 
@@ -911,7 +911,7 @@ const String& ImpGraphic::ImplGetDocFileName() const
 
 // ------------------------------------------------------------------------
 
-sal_uIntPtr ImpGraphic::ImplGetDocFilePos() const
+sal_uLong ImpGraphic::ImplGetDocFilePos() const
 {
     return mnDocFilePos;
 }
@@ -922,9 +922,9 @@ sal_Bool ImpGraphic::ImplReadEmbedded( SvStream& rIStm, sal_Bool bSwap )
 {
     MapMode         aMapMode;
     Size            aSize;
-    const sal_uIntPtr       nStartPos = rIStm.Tell();
+    const sal_uLong     nStartPos = rIStm.Tell();
     sal_uInt32      nId;
-    sal_uIntPtr         nHeaderLen;
+    sal_uLong           nHeaderLen;
     long            nType;
     long            nLen;
     const sal_uInt16    nOldFormat = rIStm.GetNumberFormatInt();
@@ -933,7 +933,7 @@ sal_Bool ImpGraphic::ImplReadEmbedded( SvStream& rIStm, sal_Bool bSwap )
     if( !mbSwapUnderway )
     {
         const String        aTempURLStr( maDocFileURLStr );
-        const sal_uIntPtr           nTempPos = mnDocFilePos;
+        const sal_uLong         nTempPos = mnDocFilePos;
 
         ImplClear();
 
@@ -1031,8 +1031,8 @@ sal_Bool ImpGraphic::ImplReadEmbedded( SvStream& rIStm, sal_Bool bSwap )
 
                     if( pOStm )
                     {
-                        sal_uIntPtr nFullLen = nHeaderLen + nLen;
-                        sal_uIntPtr nPartLen = Min( nFullLen, (sal_uIntPtr) GRAPHIC_MAXPARTLEN );
+                        sal_uLong   nFullLen = nHeaderLen + nLen;
+                        sal_uLong   nPartLen = Min( nFullLen, (sal_uLong) GRAPHIC_MAXPARTLEN );
                         sal_uInt8*  pBuffer = (sal_uInt8*) rtl_allocateMemory( nPartLen );
 
                           pOStm->SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
@@ -1053,7 +1053,7 @@ sal_Bool ImpGraphic::ImplReadEmbedded( SvStream& rIStm, sal_Bool bSwap )
                             }
 
                             rtl_freeMemory( pBuffer );
-                            sal_uIntPtr nReadErr = rIStm.GetError(), nWriteErr = pOStm->GetError();
+                            sal_uLong nReadErr = rIStm.GetError(), nWriteErr = pOStm->GetError();
                             delete pOStm, pOStm = NULL;
 
                             if( !nReadErr && !nWriteErr )
@@ -1101,9 +1101,9 @@ sal_Bool ImpGraphic::ImplReadEmbedded( SvStream& rIStm, sal_Bool bSwap )
         else if( meType >= SYS_WINMETAFILE && meType <= SYS_MACMETAFILE )
         {
             Graphic aSysGraphic;
-            sal_uIntPtr nCvtType;
+            sal_uLong   nCvtType;
 
-            switch( sal::static_int_cast<sal_uIntPtr>(meType) )
+            switch( sal::static_int_cast<sal_uLong>(meType) )
             {
                 case( SYS_WINMETAFILE ):
                 case( SYS_WNTMETAFILE ): nCvtType = CVT_WMF; break;
@@ -1149,7 +1149,7 @@ sal_Bool ImpGraphic::ImplWriteEmbedded( SvStream& rOStm )
         const MapMode   aMapMode( ImplGetPrefMapMode() );
         const Size      aSize( ImplGetPrefSize() );
         const sal_uInt16    nOldFormat = rOStm.GetNumberFormatInt();
-        sal_uIntPtr         nDataFieldPos;
+        sal_uLong           nDataFieldPos;
 
         rOStm.SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
 
@@ -1196,14 +1196,14 @@ sal_Bool ImpGraphic::ImplWriteEmbedded( SvStream& rOStm )
         // write data block
         if( !rOStm.GetError() )
         {
-            const sal_uIntPtr nDataStart = rOStm.Tell();
+            const sal_uLong nDataStart = rOStm.Tell();
 
             if( ImplIsSupportedGraphic() )
                 rOStm << *this;
 
             if( !rOStm.GetError() )
             {
-                const sal_uIntPtr nStmPos2 = rOStm.Tell();
+                const sal_uLong nStmPos2 = rOStm.Tell();
                 rOStm.Seek( nDataFieldPos );
                 rOStm << (long) ( nStmPos2 - nDataStart );
                 rOStm.Seek( nStmPos2 );
@@ -1444,9 +1444,9 @@ sal_Bool ImpGraphic::ImplIsLink() const
 
 // ------------------------------------------------------------------------
 
-sal_uIntPtr ImpGraphic::ImplGetChecksum() const
+sal_uLong ImpGraphic::ImplGetChecksum() const
 {
-    sal_uIntPtr nRet = 0;
+    sal_uLong nRet = 0;
 
     if( ImplIsSupportedGraphic() && !ImplIsSwapOut() )
     {
@@ -1504,7 +1504,7 @@ SvStream& operator>>( SvStream& rIStm, ImpGraphic& rImpGraphic )
 {
     if( !rIStm.GetError() )
     {
-        const sal_uIntPtr   nStmPos1 = rIStm.Tell();
+        const sal_uLong nStmPos1 = rIStm.Tell();
         sal_uInt32 nTmp;
 
         if ( !rImpGraphic.mbSwapUnderway )
@@ -1570,7 +1570,7 @@ SvStream& operator>>( SvStream& rIStm, ImpGraphic& rImpGraphic )
                 if( !rIStm.GetError() )
                 {
                     sal_uInt32  nMagic1(0), nMagic2(0);
-                    sal_uIntPtr nActPos = rIStm.Tell();
+                    sal_uLong   nActPos = rIStm.Tell();
 
                     rIStm >> nMagic1 >> nMagic2;
                     rIStm.Seek( nActPos );

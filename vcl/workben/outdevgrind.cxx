@@ -256,12 +256,12 @@ void setupMethodStubs( functor_vector_type& res )
             aRect ));
 
     /* void DrawRect( const Rectangle& rRect,
-                                  sal_uIntPtr nHorzRount, sal_uIntPtr nVertRound );
+                                  sal_uLong nHorzRount, sal_uLong nVertRound );
     */
     add(res,
         "DrawRect(round corners)",
         boost::bind(
-            (void (OutputDevice::*)( const Rectangle&, sal_uIntPtr nHorzRount, sal_uIntPtr nVertRound ))(
+            (void (OutputDevice::*)( const Rectangle&, sal_uLong nHorzRount, sal_uLong nVertRound ))(
                 &OutputDevice::DrawRect),
             _1,
             aRect2,
@@ -764,7 +764,7 @@ void setupMethodStubs( functor_vector_type& res )
             _1,
             aPt1,aPt2,(sal_uInt16)WAVE_NORMAL ));
 
-    /* void DrawGrid( const Rectangle& rRect, const Size& rDist, sal_uIntPtr nFlags ); */
+    /* void DrawGrid( const Rectangle& rRect, const Size& rDist, sal_uLong nFlags ); */
     add(res,
         "DrawGrid",
         boost::bind(

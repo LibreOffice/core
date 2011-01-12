@@ -1314,7 +1314,7 @@ MetaTextArrayAction::MetaTextArrayAction( const MetaTextArrayAction& rAction ) :
 {
     if( rAction.mpDXAry )
     {
-        const sal_uIntPtr nAryLen = mnLen;
+        const sal_uLong nAryLen = mnLen;
 
         mpDXAry = new sal_Int32[ nAryLen ];
         memcpy( mpDXAry, rAction.mpDXAry, nAryLen * sizeof( sal_Int32 ) );
@@ -1336,7 +1336,7 @@ MetaTextArrayAction::MetaTextArrayAction( const Point& rStartPt,
     mnIndex     ( nIndex ),
     mnLen       ( ( nLen == STRING_LEN ) ? rStr.Len() : nLen )
 {
-    const sal_uIntPtr nAryLen = pDXAry ? mnLen : 0;
+    const sal_uLong nAryLen = pDXAry ? mnLen : 0;
 
     if( nAryLen )
     {
@@ -1414,7 +1414,7 @@ void MetaTextArrayAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
     rOStm   << mnLen;
     rOStm   << nAryLen;
 
-    for( sal_uIntPtr i = 0UL; i < nAryLen; i++ )
+    for( sal_uLong i = 0UL; i < nAryLen; i++ )
         rOStm << mpDXAry[ i ];
 
     sal_uInt16 j, nLen = maStr.Len();                           // version 2
@@ -1456,7 +1456,7 @@ void MetaTextArrayAction::Read( SvStream& rIStm, ImplMetaReadData* pData )
             mpDXAry = new (std::nothrow)sal_Int32[ mnLen ];
             if ( mpDXAry )
             {
-                   sal_uIntPtr i;
+                   sal_uLong i;
                 for( i = 0UL; i < nAryLen; i++ )
                     rIStm >> mpDXAry[ i ];
 
@@ -1536,7 +1536,7 @@ void MetaStretchTextAction::Move( long nHorzMove, long nVertMove )
 void MetaStretchTextAction::Scale( double fScaleX, double fScaleY )
 {
     ImplScalePoint( maPt, fScaleX, fScaleY );
-    mnWidth = (sal_uIntPtr)FRound( mnWidth * fabs(fScaleX) );
+    mnWidth = (sal_uLong)FRound( mnWidth * fabs(fScaleX) );
 }
 
 // ------------------------------------------------------------------------

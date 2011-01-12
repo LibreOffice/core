@@ -152,7 +152,7 @@ public:
     void            Unlock();
     sal_Bool            IsLocked() const;
 
-    void            StartPopupMode( ToolBox* pParentToolBox, sal_uIntPtr nPopupModeFlags );
+    void            StartPopupMode( ToolBox* pParentToolBox, sal_uLong nPopupModeFlags );
     sal_Bool            IsInPopupMode() const;
 
     void            TitleButtonClick( sal_uInt16 nButton );
@@ -234,7 +234,7 @@ public:
     sal_Bool IsLocked( const Window *pWin );
 
     void    StartPopupMode( ToolBox *pParentToolBox, const Window *pWin );
-    void    StartPopupMode( ToolBox *pParentToolBox, const Window *pWin, sal_uIntPtr nPopupModeFlags );
+    void    StartPopupMode( ToolBox *pParentToolBox, const Window *pWin, sal_uLong nPopupModeFlags );
 
     sal_Bool    IsInPopupMode( const Window *pWin );
     void    EndPopupMode( const Window *pWin );

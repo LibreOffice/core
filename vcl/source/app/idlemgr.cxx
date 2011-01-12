@@ -73,7 +73,7 @@ ImplIdleMgr::~ImplIdleMgr()
 
 sal_Bool ImplIdleMgr::InsertIdleHdl( const Link& rLink, sal_uInt16 nPriority )
 {
-    sal_uIntPtr           nPos = LIST_APPEND;
+    sal_uLong           nPos = LIST_APPEND;
     ImplIdleData*   pIdleData = mpIdleList->First();
     while ( pIdleData )
     {

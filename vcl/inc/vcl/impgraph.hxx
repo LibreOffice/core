@@ -69,9 +69,9 @@ private:
     GfxLink*            mpGfxLink;
     GraphicType         meType;
     String              maDocFileURLStr;
-    sal_uIntPtr             mnDocFilePos;
-    mutable sal_uIntPtr       mnSizeBytes;
-    sal_uIntPtr             mnRefCount;
+    sal_uLong               mnDocFilePos;
+    mutable sal_uLong       mnSizeBytes;
+    sal_uLong               mnRefCount;
     sal_Bool                mbSwapOut;
     sal_Bool                mbSwapUnderway;
 
@@ -111,7 +111,7 @@ private:
     MapMode             ImplGetPrefMapMode() const;
     void                ImplSetPrefMapMode( const MapMode& rPrefMapMode );
 
-    sal_uIntPtr             ImplGetSizeBytes() const;
+    sal_uLong               ImplGetSizeBytes() const;
 
     void                ImplDraw( OutputDevice* pOutDev,
                                   const Point& rDestPt ) const;
@@ -134,7 +134,7 @@ private:
     void                ImplSetAnimationNotifyHdl( const Link& rLink );
     Link                ImplGetAnimationNotifyHdl() const;
 
-    sal_uIntPtr             ImplGetAnimationLoopCount() const;
+    sal_uLong               ImplGetAnimationLoopCount() const;
     void                ImplResetAnimationLoopCount();
 
     List*               ImplGetAnimationInfoList() const;
@@ -146,9 +146,9 @@ private:
 
 private:
 
-    void                ImplSetDocFileName( const String& rName, sal_uIntPtr nFilePos );
+    void                ImplSetDocFileName( const String& rName, sal_uLong nFilePos );
     const String&       ImplGetDocFileName() const;
-    sal_uIntPtr             ImplGetDocFilePos() const;
+    sal_uLong               ImplGetDocFilePos() const;
 
     sal_Bool                ImplReadEmbedded( SvStream& rIStream, sal_Bool bSwap = sal_False );
     sal_Bool                ImplWriteEmbedded( SvStream& rOStream );
@@ -165,7 +165,7 @@ private:
     GfxLink             ImplGetLink();
     sal_Bool                ImplIsLink() const;
 
-    sal_uIntPtr             ImplGetChecksum() const;
+    sal_uLong               ImplGetChecksum() const;
 
     sal_Bool                ImplExportNative( SvStream& rOStm ) const;
 

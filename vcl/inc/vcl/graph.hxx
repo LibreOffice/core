@@ -144,7 +144,7 @@ public:
 
     Size                GetSizePixel( const OutputDevice* pRefDevice = NULL ) const;
 
-    sal_uIntPtr               GetSizeBytes() const;
+    sal_uLong               GetSizeBytes() const;
 
     void                Draw( OutputDevice* pOutDev,
                               const Point& rDestPt ) const;
@@ -173,12 +173,12 @@ public:
     void                SetAnimationNotifyHdl( const Link& rLink );
     Link                GetAnimationNotifyHdl() const;
 
-    sal_uIntPtr               GetAnimationLoopCount() const;
+    sal_uLong               GetAnimationLoopCount() const;
     void                ResetAnimationLoopCount();
 
     List*               GetAnimationInfoList() const;
 
-    sal_uIntPtr               GetChecksum() const;
+    sal_uLong               GetChecksum() const;
 
 public:
 
@@ -189,9 +189,9 @@ public:
 
     static sal_uInt16       GetGraphicsCompressMode( SvStream& rIStm );
 
-    void                SetDocFileName( const String& rName, sal_uIntPtr nFilePos );
+    void                SetDocFileName( const String& rName, sal_uLong nFilePos );
     const String&       GetDocFileName() const;
-    sal_uIntPtr               GetDocFilePos() const;
+    sal_uLong               GetDocFilePos() const;
 
     sal_Bool                ReadEmbedded( SvStream& rIStream, sal_Bool bSwap = sal_False );
     sal_Bool                WriteEmbedded( SvStream& rOStream );

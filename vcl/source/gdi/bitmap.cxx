@@ -358,9 +358,9 @@ sal_Bool Bitmap::HasGreyPalette() const
 
 // ------------------------------------------------------------------
 
-sal_uIntPtr Bitmap::GetChecksum() const
+sal_uLong Bitmap::GetChecksum() const
 {
-    sal_uIntPtr nRet = 0UL;
+    sal_uLong nRet = 0UL;
 
     if( mpImpBmp )
     {
@@ -534,7 +534,7 @@ sal_Bool Bitmap::Erase( const Color& rFillColor )
 
     if( pWriteAcc )
     {
-        const sal_uIntPtr nFormat = pWriteAcc->GetScanlineFormat();
+        const sal_uLong nFormat = pWriteAcc->GetScanlineFormat();
         sal_uInt8       cIndex = 0;
         sal_Bool        bFast = sal_False;
 
@@ -586,7 +586,7 @@ sal_Bool Bitmap::Erase( const Color& rFillColor )
 
         if( bFast )
         {
-            const sal_uIntPtr nBufSize = pWriteAcc->GetScanlineSize() * pWriteAcc->Height();
+            const sal_uLong nBufSize = pWriteAcc->GetScanlineSize() * pWriteAcc->Height();
             memset( pWriteAcc->GetBuffer(), cIndex, nBufSize );
         }
         else
@@ -642,7 +642,7 @@ sal_Bool Bitmap::Invert()
 
 // ------------------------------------------------------------------
 
-sal_Bool Bitmap::Mirror( sal_uIntPtr nMirrorFlags )
+sal_Bool Bitmap::Mirror( sal_uLong nMirrorFlags )
 {
     sal_Bool bHorz = ( ( nMirrorFlags & BMP_MIRROR_HORZ ) == BMP_MIRROR_HORZ );
     sal_Bool bVert = ( ( nMirrorFlags & BMP_MIRROR_VERT ) == BMP_MIRROR_VERT );
@@ -1121,7 +1121,7 @@ sal_Bool Bitmap::CopyPixel( const Rectangle& rRectDst,
 
 // ------------------------------------------------------------------
 
-sal_Bool Bitmap::Expand( sal_uIntPtr nDX, sal_uIntPtr nDY, const Color* pInitColor )
+sal_Bool Bitmap::Expand( sal_uLong nDX, sal_uLong nDY, const Color* pInitColor )
 {
     sal_Bool bRet = sal_False;
 
@@ -1182,7 +1182,7 @@ sal_Bool Bitmap::Expand( sal_uIntPtr nDX, sal_uIntPtr nDY, const Color* pInitCol
 
 // ------------------------------------------------------------------
 
-Bitmap Bitmap::CreateMask( const Color& rTransColor, sal_uIntPtr nTol ) const
+Bitmap Bitmap::CreateMask( const Color& rTransColor, sal_uLong nTol ) const
 {
     Bitmap              aNewBmp( GetSizePixel(), 1 );
     BitmapWriteAccess*  pWriteAcc = aNewBmp.AcquireWriteAccess();
@@ -1549,7 +1549,7 @@ sal_Bool Bitmap::Replace( const AlphaMask& rAlpha, const Color& rMergeColor )
 
 // ------------------------------------------------------------------
 
-sal_Bool Bitmap::Replace( const Color& rSearchColor, const Color& rReplaceColor, sal_uIntPtr nTol )
+sal_Bool Bitmap::Replace( const Color& rSearchColor, const Color& rReplaceColor, sal_uLong nTol )
 {
     // Bitmaps with 1 bit color depth can cause problems
     // if they have other entries than black/white in their palette
@@ -1613,7 +1613,7 @@ sal_Bool Bitmap::Replace( const Color& rSearchColor, const Color& rReplaceColor,
 // ------------------------------------------------------------------
 
 sal_Bool Bitmap::Replace( const Color* pSearchColors, const Color* pReplaceColors,
-                      sal_uIntPtr nColorCount, sal_uIntPtr* _pTols )
+                      sal_uLong nColorCount, sal_uLong* _pTols )
 {
     // Bitmaps with 1 bit color depth can cause problems
     // if they have other entries than black/white in their palette
@@ -1632,7 +1632,7 @@ sal_Bool Bitmap::Replace( const Color* pSearchColors, const Color* pReplaceColor
         long*   pMinB = new long[ nColorCount ];
         long*   pMaxB = new long[ nColorCount ];
         long*   pTols;
-        sal_uIntPtr i;
+        sal_uLong   i;
 
         if( !_pTols )
         {
@@ -1748,7 +1748,7 @@ Bitmap Bitmap::GetColorTransformedBitmap( BmpColorMode eColorMode ) const
     {
         Color*  pSrcColors = NULL;
         Color*  pDstColors = NULL;
-        sal_uIntPtr   nColorCount = 0;
+        sal_uLong   nColorCount = 0;
 
         aRet = *this;
 

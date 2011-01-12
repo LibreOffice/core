@@ -531,7 +531,7 @@ Size Graphic::GetSizePixel( const OutputDevice* pRefDevice ) const
 
 // ------------------------------------------------------------------
 
-sal_uIntPtr Graphic::GetSizeBytes() const
+sal_uLong Graphic::GetSizeBytes() const
 {
     return mpImpGraphic->ImplGetSizeBytes();
 }
@@ -615,7 +615,7 @@ Link Graphic::GetAnimationNotifyHdl() const
 
 // ------------------------------------------------------------------------
 
-sal_uIntPtr Graphic::GetAnimationLoopCount() const
+sal_uLong Graphic::GetAnimationLoopCount() const
 {
     return mpImpGraphic->ImplGetAnimationLoopCount();
 }
@@ -652,7 +652,7 @@ void Graphic::SetContext( GraphicReader* pReader )
 
 sal_uInt16 Graphic::GetGraphicsCompressMode( SvStream& rIStm )
 {
-    const sal_uIntPtr     nPos = rIStm.Tell();
+    const sal_uLong     nPos = rIStm.Tell();
     const sal_uInt16    nOldFormat = rIStm.GetNumberFormatInt();
     sal_uInt32          nTmp32;
     sal_uInt16          nTmp16;
@@ -688,7 +688,7 @@ sal_uInt16 Graphic::GetGraphicsCompressMode( SvStream& rIStm )
 
 // ------------------------------------------------------------------------
 
-void Graphic::SetDocFileName( const String& rName, sal_uIntPtr nFilePos )
+void Graphic::SetDocFileName( const String& rName, sal_uLong nFilePos )
 {
     mpImpGraphic->ImplSetDocFileName( rName, nFilePos );
 }
@@ -702,7 +702,7 @@ const String& Graphic::GetDocFileName() const
 
 // ------------------------------------------------------------------------
 
-sal_uIntPtr Graphic::GetDocFilePos() const
+sal_uLong Graphic::GetDocFilePos() const
 {
     return mpImpGraphic->ImplGetDocFilePos();
 }
@@ -786,7 +786,7 @@ sal_Bool Graphic::IsLink() const
 
 // ------------------------------------------------------------------------
 
-sal_uIntPtr Graphic::GetChecksum() const
+sal_uLong Graphic::GetChecksum() const
 {
     return mpImpGraphic->ImplGetChecksum();
 }

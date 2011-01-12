@@ -216,7 +216,7 @@ static PushButton* ImplGetCancelButton( Dialog* pDialog )
 
 static void ImplMouseAutoPos( Dialog* pDialog )
 {
-    sal_uIntPtr nMouseOptions = pDialog->GetSettings().GetMouseSettings().GetOptions();
+    sal_uLong nMouseOptions = pDialog->GetSettings().GetMouseSettings().GetOptions();
     if ( nMouseOptions & MOUSE_OPTION_AUTOCENTERPOS )
     {
         Size aSize = pDialog->GetOutputSizePixel();
@@ -951,7 +951,7 @@ void Dialog::GetDrawWindowBorder( sal_Int32& rLeftBorder, sal_Int32& rTopBorder,
 }
 
 
-void Dialog::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal_uIntPtr )
+void Dialog::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal_uLong )
 {
     Point aPos = pDev->LogicToPixel( rPos );
     Size aSize = pDev->LogicToPixel( rSize );

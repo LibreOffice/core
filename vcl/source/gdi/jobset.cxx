@@ -412,8 +412,8 @@ SvStream& operator<<( SvStream& rOStream, const JobSetup& rJobSetup )
             ShortToSVBT16( (sal_uInt16)(pJobData->meOrientation), aOldJobData.nOrientation );
             ShortToSVBT16( pJobData->mnPaperBin, aOldJobData.nPaperBin );
             ShortToSVBT16( (sal_uInt16)(pJobData->mePaperFormat), aOldJobData.nPaperFormat );
-            UInt32ToSVBT32( (sal_uIntPtr)(pJobData->mnPaperWidth), aOldJobData.nPaperWidth );
-            UInt32ToSVBT32( (sal_uIntPtr)(pJobData->mnPaperHeight), aOldJobData.nPaperHeight );
+            UInt32ToSVBT32( (sal_uLong)(pJobData->mnPaperWidth), aOldJobData.nPaperWidth );
+            UInt32ToSVBT32( (sal_uLong)(pJobData->mnPaperHeight), aOldJobData.nPaperHeight );
 
             ImplOldJobSetupData aOldData;
             memset( &aOldData, 0, sizeof( aOldData ) );

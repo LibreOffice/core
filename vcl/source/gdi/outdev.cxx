@@ -122,7 +122,7 @@ struct ImplObjStack
     Point*          mpRefPoint;
     TextAlign       meTextAlign;
     RasterOp        meRasterOp;
-    sal_uIntPtr           mnTextLayoutMode;
+    sal_uLong           mnTextLayoutMode;
     LanguageType    meTextLanguage;
     sal_uInt16          mnFlags;
 };
@@ -228,7 +228,7 @@ bool OutputDevice::ImplSelectClipRegion( const Region& rRegion, SalGraphics* pGr
     long                nY;
     long                nWidth;
     long                nHeight;
-    sal_uIntPtr             nRectCount;
+    sal_uLong               nRectCount;
     ImplRegionInfo      aInfo;
     sal_Bool                bRegionRect;
     sal_Bool                bClipRegion = sal_True;
@@ -1981,7 +1981,7 @@ void OutputDevice::IntersectClipRegion( const Region& rRegion )
 
 // -----------------------------------------------------------------------
 
-void OutputDevice::SetDrawMode( sal_uIntPtr nDrawMode )
+void OutputDevice::SetDrawMode( sal_uLong nDrawMode )
 {
     DBG_TRACE1( "OutputDevice::SetDrawMode( %lx )", nDrawMode );
     DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
@@ -3403,12 +3403,12 @@ sal_uInt16 OutputDevice::GetAlphaBitCount() const
 
 // -----------------------------------------------------------------------
 
-sal_uIntPtr OutputDevice::GetColorCount() const
+sal_uLong OutputDevice::GetColorCount() const
 {
     DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
 
     const sal_uInt16 nBitCount = GetBitCount();
-    return( ( nBitCount > 31 ) ? ULONG_MAX : ( ( (sal_uIntPtr) 1 ) << nBitCount) );
+    return( ( nBitCount > 31 ) ? ULONG_MAX : ( ( (sal_uLong) 1 ) << nBitCount) );
 }
 
 // -----------------------------------------------------------------------

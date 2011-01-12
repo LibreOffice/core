@@ -284,15 +284,15 @@ typedef sal_uInt16 StateChangedType;
 #define GETFOCUS_FLOATWIN_POPUPMODEEND_CANCEL ((sal_uInt16)0x0400)
 
 // Draw-Flags fuer Draw()
-#define WINDOW_DRAW_MONO                ((sal_uIntPtr)0x00000001)
-#define WINDOW_DRAW_NOBORDER            ((sal_uIntPtr)0x00000002)
-#define WINDOW_DRAW_NOCONTROLS          ((sal_uIntPtr)0x00000004)
-#define WINDOW_DRAW_NODISABLE           ((sal_uIntPtr)0x00000008)
-#define WINDOW_DRAW_NOMNEMONIC          ((sal_uIntPtr)0x00000010)
-#define WINDOW_DRAW_NOSELECTION         ((sal_uIntPtr)0x00000020)
-#define WINDOW_DRAW_NOFOCUS             ((sal_uIntPtr)0x00000040)
-#define WINDOW_DRAW_NOBACKGROUND        ((sal_uIntPtr)0x00000080)
-#define WINDOW_DRAW_ROLLOVER            ((sal_uIntPtr)0x00000100)
+#define WINDOW_DRAW_MONO                ((sal_uLong)0x00000001)
+#define WINDOW_DRAW_NOBORDER            ((sal_uLong)0x00000002)
+#define WINDOW_DRAW_NOCONTROLS          ((sal_uLong)0x00000004)
+#define WINDOW_DRAW_NODISABLE           ((sal_uLong)0x00000008)
+#define WINDOW_DRAW_NOMNEMONIC          ((sal_uLong)0x00000010)
+#define WINDOW_DRAW_NOSELECTION         ((sal_uLong)0x00000020)
+#define WINDOW_DRAW_NOFOCUS             ((sal_uLong)0x00000040)
+#define WINDOW_DRAW_NOBACKGROUND        ((sal_uLong)0x00000080)
+#define WINDOW_DRAW_ROLLOVER            ((sal_uLong)0x00000100)
 
 // Border-Styles fuer SetBorder()
 #define WINDOW_BORDER_NORMAL            ((sal_uInt16)0x0001)
@@ -595,8 +595,8 @@ protected:
 
             void        SetCompoundControl( sal_Bool bCompound );
 
-            void        ImplCallEventListeners( sal_uIntPtr nEvent, void* pData = NULL );
-            void        CallEventListeners( sal_uIntPtr nEvent, void* pData = NULL );
+            void        ImplCallEventListeners( sal_uLong nEvent, void* pData = NULL );
+            void        CallEventListeners( sal_uLong nEvent, void* pData = NULL );
             void        FireVclEvent( VclSimpleEvent* pEvent );
 
     // FIXME: this is a hack to workaround missing layout functionality
@@ -617,7 +617,7 @@ public:
     virtual void        Paint( const Rectangle& rRect );
 
     virtual void        PostPaint();
-    virtual void        Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal_uIntPtr nFlags );
+    virtual void        Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal_uLong nFlags );
     virtual void        Move();
     virtual void        Resize();
     virtual void        Activate();
@@ -627,7 +627,7 @@ public:
     virtual void        RequestHelp( const HelpEvent& rHEvt );
     virtual void        Command( const CommandEvent& rCEvt );
     virtual void        Tracking( const TrackingEvent& rTEvt );
-    virtual void        UserEvent( sal_uIntPtr nEvent, void* pEventData );
+    virtual void        UserEvent( sal_uLong nEvent, void* pEventData );
     virtual void        StateChanged( StateChangedType nStateChange );
     virtual void        DataChanged( const DataChangedEvent& rDCEvt );
     virtual long        PreNotify( NotifyEvent& rNEvt );
@@ -639,11 +639,11 @@ public:
     /*virtual*/ void    AddChildEventListener( const Link& rEventListener );
     /*virtual*/ void    RemoveChildEventListener( const Link& rEventListener );
 
-    sal_uIntPtr               PostUserEvent( sal_uIntPtr nEvent, void* pEventData = NULL );
-    sal_uIntPtr               PostUserEvent( const Link& rLink, void* pCaller = NULL );
-    sal_Bool                PostUserEvent( sal_uIntPtr& rEventId, sal_uIntPtr nEvent, void* pEventData = NULL );
-    sal_Bool                PostUserEvent( sal_uIntPtr& rEventId, const Link& rLink, void* pCaller = NULL );
-    void                RemoveUserEvent( sal_uIntPtr nUserEvent );
+    sal_uLong               PostUserEvent( sal_uLong nEvent, void* pEventData = NULL );
+    sal_uLong               PostUserEvent( const Link& rLink, void* pCaller = NULL );
+    sal_Bool                PostUserEvent( sal_uLong& rEventId, sal_uLong nEvent, void* pEventData = NULL );
+    sal_Bool                PostUserEvent( sal_uLong& rEventId, const Link& rLink, void* pCaller = NULL );
+    void                RemoveUserEvent( sal_uLong nUserEvent );
     void                PostStateChanged( StateChangedType nState );
 
     void                IncrementLockCount();
@@ -697,13 +697,13 @@ public:
 
     struct PointerState
     {
-        sal_uIntPtr   mnState;    // the button state
+        sal_uLong   mnState;    // the button state
         Point   maPos;      // mouse position in output coordinates
     };
     PointerState        GetPointerState();
     sal_Bool                IsMouseOver();
 
-    sal_uIntPtr               GetCurrentModButtons();
+    sal_uLong               GetCurrentModButtons();
 
     void                SetInputContext( const InputContext& rInputContext );
     const InputContext& GetInputContext() const;

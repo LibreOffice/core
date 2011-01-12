@@ -212,7 +212,7 @@ class VCL_DLLPUBLIC SalXLib
 {
 protected:
     timeval         m_aTimeout;
-    sal_uIntPtr           m_nTimeoutMS;
+    sal_uLong           m_nTimeoutMS;
     int             m_pTimeoutFDS[2];
 
     bool            m_bHaveSystemChildFrames;
@@ -254,7 +254,7 @@ public:
     void PushXErrorLevel( bool bIgnore );
     void PopXErrorLevel();
 
-    virtual void            StartTimer( sal_uIntPtr nMS );
+    virtual void            StartTimer( sal_uLong nMS );
     virtual void            StopTimer();
 
     bool            CheckTimeout( bool bExecuteTimers = true );
@@ -358,11 +358,11 @@ protected:
     ScreenData      m_aInvalidScreenData;
     Pair            aResolution_;       // [dpi]
     bool            mbExactResolution;
-    sal_uIntPtr         nMaxRequestSize_;   // [byte]
+    sal_uLong           nMaxRequestSize_;   // [byte]
 
     srv_vendor_t    meServerVendor;
     SalWM           eWindowManager_;
-    sal_uIntPtr         nProperties_;       // PROPERTY_SUPPORT, BUG, FEATURE
+    sal_uLong           nProperties_;       // PROPERTY_SUPPORT, BUG, FEATURE
     sal_Bool            bLocal_;            // Server==Client? Init
     // in SalDisplay::IsLocal()
     sal_Bool            mbLocalIsValid;     // bLocal_ is valid ?
@@ -493,8 +493,8 @@ public:
     RenderEntryMap&       GetRenderEntries( int nScreen ) const { return getDataForScreen(nScreen).m_aRenderData; }
     const Pair     &GetResolution() const { return aResolution_; }
     bool            GetExactResolution() const { return mbExactResolution; }
-    sal_uIntPtr         GetProperties() const { return nProperties_; }
-    sal_uIntPtr         GetMaxRequestSize() const { return nMaxRequestSize_; }
+    sal_uLong           GetProperties() const { return nProperties_; }
+    sal_uLong           GetMaxRequestSize() const { return nMaxRequestSize_; }
     XLIB_Time       GetLastUserEventTime( bool bAlwaysReget = false ) const;
 
     bool            XIfEventWithTimeout( XEvent*, XPointer, X_if_predicate, long i_nTimeout = 1000 ) const;

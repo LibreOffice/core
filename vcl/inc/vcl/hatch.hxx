@@ -41,7 +41,7 @@ class SvStream;
 
 struct ImplHatch
 {
-    sal_uIntPtr             mnRefCount;
+    sal_uLong               mnRefCount;
     Color               maColor;
     HatchStyle          meStyle;
     long                mnDistance;

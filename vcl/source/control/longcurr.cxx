@@ -353,7 +353,7 @@ void LongCurrencyFormatter::ImplLoadRes( const ResId& rResId )
     ResMgr*     pMgr = rResId.GetResMgr();
     if( pMgr )
     {
-        sal_uIntPtr     nMask = pMgr->ReadLong();
+        sal_uLong       nMask = pMgr->ReadLong();
 
         if ( NUMERICFORMATTER_MIN & nMask )
             mnMin = pMgr->ReadLong();
@@ -635,7 +635,7 @@ void LongCurrencyField::ImplLoadRes( const ResId& rResId )
     SpinField::ImplLoadRes( rResId );
     LongCurrencyFormatter::ImplLoadRes( ResId( (RSHEADER_TYPE *)GetClassRes(), *rResId.GetResMgr() ) );
 
-    sal_uIntPtr nMask = ReadLongRes();
+    sal_uLong nMask = ReadLongRes();
     if ( CURRENCYFIELD_FIRST & nMask )
         mnFirst = ReadLongRes();
 

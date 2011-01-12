@@ -495,13 +495,13 @@ bool Printer::StartJob( const rtl::OUString& i_rJobName, boost::shared_ptr<vcl::
     if ( IsJobActive() || IsPrinting() )
         return sal_False;
 
-    sal_uIntPtr   nCopies = mnCopyCount;
+    sal_uLong   nCopies = mnCopyCount;
     bool    bCollateCopy = mbCollateCopy;
     bool    bUserCopy = sal_False;
 
     if ( nCopies > 1 )
     {
-        sal_uIntPtr nDevCopy;
+        sal_uLong nDevCopy;
 
         if ( bCollateCopy )
             nDevCopy = GetCapabilities( PRINTER_CAPABILITIES_COLLATECOPIES );
@@ -1081,9 +1081,9 @@ int PrinterController::getFilteredPageCount()
     return (getPageCountProtected() * mpImplData->maMultiPage.nRepeat + (nDiv-1)) / nDiv;
 }
 
-sal_uIntPtr PrinterController::removeTransparencies( GDIMetaFile& i_rIn, GDIMetaFile& o_rOut )
+sal_uLong PrinterController::removeTransparencies( GDIMetaFile& i_rIn, GDIMetaFile& o_rOut )
 {
-    sal_uIntPtr nRestoreDrawMode = mpImplData->mpPrinter->GetDrawMode();
+    sal_uLong nRestoreDrawMode = mpImplData->mpPrinter->GetDrawMode();
     sal_Int32 nMaxBmpDPIX = mpImplData->mpPrinter->ImplGetDPIX();
     sal_Int32 nMaxBmpDPIY = mpImplData->mpPrinter->ImplGetDPIY();
 
@@ -1181,7 +1181,7 @@ void PrinterController::printFilteredPage( int i_nPage )
     }
 
     GDIMetaFile aCleanedFile;
-    sal_uIntPtr nRestoreDrawMode = removeTransparencies( aPageFile, aCleanedFile );
+    sal_uLong nRestoreDrawMode = removeTransparencies( aPageFile, aCleanedFile );
 
     mpImplData->mpPrinter->EnableOutput( sal_True );
 

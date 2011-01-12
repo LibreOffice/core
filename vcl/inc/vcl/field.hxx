@@ -332,7 +332,7 @@ private:
     sal_Bool                    mbEmptyDate;
     sal_Bool                    mbShowDateCentury;
     sal_uInt16                  mnDateFormat;
-    sal_uIntPtr                   mnExtDateFormat;
+    sal_uLong                   mnExtDateFormat;
     sal_Bool                    mbEnforceValidValue;
 
     SAL_DLLPRIVATE void     ImplInit();

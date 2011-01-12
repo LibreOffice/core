@@ -72,26 +72,26 @@ public:
     Size                    GetSizePixel() const { return Bitmap::GetSizePixel(); }
     void                    SetSizePixel( const Size& rNewSize ) { Bitmap::SetSizePixel( rNewSize ); }
 
-    sal_uIntPtr                 GetSizeBytes() const { return Bitmap::GetSizeBytes(); }
-    sal_uIntPtr                 GetChecksum() const { return Bitmap::GetChecksum(); }
+    sal_uLong                   GetSizeBytes() const { return Bitmap::GetSizeBytes(); }
+    sal_uLong                   GetChecksum() const { return Bitmap::GetChecksum(); }
 
     Bitmap                  GetBitmap() const;
 
 public:
 
     sal_Bool                    Crop( const Rectangle& rRectPixel );
-    sal_Bool                    Expand( sal_uIntPtr nDX, sal_uIntPtr nDY, sal_uInt8* pInitTransparency = NULL );
+    sal_Bool                    Expand( sal_uLong nDX, sal_uLong nDY, sal_uInt8* pInitTransparency = NULL );
     sal_Bool                    CopyPixel( const Rectangle& rRectDst, const Rectangle& rRectSrc, const AlphaMask* pAlphaSrc = NULL );
     sal_Bool                    Erase( sal_uInt8 cTransparency );
     sal_Bool                    Invert();
-    sal_Bool                    Mirror( sal_uIntPtr nMirrorFlags );
-    sal_Bool                    Scale( const Size& rNewSize, sal_uIntPtr nScaleFlag = BMP_SCALE_FAST );
-    sal_Bool                    Scale( const double& rScaleX, const double& rScaleY, sal_uIntPtr nScaleFlag = BMP_SCALE_FAST );
+    sal_Bool                    Mirror( sal_uLong nMirrorFlags );
+    sal_Bool                    Scale( const Size& rNewSize, sal_uLong nScaleFlag = BMP_SCALE_FAST );
+    sal_Bool                    Scale( const double& rScaleX, const double& rScaleY, sal_uLong nScaleFlag = BMP_SCALE_FAST );
     sal_Bool                    Rotate( long nAngle10, sal_uInt8 cFillTransparency );
     sal_Bool                    Replace( const Bitmap& rMask, sal_uInt8 rReplaceTransparency );
-    sal_Bool                    Replace( sal_uInt8 cSearchTransparency, sal_uInt8 cReplaceTransparency, sal_uIntPtr nTol = 0UL );
+    sal_Bool                    Replace( sal_uInt8 cSearchTransparency, sal_uInt8 cReplaceTransparency, sal_uLong nTol = 0UL );
     sal_Bool                    Replace( sal_uInt8* pSearchTransparencies, sal_uInt8* pReplaceTransparencies,
-                                     sal_uIntPtr nColorCount, sal_uIntPtr* pTols = NULL );
+                                     sal_uLong nColorCount, sal_uLong* pTols = NULL );
 
 public:
 

@@ -116,7 +116,7 @@ FixedBorder::~FixedBorder()
 
 // -----------------------------------------------------------------------
 
-void FixedBorder::ImplDraw( OutputDevice* pDev, sal_uIntPtr nDrawFlags,
+void FixedBorder::ImplDraw( OutputDevice* pDev, sal_uLong nDrawFlags,
                             const Point& rPos, const Size& rSize )
 {
     const StyleSettings&    rStyleSettings = GetSettings().GetStyleSettings();
@@ -159,7 +159,7 @@ void FixedBorder::Paint( const Rectangle& )
 // -----------------------------------------------------------------------
 
 void FixedBorder::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize,
-                        sal_uIntPtr nFlags )
+                        sal_uLong nFlags )
 {
     Point   aPos  = pDev->LogicToPixel( rPos );
     Size    aSize = pDev->LogicToPixel( rSize );

@@ -253,7 +253,7 @@ void ImplImageBmp::Create( const BitmapEx& rBmpEx, long nItemWidth, long nItemHe
 
 void ImplImageBmp::Expand( sal_uInt16 nGrowSize )
 {
-    const sal_uIntPtr   nDX = nGrowSize * maSize.Width();
+    const sal_uLong     nDX = nGrowSize * maSize.Width();
     const sal_uInt16    nOldSize = mnSize;
     sal_uInt8*          pNewAry = new sal_uInt8[ mnSize = sal::static_int_cast<sal_uInt16>(mnSize+nGrowSize) ];
 
@@ -337,7 +337,7 @@ void ImplImageBmp::Replace( sal_uInt16 nPos, const BitmapEx& rBmpEx )
 
 // -----------------------------------------------------------------------
 
-void ImplImageBmp::ReplaceColors( const Color* pSrcColors, const Color* pDstColors, sal_uIntPtr nColorCount )
+void ImplImageBmp::ReplaceColors( const Color* pSrcColors, const Color* pDstColors, sal_uLong nColorCount )
 {
     maBmpEx.Replace( pSrcColors, pDstColors, nColorCount );
     delete mpDisplayBmp;

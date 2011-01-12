@@ -374,7 +374,7 @@ void Control::AppendLayoutData( const Control& rSubControl ) const
 
 // -----------------------------------------------------------------
 
-sal_Bool Control::ImplCallEventListenersAndHandler(  sal_uIntPtr nEvent, const Link& rHandler, void* pCaller )
+sal_Bool Control::ImplCallEventListenersAndHandler(  sal_uLong nEvent, const Link& rHandler, void* pCaller )
 {
     ImplDelData aCheckDelete;
     ImplAddDel( &aCheckDelete );
@@ -449,8 +449,8 @@ void Control::DataChanged( const DataChangedEvent& rDCEvt)
     {
         AllSettings     aSettings = GetSettings();
         StyleSettings   aStyleSettings = aSettings.GetStyleSettings();
-        sal_uIntPtr           nOldOptions = rDCEvt.GetOldSettings()->GetStyleSettings().GetOptions();
-        sal_uIntPtr           nNewOptions = aStyleSettings.GetOptions();
+        sal_uLong           nOldOptions = rDCEvt.GetOldSettings()->GetStyleSettings().GetOptions();
+        sal_uLong           nNewOptions = aStyleSettings.GetOptions();
 
         if ( !(nNewOptions & STYLE_OPTION_MONO) && ( nOldOptions & STYLE_OPTION_MONO ) )
         {

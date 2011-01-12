@@ -172,7 +172,7 @@ public:
                         { mpBoxList->Insert( pBox ); }
     void            Remove( ToolBox* pBox )
                         { mpBoxList->Remove( pBox ); }
-    sal_uIntPtr           Count() const
+    sal_uLong           Count() const
                         { return mpBoxList->Count(); }
 
     ToolBox*        FindToolBox( const Rectangle& rRect );
@@ -1731,7 +1731,7 @@ void ToolBox::ImplLoadRes( const ResId& rResId )
 
     DockingWindow::ImplLoadRes( rResId );
 
-    sal_uIntPtr              nObjMask;
+    sal_uLong              nObjMask;
 
     nObjMask = ReadLongRes();
 
@@ -1767,10 +1767,10 @@ void ToolBox::ImplLoadRes( const ResId& rResId )
 
     if ( nObjMask & RSC_TOOLBOX_ITEMLIST )
     {
-        sal_uIntPtr nEle = ReadLongRes();
+        sal_uLong nEle = ReadLongRes();
 
         // Item hinzufuegen
-        for ( sal_uIntPtr i = 0; i < nEle; i++ )
+        for ( sal_uLong i = 0; i < nEle; i++ )
         {
             InsertItem( ResId( (RSHEADER_TYPE *)GetClassRes(), *pMgr ) );
             IncrementRes( GetObjSizeRes( (RSHEADER_TYPE *)GetClassRes() ) );
@@ -2157,8 +2157,8 @@ sal_Bool ToolBox::ImplCalcItem()
 
 sal_uInt16 ToolBox::ImplCalcBreaks( long nWidth, long* pMaxLineWidth, sal_Bool bCalcHorz )
 {
-    sal_uIntPtr           nLineStart = 0;
-    sal_uIntPtr           nGroupStart = 0;
+    sal_uLong           nLineStart = 0;
+    sal_uLong           nGroupStart = 0;
     long            nLineWidth = 0;
     long            nCurWidth;
     long            nLastGroupLineWidth = 0;
@@ -6192,10 +6192,10 @@ sal_Bool ToolBox::ImplChangeHighlightUpDn( sal_Bool bUp, sal_Bool bNoCycle )
 
     if( pToolItem )
     {
-        sal_uIntPtr pos = ToolBox::ImplFindItemPos( pToolItem, mpData->m_aItems );
-        sal_uIntPtr nCount = mpData->m_aItems.size();
+        sal_uLong pos = ToolBox::ImplFindItemPos( pToolItem, mpData->m_aItems );
+        sal_uLong nCount = mpData->m_aItems.size();
 
-        sal_uIntPtr i=0;
+        sal_uLong i=0;
         do
         {
             if( bUp )

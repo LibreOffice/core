@@ -143,7 +143,7 @@ Meta##Name##Action::~Meta##Name##Action() {}
 class VCL_DLLPUBLIC MetaAction
 {
 private:
-    sal_uIntPtr             mnRefCount;
+    sal_uLong               mnRefCount;
     sal_uInt16              mnType;
 
     virtual sal_Bool    Compare( const MetaAction& ) const;
@@ -168,7 +168,7 @@ public:
     sal_Bool            IsEqual( const MetaAction& ) const;
 
     sal_uInt16              GetType() const { return mnType; }
-    sal_uIntPtr             GetRefCount() const { return mnRefCount; }
+    sal_uLong               GetRefCount() const { return mnRefCount; }
     void                ResetRefCount() { mnRefCount = 1; }
     void                Duplicate()  { mnRefCount++; }
     void                Delete() { if ( 0 == --mnRefCount ) delete this; }

@@ -121,13 +121,13 @@ protected:
     virtual void        drawPixel( long nX, long nY, SalColor nSalColor ) = 0;
     virtual void        drawLine( long nX1, long nY1, long nX2, long nY2 ) = 0;
     virtual void        drawRect( long nX, long nY, long nWidth, long nHeight ) = 0;
-    virtual void        drawPolyLine( sal_uIntPtr nPoints, const SalPoint* pPtAry ) = 0;
-    virtual void        drawPolygon( sal_uIntPtr nPoints, const SalPoint* pPtAry ) = 0;
+    virtual void        drawPolyLine( sal_uLong nPoints, const SalPoint* pPtAry ) = 0;
+    virtual void        drawPolygon( sal_uLong nPoints, const SalPoint* pPtAry ) = 0;
     virtual void        drawPolyPolygon( sal_uInt32 nPoly, const sal_uInt32* pPoints, PCONSTSALPOINT* pPtAry ) = 0;
     virtual bool        drawPolyPolygon( const ::basegfx::B2DPolyPolygon&, double fTransparency ) = 0;
     virtual bool        drawPolyLine( const ::basegfx::B2DPolygon&, double fTransparency, const ::basegfx::B2DVector& rLineWidths, basegfx::B2DLineJoin ) = 0;
-    virtual sal_Bool    drawPolyLineBezier( sal_uIntPtr nPoints, const SalPoint* pPtAry, const sal_uInt8* pFlgAry ) = 0;
-    virtual sal_Bool    drawPolygonBezier( sal_uIntPtr nPoints, const SalPoint* pPtAry, const sal_uInt8* pFlgAry ) = 0;
+    virtual sal_Bool    drawPolyLineBezier( sal_uLong nPoints, const SalPoint* pPtAry, const sal_uInt8* pFlgAry ) = 0;
+    virtual sal_Bool    drawPolygonBezier( sal_uLong nPoints, const SalPoint* pPtAry, const sal_uInt8* pFlgAry ) = 0;
     virtual sal_Bool    drawPolyPolygonBezier( sal_uInt32 nPoly, const sal_uInt32* pPoints, const SalPoint* const* pPtAry, const sal_uInt8* const* pFlgAry ) = 0;
 
     // CopyArea --> No RasterOp, but ClipRegion
@@ -153,9 +153,9 @@ protected:
 
     // invert --> ClipRegion (only Windows or VirDevs)
     virtual void        invert( long nX, long nY, long nWidth, long nHeight, SalInvert nFlags) = 0;
-    virtual void        invert( sal_uIntPtr nPoints, const SalPoint* pPtAry, SalInvert nFlags ) = 0;
+    virtual void        invert( sal_uLong nPoints, const SalPoint* pPtAry, SalInvert nFlags ) = 0;
 
-    virtual sal_Bool        drawEPS( long nX, long nY, long nWidth, long nHeight, void* pPtr, sal_uIntPtr nSize ) = 0;
+    virtual sal_Bool        drawEPS( long nX, long nY, long nWidth, long nHeight, void* pPtr, sal_uLong nSize ) = 0;
 
     // native widget rendering methods that require mirroring
     virtual sal_Bool        hitTestNativeControl( ControlType nType, ControlPart nPart, const Rectangle& rControlRegion,
@@ -207,7 +207,7 @@ public:
     virtual void            ResetClipRegion() = 0;
     // begin setting the clip region, add rectangles to the
     // region with the UnionClipRegion call
-    virtual void            BeginSetClipRegion( sal_uIntPtr nCount ) = 0;
+    virtual void            BeginSetClipRegion( sal_uLong nCount ) = 0;
     // all rectangles were added and the clip region should be set now
     virtual void            EndSetClipRegion() = 0;
 
@@ -237,7 +237,7 @@ public:
 
     // get kernign pairs of the current font
     // return only PairCount if (pKernPairs == NULL)
-    virtual sal_uIntPtr         GetKernPairs( sal_uIntPtr nMaxPairCount, ImplKernPairData* ) = 0;
+    virtual sal_uLong           GetKernPairs( sal_uLong nMaxPairCount, ImplKernPairData* ) = 0;
     // get the repertoire of the current font
     virtual const ImplFontCharMap* GetImplFontCharMap() const = 0;
     // graphics must fill supplied font list
@@ -366,19 +366,19 @@ public:
     void                    DrawPixel( long nX, long nY, SalColor nSalColor, const OutputDevice *pOutDev );
     void                    DrawLine( long nX1, long nY1, long nX2, long nY2, const OutputDevice *pOutDev );
     void                    DrawRect( long nX, long nY, long nWidth, long nHeight, const OutputDevice *pOutDev );
-    void                    DrawPolyLine( sal_uIntPtr nPoints, const SalPoint* pPtAry, const OutputDevice *pOutDev );
-    void                    DrawPolygon( sal_uIntPtr nPoints, const SalPoint* pPtAry, const OutputDevice *pOutDev );
+    void                    DrawPolyLine( sal_uLong nPoints, const SalPoint* pPtAry, const OutputDevice *pOutDev );
+    void                    DrawPolygon( sal_uLong nPoints, const SalPoint* pPtAry, const OutputDevice *pOutDev );
     void                    DrawPolyPolygon( sal_uInt32 nPoly,
                                              const sal_uInt32* pPoints,
                                              PCONSTSALPOINT* pPtAry,
                                              const OutputDevice *pOutDev );
     bool                    DrawPolyPolygon( const ::basegfx::B2DPolyPolygon&, double fTransparency, const OutputDevice* );
     bool                    DrawPolyLine( const basegfx::B2DPolygon&, double fTransparency, const basegfx::B2DVector& rLineWidths, basegfx::B2DLineJoin, const OutputDevice* );
-    sal_Bool                DrawPolyLineBezier( sal_uIntPtr nPoints,
+    sal_Bool                DrawPolyLineBezier( sal_uLong nPoints,
                                                 const SalPoint* pPtAry,
                                                 const sal_uInt8* pFlgAry,
                                                 const OutputDevice *pOutDev );
-    sal_Bool                DrawPolygonBezier( sal_uIntPtr nPoints,
+    sal_Bool                DrawPolygonBezier( sal_uLong nPoints,
                                                const SalPoint* pPtAry,
                                                const sal_uInt8* pFlgAry,
                                                const OutputDevice *pOutDev );
@@ -426,9 +426,9 @@ public:
 
     // invert --> ClipRegion (only Windows)
     void                    Invert( long nX, long nY, long nWidth, long nHeight, SalInvert nFlags, const OutputDevice *pOutDev );
-    void                    Invert( sal_uIntPtr nPoints, const SalPoint* pPtAry, SalInvert nFlags, const OutputDevice *pOutDev );
+    void                    Invert( sal_uLong nPoints, const SalPoint* pPtAry, SalInvert nFlags, const OutputDevice *pOutDev );
 
-    sal_Bool                    DrawEPS( long nX, long nY, long nWidth, long nHeight, void* pPtr, sal_uIntPtr nSize, const OutputDevice *pOutDev );
+    sal_Bool                    DrawEPS( long nX, long nY, long nWidth, long nHeight, void* pPtr, sal_uLong nSize, const OutputDevice *pOutDev );
 
     //-------------------------------------
     //  Native Widget Rendering functions
