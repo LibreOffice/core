@@ -254,7 +254,7 @@ class SfxSlot
 {
 public:
     sal_uInt16                      nSlotId;        // in Shell eindeutige Slot-Id
-    USHORT                      nGroupId;       // f"ur Konfigurations-Bereich
+    sal_uInt16                      nGroupId;       // f"ur Konfigurations-Bereich
     sal_uIntPtr                     nHelpId;        // i.d.R. == nSlotId
     sal_uIntPtr                     nFlags;         // artihm. veroderte Flags
 

@@ -1049,7 +1049,7 @@ void SfxDockingWindow::Initialize(SfxChildWinInfo *pInfo)
     {
         // get information about alignment, split size and position in SplitWindow
         String aStr;
-        USHORT nPos = pInfo->aExtraString.SearchAscii("AL:");
+        sal_uInt16 nPos = pInfo->aExtraString.SearchAscii("AL:");
         if ( nPos != STRING_NOTFOUND )
         {
             // alignment information

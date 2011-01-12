@@ -16,7 +16,7 @@ class SfxMacro;
 
 class SfxMacroStatement
 {
-    USHORT              nSlotId;    // ausgef"uhrte Slot-Id oder 0, wenn manuell
+    sal_uInt16              nSlotId;    // ausgef"uhrte Slot-Id oder 0, wenn manuell
     ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue > aArgs;      // aktuelle Parameter, falls nSlotId != 0
     String              aStatement; // Statement in BASIC-Syntax (ggf. mit CR/LF)
     sal_Bool                bDone;      // auskommentieren wenn kein Done() gerufen

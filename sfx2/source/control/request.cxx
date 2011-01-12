@@ -235,7 +235,7 @@ SfxRequest::SfxRequest
 
 SfxRequest::SfxRequest
 (
-    USHORT          nSlotId,    // auszuf"uhrende <Slot-Id>
+    sal_uInt16          nSlotId,    // auszuf"uhrende <Slot-Id>
     SfxCallMode     nMode,      // Synch/API/...
     SfxItemPool&    rPool       // ggf. f"ur das SfxItemSet f"ur Parameter
 )

@@ -419,8 +419,8 @@ void   SfxObjectShell::GetContent(String &rText,
         case INDEX_IGNORE:
         {
             sal_uInt16 nTextResId = 0;
-            USHORT nClosedBitmapResId = 0; // evtl. sp"ater mal unterschiedliche
-            USHORT nOpenedBitmapResId = 0; // "     "       "   "
+            sal_uInt16 nClosedBitmapResId = 0; // evtl. sp"ater mal unterschiedliche
+            sal_uInt16 nOpenedBitmapResId = 0; // "     "       "   "
             switch(i)
             {
                 case CONTENT_STYLE:

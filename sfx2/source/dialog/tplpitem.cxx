@@ -49,7 +49,7 @@ SfxTemplateItem::SfxTemplateItem
 (
     sal_uInt16 nWhichId,      // Slot-ID
     const String& rStyle, // Name des aktuellen Styles
-    USHORT nValue         // Flags f"ur das Filtern bei automatischer Anzeige
+    sal_uInt16 nValue         // Flags f"ur das Filtern bei automatischer Anzeige
 ) : SfxFlagItem( nWhichId, nValue ),
     aStyle( rStyle )
 {

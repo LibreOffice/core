@@ -823,7 +823,7 @@ const SfxFilter* SfxFilterMatcher::GetFilter4UIName( const String& rName, SfxFil
 const SfxFilter* SfxFilterMatcher::GetFilter4FilterName( const String& rName, SfxFilterFlags nMust, SfxFilterFlags nDont ) const
 {
     String aName( rName );
-    USHORT nIndex = aName.SearchAscii(": ");
+    sal_uInt16 nIndex = aName.SearchAscii(": ");
     if (  nIndex != STRING_NOTFOUND )
     {
         DBG_ERROR("Old filter name used!");

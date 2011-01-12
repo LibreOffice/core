@@ -327,9 +327,9 @@ long TimeOut_Impl( void*, void* pArgV )
 
 sal_Bool SfxProgress::SetStateText
 (
-    ULONG           nNewVal,    /* neuer Wert f"ur die Fortschritts-Anzeige */
+    sal_uLong           nNewVal,    /* neuer Wert f"ur die Fortschritts-Anzeige */
     const String&   rNewVal,    /* Status als Text */
-    ULONG           nNewRange   /* neuer Maximalwert, 0 f"ur Beibehaltung des alten */
+    sal_uLong           nNewRange   /* neuer Maximalwert, 0 f"ur Beibehaltung des alten */
 )
 
 {
@@ -341,9 +341,9 @@ sal_Bool SfxProgress::SetStateText
 
 sal_Bool SfxProgress::SetState
 (
-    ULONG   nNewVal,    /* neuer Wert f"ur die Fortschritts-Anzeige */
+    sal_uLong   nNewVal,    /* neuer Wert f"ur die Fortschritts-Anzeige */
 
-    ULONG   nNewRange   /* neuer Maximalwert, 0 f"ur Beibehaltung des alten */
+    sal_uLong   nNewRange   /* neuer Maximalwert, 0 f"ur Beibehaltung des alten */
 )
 /*  [Beschreibung]
 

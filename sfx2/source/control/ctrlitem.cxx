@@ -312,7 +312,7 @@ SfxControllerItem::~SfxControllerItem()
 
 void SfxControllerItem::StateChanged
 (
-    USHORT              ,   // <SID> des ausl"osenden Slot
+    sal_uInt16              ,   // <SID> des ausl"osenden Slot
     SfxItemState        ,   // <SfxItemState> von 'pState'
     const SfxPoolItem*      // Slot-Status, ggf. 0 oder IsInvalidItem()
 )
@@ -352,7 +352,7 @@ void SfxControllerItem::DeleteFloatingWindow()
 
 void SfxStatusForwarder::StateChanged
 (
-    USHORT              nSID,       // <SID> des ausl"osenden Slot
+    sal_uInt16              nSID,       // <SID> des ausl"osenden Slot
     SfxItemState        eState,     // <SfxItemState> von 'pState'
     const SfxPoolItem*  pState      // Slot-Status, ggf. 0 oder IsInvalidItem()
 )

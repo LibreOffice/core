@@ -177,7 +177,7 @@ ErrCode SfxCallMacro( BasicManager* pMgr, const String& rCode,
 SfxMacroInfo::SfxMacroInfo( const String& rURL ) :
     pHelpText(0),
     nRefCnt(0),
-    bAppBasic(TRUE),
+    bAppBasic(sal_True),
     nSlotId(0),
     pSlot(0)
 {
@@ -189,7 +189,7 @@ SfxMacroInfo::SfxMacroInfo( const String& rURL ) :
             // 'macro:///lib.mod.proc(args)' => Macro via App-BASIC-Mgr
             // 'macro://[docname|.]/lib.mod.proc(args)' => Macro via zugehoerigen Doc-BASIC-Mgr
             if ( aTmp.CompareToAscii("///", 3 ) != COMPARE_EQUAL )
-                bAppBasic = FALSE;
+                bAppBasic = sal_False;
             aTmp = rURL.GetToken( 3, '/' );
             if ( aTmp.GetTokenCount('.') == 3 )
             {

@@ -54,7 +54,7 @@ public:
     String                  GetCurrentFilter() const;
     void                    SetCurrentFilter(const String&);
 
-    void                    SetControlHelpIds( const INT16* _pControlId, const char** _pHelpId );
+    void                    SetControlHelpIds( const sal_Int16* _pControlId, const char** _pHelpId );
 private:
     // disable copy and assignment
     SFX2_DLLPRIVATE SvxOpenGraphicDialog    (const SvxOpenGraphicDialog&);

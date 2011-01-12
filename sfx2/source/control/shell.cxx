@@ -343,7 +343,7 @@ const SfxPoolItem* SfxShell::GetItem
 
 void SfxShell::RemoveItem
 (
-    USHORT  nSlotId         // Slot-Id des zu l"oschenden <SfxPoolItem>s
+    sal_uInt16  nSlotId         // Slot-Id des zu l"oschenden <SfxPoolItem>s
 )
 
 /*  [Beschreibung]

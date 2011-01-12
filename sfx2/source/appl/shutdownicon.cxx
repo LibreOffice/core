@@ -749,14 +749,14 @@ void SAL_CALL ShutdownIcon::initialize( const ::com::sun::star::uno::Sequence< :
 
 void ShutdownIcon::EnterModalMode()
 {
-    bModalMode = TRUE;
+    bModalMode = sal_True;
 }
 
 // -------------------------------
 
 void ShutdownIcon::LeaveModalMode()
 {
-    bModalMode = FALSE;
+    bModalMode = sal_False;
 }
 
 #ifdef WNT
