@@ -73,6 +73,26 @@ namespace svt { namespace table
         {
         }
     };
+    namespace
+    {
+        static Rectangle lcl_getContentArea( GridTableRenderer_Impl const & i_impl, Rectangle const & i_cellArea )
+        {
+            Rectangle aContentArea( i_cellArea );
+            if ( i_impl.bUseGridLines )
+            {
+                --aContentArea.Right();
+                --aContentArea.Bottom();
+            }
+            return aContentArea;
+        }
+        static Rectangle lcl_getTextRenderingArea( Rectangle const & i_contentArea )
+        {
+            Rectangle aTextArea( i_contentArea );
+            aTextArea.Left() += 2; aTextArea.Right() -= 2;
+            ++aTextArea.Top(); --aTextArea.Bottom();
+            return aTextArea;
+        }
+    }
 
     //==================================================================================================================
     //= GridTableRenderer
@@ -129,14 +149,18 @@ namespace svt { namespace table
         OSL_PRECOND( _bIsColHeaderArea || _bIsRowHeaderArea,
             "GridTableRenderer::PaintHeaderArea: invalid area flags!" );
 
-        _rDevice.Push( PUSH_FILLCOLOR | PUSH_LINECOLOR);
+        _rDevice.Push( PUSH_FILLCOLOR | PUSH_LINECOLOR );
 
         Color const background = lcl_getEffectiveColor( m_pImpl->rModel.getHeaderBackgroundColor(), _rStyle, &StyleSettings::GetDialogColor );
         _rDevice.SetFillColor( background );
 
-        m_pImpl->bUseGridLines ? _rDevice.SetLineColor( _rStyle.GetSeparatorColor() ) : _rDevice.SetLineColor();
+        _rDevice.SetLineColor();
         _rDevice.DrawRect( _rArea );
+
         // delimiter lines at bottom/right
+        ::boost::optional< ::Color > aLineColor( m_pImpl->rModel.getLineColor() );
+        ::Color const lineColor = !aLineColor ? _rStyle.GetSeparatorColor() : *aLineColor;
+        _rDevice.SetLineColor( lineColor );
         _rDevice.DrawLine( _rArea.BottomLeft(), _rArea.BottomRight() );
         _rDevice.DrawLine( _rArea.BottomRight(), _rArea.TopRight() );
 
@@ -150,8 +174,6 @@ namespace svt { namespace table
         OutputDevice& _rDevice, const Rectangle& _rArea, const StyleSettings& _rStyle )
     {
         _rDevice.Push( PUSH_LINECOLOR);
-        _rDevice.SetLineColor(_rStyle.GetSeparatorColor());
-        _rDevice.DrawLine( _rArea.BottomRight(), _rArea.TopRight());
 
         String sHeaderText;
         PColumnModel pColumn = m_pImpl->rModel.getColumnModel( _nCol );
@@ -173,12 +195,15 @@ namespace svt { namespace table
         else if ( m_pImpl->rModel.getColumnModel(_nCol)->getHorizontalAlign() == 2 )
             nHorFlag = TEXT_DRAW_RIGHT;
 
-        Rectangle aRect(_rArea);
-        aRect.Left()+=4; aRect.Right()-=4;
-        aRect.Bottom()-=2;
+        Rectangle const aTextRect( lcl_getTextRenderingArea( lcl_getContentArea( *m_pImpl, _rArea ) ) );
+        _rDevice.DrawText( aTextRect, sHeaderText, nHorFlag | nVerFlag | TEXT_DRAW_CLIP);
 
-        _rDevice.DrawText( aRect, sHeaderText, nHorFlag | nVerFlag | TEXT_DRAW_CLIP);
+        ::boost::optional< ::Color > aLineColor( m_pImpl->rModel.getLineColor() );
+        ::Color const lineColor = !aLineColor ? _rStyle.GetSeparatorColor() : *aLineColor;
+        _rDevice.SetLineColor( lineColor );
+        _rDevice.DrawLine( _rArea.BottomRight(), _rArea.TopRight());
         _rDevice.DrawLine( _rArea.BottomLeft(), _rArea.BottomRight() );
+
         _rDevice.Pop();
 
         (void)_bActive;
@@ -243,7 +268,8 @@ namespace svt { namespace table
             }
         }
 
-        m_pImpl->bUseGridLines ? _rDevice.SetLineColor( lineColor ) : _rDevice.SetLineColor();
+        //m_pImpl->bUseGridLines ? _rDevice.SetLineColor( lineColor ) : _rDevice.SetLineColor();
+        _rDevice.SetLineColor();
         _rDevice.SetFillColor( backgroundColor );
         _rDevice.DrawRect( _rRowArea );
 
@@ -261,6 +287,7 @@ namespace svt { namespace table
 
         ::boost::optional< ::Color > const aLineColor( m_pImpl->rModel.getLineColor() );
         ::Color const lineColor = !aLineColor ? _rStyle.GetSeparatorColor() : *aLineColor;
+        _rDevice.SetLineColor( lineColor );
         _rDevice.DrawLine( _rArea.BottomLeft(), _rArea.BottomRight() );
 
         ::Color const textColor = lcl_getEffectiveColor( m_pImpl->rModel.getHeaderTextColor(), _rStyle, &StyleSettings::GetFieldTextColor );
@@ -277,10 +304,8 @@ namespace svt { namespace table
         else if ( m_pImpl->rModel.getColumnModel(0)->getHorizontalAlign() == 2 )
             nHorFlag = TEXT_DRAW_RIGHT;
 
-        Rectangle aRect( _rArea );
-        aRect.Left()+=4; aRect.Right()-=4;
-        aRect.Bottom()-=2;
-        _rDevice.DrawText( aRect, m_pImpl->rModel.getRowHeader( m_pImpl->nCurrentRow ), nHorFlag | nVerFlag | TEXT_DRAW_CLIP );
+        Rectangle const aTextRect( lcl_getTextRenderingArea( lcl_getContentArea( *m_pImpl, _rArea ) ) );
+        _rDevice.DrawText( aTextRect, m_pImpl->rModel.getRowHeader( m_pImpl->nCurrentRow ), nHorFlag | nVerFlag | TEXT_DRAW_CLIP );
 
         // TODO: active? selected?
         (void)_bActive;
@@ -309,47 +334,30 @@ namespace svt { namespace table
     };
 
     //------------------------------------------------------------------------------------------------------------------
-    namespace
-    {
-        /** transforms a rectangle denoting a cell area so that afterwards, it denotes the area we
-            can use for rendering the cell's content.
-        */
-        static void lcl_convertCellToContentArea( Rectangle & io_area )
-        {
-            ++io_area.Left(); --io_area.Right();
-        }
-
-        static void lcl_convertContentToTextRenderingArea( Rectangle & io_area )
-        {
-            io_area.Left() += 2; io_area.Right() -= 2;
-            ++io_area.Top(); --io_area.Bottom();
-        }
-    }
-
-    //------------------------------------------------------------------------------------------------------------------
     void GridTableRenderer::PaintCell( ColPos const i_column, bool _bSelected, bool _bActive,
         OutputDevice& _rDevice, const Rectangle& _rArea, const StyleSettings& _rStyle )
     {
         _rDevice.Push( PUSH_LINECOLOR | PUSH_FILLCOLOR );
 
-        ::boost::optional< ::Color > aLineColor( m_pImpl->rModel.getLineColor() );
-        ::Color lineColor = !aLineColor ? _rStyle.GetSeparatorColor() : *aLineColor;
-
-        if ( _bSelected )
-        {
-            // if no line color is specified by the model, use the usual selection color for lines
-            if ( !aLineColor )
-                lineColor = _rStyle.GetHighlightColor();
-        }
-
-        m_pImpl->bUseGridLines ? _rDevice.SetLineColor( lineColor ) : _rDevice.SetLineColor();
-        _rDevice.DrawLine( _rArea.BottomRight(), _rArea.TopRight() );
-
-        Rectangle aRect( _rArea );
-        lcl_convertCellToContentArea( aRect );
-
-        const CellRenderContext aRenderContext( _rDevice, aRect, _rStyle, i_column, _bSelected );
+        Rectangle const aContentArea( lcl_getContentArea( *m_pImpl, _rArea ) );
+        CellRenderContext const aRenderContext( _rDevice, aContentArea, _rStyle, i_column, _bSelected );
         impl_paintCellContent( aRenderContext );
+
+        if ( m_pImpl->bUseGridLines )
+        {
+            ::boost::optional< ::Color > aLineColor( m_pImpl->rModel.getLineColor() );
+            ::Color lineColor = !aLineColor ? _rStyle.GetSeparatorColor() : *aLineColor;
+
+            if ( _bSelected && !aLineColor )
+            {
+                // if no line color is specified by the model, use the usual selection color for lines in selected cells
+                lineColor = _rStyle.GetHighlightColor();
+            }
+
+            _rDevice.SetLineColor( lineColor );
+            _rDevice.DrawLine( _rArea.BottomLeft(), _rArea.BottomRight() );
+            _rDevice.DrawLine( _rArea.BottomRight(), _rArea.TopRight() );
+        }
 
         _rDevice.Pop();
 
@@ -452,9 +460,7 @@ namespace svt { namespace table
             break;
         }
 
-        Rectangle textRect( i_context.aContentArea );
-        lcl_convertContentToTextRenderingArea( textRect );
-
+        Rectangle const textRect( lcl_getTextRenderingArea( i_context.aContentArea ) );
         i_context.rDevice.DrawText( textRect, i_text, nHorFlag | nVerFlag | TEXT_DRAW_CLIP );
     }
 
@@ -487,9 +493,7 @@ namespace svt { namespace table
         if ( sText.getLength() == 0 )
             return true;
 
-        Rectangle aTargetArea( i_targetArea );
-        lcl_convertCellToContentArea( aTargetArea );
-        lcl_convertContentToTextRenderingArea( aTargetArea );
+        Rectangle const aTargetArea( lcl_getTextRenderingArea( lcl_getContentArea( *m_pImpl, i_targetArea ) ) );
 
         long const nTextHeight = i_targetDevice.GetTextHeight();
         if ( nTextHeight > aTargetArea.GetHeight() )

@@ -1071,9 +1071,6 @@ namespace svt { namespace table
             TableRowGeometry aHeaderRow( *this, Rectangle( Point( 0, 0 ),
                 aAllCellsWithHeaders.BottomRight() ), ROW_COL_HEADERS );
             Rectangle aColRect(aHeaderRow.getRect());
-            // to avoid double lines when scrolling horizontally
-            if ( m_nLeftColumn != 0 )
-                --aColRect.Left();
             pRenderer->PaintHeaderArea(
                 *m_pDataWindow, aColRect, true, false, rStyle
             );
@@ -1101,31 +1098,20 @@ namespace svt { namespace table
         {
             aRowHeaderArea = aAllCellsWithHeaders;
             aRowHeaderArea.Right() = m_nRowHeaderWidthPixel - 1;
-            if(m_nTopRow+nActualRows>m_nRowCount)
-                aRowHeaderArea.Bottom() = m_nRowHeightPixel * (nActualRows -1)+ m_nColHeaderHeightPixel - 1;
+            if ( m_nTopRow + nActualRows > m_nRowCount )
+                aRowHeaderArea.Bottom() = m_nRowHeightPixel * (nActualRows - 1 ) + m_nColHeaderHeightPixel - 1;
             else
                 aRowHeaderArea.Bottom() = m_nRowHeightPixel * nActualRows + m_nColHeaderHeightPixel - 1;
-            //to avoid double lines when scrolling vertically
-            if(m_nTopRow != 0)
-                --aRowHeaderArea.Top();
-            --aRowHeaderArea.Right();
-            pRenderer->PaintHeaderArea(*m_pDataWindow, aRowHeaderArea, false, true, rStyle);
+            pRenderer->PaintHeaderArea( *m_pDataWindow, aRowHeaderArea, false, true, rStyle );
             // Note that strictly, aRowHeaderArea also contains the intersection between column
             // and row header area. However, below we go to paint this intersection, again,
             // so this hopefully doesn't hurt if we already paint it here.
 
             if ( m_pModel->hasColumnHeaders() )
             {
-                TableCellGeometry aIntersection( *this, Rectangle( Point( 0, 0 ),
+                TableCellGeometry const aIntersection( *this, Rectangle( Point( 0, 0 ),
                     aAllCellsWithHeaders.BottomRight() ), COL_ROW_HEADERS, ROW_COL_HEADERS );
-                Rectangle aInters(aIntersection.getRect());
-                //to avoid double line when scrolling vertically
-                if( m_nTopRow != 0 )
-                {
-                    --aInters.Top();
-                    --aInters.Bottom();
-                }
-                --aInters.Right();
+                Rectangle const aInters( aIntersection.getRect() );
                 pRenderer->PaintHeaderArea(
                     *m_pDataWindow, aInters, true, true, rStyle
                 );
@@ -1146,28 +1132,12 @@ namespace svt { namespace table
         {
             if ( _rUpdateRect.GetIntersection( aRowIterator.getRect() ).IsEmpty() )
                 continue;
-            bool isActiveRow = ( aRowIterator.getRow() == getCurrentRow() );
-            bool isSelectedRow = false;
-            if(!m_aSelectedRows.empty())
-            {
-                for(std::vector<RowPos>::iterator itSel=m_aSelectedRows.begin();
-                    itSel!=m_aSelectedRows.end();++itSel)
-                {
-                    if(*itSel == aRowIterator.getRow())
-                        isSelectedRow = true;
-                }
-            }
-            Rectangle aRect = aRowIterator.getRect().GetIntersection( aAllDataCellsArea );
-            // to avoid double lines
-            if ( aRowIterator.getRow() != 0 )
-                --aRect.Top();
-            if ( m_nLeftColumn != 0 )
-                --aRect.Left();
-            else
-            {
-                if ( m_pModel->hasRowHeaders( ))
-                    --aRect.Left();
-            }
+
+            bool const isActiveRow = ( aRowIterator.getRow() == getCurrentRow() );
+            bool const isSelectedRow = isRowSelected( aRowIterator.getRow() );
+
+            Rectangle const aRect = aRowIterator.getRect().GetIntersection( aAllDataCellsArea );
+
             // give the redenderer a chance to prepare the row
             pRenderer->PrepareRow(
                 aRowIterator.getRow(), isActiveRow, isSelectedRow,
@@ -1181,6 +1151,7 @@ namespace svt { namespace table
                 pRenderer->PaintRowHeader( isActiveRow, isSelectedRow, *m_pDataWindow, aCurrentRowHeader,
                     rStyle );
             }
+
             if ( !colCount )
                 continue;
 
