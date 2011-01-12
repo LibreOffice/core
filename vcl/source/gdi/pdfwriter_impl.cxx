@@ -9660,15 +9660,24 @@ bool PDFWriterImpl::writeBitmapObject( BitmapEmit& rObject, bool bMask )
     aLine.append( " 0 obj\n"
                   "<</Type/XObject/Subtype/Image/Width " );
     aLine.append( (sal_Int32)aBitmap.GetSizePixel().Width() );
-    aLine.append( " /Height " );
+    aLine.append( "/Height " );
     aLine.append( (sal_Int32)aBitmap.GetSizePixel().Height() );
-    aLine.append( " /BitsPerComponent " );
+    aLine.append( "/BitsPerComponent " );
     aLine.append( nBitsPerComponent );
-    aLine.append( " /Length " );
+    aLine.append( "/Length " );
     aLine.append( nStreamLengthObject );
     aLine.append( " 0 R\n" );
 #ifndef DEBUG_DISABLE_PDFCOMPRESSION
-    aLine.append( "/Filter/FlateDecode" );
+    if( nBitsPerComponent != 1 )
+    {
+        aLine.append( "/Filter/FlateDecode" );
+    }
+    else
+    {
+        aLine.append( "/Filter/CCITTFaxDecode/DecodeParms<</K -1/BlackIs1 true/Columns " );
+        aLine.append( (sal_Int32)aBitmap.GetSizePixel().Width() );
+        aLine.append( ">>\n" );
+    }
 #endif
     if( ! bMask )
     {
@@ -9736,7 +9745,7 @@ bool PDFWriterImpl::writeBitmapObject( BitmapEmit& rObject, bool bMask )
     {
         if( aBitmap.GetBitCount() == 1 )
         {
-            aLine.append( " /ImageMask true\n" );
+            aLine.append( "/ImageMask true\n" );
             sal_Int32 nBlackIndex = pAccess->GetBestPaletteIndex( BitmapColor( Color( COL_BLACK ) ) );
             DBG_ASSERT( nBlackIndex == 0 || nBlackIndex == 1, "wrong black index" );
             if( nBlackIndex )
@@ -9798,33 +9807,42 @@ bool PDFWriterImpl::writeBitmapObject( BitmapEmit& rObject, bool bMask )
     CHECK_RETURN( (osl_File_E_None == osl_getFilePos( m_aFile, &nStartPos )) );
 
     checkAndEnableStreamEncryption( rObject.m_nObject );
-    beginCompression();
-    if( ! bTrueColor || pAccess->GetScanlineFormat() == BMP_FORMAT_24BIT_TC_RGB )
+#ifndef DEBUG_DISABLE_PDFCOMPRESSION
+    if( nBitsPerComponent == 1 )
     {
-        const int nScanLineBytes = 1 + ( pAccess->GetBitCount() * ( pAccess->Width() - 1 ) / 8U );
-
-        for( int i = 0; i < pAccess->Height(); i++ )
-        {
-            CHECK_RETURN( writeBuffer( pAccess->GetScanline( i ), nScanLineBytes ) );
-        }
+        writeG4Stream( pAccess );
     }
     else
+#endif
     {
-        const int nScanLineBytes = pAccess->Width()*3;
-        boost::shared_array<sal_uInt8> pCol( new sal_uInt8[ nScanLineBytes ] );
-        for( int y = 0; y < pAccess->Height(); y++ )
+        beginCompression();
+        if( ! bTrueColor || pAccess->GetScanlineFormat() == BMP_FORMAT_24BIT_TC_RGB )
         {
-            for( int x = 0; x < pAccess->Width(); x++ )
+            const int nScanLineBytes = 1 + ( pAccess->GetBitCount() * ( pAccess->Width() - 1 ) / 8U );
+
+            for( int i = 0; i < pAccess->Height(); i++ )
             {
-                BitmapColor aColor = pAccess->GetColor( y, x );
-                pCol[3*x+0] = aColor.GetRed();
-                pCol[3*x+1] = aColor.GetGreen();
-                pCol[3*x+2] = aColor.GetBlue();
+                CHECK_RETURN( writeBuffer( pAccess->GetScanline( i ), nScanLineBytes ) );
             }
-            CHECK_RETURN( writeBuffer( pCol.get(), nScanLineBytes ) );
         }
+        else
+        {
+            const int nScanLineBytes = pAccess->Width()*3;
+            boost::shared_array<sal_uInt8> pCol( new sal_uInt8[ nScanLineBytes ] );
+            for( int y = 0; y < pAccess->Height(); y++ )
+            {
+                for( int x = 0; x < pAccess->Width(); x++ )
+                {
+                    BitmapColor aColor = pAccess->GetColor( y, x );
+                    pCol[3*x+0] = aColor.GetRed();
+                    pCol[3*x+1] = aColor.GetGreen();
+                    pCol[3*x+2] = aColor.GetBlue();
+                }
+                CHECK_RETURN( writeBuffer( pCol.get(), nScanLineBytes ) );
+            }
+        }
+        endCompression();
     }
-    endCompression();
     disableStreamEncryption();
 
     sal_uInt64 nEndPos = 0;
