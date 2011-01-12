@@ -47,7 +47,7 @@ class SwFrmFmt;
 class SwNumRule;
 
 /*--------------------------------------------------------------------
-    Beschreibung:   Lokale Hilfsklasse
+    Local helper class.
  --------------------------------------------------------------------*/
 class SwPoolFmtList : public SvStringsDtor
 {
@@ -59,7 +59,7 @@ public:
 
 
 /*--------------------------------------------------------------------
-    Beschreibung:   temp. StyleSheet
+    Temporary StyleSheet.
  --------------------------------------------------------------------*/
 class SW_DLLPUBLIC SwDocStyleSheet : public SfxStyleSheetBase
 {
@@ -78,10 +78,10 @@ class SW_DLLPUBLIC SwDocStyleSheet : public SfxStyleSheetBase
     BOOL                bPhysical;
 
 
-    // leere Huelse zum richtigen StyleSheet (Core) machen
+    // Make empty shell a real StyleSheet (Core).
     SW_DLLPRIVATE void              Create();
 
-    // den StyleSheet mit Daten fuellen
+    // Fill StyleSheet with data.
     enum FillStyleType {
         FillOnlyName,
         FillAllInfo,
@@ -127,9 +127,8 @@ public:
     virtual ULONG GetHelpId( String& rFile );
     virtual void SetHelpId( const String& r, ULONG nId );
 
-    // Vorbelegen der member ohne physikalischen Zugriff
-    // wird vom StyleSheetPool benutzt
-    //
+    // Preset the members without physical access.
+    // Used by StyleSheetPool.
     void                    PresetName(const String& rName)  { aName   = rName; }
     void                    PresetNameAndFamily(const String& rName);
     void                    PresetParent(const String& rName){ aParent = rName; }
@@ -156,7 +155,7 @@ public:
 };
 
 /*--------------------------------------------------------------------
-    Beschreibung:   Iterator fuer den Pool
+   Iterator for Pool.
  --------------------------------------------------------------------*/
 
 class SwStyleSheetIterator : public SfxStyleSheetIterator, public SfxListener
@@ -186,15 +185,12 @@ public:
     virtual void Notify( SfxBroadcaster&, const SfxHint& );
 };
 
-/*--------------------------------------------------------------------
-    Beschreibung:   Pool fuer
- --------------------------------------------------------------------*/
 
 class SwDocStyleSheetPool : public SfxStyleSheetBasePool
 {
     rtl::Reference< SwDocStyleSheet > mxStyleSheet;
     SwDoc&              rDoc;
-    BOOL                bOrganizer : 1;     // TRUE: fuer den Organizer
+    BOOL                bOrganizer : 1;     // TRUE: for Organizer.
 
 
     virtual SfxStyleSheetBase* Create( const String&, SfxStyleFamily, USHORT nMask);
@@ -233,7 +229,7 @@ public:
 protected:
     virtual ~SwDocStyleSheetPool();
 
-    //Fuer die daemlicheren Compiler
+    //For not-so-clever compilers.
 private:
     SwDocStyleSheetPool( const SwDocStyleSheetPool& );
 };

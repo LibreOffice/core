@@ -52,14 +52,14 @@ namespace com { namespace sun { namespace star { namespace i18n {
 typedef SwFieldType* SwFldTypePtr;
 #define GROW_FLDTYPES   16
 
-//PageDescriptor-Schnittstelle
-//typedef SwPageDesc * SwPageDescPtr;
-//SV_DECL_PTRARR_DEL(SwPageDescs, SwPageDescPtr,1,1);
+// PageDescriptor-interface
+// typedef SwPageDesc * SwPageDescPtr;
+// SV_DECL_PTRARR_DEL(SwPageDescs, SwPageDescPtr,1,1);
 
 typedef SwFrmFmt* SwFrmFmtPtr;
 SV_DECL_PTRARR_DEL(SwFrmFmts,SwFrmFmtPtr,4,4)
 
-//Spezifische Frameformate (Rahmen, DrawObjecte)
+// Specific frame formats (frames, DrawObjects).
 SV_DECL_PTRARR_DEL(SwSpzFrmFmts,SwFrmFmtPtr,0,4)
 
 typedef SwCharFmt* SwCharFmtPtr;
@@ -73,7 +73,8 @@ SV_DECL_PTRARR_DEL( SwTOXTypes, SwTOXTypePtr, 0, 1 )
 // Undo
 #define INIT_UNDOS 5
 #define GROW_UNDOS 5
-// Das Array der Undo-History
+
+// Array of Undo-history.
 typedef SwUndo* SwUndoPtr;
 SV_DECL_PTRARR_DEL( SwUndos, SwUndoPtr, INIT_UNDOS, GROW_UNDOS )
 
@@ -103,9 +104,9 @@ public:
     void Remove( USHORT nP, USHORT nL = 1 );
     void DeleteAndDestroy( USHORT nP, USHORT nL=1 );
 
-    // suche den naechsten oder vorherigen Redline mit dergleichen Seq.No
-    // Mit dem Lookahead kann die Suche eingeschraenkt werden. 0 oder
-    // USHRT_MAX suchen im gesamten Array.
+    // Search next or previous Redline with the same Seq. No.
+    // Search can be restricted via Lookahaed.
+    // Using 0 or USHRT_MAX makes search the whole array.
     USHORT FindNextOfSeqNo( USHORT nSttPos, USHORT nLookahead = 20 ) const;
     USHORT FindPrevOfSeqNo( USHORT nSttPos, USHORT nLookahead = 20 ) const;
     USHORT FindNextSeqNo( USHORT nSeqNo, USHORT nSttPos,

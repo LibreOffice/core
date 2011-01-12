@@ -54,7 +54,7 @@ enum SwAuthorFormat
 };
 
 /*--------------------------------------------------------------------
-    Beschreibung: Untertyp der Dokumentstatistik
+    Subtype of document statistics.
  --------------------------------------------------------------------*/
 
 enum SwDocStatSubType
@@ -99,7 +99,7 @@ namespace nsSwDocInfoSubType
 }
 
 
-enum RegInfoFormat  // Nur noch zum laden alter Dokumente!!!
+enum RegInfoFormat  // Only for loading of old documents!!!
 {
     RF_AUTHOR,
     RF_TIME,
@@ -116,18 +116,18 @@ enum SwPageNumSubType
 
 enum SwExtUserSubType
 {
-    EU_COMPANY      /*EU_FIRMA*/,
-    EU_FIRSTNAME    /*EU_VORNAME*/,
-    EU_NAME         /*EU_NAME*/,
-    EU_SHORTCUT     /*EU_ABK*/,
-    EU_STREET       /*EU_STRASSE*/,
-    EU_COUNTRY      /*EU_LAND*/,
-    EU_ZIP          /*EU_PLZ*/,
-    EU_CITY         /*EU_ORT*/,
-    EU_TITLE        /*EU_TITEL*/,
-    EU_POSITION     /*EU_POS*/,
-    EU_PHONE_PRIVATE /*EU_TELPRIV*/,
-    EU_PHONE_COMPANY /*EU_TELFIRMA*/,
+    EU_COMPANY,
+    EU_FIRSTNAME,
+    EU_NAME,
+    EU_SHORTCUT,
+    EU_STREET,
+    EU_COUNTRY,
+    EU_ZIP,
+    EU_CITY,
+    EU_TITLE,
+    EU_POSITION,
+    EU_PHONE_PRIVATE,
+    EU_PHONE_COMPANY,
     EU_FAX,
     EU_EMAIL,
     EU_STATE,
@@ -145,7 +145,7 @@ enum SwJumpEditFormat
 };
 
 /*--------------------------------------------------------------------
-    Beschreibung: Seitennummer
+    Page number.
  --------------------------------------------------------------------*/
 
 class SwPageNumberFieldType : public SwFieldType
@@ -164,7 +164,7 @@ public:
 };
 
 /*--------------------------------------------------------------------
-    Beschreibung: Seitennummerierung
+    Page numbering.
  --------------------------------------------------------------------*/
 
 class SW_DLLPUBLIC SwPageNumberField : public SwField
@@ -192,7 +192,7 @@ public:
 };
 
 /*--------------------------------------------------------------------
-    Beschreibung: Autoren
+    Authors.
  --------------------------------------------------------------------*/
 
 class SwAuthorFieldType : public SwFieldType
@@ -205,7 +205,7 @@ public:
 };
 
 /*--------------------------------------------------------------------
-    Beschreibung: AutorenFeld
+    Author field.
  --------------------------------------------------------------------*/
 
 class SwAuthorField : public SwField
@@ -226,7 +226,7 @@ public:
 };
 
 /*--------------------------------------------------------------------
-    Beschreibung: Filename
+    Filename
  --------------------------------------------------------------------*/
 
 class SwFileNameFieldType : public SwFieldType
@@ -240,7 +240,7 @@ public:
 };
 
 /*--------------------------------------------------------------------
-    Beschreibung: FileName
+    FileNameField
  --------------------------------------------------------------------*/
 
 class SW_DLLPUBLIC SwFileNameField : public SwField
@@ -261,7 +261,7 @@ public:
 };
 
 /*--------------------------------------------------------------------
-    Beschreibung: TemplName
+    TemplName
  --------------------------------------------------------------------*/
 
 class SwTemplNameFieldType : public SwFieldType
@@ -275,7 +275,7 @@ public:
 };
 
 /*--------------------------------------------------------------------
-    Beschreibung: TemplName
+    TemplNameField
  --------------------------------------------------------------------*/
 
 class SW_DLLPUBLIC SwTemplNameField : public SwField
@@ -291,7 +291,7 @@ public:
 
 
 /*--------------------------------------------------------------------
-    Beschreibung: Docstatistik
+    Document statistics
  --------------------------------------------------------------------*/
 
 class SwDocStatFieldType : public SwFieldType
@@ -308,7 +308,7 @@ public:
 };
 
 /*--------------------------------------------------------------------
-    Beschreibung: Dokumentstatistik
+    DocStatField
  --------------------------------------------------------------------*/
 
 class SW_DLLPUBLIC SwDocStatField : public SwField
@@ -331,7 +331,7 @@ public:
 };
 
 /*--------------------------------------------------------------------
-    Beschreibung: versteckter Text
+    Hidden text.
  --------------------------------------------------------------------*/
 
 class SwHiddenTxtFieldType : public SwFieldType
@@ -347,7 +347,7 @@ public:
 };
 
 /*--------------------------------------------------------------------
-    Beschreibung: Versteckter Text
+    HiddenTxtField
  --------------------------------------------------------------------*/
 
 class SwHiddenTxtField : public SwField
@@ -403,7 +403,7 @@ public:
 };
 
 /*--------------------------------------------------------------------
-    Beschreibung: Feld das zu einer Leerzeile (ohne Hoehe) expandiert
+    Field that expands to an empty line (without height).
  --------------------------------------------------------------------*/
 
 class SwHiddenParaFieldType : public SwFieldType
@@ -415,7 +415,7 @@ public:
 };
 
 /*--------------------------------------------------------------------
-    Beschreibung: Versteckter Absatz
+    Hidded paragraph.
  --------------------------------------------------------------------*/
 
 class SwHiddenParaField : public SwField
@@ -423,7 +423,7 @@ class SwHiddenParaField : public SwField
     String              aCond;
     BOOL                bIsHidden:1;
 public:
-    // Direkte Eingabe alten Wert loeschen
+    // Direct input, delete old value.
     SwHiddenParaField(SwHiddenParaFieldType*, const String& rCond);
 
     virtual String      Expand() const;
@@ -432,7 +432,7 @@ public:
     void                SetHidden(BOOL bHidden)     { bIsHidden = bHidden; }
     BOOL                IsHidden() const            { return bIsHidden;    }
 
-    // Bedingung erfragen/setzen
+    //Query, set condition.
     virtual const String& GetPar1() const;
     virtual void        SetPar1(const String& rStr);
     virtual bool        QueryValue( com::sun::star::uno::Any& rVal, USHORT nWhich ) const;
@@ -440,7 +440,7 @@ public:
 };
 
 /*--------------------------------------------------------------------
-    Beschreibung: Macro ausfuehren
+    Run Macro.
  --------------------------------------------------------------------*/
 
 class SwMacroFieldType : public SwFieldType
@@ -454,7 +454,7 @@ public:
 };
 
 /*--------------------------------------------------------------------
-    Beschreibung: Macrofeld
+    MacroField.
  --------------------------------------------------------------------*/
 
 class SW_DLLPUBLIC SwMacroField : public SwField
@@ -464,7 +464,7 @@ class SW_DLLPUBLIC SwMacroField : public SwField
     BOOL      bIsScriptURL;
 
 public:
-    // Direkte Eingabe alten Wert loeschen
+    // Direct input, delete old value.
     SwMacroField( SwMacroFieldType*, const String& rLibAndName,
                   const String& rTxt);
 
@@ -477,7 +477,7 @@ public:
     virtual String   Expand() const;
     virtual SwField* Copy() const;
 
-    // Library und FileName
+    // Library and FileName
     virtual const String& GetPar1() const;
     virtual void    SetPar1(const String& rStr);
 
@@ -496,7 +496,7 @@ public:
 
 
 /*--------------------------------------------------------------------
-    Beschreibung: PostIts
+    PostIts
  --------------------------------------------------------------------*/
 
 class SwPostItFieldType : public SwFieldType
@@ -511,14 +511,14 @@ public:
 };
 
 /*--------------------------------------------------------------------
-    Beschreibung: PostIt
+    PostItField
  --------------------------------------------------------------------*/
 
 class SW_DLLPUBLIC SwPostItField : public SwField
 {
-    String      sTxt;       // die Anmerkung
-    String      sAuthor;    // der Author
-    DateTime    aDateTime;  // Datum und Zeit der Anmerkung
+    String      sTxt;
+    String      sAuthor;
+    DateTime    aDateTime;
     OutlinerParaObject* mpText;
     SwTextAPIObject* m_pTextObject;
 
@@ -553,7 +553,7 @@ public:
 };
 
 /*--------------------------------------------------------------------
-    Beschreibung: DokumentInfo
+    DocumentInfo
  --------------------------------------------------------------------*/
 
 class SwDocInfoFieldType : public SwValueFieldType
@@ -589,7 +589,7 @@ public:
 };
 
 /*--------------------------------------------------------------------
-    Beschreibung: erweiterte Benutzereinstellung
+    Extended User settings.
  --------------------------------------------------------------------*/
 
 
@@ -627,7 +627,7 @@ public:
 
 
 /*--------------------------------------------------------------------
-    Beschreibung: Relatives Seitennummern - Feld
+    Relative page numbers - field.
  --------------------------------------------------------------------*/
 
 class SwRefPageSetFieldType : public SwFieldType
@@ -636,12 +636,12 @@ public:
     SwRefPageSetFieldType();
 
     virtual SwFieldType*    Copy() const;
-    // ueberlagert, weil es nichts zum Updaten gibt!
+    // Overlay, because there is nothing to update!
     virtual void            Modify( SfxPoolItem *, SfxPoolItem * );
 };
 
 /*--------------------------------------------------------------------
-    Beschreibung: Relative Seitennummerierung
+    Relative page numbering.
  --------------------------------------------------------------------*/
 
 class SwRefPageSetField : public SwField
@@ -668,7 +668,7 @@ public:
 };
 
 /*--------------------------------------------------------------------
-    Beschreibung: relatives Seitennummern - Abfrage Feld
+    Relative page numbers - query field.
  --------------------------------------------------------------------*/
 
 class SwRefPageGetFieldType : public SwFieldType
@@ -682,7 +682,7 @@ public:
     SwRefPageGetFieldType( SwDoc* pDoc );
     virtual SwFieldType*    Copy() const;
 
-    // ueberlagert, um alle RefPageGet-Felder zu updaten
+    // Overlay in order to update all RefPageGet-fields.
     virtual void Modify( SfxPoolItem *, SfxPoolItem * );
     USHORT MakeSetList( _SetGetExpFlds& rTmpLst );
 
@@ -690,7 +690,7 @@ public:
 };
 
 /*--------------------------------------------------------------------
-    Beschreibung: Relative Seitennummerierung Abfragen
+    Query relative page numbering.
  --------------------------------------------------------------------*/
 
 class SwRefPageGetField : public SwField
@@ -710,7 +710,7 @@ public:
 };
 
 /*--------------------------------------------------------------------
-    Beschreibung: Feld zum Anspringen und Editieren
+    Field to jump to and edit.
  --------------------------------------------------------------------*/
 
 class SwJumpEditFieldType : public SwFieldType
@@ -735,11 +735,11 @@ public:
     virtual String      Expand() const;
     virtual SwField*    Copy() const;
 
-    // Platzhalter-Text
+    // Placeholder-Text
     virtual const String& GetPar1() const;
     virtual void    SetPar1(const String& rStr);
 
-    // HinweisText
+    // Hint-Text
     virtual String  GetPar2() const;
     virtual void    SetPar2(const String& rStr);
 
@@ -750,7 +750,7 @@ public:
 };
 
 /*--------------------------------------------------------------------
-    Beschreibung: Script Fieldtype
+    Script Fieldtype.
  --------------------------------------------------------------------*/
 
 class SwScriptFieldType : public SwFieldType
@@ -763,16 +763,16 @@ public:
 };
 
 /*--------------------------------------------------------------------
-    Beschreibung: Script Field
+    ScriptField.
  --------------------------------------------------------------------*/
 
 class SwScriptField : public SwField
 {
-    String  sType;      // Type von Code (Java/VBScript/...)
-    String  sCode;      // der Code als Text
-                        // der Code als JavaCode ?
+    String  sType;      // Type of Code (Java/VBScript/...)
+    String  sCode;      // Code as text.
+                        // Code as JavaCode ?
 
-    BOOL    bCodeURL;   // Code enthaelt URL eines Scripts
+    BOOL    bCodeURL;   // Code contains URL of a script.
 
 public:
     SwScriptField( SwScriptFieldType*, const String& rType,
@@ -797,7 +797,7 @@ public:
 };
 
 /*--------------------------------------------------------------------
-    Beschreibung: Combined Character Fieldtype
+    Combined Character Fieldtype
  --------------------------------------------------------------------*/
 
 class SwCombinedCharFieldType : public SwFieldType
@@ -809,7 +809,7 @@ public:
 };
 
 /*--------------------------------------------------------------------
-    Beschreibung: Script Field
+    ScriptField
  --------------------------------------------------------------------*/
 
 #define MAX_COMBINED_CHARACTERS     6

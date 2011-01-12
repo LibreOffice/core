@@ -64,31 +64,31 @@ class IDocumentChartDataProviderAccess;
 
 class SW_DLLPUBLIC SwDocShell: public SfxObjectShell, public SfxListener
 {
-    SwDoc*                  pDoc;           // Document
-    rtl::Reference< SfxStyleSheetBasePool > mxBasePool;     // Durchreiche fuer Formate
-    FontList*               pFontList;      // aktuelle FontListe
+    SwDoc*                  pDoc;                           // Document.
+    rtl::Reference< SfxStyleSheetBasePool > mxBasePool;     // Passing through for formats.
+    FontList*               pFontList;                      // Current Fontlist.
 
-    // Nix geht ohne die WrtShell (historische Gruende)
-    // RuekwaertsPointer auf die View (historische Gruende)
-    // Dieser gilt solange bis im Activate ein neuer gesetzt wird
-    // oder dieser im Dtor der View geloescht wird
-    //
+    // For "historical reasons" nothing can be done without the WrtShell.
+    // Back-pointer on View (again "for historical reasons").
+    // Back-pointer is valid until in Activate a new one is set
+    // or until it is deleted in the View's Dtor.
+
     SwView*                 pView;
     SwWrtShell*             pWrtShell;
 
-    Timer                   aFinishedTimer; // Timer fuers ueberpriefen der
-                                            // Grafik-Links. Sind alle da,
-                                            // dann ist Doc voll. geladen
+    Timer                   aFinishedTimer; // Timer for checking graphics-links.
+                                            // If all are present, the doc is loaded completely.
 
     comphelper::EmbeddedObjectContainer*    pOLEChildList;
-    sal_Int16               nUpdateDocMode; // contains the com::sun::star::document::UpdateDocMode
+    sal_Int16               nUpdateDocMode;    // contains the com::sun::star::document::UpdateDocMode
     bool                    bInUpdateFontList; //prevent nested calls of UpdateFontList
-    bool                    bIsATemplate; //prevent nested calls of UpdateFontList
-    // Methoden fuer den Zugriff aufs Doc
+    bool                    bIsATemplate;      //prevent nested calls of UpdateFontList
+
+    // Methods for access to doc.
     SW_DLLPRIVATE void                  AddLink();
     SW_DLLPRIVATE void                  RemoveLink();
 
-    // Hint abfangen fuer DocInfo
+    // Catch hint for DocInfo.
     SW_DLLPRIVATE virtual void          Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 
     // FileIO
@@ -102,14 +102,14 @@ class SW_DLLPUBLIC SwDocShell: public SfxObjectShell, public SfxListener
 
     SW_DLLPRIVATE virtual USHORT            PrepareClose( BOOL bUI = TRUE, BOOL bForBrowsing = FALSE );
 
-    // DocInfo dem Doc melden
-    //
+
+    // Make DocInfo known to the Doc.
     SW_DLLPRIVATE virtual SfxDocumentInfoDialog* CreateDocumentInfoDialog(
                                     Window *pParent, const SfxItemSet &);
-    // OLE-Geraffel
+    // OLE-stuff
     SW_DLLPRIVATE virtual void          Draw( OutputDevice*, const JobSetup&, USHORT);
 
-    // Methoden fuer StyleSheets
+    // Methods for StyleSheets
     SW_DLLPRIVATE USHORT                    Edit( const String &rName, const String& rParent, USHORT nFamily,
                                     USHORT nMask, BOOL bNew,
                                     BOOL bColumn = FALSE,
@@ -124,7 +124,7 @@ class SW_DLLPUBLIC SwDocShell: public SfxObjectShell, public SfxListener
                                             USHORT nFamily, USHORT nMask, SwWrtShell* pShell = 0);
 
     SW_DLLPRIVATE void                  InitDraw();
-    SW_DLLPRIVATE void                  SubInitNew();   // fuer InitNew und HtmlSourceModus
+    SW_DLLPRIVATE void                  SubInitNew();   // for InitNew and HtmlSourceMode.
 
     SW_DLLPRIVATE void                  RemoveOLEObjects();
     SW_DLLPRIVATE void                  CalcLayoutForOLEObjects();
@@ -143,7 +143,7 @@ protected:
 public:
     using SotObject::GetInterface;
 
-    // aber selbst implementieren
+    // but we implement this ourselves.
     SFX_DECL_INTERFACE(SW_DOCSHELL)
     SFX_DECL_OBJECTFACTORY()
     TYPEINFO();
@@ -152,16 +152,16 @@ public:
 
     static rtl::OUString GetEventName( sal_Int32 nId );
 
-    //Das Doc wird fuer SO-Datenaustausch benoetigt!
+    //Doc is required for SO data exchange!
     SwDocShell( SfxObjectCreateMode eMode = SFX_CREATE_MODE_EMBEDDED );
     SwDocShell( const sal_uInt64 i_nSfxCreationFlags );
     SwDocShell( SwDoc *pDoc, SfxObjectCreateMode eMode = SFX_CREATE_MODE_STANDARD );
     ~SwDocShell();
 
-    // OLE 2.0-Benachrichtigung
+    // OLE 2.0-notification.
     DECL_LINK( Ole2ModifiedHdl, void * );
 
-    // OLE-Geraffel
+    // OLE-stuff.
     virtual void      SetVisArea( const Rectangle &rRect );
     virtual Rectangle GetVisArea( USHORT nAspect ) const;
     virtual Printer  *GetDocumentPrinter();
@@ -181,7 +181,7 @@ public:
     void                    StateAlways(SfxItemSet &);
     void                    StateStyleSheet(SfxItemSet&, SwWrtShell* pSh = 0 );
 
-    // Doc rausreichen aber VORSICHT
+    // returns Doc. But be careful!
     inline SwDoc*                   GetDoc() { return pDoc; }
     inline const SwDoc*             GetDoc() const { return pDoc; }
     IDocumentDeviceAccess*          getIDocumentDeviceAccess();
@@ -192,13 +192,13 @@ public:
     void                    UpdateFontList();
     void                    UpdateChildWindows();
 
-    // globaler IO
+    // global IO.
     virtual BOOL            Save();
 
-    // fuer VorlagenPI
+    // For Style PI.
     virtual SfxStyleSheetBasePool*  GetStyleSheetPool();
 
-    // Fuer Organizer
+    // For Organizer.
     virtual BOOL Insert(SfxObjectShell &rSource,
                         USHORT  nSourceIdx1,
                         USHORT  nSourceIdx2,
@@ -214,22 +214,22 @@ public:
 
     virtual Bitmap      GetStyleFamilyBitmap( SfxStyleFamily eFamily );
 
-    // View setzen fuer Aktionen ueber Shell
+    // Set View for actions via Shell.
     void          SetView(SwView* pVw);
     const SwView *GetView() const { return pView; }
     SwView       *GetView()       { return pView; }
 
-    // Zugriff auf die zur SwView gehoerige SwWrtShell
+    // Accress to the SwWrtShell belonging to SwView.
           SwWrtShell *GetWrtShell()       { return pWrtShell; }
     const SwWrtShell *GetWrtShell() const { return pWrtShell; }
 
-    // fuer die Core - die kennt die DocShell aber keine WrtShell!
+    // For Core - it knows the DocShell but not the WrtShell!
           SwFEShell *GetFEShell();
     const SwFEShell *GetFEShell() const
                 { return ((SwDocShell*)this)->GetFEShell(); }
 
 
-    // Fuer Einfuegen Dokument
+    // For inserting document.
     Reader* StartConvertFrom(SfxMedium& rMedium, SwReader** ppRdr,
                             SwCrsrShell* pCrsrSh = 0, SwPaM* pPaM = 0);
 
@@ -252,7 +252,7 @@ public:
 
     void _LoadStyles( SfxObjectShell& rSource, BOOL bPreserveCurrentDocument );
 
-    // Seitenvorlagedialog anzeigen, ggf. auf Spaltenpage
+    // Display dialog for page style. If required display column page.
     void FormatPage( const String& rPage,
                         BOOL bColumn = FALSE,
                         SwWrtShell*     pActShell = 0 );
@@ -264,10 +264,10 @@ public:
 
     void LoadingFinished();
 
-    // eine Uebertragung wird abgebrochen (wird aus dem SFX gerufen)
+    // Cancel transfer (called from SFX).
     virtual void CancelTransfers();
 
-    // Doc aus Html-Source neu laden
+    // Re-read Doc from Html-source.
     void    ReloadFromHtml( const String& rStreamName, SwSrcView* pSrcView );
 
     sal_Int16   GetUpdateDocMode() const {return nUpdateDocMode;}
