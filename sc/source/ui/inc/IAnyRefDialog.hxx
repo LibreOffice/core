@@ -44,12 +44,6 @@ class SAL_NO_VTABLE IAnyRefDialog : public formula::IControlReferenceHandler
 public:
     virtual ~IAnyRefDialog(){}
 
-    //virtual void ShowReference(const String& _sRef) = 0;
-    //virtual void HideReference( BOOL bDoneRefMode = TRUE ) = 0;
-    //virtual void ReleaseFocus( formula::RefEdit* pEdit, formula::RefButton* pButton = NULL ) = 0;
-    //virtual void ToggleCollapsed( formula::RefEdit* pEdit, formula::RefButton* pButton = NULL ) = 0;
-
-
     virtual void SetReference( const ScRange& rRef, ScDocument* pDoc ) = 0;
     virtual void RefInputStart( formula::RefEdit* pEdit, formula::RefButton* pButton = NULL ) = 0;
     virtual void RefInputDone( BOOL bForced = FALSE ) = 0;
