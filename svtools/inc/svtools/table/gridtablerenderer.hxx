@@ -29,6 +29,8 @@
 
 #include <svtools/table/tablemodel.hxx>
 
+#include <boost/scoped_ptr.hpp>
+
 //........................................................................
 namespace svt { namespace table
 {
@@ -47,7 +49,7 @@ namespace svt { namespace table
     class GridTableRenderer : public ITableRenderer
     {
     private:
-        GridTableRenderer_Impl*     m_pImpl;
+        ::boost::scoped_ptr< GridTableRenderer_Impl >   m_pImpl;
 
     public:
         /** creates a table renderer associated with the given model
@@ -69,7 +71,15 @@ namespace svt { namespace table
 
             This method returns the index of the last row which has been prepared
         */
-        RowPos  getCurrentRow();
+        RowPos  getCurrentRow() const;
+
+        /** determines whether or not to paint grid lines
+        */
+        bool    useGridLines() const;
+
+        /** controls whether or not to paint grid lines
+        */
+        void    useGridLines( bool const i_use );
 
     public:
         // ITableRenderer overridables

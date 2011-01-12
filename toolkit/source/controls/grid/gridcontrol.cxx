@@ -87,11 +87,13 @@ UnoGridModel::UnoGridModel( const ::com::sun::star::uno::Reference< ::com::sun::
     ImplRegisterProperty( BASEPROPERTY_FONTEMPHASISMARK );
     ImplRegisterProperty( BASEPROPERTY_FONTDESCRIPTOR );
     ImplRegisterProperty( BASEPROPERTY_TEXTCOLOR );
-    ImplRegisterProperty( BASEPROPERTY_VERTICALALIGN );
-    ImplRegisterProperty( BASEPROPERTY_GRID_EVEN_ROW_BACKGROUND );
-    ImplRegisterProperty( BASEPROPERTY_GRID_HEADER_BACKGROUND );
+    ImplRegisterProperty( BASEPROPERTY_TEXTLINECOLOR );
+    ImplRegisterProperty( BASEPROPERTY_USE_GRID_LINES );
     ImplRegisterProperty( BASEPROPERTY_GRID_LINE_COLOR );
-    ImplRegisterProperty( BASEPROPERTY_GRID_ROW_BACKGROUND );
+    ImplRegisterProperty( BASEPROPERTY_GRID_HEADER_BACKGROUND );
+    ImplRegisterProperty( BASEPROPERTY_GRID_HEADER_TEXT_COLOR );
+    ImplRegisterProperty( BASEPROPERTY_GRID_ROW_BACKGROUND_COLORS );
+    ImplRegisterProperty( BASEPROPERTY_VERTICALALIGN );
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -199,6 +201,7 @@ Any UnoGridModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
         case BASEPROPERTY_GRID_SELECTIONMODE:
             return uno::makeAny( SelectionType(1) );
         case BASEPROPERTY_GRID_SHOWROWHEADER:
+        case BASEPROPERTY_USE_GRID_LINES:
             return uno::makeAny( (sal_Bool)sal_False );
         case BASEPROPERTY_ROW_HEADER_WIDTH:
             return uno::makeAny( sal_Int32( 10 ) );
@@ -206,15 +209,11 @@ Any UnoGridModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
             return uno::makeAny( (sal_Bool)sal_True );
         case BASEPROPERTY_COLUMN_HEADER_HEIGHT:
         case BASEPROPERTY_ROW_HEIGHT:
-            return Any();
-        case BASEPROPERTY_GRID_EVEN_ROW_BACKGROUND:
-            return uno::makeAny( com::sun::star::util::Color( COL_TRANSPARENT ) );
         case BASEPROPERTY_GRID_HEADER_BACKGROUND:
-            return uno::makeAny( com::sun::star::util::Color( COL_TRANSPARENT ) );
+        case BASEPROPERTY_GRID_HEADER_TEXT_COLOR:
         case BASEPROPERTY_GRID_LINE_COLOR:
-            return uno::makeAny( com::sun::star::util::Color( COL_TRANSPARENT ) );
-        case BASEPROPERTY_GRID_ROW_BACKGROUND:
-            return uno::makeAny(com::sun::star::util::Color( COL_TRANSPARENT ) );
+        case BASEPROPERTY_GRID_ROW_BACKGROUND_COLORS:
+            return Any();
         default:
             return UnoControlModel::ImplGetDefaultValue( nPropId );
     }

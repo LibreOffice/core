@@ -40,6 +40,7 @@
 #include <sal/types.h>
 
 #include <boost/shared_ptr.hpp>
+#include <boost/optional.hpp>
 #include <boost/enable_shared_from_this.hpp>
 
 //........................................................................
@@ -461,12 +462,51 @@ namespace svt { namespace table
         */
         virtual ::rtl::OUString getRowHeader( RowPos const i_rowPos ) const = 0;
 
-        virtual ::com::sun::star::util::Color getLineColor() = 0;
-        virtual ::com::sun::star::util::Color getHeaderBackgroundColor() = 0;
-        virtual ::com::sun::star::util::Color getTextColor() = 0;
-        virtual ::com::sun::star::util::Color getOddRowBackgroundColor() = 0;
-        virtual ::com::sun::star::util::Color getEvenRowBackgroundColor() = 0;
-        virtual ::com::sun::star::style::VerticalAlignment getVerticalAlign() = 0;
+        /** returns the color to be used for rendering the grid lines.
+
+            If this value is not set, a default color from the style settings will be used.
+        */
+        virtual ::boost::optional< ::Color >    getLineColor() const = 0;
+
+        /** returns the color to be used for rendering the header background.
+
+            If this value is not set, a default color from the style settings will be used.
+        */
+        virtual ::boost::optional< ::Color >    getHeaderBackgroundColor() const = 0;
+
+        /** returns the color to be used for rendering the header text.
+
+            If this value is not set, a default color from the style settings will be used.
+        */
+        virtual ::boost::optional< ::Color >    getHeaderTextColor() const = 0;
+
+        /** returns the color to be used for rendering cell texts.
+
+            If this value is not set, a default color from the style settings will be used.
+        */
+        virtual ::boost::optional< ::Color >    getTextColor() const = 0;
+
+        /** returns the color to be used for text lines (underline, strikethrough) when rendering cell text.
+
+            If this value is not set, a default color from the style settings will be used.
+        */
+        virtual ::boost::optional< ::Color >    getTextLineColor() const = 0;
+
+        /** returns the colors to be used for the row backgrounds.
+
+            If this value is not set, every second row will have a background color derived from the style settings's
+            selection color, the other rows will not have a special background at all.
+
+            If this value is an empty sequence, the rows will not have a special background at all, instead the
+            normal background of the complete control will be used.
+
+            If value is a non-empty sequence, then rows will have the background colors as specified in the sequence,
+            in alternating order.
+        */
+        virtual ::boost::optional< ::std::vector< ::Color > >
+                                                getRowBackgroundColors() const = 0;
+
+        virtual ::com::sun::star::style::VerticalAlignment getVerticalAlign() const = 0;
 
         /// destroys the table model instance
         virtual ~ITableModel() { }

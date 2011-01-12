@@ -79,43 +79,45 @@ namespace svt { namespace table
     typedef ::std::vector< PColumnModel >           ColumnModels;
     struct UnoControlTableModel_Impl
     {
-        ColumnModels                                aColumns;
-        bool                                        bHasColumnHeaders;
-        bool                                        bHasRowHeaders;
-        ScrollbarVisibility                         eVScrollMode;
-        ScrollbarVisibility                         eHScrollMode;
-        PTableRenderer                              pRenderer;
-        PTableInputHandler                          pInputHandler;
-        TableMetrics                                nRowHeight;
-        TableMetrics                                nColumnHeaderHeight;
-        TableMetrics                                nRowHeaderWidth;
-        ::com::sun::star::util::Color               m_nLineColor;
-        ::com::sun::star::util::Color               m_nHeaderColor;
-        ::com::sun::star::util::Color               m_nTextColor;
-        ::com::sun::star::util::Color               m_nRowColor1;
-        ::com::sun::star::util::Color               m_nRowColor2;
-        ::com::sun::star::style::VerticalAlignment  m_eVerticalAlign;
-        ModellListeners                             m_aListeners;
-        WeakReference< XGridDataModel >             m_aDataModel;
-        WeakReference< XGridColumnModel >           m_aColumnModel;
+        ColumnModels                                    aColumns;
+        bool                                            bHasColumnHeaders;
+        bool                                            bHasRowHeaders;
+        ScrollbarVisibility                             eVScrollMode;
+        ScrollbarVisibility                             eHScrollMode;
+        PTableRenderer                                  pRenderer;
+        PTableInputHandler                              pInputHandler;
+        TableMetrics                                    nRowHeight;
+        TableMetrics                                    nColumnHeaderHeight;
+        TableMetrics                                    nRowHeaderWidth;
+        ::boost::optional< ::Color >                    m_aGridLineColor;
+        ::boost::optional< ::Color >                    m_aHeaderBackgroundColor;
+        ::boost::optional< ::Color >                    m_aHeaderTextColor;
+        ::boost::optional< ::Color >                    m_aTextColor;
+        ::boost::optional< ::Color >                    m_aTextLineColor;
+        ::boost::optional< ::std::vector< ::Color > >   m_aRowColors;
+        ::com::sun::star::style::VerticalAlignment      m_eVerticalAlign;
+        ModellListeners                                 m_aListeners;
+        WeakReference< XGridDataModel >                 m_aDataModel;
+        WeakReference< XGridColumnModel >               m_aColumnModel;
 
         UnoControlTableModel_Impl()
-            :aColumns           ( )
-            ,bHasColumnHeaders  ( true      )
-            ,bHasRowHeaders     ( false     )
-            ,eVScrollMode       ( ScrollbarShowNever )
-            ,eHScrollMode       ( ScrollbarShowNever )
-            ,pRenderer          (           )
-            ,pInputHandler      (           )
-            ,nRowHeight         ( 10 )
-            ,nColumnHeaderHeight( 10 )
-            ,nRowHeaderWidth    ( 10 )
-            ,m_nLineColor       ( COL_TRANSPARENT )
-            ,m_nHeaderColor     ( COL_TRANSPARENT )
-            ,m_nTextColor       ( 0 )//black as default
-            ,m_nRowColor1       ( COL_TRANSPARENT )
-            ,m_nRowColor2       ( COL_TRANSPARENT )
-            ,m_eVerticalAlign   ( com::sun::star::style::VerticalAlignment_TOP )
+            :aColumns                   ( )
+            ,bHasColumnHeaders          ( true      )
+            ,bHasRowHeaders             ( false     )
+            ,eVScrollMode               ( ScrollbarShowNever )
+            ,eHScrollMode               ( ScrollbarShowNever )
+            ,pRenderer                  ( )
+            ,pInputHandler              ( )
+            ,nRowHeight                 ( 10 )
+            ,nColumnHeaderHeight        ( 10 )
+            ,nRowHeaderWidth            ( 10 )
+            ,m_aGridLineColor           ( )
+            ,m_aHeaderBackgroundColor   ( )
+            ,m_aHeaderTextColor         ( )
+            ,m_aTextColor               ( )
+            ,m_aTextLineColor           ( )
+            ,m_aRowColors               ( )
+            ,m_eVerticalAlign           ( com::sun::star::style::VerticalAlignment_TOP )
         {
         }
     };
@@ -557,77 +559,124 @@ namespace svt { namespace table
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    ::com::sun::star::util::Color UnoControlTableModel::getLineColor()
+    namespace
     {
-        DBG_CHECK_ME();
-        return  m_pImpl->m_nLineColor;
+        void lcl_setColor( Any const & i_color, ::boost::optional< ::Color > & o_convertedColor )
+        {
+            if ( !i_color.hasValue() )
+                o_convertedColor.reset();
+            else
+            {
+                sal_Int32 nColor = COL_TRANSPARENT;
+                if ( i_color >>= nColor )
+                {
+                    o_convertedColor.reset( ::Color( nColor ) );
+                }
+                else
+                {
+                    OSL_ENSURE( false, "lcl_setColor: could not extract color value!" );
+                }
+            }
+        }
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    void UnoControlTableModel::setLineColor( ::com::sun::star::util::Color _rColor )
+    ::boost::optional< ::Color > UnoControlTableModel::getLineColor() const
     {
         DBG_CHECK_ME();
-         m_pImpl->m_nLineColor = _rColor;
+        return m_pImpl->m_aGridLineColor;
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    ::com::sun::star::util::Color UnoControlTableModel::getHeaderBackgroundColor()
+    void UnoControlTableModel::setLineColor( Any const & i_color )
     {
         DBG_CHECK_ME();
-        return  m_pImpl->m_nHeaderColor;
+        lcl_setColor( i_color, m_pImpl->m_aGridLineColor );
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    void UnoControlTableModel::setHeaderBackgroundColor( ::com::sun::star::util::Color _rColor )
+    ::boost::optional< ::Color > UnoControlTableModel::getHeaderBackgroundColor() const
     {
         DBG_CHECK_ME();
-        m_pImpl->m_nHeaderColor = _rColor;
+        return m_pImpl->m_aHeaderBackgroundColor;
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    ::com::sun::star::util::Color UnoControlTableModel::getTextColor()
+    void UnoControlTableModel::setHeaderBackgroundColor( Any const & i_color )
     {
         DBG_CHECK_ME();
-        return  m_pImpl->m_nTextColor;
+        lcl_setColor( i_color, m_pImpl->m_aHeaderBackgroundColor );
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    void UnoControlTableModel::setTextColor( ::com::sun::star::util::Color _rColor )
+    ::boost::optional< ::Color > UnoControlTableModel::getHeaderTextColor() const
     {
         DBG_CHECK_ME();
-         m_pImpl->m_nTextColor = _rColor;
+        return m_pImpl->m_aHeaderTextColor;
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    ::com::sun::star::util::Color UnoControlTableModel::getOddRowBackgroundColor()
+    void UnoControlTableModel::setHeaderTextColor( Any const & i_color )
     {
         DBG_CHECK_ME();
-        return  m_pImpl->m_nRowColor1;
+        lcl_setColor( i_color, m_pImpl->m_aHeaderTextColor );
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    void UnoControlTableModel::setOddRowBackgroundColor( ::com::sun::star::util::Color _rColor )
+    ::boost::optional< ::Color > UnoControlTableModel::getTextColor() const
     {
         DBG_CHECK_ME();
-        m_pImpl->m_nRowColor1 = _rColor;
+        return m_pImpl->m_aTextColor;
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    ::com::sun::star::util::Color UnoControlTableModel::getEvenRowBackgroundColor()
+    void UnoControlTableModel::setTextColor( Any const & i_color )
     {
         DBG_CHECK_ME();
-        return  m_pImpl->m_nRowColor2;
+        lcl_setColor( i_color, m_pImpl->m_aTextColor );
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    void UnoControlTableModel::setEvenRowBackgroundColor( ::com::sun::star::util::Color _rColor )
+    ::boost::optional< ::Color > UnoControlTableModel::getTextLineColor() const
     {
         DBG_CHECK_ME();
-        m_pImpl->m_nRowColor2 = _rColor;
+        return m_pImpl->m_aTextColor;
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    ::com::sun::star::style::VerticalAlignment UnoControlTableModel::getVerticalAlign()
+    void UnoControlTableModel::setTextLineColor( Any const & i_color )
+    {
+        DBG_CHECK_ME();
+        lcl_setColor( i_color, m_pImpl->m_aTextLineColor );
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    ::boost::optional< ::std::vector< ::Color > > UnoControlTableModel::getRowBackgroundColors() const
+    {
+        DBG_CHECK_ME();
+        return m_pImpl->m_aRowColors;
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    void UnoControlTableModel::setRowBackgroundColors( ::com::sun::star::uno::Any const & i_APIValue )
+    {
+        DBG_CHECK_ME();
+        Sequence< ::com::sun::star::util::Color > aAPIColors;
+        if ( !( i_APIValue >>= aAPIColors ) )
+            m_pImpl->m_aRowColors.reset();
+        else
+        {
+            ::std::vector< ::Color > aColors( aAPIColors.getLength() );
+            for ( sal_Int32 i=0; i<aAPIColors.getLength(); ++i )
+            {
+                aColors[i] = ::Color( aAPIColors[i] );
+            }
+            m_pImpl->m_aRowColors.reset( aColors );
+        }
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    ::com::sun::star::style::VerticalAlignment UnoControlTableModel::getVerticalAlign() const
     {
         DBG_CHECK_ME();
         return  m_pImpl->m_eVerticalAlign;

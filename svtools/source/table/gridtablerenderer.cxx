@@ -29,19 +29,23 @@
 
 #include "cellvalueconversion.hxx"
 #include "svtools/table/gridtablerenderer.hxx"
+#include "svtools/colorcfg.hxx"
 
+/** === begin UNO includes === **/
 #include <com/sun/star/graphic/XGraphic.hpp>
+/** === end UNO includes === **/
 
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 #include <vcl/window.hxx>
 #include <vcl/image.hxx>
 
-//........................................................................
+//......................................................................................................................
 namespace svt { namespace table
 {
-//........................................................................
+//......................................................................................................................
 
+    /** === begin UNO using === **/
     using ::com::sun::star::uno::Any;
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::UNO_QUERY;
@@ -54,41 +58,70 @@ namespace svt { namespace table
     using ::com::sun::star::style::VerticalAlignment_TOP;
     using ::com::sun::star::style::VerticalAlignment_MIDDLE;
     using ::com::sun::star::style::VerticalAlignment_BOTTOM;
+    /** === end UNO using === **/
 
     struct GridTableRenderer_Impl
     {
         ITableModel&    rModel;
         RowPos          nCurrentRow;
+        bool            bUseGridLines;
 
         GridTableRenderer_Impl( ITableModel& _rModel )
             :rModel( _rModel )
             ,nCurrentRow( ROW_INVALID )
+            ,bUseGridLines( true )
         {
         }
     };
 
-    //====================================================================
+    //==================================================================================================================
     //= GridTableRenderer
-    //====================================================================
-    //--------------------------------------------------------------------
+    //==================================================================================================================
+    //------------------------------------------------------------------------------------------------------------------
     GridTableRenderer::GridTableRenderer( ITableModel& _rModel )
         :m_pImpl( new GridTableRenderer_Impl( _rModel ) )
     {
     }
 
-    //--------------------------------------------------------------------
+    //------------------------------------------------------------------------------------------------------------------
     GridTableRenderer::~GridTableRenderer()
     {
-        DELETEZ( m_pImpl );
     }
 
-    //--------------------------------------------------------------------
-    RowPos GridTableRenderer::getCurrentRow()
+    //------------------------------------------------------------------------------------------------------------------
+    RowPos GridTableRenderer::getCurrentRow() const
     {
         return m_pImpl->nCurrentRow;
     }
 
-    //--------------------------------------------------------------------
+    //------------------------------------------------------------------------------------------------------------------
+    bool GridTableRenderer::useGridLines() const
+    {
+        return m_pImpl->bUseGridLines;
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    void GridTableRenderer::useGridLines( bool const i_use )
+    {
+        m_pImpl->bUseGridLines = i_use;
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    namespace
+    {
+        Color lcl_getEffectiveColor(
+            ::boost::optional< ::Color > const & i_modelColor,
+            StyleSettings const & i_styleSettings,
+            ::Color const & ( StyleSettings::*i_getDefaultColor ) () const
+        )
+        {
+            if ( !!i_modelColor )
+                return *i_modelColor;
+            return ( i_styleSettings.*i_getDefaultColor )();
+        }
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
     void GridTableRenderer::PaintHeaderArea(
         OutputDevice& _rDevice, const Rectangle& _rArea, bool _bIsColHeaderArea, bool _bIsRowHeaderArea,
         const StyleSettings& _rStyle )
@@ -97,12 +130,11 @@ namespace svt { namespace table
             "GridTableRenderer::PaintHeaderArea: invalid area flags!" );
 
         _rDevice.Push( PUSH_FILLCOLOR | PUSH_LINECOLOR);
-        Color background = m_pImpl->rModel.getHeaderBackgroundColor();
-        if ( background != COL_TRANSPARENT )
-            _rDevice.SetFillColor( background );
-        else
-            _rDevice.SetFillColor( _rStyle.GetDialogColor() );
-        _rDevice.SetLineColor( _rStyle.GetSeparatorColor() );
+
+        Color const background = lcl_getEffectiveColor( m_pImpl->rModel.getHeaderBackgroundColor(), _rStyle, &StyleSettings::GetDialogColor );
+        _rDevice.SetFillColor( background );
+
+        m_pImpl->bUseGridLines ? _rDevice.SetLineColor( _rStyle.GetSeparatorColor() ) : _rDevice.SetLineColor();
         _rDevice.DrawRect( _rArea );
         // delimiter lines at bottom/right
         _rDevice.DrawLine( _rArea.BottomLeft(), _rArea.BottomRight() );
@@ -113,7 +145,7 @@ namespace svt { namespace table
         (void)_bIsRowHeaderArea;
     }
 
-    //--------------------------------------------------------------------
+    //------------------------------------------------------------------------------------------------------------------
     void GridTableRenderer::PaintColumnHeader( ColPos _nCol, bool _bActive, bool _bSelected,
         OutputDevice& _rDevice, const Rectangle& _rArea, const StyleSettings& _rStyle )
     {
@@ -126,24 +158,26 @@ namespace svt { namespace table
         DBG_ASSERT( !!pColumn, "GridTableRenderer::PaintColumnHeader: invalid column model object!" );
         if ( !!pColumn )
             sHeaderText = pColumn->getName();
-        if(m_pImpl->rModel.getTextColor() != 0x000000)
-            _rDevice.SetTextColor(m_pImpl->rModel.getTextColor());
-        else
-            _rDevice.SetTextColor(_rStyle.GetFieldTextColor());
+
+        ::Color const textColor = lcl_getEffectiveColor( m_pImpl->rModel.getTextColor(), _rStyle, &StyleSettings::GetFieldTextColor );
+        _rDevice.SetTextColor( textColor );
+
         ULONG nHorFlag = TEXT_DRAW_LEFT;
         ULONG nVerFlag = TEXT_DRAW_TOP;
-        if(m_pImpl->rModel.getVerticalAlign() == 1)
+        if ( m_pImpl->rModel.getVerticalAlign() == 1 )
             nVerFlag = TEXT_DRAW_VCENTER;
-        else if(m_pImpl->rModel.getVerticalAlign() == 2)
+        else if ( m_pImpl->rModel.getVerticalAlign() == 2 )
             nVerFlag = TEXT_DRAW_BOTTOM;
-        if(m_pImpl->rModel.getColumnModel(_nCol)->getHorizontalAlign() == 1)
+        if ( m_pImpl->rModel.getColumnModel(_nCol)->getHorizontalAlign() == 1 )
             nHorFlag = TEXT_DRAW_CENTER;
-        else if(m_pImpl->rModel.getColumnModel(_nCol)->getHorizontalAlign() == 2)
+        else if ( m_pImpl->rModel.getColumnModel(_nCol)->getHorizontalAlign() == 2 )
             nHorFlag = TEXT_DRAW_RIGHT;
+
         Rectangle aRect(_rArea);
         aRect.Left()+=4; aRect.Right()-=4;
         aRect.Bottom()-=2;
-            _rDevice.DrawText( aRect, sHeaderText, nHorFlag | nVerFlag | TEXT_DRAW_CLIP);
+
+        _rDevice.DrawText( aRect, sHeaderText, nHorFlag | nVerFlag | TEXT_DRAW_CLIP);
         _rDevice.DrawLine( _rArea.BottomLeft(), _rArea.BottomRight() );
         _rDevice.Pop();
 
@@ -151,10 +185,10 @@ namespace svt { namespace table
         // no special painting for the active column at the moment
 
         (void)_bSelected;
-        //selection for column header not yet implemented
+        // selection for column header not yet implemented
     }
 
-    //--------------------------------------------------------------------
+    //------------------------------------------------------------------------------------------------------------------
     void GridTableRenderer::PrepareRow( RowPos _nRow, bool _bActive, bool _bSelected,
         OutputDevice& _rDevice, const Rectangle& _rRowArea, const StyleSettings& _rStyle )
     {
@@ -163,69 +197,74 @@ namespace svt { namespace table
 
         _rDevice.Push( PUSH_FILLCOLOR | PUSH_LINECOLOR);
 
-        Color aRowBackground = m_pImpl->rModel.getOddRowBackgroundColor();
-        const Color lineColor =  m_pImpl->rModel.getLineColor();
-        Color aRowBackground2 = m_pImpl->rModel.getEvenRowBackgroundColor();
-        const Color fieldColor = _rStyle.GetFieldColor();
-        if ( aRowBackground == COL_TRANSPARENT )
-            aRowBackground = fieldColor;
-        if ( aRowBackground2 == COL_TRANSPARENT )
-            aRowBackground2 = fieldColor;
-        //if row is selected background color becomes blue, and lines should be also blue
-        //if they aren't user defined
+        ::Color backgroundColor = _rStyle.GetFieldColor();
+
+        ::boost::optional< ::Color > aLineColor( m_pImpl->rModel.getLineColor() );
+        ::Color lineColor = !aLineColor ? _rStyle.GetSeparatorColor() : *aLineColor;
+
         if ( _bSelected )
         {
-            const Color aSelected( _rStyle.GetHighlightColor() );
-            aRowBackground = aSelected;
-            if ( lineColor == COL_TRANSPARENT )
-                _rDevice.SetLineColor( aRowBackground );
-            else
-                _rDevice.SetLineColor( lineColor );
+            // selected rows use the background color from the style
+            backgroundColor = _rStyle.GetHighlightColor();
+            if ( !aLineColor )
+                lineColor = backgroundColor;
         }
-        // if row not selected, check the cases whether user defined backgrounds are set
-        // and set line color to be the same
         else
         {
-            if ( ( aRowBackground2 != fieldColor ) && ( _nRow % 2 ) )
+            ::boost::optional< ::std::vector< ::Color > > aRowColors = m_pImpl->rModel.getRowBackgroundColors();
+            if ( !aRowColors )
             {
-                aRowBackground = aRowBackground2;
-                if ( lineColor == COL_TRANSPARENT )
-                    _rDevice.SetLineColor( aRowBackground );
+                // use alternating default colors
+                if ( ( m_pImpl->nCurrentRow % 2 ) == 0 )
+                {
+                    backgroundColor = _rStyle.GetFieldColor();
+                }
                 else
-                    _rDevice.SetLineColor( lineColor );
+                {
+                    Color hilightColor = _rStyle.GetHighlightColor();
+                    USHORT const luminance = hilightColor.GetLuminance();
+                    hilightColor.SetRed( 9 * ( 255 - hilightColor.GetRed() ) / 10 + hilightColor.GetRed() );
+                    hilightColor.SetGreen( 9 * ( 255 - hilightColor.GetGreen() ) / 10 + hilightColor.GetGreen() );
+                    hilightColor.SetBlue( 9 * ( 255 - hilightColor.GetBlue() ) / 10 + hilightColor.GetBlue() );
+                    backgroundColor = hilightColor;
+                }
             }
-            //fill the rows with alternating background colors if second background color is specified
-            else if ( aRowBackground != fieldColor && lineColor == COL_TRANSPARENT )
-                _rDevice.SetLineColor( aRowBackground );
             else
             {
-                //if Line color is set, then it was user defined and should be visible
-                //if it wasn't set, it'll be the same as the default background color, so lines still won't be visible
-                _rDevice.SetLineColor( lineColor );
+                if ( aRowColors->empty() )
+                {
+                    // all colors have the same background color
+                    backgroundColor = _rStyle.GetFieldColor();
+                }
+                else
+                {
+                    backgroundColor = aRowColors->at( m_pImpl->nCurrentRow % aRowColors->size() );
+                }
             }
         }
-        _rDevice.SetFillColor( aRowBackground );
+
+        m_pImpl->bUseGridLines ? _rDevice.SetLineColor( lineColor ) : _rDevice.SetLineColor();
+        _rDevice.SetFillColor( backgroundColor );
         _rDevice.DrawRect( _rRowArea );
 
-        // TODO: active?
-
         _rDevice.Pop();
+
         (void)_bActive;
+        // row containing the active cell not rendered any special at the moment
     }
 
-    //--------------------------------------------------------------------
+    //------------------------------------------------------------------------------------------------------------------
     void GridTableRenderer::PaintRowHeader( bool _bActive, bool _bSelected, OutputDevice& _rDevice, const Rectangle& _rArea,
         const StyleSettings& _rStyle )
     {
         _rDevice.Push( PUSH_LINECOLOR | PUSH_TEXTCOLOR );
 
-        _rDevice.SetLineColor( _rStyle.GetSeparatorColor() );
+        ::boost::optional< ::Color > const aLineColor( m_pImpl->rModel.getLineColor() );
+        ::Color const lineColor = !aLineColor ? _rStyle.GetSeparatorColor() : *aLineColor;
         _rDevice.DrawLine( _rArea.BottomLeft(), _rArea.BottomRight() );
 
-        if ( m_pImpl->rModel.getTextColor() != 0x000000 )
-            _rDevice.SetTextColor( m_pImpl->rModel.getTextColor() );
-        else
-            _rDevice.SetTextColor( _rStyle.GetFieldTextColor() );
+        ::Color const textColor = lcl_getEffectiveColor( m_pImpl->rModel.getHeaderTextColor(), _rStyle, &StyleSettings::GetFieldTextColor );
+        _rDevice.SetTextColor( textColor );
 
         ULONG nHorFlag = TEXT_DRAW_LEFT;
         ULONG nVerFlag = TEXT_DRAW_TOP;
@@ -249,7 +288,7 @@ namespace svt { namespace table
         _rDevice.Pop();
     }
 
-    //--------------------------------------------------------------------
+    //------------------------------------------------------------------------------------------------------------------
     struct GridTableRenderer::CellRenderContext
     {
         OutputDevice&           rDevice;
@@ -269,7 +308,7 @@ namespace svt { namespace table
         }
     };
 
-    //--------------------------------------------------------------------
+    //------------------------------------------------------------------------------------------------------------------
     namespace
     {
         /** transforms a rectangle denoting a cell area so that afterwards, it denotes the area we
@@ -287,42 +326,23 @@ namespace svt { namespace table
         }
     }
 
-    //--------------------------------------------------------------------
+    //------------------------------------------------------------------------------------------------------------------
     void GridTableRenderer::PaintCell( ColPos const i_column, bool _bSelected, bool _bActive,
         OutputDevice& _rDevice, const Rectangle& _rArea, const StyleSettings& _rStyle )
     {
         _rDevice.Push( PUSH_LINECOLOR | PUSH_FILLCOLOR );
-        Color background1 = m_pImpl->rModel.getOddRowBackgroundColor();
-        Color background2 = m_pImpl->rModel.getEvenRowBackgroundColor();
-        Color lineColor = m_pImpl->rModel.getLineColor();
 
-        // if row is selected and line color isn't user specified, use the settings' color
+        ::boost::optional< ::Color > aLineColor( m_pImpl->rModel.getLineColor() );
+        ::Color lineColor = !aLineColor ? _rStyle.GetSeparatorColor() : *aLineColor;
+
         if ( _bSelected )
         {
-            if ( lineColor == COL_TRANSPARENT )
-                _rDevice.SetLineColor( _rStyle.GetHighlightColor() );
-            else
-                _rDevice.SetLineColor( lineColor );
+            // if no line color is specified by the model, use the usual selection color for lines
+            if ( !aLineColor )
+                lineColor = _rStyle.GetHighlightColor();
         }
-        // else set line color to the color of row background
-        else
-        {
-            if ( ( background2 != COL_TRANSPARENT ) && ( m_pImpl->nCurrentRow % 2 ) )
-            {
-                if ( lineColor == COL_TRANSPARENT )
-                    _rDevice.SetLineColor( background2 );
-                else
-                    _rDevice.SetLineColor( lineColor );
-            }
-            else if ( ( background1 != COL_TRANSPARENT ) && ( lineColor == COL_TRANSPARENT ) )
-                _rDevice.SetLineColor( background1 );
-            else
-            {
-                // if line color is set, then it was user defined and should be visible
-                // if it wasn't set, it'll be the same as the default background color, so lines still won't be visible
-                _rDevice.SetLineColor( lineColor );
-            }
-        }
+
+        m_pImpl->bUseGridLines ? _rDevice.SetLineColor( lineColor ) : _rDevice.SetLineColor();
         _rDevice.DrawLine( _rArea.BottomRight(), _rArea.TopRight() );
 
         Rectangle aRect( _rArea );
@@ -337,7 +357,7 @@ namespace svt { namespace table
         // no special painting for the active cell at the moment
     }
 
-    //--------------------------------------------------------------------
+    //------------------------------------------------------------------------------------------------------------------
     void GridTableRenderer::impl_paintCellImage( CellRenderContext const & i_context, Image const & i_image )
     {
         Point imagePos( Point( i_context.aContentArea.Left(), i_context.aContentArea.Top() ) );
@@ -382,7 +402,7 @@ namespace svt { namespace table
         i_context.rDevice.DrawImage( imagePos, imageSize, i_image, 0 );
     }
 
-    //--------------------------------------------------------------------
+    //------------------------------------------------------------------------------------------------------------------
     void GridTableRenderer::impl_paintCellContent( CellRenderContext const & i_context )
     {
         Any aCellContent;
@@ -400,15 +420,16 @@ namespace svt { namespace table
         impl_paintCellText( i_context, sText );
     }
 
-    //--------------------------------------------------------------------
+    //------------------------------------------------------------------------------------------------------------------
     void GridTableRenderer::impl_paintCellText( CellRenderContext const & i_context, ::rtl::OUString const & i_text )
     {
         if ( i_context.bSelected )
             i_context.rDevice.SetTextColor( i_context.rStyle.GetHighlightTextColor() );
-        else if ( m_pImpl->rModel.getTextColor() != 0x000000 )
-            i_context.rDevice.SetTextColor( m_pImpl->rModel.getTextColor() );
         else
-            i_context.rDevice.SetTextColor( i_context.rStyle.GetFieldTextColor() );
+        {
+            ::Color const textColor = lcl_getEffectiveColor( m_pImpl->rModel.getTextColor(), i_context.rStyle, &StyleSettings::GetFieldTextColor );
+            i_context.rDevice.SetTextColor( textColor );
+        }
 
 
         ULONG nVerFlag = TEXT_DRAW_TOP;
@@ -437,20 +458,20 @@ namespace svt { namespace table
         i_context.rDevice.DrawText( textRect, i_text, nHorFlag | nVerFlag | TEXT_DRAW_CLIP );
     }
 
-    //--------------------------------------------------------------------
+    //------------------------------------------------------------------------------------------------------------------
     void GridTableRenderer::ShowCellCursor( Window& _rView, const Rectangle& _rCursorRect)
     {
         _rView.ShowFocus( _rCursorRect );
     }
 
-    //--------------------------------------------------------------------
+    //------------------------------------------------------------------------------------------------------------------
     void GridTableRenderer::HideCellCursor( Window& _rView, const Rectangle& _rCursorRect)
     {
         (void)_rCursorRect;
         _rView.HideFocus();
     }
 
-    //--------------------------------------------------------------------
+    //------------------------------------------------------------------------------------------------------------------
     bool GridTableRenderer::FitsIntoCell( Any const & i_cellContent, ColPos const i_colPos, RowPos const i_rowPos,
         bool const i_active, bool const i_selected, OutputDevice& i_targetDevice, Rectangle const & i_targetArea )
     {
@@ -483,7 +504,7 @@ namespace svt { namespace table
         return true;
     }
 
-//........................................................................
+//......................................................................................................................
 } } // namespace svt::table
-//........................................................................
+//......................................................................................................................
 

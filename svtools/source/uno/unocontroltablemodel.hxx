@@ -87,30 +87,33 @@ namespace svt { namespace table
 
     public:
         // ITableModel overridables
-        virtual TableSize   getColumnCount() const;
-        virtual TableSize   getRowCount() const;
-        virtual bool        hasColumnHeaders() const;
-        virtual bool        hasRowHeaders() const;
-        virtual bool        isCellEditable( ColPos col, RowPos row ) const;
-        virtual PColumnModel    getColumnModel( ColPos column );
-        virtual PTableRenderer  getRenderer() const;
-        virtual PTableInputHandler  getInputHandler() const;
-        virtual TableMetrics    getRowHeight() const;
-        virtual TableMetrics    getColumnHeaderHeight() const;
-        virtual TableMetrics    getRowHeaderWidth() const;
-        virtual ScrollbarVisibility getVerticalScrollbarVisibility() const;
-        virtual ScrollbarVisibility getHorizontalScrollbarVisibility() const;
-        virtual void addTableModelListener( const PTableModelListener& i_listener );
-        virtual void removeTableModelListener( const PTableModelListener& i_listener );
-        virtual void getCellContent( ColPos const i_col, RowPos const i_row, ::com::sun::star::uno::Any& o_cellContent );
-        virtual void getCellToolTip( ColPos const i_col, RowPos const i_row, ::com::sun::star::uno::Any & o_cellToolTip );
-        virtual ::rtl::OUString getRowHeader( RowPos const i_rowPos ) const;
-        virtual ::com::sun::star::util::Color getLineColor();
-        virtual ::com::sun::star::util::Color getHeaderBackgroundColor();
-        virtual ::com::sun::star::util::Color getTextColor();
-        virtual ::com::sun::star::util::Color getOddRowBackgroundColor();
-        virtual ::com::sun::star::util::Color getEvenRowBackgroundColor();
-        virtual ::com::sun::star::style::VerticalAlignment getVerticalAlign();
+        virtual TableSize                       getColumnCount() const;
+        virtual TableSize                       getRowCount() const;
+        virtual bool                            hasColumnHeaders() const;
+        virtual bool                            hasRowHeaders() const;
+        virtual bool                            isCellEditable( ColPos col, RowPos row ) const;
+        virtual PColumnModel                    getColumnModel( ColPos column );
+        virtual PTableRenderer                  getRenderer() const;
+        virtual PTableInputHandler              getInputHandler() const;
+        virtual TableMetrics                    getRowHeight() const;
+        virtual TableMetrics                    getColumnHeaderHeight() const;
+        virtual TableMetrics                    getRowHeaderWidth() const;
+        virtual ScrollbarVisibility             getVerticalScrollbarVisibility() const;
+        virtual ScrollbarVisibility             getHorizontalScrollbarVisibility() const;
+        virtual void                            addTableModelListener( const PTableModelListener& i_listener );
+        virtual void                            removeTableModelListener( const PTableModelListener& i_listener );
+        virtual void                            getCellContent( ColPos const i_col, RowPos const i_row, ::com::sun::star::uno::Any& o_cellContent );
+        virtual void                            getCellToolTip( ColPos const i_col, RowPos const i_row, ::com::sun::star::uno::Any & o_cellToolTip );
+        virtual ::rtl::OUString                 getRowHeader( RowPos const i_rowPos ) const;
+        virtual ::boost::optional< ::Color >    getLineColor() const;
+        virtual ::boost::optional< ::Color >    getHeaderBackgroundColor() const;
+        virtual ::boost::optional< ::Color >    getHeaderTextColor() const;
+        virtual ::boost::optional< ::Color >    getTextColor() const;
+        virtual ::boost::optional< ::Color >    getTextLineColor() const;
+        virtual ::boost::optional< ::std::vector< ::Color > >
+                                                getRowBackgroundColors() const;
+        virtual ::com::sun::star::style::VerticalAlignment
+                                                getVerticalAlign() const;
 
         // column write access
         void    appendColumn( ::com::sun::star::uno::Reference< ::com::sun::star::awt::grid::XGridColumn > const & i_column );
@@ -121,19 +124,24 @@ namespace svt { namespace table
         // other operations
         void    setVerticalScrollbarVisibility( ScrollbarVisibility const i_visibility ) const;
         void    setHorizontalScrollbarVisibility( ScrollbarVisibility const i_visibility ) const;
+
         void    setDataModel( ::com::sun::star::uno::Reference< ::com::sun::star::awt::grid::XGridDataModel > const & i_gridDataModel );
         bool    hasDataModel() const;
         ::com::sun::star::uno::Reference< ::com::sun::star::awt::grid::XGridDataModel >
                 getDataModel() const;
         void    setColumnModel( ::com::sun::star::uno::Reference< ::com::sun::star::awt::grid::XGridColumnModel > const & i_gridColumnModel );
         bool    hasColumnModel() const;
+
         void    setRowHeaders(bool _bRowHeaders);
         void    setColumnHeaders(bool _bColumnHeaders);
-        void    setLineColor(::com::sun::star::util::Color _rColor);
-        void    setHeaderBackgroundColor(::com::sun::star::util::Color _rColor);
-        void    setTextColor(::com::sun::star::util::Color _rColor);
-        void    setOddRowBackgroundColor(::com::sun::star::util::Color _rColor);
-        void    setEvenRowBackgroundColor(::com::sun::star::util::Color _rColor);
+
+        void    setLineColor( ::com::sun::star::uno::Any const & i_color );
+        void    setHeaderBackgroundColor( ::com::sun::star::uno::Any const & i_color );
+        void    setHeaderTextColor( ::com::sun::star::uno::Any const & i_color );
+        void    setTextColor( ::com::sun::star::uno::Any const & i_color );
+        void    setTextLineColor( ::com::sun::star::uno::Any const & i_color );
+        void    setRowBackgroundColors( ::com::sun::star::uno::Any const & i_APIValue );
+
         void    setVerticalAlign(::com::sun::star::style::VerticalAlignment _rAlign);
 
         /// retrieves the index of a column within the model

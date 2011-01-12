@@ -155,29 +155,33 @@ namespace svt { namespace table
         {
             (void)i_listener;
         }
-        virtual ::com::sun::star::util::Color getLineColor()
+        virtual ::boost::optional< ::Color > getLineColor() const
         {
-            return 0;
+            return ::boost::optional< ::Color >();
         }
-        virtual ::com::sun::star::util::Color getHeaderBackgroundColor()
+        virtual ::boost::optional< ::Color > getHeaderBackgroundColor() const
         {
-            return -1;
+            return ::boost::optional< ::Color >();
         }
-        virtual ::com::sun::star::util::Color getTextColor()
+        virtual ::boost::optional< ::Color > getHeaderTextColor() const
         {
-            return 0;
+            return ::boost::optional< ::Color >();
         }
-        virtual ::com::sun::star::util::Color getOddRowBackgroundColor()
+        virtual ::boost::optional< ::Color > getTextColor() const
         {
-            return -1;
+            return ::boost::optional< ::Color >();
         }
-        virtual ::com::sun::star::style::VerticalAlignment getVerticalAlign()
+        virtual ::boost::optional< ::Color > getTextLineColor() const
+        {
+            return ::boost::optional< ::Color >();
+        }
+        virtual ::boost::optional< ::std::vector< ::Color > > getRowBackgroundColors() const
+        {
+            return ::boost::optional< ::std::vector< ::Color > >();
+        }
+        virtual ::com::sun::star::style::VerticalAlignment getVerticalAlign() const
         {
             return com::sun::star::style::VerticalAlignment(0);
-        }
-        virtual ::com::sun::star::util::Color getEvenRowBackgroundColor()
-        {
-            return -1;
         }
         virtual void getCellContent( ColPos const i_col, RowPos const i_row, ::com::sun::star::uno::Any& o_cellContent )
         {

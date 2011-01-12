@@ -31,6 +31,7 @@
 #include "accessibletableimp.hxx"
 #include <com/sun/star/view/SelectionType.hpp>
 #include "svtools/table/tablecontrolinterface.hxx"
+#include "svtools/table/gridtablerenderer.hxx"
 #include "svtools/table/tablecontrol.hxx"
 #include "unocontroltablemodel.hxx"
 #include <comphelper/sequence.hxx>
@@ -155,7 +156,7 @@ void SVTXGridControl::setProperty( const ::rtl::OUString& PropertyName, const An
 
     switch( GetPropertyId( PropertyName ) )
     {
-    case BASEPROPERTY_ROW_HEADER_WIDTH:
+        case BASEPROPERTY_ROW_HEADER_WIDTH:
         {
             sal_Int32 rowHeaderWidth( -1 );
             aValue >>= rowHeaderWidth;
@@ -180,6 +181,18 @@ void SVTXGridControl::setProperty( const ::rtl::OUString& PropertyName, const An
             ENSURE_OR_BREAK( columnHeaderHeight > 0, "SVTXGridControl::setProperty: illegal column header height!" );
             m_pTableModel->setColumnHeaderHeight( columnHeaderHeight );
             // TODO: the model should broadcast this change itself, and the table should invalidate itself as needed
+            pTable->Invalidate();
+        }
+        break;
+
+        case BASEPROPERTY_USE_GRID_LINES:
+        {
+            GridTableRenderer* pGridRenderer = dynamic_cast< GridTableRenderer* >(
+                m_pTableModel->getRenderer().get() );
+            ENSURE_OR_BREAK( pGridRenderer != NULL, "SVTXGridControl::setProperty(UseGridLines): invalid renderer!" );
+            sal_Bool bUseGridLines = sal_False;
+            OSL_VERIFY( aValue >>= bUseGridLines );
+            pGridRenderer->useGridLines( bUseGridLines );
             pTable->Invalidate();
         }
         break;
@@ -239,6 +252,7 @@ void SVTXGridControl::setProperty( const ::rtl::OUString& PropertyName, const An
                 m_pTableModel->setHorizontalScrollbarVisibility( bHScroll ? ScrollbarShowAlways : ScrollbarShowSmart );
             break;
         }
+
         case BASEPROPERTY_VSCROLL:
         {
             sal_Bool bVScroll = true;
@@ -258,51 +272,37 @@ void SVTXGridControl::setProperty( const ::rtl::OUString& PropertyName, const An
             }
             break;
         }
-        case BASEPROPERTY_GRID_HEADER_BACKGROUND:
-        {
-            sal_Int32 colorHeader = COL_TRANSPARENT;
-            if( aValue >>= colorHeader )
-            {
-                m_pTableModel->setHeaderBackgroundColor(colorHeader);
-            }
+
+        case BASEPROPERTY_GRID_ROW_BACKGROUND_COLORS:
+            m_pTableModel->setRowBackgroundColors( aValue );
+            pTable->Invalidate();
             break;
-        }
+
         case BASEPROPERTY_GRID_LINE_COLOR:
-        {
-            sal_Int32 colorLine = COL_TRANSPARENT;
-            if( aValue >>= colorLine )
-            {
-                m_pTableModel->setLineColor(colorLine);
-            }
+            m_pTableModel->setLineColor( aValue );
+            pTable->Invalidate();
             break;
-        }
-        case BASEPROPERTY_GRID_EVEN_ROW_BACKGROUND:
-        {
-            sal_Int32 colorEvenRow = COL_TRANSPARENT;
-            if( aValue >>= colorEvenRow )
-            {
-                m_pTableModel->setEvenRowBackgroundColor(colorEvenRow);
-            }
+
+        case BASEPROPERTY_GRID_HEADER_BACKGROUND:
+            m_pTableModel->setHeaderBackgroundColor( aValue );
+            pTable->Invalidate();
             break;
-        }
-        case BASEPROPERTY_GRID_ROW_BACKGROUND:
-        {
-            sal_Int32 colorBackground = COL_TRANSPARENT;
-            if( aValue >>= colorBackground )
-            {
-                m_pTableModel->setOddRowBackgroundColor(colorBackground);
-            }
+
+        case BASEPROPERTY_GRID_HEADER_TEXT_COLOR:
+            m_pTableModel->setHeaderTextColor( aValue );
+            pTable->Invalidate();
             break;
-        }
+
         case BASEPROPERTY_TEXTCOLOR:
-        {
-            sal_Int32 colorText = 0x000000;
-            if( aValue >>= colorText )
-            {
-                m_pTableModel->setTextColor(colorText);
-            }
+            m_pTableModel->setTextColor( aValue );
+            pTable->Invalidate();
             break;
-        }
+
+        case BASEPROPERTY_TEXTLINECOLOR:
+            m_pTableModel->setTextLineColor( aValue );
+            pTable->Invalidate();
+            break;
+
         case BASEPROPERTY_VERTICALALIGN:
         {
             VerticalAlignment eAlign( VerticalAlignment_TOP );
@@ -377,12 +377,25 @@ void SVTXGridControl::impl_checkTableModelInit()
     }
 }
 
+namespace
+{
+    void lcl_convertColor( ::boost::optional< ::Color > const & i_color, Any & o_colorValue )
+    {
+        if ( !i_color )
+            o_colorValue.clear();
+        else
+            o_colorValue <<= i_color->GetColor();
+    }
+}
+
 Any SVTXGridControl::getProperty( const ::rtl::OUString& PropertyName ) throw(RuntimeException)
 {
     ::vos::OGuard aGuard( GetMutex() );
 
     TableControl* pTable = dynamic_cast< TableControl* >( GetWindow() );
     ENSURE_OR_RETURN( pTable != NULL, "SVTXGridControl::getProperty: no control (anymore)!", Any() );
+
+    Any aPropertyValue;
 
     const sal_uInt16 nPropId = GetPropertyId( PropertyName );
     switch(nPropId)
@@ -399,34 +412,92 @@ Any SVTXGridControl::getProperty( const ::rtl::OUString& PropertyName ) throw(Ru
             case MULTIPLE_SELECTION:eSelectionType = SelectionType_MULTI; break;
             default:                eSelectionType = SelectionType_NONE; break;
         }
-        return Any( eSelectionType );
+        aPropertyValue <<= eSelectionType;
+        break;
     }
+
     case BASEPROPERTY_GRID_SHOWROWHEADER:
-        return Any ((sal_Bool) m_pTableModel->hasRowHeaders());
+        aPropertyValue <<=  sal_Bool( m_pTableModel->hasRowHeaders() );
+        break;
 
     case BASEPROPERTY_GRID_SHOWCOLUMNHEADER:
-        return Any ((sal_Bool) m_pTableModel->hasColumnHeaders());
+        aPropertyValue <<=  sal_Bool( m_pTableModel->hasColumnHeaders() );
+        break;
 
     case BASEPROPERTY_GRID_DATAMODEL:
-        return Any ( m_pTableModel->getDataModel() );
+        aPropertyValue <<= m_pTableModel->getDataModel();
+        break;
 
     case BASEPROPERTY_GRID_COLUMNMODEL:
-        return Any ( m_xColumnModel);
+        aPropertyValue <<= m_xColumnModel;
+        break;
 
     case BASEPROPERTY_HSCROLL:
         {
             sal_Bool const bHasScrollbar = ( m_pTableModel->getHorizontalScrollbarVisibility() != ScrollbarShowNever );
-            return makeAny( bHasScrollbar );
+            aPropertyValue <<= bHasScrollbar;
+            break;
         }
 
     case BASEPROPERTY_VSCROLL:
         {
             sal_Bool const bHasScrollbar = ( m_pTableModel->getVerticalScrollbarVisibility() != ScrollbarShowNever );
-            return makeAny( bHasScrollbar );
+            aPropertyValue <<= bHasScrollbar;
+            break;
+        }
+
+    case BASEPROPERTY_USE_GRID_LINES:
+    {
+        GridTableRenderer* pGridRenderer = dynamic_cast< GridTableRenderer* >(
+            m_pTableModel->getRenderer().get() );
+        ENSURE_OR_BREAK( pGridRenderer != NULL, "SVTXGridControl::getProperty(UseGridLines): invalid renderer!" );
+        aPropertyValue <<= pGridRenderer->useGridLines();
+    }
+    break;
+
+    case BASEPROPERTY_GRID_ROW_BACKGROUND_COLORS:
+    {
+        ::boost::optional< ::std::vector< ::Color > > aColors( m_pTableModel->getRowBackgroundColors() );
+        if ( !aColors )
+            aPropertyValue.clear();
+        else
+        {
+            Sequence< ::com::sun::star::util::Color > aAPIColors( aColors->size() );
+            for ( size_t i=0; i<aColors->size(); ++i )
+            {
+                aAPIColors[i] = aColors->at(i).GetColor();
+            }
+            aPropertyValue <<= aAPIColors;
         }
     }
+    break;
 
-    return VCLXWindow::getProperty( PropertyName );
+    case BASEPROPERTY_GRID_LINE_COLOR:
+        lcl_convertColor( m_pTableModel->getLineColor(), aPropertyValue );
+        break;
+
+    case BASEPROPERTY_GRID_HEADER_BACKGROUND:
+        lcl_convertColor( m_pTableModel->getHeaderBackgroundColor(), aPropertyValue );
+        break;
+
+    case BASEPROPERTY_GRID_HEADER_TEXT_COLOR:
+        lcl_convertColor( m_pTableModel->getHeaderTextColor(), aPropertyValue );
+        break;
+
+    case BASEPROPERTY_TEXTCOLOR:
+        lcl_convertColor( m_pTableModel->getTextColor(), aPropertyValue );
+        break;
+
+    case BASEPROPERTY_TEXTLINECOLOR:
+        lcl_convertColor( m_pTableModel->getTextLineColor(), aPropertyValue );
+        break;
+
+    default:
+        aPropertyValue = VCLXWindow::getProperty( PropertyName );
+        break;
+    }
+
+    return aPropertyValue;
 }
 
 void SVTXGridControl::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
@@ -437,10 +508,10 @@ void SVTXGridControl::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
         BASEPROPERTY_GRID_DATAMODEL,
         BASEPROPERTY_GRID_COLUMNMODEL,
         BASEPROPERTY_GRID_SELECTIONMODE,
-        BASEPROPERTY_GRID_EVEN_ROW_BACKGROUND,
         BASEPROPERTY_GRID_HEADER_BACKGROUND,
+        BASEPROPERTY_GRID_HEADER_TEXT_COLOR,
         BASEPROPERTY_GRID_LINE_COLOR,
-        BASEPROPERTY_GRID_ROW_BACKGROUND,
+        BASEPROPERTY_GRID_ROW_BACKGROUND_COLORS,
         0
     );
     VCLXWindow::ImplGetPropertyIds( rIds, true );
