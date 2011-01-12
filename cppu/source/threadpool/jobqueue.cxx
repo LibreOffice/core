@@ -184,7 +184,7 @@ namespace cppu_threadpool {
         return m_lstCallstack.empty();
     }
 
-    sal_Bool JobQueue::isBusy()
+    sal_Bool JobQueue::isBusy() const
     {
         return m_nToDo > 0;
     }
