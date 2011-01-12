@@ -1938,41 +1938,97 @@ bool SvxBoxItem::QueryValue( uno::Any& rVal, BYTE nMemberId  ) const
     return true;
 }
 
-// -----------------------------------------------------------------------
-sal_Bool SvxBoxItem::LineToSvxLine(const ::com::sun::star::table::BorderLine& rLine, SvxBorderLine& rSvxLine, sal_Bool bConvert)
+namespace
+{
+
+sal_Bool
+lcl_lineToSvxLine(const table::BorderLine& rLine, SvxBorderLine& rSvxLine, sal_Bool bConvert)
 {
     rSvxLine.SetColor(   Color(rLine.Color));
     rSvxLine.SetInWidth( sal_uInt16( bConvert ? MM100_TO_TWIP(rLine.InnerLineWidth) : rLine.InnerLineWidth  ));
     rSvxLine.SetOutWidth( sal_uInt16( bConvert ? MM100_TO_TWIP(rLine.OuterLineWidth) : rLine.OuterLineWidth  ));
     rSvxLine.SetDistance( sal_uInt16( bConvert ? MM100_TO_TWIP(rLine.LineDistance   )  : rLine.LineDistance  ));
 
-    const table::BorderLine2* pLine2 = static_cast< const table::BorderLine2* >( &rLine );
-
-    if ( pLine2 )
-    {
-        switch ( pLine2->LineStyle )
-        {
-            default:
-            case table::BorderLineStyle::SOLID:
-                rSvxLine.SetStyle( SOLID );
-                break;
-            case table::BorderLineStyle::DOTTED:
-                rSvxLine.SetStyle( DOTTED );
-                break;
-            case table::BorderLineStyle::DASHED:
-                rSvxLine.SetStyle( DASHED );
-                break;
-        }
-    }
     sal_Bool bRet = rLine.InnerLineWidth > 0 || rLine.OuterLineWidth > 0;
+    return bRet;
+}
+
+}
+
+// -----------------------------------------------------------------------
+sal_Bool SvxBoxItem::LineToSvxLine(const ::com::sun::star::table::BorderLine& rLine, SvxBorderLine& rSvxLine, sal_Bool bConvert)
+{
+    return lcl_lineToSvxLine(rLine, rSvxLine, bConvert);
+}
+
+sal_Bool
+SvxBoxItem::LineToSvxLine(const ::com::sun::star::table::BorderLine2& rLine, SvxBorderLine& rSvxLine, sal_Bool bConvert)
+{
+    const bool bRet(lcl_lineToSvxLine(rLine, rSvxLine, bConvert));
+
+    switch ( rLine.LineStyle )
+    {
+        default:
+        case table::BorderLineStyle::SOLID:
+            rSvxLine.SetStyle( SOLID );
+            break;
+        case table::BorderLineStyle::DOTTED:
+            rSvxLine.SetStyle( DOTTED );
+            break;
+        case table::BorderLineStyle::DASHED:
+            rSvxLine.SetStyle( DASHED );
+            break;
+    }
+
     return bRet;
 }
 
 // -----------------------------------------------------------------------
 
+namespace
+{
+
+bool
+lcl_extractBorderLine(const uno::Any& rAny, table::BorderLine2& rLine)
+{
+    if (rAny >>= rLine)
+        return true;
+
+    table::BorderLine aBorderLine;
+    if (rAny >>= aBorderLine)
+    {
+        rLine.Color = aBorderLine.Color;
+        rLine.InnerLineWidth = aBorderLine.InnerLineWidth;
+        rLine.OuterLineWidth = aBorderLine.OuterLineWidth;
+        rLine.LineDistance = aBorderLine.LineDistance;
+        rLine.LineStyle = table::BorderLineStyle::SOLID;
+        return true;
+    }
+
+    return false;
+}
+
+template<typename Item>
+bool
+lcl_setLine(const uno::Any& rAny, Item& rItem, USHORT nLine, const bool bConvert)
+{
+    bool bSet(false);
+    table::BorderLine2 aBorderLine;
+    if (lcl_extractBorderLine(rAny, aBorderLine))
+    {
+        SvxBorderLine aLine;
+        bSet = SvxBoxItem::LineToSvxLine(aBorderLine, aLine, bConvert);
+        if (bSet)
+            rItem.SetLine(&aLine, nLine);
+    }
+    return bSet;
+}
+
+}
+
 bool SvxBoxItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
 {
-    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
+    bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     sal_uInt16 nLine = BOX_LINE_TOP;
     sal_Bool bDistMember = sal_False;
     nMemberId &= ~CONVERT_TWIPS;
@@ -1984,44 +2040,18 @@ bool SvxBoxItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
             if (( rVal >>= aSeq ) && ( aSeq.getLength() == 9 ))
             {
                 // 4 Borders and 5 distances
-                sal_Int32 nDist = 0;
-                SvxBorderLine aLine;
-                table::BorderLine2 aBorderLine;
-                if ( aSeq[0] >>= aBorderLine )
+                const sal_uInt16 aBorders[] = { BOX_LINE_LEFT, BOX_LINE_RIGHT, BOX_LINE_BOTTOM, BOX_LINE_TOP };
+                for (int n(0); n != SAL_N_ELEMENTS(aBorders); ++n)
                 {
-                    sal_Bool bSet = SvxBoxItem::LineToSvxLine(aBorderLine, aLine, bConvert);
-                    SetLine(bSet ? &aLine : 0, BOX_LINE_LEFT );
+                    if (!lcl_setLine(aSeq[n], *this, aBorders[n], bConvert))
+                        return sal_False;
                 }
-                else
-                    return sal_False;
 
-                if ( aSeq[1] >>= aBorderLine )
-                {
-                    sal_Bool bSet = SvxBoxItem::LineToSvxLine(aBorderLine, aLine, bConvert);
-                    SetLine(bSet ? &aLine : 0, BOX_LINE_RIGHT );
-                }
-                else
-                    return sal_False;
-
-                if ( aSeq[2] >>= aBorderLine )
-                {
-                    sal_Bool bSet = SvxBoxItem::LineToSvxLine(aBorderLine, aLine, bConvert);
-                    SetLine(bSet ? &aLine : 0, BOX_LINE_BOTTOM );
-                }
-                else
-                    return sal_False;
-
-                if ( aSeq[3] >>= aBorderLine )
-                {
-                    sal_Bool bSet = SvxBoxItem::LineToSvxLine(aBorderLine, aLine, bConvert);
-                    SetLine(bSet ? &aLine : 0, BOX_LINE_TOP );
-                }
-                else
-                    return sal_False;
-
+                // WTH are the borders and the distances saved in different order?
                 sal_uInt16 nLines[4] = { BOX_LINE_TOP, BOX_LINE_BOTTOM, BOX_LINE_LEFT, BOX_LINE_RIGHT };
                 for ( sal_Int32 n = 4; n < 9; n++ )
                 {
+                    sal_Int32 nDist = 0;
                     if ( aSeq[n] >>= nDist )
                     {
                         if( bConvert )
@@ -2089,7 +2119,7 @@ bool SvxBoxItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
             return sal_False;
 
         table::BorderLine2 aBorderLine;
-        if( rVal >>= aBorderLine )
+        if( lcl_extractBorderLine(rVal, aBorderLine) )
         {
             // usual struct
         }
@@ -2901,26 +2931,13 @@ bool SvxBoxInfoItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
             if (( rVal >>= aSeq ) && ( aSeq.getLength() == 5 ))
             {
                 // 2 BorderLines, flags, valid flags and distance
-                table::BorderLine2 aBorderLine;
-                SvxBorderLine aLine;
+                if (!lcl_setLine(aSeq[0], *this, BOXINFO_LINE_HORI, bConvert))
+                    return sal_False;
+                if (!lcl_setLine(aSeq[1], *this, BOXINFO_LINE_VERT, bConvert))
+                    return sal_False;
+
                 sal_Int16 nFlags( 0 );
                 sal_Int32 nVal( 0 );
-                if ( aSeq[0] >>= aBorderLine )
-                {
-                    sal_Bool bSet = SvxBoxItem::LineToSvxLine(aBorderLine, aLine, bConvert);
-                    if ( bSet )
-                        SetLine( &aLine, BOXINFO_LINE_HORI );
-                }
-                else
-                    return sal_False;
-                if ( aSeq[1] >>= aBorderLine )
-                {
-                    sal_Bool bSet = SvxBoxItem::LineToSvxLine(aBorderLine, aLine, bConvert);
-                    if ( bSet )
-                        SetLine( &aLine, BOXINFO_LINE_VERT );
-                }
-                else
-                    return sal_False;
                 if ( aSeq[2] >>= nFlags )
                 {
                     SetTable  ( ( nFlags & 0x01 ) != 0 );
@@ -2950,7 +2967,7 @@ bool SvxBoxInfoItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
                 return sal_False;
 
             table::BorderLine2 aBorderLine;
-            if( rVal >>= aBorderLine )
+            if( lcl_extractBorderLine(rVal, aBorderLine) )
             {
                 // usual struct
             }
@@ -3327,7 +3344,7 @@ bool SvxLineItem::PutValue( const uno::Any& rVal, BYTE nMemId )
     if ( nMemId == 0 )
     {
         table::BorderLine2 aLine;
-        if ( rVal >>= aLine )
+        if ( lcl_extractBorderLine(rVal, aLine) )
         {
             if ( !pLine )
                 pLine = new SvxBorderLine;
