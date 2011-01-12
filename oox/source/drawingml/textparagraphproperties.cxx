@@ -76,7 +76,7 @@ bool BulletList::is() const
     return mnNumberingType.hasValue();
 }
 
-void BulletList::setBulletChar( const ::rtl::OUString & sChar )
+void BulletList::setBulletChar( const OUString & sChar )
 {
     mnNumberingType <<= NumberingType::CHAR_SPECIAL;
     msBulletChar <<= sChar;
@@ -323,8 +323,30 @@ void BulletList::pushToPropMap( const ::oox::core::XmlFilterBase* pFilterBase, P
             rPropMap[ PROP_BulletFontName ] <<= aBulletFontName;
         }
     }
-    if ( msBulletChar.hasValue() )
-        rPropMap[ PROP_BulletChar ] = msBulletChar;
+    if ( msBulletChar.hasValue() ) {
+        OUString sBuChar;
+
+        msBulletChar >>= sBuChar;
+
+        if( pFilterBase && sBuChar.getLength() == 1 && maBulletFont.getFontData( aBulletFontName, nBulletFontPitch, nBulletFontFamily, *pFilterBase )
+            && ( aBulletFontName.equalsIgnoreAsciiCaseAscii( "Wingdings" ) ||
+                 aBulletFontName.equalsIgnoreAsciiCaseAscii( "Wingdings 2" ) ||
+                 aBulletFontName.equalsIgnoreAsciiCaseAscii( "Wingdings 3" ) ||
+                 aBulletFontName.equalsIgnoreAsciiCaseAscii( "Monotype Sorts" ) ||
+                 aBulletFontName.equalsIgnoreAsciiCaseAscii( "Monotype Sorts 2" ) ||
+                 aBulletFontName.equalsIgnoreAsciiCaseAscii( "Webdings" ) ||
+                 aBulletFontName.equalsIgnoreAsciiCaseAscii( "StarBats" ) ||
+                 aBulletFontName.equalsIgnoreAsciiCaseAscii( "StarMath" ) ||
+                 aBulletFontName.equalsIgnoreAsciiCaseAscii( "ZapfDingbats" ) ) )
+        {
+            sal_Unicode nBuChar = sBuChar.toChar();
+            nBuChar &= 0x00ff;
+            nBuChar |= 0xf000;
+            sBuChar = OUString( &nBuChar, 1 );
+        }
+
+        rPropMap[ PROP_BulletChar ] <<= sBuChar;
+    }
     if ( maGraphic.hasValue() )
     {
         Reference< com::sun::star::awt::XBitmap > xBitmap( maGraphic, UNO_QUERY );
