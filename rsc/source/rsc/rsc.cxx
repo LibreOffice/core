@@ -348,9 +348,9 @@ RscCmdLine::~RscCmdLine()
 {
     ByteString  *pString;
 
-    while( NULL != (pString = aInputList.Remove( (sal_uIntPtr)0 )) )
+    while( NULL != (pString = aInputList.Remove( (sal_uLong)0 )) )
         delete pString;
-    while( NULL != (pString = aSymbolList.Remove( (sal_uIntPtr)0 )) )
+    while( NULL != (pString = aSymbolList.Remove( (sal_uLong)0 )) )
         delete pString;
 }
 
@@ -656,7 +656,7 @@ void RscCompiler::EndCompile()
 |*    Letzte Aenderung  MM 21.06.91
 |*
 *************************************************************************/
-ERRTYPE RscCompiler :: IncludeParser( sal_uIntPtr lFileKey )
+ERRTYPE RscCompiler :: IncludeParser( sal_uLong lFileKey )
 {
     FILE            * finput;
     RscFile         * pFName;
@@ -724,7 +724,7 @@ ERRTYPE RscCompiler :: IncludeParser( sal_uIntPtr lFileKey )
 |*    Letzte Aenderung  MM 26.06.91
 |*
 *************************************************************************/
-ERRTYPE RscCompiler :: ParseOneFile( sal_uIntPtr lFileKey,
+ERRTYPE RscCompiler :: ParseOneFile( sal_uLong lFileKey,
                                      const RscCmdLine::OutputFile* pOutputFile,
                                      const WriteRcContext* pContext )
 {

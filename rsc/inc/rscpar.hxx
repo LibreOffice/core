@@ -43,8 +43,8 @@ class RscFileInst
     sal_uInt32              nErrorPos;  // Position des ersten Fehlers
     sal_Bool                bIncLine;   // Muss Zeilennummer incrementiert werden
     sal_uInt32              nLineNo;    // Zeile in der Eingabedatei
-    sal_uIntPtr             lFileIndex; // Index auf Eingabedatei
-    sal_uIntPtr             lSrcIndex;  // Index auf Basisdatei
+    sal_uLong               lFileIndex; // Index auf Eingabedatei
+    sal_uLong               lSrcIndex;  // Index auf Basisdatei
     FILE *              fInputFile; // Eingabedatei
     char *              pInput;     // Lesepuffer
     sal_uInt32              nInputBufLen; // Laenge des Lesepuffers
@@ -59,15 +59,15 @@ class RscFileInst
 public:
     RscTypCont *        pTypCont;
     void    Init();  // ctor initialisieren
-            RscFileInst( RscTypCont * pTC, sal_uIntPtr lIndexSrc,
-                         sal_uIntPtr lFileIndex, FILE * fFile );
-            RscFileInst( RscTypCont * pTC, sal_uIntPtr lIndexSrc,
-                         sal_uIntPtr lFileIndex, const ByteString & );
+            RscFileInst( RscTypCont * pTC, sal_uLong lIndexSrc,
+                         sal_uLong lFileIndex, FILE * fFile );
+            RscFileInst( RscTypCont * pTC, sal_uLong lIndexSrc,
+                         sal_uLong lFileIndex, const ByteString & );
             ~RscFileInst();
     sal_Bool    IsEof() const { return bEof; }
-    void    SetFileIndex( sal_uIntPtr lFIndex ) { lFileIndex = lFIndex;  }
-    sal_uIntPtr GetFileIndex()                { return( lFileIndex );  }
-    sal_uIntPtr GetSrcIndex()                 { return( lSrcIndex );   }
+    void    SetFileIndex( sal_uLong lFIndex ) { lFileIndex = lFIndex;  }
+    sal_uLong   GetFileIndex()                { return( lFileIndex );  }
+    sal_uLong   GetSrcIndex()                 { return( lSrcIndex );   }
     void    SetLineNo( sal_uInt32 nLine )     { nLineNo = nLine;       }
     sal_uInt32  GetLineNo()                   { return( nLineNo );     }
     sal_uInt32  GetScanPos()                  { return( nScanPos );    }

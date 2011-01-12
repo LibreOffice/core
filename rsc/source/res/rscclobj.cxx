@@ -120,7 +120,7 @@ ObjNode * RefNode :: GetObjNode( const RscId & rRscId ){
 |*    Letzte Aenderung  MM 15.05.91
 |*
 *************************************************************************/
-ObjNode::ObjNode( const RscId & rId, CLASS_DATA pData, sal_uIntPtr lKey ){
+ObjNode::ObjNode( const RscId & rId, CLASS_DATA pData, sal_uLong lKey ){
     pRscObj  = pData;
     aRscId   = rId;
     lFileKey = lKey;
@@ -135,7 +135,7 @@ ObjNode::ObjNode( const RscId & rId, CLASS_DATA pData, sal_uIntPtr lKey ){
 |*    Letzte Aenderung  MM 09.12.91
 |*
 *************************************************************************/
-ObjNode * ObjNode::DelObjNode( RscTop * pClass, sal_uIntPtr nFileKey ){
+ObjNode * ObjNode::DelObjNode( RscTop * pClass, sal_uLong nFileKey ){
     ObjNode * pRetNode = this;
 
     if( Right() )

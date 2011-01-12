@@ -79,7 +79,7 @@ class RscTypCont
     ByteString          aSearchPath;        // Suchen der Bitmap, Icon, Pointer
     ByteString          aSysSearchPath;     // aSearchPath plus language specific paths
     sal_uInt32              nUniqueId;          // eindeutiger Id fuer Systemresourcen
-    sal_uIntPtr             nFilePos;           // Position in der Datei ( MTF )
+    sal_uLong               nFilePos;           // Position in der Datei ( MTF )
     sal_uInt32              nPMId;              // eindeutiger Id fuer PM-Rseourcefile
                                             // muss groesser als RSC_VERSIONCONTROL_ID sein
     RscTop  *           pRoot;              // Zeiger auf die Wurzel vom Typenbaum
@@ -266,7 +266,7 @@ class RscTypCont
 
     void        InsWinBit( RscTop * pClass, const ByteString & rName,
                            Atom nVal );
-    void        WriteInc( FILE * fOutput, sal_uIntPtr lKey );
+    void        WriteInc( FILE * fOutput, sal_uLong lKey );
 
 public:
     RscBool             aBool;
@@ -297,7 +297,7 @@ public:
     RscNameTable        aNmTb;      // Tabelle fuer Namen
     RscFileTab          aFileTab;   // Tabelle der Dateinamen
     sal_uInt32              nFlags;
-    std::map<sal_uInt64, sal_uIntPtr>   aIdTranslator; //Ordnet Resourcetypen und Id's einen Id zu
+    std::map<sal_uInt64, sal_uLong> aIdTranslator; //Ordnet Resourcetypen und Id's einen Id zu
                                        //(unter PM), oder eine Dateiposition (MTF)
 
     RscTypCont( RscError *, RSCBYTEORDER_TYPE, const ByteString & rSearchPath, sal_uInt32 nFlags );
@@ -338,23 +338,23 @@ public:
     CLASS_DATA  Search( Atom typ, const RscId & rId );
     void        Delete( Atom typ, const RscId & rId );
                 // loescht alle Resourceobjekte diese Datei
-    void        Delete( sal_uIntPtr lFileKey );
+    void        Delete( sal_uLong lFileKey );
     RscTop  *   GetRoot()         { return( pRoot ); };
     sal_uInt32      PutSysName( sal_uInt32 nRscTyp, char * pName, sal_uInt32 nConst,
                             sal_uInt32 nId, sal_Bool bFirst );
     void        ClearSysNames();
     ERRTYPE     WriteRc( WriteRcContext& rContext );
-    void        WriteSrc( FILE * fOutput, sal_uIntPtr nFileIndex,
+    void        WriteSrc( FILE * fOutput, sal_uLong nFileIndex,
                           CharSet nCharSet, sal_Bool bName = sal_True );
-    ERRTYPE     WriteHxx( FILE * fOutput, sal_uIntPtr nFileKey);
-    ERRTYPE     WriteCxx( FILE * fOutput, sal_uIntPtr nFileKey,
+    ERRTYPE     WriteHxx( FILE * fOutput, sal_uLong nFileKey);
+    ERRTYPE     WriteCxx( FILE * fOutput, sal_uLong nFileKey,
                           const ByteString & rHxxName );
     void        WriteSyntax( FILE * fOutput );
     void        WriteRcCtor( FILE * fOutput );
-    void        FillNameIdList( REResourceList * pList, sal_uIntPtr lFileKey );
+    void        FillNameIdList( REResourceList * pList, sal_uLong lFileKey );
     sal_Bool        MakeConsistent( RscInconsList * pList );
     sal_uInt32      PutTranslatorKey( sal_uInt64 nKey );
-    void        IncFilePos( sal_uIntPtr nOffset ){ nFilePos += nOffset; }
+    void        IncFilePos( sal_uLong nOffset ){ nFilePos += nOffset; }
 };
 
 #endif

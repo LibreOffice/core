@@ -152,35 +152,35 @@ public:
                 // Array mit Dateinamen
     RscFileTab* GetFileTab();
                 // Eine Dateinamen-Instanz holen
-    RscFile *   GetFileStruct( sal_uIntPtr lKey );
+    RscFile *   GetFileStruct( sal_uLong lKey );
 
-    sal_uIntPtr     AddSrcFile( const ByteString & rFileName );
-    sal_uIntPtr     AddHrcFile( const ByteString & rFileName );
+    sal_uLong       AddSrcFile( const ByteString & rFileName );
+    sal_uLong       AddHrcFile( const ByteString & rFileName );
                 // Traegt die Include-Dateien in die Abhaengigkeitsliste
                 // von lFileKey ein
-    void        ScanForIncFiles( sal_uIntPtr lFileKey );
-    void        RemoveFile( sal_uIntPtr lKey );
+    void        ScanForIncFiles( sal_uLong lFileKey );
+    void        RemoveFile( sal_uLong lKey );
 
                 // Suche ueber alle DEFINES
     RscDefine * FindDef( const ByteString & rName );
-    sal_uIntPtr     GetFileKey( const ByteString & rFileName );
+    sal_uLong       GetFileKey( const ByteString & rFileName );
 };
 
 class RscHrc
 {
 protected:
-    sal_uIntPtr       lFileKey; // Index der Instanz
+    sal_uLong         lFileKey; // Index der Instanz
     RscDataBase * pDataBase;// Datenbasis
 public:
 
                 // Kompilerinstanz erzeugen
-                RscHrc( RscDataBase * pDBase, sal_uIntPtr lKey );
+                RscHrc( RscDataBase * pDBase, sal_uLong lKey );
                 ~RscHrc();
 
                 // Daten von Datei uebernehmen
     ERRTYPE     ReadFile();
 
-    sal_uIntPtr     GetFileKey() const { return lFileKey; }
+    sal_uLong       GetFileKey() const { return lFileKey; }
 
     void        SetDirty( sal_Bool bSet );
     sal_Bool        IsDirty();
@@ -190,16 +190,16 @@ public:
     ByteString  GetFileName();
 
                 //Depend-Datei anhaengen
-    void        InsertDepend( sal_uIntPtr lKey, sal_uIntPtr lPos );
+    void        InsertDepend( sal_uLong lKey, sal_uLong lPos );
 
                 // DefineList holen
     RscDefineList * GetDefineList();
                 // Suche ueber all DEFINES im Zugriff
     RscDefine * FindDef( const ByteString & rName );
     ERRTYPE     NewDef( const ByteString & rMacroName, sal_Int32 lValue,
-                        sal_uIntPtr lPos );
+                        sal_uLong lPos );
     ERRTYPE     NewDef( const ByteString & rMacroName, const ByteString & rMacro,
-                        sal_uIntPtr lPos );
+                        sal_uLong lPos );
     ERRTYPE     ChangeDef( const ByteString & rMacroName, sal_Int32 lValue );
     ERRTYPE     ChangeDef( const ByteString & rMacroName,
                            const ByteString & rMacro );
@@ -220,7 +220,7 @@ public:
 class RscSrc : public RscHrc {
 public:
             // Kompilerinstanz erzeugen
-            RscSrc( RscDataBase * pDBase, sal_uIntPtr lKey );
+            RscSrc( RscDataBase * pDBase, sal_uLong lKey );
             ~RscSrc();
 
 

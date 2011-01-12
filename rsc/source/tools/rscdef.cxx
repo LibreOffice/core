@@ -261,7 +261,7 @@ ByteString RscId::GetMacro() const
 |*    Letzte Aenderung  MM 01.11.91
 |*
 *************************************************************************/
-RscDefine::RscDefine( sal_uIntPtr lKey, const ByteString & rDefName, sal_Int32 lDefId )
+RscDefine::RscDefine( sal_uLong lKey, const ByteString & rDefName, sal_Int32 lDefId )
     : StringNode( rDefName )
 {
     nRefCount = 0;
@@ -270,7 +270,7 @@ RscDefine::RscDefine( sal_uIntPtr lKey, const ByteString & rDefName, sal_Int32 l
     pExp      = NULL;
 }
 
-RscDefine::RscDefine( sal_uIntPtr lKey, const ByteString & rDefName,
+RscDefine::RscDefine( sal_uLong lKey, const ByteString & rDefName,
                       RscExpression * pExpression  )
     : StringNode( rDefName )
 {
@@ -410,8 +410,8 @@ ByteString RscDefine::GetMacro()
 |*    Letzte Aenderung  MM 04.11.91
 |*
 *************************************************************************/
-RscDefine * RscDefineList::New( sal_uIntPtr lFileKey, const ByteString & rDefName,
-                                sal_Int32 lDefId, sal_uIntPtr lPos )
+RscDefine * RscDefineList::New( sal_uLong lFileKey, const ByteString & rDefName,
+                                sal_Int32 lDefId, sal_uLong lPos )
 {
     RscDefine * pDef;
 
@@ -421,8 +421,8 @@ RscDefine * RscDefineList::New( sal_uIntPtr lFileKey, const ByteString & rDefNam
     return pDef;
 }
 
-RscDefine * RscDefineList::New( sal_uIntPtr lFileKey, const ByteString & rDefName,
-                                RscExpression * pExpression, sal_uIntPtr lPos )
+RscDefine * RscDefineList::New( sal_uLong lFileKey, const ByteString & rDefName,
+                                RscExpression * pExpression, sal_uLong lPos )
 {
     RscDefine * pDef;
 
@@ -452,7 +452,7 @@ sal_Bool RscDefineList::Remove( RscDefine * pDef ){
     return( NULL != pDef );
 }
 
-sal_Bool RscDefineList::Remove( sal_uIntPtr lIndex ){
+sal_Bool RscDefineList::Remove( sal_uLong lIndex ){
     RscDefine * pDef = RscSubDefList::Remove( lIndex );
     if( pDef ){
         pDef->DefineToNumber();
@@ -465,7 +465,7 @@ sal_Bool RscDefineList::Remove( sal_uIntPtr lIndex ){
 sal_Bool RscDefineList::Remove(){
     RscDefine * pDef;
 
-    pDef = RscSubDefList::Remove( (sal_uIntPtr)0 );
+    pDef = RscSubDefList::Remove( (sal_uLong)0 );
 
     if( pDef ){
         pDef->DefineToNumber();
@@ -728,11 +728,11 @@ RscFile :: RscFile(){
 |*
 *************************************************************************/
 RscFile :: ~RscFile(){
-    RscDepend * pDep = Remove( (sal_uIntPtr)0 );
+    RscDepend * pDep = Remove( (sal_uLong)0 );
 
     while( pDep ){
         delete pDep;
-        pDep = Remove( (sal_uIntPtr)0 );
+        pDep = Remove( (sal_uLong)0 );
     }
 
     //von hinten nach vorne ist besser wegen der Abhaengigkeiten
@@ -752,7 +752,7 @@ RscFile :: ~RscFile(){
 |*    Letzte Aenderung  MM 12.11.91
 |*
 *************************************************************************/
-sal_Bool RscFile::Depend( sal_uIntPtr lDepend, sal_uIntPtr lFree ){
+sal_Bool RscFile::Depend( sal_uLong lDepend, sal_uLong lFree ){
     RscDepend * pDep;
 
     pDep = Last();
@@ -780,7 +780,7 @@ sal_Bool RscFile::Depend( sal_uIntPtr lDepend, sal_uIntPtr lFree ){
 |*    Letzte Aenderung  MM 06.01.92
 |*
 *************************************************************************/
-sal_Bool RscFile :: InsertDependFile( sal_uIntPtr lIncFile, sal_uIntPtr lPos )
+sal_Bool RscFile :: InsertDependFile( sal_uLong lIncFile, sal_uLong lPos )
 {
     RscDepend * pDep;
 
@@ -811,7 +811,7 @@ sal_Bool RscFile :: InsertDependFile( sal_uIntPtr lIncFile, sal_uIntPtr lPos )
 |*    Letzte Aenderung  MM 18.11.91
 |*
 *************************************************************************/
-void RscFile :: RemoveDependFile( sal_uIntPtr lDepFile )
+void RscFile :: RemoveDependFile( sal_uLong lDepFile )
 {
 
     RscDepend * pDep = Last();
@@ -973,7 +973,7 @@ RscFileTab :: ~RscFileTab(){
 |*    Letzte Aenderung  MM 16.05.91
 |*
 *************************************************************************/
-sal_uIntPtr  RscFileTab :: Find( const ByteString & rName )
+sal_uLong  RscFileTab :: Find( const ByteString & rName )
 {
     RscFile * pFName;
 
@@ -1009,7 +1009,7 @@ RscDefine * RscFileTab::FindDef( const char * pName ){
 |*    Letzte Aenderung  MM 01.11.91
 |*
 *************************************************************************/
-RscDefine * RscFileTab::FindDef( sal_uIntPtr lFileKey, const ByteString & rName )
+RscDefine * RscFileTab::FindDef( sal_uLong lFileKey, const ByteString & rName )
 {
     RscDefine   * pDef = FindDef( rName );
 
@@ -1030,7 +1030,7 @@ RscDefine * RscFileTab::FindDef( sal_uIntPtr lFileKey, const ByteString & rName 
 |*    Letzte Aenderung  MM 08.11.91
 |*
 *************************************************************************/
-sal_Bool RscFileTab::Depend( sal_uIntPtr lDepend, sal_uIntPtr lFree ){
+sal_Bool RscFileTab::Depend( sal_uLong lDepend, sal_uLong lFree ){
     if( lDepend == lFree )
         return sal_True;
 
@@ -1055,7 +1055,7 @@ sal_Bool RscFileTab::Depend( sal_uIntPtr lDepend, sal_uIntPtr lFree ){
 |*    Letzte Aenderung  MM 14.01.92
 |*
 *************************************************************************/
-sal_Bool RscFileTab::TestDef( sal_uIntPtr lFileKey, sal_uIntPtr lPos,
+sal_Bool RscFileTab::TestDef( sal_uLong lFileKey, sal_uLong lPos,
                           const RscDefine * pDefDec )
 {
     if( lFileKey == pDefDec->GetFileKey() ){
@@ -1079,7 +1079,7 @@ sal_Bool RscFileTab::TestDef( sal_uIntPtr lFileKey, sal_uIntPtr lPos,
 |*    Letzte Aenderung  MM 14.01.92
 |*
 *************************************************************************/
-sal_Bool RscFileTab::TestDef( sal_uIntPtr lFileKey, sal_uIntPtr lPos,
+sal_Bool RscFileTab::TestDef( sal_uLong lFileKey, sal_uLong lPos,
                           const RscExpression * pExpDec )
 {
     if( !pExpDec )
@@ -1113,8 +1113,8 @@ sal_Bool RscFileTab::TestDef( sal_uIntPtr lFileKey, sal_uIntPtr lPos,
 |*    Letzte Aenderung  MM 04.11.91
 |*
 *************************************************************************/
-RscDefine * RscFileTab::NewDef( sal_uIntPtr lFileKey, const ByteString & rDefName,
-                                sal_Int32 lId, sal_uIntPtr lPos )
+RscDefine * RscFileTab::NewDef( sal_uLong lFileKey, const ByteString & rDefName,
+                                sal_Int32 lId, sal_uLong lPos )
 {
     RscDefine * pDef = FindDef( rDefName );
 
@@ -1141,8 +1141,8 @@ RscDefine * RscFileTab::NewDef( sal_uIntPtr lFileKey, const ByteString & rDefNam
 |*    Letzte Aenderung  MM 04.11.91
 |*
 *************************************************************************/
-RscDefine * RscFileTab::NewDef( sal_uIntPtr lFileKey, const ByteString & rDefName,
-                                RscExpression * pExp, sal_uIntPtr lPos )
+RscDefine * RscFileTab::NewDef( sal_uLong lFileKey, const ByteString & rDefName,
+                                RscExpression * pExp, sal_uLong lPos )
 {
     RscDefine * pDef = FindDef( rDefName );
 
@@ -1245,7 +1245,7 @@ sal_Bool RscFileTab::ChangeDef( const ByteString & rDefName,
 {
     RscDefine * pDef = FindDef( rDefName );
     RscFile   * pFile;
-    sal_uIntPtr     lPos = 0;
+    sal_uLong       lPos = 0;
 
     if( pDef ){
         pFile = GetFile( pDef->GetFileKey() );
@@ -1303,7 +1303,7 @@ sal_Bool RscFileTab::ChangeDefName( const ByteString & rDefName,
 |*    Letzte Aenderung  MM 09.12.91
 |*
 *************************************************************************/
-void RscFileTab :: DeleteFileContext( sal_uIntPtr lFileKey ){
+void RscFileTab :: DeleteFileContext( sal_uLong lFileKey ){
     RscFile     * pFName;
 
     pFName = GetFile( lFileKey );
@@ -1315,7 +1315,7 @@ void RscFileTab :: DeleteFileContext( sal_uIntPtr lFileKey ){
             aDefTree.Remove( pDef );
             pDef = pFName->aDefLst.Next();
         };
-        while( pFName->aDefLst.Remove( (sal_uIntPtr)0 ) ) ;
+        while( pFName->aDefLst.Remove( (sal_uLong)0 ) ) ;
     }
 }
 
@@ -1328,7 +1328,7 @@ void RscFileTab :: DeleteFileContext( sal_uIntPtr lFileKey ){
 |*    Letzte Aenderung  MM 16.05.91
 |*
 *************************************************************************/
-void RscFileTab :: DeleteFile( sal_uIntPtr lFileKey ){
+void RscFileTab :: DeleteFile( sal_uLong lFileKey ){
     RscFile     * pFName;
 
     //Defines freigeben
@@ -1355,9 +1355,9 @@ void RscFileTab :: DeleteFile( sal_uIntPtr lFileKey ){
 |*    Letzte Aenderung  MM 16.05.91
 |*
 *************************************************************************/
-sal_uIntPtr  RscFileTab :: NewCodeFile( const ByteString & rName )
+sal_uLong  RscFileTab :: NewCodeFile( const ByteString & rName )
 {
-    sal_uIntPtr     lKey;
+    sal_uLong       lKey;
     RscFile *   pFName;
 
     lKey = Find( rName );
@@ -1381,10 +1381,10 @@ sal_uIntPtr  RscFileTab :: NewCodeFile( const ByteString & rName )
 |*    Letzte Aenderung  MM 16.05.91
 |*
 *************************************************************************/
-sal_uIntPtr  RscFileTab :: NewIncFile( const ByteString & rName,
+sal_uLong  RscFileTab :: NewIncFile( const ByteString & rName,
                                  const ByteString & rPath )
 {
-    sal_uIntPtr       lKey;
+    sal_uLong         lKey;
     RscFile * pFName;
 
     lKey = Find( rName );

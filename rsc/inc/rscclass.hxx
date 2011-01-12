@@ -37,7 +37,7 @@ class RscClass : public RscTop
 {
 protected:
     struct RscClassInst{
-        sal_uIntPtr   nVarDflt;
+        sal_uLong   nVarDflt;
     };
     struct VARTYPE_STRUCT {
         Atom            nVarName;   // Variablenname

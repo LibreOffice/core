@@ -129,8 +129,8 @@ public:
     ByteString      GetTmpFileName();   // Die Dateien werden geloescht
 
                     // Include Statements lesen
-    ERRTYPE         IncludeParser( sal_uIntPtr lFileKey );
-    ERRTYPE         ParseOneFile( sal_uIntPtr lFileKey, const RscCmdLine::OutputFile* pOutputFile, const WriteRcContext* pContext );
+    ERRTYPE         IncludeParser( sal_uLong lFileKey );
+    ERRTYPE         ParseOneFile( sal_uLong lFileKey, const RscCmdLine::OutputFile* pOutputFile, const WriteRcContext* pContext );
     ERRTYPE         Link();
     void            EndCompile();
 };

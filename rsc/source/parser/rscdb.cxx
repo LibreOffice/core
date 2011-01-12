@@ -423,7 +423,7 @@ sal_uInt32 RscTypCont :: PutSysName( sal_uInt32 nRscTyp, char * pFileName,
         if( bFirst && !bId1 )
         {
             pSysEntry->nKey = 1;
-            aSysLst.Insert( pSysEntry, (sal_uIntPtr)0 );
+            aSysLst.Insert( pSysEntry, (sal_uLong)0 );
         }
         else
             aSysLst.Insert( pSysEntry, LIST_APPEND );
@@ -441,7 +441,7 @@ sal_uInt32 RscTypCont :: PutSysName( sal_uInt32 nRscTyp, char * pFileName,
 |*    Letzte Aenderung  MM 21.06.90
 |*
 *************************************************************************/
-void RscTypCont :: WriteInc( FILE * fOutput, sal_uIntPtr lFileKey )
+void RscTypCont :: WriteInc( FILE * fOutput, sal_uLong lFileKey )
 {
     RscFile   * pFName;
 
@@ -503,7 +503,7 @@ private:
     ERRTYPE     aError;     // Enthaelt den ersten Fehler
     RscTypCont* pTypCont;
     FILE *      fOutput;    // AusgabeDatei
-    sal_uIntPtr     lFileKey;   // Welche src-Datei
+    sal_uLong       lFileKey;   // Welche src-Datei
     RscTop *    pClass;
 
     DECL_LINK( CallBackWriteRc, ObjNode * );
@@ -655,7 +655,7 @@ void RscEnumerateObj :: WriteRcFile( RscWriteRc & rMem, FILE * fOut ){
         sal_uInt32 nSize = (nCount * (sizeof(sal_uInt64)+sizeof(sal_Int32))) + sizeof(sal_Int32);
 
         rMem.Put( nCount ); //Anzahl speichern
-        for( std::map< sal_uInt64, sal_uIntPtr >::const_iterator it =
+        for( std::map< sal_uInt64, sal_uLong >::const_iterator it =
              pTypCont->aIdTranslator.begin(); it != pTypCont->aIdTranslator.end(); ++it )
         {
             // Schluessel schreiben
@@ -703,7 +703,7 @@ public:
         return aEnumObj.aError;
     };
 
-    ERRTYPE WriteSrc( sal_uIntPtr lFileKey )
+    ERRTYPE WriteSrc( sal_uLong lFileKey )
     {
         aEnumObj.lFileKey = lFileKey;
 
@@ -712,7 +712,7 @@ public:
         return aEnumObj.aError;
     }
 
-    ERRTYPE WriteCxx( sal_uIntPtr lFileKey )
+    ERRTYPE WriteCxx( sal_uLong lFileKey )
     {
         aEnumObj.lFileKey = lFileKey;
 
@@ -721,7 +721,7 @@ public:
         return aEnumObj.aError;
     }
 
-    ERRTYPE WriteHxx(  sal_uIntPtr lFileKey )
+    ERRTYPE WriteHxx(  sal_uLong lFileKey )
     {
         aEnumObj.lFileKey = lFileKey;
 
@@ -829,7 +829,7 @@ ERRTYPE RscTypCont::WriteRc( WriteRcContext& rContext )
 |*    Letzte Aenderung  MM 27.06.90
 |*
 *************************************************************************/
-void RscTypCont :: WriteSrc( FILE * fOutput, sal_uIntPtr nFileKey,
+void RscTypCont :: WriteSrc( FILE * fOutput, sal_uLong nFileKey,
                              CharSet /*nCharSet*/, sal_Bool bName )
 {
     RscFile     *   pFName;
@@ -887,7 +887,7 @@ void RscTypCont :: WriteSrc( FILE * fOutput, sal_uIntPtr nFileKey,
 |*    Letzte Aenderung  MM 30.05.91
 |*
 *************************************************************************/
-ERRTYPE RscTypCont :: WriteHxx( FILE * fOutput, sal_uIntPtr nFileKey )
+ERRTYPE RscTypCont :: WriteHxx( FILE * fOutput, sal_uLong nFileKey )
 {
     fprintf( fOutput, "#include <tools/rc.hxx>\n" );
     fprintf( fOutput, "#include <tools/resid.hxx>\n" );
@@ -953,7 +953,7 @@ ERRTYPE RscTypCont :: WriteHxx( FILE * fOutput, sal_uIntPtr nFileKey )
 |*    Letzte Aenderung  MM 30.05.91
 |*
 *************************************************************************/
-ERRTYPE RscTypCont::WriteCxx( FILE * fOutput, sal_uIntPtr nFileKey,
+ERRTYPE RscTypCont::WriteCxx( FILE * fOutput, sal_uLong nFileKey,
                               const ByteString & rHxxName )
 {
     RscEnumerateRef aEnumRef( this, pRoot, fOutput );
@@ -1019,14 +1019,14 @@ void RscTypCont::WriteRcCtor
 *************************************************************************/
 class RscDel
 {
-    sal_uIntPtr lFileKey;
+    sal_uLong lFileKey;
     DECL_LINK( Delete, RscTop * );
 public:
-    RscDel( RscTop * pRoot, sal_uIntPtr lKey );
+    RscDel( RscTop * pRoot, sal_uLong lKey );
 };
 
 
-inline RscDel::RscDel( RscTop * pRoot, sal_uIntPtr lKey )
+inline RscDel::RscDel( RscTop * pRoot, sal_uLong lKey )
 {
     lFileKey = lKey;
     pRoot->EnumNodes( LINK( this, RscDel, Delete ) );
@@ -1040,7 +1040,7 @@ IMPL_LINK_INLINE_START( RscDel, Delete, RscTop *, pNode )
 }
 IMPL_LINK_INLINE_END( RscDel, Delete, RscTop *, pNode )
 
-void RscTypCont :: Delete( sal_uIntPtr lFileKey ){
+void RscTypCont :: Delete( sal_uLong lFileKey ){
     // Resourceinstanzen loeschen
     RscDel aDel( pRoot, lFileKey );
     // Defines loeschen

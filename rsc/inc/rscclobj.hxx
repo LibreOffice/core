@@ -51,18 +51,18 @@ DECLARE_LIST( RscInconsList, RscInconsistent * )
 class ObjNode : public IdNode{
     RscId       aRscId; // Id der Resource
     CLASS_DATA  pRscObj;// pointer to a resourceobject
-    sal_uIntPtr       lFileKey;// Dateischluessel
+    sal_uLong       lFileKey;// Dateischluessel
 protected:
     using NameNode::Search;
 
 public:
     using NameNode::Insert;
 
-                ObjNode( const RscId & rId, CLASS_DATA pData, sal_uIntPtr lKey );
-    ObjNode *   DelObjNode( RscTop * pClass, sal_uIntPtr lFileKey );
+                ObjNode( const RscId & rId, CLASS_DATA pData, sal_uLong lKey );
+    ObjNode *   DelObjNode( RscTop * pClass, sal_uLong lFileKey );
     sal_uInt32      GetId() const;
     RscId       GetRscId(){ return( aRscId ); }
-    sal_uIntPtr       GetFileKey(){ return lFileKey; };
+    sal_uLong       GetFileKey(){ return lFileKey; };
     ObjNode*    Search( const RscId &rName ) const{
                     // search the index in the b-tree
                     return( (ObjNode *)IdNode::Search( rName ) );

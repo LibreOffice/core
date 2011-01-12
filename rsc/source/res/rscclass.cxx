@@ -203,9 +203,9 @@ void RscClass::SetVarDflt( CLASS_DATA pData, sal_uInt32 nEle, sal_Bool bSet )
 
     pClass = (RscClassInst *)(pData + nSuperSize );
     if( bSet )
-        pClass->nVarDflt |= ((sal_uIntPtr)1 << nEle);
+        pClass->nVarDflt |= ((sal_uLong)1 << nEle);
     else
-        pClass->nVarDflt &= ~((sal_uIntPtr)1 << nEle);
+        pClass->nVarDflt &= ~((sal_uLong)1 << nEle);
 }
 
 /*************************************************************************
@@ -223,7 +223,7 @@ sal_Bool RscClass::IsDflt( CLASS_DATA pData, sal_uInt32 nEle )
     sal_Bool            bRet;
 
     pClass = (RscClassInst *)(pData + nSuperSize );
-    if( pClass->nVarDflt & ((sal_uIntPtr)1 << nEle) )
+    if( pClass->nVarDflt & ((sal_uLong)1 << nEle) )
         bRet = sal_True;
     else
         bRet = sal_False;
@@ -276,7 +276,7 @@ RSCINST RscClass::Create
         ((RscClassInst *)(aInst.pData + nSuperSize))->nVarDflt =
             ((RscClassInst *)(rDflt.pData + nSuperSize))->nVarDflt;
     else
-        ((RscClassInst *)(aInst.pData + nSuperSize))->nVarDflt = ~((sal_uIntPtr)0);
+        ((RscClassInst *)(aInst.pData + nSuperSize))->nVarDflt = ~((sal_uLong)0);
 
     for( i = 0; i < nEntries; i++ )
     {
@@ -400,7 +400,7 @@ ERRTYPE RscClass::SetVariable
     }
 
     nEntries++;
-    if( nEntries > (sizeof( sal_uIntPtr ) * 8) )
+    if( nEntries > (sizeof( sal_uLong ) * 8) )
     {
         // Bereich fuer Default zu klein
         RscExit( 16 );
@@ -608,7 +608,7 @@ void RscClass::SetToDefault( const RSCINST & rInst )
                 aTmpI.pClass->SetToDefault( aTmpI );
         }
     }
-    pClass->nVarDflt = ~((sal_uIntPtr)0); // alles auf Default
+    pClass->nVarDflt = ~((sal_uLong)0); // alles auf Default
 
     RscTop::SetToDefault( rInst );
 }

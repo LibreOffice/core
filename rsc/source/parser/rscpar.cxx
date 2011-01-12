@@ -64,8 +64,8 @@ void RscFileInst::Init()
 |*    Letzte Aenderung  MM 06.06.91
 |*
 *************************************************************************/
-RscFileInst::RscFileInst( RscTypCont * pTC, sal_uIntPtr lIndexSrc,
-                          sal_uIntPtr lFIndex, FILE * fFile )
+RscFileInst::RscFileInst( RscTypCont * pTC, sal_uLong lIndexSrc,
+                          sal_uLong lFIndex, FILE * fFile )
 {
     pTypCont = pTC;
     Init();
@@ -79,8 +79,8 @@ RscFileInst::RscFileInst( RscTypCont * pTC, sal_uIntPtr lIndexSrc,
     pInput    = (char *)rtl_allocateMemory( nInputBufLen );
 }
 
-RscFileInst::RscFileInst( RscTypCont * pTC, sal_uIntPtr lIndexSrc,
-                          sal_uIntPtr lFIndex, const ByteString& rBuf )
+RscFileInst::RscFileInst( RscTypCont * pTC, sal_uLong lIndexSrc,
+                          sal_uLong lFIndex, const ByteString& rBuf )
 {
     pTypCont     = pTC;
     Init();

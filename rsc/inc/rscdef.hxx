@@ -125,15 +125,15 @@ friend class RscDefineList;
 friend class RscDefTree;
 friend class RscExpression;
 friend class RscId;
-    sal_uIntPtr         lFileKey;   // zu welcher Datei gehoert das Define
+    sal_uLong           lFileKey;   // zu welcher Datei gehoert das Define
     sal_uInt32          nRefCount;  // Wieviele Referenzen auf dieses Objekt
     sal_Int32           lId;        // Identifier
     RscExpression * pExp;       // Ausdruck
 protected:
 
-            RscDefine( sal_uIntPtr lFileKey, const ByteString & rDefName,
+            RscDefine( sal_uLong lFileKey, const ByteString & rDefName,
                        sal_Int32 lDefId );
-            RscDefine( sal_uIntPtr lFileKey, const ByteString & rDefName,
+            RscDefine( sal_uLong lFileKey, const ByteString & rDefName,
                        RscExpression * pExpression );
             ~RscDefine();
     void    IncRef(){ nRefCount++; }
@@ -147,7 +147,7 @@ protected:
     using StringNode::Search;
 public:
     RscDefine * Search( const char * );
-    sal_uIntPtr     GetFileKey() const { return lFileKey; }
+    sal_uLong       GetFileKey() const { return lFileKey; }
     sal_Bool        Evaluate();
     sal_Int32       GetNumber() const  { return lId;      }
     ByteString  GetMacro();
@@ -160,13 +160,13 @@ friend class RscFile;
 friend class RscFileTab;
 private:
                 // pExpression wird auf jedenfall Eigentum der Liste
-    RscDefine * New( sal_uIntPtr lFileKey, const ByteString & rDefName,
-                     sal_Int32 lDefId, sal_uIntPtr lPos );
-    RscDefine * New( sal_uIntPtr lFileKey, const ByteString & rDefName,
-                     RscExpression * pExpression, sal_uIntPtr lPos );
+    RscDefine * New( sal_uLong lFileKey, const ByteString & rDefName,
+                     sal_Int32 lDefId, sal_uLong lPos );
+    RscDefine * New( sal_uLong lFileKey, const ByteString & rDefName,
+                     RscExpression * pExpression, sal_uLong lPos );
     sal_Bool        Befor( const RscDefine * pFree, const RscDefine * pDepend );
     sal_Bool        Remove( RscDefine * pDef );
-    sal_Bool        Remove( sal_uIntPtr nIndex );
+    sal_Bool        Remove( sal_uLong nIndex );
     sal_Bool        Remove();
 public:
     void        WriteAll( FILE * fOutput );
@@ -188,10 +188,10 @@ public:
 
 /********************** R S C F I L E ************************************/
 class RscDepend {
-    sal_uIntPtr          lKey;
+    sal_uLong            lKey;
 public:
-            RscDepend( sal_uIntPtr lIncKey ){ lKey = lIncKey; };
-    sal_uIntPtr GetFileKey(){ return lKey; }
+            RscDepend( sal_uLong lIncKey ){ lKey = lIncKey; };
+    sal_uLong   GetFileKey(){ return lKey; }
 };
 DECLARE_LIST( RscDependList, RscDepend * )
 
@@ -210,9 +210,9 @@ public:
 
                     RscFile();
                     ~RscFile();
-    sal_Bool            InsertDependFile( sal_uIntPtr lDepFile, sal_uIntPtr lPos );
-    void            RemoveDependFile( sal_uIntPtr lDepFile );
-    sal_Bool            Depend( sal_uIntPtr lDepend, sal_uIntPtr lFree );
+    sal_Bool            InsertDependFile( sal_uLong lDepFile, sal_uLong lPos );
+    void            RemoveDependFile( sal_uLong lDepFile );
+    sal_Bool            Depend( sal_uLong lDepend, sal_uLong lFree );
     void            SetIncFlag(){ bIncFile = sal_True; };
     sal_Bool            IsIncFile(){  return bIncFile; };
 };
@@ -235,25 +235,25 @@ public:
 
 class RscFileTab : public RscSubFileTab {
     RscDefTree aDefTree;
-    sal_uIntPtr     Find( const ByteString & rName );
+    sal_uLong       Find( const ByteString & rName );
 public:
                 RscFileTab();
                 ~RscFileTab();
 
     RscDefine * FindDef( const char * );
     RscDefine * FindDef( const ByteString& rStr ) { return FindDef( rStr.GetBuffer() ); }
-    RscDefine * FindDef( sal_uIntPtr lKey, const ByteString & );
+    RscDefine * FindDef( sal_uLong lKey, const ByteString & );
 
-    sal_Bool        Depend( sal_uIntPtr lDepend, sal_uIntPtr lFree );
-    sal_Bool        TestDef( sal_uIntPtr lFileKey, sal_uIntPtr lPos,
+    sal_Bool        Depend( sal_uLong lDepend, sal_uLong lFree );
+    sal_Bool        TestDef( sal_uLong lFileKey, sal_uLong lPos,
                          const RscDefine * pDefDec );
-    sal_Bool        TestDef( sal_uIntPtr lFileKey, sal_uIntPtr lPos,
+    sal_Bool        TestDef( sal_uLong lFileKey, sal_uLong lPos,
                          const RscExpression * pExpDec );
 
-    RscDefine * NewDef( sal_uIntPtr lKey, const ByteString & rDefName,
-                        sal_Int32 lId, sal_uIntPtr lPos );
-    RscDefine * NewDef( sal_uIntPtr lKey, const ByteString & rDefName,
-                        RscExpression *, sal_uIntPtr lPos );
+    RscDefine * NewDef( sal_uLong lKey, const ByteString & rDefName,
+                        sal_Int32 lId, sal_uLong lPos );
+    RscDefine * NewDef( sal_uLong lKey, const ByteString & rDefName,
+                        RscExpression *, sal_uLong lPos );
 
     sal_Bool        ChangeDef( const ByteString & rDefName, sal_Int32 lId );
     sal_Bool        ChangeDef( const ByteString & rDefName, RscExpression * );
@@ -264,11 +264,11 @@ public:
                         const ByteString & rNewName );
 
            // Alle Defines die in dieser Datei Definiert sind loeschen
-    void   DeleteFileContext( sal_uIntPtr lKey );
-    void   DeleteFile( sal_uIntPtr lKey );
-    sal_uIntPtr  NewCodeFile( const ByteString & rName );
-    sal_uIntPtr  NewIncFile( const ByteString & rName, const ByteString & rPath );
-    RscFile * GetFile( sal_uIntPtr lFileKey ){ return Get( lFileKey ); }
+    void   DeleteFileContext( sal_uLong lKey );
+    void   DeleteFile( sal_uLong lKey );
+    sal_uLong  NewCodeFile( const ByteString & rName );
+    sal_uLong  NewIncFile( const ByteString & rName, const ByteString & rPath );
+    RscFile * GetFile( sal_uLong lFileKey ){ return Get( lFileKey ); }
 };
 
 #endif // _RSCDEF_HXX
