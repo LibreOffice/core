@@ -59,4 +59,3 @@ ProfileItem gid_Brand_Profileitem_Bootstrap_Errorreport_Server
   #endif
 End
 
-BRAND_RES_FILE( gid_Brand_File_Res_Ooo, ooo )
