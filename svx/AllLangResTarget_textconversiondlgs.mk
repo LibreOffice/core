@@ -14,25 +14,34 @@
 #
 # OpenOffice.org is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	See the
 # GNU Lesser General Public License version 3 for more details
 # (a copy is included in the LICENSE file that accompanied this code).
 #
 # You should have received a copy of the GNU Lesser General Public License
-# version 3 along with OpenOffice.org.  If not, see
+# version 3 along with OpenOffice.org.	If not, see
 # <http://www.openoffice.org/license.html>
 # for a copy of the LGPLv3 License.
 #
 #*************************************************************************
 
-ifeq ($(strip $(SOLARENV)),)
-$(error No environment set!)
-endif
+$(eval $(call gb_AllLangResTarget_AllLangResTarget,textconversiondlgs))
 
-gb_PARTIALBUILD := T
-GBUILDDIR := $(SOLARENV)/gbuild
-include $(GBUILDDIR)/gbuild.mk
+$(eval $(call gb_AllLangResTarget_set_reslocation,textconversiondlgs,svx))
 
-$(eval $(call gb_Module_make_global_targets,$(shell ls $(dir $(realpath $(firstword $(MAKEFILE_LIST))))/Module*.mk)))
+$(eval $(call gb_AllLangResTarget_add_srs,textconversiondlgs,\
+    svx/textconversiondlgs \
+))
 
-# vim: set noet sw=4 ts=4:
+$(eval $(call gb_SrsTarget_SrsTarget,svx/textconversiondlgs))
+
+$(eval $(call gb_SrsTarget_set_include,svx/textconversiondlgs,\
+    $$(INCLUDE) \
+    -I$(OUTDIR)/inc \
+    -I$(SRCDIR)/svx/inc/ \
+))
+
+$(eval $(call gb_SrsTarget_add_files,svx/textconversiondlgs,\
+    svx/source/unodialogs/textconversiondlgs/chinese_dialogs.src \
+))
+

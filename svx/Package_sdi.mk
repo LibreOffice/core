@@ -14,25 +14,20 @@
 #
 # OpenOffice.org is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	See the
 # GNU Lesser General Public License version 3 for more details
 # (a copy is included in the LICENSE file that accompanied this code).
 #
 # You should have received a copy of the GNU Lesser General Public License
-# version 3 along with OpenOffice.org.  If not, see
+# version 3 along with OpenOffice.org.	If not, see
 # <http://www.openoffice.org/license.html>
 # for a copy of the LGPLv3 License.
 #
 #*************************************************************************
 
-ifeq ($(strip $(SOLARENV)),)
-$(error No environment set!)
-endif
+$(eval $(call gb_Package_Package,svx_sdi,$(SRCDIR)/svx/sdi))
+$(eval $(call gb_Package_add_file,svx_sdi,inc/svx/svx.sdi,svx.sdi))
+$(eval $(call gb_Package_add_file,svx_sdi,inc/svx/svxitems.sdi,svxitems.sdi))
+$(eval $(call gb_Package_add_file,svx_sdi,inc/svx/xoitems.sdi,xoitems.sdi))
 
-gb_PARTIALBUILD := T
-GBUILDDIR := $(SOLARENV)/gbuild
-include $(GBUILDDIR)/gbuild.mk
 
-$(eval $(call gb_Module_make_global_targets,$(shell ls $(dir $(realpath $(firstword $(MAKEFILE_LIST))))/Module*.mk)))
-
-# vim: set noet sw=4 ts=4:

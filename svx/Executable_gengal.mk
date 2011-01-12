@@ -2,7 +2,7 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2009 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
 #
@@ -14,25 +14,62 @@
 #
 # OpenOffice.org is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	See the
 # GNU Lesser General Public License version 3 for more details
 # (a copy is included in the LICENSE file that accompanied this code).
 #
 # You should have received a copy of the GNU Lesser General Public License
-# version 3 along with OpenOffice.org.  If not, see
+# version 3 along with OpenOffice.org.	If not, see
 # <http://www.openoffice.org/license.html>
 # for a copy of the LGPLv3 License.
 #
 #*************************************************************************
 
-ifeq ($(strip $(SOLARENV)),)
-$(error No environment set!)
+$(eval $(call gb_Executable_Executable,gengal))
+
+$(eval $(call gb_Executable_set_include,gengal,\
+    $$(INCLUDE) \
+    -I$(SRCDIR)/svx/inc/ \
+    -I$(SRCDIR)/svx/inc/pch \
+    -I$(OUTDIR)/inc/offuh \
+))
+
+$(eval $(call gb_Executable_set_cxxflags,gengal,\
+    $$(CXXFLAGS) \
+))
+
+$(eval $(call gb_Executable_add_linked_libs,gengal,\
+    sal \
+    tl \
+    tl \
+    svl \
+    comphelper \
+    cppu \
+    cppuhelper \
+    vcl \
+    ucbhelper \
+    svxcore \
+))
+
+$(eval $(call gb_Executable_add_exception_objects,gengal,\
+    svx/source/gengal/gengal \
+))
+
+ifeq ($(OS),WNT)
+$(eval $(call gb_Executable_add_linked_libs,gengal,\
+    kernel32 \
+    msvcrt \
+    oldnames \
+    user32 \
+    uwinapi \
+))
 endif
 
-gb_PARTIALBUILD := T
-GBUILDDIR := $(SOLARENV)/gbuild
-include $(GBUILDDIR)/gbuild.mk
-
-$(eval $(call gb_Module_make_global_targets,$(shell ls $(dir $(realpath $(firstword $(MAKEFILE_LIST))))/Module*.mk)))
+ifeq ($(OS),LINUX)
+$(eval $(call gb_Executable_add_linked_libs,gengal,\
+    dl \
+    pthread \
+))
+endif
 
 # vim: set noet sw=4 ts=4:

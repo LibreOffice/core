@@ -43,70 +43,77 @@ $(eval $(call gb_SrsTarget_set_include,svx/res,\
     -I$(SRCDIR)/svx/source/inc \
     -I$(SRCDIR)/svx/source/dialog \
     -I$(SRCDIR)/svx/inc/ \
-    -I$(SRCDIR)/svx/unxlngi6.pro/inc/ \
 ))
 
+# ofa res:
 #svx/source/src/errtxt.src
 #svx/source/src/app.src
 
 #svx/source/intro/iso.src
 #svx/source/intro/ooo.src
 
+# textconversiondlgs res:
 #svx/source/unodialogs/textconversiondlgs/chinese_dictionarydialog.src
 #svx/source/unodialogs/textconversiondlgs/chinese_translationdialog.src
 
+# localization of globlmn.hrc
+#echo LASTRUN_MERGED:=TRUE > ../unxlngx6.pro/inc/inc_lastrun.mk
+#mkdir ../unxlngx6.pro/inc/
+#rm -f ../unxlngx6.pro/inc/globlmn.hrc
+#: &&     LD_LIBRARY_PATH=/home/mathias/OOO/o_gnumake3/DEV300/ooo/solver/300/unxlngx6.pro/lib${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}} /home/mathias/OOO/o_gnumake3/DEV300/ooo/solver/300/unxlngx6.pro/bin/transex3 -p svx -i globlmn_tmpl.hrc -o ../unxlngx6.pro/inc//globlmn_tmpl.hrc.unxlngx6.pro -m /home/mathias/OOO/o_gnumake3/DEV300/ooo/l10n/unxlngx6.pro/misc/sdf/svx/inc/localize.sdf -l all
+#mv ../unxlngx6.pro/inc/globlmn_tmpl.hrc.unxlngx6.pro ../unxlngx6.pro/inc/globlmn.hrc
+
 $(eval $(call gb_SrsTarget_add_files,svx/res,\
-    svx/source/stbctrls/stbctrls.src \
-    svx/source/dialog/passwd.src \
-    svx/source/dialog/language.src \
+    svx/source/accessibility/accessibility.src \
     svx/source/dialog/bmpmask.src \
-    svx/source/dialog/ucsubset.src \
-    svx/source/dialog/hdft.src \
-    svx/source/dialog/imapdlg.src \
-    svx/source/dialog/swframeposstrings.src \
-    svx/source/dialog/prtqry.src \
-    svx/source/dialog/txenctab.src \
-    svx/source/dialog/dlgctrl.src \
-    svx/source/dialog/frmsel.src \
-    svx/source/dialog/ctredlin.src \
-    svx/source/dialog/sdstring.src \
-    svx/source/dialog/ruler.src \
-    svx/source/dialog/srchdlg.src \
-    svx/source/dialog/optgrid.src \
-    svx/source/dialog/langbox.src \
     svx/source/dialog/contdlg.src \
-    svx/source/dialog/rubydialog.src \
-    svx/source/dialog/fontwork.src \
+    svx/source/dialog/ctredlin.src \
+    svx/source/dialog/dlgctrl.src \
     svx/source/dialog/docrecovery.src \
+    svx/source/dialog/fontwork.src \
+    svx/source/dialog/frmsel.src \
+    svx/source/dialog/hdft.src \
     svx/source/dialog/hyprlink.src \
+    svx/source/dialog/imapdlg.src \
+    svx/source/dialog/langbox.src \
+    svx/source/dialog/language.src \
+    svx/source/dialog/optgrid.src \
+    svx/source/dialog/passwd.src \
+    svx/source/dialog/prtqry.src \
+    svx/source/dialog/rubydialog.src \
+    svx/source/dialog/ruler.src \
+    svx/source/dialog/sdstring.src \
+    svx/source/dialog/srchdlg.src \
     svx/source/dialog/svxbmpnumvalueset.src \
-    svx/source/engine3d/string3d.src \
+    svx/source/dialog/swframeposstrings.src \
+    svx/source/dialog/txenctab.src \
+    svx/source/dialog/ucsubset.src \
     svx/source/engine3d/float3d.src \
-    svx/source/mnuctrls/mnuctrls.src \
-    svx/source/tbxctrls/linectrl.src \
-    svx/source/tbxctrls/colrctrl.src \
-    svx/source/tbxctrls/extrusioncontrols.src \
-    svx/source/tbxctrls/tbxdraw.src \
-    svx/source/tbxctrls/grafctrl.src \
-    svx/source/tbxctrls/lboxctrl.src \
-    svx/source/tbxctrls/tbcontrl.src \
-    svx/source/tbxctrls/fontworkgallery.src \
+    svx/source/engine3d/string3d.src \
     svx/source/fmcomp/gridctrl.src \
-    svx/source/form/fmexpl.src \
-    svx/source/form/formshell.src \
-    svx/source/form/fmstring.src \
     svx/source/form/datanavi.src \
     svx/source/form/filtnav.src \
-    svx/source/unodraw/unodraw.src \
+    svx/source/form/fmexpl.src \
+    svx/source/form/fmstring.src \
+    svx/source/form/formshell.src \
+    svx/source/gallery2/gallery.src \
+    svx/source/gallery2/galtheme.src \
+    svx/source/items/svxerr.src \
+    svx/source/items/svxitems.src \
+    svx/source/mnuctrls/mnuctrls.src \
+    svx/source/stbctrls/stbctrls.src \
+    svx/source/svdraw/svdstr.src \
     svx/source/table/table.src \
+    svx/source/tbxctrls/colrctrl.src \
+    svx/source/tbxctrls/extrusioncontrols.src \
+    svx/source/tbxctrls/fontworkgallery.src \
+    svx/source/tbxctrls/grafctrl.src \
+    svx/source/tbxctrls/lboxctrl.src \
+    svx/source/tbxctrls/linectrl.src \
+    svx/source/tbxctrls/tbcontrl.src \
+    svx/source/tbxctrls/tbunosearchcontrollers.src \
     svx/source/toolbars/extrusionbar.src \
     svx/source/toolbars/fontworkbar.src \
-    svx/source/gallery2/galtheme.src \
-    svx/source/gallery2/gallery.src \
-    svx/source/svdraw/svdstr.src \
-    svx/source/accessibility/accessibility.src \
-    svx/source/items/svxitems.src \
-    svx/source/items/svxerr.src \
+    svx/source/unodraw/unodraw.src \
 ))
-
 

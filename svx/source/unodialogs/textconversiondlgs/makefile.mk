@@ -31,8 +31,6 @@ TARGET=textconversiondlgs
 ENABLE_EXCEPTIONS=TRUE
 USE_DEFFILE=TRUE
 
-LOCALIZE_ME=chinese_direction_tmpl.hrc
-
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  settings.mk
@@ -48,8 +46,7 @@ SLOFILES=           \
 
 SRS1NAME=$(TARGET)
 SRC1FILES=          \
-                    chinese_translationdialog.src\
-                    chinese_dictionarydialog.src
+                    chinese_dialogs.src
 
 RESLIB1NAME=$(TARGET)
 RESLIB1SRSFILES= $(SRS)$/$(TARGET).srs

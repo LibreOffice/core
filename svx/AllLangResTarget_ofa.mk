@@ -25,28 +25,22 @@
 #
 #*************************************************************************
 
-$(eval $(call gb_Module_Module,svx,\
-    $(call gb_AllLangResTarget_get_target,svx) \
-    $(call gb_Library_get_target,svxcore) \
-    $(call gb_Library_get_target,svx) \
+$(eval $(call gb_AllLangResTarget_AllLangResTarget,ofa))
+
+$(eval $(call gb_AllLangResTarget_set_reslocation,ofa,svx))
+
+$(eval $(call gb_AllLangResTarget_add_srs,ofa,svx/ofa))
+
+$(eval $(call gb_SrsTarget_SrsTarget,svx/ofa))
+
+$(eval $(call gb_SrsTarget_set_include,svx/ofa,\
+    $$(INCLUDE) \
+    -I$(OUTDIR)/inc \
+    -I$(SRCDIR)/svx/inc/ \
 ))
 
-$(eval $(call gb_Module_read_includes,svx,\
-    lib_svx \
-    lib_svxcore \
-    res_svx \
+$(eval $(call gb_SrsTarget_add_files,svx/ofa,\
+    svx/source/src/errtxt.src \
+    svx/source/src/app.src \
 ))
-
-#todo: noopt for EnhanceCustomShapesFunctionParser.cxx on Solaris Sparc and MacOSX
-#todo: -DBOOST_SPIRIT_USE_OLD_NAMESPACE only in CustomShapes
-#todo: -DUNICODE and -D_UNICODE on WNT for source/dialog
-#todo: noopt for viewpt3d.cxx with MSVC and ICC
-#todo: set -DENABLE_VBA in case $(ENABLE_VBA)="YES"; can we do it in gbuild.mk?
-#todo: gengal
-#todo: set -D... for ENABLE_GTK/KDE/KDE4 -> in gbuild.mk?
-#todo: ibrwimp.lib in util/makefile.mk on Windows ?!
-#todo: GENHID
-#todo: uiconfig
-#todo: exports from gallery (util/gal.dxp) and svx (svx.dxp)
-#todo: resources, textconversion, packages
 
