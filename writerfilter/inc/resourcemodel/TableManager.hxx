@@ -40,6 +40,10 @@
 #include "util.hxx"
 #include "TagLogger.hxx"
 
+#if OSL_DEBUG_LEVEL > 0
+#   include <rtl/strbuf.hxx>
+#endif
+
 namespace writerfilter
 {
 
@@ -967,34 +971,46 @@ void TableManager<T, PropertiesPointer>::resolveCurrentTable()
 
     if (mpTableDataHandler.get() != NULL)
     {
-        typename TableData<T, PropertiesPointer>::Pointer_t
-            pTableData = mTableDataStack.top();
-
-        unsigned int nRows = pTableData->getRowCount();
-
-        mpTableDataHandler->startTable(nRows, pTableData->getDepth(), getTableProps());
-
-        for (unsigned int nRow = 0; nRow < nRows; ++nRow)
+        try
         {
-            typename RowData<T, PropertiesPointer>::Pointer_t pRowData = pTableData->getRow(nRow);
+            typename TableData<T, PropertiesPointer>::Pointer_t
+                pTableData = mTableDataStack.top();
 
-            unsigned int nCells = pRowData->getCellCount();
+            unsigned int nRows = pTableData->getRowCount();
 
-            mpTableDataHandler->startRow(nCells, pRowData->getProperties());
+            mpTableDataHandler->startTable(nRows, pTableData->getDepth(), getTableProps());
 
-            for (unsigned int nCell = 0; nCell < nCells; ++nCell)
+            for (unsigned int nRow = 0; nRow < nRows; ++nRow)
             {
-                mpTableDataHandler->startCell
-                    (pRowData->getCellStart(nCell),
-                     pRowData->getCellProperties(nCell));
+                typename RowData<T, PropertiesPointer>::Pointer_t pRowData = pTableData->getRow(nRow);
 
-                mpTableDataHandler->endCell(pRowData->getCellEnd(nCell));
+                unsigned int nCells = pRowData->getCellCount();
+
+                mpTableDataHandler->startRow(nCells, pRowData->getProperties());
+
+                for (unsigned int nCell = 0; nCell < nCells; ++nCell)
+                {
+                    mpTableDataHandler->startCell
+                        (pRowData->getCellStart(nCell),
+                        pRowData->getCellProperties(nCell));
+
+                    mpTableDataHandler->endCell(pRowData->getCellEnd(nCell));
+                }
+
+                mpTableDataHandler->endRow();
             }
 
-            mpTableDataHandler->endRow();
+            mpTableDataHandler->endTable();
         }
-
-        mpTableDataHandler->endTable();
+        catch (uno::Exception const& e)
+        {
+            (void) e;
+#if OSL_DEBUG_LEVEL > 0
+            rtl::OStringBuffer aBuf("resolving of current table failed with: ");
+            aBuf.append(rtl::OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8));
+            OSL_ENSURE(false, aBuf.getStr());
+#endif
+        }
     }
     resetTableProps();
     clearData();
