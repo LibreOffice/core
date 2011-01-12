@@ -48,7 +48,6 @@ $(eval $(call gb_Library_set_include,sw,\
 
 $(eval $(call gb_Library_set_defs,sw,\
     $$(DEFS) \
-    -DACCESSIBLE_LAYOUT \
     -DSW_DLLIMPLEMENTATION \
 ))
 

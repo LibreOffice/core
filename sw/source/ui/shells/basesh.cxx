@@ -143,9 +143,6 @@ static BYTE nPagePos;
 static BYTE nHeaderPos;
 static BYTE nFooterPos;
 
-#define Interior
-#include <svx/svxslots.hxx>
-
 #define SwBaseShell
 #define Shadow
 #include <sfx2/msg.hxx>

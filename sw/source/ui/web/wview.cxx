@@ -70,11 +70,6 @@
 #include <shells.hrc>
 
 #define SwWebView
-#define SearchAttributes
-#define ReplaceAttributes
-#define SearchSettings
-#define _ExecSearch ExecSearch
-#define _StateSearch StateSearch
 #define Frames
 #define Graphics
 #define OLEObjects
@@ -89,7 +84,6 @@
 #define ListInText
 #define ListInTable
 #define Page
-#include <svx/svxslots.hxx>
 #include <swslots.hxx>
 
 

@@ -44,7 +44,6 @@ $(eval $(call gb_Library_set_include,swd,\
 
 $(eval $(call gb_Library_set_defs,swd,\
     $$(DEFS) \
-    -DACCESSIBLE_LAYOUT \
 ))
 
 $(eval $(call gb_Library_add_linked_libs,swd,\
