@@ -29,7 +29,6 @@
 #define OOX_CORE_RECORDPARSER_HXX
 
 #include <map>
-#include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/io/IOException.hpp>
 #include <com/sun/star/xml/sax/SAXException.hpp>
 #include <rtl/ref.hxx>
@@ -95,4 +94,3 @@ private:
 } // namespace oox
 
 #endif
-

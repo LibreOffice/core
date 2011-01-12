@@ -41,17 +41,17 @@ namespace xls {
 
     Used to import contexts in global workbook fragments.
  */
-class OoxWorkbookContextBase : public ::oox::core::ContextHandler2, public WorkbookHelper
+class WorkbookContextBase : public ::oox::core::ContextHandler2, public WorkbookHelper
 {
 public:
     template< typename ParentType >
-    explicit            OoxWorkbookContextBase( ParentType& rParent );
+    explicit            WorkbookContextBase( ParentType& rParent );
 };
 
 // ----------------------------------------------------------------------------
 
 template< typename ParentType >
-OoxWorkbookContextBase::OoxWorkbookContextBase( ParentType& rParent ) :
+WorkbookContextBase::WorkbookContextBase( ParentType& rParent ) :
     ::oox::core::ContextHandler2( rParent ),
     WorkbookHelper( rParent )
 {
@@ -63,32 +63,32 @@ OoxWorkbookContextBase::OoxWorkbookContextBase( ParentType& rParent ) :
 
     Used to import contexts in sheet fragments.
  */
-class OoxWorksheetContextBase : public ::oox::core::ContextHandler2, public WorksheetHelperRoot
+class WorksheetContextBase : public ::oox::core::ContextHandler2, public WorksheetHelperRoot
 {
 public:
     template< typename ParentType >
-    explicit            OoxWorksheetContextBase(
+    explicit            WorksheetContextBase(
                             ParentType& rParent,
-                            ISegmentProgressBarRef xProgressBar,
+                            const ISegmentProgressBarRef& rxProgressBar,
                             WorksheetType eSheetType,
                             sal_Int16 nSheet );
 
     template< typename ParentType >
-    explicit            OoxWorksheetContextBase( ParentType& rParent );
+    explicit            WorksheetContextBase( ParentType& rParent );
 };
 
 // ----------------------------------------------------------------------------
 
 template< typename ParentType >
-OoxWorksheetContextBase::OoxWorksheetContextBase( ParentType& rParent,
-        ISegmentProgressBarRef xProgressBar, WorksheetType eSheetType, sal_Int16 nSheet ) :
+WorksheetContextBase::WorksheetContextBase( ParentType& rParent,
+        const ISegmentProgressBarRef& rxProgressBar, WorksheetType eSheetType, sal_Int16 nSheet ) :
     ::oox::core::ContextHandler2( rParent ),
-    WorksheetHelperRoot( rParent, xProgressBar, eSheetType, nSheet )
+    WorksheetHelperRoot( rParent, rxProgressBar, eSheetType, nSheet )
 {
 }
 
 template< typename ParentType >
-OoxWorksheetContextBase::OoxWorksheetContextBase( ParentType& rParent ) :
+WorksheetContextBase::WorksheetContextBase( ParentType& rParent ) :
     ::oox::core::ContextHandler2( rParent ),
     WorksheetHelperRoot( rParent )
 {
@@ -100,10 +100,10 @@ OoxWorksheetContextBase::OoxWorksheetContextBase( ParentType& rParent ) :
 
     Used to import global workbook fragments.
  */
-class OoxWorkbookFragmentBase : public ::oox::core::FragmentHandler2, public WorkbookHelper
+class WorkbookFragmentBase : public ::oox::core::FragmentHandler2, public WorkbookHelper
 {
 public:
-    explicit            OoxWorkbookFragmentBase(
+    explicit            WorkbookFragmentBase(
                             const WorkbookHelper& rHelper,
                             const ::rtl::OUString& rFragmentPath );
 };
@@ -114,22 +114,68 @@ public:
 
     Used to import sheet fragments.
  */
-class OoxWorksheetFragmentBase : public ::oox::core::FragmentHandler2, public WorksheetHelperRoot
+class WorksheetFragmentBase : public ::oox::core::FragmentHandler2, public WorksheetHelperRoot
 {
 public:
-    explicit            OoxWorksheetFragmentBase(
+    explicit            WorksheetFragmentBase(
                             const WorkbookHelper& rHelper,
                             const ::rtl::OUString& rFragmentPath,
-                            ISegmentProgressBarRef xProgressBar,
+                            const ISegmentProgressBarRef& rxProgressBar,
                             WorksheetType eSheetType,
                             sal_Int16 nSheet );
 
-    explicit            OoxWorksheetFragmentBase(
+    explicit            WorksheetFragmentBase(
                             const WorksheetHelper& rHelper,
                             const ::rtl::OUString& rFragmentPath );
 };
 
 // ============================================================================
+// ============================================================================
+
+/** Base class for all BIFF context handlers.
+
+    Derived handlers have to implement the importRecord() function that has to
+    import the record the passed BIFF input stream currently points to.
+ */
+class BiffContextHandler
+{
+public:
+    virtual             ~BiffContextHandler();
+
+    /** Derived classes have to implement importing the current record. */
+    virtual void        importRecord( BiffInputStream& rStrm ) = 0;
+};
+
+// ----------------------------------------------------------------------------
+
+/** Context handler derived from the WorkbookHelper helper class.
+
+    Used to import contexts in global workbook fragments.
+ */
+class BiffWorkbookContextBase : public BiffContextHandler, public WorkbookHelper
+{
+protected:
+    explicit            BiffWorkbookContextBase( const WorkbookHelper& rHelper );
+};
+
+// ----------------------------------------------------------------------------
+
+/** Context handler derived from the WorksheetHelper helper class.
+
+    Used to import contexts in sheet fragments.
+ */
+class BiffWorksheetContextBase : public BiffContextHandler, public WorksheetHelperRoot
+{
+protected:
+    explicit            BiffWorksheetContextBase(
+                            const WorkbookHelper& rHelper,
+                            const ISegmentProgressBarRef& rxProgressBar,
+                            WorksheetType eSheetType,
+                            sal_Int16 nSheet );
+
+    explicit            BiffWorksheetContextBase( const WorksheetHelper& rHelper );
+};
+
 // ============================================================================
 
 /** An enumeration for all types of fragments in a BIFF workbook stream. */
@@ -145,151 +191,24 @@ enum BiffFragmentType
     BIFF_FRAGMENT_UNKNOWN       /// Unknown fragment/error.
 };
 
-// ============================================================================
+// ----------------------------------------------------------------------------
 
-/** Base class for all BIFF context handlers and fragment handlers.
-
-    This base class holds a reference to the BIFF input stream which can be
-    accessed in all derived classes.
- */
-class BiffHandlerBase
-{
-protected:
-    inline explicit     BiffHandlerBase( BiffInputStream& rStrm ) : mrStrm( rStrm ) {}
-    virtual             ~BiffHandlerBase();
-
-    /** Skips a block of records up to the specified end record.
-
-        Skips all records until next end record. When this function returns,
-        stream points to the end record, and the next call of startNextRecord()
-        at the stream will start the record following the end record.
-
-        The identifier of the record that is active while this function is
-        called is used as start record identifier. This identifier is used to
-        correctly skip embedded record blocks with the same start and end
-        record identifier.
-
-        @return  True = stream points to the end record.
-     */
-    bool                skipRecordBlock( sal_uInt16 nEndRecId );
-
-    /** @return  True = current record identifier is a BOF record. */
-    bool                isBofRecord() const;
-
-protected:
-    BiffInputStream&    mrStrm;
-};
-
-// ============================================================================
-
-/** Base class for all BIFF context handlers.
-
-    Derived handlers have to implement the importRecord() function that has to
-    import the record the BIFF input stream currently points to.
- */
-class BiffContextHandler : public BiffHandlerBase
+class BiffFragmentHandler
 {
 public:
-    /** Derived classes have to implement importing the current record. */
-    virtual void        importRecord() = 0;
-
-protected:
-    explicit            BiffContextHandler( const BiffHandlerBase& rParent );
-};
-
-// ============================================================================
-
-/** Context handler derived from the WorkbookHelper helper class.
-
-    Used to import contexts in global workbook fragments.
- */
-class BiffWorkbookContextBase : public BiffContextHandler, public WorkbookHelper
-{
-protected:
-    template< typename ParentType >
-    explicit            BiffWorkbookContextBase( const ParentType& rParent );
-};
-
-// ----------------------------------------------------------------------------
-
-template< typename ParentType >
-BiffWorkbookContextBase::BiffWorkbookContextBase( const ParentType& rParent ) :
-    BiffContextHandler( rParent ),
-    WorkbookHelper( rParent )
-{
-}
-
-// ============================================================================
-
-/** Context handler derived from the WorksheetHelper helper class.
-
-    Used to import contexts in sheet fragments.
- */
-class BiffWorksheetContextBase : public BiffContextHandler, public WorksheetHelperRoot
-{
-protected:
-    template< typename ParentType >
-    explicit            BiffWorksheetContextBase(
-                            const ParentType& rParent,
-                            ISegmentProgressBarRef xProgressBar,
-                            WorksheetType eSheetType,
-                            sal_Int16 nSheet );
-
-    template< typename ParentType >
-    explicit            BiffWorksheetContextBase( const ParentType& rParent );
-};
-
-// ----------------------------------------------------------------------------
-
-template< typename ParentType >
-BiffWorksheetContextBase::BiffWorksheetContextBase( const ParentType& rParent,
-        ISegmentProgressBarRef xProgressBar, WorksheetType eSheetType, sal_Int16 nSheet ) :
-    BiffContextHandler( rParent ),
-    WorksheetHelperRoot( rParent, xProgressBar, eSheetType, nSheet )
-{
-}
-
-template< typename ParentType >
-BiffWorksheetContextBase::BiffWorksheetContextBase( const ParentType& rParent ) :
-    BiffContextHandler( rParent ),
-    WorksheetHelperRoot( rParent )
-{
-}
-
-// ============================================================================
-
-namespace prv {
-
-struct BiffFragmentStreamOwner
-{
-    typedef ::boost::shared_ptr< BinaryXInputStream >   XInputStreamRef;
-    typedef ::boost::shared_ptr< BiffInputStream >      BiffInputStreamRef;
-
-    XInputStreamRef     mxXInStrm;
-    BiffInputStreamRef  mxBiffStrm;
-
-    explicit            BiffFragmentStreamOwner( const ::oox::core::FilterBase& rFilter, const ::rtl::OUString& rStrmName );
-    virtual             ~BiffFragmentStreamOwner();
-};
-
-} // namespace prv
-
-// ----------------------------------------------------------------------------
-
-class BiffFragmentHandler : private prv::BiffFragmentStreamOwner, public BiffHandlerBase
-{
-public:
-    /** Imports the fragment, returns true, if EOF record has been reached. */
-    virtual bool        importFragment() = 0;
-
-protected:
     /** Opens the stream with the passed full name. */
     explicit            BiffFragmentHandler(
                             const ::oox::core::FilterBase& rFilter,
                             const ::rtl::OUString& rStrmName );
 
-    /** Reuses the stream of the passed fragment. */
-    explicit            BiffFragmentHandler( const BiffFragmentHandler& rHandler );
+    virtual             ~BiffFragmentHandler();
+
+    /** Imports the fragment, returns true, if EOF record has been reached. */
+    virtual bool        importFragment() = 0;
+
+protected:
+    /** Returns the BIFF input stream of this fragment. */
+    inline BiffInputStream& getInputStream() { return *mxBiffStrm; }
 
     /** Starts a new fragment in a workbbok stream and returns the fragment type.
 
@@ -326,11 +245,14 @@ protected:
     bool                skipFragment();
 
 private:
-    /** Implementation helper for the startFragment() functions. */
-    BiffFragmentType    implStartFragment( BiffType eBiff );
+    typedef ::boost::shared_ptr< BinaryXInputStream >   XInputStreamRef;
+    typedef ::boost::shared_ptr< BiffInputStream >      BiffInputStreamRef;
+
+    XInputStreamRef     mxXInStrm;
+    BiffInputStreamRef  mxBiffStrm;
 };
 
-// ============================================================================
+// ----------------------------------------------------------------------------
 
 /** Fragment handler derived from the WorkbookHelper helper class.
 
@@ -345,7 +267,7 @@ protected:
                             bool bCloneDecoder = false );
 };
 
-// ============================================================================
+// ----------------------------------------------------------------------------
 
 /** Fragment handler derived from the WorksheetHelper helper class.
 
@@ -356,12 +278,12 @@ class BiffWorksheetFragmentBase : public BiffFragmentHandler, public WorksheetHe
 protected:
     explicit            BiffWorksheetFragmentBase(
                             const BiffWorkbookFragmentBase& rParent,
-                            ISegmentProgressBarRef xProgressBar,
+                            const ISegmentProgressBarRef& rxProgressBar,
                             WorksheetType eSheetType,
                             sal_Int16 nSheet );
 };
 
-// ============================================================================
+// ----------------------------------------------------------------------------
 
 /** Special fragment handler for worksheets that have to be skipped.
  */
@@ -370,7 +292,7 @@ class BiffSkipWorksheetFragment : public BiffWorksheetFragmentBase
 public:
     explicit            BiffSkipWorksheetFragment(
                             const BiffWorkbookFragmentBase& rParent,
-                            ISegmentProgressBarRef xProgressBar,
+                            const ISegmentProgressBarRef& rxProgressBar,
                             sal_Int16 nSheet );
 
     virtual bool        importFragment();
@@ -383,4 +305,3 @@ public:
 } // namespace oox
 
 #endif
-

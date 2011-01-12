@@ -26,6 +26,7 @@
  ************************************************************************/
 
 #include "oox/ole/vbamodule.hxx"
+
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/script/ModuleInfo.hpp>
 #include <com/sun/star/script/ModuleType.hpp>
@@ -36,17 +37,20 @@
 #include "oox/ole/vbahelper.hxx"
 #include "oox/ole/vbainputstream.hxx"
 
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
+namespace oox {
+namespace ole {
+
+// ============================================================================
 
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::frame;
+using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::script;
 using namespace ::com::sun::star::script::vba;
 using namespace ::com::sun::star::uno;
 
-namespace oox {
-namespace ole {
+using ::rtl::OUString;
+using ::rtl::OUStringBuffer;
 
 // ============================================================================
 
@@ -128,18 +132,56 @@ void VbaModule::importDirRecords( BinaryInputStream& rDirStrm )
     OSL_ENSURE( mnOffset < SAL_MAX_UINT32, "VbaModule::importDirRecords - missing module stream offset" );
 }
 
-void VbaModule::importSourceCode( StorageBase& rVbaStrg,
+void VbaModule::createAndImportModule( StorageBase& rVbaStrg, const Reference< XNameContainer >& rxBasicLib,
+        const Reference< XNameAccess >& rxDocObjectNA ) const
+{
+    OUString aVBASourceCode = readSourceCode( rVbaStrg );
+    createModule( aVBASourceCode, rxBasicLib, rxDocObjectNA );
+}
+
+void VbaModule::createEmptyModule( const Reference< XNameContainer >& rxBasicLib, const Reference< XNameAccess >& rxDocObjectNA ) const
+{
+    createModule( OUString(), rxBasicLib, rxDocObjectNA );
+}
+
+// private --------------------------------------------------------------------
+
+OUString VbaModule::readSourceCode( StorageBase& rVbaStrg ) const
+{
+    OUStringBuffer aSourceCode;
+    if( (maStreamName.getLength() > 0) && (mnOffset != SAL_MAX_UINT32) )
+    {
+        BinaryXInputStream aInStrm( rVbaStrg.openInputStream( maStreamName ), true );
+        OSL_ENSURE( !aInStrm.isEof(), "VbaModule::readSourceCode - cannot open module stream" );
+        // skip the 'performance cache' stored before the actual source code
+        aInStrm.seek( mnOffset );
+        // if stream is still valid, load the source code
+        if( !aInStrm.isEof() )
+        {
+            // decompression starts at current stream position of aInStrm
+            VbaInputStream aVbaStrm( aInStrm );
+            // load the source code line-by-line, with some more processing
+            TextInputStream aVbaTextStrm( aVbaStrm, meTextEnc );
+            while( !aVbaTextStrm.isEof() )
+            {
+                OUString aCodeLine = aVbaTextStrm.readLine();
+                if( !aCodeLine.matchAsciiL( RTL_CONSTASCII_STRINGPARAM( "Attribute " ) ) )
+                {
+                    // normal source code line
+                    if( !mbExecutable )
+                        aSourceCode.appendAscii( RTL_CONSTASCII_STRINGPARAM( "Rem " ) );
+                    aSourceCode.append( aCodeLine ).append( sal_Unicode( '\n' ) );
+                }
+            }
+        }
+    }
+    return aSourceCode.makeStringAndClear();
+}
+
+void VbaModule::createModule( const OUString& rVBASourceCode,
         const Reference< XNameContainer >& rxBasicLib, const Reference< XNameAccess >& rxDocObjectNA ) const
 {
-    if( (maName.getLength() == 0) || (maStreamName.getLength() == 0) || (mnOffset == SAL_MAX_UINT32) )
-        return;
-
-    BinaryXInputStream aInStrm( rVbaStrg.openInputStream( maStreamName ), true );
-    OSL_ENSURE( !aInStrm.isEof(), "VbaModule::importSourceCode - cannot open module stream" );
-    // skip the 'performance cache' stored before the actual source code
-    aInStrm.seek( mnOffset );
-    // if stream is still valid, load the source code
-    if( aInStrm.isEof() )
+    if( maName.getLength() == 0 )
         return;
 
     // prepare the Basic module
@@ -162,7 +204,7 @@ void VbaModule::importSourceCode( StorageBase& rVbaStrg,
         break;
         case ModuleType::DOCUMENT:
             aSourceCode.appendAscii( RTL_CONSTASCII_STRINGPARAM( "VBADocumentModule" ) );
-            // get the VBA object associated to the document module
+            // get the VBA implementation object associated to the document module
             if( rxDocObjectNA.is() ) try
             {
                 aModuleInfo.ModuleObject.set( rxDocObjectNA->getByName( maName ), UNO_QUERY );
@@ -188,21 +230,8 @@ void VbaModule::importSourceCode( StorageBase& rVbaStrg,
             append( maName.replace( ' ', '_' ) ).append( sal_Unicode( '\n' ) );
     }
 
-    // decompression starts at current stream position of aInStrm
-    VbaInputStream aVbaStrm( aInStrm );
-    // load the source code line-by-line, with some more processing
-    TextInputStream aVbaTextStrm( aVbaStrm, meTextEnc );
-    while( !aVbaTextStrm.isEof() )
-    {
-        OUString aCodeLine = aVbaTextStrm.readLine();
-        // skip all 'Attribute' statements
-        if( !aCodeLine.matchAsciiL( RTL_CONSTASCII_STRINGPARAM( "Attribute " ) ) )
-        {
-            if( !mbExecutable )
-                aSourceCode.appendAscii( RTL_CONSTASCII_STRINGPARAM( "Rem " ) );
-            aSourceCode.append( aCodeLine ).append( sal_Unicode( '\n' ) );
-        }
-    }
+    // append passed VBA source code
+    aSourceCode.append( rVBASourceCode );
 
     // close the subroutine named after the module
     if( !mbExecutable )
@@ -225,7 +254,7 @@ void VbaModule::importSourceCode( StorageBase& rVbaStrg,
     }
     catch( Exception& )
     {
-        OSL_ENSURE( false, "VbaModule::importSourceCode - cannot insert module into library" );
+        OSL_ENSURE( false, "VbaModule::createModule - cannot insert module into library" );
     }
 }
 

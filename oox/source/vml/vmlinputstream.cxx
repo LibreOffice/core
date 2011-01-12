@@ -26,19 +26,22 @@
  ************************************************************************/
 
 #include "oox/vml/vmlinputstream.hxx"
+
 #include <map>
 #include <rtl/strbuf.hxx>
 #include <rtl/strbuf.hxx>
 #include "oox/helper/helper.hxx"
 
-using ::rtl::OString;
-using ::rtl::OStringBuffer;
-using ::com::sun::star::uno::Exception;
-using ::com::sun::star::uno::Reference;
-using ::com::sun::star::io::XInputStream;
-
 namespace oox {
 namespace vml {
+
+// ============================================================================
+
+using namespace ::com::sun::star::io;
+using namespace ::com::sun::star::uno;
+
+using ::rtl::OString;
+using ::rtl::OStringBuffer;
 
 // ============================================================================
 
@@ -148,6 +151,48 @@ void lclProcessAttribs( OStringBuffer& rBuffer, const sal_Char* pcBeg, const sal
         lclAppendToBuffer( rBuffer, pcBeg, pcEnd );
 }
 
+void lclProcessContents( OStringBuffer& rBuffer, const sal_Char* pcBeg, const sal_Char* pcEnd )
+{
+    /*  MSO has a very weird way to store and handle whitespaces. The stream
+        may contain lots of spaces, tabs, and newlines which have to be handled
+        as single space character. This will be done in this function.
+
+        If the element text contains a literal line break, it will be stored as
+        <br> tag (without matching closing </br> element).
+
+        A single space character following another character is stored
+        literally and must not be stipped away here. Example: The element
+            <font>abc </font>
+        contains the three letters a, b, and c, followed by a space character.
+
+        Consecutive space characters, or a leading single space character, are
+        stored in a <span> element. If there are N space characters (N > 1),
+        then the <span> element contains exactly (N-1) NBSP characters
+        (non-breaking space), followed by a regular space character. Example:
+        The element
+            <font><span style='mso-spacerun:yes'>\xA0\xA0\xA0 </span></font>
+        represents 4 consecutive space characters. Has to be handled by the
+        implementation.
+
+        A single space character for its own is stored in an empty element.
+        Example: The element
+            <font></font>
+        represents a single space character. Has to be handled by the
+        implementation.
+     */
+
+    // skip leading whitespace
+    const sal_Char* pcContentsBeg = lclFindNonWhiteSpace( pcBeg, pcEnd );
+    while( pcContentsBeg < pcEnd )
+    {
+        const sal_Char* pcWhitespaceBeg = lclFindWhiteSpace( pcContentsBeg + 1, pcEnd );
+        lclAppendToBuffer( rBuffer, pcContentsBeg, pcWhitespaceBeg );
+        if( pcWhitespaceBeg < pcEnd )
+            rBuffer.append( ' ' );
+        pcContentsBeg = lclFindNonWhiteSpace( pcWhitespaceBeg, pcEnd );
+    }
+}
+
 } // namespace
 
 // ============================================================================
@@ -176,8 +221,9 @@ StreamDataContainer::StreamDataContainer( const Reference< XInputStream >& rxInS
         {
             // look for the next opening angle bracket
             const sal_Char* pcOpen = lclFindCharacter( pcCurr, pcEnd, '<' );
+
             // copy all characters from current position to opening bracket
-            lclAppendToBuffer( aBuffer, pcCurr, pcOpen );
+            lclProcessContents( aBuffer, pcCurr, pcOpen );
 
             // nothing to do if no opening bracket has been found
             if( pcOpen < pcEnd )
@@ -214,10 +260,10 @@ StreamDataContainer::StreamDataContainer( const Reference< XInputStream >& rxInS
                             // do nothing
                         }
 
-                        // replace '<br>' elements with '<br/>' elements
+                        // replace '<br>' element with newline
                         else if( (nElementLen >= 4) && (pcOpen[ 1 ] == 'b') && (pcOpen[ 2 ] == 'r') && (lclFindNonWhiteSpace( pcOpen + 3, pcClose ) == pcClose) )
                         {
-                            aBuffer.append( RTL_CONSTASCII_STRINGPARAM( "<br/>" ) );
+                            aBuffer.append( '\n' );
                         }
 
                         // check start elements and empty elements for repeated attributes
@@ -277,4 +323,3 @@ InputStream::~InputStream()
 
 } // namespace vml
 } // namespave oox
-

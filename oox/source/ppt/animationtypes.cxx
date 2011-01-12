@@ -32,8 +32,6 @@
 
 #include "oox/helper/attributelist.hxx"
 
-#include "tokens.hxx"
-
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::animations;
 using namespace ::com::sun::star::xml::sax;

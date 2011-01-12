@@ -30,9 +30,8 @@
 #include "oox/drawingml/table/tablestylecellstylecontext.hxx"
 #include "oox/drawingml/fillpropertiesgroupcontext.hxx"
 #include "oox/drawingml/linepropertiescontext.hxx"
-#include "oox/core/namespaces.hxx"
 #include "oox/helper/attributelist.hxx"
-#include "tokens.hxx"
+
 using namespace ::oox::core;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -61,20 +60,20 @@ TableStyleCellStyleContext::createFastChildContext( ::sal_Int32 aElementToken, c
     AttributeList aAttribs( xAttribs );
     switch( aElementToken )
     {
-        case NMSP_DRAWINGML|XML_tcBdr:      // CT_TableCellBorderStyle
+        case A_TOKEN( tcBdr ):      // CT_TableCellBorderStyle
             break;
-        case NMSP_DRAWINGML|XML_left:       // CT_ThemeableLineStyle
-        case NMSP_DRAWINGML|XML_right:
-        case NMSP_DRAWINGML|XML_top:
-        case NMSP_DRAWINGML|XML_bottom:
-        case NMSP_DRAWINGML|XML_insideH:
-        case NMSP_DRAWINGML|XML_insideV:
-        case NMSP_DRAWINGML|XML_tl2br:
-        case NMSP_DRAWINGML|XML_tr2bl:
-            mnLineType = getToken( aElementToken );
+        case A_TOKEN( left ):       // CT_ThemeableLineStyle
+        case A_TOKEN( right ):
+        case A_TOKEN( top ):
+        case A_TOKEN( bottom ):
+        case A_TOKEN( insideH ):
+        case A_TOKEN( insideV ):
+        case A_TOKEN( tl2br ):
+        case A_TOKEN( tr2bl ):
+            mnLineType = getBaseToken( aElementToken );
             break;
 
-        case NMSP_DRAWINGML|XML_ln:
+        case A_TOKEN( ln ):
             {
                 if ( mnLineType != XML_none )
                 {
@@ -85,7 +84,7 @@ TableStyleCellStyleContext::createFastChildContext( ::sal_Int32 aElementToken, c
                 }
             }
             break;
-        case NMSP_DRAWINGML|XML_lnRef:
+        case A_TOKEN( lnRef ):
             {
                 if ( mnLineType != XML_none )
                 {
@@ -97,14 +96,14 @@ TableStyleCellStyleContext::createFastChildContext( ::sal_Int32 aElementToken, c
             break;
 
         // EG_ThemeableFillStyle (choice)
-        case NMSP_DRAWINGML|XML_fill:       // CT_FillProperties
+        case A_TOKEN( fill ):       // CT_FillProperties
             {
                 FillPropertiesPtr& rxFillProperties = mrTableStylePart.getFillProperties();
                 rxFillProperties.reset( new FillProperties );
                 xRet.set( new FillPropertiesContext( *this, *rxFillProperties ) );
             }
             break;
-        case NMSP_DRAWINGML|XML_fillRef:    // CT_StyleMatrixReference
+        case A_TOKEN( fillRef ):    // CT_StyleMatrixReference
             {
                 ShapeStyleRef& rStyleRef = mrTableStylePart.getStyleRefs()[ XML_fillRef ];
                 rStyleRef.mnThemedIdx = aAttribs.getInteger( XML_idx, 0 );
@@ -112,7 +111,7 @@ TableStyleCellStyleContext::createFastChildContext( ::sal_Int32 aElementToken, c
             }
             break;
 
-        case NMSP_DRAWINGML|XML_cell3D:     // CT_Cell3D
+        case A_TOKEN( cell3D ):     // CT_Cell3D
             break;
     }
     if( !xRet.is() )

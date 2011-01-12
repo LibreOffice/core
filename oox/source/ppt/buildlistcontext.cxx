@@ -28,7 +28,6 @@
 #include "buildlistcontext.hxx"
 #include <rtl/ustring.hxx>
 #include "oox/helper/attributelist.hxx"
-#include "oox/core/namespaces.hxx"
 
 
 using namespace ::oox::core;
@@ -56,7 +55,7 @@ namespace oox { namespace ppt {
     {
         switch( aElement )
         {
-        case NMSP_PPT|XML_bldGraphic:
+        case PPT_TOKEN( bldGraphic ):
             mbInBldGraphic = false;
             break;
         default:
@@ -72,18 +71,18 @@ namespace oox { namespace ppt {
 
         switch( aElementToken )
         {
-        case NMSP_PPT|XML_bldAsOne:
+        case PPT_TOKEN( bldAsOne ):
             if( mbInBldGraphic )
             {
                 mbBuildAsOne = true;
             }
             break;
-        case NMSP_PPT|XML_bldSub:
+        case PPT_TOKEN( bldSub ):
             if( mbInBldGraphic )
             {
             }
             break;
-        case NMSP_PPT|XML_bldGraphic:
+        case PPT_TOKEN( bldGraphic ):
         {
             mbInBldGraphic = true;
             AttributeList attribs( xAttribs );
@@ -94,9 +93,9 @@ namespace oox { namespace ppt {
 //      sal_uInt32 nGroupId =  attribs.getUnsignedInteger( XML_grpId, 0 );
             break;
         }
-        case NMSP_DRAWINGML|XML_bldDgm:
-        case NMSP_DRAWINGML|XML_bldOleChart:
-        case NMSP_DRAWINGML|XML_bldP:
+        case A_TOKEN( bldDgm ):
+        case A_TOKEN( bldOleChart ):
+        case A_TOKEN( bldP ):
 
             break;
         default:
