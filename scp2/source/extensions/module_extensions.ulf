@@ -142,10 +142,10 @@ en-US = "LanguageTool Open Source language checker"
 en-US = "LanguageTool Open Source language checker"
 
 [STR_NAME_MODULE_OPTIONAL_EXTENSIONS_MYSQLC]
-en-US = "MySQL Connector for OpenOffice.org"
+en-US = "MySQL Connector"
 
 [STR_DESC_MODULE_OPTIONAL_EXTENSIONS_MYSQLC]
-en-US = "MySQL Connector for OpenOffice.org"
+en-US = "MySQL Connector"
 
 [STR_NAME_MODULE_OPTIONAL_EXTENSIONS_OOOBLOGGER]
 en-US = "Metaweblog Support"
