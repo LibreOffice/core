@@ -111,9 +111,9 @@ interface XMutableGridDataModel : XGridDataModel
             contains the index of the row whose data is to be updated
         @param Values
             specifies the new values of the cells.
-        @raises ::com::sun::star::lang::IndexOutOfBoundsException
+        @throws ::com::sun::star::lang::IndexOutOfBoundsException
             if one of the row indexes or the column index is invalid
-        @raises ::com::sun::star::lang::IndexOutOfBoundsException
+        @throws ::com::sun::star::lang::IndexOutOfBoundsException
             if the lengths of the <code>ColumnIndexes</code> and <code>Values</code> sequences are not equal.
     */
     void updateRow( [in] sequence< long > ColumnIndexes, [in] long RowIndex, [in] sequence< any > Values )
@@ -122,7 +122,7 @@ interface XMutableGridDataModel : XGridDataModel
 
     /** sets a new title for a given row.
 
-        @raises ::com::sun::star::lang::IndexOutOfBoundsException
+        @throws ::com::sun::star::lang::IndexOutOfBoundsException
             if the given index does not denote a valid row.
     */
     void

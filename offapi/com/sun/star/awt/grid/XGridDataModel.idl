@@ -66,7 +66,7 @@ interface XGridDataModel
 
     /** retrieves the data for a given cell
 
-        @raises ::com::sun::star::lang::IndexOutOfBoundsException
+        @throws ::com::sun::star::lang::IndexOutOfBoundsException
             if the column or row index do not denote a valid cell position.
     */
     any getCellData( [in] long Column, [in] long Row )
@@ -76,7 +76,7 @@ interface XGridDataModel
 
         <p>A grid control will usually paint a row's title in the header column of the respective row.</p>
 
-        @raises ::com::sun::star::lang::IndexOutOfBoundsException
+        @throws ::com::sun::star::lang::IndexOutOfBoundsException
             if the given index does not denote a valid row.
     */
     string
