@@ -44,7 +44,7 @@ LayoutXMLFile::SearchL10NElements( XMLParentNode* pCur, int )
 
     /* Recurse int children, SearchL10NElements does not do that for us.  */
     if ( XMLChildNodeList* lst = pCur->GetChildList() )
-        for ( sal_uIntPtr i = 0; i < lst->Count(); i++ )
+        for ( sal_uLong i = 0; i < lst->Count(); i++ )
             if ( lst->GetObject( i )->GetNodeType() == XML_NODE_TYPE_ELEMENT )
                 HandleElement( ( XMLElement* )lst->GetObject( i ) );
             else if ( lst->GetObject( i )->GetNodeType() == XML_NODE_TYPE_COMMENT )
@@ -56,7 +56,7 @@ interestingAttributes( XMLAttributeList* lst )
 {
     std::vector<XMLAttribute*> interesting;
     if ( lst )
-        for ( sal_uIntPtr i = 0; i < lst->Count(); i++ )
+        for ( sal_uLong i = 0; i < lst->Count(); i++ )
             if ( lst->GetObject( i )->Equals( STRING( "id" ) ) )
                 interesting.insert( interesting.begin(), lst->GetObject( i ) );
             else if ( ! BSTRING( *lst->GetObject( i ) ).CompareTo( "_", 1 ) )

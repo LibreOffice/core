@@ -76,13 +76,13 @@ public:
     CfgStack() : CfgStackList( 10, 10 ) {}
     ~CfgStack();
 
-    sal_uIntPtr Push( CfgStackData *pStackData );
+    sal_uLong Push( CfgStackData *pStackData );
     CfgStackData *Push( const ByteString &rTag, const ByteString &rId );
     CfgStackData *Pop() { return Remove( Count() - 1 ); }
 
-    CfgStackData *GetStackData( sal_uIntPtr nPos = LIST_APPEND );
+    CfgStackData *GetStackData( sal_uLong nPos = LIST_APPEND );
 
-    ByteString GetAccessPath( sal_uIntPtr nPos = LIST_APPEND );
+    ByteString GetAccessPath( sal_uLong nPos = LIST_APPEND );
 };
 
 //

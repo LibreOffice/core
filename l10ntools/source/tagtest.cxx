@@ -1421,7 +1421,7 @@ sal_Bool LingTest::IsTagMandatory( TokenInfo const &aToken, TokenId &aMetaTokens
 
 void LingTest::CheckTags( TokenList &aReference, TokenList &aTestee, sal_Bool bFixTags )
 {
-    sal_uIntPtr i=0,j=0;
+    sal_uLong i=0,j=0;
     // Clean old Warnings
     while ( aCompareWarningList.Count() )
     {

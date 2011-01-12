@@ -242,10 +242,10 @@ const ByteString SourceTreeLocalizer::GetProjectRootRel()
 
     sCur.SearchAndReplaceAll( sDelimiter, "/" );
     sCur.EraseLeadingChars( '/' );
-    sal_uIntPtr nCount = sCur.GetTokenCount( '/' );
+    sal_uLong nCount = sCur.GetTokenCount( '/' );
 
     ByteString sProjectRootRel;
-    for ( sal_uIntPtr i = 0; i < nCount; i++ ) {
+    for ( sal_uLong i = 0; i < nCount; i++ ) {
         if ( sProjectRootRel.Len())
             sProjectRootRel += sDelimiter;
         sProjectRootRel += "..";
@@ -361,7 +361,7 @@ ByteString SourceTreeLocalizer::getSourceLanguages( ByteString sLanguageRestrict
 sal_Bool SourceTreeLocalizer::CheckNegativeList( const ByteString &rFileName )
 /*****************************************************************************/
 {
-    sal_uIntPtr nIndex = 0;
+    sal_uLong nIndex = 0;
     sal_Bool bReturn  = sal_True;
 
     ByteString sDelimiter(
@@ -390,7 +390,7 @@ sal_Bool SourceTreeLocalizer::CheckNegativeList( const ByteString &rFileName )
 sal_Bool SourceTreeLocalizer::CheckPositiveList( const ByteString &rFileName )
 /*****************************************************************************/
 {
-    sal_uIntPtr nIndex = 0;
+    sal_uLong nIndex = 0;
     sal_Bool bReturn  = sal_False;
 
     ByteString sDelimiter(
@@ -452,7 +452,7 @@ void SourceTreeLocalizer::WorkOnDirectory( const ByteString &rDirectory )
 /*****************************************************************************/
 {
     //printf("Working on Directory %s\n",rDirectory.GetBuffer());
-    sal_uIntPtr nIndex = 0;
+    sal_uLong nIndex = 0;
     ByteString sExtension( ExeTable[ nIndex ][ 0 ] );
     ByteString sExecutable( ExeTable[ nIndex ][ 1 ] );
     ByteString sParameter( ExeTable[ nIndex ][ 2 ] );
@@ -536,7 +536,7 @@ sal_Bool SourceTreeLocalizer::MergeSingleFile(
 
     ByteString sBCur( aEntry.GetFull(), RTL_TEXTENCODING_ASCII_US );
 
-    sal_uIntPtr nIndex = 0;
+    sal_uLong nIndex = 0;
     ByteString sExtension( aEntry.GetExtension(), RTL_TEXTENCODING_ASCII_US );
     ByteString sCandidate( ExeTable[ nIndex ][ 0 ] );
 

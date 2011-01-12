@@ -76,7 +76,7 @@ LngParser::LngParser( const ByteString &rLngFile, sal_Bool bUTF8, sal_Bool bULFF
 LngParser::~LngParser()
 /*****************************************************************************/
 {
-    for ( sal_uIntPtr i = 0; i < pLines->Count(); i++ )
+    for ( sal_uLong i = 0; i < pLines->Count(); i++ )
         delete pLines->GetObject( i );
     delete pLines;
 }
@@ -124,7 +124,7 @@ sal_Bool LngParser::CreateSDF(
         sFullEntry.Copy( sPrjEntry.Len() + 1 ), gsl_getSystemTextEncoding());
     sActFileName.SearchAndReplaceAll( "/", "\\" );
 
-    sal_uIntPtr nPos  = 0;
+    sal_uLong nPos  = 0;
     sal_Bool bStart = true;
     ByteString sGroup;
       ByteStringHashMap Text;
@@ -225,7 +225,7 @@ sal_Bool LngParser::Merge(
         Export::SetLanguages( aMergeDataFile.GetLanguages() );
     aLanguages = Export::GetLanguages();
 
-    sal_uIntPtr nPos = 0;
+    sal_uLong nPos = 0;
     sal_Bool bGroup = sal_False;
     ByteString sGroup;
 
@@ -248,7 +248,7 @@ sal_Bool LngParser::Merge(
     while ( nPos < pLines->Count()) {
         ByteStringHashMap Text;
         ByteString sID( sGroup );
-        sal_uIntPtr nLastLangPos = 0;
+        sal_uLong nLastLangPos = 0;
 
         ResData  *pResData = new ResData( "", sID , sSource );
         pResData->sResTyp = "LngText";
@@ -348,7 +348,7 @@ sal_Bool LngParser::Merge(
         delete pResData;
     }
 
-    for ( sal_uIntPtr i = 0; i < pLines->Count(); i++ )
+    for ( sal_uLong i = 0; i < pLines->Count(); i++ )
         aDestination.WriteLine( *pLines->GetObject( i ));
 
     aDestination.Close();

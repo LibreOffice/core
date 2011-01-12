@@ -238,8 +238,8 @@ extern FILE *GetNextFile()
         ByteString sOrigFile( sFileName );
 
         sFileName = Export::GetNativeFile( sFileName );
-        delete aInputFileList.GetObject(( sal_uIntPtr ) 0 );
-        aInputFileList.Remove(( sal_uIntPtr ) 0 );
+        delete aInputFileList.GetObject(( sal_uLong ) 0 );
+        aInputFileList.Remove(( sal_uLong ) 0 );
 
         if ( sFileName == "" ) {
             fprintf( stderr, "ERROR: Could not precompile File %s\n",
@@ -504,8 +504,8 @@ void Export::Init()
     nListLang = ByteString( String::CreateFromAscii(""),RTL_TEXTENCODING_ASCII_US );
     nListIndex = 0;
     while ( aResStack.Count()) {
-        delete aResStack.GetObject(( sal_uIntPtr ) 0 );
-        aResStack.Remove(( sal_uIntPtr ) 0 );
+        delete aResStack.GetObject(( sal_uLong ) 0 );
+        aResStack.Remove(( sal_uLong ) 0 );
     }
 }
 
@@ -519,8 +519,8 @@ Export::~Export()
     if ( bEnableExport )
         aOutput.Close();
     while ( aResStack.Count()) {
-        delete aResStack.GetObject(( sal_uIntPtr ) 0 );
-        aResStack.Remove(( sal_uIntPtr ) 0 );
+        delete aResStack.GetObject(( sal_uLong ) 0 );
+        aResStack.Remove(( sal_uLong ) 0 );
     }
 
     if ( bMergeMode && !bUnmerge ) {
@@ -1492,7 +1492,7 @@ sal_Bool Export::WriteExportList( ResData *pResData, ExportList *pExportList,
 
     ByteString sTimeStamp( Export::GetTimeStamp());
     ByteString sCur;
-    for ( sal_uIntPtr i = 0; pExportList != NULL && i < pExportList->Count(); i++ ) {
+    for ( sal_uLong i = 0; pExportList != NULL && i < pExportList->Count(); i++ ) {
         ExportListEntry *pEntry = pExportList->GetObject( i );
                 // mandatory for export: german and eng. and/or enus
         //ByteString a("Export::WriteExportList::pEntry");
@@ -2322,8 +2322,8 @@ void Export::MergeRest( ResData *pResData, sal_uInt16 nMode )
                             pResData->sId = ByteString("1");
 
                         PFormEntrys *pEntrys;
-                        sal_uIntPtr nLIndex = 0;
-                        sal_uIntPtr nMaxIndex = 0;
+                        sal_uLong nLIndex = 0;
+                        sal_uLong nMaxIndex = 0;
                         if ( pList )
                             nMaxIndex = pList->GetSourceLanguageListEntryCount();
                         pEntrys = pMergeDataFile->GetPFormEntrys( pResData );
@@ -2480,7 +2480,7 @@ void Export::MergeRest( ResData *pResData, sal_uInt16 nMode )
             }
 
             nListIndex++;
-            sal_uIntPtr nMaxIndex = 0;
+            sal_uLong nMaxIndex = 0;
             if ( pList )
                 nMaxIndex = pList->GetSourceLanguageListEntryCount();
             ByteString sLine;
@@ -2535,7 +2535,7 @@ void Export::SetChildWithText()
 /*****************************************************************************/
 {
     if ( aResStack.Count() > 1 ) {
-        for ( sal_uIntPtr i = 0; i < aResStack.Count() - 1; i++ ) {
+        for ( sal_uLong i = 0; i < aResStack.Count() - 1; i++ ) {
             aResStack.GetObject( i )->bChildWithText = sal_True;
         }
     }

@@ -103,7 +103,7 @@ void SourceTreeIterator::ExecuteDirectory( transex::Directory& aDirectory )
         aDirectory.readDirectory();
         OnExecuteDirectory( aDirectory.getFullName() );
         if ( aDirectory.getSubDirectories().size() )
-            for ( sal_uIntPtr i=0;i < aDirectory.getSubDirectories().size();i++ )
+            for ( sal_uLong i=0;i < aDirectory.getSubDirectories().size();i++ )
                 ExecuteDirectory( aDirectory.getSubDirectories()[ i ] );
     }
 }

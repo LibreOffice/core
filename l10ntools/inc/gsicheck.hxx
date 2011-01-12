@@ -41,7 +41,7 @@ private:
 
     ParserMessageList aMessages;
     LineFormat aFormat;
-    sal_uIntPtr nLineNumber;
+    sal_uLong nLineNumber;
 
     ByteString aUniqId;
     ByteString aLineType;
@@ -56,9 +56,9 @@ private:
     void              ReassembleLine();
 
 public:
-    GSILine( const ByteString &rLine, sal_uIntPtr nLine );
+    GSILine( const ByteString &rLine, sal_uLong nLine );
     LineFormat  GetLineFormat() const    { return aFormat; }
-    sal_uIntPtr       GetLineNumber() const    { return nLineNumber; }
+    sal_uLong       GetLineNumber() const    { return nLineNumber; }
 
     ByteString  const GetUniqId()     const    { return aUniqId; }
     ByteString  const GetLineType()   const    { return aLineType; }
@@ -113,11 +113,11 @@ private:
 public:
     GSIBlock( sal_Bool PbPrintContext, sal_Bool bSource, sal_Bool bTrans, sal_Bool bRef, sal_Bool bAllowKID, sal_Bool bAllowSusp );
     ~GSIBlock();
-    void PrintMessage( ByteString aType, ByteString aMsg, ByteString aPrefix, ByteString aContext, sal_uIntPtr nLine, ByteString aUniqueId = ByteString() );
-    void PrintError( ByteString aMsg, ByteString aPrefix, ByteString aContext, sal_uIntPtr nLine, ByteString aUniqueId = ByteString() );
+    void PrintMessage( ByteString aType, ByteString aMsg, ByteString aPrefix, ByteString aContext, sal_uLong nLine, ByteString aUniqueId = ByteString() );
+    void PrintError( ByteString aMsg, ByteString aPrefix, ByteString aContext, sal_uLong nLine, ByteString aUniqueId = ByteString() );
     void InsertLine( GSILine* pLine, const ByteString aSourceLang);
     void SetReferenceLine( GSILine* pLine );
-    sal_Bool CheckSyntax( sal_uIntPtr nLine, sal_Bool bRequireSourceLine, sal_Bool bFixTags );
+    sal_Bool CheckSyntax( sal_uLong nLine, sal_Bool bRequireSourceLine, sal_Bool bFixTags );
 
     void WriteError( LazySvFileStream &aErrOut, sal_Bool bRequireSourceLine );
     void WriteCorrect( LazySvFileStream &aOkOut, sal_Bool bRequireSourceLine );

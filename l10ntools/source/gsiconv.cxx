@@ -44,7 +44,7 @@ sal_uInt16 GetGSIFileType( SvStream &rStream )
 {
     sal_uInt16 nFileType = GSI_FILE_UNKNOWN;
 
-    sal_uIntPtr nPos( rStream.Tell());
+    sal_uLong nPos( rStream.Tell());
     rStream.Seek( STREAM_SEEK_TO_BEGIN );
 
     ByteString sLine;
@@ -233,7 +233,7 @@ int _cdecl main( int argc, char *argv[] )
 
             sal_uInt16 nFileType( GetGSIFileType( aGSI ));
 
-            sal_uIntPtr nMaxLines = (sal_uIntPtr) ByteString( argv[ 2 ] ).ToInt64();
+            sal_uLong nMaxLines = (sal_uLong) ByteString( argv[ 2 ] ).ToInt64();
             if ( !nMaxLines ) {
                 fprintf( stderr, "\nERROR: Linecount must be at least 1!\n\n" );
                 exit ( 3 );
@@ -241,8 +241,8 @@ int _cdecl main( int argc, char *argv[] )
 
             ByteString sGSILine;
             ByteString sOldId;
-            sal_uIntPtr nLine = 0;
-            sal_uIntPtr nOutputFile = 1;
+            sal_uLong nLine = 0;
+            sal_uLong nOutputFile = 1;
 
             String sOutput( sBase );
             sOutput += String( "_", RTL_TEXTENCODING_ASCII_US );

@@ -309,19 +309,19 @@ CfgStackData* CfgStack::Push( const ByteString &rTag, const ByteString &rId )
 CfgStack::~CfgStack()
 /*****************************************************************************/
 {
-    for ( sal_uIntPtr i = 0; i < Count(); i++ )
+    for ( sal_uLong i = 0; i < Count(); i++ )
         delete GetObject( i );
 }
 
 /*****************************************************************************/
-ByteString CfgStack::GetAccessPath( sal_uIntPtr nPos )
+ByteString CfgStack::GetAccessPath( sal_uLong nPos )
 /*****************************************************************************/
 {
     if ( nPos == LIST_APPEND )
         nPos = Count() - 1;
 
     ByteString sReturn;
-    for ( sal_uIntPtr i = 0; i <= nPos; i++ ) {
+    for ( sal_uLong i = 0; i <= nPos; i++ ) {
         if ( i )
             sReturn += ".";
         sReturn += GetStackData( i )->GetIdentifier();
@@ -331,7 +331,7 @@ ByteString CfgStack::GetAccessPath( sal_uIntPtr nPos )
 }
 
 /*****************************************************************************/
-CfgStackData *CfgStack::GetStackData( sal_uIntPtr nPos )
+CfgStackData *CfgStack::GetStackData( sal_uLong nPos )
 /*****************************************************************************/
 {
     if ( nPos == LIST_APPEND )
@@ -805,7 +805,7 @@ void CfgMerge::Output( const ByteString& rOutput )
         pOutputStream->Write( rOutput.GetBuffer(), rOutput.Len());
 }
 
-sal_uIntPtr CfgStack::Push( CfgStackData *pStackData )
+sal_uLong CfgStack::Push( CfgStackData *pStackData )
 {
     Insert( pStackData, LIST_APPEND );
     return Count() - 1;

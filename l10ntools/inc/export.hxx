@@ -114,11 +114,11 @@ DECLARE_LIST( ExportListBase, ExportListEntry * )
 class ExportList : public ExportListBase
 {
 private:
-    sal_uIntPtr nSourceLanguageListEntryCount;
+    sal_uLong nSourceLanguageListEntryCount;
 
 public:
     ExportList() : ExportListBase() { nSourceLanguageListEntryCount = 0; }
-    sal_uIntPtr GetSourceLanguageListEntryCount() { return nSourceLanguageListEntryCount; }
+    sal_uLong GetSourceLanguageListEntryCount() { return nSourceLanguageListEntryCount; }
     void NewSourceLanguageListEntry() { nSourceLanguageListEntryCount++; }
 };
 
@@ -302,11 +302,11 @@ private:
 
     sal_Bool bDefine;                       // cur. res. in a define?
     sal_Bool bNextMustBeDefineEOL;          // define but no \ at lineend
-    sal_uIntPtr nLevel;                     // res. recursiv? how deep?
+    sal_uLong nLevel;                       // res. recursiv? how deep?
     sal_uInt16 nList;                       // cur. res. is String- or FilterList
     ByteString nListLang;
-    sal_uIntPtr nListIndex;
-    sal_uIntPtr nListLevel;
+    sal_uLong nListIndex;
+    sal_uLong nListLevel;
     bool bSkipFile;
     ByteString sProject;
     ByteString sRoot;

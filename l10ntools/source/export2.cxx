@@ -52,7 +52,7 @@ ResData::~ResData()
 {
     if ( pStringList ) {
         // delete existing res. of type StringList
-        for ( sal_uIntPtr i = 0; i < pStringList->Count(); i++ ) {
+        for ( sal_uLong i = 0; i < pStringList->Count(); i++ ) {
             ExportListEntry* test = pStringList->GetObject( i );
             if( test != NULL ) delete test;
         }
@@ -60,7 +60,7 @@ ResData::~ResData()
     }
     if ( pFilterList ) {
         // delete existing res. of type FilterList
-        for ( sal_uIntPtr i = 0; i < pFilterList->Count(); i++ ) {
+        for ( sal_uLong i = 0; i < pFilterList->Count(); i++ ) {
             ExportListEntry* test = pFilterList->GetObject( i );
             delete test;
         }
@@ -68,7 +68,7 @@ ResData::~ResData()
     }
     if ( pItemList ) {
         // delete existing res. of type ItemList
-        for ( sal_uIntPtr i = 0; i < pItemList->Count(); i++ ) {
+        for ( sal_uLong i = 0; i < pItemList->Count(); i++ ) {
             ExportListEntry* test = pItemList->GetObject( i );
             delete test;
         }
@@ -76,7 +76,7 @@ ResData::~ResData()
     }
     if ( pUIEntries ) {
         // delete existing res. of type UIEntries
-        for ( sal_uIntPtr i = 0; i < pUIEntries->Count(); i++ ) {
+        for ( sal_uLong i = 0; i < pUIEntries->Count(); i++ ) {
             ExportListEntry* test = pUIEntries->GetObject( i );
             delete test;
         }
@@ -558,7 +558,7 @@ void Export::FillInListFallbacks(
 /*****************************************************************************/
 {
 
-    for ( sal_uIntPtr i = 0; i < pList->Count(); i++ ) {
+    for ( sal_uLong i = 0; i < pList->Count(); i++ ) {
         ExportListEntry *pEntry = pList->GetObject( i );
         if ( !( *pEntry )[ nSource ].Len()){
              ( *pEntry )[ nSource ] = ( *pEntry )[ nFallback ];

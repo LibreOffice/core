@@ -163,7 +163,7 @@ void TranslateLayout::ParseCommandLine()
 static XMLAttribute*
 findAttribute( XMLAttributeList* lst, String const& name )
 {
-    for ( sal_uIntPtr i = 0; i < lst->Count(); i++ )
+    for ( sal_uLong i = 0; i < lst->Count(); i++ )
         if ( lst->GetObject( i )->Equals( name ) )
             return lst->GetObject( i );
     return 0;
@@ -243,7 +243,7 @@ static void insertMarker( XMLParentNode *p, ByteString const& file )
     if ( XMLChildNodeList* lst = p->GetChildList() )
         if ( lst->Count() )
         {
-            sal_uIntPtr i = 1;
+            sal_uLong i = 1;
             // Skip newline, if possible.
             if ( lst->Count() > 1
                  && lst->GetObject( 2 )->GetNodeType() == XML_NODE_TYPE_DEFAULT )

@@ -235,13 +235,13 @@ public:
 
     void        Clear()
         {
-            for ( sal_uIntPtr i = 0 ; i < Count() ; i++ )
+            for ( sal_uLong i = 0 ; i < Count() ; i++ )
                 delete TokenListImpl::GetObject( i );
             TokenListImpl::Clear();
         }
-    void        Insert( TokenInfo p, sal_uIntPtr nIndex = LIST_APPEND )
+    void        Insert( TokenInfo p, sal_uLong nIndex = LIST_APPEND )
         { TokenListImpl::Insert( new TokenInfo(p), nIndex ); }
-/*    TokenInfo     Remove( sal_uIntPtr nIndex )
+/*    TokenInfo     Remove( sal_uLong nIndex )
         {
             TokenInfo aT = GetObject( nIndex );
             delete TokenListImpl::GetObject( nIndex );
@@ -250,16 +250,16 @@ public:
         }*/
 //    TokenInfo     Remove( TokenInfo p ){ return Remove( GetPos( p ) ); }
 //    TokenInfo     GetCurObject() const { return *TokenListImpl::GetCurObject(); }
-    TokenInfo&      GetObject( sal_uIntPtr nIndex ) const
+    TokenInfo&      GetObject( sal_uLong nIndex ) const
         {
 //          if ( TokenListImpl::GetObject(nIndex) )
                 return *TokenListImpl::GetObject(nIndex);
 //          else
 //              return TokenInfo();
         }
-/*    sal_uIntPtr       GetPos( const TokenInfo p ) const
+/*    sal_uLong     GetPos( const TokenInfo p ) const
         {
-            for ( sal_uIntPtr i = 0 ; i < Count() ; i++ )
+            for ( sal_uLong i = 0 ; i < Count() ; i++ )
                 if ( p == GetObject( i ) )
                     return i;
             return LIST_ENTRY_NOTFOUND;
@@ -267,7 +267,7 @@ public:
 
     TokenList( const TokenList& rList );
 /*      {
-            for ( sal_uIntPtr i = 0 ; i < rList.Count() ; i++ )
+            for ( sal_uLong i = 0 ; i < rList.Count() ; i++ )
             {
                 Insert( rList.GetObject( i ), LIST_APPEND );
             }

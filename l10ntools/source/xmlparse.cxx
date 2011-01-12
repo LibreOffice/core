@@ -96,7 +96,7 @@ XMLParentNode::XMLParentNode( const XMLParentNode& obj)
     if( obj.pChildList ){
         pChildList=new XMLChildNodeList();
         XMLChildNode* pNode = NULL;
-        for ( sal_uIntPtr i = 0; i < obj.pChildList->Count(); i++ ){
+        for ( sal_uLong i = 0; i < obj.pChildList->Count(); i++ ){
             pNode = obj.pChildList->GetObject( i );
             if( pNode != NULL){
                 switch(pNode->GetNodeType()){
@@ -126,7 +126,7 @@ XMLParentNode& XMLParentNode::operator=(const XMLParentNode& obj){
         }
         if( obj.pChildList ){
             pChildList=new XMLChildNodeList();
-            for ( sal_uIntPtr i = 0; i < obj.pChildList->Count(); i++ )
+            for ( sal_uLong i = 0; i < obj.pChildList->Count(); i++ )
                 AddChild( obj.pChildList->GetObject( i ) );
         }else pChildList = NULL;
 
@@ -160,7 +160,7 @@ int XMLParentNode::GetPosition( ByteString id ){
     static const ByteString sDeStr   = ByteString(String::CreateFromAscii(GERMAN_ISO2).ToLowerAscii()    , RTL_TEXTENCODING_ASCII_US ).ToLowerAscii();
 
     if ( pChildList ){
-        for ( sal_uIntPtr i = 0; i < pChildList->Count(); i++ ) {
+        for ( sal_uLong i = 0; i < pChildList->Count(); i++ ) {
             XMLChildNode *pChild = pChildList->GetObject( i );
             if ( pChild->GetNodeType() == XML_NODE_TYPE_ELEMENT ){
                 a = static_cast<XMLElement* >(pChild);
@@ -188,7 +188,7 @@ int XMLParentNode::RemoveChild( XMLElement *pRefElement )
 {
     XMLElement* a;
     if ( pChildList ){
-        for ( sal_uIntPtr i = 0; i < pChildList->Count(); i++ ) {
+        for ( sal_uLong i = 0; i < pChildList->Count(); i++ ) {
             XMLChildNode *pChild = pChildList->GetObject( i );
             if ( pChild->GetNodeType() == XML_NODE_TYPE_ELEMENT ){
                 a = static_cast<XMLElement* >(pChild);
@@ -218,7 +218,7 @@ int XMLParentNode::RemoveChild( XMLElement *pRefElement )
 void XMLParentNode::RemoveAndDeleteAllChilds(){
 /*****************************************************************************/
     if ( pChildList ) {
-        for ( sal_uIntPtr i = 0; i < pChildList->Count(); i++ )
+        for ( sal_uLong i = 0; i < pChildList->Count(); i++ )
             delete pChildList->GetObject( i );
         pChildList->Clear();
     }
@@ -228,7 +228,7 @@ void XMLParentNode::RemoveAndDeleteAllChilds(){
 XMLElement *XMLParentNode::GetChildElement( XMLElement *pRefElement )
 /*****************************************************************************/
 {
-    for ( sal_uIntPtr i = 0; i < pChildList->Count(); i++ ) {
+    for ( sal_uLong i = 0; i < pChildList->Count(); i++ ) {
         XMLChildNode *pChild = pChildList->GetObject( i );
         if ( pChild->GetNodeType() == XML_NODE_TYPE_ELEMENT )
             if ((( XMLElement * ) pChild )->GetName() ==
@@ -239,7 +239,7 @@ XMLElement *XMLParentNode::GetChildElement( XMLElement *pRefElement )
                     return ( XMLElement * ) pChild;
 
                 sal_Bool bMatch = sal_False;
-                for ( sal_uIntPtr j = 0; j < pList->Count() && bMatch; j++ ) {
+                for ( sal_uLong j = 0; j < pList->Count() && bMatch; j++ ) {
                     XMLAttribute *pAttribute = pList->GetObject( j );
                     XMLAttribute *pCandidate =
                         (( XMLElement * ) pChild )->GetAttribute(
@@ -334,7 +334,7 @@ sal_Bool XMLFile::Write( ofstream &rStream , XMLNode *pCur )
         switch( pCur->GetNodeType()) {
             case XML_NODE_TYPE_FILE: {
                 if( GetChildList())
-                    for ( sal_uIntPtr i = 0; i < GetChildList()->Count(); i++ )
+                    for ( sal_uLong i = 0; i < GetChildList()->Count(); i++ )
                         Write( rStream, GetChildList()->GetObject( i ));
             }
             break;
@@ -343,7 +343,7 @@ sal_Bool XMLFile::Write( ofstream &rStream , XMLNode *pCur )
                 rStream  << "<";
                 WriteString( rStream, pElement->GetName());
                 if ( pElement->GetAttributeList())
-                    for ( sal_uIntPtr j = 0; j < pElement->GetAttributeList()->Count(); j++ ) {
+                    for ( sal_uLong j = 0; j < pElement->GetAttributeList()->Count(); j++ ) {
                         rStream << " ";
                         String sData(*pElement->GetAttributeList()->GetObject( j ));
                         xmlutil.QuotHTML( sData );
@@ -358,7 +358,7 @@ sal_Bool XMLFile::Write( ofstream &rStream , XMLNode *pCur )
                     rStream << "/>";
                 else {
                     rStream << ">";
-                    for ( sal_uIntPtr k = 0; k < pElement->GetChildList()->Count(); k++ )
+                    for ( sal_uLong k = 0; k < pElement->GetChildList()->Count(); k++ )
                         Write( rStream, pElement->GetChildList()->GetObject( k ));
                     rStream << "</";
                     WriteString( rStream, pElement->GetName());
@@ -400,7 +400,7 @@ void XMLFile::Print( XMLNode *pCur, sal_uInt16 nLevel )
         switch( pCur->GetNodeType()) {
             case XML_NODE_TYPE_FILE: {
                 if( GetChildList())
-                    for ( sal_uIntPtr i = 0; i < GetChildList()->Count(); i++ )
+                    for ( sal_uLong i = 0; i < GetChildList()->Count(); i++ )
                         Print( GetChildList()->GetObject( i ));
             }
             break;
@@ -409,7 +409,7 @@ void XMLFile::Print( XMLNode *pCur, sal_uInt16 nLevel )
 
                 fprintf( stdout, "<%s", ByteString( pElement->GetName(), RTL_TEXTENCODING_UTF8 ).GetBuffer());
                 if ( pElement->GetAttributeList())
-                    for ( sal_uIntPtr j = 0; j < pElement->GetAttributeList()->Count(); j++ ){
+                    for ( sal_uLong j = 0; j < pElement->GetAttributeList()->Count(); j++ ){
                         ByteString aAttrName( *pElement->GetAttributeList()->GetObject( j ), RTL_TEXTENCODING_UTF8 );
                         if( !aAttrName.EqualsIgnoreCaseAscii( XML_LANG ) ) {
                             fprintf( stdout, " %s=\"%s\"",
@@ -422,7 +422,7 @@ void XMLFile::Print( XMLNode *pCur, sal_uInt16 nLevel )
                     fprintf( stdout, "/>" );
                 else {
                     fprintf( stdout, ">" );
-                    for ( sal_uIntPtr k = 0; k < pElement->GetChildList()->Count(); k++ )
+                    for ( sal_uLong k = 0; k < pElement->GetChildList()->Count(); k++ )
                         Print( pElement->GetChildList()->GetObject( k ), nLevel + 1 );
                     fprintf( stdout, "</%s>", ByteString( pElement->GetName(), RTL_TEXTENCODING_UTF8 ).GetBuffer());
                 }
@@ -517,7 +517,7 @@ void XMLFile::InsertL10NElement( XMLElement* pElement ){
     LangHashMap* elem;
 
     if( pElement->GetAttributeList() != NULL ){
-        for ( sal_uIntPtr j = 0; j < pElement->GetAttributeList()->Count(); j++ ){
+        for ( sal_uLong j = 0; j < pElement->GetAttributeList()->Count(); j++ ){
             tmpStr=ByteString( *pElement->GetAttributeList()->GetObject( j ),RTL_TEXTENCODING_UTF8 );
             if( tmpStr.CompareTo(ID)==COMPARE_EQUAL  ){ // Get the "id" Attribute
                 id = ByteString( pElement->GetAttributeList()->GetObject( j )->GetValue(),RTL_TEXTENCODING_UTF8 );
@@ -633,7 +633,7 @@ void XMLFile::SearchL10NElements( XMLParentNode *pCur , int pos)
             case XML_NODE_TYPE_FILE: {
                 XMLParentNode* pElement;
                 if( GetChildList()){
-                    for ( sal_uIntPtr i = 0; i < GetChildList()->Count(); i++ ){
+                    for ( sal_uLong i = 0; i < GetChildList()->Count(); i++ ){
                         pElement = (XMLParentNode*) GetChildList()->GetObject( i );
                         if( pElement->GetNodeType() ==  XML_NODE_TYPE_ELEMENT ) SearchL10NElements( pElement , i);
                     }
@@ -645,7 +645,7 @@ void XMLFile::SearchL10NElements( XMLParentNode *pCur , int pos)
                 ByteString sName(pElement->GetName(),RTL_TEXTENCODING_ASCII_US);
                 ByteString language,tmpStrVal,oldref;
                 if ( pElement->GetAttributeList()){
-                    for ( sal_uIntPtr j = 0 , cnt = pElement->GetAttributeList()->Count(); j < cnt && bInsert; j++ ){
+                    for ( sal_uLong j = 0 , cnt = pElement->GetAttributeList()->Count(); j < cnt && bInsert; j++ ){
                         const ByteString tmpStr( *pElement->GetAttributeList()->GetObject( j ),RTL_TEXTENCODING_UTF8 );
                         if( tmpStr.CompareTo(THEID)==COMPARE_EQUAL  ){  // Get the "id" Attribute
                             tmpStrVal=ByteString( pElement->GetAttributeList()->GetObject( j )->GetValue(),RTL_TEXTENCODING_UTF8 );
@@ -670,7 +670,7 @@ void XMLFile::SearchL10NElements( XMLParentNode *pCur , int pos)
                 if ( bInsert && ( nodes_localize.find( sName.ToLowerAscii() ) != nodes_localize.end() ) )
                     InsertL10NElement(pElement);
                 else if ( bInsert && pElement->GetChildList() ){
-                    for ( sal_uIntPtr k = 0; k < pElement->GetChildList()->Count(); k++ )
+                    for ( sal_uLong k = 0; k < pElement->GetChildList()->Count(); k++ )
                         SearchL10NElements( (XMLParentNode*) pElement->GetChildList()->GetObject( k ) , k);
                 }
             }
@@ -707,7 +707,7 @@ bool XMLFile::CheckExportStatus( XMLParentNode *pCur )
             case XML_NODE_TYPE_FILE: {
                 XMLParentNode* pElement;
                 if( GetChildList()){
-                    for ( sal_uIntPtr i = 0; i < GetChildList()->Count(); i++ ){
+                    for ( sal_uLong i = 0; i < GetChildList()->Count(); i++ ){
                         pElement = (XMLParentNode*) GetChildList()->GetObject( i );
                         if( pElement->GetNodeType() ==  XML_NODE_TYPE_ELEMENT ) CheckExportStatus( pElement );//, i);
                     }
@@ -719,7 +719,7 @@ bool XMLFile::CheckExportStatus( XMLParentNode *pCur )
                 ByteString sName(pElement->GetName(),RTL_TEXTENCODING_ASCII_US);
                 if( sName.EqualsIgnoreCaseAscii( TOPIC ) ){
                     if ( pElement->GetAttributeList()){
-                        for ( sal_uIntPtr j = 0 , cnt = pElement->GetAttributeList()->Count(); j < cnt && bInsert; j++ ){
+                        for ( sal_uLong j = 0 , cnt = pElement->GetAttributeList()->Count(); j < cnt && bInsert; j++ ){
                             const ByteString tmpStr( *pElement->GetAttributeList()->GetObject( j ),RTL_TEXTENCODING_UTF8 );
                             if( tmpStr.EqualsIgnoreCaseAscii( STATUS ) ){
                                 ByteString tmpStrVal=ByteString( pElement->GetAttributeList()->GetObject( j )->GetValue(),RTL_TEXTENCODING_UTF8 );
@@ -733,7 +733,7 @@ bool XMLFile::CheckExportStatus( XMLParentNode *pCur )
                     }
                 }
                 else if ( pElement->GetChildList() ){
-                    for ( sal_uIntPtr k = 0; k < pElement->GetChildList()->Count(); k++ )
+                    for ( sal_uLong k = 0; k < pElement->GetChildList()->Count(); k++ )
                         CheckExportStatus( (XMLParentNode*) pElement->GetChildList()->GetObject( k ) );//, k);
                 }
             }
@@ -768,7 +768,7 @@ XMLElement::XMLElement(const XMLElement& obj)
 {
     if ( obj.pAttributes ){
         pAttributes = new XMLAttributeList();
-        for ( sal_uIntPtr i = 0; i < obj.pAttributes->Count(); i++ )
+        for ( sal_uLong i = 0; i < obj.pAttributes->Count(); i++ )
             AddAttribute( *obj.pAttributes->GetObject( i ) , obj.pAttributes->GetObject( i )->GetValue() );
     }
 }
@@ -788,13 +788,13 @@ XMLElement& XMLElement::operator=(const XMLElement& obj){
         nPos            =obj.nPos;
 
         if ( pAttributes ){
-            for ( sal_uIntPtr i = 0; i < pAttributes->Count(); i++ )
+            for ( sal_uLong i = 0; i < pAttributes->Count(); i++ )
                 delete pAttributes->GetObject( i );
             delete pAttributes;
         }
         if ( obj.pAttributes ){
             pAttributes         =new XMLAttributeList();
-            for ( sal_uIntPtr i = 0; i < obj.pAttributes->Count(); i++ )
+            for ( sal_uLong i = 0; i < obj.pAttributes->Count(); i++ )
                 AddAttribute( *obj.pAttributes->GetObject( i ) , obj.pAttributes->GetObject( i )->GetValue() );
         }
     }
@@ -816,7 +816,7 @@ void XMLElement::ChangeLanguageTag( const String &rValue ){
     static const String rName = String::CreateFromAscii("xml-lang");
     SetLanguageId( ByteString(rValue,RTL_TEXTENCODING_UTF8) );
     if ( pAttributes ){
-        for ( sal_uIntPtr i = 0; i < pAttributes->Count(); i++ ){
+        for ( sal_uLong i = 0; i < pAttributes->Count(); i++ ){
             if ( *pAttributes->GetObject( i ) == rName ){
                 pAttributes->GetObject( i )->setValue(rValue);
             }
@@ -827,7 +827,7 @@ void XMLElement::ChangeLanguageTag( const String &rValue ){
     XMLChildNodeList* pCList = GetChildList();
 
     if( pCList != NULL ){
-        for ( sal_uIntPtr i = 0; i < pCList->Count(); i++ ){
+        for ( sal_uLong i = 0; i < pCList->Count(); i++ ){
             pNode = pCList->GetObject( i );
             if( pNode != NULL && pNode->GetNodeType() == XML_NODE_TYPE_ELEMENT ){
                 pElem = static_cast< XMLElement* >(pNode);
@@ -845,7 +845,7 @@ XMLAttribute *XMLElement::GetAttribute( const String &rName )
 /*****************************************************************************/
 {
     if ( pAttributes )
-        for ( sal_uIntPtr i = 0; i < pAttributes->Count(); i++ )
+        for ( sal_uLong i = 0; i < pAttributes->Count(); i++ )
             if ( *pAttributes->GetObject( i ) == rName )
                 return pAttributes->GetObject( i );
 
@@ -857,7 +857,7 @@ XMLElement::~XMLElement()
 /*****************************************************************************/
 {
     if ( pAttributes ) {
-        for ( sal_uIntPtr i = 0; i < pAttributes->Count(); i++ )
+        for ( sal_uLong i = 0; i < pAttributes->Count(); i++ )
             delete pAttributes->GetObject( i );
 
         delete pAttributes;
@@ -906,7 +906,7 @@ void XMLElement::Print(XMLNode *pCur, OUStringBuffer& buffer , bool rootelement 
             if ( pElement->GetAttributeList()){
                 if ( pElement->GetChildList()){
                     XMLChildNode* tmp=NULL;
-                    for ( sal_uIntPtr k = 0; k < pElement->GetChildList()->Count(); k++ ){
+                    for ( sal_uLong k = 0; k < pElement->GetChildList()->Count(); k++ ){
                         tmp=pElement->GetChildList()->GetObject( k );
                         Print( tmp, buffer , false);
                     }
@@ -923,7 +923,7 @@ void XMLElement::Print(XMLNode *pCur, OUStringBuffer& buffer , bool rootelement 
                     buffer.append( OUString::createFromAscii("\\<") );
                     buffer.append( pElement->GetName() );
                     if ( pElement->GetAttributeList()){
-                        for ( sal_uIntPtr j = 0; j < pElement->GetAttributeList()->Count(); j++ ){
+                        for ( sal_uLong j = 0; j < pElement->GetAttributeList()->Count(); j++ ){
 
                             OUString aAttrName( *pElement->GetAttributeList()->GetObject( j ) );
                             if( !aAttrName.equalsIgnoreAsciiCase( XML_LANG ) ) {
@@ -941,7 +941,7 @@ void XMLElement::Print(XMLNode *pCur, OUStringBuffer& buffer , bool rootelement 
                     else {
                         buffer.append( OUString::createFromAscii("\\>") );
                         XMLChildNode* tmp=NULL;
-                        for ( sal_uIntPtr k = 0; k < pElement->GetChildList()->Count(); k++ ){
+                        for ( sal_uLong k = 0; k < pElement->GetChildList()->Count(); k++ ){
                             tmp=pElement->GetChildList()->GetObject( k );
                             Print( tmp, buffer , false);
                         }
@@ -1241,7 +1241,7 @@ XMLFile *SimpleXMLParser::Execute( SvMemoryStream *pStream )
     pCurNode = pXMLFile;
     pCurData = NULL;
 
-    sal_uIntPtr nPos = pStream->Tell();
+    sal_uLong nPos = pStream->Tell();
     pStream->Seek( STREAM_SEEK_TO_END );
 
     aErrorInformation.eCode = XML_ERROR_NONE;

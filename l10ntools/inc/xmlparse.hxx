@@ -490,8 +490,8 @@ public:
  */
 struct XMLError {
     XML_Error eCode;    // the error code
-    sal_uIntPtr nLine;          // error line number
-    sal_uIntPtr nColumn;        // error column number
+    sal_uLong nLine;        // error line number
+    sal_uLong nColumn;      // error column number
     String sMessage;    // readable error message
 };
 

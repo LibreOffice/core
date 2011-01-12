@@ -40,7 +40,7 @@
 
 /*****************************************************************************/
 void PrintMessage( ByteString aType, ByteString aMsg, ByteString aPrefix,
-    ByteString aContext, sal_Bool bPrintContext, sal_uIntPtr nLine, ByteString aUniqueId = ByteString() )
+    ByteString aContext, sal_Bool bPrintContext, sal_uLong nLine, ByteString aUniqueId = ByteString() )
 /*****************************************************************************/
 {
     fprintf( stdout, "%s %s, Line %lu", aType.GetBuffer(), aPrefix.GetBuffer(), nLine );
@@ -55,7 +55,7 @@ void PrintMessage( ByteString aType, ByteString aMsg, ByteString aPrefix,
 
 /*****************************************************************************/
 void PrintError( ByteString aMsg, ByteString aPrefix,
-    ByteString aContext, sal_Bool bPrintContext, sal_uIntPtr nLine, ByteString aUniqueId = ByteString() )
+    ByteString aContext, sal_Bool bPrintContext, sal_uLong nLine, ByteString aUniqueId = ByteString() )
 /*****************************************************************************/
 {
     PrintMessage( "Error:", aMsg, aPrefix, aContext, bPrintContext, nLine, aUniqueId );
@@ -133,7 +133,7 @@ void LazySvFileStream::LazyOpen()
 //
 
 /*****************************************************************************/
-GSILine::GSILine( const ByteString &rLine, sal_uIntPtr nLine )
+GSILine::GSILine( const ByteString &rLine, sal_uLong nLine )
 /*****************************************************************************/
                 : ByteString( rLine )
                 , nLineNumber( nLine )
@@ -305,7 +305,7 @@ GSIBlock::~GSIBlock()
     delete pSourceLine;
     delete pReferenceLine;
 
-    for ( sal_uIntPtr i = 0; i < Count(); i++ )
+    for ( sal_uLong i = 0; i < Count(); i++ )
         delete ( GetObject( i ));
 }
 
@@ -328,7 +328,7 @@ void GSIBlock::InsertLine( GSILine* pLine, ByteString aSourceLang)
             return;
         }
     }
-    sal_uIntPtr nPos = 0;
+    sal_uLong nPos = 0;
 
     if ( aSourceLang.Len() ) // only check blockstructure if source lang is given
     {
@@ -356,7 +356,7 @@ void GSIBlock::SetReferenceLine( GSILine* pLine )
 
 /*****************************************************************************/
 void GSIBlock::PrintMessage( ByteString aType, ByteString aMsg, ByteString aPrefix,
-    ByteString aContext, sal_uIntPtr nLine, ByteString aUniqueId )
+    ByteString aContext, sal_uLong nLine, ByteString aUniqueId )
 /*****************************************************************************/
 {
     ::PrintMessage( aType, aMsg, aPrefix, aContext, bPrintContext, nLine, aUniqueId );
@@ -364,7 +364,7 @@ void GSIBlock::PrintMessage( ByteString aType, ByteString aMsg, ByteString aPref
 
 /*****************************************************************************/
 void GSIBlock::PrintError( ByteString aMsg, ByteString aPrefix,
-    ByteString aContext, sal_uIntPtr nLine, ByteString aUniqueId )
+    ByteString aContext, sal_uLong nLine, ByteString aUniqueId )
 /*****************************************************************************/
 {
     PrintMessage( "Error:", aMsg, aPrefix, aContext, nLine, aUniqueId );
@@ -375,7 +375,7 @@ void GSIBlock::PrintList( ParserMessageList *pList, ByteString aPrefix,
     GSILine *pLine )
 /*****************************************************************************/
 {
-    sal_uIntPtr i;
+    sal_uLong i;
     for ( i = 0 ; i < pList->Count() ; i++ )
     {
         ParserMessage *pMsg = pList->GetObject( i );
@@ -580,7 +580,7 @@ sal_Bool GSIBlock::HasSuspiciousChars( GSILine* pTestee, GSILine* pSource )
 
 
 /*****************************************************************************/
-sal_Bool GSIBlock::CheckSyntax( sal_uIntPtr nLine, sal_Bool bRequireSourceLine, sal_Bool bFixTags )
+sal_Bool GSIBlock::CheckSyntax( sal_uLong nLine, sal_Bool bRequireSourceLine, sal_Bool bFixTags )
 /*****************************************************************************/
 {
     static LingTest aTester;
@@ -636,7 +636,7 @@ sal_Bool GSIBlock::CheckSyntax( sal_uIntPtr nLine, sal_Bool bRequireSourceLine, 
     if ( pSourceLine )
         bHasError |= !TestUTF8( pSourceLine, bFixTags );
 
-    sal_uIntPtr i;
+    sal_uLong i;
     for ( i = 0; i < Count(); i++ )
     {
         aTester.CheckTestee( GetObject( i ), pSourceLine != NULL, bFixTags );
@@ -663,7 +663,7 @@ void GSIBlock::WriteError( LazySvFileStream &aErrOut, sal_Bool bRequireSourceLin
 
     sal_Bool bHasError = sal_False;
     sal_Bool bCopyAll = ( !pSourceLine && bRequireSourceLine ) || ( pSourceLine && !pSourceLine->IsOK() && !bCheckTranslationLang ) || bHasBlockError;
-    sal_uIntPtr i;
+    sal_uLong i;
     for ( i = 0; i < Count(); i++ )
     {
         if ( !GetObject( i )->IsOK() || bCopyAll )
@@ -687,7 +687,7 @@ void GSIBlock::WriteCorrect( LazySvFileStream &aOkOut, sal_Bool bRequireSourceLi
         return;
 
     sal_Bool bHasOK = sal_False;
-    sal_uIntPtr i;
+    sal_uLong i;
     for ( i = 0; i < Count(); i++ )
     {
         if ( ( GetObject( i )->IsOK() || bCheckSourceLang ) && !bHasBlockError )
@@ -711,7 +711,7 @@ void GSIBlock::WriteFixed( LazySvFileStream &aFixOut, sal_Bool /*bRequireSourceL
         return;
 
     sal_Bool bHasFixes = sal_False;
-    sal_uIntPtr i;
+    sal_uLong i;
     for ( i = 0; i < Count(); i++ )
     {
         if ( GetObject( i )->IsFixed() )
@@ -1033,13 +1033,13 @@ int _cdecl main( int argc, char *argv[] )
     ByteString sReferenceLine;
     GSILine* pReferenceLine = NULL;
     ByteString aOldReferenceId("No Valid ID");   // just set to something which can never be an ID
-    sal_uIntPtr nReferenceLine = 0;
+    sal_uLong nReferenceLine = 0;
 
     ByteString sGSILine;
     GSILine* pGSILine = NULL;
     ByteString aOldId("No Valid ID");   // just set to something which can never be an ID
     GSIBlock *pBlock = NULL;
-    sal_uIntPtr nLine = 0;
+    sal_uLong nLine = 0;
 
     while ( !aGSI.IsEof() )
     {
