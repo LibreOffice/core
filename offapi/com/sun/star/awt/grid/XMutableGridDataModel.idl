@@ -71,21 +71,6 @@ interface XMutableGridDataModel : XGridDataModel
     void removeRow( [in] long RowIndex )
         raises ( ::com::sun::star::lang::IndexOutOfBoundsException );
 
-    /** removes multiple rows of data from the model
-
-        <p>Grid data listeners are notified of this change via the <member>XGridDataListener::rowsRemoved</member>
-        method. The <member>GridDataEvent::Rows</member> member contains the indexes of the rows before the removal.
-        This is important to take into account by the listener, as with every removed row, the index of all subsequent
-        rows changes - nonetheless, the <code>Rows</code> array contains the original row indexes.</p>
-
-        @param RowIndexes
-            the indexes of the rows that should be removed.
-        @throws ::com::sun::star::lang::IndexOutOfBoundsException
-            if one of the indexes given in <code>RowIndexes</code> is invalid.
-    */
-    void removeRows( [in] sequence< long > RowIndexes )
-        raises ( ::com::sun::star::lang::IndexOutOfBoundsException );
-
     /** Removes all rows from the model.
     */
     void removeAllRows();
