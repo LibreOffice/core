@@ -126,7 +126,6 @@ namespace cppu_unourl
                    { "abc,def=%22", "abc,def=%22" },
                    { "abc,def=\"", "abc,def=\"" },
                    { "abc,def=%ed%a0%80", "abc,def=%ed%a0%80" } };
-            bool bResult = true;
             for (int i = 0; i < sizeof aTests / sizeof (Test); ++i)
             {
                 bool bValid = false;

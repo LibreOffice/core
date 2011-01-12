@@ -273,7 +273,7 @@ OUString findBoostrapArgument(
 }
 
 Reference< registry::XSimpleRegistry > nestRegistries(
-    const OUString baseDir,
+    const OUString &baseDir,
     const Reference< lang::XSingleServiceFactory > & xSimRegFac,
     const Reference< lang::XSingleServiceFactory > & xNesRegFac,
     OUString csl_rdbs,

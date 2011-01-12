@@ -461,7 +461,7 @@ public:
                     {
                     }
 
-    sal_Int32   getRefCount()
+    sal_Int32   getRefCount() const
         { return m_refCount; }
 
     // XEventListener

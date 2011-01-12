@@ -909,11 +909,11 @@ void OPropertySetHelper::firePropertiesChangeEvent(
     Sequence<PropertyChangeEvent> aChanges( nFireLen );
     PropertyChangeEvent* pChanges = aChanges.getArray();
 
-    sal_Int32 nFirePos = 0;
     {
     // must lock the mutex outside the loop. So all values are consistent.
     MutexGuard aGuard( rBHelper.rMutex );
     Reference < XInterface > xSource( (XPropertySet *)this, UNO_QUERY );
+    sal_Int32 nFirePos = 0;
     for( i = 0; i < nLen; i++ )
     {
         if( pHandles[i] != -1 )
@@ -946,7 +946,6 @@ PropertyState OPropertySetHelper::getPropertyState( const OUString& PropertyName
 Sequence< PropertyState > OPropertySetHelper::getPropertyStates( const Sequence< OUString >& PropertyNames )
 {
     ULONG nNames = PropertyNames.getLength();
-    const OUString* pNames = PropertyNames.getConstArray();
 
     Sequence< PropertyState > aStates( nNames );
     return aStates;

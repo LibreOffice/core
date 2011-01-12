@@ -502,8 +502,7 @@ inline static typelib_TypeDescription * createCTD(
             0, 0 );
 
         // cleanup
-        if (pRefType)
-            typelib_typedescription_release( pRefType );
+        typelib_typedescription_release( pRefType );
     }
     return pRet;
 }

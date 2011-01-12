@@ -129,7 +129,7 @@ namespace cppu_ifcontainer
             for (i = 0; i < nTests; i++)
             {
                 Reference<XEventListener> xRef = new ContainerListener(&aStats);
-                int nNewLen = pContainer->addInterface(xRef);
+                pContainer->addInterface(xRef);
                 aListeners.push_back(xRef);
             }
             Sequence< Reference< XInterface > > aElements;
