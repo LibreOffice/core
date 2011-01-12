@@ -869,26 +869,8 @@ void OfaTreeOptionsDialog::ApplyItemSets()
 void OfaTreeOptionsDialog::InitTreeAndHandler()
 {
     aTreeLB.SetNodeDefaultImages();
-
-    String sResName = String::CreateFromAscii( "iso" );
-    ResMgr* pIsoRes = ResMgr::CreateResMgr( ::rtl::OUStringToOString( sResName, RTL_TEXTENCODING_UTF8 ) );
-    if ( !pIsoRes )
-    {
-        // Fallback: Use ooo resource file
-        String sOOoName = String::CreateFromAscii( "ooo" );
-        pIsoRes = ResMgr::CreateResMgr( ::rtl::OUStringToOString( sOOoName, RTL_TEXTENCODING_UTF8 ) );
-    }
-
-    //! ResMgr* pIsoRes = SFX_APP()->GetLabelResManager();
-    ResId aImgLstRes( RID_IMGLIST_TREEOPT, *pIsoRes );
-    aImgLstRes.SetRT( RSC_IMAGELIST );
-    if ( pIsoRes->IsAvailable( aImgLstRes ) )
-        aPageImages = ImageList( ResId( RID_IMGLIST_TREEOPT, *pIsoRes ) );
-    ResId aImgLstHCRes( RID_IMGLIST_TREEOPT_HC, *pIsoRes );
-    aImgLstHCRes.SetRT( RSC_IMAGELIST );
-    if ( pIsoRes->IsAvailable( aImgLstHCRes ) )
-        aPageImagesHC = ImageList( ResId( RID_IMGLIST_TREEOPT_HC, *pIsoRes ) );
-    delete pIsoRes;
+    aPageImages = ImageList( CUI_RES( RID_IMGLIST_TREEOPT ) );
+    aPageImagesHC = ImageList( CUI_RES( RID_IMGLIST_TREEOPT_HC ) );
 
     aTreeLB.SetHelpId( HID_OFADLG_TREELISTBOX );
     aTreeLB.SetStyle( aTreeLB.GetStyle()|WB_HASBUTTONS | WB_HASBUTTONSATROOT |
