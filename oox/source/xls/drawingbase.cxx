@@ -28,7 +28,6 @@
 #include "oox/xls/drawingbase.hxx"
 
 #include <com/sun/star/awt/Rectangle.hpp>
-#include "oox/core/namespaces.hxx"
 #include "oox/helper/attributelist.hxx"
 #include "oox/helper/binaryinputstream.hxx"
 #include "oox/xls/unitconverter.hxx"

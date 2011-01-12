@@ -259,7 +259,6 @@ void DrawingFragment::onEndElement()
                 EmuRectangle aShapeRectEmu = mxAnchor->calcAnchorRectEmu( getDrawPageSize() );
                 if( (aShapeRectEmu.X >= 0) && (aShapeRectEmu.Y >= 0) && (aShapeRectEmu.Width >= 0) && (aShapeRectEmu.Height >= 0) )
                 {
-<<<<<<< local
                     // TODO: DrawingML implementation expects 32-bit coordinates for EMU rectangles (change that to EmuRectangle)
                     Rectangle aShapeRectEmu32(
                         getLimitedValue< sal_Int32, sal_Int64 >( aShapeRectEmu.X, 0, SAL_MAX_INT32 ),
@@ -267,20 +266,12 @@ void DrawingFragment::onEndElement()
                         getLimitedValue< sal_Int32, sal_Int64 >( aShapeRectEmu.Width, 0, SAL_MAX_INT32 ),
                         getLimitedValue< sal_Int32, sal_Int64 >( aShapeRectEmu.Height, 0, SAL_MAX_INT32 ) );
                     mxShape->addShape( getOoxFilter(), &getTheme(), mxDrawPage, &aShapeRectEmu32 );
-                    // collect all shape positions in the WorksheetHelper base class
-                    extendShapeBoundingBox( aShapeRectEmu32 );
-=======
-                    mxShape->addShape( getOoxFilter(), &getTheme(), mxDrawPage, &aShapeRect );
                     /*  Collect all shape positions in the WorksheetHelper base
                         class. But first, scale EMUs to 1/100 mm. */
-                    const UnitConverter& rUnitConv = getUnitConverter();
                     Rectangle aShapeRectHmm(
-                        rUnitConv.scaleToMm100( aShapeRect.X, UNIT_EMU ),
-                        rUnitConv.scaleToMm100( aShapeRect.Y, UNIT_EMU ),
-                        rUnitConv.scaleToMm100( aShapeRect.Width, UNIT_EMU ),
-                        rUnitConv.scaleToMm100( aShapeRect.Height, UNIT_EMU ) );
+                        convertEmuToHmm( aShapeRectEmu.X ), convertEmuToHmm( aShapeRectEmu.Y ),
+                        convertEmuToHmm( aShapeRectEmu.Width ), convertEmuToHmm( aShapeRectEmu.Height ) );
                     extendShapeBoundingBox( aShapeRectHmm );
->>>>>>> other
                 }
             }
             mxShape.reset();

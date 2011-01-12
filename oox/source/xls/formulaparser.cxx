@@ -376,7 +376,7 @@ void FormulaFinalizer::appendEmptyParameter( const FunctionInfo& rFuncInfo, size
 
     switch( rFuncInfo.mnBiff12FuncId )
     {
-        case BIFF12_FUNC_IF:
+        case BIFF_FUNC_IF:
             if( (nParam == 1) || (nParam == 2) )
                 maTokens.append< double >( OPCODE_PUSH, 0.0 );
         break;

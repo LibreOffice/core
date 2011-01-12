@@ -36,10 +36,10 @@
 #include "oox/drawingml/fillproperties.hxx"
 #include "oox/drawingml/lineproperties.hxx"
 #include "oox/drawingml/shapepropertymap.hxx"
+#include "oox/helper/containerhelper.hxx"
+#include "oox/token/tokens.hxx"
 #include "oox/xls/biffinputstream.hxx"
 #include "oox/xls/unitconverter.hxx"
-#include "properties.hxx"
-#include "tokens.hxx"
 
 namespace oox {
 namespace xls {

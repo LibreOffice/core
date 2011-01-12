@@ -116,7 +116,7 @@ private:
     ObjectContainer     maMarkerContainer;      /// Contains all named line markers (line end polygons).
     ObjectContainer     maDashContainer;        /// Contains all named line dsahes.
     ObjectContainer     maGradientContainer;    /// Contains all named fill gradients.
-    ObjectContainer     maBitmapContainer;      /// Contains all named fill bitmap URLs.
+    ObjectContainer     maBitmapUrlContainer;   /// Contains all named fill bitmap URLs.
     const ::rtl::OUString maDashNameBase;       /// Base name for all named line dashes.
     const ::rtl::OUString maGradientNameBase;   /// Base name for all named fill gradients.
     const ::rtl::OUString maBitmapUrlNameBase;  /// Base name for all named fill bitmap URLs.

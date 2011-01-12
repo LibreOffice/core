@@ -46,6 +46,7 @@ namespace xls {
 using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::sheet;
 using namespace ::com::sun::star::table;
+using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::uno;
 
 using ::rtl::OUString;
@@ -148,7 +149,7 @@ void Comment::finalizeImport()
         sal_Bool bVisible = sal_True;
         switch( getFilterType() )
         {
-            case FILTER_OOX:
+            case FILTER_OOXML:
                 if( const ::oox::vml::ShapeBase* pNoteShape = getVmlDrawing().getNoteShape( aNotePos ) )
                 {
                     // position and formatting

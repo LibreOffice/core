@@ -32,7 +32,6 @@
 #include <com/sun/star/drawing/LineDash.hpp>
 #include <com/sun/star/drawing/PolyPolygonBezierCoords.hpp>
 #include "oox/helper/modelobjecthelper.hxx"
-#include "properties.hxx"
 
 namespace oox {
 namespace drawingml {

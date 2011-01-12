@@ -358,6 +358,7 @@ bool BiffWorkbookFragment::importFragment()
     {
         case BIFF_FRAGMENT_GLOBALS:
         {
+            BiffInputStream& rStrm = getInputStream();
             // import workbook globals fragment and create sheets in document
             ISegmentProgressBarRef xGlobalsProgress = getProgressBar().createSegment( PROGRESS_LENGTH_GLOBALS );
             bRet = importGlobalsFragment( *xGlobalsProgress );
@@ -373,15 +374,15 @@ bool BiffWorkbookFragment::importFragment()
                     first record of the sheet fragment which is usually a BOF record. */
                 BiffFragmentType eSheetFragment = BIFF_FRAGMENT_UNKNOWN;
                 sal_Int64 nRecHandle = rWorksheets.getBiffRecordHandle( nWorksheet );
-                if( mrStrm.startRecordByHandle( nRecHandle ) )
+                if( rStrm.startRecordByHandle( nRecHandle ) )
                 {
                     /*  #i109800# Stream may point to any record of the sheet fragment.
                         Check the record identifier before calling startFragment(). */
-                    bool bIsBofRec = isBofRecord();
+                    bool bIsBofRec = BiffHelper::isBofRecord( rStrm );
                     /*  Rewind the record. If it is the BOF record, it will be read in
                         startFragment(). In every case, stream will point before the
                         first available non-BOF record. */
-                    mrStrm.rewindRecord();
+                    rStrm.rewindRecord();
                     // if the BOF record is missing, a regular worksheet will be assumed
                     eSheetFragment = bIsBofRec ? startFragment( getBiff() ) : BIFF_FRAGMENT_WORKSHEET;
                 }

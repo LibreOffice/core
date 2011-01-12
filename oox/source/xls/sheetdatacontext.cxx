@@ -715,7 +715,7 @@ void BiffSheetDataContext::importXfId( BiffInputStream& rStrm, bool bBiff2 )
             mobBiff2HasXfs = getStyles().getCellXf( 0 ).get() != 0;
         // read formatting information (includes the XF identifier)
         sal_uInt8 nFlags1, nFlags2, nFlags3;
-        mrStrm >> nFlags1 >> nFlags2 >> nFlags3;
+        rStrm >> nFlags1 >> nFlags2 >> nFlags3;
         /*  If the file contains XFs, extract and set the XF identifier,
             otherwise get the explicit formatting. */
         if( mobBiff2HasXfs.get() )
