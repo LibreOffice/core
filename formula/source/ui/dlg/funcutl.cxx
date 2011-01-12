@@ -954,6 +954,20 @@ void RefEdit::SetRefString( const XubString& rStr )
     Edit::SetText( rStr );
 }
 
+void RefEdit::SetRefValid(bool bValid)
+{
+    if (bValid)
+    {
+        SetControlForeground();
+        SetControlBackground();
+    }
+    else
+    {
+        SetControlForeground(COL_WHITE);
+        SetControlBackground(0xff6563);
+    }
+}
+
 void RefEdit::SetText( const XubString& rStr )
 {
     Edit::SetText( rStr );

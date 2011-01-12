@@ -34,10 +34,9 @@
 #include <vcl/edit.hxx>
 #include "formula/formuladllapi.h"
 
+namespace formula {
 
-namespace formula
-{
-    class IControlReferenceHandler;
+class IControlReferenceHandler;
 
 class FORMULA_DLLPUBLIC RefEdit : public Edit
 {
@@ -59,6 +58,13 @@ public:
     virtual             ~RefEdit();
 
     void                SetRefString( const XubString& rStr );
+
+    /**
+     * Flag reference valid or invalid, which in turn changes the visual
+     * appearance of the control accordingly.
+     */
+    void                SetRefValid(bool bValid);
+
     using Edit::SetText;
     virtual void        SetText( const XubString& rStr );
     virtual void        Modify();
@@ -100,6 +106,7 @@ public:
 };
 
 } // formula
+
 #endif // FORMULA_FUNCUTL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
