@@ -1,4 +1,4 @@
-#!@PERL@ -w
+#!@PERL@ -w  # -*- Mode: perl; tab-width: 4; indent-tabs-mode: nil; -*-
 #
 # Program:     set_soenv.in
 # Author:      Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems, Ireland.
@@ -2626,6 +2626,5 @@ sub AddWarning
       $Warning = $Warning."* - set_soenv: warning: $arg1 $newline";  # add the warning
    }
 }
-#-------------------
-# That's all folks!
-#-------------------
+
+# vim:set shiftwidth=4 softtabstop=4 expandtab: #
