@@ -228,17 +228,17 @@ namespace svt { namespace table
     void TableControl::InvalidateDataWindow(RowPos _nRowStart, RowPos _nRowEnd, bool _bRemoved)
     {
         Rectangle _rRect;
-        if(_bRemoved)
+        if ( _bRemoved )
             m_pImpl->invalidateRows();
         else
         {
-            if(m_bSelectionChanged)
+            if ( m_bSelectionChanged )
             {
-                m_pImpl->invalidateSelectedRegion(_nRowStart, _nRowEnd, _rRect);
+                m_pImpl->invalidateSelectedRegion( _nRowStart, _nRowEnd, _rRect );
                 m_bSelectionChanged = false;
             }
             else
-                m_pImpl->invalidateRow(_nRowStart, _rRect);
+                m_pImpl->invalidateRow( _nRowStart, _rRect );
         }
     }
 

@@ -1573,12 +1573,10 @@ namespace svt { namespace table
         {
             Rectangle aCellRect;
             impl_getCellRect( m_nCurColumn, m_nCurRow, aCellRect );
-            if(!m_pModel->hasRowHeaders() && m_nCurColumn == 0)
-                aCellRect.Left()++;
             if ( _bShow )
-                pRenderer->ShowCellCursor( *m_pDataWindow, aCellRect);
+                pRenderer->ShowCellCursor( *m_pDataWindow, aCellRect );
             else
-                pRenderer->HideCellCursor( *m_pDataWindow, aCellRect);
+                pRenderer->HideCellCursor( *m_pDataWindow, aCellRect );
         }
     }
 
@@ -1601,7 +1599,6 @@ namespace svt { namespace table
 
         TableCellGeometry aCell( *this, aAllCells, _nColumn, _nRow );
         _rCellRect = aCell.getRect();
-        _rCellRect.Top()--;_rCellRect.Left()--;
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -1696,7 +1693,7 @@ namespace svt { namespace table
         {
             Rectangle aCellRect;
             impl_getCellRect( m_nCurColumn, _nCurRow, aCellRect );
-            _rCellRect.Top() = --aCellRect.Top();
+            _rCellRect.Top() = aCellRect.Top();
             _rCellRect.Bottom() = aCellRect.Bottom();
         }
         //if the region is above the current row
@@ -1704,7 +1701,7 @@ namespace svt { namespace table
         {
             Rectangle aCellRect;
             impl_getCellRect( m_nCurColumn, _nPrevRow, aCellRect );
-            _rCellRect.Top() = --aCellRect.Top();
+            _rCellRect.Top() = aCellRect.Top();
             impl_getCellRect( m_nCurColumn, _nCurRow, aCellRect );
             _rCellRect.Bottom() = aCellRect.Bottom();
         }
@@ -1713,7 +1710,7 @@ namespace svt { namespace table
         {
             Rectangle aCellRect;
             impl_getCellRect( m_nCurColumn, _nCurRow, aCellRect );
-            _rCellRect.Top() = --aCellRect.Top();
+            _rCellRect.Top() = aCellRect.Top();
             impl_getCellRect( m_nCurColumn, _nPrevRow, aCellRect );
             _rCellRect.Bottom() = aCellRect.Bottom();
         }
@@ -1723,26 +1720,33 @@ namespace svt { namespace table
     //this method is to be called, when a new row is added
     void TableControl_Impl::invalidateRow(RowPos _nRowPos, Rectangle& _rCellRect)
     {
-        if(m_nCurRow < 0)
+        if ( m_nCurRow < 0 )
+            // hmm? Why this? Looks like a hack to me, working around some other problem.
             m_nCurRow = 0;
-        if(m_nCursorHidden == 2)
+
+        if ( m_nCursorHidden == 2 )
+            // WTF? what kind of hack is this?
             --m_nCursorHidden;
+
         impl_getAllVisibleCellsArea( _rCellRect );
-        TableRowGeometry _rRow( *this, _rCellRect, _nRowPos);
         impl_ni_updateScrollbars();
-        m_pDataWindow->Invalidate(_rRow.getRect());
+
+        TableRowGeometry const aRow( *this, _rCellRect, _nRowPos);
+        m_pDataWindow->Invalidate( aRow.getRect() );
     }
     //------------------------------------------------------------------------------------------------------------------
+
     std::vector<RowPos>& TableControl_Impl::getSelectedRows()
     {
         return m_aSelectedRows;
     }
-    //--------------------------------------------------------------------
+
+    //------------------------------------------------------------------------------------------------------------------
     void TableControl_Impl::clearSelection()
     {
         m_aSelectedRows.clear();
     }
-    //--------------------------------------------------------------------
+
     //------------------------------------------------------------------------------------------------------------------
     void TableControl_Impl::removeSelectedRow(RowPos _nRowPos)
     {
