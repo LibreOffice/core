@@ -270,7 +270,6 @@ public:
     // done setting up the clipregion
     virtual void                    EndSetClipRegion() = 0;
 
-
     // Callbacks (indepent part in vcl/source/window/winproc.cxx)
     // for default message handling return 0
     void                        SetCallback( Window* pWindow, SALFRAMEPROC pProc )

@@ -39,8 +39,6 @@
 
 #include <hash_map>
 
-#include <com/sun/star/linguistic2/XLinguServiceManager.hpp>
-
 class ImplDevFontListData;
 class ImplGetDevFontList;
 class ImplGetDevSizeList;
@@ -53,6 +51,8 @@ class Font;
 class ConvertChar;
 struct FontMatchStatus;
 class OutputDevice;
+
+namespace com { namespace sun { namespace star { namespace lang { struct Locale; }}}}
 
 // ----------------------
 // - ImplFontAttributes -
@@ -199,8 +199,8 @@ private:
     ImplGlyphFallbackFontSubstitution* mpFallbackHook;  // device specific glyh fallback substitution
 
 public:
-                            ImplDevFontList();
-                            ~ImplDevFontList();
+    explicit                ImplDevFontList();
+    virtual                 ~ImplDevFontList();
 
     // fill the list with device fonts
     void                    Add( ImplFontData* );
@@ -226,7 +226,7 @@ public:
     ImplGetDevSizeList*     GetDevSizeList( const String& rFontName ) const;
 
     //used by 2-level font fallback
-    ImplDevFontListData* ImplFindByLocale(com::sun::star::lang::Locale lc) const;
+    ImplDevFontListData* ImplFindByLocale( com::sun::star::lang::Locale& ) const;
 
 protected:
     void                    InitMatchData() const;

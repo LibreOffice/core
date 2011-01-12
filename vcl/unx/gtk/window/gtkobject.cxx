@@ -209,3 +209,8 @@ void GtkSalObject::signalDestroy( GtkObject* pObj, gpointer object )
         pThis->m_pSocket = NULL;
     }
 }
+
+void GtkSalObject::InterceptChildWindowKeyDown( sal_Bool /*bIntercept*/ )
+{
+}
+

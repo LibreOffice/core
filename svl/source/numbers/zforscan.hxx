@@ -32,7 +32,7 @@
 #include <i18npool/lang.h>
 #include <tools/color.hxx>
 #include <svl/nfkeytab.hxx>
-#include "nfsymbol.hxx"
+#include <svl/nfsymbol.hxx>
 
 class SvNumberFormatter;
 struct ImpSvNumberformatInfo;

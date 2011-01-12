@@ -27,8 +27,8 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svl.hxx"
-#include "pickerhistory.hxx"
-#include "pickerhistoryaccess.hxx"
+#include <svl/pickerhistory.hxx>
+#include <svl/pickerhistoryaccess.hxx>
 #include <cppuhelper/weakref.hxx>
 #include <vector>
 

@@ -142,7 +142,6 @@ class RscTypCont
     Atom                nTopImageId;
     Atom                nNoLabelId;
     Atom                nVertId;
-    Atom                nSingleLineId;
     Atom                nSysWinId;
 
     void        Init();         // Initialisiert Klassen und Tabelle
