@@ -112,7 +112,7 @@ void ScTPValidationValue:: SetActiveHdl()
         }
 }
 
-void            ScTPValidationValue::RefInputStartPreHdl( ScRefEdit* pEdit, ScRefButton* pButton )
+void            ScTPValidationValue::RefInputStartPreHdl( formula::RefEdit* pEdit, formula::RefButton* pButton )
 {
     if ( ScValidationDlg *pValidationDlg = GetValidationDlg() )
     {
@@ -970,7 +970,7 @@ void ScTPValidationValue::ScRefButtonEx::Click()
     if( ScTPValidationValue *pParent = dynamic_cast< ScTPValidationValue*>( GetParent() ) )
         pParent->OnClick( this );
 
-    ScRefButton::Click();
+    formula::RefButton::Click();
 }
 
 void ScTPValidationValue::OnClick( Button *pBtn )

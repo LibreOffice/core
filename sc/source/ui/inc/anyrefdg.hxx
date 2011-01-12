@@ -33,29 +33,25 @@
 #include <vcl/edit.hxx>
 #include <vcl/accel.hxx>
 #include <sfx2/basedlgs.hxx>
+#include <sfx2/tabdlg.hxx>
 #include "address.hxx"
 #include "cell.hxx"
 #include "compiler.hxx"
 #include "formula/funcutl.hxx"
 #include "IAnyRefDialog.hxx"
 #include "scresid.hxx"
+#include "scmod.hxx"
+
 #include <memory>
 
 class SfxObjectShell;
 class ScRange;
 class ScDocument;
 class ScTabViewShell;
-//The class of ScAnyRefDlg is rewritten by PengYunQuan for Validity Cell Range Picker
-//class ScAnyRefDlg;
 class ScRefHandler;
 class ScRangeList;
-//<!--Added by PengYunQuan for Validity Cell Range Picker
 class SfxShell;
-#include "scmod.hxx"
 
-typedef    formula::RefButton   ScRefButton;
-typedef        formula::RefEdit ScRefEdit;
-//-->Added by PengYunQuan for Validity Cell Range Picker
 class ScFormulaReferenceHelper
 {
     IAnyRefDialog*      m_pDlg;
@@ -105,28 +101,27 @@ public:
     void                ViewShellChanged( ScTabViewShell* pScViewShell );
 
     static              void enableInput(BOOL _bInput);
-//<!--Added by PengYunQuan for Validity Cell Range Picker
+
 protected:
     Window      *       GetWindow(){ return m_pWindow; }
+
 public:
-    bool                CanInputStart( const ScRefEdit *pEdit ){ return !!pEdit; }
+    bool                CanInputStart( const formula::RefEdit *pEdit ){ return !!pEdit; }
     bool                CanInputDone( BOOL bForced ){   return pRefEdit && (bForced || !pRefBtn);   }
-//<!--Added by PengYunQuan for Validity Cell Range Picker
 };
+
 //============================================================================
 
-//The class of ScAnyRefDlg is rewritten by PengYunQuan for Validity Cell Range Picker
 class SC_DLLPUBLIC ScRefHandler : //public SfxModelessDialog,
                     public IAnyRefDialog
 {
-//<!--Added by PengYunQuan for Validity Cell Range Picker
     Window &    m_rWindow;
     bool        m_bInRefMode;
+
 public:
     operator Window *(){ return &m_rWindow; }
     Window  * operator ->() { return static_cast<Window *>(*this); }
     template<class,bool> friend class ScRefHdlrImplBase;
-//-->Added by PengYunQuan for Validity Cell Range Picker
     friend class        formula::RefButton;
     friend class        formula::RefEdit;
 
@@ -184,18 +179,15 @@ public:
     //Overwrite TWindow will implemented by ScRefHdlrImplBase
     //virtual void        StateChanged( StateChangedType nStateChange );
 
-//<!--Added by PengYunQuan for Validity Cell Range Picker
 public:
     bool                EnterRefMode();
     bool                LeaveRefMode();
-    inline  bool        CanInputStart( const ScRefEdit *pEdit );
+    inline  bool        CanInputStart( const formula::RefEdit *pEdit );
     inline  bool        CanInputDone( BOOL bForced );
-//-->Added by PengYunQuan for Validity Cell Range Picker
 };
 
-
 //============================================================================
-//<!--Added by PengYunQuan for Validity Cell Range Picker
+
 template<  class TWindow, bool bBindRef = true >
 class ScRefHdlrImplBase:public TWindow, public ScRefHandler
 {
@@ -255,7 +247,7 @@ struct ScAnyRefDlg : ::ScRefHdlrImpl< ScAnyRefDlg, SfxModelessDialog>
 };
 //============================================================================
 
-inline bool ScRefHandler::CanInputStart( const ScRefEdit *pEdit )
+inline bool ScRefHandler::CanInputStart( const formula::RefEdit *pEdit )
 {
     return m_aHelper.CanInputStart( pEdit );
 }
@@ -267,11 +259,9 @@ inline  bool ScRefHandler::CanInputDone( BOOL bForced )
 
 template <> SC_DLLPUBLIC void ScRefHdlrImplBase<SfxModelessDialog,true>::StateChanged( StateChangedType nStateChange );
 template <> SC_DLLPUBLIC long ScRefHdlrImplBase<SfxModelessDialog,true>::PreNotify( NotifyEvent& rNEvt );
-#include <sfx2/tabdlg.hxx>
 template <> SC_DLLPUBLIC void ScRefHdlrImplBase<SfxTabDialog,false>::StateChanged( StateChangedType nStateChange );
 template <> SC_DLLPUBLIC long ScRefHdlrImplBase<SfxTabDialog,false>::PreNotify( NotifyEvent& rNEvt );
 
-//<!--Added by PengYunQuan for Validity Cell Range Picker
 #endif // SC_ANYREFDG_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
