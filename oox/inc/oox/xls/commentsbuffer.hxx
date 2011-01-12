@@ -59,7 +59,7 @@ public:
     /** Imports a cell comment from the passed attributes of the comment element. */
     void                importComment( const AttributeList& rAttribs );
     /** Imports a cell comment from the passed stream of a COMMENT record. */
-    void                importComment( RecordInputStream& rStrm );
+    void                importComment( SequenceInputStream& rStrm );
     /** Imports a cell comment from the passed stream of a NOTE record. */
     void                importNote( BiffInputStream& rStrm );
 
@@ -112,4 +112,3 @@ private:
 } // namespace oox
 
 #endif
-

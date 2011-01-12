@@ -26,21 +26,83 @@
  ************************************************************************/
 
 #include "oox/helper/modelobjecthelper.hxx"
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+
 #include <com/sun/star/awt/Gradient.hpp>
+#include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/drawing/LineDash.hpp>
 #include <com/sun/star/drawing/PolyPolygonBezierCoords.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include "oox/helper/containerhelper.hxx"
 #include "oox/helper/helper.hxx"
 
-using ::rtl::OUString;
-using ::com::sun::star::uno::Any;
-using ::com::sun::star::uno::Reference;
-using ::com::sun::star::lang::XMultiServiceFactory;
-using ::com::sun::star::awt::Gradient;
-using ::com::sun::star::drawing::LineDash;
-using ::com::sun::star::drawing::PolyPolygonBezierCoords;
-
 namespace oox {
+
+// ============================================================================
+
+using namespace ::com::sun::star::awt;
+using namespace ::com::sun::star::drawing;
+using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::uno;
+
+using ::rtl::OUString;
+
+// ============================================================================
+
+ObjectContainer::ObjectContainer( const Reference< XMultiServiceFactory >& rxFactory, const OUString& rServiceName ) :
+    mxFactory( rxFactory ),
+    maServiceName( rServiceName ),
+    mnIndex( 0 )
+{
+    OSL_ENSURE( mxFactory.is(), "ObjectContainer::ObjectContainer - missing service factory" );
+}
+
+ObjectContainer::~ObjectContainer()
+{
+}
+
+bool ObjectContainer::hasObject( const OUString& rObjName ) const
+{
+    createContainer();
+    return mxContainer.is() && mxContainer->hasByName( rObjName );
+}
+
+Any ObjectContainer::getObject( const OUString& rObjName ) const
+{
+    createContainer();
+    if( mxContainer.is() ) try
+    {
+        return mxContainer->getByName( rObjName );
+    }
+    catch( Exception& )
+    {
+    }
+    return Any();
+}
+
+OUString ObjectContainer::insertObject( const OUString& rObjName, const Any& rObj, bool bInsertByUnusedName )
+{
+    createContainer();
+    if( mxContainer.is() )
+    {
+        if( bInsertByUnusedName )
+            return ContainerHelper::insertByUnusedName( mxContainer, rObjName + OUString::valueOf( ++mnIndex ), ' ', rObj );
+        if( ContainerHelper::insertByName( mxContainer, rObjName, rObj ) )
+            return rObjName;
+    }
+    return OUString();
+}
+
+void ObjectContainer::createContainer() const
+{
+    if( !mxContainer.is() && mxFactory.is() ) try
+    {
+        mxContainer.set( mxFactory->createInstance( maServiceName ), UNO_QUERY_THROW );
+    }
+    catch( Exception& )
+    {
+    }
+    OSL_ENSURE( mxContainer.is(), "ObjectContainer::createContainer - container not found" );
+}
 
 // ============================================================================
 
@@ -88,4 +150,3 @@ OUString ModelObjectHelper::insertFillBitmapUrl( const OUString& rGraphicUrl )
 // ============================================================================
 
 } // namespace oox
-

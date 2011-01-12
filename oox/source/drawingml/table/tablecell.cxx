@@ -29,11 +29,8 @@
 #include "oox/drawingml/table/tableproperties.hxx"
 #include "oox/drawingml/shapepropertymap.hxx"
 #include "oox/drawingml/textbody.hxx"
-#include "oox/core/namespaces.hxx"
 #include "oox/core/xmlfilterbase.hxx"
 #include "oox/helper/propertyset.hxx"
-#include "properties.hxx"
-#include "tokens.hxx"
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
 #include <com/sun/star/table/XTable.hpp>

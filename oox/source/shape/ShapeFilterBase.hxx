@@ -45,7 +45,8 @@ public:
     typedef boost::shared_ptr<ShapeFilterBase> Pointer_t;
 
     explicit            ShapeFilterBase(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& rxFactory );
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext )
+                            throw( ::com::sun::star::uno::RuntimeException );
 
     virtual             ~ShapeFilterBase();
 
@@ -60,12 +61,13 @@ public:
 
     virtual ::oox::drawingml::chart::ChartConverter& getChartConverter();
 
-    virtual rtl::OUString implGetImplementationName() const;
-
     virtual bool importDocument() { return true; }
     virtual bool exportDocument() { return true; }
 
 private:
+    virtual ::oox::ole::VbaProject* implCreateVbaProject() const;
+    virtual rtl::OUString implGetImplementationName() const;
+
     ::boost::shared_ptr< ::oox::drawingml::chart::ChartConverter > mxChartConv;
 };
 

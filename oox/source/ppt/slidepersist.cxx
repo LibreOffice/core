@@ -32,10 +32,7 @@
 #include "oox/drawingml/shapepropertymap.hxx"
 #include "oox/helper/propertyset.hxx"
 #include "oox/vml/vmldrawing.hxx"
-#include "oox/core/namespaces.hxx"
 #include "oox/core/xmlfilterbase.hxx"
-#include "properties.hxx"
-#include "tokens.hxx"
 
 #include <com/sun/star/style/XStyle.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
@@ -131,7 +128,7 @@ sal_Int16 SlidePersist::getLayoutFromValueToken()
     return nLayout;
 }
 
-void SlidePersist::createXShapes( const XmlFilterBase& rFilterBase )
+void SlidePersist::createXShapes( XmlFilterBase& rFilterBase )
 {
     applyTextStyles( rFilterBase );
 

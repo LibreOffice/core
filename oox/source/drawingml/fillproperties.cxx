@@ -26,6 +26,7 @@
  ************************************************************************/
 
 #include "oox/drawingml/fillproperties.hxx"
+
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/awt/Gradient.hpp>
@@ -36,11 +37,10 @@
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/drawing/RectanglePoint.hpp>
 #include <com/sun/star/graphic/XGraphicTransformer.hpp>
-#include "properties.hxx"
-#include "tokens.hxx"
 #include "oox/helper/graphichelper.hxx"
 #include "oox/drawingml/drawingmltypes.hxx"
 #include "oox/drawingml/shapepropertymap.hxx"
+#include "oox/token/tokens.hxx"
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::drawing;

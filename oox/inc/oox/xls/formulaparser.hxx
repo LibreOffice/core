@@ -101,9 +101,9 @@ private:
 
 class FormulaParserImpl;
 
-/** Import formula parser for OOX and BIFF filters.
+/** Import formula parser for OOXML and BIFF filters.
 
-    This class implements formula import for the OOX and BIFF filter. One
+    This class implements formula import for the OOXML and BIFF filter. One
     instance is contained in the global filter data to prevent construction and
     destruction of internal buffers for every imported formula.
  */
@@ -113,17 +113,17 @@ public:
     explicit            FormulaParser( const WorkbookHelper& rHelper );
     virtual             ~FormulaParser();
 
-    /** Converts an XML formula string. */
+    /** Converts an OOXML formula string. */
     void                importFormula(
                             FormulaContext& rContext,
                             const ::rtl::OUString& rFormulaString ) const;
 
-    /** Imports and converts a OOBIN token array from the passed stream. */
+    /** Imports and converts a BIFF12 token array from the passed stream. */
     void                importFormula(
                             FormulaContext& rContext,
-                            RecordInputStream& rStrm ) const;
+                            SequenceInputStream& rStrm ) const;
 
-    /** Imports and converts a BIFF token array from the passed stream.
+    /** Imports and converts a BIFF2-BIFF8 token array from the passed stream.
         @param pnFmlaSize  Size of the token array. If null is passed, reads
         it from stream (1 byte in BIFF2, 2 bytes otherwise) first. */
     void                importFormula(
@@ -151,12 +151,15 @@ public:
     ::rtl::OUString     importOleTargetLink( const ::rtl::OUString& rFormulaString );
 
     /** Imports and converts an OLE link target from the passed stream. */
-    ::rtl::OUString     importOleTargetLink( RecordInputStream& rStrm );
+    ::rtl::OUString     importOleTargetLink( SequenceInputStream& rStrm );
 
     /** Imports and converts an OLE link target from the passed stream. */
     ::rtl::OUString     importOleTargetLink(
                             BiffInputStream& rStrm,
                             const sal_uInt16* pnFmlaSize = 0 ) const;
+
+    /** Converts the passed formula to a macro name for a drawing shape. */
+    ::rtl::OUString     importMacroName( const ::rtl::OUString& rFormulaString );
 
 private:
     ::std::auto_ptr< FormulaParserImpl > mxImpl;
@@ -168,4 +171,3 @@ private:
 } // namespace oox
 
 #endif
-
