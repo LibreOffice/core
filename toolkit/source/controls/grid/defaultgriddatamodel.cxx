@@ -250,38 +250,6 @@ namespace toolkit
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    void SAL_CALL DefaultGridDataModel::removeRows( const Sequence< ::sal_Int32 >& i_rowIndexes ) throw (IndexOutOfBoundsException, RuntimeException)
-    {
-        ::osl::ClearableMutexGuard aGuard( GetMutex() );
-
-        sal_Int32 const rowCount = i_rowIndexes.getLength();
-        if ( rowCount == 0 )
-            return;
-
-        for ( sal_Int32 row=0; row<rowCount; ++row )
-        {
-            if ( ( i_rowIndexes[row] < 0 ) || ( size_t( i_rowIndexes[row] ) >= m_aData.size() ) )
-                throw IndexOutOfBoundsException( ::rtl::OUString(), *this );
-        }
-
-        Sequence< sal_Int32 > rowIndexes( i_rowIndexes );
-        ::std::sort( stl_begin( rowIndexes ), stl_end( rowIndexes ) );
-
-        for ( sal_Int32 row = rowCount; row > 0; )
-        {
-            sal_Int32 const rowIndex = rowIndexes[--row];
-            m_aRowHeaders.erase( m_aRowHeaders.begin() + rowIndex );
-            m_aData.erase( m_aData.begin() + rowIndex );
-        }
-
-        broadcast(
-            GridDataEvent( *this, Sequence< sal_Int32 >(), rowIndexes ),
-            &XGridDataListener::rowsRemoved,
-            aGuard
-        );
-    }
-
-    //------------------------------------------------------------------------------------------------------------------
     void SAL_CALL DefaultGridDataModel::removeAllRows(  ) throw (RuntimeException)
     {
         ::osl::ClearableMutexGuard aGuard( GetMutex() );
