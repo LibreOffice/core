@@ -241,12 +241,6 @@ TYPEINIT1(ViewShellBase, SfxViewShell);
 // We have to expand the SFX_IMPL_VIEWFACTORY macro to call LateInit() after a
 // new ViewShellBase object has been constructed.
 
-/*
-SFX_IMPL_VIEWFACTORY(ViewShellBase, SdResId(STR_DEFAULTVIEW))
-{
-    SFX_VIEW_REGISTRATION(DrawDocShell);
-}
-*/
 SfxViewFactory* ViewShellBase::pFactory;
 SfxViewShell* __EXPORT ViewShellBase::CreateInstance (
     SfxViewFrame *pFrame, SfxViewShell *pOldView)
@@ -654,16 +648,6 @@ USHORT ViewShellBase::SetPrinter (
 
 
 
-PrintDialog* ViewShellBase::CreatePrintDialog (::Window *pParent)
-{
-    (void)pParent;
-    return NULL;
-    //    return mpImpl->mpPrintManager->CreatePrintDialog (pParent);
-}
-
-
-
-
 SfxTabPage*  ViewShellBase::CreatePrintOptionsPage(
     ::Window *pParent,
     const SfxItemSet &rOptions)
@@ -672,42 +656,6 @@ SfxTabPage*  ViewShellBase::CreatePrintOptionsPage(
     (void)rOptions;
     return NULL;
     //    return mpImpl->mpPrintManager->CreatePrintOptionsPage (pParent, rOptions);
-}
-
-
-
-
-USHORT  ViewShellBase::Print(SfxProgress&, BOOL bIsAPI, PrintDialog* pDlg)
-{
-    (void)bIsAPI;
-    (void)pDlg;
-    return 0;
-    //    return mpImpl->mpPrintManager->Print (rProgress, bIsAPI, pDlg);
-}
-
-
-
-
-ErrCode ViewShellBase::DoPrint (
-    SfxPrinter* pPrinter,
-    PrintDialog* pPrintDialog,
-    BOOL bSilent, BOOL bIsAPI )
-{
-    (void)pPrinter;
-    (void)pPrintDialog;
-    (void)bSilent;
-    (void)bIsAPI;
-    return 0;
-    //return mpImpl->mpPrintManager->DoPrint (pPrinter, pPrintDialog, bSilent, bIsAPI );
-}
-
-
-
-
-void ViewShellBase::PreparePrint (PrintDialog* pPrintDialog)
-{
-    SfxViewShell::PreparePrint (pPrintDialog);
-    //mpImpl->mpPrintManager->PreparePrint (pPrintDialog);
 }
 
 
