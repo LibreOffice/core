@@ -170,7 +170,7 @@ SotStorageStream::~SotStorageStream()
 *************************************************************************/
 void SotStorageStream::SyncSvStream()
 {
-    sal_uIntPtr nPos = 0;
+    sal_uLong nPos = 0;
     if( pOwnStm )
     {
         pOwnStm->Flush();
@@ -197,9 +197,9 @@ void SotStorageStream::ResetError()
 |*
 |*    Beschreibung
 *************************************************************************/
-sal_uIntPtr SotStorageStream::GetData( void* pData, sal_uIntPtr nSize )
+sal_uLong SotStorageStream::GetData( void* pData, sal_uLong nSize )
 {
-    sal_uIntPtr nRet = 0;
+    sal_uLong nRet = 0;
 
     if( pOwnStm )
     {
@@ -216,9 +216,9 @@ sal_uIntPtr SotStorageStream::GetData( void* pData, sal_uIntPtr nSize )
 |*
 |*    Beschreibung
 *************************************************************************/
-sal_uIntPtr SotStorageStream::PutData( const void* pData, sal_uIntPtr nSize )
+sal_uLong SotStorageStream::PutData( const void* pData, sal_uLong nSize )
 {
-    sal_uIntPtr nRet = 0;
+    sal_uLong nRet = 0;
 
     if( pOwnStm )
     {
@@ -235,9 +235,9 @@ sal_uIntPtr SotStorageStream::PutData( const void* pData, sal_uIntPtr nSize )
 |*
 |*    Beschreibung
 *************************************************************************/
-sal_uIntPtr SotStorageStream::SeekPos( sal_uIntPtr nPos )
+sal_uLong SotStorageStream::SeekPos( sal_uLong nPos )
 {
-    sal_uIntPtr nRet = 0;
+    sal_uLong nRet = 0;
 
     if( pOwnStm )
     {
@@ -270,9 +270,9 @@ void SotStorageStream::FlushData()
 |*
 |*    Beschreibung
 *************************************************************************/
-void SotStorageStream::SetSize( sal_uIntPtr nNewSize )
+void SotStorageStream::SetSize( sal_uLong nNewSize )
 {
-    sal_uIntPtr   nPos = Tell();
+    sal_uLong   nPos = Tell();
     if( pOwnStm )
     {
         pOwnStm->SetSize( nNewSize );
@@ -297,9 +297,9 @@ void SotStorageStream::SetSize( sal_uIntPtr nNewSize )
 *************************************************************************/
 sal_uInt32 SotStorageStream::GetSize() const
 {
-    sal_uIntPtr nPos = Tell();
+    sal_uLong nPos = Tell();
     ((SotStorageStream *)this)->Seek( STREAM_SEEK_TO_END );
-    sal_uIntPtr nSize = Tell();
+    sal_uLong nSize = Tell();
     ((SotStorageStream *)this)->Seek( nPos );
     return nSize;
 }
@@ -316,12 +316,12 @@ sal_Bool SotStorageStream::CopyTo( SotStorageStream * pDestStm )
     if( !pOwnStm || !pDestStm->pOwnStm )
     { // Wenn Ole2 oder nicht nur eigene StorageStreams
 
-        sal_uIntPtr nPos = Tell();    // Position merken
+        sal_uLong nPos = Tell();    // Position merken
         Seek( 0L );
         pDestStm->SetSize( 0 ); // Ziel-Stream leeren
 
         void * pMem = new sal_uInt8[ 8192 ];
-        sal_uIntPtr  nRead;
+        sal_uLong  nRead;
         while( 0 != (nRead = Read( pMem, 8192 )) )
         {
             if( nRead != pDestStm->Write( pMem, nRead ) )
@@ -651,7 +651,7 @@ SotStorage::SotStorage( BaseStorage * pStor )
     }
 
     m_pOwnStg = pStor;
-    sal_uIntPtr nErr = m_pOwnStg ? m_pOwnStg->GetError() : SVSTREAM_CANNOT_MAKE;
+    sal_uLong nErr = m_pOwnStg ? m_pOwnStg->GetError() : SVSTREAM_CANNOT_MAKE;
     SetError( nErr );
     if ( IsOLEStorage() )
         m_nVersion = SOFFICE_FILEFORMAT_50;
@@ -973,7 +973,7 @@ void SotStorage::ResetError()
 |*    Beschreibung
 *************************************************************************/
 void SotStorage::SetClass( const SvGlobalName & rName,
-                          sal_uIntPtr nOriginalClipFormat,
+                          sal_uLong nOriginalClipFormat,
                           const String & rUserTypeName )
 {
     DBG_ASSERT( Owner(), "must be owner" );
@@ -984,7 +984,7 @@ void SotStorage::SetClass( const SvGlobalName & rName,
 }
 
 void SotStorage::SetConvertClass( const SvGlobalName & rName,
-                                 sal_uIntPtr nOriginalClipFormat,
+                                 sal_uLong nOriginalClipFormat,
                                  const String & rUserTypeName )
 {
     DBG_ASSERT( Owner(), "must be owner" );
@@ -1013,9 +1013,9 @@ SvGlobalName SotStorage::GetClassName()
     return aGN;
 }
 
-sal_uIntPtr SotStorage::GetFormat()
+sal_uLong SotStorage::GetFormat()
 {
-    sal_uIntPtr nFormat = 0;
+    sal_uLong nFormat = 0;
     DBG_ASSERT( Owner(), "must be owner" );
     if( m_pOwnStg )
         nFormat = m_pOwnStg->GetFormat();

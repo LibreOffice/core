@@ -135,7 +135,7 @@ sal_Bool StgIo::CommitAll()
             if( aHdr.Store( *this ) )
             {
                 pStrm->Flush();
-                sal_uIntPtr n = pStrm->GetError();
+                sal_uLong n = pStrm->GetError();
                 SetError( n );
 #ifdef DBG_UTIL
                 if( n==0 ) ValidateFATs();
@@ -163,7 +163,7 @@ public:
     sal_Int32 Count() { return nPages; }
     sal_Int32 operator[]( sal_Int32 nOffset ) { return pFat[ nOffset ]; }
 
-    sal_uIntPtr Mark( sal_Int32 nPage, sal_Int32 nCount, sal_Int32 nExpect );
+    sal_uLong Mark( sal_Int32 nPage, sal_Int32 nCount, sal_Int32 nExpect );
     sal_Bool HasUnrefChains();
 };
 
@@ -201,7 +201,7 @@ sal_Bool EasyFat::HasUnrefChains()
     return sal_False;
 }
 
-sal_uIntPtr EasyFat::Mark( sal_Int32 nPage, sal_Int32 nCount, sal_Int32 nExpect )
+sal_uLong EasyFat::Mark( sal_Int32 nPage, sal_Int32 nCount, sal_Int32 nExpect )
 {
     if( nCount > 0 )
         --nCount /= GetPageSize(), nCount++;
@@ -231,17 +231,17 @@ sal_uIntPtr EasyFat::Mark( sal_Int32 nPage, sal_Int32 nCount, sal_Int32 nExpect 
 
 class Validator
 {
-    sal_uIntPtr nError;
+    sal_uLong nError;
 
     EasyFat aSmallFat;
     EasyFat aFat;
 
     StgIo &rIo;
 
-    sal_uIntPtr ValidateMasterFATs();
-    sal_uIntPtr ValidateDirectoryEntries();
-    sal_uIntPtr FindUnrefedChains();
-    sal_uIntPtr MarkAll( StgDirEntry *pEntry );
+    sal_uLong ValidateMasterFATs();
+    sal_uLong ValidateDirectoryEntries();
+    sal_uLong FindUnrefedChains();
+    sal_uLong MarkAll( StgDirEntry *pEntry );
 
 public:
 
@@ -254,7 +254,7 @@ Validator::Validator( StgIo &rIoP )
       aFat( rIoP, rIoP.pFAT, 1 << rIoP.aHdr.GetPageSize() ),
       rIo( rIoP )
 {
-    sal_uIntPtr nErr = nError = FAT_OK;
+    sal_uLong nErr = nError = FAT_OK;
 
     if( ( nErr = ValidateMasterFATs() ) != FAT_OK )
         nError = nErr;
@@ -264,10 +264,10 @@ Validator::Validator( StgIo &rIoP )
         nError = nErr;
 }
 
-sal_uIntPtr Validator::ValidateMasterFATs()
+sal_uLong Validator::ValidateMasterFATs()
 {
     sal_Int32 nCount = rIo.aHdr.GetFATSize();
-    sal_uIntPtr nErr;
+    sal_uLong nErr;
     for( sal_Int32 i = 0; i < nCount; i++ )
     {
         if( ( nErr = aFat.Mark(rIo.pFAT->GetPage( short(i), sal_False ), aFat.GetPageSize(), -3 )) != FAT_OK )
@@ -279,10 +279,10 @@ sal_uIntPtr Validator::ValidateMasterFATs()
     return FAT_OK;
 }
 
-sal_uIntPtr Validator::MarkAll( StgDirEntry *pEntry )
+sal_uLong Validator::MarkAll( StgDirEntry *pEntry )
 {
     StgIterator aIter( *pEntry );
-    sal_uIntPtr nErr = FAT_OK;
+    sal_uLong nErr = FAT_OK;
     for( StgDirEntry* p = aIter.First(); p ; p = aIter.Next() )
     {
         if( p->aEntry.GetType() == STG_STORAGE )
@@ -305,10 +305,10 @@ sal_uIntPtr Validator::MarkAll( StgDirEntry *pEntry )
     return FAT_OK;
 }
 
-sal_uIntPtr Validator::ValidateDirectoryEntries()
+sal_uLong Validator::ValidateDirectoryEntries()
 {
     // Normale DirEntries
-    sal_uIntPtr nErr = MarkAll( rIo.pTOC->GetRoot() );
+    sal_uLong nErr = MarkAll( rIo.pTOC->GetRoot() );
     if( nErr != FAT_OK )
         return nErr;
     // Small Data
@@ -328,7 +328,7 @@ sal_uIntPtr Validator::ValidateDirectoryEntries()
     return nErr;
 }
 
-sal_uIntPtr Validator::FindUnrefedChains()
+sal_uLong Validator::FindUnrefedChains()
 {
     if( aSmallFat.HasUnrefChains() ||
         aFat.HasUnrefChains() )
@@ -349,7 +349,7 @@ const Link& StgIo::GetErrorLink()
     return ErrorLink::get();
 }
 
-sal_uIntPtr StgIo::ValidateFATs()
+sal_uLong StgIo::ValidateFATs()
 {
     if( bFile )
     {
@@ -367,7 +367,7 @@ sal_uIntPtr StgIo::ValidateFATs()
             delete pV;
         }
 
-        sal_uIntPtr nErr;
+        sal_uLong nErr;
         if( bRet1 != bRet2 )
             nErr = bRet1 ? FAT_ONFILEERROR : FAT_INMEMORYERROR;
         else nErr = bRet1 ? FAT_OK : FAT_BOTHERROR;

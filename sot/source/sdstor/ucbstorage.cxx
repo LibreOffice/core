@@ -443,10 +443,10 @@ class UCBStorageStream_Impl : public SvRefBase, public SvStream
                                 ~UCBStorageStream_Impl();
 public:
 
-    virtual sal_uIntPtr               GetData( void* pData, sal_uIntPtr nSize );
-    virtual sal_uIntPtr               PutData( const void* pData, sal_uIntPtr nSize );
-    virtual sal_uIntPtr               SeekPos( sal_uIntPtr nPos );
-    virtual void                SetSize( sal_uIntPtr nSize );
+    virtual sal_uLong               GetData( void* pData, sal_uLong nSize );
+    virtual sal_uLong               PutData( const void* pData, sal_uLong nSize );
+    virtual sal_uLong               SeekPos( sal_uLong nPos );
+    virtual void                SetSize( sal_uLong nSize );
     virtual void                FlushData();
     virtual void                ResetError();
 
@@ -482,19 +482,19 @@ public:
     sal_Int16                   Commit();       // if modified and commited: transfer an XInputStream to the content
     sal_Bool                        Revert();       // discard all changes
     BaseStorage*                CreateStorage();// create an OLE Storage on the UCBStorageStream
-    sal_uIntPtr                       GetSize();
+    sal_uLong                       GetSize();
 
-    sal_uIntPtr                       ReadSourceWriteTemporary( sal_uIntPtr aLength ); // read aLength from source and copy to temporary,
+    sal_uLong                       ReadSourceWriteTemporary( sal_uLong aLength ); // read aLength from source and copy to temporary,
                                                                            // no seeking is produced
-    sal_uIntPtr                       ReadSourceWriteTemporary();                // read source till the end and copy to temporary,
+    sal_uLong                       ReadSourceWriteTemporary();                // read source till the end and copy to temporary,
                                                                            // no seeking is produced
 #if 0
-    sal_uIntPtr                       CopySourceToTemporary( sal_uIntPtr aLength ); // same as ReadSourceWriteToTemporary( aLength )
+    sal_uLong                       CopySourceToTemporary( sal_uLong aLength ); // same as ReadSourceWriteToTemporary( aLength )
                                                                         // but the writing is done at the end of temporary
                                                                         // pointer position is not changed
 #endif
 
-    sal_uIntPtr                       CopySourceToTemporary();                // same as ReadSourceWriteToTemporary()
+    sal_uLong                       CopySourceToTemporary();                // same as ReadSourceWriteToTemporary()
                                                                         // but the writing is done at the end of temporary
                                                                         // pointer position is not changed
     Reference<XInputStream>     GetXInputStream();                      // return XInputStream, after that
@@ -536,7 +536,7 @@ public:
     sal_Bool                        m_bDirty;           // ???
     sal_Bool                        m_bIsLinked;
     sal_Bool                        m_bListCreated;
-    sal_uIntPtr                       m_nFormat;
+    sal_uLong                       m_nFormat;
     String                      m_aUserTypeName;
     SvGlobalName                m_aClassId;
 
@@ -589,7 +589,7 @@ struct UCBStorageElement_Impl
 {
     String                      m_aName;        // the actual URL relative to the root "folder"
     String                      m_aOriginalName;// the original name in the content
-    sal_uIntPtr                       m_nSize;
+    sal_uLong                       m_nSize;
     sal_Bool                        m_bIsFolder;    // Only sal_True when it is a UCBStorage !
     sal_Bool                        m_bIsStorage;   // Also sal_True when it is an OLEStorage !
     sal_Bool                        m_bIsRemoved;   // element will be removed on commit
@@ -598,7 +598,7 @@ struct UCBStorageElement_Impl
     UCBStorageStream_ImplRef    m_xStream;      // reference to the "real" stream
 
                                 UCBStorageElement_Impl( const ::rtl::OUString& rName,
-                                            sal_Bool bIsFolder = sal_False, sal_uIntPtr nSize = 0 )
+                                            sal_Bool bIsFolder = sal_False, sal_uLong nSize = 0 )
                                     : m_aName( rName )
                                     , m_aOriginalName( rName )
                                     , m_nSize( nSize )
@@ -896,12 +896,12 @@ sal_Bool UCBStorageStream_Impl::Init()
     return sal_True;
 }
 
-sal_uIntPtr UCBStorageStream_Impl::ReadSourceWriteTemporary()
+sal_uLong UCBStorageStream_Impl::ReadSourceWriteTemporary()
 {
     // read source stream till the end and copy all the data to
     // the current position of the temporary stream
 
-    sal_uIntPtr aResult = 0;
+    sal_uLong aResult = 0;
 
     if( m_bSourceRead )
     {
@@ -909,7 +909,7 @@ sal_uIntPtr UCBStorageStream_Impl::ReadSourceWriteTemporary()
 
         try
         {
-            sal_uIntPtr aReaded;
+            sal_uLong aReaded;
             do
             {
                 aReaded = m_rSource->readBytes( aData, 32000 );
@@ -933,12 +933,12 @@ sal_uIntPtr UCBStorageStream_Impl::ReadSourceWriteTemporary()
 
 }
 
-sal_uIntPtr UCBStorageStream_Impl::ReadSourceWriteTemporary( sal_uIntPtr aLength )
+sal_uLong UCBStorageStream_Impl::ReadSourceWriteTemporary( sal_uLong aLength )
 {
     // read aLength bite from the source stream and copy them to the current
     // position of the temporary stream
 
-    sal_uIntPtr aResult = 0;
+    sal_uLong aResult = 0;
 
     if( m_bSourceRead )
     {
@@ -947,11 +947,11 @@ sal_uIntPtr UCBStorageStream_Impl::ReadSourceWriteTemporary( sal_uIntPtr aLength
         try
         {
 
-            sal_uIntPtr aReaded = 32000;
+            sal_uLong aReaded = 32000;
 
-            for( sal_uIntPtr pInd = 0; pInd < aLength && aReaded == 32000 ; pInd += 32000 )
+            for( sal_uLong pInd = 0; pInd < aLength && aReaded == 32000 ; pInd += 32000 )
             {
-                sal_uIntPtr aToCopy = min( aLength - pInd, 32000 );
+                sal_uLong aToCopy = min( aLength - pInd, 32000 );
                 aReaded = m_rSource->readBytes( aData, aToCopy );
                 aResult += m_pStream->Write( aData.getArray(), aReaded );
             }
@@ -973,14 +973,14 @@ sal_uIntPtr UCBStorageStream_Impl::ReadSourceWriteTemporary( sal_uIntPtr aLength
     return aResult;
 }
 
-sal_uIntPtr UCBStorageStream_Impl::CopySourceToTemporary()
+sal_uLong UCBStorageStream_Impl::CopySourceToTemporary()
 {
     // current position of the temporary stream is not changed
-    sal_uIntPtr aResult = 0;
+    sal_uLong aResult = 0;
 
     if( m_bSourceRead )
     {
-        sal_uIntPtr aPos = m_pStream->Tell();
+        sal_uLong aPos = m_pStream->Tell();
         m_pStream->Seek( STREAM_SEEK_TO_END );
         aResult = ReadSourceWriteTemporary();
         m_pStream->Seek( aPos );
@@ -991,14 +991,14 @@ sal_uIntPtr UCBStorageStream_Impl::CopySourceToTemporary()
 }
 
 #if 0
-sal_uIntPtr UCBStorageStream_Impl::CopySourceToTemporary( sal_uIntPtr aLength )
+sal_uLong UCBStorageStream_Impl::CopySourceToTemporary( sal_uLong aLength )
 {
     // current position of the temporary stream is not changed
-    sal_uIntPtr aResult = 0;
+    sal_uLong aResult = 0;
 
     if( m_bSourceRead )
     {
-        sal_uIntPtr aPos = m_pStream->Tell();
+        sal_uLong aPos = m_pStream->Tell();
         m_pStream->Seek( STREAM_SEEK_TO_END );
         aResult = ReadSourceWriteTemporary( aLength );
         m_pStream->Seek( aPos );
@@ -1011,9 +1011,9 @@ sal_uIntPtr UCBStorageStream_Impl::CopySourceToTemporary( sal_uIntPtr aLength )
 
 // UCBStorageStream_Impl must have a SvStream interface, because it then can be used as underlying stream
 // of an OLEStorage; so every write access caused by storage operations marks the UCBStorageStream as modified
-sal_uIntPtr UCBStorageStream_Impl::GetData( void* pData, sal_uIntPtr nSize )
+sal_uLong UCBStorageStream_Impl::GetData( void* pData, sal_uLong nSize )
 {
-    sal_uIntPtr aResult = 0;
+    sal_uLong aResult = 0;
 
     if( !Init() )
         return 0;
@@ -1026,13 +1026,13 @@ sal_uIntPtr UCBStorageStream_Impl::GetData( void* pData, sal_uIntPtr nSize )
         // read the tail of the data from original stream
         // copy this tail to the temporary stream
 
-        sal_uIntPtr aToRead = nSize - aResult;
+        sal_uLong aToRead = nSize - aResult;
         pData = (void*)( (char*)pData + aResult );
 
         try
         {
             Sequence<sal_Int8> aData( aToRead );
-            sal_uIntPtr aReaded = m_rSource->readBytes( aData, aToRead );
+            sal_uLong aReaded = m_rSource->readBytes( aData, aToRead );
             aResult += m_pStream->Write( (void*)aData.getArray(), aReaded );
             memcpy( pData, aData.getArray(), aReaded );
         }
@@ -1053,7 +1053,7 @@ sal_uIntPtr UCBStorageStream_Impl::GetData( void* pData, sal_uIntPtr nSize )
     return aResult;
 }
 
-sal_uIntPtr UCBStorageStream_Impl::PutData( const void* pData, sal_uIntPtr nSize )
+sal_uLong UCBStorageStream_Impl::PutData( const void* pData, sal_uLong nSize )
 {
     if ( !(m_nMode & STREAM_WRITE) )
     {
@@ -1064,7 +1064,7 @@ sal_uIntPtr UCBStorageStream_Impl::PutData( const void* pData, sal_uIntPtr nSize
     if( !nSize || !Init() )
         return 0;
 
-    sal_uIntPtr aResult = m_pStream->Write( pData, nSize );
+    sal_uLong aResult = m_pStream->Write( pData, nSize );
 
     m_bModified = aResult > 0;
 
@@ -1072,12 +1072,12 @@ sal_uIntPtr UCBStorageStream_Impl::PutData( const void* pData, sal_uIntPtr nSize
 
 }
 
-sal_uIntPtr UCBStorageStream_Impl::SeekPos( sal_uIntPtr nPos )
+sal_uLong UCBStorageStream_Impl::SeekPos( sal_uLong nPos )
 {
     if( !Init() )
         return 0;
 
-    sal_uIntPtr aResult;
+    sal_uLong aResult;
 
     if( nPos == STREAM_SEEK_TO_END )
     {
@@ -1129,7 +1129,7 @@ sal_uIntPtr UCBStorageStream_Impl::SeekPos( sal_uIntPtr nPos )
     return aResult;
 }
 
-void  UCBStorageStream_Impl::SetSize( sal_uIntPtr nSize )
+void  UCBStorageStream_Impl::SetSize( sal_uLong nSize )
 {
     if ( !(m_nMode & STREAM_WRITE) )
     {
@@ -1144,7 +1144,7 @@ void  UCBStorageStream_Impl::SetSize( sal_uIntPtr nSize )
 
     if( m_bSourceRead )
     {
-        sal_uIntPtr aPos = m_pStream->Tell();
+        sal_uLong aPos = m_pStream->Tell();
         m_pStream->Seek( STREAM_SEEK_TO_END );
         if( m_pStream->Tell() < nSize )
             ReadSourceWriteTemporary( nSize - m_pStream->Tell() );
@@ -1184,15 +1184,15 @@ void  UCBStorageStream_Impl::ResetError()
         m_pAntiImpl->ResetError();
 }
 
-sal_uIntPtr UCBStorageStream_Impl::GetSize()
+sal_uLong UCBStorageStream_Impl::GetSize()
 {
     if( !Init() )
         return 0;
 
-    sal_uIntPtr nPos = m_pStream->Tell();
+    sal_uLong nPos = m_pStream->Tell();
     m_pStream->Seek( STREAM_SEEK_TO_END );
     ReadSourceWriteTemporary();
-    sal_uIntPtr nRet = m_pStream->Tell();
+    sal_uLong nRet = m_pStream->Tell();
     m_pStream->Seek( nPos );
 
     return nRet;
@@ -1423,13 +1423,13 @@ UCBStorageStream::~UCBStorageStream()
     pImp->ReleaseRef();
 }
 
-sal_uIntPtr UCBStorageStream::Read( void * pData, sal_uIntPtr nSize )
+sal_uLong UCBStorageStream::Read( void * pData, sal_uLong nSize )
 {
     //return pImp->m_pStream->Read( pData, nSize );
     return pImp->GetData( pData, nSize );
 }
 
-sal_uIntPtr UCBStorageStream::Write( const void* pData, sal_uIntPtr nSize )
+sal_uLong UCBStorageStream::Write( const void* pData, sal_uLong nSize )
 {
 /*
     // mba: does occur in writer !
@@ -1444,13 +1444,13 @@ sal_uIntPtr UCBStorageStream::Write( const void* pData, sal_uIntPtr nSize )
     return pImp->PutData( pData, nSize );
 }
 
-sal_uIntPtr UCBStorageStream::Seek( sal_uIntPtr nPos )
+sal_uLong UCBStorageStream::Seek( sal_uLong nPos )
 {
     //return pImp->m_pStream->Seek( nPos );
     return pImp->Seek( nPos );
 }
 
-sal_uIntPtr UCBStorageStream::Tell()
+sal_uLong UCBStorageStream::Tell()
 {
     if( !pImp->Init() )
         return 0;
@@ -1463,7 +1463,7 @@ void UCBStorageStream::Flush()
     Commit();
 }
 
-sal_Bool UCBStorageStream::SetSize( sal_uIntPtr nNewSize )
+sal_Bool UCBStorageStream::SetSize( sal_uLong nNewSize )
 {
 /*
     if ( pImp->m_bCommited )
@@ -2013,7 +2013,7 @@ void UCBStorage_Impl::ReadContent()
 
                 sal_Bool bIsFolder( xRow->getBoolean(2) );
                 sal_Int64 nSize = xRow->getLong(4);
-                UCBStorageElement_Impl* pElement = new UCBStorageElement_Impl( aTitle, bIsFolder, (sal_uIntPtr) nSize );
+                UCBStorageElement_Impl* pElement = new UCBStorageElement_Impl( aTitle, bIsFolder, (sal_uLong) nSize );
                 m_aChildrenList.Insert( pElement, LIST_APPEND );
 
                 sal_Bool bIsOfficeDocument = m_bIsLinked || ( m_aClassId != SvGlobalName() );
@@ -2658,7 +2658,7 @@ void UCBStorage::SetDirty()
     pImp->m_bDirty = sal_True;
 }
 
-void UCBStorage::SetClass( const SvGlobalName & rClass, sal_uIntPtr nOriginalClipFormat, const String & rUserTypeName )
+void UCBStorage::SetClass( const SvGlobalName & rClass, sal_uLong nOriginalClipFormat, const String & rUserTypeName )
 {
     pImp->m_aClassId = rClass;
     pImp->m_nFormat = nOriginalClipFormat;
@@ -2697,7 +2697,7 @@ const ClsId& UCBStorage::GetClassId() const
     return ( const ClsId& ) pImp->m_aClassId.GetCLSID();
 }
 
-void UCBStorage::SetConvertClass( const SvGlobalName & /*rConvertClass*/, sal_uIntPtr /*nOriginalClipFormat*/, const String & /*rUserTypeName*/ )
+void UCBStorage::SetConvertClass( const SvGlobalName & /*rConvertClass*/, sal_uLong /*nOriginalClipFormat*/, const String & /*rUserTypeName*/ )
 {
     // ???
 }
@@ -2713,7 +2713,7 @@ SvGlobalName UCBStorage::GetClassName()
     return  pImp->m_aClassId;
 }
 
-sal_uIntPtr UCBStorage::GetFormat()
+sal_uLong UCBStorage::GetFormat()
 {
     return pImp->m_nFormat;
 }
@@ -2733,7 +2733,7 @@ void UCBStorage::FillInfoList( SvStorageInfoList* pList ) const
         if ( !pElement->m_bIsRemoved )
         {
             // problem: what about the size of a substorage ?!
-            sal_uIntPtr nSize = pElement->m_nSize;
+            sal_uLong nSize = pElement->m_nSize;
             if ( pElement->m_xStream.Is() )
                 nSize = pElement->m_xStream->GetSize();
             SvStorageInfo aInfo( pElement->m_aName, nSize, pElement->m_bIsStorage );
@@ -3339,7 +3339,7 @@ sal_Bool UCBStorage::IsStorageFile( SvStream* pFile )
     if ( !pFile )
         return sal_False;
 
-    sal_uIntPtr nPos = pFile->Tell();
+    sal_uLong nPos = pFile->Tell();
     pFile->Seek( STREAM_SEEK_TO_END );
     if ( pFile->Tell() < 4 )
         return sal_False;
@@ -3370,7 +3370,7 @@ sal_Bool UCBStorage::IsDiskSpannedFile( SvStream* pFile )
     if ( !pFile )
         return sal_False;
 
-    sal_uIntPtr nPos = pFile->Tell();
+    sal_uLong nPos = pFile->Tell();
     pFile->Seek( STREAM_SEEK_TO_END );
     if ( !pFile->Tell() )
         return sal_False;
@@ -3394,7 +3394,7 @@ sal_Bool UCBStorage::IsDiskSpannedFile( SvStream* pFile )
 String UCBStorage::GetLinkedFile( SvStream &rStream )
 {
     String aString;
-    sal_uIntPtr nPos = rStream.Tell();
+    sal_uLong nPos = rStream.Tell();
     rStream.Seek( STREAM_SEEK_TO_END );
     if ( !rStream.Tell() )
         return aString;

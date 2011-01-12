@@ -53,7 +53,7 @@ enum FAT_ERROR
 struct StgLinkArg
 {
     String aFile;
-    sal_uIntPtr nErr;
+    sal_uLong nErr;
 };
 
 class StgIo : public StgCache {
@@ -74,7 +74,7 @@ public:
 
     static void SetErrorLink( const Link& );
     static const Link& GetErrorLink();
-    sal_uIntPtr ValidateFATs( );
+    sal_uLong ValidateFATs( );
 };
 
 #endif

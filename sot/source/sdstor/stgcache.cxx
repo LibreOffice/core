@@ -105,7 +105,7 @@ void StgPage::SetPage( short nOff, sal_Int32 nVal )
 // The disk cache holds the cached sectors. The sector type differ according
 // to their purpose.
 
-sal_Int32 lcl_GetPageCount( sal_uIntPtr nFileSize, short nPageSize )
+sal_Int32 lcl_GetPageCount( sal_uLong nFileSize, short nPageSize )
 {
 //    return (nFileSize >= 512) ? (nFileSize - 512) / nPageSize : 0;
     // #i61980# reallife: last page may be incomplete, return number of *started* pages
@@ -135,8 +135,8 @@ StgCache::~StgCache()
 void StgCache::SetPhysPageSize( short n )
 {
     nPageSize = n;
-    sal_uIntPtr nPos = pStrm->Tell();
-    sal_uIntPtr nFileSize = pStrm->Seek( STREAM_SEEK_TO_END );
+    sal_uLong nPos = pStrm->Tell();
+    sal_uLong nFileSize = pStrm->Seek( STREAM_SEEK_TO_END );
     nPages = lcl_GetPageCount( nFileSize, nPageSize );
     pStrm->Seek( nPos );
 }
@@ -397,7 +397,7 @@ sal_Bool StgCache::Open( const String& rName, StreamMode nMode )
     SetStrm( pFileStrm, sal_True );
     if( pFileStrm->IsOpen() )
     {
-        sal_uIntPtr nFileSize = pStrm->Seek( STREAM_SEEK_TO_END );
+        sal_uLong nFileSize = pStrm->Seek( STREAM_SEEK_TO_END );
         nPages = lcl_GetPageCount( nFileSize, nPageSize );
         pStrm->Seek( 0L );
     }
@@ -431,9 +431,9 @@ sal_Bool StgCache::Read( sal_Int32 nPage, void* pBuf, sal_Int32 nPg )
             SetError( SVSTREAM_READ_ERROR );
         else if ( nPage < nPages )
         {
-            sal_uIntPtr nPos = Page2Pos( nPage );
+            sal_uLong nPos = Page2Pos( nPage );
             sal_Int32 nPg2 = ( ( nPage + nPg ) > nPages ) ? nPages - nPage : nPg;
-            sal_uIntPtr nBytes = nPg2 * nPageSize;
+            sal_uLong nBytes = nPg2 * nPageSize;
             // fixed address and size for the header
             if( nPage == -1 )
             {
@@ -462,8 +462,8 @@ sal_Bool StgCache::Write( sal_Int32 nPage, void* pBuf, sal_Int32 nPg )
 {
     if( Good() )
     {
-        sal_uIntPtr nPos = Page2Pos( nPage );
-        sal_uIntPtr nBytes = nPg * nPageSize;
+        sal_uLong nPos = Page2Pos( nPage );
+        sal_uLong nBytes = nPg * nPageSize;
         // fixed address and size for the header
         if( nPage == -1 )
             nPos = 0L, nBytes = 512;
@@ -475,7 +475,7 @@ sal_Bool StgCache::Write( sal_Int32 nPage, void* pBuf, sal_Int32 nPg )
 #endif
             }
         }
-        sal_uIntPtr nRes = pStrm->Write( pBuf, nBytes );
+        sal_uLong nRes = pStrm->Write( pBuf, nBytes );
         if( nRes != nBytes )
             SetError( SVSTREAM_WRITE_ERROR );
         else
@@ -510,7 +510,7 @@ sal_Bool StgCache::SetSize( sal_Int32 n )
     return Good();
 }
 
-void StgCache::SetError( sal_uIntPtr n )
+void StgCache::SetError( sal_uLong n )
 {
     if( n && !nError )
         nError = n;

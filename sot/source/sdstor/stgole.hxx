@@ -36,9 +36,9 @@
 class StgInternalStream : public SvStream
 {
     BaseStorageStream* pStrm;
-    virtual sal_uIntPtr GetData( void* pData, sal_uIntPtr nSize );
-    virtual sal_uIntPtr PutData( const void* pData, sal_uIntPtr nSize );
-    virtual sal_uIntPtr SeekPos( sal_uIntPtr nPos );
+    virtual sal_uLong GetData( void* pData, sal_uLong nSize );
+    virtual sal_uLong PutData( const void* pData, sal_uLong nSize );
+    virtual sal_uLong SeekPos( sal_uLong nPos );
     virtual void  FlushData();
 public:
     StgInternalStream( BaseStorage&, const String&, sal_Bool );
@@ -52,12 +52,12 @@ class StgCompObjStream : public StgInternalStream
 {
     ClsId  aClsId;
     String aUserName;
-    sal_uIntPtr  nCbFormat;
+    sal_uLong  nCbFormat;
 public:
     StgCompObjStream( BaseStorage&, sal_Bool );
     ClsId&  GetClsId()    { return aClsId;    }
     String& GetUserName() { return aUserName; }
-    sal_uIntPtr&  GetCbFormat() { return nCbFormat; }
+    sal_uLong&  GetCbFormat() { return nCbFormat; }
     sal_Bool    Load();
     sal_Bool    Store();
 };

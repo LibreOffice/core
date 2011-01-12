@@ -58,7 +58,7 @@ StgInternalStream::~StgInternalStream()
     delete pStrm;
 }
 
-sal_uIntPtr StgInternalStream::GetData( void* pData, sal_uIntPtr nSize )
+sal_uLong StgInternalStream::GetData( void* pData, sal_uLong nSize )
 {
     if( pStrm )
     {
@@ -70,7 +70,7 @@ sal_uIntPtr StgInternalStream::GetData( void* pData, sal_uIntPtr nSize )
         return 0;
 }
 
-sal_uIntPtr StgInternalStream::PutData( const void* pData, sal_uIntPtr nSize )
+sal_uLong StgInternalStream::PutData( const void* pData, sal_uLong nSize )
 {
     if( pStrm )
     {
@@ -82,7 +82,7 @@ sal_uIntPtr StgInternalStream::PutData( const void* pData, sal_uIntPtr nSize )
         return 0;
 }
 
-sal_uIntPtr StgInternalStream::SeekPos( sal_uIntPtr nPos )
+sal_uLong StgInternalStream::SeekPos( sal_uLong nPos )
 {
     return pStrm ? pStrm->Seek( nPos ) : 0;
 }
@@ -129,7 +129,7 @@ sal_Bool StgCompObjStream::Load()
         // higher bits are ignored
         nLen1 &= 0xFFFF;
         sal_Char* p = new sal_Char[ (sal_uInt16) nLen1 ];
-        if( Read( p, nLen1 ) == (sal_uIntPtr) nLen1 )
+        if( Read( p, nLen1 ) == (sal_uLong) nLen1 )
         {
             aUserName = nLen1 ? String( p, gsl_getSystemTextEncoding() ) : String();
 /*          // Now we can read the CB format
@@ -140,7 +140,7 @@ sal_Bool StgCompObjStream::Load()
                 // get a string name
                 if( nLen2 > nLen1 )
                     delete p, p = new char[ nLen2 ];
-                if( Read( p, nLen2 ) == (sal_uIntPtr) nLen2 && nLen2 )
+                if( Read( p, nLen2 ) == (sal_uLong) nLen2 && nLen2 )
                     nCbFormat = Exchange::RegisterFormatName( String( p ) );
                 else
                     SetError( SVSTREAM_GENERALERROR );

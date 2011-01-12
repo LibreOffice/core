@@ -1043,7 +1043,7 @@ sal_Int32 StgSmallStrm::Write( const void* pBuf, sal_Int32 n )
 
 #define THRESHOLD 32768L
 
-StgTmpStrm::StgTmpStrm( sal_uIntPtr nInitSize )
+StgTmpStrm::StgTmpStrm( sal_uLong nInitSize )
           : SvMemoryStream( nInitSize > THRESHOLD
                               ? 16
                             : ( nInitSize ? nInitSize : 16 ), 4096 )
@@ -1057,8 +1057,8 @@ StgTmpStrm::StgTmpStrm( sal_uIntPtr nInitSize )
 
 sal_Bool StgTmpStrm::Copy( StgTmpStrm& rSrc )
 {
-    sal_uIntPtr n    = rSrc.GetSize();
-    sal_uIntPtr nCur = rSrc.Tell();
+    sal_uLong n    = rSrc.GetSize();
+    sal_uLong nCur = rSrc.Tell();
     SetSize( n );
     if( GetError() == SVSTREAM_OK )
     {
@@ -1067,7 +1067,7 @@ sal_Bool StgTmpStrm::Copy( StgTmpStrm& rSrc )
         Seek( 0L );
         while( n )
         {
-            sal_uIntPtr nn = n;
+            sal_uLong nn = n;
             if( nn > 4096 )
                 nn = 4096;
             if( rSrc.Read( p, nn ) != nn )
@@ -1095,12 +1095,12 @@ StgTmpStrm::~StgTmpStrm()
     }
 }
 
-sal_uIntPtr StgTmpStrm::GetSize() const
+sal_uLong StgTmpStrm::GetSize() const
 {
-    sal_uIntPtr n;
+    sal_uLong n;
     if( pStrm )
     {
-        sal_uIntPtr old = pStrm->Tell();
+        sal_uLong old = pStrm->Tell();
         n = pStrm->Seek( STREAM_SEEK_TO_END );
         pStrm->Seek( old );
     }
@@ -1109,7 +1109,7 @@ sal_uIntPtr StgTmpStrm::GetSize() const
     return n;
 }
 
-void StgTmpStrm::SetSize( sal_uIntPtr n )
+void StgTmpStrm::SetSize( sal_uLong n )
 {
     if( pStrm )
         pStrm->SetStreamSize( n );
@@ -1119,15 +1119,15 @@ void StgTmpStrm::SetSize( sal_uIntPtr n )
         {
             aName = TempFile::CreateTempName();
             SvFileStream* s = new SvFileStream( aName, STREAM_READWRITE );
-            sal_uIntPtr nCur = Tell();
-            sal_uIntPtr i = nEndOfData;
+            sal_uLong nCur = Tell();
+            sal_uLong i = nEndOfData;
             if( i )
             {
                 sal_uInt8* p = new sal_uInt8[ 4096 ];
                 Seek( 0L );
                 while( i )
                 {
-                    sal_uIntPtr nb = ( i > 4096 ) ? 4096 : i;
+                    sal_uLong nb = ( i > 4096 ) ? 4096 : i;
                     if( Read( p, nb ) == nb
                      && s->Write( p, nb ) == nb )
                         i -= nb;
@@ -1163,7 +1163,7 @@ void StgTmpStrm::SetSize( sal_uIntPtr n )
         {
             if( n > nEndOfData )
             {
-                sal_uIntPtr nCur = Tell();
+                sal_uLong nCur = Tell();
                 Seek( nEndOfData - 1 );
                 *this << (sal_uInt8) 0;
                 Seek( nCur );
@@ -1174,7 +1174,7 @@ void StgTmpStrm::SetSize( sal_uIntPtr n )
     }
 }
 
-sal_uIntPtr StgTmpStrm::GetData( void* pData, sal_uIntPtr n )
+sal_uLong StgTmpStrm::GetData( void* pData, sal_uLong n )
 {
     if( pStrm )
     {
@@ -1186,7 +1186,7 @@ sal_uIntPtr StgTmpStrm::GetData( void* pData, sal_uIntPtr n )
         return SvMemoryStream::GetData( (sal_Char *)pData, n );
 }
 
-sal_uIntPtr StgTmpStrm::PutData( const void* pData, sal_uIntPtr n )
+sal_uLong StgTmpStrm::PutData( const void* pData, sal_uLong n )
 {
     sal_uInt32 nCur = Tell();
     sal_uInt32 nNew = nCur + n;
@@ -1206,7 +1206,7 @@ sal_uIntPtr StgTmpStrm::PutData( const void* pData, sal_uIntPtr n )
     return nNew;
 }
 
-sal_uIntPtr StgTmpStrm::SeekPos( sal_uIntPtr n )
+sal_uLong StgTmpStrm::SeekPos( sal_uLong n )
 {
     if( n == STREAM_SEEK_TO_END )
         n = GetSize();

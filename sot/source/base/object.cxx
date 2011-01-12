@@ -151,7 +151,7 @@ sal_Bool SotObject::ShouldDelete()
         return sal_False;
     }
 
-   sal_uIntPtr i;
+   sal_uLong i;
     for( i = 1; i < pAggList->Count(); i++ )
     {
         SvAggregate & rAgg = pAggList->GetObject( i );
@@ -212,7 +212,7 @@ SvAggregateMemberList & SotObject::GetAggList()
 |*
 |*    Beschreibung
 *************************************************************************/
-void SotObject::RemoveInterface( sal_uIntPtr nPos )
+void SotObject::RemoveInterface( sal_uLong nPos )
 {
     SvAggregate & rAgg = pAggList->GetObject( nPos );
     if( !rAgg.bFactory )
@@ -238,7 +238,7 @@ void SotObject::RemoveInterface( SotObject * pObjP )
 {
     DBG_ASSERT( pObjP, "null pointer" );
     DBG_ASSERT( pAggList, "no aggregation list" );
-    sal_uIntPtr i;
+    sal_uLong i;
     for( i = 0; i < pAggList->Count(); i++ )
     {
         SvAggregate & rAgg = pAggList->GetObject( i );
@@ -298,7 +298,7 @@ void * SotObject::DownAggCast( const SotFactory * pFact )
     // geht den Pfad nur Richtung aggregierte Objekte
     if( pAggList )
     {
-        for( sal_uIntPtr i = 1; !pCast || i < pAggList->Count(); i++ )
+        for( sal_uLong i = 1; !pCast || i < pAggList->Count(); i++ )
         {
             SvAggregate & rAgg = pAggList->GetObject( i );
             if( rAgg.bFactory )

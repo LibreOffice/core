@@ -47,7 +47,7 @@ class StorageBase;
 class StgCache {
     StgPage* pCur;                          // top of LRU list
     StgPage* pElem1;                        // top of ordered list
-    sal_uIntPtr nError;                         // error code
+    sal_uLong nError;                           // error code
     sal_Int32 nPages;                           // size of data area in pages
     sal_uInt16 nRef;                            // reference count
     void * pLRUCache;                       // hash table of cached objects
@@ -78,9 +78,9 @@ public:
     sal_Bool  IsWritable()                  { return pStrm->IsWritable(); }
     sal_Bool  Good()                        { return sal_Bool( nError == SVSTREAM_OK ); }
     sal_Bool  Bad()                         { return sal_Bool( nError != SVSTREAM_OK ); }
-    sal_uIntPtr GetError()                  { return nError;    }
+    sal_uLong GetError()                    { return nError;    }
     void  MoveError( StorageBase& );
-    void  SetError( sal_uIntPtr );
+    void  SetError( sal_uLong );
     void  ResetError();
     sal_Bool  Open( const String& rName, StreamMode );
     void  Close();

@@ -129,7 +129,7 @@ void SotFactory::DeInit()
     if( pSotData->pDataFlavorList )
     {
 
-        for( sal_uIntPtr i = 0, nMax = pSotData->pDataFlavorList->Count(); i < nMax; i++ )
+        for( sal_uLong i = 0, nMax = pSotData->pDataFlavorList->Count(); i < nMax; i++ )
             delete (::com::sun::star::datatransfer::DataFlavor*) pSotData->pDataFlavorList->GetObject( i );
         delete pSotData->pDataFlavorList;
         pSotData->pDataFlavorList = NULL;
@@ -295,8 +295,8 @@ void SotFactory::TestInvariant()
     SotData_Impl * pSotData = SOTDATA();
     if( pSotData->pObjectList )
     {
-        sal_uIntPtr nCount = pSotData->pObjectList->Count();
-        for( sal_uIntPtr i = 0; i < nCount ; i++ )
+        sal_uLong nCount = pSotData->pObjectList->Count();
+        for( sal_uLong i = 0; i < nCount ; i++ )
         {
             pSotData->pObjectList->GetObject( i )->TestInvariant( sal_False );
         }

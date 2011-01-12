@@ -46,7 +46,7 @@ using namespace::com::sun::star::datatransfer;
 
 struct SotAction_Impl
 {
-    sal_uIntPtr     nFormatId;          // Clipboard Id
+    sal_uLong   nFormatId;          // Clipboard Id
     sal_uInt16  nAction;            // Action Id
     sal_uInt8   nContextCheckId;    // additional check of content in clipboard
 };
@@ -1283,7 +1283,7 @@ static SotDestinationEntry_Impl __READONLY_DATA aDestinationArray[] =     \
 // - new style GetExchange methods -
 // ---------------------------------
 
-sal_Bool IsFormatSupported( const DataFlavorExVector& rDataFlavorExVector, sal_uIntPtr nId )
+sal_Bool IsFormatSupported( const DataFlavorExVector& rDataFlavorExVector, sal_uLong nId )
 {
     DataFlavorExVector::iterator    aIter( ( (DataFlavorExVector&) rDataFlavorExVector ).begin() );
     DataFlavorExVector::iterator    aEnd( ( (DataFlavorExVector&) rDataFlavorExVector ).end() );
@@ -1370,8 +1370,8 @@ rEntry
 static sal_uInt16 GetTransferableAction_Impl(
                             const DataFlavorExVector& rDataFlavorExVector,
                              const SotAction_Impl* pArray,
-                            sal_uIntPtr& rFormat,
-                            sal_uIntPtr nOnlyTestFormat,
+                            sal_uLong& rFormat,
+                            sal_uLong nOnlyTestFormat,
                             const Reference< XTransferable >* pxTransferable )
 {
     try
@@ -1380,11 +1380,11 @@ static sal_uInt16 GetTransferableAction_Impl(
         {
             DataFlavor              aFlavor;
             const SotAction_Impl*   pArrayStart = pArray;
-            sal_uIntPtr                 nId = pArray->nFormatId;
+            sal_uLong                   nId = pArray->nFormatId;
 
 #if OSL_DEBUG_LEVEL > 1
 // used for testing a specific format - change in the debugger the value
-    static sal_uIntPtr nChkFormat = 0;
+    static sal_uLong nChkFormat = 0;
     if( nChkFormat )
     {
         for( ; 0xffff != pArray->nFormatId &&
@@ -1458,9 +1458,9 @@ sal_uInt16 SotExchange::GetExchangeAction( const DataFlavorExVector& rDataFlavor
                                        sal_uInt16 nDestination,
                                        sal_uInt16 nSourceOptions,
                                        sal_uInt16 nUserAction,
-                                       sal_uIntPtr& rFormat,
+                                       sal_uLong& rFormat,
                                        sal_uInt16& rDefaultAction,
-                                       sal_uIntPtr nOnlyTestFormat,
+                                       sal_uLong nOnlyTestFormat,
                                        const Reference< XTransferable >* pxTransferable )
 {
     // hier wird jetzt die oben definierte Tabelle "implementiert"
@@ -1571,8 +1571,8 @@ sal_uInt16 SotExchange::GetExchangeAction( const DataFlavorExVector& rDataFlavor
 sal_uInt16 SotExchange::GetExchangeAction(
                         const Reference< XTransferable >& rxTransferable,
                         sal_uInt16 nDestination, sal_uInt16 nSourceOptions,
-                        sal_uInt16 nUserAction, sal_uIntPtr& rFormat,
-                        sal_uInt16& rDefaultAction, sal_uIntPtr nOnlyTestFormat )
+                        sal_uInt16 nUserAction, sal_uLong& rFormat,
+                        sal_uInt16& rDefaultAction, sal_uLong nOnlyTestFormat )
 {
     DataFlavorExVector aVector;
 

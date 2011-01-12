@@ -237,11 +237,11 @@ static List& InitFormats_Impl()
 |*
 |*    Beschreibung      CLIP.SDW
 *************************************************************************/
-sal_uIntPtr SotExchange::RegisterFormatName( const String& rName )
+sal_uLong SotExchange::RegisterFormatName( const String& rName )
 {
     const DataFlavorRepresentation *pFormatArray_Impl = FormatArray_Impl::get();
     // teste zuerst die Standard - Name
-    sal_uIntPtr i, nMax = SOT_FORMAT_FILE_LIST;
+    sal_uLong i, nMax = SOT_FORMAT_FILE_LIST;
     for( i = SOT_FORMAT_STRING; i <= nMax;  ++i )
         if( COMPARE_EQUAL == rName.CompareToAscii( pFormatArray_Impl[ i ].pName ) )
             return i;
@@ -277,11 +277,11 @@ sal_uIntPtr SotExchange::RegisterFormatName( const String& rName )
     return nMax + SOT_FORMATSTR_ID_USER_END + 1;
 }
 
-sal_uIntPtr SotExchange::RegisterFormatMimeType( const String& rMimeType )
+sal_uLong SotExchange::RegisterFormatMimeType( const String& rMimeType )
 {
     const DataFlavorRepresentation *pFormatArray_Impl = FormatArray_Impl::get();
     // teste zuerst die Standard - Name
-    sal_uIntPtr i, nMax = SOT_FORMAT_FILE_LIST;
+    sal_uLong i, nMax = SOT_FORMAT_FILE_LIST;
     for( i = SOT_FORMAT_STRING; i <= nMax;  ++i )
         if( rMimeType.EqualsAscii( pFormatArray_Impl[ i ].pMimeType ) )
             return i;
@@ -318,9 +318,9 @@ sal_uIntPtr SotExchange::RegisterFormatMimeType( const String& rMimeType )
 |*
 |*    Beschreibung      CLIP.SDW
 *************************************************************************/
-sal_uIntPtr SotExchange::RegisterFormat( const DataFlavor& rFlavor )
+sal_uLong SotExchange::RegisterFormat( const DataFlavor& rFlavor )
 {
-    sal_uIntPtr nRet = GetFormat( rFlavor );
+    sal_uLong nRet = GetFormat( rFlavor );
 
     if( !nRet )
     {
@@ -338,7 +338,7 @@ sal_uIntPtr SotExchange::RegisterFormat( const DataFlavor& rFlavor )
 |*
 *************************************************************************/
 
-sal_Bool SotExchange::GetFormatDataFlavor( sal_uIntPtr nFormat, DataFlavor& rFlavor )
+sal_Bool SotExchange::GetFormatDataFlavor( sal_uLong nFormat, DataFlavor& rFlavor )
 {
     sal_Bool bRet;
 
@@ -376,11 +376,11 @@ sal_Bool SotExchange::GetFormatDataFlavor( sal_uIntPtr nFormat, DataFlavor& rFla
 
 /*************************************************************************
 |*
-|*    SotExchange::GetFormatMimeType( sal_uIntPtr nFormat )
+|*    SotExchange::GetFormatMimeType( sal_uLong nFormat )
 |*
 *************************************************************************/
 
-String SotExchange::GetFormatMimeType( sal_uIntPtr nFormat )
+String SotExchange::GetFormatMimeType( sal_uLong nFormat )
 {
     String sMimeType;
     if( SOT_FORMATSTR_ID_USER_END >= nFormat )
@@ -406,10 +406,10 @@ String SotExchange::GetFormatMimeType( sal_uIntPtr nFormat )
 |*
 *************************************************************************/
 
-sal_uIntPtr SotExchange::GetFormatIdFromMimeType( const String& rMimeType )
+sal_uLong SotExchange::GetFormatIdFromMimeType( const String& rMimeType )
 {
     const DataFlavorRepresentation *pFormatArray_Impl = FormatArray_Impl::get();
-    sal_uIntPtr i, nMax = SOT_FORMAT_FILE_LIST;
+    sal_uLong i, nMax = SOT_FORMAT_FILE_LIST;
     for( i = SOT_FORMAT_STRING; i <= nMax;  ++i )
         if( rMimeType.EqualsAscii( pFormatArray_Impl[ i ].pMimeType ) )
             return i;
@@ -443,12 +443,12 @@ sal_uIntPtr SotExchange::GetFormatIdFromMimeType( const String& rMimeType )
 |*
 |*    Beschreibung      CLIP.SDW
 *************************************************************************/
-sal_uIntPtr SotExchange::GetFormat( const DataFlavor& rFlavor )
+sal_uLong SotExchange::GetFormat( const DataFlavor& rFlavor )
 {
     // teste zuerst die Standard - Name
     const ::rtl::OUString& rMimeType = rFlavor.MimeType;
     const String aMimeType( rMimeType );
-    sal_uIntPtr i, nMax = SOT_FORMAT_FILE_LIST;
+    sal_uLong i, nMax = SOT_FORMAT_FILE_LIST;
     const DataFlavorRepresentation *pFormatArray_Impl = FormatArray_Impl::get();
     for( i = SOT_FORMAT_STRING; i <= nMax;  ++i )
         if( aMimeType.EqualsAscii( pFormatArray_Impl[ i ].pMimeType ) )
@@ -482,7 +482,7 @@ sal_uIntPtr SotExchange::GetFormat( const DataFlavor& rFlavor )
 |*
 |*    Beschreibung      CLIP.SDW
 *************************************************************************/
-String SotExchange::GetFormatName( sal_uIntPtr nFormat )
+String SotExchange::GetFormatName( sal_uLong nFormat )
 {
     DataFlavor  aFlavor;
     String      aRet;

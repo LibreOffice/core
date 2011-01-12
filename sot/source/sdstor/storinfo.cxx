@@ -39,7 +39,7 @@ PRV_SV_IMPL_OWNER_LIST(SvStorageInfoList,SvStorageInfo)
 
 const SvStorageInfo * SvStorageInfoList::Get( const String & rEleName )
 {
-    for( sal_uIntPtr i = 0; i < Count(); i++ )
+    for( sal_uLong i = 0; i < Count(); i++ )
     {
         const SvStorageInfo & rType = GetObject( i );
         if( rType.GetName() == rEleName )
@@ -50,7 +50,7 @@ const SvStorageInfo * SvStorageInfoList::Get( const String & rEleName )
 
 /************** class SvStorageInfo **************************************
 *************************************************************************/
-sal_uIntPtr ReadClipboardFormat( SvStream & rStm )
+sal_uLong ReadClipboardFormat( SvStream & rStm )
 {
     sal_uInt32 nFormat = 0;
     sal_Int32 nLen = 0;
@@ -61,7 +61,7 @@ sal_uIntPtr ReadClipboardFormat( SvStream & rStm )
     {
         // get a string name
         sal_Char * p = new sal_Char[ nLen ];
-        if( rStm.Read( p, nLen ) == (sal_uIntPtr) nLen )
+        if( rStm.Read( p, nLen ) == (sal_uLong) nLen )
         {
             nFormat = SotExchange::RegisterFormatName( String::CreateFromAscii( p, short(nLen-1) ) );
         }
@@ -88,7 +88,7 @@ sal_uIntPtr ReadClipboardFormat( SvStream & rStm )
     return nFormat;
 }
 
-void WriteClipboardFormat( SvStream & rStm, sal_uIntPtr nFormat )
+void WriteClipboardFormat( SvStream & rStm, sal_uLong nFormat )
 {
     // determine the clipboard format string
     String aCbFmt;

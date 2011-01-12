@@ -71,9 +71,9 @@ friend class SotStorage;
 friend class ImpStream;
     BaseStorageStream * pOwnStm;// Zeiger auf den eigenen Stream
 protected:
-    virtual sal_uIntPtr       GetData( void* pData, sal_uIntPtr nSize );
-    virtual sal_uIntPtr       PutData( const void* pData, sal_uIntPtr nSize );
-    virtual sal_uIntPtr       SeekPos( sal_uIntPtr nPos );
+    virtual sal_uLong       GetData( void* pData, sal_uLong nSize );
+    virtual sal_uLong       PutData( const void* pData, sal_uLong nSize );
+    virtual sal_uLong       SeekPos( sal_uLong nPos );
     virtual void        FlushData();
                         ~SotStorageStream();
 public:
@@ -91,7 +91,7 @@ public:
 
     virtual void        ResetError();
 
-    virtual void        SetSize( sal_uIntPtr nNewSize );
+    virtual void        SetSize( sal_uLong nNewSize );
     sal_uInt32              GetSize() const;
     sal_Bool                CopyTo( SotStorageStream * pDestStm );
     virtual sal_Bool        Commit();
@@ -125,7 +125,7 @@ friend class ::binfilter::SvStorage;
     BaseStorage *   m_pTmpStg;   // Temp-Storage fuer Transacted, nur auf diesem schreiben!        ??? Useless ???
     BaseStorage *   m_pOwnStg;   // Zielstorage
     SvStream *  m_pStorStm;  // nur fuer SDSTORAGES
-    sal_uIntPtr       m_nError;
+    sal_uLong       m_nError;
     String      m_aName;      // Name des Storage
     sal_Bool        m_bIsRoot:1,  // z.B.: File-Storage
                 m_bDelStm:1;
@@ -175,9 +175,9 @@ public:
                             return m_nVersion;
                         }
 
-    sal_uIntPtr               GetErrorCode() const { return m_nError; }
-    sal_uIntPtr               GetError() const { return ERRCODE_TOERROR(m_nError); }
-    void                SetError( sal_uIntPtr nErrorCode )
+    sal_uLong               GetErrorCode() const { return m_nError; }
+    sal_uLong               GetError() const { return ERRCODE_TOERROR(m_nError); }
+    void                SetError( sal_uLong nErrorCode )
                         {
                             if( m_nError == SVSTREAM_OK )
                                 m_nError = nErrorCode;
@@ -190,13 +190,13 @@ public:
 
                         // eigener Datenbereich
     virtual void        SetClass( const SvGlobalName & rClass,
-                                  sal_uIntPtr bOriginalClipFormat,
+                                  sal_uLong bOriginalClipFormat,
                                   const String & rUserTypeName );
     virtual void        SetConvertClass( const SvGlobalName & rConvertClass,
-                                         sal_uIntPtr bOriginalClipFormat,
+                                         sal_uLong bOriginalClipFormat,
                                          const String & rUserTypeName );
     virtual SvGlobalName GetClassName();// Typ der Daten im Storage
-    virtual sal_uIntPtr       GetFormat();
+    virtual sal_uLong       GetFormat();
     virtual String      GetUserName();
     virtual sal_Bool        ShouldConvert();
     void                SetName( const String& rName );

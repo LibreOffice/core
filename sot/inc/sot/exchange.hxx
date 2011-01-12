@@ -52,7 +52,7 @@ namespace com { namespace sun { namespace star { namespace datatransfer {
 // - SotFormatStringId -
 // ---------------------
 
-typedef sal_uIntPtr SotFormatStringId;
+typedef sal_uLong SotFormatStringId;
 
 // ----------------
 // - DataFlavorEx -
@@ -77,14 +77,14 @@ typedef ::std::list< ::com::sun::star::datatransfer::DataFlavor >   DataFlavorLi
 typedef ::std::list< DataFlavorEx >                                 DataFlavorExList;
 
 SOT_DLLPUBLIC sal_Bool IsFormatSupported( const DataFlavorExVector& rDataFlavorExVector,
-                            sal_uIntPtr nId );
+                            sal_uLong nId );
 
 // -------------------------
 // - Vordefinierte Formate -
 // -------------------------
 
-// Die Reihenfolge und die Werte dürfen nicht geändert werden,
-// da die Implementation sich darauf verläßt.
+// Die Reihenfolge und die Werte dï¿½rfen nicht geï¿½ndert werden,
+// da die Implementation sich darauf verlï¿½ï¿½t.
 // Standard-Formate fuer die es auch Copy/Paste-Methoden gibt
 #define FORMAT_STRING           1
 #define FORMAT_BITMAP           2
@@ -188,26 +188,26 @@ class SvGlobalName;
 class SOT_DLLPUBLIC SotExchange
 {
 public:
-    static sal_uIntPtr  RegisterFormat( const ::com::sun::star::datatransfer::DataFlavor& rFlavor );
-    static sal_uIntPtr  RegisterFormatName( const String& rName );
-    static sal_uIntPtr  RegisterFormatMimeType( const String& rMimeType );
+    static sal_uLong    RegisterFormat( const ::com::sun::star::datatransfer::DataFlavor& rFlavor );
+    static sal_uLong    RegisterFormatName( const String& rName );
+    static sal_uLong    RegisterFormatMimeType( const String& rMimeType );
 
-    static sal_uIntPtr  GetFormat( const ::com::sun::star::datatransfer::DataFlavor& rFlavor );
-    static String   GetFormatName( sal_uIntPtr nFormat );
-    static sal_Bool GetFormatDataFlavor( sal_uIntPtr nFormat, ::com::sun::star::datatransfer::DataFlavor& rFlavor );
-    static String   GetFormatMimeType( sal_uIntPtr nFormat );
+    static sal_uLong    GetFormat( const ::com::sun::star::datatransfer::DataFlavor& rFlavor );
+    static String   GetFormatName( sal_uLong nFormat );
+    static sal_Bool GetFormatDataFlavor( sal_uLong nFormat, ::com::sun::star::datatransfer::DataFlavor& rFlavor );
+    static String   GetFormatMimeType( sal_uLong nFormat );
     static sal_Bool     IsInternal( const SvGlobalName& );
-    static sal_uIntPtr  GetFormatIdFromMimeType( const String& rMimeType );
+    static sal_uLong    GetFormatIdFromMimeType( const String& rMimeType );
 
     // bestimme die SotFormatStringId von dem registrierten Format
     //JP 12.11.98: diese 3 Methoden sind ab sofort ueberfluessig, da
     //              die ClipboardIds statisch sind und aequivalent zur
     //              SotFormatStringId ist!
-    static SotFormatStringId GetFormatStringId( sal_uIntPtr nFormat )
+    static SotFormatStringId GetFormatStringId( sal_uLong nFormat )
         { return nFormat; }
     static SotFormatStringId GetFormatStringId( const String& rName )
         { return SotExchange::RegisterFormatMimeType( rName ); }
-    static sal_uIntPtr RegisterSotFormatName( SotFormatStringId nId )
+    static sal_uLong RegisterSotFormatName( SotFormatStringId nId )
         { return nId; }
 
     // same for XTransferable interface
@@ -221,11 +221,11 @@ public:
         // vom Anwender gewaehlte Aktion (EXCHG_IN_*, EXCHG_INOUT_*)
         sal_uInt16 nUserAction,
         // In:- Out: Zu benutzendes Format
-        sal_uIntPtr& rFormat,
+        sal_uLong& rFormat,
         // In:- Out: Default-Action (EXCHG_IN_*, EXCHG_INOUT_*)
         sal_uInt16& rDefaultAction,
         // In:- optional - check only for this specific format
-        sal_uIntPtr nOnlyTestFormat = 0,
+        sal_uLong nOnlyTestFormat = 0,
         // In:- optional - check the contents of Xtransferable
         const ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable >* pxTransferable = NULL );
 
@@ -240,11 +240,11 @@ public:
         // vom Anwender gewaehlte Aktion (EXCHG_IN_*, EXCHG_INOUT_*)
         sal_uInt16 nUserAction,
         // In:- Out: Zu benutzendes Format
-        sal_uIntPtr& rFormat,
+        sal_uLong& rFormat,
         // In:- Out: Default-Action (EXCHG_IN_*, EXCHG_INOUT_*)
         sal_uInt16& rDefaultAction,
         // In:- optional - check only for this specific format
-        sal_uIntPtr nOnlyTestFormat = 0 );
+        sal_uLong nOnlyTestFormat = 0 );
 
     static sal_uInt16 IsChart( const SvGlobalName& rName );
     static sal_uInt16 IsMath( const SvGlobalName& rName );

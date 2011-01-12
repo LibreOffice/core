@@ -395,7 +395,7 @@ friend class SvObject;
                 bInClose:1;         // sal_True, im DoClose
 
     void *      DownAggCast( const SotFactory * pFact );
-    void        RemoveInterface( sal_uIntPtr );
+    void        RemoveInterface( sal_uLong );
     void        RemoveInterface( SotObject * );
 #if defined (GCC) && (defined (C281) || defined (C290) || defined (C291))
 public:

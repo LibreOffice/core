@@ -73,7 +73,7 @@ struct ClsId
 class SOT_DLLPUBLIC StorageBase : public SvRefBase
 {
 protected:
-    sal_uIntPtr           m_nError;                   // error code
+    sal_uLong           m_nError;                   // error code
     StreamMode      m_nMode;                    // open mode
     sal_Bool            m_bAutoCommit;
                     StorageBase();
@@ -84,8 +84,8 @@ public:
     virtual sal_Bool    Validate( sal_Bool=sal_False ) const = 0;
     virtual sal_Bool    ValidateMode( StreamMode ) const = 0;
     void            ResetError() const;
-    void            SetError( sal_uIntPtr ) const;
-    sal_uIntPtr           GetError() const;
+    void            SetError( sal_uLong ) const;
+    sal_uLong           GetError() const;
     sal_Bool            Good() const          { return sal_Bool( m_nError == SVSTREAM_OK ); }
     StreamMode      GetMode() const  { return m_nMode;  }
     void            SetAutoCommit( sal_Bool bSet )
@@ -96,12 +96,12 @@ class BaseStorageStream : public StorageBase
 {
 public:
                     TYPEINFO();
-    virtual sal_uIntPtr   Read( void * pData, sal_uIntPtr nSize ) = 0;
-    virtual sal_uIntPtr   Write( const void* pData, sal_uIntPtr nSize ) = 0;
-    virtual sal_uIntPtr   Seek( sal_uIntPtr nPos ) = 0;
-    virtual sal_uIntPtr   Tell() = 0;
+    virtual sal_uLong   Read( void * pData, sal_uLong nSize ) = 0;
+    virtual sal_uLong   Write( const void* pData, sal_uLong nSize ) = 0;
+    virtual sal_uLong   Seek( sal_uLong nPos ) = 0;
+    virtual sal_uLong   Tell() = 0;
     virtual void    Flush() = 0;
-    virtual sal_Bool    SetSize( sal_uIntPtr nNewSize ) = 0;
+    virtual sal_Bool    SetSize( sal_uLong nNewSize ) = 0;
     virtual sal_Bool    CopyTo( BaseStorageStream * pDestStm ) = 0;
     virtual sal_Bool    Commit() = 0;
     virtual sal_Bool    Revert() = 0;
@@ -119,13 +119,13 @@ public:
     virtual const ClsId&        GetClassId() const = 0;
     virtual void                SetDirty() = 0;
     virtual void                SetClass( const SvGlobalName & rClass,
-                                    sal_uIntPtr nOriginalClipFormat,
+                                    sal_uLong nOriginalClipFormat,
                                     const String & rUserTypeName ) = 0;
     virtual void                SetConvertClass( const SvGlobalName & rConvertClass,
-                                           sal_uIntPtr nOriginalClipFormat,
+                                           sal_uLong nOriginalClipFormat,
                                            const String & rUserTypeName ) = 0;
     virtual SvGlobalName        GetClassName() = 0;
-    virtual sal_uIntPtr               GetFormat() = 0;
+    virtual sal_uLong               GetFormat() = 0;
     virtual String              GetUserName() = 0;
     virtual sal_Bool                ShouldConvert() = 0;
     virtual void                FillInfoList( SvStorageInfoList* ) const = 0;
@@ -172,18 +172,18 @@ public:
 class StorageStream : public BaseStorageStream, public OLEStorageBase
 {
 //friend class Storage;
-    sal_uIntPtr           nPos;                             // current position
+    sal_uLong           nPos;                             // current position
 protected:
                     ~StorageStream();
 public:
                     TYPEINFO();
                     StorageStream( StgIo*, StgDirEntry*, StreamMode );
-    virtual sal_uIntPtr   Read( void * pData, sal_uIntPtr nSize );
-    virtual sal_uIntPtr   Write( const void* pData, sal_uIntPtr nSize );
-    virtual sal_uIntPtr   Seek( sal_uIntPtr nPos );
-    virtual sal_uIntPtr   Tell() { return nPos; }
+    virtual sal_uLong   Read( void * pData, sal_uLong nSize );
+    virtual sal_uLong   Write( const void* pData, sal_uLong nSize );
+    virtual sal_uLong   Seek( sal_uLong nPos );
+    virtual sal_uLong   Tell() { return nPos; }
     virtual void    Flush();
-    virtual sal_Bool    SetSize( sal_uIntPtr nNewSize );
+    virtual sal_Bool    SetSize( sal_uLong nNewSize );
     virtual sal_Bool    CopyTo( BaseStorageStream * pDestStm );
     virtual sal_Bool    Commit();
     virtual sal_Bool    Revert();
@@ -219,13 +219,13 @@ public:
     virtual const ClsId&        GetClassId() const;
     virtual void                SetDirty();
     virtual void                SetClass( const SvGlobalName & rClass,
-                                    sal_uIntPtr nOriginalClipFormat,
+                                    sal_uLong nOriginalClipFormat,
                                     const String & rUserTypeName );
     virtual void                SetConvertClass( const SvGlobalName & rConvertClass,
-                                           sal_uIntPtr nOriginalClipFormat,
+                                           sal_uLong nOriginalClipFormat,
                                            const String & rUserTypeName );
     virtual SvGlobalName        GetClassName();
-    virtual sal_uIntPtr               GetFormat();
+    virtual sal_uLong               GetFormat();
     virtual String              GetUserName();
     virtual sal_Bool                ShouldConvert();
     virtual void                FillInfoList( SvStorageInfoList* ) const;
@@ -274,12 +274,12 @@ public:
                                 UCBStorageStream( const String& rName, StreamMode nMode, sal_Bool bDirect, const ByteString* pKey, sal_Bool bRepair, ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XProgressHandler > xProgress );
                                 UCBStorageStream( UCBStorageStream_Impl* );
 
-    virtual sal_uIntPtr               Read( void * pData, sal_uIntPtr nSize );
-    virtual sal_uIntPtr               Write( const void* pData, sal_uIntPtr nSize );
-    virtual sal_uIntPtr               Seek( sal_uIntPtr nPos );
-    virtual sal_uIntPtr               Tell();
+    virtual sal_uLong               Read( void * pData, sal_uLong nSize );
+    virtual sal_uLong               Write( const void* pData, sal_uLong nSize );
+    virtual sal_uLong               Seek( sal_uLong nPos );
+    virtual sal_uLong               Tell();
     virtual void                Flush();
-    virtual sal_Bool                SetSize( sal_uIntPtr nNewSize );
+    virtual sal_Bool                SetSize( sal_uLong nNewSize );
     virtual sal_Bool                CopyTo( BaseStorageStream * pDestStm );
     virtual sal_Bool                Commit();
     virtual sal_Bool                Revert();
@@ -339,13 +339,13 @@ public:
     virtual const ClsId&        GetClassId() const;
     virtual void                SetDirty();
     virtual void                SetClass( const SvGlobalName & rClass,
-                                    sal_uIntPtr nOriginalClipFormat,
+                                    sal_uLong nOriginalClipFormat,
                                     const String & rUserTypeName );
     virtual void                SetConvertClass( const SvGlobalName & rConvertClass,
-                                           sal_uIntPtr nOriginalClipFormat,
+                                           sal_uLong nOriginalClipFormat,
                                            const String & rUserTypeName );
     virtual SvGlobalName        GetClassName();
-    virtual sal_uIntPtr               GetFormat();
+    virtual sal_uLong               GetFormat();
     virtual String              GetUserName();
     virtual sal_Bool                ShouldConvert();
     virtual void                FillInfoList( SvStorageInfoList* ) const;
