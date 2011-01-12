@@ -176,9 +176,9 @@ sal_Bool GIFReader::ReadGlobalHeader()
 
 // ------------------------------------------------------------------------
 
-void GIFReader::ReadPaletteEntries( BitmapPalette* pPal, sal_uIntPtr nCount )
+void GIFReader::ReadPaletteEntries( BitmapPalette* pPal, sal_uLong nCount )
 {
-    const sal_uIntPtr   nLen = 3UL * nCount;
+    const sal_uLong nLen = 3UL * nCount;
     sal_uInt8*      pBuf = new sal_uInt8[ nLen ];
 
     rIStm.Read( pBuf, nLen );
@@ -186,7 +186,7 @@ void GIFReader::ReadPaletteEntries( BitmapPalette* pPal, sal_uIntPtr nCount )
     {
         sal_uInt8* pTmp = pBuf;
 
-        for( sal_uIntPtr i = 0UL; i < nCount; )
+        for( sal_uLong i = 0UL; i < nCount; )
         {
             BitmapColor& rColor = (*pPal)[ (sal_uInt16) i++ ];
 
@@ -399,10 +399,10 @@ sal_Bool GIFReader::ReadLocalHeader()
 
 // ------------------------------------------------------------------------
 
-sal_uIntPtr GIFReader::ReadNextBlock()
+sal_uLong GIFReader::ReadNextBlock()
 {
-    sal_uIntPtr nRet = 0UL;
-    sal_uIntPtr nRead;
+    sal_uLong   nRet = 0UL;
+    sal_uLong   nRead;
     sal_uInt8   cBlockSize;
 
     rIStm >> cBlockSize;
@@ -442,9 +442,9 @@ sal_uIntPtr GIFReader::ReadNextBlock()
 
 // ------------------------------------------------------------------------
 
-void GIFReader::FillImages( HPBYTE pBytes, sal_uIntPtr nCount )
+void GIFReader::FillImages( HPBYTE pBytes, sal_uLong nCount )
 {
-    for( sal_uIntPtr i = 0UL; i < nCount; i++ )
+    for( sal_uLong i = 0UL; i < nCount; i++ )
     {
         if( nImageX >= nImageWidth )
         {
@@ -463,9 +463,9 @@ void GIFReader::FillImages( HPBYTE pBytes, sal_uIntPtr nCount )
                     if( ( nMinY > nLastImageY ) && ( nLastImageY < ( nImageHeight - 1 ) ) )
                     {
                         HPBYTE  pScanline8 = pAcc8->GetScanline( nYAcc );
-                        sal_uIntPtr nSize8 = pAcc8->GetScanlineSize();
+                        sal_uLong   nSize8 = pAcc8->GetScanlineSize();
                         HPBYTE  pScanline1 = 0;
-                        sal_uIntPtr nSize1 = 0;
+                        sal_uLong   nSize1 = 0;
 
                         if( bGCTransparent )
                         {
@@ -716,7 +716,7 @@ sal_Bool GIFReader::ProcessGIF()
         {
             sal_uInt16  nLastX = nImageX;
             sal_uInt16  nLastY = nImageY;
-            sal_uIntPtr nRet = ReadNextBlock();
+            sal_uLong   nRet = ReadNextBlock();
 
             // Return: 0:Pending / 1:OK; / 2:OK und letzter Block: / 3:EOI / 4:HardAbort
             if( nRet )

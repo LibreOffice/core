@@ -814,17 +814,17 @@ IMPL_LINK_INLINE_START( SvLBox, CloneHdl_Impl, SvListEntry*, pEntry )
 }
 IMPL_LINK_INLINE_END( SvLBox, CloneHdl_Impl, SvListEntry*, pEntry )
 
-sal_uIntPtr SvLBox::Insert( SvLBoxEntry* pEntry, SvLBoxEntry* pParent, sal_uIntPtr nPos )
+sal_uLong SvLBox::Insert( SvLBoxEntry* pEntry, SvLBoxEntry* pParent, sal_uLong nPos )
 {
     DBG_CHKTHIS(SvLBox,0);
-    sal_uIntPtr nInsPos = pModel->Insert( pEntry, pParent, nPos );
+    sal_uLong nInsPos = pModel->Insert( pEntry, pParent, nPos );
     return nInsPos;
 }
 
-sal_uIntPtr SvLBox::Insert( SvLBoxEntry* pEntry,sal_uIntPtr nRootPos )
+sal_uLong SvLBox::Insert( SvLBoxEntry* pEntry,sal_uLong nRootPos )
 {
     DBG_CHKTHIS(SvLBox,0);
-    sal_uIntPtr nInsPos = pModel->Insert( pEntry, nRootPos );
+    sal_uLong nInsPos = pModel->Insert( pEntry, nRootPos );
     return nInsPos;
 }
 
@@ -924,14 +924,14 @@ sal_Bool SvLBox::NotifyMoving(
     SvLBoxEntry*  pEntry,        // Zu verschiebender Entry aus
                                  // GetSourceListBox()->GetModel()
     SvLBoxEntry*& rpNewParent,   // Neuer Target-Parent
-    sal_uIntPtr&          rNewChildPos)  // Position in Childlist des Target-Parents
+    sal_uLong&        rNewChildPos)  // Position in Childlist des Target-Parents
 #else
 sal_Bool SvLBox::NotifyMoving(
     SvLBoxEntry*  pTarget,       // D&D-Drop-Position in this->GetModel()
     SvLBoxEntry*,                // Zu verschiebender Entry aus
                                  // GetSourceListBox()->GetModel()
     SvLBoxEntry*& rpNewParent,   // Neuer Target-Parent
-    sal_uIntPtr&          rNewChildPos)  // Position in Childlist des Target-Parents
+    sal_uLong&        rNewChildPos)  // Position in Childlist des Target-Parents
 #endif
 {
     DBG_CHKTHIS(SvLBox,0);
@@ -967,7 +967,7 @@ sal_Bool SvLBox::NotifyCopying(
     SvLBoxEntry*  pEntry,        // Zu kopierender Entry aus
                                  // GetSourceListBox()->GetModel()
     SvLBoxEntry*& rpNewParent,   // Neuer Target-Parent
-    sal_uIntPtr&          rNewChildPos)  // Position in Childlist des Target-Parents
+    sal_uLong&        rNewChildPos)  // Position in Childlist des Target-Parents
 {
     DBG_CHKTHIS(SvLBox,0);
     return NotifyMoving(pTarget,pEntry,rpNewParent,rNewChildPos);
@@ -1014,7 +1014,7 @@ sal_Bool SvLBox::CopySelection( SvLBox* pSource, SvLBoxEntry* pTarget )
     nCurEntrySelPos = 0; // Selektionszaehler fuer NotifyMoving/Copying
     sal_Bool bSuccess = sal_True;
     SvTreeEntryList aList;
-    sal_Bool bClone = (sal_Bool)( (sal_uIntPtr)(pSource->GetModel()) != (sal_uIntPtr)GetModel() );
+    sal_Bool bClone = (sal_Bool)( (sal_uLong)(pSource->GetModel()) != (sal_uLong)GetModel() );
     Link aCloneLink( pModel->GetCloneLink() );
     pModel->SetCloneLink( LINK(this, SvLBox, CloneHdl_Impl ));
 
@@ -1034,13 +1034,13 @@ sal_Bool SvLBox::CopySelection( SvLBox* pSource, SvLBoxEntry* pTarget )
     while ( pSourceEntry )
     {
         SvLBoxEntry* pNewParent = 0;
-        sal_uIntPtr nInsertionPos = LIST_APPEND;
+        sal_uLong nInsertionPos = LIST_APPEND;
         sal_Bool bOk=NotifyCopying(pTarget,pSourceEntry,pNewParent,nInsertionPos);
         if ( bOk )
         {
             if ( bClone )
             {
-                sal_uIntPtr nCloneCount = 0;
+                sal_uLong nCloneCount = 0;
                 pSourceEntry = (SvLBoxEntry*)
                     pModel->Clone( (SvListEntry*)pSourceEntry, nCloneCount );
                 pModel->InsertTree( (SvListEntry*)pSourceEntry,
@@ -1048,7 +1048,7 @@ sal_Bool SvLBox::CopySelection( SvLBox* pSource, SvLBoxEntry* pTarget )
             }
             else
             {
-                sal_uIntPtr nListPos = pModel->Copy( (SvListEntry*)pSourceEntry,
+                sal_uLong nListPos = pModel->Copy( (SvListEntry*)pSourceEntry,
                     (SvListEntry*)pNewParent, nInsertionPos );
                 pSourceEntry = GetEntry( pNewParent, nListPos );
             }
@@ -1077,7 +1077,7 @@ sal_Bool SvLBox::MoveSelectionCopyFallbackPossible( SvLBox* pSource, SvLBoxEntry
     nCurEntrySelPos = 0; // Selektionszaehler fuer NotifyMoving/Copying
     sal_Bool bSuccess = sal_True;
     SvTreeEntryList aList;
-    sal_Bool bClone = (sal_Bool)( (sal_uIntPtr)(pSource->GetModel()) != (sal_uIntPtr)GetModel() );
+    sal_Bool bClone = (sal_Bool)( (sal_uLong)(pSource->GetModel()) != (sal_uLong)GetModel() );
     Link aCloneLink( pModel->GetCloneLink() );
     if ( bClone )
         pModel->SetCloneLink( LINK(this, SvLBox, CloneHdl_Impl ));
@@ -1095,7 +1095,7 @@ sal_Bool SvLBox::MoveSelectionCopyFallbackPossible( SvLBox* pSource, SvLBoxEntry
     while ( pSourceEntry )
     {
         SvLBoxEntry* pNewParent = 0;
-        sal_uIntPtr nInsertionPos = LIST_APPEND;
+        sal_uLong nInsertionPos = LIST_APPEND;
         sal_Bool bOk = NotifyMoving(pTarget,pSourceEntry,pNewParent,nInsertionPos);
         sal_Bool bCopyOk = bOk;
         if ( !bOk && bAllowCopyFallback )
@@ -1108,7 +1108,7 @@ sal_Bool SvLBox::MoveSelectionCopyFallbackPossible( SvLBox* pSource, SvLBoxEntry
         {
             if ( bClone )
             {
-                sal_uIntPtr nCloneCount = 0;
+                sal_uLong nCloneCount = 0;
                 pSourceEntry = (SvLBoxEntry*)
                     pModel->Clone( (SvListEntry*)pSourceEntry, nCloneCount );
                 pModel->InsertTree( (SvListEntry*)pSourceEntry,
@@ -1244,7 +1244,7 @@ sal_Bool SvLBox::Select( SvLBoxEntry*, sal_Bool  )
     return sal_False;
 }
 
-sal_uIntPtr SvLBox::SelectChilds( SvLBoxEntry* , sal_Bool  )
+sal_uLong SvLBox::SelectChilds( SvLBoxEntry* , sal_Bool  )
 {
     DBG_CHKTHIS(SvLBox,0);
     return 0;
@@ -1287,7 +1287,7 @@ void SvLBox::FillEntryPath( SvLBoxEntry* pEntry, ::std::deque< sal_Int32 >& _rPa
         SvLBoxEntry* pParentEntry = GetParent( pEntry );
         while ( sal_True )
         {
-            sal_uIntPtr i, nCount = GetLevelChildCount( pParentEntry );
+            sal_uLong i, nCount = GetLevelChildCount( pParentEntry );
             for ( i = 0; i < nCount; ++i )
             {
                 SvLBoxEntry* pTemp = GetEntry( pParentEntry, i );
@@ -1317,11 +1317,11 @@ String SvLBox::GetEntryText( SvLBoxEntry* ) const
     return String();
 }
 
-sal_uIntPtr SvLBox::GetLevelChildCount( SvLBoxEntry* _pParent ) const
+sal_uLong SvLBox::GetLevelChildCount( SvLBoxEntry* _pParent ) const
 {
     DBG_CHKTHIS(SvLBox,0);
 
-    sal_uIntPtr nCount = 0;
+    sal_uLong nCount = 0;
     SvLBoxEntry* pEntry = FirstChild( _pParent );
     while ( pEntry )
     {
@@ -1898,7 +1898,7 @@ nAction
 
 #ifndef UNX
     if( (nAction == DND_ACTION_MOVE) && ( (pDDTarget &&
-        ((sal_uIntPtr)(pDDTarget->GetModel())!=(sal_uIntPtr)(this->GetModel()))) ||
+        ((sal_uLong)(pDDTarget->GetModel())!=(sal_uLong)(this->GetModel()))) ||
         !pDDTarget ))
     {
         RemoveSelection();
@@ -1938,19 +1938,19 @@ namespace
 
 void SvLBox::AddBoxToDDList_Impl( const SvLBox& rB )
 {
-    sal_uIntPtr nVal = (sal_uIntPtr)&rB;
+    sal_uLong nVal = (sal_uLong)&rB;
     SortLBoxes::get().Insert( nVal );
 }
 
 void SvLBox::RemoveBoxFromDDList_Impl( const SvLBox& rB )
 {
-    sal_uIntPtr nVal = (sal_uIntPtr)&rB;
+    sal_uLong nVal = (sal_uLong)&rB;
     SortLBoxes::get().Remove( nVal );
 }
 
 IMPL_STATIC_LINK( SvLBox, DragFinishHdl_Impl, sal_Int8*, pAction )
 {
-    sal_uIntPtr nVal = (sal_uIntPtr)pThis;
+    sal_uLong nVal = (sal_uLong)pThis;
     sal_uInt16 nFnd;
     SvULongsSort &rSortLBoxes = SortLBoxes::get();
     if( rSortLBoxes.Seek_Entry( nVal, &nFnd ) )

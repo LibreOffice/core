@@ -461,7 +461,7 @@ void ImpPathDialog::UpdateEntries( const sal_Bool )
             {
                 if( FileStat( rEntry ).GetKind() & FSYS_KIND_DIR )
                 {
-                    sal_uIntPtr l = 0;
+                    sal_uLong l = 0;
                     if( xCollator.is() )
                     {
                         for( l = 0; l < aSortDirList.Count(); l++ )
@@ -473,7 +473,7 @@ void ImpPathDialog::UpdateEntries( const sal_Bool )
             }
         }
 
-        for( sal_uIntPtr l = 0; l < aSortDirList.Count(); l++ )
+        for( sal_uLong l = 0; l < aSortDirList.Count(); l++ )
         {
             UniString aEntryStr( aTabString );
             aEntryStr += *aSortDirList.GetObject(l);
@@ -1045,7 +1045,7 @@ void ImpFileDialog::UpdateEntries( const sal_Bool bWithDirs )
                     }
                     else
                     {
-                        sal_uIntPtr l = 0;
+                        sal_uLong l = 0;
                         if( xCollator.is() )
                         {
                             for( l = 0; l < aSortDirList.Count(); l++ )
@@ -1057,7 +1057,7 @@ void ImpFileDialog::UpdateEntries( const sal_Bool bWithDirs )
         }
         }
     }
-    for( sal_uIntPtr l = 0; l < aSortDirList.Count(); l++ )
+    for( sal_uLong l = 0; l < aSortDirList.Count(); l++ )
         {
             UniString aEntryStr( aTabString );
             aEntryStr += *aSortDirList.GetObject(l);

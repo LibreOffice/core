@@ -2795,7 +2795,7 @@ void SvImpIconView::ShowTargetEmphasis( SvLBoxEntry* pEntry, sal_Bool )
 }
 
 sal_Bool SvImpIconView::NotifyMoving( SvLBoxEntry* pTarget, SvLBoxEntry* pEntry,
-    SvLBoxEntry*& rpNewPar, sal_uIntPtr& rNewChildPos )
+    SvLBoxEntry*& rpNewPar, sal_uLong& rNewChildPos )
 {
     if( pTarget == pCurParent && pModel->GetParent(pEntry) == pCurParent )
     {
@@ -2812,7 +2812,7 @@ sal_Bool SvImpIconView::NotifyMoving( SvLBoxEntry* pTarget, SvLBoxEntry* pEntry,
 }
 
 sal_Bool SvImpIconView::NotifyCopying( SvLBoxEntry* pTarget, SvLBoxEntry* pEntry,
-    SvLBoxEntry*& rpNewParent, sal_uIntPtr& rNewChildPos )
+    SvLBoxEntry*& rpNewParent, sal_uLong& rNewChildPos )
 {
     return pView->SvLBox::NotifyCopying(pTarget,pEntry,rpNewParent,rNewChildPos);
 }

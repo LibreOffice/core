@@ -160,14 +160,14 @@ SvtIconChoiceCtrl::~SvtIconChoiceCtrl()
     delete _pImp;
 }
 
-SvxIconChoiceCtrlEntry* SvtIconChoiceCtrl::InsertEntry( sal_uIntPtr nPos, const Point* pPos, sal_uInt16 nFlags  )
+SvxIconChoiceCtrlEntry* SvtIconChoiceCtrl::InsertEntry( sal_uLong nPos, const Point* pPos, sal_uInt16 nFlags  )
 {
     SvxIconChoiceCtrlEntry* pEntry = new SvxIconChoiceCtrlEntry( nFlags );
     _pImp->InsertEntry( pEntry, nPos, pPos );
     return pEntry;
 }
 
-SvxIconChoiceCtrlEntry* SvtIconChoiceCtrl::InsertEntry( const String& rText, const Image& rImage, sal_uIntPtr nPos, const Point* pPos, sal_uInt16 nFlags  )
+SvxIconChoiceCtrlEntry* SvtIconChoiceCtrl::InsertEntry( const String& rText, const Image& rImage, sal_uLong nPos, const Point* pPos, sal_uInt16 nFlags  )
 {
     SvxIconChoiceCtrlEntry* pEntry = new SvxIconChoiceCtrlEntry( rText, rImage, nFlags);
 
@@ -176,7 +176,7 @@ SvxIconChoiceCtrlEntry* SvtIconChoiceCtrl::InsertEntry( const String& rText, con
     return pEntry;
 }
 
-SvxIconChoiceCtrlEntry* SvtIconChoiceCtrl::InsertEntry( const String& rText, const Image& rImage, const Image& rImageHC, sal_uIntPtr nPos, const Point* pPos, sal_uInt16 nFlags  )
+SvxIconChoiceCtrlEntry* SvtIconChoiceCtrl::InsertEntry( const String& rText, const Image& rImage, const Image& rImageHC, sal_uLong nPos, const Point* pPos, sal_uInt16 nFlags  )
 {
     SvxIconChoiceCtrlEntry* pEntry = new SvxIconChoiceCtrlEntry( rText, rImage, rImageHC, nFlags);
 
@@ -247,7 +247,7 @@ void SvtIconChoiceCtrl::ArrangeIcons()
         Size aFullSize;
         Rectangle aEntryRect;
 
-        for ( sal_uIntPtr i = 0; i < GetEntryCount(); i++ )
+        for ( sal_uLong i = 0; i < GetEntryCount(); i++ )
         {
             SvxIconChoiceCtrlEntry* pEntry = GetEntry ( i );
             aEntryRect = _pImp->GetEntryBoundRect ( pEntry );
@@ -262,7 +262,7 @@ void SvtIconChoiceCtrl::ArrangeIcons()
         Size aFullSize;
         Rectangle aEntryRect;
 
-        for ( sal_uIntPtr i = 0; i < GetEntryCount(); i++ )
+        for ( sal_uLong i = 0; i < GetEntryCount(); i++ )
         {
             SvxIconChoiceCtrlEntry* pEntry = GetEntry ( i );
             aEntryRect = _pImp->GetEntryBoundRect ( pEntry );
@@ -312,7 +312,7 @@ void SvtIconChoiceCtrl::GetFocus()
 {
     _pImp->GetFocus();
     Control::GetFocus();
-    sal_uIntPtr nPos;
+    sal_uLong nPos;
     SvxIconChoiceCtrlEntry* pSelectedEntry = GetSelectedEntry ( nPos );
     if ( pSelectedEntry )
         _pImp->CallEventListeners( VCLEVENT_LISTBOX_SELECT, pSelectedEntry );
@@ -390,12 +390,12 @@ SvxIconChoiceCtrlEntry* SvtIconChoiceCtrl::GetPrevEntry( const Point& rPixPos, S
     aPos -= GetMapMode().GetOrigin();
     return ((SvtIconChoiceCtrl*)this)->_pImp->GetPrevEntry( aPos, pCurEntry );
 }
-sal_uIntPtr SvtIconChoiceCtrl::GetEntryCount() const
+sal_uLong SvtIconChoiceCtrl::GetEntryCount() const
 {
     return _pImp->GetEntryCount();
 }
 
-SvxIconChoiceCtrlEntry* SvtIconChoiceCtrl::GetEntry( sal_uIntPtr nPos ) const
+SvxIconChoiceCtrlEntry* SvtIconChoiceCtrl::GetEntry( sal_uLong nPos ) const
 {
     return _pImp->GetEntry( nPos );
 }
@@ -415,14 +415,14 @@ void SvtIconChoiceCtrl::RemoveEntry( SvxIconChoiceCtrlEntry* pEntry )
     _pImp->RemoveEntry( pEntry );
 }
 
-SvxIconChoiceCtrlEntry* SvtIconChoiceCtrl::GetSelectedEntry( sal_uIntPtr& rPos ) const
+SvxIconChoiceCtrlEntry* SvtIconChoiceCtrl::GetSelectedEntry( sal_uLong& rPos ) const
 {
     return _pImp->GetFirstSelectedEntry( rPos );
 }
 
 void SvtIconChoiceCtrl::ClickIcon()
 {
-    sal_uIntPtr nPos;
+    sal_uLong nPos;
     GetSelectedEntry ( nPos );
     _aClickIconHdl.Call( this );
 }
@@ -456,7 +456,7 @@ sal_Bool SvtIconChoiceCtrl::DoKeyInput( const KeyEvent& rKEvt )
     _pCurKeyEvent = NULL;
     return bHandled;
 }
-sal_uIntPtr SvtIconChoiceCtrl::GetEntryListPos( SvxIconChoiceCtrlEntry* pEntry ) const
+sal_uLong SvtIconChoiceCtrl::GetEntryListPos( SvxIconChoiceCtrlEntry* pEntry ) const
 {
     return _pImp->GetEntryListPos( pEntry );
 }
@@ -615,7 +615,7 @@ void SvtIconChoiceCtrl::SetNoSelection()
     _pImp->SetNoSelection();
 }
 
-void SvtIconChoiceCtrl::CallImplEventListeners(sal_uIntPtr nEvent, void* pData)
+void SvtIconChoiceCtrl::CallImplEventListeners(sal_uLong nEvent, void* pData)
 {
     CallEventListeners(nEvent, pData);
 }

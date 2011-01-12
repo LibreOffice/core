@@ -465,7 +465,7 @@ Rectangle ScrollableWindow::GetVisibleArea() const
 
 //-------------------------------------------------------------------
 
-void ScrollableWindow::SetLineSize( sal_uIntPtr nHorz, sal_uIntPtr nVert )
+void ScrollableWindow::SetLineSize( sal_uLong nHorz, sal_uLong nVert )
 {
     Size aPixSz( LogicToPixel( Size(nHorz, nVert) ) );
     nColumnPixW = aPixSz.Width();
@@ -561,8 +561,8 @@ void ScrollableWindow::ScrollLines( long nLinesX, long nLinesY )
 
 //-------------------------------------------------------------------
 
-void ScrollableWindow::ScrollPages( long nPagesX, sal_uIntPtr nOverlapX,
-                                    long nPagesY, sal_uIntPtr nOverlapY )
+void ScrollableWindow::ScrollPages( long nPagesX, sal_uLong nOverlapX,
+                                    long nPagesY, sal_uLong nOverlapY )
 {
     Size aOutSz( GetVisibleArea().GetSize() );
     Scroll( nPagesX * aOutSz.Width() + (nPagesX>0 ? 1 : -1) * nOverlapX,

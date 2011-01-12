@@ -40,7 +40,7 @@
 
 #define DATA_SIZE           640
 
-sal_uInt8* ImplSearchEntry( sal_uInt8* , sal_uInt8* , sal_uIntPtr , sal_uIntPtr  );
+sal_uInt8* ImplSearchEntry( sal_uInt8* , sal_uInt8* , sal_uLong , sal_uLong  );
 
 /*************************************************************************
 |*
@@ -654,8 +654,8 @@ sal_Bool GraphicDescriptor::ImpDetectPNG( SvStream& rStm, sal_Bool bExtendedInfo
 
                 if ( nTemp32 == 0x70485973 )
                 {
-                    sal_uIntPtr nXRes;
-                    sal_uIntPtr nYRes;
+                    sal_uLong   nXRes;
+                    sal_uLong   nYRes;
 
                     // horizontale Aufloesung
                     rStm >> nTemp32;
@@ -728,8 +728,8 @@ sal_Bool GraphicDescriptor::ImpDetectTIF( SvStream& rStm, sal_Bool bExtendedInfo
 
                 if ( bExtendedInfo )
                 {
-                    sal_uIntPtr nCount;
-                    sal_uIntPtr nMax = DATA_SIZE - 48;
+                    sal_uLong   nCount;
+                    sal_uLong   nMax = DATA_SIZE - 48;
                     sal_uInt32  nTemp32;
                     sal_Bool    bOk = sal_False;
 

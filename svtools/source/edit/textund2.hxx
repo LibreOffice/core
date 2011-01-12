@@ -34,12 +34,12 @@ class TextUndoDelPara : public TextUndo
 {
 private:
     sal_Bool            mbDelObject;
-    sal_uIntPtr             mnPara;
+    sal_uLong           mnPara;
     TextNode*       mpNode; // Zeigt auf das gueltige, nicht zerstoerte Objekt!
 
 public:
                     TYPEINFO();
-                    TextUndoDelPara( TextEngine* pTextEngine, TextNode* pNode, sal_uIntPtr nPara );
+                    TextUndoDelPara( TextEngine* pTextEngine, TextNode* pNode, sal_uLong nPara );
                     ~TextUndoDelPara();
 
     virtual void    Undo();
@@ -50,12 +50,12 @@ public:
 class TextUndoConnectParas : public TextUndo
 {
 private:
-    sal_uIntPtr             mnPara;
+    sal_uLong           mnPara;
     sal_uInt16          mnSepPos;
 
 public:
                     TYPEINFO();
-                    TextUndoConnectParas( TextEngine* pTextEngine, sal_uIntPtr nPara, sal_uInt16 nSepPos );
+                    TextUndoConnectParas( TextEngine* pTextEngine, sal_uLong nPara, sal_uInt16 nSepPos );
                     ~TextUndoConnectParas();
 
     virtual void    Undo();
@@ -66,12 +66,12 @@ public:
 class TextUndoSplitPara : public TextUndo
 {
 private:
-    sal_uIntPtr             mnPara;
+    sal_uLong           mnPara;
     sal_uInt16          mnSepPos;
 
 public:
                     TYPEINFO();
-                    TextUndoSplitPara( TextEngine* pTextEngine, sal_uIntPtr nPara, sal_uInt16 nSepPos );
+                    TextUndoSplitPara( TextEngine* pTextEngine, sal_uLong nPara, sal_uInt16 nSepPos );
                     ~TextUndoSplitPara();
 
     virtual void    Undo();

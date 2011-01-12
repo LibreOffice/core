@@ -31,7 +31,7 @@
 
 sal_Bool ConvertMSGToGDIMetaFile( SvStream & rMSG, GDIMetaFile & rGDIMetaFile,
                               sal_Bool(*pCallback)(void *, sal_uInt16), void * pCallerData,
-                              sal_uIntPtr nMinPercent, sal_uIntPtr nMaxPercent);
+                              sal_uLong nMinPercent, sal_uLong nMaxPercent);
 
 
 #endif // _MSGRD_HXX

@@ -50,9 +50,9 @@
 struct SvParser_Impl
 {
     String          aToken;             // gescanntes Token
-    sal_uIntPtr             nFilePos;           // akt. Position im Stream
-    sal_uIntPtr         nlLineNr;           // akt. Zeilen Nummer
-    sal_uIntPtr         nlLinePos;          // akt. Spalten Nummer
+    sal_uLong           nFilePos;           // akt. Position im Stream
+    sal_uLong           nlLineNr;           // akt. Zeilen Nummer
+    sal_uLong           nlLinePos;          // akt. Spalten Nummer
     long            nTokenValue;        // zusaetzlicher Wert (RTF)
     sal_Bool            bTokenHasValue;     // indicates whether nTokenValue is valid
     int             nToken;             // akt. Token

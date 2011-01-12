@@ -84,8 +84,8 @@ void IcnCursor_Impl::ImplCreate()
     pColumns = new SvPtrarr[ nCols ];
     pRows = new SvPtrarr[ nRows ];
 
-    sal_uIntPtr nCount = pView->aEntries.Count();
-    for( sal_uIntPtr nCur = 0; nCur < nCount; nCur++ )
+    sal_uLong nCount = pView->aEntries.Count();
+    for( sal_uLong nCur = 0; nCur < nCount; nCur++ )
     {
         SvxIconChoiceCtrlEntry* pEntry = (SvxIconChoiceCtrlEntry*)pView->aEntries.GetObject( nCur );
         // const Rectangle& rRect = pView->GetEntryBoundRect( pEntry );
@@ -366,7 +366,7 @@ SvxIconChoiceCtrlEntry* IcnCursor_Impl::GoPageUpDown( SvxIconChoiceCtrlEntry* pS
                 nNewPos = 0;
         }
         if( nPos != nNewPos )
-            return (SvxIconChoiceCtrlEntry*)pView->aEntries.GetObject( (sal_uIntPtr)nNewPos );
+            return (SvxIconChoiceCtrlEntry*)pView->aEntries.GetObject( (sal_uLong)nNewPos );
         return 0;
     }
     long nOpt = pView->GetEntryBoundRect( pStart ).Top();
@@ -408,7 +408,7 @@ SvxIconChoiceCtrlEntry* IcnCursor_Impl::GoUpDown( SvxIconChoiceCtrlEntry* pCtrlE
 {
     if( pView->IsAutoArrange() && !(pView->nWinBits & WB_ALIGN_TOP) )
     {
-        sal_uIntPtr nPos = pView->GetEntryListPos( pCtrlEntry );
+        sal_uLong nPos = pView->GetEntryListPos( pCtrlEntry );
         if( bDown && nPos < (pView->aEntries.Count() - 1) )
             return (SvxIconChoiceCtrlEntry*)pView->aEntries.GetObject( nPos + 1 );
         else if( !bDown && nPos > 0 )
@@ -503,8 +503,8 @@ void IcnCursor_Impl::CreateGridAjustData( SvPtrarr& rLists, SvxIconChoiceCtrlEnt
             SvPtrarr* pRow = new SvPtrarr;
             rLists.Insert( (void*)pRow, nCurList );
         }
-        const sal_uIntPtr nCount = pView->aEntries.Count();
-        for( sal_uIntPtr nCur = 0; nCur < nCount; nCur++ )
+        const sal_uLong nCount = pView->aEntries.Count();
+        for( sal_uLong nCur = 0; nCur < nCount; nCur++ )
         {
             SvxIconChoiceCtrlEntry* pEntry = (SvxIconChoiceCtrlEntry*)pView->aEntries.GetObject( nCur );
             const Rectangle& rRect = pView->GetEntryBoundRect( pEntry );
@@ -522,8 +522,8 @@ void IcnCursor_Impl::CreateGridAjustData( SvPtrarr& rLists, SvxIconChoiceCtrlEnt
         short nRefRow = (short)( ((rRefRect.Top()+rRefRect.Bottom())/2) / pView->nGridDY );
         SvPtrarr* pRow = new SvPtrarr;
         rLists.Insert( (void*)pRow, 0 );
-        sal_uIntPtr nCount = pView->aEntries.Count();
-        for( sal_uIntPtr nCur = 0; nCur < nCount; nCur++ )
+        sal_uLong nCount = pView->aEntries.Count();
+        for( sal_uLong nCur = 0; nCur < nCount; nCur++ )
         {
             SvxIconChoiceCtrlEntry* pEntry = (SvxIconChoiceCtrlEntry*)pView->aEntries.GetObject( nCur );
             Rectangle rRect( pView->CalcBmpRect(pEntry) );
@@ -600,8 +600,8 @@ void IcnGridMap_Impl::Create_Impl()
     _pGridMap = new sal_Bool[ _nGridRows * _nGridCols];
     memset( (void*)_pGridMap, 0, _nGridRows * _nGridCols );
 
-    const sal_uIntPtr nCount = _pView->aEntries.Count();
-    for( sal_uIntPtr nCur=0; nCur < nCount; nCur++ )
+    const sal_uLong nCount = _pView->aEntries.Count();
+    for( sal_uLong nCur=0; nCur < nCount; nCur++ )
         OccupyGrids( (SvxIconChoiceCtrlEntry*)_pView->aEntries.GetObject( nCur ));
 }
 
@@ -680,7 +680,7 @@ GridId IcnGridMap_Impl::GetGrid( const Point& rDocPos, sal_Bool* pbClipped )
     GridId nId = GetGrid( (sal_uInt16)nX, (sal_uInt16)nY );
     if( pbClipped )
         *pbClipped = bClipped;
-    DBG_ASSERT(nId <(sal_uIntPtr)(_nGridCols*_nGridRows),"GetGrid failed");
+    DBG_ASSERT(nId <(sal_uLong)(_nGridCols*_nGridRows),"GetGrid failed");
     return nId;
 }
 
@@ -700,13 +700,13 @@ Rectangle IcnGridMap_Impl::GetGridRect( GridId nId )
 GridId IcnGridMap_Impl::GetUnoccupiedGrid( sal_Bool bOccupyFound )
 {
     Create();
-    sal_uIntPtr nStart = 0;
+    sal_uLong nStart = 0;
     sal_Bool bExpanded = sal_False;
 
     while( 1 )
     {
-        const sal_uIntPtr nCount = (sal_uInt16)(_nGridCols * _nGridRows);
-        for( sal_uIntPtr nCur = nStart; nCur < nCount; nCur++ )
+        const sal_uLong nCount = (sal_uInt16)(_nGridCols * _nGridRows);
+        for( sal_uLong nCur = nStart; nCur < nCount; nCur++ )
         {
             if( !_pGridMap[ nCur ] )
             {
@@ -794,13 +794,13 @@ void IcnGridMap_Impl::Clear()
     }
 }
 
-sal_uIntPtr IcnGridMap_Impl::GetGridCount( const Size& rSizePixel, sal_uInt16 nDX, sal_uInt16 nDY)
+sal_uLong IcnGridMap_Impl::GetGridCount( const Size& rSizePixel, sal_uInt16 nDX, sal_uInt16 nDY)
 {
     long ndx = (rSizePixel.Width() - LROFFS_WINBORDER) / nDX;
     if( ndx < 0 ) ndx *= -1;
     long ndy = (rSizePixel.Height() - TBOFFS_WINBORDER) / nDY;
     if( ndy < 0 ) ndy *= -1;
-    return (sal_uIntPtr)(ndx * ndy);
+    return (sal_uLong)(ndx * ndy);
 }
 
 void IcnGridMap_Impl::OutputSizeChanged()

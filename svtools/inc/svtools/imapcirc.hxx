@@ -42,9 +42,9 @@ class Fraction;
 class SVT_DLLPUBLIC IMapCircleObject : public IMapObject
 {
     Point               aCenter;
-    sal_uIntPtr             nRadius;
+    sal_uLong               nRadius;
 
-    void                ImpConstruct( const Point& rCenter, sal_uIntPtr nRad, sal_Bool bPixel );
+    void                ImpConstruct( const Point& rCenter, sal_uLong nRad, sal_Bool bPixel );
 
 protected:
 
@@ -55,7 +55,7 @@ protected:
 public:
 
                         IMapCircleObject() {};
-                        IMapCircleObject( const Point& rCenter, sal_uIntPtr nRad,
+                        IMapCircleObject( const Point& rCenter, sal_uLong nRad,
                                           const String& rURL,
                                           const String& rAltText,
                                           const String& rDesc,
@@ -69,7 +69,7 @@ public:
     virtual sal_Bool        IsHit( const Point& rPoint ) const;
 
     Point               GetCenter( sal_Bool bPixelCoords = sal_True ) const;
-    sal_uIntPtr             GetRadius( sal_Bool bPixelCoords = sal_True ) const;
+    sal_uLong               GetRadius( sal_Bool bPixelCoords = sal_True ) const;
 
     // liefert das BoundRect des Kreis-Objektes in 1/100mm
     virtual Rectangle   GetBoundRect() const;

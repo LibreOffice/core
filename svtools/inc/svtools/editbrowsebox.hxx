@@ -302,7 +302,7 @@ namespace svt
         virtual void GetFocus();
         virtual long PreNotify(NotifyEvent& rEvt);
         virtual void Paint(const Rectangle& rClientRect);
-        virtual void Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal_uIntPtr nFlags );
+        virtual void Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal_uLong nFlags );
         virtual void StateChanged( StateChangedType nStateChange );
         virtual void DataChanged( const DataChangedEvent& _rEvent );
         virtual void Resize();
@@ -487,7 +487,7 @@ namespace svt
         CellControllerRef        aController,
                                  aOldController;
 
-        sal_uIntPtr nStartEvent, nEndEvent, nCellModifiedEvent;     // event ids
+        sal_uLong   nStartEvent, nEndEvent, nCellModifiedEvent;     // event ids
         Window* m_pFocusWhileRequest;
             // In ActivateCell, we grab the focus asynchronously, but if between requesting activation
             // and the asynchornous event the focus has changed, we won't grab it for ourself.

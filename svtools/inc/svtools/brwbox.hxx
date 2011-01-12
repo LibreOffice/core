@@ -67,7 +67,7 @@ namespace utl {
 #define BROWSER_INVALIDID           USHRT_MAX
 #define BROWSER_ENDOFSELECTION      (long)(SFX_ENDOFSELECTION)
 
-typedef sal_uIntPtr BrowserMode;
+typedef sal_uLong BrowserMode;
 
 #define BROWSER_COLUMNSELECTION      0x0001
 #define BROWSER_MULTISELECTION       0x0002
@@ -254,7 +254,7 @@ class SVT_DLLPUBLIC BrowseBox
 
     long            nDataRowHeight; // height of a single data-row
     sal_uInt16          nTitleLines;    // number of lines in title row
-    sal_uIntPtr           nControlAreaWidth; // width of fixed area beneeth hscroll
+    sal_uLong           nControlAreaWidth; // width of fixed area beneeth hscroll
     sal_Bool            bThumbDragging; // handle thumb dragging
     sal_Bool            bColumnCursor;  // single columns and fields selectable
     sal_Bool            bMultiSelection;// allow multiple selected rows
@@ -452,7 +452,7 @@ public:
     virtual void    GetFocus();
     virtual void    Resize();
     virtual void    Paint( const Rectangle& rRect );
-    virtual void    Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal_uIntPtr nFlags );
+    virtual void    Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal_uLong nFlags );
     virtual void    Command( const CommandEvent& rEvt );
     virtual void    StartDrag( sal_Int8 _nAction, const Point& _rPosPixel );
 
@@ -495,7 +495,7 @@ public:
     const Color&    GetGridLineColor() const {return aGridLineColor;}
 
     // inserting, changing, removing and freezing of columns
-    void            InsertHandleColumn( sal_uIntPtr nWidth );
+    void            InsertHandleColumn( sal_uLong nWidth );
     void            InsertDataColumn( sal_uInt16 nItemId, const Image& rImage,
                                     long nSize, HeaderBarItemBits nBits = HIB_STDSTYLE,
                                     sal_uInt16 nPos = HEADERBAR_APPEND );
@@ -510,7 +510,7 @@ public:
                                     const String* pHelpText = 0 );
     void            SetColumnTitle( sal_uInt16 nColumnId, const String &rTitle );
     void            SetColumnMode( sal_uInt16 nColumnId, BrowserColumnMode nFlags );
-    void            SetColumnWidth( sal_uInt16 nColumnId, sal_uIntPtr nWidth );
+    void            SetColumnWidth( sal_uInt16 nColumnId, sal_uLong nWidth );
     void            SetColumnPos( sal_uInt16 nColumnId, sal_uInt16 nPos );
     void            FreezeColumn( sal_uInt16 nColumnId, sal_Bool bFreeze = sal_True );
     void            UnfreezeColumns();
@@ -528,7 +528,7 @@ public:
     String          GetColumnTitle( sal_uInt16 nColumnId ) const;
     BrowserColumnMode GetColumnMode( sal_uInt16 nColumnId ) const;
     Rectangle       GetFieldRect( sal_uInt16 nColumnId ) const;
-    sal_uIntPtr           GetColumnWidth( sal_uInt16 nColumnId ) const;
+    sal_uLong           GetColumnWidth( sal_uInt16 nColumnId ) const;
     sal_uInt16          GetColumnId( sal_uInt16 nPos ) const;
     sal_uInt16          GetColumnPos( sal_uInt16 nColumnId ) const;
     sal_Bool            IsFrozen( sal_uInt16 nColumnId ) const;
@@ -628,7 +628,7 @@ public:
 
         The width is calculated so that the text fits completely, plus som margin.
     */
-    sal_uIntPtr           GetDefaultColumnWidth( const String& _rText ) const;
+    sal_uLong           GetDefaultColumnWidth( const String& _rText ) const;
 
     /** GetCellText returns the text at the given position
         @param  _nRow

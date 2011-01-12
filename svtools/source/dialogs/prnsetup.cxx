@@ -161,7 +161,7 @@ static void ImplPrnDlgAddResString( XubString& rStr, sal_uInt16 nResId )
 XubString ImplPrnDlgGetStatusText( const QueueInfo& rInfo )
 {
     XubString   aStr;
-    sal_uIntPtr     nStatus = rInfo.GetStatus();
+    sal_uLong       nStatus = rInfo.GetStatus();
 
     // Default-Printer
     if ( rInfo.GetPrinterName().Len() &&
@@ -221,7 +221,7 @@ XubString ImplPrnDlgGetStatusText( const QueueInfo& rInfo )
         ImplPrnDlgAddResString( aStr, STR_SVT_PRNDLG_POWER_SAVE );
 
     // Anzahl Jobs
-    sal_uIntPtr nJobs = rInfo.GetJobs();
+    sal_uLong nJobs = rInfo.GetJobs();
     if ( nJobs && (nJobs != QUEUE_JOBS_DONTKNOW) )
     {
         XubString aJobStr( SvtResId( STR_SVT_PRNDLG_JOBCOUNT ) );

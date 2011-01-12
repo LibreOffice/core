@@ -72,7 +72,7 @@ void MultiLineEditSyntaxHighlight::DoBracketHilight(sal_uInt16 aKey)
 {
     TextSelection aCurrentPos = GetTextView()->GetSelection();
     xub_StrLen aStartPos  = aCurrentPos.GetStart().GetIndex();
-    sal_uIntPtr nStartPara = aCurrentPos.GetStart().GetPara();
+    sal_uLong nStartPara = aCurrentPos.GetStart().GetPara();
     sal_uInt16 aCount = 0;
     int aChar = -1;
 

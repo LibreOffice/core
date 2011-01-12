@@ -58,8 +58,8 @@ protected:
     // Im-/Export
     void                ImpWriteCERN( SvStream& rOStm, const String& rBaseURL ) const;
     void                ImpWriteNCSA( SvStream& rOStm, const String& rBaseURL ) const;
-    sal_uIntPtr               ImpReadCERN( SvStream& rOStm, const String& rBaseURL );
-    sal_uIntPtr               ImpReadNCSA( SvStream& rOStm, const String& rBaseURL );
+    sal_uLong               ImpReadCERN( SvStream& rOStm, const String& rBaseURL );
+    sal_uLong               ImpReadNCSA( SvStream& rOStm, const String& rBaseURL );
 
     void                ImpReadCERNLine( const ByteString& rLine, const String& rBaseURL );
     Point               ImpReadCERNCoords( const char** ppStr );
@@ -70,7 +70,7 @@ protected:
     String              ImpReadNCSAURL( const char** ppStr, const String& rBaseURL );
     Point               ImpReadNCSACoords( const char** ppStr );
 
-    sal_uIntPtr             ImpDetectFormat( SvStream& rIStm );
+    sal_uLong               ImpDetectFormat( SvStream& rIStm );
 
 public:
 
@@ -112,7 +112,7 @@ public:
     IMapObject*         GetHitIMapObject( const Size& rOriginalSize,
                                           const Size& rDisplaySize,
                                           const Point& rRelHitPoint,
-                                          sal_uIntPtr nFlags = 0 );
+                                          sal_uLong nFlags = 0 );
 
     // Gibt die Gesamtanzahl der IMap-Objekte zurueck
     sal_uInt16              GetIMapObjectCount() const { return (sal_uInt16) maList.Count(); }
@@ -137,8 +137,8 @@ public:
     void                Write ( SvStream& rOStm, const String& rBaseURL ) const;
     void                Read( SvStream& rIStm, const String& rBaseURL );
 
-    void                Write( SvStream& rOStm, sal_uIntPtr nFormat, const String& rBaseURL ) const;
-    sal_uIntPtr               Read( SvStream& rIStm, sal_uIntPtr nFormat, const String& rBaseURL );
+    void                Write( SvStream& rOStm, sal_uLong nFormat, const String& rBaseURL ) const;
+    sal_uLong               Read( SvStream& rIStm, sal_uLong nFormat, const String& rBaseURL );
 };
 
 /******************************************************************************
@@ -152,8 +152,8 @@ public:
 class IMapCompat
 {
     SvStream*       pRWStm;
-    sal_uIntPtr         nCompatPos;
-    sal_uIntPtr         nTotalSize;
+    sal_uLong           nCompatPos;
+    sal_uLong           nTotalSize;
     sal_uInt16          nStmMode;
 
                     IMapCompat() {}

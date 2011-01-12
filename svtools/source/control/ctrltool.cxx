@@ -163,7 +163,7 @@ static void ImplMakeSearchStringFromName( XubString& rStr )
 
 // -----------------------------------------------------------------------
 
-ImplFontListNameInfo* FontList::ImplFind( const XubString& rSearchName, sal_uIntPtr* pIndex ) const
+ImplFontListNameInfo* FontList::ImplFind( const XubString& rSearchName, sal_uLong* pIndex ) const
 {
     // Wenn kein Eintrag in der Liste oder der Eintrag groesser ist als
     // der Letzte, dann hinten dranhaengen. Wir vergleichen erst mit dem
@@ -171,7 +171,7 @@ ImplFontListNameInfo* FontList::ImplFind( const XubString& rSearchName, sal_uInt
     // und somit die Wahrscheinlichkeit das hinten angehaengt werden muss
     // sehr gross ist.
     StringCompare eComp;
-    sal_uIntPtr nCnt = Count();
+    sal_uLong nCnt = Count();
     if ( !nCnt )
     {
         if ( pIndex )
@@ -195,9 +195,9 @@ ImplFontListNameInfo* FontList::ImplFind( const XubString& rSearchName, sal_uInt
     // Fonts in der Liste suchen
     ImplFontListNameInfo*   pCompareData;
     ImplFontListNameInfo*   pFoundData = NULL;
-    sal_uIntPtr                 nLow = 0;
-    sal_uIntPtr                 nHigh = nCnt-1;
-    sal_uIntPtr                 nMid;
+    sal_uLong                   nLow = 0;
+    sal_uLong                   nHigh = nCnt-1;
+    sal_uLong                   nMid;
 
     do
     {
@@ -271,7 +271,7 @@ void FontList::ImplInsertFonts( OutputDevice* pDevice, sal_Bool bAll,
 
         XubString               aSearchName = aFontInfo.GetName();
         ImplFontListNameInfo*   pData;
-        sal_uIntPtr                 nIndex;
+        sal_uLong                   nIndex;
         ImplMakeSearchString( aSearchName );
         pData = ImplFind( aSearchName, &nIndex );
 
@@ -991,7 +991,7 @@ String FontSizeNames::Size2Name( long nValue ) const
 
 //------------------------------------------------------------------------
 
-String FontSizeNames::GetIndexName( sal_uIntPtr nIndex ) const
+String FontSizeNames::GetIndexName( sal_uLong nIndex ) const
 {
     String aStr;
 
@@ -1003,7 +1003,7 @@ String FontSizeNames::GetIndexName( sal_uIntPtr nIndex ) const
 
 //------------------------------------------------------------------------
 
-long FontSizeNames::GetIndexSize( sal_uIntPtr nIndex ) const
+long FontSizeNames::GetIndexSize( sal_uLong nIndex ) const
 {
     if ( nIndex >= mnElem )
         return 0;

@@ -604,7 +604,7 @@ void TaskStatusBar::AddStatusFieldItem( sal_uInt16 nItemId, const TaskStatusFiel
     pItem->maItem   = rItem;
     pItem->mnId     = nItemId;
     pItem->mnOffX   = 0;
-    mpFieldItemList->Insert( pItem, (sal_uIntPtr)nPos );
+    mpFieldItemList->Insert( pItem, (sal_uLong)nPos );
 
     ImplUpdateField( sal_True );
 }

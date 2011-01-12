@@ -539,15 +539,15 @@ void TextDoc::Clear()
 
 void TextDoc::DestroyTextNodes()
 {
-    for ( sal_uIntPtr nNode = 0; nNode < maTextNodes.Count(); nNode++ )
+    for ( sal_uLong nNode = 0; nNode < maTextNodes.Count(); nNode++ )
         delete maTextNodes.GetObject( nNode );
     maTextNodes.clear();
 }
 
 String TextDoc::GetText( const sal_Unicode* pSep ) const
 {
-    sal_uIntPtr nLen = GetTextLen( pSep );
-    sal_uIntPtr nNodes = maTextNodes.Count();
+    sal_uLong nLen = GetTextLen( pSep );
+    sal_uLong nNodes = maTextNodes.Count();
 
     if ( nLen > STRING_MAXLEN )
     {
@@ -556,8 +556,8 @@ String TextDoc::GetText( const sal_Unicode* pSep ) const
     }
 
     String aASCIIText;
-    sal_uIntPtr nLastNode = nNodes-1;
-    for ( sal_uIntPtr nNode = 0; nNode < nNodes; nNode++ )
+    sal_uLong nLastNode = nNodes-1;
+    for ( sal_uLong nNode = 0; nNode < nNodes; nNode++ )
     {
         TextNode* pNode = maTextNodes.GetObject( nNode );
         String aTmp( pNode->GetText() );
@@ -569,7 +569,7 @@ String TextDoc::GetText( const sal_Unicode* pSep ) const
     return aASCIIText;
 }
 
-XubString TextDoc::GetText( sal_uIntPtr nPara ) const
+XubString TextDoc::GetText( sal_uLong nPara ) const
 {
     XubString aText;
     TextNode* pNode = ( nPara < maTextNodes.Count() ) ? maTextNodes.GetObject( nPara ) : 0;
@@ -580,26 +580,26 @@ XubString TextDoc::GetText( sal_uIntPtr nPara ) const
 }
 
 
-sal_uIntPtr TextDoc::GetTextLen( const xub_Unicode* pSep, const TextSelection* pSel ) const
+sal_uLong TextDoc::GetTextLen( const xub_Unicode* pSep, const TextSelection* pSel ) const
 {
-    sal_uIntPtr nLen = 0;
-    sal_uIntPtr nNodes = maTextNodes.Count();
+    sal_uLong nLen = 0;
+    sal_uLong nNodes = maTextNodes.Count();
     if ( nNodes )
     {
-        sal_uIntPtr nStartNode = 0;
-        sal_uIntPtr nEndNode = nNodes-1;
+        sal_uLong nStartNode = 0;
+        sal_uLong nEndNode = nNodes-1;
         if ( pSel )
         {
             nStartNode = pSel->GetStart().GetPara();
             nEndNode = pSel->GetEnd().GetPara();
         }
 
-        for ( sal_uIntPtr nNode = nStartNode; nNode <= nEndNode; nNode++ )
+        for ( sal_uLong nNode = nStartNode; nNode <= nEndNode; nNode++ )
         {
             TextNode* pNode = maTextNodes.GetObject( nNode );
 
             sal_uInt16 nS = 0;
-            sal_uIntPtr nE = pNode->GetText().Len();
+            sal_uLong nE = pNode->GetText().Len();
             if ( pSel && ( nNode == pSel->GetStart().GetPara() ) )
                 nS = pSel->GetStart().GetIndex();
             if ( pSel && ( nNode == pSel->GetEnd().GetPara() ) )
@@ -656,11 +656,11 @@ TextPaM TextDoc::ConnectParagraphs( TextNode* pLeft, TextNode* pRight )
     pLeft->Append( *pRight );
 
     // der rechte verschwindet.
-    sal_uIntPtr nRight = maTextNodes.GetPos( pRight );
+    sal_uLong nRight = maTextNodes.GetPos( pRight );
     maTextNodes.Remove( nRight );
     delete pRight;
 
-    sal_uIntPtr nLeft = maTextNodes.GetPos( pLeft );
+    sal_uLong nLeft = maTextNodes.GetPos( pLeft );
     TextPaM aPaM( nLeft, nPrevLen );
     return aPaM;
 }
@@ -809,7 +809,7 @@ sal_Bool TextDoc::RemoveAttribs( TextNode* pNode, sal_uInt16 nStart, sal_uInt16 
                     sal_uInt16 nOldEnd = pAttr->GetEnd();
                     pAttr->GetEnd() = nStart;
                     rpEnding = pAttr;
-//                  sal_uIntPtr nSavePos = pNode->GetCharAttribs().GetStartList().GetCurPos();
+//                  sal_uLong nSavePos = pNode->GetCharAttribs().GetStartList().GetCurPos();
                     InsertAttrib( *pAttr->GetItem(), pNode, nEnd, nOldEnd );
 //                  pNode->GetCharAttribs().GetStartList().Seek( nSavePos );
                     break;  // es kann weitere Attribute geben!

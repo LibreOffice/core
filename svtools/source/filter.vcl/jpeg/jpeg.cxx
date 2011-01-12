@@ -384,7 +384,7 @@ void* JPEGReader::CreateBitmap( void* pParam )
     {
         long nAlignedWidth;
 
-        const sal_uIntPtr nFormat = pAcc->GetScanlineFormat();
+        const sal_uLong nFormat = pAcc->GetScanlineFormat();
 
         if(
             ( bGray && ( BMP_FORMAT_8BIT_PAL == nFormat ) ) ||

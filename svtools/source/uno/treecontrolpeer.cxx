@@ -106,7 +106,7 @@ public:
     UnoTreeListBoxImpl( TreeControlPeer* pPeer, Window* pParent, WinBits nWinStyle );
     ~UnoTreeListBoxImpl();
 
-    sal_uInt32 insert( SvLBoxEntry* pEntry,SvLBoxEntry* pParent,sal_uIntPtr nPos=LIST_APPEND );
+    sal_uInt32 insert( SvLBoxEntry* pEntry,SvLBoxEntry* pParent,sal_uLong nPos=LIST_APPEND );
 
     virtual void    RequestingChilds( SvLBoxEntry* pParent );
 
@@ -259,7 +259,7 @@ void TreeControlPeer::SetWindow( Window* pWindow )
 
 // --------------------------------------------------------------------
 
-UnoTreeListEntry* TreeControlPeer::createEntry( const Reference< XTreeNode >& xNode, UnoTreeListEntry* pParent, sal_uIntPtr nPos /* = LIST_APPEND */ )
+UnoTreeListEntry* TreeControlPeer::createEntry( const Reference< XTreeNode >& xNode, UnoTreeListEntry* pParent, sal_uLong nPos /* = LIST_APPEND */ )
 {
     UnoTreeListEntry* pEntry = 0;
     if( mpTreeImpl )
@@ -563,7 +563,7 @@ Any SAL_CALL TreeControlPeer::getSelection() throw (RuntimeException)
 
     Any aRet;
 
-    sal_uIntPtr nSelectionCount = rTree.GetSelectionCount();
+    sal_uLong nSelectionCount = rTree.GetSelectionCount();
     if( nSelectionCount == 1 )
     {
         UnoTreeListEntry* pEntry = dynamic_cast< UnoTreeListEntry* >( rTree.FirstSelected() );
@@ -1104,7 +1104,7 @@ void TreeControlPeer::updateNode( UnoTreeListBoxImpl& rTree, const Reference< XT
         {
             Reference< XTreeNode > xParentNode( xNode->getParent() );
             UnoTreeListEntry* pParentEntry = 0;
-            sal_uIntPtr nChild = LIST_APPEND;
+            sal_uLong nChild = LIST_APPEND;
 
             if( xParentNode.is() )
             {
@@ -1581,7 +1581,7 @@ IMPL_LINK(UnoTreeListBoxImpl, OnExpandedHdl, UnoTreeListBoxImpl*, EMPTYARG )
 
 // --------------------------------------------------------------------
 
-sal_uInt32 UnoTreeListBoxImpl::insert( SvLBoxEntry* pEntry,SvLBoxEntry* pParent,sal_uIntPtr nPos )
+sal_uInt32 UnoTreeListBoxImpl::insert( SvLBoxEntry* pEntry,SvLBoxEntry* pParent,sal_uLong nPos )
 {
     if( pParent )
         return SvTreeListBox::Insert( pEntry, pParent, nPos );

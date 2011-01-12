@@ -58,8 +58,8 @@ class SVT_DLLPUBLIC SvParser : public SvRefBase
 protected:
     SvStream&       rInput;
     String          aToken;             // gescanntes Token
-    sal_uIntPtr         nlLineNr;           // akt. Zeilen Nummer
-    sal_uIntPtr         nlLinePos;          // akt. Spalten Nummer
+    sal_uLong           nlLineNr;           // akt. Zeilen Nummer
+    sal_uLong           nlLinePos;          // akt. Spalten Nummer
 
     SvParser_Impl   *pImplData;         // interne Daten
     long            nTokenValue;        // zusaetzlicher Wert (RTF)
@@ -68,7 +68,7 @@ protected:
 
     rtl_TextEncoding    eSrcEnc;        // Source encoding
 
-    sal_uIntPtr nNextChPos;
+    sal_uLong nNextChPos;
     sal_Unicode nNextCh;                // Akt. Zeichen fuer die "lex"
 
 
@@ -129,12 +129,12 @@ public:
 
     inline SvParserState GetStatus() const  { return eState; }  // StatusInfo
 
-    inline sal_uIntPtr  GetLineNr() const       { return nlLineNr; }
-    inline sal_uIntPtr  GetLinePos() const      { return nlLinePos; }
-    inline sal_uIntPtr  IncLineNr()             { return ++nlLineNr; }
-    inline sal_uIntPtr  IncLinePos()            { return ++nlLinePos; }
-    inline sal_uIntPtr  SetLineNr( sal_uIntPtr nlNum );         // inline unten
-    inline sal_uIntPtr  SetLinePos( sal_uIntPtr nlPos );            // inline unten
+    inline sal_uLong    GetLineNr() const       { return nlLineNr; }
+    inline sal_uLong    GetLinePos() const      { return nlLinePos; }
+    inline sal_uLong    IncLineNr()             { return ++nlLineNr; }
+    inline sal_uLong    IncLinePos()            { return ++nlLinePos; }
+    inline sal_uLong    SetLineNr( sal_uLong nlNum );           // inline unten
+    inline sal_uLong    SetLinePos( sal_uLong nlPos );          // inline unten
 
     sal_Unicode GetNextChar();
     void RereadLookahead();
@@ -189,11 +189,11 @@ SV_IMPL_REF(SvParser)
 
 
 
-inline sal_uIntPtr SvParser::SetLineNr( sal_uIntPtr nlNum )
-{   sal_uIntPtr nlOld = nlLineNr; nlLineNr = nlNum; return nlOld; }
+inline sal_uLong SvParser::SetLineNr( sal_uLong nlNum )
+{   sal_uLong nlOld = nlLineNr; nlLineNr = nlNum; return nlOld; }
 
-inline sal_uIntPtr SvParser::SetLinePos( sal_uIntPtr nlPos )
-{   sal_uIntPtr nlOld = nlLinePos; nlLinePos = nlPos; return nlOld; }
+inline sal_uLong SvParser::SetLinePos( sal_uLong nlPos )
+{   sal_uLong nlOld = nlLinePos; nlLinePos = nlPos; return nlOld; }
 
 inline sal_uInt8 SvParser::GetStackPos() const
 {   return nTokenStackPos; }

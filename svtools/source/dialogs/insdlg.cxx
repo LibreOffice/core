@@ -77,7 +77,7 @@ PRV_SV_IMPL_OWNER_LIST( SvObjectServerList, SvObjectServer )
 *************************************************************************/
 const SvObjectServer * SvObjectServerList::Get( const String & rHumanName ) const
 {
-    for( sal_uIntPtr i = 0; i < Count(); i++ )
+    for( sal_uLong i = 0; i < Count(); i++ )
     {
         if( rHumanName == GetObject( i ).GetHumanName() )
             return &GetObject( i );
@@ -92,7 +92,7 @@ const SvObjectServer * SvObjectServerList::Get( const String & rHumanName ) cons
 *************************************************************************/
 const SvObjectServer * SvObjectServerList::Get( const SvGlobalName & rName ) const
 {
-    for( sal_uIntPtr i = 0; i < Count(); i++ )
+    for( sal_uLong i = 0; i < Count(); i++ )
     {
         if( rName == GetObject( i ).GetClassName() )
             return &GetObject( i );

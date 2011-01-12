@@ -55,14 +55,14 @@ class RemoteControl
 public:
     RemoteControl();
     ~RemoteControl();
-    sal_Bool QueCommands( sal_uIntPtr nServiceId, SvStream *pIn );
+    sal_Bool QueCommands( sal_uLong nServiceId, SvStream *pIn );
     SvStream* GetReturnStream();
 
     DECL_LINK( IdleHdl,   Application* );
     DECL_LINK( CommandHdl, Application* );
 
     DECL_LINK( QueCommandsEvent, CommunicationLink* );
-    sal_uIntPtr nStoredServiceId;
+    sal_uLong nStoredServiceId;
     SvStream *pStoredStream;
 
     void ExecuteURL( String &aURL );

@@ -282,7 +282,7 @@ private:
                                       sal_uInt16 nPos, sal_Bool bHigh, sal_Bool bDrag,
                                       const Rectangle& rItemRect,
                                       const Rectangle* pRect,
-                                      sal_uIntPtr nFlags );
+                                      sal_uLong nFlags );
     SVT_DLLPRIVATE void             ImplDrawItem( sal_uInt16 nPos, sal_Bool bHigh = sal_False,
                                       sal_Bool bDrag = sal_False,
                                       const Rectangle* pRect = NULL );
@@ -302,7 +302,7 @@ public:
     virtual void        MouseMove( const MouseEvent& rMEvt );
     virtual void        Tracking( const TrackingEvent& rTEvt );
     virtual void        Paint( const Rectangle& rRect );
-    virtual void        Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal_uIntPtr nFlags );
+    virtual void        Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal_uLong nFlags );
     virtual void        Resize();
     virtual void        Command( const CommandEvent& rCEvt );
     virtual void        RequestHelp( const HelpEvent& rHEvt );

@@ -97,12 +97,12 @@ public:
     sal_Bool            MakeVisible( const Rectangle& rTarget, sal_Bool bSloppy = sal_False );
     Rectangle       GetVisibleArea() const;
 
-    void            SetLineSize( sal_uIntPtr nHorz, sal_uIntPtr nVert );
+    void            SetLineSize( sal_uLong nHorz, sal_uLong nVert );
     using Window::Scroll;
     virtual void    Scroll( long nDeltaX, long nDeltaY, sal_uInt16 nFlags = 0 );
     void            ScrollLines( long nLinesX, long nLinesY );
-    void            ScrollPages( long nPagesX, sal_uIntPtr nOverlapX,
-                                 long nPagesY, sal_uIntPtr nOverlapY );
+    void            ScrollPages( long nPagesX, sal_uLong nOverlapX,
+                                 long nPagesY, sal_uLong nOverlapY );
 
 private:
     SVT_DLLPRIVATE Size         GetOutputSizePixel() const;

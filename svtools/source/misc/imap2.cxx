@@ -253,7 +253,7 @@ void IMapPolygonObject::WriteNCSA( SvStream& rOStm, const String& rBaseURL  ) co
 |*
 \******************************************************************************/
 
-void ImageMap::Write( SvStream& rOStm, sal_uIntPtr nFormat, const String& rBaseURL ) const
+void ImageMap::Write( SvStream& rOStm, sal_uLong nFormat, const String& rBaseURL ) const
 {
     switch( nFormat )
     {
@@ -345,9 +345,9 @@ void ImageMap::ImpWriteNCSA( SvStream& rOStm, const String& rBaseURL  ) const
 |*
 \******************************************************************************/
 
-sal_uIntPtr ImageMap::Read( SvStream& rIStm, sal_uIntPtr nFormat, const String& rBaseURL  )
+sal_uLong ImageMap::Read( SvStream& rIStm, sal_uLong nFormat, const String& rBaseURL  )
 {
-    sal_uIntPtr nRet = IMAP_ERR_FORMAT;
+    sal_uLong nRet = IMAP_ERR_FORMAT;
 
     if ( nFormat == IMAP_FORMAT_DETECT )
         nFormat = ImpDetectFormat( rIStm );
@@ -375,7 +375,7 @@ sal_uIntPtr ImageMap::Read( SvStream& rIStm, sal_uIntPtr nFormat, const String& 
 |*
 \******************************************************************************/
 
-sal_uIntPtr ImageMap::ImpReadCERN( SvStream& rIStm, const String& rBaseURL )
+sal_uLong ImageMap::ImpReadCERN( SvStream& rIStm, const String& rBaseURL )
 {
     ByteString aStr;
 
@@ -553,7 +553,7 @@ String ImageMap::ImpReadCERNURL( const char** ppStr, const String& rBaseURL )
 |*
 \******************************************************************************/
 
-sal_uIntPtr ImageMap::ImpReadNCSA( SvStream& rIStm, const String& rBaseURL )
+sal_uLong ImageMap::ImpReadNCSA( SvStream& rIStm, const String& rBaseURL )
 {
     ByteString aStr;
 
@@ -708,10 +708,10 @@ Point ImageMap::ImpReadNCSACoords( const char** ppStr )
 |*
 \******************************************************************************/
 
-sal_uIntPtr ImageMap::ImpDetectFormat( SvStream& rIStm )
+sal_uLong ImageMap::ImpDetectFormat( SvStream& rIStm )
 {
-    sal_uIntPtr nPos = rIStm.Tell();
-    sal_uIntPtr nRet = IMAP_FORMAT_BIN;
+    sal_uLong   nPos = rIStm.Tell();
+    sal_uLong   nRet = IMAP_FORMAT_BIN;
     char    cMagic[6];
 
     rIStm.Read( cMagic, sizeof( cMagic ) );

@@ -1070,7 +1070,7 @@ sal_Bool WMFReader::ReadHeader()
 void WMFReader::ReadWMF()
 {
     sal_uInt16  nFunction;
-    sal_uIntPtr nPos, nPercent, nLastPercent;
+    sal_uLong   nPos, nPercent, nLastPercent;
 
     nSkipActions = 0;
     nCurrentAction = 0;

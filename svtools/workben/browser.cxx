@@ -151,7 +151,7 @@ class AppWindow: public WorkWindow
     Browser         aBrowser;
     BrowserMode     eCurMode;
     FloatingWindow *pEventView;
-    sal_uIntPtr           nNewRowNo;
+    sal_uLong           nNewRowNo;
 
 private:
     DECL_LINK( Modify, void * );
@@ -591,7 +591,7 @@ IMPL_LINK_INLINE_END( AppWindow, Modify, void *, pCaller )
 
 IMPL_LINK( AppWindow, MenuSelect, Menu *, pMenu )
 {
-    sal_uIntPtr nPos;
+    sal_uLong nPos;
 
     switch ( pMenu->GetCurItemId() )
     {

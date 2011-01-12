@@ -124,7 +124,7 @@ uno::Any TETextDataObject::getTransferData( const datatransfer::DataFlavor& rFla
 {
     uno::Any aAny;
 
-    sal_uIntPtr nT = SotExchange::GetFormat( rFlavor );
+    sal_uLong nT = SotExchange::GetFormat( rFlavor );
     if ( nT == SOT_FORMAT_STRING )
     {
         aAny <<= (::rtl::OUString)GetText();
@@ -132,7 +132,7 @@ uno::Any TETextDataObject::getTransferData( const datatransfer::DataFlavor& rFla
     else if ( nT == SOT_FORMATSTR_ID_HTML )
     {
         GetHTMLStream().Seek( STREAM_SEEK_TO_END );
-        sal_uIntPtr nLen = GetHTMLStream().Tell();
+        sal_uLong nLen = GetHTMLStream().Tell();
         GetHTMLStream().Seek(0);
 
         uno::Sequence< sal_Int8 > aSeq( nLen );
@@ -159,7 +159,7 @@ uno::Sequence< datatransfer::DataFlavor > TETextDataObject::getTransferDataFlavo
 
 sal_Bool TETextDataObject::isDataFlavorSupported( const datatransfer::DataFlavor& rFlavor ) throw(uno::RuntimeException)
 {
-    sal_uIntPtr nT = SotExchange::GetFormat( rFlavor );
+    sal_uLong nT = SotExchange::GetFormat( rFlavor );
     return ( nT == SOT_FORMAT_STRING );
 }
 
@@ -428,9 +428,9 @@ void TextView::ImpHighlight( const TextSelection& rSel )
 
         Rectangle aVisArea( mpImpl->maStartDocPos, mpImpl->mpWindow->GetOutputSizePixel() );
         long nY = 0;
-        sal_uIntPtr nStartPara = aSel.GetStart().GetPara();
-        sal_uIntPtr nEndPara = aSel.GetEnd().GetPara();
-        for ( sal_uIntPtr nPara = 0; nPara <= nEndPara; nPara++ )
+        sal_uLong nStartPara = aSel.GetStart().GetPara();
+        sal_uLong nEndPara = aSel.GetEnd().GetPara();
+        for ( sal_uLong nPara = 0; nPara <= nEndPara; nPara++ )
         {
             long nParaHeight = (long)mpImpl->mpTextEngine->CalcParaHeight( nPara );
             if ( ( nPara >= nStartPara ) && ( ( nY + nParaHeight ) > aVisArea.Top() ) )
@@ -1740,7 +1740,7 @@ TextPaM TextView::CursorStartOfDoc()
 
 TextPaM TextView::CursorEndOfDoc()
 {
-    sal_uIntPtr nNode = mpImpl->mpTextEngine->mpDoc->GetNodes().Count() - 1;
+    sal_uLong nNode = mpImpl->mpTextEngine->mpDoc->GetNodes().Count() - 1;
     TextNode* pNode = mpImpl->mpTextEngine->mpDoc->GetNodes().GetObject( nNode );
     TextPaM aPaM( nNode, pNode->GetText().Len() );
     return aPaM;
@@ -1872,7 +1872,7 @@ void TextView::ImpShowCursor( sal_Bool bGotoCursor, sal_Bool bForceVisCursor, sa
         }
 
         // X kann durch das 'bischen mehr' falsch sein:
-//      sal_uIntPtr nMaxTextWidth = mpImpl->mpTextEngine->GetMaxTextWidth();
+//      sal_uLong nMaxTextWidth = mpImpl->mpTextEngine->GetMaxTextWidth();
 //      if ( !nMaxTextWidth || ( nMaxTextWidth > 0x7FFFFFFF ) )
 //          nMaxTextWidth = 0x7FFFFFFF;
 //      long nMaxX = (long)nMaxTextWidth - aOutSz.Width();
@@ -1961,9 +1961,9 @@ sal_Bool TextView::IsInSelection( const TextPaM& rPaM )
     TextSelection aSel = mpImpl->maSelection;
     aSel.Justify();
 
-    sal_uIntPtr nStartNode = aSel.GetStart().GetPara();
-    sal_uIntPtr nEndNode = aSel.GetEnd().GetPara();
-    sal_uIntPtr nCurNode = rPaM.GetPara();
+    sal_uLong nStartNode = aSel.GetStart().GetPara();
+    sal_uLong nEndNode = aSel.GetEnd().GetPara();
+    sal_uLong nCurNode = rPaM.GetPara();
 
     if ( ( nCurNode > nStartNode ) && ( nCurNode < nEndNode ) )
         return sal_True;
@@ -2047,17 +2047,17 @@ bool TextView::ImplTruncateNewText( rtl::OUString& rNewText ) const
         bTruncated = true;
     }
 
-    sal_uIntPtr nMaxLen = mpImpl->mpTextEngine->GetMaxTextLen();
+    sal_uLong nMaxLen = mpImpl->mpTextEngine->GetMaxTextLen();
     // 0 means unlimited, there is just the String API limit handled above
     if( nMaxLen != 0 )
     {
-        sal_uIntPtr nCurLen = mpImpl->mpTextEngine->GetTextLen();
+        sal_uLong nCurLen = mpImpl->mpTextEngine->GetTextLen();
 
         sal_uInt32 nNewLen = rNewText.getLength();
         if ( nCurLen + nNewLen > nMaxLen )
         {
             // see how much text will be replaced
-            sal_uIntPtr nSelLen = mpImpl->mpTextEngine->GetTextLen( mpImpl->maSelection );
+            sal_uLong nSelLen = mpImpl->mpTextEngine->GetTextLen( mpImpl->maSelection );
             if ( nCurLen + nNewLen - nSelLen > nMaxLen )
             {
                 sal_uInt32 nTruncatedLen = static_cast<sal_uInt32>(nMaxLen - (nCurLen - nSelLen));
@@ -2074,7 +2074,7 @@ sal_Bool TextView::ImplCheckTextLen( const String& rNewText )
     sal_Bool bOK = sal_True;
     if ( mpImpl->mpTextEngine->GetMaxTextLen() )
     {
-        sal_uIntPtr n = mpImpl->mpTextEngine->GetTextLen();
+        sal_uLong n = mpImpl->mpTextEngine->GetTextLen();
         n += rNewText.Len();
         if ( n > mpImpl->mpTextEngine->GetMaxTextLen() )
         {
@@ -2159,7 +2159,7 @@ void TextView::drop( const ::com::sun::star::datatransfer::dnd::DropTargetDropEv
         // Daten fuer das loeschen nach einem DROP_MOVE:
         TextSelection aPrevSel( mpImpl->maSelection );
         aPrevSel.Justify();
-        sal_uIntPtr nPrevParaCount = mpImpl->mpTextEngine->GetParagraphCount();
+        sal_uLong nPrevParaCount = mpImpl->mpTextEngine->GetParagraphCount();
         sal_uInt16 nPrevStartParaLen = mpImpl->mpTextEngine->GetTextLen( aPrevSel.GetStart().GetPara() );
 
         sal_Bool bStarterOfDD = sal_False;
@@ -2210,7 +2210,7 @@ void TextView::drop( const ::com::sun::star::datatransfer::dnd::DropTargetDropEv
                  ( ( mpImpl->mpDDInfo->maDropPos.GetPara() == aPrevSel.GetStart().GetPara() )
                         && ( mpImpl->mpDDInfo->maDropPos.GetIndex() < aPrevSel.GetStart().GetIndex() ) ) )
             {
-                sal_uIntPtr nNewParasBeforeSelection =
+                sal_uLong nNewParasBeforeSelection =
                     mpImpl->mpTextEngine->GetParagraphCount() -    nPrevParaCount;
 
                 aPrevSel.GetStart().GetPara() += nNewParasBeforeSelection;

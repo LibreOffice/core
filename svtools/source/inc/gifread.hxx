@@ -113,14 +113,14 @@ class GIFReader : public GraphicReader
     sal_uInt8               cTransIndex1;
     sal_uInt8               cNonTransIndex1;
 
-    void                ReadPaletteEntries( BitmapPalette* pPal, sal_uIntPtr nCount );
+    void                ReadPaletteEntries( BitmapPalette* pPal, sal_uLong nCount );
     void                ClearImageExtensions();
     sal_Bool                CreateBitmaps( long nWidth, long nHeight, BitmapPalette* pPal, sal_Bool bWatchForBackgroundColor );
     sal_Bool                ReadGlobalHeader();
     sal_Bool                ReadExtension();
     sal_Bool                ReadLocalHeader();
-    sal_uIntPtr             ReadNextBlock();
-    void                FillImages( HPBYTE pBytes, sal_uIntPtr nCount );
+    sal_uLong               ReadNextBlock();
+    void                FillImages( HPBYTE pBytes, sal_uLong nCount );
     void                CreateNewBitmaps();
     sal_Bool                ProcessGIF();
 

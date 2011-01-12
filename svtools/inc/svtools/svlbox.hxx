@@ -331,8 +331,8 @@ protected:
     // invalidate children on enable/disable
     virtual void StateChanged( StateChangedType );
 
-    virtual sal_uIntPtr Insert( SvLBoxEntry* pEnt,SvLBoxEntry* pPar,sal_uIntPtr nPos=LIST_APPEND);
-    virtual sal_uIntPtr Insert( SvLBoxEntry* pEntry,sal_uIntPtr nRootPos = LIST_APPEND );
+    virtual sal_uLong Insert( SvLBoxEntry* pEnt,SvLBoxEntry* pPar,sal_uLong nPos=LIST_APPEND);
+    virtual sal_uLong Insert( SvLBoxEntry* pEntry,sal_uLong nRootPos = LIST_APPEND );
     void            InsertTree( SvLBoxEntry* pTree, SvLBoxEntry* pTarget) {pModel->InsertTree( pTree, pTarget ); }
 
     // Inplace-Editing
@@ -404,7 +404,7 @@ public:
     void            DisconnectFromModel();
 
     virtual sal_uInt16  IsA();
-    sal_uIntPtr         GetEntryCount() const {return pModel->GetEntryCount();}
+    sal_uLong           GetEntryCount() const {return pModel->GetEntryCount();}
     SvLBoxEntry*    First() const { return (SvLBoxEntry*)(pModel->First()); }
     SvLBoxEntry*    Next( SvLBoxEntry* pEntry, sal_uInt16* pDepth=0 ) const { return (SvLBoxEntry*)(pModel->Next(pEntry,pDepth));}
     SvLBoxEntry*    Prev( SvLBoxEntry* pEntry, sal_uInt16* pDepth=0 ) const { return (SvLBoxEntry*)(pModel->Prev(pEntry,pDepth));}
@@ -432,8 +432,8 @@ public:
     virtual void    SetSelectionMode( SelectionMode );
 
     // pParent==0 -> Root-Ebene
-    SvLBoxEntry*    GetEntry( SvLBoxEntry* pParent, sal_uIntPtr nPos ) const { return (SvLBoxEntry*)(pModel->GetEntry(pParent,nPos)); }
-    SvLBoxEntry*    GetEntry( sal_uIntPtr nRootPos ) const { return (SvLBoxEntry*)(pModel->GetEntry(nRootPos)); }
+    SvLBoxEntry*    GetEntry( SvLBoxEntry* pParent, sal_uLong nPos ) const { return (SvLBoxEntry*)(pModel->GetEntry(pParent,nPos)); }
+    SvLBoxEntry*    GetEntry( sal_uLong nRootPos ) const { return (SvLBoxEntry*)(pModel->GetEntry(nRootPos)); }
 
     SvLBoxEntry*    GetEntryFromPath( const ::std::deque< sal_Int32 >& _rPath ) const;
     void            FillEntryPath( SvLBoxEntry* pEntry, ::std::deque< sal_Int32 >& _rPath ) const;
@@ -444,8 +444,8 @@ public:
     SvLBoxEntry*    GetRootLevelParent(SvLBoxEntry* pEntry ) const { return (SvLBoxEntry*)(pModel->GetRootLevelParent( pEntry ));}
 
     using Window::GetChildCount;
-    sal_uIntPtr         GetChildCount( SvLBoxEntry* pParent ) const { return pModel->GetChildCount(pParent); }
-    sal_uIntPtr         GetLevelChildCount( SvLBoxEntry* pParent ) const;
+    sal_uLong           GetChildCount( SvLBoxEntry* pParent ) const { return pModel->GetChildCount(pParent); }
+    sal_uLong           GetLevelChildCount( SvLBoxEntry* pParent ) const;
 
     SvViewDataEntry* GetViewDataEntry( SvListEntry* pEntry ) const { return (SvViewDataEntry*)SvListView::GetViewData(pEntry); }
     SvViewDataItem*  GetViewDataItem( SvListEntry*, SvLBoxItem* ) const;
@@ -491,7 +491,7 @@ public:
     virtual sal_Bool    Expand( SvLBoxEntry* pParent );
     virtual sal_Bool    Collapse( SvLBoxEntry* pParent );
     virtual sal_Bool    Select( SvLBoxEntry* pEntry, sal_Bool bSelect=sal_True );
-    virtual sal_uIntPtr SelectChilds( SvLBoxEntry* pParent, sal_Bool bSelect );
+    virtual sal_uLong   SelectChilds( SvLBoxEntry* pParent, sal_Bool bSelect );
     virtual void    SelectAll( sal_Bool bSelect, sal_Bool bPaint=sal_True );
 
     virtual void    SetCurEntry( SvLBoxEntry* _pEntry ) = 0;
@@ -555,7 +555,7 @@ public:
         SvLBoxEntry*  pEntry,        // Zu verschiebender Entry aus
                                      // GetSourceListBox()->GetModel()
         SvLBoxEntry*& rpNewParent,   // Neuer Target-Parent
-        sal_uIntPtr&          rNewChildPos); // Position in Childlist des Target-Parents
+        sal_uLong&        rNewChildPos); // Position in Childlist des Target-Parents
 
     // Rueckgabe: sal_True==Ok, sal_False==Abbrechen
     virtual sal_Bool    NotifyCopying(
@@ -563,7 +563,7 @@ public:
         SvLBoxEntry*  pEntry,        // Zu kopierender Entry aus
                                      // GetSourceListBox()->GetModel()
         SvLBoxEntry*& rpNewParent,   // Neuer Target-Parent
-        sal_uIntPtr&          rNewChildPos); // Position in Childlist des Target-Parents
+        sal_uLong&        rNewChildPos); // Position in Childlist des Target-Parents
 
     // ACCESSIBILITY ==========================================================
 
@@ -596,7 +596,7 @@ struct SvLBoxDDInfo
     SvLBoxEntry*    pDDStartEntry;
     // relative Position im Eintrag bei Drag-Beginn (IconView)
     long            nMouseRelX,nMouseRelY;
-    sal_uIntPtr         nRes1,nRes2,nRes3,nRes4;
+    sal_uLong           nRes1,nRes2,nRes3,nRes4;
 };
 
 class SvInplaceEdit : public Edit

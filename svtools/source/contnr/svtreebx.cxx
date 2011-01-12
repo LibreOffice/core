@@ -399,7 +399,7 @@ IMPL_LINK_INLINE_START( SvTreeListBox, CheckButtonClick, SvLBoxButtonData *, pDa
 IMPL_LINK_INLINE_END( SvTreeListBox, CheckButtonClick, SvLBoxButtonData *, pData )
 
 SvLBoxEntry* SvTreeListBox::InsertEntry( const XubString& aText,SvLBoxEntry* pParent,
-                                     sal_Bool bChildsOnDemand, sal_uIntPtr nPos, void* pUser,
+                                     sal_Bool bChildsOnDemand, sal_uLong nPos, void* pUser,
                                      SvLBoxButtonKind eButtonKind )
 {
     DBG_CHKTHIS(SvTreeListBox,0);
@@ -439,7 +439,7 @@ SvLBoxEntry* SvTreeListBox::InsertEntry( const XubString& aText,SvLBoxEntry* pPa
 
 SvLBoxEntry* SvTreeListBox::InsertEntry( const XubString& aText,
     const Image& aExpEntryBmp, const Image& aCollEntryBmp,
-    SvLBoxEntry* pParent, sal_Bool bChildsOnDemand, sal_uIntPtr nPos, void* pUser,
+    SvLBoxEntry* pParent, sal_Bool bChildsOnDemand, sal_uLong nPos, void* pUser,
     SvLBoxButtonKind eButtonKind )
 {
     DBG_CHKTHIS(SvTreeListBox,0);
@@ -1076,11 +1076,11 @@ sal_Bool SvTreeListBox::Select( SvLBoxEntry* pEntry, sal_Bool bSelect )
     return bRetVal;
 }
 
-sal_uIntPtr SvTreeListBox::SelectChilds( SvLBoxEntry* pParent, sal_Bool bSelect )
+sal_uLong SvTreeListBox::SelectChilds( SvLBoxEntry* pParent, sal_Bool bSelect )
 {
     DBG_CHKTHIS(SvTreeListBox,0);
     pImp->DestroyAnchor();
-    sal_uIntPtr nRet = 0;
+    sal_uLong nRet = 0;
     if( !pParent->HasChilds() )
         return 0;
     sal_uInt16 nRefDepth = pModel->GetDepth( pParent );
@@ -1124,7 +1124,7 @@ void SvTreeListBox::ModelHasInserted( SvListEntry* pEntry )
 
 void SvTreeListBox::ModelIsMoving(SvListEntry* pSource,
                                         SvListEntry* /* pTargetParent */,
-                                        sal_uIntPtr /* nChildPos */ )
+                                        sal_uLong /* nChildPos */ )
 {
     DBG_CHKTHIS(SvTreeListBox,0);
     pImp->MovingEntry( (SvLBoxEntry*)pSource );
@@ -2204,12 +2204,12 @@ void SvTreeListBox::RemoveHighlightRange()
         Invalidate();
 }
 
-sal_uIntPtr SvTreeListBox::GetAscInsertionPos(SvLBoxEntry*,SvLBoxEntry*)
+sal_uLong SvTreeListBox::GetAscInsertionPos(SvLBoxEntry*,SvLBoxEntry*)
 {
     return LIST_APPEND;
 }
 
-sal_uIntPtr SvTreeListBox::GetDescInsertionPos(SvLBoxEntry*,SvLBoxEntry*)
+sal_uLong SvTreeListBox::GetDescInsertionPos(SvLBoxEntry*,SvLBoxEntry*)
 {
     DBG_CHKTHIS(SvTreeListBox,0);
     return LIST_APPEND;
@@ -2322,7 +2322,7 @@ IMPL_LINK( SvTreeListBox, DefaultCompare, SvSortData*, pData )
 }
 
 void SvTreeListBox::ModelNotification( sal_uInt16 nActionId, SvListEntry* pEntry1,
-                        SvListEntry* pEntry2, sal_uIntPtr nPos )
+                        SvListEntry* pEntry2, sal_uLong nPos )
 {
     if( nActionId == LISTACTION_CLEARING )
         CancelTextEditing();
@@ -2671,7 +2671,7 @@ void SvTreeListBox::EnableCellFocus()
     pImp->EnableCellFocus();
 }
 
-void SvTreeListBox::CallImplEventListeners(sal_uIntPtr nEvent, void* pData)
+void SvTreeListBox::CallImplEventListeners(sal_uLong nEvent, void* pData)
 {
     CallEventListeners(nEvent, pData);
 }

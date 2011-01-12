@@ -185,7 +185,7 @@ SvStream& RTFOutFuncs::Out_Fontname(SvStream& rStream, const String& rStr,
     return rStream;
 }
 
-SvStream& RTFOutFuncs::Out_Hex( SvStream& rStream, sal_uIntPtr nHex, sal_uInt8 nLen )
+SvStream& RTFOutFuncs::Out_Hex( SvStream& rStream, sal_uLong nHex, sal_uInt8 nLen )
 {
     sal_Char aNToABuf[] = "0000000000000000";
 

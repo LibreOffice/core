@@ -103,8 +103,8 @@ class SvImpIconView
     long            nMaxBmpHeight;
     long            nMaxTextWidth;
     long            nMaxBoundHeight; // Hoehe des hoechsten BoundRects
-    sal_uIntPtr         nFlags;
-    sal_uIntPtr         nCurUserEvent;
+    sal_uLong           nFlags;
+    sal_uLong           nCurUserEvent;
     SvLBoxEntry*    pCurParent;
     SvLBoxEntry*    pCursor;
     SvLBoxEntry*    pNextCursor; // wird in MovingEntry gesetzt und ist
@@ -267,9 +267,9 @@ public:
     void            ShowTargetEmphasis( SvLBoxEntry* pEntry, sal_Bool bShow );
     SvLBoxEntry*    GetDropTarget( const Point& rPosPixel );
     sal_Bool            NotifyMoving( SvLBoxEntry* pTarget, SvLBoxEntry* pEntry,
-                        SvLBoxEntry*& rpNewParent, sal_uIntPtr& rNewChildPos );
+                        SvLBoxEntry*& rpNewParent, sal_uLong& rNewChildPos );
     sal_Bool            NotifyCopying( SvLBoxEntry* pTarget, SvLBoxEntry* pEntry,
-                        SvLBoxEntry*& rpNewParent, sal_uIntPtr& rNewChildPos );
+                        SvLBoxEntry*& rpNewParent, sal_uLong& rNewChildPos );
 
     void            WriteDragServerInfo( const Point&, SvLBoxDDInfo* );
     void            ReadDragServerInfo( const Point&, SvLBoxDDInfo* );

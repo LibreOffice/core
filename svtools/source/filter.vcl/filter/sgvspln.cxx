@@ -140,10 +140,6 @@ short basis()             /* BASIS maschinenunabhaengig bestimmen     */
 #define NEGMAX   -POSMIN                   /* groesste negative Zahl  */
 #define NEGMIN   -POSMAX                   /* kleinste negative Zahl  */
 
-#define sal_True      1
-#define sal_False     0
-
-
 /* Definition von Funktionsmakros:
    */
 

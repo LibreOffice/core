@@ -345,7 +345,7 @@ void ValueSet::ImplFormatItem( ValueSetItem* pItem )
 void ValueSet::Format()
 {
     Size        aWinSize = GetOutputSizePixel();
-    sal_uIntPtr       nItemCount = mpImpl->mpItemList->Count();
+    sal_uLong       nItemCount = mpImpl->mpItemList->Count();
     WinBits     nStyle = GetStyle();
     long        nTxtHeight = GetTextHeight();
     long        nOff;
@@ -509,7 +509,7 @@ void ValueSet::Format()
             }
         }
 
-        for ( sal_uIntPtr i = 0; i < nItemCount; i++ )
+        for ( sal_uLong i = 0; i < nItemCount; i++ )
         {
             ValueSetItem* pItem = mpImpl->mpItemList->GetObject( i );
             pItem->maRect.SetEmpty();
@@ -587,8 +587,8 @@ void ValueSet::Format()
         }
 
         // draw items
-        sal_uIntPtr nFirstItem = mnFirstLine * mnCols;
-        sal_uIntPtr nLastItem = nFirstItem + (mnVisLines * mnCols);
+        sal_uLong nFirstItem = mnFirstLine * mnCols;
+        sal_uLong nLastItem = nFirstItem + (mnVisLines * mnCols);
 
         if ( !mbFullMode )
         {
@@ -598,7 +598,7 @@ void ValueSet::Format()
             if ( y+(mnVisLines*(nItemHeight+nSpace)) < aWinSize.Height() )
                 nLastItem += mnCols;
         }
-        for ( sal_uIntPtr i = 0; i < nItemCount; i++ )
+        for ( sal_uLong i = 0; i < nItemCount; i++ )
         {
             ValueSetItem*   pItem = mpImpl->mpItemList->GetObject( i );
 
@@ -1146,8 +1146,8 @@ sal_uInt16 ValueSet::ImplGetItem( const Point& rPos, sal_Bool bMove ) const
     Point     aDefPos;
     Rectangle aWinRect( aDefPos, maVirDev.GetOutputSizePixel() );
 
-    sal_uIntPtr nItemCount = mpImpl->mpItemList->Count();
-    for ( sal_uIntPtr i = 0; i < nItemCount; i++ )
+    sal_uLong nItemCount = mpImpl->mpItemList->Count();
+    for ( sal_uLong i = 0; i < nItemCount; i++ )
     {
         ValueSetItem* pItem = mpImpl->mpItemList->GetObject( i );
         if ( pItem->maRect.IsInside( rPos ) )
@@ -1827,7 +1827,7 @@ void ValueSet::InsertItem( sal_uInt16 nItemId, const Image& rImage, sal_uInt16 n
     pItem->mnId     = nItemId;
     pItem->meType   = VALUESETITEM_IMAGE;
     pItem->maImage  = rImage;
-    mpImpl->mpItemList->Insert( pItem, (sal_uIntPtr)nPos );
+    mpImpl->mpItemList->Insert( pItem, (sal_uLong)nPos );
 
     mbFormat = sal_True;
     if ( IsReallyVisible() && IsUpdateMode() )
@@ -1846,7 +1846,7 @@ void ValueSet::InsertItem( sal_uInt16 nItemId, const Color& rColor, sal_uInt16 n
     pItem->mnId     = nItemId;
     pItem->meType   = VALUESETITEM_COLOR;
     pItem->maColor  = rColor;
-    mpImpl->mpItemList->Insert( pItem, (sal_uIntPtr)nPos );
+    mpImpl->mpItemList->Insert( pItem, (sal_uLong)nPos );
 
     mbFormat = sal_True;
     if ( IsReallyVisible() && IsUpdateMode() )
@@ -1867,7 +1867,7 @@ void ValueSet::InsertItem( sal_uInt16 nItemId, const Image& rImage,
     pItem->meType   = VALUESETITEM_IMAGE;
     pItem->maImage  = rImage;
     pItem->maText   = rText;
-    mpImpl->mpItemList->Insert( pItem, (sal_uIntPtr)nPos );
+    mpImpl->mpItemList->Insert( pItem, (sal_uLong)nPos );
 
     mbFormat = sal_True;
     if ( IsReallyVisible() && IsUpdateMode() )
@@ -1888,7 +1888,7 @@ void ValueSet::InsertItem( sal_uInt16 nItemId, const Color& rColor,
     pItem->meType   = VALUESETITEM_COLOR;
     pItem->maColor  = rColor;
     pItem->maText   = rText;
-    mpImpl->mpItemList->Insert( pItem, (sal_uIntPtr)nPos );
+    mpImpl->mpItemList->Insert( pItem, (sal_uLong)nPos );
 
     mbFormat = sal_True;
     if ( IsReallyVisible() && IsUpdateMode() )
@@ -1906,7 +1906,7 @@ void ValueSet::InsertItem( sal_uInt16 nItemId, sal_uInt16 nPos )
     ValueSetItem* pItem = new ValueSetItem( *this );
     pItem->mnId     = nItemId;
     pItem->meType   = VALUESETITEM_USERDRAW;
-    mpImpl->mpItemList->Insert( pItem, (sal_uIntPtr)nPos );
+    mpImpl->mpItemList->Insert( pItem, (sal_uLong)nPos );
 
     mbFormat = sal_True;
     if ( IsReallyVisible() && IsUpdateMode() )
@@ -1924,7 +1924,7 @@ void ValueSet::InsertSpace( sal_uInt16 nItemId, sal_uInt16 nPos )
     ValueSetItem* pItem = new ValueSetItem( *this );
     pItem->mnId     = nItemId;
     pItem->meType   = VALUESETITEM_SPACE;
-    mpImpl->mpItemList->Insert( pItem, (sal_uIntPtr)nPos );
+    mpImpl->mpItemList->Insert( pItem, (sal_uLong)nPos );
 
     mbFormat = sal_True;
     if ( IsReallyVisible() && IsUpdateMode() )

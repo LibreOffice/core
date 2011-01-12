@@ -333,7 +333,7 @@ void HeaderBar::ImplDrawItem( OutputDevice* pDev,
                               sal_uInt16 nPos, sal_Bool bHigh, sal_Bool bDrag,
                               const Rectangle& rItemRect,
                               const Rectangle* pRect,
-                              sal_uIntPtr )
+                              sal_uLong )
 {
     Rectangle aRect = rItemRect;
 
@@ -1013,7 +1013,7 @@ void HeaderBar::Paint( const Rectangle& rRect )
 // -----------------------------------------------------------------------
 
 void HeaderBar::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize,
-                      sal_uIntPtr nFlags )
+                      sal_uLong nFlags )
 {
     Point       aPos  = pDev->LogicToPixel( rPos );
     Size        aSize = pDev->LogicToPixel( rSize );

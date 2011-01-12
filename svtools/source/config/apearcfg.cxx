@@ -271,7 +271,7 @@ void SvtTabAppearanceCfg::SetApplicationDefaults ( Application* pApp )
     // Mouse Snap
 
     MouseSettings hMouseSettings = hAppSettings.GetMouseSettings();
-    sal_uIntPtr         nMouseOptions  = hMouseSettings.GetOptions();
+    sal_uLong         nMouseOptions  = hMouseSettings.GetOptions();
 
     nMouseOptions &=  ! (MOUSE_OPTION_AUTOCENTERPOS | MOUSE_OPTION_AUTODEFBTNPOS);
 
@@ -292,7 +292,7 @@ void SvtTabAppearanceCfg::SetApplicationDefaults ( Application* pApp )
 
     // Merge and Publish Settings
 
-    sal_uIntPtr nFollow = hMouseSettings.GetFollow();
+    sal_uLong nFollow = hMouseSettings.GetFollow();
     if(bMenuMouseFollow)
         nFollow |= MOUSE_FOLLOW_MENU;
     else

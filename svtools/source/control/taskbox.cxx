@@ -208,7 +208,7 @@ void TaskToolBox::ImplFormatTaskToolBox()
     {
         // Eintraege aus der Liste entfernen
         while ( mpItemList->Count() > mnUpdatePos )
-            delete mpItemList->Remove( (sal_uIntPtr)mnUpdatePos );
+            delete mpItemList->Remove( (sal_uLong)mnUpdatePos );
         mnUpdateNewPos = mnUpdatePos;
     }
 
@@ -310,7 +310,7 @@ void TaskToolBox::UpdateTask( const Image& rImage, const String& rText,
         {
             // Eintraege aus der Liste entfernen
             while ( mpItemList->Count() > mnUpdatePos )
-                delete mpItemList->Remove( (sal_uIntPtr)mnUpdatePos );
+                delete mpItemList->Remove( (sal_uLong)mnUpdatePos );
             pItem = NULL;
         }
     }
@@ -340,7 +340,7 @@ void TaskToolBox::EndUpdateTask()
     {
         // Eintraege aus der Liste entfernen
         while ( mpItemList->Count() > mnUpdatePos )
-            delete mpItemList->Remove( (sal_uIntPtr)mnUpdatePos );
+            delete mpItemList->Remove( (sal_uLong)mnUpdatePos );
         mnUpdateNewPos = mnUpdatePos;
     }
 

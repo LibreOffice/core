@@ -59,15 +59,15 @@
 class TextPaM
 {
 private:
-    sal_uIntPtr         mnPara;
+    sal_uLong           mnPara;
     sal_uInt16          mnIndex;
 
 public:
                     TextPaM()                               { mnPara = 0, mnIndex = 0; }
-                    TextPaM( sal_uIntPtr nPara, sal_uInt16 nIndex )     { mnPara = nPara, mnIndex = nIndex; }
+                    TextPaM( sal_uLong nPara, sal_uInt16 nIndex )   { mnPara = nPara, mnIndex = nIndex; }
 
-    sal_uIntPtr         GetPara() const     { return mnPara; }
-    sal_uIntPtr&            GetPara()           { return mnPara; }
+    sal_uLong           GetPara() const     { return mnPara; }
+    sal_uLong&          GetPara()           { return mnPara; }
 
     sal_uInt16          GetIndex() const    { return mnIndex; }
     sal_uInt16&         GetIndex()          { return mnIndex; }
@@ -153,15 +153,15 @@ inline sal_Bool TextSelection::operator != ( const TextSelection& rSel ) const
 class SVT_DLLPUBLIC TextHint : public SfxSimpleHint
 {
 private:
-    sal_uIntPtr     mnValue;
+    sal_uLong   mnValue;
 
 public:
             TYPEINFO();
-            TextHint( sal_uIntPtr nId );
-            TextHint( sal_uIntPtr nId, sal_uIntPtr nValue );
+            TextHint( sal_uLong nId );
+            TextHint( sal_uLong nId, sal_uLong nValue );
 
-    sal_uIntPtr     GetValue() const        { return mnValue; }
-    void    SetValue( sal_uIntPtr n )   { mnValue = n; }
+    sal_uLong   GetValue() const        { return mnValue; }
+    void    SetValue( sal_uLong n )     { mnValue = n; }
 };
 
 struct TEIMEInfos
@@ -195,11 +195,11 @@ struct TEIMEInfos
 template <class T> class ToolsList : public ::std::vector< T >
 {
 public:
-    sal_uIntPtr         Count() const { return static_cast<sal_uIntPtr>(::std::vector< T >::size()); }
-    sal_uIntPtr         GetPos( T pObject ) const { return ( ::std::find( this->begin(), this->end(), pObject ) ) - this->begin(); }
-    T               GetObject( sal_uIntPtr nIndex ) const { return (*this)[nIndex]; }
-    void            Insert( T pObject, sal_uIntPtr nPos ) { ::std::vector< T >::insert( this->begin()+nPos, pObject ); }
-    void            Remove( sal_uIntPtr nPos ) { ::std::vector< T >::erase( this->begin()+nPos ); }
+    sal_uLong           Count() const { return static_cast<sal_uLong>(::std::vector< T >::size()); }
+    sal_uLong           GetPos( T pObject ) const { return ( ::std::find( this->begin(), this->end(), pObject ) ) - this->begin(); }
+    T               GetObject( sal_uLong nIndex ) const { return (*this)[nIndex]; }
+    void            Insert( T pObject, sal_uLong nPos ) { ::std::vector< T >::insert( this->begin()+nPos, pObject ); }
+    void            Remove( sal_uLong nPos ) { ::std::vector< T >::erase( this->begin()+nPos ); }
 };
 
 #endif // _TEXTDATA_HXX

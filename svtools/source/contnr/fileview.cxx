@@ -113,7 +113,7 @@ namespace
     struct ReleaseSolarMutex
     {
     private:
-        sal_uIntPtr   m_nCount;
+        sal_uLong   m_nCount;
 
     public:
         inline ReleaseSolarMutex()
@@ -615,7 +615,7 @@ public:
     String                  FolderInserted( const OUString& rURL,
                                             const OUString& rTitle );
 
-    sal_uIntPtr                   GetEntryPos( const OUString& rURL );
+    sal_uLong                   GetEntryPos( const OUString& rURL );
 
     inline void             EnableContextMenu( sal_Bool bEnable );
     inline void             EnableDelete( sal_Bool bEnable );
@@ -1612,7 +1612,7 @@ void SvtFileView::SetDoubleClickHdl( const Link& rHdl )
 
 // -----------------------------------------------------------------------
 
-sal_uIntPtr SvtFileView::GetSelectionCount() const
+sal_uLong SvtFileView::GetSelectionCount() const
 {
     return mpImp->mpView->GetSelectionCount();
 }
@@ -2480,7 +2480,7 @@ void SvtFileView_Impl::Resort_Impl( sal_Int16 nColumn, sal_Bool bAscending )
 
     if ( !mbIsFirstResort )
     {
-        sal_uIntPtr nPos = GetEntryPos( aEntryURL );
+        sal_uLong nPos = GetEntryPos( aEntryURL );
         if ( nPos < mpView->GetEntryCount() )
         {
             pEntry = mpView->GetEntry( nPos );
@@ -2688,12 +2688,12 @@ String SvtFileView_Impl::FolderInserted( const OUString& rURL, const OUString& r
 }
 
 // -----------------------------------------------------------------------
-sal_uIntPtr SvtFileView_Impl::GetEntryPos( const OUString& rURL )
+sal_uLong SvtFileView_Impl::GetEntryPos( const OUString& rURL )
 {
     ::osl::MutexGuard aGuard( maMutex );
 
     std::vector< SortingData_Impl* >::iterator aIt;
-    sal_uIntPtr   nPos = 0;
+    sal_uLong   nPos = 0;
 
     for ( aIt = maContent.begin(); aIt != maContent.end(); aIt++ )
     {

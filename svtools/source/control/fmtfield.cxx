@@ -305,7 +305,7 @@ namespace validation
 
 //==============================================================================
 SvNumberFormatter* FormattedField::StaticFormatter::s_cFormatter = NULL;
-sal_uIntPtr FormattedField::StaticFormatter::s_nReferences = 0;
+sal_uLong FormattedField::StaticFormatter::s_nReferences = 0;
 
 //------------------------------------------------------------------------------
 SvNumberFormatter* FormattedField::StaticFormatter::GetFormatter()
@@ -464,7 +464,7 @@ void FormattedField::SetTextFormatted(const XubString& rStr)
             aNewSel.Max() = nNewLen;
             if (!nCurrentLen)
             {   // there wasn't really a previous selection (as there was no previous text), we're setting a new one -> check the selection options
-                sal_uIntPtr nSelOptions = GetSettings().GetStyleSettings().GetSelectionOptions();
+                sal_uLong nSelOptions = GetSettings().GetStyleSettings().GetSelectionOptions();
                 if (nSelOptions & SELECTION_OPTION_SHOWFIRST)
                 {   // selection should be from right to left -> swap min and max
                     aNewSel.Min() = aNewSel.Max();
@@ -579,7 +579,7 @@ void FormattedField::ImplSetTextImpl(const XubString& rNew, Selection* pNewSel)
                 aSel.Max() = nNewLen;
                 if (!nCurrentLen)
                 {   // there wasn't really a previous selection (as there was no previous text), we're setting a new one -> check the selection options
-                    sal_uIntPtr nSelOptions = GetSettings().GetStyleSettings().GetSelectionOptions();
+                    sal_uLong nSelOptions = GetSettings().GetStyleSettings().GetSelectionOptions();
                     if (nSelOptions & SELECTION_OPTION_SHOWFIRST)
                     {   // selection should be from right to left -> swap min and max
                         aSel.Min() = aSel.Max();
@@ -612,7 +612,7 @@ long FormattedField::PreNotify(NotifyEvent& rNEvt)
 }
 
 //------------------------------------------------------------------------------
-void FormattedField::ImplSetFormatKey(sal_uIntPtr nFormatKey)
+void FormattedField::ImplSetFormatKey(sal_uLong nFormatKey)
 {
     DBG_CHKTHIS(FormattedField, NULL);
 
@@ -632,7 +632,7 @@ void FormattedField::ImplSetFormatKey(sal_uIntPtr nFormatKey)
 }
 
 //------------------------------------------------------------------------------
-void FormattedField::SetFormatKey(sal_uIntPtr nFormatKey)
+void FormattedField::SetFormatKey(sal_uLong nFormatKey)
 {
     DBG_CHKTHIS(FormattedField, NULL);
     sal_Bool bNoFormatter = (m_pFormatter == NULL);
@@ -1035,7 +1035,7 @@ sal_Bool FormattedField::ImplGetValue(double& dNewVal)
         // the language of our format
         LanguageType eLanguage = m_pFormatter->GetEntry(m_nFormatKey)->GetLanguage();
         // the default number format for this language
-        sal_uIntPtr nStandardNumericFormat = m_pFormatter->GetStandardFormat(NUMBERFORMAT_NUMBER, eLanguage);
+        sal_uLong nStandardNumericFormat = m_pFormatter->GetStandardFormat(NUMBERFORMAT_NUMBER, eLanguage);
 
         sal_uInt32 nTempFormat = nStandardNumericFormat;
         double dTemp;

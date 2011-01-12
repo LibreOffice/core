@@ -77,7 +77,7 @@ IMapCompat::~IMapCompat()
     {
         if ( nStmMode == STREAM_WRITE )
         {
-            const sal_uIntPtr   nEndPos = pRWStm->Tell();
+            const sal_uLong nEndPos = pRWStm->Tell();
 
             pRWStm->Seek( nCompatPos );
             *pRWStm << (sal_uInt32) ( nEndPos - nTotalSize );
@@ -85,7 +85,7 @@ IMapCompat::~IMapCompat()
         }
         else
         {
-            const sal_uIntPtr nReadSize = pRWStm->Tell() - nCompatPos;
+            const sal_uLong nReadSize = pRWStm->Tell() - nCompatPos;
 
             if ( nTotalSize > nReadSize )
                 pRWStm->SeekRel( nTotalSize - nReadSize );

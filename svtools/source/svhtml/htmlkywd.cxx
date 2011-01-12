@@ -860,7 +860,7 @@ struct HTML_ColorEntry
         const sal_Char* sName;
         const String *pUName;
     };
-    sal_uIntPtr nColor;
+    sal_uLong nColor;
 };
 
 static int __FAR_DATA bSortColorKeyWords = sal_False;
@@ -1052,7 +1052,7 @@ static int
 
 }
 
-sal_uIntPtr GetHTMLColor( const String& rName )
+sal_uLong GetHTMLColor( const String& rName )
 {
     if( !bSortColorKeyWords )
     {
@@ -1063,7 +1063,7 @@ sal_uIntPtr GetHTMLColor( const String& rName )
         bSortColorKeyWords = sal_True;
     }
 
-    sal_uIntPtr nRet = ULONG_MAX;
+    sal_uLong nRet = ULONG_MAX;
     void* pFound;
     HTML_ColorEntry aSrch;
     aSrch.pUName = &rName;

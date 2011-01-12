@@ -31,7 +31,7 @@
 
 sal_Bool ConvertGraphicToMSG(const Graphic & rGraphic, SvStream & rTargetStream,
                          sal_Bool(*pCallback)(void *, sal_uInt16), void * pCallerData,
-                         sal_uIntPtr nMinPercent, sal_uIntPtr nMaxPercent);
+                         sal_uLong nMinPercent, sal_uLong nMaxPercent);
 
 
 #endif // _MSGWR_HXX

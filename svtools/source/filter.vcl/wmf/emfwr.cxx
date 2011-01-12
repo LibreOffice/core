@@ -170,7 +170,7 @@
 
 sal_Bool EMFWriter::WriteEMF( const GDIMetaFile& rMtf, SvStream& rOStm, FilterConfigItem* pFilterConfigItem )
 {
-    const sal_uIntPtr nHeaderPos = rOStm.Tell();
+    const sal_uLong nHeaderPos = rOStm.Tell();
 
     mpHandlesUsed = new sal_Bool[ MAXHANDLES ];
     memset( mpHandlesUsed, 0, MAXHANDLES * sizeof( sal_Bool ) );
@@ -233,7 +233,7 @@ sal_Bool EMFWriter::WriteEMF( const GDIMetaFile& rMtf, SvStream& rOStm, FilterCo
 
 
     // write header
-    const sal_uIntPtr nEndPos = mpStm->Tell(); mpStm->Seek( nHeaderPos );
+    const sal_uLong nEndPos = mpStm->Tell(); mpStm->Seek( nHeaderPos );
 
     (*mpStm) << (sal_uInt32) 0x00000001 << (sal_uInt32) 108 //use [MS-EMF 2.2.11] HeaderExtension2 Object
              << (sal_Int32) 0 << (sal_Int32) 0 << (sal_Int32) ( aMtfSizePix.Width() - 1 ) << (sal_Int32) ( aMtfSizePix.Height() - 1 )
@@ -253,11 +253,11 @@ sal_Bool EMFWriter::WriteEMF( const GDIMetaFile& rMtf, SvStream& rOStm, FilterCo
 
 // -----------------------------------------------------------------------------
 
-sal_uIntPtr EMFWriter::ImplAcquireHandle()
+sal_uLong EMFWriter::ImplAcquireHandle()
 {
-    sal_uIntPtr nHandle = HANDLE_INVALID;
+    sal_uLong nHandle = HANDLE_INVALID;
 
-    for( sal_uIntPtr i = 0; i < MAXHANDLES && ( HANDLE_INVALID == nHandle ); i++ )
+    for( sal_uLong i = 0; i < MAXHANDLES && ( HANDLE_INVALID == nHandle ); i++ )
     {
         if( !mpHandlesUsed[ i ] )
         {
@@ -274,7 +274,7 @@ sal_uIntPtr EMFWriter::ImplAcquireHandle()
 
 // -----------------------------------------------------------------------------
 
-void EMFWriter::ImplReleaseHandle( sal_uIntPtr nHandle )
+void EMFWriter::ImplReleaseHandle( sal_uLong nHandle )
 {
     DBG_ASSERT( nHandle && ( nHandle < MAXHANDLES ), "Handle out of range" );
     mpHandlesUsed[ nHandle - 1 ] = sal_False;
@@ -321,7 +321,7 @@ void EMFWriter::ImplEndRecord()
 
 // -----------------------------------------------------------------------------
 
-sal_Bool EMFWriter::ImplPrepareHandleSelect( sal_uInt32& rHandle, sal_uIntPtr nSelectType )
+sal_Bool EMFWriter::ImplPrepareHandleSelect( sal_uInt32& rHandle, sal_uLong nSelectType )
 {
     if( rHandle != HANDLE_INVALID )
     {
@@ -750,7 +750,7 @@ void EMFWriter::ImplWriteBmpRecord( const Bitmap& rBmp, const Point& rPt,
         (*mpStm) << (sal_Int32) 0 << (sal_Int32) 0 << (sal_Int32) aBmpSizePixel.Width() << (sal_Int32) aBmpSizePixel.Height();
 
         // write offset positions and sizes later
-        const sal_uIntPtr nOffPos = mpStm->Tell();
+        const sal_uLong nOffPos = mpStm->Tell();
         mpStm->SeekRel( 16 );
 
         (*mpStm) << (sal_uInt32) 0 << ( ( ROP_XOR == maVDev.GetRasterOp() && WIN_SRCCOPY == nROP ) ? WIN_SRCINVERT : nROP );
@@ -774,7 +774,7 @@ void EMFWriter::ImplWriteBmpRecord( const Bitmap& rBmp, const Point& rPt,
 
         mpStm->Write( aMemStm.GetData(), nDIBSize );
 
-        const sal_uIntPtr nEndPos = mpStm->Tell();
+        const sal_uLong nEndPos = mpStm->Tell();
         mpStm->Seek( nOffPos );
         (*mpStm) << (sal_uInt32) 80 << (sal_uInt32)( nHeaderSize + ( nPalCount << 2 ) );
         (*mpStm) << (sal_uInt32)( 80 + ( nHeaderSize + ( nPalCount << 2 ) ) ) << nImageSize;
@@ -902,7 +902,7 @@ void EMFWriter::Impl_handleLineInfoPolyPolygons(const LineInfo& rInfo, const bas
 
 void EMFWriter::ImplWrite( const GDIMetaFile& rMtf )
 {
-    for( sal_uIntPtr j = 0, nActionCount = rMtf.GetActionCount(); j < nActionCount; j++ )
+    for( sal_uLong j = 0, nActionCount = rMtf.GetActionCount(); j < nActionCount; j++ )
     {
         const MetaAction*   pAction = rMtf.GetAction( j );
         const sal_uInt16        nType = pAction->GetType();
@@ -1156,7 +1156,7 @@ void EMFWriter::ImplWrite( const GDIMetaFile& rMtf )
                 const MetaEPSAction*    pA = (const MetaEPSAction*) pAction;
                 const GDIMetaFile       aSubstitute( pA->GetSubstitute() );
 
-                for( sal_uIntPtr i = 0, nCount = aSubstitute.GetActionCount(); i < nCount; i++ )
+                for( sal_uLong i = 0, nCount = aSubstitute.GetActionCount(); i < nCount; i++ )
                 {
                     const MetaAction* pSubstAct = aSubstitute.GetAction( i );
                     if( pSubstAct->GetType() == META_BMPSCALE_ACTION )

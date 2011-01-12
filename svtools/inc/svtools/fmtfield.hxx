@@ -60,7 +60,7 @@ private:
     class StaticFormatter
     {
         static SvNumberFormatter*   s_cFormatter;
-        static sal_uIntPtr              s_nReferences;
+        static sal_uLong                s_nReferences;
     public:
         StaticFormatter();
         ~StaticFormatter();
@@ -89,7 +89,7 @@ protected:
     double              m_dCurrentValue;
     double              m_dDefaultValue;
 
-    sal_uIntPtr             m_nFormatKey;
+    sal_uLong               m_nFormatKey;
     SvNumberFormatter*  m_pFormatter;
     StaticFormatter     m_aStaticFormatter;
 
@@ -146,8 +146,8 @@ public:
     double  GetDefaultValue() const             { return m_dDefaultValue; }
 
     // Einstellungen fuer das Format
-    sal_uIntPtr GetFormatKey() const                { return m_nFormatKey; }
-    void    SetFormatKey(sal_uIntPtr nFormatKey);
+    sal_uLong   GetFormatKey() const                { return m_nFormatKey; }
+    void    SetFormatKey(sal_uLong nFormatKey);
 
     SvNumberFormatter*  GetFormatter() const    { return m_pFormatter; }
     void    SetFormatter(SvNumberFormatter* pFormatter, sal_Bool bResetFormat = sal_True);
@@ -267,7 +267,7 @@ protected:
     void ImplSetValue(double dValue, sal_Bool bForce);
     sal_Bool ImplGetValue(double& dNewVal);
 
-    void ImplSetFormatKey(sal_uIntPtr nFormatKey);
+    void ImplSetFormatKey(sal_uLong nFormatKey);
         // SetFormatKey without FormatChanged notification
 
     virtual SvNumberFormatter*  CreateFormatter() { SetFormatter(StandardFormatter()); return m_pFormatter; }

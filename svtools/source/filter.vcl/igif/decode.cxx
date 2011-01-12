@@ -78,10 +78,10 @@ GIFLZWDecompressor::~GIFLZWDecompressor()
 // ------------------------------------------------------------------------
 
 HPBYTE GIFLZWDecompressor::DecompressBlock( HPBYTE pSrc, sal_uInt8 cBufSize,
-                                            sal_uIntPtr& rCount, sal_Bool& rEOI )
+                                            sal_uLong& rCount, sal_Bool& rEOI )
 {
-    sal_uIntPtr nTargetSize = 4096;
-    sal_uIntPtr nCount = 0;
+    sal_uLong   nTargetSize = 4096;
+    sal_uLong   nCount = 0;
     HPBYTE  pTarget = (HPBYTE) rtl_allocateMemory( nTargetSize );
     HPBYTE  pTmpTarget = pTarget;
 
@@ -95,8 +95,8 @@ HPBYTE GIFLZWDecompressor::DecompressBlock( HPBYTE pSrc, sal_uInt8 cBufSize,
 
         if( nCount > nTargetSize )
         {
-            sal_uIntPtr nNewSize = nTargetSize << 1;
-            sal_uIntPtr nOffset = pTmpTarget - pTarget;
+            sal_uLong   nNewSize = nTargetSize << 1;
+            sal_uLong   nOffset = pTmpTarget - pTarget;
             HPBYTE  pTmp = (HPBYTE) rtl_allocateMemory( nNewSize );
 
             memcpy( pTmp, pTarget, nTargetSize );
@@ -157,7 +157,7 @@ sal_Bool GIFLZWDecompressor::ProcessOneCode()
             break;
         }
 
-        nInputBitsBuf |= ( (sal_uIntPtr) pBlockBuf[ nBlockBufPos++ ] ) << nInputBitsBufSize;
+        nInputBitsBuf |= ( (sal_uLong) pBlockBuf[ nBlockBufPos++ ] ) << nInputBitsBufSize;
         nInputBitsBufSize += 8;
     }
 

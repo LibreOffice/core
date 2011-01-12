@@ -160,7 +160,7 @@ static sal_uInt16 aWndFunc(
 
 //-------------------------------------------------------------------------
 
-SfxErrorHandler::SfxErrorHandler(sal_uInt16 nIdP, sal_uIntPtr lStartP, sal_uIntPtr lEndP, ResMgr *pMgrP) :
+SfxErrorHandler::SfxErrorHandler(sal_uInt16 nIdP, sal_uLong lStartP, sal_uLong lEndP, ResMgr *pMgrP) :
 
     lStart(lStartP), lEnd(lEndP), nId(nIdP), pMgr(pMgrP), pFreeMgr( NULL )
 
@@ -193,7 +193,7 @@ sal_Bool SfxErrorHandler::CreateString(
     */
 
 {
-    sal_uIntPtr nErrCode = pErr->GetErrorCode() & ERRCODE_ERROR_MASK;
+    sal_uLong nErrCode = pErr->GetErrorCode() & ERRCODE_ERROR_MASK;
     if( nErrCode>=lEnd || nErrCode<=lStart )
         return sal_False;
     MessageInfo *pMsgInfo=PTR_CAST(MessageInfo,pErr);
@@ -308,7 +308,7 @@ struct ErrorResource_Impl : private Resource
 };
 
 
-sal_Bool SfxErrorHandler::GetClassString(sal_uIntPtr lClassId, String &rStr) const
+sal_Bool SfxErrorHandler::GetClassString(sal_uLong lClassId, String &rStr) const
 
 /*  [Beschreibung]
 
@@ -338,7 +338,7 @@ sal_Bool SfxErrorHandler::GetClassString(sal_uIntPtr lClassId, String &rStr) con
 //-------------------------------------------------------------------------
 
 sal_Bool SfxErrorHandler::GetMessageString(
-    sal_uIntPtr lErrId, String &rStr, sal_uInt16 &nFlags) const
+    sal_uLong lErrId, String &rStr, sal_uInt16 &nFlags) const
 
 /*  [Beschreibung]
 
@@ -368,7 +368,7 @@ sal_Bool SfxErrorHandler::GetMessageString(
 //-------------------------------------------------------------------------
 
 sal_Bool SfxErrorHandler::GetErrorString(
-    sal_uIntPtr lErrId, String &rStr, sal_uInt16 &nFlags) const
+    sal_uLong lErrId, String &rStr, sal_uInt16 &nFlags) const
 
 /*  [Beschreibung]
     Erzeugt den Fehlerstring fuer den eigentlichen Fehler ohne
@@ -437,7 +437,7 @@ SfxErrorContext::SfxErrorContext(
 
 //-------------------------------------------------------------------------
 
-sal_Bool SfxErrorContext::GetString(sal_uIntPtr nErrId, String &rStr)
+sal_Bool SfxErrorContext::GetString(sal_uLong nErrId, String &rStr)
 
 /*  [Beschreibung]
 

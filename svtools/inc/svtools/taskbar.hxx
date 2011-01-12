@@ -176,7 +176,7 @@ private:
     ImplTaskItemList*   mpItemList;
     TaskBar*            mpNotifyTaskBar;
     Point               maContextMenuPos;
-    sal_uIntPtr               mnOldItemCount;
+    sal_uLong               mnOldItemCount;
     long                mnMaxTextWidth;
     long                mnDummy1;
     sal_uInt16              mnUpdatePos;
@@ -466,7 +466,7 @@ class SVT_DLLPUBLIC WindowArrange
 private:
     List*                   mpWinList;
     void*                   mpDummy;
-    sal_uIntPtr                   mnDummy;
+    sal_uLong                   mnDummy;
 
 #ifdef _TASKBAR_CXX
     SVT_DLLPRIVATE void                    ImplTile( const Rectangle& rRect );
@@ -479,7 +479,7 @@ public:
                             WindowArrange();
                             ~WindowArrange();
 
-    void                    AddWindow( Window* pWindow, sal_uIntPtr nPos = LIST_APPEND )
+    void                    AddWindow( Window* pWindow, sal_uLong nPos = LIST_APPEND )
                                 { mpWinList->Insert( (void*)pWindow, nPos ); }
     void                    RemoveAllWindows()
                                 { mpWinList->Clear(); }

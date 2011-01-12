@@ -44,7 +44,7 @@ namespace svtools {
 class SVT_DLLPUBLIC AsynchronLink
 {
     Link   _aLink;
-    sal_uIntPtr  _nEventId;
+    sal_uLong  _nEventId;
     Timer* _pTimer;
     sal_Bool   _bInCall;
     sal_Bool*  _pDeleted;

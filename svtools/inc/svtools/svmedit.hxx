@@ -80,9 +80,9 @@ public:
     virtual void    ClearModifyFlag();
     virtual sal_Bool    IsModified() const;
 
-    virtual void    EnableUpdateData( sal_uIntPtr nTimeout = EDIT_UPDATEDATA_TIMEOUT );
+    virtual void    EnableUpdateData( sal_uLong nTimeout = EDIT_UPDATEDATA_TIMEOUT );
     virtual void    DisableUpdateData() { delete pUpdateDataTimer; pUpdateDataTimer = NULL; }
-    virtual sal_uIntPtr IsUpdateDataEnabled() const;
+    virtual sal_uLong   IsUpdateDataEnabled() const;
 
     virtual void    SetReadOnly( sal_Bool bReadOnly = sal_True );
     virtual sal_Bool    IsReadOnly() const;
@@ -134,7 +134,7 @@ public:
     Size            CalcSize( sal_uInt16 nColumns, sal_uInt16 nLines ) const;
     void            GetMaxVisColumnsAndLines( sal_uInt16& rnCols, sal_uInt16& rnLines ) const;
 
-    void            Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal_uIntPtr nFlags );
+    void            Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal_uLong nFlags );
 
        void         SetLeftMargin( sal_uInt16 n );
     sal_uInt16          GetLeftMargin() const;
@@ -146,7 +146,7 @@ public:
     void            DisableSelectionOnFocus();
 };
 
-inline sal_uIntPtr MultiLineEdit::IsUpdateDataEnabled() const
+inline sal_uLong MultiLineEdit::IsUpdateDataEnabled() const
 {
     return pUpdateDataTimer ? pUpdateDataTimer->GetTimeout() : 0;
 }

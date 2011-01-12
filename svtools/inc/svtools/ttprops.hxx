@@ -36,7 +36,7 @@
 class SfxPoolItem;
 class Bitmap;
 
-// Defines zur Steuerung der Ausführung von Slots
+// Defines zur Steuerung der Ausfï¿½hrung von Slots
 #define EXECUTE_NO                  0
 #define EXECUTE_POSSIBLE            1
 #define EXECUTE_YES                 2
@@ -60,7 +60,7 @@ class Bitmap;
 
 class SVT_DLLPUBLIC TTProperties : public ApplicationProperty
 {
-    sal_uInt16 nDonePRs;                    // Verwaltung für die Properties, die nur einmal gerufen werden mussen.
+    sal_uInt16 nDonePRs;                    // Verwaltung fï¿½r die Properties, die nur einmal gerufen werden mussen.
     SVT_DLLPRIVATE sal_Bool RequestProperty( sal_uInt16 nRequest );
 
     sal_Bool HasSlots(){ return nPropertyVersion == TT_PROPERTIES_VERSION; }
@@ -89,14 +89,14 @@ public:
 
     static SvtResId GetSvtResId( sal_uInt16 nId );
 
-    sal_uIntPtr nSidOpenUrl;
-    sal_uIntPtr nSidFileName;
-    sal_uIntPtr nSidNewDocDirect;
-    sal_uIntPtr nSidCopy;
-    sal_uIntPtr nSidPaste;
-    sal_uIntPtr nSidSourceView;
-    sal_uIntPtr nSidSelectAll;
-    sal_uIntPtr nSidReferer;
+    sal_uLong nSidOpenUrl;
+    sal_uLong nSidFileName;
+    sal_uLong nSidNewDocDirect;
+    sal_uLong nSidCopy;
+    sal_uLong nSidPaste;
+    sal_uLong nSidSourceView;
+    sal_uLong nSidSelectAll;
+    sal_uLong nSidReferer;
 
     sal_uInt16 nActualPR;
     sal_uInt16 nPropertyVersion;        // Wird bei jedem call gesetzt.

@@ -64,7 +64,7 @@ void ExtMultiLineEdit::EnableCursor( sal_Bool bEnable )
     GetTextView()->EnableCursor( bEnable );
 }
 
-void ExtMultiLineEdit::SetAttrib( const TextAttrib& rAttr, sal_uIntPtr nPara, sal_uInt16 nStart, sal_uInt16 nEnd )
+void ExtMultiLineEdit::SetAttrib( const TextAttrib& rAttr, sal_uLong nPara, sal_uInt16 nStart, sal_uInt16 nEnd )
 {
     GetTextEngine()->SetAttrib( rAttr, nPara, nStart, nEnd );
 }
@@ -74,7 +74,7 @@ void ExtMultiLineEdit::SetLeftMargin( sal_uInt16 nLeftMargin )
     GetTextEngine()->SetLeftMargin( nLeftMargin );
 }
 
-sal_uIntPtr ExtMultiLineEdit::GetParagraphCount() const
+sal_uLong ExtMultiLineEdit::GetParagraphCount() const
 {
     return GetTextEngine()->GetParagraphCount();
 }

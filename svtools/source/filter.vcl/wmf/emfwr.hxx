@@ -51,10 +51,10 @@ private:
     FilterConfigItem*   mpFilterConfigItem;
     SvStream*           mpStm;
     sal_Bool*               mpHandlesUsed;
-    sal_uIntPtr             mnHandleCount;
-    sal_uIntPtr             mnLastPercent;
-    sal_uIntPtr             mnRecordCount;
-    sal_uIntPtr             mnRecordPos;
+    sal_uLong               mnHandleCount;
+    sal_uLong               mnLastPercent;
+    sal_uLong               mnRecordCount;
+    sal_uLong               mnRecordPos;
     sal_Bool                mbRecordOpen;
     sal_Bool                mbLineChanged;
     sal_uInt32          mnLineHandle;
@@ -67,10 +67,10 @@ private:
     void                ImplBeginRecord( sal_uInt32 nType );
     void                ImplEndRecord();
 
-    sal_uIntPtr             ImplAcquireHandle();
-    void                ImplReleaseHandle( sal_uIntPtr nHandle );
+    sal_uLong               ImplAcquireHandle();
+    void                ImplReleaseHandle( sal_uLong nHandle );
 
-    sal_Bool                ImplPrepareHandleSelect( sal_uInt32& rHandle, sal_uIntPtr nSelectType );
+    sal_Bool                ImplPrepareHandleSelect( sal_uInt32& rHandle, sal_uLong nSelectType );
     void                ImplCheckLineAttr();
     void                ImplCheckFillAttr();
     void                ImplCheckTextAttr();

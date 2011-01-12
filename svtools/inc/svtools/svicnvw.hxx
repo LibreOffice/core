@@ -122,14 +122,14 @@ public:
 
     SvLBoxEntry*    InsertEntry( const XubString& rText, SvLBoxEntry* pParent = 0,
                         sal_Bool bChildsOnDemand = sal_False,
-                        sal_uIntPtr nPos=LIST_APPEND );
+                        sal_uLong nPos=LIST_APPEND );
 
     SvLBoxEntry*    InsertEntry( const XubString& rText,
                         const Image& rExpandedEntryBmp,
                         const Image& rCollapsedEntryBmp,
                         SvLBoxEntry* pParent = 0,
                         sal_Bool bChildsOnDemand = sal_False,
-                        sal_uIntPtr nPos = LIST_APPEND );
+                        sal_uLong nPos = LIST_APPEND );
 
     const Image&    GetDefaultExpandedEntryBmp() const { return aExpandedEntryBmp;}
     const Image&    GetDefaultCollapsedEntryBmp() const { return aCollapsedEntryBmp;}
@@ -166,7 +166,7 @@ public:
     virtual void    ModelHasInserted( SvListEntry* pEntry );
     virtual void    ModelHasInsertedTree( SvListEntry* pEntry );
     virtual void    ModelIsMoving(SvListEntry* pSource,
-                        SvListEntry* pTargetParent, sal_uIntPtr nChildPos );
+                        SvListEntry* pTargetParent, sal_uLong nChildPos );
     virtual void    ModelHasMoved(SvListEntry* pSource );
     virtual void    ModelIsRemoving( SvListEntry* pEntry );
     virtual void    ModelHasRemoved( SvListEntry* pEntry );
@@ -180,9 +180,9 @@ public:
     // einen "magic pointer" zurueckgeben, falls in einen leeren
     // Bereich auf der IconView gedroppt wird.
     virtual sal_Bool    NotifyMoving( SvLBoxEntry* pTarget, SvLBoxEntry* pEntry,
-                        SvLBoxEntry*& rpNewParent, sal_uIntPtr& rNewChildPos);
+                        SvLBoxEntry*& rpNewParent, sal_uLong& rNewChildPos);
     virtual sal_Bool    NotifyCopying( SvLBoxEntry* pTarget, SvLBoxEntry* pEntry,
-                        SvLBoxEntry*& rpNewParent, sal_uIntPtr& rNewChildPos);
+                        SvLBoxEntry*& rpNewParent, sal_uLong& rNewChildPos);
 
     // gibt TopLeft des BoundingRects zurueck
     // Konvertierung in Fensterposition: MapMode.Origin addieren
@@ -227,7 +227,7 @@ public:
                         // wird bei bAdd == sal_False ignoriert
                         SvPtrarr* pOtherRects = 0,
                         short nBorderOffs = -5 );
-    sal_uIntPtr         GetSelectionCount() const;
+    sal_uLong           GetSelectionCount() const;
 
     virtual void    Arrange();
     void            SetSpaceBetweenEntries( long nHor, long Ver );
@@ -243,7 +243,7 @@ public:
     SvLBoxEntry*    GetCurParent() const;
 
     virtual void    ModelNotification( sal_uInt16 nActionId, SvListEntry* pEntry1,
-                        SvListEntry* pEntry2, sal_uIntPtr nPos );
+                        SvListEntry* pEntry2, sal_uLong nPos );
 
     // 0,0: Grid-Modus ausschalten
     void            SetGrid( long nDX, long nDY );

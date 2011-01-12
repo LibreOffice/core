@@ -99,11 +99,11 @@ FixCpx ImpMultBig2( const FixCpx& ra, const FixCpx& rb )
 |*
 **************************************************************************/
 
-sal_uInt16 ImpSqrt( sal_uIntPtr nRadi )
+sal_uInt16 ImpSqrt( sal_uLong nRadi )
 {
-    register sal_uIntPtr  inf = 1;
-    register sal_uIntPtr  sup = nRadi;
-    register sal_uIntPtr sqr;
+    register sal_uLong  inf = 1;
+    register sal_uLong  sup = nRadi;
+    register sal_uLong sqr;
 
     if ( !nRadi )
         return 0;
@@ -245,7 +245,7 @@ static sal_uInt16 ImpATanx2( const Fix& rX, const Fix& rY )
 
 sal_uInt16 ImpATan2( const short x, const short y )
 {
-    Fix rRad = ImpSqrt(sal_uIntPtr(long(x)*x+long(y)*y));
+    Fix rRad = ImpSqrt(sal_uLong(long(x)*x+long(y)*y));
 
     if ( !rRad.x )
         return 0;
@@ -269,7 +269,7 @@ sal_uInt16 ImpATan2( const short x, const short y )
 
 void ImpCartToPolar( const short x, const short y, Fix& rRad, sal_uInt16& rPhi )
 {
-    rRad = Fix( ImpSqrt( sal_uIntPtr( long(x)*x+long(y)*y ) ) );
+    rRad = Fix( ImpSqrt( sal_uLong( long(x)*x+long(y)*y ) ) );
 
     if ( !rRad.x )
         rPhi=0;

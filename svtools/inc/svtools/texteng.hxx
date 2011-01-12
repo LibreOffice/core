@@ -120,11 +120,11 @@ private:
     sal_uInt16              mnCharHeight;
     sal_uInt16              mnFixCharWidth100;
 
-    sal_uIntPtr             mnMaxTextLen;
-    sal_uIntPtr             mnMaxTextWidth;
-    sal_uIntPtr                 mnCurTextWidth;
-    sal_uIntPtr                 mnCurTextHeight;
-    sal_uIntPtr             mnDefTab;
+    sal_uLong               mnMaxTextLen;
+    sal_uLong               mnMaxTextWidth;
+    sal_uLong               mnCurTextWidth;
+    sal_uLong               mnCurTextHeight;
+    sal_uLong               mnDefTab;
 
     TxtAlign            meAlign;
 
@@ -143,7 +143,7 @@ private:
 
 protected:
 
-    void                CursorMoved( sal_uIntPtr nNode );
+    void                CursorMoved( sal_uLong nNode );
     void                TextModified();
 
     void                ImpInitDoc();
@@ -154,9 +154,9 @@ protected:
     TextPaM             ImpInsertParaBreak( const TextSelection& rTextSelection, sal_Bool bKeepEndingAttribs = sal_True );
     TextPaM             ImpInsertParaBreak( const TextPaM& rPaM, sal_Bool bKeepEndingAttribs = sal_True );
     void                ImpRemoveChars( const TextPaM& rPaM, sal_uInt16 nChars, SfxUndoAction* pCurUndo = 0 );
-    TextPaM             ImpConnectParagraphs( sal_uIntPtr nLeft, sal_uIntPtr nRight );
-    void                ImpRemoveParagraph( sal_uIntPtr nPara );
-    void                ImpInitWritingDirections( sal_uIntPtr nPara );
+    TextPaM             ImpConnectParagraphs( sal_uLong nLeft, sal_uLong nRight );
+    void                ImpRemoveParagraph( sal_uLong nPara );
+    void                ImpInitWritingDirections( sal_uLong nPara );
     LocaleDataWrapper*  ImpGetLocaleDataWrapper();
 
     // to remain compatible in the minor release we copy the above ImpInsertText
@@ -168,11 +168,11 @@ protected:
     SAL_DLLPRIVATE sal_Bool IsInputSequenceCheckingRequired( sal_Unicode c, const TextSelection& rCurSel ) const;
 
     // Broadcasten bzw. Selektionen anpassen:
-    void                ImpParagraphInserted( sal_uIntPtr nPara );
-    void                ImpParagraphRemoved( sal_uIntPtr nPara );
-    void                ImpCharsRemoved( sal_uIntPtr nPara, sal_uInt16 nPos, sal_uInt16 nChars );
-    void                ImpCharsInserted( sal_uIntPtr nPara, sal_uInt16 nPos, sal_uInt16 nChars );
-    void                ImpFormattingParagraph( sal_uIntPtr nPara );
+    void                ImpParagraphInserted( sal_uLong nPara );
+    void                ImpParagraphRemoved( sal_uLong nPara );
+    void                ImpCharsRemoved( sal_uLong nPara, sal_uInt16 nPos, sal_uInt16 nChars );
+    void                ImpCharsInserted( sal_uLong nPara, sal_uInt16 nPos, sal_uInt16 nChars );
+    void                ImpFormattingParagraph( sal_uLong nPara );
     void                ImpTextHeightChanged();
     void                ImpTextFormatted();
 
@@ -180,13 +180,13 @@ protected:
     void                CheckIdleFormatter();
     void                IdleFormatAndUpdate( TextView* pCurView = 0, sal_uInt16 nMaxTimerRestarts = 5 );
 
-    sal_Bool                CreateLines( sal_uIntPtr nPara );
-    void                CreateAndInsertEmptyLine( sal_uIntPtr nPara );
-    void                ImpBreakLine( sal_uIntPtr nPara, TextLine* pLine, TETextPortion* pPortion, sal_uInt16 nPortionStart, long nRemainingWidth );
-    sal_uInt16              SplitTextPortion( sal_uIntPtr nPara, sal_uInt16 nPos );
-    void                CreateTextPortions( sal_uIntPtr nPara, sal_uInt16 nStartPos );
-    void                RecalcTextPortion( sal_uIntPtr nPara, sal_uInt16 nStartPos, short nNewChars );
-    void                SeekCursor( sal_uIntPtr nNode, sal_uInt16 nPos, Font& rFont, OutputDevice* pOutDev );
+    sal_Bool                CreateLines( sal_uLong nPara );
+    void                CreateAndInsertEmptyLine( sal_uLong nPara );
+    void                ImpBreakLine( sal_uLong nPara, TextLine* pLine, TETextPortion* pPortion, sal_uInt16 nPortionStart, long nRemainingWidth );
+    sal_uInt16              SplitTextPortion( sal_uLong nPara, sal_uInt16 nPos );
+    void                CreateTextPortions( sal_uLong nPara, sal_uInt16 nStartPos );
+    void                RecalcTextPortion( sal_uLong nPara, sal_uInt16 nStartPos, short nNewChars );
+    void                SeekCursor( sal_uLong nNode, sal_uInt16 nPos, Font& rFont, OutputDevice* pOutDev );
 
     void                FormatDoc();
     void                FormatFullDoc();
@@ -201,26 +201,26 @@ protected:
 
     sal_Bool                IsFormatted() const { return mbFormatted; }
 
-    sal_uInt16              GetCharPos( sal_uIntPtr nPara, sal_uInt16 nLine, long nDocPosX, sal_Bool bSmart = sal_False );
+    sal_uInt16              GetCharPos( sal_uLong nPara, sal_uInt16 nLine, long nDocPosX, sal_Bool bSmart = sal_False );
     Rectangle           GetEditCursor( const TextPaM& rPaM, sal_Bool bSpecial, sal_Bool bPreferPortionStart = sal_False );
-    sal_uInt16              ImpFindIndex( sal_uIntPtr nPortion, const Point& rPosInPara, sal_Bool bSmart );
-    long                ImpGetPortionXOffset( sal_uIntPtr nPara, TextLine* pLine, sal_uInt16 nTextPortion );
-    long                ImpGetXPos( sal_uIntPtr nPara, TextLine* pLine, sal_uInt16 nIndex, sal_Bool bPreferPortionStart = sal_False );
-    long                ImpGetOutputOffset( sal_uIntPtr nPara, TextLine* pLine, sal_uInt16 nIndex, sal_uInt16 nIndex2 );
-    sal_uInt8                ImpGetRightToLeft( sal_uIntPtr nPara, sal_uInt16 nPos, sal_uInt16* pStart = NULL, sal_uInt16* pEnd = NULL );
+    sal_uInt16              ImpFindIndex( sal_uLong nPortion, const Point& rPosInPara, sal_Bool bSmart );
+    long                ImpGetPortionXOffset( sal_uLong nPara, TextLine* pLine, sal_uInt16 nTextPortion );
+    long                ImpGetXPos( sal_uLong nPara, TextLine* pLine, sal_uInt16 nIndex, sal_Bool bPreferPortionStart = sal_False );
+    long                ImpGetOutputOffset( sal_uLong nPara, TextLine* pLine, sal_uInt16 nIndex, sal_uInt16 nIndex2 );
+    sal_uInt8                ImpGetRightToLeft( sal_uLong nPara, sal_uInt16 nPos, sal_uInt16* pStart = NULL, sal_uInt16* pEnd = NULL );
     void                ImpInitLayoutMode( OutputDevice* pOutDev, sal_Bool bDrawingR2LPortion = sal_False );
     TxtAlign            ImpGetAlign() const;
 
-    sal_uIntPtr             CalcTextHeight();
-    sal_uIntPtr                 CalcParaHeight( sal_uIntPtr nParagraph ) const;
-    sal_uIntPtr             CalcTextWidth( sal_uIntPtr nPara );
-    sal_uIntPtr             CalcTextWidth( sal_uIntPtr nPara, sal_uInt16 nPortionStart, sal_uInt16 nPortionLen, const Font* pFont = 0 );
-    Range               GetInvalidYOffsets( sal_uIntPtr nPortion );
+    sal_uLong               CalcTextHeight();
+    sal_uLong               CalcParaHeight( sal_uLong nParagraph ) const;
+    sal_uLong               CalcTextWidth( sal_uLong nPara );
+    sal_uLong               CalcTextWidth( sal_uLong nPara, sal_uInt16 nPortionStart, sal_uInt16 nPortionLen, const Font* pFont = 0 );
+    Range               GetInvalidYOffsets( sal_uLong nPortion );
 
     // Fuer Undo/Redo
-    void                InsertContent( TextNode* pNode, sal_uIntPtr nPara );
-    TextPaM             SplitContent( sal_uIntPtr nNode, sal_uInt16 nSepPos );
-    TextPaM             ConnectContents( sal_uIntPtr nLeftNode );
+    void                InsertContent( TextNode* pNode, sal_uLong nPara );
+    TextPaM             SplitContent( sal_uLong nNode, sal_uInt16 nSepPos );
+    TextPaM             ConnectContents( sal_uLong nLeftNode );
 
     // Ans API uebergebene PaM's und Selektionen auf einen gueltigen Bereich einstellen
     void                ValidateSelection( TextSelection& rSel ) const;
@@ -236,8 +236,8 @@ public:
     String              GetTextLines( LineEnd aSeparator = LINEEND_LF ) const;
     void                ReplaceText(const TextSelection& rSel, const String& rText);
 
-    sal_uIntPtr             GetTextLen( LineEnd aSeparator = LINEEND_LF ) const;
-    sal_uIntPtr             GetTextLen( const TextSelection& rSel, LineEnd aSeparator = LINEEND_LF ) const;
+    sal_uLong               GetTextLen( LineEnd aSeparator = LINEEND_LF ) const;
+    sal_uLong               GetTextLen( const TextSelection& rSel, LineEnd aSeparator = LINEEND_LF ) const;
 
     void                SetFont( const Font& rFont );
     const Font&         GetFont() const { return maFont; }
@@ -258,23 +258,23 @@ public:
     TextView*           GetActiveView() const;
     void                SetActiveView( TextView* pView );
 
-    void                SetMaxTextLen( sal_uIntPtr nLen );
-    sal_uIntPtr                 GetMaxTextLen() const { return mnMaxTextLen; }
+    void                SetMaxTextLen( sal_uLong nLen );
+    sal_uLong               GetMaxTextLen() const { return mnMaxTextLen; }
 
-    void                SetMaxTextWidth( sal_uIntPtr nWidth );
-    sal_uIntPtr             GetMaxTextWidth() const { return mnMaxTextWidth; }
+    void                SetMaxTextWidth( sal_uLong nWidth );
+    sal_uLong               GetMaxTextWidth() const { return mnMaxTextWidth; }
 
-    sal_uIntPtr             GetTextHeight() const;
-    sal_uIntPtr             CalcTextWidth();
+    sal_uLong               GetTextHeight() const;
+    sal_uLong               CalcTextWidth();
     sal_uInt16              GetCharHeight() const { return mnCharHeight; }
 
-    sal_uIntPtr             GetParagraphCount() const;
-    String              GetText( sal_uIntPtr nParagraph ) const;
-    sal_uInt16              GetTextLen( sal_uIntPtr nParagraph ) const;
-    sal_uIntPtr             GetTextHeight( sal_uIntPtr nParagraph ) const;
+    sal_uLong               GetParagraphCount() const;
+    String              GetText( sal_uLong nParagraph ) const;
+    sal_uInt16              GetTextLen( sal_uLong nParagraph ) const;
+    sal_uLong               GetTextHeight( sal_uLong nParagraph ) const;
 
-    sal_uInt16              GetLineCount( sal_uIntPtr nParagraph ) const;
-    sal_uInt16              GetLineLen( sal_uIntPtr nParagraph, sal_uInt16 nLine ) const;
+    sal_uInt16              GetLineCount( sal_uLong nParagraph ) const;
+    sal_uInt16              GetLineLen( sal_uLong nParagraph, sal_uInt16 nLine ) const;
 
     void                SetRightToLeft( sal_Bool bR2L );
     sal_Bool                IsRightToLeft() const { return mbRightToLeft; }
@@ -306,10 +306,10 @@ public:
     const TextAttrib*       FindAttrib( const TextPaM& rPaM, sal_uInt16 nWhich ) const;
     const TextCharAttrib*   FindCharAttrib( const TextPaM& rPaM, sal_uInt16 nWhich ) const;
 
-    void                RemoveAttribs( sal_uIntPtr nPara, sal_uInt16 nWhich, sal_Bool bIdleFormatAndUpdate );
-    void                RemoveAttrib( sal_uIntPtr nPara, const TextCharAttrib& rAttrib );
-    void                RemoveAttribs( sal_uIntPtr nPara, sal_Bool bIdleFormatAndUpdate = sal_True );
-    void                SetAttrib( const TextAttrib& rAttr, sal_uIntPtr nPara, sal_uInt16 nStart, sal_uInt16 nEnd, sal_Bool bIdleFormatAndUpdate = sal_True );
+    void                RemoveAttribs( sal_uLong nPara, sal_uInt16 nWhich, sal_Bool bIdleFormatAndUpdate );
+    void                RemoveAttrib( sal_uLong nPara, const TextCharAttrib& rAttrib );
+    void                RemoveAttribs( sal_uLong nPara, sal_Bool bIdleFormatAndUpdate = sal_True );
+    void                SetAttrib( const TextAttrib& rAttr, sal_uLong nPara, sal_uInt16 nStart, sal_uInt16 nEnd, sal_Bool bIdleFormatAndUpdate = sal_True );
 
     TxtAlign            GetTextAlign() const { return meAlign; }
     void                SetTextAlign( TxtAlign eAlign );

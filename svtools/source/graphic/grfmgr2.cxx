@@ -113,7 +113,7 @@ BitmapEx muckWithBitmap( const BitmapEx& rBmpEx,
 // - GraphicManager -
 // ------------------
 
-GraphicManager::GraphicManager( sal_uIntPtr nCacheSize, sal_uIntPtr nMaxObjCacheSize ) :
+GraphicManager::GraphicManager( sal_uLong nCacheSize, sal_uLong nMaxObjCacheSize ) :
         mpCache( new GraphicCache( *this, nCacheSize, nMaxObjCacheSize ) )
 {
 }
@@ -130,56 +130,56 @@ GraphicManager::~GraphicManager()
 
 // -----------------------------------------------------------------------------
 
-void GraphicManager::SetMaxCacheSize( sal_uIntPtr nNewCacheSize )
+void GraphicManager::SetMaxCacheSize( sal_uLong nNewCacheSize )
 {
     mpCache->SetMaxDisplayCacheSize( nNewCacheSize );
 }
 
 // -----------------------------------------------------------------------------
 
-sal_uIntPtr GraphicManager::GetMaxCacheSize() const
+sal_uLong GraphicManager::GetMaxCacheSize() const
 {
     return mpCache->GetMaxDisplayCacheSize();
 }
 
 // -----------------------------------------------------------------------------
 
-void GraphicManager::SetMaxObjCacheSize( sal_uIntPtr nNewMaxObjSize, sal_Bool bDestroyGreaterCached )
+void GraphicManager::SetMaxObjCacheSize( sal_uLong nNewMaxObjSize, sal_Bool bDestroyGreaterCached )
 {
     mpCache->SetMaxObjDisplayCacheSize( nNewMaxObjSize, bDestroyGreaterCached );
 }
 
 // -----------------------------------------------------------------------------
 
-sal_uIntPtr GraphicManager::GetMaxObjCacheSize() const
+sal_uLong GraphicManager::GetMaxObjCacheSize() const
 {
     return mpCache->GetMaxObjDisplayCacheSize();
 }
 
 // -----------------------------------------------------------------------------
 
-sal_uIntPtr GraphicManager::GetUsedCacheSize() const
+sal_uLong GraphicManager::GetUsedCacheSize() const
 {
     return mpCache->GetUsedDisplayCacheSize();
 }
 
 // -----------------------------------------------------------------------------
 
-sal_uIntPtr GraphicManager::GetFreeCacheSize() const
+sal_uLong GraphicManager::GetFreeCacheSize() const
 {
     return mpCache->GetFreeDisplayCacheSize();
 }
 
 // -----------------------------------------------------------------------------
 
-void GraphicManager::SetCacheTimeout( sal_uIntPtr nTimeoutSeconds )
+void GraphicManager::SetCacheTimeout( sal_uLong nTimeoutSeconds )
 {
     mpCache->SetCacheTimeout( nTimeoutSeconds );
 }
 
 // -----------------------------------------------------------------------------
 
-sal_uIntPtr GraphicManager::GetCacheTimeout() const
+sal_uLong GraphicManager::GetCacheTimeout() const
 {
     return mpCache->GetCacheTimeout();
 }
@@ -211,7 +211,7 @@ sal_Bool GraphicManager::IsInCache( OutputDevice* pOut, const Point& rPt,
 
 sal_Bool GraphicManager::DrawObj( OutputDevice* pOut, const Point& rPt, const Size& rSz,
                               GraphicObject& rObj, const GraphicAttr& rAttr,
-                              const sal_uIntPtr nFlags, sal_Bool& rCached )
+                              const sal_uLong nFlags, sal_Bool& rCached )
 {
     Point   aPt( rPt );
     Size    aSz( rSz );
@@ -316,7 +316,7 @@ void GraphicManager::ImplGraphicObjectWasSwappedIn( const GraphicObject& rObj )
 sal_Bool GraphicManager::ImplDraw( OutputDevice* pOut, const Point& rPt,
                                const Size& rSz, GraphicObject& rObj,
                                const GraphicAttr& rAttr,
-                               const sal_uIntPtr nFlags, sal_Bool& rCached )
+                               const sal_uLong nFlags, sal_Bool& rCached )
 {
     const Graphic&  rGraphic = rObj.GetGraphic();
     sal_Bool            bRet = sal_False;
@@ -397,7 +397,7 @@ sal_Bool GraphicManager::ImplDraw( OutputDevice* pOut, const Point& rPt,
 sal_Bool GraphicManager::ImplCreateOutput( OutputDevice* pOut,
                                        const Point& rPt, const Size& rSz,
                                        const BitmapEx& rBmpEx, const GraphicAttr& rAttr,
-                                       const sal_uIntPtr nFlags, BitmapEx* pBmpEx )
+                                       const sal_uLong nFlags, BitmapEx* pBmpEx )
 {
     sal_uInt16  nRot10 = rAttr.GetRotation() % 3600;
     Point   aOutPtPix;
@@ -627,7 +627,7 @@ sal_Bool GraphicManager::ImplCreateOutput( OutputDevice* pOut,
 sal_Bool GraphicManager::ImplCreateOutput( OutputDevice* pOut,
                                        const Point& rPt, const Size& rSz,
                                        const GDIMetaFile& rMtf, const GraphicAttr& rAttr,
-                                       const sal_uIntPtr /*nFlags*/, GDIMetaFile& rOutMtf, BitmapEx& rOutBmpEx )
+                                       const sal_uLong /*nFlags*/, GDIMetaFile& rOutMtf, BitmapEx& rOutBmpEx )
 {
     const Size aNewSize( rMtf.GetPrefSize() );
 
@@ -1652,7 +1652,7 @@ sal_Bool GraphicManager::ImplCreateRotatedScaled( const BitmapEx& rBmpEx,
 
 // -----------------------------------------------------------------------------
 
-void GraphicManager::ImplAdjust( BitmapEx& rBmpEx, const GraphicAttr& rAttr, sal_uIntPtr nAdjustmentFlags )
+void GraphicManager::ImplAdjust( BitmapEx& rBmpEx, const GraphicAttr& rAttr, sal_uLong nAdjustmentFlags )
 {
     GraphicAttr aAttr( rAttr );
 
@@ -1716,7 +1716,7 @@ void GraphicManager::ImplAdjust( BitmapEx& rBmpEx, const GraphicAttr& rAttr, sal
 
             if( pA )
             {
-                sal_uIntPtr     nTrans = cTrans, nNewTrans;
+                sal_uLong       nTrans = cTrans, nNewTrans;
                 const long  nWidth = pA->Width(), nHeight = pA->Height();
 
                 if( pA->GetScanlineFormat() == BMP_FORMAT_8BIT_PAL )
@@ -1757,7 +1757,7 @@ void GraphicManager::ImplAdjust( BitmapEx& rBmpEx, const GraphicAttr& rAttr, sal
 
 // -----------------------------------------------------------------------------
 
-void GraphicManager::ImplAdjust( GDIMetaFile& rMtf, const GraphicAttr& rAttr, sal_uIntPtr nAdjustmentFlags )
+void GraphicManager::ImplAdjust( GDIMetaFile& rMtf, const GraphicAttr& rAttr, sal_uLong nAdjustmentFlags )
 {
     GraphicAttr aAttr( rAttr );
 
@@ -1810,7 +1810,7 @@ void GraphicManager::ImplAdjust( GDIMetaFile& rMtf, const GraphicAttr& rAttr, sa
 
 // -----------------------------------------------------------------------------
 
-void GraphicManager::ImplAdjust( Animation& rAnimation, const GraphicAttr& rAttr, sal_uIntPtr nAdjustmentFlags )
+void GraphicManager::ImplAdjust( Animation& rAnimation, const GraphicAttr& rAttr, sal_uLong nAdjustmentFlags )
 {
     GraphicAttr aAttr( rAttr );
 
@@ -1924,7 +1924,7 @@ struct ImplTileInfo
 bool GraphicObject::ImplRenderTempTile( VirtualDevice& rVDev, int nExponent,
                                         int nNumTilesX, int nNumTilesY,
                                         const Size& rTileSizePixel,
-                                        const GraphicAttr* pAttr, sal_uIntPtr nFlags )
+                                        const GraphicAttr* pAttr, sal_uLong nFlags )
 {
     if( nExponent <= 1 )
         return false;
@@ -1968,7 +1968,7 @@ bool GraphicObject::ImplRenderTileRecursive( VirtualDevice& rVDev, int nExponent
                                              int nNumOrigTilesX, int nNumOrigTilesY,
                                              int nRemainderTilesX, int nRemainderTilesY,
                                              const Size& rTileSizePixel, const GraphicAttr* pAttr,
-                                             sal_uIntPtr nFlags, ImplTileInfo& rTileInfo )
+                                             sal_uLong nFlags, ImplTileInfo& rTileInfo )
 {
     // gets loaded with our tile bitmap
     GraphicObject aTmpGraphic;
@@ -2143,7 +2143,7 @@ bool GraphicObject::ImplRenderTileRecursive( VirtualDevice& rVDev, int nExponent
 // -----------------------------------------------------------------------------
 
 bool GraphicObject::ImplDrawTiled( OutputDevice* pOut, const Rectangle& rArea, const Size& rSizePixel,
-                                   const Size& rOffset, const GraphicAttr* pAttr, sal_uIntPtr nFlags, int nTileCacheSize1D )
+                                   const Size& rOffset, const GraphicAttr* pAttr, sal_uLong nFlags, int nTileCacheSize1D )
 {
     // how many tiles to generate per recursion step
     enum{ SubdivisionExponent=2 };
@@ -2254,7 +2254,7 @@ bool GraphicObject::ImplDrawTiled( OutputDevice* pOut, const Rectangle& rArea, c
 
 bool GraphicObject::ImplDrawTiled( OutputDevice& rOut, const Point& rPosPixel,
                                    int nNumTilesX, int nNumTilesY,
-                                   const Size& rTileSizePixel, const GraphicAttr* pAttr, sal_uIntPtr nFlags )
+                                   const Size& rTileSizePixel, const GraphicAttr* pAttr, sal_uLong nFlags )
 {
     Point   aCurrPos( rPosPixel );
     Size    aTileSizeLogic( rOut.PixelToLogic( rTileSizePixel ) );

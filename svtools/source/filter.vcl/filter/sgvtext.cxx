@@ -421,7 +421,7 @@ UCHAR ProcessOne(UCHAR* TBuf, sal_uInt16& Index,
             q=!CheckTextOutl(AktAtr.F,AktAtr.L);
 
             switch (Ident) {
-                case EscFont : AktAtr.SetFont(sal_uIntPtr (ChgValue(Atr0.GetFont(),0,0          ,FlgVal,NumVal)));break;
+                case EscFont : AktAtr.SetFont(sal_uLong (ChgValue(Atr0.GetFont(),0,0          ,FlgVal,NumVal)));break;
                 case EscGrad : AktAtr.Grad   =sal_uInt16(ChgValue(Atr0.Grad,   2,2000         ,FlgVal,NumVal)); break;
                 case EscBreit: AktAtr.Breite =sal_uInt16(ChgValue(Atr0.Breite, 1,1000         ,FlgVal,NumVal)); break;
                 case EscKaptS: AktAtr.Kapit  =(sal_uInt8)(ChgValue(Atr0.Kapit,  1,255          ,FlgVal,NumVal)); break;
@@ -535,8 +535,8 @@ sal_uInt16 GetLineFeed(UCHAR* TBuf, sal_uInt16 Index, ObjTextType Atr0, ObjTextT
 {
     UCHAR  c=0;
     sal_Bool   AbsEnd=sal_False;
-    sal_uIntPtr  LF100=0;
-    sal_uIntPtr  MaxLF100=0;
+    sal_uLong  LF100=0;
+    sal_uLong  MaxLF100=0;
     sal_Bool   LFauto=0;
     sal_Bool   First=sal_True;
     sal_uInt16 Grad;
@@ -594,8 +594,8 @@ sal_uInt16 SetTextContext(OutputDevice& rOut, ObjTextType& Atr, sal_Bool Kapt, s
     SgfFontOne* pSgfFont; // Font aus dem IniFile
     Font   aFont;
     Color  aColor;
-    sal_uIntPtr  Grad;
-    sal_uIntPtr  Brei;
+    sal_uLong  Grad;
+    sal_uLong  Brei;
     String FNam;
     sal_uInt16 StdBrei=50;    // Durchschnittliche Zeichenbreite in % von Schriftgrad
     sal_Bool   bFit=(FitXMul!=1 || FitXDiv!=1 || FitYMul!=1 || FitYDiv!=1);
@@ -649,17 +649,17 @@ sal_uInt16 SetTextContext(OutputDevice& rOut, ObjTextType& Atr, sal_Bool Kapt, s
         //aFont.SetCharSet(CHARSET_SYSTEM);
     }
 
-    Grad=sal_uIntPtr(Atr.Grad);
-    if ((Atr.Schnitt & TextKaptBit) !=0 && Kapt) Grad=Grad*sal_uIntPtr(Atr.Kapit)/100;
+    Grad=sal_uLong(Atr.Grad);
+    if ((Atr.Schnitt & TextKaptBit) !=0 && Kapt) Grad=Grad*sal_uLong(Atr.Kapit)/100;
     if ((Atr.Schnitt & TextSupSBit) !=0 || (Atr.Schnitt & TextSubSBit) !=0) Grad=Grad*SuperSubFact/100;
     Brei=Grad;
     if (Atr.Breite!=100 || bFit) {
         if (bFit) {
-            Grad=Grad*sal_uIntPtr(FitYMul)/sal_uIntPtr(FitYDiv);
-            Brei=Brei*sal_uIntPtr(FitXMul)/sal_uIntPtr(FitXDiv);
+            Grad=Grad*sal_uLong(FitYMul)/sal_uLong(FitYDiv);
+            Brei=Brei*sal_uLong(FitXMul)/sal_uLong(FitXDiv);
         }
-        Brei=Brei*sal_uIntPtr(Atr.Breite)/100;
-        Brei=Brei*sal_uIntPtr(StdBrei)/100;
+        Brei=Brei*sal_uLong(Atr.Breite)/100;
+        Brei=Brei*sal_uLong(StdBrei)/100;
         aFont.SetSize(Size(hPoint2Sgf(sal_uInt16(Brei)),hPoint2Sgf(sal_uInt16(Grad))));
     } else {
         aFont.SetSize(Size(0,hPoint2Sgf(sal_uInt16(Grad))));
@@ -784,8 +784,8 @@ UCHAR ProcessChar(OutputDevice& rOut, UCHAR* TBuf, ProcChrSta& R, ObjTextType& A
         ChrWidth=GetCharWidth(rOut,c1);
 
         if (R.Attrib.ZAbst!=100) { // Spezial-Zeichenabstand ?
-            sal_uIntPtr Temp;
-            Temp=sal_uIntPtr(ChrWidth)*sal_uIntPtr(R.Attrib.ZAbst)/100;
+            sal_uLong Temp;
+            Temp=sal_uLong(ChrWidth)*sal_uLong(R.Attrib.ZAbst)/100;
             ChrWidth=sal_uInt16(Temp);
         }
         nChars++;
@@ -1164,21 +1164,21 @@ void TextType::Draw(OutputDevice& rOut)
 // (DEC Alpha hat naemlich 64Bit-Pointer!)
 //UCHAR* TextType::GetBufPtr()
 //{
-//    sal_uIntPtr Temp;
-//    Temp=sal_uIntPtr(BufLo)+0x00010000*sal_uIntPtr(BufHi);
+//    sal_uLong Temp;
+//    Temp=sal_uLong(BufLo)+0x00010000*sal_uLong(BufHi);
 //    return (UCHAR*)Temp;
 //}
 //
 //void TextType::SetBufPtr(UCHAR* Ptr)
 //{
-//    sal_uIntPtr Temp=(sal_uIntPtr)Ptr;
+//    sal_uLong Temp=(sal_uLong)Ptr;
 //    BufLo=sal_uInt16(Temp & 0x0000FFFF);
 //    BufHi=sal_uInt16((Temp & 0xFFFF0000)>>16);
 //}
 
 sal_uInt32 ObjTextType::GetFont()
 {
-    return sal_uIntPtr(FontLo)+0x00010000*sal_uIntPtr(FontHi);
+    return sal_uLong(FontLo)+0x00010000*sal_uLong(FontHi);
 }
 
 void ObjTextType::SetFont(sal_uInt32 FontID)

@@ -129,9 +129,9 @@ public:
     TextPaM             InsertParaBreak( const TextPaM& rPaM, sal_Bool bKeepEndingAttribs );
     TextPaM             ConnectParagraphs( TextNode* pLeft, TextNode* pRight );
 
-    sal_uIntPtr             GetTextLen( const sal_Unicode* pSep, const TextSelection* pSel = NULL ) const;
+    sal_uLong               GetTextLen( const sal_Unicode* pSep, const TextSelection* pSel = NULL ) const;
     String              GetText( const sal_Unicode* pSep ) const;
-    String              GetText( sal_uIntPtr nPara ) const;
+    String              GetText( sal_uLong nPara ) const;
 
     void                SetLeftMargin( sal_uInt16 n )   { mnLeftMargin = n; }
     sal_uInt16              GetLeftMargin() const       { return mnLeftMargin; }

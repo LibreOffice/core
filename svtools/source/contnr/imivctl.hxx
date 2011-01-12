@@ -142,8 +142,8 @@ public:
                             ~EntryList_Impl();
 
     void                    Clear();
-    void                    Insert( SvxIconChoiceCtrlEntry* pEntry, sal_uIntPtr nPos );
-    SvxIconChoiceCtrlEntry*         Remove( sal_uIntPtr nPos );
+    void                    Insert( SvxIconChoiceCtrlEntry* pEntry, sal_uLong nPos );
+    SvxIconChoiceCtrlEntry*         Remove( sal_uLong nPos );
     void                    Remove( SvxIconChoiceCtrlEntry* pEntry );
 };
 
@@ -190,8 +190,8 @@ class SvxIconChoiceCtrl_Impl
     long            nMaxBoundHeight;            // Hoehe des hoechsten BoundRects
     sal_uInt16          nFlags;
     sal_uInt16          nCurTextDrawFlags;
-    sal_uIntPtr         nUserEventAdjustScrBars;
-    sal_uIntPtr         nUserEventShowCursor;
+    sal_uLong           nUserEventAdjustScrBars;
+    sal_uLong           nUserEventShowCursor;
     SvxIconChoiceCtrlEntry* pCurHighlightFrame;
     sal_Bool            bHighlightFramePressed;
     SvxIconChoiceCtrlEntry* pHead;                      // Eintrag oben links
@@ -211,7 +211,7 @@ class SvxIconChoiceCtrl_Impl
     SvxIconChoiceCtrlEntry* pCurEditedEntry;
     SvxIconChoiceCtrlTextMode eTextMode;
     SelectionMode   eSelectionMode;
-    sal_uIntPtr         nSelectionCount;
+    sal_uLong           nSelectionCount;
     SvxIconChoiceCtrlPositionMode ePositionMode;
     sal_Bool            bBoundRectsDirty;
     sal_Bool            bUpdateMode;
@@ -275,7 +275,7 @@ class SvxIconChoiceCtrl_Impl
     Point           AdjustAtGrid(
                         const Rectangle& rCenterRect, // "Schwerpunkt" des Objekts (typ. Bmp-Rect)
                         const Rectangle& rBoundRect ) const;
-    sal_uIntPtr         GetPredecessorGrid( const Point& rDocPos) const;
+    sal_uLong           GetPredecessorGrid( const Point& rDocPos) const;
 
     void            InitPredecessors();
     void            ClearPredecessors();
@@ -303,7 +303,7 @@ class SvxIconChoiceCtrl_Impl
     void HideFocus ();
     void DrawFocusRect ( OutputDevice* pOut );
 
-    sal_Bool            IsMnemonicChar( sal_Unicode cChar, sal_uIntPtr& rPos ) const;
+    sal_Bool            IsMnemonicChar( sal_Unicode cChar, sal_uLong& rPos ) const;
 
 public:
 
@@ -319,7 +319,7 @@ public:
     void            Clear( sal_Bool bInCtor = sal_False );
     void            SetStyle( WinBits nWinStyle );
     WinBits         GetStyle() const { return nWinBits; }
-    void            InsertEntry( SvxIconChoiceCtrlEntry*, sal_uIntPtr nPos, const Point* pPos=0 );
+    void            InsertEntry( SvxIconChoiceCtrlEntry*, sal_uLong nPos, const Point* pPos=0 );
     void            CreateAutoMnemonics( MnemonicGenerator* _pGenerator = NULL );
     void            RemoveEntry( SvxIconChoiceCtrlEntry* pEntry );
     void            FontModified();
@@ -435,10 +435,10 @@ public:
     void            Command( const CommandEvent& rCEvt );
     void            ToTop( SvxIconChoiceCtrlEntry* );
 
-    sal_uIntPtr         GetSelectionCount() const;
+    sal_uLong           GetSelectionCount() const;
     void            SetGrid( const Size& );
     Size            GetMinGrid() const;
-    sal_uIntPtr         GetGridCount(
+    sal_uLong           GetGridCount(
                         const Size& rSize,
                         sal_Bool bCheckScrBars,
                         sal_Bool bSmartScrBar ) const;
@@ -483,10 +483,10 @@ public:
     void            EditEntry( SvxIconChoiceCtrlEntry* pEntry );
     void            StopEntryEditing( sal_Bool bCancel );
     void            LockEntryPos( SvxIconChoiceCtrlEntry* pEntry, sal_Bool bLock );
-    sal_uIntPtr         GetEntryCount() const { return aEntries.Count(); }
-    SvxIconChoiceCtrlEntry* GetEntry( sal_uIntPtr nPos ) const { return (SvxIconChoiceCtrlEntry*)aEntries.GetObject(nPos); }
-    SvxIconChoiceCtrlEntry* GetFirstSelectedEntry( sal_uIntPtr& ) const;
-    SvxIconChoiceCtrlEntry* GetNextSelectedEntry( sal_uIntPtr& ) const;
+    sal_uLong           GetEntryCount() const { return aEntries.Count(); }
+    SvxIconChoiceCtrlEntry* GetEntry( sal_uLong nPos ) const { return (SvxIconChoiceCtrlEntry*)aEntries.GetObject(nPos); }
+    SvxIconChoiceCtrlEntry* GetFirstSelectedEntry( sal_uLong& ) const;
+    SvxIconChoiceCtrlEntry* GetNextSelectedEntry( sal_uLong& ) const;
     SvxIconChoiceCtrlEntry* GetHdlEntry() const { return pHdlEntry; }
     void            SetHdlEntry( SvxIconChoiceCtrlEntry* pEntry ) { pHdlEntry = pEntry; }
 
@@ -499,8 +499,8 @@ public:
                         if( bMoved ) nFlags |= F_MOVED_ENTRIES;
                         else nFlags &= ~(F_MOVED_ENTRIES);
                     }
-    sal_uIntPtr         GetEntryListPos( SvxIconChoiceCtrlEntry* ) const;
-    void            SetEntryListPos( SvxIconChoiceCtrlEntry* pEntry, sal_uIntPtr nNewPos );
+    sal_uLong           GetEntryListPos( SvxIconChoiceCtrlEntry* ) const;
+    void            SetEntryListPos( SvxIconChoiceCtrlEntry* pEntry, sal_uLong nNewPos );
     void            SetEntryImageSize( const Size& rSize ) { aImageSize = rSize; }
     void            SetEntryFlags( SvxIconChoiceCtrlEntry* pEntry, sal_uInt16 nFlags );
     SvxIconChoiceCtrlEntry* GoLeftRight( SvxIconChoiceCtrlEntry*, sal_Bool bRight );
@@ -536,7 +536,7 @@ public:
 
     sal_Bool            HandleShortCutKey( const KeyEvent& rKeyEvent );
 
-    void            CallEventListeners( sal_uIntPtr nEvent, void* pData = NULL );
+    void            CallEventListeners( sal_uLong nEvent, void* pData = NULL );
 
     inline ::svt::IAccessibleFactory&
         GetAccessibleFactory() { return aAccFactory.getFactory(); }
@@ -585,7 +585,7 @@ public:
 
 // ----------------------------------------------------------------------------------------------
 
-typedef sal_uIntPtr GridId;
+typedef sal_uLong GridId;
 
 #define GRID_NOT_FOUND  ((GridId)ULONG_MAX)
 
@@ -616,14 +616,14 @@ public:
     void            OccupyGrids( const SvxIconChoiceCtrlEntry*, sal_Bool bOccupy = sal_True );
     void            OccupyGrid( GridId nId, sal_Bool bOccupy = sal_True )
                     {
-                        DBG_ASSERT(!_pGridMap || nId<(sal_uIntPtr)(_nGridCols*_nGridRows),"OccupyGrid: Bad GridId");
-                        if(_pGridMap && nId < (sal_uIntPtr)(_nGridCols *_nGridRows) )
+                        DBG_ASSERT(!_pGridMap || nId<(sal_uLong)(_nGridCols*_nGridRows),"OccupyGrid: Bad GridId");
+                        if(_pGridMap && nId < (sal_uLong)(_nGridCols *_nGridRows) )
                             _pGridMap[ nId ] = bOccupy;
                     }
 
     Rectangle       GetGridRect( GridId );
     void            GetGridCoord( GridId, sal_uInt16& rGridX, sal_uInt16& rGridY );
-    static sal_uIntPtr  GetGridCount( const Size& rSizePixel, sal_uInt16 nGridWidth, sal_uInt16 nGridHeight );
+    static sal_uLong    GetGridCount( const Size& rSizePixel, sal_uInt16 nGridWidth, sal_uInt16 nGridHeight );
 
     void            OutputSizeChanged();
 };

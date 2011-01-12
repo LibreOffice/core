@@ -124,7 +124,7 @@ void ButtonFrame::Draw( OutputDevice& rDev )
 //-------------------------------------------------------------------
 
 BrowserColumn::BrowserColumn( sal_uInt16 nItemId, const class Image &rImage,
-                              const String& rTitle, sal_uIntPtr nWidthPixel, const Fraction& rCurrentZoom,
+                              const String& rTitle, sal_uLong nWidthPixel, const Fraction& rCurrentZoom,
                               HeaderBarItemBits nFlags )
 :   _nId( nItemId ),
     _nWidth( nWidthPixel ),
@@ -145,7 +145,7 @@ BrowserColumn::~BrowserColumn()
 
 //-------------------------------------------------------------------
 
-void BrowserColumn::SetWidth(sal_uIntPtr nNewWidthPixel, const Fraction& rCurrentZoom)
+void BrowserColumn::SetWidth(sal_uLong nNewWidthPixel, const Fraction& rCurrentZoom)
 {
     _nWidth = nNewWidthPixel;
     double n = (double)_nWidth;
@@ -749,7 +749,7 @@ void BrowserDataWin::Invalidate( const Rectangle& rRect, sal_uInt16 nFlags )
 
 void BrowserScrollBar::Tracking( const TrackingEvent& rTEvt )
 {
-    sal_uIntPtr nPos = GetThumbPos();
+    sal_uLong nPos = GetThumbPos();
     if ( nPos != _nLastPos )
     {
         if ( _nTip )

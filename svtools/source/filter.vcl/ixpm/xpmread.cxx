@@ -121,7 +121,7 @@ ReadState XPMReader::ReadXPM( Graphic& rGraphic )
                 mpColMap = new sal_uInt8[ mnColors * ( 4 + mnCpp ) ];
                 if ( mpColMap )
                 {
-                    for ( sal_uIntPtr i = 0; i < mnColors; i++ )
+                    for ( sal_uLong i = 0; i < mnColors; i++ )
                     {
                         if ( ImplGetColor( i ) == sal_False )
                         {
@@ -158,7 +158,7 @@ ReadState XPMReader::ReadXPM( Graphic& rGraphic )
                     }
                     if( mpAcc && mbStatus )
                     {
-                        sal_uIntPtr i;
+                        sal_uLong   i;
                         if ( mnColors <=256 )   // palette is only needed by using less than 257
                         {                       // colors
 
@@ -175,7 +175,7 @@ ReadState XPMReader::ReadXPM( Graphic& rGraphic )
                                 mpFastColorTable = new sal_uInt8[ 256 * 256 ];
                                 for ( pPtr = mpColMap, i = 0; i < mnColors; i++, pPtr += mnCpp + 4 )
                                 {
-                                    sal_uIntPtr j =  pPtr[ 0 ] << 8;
+                                    sal_uLong   j =  pPtr[ 0 ] << 8;
                                             j += pPtr[ 1 ];
                                     mpFastColorTable[ j ] = (sal_uInt8)i;
                                 }
@@ -240,7 +240,7 @@ ReadState XPMReader::ReadXPM( Graphic& rGraphic )
 // ImplGetColor ermittelt saemtliche Farbwerte,
 // die Rueckgabe ist sal_True wenn saemtliche Farben zugeordnet werden konnten
 
-sal_Bool XPMReader::ImplGetColor( sal_uIntPtr nNumb )
+sal_Bool XPMReader::ImplGetColor( sal_uLong nNumb )
 {
     sal_uInt8*  pString = mpStringBuf;
     sal_uInt8*  pPtr =  ( mpColMap + nNumb * ( 4 + mnCpp ) );
@@ -248,7 +248,7 @@ sal_Bool XPMReader::ImplGetColor( sal_uIntPtr nNumb )
 
     if ( bStatus )
     {
-        for ( sal_uIntPtr i = 0; i < mnCpp; i++ )
+        for ( sal_uLong i = 0; i < mnCpp; i++ )
             *pPtr++ = *pString++;
         bStatus = ImplGetColSub ( pPtr );
     }
@@ -259,7 +259,7 @@ sal_Bool XPMReader::ImplGetColor( sal_uIntPtr nNumb )
 // ImpGetScanLine liest den String mpBufSize aus und schreibt die Pixel in die
 // Bitmap. Der Parameter nY gibt die horizontale Position an.
 
-sal_Bool XPMReader::ImplGetScanLine( sal_uIntPtr nY )
+sal_Bool XPMReader::ImplGetScanLine( sal_uLong nY )
 {
     sal_Bool    bStatus = ImplGetString();
     sal_uInt8*  pString = mpStringBuf;
@@ -278,7 +278,7 @@ sal_Bool XPMReader::ImplGetScanLine( sal_uIntPtr nY )
             bStatus = sal_False;
         else
         {
-            sal_uIntPtr i, j;
+            sal_uLong i, j;
             if ( mpFastColorTable )
             {
                 for ( i = 0; i < mnWidth; i++ )
@@ -365,7 +365,7 @@ sal_Bool XPMReader::ImplGetColSub( sal_uInt8* pDest )
         // last we will try to get the colorname
         else if ( mnParaSize > 2 )  // name must enlarge the minimum size
         {
-            sal_uIntPtr i = 0;
+            sal_uLong i = 0;
             while ( sal_True )
             {
                 if ( pRGBTable[ i ].name == NULL )
@@ -442,12 +442,12 @@ sal_Bool XPMReader::ImplGetColKey( sal_uInt8 nKey )
 //             6 : '#12345678abcdefab12345678'      "      "     "     "
 
 
-void XPMReader::ImplGetRGBHex( sal_uInt8* pDest,sal_uIntPtr  nAdd )
+void XPMReader::ImplGetRGBHex( sal_uInt8* pDest,sal_uLong  nAdd )
 {
     sal_uInt8*  pPtr = mpPara+1;
     sal_uInt8   nHex, nTemp;
 
-    for ( sal_uIntPtr i = 0; i < 3; i++ )
+    for ( sal_uLong i = 0; i < 3; i++ )
     {
         nHex = (*pPtr++) - '0';
         if ( nHex > 9 )
@@ -466,15 +466,15 @@ void XPMReader::ImplGetRGBHex( sal_uInt8* pDest,sal_uIntPtr  nAdd )
 // ------------------------------------------------------------------------
 // ImplGetUlong gibt den wert einer bis zu 6stelligen ASCII-Dezimalzahl zurueck.
 
-sal_uIntPtr XPMReader::ImplGetULONG( sal_uIntPtr nPara )
+sal_uLong XPMReader::ImplGetULONG( sal_uLong nPara )
 {
     if ( ImplGetPara ( nPara ) )
     {
-        sal_uIntPtr nRetValue = 0;
+        sal_uLong nRetValue = 0;
         sal_uInt8* pPtr = mpPara;
 
         if ( ( mnParaSize > 6 ) || ( mnParaSize == 0 ) ) return 0;
-        for ( sal_uIntPtr i = 0; i < mnParaSize; i++ )
+        for ( sal_uLong i = 0; i < mnParaSize; i++ )
         {
             sal_uInt8 j = (*pPtr++) - 48;
             if ( j > 9 ) return 0;              // ascii is invalid
@@ -488,13 +488,13 @@ sal_uIntPtr XPMReader::ImplGetULONG( sal_uIntPtr nPara )
 
 // ------------------------------------------------------------------------
 
-sal_Bool XPMReader::ImplCompare( sal_uInt8* pSource, sal_uInt8* pDest, sal_uIntPtr nSize, sal_uIntPtr nMode )
+sal_Bool XPMReader::ImplCompare( sal_uInt8* pSource, sal_uInt8* pDest, sal_uLong nSize, sal_uLong nMode )
 {
     sal_Bool bRet = sal_True;
 
     if ( nMode == XPMCASENONSENSITIVE )
     {
-        for ( sal_uIntPtr i = 0; i < nSize; i++ )
+        for ( sal_uLong i = 0; i < nSize; i++ )
         {
             if ( ( pSource[i]&~0x20 ) != ( pDest[i]&~0x20 ) )
             {
@@ -505,7 +505,7 @@ sal_Bool XPMReader::ImplCompare( sal_uInt8* pSource, sal_uInt8* pDest, sal_uIntP
     }
     else
     {
-        for ( sal_uIntPtr i = 0; i < nSize; i++ )
+        for ( sal_uLong i = 0; i < nSize; i++ )
         {
             if ( pSource[i] != pDest[i] )
             {
@@ -523,12 +523,12 @@ sal_Bool XPMReader::ImplCompare( sal_uInt8* pSource, sal_uInt8* pDest, sal_uIntP
 // Konnte der Parameter gefunden werden ist der Rueckgabewert sal_True und mpPara + mnParaSize
 // werden gesetzt.
 
-sal_Bool XPMReader::ImplGetPara ( sal_uIntPtr nNumb )
+sal_Bool XPMReader::ImplGetPara ( sal_uLong nNumb )
 {
     sal_uInt8   nByte;
-    sal_uIntPtr pSize = 0;
+    sal_uLong   pSize = 0;
     sal_uInt8*  pPtr = mpStringBuf;
-    sal_uIntPtr nCount = 0;
+    sal_uLong   nCount = 0;
 
     if ( ( *pPtr != ' ' ) && ( *pPtr != 0x09 ) )
     {

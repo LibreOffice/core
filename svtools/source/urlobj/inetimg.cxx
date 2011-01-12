@@ -35,7 +35,7 @@
 
 #define TOKEN_SEPARATOR '\001'
 
-sal_Bool INetImage::Write( SvStream& rOStm, sal_uIntPtr nFormat ) const
+sal_Bool INetImage::Write( SvStream& rOStm, sal_uLong nFormat ) const
 {
     sal_Bool bRet = sal_False;
     switch( nFormat )
@@ -65,7 +65,7 @@ sal_Bool INetImage::Write( SvStream& rOStm, sal_uIntPtr nFormat ) const
     return bRet;
 }
 
-sal_Bool INetImage::Read( SvStream& rIStm, sal_uIntPtr nFormat )
+sal_Bool INetImage::Read( SvStream& rIStm, sal_uLong nFormat )
 {
     sal_Bool bRet = sal_False;
     switch( nFormat )

@@ -71,7 +71,7 @@ private:
 
     sal_Bool            bStatus;
 
-    sal_uIntPtr                 nLastPercent; // Mit welcher Zahl pCallback zuletzt aufgerufen wurde.
+    sal_uLong                   nLastPercent; // Mit welcher Zahl pCallback zuletzt aufgerufen wurde.
     FilterConfigItem*       pFilterConfigItem;
 
     com::sun::star::uno::Reference< com::sun::star::task::XStatusIndicator > xStatusIndicator;
@@ -83,9 +83,9 @@ private:
     Size                    aTargetSize;
     sal_uInt16                  nTargetDivisor;
 
-    sal_uIntPtr nMetafileHeaderPos;
+    sal_uLong nMetafileHeaderPos;
     sal_uInt32 nMaxRecordSize; // in Worten
-    sal_uIntPtr nActRecordPos;
+    sal_uLong nActRecordPos;
 
     // Aktuelle Attribute im Quell-Metafile:
     Color     aSrcLineColor;
@@ -122,11 +122,11 @@ private:
 
     // Damit nicht bei jeder Operation alle Attribute verglichen werden muessen:
 
-    sal_uIntPtr nNumberOfActions; // Anzahl der Actions im GDIMetafile
-    sal_uIntPtr nNumberOfBitmaps; // Anzahl der Bitmaps
-    sal_uIntPtr nWrittenActions;  // Anzahl der bereits verarbeiteten Actions beim Schreiben der Orders
-    sal_uIntPtr nWrittenBitmaps;  // Anzahl der bereits geschriebenen Bitmaps
-    sal_uIntPtr nActBitmapPercent; // Wieviel Prozent die naechste Bitmap schon geschrieben ist.
+    sal_uLong nNumberOfActions; // Anzahl der Actions im GDIMetafile
+    sal_uLong nNumberOfBitmaps; // Anzahl der Bitmaps
+    sal_uLong nWrittenActions;  // Anzahl der bereits verarbeiteten Actions beim Schreiben der Orders
+    sal_uLong nWrittenBitmaps;  // Anzahl der bereits geschriebenen Bitmaps
+    sal_uLong nActBitmapPercent; // Wieviel Prozent die naechste Bitmap schon geschrieben ist.
 
     sal_Bool bEmbedEMF; // optionally embedd EMF data into WMF
 

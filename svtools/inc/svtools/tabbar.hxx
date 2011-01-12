@@ -352,7 +352,7 @@ private:
     long            mnOffY;
     long            mnLastOffX;
     long            mnSplitSize;
-    sal_uIntPtr           mnSwitchTime;
+    sal_uLong           mnSwitchTime;
     WinBits         mnWinStyle;
     sal_uInt16          mnCurPageId;
     sal_uInt16          mnFirstPos;

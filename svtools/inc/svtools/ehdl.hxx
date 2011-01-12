@@ -48,7 +48,7 @@ public:
     SfxErrorContext(
             sal_uInt16 nCtxIdP, const String &aArg1, Window *pWin=0,
             sal_uInt16 nResIdP=USHRT_MAX, ResMgr *pMgrP=0);
-    virtual sal_Bool GetString(sal_uIntPtr nErrId, String &rStr);
+    virtual sal_Bool GetString(sal_uLong nErrId, String &rStr);
 
 private:
     sal_uInt16 nCtxId;
@@ -60,23 +60,23 @@ private:
 class SVT_DLLPUBLIC SfxErrorHandler : private ErrorHandler
 {
 public:
-    SfxErrorHandler(sal_uInt16 nId, sal_uIntPtr lStart, sal_uIntPtr lEnd, ResMgr *pMgr=0);
+    SfxErrorHandler(sal_uInt16 nId, sal_uLong lStart, sal_uLong lEnd, ResMgr *pMgr=0);
     ~SfxErrorHandler();
 
 protected:
-    virtual sal_Bool     GetErrorString(sal_uIntPtr lErrId, String &, sal_uInt16&) const;
-    virtual sal_Bool     GetMessageString(sal_uIntPtr lErrId, String &, sal_uInt16&) const;
+    virtual sal_Bool     GetErrorString(sal_uLong lErrId, String &, sal_uInt16&) const;
+    virtual sal_Bool     GetMessageString(sal_uLong lErrId, String &, sal_uInt16&) const;
 
 private:
 
-    sal_uIntPtr            lStart;
-    sal_uIntPtr            lEnd;
+    sal_uLong            lStart;
+    sal_uLong            lEnd;
     sal_uInt16           nId;
     ResMgr          *pMgr;
     ResMgr          *pFreeMgr;
 
 //#if 0 // _SOLAR__PRIVATE
-    SVT_DLLPRIVATE sal_Bool             GetClassString(sal_uIntPtr lErrId, String &) const;
+    SVT_DLLPRIVATE sal_Bool             GetClassString(sal_uLong lErrId, String &) const;
 //#endif
     virtual sal_Bool     CreateString(
                          const ErrorInfo *, String &, sal_uInt16 &) const;

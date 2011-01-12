@@ -147,8 +147,8 @@ private:
     long                nNodeBmpWidth;
     long                nNextVerVisSize;
     long                nMostRight;
-    sal_uIntPtr                 nVisibleCount;  // Anzahl Zeilen im Control
-    sal_uIntPtr             nCurUserEvent; //-1 == kein Userevent amn Laufen
+    sal_uLong               nVisibleCount;  // Anzahl Zeilen im Control
+    sal_uLong               nCurUserEvent; //-1 == kein Userevent amn Laufen
     short               nHorSBarHeight, nVerSBarWidth;
     sal_uInt16              nFlags;
     sal_uInt16              nCurTabPos;
@@ -363,7 +363,7 @@ public:
     void                SetTabBar( TabBar* pTabBar );
     void                CancelPendingEdit();
 
-    void                CallEventListeners( sal_uIntPtr nEvent, void* pData = NULL );
+    void                CallEventListeners( sal_uLong nEvent, void* pData = NULL );
 
     /** Enables, that one cell of a tablistbox entry can be focused */
     inline sal_Bool         IsCellFocusEnabled() const { return bIsCellFocusEnabled; }

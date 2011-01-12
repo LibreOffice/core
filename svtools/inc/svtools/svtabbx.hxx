@@ -60,8 +60,8 @@ private:
     SvLBoxTab*                  pTabList;
     sal_uInt16                      nTabCount;
     XubString                   aCurEntry;
-    sal_uIntPtr                     nDummy1;
-    sal_uIntPtr                     nDummy2;
+    sal_uLong                       nDummy1;
+    sal_uLong                       nDummy2;
 
 protected:
     SvLBoxEntry*                pViewParent;
@@ -71,9 +71,9 @@ protected:
     virtual void                SetTabs();
     virtual void                InitEntry( SvLBoxEntry*, const XubString&, const Image&, const Image&, SvLBoxButtonKind );
 
-    String                      GetTabEntryText( sal_uIntPtr nPos, sal_uInt16 nCol ) const;
-    SvLBoxEntry*                GetEntryOnPos( sal_uIntPtr _nEntryPos ) const;
-    SvLBoxEntry*                GetChildOnPos( SvLBoxEntry* _pParent, sal_uIntPtr _nEntryPos, sal_uIntPtr& _rPos ) const;
+    String                      GetTabEntryText( sal_uLong nPos, sal_uInt16 nCol ) const;
+    SvLBoxEntry*                GetEntryOnPos( sal_uLong _nEntryPos ) const;
+    SvLBoxEntry*                GetChildOnPos( SvLBoxEntry* _pParent, sal_uLong _nEntryPos, sal_uLong& _rPos ) const;
 
 public:
     SvTabListBox( Window* pParent, WinBits = WB_BORDER );
@@ -88,7 +88,7 @@ public:
 
     virtual SvLBoxEntry*    InsertEntry( const XubString& rText, SvLBoxEntry* pParent = 0,
                                          sal_Bool bChildsOnDemand = sal_False,
-                                         sal_uIntPtr nPos=LIST_APPEND, void* pUserData = 0,
+                                         sal_uLong nPos=LIST_APPEND, void* pUserData = 0,
                                          SvLBoxButtonKind eButtonKind = SvLBoxButtonKind_enabledCheckbox );
 
     virtual SvLBoxEntry*    InsertEntry( const XubString& rText,
@@ -96,26 +96,26 @@ public:
                                          const Image& rCollapsedEntryBmp,
                                          SvLBoxEntry* pParent = 0,
                                          sal_Bool bChildsOnDemand = sal_False,
-                                         sal_uIntPtr nPos = LIST_APPEND, void* pUserData = 0,
+                                         sal_uLong nPos = LIST_APPEND, void* pUserData = 0,
                                          SvLBoxButtonKind eButtonKind = SvLBoxButtonKind_enabledCheckbox );
 
-    virtual SvLBoxEntry* InsertEntryToColumn( const XubString&, sal_uIntPtr nPos = LIST_APPEND,
+    virtual SvLBoxEntry* InsertEntryToColumn( const XubString&, sal_uLong nPos = LIST_APPEND,
                                  sal_uInt16 nCol = 0xffff, void* pUserData = NULL );
     virtual SvLBoxEntry* InsertEntryToColumn( const XubString&, SvLBoxEntry* pParent,
-                                 sal_uIntPtr nPos, sal_uInt16 nCol, void* pUserData = NULL );
+                                 sal_uLong nPos, sal_uInt16 nCol, void* pUserData = NULL );
     virtual SvLBoxEntry* InsertEntryToColumn( const XubString&, const Image& rExpandedEntryBmp,
                                  const Image& rCollapsedEntryBmp, SvLBoxEntry* pParent = NULL,
-                                 sal_uIntPtr nPos = LIST_APPEND, sal_uInt16 nCol = 0xffff, void* pUserData = NULL );
+                                 sal_uLong nPos = LIST_APPEND, sal_uInt16 nCol = 0xffff, void* pUserData = NULL );
 
     virtual String  GetEntryText( SvLBoxEntry* pEntry ) const;
     String          GetEntryText( SvLBoxEntry*, sal_uInt16 nCol ) const;
-    String          GetEntryText( sal_uIntPtr nPos, sal_uInt16 nCol = 0xffff ) const;
+    String          GetEntryText( sal_uLong nPos, sal_uInt16 nCol = 0xffff ) const;
     using SvTreeListBox::SetEntryText;
-    void            SetEntryText( const XubString&, sal_uIntPtr, sal_uInt16 nCol=0xffff );
+    void            SetEntryText( const XubString&, sal_uLong, sal_uInt16 nCol=0xffff );
     void            SetEntryText(const XubString&,SvLBoxEntry*,sal_uInt16 nCol=0xffff);
-    String          GetCellText( sal_uIntPtr nPos, sal_uInt16 nCol ) const;
-    sal_uIntPtr         GetEntryPos( const XubString&, sal_uInt16 nCol = 0xffff );
-    sal_uIntPtr         GetEntryPos( const SvLBoxEntry* pEntry ) const;
+    String          GetCellText( sal_uLong nPos, sal_uInt16 nCol ) const;
+    sal_uLong           GetEntryPos( const XubString&, sal_uInt16 nCol = 0xffff );
+    sal_uLong           GetEntryPos( const SvLBoxEntry* pEntry ) const;
 
     virtual void    Resize();
     void            SetTabJustify( sal_uInt16 nTab, SvTabJustify );
@@ -162,15 +162,15 @@ public:
     void            InitHeaderBar( HeaderBar* pHeaderBar );
     sal_Bool        IsItemChecked( SvLBoxEntry* pEntry, sal_uInt16 nCol ) const;
 
-    virtual SvLBoxEntry* InsertEntryToColumn( const XubString&, sal_uIntPtr nPos = LIST_APPEND,
+    virtual SvLBoxEntry* InsertEntryToColumn( const XubString&, sal_uLong nPos = LIST_APPEND,
                                  sal_uInt16 nCol = 0xffff, void* pUserData = NULL );
     virtual SvLBoxEntry* InsertEntryToColumn( const XubString&, SvLBoxEntry* pParent,
-                                 sal_uIntPtr nPos, sal_uInt16 nCol, void* pUserData = NULL );
+                                 sal_uLong nPos, sal_uInt16 nCol, void* pUserData = NULL );
     virtual SvLBoxEntry* InsertEntryToColumn( const XubString&, const Image& rExpandedEntryBmp,
                                  const Image& rCollapsedEntryBmp, SvLBoxEntry* pParent = NULL,
-                                 sal_uIntPtr nPos = LIST_APPEND, sal_uInt16 nCol = 0xffff, void* pUserData = NULL );
-    virtual sal_uIntPtr Insert( SvLBoxEntry* pEnt,SvLBoxEntry* pPar,sal_uIntPtr nPos=LIST_APPEND);
-    virtual sal_uIntPtr Insert( SvLBoxEntry* pEntry, sal_uIntPtr nRootPos = LIST_APPEND );
+                                 sal_uLong nPos = LIST_APPEND, sal_uInt16 nCol = 0xffff, void* pUserData = NULL );
+    virtual sal_uLong Insert( SvLBoxEntry* pEnt,SvLBoxEntry* pPar,sal_uLong nPos=LIST_APPEND);
+    virtual sal_uLong Insert( SvLBoxEntry* pEntry, sal_uLong nRootPos = LIST_APPEND );
     void            RemoveEntry( SvLBoxEntry* _pEntry );
     void            Clear();
 

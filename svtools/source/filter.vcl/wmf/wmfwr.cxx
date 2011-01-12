@@ -281,7 +281,7 @@ void WMFWriter::MayCallback()
 {
     if ( xStatusIndicator.is() )
     {
-        sal_uIntPtr nPercent;
+        sal_uLong nPercent;
 
         // Wir gehen mal einfach so davon aus, dass 16386 Actions einer Bitmap entsprechen
         // (in der Regel wird ein Metafile entweder nur Actions oder einige Bitmaps und fast
@@ -302,7 +302,7 @@ void WMFWriter::MayCallback()
 
 void WMFWriter::CountActionsAndBitmaps( const GDIMetaFile & rMTF )
 {
-    sal_uIntPtr nAction, nActionCount;
+    sal_uLong nAction, nActionCount;
 
     nActionCount = rMTF.GetActionCount();
 
@@ -384,7 +384,7 @@ void WMFWriter::WriteRecordHeader(sal_uInt32 nSizeWords, sal_uInt16 nType)
 
 void WMFWriter::UpdateRecordHeader()
 {
-    sal_uIntPtr nPos;
+    sal_uLong nPos;
     sal_uInt32 nSize;
 
     nPos=pWMF->Tell(); nSize=nPos-nActRecordPos;
@@ -758,7 +758,7 @@ void WMFWriter::WMFRecord_Polygon(const Polygon & rPoly)
     else
         aSimplePoly = rPoly;
     nSize = aSimplePoly.GetSize();
-    WriteRecordHeader(((sal_uIntPtr)nSize)*2+4,W_META_POLYGON);
+    WriteRecordHeader(((sal_uLong)nSize)*2+4,W_META_POLYGON);
     *pWMF << nSize;
     for (i=0; i<nSize; i++) WritePointXY(aSimplePoly.GetPoint(i));
 }
@@ -773,7 +773,7 @@ void WMFWriter::WMFRecord_PolyLine(const Polygon & rPoly)
     else
         aSimplePoly = rPoly;
     nSize=aSimplePoly.GetSize();
-    WriteRecordHeader(((sal_uIntPtr)nSize)*2+4,W_META_POLYLINE);
+    WriteRecordHeader(((sal_uLong)nSize)*2+4,W_META_POLYLINE);
     *pWMF << nSize;
     for (i=0; i<nSize; i++) WritePointXY(aSimplePoly.GetPoint(i));
 }
@@ -925,7 +925,7 @@ void WMFWriter::WMFRecord_SetWindowOrg(const Point & rPoint)
 void WMFWriter::WMFRecord_StretchDIB( const Point & rPoint, const Size & rSize,
                                       const Bitmap & rBitmap, sal_uInt32 nROP )
 {
-    sal_uIntPtr nPosAnf,nPosEnd;
+    sal_uLong nPosAnf,nPosEnd;
 
     nActBitmapPercent=50;
     MayCallback();
@@ -1180,7 +1180,7 @@ void WMFWriter::HandleLineInfoPolyPolygons(const LineInfo& rInfo, const basegfx:
 
 void WMFWriter::WriteRecords( const GDIMetaFile & rMTF )
 {
-    sal_uIntPtr     nA, nACount;
+    sal_uLong       nA, nACount;
     MetaAction* pMA;
 
     if( bStatus )
@@ -1848,7 +1848,7 @@ void WMFWriter::WriteHeader( const GDIMetaFile &, sal_Bool bPlaceable )
 
 void WMFWriter::UpdateHeader()
 {
-    sal_uIntPtr nPos;
+    sal_uLong nPos;
     sal_uInt32 nFileSize;
 
     nPos=pWMF->Tell();                 // Endposition = Gesammtgroesse der Datei

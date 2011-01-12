@@ -271,18 +271,18 @@ void BrowseBox::SetFont( const Font& rNewFont )
 
 //-------------------------------------------------------------------
 
-sal_uIntPtr BrowseBox::GetDefaultColumnWidth( const String& _rText ) const
+sal_uLong BrowseBox::GetDefaultColumnWidth( const String& _rText ) const
 {
     return GetDataWindow().GetTextWidth( _rText ) + GetDataWindow().GetTextWidth( '0' ) * 4;
 }
 
 //-------------------------------------------------------------------
 
-void BrowseBox::InsertHandleColumn( sal_uIntPtr nWidth )
+void BrowseBox::InsertHandleColumn( sal_uLong nWidth )
 {
     DBG_CHKTHIS(BrowseBox,BrowseBoxCheckInvariants);
 
-    pCols->Insert( new BrowserColumn( 0, Image(), String(), nWidth, GetZoom(), 0 ), (sal_uIntPtr) 0 );
+    pCols->Insert( new BrowserColumn( 0, Image(), String(), nWidth, GetZoom(), 0 ), (sal_uLong) 0 );
     FreezeColumn( 0 );
 
     // Headerbar anpassen
@@ -431,9 +431,9 @@ void BrowseBox::FreezeColumn( sal_uInt16 nItemId, sal_Bool bFreeze )
             // move to the right of the last frozen column
             sal_uInt16 nFirstScrollable = FrozenColCount();
             BrowserColumn *pColumn = pCols->GetObject(nItemPos);
-            pCols->Remove( (sal_uIntPtr) nItemPos );
+            pCols->Remove( (sal_uLong) nItemPos );
             nItemPos = nFirstScrollable;
-            pCols->Insert( pColumn, (sal_uIntPtr) nItemPos );
+            pCols->Insert( pColumn, (sal_uLong) nItemPos );
         }
 
         // adjust the number of the first scrollable and visible column
@@ -448,9 +448,9 @@ void BrowseBox::FreezeColumn( sal_uInt16 nItemId, sal_Bool bFreeze )
             // move to the leftmost scrollable colum
             sal_uInt16 nFirstScrollable = FrozenColCount();
             BrowserColumn *pColumn = pCols->GetObject(nItemPos);
-            pCols->Remove( (sal_uIntPtr) nItemPos );
+            pCols->Remove( (sal_uLong) nItemPos );
             nItemPos = nFirstScrollable;
-            pCols->Insert( pColumn, (sal_uIntPtr) nItemPos );
+            pCols->Insert( pColumn, (sal_uLong) nItemPos );
         }
 
         // adjust the number of the first scrollable and visible column
@@ -664,7 +664,7 @@ void BrowseBox::SetColumnTitle( sal_uInt16 nItemId, const String& rTitle )
 
 //-------------------------------------------------------------------
 
-void BrowseBox::SetColumnWidth( sal_uInt16 nItemId, sal_uIntPtr nWidth )
+void BrowseBox::SetColumnWidth( sal_uInt16 nItemId, sal_uLong nWidth )
 {
     DBG_CHKTHIS(BrowseBox,BrowseBoxCheckInvariants);
 
@@ -686,7 +686,7 @@ void BrowseBox::SetColumnWidth( sal_uInt16 nItemId, sal_uIntPtr nWidth )
             nMaxWidth -= getDataWindow()->bAutoSizeLastCol
                     ? GetFieldRect(nItemId).Left()
                     : GetFrozenWidth();
-            if ( ( (BrowserDataWin*)pDataWin )->bAutoSizeLastCol || nWidth > (sal_uIntPtr)nMaxWidth )
+            if ( ( (BrowserDataWin*)pDataWin )->bAutoSizeLastCol || nWidth > (sal_uLong)nMaxWidth )
             {
                 nWidth = nMaxWidth > 16 ? nMaxWidth : nOldWidth;
                 nWidth = QueryColumnResize( nItemId, nWidth );
@@ -697,7 +697,7 @@ void BrowseBox::SetColumnWidth( sal_uInt16 nItemId, sal_uIntPtr nWidth )
         // In AutoSizeLastColumn() wird SetColumnWidth mit nWidth==0xffff
         // gerufen. Deshalb muss hier nochmal geprueft werden, ob sich die
         // Breite tatsaechlich geaendert hat.
-        if( (sal_uIntPtr)nOldWidth == nWidth )
+        if( (sal_uLong)nOldWidth == nWidth )
             return;
 
         // soll die Aenderung sofort dargestellt werden?
@@ -743,13 +743,13 @@ void BrowseBox::SetColumnWidth( sal_uInt16 nItemId, sal_uIntPtr nWidth )
             if( GetBackground().IsScrollable() )
             {
 
-                Rectangle aScrRect( nX + std::min( (sal_uIntPtr)nOldWidth, nWidth ), 0,
+                Rectangle aScrRect( nX + std::min( (sal_uLong)nOldWidth, nWidth ), 0,
                                     GetSizePixel().Width() , // the header is longer than the datawin
                                     pDataWin->GetPosPixel().Y() - 1 );
                 Control::Scroll( nWidth-nOldWidth, 0, aScrRect, SCROLL_FLAGS );
                 aScrRect.Bottom() = pDataWin->GetSizePixel().Height();
                 getDataWindow()->Scroll( nWidth-nOldWidth, 0, aScrRect, SCROLL_FLAGS );
-                Rectangle aInvRect( nX, 0, nX + std::max( nWidth, (sal_uIntPtr)nOldWidth ), USHRT_MAX );
+                Rectangle aInvRect( nX, 0, nX + std::max( nWidth, (sal_uLong)nOldWidth ), USHRT_MAX );
                 Control::Invalidate( aInvRect, INVALIDATE_NOCHILDREN );
                 ( (BrowserDataWin*)pDataWin )->Invalidate( aInvRect );
             }
@@ -814,7 +814,7 @@ void BrowseBox::RemoveColumn( sal_uInt16 nItemId )
         nCurColId = 0;
 
     // Spalte entfernen
-    delete( pCols->Remove( (sal_uIntPtr) nPos ));
+    delete( pCols->Remove( (sal_uLong) nPos ));
     // OJ #93534#
     if ( nFirstCol >= nPos && nFirstCol > FrozenColCount() )
     {
@@ -884,7 +884,7 @@ void BrowseBox::RemoveColumns()
     unsigned int nOldCount = pCols->Count();
     // alle Spalten entfernen
     while ( pCols->Count() )
-        delete ( pCols->Remove( (sal_uIntPtr) 0 ));
+        delete ( pCols->Remove( (sal_uLong) 0 ));
 
     // Spaltenselektion korrigieren
     if ( pColSel )

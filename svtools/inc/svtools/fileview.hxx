@@ -189,7 +189,7 @@ public:
     void                    SetDoubleClickHdl( const Link& rHdl );
     void                    SetOpenDoneHdl( const Link& rHdl );
 
-    sal_uIntPtr                 GetSelectionCount() const;
+    sal_uLong                   GetSelectionCount() const;
     SvLBoxEntry*            FirstSelected() const;
     SvLBoxEntry*            NextSelected( SvLBoxEntry* pEntry ) const;
     void                    EnableAutoResize();

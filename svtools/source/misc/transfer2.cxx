@@ -434,7 +434,7 @@ sal_Bool TransferDataContainer::GetData( const
     TDataCntnrEntryList::iterator   aIter( pImpl->aFmtList.begin() ),
                                     aEnd( pImpl->aFmtList.end() );
     sal_Bool bFnd = sal_False;
-    sal_uIntPtr nFmtId = SotExchange::GetFormat( rFlavor );
+    sal_uLong nFmtId = SotExchange::GetFormat( rFlavor );
 
     // test first the list
     for( ; aIter != aEnd; ++aIter )
@@ -500,8 +500,8 @@ void TransferDataContainer::CopyINetBookmark( const INetBookmark& rBkmk )
 
 // -----------------------------------------------------------------------------
 
-void TransferDataContainer::CopyAnyData( sal_uIntPtr nFormatId,
-                                        const sal_Char* pData, sal_uIntPtr nLen )
+void TransferDataContainer::CopyAnyData( sal_uLong nFormatId,
+                                        const sal_Char* pData, sal_uLong nLen )
 {
     if( nLen )
     {
@@ -518,7 +518,7 @@ void TransferDataContainer::CopyAnyData( sal_uIntPtr nFormatId,
 
 // -----------------------------------------------------------------------------
 
-void TransferDataContainer::CopyByteString( sal_uIntPtr nFormatId,
+void TransferDataContainer::CopyByteString( sal_uLong nFormatId,
                                             const ByteString& rStr )
 {
     CopyAnyData( nFormatId, rStr.GetBuffer(), rStr.Len() );

@@ -318,12 +318,12 @@ void IdleFormatter::ForceTimeout()
 
 TYPEINIT1( TextHint, SfxSimpleHint );
 
-TextHint::TextHint( sal_uIntPtr Id ) : SfxSimpleHint( Id )
+TextHint::TextHint( sal_uLong Id ) : SfxSimpleHint( Id )
 {
     mnValue = 0;
 }
 
-TextHint::TextHint( sal_uIntPtr Id, sal_uIntPtr nValue ) : SfxSimpleHint( Id )
+TextHint::TextHint( sal_uLong Id, sal_uLong nValue ) : SfxSimpleHint( Id )
 {
     mnValue = nValue;
 }

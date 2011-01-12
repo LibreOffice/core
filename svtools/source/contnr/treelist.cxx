@@ -89,7 +89,7 @@ void SvListEntry::SetListPositions()
     if( pChilds )
     {
         SvListEntry *pEntry = (SvListEntry*)pChilds->First();
-        sal_uIntPtr     nCur = 0;
+        sal_uLong       nCur = 0;
         while ( pEntry )
         {
             pEntry->nListPos &= 0x80000000;
@@ -189,10 +189,10 @@ SvTreeList::~SvTreeList()
 *************************************************************************/
 
 void SvTreeList::Broadcast( sal_uInt16 nActionId, SvListEntry* pEntry1,
-    SvListEntry* pEntry2, sal_uIntPtr nPos )
+    SvListEntry* pEntry2, sal_uLong nPos )
 {
-    sal_uIntPtr nViewCount = aViewList.Count();
-    for( sal_uIntPtr nCurView = 0; nCurView < nViewCount; nCurView++ )
+    sal_uLong nViewCount = aViewList.Count();
+    for( sal_uLong nCurView = 0; nCurView < nViewCount; nCurView++ )
     {
         SvListView* pView = (SvListView*)aViewList.GetObject( nCurView );
         if( pView )
@@ -202,7 +202,7 @@ void SvTreeList::Broadcast( sal_uInt16 nActionId, SvListEntry* pEntry1,
 
 void SvTreeList::InsertView( SvListView* pView)
 {
-    sal_uIntPtr nPos = aViewList.GetPos( pView );
+    sal_uLong nPos = aViewList.GetPos( pView );
     if ( nPos == LIST_ENTRY_NOTFOUND )
     {
         aViewList.Insert( pView, LIST_APPEND );
@@ -212,7 +212,7 @@ void SvTreeList::InsertView( SvListView* pView)
 
 void SvTreeList::RemoveView( SvListView* pView )
 {
-    sal_uIntPtr nPos = aViewList.GetPos( pView );
+    sal_uLong nPos = aViewList.GetPos( pView );
     if ( nPos != LIST_ENTRY_NOTFOUND )
     {
         aViewList.Remove( pView );
@@ -314,7 +314,7 @@ sal_Bool SvTreeList::IsChild( SvListEntry* pParent, SvListEntry* pChild ) const
     return bIsChild;
 }
 
-sal_uIntPtr SvTreeList::Move(SvListEntry* pSrcEntry,SvListEntry* pTargetParent,sal_uIntPtr nListPos)
+sal_uLong SvTreeList::Move(SvListEntry* pSrcEntry,SvListEntry* pTargetParent,sal_uLong nListPos)
 {
     // pDest darf Null sein!
     DBG_ASSERT(pSrcEntry,"Entry?");
@@ -358,20 +358,20 @@ sal_uIntPtr SvTreeList::Move(SvListEntry* pSrcEntry,SvListEntry* pTargetParent,s
 
     // Listenpositionen in Zielliste korrigieren
     SetListPositions( pDstList );
-    if ( pSrcList && (sal_uIntPtr)pSrcList != (sal_uIntPtr)pDstList )
+    if ( pSrcList && (sal_uLong)pSrcList != (sal_uLong)pDstList )
         SetListPositions( pSrcList );
 
 #ifdef CHECK_INTEGRITY
 CheckIntegrity();
 #endif
 
-    sal_uIntPtr nRetVal = pDstList->GetPos( pSrcEntry );
+    sal_uLong nRetVal = pDstList->GetPos( pSrcEntry );
     DBG_ASSERT(nRetVal==pSrcEntry->GetChildListPos(),"ListPos not valid");
     Broadcast( LISTACTION_MOVED,pSrcEntry,pTargetParent,nRetVal);
     return nRetVal;
 }
 
-sal_uIntPtr SvTreeList::Copy(SvListEntry* pSrcEntry,SvListEntry* pTargetParent,sal_uIntPtr nListPos)
+sal_uLong SvTreeList::Copy(SvListEntry* pSrcEntry,SvListEntry* pTargetParent,sal_uLong nListPos)
 {
     // pDest darf Null sein!
     DBG_ASSERT(pSrcEntry,"Entry?");
@@ -382,7 +382,7 @@ sal_uIntPtr SvTreeList::Copy(SvListEntry* pSrcEntry,SvListEntry* pTargetParent,s
 
     bAbsPositionsValid = sal_False;
 
-    sal_uIntPtr nCloneCount = 0;
+    sal_uLong nCloneCount = 0;
     SvListEntry* pClonedEntry = Clone( pSrcEntry, nCloneCount );
     nEntryCount += nCloneCount;
 
@@ -395,7 +395,7 @@ sal_uIntPtr SvTreeList::Copy(SvListEntry* pSrcEntry,SvListEntry* pTargetParent,s
 CheckIntegrity();
 #endif
     Broadcast( LISTACTION_INSERTED_TREE, pClonedEntry );
-    sal_uIntPtr nRetVal = pDstList->GetPos( pClonedEntry );
+    sal_uLong nRetVal = pDstList->GetPos( pClonedEntry );
     return nRetVal;
 }
 
@@ -414,7 +414,7 @@ CheckIntegrity();
 void SvTreeList::Move( SvListEntry* pSrcEntry, SvListEntry* pDstEntry )
 {
     SvListEntry* pParent;
-    sal_uIntPtr nPos;
+    sal_uLong nPos;
 
     if ( !pDstEntry )
     {
@@ -443,7 +443,7 @@ void SvTreeList::Move( SvListEntry* pSrcEntry, SvListEntry* pDstEntry )
 void SvTreeList::Copy( SvListEntry* pSrcEntry, SvListEntry* pDstEntry )
 {
     SvListEntry* pParent;
-    sal_uIntPtr nPos;
+    sal_uLong nPos;
 
     if ( !pDstEntry )
     {
@@ -470,7 +470,7 @@ void SvTreeList::Copy( SvListEntry* pSrcEntry, SvListEntry* pDstEntry )
 void SvTreeList::InsertTree( SvListEntry* pSrcEntry, SvListEntry* pDstEntry)
 {
     SvListEntry* pParent;
-    sal_uIntPtr nPos;
+    sal_uLong nPos;
 
     if ( !pDstEntry )
     {
@@ -487,7 +487,7 @@ void SvTreeList::InsertTree( SvListEntry* pSrcEntry, SvListEntry* pDstEntry)
 
 
 void SvTreeList::InsertTree(SvListEntry* pSrcEntry,
-    SvListEntry* pTargetParent,sal_uIntPtr nListPos)
+    SvListEntry* pTargetParent,sal_uLong nListPos)
 {
     DBG_ASSERT(pSrcEntry,"InsertTree:Entry?");
     if ( !pSrcEntry )
@@ -540,7 +540,7 @@ SvListEntry* SvTreeList::CreateEntry() const
 |*
 *************************************************************************/
 
-SvListEntry* SvTreeList::Clone( SvListEntry* pEntry, sal_uIntPtr& nCloneCount ) const
+SvListEntry* SvTreeList::Clone( SvListEntry* pEntry, sal_uLong& nCloneCount ) const
 {
     SvListEntry* pClonedEntry = CloneEntry( pEntry );
     nCloneCount = 1;
@@ -562,7 +562,7 @@ SvListEntry* SvTreeList::Clone( SvListEntry* pEntry, sal_uIntPtr& nCloneCount ) 
 
 SvTreeEntryList* SvTreeList::CloneChilds( SvTreeEntryList* pChilds,
                                       SvListEntry* pNewParent,
-                                      sal_uIntPtr& nCloneCount ) const
+                                      sal_uLong& nCloneCount ) const
 {
     DBG_ASSERT(pChilds->Count(),"Childs?");
     SvTreeEntryList* pClonedChilds = new SvTreeEntryList;
@@ -596,14 +596,14 @@ SvTreeEntryList* SvTreeList::CloneChilds( SvTreeEntryList* pChilds,
 |*
 *************************************************************************/
 
-sal_uIntPtr SvTreeList::GetChildCount( SvListEntry* pParent ) const
+sal_uLong SvTreeList::GetChildCount( SvListEntry* pParent ) const
 {
     if ( !pParent )
         return GetEntryCount();
 
     if ( !pParent || !pParent->pChilds)
         return 0;
-    sal_uIntPtr nCount = 0;
+    sal_uLong nCount = 0;
     sal_uInt16 nRefDepth = GetDepth( pParent );
     sal_uInt16 nActDepth = nRefDepth;
     do
@@ -625,14 +625,14 @@ sal_uIntPtr SvTreeList::GetChildCount( SvListEntry* pParent ) const
 |*
 *************************************************************************/
 
-sal_uIntPtr SvTreeList::GetVisibleChildCount(const SvListView* pView, SvListEntry* pParent) const
+sal_uLong SvTreeList::GetVisibleChildCount(const SvListView* pView, SvListEntry* pParent) const
 {
     DBG_ASSERT(pView,"GetVisChildCount:No View");
     if ( !pParent )
         pParent = pRootItem;
     if ( !pParent || !pView->IsExpanded(pParent) || !pParent->pChilds )
         return 0;
-    sal_uIntPtr nCount = 0;
+    sal_uLong nCount = 0;
     sal_uInt16 nRefDepth = GetDepth( pParent );
     sal_uInt16 nActDepth = nRefDepth;
     do
@@ -644,14 +644,14 @@ sal_uIntPtr SvTreeList::GetVisibleChildCount(const SvListView* pView, SvListEntr
     return nCount;
 }
 
-sal_uIntPtr SvTreeList::GetChildSelectionCount(const SvListView* pView,SvListEntry* pParent) const
+sal_uLong SvTreeList::GetChildSelectionCount(const SvListView* pView,SvListEntry* pParent) const
 {
     DBG_ASSERT(pView,"GetChildSelCount:No View");
     if ( !pParent )
         pParent = pRootItem;
     if ( !pParent || !pParent->pChilds)
         return 0;
-    sal_uIntPtr nCount = 0;
+    sal_uLong nCount = 0;
     sal_uInt16 nRefDepth = GetDepth( pParent );
     sal_uInt16 nActDepth = nRefDepth;
     do
@@ -707,7 +707,7 @@ SvListEntry* SvTreeList::Next( SvListEntry* pActEntry, sal_uInt16* pDepth ) cons
     }
 
     SvTreeEntryList* pActualList = pActEntry->pParent->pChilds;
-    sal_uIntPtr nActualPos = pActEntry->GetChildListPos();
+    sal_uLong nActualPos = pActEntry->GetChildListPos();
 
     if ( pActEntry->pChilds /* && pActEntry->pChilds->Count() */ )
     {
@@ -769,7 +769,7 @@ SvListEntry* SvTreeList::Prev( SvListEntry* pActEntry, sal_uInt16* pDepth ) cons
     }
 
     SvTreeEntryList* pActualList = pActEntry->pParent->pChilds;
-    sal_uIntPtr nActualPos = pActEntry->GetChildListPos();
+    sal_uLong nActualPos = pActEntry->GetChildListPos();
 
     if ( nActualPos > 0 )
     {
@@ -835,7 +835,7 @@ SvListEntry* SvTreeList::Last( sal_uInt16* /* nDepth */ ) const
 |*
 *************************************************************************/
 
-sal_uIntPtr SvTreeList::GetVisiblePos( const SvListView* pView, SvListEntry* pEntry ) const
+sal_uLong SvTreeList::GetVisiblePos( const SvListView* pView, SvListEntry* pEntry ) const
 {
     DBG_ASSERT(pView&&pEntry,"View/Entry?");
 
@@ -859,7 +859,7 @@ sal_uIntPtr SvTreeList::GetVisiblePos( const SvListView* pView, SvListEntry* pEn
 |*
 *************************************************************************/
 
-sal_uIntPtr SvTreeList::GetVisibleCount( const SvListView* pView ) const
+sal_uLong SvTreeList::GetVisibleCount( const SvListView* pView ) const
 {
     DBG_ASSERT(pView,"GetVisCount:No View");
     if( !pView->HasViewData() )
@@ -867,7 +867,7 @@ sal_uIntPtr SvTreeList::GetVisibleCount( const SvListView* pView ) const
     if ( pView->nVisibleCount )
         return pView->nVisibleCount;
 
-    sal_uIntPtr nPos = 0;
+    sal_uLong nPos = 0;
     SvListEntry* pEntry = First();  // erster Eintrag immer sichtbar
     while ( pEntry )
     {
@@ -916,7 +916,7 @@ SvListEntry* SvTreeList::NextVisible(const SvListView* pView,SvListEntry* pActEn
     }
 
     SvTreeEntryList* pActualList = pActEntry->pParent->pChilds;
-    sal_uIntPtr nActualPos = pActEntry->GetChildListPos();
+    sal_uLong nActualPos = pActEntry->GetChildListPos();
 
     if ( pView->IsExpanded(pActEntry) )
     {
@@ -984,7 +984,7 @@ SvListEntry* SvTreeList::PrevVisible(const SvListView* pView, SvListEntry* pActE
     }
 
     SvTreeEntryList* pActualList = pActEntry->pParent->pChilds;
-    sal_uIntPtr nActualPos = pActEntry->GetChildListPos();
+    sal_uLong nActualPos = pActEntry->GetChildListPos();
 
     if ( nActualPos > 0 )
     {
@@ -1049,7 +1049,7 @@ SvListEntry* SvTreeList::NextVisible(const SvListView* pView,SvListEntry* pEntry
 {
     DBG_ASSERT(pView&&pEntry&&IsEntryVisible(pView,pEntry),"NextVis:Wrong Prms/!Vis");
 
-    sal_uIntPtr nVisPos = GetVisiblePos( pView, pEntry );
+    sal_uLong nVisPos = GetVisiblePos( pView, pEntry );
     // nDelta Eintraege vorhanden ?
     // Beispiel: 0,1,2,3,4,5,6,7,8,9 nVisPos=5 nDelta=7
     //           nNewDelta = 10-nVisPos-1 == 4
@@ -1082,7 +1082,7 @@ SvListEntry* SvTreeList::PrevVisible( const SvListView* pView, SvListEntry* pEnt
 {
     DBG_ASSERT(pView&&pEntry&&IsEntryVisible(pView,pEntry),"PrevVis:Parms/!Vis");
 
-    sal_uIntPtr nVisPos = GetVisiblePos( pView, pEntry );
+    sal_uLong nVisPos = GetVisiblePos( pView, pEntry );
     // nDelta Eintraege vorhanden ?
     // Beispiel: 0,1,2,3,4,5,6,7,8,9 nVisPos=8 nDelta=20
     //           nNewDelta = nNewVisPos
@@ -1138,8 +1138,8 @@ SvListEntry* SvTreeList::NextSibling( SvListEntry* pEntry ) const
     if( !pEntry )
         return 0;
     SvTreeEntryList* pList = pEntry->pParent->pChilds;
-//  sal_uIntPtr nPos = pList->GetPos( pEntry );
-    sal_uIntPtr nPos = pEntry->GetChildListPos();
+//  sal_uLong nPos = pList->GetPos( pEntry );
+    sal_uLong nPos = pEntry->GetChildListPos();
     nPos++;
     pEntry = (SvListEntry*)(pList->GetObject( nPos ));
     return pEntry;
@@ -1152,8 +1152,8 @@ SvListEntry* SvTreeList::PrevSibling( SvListEntry* pEntry ) const
         return 0;
 
     SvTreeEntryList* pList = pEntry->pParent->pChilds;
-    // sal_uIntPtr nPos = pList->GetPos( pEntry );
-    sal_uIntPtr nPos = pEntry->GetChildListPos();
+    // sal_uLong nPos = pList->GetPos( pEntry );
+    sal_uLong nPos = pEntry->GetChildListPos();
     if ( nPos == 0 )
         return 0;
     nPos--;
@@ -1243,7 +1243,7 @@ SvListEntry* SvTreeList::LastSelected( const SvListView* pView ) const
 |*    Letzte Aenderung  17.08.94
 |*
 *************************************************************************/
-sal_uIntPtr SvTreeList::Insert( SvListEntry* pEntry,SvListEntry* pParent,sal_uIntPtr nPos )
+sal_uLong SvTreeList::Insert( SvListEntry* pEntry,SvListEntry* pParent,sal_uLong nPos )
 {
     DBG_ASSERT( pEntry,"Entry?");
 
@@ -1289,7 +1289,7 @@ CheckIntegrity();
 |*
 *************************************************************************/
 
-sal_uIntPtr SvTreeList::GetAbsPos( SvListEntry* pEntry) const
+sal_uLong SvTreeList::GetAbsPos( SvListEntry* pEntry) const
 {
     if ( !bAbsPositionsValid )
         ((SvTreeList*)this)->SetAbsolutePositions();
@@ -1308,7 +1308,7 @@ sal_uIntPtr SvTreeList::GetAbsPos( SvListEntry* pEntry) const
 
 void SvTreeList::SetAbsolutePositions()
 {
-    sal_uIntPtr nPos = 0;
+    sal_uLong nPos = 0;
     SvListEntry* pEntry = First();
     while ( pEntry )
     {
@@ -1452,7 +1452,7 @@ sal_Bool SvTreeList::Remove( SvListEntry* pEntry )
     }
 
     Broadcast( LISTACTION_REMOVING, pEntry );
-    sal_uIntPtr nRemoved = 1 + GetChildCount(pEntry);
+    sal_uLong nRemoved = 1 + GetChildCount(pEntry);
     bAbsPositionsValid = sal_False;
 
     SvListEntry* pParent = pEntry->pParent;
@@ -1462,7 +1462,7 @@ sal_Bool SvTreeList::Remove( SvListEntry* pEntry )
 
     if ( pEntry->HasChildListPos() )
     {
-        sal_uIntPtr nListPos = pEntry->GetChildListPos();
+        sal_uLong nListPos = pEntry->GetChildListPos();
         bLastEntry = (nListPos == (pList->Count()-1) ) ? sal_True : sal_False;
         pList->Remove( nListPos );
     }
@@ -1506,7 +1506,7 @@ CheckIntegrity();
 |*
 *************************************************************************/
 
-sal_uIntPtr SvTreeList::SelectChilds(SvListView* pView, SvListEntry* pParent,sal_Bool bSelect )
+sal_uLong SvTreeList::SelectChilds(SvListView* pView, SvListEntry* pParent,sal_Bool bSelect )
 {
     DBG_ASSERT(pView&&pParent,"SelChilds:View/Parent?");
     if ( !pParent->pChilds )
@@ -1516,7 +1516,7 @@ sal_uIntPtr SvTreeList::SelectChilds(SvListView* pView, SvListEntry* pParent,sal
 
     sal_uInt16 nRefDepth = GetDepth( pParent );
     sal_uInt16 nDepth = nRefDepth;
-    sal_uIntPtr nCount = 0;
+    sal_uLong nCount = 0;
     pParent = Next( pParent );
     do
     {
@@ -1555,7 +1555,7 @@ CheckIntegrity();
 }
 
 
-SvListEntry* SvTreeList::GetEntryAtAbsPos( sal_uIntPtr nAbsPos ) const
+SvListEntry* SvTreeList::GetEntryAtAbsPos( sal_uLong nAbsPos ) const
 {
     SvListEntry* pEntry = First();
     while ( nAbsPos && pEntry )
@@ -1566,7 +1566,7 @@ SvListEntry* SvTreeList::GetEntryAtAbsPos( sal_uIntPtr nAbsPos ) const
     return pEntry;
 }
 
-SvListEntry* SvTreeList::GetEntryAtVisPos( const SvListView* pView, sal_uIntPtr nVisPos ) const
+SvListEntry* SvTreeList::GetEntryAtVisPos( const SvListView* pView, sal_uLong nVisPos ) const
 {
     DBG_ASSERT(pView,"GetEntryAtVisPos:No View");
     SvListEntry* pEntry = First();
@@ -1587,7 +1587,7 @@ void SvTreeList::SetListPositions( SvTreeEntryList* pList )
             pEntry->pParent->InvalidateChildrensListPositions();
     }
     /*
-    sal_uIntPtr nListPos = 0;
+    sal_uLong nListPos = 0;
     SvListEntry* pEntry = (SvListEntry*)(pList->First());
     while( pEntry )
     {
@@ -1618,7 +1618,7 @@ sal_Bool SvTreeList::IsInChildList( SvListEntry* pParent, SvListEntry* pChild) c
 void lcl_CheckList( SvTreeEntryList* pList )
 {
     SvListEntry* pEntry = (SvListEntry*)(pList->First());
-    sal_uIntPtr nPos = 0;
+    sal_uLong nPos = 0;
     while ( pEntry )
     {
         DBG_ASSERT(pEntry->GetChildListPos()==nPos,"Wrong ListPos");
@@ -1629,7 +1629,7 @@ void lcl_CheckList( SvTreeEntryList* pList )
 
 void SvTreeList::CheckIntegrity() const
 {
-    sal_uIntPtr nMyEntryCount = 0;
+    sal_uLong nMyEntryCount = 0;
     if ( pRootItem->pChilds )
     {
         lcl_CheckList( pRootItem->pChilds );
@@ -1724,7 +1724,7 @@ void SvListView::InitTable()
     pEntry = pModel->pRootItem;
     pViewData = new SvViewData;
     pViewData->nFlags = SVLISTENTRYFLAG_EXPANDED;
-    aDataTable.Insert( (sal_uIntPtr)pEntry, pViewData );
+    aDataTable.Insert( (sal_uLong)pEntry, pViewData );
     // Jetzt alle anderen Entries
     pEntry = pModel->First();
     while( pEntry )
@@ -1732,7 +1732,7 @@ void SvListView::InitTable()
         pViewData = CreateViewData( pEntry );
         DBG_ASSERT(pViewData,"InitTable:No ViewData");
         InitViewData( pViewData, pEntry );
-        aDataTable.Insert( (sal_uIntPtr)pEntry, pViewData );
+        aDataTable.Insert( (sal_uLong)pEntry, pViewData );
         pEntry = pModel->Next( pEntry );
     }
 }
@@ -1767,7 +1767,7 @@ void SvListView::Clear()
         SvListEntry* pEntry = pModel->pRootItem;
         SvViewData* pViewData = new SvViewData;
         pViewData->nFlags = SVLISTENTRYFLAG_EXPANDED;
-        aDataTable.Insert( (sal_uIntPtr)pEntry, pViewData );
+        aDataTable.Insert( (sal_uLong)pEntry, pViewData );
     }
 }
 
@@ -1807,7 +1807,7 @@ void SvListView::ModelHasInsertedTree( SvListEntry* )
 }
 
 void SvListView::ModelIsMoving( SvListEntry* /*  pSource */ ,
-    SvListEntry* /* pTargetParent */ ,  sal_uIntPtr /* nPos */  )
+    SvListEntry* /* pTargetParent */ ,  sal_uLong /* nPos */    )
 {
     DBG_CHKTHIS(SvListView,0);
 }
@@ -1833,14 +1833,14 @@ void SvListView::ModelHasEntryInvalidated( SvListEntry*)
     DBG_CHKTHIS(SvListView,0);
 }
 
-void SvListView::ActionMoving( SvListEntry* pEntry,SvListEntry*,sal_uIntPtr)
+void SvListView::ActionMoving( SvListEntry* pEntry,SvListEntry*,sal_uLong)
 {
     DBG_CHKTHIS(SvListView,0);
     SvListEntry* pParent = pEntry->pParent;
     DBG_ASSERT(pParent,"Model not consistent");
     if( pParent != pModel->pRootItem && pParent->pChilds->Count() == 1 )
     {
-        SvViewData* pViewData = (SvViewData*)aDataTable.Get( (sal_uIntPtr)pParent );
+        SvViewData* pViewData = (SvViewData*)aDataTable.Get( (sal_uLong)pParent );
         pViewData->nFlags &= (~SVLISTENTRYFLAG_EXPANDED);
     }
     // vorlaeufig
@@ -1850,7 +1850,7 @@ void SvListView::ActionMoving( SvListEntry* pEntry,SvListEntry*,sal_uIntPtr)
 
 void SvListView::ActionMoved( SvListEntry* /* pEntry */ ,
                             SvListEntry* /* pTargetPrnt */ ,
-                            sal_uIntPtr /* nChildPos */ )
+                            sal_uLong /* nChildPos */ )
 {
     DBG_CHKTHIS(SvListView,0);
     nVisibleCount = 0;
@@ -1866,7 +1866,7 @@ void SvListView::ActionInserted( SvListEntry* pEntry )
     #ifdef DBG_UTIL
     sal_Bool bSuccess =
     #endif
-        aDataTable.Insert( (sal_uIntPtr)pEntry, pData );
+        aDataTable.Insert( (sal_uLong)pEntry, pData );
     DBG_ASSERT(bSuccess,"Entry already in View");
     if ( nVisibleCount && pModel->IsEntryVisible( this, pEntry ))
     {
@@ -1888,11 +1888,11 @@ void SvListView::ActionInsertedTree( SvListEntry* pEntry )
     sal_uInt16 nRefDepth = pModel->GetDepth( pCurEntry );
     while( pCurEntry )
     {
-        DBG_ASSERT(aDataTable.Get((sal_uIntPtr)pCurEntry)==0,"Entry already in Table");
+        DBG_ASSERT(aDataTable.Get((sal_uLong)pCurEntry)==0,"Entry already in Table");
         SvViewData* pViewData = CreateViewData( pCurEntry );
         DBG_ASSERT(pViewData,"No ViewData");
         InitViewData( pViewData, pEntry );
-        aDataTable.Insert( (sal_uIntPtr)pCurEntry, pViewData );
+        aDataTable.Insert( (sal_uLong)pCurEntry, pViewData );
         pCurEntry = pModel->Next( pCurEntry );
         if ( pCurEntry && pModel->GetDepth(pCurEntry) <= nRefDepth)
             pCurEntry = 0;
@@ -1907,9 +1907,9 @@ void SvListView::RemoveViewData( SvListEntry* pParent )
         SvListEntry* pCur = (SvListEntry*)pChilds->First();
         while( pCur )
         {
-            SvViewData* pViewData = (SvViewData*)aDataTable.Get((sal_uIntPtr)pCur);
+            SvViewData* pViewData = (SvViewData*)aDataTable.Get((sal_uLong)pCur);
             delete pViewData;
-            aDataTable.Remove( (sal_uIntPtr)pCur );
+            aDataTable.Remove( (sal_uLong)pCur );
             if( pCur->HasChilds())
                 RemoveViewData( pCur );
             pCur = (SvListEntry*)pChilds->Next();
@@ -1924,12 +1924,12 @@ void SvListView::ActionRemoving( SvListEntry* pEntry )
     DBG_CHKTHIS(SvListView,0);
     DBG_ASSERT(pEntry,"Remove:No Entry");
 
-    SvViewData* pViewData = (SvViewData*)aDataTable.Get( (sal_uIntPtr)pEntry );
-    sal_uIntPtr nSelRemoved = 0;
+    SvViewData* pViewData = (SvViewData*)aDataTable.Get( (sal_uLong)pEntry );
+    sal_uLong nSelRemoved = 0;
     if ( pViewData->IsSelected() )
         nSelRemoved = 1 + pModel->GetChildSelectionCount( this, pEntry );
     nSelectionCount -= nSelRemoved;
-    sal_uIntPtr nVisibleRemoved = 0;
+    sal_uLong nVisibleRemoved = 0;
     if ( pModel->IsEntryVisible( this, pEntry ) )
         nVisibleRemoved = 1 + pModel->GetVisibleChildCount( this, pEntry );
     if( nVisibleCount )
@@ -1944,16 +1944,16 @@ void SvListView::ActionRemoving( SvListEntry* pEntry )
     }
     bVisPositionsValid = sal_False;
 
-    pViewData = (SvViewData*)aDataTable.Get((sal_uIntPtr)pEntry);
+    pViewData = (SvViewData*)aDataTable.Get((sal_uLong)pEntry);
     delete pViewData;
-    aDataTable.Remove( (sal_uIntPtr)pEntry );
+    aDataTable.Remove( (sal_uLong)pEntry );
     RemoveViewData( pEntry );
 
     SvListEntry* pCurEntry = pEntry->pParent;
     if ( pCurEntry && pCurEntry != pModel->pRootItem &&
          pCurEntry->pChilds->Count() == 1 )
     {
-        pViewData = (SvViewData*)aDataTable.Get((sal_uIntPtr)pCurEntry);
+        pViewData = (SvViewData*)aDataTable.Get((sal_uLong)pCurEntry);
         pViewData->nFlags &= (~SVLISTENTRYFLAG_EXPANDED);
     }
 }
@@ -1970,7 +1970,7 @@ void SvListView::ActionClear()
 }
 
 void SvListView::ModelNotification( sal_uInt16 nActionId, SvListEntry* pEntry1,
-                        SvListEntry* pEntry2, sal_uIntPtr nPos )
+                        SvListEntry* pEntry2, sal_uLong nPos )
 {
     DBG_CHKTHIS(SvListView,0);
     switch( nActionId )
@@ -2052,11 +2052,11 @@ void SvTreeList::ResortChilds( SvListEntry* pParent )
     List aList( *pChildList );
     pChildList->Clear();
 
-    sal_uIntPtr nCount = aList.Count();
-    for( sal_uIntPtr nCur = 0; nCur < nCount; nCur++ )
+    sal_uLong nCount = aList.Count();
+    for( sal_uLong nCur = 0; nCur < nCount; nCur++ )
     {
         SvListEntry* pCurEntry = (SvListEntry*)aList.GetObject( nCur );
-        sal_uIntPtr nListPos = LIST_APPEND;
+        sal_uLong nListPos = LIST_APPEND;
         GetInsertionPos( pCurEntry, pParent, nListPos );
         pChildList->Insert( pCurEntry, nListPos );
         if( pCurEntry->pChilds )
@@ -2066,7 +2066,7 @@ void SvTreeList::ResortChilds( SvListEntry* pParent )
 }
 
 void SvTreeList::GetInsertionPos( SvListEntry* pEntry, SvListEntry* pParent,
-    sal_uIntPtr& rPos )
+    sal_uLong& rPos )
 {
     DBG_ASSERT(pEntry,"No Entry");
 

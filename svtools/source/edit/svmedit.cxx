@@ -208,10 +208,10 @@ void ImpSvMEdit::ImpUpdateSrollBarVis( WinBits nWinStyle )
     if ( !bNeedVScroll && bAutoVScroll )
     {
         TextEngine& rEngine( *mpTextWindow->GetTextEngine() );
-        sal_uIntPtr nOverallTextHeight(0);
-        for ( sal_uIntPtr i=0; i<rEngine.GetParagraphCount(); ++i )
+        sal_uLong nOverallTextHeight(0);
+        for ( sal_uLong i=0; i<rEngine.GetParagraphCount(); ++i )
             nOverallTextHeight += rEngine.GetTextHeight( i );
-        if ( nOverallTextHeight > (sal_uIntPtr)mpTextWindow->GetOutputSizePixel().Height() )
+        if ( nOverallTextHeight > (sal_uLong)mpTextWindow->GetOutputSizePixel().Height() )
             bNeedVScroll = true;
     }
 
@@ -304,14 +304,14 @@ void ImpSvMEdit::ImpSetScrollBarRanges()
 {
     if ( mpVScrollBar )
     {
-        sal_uIntPtr nTextHeight = mpTextWindow->GetTextEngine()->GetTextHeight();
+        sal_uLong nTextHeight = mpTextWindow->GetTextEngine()->GetTextHeight();
         mpVScrollBar->SetRange( Range( 0, (long)nTextHeight-1 ) );
     }
     if ( mpHScrollBar )
     {
-//      sal_uIntPtr nTextWidth = mpTextWindow->GetTextEngine()->CalcTextWidth();
+//      sal_uLong nTextWidth = mpTextWindow->GetTextEngine()->CalcTextWidth();
         // Es gibt kein Notify bei Breiten-Aenderung...
-//      sal_uIntPtr nW = Max( (sal_uIntPtr)mpTextWindow->GetOutputSizePixel().Width()*5, (sal_uIntPtr)nTextWidth );
+//      sal_uLong nW = Max( (sal_uLong)mpTextWindow->GetOutputSizePixel().Width()*5, (sal_uLong)nTextWidth );
 //      mpHScrollBar->SetRange( Range( 0, (long)nW ) );
         mpHScrollBar->SetRange( Range( 0, (long)mnTextWidth-1 ) );
     }
@@ -593,7 +593,7 @@ void ImpSvMEdit::Notify( SfxBroadcaster&, const SfxHint& rHint )
         {
             if ( mpHScrollBar )
             {
-                sal_uIntPtr nWidth = mpTextWindow->GetTextEngine()->CalcTextWidth();
+                sal_uLong nWidth = mpTextWindow->GetTextEngine()->CalcTextWidth();
                 if ( nWidth != mnTextWidth )
                 {
                     mnTextWidth = sal::static_int_cast< xub_StrLen >(nWidth);
@@ -625,7 +625,7 @@ void ImpSvMEdit::SetSelection( const Selection& rSelection )
 
     long nEnd = Max( aNewSelection.Min(), aNewSelection.Max() );
     TextSelection aTextSel;
-    sal_uIntPtr nPara = 0;
+    sal_uLong nPara = 0;
     sal_uInt16 nChar = 0;
     sal_uInt16 x = 0;
     while ( x <= nEnd )
@@ -656,7 +656,7 @@ const Selection& ImpSvMEdit::GetSelection() const
 
     ExtTextEngine* pExtTextEngine = mpTextWindow->GetTextEngine();
     // Absaetze davor:
-    sal_uIntPtr n;
+    sal_uLong n;
     for ( n = 0; n < aTextSel.GetStart().GetPara(); n++ )
     {
         maSelection.Min() += pExtTextEngine->GetTextLen( n );
@@ -1139,7 +1139,7 @@ sal_Bool MultiLineEdit::IsModified() const
     return pImpSvMEdit->IsModified();
 }
 
-void MultiLineEdit::EnableUpdateData( sal_uIntPtr nTimeout )
+void MultiLineEdit::EnableUpdateData( sal_uLong nTimeout )
 {
     if ( !nTimeout )
         DisableUpdateData();
@@ -1381,7 +1381,7 @@ void MultiLineEdit::DataChanged( const DataChangedEvent& rDCEvt )
         Control::DataChanged( rDCEvt );
 }
 
-void MultiLineEdit::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal_uIntPtr nFlags )
+void MultiLineEdit::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal_uLong nFlags )
 {
     ImplInitSettings( sal_True, sal_True, sal_True );
 
@@ -1434,7 +1434,7 @@ void MultiLineEdit::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSi
 
     XubString aText = GetText();
     Size aTextSz( pDev->GetTextWidth( aText ), pDev->GetTextHeight() );
-    sal_uIntPtr nLines = (sal_uIntPtr) (aSize.Height() / aTextSz.Height());
+    sal_uLong nLines = (sal_uLong) (aSize.Height() / aTextSz.Height());
     if ( !nLines )
         nLines = 1;
     aTextSz.Height() = nLines*aTextSz.Height();

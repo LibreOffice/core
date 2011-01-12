@@ -295,7 +295,7 @@ sal_Bool SgfFilterBMap(SvStream& rInp, SvStream& rOut, SgfHeader& rHead, SgfEntr
     sal_uInt8           pl1 = 0,pl2= 0;     // Masken fuer die Planes
     sal_uInt8*          pBuf=NULL;          // Buffer fuer eine Pixelzeile
     PcxExpand      aPcx;
-    sal_uIntPtr          nOfs;
+    sal_uLong          nOfs;
     sal_uInt8           cRGB[4];
 
     if (rHead.Planes<=1) nColBits=1; else nColBits=4; if (rHead.Typ==4) nColBits=8;
@@ -335,7 +335,7 @@ sal_Bool SgfFilterBMap(SvStream& rInp, SvStream& rOut, SgfHeader& rHead, SgfEntr
                 pBuf[i]=aPcx.GetByte(rInp);
             }
             for(i=nWdtInp;i<nWdtOut;i++) pBuf[i]=0;     // noch bis zu 3 Bytes
-            rOut.Seek(nOfs+((sal_uIntPtr)rHead.Ysize-j-1L)*(sal_uIntPtr)nWdtOut); // rueckwaerts schreiben!
+            rOut.Seek(nOfs+((sal_uLong)rHead.Ysize-j-1L)*(sal_uLong)nWdtOut); // rueckwaerts schreiben!
             rOut.Write((char*)pBuf,nWdtOut);
         }
     } else if (nColors==16) {
@@ -381,7 +381,7 @@ sal_Bool SgfFilterBMap(SvStream& rInp, SvStream& rOut, SgfHeader& rHead, SgfEntr
                 }
             }
             for(i=nWdtInp*4;i<nWdtOut;i++) pBuf[i]=0;            // noch bis zu 3 Bytes
-            rOut.Seek(nOfs+((sal_uIntPtr)rHead.Ysize-j-1L)*(sal_uIntPtr)nWdtOut); // rueckwaerts schreiben!
+            rOut.Seek(nOfs+((sal_uLong)rHead.Ysize-j-1L)*(sal_uLong)nWdtOut); // rueckwaerts schreiben!
             rOut.Write((char*)pBuf,nWdtOut);
         }
     } else if (nColors==256) {
@@ -401,7 +401,7 @@ sal_Bool SgfFilterBMap(SvStream& rInp, SvStream& rOut, SgfHeader& rHead, SgfEntr
             for(i=0;i<rHead.Xsize;i++)
                 pBuf[i]=aPcx.GetByte(rInp);
             for(i=rHead.Xsize;i<nWdtOut;i++) pBuf[i]=0;          // noch bis zu 3 Bytes
-            rOut.Seek(nOfs+((sal_uIntPtr)rHead.Ysize-j-1L)*(sal_uIntPtr)nWdtOut); // rueckwaerts schreiben!
+            rOut.Seek(nOfs+((sal_uLong)rHead.Ysize-j-1L)*(sal_uLong)nWdtOut); // rueckwaerts schreiben!
             rOut.Write((char*)pBuf,nWdtOut);
         }
     }
@@ -421,10 +421,10 @@ sal_Bool SgfFilterBMap(SvStream& rInp, SvStream& rOut, SgfHeader& rHead, SgfEntr
 *************************************************************************/
 sal_Bool SgfBMapFilter(SvStream& rInp, SvStream& rOut)
 {
-    sal_uIntPtr     nFileStart;            // Offset des SgfHeaders. Im allgemeinen 0.
+    sal_uLong     nFileStart;            // Offset des SgfHeaders. Im allgemeinen 0.
     SgfHeader aHead;
     SgfEntry  aEntr;
-    sal_uIntPtr     nNext;
+    sal_uLong     nNext;
     sal_Bool      bRdFlag=sal_False;         // Grafikentry gelesen ?
     sal_Bool      bRet=sal_False;            // Returncode
 
@@ -472,7 +472,7 @@ sal_Bool SgfVectScal=sal_False;
 
 Color Hpgl2SvFarbe( sal_uInt8 nFarb )
 {
-    sal_uIntPtr nColor = COL_BLACK;
+    sal_uLong nColor = COL_BLACK;
 
     switch (nFarb & 0x07) {
         case 0:  nColor=COL_WHITE;        break;
@@ -576,10 +576,10 @@ sal_Bool SgfFilterVect(SvStream& rInp, SgfHeader& rHead, SgfEntry&, GDIMetaFile&
 *************************************************************************/
 sal_Bool SgfVectFilter(SvStream& rInp, GDIMetaFile& rMtf)
 {
-    sal_uIntPtr     nFileStart;            // Offset des SgfHeaders. Im allgemeinen 0.
+    sal_uLong     nFileStart;            // Offset des SgfHeaders. Im allgemeinen 0.
     SgfHeader aHead;
     SgfEntry  aEntr;
-    sal_uIntPtr     nNext;
+    sal_uLong     nNext;
     sal_Bool      bRdFlag=sal_False;         // Grafikentry gelesen ?
     sal_Bool      bRet=sal_False;            // Returncode
 
@@ -638,7 +638,7 @@ sal_uInt8 CheckSgfTyp(SvStream& rInp, sal_uInt16& nVersion)
         sizeof(RGBQuad  )!=RGBQuadSize   )  return SGF_DONTKNOW;
 #endif
 
-    sal_uIntPtr     nPos;
+    sal_uLong     nPos;
     SgfHeader aHead;
     nVersion=0;
     nPos=rInp.Tell();

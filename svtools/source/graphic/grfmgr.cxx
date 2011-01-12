@@ -460,7 +460,7 @@ ByteString GraphicObject::GetUniqueID() const
 
 // -----------------------------------------------------------------------------
 
-sal_uIntPtr GraphicObject::GetChecksum() const
+sal_uLong GraphicObject::GetChecksum() const
 {
     return( ( maGraphic.IsSupportedGraphic() && !maGraphic.IsSwapOut() ) ? maGraphic.GetChecksum() : 0 );
 }
@@ -475,7 +475,7 @@ SvStream* GraphicObject::GetSwapStream() const
 // -----------------------------------------------------------------------------
 
 // !!! to be removed
-sal_uIntPtr GraphicObject::GetReleaseFromCache() const
+sal_uLong GraphicObject::GetReleaseFromCache() const
 {
     return 0;
 }
@@ -553,7 +553,7 @@ void GraphicObject::SetSwapStreamHdl()
 
 // -----------------------------------------------------------------------------
 
-void GraphicObject::SetSwapStreamHdl( const Link& rHdl, const sal_uIntPtr nSwapOutTimeout )
+void GraphicObject::SetSwapStreamHdl( const Link& rHdl, const sal_uLong nSwapOutTimeout )
 {
     delete mpSwapStreamHdl, mpSwapStreamHdl = new Link( rHdl );
 
@@ -615,7 +615,7 @@ void GraphicObject::SetGraphicManager( const GraphicManager& rMgr )
 // -----------------------------------------------------------------------------
 
 sal_Bool GraphicObject::IsCached( OutputDevice* pOut, const Point& rPt, const Size& rSz,
-                              const GraphicAttr* pAttr, sal_uIntPtr nFlags ) const
+                              const GraphicAttr* pAttr, sal_uLong nFlags ) const
 {
     sal_Bool bRet;
 
@@ -666,7 +666,7 @@ List* GraphicObject::GetAnimationInfoList() const
 // -----------------------------------------------------------------------------
 
 sal_Bool GraphicObject::Draw( OutputDevice* pOut, const Point& rPt, const Size& rSz,
-                          const GraphicAttr* pAttr, sal_uIntPtr nFlags )
+                          const GraphicAttr* pAttr, sal_uLong nFlags )
 {
     GraphicAttr         aAttr( pAttr ? *pAttr : GetAttr() );
     Point               aPt( rPt );
@@ -746,7 +746,7 @@ sal_Bool GraphicObject::Draw( OutputDevice* pOut, const Point& rPt, const Size& 
 sal_Bool GraphicObject::DrawWithPDFHandling( OutputDevice& rOutDev,
                                          const Point& rPt, const Size& rSz,
                                          const GraphicAttr* pGrfAttr,
-                                         const sal_uIntPtr nFlags )
+                                         const sal_uLong nFlags )
 {
     const GraphicAttr aGrfAttr( pGrfAttr ? *pGrfAttr : GetAttr() );
 
@@ -807,7 +807,7 @@ sal_Bool GraphicObject::DrawWithPDFHandling( OutputDevice& rOutDev,
 // -----------------------------------------------------------------------------
 
 sal_Bool GraphicObject::DrawTiled( OutputDevice* pOut, const Rectangle& rArea, const Size& rSize,
-                               const Size& rOffset, const GraphicAttr* pAttr, sal_uIntPtr nFlags, int nTileCacheSize1D )
+                               const Size& rOffset, const GraphicAttr* pAttr, sal_uLong nFlags, int nTileCacheSize1D )
 {
     if( pOut == NULL || rSize.Width() == 0 || rSize.Height() == 0 )
         return sal_False;
@@ -831,7 +831,7 @@ sal_Bool GraphicObject::DrawTiled( OutputDevice* pOut, const Rectangle& rArea, c
 // -----------------------------------------------------------------------------
 
 sal_Bool GraphicObject::StartAnimation( OutputDevice* pOut, const Point& rPt, const Size& rSz,
-                                    long nExtraData, const GraphicAttr* pAttr, sal_uIntPtr /*nFlags*/,
+                                    long nExtraData, const GraphicAttr* pAttr, sal_uLong /*nFlags*/,
                                     OutputDevice* pFirstFrameOutDev )
 {
     sal_Bool bRet = sal_False;

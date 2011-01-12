@@ -53,8 +53,8 @@ TextSelection ExtTextEngine::MatchGroup( const TextPaM& rCursor ) const
 {
     TextSelection aSel( rCursor );
     sal_uInt16 nPos = rCursor.GetIndex();
-    sal_uIntPtr nPara = rCursor.GetPara();
-    sal_uIntPtr nParas = GetParagraphCount();
+    sal_uLong nPara = rCursor.GetPara();
+    sal_uLong nParas = GetParagraphCount();
     if ( ( nPara < nParas ) && ( nPos < GetTextLen( nPara ) ) )
     {
         sal_uInt16 nMatchChar = maGroupChars.Search( GetText( rCursor.GetPara() ).GetChar( nPos ) );
@@ -162,7 +162,7 @@ sal_Bool ExtTextEngine::Search( TextSelection& rSel, const util::SearchOptions& 
     }
 
     bool bFound = false;
-    sal_uIntPtr nStartNode, nEndNode;
+    sal_uLong nStartNode, nEndNode;
 
     if ( bSearchInSelection )
         nEndNode = bForward ? aSel.GetEnd().GetPara() : aSel.GetStart().GetPara();
@@ -176,7 +176,7 @@ sal_Bool ExtTextEngine::Search( TextSelection& rSel, const util::SearchOptions& 
     utl::TextSearch aSearcher( rSearchOptions );
 
     // ueber die Absaetze iterieren...
-    for ( sal_uIntPtr nNode = nStartNode;
+    for ( sal_uLong nNode = nStartNode;
             bForward ?  ( nNode <= nEndNode) : ( nNode >= nEndNode );
             bForward ? nNode++ : nNode-- )
     {
@@ -357,14 +357,14 @@ sal_Bool ExtTextView::ImpIndentBlock( sal_Bool bRight )
     HideSelection();
     GetTextEngine()->UndoActionStart( bRight ? XTEXTUNDO_INDENTBLOCK : XTEXTUNDO_UNINDENTBLOCK );
 
-    sal_uIntPtr nStartPara = aSel.GetStart().GetPara();
-    sal_uIntPtr nEndPara = aSel.GetEnd().GetPara();
+    sal_uLong nStartPara = aSel.GetStart().GetPara();
+    sal_uLong nEndPara = aSel.GetEnd().GetPara();
     if ( aSel.HasRange() && !aSel.GetEnd().GetIndex() )
     {
         nEndPara--; // den dann nicht einruecken...
     }
 
-    for ( sal_uIntPtr nPara = nStartPara; nPara <= nEndPara; nPara++ )
+    for ( sal_uLong nPara = nStartPara; nPara <= nEndPara; nPara++ )
     {
         if ( bRight )
         {

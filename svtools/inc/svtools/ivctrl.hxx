@@ -85,7 +85,7 @@ class SvxIconChoiceCtrlEntry
 
     Rectangle               aRect;              // Bounding-Rect des Entries
     Rectangle               aGridRect;          // nur gesetzt im Grid-Modus
-    sal_uIntPtr                 nPos;
+    sal_uLong                   nPos;
 
     // die Eintragsposition in der Eintragsliste entspricht der beim Insert vorgegebenen
     // [Sortier-]Reihenfolge (->Reihenfolge der Anker in der Ankerliste!). Im AutoArrange-Modus
@@ -273,7 +273,7 @@ protected:
 
     virtual void        FillLayoutData() const;
 
-    void                CallImplEventListeners(sal_uIntPtr nEvent, void* pData);
+    void                CallImplEventListeners(sal_uLong nEvent, void* pData);
 
 public:
 
@@ -299,15 +299,15 @@ public:
     void                ArrangeIcons();
 
 
-    SvxIconChoiceCtrlEntry* InsertEntry( sal_uIntPtr nPos = LIST_APPEND,
+    SvxIconChoiceCtrlEntry* InsertEntry( sal_uLong nPos = LIST_APPEND,
                                      const Point* pPos = 0,
                                      sal_uInt16 nFlags = 0 );
     SvxIconChoiceCtrlEntry* InsertEntry( const String& rText, const Image& rImage,
-                                     sal_uIntPtr nPos = LIST_APPEND,
+                                     sal_uLong nPos = LIST_APPEND,
                                      const Point* pPos = 0,
                                      sal_uInt16 nFlags = 0 );
     SvxIconChoiceCtrlEntry* InsertEntry( const String& rText, const Image& rImage, const Image& rImageHC,
-                                     sal_uIntPtr nPos = LIST_APPEND,
+                                     sal_uLong nPos = LIST_APPEND,
                                      const Point* pPos = 0,
                                      sal_uInt16 nFlags = 0 );
 
@@ -331,9 +331,9 @@ public:
     sal_Bool                IsEntryEditing() const;
     void                Clear();
 
-    sal_uIntPtr                 GetEntryCount() const;
-    SvxIconChoiceCtrlEntry* GetEntry( sal_uIntPtr nPos ) const;
-    sal_uIntPtr                 GetEntryListPos( SvxIconChoiceCtrlEntry* pEntry ) const;
+    sal_uLong                   GetEntryCount() const;
+    SvxIconChoiceCtrlEntry* GetEntry( sal_uLong nPos ) const;
+    sal_uLong                   GetEntryListPos( SvxIconChoiceCtrlEntry* pEntry ) const;
     using Window::SetCursor;
     void                    SetCursor( SvxIconChoiceCtrlEntry* pEntry );
     SvxIconChoiceCtrlEntry* GetCursor() const;
@@ -349,8 +349,8 @@ public:
     // Gibt den naechsten unter pCurEntry liegenden Eintrag (ZOrder)
     SvxIconChoiceCtrlEntry* GetPrevEntry( const Point& rPosPixel, SvxIconChoiceCtrlEntry* pCurEntry, sal_Bool  ) const;
 
-    // in dem sal_uIntPtr wird die Position in der Liste des gefunden Eintrags zurueckgegeben
-    SvxIconChoiceCtrlEntry* GetSelectedEntry( sal_uIntPtr& rPos ) const;
+    // in dem sal_uLong wird die Position in der Liste des gefunden Eintrags zurueckgegeben
+    SvxIconChoiceCtrlEntry* GetSelectedEntry( sal_uLong& rPos ) const;
 
     void                        SetEntryTextMode( SvxIconChoiceCtrlTextMode eMode, SvxIconChoiceCtrlEntry* pEntry = 0 );
     SvxIconChoiceCtrlTextMode   GetEntryTextMode( const SvxIconChoiceCtrlEntry* pEntry = 0 ) const;

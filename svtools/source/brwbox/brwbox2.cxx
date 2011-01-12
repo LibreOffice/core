@@ -372,7 +372,7 @@ void BrowseBox::ToggleSelection( sal_Bool bForce )
         if ( aHighlightList.Count() && nLastRowInRect == ( nRow - 1 ) )
             aHighlightList.First()->Union( aAddRect );
         else
-            aHighlightList.Insert( new Rectangle( aAddRect ), (sal_uIntPtr) 0 );
+            aHighlightList.Insert( new Rectangle( aAddRect ), (sal_uLong) 0 );
         nLastRowInRect = nRow;
     }
 
@@ -481,7 +481,7 @@ void BrowseBox::DrawCursor()
 
 //-------------------------------------------------------------------
 
-sal_uIntPtr BrowseBox::GetColumnWidth( sal_uInt16 nId ) const
+sal_uLong BrowseBox::GetColumnWidth( sal_uInt16 nId ) const
 {
     DBG_CHKTHIS(BrowseBox,BrowseBoxCheckInvariants);
 
@@ -609,9 +609,9 @@ void BrowseBox::Resize()
     // calc the size of the scrollbars
     // (we can't ask the scrollbars for their widths cause if we're zoomed they still have to be
     // resized - which is done in UpdateScrollbars)
-    sal_uIntPtr nSBSize = GetSettings().GetStyleSettings().GetScrollBarSize();
+    sal_uLong nSBSize = GetSettings().GetStyleSettings().GetScrollBarSize();
     if (IsZoom())
-        nSBSize = (sal_uIntPtr)(nSBSize * (double)GetZoom());
+        nSBSize = (sal_uLong)(nSBSize * (double)GetZoom());
 
     DoHideCursor( "Resize" );
     sal_uInt16 nOldVisibleRows =
@@ -774,7 +774,7 @@ void BrowseBox::PaintRow( OutputDevice&, const Rectangle& )
 
 //-------------------------------------------------------------------
 
-void BrowseBox::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal_uIntPtr nFlags )
+void BrowseBox::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal_uLong nFlags )
 {
     sal_Bool bDrawSelection = (nFlags & WINDOW_DRAW_NOSELECTION) == 0;
 
@@ -926,8 +926,8 @@ void BrowseBox::ImplPaintData(OutputDevice& _rOut, const Rectangle& _rRect, sal_
     long nDataRowHeigt = GetDataRowHeight();
 
     // compute relative rows to redraw
-    sal_uIntPtr nRelTopRow = _bForeignDevice ? 0 : ((sal_uIntPtr)_rRect.Top() / nDataRowHeigt);
-    sal_uIntPtr nRelBottomRow = (sal_uIntPtr)(_bForeignDevice ? aOverallAreaSize.Height() : _rRect.Bottom()) / nDataRowHeigt;
+    sal_uLong nRelTopRow = _bForeignDevice ? 0 : ((sal_uLong)_rRect.Top() / nDataRowHeigt);
+    sal_uLong nRelBottomRow = (sal_uLong)(_bForeignDevice ? aOverallAreaSize.Height() : _rRect.Bottom()) / nDataRowHeigt;
 
     // cache frequently used values
     Point aPos( aOverallAreaPos.X(), nRelTopRow * nDataRowHeigt + aOverallAreaPos.Y() );
@@ -948,8 +948,8 @@ void BrowseBox::ImplPaintData(OutputDevice& _rOut, const Rectangle& _rRect, sal_
 
     // redraw the invalid fields
     sal_Bool bRetouching = sal_False;
-    for ( sal_uIntPtr nRelRow = nRelTopRow;
-          nRelRow <= nRelBottomRow && (sal_uIntPtr)nTopRow+nRelRow < (sal_uIntPtr)nRowCount;
+    for ( sal_uLong nRelRow = nRelTopRow;
+          nRelRow <= nRelBottomRow && (sal_uLong)nTopRow+nRelRow < (sal_uLong)nRowCount;
           ++nRelRow, aPos.Y() += nDataRowHeigt )
     {
         // get row
@@ -959,7 +959,7 @@ void BrowseBox::ImplPaintData(OutputDevice& _rOut, const Rectangle& _rRect, sal_
             continue;
 
         // prepare row
-        sal_uIntPtr nRow = nTopRow+nRelRow;
+        sal_uLong nRow = nTopRow+nRelRow;
         if ( !SeekRow( nRow) ) {
             DBG_ERROR("BrowseBox::ImplPaintData: SeekRow gescheitert");
         }
@@ -1023,7 +1023,7 @@ void BrowseBox::ImplPaintData(OutputDevice& _rOut, const Rectangle& _rRect, sal_
                 _rOut.DrawRect( aFieldRect );
             }
 
-            if (!m_bFocusOnlyCursor && (pCol->GetId() == GetCurColumnId()) && (nRow == (sal_uIntPtr)GetCurRow()))
+            if (!m_bFocusOnlyCursor && (pCol->GetId() == GetCurColumnId()) && (nRow == (sal_uLong)GetCurRow()))
                 DrawCursor();
 
             // draw a single field
@@ -1199,9 +1199,9 @@ void BrowseBox::UpdateScrollbars()
     pBDW->bInUpdateScrollbars = sal_True;
 
     // the size of the corner window (and the width of the VSB/height of the HSB)
-    sal_uIntPtr nCornerSize = GetSettings().GetStyleSettings().GetScrollBarSize();
+    sal_uLong nCornerSize = GetSettings().GetStyleSettings().GetScrollBarSize();
     if (IsZoom())
-        nCornerSize = (sal_uIntPtr)(nCornerSize * (double)GetZoom());
+        nCornerSize = (sal_uLong)(nCornerSize * (double)GetZoom());
 
     // needs VScroll?
     long nMaxRows = (pDataWin->GetSizePixel().Height()) / GetDataRowHeight();
@@ -1227,7 +1227,7 @@ void BrowseBox::UpdateScrollbars()
     }
 
     // needs HScroll?
-    sal_uIntPtr nLastCol = GetColumnAtXPosPixel( aDataWinSize.Width() - 1 );
+    sal_uLong nLastCol = GetColumnAtXPosPixel( aDataWinSize.Width() - 1 );
 
     sal_uInt16 nFrozenCols = FrozenColCount();
     sal_Bool bNeedsHScroll =    getDataWindow()->bAutoHScroll
@@ -1251,7 +1251,7 @@ void BrowseBox::UpdateScrollbars()
     }
 
     // adjust position and Width of horizontal scrollbar
-    sal_uIntPtr nHScrX = nControlAreaWidth == USHRT_MAX
+    sal_uLong nHScrX = nControlAreaWidth == USHRT_MAX
         ? 0
         : nControlAreaWidth;
 
@@ -1310,7 +1310,7 @@ void BrowseBox::UpdateScrollbars()
 
     // needs corner-window?
     // (do that AFTER positioning BOTH scrollbars)
-    sal_uIntPtr nActualCorderWidth = 0;
+    sal_uLong nActualCorderWidth = 0;
     if (aHScroll.IsVisible() && pVScroll && pVScroll->IsVisible() )
     {
         // if we have both scrollbars, the corner window fills the point of intersection of these two
@@ -1586,7 +1586,7 @@ void BrowseBox::MouseMove( const MouseEvent& rEvt )
                     nDragX = Max( rEvt.GetPosPixel().X(), nMinResizeX );
                     long nDeltaX = nDragX - nResizeX;
                     sal_uInt16 nId = GetColumnId(nResizeCol);
-                    sal_uIntPtr nOldWidth = GetColumnWidth(nId);
+                    sal_uLong nOldWidth = GetColumnWidth(nId);
                     nDragX = QueryColumnResize( GetColumnId(nResizeCol),
                                     nOldWidth + nDeltaX )
                              + nResizeX - nOldWidth;

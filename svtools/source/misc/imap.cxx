@@ -340,7 +340,7 @@ sal_Bool IMapRectangleObject::IsEqual( const IMapRectangleObject& rEqObj )
 /******************************************************************************/
 /******************************************************************************/
 
-IMapCircleObject::IMapCircleObject( const Point& rCenter, sal_uIntPtr nCircleRadius,
+IMapCircleObject::IMapCircleObject( const Point& rCenter, sal_uLong nCircleRadius,
                                     const String& rURL,
                                     const String& rAltText,
                                     const String& rDesc,
@@ -360,7 +360,7 @@ IMapCircleObject::IMapCircleObject( const Point& rCenter, sal_uIntPtr nCircleRad
 |*
 \******************************************************************************/
 
-void IMapCircleObject::ImpConstruct( const Point& rCenter, sal_uIntPtr nRad, sal_Bool bPixel )
+void IMapCircleObject::ImpConstruct( const Point& rCenter, sal_uLong nRad, sal_Bool bPixel )
 {
     if ( bPixel )
     {
@@ -432,7 +432,7 @@ sal_Bool IMapCircleObject::IsHit( const Point& rPoint ) const
     const Point aPoint( aCenter - rPoint );
     sal_Bool        bRet = sal_False;
 
-    if ( (sal_uIntPtr) sqrt( (double) aPoint.X() * aPoint.X() +
+    if ( (sal_uLong) sqrt( (double) aPoint.X() * aPoint.X() +
                        aPoint.Y() * aPoint.Y() ) <= nRadius )
     {
         bRet = sal_True;
@@ -467,9 +467,9 @@ Point IMapCircleObject::GetCenter( sal_Bool bPixelCoords ) const
 |*
 \******************************************************************************/
 
-sal_uIntPtr IMapCircleObject::GetRadius( sal_Bool bPixelCoords ) const
+sal_uLong IMapCircleObject::GetRadius( sal_Bool bPixelCoords ) const
 {
-    sal_uIntPtr nNewRadius;
+    sal_uLong nNewRadius;
 
     if ( bPixelCoords )
         nNewRadius = Application::GetDefaultDevice()->LogicToPixel( Size( nRadius, 0 ), MapMode( MAP_100TH_MM ) ).Width();
@@ -987,7 +987,7 @@ void ImageMap::InsertIMapObject( const IMapObject& rIMapObject )
 IMapObject* ImageMap::GetHitIMapObject( const Size& rTotalSize,
                                         const Size& rDisplaySize,
                                         const Point& rRelHitPoint,
-                                        sal_uIntPtr nFlags )
+                                        sal_uLong nFlags )
 {
     Point aRelPoint( rTotalSize.Width() * rRelHitPoint.X() / rDisplaySize.Width(),
                      rTotalSize.Height() * rRelHitPoint.Y() / rDisplaySize.Height() );
@@ -1026,9 +1026,9 @@ IMapObject* ImageMap::GetHitIMapObject( const Size& rTotalSize,
 Rectangle ImageMap::GetBoundRect() const
 {
     Rectangle   aBoundRect;
-    sal_uIntPtr     nCount = maList.Count();
+    sal_uLong       nCount = maList.Count();
 
-    for ( sal_uIntPtr i = 0; i < nCount; i++ )
+    for ( sal_uLong i = 0; i < nCount; i++ )
         aBoundRect.Union( ( (IMapObject*) maList.GetObject( i ) )->GetBoundRect() );
 
     return aBoundRect;

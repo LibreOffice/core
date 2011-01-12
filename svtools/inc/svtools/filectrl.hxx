@@ -80,7 +80,7 @@ public:
     Edit&           GetEdit() { return maEdit; }
     PushButton&     GetButton() { return maButton; }
 
-    void            Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal_uIntPtr nFlags );
+    void            Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal_uLong nFlags );
 
     void            SetOpenDialog( sal_Bool bOpen )     { mbOpenDlg = bOpen; }
     sal_Bool            IsOpenDialog() const            { return mbOpenDlg; }

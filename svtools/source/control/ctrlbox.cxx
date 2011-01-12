@@ -385,8 +385,8 @@ LineListBox::LineListBox( Window* pParent, const ResId& rResId ) :
 
 LineListBox::~LineListBox()
 {
-    sal_uIntPtr n = 0;
-    sal_uIntPtr nCount = pLineList->Count();
+    sal_uLong n = 0;
+    sal_uLong nCount = pLineList->Count();
     while ( n < nCount )
     {
         ImpLineListData* pData = pLineList->GetObject( n );
@@ -442,8 +442,8 @@ void LineListBox::RemoveEntry( sal_uInt16 nPos )
 
 void LineListBox::Clear()
 {
-    sal_uIntPtr n = 0;
-    sal_uIntPtr nCount = pLineList->Count();
+    sal_uLong n = 0;
+    sal_uLong nCount = pLineList->Count();
     while ( n < nCount )
     {
         ImpLineListData* pData = pLineList->GetObject( n );
@@ -461,8 +461,8 @@ void LineListBox::Clear()
 sal_uInt16 LineListBox::GetEntryPos( long nLine1, long nLine2,
                                 long nDistance ) const
 {
-    sal_uIntPtr n = 0;
-    sal_uIntPtr nCount = pLineList->Count();
+    sal_uLong n = 0;
+    sal_uLong nCount = pLineList->Count();
     while ( n < nCount )
     {
         ImpLineListData* pData = pLineList->GetObject( n );
@@ -519,7 +519,7 @@ void LineListBox::UpdateLineColors( void )
 {
     if( UpdatePaintLineColor() )
     {
-        sal_uIntPtr     nCount = pLineList->Count();
+        sal_uLong       nCount = pLineList->Count();
         if( !nCount )
             return;
 
@@ -530,7 +530,7 @@ void LineListBox::UpdateLineColors( void )
         SetUpdateMode( sal_False );
 
         sal_uInt16      nSelEntry = GetSelectEntryPos();
-        for( sal_uIntPtr n = 0 ; n < nCount ; ++n )
+        for( sal_uLong n = 0 ; n < nCount ; ++n )
         {
             ImpLineListData*    pData = pLineList->GetObject( n );
             if( pData )
@@ -676,7 +676,7 @@ void FontNameBox::Fill( const FontList* pList )
     for ( sal_uInt16 i = 0; i < nFontCount; i++ )
     {
         const FontInfo& rFontInfo = pList->GetFontName( i );
-        sal_uIntPtr nIndex = InsertEntry( rFontInfo.GetName() );
+        sal_uLong nIndex = InsertEntry( rFontInfo.GetName() );
         if ( nIndex != LISTBOX_ERROR )
         {
             sal_uInt16 nType = pList->GetFontNameType( i );
@@ -1269,8 +1269,8 @@ void FontSizeBox::Fill( const FontInfo* pInfo, const FontList* pList )
         if ( pAry == pList->GetStdSizeAry() )
         {
             // for scalable fonts all font size names
-            sal_uIntPtr nCount = aFontSizeNames.Count();
-            for( sal_uIntPtr i = 0; i < nCount; i++ )
+            sal_uLong nCount = aFontSizeNames.Count();
+            for( sal_uLong i = 0; i < nCount; i++ )
             {
                 String  aSizeName = aFontSizeNames.GetIndexName( i );
                 long    nSize = aFontSizeNames.GetIndexSize( i );

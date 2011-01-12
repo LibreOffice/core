@@ -106,7 +106,7 @@ void SvIconView::DisconnectFromModel()
 
 
 SvLBoxEntry* SvIconView::InsertEntry( const XubString& rText,
-    SvLBoxEntry* pParent, sal_Bool bChildsOnDemand, sal_uIntPtr nPos )
+    SvLBoxEntry* pParent, sal_Bool bChildsOnDemand, sal_uLong nPos )
 {
     SvLBoxEntry* pEntry = CreateEntry(
         rText, aCollapsedEntryBmp, aExpandedEntryBmp );
@@ -122,7 +122,7 @@ SvLBoxEntry* SvIconView::InsertEntry( const XubString& rText,
 SvLBoxEntry* SvIconView::InsertEntry( const XubString& rText,
     const Image& rExpEntryBmp,
     const Image& rCollEntryBmp,
-    SvLBoxEntry* pParent, sal_Bool bChildsOnDemand, sal_uIntPtr nPos)
+    SvLBoxEntry* pParent, sal_Bool bChildsOnDemand, sal_uLong nPos)
 {
     SvLBoxEntry* pEntry = CreateEntry(
         rText, rCollEntryBmp, rExpEntryBmp );
@@ -319,7 +319,7 @@ void __EXPORT SvIconView::ModelHasInsertedTree( SvListEntry* pEntry )
 }
 
 void __EXPORT SvIconView::ModelIsMoving(SvListEntry* pSource,
-        SvListEntry* /* pTargetParent */ , sal_uIntPtr /* nChildPos */ )
+        SvListEntry* /* pTargetParent */ , sal_uLong /* nChildPos */ )
 {
     pImp->MovingEntry( (SvLBoxEntry*)pSource );
 }
@@ -499,13 +499,13 @@ void SvIconView::SetSpaceBetweenEntries( long nX, long nY )
 }
 
 sal_Bool SvIconView::NotifyMoving( SvLBoxEntry* pTarget, SvLBoxEntry* pEntry,
-    SvLBoxEntry*& rpNewParent, sal_uIntPtr& rNewChildPos )
+    SvLBoxEntry*& rpNewParent, sal_uLong& rNewChildPos )
 {
     return pImp->NotifyMoving(pTarget,pEntry,rpNewParent,rNewChildPos);
 }
 
 sal_Bool SvIconView::NotifyCopying( SvLBoxEntry* pTarget, SvLBoxEntry* pEntry,
-    SvLBoxEntry*& rpNewParent, sal_uIntPtr& rNewChildPos )
+    SvLBoxEntry*& rpNewParent, sal_uLong& rNewChildPos )
 {
     return pImp->NotifyCopying(pTarget,pEntry,rpNewParent,rNewChildPos);
 }
@@ -659,9 +659,9 @@ Region SvIconView::GetDragRegion() const
     return aRegion;
 }
 
-sal_uIntPtr SvIconView::GetSelectionCount() const
+sal_uLong SvIconView::GetSelectionCount() const
 {
-    return (sal_uIntPtr)(pImp->GetSelectionCount());
+    return (sal_uLong)(pImp->GetSelectionCount());
 }
 
 void SvIconView::SetGrid( long nDX, long nDY )
@@ -670,7 +670,7 @@ void SvIconView::SetGrid( long nDX, long nDY )
 }
 
 void SvIconView::ModelNotification( sal_uInt16 nActionId, SvListEntry* pEntry1,
-    SvListEntry* pEntry2, sal_uIntPtr nPos )
+    SvListEntry* pEntry2, sal_uLong nPos )
 {
     SvLBox::ModelNotification( nActionId, pEntry1, pEntry2, nPos );
     switch( nActionId )

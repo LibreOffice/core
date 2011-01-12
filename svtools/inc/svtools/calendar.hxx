@@ -203,7 +203,7 @@ private:
     Color*          mpStandardColor;
     Color*          mpSaturdayColor;
     Color*          mpSundayColor;
-    sal_uIntPtr         mnDayCount;
+    sal_uLong           mnDayCount;
     long            mnDaysOffX;
     long            mnWeekDayOffY;
     long            mnDaysOffY;
@@ -261,7 +261,7 @@ private:
                                   sal_uInt16 nDay, sal_uInt16 nMonth, sal_uInt16 nYear,
                                   DayOfWeek eDayOfWeek,
                                   sal_Bool bBack = sal_True, sal_Bool bOther = sal_False,
-                                  sal_uIntPtr nToday = 0 );
+                                  sal_uLong nToday = 0 );
     SVT_DLLPRIVATE void         ImplDraw( sal_Bool bPaint = sal_False );
     SVT_DLLPRIVATE void         ImplUpdateDate( const Date& rDate );
     SVT_DLLPRIVATE void         ImplUpdateSelection( Table* pOld );
@@ -321,8 +321,8 @@ public:
                                      sal_Bool bSelect = sal_True );
     void            SetNoSelection();
     sal_Bool            IsDateSelected( const Date& rDate ) const;
-    sal_uIntPtr         GetSelectDateCount() const;
-    Date            GetSelectDate( sal_uIntPtr nIndex = 0 ) const;
+    sal_uLong           GetSelectDateCount() const;
+    Date            GetSelectDate( sal_uLong nIndex = 0 ) const;
     void            EnableCallEverySelect( sal_Bool bEvery = sal_True ) { mbAllSel = bEvery; }
     sal_Bool            IsCallEverySelectEnabled() const { return mbAllSel; }
 
@@ -332,7 +332,7 @@ public:
     void            SetFirstDate( const Date& rNewFirstDate );
     Date            GetFirstDate() const { return maFirstDate; }
     Date            GetLastDate() const { return GetFirstDate() + mnDayCount; }
-    sal_uIntPtr         GetDayCount() const { return mnDayCount; }
+    sal_uLong           GetDayCount() const { return mnDayCount; }
     Date            GetFirstMonth() const;
     Date            GetLastMonth() const;
     sal_uInt16          GetMonthCount() const;

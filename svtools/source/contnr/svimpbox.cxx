@@ -409,7 +409,7 @@ void SvImpLBox::PageDown( sal_uInt16 nDelta )
 
     SvLBoxEntry* pNext;
     pNext = (SvLBoxEntry*)(pView->NextVisible( pStartEntry, nRealDelta ));
-    if( (sal_uIntPtr)pNext == (sal_uIntPtr)pStartEntry )
+    if( (sal_uLong)pNext == (sal_uLong)pStartEntry )
         return;
 
     ShowCursor( sal_False );
@@ -446,7 +446,7 @@ void SvImpLBox::PageUp( sal_uInt16 nDelta )
         return;
 
     SvLBoxEntry* pPrev = (SvLBoxEntry*)(pView->PrevVisible( pStartEntry, nRealDelta ));
-    if( (sal_uIntPtr)pPrev == (sal_uIntPtr)pStartEntry )
+    if( (sal_uLong)pPrev == (sal_uLong)pStartEntry )
         return;
 
     nFlags &= (~F_FILLING);
@@ -913,8 +913,8 @@ void SvImpLBox::Paint( const Rectangle& rRect )
     }
 
 #ifdef XX_OV
-    sal_uIntPtr nXAbsPos = (sal_uInt16)pTree->GetAbsPos( pStartEntry );
-    sal_uIntPtr nXVisPos = pView->GetVisiblePos( pStartEntry );
+    sal_uLong nXAbsPos = (sal_uInt16)pTree->GetAbsPos( pStartEntry );
+    sal_uLong nXVisPos = pView->GetVisiblePos( pStartEntry );
     SvLBoxString* pXStr = (SvLBoxString*)pStartEntry->GetFirstItem( SV_ITEM_ID_LBOXSTRING);
 #endif
 
@@ -1034,10 +1034,10 @@ void SvImpLBox::RepaintSelectionItems()
 
     long nEntryHeight = pView->GetEntryHeight();
 
-    sal_uIntPtr nCount = nVisibleCount;
+    sal_uLong nCount = nVisibleCount;
     long nY = 0;
     SvLBoxEntry* pEntry = pStartEntry;
-    for( sal_uIntPtr n=0; n< nCount && pEntry; n++ )
+    for( sal_uLong n=0; n< nCount && pEntry; n++ )
     {
         pView->PaintEntry1( pEntry, nY, 0xffff ); //wg. ItemsetBrowser SV_LBOXTAB_SHOW_SELECTION );
         nY += nEntryHeight;
@@ -1096,11 +1096,11 @@ void SvImpLBox::DrawNet()
     pView->SetLineColor( aCol );
     Point aPos1, aPos2;
     sal_uInt16 nDistance;
-    sal_uIntPtr nMax = nVisibleCount + nOffs + 1;
+    sal_uLong nMax = nVisibleCount + nOffs + 1;
 
     const Image& rExpandedNodeBitmap = GetExpandedNodeBmp();
 
-    for( sal_uIntPtr n=0; n< nMax && pEntry; n++ )
+    for( sal_uLong n=0; n< nMax && pEntry; n++ )
     {
         if( pView->IsExpanded(pEntry) )
         {
@@ -1253,7 +1253,7 @@ sal_uInt16 SvImpLBox::AdjustScrollBars( Size& rSize )
         bHorBar = sal_True;
 
     // Anzahl aller nicht eingeklappten Eintraege
-    sal_uIntPtr nTotalCount = pView->GetVisibleCount();
+    sal_uLong nTotalCount = pView->GetVisibleCount();
 
     // Anzahl in der View sichtbarer Eintraege
     nVisibleCount = aOSize.Height() / nEntryHeight;
@@ -1432,10 +1432,10 @@ void SvImpLBox::FillView()
 void SvImpLBox::ShowVerSBar()
 {
     sal_Bool bVerBar = ( pView->GetStyle() & WB_VSCROLL ) != 0;
-    sal_uIntPtr nVis = 0;
+    sal_uLong nVis = 0;
     if( !bVerBar )
         nVis = pView->GetVisibleCount();
-    if( bVerBar || (nVisibleCount && nVis > (sal_uIntPtr)(nVisibleCount-1)) )
+    if( bVerBar || (nVisibleCount && nVis > (sal_uLong)(nVisibleCount-1)) )
     {
         if( !aVerSBar.IsVisible() )
         {
@@ -1592,7 +1592,7 @@ void SvImpLBox::EntryCollapsed( SvLBoxEntry* pEntry )
     if( pStartEntry )
     {
         long nOldThumbPos   = aVerSBar.GetThumbPos();
-        sal_uIntPtr nVisList      = pView->GetVisibleCount();
+        sal_uLong nVisList      = pView->GetVisibleCount();
         aVerSBar.SetRange( Range(0, nVisList-1) );
         long nNewThumbPos   = aVerSBar.GetThumbPos();
         if( nNewThumbPos != nOldThumbPos  )
@@ -2417,7 +2417,7 @@ sal_Bool SvImpLBox::KeyInput( const KeyEvent& rKEvt)
 
                 if( nDelta )
                 {
-                    DBG_ASSERT(pNewCursor&&(sal_uIntPtr)pNewCursor!=(sal_uIntPtr)pCursor,"Cursor?");
+                    DBG_ASSERT(pNewCursor&&(sal_uLong)pNewCursor!=(sal_uLong)pCursor,"Cursor?");
                     aSelEng.CursorPosChanging( bShift, bMod1 );
                     if( IsEntryInView( pNewCursor ) )
                         SetCursor( pNewCursor );
@@ -2445,7 +2445,7 @@ sal_Bool SvImpLBox::KeyInput( const KeyEvent& rKEvt)
 
                 if( nDelta )
                 {
-                    DBG_ASSERT(pNewCursor&&(sal_uIntPtr)pNewCursor!=(sal_uIntPtr)pCursor,"Cursor?");
+                    DBG_ASSERT(pNewCursor&&(sal_uLong)pNewCursor!=(sal_uLong)pCursor,"Cursor?");
                     aSelEng.CursorPosChanging( bShift, bMod1 );
                     if( IsEntryInView( pNewCursor ) )
                         SetCursor( pNewCursor );
@@ -2854,9 +2854,9 @@ void __EXPORT ImpLBSelEng::DeselectAll()
 void SvImpLBox::SetAnchorSelection(SvLBoxEntry* pOldCursor,SvLBoxEntry* pNewCursor)
 {
     SvLBoxEntry* pEntry;
-    sal_uIntPtr nAnchorVisPos = pView->GetVisiblePos( pAnchor );
-    sal_uIntPtr nOldVisPos = pView->GetVisiblePos( pOldCursor );
-    sal_uIntPtr nNewVisPos = pView->GetVisiblePos( pNewCursor );
+    sal_uLong nAnchorVisPos = pView->GetVisiblePos( pAnchor );
+    sal_uLong nOldVisPos = pView->GetVisiblePos( pOldCursor );
+    sal_uLong nNewVisPos = pView->GetVisiblePos( pNewCursor );
 
     if( nOldVisPos > nAnchorVisPos ||
         ( nAnchorVisPos==nOldVisPos && nNewVisPos > nAnchorVisPos) )
@@ -3218,7 +3218,7 @@ void SvImpLBox::Command( const CommandEvent& rCEvt )
                 SvLBoxEntry* pEntry = aSelRestore.top();
                 //#i19717# the entry is maybe already deleted
                 bool bFound = false;
-                for(sal_uIntPtr nEntry = 0; nEntry < pView->GetEntryCount(); nEntry++)
+                for(sal_uLong nEntry = 0; nEntry < pView->GetEntryCount(); nEntry++)
                     if(pEntry == pView->GetEntry(nEntry))
                     {
                         bFound = true;
@@ -3483,8 +3483,8 @@ void SvImpLBox::FindMostRight_Impl( SvLBoxEntry* pParent, SvLBoxEntry* pEntryToI
     if( !pList )
         return;
 
-    sal_uIntPtr nCount = pList->Count();
-    for( sal_uIntPtr nCur = 0; nCur < nCount; nCur++ )
+    sal_uLong nCount = pList->Count();
+    for( sal_uLong nCur = 0; nCur < nCount; nCur++ )
     {
         SvLBoxEntry* pChild = (SvLBoxEntry*)pList->GetObject( nCur );
         if( pChild != pEntryToIgnore )
@@ -3591,7 +3591,7 @@ const Image& SvImpLBox::GetDefaultCollapsedNodeImage( BmpColorMode _eMode )
 }
 
 // -----------------------------------------------------------------------
-void SvImpLBox::CallEventListeners( sal_uIntPtr nEvent, void* pData )
+void SvImpLBox::CallEventListeners( sal_uLong nEvent, void* pData )
 {
     if ( pView )
         pView->CallImplEventListeners( nEvent, pData);

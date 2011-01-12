@@ -139,7 +139,7 @@ void TextUndo::SetSelection( const TextSelection& rSel )
 }
 
 
-TextUndoDelPara::TextUndoDelPara( TextEngine* pTextEngine, TextNode* pNode, sal_uIntPtr nPara )
+TextUndoDelPara::TextUndoDelPara( TextEngine* pTextEngine, TextNode* pNode, sal_uLong nPara )
                     : TextUndo( TEXTUNDO_DELCONTENT, pTextEngine )
 {
     mpNode = pNode;
@@ -180,8 +180,8 @@ void __EXPORT TextUndoDelPara::Redo()
 
     mbDelObject = sal_True; // gehoert wieder dem Undo
 
-    sal_uIntPtr nParas = GetDoc()->GetNodes().Count();
-    sal_uIntPtr n = mnPara < nParas ? mnPara : (nParas-1);
+    sal_uLong nParas = GetDoc()->GetNodes().Count();
+    sal_uLong n = mnPara < nParas ? mnPara : (nParas-1);
     TextNode* pN = GetDoc()->GetNodes().GetObject( n );
     TextPaM aPaM( n, pN->GetText().Len() );
     SetSelection( aPaM );
@@ -190,7 +190,7 @@ void __EXPORT TextUndoDelPara::Redo()
 // -----------------------------------------------------------------------
 // TextUndoConnectParas
 // ------------------------------------------------------------------------
-TextUndoConnectParas::TextUndoConnectParas( TextEngine* pTextEngine, sal_uIntPtr nPara, sal_uInt16 nPos )
+TextUndoConnectParas::TextUndoConnectParas( TextEngine* pTextEngine, sal_uLong nPara, sal_uInt16 nPos )
                     :   TextUndo( TEXTUNDO_CONNECTPARAS, pTextEngine )
 {
     mnPara = nPara;
@@ -214,7 +214,7 @@ void __EXPORT TextUndoConnectParas::Redo()
 }
 
 
-TextUndoSplitPara::TextUndoSplitPara( TextEngine* pTextEngine, sal_uIntPtr nPara, sal_uInt16 nPos )
+TextUndoSplitPara::TextUndoSplitPara( TextEngine* pTextEngine, sal_uLong nPara, sal_uInt16 nPos )
                     : TextUndo( TEXTUNDO_SPLITPARA, pTextEngine )
 {
     mnPara = nPara;
@@ -320,7 +320,7 @@ TextUndoSetAttribs::~TextUndoSetAttribs()
 
 void __EXPORT TextUndoSetAttribs::Undo()
 {
-    for ( sal_uIntPtr nPara = maSelection.GetStart().GetPara(); nPara <= maSelection.GetEnd().GetPara(); nPara++ )
+    for ( sal_uLong nPara = maSelection.GetStart().GetPara(); nPara <= maSelection.GetEnd().GetPara(); nPara++ )
     {
 //      ContentAttribsInfo* pInf = aPrevAttribs[ (sal_uInt16)(nPara-aESel.nStartPara) ];
 //      GetTextEngine()->RemoveCharAttribs( nPara );

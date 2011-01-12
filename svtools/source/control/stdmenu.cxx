@@ -439,8 +439,8 @@ void FontSizeMenu::Fill( const FontInfo& rInfo, const FontList* pList )
         if ( pAry == pList->GetStdSizeAry() )
         {
             // for scalable fonts all font size names
-            sal_uIntPtr nCount = aFontSizeNames.Count();
-            for( sal_uIntPtr i = 0; i < nCount; i++ )
+            sal_uLong nCount = aFontSizeNames.Count();
+            for( sal_uLong i = 0; i < nCount; i++ )
             {
                 String  aSizeName = aFontSizeNames.GetIndexName( i );
                 long    nSize = aFontSizeNames.GetIndexSize( i );

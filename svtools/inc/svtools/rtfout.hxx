@@ -58,7 +58,7 @@ public:
                     rtl_TextEncoding eDestEnc = RTL_TEXTENCODING_MS_1252,
                     sal_Bool bWriteHelpFile = sal_False );
 
-    static SvStream& Out_Hex( SvStream&, sal_uIntPtr nHex, sal_uInt8 nLen );
+    static SvStream& Out_Hex( SvStream&, sal_uLong nHex, sal_uInt8 nLen );
 };
 
 

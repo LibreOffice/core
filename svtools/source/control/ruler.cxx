@@ -614,7 +614,7 @@ void Ruler::ImplDrawTicks( long nMin, long nMax, long nStart, long nCenter )
                 }
             }
             // #i49017# with some zoom factors the value nTick can overflow
-            if( ((sal_uIntPtr)nTick + (sal_uIntPtr)nTickCount) > (sal_uIntPtr)LONG_MAX)
+            if( ((sal_uLong)nTick + (sal_uLong)nTickCount) > (sal_uLong)LONG_MAX)
                 break;
             nTick += nTickCount;
         }

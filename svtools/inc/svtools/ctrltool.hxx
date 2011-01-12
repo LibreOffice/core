@@ -175,7 +175,7 @@ private:
     OutputDevice*           mpDev2;
 
 #ifdef CTRLTOOL_CXX
-    SVT_DLLPRIVATE ImplFontListNameInfo*    ImplFind( const XubString& rSearchName, sal_uIntPtr* pIndex ) const;
+    SVT_DLLPRIVATE ImplFontListNameInfo*    ImplFind( const XubString& rSearchName, sal_uLong* pIndex ) const;
     SVT_DLLPRIVATE ImplFontListNameInfo*    ImplFindByName( const XubString& rStr ) const;
     SVT_DLLPRIVATE void                 ImplInsertFonts( OutputDevice* pDev, sal_Bool bAll,
                                              sal_Bool bInsertData );
@@ -233,19 +233,19 @@ class SVT_DLLPUBLIC FontSizeNames
 {
 private:
     struct ImplFSNameItem*  mpArray;
-    sal_uIntPtr                 mnElem;
+    sal_uLong                   mnElem;
 
 public:
                             FontSizeNames( LanguageType eLanguage /* = LANGUAGE_DONTKNOW */ );
 
-    sal_uIntPtr                 Count() const { return mnElem; }
+    sal_uLong                   Count() const { return mnElem; }
     sal_Bool                    IsEmpty() const { return !mnElem; }
 
     long                    Name2Size( const String& ) const;
     String                  Size2Name( long ) const;
 
-    String                  GetIndexName( sal_uIntPtr nIndex ) const;
-    long                    GetIndexSize( sal_uIntPtr nIndex ) const;
+    String                  GetIndexName( sal_uLong nIndex ) const;
+    long                    GetIndexSize( sal_uLong nIndex ) const;
 };
 
 #endif  // _CTRLTOOL_HXX

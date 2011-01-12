@@ -676,7 +676,7 @@ private:
     long                mnBorderWidth;
     long                mnStartDragPos;
     long                mnDragPos;
-    sal_uIntPtr               mnUpdateEvtId;
+    sal_uLong               mnUpdateEvtId;
     ImplRulerData*      mpSaveData;
     ImplRulerData*      mpData;
     ImplRulerData*      mpDragData;

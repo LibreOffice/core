@@ -704,7 +704,7 @@ namespace svt { namespace table
         }
 
         //................................................................
-        void lcl_setButtonRepeat( Window& _rWindow, sal_uIntPtr _nDelay )
+        void lcl_setButtonRepeat( Window& _rWindow, sal_uLong _nDelay )
         {
             AllSettings aSettings = _rWindow.GetSettings();
             MouseSettings aMouseSettings = aSettings.GetMouseSettings();

@@ -541,7 +541,7 @@ void Calendar::ImplFormat()
     maFirstDate = aTempDate;
     nWeekDay = (sal_uInt16)aTempDate.GetDayOfWeek();
     nWeekDay = (nWeekDay+(7-(sal_uInt16)eStartDay)) % 7;
-    maFirstDate -= (sal_uIntPtr)nWeekDay;
+    maFirstDate -= (sal_uLong)nWeekDay;
     mnDayCount = nWeekDay;
     sal_uInt16 nDaysInMonth;
     sal_uInt16 nMonthCount = (sal_uInt16)(mnMonthPerLine*mnLines);
@@ -814,7 +814,7 @@ void Calendar::ImplDrawSpin( sal_Bool bDrawPrev, sal_Bool bDrawNext )
 void Calendar::ImplDrawDate( long nX, long nY,
                              sal_uInt16 nDay, sal_uInt16 nMonth, sal_uInt16 nYear,
                              DayOfWeek eDayOfWeek,
-                             sal_Bool bBack, sal_Bool bOther, sal_uIntPtr nToday )
+                             sal_Bool bBack, sal_Bool bOther, sal_uLong nToday )
 {
     ImplDateInfo*   pDateInfo;
     Color*          pTextColor = NULL;
@@ -979,7 +979,7 @@ void Calendar::ImplDraw( sal_Bool bPaint )
     long        nDeltaY;
     long        nDayX;
     long        nDayY;
-    sal_uIntPtr     nToday = Date().GetDate();
+    sal_uLong       nToday = Date().GetDate();
     sal_uInt16      nDay;
     sal_uInt16      nMonth;
     sal_uInt16      nYear;
@@ -1229,7 +1229,7 @@ void Calendar::ImplUpdateSelection( Table* pOld )
 {
     Table*  pNew = mpSelectTable;
     void*   p;
-    sal_uIntPtr nKey;
+    sal_uLong   nKey;
 
     p = pOld->First();
     while ( p )
@@ -1553,7 +1553,7 @@ void Calendar::ImplEndTracking( sal_Bool bCancel )
         if ( !bCancel )
         {
             // Feststellen, ob wir sichtbaren Bereich scrollen sollen
-            sal_uIntPtr nSelCount = mpSelectTable->Count();
+            sal_uLong nSelCount = mpSelectTable->Count();
             if ( nSelCount )
             {
                 Date aFirstSelDate( mpSelectTable->GetObjectKey( 0 ) );
@@ -2093,14 +2093,14 @@ sal_Bool Calendar::IsDateSelected( const Date& rDate ) const
 
 // -----------------------------------------------------------------------
 
-sal_uIntPtr Calendar::GetSelectDateCount() const
+sal_uLong Calendar::GetSelectDateCount() const
 {
     return mpSelectTable->Count();
 }
 
 // -----------------------------------------------------------------------
 
-Date Calendar::GetSelectDate( sal_uIntPtr nIndex ) const
+Date Calendar::GetSelectDate( sal_uLong nIndex ) const
 {
     if ( nIndex < mpSelectTable->Count() )
         return Date( mpSelectTable->GetObjectKey( nIndex ) );
@@ -2256,7 +2256,7 @@ Rectangle Calendar::GetDateRect( const Date& rDate ) const
 
     long    nX;
     long    nY;
-    sal_uIntPtr nDaysOff;
+    sal_uLong   nDaysOff;
     sal_uInt16  nDayIndex;
     Date    aDate = GetFirstMonth();
 
@@ -2390,7 +2390,7 @@ void Calendar::AddDateInfo( const Date& rDate, const String& rText,
         mpDateTable = new ImplDateTable( 256, 256 );
 
     sal_Bool            bChanged = sal_False;
-    sal_uIntPtr         nKey = rDate.GetDate();
+    sal_uLong           nKey = rDate.GetDate();
     ImplDateInfo*   pDateInfo = mpDateTable->Get( nKey );
     if ( pDateInfo )
         pDateInfo->maText = rText;
@@ -2483,7 +2483,7 @@ void Calendar::ClearDateInfo()
         ImplDateInfo* pDateInfo = mpDateTable->First();
         while ( pDateInfo )
         {
-            sal_uIntPtr nKey = mpDateTable->GetCurKey();
+            sal_uLong nKey = mpDateTable->GetCurKey();
             mpDateTable->Remove( nKey );
             Date aDate( nKey );
             ImplUpdateDate( aDate );
@@ -2502,7 +2502,7 @@ XubString Calendar::GetDateInfoText( const Date& rDate )
     XubString aRet;
     if ( mpDateTable )
     {
-        sal_uIntPtr         nKey = rDate.GetDate();
+        sal_uLong           nKey = rDate.GetDate();
         ImplDateInfo*   pDateInfo = mpDateTable->Get( nKey );
         if ( pDateInfo )
             aRet = pDateInfo->maText;

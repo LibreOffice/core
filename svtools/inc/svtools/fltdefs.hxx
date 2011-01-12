@@ -72,7 +72,7 @@ typedef sal_uInt8* PDIBBYTE;
 
 
 #if defined ( OS2 ) || defined ( UNX )
-void ReadBitmap( SvStream& rIStream, Bitmap& rBmp, sal_uInt16 nDefaultHeight = 0, sal_uIntPtr nOffBits = 0 );
+void ReadBitmap( SvStream& rIStream, Bitmap& rBmp, sal_uInt16 nDefaultHeight = 0, sal_uLong nOffBits = 0 );
 void ReplaceInfoHeader( SvStream& rStm, sal_uInt8* pBuffer );
 
 #ifdef OS2

@@ -572,7 +572,7 @@ static Image GetOfficeImageFromList_Impl( sal_uInt16 nImageId, sal_Bool bBig, sa
     static ImageList* _pBigOfficeImgList = NULL;
     static ImageList* _pSmallHCOfficeImgList = NULL;
     static ImageList* _pBigHCOfficeImgList = NULL;
-    static sal_uIntPtr nStyle = Application::GetSettings().GetStyleSettings().GetSymbolsStyle();
+    static sal_uLong nStyle = Application::GetSettings().GetStyleSettings().GetSymbolsStyle();
 
     // If the style has been changed, throw away our cache of the older images
     if ( nStyle != Application::GetSettings().GetStyleSettings().GetSymbolsStyle() )
@@ -651,7 +651,7 @@ static Image GetImageFromList_Impl( sal_uInt16 nImageId, sal_Bool bBig, sal_Bool
     static ImageList* _pBigImageList = NULL;
     static ImageList* _pSmallHCImageList = NULL;
     static ImageList* _pBigHCImageList = NULL;
-    static sal_uIntPtr nStyle = Application::GetSettings().GetStyleSettings().GetSymbolsStyle();
+    static sal_uLong nStyle = Application::GetSettings().GetStyleSettings().GetSymbolsStyle();
 
     // If the style has been changed, throw away our cache of the older images
     if ( nStyle != Application::GetSettings().GetStyleSettings().GetSymbolsStyle() )

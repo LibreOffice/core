@@ -86,7 +86,7 @@ GraphicID::GraphicID( const GraphicObject& rObj )
 {
     const Graphic& rGraphic = rObj.GetGraphic();
 
-    mnID1 = ( (sal_uIntPtr) rGraphic.GetType() ) << 28;
+    mnID1 = ( (sal_uLong) rGraphic.GetType() ) << 28;
 
     switch( rGraphic.GetType() )
     {
@@ -105,7 +105,7 @@ GraphicID::GraphicID( const GraphicObject& rObj )
             {
                 const BitmapEx aBmpEx( rGraphic.GetBitmapEx() );
 
-                mnID1 |= ( ( ( (sal_uIntPtr) aBmpEx.GetTransparentType() << 8 ) | ( aBmpEx.IsAlpha() ? 1 : 0 ) ) & 0x0fffffff );
+                mnID1 |= ( ( ( (sal_uLong) aBmpEx.GetTransparentType() << 8 ) | ( aBmpEx.IsAlpha() ? 1 : 0 ) ) & 0x0fffffff );
                 mnID2 = aBmpEx.GetSizePixel().Width();
                 mnID3 = aBmpEx.GetSizePixel().Height();
                 mnID4 = rGraphic.GetChecksum();
@@ -182,7 +182,7 @@ public:
 
     void                AddGraphicObjectReference( const GraphicObject& rObj, Graphic& rSubstitute );
     sal_Bool                ReleaseGraphicObjectReference( const GraphicObject& rObj );
-    sal_uIntPtr             GetGraphicObjectReferenceCount() { return maGraphicObjectList.Count(); }
+    sal_uLong               GetGraphicObjectReferenceCount() { return maGraphicObjectList.Count(); }
     sal_Bool                HasGraphicObjectReference( const GraphicObject& rObj );
 
     void                TryToSwapIn();
@@ -277,7 +277,7 @@ void GraphicCacheEntry::ImplFillSubstitute( Graphic& rSubstitute )
     const MapMode       aPrefMapMode( rSubstitute.GetPrefMapMode() );
     const Link          aAnimationNotifyHdl( rSubstitute.GetAnimationNotifyHdl() );
     const String        aDocFileName( rSubstitute.GetDocFileName() );
-    const sal_uIntPtr           nDocFilePos = rSubstitute.GetDocFilePos();
+    const sal_uLong         nDocFilePos = rSubstitute.GetDocFilePos();
     const GraphicType   eOldType = rSubstitute.GetType();
     const sal_Bool          bDefaultType = ( rSubstitute.GetType() == GRAPHIC_DEFAULT );
 
@@ -415,13 +415,13 @@ private:
     BitmapEx*                   mpBmpEx;
     GraphicAttr                 maAttr;
     Size                        maOutSizePix;
-    sal_uIntPtr                     mnCacheSize;
-    sal_uIntPtr                     mnOutDevDrawMode;
+    sal_uLong                       mnCacheSize;
+    sal_uLong                       mnOutDevDrawMode;
     sal_uInt16                      mnOutDevBitCount;
 
 public:
 
-    static sal_uIntPtr              GetNeededSize( OutputDevice* pOut, const Point& rPt, const Size& rSz,
+    static sal_uLong                GetNeededSize( OutputDevice* pOut, const Point& rPt, const Size& rSz,
                                                const GraphicObject& rObj, const GraphicAttr& rAttr );
 
 public:
@@ -457,9 +457,9 @@ public:
 
     const GraphicAttr&          GetAttr() const { return maAttr; }
     const Size&                 GetOutputSizePixel() const { return maOutSizePix; }
-    sal_uIntPtr                 GetCacheSize() const { return mnCacheSize; }
+    sal_uLong                   GetCacheSize() const { return mnCacheSize; }
     const GraphicCacheEntry*    GetReferencedCacheEntry() const { return mpRefCacheEntry; }
-    sal_uIntPtr                 GetOutDevDrawMode() const { return mnOutDevDrawMode; }
+    sal_uLong                   GetOutDevDrawMode() const { return mnOutDevDrawMode; }
     sal_uInt16              GetOutDevBitCount() const { return mnOutDevBitCount; }
 
     void                        SetReleaseTime( const ::vos::TTimeValue& rReleaseTime ) { maReleaseTime = rReleaseTime; }
@@ -486,12 +486,12 @@ public:
 
 // -----------------------------------------------------------------------------
 
-sal_uIntPtr GraphicDisplayCacheEntry::GetNeededSize( OutputDevice* pOut, const Point& /*rPt*/, const Size& rSz,
+sal_uLong GraphicDisplayCacheEntry::GetNeededSize( OutputDevice* pOut, const Point& /*rPt*/, const Size& rSz,
                                                const GraphicObject& rObj, const GraphicAttr& rAttr )
 {
     const Graphic&      rGraphic = rObj.GetGraphic();
     const GraphicType   eType = rGraphic.GetType();
-    sal_uIntPtr             nNeededSize;
+    sal_uLong               nNeededSize;
 
     if( GRAPHIC_BITMAP == eType )
     {
@@ -560,7 +560,7 @@ void GraphicDisplayCacheEntry::Draw( OutputDevice* pOut, const Point& rPt, const
 // - GraphicCache -
 // -----------------------
 
-GraphicCache::GraphicCache( GraphicManager& rMgr, sal_uIntPtr nDisplayCacheSize, sal_uIntPtr nMaxObjDisplayCacheSize ) :
+GraphicCache::GraphicCache( GraphicManager& rMgr, sal_uLong nDisplayCacheSize, sal_uLong nMaxObjDisplayCacheSize ) :
     mrMgr                   ( rMgr ),
     mnReleaseTimeoutSeconds ( 0UL ),
     mnMaxDisplaySize        ( nDisplayCacheSize ),
@@ -759,7 +759,7 @@ void GraphicCache::GraphicObjectWasSwappedIn( const GraphicObject& rObj )
 
 // -----------------------------------------------------------------------------
 
-void GraphicCache::SetMaxDisplayCacheSize( sal_uIntPtr nNewCacheSize )
+void GraphicCache::SetMaxDisplayCacheSize( sal_uLong nNewCacheSize )
 {
     mnMaxDisplaySize = nNewCacheSize;
 
@@ -769,7 +769,7 @@ void GraphicCache::SetMaxDisplayCacheSize( sal_uIntPtr nNewCacheSize )
 
 // -----------------------------------------------------------------------------
 
-void GraphicCache::SetMaxObjDisplayCacheSize( sal_uIntPtr nNewMaxObjSize, sal_Bool bDestroyGreaterCached )
+void GraphicCache::SetMaxObjDisplayCacheSize( sal_uLong nNewMaxObjSize, sal_Bool bDestroyGreaterCached )
 {
     const sal_Bool bDestroy = ( bDestroyGreaterCached && ( nNewMaxObjSize < mnMaxObjDisplaySize ) );
 
@@ -796,7 +796,7 @@ void GraphicCache::SetMaxObjDisplayCacheSize( sal_uIntPtr nNewMaxObjSize, sal_Bo
 
 // -----------------------------------------------------------------------------
 
-void GraphicCache::SetCacheTimeout( sal_uIntPtr nTimeoutSeconds )
+void GraphicCache::SetCacheTimeout( sal_uLong nTimeoutSeconds )
 {
     if( mnReleaseTimeoutSeconds != nTimeoutSeconds )
     {
@@ -884,7 +884,7 @@ sal_Bool GraphicCache::CreateDisplayCacheObj( OutputDevice* pOut, const Point& r
                                           const GraphicObject& rObj, const GraphicAttr& rAttr,
                                           const BitmapEx& rBmpEx )
 {
-    const sal_uIntPtr nNeededSize = GraphicDisplayCacheEntry::GetNeededSize( pOut, rPt, rSz, rObj, rAttr );
+    const sal_uLong nNeededSize = GraphicDisplayCacheEntry::GetNeededSize( pOut, rPt, rSz, rObj, rAttr );
     sal_Bool        bRet = sal_False;
 
     if( nNeededSize <= GetMaxObjDisplayCacheSize() )
@@ -918,7 +918,7 @@ sal_Bool GraphicCache::CreateDisplayCacheObj( OutputDevice* pOut, const Point& r
                                           const GraphicObject& rObj, const GraphicAttr& rAttr,
                                           const GDIMetaFile& rMtf )
 {
-    const sal_uIntPtr nNeededSize = GraphicDisplayCacheEntry::GetNeededSize( pOut, rPt, rSz, rObj, rAttr );
+    const sal_uLong nNeededSize = GraphicDisplayCacheEntry::GetNeededSize( pOut, rPt, rSz, rObj, rAttr );
     sal_Bool        bRet = sal_False;
 
     if( nNeededSize <= GetMaxObjDisplayCacheSize() )
@@ -987,9 +987,9 @@ sal_Bool GraphicCache::DrawDisplayCacheObj( OutputDevice* pOut, const Point& rPt
 
 // -----------------------------------------------------------------------------
 
-sal_Bool GraphicCache::ImplFreeDisplayCacheSpace( sal_uIntPtr nSizeToFree )
+sal_Bool GraphicCache::ImplFreeDisplayCacheSpace( sal_uLong nSizeToFree )
 {
-    sal_uIntPtr nFreedSize = 0UL;
+    sal_uLong nFreedSize = 0UL;
 
     if( nSizeToFree )
     {

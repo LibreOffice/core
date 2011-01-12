@@ -121,7 +121,7 @@ extern ::rtl::OUString CreateExactSizeText_Impl( sal_Int64 nSize ); // fileview.
 struct FolderHistory
 {
     String      m_sURL;
-    sal_uIntPtr     m_nGroup;
+    sal_uLong       m_nGroup;
 
     FolderHistory( const String& _rURL, sal_Int32 _nGroup ) :
         m_sURL( _rURL ), m_nGroup( _nGroup ) {}
@@ -237,7 +237,7 @@ void ODocumentInfoPreview::fill(
     // size
     if ( i_rURL.Len() > 0 )
     {
-        sal_uIntPtr nDocSize = ::utl::UCBContentHelper::GetSize( i_rURL );
+        sal_uLong nDocSize = ::utl::UCBContentHelper::GetSize( i_rURL );
         m_pEditWin->InsertEntry(
             m_pInfoTable->GetString( DI_SIZE ),
             CreateExactSizeText_Impl( nDocSize ) );
@@ -413,7 +413,7 @@ SvtIconWindow_Impl::SvtIconWindow_Impl( Window* pParent ) :
 
 SvtIconWindow_Impl::~SvtIconWindow_Impl()
 {
-    for ( sal_uIntPtr i = 0; i < aIconCtrl.GetEntryCount(); ++i )
+    for ( sal_uLong i = 0; i < aIconCtrl.GetEntryCount(); ++i )
     {
         SvxIconChoiceCtrlEntry* pEntry = aIconCtrl.GetEntry( i );
         delete (String*)pEntry->GetUserData();
@@ -423,7 +423,7 @@ SvtIconWindow_Impl::~SvtIconWindow_Impl()
 SvxIconChoiceCtrlEntry* SvtIconWindow_Impl::GetEntry( const String& rURL ) const
 {
     SvxIconChoiceCtrlEntry* pEntry = NULL;
-    for ( sal_uIntPtr i = 0; i < aIconCtrl.GetEntryCount(); ++i )
+    for ( sal_uLong i = 0; i < aIconCtrl.GetEntryCount(); ++i )
     {
         SvxIconChoiceCtrlEntry* pTemp = aIconCtrl.GetEntry( i );
         String aURL( *( (String*)pTemp->GetUserData() ) );
@@ -461,7 +461,7 @@ String SvtIconWindow_Impl::GetCursorPosIconURL() const
 
 String SvtIconWindow_Impl::GetSelectedIconURL() const
 {
-    sal_uIntPtr nPos;
+    sal_uLong nPos;
     SvxIconChoiceCtrlEntry* pEntry = aIconCtrl.GetSelectedEntry( nPos );
     String aURL;
     if ( pEntry )
@@ -471,7 +471,7 @@ String SvtIconWindow_Impl::GetSelectedIconURL() const
 
 String SvtIconWindow_Impl::GetSelectedIconText() const
 {
-    sal_uIntPtr nPos;
+    sal_uLong nPos;
     return MnemonicGenerator::EraseAllMnemonicChars( aIconCtrl.GetSelectedEntry( nPos )->GetText() );
 }
 
@@ -489,9 +489,9 @@ void SvtIconWindow_Impl::InvalidateIconControl()
     aIconCtrl.Invalidate();
 }
 
-sal_uIntPtr SvtIconWindow_Impl::GetCursorPos() const
+sal_uLong SvtIconWindow_Impl::GetCursorPos() const
 {
-    sal_uIntPtr nPos = ~sal_uIntPtr(0);
+    sal_uLong nPos = ~sal_uLong(0);
 
     SvxIconChoiceCtrlEntry* pCursorEntry = aIconCtrl.GetCursor( );
     if ( pCursorEntry )
@@ -500,15 +500,15 @@ sal_uIntPtr SvtIconWindow_Impl::GetCursorPos() const
     return nPos;
 }
 
-sal_uIntPtr SvtIconWindow_Impl::GetSelectEntryPos() const
+sal_uLong SvtIconWindow_Impl::GetSelectEntryPos() const
 {
-    sal_uIntPtr nPos;
+    sal_uLong nPos;
     if ( !aIconCtrl.GetSelectedEntry( nPos ) )
-        nPos = ~sal_uIntPtr(0);
+        nPos = ~sal_uLong(0);
     return nPos;
 }
 
-void SvtIconWindow_Impl::SetCursorPos( sal_uIntPtr nPos )
+void SvtIconWindow_Impl::SetCursorPos( sal_uLong nPos )
 {
     SvxIconChoiceCtrlEntry* pEntry = aIconCtrl.GetEntry( nPos );
     aIconCtrl.SetCursor( pEntry );
@@ -525,7 +525,7 @@ long SvtIconWindow_Impl::CalcHeight() const
 {
     // calculate the required height of the IconControl
     long nHeight = 0;
-    sal_uIntPtr nCount = aIconCtrl.GetEntryCount();
+    sal_uLong nCount = aIconCtrl.GetEntryCount();
     if ( nCount > 0 )
         // bottom of the last icon
         nHeight = aIconCtrl.GetEntry(nCount-1)->GetBoundRect().Bottom();
@@ -544,9 +544,9 @@ sal_Bool SvtIconWindow_Impl::IsRootURL( const String& rURL ) const
             rURL == aSamplesFolderRootURL;
 }
 
-sal_uIntPtr SvtIconWindow_Impl::GetRootPos( const String& rURL ) const
+sal_uLong SvtIconWindow_Impl::GetRootPos( const String& rURL ) const
 {
-    sal_uIntPtr nPos = ~sal_uIntPtr(0);
+    sal_uLong nPos = ~sal_uLong(0);
     if ( aNewDocumentRootURL.Match( rURL ) == STRING_MATCH )
         nPos = 0;
     else if ( aTemplateRootURL.Match( rURL ) == STRING_MATCH )
@@ -788,7 +788,7 @@ void SvtExtendedMultiLineEdit_Impl::InsertEntry( const String& rTitle, const Str
     aText += rTitle;
     aText += ':';
     InsertText( aText );
-    sal_uIntPtr nPara = GetParagraphCount() - 1;
+    sal_uLong nPara = GetParagraphCount() - 1;
     SetAttrib( TextAttribFontWeight( WEIGHT_BOLD ), nPara, 0, aText.Len() );
 
     aText = '\n';
@@ -1163,7 +1163,7 @@ IMPL_LINK ( SvtTemplateWindow , NewFolderHdl_Impl, SvtFileView *, EMPTYARG )
     aFileViewTB.EnableItem( TI_DOCTEMPLATE_PRINT, sal_False );
 
     String sURL = pFileWin->GetFolderURL();
-    sal_uIntPtr nPos = pIconWin->GetRootPos( sURL );
+    sal_uLong nPos = pIconWin->GetRootPos( sURL );
     AppendHistoryURL( sURL, nPos );
 
     aNewFolderHdl.Call( this );
@@ -1234,7 +1234,7 @@ void SvtTemplateWindow::PrintFile( const String& rURL )
 
 // ------------------------------------------------------------------------
 
-void SvtTemplateWindow::AppendHistoryURL( const String& rURL, sal_uIntPtr nGroup )
+void SvtTemplateWindow::AppendHistoryURL( const String& rURL, sal_uLong nGroup )
 {
     sal_Bool bInsert = sal_True;
     if ( !pHistoryList )

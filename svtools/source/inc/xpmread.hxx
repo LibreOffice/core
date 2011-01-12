@@ -83,35 +83,35 @@ private:
     BitmapWriteAccess*  mpMaskAcc;
     long                mnLastPos;
 
-    sal_uIntPtr             mnWidth;
-    sal_uIntPtr             mnHeight;
-    sal_uIntPtr             mnColors;
-    sal_uIntPtr             mnCpp;                              // characters per pix
+    sal_uLong               mnWidth;
+    sal_uLong               mnHeight;
+    sal_uLong               mnColors;
+    sal_uLong               mnCpp;                              // characters per pix
     sal_Bool                mbTransparent;
     sal_Bool                mbStatus;
-    sal_uIntPtr             mnStatus;
-    sal_uIntPtr             mnIdentifier;
+    sal_uLong               mnStatus;
+    sal_uLong               mnIdentifier;
     sal_uInt8               mcThisByte;
     sal_uInt8               mcLastByte;
-    sal_uIntPtr             mnTempAvail;
+    sal_uLong               mnTempAvail;
     sal_uInt8*              mpTempBuf;
     sal_uInt8*              mpTempPtr;
     sal_uInt8*              mpFastColorTable;
     sal_uInt8*              mpColMap;
-    sal_uIntPtr             mnStringSize;
+    sal_uLong               mnStringSize;
     sal_uInt8*              mpStringBuf;
-    sal_uIntPtr             mnParaSize;
+    sal_uLong               mnParaSize;
     sal_uInt8*              mpPara;
 
     sal_Bool                ImplGetString( void );
-    sal_Bool                ImplGetColor( sal_uIntPtr );
-    sal_Bool                ImplGetScanLine( sal_uIntPtr );
+    sal_Bool                ImplGetColor( sal_uLong );
+    sal_Bool                ImplGetScanLine( sal_uLong );
     sal_Bool                ImplGetColSub( sal_uInt8* );
     sal_Bool                ImplGetColKey( sal_uInt8 );
-    void                ImplGetRGBHex( sal_uInt8*, sal_uIntPtr );
-    sal_Bool                ImplGetPara( sal_uIntPtr numb );
-    sal_Bool                ImplCompare( sal_uInt8*, sal_uInt8*, sal_uIntPtr, sal_uIntPtr nmode = XPMCASENONSENSITIVE );
-    sal_uIntPtr             ImplGetULONG( sal_uIntPtr nPara );
+    void                ImplGetRGBHex( sal_uInt8*, sal_uLong );
+    sal_Bool                ImplGetPara( sal_uLong numb );
+    sal_Bool                ImplCompare( sal_uInt8*, sal_uInt8*, sal_uLong, sal_uLong nmode = XPMCASENONSENSITIVE );
+    sal_uLong               ImplGetULONG( sal_uLong nPara );
 
 public:
                         XPMReader( SvStream& rStm );

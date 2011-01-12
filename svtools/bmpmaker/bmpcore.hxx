@@ -71,7 +71,7 @@ private:
     Size            aTotSize;
     Point           aPos;
     SvFileStream*   pSRS;
-    sal_uIntPtr         nTotCount;
+    sal_uLong           nTotCount;
     sal_uInt16          nPos;
 
     void            ImplCreate( const ::std::vector< DirEntry >& rInDirs,

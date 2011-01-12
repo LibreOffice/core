@@ -167,10 +167,10 @@ SvStream& operator>>(SvStream& rIStream, DtHdType& rDtHd)
 
 void DtHdOverSeek(SvStream& rInp)
 {
-    sal_uIntPtr FPos=rInp.Tell();
-    FPos+=(sal_uIntPtr)DtHdSize;
+    sal_uLong FPos=rInp.Tell();
+    FPos+=(sal_uLong)DtHdSize;
     rInp.Seek(FPos);
-//    rInp.seekg(rInp.tellg()+(sal_uIntPtr)DtHdSize);
+//    rInp.seekg(rInp.tellg()+(sal_uLong)DtHdSize);
 }
 
 
@@ -185,21 +185,21 @@ SvStream& operator>>(SvStream& rIStream, PageType& rPage)
 
 void ObjkOverSeek(SvStream& rInp, ObjkType& rObjk)
 {
-    sal_uIntPtr Siz;
-    Siz=(sal_uIntPtr)rObjk.MemSize+rObjk.Last;  // ObjSize+ObjAnhSize
+    sal_uLong Siz;
+    Siz=(sal_uLong)rObjk.MemSize+rObjk.Last;  // ObjSize+ObjAnhSize
     rInp.Seek(rInp.Tell()+Siz);
 }
 
 SvStream& operator>>(SvStream& rInp, ObjkType& rObjk)
 {   // Die Fileposition im Stream bleibt unveraendert!
-    sal_uIntPtr nPos;
+    sal_uLong nPos;
     nPos=rInp.Tell();
     rInp.Read((char*)&rObjk.Last,ObjkSize);
 #if defined OSL_BIGENDIAN
     SWAPOBJK(rObjk);
 #endif
 #ifdef InArbeit
-    sal_uIntPtr nPos1=rInp.Tell();
+    sal_uLong nPos1=rInp.Tell();
     if(nPos == nPos1) InfoBox( NULL, "tellg funkt nich" ).Execute();
 #endif
     rInp.Seek(nPos);
@@ -991,8 +991,8 @@ sal_Bool SgfFilterSDrw( SvStream& rInp, SgfHeader&, SgfEntry&, GDIMetaFile& rMtf
     PageType      aPage;
     VirtualDevice aOutDev;
     OutputDevice* pOutDev;
-    sal_uIntPtr         nStdPos;
-    sal_uIntPtr         nZchPos;
+    sal_uLong         nStdPos;
+    sal_uLong         nZchPos;
     sal_uInt16        Num;
 
     pOutDev=&aOutDev;
@@ -1051,10 +1051,10 @@ sal_Bool SgfSDrwFilter(SvStream& rInp, GDIMetaFile& rMtf, INetURLObject aIniPath
     if (sizeof(ObjTextType)!=ObjTextTypeSize)  return sal_False;
 #endif
 
-    sal_uIntPtr     nFileStart;            // Offset des SgfHeaders. Im allgemeinen 0.
+    sal_uLong     nFileStart;            // Offset des SgfHeaders. Im allgemeinen 0.
     SgfHeader aHead;
     SgfEntry  aEntr;
-    sal_uIntPtr     nNext;
+    sal_uLong     nNext;
     sal_Bool      bRdFlag=sal_False;         // Grafikentry gelesen ?
     sal_Bool      bRet=sal_False;            // Returncode
 

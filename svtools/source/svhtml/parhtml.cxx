@@ -191,7 +191,7 @@ void HTMLOption::GetNumbers( SvULongs &rLongs, sal_Bool bSpaceDelim ) const
         // das ist ein sehr stark vereinfachter Scanner. Er sucht einfach
         // alle Tiffern aus dem String
         sal_Bool bInNum = sal_False;
-        sal_uIntPtr nNum = 0;
+        sal_uLong nNum = 0;
         for( xub_StrLen i=0; i<aValue.Len(); i++ )
         {
             register sal_Unicode c = aValue.GetChar( i );
@@ -227,7 +227,7 @@ void HTMLOption::GetNumbers( SvULongs &rLongs, sal_Bool bSpaceDelim ) const
                 nPos++;
 
             if( nPos==aValue.Len() )
-                rLongs.Insert( sal_uIntPtr(0), rLongs.Count() );
+                rLongs.Insert( sal_uLong(0), rLongs.Count() );
             else
             {
                 xub_StrLen nEnd = aValue.Search( (sal_Unicode)',', nPos );
@@ -258,7 +258,7 @@ void HTMLOption::GetColor( Color& rColor ) const
 
     String aTmp( aValue );
     aTmp.ToUpperAscii();
-    sal_uIntPtr nColor = ULONG_MAX;
+    sal_uLong nColor = ULONG_MAX;
     if( '#'!=aTmp.GetChar( 0 ) )
         nColor = GetHTMLColor( aTmp );
 
@@ -463,8 +463,8 @@ int HTMLParser::ScanText( const sal_Unicode cBreak )
                 sTmpBuffer.append( (sal_Unicode)'&' );
             else
             {
-                sal_uIntPtr nStreamPos = rInput.Tell();
-                sal_uIntPtr nLinePos = GetLinePos();
+                sal_uLong nStreamPos = rInput.Tell();
+                sal_uLong nLinePos = GetLinePos();
 
                 sal_Unicode cChar = 0U;
                 if( '#' == (nNextCh = GetNextChar()) )
@@ -545,7 +545,7 @@ int HTMLParser::ScanText( const sal_Unicode cBreak )
                         if( 0U == cChar && ';' != nNextCh )
                         {
                             DBG_ASSERT( rInput.Tell() - nStreamPos ==
-                                        (sal_uIntPtr)(nPos+1L)*GetCharSize(),
+                                        (sal_uLong)(nPos+1L)*GetCharSize(),
                                         "UTF-8 geht hier schief" );
                             for( xub_StrLen i=nPos-1L; i>1L; i-- )
                             {
@@ -575,10 +575,10 @@ int HTMLParser::ScanText( const sal_Unicode cBreak )
 //                          rInput.SeekRel( -(long)(++nPos*GetCharSize()) );
 //                          nlLinePos -= nPos;
                             DBG_ASSERT( rInput.Tell()-nStreamPos ==
-                                        (sal_uIntPtr)(nPos+1)*GetCharSize(),
+                                        (sal_uLong)(nPos+1)*GetCharSize(),
                                         "Falsche Stream-Position" );
                             DBG_ASSERT( nlLinePos-nLinePos ==
-                                        (sal_uIntPtr)(nPos+1),
+                                        (sal_uLong)(nPos+1),
                                         "Falsche Zeilen-Position" );
                             rInput.Seek( nStreamPos );
                             nlLinePos = nLinePos;
@@ -620,10 +620,10 @@ int HTMLParser::ScanText( const sal_Unicode cBreak )
 //                                      rInput.SeekRel( -(long)(++nPos*GetCharSize()) );
 //                                      nlLinePos -= nPos;
                                         DBG_ASSERT( rInput.Tell()-nStreamPos ==
-                                                    (sal_uIntPtr)(nPos+1)*GetCharSize(),
+                                                    (sal_uLong)(nPos+1)*GetCharSize(),
                                                     "Falsche Stream-Position" );
                                         DBG_ASSERT( nlLinePos-nLinePos ==
-                                                    (sal_uIntPtr)(nPos+1),
+                                                    (sal_uLong)(nPos+1),
                                                     "Falsche Zeilen-Position" );
                                         rInput.Seek( nStreamPos );
                                         nlLinePos = nLinePos;
@@ -828,7 +828,7 @@ int HTMLParser::ScanText( const sal_Unicode cBreak )
         default:
             bEqSignFound = sal_False;
             if( (nNextCh==cBreak && !cQuote) ||
-                (sal_uIntPtr(aToken.Len()) + MAX_LEN) > sal_uIntPtr(STRING_MAXLEN & ~1 ))
+                (sal_uLong(aToken.Len()) + MAX_LEN) > sal_uLong(STRING_MAXLEN & ~1 ))
                 bWeiter = sal_False;
             else
             {
@@ -838,8 +838,8 @@ int HTMLParser::ScanText( const sal_Unicode cBreak )
                     if( MAX_LEN == sTmpBuffer.getLength() )
                     {
                         aToken += String(sTmpBuffer.makeStringAndClear());
-                        if( (sal_uIntPtr(aToken.Len()) + MAX_LEN) >
-                                sal_uIntPtr(STRING_MAXLEN & ~1 ) )
+                        if( (sal_uLong(aToken.Len()) + MAX_LEN) >
+                                sal_uLong(STRING_MAXLEN & ~1 ) )
                         {
                             nNextCh = GetNextChar();
                             return HTML_TEXTTOKEN;
@@ -904,9 +904,9 @@ int HTMLParser::_GetNextRawToken()
                 aToken += String(sTmpBuffer.makeStringAndClear());
 
                 // und die Position im Stream merken
-                sal_uIntPtr nStreamPos = rInput.Tell();
-                sal_uIntPtr nLineNr = GetLineNr();
-                sal_uIntPtr nLinePos = GetLinePos();
+                sal_uLong nStreamPos = rInput.Tell();
+                sal_uLong nLineNr = GetLineNr();
+                sal_uLong nLinePos = GetLinePos();
 
                 // Start eines End-Token?
                 int bOffState = sal_False;
@@ -1136,9 +1136,9 @@ int __EXPORT HTMLParser::_GetNextToken()
         {
         case '<':
             {
-                sal_uIntPtr nStreamPos = rInput.Tell();
-                sal_uIntPtr nLineNr = GetLineNr();
-                sal_uIntPtr nLinePos = GetLinePos();
+                sal_uLong nStreamPos = rInput.Tell();
+                sal_uLong nLineNr = GetLineNr();
+                sal_uLong nLinePos = GetLinePos();
 
                 int bOffState = sal_False;
                 if( '/' == (nNextCh = GetNextChar()) )
@@ -1203,9 +1203,9 @@ int __EXPORT HTMLParser::_GetNextToken()
                         aToken = sSaveToken;
                         if( '>'!=nNextCh )
                             aToken += (sal_Unicode)' ';
-                        sal_uIntPtr nCStreamPos = 0;
-                        sal_uIntPtr nCLineNr = 0;
-                        sal_uIntPtr nCLinePos = 0;
+                        sal_uLong nCStreamPos = 0;
+                        sal_uLong nCLineNr = 0;
+                        sal_uLong nCLinePos = 0;
                         xub_StrLen nCStrLen = 0;
 
                         sal_Bool bDone = sal_False;
@@ -1301,8 +1301,8 @@ int __EXPORT HTMLParser::_GetNextToken()
                     {
                         nRet = HTML_UNKNOWNCONTROL_ON;
 
-                        sal_uIntPtr nCStreamPos = rInput.Tell();
-                        sal_uIntPtr nCLineNr = GetLineNr(), nCLinePos = GetLinePos();
+                        sal_uLong nCStreamPos = rInput.Tell();
+                        sal_uLong nCLineNr = GetLineNr(), nCLinePos = GetLinePos();
 
                         sal_Bool bDone = sal_False;
                         // bis zum schliessenden %> lesen. wenn keins gefunden
@@ -2236,8 +2236,8 @@ bool HTMLParser::ParseMetaOptionsImpl(
             if ( i_xDocProps.is() && aContent.Len() &&
                  aContent.GetTokenCount() == 2 )
             {
-                Date aDate( (sal_uIntPtr)aContent.GetToken(0).ToInt32() );
-                Time aTime( (sal_uIntPtr)aContent.GetToken(1).ToInt32() );
+                Date aDate( (sal_uLong)aContent.GetToken(0).ToInt32() );
+                Time aTime( (sal_uLong)aContent.GetToken(1).ToInt32() );
                 DateTime aDateTime( aDate, aTime );
                 ::util::DateTime uDT(aDateTime.Get100Sec(),
                     aDateTime.GetSec(), aDateTime.GetMin(),

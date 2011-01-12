@@ -145,8 +145,8 @@ protected:
     // in das Control hineingezeichnet werden
     virtual void    NotifyInvalidating();
 
-    virtual sal_uIntPtr GetAscInsertionPos( SvLBoxEntry*, SvLBoxEntry* pParent );
-    virtual sal_uIntPtr GetDescInsertionPos( SvLBoxEntry*, SvLBoxEntry* pParent );
+    virtual sal_uLong   GetAscInsertionPos( SvLBoxEntry*, SvLBoxEntry* pParent );
+    virtual sal_uLong   GetDescInsertionPos( SvLBoxEntry*, SvLBoxEntry* pParent );
     virtual void    Command( const CommandEvent& rCEvt );
 
     virtual void    RequestHelp( const HelpEvent& rHEvt );
@@ -159,7 +159,7 @@ protected:
     sal_Bool            IsCellFocusEnabled() const;
     bool            SetCurrentTabPos( sal_uInt16 _nNewPos );
     sal_uInt16          GetCurrentTabPos() const;
-    void            CallImplEventListeners(sal_uIntPtr nEvent, void* pData);
+    void            CallImplEventListeners(sal_uLong nEvent, void* pData);
 
     void            ImplEditEntry( SvLBoxEntry* pEntry );
 
@@ -201,7 +201,7 @@ public:
 
     virtual SvLBoxEntry*    InsertEntry( const XubString& rText, SvLBoxEntry* pParent = 0,
                                          sal_Bool bChildsOnDemand = sal_False,
-                                         sal_uIntPtr nPos=LIST_APPEND, void* pUserData = 0,
+                                         sal_uLong nPos=LIST_APPEND, void* pUserData = 0,
                                          SvLBoxButtonKind eButtonKind = SvLBoxButtonKind_enabledCheckbox );
 
     virtual SvLBoxEntry*    InsertEntry( const XubString& rText,
@@ -209,7 +209,7 @@ public:
                                          const Image& rCollapsedEntryBmp,
                                          SvLBoxEntry* pParent = 0,
                                          sal_Bool bChildsOnDemand = sal_False,
-                                         sal_uIntPtr nPos = LIST_APPEND, void* pUserData = 0,
+                                         sal_uLong nPos = LIST_APPEND, void* pUserData = 0,
                                          SvLBoxButtonKind eButtonKind = SvLBoxButtonKind_enabledCheckbox );
 
     const Image&    GetDefaultExpandedEntryBmp( BmpColorMode _eMode = BMP_COLOR_NORMAL ) const;
@@ -278,7 +278,7 @@ public:
     virtual void    ModelHasInserted( SvListEntry* pEntry );
     virtual void    ModelHasInsertedTree( SvListEntry* pEntry );
     virtual void    ModelIsMoving(SvListEntry* pSource,
-                        SvListEntry* pTargetParent, sal_uIntPtr nChildPos );
+                        SvListEntry* pTargetParent, sal_uLong nChildPos );
     virtual void    ModelHasMoved(SvListEntry* pSource );
     virtual void    ModelIsRemoving( SvListEntry* pEntry );
     virtual void    ModelHasRemoved( SvListEntry* pEntry );
@@ -312,8 +312,8 @@ public:
     void            SetCursor( SvLBoxEntry* pEntry, sal_Bool bForceNoSelect = sal_False );
 
     SvLBoxEntry*    GetEntry( const Point& rPos, sal_Bool bHit = sal_False ) const;
-    SvLBoxEntry*    GetEntry( SvLBoxEntry* pParent, sal_uIntPtr nPos ) const { return SvLBox::GetEntry(pParent,nPos); }
-    SvLBoxEntry*    GetEntry( sal_uIntPtr nRootPos ) const { return SvLBox::GetEntry(nRootPos);}
+    SvLBoxEntry*    GetEntry( SvLBoxEntry* pParent, sal_uLong nPos ) const { return SvLBox::GetEntry(pParent,nPos); }
+    SvLBoxEntry*    GetEntry( sal_uLong nRootPos ) const { return SvLBox::GetEntry(nRootPos);}
 
     void            PaintEntry( SvLBoxEntry* );
     long            PaintEntry( SvLBoxEntry*, long nLine,
@@ -334,7 +334,7 @@ public:
     virtual sal_Bool    Expand( SvLBoxEntry* pParent );
     virtual sal_Bool    Collapse( SvLBoxEntry* pParent );
     virtual sal_Bool    Select( SvLBoxEntry* pEntry, sal_Bool bSelect=sal_True );
-    virtual sal_uIntPtr SelectChilds( SvLBoxEntry* pParent, sal_Bool bSelect );
+    virtual sal_uLong   SelectChilds( SvLBoxEntry* pParent, sal_Bool bSelect );
     virtual void    SelectAll( sal_Bool bSelect, sal_Bool bPaint = sal_True );
     virtual void    SetCurEntry( SvLBoxEntry* _pEntry );
     virtual SvLBoxEntry*
@@ -354,7 +354,7 @@ public:
 
     DECL_LINK( DefaultCompare, SvSortData* );
     virtual void    ModelNotification( sal_uInt16 nActionId, SvListEntry* pEntry1,
-                        SvListEntry* pEntry2, sal_uIntPtr nPos );
+                        SvListEntry* pEntry2, sal_uLong nPos );
 
     long            GetTextOffset() const;
     void            EndSelection();

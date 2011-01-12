@@ -188,11 +188,11 @@ void ImplDirEntryHelper::Kill( const String& rMainUrl )
 
 //--------------------------------------------------------------------------
 
-sal_uInt8* ImplSearchEntry( sal_uInt8* pSource, sal_uInt8* pDest, sal_uIntPtr nComp, sal_uIntPtr nSize )
+sal_uInt8* ImplSearchEntry( sal_uInt8* pSource, sal_uInt8* pDest, sal_uLong nComp, sal_uLong nSize )
 {
     while ( nComp-- >= nSize )
     {
-        sal_uIntPtr i;
+        sal_uLong i;
         for ( i = 0; i < nSize; i++ )
         {
             if ( ( pSource[i]&~0x20 ) != ( pDest[i]&~0x20 ) )
@@ -252,11 +252,11 @@ static sal_Bool ImpPeekGraphicFormat( SvStream& rStream, String& rFormatExtensio
 {
     sal_uInt16  i;
     sal_uInt8    sFirstBytes[ 256 ];
-    sal_uIntPtr   nFirstLong,nSecondLong;
-    sal_uIntPtr nStreamPos = rStream.Tell();
+    sal_uLong   nFirstLong,nSecondLong;
+    sal_uLong   nStreamPos = rStream.Tell();
 
     rStream.Seek( STREAM_SEEK_TO_END );
-    sal_uIntPtr nStreamLen = rStream.Tell() - nStreamPos;
+    sal_uLong nStreamLen = rStream.Tell() - nStreamPos;
     rStream.Seek( nStreamPos );
 
     if ( !nStreamLen )
@@ -287,8 +287,8 @@ static sal_Bool ImpPeekGraphicFormat( SvStream& rStream, String& rFormatExtensio
     // Big-Endian:
     for( i = 0, nFirstLong = 0L, nSecondLong = 0L; i < 4; i++ )
     {
-        nFirstLong=(nFirstLong<<8)|(sal_uIntPtr)sFirstBytes[i];
-        nSecondLong=(nSecondLong<<8)|(sal_uIntPtr)sFirstBytes[i+4];
+        nFirstLong=(nFirstLong<<8)|(sal_uLong)sFirstBytes[i];
+        nSecondLong=(nSecondLong<<8)|(sal_uLong)sFirstBytes[i+4];
     }
 
     // Folgende Variable ist nur bei bTest==sal_True interessant. Sie
@@ -653,7 +653,7 @@ static sal_Bool ImpPeekGraphicFormat( SvStream& rStream, String& rFormatExtensio
     //--------------------------- XBM ------------------------------------
     if( !bTest )
     {
-        sal_uIntPtr nSize = ( nStreamLen > 2048 ) ? 2048 : nStreamLen;
+        sal_uLong nSize = ( nStreamLen > 2048 ) ? 2048 : nStreamLen;
         sal_uInt8* pBuf = new sal_uInt8 [ nSize ];
 
         rStream.Seek( nStreamPos );
@@ -1079,7 +1079,7 @@ void GraphicFilter::ImplInit()
 
 // ------------------------------------------------------------------------
 
-sal_uIntPtr GraphicFilter::ImplSetError( sal_uIntPtr nError, const SvStream* pStm )
+sal_uLong GraphicFilter::ImplSetError( sal_uLong nError, const SvStream* pStm )
 {
     pErrorEx->nFilterError = nError;
     pErrorEx->nStreamError = pStm ? pStm->GetError() : ERRCODE_NONE;
@@ -1278,7 +1278,7 @@ sal_uInt16 GraphicFilter::CanImportGraphic( const INetURLObject& rPath,
 sal_uInt16 GraphicFilter::CanImportGraphic( const String& rMainUrl, SvStream& rIStream,
                                         sal_uInt16 nFormat, sal_uInt16* pDeterminedFormat )
 {
-    sal_uIntPtr nStreamPos = rIStream.Tell();
+    sal_uLong nStreamPos = rIStream.Tell();
     sal_uInt16 nRes = ImpTestOrFindFormat( rMainUrl, rIStream, nFormat );
 
     rIStream.Seek(nStreamPos);
@@ -1320,7 +1320,7 @@ sal_uInt16 GraphicFilter::ImportGraphic( Graphic& rGraphic, const String& rPath,
                                      com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >* pFilterData )
 {
     String                  aFilterName;
-    sal_uIntPtr                 nStmBegin;
+    sal_uLong                   nStmBegin;
     sal_uInt16                  nStatus;
     GraphicReader*          pContext = rGraphic.GetContext();
     GfxLinkType             eLinkType = GFX_LINK_TYPE_NONE;
@@ -1637,8 +1637,8 @@ sal_uInt16 GraphicFilter::ImportGraphic( Graphic& rGraphic, const String& rPath,
 
     if( nStatus == GRFILTER_OK && bCreateNativeLink && ( eLinkType != GFX_LINK_TYPE_NONE ) && !rGraphic.GetContext() && !bLinkSet )
     {
-        const sal_uIntPtr nStmEnd = rIStream.Tell();
-        const sal_uIntPtr   nBufSize = nStmEnd - nStmBegin;
+        const sal_uLong nStmEnd = rIStream.Tell();
+        const sal_uLong nBufSize = nStmEnd - nStmBegin;
 
         if( nBufSize )
         {
@@ -1743,7 +1743,7 @@ sal_uInt16 GraphicFilter::ExportGraphic( const Graphic& rGraphic, const String& 
         if( eType != GRAPHIC_BITMAP )
         {
             Size aSizePixel;
-            sal_uIntPtr nColorCount,nBitsPerPixel,nNeededMem,nMaxMem;
+            sal_uLong nColorCount,nBitsPerPixel,nNeededMem,nMaxMem;
             VirtualDevice aVirDev;
 
             // Maximalen Speicherbedarf fuer das Bildes holen:
@@ -1765,14 +1765,14 @@ sal_uInt16 GraphicFilter::ExportGraphic( const Graphic& rGraphic, const String& 
             else if (nColorCount<=256)   nBitsPerPixel=8;
             else if (nColorCount<=65536) nBitsPerPixel=16;
             else                         nBitsPerPixel=24;
-            nNeededMem=((sal_uIntPtr)aSizePixel.Width()*(sal_uIntPtr)aSizePixel.Height()*nBitsPerPixel+7)/8;
+            nNeededMem=((sal_uLong)aSizePixel.Width()*(sal_uLong)aSizePixel.Height()*nBitsPerPixel+7)/8;
 
             // ggf. Groesse des Bildes einschraenken:
             if (nMaxMem<nNeededMem)
             {
                 double fFak=sqrt(((double)nMaxMem)/((double)nNeededMem));
-                aSizePixel.Width()=(sal_uIntPtr)(((double)aSizePixel.Width())*fFak);
-                aSizePixel.Height()=(sal_uIntPtr)(((double)aSizePixel.Height())*fFak);
+                aSizePixel.Width()=(sal_uLong)(((double)aSizePixel.Width())*fFak);
+                aSizePixel.Height()=(sal_uLong)(((double)aSizePixel.Height())*fFak);
             }
 
             aVirDev.SetMapMode(MapMode(MAP_PIXEL));

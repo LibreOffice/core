@@ -40,7 +40,7 @@ class GIFLZWDecompressor
     HPBYTE              pOutBuf;
     HPBYTE              pOutBufData;
     HPBYTE              pBlockBuf;
-    sal_uIntPtr             nInputBitsBuf;
+    sal_uLong               nInputBitsBuf;
     sal_uInt16              nTableSize;
     sal_uInt16              nClearCode;
     sal_uInt16              nEOICode;
@@ -62,7 +62,7 @@ public:
                         GIFLZWDecompressor( sal_uInt8 cDataSize );
                         ~GIFLZWDecompressor();
 
-    HPBYTE              DecompressBlock( HPBYTE pSrc, sal_uInt8 cBufSize, sal_uIntPtr& rCount, sal_Bool& rEOI );
+    HPBYTE              DecompressBlock( HPBYTE pSrc, sal_uInt8 cBufSize, sal_uLong& rCount, sal_Bool& rEOI );
 };
 
 #endif

@@ -84,8 +84,8 @@ public:
 class BrowserColumn
 {
     sal_uInt16              _nId;
-    sal_uIntPtr             _nOriginalWidth;
-    sal_uIntPtr             _nWidth;
+    sal_uLong               _nOriginalWidth;
+    sal_uLong               _nWidth;
     Image               _aImage;
     String              _aTitle;
     sal_Bool                _bFrozen;
@@ -93,13 +93,13 @@ class BrowserColumn
 
 public:
                         BrowserColumn( sal_uInt16 nItemId, const Image &rImage,
-                                        const String& rTitle, sal_uIntPtr nWidthPixel, const Fraction& rCurrentZoom,
+                                        const String& rTitle, sal_uLong nWidthPixel, const Fraction& rCurrentZoom,
                                         HeaderBarItemBits nFlags );
     virtual            ~BrowserColumn();
 
     sal_uInt16              GetId() const { return _nId; }
 
-    sal_uIntPtr             Width() { return _nWidth; }
+    sal_uLong               Width() { return _nWidth; }
     Image&              GetImage() { return _aImage; }
     String&             Title() { return _aTitle; }
     HeaderBarItemBits&  Flags() { return _nFlags; }
@@ -110,7 +110,7 @@ public:
     virtual void        Draw( BrowseBox& rBox, OutputDevice& rDev,
                               const Point& rPos, sal_Bool bCurs  );
 
-    void                SetWidth(sal_uIntPtr nNewWidthPixel, const Fraction& rCurrentZoom);
+    void                SetWidth(sal_uLong nNewWidthPixel, const Fraction& rCurrentZoom);
     void                ZoomChanged(const Fraction& rNewZoom);
 };
 
@@ -213,8 +213,8 @@ inline void BrowserDataWin::Repaint()
 
 class BrowserScrollBar: public ScrollBar
 {
-    sal_uIntPtr         _nTip;
-    sal_uIntPtr         _nLastPos;
+    sal_uLong           _nTip;
+    sal_uLong           _nLastPos;
     BrowserDataWin* _pDataWin;
 
 public:

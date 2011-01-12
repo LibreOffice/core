@@ -236,8 +236,8 @@ public:
 
 struct FilterErrorEx
 {
-    sal_uIntPtr nFilterError;
-    sal_uIntPtr nStreamError;
+    sal_uLong   nFilterError;
+    sal_uLong   nStreamError;
     long    nDummy1;
     long    nDummy2;
     long    nDummy3;
@@ -257,7 +257,7 @@ class SVT_DLLPUBLIC GraphicFilter
 private:
 
     void            ImplInit();
-    sal_uIntPtr         ImplSetError( sal_uIntPtr nError, const SvStream* pStm = NULL );
+    sal_uLong           ImplSetError( sal_uLong nError, const SvStream* pStm = NULL );
     sal_uInt16      ImpTestOrFindFormat( const String& rPath, SvStream& rStream, sal_uInt16& rFormat );
 
                     DECL_LINK( FilterCallback, ConvertData* pData );

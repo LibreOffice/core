@@ -45,9 +45,9 @@ public:
     void            EnableCursor( sal_Bool bEnable );
 
                     // methods of TextEngine
-    void            SetAttrib( const TextAttrib& rAttr, sal_uIntPtr nPara, sal_uInt16 nStart, sal_uInt16 nEnd );
+    void            SetAttrib( const TextAttrib& rAttr, sal_uLong nPara, sal_uInt16 nStart, sal_uInt16 nEnd );
     void            SetLeftMargin( sal_uInt16 nLeftMargin );
-    sal_uIntPtr         GetParagraphCount() const;
+    sal_uLong           GetParagraphCount() const;
 };
 
 #endif
