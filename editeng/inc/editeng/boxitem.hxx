@@ -109,6 +109,7 @@ public:
     USHORT  CalcLineSpace( USHORT nLine, BOOL bIgnoreLine = FALSE ) const;
     static com::sun::star::table::BorderLine2 SvxLineToLine( const SvxBorderLine* pLine, sal_Bool bConvert );
     static sal_Bool LineToSvxLine(const ::com::sun::star::table::BorderLine& rLine, SvxBorderLine& rSvxLine, sal_Bool bConvert);
+    static sal_Bool LineToSvxLine(const ::com::sun::star::table::BorderLine2& rLine, SvxBorderLine& rSvxLine, sal_Bool bConvert);
 };
 
 inline void SvxBoxItem::SetDistance( USHORT nNew )
