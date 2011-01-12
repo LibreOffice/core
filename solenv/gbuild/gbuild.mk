@@ -168,6 +168,22 @@ gb_GLOBALDEFS += \
 
 endif
 
+ifneq ($(strip $(ENABLE_GTK)),)
+gb_GLOBALDEFS += -DENABLE_GTK
+endif
+
+ifneq ($(strip $(ENABLE_KDE)),)
+gb_GLOBALDEFS += -DENABLE_KDE
+endif
+
+ifneq ($(strip $(ENABLE_KDE4)),)
+gb_GLOBALDEFS += -DENABLE_KDE4
+endif
+
+ifeq ($(strip $(ENABLE_VBA)),YES)
+gb_GLOBALDEFS += -DENABLE_VBA
+endif
+
 gb_GLOBALDEFS := $(sort $(gb_GLOBALDEFS))
 
 include $(GBUILDDIR)/Deliver.mk
