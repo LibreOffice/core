@@ -105,9 +105,6 @@
 #define FormatForSelection
 #include "scslots.hxx"
 
-#define Interior
-#include <svx/svxslots.hxx>
-
 #include "scabstdlg.hxx" //CHINA001
 
 namespace {

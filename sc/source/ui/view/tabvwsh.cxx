@@ -57,9 +57,6 @@
 #define ScTabViewShell
 #include "scslots.hxx"
 
-#define SearchSettings
-#include <svx/svxslots.hxx>
-
 TYPEINIT2(ScTabViewShell,SfxViewShell,SfxListener);
 
 SFX_IMPL_INTERFACE(ScTabViewShell,SfxViewShell,ScResId(SCSTR_TABVIEWSHELL))

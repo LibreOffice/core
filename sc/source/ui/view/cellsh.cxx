@@ -71,9 +71,6 @@
 #define CellMovement
 #include "scslots.hxx"
 
-#define SearchSettings
-#include <svx/svxslots.hxx>
-
 TYPEINIT1( ScCellShell, ScFormatShell );
 
 SFX_IMPL_INTERFACE(ScCellShell, ScFormatShell , ScResId(SCSTR_CELLSHELL) )
