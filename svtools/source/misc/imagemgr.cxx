@@ -529,6 +529,7 @@ static USHORT GetFolderDescriptionId_Impl( const String& rURL )
     return nRet;
 }
 
+/*
 static ResMgr* GetIsoResMgr_Impl()
 {
     static ResMgr* pIsoResMgr = NULL;
@@ -638,7 +639,7 @@ static Image GetOfficeImageFromList_Impl( USHORT nImageId, BOOL bBig, BOOL bHigh
 
     return aImage;
 }
-
+*/
 static Image GetImageFromList_Impl( USHORT nImageId, BOOL bBig, BOOL bHighContrast )
 {
     if ( !bBig && IMG_FOLDER == nImageId && !bHighContrast )
@@ -697,7 +698,8 @@ static Image GetImageFromList_Impl( USHORT nImageId, BOOL bBig, BOOL bHighContra
     if ( pList->HasImageAtPos( nImageId ) )
         return pList->GetImage( nImageId );
     else
-        return GetOfficeImageFromList_Impl( nImageId, bBig, bHighContrast );
+        return Image();
+        //return GetOfficeImageFromList_Impl( nImageId, bBig, bHighContrast );
 }
 
 //****************************************************************************
