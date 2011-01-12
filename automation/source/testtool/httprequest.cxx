@@ -55,7 +55,7 @@ HttpRequest::~HttpRequest()
     pStream = NULL;
 }
 
-void HttpRequest::SetRequest( ByteString aHost, ByteString aPath, USHORT nPort )
+void HttpRequest::SetRequest( ByteString aHost, ByteString aPath, sal_uInt16 nPort )
 {
     nStatus = HTTP_REQUEST_SET;
     Init();
@@ -64,7 +64,7 @@ void HttpRequest::SetRequest( ByteString aHost, ByteString aPath, USHORT nPort )
     nRequestPort = nPort;
 }
 
-void HttpRequest::SetProxy( ByteString aHost, USHORT nPort )
+void HttpRequest::SetProxy( ByteString aHost, sal_uInt16 nPort )
 {
     nStatus = HTTP_REQUEST_SET;
     Init();
@@ -72,7 +72,7 @@ void HttpRequest::SetProxy( ByteString aHost, USHORT nPort )
     nProxyPort = nPort;
 }
 
-BOOL HttpRequest::Execute()
+sal_Bool HttpRequest::Execute()
 {
     nStatus = HTTP_REQUEST_PENDING;
     Init();
@@ -104,7 +104,7 @@ BOOL HttpRequest::Execute()
     {
         delete pOutSocket;
         nStatus = HTTP_REQUEST_ERROR;
-        return FALSE;
+        return sal_False;
     }
 
 
@@ -141,9 +141,9 @@ BOOL HttpRequest::Execute()
 #define BUFFRE_SIZE 0x10000    // 64K Buffer
     char* pBuffer = new char[ BUFFRE_SIZE ];
 
-    BOOL bWasError = ( nStatus != HTTP_REQUEST_PENDING );
+    sal_Bool bWasError = ( nStatus != HTTP_REQUEST_PENDING );
 
-    ULONG nDataRead;
+    sal_uLong nDataRead;
     pStream = new SvMemoryStream( 0x10000, 0x10000 );
     while ( !bWasError )
     {
@@ -159,16 +159,16 @@ BOOL HttpRequest::Execute()
     pStream->Seek( 0 );
 
     ByteString aLine;
-    BOOL bInsideHeader = TRUE;
+    sal_Bool bInsideHeader = sal_True;
     while ( bInsideHeader )
     {
         pStream->ReadLine( aLine );
         if ( !aLine.Len() )
-            bInsideHeader = FALSE;
+            bInsideHeader = sal_False;
         else
         {
             if ( IsItem( "HTTP/", aLine ) )
-                nResultId = (USHORT)aLine.GetToken( 1, ' ' ).ToInt32();
+                nResultId = (sal_uInt16)aLine.GetToken( 1, ' ' ).ToInt32();
             if ( IsItem( "Content-Type:", aLine ) )
             {
                 aContentType = aLine.Copy( 13 );
@@ -182,12 +182,12 @@ BOOL HttpRequest::Execute()
     if ( nStatus == HTTP_REQUEST_PENDING )
     {
         nStatus = HTTP_REQUEST_DONE;
-        return TRUE;
+        return sal_True;
     }
     else
     {
         nStatus = HTTP_REQUEST_ERROR;
-        return FALSE;
+        return sal_False;
     }
 }
 /*
@@ -208,7 +208,7 @@ void HttpRequest::SendString( vos::OStreamSocket* pSocket , ByteString aText )
         pSocket->write( aText.GetBuffer(), aText.Len() );
 }
 
-BOOL HttpRequest::IsItem( ByteString aItem, ByteString aLine )
+sal_Bool HttpRequest::IsItem( ByteString aItem, ByteString aLine )
 {
     return aItem.Match( aLine ) == STRING_MATCH;
 }
@@ -232,7 +232,7 @@ SvMemoryStream* HttpRequest::GetBody()
     return pStream;
 }
 
-USHORT HttpRequest::GetStatus()
+sal_uInt16 HttpRequest::GetStatus()
 {
     return nStatus;
 }

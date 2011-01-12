@@ -53,38 +53,38 @@ void RetStream::GenError ( rtl::OString aUId, String aString )
     CmdBaseStream::GenError ( &aUId, &aString );
 }
 
-void RetStream::GenReturn ( USHORT nRet, rtl::OString aUId, String aString )
+void RetStream::GenReturn ( sal_uInt16 nRet, rtl::OString aUId, String aString )
 {
     CmdBaseStream::GenReturn ( nRet, &aUId, &aString );
 }
 
-void RetStream::GenReturn ( USHORT nRet, rtl::OString aUId, comm_ULONG nNr, String aString, BOOL bBool )
+void RetStream::GenReturn ( sal_uInt16 nRet, rtl::OString aUId, comm_ULONG nNr, String aString, sal_Bool bBool )
 {
     CmdBaseStream::GenReturn ( nRet, &aUId, nNr, &aString, bBool );
 }
 
 // MacroRecorder
-void RetStream::GenReturn( USHORT nRet, rtl::OString aUId, comm_USHORT nMethod, String aString )
+void RetStream::GenReturn( sal_uInt16 nRet, rtl::OString aUId, comm_USHORT nMethod, String aString )
 {
     CmdBaseStream::GenReturn ( nRet, &aUId, nMethod, &aString );
 }
 
-void RetStream::GenReturn( USHORT nRet, rtl::OString aUId, comm_USHORT nMethod, String aString, BOOL bBool )
+void RetStream::GenReturn( sal_uInt16 nRet, rtl::OString aUId, comm_USHORT nMethod, String aString, sal_Bool bBool )
 {
     CmdBaseStream::GenReturn ( nRet, &aUId, nMethod, &aString, bBool );
 }
 
 
-void RetStream::GenReturn ( USHORT nRet, USHORT nMethod, SbxValue &aValue )
+void RetStream::GenReturn ( sal_uInt16 nRet, sal_uInt16 nMethod, SbxValue &aValue )
 {
-    Write(USHORT(SIReturn));
+    Write(sal_uInt16(SIReturn));
     Write(nRet);
-    Write((comm_ULONG)nMethod); //HELPID BACKWARD (no ULONG needed)
-    Write(USHORT(PARAM_SBXVALUE_1));        // Typ der folgenden Parameter
+    Write((comm_ULONG)nMethod); //HELPID BACKWARD (no sal_uLong needed)
+    Write(sal_uInt16(PARAM_SBXVALUE_1));        // Typ der folgenden Parameter
     Write(aValue);
 }
 
-void RetStream::GenReturn( USHORT nRet, USHORT nMethod, String aString )
+void RetStream::GenReturn( sal_uInt16 nRet, sal_uInt16 nMethod, String aString )
 {
     CmdBaseStream::GenReturn ( nRet, nMethod, &aString );
 }
@@ -99,7 +99,7 @@ void RetStream::Write( String *pString )
 
 void RetStream::Write( SbxValue &aValue )
 {
-    *pSammel << USHORT( BinSbxValue );
+    *pSammel << sal_uInt16( BinSbxValue );
     aValue.Store( *pSammel );
 }
 

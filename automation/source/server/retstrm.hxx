@@ -54,16 +54,16 @@ public:
     void GenReturn( comm_USHORT nRet, rtl::OString aUId, comm_USHORT nMethod, comm_ULONG nNr ){CmdBaseStream::GenReturn( nRet, &aUId, nMethod, nNr );}
 
 //  new
-    void GenReturn( USHORT nRet, rtl::OString aUId, String aString );
-    void GenReturn( USHORT nRet, rtl::OString aUId, comm_ULONG nNr, String aString, BOOL bBool );
+    void GenReturn( sal_uInt16 nRet, rtl::OString aUId, String aString );
+    void GenReturn( sal_uInt16 nRet, rtl::OString aUId, comm_ULONG nNr, String aString, sal_Bool bBool );
 
 // needed for RemoteCommand and Profiling
-    void GenReturn( USHORT nRet, USHORT nMethod, SbxValue &aValue );
-    void GenReturn( USHORT nRet, USHORT nMethod, String aString );
+    void GenReturn( sal_uInt16 nRet, sal_uInt16 nMethod, SbxValue &aValue );
+    void GenReturn( sal_uInt16 nRet, sal_uInt16 nMethod, String aString );
 
 // MacroRecorder
-    void GenReturn( USHORT nRet, rtl::OString aUId, comm_USHORT nMethod, String aString );
-    void GenReturn( USHORT nRet, rtl::OString aUId, comm_USHORT nMethod, String aString, BOOL bBool );
+    void GenReturn( sal_uInt16 nRet, rtl::OString aUId, comm_USHORT nMethod, String aString );
+    void GenReturn( sal_uInt16 nRet, rtl::OString aUId, comm_USHORT nMethod, String aString, sal_Bool bBool );
 
     void Reset();
     SvStream* GetStream();

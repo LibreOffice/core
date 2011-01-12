@@ -62,14 +62,14 @@ void ImpWorkWindow::Resize()
     m_aInhalt.SetPosSizePixel( Point(), GetOutputSizePixel() );
 }
 
-BOOL EditWindow::Close()
+sal_Bool EditWindow::Close()
 {
     if ( pImpWorkWindow )
     {
         delete pImpWorkWindow;
         pImpWorkWindow = NULL;
     }
-    return TRUE;
+    return sal_True;
 }
 
 void EditWindow::Show()
@@ -77,7 +77,7 @@ void EditWindow::Show()
     if ( Check() )
         pImpWorkWindow->Show();
     else
-        bShowWin = TRUE;
+        bShowWin = sal_True;
 }
 
 void EditWindow::Hide()
@@ -85,7 +85,7 @@ void EditWindow::Hide()
     if ( Check() )
         pImpWorkWindow->Hide();
     else
-        bShowWin = FALSE;
+        bShowWin = sal_False;
 }
 
 EditWindow::EditWindow( WorkWindow *pParent, const String &rName, WinBits iWstyle )
@@ -94,7 +94,7 @@ EditWindow::EditWindow( WorkWindow *pParent, const String &rName, WinBits iWstyl
 , aMemName(rName)
 , iMemWstyle(iWstyle)
 , nTextLen(0)
-, bQuiet(FALSE)
+, bQuiet(sal_False)
 {
 }
 
@@ -103,7 +103,7 @@ EditWindow::~EditWindow()
     Close();
 }
 
-BOOL EditWindow::Check()
+sal_Bool EditWindow::Check()
 {
     if ( ! pImpWorkWindow && Application::IsInExecute() )
     {
@@ -113,7 +113,7 @@ BOOL EditWindow::Check()
         aMemPreWinText.Erase();
         if ( bShowWin )
             pImpWorkWindow->Show();
-        return TRUE;
+        return sal_True;
     }
     return pImpWorkWindow != NULL;
 }

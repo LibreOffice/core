@@ -35,7 +35,7 @@
 class CRetStream : public CmdBaseStream
 {
     SvStream *pSammel;
-    USHORT nId;
+    sal_uInt16 nId;
 
 public:
     CRetStream( SvStream *pIn );
