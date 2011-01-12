@@ -1763,7 +1763,11 @@ void XclExpFmlaCompImpl::AppendTrailingParam( XclExpFuncData& rFuncData )
 
         break;
 
-        default:;
+        default:
+            // #i108420# function without parameters stored as macro call needs the external name reference
+            if( (nParamCount == 0) && rFuncData.IsMacroFunc() )
+                AppendDefaultParam( rFuncData );
+
     }
 }
 
