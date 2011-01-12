@@ -47,8 +47,6 @@ IDLFILES=\
     XGridColumn.idl\
      XGridColumnListener.idl\
     XGridDataListener.idl\
-    XGridCell.idl\
-    XGridCellRenderer.idl\
     DefaultGridDataModel.idl\
     XGridDataModel.idl\
     XMutableGridDataModel.idl\
@@ -57,7 +55,8 @@ IDLFILES=\
     UnoControlGrid.idl\
     UnoControlGridModel.idl\
     GridInvalidDataException.idl\
-    GridInvalidModelException.idl
+    GridInvalidModelException.idl\
+
 # ------------------------------------------------------------------
 
 .INCLUDE :  target.mk
