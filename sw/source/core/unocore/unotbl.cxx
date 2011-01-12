@@ -115,7 +115,7 @@ extern void lcl_GetTblBoxColStr( sal_uInt16 nCol, String& rNm );
 
 table::BorderLine lcl_SvxLineToLine(const SvxBorderLine* pLine)
 {
-     table::BorderLine2 aLine;
+    table::BorderLine2 aLine;
     if(pLine)
     {
         aLine.Color          = pLine->GetColor().GetColor() ;
@@ -3312,7 +3312,7 @@ uno::Any SwXTextTable::getPropertyValue(const OUString& rPropertyName) throw( be
                         const SvxBoxInfoItem& rBoxInfoItem = (const SvxBoxInfoItem&)aSet.Get(SID_ATTR_BORDER_INNER);
                         const SvxBoxItem& rBox = (const SvxBoxItem&)aSet.Get(RES_BOX);
 
-                         table::TableBorder aTableBorder;
+                        table::TableBorder aTableBorder;
                         aTableBorder.TopLine                = lcl_SvxLineToLine(rBox.GetTop());
                         aTableBorder.IsTopLineValid         = rBoxInfoItem.IsValid(VALID_TOP);
                         aTableBorder.BottomLine             = lcl_SvxLineToLine(rBox.GetBottom());

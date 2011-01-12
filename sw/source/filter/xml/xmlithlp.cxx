@@ -51,11 +51,15 @@ using namespace ::xmloff::token;
 using namespace ::com::sun::star;
 
 
-#define SVX_XML_BORDER_STYLE_NONE 0
-#define SVX_XML_BORDER_STYLE_SOLID 1
-#define SVX_XML_BORDER_STYLE_DOUBLE 2
-#define SVX_XML_BORDER_STYLE_DOTTED 3
-#define SVX_XML_BORDER_STYLE_DASHED 4
+#define API_LINE_NONE USHRT_MAX
+#define API_LINE_SOLID 0
+#define API_LINE_DOTTED 1
+#define API_LINE_DASHED 2
+#define API_LINE_DOUBLE 3
+#define API_LINE_EMBOSSED 10
+#define API_LINE_ENGRAVED 11
+#define API_LINE_OUTSET 12
+#define API_LINE_INSET 13
 
 #define SVX_XML_BORDER_WIDTH_THIN 0
 #define SVX_XML_BORDER_WIDTH_MIDDLE 1
@@ -64,16 +68,16 @@ using namespace ::com::sun::star;
 
 const struct SvXMLEnumMapEntry psXML_BorderStyles[] =
 {
-    { XML_NONE,       SVX_XML_BORDER_STYLE_NONE },
-    { XML_HIDDEN,     SVX_XML_BORDER_STYLE_NONE },
-    { XML_SOLID,      SVX_XML_BORDER_STYLE_SOLID },
-    { XML_DOUBLE,     SVX_XML_BORDER_STYLE_DOUBLE },
-    { XML_DOTTED,     SVX_XML_BORDER_STYLE_DOTTED },
-    { XML_DASHED,     SVX_XML_BORDER_STYLE_DASHED },
-    { XML_GROOVE,     SVX_XML_BORDER_STYLE_SOLID },
-    { XML_RIDGE,      SVX_XML_BORDER_STYLE_SOLID },
-    { XML_INSET,      SVX_XML_BORDER_STYLE_SOLID },
-    { XML_OUTSET,     SVX_XML_BORDER_STYLE_SOLID },
+    { XML_NONE,       API_LINE_NONE },
+    { XML_HIDDEN,     API_LINE_NONE },
+    { XML_SOLID,      API_LINE_SOLID },
+    { XML_DOUBLE,     API_LINE_DOUBLE },
+    { XML_DOTTED,     API_LINE_DOTTED },
+    { XML_DASHED,     API_LINE_DASHED },
+    { XML_GROOVE,     API_LINE_ENGRAVED },
+    { XML_RIDGE,      API_LINE_EMBOSSED },
+    { XML_INSET,      API_LINE_INSET },
+    { XML_OUTSET,     API_LINE_OUTSET },
     { XML_TOKEN_INVALID, 0 }
 };
 
@@ -149,18 +153,9 @@ sal_Bool lcl_frmitems_parseXMLBorder( const OUString& rValue,
 
 void lcl_frmitems_setXMLBorderStyle( SvxBorderLine& rLine, sal_uInt16 nStyle )
 {
-    SvxBorderStyle eStyle = SOLID;
-    switch ( nStyle )
-    {
-        case SVX_XML_BORDER_STYLE_DOTTED:
-            eStyle = DOTTED;
-            break;
-        case SVX_XML_BORDER_STYLE_DASHED:
-            eStyle = DASHED;
-            break;
-        default:
-            eStyle = SOLID;
-    }
+    SvxBorderStyle eStyle = NO_STYLE;
+    if ( nStyle != API_LINE_NONE )
+        eStyle = SvxBorderStyle( nStyle );
     rLine.SetStyle( eStyle );
 }
 
