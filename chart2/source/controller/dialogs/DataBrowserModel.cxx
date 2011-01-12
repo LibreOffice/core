@@ -43,6 +43,7 @@
 #include "ExplicitCategoriesProvider.hxx"
 
 #include <com/sun/star/container/XIndexReplace.hpp>
+#include <com/sun/star/chart2/XAxis.hpp>
 #include <com/sun/star/chart2/XDataSeriesContainer.hpp>
 #include <com/sun/star/chart2/XInternalDataProvider.hpp>
 #include <com/sun/star/chart2/XCoordinateSystemContainer.hpp>
@@ -800,8 +801,19 @@ void DataBrowserModel::updateFromModel()
     if( lcl_ShowCategories( xDiagram ))
     {
         Reference< frame::XModel > xChartModel( m_xChartDocument, uno::UNO_QUERY );
-        ExplicitCategoriesProvider aExplicitCategoriesProvider( ChartModelHelper::getFirstCoordinateSystem(xChartModel), xChartModel );
-        bool bIsDateAxis = aExplicitCategoriesProvider.isDateAxis();
+        Reference< chart2::XCoordinateSystem > xCooSys( ChartModelHelper::getFirstCoordinateSystem( xChartModel ) );
+        ExplicitCategoriesProvider aExplicitCategoriesProvider( xCooSys, xChartModel );
+        bool bIsDateAxis = false;
+        if( xCooSys.is() )
+        {
+            Reference< chart2::XAxis > xAxis( xCooSys->getAxisByDimension(0,0) );
+            if( xAxis.is() )
+            {
+                chart2::ScaleData aScale( xAxis->getScaleData() );
+                bIsDateAxis = (aScale.AxisType == chart2::AxisType::DATE);
+            }
+        }
+
         sal_Int32 nDateCategoriesNumberFormat = 0;
         if( bIsDateAxis && aCooSysSeq.getLength() )
             nDateCategoriesNumberFormat = DataSeriesHelper::getNumberFormatKeyFromAxis( 0, aCooSysSeq[0], 0, 0 );

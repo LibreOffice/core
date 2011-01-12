@@ -412,6 +412,7 @@ bool lcl_isDateFormat( sal_Int32 nNumberFormat, const Reference< util::XNumberFo
 bool lcl_fillDateCategories( const uno::Reference< data::XDataSequence >& xDataSequence, std::vector< DatePlusIndex >& rDateCategories, bool bIsAutoDate, Reference< util::XNumberFormatsSupplier > xNumberFormatsSupplier )
 {
     bool bOnlyDatesFound = true;
+    bool bAnyDataFound = false;
 
     if( xDataSequence.is() )
     {
@@ -451,18 +452,28 @@ bool lcl_fillDateCategories( const uno::Reference< data::XDataSequence >& xDataS
             else
                 bIsDate = true;
 
+            bool bContainsEmptyString = false;
+            bool bContainsNan = false;
             uno::Any aAny = aValues[nN];
+            if( aAny.hasValue() )
+            {
+                OUString aTest;
+                double fTest;
+                if( (aAny>>=aTest) && !aTest.getLength() ) //empty String
+                    bContainsEmptyString = true;
+                else if( (aAny>>=fTest) &&  ::rtl::math::isNan(fTest) )
+                    bContainsNan = true;
+
+                if( !bContainsEmptyString && !bContainsNan )
+                    bAnyDataFound = true;
+            }
             DatePlusIndex aDatePlusIndex( 1.0, nN );
             if( bIsDate && (aAny >>= aDatePlusIndex.fValue) )
                 rDateCategories.push_back( aDatePlusIndex );
             else
             {
-                if( aAny.hasValue() )
-                {
-                    OUString aTest;
-                    if( !( (aAny>>=aTest) && !aTest.getLength() ) )//empty string does not count as non date value!
-                        bOnlyDatesFound=false;
-                }
+                if( aAny.hasValue() && !bContainsEmptyString )//empty string does not count as non date value!
+                    bOnlyDatesFound=false;
                 ::rtl::math::setNan( &aDatePlusIndex.fValue );
                 rDateCategories.push_back( aDatePlusIndex );
             }
@@ -470,7 +481,7 @@ bool lcl_fillDateCategories( const uno::Reference< data::XDataSequence >& xDataS
         ::std::sort( rDateCategories.begin(), rDateCategories.end(), DatePlusIndexComparator() );
     }
 
-    return bOnlyDatesFound;
+    return bAnyDataFound && bOnlyDatesFound;
 }
 
 void ExplicitCategoriesProvider::init()
