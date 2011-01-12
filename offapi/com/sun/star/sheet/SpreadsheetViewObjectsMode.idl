@@ -25,11 +25,8 @@
  *
  ************************************************************************/
 
-#ifndef __com_sun_star_sheet_TableFilterField_idl__
-#define __com_sun_star_sheet_TableFilterField_idl__
-
-#include <com/sun/star/sheet/FilterConnection.idl>
-#include <com/sun/star/sheet/FilterOperator.idl>
+#ifndef __com_sun_star_sheet_SpreadsheetViewObjectsMode_idl__
+#define __com_sun_star_sheet_SpreadsheetViewObjectsMode_idl__
 
 //=============================================================================
 
@@ -37,49 +34,23 @@ module com {  module sun {  module star {  module sheet {
 
 //=============================================================================
 
-/** describes a single condition in a filter descriptor.
-
-    @see SheetFilterDescriptor
+/** Constants that control how embedded objects are shown in the view.
  */
-published struct TableFilterField
+published constants SpreadsheetViewObjectsMode
 {
     //-------------------------------------------------------------------------
 
-    /** specifies how the condition is connected to the previous condition.
+    /** Specifies to display a specific set of objects in the spreadsheet view.
      */
-    FilterConnection Connection;
+    const short SHOW = 0;
 
     //-------------------------------------------------------------------------
 
-    /** specifies which field (column) is used for the condition.
+    /** Specifies to hide a specific set of objects from the spreadsheet view.
      */
-    long Field;
+    const short HIDE = 1;
 
     //-------------------------------------------------------------------------
-
-    /** specifies the type of the condition.
-     */
-    FilterOperator Operator;
-
-    //-------------------------------------------------------------------------
-
-    /** selects whether the <member>TableFilterField::NumericValue</member>
-        or the <member>TableFilterField::StringValue</member> is used.
-     */
-    boolean IsNumeric;
-
-    //-------------------------------------------------------------------------
-
-    /** specifies a numeric value for the condition.
-     */
-    double NumericValue;
-
-    //-------------------------------------------------------------------------
-
-    /** specifies a string value for the condition.
-     */
-    string StringValue;
-
 };
 
 //=============================================================================
