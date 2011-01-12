@@ -47,7 +47,9 @@ endif
 ifeq ($(MINGW_SHARED_GXXLIB),YES)
 gb_MINGW_LIBSTDCPP := $(subst -l,,$(MINGW_SHARED_LIBSTDCPP))
 else
-gb_MINGW_LIBSTDCPP := stdc++
+gb_MINGW_LIBSTDCPP := \
+        stdc++ \
+        moldname
 endif
 ifeq ($(MINGW_SHARED_GCCLIB),YES)
 gb_MINGW_LIBGCC := \
