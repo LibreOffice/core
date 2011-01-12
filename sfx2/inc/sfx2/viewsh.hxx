@@ -59,7 +59,6 @@ class SfxItemPool;
 class SfxTabPage;
 class SfxPrintMonitor;
 class SfxFrameSetDescriptor;
-class PrintDialog;
 class Printer;
 class SfxPrinter;
 class SfxProgress;
@@ -239,13 +238,9 @@ public:
     void                        AdjustVisArea(const Rectangle& rRect);
 
     // Printing Interface
-    virtual void                PreparePrint( PrintDialog *pPrintDialog = 0 );
-    virtual ErrCode             DoPrint( SfxPrinter *pPrinter, PrintDialog *pPrintDialog, BOOL bSilent, BOOL bIsAPI );
-    virtual USHORT              Print( SfxProgress &rProgress, BOOL bIsAPI, PrintDialog *pPrintDialog = 0 );
     virtual SfxPrinter*         GetPrinter( BOOL bCreate = FALSE );
     virtual USHORT              SetPrinter( SfxPrinter *pNewPrinter, USHORT nDiffFlags = SFX_PRINTER_ALL, bool bIsAPI=FALSE );
     virtual SfxTabPage*         CreatePrintOptionsPage( Window *pParent, const SfxItemSet &rOptions );
-    virtual PrintDialog*        CreatePrintDialog( Window *pParent );
     void                        LockPrinter( BOOL bLock = TRUE );
     BOOL                        IsPrinterLocked() const;
     virtual JobSetup            GetJobSetup() const;
