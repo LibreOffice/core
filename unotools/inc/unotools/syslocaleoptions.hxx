@@ -38,10 +38,10 @@
 #include <unotools/options.hxx>
 
 // bits for broadcasting hints of changes in a SfxSimpleHint, may be combined
-const sal_uIntPtr SYSLOCALEOPTIONS_HINT_LOCALE    = 0x00000001;
-const sal_uIntPtr SYSLOCALEOPTIONS_HINT_CURRENCY  = 0x00000002;
-const sal_uIntPtr SYSLOCALEOPTIONS_HINT_UILOCALE  = 0x00000004;
-const sal_uIntPtr SYSLOCALEOPTIONS_HINT_DECSEP    = 0x00000008;
+const sal_uLong SYSLOCALEOPTIONS_HINT_LOCALE    = 0x00000001;
+const sal_uLong SYSLOCALEOPTIONS_HINT_CURRENCY  = 0x00000002;
+const sal_uLong SYSLOCALEOPTIONS_HINT_UILOCALE  = 0x00000004;
+const sal_uLong SYSLOCALEOPTIONS_HINT_DECSEP    = 0x00000008;
 
 class SvtSysLocaleOptions_Impl;
 class SvtListener;

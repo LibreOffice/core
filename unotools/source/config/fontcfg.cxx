@@ -612,7 +612,7 @@ static ImplFontAttrWidthSearchData const aImplWidthAttrSearchList[] =
 struct ImplFontAttrTypeSearchData
 {
     const char*             mpStr;
-    sal_uIntPtr                   mnType;
+    sal_uLong                   mnType;
 };
 
 static ImplFontAttrTypeSearchData const aImplTypeAttrSearchList[] =
@@ -792,7 +792,7 @@ static sal_Bool ImplFindAndErase( String& rName, const char* pStr )
 // =======================================================================
 
 void FontSubstConfiguration::getMapName( const String& rOrgName, String& rShortName,
-    String& rFamilyName, FontWeight& rWeight, FontWidth& rWidth, sal_uIntPtr& rType )
+    String& rFamilyName, FontWeight& rWeight, FontWidth& rWidth, sal_uLong& rType )
 {
     rShortName = rOrgName;
 

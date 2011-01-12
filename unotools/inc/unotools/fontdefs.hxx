@@ -40,12 +40,12 @@ namespace utl {
 // - SubsFontName -
 // ----------------
 
-#define SUBSFONT_ONLYONE    ((sal_uIntPtr)0x00000001)
-#define SUBSFONT_MS         ((sal_uIntPtr)0x00000002)
-#define SUBSFONT_PS         ((sal_uIntPtr)0x00000004)
-#define SUBSFONT_HTML       ((sal_uIntPtr)0x00000008)
+#define SUBSFONT_ONLYONE    ((sal_uLong)0x00000001)
+#define SUBSFONT_MS         ((sal_uLong)0x00000002)
+#define SUBSFONT_PS         ((sal_uLong)0x00000004)
+#define SUBSFONT_HTML       ((sal_uLong)0x00000008)
 
-UNOTOOLS_DLLPUBLIC String GetSubsFontName( const String& rName, sal_uIntPtr nFlags );
+UNOTOOLS_DLLPUBLIC String GetSubsFontName( const String& rName, sal_uLong nFlags );
 
 // -----------------
 // - FontTokenName -

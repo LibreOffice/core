@@ -152,10 +152,10 @@ public:
 
     // SvLockBytes
     virtual void            SetSynchronMode (sal_Bool bSynchron);
-    virtual ErrCode         ReadAt ( sal_uIntPtr nPos, void *pBuffer, sal_uIntPtr nCount, sal_uIntPtr *pRead) const;
-    virtual ErrCode         WriteAt ( sal_uIntPtr, const void*, sal_uIntPtr, sal_uIntPtr *pWritten);
+    virtual ErrCode         ReadAt ( sal_uLong nPos, void *pBuffer, sal_uLong nCount, sal_uLong *pRead) const;
+    virtual ErrCode         WriteAt ( sal_uLong, const void*, sal_uLong, sal_uLong *pWritten);
     virtual ErrCode         Flush (void) const;
-    virtual ErrCode         SetSize (sal_uIntPtr);
+    virtual ErrCode         SetSize (sal_uLong);
     virtual ErrCode         Stat ( SvLockBytesStat *pStat, SvLockBytesStatFlag) const;
 
     void                    SetError( ErrCode nError )

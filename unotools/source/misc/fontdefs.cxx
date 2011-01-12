@@ -519,7 +519,7 @@ void AddTokenFontName( String& rName, const String& rNewToken )
 
 // =======================================================================
 
-String GetSubsFontName( const String& rName, sal_uIntPtr nFlags )
+String GetSubsFontName( const String& rName, sal_uLong nFlags )
 {
     String aName;
 

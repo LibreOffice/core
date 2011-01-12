@@ -1429,7 +1429,7 @@ void UcbLockBytes::SetSynchronMode (sal_Bool bSynchron)
 }
 
 //----------------------------------------------------------------------------
-ErrCode UcbLockBytes::ReadAt ( sal_uIntPtr nPos, void *pBuffer, sal_uIntPtr nCount, sal_uIntPtr *pRead) const
+ErrCode UcbLockBytes::ReadAt ( sal_uLong nPos, void *pBuffer, sal_uLong nCount, sal_uLong *pRead) const
 {
     if ( IsSynchronMode() )
     {
@@ -1488,13 +1488,13 @@ ErrCode UcbLockBytes::ReadAt ( sal_uIntPtr nPos, void *pBuffer, sal_uIntPtr nCou
 
     rtl_copyMemory (pBuffer, aData.getConstArray(), nSize);
     if (pRead)
-        *pRead = sal_uIntPtr(nSize);
+        *pRead = sal_uLong(nSize);
 
     return ERRCODE_NONE;
 }
 
 //----------------------------------------------------------------------------
-ErrCode UcbLockBytes::WriteAt ( sal_uIntPtr nPos, const void *pBuffer, sal_uIntPtr nCount, sal_uIntPtr *pWritten)
+ErrCode UcbLockBytes::WriteAt ( sal_uLong nPos, const void *pBuffer, sal_uLong nCount, sal_uLong *pWritten)
 {
     if ( pWritten )
         *pWritten = 0;
@@ -1543,11 +1543,11 @@ ErrCode UcbLockBytes::Flush() const
 }
 
 //----------------------------------------------------------------------------
-ErrCode UcbLockBytes::SetSize (sal_uIntPtr nNewSize)
+ErrCode UcbLockBytes::SetSize (sal_uLong nNewSize)
 {
     SvLockBytesStat aStat;
     Stat( &aStat, (SvLockBytesStatFlag) 0 );
-    sal_uIntPtr nSize = aStat.nSize;
+    sal_uLong nSize = aStat.nSize;
 
     if ( nSize > nNewSize )
     {
@@ -1564,7 +1564,7 @@ ErrCode UcbLockBytes::SetSize (sal_uIntPtr nNewSize)
 
     if ( nSize < nNewSize )
     {
-        sal_uIntPtr nDiff = nNewSize-nSize, nCount=0;
+        sal_uLong nDiff = nNewSize-nSize, nCount=0;
         sal_uInt8* pBuffer = new sal_uInt8[ nDiff ];
         memset(pBuffer, 0, nDiff); // initialize for enhanced security
         WriteAt( nSize, pBuffer, nDiff, &nCount );
@@ -1603,7 +1603,7 @@ ErrCode UcbLockBytes::Stat( SvLockBytesStat *pStat, SvLockBytesStatFlag) const
 
     try
     {
-        pStat->nSize = sal_uIntPtr(xSeekable->getLength());
+        pStat->nSize = sal_uLong(xSeekable->getLength());
     }
     catch (IOException)
     {

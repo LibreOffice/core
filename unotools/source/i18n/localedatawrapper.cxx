@@ -1417,7 +1417,7 @@ sal_Unicode* LocaleDataWrapper::ImplAddFormatNum( sal_Unicode* pBuf,
 
     // convert number
     pNumBuf = ImplAddUNum( aNumBuf, (sal_uInt64)nNumber );
-    nNumLen = (sal_uInt16)(sal_uIntPtr)(pNumBuf-aNumBuf);
+    nNumLen = (sal_uInt16)(sal_uLong)(pNumBuf-aNumBuf);
     pNumBuf = aNumBuf;
 
     if ( nNumLen <= nDecimals )
@@ -1551,7 +1551,7 @@ String LocaleDataWrapper::getDate( const Date& rDate ) const
             pBuf = ImplAdd2UNum( pBuf, nDay, sal_True /* IsDateDayLeadingZero() */ );
     }
 
-    return String( aBuf, (xub_StrLen)(sal_uIntPtr)(pBuf-aBuf) );
+    return String( aBuf, (xub_StrLen)(sal_uLong)(pBuf-aBuf) );
 }
 
 
@@ -1589,7 +1589,7 @@ String LocaleDataWrapper::getTime( const Time& rTime, sal_Bool bSec, sal_Bool b1
         }
     }
 
-    String aStr( aBuf, (xub_StrLen)(sal_uIntPtr)(pBuf-aBuf) );
+    String aStr( aBuf, (xub_StrLen)(sal_uLong)(pBuf-aBuf) );
 
     if ( bHour12 )
     {
@@ -1626,7 +1626,7 @@ String LocaleDataWrapper::getLongDate( const Date& rDate, CalendarWrapper& rCal,
     // day of month
     nVal = rCal.getValue( CalendarFieldIndex::DAY_OF_MONTH );
     pBuf = ImplAdd2UNum( aBuf, nVal, bDayOfMonthWithLeadingZero );
-    String aDay( aBuf, (xub_StrLen)(sal_uIntPtr)(pBuf-aBuf) );
+    String aDay( aBuf, (xub_StrLen)(sal_uLong)(pBuf-aBuf) );
     // month of year
     nVal = rCal.getValue( CalendarFieldIndex::MONTH );
     String aMonth( rCal.getDisplayName( CalendarDisplayIndex::MONTH, nVal, nDisplayMonth ) );
@@ -1636,7 +1636,7 @@ String LocaleDataWrapper::getLongDate( const Date& rDate, CalendarWrapper& rCal,
         pBuf = ImplAddUNum( aBuf, nVal % 100, 2 );
     else
         pBuf = ImplAddUNum( aBuf, nVal );
-    String aYear( aBuf, (xub_StrLen)(sal_uIntPtr)(pBuf-aBuf) );
+    String aYear( aBuf, (xub_StrLen)(sal_uLong)(pBuf-aBuf) );
     // concatenate
     switch ( getLongDateFormat() )
     {
@@ -1692,7 +1692,7 @@ String LocaleDataWrapper::getDuration( const Time& rTime, sal_Bool bSec, sal_Boo
         }
     }
 
-    return String( aBuf, (xub_StrLen)(sal_uIntPtr)(pBuf-aBuf) );
+    return String( aBuf, (xub_StrLen)(sal_uLong)(pBuf-aBuf) );
 }
 
 
@@ -1722,7 +1722,7 @@ String LocaleDataWrapper::getNum( sal_Int64 nNumber, sal_uInt16 nDecimals,
 
     sal_Unicode* pBuf = ImplAddFormatNum( pBuffer, nNumber, nDecimals,
         bUseThousandSep, bTrailingZeros );
-    String aStr( pBuffer, (xub_StrLen)(sal_uIntPtr)(pBuf-pBuffer) );
+    String aStr( pBuffer, (xub_StrLen)(sal_uLong)(pBuf-pBuffer) );
 
     if ( pBuffer != aBuf )
         delete [] pBuffer;
@@ -1760,7 +1760,7 @@ String LocaleDataWrapper::getCurr( sal_Int64 nNumber, sal_uInt16 nDecimals,
     // convert number
     sal_Unicode* pEndNumBuf = ImplAddFormatNum( pNumBuffer, nNumber, nDecimals,
         bUseThousandSep, sal_True );
-    xub_StrLen nNumLen = (xub_StrLen)(sal_uIntPtr)(pEndNumBuf-pNumBuffer);
+    xub_StrLen nNumLen = (xub_StrLen)(sal_uLong)(pEndNumBuf-pNumBuffer);
 
     // replace zeros with zero character
     if ( (cZeroChar != '0') && nDecimals /* && IsNumTrailingZeros() */ )
@@ -1921,7 +1921,7 @@ String LocaleDataWrapper::getCurr( sal_Int64 nNumber, sal_uInt16 nDecimals,
         }
     }
 
-    String aNumber( pBuffer, (xub_StrLen)(sal_uIntPtr)(pBuf-pBuffer) );
+    String aNumber( pBuffer, (xub_StrLen)(sal_uLong)(pBuf-pBuffer) );
 
     if ( pBuffer != aBuf )
         delete [] pBuffer;

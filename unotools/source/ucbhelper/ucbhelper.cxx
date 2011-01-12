@@ -366,10 +366,10 @@ Sequence < OUString > UCBContentHelper::GetFolderContents( const String& rFolder
 
     if ( pFiles )
     {
-        sal_uIntPtr nCount = pFiles->Count();
+        sal_uLong nCount = pFiles->Count();
         Sequence < OUString > aRet( nCount );
         OUString* pRet = aRet.getArray();
-        for ( sal_uIntPtr i = 0; i < nCount; ++i )
+        for ( sal_uLong i = 0; i < nCount; ++i )
         {
             OUString* pFile = pFiles->GetObject(i);
             pRet[i] = *( pFile );
@@ -447,10 +447,10 @@ Sequence < OUString > UCBContentHelper::GetResultSet( const String& rURL )
 
     if ( pList )
     {
-        sal_uIntPtr nCount = pList->Count();
+        sal_uLong nCount = pList->Count();
         Sequence < OUString > aRet( nCount );
         OUString* pRet = aRet.getArray();
-        for ( sal_uIntPtr i = 0; i < nCount; ++i )
+        for ( sal_uLong i = 0; i < nCount; ++i )
         {
             OUString* pEntry = pList->GetObject(i);
             pRet[i] = *( pEntry );
@@ -626,9 +626,9 @@ sal_Bool UCBContentHelper::HasParentFolder( const String& rFolder )
 
 // -----------------------------------------------------------------------
 
-sal_uIntPtr UCBContentHelper::GetSize( const String& rContent )
+sal_uLong UCBContentHelper::GetSize( const String& rContent )
 {
-    sal_uIntPtr nSize = 0;
+    sal_uLong nSize = 0;
     sal_Int64 nTemp = 0;
     INetURLObject aObj( rContent );
     DBG_ASSERT( aObj.GetProtocol() != INET_PROT_NOT_VALID, "Invalid URL!" );

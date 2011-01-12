@@ -73,7 +73,7 @@ namespace utl
                                                 sal_Bool bNewOnly = sal_False );
         static sal_Bool             HasParentFolder( const String& rFolder );
 
-        static sal_uIntPtr                GetSize( const String& rContent );
+        static sal_uLong                GetSize( const String& rContent );
         static sal_Bool             IsYounger( const String& rIsYoung, const String& rIsOlder );
 
         static sal_Bool             Exists( const String& rContent );

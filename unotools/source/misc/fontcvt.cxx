@@ -1376,7 +1376,7 @@ sal_Unicode ConvertChar::RecodeChar( sal_Unicode cChar ) const
 // from an traditional symbol font (i.e. U+F020..U+F0FF)
 void ConvertChar::RecodeString( String& rStr, xub_StrLen nIndex, xub_StrLen nLen ) const
 {
-    sal_uIntPtr nLastIndex = (sal_uIntPtr)nIndex + nLen;
+    sal_uLong nLastIndex = (sal_uLong)nIndex + nLen;
     if( nLastIndex > rStr.Len() )
         nLastIndex = rStr.Len();
 
@@ -1460,7 +1460,7 @@ const ConvertChar* ConvertChar::GetRecodeData( const String& rOrgFontName, const
 //=======================================================================
 
 FontToSubsFontConverter CreateFontToSubsFontConverter(
-    const String& rOrgName, sal_uIntPtr nFlags )
+    const String& rOrgName, sal_uLong nFlags )
 {
     const ConvertChar* pCvt = NULL;
 
