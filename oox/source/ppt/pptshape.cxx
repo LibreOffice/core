@@ -177,7 +177,7 @@ void PPTShape::addShape(
                 aMasterTextListStyle.reset();
 
             // use placeholder index if possible
-            if( mnSubType && getSubTypeIndex() && rSlidePersist.getMasterPersist().get() ) {
+            if( mnSubType && getSubTypeIndex() && getSubTypeIndex() != -1 && rSlidePersist.getMasterPersist().get() ) {
                 oox::drawingml::ShapePtr pPlaceholder = PPTShape::findPlaceholderByIndex( getSubTypeIndex(), rSlidePersist.getMasterPersist()->getShapes()->getChildren() );
                 if( pPlaceholder.get() ) {
                     if( pPlaceholder->getTextBody() ) {
