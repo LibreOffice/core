@@ -110,7 +110,7 @@ void ReadThroughDic( const String &rMainURL, ConvDicXMLImport &rImport )
 
     SvStreamPtr pStream = SvStreamPtr( utl::UcbStreamHelper::CreateStream( xIn ) );
 
-    sal_uIntPtr nError = sal::static_int_cast< sal_uIntPtr >(-1);
+    sal_uLong nError = sal::static_int_cast< sal_uLong >(-1);
 
     // prepare ParserInputSource
     xml::sax::InputSource aParserInput;

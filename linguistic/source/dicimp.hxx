@@ -83,8 +83,8 @@ class DictionaryNeo :
         ::com::sun::star::uno::Reference<
             ::com::sun::star::linguistic2::XDictionaryEntry > xEntry);
 
-    sal_uIntPtr                   loadEntries(const ::rtl::OUString &rMainURL);
-    sal_uIntPtr                   saveEntries(const ::rtl::OUString &rMainURL);
+    sal_uLong                   loadEntries(const ::rtl::OUString &rMainURL);
+    sal_uLong                   saveEntries(const ::rtl::OUString &rMainURL);
     int                     cmpDicEntry(const ::rtl::OUString &rWord1,
                                         const ::rtl::OUString &rWord2,
                                         sal_Bool bSimilarOnly = sal_False);

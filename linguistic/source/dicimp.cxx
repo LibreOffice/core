@@ -261,7 +261,7 @@ DictionaryNeo::~DictionaryNeo()
 {
 }
 
-sal_uIntPtr DictionaryNeo::loadEntries(const OUString &rMainURL)
+sal_uLong DictionaryNeo::loadEntries(const OUString &rMainURL)
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
@@ -291,11 +291,11 @@ sal_uIntPtr DictionaryNeo::loadEntries(const OUString &rMainURL)
         (void) e;
     }
     if (!xStream.is())
-        return static_cast< sal_uIntPtr >(-1);
+        return static_cast< sal_uLong >(-1);
 
     SvStreamPtr pStream = SvStreamPtr( utl::UcbStreamHelper::CreateStream( xStream ) );
 
-    sal_uIntPtr nErr = sal::static_int_cast< sal_uIntPtr >(-1);
+    sal_uLong nErr = sal::static_int_cast< sal_uLong >(-1);
 
     // Header einlesen
     sal_Bool bNegativ;
@@ -411,7 +411,7 @@ static ByteString formatForSave(
 }
 
 
-sal_uIntPtr DictionaryNeo::saveEntries(const OUString &rURL)
+sal_uLong DictionaryNeo::saveEntries(const OUString &rURL)
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
@@ -435,10 +435,10 @@ sal_uIntPtr DictionaryNeo::saveEntries(const OUString &rURL)
         (void) e;
     }
     if (!xStream.is())
-        return static_cast< sal_uIntPtr >(-1);
+        return static_cast< sal_uLong >(-1);
 
     SvStreamPtr pStream = SvStreamPtr( utl::UcbStreamHelper::CreateStream( xStream ) );
-    sal_uIntPtr nErr = sal::static_int_cast< sal_uIntPtr >(-1);
+    sal_uLong nErr = sal::static_int_cast< sal_uLong >(-1);
 
     //
     // Always write as the latest version, i.e. DIC_VERSION_7
