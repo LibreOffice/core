@@ -52,9 +52,9 @@ module com {  module sun {  module star {  module awt { module grid {
 interface XGridDataListener: com::sun::star::lang::XEventListener
 {
 
-    /** is called when one or more rows of data have been added to a grid control's data model.
+    /** is called when one or more rows of data have been inserted into a grid control's data model.
     */
-    void rowsAdded( [in] GridDataEvent Event );
+    void rowsInserted( [in] GridDataEvent Event );
 
     /** is called when one or more rows of data have been removed from a grid control's data model.
     */

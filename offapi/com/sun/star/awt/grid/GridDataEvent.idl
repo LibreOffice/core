@@ -37,29 +37,37 @@ module com {  module sun {  module star {  module awt {  module grid {
 
 /** used to notify changes in the data represented by an <type>XMutableGridDataModel</type>.
 
+    <p>Effectively, a <code>GridDataEvent</code> denotes a continuous two-dimensional cell range
+    within a grid's data model, which is affected by a certain change.</p>
+
     @see XMutableGridDataModel
-    @see XGridControl
     @see XGridDataListener
 
     @since OOo 3.3.0
  */
 struct GridDataEvent: com::sun::star::lang::EventObject
 {
-    /** denotes the columns affected by the data change
+    /** denotes the first column affected by a change.
 
-        <p>The array contains the indexes of the affected columns, in ascending order.</p>
-
-        <p>If this sequence is empty, the callee should all assume all columns to be affected.</p>
+        <p>If <code>FirstColumn</code> is -1, the listener should assume that all rows of a grid's data model
+        are affected.</p>
     */
-    sequence< long >    Columns;
+    long    FirstColumn;
 
-    /** denotes the rows affected by the data change
-
-        <p>The array contains the indexes of the affected rows, in ascending order.</p>
-
-        <p>If this sequence is empty, the callee should all assume all rows to be affected.</p>
+    /** denotes the last column affected by a change
     */
-    sequence< long >    Rows;
+    long    LastColumn;
+
+    /** denotes the first row affected by a change.
+
+        <p>If <code>FirstRow</code> is -1, the listener should assume that all rows of a grid's data model
+        are affected.</p>
+    */
+    long    FirstRow;
+
+    /** denotes the last row affected by a change
+    */
+    long    LastRow;
 };
 
 //=============================================================================
