@@ -541,9 +541,9 @@ void SAL_CALL SVTXGridControl::dataChanged( const GridDataEvent& i_event ) throw
     // TODO: Our UnoControlTableModel should be a listener at the data model, and multiplex those events,
     // so the TableControl/_Impl can react on it.
     if ( i_event.FirstRow == -1 )
-        pTable->InvalidateDataWindow( 0, m_pTableModel->getRowCount(), false );
+        pTable->InvalidateDataWindow( 0, m_pTableModel->getRowCount() );
     else
-        pTable->InvalidateDataWindow( i_event.FirstRow, i_event.LastRow, false );
+        pTable->InvalidateDataWindow( i_event.FirstRow, i_event.LastRow );
 }
 
 //----------------------------------------------------------------------------------------------------------------------

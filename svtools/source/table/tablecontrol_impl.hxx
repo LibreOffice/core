@@ -166,7 +166,6 @@ namespace svt { namespace table
         bool                    m_bUpdatingColWidths;
 
         Link                    m_aSelectHdl;
-        bool                    m_bSelectionChanged;
 
         AccessibleFactoryAccess     m_aFactoryAccess;
         IAccessibleTableControl*    m_pAccessibleTable;
@@ -238,15 +237,18 @@ namespace svt { namespace table
         /** _rCellRect contains the region, which should be invalidate after some action e.g. selecting row*/
         void    invalidateSelectedRegion(RowPos _nPrevRow, RowPos _nCurRow, Rectangle& _rCellRect );
 
-        /** to be called when a new row is added to the control*/
-        void    invalidateRow(RowPos _nRowPos, Rectangle& _rCellRect );
+        /** invalidates the part of the data window which is covered by the given row
+        */
+        void    invalidateRowRange( RowPos const i_firstRow, RowPos const i_lastRow );
 
         /** returns the vector, which contains the selected rows*/
         std::vector<RowPos>& getSelectedRows();
 
         /** updates the vector, which contains the selected rows after removing the row nRowPos*/
         void    removeSelectedRow(RowPos _nRowPos);
-        void    invalidateRows();
+
+
+        void    checkCursorPosition();
 
         bool    hasRowSelection() const { return !m_aSelectedRows.empty(); }
         size_t  getSelectedRowCount() const { return m_aSelectedRows.size(); }
@@ -278,9 +280,6 @@ namespace svt { namespace table
 
         void        setSelectHandler( Link const & i_selectHandler ) { m_aSelectHdl = i_selectHandler; }
         Link const& getSelectHandler() const { return m_aSelectHdl; }
-
-        void        setSelectionChanged( bool const i_changed = true ) { m_bSelectionChanged = i_changed; }
-        bool        didSelectionChange() const { return m_bSelectionChanged; }
 
         // ITableControl
         virtual void                hideCursor();

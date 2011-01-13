@@ -96,14 +96,6 @@ namespace svt { namespace table
     {
         if ( !m_pImpl->getInputHandler()->KeyInput( *m_pImpl, rKEvt ) )
             Control::KeyInput( rKEvt );
-        else
-        {
-            if ( m_pImpl->didSelectionChange() )
-            {
-                Select();
-                m_pImpl->setSelectionChanged( false );
-            }
-        }
     }
 
 
@@ -211,8 +203,7 @@ namespace svt { namespace table
             m_pImpl->markRowAsDeselected( i_rowIndex );
         }
 
-        m_pImpl->setSelectionChanged();
-        InvalidateDataWindow( i_rowIndex, i_rowIndex, false );
+        m_pImpl->invalidateRowRange( i_rowIndex, i_rowIndex );
         Select();
     }
 
@@ -233,28 +224,15 @@ namespace svt { namespace table
         }
 
 
-        m_pImpl->setSelectionChanged();
         Invalidate();
             // TODO: can't we do better than this, and invalidate only the rows which changed?
         Select();
     }
 
     // -----------------------------------------------------------------------------------------------------------------
-    void TableControl::InvalidateDataWindow(RowPos _nRowStart, RowPos _nRowEnd, bool _bRemoved)
+    void TableControl::InvalidateDataWindow( RowPos const i_firstRow, RowPos const i_lastRow )
     {
-        Rectangle _rRect;
-        if ( _bRemoved )
-            m_pImpl->invalidateRows();
-        else
-        {
-            if ( m_pImpl->didSelectionChange() )
-            {
-                m_pImpl->invalidateSelectedRegion( _nRowStart, _nRowEnd, _rRect );
-                m_pImpl->setSelectionChanged( false );
-            }
-            else
-                m_pImpl->invalidateRow( _nRowStart, _rRect );
-        }
+        m_pImpl->invalidateRowRange( i_firstRow, i_lastRow );
     }
 
     // -----------------------------------------------------------------------------------------------------------------

@@ -407,7 +407,6 @@ namespace svt { namespace table
         ,m_nResizingColumn      ( 0                             )
         ,m_bResizingGrid        ( false                         )
         ,m_bUpdatingColWidths   ( false                         )
-        ,m_bSelectionChanged    ( false                         )
         ,m_pAccessibleTable     ( NULL                          )
 #if DBG_UTIL
         ,m_nRequiredInvariants ( INV_SCROLL_POSITION )
@@ -464,6 +463,26 @@ namespace svt { namespace table
     }
 
     //------------------------------------------------------------------------------------------------------------------
+    namespace
+    {
+        bool lcl_adjustSelectedRows( ::std::vector< RowPos >& io_selectionIndexes, RowPos const i_firstAffectedRowIndex, TableSize const i_offset )
+        {
+            bool didChanges = false;
+            for (   ::std::vector< RowPos >::iterator selPos = io_selectionIndexes.begin();
+                    selPos != io_selectionIndexes.end();
+                    ++selPos
+                )
+            {
+                if ( *selPos < i_firstAffectedRowIndex )
+                    continue;
+                *selPos += i_offset;
+                didChanges = true;
+            }
+            return didChanges;
+        }
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
     void TableControl_Impl::rowsInserted( RowPos i_first, RowPos i_last )
     {
         DBG_CHECK_ME();
@@ -472,15 +491,7 @@ namespace svt { namespace table
         TableSize const insertedRows = i_last - i_first + 1;
 
         // adjust selection, if necessary
-        bool selectionChanged = false;
-        for ( ::std::vector< RowPos >::iterator selPos = m_aSelectedRows.begin(); selPos != m_aSelectedRows.end(); ++selPos )
-        {
-            if ( *selPos >= i_first )
-            {
-                *selPos += insertedRows;
-                selectionChanged = true;
-            }
-        }
+        bool const selectionChanged = lcl_adjustSelectedRows( m_aSelectedRows, i_first, insertedRows );
 
         // adjust our cached row count
         m_nRowCount = m_pModel->getRowCount();
@@ -513,7 +524,7 @@ namespace svt { namespace table
         }
 
         // schedule repaint
-        m_rAntiImpl.InvalidateDataWindow( i_first, i_last, false );
+        invalidateRowRange( i_first, m_pModel->getRowCount() - 1 );
 
         // call selection handlers, if necessary
         if ( selectionChanged )
@@ -539,10 +550,14 @@ namespace svt { namespace table
         {
             ENSURE_OR_RETURN_VOID( i_last >= i_first, "TableControl_Impl::rowsRemoved: illegal indexes!" );
 
-            for ( sal_Int32 row = i_first; row < i_last; ++row )
+            for ( sal_Int32 row = i_first; row <= i_last; ++row )
             {
-                selectionChanged |= markRowAsDeselected( row );
+                if ( markRowAsDeselected( row ) )
+                    selectionChanged = true;
             }
+
+            if ( lcl_adjustSelectedRows( m_aSelectedRows, i_last + 1, i_first - i_last - 1 ) )
+                selectionChanged = true;
         }
 
         // adjust cached row count
@@ -574,7 +589,7 @@ namespace svt { namespace table
         }
 
         // schedule a repaint
-        m_rAntiImpl.InvalidateDataWindow( firstRemovedRow, lastRemovedRow, true );
+        invalidateRowRange( firstRemovedRow, m_pModel->getRowCount() - 1 );
 
         // call selection handlers, if necessary
         if ( selectionChanged )
@@ -1134,7 +1149,8 @@ namespace svt { namespace table
             {
                 if ( m_bResizingGrid )
                     impl_ni_updateColumnWidths();
-                invalidateRows();
+                impl_ni_updateScrollbars();
+                checkCursorPosition();
                 m_bResizingGrid = true;
             }
         }
@@ -1309,6 +1325,8 @@ namespace svt { namespace table
         DBG_CHECK_ME();
 
         bool bSuccess = false;
+        bool selectionChanged = false;
+
         Rectangle rCells;
         switch ( _eAction )
         {
@@ -1334,7 +1352,7 @@ namespace svt { namespace table
                 m_aSelectedRows.push_back(m_nCurRow);
             invalidateSelectedRegion(m_nCurRow, m_nCurRow, rCells);
             ensureVisible(m_nCurColumn,m_nCurRow,false);
-            setSelectionChanged();
+            selectionChanged = true;
             bSuccess = true;
         }
         else
@@ -1368,7 +1386,7 @@ namespace svt { namespace table
                 invalidateSelectedRegion(m_nCurRow, m_nCurRow, rCells);
             }
             ensureVisible(m_nCurColumn,m_nCurRow,false);
-            setSelectionChanged();
+            selectionChanged = true;
             bSuccess = true;
         }
         else
@@ -1430,259 +1448,266 @@ namespace svt { namespace table
         case cursorBottomRight:
             bSuccess = goTo( m_nColumnCount - 1, m_nRowCount - 1 );
             break;
-    case cursorSelectRow:
-    {
-        if(m_pSelEngine->GetSelectionMode() == NO_SELECTION)
-            return bSuccess = false;
-        //pos is the position of the current row in the vector of selected rows, if current row is selected
-        int pos = getRowSelectedNumber(m_aSelectedRows, m_nCurRow);
-        //if current row is selected, it should be deselected, when ALT+SPACE are pressed
-        if(pos>-1)
+
+        case cursorSelectRow:
         {
-            m_aSelectedRows.erase(m_aSelectedRows.begin()+pos);
-            if(m_aSelectedRows.empty() && m_nAnchor != -1)
-                m_nAnchor = -1;
-        }
-        //else select the row->put it in the vector
-        else
-            m_aSelectedRows.push_back(m_nCurRow);
-        invalidateSelectedRegion(m_nCurRow, m_nCurRow, rCells);
-        setSelectionChanged();
-        bSuccess = true;
-    }
-        break;
-    case cursorSelectRowUp:
-    {
-        if(m_pSelEngine->GetSelectionMode() == NO_SELECTION)
-            return bSuccess = false;
-        else if(m_pSelEngine->GetSelectionMode() == SINGLE_SELECTION)
-        {
-            //if there are other selected rows, deselect them
-            return false;
-        }
-        else
-        {
-            //there are other selected rows
-            if(m_aSelectedRows.size()>0)
+            if(m_pSelEngine->GetSelectionMode() == NO_SELECTION)
+                return bSuccess = false;
+            //pos is the position of the current row in the vector of selected rows, if current row is selected
+            int pos = getRowSelectedNumber(m_aSelectedRows, m_nCurRow);
+            //if current row is selected, it should be deselected, when ALT+SPACE are pressed
+            if(pos>-1)
             {
-                //the anchor wasn't set -> a region is not selected, that's why clear all selection
-                //and select the current row
-                if(m_nAnchor==-1)
-                {
-                    for(std::vector<RowPos>::iterator it=m_aSelectedRows.begin();
-                        it!=m_aSelectedRows.end();++it)
-                    {
-                        invalidateSelectedRegion(*it, *it, rCells);
-                    }
-                    m_aSelectedRows.clear();
-                    m_aSelectedRows.push_back(m_nCurRow);
-                    invalidateSelectedRegion(m_nCurRow, m_nCurRow, rCells);
-                }
-                else
-                {
-                    //a region is already selected, prevRow is last selected row and the row above - nextRow - should be selected
-                    int prevRow = getRowSelectedNumber(m_aSelectedRows, m_nCurRow);
-                    int nextRow = getRowSelectedNumber(m_aSelectedRows, m_nCurRow-1);
-                    if(prevRow>-1)
-                     {
-                         //if m_nCurRow isn't the upper one, can move up, otherwise not
-                        if(m_nCurRow>0)
-                             m_nCurRow--;
-                         else
-                             return bSuccess = true;
-                         //if nextRow already selected, deselect it, otherwise select it
-                         if(nextRow>-1 && m_aSelectedRows[nextRow] == m_nCurRow)
-                         {
-                             m_aSelectedRows.erase(m_aSelectedRows.begin()+prevRow);
-                             invalidateSelectedRegion(m_nCurRow+1, m_nCurRow+1, rCells);
-                         }
-                         else
-                        {
-                             m_aSelectedRows.push_back(m_nCurRow);
-                             invalidateSelectedRegion(m_nCurRow, m_nCurRow, rCells);
-                         }
-                     }
-                    else
-                    {
-                        if(m_nCurRow>0)
-                        {
-                            m_aSelectedRows.push_back(m_nCurRow);
-                            m_nCurRow--;
-                            m_aSelectedRows.push_back(m_nCurRow);
-                            invalidateSelectedRegion(m_nCurRow+1, m_nCurRow, rCells);
-                        }
-                    }
-                }
+                m_aSelectedRows.erase(m_aSelectedRows.begin()+pos);
+                if(m_aSelectedRows.empty() && m_nAnchor != -1)
+                    m_nAnchor = -1;
+            }
+            //else select the row->put it in the vector
+            else
+                m_aSelectedRows.push_back(m_nCurRow);
+            invalidateSelectedRegion(m_nCurRow, m_nCurRow, rCells);
+            selectionChanged = true;
+            bSuccess = true;
+        }
+            break;
+        case cursorSelectRowUp:
+        {
+            if(m_pSelEngine->GetSelectionMode() == NO_SELECTION)
+                return bSuccess = false;
+            else if(m_pSelEngine->GetSelectionMode() == SINGLE_SELECTION)
+            {
+                //if there are other selected rows, deselect them
+                return false;
             }
             else
             {
-                //if nothing is selected and the current row isn't the upper one
-                //select the current and one row above
-                //otherwise select only the upper row
-                if(m_nCurRow>0)
+                //there are other selected rows
+                if(m_aSelectedRows.size()>0)
                 {
-                    m_aSelectedRows.push_back(m_nCurRow);
-                    m_nCurRow--;
-                    m_aSelectedRows.push_back(m_nCurRow);
-                    invalidateSelectedRegion(m_nCurRow+1, m_nCurRow, rCells);
-                }
-                else
-                {
-                    m_aSelectedRows.push_back(m_nCurRow);
-                    invalidateSelectedRegion(m_nCurRow, m_nCurRow, rCells);
-                }
-            }
-            m_pSelEngine->SetAnchor(TRUE);
-            m_nAnchor = m_nCurRow;
-            ensureVisible(m_nCurColumn, m_nCurRow, false);
-            setSelectionChanged();
-            bSuccess = true;
-        }
-    }
-    break;
-    case cursorSelectRowDown:
-    {
-        if(m_pSelEngine->GetSelectionMode() == NO_SELECTION)
-            bSuccess = false;
-        else if(m_pSelEngine->GetSelectionMode() == SINGLE_SELECTION)
-        {
-            bSuccess = false;
-        }
-        else
-        {
-            if(m_aSelectedRows.size()>0)
-            {
-                //the anchor wasn't set -> a region is not selected, that's why clear all selection
-                //and select the current row
-                if(m_nAnchor==-1)
-                {
-                    for(std::vector<RowPos>::iterator it=m_aSelectedRows.begin();
-                        it!=m_aSelectedRows.end();++it)
+                    //the anchor wasn't set -> a region is not selected, that's why clear all selection
+                    //and select the current row
+                    if(m_nAnchor==-1)
                     {
-                        invalidateSelectedRegion(*it, *it, rCells);
-                    }
-                    m_aSelectedRows.clear();
-                    m_aSelectedRows.push_back(m_nCurRow);
-                    invalidateSelectedRegion(m_nCurRow, m_nCurRow, rCells);
-                    }
-                else
-                {
-                    //a region is already selected, prevRow is last selected row and the row beneath - nextRow - should be selected
-                    int prevRow = getRowSelectedNumber(m_aSelectedRows, m_nCurRow);
-                    int nextRow = getRowSelectedNumber(m_aSelectedRows, m_nCurRow+1);
-                    if(prevRow>-1)
-                     {
-                         //if m_nCurRow isn't the last one, can move down, otherwise not
-                         if(m_nCurRow<m_nRowCount-1)
-                             m_nCurRow++;
-                         else
-                            return bSuccess = true;
-                         //if next row already selected, deselect it, otherwise select it
-                         if(nextRow>-1 && m_aSelectedRows[nextRow] == m_nCurRow)
-                         {
-                             m_aSelectedRows.erase(m_aSelectedRows.begin()+prevRow);
-                             invalidateSelectedRegion(m_nCurRow-1, m_nCurRow-1, rCells);
-                         }
-                         else
-                         {
-                             m_aSelectedRows.push_back(m_nCurRow);
-                             invalidateSelectedRegion(m_nCurRow, m_nCurRow, rCells);
-                         }
+                        for(std::vector<RowPos>::iterator it=m_aSelectedRows.begin();
+                            it!=m_aSelectedRows.end();++it)
+                        {
+                            invalidateSelectedRegion(*it, *it, rCells);
+                        }
+                        m_aSelectedRows.clear();
+                        m_aSelectedRows.push_back(m_nCurRow);
+                        invalidateSelectedRegion(m_nCurRow, m_nCurRow, rCells);
                     }
                     else
                     {
-                        if(m_nCurRow<m_nRowCount-1)
+                        //a region is already selected, prevRow is last selected row and the row above - nextRow - should be selected
+                        int prevRow = getRowSelectedNumber(m_aSelectedRows, m_nCurRow);
+                        int nextRow = getRowSelectedNumber(m_aSelectedRows, m_nCurRow-1);
+                        if(prevRow>-1)
+                         {
+                             //if m_nCurRow isn't the upper one, can move up, otherwise not
+                            if(m_nCurRow>0)
+                                 m_nCurRow--;
+                             else
+                                 return bSuccess = true;
+                             //if nextRow already selected, deselect it, otherwise select it
+                             if(nextRow>-1 && m_aSelectedRows[nextRow] == m_nCurRow)
+                             {
+                                 m_aSelectedRows.erase(m_aSelectedRows.begin()+prevRow);
+                                 invalidateSelectedRegion(m_nCurRow+1, m_nCurRow+1, rCells);
+                             }
+                             else
+                            {
+                                 m_aSelectedRows.push_back(m_nCurRow);
+                                 invalidateSelectedRegion(m_nCurRow, m_nCurRow, rCells);
+                             }
+                         }
+                        else
                         {
-                            m_aSelectedRows.push_back(m_nCurRow);
-                            m_nCurRow++;
-                            m_aSelectedRows.push_back(m_nCurRow);
-                            invalidateSelectedRegion(m_nCurRow-1, m_nCurRow, rCells);
+                            if(m_nCurRow>0)
+                            {
+                                m_aSelectedRows.push_back(m_nCurRow);
+                                m_nCurRow--;
+                                m_aSelectedRows.push_back(m_nCurRow);
+                                invalidateSelectedRegion(m_nCurRow+1, m_nCurRow, rCells);
+                            }
                         }
                     }
                 }
+                else
+                {
+                    //if nothing is selected and the current row isn't the upper one
+                    //select the current and one row above
+                    //otherwise select only the upper row
+                    if(m_nCurRow>0)
+                    {
+                        m_aSelectedRows.push_back(m_nCurRow);
+                        m_nCurRow--;
+                        m_aSelectedRows.push_back(m_nCurRow);
+                        invalidateSelectedRegion(m_nCurRow+1, m_nCurRow, rCells);
+                    }
+                    else
+                    {
+                        m_aSelectedRows.push_back(m_nCurRow);
+                        invalidateSelectedRegion(m_nCurRow, m_nCurRow, rCells);
+                    }
+                }
+                m_pSelEngine->SetAnchor(TRUE);
+                m_nAnchor = m_nCurRow;
+                ensureVisible(m_nCurColumn, m_nCurRow, false);
+                selectionChanged = true;
+                bSuccess = true;
+            }
+        }
+        break;
+        case cursorSelectRowDown:
+        {
+            if(m_pSelEngine->GetSelectionMode() == NO_SELECTION)
+                bSuccess = false;
+            else if(m_pSelEngine->GetSelectionMode() == SINGLE_SELECTION)
+            {
+                bSuccess = false;
             }
             else
             {
-                //there wasn't any selection, select current and row beneath, otherwise only row beneath
-                if(m_nCurRow<m_nRowCount-1)
+                if(m_aSelectedRows.size()>0)
                 {
-                    m_aSelectedRows.push_back(m_nCurRow);
-                    m_nCurRow++;
-                    m_aSelectedRows.push_back(m_nCurRow);
-                    invalidateSelectedRegion(m_nCurRow-1, m_nCurRow, rCells);
+                    //the anchor wasn't set -> a region is not selected, that's why clear all selection
+                    //and select the current row
+                    if(m_nAnchor==-1)
+                    {
+                        for(std::vector<RowPos>::iterator it=m_aSelectedRows.begin();
+                            it!=m_aSelectedRows.end();++it)
+                        {
+                            invalidateSelectedRegion(*it, *it, rCells);
+                        }
+                        m_aSelectedRows.clear();
+                        m_aSelectedRows.push_back(m_nCurRow);
+                        invalidateSelectedRegion(m_nCurRow, m_nCurRow, rCells);
+                        }
+                    else
+                    {
+                        //a region is already selected, prevRow is last selected row and the row beneath - nextRow - should be selected
+                        int prevRow = getRowSelectedNumber(m_aSelectedRows, m_nCurRow);
+                        int nextRow = getRowSelectedNumber(m_aSelectedRows, m_nCurRow+1);
+                        if(prevRow>-1)
+                         {
+                             //if m_nCurRow isn't the last one, can move down, otherwise not
+                             if(m_nCurRow<m_nRowCount-1)
+                                 m_nCurRow++;
+                             else
+                                return bSuccess = true;
+                             //if next row already selected, deselect it, otherwise select it
+                             if(nextRow>-1 && m_aSelectedRows[nextRow] == m_nCurRow)
+                             {
+                                 m_aSelectedRows.erase(m_aSelectedRows.begin()+prevRow);
+                                 invalidateSelectedRegion(m_nCurRow-1, m_nCurRow-1, rCells);
+                             }
+                             else
+                             {
+                                 m_aSelectedRows.push_back(m_nCurRow);
+                                 invalidateSelectedRegion(m_nCurRow, m_nCurRow, rCells);
+                             }
+                        }
+                        else
+                        {
+                            if(m_nCurRow<m_nRowCount-1)
+                            {
+                                m_aSelectedRows.push_back(m_nCurRow);
+                                m_nCurRow++;
+                                m_aSelectedRows.push_back(m_nCurRow);
+                                invalidateSelectedRegion(m_nCurRow-1, m_nCurRow, rCells);
+                            }
+                        }
+                    }
                 }
                 else
                 {
-                    m_aSelectedRows.push_back(m_nCurRow);
-                    invalidateSelectedRegion(m_nCurRow, m_nCurRow, rCells);
+                    //there wasn't any selection, select current and row beneath, otherwise only row beneath
+                    if(m_nCurRow<m_nRowCount-1)
+                    {
+                        m_aSelectedRows.push_back(m_nCurRow);
+                        m_nCurRow++;
+                        m_aSelectedRows.push_back(m_nCurRow);
+                        invalidateSelectedRegion(m_nCurRow-1, m_nCurRow, rCells);
+                    }
+                    else
+                    {
+                        m_aSelectedRows.push_back(m_nCurRow);
+                        invalidateSelectedRegion(m_nCurRow, m_nCurRow, rCells);
+                    }
                 }
+                m_pSelEngine->SetAnchor(TRUE);
+                m_nAnchor = m_nCurRow;
+                ensureVisible(m_nCurColumn, m_nCurRow, false);
+                selectionChanged = true;
+                bSuccess = true;
             }
-            m_pSelEngine->SetAnchor(TRUE);
-            m_nAnchor = m_nCurRow;
-            ensureVisible(m_nCurColumn, m_nCurRow, false);
-            setSelectionChanged();
-            bSuccess = true;
         }
-    }
         break;
-    case cursorSelectRowAreaTop:
-    {
-        if(m_pSelEngine->GetSelectionMode() == NO_SELECTION)
-            bSuccess = false;
-        else if(m_pSelEngine->GetSelectionMode() == SINGLE_SELECTION)
-            bSuccess = false;
-        else
+
+        case cursorSelectRowAreaTop:
         {
-            //select the region between the current and the upper row
+            if(m_pSelEngine->GetSelectionMode() == NO_SELECTION)
+                bSuccess = false;
+            else if(m_pSelEngine->GetSelectionMode() == SINGLE_SELECTION)
+                bSuccess = false;
+            else
+            {
+                //select the region between the current and the upper row
+                RowPos iter = m_nCurRow;
+                invalidateSelectedRegion(m_nCurRow, 0, rCells);
+                //put the rows in vector
+                while(iter>=0)
+                {
+                    if ( !isRowSelected( iter ) )
+                        m_aSelectedRows.push_back(iter);
+                    --iter;
+                }
+                m_nCurRow = 0;
+                m_nAnchor = m_nCurRow;
+                m_pSelEngine->SetAnchor(TRUE);
+                ensureVisible(m_nCurColumn, 0, false);
+                selectionChanged = true;
+                bSuccess = true;
+            }
+        }
+        break;
+
+        case cursorSelectRowAreaBottom:
+        {
+            if(m_pSelEngine->GetSelectionMode() == NO_SELECTION)
+                return bSuccess = false;
+            else if(m_pSelEngine->GetSelectionMode() == SINGLE_SELECTION)
+                return bSuccess = false;
+            //select the region between the current and the last row
             RowPos iter = m_nCurRow;
-            invalidateSelectedRegion(m_nCurRow, 0, rCells);
-            //put the rows in vector
-            while(iter>=0)
+            invalidateSelectedRegion(m_nCurRow, m_nRowCount-1, rCells);
+            //put the rows in the vector
+            while(iter<=m_nRowCount)
             {
                 if ( !isRowSelected( iter ) )
                     m_aSelectedRows.push_back(iter);
-                --iter;
+                ++iter;
             }
-            m_nCurRow = 0;
+            m_nCurRow = m_nRowCount-1;
             m_nAnchor = m_nCurRow;
             m_pSelEngine->SetAnchor(TRUE);
-            ensureVisible(m_nCurColumn, 0, false);
-            setSelectionChanged();
+            ensureVisible(m_nCurColumn, m_nRowCount-1, false);
+            selectionChanged = true;
             bSuccess = true;
         }
-    }
-    break;
-
-    case cursorSelectRowAreaBottom:
-    {
-        if(m_pSelEngine->GetSelectionMode() == NO_SELECTION)
-            return bSuccess = false;
-        else if(m_pSelEngine->GetSelectionMode() == SINGLE_SELECTION)
-            return bSuccess = false;
-        //select the region between the current and the last row
-        RowPos iter = m_nCurRow;
-        invalidateSelectedRegion(m_nCurRow, m_nRowCount-1, rCells);
-        //put the rows in the vector
-        while(iter<=m_nRowCount)
-        {
-            if ( !isRowSelected( iter ) )
-                m_aSelectedRows.push_back(iter);
-            ++iter;
-        }
-        m_nCurRow = m_nRowCount-1;
-        m_nAnchor = m_nCurRow;
-        m_pSelEngine->SetAnchor(TRUE);
-        ensureVisible(m_nCurColumn, m_nRowCount-1, false);
-        setSelectionChanged();
-        bSuccess = true;
-    }
-    break;
-    default:
-        DBG_ERROR( "TableControl_Impl::dispatchAction: unsupported action!" );
         break;
-    }
+        default:
+            DBG_ERROR( "TableControl_Impl::dispatchAction: unsupported action!" );
+            break;
+        }
 
-    return bSuccess;
+        if ( bSuccess && selectionChanged )
+        {
+            m_rAntiImpl.Select();
+        }
+
+        return bSuccess;
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -1838,21 +1863,29 @@ namespace svt { namespace table
     }
     //------------------------------------------------------------------------------------------------------------------
     //this method is to be called, when a new row is added
-    void TableControl_Impl::invalidateRow(RowPos _nRowPos, Rectangle& _rCellRect)
+    void TableControl_Impl::invalidateRowRange( RowPos const i_firstRow, RowPos const i_lastRow )
     {
-        if ( m_nCurRow < 0 )
-            // hmm? Why this? Looks like a hack to me, working around some other problem.
-            m_nCurRow = 0;
-
         if ( m_nCursorHidden == 2 )
             // WTF? what kind of hack is this?
             --m_nCursorHidden;
 
-        impl_getAllVisibleCellsArea( _rCellRect );
-        impl_ni_updateScrollbars();
+        RowPos const firstRow = i_firstRow < m_nTopRow ? m_nTopRow : i_firstRow;
+        RowPos const lastVisibleRow = m_nTopRow + impl_getVisibleRows( true ) - 1;
+        RowPos const lastRow = i_lastRow > lastVisibleRow ? lastVisibleRow : i_lastRow;
 
-        TableRowGeometry const aRow( *this, _rCellRect, _nRowPos);
-        m_pDataWindow->Invalidate( aRow.getRect() );
+        Rectangle aInvalidateRect;
+
+        Rectangle aVisibleCellsArea;
+        impl_getAllVisibleCellsArea( aVisibleCellsArea );
+
+        TableRowGeometry aRow( *this, aVisibleCellsArea, firstRow );
+        while ( aRow.isValid() && ( aRow.getRow() <= lastRow ) )
+        {
+            aInvalidateRect.Union( aRow.getRect() );
+            aRow.moveDown();
+        }
+
+        m_pDataWindow->Invalidate( aInvalidateRect );
     }
     //------------------------------------------------------------------------------------------------------------------
 
@@ -1889,9 +1922,10 @@ namespace svt { namespace table
             m_nCurRow = _nRowPos-1;
     }
     //------------------------------------------------------------------------------
-    void TableControl_Impl::invalidateRows()
+    void TableControl_Impl::checkCursorPosition()
     {
-        impl_ni_updateScrollbars();
+        DBG_CHECK_ME();
+
         TableSize nVisibleRows = impl_getVisibleRows(true);
         TableSize nVisibleCols = impl_getVisibleColumns(true);
         if  (   ( m_nTopRow + nVisibleRows > m_nRowCount )
