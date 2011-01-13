@@ -1527,7 +1527,7 @@ void SvtFileDialog::OpenMultiSelection_Impl()
 
 {
     String aPath;
-    sal_uIntPtr nCount = _pFileView->GetSelectionCount();
+    sal_uLong nCount = _pFileView->GetSelectionCount();
     SvLBoxEntry* pEntry = nCount ? _pFileView->FirstSelected() : NULL;
 
     if ( nCount && pEntry )
@@ -2524,7 +2524,7 @@ void SvtFileDialog::InitSize()
 SvStringsDtor* SvtFileDialog::GetPathList() const
 {
     SvStringsDtor*  pList = new SvStringsDtor;
-    sal_uIntPtr         nCount = _pFileView->GetSelectionCount();
+    sal_uLong           nCount = _pFileView->GetSelectionCount();
     SvLBoxEntry*    pEntry = nCount ? _pFileView->FirstSelected() : NULL;
 
     if ( ! pEntry )

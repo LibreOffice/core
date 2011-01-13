@@ -103,15 +103,15 @@ HRESULT STDMETHODCALLTYPE VistaFilePickerEventHandler::QueryInterface(REFIID rII
 }
 
 //-----------------------------------------------------------------------------------------
-sal_uIntPtr STDMETHODCALLTYPE VistaFilePickerEventHandler::AddRef()
+ULONG STDMETHODCALLTYPE VistaFilePickerEventHandler::AddRef()
 {
     return osl_incrementInterlockedCount(&m_nRefCount);
 }
 
 //-----------------------------------------------------------------------------------------
-sal_uIntPtr STDMETHODCALLTYPE VistaFilePickerEventHandler::Release()
+ULONG STDMETHODCALLTYPE VistaFilePickerEventHandler::Release()
 {
-    sal_uIntPtr nReturn = --m_nRefCount;
+    sal_uLong nReturn = --m_nRefCount;
     if ( m_nRefCount == 0 )
         delete this;
 
