@@ -347,8 +347,7 @@ void Test::testDataPilot()
 {
     // TODO: Coming soon.
 }
-#include <iostream>
-using namespace std;
+
 void Test::testSheetCopy()
 {
     rtl::OUString aTabName(RTL_CONSTASCII_USTRINGPARAM("TestTab"));
