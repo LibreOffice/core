@@ -236,7 +236,35 @@ namespace svt { namespace table
         /** updates the vector, which contains the selected rows after removing the row nRowPos*/
         void    removeSelectedRow(RowPos _nRowPos);
         void    invalidateRows();
-        void    clearSelection();
+
+        bool    hasRowSelection() const { return !m_aSelectedRows.empty(); }
+        size_t  getSelectedRowCount() const { return m_aSelectedRows.size(); }
+
+        /** removes the given row index from m_aSelectedRows
+
+            @return
+                <TRUE/> if and only if the row was previously marked as selected
+        */
+        bool        markRowAsDeselected( RowPos const i_rowIndex );
+
+        /** marks the given row as selectged, by putting it into m_aSelectedRows
+            @return
+                <TRUE/> if and only if the row was previously <em>not</em> marked as selected
+        */
+        bool        markRowAsSelected( RowPos const i_rowIndex );
+
+        /** marks all rows as deselected
+            @return
+                <TRUE/> if and only if the selection actually changed by this operation
+        */
+        bool        markAllRowsAsDeselected();
+
+        /** marks all rows as selected
+            @return
+                <FALSE/> if and only if all rows were selected already.
+        */
+        bool        markAllRowsAsSelected();
+
 
         // ITableControl
         virtual void                hideCursor();
@@ -265,9 +293,9 @@ namespace svt { namespace table
         // ITableModelListener
         virtual void    rowsInserted( RowPos first, RowPos last );
         virtual void    rowsRemoved( RowPos first, RowPos last );
-        virtual void    columnsInserted( ColPos first, ColPos last );
-        virtual void    columnsRemoved( ColPos first, ColPos last );
-        virtual void    columnMoved( ColPos oldIndex, ColPos newIndex );
+        virtual void    columnInserted( ColPos const i_colIndex );
+        virtual void    columnRemoved( ColPos const i_colIndex );
+        virtual void    allColumnsRemoved();
         virtual void    cellsUpdated( ColPos firstCol, ColPos lastCol, RowPos firstRow, RowPos lastRow );
         virtual void    columnChanged( ColPos const i_column, ColumnAttributeGroup const i_attributeGroup );
 

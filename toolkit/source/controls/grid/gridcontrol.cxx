@@ -372,9 +372,9 @@ sal_Bool SAL_CALL UnoGridControl::setModel( const Reference< XControlModel >& i_
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-void SAL_CALL UnoGridControl::selectRows(const ::com::sun::star::uno::Sequence< ::sal_Int32 >& rangeOfRows) throw (::com::sun::star::uno::RuntimeException)
+void SAL_CALL UnoGridControl::selectRow( ::sal_Int32 i_rowIndex ) throw (::com::sun::star::uno::RuntimeException)
 {
-    Reference< XGridControl >( getPeer(), UNO_QUERY_THROW )->selectRows( rangeOfRows);
+    Reference< XGridControl >( getPeer(), UNO_QUERY_THROW )->selectRow( i_rowIndex );
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -384,9 +384,9 @@ void SAL_CALL UnoGridControl::selectAllRows() throw (::com::sun::star::uno::Runt
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-void SAL_CALL UnoGridControl::deselectRows(const ::com::sun::star::uno::Sequence< ::sal_Int32 >& rangeOfRows) throw (::com::sun::star::uno::RuntimeException)
+void SAL_CALL UnoGridControl::deselectRow( ::sal_Int32 i_rowIndex ) throw (::com::sun::star::uno::RuntimeException)
 {
-    Reference< XGridControl >( getPeer(), UNO_QUERY_THROW )->deselectRows( rangeOfRows);
+    Reference< XGridControl >( getPeer(), UNO_QUERY_THROW )->deselectRow( i_rowIndex );
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -411,12 +411,6 @@ void SAL_CALL UnoGridControl::deselectAllRows() throw (::com::sun::star::uno::Ru
 ::sal_Bool SAL_CALL UnoGridControl::isSelectedIndex(::sal_Int32 index) throw (::com::sun::star::uno::RuntimeException)
 {
     return Reference< XGridControl >( getPeer(), UNO_QUERY_THROW )->isSelectedIndex( index );
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-void SAL_CALL UnoGridControl::selectRow(::sal_Int32 y) throw (::com::sun::star::uno::RuntimeException)
-{
-    Reference< XGridControl >( getPeer(), UNO_QUERY_THROW )->selectRow( y );
 }
 
 //----------------------------------------------------------------------------------------------------------------------

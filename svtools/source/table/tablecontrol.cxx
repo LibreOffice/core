@@ -219,9 +219,48 @@ namespace svt { namespace table
     }
 
     // -----------------------------------------------------------------------------------------------------------------
-    void TableControl::clearSelection()
+    void TableControl::SelectRow( RowPos const i_rowIndex, bool const i_select )
     {
-        m_pImpl->clearSelection();
+        ENSURE_OR_RETURN_VOID( ( i_rowIndex >= 0 ) && ( i_rowIndex < m_pImpl->getModel()->getRowCount() ),
+            "TableControl::SelectRow: no control (anymore)!" );
+
+        if ( i_select )
+        {
+            if ( !m_pImpl->markRowAsSelected( i_rowIndex ) )
+                // nothing to do
+                return;
+        }
+        else
+        {
+            m_pImpl->markRowAsDeselected( i_rowIndex );
+        }
+
+        selectionChanged( true );
+        InvalidateDataWindow( i_rowIndex, i_rowIndex, false );
+        Select();
+    }
+
+    // -----------------------------------------------------------------------------------------------------------------
+    void TableControl::SelectAll( bool const i_select )
+    {
+        if ( i_select )
+        {
+            if ( !m_pImpl->markAllRowsAsSelected() )
+                // nothing to do
+                return;
+        }
+        else
+        {
+            if ( !m_pImpl->markAllRowsAsDeselected() )
+                // nothing to do
+                return;
+        }
+
+
+        selectionChanged( true );
+        Invalidate();
+            // TODO: can't we do better than this, and invalidate only the rows which changed?
+        Select();
     }
 
     // -----------------------------------------------------------------------------------------------------------------
@@ -537,7 +576,7 @@ namespace svt { namespace table
     //------------------------------------------------------------------------------------------------------------------
     sal_Int32 TableControl::GetSelectedRowCount() const
     {
-        return m_pImpl->getSelectedRows().size();
+        return sal_Int32( m_pImpl->getSelectedRowCount() );
     }
 
     //------------------------------------------------------------------------------------------------------------------

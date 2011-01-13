@@ -87,7 +87,7 @@ namespace svt { namespace table
         ~TableControl();
 
         /// sets a new table model
-        SVT_DLLPRIVATE void        SetModel( PTableModel _pModel );
+        void        SetModel( PTableModel _pModel );
         /// retrieves the current table model
         PTableModel GetModel() const;
 
@@ -159,16 +159,12 @@ namespace svt { namespace table
 
         SVT_DLLPRIVATE virtual void Resize();
         virtual void    Select();
-        SVT_DLLPRIVATE void     SetSelectHdl( const Link& rLink )   { m_aSelectHdl = rLink; }
-        const Link&     GetSelectHdl() const            { return m_aSelectHdl; }
+                void    SetSelectHdl( const Link& rLink )   { m_aSelectHdl = rLink; }
+        const Link&     GetSelectHdl() const                { return m_aSelectHdl; }
 
         /**invalidates the table if table has been changed e.g. new row added
         */
         void InvalidateDataWindow(RowPos _nRowStart, RowPos _nRowEnd, bool _bRemoved);
-
-        /**gets the vector, which contains the selected rows
-        */
-        std::vector<sal_Int32>& GetSelectedRows();
 
         /**after removing a row, updates the vector which contains the selected rows
             if the row, which should be removed, is selected, it will be erased from the vector
@@ -221,12 +217,15 @@ namespace svt { namespace table
         virtual sal_Bool HasColHeader();
         virtual sal_Bool isAccessibleAlive( ) const;
         virtual void commitGridControlEvent( sal_Int16 _nEventId, const com::sun::star::uno::Any& _rNewValue, const com::sun::star::uno::Any& _rOldValue );
+        virtual ::std::vector< sal_Int32 >& GetSelectedRows();
         virtual void RemoveSelectedRow(RowPos _nRowPos);
         virtual ::rtl::OUString GetAccessibleCellText(sal_Int32 _nRowPos, sal_Int32 _nColPos) const;
         // .............................................................................................................
 
-        void clearSelection();
         void selectionChanged(bool _bChanged);
+
+        void    SelectRow( RowPos const i_rowIndex, bool const i_select );
+        void    SelectAll( bool const i_select );
 
     protected:
         ::svt::IAccessibleFactory&   getAccessibleFactory();

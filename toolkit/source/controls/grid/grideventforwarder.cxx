@@ -81,11 +81,11 @@ namespace toolkit
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    void SAL_CALL GridEventForwarder::rowsAdded( const GridDataEvent& i_event ) throw (RuntimeException)
+    void SAL_CALL GridEventForwarder::rowsInserted( const GridDataEvent& i_event ) throw (RuntimeException)
     {
         Reference< XGridDataListener > xPeer( m_parent.getPeer(), UNO_QUERY );
         if ( xPeer.is() )
-            xPeer->rowsAdded( i_event );
+            xPeer->rowsInserted( i_event );
     }
 
     //------------------------------------------------------------------------------------------------------------------

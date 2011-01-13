@@ -89,28 +89,6 @@ namespace toolkit
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    namespace
-    {
-        Sequence< sal_Int32 > lcl_buildSingleElementSequence( sal_Int32 const i_index )
-        {
-            Sequence< sal_Int32 > aIndexes(1);
-            aIndexes[0] = i_index;
-            return aIndexes;
-        }
-        Sequence< sal_Int32 > lcl_buildIndexSequence( sal_Int32 const i_start, sal_Int32 const i_end )
-        {
-            Sequence< sal_Int32 > aIndexes;
-            ENSURE_OR_RETURN( i_end >= i_start, "lcl_buildIndexSequence: illegal indexes!", aIndexes );
-
-            aIndexes.realloc( i_end - i_start + 1 );
-            for ( sal_Int32 i = i_start; i <= i_end; ++i )
-                aIndexes[ i - i_start ] = i;
-
-            return aIndexes;
-        }
-    }
-
-    //------------------------------------------------------------------------------------------------------------------
     void DefaultGridDataModel::broadcast( GridDataEvent const & i_event,
         void ( SAL_CALL XGridDataListener::*i_listenerMethod )( GridDataEvent const & ), ::osl::ClearableMutexGuard & i_instanceLock )
     {
@@ -183,9 +161,10 @@ namespace toolkit
         if ( columnCount > m_nColumnCount )
             m_nColumnCount = columnCount;
 
+        sal_Int32 const rowIndex = sal_Int32( m_aData.size() - 1 );
         broadcast(
-            GridDataEvent( *this, Sequence< sal_Int32 >(), lcl_buildSingleElementSequence( m_aData.size() - 1 ) ),
-            &XGridDataListener::rowsAdded,
+            GridDataEvent( *this, -1, -1, rowIndex, rowIndex ),
+            &XGridDataListener::rowsInserted,
             aGuard
         );
     }
@@ -224,9 +203,11 @@ namespace toolkit
         if ( maxColCount > m_nColumnCount )
             m_nColumnCount = maxColCount;
 
+        sal_Int32 const firstRow = sal_Int32( m_aData.size() - rowCount );
+        sal_Int32 const lastRow = sal_Int32( m_aData.size() - 1 );
         broadcast(
-            GridDataEvent( *this, Sequence< sal_Int32 >(), lcl_buildIndexSequence( m_aData.size() - rowCount, m_aData.size() - 1 ) ),
-            &XGridDataListener::rowsAdded,
+            GridDataEvent( *this, -1, -1, firstRow, lastRow ),
+            &XGridDataListener::rowsInserted,
             aGuard
         );
     }
@@ -243,7 +224,7 @@ namespace toolkit
         m_aData.erase( m_aData.begin() + i_rowIndex );
 
         broadcast(
-            GridDataEvent( *this, Sequence< sal_Int32 >(), lcl_buildSingleElementSequence( i_rowIndex ) ),
+            GridDataEvent( *this, -1, -1, i_rowIndex, i_rowIndex ),
             &XGridDataListener::rowsRemoved,
             aGuard
         );
@@ -258,7 +239,7 @@ namespace toolkit
         m_aData.clear();
 
         broadcast(
-            GridDataEvent( *this, Sequence< sal_Int32 >(), Sequence< sal_Int32 >() ),
+            GridDataEvent( *this, -1, -1, -1, -1 ),
             &XGridDataListener::rowsRemoved,
             aGuard
         );
@@ -280,7 +261,7 @@ namespace toolkit
         rRowData[ i_columnIndex ] = i_value;
 
         broadcast(
-            GridDataEvent( *this, lcl_buildSingleElementSequence( i_columnIndex ), lcl_buildSingleElementSequence( i_rowIndex ) ),
+            GridDataEvent( *this, i_columnIndex, i_columnIndex, i_rowIndex, i_rowIndex ),
             &XGridDataListener::dataChanged,
             aGuard
         );
@@ -317,12 +298,10 @@ namespace toolkit
             rDataRow[ columnIndex ] = i_values[ col ];
         }
 
-        // by definition, the indexes in the notified sequences shall be sorted
-        Sequence< sal_Int32 > columnIndexes( i_columnIndexes );
-        ::std::sort( stl_begin( columnIndexes ), stl_end( columnIndexes ) );
-
+        sal_Int32 const firstAffectedColumn = *::std::min_element( stl_begin( i_columnIndexes ), stl_end( i_columnIndexes ) );
+        sal_Int32 const lastAffectedColumn = *::std::max_element( stl_begin( i_columnIndexes ), stl_end( i_columnIndexes ) );
         broadcast(
-            GridDataEvent( *this, columnIndexes, lcl_buildSingleElementSequence( i_rowIndex ) ),
+            GridDataEvent( *this, firstAffectedColumn, lastAffectedColumn, i_rowIndex, i_rowIndex ),
             &XGridDataListener::dataChanged,
             aGuard
         );
@@ -339,7 +318,7 @@ namespace toolkit
         m_aRowHeaders[ i_rowIndex ] = i_title;
 
         broadcast(
-            GridDataEvent( *this, Sequence< sal_Int32 >(), lcl_buildSingleElementSequence( i_rowIndex ) ),
+            GridDataEvent( *this, -1, -1, i_rowIndex, i_rowIndex ),
             &XGridDataListener::rowTitleChanged,
             aGuard
         );

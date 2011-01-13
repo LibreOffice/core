@@ -70,6 +70,7 @@ namespace svt { namespace table
     using ::com::sun::star::style::HorizontalAlignment_LEFT;
     using ::com::sun::star::style::HorizontalAlignment;
     using ::com::sun::star::uno::WeakReference;
+    using ::com::sun::star::awt::grid::GridDataEvent;
     /** === end UNO using === **/
 
     //==================================================================================================================
@@ -263,7 +264,7 @@ namespace svt { namespace table
                 ++loop
             )
         {
-            (*loop)->columnsInserted( i_position, i_position );
+            (*loop)->columnInserted( i_position );
         }
     }
 
@@ -286,7 +287,7 @@ namespace svt { namespace table
                 ++loop
             )
         {
-            (*loop)->columnsRemoved( i_position, i_position );
+            (*loop)->columnRemoved( i_position );
         }
 
         // dispose the column
@@ -324,7 +325,7 @@ namespace svt { namespace table
                 ++loop
             )
         {
-            (*loop)->columnsRemoved( 0, nLastIndex );
+            (*loop)->allColumnsRemoved();
         }
     }
 
@@ -487,10 +488,16 @@ namespace svt { namespace table
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    bool UnoControlTableModel::hasColumnModel() const
+    Reference< XGridColumnModel > UnoControlTableModel::getColumnModel() const
     {
         Reference< XGridColumnModel > const xColumnModel( m_pImpl->m_aColumnModel );
-        return xColumnModel.is();
+        return xColumnModel;
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    bool UnoControlTableModel::hasColumnModel() const
+    {
+        return getColumnModel().is();
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -719,6 +726,57 @@ namespace svt { namespace table
             )
         {
             (*loop)->columnChanged( i_columnPos, i_attributeGroup );
+        }
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    void UnoControlTableModel::notifyRowsInserted( GridDataEvent const & i_event )
+    {
+        // check sanity of the event
+        ENSURE_OR_RETURN_VOID( i_event.FirstRow >= 0, "UnoControlTableModel::notifyRowsInserted: invalid first row!" );
+        ENSURE_OR_RETURN_VOID( i_event.LastRow >= i_event.FirstRow, "UnoControlTableModel::notifyRowsInserted: invalid row indexes!" );
+
+        // check own sanity
+        Reference< XGridColumnModel > const xColumnModel( m_pImpl->m_aColumnModel );
+        ENSURE_OR_RETURN_VOID( xColumnModel.is(), "UnoControlTableModel::notifyRowsInserted: no column model anymore!" );
+
+        Reference< XGridDataModel > const xDataModel( m_pImpl->m_aDataModel );
+        ENSURE_OR_RETURN_VOID( xDataModel.is(), "UnoControlTableModel::notifyRowsInserted: no data model anymore!" );
+
+        // implicitly add columns to the column model
+        // TODO: is this really a good idea?
+        sal_Int32 const dataColumnCount = xDataModel->getColumnCount();
+        OSL_ENSURE( dataColumnCount > 0, "UnoControlTableModel::notifyRowsInserted: no columns at all?" );
+
+        sal_Int32 const modelColumnCount = xColumnModel->getColumnCount();
+        if ( ( modelColumnCount == 0 ) && ( dataColumnCount > 0 ) )
+        {
+            // TODO: shouldn't we clear the mutexes guard for this call?
+            xColumnModel->setDefaultColumns( dataColumnCount );
+        }
+
+        // multiplex the event to our own listeners
+        ModellListeners aListeners( m_pImpl->m_aListeners );
+        for (   ModellListeners::const_iterator loop = aListeners.begin();
+                loop != aListeners.end();
+                ++loop
+            )
+        {
+            (*loop)->rowsInserted( i_event.FirstRow, i_event.LastRow );
+        }
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    void UnoControlTableModel::notifyRowsRemoved( GridDataEvent const & i_event )
+    {
+        // multiplex the event to our own listeners
+        ModellListeners aListeners( m_pImpl->m_aListeners );
+        for (   ModellListeners::const_iterator loop = aListeners.begin();
+                loop != aListeners.end();
+                ++loop
+            )
+        {
+            (*loop)->rowsRemoved( i_event.FirstRow, i_event.LastRow );
         }
     }
 

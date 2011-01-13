@@ -131,6 +131,8 @@ namespace svt { namespace table
                 getDataModel() const;
         void    setColumnModel( ::com::sun::star::uno::Reference< ::com::sun::star::awt::grid::XGridColumnModel > const & i_gridColumnModel );
         bool    hasColumnModel() const;
+        ::com::sun::star::uno::Reference< ::com::sun::star::awt::grid::XGridColumnModel >
+                getColumnModel() const;
 
         void    setRowHeaders(bool _bRowHeaders);
         void    setColumnHeaders(bool _bColumnHeaders);
@@ -143,6 +145,10 @@ namespace svt { namespace table
         void    setRowBackgroundColors( ::com::sun::star::uno::Any const & i_APIValue );
 
         void    setVerticalAlign(::com::sun::star::style::VerticalAlignment _rAlign);
+
+        // multiplexing of XGridDataListener events
+        void    notifyRowsInserted( ::com::sun::star::awt::grid::GridDataEvent const & i_event );
+        void    notifyRowsRemoved( ::com::sun::star::awt::grid::GridDataEvent const & i_event );
 
         /// retrieves the index of a column within the model
         ColPos getColumnPos( UnoGridColumnFacade const & i_column ) const;

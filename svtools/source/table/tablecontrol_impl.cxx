@@ -36,6 +36,15 @@
 #include "tablegeometry.hxx"
 #include "cellvalueconversion.hxx"
 
+#include "accessibletableimp.hxx"
+
+/** === begin UNO includes === **/
+#include <com/sun/star/accessibility/XAccessible.hpp>
+#include <com/sun/star/accessibility/AccessibleTableModelChange.hpp>
+#include <com/sun/star/accessibility/AccessibleEventId.hpp>
+#include <com/sun/star/accessibility/AccessibleTableModelChangeType.hpp>
+/** === end UNO includes === **/
+
 #include <comphelper/scopeguard.hxx>
 #include <vcl/scrbar.hxx>
 #include <vcl/seleng.hxx>
@@ -49,6 +58,14 @@
 namespace svt { namespace table
 {
 //......................................................................................................................
+
+    /** === begin UNO using === **/
+    using ::com::sun::star::accessibility::AccessibleTableModelChange;
+    using ::com::sun::star::uno::makeAny;
+    using ::com::sun::star::uno::Any;
+    /** === end UNO using === **/
+    namespace AccessibleEventId = ::com::sun::star::accessibility::AccessibleEventId;
+    namespace AccessibleTableModelChangeType = ::com::sun::star::accessibility::AccessibleTableModelChangeType;
 
     //====================================================================
     //= TempHideCursor
@@ -446,25 +463,125 @@ namespace svt { namespace table
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    void TableControl_Impl::rowsInserted( RowPos first, RowPos last )
+    void TableControl_Impl::rowsInserted( RowPos i_first, RowPos i_last )
     {
-        OSL_ENSURE( false, "TableControl_Impl::rowsInserted: not implemented!" );
-            // there's no known implementation (yet) which calls this method
-        OSL_UNUSED( first );
-        OSL_UNUSED( last );
+        DBG_CHECK_ME();
+        OSL_PRECOND( i_last >= i_first, "TableControl_Impl::rowsInserted: invalid row indexes!" );
+
+        TableSize const insertedRows = i_last - i_first + 1;
+
+        // adjust selection, if necessary
+        bool selectionChanged = false;
+        for ( ::std::vector< RowPos >::iterator selPos = m_aSelectedRows.begin(); selPos != m_aSelectedRows.end(); ++selPos )
+        {
+            if ( *selPos >= i_first )
+            {
+                *selPos += insertedRows;
+                selectionChanged = true;
+            }
+        }
+
+        // adjust our cached row count
+        m_nRowCount = m_pModel->getRowCount();
+
+        // if the rows have been inserted before the current row, adjust this
+        if ( i_first <= m_nCurRow )
+            goTo( m_nCurColumn, m_nCurRow + insertedRows );
+
+        // notify A1YY events
+        if ( m_rAntiImpl.isAccessibleAlive() )
+        {
+            m_rAntiImpl.commitGridControlEvent( AccessibleEventId::TABLE_MODEL_CHANGED,
+                makeAny( AccessibleTableModelChange( AccessibleTableModelChangeType::INSERT, i_first, i_last, 0, m_pModel->getColumnCount() ) ),
+                Any()
+            );
+            m_rAntiImpl.commitGridControlEvent( AccessibleEventId::CHILD,
+                 makeAny( m_rAntiImpl.m_pAccessTable->m_pAccessible->getTableHeader( TCTYPE_ROWHEADERBAR ) ),
+                Any()
+            );
+
+//          for ( sal_Int32 i = 0 ; i <= m_pModel->getColumnCount(); ++i )
+//          {
+//              m_rAntiImpl.commitGridControlEvent(
+//                    CHILD,
+//                  makeAny( m_rAntiImpl.m_pAccessTable->m_pAccessible->getTable() ),
+//                  Any());
+//          }
+            // Huh? What's that? We're notifying |columnCount| CHILD events here, claiming the *table* itself
+            // has been inserted. Doesn't make much sense, does it?
+        }
+
+        // schedule repaint
+        m_rAntiImpl.InvalidateDataWindow( i_first, i_last, false );
+
+        // call selection handlers, if necessary
+        if ( selectionChanged )
+            m_rAntiImpl.Select();
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    void TableControl_Impl::rowsRemoved( RowPos first, RowPos last )
+    void TableControl_Impl::rowsRemoved( RowPos i_first, RowPos i_last )
     {
-        OSL_ENSURE( false, "TableControl_Impl::rowsRemoved: not implemented!" );
-            // there's no known implementation (yet) which calls this method
-        OSL_UNUSED( first );
-        OSL_UNUSED( last );
+        sal_Int32 firstRemovedRow = i_first;
+        sal_Int32 lastRemovedRow = i_last;
+
+        // adjust selection, if necessary
+        bool selectionChanged = false;
+        if ( i_first == -1 )
+        {
+            selectionChanged = markAllRowsAsDeselected();
+
+            firstRemovedRow = 0;
+            lastRemovedRow = m_nRowCount - 1;
+        }
+        else
+        {
+            ENSURE_OR_RETURN_VOID( i_last >= i_first, "TableControl_Impl::rowsRemoved: illegal indexes!" );
+
+            for ( sal_Int32 row = i_first; row < i_last; ++row )
+            {
+                selectionChanged |= markRowAsDeselected( row );
+            }
+        }
+
+        // adjust cached row count
+        m_nRowCount = m_pModel->getRowCount();
+
+        // adjust the current row, if it is larger than the row count now
+        if ( m_nCurRow >= m_nRowCount )
+        {
+            if ( m_nRowCount > 0 )
+                goTo( m_nCurColumn, m_nRowCount - 1 );
+            else
+                m_nCurRow = ROW_INVALID;
+        }
+
+        // notify A11Y events
+        if ( m_rAntiImpl.isAccessibleAlive() )
+        {
+            m_rAntiImpl.commitGridControlEvent(
+                AccessibleEventId::TABLE_MODEL_CHANGED,
+                makeAny( AccessibleTableModelChange(
+                    AccessibleTableModelChangeType::DELETE,
+                    firstRemovedRow,
+                    lastRemovedRow,
+                    0,
+                    m_pModel->getColumnCount()
+                ) ),
+                Any()
+            );
+        }
+
+        // schedule a repaint
+        m_rAntiImpl.InvalidateDataWindow( firstRemovedRow, lastRemovedRow, true );
+
+        // call selection handlers, if necessary
+        if ( selectionChanged )
+            m_rAntiImpl.Select();
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    void TableControl_Impl::columnsInserted( ColPos i_first, ColPos i_last )
+    void TableControl_Impl::columnInserted( ColPos const i_colIndex )
     {
         m_nColumnCount = m_pModel->getColumnCount();
         impl_ni_updateColumnWidths();
@@ -472,12 +589,11 @@ namespace svt { namespace table
 
         m_rAntiImpl.Invalidate();
 
-        OSL_UNUSED( i_first );
-        OSL_UNUSED( i_last );
+        OSL_UNUSED( i_colIndex );
    }
 
     //------------------------------------------------------------------------------------------------------------------
-    void TableControl_Impl::columnsRemoved( ColPos i_first, ColPos i_last )
+    void TableControl_Impl::columnRemoved( ColPos const i_colIndex )
     {
         m_nColumnCount = m_pModel->getColumnCount();
         impl_ni_updateColumnWidths();
@@ -485,17 +601,17 @@ namespace svt { namespace table
 
         m_rAntiImpl.Invalidate();
 
-        OSL_UNUSED( i_first );
-        OSL_UNUSED( i_last );
+        OSL_UNUSED( i_colIndex );
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    void TableControl_Impl::columnMoved( ColPos oldIndex, ColPos newIndex )
+    void TableControl_Impl::allColumnsRemoved()
     {
-        OSL_ENSURE( false, "TableControl_Impl::columnMoved: not implemented!" );
-            // there's no known implementation (yet) which calls this method
-        OSL_UNUSED( oldIndex );
-        OSL_UNUSED( newIndex );
+        m_nColumnCount = m_pModel->getColumnCount();
+        impl_ni_updateColumnWidths();
+        impl_ni_updateScrollbars();
+
+        m_rAntiImpl.Invalidate();
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -1742,12 +1858,6 @@ namespace svt { namespace table
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    void TableControl_Impl::clearSelection()
-    {
-        m_aSelectedRows.clear();
-    }
-
-    //------------------------------------------------------------------------------------------------------------------
     void TableControl_Impl::removeSelectedRow(RowPos _nRowPos)
     {
         int i =0;
@@ -1841,10 +1951,13 @@ namespace svt { namespace table
 
         // TODO: give veto listeners a chance
 
-        if  (  ( _nColumn < -1 ) || ( _nColumn >= m_nColumnCount )
-            || ( _nRow < -1 ) || ( _nRow >= m_nRowCount )
+        if  (  ( _nColumn < 0 ) || ( _nColumn >= m_nColumnCount )
+            || ( _nRow < 0 ) || ( _nRow >= m_nRowCount )
             )
+        {
+            OSL_ENSURE( false, "TableControl_Impl::goTo: invalid row or column index!" );
             return false;
+        }
 
         TempHideCursor aHideCursor( *this );
         m_nCurColumn = _nColumn;
@@ -2087,6 +2200,88 @@ namespace svt { namespace table
     }
 
     //--------------------------------------------------------------------
+    bool TableControl_Impl::markRowAsDeselected( RowPos const i_rowIndex )
+    {
+        DBG_CHECK_ME();
+
+        ::std::vector< RowPos >::iterator selPos = ::std::find( m_aSelectedRows.begin(), m_aSelectedRows.end(), i_rowIndex );
+        if ( selPos == m_aSelectedRows.end() )
+            return false;
+
+        m_aSelectedRows.erase( selPos );
+        return true;
+    }
+
+    //--------------------------------------------------------------------
+    bool TableControl_Impl::markRowAsSelected( RowPos const i_rowIndex )
+    {
+        DBG_CHECK_ME();
+
+        if ( isRowSelected( i_rowIndex ) )
+            return false;
+
+        SelectionMode const eSelMode = getSelEngine()->GetSelectionMode();
+        switch ( eSelMode )
+        {
+        case SINGLE_SELECTION:
+            if ( !m_aSelectedRows.empty() )
+            {
+                OSL_ENSURE( m_aSelectedRows.size() == 1, "TableControl::markRowAsSelected: SingleSelection with more than one selected element?" );
+                m_aSelectedRows[0] = i_rowIndex;
+                break;
+            }
+            // fall through
+
+        case MULTIPLE_SELECTION:
+            m_aSelectedRows.push_back( i_rowIndex );
+            break;
+
+        default:
+            OSL_ENSURE( false, "TableControl_Impl::markRowAsSelected: unsupported selection mode!" );
+            return false;
+        }
+
+        return true;
+    }
+
+    //--------------------------------------------------------------------
+    bool TableControl_Impl::markAllRowsAsDeselected()
+    {
+        if ( m_aSelectedRows.empty() )
+            return false;
+
+        m_aSelectedRows.clear();
+        return true;
+    }
+
+    //--------------------------------------------------------------------
+    bool TableControl_Impl::markAllRowsAsSelected()
+    {
+        DBG_CHECK_ME();
+
+        SelectionMode const eSelMode = getSelEngine()->GetSelectionMode();
+        ENSURE_OR_RETURN_FALSE( eSelMode == MULTIPLE_SELECTION, "TableControl_Impl::markAllRowsAsSelected: unsupported selection mode!" );
+
+        if ( m_aSelectedRows.size() == size_t( m_pModel->getRowCount() ) )
+        {
+        #if OSL_DEBUG_LEVEL > 0
+            for ( TableSize row = 0; row < m_pModel->getRowCount(); ++row )
+            {
+                OSL_ENSURE( isRowSelected( row ), "TableControl_Impl::markAllRowsAsSelected: inconsistency in the selected rows!" );
+            }
+        #endif
+            // already all rows marked as selected
+            return false;
+        }
+
+        m_aSelectedRows.clear();
+        for ( RowPos i=0; i < m_pModel->getRowCount(); ++i )
+            m_aSelectedRows.push_back(i);
+
+        return true;
+    }
+
+    //--------------------------------------------------------------------
     void TableControl_Impl::resizeColumn( const Point& rPoint )
     {
         Pointer aNewPointer( POINTER_ARROW );
@@ -2261,7 +2456,7 @@ namespace svt { namespace table
     //------------------------------------------------------------------------------------------------------------------
     TableFunctionSet::TableFunctionSet(TableControl_Impl* _pTableControl)
         :m_pTableControl( _pTableControl)
-    ,m_nCurrentRow (-2)
+        ,m_nCurrentRow (-2)
     {
     }
     //------------------------------------------------------------------------------------------------------------------
@@ -2399,6 +2594,7 @@ namespace svt { namespace table
         }
         m_pTableControl->m_aSelectedRows.erase(m_pTableControl->m_aSelectedRows.begin()+pos);
     }
+
     //------------------------------------------------------------------------------------------------------------------
     void TableFunctionSet::DeselectAll()
     {

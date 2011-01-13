@@ -103,7 +103,8 @@ namespace svt { namespace table
             the table
 
             @param first
-                the old index of the first removed row
+                the old index of the first removed row. If this is <code>-1</code>, then all
+                rows have been removed from the model.
             @param last
                 the old index of the last removed row. Must not be smaller
                 than ->first
@@ -119,27 +120,19 @@ namespace svt { namespace table
                 the index of the last newly inserted row. Must not be smaller
                 than ->first
         */
-        virtual void    columnsInserted( ColPos first, ColPos last ) = 0;
+        virtual void    columnInserted( ColPos const i_colIndex ) = 0;
 
         /** notifies the listener that one or more columns have been removed from
             the table
 
-            @param first
-                the old index of the first removed column
-            @param last
-                the old index of the last removed column. Must not be smaller
-                than ->first
+            @param i_colIndex
+                the old index of the removed column
         */
-        virtual void    columnsRemoved( ColPos first, ColPos last ) = 0;
+        virtual void    columnRemoved( ColPos const i_colIndex ) = 0;
 
-        /** notifies the listener that a column in the table has moved
-
-            @param oldIndex
-                the old index of the column within the model
-            @param newIndex
-                the new index of the column within the model
+        /** notifies the listener that all columns have been removed form the model
         */
-        virtual void    columnMoved( ColPos oldIndex, ColPos newIndex ) = 0;
+        virtual void    allColumnsRemoved() = 0;
 
         /** notifies the listener that a rectangular cell range in the table
             has been updated
