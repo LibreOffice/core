@@ -269,7 +269,7 @@ enum ButtonValue {
  *   Generic value container for all control parts.
  */
 
-class VCL_PLUGIN_PUBLIC ImplControlValue
+class VCL_DLLPUBLIC ImplControlValue
 {
     friend class SalFrame;
 
@@ -307,7 +307,7 @@ class VCL_PLUGIN_PUBLIC ImplControlValue
  *
  *   Value container for scrollbars.
  */
- class VCL_PLUGIN_PUBLIC ScrollbarValue : public ImplControlValue
+class VCL_DLLPUBLIC ScrollbarValue : public ImplControlValue
 {
     public:
         long            mnMin;
@@ -333,7 +333,7 @@ class VCL_PLUGIN_PUBLIC ImplControlValue
         virtual ~ScrollbarValue();
 };
 
-class VCL_PLUGIN_PUBLIC SliderValue : public ImplControlValue
+class VCL_DLLPUBLIC SliderValue : public ImplControlValue
 {
     public:
         long            mnMin;
@@ -361,7 +361,7 @@ class VCL_PLUGIN_PUBLIC SliderValue : public ImplControlValue
 #define TABITEM_FIRST_IN_GROUP 0x004   // the tabitem is the first in group of tabitems
 #define TABITEM_LAST_IN_GROUP  0x008   // the tabitem is the last in group of tabitems
 
-class VCL_PLUGIN_PUBLIC TabitemValue : public ImplControlValue
+class VCL_DLLPUBLIC TabitemValue : public ImplControlValue
 {
     public:
         unsigned int    mnAlignment;
@@ -387,7 +387,7 @@ class VCL_PLUGIN_PUBLIC TabitemValue : public ImplControlValue
  *   Note: the other parameters of DrawNativeControl will have no meaning
  *         all parameters for spinbuttons are carried here
  */
-class VCL_PLUGIN_PUBLIC SpinbuttonValue : public ImplControlValue
+class VCL_DLLPUBLIC SpinbuttonValue : public ImplControlValue
 {
     public:
         Rectangle       maUpperRect;
