@@ -259,7 +259,7 @@ public :
     sal_Bool GetDoubleSided() const
         { return ((const Svx3DDoubleSidedItem&)GetObjectItemSet().Get(SDRATTR_3DOBJ_DOUBLE_SIDED)).GetValue(); }
 
-    // NormalsKind: 0 == sal_False/FALSE, 1 == sal_True/sal_False, else == sal_True/TRUE
+    // NormalsKind: 0 == sal_False/sal_False, 1 == sal_True/sal_False, else == sal_True/TRUE
     sal_uInt16 GetNormalsKind() const
         { return ((const Svx3DNormalsKindItem&)GetObjectItemSet().Get(SDRATTR_3DOBJ_NORMALS_KIND)).GetValue(); }
 
@@ -267,11 +267,11 @@ public :
     sal_Bool GetNormalsInvert() const
         { return ((const Svx3DNormalsInvertItem&)GetObjectItemSet().Get(SDRATTR_3DOBJ_NORMALS_INVERT)).GetValue(); }
 
-    // TextureProjX: 0 == sal_False/FALSE, 1 == sal_True/sal_False, else == sal_True/TRUE
+    // TextureProjX: 0 == sal_False/sal_False, 1 == sal_True/sal_False, else == sal_True/TRUE
     sal_uInt16 GetTextureProjectionX() const
         { return ((const Svx3DTextureProjectionXItem&)GetObjectItemSet().Get(SDRATTR_3DOBJ_TEXTURE_PROJ_X)).GetValue(); }
 
-    // TextureProjY: 0 == sal_False/FALSE, 1 == sal_True/sal_False, else == sal_True/TRUE
+    // TextureProjY: 0 == sal_False/sal_False, 1 == sal_True/sal_False, else == sal_True/TRUE
     sal_uInt16 GetTextureProjectionY() const
         { return ((const Svx3DTextureProjectionYItem&)GetObjectItemSet().Get(SDRATTR_3DOBJ_TEXTURE_PROJ_Y)).GetValue(); }
 

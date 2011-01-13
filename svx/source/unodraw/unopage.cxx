@@ -625,7 +625,7 @@ SdrObject *SvxDrawPage::_CreateSdrObject( const Reference< drawing::XShape > & x
                 aNewPolygon.setClosed(true);
                 pObj->SetExtrudePolygon(basegfx::B2DPolyPolygon(aNewPolygon));
 
-                // #107245# pObj->SetExtrudeCharacterMode(TRUE);
+                // #107245# pObj->SetExtrudeCharacterMode(sal_True);
                 pObj->SetMergedItem(Svx3DCharacterModeItem(sal_True));
             }
             else if(pNewObj->ISA(E3dLatheObj))
@@ -638,7 +638,7 @@ SdrObject *SvxDrawPage::_CreateSdrObject( const Reference< drawing::XShape > & x
                 aNewPolygon.setClosed(true);
                 pObj->SetPolyPoly2D(basegfx::B2DPolyPolygon(aNewPolygon));
 
-                // #107245# pObj->SetLatheCharacterMode(TRUE);
+                // #107245# pObj->SetLatheCharacterMode(sal_True);
                 pObj->SetMergedItem(Svx3DCharacterModeItem(sal_True));
             }
         }

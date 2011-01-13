@@ -70,8 +70,8 @@ public:
     virtual void SetModel(SdrModel* pNewModel);
 
     virtual void TakeObjInfo(SdrObjTransformInfoRec& rInfo) const;
-    virtual UINT32 GetObjInventor() const;
-    virtual UINT16 GetObjIdentifier() const;
+    virtual sal_uInt32 GetObjInventor() const;
+    virtual sal_uInt16 GetObjIdentifier() const;
     virtual SdrObjList* GetSubList() const;
 
     virtual const Rectangle& GetCurrentBoundRect() const;
@@ -131,7 +131,7 @@ public:
     virtual void NbcSetLogicRect(const Rectangle& rRect);
 
     virtual long GetRotateAngle() const;
-    virtual long GetShearAngle(FASTBOOL bVertical=FALSE) const;
+    virtual long GetShearAngle(FASTBOOL bVertical=sal_False) const;
 
     virtual sal_uInt32 GetSnapPointCount() const;
     virtual Point GetSnapPoint(sal_uInt32 i) const;

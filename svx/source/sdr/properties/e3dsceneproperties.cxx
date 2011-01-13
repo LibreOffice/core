@@ -102,13 +102,13 @@ namespace sdr
                         // and always equal.
                         if(nWhich <= SDRATTR_3DSCENE_FIRST || nWhich >= SDRATTR_3DSCENE_LAST)
                         {
-                            if(SFX_ITEM_DONTCARE == rSet.GetItemState(nWhich, FALSE))
+                            if(SFX_ITEM_DONTCARE == rSet.GetItemState(nWhich, sal_False))
                             {
                                 mpItemSet->InvalidateItem(nWhich);
                             }
                             else
                             {
-                                mpItemSet->MergeValue(rSet.Get(nWhich), TRUE);
+                                mpItemSet->MergeValue(rSet.Get(nWhich), sal_True);
                             }
                         }
 
@@ -131,7 +131,7 @@ namespace sdr
             {
                 // Generate filtered ItemSet which contains all but the SDRATTR_3DSCENE items.
                 // #i50808# Leak fix, Clone produces a new instance and we get ownership here
-                SfxItemSet* pNewSet = rSet.Clone(TRUE);
+                SfxItemSet* pNewSet = rSet.Clone(sal_True);
                 DBG_ASSERT(pNewSet, "E3dSceneProperties::SetMergedItemSet(): Could not clone ItemSet (!)");
 
                 for(sal_uInt16 b(SDRATTR_3DSCENE_FIRST); b <= SDRATTR_3DSCENE_LAST; b++)
@@ -319,13 +319,13 @@ namespace sdr
             Camera3D aSceneCam(rObj.GetCamera());
 
             // ProjectionType
-            mpItemSet->Put(Svx3DPerspectiveItem((UINT16)aSceneCam.GetProjection()));
+            mpItemSet->Put(Svx3DPerspectiveItem((sal_uInt16)aSceneCam.GetProjection()));
 
             // CamPos
-            mpItemSet->Put(Svx3DDistanceItem((UINT32)(aSceneCam.GetPosition().getZ() + 0.5)));
+            mpItemSet->Put(Svx3DDistanceItem((sal_uInt32)(aSceneCam.GetPosition().getZ() + 0.5)));
 
             // FocalLength
-            mpItemSet->Put(Svx3DFocalLengthItem((UINT32)((aSceneCam.GetFocalLength() * 100.0) + 0.5)));
+            mpItemSet->Put(Svx3DFocalLengthItem((sal_uInt32)((aSceneCam.GetFocalLength() * 100.0) + 0.5)));
         }
     } // end of namespace properties
 } // end of namespace sdr

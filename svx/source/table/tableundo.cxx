@@ -107,16 +107,16 @@ void CellUndo::Redo()
     }
 }
 
-BOOL CellUndo::Merge( SfxUndoAction *pNextAction )
+sal_Bool CellUndo::Merge( SfxUndoAction *pNextAction )
 {
     CellUndo* pNext = dynamic_cast< CellUndo* >( pNextAction );
     if( pNext && pNext->mxCell.get() == mxCell.get() )
     {
-        return TRUE;
+        return sal_True;
     }
     else
     {
-        return FALSE;
+        return sal_False;
     }
 }
 
@@ -413,7 +413,7 @@ void TableColumnUndo::Redo()
 
 // -----------------------------------------------------------------------------
 
-BOOL TableColumnUndo::Merge( SfxUndoAction *pNextAction )
+sal_Bool TableColumnUndo::Merge( SfxUndoAction *pNextAction )
 {
     TableColumnUndo* pNext = dynamic_cast< TableColumnUndo* >( pNextAction );
     return pNext && pNext->mxCol == mxCol;
@@ -482,7 +482,7 @@ void TableRowUndo::Redo()
 
 // -----------------------------------------------------------------------------
 
-BOOL TableRowUndo::Merge( SfxUndoAction *pNextAction )
+sal_Bool TableRowUndo::Merge( SfxUndoAction *pNextAction )
 {
     TableRowUndo* pNext = dynamic_cast< TableRowUndo* >( pNextAction );
     return pNext && pNext->mxRow == mxRow;

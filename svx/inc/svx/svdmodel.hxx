@@ -579,7 +579,7 @@ public:
                FASTBOOL bMergeMasterPages=sal_False, FASTBOOL bAllMasterPages=sal_False,
                FASTBOOL bUndo=sal_True, FASTBOOL bTreadSourceAsConst=sal_False);
 
-    // Ist wie Merge(SourceModel=DestModel,nFirst,nLast,nDest,sal_False,FALSE,bUndo,!bMoveNoCopy);
+    // Ist wie Merge(SourceModel=DestModel,nFirst,nLast,nDest,sal_False,sal_False,bUndo,!bMoveNoCopy);
     void CopyPages(sal_uInt16 nFirstPageNum, sal_uInt16 nLastPageNum,
                    sal_uInt16 nDestPos,
                    FASTBOOL bUndo=sal_True, FASTBOOL bMoveNoCopy=sal_False);

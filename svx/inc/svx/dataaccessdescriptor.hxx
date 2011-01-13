@@ -108,7 +108,7 @@ namespace svx
                     createAnySequence();
 
         /** initialized the descriptor from the property set given
-            <p>If <arg>_bClear</arg> is <TRUE/>, the descriptor will clear all it's current settings before
+            <p>If <arg>_bClear</arg> is <sal_True/>, the descriptor will clear all it's current settings before
             initializing with the new ones.</p>
         */
         void        initializeFrom(
@@ -116,7 +116,7 @@ namespace svx
                         sal_Bool _bClear = sal_True);
 
         /** initialized the descriptor from the property values given
-            <p>If <arg>_bClear</arg> is <TRUE/>, the descriptor will clear all it's current settings before
+            <p>If <arg>_bClear</arg> is <sal_True/>, the descriptor will clear all it's current settings before
             initializing with the new ones.</p>
         */
         void        initializeFrom(

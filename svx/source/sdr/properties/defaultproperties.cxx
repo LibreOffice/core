@@ -62,7 +62,7 @@ namespace sdr
         {
             if(rProps.mpItemSet)
             {
-                mpItemSet = rProps.mpItemSet->Clone(TRUE);
+                mpItemSet = rProps.mpItemSet->Clone(sal_True);
 
                 // do not keep parent info, this may be changed by later construrtors.
                 // This class just copies the ItemSet, ignore parent.
@@ -162,7 +162,7 @@ namespace sdr
 
             while(nWhich)
             {
-                if(SFX_ITEM_SET == rSet.GetItemState(nWhich, FALSE, &pPoolItem))
+                if(SFX_ITEM_SET == rSet.GetItemState(nWhich, sal_False, &pPoolItem))
                 {
                     if(AllowItemChange(nWhich, pPoolItem))
                     {

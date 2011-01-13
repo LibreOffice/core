@@ -107,7 +107,7 @@ SV_IMPL_VARARR(SrchAttrItemList, SearchAttrItem);
 //    rBindings.ExecuteSynchron( nId, (const SfxPoolItem**)&pSearchItem, 0L )
 
 #define GetCheckBoxValue( rBox )                                \
-    rBox.IsEnabled() ? rBox.IsChecked() : FALSE
+    rBox.IsEnabled() ? rBox.IsChecked() : sal_False
 
 #if ENABLE_LAYOUT
 #undef SVX_RES

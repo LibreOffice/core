@@ -831,7 +831,7 @@ public:
 
 protected:
     virtual Window* getEventWindow() const;
-    virtual void onWindowEvent( const ULONG _nEventId, const Window& _rWindow, const void* _pEventData );
+    virtual void onWindowEvent( const sal_uLong _nEventId, const Window& _rWindow, const void* _pEventData );
 
     // default implementations call our focus listeners, don't forget to call them if you override this
     virtual void onFocusGained( const ::com::sun::star::awt::FocusEvent& _rEvent );
@@ -871,15 +871,15 @@ protected:
     /** determines whether the text of this cell can be painted directly, without
         using the painter control
 
-        If this is <TRUE/>, the <member>PaintCell</member> method will simply use the text as returned
+        If this is <sal_True/>, the <member>PaintCell</member> method will simply use the text as returned
         by <member>GetText</member>, and draw it onto the device passed to <member>PaintFieldToCell</member>,
         while respecting the current alignment settings.
 
-        If this is <FALSE/>, the <member>PaintFieldToCell</member> request will be forwarded to the painter
+        If this is <sal_False/>, the <member>PaintFieldToCell</member> request will be forwarded to the painter
         control (<member>m_pPainter</member>). This is more expensive, but the only option
         if your painting involves more that a simple DrawText.
 
-        This member is <TRUE/> by default, and can be modified by derived classes.
+        This member is <sal_True/> by default, and can be modified by derived classes.
     */
     sal_Bool    m_bFastPaint;
 
@@ -947,7 +947,7 @@ public:
     virtual void SAL_CALL removeChangeListener( const ::com::sun::star::uno::Reference< ::com::sun::star::form::XChangeListener >& aListener ) throw (::com::sun::star::uno::RuntimeException);
 
 protected:
-    virtual void onWindowEvent( const ULONG _nEventId, const Window& _rWindow, const void* _pEventData );
+    virtual void onWindowEvent( const sal_uLong _nEventId, const Window& _rWindow, const void* _pEventData );
 
     virtual void onFocusGained( const ::com::sun::star::awt::FocusEvent& _rEvent );
     virtual void onFocusLost( const ::com::sun::star::awt::FocusEvent& _rEvent );
@@ -999,7 +999,7 @@ public:
 
 protected:
     virtual Window* getEventWindow() const;
-    virtual void onWindowEvent( const ULONG _nEventId, const Window& _rWindow, const void* _pEventData );
+    virtual void onWindowEvent( const sal_uLong _nEventId, const Window& _rWindow, const void* _pEventData );
 };
 
 //==================================================================
@@ -1051,7 +1051,7 @@ public:
     virtual void SAL_CALL SAL_CALL makeVisible(sal_Int16 nEntry) throw(::com::sun::star::uno::RuntimeException);
 
 protected:
-    virtual void onWindowEvent( const ULONG _nEventId, const Window& _rWindow, const void* _pEventData );
+    virtual void onWindowEvent( const sal_uLong _nEventId, const Window& _rWindow, const void* _pEventData );
 
     DECL_LINK( OnDoubleClick, void* );
 };
@@ -1096,7 +1096,7 @@ public:
     virtual void SAL_CALL setDropDownLineCount( ::sal_Int16 _Lines ) throw (::com::sun::star::uno::RuntimeException);
 
 protected:
-    virtual void onWindowEvent( const ULONG _nEventId, const Window& _rWindow, const void* _pEventData );
+    virtual void onWindowEvent( const sal_uLong _nEventId, const Window& _rWindow, const void* _pEventData );
 };
 
 //==================================================================

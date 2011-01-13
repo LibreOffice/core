@@ -186,7 +186,7 @@ GalleryBrowser1::~GalleryBrowser1()
 
 sal_uIntPtr GalleryBrowser1::ImplInsertThemeEntry( const GalleryThemeEntry* pEntry )
 {
-    static const BOOL bShowHiddenThemes = ( getenv( "GALLERY_SHOW_HIDDEN_THEMES" ) != NULL );
+    static const sal_Bool bShowHiddenThemes = ( getenv( "GALLERY_SHOW_HIDDEN_THEMES" ) != NULL );
 
     sal_uIntPtr nRet = LISTBOX_ENTRY_NOTFOUND;
 
@@ -263,7 +263,7 @@ void GalleryBrowser1::ImplFillExchangeData( const GalleryTheme* pThm, ExchangeDa
     if( pTheme )
     {
         sal_Bool                bUpdateAllowed, bRenameAllowed, bRemoveAllowed;
-        static const BOOL   bIdDialog = ( getenv( "GALLERY_ENABLE_ID_DIALOG" ) != NULL );
+        static const sal_Bool   bIdDialog = ( getenv( "GALLERY_ENABLE_ID_DIALOG" ) != NULL );
 
         if( pTheme->IsReadOnly() )
             bUpdateAllowed = bRenameAllowed = bRemoveAllowed = sal_False;

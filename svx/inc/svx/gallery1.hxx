@@ -80,7 +80,7 @@ public:
     sal_Bool                    IsReadOnly() const { return bReadOnly; }
     sal_Bool                    IsDefault() const;
 
-    BOOL                    IsHidden() const { return aName.SearchAscii( "private://gallery/hidden/" ) == 0; }
+    sal_Bool                    IsHidden() const { return aName.SearchAscii( "private://gallery/hidden/" ) == 0; }
 
     sal_Bool                    IsModified() const { return bModified; }
     void                    SetModified( sal_Bool bSet ) { bModified = ( bSet && !IsImported() && !IsReadOnly() ); }

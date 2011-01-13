@@ -69,7 +69,7 @@ namespace svxform
 
     private:
         Link    m_aHandler;
-        ULONG   m_nEventId;
+        sal_uLong   m_nEventId;
 
     private:
         DECL_LINK( OnCall, void* );

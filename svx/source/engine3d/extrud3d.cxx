@@ -116,7 +116,7 @@ void E3dExtrudeObj::SetDefaultAttributes(E3dDefaultAttributes& rDefault)
 |*
 \************************************************************************/
 
-UINT16 E3dExtrudeObj::GetObjIdentifier() const
+sal_uInt16 E3dExtrudeObj::GetObjIdentifier() const
 {
     return E3D_EXTRUDEOBJ_ID;
 }
@@ -190,9 +190,9 @@ void E3dExtrudeObj::TakeObjNamePlural(XubString& rName) const
 |*
 \************************************************************************/
 
-BOOL E3dExtrudeObj::IsBreakObjPossible()
+sal_Bool E3dExtrudeObj::IsBreakObjPossible()
 {
-    return TRUE;
+    return sal_True;
 }
 
 SdrAttrObj* E3dExtrudeObj::GetBreakObj()

@@ -134,7 +134,7 @@ sal_Bool SdrViewIter::ImpCheckPageView(SdrPageView* pPV) const
 
                             if(!aObjLay.IsEmpty())
                             {
-                                return TRUE;
+                                return sal_True;
                             } // ansonsten die naechste MasterPage der Page ansehen...
                         }
                         else

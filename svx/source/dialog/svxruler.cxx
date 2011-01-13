@@ -2605,7 +2605,7 @@ void SvxRuler::ApplyBorders()
         Debug_Impl(pEditWin,*pColumnItem);
 #endif // DEBUGLIN
     SfxBoolItem aFlag(SID_RULER_ACT_LINE_ONLY,
-                      nDragType & DRAG_OBJECT_ACTLINE_ONLY? TRUE: sal_False);
+                      nDragType & DRAG_OBJECT_ACTLINE_ONLY? sal_True : sal_False);
     sal_uInt16 nColId = pRuler_Imp->bIsTableRows ? (bHorz ? SID_RULER_ROWS : SID_RULER_ROWS_VERTICAL) :
                             (bHorz ? SID_RULER_BORDERS : SID_RULER_BORDERS_VERTICAL);
     pBindings->GetDispatcher()->Execute( nColId, SFX_CALLMODE_RECORD, pColumnItem, &aFlag, 0L );
@@ -2881,7 +2881,7 @@ sal_Bool SvxRuler::CalcLimits
 (
  long &nMax1,                                   // zu setzenden Minimalwert
  long &nMax2,                                   // zu setzenden Maximalwert
- BOOL
+ sal_Bool
 ) const
 /*
    [Beschreibung]
@@ -3283,7 +3283,7 @@ void SvxRuler::CalcMinMax()
                 {
                     if(pObjectItem->HasLimits())
                     {
-                        if(CalcLimits(nMaxLeft, nMaxRight, nIdx & 1? FALSE: sal_True))
+                        if(CalcLimits(nMaxLeft, nMaxRight, nIdx & 1? sal_False : sal_True))
                         {
                             nMaxLeft = ConvertPosPixel(nMaxLeft);
                             nMaxRight = ConvertPosPixel(nMaxRight);

@@ -1147,8 +1147,8 @@ Pointer SdrView::GetPreferedPointer(const Point& rMousePos, const OutputDevice* 
                         b45=b90 || (Abs(aDif.X())==Abs(aDif.Y()));
                     }
                     sal_Bool bNo=sal_False;
-                    if (!IsMirrorAllowed(sal_True,TRUE)) bNo=sal_True; // Spiegeln ueberhaupt nicht erlaubt
-                    if (!IsMirrorAllowed(sal_False,FALSE) && !b45) bNo=sal_True; // freies Spiegeln nicht erlaubt
+                    if (!IsMirrorAllowed(sal_True,sal_True)) bNo=sal_True; // Spiegeln ueberhaupt nicht erlaubt
+                    if (!IsMirrorAllowed(sal_False,sal_False) && !b45) bNo=sal_True; // freies Spiegeln nicht erlaubt
                     if (!IsMirrorAllowed(sal_True,sal_False) && !b90) bNo=sal_True;  // Spiegeln hor/ver erlaubt
                     if (bNo) return Pointer(POINTER_NOTALLOWED);
                     if (b90) {

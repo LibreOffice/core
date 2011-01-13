@@ -132,7 +132,7 @@ public:
 
         @return
             The returned flag indicates whether the specified state has been
-            changed (<TRUE/>), i.e. it has formerly not been set.
+            changed (<sal_True/>), i.e. it has formerly not been set.
     */
     virtual sal_Bool SetState (sal_Int16 aState);
 
@@ -146,7 +146,7 @@ public:
 
         @return
             The returned flag indicates whether the specified state has been
-            changed (<TRUE/>), i.e. it has formerly been set.
+            changed (<sal_True/>), i.e. it has formerly been set.
     */
     virtual sal_Bool ResetState (sal_Int16 aState);
 
@@ -156,7 +156,7 @@ public:
         @param aState
             The state for which to return its value.
         @return
-            A value of <TRUE/> indicates that the state is set.  A <FALSE/>
+            A value of <sal_True/> indicates that the state is set.  A <sal_False/>
             value indicates an unset state or the inability to access the
             entity that manages the state set.
 

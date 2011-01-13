@@ -460,7 +460,7 @@ namespace svxform
             one will be used. Else, an attempt is made to create an <type scope="com::sun::star::sdb">InteractionHandler</type>
             is made.
 
-            @return <TRUE/>
+            @return <sal_True/>
                 if and only if <member>m_xInteractionHandler</member> is valid when the method returns
         */
         bool ensureInteractionHandler();
@@ -476,7 +476,7 @@ namespace svxform
             @param _rxNewControl
                 The control which should replace the existent control.
             @return
-                <TRUE/> if and only if the control was successfully replaced
+                <sal_True/> if and only if the control was successfully replaced
         */
         bool    replaceControl(
             const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl >& _rxExistentControl,
@@ -552,15 +552,15 @@ namespace svxform
             valid.
 
             @param _rFirstInvalidityExplanation
-                if the method returns <FALSE/> (i.e. if there is an invalid control), this string contains
+                if the method returns <sal_False/> (i.e. if there is an invalid control), this string contains
                 the explanation for the invalidity, as obtained from the validator.
 
             @param _rxFirstInvalidModel
-                if the method returns <FALSE/> (i.e. if there is an invalid control), this contains
+                if the method returns <sal_False/> (i.e. if there is an invalid control), this contains
                 the control model
 
             @return
-                <TRUE/> if and only if all controls belonging to our form are valid
+                <sal_True/> if and only if all controls belonging to our form are valid
         */
         bool    checkFormComponentValidity(
                     ::rtl::OUString& /* [out] */ _rFirstInvalidityExplanation,

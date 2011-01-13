@@ -351,7 +351,7 @@ sal_Bool SdrDragView::BegDragObj(const Point& rPnt, OutputDevice* pOut, SdrHdl* 
                     }
                     else
                     {
-                        if (!IsMirrorAllowed(sal_True,TRUE)) return sal_False;
+                        if (!IsMirrorAllowed(sal_True,sal_True)) return sal_False;
                         mpCurrentSdrDragMethod = new SdrDragMirror(*this);
                     }
                 } break;

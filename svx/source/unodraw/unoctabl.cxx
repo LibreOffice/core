@@ -100,11 +100,11 @@ sal_Bool SAL_CALL SvxUnoColorTable::supportsService( const  OUString& ServiceNam
     uno::Sequence< OUString > aSNL( getSupportedServiceNames() );
     const OUString * pArray = aSNL.getConstArray();
 
-    for( INT32 i = 0; i < aSNL.getLength(); i++ )
+    for( sal_Int32 i = 0; i < aSNL.getLength(); i++ )
         if( pArray[i] == ServiceName )
-            return TRUE;
+            return sal_True;
 
-    return FALSE;
+    return sal_False;
 }
 
 OUString SAL_CALL SvxUnoColorTable::getImplementationName() throw( uno::RuntimeException )
@@ -132,7 +132,7 @@ void SAL_CALL SvxUnoColorTable::insertByName( const OUString& aName, const uno::
     if( hasByName( aName ) )
         throw container::ElementExistException();
 
-    INT32 nColor = 0;
+    sal_Int32 nColor = 0;
     if( !(aElement >>= nColor) )
         throw lang::IllegalArgumentException();
 
@@ -157,7 +157,7 @@ void SAL_CALL SvxUnoColorTable::removeByName( const OUString& Name )
 void SAL_CALL SvxUnoColorTable::replaceByName( const OUString& aName, const uno::Any& aElement )
     throw( lang::IllegalArgumentException, container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException )
 {
-    INT32 nColor = 0;
+    sal_Int32 nColor = 0;
     if( !(aElement >>= nColor) )
         throw lang::IllegalArgumentException();
 

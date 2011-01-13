@@ -1182,7 +1182,7 @@ IMPL_LINK(SdrItemBrowser,ChangedHdl,_SdrItemBrowserControl*,pBrowse)
 
         SfxItemSet aNewSet(*aSet.GetPool(),pEntry->nWhichId,pEntry->nWhichId);
         XubString aNewText(pBrowse->GetNewEntryValue());
-        BOOL bDel( aNewText.EqualsAscii("del")
+        sal_Bool bDel( aNewText.EqualsAscii("del")
             || aNewText.EqualsAscii("Del")
             || aNewText.EqualsAscii("DEL")
             || aNewText.EqualsAscii("default")

@@ -348,8 +348,8 @@ SdrObject* EnhancedCustomShape3d::Create3DObject( const SdrObject* pShape2d, con
 
         // pShape2d Umwandeln in Szene mit 3D Objekt
         E3dDefaultAttributes a3DDefaultAttr;
-        a3DDefaultAttr.SetDefaultLatheCharacterMode( TRUE );
-        a3DDefaultAttr.SetDefaultExtrudeCharacterMode( TRUE );
+        a3DDefaultAttr.SetDefaultLatheCharacterMode( sal_True );
+        a3DDefaultAttr.SetDefaultExtrudeCharacterMode( sal_True );
 
         E3dScene* pScene = new E3dPolyScene( a3DDefaultAttr );
 
@@ -370,7 +370,7 @@ SdrObject* EnhancedCustomShape3d::Create3DObject( const SdrObject* pShape2d, con
         {
             aSet.Put( XLineStyleItem( XLINE_SOLID ) );
             aSet.Put( XFillStyleItem ( XFILL_NONE ) );
-            aSet.Put( Svx3DDoubleSidedItem( TRUE ) );
+            aSet.Put( Svx3DDoubleSidedItem( sal_True ) );
         }
         else
         {
@@ -410,7 +410,7 @@ SdrObject* EnhancedCustomShape3d::Create3DObject( const SdrObject* pShape2d, con
             }
             else
             {
-                SdrObject* pNewObj = pNext->ConvertToPolyObj( FALSE, FALSE );
+                SdrObject* pNewObj = pNext->ConvertToPolyObj( sal_False, sal_False );
                 SdrPathObj* pPath = PTR_CAST( SdrPathObj, pNewObj );
                 if ( pPath )
                     aPolyPoly = pPath->GetPathPoly();
@@ -516,7 +516,7 @@ SdrObject* EnhancedCustomShape3d::Create3DObject( const SdrObject* pShape2d, con
             double fW = rVolume.getWidth();
             double fH = rVolume.getHeight();
 
-            rCamera.SetAutoAdjustProjection( FALSE );
+            rCamera.SetAutoAdjustProjection( sal_False );
             rCamera.SetViewWindow( -fW / 2, - fH / 2, fW, fH);
             basegfx::B3DPoint aLookAt( 0.0, 0.0, 0.0 );
             basegfx::B3DPoint aCamPos( 0.0, 0.0, 100.0 );

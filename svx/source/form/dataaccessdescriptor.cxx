@@ -78,13 +78,13 @@ namespace svx
         void updateSet();
 
         /** builds the descriptor from a property value sequence
-            @return <TRUE/>
+            @return <sal_True/>
                 if and only if the sequence contained valid properties only
         */
         sal_Bool buildFrom( const Sequence< PropertyValue >& _rValues );
 
         /** builds the descriptor from a property set
-            @return <TRUE/>
+            @return <sal_True/>
                 if and only if the set contained valid properties only
         */
         sal_Bool buildFrom( const Reference< XPropertySet >& _rValues );

@@ -207,7 +207,7 @@ protected:
         @param  _pColumn
             The column to compare with.
         @return
-            <TRUE/> if the column is selected, otherwise <FALSE/>
+            <sal_True/> if the column is selected, otherwise <sal_False/>
     */
     sal_Bool isColumnSelected(sal_uInt16 nColumnId,DbGridColumn* _pColumn);
 };

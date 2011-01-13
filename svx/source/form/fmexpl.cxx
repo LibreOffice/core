@@ -286,7 +286,7 @@ void FmEntryData::Clear()
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmEntryData::Clear" );
     for (;;)
     {
-        FmEntryData* pEntryData = GetChildList()->Remove(ULONG(0));
+        FmEntryData* pEntryData = GetChildList()->Remove(sal_uLong(0));
         if (pEntryData == NULL)
             break;
         delete pEntryData;

@@ -159,7 +159,7 @@ struct SvxPosSizeStatusBarControl_Impl
     Size    aSize;      // g"ultig, wenn eine Gr"o/se angezeigt wird
     String  aStr;       // g"ultig, wenn ein Text angezeigt wird
     sal_Bool    bPos;       // show position
-    BOOL    bSize;      // Gr"o/se anzeigen?
+    sal_Bool    bSize;      // Gr"o/se anzeigen?
     sal_Bool    bTable;     // Tabellenindex anzeigen?
     sal_Bool    bHasMenu;   // StarCalc Popup-Menue anzeigen?
     sal_uInt16  nFunction;  // selektierte StarCalc Funktion

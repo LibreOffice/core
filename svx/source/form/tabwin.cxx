@@ -126,9 +126,9 @@ void lcl_addToList( SvTreeListBox& _rListBox, const uno::Reference< container::X
         if ( xColumn->getPropertySetInfo()->hasPropertyByName(FM_PROP_LABEL) )
             xColumn->getPropertyValue(FM_PROP_LABEL) >>= sLabel;
         if ( sLabel.getLength() )
-            _rListBox.InsertEntry( sLabel,NULL,FALSE,LIST_APPEND,new ColumnInfo(*pEntries,sLabel) );
+            _rListBox.InsertEntry( sLabel,NULL,sal_False,LIST_APPEND,new ColumnInfo(*pEntries,sLabel) );
         else
-            _rListBox.InsertEntry( *pEntries,NULL,FALSE,LIST_APPEND,new ColumnInfo(*pEntries,sLabel) );
+            _rListBox.InsertEntry( *pEntries,NULL,sal_False,LIST_APPEND,new ColumnInfo(*pEntries,sLabel) );
     }
 }
 //==================================================================
@@ -165,7 +165,7 @@ sal_Int8 FmFieldWinListBox::ExecuteDrop( const ExecuteDropEvent& /*rEvt*/ )
 }
 
 //------------------------------------------------------------------------------
-BOOL FmFieldWinListBox::DoubleClickHdl()
+sal_Bool FmFieldWinListBox::DoubleClickHdl()
 {
     if ( pTabWin->createSelectionControls() )
         return sal_True;
