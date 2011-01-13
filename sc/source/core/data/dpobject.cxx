@@ -2558,10 +2558,11 @@ ULONG ScDPObject::RefreshCache()
         nErrId =  pSheetDesc->CheckValidate( pDoc );
     if ( nErrId == 0 )
     {
+        ScDPCollection* pDPCollection = pDoc->GetDPCollection();
         long nOldId = GetCacheId();
-        long nNewId = pDoc->GetNewDPObjectCacheId();
+        long nNewId = pDPCollection->GetNewDPObjectCacheId();
         if ( nOldId >= 0 )
-            pDoc->RemoveDPObjectCache( nOldId );
+            pDPCollection->RemoveDPObjectCache( nOldId );
 
         ScDPTableDataCache* pCache  = NULL;
         if ( pSheetDesc )
@@ -2579,7 +2580,6 @@ ULONG ScDPObject::RefreshCache()
         nNewId = pCache->GetId();
 
         bRefresh = TRUE;
-        ScDPCollection* pDPCollection = pDoc->GetDPCollection();
         USHORT nCount = pDPCollection->GetCount();
         for (USHORT i=0; i<nCount; i++)
         { //set new cache id
@@ -2637,6 +2637,103 @@ bool ScDPCollection::HasDPTable(SCCOL nCol, SCROW nRow, SCTAB nTab) const
         return false;
 
     return pMergeAttr->HasDPTable();
+}
+
+ScDPTableDataCache* ScDPCollection::GetDPObjectCache( long nID )
+{
+    for ( std::list<ScDPTableDataCache*>::iterator iter = m_listDPObjectsCaches.begin(); iter!=m_listDPObjectsCaches.end(); ++iter )
+    { //
+        if ( nID == (*iter)->GetId() )
+            return *iter;
+    }
+    return NULL;
+}
+
+ScDPTableDataCache* ScDPCollection::GetUsedDPObjectCache ( ScRange rRange )
+{
+    ScDPTableDataCache* pCache = NULL;
+    for ( short i=nCount-1; i>=0 ; i--)
+    {
+        if ( const ScSheetSourceDesc* pUsedSheetDesc = (*this)[i]->GetSheetDesc() )
+            if ( rRange == pUsedSheetDesc->aSourceRange )
+            {
+                long nID = (*this)[i]->GetCacheId();
+                if ( nID >= 0  )
+                    pCache= GetDPObjectCache( nID );
+                if ( pCache )
+                    return pCache;
+            }
+    }
+    return pCache;
+}
+
+long ScDPCollection::AddDPObjectCache( ScDPTableDataCache* pData )
+{
+    if ( pData->GetId() < 0 )
+    { //create a id for it
+        pData->SetId( GetNewDPObjectCacheId() );
+    }
+    m_listDPObjectsCaches.push_back( pData );
+    return pData->GetId();
+}
+
+void ScDPCollection::RemoveDPObjectCache( long nID )
+{
+    for ( std::list<ScDPTableDataCache*>::iterator iter = m_listDPObjectsCaches.begin(); iter!=m_listDPObjectsCaches.end(); ++iter )
+    {
+        if ( nID == (*iter)->GetId() )
+        {
+            ScDPTableDataCache* pCache = *iter;
+            m_listDPObjectsCaches.erase( iter );
+            delete pCache;
+            break;
+        }
+    }
+
+}
+
+void ScDPCollection::RemoveUnusedDPObjectCaches()
+{
+    for ( std::list<ScDPTableDataCache*>::iterator iter = m_listDPObjectsCaches.begin(); iter!=m_listDPObjectsCaches.end(); ++iter )
+    {
+        long  nID = (*iter)->GetId();
+        USHORT i ;
+        for ( i=0; i<nCount; i++)
+        {
+            if ( nID ==  (*this)[i]->GetCacheId() )
+                break;
+        }
+        if ( i == nCount )
+        {
+            ScDPTableDataCache* pCache = *iter;
+            m_listDPObjectsCaches.erase( iter );
+            delete pCache;
+            continue;
+        }
+    }
+}
+
+long ScDPCollection::GetNewDPObjectCacheId()
+{
+    long nID = 0;
+
+    bool bFound = false;
+    std::list<ScDPTableDataCache*>::iterator iter;
+    do {
+        for ( iter = m_listDPObjectsCaches.begin(); iter!=m_listDPObjectsCaches.end(); ++iter )
+        { //Get a new Id
+            if ( nID == (*iter)->GetId() )
+            {
+                nID++;
+                bFound = true;
+                break;
+            }
+        }
+        if ( iter == m_listDPObjectsCaches.end() )
+            bFound = false;
+    } while ( bFound );
+
+    return nID;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

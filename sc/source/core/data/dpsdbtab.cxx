@@ -90,7 +90,7 @@ using ::com::sun::star::uno::UNO_QUERY;
             {
                 long nID = (*pDPCollection)[i]->GetCacheId();
                 if ( nID >= 0  )
-                    pCache= pDoc->GetDPObjectCache( nID );
+                    pCache= pDPCollection->GetDPObjectCache( nID );
                 if ( pCache )
                     return pCache;
             }
@@ -164,7 +164,7 @@ ScDPTableDataCache* ScImportSourceDesc::CreateCache( ScDocument* pDoc , long nID
             SvNumberFormatter aFormat( pDoc->GetServiceManager(), ScGlobal::eLnge);
             pCache->InitFromDataBase( xRowSet, *aFormat.GetNullDate() );
             pCache->SetId( nID );
-            pDoc->AddDPObjectCache( pCache );
+            pDoc->GetDPCollection()->AddDPObjectCache( pCache );
             DBG_TRACE1("Create a cache id = %d \n", pCache->GetId() );
         }
     }
@@ -190,7 +190,7 @@ ScDPTableDataCache* ScImportSourceDesc::CreateCache( ScDocument* pDoc , long nID
 
 ScDPTableDataCache* ScImportSourceDesc::GetCache( ScDocument* pDoc, long nID ) const
 {
-    ScDPTableDataCache* pCache = pDoc->GetDPObjectCache( nID );
+    ScDPTableDataCache* pCache = pDoc->GetDPCollection()->GetDPObjectCache( nID );
     if ( NULL == pCache && pDoc )
         pCache = GetExistDPObjectCache( pDoc);
     if ( NULL == pCache )

@@ -262,6 +262,7 @@ class ScDPCollection : public ScCollection
 {
 private:
     ScDocument* pDoc;
+    std::list<ScDPTableDataCache*>   m_listDPObjectsCaches;
 public:
                 ScDPCollection(ScDocument* pDocument);
                 ScDPCollection(const ScDPCollection& r);
@@ -285,6 +286,13 @@ public:
     SC_DLLPUBLIC bool InsertNewTable(ScDPObject* pDPObj);
 
     bool        HasDPTable(SCCOL nCol, SCROW nRow, SCTAB nTab) const;
+
+    ScDPTableDataCache* GetDPObjectCache( long nID );
+    ScDPTableDataCache* GetUsedDPObjectCache ( ScRange rRange );
+    long AddDPObjectCache( ScDPTableDataCache* pData );
+    void RemoveDPObjectCache( long nID );
+    void RemoveUnusedDPObjectCaches();
+    long GetNewDPObjectCacheId ();
 };
 
 

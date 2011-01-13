@@ -165,7 +165,7 @@ ScDPCacheTable::ScDPCacheTable( ScDocument* pDoc, long nId ) :
     mpNoneCache( NULL )
 {
     if ( nId >= 0 )
-        mpCache = pDoc->GetDPObjectCache( nId );
+        mpCache = pDoc->GetDPCollection()->GetDPObjectCache( nId );
     else
     { //create a temp cache object
         initNoneCache( NULL );

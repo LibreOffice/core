@@ -246,7 +246,6 @@ private:
     ScRangeName*        pRangeName;
     ScDBCollection*     pDBCollection;
     ScDPCollection*     pDPCollection;
-    std::list<ScDPTableDataCache*>   m_listDPObjectsCaches;
     ScChartCollection*  pChartCollection;
     std::auto_ptr< ScTemporaryChartLock > apTemporaryChartLock;
     ScPatternAttr*      pSelectionAttr;                 // Attributes of a block
@@ -488,12 +487,6 @@ public:
     SC_DLLPUBLIC ScDPCollection*        GetDPCollection();
     ScDPObject*         GetDPAtCursor(SCCOL nCol, SCROW nRow, SCTAB nTab) const;
     ScDPObject*         GetDPAtBlock( const ScRange& rBlock ) const;
-    SC_DLLPUBLIC ScDPTableDataCache*    GetDPObjectCache( long nID );
-    SC_DLLPUBLIC ScDPTableDataCache*    GetUsedDPObjectCache ( ScRange rRange );
-    SC_DLLPUBLIC long                                 AddDPObjectCache( ScDPTableDataCache* pData );
-    SC_DLLPUBLIC void                                 RemoveDPObjectCache( long nID );
-    SC_DLLPUBLIC void                                 RemoveUnusedDPObjectCaches();
-    SC_DLLPUBLIC long                                 GetNewDPObjectCacheId ();
 
     SC_DLLPUBLIC ScChartCollection* GetChartCollection() const;
 
