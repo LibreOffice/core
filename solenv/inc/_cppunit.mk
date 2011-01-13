@@ -1,7 +1,7 @@
 # unroll begin
 # ---- create the test libraries ------------------------------------
 
-.IF "$(SHL1TARGET)"!=""
+.IF "$(SHL1TARGETN)"!=""
 ALLTAR : test1
 test1 .PHONY : $(SHL1TARGETN)
         @echo ----------------------------------------------------------
@@ -13,7 +13,7 @@ test1 .PHONY : $(SHL1TARGETN)
 # unroll begin
 # ---- create the test libraries ------------------------------------
 
-.IF "$(SHL2TARGET)"!=""
+.IF "$(SHL2TARGETN)"!=""
 ALLTAR : test2
 test2 .PHONY : $(SHL2TARGETN)
         @echo ----------------------------------------------------------
@@ -25,7 +25,7 @@ test2 .PHONY : $(SHL2TARGETN)
 # unroll begin
 # ---- create the test libraries ------------------------------------
 
-.IF "$(SHL3TARGET)"!=""
+.IF "$(SHL3TARGETN)"!=""
 ALLTAR : test3
 test3 .PHONY : $(SHL3TARGETN)
         @echo ----------------------------------------------------------
@@ -37,7 +37,7 @@ test3 .PHONY : $(SHL3TARGETN)
 # unroll begin
 # ---- create the test libraries ------------------------------------
 
-.IF "$(SHL4TARGET)"!=""
+.IF "$(SHL4TARGETN)"!=""
 ALLTAR : test4
 test4 .PHONY : $(SHL4TARGETN)
         @echo ----------------------------------------------------------
@@ -49,7 +49,7 @@ test4 .PHONY : $(SHL4TARGETN)
 # unroll begin
 # ---- create the test libraries ------------------------------------
 
-.IF "$(SHL5TARGET)"!=""
+.IF "$(SHL5TARGETN)"!=""
 ALLTAR : test5
 test5 .PHONY : $(SHL5TARGETN)
         @echo ----------------------------------------------------------
@@ -61,7 +61,7 @@ test5 .PHONY : $(SHL5TARGETN)
 # unroll begin
 # ---- create the test libraries ------------------------------------
 
-.IF "$(SHL6TARGET)"!=""
+.IF "$(SHL6TARGETN)"!=""
 ALLTAR : test6
 test6 .PHONY : $(SHL6TARGETN)
         @echo ----------------------------------------------------------
@@ -73,7 +73,7 @@ test6 .PHONY : $(SHL6TARGETN)
 # unroll begin
 # ---- create the test libraries ------------------------------------
 
-.IF "$(SHL7TARGET)"!=""
+.IF "$(SHL7TARGETN)"!=""
 ALLTAR : test7
 test7 .PHONY : $(SHL7TARGETN)
         @echo ----------------------------------------------------------
@@ -85,7 +85,7 @@ test7 .PHONY : $(SHL7TARGETN)
 # unroll begin
 # ---- create the test libraries ------------------------------------
 
-.IF "$(SHL8TARGET)"!=""
+.IF "$(SHL8TARGETN)"!=""
 ALLTAR : test8
 test8 .PHONY : $(SHL8TARGETN)
         @echo ----------------------------------------------------------
@@ -97,7 +97,7 @@ test8 .PHONY : $(SHL8TARGETN)
 # unroll begin
 # ---- create the test libraries ------------------------------------
 
-.IF "$(SHL9TARGET)"!=""
+.IF "$(SHL9TARGETN)"!=""
 ALLTAR : test9
 test9 .PHONY : $(SHL9TARGETN)
         @echo ----------------------------------------------------------
@@ -109,7 +109,7 @@ test9 .PHONY : $(SHL9TARGETN)
 # unroll begin
 # ---- create the test libraries ------------------------------------
 
-.IF "$(SHL10TARGET)"!=""
+.IF "$(SHL10TARGETN)"!=""
 ALLTAR : test10
 test10 .PHONY : $(SHL10TARGETN)
         @echo ----------------------------------------------------------
