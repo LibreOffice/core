@@ -34,7 +34,6 @@
 #include "svl/brdcst.hxx"
 
 #include <basic/sbx.hxx>
-#include <basic/sbxbase.hxx>
 #include "sbxres.hxx"
 #include "sbxconv.hxx"
 #include <math.h>

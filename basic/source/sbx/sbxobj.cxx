@@ -31,7 +31,6 @@
 #include <tools/stream.hxx>
 #include <vcl/sound.hxx>
 #include <basic/sbx.hxx>
-#include <basic/sbxbase.hxx>
 #include "sbxres.hxx"
 #include <svl/brdcst.hxx>
 
