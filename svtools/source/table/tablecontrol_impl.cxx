@@ -514,6 +514,9 @@ namespace svt { namespace table
         if ( i_first <= m_nCurRow )
             goTo( m_nCurColumn, m_nCurRow + insertedRows );
 
+        // adjust scrollbars
+        impl_ni_updateScrollbars();
+
         // notify A1YY events
         if ( impl_isAccessibleAlive() )
         {
@@ -585,6 +588,9 @@ namespace svt { namespace table
             else
                 m_nCurRow = ROW_INVALID;
         }
+
+        // adjust scrollbars
+        impl_ni_updateScrollbars();
 
         // notify A11Y events
         if ( impl_isAccessibleAlive() )
