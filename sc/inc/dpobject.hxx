@@ -262,7 +262,7 @@ class ScDPCollection : public ScCollection
 {
 private:
     ScDocument* pDoc;
-    std::list<ScDPTableDataCache*>   m_listDPObjectsCaches;
+    ::std::list<ScDPTableDataCache*> maDPDataCaches;
 public:
                 ScDPCollection(ScDocument* pDocument);
                 ScDPCollection(const ScDPCollection& r);

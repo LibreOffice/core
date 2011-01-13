@@ -2641,7 +2641,7 @@ bool ScDPCollection::HasDPTable(SCCOL nCol, SCROW nRow, SCTAB nTab) const
 
 ScDPTableDataCache* ScDPCollection::GetDPObjectCache( long nID )
 {
-    for ( std::list<ScDPTableDataCache*>::iterator iter = m_listDPObjectsCaches.begin(); iter!=m_listDPObjectsCaches.end(); ++iter )
+    for ( std::list<ScDPTableDataCache*>::iterator iter = maDPDataCaches.begin(); iter!=maDPDataCaches.end(); ++iter )
     { //
         if ( nID == (*iter)->GetId() )
             return *iter;
@@ -2673,18 +2673,18 @@ long ScDPCollection::AddDPObjectCache( ScDPTableDataCache* pData )
     { //create a id for it
         pData->SetId( GetNewDPObjectCacheId() );
     }
-    m_listDPObjectsCaches.push_back( pData );
+    maDPDataCaches.push_back( pData );
     return pData->GetId();
 }
 
 void ScDPCollection::RemoveDPObjectCache( long nID )
 {
-    for ( std::list<ScDPTableDataCache*>::iterator iter = m_listDPObjectsCaches.begin(); iter!=m_listDPObjectsCaches.end(); ++iter )
+    for ( std::list<ScDPTableDataCache*>::iterator iter = maDPDataCaches.begin(); iter!=maDPDataCaches.end(); ++iter )
     {
         if ( nID == (*iter)->GetId() )
         {
             ScDPTableDataCache* pCache = *iter;
-            m_listDPObjectsCaches.erase( iter );
+            maDPDataCaches.erase( iter );
             delete pCache;
             break;
         }
@@ -2699,7 +2699,7 @@ long ScDPCollection::GetNewDPObjectCacheId()
     bool bFound = false;
     std::list<ScDPTableDataCache*>::iterator iter;
     do {
-        for ( iter = m_listDPObjectsCaches.begin(); iter!=m_listDPObjectsCaches.end(); ++iter )
+        for ( iter = maDPDataCaches.begin(); iter!=maDPDataCaches.end(); ++iter )
         { //Get a new Id
             if ( nID == (*iter)->GetId() )
             {
@@ -2708,7 +2708,7 @@ long ScDPCollection::GetNewDPObjectCacheId()
                 break;
             }
         }
-        if ( iter == m_listDPObjectsCaches.end() )
+        if ( iter == maDPDataCaches.end() )
             bFound = false;
     } while ( bFound );
 
