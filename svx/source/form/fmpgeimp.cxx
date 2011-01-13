@@ -282,9 +282,7 @@ namespace
         OSL_ENSURE( !i_ignoreNonExistence ||
             ( aOldAssignment == makeAny( Reference< XControlShape >( const_cast< FmFormObj& >( _object ).getUnoShape(), UNO_QUERY ) ) ),
                 "lcl_removeFormObject: map was inconsistent!" );
-    #if OSL_DEBUG_LEVEL > 0
         (void)i_ignoreNonExistence;
-    #endif
     }
 }
 
