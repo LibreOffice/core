@@ -31,7 +31,7 @@
 # defined globally in TargetLocations.mk
 #  gb_CppunitTest_get_linktargetname
 # defined by platform
-#  gb_CppunitTest_TARGETTYPEFLAGS
+#  gb_CppunitTest_TARGETTYPE
 #  gb_CppunitTest_get_filename
 gb_CppunitTest_CPPTESTTARGET := $(call gb_Executable_get_target,cppunittester)
 gb_CppunitTest_CPPTESTCOMMAND := $(gb_CppunitTest_CPPTESTPRECOMMAND) $(gb_CppunitTest_CPPTESTTARGET)
@@ -55,7 +55,7 @@ endef
 
 define gb_CppunitTest__CppunitTest_impl
 $(call gb_LinkTarget_LinkTarget,$(2))
-$(call gb_LinkTarget_set_targettype_flags,$(2),$(gb_CppunitTest_TARGETTYPEFLAGS))
+$(call gb_LinkTarget_set_targettype,$(2),CppunitTest)
 $(call gb_LinkTarget_add_linked_libs,$(2),cppunit)
 $(call gb_CppunitTest_get_target,$(1)) : $(call gb_LinkTarget_get_target,$(2))
 $$(eval $$(call gb_Module_register_target,$(call gb_CppunitTest_get_target,$(1)),$(call gb_CppunitTest_get_clean_target,$(1))))

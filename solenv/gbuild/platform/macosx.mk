@@ -63,7 +63,7 @@ else # ifeq ($(CPUNAME),POWERPC)
 gb_CPUDEFS := -DPOWERPC -DPPC
 endif
 
-ifeq ($(SYSBASE), "")
+ifeq ($(strip $(SYSBASE)),)
 gb_SDKDIR := /Developer/SDKs/MacOSX10.4u.sdk
 else
 gb_SDKDIR := $(SYSBASE)/MacOSX10.4u.sdk
@@ -230,19 +230,19 @@ $(call gb_Output_announce,$(2),$(true),LNK,4)
 $(call gb_Helper_abbreviate_dirs,\
     mkdir -p $(dir $(1)) && \
     DYLIB_FILE=`$(gb_MKTEMP) $(dir $(1))` && \
-    $(PERL) $(SOLARENV)/bin/macosx-dylib-link-list.pl $(3) $(patsubst lib%.dylib,-l%,$(foreach lib,$(4),$(call gb_Library_get_filename,$(lib)))) > $${DYLIB_FILE} && \
+    $(PERL) $(SOLARENV)/bin/macosx-dylib-link-list.pl $(4) $(patsubst lib%.dylib,-l%,$(foreach lib,$(5),$(call gb_Library_get_filename,$(lib)))) > $${DYLIB_FILE} && \
     $(gb_CXX) \
-        $(3) \
-        $(patsubst lib%.dylib,-l%,$(foreach lib,$(filter-out $(gb_Library__FRAMEWORKS),$(4)),$(call gb_Library_get_filename,$(lib)))) \
-        $(addprefix -framework ,$(filter $(gb_Library__FRAMEWORKS),$(4))) \
-        $(foreach object,$(6),$(call gb_CObject_get_target,$(object))) \
-        $(foreach object,$(7),$(call gb_CxxObject_get_target,$(object))) \
-        $(foreach object,$(8),$(call gb_ObjCxxObject_get_target,$(object))) \
-        $(foreach lib,$(5),$(call gb_StaticLibrary_get_target,$(lib))) \
+        $(4) \
+        $(patsubst lib%.dylib,-l%,$(foreach lib,$(filter-out $(gb_Library__FRAMEWORKS),$(5)),$(call gb_Library_get_filename,$(lib)))) \
+        $(addprefix -framework ,$(filter $(gb_Library__FRAMEWORKS),$(5))) \
+        $(foreach object,$(7),$(call gb_CObject_get_target,$(object))) \
+        $(foreach object,$(8),$(call gb_CxxObject_get_target,$(object))) \
+        $(foreach object,$(9),$(call gb_ObjCxxObject_get_target,$(object))) \
+        $(foreach lib,$(6),$(call gb_StaticLibrary_get_target,$(lib))) \
         -o $(1) \
         `cat $${DYLIB_FILE}` && \
-    $(if $(filter shl exe,$(TARGETTYPE)),$(PERL) $(SOLARENV)/bin/macosx-change-install-names.pl $(TARGETTYPE) $(LAYER) $(1) &&,) \
-    $(if $(filter shl,$(TARGETTYPE)),macosx-create-bundle $(1) &&,) \
+    $(if $(filter SharedLibrary Executable,$(3)),$(PERL) $(SOLARENV)/bin/macosx-change-install-names.pl $(3) $(LAYER) $(1) &&,) \
+    $(if $(filter SharedLibrary,$(3)),macosx-create-bundle $(1) &&,) \
     rm -f $${DYLIB_FILE})
 endef
 

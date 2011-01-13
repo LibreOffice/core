@@ -219,7 +219,7 @@ $(call gb_Helper_abbreviate_dirs,\
 endef
 
 $(call gb_LinkTarget_get_target,%) : $(call gb_LinkTarget_get_headers_target,%) $(gb_Helper_MISCDUMMY)
-    $(call gb_LinkTarget__command,$@,$*,$(TARGETTYPE_FLAGS) $(LDFLAGS),$(LINKED_LIBS),$(LINKED_STATIC_LIBS),$(COBJECTS),$(CXXOBJECTS),$(OBJCXXOBJECTS))
+    $(call gb_LinkTarget__command,$@,$*,$(TARGETTYPE),$(LDFLAGS),$(LINKED_LIBS),$(LINKED_STATIC_LIBS),$(COBJECTS),$(CXXOBJECTS),$(OBJCXXOBJECTS))
 
 ifeq ($(gb_FULLDEPS),$(true))
 $(call gb_LinkTarget_get_target,%) : $(call gb_LinkTarget_get_dep_target,%)
@@ -277,8 +277,8 @@ $(call gb_LinkTarget_get_headers_target,%) : $(call gb_LinkTarget_get_external_h
 # - PCH_CXXFLAGS and PCH_DEFS are the flags that the precompiled headers will
 #   be compiled with.  They should never be overridden in a single object
 #   files.
-# - TARGETTYPEFLAGS are the flags that are needed for a specific kind of target
-#   (shl,exe...) They are mostly used by the platforms.
+# - TARGETTYPE is the type of linktarget as some platforms need very different
+#   command to link different targettypes.
 #
 # Since most variables are set on the linktarget and not on the object, the
 # object learns about these setting via GNU makes scoping of target variables.
@@ -313,7 +313,7 @@ $(call gb_LinkTarget_get_target,$(1)) : INCLUDE_STL := $$(gb_LinkTarget_INCLUDE_
 $(call gb_LinkTarget_get_target,$(1)) : LDFLAGS := $$(gb_LinkTarget_LDFLAGS)
 $(call gb_LinkTarget_get_target,$(1)) : LINKED_LIBS := 
 $(call gb_LinkTarget_get_target,$(1)) : LINKED_STATIC_LIBS := 
-$(call gb_LinkTarget_get_target,$(1)) : TARGETTYPE_FLAGS := 
+$(call gb_LinkTarget_get_target,$(1)) : TARGETTYPE := 
 $(call gb_LinkTarget_get_headers_target,$(1)) \
 $(call gb_LinkTarget_get_target,$(1)) : PCH_NAME :=
 
@@ -334,7 +334,7 @@ $(call gb_LinkTarget_get_dep_target,$(1)) : DEFS := $$(gb_LinkTarget_DEFAULTDEFS
 $(call gb_LinkTarget_get_dep_target,$(1)) : PCH_DEFS := $$(gb_LinkTarget_DEFAULTDEFS)
 $(call gb_LinkTarget_get_dep_target,$(1)) : INCLUDE := $$(gb_LinkTarget_INCLUDE)
 $(call gb_LinkTarget_get_dep_target,$(1)) : INCLUDE_STL := $$(gb_LinkTarget_INCLUDE_STL)
-$(call gb_LinkTarget_get_dep_target,$(1)) : TARGETTYPE_FLAGS := 
+$(call gb_LinkTarget_get_dep_target,$(1)) : TARGETTYPE := 
 $(call gb_LinkTarget_get_dep_target,$(1)) : PCH_NAME :=
 endif
 
@@ -504,9 +504,9 @@ define gb_LinkTarget_add_exception_objects
 $(foreach obj,$(2),$(call gb_LinkTarget_add_exception_object,$(1),$(obj)))
 endef
 
-define gb_LinkTarget_set_targettype_flags
+define gb_LinkTarget_set_targettype
 $(call gb_LinkTarget_get_target,$(1)) \
-$(call gb_LinkTarget_get_dep_target,$(1)) : TARGETTYPE_FLAGS := $(2)
+$(call gb_LinkTarget_get_dep_target,$(1)) : TARGETTYPE := $(2)
 endef
 
 define gb_LinkTarget_set_dlltarget

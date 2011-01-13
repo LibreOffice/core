@@ -184,11 +184,14 @@ $(call gb_Output_announce,$(2),$(true),LNK,4)
 $(call gb_Helper_abbreviate_dirs,\
     mkdir -p $(dir $(1)) && \
     $(gb_CXX) \
-        $(3) \
-        $(patsubst lib%.so,-l%,$(foreach lib,$(4),$(call gb_Library_get_filename,$(lib)))) \
-        $(foreach object,$(6),$(call gb_CObject_get_target,$(object))) \
-        $(foreach object,$(7),$(call gb_CxxObject_get_target,$(object))) \
-        $(foreach lib,$(5),$(call gb_StaticLibrary_get_target,$(lib))) \
+        $(if $(filter CppunitTest Library,$(3)),$(gb_Library_TARGETTYPEFLAGS)) \
+        $(if $(filter StaticLibrary,$(3)),$(gb_StaticLibrary_TARGETTYPEFLAGS)) \
+        $(if $(filter Executable,$(3)),$(gb_Executable_TARGETTYPEFLAGS)) \
+        $(4) \
+        $(patsubst lib%.so,-l%,$(foreach lib,$(5),$(call gb_Library_get_filename,$(lib)))) \
+        $(foreach object,$(7),$(call gb_CObject_get_target,$(object))) \
+        $(foreach object,$(8),$(call gb_CxxObject_get_target,$(object))) \
+        $(foreach lib,$(6),$(call gb_StaticLibrary_get_target,$(lib))) \
         -o $(1))
 endef
 
@@ -291,7 +294,6 @@ gb_Executable_LAYER := \
 
 # CppunitTest class
 
-gb_CppunitTest_TARGETTYPEFLAGS := $(gb_Library_TARGETTYPEFLAGS)
 gb_CppunitTest_CPPTESTPRECOMMAND :=
 gb_CppunitTest_SYSPRE := libtest_
 gb_CppunitTest_EXT := .so

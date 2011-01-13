@@ -328,13 +328,16 @@ $(call gb_Output_announce,$(2),$(true),LNK,4)
 $(call gb_Helper_abbreviate_dirs_native,\
     mkdir -p $(dir $(1)) && \
     RESPONSEFILE=$$(mktemp --tmpdir=$(gb_Helper_MISC)) && \
-    echo "$(foreach object,$(7),$(call gb_CxxObject_get_target,$(object))) \
-        $(foreach object,$(6),$(call gb_CObject_get_target,$(object)))" > $${RESPONSEFILE} && \
+    echo "$(foreach object,$(8),$(call gb_CxxObject_get_target,$(object))) \
+        $(foreach object,$(7),$(call gb_CObject_get_target,$(object)))" > $${RESPONSEFILE} && \
     $(gb_LINK) \
-        $(3) \
+        $(if $(filter Library CppunitTest,$(3)),$(gb_Library_TARGETTYPEFLAGS)) \
+        $(if $(filter StaticLibrary,$(3)),$(gb_StaticLibrary_TARGETTYPEFLAGS)) \
+        $(if $(filter Executable,$(3)),$(gb_Executable_TARGETTYPEFLAGS)) \
+        $(4) \
         @$${RESPONSEFILE} \
-        $(foreach lib,$(4),$(call gb_Library_get_filename,$(lib))) \
-        $(foreach lib,$(5),$(call gb_StaticLibrary_get_filename,$(lib))) \
+        $(foreach lib,$(5),$(call gb_Library_get_filename,$(lib))) \
+        $(foreach lib,$(6),$(call gb_StaticLibrary_get_filename,$(lib))) \
         $(subst -out: -implib:$(1),-out:$(1),-out:$(DLLTARGET) -implib:$(1)) && rm $${RESPONSEFILE})
 endef
 
@@ -472,7 +475,6 @@ endef
 
 # CppunitTest class
 
-gb_CppunitTest_TARGETTYPEFLAGS := $(gb_Library_TARGETTYPEFLAGS)
 gb_CppunitTest_CPPTESTPRECOMMAND :=
 gb_CppunitTest_SYSPRE := itest_
 gb_CppunitTest_EXT := .lib

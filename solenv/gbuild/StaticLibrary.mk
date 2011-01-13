@@ -34,7 +34,6 @@
 #  gb_StaticLibrary_DEFS
 #  gb_StaticLibrary_FILENAMES
 #  gb_StaticLibrary_TARGETS
-#  gb_StaticLibrary_TARGETTYPEFLAGS
 
 
 # EVIL: gb_StaticLibrary and gb_Library need the same deliver rule because they are indistinguishable on windows
@@ -62,7 +61,7 @@ endef
 
 define gb_StaticLibrary__StaticLibrary_impl
 $(call gb_LinkTarget_LinkTarget,$(2))
-$(call gb_LinkTarget_set_targettype_flags,$(2),$(gb_StaticLibrary_TARGETTYPEFLAGS))
+$(call gb_LinkTarget_set_targettype,$(2),StaticLibrary)
 $(call gb_LinkTarget_set_defs,$(2),\
     $$(DEFS) \
     $(gb_StaticLibrary_DEFS) \

@@ -36,7 +36,6 @@
 #  gb_Library_DLLFILENAMES
 #  gb_Library_FILENAMES
 #  gb_Library_TARGETS
-#  gb_Library_TARGETTYPEFLAGS
 #  gb_Library_Library_platform
 
 
@@ -65,7 +64,7 @@ endef
 
 define gb_Library__Library_impl
 $(call gb_LinkTarget_LinkTarget,$(2))
-$(call gb_LinkTarget_set_targettype_flags,$(2),$(gb_Library_TARGETTYPEFLAGS) $(call gb_Library_get_rpath,$(1)))
+$(call gb_LinkTarget_set_targettype,$(2),Library)
 $(call gb_LinkTarget_set_defs,$(2),\
     $$(DEFS) \
     $(gb_Library_DEFS) \
