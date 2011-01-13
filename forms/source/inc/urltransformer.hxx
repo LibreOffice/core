@@ -73,7 +73,7 @@ namespace frm
         /** ensures that we have an URLTransformer instance in <member>m_xTransformer</member>
 
             @return
-                <TRUE/> if and only if m_xTransformer is not <NULL/>
+                <sal_True/> if and only if m_xTransformer is not <NULL/>
         */
         bool    implEnsureTransformer() const;
     };

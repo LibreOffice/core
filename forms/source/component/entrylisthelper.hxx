@@ -84,7 +84,7 @@ namespace frm
         /** handling the XEventListener::disposing call for the case where
             our list source is being disposed
             @return
-                <TRUE/> if and only if the disposed object was our list source, and so the
+                <sal_True/> if and only if the disposed object was our list source, and so the
                 event was handled
         */
         bool        handleDisposing( const ::com::sun::star::lang::EventObject& _rEvent );

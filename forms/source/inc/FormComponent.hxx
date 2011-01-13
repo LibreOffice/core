@@ -194,7 +194,7 @@ public:
         @param _rAggregateService
             the service name of the component to aggregate
         @param _bSetDelegator
-            set this to <FALSE/> if you don't want the constructor to set the delegator at
+            set this to <sal_False/> if you don't want the constructor to set the delegator at
             the aggregate. In this case, you <em>have</em> to call doSetDelegator within your
             own constructor.
 
@@ -202,7 +202,7 @@ public:
             In this case, the aggregate needs to be queried for this interface <b>before</b> the
             <member scope="com::sun::star::uno">XAggregation::setDelegator</member> call.
 
-            In such a case, pass <FALSE/> to this parameter. Then, cache the aggregate's interface(s)
+            In such a case, pass <sal_False/> to this parameter. Then, cache the aggregate's interface(s)
             as needed. Afterwards, call <member>doSetDelegator</member>.
 
             In your destructor, you need to call <member>doResetDelegator</member> before
@@ -228,7 +228,7 @@ protected:
     /** sets the control as delegator at the aggregate
 
         This has to be called from within your derived class' constructor, if and only
-        if you passed <FALSE/> to the <arg>_bSetDelegator</arg> parameter of the
+        if you passed <sal_False/> to the <arg>_bSetDelegator</arg> parameter of the
         <type>OControl</type> constructor.
     */
     void    doSetDelegator();
@@ -383,13 +383,13 @@ protected:
         const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rFactory,   // factory to create the aggregate with
         const ::rtl::OUString& _rUnoControlModelTypeName,                       // service name of te model to aggregate
         const ::rtl::OUString& rDefault = ::rtl::OUString(),                    // service name of the default control
-        const sal_Bool _bSetDelegator = sal_True                                // set to FALSE if you want to call setDelegator later (after returning from this ctor)
+        const sal_Bool _bSetDelegator = sal_True                                // set to sal_False if you want to call setDelegator later (after returning from this ctor)
     );
     OControlModel(
         const OControlModel* _pOriginal,                                        // the original object to clone
         const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rFactory,   // factory to create the aggregate with
         const sal_Bool _bCloneAggregate = sal_True,                             // should the aggregate of the original be cloned, too?
-        const sal_Bool _bSetDelegator = sal_True                                // set to FALSE if you want to call setDelegator later (after returning from this ctor)
+        const sal_Bool _bSetDelegator = sal_True                                // set to sal_False if you want to call setDelegator later (after returning from this ctor)
     );
     virtual ~OControlModel();
 
@@ -710,8 +710,8 @@ protected:
         const ::rtl::OUString& _rUnoControlModelTypeName,   // service name of te model to aggregate
         const ::rtl::OUString& _rDefault,                   // service name of the default control
         const sal_Bool _bCommitable,                        // is the control (model) commitable ?
-        const sal_Bool _bSupportExternalBinding,            // set to TRUE if you want to support XBindableValue
-        const sal_Bool _bSupportsValidation                 // set to TRUE if you want to support XValidatable
+        const sal_Bool _bSupportExternalBinding,            // set to sal_True if you want to support XBindableValue
+        const sal_Bool _bSupportsValidation                 // set to sal_True if you want to support XValidatable
     );
     OBoundControlModel(
         const OBoundControlModel* _pOriginal,               // the original object to clone
@@ -879,7 +879,7 @@ protected:
             we're properly bound to a database column, especially <member>m_xColumnUpdate</member>
             is not <NULL/>
         @param _bPostReset
-            <TRUE/> if and only if the current control value results from a reset (<member>getDefaultForReset</member>)
+            <sal_True/> if and only if the current control value results from a reset (<member>getDefaultForReset</member>)
         @pure
     */
     virtual sal_Bool        commitControlValueToDbColumn(
@@ -1183,10 +1183,10 @@ private:
 
         Use this method if there is a potential that <b>only</b> the validity flag changed. If
         any of the other aspects (our current value, or our current text) changed, then
-        pass <TRUE/> for <member>_bForceNotification</member>.
+        pass <sal_True/> for <member>_bForceNotification</member>.
 
         @param _bForceNotification
-            if <TRUE/>, then the validity listeners will be notified, not matter whether the validity
+            if <sal_True/>, then the validity listeners will be notified, not matter whether the validity
             changed.
     */
     void        recheckValidity( bool _bForceNotification );
@@ -1217,8 +1217,8 @@ private:
         @precond The control does not have an external value supplier
 
         @param _bFromReload
-            Determines whether the connection is made after the row set has been loaded (<FALSE/>)
-            or reloaded (<TRUE/>)
+            Determines whether the connection is made after the row set has been loaded (<sal_False/>)
+            or reloaded (<sal_True/>)
 
         @see impl_disconnectDatabaseColumn_noNotify
     */
@@ -1286,7 +1286,7 @@ private:
             the binding which applies for being responsible for our value, Must not be
             <NULL/>
         @return
-            <TRUE/> if and only if the given binding can supply values in the proper type
+            <sal_True/> if and only if the given binding can supply values in the proper type
 
         @seealso getExternalValueType
     */

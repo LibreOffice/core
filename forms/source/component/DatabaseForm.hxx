@@ -201,7 +201,7 @@ class ODatabaseForm :public OFormComponents
                 // will be used as additional context information
                 // when an exception is catched and forwarded to the listeners
 
-    INT32                       m_nResetsPending;
+    sal_Int32                       m_nResetsPending;
 //  <overwritten_properties>
     sal_Int32                   m_nPrivileges;
     sal_Bool                    m_bInsertOnly;
@@ -505,12 +505,12 @@ private:
         @param _rEvent
             the event to notify
         @param _bAllowSQLException
-            <TRUE/> if SQLExceptions are allowed to leave the method
+            <sal_True/> if SQLExceptions are allowed to leave the method
         @param _rGuard
             the guard to be cleared before actually calling into the listeners, but after making
             a copy of the listeners array to operate on.
         @return
-            <TRUE/> if and only if the execution has been approved
+            <sal_True/> if and only if the execution has been approved
     */
     bool    impl_approveRowChange_throw(
         const ::com::sun::star::lang::EventObject& _rEvent,
