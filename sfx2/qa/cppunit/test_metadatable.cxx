@@ -95,7 +95,6 @@ static bool operator==(beans::StringPair p1, beans::StringPair p2)
 
 void MetadatableTest::test()
 {
-    CPPUNIT_ASSERT_MESSAGE("fail",false);
     OSL_TRACE("SwMetadatable test(): start\n");
     ::std::auto_ptr< ::sfx2::IXmlIdRegistry > const pReg(
         ::sfx2::createXmlIdRegistry(false) );
