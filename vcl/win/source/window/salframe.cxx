@@ -508,7 +508,7 @@ SalFrame* ImplSalCreateFrame( WinSalInstance* pInst,
     }
 
     // create frame
-    if ( aSalShlData.mbWNT )
+    if( true/*aSalShlData.mbWNT*/ )
     {
         LPCWSTR pClassName;
         if ( bSubFrame )
@@ -535,17 +535,6 @@ SalFrame* ImplSalCreateFrame( WinSalInstance* pInst,
         if( bLayeredAPI == 1 && GetWindowExStyle( hWnd ) & WS_EX_LAYERED )
             lpfnSetLayeredWindowAttributes( hWnd, 0, 230, 0x00000002 /*LWA_ALPHA*/ );
 #endif
-    }
-    else
-    {
-        LPCSTR pClassName;
-        if ( bSubFrame )
-            pClassName = SAL_SUBFRAME_CLASSNAMEA;
-        else
-            pClassName = SAL_FRAME_CLASSNAMEA;
-        hWnd = CreateWindowExA( nExSysStyle, pClassName, "", nSysStyle,
-                                CW_USEDEFAULT, 0, CW_USEDEFAULT, 0,
-                                hWndParent, 0, pInst->mhInst, (void*)pFrame );
     }
     if ( !hWnd )
     {
@@ -617,21 +606,10 @@ HWND ImplSalReCreateHWND( HWND hWndParent, HWND oldhWnd, BOOL bAsChild )
         nExSysStyle = 0;
     }
 
-    HWND hWnd = NULL;
-    if ( aSalShlData.mbWNT )
-    {
-        LPCWSTR pClassName = SAL_SUBFRAME_CLASSNAMEW;
-        hWnd = CreateWindowExW( nExSysStyle, pClassName, L"", nSysStyle,
+    LPCWSTR pClassName = SAL_SUBFRAME_CLASSNAMEW;
+    HWND hWnd = CreateWindowExW( nExSysStyle, pClassName, L"", nSysStyle,
                                 CW_USEDEFAULT, 0, CW_USEDEFAULT, 0,
                                 hWndParent, 0, hInstance, (void*)GetWindowPtr( oldhWnd ) );
-    }
-    else
-    {
-        LPCSTR pClassName = SAL_SUBFRAME_CLASSNAMEA;
-        hWnd = CreateWindowExA( nExSysStyle, pClassName, "", nSysStyle,
-                                CW_USEDEFAULT, 0, CW_USEDEFAULT, 0,
-                                hWndParent, 0, hInstance, (void*)GetWindowPtr( oldhWnd ) );
-    }
     return hWnd;
 }
 
@@ -2531,7 +2509,7 @@ static void ImplGetKeyNameText( LONG lParam, sal_Unicode* pBuf,
     int nKeyLen = 0;
     if ( lParam )
     {
-        if ( aSalShlData.mbWNT )
+        if ( true/*aSalShlData.mbWNT*/ )
         {
             nKeyLen = GetKeyNameTextW( lParam, aKeyBuf, nMaxKeyLen );
             // #i12401# the current unicows.dll has a bug in CharUpperBuffW, which corrupts the stack
@@ -2551,32 +2529,6 @@ static void ImplGetKeyNameText( LONG lParam, sal_Unicode* pBuf,
                         CharUpperBuffW( pW, 1 );
                     bUpper = (*pW=='+') || (*pW=='-') || (*pW==' ') || (*pW=='.');
                 }
-            }
-        }
-        else // !mbWnt
-        {
-            sal_Char aAnsiKeyBuf[ nMaxKeyLen ];
-            int nAnsiKeyLen = GetKeyNameTextA( lParam, aAnsiKeyBuf, nMaxKeyLen );
-            DBG_ASSERT( nAnsiKeyLen <= nMaxKeyLen, "Invalid key name length!" );
-            if( nAnsiKeyLen > nMaxKeyLen )
-                nAnsiKeyLen = 0;
-            else if( nAnsiKeyLen > 0 )
-            {
-                // Capitalize just the first letter of key names
-                // TODO: check MCBS key names
-                CharLowerBuffA( aAnsiKeyBuf, nAnsiKeyLen );
-
-                bool bUpper = true;
-                for( sal_Char *pA=aAnsiKeyBuf, *pE=pA+nAnsiKeyLen; pA < pE; ++pA )
-                {
-                    if( bUpper )
-                        CharUpperBuffA( pA, 1 );
-                    bUpper = (*pA=='+') || (*pA=='-') || (*pA==' ') || (*pA=='.');
-                }
-
-                // Convert to Unicode and copy the data in the Unicode Buffer
-                nKeyLen = MultiByteToWideChar( CP_ACP, MB_PRECOMPOSED,
-                    aAnsiKeyBuf, nAnsiKeyLen, aKeyBuf, nMaxKeyLen );
             }
         }
     }
@@ -2883,6 +2835,29 @@ static long ImplA2I( const BYTE* pStr )
 }
 
 // -----------------------------------------------------------------------
+static HRESULT WINAPI backwardCompatibleDwmIsCompositionEnabled( WIN_BOOL* pOut )
+{
+    *pOut = FALSE;
+    return S_OK;
+}
+
+static WIN_BOOL ImplDwmIsCompositionEnabled()
+{
+    SalData* pSalData = GetSalData();
+    if( ! pSalData->mpDwmIsCompositionEnabled )
+    {
+        rtl::OUString aLibraryName( RTL_CONSTASCII_USTRINGPARAM( "Dwmapi.dll" ) );
+        pSalData->maDwmLib = osl_loadModule( aLibraryName.pData, SAL_LOADMODULE_DEFAULT );
+        if( pSalData->maDwmLib )
+            pSalData->mpDwmIsCompositionEnabled = (DwmIsCompositionEnabled_ptr)osl_getAsciiFunctionSymbol( pSalData->maDwmLib, "DwmIsCompositionEnabled" );
+        if( ! pSalData->mpDwmIsCompositionEnabled ) // something failed
+            pSalData->mpDwmIsCompositionEnabled = backwardCompatibleDwmIsCompositionEnabled;
+    }
+    WIN_BOOL aResult = FALSE;
+    HRESULT nError = pSalData->mpDwmIsCompositionEnabled( &aResult );
+    return nError == S_OK && aResult;
+}
+
 
 void WinSalFrame::UpdateSettings( AllSettings& rSettings )
 {
@@ -2915,30 +2890,26 @@ void WinSalFrame::UpdateSettings( AllSettings& rSettings )
     }
 
     StyleSettings aStyleSettings = rSettings.GetStyleSettings();
-    BOOL bCompBorder = (aStyleSettings.GetOptions() & (STYLE_OPTION_MACSTYLE | STYLE_OPTION_UNIXSTYLE)) == 0;
     // TODO: once those options vanish: just set bCompBorder to TRUE
     // to have the system colors read
     aStyleSettings.SetScrollBarSize( GetSystemMetrics( SM_CXVSCROLL ) );
     aStyleSettings.SetSpinSize( GetSystemMetrics( SM_CXVSCROLL ) );
     aStyleSettings.SetCursorBlinkTime( GetCaretBlinkTime() );
-    if ( bCompBorder )
+    aStyleSettings.SetFloatTitleHeight( GetSystemMetrics( SM_CYSMCAPTION ) );
+    aStyleSettings.SetTitleHeight( GetSystemMetrics( SM_CYCAPTION ) );
+    aStyleSettings.SetActiveBorderColor( ImplWinColorToSal( GetSysColor( COLOR_ACTIVEBORDER ) ) );
+    aStyleSettings.SetDeactiveBorderColor( ImplWinColorToSal( GetSysColor( COLOR_INACTIVEBORDER ) ) );
+    if ( aSalShlData.mnVersion >= 410 )
     {
-        aStyleSettings.SetFloatTitleHeight( GetSystemMetrics( SM_CYSMCAPTION ) );
-        aStyleSettings.SetTitleHeight( GetSystemMetrics( SM_CYCAPTION ) );
-        aStyleSettings.SetActiveBorderColor( ImplWinColorToSal( GetSysColor( COLOR_ACTIVEBORDER ) ) );
-        aStyleSettings.SetDeactiveBorderColor( ImplWinColorToSal( GetSysColor( COLOR_INACTIVEBORDER ) ) );
-        if ( aSalShlData.mnVersion >= 410 )
-        {
-            aStyleSettings.SetActiveColor2( ImplWinColorToSal( GetSysColor( COLOR_GRADIENTACTIVECAPTION ) ) );
-            aStyleSettings.SetDeactiveColor( ImplWinColorToSal( GetSysColor( COLOR_GRADIENTINACTIVECAPTION ) ) );
-        }
-        aStyleSettings.SetFaceColor( ImplWinColorToSal( GetSysColor( COLOR_3DFACE ) ) );
-        aStyleSettings.SetInactiveTabColor( aStyleSettings.GetFaceColor() );
-        aStyleSettings.SetLightColor( ImplWinColorToSal( GetSysColor( COLOR_3DHILIGHT ) ) );
-        aStyleSettings.SetLightBorderColor( ImplWinColorToSal( GetSysColor( COLOR_3DLIGHT ) ) );
-        aStyleSettings.SetShadowColor( ImplWinColorToSal( GetSysColor( COLOR_3DSHADOW ) ) );
-        aStyleSettings.SetDarkShadowColor( ImplWinColorToSal( GetSysColor( COLOR_3DDKSHADOW ) ) );
+        aStyleSettings.SetActiveColor2( ImplWinColorToSal( GetSysColor( COLOR_GRADIENTACTIVECAPTION ) ) );
+        aStyleSettings.SetDeactiveColor( ImplWinColorToSal( GetSysColor( COLOR_GRADIENTINACTIVECAPTION ) ) );
     }
+    aStyleSettings.SetFaceColor( ImplWinColorToSal( GetSysColor( COLOR_3DFACE ) ) );
+    aStyleSettings.SetInactiveTabColor( aStyleSettings.GetFaceColor() );
+    aStyleSettings.SetLightColor( ImplWinColorToSal( GetSysColor( COLOR_3DHILIGHT ) ) );
+    aStyleSettings.SetLightBorderColor( ImplWinColorToSal( GetSysColor( COLOR_3DLIGHT ) ) );
+    aStyleSettings.SetShadowColor( ImplWinColorToSal( GetSysColor( COLOR_3DSHADOW ) ) );
+    aStyleSettings.SetDarkShadowColor( ImplWinColorToSal( GetSysColor( COLOR_3DDKSHADOW ) ) );
     aStyleSettings.SetWorkspaceColor( ImplWinColorToSal( GetSysColor( COLOR_APPWORKSPACE ) ) );
     aStyleSettings.SetHelpColor( ImplWinColorToSal( GetSysColor( COLOR_INFOBK ) ) );
     aStyleSettings.SetHelpTextColor( ImplWinColorToSal( GetSysColor( COLOR_INFOTEXT ) ) );
@@ -2960,36 +2931,51 @@ void WinSalFrame::UpdateSettings( AllSettings& rSettings )
     aStyleSettings.SetHighlightTextColor( ImplWinColorToSal( GetSysColor( COLOR_HIGHLIGHTTEXT ) ) );
     aStyleSettings.SetMenuHighlightColor( aStyleSettings.GetHighlightColor() );
     aStyleSettings.SetMenuHighlightTextColor( aStyleSettings.GetHighlightTextColor() );
-    if ( bCompBorder )
-    {
-        aStyleSettings.SetMenuColor( ImplWinColorToSal( GetSysColor( COLOR_MENU ) ) );
-        aStyleSettings.SetMenuBarColor( aStyleSettings.GetMenuColor() );
-        aStyleSettings.SetMenuBorderColor( aStyleSettings.GetLightBorderColor() ); // overriden below for flat menus
-        aStyleSettings.SetUseFlatBorders( FALSE );
-        aStyleSettings.SetUseFlatMenues( FALSE );
-        aStyleSettings.SetMenuTextColor( ImplWinColorToSal( GetSysColor( COLOR_MENUTEXT ) ) );
-        aStyleSettings.SetMenuBarTextColor( ImplWinColorToSal( GetSysColor( COLOR_MENUTEXT ) ) );
-        aStyleSettings.SetActiveColor( ImplWinColorToSal( GetSysColor( COLOR_ACTIVECAPTION ) ) );
-        aStyleSettings.SetActiveTextColor( ImplWinColorToSal( GetSysColor( COLOR_CAPTIONTEXT ) ) );
-        aStyleSettings.SetDeactiveColor( ImplWinColorToSal( GetSysColor( COLOR_INACTIVECAPTION ) ) );
-        aStyleSettings.SetDeactiveTextColor( ImplWinColorToSal( GetSysColor( COLOR_INACTIVECAPTIONTEXT ) ) );
-        if ( aSalShlData.mbWXP )
-        {
-            // only xp supports a different menu bar color
-            long bFlatMenues = 0;
-            SystemParametersInfo( SPI_GETFLATMENU, 0, &bFlatMenues, 0);
-            if( bFlatMenues )
-            {
-                aStyleSettings.SetUseFlatMenues( TRUE );
-                aStyleSettings.SetMenuBarColor( ImplWinColorToSal( GetSysColor( COLOR_MENUBAR ) ) );
-                aStyleSettings.SetMenuHighlightColor( ImplWinColorToSal( GetSysColor( COLOR_MENUHILIGHT ) ) );
-                aStyleSettings.SetMenuBorderColor( ImplWinColorToSal( GetSysColor( COLOR_3DSHADOW ) ) );
 
-                // flat borders for our controls etc. as well in this mode (ie, no 3d borders)
-                // this is not active in the classic style appearance
-                aStyleSettings.SetUseFlatBorders( TRUE );
-            }
+    ImplSVData* pSVData = ImplGetSVData();
+    pSVData->maNWFData.mnMenuFormatExtraBorder = 0;
+    pSVData->maNWFData.maMenuBarHighlightTextColor = Color( COL_TRANSPARENT );
+    GetSalData()->mbThemeMenuSupport = FALSE;
+    aStyleSettings.SetMenuColor( ImplWinColorToSal( GetSysColor( COLOR_MENU ) ) );
+    aStyleSettings.SetMenuBarColor( aStyleSettings.GetMenuColor() );
+    aStyleSettings.SetMenuBorderColor( aStyleSettings.GetLightBorderColor() ); // overriden below for flat menus
+    aStyleSettings.SetUseFlatBorders( FALSE );
+    aStyleSettings.SetUseFlatMenues( FALSE );
+    aStyleSettings.SetMenuTextColor( ImplWinColorToSal( GetSysColor( COLOR_MENUTEXT ) ) );
+    aStyleSettings.SetMenuBarTextColor( ImplWinColorToSal( GetSysColor( COLOR_MENUTEXT ) ) );
+    aStyleSettings.SetActiveColor( ImplWinColorToSal( GetSysColor( COLOR_ACTIVECAPTION ) ) );
+    aStyleSettings.SetActiveTextColor( ImplWinColorToSal( GetSysColor( COLOR_CAPTIONTEXT ) ) );
+    aStyleSettings.SetDeactiveColor( ImplWinColorToSal( GetSysColor( COLOR_INACTIVECAPTION ) ) );
+    aStyleSettings.SetDeactiveTextColor( ImplWinColorToSal( GetSysColor( COLOR_INACTIVECAPTIONTEXT ) ) );
+    if ( aSalShlData.mbWXP )
+    {
+        // only xp supports a different menu bar color
+        long bFlatMenues = 0;
+        SystemParametersInfo( SPI_GETFLATMENU, 0, &bFlatMenues, 0);
+        if( bFlatMenues )
+        {
+            aStyleSettings.SetUseFlatMenues( TRUE );
+            aStyleSettings.SetMenuBarColor( ImplWinColorToSal( GetSysColor( COLOR_MENUBAR ) ) );
+            aStyleSettings.SetMenuHighlightColor( ImplWinColorToSal( GetSysColor( COLOR_MENUHILIGHT ) ) );
+            aStyleSettings.SetMenuBorderColor( ImplWinColorToSal( GetSysColor( COLOR_3DSHADOW ) ) );
+
+            // flat borders for our controls etc. as well in this mode (ie, no 3d borders)
+            // this is not active in the classic style appearance
+            aStyleSettings.SetUseFlatBorders( TRUE );
         }
+    }
+    // check if vista or newer runs
+    // in Aero theme (and similar ?) the menu text color does not change
+    // for selected items; also on WinXP and earlier menus are not themed
+    if( aSalShlData.maVersionInfo.dwMajorVersion >= 6 &&
+       ImplDwmIsCompositionEnabled()
+       )
+    {
+        // in aero menuitem highlight text is drawn in the same color as normal
+        aStyleSettings.SetMenuHighlightTextColor( aStyleSettings.GetMenuTextColor() );
+        pSVData->maNWFData.mnMenuFormatExtraBorder = 2;
+        pSVData->maNWFData.maMenuBarHighlightTextColor = aStyleSettings.GetMenuTextColor();
+        GetSalData()->mbThemeMenuSupport = TRUE;
     }
     // Bei hellgrau geben wir die Farbe vor, damit es besser aussieht
     if ( aStyleSettings.GetFaceColor() == COL_LIGHTGRAY )
@@ -3027,7 +3013,7 @@ void WinSalFrame::UpdateSettings( AllSettings& rSettings )
     Font    aAppFont = aStyleSettings.GetAppFont();
     Font    aIconFont = aStyleSettings.GetIconFont();
     HDC     hDC = GetDC( 0 );
-    if ( aSalShlData.mbWNT )
+    if( true/*aSalShlData.mbWNT*/ )
     {
         NONCLIENTMETRICSW aNonClientMetrics;
         aNonClientMetrics.cbSize = sizeof( aNonClientMetrics );
@@ -3042,23 +3028,6 @@ void WinSalFrame::UpdateSettings( AllSettings& rSettings )
             LOGFONTW aLogFont;
             if ( SystemParametersInfoW( SPI_GETICONTITLELOGFONT, 0, &aLogFont, 0 ) )
                 ImplSalUpdateStyleFontW( hDC, aLogFont, aIconFont );
-        }
-    }
-    else
-    {
-        NONCLIENTMETRICSA aNonClientMetrics;
-        aNonClientMetrics.cbSize = sizeof( aNonClientMetrics );
-        if ( SystemParametersInfoA( SPI_GETNONCLIENTMETRICS, sizeof( aNonClientMetrics ), &aNonClientMetrics, 0 ) )
-        {
-            ImplSalUpdateStyleFontA( hDC, aNonClientMetrics.lfMenuFont, aMenuFont );
-            ImplSalUpdateStyleFontA( hDC, aNonClientMetrics.lfCaptionFont, aTitleFont );
-            ImplSalUpdateStyleFontA( hDC, aNonClientMetrics.lfSmCaptionFont, aFloatTitleFont );
-            ImplSalUpdateStyleFontA( hDC, aNonClientMetrics.lfStatusFont, aHelpFont );
-            ImplSalUpdateStyleFontA( hDC, aNonClientMetrics.lfMessageFont, aAppFont );
-
-            LOGFONTA aLogFont;
-            if ( SystemParametersInfoA( SPI_GETICONTITLELOGFONT, 0, &aLogFont, 0 ) )
-                ImplSalUpdateStyleFontA( hDC, aLogFont, aIconFont );
         }
     }
 
@@ -3649,27 +3618,7 @@ static void ImplUpdateInputLang( WinSalFrame* pFrame )
     // If we are on Windows NT we use Unicode FrameProcs and so we
     // get Unicode charcodes directly from Windows
     // no need to set up a code page
-    if ( aSalShlData.mbWNT )
-        return;
-
-    if ( !nLang )
-    {
-        pFrame->mnInputLang     = 0;
-        pFrame->mnInputCodePage = GetACP();
-    }
-    else if ( bLanguageChange )
-    {
-        sal_Char aBuf[10];
-        if ( GetLocaleInfoA( MAKELCID( nLang, SORT_DEFAULT ), LOCALE_IDEFAULTANSICODEPAGE,
-                             aBuf, sizeof(aBuf) ) > 0 )
-        {
-            pFrame->mnInputCodePage = ImplStrToNum( aBuf );
-            if ( !pFrame->mnInputCodePage )
-                pFrame->mnInputCodePage = GetACP();
-        }
-        else
-            pFrame->mnInputCodePage = GetACP();
-    }
+    return;
 }
 
 
@@ -3679,29 +3628,7 @@ static sal_Unicode ImplGetCharCode( WinSalFrame* pFrame, WPARAM nCharCode )
 
     // If we are on Windows NT we use Unicode FrameProcs and so we
     // get Unicode charcodes directly from Windows
-    if ( aSalShlData.mbWNT )
-        return (sal_Unicode)nCharCode;
-
-    sal_Char    aCharBuf[2];
-    int         nCharLen;
-    WCHAR       c;
-    if ( nCharCode > 0xFF )
-    {
-        aCharBuf[0] = (sal_Char)(nCharCode>>8);
-        aCharBuf[1] = (sal_Char)nCharCode;
-        nCharLen = 2;
-    }
-    else
-    {
-        aCharBuf[0] = (sal_Char)nCharCode;
-        nCharLen = 1;
-    }
-    if ( ::MultiByteToWideChar( pFrame->mnInputCodePage,
-                                MB_PRECOMPOSED,
-                                aCharBuf, nCharLen, &c, 1 ) )
-        return (sal_Unicode)c;
-    else
-        return (sal_Unicode)nCharCode;
+    return (sal_Unicode)nCharCode;
 }
 
 // -----------------------------------------------------------------------
@@ -4507,16 +4434,8 @@ static void ImplHandleSettingsChangeMsg( HWND hWnd, UINT nMsg,
     {
         if ( lParam )
         {
-            if ( aSalShlData.mbWNT )
-            {
                 if ( ImplSalWICompareAscii( (const wchar_t*)lParam, "devices" ) == 0 )
                     nSalEvent = SALEVENT_PRINTERCHANGED;
-            }
-            else
-            {
-                if ( stricmp( (const char*)lParam, "devices" ) == 0 )
-                    nSalEvent = SALEVENT_PRINTERCHANGED;
-            }
         }
     }
 

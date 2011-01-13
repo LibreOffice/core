@@ -39,8 +39,6 @@
 
 #include <hash_map>
 
-#include <com/sun/star/linguistic2/XLinguServiceManager.hpp>
-
 class ImplDevFontListData;
 class ImplGetDevFontList;
 class ImplGetDevSizeList;
@@ -53,6 +51,8 @@ class Font;
 class ConvertChar;
 struct FontMatchStatus;
 class OutputDevice;
+
+namespace com { namespace sun { namespace star { namespace lang { struct Locale; }}}}
 
 // ----------------------
 // - ImplFontAttributes -
@@ -140,7 +140,7 @@ public:
     virtual ImplFontData*   Clone() const = 0;
 
 protected:
-                            ImplFontData( const ImplDevFontAttributes&, int nMagic );
+    explicit                ImplFontData( const ImplDevFontAttributes&, int nMagic );
     void                    SetBitmapSize( int nW, int nH ) { mnWidth=nW; mnHeight=nH; }
 
     long                    mnWidth;    // Width (in pixels)
@@ -199,8 +199,8 @@ private:
     ImplGlyphFallbackFontSubstitution* mpFallbackHook;  // device specific glyh fallback substitution
 
 public:
-                            ImplDevFontList();
-                            ~ImplDevFontList();
+    explicit                ImplDevFontList();
+    virtual                 ~ImplDevFontList();
 
     // fill the list with device fonts
     void                    Add( ImplFontData* );
@@ -226,7 +226,7 @@ public:
     ImplGetDevSizeList*     GetDevSizeList( const String& rFontName ) const;
 
     //used by 2-level font fallback
-    ImplDevFontListData* ImplFindByLocale(com::sun::star::lang::Locale lc) const;
+    ImplDevFontListData* ImplFindByLocale( com::sun::star::lang::Locale& ) const;
 
 protected:
     void                    InitMatchData() const;
@@ -267,7 +267,7 @@ struct ImplKernPairData
 class ImplFontMetricData : public ImplFontAttributes
 {
 public:
-            ImplFontMetricData( const ImplFontSelectData& );
+    explicit ImplFontMetricData( const ImplFontSelectData& );
     void    ImplInitTextLineSize( const OutputDevice* pDev );
     void    ImplInitAboveTextLineSize();
 
@@ -327,7 +327,7 @@ public: // TODO: hide members behind accessor methods
 class VCL_DLLPUBLIC ImplFontEntry
 {
 public:
-                        ImplFontEntry( const ImplFontSelectData& );
+    explicit            ImplFontEntry( const ImplFontSelectData& );
     virtual             ~ImplFontEntry();
 
 public: // TODO: make data members private
