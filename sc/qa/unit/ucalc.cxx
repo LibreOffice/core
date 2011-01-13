@@ -65,6 +65,12 @@
 #include <stringutil.hxx>
 #include <scmatrix.hxx>
 
+#include <dpshttab.hxx>
+#include <dpobject.hxx>
+#include <dpsave.hxx>
+
+#include <com/sun/star/sheet/DataPilotFieldOrientation.hpp>
+
 using namespace ::com::sun::star;
 using ::rtl::OUString;
 
@@ -346,8 +352,9 @@ void Test::testMatrix()
 
 void Test::testDataPilot()
 {
-    OUString aTabName(RTL_CONSTASCII_USTRINGPARAM("Data"));
-    m_pDoc->InsertTab(0, aTabName);
+    m_pDoc->InsertTab(0, OUString(RTL_CONSTASCII_USTRINGPARAM("Data")));
+    m_pDoc->InsertTab(1, OUString(RTL_CONSTASCII_USTRINGPARAM("Table")));
+
     const char* aFields[] = {
         "Name", "Group", "Score"
     };
@@ -363,12 +370,15 @@ void Test::testDataPilot()
         { "Frank",   "C", 15 },
     };
 
+    sal_uInt32 nFieldCount = SAL_N_ELEMENTS(aFields);
+    sal_uInt32 nDataCount = SAL_N_ELEMENTS(aData);
+
     // Insert field names in row 0.
-    for (sal_uInt32 i = 0; i < SAL_N_ELEMENTS(aFields); ++i)
+    for (sal_uInt32 i = 0; i < nFieldCount; ++i)
         m_pDoc->SetString(0, static_cast<SCCOL>(i), 0, OUString(RTL_CONSTASCII_USTRINGPARAM(aFields[i])));
 
     // Insert data into row 1 and downward.
-    for (sal_uInt32 i = 0; i < SAL_N_ELEMENTS(aData); ++i)
+    for (sal_uInt32 i = 0; i < nDataCount; ++i)
     {
         SCROW nRow = static_cast<SCROW>(i) + 1;
         m_pDoc->SetString(0, nRow, 0, OUString(RTL_CONSTASCII_USTRINGPARAM(aData[i].pName)));
@@ -376,6 +386,41 @@ void Test::testDataPilot()
         m_pDoc->SetValue(2, nRow, 0, aData[i].nScore);
     }
 
+    SCROW nRow1 = 0, nRow2 = 0;
+    SCCOL nCol1 = 0, nCol2 = 0;
+    m_pDoc->GetDataArea(0, nCol1, nRow1, nCol2, nRow2, true, false);
+    CPPUNIT_ASSERT_MESSAGE("Data is expected to start from (col=0,row=0).", nCol1 == 0 && nRow1 == 0);
+    CPPUNIT_ASSERT_MESSAGE("Unexpected data range.",
+                           nCol2 == static_cast<SCCOL>(nFieldCount - 1) && nRow2 == static_cast<SCROW>(nDataCount));
+
+    ScSheetSourceDesc aSheetDesc;
+    aSheetDesc.aSourceRange = ScRange(nCol1, nRow1, 0, nCol2, nRow2, 0);
+    ScDPObject* pDPObj = new ScDPObject(m_pDoc);
+    pDPObj->SetSheetDesc(aSheetDesc);
+    pDPObj->SetOutRange(ScAddress(0, 0, 1));
+
+    ScDPSaveData aSaveData;
+    // Set data pilot table output options.
+    aSaveData.SetIgnoreEmptyRows(false);
+    aSaveData.SetRepeatIfEmpty(false);
+    aSaveData.SetColumnGrand(false);
+    aSaveData.SetRowGrand(false);
+    aSaveData.SetFilterButton(false);
+    aSaveData.SetDrillDown(false);
+
+    pDPObj->GetSource();
+
+    for (sal_uInt32 i = 0; i < nFieldCount; ++i)
+    {
+        OUString aDimName(RTL_CONSTASCII_USTRINGPARAM(aFields[i]));
+        ScDPSaveDimension* pDim = aSaveData.GetDimensionByName(aDimName);
+        pDim->SetOrientation(sheet::DataPilotFieldOrientation_COLUMN);
+    }
+    pDPObj->SetSaveData(aSaveData);
+
+    delete pDPObj;
+
+    m_pDoc->DeleteTab(1);
     m_pDoc->DeleteTab(0);
 }
 

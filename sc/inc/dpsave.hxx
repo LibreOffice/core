@@ -224,6 +224,16 @@ public:
     const List&             GetDimensions() const { return aDimList; }
     void                    AddDimension(ScDPSaveDimension* pDim) { aDimList.Insert(pDim, LIST_APPEND); }
 
+    /**
+     * Get a dimension object by its name.  <i>If one doesn't exist for the
+     * given name, it creats a new one.</i>
+     *
+     * @param rName dimension name
+     *
+     * @return pointer to the dimension object.  The ScDPSaveData instance
+     *         manages its life cycle; hence the caller must
+     *         <i>not</i> delete this object.
+     */
     ScDPSaveDimension*      GetDimensionByName(const String& rName);
     SC_DLLPUBLIC ScDPSaveDimension*     GetDataLayoutDimension();
     SC_DLLPUBLIC ScDPSaveDimension*      GetExistingDataLayoutDimension() const;
