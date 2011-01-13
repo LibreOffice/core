@@ -1935,21 +1935,21 @@ sal_Bool SvNumberformat::GetOutputString(String& sString,
     return sal_False;
 }
 /*
-void SvNumberformat::GetNextFareyNumber(sal_uIntPtr nPrec, sal_uIntPtr x0, sal_uIntPtr x1,
-                                        sal_uIntPtr y0, sal_uIntPtr y1,
-                                        sal_uIntPtr& x2,sal_uIntPtr& y2)
+void SvNumberformat::GetNextFareyNumber(sal_uLong nPrec, sal_uLong x0, sal_uLong x1,
+                                        sal_uLong y0, sal_uLong y1,
+                                        sal_uLong& x2,sal_uLong& y2)
 {
     x2 = ((y0+nPrec)/y1)*x1 - x0;
     y2 = ((y0+nPrec)/y1)*y1 - y0;
 }
 */
-sal_uIntPtr SvNumberformat::ImpGGT(sal_uIntPtr x, sal_uIntPtr y)
+sal_uLong SvNumberformat::ImpGGT(sal_uLong x, sal_uLong y)
 {
     if (y == 0)
         return x;
     else
     {
-        sal_uIntPtr z = x%y;
+        sal_uLong z = x%y;
         while (z)
         {
             x = y;
@@ -1960,13 +1960,13 @@ sal_uIntPtr SvNumberformat::ImpGGT(sal_uIntPtr x, sal_uIntPtr y)
     }
 }
 
-sal_uIntPtr SvNumberformat::ImpGGTRound(sal_uIntPtr x, sal_uIntPtr y)
+sal_uLong SvNumberformat::ImpGGTRound(sal_uLong x, sal_uLong y)
 {
     if (y == 0)
         return x;
     else
     {
-        sal_uIntPtr z = x%y;
+        sal_uLong z = x%y;
         while ((double)z/(double)y > D_EPS)
         {
             x = y;
@@ -2198,7 +2198,7 @@ sal_Bool SvNumberformat::GetOutputString(double fNumber,
             case NUMBERFORMAT_FRACTION:
             {
                 String sStr, sFrac, sDiv;               // Strings, Wert fuer
-                sal_uIntPtr nFrac, nDiv;                      // Vorkommaanteil
+                sal_uLong nFrac, nDiv;                      // Vorkommaanteil
                                                         // Zaehler und Nenner
                 sal_Bool bSign = sal_False;
                 if (fNumber < 0)
@@ -2220,9 +2220,9 @@ sal_Bool SvNumberformat::GetOutputString(double fNumber,
                     DBG_ERROR("SvNumberformat:: Bruch, nCntExp == 0");
                     return sal_False;
                 }
-                sal_uIntPtr nBasis = ((sal_uIntPtr)floor(           // 9, 99, 999 ,...
+                sal_uLong nBasis = ((sal_uLong)floor(           // 9, 99, 999 ,...
                                     pow(10.0,rInfo.nCntExp))) - 1;
-                sal_uIntPtr x0, y0, x1, y1;
+                sal_uLong x0, y0, x1, y1;
 
                 if (rInfo.nCntExp <= _MAX_FRACTION_PREC)
                 {
@@ -2236,7 +2236,7 @@ sal_Bool SvNumberformat::GetOutputString(double fNumber,
                         bUpperHalf = sal_False;
                                                     // Einstieg in Farey-Serie
                                                     // finden:
-                    x0 = (sal_uIntPtr) floor(fNumber*nBasis); // z.B. 2/9 <= x < 3/9
+                    x0 = (sal_uLong) floor(fNumber*nBasis); // z.B. 2/9 <= x < 3/9
                     if (x0 == 0)                        //      => x0 = 2
                     {
                         y0 = 1;
@@ -2262,11 +2262,11 @@ sal_Bool SvNumberformat::GetOutputString(double fNumber,
                         y1 = nBasis - 1;
                         double fUg = (double) x0 / (double) y0;
                         double fOg = (double) x1 / (double) y1;
-                        sal_uIntPtr nGgt = ImpGGT(y0, x0);       // x0/y0 kuerzen
+                        sal_uLong nGgt = ImpGGT(y0, x0);       // x0/y0 kuerzen
                         x0 /= nGgt;
                         y0 /= nGgt;                     // Einschachteln:
-                        sal_uIntPtr x2 = 0;
-                        sal_uIntPtr y2 = 0;
+                        sal_uLong x2 = 0;
+                        sal_uLong y2 = 0;
                         sal_Bool bStop = sal_False;
                         while (!bStop)
                         {
@@ -2315,8 +2315,8 @@ sal_Bool SvNumberformat::GetOutputString(double fNumber,
                     fup  = (double)x1/(double)y1;
                     while (fNumber > fup)
                     {
-                        sal_uIntPtr x2 = ((y0+nBasis)/y1)*x1 - x0; // naechste Farey-Zahl
-                        sal_uIntPtr y2 = ((y0+nBasis)/y1)*y1 - y0;
+                        sal_uLong x2 = ((y0+nBasis)/y1)*x1 - x0; // naechste Farey-Zahl
+                        sal_uLong y2 = ((y0+nBasis)/y1)*y1 - y0;
 //                      GetNextFareyNumber(nBasis, x0, x1, y0, y1, x2, y2);
                         x0 = x1;
                         y0 = y1;
@@ -2345,14 +2345,14 @@ sal_Bool SvNumberformat::GetOutputString(double fNumber,
                 }
                 else                                    // grosse Nenner
                 {                                       // 0,1234->123/1000
-                    sal_uIntPtr nGgt;
+                    sal_uLong nGgt;
 /*
                     nDiv = nBasis+1;
-                    nFrac = ((sal_uIntPtr)floor(0.5 + fNumber *
+                    nFrac = ((sal_uLong)floor(0.5 + fNumber *
                                     pow(10.0,rInfo.nCntExp)));
 */
                     nDiv = 10000000;
-                    nFrac = ((sal_uIntPtr)floor(0.5 + fNumber * 10000000.0));
+                    nFrac = ((sal_uLong)floor(0.5 + fNumber * 10000000.0));
                     nGgt = ImpGGT(nDiv, nFrac);
                     if (nGgt > 1)
                     {
@@ -2371,7 +2371,7 @@ sal_Bool SvNumberformat::GetOutputString(double fNumber,
                     if (nDiv > nBasis)
                     {
                         nDiv = nBasis;
-                        nFrac = ((sal_uIntPtr)floor(0.5 + fNumber *
+                        nFrac = ((sal_uLong)floor(0.5 + fNumber *
                                     pow(10.0,rInfo.nCntExp)));
                         nGgt = ImpGGTRound(nDiv, nFrac);
                         if (nGgt > 1)
@@ -2390,7 +2390,7 @@ sal_Bool SvNumberformat::GetOutputString(double fNumber,
                         OutString = rScan.GetErrorString();
                         return sal_False;
                     }
-                    nFrac = (sal_uIntPtr) floor(fNum1);
+                    nFrac = (sal_uLong) floor(fNum1);
                     sStr.Erase();
                 }
                 else if (fNum == 0.0 && nFrac != 0)
@@ -2601,7 +2601,7 @@ sal_Bool SvNumberformat::ImpGetTimeOutput(double fNumber,
         OutString = rScan.GetErrorString();
         return sal_False;
     }
-    sal_uIntPtr nSeconds = (sal_uIntPtr)floor( fTime );
+    sal_uLong nSeconds = (sal_uLong)floor( fTime );
 
     String sSecStr( ::rtl::math::doubleToUString( fTime-nSeconds,
                 rtl_math_StringFormat_F, int(nCntPost), '.'));
@@ -2620,7 +2620,7 @@ sal_Bool SvNumberformat::ImpGetTimeOutput(double fNumber,
 
     xub_StrLen nSecPos = 0;                 // Zum Ziffernweisen
                                             // abarbeiten
-    sal_uIntPtr nHour, nMin, nSec;
+    sal_uLong nHour, nMin, nSec;
     if (!rInfo.bThousand)      // kein [] Format
     {
         nHour = (nSeconds/3600) % 24;
@@ -3133,7 +3133,7 @@ sal_Bool SvNumberformat::ImpGetDateTimeOutput(double fNumber,
         bOtherCalendar = sal_False;
     sal_Int16 nNatNum = NumFor[nIx].GetNatNum().GetNatNum();
 
-    sal_uIntPtr nSeconds = (sal_uIntPtr)floor( fTime );
+    sal_uLong nSeconds = (sal_uLong)floor( fTime );
     String sSecStr( ::rtl::math::doubleToUString( fTime-nSeconds,
                 rtl_math_StringFormat_F, int(nCntPost), '.'));
     sSecStr.EraseLeadingChars('0');
@@ -3151,7 +3151,7 @@ sal_Bool SvNumberformat::ImpGetDateTimeOutput(double fNumber,
 
     xub_StrLen nSecPos = 0;                     // Zum Ziffernweisen
                                             // abarbeiten
-    sal_uIntPtr nHour, nMin, nSec;
+    sal_uLong nHour, nMin, nSec;
     if (!rInfo.bThousand)      // [] Format
     {
         nHour = (nSeconds/3600) % 24;

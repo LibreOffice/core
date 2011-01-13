@@ -54,7 +54,7 @@ DdeData::DdeData()
 
 // --- DdeData::DdeData() ------------------------------------------
 
-DdeData::DdeData( const void* p, long n, sal_uIntPtr f )
+DdeData::DdeData( const void* p, long n, sal_uLong f )
 {
     pImp = new DdeDataImp;
     pImp->hData = NULL;
@@ -105,12 +105,12 @@ void DdeData::Lock()
 
 // --- DdeData::GetFormat() ----------------------------------------
 
-sal_uIntPtr DdeData::GetFormat() const
+sal_uLong DdeData::GetFormat() const
 {
     return pImp->nFmt;
 }
 
-void DdeData::SetFormat( sal_uIntPtr nFmt )
+void DdeData::SetFormat( sal_uLong nFmt )
 {
     pImp->nFmt = nFmt;
 }
@@ -144,7 +144,7 @@ DdeData& DdeData::operator = ( const DdeData& rData )
     return *this;
 }
 
-sal_uIntPtr DdeData::GetExternalFormat( sal_uIntPtr nFmt )
+sal_uLong DdeData::GetExternalFormat( sal_uLong nFmt )
 {
     switch( nFmt )
     {
@@ -173,7 +173,7 @@ sal_uIntPtr DdeData::GetExternalFormat( sal_uIntPtr nFmt )
             if( aName.Len() )
             {
                 HATOMTBL hSysTable = WinQuerySystemAtomTable();
-                nFmt = (sal_uIntPtr)WinAddAtom( hSysTable, (PSZ)aName.GetBuffer() );
+                nFmt = (sal_uLong)WinAddAtom( hSysTable, (PSZ)aName.GetBuffer() );
             }
 #endif
 #endif
@@ -182,7 +182,7 @@ sal_uIntPtr DdeData::GetExternalFormat( sal_uIntPtr nFmt )
     return nFmt;
 }
 
-sal_uIntPtr DdeData::GetInternalFormat( sal_uIntPtr nFmt )
+sal_uLong DdeData::GetInternalFormat( sal_uLong nFmt )
 {
     switch( nFmt )
     {

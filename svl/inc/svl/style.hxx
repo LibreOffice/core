@@ -102,7 +102,7 @@ protected:
     SfxItemSet*             pSet;           // ItemSet
     sal_uInt16                  nMask;          // Flags
 
-    sal_uIntPtr                     nHelpId;        // Hilfe-ID
+    sal_uLong                   nHelpId;        // Hilfe-ID
 
     sal_Bool                    bMySet;         // sal_True: Set loeschen im dtor
 
@@ -149,8 +149,8 @@ public:
     sal_Bool   IsUserDefined() const
            { return sal_Bool( ( nMask & SFXSTYLEBIT_USERDEF) != 0 ); }
 
-    virtual sal_uIntPtr GetHelpId( String& rFile );
-    virtual void   SetHelpId( const String& r, sal_uIntPtr nId );
+    virtual sal_uLong GetHelpId( String& rFile );
+    virtual void   SetHelpId( const String& r, sal_uLong nId );
 
     virtual SfxItemSet& GetItemSet();
     virtual sal_uInt16 GetVersion() const;

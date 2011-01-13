@@ -715,7 +715,7 @@ uno::Sequence<rtl::OUString> SAL_CALL SvNumberFormatsObj::getSupportedServiceNam
 
 //------------------------------------------------------------------------
 
-SvNumberFormatObj::SvNumberFormatObj( SvNumberFormatsSupplierObj& rParent, sal_uIntPtr nK, const ::comphelper::SharedMutex& _rMutex )
+SvNumberFormatObj::SvNumberFormatObj( SvNumberFormatsSupplierObj& rParent, sal_uLong nK, const ::comphelper::SharedMutex& _rMutex )
     :rSupplier( rParent )
     ,nKey( nK )
     ,m_aMutex( _rMutex )

@@ -42,7 +42,7 @@ DdeData::DdeData( const DdeData& )
 {
 }
 
-DdeData::DdeData( const void*, long, sal_uIntPtr)
+DdeData::DdeData( const void*, long, sal_uLong)
 {
 }
 
@@ -50,11 +50,11 @@ DdeData::~DdeData( void )
 {
 }
 
-void DdeData::SetFormat( sal_uIntPtr )
+void DdeData::SetFormat( sal_uLong )
 {
 }
 
-sal_uIntPtr DdeData::GetFormat() const
+sal_uLong DdeData::GetFormat() const
 {
   return 0L;
 }
@@ -168,7 +168,7 @@ void DdeTopic::RemoveItem( const DdeItem& )
 {
 }
 
-DdeData* DdeTopic::Get( sal_uIntPtr )
+DdeData* DdeTopic::Get( sal_uLong )
 {
   return NULL;
 }
@@ -246,7 +246,7 @@ String DdeService::GetHelp()
   return String::EmptyString();
 }
 
-void DdeService::AddFormat( sal_uIntPtr )
+void DdeService::AddFormat( sal_uLong )
 {
 }
 
@@ -305,7 +305,7 @@ DdeItem( rItem )
 {
 }
 
-DdeData* DdeGetPutItem::Get( sal_uIntPtr )
+DdeData* DdeGetPutItem::Get( sal_uLong )
 {
   return NULL;
 }

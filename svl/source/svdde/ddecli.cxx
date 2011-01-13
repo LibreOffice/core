@@ -306,7 +306,7 @@ void DdeTransaction::Execute()
     HSZ     hItem = *pName;
     void*   pData = (void*)(const void *)aDdeData;
     DWORD   nData = (DWORD)(long)aDdeData;
-    sal_uIntPtr     nIntFmt = aDdeData.pImp->nFmt;
+    sal_uLong   nIntFmt = aDdeData.pImp->nFmt;
     UINT    nExtFmt  = DdeData::GetExternalFormat( nIntFmt );
     DdeInstData* pInst = ImpGetInstData();
 
@@ -427,7 +427,7 @@ DdeHotLink::DdeHotLink( DdeConnection& d, const String& i, long n ) :
 // --- DdePoke::DdePoke() ------------------------------------------
 
 DdePoke::DdePoke( DdeConnection& d, const String& i, const char* p,
-                  long l, sal_uIntPtr f, long n ) :
+                  long l, sal_uLong f, long n ) :
             DdeTransaction( d, i, n )
 {
     aDdeData = DdeData( p, l, f );

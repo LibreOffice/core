@@ -152,7 +152,7 @@ TYPEINIT1(SvOutputStreamOpenLockBytes, SvOpenLockBytes)
 
 //============================================================================
 // virtual
-ErrCode SvOutputStreamOpenLockBytes::ReadAt(sal_uIntPtr, void *, sal_uIntPtr, sal_uIntPtr *)
+ErrCode SvOutputStreamOpenLockBytes::ReadAt(sal_uLong, void *, sal_uLong, sal_uLong *)
     const
 {
     return ERRCODE_IO_CANTREAD;
@@ -160,8 +160,8 @@ ErrCode SvOutputStreamOpenLockBytes::ReadAt(sal_uIntPtr, void *, sal_uIntPtr, sa
 
 //============================================================================
 // virtual
-ErrCode SvOutputStreamOpenLockBytes::WriteAt(sal_uIntPtr nPos, void const * pBuffer,
-                                             sal_uIntPtr nCount, sal_uIntPtr * pWritten)
+ErrCode SvOutputStreamOpenLockBytes::WriteAt(sal_uLong nPos, void const * pBuffer,
+                                             sal_uLong nCount, sal_uLong * pWritten)
 {
     if (nPos != m_nPosition)
         return ERRCODE_IO_CANTWRITE;
@@ -187,7 +187,7 @@ ErrCode SvOutputStreamOpenLockBytes::Flush() const
 
 //============================================================================
 // virtual
-ErrCode SvOutputStreamOpenLockBytes::SetSize(sal_uIntPtr)
+ErrCode SvOutputStreamOpenLockBytes::SetSize(sal_uLong)
 {
     return ERRCODE_IO_NOTSUPPORTED;
 }
@@ -205,15 +205,15 @@ ErrCode SvOutputStreamOpenLockBytes::Stat(SvLockBytesStat * pStat,
 //============================================================================
 // virtual
 ErrCode SvOutputStreamOpenLockBytes::FillAppend(void const * pBuffer,
-                                                sal_uIntPtr nCount,
-                                                sal_uIntPtr * pWritten)
+                                                sal_uLong nCount,
+                                                sal_uLong * pWritten)
 {
     if (!m_xOutputStream.is())
         return ERRCODE_IO_CANTWRITE;
     if (nCount > 0
-        && nCount > std::numeric_limits< sal_uIntPtr >::max() - m_nPosition)
+        && nCount > std::numeric_limits< sal_uLong >::max() - m_nPosition)
     {
-        nCount = std::numeric_limits< sal_uIntPtr >::max() - m_nPosition;
+        nCount = std::numeric_limits< sal_uLong >::max() - m_nPosition;
         if (nCount == 0)
             return ERRCODE_IO_CANTWRITE;
     }
@@ -235,14 +235,14 @@ ErrCode SvOutputStreamOpenLockBytes::FillAppend(void const * pBuffer,
 
 //============================================================================
 // virtual
-sal_uIntPtr SvOutputStreamOpenLockBytes::Tell() const
+sal_uLong SvOutputStreamOpenLockBytes::Tell() const
 {
     return m_nPosition;
 }
 
 //============================================================================
 // virtual
-sal_uIntPtr SvOutputStreamOpenLockBytes::Seek(sal_uIntPtr)
+sal_uLong SvOutputStreamOpenLockBytes::Seek(sal_uLong)
 {
     return m_nPosition;
 }
@@ -476,7 +476,7 @@ bool SvInputStream::open()
 
 //============================================================================
 // virtual
-sal_uIntPtr SvInputStream::GetData(void * pData, sal_uIntPtr nSize)
+sal_uLong SvInputStream::GetData(void * pData, sal_uLong nSize)
 {
     if (!open())
     {
@@ -503,8 +503,8 @@ sal_uIntPtr SvInputStream::GetData(void * pData, sal_uIntPtr nSize)
         {
             sal_Int32 nRemain
                 = sal_Int32(
-                    std::min(sal_uIntPtr(nSize - nRead),
-                             sal_uIntPtr(std::numeric_limits< sal_Int32 >::max())));
+                    std::min(sal_uLong(nSize - nRead),
+                             sal_uLong(std::numeric_limits< sal_Int32 >::max())));
             if (nRemain == 0)
                 break;
             uno::Sequence< sal_Int8 > aBuffer;
@@ -540,8 +540,8 @@ sal_uIntPtr SvInputStream::GetData(void * pData, sal_uIntPtr nSize)
                 sal_Int32 nRemain
                     = sal_Int32(
                         std::min(
-                            sal_uIntPtr(nSize - nRead),
-                            sal_uIntPtr(std::numeric_limits< sal_Int32 >::max())));
+                            sal_uLong(nSize - nRead),
+                            sal_uLong(std::numeric_limits< sal_Int32 >::max())));
                 if (nRemain == 0)
                     break;
                 uno::Sequence< sal_Int8 > aBuffer;
@@ -571,7 +571,7 @@ sal_uIntPtr SvInputStream::GetData(void * pData, sal_uIntPtr nSize)
 
 //============================================================================
 // virtual
-sal_uIntPtr SvInputStream::PutData(void const *, sal_uIntPtr)
+sal_uLong SvInputStream::PutData(void const *, sal_uLong)
 {
     SetError(ERRCODE_IO_NOTSUPPORTED);
     return 0;
@@ -584,7 +584,7 @@ void SvInputStream::FlushData()
 
 //============================================================================
 // virtual
-sal_uIntPtr SvInputStream::SeekPos(sal_uIntPtr nPos)
+sal_uLong SvInputStream::SeekPos(sal_uLong nPos)
 {
     if (open())
     {
@@ -601,7 +601,7 @@ sal_uIntPtr SvInputStream::SeekPos(sal_uIntPtr nPos)
                             < STREAM_SEEK_TO_END)
                         {
                             m_nSeekedFrom = Tell();
-                            return sal_uIntPtr(nLength);
+                            return sal_uLong(nLength);
                         }
                     }
                     catch (io::IOException) {}
@@ -636,7 +636,7 @@ sal_uIntPtr SvInputStream::SeekPos(sal_uIntPtr nPos)
 
 //============================================================================
 // virtual
-void SvInputStream::SetSize(sal_uIntPtr)
+void SvInputStream::SetSize(sal_uLong)
 {
     SetError(ERRCODE_IO_NOTSUPPORTED);
 }
@@ -675,7 +675,7 @@ sal_uInt16 SvInputStream::IsA() const
 
 //============================================================================
 // virtual
-void SvInputStream::AddMark(sal_uIntPtr nPos)
+void SvInputStream::AddMark(sal_uLong nPos)
 {
     if (open() && m_pPipe)
         m_pPipe->addMark(nPos);
@@ -683,7 +683,7 @@ void SvInputStream::AddMark(sal_uIntPtr nPos)
 
 //============================================================================
 // virtual
-void SvInputStream::RemoveMark(sal_uIntPtr nPos)
+void SvInputStream::RemoveMark(sal_uLong nPos)
 {
     if (open() && m_pPipe)
         m_pPipe->removeMark(nPos);
@@ -696,7 +696,7 @@ void SvInputStream::RemoveMark(sal_uIntPtr nPos)
 //============================================================================
 
 // virtual
-sal_uIntPtr SvOutputStream::GetData(void *, sal_uIntPtr)
+sal_uLong SvOutputStream::GetData(void *, sal_uLong)
 {
     SetError(ERRCODE_IO_NOTSUPPORTED);
     return 0;
@@ -704,20 +704,20 @@ sal_uIntPtr SvOutputStream::GetData(void *, sal_uIntPtr)
 
 //============================================================================
 // virtual
-sal_uIntPtr SvOutputStream::PutData(void const * pData, sal_uIntPtr nSize)
+sal_uLong SvOutputStream::PutData(void const * pData, sal_uLong nSize)
 {
     if (!m_xStream.is())
     {
         SetError(ERRCODE_IO_CANTWRITE);
         return 0;
     }
-    sal_uIntPtr nWritten = 0;
+    sal_uLong nWritten = 0;
     for (;;)
     {
         sal_Int32 nRemain
             = sal_Int32(
-                std::min(sal_uIntPtr(nSize - nWritten),
-                         sal_uIntPtr(std::numeric_limits< sal_Int32 >::max())));
+                std::min(sal_uLong(nSize - nWritten),
+                         sal_uLong(std::numeric_limits< sal_Int32 >::max())));
         if (nRemain == 0)
             break;
         try
@@ -739,7 +739,7 @@ sal_uIntPtr SvOutputStream::PutData(void const * pData, sal_uIntPtr nSize)
 
 //============================================================================
 // virtual
-sal_uIntPtr SvOutputStream::SeekPos(sal_uIntPtr)
+sal_uLong SvOutputStream::SeekPos(sal_uLong)
 {
     SetError(ERRCODE_IO_NOTSUPPORTED);
     return 0;
@@ -763,7 +763,7 @@ void SvOutputStream::FlushData()
 
 //============================================================================
 // virtual
-void SvOutputStream::SetSize(sal_uIntPtr)
+void SvOutputStream::SetSize(sal_uLong)
 {
     SetError(ERRCODE_IO_NOTSUPPORTED);
 }

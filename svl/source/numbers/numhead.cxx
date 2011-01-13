@@ -47,7 +47,7 @@
 SvNumReadHeader::SvNumReadHeader(SvStream& rNewStream) :
     rStream( rNewStream )
 {
-    sal_uIntPtr nDataSize;
+    sal_uLong nDataSize;
     rStream >> nDataSize;
     nDataEnd = rStream.Tell() + nDataSize;
 }
@@ -56,7 +56,7 @@ SvNumReadHeader::SvNumReadHeader(SvStream& rNewStream) :
 
 SvNumReadHeader::~SvNumReadHeader()
 {
-    sal_uIntPtr nReadEnd = rStream.Tell();
+    sal_uLong nReadEnd = rStream.Tell();
     DBG_ASSERT( nReadEnd <= nDataEnd, "zuviele Bytes gelesen" );
     if ( nReadEnd != nDataEnd )
         rStream.Seek(nDataEnd);                     // Rest ueberspringen
@@ -64,9 +64,9 @@ SvNumReadHeader::~SvNumReadHeader()
 
 //#pragma SEG_FUNCDEF(numhead_03)
 
-sal_uIntPtr SvNumReadHeader::BytesLeft() const
+sal_uLong SvNumReadHeader::BytesLeft() const
 {
-    sal_uIntPtr nReadEnd = rStream.Tell();
+    sal_uLong nReadEnd = rStream.Tell();
     if (nReadEnd <= nDataEnd)
         return nDataEnd-nReadEnd;
 
@@ -78,7 +78,7 @@ sal_uIntPtr SvNumReadHeader::BytesLeft() const
 
 //#pragma SEG_FUNCDEF(numhead_04)
 
-SvNumWriteHeader::SvNumWriteHeader(SvStream& rNewStream, sal_uIntPtr nDefault) :
+SvNumWriteHeader::SvNumWriteHeader(SvStream& rNewStream, sal_uLong nDefault) :
     rStream( rNewStream )
 {
     nDataSize = nDefault;
@@ -90,7 +90,7 @@ SvNumWriteHeader::SvNumWriteHeader(SvStream& rNewStream, sal_uIntPtr nDefault) :
 
 SvNumWriteHeader::~SvNumWriteHeader()
 {
-    sal_uIntPtr nPos = rStream.Tell();
+    sal_uLong nPos = rStream.Tell();
 
     if ( nPos - nDataPos != nDataSize )             // Default getroffen?
     {
@@ -112,7 +112,7 @@ ImpSvNumMultipleReadHeader::ImpSvNumMultipleReadHeader(SvStream& rNewStream) :
 {
     sal_uInt32 nDataSize;
     rStream >> nDataSize;
-    sal_uIntPtr nDataPos = rStream.Tell();
+    sal_uLong nDataPos = rStream.Tell();
     nEntryEnd = nDataPos;
 
     rStream.SeekRel(nDataSize);
@@ -166,7 +166,7 @@ void ImpSvNumMultipleReadHeader::Skip( SvStream& rStream )
 
 void ImpSvNumMultipleReadHeader::EndEntry()
 {
-    sal_uIntPtr nPos = rStream.Tell();
+    sal_uLong nPos = rStream.Tell();
     DBG_ASSERT( nPos <= nEntryEnd, "zuviel gelesen" );
     if ( nPos != nEntryEnd )
         rStream.Seek( nEntryEnd );          // Rest ueberspringen
@@ -176,7 +176,7 @@ void ImpSvNumMultipleReadHeader::EndEntry()
 
 void ImpSvNumMultipleReadHeader::StartEntry()
 {
-    sal_uIntPtr nPos = rStream.Tell();
+    sal_uLong nPos = rStream.Tell();
     sal_uInt32 nEntrySize;
     (*pMemStream) >> nEntrySize;
 
@@ -185,9 +185,9 @@ void ImpSvNumMultipleReadHeader::StartEntry()
 
 //#pragma SEG_FUNCDEF(numhead_09)
 
-sal_uIntPtr ImpSvNumMultipleReadHeader::BytesLeft() const
+sal_uLong ImpSvNumMultipleReadHeader::BytesLeft() const
 {
-    sal_uIntPtr nReadEnd = rStream.Tell();
+    sal_uLong nReadEnd = rStream.Tell();
     if (nReadEnd <= nEntryEnd)
         return nEntryEnd-nReadEnd;
 
@@ -200,7 +200,7 @@ sal_uIntPtr ImpSvNumMultipleReadHeader::BytesLeft() const
 //#pragma SEG_FUNCDEF(numhead_0a)
 
 ImpSvNumMultipleWriteHeader::ImpSvNumMultipleWriteHeader(SvStream& rNewStream,
-                                                   sal_uIntPtr nDefault) :
+                                                   sal_uLong nDefault) :
     rStream( rNewStream ),
     aMemStream( 4096, 4096 )
 {
@@ -215,7 +215,7 @@ ImpSvNumMultipleWriteHeader::ImpSvNumMultipleWriteHeader(SvStream& rNewStream,
 
 ImpSvNumMultipleWriteHeader::~ImpSvNumMultipleWriteHeader()
 {
-    sal_uIntPtr nDataEnd = rStream.Tell();
+    sal_uLong nDataEnd = rStream.Tell();
 
     rStream << (sal_uInt16) SV_NUMID_SIZES;
     rStream << static_cast<sal_uInt32>(aMemStream.Tell());
@@ -224,7 +224,7 @@ ImpSvNumMultipleWriteHeader::~ImpSvNumMultipleWriteHeader()
     if ( nDataEnd - nDataPos != nDataSize )                 // Default getroffen?
     {
         nDataSize = nDataEnd - nDataPos;
-        sal_uIntPtr nPos = rStream.Tell();
+        sal_uLong nPos = rStream.Tell();
         rStream.Seek(nDataPos-sizeof(sal_uInt32));
         rStream << nDataSize;                               // Groesse am Anfang eintragen
         rStream.Seek(nPos);
@@ -235,7 +235,7 @@ ImpSvNumMultipleWriteHeader::~ImpSvNumMultipleWriteHeader()
 
 void ImpSvNumMultipleWriteHeader::EndEntry()
 {
-    sal_uIntPtr nPos = rStream.Tell();
+    sal_uLong nPos = rStream.Tell();
     aMemStream << static_cast<sal_uInt32>(nPos - nEntryStart);
 }
 
@@ -243,7 +243,7 @@ void ImpSvNumMultipleWriteHeader::EndEntry()
 
 void ImpSvNumMultipleWriteHeader::StartEntry()
 {
-    sal_uIntPtr nPos = rStream.Tell();
+    sal_uLong nPos = rStream.Tell();
     nEntryStart = nPos;
 }
 

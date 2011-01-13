@@ -1334,7 +1334,7 @@ sal_uInt32 SvNumberFormatter::ImpGetDefaultFormat( short nType )
         default:
             nSearch = CLOffset + ZF_STANDARD;
     }
-    sal_uInt32 nDefaultFormat = (sal_uInt32)(sal_uIntPtr) aDefaultFormatKeys.Get( nSearch );
+    sal_uInt32 nDefaultFormat = (sal_uInt32)(sal_uLong) aDefaultFormatKeys.Get( nSearch );
     if ( !nDefaultFormat )
         nDefaultFormat = NUMBERFORMAT_ENTRY_NOT_FOUND;
     if ( nDefaultFormat == NUMBERFORMAT_ENTRY_NOT_FOUND )
@@ -3207,7 +3207,7 @@ sal_uInt32 SvNumberFormatter::ImpGetDefaultCurrencyFormat()
 {
     sal_uInt32 CLOffset = ImpGetCLOffset( ActLnge );
     sal_uInt32 nDefaultCurrencyFormat =
-        (sal_uInt32)(sal_uIntPtr) aDefaultFormatKeys.Get( CLOffset + ZF_STANDARD_CURRENCY );
+        (sal_uInt32)(sal_uLong) aDefaultFormatKeys.Get( CLOffset + ZF_STANDARD_CURRENCY );
     if ( !nDefaultCurrencyFormat )
         nDefaultCurrencyFormat = NUMBERFORMAT_ENTRY_NOT_FOUND;
     if ( nDefaultCurrencyFormat == NUMBERFORMAT_ENTRY_NOT_FOUND )

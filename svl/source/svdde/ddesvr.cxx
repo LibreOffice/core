@@ -48,10 +48,10 @@ enum DdeItemType
 
 struct DdeItemImpData
 {
-    sal_uIntPtr nHCnv;
+    sal_uLong nHCnv;
     sal_uInt16 nCnt;
 
-    DdeItemImpData( sal_uIntPtr nH ) : nHCnv( nH ), nCnt( 1 ) {}
+    DdeItemImpData( sal_uLong nH ) : nHCnv( nH ), nCnt( 1 ) {}
 };
 
 SV_DECL_VARARR( DdeItemImp, DdeItemImpData, 1, 1 )
@@ -569,7 +569,7 @@ void DdeService::RemoveTopic( const DdeTopic& rTopic )
             aTopics.Remove( t );
             // JP 27.07.95: und alle Conversions loeschen !!!
             //              (sonst wird auf geloeschten Topics gearbeitet!!)
-            for( sal_uIntPtr n = pConv->Count(); n; )
+            for( sal_uLong n = pConv->Count(); n; )
             {
                 Conversation* pC = pConv->GetObject( --n );
                 if( pC->pTopic == &rTopic )
@@ -592,14 +592,14 @@ sal_Bool DdeService::HasCbFormat( sal_uInt16 nFmt )
 
 // --- DdeService::HasFormat() -------------------------------------
 
-sal_Bool DdeService::HasFormat( sal_uIntPtr nFmt )
+sal_Bool DdeService::HasFormat( sal_uLong nFmt )
 {
     return HasCbFormat( (sal_uInt16)DdeData::GetExternalFormat( nFmt ));
 }
 
 // --- DdeService::AddFormat() -------------------------------------
 
-void DdeService::AddFormat( sal_uIntPtr nFmt )
+void DdeService::AddFormat( sal_uLong nFmt )
 {
     nFmt = DdeData::GetExternalFormat( nFmt );
     aFormats.Remove( nFmt );
@@ -608,7 +608,7 @@ void DdeService::AddFormat( sal_uIntPtr nFmt )
 
 // --- DdeService::RemoveFormat() ----------------------------------
 
-void DdeService::RemoveFormat( sal_uIntPtr nFmt )
+void DdeService::RemoveFormat( sal_uLong nFmt )
 {
     aFormats.Remove( DdeData::GetExternalFormat( nFmt ) );
 }
@@ -741,7 +741,7 @@ void __EXPORT DdeTopic::_Disconnect( long nId )
 
 // --- DdeTopic::Get() ---------------------------------------------
 
-DdeData* __EXPORT DdeTopic::Get( sal_uIntPtr nFmt )
+DdeData* __EXPORT DdeTopic::Get( sal_uLong nFmt )
 {
     if ( aGetLink.IsSet() )
         return (DdeData*)aGetLink.Call( (void*)nFmt );
@@ -859,7 +859,7 @@ void DdeItem::NotifyClient()
 
 // --- DdeItem::IncMonitor() ------------------------------------------
 
-void DdeItem::IncMonitor( sal_uIntPtr nHCnv )
+void DdeItem::IncMonitor( sal_uLong nHCnv )
 {
     if( !pImpData )
     {
@@ -882,7 +882,7 @@ void DdeItem::IncMonitor( sal_uIntPtr nHCnv )
 
 // --- DdeItem::DecMonitor() ------------------------------------------
 
-void DdeItem::DecMonitor( sal_uIntPtr nHCnv )
+void DdeItem::DecMonitor( sal_uLong nHCnv )
 {
     if( pImpData )
     {
@@ -944,7 +944,7 @@ DdeGetPutItem::DdeGetPutItem( const DdeItem& rItem )
 
 // --- DdeGetPutData::Get() ----------------------------------------
 
-DdeData* DdeGetPutItem::Get( sal_uIntPtr )
+DdeData* DdeGetPutItem::Get( sal_uLong )
 {
     return 0;
 }

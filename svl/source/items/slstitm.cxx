@@ -72,7 +72,7 @@ SfxImpStringList::~SfxImpStringList()
 void SfxImpStringList::Sort( sal_Bool bAscending, List* pParallelList )
 {
     DBG_ASSERT(!pParallelList || pParallelList->Count() >= aList.Count(),"Sort:ParallelList too small");
-    sal_uIntPtr nCount = aList.Count();
+    sal_uLong nCount = aList.Count();
     if( nCount > 1 )
     {
         nCount -= 2;
@@ -81,7 +81,7 @@ void SfxImpStringList::Sort( sal_Bool bAscending, List* pParallelList )
         while( bSwapped )
         {
             bSwapped = sal_False;
-            for( sal_uIntPtr nCur = 0; nCur <= nCount; nCur++ )
+            for( sal_uLong nCur = 0; nCur <= nCount; nCur++ )
             {
                 String* pStr1 = (String*)aList.GetObject( nCur );
                 String* pStr2 = (String*)aList.GetObject( nCur+1 );

@@ -68,11 +68,11 @@
 class SVL_DLLPUBLIC SfxSimpleHint: public SfxHint
 {
 private:
-    sal_uIntPtr nId;
+    sal_uLong nId;
 public:
     TYPEINFO();
-    SfxSimpleHint( sal_uIntPtr nId );
-    sal_uIntPtr GetId() const { return nId; }
+    SfxSimpleHint( sal_uLong nId );
+    sal_uLong GetId() const { return nId; }
 };
 
 //--------------------------------------------------------------------

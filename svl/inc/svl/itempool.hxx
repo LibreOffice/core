@@ -154,9 +154,9 @@ public:
     //---------------------------------------------------------------------
 
 protected:
-    static inline void              SetRefCount( SfxPoolItem& rItem, sal_uIntPtr n );
-    static inline sal_uIntPtr               AddRef( const SfxPoolItem& rItem, sal_uIntPtr n = 1 );
-    static inline sal_uIntPtr               ReleaseRef( const SfxPoolItem& rItem, sal_uIntPtr n = 1);
+    static inline void              SetRefCount( SfxPoolItem& rItem, sal_uLong n );
+    static inline sal_uLong             AddRef( const SfxPoolItem& rItem, sal_uLong n = 1 );
+    static inline sal_uLong             ReleaseRef( const SfxPoolItem& rItem, sal_uLong n = 1);
 
 public:
                                     SfxItemPool( const SfxItemPool &rPool,
@@ -283,19 +283,19 @@ private:
 // --------------- Inline Implementierungen ------------------------------
 
 // nur der Pool darf den Referenz-Zaehler manipulieren !!!
-inline void SfxItemPool::SetRefCount( SfxPoolItem& rItem, sal_uIntPtr n )
+inline void SfxItemPool::SetRefCount( SfxPoolItem& rItem, sal_uLong n )
 {
     rItem.SetRefCount(n);
 }
 
 // nur der Pool darf den Referenz-Zaehler manipulieren !!!
-inline sal_uIntPtr SfxItemPool::AddRef( const SfxPoolItem& rItem, sal_uIntPtr n )
+inline sal_uLong SfxItemPool::AddRef( const SfxPoolItem& rItem, sal_uLong n )
 {
     return rItem.AddRef(n);
 }
 
 // nur der Pool darf den Referenz-Zaehler manipulieren !!!
-inline sal_uIntPtr SfxItemPool::ReleaseRef( const SfxPoolItem& rItem, sal_uIntPtr n )
+inline sal_uLong SfxItemPool::ReleaseRef( const SfxPoolItem& rItem, sal_uLong n )
 {
     return rItem.ReleaseRef(n);
 }

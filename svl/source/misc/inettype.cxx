@@ -633,7 +633,7 @@ Registration * Registration::m_pRegistration = 0;
 //============================================================================
 Registration::~Registration()
 {
-    {for (sal_uIntPtr i = 0; i < m_aTypeIDMap.Count(); ++i)
+    {for (sal_uLong i = 0; i < m_aTypeIDMap.Count(); ++i)
         delete static_cast< TypeIDMapEntry * >(m_aTypeIDMap.GetObject(i));
     }
     m_aTypeIDMap.Clear();

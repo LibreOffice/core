@@ -52,7 +52,7 @@
 
 static const sal_uInt16 nInitCount = 10; // einzelne USHORTs => 5 Paare ohne '0'
 #ifdef DBG_UTIL
-static sal_uIntPtr nRangesCopyCount = 0;     // wie oft wurden Ranges kopiert
+static sal_uLong nRangesCopyCount = 0;   // wie oft wurden Ranges kopiert
 #endif
 
 DBG_NAME(SfxItemSet)
@@ -67,7 +67,7 @@ DBG_NAME(SfxItemSet)
 #undef SvNums
 #undef SfxNumRanges
 
-#define NUMTYPE         sal_uIntPtr
+#define NUMTYPE         sal_uLong
 #define SvNums          SvULongs
 #define SfxNumRanges    SfxULongRanges
 #include "nranges.cxx"
@@ -802,7 +802,7 @@ void SfxItemSet::SetRanges( const sal_uInt16 *pNewRanges )
     }
 
     // create new item-array (by iterating through all new ranges)
-    sal_uIntPtr      nSize = Capacity_Impl(pNewRanges);
+    sal_uLong        nSize = Capacity_Impl(pNewRanges);
     SfxItemArray aNewItems = new const SfxPoolItem* [ nSize ];
     sal_uInt16       n = 0, nNewCount = 0;
     if ( _nCount == 0 )
@@ -1522,7 +1522,7 @@ SvStream &SfxItemSet::Store
     DBG_ASSERTWARNING( _pPool == _pPool->GetMasterPool(), "kein Master-Pool" );
 
     // Position des Counts merken, um ggf. zu korrigieren
-    sal_uIntPtr nCountPos = rStream.Tell();
+    sal_uLong nCountPos = rStream.Tell();
     rStream << _nCount;
 
     // wenn nichts zu speichern ist, auch keinen ItemIter aufsetzen!
@@ -1549,7 +1549,7 @@ SvStream &SfxItemSet::Store
         if ( nWrittenCount != _nCount )
         {
             // tats"achlichen Count im Stream ablegen
-            sal_uIntPtr nPos = rStream.Tell();
+            sal_uLong nPos = rStream.Tell();
             rStream.Seek( nCountPos );
             rStream << nWrittenCount;
             rStream.Seek( nPos );

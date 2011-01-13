@@ -49,7 +49,7 @@ sal_uInt16 nSfxFlag16Val[16] =
     1024, 2048, 4096, 8192, 16384, 32768
 };
 
-sal_uIntPtr nSfxFlag32Val[32] =
+sal_uLong nSfxFlag32Val[32] =
 {
     0x1L, 0x2L, 0x4L, 0x8L,
     0x10L, 0x20L, 0x40L, 0x80L,
@@ -71,7 +71,7 @@ TYPEINIT1(SfxSetItem, SfxPoolItem);
 
 // ------------------------------------------------------------------------
 #if OSL_DEBUG_LEVEL > 1
-static sal_uIntPtr nItemCount = 0;
+static sal_uLong nItemCount = 0;
 
 const char* pw1 = "Wow! 10.000 items!";
 const char* pw2 = "Wow! 100.000 items!";

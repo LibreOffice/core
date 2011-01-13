@@ -198,7 +198,7 @@ String SvCommandList::GetCommands() const
 */
 {
     String aRet;
-    for( sal_uIntPtr i = 0; i < aTypes.Count(); i++ )
+    for( sal_uLong i = 0; i < aTypes.Count(); i++ )
     {
         if( i != 0 )
             aRet += ' ';

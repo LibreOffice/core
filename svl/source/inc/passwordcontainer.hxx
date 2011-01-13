@@ -411,13 +411,13 @@ public:
 
 class RW_SvMemoryStream : public SvMemoryStream {
 public:
-    RW_SvMemoryStream( void* Buf, sal_uIntPtr Size, StreamMode eMode ):
+    RW_SvMemoryStream( void* Buf, sal_uLong Size, StreamMode eMode ):
             SvMemoryStream( Buf, Size, eMode){}
 
-    RW_SvMemoryStream( sal_uIntPtr InitSize=512, sal_uIntPtr Resize=64 ):
+    RW_SvMemoryStream( sal_uLong InitSize=512, sal_uLong Resize=64 ):
             SvMemoryStream( InitSize, Resize ){}
 
-    sal_uIntPtr getActualSize(){ return nEndOfData; }
+    sal_uLong getActualSize(){ return nEndOfData; }
 };
 
 

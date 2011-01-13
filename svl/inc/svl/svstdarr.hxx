@@ -50,14 +50,14 @@ typedef std::deque< sal_uInt8 > SvBytes;
 
 //#ifdef _SVSTDARR_ULONGS
 #ifndef _SVSTDARR_ULONGS_DECL
-SV_DECL_VARARR_VISIBILITY( SvULongs, sal_uIntPtr, 1, 1, SVL_DLLPUBLIC )
+SV_DECL_VARARR_VISIBILITY( SvULongs, sal_uLong, 1, 1, SVL_DLLPUBLIC )
 #define _SVSTDARR_ULONGS_DECL
 #endif
 //#endif
 
 //#ifdef _SVSTDARR_ULONGSSORT
 #ifndef _SVSTDARR_ULONGSSORT_DECL
-SV_DECL_VARARR_SORT_VISIBILITY( SvULongsSort, sal_uIntPtr, 1, 1, SVL_DLLPUBLIC )
+SV_DECL_VARARR_SORT_VISIBILITY( SvULongsSort, sal_uLong, 1, 1, SVL_DLLPUBLIC )
 #define _SVSTDARR_ULONGSSORT_DECL
 #endif
 //#endif

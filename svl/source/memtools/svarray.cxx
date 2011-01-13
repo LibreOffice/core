@@ -68,11 +68,11 @@ sal_uInt16 SvPtrarr::GetPos( const VoidPtr& aElement ) const
     return ( n >= nA ? USHRT_MAX : n );
 }
 
-SV_IMPL_VARARR( SvULongs, sal_uIntPtr )
+SV_IMPL_VARARR( SvULongs, sal_uLong )
 SV_IMPL_VARARR( SvUShorts, sal_uInt16 )
 SV_IMPL_VARARR( SvLongs, long)
 
-SV_IMPL_VARARR_SORT( SvULongsSort, sal_uIntPtr )
+SV_IMPL_VARARR_SORT( SvULongsSort, sal_uLong )
 SV_IMPL_VARARR_SORT( SvLongsSort, long )
 
 SV_IMPL_PTRARR( SvStrings, StringPtr )

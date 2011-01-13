@@ -42,15 +42,15 @@ class SVL_DLLPUBLIC SvOutputStream: public SvStream
     com::sun::star::uno::Reference< com::sun::star::io::XOutputStream >
         m_xStream;
 
-    SVL_DLLPRIVATE virtual sal_uIntPtr GetData(void *, sal_uIntPtr);
+    SVL_DLLPRIVATE virtual sal_uLong GetData(void *, sal_uLong);
 
-    SVL_DLLPRIVATE virtual sal_uIntPtr PutData(void const * pData, sal_uIntPtr nSize);
+    SVL_DLLPRIVATE virtual sal_uLong PutData(void const * pData, sal_uLong nSize);
 
-    SVL_DLLPRIVATE virtual sal_uIntPtr SeekPos(sal_uIntPtr);
+    SVL_DLLPRIVATE virtual sal_uLong SeekPos(sal_uLong);
 
     SVL_DLLPRIVATE virtual void FlushData();
 
-    SVL_DLLPRIVATE virtual void SetSize(sal_uIntPtr);
+    SVL_DLLPRIVATE virtual void SetSize(sal_uLong);
 
 public:
     SvOutputStream(com::sun::star::uno::Reference<

@@ -51,23 +51,23 @@ public:
                 rTheOutputStream):
         m_xOutputStream(rTheOutputStream), m_nPosition(0) {}
 
-    virtual ErrCode ReadAt(sal_uIntPtr, void *, sal_uIntPtr, sal_uIntPtr *) const;
+    virtual ErrCode ReadAt(sal_uLong, void *, sal_uLong, sal_uLong *) const;
 
-    virtual ErrCode WriteAt(sal_uIntPtr nPos, const void * pBuffer, sal_uIntPtr nCount,
-                            sal_uIntPtr * pWritten);
+    virtual ErrCode WriteAt(sal_uLong nPos, const void * pBuffer, sal_uLong nCount,
+                            sal_uLong * pWritten);
 
     virtual ErrCode Flush() const;
 
-    virtual ErrCode SetSize(sal_uIntPtr);
+    virtual ErrCode SetSize(sal_uLong);
 
     virtual ErrCode Stat(SvLockBytesStat * pStat, SvLockBytesStatFlag) const;
 
-    virtual ErrCode FillAppend(const void * pBuffer, sal_uIntPtr nCount,
-                               sal_uIntPtr * pWritten);
+    virtual ErrCode FillAppend(const void * pBuffer, sal_uLong nCount,
+                               sal_uLong * pWritten);
 
-    virtual sal_uIntPtr Tell() const;
+    virtual sal_uLong Tell() const;
 
-    virtual sal_uIntPtr Seek(sal_uIntPtr);
+    virtual sal_uLong Seek(sal_uLong);
 
     virtual void Terminate();
 };

@@ -40,7 +40,7 @@
 #include <svl/nranges.hxx>
 
 #undef NUMTYPE
-#define NUMTYPE sal_uIntPtr
+#define NUMTYPE sal_uLong
 #define SfxNumRanges SfxULongRanges
 #include <svl/nranges.hxx>
 

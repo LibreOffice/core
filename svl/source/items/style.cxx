@@ -333,13 +333,13 @@ SfxItemSet& SfxStyleSheetBase::GetItemSet()
 
 // Hilfe-Datei und -ID setzen und abfragen
 
-sal_uIntPtr SfxStyleSheetBase::GetHelpId( String& rFile )
+sal_uLong SfxStyleSheetBase::GetHelpId( String& rFile )
 {
     rFile = aHelpFile;
     return nHelpId;
 }
 
-void SfxStyleSheetBase::SetHelpId( const String& rFile, sal_uIntPtr nId )
+void SfxStyleSheetBase::SetHelpId( const String& rFile, sal_uLong nId )
 {
     aHelpFile = rFile;
     nHelpId = nId;
@@ -975,13 +975,13 @@ sal_Bool SfxStyleSheetBasePool::Load( SvStream& rStream )
         }
 
         //  #72939# only loop through the styles that were really inserted
-        sal_uIntPtr n = aStyles.size();
+        sal_uLong n = aStyles.size();
 
         //! delete pTmpPool;
         // Jetzt Parent und Follow setzen. Alle Sheets sind geladen.
         // Mit Setxxx() noch einmal den String eintragen, da diese
         // virtuellen Methoden evtl. ueberlagert sind.
-        for ( sal_uIntPtr i = 0; i < n; i++ )
+        for ( sal_uLong i = 0; i < n; i++ )
         {
             SfxStyleSheetBase* p = aStyles[ i ].get();
             XubString aText = p->aParent;
@@ -1220,10 +1220,10 @@ sal_Bool SfxStyleSheetBasePool::Store( SvStream& rStream, sal_Bool bUsed )
                 // Vor dem lokalen Teil wird die Laenge der lokalen Daten
                 // als sal_uInt32 sowie die Versionsnummer gespeichert.
                 rStream << (sal_uInt16) p->GetVersion();
-                sal_uIntPtr nPos1 = rStream.Tell();
+                sal_uLong nPos1 = rStream.Tell();
                 rStream << (sal_uInt32) 0;
                 p->Store( rStream );
-                sal_uIntPtr nPos2 = rStream.Tell();
+                sal_uLong nPos2 = rStream.Tell();
                 rStream.Seek( nPos1 );
                 rStream << (sal_uInt32) ( nPos2 - nPos1 - sizeof( sal_uInt32 ) );
                 rStream.Seek( nPos2 );

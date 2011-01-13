@@ -38,7 +38,7 @@
 #undef SfxXRangesItem
 
 #ifndef _SFXITEMS_HXX
-#define NUMTYPE sal_uIntPtr
+#define NUMTYPE sal_uLong
 #define SfxXRangeItem SfxULongRangeItem
 #define SfxXRangesItem SfxULongRangesItem
 #include <svl/rngitem.hxx>

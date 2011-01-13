@@ -183,17 +183,17 @@ friend class SfxItemPoolCache;
 friend class SfxItemSet;
 friend class SfxVoidItem;
 
-    sal_uIntPtr                    nRefCount;                    // Referenzzaehler
+    sal_uLong                    nRefCount;                    // Referenzzaehler
     sal_uInt16                   nWhich;
     sal_uInt16                   nKind;
 
 private:
-    inline void              SetRefCount( sal_uIntPtr n );
+    inline void              SetRefCount( sal_uLong n );
     inline void              SetKind( sal_uInt16 n );
 public:
-    inline sal_uIntPtr             AddRef( sal_uIntPtr n = 1 ) const;
+    inline sal_uLong             AddRef( sal_uLong n = 1 ) const;
 private:
-    inline sal_uIntPtr             ReleaseRef( sal_uIntPtr n = 1 ) const;
+    inline sal_uLong             ReleaseRef( sal_uLong n = 1 ) const;
     SVL_DLLPRIVATE long      Delete_Impl(void*);
 
 #if 0
@@ -239,7 +239,7 @@ public:
     virtual SvStream&        Store( SvStream &, sal_uInt16 nItemVersion ) const;
     virtual SfxPoolItem*     Clone( SfxItemPool *pPool = 0 ) const = 0;
 
-    sal_uIntPtr                    GetRefCount() const { return nRefCount; }
+    sal_uLong                    GetRefCount() const { return nRefCount; }
     inline sal_uInt16            GetKind() const { return nKind; }
 
     /** Read in a Unicode string from a streamed byte string representation.
@@ -295,7 +295,7 @@ private:
 
 // -----------------------------------------------------------------------
 
-inline void SfxPoolItem::SetRefCount( sal_uIntPtr n )
+inline void SfxPoolItem::SetRefCount( sal_uLong n )
 {
     DBG_CHKTHIS( SfxPoolItem, 0 );
     nRefCount = n;
@@ -309,7 +309,7 @@ inline void SfxPoolItem::SetKind( sal_uInt16 n )
     nKind = n;
 }
 
-inline sal_uIntPtr SfxPoolItem::AddRef( sal_uIntPtr n ) const
+inline sal_uLong SfxPoolItem::AddRef( sal_uLong n ) const
 {
     DBG_CHKTHIS( SfxPoolItem, 0 );
     DBG_ASSERT( nRefCount <= SFX_ITEMS_MAXREF, "AddRef mit nicht-Pool-Item" );
@@ -317,7 +317,7 @@ inline sal_uIntPtr SfxPoolItem::AddRef( sal_uIntPtr n ) const
     return ( ((SfxPoolItem *)this)->nRefCount += n );
 }
 
-inline sal_uIntPtr SfxPoolItem::ReleaseRef( sal_uIntPtr n ) const
+inline sal_uLong SfxPoolItem::ReleaseRef( sal_uLong n ) const
 {
     DBG_CHKTHIS( SfxPoolItem, 0 );
     DBG_ASSERT( nRefCount <= SFX_ITEMS_MAXREF, "AddRef mit nicht-Pool-Item" );

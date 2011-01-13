@@ -973,7 +973,7 @@ inline void SfxMultiFixRecordWriter::NewContent()
 
 {
     #ifdef DBG_UTIL
-    sal_uIntPtr nOldStartPos;
+    sal_uLong nOldStartPos;
     // Startposition des aktuellen Contents merken - Achtung Subklassen!
     nOldStartPos = _nContentStartPos;
     #endif

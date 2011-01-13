@@ -68,12 +68,12 @@ public:                                                                     \
                                                                             \
     sal_Bool Insert( Type* pObj );                                              \
                                                                                \
-    Type *Remove( sal_uIntPtr nPos )                                                \
+    Type *Remove( sal_uLong nPos )                                              \
         { return (Type *)Container::Remove( nPos ); }                       \
                                                                             \
     Type *Remove( Type* pObj );                                             \
                                                                                \
-    void DeleteAndDestroy( sal_uIntPtr nPos )                                       \
+    void DeleteAndDestroy( sal_uLong nPos )                                     \
     {                                                                       \
         Type *pObj = Remove( nPos );                                        \
         if( pObj )                                                          \
@@ -83,15 +83,15 @@ public:                                                                     \
     void DeleteAndDestroy()                                                 \
         { while( Count() ) DeleteAndDestroy( 0 ); }                         \
                                                                             \
-    Type* GetObject( sal_uIntPtr nPos ) const                                       \
+    Type* GetObject( sal_uLong nPos ) const                                     \
         { return (Type *)Container::GetObject( nPos ); }                    \
                                                                             \
-    Type* operator[]( sal_uIntPtr nPos ) const                                  \
+    Type* operator[]( sal_uLong nPos ) const                                    \
         { return GetObject(nPos); }                                         \
                                                                             \
-    sal_Bool Seek_Entry( const Type *pObj, sal_uIntPtr* pPos ) const;                   \
+    sal_Bool Seek_Entry( const Type *pObj, sal_uLong* pPos ) const;                 \
                                                                             \
-    sal_uIntPtr GetPos( const Type* pObj ) const;                                   \
+    sal_uLong GetPos( const Type* pObj ) const;                                 \
 
 
 #define DECLARE_CONTAINER_SORT( ClassName, Type )                           \
@@ -113,7 +113,7 @@ class ClassName : private Container                                         \
 #define IMPL_CONTAINER_SORT( ClassName, Type, SortFunc )                    \
 sal_Bool ClassName::Insert( Type *pObj )                                        \
 {                                                                           \
-    sal_uIntPtr nPos;                                                             \
+    sal_uLong nPos;                                                             \
     sal_Bool bExist = Seek_Entry( pObj, &nPos );                                \
     if( !bExist )                                                           \
         Container::Insert( pObj, nPos );                                    \
@@ -122,25 +122,25 @@ sal_Bool ClassName::Insert( Type *pObj )                                        
                                                                             \
 Type *ClassName::Remove( Type* pObj )                                       \
 {                                                                           \
-    sal_uIntPtr nPos;                                                             \
+    sal_uLong nPos;                                                             \
     if( Seek_Entry( pObj, &nPos ) )                                         \
         return Remove( nPos );                                              \
     else                                                                    \
         return 0;                                                           \
 }                                                                           \
                                                                             \
-sal_uIntPtr ClassName::GetPos( const Type* pObj ) const                           \
+sal_uLong ClassName::GetPos( const Type* pObj ) const                           \
 {                                                                           \
-    sal_uIntPtr nPos;                                                             \
+    sal_uLong nPos;                                                             \
     if( Seek_Entry( pObj, &nPos ) )                                         \
         return nPos;                                                        \
     else                                                                    \
         return CONTAINER_ENTRY_NOTFOUND;                                    \
 }                                                                           \
                                                                             \
-sal_Bool ClassName::Seek_Entry( const Type* pObj, sal_uIntPtr* pPos ) const           \
+sal_Bool ClassName::Seek_Entry( const Type* pObj, sal_uLong* pPos ) const           \
 {                                                                           \
-    register sal_uIntPtr nO  = Count(),                                           \
+    register sal_uLong nO  = Count(),                                           \
             nM,                                                             \
             nU = 0;                                                         \
     if( nO > 0 )                                                            \
