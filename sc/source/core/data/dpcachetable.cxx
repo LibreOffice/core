@@ -445,8 +445,7 @@ bool ScDPCacheTable::isRowQualified(sal_Int32 nRow, const vector<Criterion>& rCr
 void ScDPCacheTable::initNoneCache( ScDocument* pDoc )
 {
     mpCache = NULL;
-    if ( mpNoneCache )
-        delete mpNoneCache;
+    delete mpNoneCache;
     mpNoneCache = new ScDPTableDataCache( pDoc );
 }
 

@@ -401,7 +401,7 @@ bool ScDPTableDataCache::operator== ( const ScDPTableDataCache& r ) const
     return true;
 }
 
-ScDPTableDataCache::ScDPTableDataCache(  ScDocument* pDoc  ) :
+ScDPTableDataCache::ScDPTableDataCache(ScDocument* pDoc) :
     mpDoc( pDoc ),
     mnID(-1),
     mnColumnCount ( 0 ),
@@ -422,8 +422,8 @@ ScDPTableDataCache::~ScDPTableDataCache()
             for ( ULONG row = 0 ;  row < mpTableDataValues[nCol].size(); row++ )
                 delete mpTableDataValues[nCol][row];
         }
-        for ( nCol =0; nCol < mrLabelNames.size(); nCol++ )
-            delete mrLabelNames[nCol];
+        for ( nCol =0; nCol < maLabelNames.size(); nCol++ )
+            delete maLabelNames[nCol];
 
         mnColumnCount = 0;
         delete [] mpTableDataValues;
@@ -437,30 +437,9 @@ ScDPTableDataCache::~ScDPTableDataCache()
     }
 }
 
-void ScDPTableDataCache::AddRow( ScDPItemData* pRow, USHORT nCount )
+bool ScDPTableDataCache::IsValid() const
 {
-    DBG_ASSERT( pRow , " empty pointer" );
-    if ( !mrLabelNames.size() )
-    {
-        mnColumnCount= nCount;
-        mpTableDataValues = new std::vector<ScDPItemData*>[ mnColumnCount ];
-        mpSourceData      = new std::vector<SCROW>[ mnColumnCount ];
-        mpGlobalOrder     = new std::vector<SCROW>[ mnColumnCount ];
-        mpIndexOrder      = new std::vector<SCROW>[ mnColumnCount ];
-
-        for ( USHORT i = 0; i < nCount ; i ++ )
-            AddLabel( new ScDPItemData( pRow[i] ) );
-    }
-    else
-    {
-        for ( USHORT i = 0; i < nCount && i < mnColumnCount; i ++ )
-            AddData( i, new ScDPItemData( pRow[i] ) );
-    }
-}
-
-bool  ScDPTableDataCache::IsValid() const
-{
-    return mpTableDataValues!=NULL && mpSourceData!= NULL && mnColumnCount>0;
+    return mpTableDataValues != NULL && mpSourceData != NULL && mnColumnCount > 0;
 }
 
 namespace {
@@ -487,7 +466,7 @@ private:
 
 }
 
-bool ScDPTableDataCache::InitFromDoc(  ScDocument* pDoc, const ScRange& rRange )
+bool ScDPTableDataCache::InitFromDoc(ScDocument* pDoc, const ScRange& rRange)
 {
     // Make sure the formula cells within the data range are interpreted
     // during this call, for this method may be called from the interpretation
@@ -501,8 +480,7 @@ bool ScDPTableDataCache::InitFromDoc(  ScDocument* pDoc, const ScRange& rRange )
     USHORT nEndCol = rRange.aEnd.Col();
     USHORT nDocTab = rRange.aStart.Tab();
 
-    //init
-     long nOldColumCount = mnColumnCount;
+    long nOldColumCount = mnColumnCount;
     mnColumnCount = nEndCol - nStartCol + 1;
     if ( IsValid() )
     {
@@ -510,13 +488,13 @@ bool ScDPTableDataCache::InitFromDoc(  ScDocument* pDoc, const ScRange& rRange )
         {
             for ( ULONG row = 0 ;  row < mpTableDataValues[nCol].size(); row++ )
                 delete mpTableDataValues[nCol][row];
-            delete mrLabelNames[nCol];
+            delete maLabelNames[nCol];
         }
         delete [] mpTableDataValues;
         delete [] mpSourceData;
         delete [] mpGlobalOrder;
         delete [] mpIndexOrder;
-        mrLabelNames.clear();
+        maLabelNames.clear();
     }
 
     mpTableDataValues = new std::vector<ScDPItemData*>[ mnColumnCount ];
@@ -557,16 +535,16 @@ bool ScDPTableDataCache::InitFromDataBase (const Reference<sdbc::XRowSet>& xRowS
             {
                 for (ULONG row = 0 ;  row < mpTableDataValues[nCol].size(); row++)
                     delete mpTableDataValues[nCol][row];
-                delete mrLabelNames[nCol];
+                delete maLabelNames[nCol];
             }
             delete [] mpTableDataValues;
             delete [] mpSourceData;
             delete [] mpGlobalOrder;
             delete [] mpIndexOrder;
-            mrLabelNames.clear();
+            maLabelNames.clear();
         }
         // Get column titles and types.
-        mrLabelNames.reserve(mnColumnCount);
+        maLabelNames.reserve(mnColumnCount);
         mpTableDataValues = new std::vector<ScDPItemData*>[ mnColumnCount ];
         mpSourceData      = new std::vector<SCROW>[ mnColumnCount ];
         mpGlobalOrder     = new std::vector<SCROW>[ mnColumnCount ];
@@ -616,7 +594,7 @@ ULONG ScDPTableDataCache::GetDimNumType( SCCOL nDim) const
 }
 
 bool ScDPTableDataCache::ValidQuery( SCROW nRow, const ScQueryParam &rParam, bool *pSpecial)
-{ //Copied and modified from ScTable::ValidQuery
+{
     if (!rParam.GetEntry(0).bDoQuery)
         return true;
     bool bMatchWholeCell = mpDoc->GetDocOptions().IsMatchWholeCell();
@@ -834,7 +812,7 @@ bool ScDPTableDataCache::ValidQuery( SCROW nRow, const ScQueryParam &rParam, boo
 
 bool ScDPTableDataCache::IsRowEmpty( SCROW nRow ) const
 {
-    return  mbEmptyRow[ nRow ];
+    return mbEmptyRow[ nRow ];
 }
 
 bool ScDPTableDataCache::IsEmptyMember( SCROW nRow, USHORT nColumn ) const
@@ -880,11 +858,12 @@ bool ScDPTableDataCache::AddData(long nDim, ScDPItemData* pitemData)
 
 String ScDPTableDataCache::GetDimensionName( USHORT nColumn ) const
 {
-    DBG_ASSERT( /* nColumn>=0 && */ nColumn < mrLabelNames.size()-1 , "ScDPTableDataCache::GetDimensionName");
-    DBG_ASSERT( mrLabelNames.size() == static_cast <USHORT> (mnColumnCount+1), "ScDPTableDataCache::GetDimensionName");
-    if ( static_cast<size_t>(nColumn+1) < mrLabelNames.size() )
+    DBG_ASSERT(nColumn < maLabelNames.size()-1 , "ScDPTableDataCache::GetDimensionName");
+    DBG_ASSERT(maLabelNames.size() == static_cast <USHORT> (mnColumnCount+1), "ScDPTableDataCache::GetDimensionName");
+
+    if ( static_cast<size_t>(nColumn+1) < maLabelNames.size() )
     {
-        return mrLabelNames[nColumn+1]->aString;
+        return maLabelNames[nColumn+1]->aString;
     }
     else
         return String();
@@ -894,8 +873,8 @@ void ScDPTableDataCache::AddLabel(ScDPItemData *pData)
 {
     DBG_ASSERT( IsValid(), "  IsValid() == false " );
 
-    if ( mrLabelNames.size() == 0 )
-        mrLabelNames.push_back( new ScDPItemData(  ScGlobal::GetRscString(STR_PIVOT_DATA) ) );
+    if ( maLabelNames.size() == 0 )
+        maLabelNames.push_back( new ScDPItemData(ScGlobal::GetRscString(STR_PIVOT_DATA)) );
 
     //reset name if needed
     String strNewName = pData->aString;
@@ -903,9 +882,9 @@ void ScDPTableDataCache::AddLabel(ScDPItemData *pData)
     long nIndex = 1;
     do
     {
-        for ( long i= mrLabelNames.size()-1; i>=0; i-- )
+        for ( long i= maLabelNames.size()-1; i>=0; i-- )
         {
-            if( mrLabelNames[i]->aString == strNewName )
+            if( maLabelNames[i]->aString == strNewName )
             {
                 strNewName  =  pData->aString;
                 strNewName += String::CreateFromInt32( nIndex );
@@ -918,7 +897,7 @@ void ScDPTableDataCache::AddLabel(ScDPItemData *pData)
     while ( !bFound );
 
     pData->aString = strNewName;
-    mrLabelNames.push_back( pData );
+    maLabelNames.push_back( pData );
 }
 
 SCROW ScDPTableDataCache::GetItemDataId(USHORT nDim, SCROW nRow, bool bRepeatIfEmpty) const
@@ -938,7 +917,7 @@ SCROW ScDPTableDataCache::GetItemDataId(USHORT nDim, SCROW nRow, bool bRepeatIfE
 const ScDPItemData* ScDPTableDataCache::GetItemDataById(long nDim, SCROW nId) const
 {
     if ( nId >= GetRowCount()  )
-        return maAdditionalDatas.getData( nId - GetRowCount() );
+        return maAdditionalData.getData( nId - GetRowCount() );
 
     if (  (size_t)nId >= mpTableDataValues[nDim].size() || nDim >= mnColumnCount  || nId < 0  )
         return NULL;
@@ -1013,9 +992,9 @@ const ScDPItemData* ScDPTableDataCache::GetSortedItemData(SCCOL nDim, SCROW nOrd
 
 SCCOL ScDPTableDataCache::GetDimensionIndex(String sName) const
 {
-    for ( size_t n = 1; n < mrLabelNames.size(); n ++ )
+    for ( size_t n = 1; n < maLabelNames.size(); n ++ )
     {
-        if ( mrLabelNames[n]->GetString() == sName )
+        if ( maLabelNames[n]->GetString() == sName )
             return (SCCOL)(n-1);
     }
     return -1;
@@ -1033,7 +1012,7 @@ SCROW ScDPTableDataCache::GetIdByItemData(long nDim, String sItemData ) const
     }
 
     ScDPItemData rData ( sItemData );
-    return  GetRowCount() +maAdditionalDatas.getDataId(rData);
+    return  GetRowCount() +maAdditionalData.getDataId(rData);
 }
 
 SCROW ScDPTableDataCache::GetIdByItemData( long nDim, const ScDPItemData& rData  ) const
@@ -1046,7 +1025,7 @@ SCROW ScDPTableDataCache::GetIdByItemData( long nDim, const ScDPItemData& rData 
                 return n;
         }
     }
-    return  GetRowCount() + maAdditionalDatas.getDataId(rData);
+    return  GetRowCount() + maAdditionalData.getDataId(rData);
 }
 
 SCROW ScDPTableDataCache::GetAdditionalItemID ( String sItemData )
@@ -1057,7 +1036,7 @@ SCROW ScDPTableDataCache::GetAdditionalItemID ( String sItemData )
 
 SCROW ScDPTableDataCache::GetAdditionalItemID( const ScDPItemData& rData )
 {
-    return GetRowCount() + maAdditionalDatas.insertData( rData );
+    return GetRowCount() + maAdditionalData.insertData( rData );
 }
 
 
@@ -1081,7 +1060,7 @@ SCROW ScDPTableDataCache::GetOrder(long nDim, SCROW nIndex) const
     return  mpIndexOrder[nDim][nIndex];
 }
 
-ScDocument*  ScDPTableDataCache::GetDoc() const
+ScDocument* ScDPTableDataCache::GetDoc() const
 {
     return mpDoc;
 };
@@ -1091,7 +1070,7 @@ long ScDPTableDataCache::GetColumnCount() const
     return mnColumnCount;
 }
 
-long    ScDPTableDataCache::GetId() const
+long ScDPTableDataCache::GetId() const
 {
     return mnID;
 }
