@@ -188,8 +188,8 @@ public:
         @param pEvent
             The event to execute when skipping the current effect.
         @param bSkipTriggersNextEffect
-            When <TRUE/> then after skipping the current effect the next
-            effect is triggered.  When <FALSE/> then the next effect is not
+            When <sal_True/> then after skipping the current effect the next
+            effect is triggered.  When <sal_False/> then the next effect is not
             triggered.
     */
     void registerSkipEffectEvent(

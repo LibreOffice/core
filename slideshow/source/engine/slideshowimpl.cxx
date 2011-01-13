@@ -173,14 +173,14 @@ private:
     */
     canvas::tools::ElapsedTime maTimer;
     /** Time between the display of frames.  Enforced only when mbIsActive
-        is <TRUE/>.
+        is <sal_True/>.
     */
     const double mnFrameDuration;
     /** Time (of maTimer) when the next frame shall be displayed.
         Synchronize() will wait until this time.
     */
     double mnNextFrameTargetTime;
-    /** Synchronize() will wait only when this flag is <TRUE/>.  Otherwise
+    /** Synchronize() will wait only when this flag is <sal_True/>.  Otherwise
         it returns immediately.
     */
     bool mbIsActive;

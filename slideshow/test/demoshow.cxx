@@ -308,7 +308,7 @@ class DemoApp : public Application
 {
 public:
     virtual void Main();
-    virtual USHORT  Exception( USHORT nError );
+    virtual sal_uInt16  Exception( sal_uInt16 nError );
 };
 
 class ChildWindow : public Window
@@ -427,7 +427,7 @@ DemoWindow::DemoWindow() :
     Show();
 
     maUpdateTimer.SetTimeoutHdl(LINK(this, DemoWindow, updateHdl));
-    maUpdateTimer.SetTimeout( (ULONG)30 );
+    maUpdateTimer.SetTimeout( (sal_uLong)30 );
     maUpdateTimer.Start();
 }
 
@@ -495,7 +495,7 @@ void DemoWindow::Resize()
     // TODO
 }
 
-USHORT DemoApp::Exception( USHORT nError )
+sal_uInt16 DemoApp::Exception( sal_uInt16 nError )
 {
     switch( nError & EXC_MAJORTYPE )
     {
@@ -510,7 +510,7 @@ void DemoApp::Main()
 {
     bool bHelp = false;
 
-    for( USHORT i = 0; i < GetCommandLineParamCount(); i++ )
+    for( sal_uInt16 i = 0; i < GetCommandLineParamCount(); i++ )
     {
         ::rtl::OUString aParam = GetCommandLineParam( i );
 
