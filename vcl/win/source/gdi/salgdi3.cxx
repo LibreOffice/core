@@ -1366,10 +1366,6 @@ int CALLBACK SalEnumQueryFontProcExA( const ENUMLOGFONTEXA*,
 
 bool ImplIsFontAvailable( HDC hDC, const UniString& rName )
 {
-    bool bAvailable = false;
-
-    if ( aSalShlData.mbWNT )
-    {
         // Test, if Font available
         LOGFONTW aLogFont;
         memset( &aLogFont, 0, sizeof( aLogFont ) );
@@ -1381,27 +1377,9 @@ bool ImplIsFontAvailable( HDC hDC, const UniString& rName )
         memcpy( aLogFont.lfFaceName, rName.GetBuffer(), nNameLen*sizeof( wchar_t ) );
         aLogFont.lfFaceName[nNameLen] = 0;
 
-        EnumFontFamiliesExW( hDC, &aLogFont, (FONTENUMPROCW)SalEnumQueryFontProcExW,
+    bool bAvailable = false;
+    EnumFontFamiliesExW( hDC, &aLogFont, (FONTENUMPROCW)SalEnumQueryFontProcExW,
                              (LPARAM)(void*)&bAvailable, 0 );
-    }
-    else
-    {
-        ByteString aTemp = ImplSalGetWinAnsiString( rName );
-
-        // Test, if Font available
-        LOGFONTA aLogFont;
-        memset( &aLogFont, 0, sizeof( aLogFont ) );
-        aLogFont.lfCharSet = DEFAULT_CHARSET;
-
-        UINT nNameLen = aTemp.Len();
-        if ( nNameLen > sizeof( aLogFont.lfFaceName )-1 )
-            nNameLen = sizeof( aLogFont.lfFaceName )-1;
-        memcpy( aLogFont.lfFaceName, aTemp.GetBuffer(), nNameLen );
-        aLogFont.lfFaceName[nNameLen] = 0;
-
-        EnumFontFamiliesExA( hDC, &aLogFont, (FONTENUMPROCA)SalEnumQueryFontProcExA,
-                             (LPARAM)(void*)&bAvailable, 0 );
-    }
 
     return bAvailable;
 }
@@ -1564,7 +1542,7 @@ HFONT WinSalGraphics::ImplDoSetFont( ImplFontSelectData* i_pFont, float& o_rFont
         // only required for virtual devices, see below for details
         hdcScreen = GetDC(0);
 
-    if( aSalShlData.mbWNT )
+    if( true/*aSalShlData.mbWNT*/ )
     {
         LOGFONTW aLogFont;
         ImplGetLogFontFromFontSelect( mhDC, i_pFont, aLogFont, true );
@@ -1621,63 +1599,6 @@ HFONT WinSalGraphics::ImplDoSetFont( ImplFontSelectData* i_pFont, float& o_rFont
             HFONT hNewFont2 = CreateFontIndirectW( &aLogFont );
             SelectFont( mhDC, hNewFont2 );
             DeleteFont( hNewFont );
-            hNewFont = hNewFont2;
-        }
-    }
-    else
-    {
-        if( !mpLogFont )
-             // mpLogFont is needed for getting the kerning pairs
-             // TODO: get them from somewhere else
-            mpLogFont = new LOGFONTA;
-        LOGFONTA& aLogFont = *mpLogFont;
-        ImplGetLogFontFromFontSelect( mhDC, i_pFont, aLogFont, true );
-
-        // on the display we prefer Courier New when Courier is a
-        // bitmap only font and we need to stretch or rotate it
-        if( mbScreen
-        &&  (i_pFont->mnWidth != 0
-          || i_pFont->mnOrientation != 0
-          || i_pFont->mpFontData == NULL
-          || (i_pFont->mpFontData->GetHeight() != i_pFont->mnHeight))
-        && !bImplSalCourierScalable
-        && bImplSalCourierNew
-        && (stricmp( aLogFont.lfFaceName, "Courier" ) == 0) )
-            strncpy( aLogFont.lfFaceName, "Courier New", 11 );
-
-        // limit font requests to MAXFONTHEIGHT to work around driver problems
-        // TODO: share MAXFONTHEIGHT font instance
-        if( -aLogFont.lfHeight <= MAXFONTHEIGHT )
-            o_rFontScale = 1.0;
-        else
-        {
-            o_rFontScale = -aLogFont.lfHeight / (float)MAXFONTHEIGHT;
-            aLogFont.lfHeight = -MAXFONTHEIGHT;
-            aLogFont.lfWidth = static_cast<LONG>( aLogFont.lfWidth / o_rFontScale );
-        }
-
-        hNewFont = ::CreateFontIndirectA( &aLogFont );
-        if( hdcScreen )
-        {
-            // select font into screen hdc first to get an antialiased font
-            // see knowledge base article 305290:
-            // "PRB: Fonts Not Drawn Antialiased on Device Context for DirectDraw Surface"
-            ::SelectFont( hdcScreen, ::SelectFont( hdcScreen , hNewFont ) );
-        }
-        o_rOldFont = ::SelectFont( mhDC, hNewFont );
-
-        TEXTMETRICA aTextMetricA;
-        // when the font doesn't work try a replacement
-        if ( !::GetTextMetricsA( mhDC, &aTextMetricA ) )
-        {
-            // the selected font doesn't work => try a replacement
-            // TODO: use its font fallback instead
-            LOGFONTA aTempLogFont = aLogFont;
-            strncpy( aTempLogFont.lfFaceName, "Courier New", 11 );
-            aTempLogFont.lfPitchAndFamily = FIXED_PITCH;
-            HFONT hNewFont2 = CreateFontIndirectA( &aTempLogFont );
-            ::SelectFont( mhDC, hNewFont2 );
-            ::DeleteFont( hNewFont );
             hNewFont = hNewFont2;
         }
     }
@@ -1767,18 +1688,9 @@ void WinSalGraphics::GetFontMetric( ImplFontMetricData* pMetric, int nFallbackLe
     // temporarily change the HDC to the font in the fallback level
     HFONT hOldFont = SelectFont( mhDC, mhFonts[nFallbackLevel] );
 
-    if ( aSalShlData.mbWNT )
-    {
         wchar_t aFaceName[LF_FACESIZE+60];
         if( ::GetTextFaceW( mhDC, sizeof(aFaceName)/sizeof(wchar_t), aFaceName ) )
             pMetric->maName = reinterpret_cast<const sal_Unicode*>(aFaceName);
-    }
-    else
-    {
-        char aFaceName[LF_FACESIZE+60];
-        if( ::GetTextFaceA( mhDC, sizeof(aFaceName), aFaceName ) )
-            pMetric->maName = ImplSalGetUniString( aFaceName );
-    }
 
     // get the font metric
     TEXTMETRICA aWinMetric;
@@ -1842,11 +1754,6 @@ void WinSalGraphics::GetFontMetric( ImplFontMetricData* pMetric, int nFallbackLe
 
         pMetric->mnAscent   += nHalfTmpExtLeading;
         pMetric->mnDescent  += nOtherHalfTmpExtLeading;
-
-        // #109280# HACK korean only: increase descent for wavelines and impr
-        if( !aSalShlData.mbWNT )
-            if( mpWinFontData[nFallbackLevel]->SupportsKorean() )
-                pMetric->mnDescent += pMetric->mnExtLeading;
     }
 
     pMetric->mnMinKashida = GetMinKashidaWidth();
@@ -2000,45 +1907,21 @@ ULONG WinSalGraphics::GetKernPairs( ULONG nPairs, ImplKernPairData* pKernPairs )
         }
         mnFontKernPairCount = 0;
 
-        if ( aSalShlData.mbWNT )
+        KERNINGPAIR* pPairs = NULL;
+        int nCount = ::GetKerningPairsW( mhDC, 0, NULL );
+        if( nCount )
         {
-            KERNINGPAIR* pPairs = NULL;
-            int nCount = ::GetKerningPairsW( mhDC, 0, NULL );
-            if( nCount )
-            {
-#ifdef GCP_KERN_HACK
-                pPairs = new KERNINGPAIR[ nCount+1 ];
-                mpFontKernPairs = pPairs;
-                mnFontKernPairCount = nCount;
-                ::GetKerningPairsW( mhDC, nCount, pPairs );
-#else // GCP_KERN_HACK
-                pPairs = pKernPairs;
-                nCount = (nCount < nPairs) : nCount : nPairs;
-                ::GetKerningPairsW( mhDC, nCount, pPairs );
-                return nCount;
-#endif // GCP_KERN_HACK
-            }
-        }
-        else
-        {
-            if ( !mnFontCharSetCount )
-                ImplGetAllFontCharSets( this );
-
-            if ( mnFontCharSetCount <= 1 )
-                ImplAddKerningPairs( this );
-            else
-            {
-                // Query All Kerning Pairs from all possible CharSets
-                for ( BYTE i = 0; i < mnFontCharSetCount; i++ )
-                {
-                    mpLogFont->lfCharSet = mpFontCharSets[i];
-                    HFONT hNewFont = CreateFontIndirectA( mpLogFont );
-                    HFONT hOldFont = SelectFont( mhDC, hNewFont );
-                    ImplAddKerningPairs( this );
-                    SelectFont( mhDC, hOldFont );
-                    DeleteFont( hNewFont );
-                }
-            }
+            #ifdef GCP_KERN_HACK
+            pPairs = new KERNINGPAIR[ nCount+1 ];
+            mpFontKernPairs = pPairs;
+            mnFontKernPairCount = nCount;
+            ::GetKerningPairsW( mhDC, nCount, pPairs );
+            #else // GCP_KERN_HACK
+            pPairs = pKernPairs;
+            nCount = (nCount < nPairs) : nCount : nPairs;
+            ::GetKerningPairsW( mhDC, nCount, pPairs );
+            return nCount;
+            #endif // GCP_KERN_HACK
         }
 
         mbFontKernInit = FALSE;
@@ -2270,19 +2153,7 @@ void ImplReleaseTempFonts( SalData& rSalData )
         }
         else
         {
-            if( aSalShlData.mbWNT )
-                ::RemoveFontResourceW( reinterpret_cast<LPCWSTR>(p->maFontFilePath.getStr()) );
-            else
-            {
-                // poor man's string conversion because converter is gone
-                int nLen = p->maFontFilePath.getLength();
-                char* pNameA = new char[ nLen + 1 ];
-                for( int i = 0; i < nLen; ++i )
-                    pNameA[i] = (char)(p->maFontFilePath.getStr())[i];
-                pNameA[ nLen ] = 0;
-                ::RemoveFontResourceA( pNameA );
-                delete[] pNameA;
-            }
+            ::RemoveFontResourceW( reinterpret_cast<LPCWSTR>(p->maFontFilePath.getStr()) );
         }
 
         rSalData.mpTempFontItem = p->mpNextItem;
@@ -2424,14 +2295,6 @@ bool WinSalGraphics::AddTempDevFont( ImplDevFontList* pFontList,
         return false;
 
     UINT nPreferedCharSet = DEFAULT_CHARSET;
-    if ( !aSalShlData.mbWNT )
-    {
-        // for W98 guess charset preference from active codepage
-        CHARSETINFO aCharSetInfo;
-        DWORD nCP = GetACP();
-        if ( TranslateCharsetInfo( (DWORD*)nCP, &aCharSetInfo, TCI_SRCCODEPAGE ) )
-            nPreferedCharSet = aCharSetInfo.ciCharset;
-    }
 
     // create matching FontData struct
     aDFA.mbSymbolFlag = false; // TODO: how to know it without accessing the font?
@@ -2536,24 +2399,12 @@ void WinSalGraphics::GetDevFontList( ImplDevFontList* pFontList )
     if ( TranslateCharsetInfo( (DWORD*)nCP, &aCharSetInfo, TCI_SRCCODEPAGE ) )
         aInfo.mnPreferedCharSet = aCharSetInfo.ciCharset;
 
-    if ( aSalShlData.mbWNT )
-    {
-        LOGFONTW aLogFont;
-        memset( &aLogFont, 0, sizeof( aLogFont ) );
-        aLogFont.lfCharSet = DEFAULT_CHARSET;
-        aInfo.mpLogFontW = &aLogFont;
-        EnumFontFamiliesExW( mhDC, &aLogFont,
+    LOGFONTW aLogFont;
+    memset( &aLogFont, 0, sizeof( aLogFont ) );
+    aLogFont.lfCharSet = DEFAULT_CHARSET;
+    aInfo.mpLogFontW = &aLogFont;
+    EnumFontFamiliesExW( mhDC, &aLogFont,
             (FONTENUMPROCW)SalEnumFontsProcExW, (LPARAM)(void*)&aInfo, 0 );
-    }
-    else
-    {
-        LOGFONTA aLogFont;
-        memset( &aLogFont, 0, sizeof( aLogFont ) );
-        aLogFont.lfCharSet = DEFAULT_CHARSET;
-        aInfo.mpLogFontA = &aLogFont;
-        EnumFontFamiliesExA( mhDC, &aLogFont,
-            (FONTENUMPROCA)SalEnumFontsProcExA, (LPARAM)(void*)&aInfo, 0 );
-    }
 
     // Feststellen, was es fuer Courier-Schriften auf dem Bildschirm gibt,
     // um in SetFont() evt. Courier auf Courier New zu mappen
@@ -2592,12 +2443,7 @@ BOOL WinSalGraphics::GetGlyphBoundRect( long nIndex, Rectangle& rRect )
     GLYPHMETRICS aGM;
     aGM.gmptGlyphOrigin.x = aGM.gmptGlyphOrigin.y = 0;
     aGM.gmBlackBoxX = aGM.gmBlackBoxY = 0;
-    DWORD nSize = GDI_ERROR;
-    if ( aSalShlData.mbWNT )
-        nSize = ::GetGlyphOutlineW( hDC, nIndex, nGGOFlags, &aGM, 0, NULL, &aMat );
-    else if( (nGGOFlags & GGO_GLYPH_INDEX) || (nIndex <= 255) )
-        nSize = ::GetGlyphOutlineA( hDC, nIndex, nGGOFlags, &aGM, 0, NULL, &aMat );
-
+    DWORD nSize = ::GetGlyphOutlineW( hDC, nIndex, nGGOFlags, &aGM, 0, NULL, &aMat );
     if( nSize == GDI_ERROR )
         return false;
 
@@ -2617,7 +2463,6 @@ BOOL WinSalGraphics::GetGlyphOutline( long nIndex,
 {
     rB2DPolyPoly.clear();
 
-    BOOL bRet = FALSE;
     HDC  hDC = mhDC;
 
     // use unity matrix
@@ -2631,170 +2476,159 @@ BOOL WinSalGraphics::GetGlyphOutline( long nIndex,
     nIndex &= GF_IDXMASK;
 
     GLYPHMETRICS aGlyphMetrics;
-    DWORD nSize1 = GDI_ERROR;
-    if ( aSalShlData.mbWNT )
-        nSize1 = ::GetGlyphOutlineW( hDC, nIndex, nGGOFlags, &aGlyphMetrics, 0, NULL, &aMat );
-    else if( (nGGOFlags & GGO_GLYPH_INDEX) || (nIndex <= 255) )
-        nSize1 = ::GetGlyphOutlineA( hDC, nIndex, nGGOFlags, &aGlyphMetrics, 0, NULL, &aMat );
-
+    const DWORD nSize1 = ::GetGlyphOutlineW( hDC, nIndex, nGGOFlags, &aGlyphMetrics, 0, NULL, &aMat );
     if( !nSize1 )       // blank glyphs are ok
-        bRet = TRUE;
-    else if( nSize1 != GDI_ERROR )
+        return TRUE;
+    else if( nSize1 == GDI_ERROR )
+        return FALSE;
+
+    BYTE*   pData = new BYTE[ nSize1 ];
+    const DWORD nSize2 = ::GetGlyphOutlineW( hDC, nIndex, nGGOFlags,
+              &aGlyphMetrics, nSize1, pData, &aMat );
+
+    if( nSize1 != nSize2 )
+        return FALSE;
+
+    // TODO: avoid tools polygon by creating B2DPolygon directly
+    int     nPtSize = 512;
+    Point*  pPoints = new Point[ nPtSize ];
+    BYTE*   pFlags = new BYTE[ nPtSize ];
+
+    TTPOLYGONHEADER* pHeader = (TTPOLYGONHEADER*)pData;
+    while( (BYTE*)pHeader < pData+nSize2 )
     {
-        BYTE*   pData = new BYTE[ nSize1 ];
-        DWORD   nSize2;
-        if ( aSalShlData.mbWNT )
-            nSize2 = ::GetGlyphOutlineW( hDC, nIndex, nGGOFlags,
-                &aGlyphMetrics, nSize1, pData, &aMat );
-        else
-            nSize2 = ::GetGlyphOutlineA( hDC, nIndex, nGGOFlags,
-                &aGlyphMetrics, nSize1, pData, &aMat );
+        // only outline data is interesting
+        if( pHeader->dwType != TT_POLYGON_TYPE )
+            break;
 
-        if( nSize1 == nSize2 )
+        // get start point; next start points are end points
+        // of previous segment
+        USHORT nPnt = 0;
+
+        long nX = IntTimes256FromFixed( pHeader->pfxStart.x );
+        long nY = IntTimes256FromFixed( pHeader->pfxStart.y );
+        pPoints[ nPnt ] = Point( nX, nY );
+        pFlags[ nPnt++ ] = POLY_NORMAL;
+
+        bool bHasOfflinePoints = false;
+        TTPOLYCURVE* pCurve = (TTPOLYCURVE*)( pHeader + 1 );
+        pHeader = (TTPOLYGONHEADER*)( (BYTE*)pHeader + pHeader->cb );
+        while( (BYTE*)pCurve < (BYTE*)pHeader )
         {
-            bRet = TRUE;
-
-            int     nPtSize = 512;
-            Point*  pPoints = new Point[ nPtSize ];
-            BYTE*   pFlags = new BYTE[ nPtSize ];
-
-            TTPOLYGONHEADER* pHeader = (TTPOLYGONHEADER*)pData;
-            while( (BYTE*)pHeader < pData+nSize2 )
+            int nNeededSize = nPnt + 16 + 3 * pCurve->cpfx;
+            if( nPtSize < nNeededSize )
             {
-                // only outline data is interesting
-                if( pHeader->dwType != TT_POLYGON_TYPE )
-                    break;
-
-                // get start point; next start points are end points
-                // of previous segment
-                USHORT nPnt = 0;
-
-                long nX = IntTimes256FromFixed( pHeader->pfxStart.x );
-                long nY = IntTimes256FromFixed( pHeader->pfxStart.y );
-                pPoints[ nPnt ] = Point( nX, nY );
-                pFlags[ nPnt++ ] = POLY_NORMAL;
-
-                bool bHasOfflinePoints = false;
-                TTPOLYCURVE* pCurve = (TTPOLYCURVE*)( pHeader + 1 );
-                pHeader = (TTPOLYGONHEADER*)( (BYTE*)pHeader + pHeader->cb );
-                while( (BYTE*)pCurve < (BYTE*)pHeader )
+                Point* pOldPoints = pPoints;
+                BYTE* pOldFlags = pFlags;
+                nPtSize = 2 * nNeededSize;
+                pPoints = new Point[ nPtSize ];
+                pFlags = new BYTE[ nPtSize ];
+                for( USHORT i = 0; i < nPnt; ++i )
                 {
-                    int nNeededSize = nPnt + 16 + 3 * pCurve->cpfx;
-                    if( nPtSize < nNeededSize )
-                    {
-                        Point* pOldPoints = pPoints;
-                        BYTE* pOldFlags = pFlags;
-                        nPtSize = 2 * nNeededSize;
-                        pPoints = new Point[ nPtSize ];
-                        pFlags = new BYTE[ nPtSize ];
-                        for( USHORT i = 0; i < nPnt; ++i )
-                        {
-                            pPoints[ i ] = pOldPoints[ i ];
-                            pFlags[ i ] = pOldFlags[ i ];
-                        }
-                        delete[] pOldPoints;
-                        delete[] pOldFlags;
-                    }
-
-                    int i = 0;
-                    if( TT_PRIM_LINE == pCurve->wType )
-                    {
-                        while( i < pCurve->cpfx )
-                        {
-                            nX = IntTimes256FromFixed( pCurve->apfx[ i ].x );
-                            nY = IntTimes256FromFixed( pCurve->apfx[ i ].y );
-                            ++i;
-                            pPoints[ nPnt ] = Point( nX, nY );
-                            pFlags[ nPnt ] = POLY_NORMAL;
-                            ++nPnt;
-                        }
-                    }
-                    else if( TT_PRIM_QSPLINE == pCurve->wType )
-                    {
-                        bHasOfflinePoints = true;
-                        while( i < pCurve->cpfx )
-                        {
-                            // get control point of quadratic bezier spline
-                            nX = IntTimes256FromFixed( pCurve->apfx[ i ].x );
-                            nY = IntTimes256FromFixed( pCurve->apfx[ i ].y );
-                            ++i;
-                            Point aControlP( nX, nY );
-
-                            // calculate first cubic control point
-                            // P0 = 1/3 * (PBeg + 2 * PQControl)
-                            nX = pPoints[ nPnt-1 ].X() + 2 * aControlP.X();
-                            nY = pPoints[ nPnt-1 ].Y() + 2 * aControlP.Y();
-                            pPoints[ nPnt+0 ] = Point( (2*nX+3)/6, (2*nY+3)/6 );
-                            pFlags[ nPnt+0 ] = POLY_CONTROL;
-
-                            // calculate endpoint of segment
-                            nX = IntTimes256FromFixed( pCurve->apfx[ i ].x );
-                            nY = IntTimes256FromFixed( pCurve->apfx[ i ].y );
-
-                            if ( i+1 >= pCurve->cpfx )
-                            {
-                                // endpoint is either last point in segment => advance
-                                ++i;
-                            }
-                            else
-                            {
-                                // or endpoint is the middle of two control points
-                                nX += IntTimes256FromFixed( pCurve->apfx[ i-1 ].x );
-                                nY += IntTimes256FromFixed( pCurve->apfx[ i-1 ].y );
-                                nX = (nX + 1) / 2;
-                                nY = (nY + 1) / 2;
-                                // no need to advance, because the current point
-                                // is the control point in next bezier spline
-                            }
-
-                            pPoints[ nPnt+2 ] = Point( nX, nY );
-                            pFlags[ nPnt+2 ] = POLY_NORMAL;
-
-                            // calculate second cubic control point
-                            // P1 = 1/3 * (PEnd + 2 * PQControl)
-                            nX = pPoints[ nPnt+2 ].X() + 2 * aControlP.X();
-                            nY = pPoints[ nPnt+2 ].Y() + 2 * aControlP.Y();
-                            pPoints[ nPnt+1 ] = Point( (2*nX+3)/6, (2*nY+3)/6 );
-                            pFlags[ nPnt+1 ] = POLY_CONTROL;
-
-                            nPnt += 3;
-                        }
-                    }
-
-                    // next curve segment
-                    pCurve = (TTPOLYCURVE*)&pCurve->apfx[ i ];
+                    pPoints[ i ] = pOldPoints[ i ];
+                    pFlags[ i ] = pOldFlags[ i ];
                 }
-
-                // end point is start point for closed contour
-                // disabled, because Polygon class closes the contour itself
-                // pPoints[nPnt++] = pPoints[0];
-                // #i35928#
-                // Added again, but add only when not yet closed
-                if(pPoints[nPnt - 1] != pPoints[0])
-                {
-                    if( bHasOfflinePoints )
-                        pFlags[nPnt] = pFlags[0];
-
-                    pPoints[nPnt++] = pPoints[0];
-                }
-
-                // convert y-coordinates W32 -> VCL
-                for( int i = 0; i < nPnt; ++i )
-                    pPoints[i].Y() = -pPoints[i].Y();
-
-                // insert into polypolygon
-                Polygon aPoly( nPnt, pPoints, (bHasOfflinePoints ? pFlags : NULL) );
-                // convert to B2DPolyPolygon
-                // TODO: get rid of the intermediate PolyPolygon
-                rB2DPolyPoly.append( aPoly.getB2DPolygon() );
+                delete[] pOldPoints;
+                delete[] pOldFlags;
             }
 
-            delete[] pPoints;
-            delete[] pFlags;
+            int i = 0;
+            if( TT_PRIM_LINE == pCurve->wType )
+            {
+                while( i < pCurve->cpfx )
+                {
+                    nX = IntTimes256FromFixed( pCurve->apfx[ i ].x );
+                    nY = IntTimes256FromFixed( pCurve->apfx[ i ].y );
+                    ++i;
+                    pPoints[ nPnt ] = Point( nX, nY );
+                    pFlags[ nPnt ] = POLY_NORMAL;
+                    ++nPnt;
+                }
+            }
+            else if( TT_PRIM_QSPLINE == pCurve->wType )
+            {
+                bHasOfflinePoints = true;
+                while( i < pCurve->cpfx )
+                {
+                    // get control point of quadratic bezier spline
+                    nX = IntTimes256FromFixed( pCurve->apfx[ i ].x );
+                    nY = IntTimes256FromFixed( pCurve->apfx[ i ].y );
+                    ++i;
+                    Point aControlP( nX, nY );
+
+                    // calculate first cubic control point
+                    // P0 = 1/3 * (PBeg + 2 * PQControl)
+                    nX = pPoints[ nPnt-1 ].X() + 2 * aControlP.X();
+                    nY = pPoints[ nPnt-1 ].Y() + 2 * aControlP.Y();
+                    pPoints[ nPnt+0 ] = Point( (2*nX+3)/6, (2*nY+3)/6 );
+                    pFlags[ nPnt+0 ] = POLY_CONTROL;
+
+                    // calculate endpoint of segment
+                    nX = IntTimes256FromFixed( pCurve->apfx[ i ].x );
+                    nY = IntTimes256FromFixed( pCurve->apfx[ i ].y );
+
+                    if ( i+1 >= pCurve->cpfx )
+                    {
+                        // endpoint is either last point in segment => advance
+                        ++i;
+                    }
+                    else
+                    {
+                        // or endpoint is the middle of two control points
+                        nX += IntTimes256FromFixed( pCurve->apfx[ i-1 ].x );
+                        nY += IntTimes256FromFixed( pCurve->apfx[ i-1 ].y );
+                        nX = (nX + 1) / 2;
+                        nY = (nY + 1) / 2;
+                        // no need to advance, because the current point
+                        // is the control point in next bezier spline
+                    }
+
+                    pPoints[ nPnt+2 ] = Point( nX, nY );
+                    pFlags[ nPnt+2 ] = POLY_NORMAL;
+
+                    // calculate second cubic control point
+                    // P1 = 1/3 * (PEnd + 2 * PQControl)
+                    nX = pPoints[ nPnt+2 ].X() + 2 * aControlP.X();
+                    nY = pPoints[ nPnt+2 ].Y() + 2 * aControlP.Y();
+                    pPoints[ nPnt+1 ] = Point( (2*nX+3)/6, (2*nY+3)/6 );
+                    pFlags[ nPnt+1 ] = POLY_CONTROL;
+
+                    nPnt += 3;
+                }
+            }
+
+            // next curve segment
+            pCurve = (TTPOLYCURVE*)&pCurve->apfx[ i ];
         }
 
-        delete[] pData;
+        // end point is start point for closed contour
+        // disabled, because Polygon class closes the contour itself
+        // pPoints[nPnt++] = pPoints[0];
+        // #i35928#
+        // Added again, but add only when not yet closed
+        if(pPoints[nPnt - 1] != pPoints[0])
+        {
+            if( bHasOfflinePoints )
+                pFlags[nPnt] = pFlags[0];
+
+            pPoints[nPnt++] = pPoints[0];
+        }
+
+        // convert y-coordinates W32 -> VCL
+        for( int i = 0; i < nPnt; ++i )
+            pPoints[i].Y() = -pPoints[i].Y();
+
+        // insert into polypolygon
+        Polygon aPoly( nPnt, pPoints, (bHasOfflinePoints ? pFlags : NULL) );
+        // convert to B2DPolyPolygon
+        // TODO: get rid of the intermediate PolyPolygon
+        rB2DPolyPoly.append( aPoly.getB2DPolygon() );
     }
+
+    delete[] pPoints;
+    delete[] pFlags;
+
+    delete[] pData;
 
     // rescaling needed for the PolyPolygon conversion
     if( rB2DPolyPoly.count() )
@@ -2803,7 +2637,7 @@ BOOL WinSalGraphics::GetGlyphOutline( long nIndex,
         rB2DPolyPoly.transform(basegfx::tools::createScaleB2DHomMatrix(fFactor, fFactor));
     }
 
-    return bRet;
+    return TRUE;
 }
 
 // -----------------------------------------------------------------------

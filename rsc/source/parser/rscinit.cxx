@@ -372,8 +372,6 @@ void RscTypCont::Init()
     aWinBits.SetConstant( nNoLabelId, sal::static_int_cast<INT32>(WB_NOLABEL) );
     nVertId             = pHS->getID( "WB_VERT" );
     aWinBits.SetConstant( nVertId, sal::static_int_cast<INT32>(WB_VERT) );
-    nSingleLineId       = pHS->getID( "WB_SINGLELINE" );
-    aWinBits.SetConstant( nSingleLineId, sal::static_int_cast<INT32>(WB_SINGLELINE) );
     nSysWinId           = pHS->getID( "WB_SYSTEMWINDOW" );
     aWinBits.SetConstant( nSysWinId, sal::static_int_cast<INT32>(WB_SYSTEMWINDOW) );
 }

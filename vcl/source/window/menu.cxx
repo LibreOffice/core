@@ -96,6 +96,7 @@ DBG_NAME( Menu )
 
 #define EXTRASPACEY         2
 #define EXTRAITEMHEIGHT     4
+#define GUTTERBORDER        8
 
 // document closer
 #define IID_DOCUMENTCLOSE 1
@@ -2670,14 +2671,36 @@ void Menu::ImplPaint( Window* pWin, USHORT nBorder, long nStartY, MenuItemData* 
                 // Separator
                 if ( !bLayout && !bIsMenuBar && ( pData->eType == MENUITEM_SEPARATOR ) )
                 {
-                    aTmpPos.Y() = aPos.Y() + ((pData->aSz.Height()-2)/2);
-                    aTmpPos.X() = aPos.X() + 2 + nOuterSpace;
-                    pWin->SetLineColor( rSettings.GetShadowColor() );
-                    pWin->DrawLine( aTmpPos, Point( aOutSz.Width() - 3 - 2*nOuterSpace, aTmpPos.Y() ) );
-                    aTmpPos.Y()++;
-                    pWin->SetLineColor( rSettings.GetLightColor() );
-                    pWin->DrawLine( aTmpPos, Point( aOutSz.Width() - 3 - 2*nOuterSpace, aTmpPos.Y() ) );
-                    pWin->SetLineColor();
+                    bool bNativeOk = false;
+                    if( pWin->IsNativeControlSupported( CTRL_MENU_POPUP,
+                                                        PART_MENU_SEPARATOR ) )
+                    {
+                        ControlState nState = 0;
+                        if ( pData->bEnabled )
+                            nState |= CTRL_STATE_ENABLED;
+                        if ( bHighlighted )
+                            nState |= CTRL_STATE_SELECTED;
+                        Size aSz( pData->aSz );
+                        aSz.Width() = aOutSz.Width() - 2*nOuterSpace;
+                        Rectangle aItemRect( aPos, aSz );
+                        MenupopupValue aVal( nTextPos-GUTTERBORDER, aItemRect );
+                        bNativeOk = pWin->DrawNativeControl( CTRL_MENU_POPUP, PART_MENU_SEPARATOR,
+                                                             aItemRect,
+                                                             nState,
+                                                             aVal,
+                                                             OUString() );
+                    }
+                    if( ! bNativeOk )
+                    {
+                        aTmpPos.Y() = aPos.Y() + ((pData->aSz.Height()-2)/2);
+                        aTmpPos.X() = aPos.X() + 2 + nOuterSpace;
+                        pWin->SetLineColor( rSettings.GetShadowColor() );
+                        pWin->DrawLine( aTmpPos, Point( aOutSz.Width() - 3 - 2*nOuterSpace, aTmpPos.Y() ) );
+                        aTmpPos.Y()++;
+                        pWin->SetLineColor( rSettings.GetLightColor() );
+                        pWin->DrawLine( aTmpPos, Point( aOutSz.Width() - 3 - 2*nOuterSpace, aTmpPos.Y() ) );
+                        pWin->SetLineColor();
+                    }
                 }
 
                 Rectangle aOuterCheckRect( Point( aPos.X()+nCheckPos, aPos.Y() ), Size( pData->aSz.Height(), pData->aSz.Height() ) );
@@ -2722,10 +2745,11 @@ void Menu::ImplPaint( Window* pWin, USHORT nBorder, long nStartY, MenuItemData* 
                             aTmpPos.Y() = aOuterCheckRect.Top() + (aOuterCheckRect.GetHeight() - nCtrlHeight)/2;
 
                             Rectangle aCheckRect( aTmpPos, Size( nCtrlHeight, nCtrlHeight ) );
+                            MenupopupValue aVal( nTextPos-GUTTERBORDER, Rectangle( aPos, pData->aSz ) );
                             pWin->DrawNativeControl( CTRL_MENU_POPUP, nPart,
                                                      aCheckRect,
                                                      nState,
-                                                     ImplControlValue(),
+                                                     aVal,
                                                      OUString() );
                         }
                         else if ( pData->bChecked ) // by default do nothing for unchecked items
@@ -2845,16 +2869,6 @@ void Menu::ImplPaint( Window* pWin, USHORT nBorder, long nStartY, MenuItemData* 
                     aDecoView.DrawSymbol(
                         Rectangle( aTmpPos, Size( nFontHeight/2, nFontHeight/2 ) ),
                         SYMBOL_SPIN_RIGHT, pWin->GetTextColor(), nSymbolStyle );
-//                  if ( pData->nBits & MIB_POPUPSELECT )
-//                  {
-//                      aTmpPos.Y() += nFontHeight/2 ;
-//                      pWin->SetLineColor( rSettings.GetShadowColor() );
-//                      pWin->DrawLine( aTmpPos, Point( aTmpPos.X() + nFontHeight/3, aTmpPos.Y() ) );
-//                      pWin->SetLineColor( rSettings.GetLightColor() );
-//                      aTmpPos.Y()++;
-//                      pWin->DrawLine( aTmpPos, Point( aTmpPos.X() + nFontHeight/3, aTmpPos.Y() ) );
-//                      pWin->SetLineColor();
-//                  }
                 }
 
                 if ( pThisItemOnly && bHighlighted )
@@ -4724,10 +4738,11 @@ void MenuFloatingWindow::HighlightItem( USHORT nPos, BOOL bHighlight )
                     Push( PUSH_CLIPREGION );
                     IntersectClipRegion( Rectangle( Point( nX, nY ), Size( aSz.Width(), pData->aSz.Height() ) ) );
                     Rectangle aCtrlRect( Point( nX, 0 ), Size( aPxSize.Width()-nX, aPxSize.Height() ) );
+                    MenupopupValue aVal( pMenu->nTextPos-GUTTERBORDER, aItemRect );
                     DrawNativeControl( CTRL_MENU_POPUP, PART_ENTIRE_CONTROL,
                                        aCtrlRect,
                                        CTRL_STATE_ENABLED,
-                                       ImplControlValue(),
+                                       aVal,
                                        OUString() );
                     if( bHighlight &&
                         IsNativeControlSupported( CTRL_MENU_POPUP, PART_MENU_ITEM ) )
@@ -4736,7 +4751,7 @@ void MenuFloatingWindow::HighlightItem( USHORT nPos, BOOL bHighlight )
                         if( FALSE == DrawNativeControl( CTRL_MENU_POPUP, PART_MENU_ITEM,
                                                         aItemRect,
                                                         CTRL_STATE_SELECTED | ( pData->bEnabled? CTRL_STATE_ENABLED: 0 ),
-                                                        ImplControlValue(),
+                                                        aVal,
                                                         OUString() ) )
                         {
                             bDrawItemRect = bHighlight;
@@ -5071,10 +5086,11 @@ void MenuFloatingWindow::Paint( const Rectangle& )
         long nX = pMenu->pLogo ? pMenu->pLogo->aBitmap.GetSizePixel().Width() : 0;
         Size aPxSize( GetOutputSizePixel() );
         aPxSize.Width() -= nX;
+        ImplControlValue aVal( pMenu->nTextPos-GUTTERBORDER );
         DrawNativeControl( CTRL_MENU_POPUP, PART_ENTIRE_CONTROL,
                            Rectangle( Point( nX, 0 ), aPxSize ),
                            CTRL_STATE_ENABLED,
-                           ImplControlValue(),
+                           aVal,
                            OUString() );
         ImplInitClipRegion();
     }

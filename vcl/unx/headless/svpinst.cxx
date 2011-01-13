@@ -38,7 +38,7 @@
 
 #include <vcl/salframe.hxx>
 #include <vcl/svdata.hxx>
-#include <vcl/salatype.hxx>
+#include <vcl/apptypes.hxx>
 #include <vcl/saldatabasic.hxx>
 #include <sal/types.h>
 
