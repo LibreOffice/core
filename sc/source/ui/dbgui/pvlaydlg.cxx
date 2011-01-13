@@ -1423,19 +1423,47 @@ void ScDPLayoutDlg::UpdateSrcRange()
     String  theCurPosStr = aEdInPos.GetText();
     USHORT  nResult = ScRange().Parse(theCurPosStr, pDoc, pDoc->GetAddressConvention());
 
-    if ( SCA_VALID != (nResult & SCA_VALID) )
+    ScRange aNewRange;
+    if (SCA_VALID == (nResult & SCA_VALID))
     {
-        // invalid source range.
-        fprintf(stdout, "ScDPLayoutDlg::UpdateSrcRange:   invalid source range\n");
-        aEdInPos.SetRefValid(false);
-        return;
+        // Valid source range.  Take it.
+        ScRefAddress start, end;
+        ConvertDoubleRef(pDoc, theCurPosStr, 1,  start, end, pDoc->GetAddressConvention());
+        aNewRange.aStart = start.GetAddress();
+        aNewRange.aEnd = end.GetAddress();
+        aEdInPos.SetRefValid(true);
+    }
+    else
+    {
+        // invalid source range.  Check if this is a valid range name.
+        bool bValid = false;
+        ScRangeName* pRangeName = pDoc->GetRangeName();
+        if (pRangeName)
+        {
+            OUString aUpper = ScGlobal::pCharClass->upper(theCurPosStr);
+            USHORT n;
+            bValid = pRangeName->SearchNameUpper(aUpper, n);
+            if (bValid)
+            {
+                // range name found.  Check if this is a valid reference.
+                ScRangeData* pData = (*pRangeName)[n];
+                bValid = pData->IsReference(aNewRange);
+            }
+        }
+
+        aEdInPos.SetRefValid(bValid);
+        if (!bValid)
+            // All attempts have failed.  Give up.
+            return;
     }
 
-    aEdInPos.SetRefValid(true);
+    {
+        String aStr;
+        aNewRange.Format(aStr, SCA_ABS_3D, pDoc);
+        fprintf(stdout, "ScDPLayoutDlg::UpdateSrcRange:   new range = '%s'\n",
+                rtl::OUStringToOString(aStr, RTL_TEXTENCODING_UTF8).getStr());
+    }
 
-    ScRefAddress start, end;
-    ConvertDoubleRef(pDoc, theCurPosStr, 1,  start, end, pDoc->GetAddressConvention());
-    ScRange aNewRange(start.GetAddress(), end.GetAddress());
     ScSheetSourceDesc inSheet = *xDlgDPObject->GetSheetDesc();
 
     if (inSheet.aSourceRange == aNewRange)
