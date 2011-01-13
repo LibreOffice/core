@@ -1645,6 +1645,7 @@ SCSIZE ScTable::Query(ScQueryParam& rParamOrg, BOOL bKeepSub)
                             aParam.nDestCol, aParam.nDestRow, aParam.nDestTab );
     }
 
+    InitializeNoteCaptions();
     if (aParam.bInplace)
         IncRecalcLevel();       // #i116164# once for all entries
 
@@ -1785,7 +1786,7 @@ SCSIZE ScTable::Query(ScQueryParam& rParamOrg, BOOL bKeepSub)
         DecRecalcLevel();
 
     delete[] pSpecial;
-
+    SetDrawPageSize();
     return nCount;
 }
 
