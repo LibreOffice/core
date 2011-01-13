@@ -347,7 +347,8 @@ void Test::testDataPilot()
 {
     // TODO: Coming soon.
 }
-
+#include <iostream>
+using namespace std;
 void Test::testSheetCopy()
 {
     rtl::OUString aTabName(RTL_CONSTASCII_USTRINGPARAM("TestTab"));
@@ -356,6 +357,8 @@ void Test::testSheetCopy()
     SCROW nRow1, nRow2;
     bool bHidden = m_pDoc->RowHidden(0, 0, &nRow1, &nRow2);
     CPPUNIT_ASSERT_MESSAGE("new sheet should have all rows visible", !bHidden && nRow1 == 0 && nRow2 == MAXROW);
+
+    // Copy and test the result.
     m_pDoc->CopyTab(0, 1);
     CPPUNIT_ASSERT_MESSAGE("document now should have two sheets.", m_pDoc->GetTableCount() == 2);
     bHidden = m_pDoc->RowHidden(0, 1, &nRow1, &nRow2);
@@ -372,6 +375,17 @@ void Test::testSheetCopy()
     bHidden = m_pDoc->RowHidden(11, 0, &nRow1, &nRow2);
     CPPUNIT_ASSERT_MESSAGE("rows 11 - maxrow should be visible", !bHidden && nRow1 == 11 && nRow2 == MAXROW);
 
+    // Copy the sheet once again.
+    m_pDoc->CopyTab(0, 1);
+#if 0 // These tests fail also.  Re-enable this once i#116439 gets fixed.
+    CPPUNIT_ASSERT_MESSAGE("document now should have two sheets.", m_pDoc->GetTableCount() == 2);
+    bHidden = m_pDoc->RowHidden(0, 1, &nRow1, &nRow2);
+    CPPUNIT_ASSERT_MESSAGE("rows 0 - 4 should be visible", !bHidden && nRow1 == 0 && nRow2 == 4);
+    bHidden = m_pDoc->RowHidden(5, 1, &nRow1, &nRow2);
+    CPPUNIT_ASSERT_MESSAGE("rows 5 - 10 should be hidden", bHidden && nRow1 == 5 && nRow2 == 10);
+    bHidden = m_pDoc->RowHidden(11, 1, &nRow1, &nRow2);
+    CPPUNIT_ASSERT_MESSAGE("rows 11 - maxrow should be visible", !bHidden && nRow1 == 11 && nRow2 == MAXROW);
+#endif
     m_pDoc->DeleteTab(0);
 }
 
