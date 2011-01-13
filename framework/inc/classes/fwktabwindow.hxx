@@ -54,7 +54,7 @@ class FwkTabControl : public TabControl
 public:
     FwkTabControl( Window* pParent, const ResId& rResId );
 
-    void    BroadcastEvent( sal_uIntPtr nEvent );
+    void    BroadcastEvent( sal_uLong nEvent );
 };
 
 class FwkTabPage : public TabPage

@@ -1576,7 +1576,7 @@ void AutoRecovery::implts_updateTimer()
        )
         return;
 
-    sal_uIntPtr nMilliSeconds = 0;
+    sal_uLong nMilliSeconds = 0;
     if (m_eTimerType == AutoRecovery::E_NORMAL_AUTOSAVE_INTERVALL)
     {
         nMilliSeconds = (m_nAutoSaveTimeIntervall*60000); // [min] => 60.000 ms

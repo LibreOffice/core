@@ -70,7 +70,7 @@ FwkTabControl::FwkTabControl( Window* pParent, const ResId& rResId ) :
 
 // -----------------------------------------------------------------------
 
-void FwkTabControl::BroadcastEvent( sal_uIntPtr nEvent )
+void FwkTabControl::BroadcastEvent( sal_uLong nEvent )
 {
     if ( VCLEVENT_TABPAGE_ACTIVATE == nEvent || VCLEVENT_TABPAGE_DEACTIVATE == nEvent )
         ImplCallEventListeners( nEvent, (void*)(sal_uIntPtr)GetCurPageId() );

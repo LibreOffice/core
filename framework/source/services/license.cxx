@@ -589,11 +589,11 @@ sal_Bool LicenseView::IsEndReached() const
 
     ExtTextView*    pView = GetTextView();
     ExtTextEngine*  pEdit = GetTextEngine();
-    sal_uIntPtr           nHeight = pEdit->GetTextHeight();
+    sal_uLong           nHeight = pEdit->GetTextHeight();
     Size            aOutSize = pView->GetWindow()->GetOutputSizePixel();
     Point           aBottom( 0, aOutSize.Height() );
 
-    if ( (sal_uIntPtr) pView->GetDocPos( aBottom ).Y() >= nHeight - 1 )
+    if ( (sal_uLong) pView->GetDocPos( aBottom ).Y() >= nHeight - 1 )
         bEndReached = sal_True;
     else
         bEndReached = sal_False;
@@ -606,7 +606,7 @@ void LicenseView::Notify( SfxBroadcaster&, const SfxHint& rHint )
     if ( rHint.IsA( TYPE(TextHint) ) )
     {
         sal_Bool    bLastVal = EndReached();
-        sal_uIntPtr   nId = ((const TextHint&)rHint).GetId();
+        sal_uLong   nId = ((const TextHint&)rHint).GetId();
 
         if ( nId == TEXT_HINT_PARAINSERTED )
         {

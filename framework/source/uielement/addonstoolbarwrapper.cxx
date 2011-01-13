@@ -143,7 +143,7 @@ void SAL_CALL AddonsToolBarWrapper::initialize( const Sequence< Any >& aArgument
                 Window* pWindow = VCLUnoHelper::GetWindow( xFrame->getContainerWindow() );
                 if ( pWindow )
                 {
-                    sal_uIntPtr nStyles = WB_LINESPACING | WB_BORDER | WB_SCROLL | WB_MOVEABLE | WB_3DLOOK | WB_DOCKABLE | WB_SIZEABLE | WB_CLOSEABLE;
+                    sal_uLong nStyles = WB_LINESPACING | WB_BORDER | WB_SCROLL | WB_MOVEABLE | WB_3DLOOK | WB_DOCKABLE | WB_SIZEABLE | WB_CLOSEABLE;
 
                     pToolBar = new ToolBar( pWindow, nStyles );
                     m_xToolBarWindow = VCLUnoHelper::GetInterface( pToolBar );
