@@ -18,6 +18,7 @@
  * Initial Developer. All Rights Reserved.
  *
  * Contributor(s):  Michael Meeks <michael.meeks@novell.com>
+ *                  Kohei Yoshida <kyoshida@novell.com>
  *
  * Alternatively, the contents of this file may be used under the terms of
  * either the GNU General Public License Version 3 or later (the "GPLv3+"), or
@@ -80,12 +81,16 @@ public:
     void testNamedRange();
     void testCSV();
     void testMatrix();
+    void testDataPilot();
+    void testSheetCopy();
 
     CPPUNIT_TEST_SUITE(Test);
     CPPUNIT_TEST(testSUM);
     CPPUNIT_TEST(testNamedRange);
     CPPUNIT_TEST(testCSV);
     CPPUNIT_TEST(testMatrix);
+    CPPUNIT_TEST(testDataPilot);
+    CPPUNIT_TEST(testSheetCopy);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -336,6 +341,36 @@ void Test::testMatrix()
         pMat->PutEmptyPath(8, 11);
         checkMatrixElements<PartiallyFilledEmptyMatrix>(*pMat);
     }
+}
+
+void Test::testDataPilot()
+{
+    // TODO: Coming soon.
+}
+
+void Test::testSheetCopy()
+{
+    rtl::OUString aTabName(RTL_CONSTASCII_USTRINGPARAM("TestTab"));
+    m_pDoc->InsertTab(0, aTabName);
+    CPPUNIT_ASSERT_MESSAGE("document should have one sheet to begin with.", m_pDoc->GetTableCount() == 1);
+    SCROW nRow1, nRow2;
+    bool bHidden = m_pDoc->RowHidden(0, 0, &nRow1, &nRow2);
+    CPPUNIT_ASSERT_MESSAGE("new sheet should have all rows visible", !bHidden && nRow1 == 0 && nRow2 == MAXROW);
+    m_pDoc->CopyTab(0, 1);
+    CPPUNIT_ASSERT_MESSAGE("document now should have two sheets.", m_pDoc->GetTableCount() == 2);
+    bHidden = m_pDoc->RowHidden(0, 1, &nRow1, &nRow2);
+#if 0 // this currently fails due to i#116439.
+    CPPUNIT_ASSERT_MESSAGE("copied sheet should also have all rows visible as the original.", !bHidden && nRow1 == 0 && nRow2 == MAXROW);
+#endif
+    m_pDoc->DeleteTab(1);
+
+    m_pDoc->SetRowHidden(5, 10, 0, true);
+    bHidden = m_pDoc->RowHidden(0, 0, &nRow1, &nRow2);
+    CPPUNIT_ASSERT_MESSAGE("rows 0 - 4 should be visible", !bHidden && nRow1 == 0 && nRow2 == 4);
+    bHidden = m_pDoc->RowHidden(5, 0, &nRow1, &nRow2);
+    CPPUNIT_ASSERT_MESSAGE("rows 5 - 10 should be hidden", bHidden && nRow1 == 5 && nRow2 == 10);
+    bHidden = m_pDoc->RowHidden(11, 0, &nRow1, &nRow2);
+    CPPUNIT_ASSERT_MESSAGE("rows 11 - maxrow should be visible", !bHidden && nRow1 == 11 && nRow2 == MAXROW);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
