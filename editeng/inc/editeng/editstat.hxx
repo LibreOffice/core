@@ -107,7 +107,7 @@ public:
             EditStatus()                { nStatusBits = 0; nControlBits = 0; nPrevPara = 0xFFFF; }
 
     void    Clear()                     { nStatusBits = 0; }
-    void    SetControlBits( sal_uLong nMask, int bOn )
+    void    SetControlBits( sal_uLong nMask, sal_Bool bOn )
                 { SetFlags( nControlBits, nMask, bOn ); }
 
     sal_uLong   GetStatusWord() const       { return nStatusBits; }
