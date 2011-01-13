@@ -28,7 +28,6 @@
 #include "precompiled_svtools.hxx"
 
 #include "svtxgridcontrol.hxx"
-#include "accessibletableimp.hxx"
 #include <com/sun/star/view/SelectionType.hpp>
 #include "svtools/table/tablecontrolinterface.hxx"
 #include "svtools/table/gridtablerenderer.hxx"
@@ -219,9 +218,9 @@ void SVTXGridControl::setProperty( const ::rtl::OUString& PropertyName, const An
             VCLXWindow::setProperty( PropertyName, aValue );
             // and forward to the grid control's data window
             if ( pTable->IsBackground() )
-                pTable->getDataWindow()->SetBackground( pTable->GetBackground() );
+                pTable->getDataWindow().SetBackground( pTable->GetBackground() );
             else
-                pTable->getDataWindow()->SetBackground();
+                pTable->getDataWindow().SetBackground();
         }
         break;
 

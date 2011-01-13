@@ -27,13 +27,17 @@
 #ifndef SVTOOLS_TABLECONTROL_IMPL_HXX
 #define SVTOOLS_TABLECONTROL_IMPL_HXX
 
-#include <svtools/table/tablemodel.hxx>
-#include <svtools/table/tablecontrolinterface.hxx>
-#include <svtools/table/tablemodel.hxx>
+#include "svtools/table/tablemodel.hxx"
+#include "svtools/table/tablecontrolinterface.hxx"
+#include "svtools/table/tablemodel.hxx"
+
+#include "svtaccessiblefactory.hxx"
 
 #include <vcl/seleng.hxx>
 
 #include <vector>
+
+#include <boost/scoped_ptr.hpp>
 
 class ScrollBar;
 class ScrollBarBox;
@@ -141,7 +145,8 @@ namespace svt { namespace table
             The window's upper left corner is at position (0,0), relative to the
             table control, which is the direct parent of the data window.
         */
-        TableDataWindow*        m_pDataWindow;
+        ::boost::scoped_ptr< TableDataWindow >
+                                m_pDataWindow;
         /// the vertical scrollbar, if any
         ScrollBar*              m_pVScroll;
         /// the horizontal scrollbar, if any
@@ -159,6 +164,12 @@ namespace svt { namespace table
         ColPos                  m_nResizingColumn;
         bool                    m_bResizingGrid;
         bool                    m_bUpdatingColWidths;
+
+        Link                    m_aSelectHdl;
+        bool                    m_bSelectionChanged;
+
+        AccessibleFactoryAccess     m_aFactoryAccess;
+        IAccessibleTableControl*    m_pAccessibleTable;
 
 #if DBG_UTIL
     #define INV_SCROLL_POSITION     1
@@ -265,6 +276,11 @@ namespace svt { namespace table
         */
         bool        markAllRowsAsSelected();
 
+        void        setSelectHandler( Link const & i_selectHandler ) { m_aSelectHdl = i_selectHandler; }
+        Link const& getSelectHandler() const { return m_aSelectHdl; }
+
+        void        setSelectionChanged( bool const i_changed = true ) { m_bSelectionChanged = i_changed; }
+        bool        didSelectionChange() const { return m_bSelectionChanged; }
 
         // ITableControl
         virtual void                hideCursor();
@@ -283,12 +299,18 @@ namespace svt { namespace table
         virtual bool                isRowSelected( RowPos i_row ) const;
 
 
-        TableDataWindow* getDataWindow();
+        TableDataWindow&        getDataWindow()       { return *m_pDataWindow; }
+        const TableDataWindow&  getDataWindow() const { return *m_pDataWindow; }
         ScrollBar* getHorzScrollbar();
         ScrollBar* getVertScrollbar();
 
         Rectangle calcHeaderRect(bool bColHeader);
         Rectangle calcTableRect();
+
+        // A11Y
+        ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >
+                        getAccessible( Window& i_parentWindow );
+        void            disposeAccessible();
 
         // ITableModelListener
         virtual void    rowsInserted( RowPos first, RowPos last );
@@ -300,6 +322,13 @@ namespace svt { namespace table
         virtual void    columnChanged( ColPos const i_column, ColumnAttributeGroup const i_attributeGroup );
 
     private:
+        bool            impl_isAccessibleAlive() const;
+        void            impl_commitAccessibleEvent(
+                            sal_Int16 const i_eventID,
+                            ::com::sun::star::uno::Any const & i_newValue,
+                            ::com::sun::star::uno::Any const & i_oldValue
+                        );
+
         /** toggles the cursor visibility
 
             The method is not bound to the classes public invariants, as it's used in

@@ -36,6 +36,7 @@
 #include <svtools/accessiblefactory.hxx>
 
 #include <boost/shared_ptr.hpp>
+#include <boost/scoped_ptr.hpp>
 
 //........................................................................
 
@@ -45,7 +46,6 @@ namespace svt { namespace table
 
     class TableControl_Impl;
     class TableDataWindow;
-    class AccessibleTableControl_Impl;
 
     //====================================================================
     //= TableControl
@@ -71,18 +71,10 @@ namespace svt { namespace table
     class SVT_DLLPUBLIC TableControl : public Control, public IAccessibleTable
     {
     private:
-        DECL_DLLPRIVATE_LINK( ImplMouseButtonDownHdl, MouseEvent* );
-        DECL_DLLPRIVATE_LINK( ImplMouseButtonUpHdl, MouseEvent* );
+        ::boost::shared_ptr< TableControl_Impl >            m_pImpl;
 
-        DECL_DLLPRIVATE_LINK( ImplSelectHdl, void* );
-
-        ::boost::shared_ptr< TableControl_Impl >    m_pImpl;
-        Link m_aSelectHdl;
-        bool m_bSelectionChanged;
 
     public:
-        ::std::auto_ptr< AccessibleTableControl_Impl > m_pAccessTable;
-
         TableControl( Window* _pParent, WinBits _nStyle );
         ~TableControl();
 
@@ -159,8 +151,8 @@ namespace svt { namespace table
 
         SVT_DLLPRIVATE virtual void Resize();
         virtual void    Select();
-                void    SetSelectHdl( const Link& rLink )   { m_aSelectHdl = rLink; }
-        const Link&     GetSelectHdl() const                { return m_aSelectHdl; }
+                void    SetSelectHdl( const Link& rLink );
+        const Link&     GetSelectHdl() const;
 
         /**invalidates the table if table has been changed e.g. new row added
         */
@@ -170,7 +162,7 @@ namespace svt { namespace table
             if the row, which should be removed, is selected, it will be erased from the vector
         */
         SelectionEngine* getSelEngine();
-        TableDataWindow* getDataWindow();
+        TableDataWindow& getDataWindow();
 
         // Window overridables
         virtual void        GetFocus();
@@ -215,20 +207,19 @@ namespace svt { namespace table
         virtual ::com::sun::star::uno::Any GetCellContent( sal_Int32 _nRowPos, sal_Int32 _nColPos) const;
         virtual sal_Bool HasRowHeader();
         virtual sal_Bool HasColHeader();
-        virtual sal_Bool isAccessibleAlive( ) const;
-        virtual void commitGridControlEvent( sal_Int16 _nEventId, const com::sun::star::uno::Any& _rNewValue, const com::sun::star::uno::Any& _rOldValue );
         virtual ::std::vector< sal_Int32 >& GetSelectedRows();
         virtual void RemoveSelectedRow(RowPos _nRowPos);
         virtual ::rtl::OUString GetAccessibleCellText(sal_Int32 _nRowPos, sal_Int32 _nColPos) const;
         // .............................................................................................................
 
-        void selectionChanged(bool _bChanged);
-
         void    SelectRow( RowPos const i_rowIndex, bool const i_select );
         void    SelectAll( bool const i_select );
 
-    protected:
-        ::svt::IAccessibleFactory&   getAccessibleFactory();
+    private:
+        DECL_DLLPRIVATE_LINK( ImplMouseButtonDownHdl, MouseEvent* );
+        DECL_DLLPRIVATE_LINK( ImplMouseButtonUpHdl, MouseEvent* );
+
+        DECL_DLLPRIVATE_LINK( ImplSelectHdl, void* );
 
     private:
         TableControl();                                 // never implemented

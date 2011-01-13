@@ -29,8 +29,6 @@
 
 #include "tablegeometry.hxx"
 #include "tablecontrol_impl.hxx"
-#include "accessibletableimp.hxx"
-
 #include "svtools/table/tablecontrol.hxx"
 #include "svtools/table/tabledatawindow.hxx"
 
@@ -51,37 +49,17 @@ namespace svt { namespace table
 //......................................................................................................................
 
     //==================================================================================================================
-    //= AccessibleTableControl_Impl
-    //==================================================================================================================
-    // -----------------------------------------------------------------------------------------------------------------
-    Reference< XAccessible > AccessibleTableControl_Impl::getAccessibleTableHeader( AccessibleTableControlObjType _eObjType )
-    {
-        if ( m_pAccessible && m_pAccessible->isAlive() )
-            return m_pAccessible->getTableHeader( _eObjType );
-        return NULL;
-    }
-    // -----------------------------------------------------------------------------------------------------------------
-    Reference< XAccessible > AccessibleTableControl_Impl::getAccessibleTable( )
-    {
-        if ( m_pAccessible && m_pAccessible->isAlive() )
-            return m_pAccessible->getTable( );
-        return NULL;
-    }
-
-    //==================================================================================================================
     //= TableControl
     //==================================================================================================================
     // -----------------------------------------------------------------------------------------------------------------
     TableControl::TableControl( Window* _pParent, WinBits _nStyle )
         :Control( _pParent, _nStyle )
         ,m_pImpl( new TableControl_Impl( *this ) )
-        ,m_bSelectionChanged(false)
     {
-        TableDataWindow* aTableData = m_pImpl->getDataWindow();
-        aTableData->SetMouseButtonDownHdl( LINK( this, TableControl, ImplMouseButtonDownHdl ) );
-        aTableData->SetMouseButtonUpHdl( LINK( this, TableControl, ImplMouseButtonUpHdl ) );
-        aTableData->SetSelectHdl( LINK( this, TableControl, ImplSelectHdl ) );
-        m_pAccessTable.reset(new ::svt::table::AccessibleTableControl_Impl());
+        TableDataWindow& rDataWindow = m_pImpl->getDataWindow();
+        rDataWindow.SetMouseButtonDownHdl( LINK( this, TableControl, ImplMouseButtonDownHdl ) );
+        rDataWindow.SetMouseButtonUpHdl( LINK( this, TableControl, ImplMouseButtonUpHdl ) );
+        rDataWindow.SetSelectHdl( LINK( this, TableControl, ImplSelectHdl ) );
 
         // by default, use the background as determined by the style settings
         const Color aWindowColor( GetSettings().GetStyleSettings().GetFieldColor() );
@@ -95,10 +73,8 @@ namespace svt { namespace table
         ImplCallEventListeners( VCLEVENT_OBJECT_DYING );
 
         m_pImpl->setModel( PTableModel() );
+        m_pImpl->disposeAccessible();
         m_pImpl.reset();
-
-        if ( m_pAccessTable->m_pAccessible )
-            m_pAccessTable->m_pAccessible->dispose();
     }
 
     // -----------------------------------------------------------------------------------------------------------------
@@ -122,10 +98,10 @@ namespace svt { namespace table
             Control::KeyInput( rKEvt );
         else
         {
-            if(m_bSelectionChanged)
+            if ( m_pImpl->didSelectionChange() )
             {
                 Select();
-                m_bSelectionChanged = false;
+                m_pImpl->setSelectionChanged( false );
             }
         }
     }
@@ -141,23 +117,23 @@ namespace svt { namespace table
         {
         case STATE_CHANGE_CONTROLBACKGROUND:
             if ( IsControlBackground() )
-                getDataWindow()->SetControlBackground( GetControlBackground() );
+                getDataWindow().SetControlBackground( GetControlBackground() );
             else
-                getDataWindow()->SetControlBackground();
+                getDataWindow().SetControlBackground();
             break;
 
         case STATE_CHANGE_CONTROLFOREGROUND:
             if ( IsControlForeground() )
-                getDataWindow()->SetControlForeground( GetControlForeground() );
+                getDataWindow().SetControlForeground( GetControlForeground() );
             else
-                getDataWindow()->SetControlForeground();
+                getDataWindow().SetControlForeground();
             break;
 
         case STATE_CHANGE_CONTROLFONT:
             if ( IsControlFont() )
-                getDataWindow()->SetControlFont( GetControlFont() );
+                getDataWindow().SetControlFont( GetControlFont() );
             else
-                getDataWindow()->SetControlFont();
+                getDataWindow().SetControlFont();
             break;
         }
     }
@@ -235,7 +211,7 @@ namespace svt { namespace table
             m_pImpl->markRowAsDeselected( i_rowIndex );
         }
 
-        selectionChanged( true );
+        m_pImpl->setSelectionChanged();
         InvalidateDataWindow( i_rowIndex, i_rowIndex, false );
         Select();
     }
@@ -257,7 +233,7 @@ namespace svt { namespace table
         }
 
 
-        selectionChanged( true );
+        m_pImpl->setSelectionChanged();
         Invalidate();
             // TODO: can't we do better than this, and invalidate only the rows which changed?
         Select();
@@ -271,10 +247,10 @@ namespace svt { namespace table
             m_pImpl->invalidateRows();
         else
         {
-            if ( m_bSelectionChanged )
+            if ( m_pImpl->didSelectionChange() )
             {
                 m_pImpl->invalidateSelectedRegion( _nRowStart, _nRowEnd, _rRect );
-                m_bSelectionChanged = false;
+                m_pImpl->setSelectionChanged( false );
             }
             else
                 m_pImpl->invalidateRow( _nRowStart, _rRect );
@@ -306,7 +282,7 @@ namespace svt { namespace table
     }
 
     // -----------------------------------------------------------------------------------------------------------------
-    TableDataWindow* TableControl::getDataWindow()
+    TableDataWindow& TableControl::getDataWindow()
     {
         return m_pImpl->getDataWindow();
     }
@@ -315,29 +291,20 @@ namespace svt { namespace table
     Reference< XAccessible > TableControl::CreateAccessible()
     {
         Window* pParent = GetAccessibleParentWindow();
-        DBG_ASSERT( pParent, "TableControl::CreateAccessible - parent not found" );
+        ENSURE_OR_RETURN( pParent, "TableControl::CreateAccessible - parent not found", NULL );
 
-        if( pParent && !m_pAccessTable->m_pAccessible)
-        {
-            Reference< XAccessible > xAccParent = pParent->GetAccessible();
-            if( xAccParent.is() )
-            {
-                m_pAccessTable->m_pAccessible = getAccessibleFactory().createAccessibleTableControl(
-                    xAccParent, *this
-                );
-            }
-        }
-        Reference< XAccessible > xAccessible;
-        if ( m_pAccessTable->m_pAccessible )
-            xAccessible = m_pAccessTable->m_pAccessible->getMyself();
-        return xAccessible;
+        return m_pImpl->getAccessible( *pParent );
     }
+
+    // -----------------------------------------------------------------------------------------------------------------
     Reference<XAccessible> TableControl::CreateAccessibleControl( sal_Int32 _nIndex )
     {
         (void)_nIndex;
         DBG_ASSERT( FALSE, "TableControl::CreateAccessibleControl: to be overwritten!" );
         return NULL;
     }
+
+    // -----------------------------------------------------------------------------------------------------------------
     ::rtl::OUString TableControl::GetAccessibleObjectName( AccessibleTableControlObjType eObjType, sal_Int32 _nRow, sal_Int32 _nCol) const
     {
         ::rtl::OUString aRetText;
@@ -616,26 +583,6 @@ namespace svt { namespace table
         (void)_nRow;
         (void)_nColumnPos;
         return GetIndexForPoint(_rPoint);
-    ;
-    }
-
-    //------------------------------------------------------------------------------------------------------------------
-    sal_Bool TableControl::isAccessibleAlive( ) const
-    {
-        return ( NULL != m_pAccessTable->m_pAccessible ) && m_pAccessTable->m_pAccessible->isAlive();
-    }
-
-    //------------------------------------------------------------------------------------------------------------------
-    ::svt::IAccessibleFactory& TableControl::getAccessibleFactory()
-    {
-        return m_pAccessTable->m_aFactoryAccess.getFactory();
-    }
-
-    //------------------------------------------------------------------------------------------------------------------
-    void TableControl::commitGridControlEvent( sal_Int16 _nEventId, const Any& _rNewValue, const Any& _rOldValue )
-    {
-         if ( isAccessibleAlive() )
-             m_pAccessTable->m_pAccessible->commitEvent( _nEventId, _rNewValue, _rOldValue);
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -650,12 +597,6 @@ namespace svt { namespace table
     {
         (void)_bOnScreen;
         return m_pImpl->calcTableRect();
-    }
-
-    //------------------------------------------------------------------------------------------------------------------
-    void TableControl::selectionChanged(bool _bChanged)
-    {
-        m_bSelectionChanged = _bChanged;
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -682,7 +623,19 @@ namespace svt { namespace table
     //------------------------------------------------------------------------------------------------------------------
     void TableControl::Select()
     {
-        ImplCallEventListenersAndHandler( VCLEVENT_TABLEROW_SELECT, m_aSelectHdl, this );
+        ImplCallEventListenersAndHandler( VCLEVENT_TABLEROW_SELECT, m_pImpl->getSelectHandler(), this );
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    void TableControl::SetSelectHdl( const Link& i_selectHandler )
+    {
+        m_pImpl->setSelectHandler( i_selectHandler );
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    const Link& TableControl::GetSelectHdl() const
+    {
+        return m_pImpl->getSelectHandler();
     }
 
 //......................................................................................................................

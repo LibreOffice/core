@@ -36,8 +36,6 @@
 #include "tablegeometry.hxx"
 #include "cellvalueconversion.hxx"
 
-#include "accessibletableimp.hxx"
-
 /** === begin UNO includes === **/
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #include <com/sun/star/accessibility/AccessibleTableModelChange.hpp>
@@ -63,6 +61,8 @@ namespace svt { namespace table
     using ::com::sun::star::accessibility::AccessibleTableModelChange;
     using ::com::sun::star::uno::makeAny;
     using ::com::sun::star::uno::Any;
+    using ::com::sun::star::accessibility::XAccessible;
+    using ::com::sun::star::uno::Reference;
     /** === end UNO using === **/
     namespace AccessibleEventId = ::com::sun::star::accessibility::AccessibleEventId;
     namespace AccessibleTableModelChangeType = ::com::sun::star::accessibility::AccessibleTableModelChangeType;
@@ -402,17 +402,19 @@ namespace svt { namespace table
         ,m_pSelEngine           (                               )
         ,m_aSelectedRows        (                               )
         ,m_pTableFunctionSet    ( new TableFunctionSet( this  ) )
-        ,m_nAnchor              (-1                             )
+        ,m_nAnchor              ( -1                            )
         ,m_bResizingColumn      ( false                         )
         ,m_nResizingColumn      ( 0                             )
         ,m_bResizingGrid        ( false                         )
         ,m_bUpdatingColWidths   ( false                         )
+        ,m_bSelectionChanged    ( false                         )
+        ,m_pAccessibleTable     ( NULL                          )
 #if DBG_UTIL
         ,m_nRequiredInvariants ( INV_SCROLL_POSITION )
 #endif
     {
         DBG_CTOR( TableControl_Impl, TableControl_Impl_checkInvariants );
-        m_pSelEngine = new SelectionEngine(m_pDataWindow, m_pTableFunctionSet);
+        m_pSelEngine = new SelectionEngine( m_pDataWindow.get(), m_pTableFunctionSet );
         m_pSelEngine->SetSelectionMode(SINGLE_SELECTION);
         m_pDataWindow->SetPosPixel( Point( 0, 0 ) );
         m_pDataWindow->Show();
@@ -428,7 +430,6 @@ namespace svt { namespace table
         DELETEZ( m_pScrollCorner );
         DELETEZ( m_pTableFunctionSet );
         DELETEZ( m_pSelEngine );
-        DELETEZ( m_pDataWindow );
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -489,22 +490,22 @@ namespace svt { namespace table
             goTo( m_nCurColumn, m_nCurRow + insertedRows );
 
         // notify A1YY events
-        if ( m_rAntiImpl.isAccessibleAlive() )
+        if ( impl_isAccessibleAlive() )
         {
-            m_rAntiImpl.commitGridControlEvent( AccessibleEventId::TABLE_MODEL_CHANGED,
+            impl_commitAccessibleEvent( AccessibleEventId::TABLE_MODEL_CHANGED,
                 makeAny( AccessibleTableModelChange( AccessibleTableModelChangeType::INSERT, i_first, i_last, 0, m_pModel->getColumnCount() ) ),
                 Any()
             );
-            m_rAntiImpl.commitGridControlEvent( AccessibleEventId::CHILD,
-                 makeAny( m_rAntiImpl.m_pAccessTable->m_pAccessible->getTableHeader( TCTYPE_ROWHEADERBAR ) ),
+            impl_commitAccessibleEvent( AccessibleEventId::CHILD,
+                 makeAny( m_pAccessibleTable->getTableHeader( TCTYPE_ROWHEADERBAR ) ),
                 Any()
             );
 
 //          for ( sal_Int32 i = 0 ; i <= m_pModel->getColumnCount(); ++i )
 //          {
-//              m_rAntiImpl.commitGridControlEvent(
+//              impl_commitAccessibleEvent(
 //                    CHILD,
-//                  makeAny( m_rAntiImpl.m_pAccessTable->m_pAccessible->getTable() ),
+//                  makeAny( m_pAccessibleTable->getTable() ),
 //                  Any());
 //          }
             // Huh? What's that? We're notifying |columnCount| CHILD events here, claiming the *table* itself
@@ -557,9 +558,9 @@ namespace svt { namespace table
         }
 
         // notify A11Y events
-        if ( m_rAntiImpl.isAccessibleAlive() )
+        if ( impl_isAccessibleAlive() )
         {
-            m_rAntiImpl.commitGridControlEvent(
+            impl_commitAccessibleEvent(
                 AccessibleEventId::TABLE_MODEL_CHANGED,
                 makeAny( AccessibleTableModelChange(
                     AccessibleTableModelChangeType::DELETE,
@@ -1333,7 +1334,7 @@ namespace svt { namespace table
                 m_aSelectedRows.push_back(m_nCurRow);
             invalidateSelectedRegion(m_nCurRow, m_nCurRow, rCells);
             ensureVisible(m_nCurColumn,m_nCurRow,false);
-            m_rAntiImpl.selectionChanged(true);
+            setSelectionChanged();
             bSuccess = true;
         }
         else
@@ -1367,7 +1368,7 @@ namespace svt { namespace table
                 invalidateSelectedRegion(m_nCurRow, m_nCurRow, rCells);
             }
             ensureVisible(m_nCurColumn,m_nCurRow,false);
-            m_rAntiImpl.selectionChanged(true);
+            setSelectionChanged();
             bSuccess = true;
         }
         else
@@ -1446,7 +1447,7 @@ namespace svt { namespace table
         else
             m_aSelectedRows.push_back(m_nCurRow);
         invalidateSelectedRegion(m_nCurRow, m_nCurRow, rCells);
-        m_rAntiImpl.selectionChanged(true);
+        setSelectionChanged();
         bSuccess = true;
     }
         break;
@@ -1534,7 +1535,7 @@ namespace svt { namespace table
             m_pSelEngine->SetAnchor(TRUE);
             m_nAnchor = m_nCurRow;
             ensureVisible(m_nCurColumn, m_nCurRow, false);
-            m_rAntiImpl.selectionChanged(true);
+            setSelectionChanged();
             bSuccess = true;
         }
     }
@@ -1619,7 +1620,7 @@ namespace svt { namespace table
             m_pSelEngine->SetAnchor(TRUE);
             m_nAnchor = m_nCurRow;
             ensureVisible(m_nCurColumn, m_nCurRow, false);
-            m_rAntiImpl.selectionChanged(true);
+            setSelectionChanged();
             bSuccess = true;
         }
     }
@@ -1646,11 +1647,12 @@ namespace svt { namespace table
             m_nAnchor = m_nCurRow;
             m_pSelEngine->SetAnchor(TRUE);
             ensureVisible(m_nCurColumn, 0, false);
-            m_rAntiImpl.selectionChanged(true);
+            setSelectionChanged();
             bSuccess = true;
         }
     }
-        break;
+    break;
+
     case cursorSelectRowAreaBottom:
     {
         if(m_pSelEngine->GetSelectionMode() == NO_SELECTION)
@@ -1671,14 +1673,16 @@ namespace svt { namespace table
         m_nAnchor = m_nCurRow;
         m_pSelEngine->SetAnchor(TRUE);
         ensureVisible(m_nCurColumn, m_nRowCount-1, false);
-        m_rAntiImpl.selectionChanged(true);
+        setSelectionChanged();
         bSuccess = true;
     }
+    break;
+    default:
+        DBG_ERROR( "TableControl_Impl::dispatchAction: unsupported action!" );
         break;
-        default:
-            DBG_ERROR( "TableControl_Impl::dispatchAction: unsupported action!" );
-        }
-        return bSuccess;
+    }
+
+    return bSuccess;
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -2140,11 +2144,7 @@ namespace svt { namespace table
     {
         return m_pSelEngine;
     }
-    //------------------------------------------------------------------------------------------------------------------
-    TableDataWindow* TableControl_Impl::getDataWindow()
-    {
-        return m_pDataWindow;
-    }
+
     //------------------------------------------------------------------------------------------------------------------
     ScrollBar* TableControl_Impl::getHorzScrollbar()
     {
@@ -2453,6 +2453,54 @@ namespace svt { namespace table
 
         return 0L;
     }
+
+    //------------------------------------------------------------------------------------------------------------------
+    Reference< XAccessible > TableControl_Impl::getAccessible( Window& i_parentWindow )
+    {
+        DBG_TESTSOLARMUTEX();
+        if ( m_pAccessibleTable == NULL )
+        {
+            Reference< XAccessible > const xAccParent = i_parentWindow.GetAccessible();
+            if ( xAccParent.is() )
+            {
+                m_pAccessibleTable = m_aFactoryAccess.getFactory().createAccessibleTableControl(
+                    xAccParent, m_rAntiImpl
+                );
+            }
+        }
+
+        Reference< XAccessible > xAccessible;
+        if ( m_pAccessibleTable )
+            xAccessible = m_pAccessibleTable->getMyself();
+        return xAccessible;
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    void TableControl_Impl::disposeAccessible()
+    {
+        if ( m_pAccessibleTable )
+            m_pAccessibleTable->dispose();
+        m_pAccessibleTable = NULL;
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    bool TableControl_Impl::impl_isAccessibleAlive() const
+    {
+        DBG_CHECK_ME();
+        return ( NULL != m_pAccessibleTable ) && m_pAccessibleTable->isAlive();
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    void TableControl_Impl::impl_commitAccessibleEvent( sal_Int16 const i_eventID, Any const & i_newValue, Any const & i_oldValue )
+    {
+        DBG_CHECK_ME();
+        if ( impl_isAccessibleAlive() )
+             m_pAccessibleTable->commitEvent( i_eventID, i_newValue, i_oldValue );
+    }
+
+    //==================================================================================================================
+    //= TableFunctionSet
+    //==================================================================================================================
     //------------------------------------------------------------------------------------------------------------------
     TableFunctionSet::TableFunctionSet(TableControl_Impl* _pTableControl)
         :m_pTableControl( _pTableControl)
