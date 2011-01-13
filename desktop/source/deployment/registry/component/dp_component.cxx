@@ -270,8 +270,8 @@ class BackendImpl : public ::dp_registry::backend::PackageRegistryBackend
     std::auto_ptr<ComponentBackendDb> m_backendDb;
 
     void addDataToDb(OUString const & url, ComponentBackendDb::Data const & data);
-    void deleteDataFromDb(OUString const & url);
     ComponentBackendDb::Data readDataFromDb(OUString const & url);
+    void revokeEntryFromDb(OUString const & url);
 
 
     //These rdbs are for writing new service entries. The rdb files are copies
@@ -326,6 +326,10 @@ public:
     // XPackageRegistry
     virtual Sequence< Reference<deployment::XPackageTypeInfo> > SAL_CALL
     getSupportedPackageTypes() throw (RuntimeException);
+
+    virtual void SAL_CALL packageRemoved(OUString const & url, OUString const & mediaType)
+        throw (deployment::DeploymentException,
+               uno::RuntimeException);
 
     using PackageRegistryBackend::disposing;
 
@@ -660,12 +664,6 @@ void BackendImpl::addDataToDb(
         m_backendDb->addEntry(url, data);
 }
 
-void BackendImpl::deleteDataFromDb(OUString const & url)
-{
-    if (m_backendDb.get())
-        m_backendDb->removeEntry(url);
-}
-
 ComponentBackendDb::Data BackendImpl::readDataFromDb(OUString const & url)
 {
     ComponentBackendDb::Data data;
@@ -674,12 +672,26 @@ ComponentBackendDb::Data BackendImpl::readDataFromDb(OUString const & url)
     return data;
 }
 
+void BackendImpl::revokeEntryFromDb(OUString const & url)
+{
+    if (m_backendDb.get())
+        m_backendDb->revokeEntry(url);
+}
+
 // XPackageRegistry
 //______________________________________________________________________________
 Sequence< Reference<deployment::XPackageTypeInfo> >
 BackendImpl::getSupportedPackageTypes() throw (RuntimeException)
 {
     return m_typeInfos;
+}
+
+void BackendImpl::packageRemoved(OUString const & url, OUString const & /*mediaType*/)
+        throw (deployment::DeploymentException,
+               uno::RuntimeException)
+{
+    if (m_backendDb.get())
+        m_backendDb->removeEntry(url);
 }
 
 // PackageRegistryBackend
@@ -1437,6 +1449,9 @@ void BackendImpl::ComponentPackageImpl::getComponentInfo(
 
 // Package
 //______________________________________________________________________________
+//We could use here BackendImpl::hasActiveEntry. However, this check is just as well.
+//And it also shows the problem if another extension has overwritten an implementation
+//entry, because it contains the same service implementation
 beans::Optional< beans::Ambiguous<sal_Bool> >
 BackendImpl::ComponentPackageImpl::isRegistered_(
     ::osl::ResettableMutexGuard &,
@@ -1590,7 +1605,7 @@ void BackendImpl::ComponentPackageImpl::processPackage_(
             that->releaseObject(url);
         }
         m_registered = REG_NOT_REGISTERED;
-        that->deleteDataFromDb(url);
+        getMyBackend()->revokeEntryFromDb(url);
     }
 }
 
@@ -1803,7 +1818,7 @@ void BackendImpl::ComponentsPackageImpl::processPackage_(
             that->componentLiveRemoval(that->readDataFromDb(url));
         }
         that->releaseObject(url);
-        that->deleteDataFromDb(url);
+        that->revokeEntryFromDb(url);
     }
 }
 
