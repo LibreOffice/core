@@ -775,9 +775,6 @@ void ScTable::CopyToTable(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                     pDestTab->pRowFlags->CopyFrom(*pRowFlags, nRow1, nRow2);
 
                     // Hidden flags.
-                    // #i116164# Collect information first, then apply the changes,
-                    // so RowHidden doesn't rebuild the tree for each row range.
-                    std::vector<ScShowRowsEntry> aEntries;
                     for (SCROW i = nRow1; i <= nRow2; ++i)
                     {
                         SCROW nThisLastRow, nDestLastRow;
@@ -790,8 +787,7 @@ void ScTable::CopyToTable(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                             // the last row shouldn't exceed the upper bound the caller specified.
                             nLastRow = nRow2;
 
-                        //pDestTab->SetRowHidden(i, nLastRow, bThisHidden);
-                        aEntries.push_back(ScShowRowsEntry(i, nLastRow, bThisHidden));
+                        pDestTab->SetRowHidden(i, nLastRow, bThisHidden);
 
                         bool bThisHiddenChange = (bThisHidden != bDestHidden);
                         if (bThisHiddenChange && pCharts)
@@ -805,19 +801,6 @@ void ScTable::CopyToTable(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
 
                         // Jump to the last row of the identical flag segment.
                         i = nLastRow;
-                    }
-
-                    std::vector<ScShowRowsEntry>::const_iterator aEnd = aEntries.end();
-                    std::vector<ScShowRowsEntry>::const_iterator aIter = aEntries.begin();
-                    if ( aIter != aEnd )
-                    {
-                        pDestTab->mpHiddenRows->setInsertFromBack(true);    // important for undo document
-                        while (aIter != aEnd)
-                        {
-                            pDestTab->SetRowHidden(aIter->mnRow1, aIter->mnRow2, !aIter->mbShow);
-                            ++aIter;
-                        }
-                        pDestTab->mpHiddenRows->setInsertFromBack(false);
                     }
 
                     // Filtered flags.
@@ -1144,16 +1127,10 @@ ScBaseCell* ScTable::GetCell( SCCOL nCol, SCROW nRow ) const
 void ScTable::GetFirstDataPos(SCCOL& rCol, SCROW& rRow) const
 {
     rCol = 0;
-    rRow = MAXROW+1;
+    rRow = 0;
     while (aCol[rCol].IsEmptyData() && rCol < MAXCOL)
         ++rCol;
-    SCCOL nCol = rCol;
-    while (nCol <= MAXCOL && rRow > 0)
-    {
-        if (!aCol[nCol].IsEmptyData())
-            rRow = ::std::min( rRow, aCol[nCol].GetFirstDataPos());
-        ++nCol;
-    }
+    rRow = aCol[rCol].GetFirstDataPos();
 }
 
 void ScTable::GetLastDataPos(SCCOL& rCol, SCROW& rRow) const
@@ -1163,8 +1140,11 @@ void ScTable::GetLastDataPos(SCCOL& rCol, SCROW& rRow) const
     while (aCol[rCol].IsEmptyData() && (rCol > 0))
         rCol--;
     SCCOL nCol = rCol;
-    while (nCol >= 0 && rRow < MAXROW)
-        rRow = ::std::max( rRow, aCol[nCol--].GetLastDataPos());
+    while ((SCsCOL)nCol >= 0)
+    {
+        rRow = Max(rRow, aCol[nCol].GetLastDataPos());
+        nCol--;
+    }
 }
 
 
@@ -2635,9 +2615,8 @@ void ScTable::DBShowRow(SCROW nRow, bool bShow)
 }
 
 
-void ScTable::DBShowRows(SCROW nRow1, SCROW nRow2, bool bShow, bool bSetFlags)
+void ScTable::DBShowRows(SCROW nRow1, SCROW nRow2, bool bShow)
 {
-    // #i116164# IncRecalcLevel/DecRecalcLevel is in ScTable::Query
     SCROW nStartRow = nRow1;
     while (nStartRow <= nRow2)
     {
@@ -2647,7 +2626,7 @@ void ScTable::DBShowRows(SCROW nRow1, SCROW nRow2, bool bShow, bool bSetFlags)
             nEndRow = nRow2;
 
         BOOL bChanged = ( bWasVis != bShow );
-        if ( bChanged && bSetFlags )
+        if ( bChanged )
         {
             ScDrawLayer* pDrawLayer = pDocument->GetDrawLayer();
             if (pDrawLayer)
@@ -2660,13 +2639,8 @@ void ScTable::DBShowRows(SCROW nRow1, SCROW nRow2, bool bShow, bool bSetFlags)
             }
         }
 
-        // #i116164# Directly modify the flags only if there are drawing objects within the area.
-        // Otherwise, all modifications are made together in ScTable::Query, so the tree isn't constantly rebuilt.
-        if ( bSetFlags )
-        {
-            SetRowHidden(nStartRow, nEndRow, !bShow);
-            SetRowFiltered(nStartRow, nEndRow, !bShow);
-        }
+        SetRowHidden(nStartRow, nEndRow, !bShow);
+        SetRowFiltered(nStartRow, nEndRow, !bShow);
 
         if ( bChanged )
         {
@@ -2691,14 +2665,6 @@ void ScTable::ShowRows(SCROW nRow1, SCROW nRow2, bool bShow)
     SCROW nStartRow = nRow1;
     IncRecalcLevel();
     InitializeNoteCaptions();
-
-    // #i116164# if there are no drawing objects within the row range, a single HeightChanged call is enough
-    ScDrawLayer* pDrawLayer = pDocument->GetDrawLayer();
-    bool bHasObjects = pDrawLayer && pDrawLayer->HasObjectsInRows( nTab, nRow1, nRow2, false );
-    long nOldHeight = 0;
-    if ( pDrawLayer && !bHasObjects )
-        nOldHeight = static_cast<long>(GetRowHeight(nRow1, nRow2));
-
     while (nStartRow <= nRow2)
     {
         SCROW nEndRow = -1;
@@ -2707,8 +2673,9 @@ void ScTable::ShowRows(SCROW nRow1, SCROW nRow2, bool bShow)
             nEndRow = nRow2;
 
         BOOL bChanged = ( bWasVis != bShow );
-        if ( bChanged && bHasObjects )
+        if ( bChanged )
         {
+            ScDrawLayer* pDrawLayer = pDocument->GetDrawLayer();
             if (pDrawLayer)
             {
                 long nHeight = static_cast<long>(mpRowHeights->getSumValue(nStartRow, nEndRow));
@@ -2719,14 +2686,9 @@ void ScTable::ShowRows(SCROW nRow1, SCROW nRow2, bool bShow)
             }
         }
 
-        // #i116164# Directly modify the flags only if there are drawing objects within the area.
-        // Otherwise, all rows are modified together after the loop, so the tree isn't constantly rebuilt.
-        if ( bHasObjects )
-        {
-            SetRowHidden(nStartRow, nEndRow, !bShow);
-            if (bShow)
-                SetRowFiltered(nStartRow, nEndRow, false);
-        }
+        SetRowHidden(nStartRow, nEndRow, !bShow);
+        if (bShow)
+            SetRowFiltered(nStartRow, nEndRow, false);
 
         if ( bChanged )
         {
@@ -2739,25 +2701,6 @@ void ScTable::ShowRows(SCROW nRow1, SCROW nRow2, bool bShow)
 
         nStartRow = nEndRow + 1;
     }
-
-    if ( !bHasObjects )
-    {
-        // #i116164# set the flags for the whole range at once
-        SetRowHidden(nRow1, nRow2, !bShow);
-        if (bShow)
-            SetRowFiltered(nRow1, nRow2, false);
-
-        if ( pDrawLayer )
-        {
-            // if there are no objects in the range, a single HeightChanged call is enough
-            long nNewHeight = 0;
-            if ( bShow )
-                nNewHeight = static_cast<long>(GetRowHeight(nRow1, nRow2));
-            if ( nNewHeight != nOldHeight )
-                pDrawLayer->HeightChanged( nTab, nRow1, nNewHeight - nOldHeight );
-        }
-    }
-
     DecRecalcLevel();
 }
 

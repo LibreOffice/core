@@ -160,7 +160,7 @@ public:
     void            WidthChanged( SCTAB nTab, SCCOL nCol, long nDifTwips );
     void            HeightChanged( SCTAB nTab, SCROW nRow, long nDifTwips );
 
-    BOOL            HasObjectsInRows( SCTAB nTab, SCROW nStartRow, SCROW nEndRow, bool bIncludeNotes = true );
+    BOOL            HasObjectsInRows( SCTAB nTab, SCROW nStartRow, SCROW nEndRow );
 
     void            DeleteObjectsInArea( SCTAB nTab, SCCOL nCol1,SCROW nRow1,
                                             SCCOL nCol2,SCROW nRow2 );

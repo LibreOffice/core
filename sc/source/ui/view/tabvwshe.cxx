@@ -98,9 +98,7 @@ String __EXPORT ScTabViewShell::GetSelectionText( BOOL bWholeWord )
                 SCROW nRow1, nRow2;
                 SCTAB nTab1, nTab2;
                 aRange.GetVars( nCol1, nRow1, nTab1, nCol2, nRow2, nTab2);
-                bool bShrunk;
-                pDoc->ShrinkToUsedDataArea( bShrunk, nTab1, nCol1, nRow1, nCol2, nRow2, false);
-                if (bShrunk)
+                if (pDoc->ShrinkToUsedDataArea( nTab1, nCol1, nRow1, nCol2, nRow2, false))
                 {
                     aRange.aStart.SetCol( nCol1 );
                     aRange.aStart.SetRow( nRow1 );
