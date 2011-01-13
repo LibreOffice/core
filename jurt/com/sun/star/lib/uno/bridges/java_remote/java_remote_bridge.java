@@ -499,6 +499,8 @@ public class java_remote_bridge
             ((DisposeListener) i.next()).notifyDispose(this);
         }
 
+        _iProtocol.terminate();
+
         try {
             _messageDispatcher.terminate();
 

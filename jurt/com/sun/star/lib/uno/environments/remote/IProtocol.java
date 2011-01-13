@@ -51,6 +51,8 @@ public interface IProtocol {
      */
     void init() throws IOException;
 
+    void terminate();
+
     /**
      * Reads a request or reply message.
      *
