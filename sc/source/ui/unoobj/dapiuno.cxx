@@ -265,8 +265,8 @@ ScDPObject* lcl_GetDPObject( ScDocShell* pDocShell, SCTAB nTab, const String& rN
         ScDPCollection* pColl = pDoc->GetDPCollection();
         if ( pColl )
         {
-            USHORT nCount = pColl->GetCount();
-            for (USHORT i=0; i<nCount; i++)
+            size_t nCount = pColl->GetCount();
+            for (size_t i=0; i<nCount; ++i)
             {
                 ScDPObject* pDPObj = (*pColl)[i];
                 if ( pDPObj->GetOutRange().aStart.Tab() == nTab &&
@@ -347,8 +347,8 @@ ScDataPilotTableObj* ScDataPilotTablesObj::GetObjectByIndex_Impl( sal_Int32 nInd
             //  api only handles sheet data at this time
             //! allow all data sources!!!
             sal_Int32 nFound = 0;
-            USHORT nCount = pColl->GetCount();
-            for (USHORT i=0; i<nCount; i++)
+            size_t nCount = pColl->GetCount();
+            for (size_t i=0; i<nCount; ++i)
             {
                 ScDPObject* pDPObj = (*pColl)[i];
                 if ( pDPObj->GetOutRange().aStart.Tab() == nTab )
@@ -499,8 +499,8 @@ sal_Int32 SAL_CALL ScDataPilotTablesObj::getCount() throw(RuntimeException)
             //! allow all data sources!!!
 
             USHORT nFound = 0;
-            USHORT nCount = pColl->GetCount();
-            for (USHORT i=0; i<nCount; i++)
+            size_t nCount = pColl->GetCount();
+            for (size_t i=0; i<nCount; ++i)
             {
                 ScDPObject* pDPObj = (*pColl)[i];
                 if ( pDPObj->GetOutRange().aStart.Tab() == nTab )
@@ -562,9 +562,9 @@ Sequence<OUString> SAL_CALL ScDataPilotTablesObj::getElementNames()
             //! allow all data sources!!!
 
             USHORT nFound = 0;
-            USHORT nCount = pColl->GetCount();
-            USHORT i;
-            for (i=0; i<nCount; i++)
+            size_t nCount = pColl->GetCount();
+            size_t i;
+            for (i=0; i<nCount; ++i)
             {
                 ScDPObject* pDPObj = (*pColl)[i];
                 if ( pDPObj->GetOutRange().aStart.Tab() == nTab )
@@ -574,7 +574,7 @@ Sequence<OUString> SAL_CALL ScDataPilotTablesObj::getElementNames()
             USHORT nPos = 0;
             Sequence<OUString> aSeq(nFound);
             OUString* pAry = aSeq.getArray();
-            for (i=0; i<nCount; i++)
+            for (i=0; i<nCount; ++i)
             {
                 ScDPObject* pDPObj = (*pColl)[i];
                 if ( pDPObj->GetOutRange().aStart.Tab() == nTab )
@@ -598,8 +598,8 @@ sal_Bool SAL_CALL ScDataPilotTablesObj::hasByName( const OUString& aName )
         if ( pColl )
         {
             String aNamStr(aName);
-            USHORT nCount = pColl->GetCount();
-            for (USHORT i=0; i<nCount; i++)
+            size_t nCount = pColl->GetCount();
+            for (size_t i=0; i<nCount; ++i)
             {
                 //  api only handles sheet data at this time
                 //! allow all data sources!!!

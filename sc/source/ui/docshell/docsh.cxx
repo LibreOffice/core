@@ -378,8 +378,8 @@ void ScDocShell::AfterXMLLoading(sal_Bool bRet)
             ScDPCollection* pDPCollection = aDocument.GetDPCollection();
             if ( pDPCollection )
             {
-                USHORT nDPCount = pDPCollection->GetCount();
-                for (USHORT nDP=0; nDP<nDPCount; nDP++)
+                size_t nDPCount = pDPCollection->GetCount();
+                for (size_t nDP=0; nDP<nDPCount; ++nDP)
                 {
                     ScDPObject* pDPObj = (*pDPCollection)[nDP];
                     if ( !pDPObj->GetName().Len() )

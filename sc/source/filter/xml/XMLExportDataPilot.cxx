@@ -755,12 +755,12 @@ void ScXMLExportDataPilot::WriteDataPilots(const uno::Reference <sheet::XSpreads
         ScDPCollection* pDPs = pDoc->GetDPCollection();
         if (pDPs)
         {
-            sal_Int16 nDPCount = pDPs->GetCount();
+            size_t nDPCount = pDPs->GetCount();
             if (nDPCount > 0)
             {
                 SvXMLElementExport aElemDPs(rExport, XML_NAMESPACE_TABLE, XML_DATA_PILOT_TABLES, sal_True, sal_True);
                 rExport.CheckAttrList();
-                for (sal_Int16 i = 0; i < nDPCount; ++i)
+                for (size_t i = 0; i < nDPCount; ++i)
                 {
                     ScDPSaveData* pDPSave = (*pDPs)[i]->GetSaveData();
                     if (pDPSave)

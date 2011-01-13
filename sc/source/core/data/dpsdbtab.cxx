@@ -81,15 +81,14 @@ using ::com::sun::star::uno::UNO_QUERY;
 {
     ScDPTableDataCache* pCache = NULL;
     ScDPCollection* pDPCollection= pDoc->GetDPCollection();
-    USHORT nCount = pDPCollection->GetCount();
-
-    for ( short i=nCount-1; i>=0 ; i--)
+    size_t nCount = pDPCollection->GetCount();
+    for (size_t i = nCount; i > 0; --i)
     {
-        if ( const ScImportSourceDesc* pUsedDesc = (*pDPCollection)[i]->GetImportSourceDesc() )
+        if ( const ScImportSourceDesc* pUsedDesc = (*pDPCollection)[i-1]->GetImportSourceDesc() )
             if ( *this == *pUsedDesc )
             {
-                long nID = (*pDPCollection)[i]->GetCacheId();
-                if ( nID >= 0  )
+                long nID = (*pDPCollection)[i-1]->GetCacheId();
+                if ( nID >= 0 )
                     pCache= pDPCollection->GetDPObjectCache( nID );
                 if ( pCache )
                     return pCache;

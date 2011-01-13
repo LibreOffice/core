@@ -1849,7 +1849,7 @@ XclExpPivotTableManager::XclExpPivotTableManager( const XclExpRoot& rRoot ) :
 void XclExpPivotTableManager::CreatePivotTables()
 {
     if( ScDPCollection* pDPColl = GetDoc().GetDPCollection() )
-        for( USHORT nDPObj = 0, nCount = pDPColl->GetCount(); nDPObj < nCount; ++nDPObj )
+        for( size_t nDPObj = 0, nCount = pDPColl->GetCount(); nDPObj < nCount; ++nDPObj )
             if( ScDPObject* pDPObj = (*pDPColl)[ nDPObj ] )
                 if( const XclExpPivotCache* pPCache = CreatePivotCache( *pDPObj ) )
                     maPTableList.AppendNewRecord( new XclExpPivotTable( GetRoot(), *pDPObj, *pPCache ) );

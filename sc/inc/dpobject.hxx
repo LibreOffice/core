@@ -38,6 +38,7 @@
 #include <com/sun/star/sheet/XDimensionsSupplier.hpp>
 
 #include <boost/ptr_container/ptr_list.hpp>
+#include <boost/ptr_container/ptr_vector.hpp>
 #include <boost/shared_ptr.hpp>
 
 //------------------------------------------------------------------
@@ -259,36 +260,48 @@ public:
 
 // ============================================================================
 
-class ScDPCollection : public ScCollection
+class ScDPCollection
 {
 private:
     ScDocument* pDoc;
 
     typedef ::boost::ptr_list<ScDPTableDataCache> DataCachesType;
-    DataCachesType maDPDataCaches;
+    typedef ::boost::ptr_vector<ScDPObject> TablesType;
+    TablesType      maTables;
+    DataCachesType  maDPDataCaches;
 public:
                 ScDPCollection(ScDocument* pDocument);
                 ScDPCollection(const ScDPCollection& r);
-    virtual     ~ScDPCollection();
+                ~ScDPCollection();
 
-    virtual ScDataObject*   Clone() const;
+    SC_DLLPUBLIC size_t GetCount() const;
+    SC_DLLPUBLIC ScDPObject* operator[](size_t nIndex);
+    SC_DLLPUBLIC const ScDPObject* operator[](size_t nIndex) const;
 
-    ScDPObject* operator[](USHORT nIndex) const {return (ScDPObject*)At(nIndex);}
-    ScDPObject* GetByName(const String& rName) const;
+    const ScDPObject* GetByName(const String& rName) const;
 
     void        DeleteOnTab( SCTAB nTab );
     void        UpdateReference( UpdateRefMode eUpdateRefMode,
                                  const ScRange& r, SCsCOL nDx, SCsROW nDy, SCsTAB nDz );
 
-    BOOL        RefsEqual( const ScDPCollection& r ) const;
+    bool        RefsEqual( const ScDPCollection& r ) const;
     void        WriteRefsTo( ScDPCollection& r ) const;
 
-    String      CreateNewName( USHORT nMin = 1 ) const;
+    /**
+     * Create a new name that's not yet used by any existing data pilot
+     * objects.  All data pilot names are 'DataPilot' + <num>, and the nMin
+     * specifies the minimum number allowed.
+     *
+     * @param nMin minimum number allowed.
+     *
+     * @return new name for data pilot object.
+     */
+    String CreateNewName( USHORT nMin = 1 ) const;
 
     void FreeTable(ScDPObject* pDPObj);
     SC_DLLPUBLIC bool InsertNewTable(ScDPObject* pDPObj);
 
-    bool        HasDPTable(SCCOL nCol, SCROW nRow, SCTAB nTab) const;
+    bool HasDPTable(SCCOL nCol, SCROW nRow, SCTAB nTab) const;
 
     ScDPTableDataCache* GetDPObjectCache( long nID );
     ScDPTableDataCache* GetUsedDPObjectCache ( const ScRange& rRange );

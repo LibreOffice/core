@@ -708,8 +708,8 @@ ULONG RefreshDPObject( ScDPObject *pDPObj, ScDocument *pDoc, ScDocShell *pDocSh,
     {
         //Refresh all dpobjects
         ScDPCollection* pDPCollection = pDoc->GetDPCollection();
-        USHORT nCount = pDPCollection->GetCount();
-        for (USHORT i=0; i<nCount; i++)
+        size_t nCount = pDPCollection->GetCount();
+        for (size_t i=0; i<nCount; ++i)
         {
             if ( (*pDPCollection)[i]->GetCacheId() == pDPObj->GetCacheId()  )
             {

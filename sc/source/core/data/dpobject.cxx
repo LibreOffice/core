@@ -2418,7 +2418,6 @@ ScDPCollection::ScDPCollection(ScDocument* pDocument) :
 }
 
 ScDPCollection::ScDPCollection(const ScDPCollection& r) :
-    ScCollection(r),
     pDoc(r.pDoc),
     maDPDataCaches(r.maDPDataCaches)
 {
@@ -2428,94 +2427,109 @@ ScDPCollection::~ScDPCollection()
 {
 }
 
-ScDataObject* ScDPCollection::Clone() const
-{
-    return new ScDPCollection(*this);
-}
-
 void ScDPCollection::DeleteOnTab( SCTAB nTab )
 {
-    USHORT nPos = 0;
-    while ( nPos < nCount )
+    TablesType::iterator itr = maTables.begin(), itrEnd = maTables.end();
+    while (itr != itrEnd)
     {
-        // look for output positions on the deleted sheet
-        if ( static_cast<const ScDPObject*>(At(nPos))->GetOutRange().aStart.Tab() == nTab )
-            AtFree(nPos);
+        const ScDPObject& rObj = *itr;
+        if (rObj.GetOutRange().aStart.Tab() == nTab)
+            // returns the next position after the erased element.
+            itr = maTables.erase(itr);
         else
-            ++nPos;
+            ++itr;
     }
 }
 
 void ScDPCollection::UpdateReference( UpdateRefMode eUpdateRefMode,
                                          const ScRange& r, SCsCOL nDx, SCsROW nDy, SCsTAB nDz )
 {
-    for (USHORT i=0; i<nCount; i++)
-        ((ScDPObject*)At(i))->UpdateReference( eUpdateRefMode, r, nDx, nDy, nDz );
+    TablesType::iterator itr = maTables.begin(), itrEnd = maTables.end();
+    for (; itr != itrEnd; ++itr)
+        itr->UpdateReference(eUpdateRefMode, r, nDx, nDy, nDz);
 }
 
-BOOL ScDPCollection::RefsEqual( const ScDPCollection& r ) const
+bool ScDPCollection::RefsEqual( const ScDPCollection& r ) const
 {
-    if ( nCount != r.nCount )
-        return FALSE;
+    if (maTables.size() != r.maTables.size())
+        return false;
 
-    for (USHORT i=0; i<nCount; i++)
-        if ( ! ((const ScDPObject*)At(i))->RefsEqual( *((const ScDPObject*)r.At(i)) ) )
-            return FALSE;
+    TablesType::const_iterator itr = maTables.begin(), itr2 = r.maTables.begin(), itrEnd = maTables.end();
+    for (; itr != itrEnd; ++itr, ++itr2)
+        if (!itr->RefsEqual(*itr2))
+            return false;
 
-    return TRUE;    // all equal
+    return true;
 }
 
 void ScDPCollection::WriteRefsTo( ScDPCollection& r ) const
 {
-    if ( nCount == r.nCount )
+    if ( maTables.size() == r.maTables.size() )
     {
         //! assert equal names?
-        for (USHORT i=0; i<nCount; i++)
-            ((const ScDPObject*)At(i))->WriteRefsTo( *((ScDPObject*)r.At(i)) );
+        TablesType::const_iterator itr = maTables.begin(), itrEnd = maTables.end();
+        TablesType::iterator itr2 = r.maTables.begin();
+        for (; itr != itrEnd; ++itr, ++itr2)
+            itr->WriteRefsTo(*itr2);
     }
     else
     {
         // #i8180# If data pilot tables were deleted with their sheet,
         // this collection contains extra entries that must be restored.
         // Matching objects are found by their names.
-
-        DBG_ASSERT( nCount >= r.nCount, "WriteRefsTo: missing entries in document" );
-        for (USHORT nSourcePos=0; nSourcePos<nCount; nSourcePos++)
+        size_t nSrcSize = maTables.size();
+        size_t nDestSize = r.maTables.size();
+        DBG_ASSERT( nSrcSize >= nDestSize, "WriteRefsTo: missing entries in document" );
+        for (size_t nSrcPos = 0; nSrcPos < nSrcSize; ++nSrcPos)
         {
-            const ScDPObject* pSourceObj = static_cast<const ScDPObject*>(At(nSourcePos));
-            String aName = pSourceObj->GetName();
+            const ScDPObject& rSrcObj = maTables[nSrcPos];
+            String aName = rSrcObj.GetName();
             bool bFound = false;
-            for (USHORT nDestPos=0; nDestPos<r.nCount && !bFound; nDestPos++)
+            for (size_t nDestPos = 0; nDestPos < nDestSize && !bFound; ++nDestPos)
             {
-                ScDPObject* pDestObj = static_cast<ScDPObject*>(r.At(nDestPos));
-                if ( pDestObj->GetName() == aName )
+                ScDPObject& rDestObj = r.maTables[nDestPos];
+                if (rDestObj.GetName() == aName)
                 {
-                    pSourceObj->WriteRefsTo( *pDestObj );     // found object, copy refs
+                    rSrcObj.WriteRefsTo(rDestObj);     // found object, copy refs
                     bFound = true;
                 }
             }
-            if ( !bFound )
+
+            if (!bFound)
             {
                 // none found, re-insert deleted object (see ScUndoDataPilot::Undo)
 
-                ScDPObject* pDestObj = new ScDPObject( *pSourceObj );
-                pDestObj->SetAlive(TRUE);
-                if ( !r.InsertNewTable(pDestObj) )
-                {
-                    DBG_ERROR("cannot insert DPObject");
-                    DELETEZ( pDestObj );
-                }
+                ScDPObject* pDestObj = new ScDPObject(rSrcObj);
+                pDestObj->SetAlive(true);
+                r.InsertNewTable(pDestObj);
             }
         }
-        DBG_ASSERT( nCount == r.nCount, "WriteRefsTo: couldn't restore all entries" );
+        DBG_ASSERT( maTables.size() == r.maTables.size(), "WriteRefsTo: couldn't restore all entries" );
     }
 }
 
-ScDPObject* ScDPCollection::GetByName(const String& rName) const
+size_t ScDPCollection::GetCount() const
 {
-    for (USHORT i=0; i<nCount; i++)
-        if (static_cast<const ScDPObject*>(pItems[i])->GetName() == rName)
-            return static_cast<ScDPObject*>(pItems[i]);
+    return maTables.size();
+}
+
+ScDPObject* ScDPCollection::operator [](size_t nIndex)
+{
+    return &maTables[nIndex];
+}
+
+const ScDPObject* ScDPCollection::operator [](size_t nIndex) const
+{
+    return &maTables[nIndex];
+}
+
+const ScDPObject* ScDPCollection::GetByName(const String& rName) const
+{
+    TablesType::const_iterator itr = maTables.begin(), itrEnd = maTables.end();
+    for (; itr != itrEnd; ++itr)
+        if (itr->GetName() == rName)
+            return &(*itr);
+
     return NULL;
 }
 
@@ -2524,14 +2538,21 @@ String ScDPCollection::CreateNewName( USHORT nMin ) const
     String aBase = String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("DataPilot"));
     //! from Resource?
 
-    for (USHORT nAdd=0; nAdd<=nCount; nAdd++)   //  nCount+1 tries
+    size_t n = maTables.size();
+    for (size_t nAdd = 0; nAdd <= n; ++nAdd)   //  nCount+1 tries
     {
         String aNewName = aBase;
         aNewName += String::CreateFromInt32( nMin + nAdd );
-        BOOL bFound = FALSE;
-        for (USHORT i=0; i<nCount && !bFound; i++)
-            if (((const ScDPObject*)pItems[i])->GetName() == aNewName)
-                bFound = TRUE;
+        bool bFound = false;
+        TablesType::const_iterator itr = maTables.begin(), itrEnd = maTables.end();
+        for (; itr != itrEnd; ++itr)
+        {
+            if (itr->GetName() == aNewName)
+            {
+                bFound = true;
+                break;
+            }
+        }
         if (!bFound)
             return aNewName;            // found unused Name
     }
@@ -2581,8 +2602,8 @@ ULONG ScDPObject::RefreshCache()
         nNewId = pCache->GetId();
 
         bRefresh = TRUE;
-        USHORT nCount = pDPCollection->GetCount();
-        for (USHORT i=0; i<nCount; i++)
+        size_t nCount = pDPCollection->GetCount();
+        for (size_t i=0; i<nCount; ++i)
         { //set new cache id
             if ( (*pDPCollection)[i]->GetCacheId() == nOldId  )
             {
@@ -2595,6 +2616,7 @@ ULONG ScDPObject::RefreshCache()
     }
     return nErrId;
 }
+
 void ScDPObject::SetCacheId( long nCacheId )
 {
     if ( GetCacheId() != nCacheId )
@@ -2613,20 +2635,27 @@ void ScDPCollection::FreeTable(ScDPObject* pDPObj)
     const ScAddress& s = rOutRange.aStart;
     const ScAddress& e = rOutRange.aEnd;
     pDoc->RemoveFlagsTab(s.Col(), s.Row(), e.Col(), e.Row(), s.Tab(), SC_MF_DP_TABLE);
-    Free(pDPObj);
+    TablesType::iterator itr = maTables.begin(), itrEnd = maTables.end();
+    for (; itr != itrEnd; ++itr)
+    {
+        ScDPObject* p = &(*itr);
+        if (p == pDPObj)
+        {
+            maTables.erase(itr);
+            break;
+        }
+    }
 }
 
 bool ScDPCollection::InsertNewTable(ScDPObject* pDPObj)
 {
-    bool bSuccess = Insert(pDPObj);
-    if (bSuccess)
-    {
-        const ScRange& rOutRange = pDPObj->GetOutRange();
-        const ScAddress& s = rOutRange.aStart;
-        const ScAddress& e = rOutRange.aEnd;
-        pDoc->ApplyFlagsTab(s.Col(), s.Row(), e.Col(), e.Row(), s.Tab(), SC_MF_DP_TABLE);
-    }
-    return bSuccess;
+    const ScRange& rOutRange = pDPObj->GetOutRange();
+    const ScAddress& s = rOutRange.aStart;
+    const ScAddress& e = rOutRange.aEnd;
+    pDoc->ApplyFlagsTab(s.Col(), s.Row(), e.Col(), e.Row(), s.Tab(), SC_MF_DP_TABLE);
+
+    maTables.push_back(pDPObj);
+    return true;
 }
 
 bool ScDPCollection::HasDPTable(SCCOL nCol, SCROW nRow, SCTAB nTab) const
@@ -2654,13 +2683,13 @@ ScDPTableDataCache* ScDPCollection::GetDPObjectCache( long nID )
 ScDPTableDataCache* ScDPCollection::GetUsedDPObjectCache ( const ScRange& rRange )
 {
     ScDPTableDataCache* pCache = NULL;
-    for ( short i=nCount-1; i>=0 ; i--)
+    for (size_t i=maTables.size(); i > 0 ; --i)
     {
-        if ( const ScSheetSourceDesc* pUsedSheetDesc = (*this)[i]->GetSheetDesc() )
+        if ( const ScSheetSourceDesc* pUsedSheetDesc = maTables[i-1].GetSheetDesc() )
             if ( rRange == pUsedSheetDesc->aSourceRange )
             {
-                long nID = (*this)[i]->GetCacheId();
-                if ( nID >= 0  )
+                long nID = maTables[i-1].GetCacheId();
+                if ( nID >= 0 )
                     pCache= GetDPObjectCache( nID );
                 if ( pCache )
                     return pCache;
