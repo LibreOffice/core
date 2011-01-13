@@ -69,8 +69,8 @@ class EDITENG_DLLPUBLIC TextRanger
     sal_uInt16 nLower;      // Abstand Text-Kontur
     sal_uInt32 nPointCount; // Anzahl der Polygonpunkte
     sal_Bool bSimple : 1;   // Nur Aussenkante
-    sal_Bool bInner  : 1;   // TRUE: Objekt beschriften (EditEngine);
-                        // FALSE: Objekt umfliessen (StarWriter);
+    sal_Bool bInner  : 1;   // sal_True: Objekt beschriften (EditEngine);
+                        // sal_False: Objekt umfliessen (StarWriter);
     sal_Bool bVertical :1;  // for vertical writing mode
     sal_Bool bFlag3 :1;
     sal_Bool bFlag4 :1;

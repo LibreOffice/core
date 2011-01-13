@@ -44,7 +44,7 @@
 
 #include <svl/srchitem.hxx>
 
-#define _SVSTDARR_USHORTS
+#define _SVSTDARR_sal_uIt16S
 #include <svl/svstdarr.hxx>
 
 #include <impedit.hxx>
@@ -146,10 +146,10 @@ LanguageType lcl_CheckLanguage(
         lang::Locale a3( SvxCreateLocale( aLangList[3] ) );
 #endif
 
-        INT32   nCount = sizeof(aLangList) / sizeof(aLangList[0]);
-        for (INT32 i = 0;  i < nCount;  i++)
+        sal_Int32   nCount = sizeof(aLangList) / sizeof(aLangList[0]);
+        for (sal_Int32 i = 0;  i < nCount;  i++)
         {
-            INT16 nTmpLang = aLangList[i];
+            sal_Int16 nTmpLang = aLangList[i];
             if (nTmpLang != LANGUAGE_NONE  &&  nTmpLang != LANGUAGE_DONTKNOW)
             {
                 if (xSpell->hasLanguage( nTmpLang ) &&
@@ -293,7 +293,7 @@ void EditView::DeleteSelected()
     pImpEditView->DeleteSelected();
 }
 
-USHORT EditView::GetSelectedScriptType() const
+sal_uInt16 EditView::GetSelectedScriptType() const
 {
     DBG_CHKTHIS( EditView, 0 );
     DBG_CHKOBJ( pImpEditView->pEditEngine, EditEngine, 0 );
@@ -478,7 +478,7 @@ void EditView::HideCursor()
     pImpEditView->GetCursor()->Hide();
 }
 
-Pair EditView::Scroll( long ndX, long ndY, BYTE nRangeCheck )
+Pair EditView::Scroll( long ndX, long ndY, sal_uInt8 nRangeCheck )
 {
     DBG_CHKTHIS( EditView, 0 );
     DBG_CHKOBJ( pImpEditView->pEditEngine, EditEngine, 0 );
@@ -580,7 +580,7 @@ void EditView::Redo()
     PIMPEE->Redo( this );
 }
 
-ULONG EditView::Read( SvStream& rInput, const String& rBaseURL, EETextFormat eFormat, sal_Bool bSelect, SvKeyValueIterator* pHTTPHeaderAttrs )
+sal_uLong EditView::Read( SvStream& rInput, const String& rBaseURL, EETextFormat eFormat, sal_Bool bSelect, SvKeyValueIterator* pHTTPHeaderAttrs )
 {
     DBG_CHKTHIS( EditView, 0 );
     DBG_CHKOBJ( pImpEditView->pEditEngine, EditEngine, 0 );
@@ -604,7 +604,7 @@ ULONG EditView::Read( SvStream& rInput, const String& rBaseURL, EETextFormat eFo
 }
 
 #ifndef SVX_LIGHT
-ULONG EditView::Write( SvStream& rOutput, EETextFormat eFormat )
+sal_uLong EditView::Write( SvStream& rOutput, EETextFormat eFormat )
 {
     DBG_CHKTHIS( EditView, 0 );
     DBG_CHKOBJ( pImpEditView->pEditEngine, EditEngine, 0 );
@@ -737,7 +737,7 @@ void EditView::MoveParagraphs( long nDiff )
         nDest++;
     DBG_ASSERT( ( nDest >= 0 ) && ( nDest <= pImpEditView->pEditEngine->GetParagraphCount() ), "MoveParagraphs - wrong Parameters!" );
     MoveParagraphs( aRange,
-        sal::static_int_cast< USHORT >( nDest ) );
+        sal::static_int_cast< sal_uInt16 >( nDest ) );
 }
 
 void EditView::SetBackgroundColor( const Color& rColor )
@@ -788,7 +788,7 @@ void EditView::InsertText( const EditTextObject& rTextObject )
     PIMPEE->FormatAndUpdate( this );
 }
 
-void EditView::InsertText( ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable > xDataObj, const String& rBaseURL, BOOL bUseSpecial )
+void EditView::InsertText( ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable > xDataObj, const String& rBaseURL, sal_Bool bUseSpecial )
 {
     DBG_CHKTHIS( EditView, 0 );
     DBG_CHKOBJ( pImpEditView->pEditEngine, EditEngine, 0 );
@@ -805,7 +805,7 @@ void EditView::InsertText( ::com::sun::star::uno::Reference< ::com::sun::star::d
 
 sal_Bool EditView::Drop( const DropEvent& )
 {
-    return FALSE;
+    return sal_False;
 }
 
 ESelection EditView::GetDropPos()
@@ -816,7 +816,7 @@ ESelection EditView::GetDropPos()
 
 sal_Bool EditView::QueryDrop( DropEvent& )
 {
-    return FALSE;
+    return sal_False;
 }
 
 void EditView::SetEditEngineUpdateMode( sal_Bool bUpdate )
@@ -968,7 +968,7 @@ EESpellState EditView::StartThesaurus()
 
 void EditView::StartTextConversion(
         LanguageType nSrcLang, LanguageType nDestLang, const Font *pDestFont,
-        INT32 nOptions, BOOL bIsInteractive, BOOL bMultipleDoc )
+        sal_Int32 nOptions, sal_Bool bIsInteractive, sal_Bool bMultipleDoc )
 {
 #ifdef SVX_LIGHT
 #else
@@ -1066,7 +1066,7 @@ void EditView::ExecuteSpellPopup( const Point& rPosPixel, Link* pCallBack )
         Sequence< PropertyValue > aPropVals(1);
         PropertyValue &rVal = aPropVals.getArray()[0];
         rVal.Name = OUString::createFromAscii( UPN_MAX_NUMBER_OF_SUGGESTIONS );
-        rVal.Value <<= (INT16) 7;
+        rVal.Value <<= (sal_Int16) 7;
         //
         // Gibt es Replace-Vorschlaege?
         Reference< XSpellAlternatives >  xSpellAlt =
@@ -1126,7 +1126,7 @@ void EditView::ExecuteSpellPopup( const Point& rPosPixel, Link* pCallBack )
         if (xSpellAlt.is())
             aAlt = xSpellAlt->getAlternatives();
         const OUString *pAlt = aAlt.getConstArray();
-        sal_uInt16 nWords = (USHORT) aAlt.getLength();
+        sal_uInt16 nWords = (sal_uInt16) aAlt.getLength();
         if ( nWords )
         {
             for ( sal_uInt16 nW = 0; nW < nWords; nW++ )
@@ -1158,7 +1158,7 @@ void EditView::ExecuteSpellPopup( const Point& rPosPixel, Link* pCallBack )
             aDics = xDicList->getDictionaries();
             pDic  = aDics.getConstArray();
             sal_uInt16 nCheckedLanguage = PIMPEE->GetLanguage( aPaM2 );
-            sal_uInt16 nDicCount = (USHORT)aDics.getLength();
+            sal_uInt16 nDicCount = (sal_uInt16)aDics.getLength();
             for (sal_uInt16 i = 0; i < nDicCount; i++)
             {
                 uno::Reference< linguistic2::XDictionary >  xDicTmp( pDic[i], uno::UNO_QUERY );
@@ -1174,7 +1174,7 @@ void EditView::ExecuteSpellPopup( const Point& rPosPixel, Link* pCallBack )
                 {
                     // the extra 1 is because of the (possible) external
                     // linguistic entry above
-                    USHORT nPos = MN_DICTSTART + i;
+                    sal_uInt16 nPos = MN_DICTSTART + i;
                     pInsertMenu->InsertItem( nPos, xDicTmp->getName() );
 
                     uno::Reference< lang::XServiceInfo > xSvcInfo( xDicTmp, uno::UNO_QUERY );
@@ -1480,7 +1480,7 @@ void EditView::ChangeFontSize( bool bGrow, const FontList* pFontList )
 
     if( aSel.HasRange() )
     {
-        for( USHORT nPara = aSel.nStartPara; nPara <= aSel.nEndPara; nPara++ )
+        for( sal_uInt16 nPara = aSel.nStartPara; nPara <= aSel.nEndPara; nPara++ )
         {
             SvUShorts aPortions;
             rEditEngine.GetPortions( nPara, aPortions );
@@ -1488,13 +1488,13 @@ void EditView::ChangeFontSize( bool bGrow, const FontList* pFontList )
             if( aPortions.Count() == 0 )
                 aPortions.Insert( rEditEngine.GetTextLen(nPara), 0 );
 
-            const USHORT nBeginPos = (nPara == aSel.nStartPara) ? aSel.nStartPos : 0;
-            const USHORT nEndPos = (nPara == aSel.nEndPara) ? aSel.nEndPos : 0xffff;
+            const sal_uInt16 nBeginPos = (nPara == aSel.nStartPara) ? aSel.nStartPos : 0;
+            const sal_uInt16 nEndPos = (nPara == aSel.nEndPara) ? aSel.nEndPos : 0xffff;
 
-            for ( USHORT nPos = 0; nPos < aPortions.Count(); ++nPos )
+            for ( sal_uInt16 nPos = 0; nPos < aPortions.Count(); ++nPos )
             {
-                USHORT nPortionEnd   = aPortions.GetObject( nPos );
-                USHORT nPortionStart = nPos > 0 ? aPortions.GetObject( nPos - 1 ) : 0;
+                sal_uInt16 nPortionEnd   = aPortions.GetObject( nPos );
+                sal_uInt16 nPortionStart = nPos > 0 ? aPortions.GetObject( nPos - 1 ) : 0;
 
                 if( (nPortionEnd < nBeginPos) || (nPortionStart > nEndPos) )
                     continue;

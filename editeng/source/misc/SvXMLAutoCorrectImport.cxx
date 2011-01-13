@@ -143,8 +143,8 @@ SvXMLWordContext::SvXMLWordContext(
         return;
 
 //  const International& rInter = Application::GetAppInternational();
-//  BOOL bOnlyTxt = COMPARE_EQUAL != rInter.Compare( sRight, sWrong, INTN_COMPARE_IGNORECASE );
-    BOOL bOnlyTxt = sRight != sWrong;
+//  sal_Bool bOnlyTxt = COMPARE_EQUAL != rInter.Compare( sRight, sWrong, INTN_COMPARE_IGNORECASE );
+    sal_Bool bOnlyTxt = sRight != sWrong;
     if( !bOnlyTxt )
     {
         String sLongSave( sRight );
@@ -152,7 +152,7 @@ SvXMLWordContext::SvXMLWordContext(
             sLongSave.Len() )
         {
             sRight = sLongSave;
-            bOnlyTxt = TRUE;
+            bOnlyTxt = sal_True;
         }
     }
     SvxAutocorrWordPtr pNew = new SvxAutocorrWord( sWrong, sRight, bOnlyTxt );

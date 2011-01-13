@@ -59,7 +59,7 @@ class EDITENG_DLLPUBLIC SvxHyphenZoneItem : public SfxPoolItem
 public:
     TYPEINFO();
 
-    SvxHyphenZoneItem( const sal_Bool bHyph /*= FALSE*/,
+    SvxHyphenZoneItem( const sal_Bool bHyph /*= sal_False*/,
                        const sal_uInt16 nId  );
 
     // "pure virtual Methoden" vom SfxPoolItem

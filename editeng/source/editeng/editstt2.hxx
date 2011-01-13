@@ -36,16 +36,16 @@ class InternalEditStatus : public EditStatus
 public:
             InternalEditStatus() { ; }
 
-    void    TurnOnFlags( sal_uIntPtr nFlags )
+    void    TurnOnFlags( sal_uLong nFlags )
                 { nControlBits |= nFlags; }
 
-    void    TurnOffFlags( sal_uIntPtr nFlags )
+    void    TurnOffFlags( sal_uLong nFlags )
                 { nControlBits &= ~nFlags; }
 
-    void    TurnOnStatusBits( sal_uIntPtr nBits )
+    void    TurnOnStatusBits( sal_uLong nBits )
                 { nStatusBits |= nBits; }
 
-    void    TurnOffStatusBits( sal_uIntPtr nBits )
+    void    TurnOffStatusBits( sal_uLong nBits )
                 { nStatusBits &= ~nBits; }
 
 

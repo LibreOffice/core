@@ -51,7 +51,7 @@ class EDITENG_DLLPUBLIC SvxBlinkItem : public SfxBoolItem
 public:
     TYPEINFO();
 
-    SvxBlinkItem( const sal_Bool bBlink /*= FALSE*/, const sal_uInt16 nId  );
+    SvxBlinkItem( const sal_Bool bBlink /*= sal_False*/, const sal_uInt16 nId  );
 
     // "pure virtual Methoden" vom SfxPoolItem
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;

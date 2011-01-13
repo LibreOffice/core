@@ -64,7 +64,7 @@ ForbiddenCharacters SvxUnoForbiddenCharsTable::getForbiddenCharacters( const Loc
         throw RuntimeException();
 
     const LanguageType eLang = SvxLocaleToLanguage( rLocale );
-    const ForbiddenCharacters* pForbidden = mxForbiddenChars->GetForbiddenCharacters( eLang, FALSE );
+    const ForbiddenCharacters* pForbidden = mxForbiddenChars->GetForbiddenCharacters( eLang, sal_False );
     if(!pForbidden)
         throw NoSuchElementException();
 
@@ -80,7 +80,7 @@ sal_Bool SvxUnoForbiddenCharsTable::hasForbiddenCharacters( const Locale& rLocal
         return sal_False;
 
     const LanguageType eLang = SvxLocaleToLanguage( rLocale );
-    const ForbiddenCharacters* pForbidden = mxForbiddenChars->GetForbiddenCharacters( eLang, FALSE );
+    const ForbiddenCharacters* pForbidden = mxForbiddenChars->GetForbiddenCharacters( eLang, sal_False );
 
     return NULL != pForbidden;
 }
@@ -128,7 +128,7 @@ Sequence< Locale > SAL_CALL SvxUnoForbiddenCharsTable::getLocales()
 
         for( sal_Int32 nIndex = 0; nIndex < nCount; nIndex++ )
         {
-            const ULONG nLanguage = mxForbiddenChars->GetObjectKey( nIndex );
+            const sal_uLong nLanguage = mxForbiddenChars->GetObjectKey( nIndex );
             SvxLanguageToLocale ( *pLocales++, static_cast < LanguageType > (nLanguage) );
         }
     }

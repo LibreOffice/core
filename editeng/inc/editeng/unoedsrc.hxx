@@ -436,7 +436,7 @@ public:
         The depth to set on the given paragraph. The range is
         [0,n), where n is the maximal outline level.
 
-        @return TRUE, if depth could be successfully set. Reasons for
+        @return sal_True, if depth could be successfully set. Reasons for
         failure are e.g. the text does not support outline level
         (EditEngine), or the depth range is exceeded.
      */

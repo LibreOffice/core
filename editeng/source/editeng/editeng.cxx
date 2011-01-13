@@ -1340,7 +1340,7 @@ void EditEngine::SetText( const XubString& rText )
         pImpEditEngine->FormatAndUpdate();
 }
 
-sal_uIntPtr EditEngine::Read( SvStream& rInput, const String& rBaseURL, EETextFormat eFormat, SvKeyValueIterator* pHTTPHeaderAttrs /* = NULL */ )
+sal_uLong EditEngine::Read( SvStream& rInput, const String& rBaseURL, EETextFormat eFormat, SvKeyValueIterator* pHTTPHeaderAttrs /* = NULL */ )
 {
     DBG_CHKTHIS( EditEngine, 0 );
     sal_Bool bUndoEnabled = pImpEditEngine->IsUndoEnabled();
@@ -1352,7 +1352,7 @@ sal_uIntPtr EditEngine::Read( SvStream& rInput, const String& rBaseURL, EETextFo
     return rInput.GetError();
 }
 
-sal_uIntPtr EditEngine::Write( SvStream& rOutput, EETextFormat eFormat )
+sal_uLong EditEngine::Write( SvStream& rOutput, EETextFormat eFormat )
 {
     DBG_CHKTHIS( EditEngine, 0 );
     EditPaM aStartPaM( pImpEditEngine->GetEditDoc().GetStartPaM() );

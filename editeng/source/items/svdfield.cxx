@@ -51,14 +51,14 @@ int __EXPORT SdrMeasureField::operator==(const SvxFieldData& rSrc) const
 
 void __EXPORT SdrMeasureField::Load(SvPersistStream& rIn)
 {
-    UINT16 nFieldKind;
+    sal_uInt16 nFieldKind;
     rIn>>nFieldKind;
     eMeasureFieldKind=(SdrMeasureFieldKind)nFieldKind;
 }
 
 void __EXPORT SdrMeasureField::Save(SvPersistStream& rOut)
 {
-    rOut<<(UINT16)eMeasureFieldKind;
+    rOut<<(sal_uInt16)eMeasureFieldKind;
 }
 
 //////////////////////////////////////////////////////////////////////////////

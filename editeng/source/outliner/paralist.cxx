@@ -72,7 +72,7 @@ Paragraph::Paragraph( sal_Int16 nDDepth )
 
     nDepth = nDDepth;
     nFlags = 0;
-    bVisible = TRUE;
+    bVisible = sal_True;
 }
 
 Paragraph::Paragraph( const Paragraph& rPara )
@@ -90,7 +90,7 @@ Paragraph::Paragraph( const Paragraph& rPara )
 Paragraph::Paragraph( const ParagraphData& rData )
 : nFlags( 0 )
 , aBulSize( -1, -1)
-, bVisible( TRUE )
+, bVisible( sal_True )
 {
     DBG_CTOR( Paragraph, 0 );
 
@@ -118,11 +118,11 @@ void Paragraph::SetParaIsNumberingRestart( sal_Bool bParaIsNumberingRestart )
         mnNumberingStartValue = -1;
 }
 
-void ParagraphList::Clear( BOOL bDestroyParagraphs )
+void ParagraphList::Clear( sal_Bool bDestroyParagraphs )
 {
     if ( bDestroyParagraphs )
     {
-        for ( ULONG n = GetParagraphCount(); n; )
+        for ( sal_uLong n = GetParagraphCount(); n; )
         {
             Paragraph* pPara = GetParagraph( --n );
             delete pPara;
@@ -131,11 +131,11 @@ void ParagraphList::Clear( BOOL bDestroyParagraphs )
     List::Clear();
 }
 
-void ParagraphList::MoveParagraphs( ULONG nStart, ULONG nDest, ULONG _nCount )
+void ParagraphList::MoveParagraphs( sal_uLong nStart, sal_uLong nDest, sal_uLong _nCount )
 {
     if ( ( nDest < nStart ) || ( nDest >= ( nStart + _nCount ) ) )
     {
-        ULONG n;
+        sal_uLong n;
         ParagraphList aParas;
         for ( n = 0; n < _nCount; n++ )
         {
@@ -161,7 +161,7 @@ void ParagraphList::MoveParagraphs( ULONG nStart, ULONG nDest, ULONG _nCount )
 
 Paragraph* ParagraphList::NextVisible( Paragraph* pPara ) const
 {
-    ULONG n = GetAbsPos( pPara );
+    sal_uLong n = GetAbsPos( pPara );
 
     Paragraph* p = GetParagraph( ++n );
     while ( p && !p->IsVisible() )
@@ -172,7 +172,7 @@ Paragraph* ParagraphList::NextVisible( Paragraph* pPara ) const
 
 Paragraph* ParagraphList::PrevVisible( Paragraph* pPara ) const
 {
-    ULONG n = GetAbsPos( pPara );
+    sal_uLong n = GetAbsPos( pPara );
 
     Paragraph* p = n ? GetParagraph( --n ) : NULL;
     while ( p && !p->IsVisible() )
@@ -183,7 +183,7 @@ Paragraph* ParagraphList::PrevVisible( Paragraph* pPara ) const
 
 Paragraph* ParagraphList::LastVisible() const
 {
-    ULONG n = GetParagraphCount();
+    sal_uLong n = GetParagraphCount();
 
     Paragraph* p = n ? GetParagraph( --n ) : NULL;
     while ( p && !p->IsVisible() )
@@ -192,31 +192,31 @@ Paragraph* ParagraphList::LastVisible() const
     return p;
 }
 
-BOOL ParagraphList::HasChilds( Paragraph* pParagraph ) const
+sal_Bool ParagraphList::HasChilds( Paragraph* pParagraph ) const
 {
-    ULONG n = GetAbsPos( pParagraph );
+    sal_uLong n = GetAbsPos( pParagraph );
     Paragraph* pNext = GetParagraph( ++n );
-    return ( pNext && ( pNext->GetDepth() > pParagraph->GetDepth() ) ) ? TRUE : FALSE;
+    return ( pNext && ( pNext->GetDepth() > pParagraph->GetDepth() ) ) ? sal_True : sal_False;
 }
 
-BOOL ParagraphList::HasHiddenChilds( Paragraph* pParagraph ) const
+sal_Bool ParagraphList::HasHiddenChilds( Paragraph* pParagraph ) const
 {
-    ULONG n = GetAbsPos( pParagraph );
+    sal_uLong n = GetAbsPos( pParagraph );
     Paragraph* pNext = GetParagraph( ++n );
-    return ( pNext && ( pNext->GetDepth() > pParagraph->GetDepth() ) && !pNext->IsVisible() ) ? TRUE : FALSE;
+    return ( pNext && ( pNext->GetDepth() > pParagraph->GetDepth() ) && !pNext->IsVisible() ) ? sal_True : sal_False;
 }
 
-BOOL ParagraphList::HasVisibleChilds( Paragraph* pParagraph ) const
+sal_Bool ParagraphList::HasVisibleChilds( Paragraph* pParagraph ) const
 {
-    ULONG n = GetAbsPos( pParagraph );
+    sal_uLong n = GetAbsPos( pParagraph );
     Paragraph* pNext = GetParagraph( ++n );
-    return ( pNext && ( pNext->GetDepth() > pParagraph->GetDepth() ) && pNext->IsVisible() ) ? TRUE : FALSE;
+    return ( pNext && ( pNext->GetDepth() > pParagraph->GetDepth() ) && pNext->IsVisible() ) ? sal_True : sal_False;
 }
 
-ULONG ParagraphList::GetChildCount( Paragraph* pParent ) const
+sal_uLong ParagraphList::GetChildCount( Paragraph* pParent ) const
 {
-    ULONG nChildCount = 0;
-    ULONG n = GetAbsPos( pParent );
+    sal_uLong nChildCount = 0;
+    sal_uLong n = GetAbsPos( pParent );
     Paragraph* pPara = GetParagraph( ++n );
     while ( pPara && ( pPara->GetDepth() > pParent->GetDepth() ) )
     {
@@ -226,10 +226,10 @@ ULONG ParagraphList::GetChildCount( Paragraph* pParent ) const
     return nChildCount;
 }
 
-Paragraph* ParagraphList::GetParent( Paragraph* pParagraph /*, USHORT& rRelPos */ ) const
+Paragraph* ParagraphList::GetParent( Paragraph* pParagraph /*, sal_uInt16& rRelPos */ ) const
 {
     /* rRelPos = 0 */;
-    ULONG n = GetAbsPos( pParagraph );
+    sal_uLong n = GetAbsPos( pParagraph );
     Paragraph* pPrev = GetParagraph( --n );
     while ( pPrev && ( pPrev->GetDepth() >= pParagraph->GetDepth() ) )
     {
@@ -243,15 +243,15 @@ Paragraph* ParagraphList::GetParent( Paragraph* pParagraph /*, USHORT& rRelPos *
 
 void ParagraphList::Expand( Paragraph* pParent )
 {
-    ULONG nChildCount = GetChildCount( pParent );
-    ULONG nPos = GetAbsPos( pParent );
+    sal_uLong nChildCount = GetChildCount( pParent );
+    sal_uLong nPos = GetAbsPos( pParent );
 
-    for ( ULONG n = 1; n <= nChildCount; n++  )
+    for ( sal_uLong n = 1; n <= nChildCount; n++  )
     {
         Paragraph* pPara = GetParagraph( nPos+n );
         if ( !( pPara->IsVisible() ) )
         {
-            pPara->bVisible = TRUE;
+            pPara->bVisible = sal_True;
             aVisibleStateChangedHdl.Call( pPara );
         }
     }
@@ -259,25 +259,25 @@ void ParagraphList::Expand( Paragraph* pParent )
 
 void ParagraphList::Collapse( Paragraph* pParent )
 {
-    ULONG nChildCount = GetChildCount( pParent );
-    ULONG nPos = GetAbsPos( pParent );
+    sal_uLong nChildCount = GetChildCount( pParent );
+    sal_uLong nPos = GetAbsPos( pParent );
 
-    for ( ULONG n = 1; n <= nChildCount; n++  )
+    for ( sal_uLong n = 1; n <= nChildCount; n++  )
     {
         Paragraph* pPara = GetParagraph( nPos+n );
         if ( pPara->IsVisible() )
         {
-            pPara->bVisible = FALSE;
+            pPara->bVisible = sal_False;
             aVisibleStateChangedHdl.Call( pPara );
         }
     }
 }
 
-ULONG ParagraphList::GetVisPos( Paragraph* pPara )
+sal_uLong ParagraphList::GetVisPos( Paragraph* pPara )
 {
-    ULONG nVisPos = 0;
-    ULONG nPos = GetAbsPos( pPara );
-    for ( ULONG n = 0; n < nPos; n++ )
+    sal_uLong nVisPos = 0;
+    sal_uLong nPos = GetAbsPos( pPara );
+    for ( sal_uLong n = 0; n < nPos; n++ )
     {
         Paragraph* _pPara = GetParagraph( n );
         if ( _pPara->IsVisible() )

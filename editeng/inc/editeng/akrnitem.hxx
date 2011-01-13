@@ -50,7 +50,7 @@ class EDITENG_DLLPUBLIC SvxAutoKernItem : public SfxBoolItem
 public:
     TYPEINFO();
 
-    SvxAutoKernItem( const sal_Bool bAutoKern /*= FALSE*/,
+    SvxAutoKernItem( const sal_Bool bAutoKern /*= sal_False*/,
                      const sal_uInt16 nId );
 
     // "pure virtual Methoden" vom SfxPoolItem

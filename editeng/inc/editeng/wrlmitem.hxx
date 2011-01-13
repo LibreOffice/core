@@ -51,7 +51,7 @@ class EDITENG_DLLPUBLIC SvxWordLineModeItem : public SfxBoolItem
 public:
     TYPEINFO();
 
-    SvxWordLineModeItem( const sal_Bool bWordLineMode /*= FALSE*/,
+    SvxWordLineModeItem( const sal_Bool bWordLineMode /*= sal_False*/,
                      const sal_uInt16 nId  );
 
     // "pure virtual Methoden" vom SfxPoolItem

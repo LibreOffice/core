@@ -186,7 +186,7 @@ namespace editeng
     protected:
         void    createDialog();
 
-        /** continue with the conversion, return <TRUE/> if and only if the complete conversion is done
+        /** continue with the conversion, return <sal_True/> if and only if the complete conversion is done
             @param _bRepeatCurrentUnit
                 if <TRUE/>, an implNextConvertible will be called initially to advance to the next convertible.
                 if <FALSE/>, the method will initially work with the current convertible unit
@@ -237,7 +237,7 @@ namespace editeng
 
         /** determine the ConversionDirection for m_sCurrentPortion
             @return
-                <FALSE/> if and only if something went wrong
+                <sal_False/> if and only if something went wrong
         */
         bool        implGetConversionDirectionForCurrentPortion( HHC::ConversionDirection& rDirection );
 
@@ -686,7 +686,7 @@ namespace editeng
 
                         // determine if it's Hangul
                         CharClass aCharClassificaton( m_xORB, m_aSourceLocale );
-                        sal_Int16 nScript = aCharClassificaton.getScript( m_sCurrentPortion, sal::static_int_cast< USHORT >(nNextAsianScript) );
+                        sal_Int16 nScript = aCharClassificaton.getScript( m_sCurrentPortion, sal::static_int_cast< sal_uInt16 >(nNextAsianScript) );
                         if  (   ( UnicodeScript_kHangulJamo == nScript )
                             ||  ( UnicodeScript_kHangulCompatibilityJamo == nScript )
                             ||  ( UnicodeScript_kHangulSyllable == nScript )

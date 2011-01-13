@@ -50,7 +50,7 @@ class EDITENG_DLLPUBLIC SvxShadowedItem : public SfxBoolItem
 public:
     TYPEINFO();
 
-    SvxShadowedItem( const sal_Bool bShadowed /*= FALSE*/,
+    SvxShadowedItem( const sal_Bool bShadowed /*= sal_False*/,
                      const sal_uInt16 nId  );
 
     // "pure virtual Methoden" vom SfxPoolItem

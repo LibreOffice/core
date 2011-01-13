@@ -112,11 +112,11 @@ class XParaPortionList : public  XBaseParaPortionList
     sal_uIntPtr         nRefDevPtr;
     OutDevType  eRefDevType;
     MapMode     aRefMapMode;
-    sal_uIntPtr     nPaperWidth;
+    sal_uLong       nPaperWidth;
 
 
 public:
-            XParaPortionList( OutputDevice* pRefDev, sal_uIntPtr nPW ) :
+            XParaPortionList( OutputDevice* pRefDev, sal_uLong nPW ) :
                 aRefMapMode( pRefDev->GetMapMode() )
                 {
                     nRefDevPtr = (sal_uIntPtr)pRefDev; nPaperWidth = nPW;
@@ -124,7 +124,7 @@ public:
                 }
 
     sal_uIntPtr         GetRefDevPtr() const        { return nRefDevPtr; }
-    sal_uIntPtr         GetPaperWidth() const       { return nPaperWidth; }
+    sal_uLong           GetPaperWidth() const       { return nPaperWidth; }
     OutDevType      GetRefDevType() const       { return eRefDevType; }
     const MapMode&  GetRefMapMode() const       { return aRefMapMode; }
 };
@@ -138,7 +138,7 @@ struct LoadStoreTempInfos
     sal_Bool                    bSymbolParagraph_Store;
 
 
-    LoadStoreTempInfos() { bSymbolParagraph_Store = FALSE; hOldSymbolConv_Store = NULL; }
+    LoadStoreTempInfos() { bSymbolParagraph_Store = sal_False; hOldSymbolConv_Store = NULL; }
 };
 */
 
@@ -226,8 +226,8 @@ public:
     sal_uInt16                  GetUserType() const;
     void                    SetUserType( sal_uInt16 n );
 
-    sal_uIntPtr                 GetObjectSettings() const;
-    void                    SetObjectSettings( sal_uIntPtr n );
+    sal_uLong                   GetObjectSettings() const;
+    void                    SetObjectSettings( sal_uLong n );
 
     sal_Bool                    IsVertical() const;
     void                    SetVertical( sal_Bool b );

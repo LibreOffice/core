@@ -44,7 +44,7 @@ class EDITENG_DLLPUBLIC SvxCharHiddenItem : public SfxBoolItem
 public:
     TYPEINFO();
 
-    SvxCharHiddenItem( const sal_Bool bHidden /*= FALSE*/, const sal_uInt16 nId );
+    SvxCharHiddenItem( const sal_Bool bHidden /*= sal_False*/, const sal_uInt16 nId );
 
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,

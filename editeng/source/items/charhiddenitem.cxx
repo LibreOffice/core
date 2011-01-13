@@ -38,7 +38,7 @@ TYPEINIT1_FACTORY(SvxCharHiddenItem, SfxBoolItem, new SvxCharHiddenItem(sal_Fals
 /*-- 16.12.2003 15:24:25---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-SvxCharHiddenItem::SvxCharHiddenItem( const sal_Bool bHidden, const USHORT nId ) :
+SvxCharHiddenItem::SvxCharHiddenItem( const sal_Bool bHidden, const sal_uInt16 nId ) :
     SfxBoolItem( nId, bHidden )
 {
 }
@@ -68,7 +68,7 @@ SfxItemPresentation SvxCharHiddenItem::GetPresentation
         case SFX_ITEM_PRESENTATION_NAMELESS:
         case SFX_ITEM_PRESENTATION_COMPLETE:
         {
-            USHORT nId = RID_SVXITEMS_CHARHIDDEN_FALSE;
+            sal_uInt16 nId = RID_SVXITEMS_CHARHIDDEN_FALSE;
 
             if ( GetValue() )
                 nId = RID_SVXITEMS_CHARHIDDEN_TRUE;

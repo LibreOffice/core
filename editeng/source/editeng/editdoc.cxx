@@ -1363,7 +1363,7 @@ XubString EditDoc::GetSepStr( LineEnd eEnd )
 
 XubString EditDoc::GetText( LineEnd eEnd ) const
 {
-    sal_uIntPtr nLen = GetTextLen();
+    sal_uLong nLen = GetTextLen();
     sal_uInt16 nNodes = Count();
 
     String aSep = EditDoc::GetSepStr( eEnd );
@@ -1445,14 +1445,14 @@ XubString EditDoc::GetParaAsString( ContentNode* pNode, sal_uInt16 nStartPos, sa
     return aStr;
 }
 
-sal_uIntPtr EditDoc::GetTextLen() const
+sal_uLong EditDoc::GetTextLen() const
 {
-    sal_uIntPtr nLen = 0;
+    sal_uLong nLen = 0;
     for ( sal_uInt16 nNode = 0; nNode < Count(); nNode++ )
     {
         ContentNode* pNode = GetObject( nNode );
         nLen += pNode->Len();
-        // Felder k”nnen laenger sein als der Platzhalter im Node.
+        // Felder kï¿½nnen laenger sein als der Platzhalter im Node.
         const CharAttribArray& rAttrs = pNode->GetCharAttribs().GetAttribs();
         for ( sal_uInt16 nAttr = rAttrs.Count(); nAttr; )
         {
@@ -2229,7 +2229,7 @@ SvxFontTable::~SvxFontTable()
     }
 }
 
-sal_uIntPtr SvxFontTable::GetId( const SvxFontItem& rFontItem )
+sal_uLong SvxFontTable::GetId( const SvxFontItem& rFontItem )
 {
     SvxFontItem* pItem = First();
     while ( pItem )
@@ -2256,7 +2256,7 @@ SvxColorList::~SvxColorList()
     }
 }
 
-sal_uIntPtr SvxColorList::GetId( const SvxColorItem& rColorItem )
+sal_uLong SvxColorList::GetId( const SvxColorItem& rColorItem )
 {
     SvxColorItem* pItem = First();
     while ( pItem )

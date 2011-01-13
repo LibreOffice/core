@@ -148,7 +148,7 @@ public:
             SvxFontTable();
             ~SvxFontTable();
 
-    sal_uIntPtr GetId( const SvxFontItem& rFont );
+    sal_uLong   GetId( const SvxFontItem& rFont );
 };
 
 //  ----------------------------------------------------------------------
@@ -162,7 +162,7 @@ public:
             SvxColorList();
             ~SvxColorList();
 
-    sal_uIntPtr GetId( const SvxColorItem& rColor );
+    sal_uLong   GetId( const SvxColorItem& rColor );
 };
 
 //  ----------------------------------------------------------------------
@@ -455,7 +455,7 @@ private:
     sal_uInt16          nEndPortion;
     sal_uInt16          nHeight;    // Gesamthoehe der Zeile
     sal_uInt16          nTxtHeight; // Reine Texthoehe
-    sal_uInt16          nCrsrHeight;    // Bei Konturfluss hohe Zeilen => Cursor zu groá.
+    sal_uInt16          nCrsrHeight;    // Bei Konturfluss hohe Zeilen => Cursor zu groï¿½.
     sal_uInt16          nMaxAscent;
     sal_Bool            bHangingPunctuation;
     sal_Bool            bInvalid;   // fuer geschickte Formatierung
@@ -744,7 +744,7 @@ public:
     EditPaM         ConnectParagraphs( ContentNode* pLeft, ContentNode* pRight );
 
     String          GetText( LineEnd eEnd ) const;
-    sal_uIntPtr         GetTextLen() const;
+    sal_uLong           GetTextLen() const;
 
     XubString       GetParaAsString( sal_uInt16 nNode ) const;
     XubString       GetParaAsString( ContentNode* pNode, sal_uInt16 nStartPos = 0, sal_uInt16 nEndPos = 0xFFFF, sal_Bool bResolveFields = sal_True ) const;
