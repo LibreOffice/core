@@ -186,7 +186,7 @@ UUIInteractionHelper::handleRequest(
         HandleData aHD(rRequest);
         Link aLink(&aHD,handlerequest);
         pApp->PostUserEvent(aLink,this);
-        sal_uIntPtr locks = Application::ReleaseSolarMutex();
+        sal_uLong locks = Application::ReleaseSolarMutex();
         aHD.wait();
         Application::AcquireSolarMutex(locks);
         return aHD.bHandled;
@@ -247,7 +247,7 @@ UUIInteractionHelper::getStringFromRequest(
         HandleData aHD(rRequest);
         Link aLink(&aHD,getstringfromrequest);
         pApp->PostUserEvent(aLink,this);
-        sal_uIntPtr locks = Application::ReleaseSolarMutex();
+        sal_uLong locks = Application::ReleaseSolarMutex();
         aHD.wait();
         Application::AcquireSolarMutex(locks);
         return aHD.m_aResult;
