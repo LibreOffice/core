@@ -265,22 +265,21 @@ boolean SetupAppX::GetProfileSection( LPCTSTR pFileName, LPCTSTR pSection,
 {
     if ( !rSize || !*pRetBuf )
     {
-        rSize = 512;
+        rSize = 10000;
         *pRetBuf = new TCHAR[ rSize ];
     }
 
     DWORD nRet = GetPrivateProfileSection( pSection, *pRetBuf, rSize, pFileName );
 
-    if ( nRet && ( nRet + 2 > rSize ) ) // buffer was too small, retry with bigger one
+    while ( nRet && ( nRet + 2 == rSize ) ) // buffer was too small, retry until big enough
     {
-        if ( nRet < 32767 - 2 )
-        {
-            delete [] (*pRetBuf);
-            rSize = nRet + 2;
-            *pRetBuf = new TCHAR[ rSize ];
+        if (rSize > 1000000)
+            break;
+        delete [] (*pRetBuf);
+        rSize = rSize * 2;
+        *pRetBuf = new TCHAR[ rSize ];
 
-            nRet = GetPrivateProfileSection( pSection, *pRetBuf, rSize, pFileName );
-        }
+        nRet = GetPrivateProfileSection( pSection, *pRetBuf, rSize, pFileName );
     }
 
     if ( !nRet )
@@ -292,7 +291,7 @@ boolean SetupAppX::GetProfileSection( LPCTSTR pFileName, LPCTSTR pSection,
         Log( sBuf );
         return false;
     }
-    else if ( nRet + 2 > rSize )
+    else if ( nRet + 2 == rSize )
     {
         SetError( ERROR_OUTOFMEMORY );
         Log( TEXT( "ERROR: GetPrivateProfileSection() out of memory\r\n" ) );
