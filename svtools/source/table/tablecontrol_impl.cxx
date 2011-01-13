@@ -312,6 +312,20 @@ namespace svt { namespace table
         if  ( m_pInputHandler != m_pModel->getInputHandler() )
             return "input handler is not the model-provided one!";
 
+        // m_aSelectedRows should have reasonable content
+        {
+            if ( m_aSelectedRows.size() > m_pModel->getRowCount() )
+                return "there are more rows selected than actually exist";
+            for (   ::std::vector< RowPos >::const_iterator selRow = m_aSelectedRows.begin();
+                    selRow != m_aSelectedRows.end();
+                    ++selRow
+                )
+            {
+                if ( ( *selRow < 0 ) || ( *selRow >= m_pModel->getRowCount() ) )
+                    return "a non-existent row is selected";
+            }
+        }
+
         // m_nColHeaderHeightPixel consistent with the model's value?
         {
             TableMetrics nHeaderHeight = m_pModel->hasColumnHeaders() ? m_pModel->getColumnHeaderHeight() : 0;
