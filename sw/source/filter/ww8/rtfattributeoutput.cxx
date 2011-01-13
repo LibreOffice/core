@@ -1524,7 +1524,7 @@ void RtfAttributeOutput::OutputFlyFrame_Impl( const sw::Frame& rFrame, const Poi
             }
 
             if ( pGrfNode )
-                FlyFrameGraphic( dynamic_cast<const SwFlyFrmFmt*>( &rFrame.GetFrmFmt() ), *pGrfNode, rFrame.GetLayoutSize() );
+                FlyFrameGraphic( dynamic_cast<const SwFlyFrmFmt*>( &rFrame.GetFrmFmt() ), *pGrfNode);
             break;
         case sw::Frame::eDrawing:
             {
@@ -3359,7 +3359,7 @@ void RtfAttributeOutput::FlyFrameOLE( const SwFlyFrmFmt* pFlyFrmFmt, SwOLENode& 
     m_aRunText.append("}}}}");
 }
 
-void RtfAttributeOutput::FlyFrameGraphic( const SwFlyFrmFmt* pFlyFrmFmt, const SwGrfNode& rGrfNode, const Size& rSize )
+void RtfAttributeOutput::FlyFrameGraphic( const SwFlyFrmFmt* pFlyFrmFmt, const SwGrfNode& rGrfNode)
 {
     OSL_TRACE("%s", OSL_THIS_FUNC);
 
@@ -3418,8 +3418,12 @@ void RtfAttributeOutput::FlyFrameGraphic( const SwFlyFrmFmt* pFlyFrmFmt, const S
     //Get original size in twips
     Size aSize(sw::util::GetSwappedInSize(rGrfNode));
     Size aRendered(aSize);
-    aRendered.Width() = rSize.Width();
-    aRendered.Height() = rSize.Height();
+    if (pFlyFrmFmt)
+    {
+        const SwFmtFrmSize& rS = pFlyFrmFmt->GetFrmSize();
+        aRendered.Width() = rS.GetWidth();
+        aRendered.Height() = rS.GetHeight();
+    }
 
     /*
        If the graphic is not of type WMF then we will have to store two

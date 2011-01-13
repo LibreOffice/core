@@ -432,7 +432,7 @@ protected:
 private:
 
     /// Output graphic fly frames.
-    void FlyFrameGraphic( const SwFlyFrmFmt* pFlyFrmFmt, const SwGrfNode& rGrfNode, const Size& rSize );
+    void FlyFrameGraphic( const SwFlyFrmFmt* pFlyFrmFmt, const SwGrfNode& rGrfNode );
     void FlyFrameOLE( const SwFlyFrmFmt* pFlyFrmFmt, SwOLENode& rOLENode, const Size& rSize );
     void FlyFrameOLEData( SwOLENode& rOLENode );
 
