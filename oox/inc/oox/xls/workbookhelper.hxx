@@ -37,24 +37,21 @@ namespace com { namespace sun { namespace star {
     namespace container { class XNameAccess; }
     namespace container { class XNameContainer; }
     namespace lang { class XMultiServiceFactory; }
-    namespace awt { class XDevice; }
+    namespace sheet { class XDatabaseRange; }
+    namespace sheet { class XNamedRange; }
+    namespace sheet { class XSpreadsheet; }
+    namespace sheet { class XSpreadsheetDocument; }
+    namespace style { class XStyle; }
     namespace table { struct CellAddress; }
     namespace table { struct CellRangeAddress; }
     namespace table { class XCell; }
     namespace table { class XCellRange; }
-    namespace sheet { class XSpreadsheetDocument; }
-    namespace sheet { class XSpreadsheet; }
-    namespace sheet { class XNamedRanges; }
-    namespace sheet { class XNamedRange; }
-    namespace sheet { class XDatabaseRanges; }
-    namespace sheet { class XExternalDocLinks; }
-    namespace style { class XStyle; }
 } } }
 
 namespace oox {
     class AttributeList;
     class SegmentProgressBar;
-    class RecordInputStream;
+    class SequenceInputStream;
 }
 
 namespace oox { namespace core {
@@ -79,8 +76,8 @@ class ExcelBiffFilter;
 /** An enumeration for all supported spreadsheet filter types. */
 enum FilterType
 {
-    FILTER_OOX,         /// MS Excel OOXML (Office Open XML) or OOBIN.
-    FILTER_BIFF,        /// MS Excel BIFF (Binary Interchange File Format).
+    FILTER_OOXML,       /// MS Excel OOXML (Office Open XML) or BIFF12.
+    FILTER_BIFF,        /// MS Excel BIFF2-BIFF8 (Binary Interchange File Format).
     FILTER_UNKNOWN      /// Unknown filter type.
 };
 
@@ -89,31 +86,31 @@ enum FilterType
 /** Functor for case-insensitive string comparison, usable in maps etc. */
 struct IgnoreCaseCompare
 {
-    bool                operator()( const ::rtl::OUString& rName1, const ::rtl::OUString& rName2 ) const;
+    bool operator()( const ::rtl::OUString& rName1, const ::rtl::OUString& rName2 ) const;
 };
 
 // ============================================================================
 
-class WorkbookData;
-class WorkbookSettings;
-class ViewSettings;
-class WorksheetBuffer;
-class ThemeBuffer;
-class StylesBuffer;
-class SharedStringsBuffer;
-class ExternalLinkBuffer;
+class AddressConverter;
+class BiffCodecHelper;
+class ConnectionsBuffer;
 class DefinedNamesBuffer;
-class TableBuffer;
-class ScenarioBuffer;
-class WebQueryBuffer;
+class ExcelChartConverter;
+class ExternalLinkBuffer;
+class FormulaParser;
+class PageSettingsConverter;
 class PivotCacheBuffer;
 class PivotTableBuffer;
-class FormulaParser;
+class ScenarioBuffer;
+class SharedStringsBuffer;
+class StylesBuffer;
+class TableBuffer;
+class ThemeBuffer;
 class UnitConverter;
-class AddressConverter;
-class ExcelChartConverter;
-class PageSettingsConverter;
-class BiffCodecHelper;
+class ViewSettings;
+class WorkbookData;
+class WorkbookSettings;
+class WorksheetBuffer;
 
 /** Helper class to provice access to global workbook data.
 
@@ -163,21 +160,6 @@ public:
     /** Returns a reference to the service factory of the spreadsheet document model. */
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >
                         getDocumentFactory() const;
-    /** Returns the reference device of the document. */
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XDevice >
-                        getReferenceDevice() const;
-    /** Returns the container for defined names from the Calc document. */
-    ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XNamedRanges >
-                        getNamedRanges() const;
-    /** Returns the container for database ranges from the Calc document. */
-    ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XDatabaseRanges >
-                        getDatabaseRanges() const;
-    /** Returns the container for external documents from the Calc document. */
-    ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XExternalDocLinks >
-                        getExternalDocLinks() const;
-    /** Returns the container for DDE links from the Calc document. */
-    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >
-                        getDdeLinks() const;
 
     /** Returns a reference to the specified spreadsheet in the document model. */
     ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XSpreadsheet >
@@ -203,12 +185,21 @@ public:
                         getStyleObject( const ::rtl::OUString& rStyleName, bool bPageStyle ) const;
 
     /** Creates and returns a defined name on-the-fly in the Calc document.
-        The name will not be buffered in this defined names buffer.
+        The name will not be buffered in the global defined names buffer.
         @param orName  (in/out-parameter) Returns the resulting used name. */
     ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XNamedRange >
                         createNamedRangeObject(
                             ::rtl::OUString& orName,
                             sal_Int32 nNameFlags = 0 ) const;
+
+    /** Creates and returns a database range on-the-fly in the Calc document.
+        The range will not be buffered in the global table buffer.
+        @param orName  (in/out-parameter) Returns the resulting used name. */
+    ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XDatabaseRange >
+                        createDatabaseRangeObject(
+                            ::rtl::OUString& orName,
+                            const ::com::sun::star::table::CellRangeAddress& rRangeAddr ) const;
+
     /** Creates and returns a com.sun.star.style.Style object for cells or pages. */
     ::com::sun::star::uno::Reference< ::com::sun::star::style::XStyle >
                         createStyleObject(
@@ -237,8 +228,8 @@ public:
     TableBuffer&        getTables() const;
     /** Returns the scenarios collection. */
     ScenarioBuffer&     getScenarios() const;
-    /** Returns the web queries. */
-    WebQueryBuffer&     getWebQueries() const;
+    /** Returns the collection of external data connections. */
+    ConnectionsBuffer&  getConnections() const;
     /** Returns the collection of pivot caches. */
     PivotCacheBuffer&   getPivotCaches() const;
     /** Returns the collection of pivot tables. */
@@ -257,17 +248,17 @@ public:
     /** Returns the page and print settings converter. */
     PageSettingsConverter& getPageSettingsConverter() const;
 
-    // OOX specific (MUST NOT be called in BIFF filter) -----------------------
+    // OOXML/BIFF12 specific (MUST NOT be called in BIFF filter) --------------
 
-    /** Returns the base OOX filter object.
-        Must not be called, if current filter is not the OOX filter. */
+    /** Returns the base OOXML/BIFF12 filter object.
+        Must not be called, if current filter is not the OOXML/BIFF12 filter. */
     ::oox::core::XmlFilterBase& getOoxFilter() const;
 
     /** Imports a fragment using the passed fragment handler, which contains
         the full path to the fragment stream. */
     bool                importOoxFragment( const ::rtl::Reference< ::oox::core::FragmentHandler >& rxHandler );
 
-    // BIFF specific (MUST NOT be called in OOX filter) -----------------------
+    // BIFF2-BIFF8 specific (MUST NOT be called in OOXML/BIFF12 filter) -------
 
     /** Returns the base BIFF filter object. */
     ::oox::core::BinaryFilterBase& getBiffFilter() const;
