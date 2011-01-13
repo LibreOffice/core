@@ -52,7 +52,7 @@ namespace avmedia
 class MediaPlayer : public SfxChildWindow
 {
 public:
-                        MediaPlayer( Window*, USHORT, SfxBindings*, SfxChildWinInfo* );
+                        MediaPlayer( Window*, sal_uInt16, SfxBindings*, SfxChildWinInfo* );
                         ~MediaPlayer();
 
                         SFX_DECL_CHILDWINDOW( MediaPlayer );
