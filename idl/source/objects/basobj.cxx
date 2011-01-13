@@ -89,10 +89,10 @@ void SvMetaObject::WriteStars( SvStream & rOutStm )
 |*
 |*    Beschreibung
 *************************************************************************/
-sal_Bool SvMetaObject::TestAndSeekSpaceOnly( SvStream & rOutStm, sal_uIntPtr nBegPos )
+sal_Bool SvMetaObject::TestAndSeekSpaceOnly( SvStream & rOutStm, sal_uLong nBegPos )
 {
     // keine leeren Klammern schreiben
-    sal_uIntPtr nPos = rOutStm.Tell();
+    sal_uLong nPos = rOutStm.Tell();
     rOutStm.Seek( nBegPos );
     sal_Bool bOnlySpace = sal_True;
     while( bOnlySpace && rOutStm.Tell() < nPos )
@@ -118,7 +118,7 @@ sal_Bool SvMetaObject::TestAndSeekSpaceOnly( SvStream & rOutStm, sal_uIntPtr nBe
 void SvMetaObject::Back2Delemitter( SvStream & rOutStm )
 {
     // keine leeren Klammern schreiben
-    sal_uIntPtr nPos = rOutStm.Tell();
+    sal_uLong nPos = rOutStm.Tell();
     rOutStm.SeekRel( -1 );
     char c = 0;
     rOutStm >> c;
@@ -434,10 +434,10 @@ sal_Bool SvMetaName::ReadSvIdl( SvIdlDataBase & rBase, SvTokenStream & rInStm )
 void SvMetaName::WriteSvIdl( SvIdlDataBase & rBase, SvStream & rOutStm,
                              sal_uInt16 nTab )
 {
-    sal_uIntPtr nBeginPos = rOutStm.Tell();
+    sal_uLong nBeginPos = rOutStm.Tell();
     WriteTab( rOutStm, nTab );
     rOutStm << '[' << endl;
-    sal_uIntPtr nOldPos = rOutStm.Tell();
+    sal_uLong nOldPos = rOutStm.Tell();
     WriteAttributesSvIdl( rBase, rOutStm, nTab +1 );
 
     // keine leeren Klammern schreiben
@@ -477,14 +477,14 @@ void SvMetaName::Write( SvIdlDataBase & rBase, SvStream & rOutStm,
                            sal_uInt16 nTab,
                          WriteType nT, WriteAttribute nA )
 {
-    sal_uIntPtr nBeginPos = rOutStm.Tell();
+    sal_uLong nBeginPos = rOutStm.Tell();
     WriteTab( rOutStm, nTab );
     rOutStm << '[' << endl;
-    sal_uIntPtr nOldPos = rOutStm.Tell();
+    sal_uLong nOldPos = rOutStm.Tell();
     WriteAttributes( rBase, rOutStm, nTab +1, nT, nA );
 
     // keine leeren Klammern schreiben
-    sal_uIntPtr nPos = rOutStm.Tell();
+    sal_uLong nPos = rOutStm.Tell();
     rOutStm.Seek( nOldPos );
     sal_Bool bOnlySpace = sal_True;
     while( bOnlySpace && rOutStm.Tell() < nPos )

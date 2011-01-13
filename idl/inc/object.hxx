@@ -49,9 +49,9 @@ DECLARE_LIST( SvMetaClassList, SvMetaClass* )
 class SvULongs : public List
 {
 public:
-    void    Insert( sal_uIntPtr& rId, sal_uIntPtr nPos ) { sal_uIntPtr nId(rId ); List::Insert( (void*) nId, nPos ); }
-    void    Remove( sal_uIntPtr& rId ){ sal_uIntPtr nId(rId ); List::Remove( (void*) nId ); }
-    sal_uIntPtr   GetObject( sal_uIntPtr nPos ){ return (sal_uIntPtr) List::GetObject( nPos ); }
+    void    Insert( sal_uLong& rId, sal_uLong nPos ) { sal_uLong nId(rId ); List::Insert( (void*) nId, nPos ); }
+    void    Remove( sal_uLong& rId ){ sal_uLong nId(rId ); List::Remove( (void*) nId ); }
+    sal_uLong   GetObject( sal_uLong nPos ){ return (sal_uLong) List::GetObject( nPos ); }
 };
 
 /******************** class SvClassElement *******************************/

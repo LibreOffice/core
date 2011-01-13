@@ -267,8 +267,8 @@ void SvMetaAttribute::FillSbxObject( SbxInfo * pInfo, sal_uInt16 nSbxFlags )
     if( pBaseType->GetType() == TYPE_STRUCT )
     {
         const SvMetaAttributeMemberList & rList = pBaseType->GetAttrList();
-        sal_uIntPtr nCount = rList.Count();
-        for( sal_uIntPtr i = 0; i < nCount; i++ )
+        sal_uLong nCount = rList.Count();
+        for( sal_uLong i = 0; i < nCount; i++ )
             rList.GetObject( i )->FillSbxObject( pInfo, nSbxFlags );
     }
     else
@@ -303,8 +303,8 @@ void SvMetaAttribute::FillSbxObject( SvIdlDataBase & rBase,
             if ( GetSlotId().Len() )
                 rBase.aStructSlotId = GetSlotId();
             const SvMetaAttributeMemberList & rList = pBaseType->GetAttrList();
-            sal_uIntPtr nCount = rList.Count();
-            for( sal_uIntPtr i = 0; i < nCount; i++ )
+            sal_uLong nCount = rList.Count();
+            for( sal_uLong i = 0; i < nCount; i++ )
                 rList.GetObject( i )->FillSbxObject( rBase, pObj, bVariable );
             rBase.aStructSlotId = aSlotId;
         }
@@ -418,7 +418,7 @@ void SvMetaAttribute::WriteSvIdl
         rOutStm << ' ' << aSlotId.GetBuffer();
     if( pType->GetType() == TYPE_METHOD )
         pType->WriteMethodArgs( rBase, rOutStm, nTab, WRITE_IDL );
-    sal_uIntPtr nPos = rOutStm.Tell();
+    sal_uLong nPos = rOutStm.Tell();
     rOutStm << endl;
     SvMetaName::WriteSvIdl( rBase, rOutStm, nTab );
     TestAndSeekSpaceOnly( rOutStm, nPos );
@@ -529,8 +529,8 @@ void SvMetaAttribute::WriteParam( SvIdlDataBase & rBase,
         if( pBaseType->GetType() == TYPE_STRUCT )
         {
             const SvMetaAttributeMemberList & rList = pBaseType->GetAttrList();
-            sal_uIntPtr nCount = rList.Count();
-            for( sal_uIntPtr i = 0; i < nCount; i++ )
+            sal_uLong nCount = rList.Count();
+            for( sal_uLong i = 0; i < nCount; i++ )
             {
                 rList.GetObject( i )->WriteParam( rBase, rOutStm, nTab, nT );
                 if( i+1<nCount )
@@ -584,10 +584,10 @@ void SvMetaAttribute::WriteParam( SvIdlDataBase & rBase,
 |*
 |*    Beschreibung
 *************************************************************************/
-sal_uIntPtr SvMetaAttribute::MakeSlotValue( SvIdlDataBase & rBase, sal_Bool bVar ) const
+sal_uLong SvMetaAttribute::MakeSlotValue( SvIdlDataBase & rBase, sal_Bool bVar ) const
 {
      const SvNumberIdentifier & rId = GetSlotId();
-    sal_uIntPtr n = rId.GetValue();
+    sal_uLong n = rId.GetValue();
     if( rBase.aStructSlotId.Len() )
     {
         n = n << 20;
@@ -743,7 +743,7 @@ void SvMetaAttribute::WriteRecursiv_Impl( SvIdlDataBase & rBase,
                              WriteType nT, WriteAttribute nA )
 {
     const SvMetaAttributeMemberList & rList = GetType()->GetBaseType()->GetAttrList();
-    sal_uIntPtr nCount = rList.Count();
+    sal_uLong nCount = rList.Count();
 
     SvNumberIdentifier slotId = rBase.aStructSlotId;
     if ( GetSlotId().Len() )
@@ -754,7 +754,7 @@ void SvMetaAttribute::WriteRecursiv_Impl( SvIdlDataBase & rBase,
     if ( GetReadonly() )
         nA |= WA_READONLY;
 
-    for( sal_uIntPtr i = 0; i < nCount; i++ )
+    for( sal_uLong i = 0; i < nCount; i++ )
     {
         SvMetaAttribute *pAttr = rList.GetObject( i );
         if ( nT == WRITE_DOCU )
@@ -970,7 +970,7 @@ void SvMetaAttribute::Write( SvIdlDataBase & rBase, SvStream & rOutStm,
 |*
 |*    Beschreibung
 *************************************************************************/
-sal_uIntPtr SvMetaAttribute::MakeSfx( ByteString * pAttrArray )
+sal_uLong SvMetaAttribute::MakeSfx( ByteString * pAttrArray )
 {
     SvMetaType * pType = GetType();
     DBG_ASSERT( pType, "no type for attribute" );
@@ -1413,7 +1413,7 @@ void SvMetaType::FillSbxObject( SbxVariable * pObj, sal_Bool bVariable )
     {
         if( GetType() == TYPE_METHOD )
         {
-            sal_uIntPtr nCount = GetAttrCount();
+            sal_uLong nCount = GetAttrCount();
             if( nCount )
             {
                 SbxInfoRef xInfo = pObj->GetInfo();
@@ -1422,7 +1422,7 @@ void SvMetaType::FillSbxObject( SbxVariable * pObj, sal_Bool bVariable )
                     xInfo = new SbxInfo();
                     pObj->SetInfo( xInfo );
                 }
-                for( sal_uIntPtr n = nCount; n > 0; n-- )
+                for( sal_uLong n = nCount; n > 0; n-- )
                     pAttrList->GetObject( n -1 )->FillSbxObject( xInfo );
             }
         }
@@ -1563,7 +1563,7 @@ void SvMetaType::WriteSvIdl
     if( GetType() == TYPE_METHOD )
         WriteMethodArgs( rBase, rOutStm, nTab, WRITE_IDL );
 
-    sal_uIntPtr nOldPos = rOutStm.Tell();
+    sal_uLong nOldPos = rOutStm.Tell();
     rOutStm << endl;
     SvMetaExtern::WriteSvIdl( rBase, rOutStm, nTab );
     if( TestAndSeekSpaceOnly( rOutStm, nOldPos ) )
@@ -1890,15 +1890,15 @@ void SvMetaType::WriteAttributes( SvIdlDataBase & rBase, SvStream & rOutStm,
 |*
 |*    Beschreibung
 *************************************************************************/
-sal_uIntPtr SvMetaType::MakeSfx( ByteString * pAttrArray )
+sal_uLong SvMetaType::MakeSfx( ByteString * pAttrArray )
 {
-    sal_uIntPtr nC = 0;
+    sal_uLong nC = 0;
 
     if( GetBaseType()->GetType() == TYPE_STRUCT )
     {
-        sal_uIntPtr nAttrCount = GetAttrCount();
+        sal_uLong nAttrCount = GetAttrCount();
         // Die einzelnen Attribute schreiben
-        for( sal_uIntPtr n = 0; n < nAttrCount; n++ )
+        for( sal_uLong n = 0; n < nAttrCount; n++ )
         {
             nC += pAttrList->GetObject( n )->MakeSfx( pAttrArray );
             if( n +1 < nAttrCount )
@@ -1918,8 +1918,8 @@ void SvMetaType::WriteSfxItem(
 
     ByteString  aTypeName = "SfxType";
     ByteString  aAttrArray;
-    sal_uIntPtr nAttrCount = MakeSfx( &aAttrArray );
-    //sal_uIntPtr   nAttrCount = GetAttrCount();
+    sal_uLong   nAttrCount = MakeSfx( &aAttrArray );
+    //sal_uLong nAttrCount = GetAttrCount();
     ByteString  aAttrCount( ByteString::CreateFromInt32( nAttrCount ) );
     aTypeName += aAttrCount;
 
@@ -2232,9 +2232,9 @@ ByteString SvMetaType::GetParserString() const
 
     if( TYPE_METHOD == type || TYPE_STRUCT == type )
     {
-        sal_uIntPtr nAttrCount = GetAttrCount();
+        sal_uLong nAttrCount = GetAttrCount();
         // Die einzelnen Attribute schreiben
-        for( sal_uIntPtr n = 0; n < nAttrCount; n++ )
+        for( sal_uLong n = 0; n < nAttrCount; n++ )
         {
             SvMetaAttribute * pT = pAttrList->GetObject( n );
             aPStr += pT->GetType()->GetParserString();
@@ -2264,9 +2264,9 @@ void SvMetaType::WriteParamNames( SvIdlDataBase & rBase,
 
         if( TYPE_METHOD == type || TYPE_STRUCT == type )
         {
-            sal_uIntPtr nAttrCount = GetAttrCount();
+            sal_uLong nAttrCount = GetAttrCount();
             // Die einzelnen Attribute schreiben
-            for( sal_uIntPtr n = 0; n < nAttrCount; n++ )
+            for( sal_uLong n = 0; n < nAttrCount; n++ )
             {
                 SvMetaAttribute * pA = pAttrList->GetObject( n );
                 // Fuer Methoden ist rChief immer ""
@@ -2455,7 +2455,7 @@ void SvMetaTypeEnum::Save( SvPersistStream & rStm )
 sal_uInt16 SvMetaTypeEnum::GetMaxValue() const
 {
     sal_uInt16 nMax = 0;
-    for( sal_uIntPtr n = 0; n < aEnumValueList.Count(); n++ )
+    for( sal_uLong n = 0; n < aEnumValueList.Count(); n++ )
     {
         SvMetaEnumValue * pObj = aEnumValueList.GetObject( n );
         if( nMax < pObj->GetValue() )
@@ -2509,7 +2509,7 @@ void SvMetaTypeEnum::WriteContextSvIdl( SvIdlDataBase & rBase,
                                         sal_uInt16 nTab )
 {
     WriteTab( rOutStm, nTab +1 );
-    for( sal_uIntPtr n = 0; n < aEnumValueList.Count(); n++ )
+    for( sal_uLong n = 0; n < aEnumValueList.Count(); n++ )
     {
         aEnumValueList.GetObject( n )->WriteSvIdl( rBase, rOutStm, nTab );
         if( n +1 != aEnumValueList.Count() )
@@ -2580,7 +2580,7 @@ void SvMetaTypeEnum::WriteContext( SvIdlDataBase & rBase, SvStream & rOutStm,
                                  WriteType nT, WriteAttribute nA )
 {
     WriteTab( rOutStm, nTab +1 );
-    for( sal_uIntPtr n = 0; n < aEnumValueList.Count(); n++ )
+    for( sal_uLong n = 0; n < aEnumValueList.Count(); n++ )
     {
         aEnumValueList.GetObject( n )->Write( rBase, rOutStm, nTab +1, nT, nA );
 
@@ -2645,7 +2645,7 @@ ByteString SvMetaAttribute::Compare( SvMetaAttribute* pAttr )
 
             if ( aType->GetAttrCount() )
             {
-                sal_uIntPtr nCount = aType->GetAttrCount();
+                sal_uLong nCount = aType->GetAttrCount();
                 SvMetaAttributeMemberList& rList = aType->GetAttrList();
                 SvMetaAttributeMemberList& rOtherList = pAttr->GetType()->GetAttrList();
                 if ( pAttr->GetType()->GetAttrCount() != nCount )

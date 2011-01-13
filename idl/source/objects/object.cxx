@@ -179,7 +179,7 @@ void SvMetaClass::FillSbxMemberObject( SvIdlDataBase & rBase,
                                         sal_Bool bVariable )
 {
     // alle Attribute der Klasse schreiben
-    sal_uIntPtr n ;
+    sal_uLong n ;
     for( n = 0; n < aAttrList.Count(); n++ )
     {
         SvMetaAttribute * pAttr = aAttrList.GetObject( n );
@@ -387,7 +387,7 @@ void SvMetaClass::WriteContextSvIdl
 )
 {
     //SvMetaType::WriteContextSvIdl( rBase, rOutStm, nTab );
-    sal_uIntPtr n;
+    sal_uLong n;
     for( n = 0; n < aAttrList.Count(); n++ )
     {
         WriteTab( rOutStm, nTab );
@@ -416,7 +416,7 @@ void SvMetaClass::WriteContextSvIdl
 *************************************************************************/
 sal_Bool SvMetaClass::ReadSvIdl( SvIdlDataBase & rBase, SvTokenStream & rInStm )
 {
-    sal_uIntPtr nTokPos = rInStm.Tell();
+    sal_uLong nTokPos = rInStm.Tell();
     if( SvMetaType::ReadHeaderSvIdl( rBase, rInStm ) && GetType() == TYPE_CLASS )
     {
         sal_Bool bOk = sal_True;
@@ -458,7 +458,7 @@ sal_Bool SvMetaClass::TestAttribute( SvIdlDataBase & rBase, SvTokenStream & rInS
         DBG_ERROR( rAttr.GetSlotId().GetBuffer() );
     }
 
-    for( sal_uIntPtr n = 0; n < aAttrList.Count(); n++ )
+    for( sal_uLong n = 0; n < aAttrList.Count(); n++ )
     {
         SvMetaAttribute * pS = aAttrList.GetObject( n );
         if( pS->GetName() == rAttr.GetName() )
@@ -535,7 +535,7 @@ void SvMetaClass::WriteOdlMembers( ByteStringList & rSuperList,
                                        SvStream & rOutStm, sal_uInt16 nTab )
 {
     // alle Attribute schreiben
-    sal_uIntPtr n;
+    sal_uLong n;
     for( n = 0; n < aAttrList.Count(); n++ )
     {
         SvMetaAttribute * pAttr = aAttrList.GetObject( n );
@@ -655,7 +655,7 @@ void SvMetaClass::Write( SvIdlDataBase & rBase, SvStream & rOutStm,
             rOutStm << "</INTERFACE>" << endl << endl;
 
             // alle Attribute schreiben
-            sal_uIntPtr n;
+            sal_uLong n;
             for( n = 0; n < aAttrList.Count(); n++ )
             {
                 SvMetaAttribute * pAttr = aAttrList.GetObject( n );
@@ -686,7 +686,7 @@ sal_uInt16 SvMetaClass::WriteSlotParamArray( SvIdlDataBase & rBase,
                                         SvStream & rOutStm )
 {
     sal_uInt16 nCount = 0;
-    for( sal_uIntPtr n = 0; n < rSlotList.Count(); n++ )
+    for( sal_uLong n = 0; n < rSlotList.Count(); n++ )
     {
         SvSlotElement *pEle = rSlotList.GetObject( n );
         SvMetaSlot *pAttr = pEle->xSlot;
@@ -707,7 +707,7 @@ sal_uInt16 SvMetaClass::WriteSlots( const ByteString & rShellName,
                                 SvStream & rOutStm )
 {
     sal_uInt16 nSCount = 0;
-    for( sal_uIntPtr n = 0; n < rSlotList.Count(); n++ )
+    for( sal_uLong n = 0; n < rSlotList.Count(); n++ )
     {
         rSlotList.Seek(n);
         SvSlotElement * pEle = rSlotList.GetCurObject();
@@ -736,12 +736,12 @@ void SvMetaClass::InsertSlots( SvSlotElementList& rList, SvULongs& rSuperList,
     rClassList.Insert(this, LIST_APPEND);
 
     // alle direkten Attribute schreiben
-    sal_uIntPtr n;
+    sal_uLong n;
     for( n = 0; n < aAttrList.Count(); n++ )
     {
         SvMetaAttribute * pAttr = aAttrList.GetObject( n );
 
-        sal_uIntPtr nId = pAttr->GetSlotId().GetValue();
+        sal_uLong nId = pAttr->GetSlotId().GetValue();
         sal_uInt16 nPos;
         for ( nPos=0; nPos < rSuperList.Count(); nPos++ )
         {
@@ -800,7 +800,7 @@ void SvMetaClass::FillClasses( SvMetaClassList & rList )
         rList.Insert(this, LIST_APPEND);
 
         // Meine Imports
-        for( sal_uIntPtr n = 0; n < aClassList.Count(); n++ )
+        for( sal_uLong n = 0; n < aClassList.Count(); n++ )
         {
             SvClassElement * pEle = aClassList.GetObject( n );
             SvMetaClass * pCl = pEle->GetClass();
@@ -825,7 +825,7 @@ void SvMetaClass::WriteSlotStubs( const ByteString & rShellName,
                                 SvStream & rOutStm )
 {
     // alle Attribute schreiben
-    for( sal_uIntPtr n = 0; n < rSlotList.Count(); n++ )
+    for( sal_uLong n = 0; n < rSlotList.Count(); n++ )
     {
         SvSlotElement *pEle = rSlotList.GetObject( n );
         SvMetaSlot *pAttr = pEle->xSlot;
@@ -876,7 +876,7 @@ void SvMetaClass::WriteSfx( SvIdlDataBase & rBase, SvStream & rOutStm )
     SvMetaClassList classList;
     SvSlotElementList aSlotList;
     InsertSlots(aSlotList, aSuperList, classList, ByteString(), rBase);
-    sal_uIntPtr n;
+    sal_uLong n;
     for ( n=0; n<aSlotList.Count(); n++ )
     {
         SvSlotElement *pEle = aSlotList.GetObject( n );
@@ -884,7 +884,7 @@ void SvMetaClass::WriteSfx( SvIdlDataBase & rBase, SvStream & rOutStm )
         pSlot->SetListPos(n);
     }
 
-    sal_uIntPtr nSlotCount = aSlotList.Count();
+    sal_uLong nSlotCount = aSlotList.Count();
 
     // alle Attribute schreiben
     sal_uInt16 nArgCount = WriteSlotParamArray( rBase, aSlotList, rOutStm );
@@ -944,7 +944,7 @@ void SvMetaClass::WriteSfx( SvIdlDataBase & rBase, SvStream & rOutStm )
 void SvMetaClass::WriteHelpIds( SvIdlDataBase & rBase, SvStream & rOutStm,
                             Table* pTable )
 {
-    for( sal_uIntPtr n=0; n<aAttrList.Count(); n++ )
+    for( sal_uLong n=0; n<aAttrList.Count(); n++ )
     {
         SvMetaAttribute * pAttr = aAttrList.GetObject( n );
         pAttr->WriteHelpId( rBase, rOutStm, pTable );
@@ -957,7 +957,7 @@ void SvMetaClass::WriteHelpIds( SvIdlDataBase & rBase, SvStream & rOutStm,
 void SvMetaClass::WriteSrc( SvIdlDataBase & rBase, SvStream & rOutStm,
                              Table * pTable )
 {
-    for( sal_uIntPtr n=0; n<aAttrList.Count(); n++ )
+    for( sal_uLong n=0; n<aAttrList.Count(); n++ )
     {
         SvMetaAttribute * pAttr = aAttrList.GetObject( n );
         pAttr->WriteSrc( rBase, rOutStm, pTable );

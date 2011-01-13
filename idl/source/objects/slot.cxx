@@ -1049,7 +1049,7 @@ void SvMetaSlot::Insert( SvSlotElementList& rList, const ByteString & rPrefix,
     sal_uInt16 nId = (sal_uInt16) GetSlotId().GetValue();
     sal_uInt16 nListCount = (sal_uInt16) rList.Count();
     sal_uInt16 nPos;
-    sal_uIntPtr m;  // for inner "for" loop
+    sal_uLong m;  // for inner "for" loop
 
     if ( !nListCount )
         nPos = 0;
@@ -1108,7 +1108,7 @@ void SvMetaSlot::Insert( SvSlotElementList& rList, const ByteString & rPrefix,
         // Den MasterSlot clonen
         SvMetaSlotRef xEnumSlot;
         SvMetaSlot *pFirstEnumSlot = NULL;
-        for( sal_uIntPtr n = 0; n < pEnum->Count(); n++ )
+        for( sal_uLong n = 0; n < pEnum->Count(); n++ )
         {
             // Die SlotId erzeugen
             SvMetaEnumValue *enumValue = pEnum->GetObject(n);
@@ -1135,7 +1135,7 @@ void SvMetaSlot::Insert( SvSlotElementList& rList, const ByteString & rPrefix,
             {
                 DBG_ERROR("Invalid EnumSlot!");
                 xEnumSlot = Clone();
-                sal_uIntPtr nValue;
+                sal_uLong nValue;
                 if ( rBase.FindId(aSId , &nValue) )
                 {
                     SvNumberIdentifier aId;
@@ -1163,7 +1163,7 @@ void SvMetaSlot::Insert( SvSlotElementList& rList, const ByteString & rPrefix,
         pLinkedSlot = pFirstEnumSlot;
 
         // Slaves untereinander verketten
-        rList.Seek((sal_uIntPtr)0);
+        rList.Seek((sal_uLong)0);
         xEnumSlot = pFirstEnumSlot;
         SvSlotElement *pEle;
         do
@@ -1483,7 +1483,7 @@ void SvMetaSlot::WriteSlot( const ByteString & rShellName, sal_uInt16 nCount,
                 pType = pMethod->GetType();
             else
                 pType = GetType();
-            sal_uIntPtr nSCount = pType->GetAttrCount();
+            sal_uLong nSCount = pType->GetAttrCount();
             rOutStm << ByteString::CreateFromInt32( nSCount ).GetBuffer() << "/*Count*/";
         }
         else
@@ -1549,7 +1549,7 @@ sal_uInt16 SvMetaSlot::WriteSlotParamArray( SvIdlDataBase & rBase, SvStream & rO
 
         const SvMetaAttributeMemberList & rList =
                     pType->GetAttrList();
-        for( sal_uIntPtr n = 0; n < rList.Count(); n++ )
+        for( sal_uLong n = 0; n < rList.Count(); n++ )
         {
             SvMetaAttribute * pPar  = rList.GetObject( n );
             SvMetaType * pPType     = pPar->GetType();
@@ -1603,7 +1603,7 @@ void SvMetaSlot::WriteSrc( SvIdlDataBase & rBase, SvStream & rOutStm,
     if (!GetToolBoxConfig() && !GetAccelConfig() && !GetMenuConfig() && !GetStatusBarConfig() )
         return;
 
-    sal_uIntPtr nSId = GetSlotId().GetValue();
+    sal_uLong nSId = GetSlotId().GetValue();
     if( !pTable->IsKeyValid( nSId ) )
     {
         pTable->Insert( nSId, this );
@@ -1630,7 +1630,7 @@ void SvMetaSlot::WriteSrc( SvIdlDataBase & rBase, SvStream & rOutStm,
     SvMetaTypeEnum * pEnum = PTR_CAST( SvMetaTypeEnum, GetType() );
     if( GetPseudoSlots() && pEnum )
     {
-        for( sal_uIntPtr n = 0; n < pEnum->Count(); n++ )
+        for( sal_uLong n = 0; n < pEnum->Count(); n++ )
         {
             ByteString aValName = pEnum->GetObject( n )->GetName();
             ByteString aSId( GetSlotId() );
@@ -1639,7 +1639,7 @@ void SvMetaSlot::WriteSrc( SvIdlDataBase & rBase, SvStream & rOutStm,
             aSId += '_';
             aSId += aValName.Copy( pEnum->GetPrefix().Len() );
 
-            sal_uIntPtr nSId2;
+            sal_uLong nSId2;
             sal_Bool bIdOk = sal_False;
             if( rBase.FindId( aSId, &nSId2 ) )
             {
@@ -1672,7 +1672,7 @@ void SvMetaSlot::WriteSrc( SvIdlDataBase & rBase, SvStream & rOutStm,
 void SvMetaSlot::WriteHelpId( SvIdlDataBase & rBase, SvStream & rOutStm,
                              Table * pTable )
 {
-    sal_uIntPtr nSId = GetSlotId().GetValue();
+    sal_uLong nSId = GetSlotId().GetValue();
     if( !pTable->IsKeyValid( nSId ) )
     {
         pTable->Insert( nSId, this );
@@ -1682,7 +1682,7 @@ void SvMetaSlot::WriteHelpId( SvIdlDataBase & rBase, SvStream & rOutStm,
     SvMetaTypeEnum * pEnum = PTR_CAST( SvMetaTypeEnum, GetType() );
     if( GetPseudoSlots() && pEnum )
     {
-        for( sal_uIntPtr n = 0; n < pEnum->Count(); n++ )
+        for( sal_uLong n = 0; n < pEnum->Count(); n++ )
         {
             ByteString aValName = pEnum->GetObject( n )->GetName();
             ByteString aSId( GetSlotId() );
@@ -1691,7 +1691,7 @@ void SvMetaSlot::WriteHelpId( SvIdlDataBase & rBase, SvStream & rOutStm,
             aSId += '_';
             aSId += aValName.Copy( pEnum->GetPrefix().Len() );
 
-            sal_uIntPtr nSId2;
+            sal_uLong nSId2;
             sal_Bool bIdOk = sal_False;
             if( rBase.FindId( aSId, &nSId2 ) )
             {

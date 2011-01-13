@@ -88,7 +88,7 @@ char * SvChar::GetTable( CharSet nSource , CharSet nDest )
         pCharTable = new Table();
 
     sal_uInt8 * pSet;
-    pSet = (sal_uInt8 *)pCharTable->Get( ((sal_uIntPtr)nSource << 16) + (sal_uIntPtr)nDest );
+    pSet = (sal_uInt8 *)pCharTable->Get( ((sal_uLong)nSource << 16) + (sal_uLong)nDest );
 
     if( !pSet )
     {
@@ -100,7 +100,7 @@ char * SvChar::GetTable( CharSet nSource , CharSet nDest )
             if( c )
                 pSet[ i ] = (sal_uInt8)c;
         }
-        pCharTable->Insert( ((sal_uIntPtr)nSource << 16) + (sal_uIntPtr)nDest, pSet );
+        pCharTable->Insert( ((sal_uLong)nSource << 16) + (sal_uLong)nDest, pSet );
     }
 
     return (char *)pSet;

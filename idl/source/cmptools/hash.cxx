@@ -34,7 +34,7 @@
 #include <stdio.h>
 #include <ctype.h>
 
-// ProgrammabhÑngige Includes.
+// ProgrammabhÔøΩngige Includes.
 #include <hash.hxx>
 #include <tools/debug.hxx>
 
@@ -73,8 +73,8 @@ SvHashTable::SvHashTable( sal_uInt32 nMaxEntries )
 SvHashTable::~SvHashTable()
 {
 #ifdef DOS_NIE
-    printf( "Maximum: %ld, FÅllung: %ld\n", (sal_uIntPtr)nMax, (sal_uIntPtr)nFill );
-    printf( "Anfragen: %ld, Versuche: %ld", (sal_uIntPtr)lAsk, (sal_uIntPtr)lTry );
+    printf( "Maximum: %ld, FÔøΩllung: %ld\n", (sal_uLong)nMax, (sal_uLong)nFill );
+    printf( "Anfragen: %ld, Versuche: %ld", (sal_uLong)lAsk, (sal_uLong)lTry );
     if( lTry != 0 )
         printf( ", V/E = %ld\n", lTry / lAsk );
 #endif

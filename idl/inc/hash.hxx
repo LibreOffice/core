@@ -63,7 +63,7 @@ class SvStringHashEntry : public SvRefBase
 friend class SvStringHashTable;
     ByteString  aName;
     sal_uInt32  nHashId;
-    sal_uIntPtr   nValue;
+    sal_uLong   nValue;
     sal_Bool    bHasId;
 public:
                     SvStringHashEntry() : bHasId( sal_False ) {;}
@@ -78,8 +78,8 @@ public:
     sal_Bool            HasId() const { return bHasId; }
     sal_uInt32          GetId() const { return nHashId; }
 
-    void            SetValue( sal_uIntPtr n ) { nValue = n; }
-    sal_uIntPtr           GetValue() const { return nValue; }
+    void            SetValue( sal_uLong n ) { nValue = n; }
+    sal_uLong           GetValue() const { return nValue; }
 
     sal_Bool            operator == ( const SvStringHashEntry & rRef )
                     { return nHashId == rRef.nHashId; }

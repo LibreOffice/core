@@ -264,7 +264,7 @@ SvCommand::SvCommand( int argc, char ** argv )
     StringList aList;
 
     if( ResponseFile( &aList, argc, argv ) )
-    for( sal_uIntPtr i = 1; i < aList.Count(); i++ )
+    for( sal_uLong i = 1; i < aList.Count(); i++ )
     {
         String aParam( *aList.GetObject( i ) );
         sal_Unicode aFirstChar( aParam.GetChar(0) );

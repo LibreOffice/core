@@ -54,7 +54,7 @@ protected:
 #ifdef IDL_COMPILER
     virtual void WriteCSource( SvIdlDataBase & rBase,
                                  SvStream & rOutStm, sal_Bool bSet );
-    sal_uIntPtr      MakeSlotValue( SvIdlDataBase & rBase, sal_Bool bVariable ) const;
+    sal_uLong        MakeSlotValue( SvIdlDataBase & rBase, sal_Bool bVariable ) const;
     virtual void WriteAttributes( SvIdlDataBase & rBase,
                                       SvStream & rOutStm, sal_uInt16 nTab,
                                         WriteType, WriteAttribute = 0 );
@@ -118,7 +118,7 @@ public:
                                           WriteType, WriteAttribute );
     virtual void        Write( SvIdlDataBase & rBase, SvStream & rOutStm, sal_uInt16 nTab,
                                   WriteType, WriteAttribute = 0 );
-    sal_uIntPtr             MakeSfx( ByteString * pAtrrArray );
+    sal_uLong               MakeSfx( ByteString * pAtrrArray );
     virtual void        Insert( SvSlotElementList&, const ByteString & rPrefix,
                                 SvIdlDataBase& );
     virtual void        WriteHelpId( SvIdlDataBase & rBase, SvStream & rOutStm,
@@ -188,7 +188,7 @@ public:
                         const ByteString & rBasicPostfix/*, SbxDataType nT = SbxEMPTY */);
 
     SvMetaAttributeMemberList & GetAttrList() const;
-    sal_uIntPtr             GetAttrCount() const
+    sal_uLong               GetAttrCount() const
                         {
                             return pAttrList ? pAttrList->Count() : 0L;
                         }
@@ -246,7 +246,7 @@ public:
     void                WriteOdlType( SvIdlDataBase & rBase, SvStream & rOutStm, sal_uInt16 nTab );
     void                AppendParserString (ByteString &rString);
 
-    sal_uIntPtr             MakeSfx( ByteString * pAtrrArray );
+    sal_uLong               MakeSfx( ByteString * pAtrrArray );
     virtual void        WriteSfx( SvIdlDataBase & rBase, SvStream & rOutStm );
     //sal_Bool              ReadTypePrefix( SvIdlDataBase &, SvTokenStream & rInStm );
     sal_Bool                ReadMethodArgs( SvIdlDataBase & rBase,
@@ -312,9 +312,9 @@ public:
             SvMetaTypeEnum();
 
     sal_uInt16              GetMaxValue() const;
-    sal_uIntPtr               Count() const { return aEnumValueList.Count(); }
+    sal_uLong               Count() const { return aEnumValueList.Count(); }
     const ByteString &      GetPrefix() const { return aPrefix; }
-    SvMetaEnumValue *   GetObject( sal_uIntPtr n ) const
+    SvMetaEnumValue *   GetObject( sal_uLong n ) const
                         { return aEnumValueList.GetObject( n ); }
 
 #ifdef IDL_COMPILER

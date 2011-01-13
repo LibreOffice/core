@@ -105,7 +105,7 @@ public:
 
 #ifdef IDL_COMPILER
     static void         WriteTab( SvStream & rOutStm, sal_uInt16 nTab );
-    static sal_Bool         TestAndSeekSpaceOnly( SvStream &, sal_uIntPtr nBegPos );
+    static sal_Bool         TestAndSeekSpaceOnly( SvStream &, sal_uLong nBegPos );
     static void         Back2Delemitter( SvStream & );
     static void         WriteStars( SvStream & );
 
@@ -136,7 +136,7 @@ public:
     SvMetaObject *  Pop() { return aList.Remove( aList.Count() -1 ); }
     SvMetaObject *  Top() const { return aList.GetObject( aList.Count() -1 ); }
     void            Clear() { aList.Clear(); }
-    sal_uIntPtr     Count() const { return aList.Count(); }
+    sal_uLong     Count() const { return aList.Count(); }
 
     SvMetaObject *  Get( TypeId nType )
                     {

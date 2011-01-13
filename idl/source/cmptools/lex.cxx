@@ -284,9 +284,9 @@ int SvTokenStream::GetNextChar()
 |*
 |*    Beschreibung
 *************************************************************************/
-sal_uIntPtr SvTokenStream::GetNumber()
+sal_uLong SvTokenStream::GetNumber()
 {
-    sal_uIntPtr   l = 0;
+    sal_uLong   l = 0;
     short   nLog = 10;
 
     if( '0' == c )
@@ -345,8 +345,8 @@ sal_Bool SvTokenStream::MakeToken( SvToken & rToken )
     }
     while( 0 == c && !IsEof() && ( SVSTREAM_OK == rInStream.GetError() ) );
 
-    sal_uIntPtr nLastLine       = nLine;
-    sal_uIntPtr nLastColumn = nColumn;
+    sal_uLong nLastLine     = nLine;
+    sal_uLong nLastColumn   = nColumn;
     // Kommentar
     if( '/' == c )
     {

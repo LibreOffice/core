@@ -135,14 +135,14 @@ void SvMetaModule::Save( SvPersistStream & rStm )
 
     // Compiler Daten schreiben
     sal_uInt16 nCmpLen = 0;
-    sal_uIntPtr nLenPos = rStm.Tell();
+    sal_uLong nLenPos = rStm.Tell();
     rStm << nCmpLen;
 #ifdef IDL_COMPILER
     rStm << aBeginName;
     rStm << aEndName;
     rStm << aNextName;
     // Laenge der Compiler Daten schreiben
-    sal_uIntPtr nPos = rStm.Tell();
+    sal_uLong nPos = rStm.Tell();
     rStm.Seek( nLenPos );
     rStm << (sal_uInt16)( nPos - nLenPos - sizeof( sal_uInt16 ) );
     rStm.Seek( nPos );
@@ -372,7 +372,7 @@ void SvMetaModule::WriteContextSvIdl( SvIdlDataBase & rBase,
                                       sal_uInt16 nTab )
 {
     SvMetaExtern::WriteContextSvIdl( rBase, rOutStm, nTab );
-    sal_uIntPtr n;
+    sal_uLong n;
     for( n = 0; n < aTypeList.Count(); n++ )
     {
         WriteTab( rOutStm, nTab );
@@ -464,7 +464,7 @@ void SvMetaModule::WriteSvIdl( SvIdlDataBase & rBase, SvStream & rOutStm,
 *************************************************************************/
 void SvMetaModule::WriteSfx( SvIdlDataBase & rBase, SvStream & rOutStm )
 {
-    for( sal_uIntPtr n = 0; n < aClassList.Count(); n++ )
+    for( sal_uLong n = 0; n < aClassList.Count(); n++ )
     {
         SvMetaClass * pClass = aClassList.GetObject( n );
         pClass->WriteSfx( rBase, rOutStm );
@@ -474,7 +474,7 @@ void SvMetaModule::WriteSfx( SvIdlDataBase & rBase, SvStream & rOutStm )
 void SvMetaModule::WriteHelpIds( SvIdlDataBase & rBase, SvStream & rOutStm,
                             Table* pTable )
 {
-    for( sal_uIntPtr n = 0; n < aClassList.Count(); n++ )
+    for( sal_uLong n = 0; n < aClassList.Count(); n++ )
     {
         SvMetaClass * pClass = aClassList.GetObject( n );
         pClass->WriteHelpIds( rBase, rOutStm, pTable );
@@ -506,7 +506,7 @@ void SvMetaModule::WriteAttributes( SvIdlDataBase & rBase,
 void SvMetaModule::WriteSbx( SvIdlDataBase & rBase, SvStream & rOutStm,
                                 SvNamePosList & rList )
 {
-    for( sal_uIntPtr n = 0; n < aClassList.Count(); n++ )
+    for( sal_uLong n = 0; n < aClassList.Count(); n++ )
     {
         SvMetaClass * pClass = aClassList.GetObject( n );
         if( !pClass->IsShell() && pClass->GetAutomation() )
@@ -547,7 +547,7 @@ void SvMetaModule::Write( SvIdlDataBase & rBase, SvStream & rOutStm,
         rOutStm << "importlib(\"STDOLE.TLB\");" << endl;
 
     /*
-        for( sal_uIntPtr n = 0; n < aTypeList.Count(); n++ )
+        for( sal_uLong n = 0; n < aTypeList.Count(); n++ )
         {
             SvMetaType * pType = aTypeList.GetObject( n );
             if( !pType ->Write( rBase, rOutStm, nTab +1, nT, nA ) )
@@ -555,11 +555,11 @@ void SvMetaModule::Write( SvIdlDataBase & rBase, SvStream & rOutStm,
         }
     */
         /*
-        for( sal_uIntPtr n = 0; n < rBase.GetModuleList().Count(); n++ )
+        for( sal_uLong n = 0; n < rBase.GetModuleList().Count(); n++ )
         {
             SvMetaModule * pModule = rBase.GetModuleList().GetObject( n );
             const SvMetaTypeMemberList &rTypeList = pModule->GetTypeList();
-            for( sal_uIntPtr n = 0; n < rTypeList.Count(); n++ )
+            for( sal_uLong n = 0; n < rTypeList.Count(); n++ )
             {
                 SvMetaType * pType = rTypeList.GetObject( n );
                 pType->Write( rBase, rOutStm, nTab +1, nT, nA );
@@ -567,7 +567,7 @@ void SvMetaModule::Write( SvIdlDataBase & rBase, SvStream & rOutStm,
         }
         */
 
-        for( sal_uIntPtr n = 0; n < aClassList.Count(); n++ )
+        for( sal_uLong n = 0; n < aClassList.Count(); n++ )
         {
             SvMetaClass * pClass = aClassList.GetObject( n );
             if( !pClass->IsShell() && pClass->GetAutomation() )
@@ -591,7 +591,7 @@ void SvMetaModule::Write( SvIdlDataBase & rBase, SvStream & rOutStm,
         rOutStm << "</MODULE>" << endl << endl;
 
         rOutStm << "<CLASSES>" << endl;
-        for( sal_uIntPtr n = 0; n < aClassList.Count(); n++ )
+        for( sal_uLong n = 0; n < aClassList.Count(); n++ )
         {
             SvMetaClass * pClass = aClassList.GetObject( n );
             if( !pClass->IsShell() )
@@ -607,7 +607,7 @@ void SvMetaModule::Write( SvIdlDataBase & rBase, SvStream & rOutStm,
                 {
                     rOutStm << " ( ";
 
-                    for( sal_uIntPtr m=0; m<rClassList.Count(); m++ )
+                    for( sal_uLong m=0; m<rClassList.Count(); m++ )
                     {
                         SvClassElement *pEle = rClassList.GetObject(m);
                         SvMetaClass *pCl = pEle->GetClass();
@@ -629,7 +629,7 @@ void SvMetaModule::Write( SvIdlDataBase & rBase, SvStream & rOutStm,
     case WRITE_C_SOURCE:
     case WRITE_C_HEADER:
     {
-        for( sal_uIntPtr n = 0; n < aClassList.Count(); n++ )
+        for( sal_uLong n = 0; n < aClassList.Count(); n++ )
         {
             SvMetaClass * pClass = aClassList.GetObject( n );
             if( !pClass->IsShell() /* && pClass->GetAutomation() */ )
@@ -652,7 +652,7 @@ void SvMetaModule::WriteSrc( SvIdlDataBase & rBase, SvStream & rOutStm,
 //  rOutStm << "#pragma CHARSET IBMPC" << endl;
     if( aSlotIdFile.Len() )
         rOutStm << "//#include <" << aSlotIdFile.GetBuffer() << '>' << endl;
-    for( sal_uIntPtr n = 0; n < aClassList.Count(); n++ )
+    for( sal_uLong n = 0; n < aClassList.Count(); n++ )
     {
         aClassList.GetObject( n )->WriteSrc( rBase, rOutStm, pTable );
     }
@@ -664,7 +664,7 @@ void SvMetaModule::WriteSrc( SvIdlDataBase & rBase, SvStream & rOutStm,
 void SvMetaModule::WriteHxx( SvIdlDataBase & rBase, SvStream & rOutStm,
                              sal_uInt16 nTab )
 {
-    for( sal_uIntPtr n = 0; n < aClassList.Count(); n++ )
+    for( sal_uLong n = 0; n < aClassList.Count(); n++ )
     {
         SvMetaClass * pClass = aClassList.GetObject( n );
         pClass->WriteHxx( rBase, rOutStm, nTab );
@@ -677,7 +677,7 @@ void SvMetaModule::WriteHxx( SvIdlDataBase & rBase, SvStream & rOutStm,
 void SvMetaModule::WriteCxx( SvIdlDataBase & rBase, SvStream & rOutStm,
                              sal_uInt16 nTab )
 {
-    for( sal_uIntPtr n = 0; n < aClassList.Count(); n++ )
+    for( sal_uLong n = 0; n < aClassList.Count(); n++ )
     {
         SvMetaClass * pClass = aClassList.GetObject( n );
         pClass->WriteCxx( rBase, rOutStm, nTab );

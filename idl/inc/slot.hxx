@@ -75,7 +75,7 @@ class SvMetaSlot : public SvMetaAttribute
     SvString        aDisableFlags;
     SvMetaSlot*     pLinkedSlot;
     SvMetaSlot*     pNextSlot;
-    sal_uIntPtr         nListPos;
+    sal_uLong           nListPos;
     SvMetaEnumValue* pEnumValue;
     SvString    aUnoName;
 
@@ -234,9 +234,9 @@ public:
                         { return pLinkedSlot; }
     SvMetaSlot*         GetNextSlot() const
                         { return pNextSlot; }
-    sal_uIntPtr             GetListPos() const
+    sal_uLong               GetListPos() const
                         { return nListPos; }
-    void                SetListPos(sal_uIntPtr n)
+    void                SetListPos(sal_uLong n)
                         { nListPos = n; }
     void                ResetSlotPointer()
                         { pNextSlot = pLinkedSlot = 0; }

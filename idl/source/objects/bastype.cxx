@@ -41,7 +41,7 @@
 #ifdef IDL_COMPILER
 /************************************************************************/
 static sal_Bool ReadRangeSvIdl( SvStringHashEntry * pName, SvTokenStream & rInStm,
-                            sal_uIntPtr nMin, sal_uIntPtr nMax, sal_uIntPtr* pValue )
+                            sal_uLong nMin, sal_uLong nMax, sal_uLong* pValue )
 {
     sal_uInt32 nTokPos = rInStm.Tell();
     SvToken * pTok = rInStm.GetToken_Next();
@@ -53,7 +53,7 @@ static sal_Bool ReadRangeSvIdl( SvStringHashEntry * pName, SvTokenStream & rInSt
             pTok = rInStm.GetToken_Next();
             if( pTok->IsInteger() )
             {
-                sal_uIntPtr n = pTok->GetNumber();
+                sal_uLong n = pTok->GetNumber();
                 if ( n >= nMin && n <= nMax )
                 {
                     *pValue = n;
@@ -328,7 +328,7 @@ sal_Bool SvNumberIdentifier::ReadSvIdl( SvIdlDataBase & rBase,
 {
     if( SvIdentifier::ReadSvIdl( pName, rInStm ) )
     {
-        sal_uIntPtr n;
+        sal_uLong n;
         if( rBase.FindId( *this, &n ) )
         {
             nValue = n;
@@ -361,7 +361,7 @@ sal_Bool SvNumberIdentifier::ReadSvIdl( SvIdlDataBase & rBase,
 
     if( pTok->IsIdentifier() )
     {
-        sal_uIntPtr n;
+        sal_uLong n;
         if( rBase.FindId( pTok->GetString(), &n ) )
         {
             *(ByteString *)this = pTok->GetString();
@@ -568,7 +568,7 @@ sal_Bool SvUUId::WriteSvIdl( SvStream & rOutStm )
 *************************************************************************/
 sal_Bool SvVersion::ReadSvIdl( SvTokenStream & rInStm )
 {
-    sal_uIntPtr n = 0;
+    sal_uLong n = 0;
 
     sal_uInt32 nTokPos = rInStm.Tell();
     if( ReadRangeSvIdl( SvHash_Version(), rInStm, 0 , 0xFFFF, &n ) )

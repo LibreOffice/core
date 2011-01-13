@@ -44,12 +44,12 @@ class BigInt;
 class SvToken
 {
 friend class SvTokenStream;
-    sal_uIntPtr                 nLine, nColumn;
+    sal_uLong                   nLine, nColumn;
     SVTOKEN_ENUM            nType;
     ByteString                  aString;
     union
     {
-        sal_uIntPtr             nLong;
+        sal_uLong               nLong;
         sal_Bool                bBool;
         char                cChar;
 //      SvRttiBase *        pComplexObj;
@@ -58,7 +58,7 @@ friend class SvTokenStream;
 public:
             SvToken();
             SvToken( const SvToken & rObj );
-            SvToken( sal_uIntPtr n );
+            SvToken( sal_uLong n );
             SvToken( SVTOKEN_ENUM nTypeP, sal_Bool b );
             SvToken( char c );
             SvToken( SVTOKEN_ENUM nTypeP, const ByteString & rStr );
@@ -70,11 +70,11 @@ public:
     ByteString          GetTokenAsString() const;
     SVTOKEN_ENUM    GetType() const { return nType; }
 
-    void        SetLine( sal_uIntPtr nLineP )     { nLine = nLineP;       }
-    sal_uIntPtr       GetLine() const             { return nLine;         }
+    void        SetLine( sal_uLong nLineP )     { nLine = nLineP;       }
+    sal_uLong       GetLine() const             { return nLine;         }
 
-    void        SetColumn( sal_uIntPtr nColumnP ) { nColumn = nColumnP;   }
-    sal_uIntPtr       GetColumn() const           { return nColumn;       }
+    void        SetColumn( sal_uLong nColumnP ) { nColumn = nColumnP;   }
+    sal_uLong       GetColumn() const           { return nColumn;       }
 
     sal_Bool        IsEmpty() const     { return nType == SVTOKEN_EMPTY; }
     sal_Bool        IsComment() const   { return nType == SVTOKEN_COMMENT; }
@@ -98,7 +98,7 @@ public:
                         ? pHash->GetName()
                         : aString;
                 }
-    sal_uIntPtr       GetNumber() const       { return nLong;         }
+    sal_uLong       GetNumber() const       { return nLong;         }
     sal_Bool        GetBool() const         { return bBool;         }
     char        GetChar() const         { return cChar;         }
 //    SvRttiBase *GetObject() const       { return pComplexObj;   }
@@ -115,7 +115,7 @@ public:
 inline SvToken::SvToken()
     : nType( SVTOKEN_EMPTY ) {}
 
-inline SvToken::SvToken( sal_uIntPtr n )
+inline SvToken::SvToken( sal_uLong n )
     : nType( SVTOKEN_INTEGER ), nLong( n ) {}
 
 inline SvToken::SvToken( SVTOKEN_ENUM nTypeP, sal_Bool b )
@@ -141,7 +141,7 @@ DECLARE_LIST( SvTokenList, SvToken * )
 /******************** class SvTokenStream ********************************/
 class SvTokenStream
 {
-    sal_uIntPtr       nLine, nColumn;
+    sal_uLong       nLine, nColumn;
     int         nBufPos;
     int         c;          // naechstes Zeichen
     CharSet     nCharSet;
@@ -149,7 +149,7 @@ class SvTokenStream
     sal_uInt16      nTabSize;   // Tabulator Laenge
     ByteString      aStrTrue;
     ByteString      aStrFalse;
-    sal_uIntPtr     nMaxPos;
+    sal_uLong       nMaxPos;
 
     SvFileStream *  pInStream;
     SvStream &      rInStream;
@@ -167,12 +167,12 @@ class SvTokenStream
                     }
 
     void            FillTokenList();
-    sal_uIntPtr         GetNumber();
+    sal_uLong           GetNumber();
     sal_Bool            MakeToken( SvToken & );
     sal_Bool            IsEof() const { return rInStream.IsEof(); }
     void            SetMax()
                     {
-                        sal_uIntPtr n = Tell();
+                        sal_uLong n = Tell();
                         if( n > nMaxPos )
                             nMaxPos = n;
                     }

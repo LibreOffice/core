@@ -40,8 +40,8 @@
 sal_Bool FileMove_Impl( const String & rFile1, const String & rFile2, sal_Bool bImmerVerschieben )
 {
     //printf( "Move from %s to %s\n", rFile2.GetStr(), rFile1.GetStr() );
-    sal_uIntPtr nC1 = 0;
-    sal_uIntPtr nC2 = 1;
+    sal_uLong nC1 = 0;
+    sal_uLong nC2 = 1;
     if( !bImmerVerschieben )
     {
         SvFileStream aOutStm1( rFile1, STREAM_STD_READ );

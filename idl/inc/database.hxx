@@ -132,7 +132,7 @@ public:
     void                    WriteError( const ByteString & rErrWrn,
                                     const ByteString & rFileName,
                                     const ByteString & rErrorText,
-                                    sal_uIntPtr nRow = 0, sal_uIntPtr nColumn = 0 ) const;
+                                    sal_uLong nRow = 0, sal_uLong nColumn = 0 ) const;
     void                    WriteError( SvTokenStream & rInStm );
     void                    SetError( const ByteString & rError, SvToken * pTok );
     void                    Push( SvMetaObject * pObj );
@@ -146,8 +146,8 @@ public:
                                 return bOk;
                             }
     sal_uInt32              GetUniqueId() { return ++nUniqueId; }
-    sal_Bool                    FindId( const ByteString & rIdName, sal_uIntPtr * pVal );
-    sal_Bool                    InsertId( const ByteString & rIdName, sal_uIntPtr nVal );
+    sal_Bool                    FindId( const ByteString & rIdName, sal_uLong * pVal );
+    sal_Bool                    InsertId( const ByteString & rIdName, sal_uLong nVal );
     sal_Bool                    ReadIdFile( const String & rFileName );
 
     SvMetaType *            FindType( const ByteString & rName );
