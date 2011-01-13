@@ -66,6 +66,7 @@
 #include <scmatrix.hxx>
 
 using namespace ::com::sun::star;
+using ::rtl::OUString;
 
 namespace {
 
@@ -345,12 +346,42 @@ void Test::testMatrix()
 
 void Test::testDataPilot()
 {
-    // TODO: Coming soon.
+    OUString aTabName(RTL_CONSTASCII_USTRINGPARAM("Data"));
+    m_pDoc->InsertTab(0, aTabName);
+    const char* aFields[] = {
+        "Name", "Group", "Score"
+    };
+
+    struct {
+        const char* pName; const char* pGroup; int nScore;
+    } aData[] = {
+        { "Andy",    "A", 30 },
+        { "Bruce",   "A", 20 },
+        { "Charlie", "B", 45 },
+        { "David",   "B", 12 },
+        { "Edward",  "C",  8 },
+        { "Frank",   "C", 15 },
+    };
+
+    // Insert field names in row 0.
+    for (sal_uInt32 i = 0; i < SAL_N_ELEMENTS(aFields); ++i)
+        m_pDoc->SetString(0, static_cast<SCCOL>(i), 0, OUString(RTL_CONSTASCII_USTRINGPARAM(aFields[i])));
+
+    // Insert data into row 1 and downward.
+    for (sal_uInt32 i = 0; i < SAL_N_ELEMENTS(aData); ++i)
+    {
+        SCROW nRow = static_cast<SCROW>(i) + 1;
+        m_pDoc->SetString(0, nRow, 0, OUString(RTL_CONSTASCII_USTRINGPARAM(aData[i].pName)));
+        m_pDoc->SetString(1, nRow, 0, OUString(RTL_CONSTASCII_USTRINGPARAM(aData[i].pGroup)));
+        m_pDoc->SetValue(2, nRow, 0, aData[i].nScore);
+    }
+
+    m_pDoc->DeleteTab(0);
 }
 
 void Test::testSheetCopy()
 {
-    rtl::OUString aTabName(RTL_CONSTASCII_USTRINGPARAM("TestTab"));
+    OUString aTabName(RTL_CONSTASCII_USTRINGPARAM("TestTab"));
     m_pDoc->InsertTab(0, aTabName);
     CPPUNIT_ASSERT_MESSAGE("document should have one sheet to begin with.", m_pDoc->GetTableCount() == 1);
     SCROW nRow1, nRow2;
