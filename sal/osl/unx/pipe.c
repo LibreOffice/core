@@ -486,7 +486,7 @@ sal_Int32 SAL_CALL osl_receivePipe(oslPipe pPipe,
                   (sal_Char*)pBuffer,
                   BytesToRead, 0);
 
-    if ( nRet <= 0 )
+    if ( nRet < 0 )
     {
         OSL_TRACE("osl_receivePipe failed : %i '%s'",nRet,strerror(errno));
     }
