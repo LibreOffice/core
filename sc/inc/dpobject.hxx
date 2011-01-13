@@ -291,7 +291,6 @@ public:
     ScDPTableDataCache* GetUsedDPObjectCache ( ScRange rRange );
     long AddDPObjectCache( ScDPTableDataCache* pData );
     void RemoveDPObjectCache( long nID );
-    void RemoveUnusedDPObjectCaches();
     long GetNewDPObjectCacheId ();
 };
 

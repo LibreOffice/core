@@ -2692,27 +2692,6 @@ void ScDPCollection::RemoveDPObjectCache( long nID )
 
 }
 
-void ScDPCollection::RemoveUnusedDPObjectCaches()
-{
-    for ( std::list<ScDPTableDataCache*>::iterator iter = m_listDPObjectsCaches.begin(); iter!=m_listDPObjectsCaches.end(); ++iter )
-    {
-        long  nID = (*iter)->GetId();
-        USHORT i ;
-        for ( i=0; i<nCount; i++)
-        {
-            if ( nID ==  (*this)[i]->GetCacheId() )
-                break;
-        }
-        if ( i == nCount )
-        {
-            ScDPTableDataCache* pCache = *iter;
-            m_listDPObjectsCaches.erase( iter );
-            delete pCache;
-            continue;
-        }
-    }
-}
-
 long ScDPCollection::GetNewDPObjectCacheId()
 {
     long nID = 0;
