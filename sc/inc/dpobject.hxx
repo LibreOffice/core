@@ -272,9 +272,9 @@ private:
     DataCachesType  maDPDataCaches;
 
 public:
-                ScDPCollection(ScDocument* pDocument);
-                ScDPCollection(const ScDPCollection& r);
-                ~ScDPCollection();
+    ScDPCollection(ScDocument* pDocument);
+    ScDPCollection(const ScDPCollection& r);
+    ~ScDPCollection();
 
     SC_DLLPUBLIC size_t GetCount() const;
     SC_DLLPUBLIC ScDPObject* operator[](size_t nIndex);
@@ -282,12 +282,12 @@ public:
 
     const ScDPObject* GetByName(const String& rName) const;
 
-    void        DeleteOnTab( SCTAB nTab );
-    void        UpdateReference( UpdateRefMode eUpdateRefMode,
-                                 const ScRange& r, SCsCOL nDx, SCsROW nDy, SCsTAB nDz );
+    void DeleteOnTab( SCTAB nTab );
+    void UpdateReference( UpdateRefMode eUpdateRefMode,
+                          const ScRange& r, SCsCOL nDx, SCsROW nDy, SCsTAB nDz );
 
-    bool        RefsEqual( const ScDPCollection& r ) const;
-    void        WriteRefsTo( ScDPCollection& r ) const;
+    bool RefsEqual( const ScDPCollection& r ) const;
+    void WriteRefsTo( ScDPCollection& r ) const;
 
     /**
      * Create a new name that's not yet used by any existing data pilot
