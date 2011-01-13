@@ -92,7 +92,7 @@ namespace accessibility
     {
         if ( isAlive() )
         {
-            sal_uIntPtr nEventId = rVclWindowEvent.GetId();
+            sal_uLong nEventId = rVclWindowEvent.GetId();
             switch ( nEventId )
             {
                 case  VCLEVENT_OBJECT_DYING :

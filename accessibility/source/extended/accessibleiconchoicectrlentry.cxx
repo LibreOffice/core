@@ -87,7 +87,7 @@ namespace accessibility
     // Ctor() and Dtor()
     // -----------------------------------------------------------------------------
     AccessibleIconChoiceCtrlEntry::AccessibleIconChoiceCtrlEntry( SvtIconChoiceCtrl& _rIconCtrl,
-                                                                  sal_uIntPtr _nPos,
+                                                                  sal_uLong _nPos,
                                                                   const Reference< XAccessible >& _xParent ) :
 
         AccessibleIconChoiceCtrlEntry_BASE  ( m_aMutex ),
