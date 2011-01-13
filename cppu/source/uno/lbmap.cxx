@@ -69,7 +69,7 @@ class Mapping
     uno_Mapping * _pMapping;
 
 public:
-    inline Mapping( uno_Mapping * pMapping = 0 ) SAL_THROW( () );
+    inline explicit Mapping( uno_Mapping * pMapping = 0 ) SAL_THROW( () );
     inline Mapping( const Mapping & rMapping ) SAL_THROW( () );
     inline ~Mapping() SAL_THROW( () );
     inline Mapping & SAL_CALL operator = ( uno_Mapping * pMapping ) SAL_THROW( () );
