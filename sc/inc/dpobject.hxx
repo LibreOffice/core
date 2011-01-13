@@ -37,6 +37,7 @@
 #include "pivot.hxx"
 #include <com/sun/star/sheet/XDimensionsSupplier.hpp>
 
+#include <boost/ptr_container/ptr_list.hpp>
 #include <boost/shared_ptr.hpp>
 
 //------------------------------------------------------------------
@@ -262,7 +263,9 @@ class ScDPCollection : public ScCollection
 {
 private:
     ScDocument* pDoc;
-    ::std::list<ScDPTableDataCache*> maDPDataCaches;
+
+    typedef ::boost::ptr_list<ScDPTableDataCache> DataCachesType;
+    DataCachesType maDPDataCaches;
 public:
                 ScDPCollection(ScDocument* pDocument);
                 ScDPCollection(const ScDPCollection& r);
@@ -288,9 +291,13 @@ public:
     bool        HasDPTable(SCCOL nCol, SCROW nRow, SCTAB nTab) const;
 
     ScDPTableDataCache* GetDPObjectCache( long nID );
-    ScDPTableDataCache* GetUsedDPObjectCache ( ScRange rRange );
+    ScDPTableDataCache* GetUsedDPObjectCache ( const ScRange& rRange );
     long AddDPObjectCache( ScDPTableDataCache* pData );
     void RemoveDPObjectCache( long nID );
+
+    /**
+     * Get an available, unique ID value for datapilot data cache.
+     */
     long GetNewDPObjectCacheId ();
 };
 

@@ -2419,7 +2419,8 @@ ScDPCollection::ScDPCollection(ScDocument* pDocument) :
 
 ScDPCollection::ScDPCollection(const ScDPCollection& r) :
     ScCollection(r),
-    pDoc(r.pDoc)
+    pDoc(r.pDoc),
+    maDPDataCaches(r.maDPDataCaches)
 {
 }
 
@@ -2641,15 +2642,16 @@ bool ScDPCollection::HasDPTable(SCCOL nCol, SCROW nRow, SCTAB nTab) const
 
 ScDPTableDataCache* ScDPCollection::GetDPObjectCache( long nID )
 {
-    for ( std::list<ScDPTableDataCache*>::iterator iter = maDPDataCaches.begin(); iter!=maDPDataCaches.end(); ++iter )
-    { //
-        if ( nID == (*iter)->GetId() )
-            return *iter;
+    DataCachesType::iterator itr = maDPDataCaches.begin(), itrEnd = maDPDataCaches.end();
+    for (; itr != itrEnd; ++itr)
+    {
+        if ( nID == itr->GetId() )
+            return &(*itr);
     }
     return NULL;
 }
 
-ScDPTableDataCache* ScDPCollection::GetUsedDPObjectCache ( ScRange rRange )
+ScDPTableDataCache* ScDPCollection::GetUsedDPObjectCache ( const ScRange& rRange )
 {
     ScDPTableDataCache* pCache = NULL;
     for ( short i=nCount-1; i>=0 ; i--)
@@ -2679,17 +2681,15 @@ long ScDPCollection::AddDPObjectCache( ScDPTableDataCache* pData )
 
 void ScDPCollection::RemoveDPObjectCache( long nID )
 {
-    for ( std::list<ScDPTableDataCache*>::iterator iter = maDPDataCaches.begin(); iter!=maDPDataCaches.end(); ++iter )
+    DataCachesType::iterator itr = maDPDataCaches.begin(), itrEnd = maDPDataCaches.end();
+    for (; itr != itrEnd; ++itr)
     {
-        if ( nID == (*iter)->GetId() )
+        if ( nID == itr->GetId() )
         {
-            ScDPTableDataCache* pCache = *iter;
-            maDPDataCaches.erase( iter );
-            delete pCache;
+            maDPDataCaches.erase(itr);
             break;
         }
     }
-
 }
 
 long ScDPCollection::GetNewDPObjectCacheId()
@@ -2697,20 +2697,22 @@ long ScDPCollection::GetNewDPObjectCacheId()
     long nID = 0;
 
     bool bFound = false;
-    std::list<ScDPTableDataCache*>::iterator iter;
-    do {
-        for ( iter = maDPDataCaches.begin(); iter!=maDPDataCaches.end(); ++iter )
-        { //Get a new Id
-            if ( nID == (*iter)->GetId() )
+    DataCachesType::const_iterator itr, itrEnd = maDPDataCaches.end();
+    do
+    {
+        for ( itr = maDPDataCaches.begin(); itr != itrEnd; ++itr )
+        {
+            if ( nID == itr->GetId() )
             {
                 nID++;
                 bFound = true;
                 break;
             }
         }
-        if ( iter == maDPDataCaches.end() )
+        if ( itr == itrEnd )
             bFound = false;
-    } while ( bFound );
+    }
+    while ( bFound );
 
     return nID;
 }
