@@ -222,30 +222,54 @@ endif
 gb_LinkTarget_INCLUDE := $(filter-out %/stl, $(subst -I. , ,$(SOLARINC)))
 gb_LinkTarget_INCLUDE_STL := $(filter %/stl, $(subst -I. , ,$(SOLARINC)))
 
+# FIXME framework handling very hackish
+define gb_LinkTarget__get_liblinkflags
+$(patsubst lib%.dylib,-l%,$(foreach lib,$(filter-out $(gb_Library__FRAMEWORKS),$(4)),$(call gb_Library_get_filename,$(lib)))) \
+$(addprefix -framework ,$(filter $(gb_Library__FRAMEWORKS),$(4)))
+endef
+
+define gb_LinkTarget__get_layer
+$(if $(filter Executable,$(1)),\
+    $(call gb_Executable_get_layer,$(2)),\
+    $(call gb_Library_get_layer,$(2)))
+endef
+
 # FIXME the DYLIB_FILE mess is only necessary because
 # solver layout is different from installation layout
-# FIXME framework handling very hackish
-define gb_LinkTarget__command
-$(call gb_Output_announce,$(2),$(true),LNK,4)
+# parameters: 1-linktarget 2-targettype 3-ldflags 4-linked-libs 5-linked-static-libs 6-cobjects 7-cxxobjects 8-objcxxobjects
+define gb_LinkTarget__command_dynamiclink
 $(call gb_Helper_abbreviate_dirs,\
     mkdir -p $(dir $(1)) && \
     DYLIB_FILE=`$(gb_MKTEMP) $(dir $(1))` && \
-    $(PERL) $(SOLARENV)/bin/macosx-dylib-link-list.pl $(4) $(patsubst lib%.dylib,-l%,$(foreach lib,$(5),$(call gb_Library_get_filename,$(lib)))) > $${DYLIB_FILE} && \
+    $(PERL) $(SOLARENV)/bin/macosx-dylib-link-list.pl $(3) $(patsubst lib%.dylib,-l%,$(foreach lib,$(4),$(call gb_Library_get_filename,$(lib)))) > $${DYLIB_FILE} && \
     $(gb_CXX) \
-        $(4) \
-        $(patsubst lib%.dylib,-l%,$(foreach lib,$(filter-out $(gb_Library__FRAMEWORKS),$(5)),$(call gb_Library_get_filename,$(lib)))) \
-        $(addprefix -framework ,$(filter $(gb_Library__FRAMEWORKS),$(5))) \
-        $(foreach object,$(7),$(call gb_CObject_get_target,$(object))) \
-        $(foreach object,$(8),$(call gb_CxxObject_get_target,$(object))) \
-        $(foreach object,$(9),$(call gb_ObjCxxObject_get_target,$(object))) \
-        $(foreach lib,$(6),$(call gb_StaticLibrary_get_target,$(lib))) \
+        $(3) \
+        $(call gb_LinkTarget__get_liblinkflags,$(4)) \
+        $(foreach object,$(6),$(call gb_CObject_get_target,$(object))) \
+        $(foreach object,$(7),$(call gb_CxxObject_get_target,$(object))) \
+        $(foreach object,$(8),$(call gb_ObjCxxObject_get_target,$(object))) \
+        $(foreach lib,$(5),$(call gb_StaticLibrary_get_target,$(lib))) \
         -o $(1) \
         `cat $${DYLIB_FILE}` && \
-    $(if $(filter Library,$(3)),$(PERL) $(SOLARENV)/bin/macosx-change-install-names.pl $(3) $(subst OOOLIB,OOO,$(call gb_Library_get_layer,$(1))) $(1) && macosx-create-bundle $(1) &&,) \
-    $(if $(filter Executable,$(3)),$(PERL) $(SOLARENV)/bin/macosx-change-install-names.pl $(3) $(subst OOOLIB,OOO,$(call gb_Executable_get_layer,$(1))) $(1) &&,) \
+    $(PERL) $(SOLARENV)/bin/macosx-change-install-names.pl $(2) $(call gb_LinkTarget__get_layer,$(2),$(1)) $(1) && \
+    $(if $(filter-out Executable,$(2)),ln -sf $(1) $(patsubst %.dynlib,%.jnilib,$(1)) && )
     rm -f $${DYLIB_FILE})
 endef
 
+# parameters: 1-linktarget 2-cobjects 3-cxxobjects
+define gb_LinkTarget__command_staticlink
+$(call gb_Helper_abbreviate_dirs,\
+    mkdir -p $(dir $(1)) && \
+    $(gb_AR) -rsu $(1) \
+        $(foreach object,$(2),$(call gb_CObject_get_target,$(object))) \
+        $(foreach object,$(3),$(call gb_CxxObject_get_target,$(object))) 2> /dev/null)
+endef
+
+define gb_LinkTarget__command
+$(call gb_Output_announce,$(2),$(true),LNK,4)
+$(if $(filter Library CppunitTest Executable,$(3)),$(call gb_LinkTarget__command_dynamiclink,$(1),$(3),$(4),$(5),$(6),$(7),$(8),$(9)))
+$(if $(filter StaticLibrary,$(3)),$(call gb_LinkTarget__command_staticlink,$(1),$(7),$(8)))
+endef
 
 # Library class
 
@@ -300,21 +324,20 @@ $(call gb_LinkTarget__get_installname,$(call gb_Library_get_filename,$(1)),$(cal
 endef
 
 gb_Library_LAYER := \
-    $(foreach lib,$(gb_Library_OOOLIBS),$(lib):OOOLIB) \
+    $(foreach lib,$(gb_Library_OOOLIBS),$(lib):OOO) \
     $(foreach lib,$(gb_Library_PLAINLIBS_URE),$(lib):URELIB) \
-    $(foreach lib,$(gb_Library_PLAINLIBS_OOO),$(lib):OOOLIB) \
-    $(foreach lib,$(gb_Library_RTLIBS),$(lib):OOOLIB) \
+    $(foreach lib,$(gb_Library_PLAINLIBS_OOO),$(lib):OOO) \
+    $(foreach lib,$(gb_Library_RTLIBS),$(lib):OOO) \
     $(foreach lib,$(gb_Library_RTVERLIBS),$(lib):URELIB) \
     $(foreach lib,$(gb_Library_STLLIBS),$(lib):URELIB) \
     $(foreach lib,$(gb_Library_UNOLIBS_URE),$(lib):URELIB) \
-    $(foreach lib,$(gb_Library_UNOLIBS_OOO),$(lib):OOOLIB) \
+    $(foreach lib,$(gb_Library_UNOLIBS_OOO),$(lib):OOO) \
     $(foreach lib,$(gb_Library_UNOVERLIBS),$(lib):URELIB) \
 
 
 # StaticLibrary class
 
 gb_StaticLibrary_DEFS :=
-gb_StaticLibrary_TARGETTYPEFLAGS := -static -nostdlib
 gb_StaticLibrary_SYSPRE := lib
 gb_StaticLibrary_PLAINEXT := .a
 gb_StaticLibrary_JPEGEXT := lib$(gb_StaticLibrary_PLAINEXT)
@@ -339,7 +362,7 @@ endef
 gb_Executable_LAYER := \
     $(foreach exe,$(gb_Executable_UREBIN),$(exe):UREBIN) \
     $(foreach exe,$(gb_Executable_SDK),$(exe):SDKBIN) \
-    $(foreach exe,$(gb_Executable_OOO),$(exe):OOOLIB) \
+    $(foreach exe,$(gb_Executable_OOO),$(exe):OOO) \
     $(foreach exe,$(gb_Executable_BRAND),$(exe):BRAND) \
     $(foreach exe,$(gb_Executable_NONE),$(exe):NONEBIN) \
 
