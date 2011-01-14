@@ -826,13 +826,13 @@ void KeywordInfo::KeywordElement::init( Databases *pDatabases,Db* pDb,const rtl:
     listTitle.realloc( id.size() );
 
     int nSize = 0;
+    Dbt data;
+    DBData aDBData;
     const sal_Char* pData = NULL;
     const sal_Char pEmpty[] = "";
 
     for( sal_uInt32 i = 0; i < id.size(); ++i )
     {
-        DBData aDBData;
-
         listId[i] = id[i];
         listAnchor[i] = anchor[i];
 
@@ -855,7 +855,6 @@ void KeywordInfo::KeywordElement::init( Databases *pDatabases,Db* pDb,const rtl:
             {
                 Dbt key_( static_cast< void* >( const_cast< sal_Char* >( idi.getStr() ) ),
                          idi.getLength() );
-                Dbt data;
                 pDb->get( 0,&key_,&data,0 );
                 nSize = data.get_size();
                 pData = static_cast<sal_Char*>( data.get_data() );
