@@ -51,6 +51,7 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
 	fwk \
 	fwl \
 	fwm \
+	i18npaper \
 	lng \
 	msfilter \
 	msword \
@@ -63,6 +64,8 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
 	scfilt \
 	scui \
 	sfx \
+	sm \
+	smd \
 	sot \
 	svl \
 	svt \
@@ -124,6 +127,7 @@ $(eval $(call gb_Helper_register_libraries,UNOVERLIBS, \
 ))
 
 $(eval $(call gb_Helper_register_static_libraries,PLAINLIBS, \
+	i18npaper \
 	salcpprt \
 	jpeglib \
 	zlib \
