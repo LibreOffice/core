@@ -113,8 +113,8 @@ namespace slideshow
             /** Call this method to create a lock instead of calling
                 lockUpdates() and unlockUpdates() directly.
                 @param bStartLocked
-                    When <sal_True/> then the UpdateLock is created already
-                    locked. When <sal_False/> then Activate() has to be called in order
+                    When <TRUE/> then the UpdateLock is created already
+                    locked. When <FALSE/> then Activate() has to be called in order
                     to lock the lock.
             */
             ::boost::shared_ptr<UpdateLock> createLock (const bool bStartLocked);

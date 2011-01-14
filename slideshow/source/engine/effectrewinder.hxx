@@ -158,7 +158,7 @@ private:
         @param nEffectCount
             The number of main sequence effects to replay.
         @param bRedisplayCurrentSlide
-            When <sal_True/> then the current slide is redisplayed before the
+            When <TRUE/> then the current slide is redisplayed before the
             effects are replayed.
         @param rSlideRewindFunctor
             This functor is used to redisplay the current slide.
