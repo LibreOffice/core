@@ -28,39 +28,41 @@
 GUI := UNX
 COM := GCC
 
-gb_MKTEMP := TMPDIR= mktemp -t
+gb_MKTEMP := TMPDIR= /usr/bin/mktemp -t
 
-gb_CC := $(CC)
-gb_CXX := $(CXX)
-gb_GCCP := $(CC)
+gb_CC := cc
+gb_CXX := g++
+gb_GCCP := gcc
 gb_AWK := awk
 
+# use CC/CXX if they are nondefaults
+ifneq ($(origin CC),default)
+gb_CC := $(CC)
+gb_GCCP := $(CC)
+endif
+ifneq ($(origin CXX),default)
+gb_CXX := $(CXX)
+endif
 
 gb_OSDEFS := \
     -D$(OS) \
-    -D$(GUI) \
-    -DUNIX \
     -D_PTHREADS \
+    -DUNIX \
     -D_REENTRANT \
     -DNO_PTHREAD_PRIORITY \
     -DQUARTZ \
     $(EXTRA_CDEFS) \
-#	$(PTHREAD_CFLAGS) \
 
 gb_COMPILERDEFS := \
     -D$(COM) \
-    -DGLIBC=2 \
-    -D_USE_NAMESPACE=1 \
     -DHAVE_GCC_VISIBILITY_FEATURE \
     -DCPPU_ENV=gcc3 \
     -DGXX_INCLUDE_PATH=$(GXX_INCLUDE_PATH) \
-#	-D$(CVER) \
-#	-DCVER=$(CVER) \
 
-ifeq ($(CPUNAME),INTEL)
-gb_CPUDEFS := -DX86
-else # ifeq ($(CPUNAME),POWERPC)
+ifeq ($(CPUNAME),POWERPC)
 gb_CPUDEFS := -DPOWERPC -DPPC
+else
+gb_CPUDEFS := -DX86
 endif
 
 ifeq ($(strip $(SYSBASE)),)
@@ -71,34 +73,35 @@ endif
 
 
 gb_CFLAGS := \
-    -isysroot $(gb_SDKDIR) \
-    -fsigned-char \
-    -fmessage-length=0 \
-    -malign-natural \
     -Wall \
     -Wendif-labels \
-    -fno-strict-aliasing \
+    -Wextra \
     -fPIC \
+    -fmessage-length=0 \
     -fno-common \
+    -fno-strict-aliasing \
+    -fsigned-char \
+    -fvisibility=hidden \
     -pipe \
-#	-fvisibility=hidden \
 
 gb_CXXFLAGS := \
-    -isysroot $(gb_SDKDIR) \
-    -fsigned-char \
-    -fmessage-length=0 \
-    -malign-natural \
     -Wall \
     -Wendif-labels \
-    -Wno-long-double \
+    -Wextra \
     -Wno-ctor-dtor-privacy \
+    -Wno-long-double \
     -Wno-non-virtual-dtor \
-    -fno-strict-aliasing \
+    -Wreturn-type \
+    -Wshadow \
+    -Wuninitialized \
     -fPIC \
+    -fmessage-length=0 \
     -fno-common \
+    -fno-strict-aliasing \
+    -fsigned-char \
+    -isysroot $(gb_SDKDIR) \
+    -malign-natural \
     -pipe \
-#	-fvisibility=hidden \
-#	-fvisibility-inlines-hidden \
 
 # these are to get g++ to switch to Objective-C++ mode
 # (see toolkit module for a case where it is necessary to do it this way)
@@ -194,10 +197,10 @@ endef
 # LinkTarget class
 
 define gb_LinkTarget__get_rpath_for_layer
-$(patsubst $(1):%,%,$(filter $(1):%,$(gb_LinkTarget_RPATHS)))
+$(patsubst $(1):%,%,$(filter $(1):%,$(gb_LinkTarget__RPATHS)))
 endef
 
-gb_LinkTarget_RPATHS := \
+gb_LinkTarget__RPATHS := \
     URELIB:@__________________________________________________URELIB/ \
     UREBIN: \
     OOOLIB:@__________________________________________________OOO/ \
@@ -397,9 +400,11 @@ $(call gb_Helper_abbreviate_dirs,\
         -o $(call gb_SrsPartTarget_get_dep_target,$(1)))
 endef
 
+
 # ComponentTarget
 
 gb_ComponentTarget_XSLTPROCPRECOMMAND := DYLD_LIBRARY_PATH=$(OUTDIR)/lib
 gb_ComponentTarget_PREFIXBASISNATIVE := vnd.sun.star.expand:$$OOO_BASE_DIR/program/
+
 
 # vim: set noet sw=4 ts=4:

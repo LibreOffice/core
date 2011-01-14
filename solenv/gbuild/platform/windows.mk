@@ -1,7 +1,7 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
+#
 # Copyright 2009 by Sun Microsystems, Inc.
 #
 # OpenOffice.org - a multi-platform office productivity suite
@@ -34,6 +34,15 @@ gb_CC := cl
 gb_CXX := cl
 gb_LINK := link
 gb_AWK := gawk
+
+# use CC/CXX if they are nondefaults
+ifneq ($(origin CC),default)
+gb_CC := $(CC)
+gb_GCCP := $(CC)
+endif
+ifneq ($(origin CXX),default)
+gb_CXX := $(CXX)
+endif
 
 gb_OSDEFS := \
     -DWINVER=0x0500 \
@@ -344,7 +353,7 @@ endef
 
 # Library class
 
-gb_Library_DEFS := -D_DLL_ -D_DLL
+gb_Library_DEFS :=
 gb_Library_TARGETTYPEFLAGS := -DLL
 gb_Library_get_rpath :=
 

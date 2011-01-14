@@ -1,7 +1,7 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
+#
 # Copyright 2009 by Sun Microsystems, Inc.
 #
 # OpenOffice.org - a multi-platform office productivity suite
@@ -30,8 +30,8 @@ COM := GCC
 
 gb_MKTEMP := mktemp -p
 
-gb_CC := $(CC)
-gb_CXX := $(CXX)
+gb_CC := cc
+gb_CXX := g++
 gb_GCCP := gcc
 gb_AR := ar
 gb_AWK := awk
@@ -51,7 +51,7 @@ gb_CXX := $(CXX)
 endif
 
 gb_OSDEFS := \
-    -DLINUX \
+    -D$(OS) \
     -D_PTHREADS \
     -DUNIX \
     -DUNX \
@@ -62,13 +62,10 @@ GXX_INCLUDE_PATH=$(COMPATH)/include/c++/$(shell gcc -dumpversion)
 endif
 
 gb_COMPILERDEFS := \
-    -DGCC \
-    -D$(CVER) \
-    -DCVER=$(CVER) \
-    -DGLIBC=2 \
-    -DGXX_INCLUDE_PATH=$(GXX_INCLUDE_PATH) \
+    -D$(COM) \
     -DHAVE_GCC_VISIBILITY_FEATURE \
     -DCPPU_ENV=gcc3 \
+    -DGXX_INCLUDE_PATH=$(GXX_INCLUDE_PATH) \
 
 ifeq ($(CPUNAME),X86_64)
 gb_CPUDEFS := -D$(CPUNAME)
@@ -80,9 +77,11 @@ gb_CFLAGS := \
     -Wall \
     -Wendif-labels \
     -Wextra \
+    -fPIC \
     -fmessage-length=0 \
+    -fno-common \
     -fno-strict-aliasing \
-    -fpic \
+    -fsigned-char \
     -fvisibility=hidden \
     -pipe \
 
@@ -91,19 +90,21 @@ gb_CXXFLAGS := \
     -Wendif-labels \
     -Wextra \
     -Wno-ctor-dtor-privacy \
+    -Wno-long-double \
     -Wno-non-virtual-dtor \
     -Wreturn-type \
     -Wshadow \
     -Wuninitialized \
+    -fPIC \
     -fmessage-length=0 \
+    -fno-common \
     -fno-strict-aliasing \
     -fno-use-cxa-atexit \
-    -fpic \
-    -fvisibility=hidden \
     -fvisibility-inlines-hidden \
+    -fvisibility=hidden \
     -pipe \
 
-ifneq ($(SYSBASE),)
+ifneq ($(strip $(SYSBASE)),)
 gb_CXXFLAGS += --sysroot=$(SYSBASE)
 gb_CFLAGS += --sysroot=$(SYSBASE)
 endif
@@ -115,7 +116,7 @@ gb_LinkTarget_EXCEPTIONFLAGS := \
 gb_LinkTarget_NOEXCEPTIONFLAGS := \
     -DEXCEPTIONS_OFF \
     -fno-exceptions \
-    
+
 gb_LinkTarget_LDFLAGS := \
     -Wl,--sysroot=$(SYSBASE) \
     -Wl,-rpath-link=$(SOLARLIBDIR):$(SYSBASE)/lib:$(SYSBASE)/usr/lib \
@@ -187,12 +188,12 @@ $(patsubst $(1):%,%,$(filter $(1):%,$(gb_LinkTarget__RPATHS)))
 endef
 
 gb_LinkTarget__RPATHS := \
-    URELIB:'$$$$ORIGIN' \
-    UREBIN:'$$$$ORIGIN/../lib:$$$$ORIGIN' \
-    OOOLIB:'$$$$ORIGIN:$$$$ORIGIN/../ure-link/lib' \
-    BRAND:'$$$$ORIGIN:$$$$ORIGIN/../basis-link/program:$$$$ORIGIN/../basis-link/ure-link/lib' \
-    SDKBIN:'$$$$ORIGIN/../../ure-link/lib' \
-    NONEBIN:'$$$$ORIGIN/../lib:$$$$ORIGIN' \
+    URELIB:$$$$ORIGIN \
+    UREBIN:$$$$ORIGIN/../lib:$$$$ORIGIN \
+    OOOLIB:$$$$ORIGIN:$$$$ORIGIN/../ure-link/lib \
+    BRAND:$$$$ORIGIN:$$$$ORIGIN/../basis-link/program:$$$$ORIGIN/../basis-link/ure-link/lib \
+    SDKBIN:$$$$ORIGIN/../../ure-link/lib \
+    NONEBIN:$$$$ORIGIN/../lib:$$$$ORIGIN \
 
 gb_LinkTarget_CXXFLAGS := $(gb_CXXFLAGS) $(gb_COMPILEROPTFLAGS)
 gb_LinkTarget_CFLAGS := $(gb_CFLAGS) $(gb_COMPILEROPTFLAGS)
@@ -236,9 +237,10 @@ $(if $(filter Library CppunitTest Executable,$(3)),$(call gb_LinkTarget__command
 $(if $(filter StaticLibrary,$(3)),$(call gb_LinkTarget__command_staticlink,$(1),$(7),$(8)))
 endef
 
+
 # Library class
 
-gb_Library_DEFS := -D_DLL_
+gb_Library_DEFS :=
 gb_Library_TARGETTYPEFLAGS := -shared -Wl,-z,noexecstack
 gb_Library_SYSPRE := lib
 gb_Library_UNOVERPRE := $(gb_Library_SYSPRE)uno_
@@ -282,7 +284,7 @@ gb_Library_FILENAMES := \
 gb_Library_Library_platform =
 
 define gb_Library_get_rpath
--Wl,-rpath,$(call gb_LinkTarget__get_rpath_for_layer,$(call gb_Library_get_layer,$(1))) \
+'-Wl,-rpath,$(call gb_LinkTarget__get_rpath_for_layer,$(call gb_Library_get_layer,$(1)))' \
 -Wl,-rpath-link,$(gb_Library_OUTDIRLOCATION)
 endef
 
@@ -325,9 +327,10 @@ gb_Executable_LAYER := \
 
 
 define gb_Executable_get_rpath
--Wl,-rpath,$(call gb_LinkTarget__get_rpath_for_layer,$(call gb_Library_get_layer,$(1))) \
+'-Wl,-rpath,$(call gb_LinkTarget__get_rpath_for_layer,$(call gb_Library_get_layer,$(1)))' \
 -Wl,-rpath-link,$(gb_Library_OUTDIRLOCATION)
 endef
+
 
 # CppunitTest class
 
