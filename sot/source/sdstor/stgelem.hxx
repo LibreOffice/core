@@ -35,7 +35,7 @@
 #include <tools/solar.h>
 #endif
 
-#include <stg.hxx>
+#include <sot/stg.hxx>
 
 class StgIo;
 class SvStream;
