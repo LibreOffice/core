@@ -55,10 +55,10 @@ namespace dbaui
         SvxNumberInfoItem* pNumberInfoItem;
 
     public:
-        SbaSbAttrDlg( Window * pParent, const SfxItemSet*, SvNumberFormatter*, USHORT nFlags = TP_ATTR_CHAR , BOOL bRow = FALSE);
+        SbaSbAttrDlg( Window * pParent, const SfxItemSet*, SvNumberFormatter*, sal_uInt16 nFlags = TP_ATTR_CHAR , sal_Bool bRow = sal_False);
         ~SbaSbAttrDlg();
 
-        virtual void  PageCreated( USHORT nPageId, SfxTabPage& rTabPage );
+        virtual void  PageCreated( sal_uInt16 nPageId, SfxTabPage& rTabPage );
     };
 //.........................................................................
 }   // namespace dbaui

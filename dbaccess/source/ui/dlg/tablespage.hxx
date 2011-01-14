@@ -81,7 +81,7 @@ namespace dbaui
         OTableSubscriptionDialog* m_pTablesDlg;
 
     public:
-        virtual BOOL            FillItemSet(SfxItemSet& _rCoreAttrs);
+        virtual sal_Bool            FillItemSet(SfxItemSet& _rCoreAttrs);
         virtual int             DeactivatePage(SfxItemSet* _pSet);
         using OGenericAdministrationPage::DeactivatePage;
 
@@ -118,7 +118,7 @@ namespace dbaui
         ::com::sun::star::uno::Sequence< ::rtl::OUString > collectDetailedSelection() const;
 
         /// (un)check all entries
-        void CheckAll( BOOL bCheck = sal_True );
+        void CheckAll( sal_Bool bCheck = sal_True );
 
         virtual void implInitControls(const SfxItemSet& _rSet, sal_Bool _bSaveValue);
 

@@ -61,12 +61,12 @@ namespace dbaui
         }
 
         // spaeter Constructor, die Basisklasse ERZEUGT beim ersten Aufruf die Listbox
-        virtual BOOL    Init();
+        virtual sal_Bool    Init();
 
         inline sal_Int32        GetAliasNum() const { return m_nAliasNum; }
 
-        BOOL            ExistsField(const ::rtl::OUString& strFieldName, OTableFieldDescRef& rInfo);
-        BOOL            ExistsAVisitedConn() const;
+        sal_Bool            ExistsField(const ::rtl::OUString& strFieldName, OTableFieldDescRef& rInfo);
+        sal_Bool            ExistsAVisitedConn() const;
 
         virtual ::rtl::OUString     GetName() const { return GetWinName(); }
 

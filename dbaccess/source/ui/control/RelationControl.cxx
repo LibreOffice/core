@@ -108,14 +108,14 @@ namespace dbaui
         Reference< XPropertySet>                m_xDestDef;
 
 
-        void fillListBox(const Reference< XPropertySet>& _xDest,long nRow,USHORT nColumnId);
+        void fillListBox(const Reference< XPropertySet>& _xDest,long nRow,sal_uInt16 nColumnId);
         /** returns the column id for the editbrowsebox
             @param  _nColId
                     the column id SOURCE_COLUMN or DEST_COLUMN
 
             @return the current column id eihter SOURCE_COLUMN or DEST_COLUMN depends on the connection data
         */
-        USHORT getColumnIdent( USHORT _nColId ) const;
+        sal_uInt16 getColumnIdent( sal_uInt16 _nColId ) const;
     public:
         ORelationControl( OTableListBoxControl* pParent,const OJoinTableView::OTableWindowMap* _pTableMap );
         virtual ~ORelationControl();
@@ -141,16 +141,16 @@ namespace dbaui
 
         virtual long PreNotify(NotifyEvent& rNEvt );
 
-        virtual BOOL IsTabAllowed(BOOL bForward) const;
+        virtual sal_Bool IsTabAllowed(sal_Bool bForward) const;
 
         virtual void Init(const TTableConnectionData::value_type& _pConnData);
         virtual void Init() { ORelationControl_Base::Init(); }
-        virtual void InitController( ::svt::CellControllerRef& rController, long nRow, USHORT nCol );
-        virtual ::svt::CellController* GetController( long nRow, USHORT nCol );
-        virtual void PaintCell( OutputDevice& rDev, const Rectangle& rRect, USHORT nColId ) const;
-        virtual BOOL SeekRow( long nRow );
-        virtual BOOL SaveModified();
-        virtual String GetCellText( long nRow, USHORT nColId ) const;
+        virtual void InitController( ::svt::CellControllerRef& rController, long nRow, sal_uInt16 nCol );
+        virtual ::svt::CellController* GetController( long nRow, sal_uInt16 nCol );
+        virtual void PaintCell( OutputDevice& rDev, const Rectangle& rRect, sal_uInt16 nColId ) const;
+        virtual sal_Bool SeekRow( long nRow );
+        virtual sal_Bool SaveModified();
+        virtual String GetCellText( long nRow, sal_uInt16 nColId ) const;
 
         virtual void CellModified();
 
@@ -222,7 +222,7 @@ namespace dbaui
             // not the first call
             RowRemoved(0, GetRowCount());
 
-        RowInserted(0, m_pConnData->GetConnLineDataList()->size() + 1, TRUE); // add one extra row
+        RowInserted(0, m_pConnData->GetConnLineDataList()->size() + 1, sal_True); // add one extra row
     }
     //------------------------------------------------------------------------------
     void ORelationControl::Resize()
@@ -261,20 +261,20 @@ namespace dbaui
     }
 
     //------------------------------------------------------------------------------
-    BOOL ORelationControl::IsTabAllowed(BOOL bForward) const
+    sal_Bool ORelationControl::IsTabAllowed(sal_Bool bForward) const
     {
         DBG_CHKTHIS(ORelationControl,NULL);
         long nRow = GetCurRow();
-        USHORT nCol = GetCurColumnId();
+        sal_uInt16 nCol = GetCurColumnId();
 
-        BOOL bRet = !((     ( bForward && (nCol == DEST_COLUMN)     && (nRow == GetRowCount() - 1)))
+        sal_Bool bRet = !((     ( bForward && (nCol == DEST_COLUMN)     && (nRow == GetRowCount() - 1)))
                         ||  (!bForward && (nCol == SOURCE_COLUMN)   && (nRow == 0)));
 
         return bRet && EditBrowseBox::IsTabAllowed(bForward);
     }
 
     //------------------------------------------------------------------------------
-    BOOL ORelationControl::SaveModified()
+    sal_Bool ORelationControl::SaveModified()
     {
         DBG_CHKTHIS(ORelationControl,NULL);
         sal_Int32 nRow = GetCurRow();
@@ -301,19 +301,19 @@ namespace dbaui
             }
         }
 
-        return TRUE;
+        return sal_True;
     }
     //------------------------------------------------------------------------------
-    USHORT ORelationControl::getColumnIdent( USHORT _nColId ) const
+    sal_uInt16 ORelationControl::getColumnIdent( sal_uInt16 _nColId ) const
     {
-        USHORT nId = _nColId;
+        sal_uInt16 nId = _nColId;
         if ( m_pConnData->getReferencingTable() != m_pBoxControl->getReferencingTable() )
             nId = ( _nColId == SOURCE_COLUMN) ? DEST_COLUMN : SOURCE_COLUMN;
         return nId;
     }
 
     //------------------------------------------------------------------------------
-    String ORelationControl::GetCellText( long nRow, USHORT nColId ) const
+    String ORelationControl::GetCellText( long nRow, sal_uInt16 nColId ) const
     {
         DBG_CHKTHIS(ORelationControl,NULL);
         String sText;
@@ -334,7 +334,7 @@ namespace dbaui
     }
 
     //------------------------------------------------------------------------------
-    void ORelationControl::InitController( CellControllerRef& /*rController*/, long nRow, USHORT nColumnId )
+    void ORelationControl::InitController( CellControllerRef& /*rController*/, long nRow, sal_uInt16 nColumnId )
     {
         DBG_CHKTHIS(ORelationControl,NULL);
 
@@ -372,22 +372,22 @@ namespace dbaui
     }
 
     //------------------------------------------------------------------------------
-    CellController* ORelationControl::GetController( long /*nRow*/, USHORT /*nColumnId*/ )
+    CellController* ORelationControl::GetController( long /*nRow*/, sal_uInt16 /*nColumnId*/ )
     {
         DBG_CHKTHIS(ORelationControl,NULL);
         return new ListBoxCellController( m_pListCell.get() );
     }
 
     //------------------------------------------------------------------------------
-    BOOL ORelationControl::SeekRow( long nRow )
+    sal_Bool ORelationControl::SeekRow( long nRow )
     {
         DBG_CHKTHIS(ORelationControl,NULL);
         m_nDataPos = nRow;
-        return TRUE;
+        return sal_True;
     }
 
     //------------------------------------------------------------------------------
-    void ORelationControl::PaintCell( OutputDevice& rDev, const Rectangle& rRect, USHORT nColumnId ) const
+    void ORelationControl::PaintCell( OutputDevice& rDev, const Rectangle& rRect, sal_uInt16 nColumnId ) const
     {
         DBG_CHKTHIS(ORelationControl,NULL);
         String aText  =const_cast< ORelationControl*>(this)->GetCellText( m_nDataPos, nColumnId );
@@ -405,7 +405,7 @@ namespace dbaui
             rDev.SetClipRegion();
     }
     // -----------------------------------------------------------------------------
-    void ORelationControl::fillListBox(const Reference< XPropertySet>& _xDest,long /*_nRow*/,USHORT /*nColumnId*/)
+    void ORelationControl::fillListBox(const Reference< XPropertySet>& _xDest,long /*_nRow*/,sal_uInt16 /*nColumnId*/)
     {
         m_pListCell->Clear();
         try
@@ -434,7 +434,7 @@ namespace dbaui
     void ORelationControl::setWindowTables(const OTableWindow* _pSource,const OTableWindow* _pDest)
     {
         // wenn ich hier gerade editiere, ausblenden
-        BOOL bWasEditing = IsEditing();
+        sal_Bool bWasEditing = IsEditing();
         if ( bWasEditing )
             DeactivateCell();
 
@@ -670,7 +670,7 @@ OTableListBoxControl::OTableListBoxControl(  Window* _pParent
         if ( pLines->size() >= static_cast<sal_uInt32>(m_pRC_Tables->GetRowCount()) )
         {
             m_pRC_Tables->DeactivateCell();
-            m_pRC_Tables->RowInserted(m_pRC_Tables->GetRowCount(), pLines->size() - static_cast<sal_uInt32>(m_pRC_Tables->GetRowCount()) + 1, TRUE);
+            m_pRC_Tables->RowInserted(m_pRC_Tables->GetRowCount(), pLines->size() - static_cast<sal_uInt32>(m_pRC_Tables->GetRowCount()) + 1, sal_True);
             m_pRC_Tables->ActivateCell();
         }
     }
@@ -726,9 +726,9 @@ OTableListBoxControl::OTableListBoxControl(  Window* _pParent
         m_pRC_Tables->lateInit();
     }
     // -----------------------------------------------------------------------------
-    BOOL OTableListBoxControl::SaveModified()
+    sal_Bool OTableListBoxControl::SaveModified()
     {
-        BOOL bRet = m_pRC_Tables->SaveModified();
+        sal_Bool bRet = m_pRC_Tables->SaveModified();
         m_pRC_Tables->getData()->normalizeLines();
         return bRet;
     }

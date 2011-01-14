@@ -55,7 +55,7 @@ namespace dbaui
         OTableFieldDescWin*                 m_pFieldDescWin;
         OTableEditorCtrl*                   m_pEditorCtrl;
 
-        void ImplInitSettings( BOOL bFont, BOOL bForeground, BOOL bBackground );
+        void ImplInitSettings( sal_Bool bFont, sal_Bool bForeground, sal_Bool bBackground );
         void ArrangeChilds( long nSplitPos ,Rectangle& rRect);
         DECL_LINK( SplitHdl, Splitter* );
     protected:

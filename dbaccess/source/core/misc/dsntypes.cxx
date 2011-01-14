@@ -442,7 +442,7 @@ DATASOURCE_TYPE ODsnTypeCollection::determineType(const String& _rDsn) const
 
     for ( size_t i=0; i < sizeof( aKnowPrefixes ) / sizeof( aKnowPrefixes[0] ); ++i )
     {
-        USHORT nMatchLen = aKnowPrefixes[i].bMatchComplete ? sDsn.Len() : (USHORT)rtl_str_getLength( aKnowPrefixes[i].pAsciiPrefix );
+        sal_uInt16 nMatchLen = aKnowPrefixes[i].bMatchComplete ? sDsn.Len() : (sal_uInt16)rtl_str_getLength( aKnowPrefixes[i].pAsciiPrefix );
         if ( sDsn.EqualsIgnoreCaseAscii( aKnowPrefixes[i].pAsciiPrefix, 0, nMatchLen ) )
             return aKnowPrefixes[i].eType;
     }

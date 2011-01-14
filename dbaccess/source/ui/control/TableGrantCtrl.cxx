@@ -63,14 +63,14 @@ using namespace ::com::sun::star::uno;
 using namespace ::dbaui;
 using namespace ::svt;
 
-const USHORT COL_TABLE_NAME = 1;
-const USHORT COL_SELECT     = 2;
-const USHORT COL_INSERT     = 3;
-const USHORT COL_DELETE     = 4;
-const USHORT COL_UPDATE     = 5;
-const USHORT COL_ALTER      = 6;
-const USHORT COL_REF        = 7;
-const USHORT COL_DROP       = 8;
+const sal_uInt16 COL_TABLE_NAME = 1;
+const sal_uInt16 COL_SELECT     = 2;
+const sal_uInt16 COL_INSERT     = 3;
+const sal_uInt16 COL_DELETE     = 4;
+const sal_uInt16 COL_UPDATE     = 5;
+const sal_uInt16 COL_ALTER      = 6;
+const sal_uInt16 COL_REF        = 7;
+const sal_uInt16 COL_DROP       = 8;
 
 DBG_NAME(OTableGrantControl)
 
@@ -82,13 +82,13 @@ OTableGrantControl::OTableGrantControl( Window* pParent,const ResId& _RsId)
     ,m_pCheckCell( NULL )
     ,m_pEdit( NULL )
     ,m_nDataPos( 0 )
-    ,m_bEnable(TRUE)
+    ,m_bEnable(sal_True)
     ,m_nDeactivateEvent(0)
 {
     DBG_CTOR(OTableGrantControl,NULL);
     //////////////////////////////////////////////////////////////////////
     // Spalten einfuegen
-    USHORT i=1;
+    sal_uInt16 i=1;
     InsertDataColumn( i, String(ModuleRes(STR_TABLE_PRIV_NAME)  ), 75);
     FreezeColumn(i++);
     InsertDataColumn( i++, String(ModuleRes(STR_TABLE_PRIV_SELECT)), 75);
@@ -161,11 +161,11 @@ void OTableGrantControl::Init()
     if(!m_pCheckCell)
     {
         m_pCheckCell    = new CheckBoxControl( &GetDataWindow() );
-        m_pCheckCell->GetBox().EnableTriState(FALSE);
+        m_pCheckCell->GetBox().EnableTriState(sal_False);
 
         m_pEdit         = new Edit( &GetDataWindow() );
         m_pEdit->SetReadOnly();
-        m_pEdit->Enable(FALSE);
+        m_pEdit->Enable(sal_False);
     }
 
     UpdateTables();
@@ -221,17 +221,17 @@ IMPL_LINK(OTableGrantControl, AsynchDeactivate, void*, EMPTYARG)
 }
 
 //------------------------------------------------------------------------------
-BOOL OTableGrantControl::IsTabAllowed(BOOL bForward) const
+sal_Bool OTableGrantControl::IsTabAllowed(sal_Bool bForward) const
 {
     DBG_CHKTHIS(OTableGrantControl,NULL);
     long nRow = GetCurRow();
-    USHORT nCol = GetCurColumnId();
+    sal_uInt16 nCol = GetCurColumnId();
 
     if (bForward && (nCol == 2) && (nRow == GetRowCount() - 1))
-        return FALSE;
+        return sal_False;
 
     if (!bForward && (nCol == 1) && (nRow == 0))
-        return FALSE;
+        return sal_False;
 
     return EditBrowseBox::IsTabAllowed(bForward);
 }
@@ -243,16 +243,16 @@ BOOL OTableGrantControl::IsTabAllowed(BOOL bForward) const
         xAuth->revokePrivileges(sTableName,PrivilegeObject::TABLE,what)
 
 //------------------------------------------------------------------------------
-BOOL OTableGrantControl::SaveModified()
+sal_Bool OTableGrantControl::SaveModified()
 {
     DBG_CHKTHIS(OTableGrantControl,NULL);
 
     sal_Int32 nRow = GetCurRow();
     if(nRow == -1 || nRow >= m_aTableNames.getLength())
-        return FALSE;
+        return sal_False;
 
     ::rtl::OUString sTableName = m_aTableNames[nRow];
-    BOOL bErg = TRUE;
+    sal_Bool bErg = sal_True;
     try
     {
 
@@ -291,7 +291,7 @@ BOOL OTableGrantControl::SaveModified()
     }
     catch(SQLException& e)
     {
-        bErg = FALSE;
+        bErg = sal_False;
         ::dbaui::showError(::dbtools::SQLExceptionInfo(e),GetParent(),m_xORB);
     }
     if(bErg && Controller().Is())
@@ -303,7 +303,7 @@ BOOL OTableGrantControl::SaveModified()
 }
 
 //------------------------------------------------------------------------------
-String OTableGrantControl::GetCellText( long nRow, USHORT nColId ) const
+String OTableGrantControl::GetCellText( long nRow, sal_uInt16 nColId ) const
 {
     DBG_CHKTHIS(OTableGrantControl,NULL);
     if(COL_TABLE_NAME == nColId)
@@ -318,7 +318,7 @@ String OTableGrantControl::GetCellText( long nRow, USHORT nColId ) const
 }
 
 //------------------------------------------------------------------------------
-void OTableGrantControl::InitController( CellControllerRef& /*rController*/, long nRow, USHORT nColumnId )
+void OTableGrantControl::InitController( CellControllerRef& /*rController*/, long nRow, sal_uInt16 nColumnId )
 {
     DBG_CHKTHIS(OTableGrantControl,NULL);
     String sTablename = m_aTableNames[nRow];
@@ -329,7 +329,7 @@ void OTableGrantControl::InitController( CellControllerRef& /*rController*/, lon
     {
         // get the privileges from the user
         TTablePrivilegeMap::const_iterator aFind = findPrivilege(nRow);
-        m_pCheckCell->GetBox().Check(aFind != m_aPrivMap.end() ? isAllowed(nColumnId,aFind->second.nRights) : FALSE);
+        m_pCheckCell->GetBox().Check(aFind != m_aPrivMap.end() ? isAllowed(nColumnId,aFind->second.nRights) : sal_False);
     }
 }
 // -----------------------------------------------------------------------------
@@ -364,7 +364,7 @@ void OTableGrantControl::fillPrivilege(sal_Int32 _nRow) const
     }
 }
 // -----------------------------------------------------------------------------
-sal_Bool OTableGrantControl::isAllowed(USHORT _nColumnId,sal_Int32 _nPrivilege) const
+sal_Bool OTableGrantControl::isAllowed(sal_uInt16 _nColumnId,sal_Int32 _nPrivilege) const
 {
     sal_Bool bAllowed = sal_False;
     switch (_nColumnId)
@@ -406,7 +406,7 @@ void OTableGrantControl::setGrantUser(const Reference< XAuthorizable>& _xGrantUs
     m_xGrantUser = _xGrantUser;
 }
 //------------------------------------------------------------------------------
-CellController* OTableGrantControl::GetController( long nRow, USHORT nColumnId )
+CellController* OTableGrantControl::GetController( long nRow, sal_uInt16 nColumnId )
 {
     DBG_CHKTHIS(OTableGrantControl,NULL);
 
@@ -434,7 +434,7 @@ CellController* OTableGrantControl::GetController( long nRow, USHORT nColumnId )
     return pController;
 }
 //------------------------------------------------------------------------------
-BOOL OTableGrantControl::SeekRow( long nRow )
+sal_Bool OTableGrantControl::SeekRow( long nRow )
 {
     DBG_CHKTHIS(OTableGrantControl,NULL);
     m_nDataPos = nRow;
@@ -443,7 +443,7 @@ BOOL OTableGrantControl::SeekRow( long nRow )
 }
 
 //------------------------------------------------------------------------------
-void OTableGrantControl::PaintCell( OutputDevice& rDev, const Rectangle& rRect, USHORT nColumnId ) const
+void OTableGrantControl::PaintCell( OutputDevice& rDev, const Rectangle& rRect, sal_uInt16 nColumnId ) const
 {
     DBG_CHKTHIS(OTableGrantControl,NULL);
 
@@ -453,7 +453,7 @@ void OTableGrantControl::PaintCell( OutputDevice& rDev, const Rectangle& rRect, 
         if(aFind != m_aPrivMap.end())
             PaintTristate(rDev, rRect, isAllowed(nColumnId,aFind->second.nRights) ? STATE_CHECK : STATE_NOCHECK,isAllowed(nColumnId,aFind->second.nWithGrant));
         else
-            PaintTristate(rDev, rRect, STATE_NOCHECK,FALSE);
+            PaintTristate(rDev, rRect, STATE_NOCHECK,sal_False);
     }
     else
     {
@@ -494,11 +494,11 @@ OTableGrantControl::TTablePrivilegeMap::const_iterator OTableGrantControl::findP
 // -----------------------------------------------------------------------------
 Reference< XAccessible > OTableGrantControl::CreateAccessibleCell( sal_Int32 _nRow, sal_uInt16 _nColumnPos )
 {
-    USHORT nColumnId = GetColumnId( _nColumnPos );
+    sal_uInt16 nColumnId = GetColumnId( _nColumnPos );
     if(nColumnId != COL_TABLE_NAME)
     {
         TriState eState = STATE_NOCHECK;
-        BOOL bEnable = FALSE;
+        sal_Bool bEnable = sal_False;
         TTablePrivilegeMap::const_iterator aFind = findPrivilege(_nRow);
         if(aFind != m_aPrivMap.end())
         {

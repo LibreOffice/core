@@ -295,7 +295,7 @@ void ODbTypeWizDialog::clearPassword()
 // -----------------------------------------------------------------------------
 TabPage* ODbTypeWizDialog::createPage(WizardState _nState)
 {
-    USHORT nStringId = STR_PAGETITLE_ADVANCED;
+    sal_uInt16 nStringId = STR_PAGETITLE_ADVANCED;
     TabPage* pPage = NULL;
     switch(_nState)
     {

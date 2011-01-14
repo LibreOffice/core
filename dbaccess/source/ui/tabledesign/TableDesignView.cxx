@@ -303,7 +303,7 @@ IMPL_LINK( OTableDesignView, SwitchHdl, Accelerator*, /*pAcc*/ )
 //------------------------------------------------------------------------------
 long OTableDesignView::PreNotify( NotifyEvent& rNEvt )
 {
-    BOOL bHandled = FALSE;
+    sal_Bool bHandled = sal_False;
     switch(rNEvt.GetType())
     {
         case EVENT_GETFOCUS:

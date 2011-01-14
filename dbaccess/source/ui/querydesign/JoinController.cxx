@@ -216,7 +216,7 @@ bool AddTableDialogContext::allowAddition() const
 // -----------------------------------------------------------------------------
 void AddTableDialogContext::addTableWindow( const String& _rQualifiedTableName, const String& _rAliasName )
 {
-    getTableView()->AddTabWin( _rQualifiedTableName, _rAliasName, TRUE );
+    getTableView()->AddTabWin( _rQualifiedTableName, _rAliasName, sal_True );
 }
 
 // -----------------------------------------------------------------------------
@@ -382,7 +382,7 @@ void OJoinController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >& 
 
             if ( m_pAddTableDialog->IsVisible() )
             {
-                m_pAddTableDialog->Show( FALSE );
+                m_pAddTableDialog->Show( sal_False );
                 getView()->GrabFocus();
             }
             else
@@ -391,7 +391,7 @@ void OJoinController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >& 
                     WaitObject aWaitCursor( getView() );
                     m_pAddTableDialog->Update();
                 }
-                m_pAddTableDialog->Show( TRUE );
+                m_pAddTableDialog->Show( sal_True );
                 ::dbaui::notifySystemWindow(getView(),m_pAddTableDialog,::comphelper::mem_fun(&TaskPaneList::AddWindow));
             }
             break;

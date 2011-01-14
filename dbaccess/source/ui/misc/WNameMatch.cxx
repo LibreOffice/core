@@ -286,7 +286,7 @@ IMPL_LINK( OWizNameMatching, TableListClickHdl, void*, /*NOTINTERESTEDIN*/ )
     SvLBoxEntry* pEntry = m_CTRL_LEFT.FirstSelected();
     if(pEntry)
     {
-        ULONG nPos          = m_CTRL_LEFT.GetModel()->GetAbsPos(pEntry);
+        sal_uLong nPos          = m_CTRL_LEFT.GetModel()->GetAbsPos(pEntry);
         SvLBoxEntry* pOldEntry = m_CTRL_RIGHT.FirstSelected();
         if(pOldEntry && nPos != m_CTRL_RIGHT.GetModel()->GetAbsPos(pOldEntry))
         {
@@ -295,7 +295,7 @@ IMPL_LINK( OWizNameMatching, TableListClickHdl, void*, /*NOTINTERESTEDIN*/ )
             pOldEntry = m_CTRL_RIGHT.GetEntry(nPos);
             if(pOldEntry)
             {
-                ULONG nNewPos = m_CTRL_LEFT.GetModel()->GetAbsPos(m_CTRL_LEFT.GetFirstEntryInView());
+                sal_uLong nNewPos = m_CTRL_LEFT.GetModel()->GetAbsPos(m_CTRL_LEFT.GetFirstEntryInView());
                 if ( nNewPos - nPos == 1 )
                     --nNewPos;
                 m_CTRL_RIGHT.MakeVisible(m_CTRL_RIGHT.GetEntry(nNewPos),sal_True);
@@ -320,7 +320,7 @@ IMPL_LINK( OWizNameMatching, TableListRightSelectHdl, void*, /*NOTINTERESTEDIN*/
     SvLBoxEntry* pEntry = m_CTRL_RIGHT.FirstSelected();
     if(pEntry)
     {
-        ULONG nPos          = m_CTRL_RIGHT.GetModel()->GetAbsPos(pEntry);
+        sal_uLong nPos          = m_CTRL_RIGHT.GetModel()->GetAbsPos(pEntry);
         SvLBoxEntry* pOldEntry = m_CTRL_LEFT.FirstSelected();
         if(pOldEntry && nPos != m_CTRL_LEFT.GetModel()->GetAbsPos(pOldEntry))
         {
@@ -329,7 +329,7 @@ IMPL_LINK( OWizNameMatching, TableListRightSelectHdl, void*, /*NOTINTERESTEDIN*/
             pOldEntry = m_CTRL_LEFT.GetEntry(nPos);
             if(pOldEntry)
             {
-                ULONG nNewPos = m_CTRL_RIGHT.GetModel()->GetAbsPos(m_CTRL_RIGHT.GetFirstEntryInView());
+                sal_uLong nNewPos = m_CTRL_RIGHT.GetModel()->GetAbsPos(m_CTRL_RIGHT.GetFirstEntryInView());
                 if ( nNewPos - nPos == 1 )
                     nNewPos--;
                 m_CTRL_LEFT.MakeVisible(m_CTRL_LEFT.GetEntry(nNewPos),sal_True);

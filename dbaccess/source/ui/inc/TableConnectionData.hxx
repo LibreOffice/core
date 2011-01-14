@@ -84,14 +84,14 @@ namespace dbaui
         virtual OTableConnectionData* NewInstance() const;
             // (von OTableConnectionData abgeleitete Klasse muessen entsprechend eine Instanz ihrer Klasse liefern)
 
-        BOOL SetConnLine( USHORT nIndex, const String& rSourceFieldName, const String& rDestFieldName );
-        BOOL AppendConnLine( const ::rtl::OUString& rSourceFieldName, const ::rtl::OUString& rDestFieldName );
-        void ResetConnLines( BOOL bUseDefaults = TRUE );
+        sal_Bool SetConnLine( sal_uInt16 nIndex, const String& rSourceFieldName, const String& rDestFieldName );
+        sal_Bool AppendConnLine( const ::rtl::OUString& rSourceFieldName, const ::rtl::OUString& rDestFieldName );
+        void ResetConnLines( sal_Bool bUseDefaults = sal_True );
 
         /** normalizeLines moves the empty lines to the back
         */
         void normalizeLines();
-            // loescht die Liste der ConnLines, bei bUseDefaults == TRUE werden danach MAX_CONN_COUNT neue Dummy-Linien eingefuegt
+            // loescht die Liste der ConnLines, bei bUseDefaults == sal_True werden danach MAX_CONN_COUNT neue Dummy-Linien eingefuegt
 
         OConnectionLineDataVec* GetConnLineDataList(){ return &m_vConnLineData; }
 
@@ -108,7 +108,7 @@ namespace dbaui
 
             @return true if successful
         */
-        virtual BOOL Update(){ return TRUE; }
+        virtual sal_Bool Update(){ return sal_True; }
     };
 
     typedef ::std::vector< ::boost::shared_ptr<OTableConnectionData> >  TTableConnectionData;

@@ -1643,7 +1643,7 @@ TOTypeInfoSP queryTypeInfoByType(sal_Int32 _nDataType,const OTypeInfoMap& _rType
     return pTypeInfo;
 }
 // -----------------------------------------------------------------------------
-sal_Int32 askForUserAction(Window* _pParent,USHORT _nTitle,USHORT _nText,sal_Bool _bAll,const ::rtl::OUString& _sName)
+sal_Int32 askForUserAction(Window* _pParent,sal_uInt16 _nTitle,sal_uInt16 _nText,sal_Bool _bAll,const ::rtl::OUString& _sName)
 {
     vos::OGuard aGuard( Application::GetSolarMutex() );
     String aMsg = String(ModuleRes(_nText));

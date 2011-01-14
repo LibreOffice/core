@@ -116,7 +116,7 @@ namespace dbaui
         OTableConnection*       m_pSelectedConn;
 
 
-        BOOL                    m_bTrackingInitiallyMoved;
+        sal_Bool                    m_bTrackingInitiallyMoved;
 
         DECL_LINK(OnDragScrollTimer, void*);
 
@@ -150,7 +150,7 @@ namespace dbaui
 
         void NotifyTitleClicked( OTableWindow* pTabWin, const Point rMousePos );
 
-        virtual void AddTabWin(const ::rtl::OUString& _rComposedName, const ::rtl::OUString& rWinName, BOOL bNewTable = FALSE);
+        virtual void AddTabWin(const ::rtl::OUString& _rComposedName, const ::rtl::OUString& rWinName, sal_Bool bNewTable = sal_False);
         virtual void RemoveTabWin( OTableWindow* pTabWin );
 
         // alle TabWins verstecken (NICHT loeschen, sie werden in eine Undo-Action gepackt)
@@ -178,8 +178,8 @@ namespace dbaui
         */
         void addConnection(OTableConnection* _pConnection,sal_Bool _bAddData = sal_True);
 
-        BOOL            ScrollPane( long nDelta, BOOL bHoriz, BOOL bPaintScrollBars );
-        ULONG           GetTabWinCount();
+        sal_Bool            ScrollPane( long nDelta, sal_Bool bHoriz, sal_Bool bPaintScrollBars );
+        sal_uLong           GetTabWinCount();
         Point           GetScrollOffset() const { return m_aScrollOffset; }
 
         OJoinDesignView*            getDesignView() const { return m_pView; }
@@ -197,7 +197,7 @@ namespace dbaui
         const ::std::vector<OTableConnection*>* getTableConnections() const { return &m_vTableConnection; }
 
 
-        BOOL                        ExistsAConn(const OTableWindow* pFromWin) const;
+        sal_Bool                        ExistsAConn(const OTableWindow* pFromWin) const;
 
         /** getTableConnections searchs for all connections of a table
             @param  _pFromWin   the table for which connections should be found
@@ -229,7 +229,7 @@ namespace dbaui
         virtual void ClearAll();
 
         // wird vom AddTabDlg benutzt, um festzustellen, ob noch Tabellen hinzugefuegt werden duerfen
-        virtual BOOL IsAddAllowed();
+        virtual sal_Bool IsAddAllowed();
         virtual long PreNotify(NotifyEvent& rNEvt);
 
         // DnD stuff
@@ -263,7 +263,7 @@ namespace dbaui
                 <TRUE/> if the area is visible otherwise <FALSE/>
 
         */
-        BOOL isMovementAllowed(const Point& _rPoint,const Size& _rSize);
+        sal_Bool isMovementAllowed(const Point& _rPoint,const Size& _rSize);
 
         Size getRealOutputSize() const { return m_aOutputSize; }
 
@@ -316,7 +316,7 @@ namespace dbaui
 
     private:
         void    InitColors();
-        BOOL    ScrollWhileDragging();
+        sal_Bool    ScrollWhileDragging();
 
         /** executePopup opens the context menu to delate a connection
             @param  _aPos               the position where the popup menu should appear

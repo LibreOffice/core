@@ -124,7 +124,7 @@ namespace dbaui
             IAddTableDialogContext& _rContext );
 
     private:
-        virtual BOOL Close();
+        virtual sal_Bool Close();
 
         bool impl_isAddAllowed();
         void impl_addTable();

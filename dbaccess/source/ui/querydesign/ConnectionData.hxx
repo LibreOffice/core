@@ -53,7 +53,7 @@ DECLARE_LIST( OConnectionLineList, OConnectionLine* );
 DECLARE_LIST( OTableConnectionDataList, OTableConnectionData* );
 
 //==================================================================
-const USHORT MAX_CONN_COUNT     = 2;
+const sal_uInt16 MAX_CONN_COUNT     = 2;
 
 class SbaJoinTabWin;
 class SbaJoinTabWinCont;

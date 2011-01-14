@@ -45,7 +45,7 @@ namespace dbaui
 {
 
 DBG_NAME(OTitleWindow)
-OTitleWindow::OTitleWindow(Window* _pParent,USHORT _nTitleId,WinBits _nBits,BOOL _bShift)
+OTitleWindow::OTitleWindow(Window* _pParent,sal_uInt16 _nTitleId,WinBits _nBits,sal_Bool _bShift)
 : Window(_pParent,_nBits | WB_DIALOGCONTROL)
 , m_aSpace1(this)
 , m_aSpace2(this)
@@ -108,7 +108,7 @@ void OTitleWindow::Resize()
     }
 }
 // -----------------------------------------------------------------------------
-void OTitleWindow::setTitle(USHORT _nTitleId)
+void OTitleWindow::setTitle(sal_uInt16 _nTitleId)
 {
     if ( _nTitleId != 0 )
     {

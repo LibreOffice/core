@@ -84,7 +84,7 @@ namespace dbaui
         bool                m_bHasBooleanComparisonMode;
 
     public:
-        virtual BOOL        FillItemSet ( SfxItemSet& _rCoreAttrs );
+        virtual sal_Bool        FillItemSet ( SfxItemSet& _rCoreAttrs );
 
         SpecialSettingsPage(Window* pParent, const SfxItemSet& _rCoreAttrs, const DataSourceMetaData& _rDSMeta );
 
@@ -122,7 +122,7 @@ namespace dbaui
                     m_aControlDependencies;
 
     public:
-        virtual BOOL        FillItemSet (SfxItemSet& _rCoreAttrs);
+        virtual sal_Bool        FillItemSet (SfxItemSet& _rCoreAttrs);
 
         GeneratedValuesPage( Window* pParent, const SfxItemSet& _rCoreAttrs );
     protected:

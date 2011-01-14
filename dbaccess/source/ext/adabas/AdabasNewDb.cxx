@@ -176,7 +176,7 @@ DBG_NAME( OAdabasNewDbDlg )
 OAdabasNewDbDlg::OAdabasNewDbDlg( Window* pParent,
                                  const Reference<XCreateCatalog>& _rxCreateCatalog,
                                  const Reference< XMultiServiceFactory >&   _rxORB,
-                                 BOOL _bRestore)
+                                 sal_Bool _bRestore)
     :ModalDialog( pParent, ModuleRes( DLG_ADABAS_NEWDB ))
     ,m_FT_DATABASENAME(         this, ModuleRes( FT_DATABASENAME        ) )
     ,m_ET_DATABASENAME(         this, ModuleRes( ET_DATABASENAME        ) )
@@ -269,7 +269,7 @@ OAdabasNewDbDlg::OAdabasNewDbDlg( Window* pParent,
 
         m_ET_SYSUSR.SetModifyHdl(               LINK(this,OAdabasNewDbDlg,LoseFocusHdl));
         m_ET_CONUSR.SetModifyHdl(               LINK(this,OAdabasNewDbDlg,LoseFocusHdl));
-        m_ET_DOMAIN_USR.Enable(FALSE);
+        m_ET_DOMAIN_USR.Enable(sal_False);
 
         //  m_ET_SYSUSR.setUpperCase();
         //  m_ET_CONUSR.setUpperCase();
@@ -399,7 +399,7 @@ OAdabasNewDbDlg::OAdabasNewDbDlg( Window* pParent,
     m_ET_CONUSR.SetText(String::CreateFromAscii("CONTROL"));
 
     m_PB_OK.SetClickHdl(LINK(this,OAdabasNewDbDlg,ImplOKHdl));
-    m_PB_OK.Enable(FALSE);
+    m_PB_OK.Enable(sal_False);
 
     m_ET_DATABASENAME.SetModifyHdl( LINK(this,OAdabasNewDbDlg,LoseFocusHdl));
 
@@ -485,7 +485,7 @@ IMPL_LINK( OAdabasNewDbDlg, ImplOKHdl, OKButton*, /*EMPTYARG*/ )
     }
 
 
-    BOOL bOk = FALSE;
+    sal_Bool bOk = sal_False;
 
     {
         // we need url
@@ -509,13 +509,13 @@ IMPL_LINK( OAdabasNewDbDlg, ImplOKHdl, OKButton*, /*EMPTYARG*/ )
     else if(m_ET_SYSUSR.GetText() == m_ET_CONUSR.GetText())
         aErrorMessage = String(ModuleRes(STR_NO_SAME_USER));
     else
-        bOk = TRUE;
+        bOk = sal_True;
 
 
     if (!bOk)
     {
         ErrorBox(this, WB_OK, aErrorMessage).Execute();
-        return FALSE;
+        return sal_False;
     }
 
     sal_Int32 nPos = 0;
@@ -560,7 +560,7 @@ IMPL_LINK( OAdabasNewDbDlg, ImplOKHdl, OKButton*, /*EMPTYARG*/ )
     m_aCreatorThread->setTerminateHandler(LINK(this,OAdabasNewDbDlg,TerminateHdl));
     m_aCreatorThread->create();
 
-    return TRUE;
+    return sal_True;
 }
 //-------------------------------------------------------------------------
 IMPL_LINK( OAdabasNewDbDlg, TerminateHdl, void*, /*NOTUSABLE*/ )
@@ -747,7 +747,7 @@ IMPL_LINK( OAdabasNewDbDlg, PwdClickHdl, Button *, pButton )
 //------------------------------------------------------------------------
 void OAdabasNewDbDlg::CheckBitmaps()
 {
-    INT16 i=0;
+    sal_Int16 i=0;
     if(m_ConPwd.Len() && m_ET_CONUSR.GetText().Len())
             i++,m_BMP_CON.SetImage(ModuleRes(((m_nSetBitmap & 2) == 2) ? DEFAULT_BLUE : CHECK_GREEN));
     else

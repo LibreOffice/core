@@ -175,7 +175,7 @@ BSTR PromptEdit(long hWnd,BSTR connstr)
 
     // Prompt for connection information.
     hr = dlPrompt->PromptEdit((IDispatch **)&piTmpConnection,&pbSuccess);
-    if( SUCCEEDED( hr ) && FALSE == pbSuccess ) //if user press cancel then FALSE == pbSuccess
+    if( SUCCEEDED( hr ) && sal_False == pbSuccess ) //if user press cancel then sal_False == pbSuccess
     {
         piTmpConnection->Release( );
         dlPrompt->Release( );

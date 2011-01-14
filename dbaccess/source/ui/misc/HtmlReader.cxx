@@ -110,7 +110,7 @@ OHTMLReader::OHTMLReader(SvStream& rIn,const SharedConnection& _rxConnection,
     DBG_CTOR(OHTMLReader,NULL);
     SetSrcEncoding( GetExtendedCompatibilityTextEncoding(  RTL_TEXTENCODING_ISO_8859_1 ) );
     // If the file starts with a BOM, switch to UCS2.
-    SetSwitchToUCS2( TRUE );
+    SetSwitchToUCS2( sal_True );
 }
 // ---------------------------------------------------------------------------
 OHTMLReader::OHTMLReader(SvStream& rIn,
@@ -132,7 +132,7 @@ OHTMLReader::OHTMLReader(SvStream& rIn,
     DBG_CTOR(OHTMLReader,NULL);
     SetSrcEncoding( GetExtendedCompatibilityTextEncoding(  RTL_TEXTENCODING_ISO_8859_1 ) );
     // If the file starts with a BOM, switch to UCS2.
-    SetSwitchToUCS2( TRUE );
+    SetSwitchToUCS2( sal_True );
 }
 // ---------------------------------------------------------------------------
 OHTMLReader::~OHTMLReader()
@@ -325,7 +325,7 @@ void OHTMLReader::NextToken( int nToken )
 void OHTMLReader::fetchOptions()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "OHTMLReader::fetchOptions" );
-    m_bInTbl = TRUE;
+    m_bInTbl = sal_True;
     const HTMLOptions* options = GetOptions();
     sal_Int16 nArrLen = options->Count();
     for ( sal_Int16 i = 0; i < nArrLen; i++ )
@@ -492,7 +492,7 @@ sal_Bool OHTMLReader::CreateTable(int nToken)
                 // run through
             case HTML_TABLEHEADER_ON:
                 TableDataOn(eVal,nTmpToken2);
-                bTableHeader = TRUE;
+                bTableHeader = sal_True;
                 break;
             case HTML_TABLEDATA_OFF:
                 // m_bAppendFirstLine = true;
@@ -519,7 +519,7 @@ sal_Bool OHTMLReader::CreateTable(int nToken)
 
             case HTML_TITLE_ON:
             case HTML_CAPTION_ON:
-                bCaption = TRUE;
+                bCaption = sal_True;
                 break;
             case HTML_TITLE_OFF:
             case HTML_CAPTION_OFF:

@@ -39,12 +39,12 @@ namespace dbaui
         FixedText   m_aSpace2;
         FixedText   m_aTitle;
         Window*     m_pChild;
-        BOOL        m_bShift;
-        void ImplInitSettings( BOOL bFont, BOOL bForeground, BOOL bBackground );
+        sal_Bool        m_bShift;
+        void ImplInitSettings( sal_Bool bFont, sal_Bool bForeground, sal_Bool bBackground );
     protected:
         virtual void DataChanged(const DataChangedEvent& rDCEvt);
     public:
-        OTitleWindow(Window* _pParent,USHORT _nTitleId,WinBits _nBits,BOOL _bShift = TRUE);
+        OTitleWindow(Window* _pParent,sal_uInt16 _nTitleId,WinBits _nBits,sal_Bool _bShift = sal_True);
         virtual ~OTitleWindow();
 
         // window overloads
@@ -68,7 +68,7 @@ namespace dbaui
             @param  _nTitleId
                 The resource id of the title text.
         */
-        void setTitle(USHORT _nTitleId);
+        void setTitle(sal_uInt16 _nTitleId);
 
 
         /** Gets the min Width in Pixel which is needed to display the whole

@@ -146,7 +146,7 @@ namespace dbaui
                 the resource ID image to be used for the object type. Must be fed into a
                 ModuleRes instance to actually load the image.
         */
-        USHORT getDefaultImageResourceID(
+        sal_uInt16 getDefaultImageResourceID(
             sal_Int32 _nDatabaseObjectType,
             bool _bHighContrast
         );

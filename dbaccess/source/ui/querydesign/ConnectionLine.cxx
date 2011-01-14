@@ -246,7 +246,7 @@ void calcPointX2(const OTableWindow* _pWin,Point& _rNewConPos,Point& _rNewDescrP
     _rNewConPos.X() -= DESCRIPT_LINE_WIDTH;
 }
 //------------------------------------------------------------------------
-BOOL OConnectionLine::RecalcLine()
+sal_Bool OConnectionLine::RecalcLine()
 {
     //////////////////////////////////////////////////////////////////////
     // Fenster und Entries muessen gesetzt sein
@@ -254,7 +254,7 @@ BOOL OConnectionLine::RecalcLine()
     const OTableWindow* pDestWin = m_pTabConn->GetDestWin();
 
     if( !pSourceWin || !pDestWin )
-        return FALSE;
+        return sal_False;
 
     SvLBoxEntry* pSourceEntry = pSourceWin->GetListBox()->GetEntryFromText( GetData()->GetSourceFieldName() );
     SvLBoxEntry* pDestEntry = pDestWin->GetListBox()->GetEntryFromText( GetData()->GetDestFieldName() );
@@ -297,14 +297,14 @@ BOOL OConnectionLine::RecalcLine()
     // aDestConnPosY bestimmen
     calcPointsYValue(pDestWin,pDestEntry,m_aDestConnPos,m_aDestDescrLinePos);
 
-    return TRUE;
+    return sal_True;
 }
 // -----------------------------------------------------------------------------
 
 //------------------------------------------------------------------------
 void OConnectionLine::Draw( OutputDevice* pOutDev )
 {
-    const UINT16 nRectSize = 3;
+    const sal_uInt16 nRectSize = 3;
 
     //////////////////////////////////////////////////////////////////////
     // Neue Dimensionen berechnen
@@ -337,7 +337,7 @@ void OConnectionLine::Draw( OutputDevice* pOutDev )
     pOutDev->DrawRect( calcRect( m_aDestDescrLinePos,aVector) );
 }
 // -----------------------------------------------------------------------------
-BOOL OConnectionLine::IsValid() const
+sal_Bool OConnectionLine::IsValid() const
 {
     return m_pData.isValid();
 }

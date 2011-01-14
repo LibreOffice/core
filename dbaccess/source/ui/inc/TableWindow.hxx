@@ -44,11 +44,11 @@ namespace dbaui
 {
     //////////////////////////////////////////////////////////////////////////
     // Flags fuer die Groessenanpassung der SbaJoinTabWins
-    const UINT16 SIZING_NONE    = 0x0000;
-    const UINT16 SIZING_TOP     = 0x0001;
-    const UINT16 SIZING_BOTTOM  = 0x0002;
-    const UINT16 SIZING_LEFT    = 0x0004;
-    const UINT16 SIZING_RIGHT   = 0x0008;
+    const sal_uInt16 SIZING_NONE    = 0x0000;
+    const sal_uInt16 SIZING_TOP     = 0x0001;
+    const sal_uInt16 SIZING_BOTTOM  = 0x0002;
+    const sal_uInt16 SIZING_LEFT    = 0x0004;
+    const sal_uInt16 SIZING_RIGHT   = 0x0008;
 
     class OTableWindowListBox;
     class OJoinDesignView;
@@ -75,8 +75,8 @@ namespace dbaui
                                 m_pContainerListener;
         sal_Int32               m_nMoveCount;           // how often the arrow keys was pressed
         sal_Int32               m_nMoveIncrement;       // how many pixel we should move
-        UINT16                  m_nSizingFlags;
-        BOOL                    m_bActive;
+        sal_uInt16                  m_nSizingFlags;
+        sal_Bool                    m_bActive;
 
         void Draw3DBorder( const Rectangle& rRect );
         // OContainerListener
@@ -93,7 +93,7 @@ namespace dbaui
 
         virtual OTableWindowListBox*    CreateListBox();
             // wird im ERSTEN Init aufgerufen
-        BOOL FillListBox();
+        sal_Bool FillListBox();
             // wird in JEDEM Init aufgerufen
 
         virtual void OnEntryDoubleClicked(SvLBoxEntry* /*pEntry*/) { }
@@ -105,7 +105,7 @@ namespace dbaui
             @return
                 <TRUE/> when the table could handle the keyevent.
         */
-        BOOL            HandleKeyInput( const KeyEvent& rEvt );
+        sal_Bool            HandleKeyInput( const KeyEvent& rEvt );
 
         /** delete the user data with the equal type as created within createUserData
             @param  _pUserData
@@ -136,7 +136,7 @@ namespace dbaui
         virtual ~OTableWindow();
 
         // spaeter Constructor, siehe auch CreateListbox und FillListbox
-        virtual BOOL Init();
+        virtual sal_Bool Init();
 
         OJoinTableView*             getTableView();
         const OJoinTableView*       getTableView() const;
@@ -146,11 +146,11 @@ namespace dbaui
         void                        SetPosSizePixel( const Point& rNewPos, const Size& rNewSize );
 
         String                      getTitle() const;
-        void                        SetBoldTitle( BOOL bBold );
+        void                        SetBoldTitle( sal_Bool bBold );
         void                        setActive(sal_Bool _bActive = sal_True);
 
         void                        Remove();
-        BOOL                        IsActiveWindow(){ return m_bActive; }
+        sal_Bool                        IsActiveWindow(){ return m_bActive; }
 
         ::rtl::OUString             GetTableName() const { return m_pData->GetTableName(); }
         ::rtl::OUString             GetWinName() const { return m_pData->GetWinName(); }
@@ -168,7 +168,7 @@ namespace dbaui
         inline ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > GetOriginalColumns() const { return m_pData->getColumns(); }
         inline ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >    GetTable() const { return m_pData->getTable(); }
 
-        UINT16                      GetSizingFlags() const { return m_nSizingFlags; }
+        sal_uInt16                      GetSizingFlags() const { return m_nSizingFlags; }
         /** set the sizing flag to the direction
             @param  _rPos
                 The EndPosition after resizing.
@@ -192,7 +192,7 @@ namespace dbaui
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible();
 
         // habe ich Connections nach aussen ?
-        BOOL ExistsAConn() const;
+        sal_Bool ExistsAConn() const;
 
         void EnumValidFields(::std::vector< ::rtl::OUString>& arrstrFields);
 

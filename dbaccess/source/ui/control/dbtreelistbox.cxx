@@ -128,7 +128,7 @@ DBTreeListBox::DBTreeListBox( Window* pParent, const Reference< XMultiServiceFac
 // -----------------------------------------------------------------------------
 void DBTreeListBox::init()
 {
-    USHORT nSize = SPACEBETWEENENTRIES;
+    sal_uInt16 nSize = SPACEBETWEENENTRIES;
     SetSpaceBetweenEntries(nSize);
 
     m_aTimer.SetTimeout(900);
@@ -157,8 +157,8 @@ SvLBoxEntry* DBTreeListBox::GetEntryPosByName( const String& aName, SvLBoxEntry*
     SvLBoxEntry* pEntry = NULL;
     if ( pChilds )
     {
-        ULONG nCount = pChilds->Count();
-        for (ULONG i=0; i < nCount; ++i)
+        sal_uLong nCount = pChilds->Count();
+        for (sal_uLong i=0; i < nCount; ++i)
         {
             pEntry = static_cast<SvLBoxEntry*>(pChilds->GetObject(i));
             SvLBoxString* pItem = (SvLBoxString*)(pEntry->GetFirstItem(SV_ITEM_ID_LBOXSTRING));
@@ -382,7 +382,7 @@ void DBTreeListBox::RequestHelp( const HelpEvent& rHEvt )
 void DBTreeListBox::KeyInput( const KeyEvent& rKEvt )
 {
     KeyFuncType eFunc = rKEvt.GetKeyCode().GetFunction();
-    USHORT      nCode = rKEvt.GetKeyCode().GetCode();
+    sal_uInt16      nCode = rKEvt.GetKeyCode().GetCode();
     sal_Bool bHandled = sal_False;
 
     if(eFunc != KEYFUNC_DONTKNOW)
@@ -444,12 +444,12 @@ void DBTreeListBox::KeyInput( const KeyEvent& rKEvt )
         SvTreeListBox::KeyInput(rKEvt);
 }
 // -----------------------------------------------------------------------------
-BOOL DBTreeListBox::EditingEntry( SvLBoxEntry* pEntry, Selection& /*_aSelection*/)
+sal_Bool DBTreeListBox::EditingEntry( SvLBoxEntry* pEntry, Selection& /*_aSelection*/)
 {
     return m_aEditingHandler.Call(pEntry) != 0;
 }
 // -----------------------------------------------------------------------------
-BOOL DBTreeListBox::EditedEntry( SvLBoxEntry* pEntry, const XubString& rNewText )
+sal_Bool DBTreeListBox::EditedEntry( SvLBoxEntry* pEntry, const XubString& rNewText )
 {
     DBTreeEditedEntry aEntry;
     aEntry.pEntry = pEntry;
@@ -461,11 +461,11 @@ BOOL DBTreeListBox::EditedEntry( SvLBoxEntry* pEntry, const XubString& rNewText 
     }
     SetEntryText(pEntry,aEntry.aNewText);
 
-    return FALSE;  // we never want that the base change our text
+    return sal_False;  // we never want that the base change our text
 }
 
 // -----------------------------------------------------------------------------
-BOOL DBTreeListBox::DoubleClickHdl()
+sal_Bool DBTreeListBox::DoubleClickHdl()
 {
     long nResult = aDoubleClickHdl.Call( this );
     // continue default processing if the DoubleClickHandler didn't handle it
@@ -502,12 +502,12 @@ namespace
         if ( !_pPopup )
             return;
 
-        USHORT nCount = _pPopup->GetItemCount();
-        for (USHORT i=0; i < nCount; ++i)
+        sal_uInt16 nCount = _pPopup->GetItemCount();
+        for (sal_uInt16 i=0; i < nCount; ++i)
         {
             if ( _pPopup->GetItemType(i) != MENUITEM_SEPARATOR )
             {
-                USHORT nId = _pPopup->GetItemId(i);
+                sal_uInt16 nId = _pPopup->GetItemId(i);
                 PopupMenu* pSubPopUp = _pPopup->GetPopupMenu(nId);
                 if ( pSubPopUp )
                 {
@@ -534,14 +534,14 @@ namespace
 {
     void lcl_adjustMenuItemIDs( Menu& _rMenu, IController& _rCommandController )
     {
-        USHORT nCount = _rMenu.GetItemCount();
-        for ( USHORT pos = 0; pos < nCount; ++pos )
+        sal_uInt16 nCount = _rMenu.GetItemCount();
+        for ( sal_uInt16 pos = 0; pos < nCount; ++pos )
         {
             // do not adjust separators
             if ( _rMenu.GetItemType( pos ) == MENUITEM_SEPARATOR )
                 continue;
 
-            USHORT nId = _rMenu.GetItemId(pos);
+            sal_uInt16 nId = _rMenu.GetItemId(pos);
             String aCommand = _rMenu.GetItemCommand( nId );
             PopupMenu* pPopup = _rMenu.GetPopupMenu( nId );
             if ( pPopup )
@@ -550,7 +550,7 @@ namespace
                 continue;
             } // if ( pPopup )
 
-            const USHORT nCommandId = _rCommandController.registerCommandURL( aCommand );
+            const sal_uInt16 nCommandId = _rCommandController.registerCommandURL( aCommand );
             _rMenu.InsertItem( nCommandId, _rMenu.GetItemText( nId ), _rMenu.GetItemImage( nId ),
                 _rMenu.GetItemBits( nId ), pos );
 
@@ -567,19 +567,19 @@ namespace
     void lcl_insertMenuItemImages( Menu& _rMenu, IController& _rCommandController )
     {
         const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
-        const BOOL bHiContrast = rSettings.GetHighContrastMode();
+        const sal_Bool bHiContrast = rSettings.GetHighContrastMode();
         uno::Reference< frame::XController > xController = _rCommandController.getXController();
         uno::Reference< frame::XFrame> xFrame;
         if ( xController.is() )
             xFrame = xController->getFrame();
-        USHORT nCount = _rMenu.GetItemCount();
-        for ( USHORT pos = 0; pos < nCount; ++pos )
+        sal_uInt16 nCount = _rMenu.GetItemCount();
+        for ( sal_uInt16 pos = 0; pos < nCount; ++pos )
         {
             // do not adjust separators
             if ( _rMenu.GetItemType( pos ) == MENUITEM_SEPARATOR )
                 continue;
 
-            USHORT nId = _rMenu.GetItemId(pos);
+            sal_uInt16 nId = _rMenu.GetItemId(pos);
             String aCommand = _rMenu.GetItemCommand( nId );
             PopupMenu* pPopup = _rMenu.GetPopupMenu( nId );
             if ( pPopup )
@@ -589,7 +589,7 @@ namespace
             } // if ( pPopup )
 
             if ( xFrame.is() )
-                _rMenu.SetItemImage(nId,framework::GetImageFromURL(xFrame,aCommand,FALSE,bHiContrast));
+                _rMenu.SetItemImage(nId,framework::GetImageFromURL(xFrame,aCommand,sal_False,bHiContrast));
         }
     }
     // =========================================================================
@@ -733,7 +733,7 @@ PopupMenu* DBTreeListBox::CreateContextMenu( void )
 }
 
 // -----------------------------------------------------------------------------
-void DBTreeListBox::ExcecuteContextMenuAction( USHORT _nSelectedPopupEntry )
+void DBTreeListBox::ExcecuteContextMenuAction( sal_uInt16 _nSelectedPopupEntry )
 {
     if ( m_pContextMenuProvider && _nSelectedPopupEntry )
         m_pContextMenuProvider->getCommandController().executeChecked( _nSelectedPopupEntry, Sequence< PropertyValue >() );

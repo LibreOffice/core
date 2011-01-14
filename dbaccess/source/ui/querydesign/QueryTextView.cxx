@@ -84,7 +84,7 @@ OQueryTextView::OQueryTextView(OQueryContainerWindow* _pParent)
 {
     DBG_CTOR(OQueryTextView,NULL);
     m_pEdit = new OSqlEdit(this);
-    m_pEdit->SetRightToLeft(FALSE);
+    m_pEdit->SetRightToLeft(sal_False);
     m_pEdit->ClearModifyFlag();
     m_pEdit->SaveValue();
     m_pEdit->SetPosPixel( Point( 0, 0 ) );

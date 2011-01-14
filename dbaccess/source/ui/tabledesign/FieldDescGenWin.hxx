@@ -59,9 +59,9 @@ namespace dbaui
 
         void DisplayData( OFieldDescription* pFieldDescr );
         void SaveData( OFieldDescription* pFieldDescr );
-        void SetControlText( USHORT nControlId, const String& rText );
-        String GetControlText( USHORT nControlId );
-        void SetReadOnly( BOOL bReadOnly );
+        void SetControlText( sal_uInt16 nControlId, const String& rText );
+        String GetControlText( sal_uInt16 nControlId );
+        void SetReadOnly( sal_Bool bReadOnly );
 #if OSL_DEBUG_LEVEL > 0
         OTableEditorCtrl* GetEditorCtrl();
 #endif
