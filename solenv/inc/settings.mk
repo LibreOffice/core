@@ -1049,6 +1049,8 @@ GDBTRACE=gdb -nx --command=$(SOLARENV)/bin/gdbtrycatchtrace --args
 #set.
 .IF "$(VALGRIND)" != ""
 VALGRINDTOOL=valgrind --tool=$(VALGRIND) --leak-check=yes
+G_SLICE*:=malloc
+.EXPORT : G_SLICE
 .ENDIF
 
 IDLC*=$(AUGMENT_LIBRARY_PATH) $(SOLARBINDIR)/idlc
