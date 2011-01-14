@@ -554,9 +554,17 @@ namespace svt { namespace table
     void UnoControlTableModel::getCellToolTip( ColPos const i_col, RowPos const i_row, Any& o_cellToolTip )
     {
         DBG_CHECK_ME();
-        OSL_UNUSED( i_col );
-        OSL_UNUSED( i_row );
-        OSL_UNUSED( o_cellToolTip );
+        try
+        {
+            Reference< XGridDataModel > const xDataModel( m_pImpl->m_aDataModel );
+            ENSURE_OR_THROW( xDataModel.is(), "no data model anymore!" );
+
+            o_cellToolTip = xDataModel->getCellToolTip( i_col, i_row );
+        }
+        catch( const Exception& )
+        {
+            DBG_UNHANDLED_EXCEPTION();
+        }
     }
 
     //------------------------------------------------------------------------------------------------------------------

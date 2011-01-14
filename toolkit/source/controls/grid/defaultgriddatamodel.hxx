@@ -69,6 +69,7 @@ public:
     virtual void SAL_CALL updateCell( ::sal_Int32 RowIndex, ::sal_Int32 ColumnIndex, const ::com::sun::star::uno::Any& Value ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL updateRow( const ::com::sun::star::uno::Sequence< ::sal_Int32 >& ColumnIndexes, ::sal_Int32 RowIndex, const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& Values ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL setRowTitle( ::sal_Int32 RowIndex, const ::rtl::OUString& Title ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setCellToolTip( ::sal_Int32 RowIndex, ::sal_Int32 ColumnIndex, const ::com::sun::star::uno::Any& Value ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL addGridDataListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::grid::XGridDataListener >& Listener ) throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL removeGridDataListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::grid::XGridDataListener >& Listener ) throw (::com::sun::star::uno::RuntimeException);
 
@@ -76,6 +77,7 @@ public:
     virtual ::sal_Int32 SAL_CALL getRowCount() throw (::com::sun::star::uno::RuntimeException);
     virtual ::sal_Int32 SAL_CALL getColumnCount() throw (::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Any SAL_CALL getCellData( ::sal_Int32 Column, ::sal_Int32 Row ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Any SAL_CALL getCellToolTip( ::sal_Int32 Column, ::sal_Int32 Row ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
     virtual ::rtl::OUString SAL_CALL getRowTitle( ::sal_Int32 RowIndex ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
 
     // XComponent
@@ -92,15 +94,26 @@ public:
     virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  ) throw (RuntimeException);
 
 private:
+    typedef ::std::pair< Any, Any >     CellData;
+    typedef ::std::vector< CellData >   RowData;
+    typedef ::std::vector< RowData >    GridData;
+
     void broadcast(
         GridDataEvent const & i_event,
         void ( SAL_CALL ::com::sun::star::awt::grid::XGridDataListener::*i_listenerMethod )( ::com::sun::star::awt::grid::GridDataEvent const & ),
         ::osl::ClearableMutexGuard & i_instanceLock
     );
 
-    ::std::vector< ::std::vector < Any > >  m_aData;
-    ::std::vector< ::rtl::OUString >        m_aRowHeaders;
-    sal_Int32                               m_nColumnCount;
+    void    impl_addRow( Sequence< Any > const & i_rowData, sal_Int32 const i_assumedColCount = -1 );
+
+    CellData const &
+            impl_getCellData_throw( sal_Int32 const i_column, sal_Int32 const i_row ) const;
+    CellData&
+            impl_getCellDataAccess_throw( sal_Int32 const i_column, sal_Int32 const i_row );
+
+    GridData                            m_aData;
+    ::std::vector< ::rtl::OUString >    m_aRowHeaders;
+    sal_Int32                           m_nColumnCount;
 };
 
 }

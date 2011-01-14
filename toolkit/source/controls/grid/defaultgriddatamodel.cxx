@@ -115,20 +115,47 @@ namespace toolkit
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    Any SAL_CALL DefaultGridDataModel::getCellData( ::sal_Int32 i_column, ::sal_Int32 i_row ) throw (RuntimeException, IndexOutOfBoundsException)
+    DefaultGridDataModel::CellData const & DefaultGridDataModel::impl_getCellData_throw( sal_Int32 const i_column, sal_Int32 const i_row ) const
     {
-        ::osl::MutexGuard aGuard( GetMutex() );
-
         if  (   ( i_row < 0 ) || ( size_t( i_row ) > m_aData.size() )
             ||  ( i_column < 0 ) || ( i_column > m_nColumnCount )
             )
-            throw IndexOutOfBoundsException( ::rtl::OUString(), *this );
+            throw IndexOutOfBoundsException( ::rtl::OUString(), *const_cast< DefaultGridDataModel* >( this ) );
 
-        ::std::vector< Any > const & rRow( m_aData[ i_row ] );
+        RowData const & rRow( m_aData[ i_row ] );
         if ( size_t( i_column ) < rRow.size() )
             return rRow[ i_column ];
 
-        return Any();
+        static CellData s_aEmpty;
+        return s_aEmpty;
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    DefaultGridDataModel::CellData& DefaultGridDataModel::impl_getCellDataAccess_throw( sal_Int32 const i_column, sal_Int32 const i_row )
+    {
+        if  (   ( i_row < 0 ) || ( size_t( i_row ) >= m_aData.size() )
+            ||  ( i_column < 0 ) || ( i_column >= m_nColumnCount )
+            )
+            throw IndexOutOfBoundsException( ::rtl::OUString(), *this );
+
+        RowData& rRowData( m_aData[ i_row ] );
+        if ( size_t( i_column ) >= rRowData.size() )
+            rRowData.resize( i_column + 1 );
+        return rRowData[ i_column ];
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    Any SAL_CALL DefaultGridDataModel::getCellData( ::sal_Int32 i_column, ::sal_Int32 i_row ) throw (RuntimeException, IndexOutOfBoundsException)
+    {
+        ::osl::MutexGuard aGuard( GetMutex() );
+        return impl_getCellData_throw( i_column, i_row ).first;
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    Any SAL_CALL DefaultGridDataModel::getCellToolTip( ::sal_Int32 i_column, ::sal_Int32 i_row ) throw (RuntimeException, IndexOutOfBoundsException)
+    {
+        ::osl::MutexGuard aGuard( GetMutex() );
+        return impl_getCellData_throw( i_column, i_row ).second;
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -153,9 +180,7 @@ namespace toolkit
         m_aRowHeaders.push_back( i_title );
 
         // store row m_aData
-        ::std::vector< Any > newRow( columnCount );
-        ::std::copy( i_data.getConstArray(), i_data.getConstArray() + columnCount, newRow.begin() );
-        m_aData.push_back( newRow );
+        impl_addRow( i_data );
 
         // update column count
         if ( columnCount > m_nColumnCount )
@@ -167,6 +192,20 @@ namespace toolkit
             &XGridDataListener::rowsInserted,
             aGuard
         );
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    void DefaultGridDataModel::impl_addRow( Sequence< Any > const & i_rowData, sal_Int32 const i_assumedColCount )
+    {
+        OSL_PRECOND( ( i_assumedColCount <= 0 ) || ( i_assumedColCount >= i_rowData.getLength() ),
+            "DefaultGridDataModel::impl_addRow: invalid column count!" );
+
+        RowData newRow( i_assumedColCount > 0 ? i_assumedColCount : i_rowData.getLength() );
+        RowData::iterator cellData = newRow.begin();
+        for ( const Any* pData = stl_begin( i_rowData ); pData != stl_end( i_rowData ); ++pData, ++cellData )
+            cellData->first = *pData;
+
+        m_aData.push_back( newRow );
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -193,11 +232,7 @@ namespace toolkit
         for ( sal_Int32 row=0; row<rowCount;  ++row )
         {
             m_aRowHeaders.push_back( i_titles[row] );
-
-            ::std::vector< Any > newRow( maxColCount );
-            Sequence< Any > const & rRowData = i_data[row];
-            ::std::copy( rRowData.getConstArray(), rRowData.getConstArray() + rRowData.getLength(), newRow.begin() );
-            m_aData.push_back( newRow );
+            impl_addRow( i_data[row], maxColCount );
         }
 
         if ( maxColCount > m_nColumnCount )
@@ -250,15 +285,7 @@ namespace toolkit
     {
         ::osl::ClearableMutexGuard aGuard( GetMutex() );
 
-        if  (   ( i_rowIndex < 0 ) || ( size_t( i_rowIndex ) >= m_aData.size() )
-            ||  ( i_columnIndex < 0 ) || ( i_columnIndex >= m_nColumnCount )
-            )
-            throw IndexOutOfBoundsException( ::rtl::OUString(), *this );
-
-        ::std::vector< Any >& rRowData( m_aData[ i_rowIndex ] );
-        if ( size_t( i_columnIndex ) >= rRowData.size() )
-            rRowData.resize( i_columnIndex + 1 );
-        rRowData[ i_columnIndex ] = i_value;
+        impl_getCellDataAccess_throw( i_columnIndex, i_rowIndex ).first = i_value;
 
         broadcast(
             GridDataEvent( *this, i_columnIndex, i_columnIndex, i_rowIndex, i_rowIndex ),
@@ -288,14 +315,14 @@ namespace toolkit
                 throw IndexOutOfBoundsException( ::rtl::OUString(), *this );
         }
 
-        ::std::vector< Any >& rDataRow = m_aData[ i_rowIndex ];
+        RowData& rDataRow = m_aData[ i_rowIndex ];
         for ( sal_Int32 col = 0; col < columnCount; ++col )
         {
             sal_Int32 const columnIndex = i_columnIndexes[ col ];
             if ( size_t( columnIndex ) >= rDataRow.size() )
                 rDataRow.resize( columnIndex + 1 );
 
-            rDataRow[ columnIndex ] = i_values[ col ];
+            rDataRow[ columnIndex ].first = i_values[ col ];
         }
 
         sal_Int32 const firstAffectedColumn = *::std::min_element( stl_begin( i_columnIndexes ), stl_end( i_columnIndexes ) );
@@ -312,7 +339,7 @@ namespace toolkit
     {
         ::osl::ClearableMutexGuard aGuard( GetMutex() );
 
-        if  ( ( i_rowIndex < 0 ) || ( size_t( i_rowIndex ) >= m_aData.size() ) )
+        if  ( ( i_rowIndex < 0 ) || ( size_t( i_rowIndex ) >= m_aRowHeaders.size() ) )
             throw IndexOutOfBoundsException( ::rtl::OUString(), *this );
 
         m_aRowHeaders[ i_rowIndex ] = i_title;
@@ -322,6 +349,13 @@ namespace toolkit
             &XGridDataListener::rowTitleChanged,
             aGuard
         );
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    void SAL_CALL DefaultGridDataModel::setCellToolTip( ::sal_Int32 i_rowIndex, ::sal_Int32 i_columnIndex, const Any& i_value ) throw (IndexOutOfBoundsException, RuntimeException)
+    {
+        ::osl::MutexGuard aGuard( GetMutex() );
+        impl_getCellDataAccess_throw( i_columnIndex, i_rowIndex ).second = i_value;
     }
 
     //------------------------------------------------------------------------------------------------------------------
