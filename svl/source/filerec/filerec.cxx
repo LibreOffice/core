@@ -119,26 +119,9 @@ UINT32 SfxMiniRecordWriter::Close
             _pStream->Seek( nEndPos );
 
         // Header wurde JETZT geschrieben
-        _bHeaderOk = TRUE;
+        _bHeaderOk = true;
         return nEndPos;
     }
-#ifdef DBG_UTIL
-    // mu\s Fix-Size-Record gepr"uft werden?
-    else if ( SFX_BOOL_DONTCARE == _bHeaderOk )
-    {
-        // Header auslesen, um Soll-Gr"o\se zu bestimmen
-        UINT32 nEndPos = _pStream->Tell();
-        _pStream->Seek( _nStartPos );
-        UINT32 nHeader;
-        *_pStream >> nHeader;
-        _pStream->Seek( nEndPos );
-
-        // Soll-Gr"o\se mit Ist-Gr"o\se vergleichen
-        DBG_ASSERT( nEndPos - SFX_REC_OFS(nHeader) == _nStartPos + sizeof(UINT32),
-                    "fixed record size incorrect" );
-        DbgOutf( "SfxFileRec: written record until %ul", nEndPos );
-    }
-#endif
 
     // Record war bereits geschlossen
     return 0;

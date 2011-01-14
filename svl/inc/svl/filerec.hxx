@@ -40,8 +40,6 @@ SV_DECL_VARARR( SfxUINT32s, UINT32, 8, 8 )
 
 //------------------------------------------------------------------------
 
-#define SFX_BOOL_DONTCARE               BOOL(2)     // Don't-Care-Wert f"ur BOOLs
-
 #define SFX_REC_PRETAG_EXT              BYTE(0x00)  // Pre-Tag f"ur Extended-Records
 #define SFX_REC_PRETAG_EOR              BYTE(0xFF)  // Pre-Tag f"ur End-Of-Records
 
@@ -224,10 +222,7 @@ class SVL_DLLPUBLIC SfxMiniRecordWriter
 protected:
     SvStream*       _pStream;   //  <SvStream>, in dem der Record liegt
     UINT32          _nStartPos; //  Start-Position des Gesamt-Records im Stream
-    bool             _bHeaderOk; /* TRUE, wenn der Header schon geschrieben ist;
-                                    bei DBG_UTIL wird SFX_BOOL_DONTCARE ver-
-                                    wendet, um die Gr"o\se von Fix-Sized-Records
-                                    zu pr"ufen. */
+    bool             _bHeaderOk; /* TRUE, wenn der Header schon geschrieben ist; */
     BYTE            _nPreTag;   //  in den Header zu schreibendes 'Pre-Tag'
 
 public:
@@ -709,7 +704,7 @@ inline SfxMiniRecordWriter::SfxMiniRecordWriter
 
 :   _pStream( pStream ),
     _nStartPos( pStream->Tell() ),
-    _bHeaderOk(FALSE),
+    _bHeaderOk(false),
     _nPreTag( nTag )
 {
     DBG_ASSERT( _nPreTag != 0xFF, "invalid Tag" );
@@ -736,7 +731,7 @@ inline SfxMiniRecordWriter::SfxMiniRecordWriter
 :   _pStream( pStream ),
     // _nTag( uninitialized ),
     // _nStarPos( uninitialized ),
-    _bHeaderOk(SFX_BOOL_DONTCARE)
+    _bHeaderOk(true)
 {
     DBG_ASSERT( nTag != 0 && nTag != 0xFF, "invalid Tag" );
     DBG(_nStartPos = pStream->Tell());
@@ -758,7 +753,7 @@ inline SfxMiniRecordWriter::~SfxMiniRecordWriter()
 
 {
     // wurde der Header noch nicht geschrieben oder mu\s er gepr"uft werden
-    if ( !_bHeaderOk DBG(||TRUE) )
+    if ( !_bHeaderOk )
         Close();
 }
 
@@ -782,7 +777,7 @@ inline SvStream& SfxMiniRecordWriter::operator*() const
 inline void SfxMiniRecordWriter::Reset()
 {
     _pStream->Seek( _nStartPos + SFX_REC_HEADERSIZE_MINI );
-    _bHeaderOk = FALSE;
+    _bHeaderOk = false;
 }
 
 //=========================================================================
@@ -901,7 +896,7 @@ inline void SfxSingleRecordWriter::Reset()
 {
     _pStream->Seek( _nStartPos + SFX_REC_HEADERSIZE_MINI +
                                  SFX_REC_HEADERSIZE_SINGLE );
-    _bHeaderOk = FALSE;
+    _bHeaderOk = false;
 }
 
 //=========================================================================
@@ -1022,7 +1017,7 @@ inline void SfxMultiFixRecordWriter::Reset()
     _pStream->Seek( _nStartPos + SFX_REC_HEADERSIZE_MINI +
                                  SFX_REC_HEADERSIZE_SINGLE +
                                  SFX_REC_HEADERSIZE_MULTI );
-    _bHeaderOk = FALSE;
+    _bHeaderOk = false;
 }
 
 //=========================================================================
