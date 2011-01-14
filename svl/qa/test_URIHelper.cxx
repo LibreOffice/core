@@ -31,6 +31,14 @@
 
 #include "sal/config.h"
 
+#include "preextstl.h"
+#include <cppunit/TestSuite.h>
+#include <cppunit/TestFixture.h>
+#include <cppunit/TestCase.h>
+#include <cppunit/plugin/TestPlugIn.h>
+#include <cppunit/extensions/HelperMacros.h>
+#include "postextstl.h"
+
 #include <cstddef>
 
 #include "com/sun/star/lang/Locale.hpp"
@@ -55,7 +63,6 @@
 #include "cppuhelper/bootstrap.hxx"
 #include "cppuhelper/implbase1.hxx"
 #include "cppuhelper/implbase2.hxx"
-#include "testshl/simpleheader.hxx"
 #include "osl/diagnose.h"
 #include "rtl/strbuf.hxx"
 #include "rtl/string.h"
@@ -454,10 +461,10 @@ void Test::testFindFirstURLInText() {
 
 css::uno::Reference< css::uno::XComponentContext > Test::m_context;
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(Test, "alltests");
+CPPUNIT_TEST_SUITE_REGISTRATION(Test);
 
 }
 
-NOADDITIONAL;
+CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

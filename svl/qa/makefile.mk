@@ -35,10 +35,14 @@ ENABLE_EXCEPTIONS = true
 
 .INCLUDE :  settings.mk
 
-CFLAGSCXX += $(CPPUNIT_CFLAGS)
+#building with stlport, but cppunit was not built with stlport
+.IF "$(USE_SYSTEM_STL)"!="YES"
+.IF "$(SYSTEM_CPPUNIT)"=="YES"
+CFLAGSCXX+=-DADAPT_EXT_STL
+.ENDIF
+.ENDIF
+CFLAGSCXX+=$(CPPUNIT_CFLAGS)
 
-# BEGIN ----------------------------------------------------------------
-# auto generated Target:job by codegen.pl
 SHL1OBJS=  \
     $(SLO)$/test_URIHelper.obj
 
@@ -53,49 +57,11 @@ SHL1STDLIBS=\
      $(TESTSHL2LIB)    \
      $(CPPUNITLIB)
 
-SHL1IMPLIB= i$(SHL1TARGET)
-DEF1NAME    =$(SHL1TARGET)
+SHL1IMPLIB=i$(SHL1TARGET)
+DEF1NAME=$(SHL1TARGET)
 SHL1VERSIONMAP= export.map
-# auto generated Target:job
-# END ------------------------------------------------------------------
-
-#------------------------------- All object files -------------------------------
-# do this here, so we get right dependencies
-# SLOFILES=$(SHL1OBJS)
 
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :  target.mk
 .INCLUDE : _cppunit.mk
-
-# LLA: old stuff
-# USE_DEFFILE = true
-#
-# .INCLUDE: settings.mk
-#
-# .IF "$(OS)" == "WNT"
-# REGEXP = "s/^[\#].*$$//"
-# .ELSE # OS, WNT
-# REGEXP = 's/^[\#].*$$//'
-# .ENDIF # OS, WNT
-#
-# SHL1TARGET = URIHelper
-# SHL1OBJS = \
-# 	$(SLO)$/test_URIHelper.obj
-# SHL1STDLIBS = \
-#     $(CPPULIB) \
-#     $(CPPUHELPERLIB) \
-#     $(SALLIB) \
-#     $(SVTOOLLIB) \
-#     $(TOOLSLIB) \
-#     $(UNOTOOLSLIB)
-#
-# DEF1NAME = $(SHL1TARGET)
-# DEF1EXPORTFILE = $(MISC)$/$(SHL1TARGET).dxp
-#
-# .INCLUDE: target.mk
-#
-# $(MISC)$/$(SHL1TARGET).dxp: sce$/$(SHL1TARGET).sce
-#     + $(TYPE) $< | sed $(REGEXP) > $@
-#     + $(TYPE) $@ | sed "s/^/test_/" > $(MISC)$/$(SHL1TARGET).tst
-#     + $(TYPE) $(MISC)$/$(SHL1TARGET).tst | sed "/test_./ w $@"
