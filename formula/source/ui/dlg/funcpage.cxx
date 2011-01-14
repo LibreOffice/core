@@ -69,7 +69,7 @@ long FormulaListBox::PreNotify( NotifyEvent& rNEvt )
 
     long nResult=ListBox::PreNotify(rNEvt);
 
-    USHORT nSwitch=aNotifyEvt.GetType();
+    sal_uInt16 nSwitch=aNotifyEvt.GetType();
     if(nSwitch==EVENT_KEYINPUT)
     {
         KeyInput(*aNotifyEvt.GetKeyEvent());
@@ -81,7 +81,7 @@ long FormulaListBox::PreNotify( NotifyEvent& rNEvt )
 
 //============================================================================
 
-inline USHORT Lb2Cat( USHORT nLbPos )
+inline sal_uInt16 Lb2Cat( sal_uInt16 nLbPos )
 {
     // Kategorie 0 == LRU, sonst Categories == LbPos-1
     if ( nLbPos > 0 )
@@ -134,15 +134,15 @@ void FuncPage::impl_addFunctions(const IFunctionCategory* _pCategory)
 
 void FuncPage::UpdateFunctionList()
 {
-    USHORT  nSelPos   = aLbCategory.GetSelectEntryPos();
+    sal_uInt16  nSelPos   = aLbCategory.GetSelectEntryPos();
     const IFunctionCategory* pCategory = static_cast<const IFunctionCategory*>(aLbCategory.GetEntryData(nSelPos));
-    USHORT  nCategory = ( LISTBOX_ENTRY_NOTFOUND != nSelPos )
+    sal_uInt16  nCategory = ( LISTBOX_ENTRY_NOTFOUND != nSelPos )
                             ? Lb2Cat( nSelPos ) : 0;
 
     (void)nCategory;
 
     aLbFunction.Clear();
-    aLbFunction.SetUpdateMode( FALSE );
+    aLbFunction.SetUpdateMode( sal_False );
     //------------------------------------------------------
 
     if ( nSelPos > 0 )
@@ -177,7 +177,7 @@ void FuncPage::UpdateFunctionList()
     }
 
     //------------------------------------------------------
-    aLbFunction.SetUpdateMode( TRUE );
+    aLbFunction.SetUpdateMode( sal_True );
     aLbFunction.SelectEntryPos(0);
 
     if(IsVisible()) SelHdl(&aLbFunction);
@@ -210,16 +210,16 @@ IMPL_LINK( FuncPage, DblClkHdl, ListBox*, EMPTYARG )
     return 0;
 }
 
-void FuncPage::SetCategory(USHORT nCat)
+void FuncPage::SetCategory(sal_uInt16 nCat)
 {
     aLbCategory.SelectEntryPos(nCat);
     UpdateFunctionList();
 }
-USHORT FuncPage::GetFuncPos(const IFunctionDescription* _pDesc)
+sal_uInt16 FuncPage::GetFuncPos(const IFunctionDescription* _pDesc)
 {
     return aLbFunction.GetEntryPos(_pDesc);
 }
-void FuncPage::SetFunction(USHORT nFunc)
+void FuncPage::SetFunction(sal_uInt16 nFunc)
 {
     aLbFunction.SelectEntryPos(nFunc);
 }
@@ -229,17 +229,17 @@ void FuncPage::SetFocus()
     aLbFunction.GrabFocus();
 }
 
-USHORT FuncPage::GetCategory()
+sal_uInt16 FuncPage::GetCategory()
 {
     return aLbCategory.GetSelectEntryPos();
 }
 
-USHORT FuncPage::GetFunction()
+sal_uInt16 FuncPage::GetFunction()
 {
     return aLbFunction.GetSelectEntryPos();
 }
 
-USHORT FuncPage::GetFunctionEntryCount()
+sal_uInt16 FuncPage::GetFunctionEntryCount()
 {
     return aLbFunction.GetSelectEntryCount();
 }
@@ -248,7 +248,7 @@ String FuncPage::GetSelFunctionName() const
 {
     return aLbFunction.GetSelectEntry();
 }
-const IFunctionDescription* FuncPage::GetFuncDesc( USHORT nPos ) const
+const IFunctionDescription* FuncPage::GetFuncDesc( sal_uInt16 nPos ) const
 {
     // nicht schoen, aber hoffentlich selten
     return (const IFunctionDescription*) aLbFunction.GetEntryData(nPos);
