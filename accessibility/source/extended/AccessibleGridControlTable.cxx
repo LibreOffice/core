@@ -265,8 +265,7 @@ void SAL_CALL AccessibleGridControlTable::clearAccessibleSelection()
     TCSolarGuard aSolarGuard;
     ::osl::MutexGuard aGuard( getOslMutex() );
     ensureIsAlive();
-    for(unsigned int i=0;i<m_aTable.GetSelectedRows().size();i++)
-        m_aTable.RemoveSelectedRow((sal_Int32)i);
+    m_aTable.ClearSelection();
 }
 void SAL_CALL AccessibleGridControlTable::selectAllAccessibleChildren()
     throw ( uno::RuntimeException )
