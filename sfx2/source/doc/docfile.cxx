@@ -1006,6 +1006,16 @@ sal_Int8 SfxMedium::ShowLockedDocumentDialog( const uno::Sequence< ::rtl::OUStri
     return nResult;
 }
 
+namespace
+{
+    bool isSuitableProtocolForLocking(const String & rLogicName)
+    {
+        INetURLObject aUrl( rLogicName );
+        INetProtocol eProt = aUrl.GetProtocol();
+        return eProt == INET_PROT_FILE || eProt == INET_PROT_SFTP;
+    }
+}
+
 //------------------------------------------------------------------
 sal_Bool SfxMedium::LockOrigFileOnDemand( sal_Bool bLoading, sal_Bool bNoUI )
 {
@@ -1076,8 +1086,8 @@ sal_Bool SfxMedium::LockOrigFileOnDemand( sal_Bool bLoading, sal_Bool bNoUI )
             // do further checks only if the file not readonly in fs
             if ( !bContentReadonly )
             {
-                // the special file locking should be used only for file URLs
-                if ( ::utl::LocalFileHelper::IsLocalFile( aLogicName ) )
+                // the special file locking should be used only for suitable URLs
+                if ( isSuitableProtocolForLocking( aLogicName ) )
                 {
 
                     // in case of storing the document should request the output before locking
@@ -1090,7 +1100,7 @@ sal_Bool SfxMedium::LockOrigFileOnDemand( sal_Bool bLoading, sal_Bool bNoUI )
                     sal_Int8 bUIStatus = LOCK_UI_NOLOCK;
 
                     // check whether system file locking has been used, the default value is false
-                    sal_Bool bUseSystemLock = IsSystemFileLockingUsed();
+                    sal_Bool bUseSystemLock = ::utl::LocalFileHelper::IsLocalFile( aLogicName ) && IsSystemFileLockingUsed();
 
                     // TODO/LATER: This implementation does not allow to detect the system lock on saving here, actually this is no big problem
                     // if system lock is used the writeable stream should be available
