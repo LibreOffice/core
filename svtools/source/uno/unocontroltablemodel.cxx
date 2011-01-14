@@ -212,14 +212,22 @@ namespace svt { namespace table
     void UnoControlTableModel::setRowHeaders(bool _bRowHeaders)
     {
         DBG_CHECK_ME();
+        if ( m_pImpl->bHasRowHeaders == _bRowHeaders )
+            return;
+
         m_pImpl->bHasRowHeaders = _bRowHeaders;
+        impl_notifyTableMetricsChanged();
     }
 
     //------------------------------------------------------------------------------------------------------------------
     void UnoControlTableModel::setColumnHeaders(bool _bColumnHeaders)
     {
         DBG_CHECK_ME();
+        if ( m_pImpl->bHasColumnHeaders == _bColumnHeaders )
+            return;
+
         m_pImpl->bHasColumnHeaders = _bColumnHeaders;
+        impl_notifyTableMetricsChanged();
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -330,6 +338,19 @@ namespace svt { namespace table
     }
 
     //------------------------------------------------------------------------------------------------------------------
+    void UnoControlTableModel::impl_notifyTableMetricsChanged() const
+    {
+        ModellListeners aListeners( m_pImpl->m_aListeners );
+        for (   ModellListeners::const_iterator loop = aListeners.begin();
+                loop != aListeners.end();
+                ++loop
+            )
+        {
+            (*loop)->tableMetricsChanged();
+        }
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
     PTableRenderer UnoControlTableModel::getRenderer() const
     {
         DBG_CHECK_ME();
@@ -354,7 +375,11 @@ namespace svt { namespace table
     void UnoControlTableModel::setRowHeight(TableMetrics _nRowHeight)
     {
         DBG_CHECK_ME();
+        if ( m_pImpl->nRowHeight == _nRowHeight )
+            return;
+
         m_pImpl->nRowHeight = _nRowHeight;
+        impl_notifyTableMetricsChanged();
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -376,32 +401,22 @@ namespace svt { namespace table
     void UnoControlTableModel::setColumnHeaderHeight(TableMetrics _nHeight)
     {
         DBG_CHECK_ME();
+        if ( m_pImpl->nColumnHeaderHeight == _nHeight )
+            return;
+
         m_pImpl->nColumnHeaderHeight = _nHeight;
+        impl_notifyTableMetricsChanged();
     }
 
     //------------------------------------------------------------------------------------------------------------------
     void UnoControlTableModel::setRowHeaderWidth(TableMetrics _nWidth)
     {
         DBG_CHECK_ME();
-        m_pImpl->nRowHeaderWidth = _nWidth;
-    }
+        if ( m_pImpl->nRowHeaderWidth == _nWidth )
+            return;
 
-    //------------------------------------------------------------------------------------------------------------------
-    void UnoControlTableModel::SetTitleHeight( TableMetrics _nHeight )
-    {
-        DBG_CHECK_ME();
-        DBG_ASSERT( _nHeight > 0, "DefaultTableModel::SetTitleHeight: invalid height value!" );
-        m_pImpl->nColumnHeaderHeight = _nHeight;
-        // TODO: notification
-    }
-
-    //------------------------------------------------------------------------------------------------------------------
-    void UnoControlTableModel::SetHandleWidth( TableMetrics _nWidth )
-    {
-        DBG_CHECK_ME();
-        DBG_ASSERT( _nWidth > 0, "DefaultTableModel::SetHandleWidth: invalid width value!" );
         m_pImpl->nRowHeaderWidth = _nWidth;
-        // TODO: notification
+        impl_notifyTableMetricsChanged();
     }
 
     //------------------------------------------------------------------------------------------------------------------

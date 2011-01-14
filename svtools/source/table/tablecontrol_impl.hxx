@@ -317,6 +317,7 @@ namespace svt { namespace table
         virtual void    allColumnsRemoved();
         virtual void    cellsUpdated( ColPos firstCol, ColPos lastCol, RowPos firstRow, RowPos lastRow );
         virtual void    columnChanged( ColPos const i_column, ColumnAttributeGroup const i_attributeGroup );
+        virtual void    tableMetricsChanged();
 
     private:
         bool            impl_isAccessibleAlive() const;
@@ -365,6 +366,10 @@ namespace svt { namespace table
             situations where the they must not necessarily be fullfilled.
         */
         void        impl_ni_updateCachedModelValues();
+
+        /** updates the cached table metrics (row height etc.)
+        */
+        void        impl_ni_updateCachedTableMetrics();
 
         /** updates ->m_aColumnWidthsPixel with the current pixel widths of all model columns
 

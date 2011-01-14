@@ -662,6 +662,14 @@ namespace svt { namespace table
     }
 
     //------------------------------------------------------------------------------------------------------------------
+    void TableControl_Impl::tableMetricsChanged()
+    {
+        impl_ni_updateCachedTableMetrics();
+        impl_ni_updateScrollbars();
+        m_rAntiImpl.Invalidate();
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
     void TableControl_Impl::impl_invalidateColumn( ColPos const i_column )
     {
         DBG_CHECK_ME();
@@ -744,20 +752,26 @@ namespace svt { namespace table
     }
 
     //------------------------------------------------------------------------------------------------------------------
+    void TableControl_Impl::impl_ni_updateCachedTableMetrics()
+    {
+        m_nRowHeightPixel = m_rAntiImpl.LogicToPixel( Size( 0, m_pModel->getRowHeight() ), MAP_APPFONT ).Height();
+
+        m_nColHeaderHeightPixel = 0;
+        if ( m_pModel->hasColumnHeaders() )
+           m_nColHeaderHeightPixel = m_rAntiImpl.LogicToPixel( Size( 0, m_pModel->getColumnHeaderHeight() ), MAP_APPFONT ).Height();
+
+        m_nRowHeaderWidthPixel = 0;
+        if ( m_pModel->hasRowHeaders() )
+            m_nRowHeaderWidthPixel = m_rAntiImpl.LogicToPixel( Size( m_pModel->getRowHeaderWidth(), 0 ), MAP_APPFONT).Width();
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
     void TableControl_Impl::impl_ni_updateCachedModelValues()
     {
-        m_nRowHeightPixel = 15;
-        m_nColHeaderHeightPixel = 0;
-        m_nRowHeaderWidthPixel = 0;
         m_pInputHandler.reset();
         m_nColumnCount = m_nRowCount = 0;
 
-        m_nRowHeightPixel = m_rAntiImpl.LogicToPixel( Size( 0, m_pModel->getRowHeight() ), MAP_APPFONT ).Height();
-        if ( m_pModel->hasColumnHeaders() )
-           m_nColHeaderHeightPixel = m_rAntiImpl.LogicToPixel( Size( 0, m_pModel->getColumnHeaderHeight() ), MAP_APPFONT ).Height();
-        if ( m_pModel->hasRowHeaders() )
-            m_nRowHeaderWidthPixel = m_rAntiImpl.LogicToPixel( Size( m_pModel->getRowHeaderWidth(), 0 ), MAP_APPFONT).Width();
-
+        impl_ni_updateCachedTableMetrics();
         impl_ni_updateColumnWidths();
 
         m_pInputHandler = m_pModel->getInputHandler();

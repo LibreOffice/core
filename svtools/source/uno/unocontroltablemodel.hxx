@@ -66,25 +66,6 @@ namespace svt { namespace table
         UnoControlTableModel();
         ~UnoControlTableModel();
 
-        /// returns the current row height, in 1/100 millimeters
-        inline  TableMetrics    GetRowHeight() const { return getRowHeight(); }
-        /// sets a new row height.
-        void                    setRowHeight( TableMetrics _nHeight );
-         /// sets a new row header width.
-        void                    setRowHeaderWidth( TableMetrics _nWidth );
-         /// sets a new column header height.
-        void                    setColumnHeaderHeight( TableMetrics _nHeight );
-
-        /// returns the height of the title row (containing the column headers)
-        inline  TableMetrics    GetTitleHeight() const { return getColumnHeaderHeight(); }
-        /// sets a new height for the title row (containing the column headers)
-        void                    SetTitleHeight( TableMetrics _nHeight );
-
-        /// returns the width of the handle column (containing the row headers)
-        inline  TableMetrics    GetHandleWidth() const { return getRowHeaderWidth(); }
-        /// sets a new width for the handle column (containing the row headers)
-        void                    SetHandleWidth( TableMetrics _nWidth );
-
     public:
         // ITableModel overridables
         virtual TableSize                       getColumnCount() const;
@@ -137,6 +118,10 @@ namespace svt { namespace table
         void    setRowHeaders(bool _bRowHeaders);
         void    setColumnHeaders(bool _bColumnHeaders);
 
+        void    setRowHeight( TableMetrics _nHeight );
+        void    setRowHeaderWidth( TableMetrics _nWidth );
+        void    setColumnHeaderHeight( TableMetrics _nHeight );
+
         void    setLineColor( ::com::sun::star::uno::Any const & i_color );
         void    setHeaderBackgroundColor( ::com::sun::star::uno::Any const & i_color );
         void    setHeaderTextColor( ::com::sun::star::uno::Any const & i_color );
@@ -159,6 +144,9 @@ namespace svt { namespace table
 #ifdef DBG_UTIL
         const char* checkInvariants() const;
 #endif
+
+    private:
+        void    impl_notifyTableMetricsChanged() const;
     };
 
 // .....................................................................................................................

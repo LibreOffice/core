@@ -153,6 +153,13 @@ namespace svt { namespace table
         */
         virtual void    columnChanged( ColPos const i_column, ColumnAttributeGroup const i_attributeGroup ) = 0;
 
+        /** notifies the listener that the metrics of the table changed.
+
+            Metrics here include the column header height, the row header width, the row height, and the presence
+            of both the row and column header.
+        */
+        virtual void    tableMetricsChanged() = 0;
+
         /// deletes the listener instance
         virtual ~ITableModelListener(){};
     };
