@@ -989,7 +989,7 @@ ScRange ScDPOutput::GetOutputRange( sal_Int32 nRegionType )
     return ScRange(aStartPos.Col(), aStartPos.Row(), nTab, nTabEndCol, nTabEndRow, nTab);
 }
 
-BOOL ScDPOutput::HasError()
+bool ScDPOutput::HasError()
 {
     CalcSizes();
 

@@ -132,6 +132,11 @@ public:
 
     virtual ScDataObject*   Clone() const;
 
+    /**
+     * When a DP object is "alive", it has table output on a sheet.  This flag
+     * doesn't really change the behavior of the object, but is used only for
+     * testing purposes.
+     */
     void                SetAlive(BOOL bSet);
     void                SetAllowMove(BOOL bSet);
 
@@ -140,7 +145,7 @@ public:
 
 
     void                Output( const ScAddress& rPos );
-    ScRange             GetNewOutputRange( BOOL& rOverflow );
+    ScRange             GetNewOutputRange( bool& rOverflow );
     const ScRange       GetOutputRangeByType( sal_Int32 nType );
 
     void                SetSaveData(const ScDPSaveData& rData);

@@ -144,7 +144,7 @@ public:
     void            Output();           //! Refresh?
     ScRange         GetOutputRange( sal_Int32 nRegionType = ::com::sun::star::sheet::DataPilotOutputRangeType::WHOLE );
     long            GetHeaderRows();
-    BOOL            HasError();         // range overflow or exception from source
+    bool            HasError();         // range overflow or exception from source
 
     void            GetPositionData(const ScAddress& rPos, ::com::sun::star::sheet::DataPilotTablePositionData& rPosData);
 

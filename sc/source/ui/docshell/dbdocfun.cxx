@@ -1305,7 +1305,7 @@ BOOL ScDBDocFunc::DataPilotUpdate( ScDPObject* pOldObj, const ScDPObject* pNewOb
                 if ( !pDestObj->GetName().Len() )
                     pDestObj->SetName( pDoc->GetDPCollection()->CreateNewName() );
 
-                BOOL bOverflow = FALSE;
+                bool bOverflow = false;
                 ScRange aNewOut = pDestObj->GetNewOutputRange( bOverflow );
 
                 //! test for overlap with other data pilot tables

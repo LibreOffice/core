@@ -530,7 +530,7 @@ void ScDPObject::InvalidateSource()
     mpTableData.reset();
 }
 
-ScRange ScDPObject::GetNewOutputRange( BOOL& rOverflow )
+ScRange ScDPObject::GetNewOutputRange( bool& rOverflow )
 {
     CreateOutput();             // create xSource and pOutput if not already done
 
@@ -2425,6 +2425,7 @@ ScDPCollection::ScDPCollection(const ScDPCollection& r) :
 
 ScDPCollection::~ScDPCollection()
 {
+    maTables.clear();
 }
 
 void ScDPCollection::DeleteOnTab( SCTAB nTab )

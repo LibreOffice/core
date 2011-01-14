@@ -70,6 +70,7 @@
 #include <dpsave.hxx>
 
 #include <com/sun/star/sheet/DataPilotFieldOrientation.hpp>
+#include <com/sun/star/sheet/GeneralFunction.hpp>
 
 using namespace ::com::sun::star;
 using ::rtl::OUString;
@@ -349,14 +350,19 @@ void Test::testMatrix()
         checkMatrixElements<PartiallyFilledEmptyMatrix>(*pMat);
     }
 }
-
+#include <iostream>
+using namespace std;
 void Test::testDataPilot()
 {
     m_pDoc->InsertTab(0, OUString(RTL_CONSTASCII_USTRINGPARAM("Data")));
     m_pDoc->InsertTab(1, OUString(RTL_CONSTASCII_USTRINGPARAM("Table")));
 
-    const char* aFields[] = {
-        "Name", "Group", "Score"
+    struct {
+        const char* pName; sheet::DataPilotFieldOrientation eOrient;
+    } aFields[] = {
+        { "Name",  sheet::DataPilotFieldOrientation_ROW },
+        { "Group", sheet::DataPilotFieldOrientation_COLUMN },
+        { "Score", sheet::DataPilotFieldOrientation_DATA }
     };
 
     struct {
@@ -375,7 +381,7 @@ void Test::testDataPilot()
 
     // Insert field names in row 0.
     for (sal_uInt32 i = 0; i < nFieldCount; ++i)
-        m_pDoc->SetString(0, static_cast<SCCOL>(i), 0, OUString(RTL_CONSTASCII_USTRINGPARAM(aFields[i])));
+        m_pDoc->SetString(0, static_cast<SCCOL>(i), 0, OUString(RTL_CONSTASCII_USTRINGPARAM(aFields[i].pName)));
 
     // Insert data into row 1 and downward.
     for (sal_uInt32 i = 0; i < nDataCount; ++i)
@@ -408,17 +414,35 @@ void Test::testDataPilot()
     aSaveData.SetFilterButton(false);
     aSaveData.SetDrillDown(false);
 
+    // Generate the internal source structure.
     pDPObj->GetSource();
 
+    // Set the dimension information.
     for (sal_uInt32 i = 0; i < nFieldCount; ++i)
     {
-        OUString aDimName(RTL_CONSTASCII_USTRINGPARAM(aFields[i]));
+        OUString aDimName(RTL_CONSTASCII_USTRINGPARAM(aFields[i].pName));
         ScDPSaveDimension* pDim = aSaveData.GetDimensionByName(aDimName);
-        pDim->SetOrientation(sheet::DataPilotFieldOrientation_COLUMN);
+        pDim->SetOrientation(aFields[i].eOrient);
+        if (aFields[i].eOrient == sheet::DataPilotFieldOrientation_DATA)
+        {
+            pDim->SetFunction(sheet::GeneralFunction_SUM);
+            pDim->SetReferenceValue(NULL);
+        }
     }
     pDPObj->SetSaveData(aSaveData);
+    pDPObj->SetAlive(true);
+    ScDPCollection* pDPs = m_pDoc->GetDPCollection();
+    bool bSuccess = pDPs->InsertNewTable(pDPObj);
+    CPPUNIT_ASSERT_MESSAGE("failed to insert a new datapilot object", bSuccess);
+    CPPUNIT_ASSERT_MESSAGE("there should be only one data pilot table.", pDPs->GetCount() == 1);
+    pDPObj->InvalidateData();
+    pDPObj->SetName(pDPs->CreateNewName());
+    bool bOverFlow = false;
+    ScRange aOutRange = pDPObj->GetNewOutputRange(bOverFlow);
 
-    delete pDPObj;
+    // Now, delete the datapilot object.
+    pDPs->FreeTable(pDPObj);
+    CPPUNIT_ASSERT_MESSAGE("There shouldn't be any data pilot table stored with the document.", pDPs->GetCount() == 0);
 
     m_pDoc->DeleteTab(1);
     m_pDoc->DeleteTab(0);
