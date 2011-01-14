@@ -647,7 +647,7 @@ void SbxVariable::Dump( SvStream& rStrm, sal_Bool bFill )
 {
     ByteString aBNameStr( (const UniString&)GetName( SbxNAME_SHORT_TYPES ), RTL_TEXTENCODING_ASCII_US );
     rStrm << "Variable( "
-          << ByteString::CreateFromInt64( (ULONG) this ).GetBuffer() << "=="
+          << ByteString::CreateFromInt64( (sal_uIntPtr) this ).GetBuffer() << "=="
           << aBNameStr.GetBuffer();
     ByteString aBParentNameStr( (const UniString&)GetParent()->GetName(), RTL_TEXTENCODING_ASCII_US );
     if ( GetParent() )
