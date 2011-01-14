@@ -119,10 +119,10 @@ struct SmToken
     SmTokenType eType;
     sal_Unicode     cMathChar;
     // parse-help info
-    ULONG       nGroup;
-    USHORT      nLevel;
+    sal_uLong       nGroup;
+    sal_uInt16      nLevel;
     // token position
-    USHORT      nRow;
+    sal_uInt16      nRow;
     xub_StrLen  nCol;
 
     SmToken();
@@ -178,10 +178,10 @@ class SmParser
     LanguageType    nLang;
     xub_StrLen      BufferIndex,
                     nTokenIndex;
-    USHORT          Row,
+    sal_uInt16          Row,
                     ColOff;
     SmConvert       eConversion;
-    BOOL            bImportSymNames,
+    sal_Bool            bImportSymNames,
                     bExportSymNames;
 
     // declare copy-constructor and assignment-operator private
@@ -190,14 +190,14 @@ class SmParser
 
 protected:
 #if OSL_DEBUG_LEVEL
-    BOOL            IsDelimiter( const String &rTxt, xub_StrLen nPos );
+    sal_Bool            IsDelimiter( const String &rTxt, xub_StrLen nPos );
 #endif
     void            NextToken();
     xub_StrLen      GetTokenIndex() const   { return nTokenIndex; }
-    void            Insert(const String &rText, USHORT nPos);
-    void            Replace( USHORT nPos, USHORT nLen, const String &rText );
+    void            Insert(const String &rText, sal_uInt16 nPos);
+    void            Replace( sal_uInt16 nPos, sal_uInt16 nLen, const String &rText );
 
-    inline BOOL     TokenInGroup(ULONG nGroup);
+    inline sal_Bool     TokenInGroup(sal_uLong nGroup);
 
     // grammar
     void    Table();
@@ -206,7 +206,7 @@ protected:
     void    Relation();
     void    Sum();
     void    Product();
-    void    SubSup(ULONG nActiveGroup);
+    void    SubSup(sal_uLong nActiveGroup);
     void    OpSubSup();
     void    Power();
     void    Blank();
@@ -222,7 +222,7 @@ protected:
     void    FontSize();
     void    Color();
     void    Brace();
-    void    Bracebody(BOOL bIsLeftRight);
+    void    Bracebody(sal_Bool bIsLeftRight);
     void    Function();
     void    Binom();
     void    Stack();
@@ -246,22 +246,22 @@ public:
     SmConvert    GetConversion() const              { return eConversion; }
     void         SetConversion(SmConvert eConv)     { eConversion = eConv; }
 
-    BOOL         IsImportSymbolNames() const        { return bImportSymNames; }
-    void         SetImportSymbolNames(BOOL bVal)    { bImportSymNames = bVal; }
-    BOOL         IsExportSymbolNames() const        { return bExportSymNames; }
-    void         SetExportSymbolNames(BOOL bVal)    { bExportSymNames = bVal; }
+    sal_Bool         IsImportSymbolNames() const        { return bImportSymNames; }
+    void         SetImportSymbolNames(sal_Bool bVal)    { bImportSymNames = bVal; }
+    sal_Bool         IsExportSymbolNames() const        { return bExportSymNames; }
+    void         SetExportSymbolNames(sal_Bool bVal)    { bExportSymNames = bVal; }
 
-    USHORT       AddError(SmParseError Type, SmNode *pNode);
+    sal_uInt16       AddError(SmParseError Type, SmNode *pNode);
 
     const SmErrorDesc * NextError();
     const SmErrorDesc * PrevError();
-    const SmErrorDesc * GetError(USHORT i = 0xFFFF);
+    const SmErrorDesc * GetError(sal_uInt16 i = 0xFFFF);
 };
 
 
-inline BOOL SmParser::TokenInGroup(ULONG nGroup)
+inline sal_Bool SmParser::TokenInGroup(sal_uLong nGroup)
 {
-    return (CurToken.nGroup & nGroup) ? TRUE : FALSE;
+    return (CurToken.nGroup & nGroup) ? sal_True : sal_False;
 }
 
 

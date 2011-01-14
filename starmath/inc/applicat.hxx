@@ -67,7 +67,7 @@ class SvxErrorHandler;
 class SmResId : public ResId
 {
 public:
-    SmResId(USHORT nId) :
+    SmResId(sal_uInt16 nId) :
         ResId(nId)
     {
     }

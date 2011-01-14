@@ -63,8 +63,8 @@ SmViewShell * SmGetActiveView()
 
 /**************************************************************************/
 
-SmPickList::SmPickList(USHORT nInitSize, USHORT nMaxSize) :
-    SfxPtrArr((BYTE) nInitSize, 1)
+SmPickList::SmPickList(sal_uInt16 nInitSize, sal_uInt16 nMaxSize) :
+    SfxPtrArr((sal_uInt8) nInitSize, 1)
 {
     nSize = nMaxSize;
 }
@@ -78,7 +78,7 @@ SmPickList::~SmPickList()
 
 SmPickList& SmPickList::operator=(const SmPickList& rList)
 {
-    USHORT  nPos;
+    sal_uInt16  nPos;
 
     Clear();
     nSize = rList.nSize;
@@ -104,7 +104,7 @@ void SmPickList::Insert(const void *pItem)
 
 void SmPickList::Update(const void *pItem, const void *pNewItem)
 {
-    USHORT  nPos;
+    sal_uInt16  nPos;
 
     for (nPos = 0; nPos < Count(); nPos++)
         if (CompareItem(GetPtr(nPos), pItem))
@@ -117,7 +117,7 @@ void SmPickList::Update(const void *pItem, const void *pNewItem)
 
 void SmPickList::Remove(const void *pItem)
 {
-    USHORT  nPos;
+    sal_uInt16  nPos;
 
     for (nPos = 0; nPos < Count(); nPos++)
         if (CompareItem(GetPtr(nPos), pItem))
@@ -130,7 +130,7 @@ void SmPickList::Remove(const void *pItem)
 
 void SmPickList::Clear()
 {
-    USHORT  nPos;
+    sal_uInt16  nPos;
 
     for (nPos = 0; nPos < Count(); nPos++)
         DestroyItem(GetPtr(nPos));
@@ -157,7 +157,7 @@ void SmFontPickList::DestroyItem(void *pItem)
     delete (Font *)pItem;
 }
 
-BOOL SmFontPickList::CompareItem(const void *pFirstItem, const void *pSecondItem) const
+sal_Bool SmFontPickList::CompareItem(const void *pFirstItem, const void *pSecondItem) const
 {
     Font    *pFirstFont, *pSecondFont;
 
@@ -169,9 +169,9 @@ BOOL SmFontPickList::CompareItem(const void *pFirstItem, const void *pSecondItem
             (pFirstFont->GetCharSet() == pSecondFont->GetCharSet()) &&
             (pFirstFont->GetWeight()  == pSecondFont->GetWeight())  &&
             (pFirstFont->GetItalic()  == pSecondFont->GetItalic()))
-            return (TRUE);
+            return (sal_True);
 
-    return FALSE;
+    return sal_False;
 }
 
 String SmFontPickList::GetStringItem(void *pItem)
@@ -232,7 +232,7 @@ void SmFontPickList::WriteTo(SmFontDialog& rDialog) const
 
 IMPL_LINK( SmFontPickListBox, SelectHdl, ListBox *, /*pListBox*/ )
 {
-    USHORT  nPos;
+    sal_uInt16  nPos;
     String  aString;
 
     nPos = GetSelectEntryPos();
@@ -251,7 +251,7 @@ IMPL_LINK( SmFontPickListBox, SelectHdl, ListBox *, /*pListBox*/ )
 }
 
 
-SmFontPickListBox::SmFontPickListBox(Window* pParent, const ResId& rResId, USHORT nMax) :
+SmFontPickListBox::SmFontPickListBox(Window* pParent, const ResId& rResId, sal_uInt16 nMax) :
     SmFontPickList(nMax, nMax),
     ListBox(pParent, rResId)
 {
@@ -261,7 +261,7 @@ SmFontPickListBox::SmFontPickListBox(Window* pParent, const ResId& rResId, USHOR
 
 SmFontPickListBox& SmFontPickListBox::operator=(const SmFontPickList& rList)
 {
-    USHORT nPos;
+    sal_uInt16 nPos;
 
     *(SmFontPickList *)this = rList;
 
@@ -310,7 +310,7 @@ void SmFontPickListBox::Remove(const Font &rFont)
 
 ////////////////////////////////////////
 
-BOOL IsItalic( const Font &rFont )
+sal_Bool IsItalic( const Font &rFont )
 {
     FontItalic eItalic = rFont.GetItalic();
     // the code below leaves only _NONE and _DONTKNOW as not italic
@@ -318,7 +318,7 @@ BOOL IsItalic( const Font &rFont )
 }
 
 
-BOOL IsBold( const Font &rFont )
+sal_Bool IsBold( const Font &rFont )
 {
     FontWeight eWeight = rFont.GetWeight();
     return eWeight != WEIGHT_DONTKNOW && eWeight > WEIGHT_NORMAL;
@@ -328,7 +328,7 @@ BOOL IsBold( const Font &rFont )
 void SmFace::Impl_Init()
 {
     SetSize( GetSize() );
-    SetTransparent( TRUE );
+    SetTransparent( sal_True );
     SetAlign( ALIGN_BASELINE );
     SetColor( COL_AUTO );
 }

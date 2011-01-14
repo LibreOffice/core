@@ -47,7 +47,7 @@ public:
     SmConfig();
     virtual ~SmConfig();
 
-    SmFontPickList & GetFontPickList(USHORT nIdent) { return vFontPickList[nIdent]; }
+    SmFontPickList & GetFontPickList(sal_uInt16 nIdent) { return vFontPickList[nIdent]; }
 
     void ItemSetToConfig(const SfxItemSet &rSet);
     void ConfigToItemSet(SfxItemSet &rSet) const;

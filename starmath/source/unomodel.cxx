@@ -539,7 +539,7 @@ void SmModel::_setPropertyValues(const PropertyMapEntry** ppEntries, const Any* 
             {
                 if((*pValues).getValueType() != ::getBooleanCppuType())
                     throw IllegalArgumentException();
-                BOOL bVal = *(sal_Bool*)(*pValues).getValue();
+                sal_Bool bVal = *(sal_Bool*)(*pValues).getValue();
                 Font aNewFont(aFormat.GetFont((*ppEntries)->mnMemberId));
                 aNewFont.SetItalic((bVal) ? ITALIC_NORMAL : ITALIC_NONE);
                 aFormat.SetFont((*ppEntries)->mnMemberId, aNewFont);
@@ -555,7 +555,7 @@ void SmModel::_setPropertyValues(const PropertyMapEntry** ppEntries, const Any* 
             {
                 if((*pValues).getValueType() != ::getBooleanCppuType())
                     throw IllegalArgumentException();
-                BOOL bVal = *(sal_Bool*)(*pValues).getValue();
+                sal_Bool bVal = *(sal_Bool*)(*pValues).getValue();
                 Font aNewFont(aFormat.GetFont((*ppEntries)->mnMemberId));
                 aNewFont.SetWeight((bVal) ? WEIGHT_BOLD : WEIGHT_NORMAL);
                 aFormat.SetFont((*ppEntries)->mnMemberId, aNewFont);
@@ -575,7 +575,7 @@ void SmModel::_setPropertyValues(const PropertyMapEntry** ppEntries, const Any* 
 
                 // apply base size to fonts
                 const Size aTmp( aFormat.GetBaseSize() );
-                for (USHORT  i = FNT_BEGIN;  i <= FNT_END;  i++)
+                for (sal_uInt16  i = FNT_BEGIN;  i <= FNT_END;  i++)
                     aFormat.SetFontSize(i, aTmp);
             }
             break;
@@ -732,7 +732,7 @@ void SmModel::_setPropertyValues(const PropertyMapEntry** ppEntries, const Any* 
                         SmSym aSymbol ( pDescriptor->sName, aFont, static_cast < sal_Unicode > (pDescriptor->nCharacter),
                                         pDescriptor->sSymbolSet );
                         aSymbol.SetExportName ( pDescriptor->sExportName );
-                        aSymbol.SetDocSymbol( TRUE );
+                        aSymbol.SetDocSymbol( sal_True );
                         rManager.AddOrReplaceSymbol ( aSymbol );
                     }
                 }
@@ -745,7 +745,7 @@ void SmModel::_setPropertyValues(const PropertyMapEntry** ppEntries, const Any* 
             {
                 if ( (*pValues).getValueType() != ::getBooleanCppuType() )
                     throw IllegalArgumentException();
-                sal_Bool bReadonly = FALSE;
+                sal_Bool bReadonly = sal_False;
                 if ( *pValues >>= bReadonly )
                     pDocSh->SetLoadReadonly( bReadonly );
                 break;
@@ -799,7 +799,7 @@ void SmModel::_getPropertyValues( const PropertyMapEntry **ppEntries, Any *pValu
             case HANDLE_FONT_TEXT_POSTURE        :
             {
                 const SmFace &  rFace = aFormat.GetFont((*ppEntries)->mnMemberId);
-                BOOL bVal = IsItalic( rFace );
+                sal_Bool bVal = IsItalic( rFace );
                 (*pValue).setValue(&bVal, *(*ppEntries)->mpType);
             }
             break;
@@ -812,7 +812,7 @@ void SmModel::_getPropertyValues( const PropertyMapEntry **ppEntries, Any *pValu
             case HANDLE_FONT_TEXT_WEIGHT         :
             {
                 const SmFace &  rFace = aFormat.GetFont((*ppEntries)->mnMemberId);
-                BOOL bVal = IsBold( rFace ); // bold?
+                sal_Bool bVal = IsBold( rFace ); // bold?
                 (*pValue).setValue(&bVal, *(*ppEntries)->mpType);
             }
             break;

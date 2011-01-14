@@ -54,9 +54,9 @@ public:
     SmXMLImportWrapper(com::sun::star::uno::Reference<com::sun::star::frame::XModel> &rRef)
         : xModel(rRef) {}
 
-    ULONG Import(SfxMedium &rMedium);
+    sal_uLong Import(SfxMedium &rMedium);
 
-    ULONG ReadThroughComponent(
+    sal_uLong ReadThroughComponent(
         ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > xInputStream,
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > xModelComponent,
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > & rFactory,
@@ -65,7 +65,7 @@ public:
         const sal_Char* pFilterName,
         sal_Bool bEncrypted );
 
-    ULONG ReadThroughComponent(
+    sal_uLong ReadThroughComponent(
          const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage,
                 ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > xModelComponent,
         const sal_Char* pStreamName,
