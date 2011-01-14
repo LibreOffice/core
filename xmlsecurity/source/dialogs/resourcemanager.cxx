@@ -98,7 +98,7 @@ namespace XmlSec
         String sSec( _rTime, 6, 2 );
 
 
-        Date aDate( (USHORT)sDay.ToInt32(), (USHORT) sMonth.ToInt32(), (USHORT)sYear.ToInt32() );
+        Date aDate( (sal_uInt16)sDay.ToInt32(), (sal_uInt16) sMonth.ToInt32(), (sal_uInt16)sYear.ToInt32() );
         Time aTime( sHour.ToInt32(), sMin.ToInt32(), sSec.ToInt32(), 0 );
         const LocaleDataWrapper& rLoDa = GetLocaleData();
         String aStr( rLoDa.getDate( aDate ) );
@@ -357,19 +357,19 @@ vector< pair< OUString, OUString> > parseDN(const OUString& rRawString)
         return retVal;
     }
 
-    String GetHexString( const ::com::sun::star::uno::Sequence< sal_Int8 >& _rSeq, const char* _pSep, UINT16 _nLineBreak )
+    String GetHexString( const ::com::sun::star::uno::Sequence< sal_Int8 >& _rSeq, const char* _pSep, sal_uInt16 _nLineBreak )
     {
         const sal_Int8*         pSerNumSeq = _rSeq.getConstArray();
         int                     nCnt = _rSeq.getLength();
         String                  aStr;
         const char              pHexDigs[ 17 ] = "0123456789ABCDEF";
         char                    pBuffer[ 3 ] = "  ";
-        UINT8                   nNum;
-        UINT16                  nBreakStart = _nLineBreak? _nLineBreak : 1;
-        UINT16                  nBreak = nBreakStart;
+        sal_uInt8                   nNum;
+        sal_uInt16                  nBreakStart = _nLineBreak? _nLineBreak : 1;
+        sal_uInt16                  nBreak = nBreakStart;
         for( int i = 0 ; i < nCnt ; ++i )
         {
-            nNum = UINT8( pSerNumSeq[ i ] );
+            nNum = sal_uInt8( pSerNumSeq[ i ] );
 
             //MM : exchange the buffer[0] and buffer[1], which make it consistent with Mozilla and Windows
             pBuffer[ 1 ] = pHexDigs[ nNum & 0x0F ];
