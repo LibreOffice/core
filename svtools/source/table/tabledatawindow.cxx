@@ -36,22 +36,23 @@
 
 #include <vcl/help.hxx>
 
-//........................................................................
+//......................................................................................................................
 namespace svt { namespace table
 {
-//........................................................................
+//......................................................................................................................
 
     /** === begin UNO using === **/
     using ::com::sun::star::uno::Any;
     /** === end UNO using === **/
 
-    //====================================================================
+    //==================================================================================================================
     //= TableDataWindow
-    //====================================================================
-    //--------------------------------------------------------------------
+    //==================================================================================================================
+    //------------------------------------------------------------------------------------------------------------------
     TableDataWindow::TableDataWindow( TableControl_Impl& _rTableControl )
         :Window( &_rTableControl.getAntiImpl() )
         ,m_rTableControl( _rTableControl )
+        ,m_nTipWindowHandle( 0 )
     {
         // by default, use the background as determined by the style settings
         const Color aWindowColor( GetSettings().GetStyleSettings().GetFieldColor() );
@@ -59,33 +60,39 @@ namespace svt { namespace table
         SetFillColor( aWindowColor );
     }
 
-    //--------------------------------------------------------------------
+    //------------------------------------------------------------------------------------------------------------------
+    TableDataWindow::~TableDataWindow()
+    {
+        impl_hideTipWindow();
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
     void TableDataWindow::Paint( const Rectangle& rUpdateRect )
     {
         m_rTableControl.doPaintContent( rUpdateRect );
     }
-    //--------------------------------------------------------------------
+    //------------------------------------------------------------------------------------------------------------------
     void TableDataWindow::SetBackground( const Wallpaper& rColor )
     {
         Window::SetBackground( rColor );
     }
-    //--------------------------------------------------------------------
+    //------------------------------------------------------------------------------------------------------------------
     void TableDataWindow::SetControlBackground( const Color& rColor )
     {
         Window::SetControlBackground( rColor );
     }
-    //--------------------------------------------------------------------
+    //------------------------------------------------------------------------------------------------------------------
     void TableDataWindow::SetBackground()
     {
         Window::SetBackground();
     }
-    //--------------------------------------------------------------------
+    //------------------------------------------------------------------------------------------------------------------
     void TableDataWindow::SetControlBackground()
     {
         Window::SetControlBackground();
     }
 
-    //--------------------------------------------------------------------
+    //------------------------------------------------------------------------------------------------------------------
     void TableDataWindow::RequestHelp( const HelpEvent& rHEvt )
     {
         USHORT const nHelpMode = rHEvt.GetMode();
@@ -99,10 +106,10 @@ namespace svt { namespace table
             RowPos const hitRow = rTableControl.getRowAtPoint( aMousePos );
             ColPos const hitCol = rTableControl.getColAtPoint( aMousePos );
 
+            ::rtl::OUString sHelpText;
+
             if ( ( hitCol >= 0 ) && ( hitCol < pTableModel->getColumnCount() ) )
             {
-                ::rtl::OUString sHelpText;
-
                 if ( hitRow == ROW_COL_HEADERS )
                 {
                     sHelpText = pTableModel->getColumnModel( hitCol )->getHelpText();
@@ -131,14 +138,19 @@ namespace svt { namespace table
 
                     sHelpText = CellValueConversion::convertToString( aCellToolTip );
                 }
+            }
 
+            if ( sHelpText.getLength() )
+            {
                 Rectangle const aControlScreenRect(
                     OutputToScreenPixel( Point( 0, 0 ) ),
                     GetOutputSizePixel()
                 );
-                Help::ShowQuickHelp( this, aControlScreenRect, sHelpText, String(), QUICKHELP_FORCE_REPOSITION | QUICKHELP_NO_DELAY );
-                    // also do this when the help text is empty - in this case, a previously active tip help window
-                    // (possible displaying the tooltip for another cell) will be hidden, which is intended here.
+
+                if ( m_nTipWindowHandle )
+                    Help::UpdateTip( m_nTipWindowHandle, this, aControlScreenRect, sHelpText );
+                else
+                    m_nTipWindowHandle = Help::ShowTip( this, aControlScreenRect, sHelpText );
             }
         }
         else
@@ -147,9 +159,22 @@ namespace svt { namespace table
         }
     }
 
-    //--------------------------------------------------------------------
+    //------------------------------------------------------------------------------------------------------------------
+    void TableDataWindow::impl_hideTipWindow()
+    {
+        if ( m_nTipWindowHandle != 0 )
+        {
+            Help::HideTip( m_nTipWindowHandle );
+            m_nTipWindowHandle = 0;
+        }
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
     void TableDataWindow::MouseMove( const MouseEvent& rMEvt )
     {
+        if ( rMEvt.IsLeaveWindow() )
+            impl_hideTipWindow();
+
         Point aPoint = rMEvt.GetPosPixel();
         if ( !m_rTableControl.getInputHandler()->MouseMove( m_rTableControl, rMEvt ) )
         {
@@ -163,7 +188,7 @@ namespace svt { namespace table
             }
         }
     }
-    //--------------------------------------------------------------------
+    //------------------------------------------------------------------------------------------------------------------
     void TableDataWindow::MouseButtonDown( const MouseEvent& rMEvt )
     {
         const Point aPoint = rMEvt.GetPosPixel();
@@ -182,7 +207,7 @@ namespace svt { namespace table
         }
         m_aMouseButtonDownHdl.Call((MouseEvent*) &rMEvt);
     }
-    //--------------------------------------------------------------------
+    //------------------------------------------------------------------------------------------------------------------
     void TableDataWindow::MouseButtonUp( const MouseEvent& rMEvt )
     {
         if ( !m_rTableControl.getInputHandler()->MouseButtonUp( m_rTableControl, rMEvt ) )
@@ -190,17 +215,17 @@ namespace svt { namespace table
         m_aMouseButtonUpHdl.Call((MouseEvent*) &rMEvt);
         m_rTableControl.getAntiImpl().GrabFocus();
     }
-    //--------------------------------------------------------------------
+    //------------------------------------------------------------------------------------------------------------------
     void TableDataWindow::SetPointer( const Pointer& rPointer )
     {
         Window::SetPointer(rPointer);
     }
-    //--------------------------------------------------------------------
+    //------------------------------------------------------------------------------------------------------------------
     void TableDataWindow::CaptureMouse()
     {
         Window::CaptureMouse();
     }
-    //--------------------------------------------------------------------
+    //------------------------------------------------------------------------------------------------------------------
     void TableDataWindow::ReleaseMouse(  )
     {
         Window::ReleaseMouse();
@@ -223,6 +248,6 @@ namespace svt { namespace table
         }
         return nDone ? nDone : Window::Notify( rNEvt );
     }
-//........................................................................
+//......................................................................................................................
 } } // namespace svt::table
-//........................................................................
+//......................................................................................................................

@@ -118,6 +118,10 @@ public:
     static ULONG        ShowTip( Window* pParent,
                                  const Rectangle& rScreenRect,
                                  const XubString& rText, USHORT nStyle = 0 );
+    static void         UpdateTip( ULONG nId,
+                                   Window* pParent,
+                                   const Rectangle& rScreenRect,
+                                   const XubString& rText );
     static void         HideTip( ULONG nId );
 };
 

@@ -36,6 +36,7 @@
 #include "vcl/help.hxx"
 #include "vcl/helpwin.hxx"
 #include "tools/debug.hxx"
+#include "tools/diagnose_ex.h"
 #include "tools/time.hxx"
 
 // =======================================================================
@@ -274,18 +275,30 @@ BOOL Help::ShowQuickHelp( Window* pParent,
 
 // -----------------------------------------------------------------------
 
-ULONG Help::ShowTip( Window* pParent, const Rectangle& rRect,
+ULONG Help::ShowTip( Window* pParent, const Rectangle& rScreenRect,
                      const XubString& rText, USHORT nStyle )
 {
     USHORT nHelpWinStyle = HELPWINSTYLE_QUICK;
     HelpTextWindow* pHelpWin = new HelpTextWindow( pParent, rText, nHelpWinStyle, nStyle );
 
+    ULONG nId = reinterpret_cast< ULONG >( pHelpWin );
+    UpdateTip( nId, pParent, rScreenRect, rText );
+
+    pHelpWin->ShowHelp( HELPDELAY_NONE );
+    return nId;
+}
+
+// -----------------------------------------------------------------------
+
+void Help::UpdateTip( ULONG nId, Window* pParent, const Rectangle& rScreenRect, const XubString& rText )
+{
+    HelpTextWindow* pHelpWin = reinterpret_cast< HelpTextWindow* >( nId );
+    ENSURE_OR_RETURN_VOID( pHelpWin != NULL, "Help::UpdateTip: invalid ID!" );
+
     Size aSz = pHelpWin->CalcOutSize();
     pHelpWin->SetOutputSizePixel( aSz );
-    ImplSetHelpWindowPos( pHelpWin, nHelpWinStyle, nStyle,
-        pParent->OutputToScreenPixel( pParent->GetPointerPosPixel() ), &rRect );
-    pHelpWin->ShowHelp( HELPDELAY_NONE );
-    return (ULONG)pHelpWin;
+    ImplSetHelpWindowPos( pHelpWin, pHelpWin->GetWinStyle(), pHelpWin->GetStyle(),
+        pParent->OutputToScreenPixel( pParent->GetPointerPosPixel() ), &rScreenRect );
 }
 
 // -----------------------------------------------------------------------
