@@ -256,17 +256,17 @@ namespace svt { namespace table
             if ( !aRowColors )
             {
                 // use alternating default colors
-                if ( ( m_pImpl->nCurrentRow % 2 ) == 0 )
+                Color const fieldColor = _rStyle.GetFieldColor();
+                if ( _rStyle.GetHighContrastMode() || ( ( m_pImpl->nCurrentRow % 2 ) == 0 ) )
                 {
-                    backgroundColor = _rStyle.GetFieldColor();
+                    backgroundColor = fieldColor;
                 }
                 else
                 {
                     Color hilightColor = _rStyle.GetHighlightColor();
-                    USHORT const luminance = hilightColor.GetLuminance();
-                    hilightColor.SetRed( 9 * ( 255 - hilightColor.GetRed() ) / 10 + hilightColor.GetRed() );
-                    hilightColor.SetGreen( 9 * ( 255 - hilightColor.GetGreen() ) / 10 + hilightColor.GetGreen() );
-                    hilightColor.SetBlue( 9 * ( 255 - hilightColor.GetBlue() ) / 10 + hilightColor.GetBlue() );
+                    hilightColor.SetRed( 9 * ( fieldColor.GetRed() - hilightColor.GetRed() ) / 10 + hilightColor.GetRed() );
+                    hilightColor.SetGreen( 9 * ( fieldColor.GetGreen() - hilightColor.GetGreen() ) / 10 + hilightColor.GetGreen() );
+                    hilightColor.SetBlue( 9 * ( fieldColor.GetBlue() - hilightColor.GetBlue() ) / 10 + hilightColor.GetBlue() );
                     backgroundColor = hilightColor;
                 }
             }
