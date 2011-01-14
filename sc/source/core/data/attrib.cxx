@@ -77,7 +77,6 @@ TYPEINIT1(ScPageScaleToItem,    SfxPoolItem);
 
 BOOL ScHasPriority( const SvxBorderLine* pThis, const SvxBorderLine* pOther )
 {
-//    DBG_ASSERT( pThis || pOther, "LineAttr == 0" );
 
     if (!pThis)
         return FALSE;
@@ -1089,7 +1088,6 @@ int ScDoubleItem::operator==( const SfxPoolItem& rItem ) const
     DBG_ASSERT( SfxPoolItem::operator==( rItem ), "unequal Which or Type" );
     const ScDoubleItem& _rItem = (const ScDoubleItem&)rItem;
     return int(nValue == _rItem.nValue);
-        //int(nValue == ((const ScDoubleItem&)rItem).nValue);
 }
 
 //------------------------------------------------------------------------

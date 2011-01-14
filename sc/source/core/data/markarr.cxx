@@ -249,7 +249,6 @@ void ScMarkArray::SetMarkArea( SCROW nStartRow, SCROW nEndRow, BOOL bMarked )
             }
         }
     }
-//  InfoBox(0, String(nCount) + String(" Eintraege") ).Execute();
 }
 
 BOOL ScMarkArray::IsAllMarked( SCROW nStartRow, SCROW nEndRow ) const

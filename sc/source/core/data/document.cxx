@@ -2241,7 +2241,6 @@ void ScDocument::CopyFromClip( const ScRange& rDestRange, const ScMarkData& rMar
 
             SCCOL nClipStartCol = aClipRange.aStart.Col();
             SCROW nClipStartRow = aClipRange.aStart.Row();
-            // WaE: commented because unused:   SCCOL nClipEndCol = pClipDoc->aClipRange.aEnd.Col();
             SCROW nClipEndRow = aClipRange.aEnd.Row();
             for ( size_t nRange = 0; nRange < pDestRanges->size(); ++nRange )
             {
@@ -2286,9 +2285,6 @@ void ScDocument::CopyFromClip( const ScRange& rDestRange, const ScMarkData& rMar
                             CopyNonFilteredFromClip( nC1, nR1, nC2, nR2, rMark,
                                     nDx, nDy, &aCBFCP, nClipStartRow );
                         }
-                        // Not needed for columns, but if it was this would be how to.
-                        //if (nClipStartCol > nClipEndCol)
-                        //    nClipStartCol = pClipDoc->aClipRange.aStart.Col();
                         nC1 = nC2 + 1;
                         nC2 = Min((SCCOL)(nC1 + nXw), nCol2);
                     } while (nC1 <= nCol2);

@@ -233,7 +233,6 @@ public:
 
                             // external access:
     void                    SetParam( const ScSubTotalParam& rNew );
-//  const ScSubTotalParam&  GetParam() const    { return aStoredParam; }
 };
 
 
@@ -532,8 +531,6 @@ public:
                             getSubTotalDescriptor() throw(::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > SAL_CALL
                             getImportDescriptor() throw(::com::sun::star::uno::RuntimeException);
-// implemented for the XRefreshable Interface
-//    virtual void SAL_CALL refresh() throw(::com::sun::star::uno::RuntimeException);
 
                             // XRefreshable
     virtual void SAL_CALL   refresh() throw(::com::sun::star::uno::RuntimeException);

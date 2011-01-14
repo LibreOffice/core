@@ -1008,10 +1008,6 @@ BOOL ScTable::DoSubTotals( ScSubTotalParam& rParam )
                 bBlockVis = !RowFiltered(nRow);
             }
         }
-        else
-        {
-//          DBG_ERROR( "nSubTotals==0 bei DoSubTotals" );
-        }
     }
 
     // now insert the formulas

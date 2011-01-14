@@ -389,7 +389,6 @@ public:
     BOOL                HasHiddenDetails() const;
     BOOL                IsSubTotalInTitle(long nMeasure) const;
 
-//  BOOL                SubTotalEnabled() const;
     long                GetSubTotalCount( long* pUserSubStart = NULL ) const;
 
     BOOL              IsNamedItem( SCROW nIndex ) const;

@@ -439,7 +439,6 @@ BOOL ScValueIterator::GetFirst(double& rValue, USHORT& rErr)
     nRow = nStartRow;
     nTab = nStartTab;
 
-//  nColRow = 0;
     ScColumn* pCol = &(pDoc->pTab[nTab])->aCol[nCol];
     pCol->Search( nRow, nColRow );
 
@@ -449,14 +448,6 @@ BOOL ScValueIterator::GetFirst(double& rValue, USHORT& rErr)
 
     return GetThis(rValue, rErr);
 }
-
-/*  ist inline:
-BOOL ScValueIterator::GetNext(double& rValue, USHORT& rErr)
-{
-    ++nRow;
-    return GetThis(rValue, rErr);
-}
-*/
 
 // ============================================================================
 
@@ -625,7 +616,6 @@ bool ScDBQueryDataIterator::DataAccessInternal::getCurrent(Value& rValue)
             nRow = mpParam->nRow2 + 1; // Naechste Spalte
     }
 // statement unreachable
-//    return false;
 }
 
 bool ScDBQueryDataIterator::DataAccessInternal::getFirst(Value& rValue)
@@ -1060,7 +1050,6 @@ ScBaseCell* ScCellIterator::GetFirst()
     nCol = nStartCol;
     nRow = nStartRow;
     nTab = nStartTab;
-//  nColRow = 0;
     ScColumn* pCol = &(pDoc->pTab[nTab])->aCol[nCol];
     pCol->Search( nRow, nColRow );
     return GetThis();
@@ -1207,7 +1196,6 @@ ScBaseCell* ScQueryCellIterator::GetFirst()
     nRow = aParam.nRow1;
     if (aParam.bHasHeader)
         nRow++;
-//  nColRow = 0;
     ScColumn* pCol = &(pDoc->pTab[nTab])->aCol[nCol];
     pCol->Search( nRow, nColRow );
     return GetThis();
@@ -1888,8 +1876,6 @@ const ScPatternAttr* ScHorizontalAttrIterator::GetNext( SCCOL& rCol1, SCCOL& rCo
         bRowEmpty = bEmpty;
         nCol = nStartCol;           // wieder links anfangen
     }
-
-//    return NULL;
 }
 
 //-------------------------------------------------------------------------------

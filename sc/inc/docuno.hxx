@@ -147,8 +147,6 @@ public:
     virtual void SAL_CALL   acquire() throw();
     virtual void SAL_CALL   release() throw();
 
-//? virtual UString         getClassName(void);
-
     virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 
                             // XSpreadsheetDocument
@@ -211,8 +209,6 @@ public:
                             //  XDrawPagesSupplier
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPages > SAL_CALL
                             getDrawPages() throw(::com::sun::star::uno::RuntimeException);
-
-    //! XPrintable??
 
                             //  XGoalSeek
     virtual ::com::sun::star::sheet::GoalResult SAL_CALL seekGoal(

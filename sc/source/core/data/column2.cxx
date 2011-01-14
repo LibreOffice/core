@@ -1425,9 +1425,6 @@ void ScColumn::FindDataAreaPos(SCROW& rRow, long nMovY) const
 
 bool ScColumn::HasDataAt(SCROW nRow) const
 {
-/*  SCSIZE nIndex;
-    return Search( nRow, nIndex );
-*/
         //  immer nur sichtbare interessant ?
         //! dann HasVisibleDataAt raus
 
@@ -1575,11 +1572,7 @@ void ScColumn::EndListening( SvtListener& rLst, SCROW nRow )
                     pCell->DeleteBroadcaster();
             }
         }
-//      else
-//          DBG_ERROR("ScColumn::EndListening - kein Broadcaster");
     }
-//  else
-//      DBG_ERROR("ScColumn::EndListening - keine Zelle");
 }
 
 void ScColumn::CompileDBFormula()

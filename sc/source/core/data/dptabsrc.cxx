@@ -1790,7 +1790,6 @@ uno::Any SAL_CALL ScDPHierarchies::getByName( const rtl::OUString& aName )
         }
 
     throw container::NoSuchElementException();
-//    return uno::Any();
 }
 
 uno::Sequence<rtl::OUString> SAL_CALL ScDPHierarchies::getElementNames() throw(uno::RuntimeException)
@@ -1974,7 +1973,6 @@ uno::Any SAL_CALL ScDPLevels::getByName( const rtl::OUString& aName )
         }
 
     throw container::NoSuchElementException();
-//    return uno::Any();
 }
 
 uno::Sequence<rtl::OUString> SAL_CALL ScDPLevels::getElementNames() throw(uno::RuntimeException)
@@ -2120,7 +2118,6 @@ void ScDPLevel::EvaluateSortOrder()
                 ScDPMembers* pLocalMembers = GetMembersObject();
                 long nCount = pLocalMembers->getCount();
 
-//                DBG_ASSERT( aGlobalOrder.empty(), "sort twice?" );
                 aGlobalOrder.resize( nCount );
                 for (long nPos=0; nPos<nCount; nPos++)
                     aGlobalOrder[nPos] = nPos;
@@ -2315,7 +2312,6 @@ void SAL_CALL ScDPLevel::setPropertyValue( const rtl::OUString& aPropertyName, c
     else
     {
         DBG_ERROR("unknown property");
-        //! THROW( UnknownPropertyException() );
     }
 }
 
@@ -2355,7 +2351,6 @@ uno::Any SAL_CALL ScDPLevel::getPropertyValue( const rtl::OUString& aPropertyNam
     else
     {
         DBG_ERROR("unknown property");
-        //! THROW( UnknownPropertyException() );
     }
     return aRet;
 }
@@ -2486,7 +2481,6 @@ uno::Any SAL_CALL ScDPMembers::getByName( const rtl::OUString& aName )
     }
 
     throw container::NoSuchElementException();
-//    return uno::Any();
 }
 
 uno::Sequence<rtl::OUString> SAL_CALL ScDPMembers::getElementNames() throw(uno::RuntimeException)
@@ -2800,7 +2794,6 @@ void SAL_CALL ScDPMember::setPropertyValue( const rtl::OUString& aPropertyName, 
     else
     {
         DBG_ERROR("unknown property");
-        //! THROW( UnknownPropertyException() );
     }
 }
 
@@ -2821,7 +2814,6 @@ uno::Any SAL_CALL ScDPMember::getPropertyValue( const rtl::OUString& aPropertyNa
     else
     {
         DBG_ERROR("unknown property");
-        //! THROW( UnknownPropertyException() );
     }
     return aRet;
 }

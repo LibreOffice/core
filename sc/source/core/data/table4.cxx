@@ -419,82 +419,45 @@ void ScTable::FillAnalyse( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
 void ScTable::FillFormula(ULONG& /* nFormulaCounter */, BOOL /* bFirst */, ScFormulaCell* pSrcCell,
                           SCCOL nDestCol, SCROW nDestRow, BOOL bLast )
 {
-/*  USHORT nTokArrLen = pSrcCell->GetTokenArrayLen();
-    if ( nTokArrLen > 15 )                          // mehr als =A1 oder =67
-    {
-        ScRangeName* pRangeName = pDocument->GetRangeName();
-        String aName("___SC_");                     // Wird dieser String veraendert,
-                                                    // auch in document2 EraseNonUsed...
-                                                    // mitaendern!!
-        aName += pRangeName->GetSharedMaxIndex() + 1;
-        aName += '_';
-        aName += nFormulaCounter;
-        nFormulaCounter++;
-        if (bFirst)
-        {
-            ScRangeData *pAktRange = new ScRangeData(
-                            pDocument, aName, pSrcCell->GetTokenArray(), nTokArrLen,
-                            pSrcCell->GetCol(), pSrcCell->GetRow(), nTab ,RT_SHARED);
-            if (!pRangeName->Insert( pAktRange ))
-                delete pAktRange;
-            else
-                bSharedNameInserted = TRUE;
-        }
-        USHORT nIndex;
-        pRangeName->SearchName(aName, nIndex);
-        if (!pRangeName)
-        {
-            DBG_ERROR("ScTable::FillFormula: Falscher Name");
-            return;
-        }
-        nIndex = ((ScRangeData*) ((*pRangeName)[nIndex]))->GetIndex();
-        ScTokenArray aArr;
-        aArr.AddName(nIndex);
-        aArr.AddOpCode(ocStop);
-        ScFormulaCell* pDestCell = new ScFormulaCell
-            (pDocument, ScAddress( nDestCol, nDestRow, nTab ), aArr );
-        aCol[nDestCol].Insert(nDestRow, pDestCell);
-    }
-    else
-*/  {
-        pDocument->SetNoListening( TRUE );  // noch falsche Referenzen
-        ScAddress aAddr( nDestCol, nDestRow, nTab );
-        ScFormulaCell* pDestCell = new ScFormulaCell( *pSrcCell, *pDocument, aAddr );
-        aCol[nDestCol].Insert(nDestRow, pDestCell);
 
-        if ( bLast && pDestCell->GetMatrixFlag() )
+    pDocument->SetNoListening( TRUE );  // noch falsche Referenzen
+    ScAddress aAddr( nDestCol, nDestRow, nTab );
+    ScFormulaCell* pDestCell = new ScFormulaCell( *pSrcCell, *pDocument, aAddr );
+    aCol[nDestCol].Insert(nDestRow, pDestCell);
+
+    if ( bLast && pDestCell->GetMatrixFlag() )
+    {
+        ScAddress aOrg;
+        if ( pDestCell->GetMatrixOrigin( aOrg ) )
         {
-            ScAddress aOrg;
-            if ( pDestCell->GetMatrixOrigin( aOrg ) )
+            if ( nDestCol >= aOrg.Col() && nDestRow >= aOrg.Row() )
             {
-                if ( nDestCol >= aOrg.Col() && nDestRow >= aOrg.Row() )
+                ScBaseCell* pOrgCell = pDocument->GetCell( aOrg );
+                if ( pOrgCell && pOrgCell->GetCellType() == CELLTYPE_FORMULA
+                  && ((ScFormulaCell*)pOrgCell)->GetMatrixFlag() == MM_FORMULA )
                 {
-                    ScBaseCell* pOrgCell = pDocument->GetCell( aOrg );
-                    if ( pOrgCell && pOrgCell->GetCellType() == CELLTYPE_FORMULA
-                      && ((ScFormulaCell*)pOrgCell)->GetMatrixFlag() == MM_FORMULA )
-                    {
-                        ((ScFormulaCell*)pOrgCell)->SetMatColsRows(
-                            nDestCol - aOrg.Col() + 1,
-                            nDestRow - aOrg.Row() + 1 );
-                    }
-                    else
-                    {
-                        DBG_ERRORFILE( "FillFormula: MatrixOrigin keine Formelzelle mit MM_FORMULA" );
-                    }
+                    ((ScFormulaCell*)pOrgCell)->SetMatColsRows(
+                        nDestCol - aOrg.Col() + 1,
+                        nDestRow - aOrg.Row() + 1 );
                 }
                 else
                 {
-                    DBG_ERRORFILE( "FillFormula: MatrixOrigin rechts unten" );
+                    DBG_ERRORFILE( "FillFormula: MatrixOrigin keine Formelzelle mit MM_FORMULA" );
                 }
             }
             else
             {
-                DBG_ERRORFILE( "FillFormula: kein MatrixOrigin" );
+                DBG_ERRORFILE( "FillFormula: MatrixOrigin rechts unten" );
             }
         }
-        pDocument->SetNoListening( FALSE );
-        pDestCell->StartListeningTo( pDocument );
+        else
+        {
+            DBG_ERRORFILE( "FillFormula: kein MatrixOrigin" );
+        }
     }
+    pDocument->SetNoListening( FALSE );
+    pDestCell->StartListeningTo( pDocument );
+
 }
 
 void ScTable::FillAuto( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
@@ -1591,8 +1554,6 @@ void ScTable::AutoFormatArea(SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SC
         ScAutoFormatData* pData = (*pAutoFormat)[nFormatNo];
         if (pData)
         {
-//          ScPatternAttr aPattern(pDocument->GetPool());
-//            pData->FillToItemSet(nIndex, aPattern.GetItemSet(), *pDocument);
             ApplyPatternArea(nStartCol, nStartRow, nEndCol, nEndRow, rAttr);
         }
     }

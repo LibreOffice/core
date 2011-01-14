@@ -818,8 +818,6 @@ void ScAttrArray::ApplyCacheArea( SCROW nStartRow, SCROW nEndRow, SfxItemPoolCac
             }
             else
             {
-//!!!!!!!!!!!!!!!!!! mit diesem Remove gibt es Abstuerze (Calc1 Import)
-//!             pDocument->GetPool()->Remove(*pNewPattern);
                 nStart = pData[nPos].nRow + 1;
                 ++nPos;
             }

@@ -46,9 +46,6 @@ public:
                             { return ConfigItem::GetProperties( rNames ); }
 
     using ConfigItem::GetNodeNames;
-
-//  com::sun::star::uno::Sequence< rtl::OUString > GetNodeNames(rtl::OUString& rNode)
-//                          { return ConfigItem::GetNodeNames( rNode ); }
 };
 
 

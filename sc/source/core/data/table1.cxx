@@ -545,26 +545,6 @@ BOOL ScTable::GetTableArea( SCCOL& rEndCol, SCROW& rEndRow ) const
     return bRet;
 }
 
-/*      vorher:
-
-    BOOL bFound = FALSE;
-    SCCOL nMaxX = 0;
-    SCROW nMaxY = 0;
-    for (SCCOL i=0; i<=MAXCOL; i++)
-        if (!aCol[i].IsEmpty())
-        {
-            bFound = TRUE;
-            nMaxX = i;
-            SCCOL nColY = aCol[i].GetLastEntryPos();
-            if (nColY > nMaxY)
-                nMaxY = nColY;
-        }
-
-    rEndCol = nMaxX;
-    rEndRow = nMaxY;
-    return bFound;
-*/
-
 const SCCOL SC_COLUMNS_STOP = 30;
 
 BOOL ScTable::GetPrintArea( SCCOL& rEndCol, SCROW& rEndRow, BOOL bNotes ) const

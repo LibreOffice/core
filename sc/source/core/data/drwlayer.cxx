@@ -308,8 +308,6 @@ ScDrawLayer::~ScDrawLayer()
 {
     Broadcast(SdrHint(HINT_MODELCLEARED));
 
-    // #116168#
-    //Clear();
     ClearModel(sal_True);
 
     delete pUndoGroup;
@@ -442,9 +440,7 @@ void ScDrawLayer::ScCopyPage( USHORT nOldPos, USHORT nNewPos, BOOL bAlloc )
         SdrObject* pOldObject = aIter.Next();
         while (pOldObject)
         {
-            // #116235#
             SdrObject* pNewObject = pOldObject->Clone();
-            //SdrObject* pNewObject = pOldObject->Clone( pNewPage, this );
             pNewObject->SetModel(this);
             pNewObject->SetPage(pNewPage);
 
@@ -869,16 +865,12 @@ void ScDrawLayer::AddCalcUndo( SdrUndoAction* pUndo )
 
 void ScDrawLayer::BeginCalcUndo()
 {
-//! DBG_ASSERT( !bRecording, "BeginCalcUndo ohne GetCalcUndo" );
-
     DELETEZ(pUndoGroup);
     bRecording = TRUE;
 }
 
 SdrUndoGroup* ScDrawLayer::GetCalcUndo()
 {
-//! DBG_ASSERT( bRecording, "GetCalcUndo ohne BeginCalcUndo" );
-
     SdrUndoGroup* pRet = pUndoGroup;
     pUndoGroup = NULL;
     bRecording = FALSE;
@@ -1357,9 +1349,7 @@ void ScDrawLayer::CopyToClip( ScDocument* pClipDoc, SCTAB nTab, const Rectangle&
                 DBG_ASSERT( pDestPage, "no page" );
                 if (pDestPage)
                 {
-                    // #116235#
                     SdrObject* pNewObject = pOldObject->Clone();
-                    //SdrObject* pNewObject = pOldObject->Clone( pDestPage, pDestModel );
                     pNewObject->SetModel(pDestModel);
                     pNewObject->SetPage(pDestPage);
 
@@ -1521,9 +1511,7 @@ void ScDrawLayer::CopyFromClip( ScDrawLayer* pClipModel, SCTAB nSourceTab, const
         // do not copy internal objects (detective) and note captions
         if ( rSourceRange.IsInside( aObjRect ) && (pOldObject->GetLayer() != SC_LAYER_INTERN) && !IsNoteCaption( pOldObject ) )
         {
-            // #116235#
             SdrObject* pNewObject = pOldObject->Clone();
-            //SdrObject* pNewObject = pOldObject->Clone( pDestPage, this );
             pNewObject->SetModel(this);
             pNewObject->SetPage(pDestPage);
 

@@ -662,7 +662,6 @@ ScFunctionMgr::~ScFunctionMgr()
 {
     for (USHORT i = 0; i < MAX_FUNCCAT; i++)
         delete aCatLists[i];
-//  delete pFuncList;       // Macht spaeter die App
 }
 
 //------------------------------------------------------------------------

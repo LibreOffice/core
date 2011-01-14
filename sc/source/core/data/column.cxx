@@ -1390,8 +1390,6 @@ void ScColumn::CopyUpdated( const ScColumn& rPosCol, ScColumn& rDestCol ) const
         }
     }
 
-    //  Dummy:
-    //  CopyToColumn( 0,MAXROW, IDF_FORMULA, false, rDestCol, NULL, false );
 }
 
 

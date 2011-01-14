@@ -110,9 +110,6 @@ public:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XRangeSelection > SAL_CALL getRangeSelection()
         throw (::com::sun::star::uno::RuntimeException);
 
-/*    virtual ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier > SAL_CALL getNumberFormatsSupplier()
-        throw (::com::sun::star::uno::RuntimeException);*/
-
     // XRangeXMLConversion ---------------------------------------------------
 
     virtual ::rtl::OUString SAL_CALL convertRangeToXML( const ::rtl::OUString& sRangeRepresentation )
@@ -427,16 +424,6 @@ public:
         getSupportedServiceNames() throw(
                 ::com::sun::star::uno::RuntimeException);
 
-    // XUnoTunnel ------------------------------------------------------------
-
-//  virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence<
-//                                  sal_Int8 >& aIdentifier )
-//                              throw(::com::sun::star::uno::RuntimeException);
-
-//  static const com::sun::star::uno::Sequence<sal_Int8>& getUnoTunnelId();
-//  static ScChart2DataSequence* getImplementation( const com::sun::star::uno::Reference<
-//                                  com::sun::star::uno::XInterface> xObj );
-
 private:
     void setDataChangedHint(bool b);
 
@@ -663,16 +650,6 @@ public:
     virtual ::com::sun::star::uno::Sequence< ::rtl::OUString> SAL_CALL
         getSupportedServiceNames() throw(
                 ::com::sun::star::uno::RuntimeException);
-
-    // XUnoTunnel ------------------------------------------------------------
-
-//  virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence<
-//                                  sal_Int8 >& aIdentifier )
-//                              throw(::com::sun::star::uno::RuntimeException);
-
-//  static const com::sun::star::uno::Sequence<sal_Int8>& getUnoTunnelId();
-//  static ScChart2DataSequence* getImplementation( const com::sun::star::uno::Reference<
-//                                  com::sun::star::uno::XInterface> xObj );
 
     // Implementation --------------------------------------------------------
 

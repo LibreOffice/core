@@ -116,7 +116,6 @@ struct ScDPOutLevelData
             ( nDimPos==r.nDimPos && nHier==r.nHier && nLevel<r.nLevel ); }
 
     void Swap(ScDPOutLevelData& r)
-//!     { ScDPOutLevelData aTemp = r; r = *this; *this = aTemp; }
         { ScDPOutLevelData aTemp; aTemp = r; r = *this; *this = aTemp; }
 
     //! bug (73840) in uno::Sequence - copy and then assign doesn't work!
@@ -605,11 +604,6 @@ void ScDPOutput::DataCell( SCCOL nCol, SCROW nRow, SCTAB nTab, const sheet::Data
         if ( nFormat != 0 )
             pDoc->ApplyAttr( nCol, nRow, nTab, SfxUInt32Item( ATTR_VALUE_FORMAT, nFormat ) );
     }
-    else
-    {
-        //pDoc->SetString( nCol, nRow, nTab, EMPTY_STRING );
-    }
-
     //  SubTotal formatting is controlled by headers
 }
 
@@ -628,21 +622,15 @@ void ScDPOutput::HeaderCell( SCCOL nCol, SCROW nRow, SCTAB nTab,
     {
         pDoc->SetString( nCol, nRow, nTab, aCaptionBuf.makeStringAndClear() );
     }
-    else
-    {
-        //pDoc->SetString( nCol, nRow, nTab, EMPTY_STRING );
-    }
 
     if ( nFlags & sheet::MemberResultFlags::SUBTOTAL )
     {
-//      SvxWeightItem aItem( WEIGHT_BOLD );     // weight is in the style
         OutputImpl outputimp( pDoc, nTab,
             nTabStartCol, nTabStartRow, nMemberStartCol, nMemberStartRow,
             nDataStartCol, nDataStartRow, nTabEndCol, nTabEndRow );
         //! limit frames to horizontal or vertical?
         if (bColHeader)
         {
-            //lcl_SetFrame( pDoc,nTab, nCol,nMemberStartRow+(SCROW)nLevel, nCol,nTabEndRow, SC_DP_FRAME_INNER_BOLD );
             outputimp.OutputBlockFrame( nCol,nMemberStartRow+(SCROW)nLevel, nCol,nDataStartRow-1 );
 
             lcl_SetStyleById( pDoc,nTab, nCol,nMemberStartRow+(SCROW)nLevel, nCol,nDataStartRow-1,
@@ -652,7 +640,6 @@ void ScDPOutput::HeaderCell( SCCOL nCol, SCROW nRow, SCTAB nTab,
         }
         else
         {
-            //lcl_SetFrame( pDoc,nTab, nMemberStartCol+(USHORT)nLevel,nRow, nTabEndCol,nRow, SC_DP_FRAME_INNER_BOLD );
             outputimp.OutputBlockFrame( nMemberStartCol+(SCCOL)nLevel,nRow, nDataStartCol-1,nRow );
             lcl_SetStyleById( pDoc,nTab, nMemberStartCol+(SCCOL)nLevel,nRow, nDataStartCol-1,nRow,
                                     STR_PIVOT_STYLE_TITLE );
@@ -884,8 +871,6 @@ void ScDPOutput::Output()
                 SCCOL nEndColPos = nDataStartCol + (SCCOL)nEnd;     //! check for overflow
                 if ( nField+1 < nColFieldCount )
                 {
-                    //                  lcl_SetFrame( pDoc,nTab, nColPos,nRowPos, nEndColPos,nRowPos, SC_DP_FRAME_INNER_BOLD );
-                    //                  lcl_SetFrame( pDoc,nTab, nColPos,nRowPos, nEndColPos,nTabEndRow, SC_DP_FRAME_INNER_BOLD );
                     if ( nField == nColFieldCount - 2 )
                     {
                         outputimp.AddCol( nColPos );
@@ -937,8 +922,6 @@ void ScDPOutput::Output()
                     while ( nEnd+1 < nThisRowCount && ( pArray[nEnd+1].Flags & sheet::MemberResultFlags::CONTINUE ) )
                         ++nEnd;
                     SCROW nEndRowPos = nDataStartRow + (SCROW)nEnd;     //! check for overflow
-                    //  lcl_SetFrame( pDoc,nTab, nColPos,nRowPos, nColPos,nEndRowPos, SC_DP_FRAME_INNER_BOLD );
-                    //lcl_SetFrame( pDoc,nTab, nColPos,nRowPos, nTabEndCol,nEndRowPos, SC_DP_FRAME_INNER_BOLD );
                     outputimp.AddRow( nRowPos );
                     if ( vbSetBorder[ nRow ] == FALSE )
                     {
@@ -968,12 +951,6 @@ ScRange ScDPOutput::GetOutputRange( sal_Int32 nRegionType )
     using namespace ::com::sun::star::sheet;
 
     CalcSizes();
-
-//  fprintf(stdout, "ScDPOutput::GetOutputRange: aStartPos = (%ld, %d)\n", aStartPos.Row(), aStartPos.Col());fflush(stdout);
-//  fprintf(stdout, "ScDPOutput::GetOutputRange: nTabStart (Row = %ld, Col = %ld)\n", nTabStartRow, nTabStartCol);fflush(stdout);
-//  fprintf(stdout, "ScDPOutput::GetOutputRange: nMemberStart (Row = %ld, Col = %ld)\n", nMemberStartRow, nMemberStartCol);fflush(stdout);
-//  fprintf(stdout, "ScDPOutput::GetOutputRange: nDataStart (Row = %ld, Col = %ld)\n", nDataStartRow, nDataStartCol);fflush(stdout);
-//  fprintf(stdout, "ScDPOutput::GetOutputRange: nTabEnd (Row = %ld, Col = %ld)\n", nTabEndRow, nTabStartCol);fflush(stdout);
 
     SCTAB nTab = aStartPos.Tab();
     switch (nRegionType)

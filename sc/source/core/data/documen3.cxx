@@ -259,10 +259,6 @@ void ScDocument::SetScenario( SCTAB nTab, BOOL bFlag )
 BOOL ScDocument::IsScenario( SCTAB nTab ) const
 {
     return ValidTab(nTab) && pTab[nTab] &&pTab[nTab]->IsScenario();
-    //if (ValidTab(nTab) && pTab[nTab])
-    //  return pTab[nTab]->IsScenario();
-
-    //return FALSE;
 }
 
 void ScDocument::SetScenarioData( SCTAB nTab, const String& rComment,
@@ -577,11 +573,6 @@ ScOutlineTable* ScDocument::GetOutlineTable( SCTAB nTab, BOOL bCreate )
 BOOL ScDocument::SetOutlineTable( SCTAB nTab, const ScOutlineTable* pNewOutline )
 {
     return VALIDTAB(nTab) && pTab[nTab] && pTab[nTab]->SetOutlineTable(pNewOutline);
-    //if (VALIDTAB(nTab))
-    //  if (pTab[nTab])
-    //      return pTab[nTab]->SetOutlineTable(pNewOutline);
-
-    //return FALSE;
 }
 
 void ScDocument::DoAutoOutline( SCCOL nStartCol, SCROW nStartRow,
@@ -594,10 +585,6 @@ void ScDocument::DoAutoOutline( SCCOL nStartCol, SCROW nStartRow,
 BOOL ScDocument::TestRemoveSubTotals( SCTAB nTab, const ScSubTotalParam& rParam )
 {
     return VALIDTAB(nTab) && pTab[nTab] && pTab[nTab]->TestRemoveSubTotals( rParam );
-    //if (VALIDTAB(nTab) && pTab[nTab] )
-    //  return pTab[nTab]->TestRemoveSubTotals( rParam );
-
-    //return FALSE;
 }
 
 void ScDocument::RemoveSubTotals( SCTAB nTab, ScSubTotalParam& rParam )
@@ -609,11 +596,6 @@ void ScDocument::RemoveSubTotals( SCTAB nTab, ScSubTotalParam& rParam )
 BOOL ScDocument::DoSubTotals( SCTAB nTab, ScSubTotalParam& rParam )
 {
     return VALIDTAB(nTab) && pTab[nTab] && pTab[nTab]->DoSubTotals( rParam );
-    //if (VALIDTAB(nTab))
-    //  if (pTab[nTab])
-    //      return pTab[nTab]->DoSubTotals( rParam );
-
-    //return FALSE;
 }
 
 BOOL ScDocument::HasSubTotalCells( const ScRange& rRange )
@@ -1297,22 +1279,12 @@ BOOL ScDocument::HasColHeader( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, 
                                     SCTAB nTab )
 {
     return VALIDTAB(nTab) && pTab[nTab] && pTab[nTab]->HasColHeader( nStartCol, nStartRow, nEndCol, nEndRow );
-    //if (VALIDTAB(nTab))
-    //  if (pTab[nTab])
-    //      return pTab[nTab]->HasColHeader( nStartCol, nStartRow, nEndCol, nEndRow );
-
-    //return FALSE;
 }
 
 BOOL ScDocument::HasRowHeader( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow,
                                     SCTAB nTab )
 {
     return VALIDTAB(nTab) && pTab[nTab] && pTab[nTab]->HasRowHeader( nStartCol, nStartRow, nEndCol, nEndRow );
-    //if (VALIDTAB(nTab))
-    //  if (pTab[nTab])
-    //      return pTab[nTab]->HasRowHeader( nStartCol, nStartRow, nEndCol, nEndRow );
-
-    //return FALSE;
 }
 
 void ScDocument::UpdateDynamicEndRow(ScDBData& rDBData) const
@@ -1423,10 +1395,6 @@ BOOL ScDocument::GetDataEntries( SCCOL nCol, SCROW nRow, SCTAB nTab,
     }
 
     return ValidTab(nTab) && pTab[nTab] && pTab[nTab]->GetDataEntries( nCol, nRow, rStrings, bLimit );
-    //if (ValidTab(nTab) && pTab[nTab])
-    //  return pTab[nTab]->GetDataEntries( nCol, nRow, rStrings, bLimit );
-
-    //return FALSE;
 }
 
 //

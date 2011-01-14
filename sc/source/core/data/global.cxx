@@ -618,7 +618,6 @@ void ScGlobal::InitTextHeight(SfxItemPool* pPool)
         return;
     }
 
-//  String aTestString('X');
     OutputDevice* pDefaultDev = Application::GetDefaultDevice();
     VirtualDevice aVirtWindow( *pDefaultDev );
     aVirtWindow.SetMapMode(MAP_PIXEL);

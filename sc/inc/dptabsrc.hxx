@@ -768,7 +768,6 @@ public:
 
     String                  GetNameStr() const;
     void                    FillItemData( ScDPItemData& rData ) const;
-    //  const ScDPItemData&  GetItemData() const{ return maData; }
     const ScDPItemData&  GetItemData() const;
     inline SCROW               GetItemDataId() const { return mnDataId; }
     BOOL                           IsNamedItem( SCROW    nIndex  ) const;

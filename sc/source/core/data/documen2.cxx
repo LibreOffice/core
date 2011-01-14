@@ -1024,7 +1024,6 @@ ULONG ScDocument::TransferTab( ScDocument* pSrcDoc, SCTAB nSrcPos,
                 else
                 {
                     pSrcRangeNames[i] = NULL;
-                    //aSrcRangeMap.SetPair( i, 0, 0 );      // not needed, defaulted
                 }
             }
             if ( bRangeNameReplace )

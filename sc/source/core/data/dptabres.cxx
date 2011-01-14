@@ -600,7 +600,6 @@ void ScDPAggData::Calculate( ScSubTotalFunc eFunc, const ScDPSubTotalState& rSub
     if ( bEmpty || bError )
         fResult = 0.0;      // default, in case the state is later modified
 
-//  fprintf(stdout, "ScDPAggData::Calculate: result = %g\n", fResult);fflush(stdout);
     fVal = fResult;         // used directly from now on
     fAux = 0.0;             // used for running total or original result of reference value
 }
@@ -1448,7 +1447,6 @@ void ScDPResultMember::FillMemberResults( uno::Sequence<sheet::MemberResult>* pS
         if (bRoot)      // same sequence for root member
             pChildDimension->FillMemberResults( pSequences, rPos, nMeasure );
         else
-            //pChildDimension->FillMemberResults( pSequences + 1, rPos, nMeasure );
             pChildDimension->FillMemberResults( pSequences + nMemberStep/*1*/, rPos, nMeasure );
 
         if ( bTitleLine )           // title row is included in GetSize, so the following
@@ -2260,7 +2258,6 @@ void ScDPDataMember::UpdateRunningTotals( const ScDPResultMember* pRefMember,
         BOOL bHasChild = ( pRefChild != NULL );
 
         long nUserSubCount = pRefMember->GetSubTotalCount();
-        //if ( nUserSubCount || !bHasChild )
         {
             // Calculate at least automatic if no subtotals are selected,
             // show only own values if there's no child dimension (innermost).
@@ -2947,9 +2944,6 @@ void ScDPResultDimension::LateInitFrom( LateInitParams& rParams/* const vector<S
             ScDPResultMember* pResultMember = FindMember( rThisData );
             if( NULL != pResultMember )
             {
-                 //DBG_TRACE( "ScDPResultDimension::LateInitFrom");
-                 // DBG_TRACESTR( pResultMember->GetDPMember()->GetNameStr());
-
                 rInitState.AddMember( nDimSource,  pResultMember->GetDataId() );
                 pResultMember->LateInitFrom( rParams, pItemData, nPos+1, rInitState );
                 rInitState.RemoveMember();
@@ -2992,7 +2986,6 @@ bool ScDPResultDimension::IsValidEntry( const vector< SCROW >& aMembers ) const
     ByteString strTemp ("IsValidEntry: Member not found, DimName = " );
     strTemp += ByteString( GetName(), RTL_TEXTENCODING_UTF8 );
     DBG_TRACE( strTemp.GetBuffer() );
-    //    DBG_ERROR("IsValidEntry: Member not found");
 #endif
     return false;
 }
@@ -3983,8 +3976,6 @@ void ScDPResultDimension::  InitWithMembers(  LateInitParams& rParams,
         }
         if ( pResultMember )
         {
- //           DBG_TRACE( "ScDPResultDimension::InitWithMembers");
- //           DBG_TRACESTR( pResultMember->GetDPMember()->GetNameStr());
             rInitState.AddMember( nDimSource, pResultMember->GetDataId()  );
             pResultMember->LateInitFrom( rParams /*ppDim, ppLev*/, pItemData, nPos+1 , rInitState );
             rInitState.RemoveMember();

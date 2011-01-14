@@ -398,8 +398,6 @@ void ScTable::DeleteArea(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, USH
             aPattern.GetItemSet().Put( ScProtectionAttr( FALSE ) );
             ApplyPatternArea( nCol1, nRow1, nCol2, nRow2, aPattern );
         }
-
-//      DecRecalcLevel();
     }
 }
 
@@ -791,7 +789,6 @@ void ScTable::CopyToTable(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                             // the last row shouldn't exceed the upper bound the caller specified.
                             nLastRow = nRow2;
 
-                        //pDestTab->SetRowHidden(i, nLastRow, bThisHidden);
                         aEntries.push_back(ScShowRowsEntry(i, nLastRow, bThisHidden));
 
                         bool bThisHiddenChange = (bThisHidden != bDestHidden);
@@ -2098,7 +2095,6 @@ void ScTable::SetColWidth( SCCOL nCol, USHORT nNewWidth )
     {
         if (!nNewWidth)
         {
-//          DBG_ERROR("Spaltenbreite 0 in SetColWidth");
             nNewWidth = STD_COL_WIDTH;
         }
 
@@ -2969,9 +2965,6 @@ void ScTable::DoAutoOutline( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SC
     ScOutlineArray* pArray;
     ScBaseCell* pCell;
     ScRange aRef;
-/*  ScPatternAttr aBoldPattern( pDocument->GetPool() );             //! spezielle Format-Vorlage
-    aBoldPattern.GetItemSet().Put( SvxWeightItem( WEIGHT_BOLD ) );
-*/
 
     StartOutlineTable();
 
@@ -3004,7 +2997,6 @@ void ScTable::DoAutoOutline( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SC
                                 {
                                     if (pArray->Insert( aRef.aStart.Row(), aRef.aEnd.Row(), bSizeChanged ))
                                     {
-//                                      ApplyPatternArea( nStartCol, nRow, nEndCol, nRow, aBoldPattern );
                                         bFound = TRUE;
                                     }
                                     else
@@ -3035,7 +3027,6 @@ void ScTable::DoAutoOutline( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SC
                         {
                             if (pArray->Insert( aRef.aStart.Col(), aRef.aEnd.Col(), bSizeChanged ))
                             {
-//                              ApplyPatternArea( nCol, nStartRow, nCol, nEndRow, aBoldPattern );
                                 bFound = TRUE;
                             }
                             else

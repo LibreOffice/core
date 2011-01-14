@@ -207,9 +207,6 @@ VirtualDevice* ScDocument::GetVirtualDevice_100th_mm()
 {
     if (!pVirtualDevice_100th_mm)
     {
-//      pVirtualDevice_100th_mm = new VirtualDevice;
-//      pVirtualDevice_100th_mm->SetMapMode( MAP_100TH_MM );
-
         pVirtualDevice_100th_mm = new VirtualDevice( 1 );
         pVirtualDevice_100th_mm->SetReferenceDevice(VirtualDevice::REFDEV_MODE_MSO1);
         MapMode aMapMode( pVirtualDevice_100th_mm->GetMapMode() );
@@ -457,9 +454,6 @@ BOOL ScDocument::IdleCalcTextWidth()            // TRUE = demnaechst wieder vers
         return FALSE;
     bIdleDisabled = TRUE;
 
-// ULONG nMs = 0;
-// USHORT nIter = 0;
-
     const ULONG         nStart   = Time::GetSystemTicks();
     OutputDevice*       pDev     = NULL;
     MapMode             aOldMap;
@@ -479,8 +473,6 @@ BOOL ScDocument::IdleCalcTextWidth()            // TRUE = demnaechst wieder vers
         nCol = MAXCOL, nTab++;
     if ( !ValidTab(nTab) || !pTab[nTab] )
         nTab = 0;
-
-//  DBG_ERROR( String("Start = ") + String(nTab) + String(',') + String(nCol) + String(',') + String(nRow)  );
 
     //  SearchMask/Family muss gemerkt werden,
     //  damit z.B. der Organizer nicht durcheinanderkommt, wenn zwischendurch eine
@@ -534,15 +526,10 @@ BOOL ScDocument::IdleCalcTextWidth()            // TRUE = demnaechst wieder vers
                         bProgress = TRUE;
                     }
 
-//                  DBG_ERROR( String("t,c,r = ") + String(nTab) + String(',') + String(nCol) + String(',') + String(nRow)  );
-//                  DBG_ERROR( String("nOldWidth = ") + String(pCell->GetTextWidth()) );
-
                     USHORT nNewWidth = (USHORT)GetNeededSize( nCol, nRow, nTab,
                                                               pDev, nPPTX, nPPTY,
                                                               aZoomFract,aZoomFract, TRUE,
                                                               TRUE );   // bTotalSize
-
-//                  DBG_ERROR( String("nNewWidth = ") + String(nNewWidth) );
 
                     pCell->SetTextWidth( nNewWidth );
 
@@ -604,15 +591,12 @@ BOOL ScDocument::IdleCalcTextWidth()            // TRUE = demnaechst wieder vers
                 }
             }
 
-// nIter = nCount;
-
             nCount++;
 
             // Idle Berechnung abbrechen, wenn Berechnungen laenger als
             // 50ms dauern, oder nach 32 Berechnungen mal nachschauen, ob
             // bestimmte Events anstehen, die Beachtung wuenschen:
 
-// nMs = SysTicksToMs( GetSysTicks() - nStart );
 
             if (   ( 50L < Time::GetSystemTicks() - nStart )
                 || ( !(nCount&31) && Application::AnyInput( ABORT_EVENTS ) ) )
@@ -627,16 +611,12 @@ BOOL ScDocument::IdleCalcTextWidth()            // TRUE = demnaechst wieder vers
 
     delete pColIter;
 
-//  DBG_ERROR( String(nCount) + String(" End = ") + String(nTab) + String(',') + String(nCol) + String(',') + String(nRow)  );
-
     if (pDev)
         pDev->SetMapMode(aOldMap);
 
     aCurTextWidthCalcPos.SetTab( nTab );
     aCurTextWidthCalcPos.SetRow( nRow );
     aCurTextWidthCalcPos.SetCol( (SCCOL)nCol );
-
-// DBG_ERROR( String(nMs) + String(" ms (") + String(nIter) + String(')') );
 
     pStylePool->SetSearchMask( eOldFam, nOldMask );
     bIdleDisabled = FALSE;

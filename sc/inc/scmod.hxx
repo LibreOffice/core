@@ -260,7 +260,6 @@ SC_DLLPUBLIC    void                    SetAppOptions   ( const ScAppOptions& rO
 
     //  Referenzeingabe:
     //<!--Added by PengYunQuan for Validity Cell Range Picker
-    //void              SetRefDialog( USHORT nId, BOOL bVis, SfxViewFrame* pViewFrm = NULL );
     SC_DLLPUBLIC void               SetRefDialog( USHORT nId, BOOL bVis, SfxViewFrame* pViewFrm = NULL );
     //-->Added by PengYunQuan for Validity Cell Range Picker
     BOOL                IsModalMode(SfxObjectShell* pDocSh = NULL);

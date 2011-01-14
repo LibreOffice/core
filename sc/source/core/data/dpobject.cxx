@@ -114,7 +114,6 @@ using ::rtl::OUString;
 #define DP_PROP_FUNCTION            "Function"
 #define DP_PROP_IGNOREEMPTY         "IgnoreEmptyRows"
 #define DP_PROP_ISDATALAYOUT        "IsDataLayoutDimension"
-//#define DP_PROP_ISVISIBLE         "IsVisible"
 #define DP_PROP_ORIENTATION         "Orientation"
 #define DP_PROP_ORIGINAL            "Original"
 #define DP_PROP_POSITION            "Position"

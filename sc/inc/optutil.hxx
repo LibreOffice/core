@@ -69,11 +69,6 @@ public:
     using ConfigItem::EnableNotification;
     using ConfigItem::GetNodeNames;
 
-//  sal_Bool EnableNotification(com::sun::star::uno::Sequence< rtl::OUString >& rNames)
-//                          { return ConfigItem::EnableNotification( rNames ); }
-
-//  com::sun::star::uno::Sequence< rtl::OUString > GetNodeNames(rtl::OUString& rNode)
-//                          { return ConfigItem::GetNodeNames( rNode ); }
 };
 
 #endif

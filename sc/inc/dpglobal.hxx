@@ -121,9 +121,6 @@ private:
     String  aString;
     double  fValue;
     BYTE    mbFlag;
-    //bool  bHasValue: 1 ;
-    //bool  bHasData: 1;
-    //bool  bErr: 1;
 
     friend class ScDPTableDataCache;
 public:
@@ -133,7 +130,6 @@ public:
     ScDPItemData( ScDocument* pDoc, SCROW nRow, USHORT nCol, USHORT nDocTab );
 
     void        SetString( const String& rS ) { aString = rS; mbFlag &= ~(MK_VAL|MK_DATE); nNumFormat = 0; mbFlag |= MK_DATA; }
-//  void        SetValue ( double value , ULONG nNumFormat = 0 ) { bHasValue = TRUE; nNumFormat = 0;bHasData = TRUE; bDate = FALSE; fValue = value ;}
     bool        IsCaseInsEqual( const ScDPItemData& r ) const;
 
     size_t      Hash() const;

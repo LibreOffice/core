@@ -271,35 +271,6 @@ BOOL ScOutlineArray::Insert( SCCOLROW nStartCol, SCCOLROW nEndCol, BOOL& rSizeCh
         rSizeChanged = TRUE;
     }
 
-/*          nicht zusammenfassen!
-
-    //  zusammenfassen
-
-    USHORT nCount = aCollections[nLevel].GetCount();
-    USHORT nIndex;
-    bFound = FALSE;
-    for ( nIndex=0; nIndex<nCount && !bFound; nIndex++ )
-    {
-        if ( ((ScOutlineEntry*) aCollections[nLevel].At(nIndex))->GetEnd() + 1 == nStartCol )
-        {
-            nStartCol = ((ScOutlineEntry*) aCollections[nLevel].At(nIndex))->GetStart();
-            aCollections[nLevel].AtFree(nIndex);
-            nCount = aCollections[nLevel].GetCount();       // Daten geaendert
-            bFound = TRUE;
-        }
-    }
-
-    bFound = FALSE;
-    for ( nIndex=0; nIndex<nCount && !bFound; nIndex++ )
-    {
-        if ( ((ScOutlineEntry*) aCollections[nLevel].At(nIndex))->GetStart() == nEndCol + 1 )
-        {
-            nEndCol = ((ScOutlineEntry*) aCollections[nLevel].At(nIndex))->GetEnd();
-            aCollections[nLevel].AtFree(nIndex);
-            bFound = TRUE;
-        }
-    }
-*/
     ScOutlineEntry* pNewEntry = new ScOutlineEntry( nStartCol, nEndCol+1-nStartCol, bHidden );
     pNewEntry->SetVisible( bVisible );
     aCollections[nLevel].Insert( pNewEntry );
@@ -426,7 +397,6 @@ BOOL ScOutlineArray::Remove( SCCOLROW nBlockStart, SCCOLROW nBlockEnd, BOOL& rSi
 
         if ( nBlockStart<=nEnd && nBlockEnd>=nStart )
         {
-//          RemoveSub( nStart, nEnd, nLevel+1 );
             pCollect->AtFree(i);
             PromoteSub( nStart, nEnd, nLevel+1 );
             nCount = pCollect->GetCount();

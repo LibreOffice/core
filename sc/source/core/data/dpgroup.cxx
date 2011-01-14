@@ -303,8 +303,7 @@ ScDPGroupDateFilter::ScDPGroupDateFilter(double fMatchValue, sal_Int32 nDatePart
     mfMatchValue(fMatchValue),
     mnDatePart(nDatePart)
 {
-//  fprintf(stdout, "ScDPCacheTable:DateGroupFilter::DateGroupFilter: match value = %g; date part = %ld\n",
-//          mfMatchValue, mnDatePart);
+
 }
 bool ScDPGroupDateFilter::match( const ScDPItemData & rCellData ) const
 {
@@ -314,7 +313,7 @@ bool ScDPGroupDateFilter::match( const ScDPItemData & rCellData ) const
 
     if ( !rCellData.IsValue() )
         return false;
-//  ScDPCacheCell rCell( rCellData.fValue );
+
     if (!mpNumInfo)
         return false;
 
@@ -727,8 +726,7 @@ ScDPGroupDimension::ScDPGroupDimension( long nSource, const String& rNewName ) :
     nSourceDim( nSource ),
     nGroupDim( -1 ),
     aGroupName( rNewName ),
-    pDateHelper( NULL )/*,
-    pCollection( NULL )*/
+    pDateHelper( NULL )
 {
 }
 
@@ -1272,9 +1270,7 @@ void ScDPGroupTableData::ModifyFilterCriteria(vector<ScDPCacheTable::Criterion>&
                 {
                     const ScDPGroupItem* pGrpItem = pGrpDim->GetGroupByIndex(i);
                     ScDPItemData aName( pFilter->getMatchString(),pFilter->getMatchValue(),pFilter->hasValue()) ;
-                    /*aName.aString   = pFilter->getMatchString();
-                    aName.fValue    = pFilter->getMatchValue();
-                    aName.bHasValue = pFilter->hasValue();*/
+
                                        if (!pGrpItem || !pGrpItem->GetName().IsCaseInsEqual(aName))
                         continue;
 
@@ -1392,7 +1388,6 @@ void ScDPGroupTableData::FillGroupValues( /*ScDPItemData* pItemData*/ SCROW* pIt
                 sal_Int32 nPartValue = lcl_GetDatePartValue(
                     pData->GetValue(), pDateHelper->GetDatePart(), pDoc->GetFormatTable(),
                     &pDateHelper->GetNumInfo() );
-                //String aName = lcl_GetDateGroupName( pDateHelper, nPartValue, pDoc->GetFormatTable() );
                 ScDPItemData  aItemData( pDateHelper->GetDatePart(), String(), nPartValue, ScDPItemData::MK_DATA|ScDPItemData::MK_VAL|ScDPItemData::MK_DATEPART );
                 pItemDataIndex[nDim] = GetCacheTable().getCache()->GetAdditionalItemID( aItemData );
             }

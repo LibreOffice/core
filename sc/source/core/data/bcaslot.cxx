@@ -106,15 +106,12 @@ static SCSIZE initSlotDistribution( ScSlotDistribution & rSD, SCSIZE & rBSR )
     // Must be sorted by row1,row2!
     while (nRow2 <= MAXROWCOUNT)
     {
-        //fprintf( stderr, "r1,r2,slice,cum: %7zu, %7zu, %7zu, %7zu\n", (size_t)nRow1, (size_t)nRow2, (size_t)nSlice, (size_t)nSlots);
-        // {0,32k,128,0;32k,64k,256,0+256;64k,128k,512,0+256+128;128k,256k,1024,0+256+128+128;256k,512k,2048,...;512k,1M,4096,...}
         rSD.push_back( ScSlotData( nRow1, nRow2, nSlice, nSlots));
         nSlots += (nRow2 - nRow1) / nSlice;
         nRow1 = nRow2;
         nRow2 *= 2;
         nSlice *= 2;
     }
-    //fprintf( stderr, "Slices: %zu, slots per sheet: %zu, memory per referenced sheet: %zu\n", (size_t) nSlots, (size_t) nSlots * BCA_SLOTS_COL, (size_t) nSlots * BCA_SLOTS_COL * sizeof(void*));
     rBSR = nSlots;
     return nSlots;
 }
@@ -543,7 +540,6 @@ inline void ComputeNextSlot( SCSIZE & nOff, SCSIZE & nBreak, ScBroadcastAreaSlot
 void ScBroadcastAreaSlotMachine::StartListeningArea( const ScRange& rRange,
         SvtListener* pListener )
 {
-    //fprintf( stderr, "StartListeningArea (c,r,t): %d, %d, %d, %d, %d, %d\n", (int)rRange.aStart.Col(), (int)rRange.aStart.Row(), (int)rRange.aStart.Tab(), (int)rRange.aEnd.Col(), (int)rRange.aEnd.Row(), (int)rRange.aEnd.Tab());
     if ( rRange == BCA_LISTEN_ALWAYS  )
     {
         if ( !pBCAlways )
@@ -592,7 +588,6 @@ void ScBroadcastAreaSlotMachine::StartListeningArea( const ScRange& rRange,
 void ScBroadcastAreaSlotMachine::EndListeningArea( const ScRange& rRange,
         SvtListener* pListener )
 {
-    //fprintf( stderr, "EndListeningArea (c,r,t): %d, %d, %d, %d, %d, %d\n", (int)rRange.aStart.Col(), (int)rRange.aStart.Row(), (int)rRange.aStart.Tab(), (int)rRange.aEnd.Col(), (int)rRange.aEnd.Row(), (int)rRange.aEnd.Tab());
     if ( rRange == BCA_LISTEN_ALWAYS  )
     {
         DBG_ASSERT( pBCAlways, "ScBroadcastAreaSlotMachine::EndListeningArea: BCA_LISTEN_ALWAYS but none established");

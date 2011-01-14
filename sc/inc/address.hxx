@@ -85,7 +85,6 @@ const SCSIZE   SCSIZE_MAX   = ::std::numeric_limits<SCSIZE>::max();
 
 // The maximum values. Defines are needed for preprocessor checks, for example
 // in bcaslot.cxx, otherwise type safe constants are preferred.
-//#define MAXROWCOUNT_DEFINE 65536
 #define MAXROWCOUNT_DEFINE 1048576
 #define MAXCOLCOUNT_DEFINE 1024
 

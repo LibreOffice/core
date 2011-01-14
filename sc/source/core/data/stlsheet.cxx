@@ -205,7 +205,6 @@ SfxItemSet& ScStyleSheet::GetItemSet()
                         aBoxInfoItem.SetDist( TRUE );
                         aBoxInfoItem.SetValid( VALID_DISTANCE, TRUE );
 
-                        // aPageItem.SetLandscape( ORIENTATION_LANDSCAPE == pPrinter->GetOrientation() );
                         aPageItem.SetLandscape( FALSE );
 
                         rHFSet.Put( aBoxInfoItem );

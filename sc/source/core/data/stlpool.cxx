@@ -255,7 +255,6 @@ void ScStyleSheetPool::CreateStandardStyles()
     String          aStr;
     xub_StrLen      nStrLen;
     String          aHelpFile;//XXX JN welcher Text???
-    //ULONG         nNumFmt         = 0L;
     SfxItemSet*     pSet            = NULL;
     SfxItemSet*     pHFSet          = NULL;
     SvxSetItem*     pHFSetItem      = NULL;
@@ -337,11 +336,6 @@ void ScStyleSheetPool::CreateStandardStyles()
 
     pSheet->SetParent( SCSTR( STR_STYLENAME_RESULT ) );
     pSheet->SetHelpId( aHelpFile, HID_SC_SHEET_CELL_ERG1 );
-    // will now be done in GetItemSet();
-    // pSet = &pSheet->GetItemSet();
-    // nNumFmt = pDoc->GetFormatTable()->GetStandardFormat( NUMBERFORMAT_CURRENCY,
-            //                                          ScGlobal::eLnge );
-    // pSet->Put( SfxUInt32Item( ATTR_VALUE_FORMAT, nNumFmt ) );
 
     //----------------
     // 4. Ueberschrift

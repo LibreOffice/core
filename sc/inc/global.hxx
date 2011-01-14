@@ -176,8 +176,6 @@ const SCSIZE PIVOT_MAXPAGEFIELD = 10;
                                     // FILTERED immer zusammen mit HIDDEN
                                     // FILTERED und MANUALSIZE nur fuer Zeilen moeglich
 const BYTE   CR_HIDDEN      = 1;
-//const BYTE CR_MARKED      = 2;
-//const BYTE CR_PAGEBREAK   = 4;
 const BYTE   CR_MANUALBREAK = 8;
 const BYTE   CR_FILTERED    = 16;
 const BYTE   CR_MANUALSIZE  = 32;

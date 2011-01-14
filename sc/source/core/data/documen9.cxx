@@ -139,8 +139,6 @@ void ScDocument::InitDrawLayer( SfxObjectShell* pDocShell )
     if (pDocShell && !pShell)
         pShell = pDocShell;
 
-//  DBG_ASSERT(pShell,"InitDrawLayer ohne Shell");
-
     if (!pDrawLayer)
     {
         String aName;
@@ -215,9 +213,6 @@ void ScDocument::UpdateDrawPrinter()
     {
         // use the printer even if IsValid is false
         // Application::GetDefaultDevice causes trouble with changing MapModes
-
-//      OutputDevice* pRefDev = GetPrinter();
-//      pRefDev->SetMapMode( MAP_100TH_MM );
         pDrawLayer->SetRefDevice(GetRefDevice());
     }
 }
@@ -538,8 +533,6 @@ void ScDocument::Clear( sal_Bool bFromDestructor )
 
     if (pDrawLayer)
     {
-        // #116168#
-        //pDrawLayer->Clear();
         pDrawLayer->ClearModel( bFromDestructor );
     }
 }
@@ -594,7 +587,6 @@ void ScDocument::InvalidateControls( Window* pWin, SCTAB nTab, const Rectangle& 
                         //  auf ClippingRegions. Darum muss das ganze Objekt neu gepainted
                         //  werden, damit die Selektion auf der Tabelle nicht uebermalt wird.
 
-                        //pWin->Invalidate( aObjRect.GetIntersection( rMMRect ) );
                         pWin->Invalidate( aObjRect );
                     }
                 }

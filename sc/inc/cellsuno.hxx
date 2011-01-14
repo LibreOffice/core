@@ -656,9 +656,6 @@ public:
                                     const formula::FormulaGrammar::Grammar )
                                 throw(::com::sun::star::uno::RuntimeException);
 
-    // XCellRange is base class of XSheetCellRange and XSheetOperation
-//  operator XCellRangeRef() const  { return (XSheetCellRange*)this; }
-
                             // XCellRangeAddressable
     virtual ::com::sun::star::table::CellRangeAddress SAL_CALL getRangeAddress()
                                 throw(::com::sun::star::uno::RuntimeException);
