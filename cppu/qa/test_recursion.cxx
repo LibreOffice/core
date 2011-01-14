@@ -29,7 +29,14 @@
 #include "precompiled_cppu.hxx"
 #include "sal/config.h"
 
-#include "testshl/simpleheader.hxx"
+#include "preextstl.h"
+#include <cppunit/TestSuite.h>
+#include <cppunit/TestFixture.h>
+#include <cppunit/TestCase.h>
+#include <cppunit/plugin/TestPlugIn.h>
+#include <cppunit/extensions/HelperMacros.h>
+#include "postextstl.h"
+
 #include "sal/types.h"
 
 #include "Rec.hpp"
@@ -51,10 +58,10 @@ void Test::testRecursion() {
     CPPUNIT_ASSERT_EQUAL(static_cast< sal_Int32 >(0), Rec().x.getLength());
 }
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(Test, "tests");
+CPPUNIT_TEST_SUITE_REGISTRATION(Test);
 
 }
 
-NOADDITIONAL;
+CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

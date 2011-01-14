@@ -33,11 +33,18 @@ ENABLE_EXCEPTIONS := TRUE
 
 .INCLUDE: settings.mk
 
-CFLAGSCXX += $(CPPUNIT_CFLAGS)
+#building with stlport, but cppunit was not built with stlport
+.IF "$(USE_SYSTEM_STL)"!="YES"
+.IF "$(SYSTEM_CPPUNIT)"=="YES"
+CFLAGSCXX+=-DADAPT_EXT_STL
+.ENDIF
+.ENDIF
 
-DLLPRE = # no leading "lib" on .so files
+CFLAGSCXX+=$(CPPUNIT_CFLAGS)
 
-INCPRE += $(MISC)$/$(TARGET)$/inc
+DLLPRE=# no leading "lib" on .so files
+
+INCPRE+=$(MISC)$/$(TARGET)$/inc
 
 SHL1TARGET = $(TARGET)_any
 SHL1OBJS = $(SLO)$/test_any.obj
@@ -71,8 +78,6 @@ SLOFILES = $(SHL1OBJS) $(SHL2OBJS) $(SHL3OBJS) $(SHL4OBJS)
 
 .INCLUDE: target.mk
 
-ALLTAR: test
-
 $(SHL1OBJS): $(MISC)$/$(TARGET).cppumaker.flag
 
 $(MISC)$/$(TARGET).cppumaker.flag: $(MISC)$/$(TARGET).rdb
@@ -82,15 +87,11 @@ $(MISC)$/$(TARGET).cppumaker.flag: $(MISC)$/$(TARGET).rdb
     $(TOUCH) $@
 
 $(MISC)$/$(TARGET).rdb: $(MISC)$/$(TARGET)$/types.urd
-    - rm $@
+    - $(RM) $@
     $(REGMERGE) $@ /UCR $<
 
 $(MISC)$/$(TARGET)$/types.urd: types.idl
     - $(MKDIR) $(MISC)$/$(TARGET)
     $(IDLC) -O$(MISC)$/$(TARGET) -I$(SOLARIDLDIR) -cid -we $<
 
-test .PHONY: $(SHL1TARGETN) $(SHL2TARGETN) $(SHL3TARGETN) $(SHL4TARGETN)
-    $(TESTSHL2) $(SHL1TARGETN)
-    $(TESTSHL2) $(SHL2TARGETN)
-    $(TESTSHL2) $(SHL3TARGETN)
-    $(TESTSHL2) $(SHL4TARGETN)
+.INCLUDE : _cppunit.mk
