@@ -6235,13 +6235,13 @@ protected:
                                                 }
                                                 break;
                                             case M_GetSelCount :
-                                                pRet->GenReturn ( RET_Value, aUId, comm_USHORT( pTC->GetSelectedRows().size() ));
+                                                pRet->GenReturn ( RET_Value, aUId, comm_USHORT( pTC->GetSelectedRowCount() ));
                                                 break;
                                             case M_GetSelIndex :
                                                 if ( ! (nParams & PARAM_USHORT_1) )
                                                     nNr1 = 1;
-                                                if ( ValueOK( aUId, CUniString("GetSelIndex"), nNr1, pTC->GetSelectedRows().size() ) )
-                                                    pRet->GenReturn ( RET_Value, aUId, comm_USHORT( pTC->GetSelectedRows()[nNr1-1] +1 ) );
+                                                if ( ValueOK( aUId, CUniString("GetSelIndex"), nNr1, pTC->GetSelectedRowCount() ) )
+                                                    pRet->GenReturn ( RET_Value, aUId, comm_USHORT( pTC->GetSelectedRowIndex( nNr1-1 ) +1 ) );
                                                 break;
 /*                                          case M_GetSelText :
                                                 if ( ! (nParams & PARAM_USHORT_1) )

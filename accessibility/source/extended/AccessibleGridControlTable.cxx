@@ -245,8 +245,7 @@ void SAL_CALL AccessibleGridControlTable::selectAccessibleChild( sal_Int32 nChil
     ensureIsValidIndex( nChildIndex );
     sal_Int32 nColumns = m_aTable.GetColumnCount();
     sal_Int32 nRow = (nChildIndex / nColumns);
-    std::vector< sal_Int32 > selectedRows = m_aTable.GetSelectedRows();
-    selectedRows.push_back(nRow);
+    m_aTable.SelectRow( nRow, TRUE );
 }
 sal_Bool SAL_CALL AccessibleGridControlTable::isAccessibleChildSelected( sal_Int32 nChildIndex )
     throw ( lang::IndexOutOfBoundsException, uno::RuntimeException )
