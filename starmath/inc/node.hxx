@@ -355,13 +355,15 @@ public:
 
     virtual void  GetAccessibleText( String &rText ) const;
 
-    void SetSubNode(USHORT nIndex, SmNode* pNode){
-        int size = aSubNodes.size();
-        if(size <= nIndex){
+    void SetSubNode(size_t nIndex, SmNode* pNode)
+    {
+        size_t size = aSubNodes.size();
+        if (size <= nIndex)
+        {
             //Resize subnodes array
             aSubNodes.resize(nIndex + 1);
             //Set new slots to NULL
-            for(int i = size; i < nIndex+1; i++)
+            for (size_t i = size; i < nIndex+1; i++)
                 aSubNodes[i] = NULL;
         }
         aSubNodes[nIndex] = pNode;
