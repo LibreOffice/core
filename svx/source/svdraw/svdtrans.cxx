@@ -879,8 +879,8 @@ void GetMeterOrInch(MapUnit eMU, short& rnKomma, long& rnMul, long& rnDiv, int& 
         case MAP_100TH_INCH : bInch=sal_True; nKomma=2; break;
         case MAP_10TH_INCH  : bInch=sal_True; nKomma=1; break;
         case MAP_INCH       : bInch=sal_True; nKomma=0; break;
-        case MAP_POINT      : bInch=TRUE; rnDiv=72;  break;          // 1Pt   = 1/72"
-        case MAP_TWIP       : bInch=TRUE; rnDiv=144; nKomma=1; break; // 1Twip = 1/1440"
+        case MAP_POINT      : bInch=sal_True; rnDiv=72;  break;          // 1Pt   = 1/72"
+        case MAP_TWIP       : bInch=sal_True; rnDiv=144; nKomma=1; break; // 1Twip = 1/1440"
         // Sonstiges
         case MAP_PIXEL      : break;
         case MAP_SYSFONT    : break;
@@ -907,12 +907,12 @@ void GetMeterOrInch(FieldUnit eFU, short& rnKomma, long& rnMul, long& rnDiv, int
         case FUNIT_M        : bMetr=sal_True; nKomma=0; break;
         case FUNIT_KM       : bMetr=sal_True; nKomma=-3; break;
         // Inch
-        case FUNIT_TWIP     : bInch=TRUE; rnDiv=144; nKomma=1; break;  // 1Twip = 1/1440"
-        case FUNIT_POINT    : bInch=TRUE; rnDiv=72; break;   // 1Pt   = 1/72"
-        case FUNIT_PICA     : bInch=TRUE; rnDiv=6; break;    // 1Pica = 1/6"  ?
-        case FUNIT_INCH     : bInch=TRUE; break;             // 1"    = 1"
-        case FUNIT_FOOT     : bInch=TRUE; rnMul=12; break;   // 1Ft   = 12"
-        case FUNIT_MILE     : bInch=TRUE; rnMul=6336; nKomma=-1; break; // 1mile = 63360"
+        case FUNIT_TWIP     : bInch=sal_True; rnDiv=144; nKomma=1; break;  // 1Twip = 1/1440"
+        case FUNIT_POINT    : bInch=sal_True; rnDiv=72; break;   // 1Pt   = 1/72"
+        case FUNIT_PICA     : bInch=sal_True; rnDiv=6; break;    // 1Pica = 1/6"  ?
+        case FUNIT_INCH     : bInch=sal_True; break;             // 1"    = 1"
+        case FUNIT_FOOT     : bInch=sal_True; rnMul=12; break;   // 1Ft   = 12"
+        case FUNIT_MILE     : bInch=sal_True; rnMul=6336; nKomma=-1; break; // 1mile = 63360"
         // sonstiges
         case FUNIT_CUSTOM   : break;
         case FUNIT_PERCENT  : nKomma=2; break;
