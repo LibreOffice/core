@@ -110,7 +110,7 @@ public:
     ~QueryString();
 };
 
-BOOL AreYouSure( Window*, int nRid = -1 );
+sal_Bool AreYouSure( Window*, int nRid = -1 );
 
 ResId PaResId( sal_uInt32 nId );
 

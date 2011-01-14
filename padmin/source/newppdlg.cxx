@@ -152,7 +152,7 @@ void PPDImportDialog::Import()
             continue;
         }
 
-        USHORT nPos = m_aDriverLB.InsertEntry( aPrinterName );
+        sal_uInt16 nPos = m_aDriverLB.InsertEntry( aPrinterName );
         m_aDriverLB.SetEntryData( nPos, new String( aPath.PathToFileName() ) );
     }
 }

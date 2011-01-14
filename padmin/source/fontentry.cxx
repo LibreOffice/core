@@ -143,7 +143,7 @@ FontNameDlg::FontNameDlg( Window *pParent ) :
 {
     FreeResource();
 
-    m_aFontBox.EnableMultiSelection( TRUE );
+    m_aFontBox.EnableMultiSelection( sal_True );
 
     m_aOKButton.SetClickHdl( LINK( this, FontNameDlg, ClickBtnHdl ) );
     m_aRenameButton.SetClickHdl( LINK( this, FontNameDlg, ClickBtnHdl ) );
@@ -256,8 +256,8 @@ void FontNameDlg::init()
     ::std::list< fontID > aFonts;
     m_rFontManager.getFontList( aFonts );
     m_aFontBox.Clear();
-    m_aRemoveButton.Enable( FALSE );
-    m_aRenameButton.Enable( FALSE );
+    m_aRemoveButton.Enable( sal_False );
+    m_aRenameButton.Enable( sal_False );
 
     ::std::hash_map< OUString, int, OUStringHash > aFamilies;
     ::std::list< fontID >::iterator font_it;
@@ -300,7 +300,7 @@ void FontNameDlg::init()
             }
             else
                 aEntry = fillFontEntry( aInfo, String( ByteString( aFile ), osl_getThreadTextEncoding() ), aFamilies[ aInfo.m_aFamilyName ] > 1  );
-            USHORT nEntry = m_aFontBox.InsertEntry( aEntry );
+            sal_uInt16 nEntry = m_aFontBox.InsertEntry( aEntry );
             m_aFontBox.SetEntryData( nEntry, (void*)(*font_it) );
         }
     }
@@ -310,7 +310,7 @@ IMPL_LINK( FontNameDlg, SelectHdl, ListBox*, pBox )
 {
     if( pBox == &m_aFontBox )
     {
-        BOOL bEnable = m_aFontBox.GetSelectEntryCount() ? TRUE : FALSE;
+        sal_Bool bEnable = m_aFontBox.GetSelectEntryCount() ? sal_True : sal_False;
         m_aRemoveButton.Enable( bEnable );
         m_aRenameButton.Enable( bEnable );
     }
@@ -442,7 +442,7 @@ FontImportDialog::FontImportDialog( Window* pParent ) :
 {
     FreeResource();
 
-    m_aNewFontsBox.EnableMultiSelection( TRUE );
+    m_aNewFontsBox.EnableMultiSelection( sal_True );
 
     m_aOKBtn.SetClickHdl( LINK( this, FontImportDialog, ClickBtnHdl ) );
     m_aSelectAllBtn.SetClickHdl( LINK( this, FontImportDialog, ClickBtnHdl ) );
@@ -450,8 +450,8 @@ FontImportDialog::FontImportDialog( Window* pParent ) :
     m_aFromDirEdt.SetModifyHdl( LINK( this, FontImportDialog, ModifyHdl ) );
     m_aRefreshTimer.SetTimeoutHdl( LINK( this, FontImportDialog, RefreshTimeoutHdl ) );
     m_aRefreshTimer.SetTimeout( 2000 );
-    m_aLinkOnlyBox.Check( FALSE );
-    m_aSubDirsBox.Check( TRUE );
+    m_aLinkOnlyBox.Check( sal_False );
+    m_aSubDirsBox.Check( sal_True );
     m_aSubDirsBox.SetToggleHdl( LINK( this, FontImportDialog, ToggleHdl ) );
 
     Config& rPadminRC( getPadminRC() );
@@ -595,7 +595,7 @@ void FontImportDialog::fillFontBox()
             aEntry = FontNameDlg::fillFontEntry( it->second.front(), aFile, aFamilies[ it->second.front().m_aFamilyName ] > 1 );
         else
             aEntry = FontNameDlg::fillFontEntry( it->second, aFile );
-        USHORT nPos = m_aNewFontsBox.InsertEntry( aEntry );
+        sal_uInt16 nPos = m_aNewFontsBox.InsertEntry( aEntry );
         m_aNewFontsBox.SetEntryData( nPos, (void*)&(it->first) );
     }
 }
@@ -616,12 +616,12 @@ void FontImportDialog::copyFonts()
         m_pProgress = new ProgressDialog( this );
         m_pProgress->setRange( 0, aFiles.size() );
         m_pProgress->startOperation( m_aImportOperation );
-        m_pProgress->Show( TRUE );
+        m_pProgress->Show( sal_True );
         m_pProgress->setValue( 0 );
         m_pProgress->Invalidate();
         m_pProgress->Sync();
         nSuccess = m_rFontManager.importFonts( aFiles, m_aLinkOnlyBox.IsChecked() ? true : false, this );
-        m_pProgress->Show( FALSE );
+        m_pProgress->Show( sal_False );
         delete m_pProgress;
         m_pProgress = NULL;
     }
@@ -649,10 +649,10 @@ IMPL_LINK( FontImportDialog, ClickBtnHdl, Button*, pButton )
     }
     else if( pButton == &m_aSelectAllBtn )
     {
-        m_aNewFontsBox.SetUpdateMode( FALSE );
+        m_aNewFontsBox.SetUpdateMode( sal_False );
         for( int i = 0; i < m_aNewFontsBox.GetEntryCount(); i++ )
-            m_aNewFontsBox.SelectEntryPos( i, TRUE );
-        m_aNewFontsBox.SetUpdateMode( TRUE );
+            m_aNewFontsBox.SelectEntryPos( i, sal_True );
+        m_aNewFontsBox.SetUpdateMode( sal_True );
     }
     return 0;
 }

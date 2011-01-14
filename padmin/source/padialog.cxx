@@ -68,12 +68,12 @@ using namespace com::sun::star;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::beans;
 
-PADialog* PADialog::Create( Window* pParent, BOOL bAdmin )
+PADialog* PADialog::Create( Window* pParent, sal_Bool bAdmin )
 {
     return new PADialog( pParent, bAdmin );
 }
 
-PADialog::PADialog( Window* pParent, BOOL /*bAdmin*/ ) :
+PADialog::PADialog( Window* pParent, sal_Bool /*bAdmin*/ ) :
         ModalDialog( pParent, PaResId( RID_PADIALOG ) ),
         m_aDevicesLB( this, PaResId( RID_PA_LB_DEV ) ),
         m_aConfPB( this, PaResId( RID_PA_BTN_CONF ) ),
@@ -130,7 +130,7 @@ void PADialog::Init()
     UpdateDevice();
     UpdateText();
 
-    m_aRemPB.Enable( FALSE );
+    m_aRemPB.Enable( sal_False );
 
     m_aDevicesLB.SetDoubleClickHdl( LINK( this, PADialog, DoubleClickHdl ) );
     m_aDevicesLB.SetSelectHdl( LINK( this, PADialog, SelectHdl ) );
@@ -146,23 +146,23 @@ void PADialog::Init()
 
     ::psp::PrintFontManager& rFontManager( ::psp::PrintFontManager::get() );
     if( ! rFontManager.checkImportPossible() )
-        m_aFontsPB.Enable( FALSE );
+        m_aFontsPB.Enable( sal_False );
     if( rFontManager.hasFontconfig() )
     {
-        m_aFontsPB.Enable( FALSE );
-        m_aFontsPB.Show( FALSE );
+        m_aFontsPB.Enable( sal_False );
+        m_aFontsPB.Show( sal_False );
     }
 
     // at this point no actual changes will be  written
     // but the write will have checked whether any writeable config exists
     if( ! m_rPIManager.writePrinterConfig() )
     {
-        m_aAddPB.Enable( FALSE );
-        m_aRemPB.Enable( FALSE );
-        m_aConfPB.Enable( FALSE );
-        m_aRenamePB.Enable( FALSE );
-        m_aStdPB.Enable( FALSE );
-        m_aCUPSCB.Enable( FALSE );
+        m_aAddPB.Enable( sal_False );
+        m_aRemPB.Enable( sal_False );
+        m_aConfPB.Enable( sal_False );
+        m_aRenamePB.Enable( sal_False );
+        m_aStdPB.Enable( sal_False );
+        m_aCUPSCB.Enable( sal_False );
         ErrorBox aBox( GetParent(), WB_OK | WB_DEF_OK, String( PaResId( RID_ERR_NOWRITE ) ) );
         aBox.Execute();
     }
@@ -260,9 +260,9 @@ IMPL_LINK( PADialog, SelectHdl, ListBox*, pListBox )
         String sSelect = getSelectedDevice();
         String sDefPrt = m_rPIManager.getDefaultPrinter();
         if( sDefPrt == sSelect || ! m_rPIManager.removePrinter( sSelect, true ) )
-            m_aRemPB.Enable( FALSE );
+            m_aRemPB.Enable( sal_False );
         else
-            m_aRemPB.Enable( TRUE );
+            m_aRemPB.Enable( sal_True );
         UpdateText();
     }
     return 0;
@@ -277,7 +277,7 @@ void PADialog::UpdateDefPrt()
 
     if( m_aRemPB.HasFocus() )
         m_aDevicesLB.GetFocus();
-    m_aRemPB.Enable( FALSE );
+    m_aRemPB.Enable( sal_False );
 }
 
 void PADialog::UpdateText()
@@ -331,7 +331,7 @@ static Point project( const Point& rPoint )
 static Color approachColor( const Color& rFrom, const Color& rTo )
 {
     Color aColor;
-    UINT8 nDiff;
+    sal_uInt8 nDiff;
     // approach red
     if( rFrom.GetRed() < rTo.GetRed() )
     {
@@ -456,7 +456,7 @@ void SpaPrinterController::printPage( int ) const
     static const struct
     {
             const char* const pDirect;
-            USHORT nResId;
+            sal_uInt16 nResId;
     } aResIds[] =
         {
             { NULL, RID_TXT_TESTPAGE_NAME },
@@ -653,7 +653,7 @@ void PADialog::RemDevice()
     {
         if( m_aDevicesLB.GetEntry( i ).CompareTo( aDefPrinter, aDefPrinter.Len() ) == COMPARE_EQUAL )
         {
-            m_aDevicesLB.SelectEntryPos( i, TRUE );
+            m_aDevicesLB.SelectEntryPos( i, sal_True );
             UpdateText();
             break;
         }
@@ -662,7 +662,7 @@ void PADialog::RemDevice()
     m_aDevicesLB.GetFocus();
 
     if( m_aDevicesLB.GetEntryCount() < 2 )
-        m_aRemPB.Enable( FALSE );
+        m_aRemPB.Enable( sal_False );
 }
 
 void PADialog::ConfigureDevice()
