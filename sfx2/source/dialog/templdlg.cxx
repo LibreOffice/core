@@ -1252,8 +1252,8 @@ void SfxCommonTemplateDialog_Impl::UpdateStyles_Impl(USHORT nFlags)     // Flags
 
     const SfxStyleFamily eFam = pItem->GetFamily();
 
-    SfxFilterTupel *pT =      pItem->GetFilterList().at(nActFilter);
-    USHORT nFilter     = pT ? pItem->GetFilterList().at(nActFilter)->nFlags : 0;
+    SfxFilterTupel *pT = ( nActFilter < pItem->GetFilterList().size() ? pItem->GetFilterList().at(nActFilter) : NULL );
+    USHORT nFilter     = pT ? pT->nFlags : 0;
     if(!nFilter)    // automatisch
         nFilter = nAppFilter;
 
