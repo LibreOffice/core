@@ -143,6 +143,7 @@ endif
 
 gb_Helper_abbreviate_dirs_native = $(gb_Helper_abbreviate_dirs)
 
+
 # CObject class
 
 define gb_CObject__command
@@ -151,11 +152,11 @@ $(call gb_Helper_abbreviate_dirs,\
     mkdir -p $(dir $(1)) && \
     mkdir -p $(dir $(call gb_CObject_get_dep_target,$(2))) && \
     $(gb_CC) \
+        $(4) $(5) \
         -c $(3) \
         -o $(1) \
         -MMD -MT $(call gb_CObject_get_target,$(2)) \
         -MF $(call gb_CObject_get_dep_target,$(2)) \
-        $(4) $(5) \
         -I$(dir $(3)) \
         $(6))
 endef
@@ -169,11 +170,11 @@ $(call gb_Helper_abbreviate_dirs,\
     mkdir -p $(dir $(1)) && \
     mkdir -p $(dir $(call gb_CxxObject_get_dep_target,$(2))) && \
     $(gb_CXX) \
+        $(4) $(5) \
         -c $(3) \
         -o $(1) \
         -MMD -MT $(call gb_CxxObject_get_target,$(2)) \
         -MF $(call gb_CxxObject_get_dep_target,$(2)) \
-        $(4) $(5) \
         -I$(dir $(3)) \
         $(6))
 endef
@@ -211,7 +212,7 @@ $(call gb_Helper_abbreviate_dirs,\
     mkdir -p $(dir $(1)) && \
     $(gb_CXX) \
         $(if $(filter Library CppunitTest,$(2)),$(gb_Library_TARGETTYPEFLAGS) $(call gb_Library_get_rpath,$(1))) \
-        $(if $(filter Executable,$(2)),$(gb_Library_TARGETTYPEFLAGS) $(call gb_Executable_get_rpath,$(1))) \
+        $(if $(filter Executable,$(2)),$(call gb_Executable_get_rpath,$(1))) \
         $(3) \
         $(patsubst lib%.so,-l%,$(foreach lib,$(4),$(call gb_Library_get_filename,$(lib)))) \
         $(foreach object,$(6),$(call gb_CObject_get_target,$(object))) \
@@ -313,7 +314,6 @@ gb_StaticLibrary_StaticLibrary_platform =
 # Executable class
 
 gb_Executable_EXT :=
-gb_Executable_TARGETTYPEFLAGS :=
 gb_Executable_Executable_platform =
 
 gb_Executable_LAYER := \
