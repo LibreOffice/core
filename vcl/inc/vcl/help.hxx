@@ -48,8 +48,12 @@ class Window;
 #define QUICKHELP_BOTTOM            ((USHORT)0x0020)
 #define QUICKHELP_NOAUTOPOS         (QUICKHELP_LEFT | QUICKHELP_CENTER | QUICKHELP_RIGHT | QUICKHELP_TOP | QUICKHELP_VCENTER | QUICKHELP_BOTTOM)
 #define QUICKHELP_CTRLTEXT          ((USHORT)0x0040)
+/// force the existent tip window to be re-positioned, even if the previous incarnation has the same text. Applies to ShowBallon and ShowQuickHelp.
 #define QUICKHELP_FORCE_REPOSITION  ((USHORT)0x0080)
+/// no delay when opening the quick help. Applies to ShowBallon and ShowQuickHelp
 #define QUICKHELP_NO_DELAY          ((USHORT)0x0100)
+/// force balloon-style in ShowTip
+#define QUICKHELP_TIP_STYLE_BALLOON ((USHORT)0x0200)
 #define QUICKHELP_NOEVADEPOINTER    ((USHORT)0x4000)
 #define QUICKHELP_BIDI_RTL          ((USHORT)0x8000)
 

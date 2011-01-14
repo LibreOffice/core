@@ -278,7 +278,7 @@ BOOL Help::ShowQuickHelp( Window* pParent,
 ULONG Help::ShowTip( Window* pParent, const Rectangle& rScreenRect,
                      const XubString& rText, USHORT nStyle )
 {
-    USHORT nHelpWinStyle = HELPWINSTYLE_QUICK;
+    USHORT nHelpWinStyle = ( ( nStyle & QUICKHELP_TIP_STYLE_BALLOON ) != 0 ) ? HELPWINSTYLE_BALLOON : HELPWINSTYLE_QUICK;
     HelpTextWindow* pHelpWin = new HelpTextWindow( pParent, rText, nHelpWinStyle, nStyle );
 
     ULONG nId = reinterpret_cast< ULONG >( pHelpWin );
