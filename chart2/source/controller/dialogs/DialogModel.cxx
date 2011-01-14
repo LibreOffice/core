@@ -737,12 +737,6 @@ OUString DialogModel::GetRoleDataLabel()
 }
 
 // static
-OUString DialogModel::GetRoleDates()
-{
-    return OUString( String( ::chart::SchResId( STR_DATA_DATE_CATEGORIES )));
-}
-
-// static
 
 sal_Int32 DialogModel::GetRoleIndexForSorting( const ::rtl::OUString & rInternalRoleString )
 {

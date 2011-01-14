@@ -36,7 +36,7 @@
 #include "macros.hxx"
 #include "ViewDefines.hxx"
 #include "PropertyMapper.hxx"
-#include "chartview/NumberFormatterWrapper.hxx"
+#include "NumberFormatterWrapper.hxx"
 #include "LabelPositionHelper.hxx"
 #include "TrueGuard.hxx"
 #include "BaseGFXHelper.hxx"

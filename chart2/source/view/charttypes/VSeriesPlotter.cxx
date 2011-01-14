@@ -43,7 +43,7 @@
 #include "ChartTypeHelper.hxx"
 #include "Clipping.hxx"
 #include "servicenames_charttypes.hxx"
-#include "chartview/NumberFormatterWrapper.hxx"
+#include "NumberFormatterWrapper.hxx"
 #include "ContainerHelper.hxx"
 #include "DataSeriesHelper.hxx"
 #include "RegressionCurveHelper.hxx"
@@ -53,6 +53,7 @@
 #include "Strings.hrc"
 #include "RelativePositionHelper.hxx"
 #include "DateHelper.hxx"
+#include "DiagramHelper.hxx"
 
 //only for creation: @todo remove if all plotter are uno components and instanciated via servicefactory
 #include "BarChart.hxx"
@@ -395,7 +396,7 @@ OUString VSeriesPlotter::getLabelTextForValue( VDataSeries& rDataSeries
             nNumberFormatKey = rDataSeries.getExplicitNumberFormat(nPointIndex,bAsPercentage);
         else if( bAsPercentage )
         {
-            sal_Int32 nPercentFormat = ExplicitValueProvider::getPercentNumberFormat( m_apNumberFormatterWrapper->getNumberFormatsSupplier() );
+            sal_Int32 nPercentFormat = DiagramHelper::getPercentNumberFormat( m_apNumberFormatterWrapper->getNumberFormatsSupplier() );
             if( nPercentFormat != -1 )
                 nNumberFormatKey = nPercentFormat;
         }

@@ -40,7 +40,7 @@
 #include "AxisIndexDefines.hxx"
 #include "ExplicitCategoriesProvider.hxx"
 #include "CommonConverters.hxx"
-#include "chartview/NumberFormatterWrapper.hxx"
+#include "NumberFormatterWrapper.hxx"
 #include "RegressionCurveHelper.hxx"
 #include <rtl/math.hxx>
 #include <tools/debug.hxx>

@@ -56,7 +56,7 @@
 #include "ChartTypeHelper.hxx"
 #include "ObjectNameProvider.hxx"
 #include "DiagramHelper.hxx"
-#include "chartview/NumberFormatterWrapper.hxx"
+#include "NumberFormatterWrapper.hxx"
 #include "AxisIndexDefines.hxx"
 #include "AxisHelper.hxx"
 

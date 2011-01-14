@@ -70,6 +70,7 @@ SLOFILES=	\
     $(SLO)$/LinearRegressionCurveCalculator.obj \
     $(SLO)$/LogarithmicRegressionCurveCalculator.obj \
     $(SLO)$/MeanValueRegressionCurveCalculator.obj \
+    $(SLO)$/NumberFormatterWrapper.obj \
     $(SLO)$/OPropertySet.obj \
     $(SLO)$/WrappedPropertySet.obj \
     $(SLO)$/WrappedProperty.obj \

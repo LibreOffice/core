@@ -33,7 +33,7 @@
 #include "VPolarGrid.hxx"
 #include "ShapeFactory.hxx"
 #include "macros.hxx"
-#include "chartview/NumberFormatterWrapper.hxx"
+#include "NumberFormatterWrapper.hxx"
 #include "PolarLabelPositionHelper.hxx"
 #include <tools/color.hxx>
 

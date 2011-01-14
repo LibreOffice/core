@@ -104,6 +104,10 @@ public:
     static ::com::sun::star::uno::Sequence< ::rtl::OUString > getExplicitSimpleCategories(
             const SplitCategoriesProvider& rSplitCategoriesProvider );
 
+    static void convertCategoryAnysToText( ::com::sun::star::uno::Sequence< rtl::OUString >& rOutTexts
+        , const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& rInAnys
+        , ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > xChartModel );
+
     bool hasComplexCategories() const;
     sal_Int32 getCategoryLevelCount() const;
 
@@ -122,6 +126,7 @@ private: //member
     ::com::sun::star::uno::Reference<
         ::com::sun::star::chart2::data::XLabeledDataSequence> m_xOriginalCategories;
 
+    bool m_bIsExplicitCategoriesInited;
     ::com::sun::star::uno::Sequence< ::rtl::OUString >  m_aExplicitCategories;
     ::std::vector< ::std::vector< ComplexCategory > >   m_aComplexCats;
     ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference<

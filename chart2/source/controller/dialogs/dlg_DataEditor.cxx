@@ -160,9 +160,6 @@ IMPL_LINK( DataEditor, ToolboxHdl, void *, EMPTYARG )
         case TBI_DATA_SWAP_ROW :
             m_apBrwData->SwapRow ();
             break;
-        case TBI_DATA_TOGGLE_DATE_CATEGORIES:
-            m_apBrwData->ToggleDateCategories ();
-            break;
     }
 
     return 0;
@@ -178,14 +175,12 @@ IMPL_LINK( DataEditor, BrowserCursorMovedHdl, void *, EMPTYARG )
 
     m_aTbxData.EnableItem( TBI_DATA_INSERT_ROW, bIsDataValid && m_apBrwData->MayInsertRow() );
     m_aTbxData.EnableItem( TBI_DATA_INSERT_COL, bIsDataValid && m_apBrwData->MayInsertColumn() );
-    m_aTbxData.EnableItem( TBI_DATA_INSERT_TEXT_COL, bIsDataValid && m_apBrwData->MayInsertColumn() && !m_apBrwData->HasDateCategories() );
+    m_aTbxData.EnableItem( TBI_DATA_INSERT_TEXT_COL, bIsDataValid && m_apBrwData->MayInsertColumn() );
     m_aTbxData.EnableItem( TBI_DATA_DELETE_ROW, m_apBrwData->MayDeleteRow() );
     m_aTbxData.EnableItem( TBI_DATA_DELETE_COL, m_apBrwData->MayDeleteColumn() );
 
     m_aTbxData.EnableItem( TBI_DATA_SWAP_COL,   bIsDataValid && m_apBrwData->MaySwapColumns() );
     m_aTbxData.EnableItem( TBI_DATA_SWAP_ROW,   bIsDataValid && m_apBrwData->MaySwapRows() );
-
-    m_aTbxData.EnableItem( TBI_DATA_TOGGLE_DATE_CATEGORIES, bIsDataValid && m_apBrwData->MayToggleDateCategories() );
 
     return 0;
 }
@@ -203,7 +198,6 @@ void DataEditor::SetReadOnly( bool bReadOnly )
         m_aTbxData.EnableItem( TBI_DATA_DELETE_COL, FALSE );
         m_aTbxData.EnableItem( TBI_DATA_SWAP_COL, FALSE );
         m_aTbxData.EnableItem( TBI_DATA_SWAP_ROW, FALSE );
-        m_aTbxData.EnableItem( TBI_DATA_TOGGLE_DATE_CATEGORIES, FALSE );
     }
 
     m_apBrwData->SetReadOnly( m_bReadOnly );

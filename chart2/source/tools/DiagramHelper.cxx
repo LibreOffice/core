@@ -1045,26 +1045,6 @@ Sequence< rtl::OUString > DiagramHelper::getExplicitSimpleCategories(
     return aRet;
 }
 
-bool DiagramHelper::mayToggleDateCategories( const Reference< XChartDocument >& xChartDoc )
-{
-    Reference< frame::XModel > xChartModel( xChartDoc, uno::UNO_QUERY );
-    if(xChartModel.is())
-    {
-        Reference< chart2::XCoordinateSystem > xCooSys( ChartModelHelper::getFirstCoordinateSystem( xChartModel ) );
-        if( xCooSys.is() )
-        {
-            Reference< XAxis > xAxis( xCooSys->getAxisByDimension(0,0) );
-            if( xAxis.is() )
-            {
-                ScaleData aScale( xAxis->getScaleData() );
-                if( aScale.AxisType == chart2::AxisType::DATE || aScale.AxisType == chart2::AxisType::CATEGORY )
-                    return true;
-            }
-        }
-    }
-    return false;
-}
-
 namespace
 {
 void lcl_switchToDateCategories( const Reference< XChartDocument >& xChartDoc, const Reference< XAxis >& xAxis )
@@ -1194,35 +1174,62 @@ void DiagramHelper::switchToTextCategories( const Reference< XChartDocument >& x
     }
 }
 
-void DiagramHelper::toggleDateCategories( const Reference< XChartDocument >& xChartDoc )
+bool DiagramHelper::isSupportingDateAxis( const Reference< chart2::XDiagram >& xDiagram )
 {
-    Reference< frame::XModel > xChartModel( xChartDoc, uno::UNO_QUERY );
-    if(xChartModel.is())
-    {
-        ControllerLockGuard aCtrlLockGuard( xChartModel );
+    return ::chart::ChartTypeHelper::isSupportingDateAxis(
+            DiagramHelper::getChartTypeByIndex( xDiagram, 0 ), DiagramHelper::getDimension( xDiagram ), 0 );
+}
 
-        Reference< chart2::XCoordinateSystem > xCooSys( ChartModelHelper::getFirstCoordinateSystem( xChartModel ) );
-        if( xCooSys.is() )
+bool DiagramHelper::isDateNumberFormat( sal_Int32 nNumberFormat, const Reference< util::XNumberFormats >& xNumberFormats )
+{
+    bool bIsDate = false;
+    if( !xNumberFormats.is() )
+        return bIsDate;
+
+    Reference< beans::XPropertySet > xKeyProps = xNumberFormats->getByKey( nNumberFormat );
+    if( xKeyProps.is() )
+    {
+        sal_Int32 nType = util::NumberFormat::UNDEFINED;
+        xKeyProps->getPropertyValue( C2U("Type") ) >>= nType;
+        bIsDate = nType & util::NumberFormat::DATE;
+    }
+    return bIsDate;
+}
+
+sal_Int32 DiagramHelper::getDateNumberFormat( const Reference< util::XNumberFormatsSupplier >& xNumberFormatsSupplier )
+{
+    sal_Int32 nRet=-1;
+    Reference< util::XNumberFormats > xNumberFormats( xNumberFormatsSupplier->getNumberFormats() );
+    if( xNumberFormats.is() )
+    {
+        sal_Bool bCreate = sal_True;
+        const LocaleDataWrapper& rLocaleDataWrapper = Application::GetSettings().GetLocaleDataWrapper();
+        Sequence<sal_Int32> aKeySeq = xNumberFormats->queryKeys( util::NumberFormat::DATE,
+            rLocaleDataWrapper.getLocale(), bCreate );
+        if( aKeySeq.getLength() )
         {
-            Reference< XAxis > xAxis( xCooSys->getAxisByDimension(0,0) );
-            if( xAxis.is() )
-            {
-                ScaleData aScale( xAxis->getScaleData() );
-                if( aScale.AxisType == chart2::AxisType::DATE )
-                {
-                    lcl_switchToTextCategories( xChartDoc, xAxis );
-                }
-                else if( aScale.AxisType == chart2::AxisType::CATEGORY )
-                {
-                    lcl_switchToDateCategories( xChartDoc, xAxis );
-                }
-                else
-                {
-                    DBG_ERROR("Cannot toggle Date Categories for this axis type");
-                }
-            }
+            nRet = aKeySeq[0];
         }
     }
+    return nRet;
+}
+
+sal_Int32 DiagramHelper::getPercentNumberFormat( const Reference< util::XNumberFormatsSupplier >& xNumberFormatsSupplier )
+{
+    sal_Int32 nRet=-1;
+    Reference< util::XNumberFormats > xNumberFormats( xNumberFormatsSupplier->getNumberFormats() );
+    if( xNumberFormats.is() )
+    {
+        sal_Bool bCreate = sal_True;
+        const LocaleDataWrapper& rLocaleDataWrapper = Application::GetSettings().GetLocaleDataWrapper();
+        Sequence<sal_Int32> aKeySeq = xNumberFormats->queryKeys( util::NumberFormat::PERCENT,
+            rLocaleDataWrapper.getLocale(), bCreate );
+        if( aKeySeq.getLength() )
+        {
+            nRet = aKeySeq[0];
+        }
+    }
+    return nRet;
 }
 
 // static

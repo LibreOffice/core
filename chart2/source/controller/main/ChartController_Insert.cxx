@@ -44,7 +44,7 @@
 #include "DiagramHelper.hxx"
 #include "macros.hxx"
 #include "chartview/DrawModelWrapper.hxx"
-#include "chartview/NumberFormatterWrapper.hxx"
+#include "NumberFormatterWrapper.hxx"
 #include "ViewElementListProvider.hxx"
 #include "MultipleChartConverters.hxx"
 #include "ControllerLockGuard.hxx"

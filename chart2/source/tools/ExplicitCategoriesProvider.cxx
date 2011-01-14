@@ -37,6 +37,7 @@
 #include "ChartModelHelper.hxx"
 #include "ContainerHelper.hxx"
 #include "macros.hxx"
+#include "NumberFormatterWrapper.hxx"
 
 #include <com/sun/star/chart2/AxisType.hpp>
 #include <com/sun/star/util/NumberFormat.hpp>
@@ -61,6 +62,7 @@ ExplicitCategoriesProvider::ExplicitCategoriesProvider( const Reference< chart2:
     , m_xCooSysModel( xCooSysModel )
     , m_xChartModel( xChartModel )
     , m_xOriginalCategories()
+    , m_bIsExplicitCategoriesInited(false)
     , m_bIsDateAxis(false)
     , m_bIsAutoDate(false)
 {
@@ -188,30 +190,52 @@ std::vector<sal_Int32> lcl_getLimitingBorders( const std::vector< ComplexCategor
     return aLimitingBorders;
 }
 
-uno::Sequence< rtl::OUString > lcl_DataToStringSequence( const uno::Reference< data::XDataSequence >& xDataSequence )
+void ExplicitCategoriesProvider::convertCategoryAnysToText( uno::Sequence< rtl::OUString >& rOutTexts, const uno::Sequence< uno::Any >& rInAnys, Reference< frame::XModel > xChartModel )
 {
-    uno::Sequence< rtl::OUString > aStrings;
+    sal_Int32 nCount = rInAnys.getLength();
+    if(!nCount)
+        return;
+    rOutTexts.realloc(nCount);
+    Reference< util::XNumberFormatsSupplier > xNumberFormatsSupplier( xChartModel, uno::UNO_QUERY );
+    Reference< util::XNumberFormats > xNumberFormats;
+    if( xNumberFormatsSupplier.is() )
+         xNumberFormats = Reference< util::XNumberFormats >( xNumberFormatsSupplier->getNumberFormats() );
 
-    OSL_ASSERT( xDataSequence.is());
-    if( !xDataSequence.is() )
-        return aStrings;
-
-
-    uno::Reference< data::XTextualDataSequence > xTextualDataSequence( xDataSequence, uno::UNO_QUERY );
-    if( xTextualDataSequence.is() )
+    sal_Int32 nAxisNumberFormat = 0;
+    Reference< XCoordinateSystem > xCooSysModel( ChartModelHelper::getFirstCoordinateSystem( xChartModel ) );
+    if( xCooSysModel.is() )
     {
-        aStrings = xTextualDataSequence->getTextualData();
-    }
-    else
-    {
-        uno::Sequence< uno::Any > aValues = xDataSequence->getData();
-        aStrings.realloc(aValues.getLength());
-
-        for(sal_Int32 nN=aValues.getLength();nN--;)
-            aValues[nN] >>= aStrings[nN];
+        Reference< chart2::XAxis > xAxis( xCooSysModel->getAxisByDimension(0,0) );
+        nAxisNumberFormat = AxisHelper::getExplicitNumberFormatKeyForAxis(
+                  xAxis, xCooSysModel, xNumberFormatsSupplier, false );
     }
 
-    return aStrings;
+    sal_Int32 nLabelColor;
+    bool bColorChanged = false;
+
+    NumberFormatterWrapper aNumberFormatterWrapper( xNumberFormatsSupplier );
+    SvNumberFormatter* pSvNumberFormatter = aNumberFormatterWrapper.getSvNumberFormatter();
+
+    for(sal_Int32 nN=0;nN<nCount;nN++)
+    {
+        rtl::OUString aText;
+        uno::Any aAny = rInAnys[nN];
+        if( aAny.hasValue() )
+        {
+            double fDouble;
+            if( aAny>>=fDouble )
+            {
+                if( !::rtl::math::isNan(fDouble) )
+                    aText = aNumberFormatterWrapper.getFormattedString(
+                        nAxisNumberFormat, fDouble, nLabelColor, bColorChanged );
+            }
+            else
+            {
+                aAny>>=aText;
+            }
+        }
+        rOutTexts[nN] = aText;
+    }
 }
 
 SplitCategoriesProvider::~SplitCategoriesProvider()
@@ -222,9 +246,13 @@ class SplitCategoriesProvider_ForLabeledDataSequences : public SplitCategoriesPr
 {
 public:
 
-    explicit SplitCategoriesProvider_ForLabeledDataSequences( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference<
-        ::com::sun::star::chart2::data::XLabeledDataSequence> >& rSplitCategoriesList )
+    explicit SplitCategoriesProvider_ForLabeledDataSequences(
+        const ::com::sun::star::uno::Sequence<
+            ::com::sun::star::uno::Reference<
+                ::com::sun::star::chart2::data::XLabeledDataSequence> >& rSplitCategoriesList
+        , const Reference< frame::XModel >& xChartModel )
         : m_rSplitCategoriesList( rSplitCategoriesList )
+        , m_xChartModel( xChartModel )
     {}
     virtual ~SplitCategoriesProvider_ForLabeledDataSequences()
     {}
@@ -235,6 +263,8 @@ public:
 private:
     const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference<
         ::com::sun::star::chart2::data::XLabeledDataSequence> >& m_rSplitCategoriesList;
+
+    Reference< frame::XModel > m_xChartModel;
 };
 
 sal_Int32 SplitCategoriesProvider_ForLabeledDataSequences::getLevelCount() const
@@ -246,7 +276,11 @@ uno::Sequence< rtl::OUString > SplitCategoriesProvider_ForLabeledDataSequences::
     uno::Sequence< rtl::OUString > aRet;
     Reference< data::XLabeledDataSequence > xLabeledDataSequence( m_rSplitCategoriesList[nLevel] );
     if( xLabeledDataSequence.is() )
-        aRet = lcl_DataToStringSequence( xLabeledDataSequence->getValues() );
+    {
+        uno::Reference< data::XDataSequence > xDataSequence( xLabeledDataSequence->getValues() );
+        if( xDataSequence.is() )
+            ExplicitCategoriesProvider::convertCategoryAnysToText( aRet, xDataSequence->getData(), m_xChartModel );
+    }
     return aRet;
 }
 
@@ -393,22 +427,6 @@ struct DatePlusIndexComparator
     }
 };
 
-bool lcl_isDateFormat( sal_Int32 nNumberFormat, const Reference< util::XNumberFormats >& xNumberFormats )
-{
-    bool bIsDate = false;
-    if( !xNumberFormats.is() )
-        return bIsDate;
-
-    Reference< beans::XPropertySet > xKeyProps = xNumberFormats->getByKey( nNumberFormat );
-    if( xKeyProps.is() )
-    {
-        sal_Int32 nType = util::NumberFormat::UNDEFINED;
-        xKeyProps->getPropertyValue( C2U("Type") ) >>= nType;
-        bIsDate = nType & util::NumberFormat::DATE;
-    }
-    return bIsDate;
-}
-
 bool lcl_fillDateCategories( const uno::Reference< data::XDataSequence >& xDataSequence, std::vector< DatePlusIndex >& rDateCategories, bool bIsAutoDate, Reference< util::XNumberFormatsSupplier > xNumberFormatsSupplier )
 {
     bool bOnlyDatesFound = true;
@@ -424,8 +442,8 @@ bool lcl_fillDateCategories( const uno::Reference< data::XDataSequence >& xDataS
              xNumberFormats = Reference< util::XNumberFormats >( xNumberFormatsSupplier->getNumberFormats() );
 
         bool bOwnData = false;
-        bool bOwnDataAndDateFormat = false;
-        sal_Int32 nAxisNumberFormat = 0;
+        bool bOwnDataAnddAxisHasAnyFormat = false;
+        bool bOwnDataAnddAxisHasDateFormat = false;
         Reference< chart2::XChartDocument > xChartDoc( xNumberFormatsSupplier, uno::UNO_QUERY );
         Reference< XCoordinateSystem > xCooSysModel( ChartModelHelper::getFirstCoordinateSystem( Reference< frame::XModel >( xChartDoc, uno::UNO_QUERY ) ) );
         if( xChartDoc.is() && xCooSysModel.is() )
@@ -434,8 +452,12 @@ bool lcl_fillDateCategories( const uno::Reference< data::XDataSequence >& xDataS
             {
                 bOwnData = true;
                 Reference< beans::XPropertySet > xAxisProps( xCooSysModel->getAxisByDimension(0,0), uno::UNO_QUERY );
+                sal_Int32 nAxisNumberFormat = 0;
                 if( xAxisProps.is() && (xAxisProps->getPropertyValue( C2U("NumberFormat") ) >>= nAxisNumberFormat) )
-                    bOwnDataAndDateFormat = lcl_isDateFormat( nAxisNumberFormat, xNumberFormats );
+                {
+                    bOwnDataAnddAxisHasAnyFormat = true;
+                    bOwnDataAnddAxisHasDateFormat = DiagramHelper::isDateNumberFormat( nAxisNumberFormat, xNumberFormats );
+                }
             }
         }
 
@@ -445,9 +467,9 @@ bool lcl_fillDateCategories( const uno::Reference< data::XDataSequence >& xDataS
             if( bIsAutoDate )
             {
                 if( bOwnData )
-                    bIsDate = bOwnDataAndDateFormat;
+                    bIsDate = bOwnDataAnddAxisHasAnyFormat ? bOwnDataAnddAxisHasDateFormat : true;
                 else
-                    bIsDate = lcl_isDateFormat( xDataSequence->getNumberFormatKeyByIndex( nN ), xNumberFormats );
+                    bIsDate = DiagramHelper::isDateNumberFormat( xDataSequence->getNumberFormatKeyByIndex( nN ), xNumberFormats );
             }
             else
                 bIsDate = true;
@@ -488,7 +510,6 @@ void ExplicitCategoriesProvider::init()
 {
     if( m_bDirty )
     {
-        m_aExplicitCategories.realloc(0);
         m_aComplexCats.clear();//not one per index
         m_aDateCategories.clear();
 
@@ -496,7 +517,6 @@ void ExplicitCategoriesProvider::init()
         {
             if( !hasComplexCategories() )
             {
-                m_aExplicitCategories = DataSequenceToStringSequence(m_xOriginalCategories->getValues());
                 if(m_bIsDateAxis)
                 {
                     if( ChartTypeHelper::isSupportingDateAxis( AxisHelper::getChartTypeByIndex( m_xCooSysModel, 0 ), 2, 0 ) )
@@ -507,15 +527,11 @@ void ExplicitCategoriesProvider::init()
             }
             else
             {
-                m_aExplicitCategories = lcl_getExplicitSimpleCategories(
-                    SplitCategoriesProvider_ForLabeledDataSequences( m_aSplitCategoriesList ), m_aComplexCats );
                 m_bIsDateAxis = false;
             }
         }
         else
             m_bIsDateAxis=false;
-        if(!m_aExplicitCategories.getLength())
-            m_aExplicitCategories = DiagramHelper::generateAutomaticCategoriesFromCooSys( m_xCooSysModel );
         m_bDirty = false;
     }
 }
@@ -523,7 +539,28 @@ void ExplicitCategoriesProvider::init()
 
 Sequence< ::rtl::OUString > ExplicitCategoriesProvider::getSimpleCategories()
 {
-    init();
+    if( !m_bIsExplicitCategoriesInited )
+    {
+        init();
+        m_aExplicitCategories.realloc(0);
+        if( m_xOriginalCategories.is() )
+        {
+            if( !hasComplexCategories() )
+            {
+                uno::Reference< data::XDataSequence > xDataSequence( m_xOriginalCategories->getValues() );
+                if( xDataSequence.is() )
+                    ExplicitCategoriesProvider::convertCategoryAnysToText( m_aExplicitCategories, xDataSequence->getData(), m_xChartModel );
+            }
+            else
+            {
+                m_aExplicitCategories = lcl_getExplicitSimpleCategories(
+                    SplitCategoriesProvider_ForLabeledDataSequences( m_aSplitCategoriesList, m_xChartModel ), m_aComplexCats );
+            }
+        }
+        if(!m_aExplicitCategories.getLength())
+            m_aExplicitCategories = DiagramHelper::generateAutomaticCategoriesFromCooSys( m_xCooSysModel );
+        m_bIsExplicitCategoriesInited = true;
+    }
     return m_aExplicitCategories;
 }
 

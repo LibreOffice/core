@@ -375,17 +375,9 @@ InternalDataProvider::InternalDataProvider( const Reference< chart2::XChartDocum
                         if( !xLDS.is() )
                             continue;
                         Sequence< uno::Any > aDataSeq;
-                        Reference< chart2::data::XTextualDataSequence > xTextSeq( xLDS->getValues(), uno::UNO_QUERY );
-                        if( !bIsDateAxis && xTextSeq.is() )
-                        {
-                            aDataSeq = lcl_StringToAnySequence( xTextSeq->getTextualData() );
-                        }
-                        else
-                        {
-                            Reference< chart2::data::XDataSequence > xSeq( xLDS->getValues() );
-                            if( xSeq.is() )
-                                aDataSeq = xSeq->getData();
-                        }
+                        Reference< chart2::data::XDataSequence > xSeq( xLDS->getValues() );
+                        if( xSeq.is() )
+                            aDataSeq = xSeq->getData();
                         sal_Int32 nLength = aDataSeq.getLength();
                         if( static_cast< sal_Int32 >(aNewCategories.size()) < nLength )
                             aNewCategories.resize( nLength );
@@ -790,40 +782,14 @@ Sequence< uno::Any > SAL_CALL InternalDataProvider::getDataByRangeRepresentation
     }
     else if( aRange.equals( lcl_aCategoriesRangeName ) )
     {
-        bool bReturnText = true;
         vector< vector< uno::Any > > aCategories( m_bDataInColumns ? m_aInternalData.getComplexRowLabels() : m_aInternalData.getComplexColumnLabels());
         sal_Int32 nLevelCount = lcl_getInnerLevelCount( aCategories );
         if( nLevelCount == 1 )
         {
             sal_Int32 nL=0;
             aResult = this->getDataByRangeRepresentation( lcl_aCategoriesLevelRangeNamePrefix + OUString::valueOf( nL ) );
-            bool bOnlyDatesFound = true;
-            double fTest = 0.0;
-            OUString aTest;
-            for(sal_Int32 nN=aResult.getLength(); nN--;)
-            {
-                uno::Any aAny(aResult[nN]);
-                if( !( aAny >>= fTest) )
-                {
-                    if( aAny.hasValue() )
-                    {
-                        if( (aAny>>=aTest) && !aTest.getLength() )
-                        {
-                            //empty string does not count as non date value!
-                            aResult[nN] = uno::Any();
-                        }
-                        else
-                        {
-                            bOnlyDatesFound=false;
-                            break;
-                        }
-                    }
-                }
-            }
-            if( bOnlyDatesFound )
-                bReturnText = false;
         }
-        if( bReturnText )
+        else
         {
             Sequence< OUString > aLabels = m_bDataInColumns ? this->getRowDescriptions() : this->getColumnDescriptions();
             aResult.realloc( aLabels.getLength() );
