@@ -125,7 +125,7 @@ namespace svt { namespace table
         /** activates the cell at the given position
 
             @return
-                <sal_True/> if the move was successful, <sal_False/> otherwise. Usual
+                <TRUE/> if the move was successful, <FALSE/> otherwise. Usual
                 failure conditions include some other instance vetoing the move,
                 or impossibility to execute the move at all (for instance because
                 of invalid coordinates).
@@ -135,7 +135,7 @@ namespace svt { namespace table
         /** moves the active cell to the given column, by keeping the active row
 
             @return
-                <sal_True/> if the move was successful, <sal_False/> otherwise. Usual
+                <TRUE/> if the move was successful, <FALSE/> otherwise. Usual
                 failure conditions include some other instance vetoing the move,
                 or impossibility to execute the move at all (for instance because
                 of invalid coordinates).
@@ -148,7 +148,7 @@ namespace svt { namespace table
         /** moves the active cell to the given row, by keeping the active column
 
             @return
-                <sal_True/> if the move was successful, <sal_False/> otherwise. Usual
+                <TRUE/> if the move was successful, <FALSE/> otherwise. Usual
                 failure conditions include some other instance vetoing the move,
                 or impossibility to execute the move at all (for instance because
                 of invalid coordinates).

@@ -170,7 +170,7 @@ namespace svt { namespace table
         /** moves the cursor to the cell with the given coordinates
 
             To ease the caller's code, the coordinates must not necessarily denote a
-            valid position. If they don't, <sal_False/> will be returned.
+            valid position. If they don't, <FALSE/> will be returned.
         */
         bool    goTo( ColPos _nColumn, RowPos _nRow );
 
@@ -182,7 +182,7 @@ namespace svt { namespace table
                 the row position which should be visibleMust be non-negative, and smaller
                 than the row count.
             @param _bAcceptPartialVisibility
-                <sal_True/> if it's okay that the given cooordinate is only partially visible
+                <TRUE/> if it's okay that the given cooordinate is only partially visible
         */
         void    ensureVisible( ColPos _nColumn, RowPos _nRow, bool _bAcceptPartialVisibility );
     /** returns the row, which contains the input point*/

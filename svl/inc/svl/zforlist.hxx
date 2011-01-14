@@ -403,8 +403,8 @@ public:
 
     /** Create new entry of a format code string for language/country.
         @return
-            <sal_True/> if string new and ok and inserted.
-             <sal_False/> if string already exists or an unresolvable parse error
+            <TRUE/> if string new and ok and inserted.
+             <FALSE/> if string already exists or an unresolvable parse error
              occured, in which case nCheckPos is the error position within rString.
             If the error occurs at position 0 or rString is empty nCheckPos
             will be 1, so an error in the string is always indicated by
@@ -483,10 +483,10 @@ public:
 
     /** Analyze an input string
         @return
-            <sal_True/> if input is a number or is matching a format F_Index
+            <TRUE/> if input is a number or is matching a format F_Index
                 F_Index is set to a matching format if number, the value is
                 returned in fOutNumber
-            <sal_False/> if input is not a number
+            <FALSE/> if input is not a number
      */
     sal_Bool IsNumberFormat( const String& sString, sal_uInt32& F_Index, double& fOutNumber );
 
@@ -507,8 +507,8 @@ public:
 
     /** Format a number according to a format code string to be scanned.
         @return
-            <sal_False/> if format code contains an error
-            <sal_True/> else, in which case the string and color are returned.
+            <FALSE/> if format code contains an error
+            <TRUE/> else, in which case the string and color are returned.
      */
     sal_Bool GetPreviewString( const String& sFormatString, double fPreviewNumber,
                           String& sOutString, Color** ppColor,
@@ -522,8 +522,8 @@ public:
 
     /** Format a string according to a format code string to be scanned.
         @return
-            <sal_False/> if format code contains an error
-            <sal_True/> else, in which case the string and color are returned.
+            <FALSE/> if format code contains an error
+            <TRUE/> else, in which case the string and color are returned.
      */
     sal_Bool GetPreviewString( const String& sFormatString, const String& sPreviewString,
                           String& sOutString, Color** ppColor,
@@ -724,8 +724,8 @@ public:
     /** Get all standard formats for a specific currency, formats are
         appended to the <type>NfWSStringsDtor</type> list.
         @param bBank
-            <sal_True/>: generate only format strings with currency abbreviation
-            <sal_False/>: mixed format strings
+            <TRUE/>: generate only format strings with currency abbreviation
+            <FALSE/>: mixed format strings
         @return
             position of default format
      */
@@ -755,7 +755,7 @@ public:
 
         @param bFoundBank
             Only used for output.
-             If the return value is not <NULL/> this value is set to <sal_True/> if
+             If the return value is not <NULL/> this value is set to <TRUE/> if
              the matching entry was found by comparing rSymbol against the
              CurrencyAbbreviation (AKA BankSymbol).
              If the return value is <NULL/> the value of bFoundBank is undefined.
@@ -769,7 +769,7 @@ public:
             The language/country value of the format of which rSymbol and
             rExtension are obtained (<method>SvNumberformat::GetLanguage()</method>).
         @param bOnlyStringLanguage
-            If <sal_True/> only entries with language/country of rExtension are
+            If <TRUE/> only entries with language/country of rExtension are
             checked, no match on eFormatLanguage. If rExtension is empty all
              entries are checked.
         @return

@@ -74,8 +74,8 @@ public:
                                 /** Add a listener to react on config changes
                                     which are broadcasted in a SfxSimpleHint
                                     @return
-                                        <sal_True/> if added
-                                        <sal_False/> if not added
+                                        <TRUE/> if added
+                                        <FALSE/> if not added
                                  */
 
     /** Block broadcasts and accumulate hints. This may be useful if, for
@@ -85,8 +85,8 @@ public:
         two currency changes broadcasted.
 
         @param bBlock
-            <sal_True/>: broadcasts are blocked until reversed.
-            <sal_False/>: broadcasts are not blocked anymore. Pending hints are
+            <TRUE/>: broadcasts are blocked until reversed.
+            <FALSE/>: broadcasts are not blocked anymore. Pending hints are
             broadcasted if no other instance blocks the broadcast.
 
         @ATTENTION

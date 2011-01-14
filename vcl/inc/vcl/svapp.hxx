@@ -312,8 +312,8 @@ public:
         of the application's UI.
 
         @returns
-        <sal_True/> if the system font is suitable for our UI
-        <sal_False/> if the test string could not be displayed with the system font
+        <TRUE/> if the system font is suitable for our UI
+        <FALSE/> if the test string could not be displayed with the system font
      */
     static bool                 ValidateSystemFont();
 

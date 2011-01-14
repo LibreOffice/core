@@ -484,7 +484,7 @@ public:
         @see MnemonicEngine
 
         @return
-            <sal_True/> if the event has been consumed, <sal_False/> otherwise.
+            <TRUE/> if the event has been consumed, <FALSE/> otherwise.
     */
     bool            HandleKeyInput( const KeyEvent& rKEvt );
 

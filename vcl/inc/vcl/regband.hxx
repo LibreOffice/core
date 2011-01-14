@@ -94,10 +94,10 @@ public:
                                         The new ImplRegionBand object will
                                         be a copy of this band.
                                     @param bIgnorePoints
-                                        When <sal_True/> (the default) the
+                                        When <TRUE/> (the default) the
                                         band points pointed to by
                                         mpFirstBandPoint are not copied.
-                                        When <sal_False/> they are copied.
+                                        When <FALSE/> they are copied.
                                         You need the points when you are
                                         planning to call ProcessPoints()
                                         later on.

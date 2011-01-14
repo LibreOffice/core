@@ -573,7 +573,7 @@ namespace svt
 
         if ( bHandled ) // the view claimed it handled the key input
         {
-            // unfortunately, KeyInput also returns <sal_True/> (means "I handled this key input")
+            // unfortunately, KeyInput also returns <TRUE/> (means "I handled this key input")
             // when nothing really changed. Let's care for this.
             Selection aNewSelection( GetSelection() );
             if  (  aNewSelection != aOldSelection   // selection changed

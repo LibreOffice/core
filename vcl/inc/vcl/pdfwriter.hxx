@@ -1161,7 +1161,7 @@ The following structure describes the permissions used in PDF security
 
     SetStructureAttribute sets an attribute of the current structural element to a
     new value. A consistency check is performed before actually setting the value;
-    if the check fails, the function returns <sal_False/> and the attribute remains
+    if the check fails, the function returns <FALSE/> and the attribute remains
     unchanged.
 
     @param eAttr
@@ -1171,15 +1171,15 @@ The following structure describes the permissions used in PDF security
     the value to set the attribute to
 
     @returns
-    <sal_True/> if the value was valid and the change has been performed,
-    <sal_False/> if the attribute or value was invalid; attribute remains unchanged
+    <TRUE/> if the value was valid and the change has been performed,
+    <FALSE/> if the attribute or value was invalid; attribute remains unchanged
      */
     bool SetStructureAttribute( enum StructAttribute eAttr, enum StructAttributeValue eVal );
     /** set a structure attribute on the current structural element
 
     SetStructureAttributeNumerical sets an attribute of the current structural element
     to a new numerical value. A consistency check is performed before actually setting
-    the value; if the check fails, the function returns <sal_False/> and the attribute
+    the value; if the check fails, the function returns <FALSE/> and the attribute
     remains unchanged.
 
     @param eAttr
@@ -1189,8 +1189,8 @@ The following structure describes the permissions used in PDF security
     the value to set the attribute to
 
     @returns
-    <sal_True/> if the value was valid and the change has been performed,
-    <sal_False/> if the attribute or value was invalid; attribute remains unchanged
+    <TRUE/> if the value was valid and the change has been performed,
+    <FALSE/> if the attribute or value was invalid; attribute remains unchanged
      */
     bool SetStructureAttributeNumerical( enum StructAttribute eAttr, sal_Int32 nValue );
     /** set the bounding box of a structural element

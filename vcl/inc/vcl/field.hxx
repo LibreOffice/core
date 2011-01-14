@@ -400,14 +400,14 @@ public:
 
     /** enables or disables the enforcement of valid values
 
-        If this is set to <sal_True/> (which is the default), then GetDate will always return a valid
+        If this is set to <TRUE/> (which is the default), then GetDate will always return a valid
         date, no matter whether the current text can really be interpreted as date. (Note: this
         is the compatible bahavior).
 
-        If this is set to <sal_False/>, the GetDate will return GetInvalidDate, in case the current text
+        If this is set to <FALSE/>, the GetDate will return GetInvalidDate, in case the current text
         cannot be interpreted as date.
 
-        In addition, if this is set to <sal_False/>, the text in the field will <em>not</em> be corrected
+        In addition, if this is set to <FALSE/>, the text in the field will <em>not</em> be corrected
         when the control loses the focus - instead, the invalid input will be preserved.
     */
     void                    EnforceValidValue( sal_Bool _bEnforce ) { mbEnforceValidValue = _bEnforce; }
@@ -484,14 +484,14 @@ public:
 
     /** enables or disables the enforcement of valid values
 
-        If this is set to <sal_True/> (which is the default), then GetTime will always return a valid
+        If this is set to <TRUE/> (which is the default), then GetTime will always return a valid
         time, no matter whether the current text can really be interpreted as time. (Note: this
         is the compatible bahavior).
 
-        If this is set to <sal_False/>, the GetTime will return GetInvalidTime, in case the current text
+        If this is set to <FALSE/>, the GetTime will return GetInvalidTime, in case the current text
         cannot be interpreted as time.
 
-        In addition, if this is set to <sal_False/>, the text in the field will <em>not</em> be corrected
+        In addition, if this is set to <FALSE/>, the text in the field will <em>not</em> be corrected
         when the control loses the focus - instead, the invalid input will be preserved.
     */
     void                    EnforceValidValue( sal_Bool _bEnforce ) { mbEnforceValidValue = _bEnforce; }

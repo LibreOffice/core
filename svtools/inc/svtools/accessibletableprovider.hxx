@@ -83,9 +83,9 @@ public:
         @param _nColumn The column which description is in demand. */
     virtual ::rtl::OUString         GetColumnDescription( sal_uInt16 _nColumnPos ) const = 0;
 
-    /** @return  <sal_True/>, if the object has a row header. */
+    /** @return  <TRUE/>, if the object has a row header. */
     virtual sal_Bool                HasRowHeader() const = 0; //GetColumnId
-    /** @return  <sal_True/>, if the object can focus a cell. */
+    /** @return  <TRUE/>, if the object can focus a cell. */
     virtual sal_Bool                IsCellFocusable() const = 0;
     virtual sal_Bool                GoToCell( sal_Int32 _nRow, sal_uInt16 _nColumnPos ) = 0;
 
@@ -95,13 +95,13 @@ public:
     virtual void                    SelectColumn( sal_uInt16 _nColumnPos, sal_Bool _bSelect = sal_True ) = 0;
     virtual sal_Int32               GetSelectedRowCount() const = 0;
     virtual sal_Int32               GetSelectedColumnCount() const = 0;
-    /** @return  <sal_True/>, if the row is selected. */
+    /** @return  <TRUE/>, if the row is selected. */
     virtual bool                    IsRowSelected( long _nRow ) const = 0;
     virtual sal_Bool                IsColumnSelected( long _nColumnPos ) const = 0;
     virtual void                    GetAllSelectedRows( ::com::sun::star::uno::Sequence< sal_Int32 >& _rRows ) const = 0;
     virtual void                    GetAllSelectedColumns( ::com::sun::star::uno::Sequence< sal_Int32 >& _rColumns ) const = 0;
 
-    /** @return  <sal_True/>, if the cell is visible. */
+    /** @return  <TRUE/>, if the cell is visible. */
     virtual sal_Bool                IsCellVisible( sal_Int32 _nRow, sal_uInt16 _nColumnPos ) const = 0;
     virtual String                  GetAccessibleCellText( long _nRow, sal_uInt16 _nColumnPos ) const = 0;
 
@@ -189,7 +189,7 @@ public:
     virtual void dispose() = 0;
 
     /** checks whether the accessible implementation, and its context, are still alive
-        @return  <sal_True/>, if the object is not disposed or disposing.
+        @return  <TRUE/>, if the object is not disposed or disposing.
     */
     virtual sal_Bool isAlive() const = 0;
 

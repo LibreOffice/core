@@ -60,8 +60,8 @@ namespace utl
                      configuration path, this is set to <var>_sInPath</var>.
 
         @returns
-            <sal_True/>,  if a parent path could be set
-            <sal_False/>, if the path was a one-level path or an invalid path
+            <TRUE/>,  if a parent path could be set
+            <FALSE/>, if the path was a one-level path or an invalid path
 
     */
     UNOTOOLS_DLLPUBLIC sal_Bool splitLastFromConfigurationPath(::rtl::OUString const& _sInPath,
@@ -105,9 +105,9 @@ namespace utl
             which is disregarded.
 
         @returns
-            <sal_True/>, if <var>_sPrefixPath</var> is  a prefix of <var>_sNestedPath</var>;
-            <sal_False/> otherwise.<BR/>
-            If both pathes are equal <sal_True/> is returned.
+            <TRUE/>, if <var>_sPrefixPath</var> is  a prefix of <var>_sNestedPath</var>;
+            <FALSE/> otherwise.<BR/>
+            If both pathes are equal <TRUE/> is returned.
 
     */
     sal_Bool isPrefixOfConfigurationPath(::rtl::OUString const& _sNestedPath,

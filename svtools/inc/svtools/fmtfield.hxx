@@ -231,14 +231,14 @@ public:
 
     /** enables handling of not-a-number value.
 
-        When this is set to <sal_False/> (the default), then invalid inputs (i.e. text which cannot be
+        When this is set to <FALSE/> (the default), then invalid inputs (i.e. text which cannot be
         intepreted, according to the current formatting) will be handled as if the default value
         has been entered. GetValue the will return this default value.
 
-        When set to <sal_True/>, then GetValue will return NaN (not a number, see <method scope="rtl::math">isNan</method>)
+        When set to <TRUE/>, then GetValue will return NaN (not a number, see <method scope="rtl::math">isNan</method>)
         when the current input is invalid.
 
-        Note that setting this to <sal_True/> implies that upon leaving the control, the input
+        Note that setting this to <TRUE/> implies that upon leaving the control, the input
         will *not* be corrected to a valid value. For example, if the user enters "foo" in the
         control, and then tabs out of it, the text "foo" will persist, and GetValue will
         return NaN in subsequent calls.

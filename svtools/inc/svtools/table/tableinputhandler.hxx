@@ -52,9 +52,9 @@ namespace svt { namespace table
     public:
         // all those methods have the same semantics as the equal-named methods of ->Window,
         // with the additional option to return a boolean value indicating whether
-        // the event should be further processed by the ->Window implementations (<sal_False/>),
+        // the event should be further processed by the ->Window implementations (<FALSE/>),
         // or whether it has been sufficiently handled by the ->ITableInputHandler instance
-        // (<sal_False/>).
+        // (<FALSE/>).
 
         virtual bool    MouseMove       ( IAbstractTableControl& _rControl, const MouseEvent& rMEvt ) = 0;
         virtual bool    MouseButtonDown ( IAbstractTableControl& _rControl, const MouseEvent& rMEvt ) = 0;

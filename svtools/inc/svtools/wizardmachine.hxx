@@ -85,7 +85,7 @@ namespace svt
             You should make this dependent on the current state of the page only, not on
             states on other pages of the whole dialog.
 
-            The default implementation always returns <sal_True/>.
+            The default implementation always returns <TRUE/>.
         */
         virtual bool    canAdvance() const = 0;
     };
@@ -231,7 +231,7 @@ namespace svt
             @param _eReason
                 The reason why the state is to be left.
             @return
-                <sal_True/> if and only if the page is allowed to be left
+                <TRUE/> if and only if the page is allowed to be left
         */
         virtual sal_Bool    prepareLeaveCurrentState( CommitPageReason _eReason );
 
@@ -245,7 +245,7 @@ namespace svt
             changing this return type is too incompatible at the moment ...
 
             @return
-                <sal_True/> if and only if the page is allowed to be left
+                <TRUE/> if and only if the page is allowed to be left
         */
         virtual sal_Bool    leaveState( WizardState _nState );
 
@@ -270,7 +270,7 @@ namespace svt
 
         /** enables the automatic enabled/disabled state of the "Next" button
 
-            If this is <sal_True/>, then upon entering a new state, the "Next" button will automatically be
+            If this is <TRUE/>, then upon entering a new state, the "Next" button will automatically be
             enabled if and only if determineNextState does not return WZS_INVALID_STATE.
         */
         void                enableAutomaticNextButtonState( bool _bEnable = true );
@@ -292,7 +292,7 @@ namespace svt
             method is able to determine the next state without actually having the page of the current state.
 
             @return
-                <sal_True/> if and only if traveling was successfull
+                <TRUE/> if and only if traveling was successfull
 
             @see skipUntil
             @see skipBackwardUntil
@@ -308,7 +308,7 @@ namespace svt
             The skipped states appear in the state history, so <method>travelPrevious</method> will make use of them.
 
             @return
-                <sal_True/> if and only if traveling was successfull
+                <TRUE/> if and only if traveling was successfull
 
             @see skip
             @see skipBackwardUntil
@@ -326,7 +326,7 @@ namespace svt
             you from this.
 
             @return
-                <sal_True/> if and only if traveling was successfull
+                <TRUE/> if and only if traveling was successfull
 
             @see skipUntil
             @see skip

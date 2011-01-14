@@ -410,7 +410,7 @@ public:
             ::com::sun::star::i18n::NativeNumberXmlAttributes& rAttr,
             sal_uInt16 nNumFor ) const;
 
-    /** @returns <sal_True/> if E,EE,R,RR,AAA,AAAA in format code of subformat
+    /** @returns <TRUE/> if E,EE,R,RR,AAA,AAAA in format code of subformat
         nNumFor (0..3) and <b>no</b> preceding calendar was specified and the
         currently loaded calendar is "gregorian". */
     sal_Bool IsOtherCalendar( sal_uInt16 nNumFor ) const
@@ -436,8 +436,8 @@ public:
         calendar switched and rOrgCalendar was empty.
 
         @return
-            <sal_True/> if a calendar was specified and switched to,
-            <sal_False/> else.
+            <TRUE/> if a calendar was specified and switched to,
+            <FALSE/> else.
      */
     sal_Bool SwitchToSpecifiedCalendar( String& rOrgCalendar, double& fOrgDateTime,
             sal_uInt16 nNumFor ) const

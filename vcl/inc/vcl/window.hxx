@@ -501,8 +501,8 @@ public:
     the font to be tested
 
     @returns
-    <sal_True/> if the font can be used as UI font
-    <sal_False/> if the font is unsuitable as UI font
+    <TRUE/> if the font can be used as UI font
+    <FALSE/> if the font is unsuitable as UI font
      */
     SAL_DLLPRIVATE bool        ImplCheckUIFont( const Font& rFont );
     SAL_DLLPRIVATE void        ImplUpdateGlobalSettings( AllSettings& rSettings, sal_Bool bCallHdl = sal_True );

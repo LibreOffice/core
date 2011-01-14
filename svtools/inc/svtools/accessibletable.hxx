@@ -149,7 +149,7 @@ public:
     virtual void dispose() = 0;
 
     /** checks whether the accessible implementation, and its context, are still alive
-        @return  <sal_True/>, if the object is not disposed or disposing.
+        @return  <TRUE/>, if the object is not disposed or disposing.
     */
     virtual sal_Bool isAlive() const = 0;
 

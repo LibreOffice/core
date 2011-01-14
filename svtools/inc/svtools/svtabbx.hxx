@@ -198,9 +198,9 @@ public:
         @param _nColumn The column which description is in demand. */
     virtual ::rtl::OUString         GetColumnDescription( sal_uInt16 _nColumn ) const;
 
-    /** @return  <sal_True/>, if the object has a row header. */
+    /** @return  <TRUE/>, if the object has a row header. */
     virtual sal_Bool                HasRowHeader() const; //GetColumnId
-    /** @return  <sal_True/>, if the object can focus a cell. */
+    /** @return  <TRUE/>, if the object can focus a cell. */
     virtual sal_Bool                IsCellFocusable() const;
     virtual sal_Bool                GoToCell( sal_Int32 _nRow, sal_uInt16 _nColumn );
 
@@ -212,13 +212,13 @@ public:
     virtual void                    SelectColumn( sal_uInt16 _nColumn, sal_Bool _bSelect = sal_True );
     virtual sal_Int32               GetSelectedRowCount() const;
     virtual sal_Int32               GetSelectedColumnCount() const;
-    /** @return  <sal_True/>, if the row is selected. */
+    /** @return  <TRUE/>, if the row is selected. */
     virtual bool                    IsRowSelected( long _nRow ) const;
     virtual sal_Bool                IsColumnSelected( long _nColumn ) const;
     virtual void                    GetAllSelectedRows( ::com::sun::star::uno::Sequence< sal_Int32 >& _rRows ) const;
     virtual void                    GetAllSelectedColumns( ::com::sun::star::uno::Sequence< sal_Int32 >& _rColumns ) const;
 
-    /** @return  <sal_True/>, if the cell is visible. */
+    /** @return  <TRUE/>, if the cell is visible. */
     virtual sal_Bool                IsCellVisible( sal_Int32 _nRow, sal_uInt16 _nColumn ) const;
     virtual String                  GetAccessibleCellText( long _nRow, sal_uInt16 _nColumnPos ) const;
 

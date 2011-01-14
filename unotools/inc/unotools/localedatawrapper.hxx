@@ -262,14 +262,14 @@ public:
                                         0 := abbreviated name
                                         1 := full name
                                     @param bDayOfMonthWithLeadingZero
-                                        <sal_False/> := without leading zero
-                                        <sal_True/>  := with leading zero if <10
+                                        <FALSE/> := without leading zero
+                                        <TRUE/>  := with leading zero if <10
                                     @param nDisplayMonth
                                         0 := abbreviated name
                                         1 := full name
                                     @param bTwoDigitYear
-                                        <sal_False/> := full year
-                                        <sal_True/>  := year % 100
+                                        <FALSE/> := full year
+                                        <TRUE/>  := year % 100
                                  */
             String              getLongDate( const Date& rDate,
                                     CalendarWrapper& rCal,

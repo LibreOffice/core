@@ -686,9 +686,9 @@ public:
 
     /** returns the Rectangle for either the column header bar ot the row header bar
         @param  _bIsColumnBar
-            <sal_True/> when column header bar is used
+            <TRUE/> when column header bar is used
         @param  _bOnScreen
-            <sal_True/> when the rectangle should be calculated OnScreen
+            <TRUE/> when the rectangle should be calculated OnScreen
         @return
             the Rectangle
     */
@@ -696,7 +696,7 @@ public:
 
     /** calculates the Rectangle of the table
         @param  _bOnScreen
-            <sal_True/> when the rectangle should be calculated OnScreen
+            <TRUE/> when the rectangle should be calculated OnScreen
         @return
             the Rectangle
     */
@@ -708,13 +708,13 @@ public:
         @param  _nColId
             teh column id
         @param  _bOnScreen
-            <sal_True/> when the rectangle should be calculated OnScreen
+            <TRUE/> when the rectangle should be calculated OnScreen
         @return
             the Rectangle
     */
     virtual Rectangle GetFieldRectPixelAbs(sal_Int32 _nRowId,sal_uInt16 _nColId, sal_Bool _bIsHeader, sal_Bool _bOnScreen = sal_True);
 
-    /// return <sal_True/> if and only if the accessible object for this instance has been created and is alive
+    /// return <TRUE/> if and only if the accessible object for this instance has been created and is alive
     sal_Bool isAccessibleAlive( ) const;
 
     // ACCESSIBILITY ==========================================================
@@ -763,7 +763,7 @@ public:
         @param rnRow  Out-paramater that takes the row index.
         @param rnColumnId  Out-paramater that takes the column ID.
         @param rPoint  The position in pixels relative to the data window.
-        @return <sal_True/>, if the point could be converted to a valid address. */
+        @return <TRUE/>, if the point could be converted to a valid address. */
     virtual sal_Bool ConvertPointToCellAddress(
         sal_Int32& rnRow, sal_uInt16& rnColumnId, const Point& rPoint );
 
@@ -771,21 +771,21 @@ public:
         index.
         @param rnRow  Out-paramater that takes the row index.
         @param rPoint  The position in pixels relative to the header bar.
-        @return <sal_True/>, if the point could be converted to a valid index. */
+        @return <TRUE/>, if the point could be converted to a valid index. */
     virtual sal_Bool ConvertPointToRowHeader( sal_Int32& rnRow, const Point& rPoint );
 
     /** Converts a point relative to the column header bar origin to a column
         header index.
         @param rnColumnId  Out-paramater that takes the column ID.
         @param rPoint  The position in pixels relative to the header bar.
-        @return <sal_True/>, if the point could be converted to a valid index. */
+        @return <TRUE/>, if the point could be converted to a valid index. */
     virtual sal_Bool ConvertPointToColumnHeader( sal_uInt16& rnColumnPos, const Point& rPoint );
 
     /** Converts a point relative to the BrowseBox origin to the index of an
         existing control.
         @param rnRow  Out-paramater that takes the 0-based control index.
         @param rPoint  The position in pixels relative to the BrowseBox.
-        @return <sal_True/>, if the point could be converted to a valid index. */
+        @return <TRUE/>, if the point could be converted to a valid index. */
     virtual sal_Bool ConvertPointToControlIndex( sal_Int32& rnIndex, const Point& rPoint );
 
     // Object data and state --------------------------------------------------

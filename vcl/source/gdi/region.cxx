@@ -78,7 +78,7 @@ DBG_NAMEEX( PolyPolygon )
 
 namespace {
 
-/** Return <sal_True/> when the given polygon is rectiliner and oriented so that
+/** Return <TRUE/> when the given polygon is rectiliner and oriented so that
     all sides are either horizontal or vertical.
 */
 bool ImplIsPolygonRectilinear (const PolyPolygon& rPolyPoly)
@@ -278,7 +278,7 @@ ImplRegion* ImplRectilinearPolygonToBands (const PolyPolygon& rPolyPoly)
 
 
 /** Convert a general polygon (one for which ImplIsPolygonRectilinear()
-    returns <sal_False/>) to bands.
+    returns <FALSE/>) to bands.
 */
 ImplRegion* ImplGeneralPolygonToBands (
     const PolyPolygon& rPolyPoly,
