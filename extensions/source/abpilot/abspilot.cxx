@@ -140,7 +140,7 @@ namespace abp
     //---------------------------------------------------------------------
     String OAddessBookSourcePilot::getStateDisplayName( WizardState _nState ) const
     {
-        USHORT nResId = 0;
+        sal_uInt16 nResId = 0;
         switch ( _nState )
         {
             case STATE_SELECT_ABTYPE:        nResId = STR_SELECT_ABTYPE; break;
@@ -205,7 +205,7 @@ namespace abp
     }
 
     //---------------------------------------------------------------------
-    BOOL OAddessBookSourcePilot::Close()
+    sal_Bool OAddessBookSourcePilot::Close()
     {
         implCleanup();
 

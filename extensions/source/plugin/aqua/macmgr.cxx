@@ -580,7 +580,7 @@ static rtl::OUString FindFolderURL(  FSVolumeRefNum vRefNum, OSType folderType )
 Sequence<PluginDescription> XPluginManager_Impl::impl_getPluginDescriptions() throw()
 {
     static Sequence<PluginDescription> aDescriptions;
-    static BOOL bHavePlugins = FALSE;
+    static sal_Bool bHavePlugins = sal_False;
     if( ! bHavePlugins )
     {
         std::list<PluginDescription*> aPlugins;
@@ -639,7 +639,7 @@ Sequence<PluginDescription> XPluginManager_Impl::impl_getPluginDescriptions() th
             delete *iter;
         }
         aPlugins.clear();
-        bHavePlugins = TRUE;
+        bHavePlugins = sal_True;
     }
     return aDescriptions;
 }

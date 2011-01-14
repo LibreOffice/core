@@ -779,7 +779,7 @@ namespace pcr
 
                 // font style
                 ::FontWeight  eWeight = VCLUnoHelper::ConvertFontWeight( aFont.Weight );
-                USHORT nStyleResID = RID_STR_FONTSTYLE_REGULAR;
+                sal_uInt16 nStyleResID = RID_STR_FONTSTYLE_REGULAR;
                 if ( aFont.Slant == FontSlant_ITALIC )
                 {
                     if ( eWeight > WEIGHT_NORMAL )
@@ -1256,7 +1256,7 @@ namespace pcr
         // boolean values
         if ( eType == TypeClass_BOOLEAN )
         {
-            USHORT nResId = RID_RSC_ENUM_YESNO;
+            sal_uInt16 nResId = RID_RSC_ENUM_YESNO;
             if  (   ( nPropId == PROPERTY_ID_SHOW_POSITION )
                 ||  ( nPropId == PROPERTY_ID_SHOW_NAVIGATION )
                 ||  ( nPropId == PROPERTY_ID_SHOW_RECORDACTIONS )

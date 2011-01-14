@@ -281,7 +281,7 @@ namespace pcr
 
         getTypedControlWindow()->SetFormatter( getTypedControlWindow()->StandardFormatter() );
         SvNumberFormatter* pFormatter = getTypedControlWindow()->GetFormatter();
-        ULONG nStandardDateTimeFormat = pFormatter->GetStandardFormat( NUMBERFORMAT_DATETIME, eSysLanguage );
+        sal_uLong nStandardDateTimeFormat = pFormatter->GetStandardFormat( NUMBERFORMAT_DATETIME, eSysLanguage );
 
         getTypedControlWindow()->SetFormatKey( nStandardDateTimeFormat );
     }
@@ -715,8 +715,8 @@ namespace pcr
         getTypedControlWindow()->SetDropDownLineCount( LB_DEFAULT_COUNT );
         if ( ( nWinStyle & WB_READONLY ) != 0 )
         {
-            getTypedControlWindow()->SetReadOnly( TRUE );
-            getTypedControlWindow()->Enable( TRUE );
+            getTypedControlWindow()->SetReadOnly( sal_True );
+            getTypedControlWindow()->Enable( sal_True );
         }
     }
 
@@ -824,8 +824,8 @@ namespace pcr
         getTypedControlWindow()->SetDropDownLineCount( LB_DEFAULT_COUNT );
         if ( ( nWinStyle & WB_READONLY ) != 0 )
         {
-            getTypedControlWindow()->SetReadOnly( TRUE );
-            getTypedControlWindow()->Enable( TRUE );
+            getTypedControlWindow()->SetReadOnly( sal_True );
+            getTypedControlWindow()->Enable( sal_True );
         }
     }
 
@@ -887,10 +887,10 @@ namespace pcr
     //------------------------------------------------------------------
     Sequence< ::rtl::OUString > SAL_CALL OListboxControl::getListEntries(  ) throw (RuntimeException)
     {
-        const USHORT nCount = getTypedControlWindow()->GetEntryCount();
+        const sal_uInt16 nCount = getTypedControlWindow()->GetEntryCount();
         Sequence< ::rtl::OUString > aRet(nCount);
         ::rtl::OUString* pIter = aRet.getArray();
-        for (USHORT i = 0; i < nCount ; ++i,++pIter)
+        for (sal_uInt16 i = 0; i < nCount ; ++i,++pIter)
             *pIter = getTypedControlWindow()->GetEntry(i);
 
         return aRet;
@@ -957,10 +957,10 @@ namespace pcr
     //------------------------------------------------------------------
     Sequence< ::rtl::OUString > SAL_CALL OComboboxControl::getListEntries(  ) throw (RuntimeException)
     {
-        const USHORT nCount = getTypedControlWindow()->GetEntryCount();
+        const sal_uInt16 nCount = getTypedControlWindow()->GetEntryCount();
         Sequence< ::rtl::OUString > aRet(nCount);
         ::rtl::OUString* pIter = aRet.getArray();
-        for (USHORT i = 0; i < nCount ; ++i,++pIter)
+        for (sal_uInt16 i = 0; i < nCount ; ++i,++pIter)
             *pIter = getTypedControlWindow()->GetEntry(i);
 
         return aRet;
@@ -1050,7 +1050,7 @@ namespace pcr
         ,m_nOperationMode( eStringList )
         ,m_bDropdown( sal_False )
     {
-        SetCompoundControl( TRUE );
+        SetCompoundControl( sal_True );
 
         m_pImplEdit = new MultiLineEdit( this, WB_TABSTOP | WB_IGNORETAB | WB_NOBORDER | (_nStyle & WB_READONLY) );
         SetSubEdit( m_pImplEdit );

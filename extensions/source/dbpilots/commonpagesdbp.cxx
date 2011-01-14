@@ -147,7 +147,7 @@ namespace dbp
 
             // search the entry of the given type with the given name
             XubString sLookup( sCommand );
-            for ( USHORT nLookup = 0; nLookup < m_aTable.GetEntryCount(); ++nLookup )
+            for ( sal_uInt16 nLookup = 0; nLookup < m_aTable.GetEntryCount(); ++nLookup )
             {
                 if ( m_aTable.GetEntry( nLookup ) == sLookup )
                     if ( reinterpret_cast< sal_IntPtr >( m_aTable.GetEntryData( nLookup ) ) == nCommandType )

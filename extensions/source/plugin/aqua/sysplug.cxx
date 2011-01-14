@@ -270,10 +270,10 @@ MacPluginComm::~MacPluginComm()
 }
 
 //--------------------------------------------------------------------------------------------------
-BOOL MacPluginComm::retrieveFunction( const char* i_pName, void** o_ppFunc ) const
+sal_Bool MacPluginComm::retrieveFunction( const char* i_pName, void** o_ppFunc ) const
 {
     if( ! m_hPlugLib || ! o_ppFunc )
-        return FALSE;
+        return sal_False;
 
     *o_ppFunc = (void*)osl_getAsciiFunctionSymbol( m_hPlugLib, i_pName );
 

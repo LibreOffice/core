@@ -94,7 +94,7 @@ IMPL_LINK( PluginConnector, WorkOnNewMessageHdl, Mediator*, /*pMediator*/ )
 
     MediatorMessage* pMessage;
     CommandAtoms nCommand;
-    while( (pMessage = GetNextMessage( FALSE )) )
+    while( (pMessage = GetNextMessage( sal_False )) )
     {
         nCommand = (CommandAtoms)pMessage->GetUINT32();
         medDebug( 1, "%s\n", GetCommandName( nCommand ) );
@@ -102,7 +102,7 @@ IMPL_LINK( PluginConnector, WorkOnNewMessageHdl, Mediator*, /*pMediator*/ )
         {
             case eNPN_GetURL:
             {
-                UINT32 nInstance    = pMessage->GetUINT32();
+                sal_uInt32 nInstance    = pMessage->GetUINT32();
                 NPP instance        = m_aInstances[ nInstance ]->instance;
                 char* pUrl          = pMessage->GetString();
                 char* pWindow       = pMessage->GetString();
@@ -115,7 +115,7 @@ IMPL_LINK( PluginConnector, WorkOnNewMessageHdl, Mediator*, /*pMediator*/ )
             break;
             case eNPN_GetURLNotify:
             {
-                UINT32 nInstance    = pMessage->GetUINT32();
+                sal_uInt32 nInstance    = pMessage->GetUINT32();
                 NPP instance        = m_aInstances[ nInstance ]->instance;
                 char* pUrl          = pMessage->GetString();
                 char* pWindow       = pMessage->GetString();
@@ -131,13 +131,13 @@ IMPL_LINK( PluginConnector, WorkOnNewMessageHdl, Mediator*, /*pMediator*/ )
             break;
             case eNPN_DestroyStream:
             {
-                UINT32 nInstance    = pMessage->GetUINT32();
+                sal_uInt32 nInstance    = pMessage->GetUINT32();
                 NPP instance        = m_aInstances[ nInstance ]->instance;
-                UINT32 nFileID      = pMessage->GetUINT32();
+                sal_uInt32 nFileID      = pMessage->GetUINT32();
                 char* pUrl          = pMessage->GetString();
                 NPError* pReason    = (NPError*)pMessage->GetBytes();
                 NPError aRet = NPERR_FILE_NOT_FOUND;
-                if( nFileID < static_cast<UINT32>(m_aNPWrapStreams.size()) )
+                if( nFileID < static_cast<sal_uInt32>(m_aNPWrapStreams.size()) )
                 {
                     if( ! strcmp( m_aNPWrapStreams[ nFileID ]->url, pUrl ) )
                     {
@@ -162,7 +162,7 @@ IMPL_LINK( PluginConnector, WorkOnNewMessageHdl, Mediator*, /*pMediator*/ )
             break;
             case eNPN_NewStream:
             {
-                UINT32 nInstance    = pMessage->GetUINT32();
+                sal_uInt32 nInstance    = pMessage->GetUINT32();
                 NPP instance        = m_aInstances[ nInstance ]->instance;
                 NPMIMEType pType    = pMessage->GetString();
                 char* pTarget       = pMessage->GetString();
@@ -173,24 +173,24 @@ IMPL_LINK( PluginConnector, WorkOnNewMessageHdl, Mediator*, /*pMediator*/ )
 
                 if( aRet != NPERR_NO_ERROR )
                 {
-                    UINT32 nDummy = 0;
+                    sal_uInt32 nDummy = 0;
                     Respond( pMessage->m_nID,
                              (char*)&aRet, sizeof( aRet ),
                              "", 0,
-                             &nDummy, sizeof(UINT32),
-                             &nDummy, sizeof(UINT32),
+                             &nDummy, sizeof(sal_uInt32),
+                             &nDummy, sizeof(sal_uInt32),
                              NULL );
                 }
                 else
                 {
                     m_aNPWrapStreams.push_back( pStream );
 
-                    ULONG nLen = strlen( pStream->url );
+                    sal_uLong nLen = strlen( pStream->url );
                     Respond( pMessage->m_nID,
                              (char*)&aRet, sizeof( aRet ),
                              pStream->url, nLen,
-                             &pStream->end, sizeof(UINT32),
-                             &pStream->lastmodified, sizeof(UINT32),
+                             &pStream->end, sizeof(sal_uInt32),
+                             &pStream->lastmodified, sizeof(sal_uInt32),
                              NULL );
                 }
 
@@ -200,11 +200,11 @@ IMPL_LINK( PluginConnector, WorkOnNewMessageHdl, Mediator*, /*pMediator*/ )
             break;
             case eNPN_PostURLNotify:
             {
-                UINT32 nInstance    = pMessage->GetUINT32();
+                sal_uInt32 nInstance    = pMessage->GetUINT32();
                 NPP instance        = m_aInstances[ nInstance ]->instance;
                 char* pUrl      = pMessage->GetString();
                 char* pTarget   = pMessage->GetString();
-                UINT32 nLen     = pMessage->GetUINT32();
+                sal_uInt32 nLen     = pMessage->GetUINT32();
                 char* pBuf      = (char*)pMessage->GetBytes();
                 NPBool* pFile   = (NPBool*)pMessage->GetBytes();
                 void** pNData   = (void**)pMessage->GetBytes();
@@ -220,11 +220,11 @@ IMPL_LINK( PluginConnector, WorkOnNewMessageHdl, Mediator*, /*pMediator*/ )
             break;
             case eNPN_PostURL:
             {
-                UINT32 nInstance    = pMessage->GetUINT32();
+                sal_uInt32 nInstance    = pMessage->GetUINT32();
                 NPP instance        = m_aInstances[ nInstance ]->instance;
                 char* pUrl      = pMessage->GetString();
                 char* pWindow   = pMessage->GetString();
-                UINT32 nLen     = pMessage->GetUINT32();
+                sal_uInt32 nLen     = pMessage->GetUINT32();
                 char* pBuf      = (char*)pMessage->GetBytes();
                 NPBool* pFile   = (NPBool*)pMessage->GetBytes();
                 NPError aRet =
@@ -238,14 +238,14 @@ IMPL_LINK( PluginConnector, WorkOnNewMessageHdl, Mediator*, /*pMediator*/ )
             break;
             case eNPN_RequestRead:
             {
-                UINT32 nFileID      = pMessage->GetUINT32();
+                sal_uInt32 nFileID      = pMessage->GetUINT32();
                 NPStream* pStream   = m_aNPWrapStreams[ nFileID ];
-                UINT32 nRanges      = pMessage->GetUINT32();
-                UINT32* pArray      = (UINT32*)pMessage->GetBytes();
+                sal_uInt32 nRanges      = pMessage->GetUINT32();
+                sal_uInt32* pArray      = (sal_uInt32*)pMessage->GetBytes();
                 // build ranges table
                 NPByteRange* pFirst = new NPByteRange;
                 NPByteRange* pRun   = pFirst;
-                for( UINT32 n = 0; n < nRanges; n++ )
+                for( sal_uInt32 n = 0; n < nRanges; n++ )
                 {
                     pRun->offset = pArray[ 2*n ];
                     pRun->length = pArray[ 2*n+1 ];
@@ -265,7 +265,7 @@ IMPL_LINK( PluginConnector, WorkOnNewMessageHdl, Mediator*, /*pMediator*/ )
             break;
             case eNPN_Status:
             {
-                UINT32 nInstance    = pMessage->GetUINT32();
+                sal_uInt32 nInstance    = pMessage->GetUINT32();
                 NPP instance        = m_aInstances[ nInstance ]->instance;
                 char* pString   = pMessage->GetString();
                 NPN_Status( instance, pString );
@@ -286,13 +286,13 @@ IMPL_LINK( PluginConnector, WorkOnNewMessageHdl, Mediator*, /*pMediator*/ )
             break;
             case eNPN_Write:
             {
-                UINT32 nInstance    = pMessage->GetUINT32();
+                sal_uInt32 nInstance    = pMessage->GetUINT32();
                 NPP instance        = m_aInstances[ nInstance ]->instance;
-                UINT32 nFileID      = pMessage->GetUINT32();
+                sal_uInt32 nFileID      = pMessage->GetUINT32();
                 NPStream* pStream   = m_aNPWrapStreams[ nFileID ];
-                INT32 nLen          = pMessage->GetUINT32();
+                sal_Int32 nLen          = pMessage->GetUINT32();
                 void* pBuffer       = pMessage->GetBytes();
-                INT32 nRet = NPN_Write( instance, pStream, nLen, pBuffer );
+                sal_Int32 nRet = NPN_Write( instance, pStream, nLen, pBuffer );
                 Respond( pMessage->m_nID,
                          (char*)&nRet, sizeof( nRet ),
                          NULL );
@@ -302,7 +302,7 @@ IMPL_LINK( PluginConnector, WorkOnNewMessageHdl, Mediator*, /*pMediator*/ )
             break;
             case eNPN_UserAgent:
             {
-                UINT32 nInstance    = pMessage->GetUINT32();
+                sal_uInt32 nInstance    = pMessage->GetUINT32();
                 NPP instance        = m_aInstances[ nInstance ]->instance;
                 const char* pAnswer = NPN_UserAgent( instance );
                 Respond( pMessage->m_nID,
@@ -320,7 +320,7 @@ IMPL_LINK( PluginConnector, WorkOnNewMessageHdl, Mediator*, /*pMediator*/ )
 }
 
 #define GET_INSTANCE() \
-    UINT32 nInstance;  \
+    sal_uInt32 nInstance;  \
     nInstance = GetNPPID( instance );
 
 #define GET_INSTANCE_RET( err ) \
@@ -350,9 +350,9 @@ NPError UnxPluginComm::NPP_Destroy( NPP instance, NPSavedData** save )
         return NPERR_GENERIC_ERROR;
 
     aRet = GetNPError( pMes );
-    ULONG nSaveBytes;
+    sal_uLong nSaveBytes;
     void* pSaveData = pMes->GetBytes( nSaveBytes );
-    if( nSaveBytes == 4 && *(UINT32*)pSaveData == 0 )
+    if( nSaveBytes == 4 && *(sal_uInt32*)pSaveData == 0 )
         *save = NULL;
     else
     {
@@ -369,7 +369,7 @@ NPError UnxPluginComm::NPP_DestroyStream( NPP instance, NPStream* stream, NPErro
 {
     NPError aRet = NPERR_GENERIC_ERROR;
     GET_INSTANCE_RET( aRet );
-    UINT32 nFileID = GetStreamID( stream );
+    sal_uInt32 nFileID = GetStreamID( stream );
     if( nFileID == PluginConnector::UnknownStreamID )
         return NPERR_GENERIC_ERROR;
 
@@ -526,7 +526,7 @@ void UnxPluginComm::NPP_Shutdown()
 void UnxPluginComm::NPP_StreamAsFile( NPP instance, NPStream* stream, const char* fname )
 {
     GET_INSTANCE();
-    UINT32 nFileID = GetStreamID( stream );
+    sal_uInt32 nFileID = GetStreamID( stream );
     if( nFileID == PluginConnector::UnknownStreamID )
         return;
 
@@ -552,7 +552,7 @@ void UnxPluginComm::NPP_URLNotify( NPP instance, const char* url, NPReason reaso
 int32 UnxPluginComm::NPP_Write( NPP instance, NPStream* stream, int32 offset, int32 len, void* buffer )
 {
     GET_INSTANCE_RET( -1 );
-    UINT32 nFileID = GetStreamID( stream );
+    sal_uInt32 nFileID = GetStreamID( stream );
     if( nFileID == PluginConnector::UnknownStreamID )
         return -1;
 
@@ -575,7 +575,7 @@ int32 UnxPluginComm::NPP_Write( NPP instance, NPStream* stream, int32 offset, in
 int32 UnxPluginComm::NPP_WriteReady( NPP instance, NPStream* stream )
 {
     GET_INSTANCE_RET( -1 );
-    UINT32 nFileID = GetStreamID( stream );
+    sal_uInt32 nFileID = GetStreamID( stream );
     if( nFileID == PluginConnector::UnknownStreamID )
         return -1;
 

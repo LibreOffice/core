@@ -43,14 +43,14 @@
 
 struct MediatorMessage
 {
-    ULONG   m_nID;
-    ULONG   m_nBytes;
+    sal_uLong   m_nID;
+    sal_uLong   m_nBytes;
     char*   m_pBytes;
     char*   m_pRun;
 
     MediatorMessage() : m_nID( 0 ), m_nBytes( 0 ),
         m_pBytes( NULL ), m_pRun( NULL ) {}
-    MediatorMessage( ULONG nID, ULONG nBytes, char* pBytes ) :
+    MediatorMessage( sal_uLong nID, sal_uLong nBytes, char* pBytes ) :
             m_nID( nID ),m_nBytes( nBytes ), m_pRun( NULL )
         {
             m_pBytes = new char[ m_nBytes ];
@@ -63,7 +63,7 @@ struct MediatorMessage
                 delete [] m_pBytes;
         }
 
-    void Set( ULONG nBytes, char* pBytes )
+    void Set( sal_uLong nBytes, char* pBytes )
         {
             if( m_pBytes )
                 delete [] m_pBytes;
@@ -72,11 +72,11 @@ struct MediatorMessage
             memcpy( m_pBytes, pBytes, (size_t)m_nBytes );
         }
 
-    ULONG   ExtractULONG();
+    sal_uLong   ExtractULONG();
     char*   GetString();
-    UINT32  GetUINT32();
-    void*   GetBytes( ULONG& );
-    void*   GetBytes() { ULONG nBytes; return GetBytes( nBytes ); }
+    sal_uInt32  GetUINT32();
+    void*   GetBytes( sal_uLong& );
+    void*   GetBytes() { sal_uLong nBytes; return GetBytes( nBytes ); }
 
     void    Rewind() { m_pRun = NULL; }
 };
@@ -97,7 +97,7 @@ protected:
     MediatorListener*                   m_pListener;
     // thread to fill the queue
 
-    ULONG                               m_nCurrentID;
+    sal_uLong                               m_nCurrentID;
     // will be constantly increased with each message sent
     bool                                m_bValid;
 
@@ -112,27 +112,27 @@ public:
     // with error
     void invalidate() { m_bValid = false; }
 
-    ULONG SendMessage( ULONG nBytes, const char* pBytes, ULONG nMessageID = 0 );
-    ULONG SendMessage( const ByteString& rMessage, ULONG nMessageID = 0 )
+    sal_uLong SendMessage( sal_uLong nBytes, const char* pBytes, sal_uLong nMessageID = 0 );
+    sal_uLong SendMessage( const ByteString& rMessage, sal_uLong nMessageID = 0 )
         {
             return SendMessage( rMessage.Len(), rMessage.GetBuffer(), nMessageID );
         }
 
-    BOOL WaitForMessage( ULONG nTimeOut = 5000 );
+    sal_Bool WaitForMessage( sal_uLong nTimeOut = 5000 );
     // timeout in ms
     // TRUE:  Message came in
     // FALSE: timed out
     // if timeout is set, WaitForMessage will wait even if there are messages
     // in the queue
 
-    virtual MediatorMessage* WaitForAnswer( ULONG nMessageID );
+    virtual MediatorMessage* WaitForAnswer( sal_uLong nMessageID );
     // wait for an answer message ( ID >= 1 << 24 )
     // the message will be removed from the queue and returned
 
-    MediatorMessage* TransactMessage( ULONG nBytes, char* pBytes );
+    MediatorMessage* TransactMessage( sal_uLong nBytes, char* pBytes );
     // sends a message and waits for an answer
 
-    MediatorMessage* GetNextMessage( BOOL bWait = FALSE );
+    MediatorMessage* GetNextMessage( sal_Bool bWait = sal_False );
 
 
     Link SetConnectionLostHdl( const Link& rLink )

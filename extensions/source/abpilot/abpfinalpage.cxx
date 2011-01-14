@@ -78,7 +78,7 @@ namespace abp
         m_aName.SetModifyHdl( LINK(this, FinalPage, OnNameModified) );
         m_aLocation.SetModifyHdl( LINK(this, FinalPage, OnNameModified) );
         m_aRegisterName.SetClickHdl( LINK( this, FinalPage, OnRegister ) );
-        m_aRegisterName.Check(TRUE);
+        m_aRegisterName.Check(sal_True);
     }
 
     //---------------------------------------------------------------------
@@ -217,7 +217,7 @@ namespace abp
     // -----------------------------------------------------------------------------
     IMPL_LINK( FinalPage, OnRegister, CheckBox*, EMPTYARG )
     {
-        BOOL bEnable = m_aRegisterName.IsChecked();
+        sal_Bool bEnable = m_aRegisterName.IsChecked();
         m_aNameLabel.Enable(bEnable);
         m_aName.Enable(bEnable);
         implCheckName();
