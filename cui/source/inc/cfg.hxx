@@ -75,7 +75,7 @@ public:
     SvxConfigDialog( Window*, const SfxItemSet* );
     ~SvxConfigDialog();
 
-    virtual void                PageCreated( USHORT nId, SfxTabPage &rPage );
+    virtual void                PageCreated( sal_uInt16 nId, SfxTabPage &rPage );
     virtual short               Ok();
 
     void SetFrame(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& xFrame);
@@ -121,7 +121,7 @@ public:
         const com::sun::star::uno::Reference
             < com::sun::star::uno::XInterface >& xManager );
 
-    void SetModified( bool bValue = TRUE ) { bModified = bValue; }
+    void SetModified( bool bValue = sal_True ) { bModified = bValue; }
     bool IsModified( ) { return bModified; }
 
     bool IsReadOnly( ) { return bReadOnly; }
@@ -220,7 +220,7 @@ public:
     // methods inherited from SaveInData
     SvxEntries*         GetEntries();
     void                SetEntries( SvxEntries* );
-    bool                HasURL( const rtl::OUString& URL ) { (void)URL; return FALSE; }
+    bool                HasURL( const rtl::OUString& URL ) { (void)URL; return sal_False; }
     bool                HasSettings() { return m_xMenuSettings.is(); }
     void                Reset();
     bool                Apply();
@@ -231,7 +231,7 @@ class SvxConfigEntry
 private:
 
     // common properties
-    USHORT                      nId;
+    sal_uInt16                      nId;
     ::rtl::OUString             aHelpText;
     ::rtl::OUString             aLabel;
     ::rtl::OUString             aCommand;
@@ -258,18 +258,18 @@ public:
 
     SvxConfigEntry( const ::rtl::OUString& rDisplayName,
                     const ::rtl::OUString& rCommandURL,
-                    bool bPopup = FALSE,
-                    bool bParentData = FALSE );
+                    bool bPopup = sal_False,
+                    bool bParentData = sal_False );
 
     SvxConfigEntry()
         :
             nId( 0 ),
-            bPopUp( FALSE ),
-            bStrEdited( FALSE ),
-            bIsUserDefined( FALSE ),
-            bIsMain( FALSE ),
-            bIsParentData( FALSE ),
-            bIsVisible( TRUE ),
+            bPopUp( sal_False ),
+            bStrEdited( sal_False ),
+            bIsUserDefined( sal_False ),
+            bIsMain( sal_False ),
+            bIsParentData( sal_False ),
+            bIsVisible( sal_True ),
             nStyle( 0 ),
             pEntries( 0 )
     {}
@@ -280,7 +280,7 @@ public:
     void    SetCommand( const String& rCmd ) { aCommand = rCmd; }
 
     const ::rtl::OUString&      GetName() const { return aLabel; }
-    void    SetName( const String& rStr ) { aLabel = rStr; bStrEdited = TRUE; }
+    void    SetName( const String& rStr ) { aLabel = rStr; bStrEdited = sal_True; }
     bool    HasChangedName() const { return bStrEdited; }
 
     const ::rtl::OUString&      GetHelpText() ;
@@ -289,10 +289,10 @@ public:
     const ::rtl::OUString&      GetHelpURL() const { return aHelpURL; }
     void    SetHelpURL( const String& rStr ) { aHelpURL = rStr; }
 
-    void    SetPopup( bool bOn = TRUE ) { bPopUp = bOn; }
+    void    SetPopup( bool bOn = sal_True ) { bPopUp = bOn; }
     bool    IsPopup() const { return bPopUp; }
 
-    void    SetUserDefined( bool bOn = TRUE ) { bIsUserDefined = bOn; }
+    void    SetUserDefined( bool bOn = sal_True ) { bIsUserDefined = bOn; }
     bool    IsUserDefined() const { return bIsUserDefined; }
 
     bool    IsBinding() const { return !bPopUp; }
@@ -302,10 +302,10 @@ public:
     void    SetEntries( SvxEntries* entries ) { pEntries = entries; }
     bool    HasEntries() const { return pEntries != NULL; }
 
-    void    SetMain( bool bValue = TRUE ) { bIsMain = bValue; }
+    void    SetMain( bool bValue = sal_True ) { bIsMain = bValue; }
     bool    IsMain() { return bIsMain; }
 
-    void    SetParentData( bool bValue = TRUE ) { bIsParentData = bValue; }
+    void    SetParentData( bool bValue = sal_True ) { bIsParentData = bValue; }
     bool    IsParentData() { return bIsParentData; }
 
     bool    IsMovable();
@@ -345,13 +345,13 @@ public:
 
     virtual sal_Int8    AcceptDrop( const AcceptDropEvent& rEvt );
 
-    virtual BOOL        NotifyAcceptDrop( SvLBoxEntry* pEntry );
+    virtual sal_Bool        NotifyAcceptDrop( SvLBoxEntry* pEntry );
 
-    virtual BOOL        NotifyMoving( SvLBoxEntry*, SvLBoxEntry*,
-                                      SvLBoxEntry*&, ULONG& );
+    virtual sal_Bool        NotifyMoving( SvLBoxEntry*, SvLBoxEntry*,
+                                      SvLBoxEntry*&, sal_uLong& );
 
-    virtual BOOL        NotifyCopying( SvLBoxEntry*, SvLBoxEntry*,
-                                       SvLBoxEntry*&, ULONG&);
+    virtual sal_Bool        NotifyCopying( SvLBoxEntry*, SvLBoxEntry*,
+                                       SvLBoxEntry*&, sal_uLong&);
 
     virtual DragDropMode    NotifyStartDrag(
         TransferDataContainer&, SvLBoxEntry* );
@@ -444,13 +444,13 @@ protected:
 
     SvLBoxEntry*    InsertEntry(        SvxConfigEntry* pNewEntryData,
                                         SvLBoxEntry* pTarget = NULL,
-                                        bool bFront = FALSE );
+                                        bool bFront = sal_False );
 
     void            AddSubMenusToUI(    const String& rBaseTitle,
                                         SvxConfigEntry* pParentData );
 
     SvLBoxEntry*    InsertEntryIntoUI ( SvxConfigEntry* pNewEntryData,
-                                        ULONG nPos = LIST_APPEND );
+                                        sal_uLong nPos = LIST_APPEND );
 
     SvxEntries*     FindParentForChild( SvxEntries* pParentEntries,
                                         SvxConfigEntry* pChildData );
@@ -464,15 +464,15 @@ public:
     SaveInData*     GetSaveInData() { return pCurrentSaveInData; }
 
     SvLBoxEntry*    AddFunction( SvLBoxEntry* pTarget = NULL,
-                                 bool bFront = FALSE,
-                                 bool bAllowDuplicates = FALSE );
+                                 bool bFront = sal_False,
+                                 bool bAllowDuplicates = sal_False );
 
     virtual void    MoveEntry( bool bMoveUp );
 
     bool            MoveEntryData(  SvLBoxEntry* pSourceEntry,
                                     SvLBoxEntry* pTargetEntry );
 
-    BOOL            FillItemSet( SfxItemSet& );
+    sal_Bool            FillItemSet( SfxItemSet& );
     void            Reset( const SfxItemSet& );
 
     virtual bool    DeleteSelectedContent() = 0;
@@ -554,7 +554,7 @@ class SvxMainMenuOrganizerDialog : public ModalDialog
 public:
     SvxMainMenuOrganizerDialog (
         Window*, SvxEntries*,
-        SvxConfigEntry*, bool bCreateMenu = FALSE );
+        SvxConfigEntry*, bool bCreateMenu = sal_False );
 
     ~SvxMainMenuOrganizerDialog ();
 
@@ -568,7 +568,7 @@ class SvxToolbarEntriesListBox : public SvxMenuEntriesListBox
     Size            m_aCheckBoxImageSizePixel;
     Link            m_aChangedListener;
     SvLBoxButtonData*   m_pButtonData;
-    BOOL            m_bHiContrastMode;
+    sal_Bool            m_bHiContrastMode;
     SvxConfigPage*  pPage;
 
     void            ChangeVisibility( SvLBoxEntry* pEntry );
@@ -596,11 +596,11 @@ public:
     Size            GetCheckBoxPixelSize() const
         { return m_aCheckBoxImageSizePixel; }
 
-    virtual BOOL    NotifyMoving(
-        SvLBoxEntry*, SvLBoxEntry*, SvLBoxEntry*&, ULONG& );
+    virtual sal_Bool    NotifyMoving(
+        SvLBoxEntry*, SvLBoxEntry*, SvLBoxEntry*&, sal_uLong& );
 
-    virtual BOOL    NotifyCopying(
-        SvLBoxEntry*, SvLBoxEntry*, SvLBoxEntry*&, ULONG&);
+    virtual sal_Bool    NotifyCopying(
+        SvLBoxEntry*, SvLBoxEntry*, SvLBoxEntry*&, sal_uLong&);
 
     void            KeyInput( const KeyEvent& rKeyEvent );
 };
@@ -629,8 +629,8 @@ public:
     ~SvxToolbarConfigPage();
 
     SvLBoxEntry*    AddFunction( SvLBoxEntry* pTarget = NULL,
-                                             bool bFront = FALSE,
-                                             bool bAllowDuplicates = TRUE );
+                                             bool bFront = sal_False,
+                                             bool bAllowDuplicates = sal_True );
 
     void            MoveEntry( bool bMoveUp );
 
@@ -803,7 +803,7 @@ public:
         const rtl::OUString& aMessage );
 
     rtl::OUString ReplaceIconName( const rtl::OUString& );
-    USHORT ShowDialog();
+    sal_uInt16 ShowDialog();
 };
 //added for issue83555
 class SvxIconChangeDialog : public ModalDialog

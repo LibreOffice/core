@@ -134,9 +134,9 @@ class AlternativesString_Impl : public SvLBoxString
 public:
 
     AlternativesString_Impl( ThesaurusAlternativesCtrl_Impl &rControl,
-        SvLBoxEntry* pEntry, USHORT nFlags, const String& rStr );
+        SvLBoxEntry* pEntry, sal_uInt16 nFlags, const String& rStr );
 
-    virtual void Paint( const Point& rPos, SvLBox& rDev, USHORT nFlags, SvLBoxEntry* pEntry);
+    virtual void Paint( const Point& rPos, SvLBox& rDev, sal_uInt16 nFlags, SvLBoxEntry* pEntry);
 };
 
 

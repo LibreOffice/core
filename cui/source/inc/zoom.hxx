@@ -39,9 +39,9 @@
 
 // define ----------------------------------------------------------------
 /* CHINA001
-#define ZOOMBTN_OPTIMAL     ((USHORT)0x0001)
-#define ZOOMBTN_PAGEWIDTH   ((USHORT)0x0002)
-#define ZOOMBTN_WHOLEPAGE   ((USHORT)0x0004)
+#define ZOOMBTN_OPTIMAL     ((sal_uInt16)0x0001)
+#define ZOOMBTN_PAGEWIDTH   ((sal_uInt16)0x0002)
+#define ZOOMBTN_WHOLEPAGE   ((sal_uInt16)0x0004)
 */
 #ifndef _SVX_ZOOM_HXX
 #include "zoom_def.hxx"
@@ -84,7 +84,7 @@ private:
 
     const SfxItemSet&   rSet;
     SfxItemSet*         pOutSet;
-    BOOL                bModified;
+    sal_Bool                bModified;
 
 #ifdef _SVX_ZOOM_CXX
     DECL_LINK( UserHdl, RadioButton* );
@@ -101,11 +101,11 @@ public:
 
     const SfxItemSet*   GetOutputItemSet() const { return pOutSet; }
 
-    USHORT              GetFactor() const;
-    void                SetFactor( USHORT nNewFactor, USHORT nBtnId = 0 );
+    sal_uInt16              GetFactor() const;
+    void                SetFactor( sal_uInt16 nNewFactor, sal_uInt16 nBtnId = 0 );
 
-    void                HideButton( USHORT nBtnId );
-    void                SetLimits( USHORT nMin, USHORT nMax );
+    void                HideButton( sal_uInt16 nBtnId );
+    void                SetLimits( sal_uInt16 nMin, sal_uInt16 nMax );
 };
 
 #include <layout/layout-post.hxx>

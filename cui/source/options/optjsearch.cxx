@@ -66,7 +66,7 @@ SvxJSearchOptionsPage::SvxJSearchOptionsPage( Window* pParent, const SfxItemSet&
     aIgnoreMiddleDot            ( this, CUI_RES( CB_IGNORE_MIDDLE_DOT ) )
 {
     FreeResource();
-    bSaveOptions = TRUE;
+    bSaveOptions = sal_True;
     nTransliterationFlags = 0x00000000;
 }
 
@@ -82,9 +82,9 @@ SfxTabPage*  SvxJSearchOptionsPage::Create( Window* pParent, const SfxItemSet& r
 }
 
 
-void SvxJSearchOptionsPage::SetTransliterationFlags( INT32 nSettings )
+void SvxJSearchOptionsPage::SetTransliterationFlags( sal_Int32 nSettings )
 {
-    BOOL  bVal = 0 != (nSettings & TransliterationModules_IGNORE_CASE);
+    sal_Bool  bVal = 0 != (nSettings & TransliterationModules_IGNORE_CASE);
     aMatchCase               .Check( bVal );    //! treat as equal uppercase/lowercase
     bVal = 0 != (nSettings & TransliterationModules_IGNORE_WIDTH);
     aMatchFullHalfWidth      .Check( bVal );
@@ -127,9 +127,9 @@ void SvxJSearchOptionsPage::SetTransliterationFlags( INT32 nSettings )
 }
 
 
-INT32 SvxJSearchOptionsPage::GetTransliterationFlags_Impl()
+sal_Int32 SvxJSearchOptionsPage::GetTransliterationFlags_Impl()
 {
-    INT32 nTmp = 0;
+    sal_Int32 nTmp = 0;
     if (aMatchCase.IsChecked()) //! treat as equal uppercase/lowercase
         nTmp |= TransliterationModules_IGNORE_CASE;
     if (aMatchFullHalfWidth.IsChecked())
@@ -225,153 +225,153 @@ void SvxJSearchOptionsPage::Reset( const SfxItemSet& )
 }
 
 
-BOOL SvxJSearchOptionsPage::FillItemSet( SfxItemSet& )
+sal_Bool SvxJSearchOptionsPage::FillItemSet( SfxItemSet& )
 {
-    BOOL bModified = FALSE;
+    sal_Bool bModified = sal_False;
 
-    INT32 nOldVal = nTransliterationFlags;
+    sal_Int32 nOldVal = nTransliterationFlags;
     nTransliterationFlags = GetTransliterationFlags_Impl();
     bModified = nOldVal != nTransliterationFlags;
 
     if (!IsSaveOptions())
         return bModified;
 
-    bModified = FALSE;
+    bModified = sal_False;
     SvtSearchOptions aOpt;
-    BOOL bNewVal, bChanged;
+    sal_Bool bNewVal, bChanged;
 
     bNewVal  = aMatchCase.IsChecked();  //! treat as equal uppercase/lowercase
     bChanged = bNewVal != aMatchCase.GetSavedValue();
     if (bChanged)
     {
         aOpt.SetMatchCase(!bNewVal );
-        bModified = TRUE;
+        bModified = sal_True;
     }
     bNewVal  = aMatchFullHalfWidth.IsChecked();
     bChanged = bNewVal != aMatchFullHalfWidth.GetSavedValue();
     if (bChanged)
     {
         aOpt.SetMatchFullHalfWidthForms( bNewVal );
-        bModified = TRUE;
+        bModified = sal_True;
     }
     bNewVal  = aMatchHiraganaKatakana.IsChecked();
     bChanged = bNewVal != aMatchHiraganaKatakana.GetSavedValue();
     if (bChanged)
     {
         aOpt.SetMatchHiraganaKatakana( bNewVal );
-        bModified = TRUE;
+        bModified = sal_True;
     }
     bNewVal  = aMatchContractions.IsChecked();
     bChanged = bNewVal != aMatchContractions.GetSavedValue();
     if (bChanged)
     {
         aOpt.SetMatchContractions( bNewVal );
-        bModified = TRUE;
+        bModified = sal_True;
     }
     bNewVal  = aMatchMinusDashChoon.IsChecked();
     bChanged = bNewVal != aMatchMinusDashChoon.GetSavedValue();
     if (bChanged)
     {
         aOpt.SetMatchMinusDashChoon( bNewVal );
-        bModified = TRUE;
+        bModified = sal_True;
     }
     bNewVal  = aMatchRepeatCharMarks.IsChecked();
     bChanged = bNewVal != aMatchRepeatCharMarks.GetSavedValue();
     if (bChanged)
     {
         aOpt.SetMatchRepeatCharMarks( bNewVal );
-        bModified = TRUE;
+        bModified = sal_True;
     }
     bNewVal  = aMatchVariantFormKanji.IsChecked();
     bChanged = bNewVal != aMatchVariantFormKanji.GetSavedValue();
     if (bChanged)
     {
         aOpt.SetMatchVariantFormKanji( bNewVal );
-        bModified = TRUE;
+        bModified = sal_True;
     }
     bNewVal  = aMatchOldKanaForms.IsChecked();
     bChanged = bNewVal != aMatchOldKanaForms.GetSavedValue();
     if (bChanged)
     {
         aOpt.SetMatchOldKanaForms( bNewVal );
-        bModified = TRUE;
+        bModified = sal_True;
     }
     bNewVal  = aMatchDiziDuzu.IsChecked();
     bChanged = bNewVal != aMatchDiziDuzu.GetSavedValue();
     if (bChanged)
     {
         aOpt.SetMatchDiziDuzu( bNewVal );
-        bModified = TRUE;
+        bModified = sal_True;
     }
     bNewVal  = aMatchBavaHafa.IsChecked();
     bChanged = bNewVal != aMatchBavaHafa.GetSavedValue();
     if (bChanged)
     {
         aOpt.SetMatchBavaHafa( bNewVal );
-        bModified = TRUE;
+        bModified = sal_True;
     }
     bNewVal  = aMatchTsithichiDhizi.IsChecked();
     bChanged = bNewVal != aMatchTsithichiDhizi.GetSavedValue();
     if (bChanged)
     {
         aOpt.SetMatchTsithichiDhizi( bNewVal );
-        bModified = TRUE;
+        bModified = sal_True;
     }
     bNewVal  = aMatchHyuiyuByuvyu.IsChecked();
     bChanged = bNewVal != aMatchHyuiyuByuvyu.GetSavedValue();
     if (bChanged)
     {
         aOpt.SetMatchHyuiyuByuvyu( bNewVal );
-        bModified = TRUE;
+        bModified = sal_True;
     }
     bNewVal  = aMatchSesheZeje.IsChecked();
     bChanged = bNewVal != aMatchSesheZeje.GetSavedValue();
     if (bChanged)
     {
         aOpt.SetMatchSesheZeje( bNewVal );
-        bModified = TRUE;
+        bModified = sal_True;
     }
     bNewVal  = aMatchIaiya.IsChecked();
     bChanged = bNewVal != aMatchIaiya.GetSavedValue();
     if (bChanged)
     {
         aOpt.SetMatchIaiya( bNewVal );
-        bModified = TRUE;
+        bModified = sal_True;
     }
     bNewVal  = aMatchKiku.IsChecked();
     bChanged = bNewVal != aMatchKiku.GetSavedValue();
     if (bChanged)
     {
         aOpt.SetMatchKiku( bNewVal );
-        bModified = TRUE;
+        bModified = sal_True;
     }
     bNewVal  = aIgnorePunctuation.IsChecked();
     bChanged = bNewVal != aIgnorePunctuation.GetSavedValue();
     if (bChanged)
     {
         aOpt.SetIgnorePunctuation( bNewVal );
-        bModified = TRUE;
+        bModified = sal_True;
     }
     bNewVal  = aIgnoreWhitespace.IsChecked();
     bChanged = bNewVal != aIgnoreWhitespace.GetSavedValue();
     if (bChanged)
     {
         aOpt.SetIgnoreWhitespace( bNewVal );
-        bModified = TRUE;
+        bModified = sal_True;
     }
     bNewVal  = aMatchProlongedSoundMark.IsChecked();
     bChanged = bNewVal != aMatchProlongedSoundMark.GetSavedValue();
     if (bChanged)
     {
         aOpt.SetIgnoreProlongedSoundMark( bNewVal );
-        bModified = TRUE;
+        bModified = sal_True;
     }
     bNewVal  = aIgnoreMiddleDot.IsChecked();
     bChanged = bNewVal != aIgnoreMiddleDot.GetSavedValue();
     if (bChanged)
     {
         aOpt.SetIgnoreMiddleDot( bNewVal );
-        bModified = TRUE;
+        bModified = sal_True;
     }
 
     return bModified;

@@ -40,15 +40,15 @@ class SvxBorderBackgroundDlg: public SfxTabDialog
 public:
     SvxBorderBackgroundDlg( Window *pParent,
                             const SfxItemSet& rCoreSet,
-                            BOOL bEnableSelector = FALSE );
+                            sal_Bool bEnableSelector = sal_False );
 
     ~SvxBorderBackgroundDlg();
 
 protected:
-    virtual void    PageCreated( USHORT nPageId, SfxTabPage& rTabPage );
+    virtual void    PageCreated( sal_uInt16 nPageId, SfxTabPage& rTabPage );
 
 private:
-    BOOL    bEnableBackgroundSelector; // fuer Border/Background-Dlg
+    sal_Bool    bEnableBackgroundSelector; // fuer Border/Background-Dlg
 };
 
 

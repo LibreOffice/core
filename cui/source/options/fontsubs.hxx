@@ -55,15 +55,15 @@ class SvxFontSubstCheckListBox : public SvxSimpleTable
         SvxFontSubstCheckListBox(Window* pParent, const ResId& rResId ) :
             SvxSimpleTable( pParent, rResId ){}
 
-        inline void     *GetUserData(ULONG nPos) { return GetEntry(nPos)->GetUserData(); }
-        inline void     SetUserData(ULONG nPos, void *pData ) { GetEntry(nPos)->SetUserData(pData); }
+        inline void     *GetUserData(sal_uLong nPos) { return GetEntry(nPos)->GetUserData(); }
+        inline void     SetUserData(sal_uLong nPos, void *pData ) { GetEntry(nPos)->SetUserData(pData); }
 
-        BOOL            IsChecked(ULONG nPos, USHORT nCol = 0);
-        BOOL            IsChecked(SvLBoxEntry* pEntry, USHORT nCol = 0);
-        void            CheckEntryPos(ULONG nPos, USHORT nCol, BOOL bChecked);
-        void            CheckEntry(SvLBoxEntry* pEntry, USHORT nCol, BOOL bChecked);
-        SvButtonState   GetCheckButtonState( SvLBoxEntry*, USHORT nCol ) const;
-        void            SetCheckButtonState( SvLBoxEntry*, USHORT nCol, SvButtonState );
+        sal_Bool            IsChecked(sal_uLong nPos, sal_uInt16 nCol = 0);
+        sal_Bool            IsChecked(SvLBoxEntry* pEntry, sal_uInt16 nCol = 0);
+        void            CheckEntryPos(sal_uLong nPos, sal_uInt16 nCol, sal_Bool bChecked);
+        void            CheckEntry(SvLBoxEntry* pEntry, sal_uInt16 nCol, sal_Bool bChecked);
+        SvButtonState   GetCheckButtonState( SvLBoxEntry*, sal_uInt16 nCol ) const;
+        void            SetCheckButtonState( SvLBoxEntry*, sal_uInt16 nCol, SvButtonState );
 };
 
 // class SvxFontSubstTabPage ----------------------------------------------------
@@ -114,7 +114,7 @@ class SvxFontSubstTabPage : public SfxTabPage
 
 public:
     static SfxTabPage*  Create( Window* pParent, const SfxItemSet& rAttrSet);
-    virtual BOOL        FillItemSet( SfxItemSet& rSet );
+    virtual sal_Bool        FillItemSet( SfxItemSet& rSet );
     virtual void        Reset( const SfxItemSet& rSet );
 };
 

@@ -106,9 +106,9 @@ class SvxGrfCropPage : public SfxTabPage
     const MetricField*  pLastCropField;
     long            nOldWidth;
     long            nOldHeight;
-    BOOL            bReset;
-    BOOL            bInitialized;
-    BOOL            bSetOrigSize;
+    sal_Bool            bReset;
+    sal_Bool            bInitialized;
+    sal_Bool            bSetOrigSize;
 
 
     SvxGrfCropPage( Window *pParent, const SfxItemSet &rSet );
@@ -124,14 +124,14 @@ class SvxGrfCropPage : public SfxTabPage
 
     void            CalcZoom();
     void            CalcMinMaxBorder();
-    void            GraphicHasChanged(BOOL bFound);
+    void            GraphicHasChanged(sal_Bool bFound);
     virtual void    ActivatePage(const SfxItemSet& rSet);
 
     Size            GetGrfOrigSize( const Graphic& ) const;
 public:
     static SfxTabPage *Create( Window *pParent, const SfxItemSet &rSet );
 
-    virtual BOOL FillItemSet( SfxItemSet &rSet );
+    virtual sal_Bool FillItemSet( SfxItemSet &rSet );
     virtual void Reset( const SfxItemSet &rSet );
     virtual int DeactivatePage( SfxItemSet *pSet );
 };

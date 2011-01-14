@@ -195,7 +195,7 @@ public:
     SvxMessDialog( Window* pWindow, const String& rText, const String& rDesc, Image* pImg = NULL );
     ~SvxMessDialog();
 
-    void    SetButtonText( USHORT nBtnId, const String& rNewTxt );
+    void    SetButtonText( sal_uInt16 nBtnId, const String& rNewTxt );
 };
 
 

@@ -65,8 +65,8 @@ class SvPasteObjectDialog : public ModalDialog
     Table           aSupplementTable;
     SvGlobalName    aObjClassName;
     String          aObjName;
-    USHORT          nAspect;
-    BOOL            bLink;
+    sal_uInt16          nAspect;
+    sal_Bool            bLink;
 
     ListBox&        ObjectLB()      { return aLbInsertList; }
     FixedText&      ObjectSource()  { return aFtObjectSource; }
@@ -78,8 +78,8 @@ class SvPasteObjectDialog : public ModalDialog
     DECL_LINK( SelectHdl, ListBox * );
     DECL_LINK( DoubleClickHdl, ListBox * );
     void            SetDefault();
-    USHORT      GetAspect() const { return nAspect; }
-    BOOL        ShouldLink() const { return bLink; }
+    sal_uInt16      GetAspect() const { return nAspect; }
+    sal_Bool        ShouldLink() const { return bLink; }
 
 public:
                 SvPasteObjectDialog( Window* pParent );
@@ -87,7 +87,7 @@ public:
 
     void        Insert( SotFormatStringId nFormat, const String & rFormatName );
     void        SetObjName( const SvGlobalName & rClass, const String & rObjName );
-    ULONG       GetFormat( const TransferableDataHelper& aHelper,
+    sal_uLong       GetFormat( const TransferableDataHelper& aHelper,
                         const DataFlavorExVector* pFormats=0,
                         const TransferableObjectDescriptor* pDesc=0 );
 };

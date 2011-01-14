@@ -148,7 +148,7 @@ private:
     long                nWidth;
     sal_Bool            bFirstSelect;
     sal_Bool            bDoNothing;
-    BOOL                bDicIsReadonly;
+    sal_Bool                bDicIsReadonly;
 
 #ifdef _SVX_OPTDICT_CXX
     DECL_LINK( SelectBookHdl_Impl, ListBox * );
@@ -165,7 +165,7 @@ private:
                             ::com::sun::star::linguistic2::XDictionary >  &xDic );
 
     void            RemoveDictEntry(SvLBoxEntry* pEntry);
-    USHORT          GetLBInsertPos(const String &rDicWord);
+    sal_uInt16          GetLBInsertPos(const String &rDicWord);
 
 #endif
 

@@ -75,7 +75,7 @@
 
 // static ----------------------------------------------------------------
 
-static USHORT pRanges[] =
+static sal_uInt16 pRanges[] =
 {
     SID_ATTR_BORDER_INNER,      SID_ATTR_BORDER_SHADOW,
     SID_ATTR_ALIGN_MARGIN,      SID_ATTR_ALIGN_MARGIN,
@@ -85,7 +85,7 @@ static USHORT pRanges[] =
     0
 };
 
-BOOL SvxBorderTabPage::bSync = TRUE;
+sal_Bool SvxBorderTabPage::bSync = sal_True;
 
 
 //------------------------------------------------------------------------
@@ -222,7 +222,7 @@ SvxBorderTabPage::SvxBorderTabPage( Window* pParent,
     /*  Use SvxMarginItem instead of margins from SvxBoxItem, if present.
         ->  Remember this state in mbUseMarginItem, because other special handling
             is needed across various functions... */
-    mbUseMarginItem = rCoreAttrs.GetItemState(GetWhich(SID_ATTR_ALIGN_MARGIN),TRUE) != SFX_ITEM_UNKNOWN;
+    mbUseMarginItem = rCoreAttrs.GetItemState(GetWhich(SID_ATTR_ALIGN_MARGIN),sal_True) != SFX_ITEM_UNKNOWN;
 
     // Metrik einstellen
     FieldUnit eFUnit = GetModuleFieldUnit( rCoreAttrs );
@@ -263,10 +263,10 @@ SvxBorderTabPage::SvxBorderTabPage( Window* pParent,
 
     SetFieldUnit( aEdShadowSize, eFUnit );
 
-    USHORT nWhich = GetWhich( SID_ATTR_BORDER_INNER, sal_False );
-    BOOL bIsDontCare = TRUE;
+    sal_uInt16 nWhich = GetWhich( SID_ATTR_BORDER_INNER, sal_False );
+    sal_Bool bIsDontCare = sal_True;
 
-    if ( rCoreAttrs.GetItemState( nWhich, TRUE ) >= SFX_ITEM_AVAILABLE )
+    if ( rCoreAttrs.GetItemState( nWhich, sal_True ) >= SFX_ITEM_AVAILABLE )
     {
         // Absatz oder Tabelle
         const SvxBoxInfoItem* pBoxInfo =
@@ -358,14 +358,14 @@ SvxBorderTabPage::SvxBorderTabPage( Window* pParent,
     if ( pColorTable )
     {
         // fuellen der Linienfarben-Box
-        aLbLineColor.SetUpdateMode( FALSE );
+        aLbLineColor.SetUpdateMode( sal_False );
 
         for ( long i = 0; i < pColorTable->Count(); ++i )
         {
             XColorEntry* pEntry = pColorTable->GetColor(i);
             aLbLineColor.InsertEntry( pEntry->GetColor(), pEntry->GetName() );
         }
-        aLbLineColor.SetUpdateMode( TRUE );
+        aLbLineColor.SetUpdateMode( sal_True );
         // dann nur noch in die Schattenfarben-Box kopieren
         aLbShadowColor.CopyEntries( aLbLineColor );
     }
@@ -404,7 +404,7 @@ SvxBorderTabPage::~SvxBorderTabPage()
 
 // -----------------------------------------------------------------------
 
-USHORT* SvxBorderTabPage::GetRanges()
+sal_uInt16* SvxBorderTabPage::GetRanges()
 {
     return pRanges;
 }
@@ -438,7 +438,7 @@ void SvxBorderTabPage::Reset( const SfxItemSet& rSet )
 
     const SvxBoxItem*       pBoxItem;
     const SvxBoxInfoItem*   pBoxInfoItem;
-    USHORT                  nWhichBox       = GetWhich(SID_ATTR_BORDER_OUTER);
+    sal_uInt16                  nWhichBox       = GetWhich(SID_ATTR_BORDER_OUTER);
     SfxMapUnit              eCoreUnit;
     const Color             aColBlack       = RGBCOL(COL_BLACK);
 
@@ -482,9 +482,9 @@ void SvxBorderTabPage::Reset( const SfxItemSet& rSet )
 
                 if ( pBoxInfoItem->IsDist() )
                 {
-                    if( rSet.GetItemState( nWhichBox, TRUE ) >= SFX_ITEM_DEFAULT )
+                    if( rSet.GetItemState( nWhichBox, sal_True ) >= SFX_ITEM_DEFAULT )
                     {
-                        BOOL bIsAnyBorderVisible = aFrameSel.IsAnyBorderVisible();
+                        sal_Bool bIsAnyBorderVisible = aFrameSel.IsAnyBorderVisible();
                         if( !bIsAnyBorderVisible || !pBoxInfoItem->IsMinDist() )
                         {
                             aLeftMF.SetMin( 0 );
@@ -513,7 +513,7 @@ void SvxBorderTabPage::Reset( const SfxItemSet& rSet )
                         // or it is null with an active border line
                         // no automatic changes should be made
                         const long nDefDist = bIsAnyBorderVisible ? pBoxInfoItem->GetDefDist() : 0;
-                        BOOL bDiffDist = (nDefDist != nLeftDist ||
+                        sal_Bool bDiffDist = (nDefDist != nLeftDist ||
                                     nDefDist != nRightDist ||
                                     nDefDist != nTopDist   ||
                                     nDefDist != nBottomDist);
@@ -553,7 +553,7 @@ void SvxBorderTabPage::Reset( const SfxItemSet& rSet )
     //-------------------------------------------------------------
     {
         // Do all visible lines show the same line widths?
-        USHORT nPrim, nDist, nSecn;
+        sal_uInt16 nPrim, nDist, nSecn;
         bool bWidthEq = aFrameSel.GetVisibleWidth( nPrim, nDist, nSecn );
         if( bWidthEq )
             aLbLineStyle.SelectEntry( nPrim * 100, nSecn * 100, nDist * 100 );
@@ -566,7 +566,7 @@ void SvxBorderTabPage::Reset( const SfxItemSet& rSet )
         if( !bColorEq )
             aColor.SetColor( COL_BLACK );
 
-        USHORT nSelPos = aLbLineColor.GetEntryPos( aColor );
+        sal_uInt16 nSelPos = aLbLineColor.GetEntryPos( aColor );
         if( nSelPos == LISTBOX_ENTRY_NOTFOUND )
             nSelPos = aLbLineColor.InsertEntry( aColor, SVX_RESSTR( RID_SVXSTR_COLOR_USER ) );
 
@@ -582,7 +582,7 @@ void SvxBorderTabPage::Reset( const SfxItemSet& rSet )
         SelColHdl_Impl( &aLbLineColor );
     }
 
-    BOOL bEnable = aWndShadows.GetSelectItemId() > 1 ;
+    sal_Bool bEnable = aWndShadows.GetSelectItemId() > 1 ;
     aFtShadowSize.Enable(bEnable);
     aEdShadowSize.Enable(bEnable);
     aFtShadowColor.Enable(bEnable);
@@ -600,11 +600,11 @@ void SvxBorderTabPage::Reset( const SfxItemSet& rSet )
 
     const SfxPoolItem* pItem;
     SfxObjectShell* pShell;
-    if(SFX_ITEM_SET == rSet.GetItemState(SID_HTML_MODE, FALSE, &pItem) ||
+    if(SFX_ITEM_SET == rSet.GetItemState(SID_HTML_MODE, sal_False, &pItem) ||
         ( 0 != (pShell = SfxObjectShell::Current()) &&
                     0 != (pItem = pShell->GetItem(SID_HTML_MODE))))
     {
-        USHORT nHtmlMode = ((SfxUInt16Item*)pItem)->GetValue();
+        sal_uInt16 nHtmlMode = ((SfxUInt16Item*)pItem)->GetValue();
         if(nHtmlMode & HTMLMODE_ON)
         {
             //Im Html-Mode gibt es keinen Schatten und nur komplette Umrandungen
@@ -616,14 +616,14 @@ void SvxBorderTabPage::Reset( const SfxItemSet& rSet )
             aLbShadowColor.Disable();
             aFlShadow     .Disable();
 
-            USHORT nLBCount = aLbLineStyle.GetEntryCount();
+            sal_uInt16 nLBCount = aLbLineStyle.GetEntryCount();
             // ist es ein Absatzdialog, dann alle Linien fuer
             // Sw-Export, sonst ist die Page nicht da
             if(!(mbHorEnabled || mbVerEnabled)
                  && 0 == (nHtmlMode & HTMLMODE_FULL_ABS_POS) &&
                 SFX_ITEM_AVAILABLE > rSet.GetItemState(GetWhich( SID_ATTR_PARA_LINESPACE )))
             {
-                for( USHORT i = nLBCount - 1; i > LINESTYLE_HTML_MAX; --i)
+                for( sal_uInt16 i = nLBCount - 1; i > LINESTYLE_HTML_MAX; --i)
                     aLbLineStyle.RemoveEntry(i);
             }
 
@@ -655,13 +655,13 @@ int SvxBorderTabPage::DeactivatePage( SfxItemSet* _pSet )
 
 #define IS_DONT_CARE(a) ((a).GetState() == svx::FRAMESTATE_DONTCARE )
 
-BOOL SvxBorderTabPage::FillItemSet( SfxItemSet& rCoreAttrs )
+sal_Bool SvxBorderTabPage::FillItemSet( SfxItemSet& rCoreAttrs )
 {
     bool bAttrsChanged = SfxTabPage::FillItemSet( rCoreAttrs );
 
-    BOOL                  bPut          = TRUE;
-    USHORT                nBoxWhich     = GetWhich( SID_ATTR_BORDER_OUTER );
-    USHORT                nBoxInfoWhich = rCoreAttrs.GetPool()->GetWhich( SID_ATTR_BORDER_INNER, sal_False );
+    sal_Bool                  bPut          = sal_True;
+    sal_uInt16                nBoxWhich     = GetWhich( SID_ATTR_BORDER_OUTER );
+    sal_uInt16                nBoxInfoWhich = rCoreAttrs.GetPool()->GetWhich( SID_ATTR_BORDER_INNER, sal_False );
     const SfxItemSet&     rOldSet       = GetItemSet();
     SvxBoxItem            aBoxItem      ( nBoxWhich );
     SvxBoxInfoItem        aBoxInfoItem  ( nBoxInfoWhich );
@@ -673,7 +673,7 @@ BOOL SvxBorderTabPage::FillItemSet( SfxItemSet& rCoreAttrs )
     //------------------
     // Umrandung aussen:
     //------------------
-    typedef ::std::pair<svx::FrameBorderType,USHORT> TBorderPair;
+    typedef ::std::pair<svx::FrameBorderType,sal_uInt16> TBorderPair;
     TBorderPair eTypes1[] = {
                                 TBorderPair(svx::FRAMEBORDER_TOP,BOX_LINE_TOP),
                                 TBorderPair(svx::FRAMEBORDER_BOTTOM,BOX_LINE_BOTTOM),
@@ -703,7 +703,7 @@ BOOL SvxBorderTabPage::FillItemSet( SfxItemSet& rCoreAttrs )
     if( aLeftMF.IsVisible() )
     {
         // #i40405# enable distance controls for next dialog call
-        aBoxInfoItem.SetDist( TRUE );
+        aBoxInfoItem.SetDist( sal_True );
 
         if( !mbUseMarginItem )
         {
@@ -734,10 +734,10 @@ BOOL SvxBorderTabPage::FillItemSet( SfxItemSet& rCoreAttrs )
                         (pOldBoxInfoItem && !pOldBoxInfoItem->IsValid(VALID_DISTANCE))
                        )
                     {
-                        aBoxItem.SetDistance( (USHORT)GetCoreValue( aLeftMF, eCoreUnit ), BOX_LINE_LEFT  );
-                        aBoxItem.SetDistance( (USHORT)GetCoreValue( aRightMF, eCoreUnit ), BOX_LINE_RIGHT );
-                        aBoxItem.SetDistance( (USHORT)GetCoreValue( aTopMF, eCoreUnit ), BOX_LINE_TOP   );
-                        aBoxItem.SetDistance( (USHORT)GetCoreValue( aBottomMF, eCoreUnit ), BOX_LINE_BOTTOM);
+                        aBoxItem.SetDistance( (sal_uInt16)GetCoreValue( aLeftMF, eCoreUnit ), BOX_LINE_LEFT  );
+                        aBoxItem.SetDistance( (sal_uInt16)GetCoreValue( aRightMF, eCoreUnit ), BOX_LINE_RIGHT );
+                        aBoxItem.SetDistance( (sal_uInt16)GetCoreValue( aTopMF, eCoreUnit ), BOX_LINE_TOP   );
+                        aBoxItem.SetDistance( (sal_uInt16)GetCoreValue( aBottomMF, eCoreUnit ), BOX_LINE_BOTTOM);
                     }
                     else
                     {
@@ -746,10 +746,10 @@ BOOL SvxBorderTabPage::FillItemSet( SfxItemSet& rCoreAttrs )
                         aBoxItem.SetDistance(pOldBoxItem->GetDistance(BOX_LINE_TOP  ), BOX_LINE_TOP);
                         aBoxItem.SetDistance(pOldBoxItem->GetDistance(BOX_LINE_BOTTOM), BOX_LINE_BOTTOM);
                     }
-                    aBoxInfoItem.SetValid( VALID_DISTANCE, TRUE );
+                    aBoxInfoItem.SetValid( VALID_DISTANCE, sal_True );
                 }
                 else
-                    aBoxInfoItem.SetValid( VALID_DISTANCE, FALSE );
+                    aBoxInfoItem.SetValid( VALID_DISTANCE, sal_False );
             }
         }
     }
@@ -767,13 +767,13 @@ BOOL SvxBorderTabPage::FillItemSet( SfxItemSet& rCoreAttrs )
     //
     // Put oder Clear der Umrandung?
     //
-    bPut = TRUE;
+    bPut = sal_True;
 
-    if (   SFX_ITEM_DEFAULT == rOldSet.GetItemState( nBoxWhich,     FALSE ))
+    if (   SFX_ITEM_DEFAULT == rOldSet.GetItemState( nBoxWhich,     sal_False ))
     {
         bPut = aBoxItem != (const SvxBoxItem&)(rOldSet.Get(nBoxWhich)) ? sal_True : sal_False;
     }
-    if(  SFX_ITEM_DEFAULT == rOldSet.GetItemState( nBoxInfoWhich, FALSE ) )
+    if(  SFX_ITEM_DEFAULT == rOldSet.GetItemState( nBoxInfoWhich, sal_False ) )
     {
         const SvxBoxInfoItem& rOldBoxInfo = (const SvxBoxInfoItem&)
                                 rOldSet.Get(nBoxInfoWhich);
@@ -788,14 +788,14 @@ BOOL SvxBorderTabPage::FillItemSet( SfxItemSet& rCoreAttrs )
         if ( !pOldBoxItem || !( *pOldBoxItem == aBoxItem ) )
         {
             rCoreAttrs.Put( aBoxItem );
-            bAttrsChanged |= TRUE;
+            bAttrsChanged |= sal_True;
         }
         pOld = GetOldItem( rCoreAttrs, SID_ATTR_BORDER_INNER, sal_False );
 
         if ( !pOld || !( *(const SvxBoxInfoItem*)pOld == aBoxInfoItem ) )
         {
             rCoreAttrs.Put( aBoxInfoItem );
-            bAttrsChanged |= TRUE;
+            bAttrsChanged |= sal_True;
         }
     }
     else
@@ -859,7 +859,7 @@ IMPL_LINK( SvxBorderTabPage, SelPreHdl_Impl, void *, EMPTYARG )
     aFrameSel.DeselectAllBorders();
 
     // Using image ID to find correct line in table above.
-    USHORT nLine = GetPresetImageId( aWndPresets.GetSelectItemId() ) - 1;
+    sal_uInt16 nLine = GetPresetImageId( aWndPresets.GetSelectItemId() ) - 1;
 
     // Apply all styles from the table
     for( int nBorder = 0; nBorder < svx::FRAMEBORDERTYPE_COUNT; ++nBorder )
@@ -896,7 +896,7 @@ IMPL_LINK( SvxBorderTabPage, SelPreHdl_Impl, void *, EMPTYARG )
 
 IMPL_LINK( SvxBorderTabPage, SelSdwHdl_Impl, void *, EMPTYARG )
 {
-    BOOL bEnable = aWndShadows.GetSelectItemId() > 1;
+    sal_Bool bEnable = aWndShadows.GetSelectItemId() > 1;
     aFtShadowSize.Enable(bEnable);
     aEdShadowSize.Enable(bEnable);
     aFtShadowColor.Enable(bEnable);
@@ -925,9 +925,9 @@ IMPL_LINK( SvxBorderTabPage, SelStyleHdl_Impl, ListBox *, pLb )
 {
     if ( pLb == &aLbLineStyle )
         aFrameSel.SetStyleToSelection(
-            static_cast< USHORT >( aLbLineStyle.GetSelectEntryLine1() / 100 ),
-            static_cast< USHORT >( aLbLineStyle.GetSelectEntryDistance() / 100 ),
-            static_cast< USHORT >( aLbLineStyle.GetSelectEntryLine2() / 100 ) );
+            static_cast< sal_uInt16 >( aLbLineStyle.GetSelectEntryLine1() / 100 ),
+            static_cast< sal_uInt16 >( aLbLineStyle.GetSelectEntryDistance() / 100 ),
+            static_cast< sal_uInt16 >( aLbLineStyle.GetSelectEntryLine2() / 100 ) );
 
     return 0;
 }
@@ -937,17 +937,17 @@ IMPL_LINK( SvxBorderTabPage, SelStyleHdl_Impl, ListBox *, pLb )
 // ============================================================================
 
 // number of preset images to show
-const USHORT SVX_BORDER_PRESET_COUNT = 5;
+const sal_uInt16 SVX_BORDER_PRESET_COUNT = 5;
 
 // number of shadow images to show
-const USHORT SVX_BORDER_SHADOW_COUNT = 5;
+const sal_uInt16 SVX_BORDER_SHADOW_COUNT = 5;
 
 // ----------------------------------------------------------------------------
 
-USHORT SvxBorderTabPage::GetPresetImageId( USHORT nValueSetIdx ) const
+sal_uInt16 SvxBorderTabPage::GetPresetImageId( sal_uInt16 nValueSetIdx ) const
 {
     // table with all sets of predefined border styles
-    static const USHORT ppnImgIds[][ SVX_BORDER_PRESET_COUNT ] =
+    static const sal_uInt16 ppnImgIds[][ SVX_BORDER_PRESET_COUNT ] =
     {
         // simple cell without diagonal frame borders
         {   IID_PRE_CELL_NONE,  IID_PRE_CELL_ALL,       IID_PRE_CELL_LR,        IID_PRE_CELL_TB,    IID_PRE_CELL_L          },
@@ -977,10 +977,10 @@ USHORT SvxBorderTabPage::GetPresetImageId( USHORT nValueSetIdx ) const
     return ppnImgIds[ nLine ][ nValueSetIdx - 1 ];
 }
 
-USHORT SvxBorderTabPage::GetPresetStringId( USHORT nValueSetIdx ) const
+sal_uInt16 SvxBorderTabPage::GetPresetStringId( sal_uInt16 nValueSetIdx ) const
 {
     // string resource IDs for each image (in order of the IID_PRE_* image IDs)
-    static const USHORT pnStrIds[] =
+    static const sal_uInt16 pnStrIds[] =
     {
         RID_SVXSTR_TABLE_PRESET_NONE,
         RID_SVXSTR_PARA_PRESET_ALL,
@@ -1025,7 +1025,7 @@ void SvxBorderTabPage::FillPresetVS()
     aWndPresets.SetSizePixel( aWndPresets.CalcWindowSizePixel( aImgSize ) );
 
     // insert images and help texts
-    for( USHORT nVSIdx = 1; nVSIdx <= SVX_BORDER_PRESET_COUNT; ++nVSIdx )
+    for( sal_uInt16 nVSIdx = 1; nVSIdx <= SVX_BORDER_PRESET_COUNT; ++nVSIdx )
     {
         aWndPresets.InsertItem( nVSIdx );
         aWndPresets.SetItemImage( nVSIdx, rImgList.GetImage( GetPresetImageId( nVSIdx ) ) );
@@ -1052,14 +1052,14 @@ void SvxBorderTabPage::FillShadowVS()
     aWndShadows.SetSizePixel( aWndShadows.CalcWindowSizePixel( aImgSize ) );
 
     // image resource IDs
-    static const USHORT pnImgIds[ SVX_BORDER_SHADOW_COUNT ] =
+    static const sal_uInt16 pnImgIds[ SVX_BORDER_SHADOW_COUNT ] =
         { IID_SHADOWNONE, IID_SHADOW_BOT_RIGHT, IID_SHADOW_TOP_RIGHT, IID_SHADOW_BOT_LEFT, IID_SHADOW_TOP_LEFT };
     // string resource IDs for each image
-    static const USHORT pnStrIds[ SVX_BORDER_SHADOW_COUNT ] =
+    static const sal_uInt16 pnStrIds[ SVX_BORDER_SHADOW_COUNT ] =
         { RID_SVXSTR_SHADOW_STYLE_NONE, RID_SVXSTR_SHADOW_STYLE_BOTTOMRIGHT, RID_SVXSTR_SHADOW_STYLE_TOPRIGHT, RID_SVXSTR_SHADOW_STYLE_BOTTOMLEFT, RID_SVXSTR_SHADOW_STYLE_TOPLEFT };
 
     // insert images and help texts
-    for( USHORT nVSIdx = 1; nVSIdx <= SVX_BORDER_SHADOW_COUNT; ++nVSIdx )
+    for( sal_uInt16 nVSIdx = 1; nVSIdx <= SVX_BORDER_SHADOW_COUNT; ++nVSIdx )
     {
         aWndShadows.InsertItem( nVSIdx );
         aWndShadows.SetItemImage( nVSIdx, rImgList.GetImage( pnImgIds[ nVSIdx - 1 ] ) );
@@ -1117,9 +1117,9 @@ IMPL_LINK( SvxBorderTabPage, LinesChanged_Impl, void*, EMPTYARG )
 {
     if(!mbUseMarginItem && aLeftMF.IsVisible())
     {
-        BOOL bLineSet = aFrameSel.IsAnyBorderVisible();
-        BOOL bMinAllowed = 0 != (nSWMode & (SW_BORDER_MODE_FRAME|SW_BORDER_MODE_TABLE));
-        BOOL bSpaceModified =   aLeftMF  .IsModified()||
+        sal_Bool bLineSet = aFrameSel.IsAnyBorderVisible();
+        sal_Bool bMinAllowed = 0 != (nSWMode & (SW_BORDER_MODE_FRAME|SW_BORDER_MODE_TABLE));
+        sal_Bool bSpaceModified =   aLeftMF  .IsModified()||
                                 aRightMF .IsModified()||
                                 aTopMF   .IsModified()||
                                 aBottomMF.IsModified();
@@ -1160,7 +1160,7 @@ IMPL_LINK( SvxBorderTabPage, LinesChanged_Impl, void*, EMPTYARG )
             }
         }
         //fuer Tabellen ist alles erlaubt
-        USHORT nValid = VALID_TOP|VALID_BOTTOM|VALID_LEFT|VALID_RIGHT;
+        sal_uInt16 nValid = VALID_TOP|VALID_BOTTOM|VALID_LEFT|VALID_RIGHT;
 
         //fuer Rahmen und  Absatz wird das Edit disabled, wenn keine Border gesetzt ist
         if(nSWMode & (SW_BORDER_MODE_FRAME|SW_BORDER_MODE_PARA))

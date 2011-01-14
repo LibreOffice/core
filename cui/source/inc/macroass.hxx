@@ -76,7 +76,7 @@ public:
 
     virtual                     ~_SfxMacroTabPage();
 
-    void                        AddEvent( const String & rEventName, USHORT nEventId );
+    void                        AddEvent( const String & rEventName, sal_uInt16 nEventId );
 
     const SvxMacroTableDtor&    GetMacroTbl() const;
     void                        SetMacroTbl( const SvxMacroTableDtor& rTbl );
@@ -86,10 +86,10 @@ public:
     virtual void                PageCreated (SfxAllItemSet aSet);
 
     // --------- Erben aus der Basis -------------
-    virtual BOOL                FillItemSet( SfxItemSet& rSet );
+    virtual sal_Bool                FillItemSet( SfxItemSet& rSet );
     virtual void                Reset( const SfxItemSet& rSet );
 
-    BOOL                        IsReadOnly() const;
+    sal_Bool                        IsReadOnly() const;
 };
 
 inline const SvxMacroTableDtor& _SfxMacroTabPage::GetMacroTbl() const

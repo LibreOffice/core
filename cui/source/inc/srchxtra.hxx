@@ -45,7 +45,7 @@ public:
     ~SvxSearchFormatDialog();
 
 protected:
-    virtual void    PageCreated( USHORT nId, SfxTabPage &rPage );
+    virtual void    PageCreated( sal_uInt16 nId, SfxTabPage &rPage );
 
 private:
     FontList*       pFontList;
@@ -57,7 +57,7 @@ class SvxSearchAttributeDialog : public ModalDialog
 {
 public:
     SvxSearchAttributeDialog( Window* pParent, SearchAttrItemList& rLst,
-                              const USHORT* pWhRanges );
+                              const sal_uInt16* pWhRanges );
 
 private:
     FixedText           aAttrFL;
@@ -92,15 +92,15 @@ private:
 
 public:
     SvxSearchSimilarityDialog(  Window* pParent,
-                                BOOL bRelax,
-                                USHORT nOther,
-                                USHORT nShorter,
-                                USHORT nLonger );
+                                sal_Bool bRelax,
+                                sal_uInt16 nOther,
+                                sal_uInt16 nShorter,
+                                sal_uInt16 nLonger );
 
-    USHORT  GetOther()      { return (USHORT)aOtherFld.GetValue(); }
-    USHORT  GetShorter()    { return (USHORT)aShorterFld.GetValue(); }
-    USHORT  GetLonger()     { return (USHORT)aLongerFld.GetValue(); }
-    BOOL    IsRelaxed()     { return aRelaxBox.IsChecked(); }
+    sal_uInt16  GetOther()      { return (sal_uInt16)aOtherFld.GetValue(); }
+    sal_uInt16  GetShorter()    { return (sal_uInt16)aShorterFld.GetValue(); }
+    sal_uInt16  GetLonger()     { return (sal_uInt16)aLongerFld.GetValue(); }
+    sal_Bool    IsRelaxed()     { return aRelaxBox.IsChecked(); }
 };
 
 

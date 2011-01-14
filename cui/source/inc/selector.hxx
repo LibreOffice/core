@@ -50,41 +50,41 @@
 
 struct SvxGroupInfo_Impl
 {
-    USHORT          nKind;
-    USHORT          nOrd;
+    sal_uInt16          nKind;
+    sal_uInt16          nOrd;
     ::com::sun::star::uno::Reference< ::com::sun::star::script::browse::XBrowseNode >
                     xBrowseNode;
     ::rtl::OUString sURL;
     ::rtl::OUString sHelpText;
-    BOOL            bWasOpened;
+    sal_Bool            bWasOpened;
 
-    SvxGroupInfo_Impl( USHORT n, USHORT nr )
+    SvxGroupInfo_Impl( sal_uInt16 n, sal_uInt16 nr )
         :nKind( n )
         ,nOrd( nr )
         ,xBrowseNode()
         ,sURL()
         ,sHelpText()
-        ,bWasOpened(FALSE)
+        ,bWasOpened(sal_False)
     {
     }
 
-    SvxGroupInfo_Impl( USHORT n, USHORT nr, const ::com::sun::star::uno::Reference< ::com::sun::star::script::browse::XBrowseNode >& _rxNode )
+    SvxGroupInfo_Impl( sal_uInt16 n, sal_uInt16 nr, const ::com::sun::star::uno::Reference< ::com::sun::star::script::browse::XBrowseNode >& _rxNode )
         :nKind( n )
         ,nOrd( nr )
         ,xBrowseNode( _rxNode )
         ,sURL()
         ,sHelpText()
-        ,bWasOpened(FALSE)
+        ,bWasOpened(sal_False)
     {
     }
 
-    SvxGroupInfo_Impl( USHORT n, USHORT nr, const ::rtl::OUString& _rURL, const ::rtl::OUString& _rHelpText )
+    SvxGroupInfo_Impl( sal_uInt16 n, sal_uInt16 nr, const ::rtl::OUString& _rURL, const ::rtl::OUString& _rHelpText )
         :nKind( n )
         ,nOrd( nr )
         ,xBrowseNode()
         ,sURL( _rURL )
         ,sHelpText( _rHelpText )
-        ,bWasOpened(FALSE)
+        ,bWasOpened(sal_False)
     {
     }
 };
@@ -165,7 +165,7 @@ private:
 
 protected:
     virtual void    RequestingChilds( SvLBoxEntry *pEntry);
-    virtual BOOL    Expand( SvLBoxEntry* pParent );
+    virtual sal_Bool    Expand( SvLBoxEntry* pParent );
     using SvListView::Expand;
 
 public:
@@ -179,7 +179,7 @@ public:
             ~SvxConfigGroupListBox_Impl();
 
     void    Init();
-    void    Open( SvLBoxEntry*, BOOL );
+    void    Open( SvLBoxEntry*, sal_Bool );
     void    ClearAll();
     void    GroupSelected();
 
@@ -203,7 +203,7 @@ class SvxScriptSelectorDialog : public ModelessDialog
     FixedLine                       aDescription;
     FixedText                       aDescriptionText;
 
-    BOOL                            m_bShowSlots;
+    sal_Bool                            m_bShowSlots;
     Link                            m_aAddHdl;
 
     DECL_LINK( ClickHdl, Button * );
@@ -217,7 +217,7 @@ public:
 
     SvxScriptSelectorDialog (
         Window* pParent = NULL,
-        BOOL bShowSlots = FALSE,
+        sal_Bool bShowSlots = sal_False,
         const ::com::sun::star::uno::Reference
             < ::com::sun::star::frame::XFrame >& xFrame = 0
     );

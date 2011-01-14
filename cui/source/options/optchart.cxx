@@ -40,13 +40,13 @@
 void ChartColorLB::FillBox( const SvxChartColorTable & rTab )
 {
     long nCount = rTab.size();
-    SetUpdateMode( FALSE );
+    SetUpdateMode( sal_False );
 
     for( long i = 0; i < nCount; i++ )
     {
         Append( const_cast< XColorEntry * >( & rTab[ i ] ));
     }
-    SetUpdateMode( TRUE );
+    SetUpdateMode( sal_True );
 }
 
 
@@ -80,7 +80,7 @@ SvxDefaultColorOptPage::SvxDefaultColorOptPage( Window* pParent, const SfxItemSe
     pColorTab = new XColorTable( SvtPathOptions().GetPalettePath() );
 
     const SfxPoolItem* pItem = NULL;
-    if ( rInAttrs.GetItemState( SID_SCH_EDITOPTIONS, FALSE, &pItem ) == SFX_ITEM_SET )
+    if ( rInAttrs.GetItemState( SID_SCH_EDITOPTIONS, sal_False, &pItem ) == SFX_ITEM_SET )
     {
         pColorConfig = SAL_STATIC_CAST( SvxChartColorTableItem*, pItem->Clone() );
     }
@@ -123,12 +123,12 @@ SfxTabPage* __EXPORT SvxDefaultColorOptPage::Create( Window* pParent, const SfxI
     return new SvxDefaultColorOptPage( pParent, rAttrs );
 }
 
-BOOL __EXPORT SvxDefaultColorOptPage::FillItemSet( SfxItemSet& rOutAttrs )
+sal_Bool __EXPORT SvxDefaultColorOptPage::FillItemSet( SfxItemSet& rOutAttrs )
 {
     if( pColorConfig )
         rOutAttrs.Put( *SAL_STATIC_CAST( SfxPoolItem*, pColorConfig ));
 
-    return TRUE;
+    return sal_True;
 }
 
 void __EXPORT SvxDefaultColorOptPage::Reset( const SfxItemSet& )
@@ -147,7 +147,7 @@ void SvxDefaultColorOptPage::FillColorBox()
     for( long i = 0; i < nCount; i++ )
     {
         pColorEntry = pColorTab->GetColor( i );
-        aValSetColorBox.InsertItem( (USHORT) i + 1, pColorEntry->GetColor(), pColorEntry->GetName() );
+        aValSetColorBox.InsertItem( (sal_uInt16) i + 1, pColorEntry->GetColor(), pColorEntry->GetName() );
     }
 }
 
@@ -208,7 +208,7 @@ IMPL_LINK( SvxDefaultColorOptPage, ListClickedHdl, ChartColorLB*,  pColorList )
     }
     else
     {
-        aValSetColorBox.SelectItem( (USHORT)nIndex + 1 );       // ValueSet is 1-based
+        aValSetColorBox.SelectItem( (sal_uInt16)nIndex + 1 );       // ValueSet is 1-based
     }
 
     return 0L;
@@ -219,7 +219,7 @@ IMPL_LINK( SvxDefaultColorOptPage, ListClickedHdl, ChartColorLB*,  pColorList )
 
 IMPL_LINK( SvxDefaultColorOptPage, BoxClickedHdl, ValueSet*, EMPTYARG )
 {
-    USHORT nIdx = aLbChartColors.GetSelectEntryPos();
+    sal_uInt16 nIdx = aLbChartColors.GetSelectEntryPos();
     if( nIdx != LISTBOX_ENTRY_NOTFOUND )
     {
         XColorEntry aEntry( aValSetColorBox.GetItemColor( aValSetColorBox.GetSelectItemId() ),

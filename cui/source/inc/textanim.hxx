@@ -86,7 +86,7 @@ private:
     DECL_LINK( ClickDirectionHdl_Impl, ImageButton * );
 
     void                SelectDirection( SdrTextAniDirection nValue );
-    USHORT              GetSelectedDirection();
+    sal_uInt16              GetSelectedDirection();
 #endif
 
 public:
@@ -95,9 +95,9 @@ public:
     ~SvxTextAnimationPage();
 
     static SfxTabPage*  Create( Window*, const SfxItemSet& );
-    static  USHORT*     GetRanges();
+    static  sal_uInt16*     GetRanges();
 
-    virtual BOOL        FillItemSet( SfxItemSet& );
+    virtual sal_Bool        FillItemSet( SfxItemSet& );
     virtual void        Reset( const SfxItemSet & );
 
     void         Construct();
@@ -114,7 +114,7 @@ private:
     const SfxItemSet&   rOutAttrs;
     const SdrView*      pView;
 
-    virtual void        PageCreated( USHORT nId, SfxTabPage &rPage );
+    virtual void        PageCreated( sal_uInt16 nId, SfxTabPage &rPage );
 
 public:
 

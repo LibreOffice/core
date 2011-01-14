@@ -55,7 +55,7 @@ int IconcDlgCmpUS_Impl( const void* p1, const void* p2 )
 #endif
 #endif
 {
-    return *(USHORT*)p1 - *(USHORT*)p2;
+    return *(sal_uInt16*)p1 - *(sal_uInt16*)p2;
 }
 
 // some stuff for easier changes for SvtViewOptions
@@ -93,9 +93,9 @@ IconChoicePage::IconChoicePage( Window *pParent, const ResId &rResId,
                                 const SfxItemSet &rAttrSet )
 :   TabPage                   ( pParent, rResId ),
     pSet                      ( &rAttrSet ),
-    bHasExchangeSupport       ( FALSE ),
+    bHasExchangeSupport       ( sal_False ),
     pDialog                   ( NULL ),
-    bStandard                 ( FALSE )
+    bStandard                 ( sal_False )
 {
     SetStyle ( GetStyle()  | WB_DIALOGCONTROL | WB_HIDE );
 }
@@ -135,9 +135,9 @@ void IconChoicePage::FillUserData()
 
 // -----------------------------------------------------------------------
 
-BOOL IconChoicePage::IsReadOnly() const
+sal_Bool IconChoicePage::IsReadOnly() const
 {
-    return FALSE;
+    return sal_False;
 }
 
 // -----------------------------------------------------------------------
@@ -158,16 +158,16 @@ void IconChoicePage::ImplInitSettings()
     Window* pParent = GetParent();
     if ( pParent->IsChildTransparentModeEnabled() && !IsControlBackground() )
     {
-        EnableChildTransparentMode( TRUE );
+        EnableChildTransparentMode( sal_True );
         SetParentClipMode( PARENTCLIPMODE_NOCLIP );
-        SetPaintTransparent( TRUE );
+        SetPaintTransparent( sal_True );
         SetBackground();
     }
     else
     {
-        EnableChildTransparentMode( FALSE );
+        EnableChildTransparentMode( sal_False );
         SetParentClipMode( 0 );
-        SetPaintTransparent( FALSE );
+        SetPaintTransparent( sal_False );
 
         if ( IsControlBackground() )
             SetBackground( GetControlBackground() );
@@ -217,7 +217,7 @@ void IconChoicePage::DataChanged( const DataChangedEvent& rDCEvt )
 
 IconChoiceDialog::IconChoiceDialog ( Window* pParent, const ResId &rResId,
                                      const EIconChoicePos ePos,
-                                     const SfxItemSet *pItemSet )//, BOOL bEditFmt, const String *pUserButtonText = 0 )
+                                     const SfxItemSet *pItemSet )//, sal_Bool bEditFmt, const String *pUserButtonText = 0 )
 :   ModalDialog         ( pParent, rResId ),
     meChoicePos     ( ePos ),
     maIconCtrl      ( this, WB_3DLOOK | WB_ICON | WB_BORDER |
@@ -235,11 +235,11 @@ IconChoiceDialog::IconChoiceDialog ( Window* pParent, const ResId &rResId,
     pRanges         ( NULL ),
     nResId          ( rResId.GetId() ),
 
-    bHideResetBtn   ( FALSE ),
-    bModal          ( FALSE ),
-    bInOK           ( FALSE ),
-    bModified       ( FALSE ),
-    bItemsReset     ( FALSE )
+    bHideResetBtn   ( sal_False ),
+    bModal          ( sal_False ),
+    bInOK           ( sal_False ),
+    bModified       ( sal_False ),
+    bItemsReset     ( sal_False )
 {
     // IconChoiceCtrl-Settings
     //maIconCtrl.SetBackground ( Wallpaper( Color (146, 146, 186) ) );
@@ -248,7 +248,7 @@ IconChoiceDialog::IconChoiceDialog ( Window* pParent, const ResId &rResId,
     SetCtrlPos ( meChoicePos );
     maIconCtrl.SetClickHdl ( LINK ( this, IconChoiceDialog , ChosePageHdl_Impl ) );
     maIconCtrl.Show();
-    maIconCtrl.SetChoiceWithCursor ( TRUE );
+    maIconCtrl.SetChoiceWithCursor ( sal_True );
     maIconCtrl.SetSelectionMode( SINGLE_SELECTION );
     maIconCtrl.SetHelpId( HID_ICCDIALOG_CHOICECTRL );
 
@@ -271,14 +271,14 @@ IconChoiceDialog::IconChoiceDialog ( Window* pParent, const ResId &rResId,
     aHelpBtn.Show();
     aResetBtn.Show();
 
-    SetPosSizeCtrls ( TRUE );
+    SetPosSizeCtrls ( sal_True );
 }
 
 // -----------------------------------------------------------------------
 
 /*
 IconChoiceDialog ::IconChoiceDialog ( SfxViewFrame *pViewFrame, Window* pParent, const ResId &rResId,
-                   const SfxItemSet * = 0, BOOL bEditFmt = FALSE,
+                   const SfxItemSet * = 0, sal_Bool bEditFmt = sal_False,
                    const String *pUserButtonText = 0 )
 :   meChoicePos     ( PosLeft ),    // Default erst ma Links
     maIconCtrl      ( this, Die_Winbits ),
@@ -298,7 +298,7 @@ IconChoiceDialog ::IconChoiceDialog ( SfxViewFrame *pViewFrame, Window* pParent,
 
 IconChoiceDialog ::~IconChoiceDialog ()
 {
-    ULONG i;
+    sal_uLong i;
 
     // save configuration at INI-Manager
     // and remove pages
@@ -306,7 +306,7 @@ IconChoiceDialog ::~IconChoiceDialog ()
     aTabDlgOpt.SetWindowState( ::rtl::OUString::createFromAscii( GetWindowState((WINDOWSTATE_MASK_X | WINDOWSTATE_MASK_Y | WINDOWSTATE_MASK_STATE | WINDOWSTATE_MASK_MINIMIZED)).GetBuffer() ) );
     aTabDlgOpt.SetPageID( mnCurrentPageId );
 
-    const ULONG nCount = maPageList.Count();
+    const sal_uLong nCount = maPageList.Count();
 
     for ( i = 0; i < nCount; ++i )
     {
@@ -334,7 +334,7 @@ IconChoiceDialog ::~IconChoiceDialog ()
     for ( i=0; i<maIconCtrl.GetEntryCount(); i++)
     {
         SvxIconChoiceCtrlEntry* pEntry = maIconCtrl.GetEntry ( i );
-        USHORT* pUserData = (USHORT*) pEntry->GetUserData();
+        sal_uInt16* pUserData = (sal_uInt16*) pEntry->GetUserData();
         delete pUserData;
     }
 
@@ -351,12 +351,12 @@ IconChoiceDialog ::~IconChoiceDialog ()
 |
 \**********************************************************************/
 
-SvxIconChoiceCtrlEntry* IconChoiceDialog::AddTabPage( USHORT nId, const String& rIconText,
+SvxIconChoiceCtrlEntry* IconChoiceDialog::AddTabPage( sal_uInt16 nId, const String& rIconText,
                                    const Image& rChoiceIcon,
                                    const Image& rChoiceIconHC,
                                    CreatePage pCreateFunc /* != 0 */,
                                    GetPageRanges pRangesFunc /* darf 0 sein */,
-                                   BOOL bItemsOnDemand, ULONG /*nPos*/ )
+                                   sal_Bool bItemsOnDemand, sal_uLong /*nPos*/ )
 {
     IconChoicePageData* pData = new IconChoicePageData ( nId, pCreateFunc,
                                                          pRangesFunc,
@@ -366,7 +366,7 @@ SvxIconChoiceCtrlEntry* IconChoiceDialog::AddTabPage( USHORT nId, const String& 
     pData->fnGetRanges = pRangesFunc;
     pData->bOnDemand = bItemsOnDemand;
 
-    USHORT *pId = new USHORT ( nId );
+    sal_uInt16 *pId = new sal_uInt16 ( nId );
     SvxIconChoiceCtrlEntry* pEntry = maIconCtrl.InsertEntry( rIconText, rChoiceIcon, rChoiceIconHC );
     pEntry->SetUserData ( (void*) pId );
     return pEntry;
@@ -382,7 +382,7 @@ void IconChoiceDialog::Paint( const Rectangle& rRect )
 {
     Dialog::Paint ( rRect );
 
-    for ( ULONG i=0; i<maPageList.Count(); i++ )
+    for ( sal_uLong i=0; i<maPageList.Count(); i++ )
     {
         IconChoicePageData* pData = (IconChoicePageData*)maPageList.GetObject ( i );
 
@@ -453,7 +453,7 @@ void IconChoiceDialog::HidePageImpl ( IconChoicePageData* pData )
 
 // -----------------------------------------------------------------------
 
-void IconChoiceDialog::ShowPage( USHORT nId )
+void IconChoiceDialog::ShowPage( sal_uInt16 nId )
 {
     bool bInvalidate = GetCurPageId() != nId;
     SetCurPageId( nId );
@@ -483,7 +483,7 @@ void IconChoiceDialog::Resize()
     }
 }
 
-void IconChoiceDialog::SetPosSizeCtrls ( BOOL bInit )
+void IconChoiceDialog::SetPosSizeCtrls ( sal_Bool bInit )
 {
     const Point aCtrlOffset ( LogicToPixel( Point( CTRLS_OFFSET, CTRLS_OFFSET ), MAP_APPFONT ) );
     Size aOutSize ( GetOutputSizePixel() );
@@ -539,7 +539,7 @@ void IconChoiceDialog::SetPosSizeCtrls ( BOOL bInit )
     ////////////////////////////////////////
     // Pages resizen & positionieren
     //
-    for ( ULONG i=0; i<maPageList.Count(); i++ )
+    for ( sal_uLong i=0; i<maPageList.Count(); i++ )
     {
         IconChoicePageData* pData = (IconChoicePageData*)maPageList.GetObject ( i );
 
@@ -584,7 +584,7 @@ void IconChoiceDialog::SetPosSizeCtrls ( BOOL bInit )
     ////////////////////////////////////////
     // Buttons positionieren
     //
-    ULONG nXOffset=0;
+    sal_uLong nXOffset=0;
     if ( meChoicePos == PosRight )
         nXOffset = aNewIconCtrlSize.Width()+(2*aCtrlOffset.X());
 
@@ -622,7 +622,7 @@ void IconChoiceDialog::SetPosSizeCtrls ( BOOL bInit )
     Invalidate();
 }
 
-void IconChoiceDialog::SetPosSizePages ( USHORT nId )
+void IconChoiceDialog::SetPosSizePages ( sal_uInt16 nId )
 {
     const Point aCtrlOffset ( LogicToPixel( Point( CTRLS_OFFSET, CTRLS_OFFSET ), MAP_APPFONT ) );
     IconChoicePageData* pData = GetPageData ( nId );
@@ -678,13 +678,13 @@ void IconChoiceDialog::SetPosSizePages ( USHORT nId )
 
 IMPL_LINK ( IconChoiceDialog , ChosePageHdl_Impl, void *, EMPTYARG )
 {
-    ULONG nPos;
+    sal_uLong nPos;
 
     SvxIconChoiceCtrlEntry *pEntry = maIconCtrl.GetSelectedEntry ( nPos );
     if ( !pEntry )
         pEntry = maIconCtrl.GetCursor( );
 
-    USHORT *pId = (USHORT*)pEntry->GetUserData ();
+    sal_uInt16 *pId = (sal_uInt16*)pEntry->GetUserData ();
 
     if( *pId != mnCurrentPageId )
     {
@@ -709,7 +709,7 @@ IMPL_LINK ( IconChoiceDialog , ChosePageHdl_Impl, void *, EMPTYARG )
 
 IMPL_LINK( IconChoiceDialog, OkHdl, Button *, EMPTYARG )
 {
-    bInOK = TRUE;
+    bInOK = sal_True;
 
     if ( OK_Impl() )
     {
@@ -801,7 +801,7 @@ void IconChoiceDialog::ActivatePageImpl ()
             pData->pPage->Reset( *pSet );
         }
 
-        pData->bRefresh = FALSE;
+        pData->bRefresh = sal_False;
 
         if ( pExampleSet )
             pData->pPage->ActivatePage( *pExampleSet );
@@ -809,7 +809,7 @@ void IconChoiceDialog::ActivatePageImpl ()
 
     SetHelpId( pData->pPage->GetHelpId() );
 
-    BOOL bReadOnly = pData->pPage->IsReadOnly();
+    sal_Bool bReadOnly = pData->pPage->IsReadOnly();
     if ( bReadOnly || bHideResetBtn )
         aResetBtn.Hide();
     else
@@ -819,7 +819,7 @@ void IconChoiceDialog::ActivatePageImpl ()
 
 // -----------------------------------------------------------------------
 
-BOOL IconChoiceDialog::DeActivatePageImpl ()
+sal_Bool IconChoiceDialog::DeActivatePageImpl ()
 {
     IconChoicePageData *pData = GetPageData ( mnCurrentPageId );
 
@@ -867,24 +867,24 @@ BOOL IconChoiceDialog::DeActivatePageImpl ()
             pSet = GetRefreshedSet();
             DBG_ASSERT( pSet, "GetRefreshedSet() liefert NULL" );
             // alle Pages als neu zu initialsieren flaggen
-            const ULONG nCount = maPageList.Count();
+            const sal_uLong nCount = maPageList.Count();
 
-            for ( USHORT i = 0; i < nCount; ++i )
+            for ( sal_uInt16 i = 0; i < nCount; ++i )
             {
                 IconChoicePageData* pObj = (IconChoicePageData*)maPageList.GetObject(i);
 
                 if ( pObj->pPage != pPage ) // eigene Page nicht mehr refreshen
-                    pObj->bRefresh = TRUE;
+                    pObj->bRefresh = sal_True;
                 else
-                    pObj->bRefresh = FALSE;
+                    pObj->bRefresh = sal_False;
             }
         }
     }
 
     if ( nRet & IconChoicePage::LEAVE_PAGE )
-        return TRUE;
+        return sal_True;
     else
-        return FALSE;
+        return sal_False;
 }
 
 // -----------------------------------------------------------------------
@@ -911,7 +911,7 @@ void IconChoiceDialog::ResetPageImpl ()
 |
 \**********************************************************************/
 
-const USHORT* IconChoiceDialog::GetInputRanges( const SfxItemPool& rPool )
+const sal_uInt16* IconChoiceDialog::GetInputRanges( const SfxItemPool& rPool )
 {
     if ( pSet )
     {
@@ -922,19 +922,19 @@ const USHORT* IconChoiceDialog::GetInputRanges( const SfxItemPool& rPool )
     if ( pRanges )
         return pRanges;
     SvUShorts aUS( 16, 16 );
-    ULONG nCount = maPageList.Count();
+    sal_uLong nCount = maPageList.Count();
 
-    USHORT i;
+    sal_uInt16 i;
     for ( i = 0; i < nCount; ++i )
     {
         IconChoicePageData* pData = maPageList.GetObject (i);
 
         if ( pData->fnGetRanges )
         {
-            const USHORT* pTmpRanges = (pData->fnGetRanges)();
-            const USHORT* pIter = pTmpRanges;
+            const sal_uInt16* pTmpRanges = (pData->fnGetRanges)();
+            const sal_uInt16* pIter = pTmpRanges;
 
-            USHORT nLen;
+            sal_uInt16 nLen;
             for( nLen = 0; *pIter; ++nLen, ++pIter )
                 ;
             aUS.Insert( pTmpRanges, nLen, aUS.Count() );
@@ -958,14 +958,14 @@ const USHORT* IconChoiceDialog::GetInputRanges( const SfxItemPool& rPool )
 #if defined __SUNPRO_CC
 #pragma disable_warn
 #endif
-        qsort( (void*)aUS.GetData(), aUS.Count(), sizeof(USHORT), IconcDlgCmpUS_Impl );
+        qsort( (void*)aUS.GetData(), aUS.Count(), sizeof(sal_uInt16), IconcDlgCmpUS_Impl );
 #if defined __SUNPRO_CC
 #pragma enable_warn
 #endif
     }
 
-    pRanges = new USHORT[aUS.Count() + 1];
-    memcpy(pRanges, aUS.GetData(), sizeof(USHORT) * aUS.Count());
+    pRanges = new sal_uInt16[aUS.Count() + 1];
+    memcpy(pRanges, aUS.GetData(), sizeof(sal_uInt16) * aUS.Count());
     pRanges[aUS.Count()] = 0;
 
     return pRanges;
@@ -988,14 +988,14 @@ void IconChoiceDialog::SetInputSet( const SfxItemSet* pInSet )
 
 // -----------------------------------------------------------------------
 
-void IconChoiceDialog::PageCreated( USHORT /*nId*/, IconChoicePage& /*rPage*/ )
+void IconChoiceDialog::PageCreated( sal_uInt16 /*nId*/, IconChoicePage& /*rPage*/ )
 {
     // not interested in
 }
 
 // -----------------------------------------------------------------------
 
-SfxItemSet* IconChoiceDialog::CreateInputItemSet( USHORT )
+SfxItemSet* IconChoiceDialog::CreateInputItemSet( sal_uInt16 )
 {
     DBG_WARNINGFILE( "CreateInputItemSet nicht implementiert" );
 
@@ -1020,11 +1020,11 @@ short IconChoiceDialog::Execute()
 
 // -----------------------------------------------------------------------
 
-void IconChoiceDialog::Start( BOOL bShow )
+void IconChoiceDialog::Start( sal_Bool bShow )
 {
 
     aCancelBtn.SetClickHdl( LINK( this, IconChoiceDialog, CancelHdl ) );
-    bModal = FALSE;
+    bModal = sal_False;
 
     Start_Impl();
 
@@ -1038,8 +1038,8 @@ void IconChoiceDialog::Start( BOOL bShow )
 sal_Bool IconChoiceDialog::QueryClose()
 {
     sal_Bool bRet = sal_True;
-    const ULONG nCount = maPageList.Count();
-    for ( ULONG i = 0; i < nCount; ++i )
+    const sal_uLong nCount = maPageList.Count();
+    for ( sal_uLong i = 0; i < nCount; ++i )
     {
         IconChoicePageData* pData = maPageList.GetObject(i);
         if ( pData->pPage && !pData->pPage->QueryClose() )
@@ -1056,7 +1056,7 @@ sal_Bool IconChoiceDialog::QueryClose()
 void IconChoiceDialog::Start_Impl()
 {
     Point aPos;
-    USHORT nActPage;
+    sal_uInt16 nActPage;
 
     if ( mnCurrentPageId == 0 || mnCurrentPageId == USHRT_MAX )
         nActPage = maPageList.GetObject(0)->nId;//First()->nId;
@@ -1072,7 +1072,7 @@ void IconChoiceDialog::Start_Impl()
         SetWindowState( ByteString( aTabDlgOpt.GetWindowState().getStr(), RTL_TEXTENCODING_ASCII_US ) );
 
         // initiale TabPage aus Programm/Hilfe/Konfig
-        nActPage = (USHORT)aTabDlgOpt.GetPageID();
+        nActPage = (sal_uInt16)aTabDlgOpt.GetPageID();
 
         if ( USHRT_MAX != mnCurrentPageId )
             nActPage = mnCurrentPageId;
@@ -1104,12 +1104,12 @@ const SfxItemSet* IconChoiceDialog::GetRefreshedSet()
 |
 \**********************************************************************/
 
-IconChoicePageData* IconChoiceDialog::GetPageData ( USHORT nId )
+IconChoicePageData* IconChoiceDialog::GetPageData ( sal_uInt16 nId )
 {
     IconChoicePageData *pRet = NULL;
-    BOOL bFound = FALSE;
+    sal_Bool bFound = sal_False;
 
-    for ( ULONG i=0; i<maPageList.Count() && !bFound; i++ )
+    for ( sal_uLong i=0; i<maPageList.Count() && !bFound; i++ )
     {
         IconChoicePageData* pData = (IconChoicePageData*)maPageList.GetObject ( i );
 
@@ -1128,7 +1128,7 @@ IconChoicePageData* IconChoiceDialog::GetPageData ( USHORT nId )
 |
 \**********************************************************************/
 
-BOOL IconChoiceDialog::OK_Impl()
+sal_Bool IconChoiceDialog::OK_Impl()
 {
     IconChoicePage* pPage = GetPageData ( mnCurrentPageId )->pPage;
 
@@ -1139,7 +1139,7 @@ BOOL IconChoiceDialog::OK_Impl()
         if ( pSet )
         {
             SfxItemSet aTmp( *pSet->GetPool(), pSet->GetRanges() );
-            BOOL bRet = FALSE;
+            sal_Bool bRet = sal_False;
 
             if ( pPage->HasExchangeSupport() )
                 nRet = pPage->DeactivatePage( &aTmp );
@@ -1151,7 +1151,7 @@ BOOL IconChoiceDialog::OK_Impl()
                 pOutSet->Put( aTmp );
             }
             else if ( bRet )
-                bModified |= TRUE;
+                bModified |= sal_True;
         }
         else
             nRet = pPage->DeactivatePage( NULL );
@@ -1165,20 +1165,20 @@ BOOL IconChoiceDialog::OK_Impl()
 
 short IconChoiceDialog::Ok()
 {
-    bInOK = TRUE;
+    bInOK = sal_True;
 
     if ( !pOutSet )
     {
         if ( !pExampleSet && pSet )
-            pOutSet = pSet->Clone( FALSE ); // ohne Items
+            pOutSet = pSet->Clone( sal_False ); // ohne Items
         else if ( pExampleSet )
             pOutSet = new SfxItemSet( *pExampleSet );
     }
-    BOOL _bModified = FALSE;
+    sal_Bool _bModified = sal_False;
 
-    const ULONG nCount = maPageList.Count();
+    const sal_uLong nCount = maPageList.Count();
 
-    for ( USHORT i = 0; i < nCount; ++i )
+    for ( sal_uInt16 i = 0; i < nCount; ++i )
     {
         IconChoicePageData* pData = GetPageData ( i );
 
@@ -1198,7 +1198,7 @@ short IconChoiceDialog::Ok()
 
                 if ( pPage->FillItemSet( aTmp ) )
                 {
-                    _bModified |= TRUE;
+                    _bModified |= sal_True;
                     pExampleSet->Put( aTmp );
                     pOutSet->Put( aTmp );
                 }
@@ -1207,20 +1207,20 @@ short IconChoiceDialog::Ok()
     }
 
     if ( _bModified || ( pOutSet && pOutSet->Count() > 0 ) )
-        _bModified |= TRUE;
+        _bModified |= sal_True;
 
     return _bModified ? RET_OK : RET_CANCEL;
 }
 
 // -----------------------------------------------------------------------
 
-void IconChoiceDialog::FocusOnIcon( USHORT nId )
+void IconChoiceDialog::FocusOnIcon( sal_uInt16 nId )
 {
     // set focus to icon for the current visible page
-    for ( USHORT i=0; i<maIconCtrl.GetEntryCount(); i++)
+    for ( sal_uInt16 i=0; i<maIconCtrl.GetEntryCount(); i++)
     {
         SvxIconChoiceCtrlEntry* pEntry = maIconCtrl.GetEntry ( i );
-        USHORT* pUserData = (USHORT*) pEntry->GetUserData();
+        sal_uInt16* pUserData = (sal_uInt16*) pEntry->GetUserData();
 
         if ( pUserData && *pUserData == nId )
         {

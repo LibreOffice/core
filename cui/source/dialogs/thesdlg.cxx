@@ -84,7 +84,7 @@ LookUpComboBox_Impl::LookUpComboBox_Impl(
     m_aModifyTimer.SetTimeoutHdl( LINK( this, LookUpComboBox_Impl, ModifyTimer_Hdl ) );
     m_aModifyTimer.SetTimeout( 500 );
 
-    EnableAutocomplete( FALSE );
+    EnableAutocomplete( sal_False );
 }
 
 
@@ -145,7 +145,7 @@ void ReplaceEdit_Impl::SetText( const XubString& rStr, const Selection& rNewSele
 
 AlternativesString_Impl::AlternativesString_Impl(
     ThesaurusAlternativesCtrl_Impl &rControl,
-    SvLBoxEntry* pEntry, USHORT nFlags, const String& rStr ) :
+    SvLBoxEntry* pEntry, sal_uInt16 nFlags, const String& rStr ) :
     //
     SvLBoxString( pEntry, nFlags, rStr ),
     m_rControlImpl( rControl )
@@ -154,7 +154,7 @@ AlternativesString_Impl::AlternativesString_Impl(
 
 void AlternativesString_Impl::Paint(
     const Point& rPos,
-    SvLBox& rDev, USHORT,
+    SvLBox& rDev, sal_uInt16,
     SvLBoxEntry* pEntry )
 {
     AlternativesExtraData* pData = m_rControlImpl.GetExtraData( pEntry );
@@ -367,7 +367,7 @@ bool SvxThesaurusDialog_Impl::UpdateAlternativesBox_Impl()
     const sal_Int32 nMeanings = aMeanings.getLength();
     const uno::Reference< linguistic2::XMeaning > *pMeanings = aMeanings.getConstArray();
 
-    m_pAlternativesCT->SetUpdateMode( FALSE );
+    m_pAlternativesCT->SetUpdateMode( sal_False );
 
     // clear old user data of control before creating new ones via AddEntry below
     m_pAlternativesCT->ClearExtraData();
@@ -387,7 +387,7 @@ bool SvxThesaurusDialog_Impl::UpdateAlternativesBox_Impl()
             m_pAlternativesCT->AddEntry( -1, pSynonyms[k], false );
     }
 
-    m_pAlternativesCT->SetUpdateMode( TRUE );
+    m_pAlternativesCT->SetUpdateMode( sal_True );
 
     return nMeanings > 0;
 }
@@ -419,7 +419,7 @@ IMPL_LINK( SvxThesaurusDialog_Impl, LanguageHdl_Impl, MenuButton *, pBtn )
     PopupMenu *pMenu = aLangMBtn.GetPopupMenu();
     if (pMenu && pBtn)
     {
-        USHORT nItem = pBtn->GetCurItemId();
+        sal_uInt16 nItem = pBtn->GetCurItemId();
         String aLangText( pMenu->GetItemText( nItem ) );
         LanguageType nLang = SvtLanguageTable().GetType( aLangText );
         DBG_ASSERT( nLang != LANGUAGE_NONE && nLang != LANGUAGE_DONTKNOW, "failed to get language" );
@@ -457,7 +457,7 @@ IMPL_LINK( SvxThesaurusDialog_Impl, WordSelectHdl_Impl, ComboBox *, pBox )
 {
     if (pBox && !aWordCB.IsTravelSelect())  // act only upon return key and not when traveling with cursor keys
     {
-        USHORT nPos = pBox->GetSelectEntryPos();
+        sal_uInt16 nPos = pBox->GetSelectEntryPos();
         String aStr( pBox->GetEntry( nPos ) );
         aStr = linguistic::GetThesaurusReplaceText( aStr );
         aWordCB.SetText( aStr );
@@ -704,7 +704,7 @@ SvxThesaurusDialog::SvxThesaurusDialog(
     }
     std::sort( aLangVec.begin(), aLangVec.end() );
     for (size_t i = 0;  i < aLangVec.size();  ++i)
-        pMenu->InsertItem( (USHORT)i+1, aLangVec[i] );  // menu items should be enumerated from 1 and not 0
+        pMenu->InsertItem( (sal_uInt16)i+1, aLangVec[i] );  // menu items should be enumerated from 1 and not 0
     m_pImpl->aLangMBtn.SetPopupMenu( pMenu );
 
     SetWindowTitle( nLanguage );

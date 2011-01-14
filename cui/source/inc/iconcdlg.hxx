@@ -52,7 +52,7 @@ class IconChoicePage;
 
 // Create-Function
 typedef IconChoicePage* (*CreatePage)(Window *pParent, const SfxItemSet &rAttrSet);
-typedef USHORT*         (*GetPageRanges)(); // liefert internationale Which-Wert
+typedef sal_uInt16*         (*GetPageRanges)(); // liefert internationale Which-Wert
 
 // page-list
 DECLARE_LIST( IconChoicePageList, IconChoicePageData * )
@@ -68,21 +68,21 @@ enum EIconChoicePos { PosLeft, PosRight, PosTop, PosBottom };
 
 struct IconChoicePageData
 {
-    USHORT nId;                  // Die ID
+    sal_uInt16 nId;                  // Die ID
     CreatePage fnCreatePage;     // Pointer auf die Factory
     GetPageRanges fnGetRanges;// Pointer auf die Ranges-Funktion
     IconChoicePage* pPage;       // die TabPage selber
-    BOOL bOnDemand;              // Flag: ItemSet onDemand
-    BOOL bRefresh;               // Flag: Seite mu\s neu initialisiert werden
+    sal_Bool bOnDemand;              // Flag: ItemSet onDemand
+    sal_Bool bRefresh;               // Flag: Seite mu\s neu initialisiert werden
 
     // Konstruktor
-    IconChoicePageData( USHORT Id, CreatePage fnPage, GetPageRanges fnRanges, BOOL bDemand )
+    IconChoicePageData( sal_uInt16 Id, CreatePage fnPage, GetPageRanges fnRanges, sal_Bool bDemand )
         : nId           ( Id ),
           fnCreatePage  ( fnPage ),
           fnGetRanges   ( fnRanges ),
           pPage         ( NULL ),
           bOnDemand     ( bDemand ),
-          bRefresh      ( FALSE )
+          bRefresh      ( sal_False )
     {}
 };
 
@@ -100,9 +100,9 @@ class IconChoicePage : public TabPage
 private :
     const SfxItemSet*   pSet;
     String              aUserString;
-    BOOL                bHasExchangeSupport;
+    sal_Bool                bHasExchangeSupport;
     IconChoiceDialog*   pDialog;
-    BOOL                bStandard;
+    sal_Bool                bStandard;
 
     void                SetDialog( IconChoiceDialog* pNew ) { pDialog = pNew; }
     IconChoiceDialog*   GetDialog() const { return pDialog; }
@@ -114,19 +114,19 @@ private :
 protected :
     IconChoicePage( Window *pParent, const ResId &, const SfxItemSet &rAttrSet );
 
-    USHORT              GetSlot( USHORT nWhich ) const  { return pSet->GetPool()->GetSlotId( nWhich ); }
-    USHORT              GetWhich( USHORT nSlot ) const  { return pSet->GetPool()->GetWhich( nSlot ); }
+    sal_uInt16              GetSlot( sal_uInt16 nWhich ) const  { return pSet->GetPool()->GetSlotId( nWhich ); }
+    sal_uInt16              GetWhich( sal_uInt16 nSlot ) const  { return pSet->GetPool()->GetWhich( nSlot ); }
 
 public :
     virtual             ~IconChoicePage();
 
     const SfxItemSet&   GetItemSet() const { return *pSet; }
 
-    virtual BOOL        FillItemSet( SfxItemSet& ) = 0;
+    virtual sal_Bool        FillItemSet( SfxItemSet& ) = 0;
     virtual void        Reset( const SfxItemSet& ) = 0;
 
-    BOOL                HasExchangeSupport() const              { return bHasExchangeSupport; }
-    void                SetExchangeSupport( BOOL bNew = TRUE )  { bHasExchangeSupport = bNew; }
+    sal_Bool                HasExchangeSupport() const              { return bHasExchangeSupport; }
+    void                SetExchangeSupport( sal_Bool bNew = sal_True )  { bHasExchangeSupport = bNew; }
 
     enum {
         KEEP_PAGE = 0x0000,     // Fehlerbehandlung; Seite nicht wechseln
@@ -143,7 +143,7 @@ public :
     void                SetUserData(const String& rString)  { aUserString = rString; }
     String              GetUserData() { return aUserString; }
     virtual void        FillUserData();
-    virtual BOOL        IsReadOnly() const;
+    virtual sal_Bool        IsReadOnly() const;
     virtual sal_Bool    QueryClose();
 
     void                StateChanged( StateChangedType nType );
@@ -166,7 +166,7 @@ private :
 
     SvtIconChoiceCtrl       maIconCtrl;     // DAS IconChoice-Control
 
-    USHORT                  mnCurrentPageId;    // Id der aktuell sichtbaren Page
+    sal_uInt16                  mnCurrentPageId;    // Id der aktuell sichtbaren Page
 
     // Buttons
     OKButton                aOKBtn;
@@ -177,43 +177,43 @@ private :
     const SfxItemSet*       pSet;
     SfxItemSet*             pOutSet;
     SfxItemSet*             pExampleSet;
-    USHORT*                 pRanges;
+    sal_uInt16*                 pRanges;
 
     sal_uInt32              nResId;
 
-    BOOL                    bHideResetBtn;
-    BOOL                    bModal;
-    BOOL                    bInOK;
-    BOOL                    bModified;
-    BOOL                    bItemsReset;
+    sal_Bool                    bHideResetBtn;
+    sal_Bool                    bModal;
+    sal_Bool                    bInOK;
+    sal_Bool                    bModified;
+    sal_Bool                    bItemsReset;
 
     DECL_LINK ( ChosePageHdl_Impl, void * );
     DECL_LINK ( OkHdl,             Button * );
     DECL_LINK ( ResetHdl,          Button * );
     DECL_LINK ( CancelHdl,         Button * );
 
-    IconChoicePageData*     GetPageData ( USHORT nId );
+    IconChoicePageData*     GetPageData ( sal_uInt16 nId );
     void                    Start_Impl();
-    BOOL                    OK_Impl();
+    sal_Bool                    OK_Impl();
 
-    void                    SetPosSizeCtrls ( BOOL bInit = FALSE );
-    void                    SetPosSizePages ( USHORT nId );
+    void                    SetPosSizeCtrls ( sal_Bool bInit = sal_False );
+    void                    SetPosSizePages ( sal_uInt16 nId );
 
-    void                    FocusOnIcon ( USHORT nId );
+    void                    FocusOnIcon ( sal_uInt16 nId );
 
 protected :
     void                    ShowPageImpl ( IconChoicePageData* pData );
     void                    HidePageImpl ( IconChoicePageData* pData );
 
-    virtual void            PageCreated( USHORT nId, IconChoicePage& rPage );
-    virtual SfxItemSet*     CreateInputItemSet( USHORT nId );
+    virtual void            PageCreated( sal_uInt16 nId, IconChoicePage& rPage );
+    virtual SfxItemSet*     CreateInputItemSet( sal_uInt16 nId );
     inline SfxItemSet*      GetInputSetImpl() { return (SfxItemSet*)pSet; }
-    inline IconChoicePage*  GetTabPage( USHORT nPageId )
+    inline IconChoicePage*  GetTabPage( sal_uInt16 nPageId )
                                 { return ( GetPageData (nPageId)->pPage?GetPageData (nPageId)->pPage:NULL); }
     const SfxItemSet*       GetRefreshedSet();
 
     void                    ActivatePageImpl ();
-    BOOL                    DeActivatePageImpl ();
+    sal_Bool                    DeActivatePageImpl ();
     void                    ResetPageImpl ();
 
     short                   Ok();
@@ -237,16 +237,16 @@ public :
     //
 
     SvxIconChoiceCtrlEntry* AddTabPage(
-        USHORT nId, const String& rIconText, const Image& rChoiceIcon, const Image& rChoiceIconHC,
+        sal_uInt16 nId, const String& rIconText, const Image& rChoiceIcon, const Image& rChoiceIconHC,
         CreatePage pCreateFunc /* != NULL */, GetPageRanges pRangesFunc = NULL /* NULL allowed*/,
-        BOOL bItemsOnDemand = FALSE, ULONG nPos = LIST_APPEND );
+        sal_Bool bItemsOnDemand = sal_False, sal_uLong nPos = LIST_APPEND );
 
-    void                SetCurPageId( USHORT nId ) { mnCurrentPageId = nId; FocusOnIcon( nId ); }
-    USHORT              GetCurPageId() const       { return mnCurrentPageId; }
-    void                ShowPage( USHORT nId );
+    void                SetCurPageId( sal_uInt16 nId ) { mnCurrentPageId = nId; FocusOnIcon( nId ); }
+    sal_uInt16              GetCurPageId() const       { return mnCurrentPageId; }
+    void                ShowPage( sal_uInt16 nId );
 
                         // liefert ggf. per Map konvertierte lokale Slots
-    const USHORT*       GetInputRanges( const SfxItemPool& );
+    const sal_uInt16*       GetInputRanges( const SfxItemPool& );
     void                SetInputSet( const SfxItemSet* pInSet );
     const SfxItemSet*   GetOutputItemSet() const { return pOutSet; }
 
@@ -258,7 +258,7 @@ public :
     HelpButton&         GetHelpButton() { return aHelpBtn; }
 
     short               Execute();
-    void                Start( BOOL bShow = TRUE );
+    void                Start( sal_Bool bShow = sal_True );
     sal_Bool            QueryClose();
 
     const SfxItemSet*   GetExampleSet() const { return pExampleSet; }

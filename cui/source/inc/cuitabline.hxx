@@ -49,21 +49,21 @@ private:
     XDashList*          pNewDashList;
     XLineEndList*       pLineEndList;
     XLineEndList*       pNewLineEndList;
-    BOOL                bObjSelected;
+    sal_Bool                bObjSelected;
 
     ChangeType          nLineEndListState;
     ChangeType          nDashListState;
     ChangeType          mnColorTableState;
 
-    USHORT              nPageType;
-    USHORT              nDlgType;
-    USHORT              nPosDashLb;
-    USHORT              nPosLineEndLb;
-    USHORT              mnPos;
-    BOOL                mbAreaTP;
-    BOOL                mbDeleteColorTable;
+    sal_uInt16              nPageType;
+    sal_uInt16              nDlgType;
+    sal_uInt16              nPosDashLb;
+    sal_uInt16              nPosLineEndLb;
+    sal_uInt16              mnPos;
+    sal_Bool                mbAreaTP;
+    sal_Bool                mbDeleteColorTable;
 
-    virtual void        PageCreated( USHORT nId, SfxTabPage &rPage );
+    virtual void        PageCreated( sal_uInt16 nId, SfxTabPage &rPage );
 
 protected:
     virtual short       Ok();
@@ -75,7 +75,7 @@ protected:
 public:
     SvxLineTabDialog( Window* pParent, const SfxItemSet* pAttr,
                       SdrModel* pModel, const SdrObject* pObj = NULL,
-                      BOOL bHasObj = TRUE );
+                      sal_Bool bHasObj = sal_True );
     ~SvxLineTabDialog();
 
     void             SetNewDashList( XDashList* pInLst)
@@ -148,15 +148,15 @@ private:
     List                aGrfNames;
     List                aGrfBrushItems;
     String              sNumCharFmtName;
-    BOOL                bLastWidthModified;
+    sal_Bool                bLastWidthModified;
     Size                aSymbolLastSize;
     Graphic             aSymbolGraphic;
     Size                aSymbolSize;
-    BOOL                bSymbols;
+    sal_Bool                bSymbols;
 
     const SfxItemSet&   rOutAttrs;
     RECT_POINT          eRP;
-    BOOL                bObjSelected;
+    sal_Bool                bObjSelected;
 
     XOutdevItemPool*    pXPool;
     XLineStyleItem      aXLStyle;
@@ -173,15 +173,15 @@ private:
     ChangeType*         pnLineEndListState;
     ChangeType*         pnDashListState;
     ChangeType*         pnColorTableState;
-    UINT16             nPageType; //add CHINA001
-    UINT16             nDlgType; //add CHINA001
-    USHORT*             pPosDashLb;
-    USHORT*             pPosLineEndLb;
+    sal_uInt16             nPageType; //add CHINA001
+    sal_uInt16             nDlgType; //add CHINA001
+    sal_uInt16*             pPosDashLb;
+    sal_uInt16*             pPosLineEndLb;
 
     SfxMapUnit          ePoolUnit;
 
     // #63083#
-    INT32               nActLineWidth;
+    sal_Int32               nActLineWidth;
 
     //Handler für Gallery-Popup-Menue-Button + Size
     DECL_LINK( GraphicHdl_Impl, MenuButton * );
@@ -201,13 +201,13 @@ private:
     // #116827#
     DECL_LINK( ChangeEdgeStyleHdl_Impl, void * );
 
-    BOOL FillXLSet_Impl();
+    sal_Bool FillXLSet_Impl();
 #endif
 
     void FillListboxes();
 public:
 
-    void ShowSymbolControls(BOOL bOn);
+    void ShowSymbolControls(sal_Bool bOn);
 
     SvxLineTabPage( Window* pParent, const SfxItemSet& rInAttrs );
     virtual ~SvxLineTabPage();
@@ -216,9 +216,9 @@ public:
 
 
     static  SfxTabPage* Create( Window*, const SfxItemSet& );
-    static  USHORT*    GetRanges();
+    static  sal_uInt16*    GetRanges();
 
-    virtual BOOL FillItemSet( SfxItemSet& );
+    virtual sal_Bool FillItemSet( SfxItemSet& );
     virtual void Reset( const SfxItemSet& );
 
     virtual void ActivatePage( const SfxItemSet& rSet );
@@ -231,12 +231,12 @@ public:
     void    SetColorTable( XColorTable* pColTab ) { pColorTab = pColTab; }
     void    SetDashList( XDashList* pDshLst ) { pDashList = pDshLst; }
     void    SetLineEndList( XLineEndList* pLneEndLst) { pLineEndList = pLneEndLst; }
-    void    SetObjSelected( BOOL bHasObj ) { bObjSelected = bHasObj; }
+    void    SetObjSelected( sal_Bool bHasObj ) { bObjSelected = bHasObj; }
 
-    void    SetPageType( UINT16 nInType ) { nPageType = nInType; }//CHINA001 void    SetPageType( USHORT* pInType ) { pPageType = pInType; }
-    void    SetDlgType( UINT16 nInType ) { nDlgType = nInType; }    //CHINA001 void    SetDlgType( USHORT* pInType ) { pDlgType = pInType; }
-    void    SetPosDashLb( USHORT* pInPos ) { pPosDashLb = pInPos; }
-    void    SetPosLineEndLb( USHORT* pInPos ) { pPosLineEndLb = pInPos; }
+    void    SetPageType( sal_uInt16 nInType ) { nPageType = nInType; }//CHINA001 void    SetPageType( sal_uInt16* pInType ) { pPageType = pInType; }
+    void    SetDlgType( sal_uInt16 nInType ) { nDlgType = nInType; }    //CHINA001 void    SetDlgType( sal_uInt16* pInType ) { pDlgType = pInType; }
+    void    SetPosDashLb( sal_uInt16* pInPos ) { pPosDashLb = pInPos; }
+    void    SetPosLineEndLb( sal_uInt16* pInPos ) { pPosLineEndLb = pInPos; }
 
     void    SetLineEndChgd( ChangeType* pIn ) { pnLineEndListState = pIn; }
     void    SetDashChgd( ChangeType* pIn ) { pnDashListState = pIn; }
@@ -281,7 +281,7 @@ private:
 
     const SfxItemSet&   rOutAttrs;
     XDash               aDash;
-    BOOL                bObjSelected;
+    sal_Bool                bObjSelected;
 
     XOutdevItemPool*    pXPool;
     XLineStyleItem      aXLStyle;
@@ -294,9 +294,9 @@ private:
     XDashList*          pDashList;
 
     ChangeType*         pnDashListState;
-    USHORT*             pPageType;
-    USHORT*             pDlgType;
-    USHORT*             pPosDashLb;
+    sal_uInt16*             pPageType;
+    sal_uInt16*             pDlgType;
+    sal_uInt16*             pPosDashLb;
 
     SfxMapUnit          ePoolUnit;
     FieldUnit           eFUnit;
@@ -326,18 +326,18 @@ public:
     void    Construct();
 
     static  SfxTabPage* Create( Window*, const SfxItemSet& );
-    virtual BOOL FillItemSet( SfxItemSet& );
+    virtual sal_Bool FillItemSet( SfxItemSet& );
     virtual void Reset( const SfxItemSet & );
 
     virtual void ActivatePage( const SfxItemSet& rSet );
     virtual int  DeactivatePage( SfxItemSet* pSet );
 
     void    SetDashList( XDashList* pDshLst ) { pDashList = pDshLst; }
-    void    SetObjSelected( BOOL bHasObj ) { bObjSelected = bHasObj; }
+    void    SetObjSelected( sal_Bool bHasObj ) { bObjSelected = bHasObj; }
 
-    void    SetPageType( USHORT* pInType ) { pPageType = pInType; }
-    void    SetDlgType( USHORT* pInType ) { pDlgType = pInType; }
-    void    SetPosDashLb( USHORT* pInPos ) { pPosDashLb = pInPos; }
+    void    SetPageType( sal_uInt16* pInType ) { pPageType = pInType; }
+    void    SetDlgType( sal_uInt16* pInType ) { pDlgType = pInType; }
+    void    SetPosDashLb( sal_uInt16* pInPos ) { pPosDashLb = pInPos; }
 
     void    SetDashChgd( ChangeType* pIn ) { pnDashListState = pIn; }
 
@@ -371,7 +371,7 @@ private:
 
     const SfxItemSet&   rOutAttrs;
     const SdrObject*    pPolyObj;
-    BOOL                bObjSelected;
+    sal_Bool                bObjSelected;
 
     XOutdevItemPool*    pXPool;
     XLineStyleItem      aXLStyle;
@@ -383,9 +383,9 @@ private:
     XLineEndList*       pLineEndList;
 
     ChangeType*         pnLineEndListState;
-    USHORT*             pPageType;
-    USHORT*             pDlgType;
-    USHORT*             pPosLineEndLb;
+    sal_uInt16*             pPageType;
+    sal_uInt16*             pDlgType;
+    sal_uInt16*             pPosLineEndLb;
 
 #ifdef _SVX_TPLNEEND_CXX
     DECL_LINK( ClickAddHdl_Impl, void * );
@@ -406,7 +406,7 @@ public:
     void    Construct();
 
     static  SfxTabPage* Create( Window*, const SfxItemSet& );
-    virtual BOOL FillItemSet( SfxItemSet& );
+    virtual sal_Bool FillItemSet( SfxItemSet& );
     virtual void Reset( const SfxItemSet & );
 
     virtual void ActivatePage( const SfxItemSet& rSet );
@@ -414,11 +414,11 @@ public:
 
     void    SetLineEndList( XLineEndList* pInList ) { pLineEndList = pInList; }
     void    SetPolyObj( const SdrObject* pObj ) { pPolyObj = pObj; }
-    void    SetObjSelected( BOOL bHasObj ) { bObjSelected = bHasObj; }
+    void    SetObjSelected( sal_Bool bHasObj ) { bObjSelected = bHasObj; }
 
-    void    SetPageType( USHORT* pInType ) { pPageType = pInType; }
-    void    SetDlgType( USHORT* pInType ) { pDlgType = pInType; }
-    void    SetPosLineEndLb( USHORT* pInPos ) { pPosLineEndLb = pInPos; }
+    void    SetPageType( sal_uInt16* pInType ) { pPageType = pInType; }
+    void    SetDlgType( sal_uInt16* pInType ) { pDlgType = pInType; }
+    void    SetPosLineEndLb( sal_uInt16* pInPos ) { pPosLineEndLb = pInPos; }
 
     void    SetLineEndChgd( ChangeType* pIn ) { pnLineEndListState = pIn; }
 

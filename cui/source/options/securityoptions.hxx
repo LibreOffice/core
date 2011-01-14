@@ -74,13 +74,13 @@ namespace svx
         SecurityOptionsDialog( Window* pParent, SvtSecurityOptions* pOptions );
         ~SecurityOptionsDialog();
 
-        inline bool         IsSaveOrSendDocsChecked() const { return m_aSaveOrSendDocsCB.IsChecked() != FALSE; }
-        inline bool         IsSignDocsChecked() const { return m_aSignDocsCB.IsChecked() != FALSE; }
-        inline bool         IsPrintDocsChecked() const { return m_aPrintDocsCB.IsChecked() != FALSE; }
-        inline bool         IsCreatePdfChecked() const { return m_aCreatePdfCB.IsChecked() != FALSE; }
-        inline bool         IsRemovePersInfoChecked() const { return m_aRemovePersInfoCB.IsChecked() != FALSE; }
-        inline bool         IsRecommPasswdChecked() const { return m_aRecommPasswdCB.IsChecked() != FALSE; }
-        inline bool         IsCtrlHyperlinkChecked() const { return m_aCtrlHyperlinkCB.IsChecked() != FALSE; }
+        inline bool         IsSaveOrSendDocsChecked() const { return m_aSaveOrSendDocsCB.IsChecked() != sal_False; }
+        inline bool         IsSignDocsChecked() const { return m_aSignDocsCB.IsChecked() != sal_False; }
+        inline bool         IsPrintDocsChecked() const { return m_aPrintDocsCB.IsChecked() != sal_False; }
+        inline bool         IsCreatePdfChecked() const { return m_aCreatePdfCB.IsChecked() != sal_False; }
+        inline bool         IsRemovePersInfoChecked() const { return m_aRemovePersInfoCB.IsChecked() != sal_False; }
+        inline bool         IsRecommPasswdChecked() const { return m_aRecommPasswdCB.IsChecked() != sal_False; }
+        inline bool         IsCtrlHyperlinkChecked() const { return m_aCtrlHyperlinkCB.IsChecked() != sal_False; }
     };
 
 //........................................................................

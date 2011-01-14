@@ -76,11 +76,11 @@ _SvxMacroTabPage_Impl::_SvxMacroTabPage_Impl( const SfxItemSet& rAttrSet ) :
     pStrEvent( NULL ),
     pAssignedMacro( NULL ),
     pEventLB( NULL ),
-    bReadOnly( FALSE ),
-    bIDEDialogMode( FALSE )
+    bReadOnly( sal_False ),
+    bIDEDialogMode( sal_False )
 {
     const SfxPoolItem* pItem;
-    if ( SFX_ITEM_SET == rAttrSet.GetItemState( SID_ATTR_MACROITEM, FALSE, &pItem ) )
+    if ( SFX_ITEM_SET == rAttrSet.GetItemState( SID_ATTR_MACROITEM, sal_False, &pItem ) )
         bIDEDialogMode = ((const SfxBoolItem*)pItem)->GetValue();
 }
 
@@ -128,7 +128,7 @@ IMPL_LINK( _HeaderTabListBox, HeaderEndDrag_Impl, HeaderBar*, pBar )
     if( !maHeaderBar.IsItemMode() )
     {
         Size    aSz;
-        USHORT    _nTabs = maHeaderBar.GetItemCount();
+        sal_uInt16    _nTabs = maHeaderBar.GetItemCount();
         long    nTmpSz = 0;
         long    nWidth = maHeaderBar.GetItemSize( ITEMID_EVENT );
         long    nBarWidth = maHeaderBar.GetSizePixel().Width();
@@ -140,7 +140,7 @@ IMPL_LINK( _HeaderTabListBox, HeaderEndDrag_Impl, HeaderBar*, pBar )
 
         {
             long    _nWidth;
-            for( USHORT i = 1 ; i < _nTabs ; ++i )
+            for( sal_uInt16 i = 1 ; i < _nTabs ; ++i )
             {
                 _nWidth = maHeaderBar.GetItemSize( i );
                 aSz.Width() =  _nWidth + nTmpSz;
@@ -197,7 +197,7 @@ void _HeaderTabListBox::ConnectElements( void )
     maListBox.InitHeaderBar( &maHeaderBar );
 }
 
-void _HeaderTabListBox::Show( BOOL bVisible, USHORT nFlags )
+void _HeaderTabListBox::Show( sal_Bool bVisible, sal_uInt16 nFlags )
 {
     maListBox.Show( bVisible, nFlags );
     maHeaderBar.Show( bVisible, nFlags );
@@ -341,7 +341,7 @@ void _SvxMacroTabPage::InitResources()
 
 // the following method is called when the user clicks OK
 // We use the contents of the hashes to replace the settings
-BOOL _SvxMacroTabPage::FillItemSet( SfxItemSet& /*rSet*/ )
+sal_Bool _SvxMacroTabPage::FillItemSet( SfxItemSet& /*rSet*/ )
 {
     try
     {
@@ -392,7 +392,7 @@ BOOL _SvxMacroTabPage::FillItemSet( SfxItemSet& /*rSet*/ )
     {
     }
     // what is the return value about??
-    return FALSE;
+    return sal_False;
 }
 
 // the following method clears the bindings in the hashes for both doc & app
@@ -439,12 +439,12 @@ void _SvxMacroTabPage::Reset()
     DisplayAppEvents(bAppEvents);
 }
 
-void _SvxMacroTabPage::SetReadOnly( BOOL bSet )
+void _SvxMacroTabPage::SetReadOnly( sal_Bool bSet )
 {
     mpImpl->bReadOnly = bSet;
 }
 
-BOOL _SvxMacroTabPage::IsReadOnly() const
+sal_Bool _SvxMacroTabPage::IsReadOnly() const
 {
     return mpImpl->bReadOnly;
 }
@@ -459,14 +459,14 @@ class IconLBoxString : public SvLBoxString
     int m_nxImageOffset;
 
     public:
-        IconLBoxString( SvLBoxEntry* pEntry, USHORT nFlags, const String& sText,
+        IconLBoxString( SvLBoxEntry* pEntry, sal_uInt16 nFlags, const String& sText,
             Image* pMacroImg, Image* pComponentImg,
             Image* pMacroImg_h, Image* pComponentImg_h );
-        virtual void Paint(const Point& aPos, SvLBox& aDevice, USHORT nFlags, SvLBoxEntry* pEntry );
+        virtual void Paint(const Point& aPos, SvLBox& aDevice, sal_uInt16 nFlags, SvLBoxEntry* pEntry );
 };
 
 
-IconLBoxString::IconLBoxString( SvLBoxEntry* pEntry, USHORT nFlags, const String& sText,
+IconLBoxString::IconLBoxString( SvLBoxEntry* pEntry, sal_uInt16 nFlags, const String& sText,
     Image* pMacroImg, Image* pComponentImg, Image* pMacroImg_h, Image* pComponentImg_h )
         : SvLBoxString( pEntry, nFlags, sText )
         , m_pMacroImg( pMacroImg )
@@ -479,7 +479,7 @@ IconLBoxString::IconLBoxString( SvLBoxEntry* pEntry, USHORT nFlags, const String
 
 //===============================================
 void IconLBoxString::Paint( const Point& aPos, SvLBox& aDevice,
-                               USHORT /*nFlags*/, SvLBoxEntry* /*pEntry*/ )
+                               sal_uInt16 /*nFlags*/, SvLBoxEntry* /*pEntry*/ )
 {
     String aTxt( GetText() );
     if( aTxt.Len() )
@@ -488,7 +488,7 @@ void IconLBoxString::Paint( const Point& aPos, SvLBox& aDevice,
         sal_Int32 nIndex = aURL.indexOf( aVndSunStarUNO );
         bool bUNO = nIndex == 0;
 
-        BOOL bHC = aDevice.GetSettings().GetStyleSettings().GetHighContrastMode();
+        sal_Bool bHC = aDevice.GetSettings().GetStyleSettings().GetHighContrastMode();
         const Image* pImg;
         if( bHC )
             pImg = bUNO ? m_pComponentImg_h : m_pMacroImg_h;
@@ -522,7 +522,7 @@ void _SvxMacroTabPage::DisplayAppEvents( bool appEvents)
     bAppEvents = appEvents;
 
     SvHeaderTabListBox&        rListBox = mpImpl->pEventLB->GetListBox();
-    mpImpl->pEventLB->SetUpdateMode( FALSE );
+    mpImpl->pEventLB->SetUpdateMode( sal_False );
     rListBox.Clear();
     SvLBoxEntry*    pE = rListBox.GetEntry( 0 );
     EventsHash* eventsHash;
@@ -591,7 +591,7 @@ void _SvxMacroTabPage::DisplayAppEvents( bool appEvents)
         rListBox.MakeVisible( pE );
     }
 
-    rListBox.SetUpdateMode( TRUE );
+    rListBox.SetUpdateMode( sal_True );
     EnableButtons( String() );
 }
 
@@ -601,7 +601,7 @@ IMPL_STATIC_LINK( _SvxMacroTabPage, SelectEvent_Impl, SvTabListBox*, EMPTYARG )
     _SvxMacroTabPage_Impl*    pImpl = pThis->mpImpl;
     SvHeaderTabListBox&        rListBox = pImpl->pEventLB->GetListBox();
     SvLBoxEntry*            pE = rListBox.FirstSelected();
-    ULONG                    nPos;
+    sal_uLong                    nPos;
 
     if( !pE || LISTBOX_ENTRY_NOTFOUND ==
         ( nPos = rListBox.GetModel()->GetAbsPos( pE ) ) )
@@ -630,7 +630,7 @@ long _SvxMacroTabPage::GenericHandler_Impl( _SvxMacroTabPage* pThis, PushButton*
     _SvxMacroTabPage_Impl*    pImpl = pThis->mpImpl;
     SvHeaderTabListBox& rListBox = pImpl->pEventLB->GetListBox();
     SvLBoxEntry* pE = rListBox.FirstSelected();
-    ULONG nPos;
+    sal_uLong nPos;
     if( !pE || LISTBOX_ENTRY_NOTFOUND ==
         ( nPos = rListBox.GetModel()->GetAbsPos( pE ) ) )
     {
@@ -638,7 +638,7 @@ long _SvxMacroTabPage::GenericHandler_Impl( _SvxMacroTabPage* pThis, PushButton*
         return 0;
     }
 
-    const BOOL bAssEnabled = pBtn != pImpl->pDeletePB && pImpl->pAssignPB->IsEnabled();
+    const sal_Bool bAssEnabled = pBtn != pImpl->pDeletePB && pImpl->pAssignPB->IsEnabled();
 
     ::rtl::OUString* pEventName = (::rtl::OUString*)pE->GetUserData();
 
@@ -696,7 +696,7 @@ long _SvxMacroTabPage::GenericHandler_Impl( _SvxMacroTabPage* pThis, PushButton*
     else if( bAssEnabled )
     {
         // assign pressed
-        SvxScriptSelectorDialog* pDlg = new SvxScriptSelectorDialog( pThis, FALSE, pThis->GetFrame() );
+        SvxScriptSelectorDialog* pDlg = new SvxScriptSelectorDialog( pThis, sal_False, pThis->GetFrame() );
         if( pDlg )
         {
             short ret = pDlg->Execute();
@@ -725,7 +725,7 @@ long _SvxMacroTabPage::GenericHandler_Impl( _SvxMacroTabPage* pThis, PushButton*
     }
 
     // update the listbox entry
-    pImpl->pEventLB->SetUpdateMode( FALSE );
+    pImpl->pEventLB->SetUpdateMode( sal_False );
     // pE->ReplaceItem( new SvLBoxString( pE, 0, sEventURL ), LB_MACROS_ITEMPOS );
     pE->ReplaceItem( new IconLBoxString( pE, 0, sEventURL,
             pImpl->pMacroImg, pImpl->pComponentImg,
@@ -734,7 +734,7 @@ long _SvxMacroTabPage::GenericHandler_Impl( _SvxMacroTabPage* pThis, PushButton*
     rListBox.GetModel()->InvalidateEntry( pE );
     rListBox.Select( pE );
     rListBox.MakeVisible( pE );
-    rListBox.SetUpdateMode( TRUE );
+    rListBox.SetUpdateMode( sal_True );
 
     pThis->EnableButtons( String() );
     return 0;
@@ -774,7 +774,7 @@ void _SvxMacroTabPage::InitAndSetHandler( Reference< container::XNameReplace> xA
         mpImpl->pEventLB->GetListBox().SetEntryHeight(
             sal::static_int_cast< short >(nMinLineHeight) );
 
-    mpImpl->pEventLB->Enable( TRUE );
+    mpImpl->pEventLB->Enable( sal_True );
 
     if(!m_xAppEvents.is())
     {
@@ -884,7 +884,7 @@ SvxMacroTabPage::SvxMacroTabPage( Window* pParent, const Reference< frame::XFram
     InitAndSetHandler( xNameReplace, Reference< container::XNameReplace>(0), Reference< util::XModifiable >(0));
     DisplayAppEvents(true);
     SvHeaderTabListBox& rListBox = mpImpl->pEventLB->GetListBox();
-    SvLBoxEntry* pE = rListBox.GetEntry( (ULONG)nSelectedIndex );
+    SvLBoxEntry* pE = rListBox.GetEntry( (sal_uLong)nSelectedIndex );
     if( pE )
         rListBox.Select(pE);
 }

@@ -90,7 +90,7 @@ public:
                                     m_pAccelConfigPage( pAccelConfigPage )
                                 {}
 
-    void                        ReplaceEntry( USHORT nPos, const String &rStr );
+    void                        ReplaceEntry( sal_uInt16 nPos, const String &rStr );
 };
 
 // class SfxAcceleratorConfigPage ----------------------------------------
@@ -107,7 +107,7 @@ struct TAccInfo
             , m_bIsConfigurable(sal_True )
             , m_sCommand       (         )
             , m_aKey           (aKey     )
-            // its important to set TRUE as default -
+            // its important to set sal_True as default -
             // because only fix entries will be disabled later ...
         {}
 
@@ -184,7 +184,7 @@ private:
 
     String                      GetLabel4Command(const String& sCommand);
     void                        InitAccCfg();
-    USHORT                      MapKeyCodeToPos( const KeyCode &rCode ) const;
+    sal_uInt16                      MapKeyCodeToPos( const KeyCode &rCode ) const;
     css::uno::Reference< css::frame::XModel > SearchForAlreadyLoadedDoc(const String& sName);
     void                        StartFileDialog( WinBits nBits, const String& rTitle );
 
@@ -197,7 +197,7 @@ public:
                                 SfxAcceleratorConfigPage( Window *pParent, const SfxItemSet& rItemSet );
     virtual                     ~SfxAcceleratorConfigPage();
 
-    virtual BOOL                FillItemSet( SfxItemSet& );
+    virtual sal_Bool                FillItemSet( SfxItemSet& );
     virtual void                Reset( const SfxItemSet& );
 
     void                        Apply(const css::uno::Reference< css::ui::XAcceleratorConfiguration >& pAccMgr);
@@ -214,8 +214,8 @@ public:
     SfxAcceleratorConfigListBox( Window *pParent, ResId &rResId ) :
         ListBox( pParent, rResId ) {}
 
-    void ReplaceEntry( USHORT nPos, const String &rStr );
-    void ExpandEntry ( USHORT nPos, const String &rStr );
+    void ReplaceEntry( sal_uInt16 nPos, const String &rStr );
+    void ExpandEntry ( sal_uInt16 nPos, const String &rStr );
 };
 
 class SvxShortcutAssignDlg : public SfxSingleTabDialog

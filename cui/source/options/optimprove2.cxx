@@ -183,7 +183,7 @@ sal_Bool SvxImprovementOptionsPage::FillItemSet( SfxItemSet& /*rSet*/ )
         ::comphelper::ConfigurationHelper::writeRelativeKey(
             xConfig, C2S("Participation"), C2S("ShowedInvitation"), uno::makeAny( true ) );
         ::comphelper::ConfigurationHelper::writeRelativeKey(
-            xConfig, C2S("Participation"), C2S("InvitationAccepted"), uno::makeAny( m_aYesRB.IsChecked() != FALSE ) );
+            xConfig, C2S("Participation"), C2S("InvitationAccepted"), uno::makeAny( m_aYesRB.IsChecked() != sal_False ) );
         ::comphelper::ConfigurationHelper::flush( xConfig );
         // TODO: refactor
         ::comphelper::UiEventsLogger::reinit();

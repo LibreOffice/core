@@ -109,15 +109,15 @@ struct SfxStylesInfo_Impl
 
 struct SfxGroupInfo_Impl
 {
-    USHORT      nKind;
-    USHORT      nOrd;
+    sal_uInt16      nKind;
+    sal_uInt16      nOrd;
     void*       pObject;
-    BOOL        bWasOpened;
+    sal_Bool        bWasOpened;
     String      sCommand;
     String      sLabel;
 
-                SfxGroupInfo_Impl( USHORT n, USHORT nr, void* pObj = 0 ) :
-                    nKind( n ), nOrd( nr ), pObject( pObj ), bWasOpened(FALSE) {}
+                SfxGroupInfo_Impl( sal_uInt16 n, sal_uInt16 nr, void* pObj = 0 ) :
+                    nKind( n ), nOrd( nr ), pObject( pObj ), bWasOpened(sal_False) {}
 };
 
 typedef SfxGroupInfo_Impl* SfxGroupInfoPtr;
@@ -155,9 +155,9 @@ class SfxConfigGroupListBox_Impl : public SvTreeListBox
     //SfxSlotPool*                    pSlotPool;
     SfxConfigFunctionListBox_Impl*  pFunctionListBox;
     SfxGroupInfoArr_Impl            aArr;
-    ULONG                           nMode;
-    BOOL                            bShowSF; // show Scripting Framework scripts
-    BOOL                            bShowBasic; // show Basic scripts
+    sal_uLong                           nMode;
+    sal_Bool                            bShowSF; // show Scripting Framework scripts
+    sal_Bool                            bShowBasic; // show Basic scripts
 
     ::rtl::OUString m_sModuleLongName;
     css::uno::Reference< css::lang::XMultiServiceFactory > m_xSMGR;
@@ -181,12 +181,12 @@ class SfxConfigGroupListBox_Impl : public SvTreeListBox
 protected:
     virtual void        RequestingChilds( SvLBoxEntry *pEntry);
     using SvListView::Expand;
-    virtual BOOL        Expand( SvLBoxEntry* pParent );
+    virtual sal_Bool        Expand( SvLBoxEntry* pParent );
 
 public:
     SfxConfigGroupListBox_Impl ( Window* pParent,
                                  const ResId&,
-                                 ULONG nConfigMode = 0 );
+                                 sal_uLong nConfigMode = 0 );
     ~SfxConfigGroupListBox_Impl();
     void                ClearAll();
 
@@ -195,7 +195,7 @@ public:
                              const ::rtl::OUString&                                        sModuleLongName);
     void                SetFunctionListBox( SfxConfigFunctionListBox_Impl *pBox )
                         { pFunctionListBox = pBox; }
-    void                Open( SvLBoxEntry*, BOOL );
+    void                Open( SvLBoxEntry*, sal_Bool );
     void                GroupSelected();
     void                SelectMacro( const SfxMacroInfoItem* );
     void                AddAndSelect( const SfxStringItem*, const SfxStringItem* );
