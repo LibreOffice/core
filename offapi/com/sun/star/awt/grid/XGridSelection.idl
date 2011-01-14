@@ -41,18 +41,6 @@ module com {  module sun {  module star {  module awt { module grid {
  */
 interface XGridSelection
 {
-    /** Returns the lowest index of the selection.
-        @returns
-            the lowest index.
-    */
-    long getMinSelectionIndex();
-
-    /** Returns the highest index of the selection.
-        @returns
-            the highest index.
-    */
-    long getMaxSelectionIndex();
-
     /** Selects all rows.
     */
     void selectAllRows();
