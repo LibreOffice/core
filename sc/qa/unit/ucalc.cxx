@@ -45,6 +45,7 @@
 # include <tools/prewin.h>
 # include <windows.h>
 # include <tools/postwin.h>
+# undef ERROR
 #endif
 
 #include "preextstl.h"
