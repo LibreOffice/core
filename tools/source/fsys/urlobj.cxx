@@ -425,7 +425,10 @@ static INetURLObject::SchemeInfo const aSchemeInfoMap[INET_PROT_END]
           false, false, false, true, false },
         { "", "", 0, false, false, false, false, true, true, true, false },
         { "smb", "smb://", 139, true, true, false, true, true, true, true,
+          true },
+        { "sftp", "sftp://", 22, true, true, false, true, true, true, true,
           true } };
+
 
 // static
 inline INetURLObject::SchemeInfo const &
@@ -2208,7 +2211,9 @@ INetURLObject::getPrefix(sal_Unicode const *& rBegin,
             { "vnd.sun.star.tdoc:", 0, INET_PROT_VND_SUN_STAR_TDOC,
               PrefixInfo::OFFICIAL },
             { "vnd.sun.star.webdav:", 0, INET_PROT_VND_SUN_STAR_WEBDAV,
-              PrefixInfo::OFFICIAL } };
+              PrefixInfo::OFFICIAL },
+            { "sftp:", 0, INET_PROT_SFTP, PrefixInfo::OFFICIAL } };
+
     PrefixInfo const * pFirst = aMap + 1;
     PrefixInfo const * pLast = aMap + sizeof aMap / sizeof (PrefixInfo) - 1;
     PrefixInfo const * pMatch = 0;
@@ -3426,6 +3431,7 @@ bool INetURLObject::parsePath(INetProtocol eScheme,
             break;
 
         case INET_PROT_GENERIC:
+        case INET_PROT_SFTP:
             while (pPos < pEnd && *pPos != nFragmentDelimiter)
             {
                 EscapeType eEscapeType;

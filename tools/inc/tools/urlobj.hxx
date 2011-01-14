@@ -140,7 +140,8 @@ enum INetProtocol
     INET_PROT_VND_SUN_STAR_TDOC = 29,
     INET_PROT_GENERIC = 30,
     INET_PROT_SMB = 31,
-    INET_PROT_END = 32
+    INET_PROT_SFTP = 32,
+    INET_PROT_END = 33
 };
 
 //============================================================================
