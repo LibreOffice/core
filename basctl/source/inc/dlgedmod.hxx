@@ -54,7 +54,7 @@ public:
     DlgEdModel();
     virtual ~DlgEdModel();
 
-    virtual void DlgEdModelChanged( FASTBOOL bChanged = TRUE );
+    virtual void DlgEdModelChanged( FASTBOOL bChanged = sal_True );
 
     virtual SdrPage*  AllocPage(FASTBOOL bMasterPage);
 

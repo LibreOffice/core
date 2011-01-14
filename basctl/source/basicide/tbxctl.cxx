@@ -65,7 +65,7 @@ IMPL_LINK( PopupWindowTbx, SelectHdl, void*, EMPTYARG )
     return 0;
 }
 
-PopupWindowTbx::PopupWindowTbx( USHORT nId, WindowAlign eAlign,
+PopupWindowTbx::PopupWindowTbx( sal_uInt16 nId, WindowAlign eAlign,
                                 ResId aRIdWin, ResId aRIdTbx,
                                 SfxBindings& rBind ) :
                 SfxPopupWindow  ( nId, aRIdWin, rBind ),
@@ -117,7 +117,7 @@ PopupWindowTbx::~PopupWindowTbx()
 |*
 \************************************************************************/
 
-TbxControls::TbxControls( USHORT nSlotId, USHORT nId, ToolBox& rTbx ) :
+TbxControls::TbxControls( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx ) :
         SfxToolBoxControl( nSlotId, nId, rTbx )
 {
     nLastSlot = USHRT_MAX;
@@ -138,7 +138,7 @@ SfxPopupWindowType TbxControls::GetPopupWindowType() const
     return(SFX_POPUPWINDOW_ONTIMEOUT);
 }
 
-void TbxControls::StateChanged( USHORT nSID, SfxItemState eState,
+void TbxControls::StateChanged( sal_uInt16 nSID, SfxItemState eState,
   const SfxPoolItem* pState )
 {
     if( pState )
@@ -146,8 +146,8 @@ void TbxControls::StateChanged( USHORT nSID, SfxItemState eState,
         SfxAllEnumItem* pItem = PTR_CAST(SfxAllEnumItem, pState);
         if( pItem )
         {
-            USHORT nLastEnum = pItem->GetValue();
-            USHORT nTemp = 0;
+            sal_uInt16 nLastEnum = pItem->GetValue();
+            sal_uInt16 nTemp = 0;
             switch( nLastEnum )
             {
                 case SVX_SNAP_PUSHBUTTON:       nTemp = SID_INSERT_PUSHBUTTON; break;
@@ -193,7 +193,7 @@ void TbxControls::StateChanged( USHORT nSID, SfxItemState eState,
     SfxToolBoxControl::StateChanged( nSID, eState,pState );
 }
 
-void TbxControls::Select( USHORT nModifier )
+void TbxControls::Select( sal_uInt16 nModifier )
 {
     (void)nModifier;
     SfxAllEnumItem aItem( SID_CHOOSE_CONTROLS, nLastSlot );
@@ -228,7 +228,7 @@ SfxPopupWindow* TbxControls::CreatePopupWindow()
                                 IDEResId( RID_TBXCONTROLS ),
                                 IDEResId( RID_TOOLBOX ),
                                 GetBindings() );
-        pWin->StartPopupMode(&GetToolBox(), TRUE);
+        pWin->StartPopupMode(&GetToolBox(), sal_True);
         pWin->Update();
         pWin->StartSelection();
         pWin->Show();

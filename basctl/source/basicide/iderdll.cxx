@@ -68,7 +68,7 @@ BasicIDEDLL* BasicIDEDLL::GetDLL()
     return pBasicIDEDLL;
 }
 
-IDEResId::IDEResId( USHORT nId ):
+IDEResId::IDEResId( sal_uInt16 nId ):
     ResId( nId, *(*(BasicIDEModule**)GetAppData(SHL_IDE))->GetResMgr() )
 {
 }
@@ -139,8 +139,8 @@ BasicIDEData* BasicIDEDLL::GetExtraData()
 BasicIDEData::BasicIDEData() : aObjCatPos( INVPOSITION, INVPOSITION )
 {
     nBasicDialogCount = 0;
-    bChoosingMacro = FALSE;
-    bShellInCriticalSection = FALSE;
+    bChoosingMacro = sal_False;
+    bShellInCriticalSection = sal_False;
     pSearchItem = new SvxSearchItem( SID_SEARCH_ITEM );
 
     StarBASIC::SetGlobalBreakHdl( LINK( this, BasicIDEData, GlobalBasicBreakHdl ) );

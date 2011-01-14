@@ -56,7 +56,7 @@ using namespace ::com::sun::star::container;
 //----------------------------------------------------------------------------
 
 extern "C" {
-    SAL_DLLPUBLIC_EXPORT rtl_uString* basicide_choose_macro( void* pOnlyInDocument_AsXModel, BOOL bChooseOnly, rtl_uString* pMacroDesc )
+    SAL_DLLPUBLIC_EXPORT rtl_uString* basicide_choose_macro( void* pOnlyInDocument_AsXModel, sal_Bool bChooseOnly, rtl_uString* pMacroDesc )
     {
         ::rtl::OUString aMacroDesc( pMacroDesc );
         Reference< frame::XModel > aDocument( static_cast< frame::XModel* >( pOnlyInDocument_AsXModel ) );
@@ -66,7 +66,7 @@ extern "C" {
 
         return pScriptURL;
     }
-    SAL_DLLPUBLIC_EXPORT void basicide_macro_organizer( INT16 nTabId )
+    SAL_DLLPUBLIC_EXPORT void basicide_macro_organizer( sal_Int16 nTabId )
     {
         OSL_TRACE("in basicide_macro_organizer");
         BasicIDE::Organize( nTabId );
@@ -77,7 +77,7 @@ namespace BasicIDE
 {
 //----------------------------------------------------------------------------
 
-void Organize( INT16 tabId )
+void Organize( sal_Int16 tabId )
 {
     BasicIDEDLL::Init();
 
@@ -98,21 +98,21 @@ void Organize( INT16 tabId )
 
 //----------------------------------------------------------------------------
 
-BOOL IsValidSbxName( const String& rName )
+sal_Bool IsValidSbxName( const String& rName )
 {
-    for ( USHORT nChar = 0; nChar < rName.Len(); nChar++ )
+    for ( sal_uInt16 nChar = 0; nChar < rName.Len(); nChar++ )
     {
-        BOOL bValid = ( ( rName.GetChar(nChar) >= 'A' && rName.GetChar(nChar) <= 'Z' ) ||
+        sal_Bool bValid = ( ( rName.GetChar(nChar) >= 'A' && rName.GetChar(nChar) <= 'Z' ) ||
                         ( rName.GetChar(nChar) >= 'a' && rName.GetChar(nChar) <= 'z' ) ||
                         ( rName.GetChar(nChar) >= '0' && rName.GetChar(nChar) <= '9' && nChar ) ||
                         ( rName.GetChar(nChar) == '_' ) );
         if ( !bValid )
-            return FALSE;
+            return sal_False;
     }
-    return TRUE;
+    return sal_True;
 }
 
-static BOOL StringCompareLessThan( const String& rStr1, const String& rStr2 )
+static sal_Bool StringCompareLessThan( const String& rStr1, const String& rStr2 )
 {
     return (rStr1.CompareIgnoreCaseToAscii( rStr2 ) == COMPARE_LESS);
 }
@@ -191,7 +191,7 @@ bool RenameModule( Window* pErrorParent, const ScriptDocument& rDocument, const 
     BasicIDEShell* pIDEShell = IDE_DLL()->GetShell();
     if ( pIDEShell )
     {
-        IDEBaseWindow* pWin = pIDEShell->FindWindow( rDocument, rLibName, rNewName, BASICIDE_TYPE_MODULE, TRUE );
+        IDEBaseWindow* pWin = pIDEShell->FindWindow( rDocument, rLibName, rNewName, BASICIDE_TYPE_MODULE, sal_True );
         if ( pWin )
         {
             // set new name in window
@@ -202,7 +202,7 @@ bool RenameModule( Window* pErrorParent, const ScriptDocument& rDocument, const 
             pModWin->SetSbModule( (SbModule*)pModWin->GetBasic()->FindModule( rNewName ) );
 
             // update tabwriter
-            USHORT nId = (USHORT)(pIDEShell->GetIDEWindowTable()).GetKey( pWin );
+            sal_uInt16 nId = (sal_uInt16)(pIDEShell->GetIDEWindowTable()).GetKey( pWin );
             DBG_ASSERT( nId, "No entry in Tabbar!" );
             if ( nId )
             {
@@ -218,20 +218,20 @@ bool RenameModule( Window* pErrorParent, const ScriptDocument& rDocument, const 
 
 //----------------------------------------------------------------------------
 
-::rtl::OUString ChooseMacro( const uno::Reference< frame::XModel >& rxLimitToDocument, BOOL bChooseOnly, const ::rtl::OUString& rMacroDesc )
+::rtl::OUString ChooseMacro( const uno::Reference< frame::XModel >& rxLimitToDocument, sal_Bool bChooseOnly, const ::rtl::OUString& rMacroDesc )
 {
     (void)rMacroDesc;
 
     BasicIDEDLL::Init();
 
-    IDE_DLL()->GetExtraData()->ChoosingMacro() = TRUE;
+    IDE_DLL()->GetExtraData()->ChoosingMacro() = sal_True;
     SFX_APP()->EnterBasicCall();
 
     String aScriptURL;
-    BOOL bError = FALSE;
+    sal_Bool bError = sal_False;
     SbMethod* pMethod = NULL;
 
-    MacroChooser* pChooser = new MacroChooser( NULL, TRUE );
+    MacroChooser* pChooser = new MacroChooser( NULL, sal_True );
     if ( bChooseOnly || !SvtModuleOptions().IsBasicIDE() )
         pChooser->SetMode( MACROCHOOSER_CHOOSEONLY );
 
@@ -241,7 +241,7 @@ bool RenameModule( Window* pErrorParent, const ScriptDocument& rDocument, const 
 
     short nRetValue = pChooser->Execute();
 
-    IDE_DLL()->GetExtraData()->ChoosingMacro() = FALSE;
+    IDE_DLL()->GetExtraData()->ChoosingMacro() = sal_False;
 
     switch ( nRetValue )
     {
@@ -308,7 +308,7 @@ bool RenameModule( Window* pErrorParent, const ScriptDocument& rDocument, const 
                                     if ( xLimitToDocument != aDocument.getDocument() )
                                     {
                                         // error
-                                        bError = TRUE;
+                                        bError = sal_True;
                                         ErrorBox( NULL, WB_OK | WB_DEF_OK, String( IDEResId( RID_STR_ERRORCHOOSEMACRO ) ) ).Execute();
                                     }
                                 }
@@ -363,9 +363,9 @@ Sequence< ::rtl::OUString > GetMethodNames( const ScriptDocument& rDocument, con
     {
         SbModuleRef xModule = new SbModule( rModName );
         xModule->SetSource32( aOUSource );
-        USHORT nCount = xModule->GetMethods()->Count();
-        USHORT nRealCount = nCount;
-        for ( USHORT i = 0; i < nCount; i++ )
+        sal_uInt16 nCount = xModule->GetMethods()->Count();
+        sal_uInt16 nRealCount = nCount;
+        for ( sal_uInt16 i = 0; i < nCount; i++ )
         {
             SbMethod* pMethod = (SbMethod*)xModule->GetMethods()->Get( i );
             if( pMethod->IsHidden() )
@@ -373,8 +373,8 @@ Sequence< ::rtl::OUString > GetMethodNames( const ScriptDocument& rDocument, con
         }
         aSeqMethods.realloc( nRealCount );
 
-        USHORT iTarget = 0;
-        for ( USHORT i = 0 ; i < nCount; ++i )
+        sal_uInt16 iTarget = 0;
+        for ( sal_uInt16 i = 0 ; i < nCount; ++i )
         {
             SbMethod* pMethod = (SbMethod*)xModule->GetMethods()->Get( i );
             if( pMethod->IsHidden() )
@@ -389,9 +389,9 @@ Sequence< ::rtl::OUString > GetMethodNames( const ScriptDocument& rDocument, con
 
 //----------------------------------------------------------------------------
 
-BOOL HasMethod( const ScriptDocument& rDocument, const String& rLibName, const String& rModName, const String& rMethName )
+sal_Bool HasMethod( const ScriptDocument& rDocument, const String& rLibName, const String& rModName, const String& rMethName )
 {
-    BOOL bHasMethod = FALSE;
+    sal_Bool bHasMethod = sal_False;
 
     ::rtl::OUString aOUSource;
     if ( rDocument.hasModule( rLibName, rModName ) && rDocument.getModule( rLibName, rModName, aOUSource ) )
@@ -403,7 +403,7 @@ BOOL HasMethod( const ScriptDocument& rDocument, const String& rLibName, const S
         {
             SbMethod* pMethod = (SbMethod*)pMethods->Find( rMethName, SbxCLASS_METHOD );
             if ( pMethod && !pMethod->IsHidden() )
-                bHasMethod = TRUE;
+                bHasMethod = sal_True;
         }
     }
 

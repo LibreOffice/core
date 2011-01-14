@@ -71,7 +71,7 @@ __EXPORT BasicDocShell::~BasicDocShell()
     delete pPrinter;
 }
 
-SfxPrinter* BasicDocShell::GetPrinter( BOOL bCreate )
+SfxPrinter* BasicDocShell::GetPrinter( sal_Bool bCreate )
 {
     if ( !pPrinter && bCreate )
         pPrinter = new SfxPrinter( new SfxItemSet( GetPool(), SID_PRINTER_NOTFOUND_WARN , SID_PRINTER_NOTFOUND_WARN ) );
@@ -94,6 +94,6 @@ void BasicDocShell::FillClass( SvGlobalName*, sal_uInt32*, String*, String*, Str
     DBG_ASSERT( bTemplate == sal_False, "No template for Basic" );
 }
 
-void BasicDocShell::Draw( OutputDevice *, const JobSetup &, USHORT )
+void BasicDocShell::Draw( OutputDevice *, const JobSetup &, sal_uInt16 )
 {}
 

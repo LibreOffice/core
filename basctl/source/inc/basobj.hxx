@@ -51,7 +51,7 @@ struct BasicIDE_Impl;
 
 namespace BasicIDE
 {
-    void            Organize( INT16 tabId );
+    void            Organize( sal_Int16 tabId );
 
 
     // Hilfsmethoden fuer den allg. Gebrauch:
@@ -61,10 +61,10 @@ namespace BasicIDE
     StarBASIC*  FindBasic( const SbxVariable* pVar );
     void            StopBasic();
     long         HandleBasicError( StarBASIC* pBasic );
-    void            BasicStopped( BOOL* pbAppWindowDisabled = 0, BOOL* pbDispatcherLocked = 0, USHORT* pnWaitCount = 0,
+    void            BasicStopped( sal_Bool* pbAppWindowDisabled = 0, sal_Bool* pbDispatcherLocked = 0, sal_uInt16* pnWaitCount = 0,
                             SfxUInt16Item** ppSWActionCount = 0, SfxUInt16Item** ppSWLockViewCount = 0 );
 
-    BOOL            IsValidSbxName( const String& rName );
+    sal_Bool            IsValidSbxName( const String& rName );
 
     BasicManager*       FindBasicManager( StarBASIC* pLib );
 
@@ -95,13 +95,13 @@ namespace BasicIDE
     // new methods for macros
 
     ::rtl::OUString     ChooseMacro( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& rxLimitToDocument,
-        BOOL bChooseOnly, const ::rtl::OUString& rMacroDesc );
+        sal_Bool bChooseOnly, const ::rtl::OUString& rMacroDesc );
 
     ::com::sun::star::uno::Sequence< ::rtl::OUString > GetMethodNames(
         const ScriptDocument& rDocument, const String& rLibName, const String& rModName )
         throw( ::com::sun::star::container::NoSuchElementException );
 
-    BOOL                    HasMethod(
+    sal_Bool                    HasMethod(
         const ScriptDocument& rDocument, const String& rLibName, const String& rModName, const String& rMethName );
 
     // new methods for dialogs
