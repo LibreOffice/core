@@ -98,6 +98,17 @@ void lcl_shiftControls( Control& rEdit, Control& rAuto, long nNewXPos )
     rAuto.SetPosPixel(aPos);
 }
 
+long lcl_getLabelDistance( Control& rControl )
+{
+    return rControl.LogicToPixel( Size(RSC_SP_CTRL_DESC_X, 0), MapMode(MAP_APPFONT) ).Width();
+}
+
+void lcl_setValue( FormattedField& rFmtField, double fValue )
+{
+    rFmtField.SetValue( fValue );
+    rFmtField.SetDefaultValue( fValue );
+}
+
 }
 
 ScaleTabPage::ScaleTabPage(Window* pWindow,const SfxItemSet& rInAttrs) :
@@ -168,6 +179,18 @@ ScaleTabPage::ScaleTabPage(Window* pWindow,const SfxItemSet& rInAttrs) :
     m_aLB_TimeResolution.SetDropDownLineCount(3);
     m_aLB_MainTimeUnit.SetDropDownLineCount(3);
     m_aLB_HelpTimeUnit.SetDropDownLineCount(3);
+
+    aFmtFldMin.SetModifyHdl(LINK(this, ScaleTabPage, FmtFieldModifiedHdl));
+    aFmtFldMax.SetModifyHdl(LINK(this, ScaleTabPage, FmtFieldModifiedHdl));
+    aFmtFldStepMain.SetModifyHdl(LINK(this, ScaleTabPage, FmtFieldModifiedHdl));
+    aFmtFldOrigin.SetModifyHdl(LINK(this, ScaleTabPage, FmtFieldModifiedHdl));
+}
+
+IMPL_LINK( ScaleTabPage, FmtFieldModifiedHdl, FormattedField*, pFmtFied )
+{
+    if( pFmtFied )
+        pFmtFied->SetDefaultValue( pFmtFied->GetValue() );
+    return 0;
 }
 
 void ScaleTabPage::StateChanged( StateChangedType nType )
@@ -176,11 +199,6 @@ void ScaleTabPage::StateChanged( StateChangedType nType )
 
     if( nType == STATE_CHANGE_INITSHOW )
         AdjustControlPositions();
-}
-
-long lcl_getLabelDistance( Control& rControl )
-{
-    return rControl.LogicToPixel( Size(RSC_SP_CTRL_DESC_X, 0), MapMode(MAP_APPFONT) ).Width();
 }
 
 void ScaleTabPage::AdjustControlPositions()
@@ -320,7 +338,7 @@ void ScaleTabPage::EnableControls()
     {
         //transport value from one to other control
         if( bWasDateAxis )
-            aFmtFldStepMain.SetValue( m_aMt_MainDateStep.GetValue() );
+            lcl_setValue( aFmtFldStepMain, m_aMt_MainDateStep.GetValue() );
         else
             m_aMt_MainDateStep.SetValue( static_cast<sal_Int32>(aFmtFldStepMain.GetValue()) );
     }
@@ -483,7 +501,7 @@ void ScaleTabPage::Reset(const SfxItemSet& rInAttrs)
     if (rInAttrs.GetItemState(SCHATTR_AXIS_MIN,TRUE, &pPoolItem) == SFX_ITEM_SET)
     {
         fMin = ((const SvxDoubleItem*)pPoolItem)->GetValue();
-        aFmtFldMin.SetValue( fMin );
+        lcl_setValue( aFmtFldMin, fMin );
     }
 
     if (rInAttrs.GetItemState(SCHATTR_AXIS_AUTO_MAX,TRUE, &pPoolItem) == SFX_ITEM_SET)
@@ -492,7 +510,7 @@ void ScaleTabPage::Reset(const SfxItemSet& rInAttrs)
     if (rInAttrs.GetItemState(SCHATTR_AXIS_MAX,TRUE, &pPoolItem) == SFX_ITEM_SET)
     {
         fMax = ((const SvxDoubleItem*)pPoolItem)->GetValue();
-        aFmtFldMax.SetValue( fMax );
+        lcl_setValue( aFmtFldMax, fMax );
     }
 
     if (rInAttrs.GetItemState(SCHATTR_AXIS_AUTO_STEP_MAIN,TRUE, &pPoolItem) == SFX_ITEM_SET)
@@ -501,7 +519,7 @@ void ScaleTabPage::Reset(const SfxItemSet& rInAttrs)
     if (rInAttrs.GetItemState(SCHATTR_AXIS_STEP_MAIN,TRUE, &pPoolItem) == SFX_ITEM_SET)
     {
         fStepMain = ((const SvxDoubleItem*)pPoolItem)->GetValue();
-        aFmtFldStepMain.SetValue( fStepMain );
+        lcl_setValue( aFmtFldStepMain, fStepMain );
         m_aMt_MainDateStep.SetValue( static_cast<sal_Int32>(fStepMain) );
     }
     if (rInAttrs.GetItemState(SCHATTR_AXIS_AUTO_STEP_HELP,TRUE, &pPoolItem) == SFX_ITEM_SET)
@@ -520,7 +538,7 @@ void ScaleTabPage::Reset(const SfxItemSet& rInAttrs)
     if (rInAttrs.GetItemState(SCHATTR_AXIS_ORIGIN,TRUE, &pPoolItem) == SFX_ITEM_SET)
     {
         fOrigin = ((const SvxDoubleItem*)pPoolItem)->GetValue();
-        aFmtFldOrigin.SetValue( fOrigin );
+        lcl_setValue( aFmtFldOrigin, fOrigin );
     }
 
     if (rInAttrs.GetItemState(SCHATTR_AXIS_AUTO_TIME_RESOLUTION,TRUE, &pPoolItem) == SFX_ITEM_SET)
