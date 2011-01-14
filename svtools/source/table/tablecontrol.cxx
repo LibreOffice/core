@@ -242,9 +242,9 @@ namespace svt { namespace table
     }
 
     // -----------------------------------------------------------------------------------------------------------------
-    void TableControl::RemoveSelectedRow(RowPos _nRowPos)
+    void TableControl::ClearSelection()
     {
-        m_pImpl->removeSelectedRow(_nRowPos);
+        SelectAll( false );
     }
 
     // -----------------------------------------------------------------------------------------------------------------

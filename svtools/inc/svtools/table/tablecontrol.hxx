@@ -28,12 +28,13 @@
 #define SVTOOLS_INC_TABLE_TABLECONTROL_HXX
 
 #include "svtools/svtdllapi.h"
-#include <svtools/table/tablemodel.hxx>
+#include "svtools/table/tablemodel.hxx"
+#include "svtools/table/tabledatawindow.hxx"
+#include "svtools/accessibletable.hxx"
+#include "svtools/accessiblefactory.hxx"
+
 #include <vcl/ctrl.hxx>
 #include <vcl/seleng.hxx>
-#include <svtools/table/tabledatawindow.hxx>
-#include <svtools/accessibletable.hxx>
-#include <svtools/accessiblefactory.hxx>
 
 #include <boost/shared_ptr.hpp>
 #include <boost/scoped_ptr.hpp>
@@ -65,8 +66,6 @@ namespace svt { namespace table
         The control supports the concept of a <em>current</em> (or <em>active</em>
         cell).
         The control supports accessibility, this is encapsulated in IAccessibleTable
-
-        // TODO: scrolling?
     */
     class SVT_DLLPUBLIC TableControl : public Control, public IAccessibleTable
     {
@@ -207,7 +206,7 @@ namespace svt { namespace table
         virtual sal_Bool HasRowHeader();
         virtual sal_Bool HasColHeader();
         virtual ::std::vector< sal_Int32 >& GetSelectedRows();
-        virtual void RemoveSelectedRow(RowPos _nRowPos);
+        virtual void ClearSelection();
         virtual ::rtl::OUString GetAccessibleCellText(sal_Int32 _nRowPos, sal_Int32 _nColPos) const;
         // .............................................................................................................
 
