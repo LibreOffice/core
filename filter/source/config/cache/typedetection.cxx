@@ -1007,13 +1007,21 @@ void TypeDetection::impl_seekStreamToZero(comphelper::MediaDescriptor& rDescript
     aLock.clear();
     // <- SAFE
 
-    // Attention! If e.g. an office module was not installed sometimes we find a
-    // registered detect service, which is referred inside the configuration ... but not realy
-    // installed. On the other side we use third party components here, which can make trouble anyway.
-    // So we should handle errors during creation of such services more gracefully .-)
-    xDetector = css::uno::Reference< css::document::XExtendedFilterDetection >(
-            xSMGR->createInstance(sDetectService),
-            css::uno::UNO_QUERY);
+    try
+    {
+        // Attention! If e.g. an office module was not installed sometimes we
+        // find a registered detect service, which is referred inside the
+        // configuration ... but not realy installed. On the other side we use
+        // third party components here, which can make trouble anyway.  So we
+        // should handle errors during creation of such services more
+        // gracefully .-)
+        xDetector = css::uno::Reference< css::document::XExtendedFilterDetection >(
+                xSMGR->createInstance(sDetectService),
+                css::uno::UNO_QUERY_THROW);
+    }
+    catch (...)
+    {
+    }
 
     if ( ! xDetector.is())
         return ::rtl::OUString();
