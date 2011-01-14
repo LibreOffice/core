@@ -381,14 +381,14 @@ void Test::testDataPilot()
 
     // Insert field names in row 0.
     for (sal_uInt32 i = 0; i < nFieldCount; ++i)
-        m_pDoc->SetString(0, static_cast<SCCOL>(i), 0, OUString(RTL_CONSTASCII_USTRINGPARAM(aFields[i].pName)));
+        m_pDoc->SetString(0, static_cast<SCCOL>(i), 0, OUString::createFromAscii(aFields[i].pName));
 
     // Insert data into row 1 and downward.
     for (sal_uInt32 i = 0; i < nDataCount; ++i)
     {
         SCROW nRow = static_cast<SCROW>(i) + 1;
-        m_pDoc->SetString(0, nRow, 0, OUString(RTL_CONSTASCII_USTRINGPARAM(aData[i].pName)));
-        m_pDoc->SetString(1, nRow, 0, OUString(RTL_CONSTASCII_USTRINGPARAM(aData[i].pGroup)));
+        m_pDoc->SetString(0, nRow, 0, OUString::createFromAscii(aData[i].pName));
+        m_pDoc->SetString(1, nRow, 0, OUString::createFromAscii(aData[i].pGroup));
         m_pDoc->SetValue(2, nRow, 0, aData[i].nScore);
     }
 
@@ -420,7 +420,7 @@ void Test::testDataPilot()
     // Set the dimension information.
     for (sal_uInt32 i = 0; i < nFieldCount; ++i)
     {
-        OUString aDimName(RTL_CONSTASCII_USTRINGPARAM(aFields[i].pName));
+        OUString aDimName(OUString::createFromAscii(aFields[i].pName));
         ScDPSaveDimension* pDim = aSaveData.GetDimensionByName(aDimName);
         pDim->SetOrientation(aFields[i].eOrient);
         if (aFields[i].eOrient == sheet::DataPilotFieldOrientation_DATA)
