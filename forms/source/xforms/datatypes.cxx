@@ -957,7 +957,7 @@ namespace xforms
         fValue = (double)(sal_Int16)value.toInt32();
         // TODO/eforms
         // this does not care for values which do not fit into a sal_Int16, but simply
-        // cuts them down. A better implementation here should probably return <sal_False/>
+        // cuts them down. A better implementation here should probably return <FALSE/>
         // for those values.
         // Else, we may have a situation where the UI claims an input to be valid
         // (say "12345678"), while internally, and at submission time, this is cut to

@@ -211,12 +211,12 @@ protected:
         @param _nIndex
             the index at which position it should be inserted
         @param _bEvents
-            if <sal_True/>, event knittings will be done
+            if <TRUE/>, event knittings will be done
         @param _pApprovalResult
             must contain the result of an approveNewElement call. Can be <NULL/>, in this case, the approval
             is done within implInsert.
         @param _bFire
-            if <sal_True/>, a notification about the insertion will be fired
+            if <TRUE/>, a notification about the insertion will be fired
     */
             void implInsert(
                 sal_Int32 _nIndex,

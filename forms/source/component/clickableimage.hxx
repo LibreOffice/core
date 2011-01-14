@@ -241,7 +241,7 @@ namespace frm
         ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > _getTypes();
 
         /** approves the action by calling the approve listeners
-            @return <sal_True/> if and only if the action has <em>not</em> been cancelled by a listener
+            @return <TRUE/> if and only if the action has <em>not</em> been cancelled by a listener
         */
         bool    approveAction( );
 

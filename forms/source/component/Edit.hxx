@@ -47,7 +47,7 @@ class OEditModel
     ::com::sun::star::uno::Any  m_aLastKnownValue;
     ::std::auto_ptr< ::dbtools::FormattedColumnValue >
                                 m_pValueFormatter;
-    sal_Bool                    m_bMaxTextLenModified : 1;  // set to <sal_True/> when we change the MaxTextLen of the aggregate
+    sal_Bool                    m_bMaxTextLenModified : 1;  // set to <TRUE/> when we change the MaxTextLen of the aggregate
 
     sal_Bool                    m_bWritingFormattedFake : 1;
         // are we writing something which should be interpreted as formatted upon reading?

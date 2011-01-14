@@ -505,12 +505,12 @@ private:
         @param _rEvent
             the event to notify
         @param _bAllowSQLException
-            <sal_True/> if SQLExceptions are allowed to leave the method
+            <TRUE/> if SQLExceptions are allowed to leave the method
         @param _rGuard
             the guard to be cleared before actually calling into the listeners, but after making
             a copy of the listeners array to operate on.
         @return
-            <sal_True/> if and only if the execution has been approved
+            <TRUE/> if and only if the execution has been approved
     */
     bool    impl_approveRowChange_throw(
         const ::com::sun::star::lang::EventObject& _rEvent,

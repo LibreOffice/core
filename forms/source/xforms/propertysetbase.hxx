@@ -253,7 +253,7 @@ protected:
 
         Usually used to initialize the cache with values which are different from default
         constructed values. Say you have a boolean property whose initial state
-        is <sal_True/>. Say you call <member>notifyAndCachePropertyValue</member> the first time: it will
+        is <TRUE/>. Say you call <member>notifyAndCachePropertyValue</member> the first time: it will
         default construct the "old value" for this property as <FALSE/>, and thus <b>not</b> do
         any notifications if the "current value" is also <FALSE/> - which might be wrong, since
         the guessing of the "old value" differed from the real initial value which was <TRUE/>.

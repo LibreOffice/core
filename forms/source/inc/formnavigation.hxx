@@ -208,7 +208,7 @@ namespace frm
 
             @complexity O(log n), with n being the number of all potentially known URLs
             @return
-                <sal_True/> if and only if the given id is a known feature id
+                <TRUE/> if and only if the given id is a known feature id
                 (which is a valid usage)
         */
         bool        getFeatureURL( sal_Int16 _nFeatureId, ::com::sun::star::util::URL& /* [out] */ _rURL );
