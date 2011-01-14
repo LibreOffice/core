@@ -80,7 +80,7 @@ css::awt::Rectangle getPosSize( const uno::Reference< frame::XModel >& xModel )
     return aRect;
 }
 
-void setPosSize( const uno::Reference< frame::XModel >& xModel, sal_Int32 nValue, USHORT nFlag )
+void setPosSize( const uno::Reference< frame::XModel >& xModel, sal_Int32 nValue, sal_uInt16 nFlag )
 {
     uno::Reference< frame::XController > xController( xModel->getCurrentController(), uno::UNO_QUERY_THROW );
     uno::Reference< css::awt::XWindow > xWindow (xController->getFrame()->getContainerWindow(), uno::UNO_QUERY_THROW );
