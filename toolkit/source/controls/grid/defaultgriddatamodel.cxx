@@ -131,17 +131,26 @@ namespace toolkit
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    DefaultGridDataModel::CellData& DefaultGridDataModel::impl_getCellDataAccess_throw( sal_Int32 const i_column, sal_Int32 const i_row )
+    DefaultGridDataModel::RowData& DefaultGridDataModel::impl_getRowDataAccess_throw( sal_Int32 const i_rowIndex, size_t const i_requiredColumnCount )
     {
-        if  (   ( i_row < 0 ) || ( size_t( i_row ) >= m_aData.size() )
-            ||  ( i_column < 0 ) || ( i_column >= m_nColumnCount )
-            )
+        OSL_ENSURE( i_requiredColumnCount <= size_t( m_nColumnCount ), "DefaultGridDataModel::impl_getRowDataAccess_throw: invalid column count!" );
+        if  ( ( i_rowIndex < 0 ) || ( size_t( i_rowIndex ) >= m_aData.size() ) )
             throw IndexOutOfBoundsException( ::rtl::OUString(), *this );
 
-        RowData& rRowData( m_aData[ i_row ] );
-        if ( size_t( i_column ) >= rRowData.size() )
-            rRowData.resize( i_column + 1 );
-        return rRowData[ i_column ];
+        RowData& rRowData( m_aData[ i_rowIndex ] );
+        if ( rRowData.size() < i_requiredColumnCount )
+            rRowData.resize( i_requiredColumnCount );
+        return rRowData;
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    DefaultGridDataModel::CellData& DefaultGridDataModel::impl_getCellDataAccess_throw( sal_Int32 const i_columnIndex, sal_Int32 const i_rowIndex )
+    {
+        if  ( ( i_columnIndex < 0 ) || ( i_columnIndex >= m_nColumnCount ) )
+            throw IndexOutOfBoundsException( ::rtl::OUString(), *this );
+
+        RowData& rRowData( impl_getRowDataAccess_throw( i_rowIndex, size_t( i_columnIndex + 1 ) ) );
+        return rRowData[ i_columnIndex ];
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -281,7 +290,7 @@ namespace toolkit
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    void SAL_CALL DefaultGridDataModel::updateCell( ::sal_Int32 i_rowIndex, ::sal_Int32 i_columnIndex, const Any& i_value ) throw (IndexOutOfBoundsException, RuntimeException)
+    void SAL_CALL DefaultGridDataModel::updateCellData( ::sal_Int32 i_columnIndex, ::sal_Int32 i_rowIndex, const Any& i_value ) throw (IndexOutOfBoundsException, RuntimeException)
     {
         ::osl::ClearableMutexGuard aGuard( GetMutex() );
 
@@ -295,7 +304,7 @@ namespace toolkit
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    void SAL_CALL DefaultGridDataModel::updateRow( const Sequence< ::sal_Int32 >& i_columnIndexes, ::sal_Int32 i_rowIndex, const Sequence< Any >& i_values ) throw (IndexOutOfBoundsException, IllegalArgumentException, RuntimeException)
+    void SAL_CALL DefaultGridDataModel::updateRowData( const Sequence< ::sal_Int32 >& i_columnIndexes, ::sal_Int32 i_rowIndex, const Sequence< Any >& i_values ) throw (IndexOutOfBoundsException, IllegalArgumentException, RuntimeException)
     {
         ::osl::ClearableMutexGuard aGuard( GetMutex() );
 
@@ -352,10 +361,19 @@ namespace toolkit
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    void SAL_CALL DefaultGridDataModel::setCellToolTip( ::sal_Int32 i_rowIndex, ::sal_Int32 i_columnIndex, const Any& i_value ) throw (IndexOutOfBoundsException, RuntimeException)
+    void SAL_CALL DefaultGridDataModel::updateCellToolTip( ::sal_Int32 i_columnIndex, ::sal_Int32 i_rowIndex, const Any& i_value ) throw (IndexOutOfBoundsException, RuntimeException)
     {
         ::osl::MutexGuard aGuard( GetMutex() );
         impl_getCellDataAccess_throw( i_columnIndex, i_rowIndex ).second = i_value;
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    void SAL_CALL DefaultGridDataModel::updateRowToolTip( ::sal_Int32 i_rowIndex, const Any& i_value ) throw (IndexOutOfBoundsException, RuntimeException)
+    {
+        ::osl::MutexGuard aGuard( GetMutex() );
+        RowData& rRowData = impl_getRowDataAccess_throw( i_rowIndex, m_nColumnCount );
+        for ( RowData::iterator cell = rRowData.begin(); cell != rRowData.end(); ++cell )
+            cell->second = i_value;
     }
 
     //------------------------------------------------------------------------------------------------------------------
