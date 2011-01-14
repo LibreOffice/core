@@ -702,10 +702,10 @@ bool FlashExporter::getMetaFile( Reference< XComponent >&xComponent, GDIMetaFile
         BitmapEx rBitmapEx( aGraphic.GetBitmap(), Color(255,255,255) );
 
         Rectangle clipRect;
-        for( ULONG i = 0, nCount = rMtf.GetActionCount(); i < nCount; i++ )
+        for( sal_uLong i = 0, nCount = rMtf.GetActionCount(); i < nCount; i++ )
         {
             const MetaAction*   pAction = rMtf.GetAction( i );
-            const USHORT        nType = pAction->GetType();
+            const sal_uInt16        nType = pAction->GetType();
 
             switch( nType )
             {

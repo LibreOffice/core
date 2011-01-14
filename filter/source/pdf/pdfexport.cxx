@@ -211,7 +211,7 @@ sal_Bool PDFExport::ExportSelection( vcl::PDFWriter& rPDFWriter, Reference< com:
                     const Size                  aMtfSize( aPageSize.Width, aPageSize.Height );
 
                     pOut->Push();
-                    pOut->EnableOutput( FALSE );
+                    pOut->EnableOutput( sal_False );
                     pOut->SetMapMode( aMapMode );
 
                     aMtf.SetPrefSize( aMtfSize );
@@ -905,7 +905,7 @@ sal_Bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue
                 if( nPageCount > 0 )
                     bRet = ExportSelection( *pPDFWriter, xRenderable, aSelection, aMultiSelection, aRenderOptions, nPageCount );
                 else
-                    bRet = FALSE;
+                    bRet = sal_False;
 
                 if ( bRet && bSecondPassForImpressNotes )
                 {

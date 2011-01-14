@@ -32,18 +32,18 @@
 
 LZWDecompressor::LZWDecompressor()
 {
-    USHORT i;
+    sal_uInt16 i;
 
     pTable=new LZWTableEntry[4096];
-    pOutBuf=new BYTE[4096];
+    pOutBuf=new sal_uInt8[4096];
     for (i=0; i<4096; i++)
     {
         pTable[i].nPrevCode=0;
         pTable[i].nDataCount=1;
-        pTable[i].nData=(BYTE)i;
+        pTable[i].nData=(sal_uInt8)i;
     }
     pIStream=NULL;
-    bFirst = TRUE;
+    bFirst = sal_True;
     nOldCode = 0;
 }
 
@@ -61,7 +61,7 @@ void LZWDecompressor::StartDecompression(SvStream & rIStream)
 
     nTableSize=258;
 
-    bEOIFound=FALSE;
+    bEOIFound=sal_False;
 
     nOutBufDataLen=0;
 
@@ -72,7 +72,7 @@ void LZWDecompressor::StartDecompression(SvStream & rIStream)
     if ( bFirst )
     {
         bInvert = nInputBitsBuf == 1;
-        bFirst = FALSE;
+        bFirst = sal_False;
     }
 
     if ( bInvert )
@@ -80,9 +80,9 @@ void LZWDecompressor::StartDecompression(SvStream & rIStream)
 }
 
 
-ULONG LZWDecompressor::Decompress(BYTE * pTarget, ULONG nMaxCount)
+sal_uLong LZWDecompressor::Decompress(sal_uInt8 * pTarget, sal_uLong nMaxCount)
 {
-    ULONG nCount;
+    sal_uLong nCount;
 
     if (pIStream==NULL) return 0;
 
@@ -91,8 +91,8 @@ ULONG LZWDecompressor::Decompress(BYTE * pTarget, ULONG nMaxCount)
 
         if (pIStream->GetError()) break;
 
-        if (((ULONG)nOutBufDataLen)>=nMaxCount) {
-            nOutBufDataLen = nOutBufDataLen - (USHORT)nMaxCount;
+        if (((sal_uLong)nOutBufDataLen)>=nMaxCount) {
+            nOutBufDataLen = nOutBufDataLen - (sal_uInt16)nMaxCount;
             nCount+=nMaxCount;
             while (nMaxCount>0) {
                 *(pTarget++)=*(pOutBufData++);
@@ -101,14 +101,14 @@ ULONG LZWDecompressor::Decompress(BYTE * pTarget, ULONG nMaxCount)
             break;
         }
 
-        nMaxCount-=(ULONG)nOutBufDataLen;
+        nMaxCount-=(sal_uLong)nOutBufDataLen;
         nCount+=nOutBufDataLen;
         while (nOutBufDataLen>0) {
             *(pTarget++)=*(pOutBufData++);
             nOutBufDataLen--;
         }
 
-        if (bEOIFound==TRUE) break;
+        if (bEOIFound==sal_True) break;
 
         DecompressSome();
 
@@ -118,9 +118,9 @@ ULONG LZWDecompressor::Decompress(BYTE * pTarget, ULONG nMaxCount)
 }
 
 
-USHORT LZWDecompressor::GetNextCode()
+sal_uInt16 LZWDecompressor::GetNextCode()
 {
-    USHORT nBits,nCode;
+    sal_uInt16 nBits,nCode;
 
     if      (nTableSize<511)  nBits=9;
     else if (nTableSize<1023) nBits=10;
@@ -151,7 +151,7 @@ USHORT LZWDecompressor::GetNextCode()
 }
 
 
-void LZWDecompressor::AddToTable(USHORT nPrevCode, USHORT nCodeFirstData)
+void LZWDecompressor::AddToTable(sal_uInt16 nPrevCode, sal_uInt16 nCodeFirstData)
 {
     while (pTable[nCodeFirstData].nDataCount>1)
         nCodeFirstData=pTable[nCodeFirstData].nPrevCode;
@@ -166,17 +166,17 @@ void LZWDecompressor::AddToTable(USHORT nPrevCode, USHORT nCodeFirstData)
 
 void LZWDecompressor::DecompressSome()
 {
-    USHORT i,nCode;
+    sal_uInt16 i,nCode;
 
     nCode=GetNextCode();
     if (nCode==256) {
         nTableSize=258;
         nCode=GetNextCode();
-        if (nCode==257) { bEOIFound=TRUE; return; }
+        if (nCode==257) { bEOIFound=sal_True; return; }
     }
     else if (nCode<nTableSize) AddToTable(nOldCode,nCode);
     else if (nCode==nTableSize) AddToTable(nOldCode,nOldCode);
-    else { bEOIFound=TRUE; return; }
+    else { bEOIFound=sal_True; return; }
 
     nOldCode=nCode;
 

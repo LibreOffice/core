@@ -174,7 +174,7 @@ TypeDetection::~TypeDetection()
         // by calling its registered deep detection service.
         // But break this loop if a type match to the given descriptor
         // by an URL pattern(!) or if deep detection isnt allowed from
-        // outside (bAllowDeep=FALSE) or break the whole detection by
+        // outside (bAllowDeep=sal_False) or break the whole detection by
         // throwing an exception if creation of the might needed input
         // stream failed by e.g. an IO exception ...
         OUStringList lUsedDetectors;

@@ -146,13 +146,13 @@ void SvxMSExportOLEObjects::ExportOLEObject( svt::EmbeddedObjectRef& rObj, SvSto
     const SfxFilter* pExpFilter = NULL;
     {
         static struct _ObjExpType {
-            UINT32 nFlag;
+            sal_uInt32 nFlag;
             const char* pFilterNm;
             // GlobalNameId
             struct _GlobalNameIds {
-                UINT32 n1;
-                USHORT n2, n3;
-                BYTE b8, b9, b10, b11, b12, b13, b14, b15;
+                sal_uInt32 n1;
+                sal_uInt16 n2, n3;
+                sal_uInt8 b8, b9, b10, b11, b12, b13, b14, b15;
             }
             aGlNmIds[4];
         } aArr[] = {
@@ -220,7 +220,7 @@ void SvxMSExportOLEObjects::ExportOLEObject( svt::EmbeddedObjectRef& rObj, SvSto
             aSeq[1].Value <<= ::rtl::OUString( pExpFilter->GetName() );
             uno::Reference < frame::XStorable > xStor( rObj->getComponent(), uno::UNO_QUERY );
             xStor->storeToURL( ::rtl::OUString::createFromAscii( "private:stream" ), aSeq );
-            SotStorageRef xOLEStor = new SotStorage( pStream, TRUE );
+            SotStorageRef xOLEStor = new SotStorage( pStream, sal_True );
             xOLEStor->CopyTo( &rDestStg );
             rDestStg.Commit();
         }

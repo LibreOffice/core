@@ -40,16 +40,16 @@
 
 // Eintrag in eine Huffman-Tabelle:
 struct CCIHuffmanTableEntry {
-    USHORT nValue;    // Der Daten-Wert.
-    USHORT nCode;     // Der Code durch den der Daten-Wert repraesentiert wird.
-    USHORT nCodeBits; // Laenge des Codes in Bits.
+    sal_uInt16 nValue;    // Der Daten-Wert.
+    sal_uInt16 nCode;     // Der Code durch den der Daten-Wert repraesentiert wird.
+    sal_uInt16 nCodeBits; // Laenge des Codes in Bits.
 };
 
 
 // Eintrag in eine Hash-Tabelle zur schnellen Dekodierung
 struct CCILookUpTableEntry {
-    USHORT nValue;
-    USHORT nCodeBits;
+    sal_uInt16 nValue;
+    sal_uInt16 nCodeBits;
 };
 
 
@@ -57,67 +57,67 @@ class CCIDecompressor {
 
 public:
 
-    CCIDecompressor( ULONG nOptions, UINT32 nImageWidth );
+    CCIDecompressor( sal_uLong nOptions, sal_uInt32 nImageWidth );
     ~CCIDecompressor();
 
     void StartDecompression( SvStream & rIStream );
 
-    BOOL DecompressScanline(BYTE * pTarget, ULONG nTargetBits );
+    sal_Bool DecompressScanline(sal_uInt8 * pTarget, sal_uLong nTargetBits );
 
 private:
 
     void MakeLookUp(const CCIHuffmanTableEntry * pHufTab,
                     const CCIHuffmanTableEntry * pHufTabSave,
                     CCILookUpTableEntry * pLookUp,
-                    USHORT nHuffmanTableSize,
-                    USHORT nMaxCodeBits);
+                    sal_uInt16 nHuffmanTableSize,
+                    sal_uInt16 nMaxCodeBits);
 
-    BOOL ReadEOL( UINT32 nMaxFillBits );
+    sal_Bool ReadEOL( sal_uInt32 nMaxFillBits );
 
-    BOOL Read2DTag();
+    sal_Bool Read2DTag();
 
-    BYTE ReadBlackOrWhite();
+    sal_uInt8 ReadBlackOrWhite();
 
-    USHORT ReadCodeAndDecode(const CCILookUpTableEntry * pLookUp,
-                             USHORT nMaxCodeBits);
+    sal_uInt16 ReadCodeAndDecode(const CCILookUpTableEntry * pLookUp,
+                             sal_uInt16 nMaxCodeBits);
 
-    void FillBits(BYTE * pTarget, USHORT nTargetBits,
-                  USHORT nBitPos, USHORT nNumBits,
-                  BYTE nBlackOrWhite);
+    void FillBits(sal_uInt8 * pTarget, sal_uInt16 nTargetBits,
+                  sal_uInt16 nBitPos, sal_uInt16 nNumBits,
+                  sal_uInt8 nBlackOrWhite);
 
-    USHORT CountBits(const BYTE * pData, USHORT nDataSizeBits,
-                     USHORT nBitPos, BYTE nBlackOrWhite);
+    sal_uInt16 CountBits(const sal_uInt8 * pData, sal_uInt16 nDataSizeBits,
+                     sal_uInt16 nBitPos, sal_uInt8 nBlackOrWhite);
 
-    void Read1DScanlineData(BYTE * pTarget, USHORT nTargetBits);
+    void Read1DScanlineData(sal_uInt8 * pTarget, sal_uInt16 nTargetBits);
 
-    void Read2DScanlineData(BYTE * pTarget, USHORT nTargetBits);
+    void Read2DScanlineData(sal_uInt8 * pTarget, sal_uInt16 nTargetBits);
 
-    BOOL bTableBad;
+    sal_Bool bTableBad;
 
-    BOOL bStatus;
+    sal_Bool bStatus;
 
-    BYTE* pByteSwap;
+    sal_uInt8* pByteSwap;
 
     SvStream * pIStream;
 
-    UINT32 nEOLCount;
+    sal_uInt32 nEOLCount;
 
-    UINT32 nWidth;
+    sal_uInt32 nWidth;
 
-    ULONG nOptions;
+    sal_uLong nOptions;
 
-    BOOL bFirstEOL;
+    sal_Bool bFirstEOL;
 
     CCILookUpTableEntry * pWhiteLookUp;
     CCILookUpTableEntry * pBlackLookUp;
     CCILookUpTableEntry * p2DModeLookUp;
     CCILookUpTableEntry * pUncompLookUp;
 
-    ULONG nInputBitsBuf;
-    USHORT nInputBitsBufSize;
+    sal_uLong nInputBitsBuf;
+    sal_uInt16 nInputBitsBufSize;
 
-    BYTE * pLastLine;
-    ULONG nLastLineSize;
+    sal_uInt8 * pLastLine;
+    sal_uLong nLastLineSize;
 };
 
 

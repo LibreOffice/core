@@ -42,7 +42,7 @@ CGMOutAct::CGMOutAct( CGM& rCGM )
     mnGroupActCount = mnGroupLevel = 0;
     mpGroupLevel = new sal_uInt32[ CGM_OUTACT_MAX_GROUP_LEVEL ];
     mpPoints = (Point*)new sal_Int8[ 0x2000 * sizeof( Point ) ];
-    mpFlags = new BYTE[ 0x2000 ];
+    mpFlags = new sal_uInt8[ 0x2000 ];
 
     mnIndex = 0;
     mpGradient = NULL;
@@ -110,12 +110,12 @@ void CGMOutAct::EndFigure()
 
 void CGMOutAct::RegPolyLine( Polygon& rPolygon, sal_Bool bReverse )
 {
-    USHORT nPoints = rPolygon.GetSize();
+    sal_uInt16 nPoints = rPolygon.GetSize();
     if ( nPoints )
     {
         if ( bReverse )
         {
-            for ( USHORT i = 0; i <  nPoints; i++ )
+            for ( sal_uInt16 i = 0; i <  nPoints; i++ )
             {
                 mpPoints[ mnIndex + i ] = rPolygon.GetPoint( nPoints - i - 1 );
                 mpFlags[ mnIndex + i ] = (sal_Int8)rPolygon.GetFlags( nPoints - i - 1 );
@@ -123,7 +123,7 @@ void CGMOutAct::RegPolyLine( Polygon& rPolygon, sal_Bool bReverse )
         }
         else
         {
-            for ( USHORT i = 0; i <  nPoints; i++ )
+            for ( sal_uInt16 i = 0; i <  nPoints; i++ )
             {
                 mpPoints[ mnIndex + i ] = rPolygon.GetPoint( i );
                 mpFlags[ mnIndex + i ] = (sal_Int8)rPolygon.GetFlags( i );

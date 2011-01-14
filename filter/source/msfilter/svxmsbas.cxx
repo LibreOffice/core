@@ -67,7 +67,7 @@ static ::rtl::OUString sVBAOption( RTL_CONSTASCII_USTRINGPARAM( "Option VBASuppo
 
 int SvxImportMSVBasic::Import( const String& rStorageName,
                                 const String &rSubStorageName,
-                                BOOL bAsComment, BOOL bStripped )
+                                sal_Bool bAsComment, sal_Bool bStripped )
 {
     std::vector< String > codeNames;
     return Import(  rStorageName, rSubStorageName, codeNames, bAsComment, bStripped );
@@ -76,7 +76,7 @@ int SvxImportMSVBasic::Import( const String& rStorageName,
 int SvxImportMSVBasic::Import( const String& rStorageName,
                                 const String &rSubStorageName,
                                 const std::vector< String >& codeNames,
-                                BOOL bAsComment, BOOL bStripped )
+                                sal_Bool bAsComment, sal_Bool bStripped )
 {
     int nRet = 0;
     if( bImport && ImportCode_Impl( rStorageName, rSubStorageName, codeNames,
@@ -103,7 +103,7 @@ bool SvxImportMSVBasic::ImportForms_Impl(const String& rStorageName,
     std::vector<String> aUserForms;
     SvStorageInfoList aContents;
     xVBAStg->FillInfoList(&aContents);
-    for (USHORT nI = 0; nI < aContents.Count(); ++nI)
+    for (sal_uInt16 nI = 0; nI < aContents.Count(); ++nI)
     {
           SvStorageInfo& rInfo = aContents.GetObject(nI);
           if (!rInfo.IsStream() && rInfo.GetName() != rSubStorageName)
@@ -197,10 +197,10 @@ bool SvxImportMSVBasic::ImportForms_Impl(const String& rStorageName,
 }
 
 
-BOOL SvxImportMSVBasic::CopyStorage_Impl( const String& rStorageName,
+sal_Bool SvxImportMSVBasic::CopyStorage_Impl( const String& rStorageName,
                                          const String& rSubStorageName)
 {
-    BOOL bValidStg = FALSE;
+    sal_Bool bValidStg = sal_False;
     {
         SvStorageRef xVBAStg( xRoot->OpenSotStorage( rStorageName,
                                     STREAM_READWRITE | STREAM_NOCREATE |
@@ -213,7 +213,7 @@ BOOL SvxImportMSVBasic::CopyStorage_Impl( const String& rStorageName,
             if( xVBASubStg.Is() && !xVBASubStg->GetError() )
             {
                 // then we will copy these storages into the (temporary) storage of the document
-                bValidStg = TRUE;
+                bValidStg = sal_True;
             }
         }
     }
@@ -233,18 +233,18 @@ BOOL SvxImportMSVBasic::CopyStorage_Impl( const String& rStorageName,
         if ( nError != ERRCODE_NONE )
             xRoot->SetError( nError );
         else
-            bValidStg = TRUE;
+            bValidStg = sal_True;
     }
 
     return bValidStg;
 }
 
-BOOL SvxImportMSVBasic::ImportCode_Impl( const String& rStorageName,
+sal_Bool SvxImportMSVBasic::ImportCode_Impl( const String& rStorageName,
                                         const String &rSubStorageName,
                                         const std::vector< String >& codeNames,
-                                        BOOL bAsComment, BOOL bStripped )
+                                        sal_Bool bAsComment, sal_Bool bStripped )
 {
-    BOOL bRet = FALSE;
+    sal_Bool bRet = sal_False;
     VBA_Impl aVBA( *xRoot, bAsComment );
     if( aVBA.Open(rStorageName,rSubStorageName) )
     {
@@ -263,7 +263,7 @@ BOOL SvxImportMSVBasic::ImportCode_Impl( const String& rStorageName,
         {
         }
 
-        UINT16 nStreamCount = aVBA.GetNoStreams();
+        sal_uInt16 nStreamCount = aVBA.GetNoStreams();
         Reference<XNameContainer> xLib;
         String aLibName( RTL_CONSTASCII_USTRINGPARAM( "Standard" ) );
         if( xLibContainer.is() && nStreamCount )
@@ -298,7 +298,7 @@ BOOL SvxImportMSVBasic::ImportCode_Impl( const String& rStorageName,
             NameModuleDataHash moduleData;
             NameModuleInfoHash moduleInfos;
 
-            for( UINT16 i=0; i<nStreamCount;i++)
+            for( sal_uInt16 i=0; i<nStreamCount;i++)
             {
                 StringArray aDecompressed = aVBA.Decompress(i);
 #if 0
@@ -386,7 +386,7 @@ BOOL SvxImportMSVBasic::ImportCode_Impl( const String& rStorageName,
                 };
                 ::rtl::OUString aSource(sTemp);
 
-                for(ULONG j=0;j<aDecompressed.GetSize();j++)
+                for(sal_uLong j=0;j<aDecompressed.GetSize();j++)
                 {
                     if (bStripped)
                     {
