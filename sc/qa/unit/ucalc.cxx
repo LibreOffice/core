@@ -72,10 +72,19 @@
 #include <com/sun/star/sheet/DataPilotFieldOrientation.hpp>
 #include <com/sun/star/sheet/GeneralFunction.hpp>
 
+#include <iostream>
+
 using namespace ::com::sun::star;
 using ::rtl::OUString;
+using ::std::cout;
+using ::std::endl;
 
 namespace {
+
+::std::ostream& operator<< (::std::ostream& os, const OUString& str)
+{
+    return os << ::rtl::OUStringToOString(str, RTL_TEXTENCODING_UTF8).getStr();
+}
 
 class Test : public CppUnit::TestFixture {
 public:
@@ -350,8 +359,7 @@ void Test::testMatrix()
         checkMatrixElements<PartiallyFilledEmptyMatrix>(*pMat);
     }
 }
-#include <iostream>
-using namespace std;
+
 void Test::testDataPilot()
 {
     m_pDoc->InsertTab(0, OUString(RTL_CONSTASCII_USTRINGPARAM("Data")));
@@ -381,14 +389,14 @@ void Test::testDataPilot()
 
     // Insert field names in row 0.
     for (sal_uInt32 i = 0; i < nFieldCount; ++i)
-        m_pDoc->SetString(0, static_cast<SCCOL>(i), 0, OUString::createFromAscii(aFields[i].pName));
+        m_pDoc->SetString(static_cast<SCCOL>(i), 0, 0, OUString(aFields[i].pName, strlen(aFields[i].pName), RTL_TEXTENCODING_UTF8));
 
     // Insert data into row 1 and downward.
     for (sal_uInt32 i = 0; i < nDataCount; ++i)
     {
         SCROW nRow = static_cast<SCROW>(i) + 1;
-        m_pDoc->SetString(0, nRow, 0, OUString::createFromAscii(aData[i].pName));
-        m_pDoc->SetString(1, nRow, 0, OUString::createFromAscii(aData[i].pGroup));
+        m_pDoc->SetString(0, nRow, 0, OUString(aData[i].pName, strlen(aData[i].pName), RTL_TEXTENCODING_UTF8));
+        m_pDoc->SetString(1, nRow, 0, OUString(aData[i].pGroup, strlen(aData[i].pGroup), RTL_TEXTENCODING_UTF8));
         m_pDoc->SetValue(2, nRow, 0, aData[i].nScore);
     }
 
@@ -398,6 +406,19 @@ void Test::testDataPilot()
     CPPUNIT_ASSERT_MESSAGE("Data is expected to start from (col=0,row=0).", nCol1 == 0 && nRow1 == 0);
     CPPUNIT_ASSERT_MESSAGE("Unexpected data range.",
                            nCol2 == static_cast<SCCOL>(nFieldCount - 1) && nRow2 == static_cast<SCROW>(nDataCount));
+
+#if 0
+    for (SCROW nRow = nRow1; nRow <= nRow2; ++nRow)
+    {
+        for (SCCOL nCol = nCol1; nCol <= nCol2; ++nCol)
+        {
+            String aVal;
+            m_pDoc->GetString(nCol, nRow, 0, aVal);
+            cout << aVal << " | ";
+        }
+        cout << endl;
+    }
+#endif
 
     ScSheetSourceDesc aSheetDesc;
     aSheetDesc.aSourceRange = ScRange(nCol1, nRow1, 0, nCol2, nRow2, 0);
@@ -409,18 +430,21 @@ void Test::testDataPilot()
     // Set data pilot table output options.
     aSaveData.SetIgnoreEmptyRows(false);
     aSaveData.SetRepeatIfEmpty(false);
-    aSaveData.SetColumnGrand(false);
-    aSaveData.SetRowGrand(false);
+    aSaveData.SetColumnGrand(true);
+    aSaveData.SetRowGrand(true);
     aSaveData.SetFilterButton(false);
-    aSaveData.SetDrillDown(false);
+    aSaveData.SetDrillDown(true);
 
-    // Generate the internal source structure.
-    pDPObj->GetSource();
+    // Check the sanity of the source range.
+    nCol1 = aSheetDesc.aSourceRange.aStart.Col();
+    nRow1 = aSheetDesc.aSourceRange.aStart.Row();
+    nRow2 = aSheetDesc.aSourceRange.aEnd.Row();
+    CPPUNIT_ASSERT_MESSAGE("source range contains no data!", nRow2 - nRow1 > 1);
 
     // Set the dimension information.
     for (sal_uInt32 i = 0; i < nFieldCount; ++i)
     {
-        OUString aDimName(OUString::createFromAscii(aFields[i].pName));
+        OUString aDimName(aFields[i].pName, strlen(aFields[i].pName), RTL_TEXTENCODING_UTF8);
         ScDPSaveDimension* pDim = aSaveData.GetDimensionByName(aDimName);
         pDim->SetOrientation(aFields[i].eOrient);
         if (aFields[i].eOrient == sheet::DataPilotFieldOrientation_DATA)
@@ -428,21 +452,61 @@ void Test::testDataPilot()
             pDim->SetFunction(sheet::GeneralFunction_SUM);
             pDim->SetReferenceValue(NULL);
         }
+        else
+        {
+            for (SCROW nRow = nRow1 + 1; nRow <= nRow2; ++nRow)
+            {
+                SCCOL nCol = nCol1 + static_cast<SCCOL>(i);
+                String aVal;
+                m_pDoc->GetString(nCol, nRow, 0, aVal);
+                // This call is just to populate the member list for each dimension.
+                ScDPSaveMember* pMem = pDim->GetMemberByName(aVal);
+                pMem->SetShowDetails(false);
+                pMem->SetIsVisible(true);
+            }
+        }
     }
+
+    // Don't forget the data layout dimension.
+    ScDPSaveDimension* pDim = aSaveData.GetDataLayoutDimension();
+    pDim->SetOrientation(sheet::DataPilotFieldOrientation_ROW);
+    pDim->SetShowEmpty(true);
+
     pDPObj->SetSaveData(aSaveData);
     pDPObj->SetAlive(true);
     ScDPCollection* pDPs = m_pDoc->GetDPCollection();
     bool bSuccess = pDPs->InsertNewTable(pDPObj);
     CPPUNIT_ASSERT_MESSAGE("failed to insert a new datapilot object", bSuccess);
-    CPPUNIT_ASSERT_MESSAGE("there should be only one data pilot table.", pDPs->GetCount() == 1);
+    CPPUNIT_ASSERT_MESSAGE("there should be only one data pilot table.",
+                           pDPs->GetCount() == 1);
     pDPObj->InvalidateData();
     pDPObj->SetName(pDPs->CreateNewName());
+
     bool bOverFlow = false;
     ScRange aOutRange = pDPObj->GetNewOutputRange(bOverFlow);
+    CPPUNIT_ASSERT_MESSAGE("Table overflow!?", !bOverFlow);
+
+    pDPObj->Output(aOutRange.aStart);
+#if 0
+    aOutRange = pDPObj->GetOutRange();
+    const ScAddress& s = aOutRange.aStart;
+    const ScAddress& e = aOutRange.aEnd;
+    for (SCROW nRow = s.Row(); nRow <= e.Row(); ++nRow)
+    {
+        for (SCCOL nCol = s.Col(); nCol <= e.Col(); ++nCol)
+        {
+            String aVal;
+            m_pDoc->GetString(nCol, nRow, s.Tab(), aVal);
+            cout << aVal << " | ";
+        }
+        cout << endl;
+    }
+#endif
 
     // Now, delete the datapilot object.
     pDPs->FreeTable(pDPObj);
-    CPPUNIT_ASSERT_MESSAGE("There shouldn't be any data pilot table stored with the document.", pDPs->GetCount() == 0);
+    CPPUNIT_ASSERT_MESSAGE("There shouldn't be any data pilot table stored with the document.",
+                           pDPs->GetCount() == 0);
 
     m_pDoc->DeleteTab(1);
     m_pDoc->DeleteTab(0);

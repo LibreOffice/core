@@ -174,6 +174,16 @@ public:
     USHORT                  GetOrientation() const  { return nOrientation; }
 
     ScDPSaveMember*         GetExistingMemberByName(const String& rName);
+
+    /**
+     * Get a member object by its name.  If one doesn't exist, creat a new
+     * object and return it.  This class manages the life cycle of all member
+     * objects belonging to it, so <i>don't delete the returned instance.</i>
+     *
+     * @param rName member name
+     *
+     * @return pointer to the member object.
+     */
     ScDPSaveMember*         GetMemberByName(const String& rName);
 
     void                    SetMemberPosition( const String& rName, sal_Int32 nNewPos );
