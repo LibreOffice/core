@@ -263,7 +263,7 @@ public:
     ~SwRenderData();
 
 
-    bool HasPostItData() const  { return m_pPostItShell != 0 && m_pPostItDoc != 0 && m_pPostItShell != 0; }
+    bool HasPostItData() const  { return m_pPostItShell != 0 && m_pPostItDoc != 0; }
     void CreatePostItData( SwDoc *pDoc, const SwViewOption *pViewOpt, OutputDevice *pOutDev );
     void DeletePostItData();
 
