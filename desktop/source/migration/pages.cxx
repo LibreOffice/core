@@ -225,7 +225,7 @@ IMPL_LINK( LicensePage, PageDownHdl, PushButton *, EMPTYARG )
 
 IMPL_LINK( LicensePage, EndReachedHdl, LicenseView *, EMPTYARG )
 {
-    m_bLicenseRead = TRUE;
+    m_bLicenseRead = sal_True;
     updateDialogTravelUI();
     return 0;
 }
@@ -259,20 +259,20 @@ void LicenseView::ScrollDown( ScrollType eScroll )
         pScroll->DoScrollAction( eScroll );
 }
 
-BOOL LicenseView::IsEndReached() const
+sal_Bool LicenseView::IsEndReached() const
 {
-    BOOL bEndReached;
+    sal_Bool bEndReached;
 
     ExtTextView*    pView = GetTextView();
     ExtTextEngine*  pEdit = GetTextEngine();
-    ULONG           nHeight = pEdit->GetTextHeight();
+    sal_uLong           nHeight = pEdit->GetTextHeight();
     Size            aOutSize = pView->GetWindow()->GetOutputSizePixel();
     Point           aBottom( 0, aOutSize.Height() );
 
-    if ( (ULONG) pView->GetDocPos( aBottom ).Y() >= nHeight - 1 )
-        bEndReached = TRUE;
+    if ( (sal_uLong) pView->GetDocPos( aBottom ).Y() >= nHeight - 1 )
+        bEndReached = sal_True;
     else
-        bEndReached = FALSE;
+        bEndReached = sal_False;
 
     return bEndReached;
 }
@@ -281,8 +281,8 @@ void LicenseView::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
     if ( rHint.IsA( TYPE(TextHint) ) )
     {
-        BOOL    bLastVal = EndReached();
-        ULONG   nId = ((const TextHint&)rHint).GetId();
+        sal_Bool    bLastVal = EndReached();
+        sal_uLong   nId = ((const TextHint&)rHint).GetId();
 
         if ( nId == TEXT_HINT_PARAINSERTED )
         {

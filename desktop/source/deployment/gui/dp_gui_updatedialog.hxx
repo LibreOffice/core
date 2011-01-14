@@ -98,7 +98,7 @@ public:
 
     ~UpdateDialog();
 
-    virtual BOOL Close();
+    virtual sal_Bool Close();
 
     virtual short Execute();
 
@@ -127,7 +127,7 @@ private:
 
         virtual ~CheckListBox();
 
-        USHORT getItemCount() const;
+        sal_uInt16 getItemCount() const;
 
     private:
         CheckListBox(UpdateDialog::CheckListBox &); // not defined
@@ -148,7 +148,7 @@ private:
 
     friend class CheckListBox;
 
-    USHORT insertItem( UpdateDialog::Index *pIndex, SvLBoxButtonKind kind );
+    sal_uInt16 insertItem( UpdateDialog::Index *pIndex, SvLBoxButtonKind kind );
     void addAdditional( UpdateDialog::Index *pIndex, SvLBoxButtonKind kind );
     bool isIgnoredUpdate( UpdateDialog::Index *pIndex );
     void setIgnoredUpdate( UpdateDialog::Index *pIndex, bool bIgnore, bool bIgnoreAll );
@@ -223,7 +223,7 @@ private:
     Size    m_aFirstLineSize;
     long    m_nFirstLineDelta;
     long    m_nOneLineMissing;
-    USHORT  m_nLastID;
+    sal_uInt16  m_nLastID;
     bool    m_bModified;
 };
 

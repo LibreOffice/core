@@ -170,7 +170,7 @@ class ExtensionBox_Impl : public ::svt::IExtensionListBox
     void            SetupScrollBar();
     void            DrawRow( const Rectangle& rRect, const TEntry_Impl pEntry );
     bool            HandleTabKey( bool bReverse );
-    bool            HandleCursorKey( USHORT nKeyCode );
+    bool            HandleCursorKey( sal_uInt16 nKeyCode );
     bool            FindEntryPos( const TEntry_Impl pEntry, long nStart, long nEnd, long &nFound );
     bool            isHCMode();
     void            DeleteRemoved();

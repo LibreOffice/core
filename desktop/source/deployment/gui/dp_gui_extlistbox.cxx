@@ -711,7 +711,7 @@ bool ExtensionBox_Impl::HandleTabKey( bool )
 }
 
 // -----------------------------------------------------------------------
-bool ExtensionBox_Impl::HandleCursorKey( USHORT nKeyCode )
+bool ExtensionBox_Impl::HandleCursorKey( sal_uInt16 nKeyCode )
 {
     if ( m_vEntries.empty() )
         return true;
@@ -876,7 +876,7 @@ long ExtensionBox_Impl::Notify( NotifyEvent& rNEvt )
     {
         const KeyEvent* pKEvt = rNEvt.GetKeyEvent();
         KeyCode         aKeyCode = pKEvt->GetKeyCode();
-        USHORT          nKeyCode = aKeyCode.GetCode();
+        sal_uInt16          nKeyCode = aKeyCode.GetCode();
 
         if ( nKeyCode == KEY_TAB )
             bHandled = HandleTabKey( aKeyCode.IsShift() );

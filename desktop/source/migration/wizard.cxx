@@ -112,7 +112,7 @@ static sal_Int32 getBuildId()
     return nBuildId;
 }
 
-WizardResId::WizardResId( USHORT nId ) :
+WizardResId::WizardResId( sal_uInt16 nId ) :
     ResId( nId, *FirstStartWizard::GetResManager() )
 {
 }
@@ -280,7 +280,7 @@ long FirstStartWizard::PreNotify( NotifyEvent& rNEvt )
     {
         const KeyCode& rKey = rNEvt.GetKeyEvent()->GetKeyCode();
         if( rKey.GetCode() == KEY_F1 && ! rKey.GetModifier() )
-            return TRUE;
+            return sal_True;
     }
     return RoadmapWizard::PreNotify(rNEvt);
 }

@@ -441,7 +441,7 @@ long ExtBoxWithBtns_Impl::Notify( NotifyEvent& rNEvt )
     {
         const KeyEvent* pKEvt = rNEvt.GetKeyEvent();
         KeyCode         aKeyCode = pKEvt->GetKeyCode();
-        USHORT          nKeyCode = aKeyCode.GetCode();
+        sal_uInt16          nKeyCode = aKeyCode.GetCode();
 
         if ( nKeyCode == KEY_TAB )
             bHandled = HandleTabKey( aKeyCode.IsShift() );
@@ -568,14 +568,14 @@ DialogHelper::~DialogHelper()
 }
 
 //------------------------------------------------------------------------------
-ResId DialogHelper::getResId( USHORT nId )
+ResId DialogHelper::getResId( sal_uInt16 nId )
 {
     const ::vos::OGuard guard( Application::GetSolarMutex() );
     return ResId( nId, *DeploymentGuiResMgr::get() );
 }
 
 //------------------------------------------------------------------------------
-String DialogHelper::getResourceString( USHORT id )
+String DialogHelper::getResourceString( sal_uInt16 id )
 {
     // init with non-acquired solar mutex:
     BrandName::get();
@@ -599,7 +599,7 @@ bool DialogHelper::IsSharedPkgMgr( const uno::Reference< deployment::XPackage > 
 //------------------------------------------------------------------------------
 bool DialogHelper::continueOnSharedExtension( const uno::Reference< deployment::XPackage > &xPackage,
                                               Window *pParent,
-                                              const USHORT nResID,
+                                              const sal_uInt16 nResID,
                                               bool &bHadWarning )
 {
     if ( !bHadWarning && IsSharedPkgMgr( xPackage ) )
@@ -668,8 +668,8 @@ bool DialogHelper::installForAllUsers( bool &bInstallForAll ) const
     sMsgText.SearchAndReplaceAllAscii( "%PRODUCTNAME", BrandName::get() );
     aQuery.SetMessText( sMsgText );
 
-    USHORT nYesBtnID = aQuery.GetButtonId( 0 );
-    USHORT nNoBtnID = aQuery.GetButtonId( 1 );
+    sal_uInt16 nYesBtnID = aQuery.GetButtonId( 0 );
+    sal_uInt16 nNoBtnID = aQuery.GetButtonId( 1 );
 
     if ( nYesBtnID != BUTTONDIALOG_BUTTON_NOTFOUND )
         aQuery.SetButtonText( nYesBtnID, getResourceString( RID_STR_INSTALL_FOR_ME ) );
@@ -1114,7 +1114,7 @@ IMPL_LINK( ExtMgrDialog, TimeOutHdl, Timer*, EMPTYARG )
         }
 
         if ( m_aProgressBar.IsVisible() )
-            m_aProgressBar.SetValue( (USHORT) m_nProgress );
+            m_aProgressBar.SetValue( (sal_uInt16) m_nProgress );
 
         m_aTimeoutTimer.Start();
     }
@@ -1167,7 +1167,7 @@ void ExtMgrDialog::Resize()
         Rectangle aNativeControlRegion, aNativeContentRegion;
         if( (bNativeOK = GetNativeControlRegion( CTRL_PROGRESS, PART_ENTIRE_CONTROL, aControlRegion,
                                                  CTRL_STATE_ENABLED, aValue, rtl::OUString(),
-                                                 aNativeControlRegion, aNativeContentRegion ) ) != FALSE )
+                                                 aNativeControlRegion, aNativeContentRegion ) ) != sal_False )
         {
             nProgressHeight = aNativeControlRegion.GetHeight();
         }
@@ -1204,7 +1204,7 @@ long ExtMgrDialog::Notify( NotifyEvent& rNEvt )
     {
         const KeyEvent* pKEvt = rNEvt.GetKeyEvent();
         KeyCode         aKeyCode = pKEvt->GetKeyCode();
-        USHORT          nKeyCode = aKeyCode.GetCode();
+        sal_uInt16          nKeyCode = aKeyCode.GetCode();
 
         if ( nKeyCode == KEY_TAB )
         {
@@ -1231,7 +1231,7 @@ long ExtMgrDialog::Notify( NotifyEvent& rNEvt )
 }
 
 //------------------------------------------------------------------------------
-BOOL ExtMgrDialog::Close()
+sal_Bool ExtMgrDialog::Close()
 {
     bool bRet = m_pManager->queryTermination();
     if ( bRet )
@@ -1551,7 +1551,7 @@ IMPL_LINK( UpdateRequiredDialog, TimeOutHdl, Timer*, EMPTYARG )
         }
 
         if ( m_aProgressBar.IsVisible() )
-            m_aProgressBar.SetValue( (USHORT) m_nProgress );
+            m_aProgressBar.SetValue( (sal_uInt16) m_nProgress );
 
         m_aTimeoutTimer.Start();
     }
@@ -1610,7 +1610,7 @@ void UpdateRequiredDialog::Resize()
         Rectangle aNativeControlRegion, aNativeContentRegion;
         if( (bNativeOK = GetNativeControlRegion( CTRL_PROGRESS, PART_ENTIRE_CONTROL, aControlRegion,
                                                  CTRL_STATE_ENABLED, aValue, rtl::OUString(),
-                                                 aNativeControlRegion, aNativeContentRegion ) ) != FALSE )
+                                                 aNativeControlRegion, aNativeContentRegion ) ) != sal_False )
         {
             nProgressHeight = aNativeControlRegion.GetHeight();
         }
@@ -1648,7 +1648,7 @@ short UpdateRequiredDialog::Execute()
 
 //------------------------------------------------------------------------------
 // VCL::Dialog
-BOOL UpdateRequiredDialog::Close()
+sal_Bool UpdateRequiredDialog::Close()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 

@@ -33,7 +33,7 @@
 #include <rtl/logfile.hxx>
 #include <tools/extendapplicationenvironment.hxx>
 
-BOOL SVMain();
+sal_Bool SVMain();
 
 // -=-= main() -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 

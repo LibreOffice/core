@@ -525,7 +525,7 @@ void BackendImpl::implProcessHelp
 
                     if( !bSuccess )
                     {
-                        USHORT nErrStrId = 0;
+                        sal_uInt16 nErrStrId = 0;
                         switch( aErrorInfo.m_eErrorClass )
                         {
                         case HELPPROCESSING_GENERAL_ERROR:
