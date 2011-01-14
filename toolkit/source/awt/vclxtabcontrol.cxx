@@ -483,7 +483,7 @@ void VCLXTabControl::ProcessWindowEvent( const VclWindowEvent& _rVclWindowEvent 
         case VCLEVENT_TABPAGE_REMOVEDALL:
         case VCLEVENT_TABPAGE_PAGETEXTCHANGED:
         {
-            sal_uIntPtr page = (sal_uIntPtr) _rVclWindowEvent.GetData();
+            sal_uLong page = (sal_uLong) _rVclWindowEvent.GetData();
             for ( std::list< uno::Reference
                       < awt::XTabListener > >::iterator it
                       = mxTabListeners.begin(); it != mxTabListeners.end(); it++)

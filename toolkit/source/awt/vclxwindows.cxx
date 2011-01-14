@@ -3251,7 +3251,7 @@ void VCLXScrollBar::setProperty( const ::rtl::OUString& PropertyName, const ::co
                 }
                 AllSettings aSettings( pScrollBar->GetSettings() );
                 StyleSettings aStyle( aSettings.GetStyleSettings() );
-                sal_uIntPtr nDragOptions = aStyle.GetDragFullOptions();
+                sal_uLong nDragOptions = aStyle.GetDragFullOptions();
                 if ( bDo )
                     nDragOptions |= DRAGFULL_OPTION_SCROLL;
                 else

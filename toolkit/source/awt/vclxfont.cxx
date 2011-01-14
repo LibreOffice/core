@@ -204,7 +204,7 @@ void VCLXFont::getKernPairs( ::com::sun::star::uno::Sequence< sal_Unicode >& rnC
         Font aOldFont = pOutDev->GetFont();
         pOutDev->SetFont( maFont );
 
-        sal_uIntPtr nPairs = pOutDev->GetKerningPairCount();
+        sal_uLong nPairs = pOutDev->GetKerningPairCount();
         if ( nPairs )
         {
             KerningPair* pData = new KerningPair[ nPairs ];
@@ -218,7 +218,7 @@ void VCLXFont::getKernPairs( ::com::sun::star::uno::Sequence< sal_Unicode >& rnC
             sal_Unicode* pChars2 = rnChars2.getArray();
             sal_Int16* pKerns = rnKerns.getArray();
 
-            for ( sal_uIntPtr n = 0; n < nPairs; n++ )
+            for ( sal_uLong n = 0; n < nPairs; n++ )
             {
                 pChars1[n] = pData[n].nChar1;
                 pChars2[n] = pData[n].nChar2;

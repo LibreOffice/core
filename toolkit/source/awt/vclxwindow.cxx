@@ -151,7 +151,7 @@ private:
     TopWindowListenerMultiplexer        maTopWindowListeners;
 
     CallbackArray                       maCallbackEvents;
-    sal_uIntPtr                               mnCallbackEventId;
+    sal_uLong                               mnCallbackEventId;
 
 public:
     bool                                mbDisposing             : 1;
@@ -159,7 +159,7 @@ public:
     bool                                mbSynthesizingVCLEvent  : 1;
     bool                                mbWithDefaultProps      : 1;
 
-    sal_uIntPtr                               mnListenerLockLevel;
+    sal_uLong                               mnListenerLockLevel;
     sal_Int16                           mnWritingMode;
     sal_Int16                           mnContextWritingMode;
 
