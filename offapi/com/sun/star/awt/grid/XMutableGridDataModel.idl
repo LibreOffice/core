@@ -76,16 +76,16 @@ interface XMutableGridDataModel : XGridDataModel
     void removeAllRows();
 
     /** updates the content of the given cell
-        @param RowIndex
-            the row index of the to-be-updated cell
         @param ColumnIndex
             the column index of the to-be-updated cell
+        @param RowIndex
+            the row index of the to-be-updated cell
         @param Value
             the new value of the cell.
         @throws ::com::sun::star::lang::IndexOutOfBoundsException
             if the row or column index is invalid
     */
-    void updateCell( [in] long RowIndex, [in] long ColumnIndex, [in] any Value )
+    void updateCellData( [in] long ColumnIndex, [in] long RowIndex, [in] any Value )
         raises ( ::com::sun::star::lang::IndexOutOfBoundsException );
 
     /** updates the content of a given row.
@@ -123,7 +123,7 @@ interface XMutableGridDataModel : XGridDataModel
 
         @see XGridDataModel::getCellToolTip
     */
-    void setCellToolTip( [in] long RowIndex, [in] long ColumnIndex, [in] any Value )
+    void updateCellToolTip( [in] long ColumnIndex, [in] long RowIndex, [in] any Value )
         raises ( ::com::sun::star::lang::IndexOutOfBoundsException );
 
     //-------------------------------------------------------------------------
