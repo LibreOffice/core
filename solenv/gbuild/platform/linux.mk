@@ -30,9 +30,10 @@ COM := GCC
 
 gb_MKTEMP := mktemp -p
 
-gb_CC := gcc
-gb_CXX := g++
+gb_CC := $(CC)
+gb_CXX := $(CXX)
 gb_GCCP := gcc
+gb_AR := ar
 gb_AWK := awk
 
 # normalize setsolar and configure env.
@@ -204,22 +205,35 @@ endif
 gb_LinkTarget_INCLUDE := $(filter-out %/stl, $(subst -I. , ,$(SOLARINC)))
 gb_LinkTarget_INCLUDE_STL := $(filter %/stl, $(subst -I. , ,$(SOLARINC)))
 
-define gb_LinkTarget__command
-$(call gb_Output_announce,$(2),$(true),LNK,4)
+# parameters: 1-linktarget 2-targettype 3-ldflags 4-linked-libs 5-linked-static-libs 6-cobjects 7-cxxobjects
+define gb_LinkTarget__command_dynamiclink
 $(call gb_Helper_abbreviate_dirs,\
     mkdir -p $(dir $(1)) && \
     $(gb_CXX) \
-        $(if $(filter Library CppunitTest,$(3)),$(gb_Library_TARGETTYPEFLAGS) $(call gb_Library_get_rpath,$(1))) \
-        $(if $(filter Executable,$(3)),$(gb_Library_TARGETTYPEFLAGS) $(call gb_Executable_get_rpath,$(1))) \
-        $(if $(filter StaticLibrary,$(3)),$(gb_StaticLibrary_TARGETTYPEFLAGS)) \
-        $(4) \
-        $(patsubst lib%.so,-l%,$(foreach lib,$(5),$(call gb_Library_get_filename,$(lib)))) \
-        $(foreach object,$(7),$(call gb_CObject_get_target,$(object))) \
-        $(foreach object,$(8),$(call gb_CxxObject_get_target,$(object))) \
-        -Wl$(COMMA)--start-group $(foreach lib,$(6),$(call gb_StaticLibrary_get_target,$(lib))) -Wl$(COMMA)--end-group \
+        $(if $(filter Library CppunitTest,$(2)),$(gb_Library_TARGETTYPEFLAGS) $(call gb_Library_get_rpath,$(1))) \
+        $(if $(filter Executable,$(2)),$(gb_Library_TARGETTYPEFLAGS) $(call gb_Executable_get_rpath,$(1))) \
+        $(3) \
+        $(patsubst lib%.so,-l%,$(foreach lib,$(4),$(call gb_Library_get_filename,$(lib)))) \
+        $(foreach object,$(6),$(call gb_CObject_get_target,$(object))) \
+        $(foreach object,$(7),$(call gb_CxxObject_get_target,$(object))) \
+        -Wl$(COMMA)--start-group $(foreach lib,$(5),$(call gb_StaticLibrary_get_target,$(lib))) -Wl$(COMMA)--end-group \
         -o $(1))
 endef
 
+# parameters: 1-linktarget 2-cobjects 3-cxxobjects
+define gb_LinkTarget__command_staticlink
+$(call gb_Helper_abbreviate_dirs,\
+    mkdir -p $(dir $(1)) && \
+    $(gb_AR) -rsu $(1) \
+        $(foreach object,$(2),$(call gb_CObject_get_target,$(object))) \
+        $(foreach object,$(3),$(call gb_CxxObject_get_target,$(object))))
+endef
+
+define gb_LinkTarget__command
+$(call gb_Output_announce,$(2),$(true),LNK,4)
+$(if $(filter Library CppunitTest Executable,$(3)),$(call gb_LinkTarget__command_dynamiclink,$(1),$(3),$(4),$(5),$(6),$(7),$(8)))
+$(if $(filter StaticLibrary,$(3)),$(call gb_LinkTarget__command_staticlink,$(1),$(7),$(8)))
+endef
 
 # Library class
 
@@ -286,7 +300,6 @@ gb_Library_LAYER := \
 # StaticLibrary class
 
 gb_StaticLibrary_DEFS :=
-gb_StaticLibrary_TARGETTYPEFLAGS := -Wl,-z,noexecstack -static -nostdlib
 gb_StaticLibrary_SYSPRE := lib
 gb_StaticLibrary_PLAINEXT := .a
 gb_StaticLibrary_JPEGEXT := lib$(gb_StaticLibrary_PLAINEXT)
