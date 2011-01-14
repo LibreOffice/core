@@ -2219,7 +2219,7 @@ void SAL_CALL OReportController::propertyChange( const beans::PropertyChangeEven
         {
             if ( evt.PropertyName.equals( PROPERTY_REPORTHEADERON ) )
             {
-                const USHORT nPosition = m_xReportDefinition->getPageHeaderOn() ? 1 : 0;
+                const sal_uInt16 nPosition = m_xReportDefinition->getPageHeaderOn() ? 1 : 0;
                 if ( bShow )
                 {
                     getDesignView()->addSection(m_xReportDefinition->getReportHeader(),DBREPORTHEADER,nPosition);
@@ -2232,7 +2232,7 @@ void SAL_CALL OReportController::propertyChange( const beans::PropertyChangeEven
             }
             else if ( evt.PropertyName.equals( PROPERTY_REPORTFOOTERON ) )
             {
-                USHORT nPosition = getDesignView()->getSectionCount();
+                sal_uInt16 nPosition = getDesignView()->getSectionCount();
                 if ( m_xReportDefinition->getPageFooterOn() )
                     --nPosition;
                 if ( bShow )
@@ -2254,7 +2254,7 @@ void SAL_CALL OReportController::propertyChange( const beans::PropertyChangeEven
                 }
                 else
                 {
-                    getDesignView()->removeSection(USHORT(0));
+                    getDesignView()->removeSection(sal_uInt16(0));
                 }
             }
             else if ( evt.PropertyName.equals( PROPERTY_PAGEFOOTERON ) )
@@ -2309,12 +2309,12 @@ void SAL_CALL OReportController::disposing( const lang::EventObject& Source ) th
 }
 
 // -----------------------------------------------------------------------------
-USHORT lcl_getNonVisbleGroupsBefore( const uno::Reference< report::XGroups>& _xGroups
+sal_uInt16 lcl_getNonVisbleGroupsBefore( const uno::Reference< report::XGroups>& _xGroups
                           ,sal_Int32 _nGroupPos
                           ,::std::mem_fun_t<sal_Bool,OGroupHelper>&_pGroupMemberFunction)
 {
     uno::Reference< report::XGroup> xGroup;
-    USHORT nNonVisibleGroups = 0;
+    sal_uInt16 nNonVisibleGroups = 0;
     sal_Int32 nCount = _xGroups->getCount();
     for( sal_Int32 i = 0; i < _nGroupPos && i < nCount; ++i)
     {
@@ -2333,12 +2333,12 @@ void OReportController::groupChange( const uno::Reference< report::XGroup>& _xGr
     ::std::mem_fun_t<sal_Bool,OGroupHelper> pMemFun = ::std::mem_fun(&OGroupHelper::getHeaderOn);
     ::std::mem_fun_t<uno::Reference<report::XSection> , OGroupHelper> pMemFunSection = ::std::mem_fun(&OGroupHelper::getHeader);
     ::rtl::OUString sColor(DBGROUPHEADER);
-    USHORT nPosition = 0;
+    sal_uInt16 nPosition = 0;
     bool bHandle = false;
     if ( _sPropName.equals( PROPERTY_HEADERON ) )
     {
         nPosition = m_xReportDefinition->getPageHeaderOn() ? (m_xReportDefinition->getReportHeaderOn() ? 2 : 1) : (m_xReportDefinition->getReportHeaderOn() ? 1 : 0);
-        nPosition += (static_cast<USHORT>(_nGroupPos) - lcl_getNonVisbleGroupsBefore(m_xReportDefinition->getGroups(),_nGroupPos,pMemFun));
+        nPosition += (static_cast<sal_uInt16>(_nGroupPos) - lcl_getNonVisbleGroupsBefore(m_xReportDefinition->getGroups(),_nGroupPos,pMemFun));
         bHandle = true;
     }
     else if ( _sPropName.equals( PROPERTY_FOOTERON ) )
@@ -2352,7 +2352,7 @@ void OReportController::groupChange( const uno::Reference< report::XGroup>& _xGr
         if ( m_xReportDefinition->getReportFooterOn() )
             --nPosition;
         sColor = DBGROUPFOOTER;
-        nPosition -= (static_cast<USHORT>(_nGroupPos) - lcl_getNonVisbleGroupsBefore(m_xReportDefinition->getGroups(),_nGroupPos,pMemFun));
+        nPosition -= (static_cast<sal_uInt16>(_nGroupPos) - lcl_getNonVisbleGroupsBefore(m_xReportDefinition->getGroups(),_nGroupPos,pMemFun));
         if ( !_bShow )
             --nPosition;
         bHandle = true;
@@ -2423,10 +2423,10 @@ void OReportController::openPageDialog(const uno::Reference<report::XSection>& _
         new SfxAllEnumItem(RPTUI_ID_START,PAPER_A4),
         new SfxAllEnumItem(RPTUI_ID_END,PAPER_E),
         new SvxBrushItem(ITEMID_BRUSH),
-        new SfxUInt16Item(RPTUI_ID_METRIC,static_cast<UINT16>(eUserMetric))
+        new SfxUInt16Item(RPTUI_ID_METRIC,static_cast<sal_uInt16>(eUserMetric))
     };
 
-    static USHORT pRanges[] =
+    static sal_uInt16 pRanges[] =
     {
         RPTUI_ID_LRSPACE,RPTUI_ID_BRUSH,
         SID_ATTR_METRIC,SID_ATTR_METRIC,
@@ -2447,9 +2447,9 @@ void OReportController::openPageDialog(const uno::Reference<report::XSection>& _
             pDescriptor->Put(SvxSizeItem(RPTUI_ID_SIZE,VCLSize(getStyleProperty<awt::Size>(m_xReportDefinition,PROPERTY_PAPERSIZE))));
             pDescriptor->Put(SvxLRSpaceItem(getStyleProperty<sal_Int32>(m_xReportDefinition,PROPERTY_LEFTMARGIN)
                                             ,getStyleProperty<sal_Int32>(m_xReportDefinition,PROPERTY_RIGHTMARGIN),0,0,RPTUI_ID_LRSPACE));
-            pDescriptor->Put(SvxULSpaceItem(static_cast<USHORT>(getStyleProperty<sal_Int32>(m_xReportDefinition,PROPERTY_TOPMARGIN))
-                                            ,static_cast<USHORT>(getStyleProperty<sal_Int32>(m_xReportDefinition,PROPERTY_BOTTOMMARGIN)),RPTUI_ID_ULSPACE));
-            pDescriptor->Put(SfxUInt16Item(SID_ATTR_METRIC,static_cast<UINT16>(eUserMetric)));
+            pDescriptor->Put(SvxULSpaceItem(static_cast<sal_uInt16>(getStyleProperty<sal_Int32>(m_xReportDefinition,PROPERTY_TOPMARGIN))
+                                            ,static_cast<sal_uInt16>(getStyleProperty<sal_Int32>(m_xReportDefinition,PROPERTY_BOTTOMMARGIN)),RPTUI_ID_ULSPACE));
+            pDescriptor->Put(SfxUInt16Item(SID_ATTR_METRIC,static_cast<sal_uInt16>(eUserMetric)));
 
             uno::Reference< style::XStyle> xPageStyle(getUsedStyle(m_xReportDefinition));
             if ( xPageStyle.is() )
@@ -2594,7 +2594,7 @@ void OReportController::Notify(SfxBroadcaster & /* _rBc */, SfxHint const & _rHi
     }
 }
 // -----------------------------------------------------------------------------
-void OReportController::executeMethodWithUndo(USHORT _nUndoStrId,const ::std::mem_fun_t<void,ODesignView>& _pMemfun)
+void OReportController::executeMethodWithUndo(sal_uInt16 _nUndoStrId,const ::std::mem_fun_t<void,ODesignView>& _pMemfun)
 {
     const String sUndoAction = String((ModuleRes(_nUndoStrId)));
     UndoManagerListAction aListAction(m_aUndoManager,sUndoAction);
@@ -2603,7 +2603,7 @@ void OReportController::executeMethodWithUndo(USHORT _nUndoStrId,const ::std::me
     InvalidateFeature( SID_UNDO );
 }
 // -----------------------------------------------------------------------------
-void OReportController::alignControlsWithUndo(USHORT _nUndoStrId,sal_Int32 _nControlModification,bool _bAlignAtSection)
+void OReportController::alignControlsWithUndo(sal_uInt16 _nUndoStrId,sal_Int32 _nControlModification,bool _bAlignAtSection)
 {
     const String sUndoAction = String((ModuleRes(_nUndoStrId)));
     UndoManagerListAction aListAction(m_aUndoManager,sUndoAction);
@@ -2686,7 +2686,7 @@ void OReportController::shrinkSectionTop(uno::Reference<report::XSection> _xSect
     _xSection->setHeight(nNewSectionHeight);
 }
 
-void OReportController::shrinkSection(USHORT _nUndoStrId, uno::Reference<report::XSection> _xSection, sal_Int32 _nSid)
+void OReportController::shrinkSection(sal_uInt16 _nUndoStrId, uno::Reference<report::XSection> _xSection, sal_Int32 _nSid)
 {
     if ( _xSection.is() )
     {
@@ -4257,7 +4257,7 @@ void OReportController::openZoomDialog()
         {
             new SvxZoomItem()
         };
-        static USHORT pRanges[] =
+        static sal_uInt16 pRanges[] =
         {
             SID_ATTR_ZOOM,SID_ATTR_ZOOM,
             0

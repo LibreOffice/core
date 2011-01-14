@@ -78,11 +78,11 @@ SdrPage* OReportPage::Clone() const
 }
 
 //----------------------------------------------------------------------------
-ULONG OReportPage::getIndexOf(const uno::Reference< report::XReportComponent >& _xObject)
+sal_uLong OReportPage::getIndexOf(const uno::Reference< report::XReportComponent >& _xObject)
 {
     DBG_CHKTHIS( rpt_OReportPage,NULL);
-    ULONG nCount = GetObjCount();
-    ULONG i = 0;
+    sal_uLong nCount = GetObjCount();
+    sal_uLong i = 0;
     for (; i < nCount; ++i)
     {
         OObjectBase* pObj = dynamic_cast<OObjectBase*>(GetObj(i));
@@ -98,7 +98,7 @@ ULONG OReportPage::getIndexOf(const uno::Reference< report::XReportComponent >& 
 void OReportPage::removeSdrObject(const uno::Reference< report::XReportComponent >& _xObject)
 {
     DBG_CHKTHIS( rpt_OReportPage,NULL);
-    ULONG nPos = getIndexOf(_xObject);
+    sal_uLong nPos = getIndexOf(_xObject);
     if ( nPos < GetObjCount() )
     {
         OObjectBase* pBase = dynamic_cast<OObjectBase*>(GetObj(nPos));
@@ -109,7 +109,7 @@ void OReportPage::removeSdrObject(const uno::Reference< report::XReportComponent
     }
 }
 // -----------------------------------------------------------------------------
-SdrObject* OReportPage::RemoveObject(ULONG nObjNum)
+SdrObject* OReportPage::RemoveObject(sal_uLong nObjNum)
 {
     SdrObject* pObj = SdrPage::RemoveObject(nObjNum);
     if (getSpecialMode())
@@ -152,7 +152,7 @@ void OReportPage::insertObject(const uno::Reference< report::XReportComponent >&
     OSL_ENSURE(_xObject.is(),"Object is not valid to create a SdrObject!");
     if ( !_xObject.is() ) // || !m_pView )
         return;
-    ULONG nPos = getIndexOf(_xObject);
+    sal_uLong nPos = getIndexOf(_xObject);
     if ( nPos < GetObjCount() )
         return; // Object already in list
 
@@ -177,7 +177,7 @@ void OReportPage::removeTempObject(SdrObject *_pToRemoveObj)
 {
     if (_pToRemoveObj)
     {
-        for (ULONG i=0;i<GetObjCount();i++)
+        for (sal_uLong i=0;i<GetObjCount();i++)
         {
             SdrObject *aObj = GetObj(i);
             if (aObj && aObj == _pToRemoveObj)
@@ -207,7 +207,7 @@ void OReportPage::resetSpecialMode()
     m_bSpecialInsertMode = false;
 }
 // -----------------------------------------------------------------------------
-void OReportPage::NbcInsertObject(SdrObject* pObj, ULONG nPos, const SdrInsertReason* pReason)
+void OReportPage::NbcInsertObject(SdrObject* pObj, sal_uLong nPos, const SdrInsertReason* pReason)
 {
     SdrPage::NbcInsertObject(pObj, nPos, pReason);
 

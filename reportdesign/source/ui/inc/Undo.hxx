@@ -67,7 +67,7 @@ namespace rptui
         OSectionUndo(   OReportModel& rMod
                         ,sal_uInt16 _nSlot
                         ,Action _eAction
-                        ,USHORT nCommentID);
+                        ,sal_uInt16 nCommentID);
         virtual ~OSectionUndo();
 
         virtual void        Undo();
@@ -95,7 +95,7 @@ namespace rptui
                                 ,OReportHelper> _pMemberFunction
                             ,const ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportDefinition >& _xReport
                             ,Action _eAction
-                            ,USHORT nCommentID);
+                            ,sal_uInt16 nCommentID);
         virtual ~OReportSectionUndo();
     };
 
@@ -122,7 +122,7 @@ namespace rptui
                                             ,OGroupHelper> _pMemberFunction
                             ,const ::com::sun::star::uno::Reference< ::com::sun::star::report::XGroup >& _xGroup
                             ,Action _eAction
-                            ,USHORT nCommentID);
+                            ,sal_uInt16 nCommentID);
 
         virtual String      GetComment() const;
     };
@@ -142,7 +142,7 @@ namespace rptui
     public:
         TYPEINFO();
         OGroupUndo(OReportModel& rMod
-                    ,USHORT nCommentID
+                    ,sal_uInt16 nCommentID
                     ,Action _eAction
                     ,const ::com::sun::star::uno::Reference< ::com::sun::star::report::XGroup>& _xGroup
                     ,const ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportDefinition >& _xReportDefinition);

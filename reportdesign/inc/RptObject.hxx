@@ -175,8 +175,8 @@ public:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet> getAwtComponent();
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > getUnoShape();
-    virtual UINT16 GetObjIdentifier() const;
-    virtual UINT32 GetObjInventor() const;
+    virtual sal_uInt16 GetObjIdentifier() const;
+    virtual sal_uInt32 GetObjInventor() const;
 };
 
 //============================================================================
@@ -187,17 +187,17 @@ class REPORTDESIGN_DLLPUBLIC OOle2Obj: public SdrOle2Obj , public OObjectBase
     friend class OReportPage;
     friend class DlgEdFactory;
 
-    UINT16 m_nType;
+    sal_uInt16 m_nType;
     bool    m_bOnlyOnce;
     void impl_createDataProvider_nothrow( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel>& _xModel);
 public:
-    static OOle2Obj* Create( const ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportComponent>& _xComponent,UINT16 _nType )
+    static OOle2Obj* Create( const ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportComponent>& _xComponent,sal_uInt16 _nType )
     {
         return new OOle2Obj( _xComponent,_nType );
     }
 protected:
-    OOle2Obj(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportComponent>& _xComponent,UINT16 _nType);
-    OOle2Obj(const ::rtl::OUString& _sComponentName,UINT16 _nType);
+    OOle2Obj(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportComponent>& _xComponent,sal_uInt16 _nType);
+    OOle2Obj(const ::rtl::OUString& _sComponentName,sal_uInt16 _nType);
 
 
     virtual void NbcMove( const Size& rSize );
@@ -217,8 +217,8 @@ public:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet> getAwtComponent();
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > getUnoShape();
-    virtual UINT16 GetObjIdentifier() const;
-    virtual UINT32 GetObjInventor() const;
+    virtual sal_uInt16 GetObjIdentifier() const;
+    virtual sal_uInt32 GetObjInventor() const;
     // Clone() soll eine komplette Kopie des Objektes erzeugen.
     virtual SdrObject* Clone() const;
     virtual void initializeOle();
@@ -270,8 +270,8 @@ public:
     static ::rtl::OUString GetDefaultName(const OUnoObject* _pObj);
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > getUnoShape();
-    virtual UINT16 GetObjIdentifier() const;
-    virtual UINT32 GetObjInventor() const;
+    virtual sal_uInt16 GetObjIdentifier() const;
+    virtual sal_uInt32 GetObjInventor() const;
     virtual SdrObject* Clone() const;
 
 private:

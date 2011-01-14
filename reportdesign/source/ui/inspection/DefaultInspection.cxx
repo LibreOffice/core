@@ -237,7 +237,7 @@ namespace rptui
         const struct
         {
             const sal_Char* programmaticName;
-            USHORT          uiNameResId;
+            sal_uInt16          uiNameResId;
             rtl::OString    helpId;
         } aCategories[] = {
             { "General",    RID_STR_PROPPAGE_DEFAULT,   HID_RPT_PROPDLG_TAB_GENERAL },

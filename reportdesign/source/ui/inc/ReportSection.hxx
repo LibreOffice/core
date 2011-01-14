@@ -61,7 +61,7 @@ namespace rptui
         ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection >              m_xSection;
 
         DlgEdMode                   m_eMode;
-        BOOL                        m_bDialogModelChanged;
+        sal_Bool                        m_bDialogModelChanged;
         sal_Bool                    m_bInDrag;
 
         /** fills the section with all control from the report section
@@ -117,15 +117,15 @@ namespace rptui
         *
         * \param _bVisible when <TRUE/> the grid is made visible
         */
-        void SetGridVisible(BOOL _bVisible);
+        void SetGridVisible(sal_Bool _bVisible);
 
         inline OSectionWindow*      getSectionWindow() const { return m_pParent; }
         inline OSectionView&        getSectionView() const { return *m_pView; }
         inline OReportPage*         getPage() const { return m_pPage; }
         inline ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection > getSection() const { return m_xSection; }
 
-        void            SetDialogModelChanged( BOOL bChanged = TRUE ) { m_bDialogModelChanged = bChanged; }
-        BOOL            IsDialogModelChanged() const { return m_bDialogModelChanged; }
+        void            SetDialogModelChanged( sal_Bool bChanged = sal_True ) { m_bDialogModelChanged = bChanged; }
+        sal_Bool            IsDialogModelChanged() const { return m_bDialogModelChanged; }
         DlgEdMode       GetMode() const { return m_eMode; }
         void            SetMode( DlgEdMode m_eMode );
 

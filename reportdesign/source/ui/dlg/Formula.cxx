@@ -115,7 +115,7 @@ bool FormulaDialog::calculateValue( const String& rStrExp, String& rStrResult )
     rStrResult = rStrExp;
     return false;
 }
-void FormulaDialog::doClose(BOOL _bOk)
+void FormulaDialog::doClose(sal_Bool _bOk)
 {
     EndDialog(_bOk ? RET_OK : RET_CANCEL);
 }
@@ -125,10 +125,10 @@ void FormulaDialog::insertEntryToLRUList(const IFunctionDescription*    /*_pDesc
 void FormulaDialog::showReference(const String& /*_sFormula*/)
 {
 }
-void FormulaDialog::dispatch(BOOL /*_bOK*/,BOOL /*_bMartixChecked*/)
+void FormulaDialog::dispatch(sal_Bool /*_bOK*/,sal_Bool /*_bMartixChecked*/)
 {
 }
-void FormulaDialog::setDispatcherLock( BOOL /*bLock*/ )
+void FormulaDialog::setDispatcherLock( sal_Bool /*bLock*/ )
 {
 }
 void FormulaDialog::setReferenceInput(const FormEditData* /*_pData*/)
@@ -188,7 +188,7 @@ void FormulaDialog::ShowReference(const String& /*_sRef*/)
 {
 }
 // -----------------------------------------------------------------------------
-void FormulaDialog::HideReference( BOOL /*bDoneRefMode*/)
+void FormulaDialog::HideReference( sal_Bool /*bDoneRefMode*/)
 {
 }
 // -----------------------------------------------------------------------------
@@ -242,7 +242,7 @@ IMPL_LINK( FormulaDialog, OnClickHdl, OAddFieldWindow* ,_pAddFieldDlg)
     } // if ( m_pEdit && aArgs.getLength() )
     m_pEdit = NULL;
     _pAddFieldDlg->Hide();
-    RefInputDoneAfter( TRUE );
+    RefInputDoneAfter( sal_True );
 
     return 0L;
 }

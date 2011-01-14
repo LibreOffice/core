@@ -55,7 +55,7 @@ namespace rptui
         *
         * \param _bVisible when <TRUE/> the grid is made visible
         */
-        void SetGridVisible(BOOL _bVisible);
+        void SetGridVisible(sal_Bool _bVisible);
     };
 //==============================================================================
 } // rptui

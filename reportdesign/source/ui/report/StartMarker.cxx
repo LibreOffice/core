@@ -83,7 +83,7 @@ OStartMarker::OStartMarker(OSectionWindow* _pParent,const ::rtl::OUString& _sCol
     m_aVRuler.SetMargin2();
     const MeasurementSystem eSystem = SvtSysLocale().GetLocaleData().getMeasurementSystemEnum();
     m_aVRuler.SetUnit(MEASURE_METRIC == eSystem ? FUNIT_CM : FUNIT_INCH);
-    SetPaintTransparent(TRUE);
+    SetPaintTransparent(sal_True);
 }
 // -----------------------------------------------------------------------------
 OStartMarker::~OStartMarker()
@@ -108,7 +108,7 @@ sal_Int32 OStartMarker::getMinHeight() const
 void OStartMarker::Paint( const Rectangle& rRect )
 {
     Window::Paint( rRect );
-    //SetUpdateMode(FALSE);
+    //SetUpdateMode(sal_False);
     Size aSize = GetOutputSizePixel();
     long nSize = aSize.Width();
     const long nCornerWidth = long(CORNER_SPACE * (double)GetMapMode().GetScaleX());
@@ -132,14 +132,14 @@ void OStartMarker::Paint( const Rectangle& rRect )
 
         Color aStartColor(m_nColor);
         aStartColor.IncreaseLuminance(10);
-        USHORT nHue = 0;
-        USHORT nSat = 0;
-        USHORT nBri = 0;
+        sal_uInt16 nHue = 0;
+        sal_uInt16 nSat = 0;
+        sal_uInt16 nBri = 0;
         aStartColor.RGBtoHSB(nHue, nSat, nBri);
         nSat += 40;
         Color aEndColor(Color::HSBtoRGB(nHue, nSat, nBri));
         Gradient aGradient(GRADIENT_LINEAR,aStartColor,aEndColor);
-        aGradient.SetSteps(static_cast<USHORT>(aSize.Height()));
+        aGradient.SetSteps(static_cast<sal_uInt16>(aSize.Height()));
 
         DrawGradient(PixelToLogic(aPoly) ,aGradient);
     }
@@ -218,10 +218,10 @@ void OStartMarker::initDefaultNodeImages()
         pImage = m_bCollapsed ? s_pDefCollapsed : s_pDefExpanded;
     }
     m_aImage.SetImage(*pImage);
-    m_aImage.SetMouseTransparent(TRUE);
+    m_aImage.SetMouseTransparent(sal_True);
     m_aImage.SetBackground();
     m_aText.SetBackground();
-    m_aText.SetMouseTransparent(TRUE);
+    m_aText.SetMouseTransparent(sal_True);
 }
 // -----------------------------------------------------------------------
 void OStartMarker::ImplInitSettings()
