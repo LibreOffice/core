@@ -437,11 +437,9 @@ BOOL SfxManageStyleSheetPage::FillItemSet( SfxItemSet& rSet )
         // geht nur bei Benutzervorlagen
 #if OSL_DEBUG_LEVEL > 1
         USHORT nIdx = (USHORT)(long)aFilterLb.GetEntryData( nFilterIdx );
-        SfxFilterTupel* p;
-        p = pItem->GetFilterList().GetObject( nIdx );
+        SfxFilterTupel* p = pItem->GetFilterList()[ nIdx ];
 #endif
-        USHORT nMask = pItem->GetFilterList().at(
-            (size_t)aFilterLb.GetEntryData( nFilterIdx ) )->nFlags | SFXSTYLEBIT_USERDEF;
+        USHORT nMask = pItem->GetFilterList()[ (size_t)aFilterLb.GetEntryData( nFilterIdx ) ]->nFlags | SFXSTYLEBIT_USERDEF;
         pStyle->SetMask( nMask );
     }
     if(aAutoCB.IsVisible() &&

@@ -1252,7 +1252,7 @@ void SfxCommonTemplateDialog_Impl::UpdateStyles_Impl(USHORT nFlags)     // Flags
 
     const SfxStyleFamily eFam = pItem->GetFamily();
 
-    SfxFilterTupel *pT = ( nActFilter < pItem->GetFilterList().size() ? pItem->GetFilterList().at(nActFilter) : NULL );
+    SfxFilterTupel* pT = ( nActFilter < pItem->GetFilterList().size() ? pItem->GetFilterList()[nActFilter] : NULL );
     USHORT nFilter     = pT ? pT->nFlags : 0;
     if(!nFilter)    // automatisch
         nFilter = nAppFilter;
@@ -1283,8 +1283,8 @@ void SfxCommonTemplateDialog_Impl::UpdateStyles_Impl(USHORT nFlags)     // Flags
             {
                 nActFilter = 0;
                 aFilterLb.SelectEntryPos(1);
-                SfxFilterTupel *pActT = rFilter[ nActFilter ];
-                USHORT nFilterFlags = pActT ? rFilter[ nActFilter ]->nFlags : 0;
+                SfxFilterTupel* pActT = ( nActFilter < rFilter.size() ) ? rFilter[ nActFilter ] : NULL;
+                USHORT nFilterFlags = pActT ? pActT->nFlags : 0;
                 pStyleSheetPool->SetSearchMask(eFam, nFilterFlags);
             }
 
@@ -1511,9 +1511,9 @@ void SfxCommonTemplateDialog_Impl::Update_Impl()
          const SfxStyleFamilyItem *pStyleItem =  GetFamilyItem_Impl();
 #if OSL_DEBUG_LEVEL > 1
          SfxFilterTupel *pT;
-         pT = pStyleItem->GetFilterList().GetObject(nActFilter);
+         pT = pStyleItem->GetFilterList()[ nActFilter ];
 #endif
-         if(0 == pStyleItem->GetFilterList().at(nActFilter)->nFlags
+         if (  0 == pStyleItem->GetFilterList()[ nActFilter ]->nFlags
             && nAppFilter != pItem->GetValue())
          {
              nAppFilter = pItem->GetValue();
@@ -1737,8 +1737,7 @@ BOOL SfxCommonTemplateDialog_Impl::Execute_Impl(
 
         for ( size_t i = 0; i < nFilterCount; ++i )
         {
-            const SfxFilterTupel *pTupel =
-                pFamilyItem->GetFilterList().at( i );
+            const SfxFilterTupel *pTupel = pFamilyItem->GetFilterList()[ i ];
 
             if ( ( pTupel->nFlags & nFilterFlags ) == nFilterFlags && pIdx )
                 *pIdx = i;
@@ -1863,7 +1862,7 @@ void SfxCommonTemplateDialog_Impl::ActionSelect(USHORT nEntry)
                 USHORT nFilter;
                 if( pItem && nActFilter != 0xffff )
                 {
-                    nFilter = pItem->GetFilterList().at( nActFilter )->nFlags;
+                    nFilter = pItem->GetFilterList()[ nActFilter ]->nFlags;
                     if(!nFilter)    // automatisch
                         nFilter = nAppFilter;
                 }
@@ -1871,9 +1870,8 @@ void SfxCommonTemplateDialog_Impl::ActionSelect(USHORT nEntry)
                     nFilter=pStyleSheetPool->GetSearchMask();
                 pStyleSheetPool->SetSearchMask( eFam, SFXSTYLEBIT_USERDEF );
 
-                SfxNewStyleDlg *pDlg =
+                SfxNewStyleDlg *pDlg = new SfxNewStyleDlg(pWindow, *pStyleSheetPool);
                     // why? : FloatingWindow must not be parent of a modal dialog
-                    new SfxNewStyleDlg(pWindow, *pStyleSheetPool);
                 if(RET_OK == pDlg->Execute())
                 {
                     pStyleSheetPool->SetSearchMask(eFam, nFilter);
@@ -1994,7 +1992,7 @@ void SfxCommonTemplateDialog_Impl::NewHdl(void *)
         USHORT nMask;
         if( pItem && nActFilter != 0xffff )
         {
-            nMask = pItem->GetFilterList().at( nActFilter )->nFlags;
+            nMask = pItem->GetFilterList()[ nActFilter ]->nFlags;
             if(!nMask)    // automatisch
                 nMask = nAppFilter;
         }
@@ -2097,12 +2095,12 @@ void    SfxCommonTemplateDialog_Impl::EnableDelete()
         const SfxStyleFamily eFam = pItem->GetFamily();
         USHORT nFilter = 0;
         if(pItem->GetFilterList().size() > nActFilter)
-            nFilter = pItem->GetFilterList().at( nActFilter )->nFlags;
+            nFilter = pItem->GetFilterList()[ nActFilter ]->nFlags;
         if(!nFilter)    // automatisch
             nFilter = nAppFilter;
         const SfxStyleSheetBase *pStyle =
-            pStyleSheetPool->Find(aTemplName,eFam,
-                                  pTreeBox? SFXSTYLEBIT_ALL: nFilter);
+            pStyleSheetPool->Find(aTemplName,eFam, pTreeBox? SFXSTYLEBIT_ALL: nFilter);
+
         DBG_ASSERT(pStyle, "Style nicht gefunden");
         if(pStyle && pStyle->IsUserDefined())
         {
