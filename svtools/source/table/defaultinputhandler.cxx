@@ -30,10 +30,11 @@
 #include "svtools/table/defaultinputhandler.hxx"
 #include "svtools/table/tablecontrolinterface.hxx"
 
+#include "tabledatawindow.hxx"
+
 #include <tools/debug.hxx>
 #include <vcl/event.hxx>
 #include <vcl/cursor.hxx>
-#include "svtools/table/tabledatawindow.hxx"
 
 //........................................................................
 namespace svt { namespace table

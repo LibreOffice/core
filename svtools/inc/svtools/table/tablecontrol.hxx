@@ -29,7 +29,6 @@
 
 #include "svtools/svtdllapi.h"
 #include "svtools/table/tablemodel.hxx"
-#include "svtools/table/tabledatawindow.hxx"
 #include "svtools/accessibletable.hxx"
 #include "svtools/accessiblefactory.hxx"
 
@@ -46,7 +45,6 @@ namespace svt { namespace table
 //........................................................................
 
     class TableControl_Impl;
-    class TableDataWindow;
 
     //====================================================================
     //= TableControl
@@ -159,8 +157,8 @@ namespace svt { namespace table
         /**after removing a row, updates the vector which contains the selected rows
             if the row, which should be removed, is selected, it will be erased from the vector
         */
-        SelectionEngine* getSelEngine();
-        TableDataWindow& getDataWindow();
+        SelectionEngine*    getSelEngine();
+        Window&             getDataWindow();
 
         // Window overridables
         virtual void        GetFocus();

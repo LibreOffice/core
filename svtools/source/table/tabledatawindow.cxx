@@ -28,8 +28,8 @@
 #include "precompiled_svtools.hxx"
 
 #include "svtools/table/tablecontrol.hxx"
-#include "svtools/table/tabledatawindow.hxx"
 
+#include "tabledatawindow.hxx"
 #include "tablecontrol_impl.hxx"
 #include "tablegeometry.hxx"
 #include "cellvalueconversion.hxx"

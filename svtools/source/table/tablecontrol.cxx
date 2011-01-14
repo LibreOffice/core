@@ -27,10 +27,11 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svtools.hxx"
 
+#include "svtools/table/tablecontrol.hxx"
+
 #include "tablegeometry.hxx"
 #include "tablecontrol_impl.hxx"
-#include "svtools/table/tablecontrol.hxx"
-#include "svtools/table/tabledatawindow.hxx"
+#include "tabledatawindow.hxx"
 
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
@@ -266,7 +267,7 @@ namespace svt { namespace table
     }
 
     // -----------------------------------------------------------------------------------------------------------------
-    TableDataWindow& TableControl::getDataWindow()
+    Window& TableControl::getDataWindow()
     {
         return m_pImpl->getDataWindow();
     }
