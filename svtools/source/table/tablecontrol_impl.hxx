@@ -245,17 +245,11 @@ namespace svt { namespace table
         */
         void    invalidateRowRange( RowPos const i_firstRow, RowPos const i_lastRow );
 
-        /** returns the vector, which contains the selected rows*/
-        std::vector<RowPos>& getSelectedRows();
-
-        /** updates the vector, which contains the selected rows after removing the row nRowPos*/
-        void    removeSelectedRow(RowPos _nRowPos);
-
-
         void    checkCursorPosition();
 
         bool    hasRowSelection() const { return !m_aSelectedRows.empty(); }
         size_t  getSelectedRowCount() const { return m_aSelectedRows.size(); }
+        RowPos  getSelectedRowIndex( size_t const i_selectionIndex ) const;
 
         /** removes the given row index from m_aSelectedRows
 

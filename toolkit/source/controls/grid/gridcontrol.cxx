@@ -360,18 +360,6 @@ sal_Bool SAL_CALL UnoGridControl::setModel( const Reference< XControlModel >& i_
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-::sal_Int32 SAL_CALL UnoGridControl::getMinSelectionIndex() throw (::com::sun::star::uno::RuntimeException)
-{
-    return Reference< XGridControl >( getPeer(), UNO_QUERY_THROW )->getMinSelectionIndex();
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-::sal_Int32 SAL_CALL UnoGridControl::getMaxSelectionIndex() throw (::com::sun::star::uno::RuntimeException)
-{
-    return Reference< XGridControl >( getPeer(), UNO_QUERY_THROW )->getMaxSelectionIndex();
-}
-
-//----------------------------------------------------------------------------------------------------------------------
 void SAL_CALL UnoGridControl::selectRow( ::sal_Int32 i_rowIndex ) throw (::com::sun::star::uno::RuntimeException)
 {
     Reference< XGridControl >( getPeer(), UNO_QUERY_THROW )->selectRow( i_rowIndex );

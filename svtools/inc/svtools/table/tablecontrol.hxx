@@ -190,8 +190,6 @@ namespace svt { namespace table
         virtual long GetRowCount() const;
         virtual long GetColumnCount() const;
         virtual sal_Bool HasRowHeader() const;
-        virtual sal_Int32 GetSelectedRowCount() const;
-        virtual bool IsRowSelected( long _nRow ) const;
         virtual sal_Bool ConvertPointToCellAddress( sal_Int32& _rnRow, sal_Int32& _rnColPos, const Point& _rPoint );
         virtual Rectangle calcHeaderRect( sal_Bool _bIsColumnBar, BOOL _bOnScreen = TRUE );
         virtual Rectangle calcTableRect( BOOL _bOnScreen = TRUE );
@@ -205,13 +203,14 @@ namespace svt { namespace table
         virtual ::com::sun::star::uno::Any GetCellContent( sal_Int32 _nRowPos, sal_Int32 _nColPos) const;
         virtual sal_Bool HasRowHeader();
         virtual sal_Bool HasColHeader();
-        virtual ::std::vector< sal_Int32 >& GetSelectedRows();
-        virtual void ClearSelection();
         virtual ::rtl::OUString GetAccessibleCellText(sal_Int32 _nRowPos, sal_Int32 _nColPos) const;
-        // .............................................................................................................
 
-        void    SelectRow( RowPos const i_rowIndex, bool const i_select );
-        void    SelectAll( bool const i_select );
+        virtual sal_Int32 GetSelectedRowCount() const;
+        virtual sal_Int32 GetSelectedRowIndex( sal_Int32 const i_selectionIndex ) const;
+        virtual bool IsRowSelected( sal_Int32 const i_rowIndex ) const;
+        virtual void SelectRow( sal_Int32 const i_rowIndex, bool const i_select );
+        virtual void SelectAllRows( bool const i_select );
+        // .............................................................................................................
 
     private:
         DECL_DLLPRIVATE_LINK( ImplMouseButtonDownHdl, MouseEvent* );

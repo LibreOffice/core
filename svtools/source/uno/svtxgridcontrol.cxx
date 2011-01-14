@@ -597,42 +597,6 @@ void SAL_CALL SVTXGridControl::disposing( const ::com::sun::star::lang::EventObj
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-::sal_Int32 SAL_CALL SVTXGridControl::getMinSelectionIndex() throw (::com::sun::star::uno::RuntimeException)
-{
-    ::vos::OGuard aGuard( GetMutex() );
-
-    TableControl* pTable = dynamic_cast< TableControl* >( GetWindow() );
-    ENSURE_OR_RETURN( pTable, "SVTXGridControl::getMinSelectionIndex: no control (anymore)!", -1 );
-
-    std::vector<RowPos>& selectedRows = pTable->GetSelectedRows();
-    if(selectedRows.empty())
-        return -1;
-    else
-    {
-        std::vector<RowPos>::iterator itStart = selectedRows.begin();
-        std::vector<RowPos>::iterator itEnd = selectedRows.end();
-        return *(std::min_element(itStart, itEnd));
-    }
-}
-
-::sal_Int32 SAL_CALL SVTXGridControl::getMaxSelectionIndex() throw (::com::sun::star::uno::RuntimeException)
-{
-    ::vos::OGuard aGuard( GetMutex() );
-
-    TableControl* pTable = dynamic_cast< TableControl* >( GetWindow() );
-    ENSURE_OR_RETURN( pTable, "SVTXGridControl::getMaxSelectionIndex: no control (anymore)!", -1 );
-
-    std::vector<RowPos>& selectedRows = pTable->GetSelectedRows();
-    if(selectedRows.empty())
-        return -1;
-    else
-    {
-        std::vector<RowPos>::iterator itStart = selectedRows.begin();
-        std::vector<RowPos>::iterator itEnd = selectedRows.end();
-        return *(std::max_element(itStart, itEnd));
-    }
-}
-
 void SAL_CALL SVTXGridControl::selectRow( ::sal_Int32 i_rowIndex ) throw (::com::sun::star::uno::RuntimeException)
 {
     ::vos::OGuard aGuard( GetMutex() );
@@ -650,7 +614,7 @@ void SAL_CALL SVTXGridControl::selectAllRows() throw (::com::sun::star::uno::Run
     TableControl* pTable = dynamic_cast< TableControl* >( GetWindow() );
     ENSURE_OR_RETURN_VOID( pTable, "SVTXGridControl::selectAllRows: no control (anymore)!" );
 
-    pTable->SelectAll( true );
+    pTable->SelectAllRows( true );
 }
 
 void SAL_CALL SVTXGridControl::deselectRow( ::sal_Int32 i_rowIndex ) throw (::com::sun::star::uno::RuntimeException)
@@ -670,7 +634,7 @@ void SAL_CALL SVTXGridControl::deselectAllRows() throw (::com::sun::star::uno::R
     TableControl* pTable = dynamic_cast< TableControl* >( GetWindow() );
     ENSURE_OR_RETURN_VOID( pTable, "SVTXGridControl::deselectAllRows: no control (anymore)!" );
 
-    pTable->SelectAll( false );
+    pTable->SelectAllRows( false );
 }
 
 ::com::sun::star::uno::Sequence< ::sal_Int32 > SAL_CALL SVTXGridControl::getSelection() throw (::com::sun::star::uno::RuntimeException)
@@ -680,9 +644,11 @@ void SAL_CALL SVTXGridControl::deselectAllRows() throw (::com::sun::star::uno::R
     TableControl* pTable = dynamic_cast< TableControl* >( GetWindow() );
     ENSURE_OR_RETURN( pTable, "SVTXGridControl::getSelection: no control (anymore)!", Sequence< sal_Int32 >() );
 
-    std::vector<RowPos>& selectedRows = pTable->GetSelectedRows();
-    Sequence<sal_Int32> selectedRowsToSequence(comphelper::containerToSequence(selectedRows));
-    return selectedRowsToSequence;
+    sal_Int32 selectionCount = pTable->GetSelectedRowCount();
+    Sequence< sal_Int32 > selectedRows( selectionCount );
+    for ( sal_Int32 i=0; i<selectionCount; ++i )
+        selectedRows[i] = pTable->GetSelectedRowIndex(i);
+    return selectedRows;
 }
 
 ::sal_Bool SAL_CALL SVTXGridControl::isSelectionEmpty() throw (::com::sun::star::uno::RuntimeException)
@@ -692,11 +658,7 @@ void SAL_CALL SVTXGridControl::deselectAllRows() throw (::com::sun::star::uno::R
     TableControl* pTable = dynamic_cast< TableControl* >( GetWindow() );
     ENSURE_OR_RETURN( pTable, "SVTXGridControl::getSelection: no control (anymore)!", sal_True );
 
-    std::vector<RowPos>& selectedRows = pTable->GetSelectedRows();
-    if(selectedRows.empty())
-        return sal_True;
-    else
-        return sal_False;
+    return pTable->GetSelectedRowCount() > 0;
 }
 
 ::sal_Bool SAL_CALL SVTXGridControl::isSelectedIndex( ::sal_Int32 index ) throw (::com::sun::star::uno::RuntimeException)
@@ -746,23 +708,22 @@ void SVTXGridControl::ImplCallItemListeners()
 
     if ( m_aSelectionListeners.getLength() )
     {
-        ::std::vector<sal_Int32> selRows = pTable->GetSelectedRows();
+        sal_Int32 const actSelRowCount = pTable->GetSelectedRowCount();
         ::com::sun::star::awt::grid::GridSelectionEvent aEvent;
         aEvent.Source = (::cppu::OWeakObject*)this;
         aEvent.Column = 0;
-        sal_Int32 actSelRowCount = selRows.size();
         sal_Int32 diff = actSelRowCount - m_nSelectedRowCount;
         //row added to selection
         if(diff >= 1)
         {
             aEvent.Action = com::sun::star::awt::grid::SelectionEventType(0);
-            aEvent.Row = selRows[actSelRowCount-1];
+            aEvent.Row = pTable->GetSelectedRowIndex( actSelRowCount - 1 );
             aEvent.Range = diff;
         }
         //selected row changed
         else if(diff == 0 && actSelRowCount != 0)
         {
-            aEvent.Row = selRows[actSelRowCount-1];
+            aEvent.Row = pTable->GetSelectedRowIndex( actSelRowCount - 1 );
             aEvent.Action = com::sun::star::awt::grid::SelectionEventType(2);
             aEvent.Range = 0;
         }
@@ -771,7 +732,7 @@ void SVTXGridControl::ImplCallItemListeners()
             //selection changed: multiple row deselected, only 1 row is selected
             if(actSelRowCount == 1)
             {
-                aEvent.Row = selRows[actSelRowCount-1];
+                aEvent.Row = pTable->GetSelectedRowIndex( actSelRowCount - 1 );
                 aEvent.Action = com::sun::star::awt::grid::SelectionEventType(2);
             }
             //row is deselected

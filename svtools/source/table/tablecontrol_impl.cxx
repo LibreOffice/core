@@ -1910,40 +1910,7 @@ namespace svt { namespace table
 
         m_pDataWindow->Invalidate( aInvalidateRect );
     }
-    //------------------------------------------------------------------------------------------------------------------
 
-    std::vector<RowPos>& TableControl_Impl::getSelectedRows()
-    {
-        return m_aSelectedRows;
-    }
-
-    //------------------------------------------------------------------------------------------------------------------
-    void TableControl_Impl::removeSelectedRow(RowPos _nRowPos)
-    {
-        int i =0;
-        //if the row is selected, remove it from the selection vector
-        if ( isRowSelected( _nRowPos ) )
-        {
-            if(m_aSelectedRows.size()>1)
-                m_aSelectedRows.erase(m_aSelectedRows.begin()+_nRowPos);
-            else
-                m_aSelectedRows.clear();
-        }
-        //after removing a row, row positions must be updated, so selected rows could stay selected
-        if(m_aSelectedRows.size()>1)
-        {
-            for(std::vector<RowPos>::iterator it=m_aSelectedRows.begin();it!=m_aSelectedRows.end();++it)
-            {
-                if(*it > _nRowPos)
-                    m_aSelectedRows[i]=*it-1;
-                ++i;
-            }
-        }
-        if(_nRowPos == 0)
-            m_nCurRow = 0;
-        else
-            m_nCurRow = _nRowPos-1;
-    }
     //------------------------------------------------------------------------------
     void TableControl_Impl::checkCursorPosition()
     {
@@ -2218,6 +2185,14 @@ namespace svt { namespace table
     bool TableControl_Impl::isRowSelected( RowPos i_row ) const
     {
         return ::std::find( m_aSelectedRows.begin(), m_aSelectedRows.end(), i_row ) != m_aSelectedRows.end();
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    RowPos TableControl_Impl::getSelectedRowIndex( size_t const i_selectionIndex ) const
+    {
+        if ( i_selectionIndex < m_aSelectedRows.size() )
+            return m_aSelectedRows[ i_selectionIndex ];
+        return ROW_INVALID;
     }
 
     //------------------------------------------------------------------------------------------------------------------

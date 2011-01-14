@@ -168,16 +168,13 @@ namespace svt { namespace table
     {
         const Point aPoint = rMEvt.GetPosPixel();
         const RowPos nCurRow = m_rTableControl.getRowAtPoint( aPoint );
-        std::vector<RowPos> selectedRows(m_rTableControl.getSelectedRows());
         if ( !m_rTableControl.getInputHandler()->MouseButtonDown( m_rTableControl, rMEvt ) )
             Window::MouseButtonDown( rMEvt );
         else
         {
             if(nCurRow >= 0 && m_rTableControl.getSelEngine()->GetSelectionMode() != NO_SELECTION)
             {
-                bool found = std::find(selectedRows.begin(),selectedRows.end(), nCurRow) != selectedRows.end();
-
-                if( !found )
+                if( !m_rTableControl.isRowSelected( nCurRow ) )
                 {
                     m_aSelectHdl.Call( NULL );
                 }

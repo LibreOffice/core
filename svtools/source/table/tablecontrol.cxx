@@ -186,6 +186,24 @@ namespace svt { namespace table
         return m_pImpl->goTo( _nColPos, _nRowPos );
     }
 
+    //------------------------------------------------------------------------------------------------------------------
+    sal_Int32 TableControl::GetSelectedRowCount() const
+    {
+        return sal_Int32( m_pImpl->getSelectedRowCount() );
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    sal_Int32 TableControl::GetSelectedRowIndex( sal_Int32 const i_selectionIndex ) const
+    {
+        return sal_Int32( m_pImpl->getSelectedRowIndex( i_selectionIndex ) );
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    bool TableControl::IsRowSelected( sal_Int32 const i_rowIndex ) const
+    {
+        return m_pImpl->isRowSelected( i_rowIndex );
+    }
+
     // -----------------------------------------------------------------------------------------------------------------
     void TableControl::SelectRow( RowPos const i_rowIndex, bool const i_select )
     {
@@ -208,7 +226,7 @@ namespace svt { namespace table
     }
 
     // -----------------------------------------------------------------------------------------------------------------
-    void TableControl::SelectAll( bool const i_select )
+    void TableControl::SelectAllRows( bool const i_select )
     {
         if ( i_select )
         {
@@ -233,18 +251,6 @@ namespace svt { namespace table
     void TableControl::InvalidateDataWindow( RowPos const i_firstRow, RowPos const i_lastRow )
     {
         m_pImpl->invalidateRowRange( i_firstRow, i_lastRow );
-    }
-
-    // -----------------------------------------------------------------------------------------------------------------
-    std::vector<sal_Int32>& TableControl::GetSelectedRows()
-    {
-        return m_pImpl->getSelectedRows();
-    }
-
-    // -----------------------------------------------------------------------------------------------------------------
-    void TableControl::ClearSelection()
-    {
-        SelectAll( false );
     }
 
     // -----------------------------------------------------------------------------------------------------------------
@@ -516,18 +522,6 @@ namespace svt { namespace table
     sal_Bool TableControl::HasRowHeader() const
     {
         return GetModel()->hasRowHeaders();
-    }
-
-    //------------------------------------------------------------------------------------------------------------------
-    sal_Int32 TableControl::GetSelectedRowCount() const
-    {
-        return sal_Int32( m_pImpl->getSelectedRowCount() );
-    }
-
-    //------------------------------------------------------------------------------------------------------------------
-    bool TableControl::IsRowSelected( long _nRow ) const
-    {
-        return m_pImpl->isRowSelected( _nRow );
     }
 
     //------------------------------------------------------------------------------------------------------------------
