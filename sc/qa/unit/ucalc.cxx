@@ -73,11 +73,13 @@
 #include <com/sun/star/sheet/GeneralFunction.hpp>
 
 #include <iostream>
+#include <vector>
 
 using namespace ::com::sun::star;
 using ::rtl::OUString;
 using ::std::cout;
 using ::std::endl;
+using ::std::vector;
 
 namespace {
 
@@ -425,6 +427,13 @@ void Test::testDataPilot()
     ScDPObject* pDPObj = new ScDPObject(m_pDoc);
     pDPObj->SetSheetDesc(aSheetDesc);
     pDPObj->SetOutRange(ScAddress(0, 0, 1));
+    ScPivotParam aParam;
+    pDPObj->FillOldParam(aParam, false);
+    for (sal_uInt32 i = 0; i < nFieldCount; ++i)
+    {
+        vector<ScDPLabelData::Member> aMembers;
+        pDPObj->GetMembers(i, 0, aMembers);
+    }
 
     ScDPSaveData aSaveData;
     // Set data pilot table output options.
@@ -447,6 +456,9 @@ void Test::testDataPilot()
         OUString aDimName(aFields[i].pName, strlen(aFields[i].pName), RTL_TEXTENCODING_UTF8);
         ScDPSaveDimension* pDim = aSaveData.GetDimensionByName(aDimName);
         pDim->SetOrientation(aFields[i].eOrient);
+        pDim->SetUsedHierarchy(0);
+        pDim->SetShowEmpty(true);
+
         if (aFields[i].eOrient == sheet::DataPilotFieldOrientation_DATA)
         {
             pDim->SetFunction(sheet::GeneralFunction_SUM);
@@ -454,16 +466,34 @@ void Test::testDataPilot()
         }
         else
         {
-            for (SCROW nRow = nRow1 + 1; nRow <= nRow2; ++nRow)
-            {
-                SCCOL nCol = nCol1 + static_cast<SCCOL>(i);
-                String aVal;
-                m_pDoc->GetString(nCol, nRow, 0, aVal);
-                // This call is just to populate the member list for each dimension.
-                ScDPSaveMember* pMem = pDim->GetMemberByName(aVal);
-                pMem->SetShowDetails(false);
-                pMem->SetIsVisible(true);
-            }
+            sheet::DataPilotFieldSortInfo aSortInfo;
+            aSortInfo.IsAscending = true;
+            aSortInfo.Mode = 2;
+            pDim->SetSortInfo(&aSortInfo);
+
+            sheet::DataPilotFieldLayoutInfo aLayInfo;
+            aLayInfo.LayoutMode = 0;
+            aLayInfo.AddEmptyLines = false;
+            pDim->SetLayoutInfo(&aLayInfo);
+            sheet::DataPilotFieldAutoShowInfo aShowInfo;
+            aShowInfo.IsEnabled = false;
+            aShowInfo.ShowItemsMode = 0;
+            aShowInfo.ItemCount = 0;
+            pDim->SetAutoShowInfo(&aShowInfo);
+
+//          USHORT nFuncs[] = { sheet::GeneralFunction_AUTO };
+//          pDim->SetSubTotals(1, nFuncs);
+        }
+
+        for (SCROW nRow = nRow1 + 1; nRow <= nRow2; ++nRow)
+        {
+            SCCOL nCol = nCol1 + static_cast<SCCOL>(i);
+            String aVal;
+            m_pDoc->GetString(nCol, nRow, 0, aVal);
+            // This call is just to populate the member list for each dimension.
+            ScDPSaveMember* pMem = pDim->GetMemberByName(aVal);
+            pMem->SetShowDetails(true);
+            pMem->SetIsVisible(true);
         }
     }
 
@@ -476,7 +506,7 @@ void Test::testDataPilot()
     pDPObj->SetAlive(true);
     ScDPCollection* pDPs = m_pDoc->GetDPCollection();
     bool bSuccess = pDPs->InsertNewTable(pDPObj);
-    CPPUNIT_ASSERT_MESSAGE("failed to insert a new datapilot object", bSuccess);
+    CPPUNIT_ASSERT_MESSAGE("failed to insert a new datapilot object into document", bSuccess);
     CPPUNIT_ASSERT_MESSAGE("there should be only one data pilot table.",
                            pDPs->GetCount() == 1);
     pDPObj->InvalidateData();
