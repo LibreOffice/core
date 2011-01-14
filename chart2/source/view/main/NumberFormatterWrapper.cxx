@@ -111,7 +111,7 @@ rtl::OUString NumberFormatterWrapper::getFormattedString(
         return aText;
     }
     // i99104 handle null date correctly
-    USHORT nYear = 1899,nDay = 30,nMonth = 12;
+    sal_uInt16 nYear = 1899,nDay = 30,nMonth = 12;
     if ( m_aNullDate.hasValue() )
     {
         Date* pDate = m_pNumberFormatter->GetNullDate();

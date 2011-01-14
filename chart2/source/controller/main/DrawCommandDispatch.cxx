@@ -386,7 +386,7 @@ void DrawCommandDispatch::execute( const ::rtl::OUString& rCommand, const Sequen
             {
                 ::vos::OGuard aGuard( Application::GetSolarMutex() );
                 m_pChartController->setDrawMode( eDrawMode );
-                setInsertObj( sal::static_int_cast< USHORT >( eKind ) );
+                setInsertObj( sal::static_int_cast< sal_uInt16 >( eKind ) );
                 if ( bCreate )
                 {
                     pDrawViewWrapper->SetCreateMode();
@@ -443,7 +443,7 @@ void DrawCommandDispatch::describeSupportedFeatures()
     implDescribeSupportedFeature( ".uno:StarShapes",        COMMAND_ID_DRAWTBX_CS_STAR,         CommandGroup::INSERT );
 }
 
-void DrawCommandDispatch::setInsertObj( USHORT eObj )
+void DrawCommandDispatch::setInsertObj( sal_uInt16 eObj )
 {
     DrawViewWrapper* pDrawViewWrapper = ( m_pChartController ? m_pChartController->GetDrawViewWrapper() : NULL );
     if ( pDrawViewWrapper )
@@ -527,13 +527,13 @@ SdrObject* DrawCommandDispatch::createDefaultObject( const sal_uInt16 nID )
                                 if ( pTextObj )
                                 {
                                     pTextObj->SetLogicRect( aRect );
-                                    BOOL bVertical = ( nID == SID_DRAW_TEXT_VERTICAL );
+                                    sal_Bool bVertical = ( nID == SID_DRAW_TEXT_VERTICAL );
                                     pTextObj->SetVerticalWriting( bVertical );
                                     if ( bVertical )
                                     {
                                         SfxItemSet aSet( pDrawModelWrapper->GetItemPool() );
-                                        aSet.Put( SdrTextAutoGrowWidthItem( TRUE ) );
-                                        aSet.Put( SdrTextAutoGrowHeightItem( FALSE ) );
+                                        aSet.Put( SdrTextAutoGrowWidthItem( sal_True ) );
+                                        aSet.Put( SdrTextAutoGrowHeightItem( sal_False ) );
                                         aSet.Put( SdrTextVertAdjustItem( SDRTEXTVERTADJUST_TOP ) );
                                         aSet.Put( SdrTextHorzAdjustItem( SDRTEXTHORZADJUST_RIGHT ) );
                                         pTextObj->SetMergedItemSet( aSet );

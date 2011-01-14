@@ -58,7 +58,7 @@ SchAlignmentTabPage::SchAlignmentTabPage(Window* pWindow,
 {
     FreeResource();
 
-    aCbStacked.EnableTriState( FALSE );
+    aCbStacked.EnableTriState( sal_False );
     aOrientHlp.AddDependentWindow( aFtRotate, STATE_CHECK );
 
     if( !bWithRotation )
@@ -88,7 +88,7 @@ SfxTabPage* SchAlignmentTabPage::CreateWithoutRotation(Window* pParent,
     return new SchAlignmentTabPage(pParent, rInAttrs, false);
 }
 
-BOOL SchAlignmentTabPage::FillItemSet(SfxItemSet& rOutAttrs)
+sal_Bool SchAlignmentTabPage::FillItemSet(SfxItemSet& rOutAttrs)
 {
     //Seit 4/1998 koennen Texte frei gedreht werden: SCHATTR_TEXT_DEGREES
     bool bStacked = aOrientHlp.GetStackedState() == STATE_CHECK;
@@ -100,7 +100,7 @@ BOOL SchAlignmentTabPage::FillItemSet(SfxItemSet& rOutAttrs)
     SvxFrameDirection aDirection( aLbTextDirection.GetSelectEntryValue() );
     rOutAttrs.Put( SfxInt32Item( EE_PARA_WRITINGDIR, aDirection ) );
 
-    return TRUE;
+    return sal_True;
 }
 
 void SchAlignmentTabPage::Reset(const SfxItemSet& rInAttrs)
@@ -115,7 +115,7 @@ void SchAlignmentTabPage::Reset(const SfxItemSet& rInAttrs)
     aOrientHlp.SetStackedState( bStacked ? STATE_CHECK : STATE_NOCHECK );
 
 
-    if( rInAttrs.GetItemState(EE_PARA_WRITINGDIR, TRUE, &pItem) == SFX_ITEM_SET)
+    if( rInAttrs.GetItemState(EE_PARA_WRITINGDIR, sal_True, &pItem) == SFX_ITEM_SET)
         aLbTextDirection.SelectEntryValue( SvxFrameDirection(((const SvxFrameDirectionItem*)pItem)->GetValue()) );
 }
 

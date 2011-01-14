@@ -191,13 +191,13 @@ void DataEditor::SetReadOnly( bool bReadOnly )
     m_bReadOnly = bReadOnly;
     if( m_bReadOnly )
     {
-        m_aTbxData.EnableItem( TBI_DATA_INSERT_ROW, FALSE );
-        m_aTbxData.EnableItem( TBI_DATA_INSERT_COL, FALSE );
-        m_aTbxData.EnableItem( TBI_DATA_INSERT_TEXT_COL, FALSE );
-        m_aTbxData.EnableItem( TBI_DATA_DELETE_ROW, FALSE );
-        m_aTbxData.EnableItem( TBI_DATA_DELETE_COL, FALSE );
-        m_aTbxData.EnableItem( TBI_DATA_SWAP_COL, FALSE );
-        m_aTbxData.EnableItem( TBI_DATA_SWAP_ROW, FALSE );
+        m_aTbxData.EnableItem( TBI_DATA_INSERT_ROW, sal_False );
+        m_aTbxData.EnableItem( TBI_DATA_INSERT_COL, sal_False );
+        m_aTbxData.EnableItem( TBI_DATA_INSERT_TEXT_COL, sal_False );
+        m_aTbxData.EnableItem( TBI_DATA_DELETE_ROW, sal_False );
+        m_aTbxData.EnableItem( TBI_DATA_DELETE_COL, sal_False );
+        m_aTbxData.EnableItem( TBI_DATA_SWAP_COL, sal_False );
+        m_aTbxData.EnableItem( TBI_DATA_SWAP_ROW, sal_False );
     }
 
     m_apBrwData->SetReadOnly( m_bReadOnly );
@@ -258,7 +258,7 @@ void DataEditor::UpdateData()
 // }
 
 // {
-//     BOOL bRet = TRUE;
+//     sal_Bool bRet = sal_True;
 
 //     // confirm changes currently made and not saved
 //     m_apBrwData->EndEditing();
@@ -281,7 +281,7 @@ void DataEditor::UpdateData()
 //     if( bRet )
 //     {
 //         // close child window
-//         SfxBoolItem aItem( SID_DIAGRAM_DATA, FALSE );
+//         SfxBoolItem aItem( SID_DIAGRAM_DATA, sal_False );
 //         if( m_pBindings )
 //         {
 //             SfxDispatcher* pDisp = m_pBindings->GetDispatcher();
@@ -292,7 +292,7 @@ void DataEditor::UpdateData()
 //         }
 //     }
 
-//     return ( bRet? SfxFloatingWindow::Close(): FALSE );
+//     return ( bRet? SfxFloatingWindow::Close(): sal_False );
 // }
 
 void DataEditor::AdaptBrowseBoxSize()
@@ -313,12 +313,12 @@ void DataEditor::Resize()
 //     ImplAdjustHeaderControls( false /* bRefreshFromModel */ );
 }
 
-BOOL DataEditor::Close()
+sal_Bool DataEditor::Close()
 {
     if( ApplyChangesToModel() )
         return ModalDialog::Close();
     else
-        return TRUE;
+        return sal_True;
 }
 
 bool DataEditor::ApplyChangesToModel()

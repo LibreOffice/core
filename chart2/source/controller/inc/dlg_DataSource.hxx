@@ -91,7 +91,7 @@ private:
     bool                  m_bRangeChooserTabIsValid;
     bool                  m_bDataSourceTabIsValid;
 
-    static USHORT         m_nLastPageId;
+    static sal_uInt16         m_nLastPageId;
 };
 
 } //  namespace chart

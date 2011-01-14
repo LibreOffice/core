@@ -143,7 +143,7 @@ bool AxisItemConverter::ApplyItemSet( const SfxItemSet & rItemSet )
     return ItemConverter::ApplyItemSet( rItemSet ) || bResult;
 }
 
-const USHORT * AxisItemConverter::GetWhichPairs() const
+const sal_uInt16 * AxisItemConverter::GetWhichPairs() const
 {
     // must span all used items!
     return nAxisWhichPairs;
@@ -162,7 +162,7 @@ bool AxisItemConverter::GetItemProperty( tWhichIdType nWhichId, tPropertyNameWit
     return true;
 }
 
-void AxisItemConverter::FillSpecialItem( USHORT nWhichId, SfxItemSet & rOutItemSet ) const
+void AxisItemConverter::FillSpecialItem( sal_uInt16 nWhichId, SfxItemSet & rOutItemSet ) const
     throw( uno::Exception )
 {
     if( ! m_xAxis.is() )
@@ -217,7 +217,7 @@ void AxisItemConverter::FillSpecialItem( USHORT nWhichId, SfxItemSet & rOutItemS
 
         case SCHATTR_AXIS_LOGARITHM:
         {
-            BOOL bValue = AxisHelper::isLogarithmic( aScale.Scaling );
+            sal_Bool bValue = AxisHelper::isLogarithmic( aScale.Scaling );
             rOutItemSet.Put( SfxBoolItem( nWhichId, bValue ));
         }
         break;
@@ -396,7 +396,7 @@ void AxisItemConverter::FillSpecialItem( USHORT nWhichId, SfxItemSet & rOutItemS
     }
 }
 
-bool AxisItemConverter::ApplySpecialItem( USHORT nWhichId, const SfxItemSet & rItemSet )
+bool AxisItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const SfxItemSet & rItemSet )
     throw( uno::Exception )
 {
     if( !m_xAxis.is() )

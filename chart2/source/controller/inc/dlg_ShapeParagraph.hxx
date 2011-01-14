@@ -43,7 +43,7 @@ public:
     virtual ~ShapeParagraphDialog();
 
 private:
-    virtual void PageCreated( USHORT nId, SfxTabPage& rPage );
+    virtual void PageCreated( sal_uInt16 nId, SfxTabPage& rPage );
 };
 
 //.............................................................................

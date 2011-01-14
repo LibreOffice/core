@@ -162,9 +162,9 @@ void SelectorListBox::UpdateChartElementsListAndSelection()
             }
         }
 
-        USHORT nEntryPosToSelect = 0; bool bSelectionFound = false;
+        sal_uInt16 nEntryPosToSelect = 0; bool bSelectionFound = false;
         aIt = m_aEntries.begin();
-        for( USHORT nN=0; aIt != m_aEntries.end(); ++aIt, ++nN )
+        for( sal_uInt16 nN=0; aIt != m_aEntries.end(); ++aIt, ++nN )
         {
             InsertEntry( aIt->UIName );
             if ( !bSelectionFound && aSelectedOID == aIt->OID )
@@ -177,7 +177,7 @@ void SelectorListBox::UpdateChartElementsListAndSelection()
         if( bSelectionFound )
             SelectEntryPos(nEntryPosToSelect);
 
-        USHORT nEntryCount = GetEntryCount();
+        sal_uInt16 nEntryCount = GetEntryCount();
         if( nEntryCount > 100 )
             nEntryCount = 100;
         SetDropDownLineCount( nEntryCount );
@@ -205,7 +205,7 @@ void SelectorListBox::Select()
 
     if ( !IsTravelSelect() )
     {
-        USHORT nPos = GetSelectEntryPos();
+        sal_uInt16 nPos = GetSelectEntryPos();
         if( nPos < m_aEntries.size() )
         {
             ObjectHierarchy::tOID aOID = m_aEntries[nPos].OID;
@@ -223,7 +223,7 @@ long SelectorListBox::Notify( NotifyEvent& rNEvt )
 
     if ( rNEvt.GetType() == EVENT_KEYINPUT )
     {
-        USHORT nCode = rNEvt.GetKeyEvent()->GetKeyCode().GetCode();
+        sal_uInt16 nCode = rNEvt.GetKeyEvent()->GetKeyCode().GetCode();
 
         switch ( nCode )
         {

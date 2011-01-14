@@ -323,8 +323,8 @@ uno::Reference< chart2::XChartDocument > ObjectPropertiesDialogParameter::getDoc
     return m_xChartDocument;
 }
 
-//const USHORT nNoArrowDlg          = 1100;
-const USHORT nNoArrowNoShadowDlg    = 1101;
+//const sal_uInt16 nNoArrowDlg          = 1100;
+const sal_uInt16 nNoArrowNoShadowDlg    = 1101;
 
 //-------------------------------------------------------------------
 //-------------------------------------------------------------------
@@ -505,7 +505,7 @@ SchAttribTabDlg::~SchAttribTabDlg()
     delete m_pAutoSymbolGraphic;
 }
 
-void SchAttribTabDlg::PageCreated(USHORT nId, SfxTabPage &rPage)
+void SchAttribTabDlg::PageCreated(sal_uInt16 nId, SfxTabPage &rPage)
 {
     SfxAllItemSet aSet(*(GetInputSetImpl()->GetPool()));
     switch (nId)
@@ -609,7 +609,7 @@ void SchAttribTabDlg::PageCreated(USHORT nId, SfxTabPage &rPage)
             break;
 
         case RID_SVXPAGE_NUMBERFORMAT:
-               aSet.Put (SvxNumberInfoItem( m_pNumberFormatter, (const USHORT)SID_ATTR_NUMBERFORMAT_INFO));
+               aSet.Put (SvxNumberInfoItem( m_pNumberFormatter, (const sal_uInt16)SID_ATTR_NUMBERFORMAT_INFO));
             rPage.PageCreated(aSet);
             break;
 

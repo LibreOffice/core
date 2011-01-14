@@ -272,10 +272,10 @@ void ShapeController::executeDispatch_FormatLine()
         {
             SdrObject* pSelectedObj = pDrawViewWrapper->getSelectedObject();
             SfxItemSet aAttr( pDrawViewWrapper->GetDefaultAttr() );
-            BOOL bHasMarked = pDrawViewWrapper->AreObjectsMarked();
+            sal_Bool bHasMarked = pDrawViewWrapper->AreObjectsMarked();
             if ( bHasMarked )
             {
-                pDrawViewWrapper->MergeAttrFromMarked( aAttr, FALSE );
+                pDrawViewWrapper->MergeAttrFromMarked( aAttr, sal_False );
             }
             SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
             if ( pFact )
@@ -288,11 +288,11 @@ void ShapeController::executeDispatch_FormatLine()
                     const SfxItemSet* pOutAttr = pDlg->GetOutputItemSet();
                     if ( bHasMarked )
                     {
-                        pDrawViewWrapper->SetAttrToMarked( *pOutAttr, FALSE );
+                        pDrawViewWrapper->SetAttrToMarked( *pOutAttr, sal_False );
                     }
                     else
                     {
-                        pDrawViewWrapper->SetDefaultAttr( *pOutAttr, FALSE );
+                        pDrawViewWrapper->SetDefaultAttr( *pOutAttr, sal_False );
                     }
                 }
             }
@@ -311,10 +311,10 @@ void ShapeController::executeDispatch_FormatArea()
         if ( pParent && pDrawModelWrapper && pDrawViewWrapper )
         {
             SfxItemSet aAttr( pDrawViewWrapper->GetDefaultAttr() );
-            BOOL bHasMarked = pDrawViewWrapper->AreObjectsMarked();
+            sal_Bool bHasMarked = pDrawViewWrapper->AreObjectsMarked();
             if ( bHasMarked )
             {
-                pDrawViewWrapper->MergeAttrFromMarked( aAttr, FALSE );
+                pDrawViewWrapper->MergeAttrFromMarked( aAttr, sal_False );
             }
             SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
             if ( pFact )
@@ -336,11 +336,11 @@ void ShapeController::executeDispatch_FormatArea()
                         const SfxItemSet* pOutAttr = pDlg->GetOutputItemSet();
                         if ( bHasMarked )
                         {
-                            pDrawViewWrapper->SetAttrToMarked( *pOutAttr, FALSE );
+                            pDrawViewWrapper->SetAttrToMarked( *pOutAttr, sal_False );
                         }
                         else
                         {
-                            pDrawViewWrapper->SetDefaultAttr( *pOutAttr, FALSE );
+                            pDrawViewWrapper->SetDefaultAttr( *pOutAttr, sal_False );
                         }
                     }
                 }
@@ -359,10 +359,10 @@ void ShapeController::executeDispatch_TextAttributes()
         if ( pParent && pDrawViewWrapper )
         {
             SfxItemSet aAttr( pDrawViewWrapper->GetDefaultAttr() );
-            BOOL bHasMarked = pDrawViewWrapper->AreObjectsMarked();
+            sal_Bool bHasMarked = pDrawViewWrapper->AreObjectsMarked();
             if ( bHasMarked )
             {
-                pDrawViewWrapper->MergeAttrFromMarked( aAttr, FALSE );
+                pDrawViewWrapper->MergeAttrFromMarked( aAttr, sal_False );
             }
             SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
             if ( pFact )
@@ -378,7 +378,7 @@ void ShapeController::executeDispatch_TextAttributes()
                     }
                     else
                     {
-                        pDrawViewWrapper->SetDefaultAttr( *pOutAttr, FALSE );
+                        pDrawViewWrapper->SetDefaultAttr( *pOutAttr, sal_False );
                     }
                 }
             }
@@ -410,7 +410,7 @@ void ShapeController::executeDispatch_TransformDialog()
                         pFact->CreateCaptionDialog( pParent, pDrawViewWrapper ) );
                     if ( pDlg.get() )
                     {
-                        const USHORT* pRange = pDlg->GetInputRanges( *aAttr.GetPool() );
+                        const sal_uInt16* pRange = pDlg->GetInputRanges( *aAttr.GetPool() );
                         SfxItemSet aCombAttr( *aAttr.GetPool(), pRange );
                         aCombAttr.Put( aAttr );
                         aCombAttr.Put( aGeoAttr );

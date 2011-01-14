@@ -116,7 +116,7 @@ ThreeD_SceneGeometry_TabPage::ThreeD_SceneGeometry_TabPage( Window* pWindow
     m_aMFYRotation.SetValue(m_nYRotation);
     m_aMFZRotation.SetValue(m_nZRotation);
 
-    const ULONG nTimeout = 4*EDIT_UPDATEDATA_TIMEOUT;
+    const sal_uLong nTimeout = 4*EDIT_UPDATEDATA_TIMEOUT;
     Link aAngleChangedLink( LINK( this, ThreeD_SceneGeometry_TabPage, AngleChanged ));
     Link aAngleEditedLink( LINK( this, ThreeD_SceneGeometry_TabPage, AngleEdited ));
 

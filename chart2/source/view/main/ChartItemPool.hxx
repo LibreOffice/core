@@ -46,7 +46,7 @@ protected:
 public:
 
     virtual SfxItemPool* Clone() const;
-    SfxMapUnit GetMetric( USHORT nWhich ) const;
+    SfxMapUnit GetMetric( sal_uInt16 nWhich ) const;
 
     /// creates a pure chart item pool
     static SfxItemPool* CreateChartItemPool();

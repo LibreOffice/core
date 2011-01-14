@@ -76,7 +76,7 @@ protected:
     virtual void describeSupportedFeatures();
 
 private:
-    void setInsertObj( USHORT eObj );
+    void setInsertObj( sal_uInt16 eObj );
     SdrObject* createDefaultObject( const sal_uInt16 nID );
 
     bool parseCommandURL( const ::rtl::OUString& rCommandURL, sal_uInt16* pnFeatureId, ::rtl::OUString* pBaseCommand, ::rtl::OUString* pCustomShapeType );
