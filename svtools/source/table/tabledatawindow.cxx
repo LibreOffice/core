@@ -107,6 +107,7 @@ namespace svt { namespace table
             ColPos const hitCol = rTableControl.getColAtPoint( aMousePos );
 
             ::rtl::OUString sHelpText;
+            USHORT nHelpStyle = 0;
 
             if ( ( hitCol >= 0 ) && ( hitCol < pTableModel->getColumnCount() ) )
             {
@@ -137,6 +138,9 @@ namespace svt { namespace table
                     }
 
                     sHelpText = CellValueConversion::convertToString( aCellToolTip );
+
+                    if ( sHelpText.indexOf( '\n' ) >= 0 )
+                        nHelpStyle = QUICKHELP_TIP_STYLE_BALLOON;
                 }
             }
 
@@ -150,7 +154,7 @@ namespace svt { namespace table
                 if ( m_nTipWindowHandle )
                     Help::UpdateTip( m_nTipWindowHandle, this, aControlScreenRect, sHelpText );
                 else
-                    m_nTipWindowHandle = Help::ShowTip( this, aControlScreenRect, sHelpText );
+                    m_nTipWindowHandle = Help::ShowTip( this, aControlScreenRect, sHelpText, nHelpStyle );
             }
         }
         else
