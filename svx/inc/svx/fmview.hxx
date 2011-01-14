@@ -118,7 +118,7 @@ public:
 
     /** grab the focus to the first form control on the view
         @param _bForceSync
-            <sal_True/> if the handling should be done synchronously.
+            <TRUE/> if the handling should be done synchronously.
     */
     SVX_DLLPRIVATE void GrabFirstControlFocus( sal_Bool _bForceSync = sal_False );
 

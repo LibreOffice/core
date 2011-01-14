@@ -188,7 +188,7 @@ public:
         @param rDateTime
             A dateTime string that will be parsed and changed in case a match
             was found.
-        @return <sal_True/> if the given string was changed
+        @return <TRUE/> if the given string was changed
      */
     static bool ConvertRNGDateTimeToISO( ::rtl::OUString& rDateTime );
 

@@ -392,7 +392,7 @@ namespace
 
     // -----------------------------------------------------------------------
     /** retrieves the value of an environment variable
-        @return <sal_True/> if and only if the retrieved string value is not empty
+        @return <TRUE/> if and only if the retrieved string value is not empty
     */
     bool getEnvironmentValue( const sal_Char* _pAsciiEnvName, ::rtl::OUString& _rValue )
     {
@@ -900,7 +900,7 @@ sal_Bool SvtFileDialog::createNewUserFilter( const String& _rNewFilter, sal_Bool
         // 05.12.2001 - 95486 - fs@openoffice.org
 
     // now, the default extension is set to the one of the user filter (or empty)
-    // if the former is not allowed (_bAllowUserDefExt = <sal_False/>), we have to use the ext of the current filter
+    // if the former is not allowed (_bAllowUserDefExt = <FALSE/>), we have to use the ext of the current filter
     // (if possible)
     sal_Bool bUseCurFilterExt = sal_True;
     String sUserFilter = _pImp->_pUserFilter->GetType();

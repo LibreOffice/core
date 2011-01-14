@@ -142,7 +142,7 @@ private:
     @param _bMultiExt
         allow for filters with more than one extension pattern
     @param _rFilterChanged
-        set to <sal_True/> if the filter changed
+        set to <TRUE/> if the filter changed
     @return
         the filter which has been found
     */
@@ -303,7 +303,7 @@ public:
         only certain URLs can be browsed. This method checks whether a given URL belongs
         to this set of permitted URLs.</p>
 
-        <p>If no "access restriction" is effective, this method always returns <sal_True/>.</p>
+        <p>If no "access restriction" is effective, this method always returns <TRUE/>.</p>
     */
     inline bool isUrlAllowed( const String& _rURL ) const { return m_aURLFilter.isUrlAllowed( _rURL ); }
 
@@ -313,16 +313,16 @@ private:
     /** updates _pUserFilter with a new filter
         <p>No checks for necessity are made.</p>
         @param _bAllowUserDefExt
-            set to <sal_True/> if a filter like "*.txt" should reset the DefaultExtension to doc.
+            set to <TRUE/> if a filter like "*.txt" should reset the DefaultExtension to doc.
             <p>
             In a file-save-dialog this would have the following effect:<br/>
             Say that auto-extension is checked, and the user enters *.txt, while a non-txt filter is selected.<br/>
-            If _bAllowUserDefExt is set to <sal_True/>, then a user input of "foo" would save a foo.txt, but in a format
+            If _bAllowUserDefExt is set to <TRUE/>, then a user input of "foo" would save a foo.txt, but in a format
             which is determined by the filter selected (which is no txt file as said above).<br/>
-            If _bAllowUserDefExt is set to <sal_False/>, the default extension will be the one of the selected filter, means
+            If _bAllowUserDefExt is set to <FALSE/>, the default extension will be the one of the selected filter, means
             in the above scenario a file "foo.<ext>" will be saved where ext is the extension of the selected filter.
             </p>
-        @return <sal_True/> if the new filter is "*.*"
+        @return <TRUE/> if the new filter is "*.*"
     */
     sal_Bool                    createNewUserFilter( const String& _rNewFilter, sal_Bool _bAllowUserDefExt );
 

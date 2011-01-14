@@ -151,7 +151,7 @@ private:
         @param _out_rpContact
             Upon successfull return, ->_out_rpContact contains the ViewContact.
         @return
-            <sal_True/> if and only if the contact was successfully retrieved. In this case,
+            <TRUE/> if and only if the contact was successfully retrieved. In this case,
             ->_out_rpContact contains a pointer to this contact.
             A failure to retrieve the contact object fires an assertion in non-product builds.
     */

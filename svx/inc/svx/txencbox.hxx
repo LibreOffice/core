@@ -57,12 +57,12 @@ public:
          with RTL_TEXTENCODING_INFO_MIME </p>
 
         @param bExcludeImportSubsets
-            If <sal_True/>, some specific encodings are not listed, as they are a
+            If <TRUE/>, some specific encodings are not listed, as they are a
             subset of another encoding. This is the case for
             RTL_TEXTENCODING_GB_2312, RTL_TEXTENCODING_GBK,
             RTL_TEXTENCODING_MS_936, which are covered by
             RTL_TEXTENCODING_GB_18030. Normally, this flag should be set to
-            <sal_True/> whenever the box is used in import dialogs. */
+            <TRUE/> whenever the box is used in import dialogs. */
     void                FillFromTextEncodingTable(
                             sal_Bool bExcludeImportSubsets = sal_False,
                             sal_uInt32 nExcludeInfoFlags = 0,
@@ -78,12 +78,12 @@ public:
          with RTL_TEXTENCODING_INFO_MIME </p>
 
         @param bExcludeImportSubsets
-            If <sal_True/>, some specific encodings are not listed, as they are a
+            If <TRUE/>, some specific encodings are not listed, as they are a
             subset of another encoding. This is the case for
             RTL_TEXTENCODING_GB_2312, RTL_TEXTENCODING_GBK,
             RTL_TEXTENCODING_MS_936, which are covered by
             RTL_TEXTENCODING_GB_18030. Normally, this flag should be set to
-            <sal_True/> whenever the box is used in import dialogs. */
+            <TRUE/> whenever the box is used in import dialogs. */
     void                FillFromDbTextEncodingMap(
                             sal_Bool bExcludeImportSubsets = sal_False,
                             sal_uInt32 nExcludeInfoFlags = 0,

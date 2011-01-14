@@ -202,7 +202,7 @@ public:
     virtual void UnGroupObj( sal_uIntPtr nObjNum );
 
     /** Return whether there is an explicit, user defined, object navigation
-        order.  When there is one this method returns <sal_True/> and the
+        order.  When there is one this method returns <TRUE/> and the
         GetObjectForNavigationPosition() and
         SdrObject::GetNavigationPosition() methods will return values
         different from those returne by SdrObject::GetOrdNum() and
@@ -238,11 +238,11 @@ public:
         the mpNavigationOrder list.  This method returns immediately when no
         update is necessary.
         @return
-            This method returns <sal_True/> when the navigation positions stored
+            This method returns <TRUE/> when the navigation positions stored
             in SdrObjects are up to date.
-            It returns <sal_False/> when teh navigation positions are not valid,
+            It returns <FALSE/> when teh navigation positions are not valid,
             for example because no explicit navigation order has been
-            defined, i.e. HasObjectNavigationOrder() would return <sal_False/>.
+            defined, i.e. HasObjectNavigationOrder() would return <FALSE/>.
     */
     bool RecalcNavigationPositions (void);
 
@@ -264,7 +264,7 @@ private:
     /// not exist then maList defines the navigation order.
     ::boost::scoped_ptr<WeakSdrObjectContainerType> mpNavigationOrder;
 
-    /// This flag is <sal_True/> when the mpNavigation list has been changed but
+    /// This flag is <TRUE/> when the mpNavigation list has been changed but
     /// the indices of the referenced SdrObjects still have their old values.
     bool mbIsNavigationOrderDirty;
 

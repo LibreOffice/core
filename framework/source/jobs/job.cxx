@@ -816,7 +816,7 @@ void SAL_CALL Job::notifyTermination( /*IN*/ const css::lang::EventObject& ) thr
 
     @param  bGetsOwnerShip
                 If it's set to <sal_True> and we throw the right veto excepion, we have to close this frame later
-                if our internal processes will be finished. If it's set to <sal_False/> we can ignore it.
+                if our internal processes will be finished. If it's set to <FALSE/> we can ignore it.
 
     @throw  CloseVetoException
                 if our internal wrapped job is still running.

@@ -517,7 +517,7 @@ public:
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >
         getServiceManager() const { return m_xServiceFactory; }
 
-    /// returns <sal_True/> if the text of the given cell can be copied into the clipboard
+    /// returns <TRUE/> if the text of the given cell can be copied into the clipboard
     sal_Bool    canCopyCellText(sal_Int32 _nRow, sal_Int16 _nColId);
     /// copies the text of the given cell into the clipboard
     void        copyCellText(sal_Int32 _nRow, sal_Int16 _nColId);

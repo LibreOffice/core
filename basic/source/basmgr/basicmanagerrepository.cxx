@@ -169,11 +169,11 @@ namespace basic
 
             @param  _out_rStorage
                 takes the storage upon successful return. Note that this might be <NULL/> even
-                if <sal_True/> is returned. In this case, the document has not yet been saved.
+                if <TRUE/> is returned. In this case, the document has not yet been saved.
 
             @return
-                <sal_True/> if the storage could be successfully retrieved (in which case
-                <arg>_out_rStorage</arg> might or might not be <NULL/>), <sal_False/> otherwise.
+                <TRUE/> if the storage could be successfully retrieved (in which case
+                <arg>_out_rStorage</arg> might or might not be <NULL/>), <FALSE/> otherwise.
                 In the latter case, processing this document should stop.
         */
         bool    impl_getDocumentStorage_nothrow( const Reference< XModel >& _rxDocument, Reference< XStorage >& _out_rStorage );
@@ -190,7 +190,7 @@ namespace basic
                 takes the dialog library container upon successful return
 
             @return
-                <sal_True/> if and only if both containers exist, and could successfully be retrieved
+                <TRUE/> if and only if both containers exist, and could successfully be retrieved
         */
         bool    impl_getDocumentLibraryContainers_nothrow(
                     const Reference< XModel >& _rxDocument,

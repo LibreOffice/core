@@ -318,7 +318,7 @@ private:
         @param  _pTargetItems
             The target where to insert the items.
         @param  _bCopy
-            If <sal_True/> the items will not be removed from the model, otherwise they will.
+            If <TRUE/> the items will not be removed from the model, otherwise they will.
     */
     void insertFilterItem(const ::std::vector<FmFilterItem*>& _rFilterList,FmFilterItems* _pTargetItems,sal_Bool _bCopy = sal_False);
     SvLBoxEntry* getPrevEntry(SvLBoxEntry* _pStartWith = NULL);

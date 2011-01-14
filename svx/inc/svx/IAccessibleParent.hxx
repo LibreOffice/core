@@ -74,9 +74,9 @@ public:
             The TreeInfo for the old child.
 
         @return
-           If the replacement has taken place successfully <sal_True/> is
+           If the replacement has taken place successfully <TRUE/> is
            returned.  If the replacement can not be carried out or an error
-           occurs that does not result in an exception then <sal_False/> is
+           occurs that does not result in an exception then <FALSE/> is
            returned.
 
         @raises RuntimeException

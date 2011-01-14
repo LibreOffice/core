@@ -83,8 +83,8 @@ public:
     sal_Bool    GetAutoControlFocus() const { return m_bAutoControlFocus; }
     void        SetAutoControlFocus( sal_Bool _bAutoControlFocus );
 
-    /** check whether the OpenInDesignMode has been set explicitly or been loaded (<sal_False/>)
-        or if it still has the default value from construction (<sal_True/>)
+    /** check whether the OpenInDesignMode has been set explicitly or been loaded (<FALSE/>)
+        or if it still has the default value from construction (<TRUE/>)
     */
     sal_Bool    OpenInDesignModeIsDefaulted();
 

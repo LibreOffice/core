@@ -364,7 +364,7 @@ protected:
         ::std::vector< String >& _out_rNames );
 
     /** checks whether the instance is already disposed, if so, this is reported as assertion error (debug
-        builds only) and <sal_True/> is returned.
+        builds only) and <TRUE/> is returned.
     */
     bool    impl_checkDisposed() const;
 
@@ -383,7 +383,7 @@ public:
 
     /** announces a new "current selection"
         @return
-            <sal_True/> if and only if the to-bet-set selection was different from the previous selection
+            <TRUE/> if and only if the to-bet-set selection was different from the previous selection
     */
     bool    setCurrentSelection( const InterfaceBag& _rSelection );
 
@@ -397,7 +397,7 @@ public:
 
     /** sets a new current selection as indicated by a mark list
         @return
-            <sal_True/> if and only if the to-bet-set selection was different from the previous selection
+            <TRUE/> if and only if the to-bet-set selection was different from the previous selection
     */
     bool    setCurrentSelectionFromMark(const SdrMarkList& rMarkList);
 
@@ -450,7 +450,7 @@ public:
     /// executes a control conversion slot for a given object
            bool executeControlConversionSlot( const ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormComponent >& _rxObject, sal_uInt16 _nSlotId );
     /** executes a control conversion slot for the current selection
-        @precond canConvertCurrentSelectionToControl( <arg>_nSlotId</arg> ) must return <sal_True/>
+        @precond canConvertCurrentSelectionToControl( <arg>_nSlotId</arg> ) must return <TRUE/>
     */
            bool executeControlConversionSlot( sal_uInt16 _nSlotId );
     /// checks whether the given slot id denotes a control conversion slot

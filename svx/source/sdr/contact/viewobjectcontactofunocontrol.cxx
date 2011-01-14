@@ -656,7 +656,7 @@ namespace sdr { namespace contact {
         /** determines whether or not our control is printable
 
             Effectively, this method returns the value of the "Printable" property
-            of the control's model. If we have no control, <sal_False/> is returned.
+            of the control's model. If we have no control, <FALSE/> is returned.
         */
         bool    isPrintableControl() const;
 
@@ -721,7 +721,7 @@ namespace sdr { namespace contact {
                 a reference to a pointer holding, upon return, the desired SdrPageView
 
             @return
-                <sal_True/> if and only if a ->SdrPageView could be obtained
+                <TRUE/> if and only if a ->SdrPageView could be obtained
 
             @precond
                 We really belong to an SdrPageViewWindow. Perhaps (I'm not sure ATM :)
@@ -732,7 +732,7 @@ namespace sdr { namespace contact {
                 We're not disposed.
 
             @postcond
-                The method expects success, if it returns with <sal_False/>, this will have been
+                The method expects success, if it returns with <FALSE/>, this will have been
                 asserted.
 
             @nothrow
@@ -742,7 +742,7 @@ namespace sdr { namespace contact {
         /** adjusts the control visibility so it respects its layer's visibility
 
             @param _bForce
-                set to <sal_True/> if you want to force a ->XWindow::setVisible call,
+                set to <TRUE/> if you want to force a ->XWindow::setVisible call,
                 no matter if the control visibility is already correct
 
             @precond
@@ -776,10 +776,10 @@ namespace sdr { namespace contact {
                 determines whether the control is currently visible. Note that this is only a shortcut for
                 querying _rxControl for the XWindow2 interface, and calling isVisible at this interface.
                 This shortcut has been chosen since the caller usually already has this information.
-                If _bForce is <sal_True/>, _bIsCurrentlyVisible is ignored.
+                If _bForce is <TRUE/>, _bIsCurrentlyVisible is ignored.
 
             @param _bForce
-                set to <sal_True/> if you want to force a ->XWindow::setVisible call,
+                set to <TRUE/> if you want to force a ->XWindow::setVisible call,
                 no matter if the control visibility is already correct
 
             @precond

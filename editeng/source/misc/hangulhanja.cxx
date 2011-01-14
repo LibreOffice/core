@@ -186,7 +186,7 @@ namespace editeng
     protected:
         void    createDialog();
 
-        /** continue with the conversion, return <sal_True/> if and only if the complete conversion is done
+        /** continue with the conversion, return <TRUE/> if and only if the complete conversion is done
             @param _bRepeatCurrentUnit
                 if <TRUE/>, an implNextConvertible will be called initially to advance to the next convertible.
                 if <FALSE/>, the method will initially work with the current convertible unit
@@ -237,7 +237,7 @@ namespace editeng
 
         /** determine the ConversionDirection for m_sCurrentPortion
             @return
-                <sal_False/> if and only if something went wrong
+                <FALSE/> if and only if something went wrong
         */
         bool        implGetConversionDirectionForCurrentPortion( HHC::ConversionDirection& rDirection );
 

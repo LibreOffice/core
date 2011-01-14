@@ -134,7 +134,7 @@ public:
         In case the update is needed, the additional check made it somewhat more expensive. In case it's not
         necessary (which should be the usual case), the check alone is (much) less expensive than the real update.
         <br/>
-        So set <arg>_bSmart</arg> to <sal_True/> to do a check for necessity first.
+        So set <arg>_bSmart</arg> to <TRUE/> to do a check for necessity first.
     */
     void            Update( sal_Bool _bSmart = sal_True );
 

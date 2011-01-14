@@ -781,7 +781,7 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_getOrCreat
 
     @param      aURL
                     URL which should be "detected"
-    @return     <sal_True/> if somewhere could handle that - <sal_False/> otherwise.
+    @return     <TRUE/> if somewhere could handle that - <FALSE/> otherwise.
 
     @threadsafe yes
     @modified   17.05.2002 09:47, as96863

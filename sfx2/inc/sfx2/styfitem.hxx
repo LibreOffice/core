@@ -112,7 +112,7 @@ public:
         <p>Usually, you will use the same resource which originally constructed the object.</p>
 
         @return
-            <sal_True/> if an image list for the requested mode could be found in the given resource.
+            <TRUE/> if an image list for the requested mode could be found in the given resource.
     */
     sal_Bool    updateImages( const ResId& _rId, const BmpColorMode _eMode );
 };

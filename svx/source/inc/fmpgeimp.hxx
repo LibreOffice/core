@@ -150,7 +150,7 @@ private:
         If <member>xCurrentForm</member> is not valid anymore, it is reset to <NULL/>.
 
         @return
-            <sal_True/> if and only if xCurrentForm is valid.
+            <TRUE/> if and only if xCurrentForm is valid.
 
         @since #i40086#
     */

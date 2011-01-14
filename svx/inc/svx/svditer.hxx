@@ -57,7 +57,7 @@ public:
     /** This variant lets the user choose the order in which to travel over
         the objects.
         @param bUseZOrder
-            When <sal_True/> then the z-order defines the order of iteration.
+            When <TRUE/> then the z-order defines the order of iteration.
             Otherwise the navigation position as returned by
             SdrObject::GetNavigationPosition() is used.
     */

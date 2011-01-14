@@ -283,8 +283,8 @@ css::uno::Sequence< sal_Int8 > SAL_CALL BackingComp::getImplementationId()
     @see impl_getStaticSupportedServiceNames()
     @see SERVICENAME
 
-    @return <sal_True/> if the queried service is supported;
-            <br><sal_False/> otherwise.
+    @return <TRUE/> if the queried service is supported;
+            <br><FALSE/> otherwise.
 */
 
 sal_Bool SAL_CALL BackingComp::supportsService( /*IN*/ const ::rtl::OUString& sServiceName )
@@ -546,7 +546,7 @@ void SAL_CALL BackingComp::attachFrame( /*IN*/ const css::uno::Reference< css::f
     This component does not know any model. It will be represented by a window and
     it's controller only.
 
-    return  <sal_False/> everytime.
+    return  <FALSE/> everytime.
  */
 
 sal_Bool SAL_CALL BackingComp::attachModel( /*IN*/ const css::uno::Reference< css::frame::XModel >& )

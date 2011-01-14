@@ -113,7 +113,7 @@ namespace svxform
                 the name of the method at the interface determined by _rListenerType
 
             @return
-                <sal_True/> if and only if the method is declared <code>oneway</code>, i.e. can be called asynchronously
+                <TRUE/> if and only if the method is declared <code>oneway</code>, i.e. can be called asynchronously
         */
         bool    impl_allowAsynchronousCall_nothrow( const ::rtl::OUString& _rListenerType, const ::rtl::OUString& _rMethodName ) const;
 
