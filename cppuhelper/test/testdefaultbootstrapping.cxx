@@ -39,6 +39,7 @@
 #include <cppuhelper/bootstrap.hxx>
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 
 using namespace ::cppu;
 using namespace ::com::sun::star::lang;

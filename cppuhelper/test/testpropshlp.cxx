@@ -495,7 +495,7 @@ public:
                 OSL_ENSURE( pExceptedListenerValues[nCurrent].getValueType().getTypeClass() == TypeClass_SHORT ,
                             "PropertySetHelper: wrong data type" );
 
-                sal_Int16 nInt16, nOldInt16;
+                sal_Int16 nInt16(0), nOldInt16(0);
                 pExceptedListenerValues[nCurrent]   >>= nInt16;
                 evt.OldValue                        >>= nOldInt16;
                 OSL_ENSURE( nInt16 == nOldInt16, "PropertySetHelper: wrong old value" );
@@ -511,7 +511,7 @@ public:
                 {
                     OSL_ENSURE( evt.PropertyName == OUString( RTL_CONSTASCII_USTRINGPARAM("INT32") ), "PropertySetHelper: wrong name" );
 
-                    sal_Int32 nInt32,nOldInt32;
+                    sal_Int32 nInt32(0),nOldInt32(0);
 
                     pExceptedListenerValues[nCurrent] >>= nInt32;
                     evt.OldValue >>= nOldInt32;
@@ -550,7 +550,7 @@ public:
                 {
                     OSL_ENSURE( evt.PropertyName == OUString( RTL_CONSTASCII_USTRINGPARAM("INT16") ), "PropertySetHelper: wrong name" );
 
-                    sal_Int16 nInt16, nOldInt16;
+                    sal_Int16 nInt16(0), nOldInt16(0);
                     pExceptedListenerValues[nCurrent]   >>= nInt16;
                     evt.OldValue                        >>= nOldInt16;
 
@@ -572,7 +572,7 @@ public:
                 {
                     OSL_ENSURE( evt.PropertyName == OUString( RTL_CONSTASCII_USTRINGPARAM("INT32") ), "PropertySetHelper: wrong name" );
 
-                    sal_Int32 nInt32,nOldInt32;
+                    sal_Int32 nInt32(0),nOldInt32(0);
                     pExceptedListenerValues[nCurrent] >>= nInt32;
                     evt.OldValue >>= nOldInt32;
                     OSL_ENSURE( nInt32 == nOldInt32 , "PropertySetHelper: wrong old value" );
@@ -613,7 +613,7 @@ public:
                     {
                     OSL_ENSURE( evt.PropertyName == OUString( RTL_CONSTASCII_USTRINGPARAM("INT16") ), "PropertySetHelper: wrong name" );
 
-                    sal_Int16 nInt16, nOldInt16;
+                    sal_Int16 nInt16(0), nOldInt16(0);
                     pExceptedListenerValues[nCurrent]   >>= nInt16;
                     evt.OldValue                        >>= nOldInt16;
                     OSL_ENSURE( nInt16 == nOldInt16 , "PropertySetHelper: wrong old value" );
@@ -630,7 +630,7 @@ public:
                     OSL_ENSURE( evt.PropertyName == OUString( RTL_CONSTASCII_USTRINGPARAM("INT32") ), "PropertySetHelper: wrong name" );
 
 
-                    sal_Int32 nInt32,nOldInt32;
+                    sal_Int32 nInt32(0),nOldInt32(0);
                     pExceptedListenerValues[nCurrent] >>= nInt32;
                     evt.OldValue >>= nOldInt32;
                     OSL_ENSURE( nInt32 == nOldInt32 , "PropertySetHelper: wrong old value" );
@@ -1011,7 +1011,7 @@ void test_PropertySetHelper()
             b = *((sal_Bool*)aValue.getValue());
             OSL_ENSURE( !b, "PropertySetHelper: wrong BOOL value" );
 
-            sal_Int16 n16;
+            sal_Int16 n16(0);
             aValue <<=(sal_Int16)22;
             xPS->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM("INT16") ), aValue );
             aValue = xPS->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM("INT16") ) );
@@ -1028,7 +1028,7 @@ void test_PropertySetHelper()
             aValue <<= (sal_Int16)55;
             xPS->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM("INT32") ), aValue );
             aValue = xPS->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM("INT32") ) );
-            sal_Int32 n32;
+            sal_Int32 n32(0);
             aValue >>= n32;
             OSL_ENSURE( 55 == n32 , "PropertySetHelper: wrong INT32 value" );
             aValue <<= (sal_Int16)66;
