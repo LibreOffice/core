@@ -29,7 +29,6 @@
 
 #include "svtools/table/tablemodel.hxx"
 #include "svtools/table/tablecontrolinterface.hxx"
-#include "svtools/table/tablemodel.hxx"
 
 #include "svtaccessiblefactory.hxx"
 
@@ -238,6 +237,11 @@ namespace svt { namespace table
         void    invalidateSelectedRegion(RowPos _nPrevRow, RowPos _nCurRow, Rectangle& _rCellRect );
 
         /** invalidates the part of the data window which is covered by the given row
+            @param i_firstRow
+                the index of the first row to include in the invalidation
+            @param i_lastRow
+                the index of the last row to include in the invalidation, or ROW_INVALID if the invalidation
+                should happen down to the bottom of the data window.
         */
         void    invalidateRowRange( RowPos const i_firstRow, RowPos const i_lastRow );
 

@@ -541,7 +541,7 @@ namespace svt { namespace table
         }
 
         // schedule repaint
-        invalidateRowRange( i_first, m_pModel->getRowCount() - 1 );
+        invalidateRowRange( i_first, ROW_INVALID );
 
         // call selection handlers, if necessary
         if ( selectionChanged )
@@ -609,7 +609,7 @@ namespace svt { namespace table
         }
 
         // schedule a repaint
-        invalidateRowRange( firstRemovedRow, m_pModel->getRowCount() - 1 );
+        invalidateRowRange( firstRemovedRow, ROW_INVALID );
 
         // call selection handlers, if necessary
         if ( selectionChanged )
@@ -1891,19 +1891,22 @@ namespace svt { namespace table
 
         RowPos const firstRow = i_firstRow < m_nTopRow ? m_nTopRow : i_firstRow;
         RowPos const lastVisibleRow = m_nTopRow + impl_getVisibleRows( true ) - 1;
-        RowPos const lastRow = i_lastRow > lastVisibleRow ? lastVisibleRow : i_lastRow;
+        RowPos const lastRow = ( ( i_lastRow == ROW_INVALID ) || ( i_lastRow > lastVisibleRow ) ) ? lastVisibleRow : i_lastRow;
 
         Rectangle aInvalidateRect;
 
         Rectangle aVisibleCellsArea;
         impl_getAllVisibleCellsArea( aVisibleCellsArea );
 
-        TableRowGeometry aRow( *this, aVisibleCellsArea, firstRow );
+        TableRowGeometry aRow( *this, aVisibleCellsArea, firstRow, true );
         while ( aRow.isValid() && ( aRow.getRow() <= lastRow ) )
         {
             aInvalidateRect.Union( aRow.getRect() );
             aRow.moveDown();
         }
+
+        if ( i_lastRow == ROW_INVALID )
+            aInvalidateRect.Bottom() = m_pDataWindow->GetOutputSizePixel().Height();
 
         m_pDataWindow->Invalidate( aInvalidateRect );
     }
