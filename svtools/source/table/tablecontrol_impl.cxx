@@ -351,10 +351,27 @@ namespace svt { namespace table
                 return "row header widths are inconsistent!";
         }
 
-        // TODO: check m_aColumnWidths
-        // - for each element, getStart <= getEnd()
-        // - for each i: col[ i ].getEnd() == col[ i+1 ].getStart()
-        // - col[ m_nLeftColumn ].getStart == m_nRowHeaderWidthPixel
+        // m_aColumnWidths consistency
+        if ( size_t( m_nColumnCount ) != m_aColumnWidths.size() )
+            return "wrong number of cached column widths";
+
+        for (   ColumnPositions::const_iterator col = m_aColumnWidths.begin();
+                col != m_aColumnWidths.end();
+            )
+        {
+            if ( col->getEnd() < col->getStart() )
+                return "column widths: 'end' is expected to not be smaller than start";
+
+            ColumnPositions::const_iterator nextCol = col + 1;
+            if ( nextCol != m_aColumnWidths.end() )
+                if ( col->getEnd() != nextCol->getStart() )
+                    return "column widths: one column's end should be the next column's start";
+            col = nextCol;
+        }
+
+        if ( m_nLeftColumn < m_nColumnCount )
+            if ( m_aColumnWidths[ m_nLeftColumn ].getStart() != m_nRowHeaderWidthPixel )
+                return "the left-most column should start immediately after the row header";
 
         if ( m_nCursorHidden < 0 )
             return "invalid hidden count for the cursor!";
@@ -1128,14 +1145,14 @@ namespace svt { namespace table
         // position it
         if ( m_pHScroll )
         {
-            TableSize nVisibleUnits = lcl_getColumnsVisibleWithin( aDataCellPlayground, m_nLeftColumn, *this, false );
-            int nRange = m_nColumnCount;
-            if( m_nLeftColumn + nVisibleUnits == nRange-1)
+            TableSize const nVisibleUnits = lcl_getColumnsVisibleWithin( aDataCellPlayground, m_nLeftColumn, *this, false );
+            TableMetrics const nRange = m_nColumnCount;
+            if( m_nLeftColumn + nVisibleUnits == nRange - 1 )
             {
-                if ( m_aColumnWidths[ nRange-2 ].getEnd() - m_aColumnWidths[ m_nLeftColumn ].getEnd() + m_aColumnWidths[ nRange-1 ].getWidth() > aDataCellPlayground.GetWidth() )
+                if ( m_aColumnWidths[ nRange - 1 ].getStart() - m_aColumnWidths[ m_nLeftColumn ].getEnd() + m_aColumnWidths[ nRange-1 ].getWidth() > aDataCellPlayground.GetWidth() )
                 {
                     m_pHScroll->SetVisibleSize( nVisibleUnits -1 );
-                    m_pHScroll->SetPageSize(nVisibleUnits -1);
+                    m_pHScroll->SetPageSize( nVisibleUnits - 1 );
                 }
             }
             Rectangle aScrollbarArea(
