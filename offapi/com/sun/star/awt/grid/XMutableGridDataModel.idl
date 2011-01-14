@@ -85,7 +85,7 @@ interface XMutableGridDataModel : XGridDataModel
         @throws ::com::sun::star::lang::IndexOutOfBoundsException
             if the row or column index is invalid
     */
-    void updateCell([in] long RowIndex, [in] long ColumnIndex, [in] any Value )
+    void updateCell( [in] long RowIndex, [in] long ColumnIndex, [in] any Value )
         raises ( ::com::sun::star::lang::IndexOutOfBoundsException );
 
     /** updates the content of a given row.
@@ -118,6 +118,13 @@ interface XMutableGridDataModel : XGridDataModel
     void
         setRowTitle( [in] long RowIndex, [in] string Title )
             raises ( ::com::sun::star::lang::IndexOutOfBoundsException );
+
+    /** updates the tooltip to be displayed for a given cell
+
+        @see XGridDataModel::getCellToolTip
+    */
+    void setCellToolTip( [in] long RowIndex, [in] long ColumnIndex, [in] any Value )
+        raises ( ::com::sun::star::lang::IndexOutOfBoundsException );
 
     //-------------------------------------------------------------------------
 
