@@ -189,7 +189,7 @@ endef
 gb_LinkTarget__RPATHS := \
     URELIB:$$$$ORIGIN \
     UREBIN:$$$$ORIGIN/../lib:$$$$ORIGIN \
-    OOOLIB:$$$$ORIGIN:$$$$ORIGIN/../ure-link/lib \
+    OOO:$$$$ORIGIN:$$$$ORIGIN/../ure-link/lib \
     BRAND:$$$$ORIGIN:$$$$ORIGIN/../basis-link/program:$$$$ORIGIN/../basis-link/ure-link/lib \
     SDKBIN:$$$$ORIGIN/../../ure-link/lib \
     NONEBIN:$$$$ORIGIN/../lib:$$$$ORIGIN \

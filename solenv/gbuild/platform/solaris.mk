@@ -171,7 +171,7 @@ endef
 gb_LinkTarget__RPATHS := \
     URELIB:$$$$ORIGIN \
     UREBIN:$$$$ORIGIN/../lib:$$$$ORIGIN \
-    OOOLIB:$$$$ORIGIN:$$$$ORIGIN/../ure-link/lib \
+    OOO:$$$$ORIGIN:$$$$ORIGIN/../ure-link/lib \
     BRAND:$$$$ORIGIN:$$$$ORIGIN/../basis-link/program:$$$$ORIGIN/../basis-link/ure-link/lib \
     SDKBIN:$$$$ORIGIN/../../ure-link/lib \
     NONEBIN:$$$$ORIGIN/../lib:$$$$ORIGIN \
@@ -258,14 +258,14 @@ gb_Library_FILENAMES := \
 
 
 gb_Library_LAYER := \
-    $(foreach lib,$(gb_Library_OOOLIBS),$(lib):OOOLIB) \
+    $(foreach lib,$(gb_Library_OOOLIBS),$(lib):OOO) \
     $(foreach lib,$(gb_Library_PLAINLIBS_URE),$(lib):URELIB) \
-    $(foreach lib,$(gb_Library_PLAINLIBS_OOO),$(lib):OOOLIB) \
-    $(foreach lib,$(gb_Library_RTLIBS),$(lib):OOOLIB) \
+    $(foreach lib,$(gb_Library_PLAINLIBS_OOO),$(lib):OOO) \
+    $(foreach lib,$(gb_Library_RTLIBS),$(lib):OOO) \
     $(foreach lib,$(gb_Library_RTVERLIBS),$(lib):URELIB) \
     $(foreach lib,$(gb_Library_STLLIBS),$(lib):URELIB) \
     $(foreach lib,$(gb_Library_UNOLIBS_URE),$(lib):URELIB) \
-    $(foreach lib,$(gb_Library_UNOLIBS_OOO),$(lib):OOOLIB) \
+    $(foreach lib,$(gb_Library_UNOLIBS_OOO),$(lib):OOO) \
     $(foreach lib,$(gb_Library_UNOVERLIBS),$(lib):URELIB) \
 
 define gb_Library_get_rpath
