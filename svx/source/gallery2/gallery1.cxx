@@ -35,10 +35,10 @@
 #include <unotools/ucbstreamhelper.hxx>
 #include <unotools/pathoptions.hxx>
 #include <sfx2/docfile.hxx>
-#include "gallery.hxx"
+#include "svx/gallery.hxx"
 #include "gallery.hrc"
 #include "svx/galmisc.hxx"
-#include "galtheme.hxx"
+#include "svx/galtheme.hxx"
 #include "svx/gallery1.hxx"
 #include <com/sun/star/sdbc/XResultSet.hpp>
 #include <com/sun/star/ucb/XContentAccess.hpp>
@@ -626,7 +626,7 @@ BOOL Gallery::CreateTheme( const String& rThemeName, UINT32 nNumFrom )
 
     if( !HasTheme( rThemeName ) && ( GetUserURL().GetProtocol() != INET_PROT_NOT_VALID ) )
     {
-        nLastFileNumber=nNumFrom > nLastFileNumber ? nNumFrom : ++nLastFileNumber;
+        nLastFileNumber = nNumFrom > nLastFileNumber ? nNumFrom : nLastFileNumber + 1;
         GalleryThemeEntry* pNewEntry = new GalleryThemeEntry( GetUserURL(), rThemeName,
                                                               nLastFileNumber,
                                                               FALSE, FALSE, TRUE, 0, FALSE );

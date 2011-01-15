@@ -29,11 +29,12 @@
 #define __FRAMEWORK_CLASSES_FWKRESID_HXX_
 
 #include <tools/resid.hxx>
+#include <framework/fwedllapi.h>
 
 namespace framework
 {
 
-class FwkResId : public ResId
+class FWE_DLLPUBLIC FwkResId : public ResId
 {
     public:
         FwkResId( USHORT nId );

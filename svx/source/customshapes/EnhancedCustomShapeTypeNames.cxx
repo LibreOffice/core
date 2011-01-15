@@ -27,7 +27,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
-#include "EnhancedCustomShapeTypeNames.hxx"
+#include "svx/EnhancedCustomShapeTypeNames.hxx"
 #include <osl/mutex.hxx>
 #include <hash_map>
 

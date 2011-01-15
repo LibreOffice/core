@@ -29,8 +29,8 @@
 #include "precompiled_svx.hxx"
 #include <editeng/eeitem.hxx>
 
-#include "svdstr.hrc"   // Namen aus der Resource
-#include "svdglob.hxx"  // StringCache
+#include "svx/svdstr.hrc"   // Namen aus der Resource
+#include "svx/svdglob.hxx"  // StringCache
 #include <svx/svdpagv.hxx>
 #include <svx/svdmrkv.hxx>
 #include <svx/svdedxv.hxx>
@@ -55,7 +55,7 @@
 #include <tools/tenccvt.hxx>
 #include <svx/sdr/overlay/overlaypolypolygon.hxx>
 #include <svx/sdr/overlay/overlaymanager.hxx>
-#include <sdrpaintwindow.hxx>
+#include <svx/sdrpaintwindow.hxx>
 #include <svx/sdrpagewindow.hxx>
 #include <svx/sdrhittesthelper.hxx>
 
@@ -987,8 +987,6 @@ Pointer SdrView::GetPreferedPointer(const Point& rMousePos, const OutputDevice* 
     {
         if ((IsDraggingPoints() || IsDraggingGluePoints()) && IsMouseHideWhileDraggingPoints())
             return Pointer(POINTER_NULL);
-
-        OSL_TRACE("SdrView::GetPreferedPointer(%lx) %lx\n", this, mpCurrentSdrDragMethod);
 
         return mpCurrentSdrDragMethod->GetSdrDragPointer();
     }
