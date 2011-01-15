@@ -80,6 +80,12 @@ SLOFILES = $(SHL1OBJS) $(SHL2OBJS) $(SHL3OBJS) $(SHL4OBJS)
 
 $(SHL1OBJS): $(MISC)$/$(TARGET).cppumaker.flag
 
+$(SHL2OBJS): $(MISC)$/$(TARGET).cppumaker.flag
+
+$(SHL3OBJS): $(MISC)$/$(TARGET).cppumaker.flag
+
+$(SHL4OBJS): $(MISC)$/$(TARGET).cppumaker.flag
+
 $(MISC)$/$(TARGET).cppumaker.flag: $(MISC)$/$(TARGET).rdb
     - $(MKDIRHIER) $(MISC)$/$(TARGET)$/inc
     $(CPPUMAKER) -O$(MISC)$/$(TARGET)$/inc -BUCR -C $< \
