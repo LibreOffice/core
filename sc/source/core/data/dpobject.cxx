@@ -2646,10 +2646,8 @@ void ScDPCollection::FreeTable(ScDPObject* pDPObj)
     if (maTables.size() == 1)
     {
         if (&maTables.back() == pDPObj)
-        {
             maTables.clear();
-            return;
-        }
+        return;
     }
 #endif
     TablesType::iterator itr = maTables.begin(), itrEnd = maTables.end();
