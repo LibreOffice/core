@@ -50,7 +50,8 @@ IDLFILES=\
     XStorageBasedLibraryContainer.idl\
     ModuleSizeExceededRequest.idl\
     ModuleInfo.idl\
-    ModuleType.idl
+    ModuleType.idl\
+    NativeObjectWrapper.idl
 
 # ------------------------------------------------------------------
 

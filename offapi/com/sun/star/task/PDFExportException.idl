@@ -24,42 +24,29 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
+#ifndef __com_sun_star_task_PDFExportException_idl__
+#define __com_sun_star_task_PDFExportException_idl__
 
-#ifndef __com_sun_star_sheet_XSheetFilterDescriptor_idl__
-#define __com_sun_star_sheet_XSheetFilterDescriptor_idl__
+#ifndef __com_sun_star_uno_Exception_idl__
+#include <com/sun/star/uno/Exception.idl>
+#endif
 
-#include <com/sun/star/sheet/TableFilterField.idl>
-#include <com/sun/star/uno/XInterface.idl>
+ module com {  module sun {  module star {  module task {
 
-//=============================================================================
 
-module com {  module sun {  module star {  module sheet {
-
-//=============================================================================
-
-/** provides access to a collection of filter conditions (filter fields).
-
-    @see SheetFilterDescriptor
+/** is an exception that provides information on an error during PDF export.
  */
-published interface XSheetFilterDescriptor: com::sun::star::uno::XInterface
+published exception PDFExportException: com::sun::star::uno::Exception
 {
-    //-------------------------------------------------------------------------
-
-    /** returns the collection of filter fields.
-     */
-    sequence< TableFilterField > getFilterFields();
-
-    //-------------------------------------------------------------------------
-
-    /** sets a new collection of filter fields.
-     */
-    void setFilterFields( [in] sequence< TableFilterField > aFilterFields );
-
+    /** contains a number of errors that occured during PDFExport
+    */
+    sequence< long > ErrorCodes;
 };
 
 //=============================================================================
 
 }; }; }; };
 
+/*===========================================================================
+===========================================================================*/
 #endif
-
