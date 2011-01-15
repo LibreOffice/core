@@ -47,37 +47,39 @@ testcase g_mediaplayer
            goto endsub
         endif
         Datei$ = ConvertPath (convertPath (gTesttoolPath + "graphics\required\input\29secsound.wav"))
-        '/// Open New Document ///'
+        printlog "Open New Document"
         Call hNewDocument
         sleep 2
-        '/// Check if the Media Player already exists - if so - close it ///'
+        printlog "Check if the Media Player already exists - if so - close it"
         kontext "mPlayer"
-        if mPlayer.exists then ' Close the MediaPlayer
-           warnlog "The MediaPlayer was visible since some earlier test. Plese notify FHA."
+        printlog "Close the MediaPlayer if it is open already"
+        if mPlayer.exists then 
+           warnlog "The MediaPlayer was visible since some earlier test."
            ToolsMediaPlayer
            printlog "Closed the Media Player"
         endif
         
-        '/// Tools - MediaPlayer ///'
+        printlog "Tools - MediaPlayer"
         ToolsMediaPlayer
         sleep 2
-        '/// Open file ///' 'a bigger / longer one
+        printlog "Open file"
         kontext "mPlayer"
         if mPlayer.exists then
            printlog "The MediaPlayer was open."
         else
-           warnlog "Tools - MediaPlayer didnt work. The MediaPlayer wasnt visible. Aborting test."
-           Call  hCloseDocument    '/// Close document ///'
-           goto endsub
+            warnlog "Tools - MediaPlayer didnt work. The MediaPlayer wasnt visible. Aborting test."
+            printlog "Close document"
+            Call  hCloseDocument
+            goto endsub
         endif
         Mopen.Click
         kontext "OeffnenDlg"
         Pfad.SetText Datei$
         Oeffnen.Click
         
-        '/// This test wont work correctly under Solaris and Linux, ///'
-        '/// unless some optional Media-libraries are installed. ///'
-        '/// Therefore we warn the tester about it if we cannot open the file. ///'
+        printlog "This test wont work correctly under Solaris and Linux,"
+        printlog "unless some optional Media-libraries are installed."
+        printlog "Therefore we warn the tester about it if we cannot open the file."
         
         iWaitIndex = 0
         do while OeffnenDlg.Exists AND iWaitIndex < 10
@@ -90,7 +92,8 @@ testcase g_mediaplayer
            Active.OK
            kontext "Mplayer"
            ToolsMediaPlayer
-           Call hCloseDocument   '/// close document ///'
+           printlog "close document"
+           Call hCloseDocument   
            goto endsub
         else
            kontext "Mplayer"
@@ -99,7 +102,7 @@ testcase g_mediaplayer
         
         timevalue1 = mTimeedit.GetText
         
-        '/// Stop ///'
+        printlog "Stop"
         sleep 2
         mStop.Click
         printlog "Just pressed stop."
@@ -109,17 +112,18 @@ testcase g_mediaplayer
         timevalue3 = mTimeedit.GetText
         printlog "The time was: " + mTimeedit.GetText
         if timevalue1 = timevalue2 AND timevalue2 = timevalue3 then
-           if gtSYSName <> "WinXP" then '("Solaris x86" OR "Linux" OR "Solaris") then
-              warnlog "The sound doesnt seem to be played at all. And since the test is run on a platform which needs extra libraries, the test ends now."
-              kontext "Mplayer"
-              if Mplayer.Exists(3) then
-                 ToolsMediaPlayer
-          endif
-              Call  hCloseDocument   '/// close document ///'
-              goto endsub
-           else
-              warnlog "The sound doesnt seem to be played at all, but I will continue the test. The platform was: " + gtSYSName
-           endif
+            if gtSYSName <> "WinXP" then '("Solaris x86" OR "Linux" OR "Solaris") then
+            warnlog "The sound doesnt seem to be played at all. And since the test is run on a platform which needs extra libraries, the test ends now."
+            kontext "Mplayer"
+            if Mplayer.Exists(3) then
+                ToolsMediaPlayer
+            endif
+            printlog "close document"
+            Call  hCloseDocument
+            goto endsub
+        else
+            warnlog "The sound doesnt seem to be played at all, but I will continue the test. The platform was: " + gtSYSName
+        endif
         else
            if timevalue1 <> timevalue2 AND timevalue2 = timevalue3 then
               Printlog "the stop-button seemed to work. Good."
@@ -127,7 +131,7 @@ testcase g_mediaplayer
               warnlog "Very strange. The first value was: " + timevalue1 + ". Second: " + timevalue2 + ". Third: " + timevalue3
            endif
         endif
-        '/// Play ///'
+        printlog "Play"
         ' Save value
         timevalue1 = mTimeedit.GetText
         ' Press 'Play'
@@ -141,7 +145,7 @@ testcase g_mediaplayer
            Printlog "the play-button seemed to work. Good."
         endif
         
-        '/// Pause ///'
+        printlog "Pause"
         mPlay.Click
         sleep 10
         mPause.Click
@@ -156,19 +160,23 @@ testcase g_mediaplayer
            Printlog "the pause-button seemed to work. Good."
         endif
         
-        '/// Time ///'
-        mStop.Click  'to get to the beginning.
-        sleep 1      'And make sure it's really the beginning.
+        printlog "Time"
+        printlog " Click Stop to get to the beginning."
+        mStop.Click  
+        sleep 1
+        printlog "And make sure it's really the beginning."
         timevalue1 = mTimeedit.GetText
         if timevalue1 <> "00:00:00 / 00:00:29" then
            warnlog "Expected the time to go back to 00:00:00, but was " + timevalue1 + " instead."
-           mStop.Click  'to make another try to get to the beginning again.
+            printlog "to make another try to get to the beginning again."
+            mStop.Click  '
         else
            printlog "Sound stopped, time-value set to 00:00:00."
         endif
         
         printlog "We press 'Play'"
-        mPlay.Click  'to get it running
+        printlog "Click play to get it running"
+        mPlay.Click 
         sleep 5
         timefound = 0
         
@@ -192,41 +200,34 @@ testcase g_mediaplayer
            warnlog "Either the time didnt change, or the test-computer is too fast."
         endif
         
-        '-Repeat
-         'Plays the file repeatedly.
-        '/// Loop ///'
+        printlog "Loop"
         mLoop.Click
         
-        '/// Volume ///'
-        'mVolume. 'Click
-        '-Volume slider
-         'Adjusts the volume.
+        printlog "Volume"
         
-        '/// Mute ///'
+        printlog "Mute"
         mMute.Click
         sleep 1
         mMute.Click
-        '-Mute
-        'Turns sound off and on.
         
-        '/// Time-slider ///'
+        printlog "Time-slider"
         ' mTimeslider. 'Click
          '-Position slider
           'Moves to a different position in the file.
         
-        '/// Scroll-whatever ///'
+        printlog "Scroll-whatever"
         'mZoomlistbox.
         '-Zoom
          'Adjusts the size of the movie playback.
         
-        '/// Apply ///'
+        printlog "Apply"
         mInsert.Click
         sleep 10
         
-        '/// Close the MediaPlayer via Tools - MediaPlayer ///'
+        printlog "Close the MediaPlayer via Tools - MediaPlayer"
         ToolsMediaPlayer
         
-        '/// Check if there is an object available. ///'
+        printlog "Check if there is an object available."
         if (gApplication = "IMPRESS") then
            kontext "DocumentImpress"
         else
@@ -242,14 +243,14 @@ testcase g_mediaplayer
         Kontext "TabPositionAndSize"
         if Width.Exists then
            Printlog "Position and Size came up, object inserted correctly."
-           '/// Close dialog TabPositionAndSize with 'OK' ///'
+           printlog "Close dialog TabPositionAndSize with 'OK'"
            TabPositionAndSize.OK
         else
            Warnlog "Position And Size didn't come up, was there no sound-object inserted?"
         endif
         sleep 2
-        '/// close document ///'
-        Call  hCloseDocument	'/// close document ///'
+        printlog "close document"
+        Call  hCloseDocument	
     else
         qaerrorLog "#74350# - Different strings in g_mediaplayer under Italian."
     endif

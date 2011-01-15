@@ -54,7 +54,7 @@ sub id_005
     call tiFormatFontwork
     call tiFormatGroup
     printlog " format->group is also modify->group "
-    '        tiFormatLayer ' not in impress
+
 end sub
 '------------------------------------------------------------------------------
 testcase tiFormatDefault
