@@ -43,6 +43,10 @@ AUTOSEG=true
 
 # --- Files --------------------------------------------------------
 
+.IF "$(USE_SYSTEM_STL)"!="YES"
+CFLAGSCXX+=-DSTLPORT_WORKAROUND
+.ENDIF
+
 SLOFILES =  \
     $(EXCEPTIONSFILES) \
     $(EXCEPTIONSNOOPTFILES) \
