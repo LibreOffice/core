@@ -26,42 +26,34 @@
  ************************************************************************/
 
 #include "oox/drawingml/chart/axisconverter.hxx"
+
 #include <com/sun/star/chart/ChartAxisArrangeOrderType.hpp>
 #include <com/sun/star/chart/ChartAxisLabelPosition.hpp>
 #include <com/sun/star/chart/ChartAxisMarkPosition.hpp>
 #include <com/sun/star/chart/ChartAxisPosition.hpp>
 #include <com/sun/star/chart/TimeInterval.hpp>
 #include <com/sun/star/chart/TimeUnit.hpp>
-#include <com/sun/star/chart2/TickmarkStyle.hpp>
 #include <com/sun/star/chart2/AxisType.hpp>
+#include <com/sun/star/chart2/TickmarkStyle.hpp>
 #include <com/sun/star/chart2/XAxis.hpp>
 #include <com/sun/star/chart2/XCoordinateSystem.hpp>
 #include <com/sun/star/chart2/XTitled.hpp>
-#include "oox/drawingml/lineproperties.hxx"
 #include "oox/drawingml/chart/axismodel.hxx"
 #include "oox/drawingml/chart/titleconverter.hxx"
 #include "oox/drawingml/chart/typegroupconverter.hxx"
-#include "properties.hxx"
-
-using ::rtl::OUString;
-using ::com::sun::star::uno::Any;
-using ::com::sun::star::uno::Reference;
-using ::com::sun::star::uno::Sequence;
-using ::com::sun::star::uno::Exception;
-using ::com::sun::star::uno::UNO_QUERY;
-using ::com::sun::star::uno::UNO_QUERY_THROW;
-using ::com::sun::star::beans::XPropertySet;
-using ::com::sun::star::chart2::IncrementData;
-using ::com::sun::star::chart2::ScaleData;
-using ::com::sun::star::chart2::SubIncrement;
-using ::com::sun::star::chart2::XAxis;
-using ::com::sun::star::chart2::XCoordinateSystem;
-using ::com::sun::star::chart2::XScaling;
-using ::com::sun::star::chart2::XTitled;
+#include "oox/drawingml/lineproperties.hxx"
 
 namespace oox {
 namespace drawingml {
 namespace chart {
+
+// ============================================================================
+
+using namespace ::com::sun::star::beans;
+using namespace ::com::sun::star::chart2;
+using namespace ::com::sun::star::uno;
+
+using ::rtl::OUString;
 
 // ============================================================================
 
@@ -371,4 +363,3 @@ void AxisConverter::convertFromModel( const Reference< XCoordinateSystem >& rxCo
 } // namespace chart
 } // namespace drawingml
 } // namespace oox
-

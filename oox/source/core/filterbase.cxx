@@ -26,49 +26,41 @@
  ************************************************************************/
 
 #include "oox/core/filterbase.hxx"
+
 #include <set>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/task/XStatusIndicator.hpp>
 #include <com/sun/star/task/XInteractionHandler.hpp>
+#include <comphelper/docpasswordhelper.hxx>
+#include <comphelper/mediadescriptor.hxx>
 #include <osl/mutex.hxx>
 #include <rtl/instance.hxx>
 #include <rtl/uri.hxx>
-#include <comphelper/docpasswordhelper.hxx>
-#include <comphelper/mediadescriptor.hxx>
-#include "tokens.hxx"
 #include "oox/helper/binaryinputstream.hxx"
 #include "oox/helper/binaryoutputstream.hxx"
 #include "oox/helper/graphichelper.hxx"
 #include "oox/helper/modelobjecthelper.hxx"
 #include "oox/ole/oleobjecthelper.hxx"
-
-using ::rtl::OUString;
-using ::com::sun::star::uno::Any;
-using ::com::sun::star::uno::Reference;
-using ::com::sun::star::uno::Sequence;
-using ::com::sun::star::uno::Exception;
-using ::com::sun::star::uno::RuntimeException;
-using ::com::sun::star::uno::UNO_QUERY;
-using ::com::sun::star::uno::UNO_QUERY_THROW;
-using ::com::sun::star::uno::UNO_SET_THROW;
-using ::com::sun::star::lang::IllegalArgumentException;
-using ::com::sun::star::lang::XMultiServiceFactory;
-using ::com::sun::star::lang::XComponent;
-using ::com::sun::star::beans::PropertyValue;
-using ::com::sun::star::frame::XFrame;
-using ::com::sun::star::frame::XModel;
-using ::com::sun::star::io::XInputStream;
-using ::com::sun::star::io::XOutputStream;
-using ::com::sun::star::io::XStream;
-using ::com::sun::star::task::XStatusIndicator;
-using ::com::sun::star::task::XInteractionHandler;
-using ::com::sun::star::graphic::XGraphic;
-using ::comphelper::MediaDescriptor;
-using ::comphelper::SequenceAsHashMap;
-using ::oox::ole::OleObjectHelper;
+#include "oox/ole/vbaproject.hxx"
 
 namespace oox {
 namespace core {
+
+// ============================================================================
+
+using namespace ::com::sun::star::beans;
+using namespace ::com::sun::star::frame;
+using namespace ::com::sun::star::graphic;
+using namespace ::com::sun::star::io;
+using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::task;
+using namespace ::com::sun::star::uno;
+
+using ::comphelper::MediaDescriptor;
+using ::comphelper::SequenceAsHashMap;
+using ::oox::ole::OleObjectHelper;
+using ::oox::ole::VbaProject;
+using ::rtl::OUString;
 
 // ============================================================================
 
@@ -140,6 +132,7 @@ struct FilterBaseImpl
     typedef ::boost::shared_ptr< GraphicHelper >        GraphicHelperRef;
     typedef ::boost::shared_ptr< ModelObjectHelper >    ModelObjHelperRef;
     typedef ::boost::shared_ptr< OleObjectHelper >      OleObjHelperRef;
+    typedef ::boost::shared_ptr< VbaProject >           VbaProjectRef;
 
     FilterDirection     meDirection;
     SequenceAsHashMap   maArguments;
@@ -150,8 +143,11 @@ struct FilterBaseImpl
     GraphicHelperRef    mxGraphicHelper;        /// Graphic and graphic object handling.
     ModelObjHelperRef   mxModelObjHelper;       /// Tables to create new named drawing objects.
     OleObjHelperRef     mxOleObjHelper;         /// OLE object handling.
+    VbaProjectRef       mxVbaProject;           /// VBA project manager.
 
-    Reference< XMultiServiceFactory >   mxGlobalFactory;
+    Reference< XComponentContext >      mxComponentContext;
+    Reference< XMultiComponentFactory > mxComponentFactory;
+    Reference< XMultiServiceFactory >   mxServiceFactory;
     Reference< XModel >                 mxModel;
     Reference< XMultiServiceFactory >   mxModelFactory;
     Reference< XFrame >                 mxTargetFrame;
@@ -160,10 +156,9 @@ struct FilterBaseImpl
     Reference< XStatusIndicator >       mxStatusIndicator;
     Reference< XInteractionHandler >    mxInteractionHandler;
 
-    explicit            FilterBaseImpl( const Reference< XMultiServiceFactory >& rxGlobalFactory );
+    explicit            FilterBaseImpl( const Reference< XComponentContext >& rxContext ) throw( RuntimeException );
 
-    void                setDocumentModel( const Reference< XComponent >& rxComponent );
-    bool                hasDocumentModel() const;
+    void                setDocumentModel( const Reference< XComponent >& rxComponent ) throw( IllegalArgumentException );
 
     void                initializeFilter();
     void                finalizeFilter();
@@ -171,22 +166,25 @@ struct FilterBaseImpl
 
 // ----------------------------------------------------------------------------
 
-FilterBaseImpl::FilterBaseImpl( const Reference< XMultiServiceFactory >& rxGlobalFactory ) :
+FilterBaseImpl::FilterBaseImpl( const Reference< XComponentContext >& rxContext ) throw( RuntimeException ) :
     meDirection( FILTERDIRECTION_UNKNOWN ),
-    mxGlobalFactory( rxGlobalFactory )
+    mxComponentContext( rxContext, UNO_SET_THROW ),
+    mxComponentFactory( rxContext->getServiceManager(), UNO_SET_THROW ),
+    mxServiceFactory( rxContext->getServiceManager(), UNO_QUERY_THROW )
 {
-    OSL_ENSURE( mxGlobalFactory.is(), "FilterBaseImpl::FilterBaseImpl - missing service factory" );
 }
 
-void FilterBaseImpl::setDocumentModel( const Reference< XComponent >& rxComponent )
+void FilterBaseImpl::setDocumentModel( const Reference< XComponent >& rxComponent ) throw( IllegalArgumentException )
 {
-    mxModel.set( rxComponent, UNO_QUERY );
-    mxModelFactory.set( rxComponent, UNO_QUERY );
-}
-
-bool FilterBaseImpl::hasDocumentModel() const
-{
-    return mxGlobalFactory.is() && mxModel.is() && mxModelFactory.is();
+    try
+    {
+        mxModel.set( rxComponent, UNO_QUERY_THROW );
+        mxModelFactory.set( rxComponent, UNO_QUERY_THROW );
+    }
+    catch( Exception& )
+    {
+        throw IllegalArgumentException();
+    }
 }
 
 void FilterBaseImpl::initializeFilter()
@@ -217,8 +215,8 @@ void FilterBaseImpl::finalizeFilter()
 
 // ============================================================================
 
-FilterBase::FilterBase( const Reference< XMultiServiceFactory >& rxGlobalFactory ) :
-    mxImpl( new FilterBaseImpl( rxGlobalFactory ) )
+FilterBase::FilterBase( const Reference< XComponentContext >& rxContext ) throw( RuntimeException ) :
+    mxImpl( new FilterBaseImpl( rxContext ) )
 {
 }
 
@@ -244,9 +242,19 @@ Any FilterBase::getArgument( const OUString& rArgName ) const
     return (aIt == mxImpl->maArguments.end()) ? Any() : aIt->second;
 }
 
-const Reference< XMultiServiceFactory >& FilterBase::getGlobalFactory() const
+const Reference< XComponentContext >& FilterBase::getComponentContext() const
 {
-    return mxImpl->mxGlobalFactory;
+    return mxImpl->mxComponentContext;
+}
+
+const Reference< XMultiComponentFactory >& FilterBase::getComponentFactory() const
+{
+    return mxImpl->mxComponentFactory;
+}
+
+const Reference< XMultiServiceFactory >& FilterBase::getServiceFactory() const
+{
+    return mxImpl->mxServiceFactory;
 }
 
 const Reference< XModel >& FilterBase::getModel() const
@@ -399,7 +407,14 @@ OleObjectHelper& FilterBase::getOleObjectHelper() const
     return *mxImpl->mxOleObjHelper;
 }
 
-OUString FilterBase::requestPassword( ::comphelper::IDocPasswordVerifier& rVerifier ) const
+VbaProject& FilterBase::getVbaProject() const
+{
+    if( !mxImpl->mxVbaProject )
+        mxImpl->mxVbaProject.reset( implCreateVbaProject() );
+    return *mxImpl->mxVbaProject;
+}
+
+Sequence< NamedValue > FilterBase::requestEncryptionData( ::comphelper::IDocPasswordVerifier& rVerifier ) const
 {
     ::std::vector< OUString > aDefaultPasswords;
     aDefaultPasswords.push_back( CREATE_OUSTRING( "VelvetSweatshop" ) );
@@ -464,8 +479,6 @@ void SAL_CALL FilterBase::initialize( const Sequence< Any >& rArgs ) throw( Exce
 void SAL_CALL FilterBase::setTargetDocument( const Reference< XComponent >& rxDocument ) throw( IllegalArgumentException, RuntimeException )
 {
     mxImpl->setDocumentModel( rxDocument );
-    if( !mxImpl->hasDocumentModel() )
-        throw IllegalArgumentException();
     mxImpl->meDirection = FILTERDIRECTION_IMPORT;
 }
 
@@ -474,8 +487,6 @@ void SAL_CALL FilterBase::setTargetDocument( const Reference< XComponent >& rxDo
 void SAL_CALL FilterBase::setSourceDocument( const Reference< XComponent >& rxDocument ) throw( IllegalArgumentException, RuntimeException )
 {
     mxImpl->setDocumentModel( rxDocument );
-    if( !mxImpl->hasDocumentModel() )
-        throw IllegalArgumentException();
     mxImpl->meDirection = FILTERDIRECTION_EXPORT;
 }
 
@@ -483,35 +494,35 @@ void SAL_CALL FilterBase::setSourceDocument( const Reference< XComponent >& rxDo
 
 sal_Bool SAL_CALL FilterBase::filter( const Sequence< PropertyValue >& rMediaDescSeq ) throw( RuntimeException )
 {
+    if( !mxImpl->mxModel.is() || !mxImpl->mxModelFactory.is() || (mxImpl->meDirection == FILTERDIRECTION_UNKNOWN) )
+        throw RuntimeException();
+
     sal_Bool bRet = sal_False;
-    if( mxImpl->hasDocumentModel() && (mxImpl->meDirection != FILTERDIRECTION_UNKNOWN) )
+    setMediaDescriptor( rMediaDescSeq );
+    DocumentOpenedGuard aOpenedGuard( mxImpl->maFileUrl );
+    if( aOpenedGuard.isValid() || !mxImpl->maFileUrl.getLength() )
     {
-        setMediaDescriptor( rMediaDescSeq );
-        DocumentOpenedGuard aOpenedGuard( mxImpl->maFileUrl );
-        if( aOpenedGuard.isValid() || !mxImpl->maFileUrl.getLength() )
+        mxImpl->initializeFilter();
+        switch( mxImpl->meDirection )
         {
-            mxImpl->initializeFilter();
-            switch( mxImpl->meDirection )
-            {
-                case FILTERDIRECTION_UNKNOWN:
-                break;
-                case FILTERDIRECTION_IMPORT:
-                    if( mxImpl->mxInStream.is() )
-                    {
-                        mxImpl->mxStorage = implCreateStorage( mxImpl->mxInStream );
-                        bRet = mxImpl->mxStorage.get() && importDocument();
-                    }
-                break;
-                case FILTERDIRECTION_EXPORT:
-                    if( mxImpl->mxOutStream.is() )
-                    {
-                        mxImpl->mxStorage = implCreateStorage( mxImpl->mxOutStream );
-                        bRet = mxImpl->mxStorage.get() && exportDocument();
-                    }
-                break;
-            }
-            mxImpl->finalizeFilter();
+            case FILTERDIRECTION_UNKNOWN:
+            break;
+            case FILTERDIRECTION_IMPORT:
+                if( mxImpl->mxInStream.is() )
+                {
+                    mxImpl->mxStorage = implCreateStorage( mxImpl->mxInStream );
+                    bRet = mxImpl->mxStorage.get() && importDocument();
+                }
+            break;
+            case FILTERDIRECTION_EXPORT:
+                if( mxImpl->mxOutStream.is() )
+                {
+                    mxImpl->mxStorage = implCreateStorage( mxImpl->mxOutStream );
+                    bRet = mxImpl->mxStorage.get() && exportDocument();
+                }
+            break;
         }
+        mxImpl->finalizeFilter();
     }
     return bRet;
 }
@@ -563,7 +574,7 @@ void FilterBase::setMediaDescriptor( const Sequence< PropertyValue >& rMediaDesc
 GraphicHelper* FilterBase::implCreateGraphicHelper() const
 {
     // default: return base implementation without any special behaviour
-    return new GraphicHelper( mxImpl->mxGlobalFactory, mxImpl->mxTargetFrame, mxImpl->mxStorage );
+    return new GraphicHelper( mxImpl->mxComponentContext, mxImpl->mxTargetFrame, mxImpl->mxStorage );
 }
 
 // ============================================================================

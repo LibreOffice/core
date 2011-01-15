@@ -33,8 +33,6 @@
 #include "oox/drawingml/textliststylecontext.hxx"
 #include "oox/drawingml/textfield.hxx"
 #include "oox/drawingml/textfieldcontext.hxx"
-#include "oox/core/namespaces.hxx"
-#include "tokens.hxx"
 
 using ::rtl::OUString;
 using namespace ::oox::core;
@@ -69,7 +67,7 @@ TextParagraphContext::TextParagraphContext( ContextHandler& rParent, TextParagra
 // --------------------------------------------------------------------
 void TextParagraphContext::endFastElement( sal_Int32 aElementToken ) throw (SAXException, RuntimeException)
 {
-    if( aElementToken == (NMSP_DRAWINGML|XML_p) )
+    if( aElementToken == (A_TOKEN( p )) )
     {
     }
 }
@@ -83,14 +81,14 @@ Reference< XFastContextHandler > TextParagraphContext::createFastChildContext( s
     // EG_TextRun
     switch( aElementToken )
     {
-    case NMSP_DRAWINGML|XML_r:      // "CT_RegularTextRun" Regular Text Run.
+    case A_TOKEN( r ):      // "CT_RegularTextRun" Regular Text Run.
     {
         TextRunPtr pRun( new TextRun );
         mrParagraph.addRun( pRun );
         xRet.set( new RegularTextRunContext( *this, pRun ) );
         break;
     }
-    case NMSP_DRAWINGML|XML_br: // "CT_TextLineBreak" Soft return line break (vertical tab).
+    case A_TOKEN( br ): // "CT_TextLineBreak" Soft return line break (vertical tab).
     {
         TextRunPtr pRun( new TextRun );
         pRun->setLineBreak();
@@ -98,17 +96,17 @@ Reference< XFastContextHandler > TextParagraphContext::createFastChildContext( s
         xRet.set( new RegularTextRunContext( *this, pRun ) );
         break;
     }
-    case NMSP_DRAWINGML|XML_fld:    // "CT_TextField" Text Field.
+    case A_TOKEN( fld ):    // "CT_TextField" Text Field.
     {
         TextFieldPtr pField( new TextField );
         mrParagraph.addRun( pField );
         xRet.set( new TextFieldContext( *this, xAttribs, *pField ) );
         break;
     }
-    case NMSP_DRAWINGML|XML_pPr:
+    case A_TOKEN( pPr ):
         xRet.set( new TextParagraphPropertiesContext( *this, xAttribs, mrParagraph.getProperties() ) );
         break;
-    case NMSP_DRAWINGML|XML_endParaRPr:
+    case A_TOKEN( endParaRPr ):
         xRet.set( new TextCharacterPropertiesContext( *this, xAttribs, mrParagraph.getEndProperties() ) );
         break;
     }
@@ -130,12 +128,12 @@ void RegularTextRunContext::endFastElement( sal_Int32 aElementToken ) throw (SAX
 {
     switch( aElementToken )
     {
-    case NMSP_DRAWINGML|XML_t:
+    case A_TOKEN( t ):
     {
         mbIsInText = false;
         break;
     }
-    case NMSP_DRAWINGML|XML_r:
+    case A_TOKEN( r ):
     {
         break;
     }
@@ -161,10 +159,10 @@ Reference< XFastContextHandler > RegularTextRunContext::createFastChildContext( 
 
     switch( aElementToken )
     {
-    case NMSP_DRAWINGML|XML_rPr:    // "CT_TextCharPropertyBag" The text char properties of this text run.
+    case A_TOKEN( rPr ):    // "CT_TextCharPropertyBag" The text char properties of this text run.
         xRet.set( new TextCharacterPropertiesContext( *this, xAttribs, mpRunPtr->getTextCharacterProperties() ) );
         break;
-    case NMSP_DRAWINGML|XML_t:      // "xsd:string" minOccurs="1" The actual text string.
+    case A_TOKEN( t ):      // "xsd:string" minOccurs="1" The actual text string.
         mbIsInText = true;
         break;
     }
@@ -194,13 +192,13 @@ Reference< XFastContextHandler > TextBodyContext::createFastChildContext( sal_In
 
     switch( aElementToken )
     {
-    case NMSP_DRAWINGML|XML_bodyPr:     // CT_TextBodyPropertyBag
+    case A_TOKEN( bodyPr ):     // CT_TextBodyPropertyBag
         xRet.set( new TextBodyPropertiesContext( *this, xAttribs, mrTextBody.getTextProperties() ) );
         break;
-    case NMSP_DRAWINGML|XML_lstStyle:   // CT_TextListStyle
+    case A_TOKEN( lstStyle ):   // CT_TextListStyle
         xRet.set( new TextListStyleContext( *this, mrTextBody.getTextListStyle() ) );
         break;
-    case NMSP_DRAWINGML|XML_p:          // CT_TextParagraph
+    case A_TOKEN( p ):          // CT_TextParagraph
         xRet.set( new TextParagraphContext( *this, mrTextBody.addParagraph() ) );
         break;
     }

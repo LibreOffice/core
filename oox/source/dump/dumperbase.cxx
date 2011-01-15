@@ -29,44 +29,45 @@
 
 #include <algorithm>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/ucb/XSimpleFileAccess.hpp>
 #include <com/sun/star/io/XActiveDataSink.hpp>
 #include <com/sun/star/io/XActiveDataSource.hpp>
 #include <com/sun/star/io/XTextInputStream.hpp>
 #include <com/sun/star/io/XTextOutputStream.hpp>
-#include <rtl/math.hxx>
-#include <osl/file.hxx>
+#include <com/sun/star/ucb/XSimpleFileAccess.hpp>
 #include <comphelper/docpasswordhelper.hxx>
+#include <osl/file.hxx>
+#include <rtl/math.hxx>
+#include "oox/core/filterbase.hxx"
 #include "oox/helper/binaryoutputstream.hxx"
 #include "oox/helper/textinputstream.hxx"
-#include "oox/core/filterbase.hxx"
 #include "oox/xls/biffhelper.hxx"
 
 #if OOX_INCLUDE_DUMPER
 
+namespace oox {
+namespace dump {
+
+// ============================================================================
+
+using namespace ::com::sun::star::beans;
+using namespace ::com::sun::star::io;
+using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::ucb;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::util;
+
+using ::comphelper::MediaDescriptor;
+using ::oox::core::FilterBase;
 using ::rtl::OString;
 using ::rtl::OStringBuffer;
 using ::rtl::OStringToOUString;
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
 using ::rtl::OUStringToOString;
-using ::com::sun::star::uno::Exception;
-using ::com::sun::star::uno::Reference;
-using ::com::sun::star::uno::UNO_QUERY_THROW;
-using ::com::sun::star::util::DateTime;
-using ::com::sun::star::lang::XMultiServiceFactory;
-using ::com::sun::star::ucb::XSimpleFileAccess;
-using ::com::sun::star::io::XActiveDataSink;
-using ::com::sun::star::io::XActiveDataSource;
-using ::com::sun::star::io::XInputStream;
-using ::com::sun::star::io::XOutputStream;
-using ::com::sun::star::io::XTextInputStream;
-using ::com::sun::star::io::XTextOutputStream;
-using ::comphelper::MediaDescriptor;
-using ::oox::core::FilterBase;
 
-namespace oox {
-namespace dump {
+// ============================================================================
+
+namespace {
 
 const sal_Unicode OOX_DUMP_BOM          = 0xFEFF;
 const sal_Int32 OOX_DUMP_MAXSTRLEN      = 80;
@@ -78,6 +79,8 @@ const sal_Unicode OOX_DUMP_LF           = '\n';
 const sal_Unicode OOX_DUMP_ITEMSEP      = '=';
 const sal_Int32 OOX_DUMP_BYTESPERLINE   = 16;
 const sal_Int64 OOX_DUMP_MAXARRAY       = 16;
+
+} // namespace
 
 // ============================================================================
 // ============================================================================
@@ -1581,18 +1584,18 @@ NameListRef SharedConfigData::getNameList( const OUString& rListName ) const
     return xList;
 }
 
-OUString SharedConfigData::requestPassword( ::comphelper::IDocPasswordVerifier& rVerifier )
+Sequence< NamedValue > SharedConfigData::requestEncryptionData( ::comphelper::IDocPasswordVerifier& rVerifier )
 {
-    OUString aPassword;
+    Sequence< NamedValue > aEncryptionData;
     if( !mbPwCancelled )
     {
         ::std::vector< OUString > aDefaultPasswords;
         aDefaultPasswords.push_back( CREATE_OUSTRING( "VelvetSweatshop" ) );
-        aPassword = ::comphelper::DocPasswordHelper::requestAndVerifyDocPassword(
+        aEncryptionData = ::comphelper::DocPasswordHelper::requestAndVerifyDocPassword(
             rVerifier, mrMediaDesc, ::comphelper::DocPasswordRequestType_MS, &aDefaultPasswords );
-        mbPwCancelled = aPassword.getLength() == 0;
+        mbPwCancelled = !aEncryptionData.hasElements();
     }
-    return aPassword;
+    return aEncryptionData;
 }
 
 bool SharedConfigData::implIsValid() const
@@ -1712,7 +1715,7 @@ void Config::construct( const Config& rParent )
 void Config::construct( const sal_Char* pcEnvVar, const FilterBase& rFilter )
 {
     if( rFilter.getFileUrl().getLength() > 0 )
-        construct( pcEnvVar, rFilter.getGlobalFactory(), rFilter.getStorage(), rFilter.getFileUrl(), rFilter.getMediaDescriptor() );
+        construct( pcEnvVar, rFilter.getServiceFactory(), rFilter.getStorage(), rFilter.getFileUrl(), rFilter.getMediaDescriptor() );
 }
 
 void Config::construct( const sal_Char* pcEnvVar, const Reference< XMultiServiceFactory >& rxFactory, const StorageRef& rxRootStrg, const OUString& rSysFileName, MediaDescriptor& rMediaDesc )
@@ -1764,9 +1767,9 @@ NameListRef Config::getNameList( const String& rListName ) const
     return implGetNameList( rListName );
 }
 
-OUString Config::requestPassword( ::comphelper::IDocPasswordVerifier& rVerifier )
+Sequence< NamedValue > Config::requestEncryptionData( ::comphelper::IDocPasswordVerifier& rVerifier )
 {
-    return mxCfgData->requestPassword( rVerifier );
+    return mxCfgData->requestEncryptionData( rVerifier );
 }
 
 bool Config::isPasswordCancelled() const
@@ -3212,4 +3215,3 @@ void DumperBase::construct( const ConfigRef& rxConfig )
 } // namespace oox
 
 #endif
-

@@ -31,7 +31,6 @@
 #include "oox/drawingml/theme.hxx"
 #include "oox/core/xmlfilterbase.hxx"
 #include "oox/helper/attributelist.hxx"
-#include "tokens.hxx"
 
 using ::rtl::OUString;
 using ::oox::core::XmlFilterBase;

@@ -51,4 +51,3 @@ ChartSpaceModel::~ChartSpaceModel()
 } // namespace chart
 } // namespace drawingml
 } // namespace oox
-

@@ -1,4 +1,4 @@
-wp      writerperfect : LIBWPD:libwpd sot comphelper xmloff NULL
+wp      writerperfect : LIBWPD:libwpd sot comphelper xmloff LIBXSLT:libxslt NULL
 wp	writerperfect			usr1	-	all	wp_mkout NULL
 wp	writerperfect\source\stream	nmake	-	all	wp_stream NULL
 wp	writerperfect\source\filter	nmake	-	all	wp_filter NULL

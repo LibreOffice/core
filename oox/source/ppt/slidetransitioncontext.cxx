@@ -38,9 +38,6 @@
 #include "oox/ppt/soundactioncontext.hxx"
 #include "oox/drawingml/shapegroupcontext.hxx"
 #include "oox/helper/attributelist.hxx"
-#include "oox/core/namespaces.hxx"
-
-#include "tokens.hxx"
 
 using rtl::OUString;
 using namespace ::com::sun::star;
@@ -86,10 +83,10 @@ Reference< XFastContextHandler > SlideTransitionContext::createFastChildContext(
 
     switch( aElementToken )
     {
-    case NMSP_PPT|XML_blinds:
-    case NMSP_PPT|XML_checker:
-    case NMSP_PPT|XML_comb:
-    case NMSP_PPT|XML_randomBar:
+    case PPT_TOKEN( blinds ):
+    case PPT_TOKEN( checker ):
+    case PPT_TOKEN( comb ):
+    case PPT_TOKEN( randomBar ):
         if (!mbHasTransition)
         {
             mbHasTransition = true;
@@ -97,8 +94,8 @@ Reference< XFastContextHandler > SlideTransitionContext::createFastChildContext(
             // ST_Direction { XML_horz, XML_vert }
         }
         break;
-    case NMSP_PPT|XML_cover:
-    case NMSP_PPT|XML_pull:
+    case PPT_TOKEN( cover ):
+    case PPT_TOKEN( pull ):
         if (!mbHasTransition)
         {
             mbHasTransition = true;
@@ -109,8 +106,8 @@ Reference< XFastContextHandler > SlideTransitionContext::createFastChildContext(
             //                                   XML_ld, XML_lu, XML_rd, XML_ru }
         }
         break;
-    case NMSP_PPT|XML_cut:
-    case NMSP_PPT|XML_fade:
+    case PPT_TOKEN( cut ):
+    case PPT_TOKEN( fade ):
         if (!mbHasTransition)
         {
             mbHasTransition = true;
@@ -119,8 +116,8 @@ Reference< XFastContextHandler > SlideTransitionContext::createFastChildContext(
             maTransition.setOoxTransitionType( aElementToken, attribs.getBool( XML_thruBlk, false ), 0);
         }
         break;
-    case NMSP_PPT|XML_push:
-    case NMSP_PPT|XML_wipe:
+    case PPT_TOKEN( push ):
+    case PPT_TOKEN( wipe ):
         if (!mbHasTransition)
         {
             mbHasTransition = true;
@@ -128,7 +125,7 @@ Reference< XFastContextHandler > SlideTransitionContext::createFastChildContext(
             // ST_TransitionSideDirectionType { XML_d, XML_l, XML_r, XML_u }
         }
         break;
-    case NMSP_PPT|XML_split:
+    case PPT_TOKEN( split ):
         if (!mbHasTransition)
         {
             mbHasTransition = true;
@@ -137,7 +134,7 @@ Reference< XFastContextHandler > SlideTransitionContext::createFastChildContext(
             // ST_TransitionInOutDirectionType { XML_out, XML_in }
         }
         break;
-    case NMSP_PPT|XML_zoom:
+    case PPT_TOKEN( zoom ):
         if (!mbHasTransition)
         {
             mbHasTransition = true;
@@ -145,7 +142,7 @@ Reference< XFastContextHandler > SlideTransitionContext::createFastChildContext(
             // ST_TransitionInOutDirectionType { XML_out, XML_in }
         }
         break;
-    case NMSP_PPT|XML_wheel:
+    case PPT_TOKEN( wheel ):
         if (!mbHasTransition)
         {
             mbHasTransition = true;
@@ -154,13 +151,13 @@ Reference< XFastContextHandler > SlideTransitionContext::createFastChildContext(
             // unsignedInt
         }
         break;
-    case NMSP_PPT|XML_circle:
-    case NMSP_PPT|XML_diamond:
-    case NMSP_PPT|XML_dissolve:
-    case NMSP_PPT|XML_newsflash:
-    case NMSP_PPT|XML_plus:
-    case NMSP_PPT|XML_random:
-    case NMSP_PPT|XML_wedge:
+    case PPT_TOKEN( circle ):
+    case PPT_TOKEN( diamond ):
+    case PPT_TOKEN( dissolve ):
+    case PPT_TOKEN( newsflash ):
+    case PPT_TOKEN( plus ):
+    case PPT_TOKEN( random ):
+    case PPT_TOKEN( wedge ):
         // CT_Empty
         if (!mbHasTransition)
         {
@@ -170,11 +167,11 @@ Reference< XFastContextHandler > SlideTransitionContext::createFastChildContext(
         break;
 
 
-    case NMSP_PPT|XML_sndAc: // CT_TransitionSoundAction
+    case PPT_TOKEN( sndAc ): // CT_TransitionSoundAction
         //"Sound"
         xRet.set( new SoundActionContext ( *this, maSlideProperties ) );
         break;
-    case NMSP_PPT|XML_extLst: // CT_OfficeArtExtensionList
+    case PPT_TOKEN( extLst ): // CT_OfficeArtExtensionList
         return xRet;
     default:
         break;
@@ -188,7 +185,7 @@ Reference< XFastContextHandler > SlideTransitionContext::createFastChildContext(
 
 void SlideTransitionContext::endFastElement( sal_Int32 aElement ) throw (::com::sun::star::xml::sax::SAXException, RuntimeException)
 {
-    if( aElement == (NMSP_PPT|XML_transition) )
+    if( aElement == (PPT_TOKEN( transition )) )
     {
         if( mbHasTransition )
         {

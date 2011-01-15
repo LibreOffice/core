@@ -42,13 +42,11 @@
 #include <com/sun/star/presentation/EffectNodeType.hpp>
 
 #include "oox/helper/attributelist.hxx"
-#include "oox/core/namespaces.hxx"
 #include "oox/core/fragmenthandler.hxx"
 #include "oox/ppt/pptimport.hxx"
 #include "oox/drawingml/drawingmltypes.hxx"
 
 #include "animationtypes.hxx"
-#include "tokens.hxx"
 
 using namespace ::oox::core;
 using namespace ::com::sun::star::uno;
@@ -619,7 +617,7 @@ static OUString getConvertedSubType( sal_Int16 nPresetClass, sal_Int32 nPresetId
 
     void SAL_CALL CommonTimeNodeContext::endFastElement( sal_Int32 aElement ) throw ( SAXException, RuntimeException)
     {
-        if( aElement == ( NMSP_PPT|XML_iterate ) )
+        if( aElement == ( PPT_TOKEN( iterate ) ) )
         {
             mbIterate = false;
         }
@@ -632,22 +630,22 @@ static OUString getConvertedSubType( sal_Int16 nPresetClass, sal_Int32 nPresetId
 
         switch ( aElementToken )
         {
-        case NMSP_PPT|XML_childTnLst:
-        case NMSP_PPT|XML_subTnLst:
+        case PPT_TOKEN( childTnLst ):
+        case PPT_TOKEN( subTnLst ):
             xRet.set( new TimeNodeListContext( *this, mpNode->getChildren() ) );
             break;
 
-        case NMSP_PPT|XML_stCondLst:
+        case PPT_TOKEN( stCondLst ):
             xRet.set( new CondListContext( *this, aElementToken, xAttribs, mpNode, mpNode->getStartCondition() ) );
             break;
-        case NMSP_PPT|XML_endCondLst:
+        case PPT_TOKEN( endCondLst ):
             xRet.set( new CondListContext( *this, aElementToken, xAttribs, mpNode, mpNode->getEndCondition() ) );
             break;
 
-        case NMSP_PPT|XML_endSync:
+        case PPT_TOKEN( endSync ):
             xRet.set( new CondContext( *this, xAttribs, mpNode, mpNode->getEndSyncValue() ) );
             break;
-        case NMSP_PPT|XML_iterate:
+        case PPT_TOKEN( iterate ):
         {
             sal_Int32 nVal = xAttribs->getOptionalValueToken( XML_type, XML_el );
             if( nVal != 0 )
@@ -680,7 +678,7 @@ static OUString getConvertedSubType( sal_Int16 nPresetClass, sal_Int32 nPresetId
             mbIterate = true;
             break;
         }
-        case NMSP_PPT|XML_tmAbs:
+        case PPT_TOKEN( tmAbs ):
             if( mbIterate )
             {
                 AttributeList attribs( xAttribs );
@@ -689,7 +687,7 @@ static OUString getConvertedSubType( sal_Int16 nPresetClass, sal_Int32 nPresetId
                 mpNode->getNodeProperties()[ NP_ITERATEINTERVAL ] <<= fTime;
             }
             break;
-        case NMSP_PPT|XML_tmPct:
+        case PPT_TOKEN( tmPct ):
             if( mbIterate )
             {
                 AttributeList attribs( xAttribs );
