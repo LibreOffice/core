@@ -204,32 +204,70 @@ SAL_IMPLEMENT_MAIN()
         rtl::OUString sFoo(rtl::OUString::createFromAscii("XXXXXXXXXXXXXXX"));
     )
 
-    std::cout << "--Ascii String Comparison--" << std::endl;
+    std::cout << "--Ascii Unequal Comparison--" << std::endl;
 
     rtl::OUString sCompare(RTL_CONSTASCII_USTRINGPARAM_CLASSIC("XXXXXXXXXXXXXXX"));
 
     TIME
     (
-        "rtl::OUString::equalsAsciiL (false)",
+        "rtl::OUString::equalsAsciiL",
         sCompare.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("apple"));
     )
 
     TIME
     (
-        "rtl::OUString::equalsAscii (false)",
+        "rtl::OUString::equalsAscii",
         sCompare.equalsAscii("apple");
     )
 
     TIME
     (
-        "rtl::OUString::equalsAsciiL(true)",
+        "rtl::OUString::compareToAscii (one arg) (!=0)",
+        sCompare.compareToAscii("apple");
+    )
+
+    TIME
+    (
+        "rtl::OUString::compareToAscii (two args) (!=0)",
+        sCompare.compareToAscii(RTL_CONSTASCII_STRINGPARAM("apple"));
+    )
+
+    TIME
+    (
+        "operator==(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM_CLASSIC(\"apple\")))",
+        sCompare == rtl::OUString(RTL_CONSTASCII_USTRINGPARAM_CLASSIC("apple"));
+    )
+
+    std::cout << "--Ascii Unequal Comparison--" << std::endl;
+
+    TIME
+    (
+        "rtl::OUString::equalsAsciiL",
         sCompare.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("XXXXXXXXXXXXXXX"));
     )
 
     TIME
     (
-        "rtl::OUString::equalsAscii (true)",
+        "rtl::OUString::compareToAscii (two args) (==0)",
+        sCompare.compareToAscii(RTL_CONSTASCII_STRINGPARAM("XXXXXXXXXXXXXXX"));
+    )
+
+    TIME
+    (
+        "rtl::OUString::equalsAscii",
         sCompare.equalsAscii("XXXXXXXXXXXXXXX");
+    )
+
+    TIME
+    (
+        "rtl::OUString::compareToAscii (one arg) (==0)",
+        sCompare.compareToAscii("XXXXXXXXXXXXXXX");
+    )
+
+    TIME
+    (
+        "operator==(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM_CLASSIC(\"XXXXXXXXXXXXXXX\"))",
+        sCompare == rtl::OUString(RTL_CONSTASCII_USTRINGPARAM_CLASSIC("XXXXXXXXXXXXXXX"));
     )
 
     return 0;
