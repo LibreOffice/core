@@ -31,6 +31,7 @@ $(eval $(call gb_Module_add_moduledirs,ooo,\
 	framework \
 	sc \
 	sfx2 \
+	starmath \
 	svl \
 	svtools \
 	sw \
