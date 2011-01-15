@@ -353,6 +353,7 @@ static MsLangId::IsoLangEntry const aImplIsoLangEntries[] =
     { LANGUAGE_PAPIAMENTU,                 "pap", "AN" },
     { LANGUAGE_USER_PAPIAMENTU_ARUBA,      "pap", "AW" },
     { LANGUAGE_ENGLISH_SINGAPORE,           "en", "SG" },
+    { LANGUAGE_USER_YIDDISH_US,             "yi", "US" },
     { LANGUAGE_YIDDISH,                     "yi", "IL" },   // new: old was "ji"
     { LANGUAGE_YIDDISH,                     "ji", "IL" },   // old: new is "yi"
     { LANGUAGE_SYRIAC,                     "syr", "TR" },   // "TR" according to http://www.ethnologue.com/show_language.asp?code=SYC

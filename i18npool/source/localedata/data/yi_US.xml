@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE Locale SYSTEM 'locale.dtd'>
+<Locale versionDTD="2.0.3" allowUpdateFromCLDR="no" version="1.0">
+  <LC_INFO>
+    <Language>
+      <LangID>yi</LangID>
+      <DefaultName>Yiddish</DefaultName>
+    </Language>
+    <Country>
+      <CountryID>US</CountryID>
+      <DefaultName>United States</DefaultName>
+    </Country>
+  </LC_INFO>
+  <LC_CTYPE ref="en_US"/>
+  <LC_FORMAT ref="en_US" replaceTo="[$$-83D]"/>
+  <LC_COLLATION ref="en_US"/>
+  <LC_SEARCH ref="en_US"/>
+  <LC_INDEX>
+    <IndexKey phonetic="false" default="true" unoid="alphanumeric">א-י כ ל מ נ ס ע פ צ-ת</IndexKey>
+    <UnicodeScript>10</UnicodeScript>
+    <FollowPageWord>ז“</FollowPageWord>
+    <FollowPageWord>ז“</FollowPageWord>
+  </LC_INDEX>
+  <LC_CALENDAR>
+    <Calendar unoid="gregorian" default="true">
+      <DaysOfWeek>
+        <Day>
+          <DayID>sun</DayID>
+          <DefaultAbbrvName>זונ'</DefaultAbbrvName>
+          <DefaultFullName>זונטיק</DefaultFullName>
+        </Day>
+        <Day>
+          <DayID>mon</DayID>
+          <DefaultAbbrvName>מאָנ'</DefaultAbbrvName>
+          <DefaultFullName>מאָנטיק</DefaultFullName>
+        </Day>
+        <Day>
+          <DayID>tue</DayID>
+          <DefaultAbbrvName>דינ'</DefaultAbbrvName>
+          <DefaultFullName>דינסטיק</DefaultFullName>
+        </Day>
+        <Day>
+          <DayID>wed</DayID>
+          <DefaultAbbrvName>מיט'</DefaultAbbrvName>
+          <DefaultFullName>מיטװאָך</DefaultFullName>
+        </Day>
+        <Day>
+          <DayID>thu</DayID>
+          <DefaultAbbrvName>דאָנ'</DefaultAbbrvName>
+          <DefaultFullName>דאָנערשטיק</DefaultFullName>
+        </Day>
+        <Day>
+          <DayID>fri</DayID>
+          <DefaultAbbrvName>פֿרײַ'</DefaultAbbrvName>
+          <DefaultFullName>פֿרײַטיק</DefaultFullName>
+        </Day>
+        <Day>
+          <DayID>sat</DayID>
+          <DefaultAbbrvName>שבת</DefaultAbbrvName>
+          <DefaultFullName>שבת</DefaultFullName>
+        </Day>
+      </DaysOfWeek>
+      <MonthsOfYear>
+        <Month>
+          <MonthID>jan</MonthID>
+          <DefaultAbbrvName>יאַנ</DefaultAbbrvName>
+          <DefaultFullName>יאַנואַר</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>feb</MonthID>
+          <DefaultAbbrvName>פֿעב</DefaultAbbrvName>
+          <DefaultFullName>פֿעברואַר</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>mar</MonthID>
+          <DefaultAbbrvName>מאַר</DefaultAbbrvName>
+          <DefaultFullName>מאַרץ</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>apr</MonthID>
+          <DefaultAbbrvName>אַפּר</DefaultAbbrvName>
+          <DefaultFullName>אַפּריל</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>may</MonthID>
+          <DefaultAbbrvName>מײַ</DefaultAbbrvName>
+          <DefaultFullName>מײַ</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>jun</MonthID>
+          <DefaultAbbrvName>יונ</DefaultAbbrvName>
+          <DefaultFullName>יוני</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>jul</MonthID>
+          <DefaultAbbrvName>יול</DefaultAbbrvName>
+          <DefaultFullName>יולי</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>aug</MonthID>
+          <DefaultAbbrvName>אױג</DefaultAbbrvName>
+          <DefaultFullName>אױגוסט</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>sep</MonthID>
+          <DefaultAbbrvName>סעפּ</DefaultAbbrvName>
+          <DefaultFullName>סעפּטעמבער</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>oct</MonthID>
+          <DefaultAbbrvName>אָקט</DefaultAbbrvName>
+          <DefaultFullName>אָקטאָבער</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>nov</MonthID>
+          <DefaultAbbrvName>נאָװ</DefaultAbbrvName>
+          <DefaultFullName>נאָװעמבער</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>dec</MonthID>
+          <DefaultAbbrvName>דעצ</DefaultAbbrvName>
+          <DefaultFullName>דעצעמבער</DefaultFullName>
+        </Month>
+      </MonthsOfYear>
+      <Eras>
+        <Era>
+          <EraID>bc</EraID>
+          <DefaultAbbrvName>פֿ"ק</DefaultAbbrvName>
+          <DefaultFullName>פֿ"ק</DefaultFullName>
+        </Era>
+        <Era>
+          <EraID>ad</EraID>
+          <DefaultAbbrvName>אצ“ר</DefaultAbbrvName>
+          <DefaultFullName>אצ“ר</DefaultFullName>
+        </Era>
+      </Eras>
+      <StartDayOfWeek>
+        <DayID>sun</DayID>
+      </StartDayOfWeek>
+      <MinimalDaysInFirstWeek>1</MinimalDaysInFirstWeek>
+    </Calendar>
+  </LC_CALENDAR>
+  <LC_CURRENCY ref="en_US"/>
+  <LC_TRANSLITERATION ref="en_US"/>
+  <LC_MISC>
+    <ReservedWords>
+      <trueWord>אמת</trueWord>
+      <falseWord>פֿאַלש</falseWord>
+      <quarter1Word>ערשט יאָרפֿערטל</quarter1Word>
+      <quarter2Word>צװײט יאָרפֿערטל</quarter2Word>
+      <quarter3Word>דריט  יאָרפֿערטל</quarter3Word>
+      <quarter4Word>פֿערט יאָרפֿערטל</quarter4Word>
+      <aboveWord>אױבן</aboveWord>
+      <belowWord>אונטן</belowWord>
+      <quarter1Abbreviation>י“פֿ1</quarter1Abbreviation>
+      <quarter2Abbreviation>י“פֿ2</quarter2Abbreviation>
+      <quarter3Abbreviation>י“פֿ3</quarter3Abbreviation>
+      <quarter4Abbreviation>י“פֿ4</quarter4Abbreviation>
+    </ReservedWords>
+  </LC_MISC>
+  <LC_NumberingLevel ref="en_US"/>
+  <LC_OutLineNumberingLevel ref="en_US"/>
+</Locale>

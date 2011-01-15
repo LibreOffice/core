@@ -339,6 +339,7 @@ sal_Int16 MsLangId::getScriptType( LanguageType nLang )
         case LANGUAGE_FARSI:
         case LANGUAGE_HEBREW:
         case LANGUAGE_YIDDISH:
+        case LANGUAGE_USER_YIDDISH_US:
         case LANGUAGE_MARATHI:
         case LANGUAGE_PUNJABI:
         case LANGUAGE_GUJARATI:

@@ -313,6 +313,7 @@ SHL4OBJS= \
     $(SLO)$/localedata_ve_ZA.obj \
     $(SLO)$/localedata_vi_VN.obj \
     $(SLO)$/localedata_xh_ZA.obj \
+    $(SLO)$/localedata_yi_US.obj \
     $(SLO)$/localedata_zh_CN.obj \
     $(SLO)$/localedata_zh_HK.obj \
     $(SLO)$/localedata_zh_MO.obj \
