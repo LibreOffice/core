@@ -228,16 +228,11 @@ SAL_IMPLEMENT_MAIN()
         sCompare.equalsAscii("apple");
     )
 
+    //(const sal_Char*, sal_Int32) version has different semantics
     TIME
     (
-        "rtl::OUString::compareToAscii (one arg) (!=0)",
+        "rtl::OUString::compareToAscii (const sal_Char*)",
         sCompare.compareToAscii("apple");
-    )
-
-    TIME
-    (
-        "rtl::OUString::compareToAscii (two args) (!=0)",
-        sCompare.compareToAscii(RTL_CONSTASCII_STRINGPARAM("apple"));
     )
 
     TIME
@@ -264,19 +259,14 @@ SAL_IMPLEMENT_MAIN()
 
     TIME
     (
-        "rtl::OUString::compareToAscii (two args) (==0)",
-        sCompare.compareToAscii(RTL_CONSTASCII_STRINGPARAM("XXXXXXXXXXXXXXX"));
-    )
-
-    TIME
-    (
         "rtl::OUString::equalsAscii",
         sCompare.equalsAscii("XXXXXXXXXXXXXXX");
     )
 
+    //(const sal_Char*, sal_Int32) version has different semantics
     TIME
     (
-        "rtl::OUString::compareToAscii (one arg) (==0)",
+        "rtl::OUString::compareToAscii (const sal_Char*)",
         sCompare.compareToAscii("XXXXXXXXXXXXXXX");
     )
 
