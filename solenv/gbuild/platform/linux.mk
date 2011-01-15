@@ -90,7 +90,6 @@ gb_CXXFLAGS := \
     -Wendif-labels \
     -Wextra \
     -Wno-ctor-dtor-privacy \
-    -Wno-long-double \
     -Wno-non-virtual-dtor \
     -Wreturn-type \
     -Wshadow \
@@ -153,13 +152,13 @@ $(call gb_Helper_abbreviate_dirs,\
     mkdir -p $(dir $(1)) && \
     mkdir -p $(dir $(call gb_CObject_get_dep_target,$(2))) && \
     $(gb_CC) \
-        $(4) $(5) \
+        $(DEFS) $(CFLAGS) \
         -c $(3) \
         -o $(1) \
         -MMD -MT $(call gb_CObject_get_target,$(2)) \
         -MF $(call gb_CObject_get_dep_target,$(2)) \
         -I$(dir $(3)) \
-        $(6))
+        $(INCLUDE))
 endef
 
 
@@ -171,13 +170,13 @@ $(call gb_Helper_abbreviate_dirs,\
     mkdir -p $(dir $(1)) && \
     mkdir -p $(dir $(call gb_CxxObject_get_dep_target,$(2))) && \
     $(gb_CXX) \
-        $(4) $(5) \
+        $(DEFS) $(CXXFLAGS) \
         -c $(3) \
         -o $(1) \
         -MMD -MT $(call gb_CxxObject_get_target,$(2)) \
         -MF $(call gb_CxxObject_get_dep_target,$(2)) \
         -I$(dir $(3)) \
-        $(6))
+        $(INCLUDE_STL) $(INCLUDE))
 endef
 
 
@@ -207,34 +206,31 @@ endif
 gb_LinkTarget_INCLUDE := $(filter-out %/stl, $(subst -I. , ,$(SOLARINC)))
 gb_LinkTarget_INCLUDE_STL := $(filter %/stl, $(subst -I. , ,$(SOLARINC)))
 
-# parameters: 1-linktarget 2-targettype 3-ldflags 4-linked-libs 5-linked-static-libs 6-cobjects 7-cxxobjects
 define gb_LinkTarget__command_dynamiclink
 $(call gb_Helper_abbreviate_dirs,\
     mkdir -p $(dir $(1)) && \
     $(gb_CXX) \
-        $(if $(filter Library CppunitTest,$(2)),$(gb_Library_TARGETTYPEFLAGS) $(call gb_Library_get_rpath,$(1))) \
-        $(if $(filter Executable,$(2)),$(call gb_Executable_get_rpath,$(1))) \
-        $(3) \
-        $(patsubst lib%.so,-l%,$(foreach lib,$(4),$(call gb_Library_get_filename,$(lib)))) \
-        $(foreach object,$(6),$(call gb_CObject_get_target,$(object))) \
-        $(foreach object,$(7),$(call gb_CxxObject_get_target,$(object))) \
-        -Wl$(COMMA)--start-group $(foreach lib,$(5),$(call gb_StaticLibrary_get_target,$(lib))) -Wl$(COMMA)--end-group \
+        $(if $(filter Library CppunitTest,$(TARGETTYPE)),$(gb_Library_TARGETTYPEFLAGS)) \
+        $(RPATH) $(LDFLAGS) \
+        $(patsubst lib%.so,-l%,$(foreach lib,$(LINKED_LIBS),$(call gb_Library_get_filename,$(lib)))) \
+        $(foreach object,$(COBJECTS),$(call gb_CObject_get_target,$(object))) \
+        $(foreach object,$(CXXOBJECTS),$(call gb_CxxObject_get_target,$(object))) \
+        -Wl$(COMMA)--start-group $(foreach lib,$(LINKED_STATIC_LIBS),$(call gb_StaticLibrary_get_target,$(lib))) -Wl$(COMMA)--end-group \
         -o $(1))
 endef
 
-# parameters: 1-linktarget 2-cobjects 3-cxxobjects
 define gb_LinkTarget__command_staticlink
 $(call gb_Helper_abbreviate_dirs,\
     mkdir -p $(dir $(1)) && \
     $(gb_AR) -rsu $(1) \
-        $(foreach object,$(2),$(call gb_CObject_get_target,$(object))) \
-        $(foreach object,$(3),$(call gb_CxxObject_get_target,$(object))) 2> /dev/null)
+        $(foreach object,$(COBJECTS),$(call gb_CObject_get_target,$(object))) \
+        $(foreach object,$(CXXOBJECTS),$(call gb_CxxObject_get_target,$(object))) 2> /dev/null)
 endef
 
 define gb_LinkTarget__command
 $(call gb_Output_announce,$(2),$(true),LNK,4)
-$(if $(filter Library CppunitTest Executable,$(3)),$(call gb_LinkTarget__command_dynamiclink,$(1),$(3),$(4),$(5),$(6),$(7),$(8)))
-$(if $(filter StaticLibrary,$(3)),$(call gb_LinkTarget__command_staticlink,$(1),$(7),$(8)))
+$(if $(filter Library CppunitTest Executable,$(TARGETTYPE)),$(call gb_LinkTarget__command_dynamiclink,$(1)))
+$(if $(filter StaticLibrary,$(TARGETTYPE)),$(call gb_LinkTarget__command_staticlink,$(1)))
 endef
 
 
@@ -281,23 +277,26 @@ gb_Library_FILENAMES := \
     $(foreach lib,$(gb_Library_UNOVERLIBS),$(lib):$(gb_Library_UNOVERPRE)$(lib)$(gb_Library_PLAINEXT)) \
 
 
-gb_Library_Library_platform =
-
-define gb_Library_get_rpath
-'-Wl,-rpath,$(call gb_LinkTarget__get_rpath_for_layer,$(call gb_Library_get_layer,$(1)))' \
--Wl,-rpath-link,$(gb_Library_OUTDIRLOCATION)
-endef
-
 gb_Library_LAYER := \
-    $(foreach lib,$(gb_Library_OOOLIBS),$(lib):OOOLIB) \
+    $(foreach lib,$(gb_Library_OOOLIBS),$(lib):OOO) \
     $(foreach lib,$(gb_Library_PLAINLIBS_URE),$(lib):URELIB) \
-    $(foreach lib,$(gb_Library_PLAINLIBS_OOO),$(lib):OOOLIB) \
-    $(foreach lib,$(gb_Library_RTLIBS),$(lib):OOOLIB) \
+    $(foreach lib,$(gb_Library_PLAINLIBS_OOO),$(lib):OOO) \
+    $(foreach lib,$(gb_Library_RTLIBS),$(lib):OOO) \
     $(foreach lib,$(gb_Library_RTVERLIBS),$(lib):URELIB) \
     $(foreach lib,$(gb_Library_STLLIBS),$(lib):URELIB) \
     $(foreach lib,$(gb_Library_UNOLIBS_URE),$(lib):URELIB) \
-    $(foreach lib,$(gb_Library_UNOLIBS_OOO),$(lib):OOOLIB) \
+    $(foreach lib,$(gb_Library_UNOLIBS_OOO),$(lib):OOO) \
     $(foreach lib,$(gb_Library_UNOVERLIBS),$(lib):URELIB) \
+
+define gb_Library_get_rpath
+'-Wl,-rpath,$(call gb_LinkTarget__get_rpath_for_layer,$(call gb_Library_get_layer,$(1)))' \
+'-Wl,-rpath-link,$(gb_Library_OUTDIRLOCATION)'
+endef
+
+define gb_Library_Library_platform
+$(call gb_LinkTarget_get_target,$(2)) : RPATH := $(call gb_Library_get_rpath,$(1))
+
+endef
 
 
 # StaticLibrary class
@@ -313,22 +312,27 @@ gb_StaticLibrary_FILENAMES := \
 
 gb_StaticLibrary_StaticLibrary_platform =
 
+
 # Executable class
 
 gb_Executable_EXT :=
-gb_Executable_Executable_platform =
 
 gb_Executable_LAYER := \
     $(foreach exe,$(gb_Executable_UREBIN),$(exe):UREBIN) \
     $(foreach exe,$(gb_Executable_SDK),$(exe):SDKBIN) \
-    $(foreach exe,$(gb_Executable_OOO),$(exe):OOOLIB) \
+    $(foreach exe,$(gb_Executable_OOO),$(exe):OOO) \
     $(foreach exe,$(gb_Executable_BRAND),$(exe):BRAND) \
     $(foreach exe,$(gb_Executable_NONE),$(exe):NONEBIN) \
 
 
 define gb_Executable_get_rpath
-'-Wl,-rpath,$(call gb_LinkTarget__get_rpath_for_layer,$(call gb_Library_get_layer,$(1)))' \
+'-Wl,-rpath,$(call gb_LinkTarget__get_rpath_for_layer,$(call gb_Executable_get_layer,$(1)))' \
 -Wl,-rpath-link,$(gb_Library_OUTDIRLOCATION)
+endef
+
+define gb_Executable_Executable_platform
+$(call gb_LinkTarget_get_target,$(2)) : RPATH := $(call gb_Executable_get_rpath,$(1))
+
 endef
 
 
@@ -338,6 +342,12 @@ gb_CppunitTest_CPPTESTPRECOMMAND := LD_LIBRARY_PATH=$(OUTDIR)/lib
 gb_CppunitTest_SYSPRE := libtest_
 gb_CppunitTest_EXT := .so
 gb_CppunitTest_get_filename = $(gb_CppunitTest_SYSPRE)$(1)$(gb_CppunitTest_EXT)
+
+define gb_CppunitTest_CppunitTest_platform
+$(call gb_LinkTarget_get_target,$(2)) : RPATH :=
+
+endef
+
 
 # SdiTarget class
 
@@ -356,8 +366,8 @@ define gb_SrsPartTarget__command_dep
 $(call gb_Helper_abbreviate_dirs,\
     $(gb_GCCP) \
         -MM -MT $(call gb_SrsPartTarget_get_target,$(1)) \
-        $(3) \
-        $(4) \
+        $(INCLUDE) \
+        $(DEFS) \
         -c -x c++-header $(2) \
         -o $(call gb_SrsPartTarget_get_dep_target,$(1)))
 endef

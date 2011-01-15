@@ -43,14 +43,14 @@ $(call gb_Helper_abbreviate_dirs_native,\
         -p $(firstword $(subst /, ,$(2))) \
         -i $(3) \
         -o $(1) \
-        -m $(4) \
+        -m $(SDF) \
         -l all)
 
 endef
 
 define gb_SrsPartMergeTarget__rules
 $$(call gb_SrsPartMergeTarget_get_target,%) : $(1)/% $$(gb_Helper_MISCDUMMY) | $$(gb_SrsPartMergeTarget_TRANSEXTARGET) $$(gb_SrsPartMergeTarget_TRANSEXAUXDEPS)
-    $$(call gb_SrsPartMergeTarget__command,$$@,$$*,$$<,$$(SDF))
+    $$(call gb_SrsPartMergeTarget__command,$$@,$$*,$$<)
 
 endef
 
@@ -69,11 +69,11 @@ $(call gb_Helper_abbreviate_dirs_native,\
     mkdir -p $(dir $(1)) && \
     RESPONSEFILE=`$(gb_MKTEMP) $(gb_Helper_MISC)` && \
     echo "-s \
-        $(4) \
+        $(INCLUDE) \
         -I$(dir $(3)) \
-        $(5) \
+        $(DEFS) \
         -fp=$(1) \
-        $(6)" > $${RESPONSEFILE} && \
+        $(lastword $$< $$(MERGEDFILE))" > $${RESPONSEFILE} && \
     $(gb_SrsPartTarget_RSCCOMMAND) -presponse @$${RESPONSEFILE} && \
     rm -rf $${RESPONSEFILE})
 
@@ -81,8 +81,8 @@ endef
 
 define gb_SrsPartTarget__rules
 $$(call gb_SrsPartTarget_get_target,%) : $(1)/% $$(gb_Helper_MISCDUMMY) | $$(gb_SrsPartTarget_RSCTARGET)
-    $$(call gb_SrsPartTarget__command_dep,$$*,$$<,$$(INCLUDE),$$(DEFS))
-    $$(call gb_SrsPartTarget__command,$$@,$$*,$$<,$$(INCLUDE),$$(DEFS),$$(lastword $$< $$(MERGEDFILE)))
+    $$(call gb_SrsPartTarget__command_dep,$$*,$$<)
+    $$(call gb_SrsPartTarget__command,$$@,$$*,$$<)
 
 ifeq ($(gb_FULLDEPS),$(true))
 $$(call gb_SrsPartTarget_get_dep_target,%) : $(1)/% $$(gb_Helper_MISCDUMMY)

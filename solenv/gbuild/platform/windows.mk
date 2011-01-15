@@ -220,9 +220,9 @@ $(call gb_Helper_abbreviate_dirs_native,\
     mkdir -p $(dir $(1)) && \
     unset INCLUDE && \
     $(gb_CC) \
-        $(4) $(5) \
+        $(DEFS) $(CFLAGS) \
         -I$(dir $(3)) \
-        $(6) \
+        $(INCLUDE) \
         -c $(3) \
         -Fo$(1) \
         -showIncludes > $(1).out; \
@@ -245,9 +245,9 @@ $(call gb_Helper_abbreviate_dirs_native,\
     mkdir -p $(dir $(1)) && \
     unset INCLUDE && \
     $(gb_CXX) \
-        $(4) $(5) \
+        $(DEFS) $(CFLAGS) \
         -I$(dir $(3)) \
-        $(6) \
+        $(INCLUDE_STL) $(INCLUDE) \
         -c $(3) \
         -Fo$(1) \
         -showIncludes > $(1).out; \
@@ -337,16 +337,16 @@ $(call gb_Output_announce,$(2),$(true),LNK,4)
 $(call gb_Helper_abbreviate_dirs_native,\
     mkdir -p $(dir $(1)) && \
     RESPONSEFILE=$$(mktemp --tmpdir=$(gb_Helper_MISC)) && \
-    echo "$(foreach object,$(8),$(call gb_CxxObject_get_target,$(object))) \
-        $(foreach object,$(7),$(call gb_CObject_get_target,$(object)))" > $${RESPONSEFILE} && \
+    echo "$(foreach object,$(CXXOBJECTS),$(call gb_CxxObject_get_target,$(object))) \
+        $(foreach object,$(COBJECTS),$(call gb_CObject_get_target,$(object)))" > $${RESPONSEFILE} && \
     $(gb_LINK) \
-        $(if $(filter Library CppunitTest,$(3)),$(gb_Library_TARGETTYPEFLAGS)) \
-        $(if $(filter StaticLibrary,$(3)),$(gb_StaticLibrary_TARGETTYPEFLAGS)) \
-        $(if $(filter Executable,$(3)),$(gb_Executable_TARGETTYPEFLAGS)) \
-        $(4) \
+        $(if $(filter Library CppunitTest,$(TARGETTYPE)),$(gb_Library_TARGETTYPEFLAGS)) \
+        $(if $(filter StaticLibrary,$(TARGETTYPE)),$(gb_StaticLibrary_TARGETTYPEFLAGS)) \
+        $(if $(filter Executable,$(TARGETTYPE)),$(gb_Executable_TARGETTYPEFLAGS)) \
+        $(DEFS) \
         @$${RESPONSEFILE} \
-        $(foreach lib,$(5),$(call gb_Library_get_filename,$(lib))) \
-        $(foreach lib,$(6),$(call gb_StaticLibrary_get_filename,$(lib))) \
+        $(foreach lib,$(LINKED_LIBS),$(call gb_Library_get_filename,$(lib))) \
+        $(foreach lib,$(LINKED_STATIC_LIBS),$(call gb_StaticLibrary_get_filename,$(lib))) \
         $(subst -out: -implib:$(1),-out:$(1),-out:$(DLLTARGET) -implib:$(1)) && rm $${RESPONSEFILE})
 endef
 
@@ -506,7 +506,8 @@ ifeq ($(gb_FULLDEPS),$(true))
 define gb_SrsPartTarget__command_dep
 $(call gb_Helper_abbreviate_dirs_native,\
     $(OUTDIR)/bin/makedepend$(gb_Executable_EXT) \
-        $(3) $(4) \
+        $(INCLUDE) \
+        $(DEFS) \
         $(2) \
         -f - \
     | $(gb_AWK) -f $(GBUILDDIR)/processdeps.awk \

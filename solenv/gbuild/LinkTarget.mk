@@ -117,12 +117,12 @@ endef
 define gb_CxxObject__rules
 $$(call gb_CxxObject_get_target,%) : $$(call gb_CxxObject_get_source,$(1),%)
     $$(eval $$(gb_CxxObject__set_pchflags))
-    $$(call gb_CxxObject__command,$$@,$$*,$$<,$$(DEFS),$$(CXXFLAGS) $$(PCHFLAGS),$$(INCLUDE_STL) $$(INCLUDE))
+    $$(call gb_CxxObject__command,$$@,$$*,$$<)
 
 ifeq ($(gb_FULLDEPS),$(true))
 $$(call gb_CxxObject_get_dep_target,%) : $$(call gb_CxxObject_get_source,$(1),%)
     $$(eval $$(gb_CxxObject__set_pchflags))
-    $$(call gb_CxxObject__command_dep,$$@,$$*,$$<,$$(DEFS),$$(CXXFLAGS) $$(PCHFLAGS),$$(INCLUDE_STL) $$(INCLUDE))
+    $$(call gb_CxxObject__command_dep,$$@,$$*,$$<)
 endif
 
 endef
@@ -219,7 +219,7 @@ $(call gb_Helper_abbreviate_dirs,\
 endef
 
 $(call gb_LinkTarget_get_target,%) : $(call gb_LinkTarget_get_headers_target,%) $(gb_Helper_MISCDUMMY)
-    $(call gb_LinkTarget__command,$@,$*,$(TARGETTYPE),$(LDFLAGS),$(LINKED_LIBS),$(LINKED_STATIC_LIBS),$(COBJECTS),$(CXXOBJECTS),$(OBJCXXOBJECTS))
+    $(call gb_LinkTarget__command,$@,$*)
 
 ifeq ($(gb_FULLDEPS),$(true))
 $(call gb_LinkTarget_get_target,%) : $(call gb_LinkTarget_get_dep_target,%)

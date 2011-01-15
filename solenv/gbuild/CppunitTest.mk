@@ -58,6 +58,7 @@ $(call gb_LinkTarget_LinkTarget,$(2))
 $(call gb_LinkTarget_set_targettype,$(2),CppunitTest)
 $(call gb_LinkTarget_add_linked_libs,$(2),cppunit)
 $(call gb_CppunitTest_get_target,$(1)) : $(call gb_LinkTarget_get_target,$(2))
+$(call gb_CppunitTest_CppunitTest_platform,$(1),$(2))
 $$(eval $$(call gb_Module_register_target,$(call gb_CppunitTest_get_target,$(1)),$(call gb_CppunitTest_get_clean_target,$(1))))
 
 endef

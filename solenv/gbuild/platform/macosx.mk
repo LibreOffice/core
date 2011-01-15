@@ -147,13 +147,13 @@ $(call gb_Helper_abbreviate_dirs,\
     mkdir -p $(dir $(1)) && \
     mkdir -p $(dir $(call gb_CObject_get_dep_target,$(2))) && \
     $(gb_CC) \
-        $(4) $(5) \
+        $(DEFS) $(CFLAGS) \
         -c $(3) \
         -o $(1) \
         -MMD -MT $(call gb_CObject_get_target,$(2)) \
         -MF $(call gb_CObject_get_dep_target,$(2)) \
         -I$(dir $(3)) \
-        $(6))
+        $(INCLUDE))
 endef
 
 
@@ -166,13 +166,13 @@ $(call gb_Helper_abbreviate_dirs,\
     mkdir -p $(dir $(1)) && \
     mkdir -p $(dir $(call gb_CxxObject_get_dep_target,$(2))) && \
     $(gb_CXX) \
-        $(4) $(5) \
+        $(DEFS) $(CXXFLAGS) \
         -c $(3) \
         -o $(1) \
         -MMD -MT $(call gb_CxxObject_get_target,$(2)) \
         -MF $(call gb_CxxObject_get_dep_target,$(2)) \
         -I$(dir $(3)) \
-        $(6))
+        $(INCLUDE_STL) $(INCLUDE))
 endef
 
 
@@ -239,23 +239,22 @@ endef
 
 # FIXME the DYLIB_FILE mess is only necessary because
 # solver layout is different from installation layout
-# parameters: 1-linktarget 2-targettype 3-ldflags 4-linked-libs 5-linked-static-libs 6-cobjects 7-cxxobjects 8-objcxxobjects
 define gb_LinkTarget__command_dynamiclink
 $(call gb_Helper_abbreviate_dirs,\
     mkdir -p $(dir $(1)) && \
     DYLIB_FILE=`$(gb_MKTEMP) $(dir $(1))` && \
-    $(PERL) $(SOLARENV)/bin/macosx-dylib-link-list.pl $(3) $(patsubst lib%.dylib,-l%,$(foreach lib,$(4),$(call gb_Library_get_filename,$(lib)))) > $${DYLIB_FILE} && \
+    $(PERL) $(SOLARENV)/bin/macosx-dylib-link-list.pl $(LDFLAGS) $(patsubst lib%.dylib,-l%,$(foreach lib,$(LINKED_LIBS),$(call gb_Library_get_filename,$(lib)))) > $${DYLIB_FILE} && \
     $(gb_CXX) \
-        $(3) \
-        $(call gb_LinkTarget__get_liblinkflags,$(4)) \
-        $(foreach object,$(6),$(call gb_CObject_get_target,$(object))) \
-        $(foreach object,$(7),$(call gb_CxxObject_get_target,$(object))) \
-        $(foreach object,$(8),$(call gb_ObjCxxObject_get_target,$(object))) \
-        $(foreach lib,$(5),$(call gb_StaticLibrary_get_target,$(lib))) \
+        $(RPATH) $(LDFLAGS) \
+        $(call gb_LinkTarget__get_liblinkflags,$(LINKED_LIBS)) \
+        $(foreach object,$(COBJECTS),$(call gb_CObject_get_target,$(object))) \
+        $(foreach object,$(CXXOBJECTS),$(call gb_CxxObject_get_target,$(object))) \
+        $(foreach object,$(OBJCXXOBJECTS),$(call gb_ObjCxxObject_get_target,$(object))) \
+        $(foreach lib,$(LINKED_STATIC_LIBS),$(call gb_StaticLibrary_get_target,$(lib))) \
         -o $(1) \
         `cat $${DYLIB_FILE}` && \
-    $(PERL) $(SOLARENV)/bin/macosx-change-install-names.pl $(2) $(call gb_LinkTarget__get_layer,$(2),$(1)) $(1) && \
-    $(if $(filter-out Executable,$(2)),ln -sf $(1) $(patsubst %.dynlib,%.jnilib,$(1)) && )
+    $(PERL) $(SOLARENV)/bin/macosx-change-install-names.pl $(TARGETTYPE) $(call gb_LinkTarget__get_layer,$(TARGETTYPE),$(1)) $(1) && \
+    $(if $(filter-out Executable,$(TARGETTYPE)),ln -sf $(1) $(patsubst %.dynlib,%.jnilib,$(1)) && )
     rm -f $${DYLIB_FILE})
 endef
 
@@ -264,15 +263,16 @@ define gb_LinkTarget__command_staticlink
 $(call gb_Helper_abbreviate_dirs,\
     mkdir -p $(dir $(1)) && \
     $(gb_AR) -rsu $(1) \
-        $(foreach object,$(2),$(call gb_CObject_get_target,$(object))) \
-        $(foreach object,$(3),$(call gb_CxxObject_get_target,$(object))) 2> /dev/null)
+        $(foreach object,$(COBJECTS),$(call gb_CObject_get_target,$(object))) \
+        $(foreach object,$(CXXOBJECTS),$(call gb_CxxObject_get_target,$(object))) 2> /dev/null)
 endef
 
 define gb_LinkTarget__command
 $(call gb_Output_announce,$(2),$(true),LNK,4)
-$(if $(filter Library CppunitTest Executable,$(3)),$(call gb_LinkTarget__command_dynamiclink,$(1),$(3),$(4),$(5),$(6),$(7),$(8),$(9)))
-$(if $(filter StaticLibrary,$(3)),$(call gb_LinkTarget__command_staticlink,$(1),$(7),$(8)))
+$(if $(filter Library CppunitTest Executable,$(TARGETTYPE)),$(call gb_LinkTarget__command_dynamiclink,$(1)))
+$(if $(filter StaticLibrary,$(TARGETTYPE)),$(call gb_LinkTarget__command_staticlink,$(1)))
 endef
+
 
 # Library class
 
@@ -320,12 +320,6 @@ gb_Library_FILENAMES := \
     $(foreach lib,$(gb_Library_UNOVERLIBS),$(lib):$(gb_Library_UNOVERPRE)$(lib)$(gb_Library_PLAINEXT)) \
 
 
-gb_Library_Library_platform =
-
-define gb_Library_get_rpath
-$(call gb_LinkTarget__get_installname,$(call gb_Library_get_filename,$(1)),$(call gb_LinkTarget__get_rpath_for_layer,$(call gb_Library_get_layer,$(1))))
-endef
-
 gb_Library_LAYER := \
     $(foreach lib,$(gb_Library_OOOLIBS),$(lib):OOO) \
     $(foreach lib,$(gb_Library_PLAINLIBS_URE),$(lib):URELIB) \
@@ -336,6 +330,15 @@ gb_Library_LAYER := \
     $(foreach lib,$(gb_Library_UNOLIBS_URE),$(lib):URELIB) \
     $(foreach lib,$(gb_Library_UNOLIBS_OOO),$(lib):OOO) \
     $(foreach lib,$(gb_Library_UNOVERLIBS),$(lib):URELIB) \
+
+define gb_Library_get_rpath
+$(call gb_LinkTarget__get_installname,$(call gb_Library_get_filename,$(1)),$(call gb_LinkTarget__get_rpath_for_layer,$(call gb_Library_get_layer,$(1))))
+endef
+
+define gb_Library_Library_platform
+$(call gb_LinkTarget_get_target,$(2)) : RPATH := $(call gb_Library_get_rpath,$(1))
+
+endef
 
 
 # StaticLibrary class
@@ -351,16 +354,11 @@ gb_StaticLibrary_FILENAMES := \
 
 gb_StaticLibrary_StaticLibrary_platform =
 
+
 # Executable class
 
 gb_Executable_EXT :=
 gb_Executable_TARGETTYPEFLAGS := -bind_at_load
-
-gb_Executable_Library_platform =
-
-define gb_Executable_get_rpath
-$(call gb_LinkTarget__get_installname,$(1),$(call gb_LinkTarget__get_rpath_for_layer,$(call gb_Executable_get_layer,$(1))))
-endef
 
 gb_Executable_LAYER := \
     $(foreach exe,$(gb_Executable_UREBIN),$(exe):UREBIN) \
@@ -369,6 +367,17 @@ gb_Executable_LAYER := \
     $(foreach exe,$(gb_Executable_BRAND),$(exe):BRAND) \
     $(foreach exe,$(gb_Executable_NONE),$(exe):NONEBIN) \
 
+
+define gb_Executable_get_rpath
+$(call gb_LinkTarget__get_installname,$(1),$(call gb_LinkTarget__get_rpath_for_layer,$(call gb_Executable_get_layer,$(1))))
+endef
+
+define gb_Executable_Executable_platform
+$(call gb_LinkTarget_get_target,$(2)) : RPATH := $(call gb_Executable_get_rpath,$(1))
+
+endef
+
+
 # CppunitTest class
 
 gb_CppunitTest_TARGETTYPEFLAGS := $(gb_Library_TARGETTYPEFLAGS)
@@ -376,6 +385,12 @@ gb_CppunitTest_CPPTESTPRECOMMAND :=
 gb_CppunitTest_SYSPRE := libtest_
 gb_CppunitTest_EXT := .dylib
 gb_CppunitTest_get_filename = $(gb_CppunitTest_SYSPRE)$(1)$(gb_CppunitTest_EXT)
+
+define gb_CppunitTest_CppunitTest_platform
+$(call gb_LinkTarget_get_target,$(2)) : RPATH :=
+
+endef
+
 
 # SdiTarget class
 
@@ -394,8 +409,8 @@ define gb_SrsPartTarget__command_dep
 $(call gb_Helper_abbreviate_dirs,\
     $(gb_GCCP) \
         -MM -MT $(call gb_SrsPartTarget_get_target,$(1)) \
-        $(3) \
-        $(4) \
+        $(INCLUDE) \
+        $(DEFS) \
         -c -x c++-header $(2) \
         -o $(call gb_SrsPartTarget_get_dep_target,$(1)))
 endef
