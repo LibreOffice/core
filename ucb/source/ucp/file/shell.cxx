@@ -1977,9 +1977,9 @@ void SAL_CALL shell::insertDefaultProperties( const rtl::OUString& aUnqPath )
 
 sal_Bool SAL_CALL shell::getUnqFromUrl( const rtl::OUString& Url,rtl::OUString& Unq )
 {
-    if( 0 == Url.compareToAscii( "file:///" ) ||
-        0 == Url.compareToAscii( "file://localhost/" ) ||
-        0 == Url.compareToAscii( "file://127.0.0.1/" ) )
+    if (Url.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("file:///")) ||
+        Url.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("file://localhost/")) ||
+        Url.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("file://127.0.0.1/")))
     {
         Unq = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("file:///"));
         return false;

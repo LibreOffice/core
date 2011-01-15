@@ -276,7 +276,7 @@ sal_Bool SAL_CALL
 BaseContent::supportsService( const rtl::OUString& ServiceName )
     throw( RuntimeException)
 {
-    if( ServiceName.compareToAscii( "com.sun.star.ucb.FileContent" ) == 0 )
+    if (ServiceName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.ucb.FileContent")))
         return true;
     else
         return false;
@@ -349,15 +349,15 @@ BaseContent::execute( const Command& aCommand,
 
     Any aAny;
 
-    if( ! aCommand.Name.compareToAscii( "getPropertySetInfo" ) )  // No exceptions
+    if (aCommand.Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("getPropertySetInfo")))  // No exceptions
     {
         aAny <<= getPropertySetInfo( CommandId );
     }
-    else if( ! aCommand.Name.compareToAscii( "getCommandInfo" ) )  // no exceptions
+    else if (aCommand.Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("getCommandInfo")))  // no exceptions
     {
         aAny <<= getCommandInfo();
     }
-    else if( ! aCommand.Name.compareToAscii( "setPropertyValues" ) )
+    else if (aCommand.Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("setPropertyValues")))
     {
         Sequence< beans::PropertyValue > sPropertyValues;
 
@@ -367,7 +367,7 @@ BaseContent::execute( const Command& aCommand,
         else
             aAny <<= setPropertyValues( CommandId,sPropertyValues );  // calls endTask by itself
     }
-    else if( ! aCommand.Name.compareToAscii( "getPropertyValues" ) )
+    else if (aCommand.Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("getPropertyValues")))
     {
         Sequence< beans::Property > ListOfRequestedProperties;
 
@@ -378,7 +378,7 @@ BaseContent::execute( const Command& aCommand,
             aAny <<= getPropertyValues( CommandId,
                                         ListOfRequestedProperties );
     }
-    else if( ! aCommand.Name.compareToAscii( "open" ) )
+    else if (aCommand.Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("open")))
     {
         OpenCommandArgument2 aOpenArgument;
         if( ! ( aCommand.Argument >>= aOpenArgument ) )
@@ -391,7 +391,7 @@ BaseContent::execute( const Command& aCommand,
                 aAny <<= result;
         }
     }
-    else if( ! aCommand.Name.compareToAscii( "delete" ) )
+    else if (aCommand.Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("delete")))
     {
         if( ! aCommand.Argument.has< sal_Bool >() )
             m_pMyShell->installError( CommandId,
@@ -399,7 +399,7 @@ BaseContent::execute( const Command& aCommand,
         else
             deleteContent( CommandId );
     }
-    else if( ! aCommand.Name.compareToAscii( "transfer" ) )
+    else if (aCommand.Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("transfer")))
     {
         TransferInfo aTransferInfo;
         if( ! ( aCommand.Argument >>= aTransferInfo ) )
@@ -408,7 +408,7 @@ BaseContent::execute( const Command& aCommand,
         else
             transfer( CommandId, aTransferInfo );
     }
-    else if( ! aCommand.Name.compareToAscii( "insert" ) )
+    else if (aCommand.Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("insert")))
     {
         InsertCommandArgument aInsertArgument;
         if( ! ( aCommand.Argument >>= aInsertArgument ) )
@@ -417,7 +417,7 @@ BaseContent::execute( const Command& aCommand,
         else
             insert( CommandId,aInsertArgument );
     }
-    else if( ! aCommand.Name.compareToAscii( "getCasePreservingURL" ) )
+    else if (aCommand.Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("getCasePreservingURL")))
     {
         Sequence< beans::Property > seq(1);
         seq[0] = beans::Property(
@@ -430,7 +430,7 @@ BaseContent::execute( const Command& aCommand,
         if(!xRow->wasNull())
             aAny <<= CasePreservingURL;
     }
-    else if( ! aCommand.Name.compareToAscii( "createNewContent" ) )
+    else if (aCommand.Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("createNewContent")))
     {
         ucb::ContentInfo aArg;
         if ( !( aCommand.Argument >>= aArg ) )
@@ -836,16 +836,16 @@ BaseContent::getPropertyValues(
             const beans::Property& rProp = pProps[ n ];
             Any& rValue = pValues[ n ];
 
-            if( rProp.Name.compareToAscii( "ContentType" ) == 0 )
+            if (rProp.Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("ContentType")))
             {
                 rValue <<= m_bFolder ? m_pMyShell->FolderContentType
                     : m_pMyShell->FileContentType;
             }
-            else if( rProp.Name.compareToAscii( "IsFolder" ) == 0 )
+            else if (rProp.Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("IsFolder")))
             {
                 rValue <<= m_bFolder;
             }
-            else if( rProp.Name.compareToAscii( "IsDocument" ) == 0 )
+            else if (rProp.Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("IsDocument")))
             {
                 rValue <<= sal_Bool( !m_bFolder );
             }
