@@ -46,9 +46,6 @@ using ::std::auto_ptr;
 using ::std::unary_function;
 using ::std::for_each;
 
-//2do: DocOption TimeOut?
-//#define SC_CHARTTIMEOUT 1000      // eine Sekunde keine Aenderung/KeyEvent
-
 // Update chart listeners quickly, to get a similar behavior to loaded charts
 // which register UNO listeners.
 #define SC_CHARTTIMEOUT 10

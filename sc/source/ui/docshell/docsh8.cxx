@@ -98,7 +98,6 @@ using ::std::vector;
 #define SC_SERVICE_DRVMAN           "com.sun.star.sdbc.DriverManager"
 
 //! move to a header file?
-//#define SC_DBPROP_DATASOURCENAME  "DataSourceName"
 #define SC_DBPROP_ACTIVECONNECTION  "ActiveConnection"
 #define SC_DBPROP_COMMAND           "Command"
 #define SC_DBPROP_COMMANDTYPE       "CommandType"

@@ -33,8 +33,6 @@
 
 // INCLUDE ---------------------------------------------------------------
 
-//#define SI_VCDRAWOBJ
-
 #include <tools/urlobj.hxx>
 #include <svx/fmglob.hxx>
 #include <svx/svdouno.hxx>

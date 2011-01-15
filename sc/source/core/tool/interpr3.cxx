@@ -57,8 +57,6 @@ using namespace formula;
 #define SCdEpsilon                1.0E-7
 #define SC_MAX_ITERATION_COUNT    20
 #define MAX_ANZ_DOUBLE_FOR_SORT 100000
-// PI jetzt als F_PI aus solar.h
-//#define   PI            3.1415926535897932
 
 const double ScInterpreter::fMaxGammaArgument = 171.624376956302;  // found experimental
 const double fMachEps = ::std::numeric_limits<double>::epsilon();

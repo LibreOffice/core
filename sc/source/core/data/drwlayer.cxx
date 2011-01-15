@@ -89,7 +89,6 @@
 
 //  Abstand zur naechsten Zelle beim Loeschen (bShrink), damit der Anker
 //  immer an der richtigen Zelle angezeigt wird
-//#define SHRINK_DIST       3
 //  und noch etwas mehr, damit das Objekt auch sichtbar in der Zelle liegt
 #define SHRINK_DIST     25
 

@@ -71,7 +71,6 @@
 #define LB_ALGORITHM        19
 #define BTN_NATURALSORT     20
 
-//#define RID_SCDLG_SORT_WARNING
 #define FT_TEXT             1
 #define FT_TIP              2
 #define BTN_EXTSORT         3
