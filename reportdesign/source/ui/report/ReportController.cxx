@@ -2526,8 +2526,8 @@ void OReportController::openPageDialog(const uno::Reference<report::XSection>& _
 
                     if ( SFX_ITEM_SET == pSet->GetItemState( RPTUI_ID_LRSPACE,sal_True,&pItem))
                     {
-                        xProp->setPropertyValue(PROPERTY_LEFTMARGIN,uno::makeAny(static_cast<const SvxLRSpaceItem*>(pItem)->GetLeft()));
-                        xProp->setPropertyValue(PROPERTY_RIGHTMARGIN,uno::makeAny(static_cast<const SvxLRSpaceItem*>(pItem)->GetRight()));
+                        xProp->setPropertyValue(PROPERTY_LEFTMARGIN,uno::makeAny((sal_Int32)static_cast<const SvxLRSpaceItem*>(pItem)->GetLeft()));
+                        xProp->setPropertyValue(PROPERTY_RIGHTMARGIN,uno::makeAny((sal_Int32)static_cast<const SvxLRSpaceItem*>(pItem)->GetRight()));
                     }
                     if ( SFX_ITEM_SET == pSet->GetItemState( RPTUI_ID_ULSPACE,sal_True,&pItem))
                     {
