@@ -243,7 +243,7 @@ private:
 uno::Any SAL_CALL ConfigurationErrorHandler::Context::getValueByName( OUString const & aName)
         throw (uno::RuntimeException)
 {
-    if ( aName.equalsAscii( CONFIG_ERROR_HANDLER ) )
+    if ( aName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(CONFIG_ERROR_HANDLER)) )
     {
         if ( !m_xHandler.is() )
             m_xHandler = ConfigurationErrorHandler::getDefaultInteractionHandler();
