@@ -304,6 +304,29 @@ struct WRITERFILTER_DLLPRIVATE TableInfo
 
 };
 
+namespace
+{
+
+bool lcl_extractTableBorderProperty(PropertyMapPtr pTableProperties, const PropertyIds nId, TableInfo& rInfo, table::BorderLine2& rLine)
+{
+    PropertyMap::iterator aTblBorderIter = pTableProperties->find( PropertyDefinition(nId, false) );
+    if( aTblBorderIter != pTableProperties->end() )
+    {
+        OSL_VERIFY(aTblBorderIter->second >>= rLine);
+
+        rInfo.pTableBorders->Insert( nId, false, uno::makeAny( rLine ) );
+        PropertyMap::iterator pIt = rInfo.pTableDefaults->find( PropertyDefinition( nId, false ) );
+        if ( pIt != rInfo.pTableDefaults->end( ) )
+            rInfo.pTableDefaults->erase( pIt );
+
+        return true;
+    }
+
+    return false;
+}
+
+}
+
 TableStyleSheetEntry * DomainMapperTableHandler::endTableGetTableStyle(TableInfo & rInfo)
 {
     // will receive the table style if any
@@ -392,89 +415,41 @@ TableStyleSheetEntry * DomainMapperTableHandler::endTableGetTableStyle(TableInfo
 
         //table border settings
         table::TableBorder aTableBorder;
+        table::BorderLine2 aBorderLine;
 
-        PropertyMap::iterator aTblBorderIter = m_aTableProperties->find( PropertyDefinition(PROP_TOP_BORDER, false) );
-        if( aTblBorderIter != m_aTableProperties->end() )
+        if (lcl_extractTableBorderProperty(m_aTableProperties, PROP_TOP_BORDER, rInfo, aBorderLine))
         {
-            aTblBorderIter->second >>= aTableBorder.TopLine;
-            aTableBorder.IsTopLineValid = true;
-            m_aTableProperties->erase( aTblBorderIter );
-
-            rInfo.pTableBorders->Insert( PROP_TOP_BORDER, false,
-                                        uno::makeAny( aTableBorder.TopLine ) );
-            PropertyMap::iterator pIt = rInfo.pTableDefaults->find( PropertyDefinition( PROP_TOP_BORDER, false ) );
-            if ( pIt != rInfo.pTableDefaults->end( ) )
-                rInfo.pTableDefaults->erase( pIt );
+            aTableBorder.TopLine = aBorderLine;
+            aTableBorder.IsTopLineValid = sal_True;
         }
-        aTblBorderIter = m_aTableProperties->find( PropertyDefinition(PROP_BOTTOM_BORDER, false) );
-        if( aTblBorderIter != m_aTableProperties->end() )
+        if (lcl_extractTableBorderProperty(m_aTableProperties, PROP_BOTTOM_BORDER, rInfo, aBorderLine))
         {
-            aTblBorderIter->second >>= aTableBorder.BottomLine;
-            aTableBorder.IsBottomLineValid = true;
-            m_aTableProperties->erase( aTblBorderIter );
-
-            rInfo.pTableBorders->Insert( PROP_BOTTOM_BORDER, false,
-                                        uno::makeAny( aTableBorder.BottomLine));
-            PropertyMap::iterator pIt = rInfo.pTableDefaults->find( PropertyDefinition( PROP_BOTTOM_BORDER, false ) );
-            if ( pIt != rInfo.pTableDefaults->end( ) )
-                rInfo.pTableDefaults->erase( pIt );
+            aTableBorder.BottomLine = aBorderLine;
+            aTableBorder.IsBottomLineValid = sal_True;
         }
-        aTblBorderIter = m_aTableProperties->find( PropertyDefinition(PROP_LEFT_BORDER, false) );
-        if( aTblBorderIter != m_aTableProperties->end() )
+        if (lcl_extractTableBorderProperty(m_aTableProperties, PROP_LEFT_BORDER, rInfo, aBorderLine))
         {
-            aTblBorderIter->second >>= aTableBorder.LeftLine;
-            aTableBorder.IsLeftLineValid = true;
-            m_aTableProperties->erase( aTblBorderIter );
-
-            rInfo.pTableBorders->Insert( PROP_LEFT_BORDER, false,
-                                        uno::makeAny( aTableBorder.LeftLine ) );
-            PropertyMap::iterator pIt = rInfo.pTableDefaults->find( PropertyDefinition( PROP_LEFT_BORDER, false ) );
-            if ( pIt != rInfo.pTableDefaults->end( ) )
-                rInfo.pTableDefaults->erase( pIt );
+            aTableBorder.LeftLine = aBorderLine;
+            aTableBorder.IsLeftLineValid = sal_True;
         }
-        aTblBorderIter = m_aTableProperties->find( PropertyDefinition(PROP_RIGHT_BORDER, false) );
-        if( aTblBorderIter != m_aTableProperties->end() )
+        if (lcl_extractTableBorderProperty(m_aTableProperties, PROP_RIGHT_BORDER, rInfo, aBorderLine))
         {
-            aTblBorderIter->second >>= aTableBorder.RightLine;
-            aTableBorder.IsRightLineValid = true;
-            m_aTableProperties->erase( aTblBorderIter );
-
-            rInfo.pTableBorders->Insert( PROP_RIGHT_BORDER, false,
-                                        uno::makeAny( aTableBorder.RightLine ) );
-            PropertyMap::iterator pIt = rInfo.pTableDefaults->find( PropertyDefinition( PROP_RIGHT_BORDER, false ) );
-            if ( pIt != rInfo.pTableDefaults->end( ) )
-                rInfo.pTableDefaults->erase( pIt );
+            aTableBorder.RightLine = aBorderLine;
+            aTableBorder.IsRightLineValid = sal_True;
         }
-        aTblBorderIter = m_aTableProperties->find( PropertyDefinition(META_PROP_HORIZONTAL_BORDER, false) );
-        if( aTblBorderIter != m_aTableProperties->end() )
+        if (lcl_extractTableBorderProperty(m_aTableProperties, META_PROP_HORIZONTAL_BORDER, rInfo, aBorderLine))
         {
-            aTblBorderIter->second >>= aTableBorder.HorizontalLine;
-            aTableBorder.IsHorizontalLineValid = true;
-            m_aTableProperties->erase( aTblBorderIter );
-
-            rInfo.pTableBorders->Insert
-                (META_PROP_HORIZONTAL_BORDER, false,
-                 uno::makeAny( aTableBorder.HorizontalLine ) );
-            PropertyMap::iterator pIt = rInfo.pTableDefaults->find( PropertyDefinition( META_PROP_HORIZONTAL_BORDER, false ) );
-            if ( pIt != rInfo.pTableDefaults->end( ) )
-                rInfo.pTableDefaults->erase( pIt );
+            aTableBorder.HorizontalLine = aBorderLine;
+            aTableBorder.IsHorizontalLineValid = sal_True;
         }
-        aTblBorderIter = m_aTableProperties->find( PropertyDefinition(META_PROP_VERTICAL_BORDER, false) );
-        if( aTblBorderIter != m_aTableProperties->end() )
+        if (lcl_extractTableBorderProperty(m_aTableProperties, META_PROP_VERTICAL_BORDER, rInfo, aBorderLine))
         {
-            aTblBorderIter->second >>= aTableBorder.VerticalLine;
-            aTableBorder.IsVerticalLineValid = true;
-            m_aTableProperties->erase( aTblBorderIter );
-
-            rInfo.pTableBorders->Insert
-                (META_PROP_VERTICAL_BORDER, false,
-                 uno::makeAny( aTableBorder.VerticalLine ) );
-            PropertyMap::iterator pIt = rInfo.pTableDefaults->find( PropertyDefinition( META_PROP_VERTICAL_BORDER, false ) );
-            if ( pIt != rInfo.pTableDefaults->end( ) )
-                rInfo.pTableDefaults->erase( pIt );
+            aTableBorder.VerticalLine = aBorderLine;
+            aTableBorder.IsVerticalLineValid = sal_True;
         }
+
         aTableBorder.Distance = 0;
-        aTableBorder.IsDistanceValid = false;
+        aTableBorder.IsDistanceValid = sal_False;
 
         m_aTableProperties->Insert( PROP_TABLE_BORDER, false, uno::makeAny( aTableBorder ) );
 
