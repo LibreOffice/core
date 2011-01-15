@@ -47,9 +47,13 @@ all:
 .IF "$(ENABLE_GRAPHITE)"=="TRUE"
 TARFILE_NAME=silgraphite-2.3.1
 TARFILE_MD5=d35724900f6a4105550293686688bbb3
+#graphite-updatewerror.patch -Werror passed to CFLAGS configure for
+#--enable-debug, but not in configure.ac, so update configure to
+#match
 PATCH_FILES=\
     graphite-2.3.1.patch \
-    graphite-removeobsolete.patch
+    graphite-removeobsolete.patch \
+    graphite-updatewerror.patch
 
 # convert line-endings to avoid problems when patching
 CONVERTFILES=\
