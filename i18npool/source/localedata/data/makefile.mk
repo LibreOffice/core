@@ -167,6 +167,7 @@ SHL3OBJS=	\
     $(SLO)$/localedata_de_DE.obj	\
     $(SLO)$/localedata_de_LI.obj	\
     $(SLO)$/localedata_de_LU.obj	\
+    $(SLO)$/localedata_dsb_DE.obj	\
     $(SLO)$/localedata_el_GR.obj	\
     $(SLO)$/localedata_et_EE.obj	\
     $(SLO)$/localedata_eu.obj	\
