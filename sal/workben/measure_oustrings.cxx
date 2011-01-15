@@ -214,6 +214,14 @@ SAL_IMPLEMENT_MAIN()
         sCompare.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("apple"));
     )
 
+    rtl::OUString sUnequalCompareTo(RTL_CONSTASCII_USTRINGPARAM_CLASSIC("apple"));
+
+    TIME
+    (
+        "operator==(precreated OUString(\"apple\"))",
+        sCompare == sUnequalCompareTo;
+    )
+
     TIME
     (
         "rtl::OUString::equalsAscii",
@@ -244,6 +252,14 @@ SAL_IMPLEMENT_MAIN()
     (
         "rtl::OUString::equalsAsciiL",
         sCompare.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("XXXXXXXXXXXXXXX"));
+    )
+
+    rtl::OUString sEqualCompareTo(RTL_CONSTASCII_USTRINGPARAM_CLASSIC("XXXXXXXXXXXXXXX"));
+
+    TIME
+    (
+        "operator==(precreated OUString(\"XXXXXXXXXXXXXXX\"))",
+        sCompare == sEqualCompareTo;
     )
 
     TIME
