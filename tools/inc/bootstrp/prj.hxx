@@ -31,8 +31,8 @@
 
 #include <tools/fsys.hxx>
 #include <tools/stream.hxx>
-#include "bootstrp/listmacr.hxx"
 #include <osl/mutex.hxx>
+#include <vector>
 
 #define OS_NONE             0x0000
 #define OS_WIN16            0x0001
@@ -180,34 +180,37 @@ public:
 *
 *********************************************************************/
 
-DECL_DEST_LIST ( PrjList_tmp, PrjList, CommandData * )
+typedef ::std::vector< CommandData* > PrjList;
 
 class Star;
-class Prj : public PrjList
+class Prj
 {
 friend class Star;
 private:
-    BOOL            bVisited;
+    PrjList             maList;
+    size_t              maCurrent;
+
+    BOOL                bVisited;
 
     ByteString          aPrjPath;
     ByteString          aProjectName;
     ByteString          aProjectPrefix;     // max. 2-buchstabige Abk.
     SByteStringList*    pPrjInitialDepList;
     SByteStringList*    pPrjDepList;
-    BOOL            bHardDependencies;
-    BOOL            bSorted;
+    BOOL                bHardDependencies;
+    BOOL                bSorted;
 
 public:
-                    Prj();
-                    Prj( ByteString aName );
-                    ~Prj();
-    void            SetPreFix( ByteString aPre ){aProjectPrefix = aPre;}
+                        Prj();
+                        Prj( ByteString aName );
+                        ~Prj();
+    void                SetPreFix( ByteString aPre ){aProjectPrefix = aPre;}
     ByteString          GetPreFix(){return aProjectPrefix;}
     ByteString          GetProjectName()
                             {return aProjectName;}
-    void            SetProjectName(ByteString aName)
+    void                SetProjectName(ByteString aName)
                             {aProjectName = aName;}
-    BOOL            InsertDirectory( ByteString aDirName , USHORT aWhat,
+    BOOL                InsertDirectory( ByteString aDirName , USHORT aWhat,
                                     USHORT aWhatOS, ByteString aLogFileName,
                                     const ByteString &rClientRestriction );
     CommandData*    RemoveDirectory( ByteString aLogFileName );
@@ -217,9 +220,55 @@ public:
                             { return GetDirectoryData( aLogFileName ); };
 
     SByteStringList*    GetDependencies( BOOL bExpanded = TRUE );
-    void            AddDependencies( ByteString aStr );
-    void            HasHardDependencies( BOOL bHard ) { bHardDependencies = bHard; }
-    BOOL            HasHardDependencies() { return bHardDependencies; }
+    void                AddDependencies( ByteString aStr );
+    void                HasHardDependencies( BOOL bHard ) { bHardDependencies = bHard; }
+    BOOL                HasHardDependencies() { return bHardDependencies; }
+
+    size_t              Count() const { return maList.size(); }
+
+    CommandData*        GetObject( size_t i ) { return ( i < maList.size() ) ? maList[ i ] : NULL; }
+
+    void                Insert( CommandData* item, size_t i )
+                        {
+                            if ( i < maList.size() )
+                            {
+                                PrjList::iterator it = maList.begin();
+                                ::std::advance( it, i );
+                                maList.insert( it, item );
+                                maCurrent = i;
+                            }
+                            else
+                            {
+                                maCurrent = maList.size();
+                                maList.push_back( item );
+                            }
+                        }
+
+    CommandData*        First()
+                        {
+                            maCurrent = 0;
+                            return maList.empty() ? NULL : maList[ 0 ];
+                        }
+
+    CommandData*        Next()
+                        {
+                            if ( maCurrent+1 >= maList.size() ) return NULL;
+                            maCurrent++;
+                            return maList[ maCurrent ];
+                        }
+
+    CommandData*        Remove( CommandData* item )
+                        {
+                            for ( PrjList::iterator it = maList.begin(); it < maList.end(); ++it  )
+                            {
+                                if ( *it == item )
+                                {
+                                    maList.erase( it );
+                                    return item;
+                                }
+                            }
+                            return NULL;
+                        }
 };
 
 /*********************************************************************
@@ -230,7 +279,6 @@ public:
 *
 *********************************************************************/
 
-DECL_DEST_LIST ( StarList_tmp, StarList, Prj* )
 DECLARE_LIST ( SolarFileList, String* )
 
 class StarFile
@@ -258,9 +306,14 @@ DECLARE_LIST( StarFileList, StarFile * )
 #define STAR_MODE_RECURSIVE_PARSE       0x0001
 #define STAR_MODE_MULTIPLE_PARSE        0x0002
 
-class Star : public StarList
+typedef ::std::vector< Prj* > StarList;
+
+class Star
 {
 private:
+    StarList        maStarList;
+    size_t          maCurrent;
+
     ByteString      aStarName;
 
     static Link aDBNotFoundHdl;
@@ -303,6 +356,54 @@ public:
     BOOL            NeedsUpdate();
 
     USHORT          GetMode() { return nStarMode; }
+
+    size_t          Count() const { return maStarList.size(); }
+
+    Prj*            GetObject( size_t i )
+                        { return ( i < maStarList.size() ) ? maStarList[ i ] : NULL; }
+
+    void            Insert( Prj* item, size_t i )
+                    {
+                        if ( i < maStarList.size() )
+                        {
+                            StarList::iterator it = maStarList.begin();
+                            ::std::advance( it, i );
+                            maStarList.insert( it, item );
+                            maCurrent = i;
+                        }
+                        else
+                        {
+                            maCurrent = maStarList.size();
+                            maStarList.push_back( item );
+                        }
+                    }
+
+    Prj*            First()
+                    {
+                        maCurrent = 0;
+                        return maStarList.empty() ? NULL : maStarList[ 0 ];
+                    }
+
+    Prj*            Next()
+                    {
+                        if ( maCurrent+1 >= maStarList.size() ) return NULL;
+                        maCurrent++;
+                        return maStarList[ maCurrent ];
+                    }
+
+    Prj*            Remove( Prj* item )
+                    {
+                        for ( StarList::iterator it = maStarList.begin(); it < maStarList.end(); ++it  )
+                        {
+                            if ( *it == item )
+                            {
+                                maStarList.erase( it );
+                                return item;
+                            }
+                        }
+                        return NULL;
+                    }
+
 };
 
 class StarWriter : public Star
@@ -322,7 +423,7 @@ public:
     Prj*            RemoveProject ( ByteString aProjectName );
 
     USHORT          Read( String aFileName, BOOL bReadComments = FALSE, USHORT nMode = STAR_MODE_SINGLE_PARSE  );
-       USHORT           Read( SolarFileList *pSolarFiles, BOOL bReadComments = FALSE );
+    USHORT          Read( SolarFileList *pSolarFiles, BOOL bReadComments = FALSE );
     USHORT          Write( String aFileName );
     USHORT          WriteMultiple( String rSourceRoot );
 

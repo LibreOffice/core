@@ -19,7 +19,6 @@ mkdir: %_DEST%\inc%_EXT%\bootstrp
 
 ..\inc\bootstrp\command.hxx %_DEST%\inc%_EXT%\bootstrp\command.hxx
 ..\inc\bootstrp\inimgr.hxx %_DEST%\inc%_EXT%\bootstrp\inimgr.hxx
-..\inc\bootstrp\listmacr.hxx %_DEST%\inc%_EXT%\bootstrp\listmacr.hxx
 ..\inc\bootstrp\mkcreate.hxx %_DEST%\inc%_EXT%\bootstrp\mkcreate.hxx
 ..\inc\bootstrp\prj.hxx %_DEST%\inc%_EXT%\bootstrp\prj.hxx
 ..\inc\bootstrp\sstring.hxx %_DEST%\inc%_EXT%\bootstrp\sstring.hxx

@@ -141,7 +141,6 @@ ByteString SimpleConfig::GetCleanedNextLine( BOOL bReadComments )
 
     aTmpStr = aTmpStr.EraseLeadingChars();
     aTmpStr = aTmpStr.EraseTrailingChars();
-//  while ( aTmpStr.SearchAndReplace(String(' '),String('\t') ) != (USHORT)-1 );
     int nLength = aTmpStr.Len();
     ByteString aEraseString;
     BOOL bFirstTab = TRUE;
@@ -311,6 +310,10 @@ Prj::~Prj()
 {
     if ( pPrjDepList )
     {
+        for ( size_t i = 0, n = maList.size(); i < n; ++i )
+            delete maList[ i ];
+        maList.clear();
+
         ByteString *pString = pPrjDepList->First();
         while ( pString )
         {
@@ -379,7 +382,7 @@ BOOL Prj::InsertDirectory ( ByteString aDirName, USHORT aWhat,
     pData->SetLogFile( aLogFileName );
     pData->SetClientRestriction( rClientRestriction );
 
-    Insert( pData );
+    maList.push_back( pData );
 
     return FALSE;
 }
@@ -391,14 +394,14 @@ BOOL Prj::InsertDirectory ( ByteString aDirName, USHORT aWhat,
 CommandData* Prj::RemoveDirectory ( ByteString aLogFileName )
 /*****************************************************************************/
 {
-    ULONG nCountMember = Count();
+    size_t nCountMember = maList.size();
     CommandData* pData;
     CommandData* pDataFound = NULL;
     SByteStringList* pDataDeps;
 
-    for ( USHORT i = 0; i < nCountMember; i++ )
+    for ( size_t i = 0; i < nCountMember; i++ )
     {
-        pData = GetObject( i );
+        pData = maList[ i ];
         if ( pData->GetLogFile() == aLogFileName )
             pDataFound = pData;
         else
@@ -564,6 +567,9 @@ Star::Star( GenericInformationList *pStandLst, ByteString &rVersion,
 Star::~Star()
 /*****************************************************************************/
 {
+    for ( size_t i = 0, n = maStarList.size(); i < n; ++i )
+        delete maStarList[ i ];
+    maStarList.clear();
 }
 
 /*****************************************************************************/
@@ -613,7 +619,7 @@ void Star::Read( String &rFileName )
 void Star::Read( SolarFileList *pSolarFiles )
 /*****************************************************************************/
 {
-    while(  pSolarFiles->Count()) {
+    while(  pSolarFiles->Count() ) {
         ByteString aString;
 
         StarFile *pFile = new StarFile( *pSolarFiles->GetObject(( ULONG ) 0 ));
@@ -938,7 +944,6 @@ Prj* Star::GetPrj ( ByteString aProjectName )
         if ( pPrj->GetProjectName().EqualsIgnoreCaseAscii(aProjectName) )
             return pPrj;
     }
-//  return (Prj*)NULL;
     return 0L ;
 }
 
@@ -1529,12 +1534,12 @@ BOOL StarWriter::InsertProject ( Prj* )
 Prj* StarWriter::RemoveProject ( ByteString aProjectName )
 /*****************************************************************************/
 {
-    ULONG nCountMember = Count();
+    size_t nCountMember = Count();
     Prj* pPrj;
     Prj* pPrjFound = NULL;
     SByteStringList* pPrjDeps;
 
-    for ( USHORT i = 0; i < nCountMember; i++ )
+    for ( size_t i = 0; i < nCountMember; i++ )
     {
         pPrj = GetObject( i );
         if ( pPrj->GetProjectName() == aProjectName )
