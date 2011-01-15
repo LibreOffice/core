@@ -246,7 +246,7 @@ SAL_IMPLEMENT_MAIN()
         sCompare == rtl::OUString(RTL_CONSTASCII_USTRINGPARAM_CLASSIC("apple"));
     )
 
-    std::cout << "--Ascii Unequal Comparison--" << std::endl;
+    std::cout << "--Ascii Equal Comparison--" << std::endl;
 
     TIME
     (
