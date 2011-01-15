@@ -364,7 +364,7 @@ namespace dbaui
             }
             return xRet;
         }
-        catch (com::sun::star::io::WrongFormatException e)
+        catch (com::sun::star::io::WrongFormatException &e)
         {
             com::sun::star::sdbc::SQLException aSQLException;
             aSQLException.Message = e.Message;

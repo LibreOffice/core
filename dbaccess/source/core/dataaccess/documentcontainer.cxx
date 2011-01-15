@@ -570,7 +570,7 @@ Reference< XComponent > SAL_CALL ODocumentContainer::loadComponentFromURL( const
     {
         throw IllegalArgumentException();
     }
-    catch(WrappedTargetException e)
+    catch(WrappedTargetException &e)
     {
         throw;
     }

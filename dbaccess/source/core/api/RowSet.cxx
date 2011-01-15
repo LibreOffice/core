@@ -1821,7 +1821,6 @@ void ORowSet::execute_NoApprove_NoNewConn(ResettableMutexGuard& _rClearForNotifi
         ::rtl::Reference< ::connectivity::OSQLColumns> aColumns = new ::connectivity::OSQLColumns();
         ::std::vector< ::rtl::OUString> aNames;
         ::rtl::OUString aDescription;
-        sal_Int32 nFormatKey = 0;
 
         const ::std::map<sal_Int32,sal_Int32>& rKeyColumns = m_pCache->getKeyColumns();
         if(!m_xColumns.is())
@@ -1872,7 +1871,7 @@ void ORowSet::execute_NoApprove_NoNewConn(ResettableMutexGuard& _rClearForNotifi
 
                         try
                         {
-                            nFormatKey = 0;
+                            sal_Int32 nFormatKey = 0;
                             if(m_xNumberFormatTypes.is())
                                 nFormatKey = ::dbtools::getDefaultNumberFormat(pColumn,m_xNumberFormatTypes,aLocale);
 
