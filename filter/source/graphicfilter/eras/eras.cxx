@@ -40,7 +40,7 @@ class RASWriter {
 
 private:
 
-    SvStream*           mpOStm;
+    SvStream & m_rOStm;
     USHORT              mpOStmOldModus;
 
     BOOL                mbStatus;
@@ -61,18 +61,19 @@ private:
     void                ImplPutByte( BYTE );    // RLE decoding
 
 public:
-                        RASWriter();
-                        ~RASWriter();
+    RASWriter(SvStream &rStream);
+    ~RASWriter();
 
-    BOOL                WriteRAS( const Graphic& rGraphic, SvStream& rRAS, FilterConfigItem* pFilterConfigItem );
+    BOOL WriteRAS( const Graphic& rGraphic, FilterConfigItem* pFilterConfigItem );
 };
 
 //=================== Methoden von RASWriter ==============================
 
-RASWriter::RASWriter() :
-    mbStatus    ( TRUE ),
-    mpAcc       ( NULL ),
-    mnRepCount  ( 0xffffffff )
+RASWriter::RASWriter(SvStream &rStream)
+    : m_rOStm(rStream)
+    , mbStatus(TRUE)
+    , mpAcc(NULL)
+    , mnRepCount( 0xffffffff )
 {
 }
 
@@ -92,11 +93,9 @@ void RASWriter::ImplCallback( ULONG nYPos )
 
 //  ------------------------------------------------------------------------
 
-BOOL RASWriter::WriteRAS( const Graphic& rGraphic, SvStream& rRAS, FilterConfigItem* pFilterConfigItem)
+BOOL RASWriter::WriteRAS( const Graphic& rGraphic, FilterConfigItem* pFilterConfigItem)
 {
     Bitmap  aBmp;
-
-    mpOStm = &rRAS;
 
     if ( pFilterConfigItem )
     {
@@ -122,8 +121,8 @@ BOOL RASWriter::WriteRAS( const Graphic& rGraphic, SvStream& rRAS, FilterConfigI
     mpAcc = aBmp.AcquireReadAccess();
     if ( mpAcc )
     {
-        mpOStmOldModus = mpOStm->GetNumberFormatInt();
-        mpOStm->SetNumberFormatInt( NUMBERFORMAT_INT_BIGENDIAN );
+        mpOStmOldModus = m_rOStm.GetNumberFormatInt();
+        m_rOStm.SetNumberFormatInt( NUMBERFORMAT_INT_BIGENDIAN );
 
         if ( ImplWriteHeader() )
         {
@@ -136,7 +135,7 @@ BOOL RASWriter::WriteRAS( const Graphic& rGraphic, SvStream& rRAS, FilterConfigI
     else
         mbStatus = FALSE;
 
-    mpOStm->SetNumberFormatInt( mpOStmOldModus );
+    m_rOStm.SetNumberFormatInt( mpOStmOldModus );
 
     if ( xStatusIndicator.is() )
         xStatusIndicator->end();
@@ -158,17 +157,17 @@ BOOL RASWriter::ImplWriteHeader()
     }
         if ( mbStatus && mnWidth && mnHeight && mnDepth )
     {
-        *mpOStm << (UINT32)0x59a66a95 << (UINT32)mnWidth << (UINT32)mnHeight
+        m_rOStm << (UINT32)0x59a66a95 << (UINT32)mnWidth << (UINT32)mnHeight
             << (UINT32)mnDepth
             << (UINT32)(( ( ( ( mnWidth * mnDepth ) + 15 ) >> 4 ) << 1 ) * mnHeight)
             << (UINT32)2;
 
         if ( mnDepth > 8 )
-            *mpOStm << (UINT32)0 << (UINT32)0;
+            m_rOStm << (UINT32)0 << (UINT32)0;
         else
         {
 
-            *mpOStm << (UINT32)1 << (UINT32)( mnColors * 3 );
+            m_rOStm << (UINT32)1 << (UINT32)( mnColors * 3 );
         }
     }
     else mbStatus = FALSE;
@@ -182,9 +181,9 @@ void RASWriter::ImplWritePalette()
 {
     USHORT i;
 
-    for ( i = 0; i < mnColors; *mpOStm << mpAcc->GetPaletteColor( i++ ).GetRed() ) ;
-    for ( i = 0; i < mnColors; *mpOStm << mpAcc->GetPaletteColor( i++ ).GetGreen() ) ;
-    for ( i = 0; i < mnColors; *mpOStm << mpAcc->GetPaletteColor( i++ ).GetBlue() ) ;
+    for ( i = 0; i < mnColors; m_rOStm << mpAcc->GetPaletteColor( i++ ).GetRed() ) ;
+    for ( i = 0; i < mnColors; m_rOStm << mpAcc->GetPaletteColor( i++ ).GetGreen() ) ;
+    for ( i = 0; i < mnColors; m_rOStm << mpAcc->GetPaletteColor( i++ ).GetBlue() ) ;
 }
 
 // ------------------------------------------------------------------------
@@ -259,15 +258,15 @@ void RASWriter::ImplPutByte( BYTE nPutThis )
         {
             if ( mnRepCount == 0 )
             {
-                *mpOStm << (BYTE)mnRepVal;
+                m_rOStm << (BYTE)mnRepVal;
                 if ( mnRepVal == 0x80 )
-                    *mpOStm << (BYTE)0;
+                    m_rOStm << (BYTE)0;
             }
             else
             {
-                *mpOStm << (BYTE)0x80;
-                *mpOStm << (BYTE)mnRepCount;
-                *mpOStm << (BYTE)mnRepVal;
+                m_rOStm << (BYTE)0x80;
+                m_rOStm << (BYTE)mnRepCount;
+                m_rOStm << (BYTE)mnRepVal;
             }
             mnRepVal = nPutThis;
             mnRepCount = 0;
@@ -283,9 +282,9 @@ void RASWriter::ImplPutByte( BYTE nPutThis )
 
 extern "C" BOOL __LOADONCALLAPI GraphicExport( SvStream& rStream, Graphic& rGraphic, FilterConfigItem* pFilterConfigItem, BOOL )
 {
-    RASWriter aRASWriter;
+    RASWriter aRASWriter(rStream);
 
-    return aRASWriter.WriteRAS( rGraphic, rStream, pFilterConfigItem );
+    return aRASWriter.WriteRAS( rGraphic, pFilterConfigItem );
 }
 
 // ---------------
