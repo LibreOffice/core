@@ -46,7 +46,7 @@ class PGMWriter {
 
 private:
 
-    SvStream*           mpOStm;             // Die auszugebende PGM-Datei
+    SvStream& m_rOStm;          // Die auszugebende PGM-Datei
     USHORT              mpOStmOldModus;
 
     BOOL                mbStatus;
@@ -61,17 +61,18 @@ private:
     com::sun::star::uno::Reference< com::sun::star::task::XStatusIndicator > xStatusIndicator;
 
 public:
-                        PGMWriter();
-                        ~PGMWriter();
+    PGMWriter(SvStream &rStream);
+    ~PGMWriter();
 
-    BOOL                WritePGM( const Graphic& rGraphic, SvStream& rPGM, FilterConfigItem* pFilterConfigItem );
+    BOOL WritePGM( const Graphic& rGraphic, FilterConfigItem* pFilterConfigItem );
 };
 
 //=================== Methoden von PGMWriter ==============================
 
-PGMWriter::PGMWriter() :
-    mbStatus    ( TRUE ),
-    mpAcc       ( NULL )
+PGMWriter::PGMWriter(SvStream &rStream)
+    : m_rOStm(rStream)
+    , mbStatus(TRUE)
+    , mpAcc(NULL)
 {
 }
 
@@ -83,11 +84,8 @@ PGMWriter::~PGMWriter()
 
 // ------------------------------------------------------------------------
 
-BOOL PGMWriter::WritePGM( const Graphic& rGraphic, SvStream& rPGM, FilterConfigItem* pFilterConfigItem )
+BOOL PGMWriter::WritePGM( const Graphic& rGraphic, FilterConfigItem* pFilterConfigItem )
 {
-
-    mpOStm = &rPGM;
-
     if ( pFilterConfigItem )
     {
         mnMode = pFilterConfigItem->ReadInt32( String( RTL_CONSTASCII_USTRINGPARAM( "FileFormat" ) ), 0 );
@@ -104,8 +102,8 @@ BOOL PGMWriter::WritePGM( const Graphic& rGraphic, SvStream& rPGM, FilterConfigI
     Bitmap      aBmp = aBmpEx.GetBitmap();
     aBmp.Convert( BMP_CONVERSION_8BIT_GREYS );
 
-    mpOStmOldModus = mpOStm->GetNumberFormatInt();
-    mpOStm->SetNumberFormatInt( NUMBERFORMAT_INT_BIGENDIAN );
+    mpOStmOldModus = m_rOStm.GetNumberFormatInt();
+    m_rOStm.SetNumberFormatInt( NUMBERFORMAT_INT_BIGENDIAN );
 
     mpAcc = aBmp.AcquireReadAccess();
     if( mpAcc )
@@ -119,7 +117,7 @@ BOOL PGMWriter::WritePGM( const Graphic& rGraphic, SvStream& rPGM, FilterConfigI
     else
         mbStatus = FALSE;
 
-    mpOStm->SetNumberFormatInt( mpOStmOldModus );
+    m_rOStm.SetNumberFormatInt( mpOStmOldModus );
 
     if ( xStatusIndicator.is() )
         xStatusIndicator->end();
@@ -136,16 +134,16 @@ BOOL PGMWriter::ImplWriteHeader()
     if ( mnWidth && mnHeight )
     {
         if ( mnMode == 0 )
-            *mpOStm << "P5\x0a";
+            m_rOStm << "P5\x0a";
         else
-            *mpOStm << "P2\x0a";
+            m_rOStm << "P2\x0a";
 
         ImplWriteNumber( mnWidth );
-        *mpOStm << (BYTE)32;
+        m_rOStm << (BYTE)32;
         ImplWriteNumber( mnHeight );
-        *mpOStm << (BYTE)32;
+        m_rOStm << (BYTE)32;
         ImplWriteNumber( 255 );         // max. gray value
-        *mpOStm << (BYTE)10;
+        m_rOStm << (BYTE)10;
     }
     else
         mbStatus = FALSE;
@@ -163,7 +161,7 @@ void PGMWriter::ImplWriteBody()
         {
             for ( ULONG x = 0; x < mnWidth; x++ )
             {
-                *mpOStm << (BYTE)( mpAcc->GetPixel( y, x ) );
+                m_rOStm << (BYTE)( mpAcc->GetPixel( y, x ) );
             }
         }
     }
@@ -178,18 +176,18 @@ void PGMWriter::ImplWriteBody()
                 if ( nCount < 0 )
                 {
                     nCount = 69;
-                    *mpOStm << (BYTE)10;
+                    m_rOStm << (BYTE)10;
                 }
                 nDat = (BYTE)mpAcc->GetPixel( y, x );
                 nNumb = nDat / 100;
                 if ( nNumb )
                 {
-                    *mpOStm << (BYTE)( nNumb + '0' );
+                    m_rOStm << (BYTE)( nNumb + '0' );
                     nDat -= ( nNumb * 100 );
                     nNumb = nDat / 10;
-                    *mpOStm << (BYTE)( nNumb + '0' );
+                    m_rOStm << (BYTE)( nNumb + '0' );
                     nDat -= ( nNumb * 10 );
-                    *mpOStm << (BYTE)( nDat + '0' );
+                    m_rOStm << (BYTE)( nDat + '0' );
                     nCount -= 4;
                 }
                 else
@@ -197,20 +195,20 @@ void PGMWriter::ImplWriteBody()
                     nNumb = nDat / 10;
                     if ( nNumb )
                     {
-                        *mpOStm << (BYTE)( nNumb + '0' );
+                        m_rOStm << (BYTE)( nNumb + '0' );
                         nDat -= ( nNumb * 10 );
-                        *mpOStm << (BYTE)( nDat + '0' );
+                        m_rOStm << (BYTE)( nDat + '0' );
                         nCount -= 3;
                     }
                     else
                     {
-                        *mpOStm << (BYTE)( nDat + '0' );
+                        m_rOStm << (BYTE)( nDat + '0' );
                         nCount -= 2;
                     }
                 }
-                *mpOStm << (BYTE)' ';
+                m_rOStm << (BYTE)' ';
             }
-            *mpOStm << (BYTE)10;
+            m_rOStm << (BYTE)10;
         }
     }
 }
@@ -223,7 +221,7 @@ void PGMWriter::ImplWriteNumber( sal_Int32 nNumber )
     const ByteString aNum( ByteString::CreateFromInt32( nNumber ) );
 
     for( sal_Int16 n = 0UL, nLen = aNum.Len(); n < nLen; n++  )
-        *mpOStm << aNum.GetChar( n );
+        m_rOStm << aNum.GetChar( n );
 
 }
 
@@ -235,9 +233,9 @@ void PGMWriter::ImplWriteNumber( sal_Int32 nNumber )
 
 extern "C" BOOL __LOADONCALLAPI GraphicExport( SvStream& rStream, Graphic& rGraphic, FilterConfigItem* pFilterConfigItem, BOOL )
 {
-    PGMWriter aPGMWriter;
+    PGMWriter aPGMWriter(rStream);
 
-    return aPGMWriter.WritePGM( rGraphic, rStream, pFilterConfigItem );
+    return aPGMWriter.WritePGM( rGraphic, pFilterConfigItem );
 }
 
 // ------------------------------------------------------------------------
