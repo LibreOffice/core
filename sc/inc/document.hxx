@@ -148,7 +148,6 @@ class ScRowBreakIterator;
 struct ScSetStringParam;
 class ScDocRowHeightUpdater;
 struct ScColWidthParam;
-class ScDPTableDataCache;
 struct ScCopyBlockFromClipParams;
 
 namespace com { namespace sun { namespace star {

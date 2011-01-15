@@ -177,7 +177,6 @@ ScDPObject::ScDPObject( ScDocument* pD ) :
 }
 
 ScDPObject::ScDPObject(const ScDPObject& r) :
-    ScDataObject(),
     pDoc( r.pDoc ),
     pSaveData( NULL ),
     aTableName( r.aTableName ),
@@ -217,11 +216,6 @@ ScDPObject::~ScDPObject()
     delete pServDesc;
     mnCacheId = -1;
     InvalidateSource();
-}
-
-ScDataObject* ScDPObject::Clone() const
-{
-    return new ScDPObject(*this);
 }
 
 void ScDPObject::SetAlive(BOOL bSet)

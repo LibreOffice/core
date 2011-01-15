@@ -91,7 +91,7 @@ struct ScDPServiceDesc
 };
 
 
-class SC_DLLPUBLIC ScDPObject : public ScDataObject
+class SC_DLLPUBLIC ScDPObject
 {
 private:
     ScDocument*             pDoc;
@@ -128,9 +128,7 @@ public:
     ULONG RefreshCache();
                 ScDPObject( ScDocument* pD );
                 ScDPObject(const ScDPObject& r);
-    virtual     ~ScDPObject();
-
-    virtual ScDataObject*   Clone() const;
+                ~ScDPObject();
 
     /**
      * When a DP object is "alive", it has table output on a sheet.  This flag
