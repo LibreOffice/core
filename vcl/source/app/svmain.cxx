@@ -248,7 +248,7 @@ Any SAL_CALL DesktopEnvironmentContext::getValueByName( const rtl::OUString& Nam
 {
     Any retVal;
 
-    if ( 0 == Name.compareToAscii( "system.desktop-environment" ) )
+    if (Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("system.desktop-environment")))
     {
         retVal = makeAny( Application::GetDesktopEnvironment() );
     }
