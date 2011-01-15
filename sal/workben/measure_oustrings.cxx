@@ -140,7 +140,7 @@ SAL_IMPLEMENT_MAIN()
     }
 #endif
 
-    std::cout << "--Empty Strings--" << std::endl;
+    std::cout << "--Empty Strings Construction--" << std::endl;
 
     TIME
     (
@@ -154,7 +154,7 @@ SAL_IMPLEMENT_MAIN()
         rtl::OUString sFoo(rtl::OUString::createFromAscii(""));
     )
 
-    std::cout << "--Single Chars--" << std::endl;
+    std::cout << "--Single Chars Construction--" << std::endl;
 
     TIME
     (
@@ -182,7 +182,7 @@ SAL_IMPLEMENT_MAIN()
         rtl::OUString sFoo(rtl::OUString::createFromAscii("X"));
     )
 
-    std::cout << "--MultiChar Strings--" << std::endl;
+    std::cout << "--MultiChar Strings Construction--" << std::endl;
 
 #ifdef SAL_DECLARE_UTF16
     TIME
@@ -202,6 +202,34 @@ SAL_IMPLEMENT_MAIN()
     (
         "rtl::OUString::createFromAscii(\"XXXXXXXX\")",
         rtl::OUString sFoo(rtl::OUString::createFromAscii("XXXXXXXXXXXXXXX"));
+    )
+
+    std::cout << "--Ascii String Comparison--" << std::endl;
+
+    rtl::OUString sCompare(RTL_CONSTASCII_USTRINGPARAM_CLASSIC("XXXXXXXXXXXXXXX"));
+
+    TIME
+    (
+        "rtl::OUString::equalsAsciiL (false)",
+        sCompare.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("apple"));
+    )
+
+    TIME
+    (
+        "rtl::OUString::equalsAscii (false)",
+        sCompare.equalsAscii("apple");
+    )
+
+    TIME
+    (
+        "rtl::OUString::equalsAsciiL(true)",
+        sCompare.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("XXXXXXXXXXXXXXX"));
+    )
+
+    TIME
+    (
+        "rtl::OUString::equalsAscii (true)",
+        sCompare.equalsAscii("XXXXXXXXXXXXXXX");
     )
 
     return 0;
