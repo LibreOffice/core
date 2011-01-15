@@ -46,7 +46,7 @@ class PBMWriter {
 
 private:
 
-    SvStream*           mpOStm;             // Die auszugebende PBM-Datei
+    SvStream& m_rOStm;          // Die auszugebende PBM-Datei
     USHORT              mpOStmOldModus;
 
     BOOL                mbStatus;
@@ -61,17 +61,18 @@ private:
     com::sun::star::uno::Reference< com::sun::star::task::XStatusIndicator > xStatusIndicator;
 
 public:
-                        PBMWriter();
-                        ~PBMWriter();
+    PBMWriter(SvStream &rPBM);
+    ~PBMWriter();
 
-    BOOL                WritePBM( const Graphic& rGraphic, SvStream& rPBM, FilterConfigItem* pFilterConfigItem );
+    BOOL WritePBM( const Graphic& rGraphic, FilterConfigItem* pFilterConfigItem );
 };
 
 //=================== Methoden von PBMWriter ==============================
 
-PBMWriter::PBMWriter() :
-    mbStatus    ( TRUE ),
-    mpAcc       ( NULL )
+PBMWriter::PBMWriter(SvStream &rPBM)
+    : m_rOStm(rPBM)
+    , mbStatus(TRUE)
+    , mpAcc(NULL)
 {
 }
 
@@ -83,11 +84,8 @@ PBMWriter::~PBMWriter()
 
 // ------------------------------------------------------------------------
 
-BOOL PBMWriter::WritePBM( const Graphic& rGraphic, SvStream& rPBM, FilterConfigItem* pFilterConfigItem )
+BOOL PBMWriter::WritePBM( const Graphic& rGraphic, FilterConfigItem* pFilterConfigItem )
 {
-
-    mpOStm = &rPBM;
-
     if ( pFilterConfigItem )
     {
         mnMode = pFilterConfigItem->ReadInt32( String( RTL_CONSTASCII_USTRINGPARAM( "FileFormat" ) ), 0 );
@@ -104,8 +102,8 @@ BOOL PBMWriter::WritePBM( const Graphic& rGraphic, SvStream& rPBM, FilterConfigI
     Bitmap      aBmp = aBmpEx.GetBitmap();
     aBmp.Convert( BMP_CONVERSION_1BIT_THRESHOLD );
 
-    mpOStmOldModus = mpOStm->GetNumberFormatInt();
-    mpOStm->SetNumberFormatInt( NUMBERFORMAT_INT_BIGENDIAN );
+    mpOStmOldModus = m_rOStm.GetNumberFormatInt();
+    m_rOStm.SetNumberFormatInt( NUMBERFORMAT_INT_BIGENDIAN );
 
     mpAcc = aBmp.AcquireReadAccess();
     if( mpAcc )
@@ -118,7 +116,7 @@ BOOL PBMWriter::WritePBM( const Graphic& rGraphic, SvStream& rPBM, FilterConfigI
     else
         mbStatus = FALSE;
 
-    mpOStm->SetNumberFormatInt( mpOStmOldModus );
+    m_rOStm.SetNumberFormatInt( mpOStmOldModus );
 
     if ( xStatusIndicator.is() )
         xStatusIndicator->end();
@@ -135,14 +133,14 @@ BOOL PBMWriter::ImplWriteHeader()
     if ( mnWidth && mnHeight )
     {
         if ( mnMode == 0 )
-            *mpOStm << "P4\x0a";
+            m_rOStm << "P4\x0a";
         else
-            *mpOStm << "P1\x0a";
+            m_rOStm << "P1\x0a";
 
         ImplWriteNumber( mnWidth );
-        *mpOStm << (BYTE)32;
+        m_rOStm << (BYTE)32;
         ImplWriteNumber( mnHeight );
-        *mpOStm << (BYTE)10;
+        m_rOStm << (BYTE)10;
     }
     else mbStatus = FALSE;
     return mbStatus;
@@ -164,10 +162,10 @@ void PBMWriter::ImplWriteBody()
                 if (!(mpAcc->GetPixel( y, x ) & 1 ) )
                     nBYTE++;
                 if ( ( x & 7 ) == 7 )
-                    *mpOStm << nBYTE;
+                    m_rOStm << nBYTE;
             }
             if ( ( x & 7 ) != 0 )
-                *mpOStm << (BYTE)( nBYTE << ( ( x ^ 7 ) + 1 ) );
+                m_rOStm << (BYTE)( nBYTE << ( ( x ^ 7 ) + 1 ) );
         }
     }
     else
@@ -181,11 +179,11 @@ void PBMWriter::ImplWriteBody()
                 if (!( --nxCount ) )
                 {
                     nxCount = 69;
-                    *mpOStm << (BYTE)10;
+                    m_rOStm << (BYTE)10;
                 }
-                *mpOStm << (BYTE)( ( mpAcc->GetPixel( y, x ) ^ 1 ) + '0' ) ;
+                m_rOStm << (BYTE)( ( mpAcc->GetPixel( y, x ) ^ 1 ) + '0' ) ;
             }
-            *mpOStm << (BYTE)10;
+            m_rOStm << (BYTE)10;
         }
     }
 }
@@ -198,7 +196,7 @@ void PBMWriter::ImplWriteNumber( sal_Int32 nNumber )
     const ByteString aNum( ByteString::CreateFromInt32( nNumber ) );
 
     for( sal_Int16 n = 0, nLen = aNum.Len(); n < nLen; n++ )
-        *mpOStm << aNum.GetChar( n );
+        m_rOStm << aNum.GetChar( n );
 
 }
 
@@ -210,9 +208,9 @@ void PBMWriter::ImplWriteNumber( sal_Int32 nNumber )
 
 extern "C" BOOL __LOADONCALLAPI GraphicExport( SvStream& rStream, Graphic& rGraphic, FilterConfigItem* pFilterConfigItem, BOOL )
 {
-    PBMWriter aPBMWriter;
+    PBMWriter aPBMWriter(rStream);
 
-    return aPBMWriter.WritePBM( rGraphic, rStream, pFilterConfigItem );
+    return aPBMWriter.WritePBM( rGraphic, pFilterConfigItem );
 }
 
 // ------------------------------------------------------------------------
