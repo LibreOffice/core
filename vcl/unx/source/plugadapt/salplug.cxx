@@ -95,7 +95,7 @@ static SalInstance* tryInstance( const OUString& rModuleBase )
                  * So make sure libgtk+ & co are still mapped into memory when
                  * atk-bridge's atexit handler gets called.
                  */
-                if( rModuleBase.equalsAscii("gtk") )
+                if( rModuleBase.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("gtk")) )
                 {
                     pCloseModule = NULL;
                 }
@@ -103,7 +103,7 @@ static SalInstance* tryInstance( const OUString& rModuleBase )
                  * #i109007# KDE3 seems to have the same problem; an atexit cleanup
                  * handler, which cannot be resolved anymore if the plugin is already unloaded.
                  */
-                else if( rModuleBase.equalsAscii("kde") )
+                else if( rModuleBase.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("kde")) )
                 {
                     pCloseModule = NULL;
                 }
@@ -214,7 +214,7 @@ static SalInstance* check_headless_plugin()
     for( int i = 0; i < nParams; i++ )
     {
         osl_getCommandArg( i, &aParam.pData );
-        if( aParam.equalsAscii( "-headless" ) )
+        if( aParam.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("-headless")) )
             return tryInstance( OUString( RTL_CONSTASCII_USTRINGPARAM( "svp" ) ) );
     }
     return NULL;
