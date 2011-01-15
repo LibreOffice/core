@@ -29,7 +29,7 @@
 #include <svtools/libcall.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/window.hxx>
-#include <vcl/imagebtn.hxx>
+#include <vcl/button.hxx>
 #include <vcl/field.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/help.hxx>

@@ -53,6 +53,7 @@ class SfxItemSet;
 class SvxBorderLine;
 class SvxBoxItem;
 class SvxBoxInfoItem;
+class SfxStyleSheetBase;
 class SfxStyleSheet;
 class SfxPoolItem;
 class EditTextObject;
@@ -187,8 +188,8 @@ public:
     const SfxStyleSheet*    GetStyleSheetFromMarked();
     void                    SetStyleSheetToMarked( SfxStyleSheet* pStyleSheet,
                                                         BOOL bRecord = TRUE );
-    void                    RemoveStyleSheetInUse( SfxStyleSheet* pStyleSheet );
-    void                    UpdateStyleSheetInUse( SfxStyleSheet* pStyleSheet );
+    void                    RemoveStyleSheetInUse( const SfxStyleSheetBase* pStyleSheet );
+    void                    UpdateStyleSheetInUse( const SfxStyleSheetBase* pStyleSheet );
 
     void            SetNumberFormat( short nFormatType, ULONG nAdd = 0 );
     void            SetNumFmtByStr( const String& rCode );

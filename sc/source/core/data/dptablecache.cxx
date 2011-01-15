@@ -201,8 +201,11 @@ ScDPItemData::ScDPItemData( ScDocument* pDoc, SCROW nRow, USHORT nCol, USHORT nD
     ScBaseCell* pCell = pDoc->GetCell( aPos );
 
     if ( pCell && pCell->GetCellType() == CELLTYPE_FORMULA && ((ScFormulaCell*)pCell)->GetErrCode() )
+    {
         SetString ( aDocStr );      //[SODC_19347] add liyi
         //bErr = TRUE;              //[SODC_19347] del liyi
+        mbFlag |= MK_ERR;
+    }
     else if ( pDoc->HasValueData( nCol, nRow, nDocTab ) )
     {
         double fVal = pDoc->GetValue(ScAddress(nCol, nRow, nDocTab));
@@ -672,8 +675,15 @@ bool ScDPTableDataCache::ValidQuery( SCROW nRow, const ScQueryParam &rParam, BOO
         {
             ScQueryEntry& rEntry = rParam.GetEntry(i);
             // we can only handle one single direct query
-            SCROW nId = GetItemDataId( (SCCOL)rEntry.nField, nRow, FALSE );
-            const ScDPItemData* pCellData = GetItemDataById(  (SCCOL)rEntry.nField, nId);
+            // #i115431# nField in QueryParam is the sheet column, not the field within the source range
+            SCCOL nQueryCol = (SCCOL)rEntry.nField;
+            if ( nQueryCol < rParam.nCol1 )
+                nQueryCol = rParam.nCol1;
+            if ( nQueryCol > rParam.nCol2 )
+                nQueryCol = rParam.nCol2;
+            SCCOL nSourceField = nQueryCol - rParam.nCol1;
+            SCROW nId = GetItemDataId( nSourceField, nRow, FALSE );
+            const ScDPItemData* pCellData = GetItemDataById( nSourceField, nId );
 
             BOOL bOk = FALSE;
             BOOL bTestEqual = FALSE;

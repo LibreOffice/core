@@ -46,6 +46,7 @@
 #include "global.hxx"
 #include "globstr.hrc"
 
+using namespace com::sun::star;
 
 
 static ScProgress theDummyInterpretProgress;
@@ -78,6 +79,14 @@ BOOL lcl_IsHiddenDocument( SfxObjectShell* pObjSh )
     return FALSE;
 }
 
+bool lcl_HasControllersLocked( SfxObjectShell& rObjSh )
+{
+    uno::Reference<frame::XModel> xModel( rObjSh.GetBaseModel() );
+    if (xModel.is())
+        return xModel->hasControllersLocked();
+    return false;
+}
+
 ScProgress::ScProgress( SfxObjectShell* pObjSh, const String& rText,
                         ULONG nRange, BOOL bAllDocs, BOOL bWait )
 {
@@ -104,10 +113,12 @@ ScProgress::ScProgress( SfxObjectShell* pObjSh, const String& rText,
         pProgress = NULL;
     }
     else if ( pObjSh && ( pObjSh->GetCreateMode() == SFX_CREATE_MODE_EMBEDDED ||
-                          pObjSh->GetProgress() ) )
+                          pObjSh->GetProgress() ||
+                          lcl_HasControllersLocked(*pObjSh) ) )
     {
         //  #62808# no own progress for embedded objects,
         //  #73633# no second progress if the document already has one
+        //  #163566# no progress while controllers are locked (repaint disabled)
 
         pProgress = NULL;
     }

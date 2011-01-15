@@ -169,8 +169,7 @@ void ScDocument::SetDBCollection( ScDBCollection* pNewDBCollection, BOOL bRemove
                         RemoveFlagsTab( aOldRange.aStart.Col(), aOldRange.aStart.Row(),
                                         aOldRange.aEnd.Col(),   aOldRange.aEnd.Row(),
                                         aOldRange.aStart.Tab(), SC_MF_AUTO );
-                        if (pShell)
-                            pShell->Broadcast( ScPaintHint( aOldRange, PAINT_GRID ) );
+                        RepaintRange( aOldRange );
                     }
                 }
             }
@@ -540,6 +539,14 @@ bool ScDocument::HasAnySheetEventScript( sal_Int32 nEvent, bool bWithVbaEvents )
 {
     for (SCTAB nTab = 0; nTab <= MAXTAB; nTab++)
         if (HasSheetEventScript( nTab, nEvent, bWithVbaEvents ))
+            return true;
+    return false;
+}
+
+bool ScDocument::HasAnyCalcNotification() const
+{
+    for (SCTAB nTab = 0; nTab <= MAXTAB; nTab++)
+        if (pTab[nTab] && pTab[nTab]->GetCalcNotification())
             return true;
     return false;
 }

@@ -379,11 +379,13 @@ InternalDataProvider::InternalDataProvider( const Reference< chart2::XChartDocum
                         if( xSeq.is() )
                             aDataSeq = xSeq->getData();
                         sal_Int32 nLength = aDataSeq.getLength();
-                        if( static_cast< sal_Int32 >(aNewCategories.size()) < nLength )
+                        sal_Int32 nCatLength = static_cast< sal_Int32 >(aNewCategories.size());
+                        if( nCatLength < nLength )
                             aNewCategories.resize( nLength );
-
+                        else if( nLength < nCatLength )
+                            aDataSeq.realloc( nCatLength );
                         transform( aNewCategories.begin(), aNewCategories.end(), aDataSeq.getConstArray(),
-                            aNewCategories.begin(), lcl_setAnyAtLevel(nL) );
+                            aNewCategories.begin(), lcl_setStringAtLevel(nL) );
                     }
                     if( !nLevelCount )
                     {

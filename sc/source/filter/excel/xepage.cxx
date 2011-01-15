@@ -48,7 +48,7 @@
 #include <set>
 #include <limits>
 
-#include <oox/core/tokens.hxx>
+using namespace ::oox;
 
 using ::rtl::OString;
 using ::std::set;

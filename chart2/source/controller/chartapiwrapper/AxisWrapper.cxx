@@ -352,33 +352,35 @@ void lcl_AddPropertiesToVector(
                   beans::PropertyAttribute::MAYBEDEFAULT ));
 }
 
-const Sequence< Property > & lcl_GetPropertySequence()
+struct StaticAxisWrapperPropertyArray_Initializer
 {
-    static Sequence< Property > aPropSeq;
-
-    // /--
-    MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-    if( 0 == aPropSeq.getLength() )
+    Sequence< Property >* operator()()
     {
-        // get properties
+        static Sequence< Property > aPropSeq( lcl_GetPropertySequence() );
+        return &aPropSeq;
+    }
+
+private:
+    Sequence< Property > lcl_GetPropertySequence()
+    {
         ::std::vector< ::com::sun::star::beans::Property > aProperties;
         lcl_AddPropertiesToVector( aProperties );
         ::chart::CharacterProperties::AddPropertiesToVector( aProperties );
         ::chart::LineProperties::AddPropertiesToVector( aProperties );
-//         ::chart::NamedLineProperties::AddPropertiesToVector( aProperties );
+        //::chart::NamedLineProperties::AddPropertiesToVector( aProperties );
         ::chart::UserDefinedProperties::AddPropertiesToVector( aProperties );
         ::chart::wrapper::WrappedScaleTextProperties::addProperties( aProperties );
 
-        // and sort them for access via bsearch
         ::std::sort( aProperties.begin(), aProperties.end(),
                      ::chart::PropertyNameLess() );
 
-        // transfer result to static Sequence
-        aPropSeq = ::chart::ContainerHelper::ContainerToSequence( aProperties );
+        return ::chart::ContainerHelper::ContainerToSequence( aProperties );
     }
+};
 
-    return aPropSeq;
-}
+struct StaticAxisWrapperPropertyArray : public rtl::StaticAggregate< Sequence< Property >, StaticAxisWrapperPropertyArray_Initializer >
+{
+};
 
 } // anonymous namespace
 
@@ -534,7 +536,6 @@ uno::Reference< util::XNumberFormats > SAL_CALL AxisWrapper::getNumberFormats()
     return uno::Reference< util::XNumberFormats >();
 }
 
-// static
 void AxisWrapper::getDimensionAndMainAxisBool( tAxisType eType, sal_Int32& rnDimensionIndex, sal_Bool& rbMainAxis )
 {
     switch( eType )
@@ -642,7 +643,7 @@ Reference< beans::XPropertySet > AxisWrapper::getInnerPropertySet()
 
 const Sequence< beans::Property >& AxisWrapper::getPropertySequence()
 {
-    return lcl_GetPropertySequence();
+    return *StaticAxisWrapperPropertyArray::get();
 }
 
 const std::vector< WrappedProperty* > AxisWrapper::createWrappedProperties()

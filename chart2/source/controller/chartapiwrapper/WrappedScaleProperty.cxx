@@ -116,7 +116,6 @@ WrappedScaleProperty::~WrappedScaleProperty()
 {
 }
 
-//static
 void WrappedScaleProperty::addWrappedProperties( std::vector< WrappedProperty* >& rList
             , ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact )
 {

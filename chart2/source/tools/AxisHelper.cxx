@@ -66,19 +66,16 @@ using namespace ::com::sun::star::chart2;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
 
-//static
 Reference< chart2::XScaling > AxisHelper::createLinearScaling()
 {
     return new LinearScaling( 1.0, 0.0 );
 }
 
-//static
 Reference< chart2::XScaling > AxisHelper::createLogarithmicScaling( double fBase )
 {
     return new LogarithmicScaling( fBase );
 }
 
-//static
 ScaleData AxisHelper::createDefaultScale()
 {
     ScaleData aScaleData;
@@ -91,7 +88,6 @@ ScaleData AxisHelper::createDefaultScale()
     return aScaleData;
 }
 
-//static
 void AxisHelper::removeExplicitScaling( ScaleData& rScaleData )
 {
     uno::Any aEmpty;
@@ -102,7 +98,6 @@ void AxisHelper::removeExplicitScaling( ScaleData& rScaleData )
     rScaleData.TimeIncrement = aDefaultScale.TimeIncrement;
 }
 
-//static
 bool AxisHelper::isLogarithmic( const Reference< XScaling >& xScaling )
 {
     bool bReturn = false;
@@ -290,7 +285,6 @@ sal_Int32 AxisHelper::getExplicitNumberFormatKeyForAxis(
     return nNumberFormatKey;
 }
 
-//static
 Reference< XAxis > AxisHelper::createAxis(
           sal_Int32 nDimensionIndex
         , sal_Int32 nAxisIndex // 0==main or 1==secondary axis
@@ -359,7 +353,6 @@ Reference< XAxis > AxisHelper::createAxis(
     return xAxis;
 }
 
-//static
 Reference< XAxis > AxisHelper::createAxis( sal_Int32 nDimensionIndex, bool bMainAxis
                 , const Reference< chart2::XDiagram >& xDiagram
                 , const Reference< uno::XComponentContext >& xContext
@@ -378,7 +371,6 @@ Reference< XAxis > AxisHelper::createAxis( sal_Int32 nDimensionIndex, bool bMain
         nDimensionIndex, nAxisIndex, xCooSys, xContext, pRefSizeProvider );
 }
 
-//static
 void AxisHelper::showAxis( sal_Int32 nDimensionIndex, bool bMainAxis
                 , const Reference< chart2::XDiagram >& xDiagram
                 , const Reference< uno::XComponentContext >& xContext
@@ -401,7 +393,6 @@ void AxisHelper::showAxis( sal_Int32 nDimensionIndex, bool bMainAxis
         AxisHelper::makeAxisVisible( xAxis );
 }
 
-//static
 void AxisHelper::showGrid( sal_Int32 nDimensionIndex, sal_Int32 nCooSysIndex, bool bMainGrid
                 , const Reference< XDiagram >& xDiagram
                 , const Reference< uno::XComponentContext >& /*xContext*/ )
@@ -431,7 +422,6 @@ void AxisHelper::showGrid( sal_Int32 nDimensionIndex, sal_Int32 nCooSysIndex, bo
     }
 }
 
-//static
 void AxisHelper::makeAxisVisible( const Reference< XAxis >& xAxis )
 {
     Reference< beans::XPropertySet > xProps( xAxis, uno::UNO_QUERY );
@@ -443,7 +433,6 @@ void AxisHelper::makeAxisVisible( const Reference< XAxis >& xAxis )
     }
 }
 
-//static
 void AxisHelper::makeGridVisible( const Reference< beans::XPropertySet >& xGridProperties )
 {
     if( xGridProperties.is() )
@@ -453,14 +442,12 @@ void AxisHelper::makeGridVisible( const Reference< beans::XPropertySet >& xGridP
     }
 }
 
-//static
 void AxisHelper::hideAxis( sal_Int32 nDimensionIndex, bool bMainAxis
                 , const Reference< XDiagram >& xDiagram )
 {
     AxisHelper::makeAxisInvisible( AxisHelper::getAxis( nDimensionIndex, bMainAxis, xDiagram ) );
 }
 
-//static
 void AxisHelper::makeAxisInvisible( const Reference< XAxis >& xAxis )
 {
     Reference< beans::XPropertySet > xProps( xAxis, uno::UNO_QUERY );
@@ -470,7 +457,6 @@ void AxisHelper::makeAxisInvisible( const Reference< XAxis >& xAxis )
     }
 }
 
-//static
 void AxisHelper::hideAxisIfNoDataIsAttached( const Reference< XAxis >& xAxis, const Reference< XDiagram >& xDiagram )
 {
     //axis is hidden if no data is attached anymore but data is available
@@ -514,7 +500,6 @@ void AxisHelper::hideGrid( sal_Int32 nDimensionIndex, sal_Int32 nCooSysIndex, bo
     }
 }
 
-//static
 void AxisHelper::makeGridInvisible( const Reference< beans::XPropertySet >& xGridProperties )
 {
     if( xGridProperties.is() )
@@ -548,7 +533,6 @@ sal_Bool AxisHelper::isGridShown( sal_Int32 nDimensionIndex, sal_Int32 nCooSysIn
     return bRet;
 }
 
-//static
 Reference< XCoordinateSystem > AxisHelper::getCoordinateSystemByIndex(
     const Reference< XDiagram >& xDiagram, sal_Int32 nIndex )
 {
@@ -561,7 +545,6 @@ Reference< XCoordinateSystem > AxisHelper::getCoordinateSystemByIndex(
     return NULL;
 }
 
-//static
 Reference< XAxis > AxisHelper::getAxis( sal_Int32 nDimensionIndex, bool bMainAxis
             , const Reference< XDiagram >& xDiagram )
 {
@@ -577,7 +560,6 @@ Reference< XAxis > AxisHelper::getAxis( sal_Int32 nDimensionIndex, bool bMainAxi
     return xRet;
 }
 
-//static
 Reference< XAxis > AxisHelper::getAxis( sal_Int32 nDimensionIndex, sal_Int32 nAxisIndex
             , const Reference< XCoordinateSystem >& xCooSys )
 {
@@ -593,7 +575,6 @@ Reference< XAxis > AxisHelper::getAxis( sal_Int32 nDimensionIndex, sal_Int32 nAx
     return xRet;
 }
 
-//static
 Reference< XAxis > AxisHelper::getCrossingMainAxis( const Reference< XAxis >& xAxis
             , const Reference< XCoordinateSystem >& xCooSys )
 {
@@ -615,7 +596,6 @@ Reference< XAxis > AxisHelper::getCrossingMainAxis( const Reference< XAxis >& xA
     return AxisHelper::getAxis( nDimensionIndex, 0, xCooSys );
 }
 
-//static
 Reference< XAxis > AxisHelper::getParallelAxis( const Reference< XAxis >& xAxis
             , const Reference< XDiagram >& xDiagram )
 {
@@ -642,7 +622,6 @@ sal_Bool AxisHelper::isAxisShown( sal_Int32 nDimensionIndex, bool bMainAxis
     return AxisHelper::isAxisVisible( AxisHelper::getAxis( nDimensionIndex, bMainAxis, xDiagram ) );
 }
 
-//static
 sal_Bool AxisHelper::isAxisVisible( const Reference< XAxis >& xAxis )
 {
     sal_Bool bRet = false;
@@ -668,7 +647,6 @@ sal_Bool AxisHelper::areAxisLabelsVisible( const Reference< beans::XPropertySet 
     return bRet;
 }
 
-//static
 sal_Bool AxisHelper::isGridVisible( const Reference< beans::XPropertySet >& xGridProperies )
 {
     sal_Bool bRet = false;
@@ -682,7 +660,6 @@ sal_Bool AxisHelper::isGridVisible( const Reference< beans::XPropertySet >& xGri
     return bRet;
 }
 
-//static
 Reference< beans::XPropertySet > AxisHelper::getGridProperties(
             const Reference< XCoordinateSystem >& xCooSys
         , sal_Int32 nDimensionIndex, sal_Int32 nAxisIndex, sal_Int32 nSubGridIndex )
@@ -705,7 +682,6 @@ Reference< beans::XPropertySet > AxisHelper::getGridProperties(
     return xRet;
 }
 
-//static
 sal_Int32 AxisHelper::getDimensionIndexOfAxis(
               const Reference< XAxis >& xAxis
             , const Reference< XDiagram >& xDiagram )
@@ -717,7 +693,6 @@ sal_Int32 AxisHelper::getDimensionIndexOfAxis(
     return nDimensionIndex;
 }
 
-//static
 bool AxisHelper::getIndicesForAxis(
               const Reference< XAxis >& xAxis
             , const Reference< XCoordinateSystem >& xCooSys
@@ -750,7 +725,6 @@ bool AxisHelper::getIndicesForAxis(
     return false;
 }
 
-//static
 bool AxisHelper::getIndicesForAxis( const Reference< XAxis >& xAxis, const Reference< XDiagram >& xDiagram
             , sal_Int32& rOutCooSysIndex, sal_Int32& rOutDimensionIndex, sal_Int32& rOutAxisIndex )
 {
@@ -777,7 +751,6 @@ bool AxisHelper::getIndicesForAxis( const Reference< XAxis >& xAxis, const Refer
     return false;
 }
 
-//static
 std::vector< Reference< XAxis > > AxisHelper::getAllAxesOfCoordinateSystem(
       const Reference< XCoordinateSystem >& xCooSys
     , bool bOnlyVisible /* = false */ )
@@ -824,7 +797,6 @@ std::vector< Reference< XAxis > > AxisHelper::getAllAxesOfCoordinateSystem(
     return aAxisVector;
 }
 
-//static
 Sequence< Reference< XAxis > > AxisHelper::getAllAxesOfDiagram(
       const Reference< XDiagram >& xDiagram
     , bool bOnlyVisible )
@@ -846,7 +818,6 @@ Sequence< Reference< XAxis > > AxisHelper::getAllAxesOfDiagram(
     return ContainerHelper::ContainerToSequence( aAxisVector );
 }
 
-//static
 Sequence< Reference< beans::XPropertySet > > AxisHelper::getAllGrids( const Reference< XDiagram >& xDiagram )
 {
     Sequence< Reference< XAxis > > aAllAxes( AxisHelper::getAllAxesOfDiagram( xDiagram ) );
@@ -875,7 +846,6 @@ Sequence< Reference< beans::XPropertySet > > AxisHelper::getAllGrids( const Refe
     return ContainerHelper::ContainerToSequence( aGridVector );
 }
 
-//static
 void AxisHelper::getAxisOrGridPossibilities( Sequence< sal_Bool >& rPossibilityList
         , const Reference< XDiagram>& xDiagram, sal_Bool bAxis )
 {
@@ -895,7 +865,6 @@ void AxisHelper::getAxisOrGridPossibilities( Sequence< sal_Bool >& rPossibilityL
             rPossibilityList[nIndex] = rPossibilityList[nIndex-3];
 }
 
-//static
 bool AxisHelper::isSecondaryYAxisNeeded( const Reference< XCoordinateSystem >& xCooSys )
 {
     Reference< chart2::XChartTypeContainer > xCTCnt( xCooSys, uno::UNO_QUERY );
@@ -924,7 +893,6 @@ bool AxisHelper::isSecondaryYAxisNeeded( const Reference< XCoordinateSystem >& x
     return false;
 }
 
-//static
 bool AxisHelper::shouldAxisBeDisplayed( const Reference< XAxis >& xAxis
                                        , const Reference< XCoordinateSystem >& xCooSys )
 {
@@ -950,7 +918,6 @@ bool AxisHelper::shouldAxisBeDisplayed( const Reference< XAxis >& xAxis
     return bRet;
 }
 
-//static
 void AxisHelper::getAxisOrGridExcistence( Sequence< sal_Bool >& rExistenceList
         , const Reference< XDiagram>& xDiagram, sal_Bool bAxis )
 {
@@ -976,7 +943,6 @@ void AxisHelper::getAxisOrGridExcistence( Sequence< sal_Bool >& rExistenceList
     }
 }
 
-//static
 bool AxisHelper::changeVisibilityOfAxes( const Reference< XDiagram >& xDiagram
                         , const Sequence< sal_Bool >& rOldExistenceList
                         , const Sequence< sal_Bool >& rNewExistenceList
@@ -1000,7 +966,6 @@ bool AxisHelper::changeVisibilityOfAxes( const Reference< XDiagram >& xDiagram
     return bChanged;
 }
 
-//static
 bool AxisHelper::changeVisibilityOfGrids( const Reference< XDiagram >& xDiagram
                         , const Sequence< sal_Bool >& rOldExistenceList
                         , const Sequence< sal_Bool >& rNewExistenceList
@@ -1021,7 +986,6 @@ bool AxisHelper::changeVisibilityOfGrids( const Reference< XDiagram >& xDiagram
     return bChanged;
 }
 
-//static
 Reference< XCoordinateSystem > AxisHelper::getCoordinateSystemOfAxis(
               const Reference< XAxis >& xAxis
             , const Reference< XDiagram >& xDiagram )

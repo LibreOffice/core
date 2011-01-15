@@ -81,7 +81,7 @@
 #include <vcl/outdev.hxx>
 #include <vcl/pointr.hxx>
 #include <vcl/ptrstyle.hxx>
-#include <vcl/wintypes.hxx>
+#include <tools/wintypes.hxx>
 #include <vcl/event.hxx>
 #include <limits.h>
 #include <tools/errinf.hxx>
@@ -185,7 +185,6 @@
 #include <sfx2/ipfrm.hxx>
 #include <docsh.hxx>
 //REMOVE    #include <sfx2/interno.hxx>
-#include <vcl/wintypes.hxx>
 #include <sfx2/docfac.hxx>
 #include <scitems.hxx>
 #include <vcl/virdev.hxx>
@@ -208,7 +207,7 @@
 #include <svl/stritem.hxx>
 #include <collect.hxx>
 #include <svx/svdsob.hxx>
-#include <vcl/imagebtn.hxx>
+#include <vcl/button.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/svdglue.hxx>
 #include <svx/svdlayer.hxx>

@@ -651,7 +651,6 @@ void VLegend::setDefaultWritingMode( sal_Int16 nDefaultWritingMode )
 
 // ----------------------------------------
 
-// static
 bool VLegend::isVisible( const Reference< XLegend > & xLegend )
 {
     if( ! xLegend.is())

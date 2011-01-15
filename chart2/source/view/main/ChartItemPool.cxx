@@ -65,7 +65,7 @@ ChartItemPool::ChartItemPool():
     SvULongs aTmp;
     ppPoolDefaults[SCHATTR_DATADESCR_AVAILABLE_PLACEMENTS - SCHATTR_START] = new SfxIntegerListItem(SCHATTR_DATADESCR_AVAILABLE_PLACEMENTS,aTmp);
     ppPoolDefaults[SCHATTR_DATADESCR_NO_PERCENTVALUE    - SCHATTR_START] = new SfxBoolItem(SCHATTR_DATADESCR_NO_PERCENTVALUE);
-    ppPoolDefaults[SCHATTR_PERCENT_NUMBERFORMAT_VALUE  - SCHATTR_START] = new SfxInt32Item(SCHATTR_PERCENT_NUMBERFORMAT_VALUE, 0);
+    ppPoolDefaults[SCHATTR_PERCENT_NUMBERFORMAT_VALUE  - SCHATTR_START] = new SfxUInt32Item(SCHATTR_PERCENT_NUMBERFORMAT_VALUE, 0);
     ppPoolDefaults[SCHATTR_PERCENT_NUMBERFORMAT_SOURCE - SCHATTR_START] = new SfxBoolItem(SCHATTR_PERCENT_NUMBERFORMAT_SOURCE);
 
     //legend
@@ -217,7 +217,6 @@ SfxMapUnit ChartItemPool::GetMetric(USHORT /* nWhich */) const
     return SFX_MAPUNIT_100TH_MM;
 }
 
-// static
 SfxItemPool* ChartItemPool::CreateChartItemPool()
 {
     return new ChartItemPool();

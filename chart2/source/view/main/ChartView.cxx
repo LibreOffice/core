@@ -118,7 +118,6 @@ using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::Any;
 using rtl::OUString;
 
-//static
 const uno::Sequence<sal_Int8>& ExplicitValueProvider::getUnoTunnelId()
 {
     static uno::Sequence<sal_Int8> * pSeq = 0;
@@ -135,7 +134,6 @@ const uno::Sequence<sal_Int8>& ExplicitValueProvider::getUnoTunnelId()
     return *pSeq;
 }
 
-//static
 ExplicitValueProvider* ExplicitValueProvider::getExplicitValueProvider(
         const Reference< uno::XInterface >& xChartView )
 {
@@ -1839,7 +1837,6 @@ bool lcl_getPropertySwapXAndYAxis( const uno::Reference< XDiagram >& xDiagram )
 
 }
 
-//static
 sal_Int32 ExplicitValueProvider::getExplicitNumberFormatKeyForAxis(
                   const Reference< chart2::XAxis >& xAxis
                 , const Reference< chart2::XCoordinateSystem > & xCorrespondingCoordinateSystem
@@ -1908,7 +1905,6 @@ sal_Int32 ExplicitValueProvider::getExplicitPercentageNumberFormatKeyForDataLabe
     return nFormat;
 }
 
-//static
 awt::Rectangle ExplicitValueProvider::addAxisTitleSizes(
             const Reference< frame::XModel >& xChartModel
             , const Reference< uno::XInterface >& xChartView
@@ -1976,7 +1972,6 @@ awt::Rectangle ExplicitValueProvider::addAxisTitleSizes(
     return aRet;
 }
 
-//static
 awt::Rectangle ExplicitValueProvider::substractAxisTitleSizes(
             const Reference< frame::XModel >& xChartModel
             , const Reference< uno::XInterface >& xChartView

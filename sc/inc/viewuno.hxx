@@ -225,7 +225,8 @@ public:
 
     void                    SelectionChanged();
     void                    VisAreaChanged();
-    void                    SheetChanged();
+    // bSameTabButMoved = true if the same sheet as before is activated, used after moving/copying/inserting/deleting a sheet
+    void                    SheetChanged( bool bSameTabButMoved = false );
     bool                    IsMouseListening() const;
     sal_Bool                MousePressed( const ::com::sun::star::awt::MouseEvent& e ) throw (::com::sun::star::uno::RuntimeException);
     sal_Bool                MouseReleased( const ::com::sun::star::awt::MouseEvent& e ) throw (::com::sun::star::uno::RuntimeException);

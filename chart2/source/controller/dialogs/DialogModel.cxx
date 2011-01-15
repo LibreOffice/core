@@ -381,7 +381,6 @@ DialogModel::DialogModel(
         m_xContext( xContext ),
         m_aTimerTriggeredControllerLock( uno::Reference< frame::XModel >( m_xChartDocument, uno::UNO_QUERY ) )
 {
-    createBackup();
 }
 
 DialogModel::~DialogModel()
@@ -724,19 +723,15 @@ bool DialogModel::setData(
     return true;
 }
 
-// static
 OUString DialogModel::ConvertRoleFromInternalToUI( const OUString & rRoleString )
 {
     return lcl_ConvertRole( rRoleString, true );
 }
 
-// static
 OUString DialogModel::GetRoleDataLabel()
 {
     return OUString( String( ::chart::SchResId( STR_OBJECT_DATALABELS )));
 }
-
-// static
 
 sal_Int32 DialogModel::GetRoleIndexForSorting( const ::rtl::OUString & rInternalRoleString )
 {
@@ -753,20 +748,6 @@ sal_Int32 DialogModel::GetRoleIndexForSorting( const ::rtl::OUString & rInternal
 }
 
 // private methods
-
-void DialogModel::createBackup()
-{
-    OSL_ENSURE( ! m_xBackupChartDocument.is(), "Cloning already cloned model" );
-    try
-    {
-        Reference< util::XCloneable > xCloneable( m_xChartDocument, uno::UNO_QUERY_THROW );
-        m_xBackupChartDocument.set( xCloneable->createClone(), uno::UNO_QUERY_THROW );
-    }
-    catch( uno::Exception & ex )
-    {
-        ASSERT_EXCEPTION( ex );
-    }
-}
 
 void DialogModel::applyInterpretedData(
     const InterpretedData & rNewData,
