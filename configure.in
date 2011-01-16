@@ -5469,19 +5469,19 @@ else
    fi
 fi
 
-AC_MSG_CHECKING([whether $GNUCP is GNU cp])
-if $GNUCP --version 2>/dev/null | grep "Free Software Foundation" >/dev/null 2>/dev/null; then
+AC_MSG_CHECKING([whether $GNUCP is GNU cp from coreutils with preserve= support])
+if $GNUCP --version 2>/dev/null | grep "coreutils" >/dev/null 2>/dev/null; then
    AC_MSG_RESULT([yes])
 else
-   if $GNUCP --version 2>/dev/null | grep "GNU fileutils" >/dev/null 2>/dev/null; then
-      AC_MSG_RESULT([yes])
+   AC_MSG_RESULT([no])
+   GNUCP=''
+fi
+
+if test -z "$GNUCP"; then
+   if test "$_os" = "SunOS" -o "$_os" = "FreeBSD"; then
+      AC_MSG_ERROR([no, GNU cp from coreutils is needed. install or specify with --with-gnu-cp=/path/to/it])
    else
-      if test "$_os" = "SunOS" -o "$_os" = "FreeBSD"; then
-         AC_MSG_ERROR([no, GNU cp needed. install or specify with --with-gnu-cp=/path/to/it])
-      else
-         GNUCP=''
-         AC_MSG_RESULT([no gnucp found - using the system's cp command])
-      fi
+      AC_MSG_RESULT([no GNU cp from coreutils found - using the system's cp command])
    fi
 fi
 
