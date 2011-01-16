@@ -1401,4 +1401,8 @@ bool IsDestroyFrameAnchoredAtChar(SwPosition const & rAnchorPos,
             );
 }
 
+const String UNDO_ARG1("$1", RTL_TEXTENCODING_ASCII_US);
+const String UNDO_ARG2("$2", RTL_TEXTENCODING_ASCII_US);
+const String UNDO_ARG3("$3", RTL_TEXTENCODING_ASCII_US);
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

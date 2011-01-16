@@ -114,9 +114,9 @@ namespace utl {
     class TransliterationWrapper;
 }
 
-const String UNDO_ARG1("$1", RTL_TEXTENCODING_ASCII_US);
-const String UNDO_ARG2("$2", RTL_TEXTENCODING_ASCII_US);
-const String UNDO_ARG3("$3", RTL_TEXTENCODING_ASCII_US);
+SW_DLLPUBLIC extern const String UNDO_ARG1;
+SW_DLLPUBLIC extern const String UNDO_ARG2;
+SW_DLLPUBLIC extern const String UNDO_ARG3;
 
 typedef SwRedlineSaveData* SwRedlineSaveDataPtr;
 SV_DECL_PTRARR_DEL( SwRedlineSaveDatas, SwRedlineSaveDataPtr, 8, 8 )
