@@ -25,7 +25,9 @@
 #
 #*************************************************************************
 
-# mk file for $(OS)$(COM)$(CPU)$(COMEX) == WNTMSCI11 and WNTMSCI12
+# mk file for $(OS)$(COM)$(CPU)$(COMEX) == WNTMSC[IX]{12,13}
+# yes, despite the "11" in this file name, note that we don't actually
+# support the WNTMSCI11 (MSVC 2005) compiler any more
 
 SOLAR_JAVA*=TRUE
 FULL_DESK=TRUE
@@ -88,7 +90,7 @@ CFLAGS+=-GS
 
 CFLAGS+=-c -nologo -Gs $(NOLOGO)
 
-.IF "$(cl_x64)" == ""
+.IF "$(CL_X64)" == ""
 CDEFS+= -D_X86_=1 -D_CRT_SECURE_NO_DEPRECATE -D_CRT_NONSTDC_NO_DEPRECATE -D_CRT_NON_CONFORMING_SWPRINTFS
 .ELSE
 CDEFS+= -D_AMD64_=1 -D_CRT_SECURE_NO_DEPRECATE -D_CRT_NONSTDC_NO_DEPRECATE -D_CRT_NON_CONFORMING_SWPRINTFS
@@ -227,7 +229,7 @@ _VC_MANIFEST_BASENAME=__VC80
 _VC_MANIFEST_BASENAME=__VC90
 .ENDIF
 
-.IF "$(cl_x64)" == ""
+.IF "$(CL_X64)" == ""
 LINK=link /MACHINE:IX86
 .ELSE
 LINK=link /MACHINE:X64
@@ -241,7 +243,7 @@ LINKFLAGS=/MAP /OPT:NOREF
 .ENDIF
 
 # excetion handling protection
-.IF "$(cl_x64)" == ""
+.IF "$(CL_X64)" == ""
 LINKFLAGS+=-safeseh
 .ENDIF
 
@@ -325,23 +327,11 @@ LIBSTLPORT=stlport_vc71.lib
 LIBSTLPORTST=stlport_vc71_static.lib
 .ENDIF
 
-.IF "$(PROF_EDITION)" == ""
-ATL_INCLUDE*=$(COMPATH)/PlatformSDK/include/atl
-ATL_LIB*=$(COMPATH)/atlmfc/lib
-MFC_INCLUDE*=$(COMPATH)/PlatformSDK/include/mfc
-MFC_LIB*=$(COMPATH)/atlmfc/lib
-.ELSE
-ATL_INCLUDE*=$(COMPATH)/atlmfc/include
-ATL_LIB*=$(COMPATH)/atlmfc/lib
-MFC_INCLUDE*=$(COMPATH)/atlmfc/include
-MFC_LIB*=$(COMPATH)/atlmfc/lib
-.ENDIF
-
 LIBMGR=lib $(NOLOGO)
 IMPLIB=lib
 LIBFLAGS=
 
-.IF "$(cl_x64)" == ""
+.IF "$(CL_X64)" == ""
 IMPLIBFLAGS=-machine:IX86
 .ELSE
 IMPLIBFLAGS=-machine:X64

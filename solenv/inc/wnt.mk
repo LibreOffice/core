@@ -30,14 +30,10 @@
 
 # --- Compiler ---
 
-.IF "$(OS)$(COM)$(CPU)" == "WNTMSCI"
-.IF "$(COMEX)" == "10"
-.INCLUDE : wntmsci10.mk
-.ELSE
-# for wntmsci11 (.Net 2005) and wntmsci12 (.Net 2008)
+.IF "$(OS)$(COM)" == "WNTMSC"
+# for wntmsci12 (MSVC 2005) and wntmsci13 (MSVC 2010), 32- and 64-bit
 .INCLUDE : wntmsci11.mk
-.ENDIF # "$(COMEX)" == "10"
-.ENDIF # "$(OS)$(COM)$(CPU)" == "WNTMSCI"
+.ENDIF # "$(OS)$(COM)" == "WNTMSC"
 
 .IF "$(COM)$(OS)$(CPU)" == "GCCWNTI"
 .INCLUDE : wntgcci.mk

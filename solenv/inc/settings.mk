@@ -1026,18 +1026,6 @@ AUGMENT_LIBRARY_PATH_LOCAL = : && \
     $(OOO_LIBRARY_PATH_VAR)=$${{$(OOO_LIBRARY_PATH_VAR)+$${{$(OOO_LIBRARY_PATH_VAR)}}:}}$(normpath, $(PWD)/$(DLLDEST)):$(normpath, $(SOLARSHAREDBIN))
 .END
 
-# remove if .Net 2003 support has expired 
-.IF "$(debug)"!=""
-.IF "$(OS)$(COM)$(CPU)" == "WNTMSCI"
-.IF "$(COMEX)" == "10"
-.IF "$(SLOFILES)$(OBJFILES)$(DEPOBJFILES)"!=""
-MAXPROCESS!:=1
-.EXPORT : MAXPROCESS
-.ENDIF			# "$(SLOFILES)$(OBJFILES)$(DEPOBJFILES)"!=""
-.ENDIF			# "$(COMEX)" == "10"
-.ENDIF			# "$(OS)$(COM)$(CPU)" == "WNTMSCI"
-.ENDIF			# "$(debug)"!=""
-
 # for multiprocess building in external modules
 # allow seperate handling
 EXTMAXPROCESS*=$(MAXPROCESS)
