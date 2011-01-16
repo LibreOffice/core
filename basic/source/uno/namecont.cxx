@@ -3118,8 +3118,8 @@ void SAL_CALL SfxLibrary::removeContainerListener( const Reference< XContainerLi
 //============================================================================
 // Implementation class ScriptExtensionIterator
 
-static rtl::OUString aBasicLibMediaType(RTL_CONSTASCII_USTRINGPARAM("application/vnd.sun.star.basic-library"));
-static rtl::OUString aDialogLibMediaType(RTL_CONSTASCII_USTRINGPARAM("application/vnd.sun.star.dialog-library"));
+#define sBasicLibMediaType "application/vnd.sun.star.basic-library"
+#define sDialogLibMediaType "application/vnd.sun.star.dialog-library"
 
 ScriptExtensionIterator::ScriptExtensionIterator( void )
     : m_eState( USER_EXTENSIONS )
@@ -3270,11 +3270,11 @@ Reference< deployment::XPackage > ScriptSubPackageIterator::implDetectScriptPack
     {
         const Reference< deployment::XPackageTypeInfo > xPackageTypeInfo = xPackage->getPackageType();
         rtl::OUString aMediaType = xPackageTypeInfo->getMediaType();
-        if( aMediaType.equals( aBasicLibMediaType ) )
+        if( aMediaType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sBasicLibMediaType)) )
         {
             xScriptPackage = xPackage;
         }
-        else if( aMediaType.equals( aDialogLibMediaType ) )
+        else if( aMediaType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sDialogLibMediaType)) )
         {
             rbPureDialogLib = true;
             xScriptPackage = xPackage;
@@ -3316,12 +3316,12 @@ Reference< deployment::XPackage > ScriptExtensionIterator::implGetScriptPackageF
                 const Reference< deployment::XPackage > xSubPkg = pSeq[ iPkg ];
                 const Reference< deployment::XPackageTypeInfo > xPackageTypeInfo = xSubPkg->getPackageType();
                 rtl::OUString aMediaType = xPackageTypeInfo->getMediaType();
-                if( aMediaType.equals( aBasicLibMediaType ) )
+                if( aMediaType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sBasicLibMediaType)) )
                 {
                     xScriptPackage = xSubPkg;
                     break;
                 }
-                else if( aMediaType.equals( aDialogLibMediaType ) )
+                else if( aMediaType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sDialogLibMediaType)) )
                 {
                     rbPureDialogLib = true;
                     xScriptPackage = xSubPkg;
@@ -3333,11 +3333,11 @@ Reference< deployment::XPackage > ScriptExtensionIterator::implGetScriptPackageF
         {
             const Reference< deployment::XPackageTypeInfo > xPackageTypeInfo = xPackage->getPackageType();
             rtl::OUString aMediaType = xPackageTypeInfo->getMediaType();
-            if( aMediaType.equals( aBasicLibMediaType ) )
+            if( aMediaType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sBasicLibMediaType)) )
             {
                 xScriptPackage = xPackage;
             }
-            else if( aMediaType.equals( aDialogLibMediaType ) )
+            else if( aMediaType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sDialogLibMediaType)) )
             {
                 rbPureDialogLib = true;
                 xScriptPackage = xPackage;
