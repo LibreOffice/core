@@ -119,8 +119,6 @@ class ConfigurationHelper
                                                                       const ::rtl::OUString&                                        sRelPath  ,
                                                                             sal_Int32                                               nOpenFlags)
         {
-            static ::rtl::OUString PATH_SEPERATOR(RTL_CONSTASCII_USTRINGPARAM("/"));
-
             css::uno::Reference< css::uno::XInterface > xCFG;
 
             try
@@ -130,7 +128,7 @@ class ConfigurationHelper
 
                 ::rtl::OUStringBuffer sPath(1024);
                 sPath.append(sPackage      );
-                sPath.append(PATH_SEPERATOR);
+                sPath.append(static_cast<sal_Unicode>('/'));
                 sPath.append(sRelPath      );
 
                 sal_Bool bReadOnly   = ((nOpenFlags & ConfigurationHelper::E_READONLY   ) == ConfigurationHelper::E_READONLY   );
