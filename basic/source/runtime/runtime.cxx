@@ -1043,7 +1043,7 @@ void SbiRuntime::TOSMakeTemp()
         p->Broadcast( SBX_HINT_DATAWANTED );
 
     SbxVariable* pDflt = NULL;
-    if ( bVBAEnabled &&  ( p->GetType() == SbxOBJECT || p->GetType() == SbxVARIANT  ) && ( pDflt = getDefaultProp( p ) ) )
+    if ( bVBAEnabled &&  ( p->GetType() == SbxOBJECT || p->GetType() == SbxVARIANT  ) && ((pDflt = getDefaultProp(p)) != NULL) )
     {
         pDflt->Broadcast( SBX_HINT_DATAWANTED );
         // replacing new p on stack causes object pointed by
