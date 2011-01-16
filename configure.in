@@ -4351,7 +4351,7 @@ if test -n "$with_system_db" -o -n "$with_system_libs" && \
         AC_MSG_RESULT([no])
     done
 
-    if test "$DB_INCLUDES" = ""; then
+    if test "$db_header" = ""; then
        AC_CHECK_HEADER(db.h, [ DB_INCLUDES=/usr/include; db_header="db.h" ],
            [ AC_MSG_ERROR(no. install the db4-dev package) ])
     fi
