@@ -460,7 +460,7 @@ namespace svt { namespace table
 
         /** retrieves title of a given row
         */
-        virtual ::rtl::OUString getRowHeader( RowPos const i_rowPos ) const = 0;
+        virtual ::com::sun::star::uno::Any      getRowHeading( RowPos const i_rowPos ) const = 0;
 
         /** returns the color to be used for rendering the grid lines.
 

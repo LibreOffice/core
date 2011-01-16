@@ -566,24 +566,24 @@ namespace svt { namespace table
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    ::rtl::OUString UnoControlTableModel::getRowHeader( RowPos const i_rowPos ) const
+    Any UnoControlTableModel::getRowHeading( RowPos const i_rowPos ) const
     {
         DBG_CHECK_ME();
 
-        ::rtl::OUString sRowHeader;
+        Any aRowHeading;
 
         Reference< XGridDataModel > const xDataModel( m_pImpl->m_aDataModel );
-        ENSURE_OR_RETURN( xDataModel.is(), "UnoControlTableModel::getRowHeader: no data model anymore!", sRowHeader );
+        ENSURE_OR_RETURN( xDataModel.is(), "UnoControlTableModel::getRowHeading: no data model anymore!", aRowHeading );
 
         try
         {
-            sRowHeader = xDataModel->getRowTitle( i_rowPos );
+            aRowHeading = xDataModel->getRowHeading( i_rowPos );
         }
         catch( const Exception& )
         {
             DBG_UNHANDLED_EXCEPTION();
         }
-        return sRowHeader;
+        return aRowHeading;
     }
 
     //------------------------------------------------------------------------------------------------------------------

@@ -364,7 +364,9 @@ namespace svt { namespace table
     //------------------------------------------------------------------------------------------------------------------
     ::rtl::OUString TableControl::GetRowName( sal_Int32 _nIndex) const
     {
-        return GetModel()->getRowHeader( _nIndex );
+        ::rtl::OUString sRowName;
+        GetModel()->getRowHeading( _nIndex ) >>= sRowName;
+        return sRowName;
     }
 
     //------------------------------------------------------------------------------------------------------------------

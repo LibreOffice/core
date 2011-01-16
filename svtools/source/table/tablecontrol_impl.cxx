@@ -209,10 +209,10 @@ namespace svt { namespace table
         virtual void getCellToolTip( ColPos const, RowPos const, ::com::sun::star::uno::Any& )
         {
         }
-        virtual ::rtl::OUString getRowHeader( RowPos const i_rowPos ) const
+        virtual Any getRowHeading( RowPos const i_rowPos ) const
         {
             (void)i_rowPos;
-            return ::rtl::OUString();
+            return Any();
         }
     };
 

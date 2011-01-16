@@ -547,13 +547,13 @@ void SAL_CALL SVTXGridControl::dataChanged( const GridDataEvent& i_event ) throw
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-void SAL_CALL SVTXGridControl::rowTitleChanged( const GridDataEvent& i_event ) throw (RuntimeException)
+void SAL_CALL SVTXGridControl::rowHeadingChanged( const GridDataEvent& i_event ) throw (RuntimeException)
 {
     ::vos::OGuard aGuard( GetMutex() );
     OSL_UNUSED( i_event );
 
     TableControl* pTable = dynamic_cast< TableControl* >( GetWindow() );
-    ENSURE_OR_RETURN_VOID( pTable, "SVTXGridControl::rowTitleChanged: no control (anymore)!" );
+    ENSURE_OR_RETURN_VOID( pTable, "SVTXGridControl::rowHeadingChanged: no control (anymore)!" );
 
     // TODO: we could do better than this - invalidate the header area only
     pTable->Invalidate();

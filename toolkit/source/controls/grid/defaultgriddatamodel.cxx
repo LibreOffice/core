@@ -163,7 +163,7 @@ namespace toolkit
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    ::rtl::OUString SAL_CALL DefaultGridDataModel::getRowTitle( ::sal_Int32 i_row ) throw (RuntimeException, IndexOutOfBoundsException)
+    Any SAL_CALL DefaultGridDataModel::getRowHeading( ::sal_Int32 i_row ) throw (RuntimeException, IndexOutOfBoundsException)
     {
         ::comphelper::ComponentGuard aGuard( *this, rBHelper );
 
@@ -174,14 +174,14 @@ namespace toolkit
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    void SAL_CALL DefaultGridDataModel::addRow( const ::rtl::OUString& i_title, const Sequence< Any >& i_data ) throw (RuntimeException)
+    void SAL_CALL DefaultGridDataModel::addRow( const Any& i_heading, const Sequence< Any >& i_data ) throw (RuntimeException)
     {
         ::comphelper::ComponentGuard aGuard( *this, rBHelper );
 
         sal_Int32 const columnCount = i_data.getLength();
 
         // store header name
-        m_aRowHeaders.push_back( i_title );
+        m_aRowHeaders.push_back( i_heading );
 
         // store row m_aData
         impl_addRow( i_data );
@@ -213,14 +213,14 @@ namespace toolkit
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    void SAL_CALL DefaultGridDataModel::addRows( const Sequence< ::rtl::OUString >& i_titles, const Sequence< Sequence< Any > >& i_data ) throw (IllegalArgumentException, RuntimeException)
+    void SAL_CALL DefaultGridDataModel::addRows( const Sequence< Any >& i_headings, const Sequence< Sequence< Any > >& i_data ) throw (IllegalArgumentException, RuntimeException)
     {
-        if ( i_titles.getLength() != i_data.getLength() )
+        if ( i_headings.getLength() != i_data.getLength() )
             throw IllegalArgumentException( ::rtl::OUString(), *this, -1 );
 
         ::comphelper::ComponentGuard aGuard( *this, rBHelper );
 
-        sal_Int32 const rowCount = i_titles.getLength();
+        sal_Int32 const rowCount = i_headings.getLength();
         if ( rowCount == 0 )
             return;
 
@@ -235,7 +235,7 @@ namespace toolkit
 
         for ( sal_Int32 row=0; row<rowCount;  ++row )
         {
-            m_aRowHeaders.push_back( i_titles[row] );
+            m_aRowHeaders.push_back( i_headings[row] );
             impl_addRow( i_data[row], maxColCount );
         }
 
@@ -339,18 +339,18 @@ namespace toolkit
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    void SAL_CALL DefaultGridDataModel::setRowTitle( ::sal_Int32 i_rowIndex, const ::rtl::OUString& i_title ) throw (IndexOutOfBoundsException, RuntimeException)
+    void SAL_CALL DefaultGridDataModel::setRowHeading( ::sal_Int32 i_rowIndex, const Any& i_heading ) throw (IndexOutOfBoundsException, RuntimeException)
     {
         ::comphelper::ComponentGuard aGuard( *this, rBHelper );
 
         if  ( ( i_rowIndex < 0 ) || ( size_t( i_rowIndex ) >= m_aRowHeaders.size() ) )
             throw IndexOutOfBoundsException( ::rtl::OUString(), *this );
 
-        m_aRowHeaders[ i_rowIndex ] = i_title;
+        m_aRowHeaders[ i_rowIndex ] = i_heading;
 
         broadcast(
             GridDataEvent( *this, -1, -1, i_rowIndex, i_rowIndex ),
-            &XGridDataListener::rowTitleChanged,
+            &XGridDataListener::rowHeadingChanged,
             aGuard
         );
     }
@@ -395,7 +395,7 @@ namespace toolkit
         GridData aEmptyData;
         m_aData.swap( aEmptyData );
 
-        ::std::vector< ::rtl::OUString > aEmptyRowHeaders;
+        ::std::vector< Any > aEmptyRowHeaders;
         m_aRowHeaders.swap( aEmptyRowHeaders );
 
         m_nColumnCount = 0;

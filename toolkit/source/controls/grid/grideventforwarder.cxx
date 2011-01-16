@@ -105,11 +105,11 @@ namespace toolkit
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    void SAL_CALL GridEventForwarder::rowTitleChanged( const GridDataEvent& i_event ) throw (RuntimeException)
+    void SAL_CALL GridEventForwarder::rowHeadingChanged( const GridDataEvent& i_event ) throw (RuntimeException)
     {
         Reference< XGridDataListener > xPeer( m_parent.getPeer(), UNO_QUERY );
         if ( xPeer.is() )
-            xPeer->rowTitleChanged( i_event );
+            xPeer->rowHeadingChanged( i_event );
     }
 
     //------------------------------------------------------------------------------------------------------------------
