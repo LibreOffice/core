@@ -171,22 +171,17 @@ namespace framework
 
 #define SFX_REFERER_USER        "private:user"
 
-const ::rtl::OUString aCmdHelpIndex( RTL_CONSTASCII_USTRINGPARAM( ".uno:HelpIndex" ));
-const ::rtl::OUString aCmdToolsMenu( RTL_CONSTASCII_USTRINGPARAM( ".uno:ToolsMenu" ));
-const ::rtl::OUString aCmdHelpMenu( RTL_CONSTASCII_USTRINGPARAM( ".uno:HelpMenu" ));
-const ::rtl::OUString aSlotHelpMenu( RTL_CONSTASCII_USTRINGPARAM( "slot:5410" ));
+#define aCmdHelpIndex ".uno:HelpIndex"
+#define aCmdToolsMenu ".uno:ToolsMenu"
+#define aCmdHelpMenu ".uno:HelpMenu"
+#define aSlotHelpMenu "slot:5410"
 
-const ::rtl::OUString aSpecialFileMenu( RTL_CONSTASCII_USTRINGPARAM( "file" ));
-const ::rtl::OUString aSpecialWindowMenu( RTL_CONSTASCII_USTRINGPARAM( "window" ));
-const ::rtl::OUString aSlotSpecialFileMenu( RTL_CONSTASCII_USTRINGPARAM( "slot:5510" ));
-const ::rtl::OUString aSlotSpecialWindowMenu( RTL_CONSTASCII_USTRINGPARAM( "slot:5610" ));
-const ::rtl::OUString aSlotSpecialToolsMenu( RTL_CONSTASCII_USTRINGPARAM( "slot:6677" ));
+#define aSpecialWindowMenu "window"
+#define aSlotSpecialWindowMenu "slot:5610"
+#define aSlotSpecialToolsMenu "slot:6677"
 
-// special uno commands for picklist and window list
-const ::rtl::OUString aSpecialFileCommand( RTL_CONSTASCII_USTRINGPARAM( ".uno:PickList" ));
-const ::rtl::OUString aSpecialWindowCommand( RTL_CONSTASCII_USTRINGPARAM( ".uno:WindowList" ));
-
-const ::rtl::OUString UNO_COMMAND( RTL_CONSTASCII_USTRINGPARAM( ".uno:" ));
+// special uno commands for window list
+#define aSpecialWindowCommand ".uno:WindowList"
 
 static sal_Int16 getImageTypeFromBools( sal_Bool bBig )
 {
@@ -861,9 +856,9 @@ IMPL_LINK( MenuBarManager, Activate, Menu *, pMenu )
         m_bActive = TRUE;
 
         ::rtl::OUString aMenuCommand( m_aMenuItemCommand );
-        if ( m_aMenuItemCommand == aSpecialWindowMenu ||
-             m_aMenuItemCommand == aSlotSpecialWindowMenu ||
-             aMenuCommand == aSpecialWindowCommand )
+        if ( m_aMenuItemCommand.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(aSpecialWindowMenu)) ||
+             m_aMenuItemCommand.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(aSlotSpecialWindowMenu)) ||
+             aMenuCommand.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(aSpecialWindowCommand)) )
              MenuManager::UpdateSpecialWindowMenu( pMenu,getServiceFactory(),m_aLock );
 
         // Check if some modes have changed so we have to update our menu images
@@ -902,7 +897,7 @@ IMPL_LINK( MenuBarManager, Activate, Menu *, pMenu )
 
                 // Set key code, workaround for hard-coded shortcut F1 mapped to .uno:HelpIndex
                 // Only non-popup menu items can have a short-cut
-                if ( pMenuItemHandler->aMenuItemURL == aCmdHelpIndex )
+                if ( pMenuItemHandler->aMenuItemURL.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(aCmdHelpIndex)) )
                 {
                     KeyCode aKeyCode( KEY_F1 );
                     pMenu->SetAccelKey( pMenuItemHandler->nItemId, aKeyCode );
@@ -1277,7 +1272,7 @@ void MenuBarManager::FillMenuManager( Menu* pMenu, const Reference< XFrame >& rF
             USHORT          nItemId  = pMenu->GetItemId( nPos );
             ::rtl::OUString aCommand = pMenu->GetItemCommand( nItemId );
             if ( nItemId == SID_MDIWINDOWLIST ||
-                 aCommand == aSpecialWindowCommand )
+                 aCommand.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(aSpecialWindowCommand)) )
             {
                 // Retrieve addon popup menus and add them to our menu bar
                 Reference< com::sun::star::frame::XModel >      xModel;
@@ -1378,12 +1373,12 @@ void MenuBarManager::FillMenuManager( Menu* pMenu, const Reference< XFrame >& rF
                     xPopupMenuDispatchProvider = pAttributes->xDispatchProvider;
 
                 // Check if this is the help menu. Add menu item if needed
-                if ( nItemId == SID_HELPMENU || aItemCommand == aSlotHelpMenu || aItemCommand == aCmdHelpMenu )
+                if ( nItemId == SID_HELPMENU || aItemCommand.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(aSlotHelpMenu)) || aItemCommand.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(aCmdHelpMenu)) )
                 {
                     // Check if this is the help menu. Add menu item if needed
                     CheckAndAddMenuExtension( pPopup );
                 }
-                else if (( nItemId == SID_ADDONLIST || aItemCommand == aSlotSpecialToolsMenu || aItemCommand == aCmdToolsMenu ) &&
+                else if (( nItemId == SID_ADDONLIST || aItemCommand.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(aSlotSpecialToolsMenu)) || aItemCommand.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(aCmdToolsMenu)) ) &&
                          AddonMenuManager::HasAddonMenuElements() )
                 {
                     // Create addon popup menu if there exist elements and this is the tools popup menu
@@ -1508,7 +1503,7 @@ void MenuBarManager::FillMenuManager( Menu* pMenu, const Reference< XFrame >& rF
 
             // Set key code, workaround for hard-coded shortcut F1 mapped to .uno:HelpIndex
             // Only non-popup menu items can have a short-cut
-            if ( pMenuItemHandler->aMenuItemURL == aCmdHelpIndex )
+            if ( pMenuItemHandler->aMenuItemURL.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(aCmdHelpIndex)) )
             {
                 KeyCode aKeyCode( KEY_F1 );
                 pMenu->SetAccelKey( pMenuItemHandler->nItemId, aKeyCode );
