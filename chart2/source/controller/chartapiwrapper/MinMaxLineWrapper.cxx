@@ -61,7 +61,6 @@ const Sequence< Property > & lcl_GetPropertySequence()
 {
     static Sequence< Property > aPropSeq;
 
-    // /--
     MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
     if( 0 == aPropSeq.getLength() )
     {
@@ -134,14 +133,12 @@ void SAL_CALL MinMaxLineWrapper::removeEventListener(
 {
     if(!m_pPropertyArrayHelper.get())
     {
-        // /--
         ::osl::MutexGuard aGuard( GetMutex() );
         if(!m_pPropertyArrayHelper.get())
         {
             sal_Bool bSorted = sal_True;
             m_pPropertyArrayHelper = ::boost::shared_ptr< ::cppu::OPropertyArrayHelper >( new ::cppu::OPropertyArrayHelper( lcl_GetPropertySequence(), bSorted ) );
         }
-        // \--
     }
     return *m_pPropertyArrayHelper.get();
 }
@@ -152,11 +149,9 @@ uno::Reference< beans::XPropertySetInfo > SAL_CALL MinMaxLineWrapper::getPropert
 {
     if( !m_xInfo.is() )
     {
-        // /--
         ::osl::MutexGuard aGuard( GetMutex() );
         if( !m_xInfo.is() )
             m_xInfo = ::cppu::OPropertySetHelper::createPropertySetInfo( getInfoHelper() );
-        // \--
     }
     return m_xInfo;
 }

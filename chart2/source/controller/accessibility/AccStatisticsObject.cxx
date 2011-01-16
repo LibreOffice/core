@@ -40,27 +40,9 @@ namespace chart
 
 AccStatisticsObject::AccStatisticsObject( const AccessibleElementInfo& rAccInfo )
         : AccessibleChartElement( rAccInfo, false/*NoChildren*/, true/*AlwaysTransparent*/ )
-        //, m_eType( eType )
-        //, m_nSeriesIndex( nSeriesIndex )
-{
-//    ChartModel * pModel = GetChartModel();
-//    OSL_ASSERT( pModel );
 
-    // /-- solar
+{
     SolarMutexGuard aSolarGuard;
-/*    switch( eType )
-    {
-        case MEAN_VAL_LINE:
-            SetItemSet( pModel->GetAverageAttr( m_nSeriesIndex ));
-            break;
-        case ERROR_BARS:
-            SetItemSet( pModel->GetErrorAttr( m_nSeriesIndex ));
-            break;
-        case REGRESSION:
-            SetItemSet( pModel->GetRegressAttr( m_nSeriesIndex ));
-            break;
-    }*/
-    // \-- solar
 }
 
 AccStatisticsObject::~AccStatisticsObject()

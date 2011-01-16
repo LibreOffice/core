@@ -98,12 +98,10 @@ awt::Rectangle AccessibleChartView::GetWindowPosSize() const
     Window* pWindow( VCLUnoHelper::GetWindow( GetInfo().m_xWindow ));
     if( pWindow )
     {
-        // /-- solar
         SolarMutexGuard aSolarGuard;
         Point aVCLPoint( pWindow->OutputToAbsoluteScreenPixel( Point( 0, 0 ) ));
         aBBox.X = aVCLPoint.getX();
         aBBox.Y = aVCLPoint.getY();
-        // \-- solar
     }
 
     return aBBox;

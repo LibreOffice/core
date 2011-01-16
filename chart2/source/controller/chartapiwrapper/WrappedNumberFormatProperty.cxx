@@ -117,8 +117,6 @@ Any WrappedNumberFormatProperty::getPropertyDefault( const Reference< beans::XPr
 }
 
 //-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
 
 WrappedLinkNumberFormatProperty::WrappedLinkNumberFormatProperty( WrappedNumberFormatProperty* pWrappedNumberFormatProperty )
         : WrappedProperty( C2U("LinkNumberFormatToSource"), C2U("") )

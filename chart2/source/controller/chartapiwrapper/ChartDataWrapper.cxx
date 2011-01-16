@@ -463,12 +463,7 @@ void SAL_CALL ChartDataWrapper::disposing( const lang::EventObject& /* Source */
 {
 }
 
-//  ::com::sun::star::chart::ChartDataChangeEvent aEvent;
-//  aEvent.Type = chart::ChartDataChangeType_ALL;
-//  aEvent.StartColumn = 0;
-//  aEvent.EndColumn = 0;
-//  aEvent.StartRow = 0;
-//  aEvent.EndRow = 0;
+
 void ChartDataWrapper::fireChartDataChangeEvent(
     ::com::sun::star::chart::ChartDataChangeEvent& aEvent )
 {

@@ -439,7 +439,6 @@ const uno::Sequence< Property > & lcl_GetPropertySequence()
 {
     static uno::Sequence< Property > aPropSeq;
 
-    // /--
     MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
     if( 0 == aPropSeq.getLength() )
     {
@@ -1160,7 +1159,6 @@ void SAL_CALL DiagramWrapper::dispose()
 {
     m_aEventListenerContainer.disposeAndClear( lang::EventObject( static_cast< ::cppu::OWeakObject* >( this )));
 
-    // /--
     MutexGuard aGuard( GetMutex());
 
     DisposeHelper::DisposeAndClear( m_xXAxisTitle );
@@ -1186,7 +1184,6 @@ void SAL_CALL DiagramWrapper::dispose()
     DisposeHelper::DisposeAndClear( m_xDownBarWrapper );
 
     clearWrappedPropertySet();
-    // \--
 }
 
 void SAL_CALL DiagramWrapper::addEventListener(
@@ -1203,8 +1200,6 @@ void SAL_CALL DiagramWrapper::removeEventListener(
     m_aEventListenerContainer.removeInterface( aListener );
 }
 
-//-----------------------------------------------------------------------------------------------------------------
-//-----------------------------------------------------------------------------------------------------------------
 //-----------------------------------------------------------------------------------------------------------------
 
 //PROP_DIAGRAM_DATAROW_SOURCE
@@ -1308,9 +1303,6 @@ Any WrappedDataRowSourceProperty::getPropertyDefault( const Reference< beans::XP
 }
 
 //-----------------------------------------------------------------------------------------------------------------
-//-----------------------------------------------------------------------------------------------------------------
-//-----------------------------------------------------------------------------------------------------------------
-
 
 //PROP_DIAGRAM_STACKED
 //PROP_DIAGRAM_DEEP
@@ -1427,8 +1419,6 @@ Any WrappedStackingProperty::getPropertyDefault( const Reference< beans::XProper
 }
 
 //-----------------------------------------------------------------------------------------------------------------
-//-----------------------------------------------------------------------------------------------------------------
-//-----------------------------------------------------------------------------------------------------------------
 
 //PROP_DIAGRAM_THREE_D
 class WrappedDim3DProperty : public WrappedProperty
@@ -1501,8 +1491,6 @@ Any WrappedDim3DProperty::getPropertyDefault( const Reference< beans::XPropertyS
     return aRet;
 }
 
-//-----------------------------------------------------------------------------------------------------------------
-//-----------------------------------------------------------------------------------------------------------------
 //-----------------------------------------------------------------------------------------------------------------
 
 //PROP_DIAGRAM_VERTICAL
@@ -1581,8 +1569,6 @@ Any WrappedVerticalProperty::getPropertyDefault( const Reference< beans::XProper
     return aRet;
 }
 
-//-----------------------------------------------------------------------------------------------------------------
-//-----------------------------------------------------------------------------------------------------------------
 //-----------------------------------------------------------------------------------------------------------------
 
 //PROP_DIAGRAM_NUMBER_OF_LINES
@@ -1741,8 +1727,6 @@ Any WrappedNumberOfLinesProperty::getPropertyDefault( const Reference< beans::XP
 }
 
 //-----------------------------------------------------------------------------------------------------------------
-//-----------------------------------------------------------------------------------------------------------------
-//-----------------------------------------------------------------------------------------------------------------
 
 //PROP_DIAGRAM_ATTRIBUTED_DATA_POINTS
 class WrappedAttributedDataPointsProperty : public WrappedProperty
@@ -1862,8 +1846,6 @@ Any WrappedAttributedDataPointsProperty::getPropertyDefault( const Reference< be
 }
 
 //-----------------------------------------------------------------------------------------------------------------
-//-----------------------------------------------------------------------------------------------------------------
-//-----------------------------------------------------------------------------------------------------------------
 
 //PROP_DIAGRAM_SOLIDTYPE
 class WrappedSolidTypeProperty : public WrappedProperty
@@ -1940,8 +1922,6 @@ Any WrappedSolidTypeProperty::getPropertyDefault( const Reference< beans::XPrope
 }
 
 //-----------------------------------------------------------------------------------------------------------------
-//-----------------------------------------------------------------------------------------------------------------
-//-----------------------------------------------------------------------------------------------------------------
 
 class WrappedAutomaticSizeProperty : public WrappedProperty
 {
@@ -2015,8 +1995,6 @@ Any WrappedAutomaticSizeProperty::getPropertyDefault( const Reference< beans::XP
 }
 
 //-----------------------------------------------------------------------------------------------------------------
-//-----------------------------------------------------------------------------------------------------------------
-//-----------------------------------------------------------------------------------------------------------------
 
 //PROP_DIAGRAM_INCLUDE_HIDDEN_CELLS
 class WrappedIncludeHiddenCellsProperty : public WrappedProperty
@@ -2052,8 +2030,6 @@ void WrappedIncludeHiddenCellsProperty::setPropertyValue( const Any& rOuterValue
     ChartModelHelper::setIncludeHiddenCells( bNewValue, m_spChart2ModelContact->getChartModel() );
 }
 
-//-----------------------------------------------------------------------------------------------------------------
-//-----------------------------------------------------------------------------------------------------------------
 //-----------------------------------------------------------------------------------------------------------------
 
 // ____ XDiagramProvider ____
@@ -2129,9 +2105,6 @@ uno::Sequence< OUString > DiagramWrapper::getSupportedServiceNames_Static()
     aServices[ 5 ] = C2U( "com.sun.star.chart.ChartAxisZSupplier" );
     aServices[ 6 ] = C2U( "com.sun.star.chart.ChartTwoAxisXSupplier" );
     aServices[ 7 ] = C2U( "com.sun.star.chart.ChartTwoAxisYSupplier" );
-//     aServices[ x ] = C2U( "com.sun.star.beans.PropertySet" );
-//     aServices[ x ] = C2U( "com.sun.star.drawing.FillProperties" );
-//     aServices[ x ] = C2U( "com.sun.star.drawing.LineProperties" );
 
     return aServices;
 }

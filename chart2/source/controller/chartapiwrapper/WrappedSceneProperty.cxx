@@ -55,8 +55,6 @@ void WrappedSceneProperty::addWrappedProperties( std::vector< WrappedProperty* >
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-//----------------------------------------------------------------------------------------------------------------------
-//----------------------------------------------------------------------------------------------------------------------
 
 WrappedD3DTransformMatrixProperty::WrappedD3DTransformMatrixProperty(
             ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact )

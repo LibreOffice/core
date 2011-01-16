@@ -140,8 +140,6 @@ enum
 }//anonymous namespace
 
 //-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
 //static
 void WrappedScaleTextProperties::addProperties( ::std::vector< Property > & rOutProperties )
 {
@@ -153,7 +151,6 @@ void WrappedScaleTextProperties::addProperties( ::std::vector< Property > & rOut
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 }
 
-//-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
 
 //static

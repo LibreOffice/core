@@ -50,8 +50,6 @@ const sal_Int32 DEFAULT_GAPWIDTH = 100;
 const sal_Int32 DEFAULT_OVERLAP = 0;
 
 //-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
 
 WrappedBarPositionProperty_Base::WrappedBarPositionProperty_Base(
                   const ::rtl::OUString& rOuterName
@@ -172,8 +170,6 @@ Any WrappedBarPositionProperty_Base::getPropertyValue( const Reference< beans::X
 }
 
 //-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
 
 WrappedGapwidthProperty::WrappedGapwidthProperty(
         ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact )
@@ -184,8 +180,6 @@ WrappedGapwidthProperty::~WrappedGapwidthProperty()
 {
 }
 
-//-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
 
 WrappedBarOverlapProperty::WrappedBarOverlapProperty(

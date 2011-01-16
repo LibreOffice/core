@@ -51,9 +51,6 @@ namespace chart
 namespace wrapper
 {
 
-
-//-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
 
 class WrappedStockProperty : public WrappedProperty
@@ -136,8 +133,6 @@ void WrappedStockProperty::setPropertyValue( const ::com::sun::star::uno::Any& r
 }
 
 //-------------------------------------------------------------------------------------
-//-------------------------------------------------------------------------------------
-//-------------------------------------------------------------------------------------
 
 class WrappedVolumeProperty : public WrappedStockProperty
 {
@@ -211,8 +206,6 @@ uno::Reference< chart2::XChartTypeTemplate > WrappedVolumeProperty::getNewTempla
 }
 
 //-------------------------------------------------------------------------------------
-//-------------------------------------------------------------------------------------
-
 
 class WrappedUpDownProperty : public WrappedStockProperty
 {
@@ -290,8 +283,6 @@ enum
 }//anonymous namespace
 
 //-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
 //static
 void WrappedStockProperties::addProperties( ::std::vector< Property > & rOutProperties )
 {
@@ -312,8 +303,6 @@ void WrappedStockProperties::addProperties( ::std::vector< Property > & rOutProp
 }
 
 //-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
-
 //static
 void WrappedStockProperties::addWrappedProperties( std::vector< WrappedProperty* >& rList
                                     , ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact )
@@ -321,10 +310,6 @@ void WrappedStockProperties::addWrappedProperties( std::vector< WrappedProperty*
     rList.push_back( new WrappedVolumeProperty( spChart2ModelContact ) );
     rList.push_back( new WrappedUpDownProperty( spChart2ModelContact ) );
 }
-
-//-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
 
 } //namespace wrapper
 } //namespace chart

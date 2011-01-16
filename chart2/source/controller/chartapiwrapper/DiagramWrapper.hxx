@@ -73,8 +73,7 @@ class DiagramWrapper : public ::cppu::ImplInheritanceHelper12<
                      , ::com::sun::star::chart::X3DDisplay
                      , ::com::sun::star::chart::X3DDefaultSetter
                      , ::com::sun::star::lang::XServiceInfo
-                        , ::com::sun::star::lang::XComponent
-//                      , ::com::sun::star::lang::XEventListener
+                     , ::com::sun::star::lang::XComponent
                      , ::com::sun::star::chart::XDiagramPositioning
                      , ::com::sun::star::chart2::XDiagramProvider
                      , ::com::sun::star::chart::XSecondAxisTitleSupplier

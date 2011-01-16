@@ -61,7 +61,6 @@ const Sequence< Property > & lcl_GetPropertySequence()
 {
     static Sequence< Property > aPropSeq;
 
-    // /--
     MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
     if( 0 == aPropSeq.getLength() )
     {
@@ -137,14 +136,12 @@ void SAL_CALL UpDownBarWrapper::removeEventListener(
 {
     if(!m_pPropertyArrayHelper.get())
     {
-        // /--
         ::osl::MutexGuard aGuard( GetMutex() );
         if(!m_pPropertyArrayHelper.get())
         {
             sal_Bool bSorted = sal_True;
             m_pPropertyArrayHelper = ::boost::shared_ptr< ::cppu::OPropertyArrayHelper >( new ::cppu::OPropertyArrayHelper( lcl_GetPropertySequence(), bSorted ) );
         }
-        // \--
     }
     return *m_pPropertyArrayHelper.get();
 }
@@ -155,11 +152,9 @@ uno::Reference< beans::XPropertySetInfo > SAL_CALL UpDownBarWrapper::getProperty
 {
     if( !m_xInfo.is() )
     {
-        // /--
         ::osl::MutexGuard aGuard( GetMutex() );
         if( !m_xInfo.is() )
             m_xInfo = ::cppu::OPropertySetHelper::createPropertySetInfo( getInfoHelper() );
-        // \--
     }
     return m_xInfo;
 }
@@ -322,7 +317,6 @@ uno::Any SAL_CALL UpDownBarWrapper::getPropertyDefault( const ::rtl::OUString& r
 {
     static tPropertyValueMap aStaticDefaults;
 
-    // /--
     ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
     if( 0 == aStaticDefaults.size() )
     {

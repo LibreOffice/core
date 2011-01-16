@@ -102,11 +102,10 @@ private:
     ChartDocumentWrapper& m_rChartDocumentWrapper;
 };
 
-}
+} //namespace wrapper
 
-//.............................................................................
 } //namespace chart
-//.............................................................................
+
 
 // CHART_WRAPPED_ADDIN_PROPERTY_HXX
 #endif

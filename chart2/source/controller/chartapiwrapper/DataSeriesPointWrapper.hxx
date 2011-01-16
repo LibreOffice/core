@@ -136,8 +136,6 @@ private:
         sal_Int32 nHandle, const ::com::sun::star::uno::Any& rValue )
         throw (::com::sun::star::uno::Exception);
 
-    // ----------------------------------------
-
     ::boost::shared_ptr< Chart2ModelContact >   m_spChart2ModelContact;
     ::cppu::OInterfaceContainerHelper           m_aEventListenerContainer;
 

@@ -69,8 +69,6 @@ namespace wrapper
 
 
 //-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
 
 class WrappedSymbolTypeProperty : public WrappedSeriesOrDiagramProperty< sal_Int32 >
 {
@@ -200,8 +198,6 @@ void lcl_addWrappedProperties( std::vector< WrappedProperty* >& rList
 }//anonymous namespace
 
 //-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
 //static
 void WrappedSymbolProperties::addProperties( ::std::vector< Property > & rOutProperties )
 {
@@ -235,8 +231,6 @@ void WrappedSymbolProperties::addProperties( ::std::vector< Property > & rOutPro
 }
 
 //-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
-
 //static
 void WrappedSymbolProperties::addWrappedPropertiesForSeries( std::vector< WrappedProperty* >& rList
                                     , ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact )
@@ -245,8 +239,6 @@ void WrappedSymbolProperties::addWrappedPropertiesForSeries( std::vector< Wrappe
 }
 
 //-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
-
 //static
 void WrappedSymbolProperties::addWrappedPropertiesForDiagram( std::vector< WrappedProperty* >& rList
                                     , ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact )
@@ -254,8 +246,6 @@ void WrappedSymbolProperties::addWrappedPropertiesForDiagram( std::vector< Wrapp
     lcl_addWrappedProperties( rList, spChart2ModelContact, DIAGRAM );
 }
 
-//-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
 
 WrappedSymbolTypeProperty::WrappedSymbolTypeProperty(
@@ -345,8 +335,6 @@ beans::PropertyState WrappedSymbolTypeProperty::getPropertyState( const Referenc
 }
 
 //-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
 
 WrappedSymbolBitmapURLProperty::WrappedSymbolBitmapURLProperty(
     ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact,
@@ -419,8 +407,6 @@ void WrappedSymbolBitmapURLProperty::setValueToSeries(
 }
 
 
-//-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
 
 namespace
@@ -546,8 +532,6 @@ beans::PropertyState WrappedSymbolSizeProperty::getPropertyState( const Referenc
 }
 
 //-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
 
 WrappedSymbolAndLinesProperty::WrappedSymbolAndLinesProperty(
     ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact,
@@ -584,10 +568,6 @@ beans::PropertyState WrappedSymbolAndLinesProperty::getPropertyState( const Refe
     //do not export this property anymore, instead use a linestyle none for no lines
     return beans::PropertyState_DEFAULT_VALUE;
 }
-
-//-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
 
 } //namespace wrapper
 } //namespace chart

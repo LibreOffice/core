@@ -130,8 +130,7 @@ void lcl_addWrappedProperties( std::vector< WrappedProperty* >& rList )
 }//anonymous namespace
 
 //-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
+
 //static
 void WrappedAutomaticPositionProperties::addProperties( ::std::vector< Property > & rOutProperties )
 {
@@ -143,7 +142,6 @@ void WrappedAutomaticPositionProperties::addProperties( ::std::vector< Property 
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 }
 
-//-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
 
 //static

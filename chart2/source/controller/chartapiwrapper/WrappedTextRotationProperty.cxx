@@ -41,7 +41,6 @@ using ::rtl::OUString;
 //.............................................................................
 namespace chart
 {
-//.............................................................................
 
 WrappedTextRotationProperty::WrappedTextRotationProperty( bool bDirectState )
     : ::chart::WrappedProperty( C2U( "TextRotation" ), C2U( "TextRotation" ) )
@@ -83,7 +82,6 @@ Any WrappedTextRotationProperty::convertOuterToInnerValue( const Any& rOuterValu
     return aRet;
 }
 
-//.............................................................................
 } //namespace chart
 //.............................................................................
 
