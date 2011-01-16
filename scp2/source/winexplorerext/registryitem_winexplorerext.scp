@@ -113,7 +113,7 @@ RegistryItem gid_Regitem_Clsid_7BC0E710_5703_45BE_A29D_5D46D8B39262
     ModuleID = gid_Module_Root;
     Subkey = "CLSID\{7BC0E710-5703-45BE-A29D-5D46D8B39262}";
 // Better?: "OpenOffice.org Format Filter"
-// old:    Value = "opendocument.org Filter";
+// old:    Value = "libreoffice.org Filter";
 	Styles = (X64_ONLY); // Values: X64
     Value = "OpenDocument Format Filter";
     Val64 = "OpenDocument Format Filter";
@@ -143,7 +143,7 @@ RegistryItem gid_Regitem_Clsid_7BC0E713_5703_45BE_A29D_5D46D8B39262
     ModuleID = gid_Module_Root;
     Subkey = "CLSID\{7BC0E713-5703-45BE-A29D-5D46D8B39262}";
 //? Better: "OpenOffice.org Persistent Handler"
-// old:    Value = "opendocument.org Persistent Handler";
+// old:    Value = "libreoffice.org Persistent Handler";
 	Styles = (X64); // Values: X64
     Value = "OpenDocument Format Persistent Handler";
     Val64 = "OpenDocument Format Persistent Handler";

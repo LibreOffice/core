@@ -430,7 +430,7 @@ End
         ParentID = PREDEFINED_HKEY_CLASSES_ROOT; \
         ModuleID = modid; \
         Subkey = STRING(CONCAT3(.,key,\OpenWithProgIDs)); \
-        Name = STRING(CONCAT2(OpenOffice.org.,name)); \
+        Name = STRING(CONCAT2(LibreOffice.,name)); \
         Value = " "; \
     End
 
@@ -439,7 +439,7 @@ End
         ParentID = PREDEFINED_HKEY_CLASSES_ROOT; \
         ModuleID = gid_Module_Root_Reg_##name; \
         Subkey = STRING(CONCAT2(.,key)); \
-        Value = STRING(CONCAT2(OpenOffice.org.,name)); \
+        Value = STRING(CONCAT2(LibreOffice.,name)); \
         ComponentCondition = STRING(CONCAT3(REGISTER_,cond,=1)); \
     End
 
@@ -447,7 +447,7 @@ End
     RegistryItem CONCAT2(gid_Regitem_Openoffice_,name) \
         ParentID = PREDEFINED_HKEY_CLASSES_ROOT; \
         ModuleID = modid; \
-        Subkey = STRING(CONCAT2(OpenOffice.org.,name)); \
+        Subkey = STRING(CONCAT2(LibreOffice.,name)); \
         REG_VALUE_LNG(disp_name) \
     End
 
@@ -455,7 +455,7 @@ End
     RegistryItem CONCAT3(gid_Regitem_Openoffice_,name,_Defaulticon) \
         ParentID = PREDEFINED_HKEY_CLASSES_ROOT; \
         ModuleID = modid; \
-        Subkey = STRING(CONCAT3(OpenOffice.org.,name,\DefaultIcon)); \
+        Subkey = STRING(CONCAT3(LibreOffice.,name,\DefaultIcon)); \
         Value = "<progpath>\program\soffice.exe," STRING(icon_id); \
     End
 
@@ -463,7 +463,7 @@ End
     RegistryItem CONCAT3(gid_Regitem_Openoffice_,name,_Shell) \
         ParentID = PREDEFINED_HKEY_CLASSES_ROOT; \
         ModuleID = modid; \
-        Subkey = STRING(CONCAT3(OpenOffice.org.,name,\shell)); \
+        Subkey = STRING(CONCAT3(LibreOffice.,name,\shell)); \
         Value = STRING(default); \
     End
 
@@ -471,13 +471,13 @@ End
     RegistryItem CONCAT3(gid_Regitem_Openoffice_,name,_Shell_New) \
         ParentID = PREDEFINED_HKEY_CLASSES_ROOT; \
         ModuleID = modid; \
-        Subkey = STRING(CONCAT3(OpenOffice.org.,name,\shell\new)); \
+        Subkey = STRING(CONCAT3(LibreOffice.,name,\shell\new)); \
         REG_VALUE_LNG(NEW) \
     End \
     RegistryItem CONCAT3(gid_Regitem_Openoffice_,name,_Shell_New_Command) \
         ParentID = PREDEFINED_HKEY_CLASSES_ROOT; \
         ModuleID = modid; \
-        Subkey = STRING(CONCAT3(OpenOffice.org.,name,\shell\new\command)); \
+        Subkey = STRING(CONCAT3(LibreOffice.,name,\shell\new\command)); \
         Value = "\"<progpath>\program\\" STRING(app) "\" -n \"%1\""; \
     End
 
@@ -485,7 +485,7 @@ End
     RegistryItem CONCAT3(gid_Regitem_Openoffice_,name,_Shell_Open_Command) \
         ParentID = PREDEFINED_HKEY_CLASSES_ROOT; \
         ModuleID = modid; \
-        Subkey = STRING(CONCAT3(OpenOffice.org.,name,\shell\open\command)); \
+        Subkey = STRING(CONCAT3(LibreOffice.,name,\shell\open\command)); \
         Value = "\"<progpath>\program\\" STRING(app) "\" -o \"%1\""; \
     End
 
@@ -493,7 +493,7 @@ End
     RegistryItem CONCAT3(gid_Regitem_Openoffice_,name,_Shell_Print_Command) \
         ParentID = PREDEFINED_HKEY_CLASSES_ROOT; \
         ModuleID = modid; \
-        Subkey = STRING(CONCAT3(OpenOffice.org.,name,\shell\print\command)); \
+        Subkey = STRING(CONCAT3(LibreOffice.,name,\shell\print\command)); \
         Value = "\"<progpath>\program\\" STRING(app) "\" -p \"%1\""; \
     End
 
@@ -501,7 +501,7 @@ End
     RegistryItem CONCAT3(gid_Regitem_Openoffice_,name,_Shell_Printto_Command) \
         ParentID = PREDEFINED_HKEY_CLASSES_ROOT; \
         ModuleID = modid; \
-        Subkey = STRING(CONCAT3(OpenOffice.org.,name,\shell\printto\command)); \
+        Subkey = STRING(CONCAT3(LibreOffice.,name,\shell\printto\command)); \
         Value = "\"<progpath>\program\\" STRING(app) "\" -pt \"%2\" \"%1\""; \
     End
 
@@ -511,7 +511,7 @@ End
         ModuleID = modid; \
         Subkey = STRING(Software\%MANUFACTURER\%PRODUCTNAME%PRODUCTADDON\%PRODUCTVERSION\Capabilities\FileAssociations); \
         Name = STRING(CONCAT2(.,key)); \
-        Value = STRING(CONCAT3(soffice.Star,doc_type,Document.6)); \
+        Value = STRING(CONCAT3(loffice.Star,doc_type,Document.6)); \
         Styles = (); \
     End
 
@@ -521,7 +521,7 @@ End
         ModuleID = modid; \
         Subkey = STRING(Software\%MANUFACTURER\%PRODUCTNAME%PRODUCTADDON\%PRODUCTVERSION\Capabilities\FileAssociations); \
         Name = STRING(CONCAT2(.,key)); \
-        Value = STRING(CONCAT3(soffice.Star,doc_type,Template.6)); \
+        Value = STRING(CONCAT3(loffice.Star,doc_type,Template.6)); \
         Styles = (); \
     End
 

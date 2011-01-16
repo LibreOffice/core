@@ -28,7 +28,7 @@ ECHO RegistryItem gid_Regitem_OpenOffice_%LINE%_OpenWith_%1		>> %OUTPUT%
 ECHO     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;				>> %OUTPUT%
 ECHO     Subkey = ".%LINE%\OpenWithProgIDs";					>> %OUTPUT%
 ECHO     ModuleID = gid_Module_Prg_%1_Bin;						>> %OUTPUT%
-ECHO     Name = "opendocument.%1Document.1";					>> %OUTPUT%
+ECHO     Name = "libreoffice.%1Document.1";					>> %OUTPUT%
 ECHO     Value = "%PRODUCTNAME %PRODUCTVERSION";				>> %OUTPUT%
 ECHO End														>> %OUTPUT%
 ECHO.															>> %OUTPUT%

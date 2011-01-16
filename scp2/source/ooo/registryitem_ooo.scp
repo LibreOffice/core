@@ -31,7 +31,7 @@ RegistryItem gid_Regitem_Bau
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     Subkey = ".bau";
     ModuleID = gid_Module_Root;
-    Value = "soffice.StarConfigFile.6";
+    Value = "loffice.StarConfigFile.6";
 End
 
 RegistryItem gid_Regitem_AppID__df595024_3257_41b3_bcf1_a51515ad205e_
@@ -102,47 +102,47 @@ RegistryItem gid_Regitem_Sdg
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     Subkey = ".sdg";
     ModuleID = gid_Module_Root;
-    Value = "soffice.StarConfigFile.6";
+    Value = "loffice.StarConfigFile.6";
 End
 
 RegistryItem gid_Regitem_Sdv
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     Subkey = ".sdv";
     ModuleID = gid_Module_Root;
-    Value = "soffice.StarConfigFile.6";
+    Value = "loffice.StarConfigFile.6";
 End
 
 RegistryItem gid_Regitem_Sob
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     Subkey = ".sob";
     ModuleID = gid_Module_Root;
-    Value = "soffice.StarConfigFile.6";
+    Value = "loffice.StarConfigFile.6";
 End
 
 RegistryItem gid_Regitem_Soc
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     Subkey = ".soc";
     ModuleID = gid_Module_Root;
-    Value = "soffice.StarConfigFile.6";
+    Value = "loffice.StarConfigFile.6";
 End
 
 RegistryItem gid_Regitem_Sod
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     Subkey = ".sod";
     ModuleID = gid_Module_Root;
-    Value = "soffice.StarConfigFile.6";
+    Value = "loffice.StarConfigFile.6";
 End
 
 RegistryItem gid_Regitem_Soe
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     Subkey = ".soe";
     ModuleID = gid_Module_Root;
-    Value = "soffice.StarConfigFile.6";
+    Value = "loffice.StarConfigFile.6";
 End
 
 RegistryItem gid_Regitem_Soffice_Starconfigfile_6
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    Subkey = "soffice.StarConfigFile.6";
+    Subkey = "loffice.StarConfigFile.6";
     ModuleID = gid_Module_Root;
     REG_VALUE_LNG(SO60_CONFIGFILE)
 End
@@ -405,14 +405,14 @@ RegistryItem gid_Regitem_Sog
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     Subkey = ".sog";
     ModuleID = gid_Module_Root;
-    Value = "soffice.StarConfigFile.6";
+    Value = "loffice.StarConfigFile.6";
 End
 
 RegistryItem gid_Regitem_Soh
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     Subkey = ".soh";
     ModuleID = gid_Module_Root;
-    Value = "soffice.StarConfigFile.6";
+    Value = "loffice.StarConfigFile.6";
 End
 
 RegistryItem gid_Regitem_Stardiv_Uno_Servicemanager
@@ -468,7 +468,7 @@ RegistryItem gid_Regitem_Thm
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     Subkey = ".thm";
     ModuleID = gid_Module_Root;
-    Value = "soffice.StarConfigFile.6";
+    Value = "loffice.StarConfigFile.6";
 End
 
 RegistryItem gid_Regitem_Vor_Contenttype
@@ -491,28 +491,28 @@ RegistryItem gid_Regitem_Xba
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     Subkey = ".xba";
     ModuleID = gid_Module_Root;
-    Value = "soffice.StarConfigFile.6";
+    Value = "loffice.StarConfigFile.6";
 End
 
 RegistryItem gid_Regitem_Xcs
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     Subkey = ".xcs";
     ModuleID = gid_Module_Root;
-    Value = "soffice.StarConfigFile.6";
+    Value = "loffice.StarConfigFile.6";
 End
 
 RegistryItem gid_Regitem_Xcu
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     Subkey = ".xcu";
     ModuleID = gid_Module_Root;
-    Value = "soffice.StarConfigFile.6";
+    Value = "loffice.StarConfigFile.6";
 End
 
 RegistryItem gid_Regitem_Xdl
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     Subkey = ".xdl";
     ModuleID = gid_Module_Root;
-    Value = "soffice.StarConfigFile.6";
+    Value = "loffice.StarConfigFile.6";
 End
 
 RegistryItem gid_Regitem_Software_Openofficeorg_Uno_Installpath
