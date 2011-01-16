@@ -466,4 +466,31 @@ BOOL FuncData::GetParamDesc( String& aName, String& aDesc, USHORT nParam )
 }
 
 
+bool FuncData::getParamDesc( ::rtl::OUString& aName, ::rtl::OUString& aDesc, sal_uInt16 nParam )
+{
+    bool bRet = false;
+    if ( nParam <= nParamCount )
+    {
+        osl::Module* pLib = pModuleData->GetInstance();
+        FARPROC fProc = (FARPROC) pLib->getFunctionSymbol( LIBFUNCNAME(GETPARAMDESC) );
+        if ( fProc != NULL )
+        {
+            sal_Char pcName[256];
+            sal_Char pcDesc[256];
+            *pcName = *pcDesc = 0;
+            sal_uInt16 nFuncNo = nNumber;   // nicht per Reference versauen lassen..
+            ((::GetParamDesc)fProc)( nFuncNo, nParam, pcName, pcDesc );
+            aName = ::rtl::OUString( pcName, 256, osl_getThreadTextEncoding() );
+            aDesc = ::rtl::OUString( pcDesc, 256, osl_getThreadTextEncoding() );
+            bRet = true;
+        }
+    }
+    if ( !bRet )
+    {
+        aName = ::rtl::OUString();
+        aDesc = ::rtl::OUString();
+    }
+    return bRet;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

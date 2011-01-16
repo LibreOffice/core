@@ -221,7 +221,7 @@ public:
     ScFunctionList();
     ~ScFunctionList();
 
-    ULONG           GetCount() const
+    sal_uInt32           GetCount() const
                     { return aFunctionList.Count(); }
 
     const ScFuncDesc*   First()
@@ -230,7 +230,7 @@ public:
     const ScFuncDesc*   Next()
                         { return (const ScFuncDesc*) aFunctionList.Next(); }
 
-    const ScFuncDesc*   GetFunction( ULONG nIndex ) const
+    const ScFuncDesc*   GetFunction( sal_uInt32 nIndex ) const
                     { return (const ScFuncDesc*) aFunctionList.GetObject( nIndex ); }
 
     xub_StrLen      GetMaxFuncNameLen() const
@@ -268,8 +268,8 @@ public:
     static ::rtl::OUString       GetCategoryName(sal_uInt32 _nCategoryNumber );
 
     const ScFuncDesc*   Get( const ::rtl::OUString& rFName ) const;
-    const ScFuncDesc*   Get( USHORT nFIndex ) const;
-    const ScFuncDesc*   First( USHORT nCategory = 0 ) const;
+    const ScFuncDesc*   Get( sal_uInt16 nFIndex ) const;
+    const ScFuncDesc*   First( sal_uInt16 nCategory = 0 ) const;
     const ScFuncDesc*   Next() const;
 
     // formula::IFunctionManager
