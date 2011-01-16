@@ -549,7 +549,7 @@ Star::Star( GenericInformationList *pStandLst, ByteString &rVersion,
                                     aPrjEntry += DirEntry( sPrjDir );
                                     aPrjEntry += DirEntry( sSolarFile );
 
-                                    pFileList->Insert( new String( aPrjEntry.GetFull()), LIST_APPEND );
+                                    pFileList->push_back( new String( aPrjEntry.GetFull()) );
 
                                     ByteString sFile( aPrjEntry.GetFull(), RTL_TEXTENCODING_ASCII_US );
                                 }
@@ -592,25 +592,26 @@ void Star::Read( String &rFileName )
 /*****************************************************************************/
 {
     ByteString aString;
-    aFileList.Insert( new String( rFileName ));
+    aFileList.push_back( new String( rFileName ));
 
     DirEntry aEntry( rFileName );
     aEntry.ToAbs();
     aEntry = aEntry.GetPath().GetPath().GetPath();
     sSourceRoot = aEntry.GetFull();
 
-    while( aFileList.Count()) {
-        StarFile *pFile = new StarFile( *aFileList.GetObject(( ULONG ) 0 ));
+    for ( size_t i = 0, n = aFileList.size(); i < n; ++ i )
+    {
+        StarFile *pFile = new StarFile( *aFileList[ i ] );
         if ( pFile->Exists()) {
-            SimpleConfig aSolarConfig( *aFileList.GetObject(( ULONG ) 0 ));
+            SimpleConfig aSolarConfig( *aFileList[ i ] );
             while (( aString = aSolarConfig.GetNext()) != "" )
                 InsertToken (( char * ) aString.GetBuffer());
         }
         aMutex.acquire();
         aLoadedFilesList.Insert( pFile, LIST_APPEND );
         aMutex.release();
-        aFileList.Remove(( ULONG ) 0 );
     }
+    aFileList.clear();
     // resolve all dependencies recursive
     Expand_Impl();
 }
@@ -619,12 +620,13 @@ void Star::Read( String &rFileName )
 void Star::Read( SolarFileList *pSolarFiles )
 /*****************************************************************************/
 {
-    while(  pSolarFiles->Count() ) {
+    for ( size_t i = 0, n = pSolarFiles->size(); i < n; ++ i )
+    {
         ByteString aString;
 
-        StarFile *pFile = new StarFile( *pSolarFiles->GetObject(( ULONG ) 0 ));
+        StarFile *pFile = new StarFile( *(*pSolarFiles)[ i ] );
         if ( pFile->Exists()) {
-            SimpleConfig aSolarConfig( *pSolarFiles->GetObject(( ULONG ) 0 ));
+            SimpleConfig aSolarConfig( *(*pSolarFiles)[ i ] );
             while (( aString = aSolarConfig.GetNext()) != "" )
                 InsertToken (( char * ) aString.GetBuffer());
         }
@@ -632,8 +634,9 @@ void Star::Read( SolarFileList *pSolarFiles )
         aMutex.acquire();
         aLoadedFilesList.Insert( pFile, LIST_APPEND );
         aMutex.release();
-        delete pSolarFiles->Remove(( ULONG ) 0 );
+        delete (*pSolarFiles)[ i ]; // TODO: isn't this deleting the object inserted into aLoadedFilesList?
     }
+    pSolarFiles->clear();
     delete pSolarFiles;
 
     Expand_Impl();
@@ -665,8 +668,8 @@ void Star::InsertSolarList( String sProject )
     // inserts a new solarlist part of another project
     String sFileName( CreateFileName( sProject ));
 
-    for ( ULONG i = 0; i < aFileList.Count(); i++ ) {
-        if (( *aFileList.GetObject( i )) == sFileName )
+    for ( size_t i = 0; i < aFileList.size(); i++ ) {
+        if ( (*aFileList[ i ]) == sFileName )
             return;
     }
 
@@ -674,7 +677,7 @@ void Star::InsertSolarList( String sProject )
     if ( HasProject( ssProject ))
         return;
 
-    aFileList.Insert( new String( sFileName ), LIST_APPEND );
+    aFileList.push_back( new String( sFileName ) );
 }
 
 /*****************************************************************************/
@@ -1082,7 +1085,7 @@ StarWriter::StarWriter( GenericInformationList *pStandLst, ByteString &rVersion,
                                     aPrjEntry += DirEntry( sPrjDir );
                                     aPrjEntry += DirEntry( sSolarFile );
 
-                                    pFileList->Insert( new String( aPrjEntry.GetFull()), LIST_APPEND );
+                                    pFileList->push_back( new String( aPrjEntry.GetFull()) );
 
                                     ByteString sFile( aPrjEntry.GetFull(), RTL_TEXTENCODING_ASCII_US );
                                     fprintf( stdout, "%s\n", sFile.GetBuffer());
@@ -1111,18 +1114,18 @@ USHORT StarWriter::Read( String aFileName, BOOL bReadComments, USHORT nMode  )
     nStarMode = nMode;
 
     ByteString aString;
-    aFileList.Insert( new String( aFileName ));
+    aFileList.push_back( new String( aFileName ) );
 
     DirEntry aEntry( aFileName );
     aEntry.ToAbs();
     aEntry = aEntry.GetPath().GetPath().GetPath();
     sSourceRoot = aEntry.GetFull();
 
-    while( aFileList.Count()) {
-
-        StarFile *pFile = new StarFile( *aFileList.GetObject(( ULONG ) 0 ));
+    for ( size_t i = 0, n = aFileList.size(); i < n; ++i )
+    {
+        StarFile *pFile = new StarFile( *aFileList[ i ] );
         if ( pFile->Exists()) {
-            SimpleConfig aSolarConfig( *aFileList.GetObject(( ULONG ) 0 ));
+            SimpleConfig aSolarConfig( *aFileList[ i ] );
             while (( aString = aSolarConfig.GetCleanedNextLine( bReadComments )) != "" )
                 InsertTokenLine ( aString );
         }
@@ -1130,8 +1133,9 @@ USHORT StarWriter::Read( String aFileName, BOOL bReadComments, USHORT nMode  )
         aMutex.acquire();
         aLoadedFilesList.Insert( pFile, LIST_APPEND );
         aMutex.release();
-        delete aFileList.Remove(( ULONG ) 0 );
+        delete aFileList[ i ]; // TODO: isn't this deleting the object inserted into aLoadedFilesList?
     }
+    aFileList.clear();
     // resolve all dependencies recursive
     Expand_Impl();
 
@@ -1147,12 +1151,12 @@ USHORT StarWriter::Read( SolarFileList *pSolarFiles, BOOL bReadComments )
     nStarMode = STAR_MODE_MULTIPLE_PARSE;
 
     // this ctor is used by StarBuilder to get the information for the whole workspace
-    while(  pSolarFiles->Count()) {
+    for ( size_t i = 0, n = pSolarFiles->size(); i < n; ++i )
+    {
         ByteString aString;
-
-        StarFile *pFile = new StarFile(  *pSolarFiles->GetObject(( ULONG ) 0 ));
+        StarFile *pFile = new StarFile(  *(*pSolarFiles)[ i ] );
         if ( pFile->Exists()) {
-            SimpleConfig aSolarConfig( *pSolarFiles->GetObject(( ULONG ) 0 ));
+            SimpleConfig aSolarConfig( *(*pSolarFiles)[ i ] );
             while (( aString = aSolarConfig.GetCleanedNextLine( bReadComments )) != "" )
                 InsertTokenLine ( aString );
         }
@@ -1160,8 +1164,9 @@ USHORT StarWriter::Read( SolarFileList *pSolarFiles, BOOL bReadComments )
         aMutex.acquire();
         aLoadedFilesList.Insert( pFile, LIST_APPEND );
         aMutex.release();
-        delete pSolarFiles->Remove(( ULONG ) 0 );
+        delete (*pSolarFiles)[ i ]; // TODO: isn't this deleting the object inserted into aLoadedFilesList?
     }
+    pSolarFiles->clear();
     delete pSolarFiles;
 
     Expand_Impl();

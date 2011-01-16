@@ -51,11 +51,6 @@
 class SByteStringList;
 class GenericInformationList;
 
-/*
-// Pfade auf Konfigurationsdateien des Build-Servers
-
-#define REQUEST_DIR         \\src\data4\source\b_server\server\newjob
-*/
 /*********************************************************************
 *
 *   Die Klasse CommandData haelte alle Informationen, die fuer die
@@ -279,8 +274,6 @@ public:
 *
 *********************************************************************/
 
-DECLARE_LIST ( SolarFileList, String* )
-
 class StarFile
 {
 private:
@@ -307,6 +300,7 @@ DECLARE_LIST( StarFileList, StarFile * )
 #define STAR_MODE_MULTIPLE_PARSE        0x0002
 
 typedef ::std::vector< Prj* > StarList;
+typedef ::std::vector< String* > SolarFileList;
 
 class Star
 {
