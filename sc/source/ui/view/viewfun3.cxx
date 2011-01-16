@@ -623,7 +623,6 @@ void ScViewFunc::PasteFromSystem()
     {
         TransferableDataHelper aDataHelper( TransferableDataHelper::CreateFromSystemClipboard( pWin ) );
 
-//      if (pClipObj.Is())
         {
             ULONG nBiff8 = SotExchange::RegisterFormatName(
                     String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("Biff8")));
@@ -1877,7 +1876,6 @@ void ScViewFunc::DataFormPutData( SCROW nCurrentRow ,
         }
         USHORT nExtFlags = 0;
         pDocSh->UpdatePaintExt( nExtFlags, nStartCol, nStartRow, nStartTab , nEndCol, nEndRow, nEndTab ); // content before the change
-        //rMark.SetMarkArea( aUserRange );
         pDoc->BeginDrawUndo();
 
         for(sal_uInt16 i = 0; i < aColLength; i++)
@@ -1888,7 +1886,6 @@ void ScViewFunc::DataFormPutData( SCROW nCurrentRow ,
                 pDoc->SetString( nStartCol + i, nCurrentRow, nTab, aFieldName );
             }
         }
-        //pDoc->ExtendMergeSel( nStartCol, nStartRow, nEndCol, nEndRow, rMark, TRUE );    // Refresh
         pDocSh->UpdatePaintExt( nExtFlags, nStartCol, nCurrentRow, nStartTab, nEndCol, nCurrentRow, nEndTab );  // content after the change
         SfxUndoAction* pUndo = new ScUndoDataForm( pDocSh,
                                                                 nStartCol, nCurrentRow, nStartTab,

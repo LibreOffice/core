@@ -125,10 +125,6 @@ BOOL ScTabViewShell::ActivateObject( SdrOle2Obj* pObj, long nVerb )
     ErrCode nErr = ERRCODE_NONE;
     BOOL bErrorShown = FALSE;
 
-    // linked objects aren't supported
-//  if ( xIPObj->IsLink() )
-//      nErr = xIPObj->DoVerb(nVerb);           // gelinkt -> ohne Client etc.
-//  else
     {
         SfxInPlaceClient* pClient = FindIPClient( xObj, pWin );
         if ( !pClient )
@@ -284,7 +280,6 @@ void ScTabViewShell::ExecDrawIns(SfxRequest& rReq)
     ScDrawView*  pView     = pTabView->GetScDrawView();
     ScDocShell*  pDocSh    = GetViewData()->GetDocShell();
     ScDocument*  pDoc      = pDocSh->GetDocument();
-//  SdrModel*    pDrModel  = pDocSh->MakeDrawLayer();
     SdrModel*    pDrModel  = pView->GetModel();
 
     switch ( nSlot )
@@ -301,7 +296,6 @@ void ScTabViewShell::ExecDrawIns(SfxRequest& rReq)
 
         case SID_INSERT_DIAGRAM:
             FuInsertChart(this, pWin, pView, pDrModel, rReq);
-//?         SC_MOD()->SetFunctionDlg( NULL );//XXX
             break;
 
         case SID_INSERT_OBJECT:

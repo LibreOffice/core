@@ -373,7 +373,6 @@ void ScTabView::ResetTimer()
 
 IMPL_LINK( ScTabView, TimerHdl, Timer*, EMPTYARG )
 {
-//  aScrollTimer.Stop();
     if (pTimerWindow)
         pTimerWindow->MouseMove( aTimerMEvt );
 

@@ -498,7 +498,6 @@ void ScDBFunc::DoSubTotals( const ScSubTotalParam& rParam, BOOL bRecord,
                 pUndoDB = new ScDBCollection( *pDocDB );
         }
 
-//      pDoc->SetOutlineTable( nTab, NULL );
         ScOutlineTable* pOut = pDoc->GetOutlineTable( nTab );
         if (pOut)
             pOut->GetRowArray()->RemoveAll();       // nur Zeilen-Outlines loeschen
@@ -530,7 +529,6 @@ void ScDBFunc::DoSubTotals( const ScSubTotalParam& rParam, BOOL bRecord,
 
         if (bRecord)
         {
-//          ScDBData* pUndoDBData = pDBData ? new ScDBData( *pDBData ) : NULL;
             pDocSh->GetUndoManager()->AddUndoAction(
                 new ScUndoSubTotals( pDocSh, nTab,
                                         rParam, aNewParam.nRow2,

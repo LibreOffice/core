@@ -2371,9 +2371,7 @@ void ScTabView::ActivateView( BOOL bActivate, BOOL bFirst )
 
         if (!bRefMode)
         {
-            //pScMod->InputEnterHandler();
-
-            //  #80843# pass view to GetInputHdl, this view may not be current anymore
+            //  pass view to GetInputHdl, this view may not be current anymore
             ScInputHandler* pHdl = SC_MOD()->GetInputHdl(aViewData.GetViewShell());
             if (pHdl)
                 pHdl->EnterHandler();
@@ -2390,9 +2388,6 @@ void ScTabView::ActivateView( BOOL bActivate, BOOL bFirst )
         HideAllCursors();               // Cursor
     else if (!bFirst)
         ShowAllCursors();
-
-    //HMHif (pDrawView)
-    //HMH   DrawShowMarkHdl(bActivate);     // Drawing-Markierung
 
     if (bActivate)
     {

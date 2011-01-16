@@ -533,20 +533,6 @@ void ScTabView::DrawEnableAnim(BOOL bSet)
     }
 }
 
-//HMHvoid ScTabView::DrawShowMarkHdl(BOOL bShow)
-//HMH{
-    //HMHif (!pDrawView)
-    //HMH   return;
-
-    //HMHif (bShow)
-    //HMH{
-    //HMH   if (!pDrawView->IsDisableHdl())
-    //HMH       pDrawView->ShowMarkHdl();
-    //HMH}
-    //HMHelse
-    //HMH   pDrawView->HideMarkHdl();
-//HMH}
-
 void ScTabView::UpdateDrawTextOutliner()
 {
     if ( pDrawView )

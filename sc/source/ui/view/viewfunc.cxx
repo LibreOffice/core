@@ -723,11 +723,6 @@ void ScViewFunc::EnterValue( SCCOL nCol, SCROW nRow, SCTAB nTab, const double& r
                     new ScUndoEnterValue( pDocSh, aPos, pUndoCell, rValue, bNeedHeight ) );
             }
 
-/*!             Zeilenhoehe anpassen? Dann auch bei Undo...
-            if (bNeedHeight)
-                AdjustRowHeight(nRow,nRow);
-*/
-
             pDocSh->PostPaintCell( aPos );
             pDocSh->UpdateOle(GetViewData());
             aModificator.SetDocumentModified();
@@ -1956,7 +1951,6 @@ void ScViewFunc::DeleteContents( USHORT nFlags, BOOL bRecord )
         aMarkRange.aEnd = aMarkRange.aStart;
         if ( pDoc->HasAttrib( aMarkRange, HASATTR_MERGED ) )
         {
-//          InitOwnBlockMode();
             aFuncMark.SetMarkArea( aMarkRange );
         }
         else
@@ -2053,7 +2047,6 @@ void ScViewFunc::DeleteContents( USHORT nFlags, BOOL bRecord )
     else
     {
         pDoc->DeleteSelection( nFlags, aFuncMark );
-//       aFuncMark.MarkToSimple();
     }
 
     if ( bRecord )

@@ -1405,12 +1405,11 @@ void ScViewFunc::FillTab( USHORT nFlags, USHORT nFunction, BOOL bSkipEmpty, BOOL
         aMarkRange = ScRange( GetViewData()->GetCurX(), GetViewData()->GetCurY(), nTab );
 
     ScDocument* pUndoDoc = NULL;
-//  if ( bRecord )
+
     if (bUndo)
     {
         pUndoDoc = new ScDocument( SCDOCMODE_UNDO );
         pUndoDoc->InitUndo( pDoc, nTab, nTab );
-//      pUndoDoc->SelectTable( nTab, TRUE );        // nur fuer Markierung
 
         SCTAB nTabCount = pDoc->GetTableCount();
         for (SCTAB i=0; i<nTabCount; i++)
@@ -1420,7 +1419,6 @@ void ScViewFunc::FillTab( USHORT nFlags, USHORT nFunction, BOOL bSkipEmpty, BOOL
                 aMarkRange.aStart.SetTab( i );
                 aMarkRange.aEnd.SetTab( i );
                 pDoc->CopyToDocument( aMarkRange, IDF_ALL, bMulti, pUndoDoc );
-//              pUndoDoc->SelectTable( i, TRUE );
             }
     }
 
@@ -1433,7 +1431,6 @@ void ScViewFunc::FillTab( USHORT nFlags, USHORT nFunction, BOOL bSkipEmpty, BOOL
         pDoc->FillTab( aMarkRange, rMark, nFlags, nFunction, bSkipEmpty, bAsLink );
     }
 
-//  if ( bRecord )
     if (bUndo)
     {   //! fuer ChangeTrack erst zum Schluss
         pDocSh->GetUndoManager()->AddUndoAction(
@@ -1685,7 +1682,6 @@ void ScViewFunc::SearchAndReplace( const SvxSearchItem* pSearchItem,
     SCCOL nCol = GetViewData()->GetCurX();
     SCROW nRow = GetViewData()->GetCurY();
     SCTAB nTab = GetViewData()->GetTabNo();
-//    BOOL bAttrib = pSearchItem->GetPattern();
     USHORT nCommand = pSearchItem->GetCommand();
     BOOL bAllTables = pSearchItem->IsAllTables();
     BOOL* pOldSelectedTables = NULL;
@@ -2218,10 +2214,7 @@ BOOL ScViewFunc::DeleteTables(const SvShorts &TheTabs, BOOL bRecord )
     if (bRecord)
     {
         pUndoDoc = new ScDocument( SCDOCMODE_UNDO );
-//      pUndoDoc->InitDrawLayer( pDocSh );
         SCTAB nCount = pDoc->GetTableCount();
-
-//      pUndoDoc->InitUndo( pDoc, 0, nCount-1 );        // incl. Ref.
 
         String aOldName;
         for(i=0;i<TheTabs.Count();i++)
@@ -2430,7 +2423,6 @@ void ScViewFunc::ImportTables( ScDocShell* pSrcShell,
     ScDocShell* pDocSh = GetViewData()->GetDocShell();
     ScDocument* pDoc = pDocSh->GetDocument();
     BOOL bUndo(pDoc->IsUndoEnabled());
-    //SCTAB nTab = GetViewData()->GetTabNo();
 
     BOOL bError = FALSE;
     BOOL bRefs = FALSE;

@@ -420,13 +420,8 @@ void ScDrawStringsVars::SetPattern( const ScPatternAttr* pNew, const SfxItemSet*
 
     //  Zahlenformat
 
-//    ULONG nOld = nValueFormat;
     nValueFormat = pPattern->GetNumberFormat( pOutput->pDoc->GetFormatTable(), pCondSet );
 
-/*  s.u.
-    if (nValueFormat != nOld)
-        pLastCell = NULL;           // immer neu formatieren
-*/
     //  Raender
 
     pMargin = (const SvxMarginItem*)&pPattern->GetItem( ATTR_MARGIN, pCondSet );
@@ -459,7 +454,6 @@ void ScDrawStringsVars::SetPatternSimple( const ScPatternAttr* pNew, const SfxIt
     //  Zahlenformat
 
     ULONG nOld = nValueFormat;
-//  nValueFormat = pPattern->GetNumberFormat( pFormatter );
     const SfxPoolItem* pFormItem;
     if ( !pCondSet || pCondSet->GetItemState(ATTR_VALUE_FORMAT,TRUE,&pFormItem) != SFX_ITEM_SET )
         pFormItem = &pPattern->GetItem(ATTR_VALUE_FORMAT);
@@ -879,11 +873,6 @@ BOOL ScOutputData::GetMergeOrigin( SCCOL nX, SCROW nY, SCSIZE nArrY,
     else if ( pInfo->bVOverlapped )
         bDoMerge = bIsTop;
 
-                                    // weiter solange versteckt
-/*  if (!bDoMerge)
-        return FALSE;
-*/
-
     rOverX = nX;
     rOverY = nY;
     BOOL bHOver = pInfo->bHOverlapped;
@@ -899,14 +888,11 @@ BOOL ScOutputData::GetMergeOrigin( SCCOL nX, SCROW nY, SCSIZE nArrY,
 
         if (rOverX >= nX1 && !bHidden)
         {
-//          rVirtPosX -= pRowInfo[0].pCellInfo[rOverX+1].nWidth;
             bHOver = pRowInfo[nArrY].pCellInfo[rOverX+1].bHOverlapped;
             bVOver = pRowInfo[nArrY].pCellInfo[rOverX+1].bVOverlapped;
         }
         else
         {
-//          if (!bClipVirt)
-//              rVirtPosX -= (long) (pDoc->GetColWidth( rOverX, nTab ) * nPPTX);
             USHORT nOverlap = ((ScMergeFlagAttr*)pDoc->GetAttr(
                                 rOverX, rOverY, nTab, ATTR_MERGE_FLAG ))->GetValue();
             bHOver = ((nOverlap & SC_MF_HOR) != 0);
@@ -929,14 +915,11 @@ BOOL ScOutputData::GetMergeOrigin( SCCOL nX, SCROW nY, SCSIZE nArrY,
             !pDoc->RowHidden(rOverY, nTab) &&
             pRowInfo[nArrY].nRowNo == rOverY)
         {
-//          rVirtPosY -= pRowInfo[nArrY].nHeight;
             bHOver = pRowInfo[nArrY].pCellInfo[rOverX+1].bHOverlapped;
             bVOver = pRowInfo[nArrY].pCellInfo[rOverX+1].bVOverlapped;
         }
         else
         {
-//          if (!bClipVirt)
-//              rVirtPosY -= (long) (pDoc->GetRowHeight( rOverY, nTab ) * nPPTY);
             USHORT nOverlap = ((ScMergeFlagAttr*)pDoc->GetAttr(
                                 rOverX, rOverY, nTab, ATTR_MERGE_FLAG ))->GetValue();
             bHOver = ((nOverlap & SC_MF_HOR) != 0);
@@ -1354,7 +1337,6 @@ void ScOutputData::DrawStrings( BOOL bPixelToLogic )
     BOOL bWasIdleDisabled = pDoc->IsIdleDisabled();
     pDoc->DisableIdle( TRUE );
     Size aMinSize = pRefDevice->PixelToLogic(Size(0,100));      // erst darueber wird ausgegeben
-//    UINT32 nMinHeight = aMinSize.Height() / 200;                // 1/2 Pixel
 
     ScDrawStringsVars aVars( this, bPixelToLogic );
 
@@ -1395,7 +1377,6 @@ void ScOutputData::DrawStrings( BOOL bPixelToLogic )
         if ( pThisRowInfo->bChanged )
         {
             SCROW nY = pThisRowInfo->nRowNo;
-//            long nCellHeight = (long) pThisRowInfo->nHeight;
             long nPosX = nInitPosX;
             if ( nLoopStartX < nX1 )
                 nPosX -= pRowInfo[0].pCellInfo[nLoopStartX+1].nWidth * nLayoutSign;
@@ -2383,7 +2364,6 @@ void ScOutputData::DrawEdit(BOOL bPixelToLogic)
 {
     vcl::PDFExtOutDevData* pPDFData = PTR_CAST( vcl::PDFExtOutDevData, pDev->GetExtOutDevData() );
     Size aMinSize = pRefDevice->PixelToLogic(Size(0,100));      // erst darueber wird ausgegeben
-//    UINT32 nMinHeight = aMinSize.Height() / 200;                // 1/2 Pixel
 
     ScModule* pScMod = SC_MOD();
     sal_Int32 nConfBackColor = pScMod->GetColorConfig().GetColorValue(svtools::DOCCOLOR).nColor;
@@ -2416,7 +2396,7 @@ void ScOutputData::DrawEdit(BOOL bPixelToLogic)
     for (SCSIZE nArrY=0; nArrY+1<nArrCount; nArrY++)            // 0 fuer Reste von zusammengefassten
     {
         RowInfo* pThisRowInfo = &pRowInfo[nArrY];
-//        long nCellHeight = (long) pThisRowInfo->nHeight;
+
         if (nArrY==1) nRowPosY = nScrY;                         // vorher wird einzeln berechnet
 
         if ( pThisRowInfo->bChanged || nArrY==0 )
@@ -3034,7 +3014,6 @@ void ScOutputData::DrawEdit(BOOL bPixelToLogic)
                                 short nOriVal = 0;
                                 if (aAlignParam.meOrient == SVX_ORIENTATION_TOPBOTTOM)
                                 {
-                                    // nOriVal = -900;
                                     nOriVal = 2700;
                                     if (aAlignParam.meHorJust != SVX_HOR_JUSTIFY_BLOCK)
                                     {
@@ -3638,8 +3617,6 @@ void ScOutputData::DrawRotated(BOOL bPixelToLogic)
                                     if ( eRotMode != SVX_ROTATE_MODE_STANDARD )
                                         nEngineWidth = (long) ( nRealHeight / fabs( nSin ) );
                                 }
-
-                                // BOOL bVClip = ( nEngineHeight > aCellSize.Height() );
 
                                 long nClipStartX = nStartX;
                                 if (nX<nX1)

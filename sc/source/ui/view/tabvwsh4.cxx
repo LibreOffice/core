@@ -412,7 +412,6 @@ void ScTabViewShell::InnerResizePixel( const Point &rOfs, const Size &rSize )
 
     UpdateOleZoom();                                    //  Zoom fuer In-Place berechnen
 
-//  GetViewData()->GetDocShell()->UpdateOle( GetViewData() );
     GetViewData()->GetDocShell()->SetDocumentModified();
 }
 
@@ -1570,7 +1569,6 @@ BOOL ScTabViewShell::SfxKeyInput(const KeyEvent& rKeyEvent)
 
 bool ScTabViewShell::KeyInput( const KeyEvent &rKeyEvent )
 {
-//  return SfxViewShell::KeyInput( rKeyEvent );
     return TabKeyInput( rKeyEvent );
 }
 
@@ -1617,7 +1615,6 @@ bool ScTabViewShell::KeyInput( const KeyEvent &rKeyEvent )
     bPrintSelected(FALSE),      \
     bReadOnly(FALSE),           \
     pScSbxObject(NULL),         \
-    /*bChartDlgIsEdit(FALSE),*/     \
     bChartAreaValid(FALSE),     \
     nCurRefDlgId(0),            \
     pAccessibilityBroadcaster(NULL)
@@ -1635,7 +1632,6 @@ void ScTabViewShell::Construct( BYTE nForceDesignMode )
 
     SetName( String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("View")) ); // fuer SBX
     Color aColBlack( COL_BLACK );
-//  SetPool( &pSfxApp->GetPool() );
     SetPool( &SC_MOD()->GetPool() );
     SetWindow( GetActiveWin() );
 
@@ -1862,9 +1858,6 @@ ScTabViewShell::ScTabViewShell( SfxViewFrame* pViewFrame,
         SetZoomType( rAppOpt.GetZoomType(), TRUE );
     }
 
-    /*uno::Reference<frame::XFrame> xFrame = pViewFrame->GetFrame().GetFrameInterface();
-    if (xFrame.is())
-        xFrame->setComponent( uno::Reference<awt::XWindow>(), new ScTabViewObj( this ) );*/
     // make Controller known to SFX
     new ScTabViewObj( this );
 

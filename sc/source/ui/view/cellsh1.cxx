@@ -1534,7 +1534,6 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
             break;
 
         case SID_SPELL_DIALOG:
-//           pTabViewShell->DoSpellingChecker();
             {
                 SfxViewFrame* pViewFrame = pTabViewShell->GetViewFrame();
                 if( rReq.GetArgs() )
@@ -1682,8 +1681,6 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
         case SID_INS_FUNCTION:
             {
                 const SfxBoolItem* pOkItem = (const SfxBoolItem*)&pReqArgs->Get( SID_DLG_RETOK );
-
-//              pScMod->SetFunctionDlg( NULL );
 
                 if ( pOkItem->GetValue() )      // OK
                 {

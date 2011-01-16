@@ -330,8 +330,6 @@ void ScFormatShell::ExecuteStyle( SfxRequest& rReq )
 
         String                  aStyleName;
         USHORT                  nRetMask = 0xffff;
-//      #96983# only stylist sends focus to sheet
-//        BOOL                    bGrabFocus = ( SID_STYLE_APPLY == nSlotId );
 
         pStylePool->SetSearchMask( eFamily, SFXSTYLEBIT_ALL );
 
@@ -813,8 +811,6 @@ void ScFormatShell::ExecuteStyle( SfxRequest& rReq )
 
                         if ( SFX_STYLE_FAMILY_PARA == eFam )
                         {
-//                          pDoc->CellStyleChanged( *pStyleSheet, aOldSet );
-
                             SfxItemSet& rNewSet = pStyleSheet->GetItemSet();
                             BOOL bNumFormatChanged;
                             if ( ScGlobal::CheckWidthInvalidate(
@@ -889,12 +885,7 @@ void ScFormatShell::ExecuteStyle( SfxRequest& rReq )
             }
         }
 
-//      if ( nRetMask != 0xffff )// Irgendein Wert MUSS geliefert werden JN
             rReq.SetReturnValue( SfxUInt16Item( nSlotId, nRetMask ) );
-
-//      #96983# only stylist sends focus to sheet
-//        if ( bGrabFocus )
-//            pTabViewShell->GetActiveWin()->GrabFocus();
 
         if ( bAddUndo && bUndo)
             pDocSh->GetUndoManager()->AddUndoAction(
@@ -1340,7 +1331,6 @@ void ScFormatShell::ExecuteTextAttr( SfxRequest& rReq )
                     SVX_HOR_JUSTIFY_LEFT : SVX_HOR_JUSTIFY_STANDARD, SID_H_ALIGNCELL ) );
                 ExecuteSlot( rReq, GetInterface() );
                 return;
-//              APPLY_HOR_JUSTIFY( SVX_HOR_JUSTIFY_LEFT );
                 //break;
 
             case SID_ALIGNRIGHT:
@@ -1350,7 +1340,6 @@ void ScFormatShell::ExecuteTextAttr( SfxRequest& rReq )
                     SVX_HOR_JUSTIFY_RIGHT : SVX_HOR_JUSTIFY_STANDARD, SID_H_ALIGNCELL ) );
                 ExecuteSlot( rReq, GetInterface() );
                 return;
-//              APPLY_HOR_JUSTIFY( SVX_HOR_JUSTIFY_RIGHT );
                 //break;
 
             case SID_ALIGNCENTERHOR:
@@ -1360,7 +1349,6 @@ void ScFormatShell::ExecuteTextAttr( SfxRequest& rReq )
                     SVX_HOR_JUSTIFY_CENTER : SVX_HOR_JUSTIFY_STANDARD, SID_H_ALIGNCELL ) );
                 ExecuteSlot( rReq, GetInterface() );
                 return;
-//              APPLY_HOR_JUSTIFY( SVX_HOR_JUSTIFY_CENTER );
                 //break;
 
             case SID_ALIGNBLOCK:
@@ -1370,7 +1358,6 @@ void ScFormatShell::ExecuteTextAttr( SfxRequest& rReq )
                     SVX_HOR_JUSTIFY_BLOCK : SVX_HOR_JUSTIFY_STANDARD, SID_H_ALIGNCELL ) );
                 ExecuteSlot( rReq, GetInterface() );
                 return;
-//              APPLY_HOR_JUSTIFY( SVX_HOR_JUSTIFY_BLOCK );
                 //break;
 
             case SID_ALIGNTOP:
@@ -1380,7 +1367,6 @@ void ScFormatShell::ExecuteTextAttr( SfxRequest& rReq )
                     SVX_VER_JUSTIFY_TOP : SVX_VER_JUSTIFY_STANDARD, SID_V_ALIGNCELL ) );
                 ExecuteSlot( rReq, GetInterface() );
                 return;
-//              APPLY_VER_JUSTIFY( SVX_VER_JUSTIFY_TOP );
                 //break;
 
             case SID_ALIGNBOTTOM:
@@ -1390,7 +1376,6 @@ void ScFormatShell::ExecuteTextAttr( SfxRequest& rReq )
                     SVX_VER_JUSTIFY_BOTTOM : SVX_VER_JUSTIFY_STANDARD, SID_V_ALIGNCELL ) );
                 ExecuteSlot( rReq, GetInterface() );
                 return;
-//              APPLY_VER_JUSTIFY( SVX_VER_JUSTIFY_BOTTOM );
                 //break;
 
             case SID_ALIGNCENTERVER:
@@ -1400,7 +1385,6 @@ void ScFormatShell::ExecuteTextAttr( SfxRequest& rReq )
                     SVX_VER_JUSTIFY_CENTER : SVX_VER_JUSTIFY_STANDARD, SID_V_ALIGNCELL ) );
                 ExecuteSlot( rReq, GetInterface() );
                 return;
-//              APPLY_VER_JUSTIFY( SVX_VER_JUSTIFY_CENTER );
                 //break;
 
             default:
@@ -1410,7 +1394,6 @@ void ScFormatShell::ExecuteTextAttr( SfxRequest& rReq )
     }
 
     rBindings.Update();
-//  rReq.Done();
 
     if( pNewSet )
     {
@@ -1737,13 +1720,6 @@ void ScFormatShell::GetAttrState( SfxItemSet& rSet )
                 rSet.Put( rBrushItem, GetPool().GetWhich(nWhich) );
             }
             break;
-/*          case SID_ATTR_ALIGN_LINEBREAK:
-            {
-                const SfxBoolItem& rBreakItem = (const SfxBoolItem&)rAttrSet.Get( ATTR_LINEBREAK );
-                rSet.Put( rBreakItem, GetPool().GetWhich(nWhich) );
-            }
-            break;
-*/
         }
         nWhich = aIter.NextWhich();
     }

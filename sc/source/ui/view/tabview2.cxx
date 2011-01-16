@@ -110,7 +110,6 @@ void ScTabView::InitOwnBlockMode()
         if (!rMark.IsMarked() && !rMark.IsMultiMarked())
             GetSelEngine()->CursorPosChanging( FALSE, FALSE );
 
-//      bIsBlockMode = TRUE;
         bIsBlockMode = SC_BLOCKMODE_OWN;            //! Variable umbenennen!
         nBlockStartX = 0;
         nBlockStartY = 0;
@@ -148,7 +147,6 @@ void ScTabView::InitBlockMode( SCCOL nCurX, SCROW nCurY, SCTAB nCurZ,
             bBlockNeg = FALSE;
         rMark.SetMarkNegative(bBlockNeg);
 
-//      bIsBlockMode = TRUE;
         bIsBlockMode = SC_BLOCKMODE_NORMAL;         //! Variable umbenennen!
         bBlockCols = bCols;
         bBlockRows = bRows;
@@ -210,7 +208,6 @@ void ScTabView::DoneBlockMode( BOOL bContinue )            // Default FALSE
             else
                 rMark.ResetMark();
         }
-//      bIsBlockMode = FALSE;
         bIsBlockMode = SC_BLOCKMODE_NONE;           //! Variable umbenennen!
 
         rMark.SetMarking(bFlag);
@@ -380,9 +377,6 @@ void ScTabView::MarkCursor( SCCOL nCurX, SCROW nCurY, SCTAB nCurZ,
                                         nDrawEndCol, nDrawEndRow, bCont );
         if ( bDraw )
         {
-//?         PutInOrder( nDrawStartCol, nDrawEndCol );
-//?         PutInOrder( nDrawStartRow, nDrawEndRow );
-
             HideAllCursors();
             InvertBlockMark( nDrawStartCol, nDrawStartRow, nDrawEndCol, nDrawEndRow );
             if (bCont)
@@ -399,7 +393,6 @@ void ScTabView::MarkCursor( SCCOL nCurX, SCROW nCurY, SCTAB nCurZ,
         nOldCurY = nCurY;
 
         aViewData.GetViewShell()->UpdateInputHandler();
-//      InvalidateAttribs();
     }
 
     if ( !bCols && !bRows )
@@ -1027,16 +1020,12 @@ void ScTabView::SelectAllTables()
 {
     ScDocument* pDoc = aViewData.GetDocument();
     ScMarkData& rMark = aViewData.GetMarkData();
-//    SCTAB nTab = aViewData.GetTabNo();
     SCTAB nCount = pDoc->GetTableCount();
 
     if (nCount>1)
     {
         for (SCTAB i=0; i<nCount; i++)
             rMark.SelectTable( i, TRUE );
-
-        //      Markierungen werden per Default nicht pro Tabelle gehalten
-//      pDoc->ExtendMarksFromTable( nTab );
 
         aViewData.GetDocShell()->PostPaintExtras();
         SfxBindings& rBind = aViewData.GetBindings();

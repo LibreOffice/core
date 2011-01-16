@@ -70,7 +70,6 @@ using namespace com::sun::star;
 
 void lcl_AdjustInsertPos( ScViewData* pData, Point& rPos, Size& rSize )
 {
-//  SdrPage* pPage = pData->GetDocument()->GetDrawLayer()->GetPage( pData->GetTabNo() );
     SdrPage* pPage = pData->GetScDrawView()->GetModel()->GetPage( static_cast<sal_uInt16>(pData->GetTabNo()) );
     DBG_ASSERT(pPage,"pPage ???");
     Size aPgSize( pPage->GetSize() );
@@ -160,9 +159,7 @@ void ScViewFunc::PasteDraw( const Point& rLogicPos, SdrModel* pModel,
                 const SdrMark* pM=aMark.GetMark(nm);
                 const SdrObject* pObj=pM->GetMarkedSdrObj();
 
-                // #116235#
                 SdrObject* pNeuObj=pObj->Clone();
-                //SdrObject* pNeuObj=pObj->Clone(pDestPage,pDrawModel);
 
                 if (pNeuObj!=NULL)
                 {
@@ -374,7 +371,7 @@ BOOL ScViewFunc::PasteGraphic( const Point& rPos, const Graphic& rGraphic,
     }
 
     Size aSize = pWin->LogicToLogic( rGraphic.GetPrefSize(), &aSourceMap, &aDestMap );
-//  lcl_AdjustInsertPos( GetViewData(), aPos, aSize );
+
     if ( GetViewData()->GetDocument()->IsNegativePage( GetViewData()->GetTabNo() ) )
         aPos.X() -= aSize.Width();
 

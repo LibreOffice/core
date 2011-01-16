@@ -639,8 +639,6 @@ void ScGridWindow::UpdateDragRect( BOOL bShowRange, const Rectangle& rPosRect )
         return;         // everything unchanged
     }
 
-    // if ( bDragRect )
-    //  DrawDragRect( nDragStartX, nDragStartY, nDragEndX, nDragEndY, FALSE );
     if ( bShowRange )
     {
         nDragStartX = nStartX;
@@ -648,7 +646,6 @@ void ScGridWindow::UpdateDragRect( BOOL bShowRange, const Rectangle& rPosRect )
         nDragEndX = nEndX;
         nDragEndY = nEndY;
         bDragRect = TRUE;
-        // DrawDragRect( nDragStartX, nDragStartY, nDragEndX, nDragEndY, FALSE );
     }
     else
         bDragRect = FALSE;
@@ -814,8 +811,6 @@ void ScGridWindow::PagebreakMove( const MouseEvent& rMEvt, BOOL bUp )
     {
         if ( bPagebreakDrawn )          // weginvertieren
         {
-            // DrawDragRect( aPagebreakDrag.aStart.Col(), aPagebreakDrag.aStart.Row(),
-            //              aPagebreakDrag.aEnd.Col(), aPagebreakDrag.aEnd.Row(), FALSE );
             bPagebreakDrawn = FALSE;
             UpdateDragRectOverlay();
         }
@@ -922,16 +917,12 @@ void ScGridWindow::PagebreakMove( const MouseEvent& rMEvt, BOOL bUp )
         if ( bPagebreakDrawn )
         {
             // weginvertieren
-            // DrawDragRect( aPagebreakDrag.aStart.Col(), aPagebreakDrag.aStart.Row(),
-            //              aPagebreakDrag.aEnd.Col(), aPagebreakDrag.aEnd.Row(), FALSE );
             bPagebreakDrawn = FALSE;
         }
         aPagebreakDrag = aDrawRange;
         if ( !bUp && !bHide )
         {
             // hininvertieren
-            // DrawDragRect( aPagebreakDrag.aStart.Col(), aPagebreakDrag.aStart.Row(),
-            //              aPagebreakDrag.aEnd.Col(), aPagebreakDrag.aEnd.Row(), FALSE );
             bPagebreakDrawn = TRUE;
         }
         UpdateDragRectOverlay();

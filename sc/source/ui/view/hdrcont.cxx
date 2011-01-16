@@ -291,12 +291,10 @@ void ScHeaderControl::Paint( const Rectangle& rRect )
     long nLayoutSign = bLayoutRTL ? -1 : 1;
     BOOL bMirrored = IsMirrored();
 
-//  const FunctionSet*  pFuncSet = pSelEngine->GetFunctionSet();
     String              aString;
     USHORT              nBarSize;
     Point               aScrPos;
     Size                aTextSize;
-//  Size                aSize = GetOutputSizePixel();
 
     if (bVertical)
         nBarSize = (USHORT) GetSizePixel().Width();
@@ -329,7 +327,6 @@ void ScHeaderControl::Paint( const Rectangle& rRect )
     //  aeussere Linien komplett durchzeichnen
     //  Zuerst Ende der letzten Zelle finden
 
-//  long nLineEnd = -1;
     long nLineEnd = nInitScrPos - nLayoutSign;
 
     for (SCCOLROW i=nPos; i<nSize; i++)
@@ -622,8 +619,6 @@ SCCOLROW ScHeaderControl::GetMousePos( const MouseEvent& rMEvt, BOOL& rBorder )
     {
         SCCOLROW nEntryNo = nCount + nPos;
 
-//      nScrPos = GetScrPos( nEntryNo ) - 1;
-
         if (nEntryNo > nSize)
             nScrPos = nEndPos + nLayoutSign;
         else
@@ -716,7 +711,6 @@ void ScHeaderControl::MouseButtonDown( const MouseEvent& rMEvt )
             ShowDragHelp();
             DrawInvert( nDragPos );
 
-            // CaptureMouse();
             StartTracking();
             bDragging = TRUE;
             bDragMoved = FALSE;
@@ -758,8 +752,6 @@ void ScHeaderControl::MouseButtonUp( const MouseEvent& rMEvt )
 
     SetMarking( FALSE );
     bIgnoreMove = FALSE;
-//    BOOL bFound;
-//    SCCOLROW nHitNo = GetMousePos( rMEvt, bFound );
 
     if ( bDragging )
     {

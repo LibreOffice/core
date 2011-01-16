@@ -659,7 +659,6 @@ BOOL ScViewFunc::PasteFile( const Point& rPos, const String& rFile, BOOL bLink )
     Graphic aGraphic;
     GraphicFilter* pGraphicFilter = GraphicFilter::GetGraphicFilter();
 
-//      GraphicProgress aGraphicProgress(&aGraphicFilter);
 
     if (!pGraphicFilter->ImportGraphic(aGraphic, aURL,
             GRFILTER_FORMAT_DONTKNOW, &nFilterFormat ))

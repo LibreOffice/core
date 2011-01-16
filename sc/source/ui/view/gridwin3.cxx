@@ -287,19 +287,6 @@ MapMode ScGridWindow::GetDrawMapMode( BOOL bForce )
     return aDrawMode;
 }
 
-//BOOL ScGridWindow::DrawBeforeScroll()
-//{
-//  ScDrawView* pDrView = pViewData->GetView()->GetScDrawView();
-//
-//  BOOL bXor = FALSE;
-//  if (pDrView)
-//  {
-//      bXor=pDrView->IsShownXorVisible(this);
-//      if (bXor) pDrView->HideShownXor(this);
-//  }
-//  return bXor;
-//}
-
 void ScGridWindow::DrawAfterScroll(/*BOOL bVal*/)
 {
     Update();       // immer, damit das Verhalten mit/ohne DrawingLayer gleich ist
@@ -307,27 +294,11 @@ void ScGridWindow::DrawAfterScroll(/*BOOL bVal*/)
     ScDrawView* pDrView = pViewData->GetView()->GetScDrawView();
     if (pDrView)
     {
-        //if (bVal)
-        //  pDrView->ShowShownXor(this);
-
         OutlinerView* pOlView = pDrView->GetTextEditOutlinerView();
         if (pOlView && pOlView->GetWindow() == this)
             pOlView->ShowCursor(FALSE);                 // ist beim Scrollen weggekommen
     }
 }
-
-//void ScGridWindow::DrawMarks()
-//{
-//  ScDrawView* pDrView = pViewData->GetView()->GetScDrawView();
-//  if (pDrView)
-//      pDrView->DrawMarks(this);
-//}
-
-//BOOL ScGridWindow::NeedDrawMarks()
-//{
-//  ScDrawView* pDrView = pViewData->GetView()->GetScDrawView();
-//  return pDrView && pDrView->IsMarkHdlShown() && pDrView->AreObjectsMarked();
-//}
 
 void ScGridWindow::CreateAnchorHandle(SdrHdlList& rHdl, const ScAddress& rAddress)
 {
@@ -416,22 +387,6 @@ BOOL ScGridWindow::DrawHasMarkedObj()
     ScDrawView* p = pViewData->GetScDrawView();
     return p ? p->AreObjectsMarked() : FALSE;
 }
-
-//void ScGridWindow::DrawStartTimer()
-//{
-    //ScDrawView* pDrView = pViewData->GetView()->GetScDrawView();
-    //if (pDrView)
-    //{
-        /* jetzt in DrawMarks
-        USHORT nWinNum = pDrView->FindWin(this);
-        if (nWinNum!=SDRVIEWWIN_NOTFOUND)
-            pDrView->AfterInitRedraw(nWinNum);
-        */
-
-        // pDrView->PostPaint();
-        // pDrView->RestartAfterPaintTimer();
-    //}
-//}
 
 void ScGridWindow::DrawMarkDropObj( SdrObject* pObj )
 {

@@ -62,7 +62,6 @@ ScDrawView::ScDrawView( OutputDevice* pOut, ScViewData* pData ) :
     pDropMarker( NULL ),
     pDropMarkObj( NULL ),
     bInConstruct( TRUE )
-    //HMHbDisableHdl( FALSE )
 {
     // #i73602# Use default from the configuration
     SetBufferedOverlayAllowed(getOptionsDrawinglayer().IsOverlayBuffer_Calc());

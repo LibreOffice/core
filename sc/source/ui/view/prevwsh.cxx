@@ -136,7 +136,6 @@ void ScPreviewShell::Construct( Window* pParent )
     if (pDrawBC)
         StartListening(*pDrawBC);
 
-//  pPreview->Show();           // wird vom Sfx angezeigt
     pHorScroll->Show();
     pVerScroll->Show();
     pCorner->Show();
@@ -246,8 +245,6 @@ void ScPreviewShell::AdjustPosSizePixel( const Point &rPos, const Size &rSize )
 {
     long nBarW = GetViewFrame()->GetWindow().GetSettings().GetStyleSettings().GetScrollBarSize();
     long nBarH = nBarW;
-//  long nBarW = pVerScroll->GetSizePixel().Width();
-//  long nBarH = pHorScroll->GetSizePixel().Height();
 
     Size aOutSize( rSize.Width()-nBarW, rSize.Height()-nBarH );
     pPreview->SetPosSizePixel( rPos, aOutSize );

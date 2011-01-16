@@ -334,7 +334,6 @@ void ScTabView::InitRefMode( SCCOL nCurX, SCROW nCurY, SCTAB nCurZ, ScRefType eT
     }
 }
 
-// static
 void ScTabView::SetScrollBar( ScrollBar& rScroll, long nRangeMax, long nVisible, long nPos, BOOL bLayoutRTL )
 {
     if ( nVisible == 0 )
@@ -358,7 +357,6 @@ void ScTabView::SetScrollBar( ScrollBar& rScroll, long nRangeMax, long nVisible,
     }
 }
 
-// static
 long ScTabView::GetScrollBarPos( ScrollBar& rScroll, BOOL bLayoutRTL )
 {
     if ( bLayoutRTL )

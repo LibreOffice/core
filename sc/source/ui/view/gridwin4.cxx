@@ -294,8 +294,6 @@ void lcl_DrawHighlight( ScOutputData& rOutputData, ScViewData* pViewData,
 
 void ScGridWindow::DoInvertRect( const Rectangle& rPixel )
 {
-//  Invert( PixelToLogic(rPixel) );
-
     if ( rPixel == aInvertRect )
         aInvertRect = Rectangle();      // aufheben
     else
@@ -1428,7 +1426,6 @@ void ScGridWindow::InvertSimple( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2,
             if (bTestMerge)
                 if (bWasHidden)                 // auf versteckte zusammengefasste testen
                 {
-//                  --nY;                       // nY geaendert -> vorherige zeichnen
                     bDoHidden = TRUE;
                     bDoRow = TRUE;
                 }
@@ -1713,8 +1710,6 @@ void ScGridWindow::GetSelectionRects( ::std::vector< Rectangle >& rPixelRects )
             nScrY = nEndY + 1;
         }
     }
-
-//  aInvert.Flush();        // before restoring MapMode
 }
 
 // -------------------------------------------------------------------------

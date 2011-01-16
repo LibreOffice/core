@@ -218,8 +218,6 @@ ScSimpleRefDlgWrapper::ScSimpleRefDlgWrapper( Window* pParentP,
                                 SfxChildWinInfo*    pInfo )
         : SfxChildWindow(pParentP, nId)
 {
-//  ScTabViewShell* pViewShell =
-//      PTR_CAST( ScTabViewShell, SfxViewShell::Current() );
 
     ScTabViewShell* pViewShell = NULL;
     SfxDispatcher* pDisp = p->GetDispatcher();
@@ -362,28 +360,6 @@ void ScAcceptChgDlgWrapper::ReInitDlg()
 //-------------------------------------------------------------------------
 
 IMPL_CHILD_CTOR( ScHighlightChgDlgWrapper, FID_CHG_SHOW )
-
-/*------------------------------------------------------------------------*/
-/*@@@
-        //-------------------------------------------------------------------------
-        // ScFunctionDlgWrapper
-        //-------------------------------------------------------------------------
-
-        IMPL_CHILD_CTOR( ScFunctionDlgWrapper, SID_OPENDLG_FUNCTION )
-
-        //-------------------------------------------------------------------------
-        // ScEditFunctionDlgWrapper
-        //-------------------------------------------------------------------------
-
-        IMPL_CHILD_CTOR( ScEditFunctionDlgWrapper, SID_OPENDLG_EDITFUNCTION )
-
-        //-------------------------------------------------------------------------
-        // ScArgumentDlgWrapper
-        //-------------------------------------------------------------------------
-
-        IMPL_CHILD_CTOR( ScArgumentDlgWrapper, SID_OPENDLG_ARGUMENT )
-@@@*/
-/*------------------------------------------------------------------------*/
 
 
 //<!--Added by PengYunQuan for Validity Cell Range Picker

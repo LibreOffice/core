@@ -72,7 +72,6 @@ void ScTabViewShell::InsertURLButton( const String& rName, const String& rURL,
     MakeDrawLayer();
 
     ScTabView*  pView   = pViewData->GetView();
-//  SdrView*    pDrView = pView->GetSdrView();
     ScDrawView* pDrView = pView->GetScDrawView();
     SdrModel*   pModel  = pDrView->GetModel();
 
@@ -125,7 +124,6 @@ void ScTabViewShell::InsertURLButton( const String& rName, const String& rURL,
         aPos.X() -= aSize.Width();
 
     pObj->SetLogicRect(Rectangle(aPos, aSize));
-//  pObj->Resize(Point(), Fraction(1, 1), Fraction(1, 1));
 
     //  am alten VC-Button musste die Position/Groesse nochmal explizit
     //  gesetzt werden - das scheint mit UnoControls nicht noetig zu sein

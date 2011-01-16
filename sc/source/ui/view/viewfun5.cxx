@@ -213,9 +213,6 @@ BOOL ScViewFunc::PasteDataFormat( ULONG nFormatId,
         }
         else
         {
-//            uno::Reference < io::XInputStream > xStm;
-//            TransferableObjectDescriptor    aObjDesc;
-
             if ( aDataHelper.GetTransferableObjectDescriptor( SOT_FORMATSTR_ID_OBJECTDESCRIPTOR_OLE, aObjDesc ) )
             {
                 ::rtl::OUString aName;

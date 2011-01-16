@@ -782,8 +782,6 @@ void ScTabViewShell::ExecuteUndo(SfxRequest& rReq)
                 GetViewFrame()->GetBindings().InvalidateAll(sal_False);
             }
             break;
-//      default:
-//          GetViewFrame()->ExecuteSlot( rReq );
     }
 }
 

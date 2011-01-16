@@ -394,7 +394,6 @@ bool ScOutlineWindow::ItemHit( const Point& rPos, size_t& rnLevel, size_t& rnEnt
     if ( nLevel == SC_OL_NOLEVEL )
         return false;
 
-//    long nLevelPos = GetLevelPos( nLevel );
     long nEntryMousePos = mbHoriz ? rPos.X() : rPos.Y();
 
     // --- level buttons ---
@@ -697,7 +696,6 @@ void ScOutlineWindow::Paint( const Rectangle& /* rRect */ )
             const ScOutlineEntry* pEntry = pArray->GetEntry( sal::static_int_cast<USHORT>(nLevel),
                                                              sal::static_int_cast<USHORT>(nEntry) );
             SCCOLROW nStart = pEntry->GetStart();
-//            SCCOLROW nEnd = pEntry->GetEnd();
 
             // visible range?
             bool bDraw = (nStartIndex <= nStart) && (nStart <= nEndIndex + 1);

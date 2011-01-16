@@ -226,7 +226,6 @@ void ScPreview::CalcPages( SCTAB /*nToWhichTab*/ )
     ScDocument* pDoc = pDocShell->GetDocument();
     nTabCount = pDoc->GetTableCount();
 
-    //SCTAB nAnz = Min( nTabCount, SCTAB(nToWhichTab+1) );
     SCTAB nAnz = nTabCount;
     SCTAB nStart = nTabsTested;
     if (!bValid)
@@ -320,8 +319,6 @@ void ScPreview::RecalcPages()                   // nur nPageNo geaendert
                 nTab = i;
                 nTabPage = nPageNo - nThisStart;
                 nTabStart = nThisStart;
-
-//              aPageSize = aPrintFunc.GetPageSize();
             }
         }
 
@@ -400,7 +397,6 @@ void ScPreview::DoPrint( ScPreviewLocationData* pFillLocation )
         DBG_ASSERT(nPrinted<=1, "was'n nu los?");
 
         SetMapMode(aMMMode);
-//      USHORT nPrintZoom = pPrintFunc->GetZoom();
 
         if (nPrinted)   // wenn nichts, alles grau zeichnen
         {

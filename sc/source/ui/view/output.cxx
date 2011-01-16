@@ -453,9 +453,6 @@ void ScOutputData::DrawGrid( BOOL bGrid, BOOL bPage )
 
                         if (pThisRowInfo->bChanged && !bHOver)
                         {
-                            //Point aStart( nPosX-nSignedOneX, nPosY );
-                            //Point aEnd( nPosX-nSignedOneX, nNextY-nOneY );
-                            //pDev->DrawLine( aStart, aEnd );
                             aGrid.AddVerLine( nPosX-nSignedOneX, nPosY, nNextY-nOneY );
                         }
                         nPosY = nNextY;
@@ -463,9 +460,6 @@ void ScOutputData::DrawGrid( BOOL bGrid, BOOL bPage )
                 }
                 else
                 {
-                    //Point aStart( nPosX-nSignedOneX, nScrY );
-                    //Point aEnd( nPosX-nSignedOneX, nScrY+nScrH-nOneY );
-                    //pDev->DrawLine( aStart, aEnd );
                     aGrid.AddVerLine( nPosX-nSignedOneX, nScrY, nScrY+nScrH-nOneY );
                 }
             }
@@ -556,9 +550,6 @@ void ScOutputData::DrawGrid( BOOL bGrid, BOOL bPage )
                             }
                             if (!bVOver)
                             {
-                                //Point aStart( nPosX, nPosY-nOneY );
-                                //Point aEnd( nNextX-nSignedOneX, nPosY-nOneY );
-                                //pDev->DrawLine( aStart, aEnd );
                                 aGrid.AddHorLine( nPosX, nNextX-nSignedOneX, nPosY-nOneY );
                             }
                         }
@@ -567,9 +558,6 @@ void ScOutputData::DrawGrid( BOOL bGrid, BOOL bPage )
                 }
                 else
                 {
-                    //Point aStart( nScrX, nPosY-nOneY );
-                    //Point aEnd( nScrX+nScrW-nOneX, nPosY-nOneY );
-                    //pDev->DrawLine( aStart, aEnd );
                     aGrid.AddHorLine( nScrX, nScrX+nScrW-nOneX, nPosY-nOneY );
                 }
             }
@@ -980,10 +968,6 @@ void ScOutputData::DrawExtraShadow(BOOL bLeft, BOOL bTop, BOOL bRight, BOOL bBot
                                     ++nWx;
                                 nMaxWidth = pRowInfo[0].pCellInfo[nWx+1].nWidth;
                             }
-
-//                          Rectangle aRect( Point(nPosX,nPosY),
-//                                           Size( pRowInfo[0].pCellInfo[nArrX].nWidth,
-//                                                  pRowInfo[nArrY].nHeight ) );
 
                             // rectangle is in logical orientation
                             Rectangle aRect( nPosX, nPosY,

@@ -68,7 +68,6 @@
 
 //==================================================================
 
-//  static
 void ScViewUtil::PutItemScript( SfxItemSet& rShellSet, const SfxItemSet& rCoreSet,
                                 USHORT nWhichId, USHORT nScript )
 {
@@ -87,7 +86,6 @@ void ScViewUtil::PutItemScript( SfxItemSet& rShellSet, const SfxItemSet& rCoreSe
         rShellSet.InvalidateItem( nWhichId );
 }
 
-//  static
 USHORT ScViewUtil::GetEffLanguage( ScDocument* pDoc, const ScAddress& rPos )
 {
     //  used for thesaurus
@@ -117,7 +115,6 @@ USHORT ScViewUtil::GetEffLanguage( ScDocument* pDoc, const ScAddress& rPos )
     return eLnge;
 }
 
-//  static
 sal_Int32 ScViewUtil::GetTransliterationType( USHORT nSlotID )
 {
     sal_Int32 nType = 0;
@@ -154,7 +151,6 @@ sal_Int32 ScViewUtil::GetTransliterationType( USHORT nSlotID )
     return nType;
 }
 
-//  static
 BOOL ScViewUtil::IsActionShown( const ScChangeAction& rAction,
                                 const ScChangeViewSettings& rSettings,
                                 ScDocument& rDocument )
@@ -255,7 +251,6 @@ BOOL ScViewUtil::IsActionShown( const ScChangeAction& rAction,
     return TRUE;
 }
 
-// static
 void ScViewUtil::UnmarkFiltered( ScMarkData& rMark, ScDocument* pDoc )
 {
     rMark.MarkToMulti();
@@ -294,7 +289,6 @@ void ScViewUtil::UnmarkFiltered( ScMarkData& rMark, ScDocument* pDoc )
 }
 
 
-// static
 bool ScViewUtil::FitToUnfilteredRows( ScRange & rRange, ScDocument * pDoc, size_t nRows )
 {
     SCTAB nTab = rRange.aStart.Tab();
@@ -309,8 +303,6 @@ bool ScViewUtil::FitToUnfilteredRows( ScRange & rRange, ScDocument * pDoc, size_
     return static_cast<size_t>(nCount) == nRows && bOneTabOnly;
 }
 
-
-// static
 bool ScViewUtil::HasFiltered( const ScRange& rRange, ScDocument* pDoc )
 {
     SCROW nStartRow = rRange.aStart.Row();
@@ -324,7 +316,6 @@ bool ScViewUtil::HasFiltered( const ScRange& rRange, ScDocument* pDoc )
     return false;
 }
 
-// static
 void ScViewUtil::HideDisabledSlot( SfxItemSet& rSet, SfxBindings& rBindings, USHORT nSlotId )
 {
     SvtCJKOptions aCJKOptions;

@@ -3034,7 +3034,6 @@ ScAddress ScViewData::GetCurPos() const
 }
 
 
-// static
 void ScViewData::AddPixelsWhile( long & rScrY, long nEndPixels, SCROW & rPosY,
         SCROW nEndRow, double nPPTY, const ScDocument * pDoc, SCTAB nTabNo )
 {
@@ -3074,7 +3073,6 @@ void ScViewData::AddPixelsWhile( long & rScrY, long nEndPixels, SCROW & rPosY,
 }
 
 
-// static
 void ScViewData::AddPixelsWhileBackward( long & rScrY, long nEndPixels,
         SCROW & rPosY, SCROW nStartRow, double nPPTY, const ScDocument * pDoc,
         SCTAB nTabNo )

@@ -63,7 +63,7 @@ String GalleryGetFullPath()
 {
     GalleryExplorer* pGal = SVX_GALLERY();
     DBG_ASSERT( pGal, "Wo ist die Gallery?" );
-//  return pGal->GetPath().GetFull();
+
     return pGal->GetURL().GetMainURL(INetURLObject::NO_DECODE);
     // URL as stored in GraphicLink must be encoded
 }

@@ -128,7 +128,6 @@ void ScColBar::SetEntrySize( SCCOLROW nPos, USHORT nNewSize )
         nSizeTwips = (USHORT) ( nNewSize / pViewData->GetPPTX() );
 
     ScMarkData& rMark = pViewData->GetMarkData();
-//  SCTAB nTab = pViewData->GetTabNo();
 
     SCCOLROW* pRanges = new SCCOLROW[MAXCOL+1];
     SCCOL nRangeCnt = 0;
@@ -294,7 +293,6 @@ void ScRowBar::SetEntrySize( SCCOLROW nPos, USHORT nNewSize )
         nSizeTwips = (USHORT) ( nNewSize / pViewData->GetPPTY() );
 
     ScMarkData& rMark = pViewData->GetMarkData();
-//  SCTAB nTab = pViewData->GetTabNo();
 
     SCCOLROW* pRanges = new SCCOLROW[MAXROW+1];
     SCROW nRangeCnt = 0;

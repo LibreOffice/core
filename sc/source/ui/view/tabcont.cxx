@@ -255,12 +255,6 @@ void ScTabControl::Select()
     for (i=0; i<nCount; i++)
         rMark.SelectTable( i, IsPageSelected(static_cast<sal_uInt16>(i)+1) );
 
-/*      Markierungen werden per Default nicht pro Tabelle gehalten
-    USHORT nSelCnt = GetSelectPageCount();
-    if (nSelCnt>1)
-        pDoc->ExtendMarksFromTable( nPage );
-*/
-
     SfxDispatcher& rDisp = pViewData->GetDispatcher();
     if (rDisp.IsLocked())
         pViewData->GetView()->SetTabNo( static_cast<SCTAB>(nPage) );
@@ -384,26 +378,12 @@ void ScTabControl::UpdateStatus()
 
 void ScTabControl::ActivateView(BOOL bActivate)
 {
-//  ScDocument* pDoc = pViewData->GetDocument();
     ScMarkData& rMark = pViewData->GetMarkData();
-
-//  ResetMark direkt in TabView
-//  pDoc->ResetMark();
 
     USHORT nCurId = GetCurPageId();
     if (!nCurId) return;            // kann vorkommen, wenn bei Excel-Import alles versteckt ist
     USHORT nPage = nCurId - 1;
-//    USHORT nCount = GetMaxId();
 
-    /*
-    USHORT i;
-    for (i=0; i<nCount; i++)
-    {
-        SelectPage( i+1, FALSE );
-        if (bActivate)
-            rMark.SelectTable( i, FALSE );
-    }
-    */
     if (bActivate)
     {
         SelectPage( nPage+1, TRUE );

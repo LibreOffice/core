@@ -871,16 +871,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
                 {
                     // TODO/LATER: when is this code executed?
                     pTabViewShell->Escape();
-                    //SfxObjectShell* pObjSh = GetViewData()->GetSfxDocShell();
-                    //if (pObjSh->GetInPlaceObject() &&
-                    //    pObjSh->GetInPlaceObject()->GetIPClient())
-                    //{
-                    //    GetViewData()->GetDocShell()->
-                    //        DoInPlaceActivate(FALSE);       // OLE beenden
-                    //}
                 }
-
-//              SetSumAssignMode(); //ScInputWindow
             }
             break;
 
