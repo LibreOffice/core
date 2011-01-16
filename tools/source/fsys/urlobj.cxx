@@ -3286,9 +3286,9 @@ bool INetURLObject::parsePath(INetProtocol eScheme,
             }
             bool bInbox;
             rtl::OUString sCompare(aTheSynPath);
-            if (sCompare.equalsAscii("/inbox"))
+            if (sCompare.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("/inbox")))
                 bInbox = true;
-            else if (sCompare.equalsAscii("/newsgroups"))
+            else if (sCompare.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("/newsgroups")))
                 bInbox = false;
             else
                 return false;
