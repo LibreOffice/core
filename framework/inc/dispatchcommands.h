@@ -44,9 +44,6 @@ namespace framework{
 //_________________________________________________________________________________________________________________
 
 static ::rtl::OUString CMD_UNO_SHOWSTARTMODULE(RTL_CONSTASCII_USTRINGPARAM(".uno:ShowStartModule"));
-static ::rtl::OUString CMD_UNO_CLOSEDOC(RTL_CONSTASCII_USTRINGPARAM(".uno:CloseDoc"));
-static ::rtl::OUString CMD_UNO_CLOSEWIN(RTL_CONSTASCII_USTRINGPARAM(".uno:CloseWin"));
-static ::rtl::OUString CMD_UNO_CLOSEFRAME(RTL_CONSTASCII_USTRINGPARAM(".uno:CloseFrame"));
 
 }       //  namespace framework
 
