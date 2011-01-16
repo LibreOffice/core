@@ -151,7 +151,7 @@ uno::Sequence< beans::PropertyValue > SvFilterOptionsDialog::getPropertyValues()
     sal_Int32 i, nCount;
     for ( i = 0, nCount = aMediaDescriptor.getLength(); i < nCount; i++ )
     {
-        if ( aMediaDescriptor[ i ].Name.equalsAscii( "FilterData" ) )
+        if ( aMediaDescriptor[ i ].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("FilterData")) )
             break;
     }
     if ( i == nCount )
@@ -173,7 +173,7 @@ void SvFilterOptionsDialog::setPropertyValues( const uno::Sequence< beans::Prope
     sal_Int32 i, nCount;
     for ( i = 0, nCount = aMediaDescriptor.getLength(); i < nCount; i++ )
     {
-        if ( aMediaDescriptor[ i ].Name.equalsAscii( "FilterData" ) )
+        if ( aMediaDescriptor[ i ].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("FilterData")) )
         {
             aMediaDescriptor[ i ].Value >>= aFilterDataSequence;
             break;

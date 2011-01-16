@@ -441,7 +441,7 @@ namespace svt
     OProductRegistration::EventType OProductRegistration::classify( const OUString& _rEventDesc )
     {
         EventType eReturn = etUnknown;
-        if ( _rEventDesc.equalsAscii( "RegistrationRequired" ) )
+        if ( _rEventDesc.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("RegistrationRequired")) )
         {
             eReturn = etRegistrationRequired;
         }

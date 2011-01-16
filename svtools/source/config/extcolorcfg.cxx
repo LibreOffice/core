@@ -327,12 +327,12 @@ void ExtendedColorConfig_Impl::Load(const rtl::OUString& rScheme)
     {
         aComponentNames = GetPropertyNames(sBase);
         FillComponentColors(aComponentNames,aDisplayNameMap);
-    } // if ( bFound )
+    }
 
     if ( !m_sLoadedScheme.getLength() )
         m_sLoadedScheme = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("default"));
 
-    if ( !sScheme.equalsAscii("default") )
+    if ( !sScheme.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("default")) )
     {
         ::rtl::OUString sDefault(RTL_CONSTASCII_USTRINGPARAM("default"));
         if ( ExistsScheme(sDefault) )
@@ -341,7 +341,7 @@ void ExtendedColorConfig_Impl::Load(const rtl::OUString& rScheme)
             aComponentNames = GetPropertyNames(sBaseDefault);
             FillComponentColors(aComponentNames,aDisplayNameMap);
         }
-    } // if ( !sScheme.equalsAscii("default") )
+    }
     if ( !bFound && sScheme.getLength() )
     {
         AddScheme(sScheme);

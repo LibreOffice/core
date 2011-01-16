@@ -189,15 +189,15 @@ throw ( Exception, RuntimeException )
         {
             if ( aArguments[i] >>= aPropValue )
             {
-                if ( aPropValue.Name.equalsAscii( "Frame" ))
+                if ( aPropValue.Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Frame")) )
                     aPropValue.Value >>= m_xFrame;
-                else if ( aPropValue.Name.equalsAscii( "CommandURL" ))
+                else if ( aPropValue.Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("CommandURL")) )
                     aPropValue.Value >>= m_aCommandURL;
-                else if ( aPropValue.Name.equalsAscii( "ServiceManager" ))
+                else if ( aPropValue.Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("ServiceManager")) )
                     aPropValue.Value >>= m_xServiceManager;
-                else if ( aPropValue.Name.equalsAscii( "ParentWindow" ))
+                else if ( aPropValue.Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("ParentWindow")) )
                     aPropValue.Value >>= m_xParentWindow;
-                else if ( aPropValue.Name.equalsAscii( "Identifier" ))
+                else if ( aPropValue.Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Identifier")) )
                     aPropValue.Value >>= m_nID;
             }
         }

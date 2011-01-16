@@ -194,7 +194,7 @@ void SAL_CALL EmbedEventListener_Impl::notifyEvent( const document::EventObject&
 {
     SolarMutexGuard aGuard;
 
-    if ( pObject && aEvent.EventName.equalsAscii("OnVisAreaChanged") && pObject->GetViewAspect() != embed::Aspects::MSOLE_ICON && !pObject->IsChart() )
+    if ( pObject && aEvent.EventName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("OnVisAreaChanged")) && pObject->GetViewAspect() != embed::Aspects::MSOLE_ICON && !pObject->IsChart() )
     {
         pObject->UpdateReplacement();
     }
