@@ -427,9 +427,7 @@ public:
 
     const ScOptSolverSave* GetSolverSaveData() const    { return pSolverSaveData; }     // may be null
     void            SetSolverSaveData( const ScOptSolverSave& rData );
-    //<!--Added by PengYunQuan for Validity Cell Range Picker
     sal_Bool        AcceptStateUpdate() const;
-    //-->Added by PengYunQuan for Validity Cell Range Picker
     ScSheetSaveData* GetSheetSaveData();
 
     void ResetKeyBindings( ScOptionsUtil::KeyBindingType eType );

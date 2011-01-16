@@ -2929,7 +2929,6 @@ void ScDocShellModificator::SetDocumentModified()
     }
 }
 
-//<!--Added by PengYunQuan for Validity Cell Range Picker
 sal_Bool ScDocShell::AcceptStateUpdate() const
 {
     if( SfxObjectShell::AcceptStateUpdate() )
@@ -2940,7 +2939,6 @@ sal_Bool ScDocShell::AcceptStateUpdate() const
 
     return sal_False;
 }
-//-->Added by PengYunQuan for Validity Cell Range Picker
 
 
 bool ScDocShell::IsChangeRecording() const

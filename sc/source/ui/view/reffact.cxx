@@ -45,9 +45,7 @@
 #include "acredlin.hxx"
 #include "simpref.hxx"
 #include "scmod.hxx"
-//<!--Added by PengYunQuan for Validity Cell Range Picker
 #include "validate.hxx"
-//<!--Added by PengYunQuan for Validity Cell Range Picker
 
 // -----------------------------------------------------------------------
 
@@ -72,8 +70,6 @@ SFX_IMPL_CHILDWINDOW(ScFunctionDlgWrapper, SID_OPENDLG_FUNCTION )
 SFX_IMPL_CHILDWINDOW(ScEditFunctionDlgWrapper, SID_OPENDLG_EDITFUNCTION )
 SFX_IMPL_CHILDWINDOW(ScArgumentDlgWrapper, SID_OPENDLG_ARGUMENT )
 */
-//<!--Added by PengYunQuan for Validity Cell Range Picker
-//SFX_IMPL_MODELESSDIALOG(ScValidityRefChildWin, SID_VALIDITY_REFERENCE )
 SFX_IMPL_CHILDWINDOW(ScValidityRefChildWin, SID_VALIDITY_REFERENCE)
 SfxChildWinInfo ScValidityRefChildWin::GetInfo() const
 {
@@ -92,7 +88,6 @@ SfxChildWinInfo ScValidityRefChildWin::GetInfo() const
 }
 
 namespace { ScTabViewShell * lcl_GetTabViewShell( SfxBindings *pBindings ); }
-//<!--Added by PengYunQuan for Validity Cell Range Picker
 
 #define IMPL_CHILD_CTOR(Class,sid) \
     Class::Class( Window*               pParentP,                   \
@@ -101,7 +96,6 @@ namespace { ScTabViewShell * lcl_GetTabViewShell( SfxBindings *pBindings ); }
                     SfxChildWinInfo*    pInfo )                     \
         : SfxChildWindow(pParentP, nId)                             \
     {                                                               \
-        /*//<!--Added by PengYunQuan for Validity Cell Range Picker*/\
         /************************************************************************************/\
         /*      When a new document is creating, the SfxViewFrame may be ready,             */\
         /*      But the ScTabViewShell may have not been activated yet. In this             */\
@@ -109,7 +103,6 @@ namespace { ScTabViewShell * lcl_GetTabViewShell( SfxBindings *pBindings ); }
         /*      and we should lcl_GetTabViewShell( p ) instead of SfxViewShell::Current()   */\
         /************************************************************************************/\
         ScTabViewShell* pViewShell = lcl_GetTabViewShell( p );      \
-        /*//-->Added by PengYunQuan for Validity Cell Range Picker*/\
         if (!pViewShell)                                            \
             pViewShell = PTR_CAST( ScTabViewShell, SfxViewShell::Current() ); \
         DBG_ASSERT( pViewShell, "missing view shell :-(" );         \
@@ -362,7 +355,6 @@ void ScAcceptChgDlgWrapper::ReInitDlg()
 IMPL_CHILD_CTOR( ScHighlightChgDlgWrapper, FID_CHG_SHOW )
 
 
-//<!--Added by PengYunQuan for Validity Cell Range Picker
 namespace
 {
     ScTabViewShell * lcl_GetTabViewShell( SfxBindings *pBindings )
@@ -408,6 +400,5 @@ ScValidityRefChildWin::~ScValidityRefChildWin()
     if( m_bFreeWindowLock )
         pWindow = NULL;
 }
-//-->Added by PengYunQuan for Validity Cell Range Picker
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

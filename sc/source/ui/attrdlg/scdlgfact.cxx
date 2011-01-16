@@ -1534,19 +1534,13 @@ SfxAbstractTabDialog * ScAbstractDialogFactory_Impl::CreateScParagraphDlg( Windo
 
 //add for ScValidationDlg begin
 SfxAbstractTabDialog * ScAbstractDialogFactory_Impl::CreateScValidationDlg( Window* pParent,
-//<!--Modified by PengYunQuan for Validity Cell Range Picker
-//                                                      const SfxItemSet* pArgSet,int nId  )
                                                         const SfxItemSet* pArgSet,int nId, ScTabViewShell *pTabVwSh  )
-//-->Modified by PengYunQuan for Validity Cell Range Picke
 {
     SfxTabDialog* pDlg=NULL;
     switch ( nId )
     {
         case TAB_DLG_VALIDATION :
-            //<!--Modified by PengYunQuan for Validity Cell Range Picker
-            //pDlg = new ScValidationDlg( pParent, pArgSet );
             pDlg = new ScValidationDlg( pParent, pArgSet, pTabVwSh );
-            //-->Modified by PengYunQuan for Validity Cell Range Picker
             break;
         default:
             break;

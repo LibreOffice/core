@@ -294,20 +294,13 @@ void ScDLL::Init()
     ScSpellDialogChildWindow    ::RegisterChildWindow(FALSE, pMod);
     ::avmedia::MediaPlayer      ::RegisterChildWindow(FALSE, pMod);
 
-    //<!--Added by PengYunQuan for Validity Cell Range Picker
     ScValidityRefChildWin::RegisterChildWindow(FALSE, pMod);
-    //-->Added by PengYunQuan for Validity Cell Range Picker
 
     //  Edit-Engine-Felder, soweit nicht schon in OfficeApplication::Init
 
     SvClassManager& rClassManager = SvxFieldItem::GetClassManager();
-//  rClassManager.SV_CLASS_REGISTER( SvxURLField );
-//  rClassManager.SV_CLASS_REGISTER( SvxDateField );
-//  rClassManager.SV_CLASS_REGISTER( SvxPageField );
     rClassManager.SV_CLASS_REGISTER( SvxPagesField );
-//  rClassManager.SV_CLASS_REGISTER( SvxTimeField );
     rClassManager.SV_CLASS_REGISTER( SvxFileField );
-//  rClassManager.SV_CLASS_REGISTER( SvxExtFileField );
     rClassManager.SV_CLASS_REGISTER( SvxTableField );
 
     SdrRegisterFieldClasses();      // SvDraw-Felder registrieren

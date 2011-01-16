@@ -100,7 +100,6 @@ class ScSimpleRefDlgWrapper: public SfxChildWindow
         void            StartRefInput();
 };
 
-//<!--Added by PengYunQuan for Validity Cell Range Picker
 class SC_DLLPUBLIC ScValidityRefChildWin : public SfxChildWindow
 {
     bool    m_bVisibleLock:1;
@@ -115,7 +114,6 @@ public:
     void                Hide(){ if( !m_bVisibleLock) SfxChildWindow::Hide(); }
     void                Show( USHORT nFlags ){ if( !m_bVisibleLock ) SfxChildWindow::Show( nFlags ); }
 };
-//-->Added by PengYunQuan for Validity Cell Range Picker
 
 //==================================================================
 

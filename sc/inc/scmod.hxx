@@ -39,11 +39,9 @@
 #include <unotools/options.hxx>
 #include <tools/shl.hxx>
 
-//<!--Added by PengYunQuan for Validity Cell Range Picker
 #include <map>
 #include <list>
 #include <algorithm>
-//-->Added by PengYunQuan for Validity Cell Range Picker
 
 
 class KeyEvent;
@@ -147,9 +145,7 @@ class ScModule: public SfxModule, public SfxListener, utl::ConfigurationListener
     bool                mbIsInSharedDocLoading;
     bool                mbIsInSharedDocSaving;
 
-    //<!--Added by PengYunQuan for Validity Cell Range Picker
     std::map<USHORT, std::list<Window*> > m_mapRefWindow;
-    //-->Added by PengYunQuan for Validity Cell Range Picker
 public:
                     SFX_DECL_INTERFACE(SCID_APP)
 
@@ -259,9 +255,7 @@ SC_DLLPUBLIC    void                    SetAppOptions   ( const ScAppOptions& rO
     ScFormEditData*     GetFormEditData()       { return pFormEditData; }
 
     //  Referenzeingabe:
-    //<!--Added by PengYunQuan for Validity Cell Range Picker
     SC_DLLPUBLIC void               SetRefDialog( USHORT nId, BOOL bVis, SfxViewFrame* pViewFrm = NULL );
-    //-->Added by PengYunQuan for Validity Cell Range Picker
     BOOL                IsModalMode(SfxObjectShell* pDocSh = NULL);
     BOOL                IsFormulaMode();
     BOOL                IsRefDialogOpen();

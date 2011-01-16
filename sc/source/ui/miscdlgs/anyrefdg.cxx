@@ -346,7 +346,7 @@ void ScFormulaReferenceHelper::Init()
         pRefComp->SetCompileForFAP(TRUE);
 
         nRefTab = nTab;
-    } // if ( pViewData )
+    }
 }
 // -----------------------------------------------------------------------------
 IMPL_LINK( ScFormulaReferenceHelper, AccelSelectHdl, Accelerator *, pSelAccel )
@@ -368,10 +368,7 @@ IMPL_LINK( ScFormulaReferenceHelper, AccelSelectHdl, Accelerator *, pSelAccel )
 //----------------------------------------------------------------------------
 void ScFormulaReferenceHelper::RefInputDone( BOOL bForced )
 {
-    //<!--Modified by PengYunQuan for Validity Cell Range Picker
-    //if (pRefEdit && (bForced || !pRefBtn))
-    if ( CanInputDone( bForced ) )//if (pRefEdit && (bForced || !pRefBtn))
-    //-->Modified by PengYunQuan for Validity Cell Range Picker
+    if ( CanInputDone( bForced ) )
     {
         if (bAccInserted)           // Accelerator wieder abschalten
         {
@@ -738,8 +735,6 @@ bool ScRefHandler::EnterRefMode()
     m_aHelper.Init();
 
     m_aHelper.SetDispatcherLock( TRUE );
-    //@Test
-    //SFX_APPWINDOW->Disable(TRUE);   //@BugID 54702
 
     return m_bInRefMode = true;
 }
@@ -765,7 +760,6 @@ bool ScRefHandler::LeaveRefMode()
     if( pScViewShell )
         pScViewShell->UpdateInputHandler(TRUE);
 
-    //SFX_APPWINDOW->Enable(TRUE,TRUE);
     lcl_InvalidateWindows();
 
     m_bInRefMode = false;

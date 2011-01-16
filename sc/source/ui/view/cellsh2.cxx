@@ -196,7 +196,6 @@ BOOL lcl_GetSortParam( const ScViewData* pData, ScSortParam& rSortParam )
     return bSort;
 }
 
-//<!-- Added by PengYunQuan for Validity Cell Range Picker
 //after end execute from !IsModalInputMode, it is safer to delay deleting
 namespace
 {
@@ -206,7 +205,6 @@ namespace
         return 0;
     }
 }
-//--> Added by PengYunQuan for Validity Cell Range Picker
 
 void ScCellShell::ExecuteDB( SfxRequest& rReq )
 {
@@ -1131,11 +1129,9 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                         pTabViewShell->SetValidation( aData );
                         rReq.Done( *pOutSet );
                     }
-                    //<!-- Modified by PengYunQuan for Validity Cell Range Picker
                     //after end execute from !IsModalInputMode, it is safer to delay deleting
                     //delete pDlg;
                     Application::PostUserEvent( Link( pDlg, &DelayDeleteAbstractDialog ) );
-                    //--> Modified by PengYunQuan for Validity Cell Range Picker
                 }
             }
             break;
