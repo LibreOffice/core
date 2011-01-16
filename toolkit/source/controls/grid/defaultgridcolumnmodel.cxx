@@ -161,6 +161,18 @@ namespace toolkit
         Reference< XGridColumn > const xColumn( *pos );
         m_aColumns.erase( pos );
 
+        // update indexes of all subsequent columns
+        sal_Int32 columnIndex( i_columnIndex );
+        for (   Columns::iterator updatePos = m_aColumns.begin() + columnIndex;
+                updatePos != m_aColumns.end();
+                ++updatePos, ++columnIndex
+            )
+        {
+            GridColumn* pColumnImpl = GridColumn::getImplementation( *updatePos );
+            ENSURE_OR_CONTINUE( pColumnImpl, "DefaultGridColumnModel::removeColumn: invalid column implementation!" );
+            pColumnImpl->setIndex( columnIndex );
+        }
+
         // fire removal notifications
         ContainerEvent aEvent;
         aEvent.Source = *this;
