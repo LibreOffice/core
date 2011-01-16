@@ -387,8 +387,6 @@ ScValidityRefChildWin::ScValidityRefChildWin( Window*               pParentP,   
         DBG_ASSERT( pViewShell, "missing view shell :-(" );         \
         if (pViewShell && !pWindow)                                             \
             pViewShell->GetViewFrame()->SetChildWindow( nId, FALSE );           \
-        else if( pWindow /*&& pWindow->ISA(ScValidationDlg)*/ )
-        {}//pWindow = new Window( pParentP, WB_HIDE );
 
     if( pWindow ) m_pSavedWndParent = pWindow->GetParent();
 }
