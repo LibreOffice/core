@@ -52,7 +52,7 @@ class SdrDragStat;
 
 //////////////////////////////////////////////////////////////////////////////
 
-class SdrDragEntry
+class SVX_DLLPUBLIC SdrDragEntry
 {
 private:
     // bitfield
