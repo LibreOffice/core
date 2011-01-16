@@ -905,10 +905,10 @@ lcl_ScRange_Parse_XL_A1( ScRange& r,
     tmp1 = lcl_a1_get_col( p, &r.aEnd, &nFlags2 );
     if( !tmp1 && !aEndTabName.Len() )     // Probably the aEndTabName was specified after the first range
     {
-        SCTAB nTab = 0;
         p = lcl_XL_ParseSheetRef( p, aEndTabName, false, NULL );
         if( p )
         {
+            SCTAB nTab = 0;
             if( aEndTabName.Len() && pDoc->GetTable( aEndTabName, nTab ) )
             {
                 r.aEnd.SetTab( nTab );
