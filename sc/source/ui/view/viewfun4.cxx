@@ -478,14 +478,12 @@ void ScViewFunc::DoSheetConversion( const ScConversionParam& rConvParam, BOOL bR
     ScMarkData& rMark = rViewData.GetMarkData();
     ScSplitPos eWhich = rViewData.GetActivePart();
     EditView* pEditView = NULL;
-    ESelection* pEditSel = NULL;
     BOOL bIsEditMode = rViewData.HasEditView(eWhich);
     if (bRecord && !pDoc->IsUndoEnabled())
         bRecord = FALSE;
     if (bIsEditMode)                                            // Edit-Mode aktiv
     {
         rViewData.GetEditView(eWhich, pEditView, nCol, nRow);
-        pEditSel = new ESelection(pEditView->GetSelection());
         SC_MOD()->InputEnterHandler();
     }
     else
@@ -505,7 +503,6 @@ void ScViewFunc::DoSheetConversion( const ScConversionParam& rConvParam, BOOL bR
         if (!aTester.IsEditable())
         {
             ErrorMessage(aTester.GetMessageId());
-            delete pEditSel;
             return;
         }
     }
