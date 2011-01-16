@@ -145,7 +145,6 @@ sal_Int32 SAL_CALL ScannerTestService::run( const uno::Sequence< rtl::OUString >
         pDocument->resolve(*pStream);
 
 #ifdef DEBUG_ELEMENT
-        writerfilter::TagLogger::dump("DEBUG");
         debugLogger->endDocument();
 #endif
 
