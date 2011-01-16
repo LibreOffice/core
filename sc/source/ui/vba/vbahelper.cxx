@@ -531,7 +531,7 @@ rtl::OUString getAnyAsString( const uno::Any& pvargItem ) throw ( uno::RuntimeEx
                 break;
             }
         default:
-                   throw uno::RuntimeException( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(( "Invalid type, can't convert" )), uno::Reference< uno::XInterface >() );
+                   throw uno::RuntimeException( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Invalid type, can't convert" ) ), uno::Reference< uno::XInterface >() );
     }
     return sString;
 }
