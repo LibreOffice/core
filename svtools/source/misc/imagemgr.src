@@ -192,7 +192,7 @@ String STR_DESCRIPTION_SDRAW_DOC
 
 String STR_DESCRIPTION_SDATABASE_DOC
 {
-    Text [ en-US ] = "%STAROFFICE Database" ;
+    Text [ en-US ] = "StarOffice Database" ;
 };
 
 String STR_DESCRIPTION_SCALC_DOC
@@ -213,7 +213,7 @@ String STR_DESCRIPTION_GLOBALDOC
 };
 String STR_DESCRIPTION_SIMAGE_DOC
 {
-    Text [ en-US ] = "%STAROFFICE Image" ;
+    Text [ en-US ] = "StarOffice Image" ;
 };
 String STR_DESCRIPTION_TEXTFILE
 {
@@ -225,7 +225,7 @@ String STR_DESCRIPTION_LINK
 };
 String STR_DESCRIPTION_SOFFICE_TEMPLATE_DOC
 {
-    Text [ en-US ] = "%STAROFFICE 3.0 - 5.0 Template" ;
+    Text [ en-US ] = "StarOffice 3.0 - 5.0 Template" ;
 };
 String STR_DESCRIPTION_EXCEL_DOC
 {

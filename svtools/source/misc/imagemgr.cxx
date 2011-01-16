@@ -638,24 +638,6 @@ static Image GetImageFromList_Impl( USHORT nImageId, BOOL bBig )
         return GetOfficeImageFromList_Impl( nImageId, bBig );
 }
 
-//****************************************************************************
-
-void ReplaceStarOfficeVar( String& _rDescription )
-{
-    static String sVariable( RTL_CONSTASCII_USTRINGPARAM( "%STAROFFICE" ) );
-    static String sProductName;
-    if ( sProductName.Len() == 0 )
-    {
-        ::rtl::OUString sTemp;
-        ::utl::ConfigManager::GetDirectConfigProperty( ::utl::ConfigManager::PRODUCTNAME ) >>= sTemp;
-        if ( sTemp.equalsAscii( "StarSuite" ) == sal_False )
-            sProductName = String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "StarOffice" ) );
-        else
-            sProductName = String( sTemp );
-    }
-    _rDescription.SearchAndReplace( sVariable, sProductName );
-}
-
 String SvFileInformationManager::GetDescription_Impl( const INetURLObject& rObject, sal_Bool bDetectFolder )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aTimeLog, "svtools", "hb93813", "SvFileInformationManager::GetDescription_Impl()" );
@@ -722,7 +704,6 @@ String SvFileInformationManager::GetDescription_Impl( const INetURLObject& rObje
         sDescription += ')';
     }
 
-    ReplaceStarOfficeVar( sDescription );
     return sDescription;
 }
 
