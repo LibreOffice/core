@@ -429,8 +429,9 @@ SvtCompatibilityOptions_Impl::SvtCompatibilityOptions_Impl()
         {
             SvtSysLocale aSysLocale;
             com::sun::star::lang::Locale aLocale = aSysLocale.GetLocale();
-            if ( aLocale.Language.equalsAscii( "zh" ) || aLocale.Language.equalsAscii( "ja" ) ||
-                    aLocale.Language.equalsAscii( "ko" ) )
+            if ( aLocale.Language.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("zh")) ||
+                 aLocale.Language.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("ja")) ||
+                 aLocale.Language.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("ko")) )
                 aItem.bExpandWordSpace = false;
 
             m_aDefOptions = aItem;

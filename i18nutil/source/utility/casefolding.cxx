@@ -46,7 +46,7 @@ static Mapping mapping_0049[] = {{0, 2, {0x0069, 0x0307, 0}},{0, 1, {0x0131, 0, 
 static Mapping mapping_0069[] = {{0, 1, {0x0130, 0, 0}},{0, 1, {0x0049, 0, 0}}};
 static Mapping mapping_0130[] = {{0, 1, {0x0069, 0, 0}},{0, 1, {0x0130, 0, 0}}};
 
-#define langIs(lang) (aLocale.Language.compareToAscii(lang) == 0)
+#define langIs(lang) (aLocale.Language.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(lang)))
 
 // only check simple case, there is more complicated case need to be checked.
 #define type_i(ch) ((ch) == 0x0069 || (ch) == 0x006a)
