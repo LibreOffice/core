@@ -76,6 +76,8 @@ DEF2NAME    := $(SHL2TARGET)
 SHL2VERSIONMAP:=uno_purpenvhelper$(COMID).map
 .ELIF "$(GUI)"=="OS2"
 SHL2VERSIONMAP:=uno_purpenvhelperwntgcc.map
+.ELIF "$(COMNAME)"=="mscx"
+SHL2VERSIONMAP:=$(SHL2TARGET)X.map
 .ELSE
 SHL2VERSIONMAP:=$(SHL2TARGET).map
 .ENDIF			# "$(GUI)$(COM)"=="WNTGCC"
