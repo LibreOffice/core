@@ -77,7 +77,7 @@ namespace svt { namespace table
     /// denotes column attributes related to the appearance of the column, i.e. those relevant for rendering
     #define COL_ATTRS_APPEARANCE    (0x00000002)
     /// denotes the entirety of column attributes
-    #define COL_ATTRS_ALL           (0xFFFFFFFF)
+    #define COL_ATTRS_ALL           (0x7FFFFFFF)
 
     //====================================================================
     //= ITableModelListener

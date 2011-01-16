@@ -312,8 +312,6 @@ namespace svt { namespace table
         if ( m_pImpl->aColumns.empty() )
             return;
 
-        const ColPos nLastIndex = m_pImpl->aColumns.size() - 1;
-
         // dispose the column instances
         for (   ColumnModels::const_iterator col = m_pImpl->aColumns.begin();
                 col != m_pImpl->aColumns.end();

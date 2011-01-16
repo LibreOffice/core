@@ -547,9 +547,10 @@ void SAL_CALL SVTXGridControl::dataChanged( const GridDataEvent& i_event ) throw
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-void SAL_CALL SVTXGridControl::rowTitleChanged( const GridDataEvent& Event ) throw (RuntimeException)
+void SAL_CALL SVTXGridControl::rowTitleChanged( const GridDataEvent& i_event ) throw (RuntimeException)
 {
     ::vos::OGuard aGuard( GetMutex() );
+    OSL_UNUSED( i_event );
 
     TableControl* pTable = dynamic_cast< TableControl* >( GetWindow() );
     ENSURE_OR_RETURN_VOID( pTable, "SVTXGridControl::rowTitleChanged: no control (anymore)!" );
@@ -586,6 +587,7 @@ void SAL_CALL SVTXGridControl::elementReplaced( const ContainerEvent& i_event ) 
 {
     OSL_ENSURE( false, "SVTXGridControl::elementReplaced: not implemented!" );
         // at the moment, the XGridColumnModel API does not allow replacing columns
+    OSL_UNUSED( i_event );
     // TODO: replace the respective column in our table model
 }
 

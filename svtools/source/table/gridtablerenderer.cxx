@@ -492,6 +492,8 @@ namespace svt { namespace table
 
         OSL_UNUSED( i_active );
         OSL_UNUSED( i_selected );
+        OSL_UNUSED( i_rowPos );
+        OSL_UNUSED( i_colPos );
         return true;
     }
 
