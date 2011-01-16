@@ -80,7 +80,8 @@ namespace toolkit
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    void GridColumn::broadcast_changed( sal_Char const * const i_asciiAttributeName, Any i_oldValue, Any i_newValue, ::osl::ClearableMutexGuard& i_Guard )
+    void GridColumn::broadcast_changed( sal_Char const * const i_asciiAttributeName, Any i_oldValue, Any i_newValue,
+        ::comphelper::ComponentGuard& i_Guard )
     {
         Reference< XInterface > const xSource( static_cast< ::cppu::OWeakObject* >( this ) );
         GridColumnEvent const aEvent(
@@ -98,21 +99,21 @@ namespace toolkit
     //------------------------------------------------------------------------------------------------------------------
     ::com::sun::star::uno::Any SAL_CALL GridColumn::getIdentifier() throw (::com::sun::star::uno::RuntimeException)
     {
-        ::osl::MutexGuard aGuard( m_aMutex );
+        ::comphelper::ComponentGuard aGuard( *this, rBHelper );
         return m_aIdentifier;
     }
 
     //------------------------------------------------------------------------------------------------------------------
     void SAL_CALL GridColumn::setIdentifier(const ::com::sun::star::uno::Any & value) throw (::com::sun::star::uno::RuntimeException)
     {
-        ::osl::MutexGuard aGuard( m_aMutex );
+        ::comphelper::ComponentGuard aGuard( *this, rBHelper );
         m_aIdentifier = value;
     }
 
     //------------------------------------------------------------------------------------------------------------------
     ::sal_Int32 SAL_CALL GridColumn::getColumnWidth() throw (::com::sun::star::uno::RuntimeException)
     {
-        ::osl::MutexGuard aGuard( m_aMutex );
+        ::comphelper::ComponentGuard aGuard( *this, rBHelper );
         return m_nColumnWidth;
     }
 
@@ -125,7 +126,7 @@ namespace toolkit
     //------------------------------------------------------------------------------------------------------------------
     ::sal_Int32 SAL_CALL GridColumn::getPreferredWidth() throw (::com::sun::star::uno::RuntimeException)
     {
-        ::osl::MutexGuard aGuard( m_aMutex );
+        ::comphelper::ComponentGuard aGuard( *this, rBHelper );
         return m_nPreferredWidth;
     }
 
@@ -138,7 +139,7 @@ namespace toolkit
     //------------------------------------------------------------------------------------------------------------------
     ::sal_Int32 SAL_CALL GridColumn::getMaxWidth() throw (::com::sun::star::uno::RuntimeException)
     {
-        ::osl::MutexGuard aGuard( m_aMutex );
+        ::comphelper::ComponentGuard aGuard( *this, rBHelper );
         return m_nMaxWidth;
     }
 
@@ -151,7 +152,7 @@ namespace toolkit
     //------------------------------------------------------------------------------------------------------------------
     ::sal_Int32 SAL_CALL GridColumn::getMinWidth() throw (::com::sun::star::uno::RuntimeException)
     {
-        ::osl::MutexGuard aGuard( m_aMutex );
+        ::comphelper::ComponentGuard aGuard( *this, rBHelper );
         return m_nMinWidth;
     }
 
@@ -164,7 +165,7 @@ namespace toolkit
     //------------------------------------------------------------------------------------------------------------------
     ::rtl::OUString SAL_CALL GridColumn::getTitle() throw (::com::sun::star::uno::RuntimeException)
     {
-        ::osl::MutexGuard aGuard( m_aMutex );
+        ::comphelper::ComponentGuard aGuard( *this, rBHelper );
         return m_sTitle;
     }
 
@@ -177,7 +178,7 @@ namespace toolkit
     //------------------------------------------------------------------------------------------------------------------
     ::rtl::OUString SAL_CALL GridColumn::getHelpText() throw (RuntimeException)
     {
-        ::osl::MutexGuard aGuard( m_aMutex );
+        ::comphelper::ComponentGuard aGuard( *this, rBHelper );
         return m_sHelpText;
     }
 
@@ -190,7 +191,7 @@ namespace toolkit
     //------------------------------------------------------------------------------------------------------------------
     sal_Bool SAL_CALL GridColumn::getResizeable() throw (::com::sun::star::uno::RuntimeException)
     {
-        ::osl::MutexGuard aGuard( m_aMutex );
+        ::comphelper::ComponentGuard aGuard( *this, rBHelper );
         return m_bResizeable;
     }
 
@@ -203,7 +204,7 @@ namespace toolkit
     //------------------------------------------------------------------------------------------------------------------
     HorizontalAlignment SAL_CALL GridColumn::getHorizontalAlign() throw (::com::sun::star::uno::RuntimeException)
     {
-        ::osl::MutexGuard aGuard( m_aMutex );
+        ::comphelper::ComponentGuard aGuard( *this, rBHelper );
         return m_eHorizontalAlign;
     }
 
@@ -226,37 +227,24 @@ namespace toolkit
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    void SAL_CALL GridColumn::dispose() throw (RuntimeException)
+    void SAL_CALL GridColumn::disposing()
     {
-        // simply disambiguate, the base class handles this
-        GridColumn_Base::dispose();
-    }
-
-    //------------------------------------------------------------------------------------------------------------------
-    void SAL_CALL GridColumn::addEventListener( const Reference< XEventListener >& i_listener ) throw (RuntimeException)
-    {
-        // simply disambiguate, the base class handles this
-        GridColumn_Base::addEventListener( i_listener );
-    }
-
-    //------------------------------------------------------------------------------------------------------------------
-    void SAL_CALL GridColumn::removeEventListener( const Reference< XEventListener >& i_listener ) throw (RuntimeException)
-    {
-        // simply disambiguate, the base class handles this
-        GridColumn_Base::removeEventListener( i_listener );
+        ::osl::MutexGuard aGuard( m_aMutex );
+        m_aIdentifier.clear();
+        m_sTitle = m_sHelpText = ::rtl::OUString();
     }
 
     //------------------------------------------------------------------------------------------------------------------
     ::sal_Int32 SAL_CALL GridColumn::getIndex() throw (RuntimeException)
     {
-        ::osl::MutexGuard aGuard( m_aMutex );
+        ::comphelper::ComponentGuard aGuard( *this, rBHelper );
         return m_nIndex;
     }
 
     //------------------------------------------------------------------------------------------------------------------
     void GridColumn::setIndex( sal_Int32 const i_index )
     {
-        ::osl::MutexGuard aGuard( m_aMutex );
+        ::comphelper::ComponentGuard aGuard( *this, rBHelper );
         m_nIndex = i_index;
     }
 

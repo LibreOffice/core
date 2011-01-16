@@ -25,36 +25,37 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_toolkit.hxx"
 #include <com/sun/star/awt/grid/XMutableGridDataModel.hpp>
-#include <com/sun/star/awt/grid/GridDataEvent.hpp>
-#include <com/sun/star/awt/grid/XGridDataListener.hpp>
-#include <com/sun/star/awt/XControl.hpp>
-#include <com/sun/star/lang/XEventListener.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/lang/XUnoTunnel.hpp>
-#include <cppuhelper/implbase2.hxx>
-#include <cppuhelper/implbase3.hxx>
-#include <rtl/ref.hxx>
-#include <vector>
+
+#include <cppuhelper/basemutex.hxx>
+#include <cppuhelper/compbase2.hxx>
 #include <toolkit/helper/mutexandbroadcasthelper.hxx>
 
-using ::rtl::OUString;
+#include <vector>
+
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::awt::grid;
 using namespace ::com::sun::star::lang;
 
+namespace comphelper
+{
+    class ComponentGuard;
+}
+
 namespace toolkit
 {
 
 enum broadcast_type { row_added, row_removed, data_changed};
 
-typedef ::cppu::WeakImplHelper2< XMutableGridDataModel, XServiceInfo > DefaultGridDataModel_Base;
-class DefaultGridDataModel : public DefaultGridDataModel_Base,
-                             public MutexAndBroadcastHelper
+typedef ::cppu::WeakComponentImplHelper2    <   XMutableGridDataModel
+                                            ,   XServiceInfo
+                                            >   DefaultGridDataModel_Base;
+
+class DefaultGridDataModel  :public ::cppu::BaseMutex
+                            ,public DefaultGridDataModel_Base
 {
 public:
     DefaultGridDataModel();
@@ -81,10 +82,8 @@ public:
     virtual ::com::sun::star::uno::Any SAL_CALL getCellToolTip( ::sal_Int32 Column, ::sal_Int32 Row ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
     virtual ::rtl::OUString SAL_CALL getRowTitle( ::sal_Int32 RowIndex ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
 
-    // XComponent
-    virtual void SAL_CALL dispose(  ) throw (RuntimeException);
-    virtual void SAL_CALL addEventListener( const Reference< XEventListener >& xListener ) throw (RuntimeException);
-    virtual void SAL_CALL removeEventListener( const Reference< XEventListener >& aListener ) throw (RuntimeException);
+    // OComponentHelper
+    virtual void SAL_CALL disposing();
 
     // XCloneable
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::util::XCloneable > SAL_CALL createClone(  ) throw (::com::sun::star::uno::RuntimeException);
@@ -102,7 +101,7 @@ private:
     void broadcast(
         GridDataEvent const & i_event,
         void ( SAL_CALL ::com::sun::star::awt::grid::XGridDataListener::*i_listenerMethod )( ::com::sun::star::awt::grid::GridDataEvent const & ),
-        ::osl::ClearableMutexGuard & i_instanceLock
+        ::comphelper::ComponentGuard & i_instanceLock
     );
 
     void    impl_addRow( Sequence< Any > const & i_rowData, sal_Int32 const i_assumedColCount = -1 );

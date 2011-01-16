@@ -36,6 +36,7 @@
 /** === end UNO includes === **/
 
 #include <comphelper/sequence.hxx>
+#include <comphelper/componentguard.hxx>
 #include <toolkit/helper/servicenames.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <tools/diagnose_ex.h>
@@ -119,13 +120,14 @@ namespace toolkit
     //------------------------------------------------------------------------------------------------------------------
     Reference< XGridColumn > SAL_CALL DefaultGridColumnModel::createColumn(  ) throw (RuntimeException)
     {
+        ::comphelper::ComponentGuard aGuard( *this, rBHelper );
         return new GridColumn();
     }
 
     //------------------------------------------------------------------------------------------------------------------
     ::sal_Int32 SAL_CALL DefaultGridColumnModel::addColumn( const Reference< XGridColumn > & i_column ) throw (RuntimeException, IllegalArgumentException)
     {
-        ::osl::ClearableMutexGuard aGuard( m_aMutex );
+        ::comphelper::ComponentGuard aGuard( *this, rBHelper );
 
         GridColumn* const pGridColumn = GridColumn::getImplementation( i_column );
         if ( pGridColumn == NULL )
@@ -150,7 +152,7 @@ namespace toolkit
     //------------------------------------------------------------------------------------------------------------------
     void SAL_CALL DefaultGridColumnModel::removeColumn( ::sal_Int32 i_columnIndex )  throw (RuntimeException, IndexOutOfBoundsException)
     {
-        ::osl::ClearableMutexGuard aGuard( m_aMutex );
+        ::comphelper::ComponentGuard aGuard( *this, rBHelper );
 
         if ( ( i_columnIndex < 0 ) || ( size_t( i_columnIndex ) >= m_aColumns.size() ) )
             throw IndexOutOfBoundsException( ::rtl::OUString(), *this );
@@ -172,14 +174,14 @@ namespace toolkit
     //------------------------------------------------------------------------------------------------------------------
     Sequence< Reference< XGridColumn > > SAL_CALL DefaultGridColumnModel::getColumns() throw (RuntimeException)
     {
-        ::osl::MutexGuard aGuard( m_aMutex );
+        ::comphelper::ComponentGuard aGuard( *this, rBHelper );
         return ::comphelper::containerToSequence( m_aColumns );
     }
 
     //------------------------------------------------------------------------------------------------------------------
     Reference< XGridColumn > SAL_CALL DefaultGridColumnModel::getColumn(::sal_Int32 index) throw (IndexOutOfBoundsException, RuntimeException)
     {
-        ::osl::MutexGuard aGuard( m_aMutex );
+        ::comphelper::ComponentGuard aGuard( *this, rBHelper );
 
         if ( index >=0 && index < ((sal_Int32)m_aColumns.size()))
             return m_aColumns[index];
@@ -194,7 +196,7 @@ namespace toolkit
         ::std::vector< ContainerEvent > aInsertedColumns;
 
         {
-            ::osl::MutexGuard aGuard( m_aMutex );
+            ::comphelper::ComponentGuard aGuard( *this, rBHelper );
 
             // remove existing columns
             while ( !m_aColumns.empty() )
@@ -315,31 +317,31 @@ namespace toolkit
         m_aContainerListeners.disposeAndClear( aEvent );
 
         ::osl::MutexGuard aGuard( m_aMutex );
-        // remove, dispose and clear columns
-        {
-            while ( !m_aColumns.empty() )
-            {
-                try
-                {
-                    const Reference< XComponent > xColComponent( m_aColumns[ 0 ], UNO_QUERY_THROW );
-                    xColComponent->dispose();
-                }
-                catch( const Exception& )
-                {
-                    DBG_UNHANDLED_EXCEPTION();
-                }
 
-                m_aColumns.erase( m_aColumns.begin() );
+        // remove, dispose and clear columns
+        while ( !m_aColumns.empty() )
+        {
+            try
+            {
+                const Reference< XComponent > xColComponent( m_aColumns[ 0 ], UNO_QUERY_THROW );
+                xColComponent->dispose();
+            }
+            catch( const Exception& )
+            {
+                DBG_UNHANDLED_EXCEPTION();
             }
 
-            Columns aEmpty;
-            m_aColumns.swap( aEmpty );
+            m_aColumns.erase( m_aColumns.begin() );
         }
+
+        Columns aEmpty;
+        m_aColumns.swap( aEmpty );
     }
 
     //------------------------------------------------------------------------------------------------------------------
     Reference< XCloneable > SAL_CALL DefaultGridColumnModel::createClone(  ) throw (RuntimeException)
     {
+        ::comphelper::ComponentGuard aGuard( *this, rBHelper );
         return new DefaultGridColumnModel( *this );
     }
 
