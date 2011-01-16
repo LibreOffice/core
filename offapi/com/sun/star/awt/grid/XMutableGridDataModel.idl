@@ -43,22 +43,22 @@ interface XMutableGridDataModel : XGridDataModel
 {
     /** adds a row to the model.
 
-        @param Title
-            is the header title of the row.
+        @param Heading
+            denotes the heading of the row.
         @param Data
             specifies the content of the row.
     */
-    void addRow( [in] string Title, [in] sequence< any > Data );
+    void addRow( [in] any Heading, [in] sequence< any > Data );
 
     /** adds multiple rows of data to the model.
-        @param Titles
-            specifies the header titles of the to-be-added rows.
+        @param Headings
+            denotes the headings of the to-be-added rows.
         @param Data
             specifies the data of the rows to be added.
         @throws ::com::sun::star::lang::IllegalArgumentException
             if <code>Titles</code> and <code>Data</code> are of different length.
     */
-    void addRows( [in] sequence< string > Titles, [in] sequence< sequence< any > > Data )
+    void addRows( [in] sequence< any > Headings, [in] sequence< sequence< any > > Data )
         raises ( ::com::sun::star::lang::IllegalArgumentException );
 
     /** removes a row of data from the model
@@ -116,7 +116,7 @@ interface XMutableGridDataModel : XGridDataModel
             if the given index does not denote a valid row.
     */
     void
-        setRowTitle( [in] long RowIndex, [in] string Title )
+        setRowHeading( [in] long RowIndex, [in] any Heading )
             raises ( ::com::sun::star::lang::IndexOutOfBoundsException );
 
     /** updates the tooltip to be displayed for a given cell
