@@ -683,7 +683,9 @@ elsif ( $platform =~ m/cygwin/ )
       $FRAME_HOME     = PathFormat('@FRAME_HOME@');
       $USE_NEW_SDK    = "TRUE";
       $CPUNAME        = "INTEL";
+      $CPUNAME        = "X86_64" if $CL_X64;
       $CPU            = "I";
+      $CPU            = "X" if $CL_X64;
       $GUI            = "WNT";
       $GUIBASE        = "WIN";
       $GVER           = "NT351";
@@ -693,7 +695,7 @@ elsif ( $platform =~ m/cygwin/ )
       $use_shl_versions = "TRUE";
       $wps = ';'; # Windows style path seperator
   if ( $MINGW eq "yes" )
-  {   # At the moment this implies the use of tcsh
+  {   # At the moment this implies the use of tcsh, wtf?
       print "Setting Windows NT cygwin MinGW specific values... ";
       $FLIPCMD        = "slfl.pl";
       $PATH_SEPERATOR = ';';
@@ -711,42 +713,35 @@ elsif ( $platform =~ m/cygwin/ )
       $COMPATH        = PathFormat('@COMPATH@');
       $COM            = "MSC";
       $OUTPATH        = "wntmsci@COMEX@";
+      $OUTPATH        = "wntmscx@COMEX@" if $CL_X64;
       $INPATH         = $OUTPATH.$PROEXT;
       $COMEX          = '@COMEX@';
-      if ( "@COMEX@" eq "10" ) { # .NET 2003 needs M1310
-          $CVER        = "M1310";
-          $ATL_LIB     = $COMPATH.$ds."atlmfc".$ds."lib";
-          $ATL_INCLUDE = $COMPATH.$ds."atlmfc".$ds."include";
-          $MFC_LIB     = "";
-          $MFC_INCLUDE = "";
-      } elsif ( "@COMEX@" ge "11" ) { # .NET 2005 needs M1400
-	  if ( "@COMEX@" eq "11" ) {
-	      $CVER        = "M1400";
-	  } elsif ( "@COMEX@" eq "12" ) {
-	      $CVER        = "M1500";
+      if ( "@COMEX@" eq "12" ) {
+          $CVER        = "M1500";
       } elsif ( "@COMEX@" eq "13" ) {
           $CVER        = "M1600";
+      } else {                   # Unsupported
+          die "Unsupported compiler version.\n";
+      }
+      if ( "@DISABLE_ACTIVEX@" ) {
+          $ATL_LIB     = $PSDK_HOME.$ds."lib"; # Doesn't exist for VSE
+          $ATL_INCLUDE = $PSDK_HOME.$ds."include".$ds."atl";
+          $MFC_LIB     = $PSDK_HOME.$ds."lib"; # Doesn't exist for VSE
+          $MFC_INCLUDE = $PSDK_HOME.$ds."include".$ds."mfc";
+      } else {
           $ATL_LIB     = $COMPATH.$ds."atlmfc".$ds."lib";
           $ATL_INCLUDE = $COMPATH.$ds."atlmfc".$ds."include";
-	  } else {                   # Unsupported
-	      die "Unsupported value for COMEX variable.\n";
-	  }
-          if ( "@DISABLE_ACTIVEX@" ) {
-              $ATL_LIB     = $PSDK_HOME.$ds."lib"; # Doesn't exist for VSE
-              $ATL_INCLUDE = $PSDK_HOME.$ds."include".$ds."atl";
-              $MFC_LIB     = $PSDK_HOME.$ds."lib"; # Doesn't exist for VSE
-              $MFC_INCLUDE = $PSDK_HOME.$ds."include".$ds."mfc";
-          } else {
-              $ATL_LIB     = $COMPATH.$ds."atlmfc".$ds."lib";
-              $ATL_INCLUDE = $COMPATH.$ds."atlmfc".$ds."include";
-              $MFC_LIB     = $COMPATH.$ds."atlmfc".$ds."lib";
-              $MFC_INCLUDE = $PSDK_HOME.$ds."include".$ds."mfc";
-          }
+          $MFC_LIB     = $COMPATH.$ds."atlmfc".$ds."lib";
+          $MFC_INCLUDE = $PSDK_HOME.$ds."include".$ds."mfc";
       }
-	  print "Setting W32 build with bash shell specific values... ";
-	  # No speacial treatment for CC an CXX anymore.
-	  $FLIPCMD        = "slfl.pl";
-	  $PATH_SEPERATOR = ';';
+      if ($CL_X64) {
+          $ATL_LIB     .= $ds."amd64";
+          $MFC_LIB     .= $ds."amd64";
+      }
+      print "Setting Windows build specific values... ";
+      # No speacial treatment for CC an CXX anymore.
+      $FLIPCMD        = "slfl.pl";
+      $PATH_SEPERATOR = ';';
   }
 }
 elsif ( $platform =~ m/os2/ )
@@ -1115,12 +1110,6 @@ if ($platform =~ m/cygwin|os2/)
       $ILIB       .= $wps.$FRAME_HOME.$LIB;
       if ( '@ENABLE_DIRECTX@' ne "" ) {
           $ILIB   .= $wps.$DIRECTXSDK_LIB;
-          if ( '@COMEX@' eq "10" ) {
-              # .NET2003 provides and compiles against DirectX 5 libraries and is
-              # hereby still Win9x compatible.
-              $ILIB .= $wps.'$COMPATH'.$ds.'PlatformSDK'.$LIB;
-              $USE_DIRECTX5 = "YES";
-          }
       }
       # ILIB needs to use '\' directory seperators;
       $ILIB = WinPath( $ILIB, ";" );
@@ -1202,32 +1191,31 @@ elsif ($platform =~ m/cygwin/)
 
    # Add path to compiler
    $tmppath = CygFormat($COMPATH).$BIN;
+   $tmppath .= $ds."amd64" if $CL_X64;
    $tmppath =~ s/^\/\//\//;
    $PATH .= $ps.$tmppath;
 
    if ( $COM eq "MSC" ) {
        $tmppath = CygFormat($MSPDB_PATH);
-	   # for .NET to find mspdb71.dll (needed by CL.EXE C/C++ Compiler)
-	   if ( $PATH !~ /(?:[:]|\A)(?:$tmppath)(?:[:]|\Z)/ ) {
-		   $PATH .= $ps.$tmppath;
-	   }
-	   if ( ( $COMEX ge "10" ) ) {
-		   # .NET needs midl.exe
-               $tmppath = CygFormat($MIDL_PATH);
-		   if ( $PATH !~ /(?:[:]|\A)(?:$tmppath)(?:[:]|\Z)/ ) {
-			   $PATH .= $ps.$tmppath;
-		   }
-		   # .NET needs csc.exe
-               $tmppath = CygFormat($CSC_PATH);
-		   if ( $PATH !~ /(?:[:]|\A)(?:$tmppath)(?:[:]|\Z)/ ) {
-			   $PATH .= $ps.$tmppath;
-		   }
-		   # Native installer needs some files if the Windows Installer SDK
-               $tmppath = CygFormat($PSDK_HOME);
-		   if ( $PATH !~ /(?:[:]|\A)(?:$tmppath\/bin)(?:[:]|\Z)/i ) {
-			   $PATH .= $ps.$tmppath.$BIN;
-		   }
-	   }
+       # for MSVC to find mspdb71.dll
+       if ( $PATH !~ /(?:[:]|\A)(?:$tmppath)(?:[:]|\Z)/ ) {
+           $PATH .= $ps.$tmppath;
+       }
+       # need midl.exe
+       $tmppath = CygFormat($MIDL_PATH);
+       if ( $PATH !~ /(?:[:]|\A)(?:$tmppath)(?:[:]|\Z)/ ) {
+           $PATH .= $ps.$tmppath;
+       }
+       # needs csc.exe
+       $tmppath = CygFormat($CSC_PATH);
+       if ( $PATH !~ /(?:[:]|\A)(?:$tmppath)(?:[:]|\Z)/ ) {
+           $PATH .= $ps.$tmppath;
+       }
+       # Installer needs some files if the Windows Installer SDK
+       $tmppath = CygFormat($PSDK_HOME);
+       if ( $PATH !~ /(?:[:]|\A)(?:$tmppath\/bin)(?:[:]|\Z)/i ) {
+           $PATH .= $ps.$tmppath.$BIN;
+       }
    } else { # Mingw is different
 	   # Native installer needs some files if the Windows Installer SDK
                $tmppath = CygFormat($PSDK_HOME);
@@ -1504,11 +1492,6 @@ elsif ($platform =~ m/cygwin/)
                          $I.'$COMPATH'.$ds."include";
       if ( '@ENABLE_DIRECTX@' ne "" ) {
           $SOLARINC   .= $I.PathFormat('@DIRECTXSDK_HOME@').$INCLUDE;
-          if ( '@COMEX@' eq "10" ) {
-              # .NET2003 provides and compiles against DirectX 5 libraries and is
-              # hereby still Win9x compatible.
-              $SOLARINC .= $I.'$COMPATH'.$ds.'PlatformSDK'.$ds."include";
-          }
       }
    }
    elsif ( $COM eq "GCC" )
