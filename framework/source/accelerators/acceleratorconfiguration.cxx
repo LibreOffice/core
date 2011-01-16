@@ -86,6 +86,12 @@
 
 namespace framework
 {
+    const ::rtl::OUString CFG_ENTRY_PRIMARY(RTL_CONSTASCII_USTRINGPARAM("PrimaryKeys"));
+    const ::rtl::OUString CFG_ENTRY_SECONDARY(RTL_CONSTASCII_USTRINGPARAM("SecondaryKeys"));
+    const ::rtl::OUString CFG_ENTRY_GLOBAL(RTL_CONSTASCII_USTRINGPARAM("Global"));
+    const ::rtl::OUString CFG_ENTRY_MODULES(RTL_CONSTASCII_USTRINGPARAM("Modules"));
+    const ::rtl::OUString CFG_PROP_COMMAND(RTL_CONSTASCII_USTRINGPARAM("Command"));
+
 
 #ifdef fpc
     #error "Who exports this define? I use it as namespace alias ..."
