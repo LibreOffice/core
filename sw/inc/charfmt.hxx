@@ -30,7 +30,7 @@
 
 #include <format.hxx>
 
-class SwCharFmt : public SwFmt
+class SW_DLLPUBLIC SwCharFmt : public SwFmt
 {
     friend class SwDoc;
     friend class SwTxtFmtColl;
