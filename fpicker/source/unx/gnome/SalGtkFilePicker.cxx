@@ -922,7 +922,7 @@ uno::Sequence<rtl::OUString> SAL_CALL SalGtkFilePicker::getSelectedFiles() throw
             }
             while( nTokenIndex >= 0 );
 
-            if( !bExtensionTypedIn && ( !sToken.equalsAscii( "*" ) ) )
+            if( !bExtensionTypedIn && ( !sToken.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("*")) ) )
             {
                 //if the filename does not already have the auto extension, stick it on
                 OUString sExtension = OUString(RTL_CONSTASCII_USTRINGPARAM( "." )) + sToken;
