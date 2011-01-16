@@ -960,7 +960,7 @@ void ScInterpreter::ScMatInv()
                     ScMatrixRef xR = GetNewMat( nR, nR);
                     if (xR)
                     {
-                        ScMatrix* pR = xR;
+                        ScMatrix* pR = xR.get();
                         lcl_MFastMult( pMat, xY.get(), pR, nR, nR, nR);
                         fprintf( stderr, "\n%s\n", "ScMatInv(): mult-identity");
                         for (SCSIZE i=0; i < nR; ++i)

@@ -45,6 +45,7 @@
 // the documentation thingy
 #include <stdio.h>
 #include <com/sun/star/sheet/FormulaLanguage.hpp>
+#include <rtl/strbuf.hxx>
 #include "compiler.hxx"
 #include "sc.hrc"   // VAR_ARGS
 #endif
@@ -415,9 +416,12 @@ void ScParameterClassification::MergeArgumentsFromFunctionResource()
         }
         if ( nArgs > CommonData::nMaxParams )
         {
-            DBG_ERROR2( "ScParameterClassification::Init: too many arguments in listed function: %s: %d",
-                    ByteString( *(pDesc->pFuncName),
-                        RTL_TEXTENCODING_UTF8).GetBuffer(), nArgs);
+            rtl::OStringBuffer aBuf;
+            aBuf.append("ScParameterClassification::Init: too many arguments in listed function: ");
+            aBuf.append(rtl::OUStringToOString(*(pDesc->pFuncName), RTL_TEXTENCODING_UTF8));
+            aBuf.append(": ");
+            aBuf.append(nArgs);
+            OSL_ENSURE(false, aBuf.getStr());
             nArgs = CommonData::nMaxParams;
             pRun->aData.bRepeatLast = true;
         }
