@@ -226,7 +226,7 @@ css::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > SAL_CALL Disp
 
 ::sal_Bool lcl_isStartModuleDispatch (const css::util::URL& aURL)
 {
-    return (aURL.Complete.equals(CMD_UNO_SHOWSTARTMODULE));
+    return (aURL.Complete.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(CMD_UNO_SHOWSTARTMODULE)));
 }
 
 //_________________________________________________________________________________________________________________

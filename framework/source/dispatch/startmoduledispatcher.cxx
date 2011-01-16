@@ -120,7 +120,7 @@ void SAL_CALL StartModuleDispatcher::dispatchWithNotification(const css::util::U
     throw(css::uno::RuntimeException)
 {
     ::sal_Int16 nResult = css::frame::DispatchResultState::DONTKNOW;
-    if (aURL.Complete.equals (CMD_UNO_SHOWSTARTMODULE))
+    if (aURL.Complete.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(CMD_UNO_SHOWSTARTMODULE)))
     {
         nResult = css::frame::DispatchResultState::FAILURE;
         if (implts_isBackingModePossible ())

@@ -43,7 +43,7 @@ namespace framework{
 
 //_________________________________________________________________________________________________________________
 
-static ::rtl::OUString CMD_UNO_SHOWSTARTMODULE(RTL_CONSTASCII_USTRINGPARAM(".uno:ShowStartModule"));
+#define CMD_UNO_SHOWSTARTMODULE ".uno:ShowStartModule"
 
 }       //  namespace framework
 
