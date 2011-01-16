@@ -647,7 +647,7 @@ BOOL GSIBlock::CheckSyntax( ULONG nLine, BOOL bRequireSourceLine, BOOL bFixTags 
                 GetObject( i )->NotOK();
             bHasError = TRUE;
             PrintList( GetObject( i )->GetMessageList(), "Translation", GetObject( i ) );
-            PrintList( &(aTester.GetCompareWarnings()), "Translation Tag Missmatch", GetObject( i ) );
+            PrintList( &(aTester.GetCompareWarnings()), "Translation Tag Mismatch", GetObject( i ) );
         }
         bHasError |= !TestUTF8( GetObject( i ), bFixTags );
         if ( pSourceLine )
