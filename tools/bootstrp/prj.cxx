@@ -584,24 +584,19 @@ void Star::Read( String &rFileName )
     aEntry = aEntry.GetPath().GetPath().GetPath();
     sSourceRoot = aEntry.GetFull();
 
-    // todo: change this to while( !aFileList.empty() )
-    for ( size_t i = 0, n = aFileList.size(); i < n; ++ i )
+    while ( !aFileList.empty() )
     {
-        StarFile *pFile = new StarFile( *aFileList[ i ] );
-        if ( pFile->Exists()) {
-            SimpleConfig aSolarConfig( *aFileList[ i ] );
+        StarFile *pFile = new StarFile( *aFileList.front() );
+        if ( pFile->Exists())
+        {
+            SimpleConfig aSolarConfig( *aFileList.front() );
             while (( aString = aSolarConfig.GetNext()) != "" )
                 InsertToken (( char * ) aString.GetBuffer());
         }
-        // todo: delete the pFile (it's not needed any more)
-        // todo: change the delete; to remove the 1st item in the list.
-        // what happens is new files may be added to the list by InsertToken()... thus, the list
-        // gets longer as things get processed. Thus, we need to remove things from the front as
-        // they get processed.
-        delete aFileList[ i ];
+        delete pFile;
+        delete aFileList.front();
+        aFileList.erase( aFileList.begin() );
     }
-    // todo: remove the clear(); if we left the loop above, then the list is empty
-    aFileList.clear();
     // resolve all dependencies recursive
     Expand_Impl();
 }
@@ -610,19 +605,21 @@ void Star::Read( String &rFileName )
 void Star::Read( SolarFileList *pSolarFiles )
 /*****************************************************************************/
 {
-    for ( size_t i = 0, n = pSolarFiles->size(); i < n; ++ i )
+    while ( !pSolarFiles->empty() )
     {
         ByteString aString;
 
-        StarFile *pFile = new StarFile( *(*pSolarFiles)[ i ] );
-        if ( pFile->Exists()) {
-            SimpleConfig aSolarConfig( *(*pSolarFiles)[ i ] );
+        StarFile *pFile = new StarFile( *pSolarFiles->front() );
+        if ( pFile->Exists())
+        {
+            SimpleConfig aSolarConfig( *pSolarFiles->front() );
             while (( aString = aSolarConfig.GetNext()) != "" )
                 InsertToken (( char * ) aString.GetBuffer());
         }
-        delete (*pSolarFiles)[ i ];
+        delete pFile;
+        delete pSolarFiles->front();
+        aFileList.erase( aFileList.begin() );
     }
-    pSolarFiles->clear();
     delete pSolarFiles;
 
     Expand_Impl();
@@ -654,10 +651,9 @@ void Star::InsertSolarList( String sProject )
     // inserts a new solarlist part of another project
     String sFileName( CreateFileName( sProject ));
 
-    for ( size_t i = 0; i < aFileList.size(); i++ ) {
-        if ( (*aFileList[ i ]) == sFileName )
+    for ( SolarFileList::iterator it = aFileList.begin(); it != aFileList.end(); ++it )
+        if ( *(*it) == sFileName )
             return;
-    }
 
     ByteString ssProject( sProject, RTL_TEXTENCODING_ASCII_US );
     if ( HasProject( ssProject ))
@@ -1107,17 +1103,18 @@ USHORT StarWriter::Read( String aFileName, BOOL bReadComments, USHORT nMode  )
     aEntry = aEntry.GetPath().GetPath().GetPath();
     sSourceRoot = aEntry.GetFull();
 
-    for ( size_t i = 0, n = aFileList.size(); i < n; ++i )
+    while ( !aFileList.empty() )
     {
-        StarFile *pFile = new StarFile( *aFileList[ i ] );
+        StarFile *pFile = new StarFile( *aFileList.front() );
         if ( pFile->Exists()) {
-            SimpleConfig aSolarConfig( *aFileList[ i ] );
+            SimpleConfig aSolarConfig( *aFileList.front() );
             while (( aString = aSolarConfig.GetCleanedNextLine( bReadComments )) != "" )
                 InsertTokenLine ( aString );
         }
-        delete aFileList[ i ];
+        delete pFile;
+        delete aFileList.front();
+        aFileList.erase( aFileList.begin() );
     }
-    aFileList.clear();
     // resolve all dependencies recursive
     Expand_Impl();
 
@@ -1133,18 +1130,19 @@ USHORT StarWriter::Read( SolarFileList *pSolarFiles, BOOL bReadComments )
     nStarMode = STAR_MODE_MULTIPLE_PARSE;
 
     // this ctor is used by StarBuilder to get the information for the whole workspace
-    for ( size_t i = 0, n = pSolarFiles->size(); i < n; ++i )
+    while ( !pSolarFiles->empty() )
     {
         ByteString aString;
-        StarFile *pFile = new StarFile(  *(*pSolarFiles)[ i ] );
+        StarFile *pFile = new StarFile( *pSolarFiles->front() );
         if ( pFile->Exists()) {
-            SimpleConfig aSolarConfig( *(*pSolarFiles)[ i ] );
+            SimpleConfig aSolarConfig( *pSolarFiles->front() );
             while (( aString = aSolarConfig.GetCleanedNextLine( bReadComments )) != "" )
                 InsertTokenLine ( aString );
         }
-        delete (*pSolarFiles)[ i ];
+        delete pFile;
+        delete pSolarFiles->front();
+        pSolarFiles->erase( pSolarFiles->begin() );
     }
-    pSolarFiles->clear();
     delete pSolarFiles;
 
     Expand_Impl();

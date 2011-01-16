@@ -33,6 +33,7 @@
 #include <tools/stream.hxx>
 #include <osl/mutex.hxx>
 #include <vector>
+#include <list>
 
 #define OS_NONE             0x0000
 #define OS_WIN16            0x0001
@@ -295,7 +296,7 @@ public:
 typedef ::std::vector< Prj* > StarList;
 // todo: SolarFileList should be a linked list and not a vector.
 // also, the Read() functions need to be changed (see 1st read() in prj.cxx for notes)
-typedef ::std::vector< String* > SolarFileList;
+typedef ::std::list< String* > SolarFileList;
 
 class Star
 {
