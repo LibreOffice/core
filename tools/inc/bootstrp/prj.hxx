@@ -285,21 +285,16 @@ private:
 
 public:
     StarFile( const String &rFile );
-    const String &GetName() { return aFileName; }
-    Date GetDate() { return aDate; }
-    Time GetTime() { return aTime; }
-
-    BOOL NeedsUpdate();
     BOOL Exists() { return bExists; }
 };
-
-DECLARE_LIST( StarFileList, StarFile * )
 
 #define STAR_MODE_SINGLE_PARSE          0x0000
 #define STAR_MODE_RECURSIVE_PARSE       0x0001
 #define STAR_MODE_MULTIPLE_PARSE        0x0002
 
 typedef ::std::vector< Prj* > StarList;
+// todo: SolarFileList should be a linked list and not a vector.
+// also, the Read() functions need to be changed (see 1st read() in prj.cxx for notes)
 typedef ::std::vector< String* > SolarFileList;
 
 class Star
@@ -316,7 +311,6 @@ protected:
 
     USHORT          nStarMode;
     SolarFileList   aFileList;
-    StarFileList    aLoadedFilesList;
     String          sSourceRoot;
 
     void InsertSolarList( String sProject );
@@ -347,7 +341,6 @@ public:
     ByteString          GetPrjName( DirEntry &rPath );
 
     void            InsertToken( char *pChar );
-    BOOL            NeedsUpdate();
 
     USHORT          GetMode() { return nStarMode; }
 

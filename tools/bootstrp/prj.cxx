@@ -573,21 +573,6 @@ Star::~Star()
 }
 
 /*****************************************************************************/
-BOOL Star::NeedsUpdate()
-/*****************************************************************************/
-{
-    aMutex.acquire();
-    for ( ULONG i = 0; i < aLoadedFilesList.Count(); i++ )
-        if ( aLoadedFilesList.GetObject( i )->NeedsUpdate()) {
-            aMutex.release();
-            return TRUE;
-        }
-
-    aMutex.release();
-    return FALSE;
-}
-
-/*****************************************************************************/
 void Star::Read( String &rFileName )
 /*****************************************************************************/
 {
@@ -599,6 +584,7 @@ void Star::Read( String &rFileName )
     aEntry = aEntry.GetPath().GetPath().GetPath();
     sSourceRoot = aEntry.GetFull();
 
+    // todo: change this to while( !aFileList.empty() )
     for ( size_t i = 0, n = aFileList.size(); i < n; ++ i )
     {
         StarFile *pFile = new StarFile( *aFileList[ i ] );
@@ -607,10 +593,14 @@ void Star::Read( String &rFileName )
             while (( aString = aSolarConfig.GetNext()) != "" )
                 InsertToken (( char * ) aString.GetBuffer());
         }
-        aMutex.acquire();
-        aLoadedFilesList.Insert( pFile, LIST_APPEND );
-        aMutex.release();
+        // todo: delete the pFile (it's not needed any more)
+        // todo: change the delete; to remove the 1st item in the list.
+        // what happens is new files may be added to the list by InsertToken()... thus, the list
+        // gets longer as things get processed. Thus, we need to remove things from the front as
+        // they get processed.
+        delete aFileList[ i ];
     }
+    // todo: remove the clear(); if we left the loop above, then the list is empty
     aFileList.clear();
     // resolve all dependencies recursive
     Expand_Impl();
@@ -630,11 +620,7 @@ void Star::Read( SolarFileList *pSolarFiles )
             while (( aString = aSolarConfig.GetNext()) != "" )
                 InsertToken (( char * ) aString.GetBuffer());
         }
-
-        aMutex.acquire();
-        aLoadedFilesList.Insert( pFile, LIST_APPEND );
-        aMutex.release();
-        delete (*pSolarFiles)[ i ]; // TODO: isn't this deleting the object inserted into aLoadedFilesList?
+        delete (*pSolarFiles)[ i ];
     }
     pSolarFiles->clear();
     delete pSolarFiles;
@@ -1129,11 +1115,7 @@ USHORT StarWriter::Read( String aFileName, BOOL bReadComments, USHORT nMode  )
             while (( aString = aSolarConfig.GetCleanedNextLine( bReadComments )) != "" )
                 InsertTokenLine ( aString );
         }
-
-        aMutex.acquire();
-        aLoadedFilesList.Insert( pFile, LIST_APPEND );
-        aMutex.release();
-        delete aFileList[ i ]; // TODO: isn't this deleting the object inserted into aLoadedFilesList?
+        delete aFileList[ i ];
     }
     aFileList.clear();
     // resolve all dependencies recursive
@@ -1160,11 +1142,7 @@ USHORT StarWriter::Read( SolarFileList *pSolarFiles, BOOL bReadComments )
             while (( aString = aSolarConfig.GetCleanedNextLine( bReadComments )) != "" )
                 InsertTokenLine ( aString );
         }
-
-        aMutex.acquire();
-        aLoadedFilesList.Insert( pFile, LIST_APPEND );
-        aMutex.release();
-        delete (*pSolarFiles)[ i ]; // TODO: isn't this deleting the object inserted into aLoadedFilesList?
+        delete (*pSolarFiles)[ i ];
     }
     pSolarFiles->clear();
     delete pSolarFiles;
@@ -1589,24 +1567,6 @@ StarFile::StarFile( const String &rFile )
     }
     else
         bExists = FALSE;
-}
-
-/*****************************************************************************/
-BOOL StarFile::NeedsUpdate()
-/*****************************************************************************/
-{
-    DirEntry aEntry( aFileName );
-    if ( aEntry.Exists()) {
-        if ( !bExists ) {
-            bExists = TRUE;
-            return TRUE;
-        }
-        FileStat aStat( aEntry );
-        if (( aStat.DateModified() > aDate ) ||
-            (( aStat.DateModified() == aDate ) && ( aStat.TimeModified() > aTime )))
-            return TRUE;
-    }
-    return FALSE;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
