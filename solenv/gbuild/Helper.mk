@@ -154,4 +154,8 @@ gb_StaticLibrary_$(1) += $(2)
 
 endef
 
+define gb_Helper_execute
+$(call gb_Helper_set_ld_path) $(OUTDIR)/bin/$(1)
+endef
+
 # vim: set noet sw=4 ts=4:

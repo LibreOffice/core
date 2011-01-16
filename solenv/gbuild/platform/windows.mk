@@ -201,6 +201,8 @@ $(subst $(gb_Helper_SRCDIR_NATIVE)/,$$S/,O=$(gb_Helper_OUTDIR_NATIVE)) && \
 $(subst $(gb_Helper_SRCDIR_NATIVE)/,$$S/,$(subst $(REPODIR)/,$$R/,$(subst $(SRCDIR)/,$$S/,$(subst $(gb_Helper_OUTDIR_NATIVE)/,$$O/,$(subst $(OUTDIR)/,$$O/,W=$(gb_Helper_WORKDIR_NATIVE) && $(subst $(gb_Helper_WORKDIR_NATIVE)/,$$W/,$(subst $(WORKDIR)/,$$W/,$(1)))))))))
 endef
 
+gb_Helper_set_ld_path := PATH="$${PATH}:$(OUTDIR)/bin"
+
 # CObject class
 
 ifeq ($(gb_FULLDEPS),$(true))

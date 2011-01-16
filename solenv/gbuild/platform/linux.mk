@@ -137,6 +137,8 @@ endif
 
 gb_Helper_abbreviate_dirs_native = $(gb_Helper_abbreviate_dirs)
 
+gb_Helper_set_ld_path := LD_LIBRARY_PATH=$(OUTDIR)/lib
+
 # CObject class
 
 define gb_CObject__command
