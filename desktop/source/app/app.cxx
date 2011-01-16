@@ -189,11 +189,6 @@ namespace desktop
 static oslSignalHandler pSignalHandler = 0;
 static sal_Bool _bCrashReporterEnabled = sal_True;
 
-static const ::rtl::OUString CFG_PACKAGE_COMMON_HELP   ( RTL_CONSTASCII_USTRINGPARAM( "org.openoffice.Office.Common/Help"));
-static const ::rtl::OUString CFG_PATH_REG              ( RTL_CONSTASCII_USTRINGPARAM( "Registration"                     ));
-static const ::rtl::OUString CFG_ENTRY_REGURL          ( RTL_CONSTASCII_USTRINGPARAM( "URL"                              ));
-static const ::rtl::OUString CFG_ENTRY_TEMPLATEREGURL  ( RTL_CONSTASCII_USTRINGPARAM( "TemplateURL"                      ));
-
 // ----------------------------------------------------------------------------
 
 ResMgr* Desktop::GetDesktopResManager()
