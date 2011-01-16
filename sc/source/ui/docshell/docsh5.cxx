@@ -260,15 +260,10 @@ ScDBData* ScDocShell::GetDBData( const ScRange& rMarked, ScGetDBMode eMode, ScGe
         nStartCol = nEndCol = nCol;
         nStartRow = nEndRow = nRow;
         nStartTab = nEndTab = nTab;
-//      bMark = FALSE;                          // nichts zu markieren
     }
     else
     {
-        if ( bSelected )
-        {
-//          bMark = FALSE;
-        }
-        else
+        if ( !bSelected )
         {                                       // zusammenhaengender Bereich
             nStartCol = nCol;
             nStartRow = nRow;

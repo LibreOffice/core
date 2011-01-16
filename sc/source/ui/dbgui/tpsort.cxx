@@ -577,8 +577,6 @@ ScTabPageSortOptions::ScTabPageSortOptions( Window*             pParent,
         aLineDirection  ( this, ScResId( FL_DIRECTION ) ),
         aBtnTopDown     ( this, ScResId( BTN_TOP_DOWN ) ),
         aBtnLeftRight   ( this, ScResId( BTN_LEFT_RIGHT ) ),
-//      aFtAreaLabel    ( this, ScResId( FT_AREA_LABEL ) ),
-//      aFtArea         ( this, ScResId( FT_AREA ) ),
         //
 #if ENABLE_LAYOUT_EXPERIMENTAL
 #undef this
@@ -699,10 +697,6 @@ void ScTabPageSortOptions::Init()
         theArea.AppendAscii(RTL_CONSTASCII_STRINGPARAM(" ("));
         theArea += theDbName;
         theArea += ')';
-
-        //aFtArea.SetText( theArea );
-        //theArea.Insert( aStrAreaLabel, 0 );
-        //aFtAreaLabel.SetText( theArea );
 
         aBtnHeader.SetText( aStrColLabel );
     }

@@ -171,7 +171,6 @@ namespace
 // -----------------------------------------------------------------------
 // MoveFile/KillFile/IsDocument: similar to SfxContentHelper
 
-// static
 BOOL ScDocShell::MoveFile( const INetURLObject& rSourceObj, const INetURLObject& rDestObj )
 {
     sal_Bool bMoveData = sal_True;
@@ -216,7 +215,6 @@ BOOL ScDocShell::MoveFile( const INetURLObject& rSourceObj, const INetURLObject&
 }
 
 
-// static
 BOOL ScDocShell::KillFile( const INetURLObject& rURL )
 {
     sal_Bool bRet = sal_True;
@@ -236,7 +234,6 @@ BOOL ScDocShell::KillFile( const INetURLObject& rURL )
     return bRet;
 }
 
-// static
 BOOL ScDocShell::IsDocument( const INetURLObject& rURL )
 {
     sal_Bool bRet = sal_False;

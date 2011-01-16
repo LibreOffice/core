@@ -1035,7 +1035,6 @@ ScVbaChart::isSeriesIndexValid(sal_Int32 _seriesindex) throw( script::BasicError
     try
     {
         uno::Reference< chart::XChartDataArray > xChartDataArray( mxChartDocument->getData(), uno::UNO_QUERY_THROW );
-        //        dblValues = xChartDataArray.getData();
         //TODO I guess we have to differentiate between XlRowCol
         if ( !xChartDataArray.is() )
         {
@@ -1213,13 +1212,8 @@ ScVbaChart::getAxisPropertySet(sal_Int32 _nAxisType, sal_Int32 _nAxisGroup) thro
             }
             break;
         case xlSeriesAxis:
-//                if (_nAxisGroup == xlPrimary){
             xAxisProps = xAxisZSupplier->getZAxis();
             break;
-//                }
-//                else if (_nAxisGroup == xlSecondary){
- //                   return xTwoAxisXSupplier.getSecondaryZAxis();
- //               }
         case xlValue:
             if (_nAxisGroup == xlPrimary)
                 xAxisProps = xAxisYSupplier->getYAxis();

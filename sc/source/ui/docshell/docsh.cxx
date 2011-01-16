@@ -161,11 +161,8 @@ const sal_Char ScDocShell::pStyleName[] = "SfxStyleSheets";
 //  Filter-Namen (wie in sclib.cxx)
 
 static const sal_Char pFilterSc50[]     = "StarCalc 5.0";
-//static const sal_Char pFilterSc50Temp[]   = "StarCalc 5.0 Vorlage/Template";
 static const sal_Char pFilterSc40[]     = "StarCalc 4.0";
-//static const sal_Char pFilterSc40Temp[]   = "StarCalc 4.0 Vorlage/Template";
 static const sal_Char pFilterSc30[]     = "StarCalc 3.0";
-//static const sal_Char pFilterSc30Temp[]   = "StarCalc 3.0 Vorlage/Template";
 static const sal_Char pFilterSc10[]     = "StarCalc 1.0";
 static const sal_Char pFilterXML[]      = "StarOffice XML (Calc)";
 static const sal_Char pFilterAscii[]        = "Text - txt - csv (StarCalc)";
@@ -1158,9 +1155,6 @@ BOOL ScDocShell::ConvertFrom( SfxMedium& rMedium )
             }
             else
                 bRet = TRUE;
-
-            // #93255# update of row height done inside of Excel filter to speed up chart import
-//            bSetRowHeights = TRUE;      //  #75357# optimal row heights must be updated
         }
         else if (aFltName.EqualsAscii(pFilterAscii))
         {
@@ -1483,12 +1477,6 @@ BOOL ScDocShell::ConvertFrom( SfxMedium& rMedium )
                         nWidth + (USHORT)ScGlobal::nLastColWidthExtra );
                 }
             }
-//          if ( bSetRowHeights )
-//          {
-//              //  nExtra must be 0
-//              aDocument.SetOptimalHeight( 0, nEndRow, nTab, 0, &aVirtDev,
-//                  nPPTX, nPPTY, aZoom, aZoom, FALSE );
-//          }
         }
 
         if (bSetRowHeights)
@@ -1605,13 +1593,6 @@ BOOL ScDocShell::SaveAs( SfxMedium& rMedium )
 
 BOOL ScDocShell::IsInformationLost()
 {
-/*
-    const SfxFilter *pFilt = GetMedium()->GetFilter();
-    BOOL bRet = pFilt && pFilt->IsAlienFormat() && bNoInformLost;
-    if (bNoInformLost)                  // nur einmal!!
-        bNoInformLost = FALSE;
-    return bRet;
-*/
     //!!! bei Gelegenheit ein korrekte eigene Behandlung einbauen
 
     return SfxObjectShell::IsInformationLost();
@@ -1621,12 +1602,10 @@ BOOL ScDocShell::IsInformationLost()
 // Xcl-like column width measured in characters of standard font.
 xub_StrLen lcl_ScDocShell_GetColWidthInChars( USHORT nWidth )
 {
-    // double fColScale = 1.0;
-    double  f = nWidth;
+    double f = nWidth;
     f *= 1328.0 / 25.0;
     f += 90.0;
     f *= 1.0 / 23.0;
-    // f /= fColScale * 256.0;
     f /= 256.0;
 
     return xub_StrLen( f );
@@ -2074,19 +2053,6 @@ BOOL ScDocShell::ConvertTo( SfxMedium &rMed )
     BOOL bRet = FALSE;
     String aFltName = rMed.GetFilter()->GetFilterName();
 
-/*
-    if (aFltName.EqualsAscii(pFilterLotus))
-    {
-        SvStream* pStream = rMed.GetOutStream();
-        if (pStream)
-        {
-            FltError eError = ScFormatFilter::Get().ScExportLotus123( *pStream, &aDocument, ExpWK1,
-                                                CHARSET_IBMPC_437 );
-            bRet = eError == eERR_OK;
-        }
-    }
-    else
-*/
     if (aFltName.EqualsAscii(pFilterXML))
     {
         //TODO/LATER: this shouldn't happen!
@@ -2211,12 +2177,8 @@ BOOL ScDocShell::ConvertTo( SfxMedium &rMed )
 
         if ( eError != eERR_OK && (eError & ERRCODE_WARNING_MASK) )
         {
-//!         if ( !rMed.GetError() )
-//!             rMed.SetError( eError, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ) );
             eError = eERR_OK;
         }
-//!     else if ( aDocument.GetTableCount() > 1 && !rMed.GetError() )
-//!         rMed.SetError( SCWARN_EXPORT_ASCII, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ) );
 
         INetURLObject aTmpFile( rMed.GetPhysicalName(), INET_PROT_FILE );
         if ( bHasMemo )

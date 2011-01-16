@@ -200,7 +200,6 @@ sal_Int64 SAL_CALL ScHeaderFooterContentObj::getSomething(
     return 0;
 }
 
-// static
 const uno::Sequence<sal_Int8>& ScHeaderFooterContentObj::getUnoTunnelId()
 {
     static uno::Sequence<sal_Int8> * pSeq = 0;
@@ -217,7 +216,6 @@ const uno::Sequence<sal_Int8>& ScHeaderFooterContentObj::getUnoTunnelId()
     return *pSeq;
 }
 
-// static
 ScHeaderFooterContentObj* ScHeaderFooterContentObj::getImplementation(
                                 const uno::Reference<sheet::XHeaderFooterContent> xObj )
 {
@@ -694,7 +692,6 @@ sal_Int64 SAL_CALL ScCellTextCursor::getSomething(
     return SvxUnoTextCursor::getSomething( rId );
 }
 
-// static
 const uno::Sequence<sal_Int8>& ScCellTextCursor::getUnoTunnelId()
 {
     static uno::Sequence<sal_Int8> * pSeq = 0;
@@ -711,7 +708,6 @@ const uno::Sequence<sal_Int8>& ScCellTextCursor::getUnoTunnelId()
     return *pSeq;
 }
 
-// static
 ScCellTextCursor* ScCellTextCursor::getImplementation( const uno::Reference<uno::XInterface> xObj )
 {
     ScCellTextCursor* pRet = NULL;
@@ -798,7 +794,6 @@ sal_Int64 SAL_CALL ScHeaderFooterTextCursor::getSomething(
     return SvxUnoTextCursor::getSomething( rId );
 }
 
-// static
 const uno::Sequence<sal_Int8>& ScHeaderFooterTextCursor::getUnoTunnelId()
 {
     static uno::Sequence<sal_Int8> * pSeq = 0;
@@ -815,7 +810,6 @@ const uno::Sequence<sal_Int8>& ScHeaderFooterTextCursor::getUnoTunnelId()
     return *pSeq;
 }
 
-// static
 ScHeaderFooterTextCursor* ScHeaderFooterTextCursor::getImplementation(
                                 const uno::Reference<uno::XInterface> xObj )
 {
@@ -902,7 +896,6 @@ sal_Int64 SAL_CALL ScDrawTextCursor::getSomething(
     return SvxUnoTextCursor::getSomething( rId );
 }
 
-// static
 const uno::Sequence<sal_Int8>& ScDrawTextCursor::getUnoTunnelId()
 {
     static uno::Sequence<sal_Int8> * pSeq = 0;
@@ -919,7 +912,6 @@ const uno::Sequence<sal_Int8>& ScDrawTextCursor::getUnoTunnelId()
     return *pSeq;
 }
 
-// static
 ScDrawTextCursor* ScDrawTextCursor::getImplementation( const uno::Reference<uno::XInterface> xObj )
 {
     ScDrawTextCursor* pRet = NULL;

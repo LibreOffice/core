@@ -516,7 +516,6 @@ BOOL ScImportExport::ExportStream( SvStream& rStrm, const String& rBaseURL, ULON
 }
 
 
-//static
 void ScImportExport::WriteUnicodeOrByteString( SvStream& rStrm, const String& rString, BOOL bZero )
 {
     rtl_TextEncoding eEnc = rStrm.GetStreamCharSet();
@@ -547,7 +546,6 @@ void ScImportExport::WriteUnicodeOrByteString( SvStream& rStrm, const String& rS
 
 
 // This function could be replaced by endlub()
-// static
 void ScImportExport::WriteUnicodeOrByteEndl( SvStream& rStrm )
 {
     if ( rStrm.GetStreamCharSet() == RTL_TEXTENCODING_UNICODE )
@@ -1361,7 +1359,6 @@ BOOL ScImportExport::ExtText2Doc( SvStream& rStrm )
 }
 
 
-// static
 const sal_Unicode* ScImportExport::ScanNextFieldFromString( const sal_Unicode* p,
         String& rField, sal_Unicode cStr, const sal_Unicode* pSeps, bool bMergeSeps, bool& rbIsQuoted )
 {
@@ -1519,7 +1516,6 @@ BOOL ScImportExport::Doc2Text( SvStream& rStrm )
                 if( nCol < nEndCol )
                     lcl_WriteSimpleString( rStrm, String(cSep) );
             }
-//          if( nRow < nEndRow )
                 WriteUnicodeOrByteEndl( rStrm );
             if( rStrm.GetError() != SVSTREAM_OK )
                 break;

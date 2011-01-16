@@ -687,7 +687,6 @@ BOOL ScDocFunc::DeleteContents( const ScMarkData& rMark, USHORT nFlags,
     else
     {
         pDoc->DeleteSelection( nFlags, aMultiMark );
-//       aMultiMark.MarkToSimple();
     }
 
     // add undo action after drawing undo is complete (objects and note captions)
@@ -701,10 +700,7 @@ BOOL ScDocFunc::DeleteContents( const ScMarkData& rMark, USHORT nFlags,
     else if (nExtFlags & SC_PF_LINES)
         lcl_PaintAbove( rDocShell, aExtendedRange );    // fuer Linien ueber dem Bereich
 
-//  rDocShell.UpdateOle(GetViewData());     //! an der View?
     aModificator.SetDocumentModified();
-//! CellContentChanged();
-//! ShowAllCursors();
 
     return TRUE;
 }
@@ -1333,14 +1329,8 @@ BOOL ScDocFunc::ApplyStyle( const ScMarkData& rMark, const String& rStyleName,
 
     }
 
-//  BOOL bPaintExt = pDoc->HasAttrib( aMultiRange, HASATTR_PAINTEXT );
-//  pDoc->ApplySelectionPattern( rPattern, rMark );
-
     pDoc->ApplySelectionStyle( (ScStyleSheet&)*pStyleSheet, rMark );
 
-//  if (!bPaintExt)
-//      bPaintExt = pDoc->HasAttrib( aMultiRange, HASATTR_PAINTEXT );
-//  USHORT nExtFlags = bPaintExt ? SC_PF_LINES : 0;
     USHORT nExtFlags = 0;
     if (!AdjustRowHeight( aMultiRange ))
         rDocShell.PostPaint( aMultiRange, PAINT_GRID, nExtFlags );
@@ -1751,7 +1741,6 @@ BOOL ScDocFunc::InsertCells( const ScRange& rRange, const ScMarkData* pTabMark, 
                     rDocShell.PostPaint( nPaintStartX, nPaintStartY, i, nPaintEndX, nPaintEndY, i+nScenarioCount, nPaintFlags, nExtFlags );
             }
         }
-        //aModificator.SetDocumentModified();
     }
     else
     {
@@ -3598,7 +3587,6 @@ BOOL ScDocFunc::ClearItems( const ScMarkData& rMark, const USHORT* pWhich, BOOL 
     aMultiMark.MarkToMulti();
     aMultiMark.GetMultiMarkArea( aMarkRange );
 
-//  if (bRecord)
     if (bUndo)
     {
         SCTAB nStartTab = aMarkRange.aStart.Tab();
@@ -3639,7 +3627,6 @@ BOOL ScDocFunc::ChangeIndent( const ScMarkData& rMark, BOOL bIncrement, BOOL bAp
     ScRange aMarkRange;
     rMark.GetMultiMarkArea( aMarkRange );
 
-//  if (bRecord)
     if (bUndo)
     {
         SCTAB nStartTab = aMarkRange.aStart.Tab();
@@ -3820,7 +3807,7 @@ BOOL ScDocFunc::EnterMatrix( const ScRange& rRange, const ScMarkData* pTabMark,
         WaitObject aWait( rDocShell.GetActiveDialogParent() );
 
         ScDocument* pUndoDoc = NULL;
-//      if (bRecord)    // immer
+
         if (bUndo)
         {
             //! auch bei Undo selektierte Tabellen beruecksichtigen
@@ -3856,7 +3843,6 @@ BOOL ScDocFunc::EnterMatrix( const ScRange& rRange, const ScMarkData* pTabMark,
             pDoc->InsertMatrixFormula( nStartCol, nStartRow, nEndCol, nEndRow,
                     aMark, rString, NULL, eGrammar);
 
-//      if (bRecord)    // immer
         if (bUndo)
         {
             //! auch bei Undo selektierte Tabellen beruecksichtigen
@@ -4038,7 +4024,6 @@ BOOL ScDocFunc::FillSimple( const ScRange& rRange, const ScMarkData* pTabMark,
         }
 
         rDocShell.PostPaintGridAll();
-//      rDocShell.PostPaintDataChanged();
         aModificator.SetDocumentModified();
 
         bSuccess = TRUE;
@@ -4147,7 +4132,6 @@ BOOL ScDocFunc::FillSeries( const ScRange& rRange, const ScMarkData* pTabMark,
             AdjustRowHeight(rRange);
 
             rDocShell.PostPaintGridAll();
-//          rDocShell.PostPaintDataChanged();
             aModificator.SetDocumentModified();
         }
 
@@ -4288,7 +4272,6 @@ BOOL ScDocFunc::FillAuto( ScRange& rRange, const ScMarkData* pTabMark, FillDir e
     }
 
     rDocShell.PostPaintGridAll();
-//  rDocShell.PostPaintDataChanged();
     aModificator.SetDocumentModified();
 
     rRange = aDestArea;         // Zielbereich zurueckgeben (zum Markieren)

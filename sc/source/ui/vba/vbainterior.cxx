@@ -92,7 +92,6 @@ static PatternMap aPatternMap( lcl_getPatternMap() );
 ScVbaInterior::ScVbaInterior( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< beans::XPropertySet >&  xProps, ScDocument* pScDoc ) throw ( lang::IllegalArgumentException) : ScVbaInterior_BASE( xParent, xContext ), m_xProps(xProps), m_pScDoc( pScDoc )
 {
     // auto color
-    //m_aPattColor.SetColor( (sal_uInt32)0xFFFFFFFF );
     m_aPattColor.SetColor( (sal_uInt32)0x0 );
     m_nPattern = 0L;
     if ( !m_xProps.is() )
@@ -113,7 +112,6 @@ ScVbaInterior::setColor( const uno::Any& _color  ) throw (uno::RuntimeException)
     if( _color >>= nColor )
     {
         SetUserDefinedAttributes( BACKCOLOR, SetAttributeData( XLRGBToOORGB( nColor ) ) );
-        //m_xProps->setPropertyValue( BACKCOLOR , XLRGBToOORGB(_color));
         SetMixedColor();
     }
 }
@@ -277,7 +275,6 @@ uno::Any
 ScVbaInterior::SetAttributeData( sal_Int32 nValue )
 {
     xml::AttributeData aAttributeData;
-    //aAttributeData.Namespace = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "ooo.vba.excel.CellPatten"));
     aAttributeData.Type = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "sal_Int32" ));
     aAttributeData.Value = rtl::OUString::valueOf( nValue );
     return uno::makeAny( aAttributeData );

@@ -173,7 +173,6 @@ ScVbaAxis::getCrosses(  ) throw (script::BasicErrorException, uno::RuntimeExcept
             {
                 double forigin = 0.0;
                 mxPropertySet->getPropertyValue(ORIGIN) >>= forigin;
-//obsolete      double fmax = AnyConverter.toDouble(mxPropertySet.getPropertyValue("Max"));
                 double fmin = 0.0;
                 mxPropertySet->getPropertyValue(VBA_MIN) >>= fmin;
                 if (forigin == fmin)
@@ -195,11 +194,9 @@ ScVbaAxis::setCrossesAt( double _fCrossesAt ) throw (script::BasicErrorException
 {
     try
     {
-//        if (getCrosses() == xlAxisCrossesCustom){
         setMaximumScaleIsAuto( sal_False );
         setMinimumScaleIsAuto( sal_False );
         mxPropertySet->setPropertyValue(ORIGIN, uno::makeAny(_fCrossesAt));
-//        }
     }
     catch (uno::Exception& e)
     {
