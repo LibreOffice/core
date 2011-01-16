@@ -119,18 +119,18 @@ namespace framework
 
 #define SFX_REFERER_USER        "private:user"
 
-const ::rtl::OUString aSlotNewDocDirect( RTL_CONSTASCII_USTRINGPARAM( "slot:5537" ));
-const ::rtl::OUString aSlotAutoPilot( RTL_CONSTASCII_USTRINGPARAM( "slot:6381" ));
+#define aSlotNewDocDirect "slot:5537"
+#define aSlotAutoPilot "slot:6381"
 
-const ::rtl::OUString aSpecialFileMenu( RTL_CONSTASCII_USTRINGPARAM( "file" ));
-const ::rtl::OUString aSpecialWindowMenu( RTL_CONSTASCII_USTRINGPARAM( "window" ));
-const ::rtl::OUString aSlotSpecialFileMenu( RTL_CONSTASCII_USTRINGPARAM( "slot:5510" ));
-const ::rtl::OUString aSlotSpecialWindowMenu( RTL_CONSTASCII_USTRINGPARAM( "slot:5610" ));
-const ::rtl::OUString aSlotSpecialToolsMenu( RTL_CONSTASCII_USTRINGPARAM( "slot:6677" ));
+#define aSpecialFileMenu "file"
+#define aSpecialWindowMenu "window"
+#define aSlotSpecialFileMenu "slot:5510"
+#define aSlotSpecialWindowMenu "slot:5610"
+#define aSlotSpecialToolsMenu "slot:6677"
 
 // special uno commands for picklist and window list
-const ::rtl::OUString aSpecialFileCommand( RTL_CONSTASCII_USTRINGPARAM( "PickList" ));
-const ::rtl::OUString aSpecialWindowCommand( RTL_CONSTASCII_USTRINGPARAM( "WindowList" ));
+#define aSpecialFileCommand "PickList"
+#define aSpecialWindowCommand "WindowList"
 
 const ::rtl::OUString UNO_COMMAND( RTL_CONSTASCII_USTRINGPARAM( ".uno:" ));
 
@@ -184,7 +184,7 @@ MenuManager::MenuManager(
 
                 // Create addon popup menu if there exist elements and this is the tools popup menu
                 if (( nItemId == SID_ADDONLIST ||
-                    aItemCommand == aSlotSpecialToolsMenu ) &&
+                    aItemCommand.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(aSlotSpecialToolsMenu)) ) &&
                     AddonMenuManager::HasAddonMenuElements() )
                 {
                     USHORT      nCount   = 0;
@@ -224,7 +224,7 @@ MenuManager::MenuManager(
         else
         {
             if ( nItemId == SID_NEWDOCDIRECT ||
-                 aItemCommand == aSlotNewDocDirect )
+                 aItemCommand.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(aSlotNewDocDirect)) )
             {
                 // #110897#
                 // Reference< ::com::sun::star::lang::XMultiServiceFactory > aMultiServiceFactory(::comphelper::getProcessServiceFactory());
@@ -244,7 +244,7 @@ MenuManager::MenuManager(
                 }
             }
             else if ( nItemId == SID_AUTOPILOTMENU ||
-                      aItemCommand == aSlotAutoPilot )
+                      aItemCommand.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(aSlotAutoPilot)) )
             {
                 // #110897#
                 // Reference< ::com::sun::star::lang::XMultiServiceFactory > aMultiServiceFactory(::comphelper::getProcessServiceFactory());
@@ -813,13 +813,13 @@ IMPL_LINK( MenuManager, Activate, Menu *, pMenu )
             aCommand = aCommand.copy( UNO_COMMAND.getLength() );
         }
 
-        if ( m_aMenuItemCommand == aSpecialFileMenu ||
-             m_aMenuItemCommand == aSlotSpecialFileMenu ||
-             aCommand == aSpecialFileCommand )
+        if ( m_aMenuItemCommand.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(aSpecialFileMenu)) ||
+             m_aMenuItemCommand.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(aSlotSpecialFileMenu)) ||
+             aCommand.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(aSpecialFileCommand)) )
             UpdateSpecialFileMenu( pMenu );
-        else if ( m_aMenuItemCommand == aSpecialWindowMenu ||
-                  m_aMenuItemCommand == aSlotSpecialWindowMenu ||
-                  aCommand == aSpecialWindowCommand )
+        else if ( m_aMenuItemCommand.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(aSpecialWindowMenu)) ||
+                  m_aMenuItemCommand.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(aSlotSpecialWindowMenu)) ||
+                  aCommand.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(aSpecialWindowCommand)) )
                   UpdateSpecialWindowMenu( pMenu,getServiceFactory(),m_aLock );
 
         // Check if some modes have changed so we have to update our menu images
