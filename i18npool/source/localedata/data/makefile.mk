@@ -278,6 +278,7 @@ SHL4OBJS= \
     $(SLO)$/localedata_ku_TR.obj \
     $(SLO)$/localedata_ky_KG.obj \
     $(SLO)$/localedata_lg_UG.obj \
+    $(SLO)$/localedata_lif_NP.obj \
     $(SLO)$/localedata_ln_CD.obj \
     $(SLO)$/localedata_lo_LA.obj \
     $(SLO)$/localedata_mai_IN.obj \

@@ -325,6 +325,7 @@ StringArray STR_ARR_SVT_LANGUAGE_TABLE
         < "Rusyn (Slovakia)" ; LANGUAGE_USER_RUSYN_SLOVAKIA ; > ;
         < "Yiddish (USA)" ; LANGUAGE_USER_YIDDISH_US ; > ;
         < "Hawaiian" ; LANGUAGE_HAWAIIAN_UNITED_STATES ; > ;
+        < "Limbu" ; LANGUAGE_USER_LIMBU ; > ;
     };
 };
 
