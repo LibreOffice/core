@@ -612,29 +612,29 @@ namespace DOM
     {
         events::CEvent *pEvent = 0;
         if (
-            aType.compareToAscii("DOMSubtreeModified")          == 0||
-            aType.compareToAscii("DOMNodeInserted")             == 0||
-            aType.compareToAscii("DOMNodeRemoved")              == 0||
-            aType.compareToAscii("DOMNodeRemovedFromDocument")  == 0||
-            aType.compareToAscii("DOMNodeInsertedIntoDocument") == 0||
-            aType.compareToAscii("DOMAttrModified")             == 0||
-            aType.compareToAscii("DOMCharacterDataModified")    == 0)
+            aType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("DOMSubtreeModified"))          ||
+            aType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("DOMNodeInserted"))             ||
+            aType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("DOMNodeRemoved"))              ||
+            aType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("DOMNodeRemovedFromDocument"))  ||
+            aType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("DOMNodeInsertedIntoDocument")) ||
+            aType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("DOMAttrModified"))             ||
+            aType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("DOMCharacterDataModified")))
         {
             pEvent = new events::CMutationEvent;
 
         } else if (
-            aType.compareToAscii("DOMFocusIn")  == 0||
-            aType.compareToAscii("DOMFocusOut") == 0||
-            aType.compareToAscii("DOMActivate") == 0)
+            aType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("DOMFocusIn"))  ||
+            aType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("DOMFocusOut")) ||
+            aType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("DOMActivate")))
         {
             pEvent = new events::CUIEvent;
         } else if (
-            aType.compareToAscii("click")     == 0||
-            aType.compareToAscii("mousedown") == 0||
-            aType.compareToAscii("mouseup")   == 0||
-            aType.compareToAscii("mouseover") == 0||
-            aType.compareToAscii("mousemove") == 0||
-            aType.compareToAscii("mouseout")  == 0 )
+            aType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("click"))     ||
+            aType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("mousedown")) ||
+            aType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("mouseup"))   ||
+            aType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("mouseover")) ||
+            aType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("mousemove")) ||
+            aType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("mouseout")) )
         {
             pEvent = new events::CMouseEvent;
         }

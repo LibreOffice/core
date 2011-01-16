@@ -450,7 +450,7 @@ CacheItem FilterCache::getItem(      EItemType        eType,
         // --> PB 2006-10-18 #142498#
         // In Standalone-Impress the module WriterWeb is not installed
         // but it is there to load help pages
-        sal_Bool bIsHelpFilter = sItem.equalsAscii( "writer_web_HTML_help" );
+        bool bIsHelpFilter = sItem.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("writer_web_HTML_help"));
 
         if ( !bIsHelpFilter && !impl_isModuleInstalled(sDocService) )
         // <--
