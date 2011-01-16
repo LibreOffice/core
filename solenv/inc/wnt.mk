@@ -31,8 +31,9 @@
 # --- Compiler ---
 
 .IF "$(OS)$(COM)" == "WNTMSC"
-# for wntmsci12 (MSVC 2005) and wntmsci13 (MSVC 2010), 32- and 64-bit
-.INCLUDE : wntmsci11.mk
+# for wntmsci12, wntmscx12, wntmsci13 and wntmscx13
+# (MSVC 2008 and MSVC 2010, 32- and 64-bit)
+.INCLUDE : wntmsc.mk
 .ENDIF # "$(OS)$(COM)" == "WNTMSC"
 
 .IF "$(COM)$(OS)$(CPU)" == "GCCWNTI"
