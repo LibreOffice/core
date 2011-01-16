@@ -311,6 +311,7 @@ SHL4OBJS= \
     $(SLO)$/localedata_tpi_PG.obj \
     $(SLO)$/localedata_ts_ZA.obj \
     $(SLO)$/localedata_ug_CN.obj \
+    $(SLO)$/localedata_ur_PK.obj \
     $(SLO)$/localedata_uz_UZ.obj \
     $(SLO)$/localedata_ve_ZA.obj \
     $(SLO)$/localedata_vi_VN.obj \
