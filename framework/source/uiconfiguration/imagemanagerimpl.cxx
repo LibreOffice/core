@@ -786,15 +786,15 @@ void ImageManagerImpl::initialize( const Sequence< Any >& aArguments )
             PropertyValue aPropValue;
             if ( aArguments[n] >>= aPropValue )
             {
-                if ( aPropValue.Name.equalsAscii( "UserConfigStorage" ))
+                if ( aPropValue.Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("UserConfigStorage")) )
                 {
                     aPropValue.Value >>= m_xUserConfigStorage;
                 }
-                else if ( aPropValue.Name.equalsAscii( "ModuleIdentifier" ))
+                else if ( aPropValue.Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("ModuleIdentifier")) )
                 {
                     aPropValue.Value >>= m_aModuleIdentifier;
                 }
-                else if ( aPropValue.Name.equalsAscii( "UserRootCommit" ))
+                else if ( aPropValue.Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("UserRootCommit")) )
                 {
                     aPropValue.Value >>= m_xUserRootCommit;
                 }

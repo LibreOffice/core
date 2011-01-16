@@ -477,8 +477,8 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_queryFrame
     {
         // There exist a hard coded interception for special URLs.
         if (
-            (aURL.Complete.equalsAscii(".uno:CloseDoc"  )) ||
-            (aURL.Complete.equalsAscii(".uno:CloseWin"  ))
+            (aURL.Complete.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(".uno:CloseDoc"))) ||
+            (aURL.Complete.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(".uno:CloseWin")))
            )
         {
             css::uno::Reference< css::frame::XDispatchProvider > xParent( xFrame->getCreator(), css::uno::UNO_QUERY );
@@ -494,7 +494,7 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_queryFrame
             else
                 xDispatcher = implts_getOrCreateDispatchHelper( E_CLOSEDISPATCHER, xFrame );
         }
-        else if (aURL.Complete.equalsAscii(".uno:CloseFrame"))
+        else if (aURL.Complete.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(".uno:CloseFrame")))
             xDispatcher = implts_getOrCreateDispatchHelper( E_CLOSEDISPATCHER, xFrame );
 
         if ( ! xDispatcher.is())

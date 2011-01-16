@@ -104,7 +104,7 @@ void SAL_CALL SfxEvents_Impl::replaceByName( const OUSTRING & aName, const ANY &
 
                 ::rtl::OUString sType;
                 if  (   ( aProperties.getLength() == 1 )
-                    &&  ( aProperties[0].Name.compareToAscii( PROP_EVENT_TYPE ) == 0 )
+                    &&  ( aProperties[0].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(PROP_EVENT_TYPE)) )
                     &&  ( aProperties[0].Value >>= sType )
                     &&  ( sType.getLength() == 0 )
                     )
@@ -217,13 +217,13 @@ static void Execute( ANY& aEventData, const css::document::DocumentEvent& aTrigg
         sal_Int32 nIndex = 0;
         while ( nIndex < nCount )
         {
-            if ( aProperties[ nIndex ].Name.compareToAscii( PROP_EVENT_TYPE ) == 0 )
+            if (aProperties[ nIndex ].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(PROP_EVENT_TYPE)))
                 aProperties[ nIndex ].Value >>= aType;
-            else if ( aProperties[ nIndex ].Name.compareToAscii( PROP_SCRIPT ) == 0 )
+            else if (aProperties[ nIndex ].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(PROP_SCRIPT)))
                 aProperties[ nIndex ].Value >>= aScript;
-            else if ( aProperties[ nIndex ].Name.compareToAscii( PROP_LIBRARY ) == 0 )
+            else if (aProperties[ nIndex ].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(PROP_LIBRARY)))
                 aProperties[ nIndex ].Value >>= aLibrary;
-            else if ( aProperties[ nIndex ].Name.compareToAscii( PROP_MACRO_NAME ) == 0 )
+            else if (aProperties[ nIndex ].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(PROP_MACRO_NAME)))
                 aProperties[ nIndex ].Value >>= aMacroName;
             else {
                 DBG_ERROR("Unknown property value!");
@@ -231,13 +231,13 @@ static void Execute( ANY& aEventData, const css::document::DocumentEvent& aTrigg
             nIndex += 1;
         }
 
-        if ( aType.compareToAscii( STAR_BASIC ) == 0 && aScript.getLength() )
+        if (aType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(STAR_BASIC)) && aScript.getLength())
         {
             com::sun::star::uno::Any aAny;
             SfxMacroLoader::loadMacro( aScript, aAny, pDoc );
         }
-        else if ( aType.compareToAscii( "Service" ) == 0 ||
-                  aType.compareToAscii( "Script" ) == 0 )
+        else if (aType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Service")) ||
+                  aType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Script")))
         {
             if ( aScript.getLength() )
             {
@@ -400,13 +400,13 @@ SvxMacro* SfxEvents_Impl::ConvertToMacro( const ANY& rElement, SfxObjectShell* p
 
         while ( nIndex < nCount )
         {
-            if ( aProperties[ nIndex ].Name.compareToAscii( PROP_EVENT_TYPE ) == 0 )
+            if (aProperties[ nIndex ].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(PROP_EVENT_TYPE)))
                 aProperties[ nIndex ].Value >>= aType;
-            else if ( aProperties[ nIndex ].Name.compareToAscii( PROP_SCRIPT ) == 0 )
+            else if (aProperties[ nIndex ].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(PROP_SCRIPT)))
                 aProperties[ nIndex ].Value >>= aScriptURL;
-            else if ( aProperties[ nIndex ].Name.compareToAscii( PROP_LIBRARY ) == 0 )
+            else if (aProperties[ nIndex ].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(PROP_LIBRARY)))
                 aProperties[ nIndex ].Value >>= aLibrary;
-            else if ( aProperties[ nIndex ].Name.compareToAscii( PROP_MACRO_NAME ) == 0 )
+            else if (aProperties[ nIndex ].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(PROP_MACRO_NAME)))
                 aProperties[ nIndex ].Value >>= aMacroName;
             else {
                 DBG_ERROR("Unknown propery value!");
@@ -416,11 +416,11 @@ SvxMacro* SfxEvents_Impl::ConvertToMacro( const ANY& rElement, SfxObjectShell* p
 
         // Get the type
         ScriptType  eType( STARBASIC );
-        if ( aType.compareToAscii( STAR_BASIC ) == COMPARE_EQUAL )
+        if (aType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(STAR_BASIC)))
             eType = STARBASIC;
-        else if ( aType.compareToAscii( "Script" ) == COMPARE_EQUAL && aScriptURL.getLength() )
+        else if (aType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Script")) && aScriptURL.getLength())
             eType = EXTENDED_STYPE;
-        else if ( aType.compareToAscii( SVX_MACRO_LANGUAGE_JAVASCRIPT ) == COMPARE_EQUAL )
+        else if (aType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(SVX_MACRO_LANGUAGE_JAVASCRIPT)))
             eType = JAVASCRIPT;
         else {
             DBG_ERRORFILE( "ConvertToMacro: Unknown macro type" );
@@ -428,7 +428,7 @@ SvxMacro* SfxEvents_Impl::ConvertToMacro( const ANY& rElement, SfxObjectShell* p
 
         if ( aMacroName.getLength() )
         {
-            if ( aLibrary.compareToAscii("application") == 0 )
+            if (aLibrary.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("application")))
                 aLibrary = SFX_APP()->GetName();
             else
                 aLibrary = ::rtl::OUString();
@@ -466,28 +466,28 @@ void SfxEvents_Impl::BlowUpMacro( const ANY& rEvent, ANY& rRet, SfxObjectShell* 
 
     while ( nIndex < nCount )
     {
-        if ( aInProps[ nIndex ].Name.compareToAscii( PROP_EVENT_TYPE ) == 0 )
+        if (aInProps[ nIndex ].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(PROP_EVENT_TYPE)))
         {
             aInProps[nIndex].Value >>= aType;
             aOutProps[0] = aInProps[nIndex];
         }
-        else if ( aInProps[ nIndex ].Name.compareToAscii( PROP_SCRIPT ) == 0 )
+        else if (aInProps[ nIndex ].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(PROP_SCRIPT)))
         {
             aInProps[nIndex].Value >>= aScript;
             aOutProps[1] = aInProps[nIndex];
         }
-        else if ( aInProps[ nIndex ].Name.compareToAscii( PROP_LIBRARY ) == 0 )
+        else if (aInProps[ nIndex ].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(PROP_LIBRARY)))
         {
             aInProps[ nIndex ].Value >>= aLibrary;
         }
-        else if ( aInProps[ nIndex ].Name.compareToAscii( PROP_MACRO_NAME ) == 0 )
+        else if (aInProps[ nIndex ].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(PROP_MACRO_NAME)))
         {
             aInProps[ nIndex ].Value >>= aMacroName;
         }
         nIndex += 1;
     }
 
-    if ( aType.compareToAscii( STAR_BASIC ) == 0 )
+    if (aType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(STAR_BASIC)))
     {
         aOutProps.realloc(4);
         if ( aScript.getLength() )
@@ -499,7 +499,7 @@ void SfxEvents_Impl::BlowUpMacro( const ANY& rEvent, ANY& rRet, SfxObjectShell* 
                 if ( ( nHashPos != STRING_NOTFOUND ) && ( nHashPos < nArgsPos ) )
                 {
                     OUSTRING aBasMgrName( INetURLObject::decode( aScript.copy( 8, nHashPos-8 ), INET_HEX_ESCAPE, INetURLObject::DECODE_WITH_CHARSET ) );
-                    if ( aBasMgrName.compareToAscii(".") == 0 )
+                    if (aBasMgrName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(".")))
                         aLibrary = pDoc->GetTitle();
 /*
                     else if ( aBasMgrName.getLength() )
@@ -520,7 +520,7 @@ void SfxEvents_Impl::BlowUpMacro( const ANY& rEvent, ANY& rRet, SfxObjectShell* 
         else if ( aMacroName.getLength() )
         {
             aScript = OUSTRING( RTL_CONSTASCII_USTRINGPARAM( MACRO_PRFIX ) );
-            if ( aLibrary.compareTo( SFX_APP()->GetName() ) != 0 && aLibrary.compareToAscii("StarDesktop") != 0 && aLibrary.compareToAscii("application") != 0 )
+            if ( aLibrary.compareTo( SFX_APP()->GetName() ) != 0 && !aLibrary.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("StarDesktop")) && !aLibrary.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("application")) )
                 aScript += String('.');
 
             aScript += String('/');
@@ -531,7 +531,7 @@ void SfxEvents_Impl::BlowUpMacro( const ANY& rEvent, ANY& rRet, SfxObjectShell* 
             // wrong properties
             return;
 
-        if ( aLibrary.compareToAscii("document") != 0 )
+        if (!aLibrary.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("document")))
         {
             if ( !aLibrary.getLength() || (pDoc && ( String(aLibrary) == pDoc->GetTitle( SFX_TITLE_APINAME ) || String(aLibrary) == pDoc->GetTitle() )) )
                 aLibrary = String::CreateFromAscii("document");
@@ -547,7 +547,7 @@ void SfxEvents_Impl::BlowUpMacro( const ANY& rEvent, ANY& rRet, SfxObjectShell* 
         aOutProps[3].Value <<= aMacroName;
         rRet <<= aOutProps;
     }
-    else if ( aType.compareToAscii( SVX_MACRO_LANGUAGE_JAVASCRIPT ) == 0 )
+    else if (aType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(SVX_MACRO_LANGUAGE_JAVASCRIPT)))
     {
         aOutProps[1] = aInProps[1];
         rRet <<= aOutProps;

@@ -196,7 +196,7 @@ void SAL_CALL MenuBarWrapper::initialize( const Sequence< Any >& aArguments ) th
                 PropertyValue aPropValue;
                 if ( aArguments[n] >>= aPropValue )
                 {
-                    if ( aPropValue.Name.equalsAscii( "MenuOnly" ))
+                    if ( aPropValue.Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("MenuOnly")) )
                         aPropValue.Value >>= bMenuOnly;
                 }
             }

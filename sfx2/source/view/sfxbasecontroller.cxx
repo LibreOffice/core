@@ -792,7 +792,7 @@ REFERENCE< XDISPATCH > SAL_CALL SfxBaseController::queryDispatch(   const   UNOU
         SfxViewFrame*           pAct    = m_pData->m_pViewShell->GetViewFrame() ;
         if ( !m_pData->m_bDisposing )
         {
-            if ( sTargetFrameName.compareToAscii( "_beamer" ) == COMPARE_EQUAL )
+            if ( sTargetFrameName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("_beamer")) )
             {
                 SfxViewFrame *pFrame = m_pData->m_pViewShell->GetViewFrame();
                 if ( eSearchFlags & ( ::com::sun::star::frame::FrameSearchFlag::CREATE ))
@@ -809,7 +809,7 @@ REFERENCE< XDISPATCH > SAL_CALL SfxBaseController::queryDispatch(   const   UNOU
                     return xProv->queryDispatch( aURL, sTargetFrameName, ::com::sun::star::frame::FrameSearchFlag::SELF );
             }
 
-            if ( aURL.Protocol.compareToAscii( ".uno:" ) == COMPARE_EQUAL )
+            if ( aURL.Protocol.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(".uno:")) )
             {
                 rtl::OUString aMasterCommand = SfxOfficeDispatch::GetMasterUnoCommand( aURL );
                 sal_Bool      bMasterCommand( aMasterCommand.getLength() > 0 );
@@ -865,7 +865,7 @@ REFERENCE< XDISPATCH > SAL_CALL SfxBaseController::queryDispatch(   const   UNOU
                     }
                 }
             }
-            else if ( aURL.Protocol.compareToAscii( "slot:" ) == COMPARE_EQUAL )
+            else if ( aURL.Protocol.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("slot:")) )
             {
                 USHORT nId = (USHORT) aURL.Path.toInt32();
 
@@ -917,7 +917,7 @@ REFERENCE< XDISPATCH > SAL_CALL SfxBaseController::queryDispatch(   const   UNOU
                     }
                 }
             }
-            else if( sTargetFrameName.compareToAscii( "_self" )==COMPARE_EQUAL || sTargetFrameName.getLength()==0 )
+            else if( sTargetFrameName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("_self")) || sTargetFrameName.getLength()==0 )
             {
                 // check for already loaded URL ... but with additional jumpmark!
                 REFERENCE< XMODEL > xModel = getModel();

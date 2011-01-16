@@ -844,9 +844,9 @@ void LayoutManager::implts_createCustomToolBars(
         ::rtl::OUString aTbxTitle;
         for ( sal_Int32 j = 0; j < rTbxSeq.getLength(); j++ )
         {
-            if ( rTbxSeq[j].Name.equalsAscii( "ResourceURL" ))
+            if ( rTbxSeq[j].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("ResourceURL")) )
                 rTbxSeq[j].Value >>= aTbxResName;
-            else if ( rTbxSeq[j].Name.equalsAscii( "UIName" ))
+            else if ( rTbxSeq[j].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("UIName")) )
                 rTbxSeq[j].Value >>= aTbxTitle;
         }
 
@@ -1332,7 +1332,7 @@ void LayoutManager::implts_refreshContextToolbarsVisibility()
     UIElementVector::iterator pIter;
     for ( pIter = m_aUIElements.begin(); pIter != m_aUIElements.end(); ++pIter )
     {
-        if ( pIter->m_aType.equalsAsciiL( "toolbar", 7 ))
+        if ( pIter->m_aType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("toolbar")) )
         {
             aUIElementVisible.aName    = pIter->m_aName;
             aUIElementVisible.bVisible = pIter->m_bVisible;
@@ -1449,22 +1449,22 @@ sal_Bool LayoutManager::implts_readWindowStateData( const rtl::OUString& aName, 
                         if ( aWindowState[n].Value >>= bValue )
                             rElementData.m_aDockedData.m_bLocked = bValue;
                     }
-                    else if ( aWindowState[n].Name.equalsAscii( WINDOWSTATE_PROPERTY_CONTEXT ))
+                    else if ( aWindowState[n].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(WINDOWSTATE_PROPERTY_CONTEXT)))
                     {
                         if ( aWindowState[n].Value >>= bValue )
                             rElementData.m_bContextSensitive = bValue;
                     }
-                    else if ( aWindowState[n].Name.equalsAscii( WINDOWSTATE_PROPERTY_NOCLOSE ))
+                    else if ( aWindowState[n].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(WINDOWSTATE_PROPERTY_NOCLOSE)))
                     {
                         if ( aWindowState[n].Value >>= bValue )
                             rElementData.m_bNoClose = bValue;
                     }
-                    else if ( aWindowState[n].Name.equalsAscii( WINDOWSTATE_PROPERTY_CONTEXTACTIVE ))
+                    else if ( aWindowState[n].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(WINDOWSTATE_PROPERTY_CONTEXTACTIVE)))
                     {
                         if ( aWindowState[n].Value >>= bValue )
                             rElementData.m_bContextActive = bValue;
                     }
-                    else if ( aWindowState[n].Name.equalsAscii( WINDOWSTATE_PROPERTY_SOFTCLOSE ))
+                    else if ( aWindowState[n].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(WINDOWSTATE_PROPERTY_SOFTCLOSE)))
                     {
                         if ( aWindowState[n].Value >>= bValue )
                             rElementData.m_bSoftClose = bValue;
@@ -4022,7 +4022,7 @@ IMPL_LINK( LayoutManager, WindowEventListener, VclSimpleEvent*, pEvent )
 
                 for ( pIter = m_aUIElements.begin(); pIter != m_aUIElements.end(); ++pIter )
                 {
-                    if ( pIter->m_aType.equalsAscii( "toolbar" ) &&
+                    if ( pIter->m_aType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("toolbar")) &&
                         pIter->m_xUIElement.is() )
                     {
                         css::uno::Reference< css::ui::XUIFunctionListener > xListener( pIter->m_xUIElement, UNO_QUERY );
@@ -4945,7 +4945,7 @@ throw (RuntimeException)
             UIElementVector::iterator pIter;
             for ( pIter = m_aUIElements.begin(); pIter != m_aUIElements.end(); ++pIter )
             {
-                if ( pIter->m_aType.equalsAscii( "toolbar" ) &&
+                if ( pIter->m_aType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("toolbar")) &&
                      pIter->m_xUIElement.is() &&
                      pIter->m_bFloating &&
                      pIter->m_bVisible )

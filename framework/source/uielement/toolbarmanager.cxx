@@ -123,19 +123,18 @@ static const char   ITEM_DESCRIPTOR_VISIBLE[]       = "IsVisible";
 static const char   ITEM_DESCRIPTOR_WIDTH[]         = "Width";
 static const char   ITEM_DESCRIPTOR_STYLE[]         = "Style";
 
-static const sal_Int32 ITEM_DESCRIPTOR_COMMANDURL_LEN  = 10;
-static const sal_Int32 ITEM_DESCRIPTOR_HELPURL_LEN     = 7;
-static const sal_Int32 ITEM_DESCRIPTOR_TOOLTIP_LEN     = 7;
-static const sal_Int32 ITEM_DESCRIPTOR_CONTAINER_LEN   = 23;
-static const sal_Int32 ITEM_DESCRIPTOR_LABEL_LEN       = 5;
-static const sal_Int32 ITEM_DESCRIPTOR_TYPE_LEN        = 4;
-static const sal_Int32 ITEM_DESCRIPTOR_VISIBLE_LEN     = 9;
-static const sal_Int32 ITEM_DESCRIPTOR_WIDTH_LEN       = 5;
-static const sal_Int32 ITEM_DESCRIPTOR_STYLE_LEN       = 5;
+static const sal_Int32 ITEM_DESCRIPTOR_COMMANDURL_LEN  = RTL_CONSTASCII_LENGTH(ITEM_DESCRIPTOR_COMMANDURL);
+static const sal_Int32 ITEM_DESCRIPTOR_HELPURL_LEN     = RTL_CONSTASCII_LENGTH(ITEM_DESCRIPTOR_HELPURL);
+static const sal_Int32 ITEM_DESCRIPTOR_TOOLTIP_LEN     = RTL_CONSTASCII_LENGTH(ITEM_DESCRIPTOR_TOOLTIP);
+static const sal_Int32 ITEM_DESCRIPTOR_CONTAINER_LEN   = RTL_CONSTASCII_LENGTH(ITEM_DESCRIPTOR_CONTAINER);
+static const sal_Int32 ITEM_DESCRIPTOR_LABEL_LEN       = RTL_CONSTASCII_LENGTH(ITEM_DESCRIPTOR_LABEL);
+static const sal_Int32 ITEM_DESCRIPTOR_TYPE_LEN        = RTL_CONSTASCII_LENGTH(ITEM_DESCRIPTOR_TYPE);
+static const sal_Int32 ITEM_DESCRIPTOR_VISIBLE_LEN     = RTL_CONSTASCII_LENGTH(ITEM_DESCRIPTOR_VISIBLE);
+static const sal_Int32 ITEM_DESCRIPTOR_WIDTH_LEN       = RTL_CONSTASCII_LENGTH(ITEM_DESCRIPTOR_WIDTH);
+static const sal_Int32 ITEM_DESCRIPTOR_STYLE_LEN       = RTL_CONSTASCII_LENGTH(ITEM_DESCRIPTOR_STYLE);
 
 static const char   HELPID_PREFIX[]                 = "helpid:";
 static const char   HELPID_PREFIX_TESTTOOL[]        = ".HelpId:";
-//static sal_Int32    HELPID_PREFIX_LENGTH            = 7;
 static const USHORT STARTID_CUSTOMIZE_POPUPMENU     = 1000;
 
 #define MENUPREFIX "private:resource/menubar/"
@@ -564,7 +563,7 @@ throw ( ::com::sun::star::uno::RuntimeException )
     if ( m_bDisposed )
         return;
 
-    if ( Event.FeatureURL.Complete.equalsAscii( ".uno:ImageOrientation" ))
+    if ( Event.FeatureURL.Complete.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(".uno:ImageOrientation")) )
     {
         SfxImageItem aItem( 1, 0 );
         aItem.PutValue( Event.State );
@@ -889,7 +888,7 @@ uno::Sequence< beans::PropertyValue > ToolBarManager::GetPropsForCommand( const 
     aPropSeq = GetPropsForCommand( aCmdURL );
     for ( sal_Int32 i = 0; i < aPropSeq.getLength(); i++ )
     {
-        if ( aPropSeq[i].Name.equalsAscii( "Name" ))
+        if ( aPropSeq[i].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Name")) )
         {
             aPropSeq[i].Value >>= aLabel;
             break;
@@ -907,7 +906,7 @@ sal_Int32 ToolBarManager::RetrievePropertiesFromCommand( const ::rtl::OUString& 
     aPropSeq = GetPropsForCommand( aCmdURL );
     for ( sal_Int32 i = 0; i < aPropSeq.getLength(); i++ )
     {
-        if ( aPropSeq[i].Name.equalsAscii( "Properties" ))
+        if ( aPropSeq[i].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Properties")) )
         {
             aPropSeq[i].Value >>= nProperties;
             break;
@@ -1300,7 +1299,7 @@ void ToolBarManager::FillToolbar( const Reference< XIndexAccess >& rItemContaine
             {
                 for ( int i = 0; i < aProp.getLength(); i++ )
                 {
-                    if ( aProp[i].Name.equalsAsciiL( ITEM_DESCRIPTOR_COMMANDURL, ITEM_DESCRIPTOR_COMMANDURL_LEN ))
+                    if ( aProp[i].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(ITEM_DESCRIPTOR_COMMANDURL)) )
                     {
                         aProp[i].Value >>= aCommandURL;
                         if ( aCommandURL.compareToAscii(MENUPREFIX, RTL_CONSTASCII_LENGTH(MENUPREFIX) ) == 0  )
@@ -1321,7 +1320,7 @@ void ToolBarManager::FillToolbar( const Reference< XIndexAccess >& rItemContaine
                                     xMenuContainer->getByIndex(0) >>= aProps;
                                     for ( sal_Int32 index=0; index<aProps.getLength(); ++index )
                                     {
-                                        if ( aProps[ index ].Name.equalsAsciiL( ITEM_DESCRIPTOR_CONTAINER, ITEM_DESCRIPTOR_CONTAINER_LEN ))
+                                        if ( aProps[ index ].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(ITEM_DESCRIPTOR_CONTAINER)) )
 
                                         {
                                             aProps[ index ].Value >>= aMenuDesc;
@@ -1335,19 +1334,19 @@ void ToolBarManager::FillToolbar( const Reference< XIndexAccess >& rItemContaine
                             }
                         }
                     }
-                    else if (  aProp[i].Name.equalsAsciiL( ITEM_DESCRIPTOR_HELPURL, ITEM_DESCRIPTOR_HELPURL_LEN ))
+                    else if (  aProp[i].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(ITEM_DESCRIPTOR_HELPURL)) )
                         aProp[i].Value >>= aHelpURL;
-                    else if (  aProp[i].Name.equalsAsciiL( ITEM_DESCRIPTOR_TOOLTIP, ITEM_DESCRIPTOR_TOOLTIP_LEN ))
+                    else if (  aProp[i].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(ITEM_DESCRIPTOR_TOOLTIP)) )
                         aProp[i].Value >>= aTooltip;
-                    else if ( aProp[i].Name.equalsAsciiL( ITEM_DESCRIPTOR_LABEL, ITEM_DESCRIPTOR_LABEL_LEN ))
+                    else if ( aProp[i].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(ITEM_DESCRIPTOR_LABEL)) )
                         aProp[i].Value >>= aLabel;
-                    else if ( aProp[i].Name.equalsAsciiL( ITEM_DESCRIPTOR_TYPE, ITEM_DESCRIPTOR_TYPE_LEN ))
+                    else if ( aProp[i].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(ITEM_DESCRIPTOR_TYPE)) )
                         aProp[i].Value >>= nType;
-                    else if ( aProp[i].Name.equalsAsciiL( ITEM_DESCRIPTOR_VISIBLE, ITEM_DESCRIPTOR_VISIBLE_LEN ))
+                    else if ( aProp[i].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(ITEM_DESCRIPTOR_VISIBLE)) )
                         aProp[i].Value >>= bIsVisible;
-                    else if ( aProp[i].Name.equalsAsciiL( ITEM_DESCRIPTOR_WIDTH, ITEM_DESCRIPTOR_WIDTH_LEN ))
+                    else if ( aProp[i].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(ITEM_DESCRIPTOR_WIDTH)) )
                         aProp[i].Value >>= nWidth;
-                    else if ( aProp[i].Name.equalsAsciiL( ITEM_DESCRIPTOR_STYLE, ITEM_DESCRIPTOR_STYLE_LEN ))
+                    else if ( aProp[i].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(ITEM_DESCRIPTOR_STYLE)) )
                         aProp[i].Value >>= nStyle;
                 }
 
@@ -2021,11 +2020,11 @@ IMPL_LINK( ToolBarManager, MenuSelect, Menu*, pMenu )
                                 {
                                     for ( sal_Int32 j = 0; j < aProp.getLength(); j++ )
                                     {
-                                        if ( aProp[j].Name.equalsAscii( ITEM_DESCRIPTOR_COMMANDURL ))
+                                        if ( aProp[j].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(ITEM_DESCRIPTOR_COMMANDURL)) )
                                         {
                                             aProp[j].Value >>= aCommandURL;
                                         }
-                                        else if ( aProp[j].Name.equalsAscii( ITEM_DESCRIPTOR_VISIBLE ))
+                                        else if ( aProp[j].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(ITEM_DESCRIPTOR_VISIBLE)) )
                                         {
                                             aProp[j].Value >>= bVisible;
                                             nVisibleIndex = j;

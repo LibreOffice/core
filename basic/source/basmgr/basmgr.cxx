@@ -953,7 +953,7 @@ void BasicManager::SetLibraryContainerInfo( const LibraryContainerInfo& rInfo )
             {
                 Any aLibAny = xScriptCont->getByName( *pScriptLibName );
 
-                if ( pScriptLibName->equalsAscii( "Standard" ) )
+                if ( pScriptLibName->equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Standard")) )
                     xScriptCont->loadLibrary( *pScriptLibName );
 
                 BasMgrContainerListenerImpl::insertLibraryImpl

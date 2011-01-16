@@ -1190,14 +1190,14 @@ void SAL_CALL XCUBasedAcceleratorConfiguration::reset()
 {
     css::uno::Reference< css::container::XNamed > xNamed(m_xCfg, css::uno::UNO_QUERY);
     ::rtl::OUString sConfig = xNamed->getName();
-    if ( sConfig.equalsAscii("Global") )
+    if ( sConfig.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Global")) )
     {
         m_xCfg = css::uno::Reference< css::container::XNameAccess > (
             ::comphelper::ConfigurationHelper::openConfig( m_xSMGR, CFG_ENTRY_GLOBAL, ::comphelper::ConfigurationHelper::E_ALL_LOCALES ),
             css::uno::UNO_QUERY );
         XCUBasedAcceleratorConfiguration::reload();
     }
-    else if ( sConfig.equalsAscii("Modules") )
+    else if ( sConfig.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Modules")) )
     {
         m_xCfg = css::uno::Reference< css::container::XNameAccess > (
             ::comphelper::ConfigurationHelper::openConfig( m_xSMGR, CFG_ENTRY_MODULES, ::comphelper::ConfigurationHelper::E_ALL_LOCALES ),
@@ -1283,9 +1283,9 @@ void XCUBasedAcceleratorConfiguration::impl_ts_load( sal_Bool bPreferred, const 
 {
     AcceleratorCache aReadCache = AcceleratorCache();
     css::uno::Reference< css::container::XNameAccess > xAccess;
-    if (m_sGlobalOrModules.equalsAscii("Global"))
+    if (m_sGlobalOrModules.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Global")))
         xCfg->getByName(CFG_ENTRY_GLOBAL) >>= xAccess;
-    else if (m_sGlobalOrModules.equalsAscii("Modules"))
+    else if (m_sGlobalOrModules.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Modules")))
     {
         css::uno::Reference< css::container::XNameAccess > xModules;
         xCfg->getByName(CFG_ENTRY_MODULES) >>= xModules;
@@ -1362,13 +1362,13 @@ void XCUBasedAcceleratorConfiguration::impl_ts_load( sal_Bool bPreferred, const 
                     break;
                 }
 
-                if (sToken[k].equalsAscii("SHIFT"))
+                if (sToken[k].equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("SHIFT")))
                     aKeyEvent.Modifiers |= css::awt::KeyModifier::SHIFT;
-                else if (sToken[k].equalsAscii("MOD1"))
+                else if (sToken[k].equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("MOD1")))
                     aKeyEvent.Modifiers |= css::awt::KeyModifier::MOD1;
-                else if (sToken[k].equalsAscii("MOD2"))
+                else if (sToken[k].equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("MOD2")))
                     aKeyEvent.Modifiers |= css::awt::KeyModifier::MOD2;
-                else if (sToken[k].equalsAscii("MOD3"))
+                else if (sToken[k].equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("MOD3")))
                     aKeyEvent.Modifiers |= css::awt::KeyModifier::MOD3;
                 else
                 {
@@ -1587,13 +1587,13 @@ void XCUBasedAcceleratorConfiguration::reloadChanged( const ::rtl::OUString& sPr
             break;
 
         sToken[i] = sKey.getToken(0, '_', nIndex);
-        if (sToken[i].equalsAscii("SHIFT"))
+        if (sToken[i].equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("SHIFT")))
             aKeyEvent.Modifiers |= css::awt::KeyModifier::SHIFT;
-        else if (sToken[i].equalsAscii("MOD1"))
+        else if (sToken[i].equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("MOD1")))
             aKeyEvent.Modifiers |= css::awt::KeyModifier::MOD1;
-        else if (sToken[i].equalsAscii("MOD2"))
+        else if (sToken[i].equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("MOD2")))
             aKeyEvent.Modifiers |= css::awt::KeyModifier::MOD2;
-                else if (sToken[i].equalsAscii("MOD3"))
+                else if (sToken[i].equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("MOD3")))
                         aKeyEvent.Modifiers |= css::awt::KeyModifier::MOD3;
     }
 

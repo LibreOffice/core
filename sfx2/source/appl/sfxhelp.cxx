@@ -518,7 +518,7 @@ String SfxHelp::GetHelpModuleName_Impl()
                 xCont->getByName( aModuleIdentifier ) >>= lProps;
             for ( sal_Int32 i = 0; i < lProps.getLength(); ++i )
             {
-                if ( lProps[i].Name.equalsAscii("ooSetupFactoryShortName") )
+                if ( lProps[i].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("ooSetupFactoryShortName")) )
                 {
                     lProps[i].Value >>= aFactoryShortName;
                     break;
@@ -535,26 +535,26 @@ String SfxHelp::GetHelpModuleName_Impl()
     if ( aFactoryShortName.getLength() > 0 )
     {
         // Map some module identifiers to their "real" help module string.
-        if ( aFactoryShortName.equalsAscii( "chart2" ) )
+        if ( aFactoryShortName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("chart2")) )
             aFactoryShortName = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "schart" ) );
-        else if ( aFactoryShortName.equalsAscii( "BasicIDE" ) )
+        else if ( aFactoryShortName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("BasicIDE")) )
             aFactoryShortName = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "sbasic" ) );
-        else if ( aFactoryShortName.equalsAscii( "sweb" )
-                || aFactoryShortName.equalsAscii( "sglobal" )
-                || aFactoryShortName.equalsAscii( "swxform" ) )
+        else if ( aFactoryShortName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("sweb"))
+                || aFactoryShortName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("sglobal"))
+                || aFactoryShortName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("swxform")) )
             aFactoryShortName = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "swriter" ) );
-        else if ( aFactoryShortName.equalsAscii( "dbquery" )
-                || aFactoryShortName.equalsAscii( "dbbrowser" )
-                || aFactoryShortName.equalsAscii( "dbrelation" )
-                || aFactoryShortName.equalsAscii( "dbtable" )
-                || aFactoryShortName.equalsAscii( "dbapp" )
-                || aFactoryShortName.equalsAscii( "dbreport" )
-                || aFactoryShortName.equalsAscii( "swreport" )
-                || aFactoryShortName.equalsAscii( "dbbrowser" )
-                || aFactoryShortName.equalsAscii( "swform" ) )
+        else if ( aFactoryShortName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("dbquery"))
+                || aFactoryShortName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("dbbrowser"))
+                || aFactoryShortName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("dbrelation"))
+                || aFactoryShortName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("dbtable"))
+                || aFactoryShortName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("dbapp"))
+                || aFactoryShortName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("dbreport"))
+                || aFactoryShortName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("swreport"))
+                || aFactoryShortName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("dbbrowser"))
+                || aFactoryShortName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("swform")) )
             aFactoryShortName = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "sdatabase" ) );
-        else if ( aFactoryShortName.equalsAscii( "sbibliography" )
-                || aFactoryShortName.equalsAscii( "StartModule" ) )
+        else if ( aFactoryShortName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("sbibliography"))
+                || aFactoryShortName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("StartModule")) )
             aFactoryShortName = sDefaultModule;
     }
     else
