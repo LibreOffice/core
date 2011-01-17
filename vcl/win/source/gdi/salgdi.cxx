@@ -804,7 +804,7 @@ void WinSalGraphics::GetResolution( long& rDPIX, long& rDPIY )
 
 // -----------------------------------------------------------------------
 
-USHORT WinSalGraphics::GetBitCount()
+USHORT WinSalGraphics::GetBitCount() const
 {
     return (USHORT)GetDeviceCaps( mhDC, BITSPIXEL );
 }

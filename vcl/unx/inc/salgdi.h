@@ -231,7 +231,7 @@ public:
 
     // overload all pure virtual methods
     virtual void            GetResolution( sal_Int32& rDPIX, sal_Int32& rDPIY );
-    virtual USHORT          GetBitCount();
+    virtual USHORT          GetBitCount() const;
     virtual long            GetGraphicsWidth() const;
     virtual long            GetGraphicsHeight() const;
 

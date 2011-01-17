@@ -165,7 +165,7 @@ void Os2SalGraphics::GetResolution( long& rDPIX, long& rDPIY )
 
 // -----------------------------------------------------------------------
 
-USHORT Os2SalGraphics::GetBitCount()
+USHORT Os2SalGraphics::GetBitCount() const
 {
     LONG nBitCount;
     DevQueryCaps( mhDC, CAPS_COLOR_BITCOUNT, 1, &nBitCount );

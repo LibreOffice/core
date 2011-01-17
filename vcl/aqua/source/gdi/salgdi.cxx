@@ -452,7 +452,7 @@ void AquaSalGraphics::copyResolution( AquaSalGraphics& rGraphics )
 
 // -----------------------------------------------------------------------
 
-USHORT AquaSalGraphics::GetBitCount()
+USHORT AquaSalGraphics::GetBitCount() const
 {
     USHORT nBits = mnBitmapDepth ? mnBitmapDepth : 32;//24;
     return nBits;

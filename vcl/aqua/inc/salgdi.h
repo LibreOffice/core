@@ -245,7 +245,7 @@ public:
     // get device resolution
     virtual void            GetResolution( long& rDPIX, long& rDPIY );
     // get the depth of the device
-    virtual USHORT          GetBitCount();
+    virtual USHORT          GetBitCount() const;
     // get the width of the device
     virtual long            GetGraphicsWidth() const;
 

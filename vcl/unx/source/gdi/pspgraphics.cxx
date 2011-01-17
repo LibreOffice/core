@@ -279,7 +279,7 @@ void PspGraphics::GetResolution( sal_Int32 &rDPIX, sal_Int32 &rDPIY )
     }
 }
 
-USHORT PspGraphics::GetBitCount()
+USHORT PspGraphics::GetBitCount() const
 {
     return m_pPrinterGfx->GetBitCount();
 }

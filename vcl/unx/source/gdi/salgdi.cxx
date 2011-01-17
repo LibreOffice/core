@@ -531,7 +531,7 @@ void X11SalGraphics::GetResolution( sal_Int32 &rDPIX, sal_Int32 &rDPIY ) // cons
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-USHORT X11SalGraphics::GetBitCount() // const
+USHORT X11SalGraphics::GetBitCount() const
 {
     return GetVisual().GetDepth();
 }
