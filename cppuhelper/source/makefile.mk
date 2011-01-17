@@ -175,6 +175,8 @@ DEF1NAME=$(SHL1TARGET)
 
 .IF "$(COMNAME)"=="msci"
 SHL1VERSIONMAP=msvc_win32_intel.map
+.ELIF "$(COMNAME)"=="mscx"
+SHL1VERSIONMAP=msvc_win32_x86_64.map
 .ELIF "$(COMNAME)"=="sunpro5"
 SHL1VERSIONMAP=cc5_solaris_sparc.map
 .ELIF "$(GUI)$(COMNAME)"=="OS2gcc3"

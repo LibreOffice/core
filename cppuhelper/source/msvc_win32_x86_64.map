@@ -1,0 +1,280 @@
+UDK_3_0_0 {
+    global:
+GetVersionInfo;
+??0OComponentHelper@cppu@@QEAA@AEAVMutex@osl@@@Z;
+??1OComponentHelper@cppu@@UEAA@XZ;
+??BOWeakObject@cppu@@QEAA?AV?$Reference@VXInterface@uno@star@sun@com@@@uno@star@sun@com@@XZ;
+??BWeakReferenceHelper@uno@star@sun@com@@QEBA?AV?$Reference@VXInterface@uno@star@sun@com@@@1234@XZ;
+??_7OComponentHelper@cppu@@6BOWeakObject@1@@;
+??_7OComponentHelper@cppu@@6BXAggregation@uno@star@sun@com@@@;
+??_7OComponentHelper@cppu@@6BXComponent@lang@star@sun@com@@@;
+??_7OComponentHelper@cppu@@6BXTypeProvider@lang@star@sun@com@@@;
+??_7OWeakAggObject@cppu@@6BOWeakObject@1@@;
+??_7OWeakAggObject@cppu@@6BXAggregation@uno@star@sun@com@@@;
+??_7OWeakObject@cppu@@6B@;
+??_GOComponentHelper@cppu@@UEAAPEAXI@Z;
+??_GOWeakAggObject@cppu@@MEAAPEAXI@Z;
+??_GOWeakObject@cppu@@MEAAPEAXI@Z;
+?addEventListener@OComponentHelper@cppu@@UEAAXAEBV?$Reference@VXEventListener@lang@star@sun@com@@@uno@star@sun@com@@@Z;
+?dispose@OComponentHelper@cppu@@UEAAXXZ;
+?disposing@OComponentHelper@cppu@@MEAAXXZ;
+?release@OComponentHelper@cppu@@UEAAXXZ;
+?removeEventListener@OComponentHelper@cppu@@UEAAXAEBV?$Reference@VXEventListener@lang@star@sun@com@@@uno@star@sun@com@@@Z;
+??1OTypeCollection@cppu@@QEAA@XZ;
+?createFactoryProxy@cppu@@YA?AV?$Reference@VXSingleServiceFactory@lang@star@sun@com@@@uno@star@sun@com@@AEBV?$Reference@VXMultiServiceFactory@lang@star@sun@com@@@3456@AEBV23456@@Z;
+?createOneInstanceRegistryFactory@cppu@@YA?AV?$Reference@VXSingleServiceFactory@lang@star@sun@com@@@uno@star@sun@com@@AEBV?$Reference@VXMultiServiceFactory@lang@star@sun@com@@@3456@AEBVOUString@rtl@@AEBV?$Reference@VXRegistryKey@registry@star@sun@com@@@3456@@Z;
+?createSingleRegistryFactory@cppu@@YA?AV?$Reference@VXSingleServiceFactory@lang@star@sun@com@@@uno@star@sun@com@@AEBV?$Reference@VXMultiServiceFactory@lang@star@sun@com@@@3456@AEBVOUString@rtl@@AEBV?$Reference@VXRegistryKey@registry@star@sun@com@@@3456@@Z;
+?getTypes@OTypeCollection@cppu@@QEAA?AV?$Sequence@VType@uno@star@sun@com@@@uno@star@sun@com@@XZ;
+?createStandardClassWithSequence@cppu@@YAPEAVXIdlClass@reflection@star@sun@com@@AEBV?$Reference@VXMultiServiceFactory@lang@star@sun@com@@@uno@456@AEBVOUString@rtl@@AEBV?$Reference@VXIdlClass@reflection@star@sun@com@@@8456@AEBV?$Sequence@VOUString@rtl@@@8456@@Z;
+??0OInterfaceContainerHelper@cppu@@QEAA@AEAVMutex@osl@@@Z;
+??0OInterfaceIteratorHelper@cppu@@QEAA@AEAVOInterfaceContainerHelper@1@@Z;
+??1OInterfaceContainerHelper@cppu@@QEAA@XZ;
+??1OInterfaceIteratorHelper@cppu@@QEAA@XZ;
+?addInterface@OInterfaceContainerHelper@cppu@@QEAAJAEBV?$Reference@VXInterface@uno@star@sun@com@@@uno@star@sun@com@@@Z;
+?clear@OInterfaceContainerHelper@cppu@@QEAAXXZ;
+?copyAndResetInUse@OInterfaceContainerHelper@cppu@@AEAAXXZ;
+?disposeAndClear@OInterfaceContainerHelper@cppu@@QEAAXAEBUEventObject@lang@star@sun@com@@@Z;
+?getElements@OInterfaceContainerHelper@cppu@@QEBA?AV?$Sequence@V?$Reference@VXInterface@uno@star@sun@com@@@uno@star@sun@com@@@uno@star@sun@com@@XZ;
+?getLength@OInterfaceContainerHelper@cppu@@QEBAJXZ;
+?next@OInterfaceIteratorHelper@cppu@@QEAAPEAVXInterface@uno@star@sun@com@@XZ;
+?removeInterface@OInterfaceContainerHelper@cppu@@QEAAJAEBV?$Reference@VXInterface@uno@star@sun@com@@@uno@star@sun@com@@@Z;
+??0WeakReferenceHelper@uno@star@sun@com@@QEAA@AEBV01234@@Z;
+??0WeakReferenceHelper@uno@star@sun@com@@QEAA@AEBV?$Reference@VXInterface@uno@star@sun@com@@@1234@@Z;
+??1OWeakAggObject@cppu@@MEAA@XZ;
+??1OWeakObject@cppu@@MEAA@XZ;
+??1WeakReferenceHelper@uno@star@sun@com@@QEAA@XZ;
+??4WeakReferenceHelper@uno@star@sun@com@@QEAAAEAV01234@AEBV01234@@Z;
+??4WeakReferenceHelper@uno@star@sun@com@@QEAAAEAV01234@AEBV?$Reference@VXInterface@uno@star@sun@com@@@1234@@Z;
+?acquire@OWeakAggObject@cppu@@UEAAXXZ;
+?acquire@OWeakObject@cppu@@UEAAXXZ;
+?get@WeakReferenceHelper@uno@star@sun@com@@QEBA?AV?$Reference@VXInterface@uno@star@sun@com@@@2345@XZ;
+?queryAdapter@OWeakObject@cppu@@UEAA?AV?$Reference@VXAdapter@uno@star@sun@com@@@uno@star@sun@com@@XZ;
+?queryAggregation@OWeakAggObject@cppu@@UEAA?AVAny@uno@star@sun@com@@AEBVType@4567@@Z;
+?queryInterface@OWeakAggObject@cppu@@UEAA?AVAny@uno@star@sun@com@@AEBVType@4567@@Z;
+?queryInterface@OWeakObject@cppu@@UEAA?AVAny@uno@star@sun@com@@AEBVType@4567@@Z;
+?release@OWeakAggObject@cppu@@UEAAXXZ;
+?release@OWeakObject@cppu@@UEAAXXZ;
+?setDelegator@OWeakAggObject@cppu@@UEAAXAEBV?$Reference@VXInterface@uno@star@sun@com@@@uno@star@sun@com@@@Z;
+??0OPropertyArrayHelper@cppu@@QEAA@AEBV?$Sequence@UProperty@beans@star@sun@com@@@uno@star@sun@com@@E@Z;
+??0OPropertyArrayHelper@cppu@@QEAA@PEAUProperty@beans@star@sun@com@@JE@Z;
+??1IPropertyArrayHelper@cppu@@UEAA@XZ;
+??1OPropertyArrayHelper@cppu@@UEAA@XZ;
+??1OPropertySetHelper@cppu@@QEAA@XZ;
+??_7IPropertyArrayHelper@cppu@@6B@;
+??_7OPropertyArrayHelper@cppu@@6B@;
+??_7OPropertySetHelper@cppu@@6BXFastPropertySet@beans@star@sun@com@@@;
+??_7OPropertySetHelper@cppu@@6BXMultiPropertySet@beans@star@sun@com@@@;
+??_7OPropertySetHelper@cppu@@6BXPropertySet@beans@star@sun@com@@@;
+??_GIPropertyArrayHelper@cppu@@UEAAPEAXI@Z;
+??_GOPropertyArrayHelper@cppu@@UEAAPEAXI@Z;
+?addPropertiesChangeListener@OPropertySetHelper@cppu@@UEAAXAEBV?$Sequence@VOUString@rtl@@@uno@star@sun@com@@AEBV?$Reference@VXPropertiesChangeListener@beans@star@sun@com@@@4567@@Z;
+?addPropertyChangeListener@OPropertySetHelper@cppu@@UEAAXAEBVOUString@rtl@@AEBV?$Reference@VXPropertyChangeListener@beans@star@sun@com@@@uno@star@sun@com@@@Z;
+?addVetoableChangeListener@OPropertySetHelper@cppu@@UEAAXAEBVOUString@rtl@@AEBV?$Reference@VXVetoableChangeListener@beans@star@sun@com@@@uno@star@sun@com@@@Z;
+?createPropertySetInfo@OPropertySetHelper@cppu@@SA?AV?$Reference@VXPropertySetInfo@beans@star@sun@com@@@uno@star@sun@com@@AEAVIPropertyArrayHelper@2@@Z;
+?disposing@OPropertySetHelper@cppu@@QEAAXXZ;
+?fillHandles@OPropertyArrayHelper@cppu@@UEAAJPEAJAEBV?$Sequence@VOUString@rtl@@@uno@star@sun@com@@@Z;
+?fillPropertyMembersByHandle@OPropertyArrayHelper@cppu@@UEAAEPEAVOUString@rtl@@PEAFJ@Z;
+?fire@OPropertySetHelper@cppu@@IEAAXPEAJPEBVAny@uno@star@sun@com@@1JE@Z;
+?firePropertiesChangeEvent@OPropertySetHelper@cppu@@UEAAXAEBV?$Sequence@VOUString@rtl@@@uno@star@sun@com@@AEBV?$Reference@VXPropertiesChangeListener@beans@star@sun@com@@@4567@@Z;
+?getCount@OPropertyArrayHelper@cppu@@QEBAJXZ;
+?getFastPropertyValue@OPropertySetHelper@cppu@@UEAA?AVAny@uno@star@sun@com@@J@Z;
+?getHandleByName@OPropertyArrayHelper@cppu@@UEAAJAEBVOUString@rtl@@@Z;
+?getProperties@OPropertyArrayHelper@cppu@@UEAA?AV?$Sequence@UProperty@beans@star@sun@com@@@uno@star@sun@com@@XZ;
+?getPropertyByName@OPropertyArrayHelper@cppu@@UEAA?AUProperty@beans@star@sun@com@@AEBVOUString@rtl@@@Z;
+?getPropertyValue@OPropertySetHelper@cppu@@UEAA?AVAny@uno@star@sun@com@@AEBVOUString@rtl@@@Z;
+?getPropertyValues@OPropertySetHelper@cppu@@UEAA?AV?$Sequence@VAny@uno@star@sun@com@@@uno@star@sun@com@@AEBV?$Sequence@VOUString@rtl@@@4567@@Z;
+?hasPropertyByName@OPropertyArrayHelper@cppu@@UEAAEAEBVOUString@rtl@@@Z;
+?init@OPropertyArrayHelper@cppu@@AEAAXE@Z;
+?queryInterface@OPropertySetHelper@cppu@@UEAA?AVAny@uno@star@sun@com@@AEBVType@4567@@Z;
+?queryInterface@OPropertySetHelper@cppu@@W7EAA?AVAny@uno@star@sun@com@@AEBVType@4567@@Z;
+?queryInterface@OPropertySetHelper@cppu@@WBA@EAA?AVAny@uno@star@sun@com@@AEBVType@4567@@Z;
+?removePropertiesChangeListener@OPropertySetHelper@cppu@@UEAAXAEBV?$Reference@VXPropertiesChangeListener@beans@star@sun@com@@@uno@star@sun@com@@@Z;
+?removePropertyChangeListener@OPropertySetHelper@cppu@@UEAAXAEBVOUString@rtl@@AEBV?$Reference@VXPropertyChangeListener@beans@star@sun@com@@@uno@star@sun@com@@@Z;
+?removeVetoableChangeListener@OPropertySetHelper@cppu@@UEAAXAEBVOUString@rtl@@AEBV?$Reference@VXVetoableChangeListener@beans@star@sun@com@@@uno@star@sun@com@@@Z;
+?setFastPropertyValue@OPropertySetHelper@cppu@@UEAAXJAEBVAny@uno@star@sun@com@@@Z;
+?setFastPropertyValues@OPropertySetHelper@cppu@@IEAAXJPEAJPEBVAny@uno@star@sun@com@@J@Z;
+?setPropertyValue@OPropertySetHelper@cppu@@UEAAXAEBVOUString@rtl@@AEBVAny@uno@star@sun@com@@@Z;
+?setPropertyValues@OPropertySetHelper@cppu@@UEAAXAEBV?$Sequence@VOUString@rtl@@@uno@star@sun@com@@AEBV?$Sequence@VAny@uno@star@sun@com@@@4567@@Z;
+??0ClassDataBase@cppu@@QEAA@J@Z;
+??0ClassDataBase@cppu@@QEAA@XZ;
+??1ClassDataBase@cppu@@QEAA@XZ;
+?getImplHelperInitMutex@cppu@@YAAEAVMutex@osl@@XZ;
+?getImplementationId@ClassData@cppu@@QEAA?AV?$Sequence@C@uno@star@sun@com@@XZ;
+?getTypes@ClassData@cppu@@QEAA?AV?$Sequence@VType@uno@star@sun@com@@@uno@star@sun@com@@XZ;
+?initTypeProvider@ClassData@cppu@@QEAAXXZ;
+?query@ClassData@cppu@@QEAA?AVAny@uno@star@sun@com@@AEBVType@4567@PEAVXTypeProvider@lang@567@@Z;
+?writeTypeOffset@ClassData@cppu@@QEAAXAEBVType@uno@star@sun@com@@J@Z;
+?createRegistryServiceFactory@cppu@@YA?AV?$Reference@VXMultiServiceFactory@lang@star@sun@com@@@uno@star@sun@com@@AEBVOUString@rtl@@0E0@Z;
+?throwException@cppu@@YAXAEBVAny@uno@star@sun@com@@@Z;
+??0OTypeCollection@cppu@@QEAA@AEBVType@uno@star@sun@com@@00000000000AEBV?$Sequence@VType@uno@star@sun@com@@@3456@@Z;
+??0OTypeCollection@cppu@@QEAA@AEBVType@uno@star@sun@com@@0000000000AEBV?$Sequence@VType@uno@star@sun@com@@@3456@@Z;
+??0OTypeCollection@cppu@@QEAA@AEBVType@uno@star@sun@com@@000000000AEBV?$Sequence@VType@uno@star@sun@com@@@3456@@Z;
+??0OTypeCollection@cppu@@QEAA@AEBVType@uno@star@sun@com@@00000000AEBV?$Sequence@VType@uno@star@sun@com@@@3456@@Z;
+??0OTypeCollection@cppu@@QEAA@AEBVType@uno@star@sun@com@@0000000AEBV?$Sequence@VType@uno@star@sun@com@@@3456@@Z;
+??0OTypeCollection@cppu@@QEAA@AEBVType@uno@star@sun@com@@000000AEBV?$Sequence@VType@uno@star@sun@com@@@3456@@Z;
+??0OTypeCollection@cppu@@QEAA@AEBVType@uno@star@sun@com@@00000AEBV?$Sequence@VType@uno@star@sun@com@@@3456@@Z;
+??0OTypeCollection@cppu@@QEAA@AEBVType@uno@star@sun@com@@0000AEBV?$Sequence@VType@uno@star@sun@com@@@3456@@Z;
+??0OTypeCollection@cppu@@QEAA@AEBVType@uno@star@sun@com@@000AEBV?$Sequence@VType@uno@star@sun@com@@@3456@@Z;
+??0OTypeCollection@cppu@@QEAA@AEBVType@uno@star@sun@com@@00AEBV?$Sequence@VType@uno@star@sun@com@@@3456@@Z;
+??0OTypeCollection@cppu@@QEAA@AEBVType@uno@star@sun@com@@0AEBV?$Sequence@VType@uno@star@sun@com@@@3456@@Z;
+??0OTypeCollection@cppu@@QEAA@AEBVType@uno@star@sun@com@@AEBV?$Sequence@VType@uno@star@sun@com@@@3456@@Z;
+??1OImplementationId@cppu@@QEAA@XZ;
+?getImplementationId@OImplementationId@cppu@@QEBA?AV?$Sequence@C@uno@star@sun@com@@XZ;
+?writeSharedLibComponentInfo@cppu@@YAXAEBVOUString@rtl@@0AEBV?$Reference@VXMultiServiceFactory@lang@star@sun@com@@@uno@star@sun@com@@AEBV?$Reference@VXRegistryKey@registry@star@sun@com@@@5678@@Z;
+?remove@OInterfaceIteratorHelper@cppu@@QEAAXXZ;
+??0OWeakObject@cppu@@QEAA@XZ;
+?installTypeDescriptionManager@cppu@@YAEAEBV?$Reference@VXHierarchicalNameAccess@container@star@sun@com@@@uno@star@sun@com@@@Z;
+?loadSharedLibComponentFactory@cppu@@YA?AV?$Reference@VXInterface@uno@star@sun@com@@@uno@star@sun@com@@AEBVOUString@rtl@@00AEBV?$Reference@VXMultiServiceFactory@lang@star@sun@com@@@3456@AEBV?$Reference@VXRegistryKey@registry@star@sun@com@@@3456@@Z;
+?createComponentContext@cppu@@YA?AV?$Reference@VXComponentContext@uno@star@sun@com@@@uno@star@sun@com@@PEBUContextEntry_Init@1@JAEBV23456@@Z;
+?bootstrap_InitialComponentContext@cppu@@YA?AV?$Reference@VXComponentContext@uno@star@sun@com@@@uno@star@sun@com@@AEBV?$Reference@VXSimpleRegistry@registry@star@sun@com@@@3456@AEBVOUString@rtl@@@Z;
+?createNestedRegistry@cppu@@YA?AV?$Reference@VXSimpleRegistry@registry@star@sun@com@@@uno@star@sun@com@@AEBVOUString@rtl@@@Z;
+?createSimpleRegistry@cppu@@YA?AV?$Reference@VXSimpleRegistry@registry@star@sun@com@@@uno@star@sun@com@@AEBVOUString@rtl@@@Z;
+??0WeakAggComponentImplHelperBase@cppu@@IEAA@AEAVMutex@osl@@@Z;
+??0WeakComponentImplHelperBase@cppu@@IEAA@AEAVMutex@osl@@@Z;
+?acquire@WeakAggComponentImplHelperBase@cppu@@UEAAXXZ;
+?acquire@WeakComponentImplHelperBase@cppu@@UEAAXXZ;
+?addEventListener@WeakAggComponentImplHelperBase@cppu@@UEAAXAEBV?$Reference@VXEventListener@lang@star@sun@com@@@uno@star@sun@com@@@Z;
+?addEventListener@WeakComponentImplHelperBase@cppu@@UEAAXAEBV?$Reference@VXEventListener@lang@star@sun@com@@@uno@star@sun@com@@@Z;
+?dispose@WeakAggComponentImplHelperBase@cppu@@UEAAXXZ;
+?dispose@WeakComponentImplHelperBase@cppu@@UEAAXXZ;
+?queryAggregation@WeakAggComponentImplHelperBase@cppu@@UEAA?AVAny@uno@star@sun@com@@AEBVType@4567@@Z;
+?queryInterface@WeakAggComponentImplHelperBase@cppu@@UEAA?AVAny@uno@star@sun@com@@AEBVType@4567@@Z;
+?queryInterface@WeakComponentImplHelperBase@cppu@@UEAA?AVAny@uno@star@sun@com@@AEBVType@4567@@Z;
+?release@WeakAggComponentImplHelperBase@cppu@@UEAAXXZ;
+?release@WeakComponentImplHelperBase@cppu@@UEAAXXZ;
+?removeEventListener@WeakAggComponentImplHelperBase@cppu@@UEAAXAEBV?$Reference@VXEventListener@lang@star@sun@com@@@uno@star@sun@com@@@Z;
+?removeEventListener@WeakComponentImplHelperBase@cppu@@UEAAXAEBV?$Reference@VXEventListener@lang@star@sun@com@@@uno@star@sun@com@@@Z;
+??1WeakAggComponentImplHelperBase@cppu@@UEAA@XZ;
+??1WeakComponentImplHelperBase@cppu@@UEAA@XZ;
+?disposing@WeakAggComponentImplHelperBase@cppu@@MEAAXXZ;
+?disposing@WeakComponentImplHelperBase@cppu@@MEAAXXZ;
+?createOneInstanceFactory@cppu@@YA?AV?$Reference@VXSingleServiceFactory@lang@star@sun@com@@@uno@star@sun@com@@AEBV?$Reference@VXMultiServiceFactory@lang@star@sun@com@@@3456@AEBVOUString@rtl@@P6A?AV?$Reference@VXInterface@uno@star@sun@com@@@3456@0@ZAEBV?$Sequence@VOUString@rtl@@@3456@PEAU_rtl_ModuleCount@@@Z;
+?createSingleComponentFactory@cppu@@YA?AV?$Reference@VXSingleComponentFactory@lang@star@sun@com@@@uno@star@sun@com@@P6A?AV?$Reference@VXInterface@uno@star@sun@com@@@3456@AEBV?$Reference@VXComponentContext@uno@star@sun@com@@@3456@@ZAEBVOUString@rtl@@AEBV?$Sequence@VOUString@rtl@@@3456@PEAU_rtl_ModuleCount@@@Z;
+?createSingleFactory@cppu@@YA?AV?$Reference@VXSingleServiceFactory@lang@star@sun@com@@@uno@star@sun@com@@AEBV?$Reference@VXMultiServiceFactory@lang@star@sun@com@@@3456@AEBVOUString@rtl@@P6A?AV?$Reference@VXInterface@uno@star@sun@com@@@3456@0@ZAEBV?$Sequence@VOUString@rtl@@@3456@PEAU_rtl_ModuleCount@@@Z;
+?defaultBootstrap_InitialComponentContext@cppu@@YA?AV?$Reference@VXComponentContext@uno@star@sun@com@@@uno@star@sun@com@@XZ;
+?acquire@OComponentHelper@cppu@@UEAAXXZ;
+?getTypes@OComponentHelper@cppu@@UEAA?AV?$Sequence@VType@uno@star@sun@com@@@uno@star@sun@com@@XZ;
+?queryAggregation@OComponentHelper@cppu@@UEAA?AVAny@uno@star@sun@com@@AEBVType@4567@@Z;
+?queryInterface@OComponentHelper@cppu@@UEAA?AVAny@uno@star@sun@com@@AEBVType@4567@@Z;
+?removeListener@?$OBroadcastHelperVar@VOMultiTypeInterfaceContainerHelper@cppu@@VType@uno@star@sun@com@@@cppu@@QEAAXAEBVType@uno@star@sun@com@@AEBV?$Reference@VXInterface@uno@star@sun@com@@@4567@@Z;
+??0OMultiTypeInterfaceContainerHelper@cppu@@QEAA@AEAVMutex@osl@@@Z;
+??0OMultiTypeInterfaceContainerHelperInt32@cppu@@QEAA@AEAVMutex@osl@@@Z;
+??1OMultiTypeInterfaceContainerHelper@cppu@@QEAA@XZ;
+??1OMultiTypeInterfaceContainerHelperInt32@cppu@@QEAA@XZ;
+?addInterface@OMultiTypeInterfaceContainerHelper@cppu@@QEAAJAEBVType@uno@star@sun@com@@AEBV?$Reference@VXInterface@uno@star@sun@com@@@4567@@Z;
+?addInterface@OMultiTypeInterfaceContainerHelperInt32@cppu@@QEAAJAEBJAEBV?$Reference@VXInterface@uno@star@sun@com@@@uno@star@sun@com@@@Z;
+?clear@OMultiTypeInterfaceContainerHelper@cppu@@QEAAXXZ;
+?clear@OMultiTypeInterfaceContainerHelperInt32@cppu@@QEAAXXZ;
+?disposeAndClear@OMultiTypeInterfaceContainerHelper@cppu@@QEAAXAEBUEventObject@lang@star@sun@com@@@Z;
+?disposeAndClear@OMultiTypeInterfaceContainerHelperInt32@cppu@@QEAAXAEBUEventObject@lang@star@sun@com@@@Z;
+?getContainedTypes@OMultiTypeInterfaceContainerHelper@cppu@@QEBA?AV?$Sequence@VType@uno@star@sun@com@@@uno@star@sun@com@@XZ;
+?getContainedTypes@OMultiTypeInterfaceContainerHelperInt32@cppu@@QEBA?AV?$Sequence@J@uno@star@sun@com@@XZ;
+?getContainer@OMultiTypeInterfaceContainerHelper@cppu@@QEBAPEAVOInterfaceContainerHelper@2@AEBVType@uno@star@sun@com@@@Z;
+?getContainer@OMultiTypeInterfaceContainerHelperInt32@cppu@@QEBAPEAVOInterfaceContainerHelper@2@AEBJ@Z;
+?removeInterface@OMultiTypeInterfaceContainerHelper@cppu@@QEAAJAEBVType@uno@star@sun@com@@AEBV?$Reference@VXInterface@uno@star@sun@com@@@4567@@Z;
+?removeInterface@OMultiTypeInterfaceContainerHelperInt32@cppu@@QEAAJAEBJAEBV?$Reference@VXInterface@uno@star@sun@com@@@uno@star@sun@com@@@Z;
+??0OPropertySetHelper@cppu@@QEAA@AEAU?$OBroadcastHelperVar@VOMultiTypeInterfaceContainerHelper@cppu@@VType@uno@star@sun@com@@@1@@Z;
+?addListener@?$OBroadcastHelperVar@VOMultiTypeInterfaceContainerHelper@cppu@@VType@uno@star@sun@com@@@cppu@@QEAAXAEBVType@uno@star@sun@com@@AEBV?$Reference@VXInterface@uno@star@sun@com@@@4567@@Z;
+?component_writeInfoHelper@cppu@@YAEPEAX0QEBUImplementationEntry@1@@Z;
+?component_getFactoryHelper@cppu@@YAPEAXPEBDPEAX1QEBUImplementationEntry@1@@Z;
+?ImplHelper_query@cppu@@YA?AVAny@uno@star@sun@com@@AEBVType@3456@PEAUclass_data@1@PEAX@Z;
+?ImplHelper_queryNoXInterface@cppu@@YA?AVAny@uno@star@sun@com@@AEBVType@3456@PEAUclass_data@1@PEAX@Z;
+?ImplHelper_getTypes@cppu@@YA?AV?$Sequence@VType@uno@star@sun@com@@@uno@star@sun@com@@PEAUclass_data@1@@Z;
+?ImplInhHelper_getTypes@cppu@@YA?AV?$Sequence@VType@uno@star@sun@com@@@uno@star@sun@com@@PEAUclass_data@1@AEBV23456@@Z;
+?ImplHelper_getImplementationId@cppu@@YA?AV?$Sequence@C@uno@star@sun@com@@PEAUclass_data@1@@Z;
+?WeakImplHelper_query@cppu@@YA?AVAny@uno@star@sun@com@@AEBVType@3456@PEAUclass_data@1@PEAXPEAVOWeakObject@1@@Z;
+?WeakImplHelper_getTypes@cppu@@YA?AV?$Sequence@VType@uno@star@sun@com@@@uno@star@sun@com@@PEAUclass_data@1@@Z;
+?WeakAggImplHelper_queryAgg@cppu@@YA?AVAny@uno@star@sun@com@@AEBVType@3456@PEAUclass_data@1@PEAXPEAVOWeakAggObject@1@@Z;
+?WeakAggComponentImplHelper_getTypes@cppu@@YA?AV?$Sequence@VType@uno@star@sun@com@@@uno@star@sun@com@@PEAUclass_data@1@@Z;
+?WeakComponentImplHelper_query@cppu@@YA?AVAny@uno@star@sun@com@@AEBVType@3456@PEAUclass_data@1@PEAXPEAVWeakComponentImplHelperBase@1@@Z;
+?WeakAggImplHelper_getTypes@cppu@@YA?AV?$Sequence@VType@uno@star@sun@com@@@uno@star@sun@com@@PEAUclass_data@1@@Z;
+?WeakAggComponentImplHelper_queryAgg@cppu@@YA?AVAny@uno@star@sun@com@@AEBVType@3456@PEAUclass_data@1@PEAXPEAVWeakAggComponentImplHelperBase@1@@Z;
+?WeakComponentImplHelper_getTypes@cppu@@YA?AV?$Sequence@VType@uno@star@sun@com@@@uno@star@sun@com@@PEAUclass_data@1@@Z;
+?defaultBootstrap_InitialComponentContext@cppu@@YA?AV?$Reference@VXComponentContext@uno@star@sun@com@@@uno@star@sun@com@@AEBVOUString@rtl@@@Z;
+
+??0AccessControl@cppu@@QEAA@AEBV?$Reference@VXComponentContext@uno@star@sun@com@@@uno@star@sun@com@@@Z;
+??0AccessControl@cppu@@QEAA@AEBV?$Reference@VXAccessController@security@star@sun@com@@@uno@star@sun@com@@@Z;
+??0AccessControl@cppu@@QEAA@AEBV01@@Z;
+?checkRuntimePermission@AccessControl@cppu@@QEAAXAEBVOUString@rtl@@@Z;
+?checkFilePermission@AccessControl@cppu@@QEAAXAEBVOUString@rtl@@0@Z;
+?checkSocketPermission@AccessControl@cppu@@QEAAXAEBVOUString@rtl@@0@Z;
+
+??0UnoUrl@cppu@@QEAA@AEBV01@@Z;
+??0UnoUrl@cppu@@QEAA@AEBVOUString@rtl@@@Z;
+??0UnoUrlDescriptor@cppu@@QEAA@AEBV01@@Z;
+??0UnoUrlDescriptor@cppu@@QEAA@AEBVOUString@rtl@@@Z;
+??1UnoUrl@cppu@@QEAA@XZ;
+??1UnoUrlDescriptor@cppu@@QEAA@XZ;
+??4UnoUrl@cppu@@QEAAAEAV01@AEBV01@@Z;
+??4UnoUrlDescriptor@cppu@@QEAAAEAV01@AEBV01@@Z;
+?getConnection@UnoUrl@cppu@@QEBAAEBVUnoUrlDescriptor@2@XZ;
+?getDescriptor@UnoUrlDescriptor@cppu@@QEBAAEBVOUString@rtl@@XZ;
+?getName@UnoUrlDescriptor@cppu@@QEBAAEBVOUString@rtl@@XZ;
+?getObjectName@UnoUrl@cppu@@QEBAAEBVOUString@rtl@@XZ;
+?getParameter@UnoUrlDescriptor@cppu@@QEBA?AVOUString@rtl@@AEBV34@@Z;
+?getProtocol@UnoUrl@cppu@@QEBAAEBVUnoUrlDescriptor@2@XZ;
+?hasParameter@UnoUrlDescriptor@cppu@@QEBA_NAEBVOUString@rtl@@@Z;
+
+    local:
+        *;
+};
+
+UDK_3.1 {
+    global:
+        ?getCaughtException@cppu@@YA?AVAny@uno@star@sun@com@@XZ;
+
+        ??0OPropertySetHelper@cppu@@QEAA@AEAU?$OBroadcastHelperVar@VOMultiTypeInterfaceContainerHelper@cppu@@VType@uno@star@sun@com@@@1@_N@Z;
+
+        ?bootstrap@cppu@@YA?AV?$Reference@VXComponentContext@uno@star@sun@com@@@uno@star@sun@com@@XZ;
+        ??0BootstrapException@cppu@@QEAA@XZ;
+        ??0BootstrapException@cppu@@QEAA@AEBVOUString@rtl@@@Z;
+        ??0BootstrapException@cppu@@QEAA@AEBV01@@Z;
+        ??1BootstrapException@cppu@@UEAA@XZ;
+        ??4BootstrapException@cppu@@QEAAAEAV01@AEBV01@@Z;
+        ?getMessage@BootstrapException@cppu@@QEBAAEBVOUString@rtl@@XZ;
+} UDK_3_0_0;
+
+UDK_3.2 {
+    global:
+        ??1PropertySetMixinImpl@cppu@@AEAA@XZ;
+        ?queryInterface@PropertySetMixinImpl@cppu@@MEAA?AVAny@uno@star@sun@com@@AEBVType@4567@@Z;
+        ?getPropertySetInfo@PropertySetMixinImpl@cppu@@MEAA?AV?$Reference@VXPropertySetInfo@beans@star@sun@com@@@uno@star@sun@com@@XZ;
+        ?notify@BoundListeners@PropertySetMixinImpl@cppu@@QEBAXXZ;
+        ?setPropertyValue@PropertySetMixinImpl@cppu@@MEAAXAEBVOUString@rtl@@AEBVAny@uno@star@sun@com@@@Z;
+        ?getPropertyValue@PropertySetMixinImpl@cppu@@MEAA?AVAny@uno@star@sun@com@@AEBVOUString@rtl@@@Z;
+        ?removePropertyChangeListener@PropertySetMixinImpl@cppu@@MEAAXAEBVOUString@rtl@@AEBV?$Reference@VXPropertyChangeListener@beans@star@sun@com@@@uno@star@sun@com@@@Z;
+        ?removeVetoableChangeListener@PropertySetMixinImpl@cppu@@MEAAXAEBVOUString@rtl@@AEBV?$Reference@VXVetoableChangeListener@beans@star@sun@com@@@uno@star@sun@com@@@Z;
+        ?setFastPropertyValue@PropertySetMixinImpl@cppu@@MEAAXJAEBVAny@uno@star@sun@com@@@Z;
+        ?getFastPropertyValue@PropertySetMixinImpl@cppu@@MEAA?AVAny@uno@star@sun@com@@J@Z;
+        ?getPropertyValues@PropertySetMixinImpl@cppu@@MEAA?AV?$Sequence@UPropertyValue@beans@star@sun@com@@@uno@star@sun@com@@XZ;
+        ?setPropertyValues@PropertySetMixinImpl@cppu@@MEAAXAEBV?$Sequence@UPropertyValue@beans@star@sun@com@@@uno@star@sun@com@@@Z;
+        ?prepareSet@PropertySetMixinImpl@cppu@@IEAAXAEBVOUString@rtl@@AEBVAny@uno@star@sun@com@@1PEAVBoundListeners@12@@Z;
+        ??0BoundListeners@PropertySetMixinImpl@cppu@@QEAA@XZ;
+        ??1BoundListeners@PropertySetMixinImpl@cppu@@QEAA@XZ;
+        ??0PropertySetMixinImpl@cppu@@AEAA@AEBV?$Reference@VXComponentContext@uno@star@sun@com@@@uno@star@sun@com@@W4Implements@01@AEBV?$Sequence@VOUString@rtl@@@3456@AEBVType@3456@@Z;
+        ?dispose@PropertySetMixinImpl@cppu@@IEAAXXZ;
+        ?addPropertyChangeListener@PropertySetMixinImpl@cppu@@MEAAXAEBVOUString@rtl@@AEBV?$Reference@VXPropertyChangeListener@beans@star@sun@com@@@uno@star@sun@com@@@Z;
+        ?addVetoableChangeListener@PropertySetMixinImpl@cppu@@MEAAXAEBVOUString@rtl@@AEBV?$Reference@VXVetoableChangeListener@beans@star@sun@com@@@uno@star@sun@com@@@Z;
+} UDK_3.1;
+
+UDK_3.3 {
+    global:
+        ?getTypes@OPropertySetHelper@cppu@@QEAA?AV?$Sequence@VType@uno@star@sun@com@@@uno@star@sun@com@@XZ;
+} UDK_3.2;
+
+UDK_3.4 { # OOo 2.4
+    global:
+        ?bootstrap_expandUri@cppu@@YA?AVOUString@rtl@@AEBV23@@Z; # rtl::OUString cppu::bootstrap_expandUri(rtl::OUString const &)
+} UDK_3.3;
+
+UDK_3.5 { # OOo 3.0
+    global:
+        ??0OPropertySetHelper@cppu@@QEAA@AEAU?$OBroadcastHelperVar@VOMultiTypeInterfaceContainerHelper@cppu@@VType@uno@star@sun@com@@@1@PEAVIEventNotificationHook@1@_N@Z;
+} UDK_3.4;
+
+UDK_3.6 { # OOo 3.3
+    global:
+        ?disposeWeakConnectionPoint@OWeakObject@cppu@@IEAAXXZ;
+        ?clear@WeakReferenceHelper@uno@star@sun@com@@QEAAXXZ;
+        ?createOneInstanceComponentFactory@cppu@@YA?AV?$Reference@VXSingleComponentFactory@lang@star@sun@com@@@uno@star@sun@com@@P6A?AV?$Reference@VXInterface@uno@star@sun@com@@@3456@AEBV?$Reference@VXComponentContext@uno@star@sun@com@@@3456@@ZAEBVOUString@rtl@@AEBV?$Sequence@VOUString@rtl@@@3456@PEAU_rtl_ModuleCount@@@Z;
+} UDK_3.5;
