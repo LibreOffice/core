@@ -431,7 +431,7 @@ sal_Bool SAL_CALL isDependencySatisfied( GConfClient* aClient, const Configurati
         {
             rtl::OUString aCompleteName( rtl::OStringToOUString(
                 g_get_real_name(), osl_getThreadTextEncoding() ) );
-            if( !aCompleteName.equalsAscii( "Unknown" ) )
+            if( !aCompleteName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Unknown")) )
                 return sal_True;
         }
             break;
@@ -440,7 +440,7 @@ sal_Bool SAL_CALL isDependencySatisfied( GConfClient* aClient, const Configurati
         {
             rtl::OUString aCompleteName( rtl::OStringToOUString(
                 g_get_real_name(), osl_getThreadTextEncoding() ) );
-            if( !aCompleteName.equalsAscii( "Unknown" ) )
+            if( !aCompleteName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Unknown")) )
             {
                 if( aCompleteName.trim().indexOf(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" ")), 0) != -1 )
                     return sal_True;
