@@ -32,11 +32,12 @@
 #  gb_Library_OUTDIRLOCATION := $(OUTDIR)/lib
 #  gb_Library_DLLDIR := $(WORKDIR)/LinkTarget/Library
 # defined by platform
+#  gb_Library_COMPONENTPREFIXES
 #  gb_Library_DEFS
 #  gb_Library_DLLFILENAMES
 #  gb_Library_FILENAMES
-#  gb_Library_TARGETS
 #  gb_Library_Library_platform
+#  gb_Library_TARGETS
 
 
 # EVIL: gb_StaticLibrary and gb_Library need the same deliver rule because they are indistinguishable on windows
@@ -77,11 +78,21 @@ $(call gb_Deliver_add_deliverable,$(call gb_Library_get_target,$(1)),$(call gb_L
 endef
 
 define gb_Library_set_componentfile
-$(call gb_ComponentTarget_ComponentTarget,$(2),$(call gb_Library_get_filename,$(1)),$(call gb_Library_get_dllname,$(1)))
+$(call gb_ComponentTarget_ComponentTarget,$(2),$(call gb_Library__get_componentprefix,$(1)),$(call gb_Library_get_filename,$(1)),$(call gb_Library_get_dllname,$(1)))
 $(call gb_Library_get_target,$(1)) : $(call gb_ComponentTarget_get_outdir_target,$(2))
 $(call gb_Library_get_clean_target,$(1)) : $(call gb_ComponentTarget_get_clean_target,$(2))
 
 endef
+
+gb_Library__get_componentprefix = \
+    $(call gb_Library__get_layer_componentprefix,$(call \
+        gb_Library_get_layer,$(1)))
+
+gb_Library__get_layer_componentprefix = \
+    $(patsubst $(1):%,%,$(or \
+        $(filter $(1):%,$(gb_Library_COMPONENTPREFIXES)), \
+        $(call gb_Output_error,no ComponentTarget native prefix for layer '$(1)')))
+
 
 define gb_Library__forward_to_Linktarget
 gb_Library_$(1) = $$(call gb_LinkTarget_$(1),$(call gb_Library_get_linktargetname,$$(call gb_Library_get_filename,$$(1))),$$(2),$$(3))
