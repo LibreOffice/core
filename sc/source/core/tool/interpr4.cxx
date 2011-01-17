@@ -3706,7 +3706,6 @@ StackVar ScInterpreter::Interpret()
                 case ocMacro            : ScMacro();                    break;
                 case ocDBArea           : ScDBArea();                   break;
                 case ocColRowNameAuto   : ScColRowNameAuto();           break;
-// separated    case ocPush             : Push( (ScToken&) *pCur );     break;
                 case ocIf               : ScIfJump();                   break;
                 case ocChose            : ScChoseJump();                break;
                 case ocAdd              : ScAdd();                      break;

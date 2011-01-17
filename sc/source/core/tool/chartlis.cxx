@@ -221,7 +221,6 @@ void ScChartListener::SetUno(
         const uno::Reference< chart::XChartDataChangeEventListener >& rListener,
         const uno::Reference< chart::XChartData >& rSource )
 {
-//  DBG_ASSERT( rListener.is() && rSource.is(), "Nullpointer bei SetUno" );
     delete pUnoData;
     pUnoData = new ScChartUnoData( rListener, rSource );
 }

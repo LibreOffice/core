@@ -46,8 +46,6 @@ using namespace com::sun::star;
 
 //------------------------------------------------------------------------
 
-//SMART_UNO_IMPLEMENTATION( ScAddInListener, UsrObject );
-
 SC_SIMPLE_SERVICE_INFO( ScAddInListener, "ScAddInListener", "stardiv.one.sheet.AddInListener" )
 
 //------------------------------------------------------------------------

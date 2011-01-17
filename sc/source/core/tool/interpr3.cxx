@@ -460,10 +460,6 @@ double ScInterpreter::Fakultaet(double x)
     }
     else
         SetError(errNoValue);
-/*                                           // Stirlingsche Naeherung zu ungenau
-    else
-        x = pow(x/exp(1), x) * sqrt(x) * SQRT_2_PI * (1.0 + 1.0 / (12.0 * x));
-*/
     return x;
 }
 
@@ -2399,9 +2395,6 @@ bool ScInterpreter::CalculateTest(BOOL _bTemplin
         }
         fT = fabs(fSum1/fCount1 - fSum2/fCount2)/sqrt(fS1+fS2);
         double c = fS1/(fS1+fS2);
-// s.u. fF = ::rtl::math::approxFloor(1.0/(c*c/(fCount1-1.0)+(1.0-c)*(1.0-c)/(fCount2-1.0)));
-//      fF = ::rtl::math::approxFloor((fS1+fS2)*(fS1+fS2)/(fS1*fS1/(fCount1-1.0) + fS2*fS2/(fCount2-1.0)));
-
     //  GetTDist wird mit GetBetaDist berechnet und kommt auch mit nicht ganzzahligen
     //  Freiheitsgraden klar. Dann stimmt das Ergebnis auch mit Excel ueberein (#52406#):
         fF = 1.0/(c*c/(fCount1-1.0)+(1.0-c)*(1.0-c)/(fCount2-1.0));
@@ -3224,7 +3217,6 @@ void ScInterpreter::CalculateSmallLarge(BOOL bSmall)
      * actually are defined to return an array of values if an array of
      * positions was passed, in which case, depending on the number of values,
      * we may or will need a real sorted array again, see #i32345. */
-    //GetSortArray(1, aSortArray);
     GetNumberSequenceArray(1, aSortArray);
     SCSIZE nSize = aSortArray.size();
     if (aSortArray.empty() || nSize == 0 || nGlobalError || nSize < k)

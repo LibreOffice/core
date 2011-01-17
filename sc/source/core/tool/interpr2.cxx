@@ -1762,7 +1762,6 @@ void ScInterpreter::ScBackSolver()
                 // Try a nice rounded input value if possible.
                 const double fNiceDelta = (bDoneIteration && fabs(fBestX) >= 1e-3 ? 1e-3 : fDelta);
                 double nX = ::rtl::math::approxFloor((fBestX / fNiceDelta) + 0.5) * fNiceDelta;
-//                double nX = ::rtl::math::approxFloor((fBestX / fDelta) + 0.5) * fDelta;
 
                 if ( bDoneIteration )
                 {

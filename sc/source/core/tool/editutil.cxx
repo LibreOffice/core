@@ -681,7 +681,6 @@ String ScHeaderEditEngine::CalcFieldValue( const SvxFieldItem& rField,
             aRet = ScGlobal::pLocaleData->getDate(aData.aDate);
         else
         {
-            //DBG_ERROR("unbekannter Feldbefehl");
             aRet = '?';
         }
     }
@@ -746,7 +745,6 @@ String ScFieldEditEngine::CalcFieldValue( const SvxFieldItem& rField,
         }
         else
         {
-            //DBG_ERROR("unbekannter Feldbefehl");
             aRet = '?';
         }
     }

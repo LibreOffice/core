@@ -136,15 +136,6 @@ ScRangeData::ScRangeData( ScDocument* pDok,
             else
                 eType = eType | RT_ABSAREA;
         }
-        // Die Importfilter haben diesen Test nicht,
-        // da die benannten Bereiche z.T. noch unvollstaendig sind.
-//      if( !pCode->GetCodeLen() )
-//      {
-//          // ggf. den Fehlercode wg. unvollstaendiger Formel setzen!
-//          ScCompiler aComp( pDok, aPos, *pCode );
-//          aComp.CompileTokenArray();
-//          pCode->DelRPN();
-//      }
     }
 }
 
@@ -233,10 +224,6 @@ void ScRangeData::GuessPosition()
     }
 
     aPos = ScAddress( (SCCOL)(-nMinCol), (SCROW)(-nMinRow), (SCTAB)(-nMinTab) );
-
-    //! Test
-//  DBG_ERROR(String("Pos ")+String((SCCOL)(-nMinCol))+String("/")+
-//          String((SCROW)(-nMinRow))+String("/")+String((SCTAB)(-nMinTab)));
 }
 
 void ScRangeData::GetSymbol( String& rSymbol, const FormulaGrammar::Grammar eGrammar ) const
@@ -441,7 +428,6 @@ void ScRangeData::UpdateTabRef(SCTAB nOldTable, USHORT nFlag, SCTAB nNewTable)
 
 void ScRangeData::MakeValidName( String& rName )        // static
 {
-    //ScCompiler::InitSymbolsNative();
 
     // strip leading invalid characters
     xub_StrLen nPos = 0;

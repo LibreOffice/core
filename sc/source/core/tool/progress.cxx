@@ -178,7 +178,6 @@ void ScProgress::DeleteInterpretProgress()
             a refresh of the sheet window which may call CreateInterpretProgress
             and DeleteInterpretProgress again (from Output::DrawStrings),
             resulting in double deletion of 'pInterpretProgress'. */
-//       if ( --nInterpretProgress == 0 )
         if ( nInterpretProgress == 1 )
         {
             if ( pInterpretProgress != &theDummyInterpretProgress )

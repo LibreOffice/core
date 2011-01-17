@@ -178,10 +178,6 @@ bool lcl_createExcelQuery(
 
     if (bValid)
     {
-//      ULONG nVisible = 0;
-//      for ( nCol=nCol1; nCol<=nCol2; nCol++ )
-//          nVisible += aCol[nCol].VisibleCount( nRow1+1, nRow2 );
-
         // Count the number of visible cells (excluding the header row).  Each
         // visible cell corresponds with a single query.
         SCSIZE nVisible = pQueryRef->getVisibleDataCellCount();

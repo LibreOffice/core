@@ -248,8 +248,6 @@ ScMemChart* ScChartArray::CreateMemChartSingle()
             static_cast<short>(nColCount), static_cast<short>(nRowCount) );
     if (pMemChart)
     {
-//      SvNumberFormatter* pFormatter = pDocument->GetFormatTable();
-//      pMemChart->SetNumberFormatter( pFormatter );
         if ( bValidData )
         {
             BOOL bCalcAsShown = pDocument->GetDocOptions().IsCalcAsShown();
@@ -308,16 +306,11 @@ ScMemChart* ScChartArray::CreateMemChartSingle()
             {
                 aString = ScGlobal::GetRscString(STR_COLUMN);
                 aString += ' ';
-//                aString += String::CreateFromInt32( pCols[nCol]+1 );
                 ScAddress aPos( aCols[ nCol ], 0, 0 );
                 aPos.Format( aColStr, SCA_VALID_COL, NULL );
                 aString += aColStr;
             }
             pMemChart->SetColText( static_cast<short>(nCol), aString);
-
-//            ULONG nNumberAttr = (nTotalRows ? pDocument->GetNumberFormat(
-//                        ScAddress( pCols[nCol], nRow1, nTab1)) : 0);
-//          pMemChart->SetNumFormatIdCol( static_cast<long>(nCol), nNumberAttr );
         }
 
         //
@@ -339,37 +332,7 @@ ScMemChart* ScChartArray::CreateMemChartSingle()
                 aString += String::CreateFromInt32( aRows[nRow]+1 );
             }
             pMemChart->SetRowText( static_cast<short>(nRow), aString);
-
-//            ULONG nNumberAttr = (nTotalCols ? pDocument->GetNumberFormat(
-//                        ScAddress( nCol1, pRows[nRow], nTab1)) : 0);
-//          pMemChart->SetNumFormatIdRow( static_cast<long>(nRow), nNumberAttr );
         }
-
-        //
-        //  Titel
-        //
-
-//      pMemChart->SetMainTitle(ScGlobal::GetRscString(STR_CHART_MAINTITLE));
-//      pMemChart->SetSubTitle(ScGlobal::GetRscString(STR_CHART_SUBTITLE));
-//      pMemChart->SetXAxisTitle(ScGlobal::GetRscString(STR_CHART_XTITLE));
-//      pMemChart->SetYAxisTitle(ScGlobal::GetRscString(STR_CHART_YTITLE));
-//      pMemChart->SetZAxisTitle(ScGlobal::GetRscString(STR_CHART_ZTITLE));
-
-        //
-        //  Zahlen-Typ
-        //
-
-//        ULONG nNumberAttr = (nTotalCols && nTotalRows ?
-//                pDocument->GetNumberFormat( ScAddress( nCol1, nRow1, nTab1)) :
-//                0);
-//      if (pFormatter)
-//          pMemChart->SetDataType(pFormatter->GetType( nNumberAttr ));
-
-        //
-        //  Parameter-Strings
-        //
-
-//        SetExtraStrings( *pMemChart );
     }
 
     return pMemChart;
@@ -409,7 +372,6 @@ ScMemChart* ScChartArray::CreateMemChartMulti()
     {
         SCSIZE nCol = 0;
         SCSIZE nRow = 0;
-//      pMemChart->SetNumberFormatter( pDocument->GetFormatTable() );
         BOOL bCalcAsShown = pDocument->GetDocOptions().IsCalcAsShown();
         ULONG nIndex = 0;
         if (bValidData)
@@ -504,16 +466,9 @@ ScMemChart* ScChartArray::CreateMemChartMulti()
                     nPosCol++;
                 ScAddress aPos( nPosCol - 1, 0, 0 );
                 aPos.Format( aColStr, SCA_VALID_COL, NULL );
-//                aString += String::CreateFromInt32( nPosCol );
                 aString += aColStr;
             }
             pMemChart->SetColText( static_cast<short>(nCol), aString);
-
-//          ULONG nNumberAttr = 0;
-//          pPos = GetPositionMap()->GetPosition( nCol, 0 );
-//          if ( pPos )
-//              nNumberAttr = pDocument->GetNumberFormat( *pPos );
-//          pMemChart->SetNumFormatIdCol( static_cast<long>(nCol), nNumberAttr );
         }
 
         //
@@ -541,47 +496,7 @@ ScMemChart* ScChartArray::CreateMemChartMulti()
                 aString += String::CreateFromInt32( nPosRow );
             }
             pMemChart->SetRowText( static_cast<short>(nRow), aString);
-
-//          ULONG nNumberAttr = 0;
-//          pPos = GetPositionMap()->GetPosition( 0, nRow );
-//          if ( pPos )
-//              nNumberAttr = pDocument->GetNumberFormat( *pPos );
-//          pMemChart->SetNumFormatIdRow( static_cast<long>(nRow), nNumberAttr );
         }
-
-        //
-        //  Titel
-        //
-
-//      pMemChart->SetMainTitle(ScGlobal::GetRscString(STR_CHART_MAINTITLE));
-//      pMemChart->SetSubTitle(ScGlobal::GetRscString(STR_CHART_SUBTITLE));
-//      pMemChart->SetXAxisTitle(ScGlobal::GetRscString(STR_CHART_XTITLE));
-//      pMemChart->SetYAxisTitle(ScGlobal::GetRscString(STR_CHART_YTITLE));
-//      pMemChart->SetZAxisTitle(ScGlobal::GetRscString(STR_CHART_ZTITLE));
-
-        //
-        //  Zahlen-Typ
-        //
-
-//      SvNumberFormatter* pFormatter = pDocument->GetFormatTable();
-//      if (pFormatter)
-//      {
-//          ULONG nIndex = 0;
-//          ULONG nCount = GetPositionMap()->GetCount();
-//          const ScAddress* pPos;
-//          do
-//          {
-//              pPos = GetPositionMap()->GetPosition( nIndex );
-//          } while ( !pPos && ++nIndex < nCount );
-//          ULONG nFormat = ( pPos ? pDocument->GetNumberFormat( *pPos ) : 0 );
-//          pMemChart->SetDataType( pFormatter->GetType( nFormat ) );
-//      }
-
-        //
-        //  Parameter-Strings
-        //
-
-//        SetExtraStrings( *pMemChart );
     }
 
     return pMemChart;

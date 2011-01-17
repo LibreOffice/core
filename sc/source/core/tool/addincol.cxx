@@ -318,7 +318,7 @@ void ScUnoAddInCollection::Initialize()
             while ( xEnum->hasMoreElements() )
             {
                 uno::Any aAddInAny = xEnum->nextElement();
-//?             if ( aAddInAny.getReflection()->getTypeClass() == uno::TypeClass_INTERFACE )
+
                 {
                     uno::Reference<uno::XInterface> xIntFac;
                     aAddInAny >>= xIntFac;
@@ -715,9 +715,6 @@ BOOL lcl_ValidReturnType( const uno::Reference<reflection::XIdlClass>& xClass )
 
     switch (xClass->getTypeClass())
     {
-        // case uno::TypeClass_VOID:
-        //  ???
-
         case uno::TypeClass_ANY:                // variable type
         case uno::TypeClass_ENUM:               //! ???
         case uno::TypeClass_BOOLEAN:

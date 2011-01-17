@@ -1639,7 +1639,6 @@ void ScAddress::Format( String& r, USHORT nFlags, ScDocument* pDoc,
             r = ScGlobal::GetRscString( STR_NOREF_STR );
             return;
         }
-//      if( nFlags & ( SCA_TAB_ABSOLUTE | SCA_TAB_3D ) )
         if( nFlags & SCA_TAB_3D )
         {
             String aTabName, aDocName;

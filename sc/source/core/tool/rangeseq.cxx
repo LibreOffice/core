@@ -431,8 +431,6 @@ ScMatrixRef ScSequenceToMatrix::CreateMixedMatrix( const com::sun::star::uno::An
                     {
                         // Try string, else use empty as last resort.
 
-                        //Reflection* pRefl = pColArr[nCol].getReflection();
-                        //if ( pRefl->equals( *OUString_getReflection() ) )
                         if ( pColArr[nCol] >>= aUStr )
                             xMatrix->PutString( String( aUStr ),
                                     static_cast<SCSIZE>(nCol),

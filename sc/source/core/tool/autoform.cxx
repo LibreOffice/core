@@ -1038,8 +1038,6 @@ BOOL ScAutoFormat::Load()
                 BYTE nChrSet, nCnt;
                 long nPos = rStream.Tell();
                 rStream >> nCnt >> nChrSet;
-//              if( 4 <= nCnt )
-//                  rStream >> nFileVers;
                 if( rStream.Tell() != ULONG(nPos + nCnt) )
                 {
                     DBG_ERRORFILE( "Der Header enthaelt mehr/neuere Daten" );
@@ -1136,9 +1134,6 @@ BOOL ScAutoFormat::Save()
                 << (BYTE)2      // Anzahl von Zeichen des Headers incl. diesem
                 << (BYTE)::GetSOStoreTextEncoding(
                     gsl_getSystemTextEncoding(), sal::static_int_cast<USHORT>(rStream.GetVersion()) );
-//              << (BYTE)4      // Anzahl von Zeichen des Headers incl. diesem
-//              << (BYTE)::GetStoreCharSet(::GetSystemCharSet())
-//              << (UNIT16)SOFFICE_FILEFORMAT_NOW;
         ScAfVersions::Write(rStream);           // Item-Versionen
 
         bRet = (rStream.GetError() == 0);

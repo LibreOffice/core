@@ -50,22 +50,6 @@
 
 // STATIC DATA -----------------------------------------------------------
 
-/*  Strings bei Gelegenheit ganz raus...
-static USHORT nFuncRes[] = {                //  Reihenfolge wie bei enum ScSubTotalFunc
-        0,                                  //  none
-        STR_PIVOTFUNC_AVG,
-        STR_PIVOTFUNC_COUNT,
-        STR_PIVOTFUNC_COUNT2,
-        STR_PIVOTFUNC_MAX,
-        STR_PIVOTFUNC_MIN,
-        STR_PIVOTFUNC_PROD,
-        STR_PIVOTFUNC_STDDEV,
-        STR_PIVOTFUNC_STDDEV2,
-        STR_PIVOTFUNC_SUM,
-        STR_PIVOTFUNC_VAR,
-        STR_PIVOTFUNC_VAR2 };
-*/
-
 static OpCode eOpCodeTable[] = {            //  Reihenfolge wie bei enum ScSubTotalFunc
         ocBad,                              //  none
         ocAverage,
@@ -185,8 +169,6 @@ void ScConsData::DeleteData()
         ppRefs = NULL;
     }
 
-//  DELETEARR( ppData1, nColCount );
-//  DELETEARR( ppData2, nColCount );
     DELETEARR( ppCount, nColCount );
     DELETEARR( ppSum,   nColCount );
     DELETEARR( ppSumSqr,nColCount );

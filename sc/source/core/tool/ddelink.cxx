@@ -269,7 +269,6 @@ void ScDdeLink::TryUpdate()
     else
     {
         bIsInUpdate = TRUE;
-        //Application::Reschedule();    //! OS/2-Simulation
         pDoc->IncInDdeLinkUpdate();
         Update();
         pDoc->DecInDdeLinkUpdate();

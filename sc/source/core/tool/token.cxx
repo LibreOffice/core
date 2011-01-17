@@ -1474,8 +1474,6 @@ FormulaToken* ScTokenArray::MergeArray( )
     if( nCol <= 0 || nRow <= 0 )
         return NULL;
 
-    // fprintf (stderr, "Array (cols = %d, rows = %d)\n", nCol, nRow );
-
     int nSign = 1;
     ScMatrix* pArray = new ScMatrix( nCol, nRow );
     for ( i = nStart, nCol = 0, nRow = 0 ; i < nLen ; i++ )

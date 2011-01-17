@@ -106,7 +106,6 @@ typedef void (CALLTYPE* FARPROC) ( void );
 FuncData::FuncData(const String& rIName) :
     pModuleData     (NULL),
     aInternalName   (rIName),
-//  aFuncName       (""),
     nNumber         (0),
     nParamCount     (0),
     eAsyncType      (NONE)
@@ -434,7 +433,6 @@ BOOL FuncData::Unadvice( double nHandle )
 
 const String& FuncData::GetModuleName() const
 {
-    // DBG_ASSERT( pModuleData, "Keine Arme, keine Kekse" ):
     return pModuleData->GetName();
 }
 

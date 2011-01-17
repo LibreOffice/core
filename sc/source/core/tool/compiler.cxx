@@ -912,9 +912,6 @@ struct ConventionOOO_A1 : public Convention_A1
         ScComplexRefData aRef( rRef );
         // In case absolute/relative positions weren't separately available:
         // transform relative to absolute!
-        //  AdjustReference( aRef.Ref1 );
-        //  if( !bSingleRef )
-        //      AdjustReference( aRef.Ref2 );
         aRef.Ref1.CalcAbsIfRel( rComp.GetPos() );
         if( !bSingleRef )
             aRef.Ref2.CalcAbsIfRel( rComp.GetPos() );

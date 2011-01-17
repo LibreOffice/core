@@ -755,17 +755,6 @@ inline BOOL RectIsPoints( const Rectangle& rRect, const Point& rStart, const Poi
 
 void ScDetectiveFunc::DeleteBox( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2 )
 {
-/*  String aStr;
-    aStr += nCol1;
-    aStr += '/';
-    aStr += nRow1;
-    aStr += '/';
-    aStr += nCol2;
-    aStr += '/';
-    aStr += nRow2;
-    InfoBox(0,aStr).Execute();
-*/
-
     Rectangle aCornerRect = GetDrawRect( nCol1, nRow1, nCol2, nRow2 );
     Point aStartCorner = aCornerRect.TopLeft();
     Point aEndCorner = aCornerRect.BottomRight();
@@ -1061,7 +1050,6 @@ USHORT ScDetectiveFunc::InsertSuccLevel( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, 
     //  ueber ganzes Dokument
 
     USHORT nResult = DET_INS_EMPTY;
-//  ScCellIterator aCellIter( pDoc, 0,0, nTab, MAXCOL,MAXROW, nTab );
     ScCellIterator aCellIter( pDoc, 0,0,0, MAXCOL,MAXROW,MAXTAB );          // alle Tabellen
     ScBaseCell* pCell = aCellIter.GetFirst();
     while (pCell)
@@ -1585,12 +1573,10 @@ void ScDetectiveFunc::UpdateAllArrowColors()
                     if ( bArrow || bError )
                     {
                         ColorData nColorData = ( bError ? GetErrorColor() : GetArrowColor() );
-                        //pObject->SendRepaintBroadcast(pObject->GetBoundRect());
                         pObject->SetMergedItem( XLineColorItem( String(), Color( nColorData ) ) );
 
                         // repaint only
                         pObject->ActionChanged();
-                        // pObject->SendRepaintBroadcast(pObject->GetBoundRect());
                     }
                 }
             }
