@@ -260,9 +260,6 @@ double lcl_ConvertToDateValue( SwDoc& rDoc, sal_Int32 nDate )
 |*
 |*  SwCalc::SwCalc( SwDoc* pD ) :
 |*
-|*  Erstellung          OK 12-02-93 11:04am
-|*  Letzte Aenderung    JP 03.11.95
-|*
 |******************************************************************************/
 
 SwCalc::SwCalc( SwDoc& rD )
@@ -404,9 +401,6 @@ static ULONG SwDocStat::* const aDocStat2[ 4 ] =
 |*
 |*  SwCalc::~SwCalc()
 |*
-|*  Erstellung          OK 12-02-93 11:04am
-|*  Letzte Aenderung    OK 12-02-93 11:04am
-|*
 |******************************************************************************/
 
 SwCalc::~SwCalc()
@@ -422,9 +416,6 @@ SwCalc::~SwCalc()
 /******************************************************************************
 |*
 |*  SwSbxValue SwCalc::Calculate( const String& rStr )
-|*
-|*  Erstellung          OK 12-02-93 11:04am
-|*  Letzte Aenderung    OK 12-02-93 11:04am
 |*
 |******************************************************************************/
 
@@ -458,8 +449,6 @@ SwSbxValue SwCalc::Calculate( const String& rStr )
 |*                      nur beim errechnen von Tabellenzellen auf FALSE gesetzt
 |*                      werden, damit keine Rundungsfehler beim zusammenstellen
 |*                      der Formel entstehen.
-|*  Erstellung          OK 12-02-93 11:04am
-|*  Letzte Aenderung    JP 19.02.98
 |*
 |******************************************************************************/
 
@@ -501,9 +490,6 @@ String SwCalc::GetStrResult( double nValue, BOOL )
 |*
 |*  SwCalcExp* SwCalc::VarLook( const String& )
 |*
-|*  Erstellung          OK 12-02-93 11:04am
-|*  Letzte Aenderung    JP 15.11.99
-|*
 |******************************************************************************/
 
 SwCalcExp* SwCalc::VarInsert( const String &rStr )
@@ -516,9 +502,6 @@ SwCalcExp* SwCalc::VarInsert( const String &rStr )
 /******************************************************************************
 |*
 |*  SwCalcExp* SwCalc::VarLook( const String& , USHORT ins )
-|*
-|*  Erstellung          OK 12-02-93 11:04am
-|*  Letzte Aenderung    JP 15.11.99
 |*
 |******************************************************************************/
 SwCalcExp* SwCalc::VarLook( const String& rStr, USHORT ins )
@@ -674,9 +657,6 @@ SwCalcExp* SwCalc::VarLook( const String& rStr, USHORT ins )
 |*
 |*  BOOL SwCalc::VarChange( const String& rStr, const SwSbxValue nValue )
 |*
-|*  Erstellung          OK 12-02-93 11:04am
-|*  Letzte Aenderung    OK 12-02-93 11:04am
-|*
 |******************************************************************************/
 
 void SwCalc::VarChange( const String& rStr, double nValue )
@@ -707,9 +687,6 @@ void SwCalc::VarChange( const String& rStr, const SwSbxValue& rValue )
 |*
 |*  BOOL SwCalc::Push( const void* pPtr )
 |*
-|*  Erstellung          OK 12-02-93 11:05am
-|*  Letzte Aenderung    OK 12-02-93 11:05am
-|*
 |******************************************************************************/
 
 BOOL SwCalc::Push( const VoidPtr pPtr )
@@ -725,9 +702,6 @@ BOOL SwCalc::Push( const VoidPtr pPtr )
 |*
 |*  void SwCalc::Pop( const void* pPtr )
 |*
-|*  Erstellung          OK 12-02-93 11:05am
-|*  Letzte Aenderung    OK 12-02-93 11:05am
-|*
 |******************************************************************************/
 
 void SwCalc::Pop( const VoidPtr )
@@ -741,9 +715,6 @@ void SwCalc::Pop( const VoidPtr )
 /******************************************************************************
 |*
 |*  SwCalcOper SwCalc::GetToken()
-|*
-|*  Erstellung          OK 12-02-93 11:05am
-|*  Letzte Aenderung    JP 03.11.95
 |*
 |******************************************************************************/
 
@@ -1156,9 +1127,6 @@ else
 |*
 |*  SwSbxValue SwCalc::Term()
 |*
-|*  Erstellung          OK 12-02-93 11:05am
-|*  Letzte Aenderung    JP 16.01.96
-|*
 |******************************************************************************/
 
 SwSbxValue SwCalc::Term()
@@ -1330,9 +1298,6 @@ SwSbxValue SwCalc::Term()
 |*
 |*  SwSbxValue SwCalc::Prim()
 |*
-|*  Erstellung          OK 12-02-93 11:05am
-|*  Letzte Aenderung    JP 03.11.95
-|*
 |******************************************************************************/
 
 extern "C" typedef double (*pfCalc)( double );
@@ -1503,9 +1468,6 @@ SwSbxValue SwCalc::Prim()
 |*
 |*  SwSbxValue  SwCalc::Expr()
 |*
-|*  Erstellung          OK 12-02-93 11:06am
-|*  Letzte Aenderung    JP 03.11.95
-|*
 |******************************************************************************/
 
 SwSbxValue  SwCalc::Expr()
@@ -1598,8 +1560,6 @@ lcl_Str2Double( const String& rCommand, xub_StrLen& rCommandPos, double& rVal,
 /******************************************************************************
  *  Methode     :   BOOL SwCalc::Str2Double( double& )
  *  Beschreibung:
- *  Erstellt    :   OK 07.06.94 12:56
- *  Aenderung   :   JP 27.10.98
  ******************************************************************************/
 bool SwCalc::Str2Double( const String& rCommand, xub_StrLen& rCommandPos,
     double& rVal, const LocaleDataWrapper* const pLclData )
@@ -1664,9 +1624,6 @@ BOOL SwCalc::IsValidVarName( const String& rStr,
 /******************************************************************************
 |*
 |*  CTOR DTOR der SwHash classes
-|*
-|*  Ersterstellung      OK 25.06.93 12:20
-|*  Letzte Aenderung    OK 25.06.93 12:20
 |*
 ******************************************************************************/
 

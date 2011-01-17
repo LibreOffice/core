@@ -331,7 +331,6 @@ SwField* SwEditShell::GetCurFld() const
 |*                  SwEditShell::UpdateFlds()
 |*
 |*    Beschreibung  Stehen die PaMs auf Feldern ?
-|*                  BP 12.05.92
 |*
 *************************************************************************/
 SwTxtFld* lcl_FindInputFld( SwDoc* pDoc, SwField& rFld )
@@ -448,7 +447,7 @@ void SwEditShell::UpdateFlds( SwField &rFld )
     EndAllAction();
 }
 
-/*-----------------13.05.92 10:54-------------------
+/*--------------------------------------------------
  Liefert den logischen fuer die Datenbank zurueck
  --------------------------------------------------*/
 

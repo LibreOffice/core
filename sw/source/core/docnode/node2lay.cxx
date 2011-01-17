@@ -44,7 +44,7 @@
 #include "node2lay.hxx"
 
 
-/* -----------------25.02.99 10:31-------------------
+/* --------------------------------------------------
  * Die SwNode2LayImpl-Klasse erledigt die eigentliche Arbeit,
  * die SwNode2Layout-Klasse ist nur die der Oefffentlichkeit bekannte Schnittstelle
  * --------------------------------------------------*/
@@ -69,7 +69,7 @@ public:
                     const BOOL bCalcFrm = TRUE ) const;
 };
 
-/* -----------------25.02.99 10:38-------------------
+/* --------------------------------------------------
  * Hauptaufgabe des Ctor: Das richtige SwModify zu ermitteln,
  * ueber das iteriert wird.
  * Uebergibt man bSearch == TRUE, so wird der naechste Cntnt- oder TableNode
@@ -124,7 +124,7 @@ SwNode2LayImpl::SwNode2LayImpl( const SwNode& rNode, ULONG nIdx, BOOL bSearch )
         pIter = NULL;
 }
 
-/* -----------------25.02.99 10:41-------------------
+/* --------------------------------------------------
  * SwNode2LayImpl::NextFrm() liefert den naechsten "sinnvollen" Frame,
  * beim ersten Aufruf wird am eigentlichen Iterator ein First gerufen,
  * danach die Next-Methode. Das Ergebnis wird auf Brauchbarkeit untersucht,

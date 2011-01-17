@@ -1990,7 +1990,7 @@ SwXReferenceMark* SwXReferenceMarks::GetObject( SwDoc* pDoc, const SwFmtRefMark*
     return SwXReferenceMark::CreateXReferenceMark(*pDoc, *pMark);
 }
 
-/*-----------------11.03.98 11:18-------------------
+/*--------------------------------------------------
     Gueltigkeitspruefung
 --------------------------------------------------*/
 void SwUnoCollection::Invalidate()

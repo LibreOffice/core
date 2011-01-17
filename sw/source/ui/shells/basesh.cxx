@@ -1226,7 +1226,7 @@ void SwBaseShell::Execute(SfxRequest &rReq)
     }
 }
 
-/* -----------------14.04.99 15:10-------------------
+/* --------------------------------------------------
  * Hier wird der State fuer SID_IMAP / SID_CONTOUR behandelt,
  * wenn die Grafik ausgeswappt ist
  * --------------------------------------------------*/

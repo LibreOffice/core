@@ -753,7 +753,7 @@ BOOL SwGlossaryHdl::IsOld() const
     return bRet;
 }
 
-/*-----------------09.06.97 16:15-------------------
+/*--------------------------------------------------
     Gruppe ohne Pfadindex finden
 --------------------------------------------------*/
 BOOL SwGlossaryHdl::FindGroupName(String & rGroup)

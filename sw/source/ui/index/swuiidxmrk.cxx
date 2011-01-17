@@ -403,7 +403,7 @@ String  SwIndexMarkDlg::GetDefaultPhoneticReading( const String& rText )
     return xExtendedIndexEntrySupplier->getPhoneticCandidate(rText, aLocale);
 }
 
-/* -----------------07.09.99 10:43-------------------
+/* --------------------------------------------------
     Change the content of aEntryED if text is selected
  --------------------------------------------------*/
 void    SwIndexMarkDlg::Activate()
@@ -1026,7 +1026,7 @@ IMPL_LINK( SwIndexMarkDlg, KeyDCBModifyHdl, ComboBox *, pBox )
     return 0;
 }
 
-/*-----------------25.02.94 21:19-------------------
+/*--------------------------------------------------
  dtor ueberladen
 --------------------------------------------------*/
 SwIndexMarkDlg::~SwIndexMarkDlg()

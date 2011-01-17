@@ -785,7 +785,7 @@ Reference< util::XSearchDescriptor >  SwXTextDocument::createSearchDescriptor(vo
 
 }
 
-/* -----------------26.02.99 16:08-------------------
+/* --------------------------------------------------
  * wird fuer findAll/First/Next verwendet
  * --------------------------------------------------*/
 SwUnoCrsr*  SwXTextDocument::FindAny(const Reference< util::XSearchDescriptor > & xDesc,

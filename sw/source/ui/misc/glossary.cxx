@@ -367,7 +367,7 @@ void SwGlossaryDlg::Apply()
     aShortNameEdit.Enable(bOn);
 }
 
-/* -----------------26.11.98 16:15-------------------
+/* --------------------------------------------------
  * existiert der Titel in der ausgewaehlten Gruppe?
  * --------------------------------------------------*/
 SvLBoxEntry* SwGlossaryDlg::DoesBlockExist(const String& rBlock,
@@ -889,7 +889,7 @@ IMPL_LINK( SwGlossaryDlg, CheckBoxHdl, CheckBox *, pBox )
     return 0;
 }
 
-/* -----------------26.11.98 15:18-------------------
+/* --------------------------------------------------
  * TreeListBox fuer Gruppen und Bausteine
  * --------------------------------------------------*/
 SwGlTreeListBox::SwGlTreeListBox(Window* pParent, const ResId& rResId) :

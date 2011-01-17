@@ -64,7 +64,7 @@ SwSelGlossaryDlg::SwSelGlossaryDlg(Window * pParent, const String &rShortName)
     aGlosBox.SetDoubleClickHdl(LINK(this, SwSelGlossaryDlg, DoubleClickHdl));
 }
 
-/*-----------------25.02.94 20:50-------------------
+/*--------------------------------------------------
  dtor ueberladen
 --------------------------------------------------*/
 SwSelGlossaryDlg::~SwSelGlossaryDlg() {}

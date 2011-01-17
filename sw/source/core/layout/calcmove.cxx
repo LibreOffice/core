@@ -75,8 +75,6 @@
 |*  SwCntntFrm::ShouldBwdMoved()
 |*
 |*  Beschreibung        Returnwert sagt, ob der Frm verschoben werden sollte.
-|*  Ersterstellung      MA 05. Dec. 96
-|*  Letzte Aenderung    MA 05. Dec. 96
 |*
 |*************************************************************************/
 
@@ -259,8 +257,6 @@ BOOL SwCntntFrm::ShouldBwdMoved( SwLayoutFrm *pNewUpper, BOOL, BOOL & )
 |*      Ein weiterer Vorteil ist, das eines schoenen Tages das _Prepare und
 |*      damit die Formatierung von Vorgaengern umgangen werden kann.
 |*      So kann evtl. mal 'schnell' an's Dokumentende gesprungen werden.
-|*  Ersterstellung      MA ??
-|*  Letzte Aenderung    MA 13. Dec. 93
 |*
 |*************************************************************************/
 //Zwei kleine Freundschaften werden hier zu einem Geheimbund.
@@ -500,9 +496,6 @@ void SwFrm::PrepareCrsr()
 |*
 |*  SwFrm::MakePos()
 |*
-|*  Ersterstellung      MA ??
-|*  Letzte Aenderung    MA 24. May. 93
-|*
 |*************************************************************************/
 
 // Hier wird GetPrev() zurueckgegeben, allerdings werden
@@ -663,9 +656,6 @@ void SwFrm::MakePos()
 /*************************************************************************
 |*
 |*  SwPageFrm::MakeAll()
-|*
-|*  Ersterstellung      MA 23. Feb. 93
-|*  Letzte Aenderung    MA 20. Jul. 98
 |*
 |*************************************************************************/
 // --> OD 2004-07-01 #i28701# - new type <SwSortedObjs>
@@ -863,9 +853,6 @@ void SwPageFrm::MakeAll()
 |*
 |*  SwLayoutFrm::MakeAll()
 |*
-|*  Ersterstellung      MA ??
-|*  Letzte Aenderung    MA 28. Nov. 95
-|*
 |*************************************************************************/
 
 
@@ -950,9 +937,6 @@ void SwLayoutFrm::MakeAll()
 /*************************************************************************
 |*
 |*  SwCntntFrm::MakePrtArea()
-|*
-|*  Ersterstellung      MA 17. Nov. 92
-|*  Letzte Aenderung    MA 03. Mar. 96
 |*
 |*************************************************************************/
 bool SwTxtNode::IsCollapse() const
@@ -1820,9 +1804,6 @@ void SwCntntFrm::MakeAll()
 /*************************************************************************
 |*
 |*  SwCntntFrm::_WouldFit()
-|*
-|*  Ersterstellung      MA 28. Feb. 95
-|*  Letzte Aenderung    AMA 15. Feb. 99
 |*
 |*************************************************************************/
 

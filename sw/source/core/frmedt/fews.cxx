@@ -74,9 +74,6 @@ TYPEINIT1(SwFEShell,SwEditShell)
 /***********************************************************************
 #*  Class      :  SwFEShell
 #*  Methode    :  EndAllActionAndCall()
-#*
-#*  Datum      :  MA 03. May. 93
-#*  Update     :  MA 31. Oct. 95
 #***********************************************************************/
 
 void SwFEShell::EndAllActionAndCall()
@@ -98,8 +95,6 @@ void SwFEShell::EndAllActionAndCall()
 #*  Class       :  SwFEShell
 #*  Methode     :  GetCntntPos
 #*  Beschreibung:  Ermitteln des Cntnt's der dem Punkt am naechsten liegt
-#*  Datum       :  MA 02. Jun. 92
-#*  Update      :  MA 02. May. 95
 #***********************************************************************/
 
 Point SwFEShell::GetCntntPos( const Point& rPoint, BOOL bNext ) const
@@ -250,9 +245,6 @@ bool SwFEShell::IsDirectlyInSection() const
 |*
 |*  SwFEShell::GetFrmType()
 |*
-|*  Ersterstellung      MA 12. Jan. 93
-|*  Letzte Aenderung    AMA 25. Nov. 98
-|*
 *************************************************************************/
 
 USHORT SwFEShell::GetFrmType( const Point *pPt, BOOL bStopAtFly ) const
@@ -326,9 +318,6 @@ USHORT SwFEShell::GetFrmType( const Point *pPt, BOOL bStopAtFly ) const
 |*
 |*  SwFEShell::ShLooseFcs(), ShGetFcs()
 |*
-|*  Ersterstellung      MA 10. May. 93
-|*  Letzte Aenderung    MA 09. Sep. 98
-|*
 *************************************************************************/
 
 void SwFEShell::ShGetFcs( BOOL bUpdate )
@@ -360,9 +349,6 @@ void SwFEShell::ShLooseFcs()
 |*  SwFEShell::GetPhyPageNum()
 |*  SwFEShell::GetVirtPageNum()
 |*
-|*  Ersterstellung      OK 07.07.93 08:20
-|*  Letzte Aenderung    MA 03. Jan. 94
-|*
 *************************************************************************/
 
 USHORT SwFEShell::GetPhyPageNum()
@@ -387,9 +373,6 @@ USHORT SwFEShell::GetVirtPageNum( const BOOL bCalcFrm )
 |*  void SwFEShell::SetNewPageOffset()
 |*  void SwFEShell::SetPageOffset()
 |*  USHORT SwFEShell::GetPageOffset() const
-|*
-|*  Ersterstellung      OK 07.07.93 08:20
-|*  Letzte Aenderung    MA 30. Mar. 95
 |*
 *************************************************************************/
 
@@ -465,9 +448,6 @@ USHORT SwFEShell::GetPageOffset() const
 /*************************************************************************
 |*
 |*  SwFEShell::InsertLabel()
-|*
-|*  Ersterstellung      MA 10. Feb. 94
-|*  Letzte Aenderung    MA 10. Feb. 94
 |*
 *************************************************************************/
 
@@ -563,8 +543,6 @@ void SwFEShell::InsertLabel( const SwLabelType eType, const String &rTxt, const 
 /***********************************************************************
 #*  Class       :  SwFEShell
 #*  Methoden    :  Sort
-#*  Datum       :  ??
-#*  Update      :  ??
 #***********************************************************************/
 
 BOOL SwFEShell::Sort(const SwSortOptions& rOpt)
@@ -641,9 +619,6 @@ BOOL SwFEShell::Sort(const SwSortOptions& rOpt)
 |*
 |*  SwFEShell::GetCurColNum(), _GetColNum()
 |*
-|*  Ersterstellung      MA 03. Feb. 95
-|*  Letzte Aenderung    MA 20. Apr. 95
-|
 |*************************************************************************/
 
 USHORT SwFEShell::_GetCurColNum( const SwFrm *pFrm,

@@ -702,7 +702,7 @@ SwUnoCursorHelper::GetCurTxtFmtColl(SwPaM & rPaM, const bool bConditional)
     return (bError) ? 0 : pFmt;
 }
 
-/* -----------------26.06.98 16:20-------------------
+/* --------------------------------------------------
  *  Hilfsfunktion fuer PageDesc
  * --------------------------------------------------*/
 SwPageDesc* GetPageDescByName_Impl(SwDoc& rDoc, const String& rName)

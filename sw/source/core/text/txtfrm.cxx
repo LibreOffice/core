@@ -1834,7 +1834,7 @@ void SwTxtFrm::Prepare( const PrepareHint ePrep, const void* pVoid,
         pPara->SetPrep( sal_True );
 }
 
-/* -----------------11.02.99 17:56-------------------
+/* --------------------------------------------------
  * Kleine Hilfsklasse mit folgender Funktion:
  * Sie soll eine Probeformatierung vorbereiten.
  * Der Frame wird in Groesse und Position angepasst, sein SwParaPortion zur Seite

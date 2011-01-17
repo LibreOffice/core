@@ -1300,7 +1300,7 @@ void SwTOXBaseSection::UpdateTemplate( const SwTxtNode* pOwnChapterNode )
     }
 }
 
-/* -----------------14.07.99 09:59-------------------
+/* --------------------------------------------------
     Description: generate content from sequence fields
  --------------------------------------------------*/
 void SwTOXBaseSection::UpdateSequence( const SwTxtNode* pOwnChapterNode )

@@ -29,7 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-/* -----------------08.01.99 14:55-------------------
+/* --------------------------------------------------
  * Und hier die Beschreibung:
  *
  * Durch die PROTOCOL-Makros wird es ermoeglicht, Ereignisse im Frame-Methoden zu protokollieren.
@@ -178,7 +178,7 @@ public:
         { if( pVar && nNo < pVar->Count() ) rVar = (*pVar)[ nNo ]; }
 };
 
-/* -----------------11.01.99 10:43-------------------
+/* --------------------------------------------------
  * Durch das PROTOCOL_ENTER-Makro wird ein SwEnterLeave-Objekt erzeugt,
  * wenn die aktuelle Funktion aufgezeichnet werden soll, wird ein
  * SwImplEnterLeave-Objekt angelegt. Der Witz dabei ist, das der Ctor
@@ -331,7 +331,7 @@ SwImplProtocol::~SwImplProtocol()
     delete pVar;
 }
 
-/* -----------------11.01.99 11:03-------------------
+/* --------------------------------------------------
  * SwImplProtocol::CheckLine analysiert eine Zeile der INI-Datei
  * --------------------------------------------------*/
 
@@ -433,7 +433,7 @@ void SwImplProtocol::CheckLine( ByteString& rLine )
     }
 }
 
-/* -----------------11.01.99 11:17-------------------
+/* --------------------------------------------------
  * SwImplProtocol::FileInit() liest die Datei "dbg_lay.ini"
  * im aktuellen Verzeichnis und wertet sie aus.
  * --------------------------------------------------*/
@@ -466,7 +466,7 @@ void SwImplProtocol::FileInit()
     aStream.Close();
 }
 
-/* -----------------11.01.99 11:20-------------------
+/* --------------------------------------------------
  * lcl_Start sorgt fuer Einrueckung um zwei Blanks bei ACT_START
  * und nimmt diese bei ACT_END wieder zurueck.
  * --------------------------------------------------*/
@@ -488,7 +488,7 @@ void lcl_Start( ByteString& rOut, ByteString& rLay, ULONG nAction )
     }
 }
 
-/* -----------------11.01.99 11:21-------------------
+/* --------------------------------------------------
  * lcl_Flags gibt das ValidSize-, ValidPos- und ValidPrtArea-Flag ("Sz","Ps","PA")
  * des Frames aus, "+" fuer valid, "-" fuer invalid.
  * --------------------------------------------------*/
@@ -503,7 +503,7 @@ void lcl_Flags( ByteString& rOut, const SwFrm* pFrm )
     rOut += pFrm->GetValidPrtAreaFlag() ? '+' : '-';
 }
 
-/* -----------------11.01.99 11:23-------------------
+/* --------------------------------------------------
  * lcl_FrameType gibt den Typ des Frames in Klartext aus.
  * --------------------------------------------------*/
 
@@ -552,7 +552,7 @@ void lcl_FrameType( ByteString& rOut, const SwFrm* pFrm )
         rOut += "Not impl. ";
 }
 
-/* -----------------11.01.99 11:25-------------------
+/* --------------------------------------------------
  * SwImplProtocol::Record(..) wird nur gerufen, wenn das PROTOCOL-Makro
  * feststellt, dass die Funktion aufgezeichnet werden soll ( SwProtocol::nRecord ).
  * In dieser Methode werden noch die beiden weiteren Einschraenkungen ueberprueft,
@@ -701,7 +701,7 @@ void SwImplProtocol::_Record( const SwFrm* pFrm, ULONG nFunction, ULONG nAct, vo
         SwProtocol::SetRecord( 0 );        // => Ende der Aufzeichnung
 }
 
-/* -----------------13.01.99 11:39-------------------
+/* --------------------------------------------------
  * SwImplProtocol::SectFunc(...) wird von SwImplProtocol::_Record(..) gerufen,
  * hier werden die Ausgaben rund um SectionFrms abgehandelt.
  * --------------------------------------------------*/
@@ -727,7 +727,7 @@ void SwImplProtocol::SectFunc( ByteString &rOut, const SwFrm* , ULONG nAct, void
     }
 }
 
-/* -----------------11.01.99 11:31-------------------
+/* --------------------------------------------------
  * SwImplProtocol::InsertFrm(..) nimmt eine neue FrmId zum Aufzeichnen auf,
  * wenn pFrmIds==NULL, werden alle aufgezeichnet, sobald durch InsertFrm(..)
  * pFrmIds angelegt wird, werden nur noch die enthaltenen FrmIds aufgezeichnet.
@@ -743,7 +743,7 @@ BOOL SwImplProtocol::InsertFrm( USHORT nId )
     return TRUE;
 }
 
-/* -----------------11.01.99 11:52-------------------
+/* --------------------------------------------------
  * SwImplProtocol::DeleteFrm(..) entfernt eine FrmId aus dem pFrmIds-Array,
  * so dass diese Frame nicht mehr aufgezeichnet wird.
  * --------------------------------------------------*/
@@ -756,7 +756,7 @@ BOOL SwImplProtocol::DeleteFrm( USHORT nId )
     return TRUE;
 }
 
-/*-----------------20.9.2001 10:29------------------
+/*--------------------------------------------------
  * SwProtocol::SnapShot(..)
  * creates a snapshot of the given frame and its content.
  * --------------------------------------------------*/
@@ -790,7 +790,7 @@ void SwImplProtocol::SnapShot( const SwFrm* pFrm, ULONG nFlags )
     }
 }
 
-/* -----------------11.01.99 11:53-------------------
+/* --------------------------------------------------
  * SwEnterLeave::Ctor(..) wird vom eigentlichen (inline-)Kontruktor gerufen,
  * wenn die Funktion aufgezeichnet werden soll.
  * Die Aufgabe ist es abhaengig von der Funktion das richtige SwImplEnterLeave-Objekt
@@ -811,7 +811,7 @@ void SwEnterLeave::Ctor( const SwFrm* pFrm, ULONG nFunc, ULONG nAct, void* pPar 
     pImpl->Enter();
 }
 
-/* -----------------11.01.99 11:56-------------------
+/* --------------------------------------------------
  * SwEnterLeave::Dtor() ruft lediglich den Destruktor des SwImplEnterLeave-Objekts,
  * ist nur deshalb nicht inline, damit die SwImplEnterLeave-Definition nicht
  * im dbg_lay.hxx zu stehen braucht.

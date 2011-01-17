@@ -305,7 +305,7 @@ IMPL_LINK( SwContentOptPage, AnyRulerHdl, CheckBox*, pBox)
     VertRulerHdl(&aVRulerCBox);
     return 0;
 }
-/*----------------- OS 27.01.95  -----------------------
+/*------------------------------------------------------
  TabPage Drucker Zusatzeinstellungen
 -------------------------------------------------------*/
 SwAddPrinterTabPage::SwAddPrinterTabPage( Window* pParent,
@@ -551,7 +551,7 @@ void SwAddPrinterTabPage::PageCreated (SfxAllItemSet aSet)
     }
 }
 
-/*-----------------03.09.96 11.53-------------------
+/*--------------------------------------------------
     Tabpage Standardfonts
 --------------------------------------------------*/
 SwStdFontTabPage::SwStdFontTabPage( Window* pParent,
@@ -1518,7 +1518,7 @@ void SwShdwCrsrOptionsTabPage::Reset( const SfxItemSet& rSet )
     }
 }
 
-/*-----------------31.10.97 17:55-------------------
+/*--------------------------------------------------
  TabPage fuer Redlining
 --------------------------------------------------*/
 struct CharAttr

@@ -681,7 +681,7 @@ inline rtl::OUString lcl_getString( SwXCell &rCell )
     return rCell.getString();
 }
 
-/* -----------------30.04.02 08:00-------------------
+/* --------------------------------------------------
  * non UNO function call to set string in SwXCell
  * --------------------------------------------------*/
 void lcl_setString( SwXCell &rCell, const rtl::OUString &rTxt,
@@ -700,7 +700,7 @@ void lcl_setString( SwXCell &rCell, const rtl::OUString &rTxt,
     rCell.SwXText::setString(rTxt);
 }
 
-/* -----------------30.04.02 08:00-------------------
+/* --------------------------------------------------
  * non UNO function call to get value from SwXCell
  * --------------------------------------------------*/
 double lcl_getValue( SwXCell &rCell )
@@ -713,7 +713,7 @@ double lcl_getValue( SwXCell &rCell )
     return fRet;
 }
 
-/* -----------------30.04.02 08:00-------------------
+/* --------------------------------------------------
  * non UNO function call to set value in SwXCell
  * --------------------------------------------------*/
 void lcl_setValue( SwXCell &rCell, double nVal )
@@ -1250,7 +1250,7 @@ SwXCell* SwXCell::CreateXCell(SwFrmFmt* pTblFmt, SwTableBox* pBox, SwTable *pTab
     return pRet;
 }
 
-/* -----------------12.06.98 07:37-------------------
+/* --------------------------------------------------
  *  exitstiert die Box in der angegebenen Tabelle?
  * --------------------------------------------------*/
 SwTableBox* SwXCell::FindBox(SwTable* pTable, SwTableBox* pBox2)

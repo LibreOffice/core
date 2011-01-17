@@ -2016,7 +2016,7 @@ SwTOXEntryTabPage::SwTOXEntryTabPage(Window* pParent, const SfxItemSet& rAttrSet
     aSecondKeyLB.SelectEntryPos(0);
     aThirdKeyLB.SelectEntryPos(0);
 }
-/* -----------------30.11.99 13:37-------------------
+/* --------------------------------------------------
     pVoid is used as signal to change all levels of the example
  --------------------------------------------------*/
 IMPL_LINK(SwTOXEntryTabPage, ModifyHdl, void*, pVoid)
@@ -2376,7 +2376,7 @@ void SwTOXEntryTabPage::PreTokenButtonRemoved(const SwFormToken& rToken)
     sal_uInt16 nPos = aAuthFieldsLB.InsertEntry(sTemp);
     aAuthFieldsLB.SetEntryData(nPos, (void*)(nData));
 }
-/*-- 16.06.99 10:47:35---------------------------------------------------
+/*-----------------------------------------------------------------------
 
 This function inizializes the default value in the Token
 put here the UI dependent initializations
@@ -3384,7 +3384,7 @@ String  SwTokenWindow::GetPattern() const
     }
     return sRet;
 }
-/* -----------------19.08.99 11:27-------------------
+/* --------------------------------------------------
     Description: Check if a control of the specified
                     TokenType is already contained in the list
  --------------------------------------------------*/

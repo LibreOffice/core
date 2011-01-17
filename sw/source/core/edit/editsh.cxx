@@ -593,12 +593,6 @@ void SwEditShell::ReplaceDropTxt( const String &rStr )
     }
 }
 
-/******************************************************************************
- *  Methode     :
- *  Beschreibung:
- *  Erstellt    :   OK 25.04.94 13:45
- *  Aenderung   :
- ******************************************************************************/
 
 String SwEditShell::Calculate()
 {

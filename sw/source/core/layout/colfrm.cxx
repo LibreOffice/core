@@ -55,9 +55,6 @@ void lcl_RemoveFtns( SwFtnBossFrm* pBoss, BOOL bPageOnly, BOOL bEndNotes );
 |*
 |*  SwColumnFrm::SwColumnFrm()
 |*
-|*  Ersterstellung      MA ??
-|*  Letzte Aenderung    AMA 30. Oct 98
-|*
 |*************************************************************************/
 SwColumnFrm::SwColumnFrm( SwFrmFmt *pFmt ):
     SwFtnBossFrm( pFmt )
@@ -84,9 +81,6 @@ SwColumnFrm::~SwColumnFrm()
 /*************************************************************************
 |*
 |*  SwLayoutFrm::ChgColumns()
-|*
-|*  Ersterstellung      MA 11. Feb. 93
-|*  Letzte Aenderung    MA 12. Oct. 98
 |*
 |*************************************************************************/
 
@@ -198,7 +192,7 @@ static BOOL lcl_AddColumns( SwLayoutFrm *pCont, USHORT nCount )
     return bRet;
 }
 
-/*-----------------21.09.99 15:42-------------------
+/*--------------------------------------------------
  * ChgColumns() adds or removes columns from a layoutframe.
  * Normally, a layoutframe with a column attribut of 1 or 0 columns contains
  * no columnframe. However, a sectionframe with "footnotes at the end" needs
@@ -322,9 +316,6 @@ void SwLayoutFrm::ChgColumns( const SwFmtCol &rOld, const SwFmtCol &rNew,
 /*************************************************************************
 |*
 |*  SwLayoutFrm::AdjustColumns()
-|*
-|*  Ersterstellung      MA 19. Jan. 99
-|*  Letzte Aenderung    MA 19. Jan. 99
 |*
 |*************************************************************************/
 

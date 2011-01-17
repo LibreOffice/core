@@ -90,7 +90,7 @@ const SwSection* SwEditShell::GetCurrSection() const
     return GetDoc()->GetCurrSection( *GetCrsr()->GetPoint() );
 }
 
-/*-----------------17.03.99 11:53-------------------
+/*--------------------------------------------------
  * SwEditShell::GetAnySection liefert den fuer Spalten
  * zustaendigen Bereich, bei Fussnoten kann es nicht der
  * Bereich innerhalb der Fussnote sein.

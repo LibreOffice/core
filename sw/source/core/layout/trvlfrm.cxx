@@ -109,8 +109,6 @@ static SwCrsrOszControl aOszCtrl = { 0, 0, 0 };
 |*
 |*  Beschreibung:       Sucht denjenigen CntntFrm, innerhalb dessen
 |*                      PrtArea der Point liegt.
-|*  Ersterstellung      MA 20. Jul. 92
-|*  Letzte Aenderung    MA 23. May. 95
 |*
 |*************************************************************************/
 BOOL SwLayoutFrm::GetCrsrOfst( SwPosition *pPos, Point &rPoint,
@@ -146,8 +144,6 @@ BOOL SwLayoutFrm::GetCrsrOfst( SwPosition *pPos, Point &rPoint,
 |*
 |*  Beschreibung:       Sucht die Seite, innerhalb der der gesuchte Point
 |*                      liegt.
-|*  Ersterstellung      MA 20. Jul. 92
-|*  Letzte Aenderung    MA 18. Jul. 96
 |*
 |*************************************************************************/
 
@@ -296,8 +292,6 @@ bool SwRootFrm::FillSelection( SwSelectionList& aSelList, const SwRect& rRect) c
 |*  Beschreibung:       Reicht Primaer den Aufruf an die erste Seite weiter.
 |*                      Wenn der 'reingereichte Point veraendert wird,
 |*                      so wird FALSE zurueckgegeben.
-|*  Ersterstellung      MA 01. Jun. 92
-|*  Letzte Aenderung    MA 30. Nov. 94
 |*
 |*************************************************************************/
 BOOL SwRootFrm::GetCrsrOfst( SwPosition *pPos, Point &rPoint,
@@ -351,8 +345,6 @@ BOOL SwRootFrm::GetCrsrOfst( SwPosition *pPos, Point &rPoint,
 |*                      der Crsr notfalls mit Gewalt in einen der CntntFrms
 |*                      gesetzt.
 |*                      In geschuetzte Zellen gibt es hier keinen Eingang.
-|*  Ersterstellung      MA 04. Jun. 93
-|*  Letzte Aenderung    MA 23. May. 95
 |*
 |*************************************************************************/
 BOOL SwCellFrm::GetCrsrOfst( SwPosition *pPos, Point &rPoint,
@@ -420,9 +412,6 @@ BOOL SwCellFrm::GetCrsrOfst( SwPosition *pPos, Point &rPoint,
 /*************************************************************************
 |*
 |*  SwFlyFrm::GetCrsrOfst()
-|*
-|*  Ersterstellung      MA 15. Dec. 92
-|*  Letzte Aenderung    MA 23. May. 95
 |*
 |*************************************************************************/
 //Problem: Wenn zwei Flys genau gleich gross sind und auf derselben
@@ -516,8 +505,6 @@ BOOL SwFlyFrm::GetCrsrOfst( SwPosition *pPos, Point &rPoint,
 /*************************************************************************
 |*
 |*    Beschreibung      Layoutabhaengiges Cursortravelling
-|*    Ersterstellung    MA 23. Jul. 92
-|*    Letzte Aenderung  MA 06. Sep. 93
 |*
 |*************************************************************************/
 BOOL SwCntntFrm::LeftMargin(SwPaM *pPam) const
@@ -886,8 +873,6 @@ BOOL SwCntntFrm::UnitDown( SwPaM* pPam, const SwTwips, BOOL bInReadOnly ) const
 |*          diejenige in der der PaM sitzt. Anderfalls ist die aktuelle
 |*          Seite die erste Seite innerhalb der VisibleArea.
 |*          Es wird nur auf den vorhandenen Seiten gearbeitet!
-|*  Ersterstellung      MA 20. May. 92
-|*  Letzte Aenderung    MA 09. Oct. 97
 |*
 |*************************************************************************/
 USHORT SwRootFrm::GetCurrPage( const SwPaM *pActualCrsr ) const
@@ -910,8 +895,6 @@ USHORT SwRootFrm::GetCurrPage( const SwPaM *pActualCrsr ) const
 |*          Liefert Null, wenn die Operation nicht moeglich ist.
 |*          Der PaM sitzt in der letzten Seite, wenn die Seitenzahl zu gross
 |*          gewaehlt wurde.
-|*  Ersterstellung      MA 20. May. 92
-|*  Letzte Aenderung    MA 09. Oct. 97
 |*
 |*************************************************************************/
 USHORT SwRootFrm::SetCurrPage( SwCursor* pToSet, USHORT nPageNum )
@@ -982,8 +965,6 @@ USHORT SwRootFrm::SetCurrPage( SwCursor* pToSet, USHORT nPageNum )
 |*      andere Anfang/Ende.
 |*      Fuer die Bestimmung der Seite und des Cntnt (Anfang/Ende) werden
 |*      die im folgenden definierten Funktionen benutzt.
-|*    Ersterstellung    MA 15. Oct. 92
-|*    Letzte Aenderung  MA 28. Feb. 93
 |*
 |*************************************************************************/
 SwCntntFrm *GetFirstSub( const SwLayoutFrm *pLayout )
@@ -1098,8 +1079,6 @@ BOOL GetFrmInPage( const SwCntntFrm *pCnt, SwWhichPage fnWhichPage,
  *                      erweitert bis einer gefunden wird.
 |*                      Zurueckgegeben wird die 'Semantisch richtige' Position
 |*                      innerhalb der PrtArea des gefundenen CntntFrm
-|*  Ersterstellung      MA 15. Jul. 92
-|*  Letzte Aenderung    MA 09. Jan. 97
 |*
 |*************************************************************************/
 ULONG CalcDiff( const Point &rPt1, const Point &rPt2 )
@@ -1353,9 +1332,6 @@ const SwCntntFrm *SwLayoutFrm::GetCntntPos( Point& rPoint,
 |*  Beschreibung        Analog zu SwLayoutFrm::GetCntntPos().
 |*                      Spezialisiert fuer Felder in Rahmen.
 |*
-|*  Ersterstellung      MA 22. Mar. 95
-|*  Letzte Aenderung    MA 07. Nov. 95
-|*
 |*************************************************************************/
 void SwPageFrm::GetCntntPosition( const Point &rPt, SwPosition &rPos ) const
 {
@@ -1450,8 +1426,6 @@ void SwPageFrm::GetCntntPosition( const Point &rPt, SwPosition &rPos ) const
 |*
 |*  Beschreibung        Es wird der naechstliegende Cntnt zum uebergebenen
 |*                      Point gesucht. Es wird nur im BodyText gesucht.
-|*  Ersterstellung      MA 15. Jul. 92
-|*  Letzte Aenderung    JP 11.10.2001
 |*
 |*************************************************************************/
 
@@ -1572,8 +1546,6 @@ Point SwRootFrm::GetNextPrevCntntPos( const Point& rPoint, BOOL bNext ) const
 |*          Liefert Null, wenn die Operation nicht moeglich ist.
 |*          Die Pos ist die der letzten Seite, wenn die Seitenzahl zu gross
 |*          gewaehlt wurde.
-|*  Ersterstellung      MA 01. Jun. 92
-|*  Letzte Aenderung    MA 09. Oct. 97
 |*
 |*************************************************************************/
 Point SwRootFrm::GetPagePos( USHORT nPageNum ) const
@@ -1641,8 +1613,6 @@ BOOL SwRootFrm::IsDummyPage( USHORT nPageNum ) const
 |*                      geschuetzt?
 |*                      Auch Fly in Fly in ... und Fussnoten
 |*
-|*    Ersterstellung    MA 28. Jul. 93
-|*    Letzte Aenderung  MA 06. Nov. 97
 |*
 |*************************************************************************/
 BOOL SwFrm::IsProtected() const
@@ -1706,8 +1676,6 @@ BOOL SwFrm::IsProtected() const
 |*    SwFrm::GetPhyPageNum()
 |*    Beschreibung:     Liefert die physikalische Seitennummer
 |*
-|*    Ersterstellung    OK 06.07.93 08:35
-|*    Letzte Aenderung  MA 30. Nov. 94
 |*
 |*************************************************************************/
 USHORT SwFrm::GetPhyPageNum() const
@@ -1716,7 +1684,7 @@ USHORT SwFrm::GetPhyPageNum() const
     return pPage ? pPage->GetPhyPageNum() : 0;
 }
 
-/*-----------------26.02.01 11:25-------------------
+/*--------------------------------------------------
  * SwFrm::WannaRightPage()
  * decides if the page want to be a rightpage or not.
  * If the first content of the page has a page descriptor,
@@ -1789,9 +1757,6 @@ BOOL SwFrm::WannaRightPage() const
 |*    SwFrm::GetVirtPageNum()
 |*    Beschreibung:     Liefert die virtuelle Seitennummer mit Offset
 |*
-|*    Ersterstellung    OK 06.07.93 08:35
-|*    Letzte Aenderung  MA 30. Nov. 94
-|*
 |*************************************************************************/
 USHORT SwFrm::GetVirtPageNum() const
 {
@@ -1844,9 +1809,6 @@ USHORT SwFrm::GetVirtPageNum() const
 /*************************************************************************
 |*
 |*  SwRootFrm::MakeTblCrsrs()
-|*
-|*  Ersterstellung      MA 14. May. 93
-|*  Letzte Aenderung    MA 02. Feb. 94
 |*
 |*************************************************************************/
 //Ermitteln und einstellen derjenigen Zellen die von der Selektion
@@ -1967,9 +1929,6 @@ bool SwRootFrm::MakeTblCrsrs( SwTableCursor& rTblCrsr )
 /*************************************************************************
 |*
 |*  SwRootFrm::CalcFrmRects
-|*
-|*  Ersterstellung      MA 24. Aug. 92
-|*  Letzte Aenderung    MA 24. Aug. 93
 |*
 |*************************************************************************/
 

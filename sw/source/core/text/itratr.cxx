@@ -745,7 +745,7 @@ void SwTxtNode::GetMinMaxSize( ULONG nIndex, ULONG& rMin, ULONG &rMax,
                             if( RES_FLYFRMFMT == pFrmFmt->Which()
                                 && rTmpSize.GetWidthPercent() )
                             {
-/*-----------------24.01.97 14:09----------------------------------------------
+/*-----------------------------------------------------------------------------
  * Hier ein HACK fuer folgende Situation: In dem Absatz befindet sich
  * ein Textrahmen mit relativer Groesse. Dann nehmen wir mal als minimale
  * Breite 0,5 cm und als maximale KSHRT_MAX.

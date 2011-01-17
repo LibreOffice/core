@@ -91,8 +91,6 @@ void RegistFlys( SwPageFrm*, const SwLayoutFrm* );
 #*  Methode     :  UseSpzLayoutFmt
 #*  Beschreibung:  Anhand des Request werden zu dem Format entsprechende
 #*      Aenderungen an den Spezifischen Layouts vorgenommen.
-#*  Datum       :  MA 23. Sep. 92
-#*  Update      :  JP 09.03.98
 #***********************************************************************/
 
 sal_Bool lcl_SetNewFlyPos( const SwNode& rNode, SwFmtAnchor& rAnchor,
@@ -269,8 +267,6 @@ void SwFEShell::SelectFlyFrm( SwFlyFrm& rFrm, sal_Bool bNew )
 |*  SwFEShell::FindFlyFrm()
 |*
 |*  Beschreibung        Liefert den Fly wenn einer Selektiert ist.
-|*  Ersterstellung      MA 03. Nov. 92
-|*  Letzte Aenderung    MA 05. Mar. 96
 |*
 *************************************************************************/
 
@@ -295,8 +291,6 @@ SwFlyFrm *SwFEShell::FindFlyFrm() const
 |*
 |*  Beschreibung        Liefert sal_True, wenn der aktuelle Fly an einem anderen
 |*                      verankert werden koennte (also innerhalb ist)
-|*  Ersterstellung      AMA 11. Sep. 97
-|*  Letzte Aenderung    AMA 14. Jan. 98
 |*
 *************************************************************************/
 
@@ -359,9 +353,6 @@ const SwFrmFmt* SwFEShell::IsFlyInFly()
 |*
 |*  SwFEShell::SetFlyPos
 |*
-|*  Ersterstellung      MA 14. Jan. 93
-|*  Letzte Aenderung    MA 14. Feb. 95
-|*
 *************************************************************************/
 
 void SwFEShell::SetFlyPos( const Point& rAbsPos )
@@ -402,9 +393,6 @@ void SwFEShell::SetFlyPos( const Point& rAbsPos )
 /*************************************************************************
 |*
 |*  SwFEShell::FindAnchorPos
-|*
-|*  Ersterstellung      AMA 24. Sep. 97
-|*  Letzte Aenderung    AMA 24. Sep. 97
 |*
 *************************************************************************/
 
@@ -613,8 +601,6 @@ Point SwFEShell::FindAnchorPos( const Point& rAbsPos, sal_Bool bMoveIt )
 #*  Class       :  SwFEShell
 #*  Methode     :  NewFlyFrm
 #*  Beschreibung:
-#*  Datum       :  MA 03. Nov. 92
-#*  Update      :  JP 11. Aug. 93
 #***********************************************************************/
 
 const SwFrmFmt *SwFEShell::NewFlyFrm( const SfxItemSet& rSet, sal_Bool bAnchValid,
@@ -787,8 +773,6 @@ const SwFrmFmt *SwFEShell::NewFlyFrm( const SfxItemSet& rSet, sal_Bool bAnchVali
 /***********************************************************************
 #*  Class       :  SwFEShell
 #*  Methode     :  Insert
-#*  Datum       :  ??
-#*  Update      :  MA 12. Sep. 94
 #***********************************************************************/
 
 void SwFEShell::Insert( const String& rGrfName, const String& rFltName,
@@ -944,8 +928,6 @@ void SwFEShell::InsertDrawObj( SdrObject& rDrawObj,
 /***********************************************************************
 #*  Class       :  SwFEShell
 #*  Methode     :  GetPageObjs
-#*  Datum       :  ??
-#*  Update      :  MA 11. Jan. 95
 #***********************************************************************/
 
 void SwFEShell::GetPageObjs( SvPtrarr& rFillArr )
@@ -967,8 +949,6 @@ void SwFEShell::GetPageObjs( SvPtrarr& rFillArr )
 /***********************************************************************
 #*  Class       :  SwFEShell
 #*  Methode     :  SetPageFlysNewPage
-#*  Datum       :  ??
-#*  Update      :  MA 14. Feb. 95
 #***********************************************************************/
 
 void SwFEShell::SetPageObjsNewPage( SvPtrarr& rFillArr, int nOffset )
@@ -1028,8 +1008,6 @@ void SwFEShell::SetPageObjsNewPage( SvPtrarr& rFillArr, int nOffset )
 #*                 Attributen des aktuellen FlyFrms gefuellt.
 #*                 Sind Attribute nicht zu fuellen weil fehl am Platz oder
 #*                 uneindeutig (Mehrfachtselektionen) so werden sie entfernt.
-#*  Datum       :  MA 03. Nov. 92
-#*  Update      :  MA 03. Feb. 94
 #***********************************************************************/
 
 sal_Bool SwFEShell::GetFlyFrmAttr( SfxItemSet &rSet ) const
@@ -1090,8 +1068,6 @@ sal_Bool SwFEShell::GetFlyFrmAttr( SfxItemSet &rSet ) const
 #*  Class       :  SwFEShell
 #*  Methode     :  SetFlyFrmAttr
 #*  Beschreibung:  Die Attribute des aktuellen Flys aendern sich.
-#*  Datum       :  MA 03. Nov. 92
-#*  Update      :  MA 01. Aug. 95
 #***********************************************************************/
 
 sal_Bool SwFEShell::SetFlyFrmAttr( SfxItemSet& rSet )
@@ -1178,8 +1154,6 @@ sal_Bool SwFEShell::SetDrawingAttr( SfxItemSet& rSet )
 #*  Methode     :  ResetFlyFrmAttr
 #*  Beschreibung:  Das gewuenschte Attribut oder die im Set befindlichen
 #*                  werden zurueckgesetzt.
-#*  Datum       :  MA 14. Mar. 97
-#*  Update      :  MA 14. Mar. 97
 #***********************************************************************/
 
 sal_Bool SwFEShell::ResetFlyFrmAttr( sal_uInt16 nWhich, const SfxItemSet* pSet )
@@ -1230,8 +1204,6 @@ sal_Bool SwFEShell::ResetFlyFrmAttr( sal_uInt16 nWhich, const SfxItemSet* pSet )
 #*  Class       :  SwFEShell
 #*  Methode     :  GetCurFrmFmt
 #*  Beschreibung:  liefert wenn Rahmen, dann Rahmenvorlage, sonst 0
-#*  Datum       :  ST 04. Jun. 93
-#*  Update      :
 #***********************************************************************/
 
 SwFrmFmt* SwFEShell::GetCurFrmFmt() const
@@ -1247,8 +1219,6 @@ SwFrmFmt* SwFEShell::GetCurFrmFmt() const
 /******************************************************************************
  *  Methode     :   void SwFEShell::SetFrmFmt(SwFrmFmt *pNewFmt)
  *  Beschreibung:
- *  Erstellt    :   OK 14.04.94 15:40
- *  Aenderung   :   MA 23. Apr. 97
  ******************************************************************************/
 
 void SwFEShell::SetFrmFmt( SwFrmFmt *pNewFmt, sal_Bool bKeepOrient, Point* pDocPos )
@@ -1301,9 +1271,6 @@ void SwFEShell::SetFrmFmt( SwFrmFmt *pNewFmt, sal_Bool bKeepOrient, Point* pDocP
 |*
 |*  SwFEShell::GetFlyFrmFmt()
 |*
-|*  Ersterstellung      OK 23.06.93 13:15
-|*  Letzte Aenderung    OK 23.06.93 13:15
-|*
 *************************************************************************/
 
 const SwFrmFmt* SwFEShell::GetFlyFrmFmt() const
@@ -1336,9 +1303,6 @@ SwFrmFmt* SwFEShell::GetFlyFrmFmt()
 |*
 |*  SwFEShell::GetFlyRect()
 |*
-|*  Ersterstellung      AMA 6. Mae. 97
-|*  Letzte Aenderung    AMA 6. Mae. 97
-|*
 *************************************************************************/
 
 SwRect SwFEShell::GetFlyRect() const
@@ -1357,9 +1321,6 @@ SwRect SwFEShell::GetFlyRect() const
 /*************************************************************************
 |*
 |*  SwFEShell::GetObjRect()
-|*
-|*  Ersterstellung      MA 22. Aug. 93
-|*  Letzte Aenderung    MA 11. Jan. 95
 |*
 *************************************************************************/
 
@@ -1386,8 +1347,6 @@ void SwFEShell::SetObjRect( const SwRect& rRect )
 /***********************************************************************
 #*  Class       :  SwFEShell
 #*  Methode     :  RequestObjectResize()
-#*  Datum       :  MA 10. Feb. 95
-#*  Update      :  MA 13. Jul. 95
 #***********************************************************************/
 
 Size SwFEShell::RequestObjectResize( const SwRect &rRect, const uno::Reference < embed::XEmbeddedObject >& xObj )
@@ -1513,8 +1472,6 @@ Size SwFEShell::RequestObjectResize( const SwRect &rRect, const uno::Reference <
 /***********************************************************************
 #*  Class       :  SwFEShell
 #*  Methode     :  WizzardFindCurFrmFmt
-#*  Datum       :  JP 31.07.95
-#*  Update      :  JP 31.07.95
 #***********************************************************************/
 
 SwFrmFmt* SwFEShell::WizzardGetFly()

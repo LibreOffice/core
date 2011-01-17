@@ -166,7 +166,7 @@ uno::Sequence< OUString > SwXAutoTextContainer::getElementNames(void) throw( uno
     }
     return aGroupNames;
 }
-/*-- 21.12.98 12:42:19---------------------------------------------------
+/*-----------------------------------------------------------------------
     findet Gruppennamen mit und ohne Pfadindex
   -----------------------------------------------------------------------*/
 sal_Bool SwXAutoTextContainer::hasByName(const OUString& Name)

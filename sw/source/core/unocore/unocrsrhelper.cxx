@@ -134,7 +134,7 @@ GetNestedTextContent(SwTxtNode & rTextNode, xub_StrLen const nIndex,
     return xRet;
 }
 
-/* -----------------16.09.98 12:27-------------------
+/* --------------------------------------------------
 *   Lesen spezieller Properties am Cursor
  * --------------------------------------------------*/
 sal_Bool getCrsrPropertyValue(const SfxItemPropertySimpleEntry& rEntry
@@ -767,7 +767,7 @@ void GetCurPageStyle(SwPaM& rPaM, String &rString)
         SwStyleNameMapper::FillProgName( pPage->GetPageDesc()->GetName(), rString, nsSwGetPoolIdFromName::GET_POOLID_PAGEDESC, sal_True );
 }
 
-/* -----------------30.03.99 10:52-------------------
+/* --------------------------------------------------
  * spezielle Properties am Cursor zuruecksetzen
  * --------------------------------------------------*/
 void resetCrsrPropertyValue(const SfxItemPropertySimpleEntry& rEntry, SwPaM& rPam)

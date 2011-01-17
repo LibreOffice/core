@@ -2933,7 +2933,7 @@ void SwDoc::SetTabRows( const SwTabCols &rNew, BOOL bCurColOnly, const SwCursor*
     ::ClearFEShellTabCols();
 }
 
-/* -----------------18.07.98 11:45-------------------
+/* --------------------------------------------------
  *  Direktzugriff fuer UNO
  * --------------------------------------------------*/
 void SwDoc::SetTabCols(SwTable& rTab, const SwTabCols &rNew, const SwTabCols &rOld,

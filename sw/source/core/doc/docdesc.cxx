@@ -138,9 +138,6 @@ static void lcl_DefaultPageFmt( sal_uInt16 nPoolFmtId,
 |*
 |*  SwDoc::ChgPageDesc()
 |*
-|*  Ersterstellung      MA 25. Jan. 93
-|*  Letzte Aenderung    MA 01. Mar. 95
-|*
 |*************************************************************************/
 
 void lcl_DescSetAttr( const SwFrmFmt &rSource, SwFrmFmt &rDest,
@@ -439,8 +436,6 @@ void SwDoc::ChgPageDesc( USHORT i, const SwPageDesc &rChged )
 |*
 |*  Beschreibung        Alle Descriptoren, deren Follow auf den zu loeschenden
 |*      zeigen muessen angepasst werden.
-|*  Ersterstellung      MA 25. Jan. 93
-|*  Letzte Aenderung    JP 04.09.95
 |*
 |*************************************************************************/
 
@@ -585,9 +580,6 @@ void SwDoc::DelPageDesc( USHORT i, BOOL bBroadcast )
 |*
 |*  SwDoc::MakePageDesc()
 |*
-|*  Ersterstellung      MA 25. Jan. 93
-|*  Letzte Aenderung    MA 20. Aug. 93
-|*
 |*************************************************************************/
 
 USHORT SwDoc::MakePageDesc( const String &rName, const SwPageDesc *pCpy,
@@ -652,8 +644,6 @@ SwPageDesc* SwDoc::FindPageDescByName( const String& rName, USHORT* pPos ) const
 /******************************************************************************
  *  Methode     :   void SwDoc::PrtDataChanged()
  *  Beschreibung:
- *  Erstellt    :   OK 27.10.94 10:20
- *  Aenderung   :   MA 26. Mar. 98
  ******************************************************************************/
 
 void SwDoc::PrtDataChanged()

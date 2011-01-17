@@ -64,7 +64,7 @@ SwDocDisplayItem::SwDocDisplayItem( USHORT _nWhich ) :
 
 };
 
-/*------------OS 12.01.95 -------------------------------------------
+/*-------------------------------------------------------------------
     Item fuer Einstellungsdialog, Seite Dokumentansicht
 --------------------------------------------------------------------*/
 SwDocDisplayItem::SwDocDisplayItem( const SwDocDisplayItem& rDocDisplayItem ):
@@ -289,7 +289,7 @@ int SwAddPrinterItem::operator==( const SfxPoolItem& rAttr ) const
     return  SwPrintData::operator==(rItem);
 }
 
-/*-----------------03.11.97 10:00-------------------
+/*--------------------------------------------------
  Item fuer Einstellungsdialog, ShadowCursorSeite
 --------------------------------------------------*/
 SwShadowCursorItem::SwShadowCursorItem( USHORT _nWhich )

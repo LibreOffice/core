@@ -41,9 +41,6 @@
 |*
 |*  SwRect::SwRect()
 |*
-|*  Ersterstellung      MA 02. Feb. 93
-|*  Letzte Aenderung    MA 05. Sep. 93
-|*
 |*************************************************************************/
 
 
@@ -61,9 +58,6 @@ SwRect::SwRect( const Rectangle &rRect ) :
 |*
 |*  SwRect::Center()
 |*
-|*  Ersterstellung      MA 27. Jan. 93
-|*  Letzte Aenderung    MA 27. Jan. 93
-|*
 |*************************************************************************/
 Point SwRect::Center() const
 {
@@ -74,9 +68,6 @@ Point SwRect::Center() const
 /*************************************************************************
 |*
 |*  SwRect::Union()
-|*
-|*  Ersterstellung      MA 27. Jan. 93
-|*  Letzte Aenderung    MA 27. Jan. 93
 |*
 |*************************************************************************/
 
@@ -99,9 +90,6 @@ SwRect& SwRect::Union( const SwRect& rRect )
 /*************************************************************************
 |*
 |*  SwRect::Intersection(), _Intersection()
-|*
-|*  Ersterstellung      MA 27. Jan. 93
-|*  Letzte Aenderung    MA 05. Sep. 93
 |*
 |*************************************************************************/
 
@@ -155,9 +143,6 @@ SwRect& SwRect::_Intersection( const SwRect& rRect )
 |*
 |*  SwRect::IsInside()
 |*
-|*  Ersterstellung      MA 27. Jan. 93
-|*  Letzte Aenderung    MA 27. Jan. 93
-|*
 |*************************************************************************/
 
 
@@ -199,9 +184,6 @@ BOOL SwRect::IsNear( const Point& rPoint, long nTolerance ) const
 |*
 |*  SwRect::IsOver()
 |*
-|*  Ersterstellung      MA 25. Feb. 94
-|*  Letzte Aenderung    MA 27. Jun. 96
-|*
 |*************************************************************************/
 
 
@@ -217,9 +199,6 @@ BOOL SwRect::IsOver( const SwRect& rRect ) const
 /*************************************************************************
 |*
 |*  SwRect::Justify()
-|*
-|*  Ersterstellung      MA 10. Oct. 94
-|*  Letzte Aenderung    MA 23. Oct. 96
 |*
 |*************************************************************************/
 
