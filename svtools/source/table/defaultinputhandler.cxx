@@ -31,104 +31,116 @@
 #include "svtools/table/tablecontrolinterface.hxx"
 
 #include "tabledatawindow.hxx"
+#include "mousefunction.hxx"
 
 #include <tools/debug.hxx>
 #include <vcl/event.hxx>
 #include <vcl/cursor.hxx>
 
-//........................................................................
+//......................................................................................................................
 namespace svt { namespace table
 {
-//.......................................................................
+//......................................................................................................................
 
+    typedef ::rtl::Reference< IMouseFunction >  PMouseFunction;
+    typedef ::std::vector< PMouseFunction >     MouseFunctions;
     struct DefaultInputHandler_Impl
     {
+        PMouseFunction  pActiveFunction;
+        MouseFunctions  aMouseFunctions;
     };
 
-    //====================================================================
+    //==================================================================================================================
     //= DefaultInputHandler
-    //====================================================================
-    //--------------------------------------------------------------------
+    //==================================================================================================================
+    //------------------------------------------------------------------------------------------------------------------
     DefaultInputHandler::DefaultInputHandler()
         :m_pImpl( new DefaultInputHandler_Impl )
-        ,m_nResizingColumn( COL_INVALID )
     {
+        m_pImpl->aMouseFunctions.push_back( new ColumnResize );
     }
 
-    //--------------------------------------------------------------------
+    //------------------------------------------------------------------------------------------------------------------
     DefaultInputHandler::~DefaultInputHandler()
     {
-        DELETEZ( m_pImpl );
     }
 
-    //--------------------------------------------------------------------
-    bool DefaultInputHandler::MouseMove( ITableControl& i_control, const MouseEvent& _rMEvt )
+    //------------------------------------------------------------------------------------------------------------------
+    namespace
     {
-        Point const aPoint = _rMEvt.GetPosPixel();
-
-        // resize test
-        if ( m_nResizingColumn != COL_INVALID )
+        bool lcl_delegateMouseEvent( DefaultInputHandler_Impl& i_impl, ITableControl& i_control, const MouseEvent& i_event,
+            FunctionResult ( IMouseFunction::*i_handlerMethod )( ITableControl&, const MouseEvent& ) )
         {
-            ::Size const tableSize = i_control.getTableSizePixel();
+            if ( i_impl.pActiveFunction.is() )
+            {
+                bool furtherHandler = false;
+                switch ( (i_impl.pActiveFunction.get()->*i_handlerMethod)( i_control, i_event ) )
+                {
+                case ActivateFunction:
+                    OSL_ENSURE( false, "lcl_delegateMouseEvent: unexpected - function already *is* active!" );
+                    break;
+                case ContinueFunction:
+                    break;
+                case DeactivateFunction:
+                    i_impl.pActiveFunction.clear();
+                    break;
+                case SkipFunction:
+                    furtherHandler = true;
+                    break;
+                }
+                if ( !furtherHandler )
+                    // handled the event
+                    return true;
+            }
 
-            // set proper pointer
-            Pointer aNewPointer( POINTER_ARROW );
-            ColumnMetrics const & columnMetrics( i_control.getColumnMetrics( m_nResizingColumn ) );
-            if  (   ( aPoint.X() > tableSize.Width() )
-                ||  ( aPoint.X() < columnMetrics.nStartPixel )
+            // ask all other handlers
+            bool handled = false;
+            for (   MouseFunctions::iterator handler = i_impl.aMouseFunctions.begin();
+                    ( handler != i_impl.aMouseFunctions.end() ) && !handled;
+                    ++handler
                 )
             {
-                aNewPointer = Pointer( POINTER_NOTALLOWED );
-            }
-            else
-            {
-                aNewPointer = Pointer( POINTER_HSPLIT );
-            }
-            i_control.setPointer( aNewPointer );
+                if ( *handler == i_impl.pActiveFunction )
+                    // we already invoked this function
+                    continue;
 
-            // show tracking line
-            i_control.hideTracking();
-            i_control.showTracking(
-                Rectangle(
-                    Point( aPoint.X(), 0 ),
-                    Size( 1, tableSize.Height() )
-                ),
-                SHOWTRACK_SPLIT | SHOWTRACK_WINDOW
-            );
+                switch ( (handler->get()->*i_handlerMethod)( i_control, i_event ) )
+                {
+                case ActivateFunction:
+                    i_impl.pActiveFunction = *handler;
+                    handled = true;
+                    break;
+                case ContinueFunction:
+                case DeactivateFunction:
+                    OSL_ENSURE( false, "lcl_delegateMouseEvent: unexpected: inactivate handler cannot be continued or deactivated!" );
+                    break;
+                case SkipFunction:
+                    handled = false;
+                    break;
+                }
+            }
+            return handled;
+        }
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    bool DefaultInputHandler::MouseMove( ITableControl& i_tableControl, const MouseEvent& i_event )
+    {
+        return lcl_delegateMouseEvent( *m_pImpl, i_tableControl, i_event, &IMouseFunction::handleMouseMove );
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    bool DefaultInputHandler::MouseButtonDown( ITableControl& i_tableControl, const MouseEvent& i_event )
+    {
+        if ( lcl_delegateMouseEvent( *m_pImpl, i_tableControl, i_event, &IMouseFunction::handleMouseDown ) )
             return true;
-        }
 
-        // test for column divider, adjust the mouse pointer, if necessary
-        Pointer aNewPointer( POINTER_ARROW );
-
-        TableCell const tableCell = i_control.hitTest( aPoint );
-        if ( ( tableCell.nRow == ROW_COL_HEADERS ) && ( tableCell.eArea == ColumnDivider ) )
-        {
-            aNewPointer = Pointer( POINTER_HSPLIT );
-        }
-
-        i_control.setPointer( aNewPointer );
-        return true;
-    }
-
-    //--------------------------------------------------------------------
-    bool DefaultInputHandler::MouseButtonDown( ITableControl& i_tableControl, const MouseEvent& _rMEvt )
-    {
         bool bHandled = false;
-        Point const aPoint = _rMEvt.GetPosPixel();
+
+        // TODO: move the below to a IMouseFunction implementation, too
+        Point const aPoint = i_event.GetPosPixel();
         TableCell const tableCell( i_tableControl.hitTest( aPoint ) );
-        if ( tableCell.nRow == ROW_COL_HEADERS )
-        {
-            if  (   ( tableCell.nColumn != COL_INVALID )
-                &&  ( tableCell.eArea == ColumnDivider )
-                )
-            {
-                m_nResizingColumn = tableCell.nColumn;
-                i_tableControl.captureMouse();
-            }
-            bHandled = true;
-        }
-        else if ( tableCell.nRow >= 0 )
+        if ( tableCell.nRow >= 0 )
         {
             bool bSetCursor = false;
             if ( i_tableControl.getSelEngine()->GetSelectionMode() == NO_SELECTION )
@@ -139,7 +151,7 @@ namespace svt { namespace table
             {
                 if ( !i_tableControl.isRowSelected( tableCell.nRow ) )
                 {
-                    bHandled = i_tableControl.getSelEngine()->SelMouseButtonDown( _rMEvt );
+                    bHandled = i_tableControl.getSelEngine()->SelMouseButtonDown( i_event );
                 }
                 else
                 {
@@ -153,59 +165,21 @@ namespace svt { namespace table
                 bHandled = true;
             }
         }
+
         return bHandled;
     }
-    //--------------------------------------------------------------------
-    bool DefaultInputHandler::MouseButtonUp( ITableControl& i_tableControl, const MouseEvent& _rMEvt )
+
+    //------------------------------------------------------------------------------------------------------------------
+    bool DefaultInputHandler::MouseButtonUp( ITableControl& i_tableControl, const MouseEvent& i_event )
     {
+        if ( lcl_delegateMouseEvent( *m_pImpl, i_tableControl, i_event, &IMouseFunction::handleMouseUp ) )
+            return true;
+
         bool bHandled = false;
-        Point const aPoint = _rMEvt.GetPosPixel();
-        if ( m_nResizingColumn != COL_INVALID )
-        {
-            i_tableControl.hideTracking();
-            PColumnModel const pColumn = i_tableControl.getModel()->getColumnModel( m_nResizingColumn );
-            long const maxWidthLogical = pColumn->getMaxWidth();
-            long const minWidthLogical = pColumn->getMinWidth();
 
-            // new position of mouse
-            long const requestedEnd = aPoint.X();
-
-            // old position of right border
-            long const oldEnd = i_tableControl.getColumnMetrics( m_nResizingColumn ).nEndPixel;
-
-            // position of left border if cursor in the to-be-resized column
-            long const columnStart = i_tableControl.getColumnMetrics( m_nResizingColumn ).nStartPixel;
-            long const requestedWidth = requestedEnd - columnStart;
-                // TODO: this is not correct, strictly: It assumes that the mouse was pressed exactly on the "end" pos,
-                // but for a while now, we have relaxed this, and allow clicking a few pixels aside, too
-
-            if ( requestedEnd >= columnStart )
-            {
-                long requestedWidthLogical = i_tableControl.pixelWidthToAppFont( requestedWidth );
-                // respect column width limits
-                if ( oldEnd > requestedEnd )
-                {
-                    // column has become smaller, check against minimum width
-                    if ( ( minWidthLogical != 0 ) && ( requestedWidthLogical < minWidthLogical ) )
-                        requestedWidthLogical = minWidthLogical;
-                }
-                else if ( oldEnd < requestedEnd )
-                {
-                    // column has become larger, check against max width
-                    if ( ( maxWidthLogical != 0 ) && ( requestedWidthLogical >= maxWidthLogical ) )
-                        requestedWidthLogical = maxWidthLogical;
-                }
-                pColumn->setWidth( requestedWidthLogical );
-                i_tableControl.invalidate();
-            }
-
-            i_tableControl.setPointer( Pointer() );
-            i_tableControl.releaseMouse();
-
-            m_nResizingColumn = COL_INVALID;
-            bHandled = true;
-        }
-        else if ( i_tableControl.getRowAtPoint( aPoint ) >= 0 )
+        // TODO: move the below to a IMouseFunction implementation, too
+        Point const aPoint = i_event.GetPosPixel();
+        if ( i_tableControl.getRowAtPoint( aPoint ) >= 0 )
         {
             if ( i_tableControl.getSelEngine()->GetSelectionMode() == NO_SELECTION )
             {
@@ -213,12 +187,13 @@ namespace svt { namespace table
             }
             else
             {
-                bHandled = i_tableControl.getSelEngine()->SelMouseButtonUp( _rMEvt );
+                bHandled = i_tableControl.getSelEngine()->SelMouseButtonUp( i_event );
             }
         }
         return bHandled;
     }
-    //--------------------------------------------------------------------
+
+    //------------------------------------------------------------------------------------------------------------------
     bool DefaultInputHandler::KeyInput( ITableControl& _rControl, const KeyEvent& rKEvt )
     {
         bool bHandled = false;
@@ -267,21 +242,21 @@ namespace svt { namespace table
         return bHandled;
     }
 
-    //--------------------------------------------------------------------
+    //------------------------------------------------------------------------------------------------------------------
     bool DefaultInputHandler::GetFocus( ITableControl& _rControl )
     {
         _rControl.showCursor();
         return false;   // continue processing
     }
 
-    //--------------------------------------------------------------------
+    //------------------------------------------------------------------------------------------------------------------
     bool DefaultInputHandler::LoseFocus( ITableControl& _rControl )
     {
         _rControl.hideCursor();
         return false;   // continue processing
     }
 
-    //--------------------------------------------------------------------
+    //------------------------------------------------------------------------------------------------------------------
     bool DefaultInputHandler::RequestHelp( ITableControl& _rControl, const HelpEvent& _rHEvt )
     {
         (void)_rControl;
@@ -290,7 +265,7 @@ namespace svt { namespace table
         return false;
     }
 
-    //--------------------------------------------------------------------
+    //------------------------------------------------------------------------------------------------------------------
     bool DefaultInputHandler::Command( ITableControl& _rControl, const CommandEvent& _rCEvt )
     {
         (void)_rControl;
@@ -299,7 +274,7 @@ namespace svt { namespace table
         return false;
     }
 
-    //--------------------------------------------------------------------
+    //------------------------------------------------------------------------------------------------------------------
     bool DefaultInputHandler::PreNotify( ITableControl& _rControl, NotifyEvent& _rNEvt )
     {
         (void)_rControl;
@@ -308,7 +283,7 @@ namespace svt { namespace table
         return false;
     }
 
-    //--------------------------------------------------------------------
+    //------------------------------------------------------------------------------------------------------------------
     bool DefaultInputHandler::Notify( ITableControl& _rControl, NotifyEvent& _rNEvt )
     {
         (void)_rControl;
@@ -316,6 +291,6 @@ namespace svt { namespace table
         // TODO
         return false;
     }
-//........................................................................
+//......................................................................................................................
 } } // namespace svt::table
-//........................................................................
+//......................................................................................................................

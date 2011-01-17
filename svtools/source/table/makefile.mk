@@ -46,6 +46,7 @@ SLOFILES=\
         $(SLO)$/tablegeometry.obj \
         $(SLO)$/defaultinputhandler.obj \
         $(SLO)$/tabledatawindow.obj \
+        $(SLO)$/mousefunction.obj \
         $(SLO)$/cellvalueconversion.obj
 
 #LIB1TARGET=     $(SLB)$/$(TARGET).lib
