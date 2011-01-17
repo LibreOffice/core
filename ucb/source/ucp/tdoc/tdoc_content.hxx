@@ -67,6 +67,7 @@ class ContentProperties
 {
 public:
     ContentProperties()
+    : m_eType( STREAM )
     {}
 
     ContentProperties( const ContentType & rType, const rtl::OUString & rTitle )
