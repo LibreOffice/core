@@ -739,10 +739,10 @@ sal_Bool SvXMLExportItemMapper::QueryXMLValue(
                                 eStyle = XML_DOUBLE;
                                 break;
                             case EMBOSSED:
-                                eStyle = XML_EMBOSSED;
+                                eStyle = XML_RIDGE;
                                 break;
                             case ENGRAVED:
-                                eStyle = XML_ENGRAVED;
+                                eStyle = XML_GROOVE;
                                 break;
                             case INSET:
                                 eStyle = XML_INSET;
