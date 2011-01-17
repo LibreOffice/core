@@ -37,6 +37,10 @@
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/table/BorderLine2.hpp>
 
+#if DEBUG
+#include <cstdio>
+#endif
+
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
 
@@ -344,10 +348,10 @@ sal_Bool XMLBorderHdl::exportXML( OUString& rStrExpValue, const uno::Any& rValue
                 eStyleToken = XML_DOUBLE;
                 break;
             case API_LINE_EMBOSSED:
-                eStyleToken = XML_EMBOSSED;
+                eStyleToken = XML_RIDGE;
                 break;
             case API_LINE_ENGRAVED:
-                eStyleToken = XML_ENGRAVED;
+                eStyleToken = XML_GROOVE;
                 break;
             case API_LINE_OUTSET:
                 eStyleToken = XML_OUTSET;
