@@ -613,6 +613,7 @@ PrintDialog::JobTabPage::JobTabPage( Window* i_pParent, const ResId& rResId )
     , maCopyCountField( this, VclResId( SV_PRINT_COPYCOUNT_FIELD ) )
     , maCollateBox( this, VclResId( SV_PRINT_COLLATE ) )
     , maCollateImage( this, VclResId( SV_PRINT_COLLATE_IMAGE ) )
+    , maReverseOrderBox( this, VclResId( SV_PRINT_OPT_REVERSE ) )
     , maCollateImg( VclResId( SV_PRINT_COLLATE_IMG ) )
     , maCollateHCImg( VclResId( SV_PRINT_COLLATE_HC_IMG ) )
     , maNoCollateImg( VclResId( SV_PRINT_NOCOLLATE_IMG ) )
@@ -741,7 +742,6 @@ PrintDialog::OutputOptPage::OutputOptPage( Window* i_pParent, const ResId& i_rRe
     , maOptionsLine( this, VclResId( SV_PRINT_OPT_PRINT_FL ) )
     , maToFileBox( this, VclResId( SV_PRINT_OPT_TOFILE ) )
     , maCollateSingleJobsBox( this, VclResId( SV_PRINT_OPT_SINGLEJOBS ) )
-    , maReverseOrderBox( this, VclResId( SV_PRINT_OPT_REVERSE ) )
 {
     FreeResource();
 
@@ -765,7 +765,6 @@ void PrintDialog::OutputOptPage::setupLayout()
     mxOptGroup = xCol;
     xCol->addWindow( &maToFileBox );
     xCol->addWindow( &maCollateSingleJobsBox );
-    xCol->addWindow( &maReverseOrderBox );
 }
 
 void PrintDialog::OutputOptPage::readFromSettings()
@@ -833,7 +832,7 @@ PrintDialog::PrintDialog( Window* i_pParent, const boost::shared_ptr<PrinterCont
     maPageStr = maNumPagesText.GetText();
 
     // init reverse print
-    maOptionsPage.maReverseOrderBox.Check( maPController->getReversePrint() );
+    maJobPage.maReverseOrderBox.Check( maPController->getReversePrint() );
 
     // fill printer listbox
     const std::vector< rtl::OUString >& rQueues( Printer::GetPrinterQueues() );
@@ -906,7 +905,7 @@ PrintDialog::PrintDialog( Window* i_pParent, const boost::shared_ptr<PrinterCont
     maJobPage.maDetailsBtn.SetToggleHdl( LINK( this, PrintDialog, ClickHdl ) );
     maNUpPage.maBorderCB.SetClickHdl( LINK( this, PrintDialog, ClickHdl ) );
     maOptionsPage.maToFileBox.SetToggleHdl( LINK( this, PrintDialog, ClickHdl ) );
-    maOptionsPage.maReverseOrderBox.SetToggleHdl( LINK( this, PrintDialog, ClickHdl ) );
+    maJobPage.maReverseOrderBox.SetToggleHdl( LINK( this, PrintDialog, ClickHdl ) );
     maOptionsPage.maCollateSingleJobsBox.SetToggleHdl( LINK( this, PrintDialog, ClickHdl ) );
     maNUpPage.maPagesBtn.SetToggleHdl( LINK( this, PrintDialog, ClickHdl ) );
 
@@ -1637,6 +1636,16 @@ void PrintDialog::setupOptionalUI()
     {
         maJobPage.mxPrintRange->show( false, false );
         maJobPage.maCopySpacer.Show( FALSE );
+        maJobPage.maReverseOrderBox.Show( FALSE );
+    }
+    else
+    {
+        // add an indent to the current column
+        vcl::Indenter* pIndent = new vcl::Indenter( maJobPage.mxPrintRange.get(), -1 );
+        maJobPage.mxPrintRange->addChild( pIndent );
+        // and create a column inside the indent
+        pIndent->setWindow( &maJobPage.maReverseOrderBox );
+        maJobPage.maReverseOrderBox.Show( TRUE );
     }
 
 #ifdef WNT
@@ -2187,9 +2196,9 @@ IMPL_LINK( PrintDialog, ClickHdl, Button*, pButton )
                                  makeAny( sal_Bool(isCollate()) ) );
         checkControlDependencies();
     }
-    else if( pButton == &maOptionsPage.maReverseOrderBox )
+    else if( pButton == &maJobPage.maReverseOrderBox )
     {
-        sal_Bool bChecked = maOptionsPage.maReverseOrderBox.IsChecked();
+        sal_Bool bChecked = maJobPage.maReverseOrderBox.IsChecked();
         maPController->setReversePrint( bChecked );
         maPController->setValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintReverse" ) ),
                                  makeAny( bChecked ) );

@@ -169,6 +169,7 @@ namespace vcl
             NumericField                            maCopyCountField;
             CheckBox                                maCollateBox;
             FixedImage                              maCollateImage;
+            CheckBox                                maReverseOrderBox;
 
             Image                                   maCollateImg;
             Image                                   maCollateHCImg;
@@ -197,7 +198,6 @@ namespace vcl
             FixedLine                           maOptionsLine;
             CheckBox                            maToFileBox;
             CheckBox                            maCollateSingleJobsBox;
-            CheckBox                            maReverseOrderBox;
 
             boost::shared_ptr<vcl::RowOrColumn> mxOptGroup;
 
