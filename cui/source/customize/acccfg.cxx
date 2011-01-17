@@ -40,6 +40,7 @@
 #include <sfx2/app.hxx>
 #include <sfx2/filedlghelper.hxx>
 #include <sfx2/minfitem.hxx>
+#include <sfx2/sfxresid.hxx>
 #include <svl/stritem.hxx>
 
 #include "cuires.hrc"
@@ -721,7 +722,6 @@ SfxAcceleratorConfigPage::SfxAcceleratorConfigPage( Window* pParent, const SfxIt
     , aResetButton            (this   , CUI_RES(BTN_RESET               ))
     , aLoadAccelConfigStr             ( CUI_RES( STR_LOADACCELCONFIG ) )
     , aSaveAccelConfigStr             ( CUI_RES( STR_SAVEACCELCONFIG ) )
-    , aFilterAllStr                   ( CUI_RES( STR_SFX_FILTERNAME_ALL ) )
     , aFilterCfgStr                   ( CUI_RES( STR_FILTERNAME_CFG ) )
     , m_bStylesInfoInitialized(sal_False)
     , m_xGlobal               ()
@@ -729,6 +729,8 @@ SfxAcceleratorConfigPage::SfxAcceleratorConfigPage( Window* pParent, const SfxIt
     , m_xAct                  ()
 {
     FreeResource();
+
+    aFilterAllStr = String( SfxResId( STR_SFX_FILTERNAME_ALL ) );
 
 // install handler functions
     aChangeButton.SetClickHdl( LINK( this, SfxAcceleratorConfigPage, ChangeHdl ));
@@ -744,7 +746,7 @@ SfxAcceleratorConfigPage::SfxAcceleratorConfigPage( Window* pParent, const SfxIt
     aModuleButton.SetClickHdl( LINK( this, SfxAcceleratorConfigPage, RadioHdl  ));
 
     // initialize Entriesbox
-    aEntriesBox.SetWindowBits(WB_HSCROLL|WB_CLIPCHILDREN);
+    aEntriesBox.SetStyle(aEntriesBox.GetStyle()|WB_HSCROLL|WB_CLIPCHILDREN);
     aEntriesBox.SetSelectionMode(SINGLE_SELECTION);
     aEntriesBox.SetTabs(&AccCfgTabs[0], MAP_APPFONT);
     aEntriesBox.Resize(); // OS: Hack for right selection
@@ -768,7 +770,7 @@ SfxAcceleratorConfigPage::SfxAcceleratorConfigPage( Window* pParent, const SfxIt
     pGroupLBox->SetFunctionListBox(pFunctionBox);
 
     // initialize KeyBox
-    aKeyBox.SetWindowBits(WB_CLIPCHILDREN|WB_HSCROLL|WB_SORT);
+    aKeyBox.SetStyle(aKeyBox.GetStyle()|WB_CLIPCHILDREN|WB_HSCROLL|WB_SORT);
 }
 
 //-----------------------------------------------
@@ -1377,7 +1379,6 @@ void SfxAcceleratorConfigPage::StartFileDialog( WinBits nBits, const String& rTi
     m_pFileDlg = new sfx2::FileDialogHelper( nDialogType, 0 );
 
     m_pFileDlg->SetTitle( rTitle );
-//  m_pFileDlg->SetDialogHelpId( bSave ? HID_CONFIG_SAVE : HID_CONFIG_LOAD );
     m_pFileDlg->AddFilter( aFilterAllStr, DEFINE_CONST_UNICODE( FILEDIALOG_FILTER_ALL ) );
     m_pFileDlg->AddFilter( aFilterCfgStr, DEFINE_CONST_UNICODE( "*.cfg" ) );
 

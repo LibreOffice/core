@@ -35,7 +35,6 @@
 #include <testtool.hxx>
 #include "cmdstrm.hxx"
 #include <basic/basicrt.hxx>
-#include <vcl/smartid.hxx>
 #include "httprequest.hxx"
 
 #include <map>
@@ -106,7 +105,7 @@ class ControlData
 {
 public:
     String Kurzname;
-    SmartId aUId;
+    rtl::OString aUId;
 };
 
 DBG_NAMEEX( ControlItem )
@@ -118,8 +117,8 @@ private:
 public:
     ControlData *pData;
 
-    ControlItem( const char *Name, SmartId aUIdP );
-    ControlItem( const String &Name, SmartId aUIdP );
+    ControlItem( const char *Name, rtl::OString aUIdP );
+    ControlItem( const String &Name, rtl::OString aUIdP );
 //  ControlItem( const String &Name, const String &URL, const URLType aType );
 //    ControlItem( const String &Name, const String &URL, const ULONG nUId );
 //    ControlItem( const char *Name, const String &URL, const ULONG nUId );
@@ -158,9 +157,9 @@ public:
 class ControlItemSon : public ControlItem, public ControlSon
 {
 public:
-    ControlItemSon(const char *Name, SmartId aUIdP )
+    ControlItemSon(const char *Name, rtl::OString aUIdP )
         : ControlItem( Name, aUIdP ) {}
-    ControlItemSon(const String &Name, SmartId aUIdP );
+    ControlItemSon(const String &Name, rtl::OString aUIdP );
 //  ControlItemSon(const String &Name, const String &URL, const URLType aType );
 //    ControlItemSon(const String &Name, const String &URL, const ULONG nUId );
 //    ControlItemSon(const char *Name, const String &URL, const ULONG nUId );
@@ -170,9 +169,9 @@ public:
 class ControlDef : public ControlItemSon
 {
 public:
-    ControlDef(const char *Name, SmartId aUIdP )
+    ControlDef(const char *Name, rtl::OString aUIdP )
         : ControlItemSon( Name, aUIdP ) {DBG_CTOR(ControlDef,0);}
-    ControlDef(const String &Name, SmartId aUIdP );
+    ControlDef(const String &Name, rtl::OString aUIdP );
 //  ControlDef(const String &Name, const String &URL, const URLType aType );
     ControlDef(const String &aOldName, const String &aNewName, ControlDef *pOriginal, BOOL bWithSons = FALSE );
     ~ControlDef() {DBG_DTOR(ControlDef,0);}
@@ -185,7 +184,7 @@ public:
 class ControlItemUId : public ControlItem
 {
 public:
-    ControlItemUId(String Name, SmartId aUIdP)
+    ControlItemUId(String Name, rtl::OString aUIdP)
         : ControlItem( Name, aUIdP){}
     virtual BOOL operator < (const ControlItem &rPar);
     virtual BOOL operator == (const ControlItem &rPar);
@@ -194,7 +193,7 @@ public:
 class ControlItemUIdSon : public ControlItemUId, public ControlSon
 {
 public:
-    ControlItemUIdSon(String Name, SmartId aUIdP) : ControlItemUId( Name, aUIdP) {}
+    ControlItemUIdSon(String Name, rtl::OString aUIdP) : ControlItemUId( Name, aUIdP) {}
     MK_SON_ACCESS( ControlItemUId )
 };
 
@@ -203,14 +202,14 @@ class ReverseName : public ControlItemUId
 public:
     ULONG LastSequence;
 
-    ReverseName(String Name, SmartId aUIdP, ULONG nSeq) : ControlItemUId( Name, aUIdP), LastSequence(nSeq) {}
+    ReverseName(String Name, rtl::OString aUIdP, ULONG nSeq) : ControlItemUId( Name, aUIdP), LastSequence(nSeq) {}
 };
 
 class CRevNames: public CNames
 {
 public:
-    void Insert( String aName, SmartId aUId, ULONG nSeq );
-    String GetName( SmartId aUId );
+    void Insert( String aName, rtl::OString aUId, ULONG nSeq );
+    String GetName( rtl::OString aUId );
     void Invalidate ( ULONG nSeq );
 };
 

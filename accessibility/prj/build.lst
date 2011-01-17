@@ -1,4 +1,4 @@
-ac  accessibility	:    l10n tools jurt offuh unoil vcl javaunohelper jvmaccess cppu sal toolkit svtools NULL
+ac  accessibility	:    l10n tools jurt offuh unoil vcl javaunohelper jvmaccess cppu sal toolkit svtools LIBXSLT:libxslt NULL
 ac	accessibility                                         	usr1	-	all	ac_mkout NULL
 ac	accessibility\inc                                      	nmake	-	all	ac_inc NULL
 ac	accessibility\bridge\org\openoffice\java\accessibility	nmake	-	w	ac_ooja ac_inc NULL

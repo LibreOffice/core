@@ -244,7 +244,7 @@ else
   CMD=/tmp/userinstall.$$; echo "" > $CMD
 fi
 
-sed -e 's|"/|"${PKG_INSTALL_ROOT}/|g' > $CMD
+sed -e 's|/opt/|${PKG_INSTALL_ROOT}/opt/|g' > $CMD
 /bin/sh -e $CMD
 rm -f $CMD
 EOF

@@ -1023,39 +1023,39 @@ namespace pcr
         {
         case PROPERTY_ID_DEFAULT_SELECT_SEQ:
         case PROPERTY_ID_SELECTEDITEMS:
-            aDescriptor.PrimaryButtonId = UID_PROP_DLG_SELECTION;
+            aDescriptor.PrimaryButtonId = rtl::OUString::createFromAscii(UID_PROP_DLG_SELECTION);
             break;
 
         case PROPERTY_ID_FILTER:
-            aDescriptor.PrimaryButtonId = UID_PROP_DLG_FILTER;
+            aDescriptor.PrimaryButtonId = rtl::OUString::createFromAscii(UID_PROP_DLG_FILTER);
             break;
 
         case PROPERTY_ID_SORT:
-            aDescriptor.PrimaryButtonId = UID_PROP_DLG_ORDER;
+            aDescriptor.PrimaryButtonId = rtl::OUString::createFromAscii(UID_PROP_DLG_ORDER);
             break;
 
         case PROPERTY_ID_MASTERFIELDS:
         case PROPERTY_ID_DETAILFIELDS:
             nControlType = PropertyControlType::StringListField;
-            aDescriptor.PrimaryButtonId = UID_PROP_DLG_FORMLINKFIELDS;
+            aDescriptor.PrimaryButtonId = rtl::OUString::createFromAscii(UID_PROP_DLG_FORMLINKFIELDS);
             break;
 
         case PROPERTY_ID_COMMAND:
-            aDescriptor.PrimaryButtonId = UID_PROP_DLG_SQLCOMMAND;
+            aDescriptor.PrimaryButtonId = rtl::OUString::createFromAscii(UID_PROP_DLG_SQLCOMMAND);
             break;
 
         case PROPERTY_ID_TABINDEX:
         {
             Reference< XControlContainer > xControlContext( impl_getContextControlContainer_nothrow() );
             if ( xControlContext.is() )
-                aDescriptor.PrimaryButtonId = UID_PROP_DLG_TABINDEX;
+                aDescriptor.PrimaryButtonId = rtl::OUString::createFromAscii(UID_PROP_DLG_TABINDEX);
             nControlType = PropertyControlType::NumericField;
         };
         break;
 
         case PROPERTY_ID_FONT:
             bReadOnly = sal_True;
-            aDescriptor.PrimaryButtonId = UID_PROP_DLG_FONT_TYPE;
+            aDescriptor.PrimaryButtonId = rtl::OUString::createFromAscii(UID_PROP_DLG_FONT_TYPE);
             break;
 
         case PROPERTY_ID_TARGET_URL:
@@ -1063,8 +1063,8 @@ namespace pcr
         {
             aDescriptor.Control = new OFileUrlControl( impl_getDefaultDialogParent_nothrow(), WB_TABSTOP | WB_BORDER );
 
-            aDescriptor.PrimaryButtonId = ( PROPERTY_ID_TARGET_URL == nPropId )
-                ? UID_PROP_DLG_ATTR_TARGET_URL : UID_PROP_DLG_IMAGE_URL;
+            aDescriptor.PrimaryButtonId = rtl::OUString::createFromAscii(( PROPERTY_ID_TARGET_URL == nPropId )
+                ? UID_PROP_DLG_ATTR_TARGET_URL : UID_PROP_DLG_IMAGE_URL);
         }
         break;
 
@@ -1081,13 +1081,13 @@ namespace pcr
             switch( nPropId )
             {
             case PROPERTY_ID_BACKGROUNDCOLOR:
-                aDescriptor.PrimaryButtonId = UID_PROP_DLG_BACKGROUNDCOLOR; break;
+                aDescriptor.PrimaryButtonId = rtl::OUString::createFromAscii(UID_PROP_DLG_BACKGROUNDCOLOR); break;
             case PROPERTY_ID_FILLCOLOR:
-                aDescriptor.PrimaryButtonId = UID_PROP_DLG_FILLCOLOR; break;
+                aDescriptor.PrimaryButtonId = rtl::OUString::createFromAscii(UID_PROP_DLG_FILLCOLOR); break;
             case PROPERTY_ID_SYMBOLCOLOR:
-                aDescriptor.PrimaryButtonId = UID_PROP_DLG_SYMBOLCOLOR; break;
+                aDescriptor.PrimaryButtonId = rtl::OUString::createFromAscii(UID_PROP_DLG_SYMBOLCOLOR); break;
             case PROPERTY_ID_BORDERCOLOR:
-                aDescriptor.PrimaryButtonId = UID_PROP_DLG_BORDERCOLOR; break;
+                aDescriptor.PrimaryButtonId = rtl::OUString::createFromAscii(UID_PROP_DLG_BORDERCOLOR); break;
             }
             break;
 
@@ -1111,7 +1111,7 @@ namespace pcr
 
         case PROPERTY_ID_CONTROLLABEL:
             bReadOnly = sal_True;
-            aDescriptor.PrimaryButtonId = UID_PROP_DLG_CONTROLLABEL;
+            aDescriptor.PrimaryButtonId = rtl::OUString::createFromAscii(UID_PROP_DLG_CONTROLLABEL);
             break;
 
         case PROPERTY_ID_FORMATKEY:
@@ -1141,7 +1141,7 @@ namespace pcr
                         aDescriptor.Control = pControl;
                         pControl->SetFormatSupplier( pSupplier );
 
-                        aDescriptor.PrimaryButtonId = UID_PROP_DLG_NUMBER_FORMAT;
+                        aDescriptor.PrimaryButtonId = rtl::OUString::createFromAscii(UID_PROP_DLG_NUMBER_FORMAT);
                     }
                     else
                     {
@@ -1342,7 +1342,7 @@ namespace pcr
 
                 if ( nPropId == PROPERTY_ID_MAXTEXTLEN )
                     aMinValue.Value = -1;
-                else if ( ( nPropId == PROPERTY_ID_BOUNDCOLUMN ) || ( nPropId == PROPERTY_ID_VISIBLESIZE ) )
+                else if ( nPropId == PROPERTY_ID_VISIBLESIZE )
                     aMinValue.Value = 1;
                 else
                     aMinValue.Value = 0;
@@ -1366,7 +1366,7 @@ namespace pcr
             // DataSource
             case PROPERTY_ID_DATASOURCE:
             {
-                aDescriptor.PrimaryButtonId = UID_PROP_DLG_ATTR_DATASOURCE;
+                aDescriptor.PrimaryButtonId = rtl::OUString::createFromAscii(UID_PROP_DLG_ATTR_DATASOURCE);
 
                 ::std::vector< ::rtl::OUString > aListEntries;
 
@@ -1416,7 +1416,7 @@ namespace pcr
             }
         }
 
-        if ( aDescriptor.PrimaryButtonId )
+        if ( aDescriptor.PrimaryButtonId.getLength() )
             aDescriptor.HasPrimaryButton = sal_True;
         if ( aDescriptor.SecondaryButtonId )
             aDescriptor.HasSecondaryButton = sal_True;
@@ -2471,7 +2471,7 @@ namespace pcr
             _out_rProperty.DisplayName = m_pInfoService->getPropertyTranslation( PROPERTY_ID_COMMAND );
 
             _out_rProperty.HelpURL = HelpIdUrl::getHelpURL( m_pInfoService->getPropertyHelpId( PROPERTY_ID_COMMAND ) );
-            _out_rProperty.PrimaryButtonId = UID_PROP_DLG_SQLCOMMAND;
+            _out_rProperty.PrimaryButtonId = rtl::OUString::createFromAscii(UID_PROP_DLG_SQLCOMMAND);
 
             ////////////////////////////////////////////////////////////
             sal_Int32 nCommandType = CommandType::COMMAND;

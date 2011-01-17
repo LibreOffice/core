@@ -151,7 +151,7 @@ SvxSearchAttributeDialog::SvxSearchAttributeDialog( Window* pParent,
 {
     FreeResource();
 
-    aAttrLB.SetWindowBits( GetStyle() | WB_CLIPCHILDREN | WB_HSCROLL | WB_SORT );
+    aAttrLB.SetStyle( GetStyle() | WB_CLIPCHILDREN | WB_HSCROLL | WB_SORT );
     aAttrLB.GetModel()->SetSortMode( SortAscending );
 
     aOKBtn.SetClickHdl( LINK( this, SvxSearchAttributeDialog, OKHdl ) );

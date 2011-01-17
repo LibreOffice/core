@@ -28,6 +28,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_automation.hxx"
 #include <tools/stream.hxx>
+#include <basic/ttstrhlp.hxx>
 
 #include "retstrm.hxx"
 #include "rcontrol.hxx"
@@ -47,39 +48,48 @@ RetStream::~RetStream()
     delete pSammel;
 }
 
-void RetStream::GenError ( SmartId aUId, String aString )
+void RetStream::GenError ( rtl::OString aUId, String aString )
 {
     CmdBaseStream::GenError ( &aUId, &aString );
 }
 
-void RetStream::GenReturn ( USHORT nRet, SmartId aUId, String aString )
+void RetStream::GenReturn ( USHORT nRet, rtl::OString aUId, String aString )
 {
     CmdBaseStream::GenReturn ( nRet, &aUId, &aString );
 }
 
-void RetStream::GenReturn ( USHORT nRet, SmartId aUId, SbxValue &aValue )
-{
-    Write(USHORT(SIReturn));
-    Write(nRet);
-    Write(&aUId);
-    Write(USHORT(PARAM_SBXVALUE_1));        // Typ der folgenden Parameter
-    Write(aValue);
-}
-
-void RetStream::GenReturn ( USHORT nRet, SmartId aUId, comm_ULONG nNr, String aString, BOOL bBool )
+void RetStream::GenReturn ( USHORT nRet, rtl::OString aUId, comm_ULONG nNr, String aString, BOOL bBool )
 {
     CmdBaseStream::GenReturn ( nRet, &aUId, nNr, &aString, bBool );
 }
 
-void RetStream::GenReturn( USHORT nRet, SmartId aUId, comm_USHORT nMethod, String aString )
+// MacroRecorder
+void RetStream::GenReturn( USHORT nRet, rtl::OString aUId, comm_USHORT nMethod, String aString )
 {
     CmdBaseStream::GenReturn ( nRet, &aUId, nMethod, &aString );
 }
 
-void RetStream::GenReturn( USHORT nRet, SmartId aUId, comm_USHORT nMethod, String aString, BOOL bBool )
+void RetStream::GenReturn( USHORT nRet, rtl::OString aUId, comm_USHORT nMethod, String aString, BOOL bBool )
 {
     CmdBaseStream::GenReturn ( nRet, &aUId, nMethod, &aString, bBool );
 }
+
+
+void RetStream::GenReturn ( USHORT nRet, USHORT nMethod, SbxValue &aValue )
+{
+    Write(USHORT(SIReturn));
+    Write(nRet);
+    Write((comm_ULONG)nMethod); //HELPID BACKWARD (no ULONG needed)
+    Write(USHORT(PARAM_SBXVALUE_1));        // Typ der folgenden Parameter
+    Write(aValue);
+}
+
+void RetStream::GenReturn( USHORT nRet, USHORT nMethod, String aString )
+{
+    CmdBaseStream::GenReturn ( nRet, nMethod, &aString );
+}
+
+
 
 
 void RetStream::Write( String *pString )
@@ -93,16 +103,11 @@ void RetStream::Write( SbxValue &aValue )
     aValue.Store( *pSammel );
 }
 
-void RetStream::Write( SmartId* pId )
+void RetStream::Write( rtl::OString* pId )
 {
-    DBG_ASSERT( !pId->HasString() || !pId->HasNumeric(), "SmartId contains Number and String. using String only." );
-    if ( pId->HasString() )
-    {
-        String aTmp( pId->GetStr() );
-        Write( &aTmp );
-    }
-    else
-        Write( static_cast<comm_ULONG>(pId->GetNum()) ); ////GetNum() ULONG != comm_ULONG on 64bit
+    //HELPID BACKWARD (should use ByteString or OString)
+    String aTmp( Id2Str( *pId ) );
+    Write( &aTmp );
 }
 
 

@@ -44,6 +44,7 @@ ModalDialog RID_SVX_MDLG_HANGULHANJA
 
     PushButton PB_FIND
     {
+        HelpID = "cui:PushButton:RID_SVX_MDLG_HANGULHANJA:PB_FIND";
         Pos = MAP_APPFONT( 207, 23 );
         Size = MAP_APPFONT( 30, 14 );
 
@@ -67,6 +68,7 @@ ModalDialog RID_SVX_MDLG_HANGULHANJA
 
     RadioButton RB_SIMPLE_CONVERSION
     {
+        HelpID = "cui:RadioButton:RID_SVX_MDLG_HANGULHANJA:RB_SIMPLE_CONVERSION";
         Pos = MAP_APPFONT( 51, 81 );
         Size = MAP_APPFONT( 60, 8 );
 
@@ -77,6 +79,7 @@ ModalDialog RID_SVX_MDLG_HANGULHANJA
 
     RadioButton RB_HANJA_HANGUL_BRACKETED
     {
+        HelpID = "cui:RadioButton:RID_SVX_MDLG_HANGULHANJA:RB_HANJA_HANGUL_BRACKETED";
         Pos = MAP_APPFONT( 114, 81 );
         Size = MAP_APPFONT( 60, 8 );
 
@@ -85,6 +88,7 @@ ModalDialog RID_SVX_MDLG_HANGULHANJA
 
     RadioButton RB_HANGUL_HANJA_BRACKETED
     {
+        HelpID = "cui:RadioButton:RID_SVX_MDLG_HANGULHANJA:RB_HANGUL_HANJA_BRACKETED";
         Pos = MAP_APPFONT( 177, 81 );
         Size = MAP_APPFONT( 60, 8 );
 
@@ -93,6 +97,7 @@ ModalDialog RID_SVX_MDLG_HANGULHANJA
 
     RadioButton RB_HANGUL_HANJA_ABOVE
     {
+        HelpID = "cui:RadioButton:RID_SVX_MDLG_HANGULHANJA:RB_HANGUL_HANJA_ABOVE";
         Pos = MAP_APPFONT( 51, 95 );
         Size = MAP_APPFONT( 60, 16 );
 
@@ -102,6 +107,7 @@ ModalDialog RID_SVX_MDLG_HANGULHANJA
 
     RadioButton RB_HANGUL_HANJA_BELOW
     {
+        HelpID = "cui:RadioButton:RID_SVX_MDLG_HANGULHANJA:RB_HANGUL_HANJA_BELOW";
         Pos = MAP_APPFONT( 114, 95 );
         Size = MAP_APPFONT( 60, 16 );
 
@@ -111,6 +117,7 @@ ModalDialog RID_SVX_MDLG_HANGULHANJA
 
     RadioButton RB_HANJA_HANGUL_ABOVE
     {
+        HelpID = "cui:RadioButton:RID_SVX_MDLG_HANGULHANJA:RB_HANJA_HANGUL_ABOVE";
         Pos = MAP_APPFONT( 56, 114 );
         Size = MAP_APPFONT( 60, 16 );
 
@@ -120,6 +127,7 @@ ModalDialog RID_SVX_MDLG_HANGULHANJA
 
     RadioButton RB_HANJA_HANGUL_BELOW
     {
+        HelpID = "cui:RadioButton:RID_SVX_MDLG_HANGULHANJA:RB_HANJA_HANGUL_BELOW";
         Pos = MAP_APPFONT( 114, 114 );
         Size = MAP_APPFONT( 60, 16 );
 
@@ -137,6 +145,7 @@ ModalDialog RID_SVX_MDLG_HANGULHANJA
 
     CheckBox CB_HANGUL_ONLY
     {
+        HelpID = "cui:CheckBox:RID_SVX_MDLG_HANGULHANJA:CB_HANGUL_ONLY";
         Pos = MAP_APPFONT( 51, 134 );
         Size = MAP_APPFONT( 60, 8 );
 
@@ -145,6 +154,7 @@ ModalDialog RID_SVX_MDLG_HANGULHANJA
 
     CheckBox CB_HANJA_ONLY
     {
+        HelpID = "cui:CheckBox:RID_SVX_MDLG_HANGULHANJA:CB_HANJA_ONLY";
         Pos = MAP_APPFONT( 114, 134 );
         Size = MAP_APPFONT( 55, 8 );
 
@@ -159,6 +169,7 @@ ModalDialog RID_SVX_MDLG_HANGULHANJA
 
     CheckBox CB_REPLACE_BY_CHARACTER
     {
+        HelpID = "cui:CheckBox:RID_SVX_MDLG_HANGULHANJA:CB_REPLACE_BY_CHARACTER";
         Pos = MAP_APPFONT( 241, 81 );
         Size = MAP_APPFONT( 55, 24 );
 
@@ -212,36 +223,42 @@ ModalDialog RID_SVX_MDLG_HANGULHANJA_OPT
     };
     CheckBox CB_IGNOREPOST
     {
+        HelpID = "cui:CheckBox:RID_SVX_MDLG_HANGULHANJA_OPT:CB_IGNOREPOST";
         Pos = MAP_APPFONT ( HHO_COL_1a, HHO_ROW_9 ) ;
         Size = MAP_APPFONT ( HHO_COL_6 - HHO_COL_1a , 12 ) ;
         Text[ en-US ] = "Ignore post-positional word";
     };
     CheckBox CB_SHOWRECENTLYFIRST
     {
+        HelpID = "cui:CheckBox:RID_SVX_MDLG_HANGULHANJA_OPT:CB_SHOWRECENTLYFIRST";
         Pos = MAP_APPFONT ( HHO_COL_1a, HHO_ROW_11 ) ;
         Size = MAP_APPFONT ( HHO_COL_6 - HHO_COL_1a , 12 ) ;
         Text [ en-US ] = "Show recently used entries first";
     };
     CheckBox CB_AUTOREPLACEUNIQUE
     {
+        HelpID = "cui:CheckBox:RID_SVX_MDLG_HANGULHANJA_OPT:CB_AUTOREPLACEUNIQUE";
         Pos = MAP_APPFONT ( HHO_COL_1a, HHO_ROW_12 ) ;
         Size = MAP_APPFONT ( HHO_COL_6 - HHO_COL_1a , 12 ) ;
         Text [ en-US ] = "Replace all unique entries automatically";
     };
     PushButton PB_HHO_NEW
     {
+        HelpID = "cui:PushButton:RID_SVX_MDLG_HANGULHANJA_OPT:PB_HHO_NEW";
         Pos = MAP_APPFONT ( HHO_COL_3 , HHO_ROW_2 ) ;
         Size = MAP_APPFONT ( HHO_COL_4 - HHO_COL_3 , 14 ) ;
         Text [ en-US ] = "New...";
     };
     PushButton PB_HHO_EDIT
     {
+        HelpID = "cui:PushButton:RID_SVX_MDLG_HANGULHANJA_OPT:PB_HHO_EDIT";
         Pos = MAP_APPFONT ( HHO_COL_3 , HHO_ROW_4 ) ;
         Size = MAP_APPFONT ( HHO_COL_4 - HHO_COL_3 , 14 ) ;
         Text [ en-US ] = "Edit...";
     };
     PushButton PB_HHO_DELETE
     {
+        HelpID = "cui:PushButton:RID_SVX_MDLG_HANGULHANJA_OPT:PB_HHO_DELETE";
         Pos = MAP_APPFONT ( HHO_COL_3 , HHO_ROW_6 ) ;
         Size = MAP_APPFONT ( HHO_COL_4 - HHO_COL_3 , 14 ) ;
         Text [ en-US ] = "Delete";
@@ -291,6 +308,7 @@ ModalDialog RID_SVX_MDLG_HANGULHANJA_NEWDICT
     };
     Edit ED_DICTNAME
     {
+        HelpID = "cui:Edit:RID_SVX_MDLG_HANGULHANJA_NEWDICT:ED_DICTNAME";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 55 , 14 ) ;
         Size = MAP_APPFONT ( 90 , 12 ) ;
@@ -340,6 +358,7 @@ ModalDialog RID_SVX_MDLG_HANGULHANJA_EDIT
     };
     ListBox LB_BOOK
     {
+        HelpID = "cui:ListBox:RID_SVX_MDLG_HANGULHANJA_EDIT:LB_BOOK";
         Pos = MAP_APPFONT ( HHE_COL_3 , HHE_ROW_1 ) ;
         Size = MAP_APPFONT ( HHE_COL_4 - HHE_COL_3 , 60 ) ;
         DropDown = TRUE;
@@ -353,6 +372,7 @@ ModalDialog RID_SVX_MDLG_HANGULHANJA_EDIT
     };
     ComboBox LB_ORIGINAL
     {
+        HelpID = "cui:ComboBox:RID_SVX_MDLG_HANGULHANJA_EDIT:LB_ORIGINAL";
         Pos = MAP_APPFONT ( HHE_COL_1 , HHE_ROW_5 ) ;
         Size = MAP_APPFONT ( HHE_COL_4 - HHE_COL_1 , 60 ) ;
         DropDown = TRUE;
@@ -366,6 +386,7 @@ ModalDialog RID_SVX_MDLG_HANGULHANJA_EDIT
     };
     Edit ED_1
     {
+        HelpID = "cui:Edit:RID_SVX_MDLG_HANGULHANJA_EDIT:ED_1";
         Pos = MAP_APPFONT ( HHE_COL_1 , HHE_ROW_11 ) ;
         Size = MAP_APPFONT ( HHE_COL_3_1 - HHE_COL_1 , 12 ) ;
         Hide = False;
@@ -373,6 +394,7 @@ ModalDialog RID_SVX_MDLG_HANGULHANJA_EDIT
     };
     Edit ED_2
     {
+        HelpID = "cui:Edit:RID_SVX_MDLG_HANGULHANJA_EDIT:ED_2";
         Pos = MAP_APPFONT ( HHE_COL_1 , HHE_ROW_11 + 12 ) ;
         Size = MAP_APPFONT ( HHE_COL_3_1 - HHE_COL_1 , 12 ) ;
         Hide = False;
@@ -380,6 +402,7 @@ ModalDialog RID_SVX_MDLG_HANGULHANJA_EDIT
     };
     Edit ED_3
     {
+        HelpID = "cui:Edit:RID_SVX_MDLG_HANGULHANJA_EDIT:ED_3";
         Pos = MAP_APPFONT ( HHE_COL_1 , HHE_ROW_11 + 24 ) ;
         Size = MAP_APPFONT ( HHE_COL_3_1 - HHE_COL_1 , 12 ) ;
         Hide = False;
@@ -387,6 +410,7 @@ ModalDialog RID_SVX_MDLG_HANGULHANJA_EDIT
     };
     Edit ED_4
     {
+        HelpID = "cui:Edit:RID_SVX_MDLG_HANGULHANJA_EDIT:ED_4";
         Pos = MAP_APPFONT ( HHE_COL_1 , HHE_ROW_11 + 36 ) ;
         Size = MAP_APPFONT ( HHE_COL_3_1 - HHE_COL_1 , 12 ) ;
         Hide = False;
@@ -401,12 +425,14 @@ ModalDialog RID_SVX_MDLG_HANGULHANJA_EDIT
     };
     PushButton PB_HHE_NEW
     {
+        HelpID = "cui:PushButton:RID_SVX_MDLG_HANGULHANJA_EDIT:PB_HHE_NEW";
         Pos = MAP_APPFONT ( HHE_COL_5 , HHE_ROW_a1 ) ;
         Size = MAP_APPFONT ( RSC_CD_PUSHBUTTON_WIDTH , RSC_CD_PUSHBUTTON_HEIGHT ) ;
         Text [ en-US ] = "New";
     };
     PushButton PB_HHE_DELETE
     {
+        HelpID = "cui:PushButton:RID_SVX_MDLG_HANGULHANJA_EDIT:PB_HHE_DELETE";
         Pos = MAP_APPFONT ( HHE_COL_5 , HHE_ROW_a3 ) ;
         Size = MAP_APPFONT ( RSC_CD_PUSHBUTTON_WIDTH , RSC_CD_PUSHBUTTON_HEIGHT ) ;
         Text [ en-US ] = "Delete";

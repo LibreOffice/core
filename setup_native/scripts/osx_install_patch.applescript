@@ -43,13 +43,28 @@ if (button returned of result) is AbortLabel then
 	return 2
 end if
 
-set the found_ooos to (do shell script "mdfind \"kMDItemContentType == 'com.apple.application-bundle' && kMDItemDisplayName == '[PRODUCTNAME]*' && kMDItemDisplayName != '[FULLPRODUCTNAME].app'\"") & "
+set the found_ooos_all to (do shell script "mdfind \"kMDItemContentType == 'com.apple.application-bundle' && kMDItemDisplayName == '[PRODUCTNAME]*' && kMDItemDisplayName != '[FULLAPPPRODUCTNAME].app'\"") & "
 " & chooseMyOwn
+
+set found_ooos_all_paragraphs to paragraphs in found_ooos_all
+
+set found_ooos to {}
+repeat with currentApp in found_ooos_all_paragraphs
+	if currentApp does not start with "/Volumes" then
+		copy currentApp to the end of found_ooos
+	end if
+end repeat
+
+-- repeat with oneApp in found_ooos
+--  display dialog oneApp
+-- end repeat
 
 -- the choice returned is of type "list"
 -- Show selection dialog only if more than one or no product was found
-if (get first paragraph of found_ooos) is "" then
-  set the choice to (choose from list of paragraphs in found_ooos default items (get last paragraph of found_ooos) with prompt listPrompt OK button name listOKLabel cancel button name listCancelLabel)
+-- The first item is an empty string, if no app was found and no app started with "/Volumes"
+-- The first item is chooseMyOwn, if no app was found and at least one app started with "/Volumes"
+if (get first item of found_ooos as string) is "" then
+  set the choice to (choose from list found_ooos default items (get second item of found_ooos) with prompt listPrompt OK button name listOKLabel cancel button name listCancelLabel)
   if choice is false then
 	  -- do nothing, the user cancelled the installation
     	return 2 --aborted by user
@@ -58,11 +73,22 @@ if (get first paragraph of found_ooos) is "" then
 	  -- the user would not be able to select the .app
 	  set the choice to POSIX path of (choose file with prompt chooseManual of type "com.apple.application-bundle" without showing package contents and invisibles)
   end if
-else if (get second paragraph of found_ooos) is chooseMyOwn then
+else if (get first item of found_ooos as string) is chooseMyOwn then
+  set the choice to (choose from list found_ooos default items (get first item of found_ooos) with prompt listPrompt OK button name listOKLabel cancel button name listCancelLabel)
+  if choice is false then
+	  -- do nothing, the user cancelled the installation
+    	return 2 --aborted by user
+  else if (choice as string) is chooseMyOwn then
+	  -- yeah, one needs to use "choose file", otherwise
+	  -- the user would not be able to select the .app
+	  set the choice to POSIX path of (choose file with prompt chooseManual of type "com.apple.application-bundle" without showing package contents and invisibles)
+  end if
+else if (get second item of found_ooos as string) is chooseMyOwn then
   -- set choice to found installation
-  set the choice to (get first paragraph of found_ooos)
+  -- set the choice to (get first paragraph of found_ooos)
+  set the choice to (get first item of found_ooos)
 else 
-  set the choice to (choose from list of paragraphs in found_ooos default items (get first paragraph of found_ooos) with prompt listPrompt OK button name listOKLabel cancel button name listCancelLabel)
+  set the choice to (choose from list found_ooos default items (get first item of found_ooos) with prompt listPrompt OK button name listOKLabel cancel button name listCancelLabel)
   if choice is false then
 	  -- do nothing, the user cancelled the installation
     	return 2 --aborted by user

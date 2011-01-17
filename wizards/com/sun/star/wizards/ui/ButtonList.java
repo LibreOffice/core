@@ -34,16 +34,15 @@ import com.sun.star.awt.XControlModel;
 import com.sun.star.awt.XFixedText;
 import com.sun.star.awt.XItemEventBroadcaster;
 import com.sun.star.awt.XItemListener;
-// import com.sun.star.awt.XView;
 import com.sun.star.awt.XWindow;
 import com.sun.star.lang.EventObject;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.wizards.common.Helper;
 import com.sun.star.wizards.common.IRenderer;
 import com.sun.star.wizards.common.PropertySetHelper;
-// import com.sun.star.wizards.ui.event.*;
 import javax.swing.ListModel;
 import javax.swing.event.ListDataEvent;
+import com.sun.star.wizards.common.HelpIds;
 
 /**
  *
@@ -165,7 +164,7 @@ public class ButtonList implements XItemEventBroadcaster, XActionListener
             btnBack = dialog.insertButton(m_aControlName + "_btnBack", "prevPage", this, pNames1, new Object[]
                     {
                         btnSize,
-                        "HID:" + helpURL++,
+                        HelpIds.getHelpIdString(helpURL++),
                         Integer.valueOf(pos.Width),
                         Integer.valueOf(pos.Height + (m_aButtonSize.Height + gap.Height) * rows + gap.Height + imageTextHeight + 1),
                         step,
@@ -177,7 +176,7 @@ public class ButtonList implements XItemEventBroadcaster, XActionListener
             btnNext = dialog.insertButton(m_aControlName + "_btnNext", "nextPage", this, pNames1, new Object[]
                     {
                         btnSize,
-                        "HID:" + helpURL++,
+                        HelpIds.getHelpIdString(helpURL++),
                         Integer.valueOf(pos.Width + (m_aButtonSize.Width + gap.Width) * cols + gap.Width - btnSize.intValue() + 1),
                         Integer.valueOf(pos.Height + (m_aButtonSize.Height + gap.Height) * rows + gap.Height + imageTextHeight + 1),
                         step,
@@ -256,7 +255,7 @@ public class ButtonList implements XItemEventBroadcaster, XActionListener
                     /* Short.valueOf((short) 1), */ /* NO_BORDER, */
                     /* BACKGROUND_COLOR, */
                     m_aButtonHeight,
-                    "HID:" + helpURL++,
+                    HelpIds.getHelpIdString(helpURL++),
                     /* "Test", */
                     Integer.valueOf(nButtonX),
                     Integer.valueOf(nButtonY),

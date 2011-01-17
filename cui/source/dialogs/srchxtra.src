@@ -148,6 +148,7 @@ ModalDialog RID_SVXDLG_SEARCHSIMILARITY
     };
     NumericField NF_OTHER
     {
+        HelpID = "cui:NumericField:RID_SVXDLG_SEARCHSIMILARITY:NF_OTHER";
         Pos = MAP_APPFONT ( 86 , 14 ) ;
         Size = MAP_APPFONT ( 24 , 12 ) ;
         Border = TRUE ;
@@ -169,6 +170,7 @@ ModalDialog RID_SVXDLG_SEARCHSIMILARITY
     };
     NumericField NF_LONGER
     {
+        HelpID = "cui:NumericField:RID_SVXDLG_SEARCHSIMILARITY:NF_LONGER";
         Pos = MAP_APPFONT ( 86 , 28 ) ;
         Size = MAP_APPFONT ( 24 , 12 ) ;
         Border = TRUE ;
@@ -190,6 +192,7 @@ ModalDialog RID_SVXDLG_SEARCHSIMILARITY
     };
     NumericField NF_SHORTER
     {
+        HelpID = "cui:NumericField:RID_SVXDLG_SEARCHSIMILARITY:NF_SHORTER";
         Pos = MAP_APPFONT ( 86 , 44 ) ;
         Size = MAP_APPFONT ( 24 , 12 ) ;
         Border = TRUE ;
@@ -205,6 +208,7 @@ ModalDialog RID_SVXDLG_SEARCHSIMILARITY
     };
     CheckBox CB_RELAX
     {
+        HelpID = "cui:CheckBox:RID_SVXDLG_SEARCHSIMILARITY:CB_RELAX";
         Pos = MAP_APPFONT ( 12 , 60 ) ;
         Size = MAP_APPFONT ( 98 , 10 ) ;
         Text [ en-US ] = "~Combine" ;

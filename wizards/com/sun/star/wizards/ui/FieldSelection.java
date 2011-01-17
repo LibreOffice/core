@@ -28,7 +28,7 @@ package com.sun.star.wizards.ui;
 
 import com.sun.star.awt.FontDescriptor;
 import com.sun.star.awt.XListBox;
-// import com.sun.star.wizards.common.*;
+import com.sun.star.wizards.common.*;
 import com.sun.star.wizards.common.JavaTools;
 
 import java.util.*;
@@ -241,7 +241,7 @@ public class FieldSelection
                     },
                     new Object[]
                     {
-                        ListBoxHeight, "HID:" + Integer.toString(_FirstHelpIndex), Boolean.TRUE, new Integer(CompPosX), ListBoxPosY, IStep, new Short((curtabindex++)), ListBoxWidth
+                        ListBoxHeight, HelpIds.getHelpIdString(_FirstHelpIndex), Boolean.TRUE, new Integer(CompPosX), ListBoxPosY, IStep, new Short((curtabindex++)), ListBoxWidth
                     });
 
             Object btnmoveselected = CurUnoDialog.insertButton("cmdMoveSelected" + sIncSuffix, SOCMDMOVESEL, new ActionListenerImpl(),
@@ -251,7 +251,7 @@ public class FieldSelection
                     },
                     new Object[]
                     {
-                        Boolean.FALSE, new Integer(14), "HID:" + Integer.toString(_FirstHelpIndex + 1), ">", cmdShiftButtonPosX, ShiftButtonPosY[a++], IStep, new Short(curtabindex++), CmdButtonWidth
+                        Boolean.FALSE, new Integer(14), HelpIds.getHelpIdString(_FirstHelpIndex + 1), ">", cmdShiftButtonPosX, ShiftButtonPosY[a++], IStep, new Short(curtabindex++), CmdButtonWidth
                     });
 
             if (bshowFourButtons == true)
@@ -263,7 +263,7 @@ public class FieldSelection
                         },
                         new Object[]
                         {
-                            new Integer(14), "HID:" + Integer.toString(_FirstHelpIndex + 2), ">>", cmdShiftButtonPosX, ShiftButtonPosY[a++], IStep, new Short(curtabindex++), CmdButtonWidth
+                            new Integer(14), HelpIds.getHelpIdString(_FirstHelpIndex + 2), ">>", cmdShiftButtonPosX, ShiftButtonPosY[a++], IStep, new Short(curtabindex++), CmdButtonWidth
                         });
             }
             Object btnremoveselected = CurUnoDialog.insertButton("cmdRemoveSelected" + sIncSuffix, SOCMDREMOVESEL, new ActionListenerImpl(),
@@ -273,7 +273,7 @@ public class FieldSelection
                     },
                     new Object[]
                     {
-                        Boolean.FALSE, new Integer(14), "HID:" + Integer.toString(_FirstHelpIndex + 3), "<", cmdShiftButtonPosX, ShiftButtonPosY[a++], IStep, new Short(curtabindex++), CmdButtonWidth
+                        Boolean.FALSE, new Integer(14), HelpIds.getHelpIdString(_FirstHelpIndex + 3), "<", cmdShiftButtonPosX, ShiftButtonPosY[a++], IStep, new Short(curtabindex++), CmdButtonWidth
                     });
 
             if (bshowFourButtons == true)
@@ -285,7 +285,7 @@ public class FieldSelection
                         },
                         new Object[]
                         {
-                            new Integer(14), "HID:" + Integer.toString(_FirstHelpIndex + 4), "<<", cmdShiftButtonPosX, ShiftButtonPosY[a++], IStep, new Short(curtabindex++), CmdButtonWidth
+                            new Integer(14), HelpIds.getHelpIdString(_FirstHelpIndex + 4), "<<", cmdShiftButtonPosX, ShiftButtonPosY[a++], IStep, new Short(curtabindex++), CmdButtonWidth
                         });
             }
 
@@ -311,7 +311,7 @@ public class FieldSelection
                     },
                     new Object[]
                     {
-                        ListBoxHeight, "HID:" + Integer.toString(_FirstHelpIndex + 5), Boolean.TRUE, SelListBoxPosX, ListBoxPosY, IStep, new Short(curtabindex++), ListBoxWidth
+                        ListBoxHeight, HelpIds.getHelpIdString(_FirstHelpIndex + 5), Boolean.TRUE, SelListBoxPosX, ListBoxPosY, IStep, new Short(curtabindex++), ListBoxWidth
                     });
 
             Object btnmoveup = CurUnoDialog.insertButton("cmdMoveUp" + sIncSuffix, SOCMDMOVEUP, new ActionListenerImpl(),
@@ -321,7 +321,7 @@ public class FieldSelection
                     },
                     new Object[]
                     {
-                        Boolean.FALSE, oFontDesc, new Integer(14), "HID:" + Integer.toString(_FirstHelpIndex + 6), String.valueOf((char) 8743), cmdMoveButtonPosX, MoveButtonPosY[0], IStep, new Short(curtabindex++), CmdButtonWidth
+                        Boolean.FALSE, oFontDesc, new Integer(14), HelpIds.getHelpIdString(_FirstHelpIndex + 6), String.valueOf((char) 8743), cmdMoveButtonPosX, MoveButtonPosY[0], IStep, new Short(curtabindex++), CmdButtonWidth
                     });
 
             Object btnmovedown = CurUnoDialog.insertButton("cmdMoveDown" + sIncSuffix, SOCMDMOVEDOWN, new ActionListenerImpl(),
@@ -331,7 +331,7 @@ public class FieldSelection
                     },
                     new Object[]
                     {
-                        Boolean.FALSE, oFontDesc, new Integer(14), "HID:" + Integer.toString(_FirstHelpIndex + 7), String.valueOf((char) 8744), cmdMoveButtonPosX, MoveButtonPosY[1], IStep, new Short(curtabindex++), CmdButtonWidth
+                        Boolean.FALSE, oFontDesc, new Integer(14), HelpIds.getHelpIdString(_FirstHelpIndex + 7), String.valueOf((char) 8744), cmdMoveButtonPosX, MoveButtonPosY[1], IStep, new Short(curtabindex++), CmdButtonWidth
                     });
 
             CurUnoDialog.getPeerConfiguration().setAccessibleName(btnmoveselected, AccessTextMoveSelected);

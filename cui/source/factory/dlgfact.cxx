@@ -725,13 +725,13 @@ void AbstractSvxNameDialog_Impl::SetCheckNameHdl( const Link& rLink, bool bCheck
     else
         pDlg->SetCheckNameHdl( Link(), bCheckImmediately );
 }
-void AbstractSvxNameDialog_Impl::SetEditHelpId(ULONG nHelpId)
+void AbstractSvxNameDialog_Impl::SetEditHelpId(const rtl::OString& aHelpId)
 {
-    pDlg->SetEditHelpId( nHelpId );
+    pDlg->SetEditHelpId( aHelpId );
 }
-void AbstractSvxNameDialog_Impl::SetHelpId( ULONG nHelpId )
+void AbstractSvxNameDialog_Impl::SetHelpId( const rtl::OString& aHelpId )
 {
-    pDlg->SetHelpId( nHelpId );
+    pDlg->SetHelpId( aHelpId );
 }
 void AbstractSvxNameDialog_Impl::SetText( const XubString& rStr )
 {
@@ -843,9 +843,9 @@ void AbstractSvxMultiFileDialog_Impl::SetTitle( const String& rNewTitle )
     pDlg->SetText( rNewTitle );
 }
 
-void AbstractSvxMultiFileDialog_Impl::SetHelpId( ULONG nHelpId )
+void AbstractSvxMultiFileDialog_Impl::SetHelpId( const rtl::OString& aHelpId )
 {
-    pDlg->SetHelpId( nHelpId );
+    pDlg->SetHelpId( aHelpId );
 }
 
 Window * AbstractSvxHpLinkDlg_Impl::GetWindow()
@@ -1888,46 +1888,40 @@ GetTabPageRanges AbstractDialogFactory_Impl::GetTabPageRangesFunc( USHORT nId )
     return 0;
 }
 
-SfxAbstractInsertObjectDialog* AbstractDialogFactory_Impl::CreateInsertObjectDialog( Window* pParent, USHORT nSlotId,
+SfxAbstractInsertObjectDialog* AbstractDialogFactory_Impl::CreateInsertObjectDialog( Window* pParent, const rtl::OUString& rCommand,
             const Reference < com::sun::star::embed::XStorage >& xStor,
             const SvObjectServerList* pList )
 {
     InsertObjectDialog_Impl* pDlg=0;
-    switch ( nSlotId )
-    {
-        case SID_INSERT_OBJECT : pDlg = new SvInsertOleDlg( pParent, xStor, pList ); break;
-        case SID_INSERT_PLUGIN : pDlg = new SvInsertPlugInDialog( pParent, xStor ); break;
-        case SID_INSERT_APPLET : pDlg = new SvInsertAppletDialog( pParent, xStor ); break;
-        case SID_INSERT_FLOATINGFRAME : pDlg = new SfxInsertFloatingFrameDialog( pParent, xStor ); break;
-        default: break;
-    }
+    if ( rCommand.equalsAscii(".uno:InsertObject" ) )
+        pDlg = new SvInsertOleDlg( pParent, xStor, pList );
+    else if ( rCommand.equalsAscii(".uno:InsertPlugin" ) )
+        pDlg = new SvInsertPlugInDialog( pParent, xStor );
+    else if ( rCommand.equalsAscii(".uno:InsertObjectFloatingFrame" ) )
+        pDlg = new SfxInsertFloatingFrameDialog( pParent, xStor );
 
     if ( pDlg )
     {
-        pDlg->SetHelpId( nSlotId );
+        pDlg->SetHelpId( rtl::OString( rCommand, rCommand.getLength(), RTL_TEXTENCODING_UTF8 ) );
         return new AbstractInsertObjectDialog_Impl( pDlg );
     }
     return 0;
 }
 
-VclAbstractDialog* AbstractDialogFactory_Impl::CreateEditObjectDialog( Window* pParent, USHORT nSlotId,
+VclAbstractDialog* AbstractDialogFactory_Impl::CreateEditObjectDialog( Window* pParent,  const rtl::OUString& rCommand,
             const Reference < com::sun::star::embed::XEmbeddedObject >& xObj )
 {
     InsertObjectDialog_Impl* pDlg=0;
-    switch ( nSlotId )
+    if ( rCommand.equalsAscii(".uno:InsertObjectFloatingFrame" ) )
     {
-        case SID_INSERT_APPLET : pDlg = new SvInsertAppletDialog( pParent, xObj ); break;
-        case SID_INSERT_FLOATINGFRAME : pDlg = new SfxInsertFloatingFrameDialog( pParent, xObj ); break;
-        default: break;
-    }
-
-    if ( pDlg )
-    {
-        pDlg->SetHelpId( nSlotId );
+        pDlg = new SfxInsertFloatingFrameDialog( pParent, xObj );
+        pDlg->SetHelpId( rtl::OString( rCommand, rCommand.getLength(), RTL_TEXTENCODING_UTF8 ) );
         return new VclAbstractDialog_Impl( pDlg );
     }
     return 0;
 }
+
+
 
 SfxAbstractPasteDialog* AbstractDialogFactory_Impl::CreatePasteDialog( Window* pParent )
 {
@@ -1963,9 +1957,9 @@ VclAbstractDialog* AbstractDialogFactory_Impl::CreateOptionsDialog(
     return new VclAbstractDialog_Impl( new OfaTreeOptionsDialog( pParent, rExtensionId ) );
 }
 
-SvxAbstractInsRowColDlg* AbstractDialogFactory_Impl::CreateSvxInsRowColDlg( Window* pParent, bool bCol, ULONG nHelpId )
+SvxAbstractInsRowColDlg* AbstractDialogFactory_Impl::CreateSvxInsRowColDlg( Window* pParent, bool bCol, const rtl::OString& sHelpId )
 {
-    return new SvxInsRowColDlg( pParent, bCol, nHelpId );
+    return new SvxInsRowColDlg( pParent, bCol, sHelpId );
 }
 
 AbstractPasswordToOpenModifyDialog * AbstractDialogFactory_Impl::CreatePasswordToOpenModifyDialog(

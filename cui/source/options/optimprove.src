@@ -34,7 +34,7 @@
 
 TabPage RID_SVXPAGE_IMPROVEMENT
 {
-    //!HelpId = HID_OPTIONS_IMPROVEMENT ;
+        HelpId = "cui:TabPage:RID_SVXPAGE_IMPROVEMENT" ;
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Hide = TRUE ;
@@ -55,6 +55,7 @@ TabPage RID_SVXPAGE_IMPROVEMENT
     };
     RadioButton RB_YES
     {
+        HelpID = "cui:RadioButton:RID_SVXPAGE_IMPROVEMENT:RB_YES";
         Pos = MAP_APPFONT ( 12 , 92 ) ;
         Size = MAP_APPFONT ( 215 , 10 ) ;
         Check = TRUE ;
@@ -62,6 +63,7 @@ TabPage RID_SVXPAGE_IMPROVEMENT
     };
     RadioButton RB_NO
     {
+        HelpID = "cui:RadioButton:RID_SVXPAGE_IMPROVEMENT:RB_NO";
         Pos = MAP_APPFONT ( 12 , 105 ) ;
         Size = MAP_APPFONT ( 215 , 10 ) ;
         Text [ en-US ] = "~No, I do not wish to participate" ;
@@ -105,6 +107,7 @@ TabPage RID_SVXPAGE_IMPROVEMENT
     };
     PushButton PB_SHOWDATA
     {
+        HelpID = "cui:PushButton:RID_SVXPAGE_IMPROVEMENT:PB_SHOWDATA";
         Pos = MAP_APPFONT ( 12 , 161 ) ;
         Size = MAP_APPFONT ( 60 , 14 ) ;
         Text [ en-US ] = "~Show Data" ;

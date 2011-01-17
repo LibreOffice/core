@@ -31,6 +31,7 @@
 
 TabPage RID_PAGE_GW_FIELDSELECTION
 {
+    HelpID = "extensions:TabPage:RID_PAGE_GW_FIELDSELECTION";
     SVLook = TRUE ;
     Size = MAP_APPFONT ( WINDOW_SIZE_X , WINDOW_SIZE_Y ) ;
 
@@ -51,6 +52,7 @@ TabPage RID_PAGE_GW_FIELDSELECTION
     };
     ListBox LB_EXISTING_FIELDS
     {
+        HelpID = "extensions:ListBox:RID_PAGE_GW_FIELDSELECTION:LB_EXISTING_FIELDS";
         Pos = MAP_APPFONT ( 7 , 63  ) ;
         Size = MAP_APPFONT ( WINDOW_HALF_SIZE_X - ITEM_BUTTON_SIZE_X / 2 - 13, WINDOW_SIZE_Y - 63 - 6 ) ;
         SVLook = TRUE ;
@@ -61,24 +63,28 @@ TabPage RID_PAGE_GW_FIELDSELECTION
     };
     PushButton PB_FIELDRIGHT
     {
+        HelpID = "extensions:PushButton:RID_PAGE_GW_FIELDSELECTION:PB_FIELDRIGHT";
         Pos = MAP_APPFONT ( WINDOW_HALF_SIZE_X - ITEM_BUTTON_SIZE_X / 2, 63 );
         Size = MAP_APPFONT ( ITEM_BUTTON_SIZE_X, ITEM_BUTTON_SIZE_Y );
         Text = "->";
     };
     PushButton PB_ALLFIELDSRIGHT
     {
+        HelpID = "extensions:PushButton:RID_PAGE_GW_FIELDSELECTION:PB_ALLFIELDSRIGHT";
         Pos = MAP_APPFONT ( WINDOW_HALF_SIZE_X - ITEM_BUTTON_SIZE_X / 2, 63 + ITEM_BUTTON_SIZE_Y + 3 );
         Size = MAP_APPFONT ( ITEM_BUTTON_SIZE_X, ITEM_BUTTON_SIZE_Y );
         Text = "=>>";
     };
     PushButton PB_FIELDLEFT
     {
+        HelpID = "extensions:PushButton:RID_PAGE_GW_FIELDSELECTION:PB_FIELDLEFT";
         Pos = MAP_APPFONT ( WINDOW_HALF_SIZE_X - ITEM_BUTTON_SIZE_X / 2, 63 + ITEM_BUTTON_SIZE_Y + 3 + ITEM_BUTTON_SIZE_Y + 12 );
         Size = MAP_APPFONT ( ITEM_BUTTON_SIZE_X, ITEM_BUTTON_SIZE_Y );
         Text = "<-";
     };
     PushButton PB_ALLFIELDSLEFT
     {
+        HelpID = "extensions:PushButton:RID_PAGE_GW_FIELDSELECTION:PB_ALLFIELDSLEFT";
         Pos = MAP_APPFONT ( WINDOW_HALF_SIZE_X - ITEM_BUTTON_SIZE_X / 2, 63 + ITEM_BUTTON_SIZE_Y + 3 + ITEM_BUTTON_SIZE_Y + 12 + ITEM_BUTTON_SIZE_Y + 3 );
         Size = MAP_APPFONT ( ITEM_BUTTON_SIZE_X, ITEM_BUTTON_SIZE_Y );
         Text = "<<=";
@@ -91,6 +97,7 @@ TabPage RID_PAGE_GW_FIELDSELECTION
     };
     ListBox LB_SELECTED_FIELDS
     {
+        HelpID = "extensions:ListBox:RID_PAGE_GW_FIELDSELECTION:LB_SELECTED_FIELDS";
         Pos = MAP_APPFONT ( WINDOW_HALF_SIZE_X + ITEM_BUTTON_SIZE_X / 2 + 6 , 63  ) ;
         Size = MAP_APPFONT ( WINDOW_HALF_SIZE_X - ITEM_BUTTON_SIZE_X / 2 - 13, WINDOW_SIZE_Y - 63 - 6 ) ;
         SVLook = TRUE ;

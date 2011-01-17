@@ -32,6 +32,7 @@ import com.sun.star.awt.XButton;
 import com.sun.star.awt.XFixedText;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.wizards.common.Helper;
+import com.sun.star.wizards.common.HelpIds;
 import com.sun.star.wizards.common.JavaTools;
 import com.sun.star.wizards.common.IRenderer;
 import com.sun.star.wizards.ui.ImageList;
@@ -135,7 +136,7 @@ public abstract class ImageListDialog extends UnoDialog2 implements UIConsts
                 },
                 new Object[]
                 {
-                    Boolean.TRUE, new Integer(dialogHeight), "HID:" + hid, Boolean.TRUE, "imgDialog", new Integer(59), new Integer(24), INTEGERS[1], resources[RES_TITLE], new Integer(dialogWidth)
+                    Boolean.TRUE, new Integer(dialogHeight), HelpIds.getHelpIdString(hid), Boolean.TRUE, "imgDialog", new Integer(59), new Integer(24), INTEGERS[1], resources[RES_TITLE], new Integer(dialogWidth)
                 });
         //Set member- FontDescriptors...
         fontDescriptor1.Weight = 150;
@@ -151,13 +152,13 @@ public abstract class ImageListDialog extends UnoDialog2 implements UIConsts
                 PROPNAMES,
                 new Object[]
                 {
-                    Boolean.TRUE, INTEGER_14, "HID:" + (hid + 3), resources[RES_OK], "btnOK", iButtonsX, new Integer(22), new Short((short) com.sun.star.awt.PushButtonType.OK_value), new Short((short) 7), INTEGER_50
+                    Boolean.TRUE, INTEGER_14, HelpIds.getHelpIdString(hid + 3), resources[RES_OK], "btnOK", iButtonsX, new Integer(22), new Short((short) com.sun.star.awt.PushButtonType.OK_value), new Short((short) 7), INTEGER_50
                 });
         btnCancel = insertButton("btnCancel", null,
                 PROPNAMES,
                 new Object[]
                 {
-                    Boolean.FALSE, INTEGER_14, "HID:" + (hid + 4), resources[RES_CANCEL], "btnCancel", iButtonsX, new Integer(41), new Short((short) com.sun.star.awt.PushButtonType.CANCEL_value), new Short((short) 8), INTEGER_50
+                    Boolean.FALSE, INTEGER_14, HelpIds.getHelpIdString(hid + 4), resources[RES_CANCEL], "btnCancel", iButtonsX, new Integer(41), new Short((short) com.sun.star.awt.PushButtonType.CANCEL_value), new Short((short) 8), INTEGER_50
                 });
         btnHelp = insertButton("btnHelp", null,
                 PROPNAMES,
@@ -175,7 +176,7 @@ public abstract class ImageListDialog extends UnoDialog2 implements UIConsts
                     PROPNAMES,
                     new Object[]
                     {
-                        Boolean.FALSE, INTEGER_14, "HID:" + (hid + 1), resources[RES_OTHER], "btnOther", iButtonsX, new Integer(otherY), new Short((short) com.sun.star.awt.PushButtonType.STANDARD_value), new Short((short) 5), INTEGER_50
+                        Boolean.FALSE, INTEGER_14, HelpIds.getHelpIdString(hid + 1), resources[RES_OTHER], "btnOther", iButtonsX, new Integer(otherY), new Short((short) com.sun.star.awt.PushButtonType.STANDARD_value), new Short((short) 5), INTEGER_50
                     });
         }
 
@@ -188,7 +189,7 @@ public abstract class ImageListDialog extends UnoDialog2 implements UIConsts
                     PROPNAMES,
                     new Object[]
                     {
-                        Boolean.FALSE, INTEGER_14, "HID:" + (hid + 2), resources[RES_DESELECT], "btnNoImage", iButtonsX, new Integer(deselectY), new Short((short) com.sun.star.awt.PushButtonType.STANDARD_value), new Short((short) 4), INTEGER_50
+                        Boolean.FALSE, INTEGER_14, HelpIds.getHelpIdString(hid + 2), resources[RES_DESELECT], "btnNoImage", iButtonsX, new Integer(deselectY), new Short((short) com.sun.star.awt.PushButtonType.STANDARD_value), new Short((short) 4), INTEGER_50
                     });
         }
 

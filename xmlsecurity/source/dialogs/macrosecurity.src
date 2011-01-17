@@ -101,6 +101,7 @@ TabPage RID_XMLSECTP_SECLEVEL
     };
     RadioButton RB_VERYHIGH
     {
+        HelpID = "xmlsecurity:RadioButton:RID_XMLSECTP_SECLEVEL:RB_VERYHIGH";
         Pos = MAP_APPFONT( SL_COL_1, SL_ROW_0 );
         Size = MAP_APPFONT( SL_COL_2-SL_COL_1, RSC_BIG_RADIOBUTTON );
         WordBreak = TRUE;
@@ -108,6 +109,7 @@ TabPage RID_XMLSECTP_SECLEVEL
     };
     RadioButton RB_HIGH
     {
+        HelpID = "xmlsecurity:RadioButton:RID_XMLSECTP_SECLEVEL:RB_HIGH";
         Pos = MAP_APPFONT( SL_COL_1, SL_ROW_1 );
         Size = MAP_APPFONT( SL_COL_2-SL_COL_1, RSC_BIG_RADIOBUTTON );
         WordBreak = TRUE;
@@ -115,6 +117,7 @@ TabPage RID_XMLSECTP_SECLEVEL
     };
     RadioButton RB_MEDIUM
     {
+        HelpID = "xmlsecurity:RadioButton:RID_XMLSECTP_SECLEVEL:RB_MEDIUM";
         Pos = MAP_APPFONT( SL_COL_1, SL_ROW_2 );
         Size = MAP_APPFONT( SL_COL_2-SL_COL_1, RSC_BIG_RADIOBUTTON );
         WordBreak = TRUE;
@@ -122,6 +125,7 @@ TabPage RID_XMLSECTP_SECLEVEL
     };
     RadioButton RB_LOW
     {
+        HelpID = "xmlsecurity:RadioButton:RID_XMLSECTP_SECLEVEL:RB_LOW";
         Pos = MAP_APPFONT( SL_COL_1, SL_ROW_3 );
         Size = MAP_APPFONT( SL_COL_2-SL_COL_1, SL_ROW_4-SL_ROW_3 );
         WordBreak = TRUE;
@@ -161,18 +165,21 @@ TabPage RID_XMLSECTP_TRUSTSOURCES
     };
     PushButton PB_ADD_TRUSTCERT
     {
+        HelpID = "xmlsecurity:PushButton:RID_XMLSECTP_TRUSTSOURCES:PB_ADD_TRUSTCERT";
         Pos = MAP_APPFONT( TS_COL_2, TS_ROW_2 );
         Size = MAP_APPFONT( RSC_CD_PUSHBUTTON_WIDTH, RSC_CD_PUSHBUTTON_HEIGHT );
         Text [ en-US ] = "Add...";
     };
     PushButton PB_VIEW_TRUSTCERT
     {
+        HelpID = "xmlsecurity:PushButton:RID_XMLSECTP_TRUSTSOURCES:PB_VIEW_TRUSTCERT";
         Pos = MAP_APPFONT( TS_COL_4, TS_ROW_2 );
         Size = MAP_APPFONT( RSC_CD_PUSHBUTTON_WIDTH, RSC_CD_PUSHBUTTON_HEIGHT );
         Text [ en-US ] = "View...";
     };
     PushButton PB_REMOVE_TRUSTCERT
     {
+        HelpID = "xmlsecurity:PushButton:RID_XMLSECTP_TRUSTSOURCES:PB_REMOVE_TRUSTCERT";
         Pos = MAP_APPFONT( TS_COL_6, TS_ROW_2 );
         Size = MAP_APPFONT( RSC_CD_PUSHBUTTON_WIDTH, RSC_CD_PUSHBUTTON_HEIGHT );
         Text [ en-US ] = "Remove";
@@ -197,6 +204,7 @@ TabPage RID_XMLSECTP_TRUSTSOURCES
     };
     ListBox LB_TRUSTFILELOC
     {
+        HelpID = "xmlsecurity:ListBox:RID_XMLSECTP_TRUSTSOURCES:LB_TRUSTFILELOC";
         Pos = MAP_APPFONT( TS_COL_1, TS_ROW_5 );
         Size = MAP_APPFONT( TS_COL_7-TS_COL_1, TS_ROW_6-TS_ROW_5 );
         SVLook = TRUE;
@@ -206,12 +214,14 @@ TabPage RID_XMLSECTP_TRUSTSOURCES
     };
     PushButton FL_ADD_TRUSTFILELOC
     {
+        HelpID = "xmlsecurity:PushButton:RID_XMLSECTP_TRUSTSOURCES:FL_ADD_TRUSTFILELOC";
         Pos = MAP_APPFONT( TS_COL_4, TS_ROW_7 );
         Size = MAP_APPFONT( RSC_CD_PUSHBUTTON_WIDTH, RSC_CD_PUSHBUTTON_HEIGHT );
         Text [ en-US ] = "Add...";
     };
     PushButton FL_REMOVE_TRUSTFILELOC
     {
+        HelpID = "xmlsecurity:PushButton:RID_XMLSECTP_TRUSTSOURCES:FL_REMOVE_TRUSTFILELOC";
         Pos = MAP_APPFONT( TS_COL_6, TS_ROW_7 );
         Size = MAP_APPFONT( RSC_CD_PUSHBUTTON_WIDTH, RSC_CD_PUSHBUTTON_HEIGHT );
         Text [ en-US ] = "Remove";

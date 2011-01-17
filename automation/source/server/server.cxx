@@ -709,7 +709,7 @@ IMPL_LINK( ImplRemoteControl, CommandHdl, Application*, EMPTYARG )
         m_bInsideExecutionLoop = FALSE;
     }
 
-    StatementList::aWindowWaitUId = SmartId();  // Warten rücksetzen, da handler sowieso verlassen wird
+    StatementList::aWindowWaitUId = rtl::OString();  // Warten rücksetzen, da handler sowieso verlassen wird
 
 /*    if( StatementList::pFirst && !StatementList::bReadingCommands )
          // Abfrage nötig, da andere CommandHdl aktiv sein können oder
@@ -857,6 +857,9 @@ ImplRemoteControl::ImplRemoteControl()
         m_pDbgWin = new EditWindow( NULL, CUniString("Debug Window"), WB_VSCROLL );
         m_pDbgWin->bQuiet = TRUE;
         m_pDbgWin->Hide();
+        m_pDbgWin->bQuiet = FALSE;
+        m_pDbgWin->Show();
+
         StatementList::m_pDbgWin = m_pDbgWin;
     }
 #endif

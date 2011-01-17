@@ -53,6 +53,7 @@ import com.sun.star.wizards.ui.event.DataAware;
 import com.sun.star.wizards.ui.event.UnoDataAware;
 import com.sun.star.wizards.web.data.CGPublish;
 import com.sun.star.wizards.web.data.CGSettings;
+import com.sun.star.wizards.common.HelpIds;
 
 /**
  * This is the FTP Dialog. <br/>
@@ -186,7 +187,7 @@ public class FTPDialog extends UnoDialog2 implements UIConsts, WWHID
         publish = p;
 
 
-        imagesDirectory = FileAccess.connectURLs(((CGSettings) (publish.root)).soTemplateDir, "wizard/bitmap/");
+        imagesDirectory = FileAccess.connectURLs(((CGSettings) (publish.root)).soTemplateDir, "../wizard/bitmap/");
 
         //Load Resources
         resources = new FTPDialogResources(xmsf);
@@ -200,7 +201,7 @@ public class FTPDialog extends UnoDialog2 implements UIConsts, WWHID
                 },
                 new Object[]
                 {
-                    Boolean.TRUE, new Integer(160), "HID:" + HID_FTP, Boolean.TRUE, "FTPDialog", new Integer(167), new Integer(82), resources.resFTPDialog_title, new Integer(222)
+                    Boolean.TRUE, new Integer(160), HelpIds.getHelpIdString(HID_FTP), Boolean.TRUE, "FTPDialog", new Integer(167), new Integer(82), resources.resFTPDialog_title, new Integer(222)
                 });
 
         //add controls to dialog
@@ -248,7 +249,7 @@ public class FTPDialog extends UnoDialog2 implements UIConsts, WWHID
                 },
                 new Object[]
                 {
-                    INTEGER_12, "HID:" + HID_FTP_SERVER, "txtIP", new Integer(110), new Integer(18), new Short((short) 2), new Integer(106)
+                    INTEGER_12, HelpIds.getHelpIdString(HID_FTP_SERVER), "txtIP", new Integer(110), new Integer(18), new Short((short) 2), new Integer(106)
                 });
         lblUsername = insertLabel("lblUsername",
                 PROPNAMES_LABEL,
@@ -263,7 +264,7 @@ public class FTPDialog extends UnoDialog2 implements UIConsts, WWHID
                 },
                 new Object[]
                 {
-                    INTEGER_12, "HID:" + HID_FTP_USERNAME, "txtUsername", new Integer(110), new Integer(34), new Short((short) 4), new Integer(106)
+                    INTEGER_12, HelpIds.getHelpIdString(HID_FTP_USERNAME), "txtUsername", new Integer(110), new Integer(34), new Short((short) 4), new Integer(106)
                 });
         lblPassword = insertLabel("lblPassword",
                 PROPNAMES_LABEL,
@@ -278,7 +279,7 @@ public class FTPDialog extends UnoDialog2 implements UIConsts, WWHID
                 },
                 new Object[]
                 {
-                    new Short((short) 42), INTEGER_12, "HID:" + HID_FTP_PASS, "txtPassword", new Integer(110), new Integer(50), new Short((short) 6), new Integer(106)
+                    new Short((short) 42), INTEGER_12, HelpIds.getHelpIdString(HID_FTP_PASS), "txtPassword", new Integer(110), new Integer(50), new Short((short) 6), new Integer(106)
                 });
         ln2 = insertFixedLine("ln2",
                 PROPNAMES_LABEL,
@@ -290,7 +291,7 @@ public class FTPDialog extends UnoDialog2 implements UIConsts, WWHID
                 PROPNAMES_BUTTON,
                 new Object[]
                 {
-                    INTEGER_14, "HID:" + HID_FTP_TEST, resources.resbtnConnect_value, "btnConnect", INTEGER_12, new Integer(80), new Short((short) 8), INTEGER_50
+                    INTEGER_14, HelpIds.getHelpIdString(HID_FTP_TEST), resources.resbtnConnect_value, "btnConnect", INTEGER_12, new Integer(80), new Short((short) 8), INTEGER_50
                 });
 
         imgStatus = insertImage("imgStatus",
@@ -324,27 +325,27 @@ public class FTPDialog extends UnoDialog2 implements UIConsts, WWHID
                 },
                 new Object[]
                 {
-                    new Boolean(false), INTEGER_12, "HID:" + HID_FTP_TXT_PATH, "txtDir", INTEGER_12, new Integer(113), new Short((short) 11), resources.restxtDir_value, new Integer(184)
+                    new Boolean(false), INTEGER_12, HelpIds.getHelpIdString(HID_FTP_TXT_PATH), "txtDir", INTEGER_12, new Integer(113), new Short((short) 11), resources.restxtDir_value, new Integer(184)
                 });
         btnDir = insertButton("btnDir", "chooseDirectory",
                 PROPNAMES_BUTTON,
                 new Object[]
                 {
-                    INTEGER_14, "HID:" + HID_FTP_BTN_PATH, resources.resbtnDir_value, "btnDir", new Integer(199), new Integer(112), new Short((short) 12), INTEGER_16
+                    INTEGER_14, HelpIds.getHelpIdString(HID_FTP_BTN_PATH), resources.resbtnDir_value, "btnDir", new Integer(199), new Integer(112), new Short((short) 12), INTEGER_16
                 });
 
         btnOK = insertButton("btnOK", null,
                 PROPNAMES_BUTTON2,
                 new Object[]
                 {
-                    INTEGER_14, "HID:" + HID_FTP_OK, resources.resbtnOK_value, "btnOK", new Integer(165), new Integer(142), new Short((short) PushButtonType.OK_value), new Short((short) 13), INTEGER_50
+                    INTEGER_14, HelpIds.getHelpIdString(HID_FTP_OK), resources.resbtnOK_value, "btnOK", new Integer(165), new Integer(142), new Short((short) PushButtonType.OK_value), new Short((short) 13), INTEGER_50
                 });
 
         btnCancel = insertButton("btnCancel",
                 null, PROPNAMES_BUTTON2,
                 new Object[]
                 {
-                    INTEGER_14, "HID:" + HID_FTP_CANCEL, resources.resbtnCancel_value, "btnCancel", new Integer(113), new Integer(142), new Short((short) PushButtonType.CANCEL_value), new Short((short) 14), INTEGER_50
+                    INTEGER_14, HelpIds.getHelpIdString(HID_FTP_CANCEL), resources.resbtnCancel_value, "btnCancel", new Integer(113), new Integer(142), new Short((short) PushButtonType.CANCEL_value), new Short((short) 14), INTEGER_50
                 });
 
         btnHelp = insertButton("btnHelp", null,
