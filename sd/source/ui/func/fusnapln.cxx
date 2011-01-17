@@ -74,7 +74,6 @@ FunctionReference FuSnapLine::Create( ViewShell* pViewSh, ::sd::Window* pWin, ::
 void FuSnapLine::DoExecute( SfxRequest& rReq )
 {
     const SfxItemSet* pArgs = rReq.GetArgs();
-    SdrPageView* pPV = 0;
     USHORT  nHelpLine = 0;
     BOOL    bCreateNew = TRUE;
 
@@ -87,11 +86,12 @@ void FuSnapLine::DoExecute( SfxRequest& rReq )
         pArgs = NULL;
     }
 
+    SdrPageView* pPV = mpView->GetSdrPageView();
+
     if ( !pArgs )
     {
         SfxItemSet aNewAttr(mpViewShell->GetPool(), ATTR_SNAPLINE_START, ATTR_SNAPLINE_END);
         bool bLineExist (false);
-        pPV = mpView->GetSdrPageView();
         Point aLinePos;
 
         if (pHelpLineIndex == NULL)
