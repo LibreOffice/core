@@ -811,7 +811,6 @@ void lcl_ChgNumRule( SwDoc& rDoc, const SwNumRule& rRule )
     rDoc.UpdateNumRule();
 }
 
-// add handling of parameter <bResetIndentAttrs>
 void SwDoc::SetNumRule( const SwPaM& rPam,
                         const SwNumRule& rRule,
                         const bool bCreateNewList,
@@ -1532,7 +1531,6 @@ BOOL SwDoc::GotoNextNum( SwPosition& rPos, BOOL bOverUpper,
    return ::lcl_GotoNextPrevNum( rPos, TRUE, bOverUpper, pUpper, pLower );
 }
 
-// --> OD 2008-03-18 #refactorlists# - add output parameter <sListId>
 const SwNumRule *  SwDoc::SearchNumRule(const SwPosition & rPos,
                                         const bool bForward,
                                         const bool bNum,
