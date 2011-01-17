@@ -251,7 +251,7 @@ endef
 
 # Library class
 
-gb_Library_DEFS :=
+gb_Library_DEFS := -D_DLL_
 gb_Library_TARGETTYPEFLAGS := -dynamiclib -single_module
 gb_Library_SYSPRE := lib
 gb_Library_UNOVERPRE := $(gb_Library_SYSPRE)uno_
