@@ -272,7 +272,7 @@
 #include "vcl/timer.hxx"
 #include "vcl/toolbox.hxx"
 #include "vcl/window.hxx"
-#include "vcl/wintypes.hxx"
+#include "tools/wintypes.hxx"
 #include "vcl/wrkwin.hxx"
 
 #include "vos/diagnose.hxx"
