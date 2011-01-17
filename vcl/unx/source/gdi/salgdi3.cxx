@@ -985,15 +985,7 @@ void X11SalGraphics::DrawCairoAAFontString( const ServerFontLayout& rLayout )
         return;
 
     // find a XRenderPictFormat compatible with the Drawable
-    XRenderPictFormat* pVisualFormat = static_cast<XRenderPictFormat*>(GetXRenderFormat());
-    if( !pVisualFormat )
-    {
-        Visual* pVisual = GetDisplay()->GetVisual( m_nScreen ).GetVisual();
-        pVisualFormat = XRenderPeer::GetInstance().FindVisualFormat( pVisual );
-        // cache the XRenderPictFormat
-        SetXRenderFormat( static_cast<void*>(pVisualFormat) );
-    }
-
+    XRenderPictFormat* pVisualFormat = GetXRenderFormat();
     DBG_ASSERT( pVisualFormat!=NULL, "no matching XRenderPictFormat for text" );
     if( !pVisualFormat )
         return;
