@@ -60,8 +60,8 @@ testcase tFormatPage_16
     Call hNewDocument
 
     '/// Open test file testForAutoFit.sxw
-    Call hFileOpen(sTestFile)
-    Call sMakeReadOnlyDocumentEditable
+    hFileOpenLocally( sTestFile )
+    
 
     '/// Open Navigator and enter as page number 2
     Kontext "Navigator"
@@ -151,8 +151,8 @@ testcase tFormatPage_17
     Call hNewDocument
 
     '/// Open test file testForAutoFit.sxw
-     Call hFileOpen(sTestFile)
-     Call sMakeReadOnlyDocumentEditable
+     hFileOpenLocally( sTestFile )
+     
 
     '/// Open Navigator and enter as page number 2
     Kontext "Navigator"
@@ -255,8 +255,8 @@ testcase tFormatPage_18
     Call hNewDocument
 
     '/// Open test file testForAutoFit.sxw
-     Call hFileOpen(sTestFile)
-     Call sMakeReadOnlyDocumentEditable
+     hFileOpenLocally( sTestFile )
+     
 
     '/// Open Navigator and enter as page number 2
     Kontext "Navigator"
@@ -340,8 +340,8 @@ testcase tFormatPage_19
     Call hNewDocument
 
     '/// Open test file testForAutoFit.sxw
-     Call hFileOpen(sTestFile)
-     Call sMakeReadOnlyDocumentEditable
+     hFileOpenLocally( sTestFile )
+     
 
     '/// Open Navigator and enter as page number 2
     Kontext "Navigator"
@@ -417,8 +417,8 @@ testcase tFormatPage_20
     Call hNewDocument
 
     '/// Open test file testForAutoFit.sxw
-    Call hFileOpen(sTestFile)
-    Call sMakeReadOnlyDocumentEditable
+    hFileOpenLocally( sTestFile )
+    
 
     '/// Open Navigator and enter as page number 2
     Kontext "Navigator"
@@ -507,8 +507,8 @@ testcase tFormatPage_21
     '/// AutoFit height - Check (Footer,multiline content)
 
     '/// Open test file testForAutoFit.sxw
-     Call hFileOpen(sTestFile)
-     Call sMakeReadOnlyDocumentEditable
+     hFileOpenLocally( sTestFile )
+     
 
     '/// Open Navigator and enter as page number 2
     Kontext "Navigator"
@@ -613,8 +613,8 @@ testcase tFormatPage_22
     Call hNewDocument
 
     '/// Open test file testForAutoFit.sxw
-    Call hFileOpen(sTestFile)
-    Call sMakeReadOnlyDocumentEditable
+    hFileOpenLocally( sTestFile )
+    
 
     '/// Open Navigator and enter as page number 2
     Kontext "Navigator"
@@ -697,8 +697,8 @@ testcase tFormatPage_23
     '/// AutoFit height - UnCheck (Footer,multiline content)
 
     '/// Open test file testForAutoFit.sxw
-    Call hFileOpen(sTestFile)
-    Call sMakeReadOnlyDocumentEditable
+    hFileOpenLocally( sTestFile )
+    
 
     '/// Open Navigator and enter as page number 2
     Kontext "Navigator"

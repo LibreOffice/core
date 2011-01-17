@@ -148,8 +148,8 @@ testcase tToolsOptionsHTMLLayout
     Dim iMasseinheit(3) as integer
     Dim iTemp(3) as integer
     '///Open "writer\\optional\\input\\options\\options1.sxw ///
-    Call hFileOpen ( gTesttoolPath + "writer\optional\input\options\options1.sxw" )
-    Call sMakeReadOnlyDocumentEditable
+    hFileOpenLocally(  gTesttoolPath + "writer\optional\input\options\options1.sxw" )
+    
     
     printlog "'///- Tools/Options/Writer: View ///"
     ToolsOptions
@@ -397,8 +397,8 @@ testcase tToolsOptionsHTMLGrid
     Dim sTempMetricField(4) as string
         
     '/// uses: "writer\\optional\\input\\options\\options1.sxw" ///
-    Call hFileOpen ( gTesttoolPath + "writer\optional\input\options\options1.sxw" )
-    Call sMakeReadOnlyDocumentEditable
+    hFileOpenLocally(  gTesttoolPath + "writer\optional\input\options\options1.sxw" )
+    
    
     printlog "'///- Tools/Options/HTML: Grid ///"
     printlog ("'/// - save states ///")
@@ -552,8 +552,8 @@ testcase tToolsOptionsHTMLGrid
     '///  ( gTesttoolPath + "writer\optional\input\options\gridtst.sxw" ) ///'
     '/// NOT Possible Without <ALT> + <cursor> stuff :-((((( BugID: 84741 ///'
     '/// uses"writer\optional\input\options\htmltag.html" ///
-    Call hFileOpen ( gTesttoolPath + "writer\optional\input\options\htmltag.html" )
-    Call sMakeReadOnlyDocumentEditable
+    hFileOpenLocally(  gTesttoolPath + "writer\optional\input\options\htmltag.html" )
+    
     
     '/// check if writeable!///'
     try

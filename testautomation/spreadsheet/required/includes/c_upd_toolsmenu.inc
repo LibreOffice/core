@@ -29,23 +29,6 @@
 '*
 '* short description : Resource Test - Tools Menu Part I
 '*
-'************************************************************************
-'*
-' #1 tToolsSpellcheck
-' #1 tToolsHangulHanjaConversion
-' #1 tToolsLanguageChineseTranslation
-' #1 tToolsLanguageThesaurus
-' #1 tToolsLanguageHyphenation
-' #1 tToolsDetective
-' #1 tToolsAutoCorrect
-' #1 tToolsGoalSeek
-' #1 tToolsScenario
-' #1 tToolsProtectSheet
-' #1 tToolsProtectDocument
-' #1 tToolsCellContents
-' #1 tToolsGallery
-' #1 tToolsMediaPlayer
-'*
 '\***********************************************************************
 
 sub c_upd_toolsmenu
@@ -77,10 +60,7 @@ testcase tToolsSpellcheck
     Dim iDictionaries as integer
     
     printlog " Load document from 'gTesttoolPath + spreadsheet\required\input\english.ods"
-    Call hFileOpen (Convertpath (gTesttoolPath + "spreadsheet\required\input\english.ods" ))
-    '/// If the file is not editable, click the edit button on standardbar
-    printlog "If the file is not editable, click the edit button on standardbar"
-    call sMakeReadOnlyDocumentEditable
+    hFileOpenLocally( gTesttoolPath & "spreadsheet\required\input\english.ods" )
     '/// Enter 'fgsdftk' in a cell
     printlog " Enter 'fgsdftk' in a cell"
     Kontext "DocumentCalc"
@@ -208,6 +188,7 @@ testcase tToolsSpellcheck
     '/// Close starting document
     printlog " Close starting document"
     call hCloseDocument
+    hFileDelete( gLastWorkFile )
 
 endcase
 
@@ -228,10 +209,7 @@ testcase tToolsHangulHanjaConversion
     bCTLLanguage = ActiveDeactivateCTLSupport(TRUE)
     '/// Load document from 'gTesttoolPath + "spreadsheet\required\input\korean.ods"'
     printlog " Load document from 'gTesttoolPath + spreadsheet\required\input\korean.ods"
-    Call hFileOpen (Convertpath (gTesttoolPath + "spreadsheet\required\input\korean.ods" ))
-    '/// If the file is not editable, click the edit button on standardbar
-    printlog "If the file is not editable, click the edit button on standardbar"
-    call sMakeReadOnlyDocumentEditable
+    hFileOpenLocally( gTesttoolPath & "spreadsheet\required\input\korean.ods" )
     '/// Select cell B1
     printlog " Select cell B1"
     Call fCalcSelectRange ("B1")
@@ -337,6 +315,7 @@ testcase tToolsHangulHanjaConversion
     '/// Close document
     printlog " Close document"
     call hCloseDocument
+    hFileDelete( gLastWorkFile )
 
 endcase
 
@@ -392,9 +371,7 @@ testcase tToolsLanguageThesaurus
 '///<u><b>Tools – Language – Chinese Translation</b></u>
 
     printlog " Load document from 'gTesttoolPath + spreadsheet\required\input\english.ods"
-    Call hFileOpen (Convertpath (gTesttoolPath + "spreadsheet\required\input\english.ods" ))
-    printlog "If the file is not editable, click the edit button on standardbar"
-    call sMakeReadOnlyDocumentEditable    
+    hFileOpenLocally( gTesttoolPath & "spreadsheet\required\input\english.ods" )
     Kontext "DocumentCalc"
     printlog " Enter 'test' in a cell"
     Call fCalcSelectRange ("B2")
@@ -427,6 +404,7 @@ testcase tToolsLanguageThesaurus
     Thesaurus.Cancel
     printlog " Close document"
     call hCloseDocument
+    hFileDelete( gLastWorkFile )
 
 endcase
 

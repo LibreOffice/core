@@ -67,8 +67,7 @@ testcase tHHNoSelction_1
 
     '/// Open a test file , which includes some Korean characters
     '/// + and some Chinese characters
-    Call hFileOpen(sTestFile)
-    sMakeReadOnlyDocumentEditable()
+    hFileOpenLocally(sTestFile)
 
     '/// Set focus before the 3rd character
     Call wTypeKeys "<MOD1 Home>"
@@ -137,8 +136,7 @@ testcase tHHNoSelction_2
     '/// Open a test file , which includes some English ,
     '/// + Germany , French , Korean and Chinese characters
     '/// + (Korean is before Chinese)
-    Call hFileOpen(sTestFile)
-    sMakeReadOnlyDocumentEditable()
+    Call hFileOpenLocally(sTestFile)
     
     '/// Set focus to the beginning
     Call wTypeKeys "<MOD1 Home>"
@@ -195,8 +193,8 @@ testcase tHHNoSelction_3
     '/// Open a test file , which includes some English ,
     '/// + Germany , French , Korean and Chinese characters
     '/// + (Chinese is before Korean)
-    Call hFileOpen(sTestFile)
-    sMakeReadOnlyDocumentEditable()
+    Call hFileOpenLocally( sTestFile )
+    ()
     
     '/// Set focus to the beginning
     Call wTypeKeys "<MOD1 Home>"
@@ -250,8 +248,8 @@ testcase tHHNoSelction_4
   '/// Open a test file , which includes some English ,
   '/// + Germany , French characters .
   '/// + There are no Chinese and Korean
-   Call hFileOpen(sTestFile)
-   sMakeReadOnlyDocumentEditable()
+   Call hFileOpenLocally( sTestFile )
+   ()
 
   '/// Set focus to the beginning
    Call wTypeKeys "<MOD1 Home>"
@@ -291,8 +289,8 @@ testcase tHHNoSelction_5
   Call hNewDocument
 
   '/// Open a test file , which includes some Chinese and Korean
-   Call hFileOpen(sTestFile)
-   sMakeReadOnlyDocumentEditable()
+   Call hFileOpenLocally( sTestFile )
+   ()
 
   '/// Set focus to the end of the file
    Call wTypeKeys "<MOD1 End>"
@@ -333,8 +331,8 @@ testcase tHHNoSelction_6
 
     '/// Open a test file , which includes some Chinese and Korean,
     '/// + the 3rd character in 1st line isn't convertible
-    Call hFileOpen(sTestFile)
-    sMakeReadOnlyDocumentEditable()
+    Call hFileOpenLocally( sTestFile )
+    ()
 
     '/// Set focus to the 3rd character (korean)
     Call wTypeKeys "<MOD1 Home>"
@@ -398,8 +396,8 @@ testcase tHHNoSelction_7
 
   '/// Open a test file , which includes some Chinese and Korean,
   '/// + the 3rd character in 2nd line isn't convertible
-   Call hFileOpen(sTestFile)
-   sMakeReadOnlyDocumentEditable()
+   Call hFileOpenLocally( sTestFile )
+   ()
 
   '/// Set focus to the 3rd chinese character
    Call wTypeKeys "<MOD1 Home><Down><Home>"
@@ -466,8 +464,8 @@ testcase tHHSingleSelction_1
     Call hNewDocument
     
     '/// Open a test file , which includes some Chinese and Korean
-    Call hFileOpen(sTestFile)
-    sMakeReadOnlyDocumentEditable()
+    Call hFileOpenLocally( sTestFile )
+    ()
     
     '/// Select from 4th to 7th character
     Call wTypeKeys "<MOD1 Home>"
@@ -527,8 +525,8 @@ testcase tHHMultiSelction_1
   Call hNewDocument
 
   '/// Open a test file , which includes some Korean chacters
-   Call hFileOpen(sTestFile)
-   sMakeReadOnlyDocumentEditable()
+   Call hFileOpenLocally( sTestFile )
+   ()
 
   '/// Do a multi Selectiong to the charcters -- 입력
    Call fFindWord(sMultiWord)
@@ -573,8 +571,8 @@ testcase tHHTextBox_1
 
   '/// Open a test file , which includes a text box and
   '/// + some Korean chacters in the text box
-   Call hFileOpen(sTestFile)
-   sMakeReadOnlyDocumentEditable()
+   Call hFileOpenLocally( sTestFile )
+   ()
 
   '/// Tools / HangulHanjaConversion , the below 4 checkboxes ralated
   '/// + ruby should be disabled .
@@ -645,8 +643,8 @@ testcase tHHDrawBox_1
 
   '/// Open a test file , which includes a draw box and
   '/// + some Korean chacters in the text box
-   Call hFileOpen(sTestFile)
-   sMakeReadOnlyDocumentEditable()
+   Call hFileOpenLocally( sTestFile )
+   ()
   '/// Tools / HangulHanjaConversion , the below 4 checkboxes ralated
   '/// + ruby should be disabled .
   '/// -> 'Hanja As Ruby Above Hangul'

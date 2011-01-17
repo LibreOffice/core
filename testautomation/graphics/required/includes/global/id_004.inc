@@ -307,11 +307,11 @@ testcase tiInsertChart
     InsertChart
     WaitSlot (2000)
     Kontext "Messagebox"
-        if Messagebox.Exists then
-            Warnlog Messagebox.GetText
-            Messagebox.OK
-            sleep 1
-        end if
+    if Messagebox.Exists then
+        Warnlog Messagebox.GetText
+        Messagebox.OK
+        sleep 1
+    end if
     gMouseClick 1,1
     sleep 2
     printlog "close application "
@@ -360,17 +360,17 @@ testcase tiInsertSpreadsheet
     InsertSpreadsheetDraw
     WaitSlot (2000)
     Kontext "Messagebox"
-        if Messagebox.Exists (5) then
-            Warnlog Messagebox.GetText
-            Messagebox.OK
-        end if
-        sleep 2
-        printlog "click somewhere out of the object, to deselect it "
-        gMouseClick 1,1
-        sleep 1
-        printlog "select and delete object with keys: <Tab><Delete> "
-        hTypekeys "<Tab><Delete>"
-        sleep 2
+    if Messagebox.Exists (5) then
+        Warnlog Messagebox.GetText
+        Messagebox.OK
+    end if
+    sleep 2
+    printlog "click somewhere out of the object, to deselect it "
+    gMouseClick 1,1
+    sleep 1
+    printlog "select and delete object with keys: <Tab><Delete> "
+    hTypekeys "<Tab><Delete>"
+    sleep 2
     printlog "close application "
     Call hCloseDocument
     

@@ -1,115 +1,115 @@
 ' **** general Printersettings-Dialog ( File/Printer settings )
 ' ****
-*DruckerEinrichten svtools:ModalDialog:DLG_SVT_PRNDLG_PRNSETUPDLG
-Drucker svtools:ListBox:DLG_SVT_PRNDLG_PRNSETUPDLG:LB_NAMES
-Eigenschaften svtools:PushButton:DLG_SVT_PRNDLG_PRNSETUPDLG:BTN_PROPERTIES
+*DruckerEinrichten sym:svtools:ModalDialog:DLG_SVT_PRNDLG_PRNSETUPDLG
+Drucker sym:svtools:ListBox:DLG_SVT_PRNDLG_PRNSETUPDLG:LB_NAMES
+Eigenschaften sym:svtools:PushButton:DLG_SVT_PRNDLG_PRNSETUPDLG:BTN_PROPERTIES
 
 '************************************************************************
 '************ all file-dialogs
 '************
-*GeneralFileDialog HID_EXPLORERDLG_FILE
-UebergeordneterOrdner fpicker:MenuButton:DLG_SVT_EXPLORERFILE:BTN_EXPLORERFILE_UP
-NeuerOrdner fpicker:ImageButton:DLG_SVT_EXPLORERFILE:BTN_EXPLORERFILE_NEWFOLDER
-Standard fpicker:MenuButton:DLG_SVT_EXPLORERFILE:BTN_EXPLORERFILE_STANDARD
-DateiAuswahl HID_FILEDLG_STANDARD
-Dateiname HID_FILEDLG_AUTOCOMPLETEBOX
-Dateityp fpicker:ListBox:DLG_SVT_EXPLORERFILE:LB_EXPLORERFILE_FILETYPE
-Oeffnen fpicker:PushButton:DLG_SVT_EXPLORERFILE:BTN_EXPLORERFILE_OPEN
-Auswaehlen fpicker:PushButton:DLG_SVT_EXPLORERFILE:BTN_EXPLORERFILE_OPEN
+*GeneralFileDialog sym:SVT_HID_EXPLORERDLG_FILE
+UebergeordneterOrdner sym:fpicker:MenuButton:DLG_SVT_EXPLORERFILE:BTN_EXPLORERFILE_UP
+NeuerOrdner sym:fpicker:ImageButton:DLG_SVT_EXPLORERFILE:BTN_EXPLORERFILE_NEWFOLDER
+Standard sym:fpicker:MenuButton:DLG_SVT_EXPLORERFILE:BTN_EXPLORERFILE_STANDARD
+DateiAuswahl sym:SVT_HID_FILEDLG_STANDARD
+Dateiname sym:SVT_HID_FILEDLG_AUTOCOMPLETEBOX
+Dateityp sym:fpicker:ListBox:DLG_SVT_EXPLORERFILE:LB_EXPLORERFILE_FILETYPE
+Oeffnen sym:fpicker:PushButton:DLG_SVT_EXPLORERFILE:BTN_EXPLORERFILE_OPEN
+Auswaehlen sym:fpicker:PushButton:DLG_SVT_EXPLORERFILE:BTN_EXPLORERFILE_OPEN
 
 +GrafikEinfuegenDlg GeneralFileDialog
-Pfad HID_FILEDLG_AUTOCOMPLETEBOX HID_FILEDLG_PATH_FILENAME
-Stil HID_FILEOPEN_IMAGE_TEMPLATE
-Verknuepfen HID_FILEDLG_LINK_CB HID_IMPGRF_CB_LINK
-Vorschau HID_FILEDLG_PREVIEW_CB HID_IMPGRF_CB_PREVIEW
-Link HID_FILEDLG_LINK_CB
-Preview HID_FILEDLG_PREVIEW_CB
+Pfad sym:SVT_HID_FILEDLG_AUTOCOMPLETEBOX sym:SFX2_HID_FILEDLG_PATH_FILENAME
+Stil sym:SVT_HID_FILEOPEN_IMAGE_TEMPLATE
+Verknuepfen sym:SVT_HID_FILEDLG_LINK_CB HID_IMPGRF_CB_LINK
+Vorschau sym:SVT_HID_FILEDLG_PREVIEW_CB HID_IMPGRF_CB_PREVIEW
+Link sym:SVT_HID_FILEDLG_LINK_CB
+Preview sym:SVT_HID_FILEDLG_PREVIEW_CB
 
 +OeffnenDlg GeneralFileDialog
-Pfad HID_FILEDLG_AUTOCOMPLETEBOX HID_FILEDLG_PATH_FILENAME
-Version HID_FILEOPEN_VERSION
-NurLesen HID_FILEOPEN_READONLY
-Einfuegen HID_FILEDLG_INSERT_BTN
-Play HID_FILESAVE_DOPLAY
+Pfad sym:SVT_HID_FILEDLG_AUTOCOMPLETEBOX sym:SFX2_HID_FILEDLG_PATH_FILENAME
+Version sym:SVT_HID_FILEOPEN_VERSION
+NurLesen sym:SVT_HID_FILEOPEN_READONLY
+Einfuegen sym:SVT_HID_FILEDLG_INSERT_BTN
+Play sym:SVT_HID_FILESAVE_DOPLAY
 
 +KonkordanzdateiOeffnen GeneralFileDialog
 
 +VorlagenLaden GeneralFileDialog
-Text HID_LTEMPL_TEXT
-Rahmen HID_LTEMPL_FRAME
-Seite HID_LTEMPL_PAGE
-Numerierung HID_LTEMPL_NUMBERING
-Ueberschreiben HID_LTEMPL_OVERRIDE
+Text sym:SW_HID_LTEMPL_TEXT
+Rahmen sym:SW_HID_LTEMPL_FRAME
+Seite sym:SW_HID_LTEMPL_PAGE
+Numerierung sym:SW_HID_LTEMPL_NUMBERING
+Ueberschreiben sym:SW_HID_LTEMPL_OVERRIDE
 ' Vorlagen HID_LTEMPL_TEMPLATES
 
-*SpeichernDlg HID_FILESAVE_DIALOG
-Dateiname HID_FILESAVE_FILEURL
-Vorlage HID_FILESAVE_TEMPLATE
-Dateityp HID_FILESAVE_FILETYPE
-Speichern HID_FILESAVE_DOSAVE
-NeuerOrdner HID_FILESAVE_CREATEDIRECTORY
-Standard HID_FILESAVE_DEFAULTDIRECTORY
-DateiAuswahl HID_FILESAVE_FILEVIEW
-Passwort HID_FILESAVE_SAVEWITHPASSWORD
-AutomatischeDateinamenserweiterung HID_FILESAVE_AUTOEXTENSION
-UebergeordneterOrdner HID_FILESAVE_LEVELUP
+*SpeichernDlg sym:SVT_HID_FILESAVE_DIALOG
+Dateiname sym:SVT_HID_FILESAVE_FILEURL
+Vorlage sym:SVT_HID_FILESAVE_TEMPLATE
+Dateityp sym:SVT_HID_FILESAVE_FILETYPE
+Speichern sym:SVT_HID_FILESAVE_DOSAVE
+NeuerOrdner sym:SVT_HID_FILESAVE_CREATEDIRECTORY
+Standard sym:SVT_HID_FILESAVE_DEFAULTDIRECTORY
+DateiAuswahl sym:SVT_HID_FILESAVE_FILEVIEW
+Passwort sym:SVT_HID_FILESAVE_SAVEWITHPASSWORD
+AutomatischeDateinamenserweiterung sym:SVT_HID_FILESAVE_AUTOEXTENSION
+UebergeordneterOrdner sym:SVT_HID_FILESAVE_LEVELUP
 
 +ExportierenDlg SpeichernDlg
-Selektion HID_FILESAVE_SELECTION
+Selektion sym:SVT_HID_FILESAVE_SELECTION
 
 ' **** Hyperlink-File-Dialog
 ' ****
-*HyperlinkAuswahlDlg HID_FILEDLG_CHARDLG
-UebergeordneterOrdner fpicker:MenuButton:DLG_SVT_EXPLORERFILE:BTN_EXPLORERFILE_UP
-NeuerOrdner fpicker:ImageButton:DLG_SVT_EXPLORERFILE:BTN_EXPLORERFILE_NEWFOLDER
-Standard fpicker:MenuButton:DLG_SVT_EXPLORERFILE:BTN_EXPLORERFILE_STANDARD
-DateiAuswahl HID_FILEDLG_STANDARD
-Dateiname HID_FILEDLG_AUTOCOMPLETEBOX
-Dateityp fpicker:ListBox:DLG_SVT_EXPLORERFILE:LB_EXPLORERFILE_FILETYPE
-Oeffnen fpicker:PushButton:DLG_SVT_EXPLORERFILE:BTN_EXPLORERFILE_OPEN
-NurLesen fpicker:CheckBox:DLG_SVT_EXPLORERFILE:CB_EXPLORERFILE_READONLY
+*HyperlinkAuswahlDlg sym:SW_HID_FILEDLG_CHARDLG
+UebergeordneterOrdner sym:fpicker:MenuButton:DLG_SVT_EXPLORERFILE:BTN_EXPLORERFILE_UP
+NeuerOrdner sym:fpicker:ImageButton:DLG_SVT_EXPLORERFILE:BTN_EXPLORERFILE_NEWFOLDER
+Standard sym:fpicker:MenuButton:DLG_SVT_EXPLORERFILE:BTN_EXPLORERFILE_STANDARD
+DateiAuswahl sym:SVT_HID_FILEDLG_STANDARD
+Dateiname sym:SVT_HID_FILEDLG_AUTOCOMPLETEBOX
+Dateityp sym:fpicker:ListBox:DLG_SVT_EXPLORERFILE:LB_EXPLORERFILE_FILETYPE
+Oeffnen sym:fpicker:PushButton:DLG_SVT_EXPLORERFILE:BTN_EXPLORERFILE_OPEN
+NurLesen sym:fpicker:CheckBox:DLG_SVT_EXPLORERFILE:CB_EXPLORERFILE_READONLY
 
 ' **** general Color-Dialog ( under tools / options / staroffice / color / edit )
 ' ****
-*FarbeDlg svtools:ModalDialog:DLG_COLOR
+*FarbeDlg sym:svtools:ModalDialog:DLG_COLOR
 'Grundfarben
 'BenutzerdefinierteFarben
-Cyan svtools:MetricField:DLG_COLOR:NUM_CYAN
-Magenta svtools:MetricField:DLG_COLOR:NUM_MAGENTA
-Yellow svtools:MetricField:DLG_COLOR:NUM_YELLOW
-Key svtools:MetricField:DLG_COLOR:NUM_KEY
-Rot svtools:NumericField:DLG_COLOR:NUM_RED
-Gruen svtools:NumericField:DLG_COLOR:NUM_GREEN
-Blau svtools:NumericField:DLG_COLOR:NUM_BLUE
-Farbton svtools:NumericField:DLG_COLOR:NUM_HUE
-Saettigung svtools:NumericField:DLG_COLOR:NUM_SATURATION
-Hell svtools:NumericField:DLG_COLOR:NUM_LUMINANCE
-Links svtools:PushButton:DLG_COLOR:BTN_1
-Rechts svtools:PushButton:DLG_COLOR:BTN_2
+Cyan sym:svtools:MetricField:DLG_COLOR:NUM_CYAN
+Magenta sym:svtools:MetricField:DLG_COLOR:NUM_MAGENTA
+Yellow sym:svtools:MetricField:DLG_COLOR:NUM_YELLOW
+Key sym:svtools:MetricField:DLG_COLOR:NUM_KEY
+Rot sym:svtools:NumericField:DLG_COLOR:NUM_RED
+Gruen sym:svtools:NumericField:DLG_COLOR:NUM_GREEN
+Blau sym:svtools:NumericField:DLG_COLOR:NUM_BLUE
+Farbton sym:svtools:NumericField:DLG_COLOR:NUM_HUE
+Saettigung sym:svtools:NumericField:DLG_COLOR:NUM_SATURATION
+Hell sym:svtools:NumericField:DLG_COLOR:NUM_LUMINANCE
+Links sym:svtools:PushButton:DLG_COLOR:BTN_1
+Rechts sym:svtools:PushButton:DLG_COLOR:BTN_2
 
-*SendMasterDocument HID_FILESAVE_DIALOG
-Dateiname HID_SEND_MASTER_CTRL_EDIT_FILEURL
-Vorlage HID_SEND_MASTER_CTRL_LISTBOX_TEMPLATE
-Filter HID_SEND_MASTER_CTRL_LISTBOX_FILTER
-AutomatischeDateinamenserweiterung HID_SEND_MASTER_CTRL_CHECKBOX_AUTOEXTENSION
-Speichern HID_SEND_MASTER_CTRL_PUSHBUTTON_OK
-Cancel HID_SEND_MASTER_CTRL_PUSHBUTTON_CANCEL
-DateiAuswahl HID_SEND_MASTER_CTRL_CONTROL_FILEVIEW
-UebergeordneterOrdner HID_FILESAVE_LEVELUP
-NeuerOrdner HID_FILESAVE_CREATEDIRECTORY
-Standard HID_FILESAVE_DEFAULTDIRECTORY
+*SendMasterDocument sym:SVT_HID_FILESAVE_DIALOG
+Dateiname sym:SW_HID_SEND_MASTER_CTRL_EDIT_FILEURL
+Vorlage sym:SW_HID_SEND_MASTER_CTRL_LISTBOX_TEMPLATE
+Filter sym:SW_HID_SEND_MASTER_CTRL_LISTBOX_FILTER
+AutomatischeDateinamenserweiterung sym:SW_HID_SEND_MASTER_CTRL_CHECKBOX_AUTOEXTENSION
+Speichern sym:SW_HID_SEND_MASTER_CTRL_PUSHBUTTON_OK
+Cancel sym:SW_HID_SEND_MASTER_CTRL_PUSHBUTTON_CANCEL
+DateiAuswahl sym:SW_HID_SEND_MASTER_CTRL_CONTROL_FILEVIEW
+UebergeordneterOrdner sym:SVT_HID_FILESAVE_LEVELUP
+NeuerOrdner sym:SVT_HID_FILESAVE_CREATEDIRECTORY
+Standard sym:SVT_HID_FILESAVE_DEFAULTDIRECTORY
 
-*SendHTMLDocument HID_FILESAVE_DIALOG
-Dateiname HID_SEND_HTML_CTRL_EDIT_FILEURL
-Vorlage HID_SEND_HTML_CTRL_LISTBOX_TEMPLATE
-Filter HID_SEND_HTML_CTRL_LISTBOX_FILTER
-AutomatischeDateinamenserweiterung HID_SEND_HTML_CTRL_CHECKBOX_AUTOEXTENSION
-Speichern HID_SEND_HTML_CTRL_PUSHBUTTON_OK
-Cancel HID_SEND_HTML_CTRL_PUSHBUTTON_CANCEL
-DateiAuswahl HID_SEND_HTML_CTRL_CONTROL_FILEVIEW
-UebergeordneterOrdner HID_FILESAVE_LEVELUP
-NeuerOrdner HID_FILESAVE_CREATEDIRECTORY
-Standard HID_FILESAVE_DEFAULTDIRECTORY
+*SendHTMLDocument sym:SVT_HID_FILESAVE_DIALOG
+Dateiname sym:SW_HID_SEND_HTML_CTRL_EDIT_FILEURL
+Vorlage sym:SW_HID_SEND_HTML_CTRL_LISTBOX_TEMPLATE
+Filter sym:SW_HID_SEND_HTML_CTRL_LISTBOX_FILTER
+AutomatischeDateinamenserweiterung sym:SW_HID_SEND_HTML_CTRL_CHECKBOX_AUTOEXTENSION
+Speichern sym:SW_HID_SEND_HTML_CTRL_PUSHBUTTON_OK
+Cancel sym:SW_HID_SEND_HTML_CTRL_PUSHBUTTON_CANCEL
+DateiAuswahl sym:SW_HID_SEND_HTML_CTRL_CONTROL_FILEVIEW
+UebergeordneterOrdner sym:SVT_HID_FILESAVE_LEVELUP
+NeuerOrdner sym:SVT_HID_FILESAVE_CREATEDIRECTORY
+Standard sym:SVT_HID_FILESAVE_DEFAULTDIRECTORY
 
 
 ' **** Messageboxes amd Lastversion-message set to the active operator
@@ -119,15 +119,15 @@ Standard HID_FILESAVE_DEFAULTDIRECTORY
 
 ' **** new folder-dialog
 ' ****
-*NeuerOrdner fpicker:ModalDialog:DLG_SVT_QUERYFOLDERNAME
-OrdnerName fpicker:Edit:DLG_SVT_QUERYFOLDERNAME:ED_SVT_QUERYFOLDERNAME_DLG_NAME
+*NeuerOrdner sym:fpicker:ModalDialog:DLG_SVT_QUERYFOLDERNAME
+OrdnerName sym:fpicker:Edit:DLG_SVT_QUERYFOLDERNAME:ED_SVT_QUERYFOLDERNAME_DLG_NAME
 
 ' **** Translationwidow fuer das Ubersetzungstooling
 ' ****
-*TranslationWindow svtools:WorkWindow:TT_INLINE_TRANSLATION svtools:FloatingWindow:TT_INLINE_TRANSLATION
+*TranslationWindow sym:svtools:WorkWindow:TT_INLINE_TRANSLATION svtools:FloatingWindow:TT_INLINE_TRANSLATION
 
 ' **** specal longnames for bas test
 ' **** author marc.neumann@oracle.com
-*MSC_Special_Dialog MSC_Super_ID
-*MSC_Special_Dialog2 MSC_Super_ID2
-*MSC_Special_Dialog3 MSC_Super_ID3
+*MSC_Special_Dialog sym:customcontrol1
+*MSC_Special_Dialog2 sym:customcontrol2
+*MSC_Special_Dialog3 sym:customcontrol3

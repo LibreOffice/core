@@ -212,8 +212,8 @@ testcase tTextframes_20
     '/// + There are 1 page in the file.
     '/// + The frame is ocupied in the whole 1st page and wraped as Through
     '/// + Some text are behind the frame
-    Call hFileOpen(sTestFile,false)
-    Call sMakeReadOnlyDocumentEditable
+    hFileOpenLocally( sTestFile )
+    
     
     '/// Set focus to frame
     Call wTypeKeys ( "<Shift F4>" )
@@ -282,8 +282,8 @@ testcase tTextframes_21
     '/// + The frame is ocupied in the whole 1st page and wraped as None
     '/// + Some text are in the 2nd page
     
-    Call hFileOpen(sTestFile,false)
-    Call sMakeReadOnlyDocumentEditable
+    hFileOpenLocally( sTestFile )
+    
     
     '/// Set focus to frame
     Call wTypeKeys ( "<Shift F4>" )
@@ -353,8 +353,8 @@ testcase tTextframes_22
     '/// + there are some space in the left of the frame.
     '/// + Some text are in the 2nd page
     
-    Call hFileOpen(sTestFile,false)
-    Call sMakeReadOnlyDocumentEditable
+    hFileOpenLocally( sTestFile )
+    
     
     printlog "- Test wrap - before"
     
@@ -472,8 +472,8 @@ testcase tTextframes_23
     '/// + there are some space in the right of the frame.
     '/// + Some text are in the 2nd page
     
-    Call hFileOpen(sTestFile,false)
-    Call sMakeReadOnlyDocumentEditable
+    hFileOpenLocally( sTestFile )
+    
     
     printlog "- Test wrap - before"
     
@@ -868,7 +868,7 @@ testcase tTextframes_28
     
     printlog "Insert a frame"
     Call fInsertFrame(30, 30, 60, 60)
-    
+    Sleep 2
     printlog "Naming the frame"
     Call fFormatFrame("TabZusaetze")
     ObjektName.SetText sFrameName1
@@ -885,7 +885,7 @@ testcase tTextframes_28
     
     printlog "Insert another frame"
     Call fInsertFrame(50, 50, 80, 80)
-    
+    Sleep 2
     printlog "Naming the frame"
     Call fFormatFrame("TabZusaetze")
     ObjektName.SetText sFrameName2
@@ -1075,7 +1075,7 @@ testcase tTextframes_31
     Sleep 2
     
     '/// Check if the frame is non-editable
-    Call hFileOpen(sTestFile,false)
+    hFileOpen( sTestFile )
     
     Call wTypeKeys ( "<Shift F4>" )
     
@@ -1132,7 +1132,7 @@ testcase tTextframes_32
     Sleep 2
     
     '/// Check if the text can be inputed into frame
-    Call hFileOpen(sTestFile,false)
+    hFileOpen( sTestFile )
     
     Call wTypeKeys "<SHIFT F4><RETURN>"
     Wait 500

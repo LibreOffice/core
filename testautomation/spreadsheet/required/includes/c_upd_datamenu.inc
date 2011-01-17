@@ -885,10 +885,7 @@ testcase tDataDataPilot
     
     '/// Open testdocument 'gTesttoolPath + spreadsheet\required\input\datapilot.ods'
     printlog " Open testdocument 'gTesttoolPath + spreadsheet\required\input\datapilot.ods'"
-    Call hFileOpen (Convertpath (gTesttoolPath + "spreadsheet\required\input\datapilot.ods" ))
-    '/// If the file is not editable, click the edit button on standardbar
-    printlog " If the file is not editable, click the edit button on standardbar"
-    Call sMakeReadOnlyDocumentEditable
+    hFileOpenLocally( gTesttoolPath & "spreadsheet\required\input\datapilot.ods" )
     '/// Select cell C34
     printlog " Select cell C34"
     Call fCalcSelectRange ( "C34" )
@@ -1030,10 +1027,7 @@ testcase tDataRefreshRange
 
     '/// Load testdocument Database_Refresh
     printlog " Load testdocument Database_Refresh"
-    Call hFileOpen (Convertpath (gTesttoolPath + "spreadsheet\required\input\Database_Refresh.ods" ))
-    '/// If the file is not editable, click the edit button on standardbar
-    printlog " If the file is not editable, click the edit button on standardbar"
-    Call sMakeReadOnlyDocumentEditable
+    hFileOpenLocally( gTesttoolPath & "spreadsheet\required\input\Database_Refresh.ods" )
     '/// Refresh Database by 'Data – Refresh Range'
     printlog " Refresh Database by 'Data – Refresh Range'"
     DataRefreshRange

@@ -35,12 +35,15 @@
 '\*************************************************************************************
 
 testcase tEditImageMap
-   Call  hNewDocument               '/// new document ///'
-   EditImageMap                  '/// edit image map ///'
+    printlog "new document"
+   Call  hNewDocument
+   printlog "edit image map"
+   EditImageMap                  
    Kontext "ImageMapEditor"
    sleep 1
-   if ImageMapEditor.Exists (2) then         '/// test dialog controls ///'
+   if ImageMapEditor.Exists (2) then         
    printlog "ImageMap editor exists"
+        printlog "test dialog controls"
       DialogTest ( ImageMapEditor )
       try
         ImageMapEditor.Close
@@ -60,52 +63,60 @@ testcase tEditImageMap
         Printlog "ImageMap closed using the edit-menu entry"
       endcatch
    end if
-   Call  hCloseDocument             '/// close document ///'
+   printlog "close document"
+   Call  hCloseDocument             
    
 endcase 'tEditImageMap
-'------------------------------------------------------------------------------------------------------------------------------------
+
+'-------------------------------------------------------------------------------
+
 testcase tEditImageMapProperties
 
     qaerrorlog "test not yet ready."
     goto endsub
-    Call  hNewDocument                  '/// new document ///'
-    InsertGraphicsFromFile               '/// Insert a graphic and select it ///'
+    printlog "new document"
+    Call  hNewDocument
+    printlog "Insert a graphic and select it"
+    InsertGraphicsFromFile               
     sleep (1)
     Kontext "GrafikEinfuegenDlg"
-        sleep (2)
-        Dateiname.SetText ConvertPath (gTesttoolPath + "graphics\required\input\SaveAsPicture\SaveAsPicture.pcx")
-        sleep (2)
-        Oeffnen.Click
-        sleep (2)
-    EditImageMap                              '/// Open the image map dialog ///'
-        Kontext "ImageMapEditor"
-        sleep (1)
-        if ImageMapEditor.Exists (2) then         '/// test dialog controls ///'
-            printlog "ImageMap editor exists"
-        else
-            warnlog "Something is wrong, the Imagemap didn't show up."
-        end if
+    sleep (2)
+    Dateiname.SetText ConvertPath (gTesttoolPath + "graphics\required\input\SaveAsPicture\SaveAsPicture.pcx")
+    sleep (2)
+    Oeffnen.Click
+    sleep (2)
+    printlog "Open the image map dialog"
+    EditImageMap
+    Kontext "ImageMapEditor"
+    sleep (1)
+    if ImageMapEditor.Exists (2) then
+        printlog "ImageMap editor exists"
+    else
+        warnlog "Something is wrong, the Imagemap didn't show up."
+    end if
+    printlog "Insert an 'image map' object"
+    Ellipse.Click
+    Dokument.MouseDown 50,50
+    Dokument.MouseMove 50,50,10,10
+    Dokument.MouseUp 10,10
 
-        Ellipse.Click                                   '/// Insert an 'image map' object ///'
-        Dokument.MouseDown 50,50
-        Dokument.MouseMove 50,50,10,10
-        Dokument.MouseUp 10,10
-
-        Eigenschaften.Click                       '/// Click on the properties icon to open up the properties for the Object ///'
-        kontext "ImageMapHyperlink"
-        sleep (1)
-        if ImageMapHyperlink.Exists (2) then 
-            printlog "ImageMapHyperlink (properties) editor exists"
-        else
-            warnlog "Something is wrong, the ImageMapHyperlink (properties) didn't show up."
-        end if
-
-        URL.SetText "http://www.cnn.com"          '/// Write some text in each field ///'
-        Frame.SetText "http://www.framed.com"
-        Objectname.SetText "This is a strange name: Huckillerry Bohaahw"
-        Alternativetext.SetText "Alternative, the only way to fly..."
-        Description.SetText "Just a Foney-text... or whatever it's called."
-        ImageMapHyperlink.Ok        '/// Close the Properties-Dialogue with "Ok" ///'
+    printlog "Click on the properties icon to open up the properties for the Object"
+    Eigenschaften.Click
+    kontext "ImageMapHyperlink"
+    sleep (1)
+    if ImageMapHyperlink.Exists (2) then
+        printlog "ImageMapHyperlink (properties) editor exists"
+    else
+        warnlog "Something is wrong, the ImageMapHyperlink (properties) didn't show up."
+    end if
+    printlog "Write some text in each field"
+    URL.SetText "http://www.cnn.com"
+    Frame.SetText "http://www.framed.com"
+    Objectname.SetText "This is a strange name: Huckillerry Bohaahw"
+    Alternativetext.SetText "Alternative, the only way to fly..."
+    Description.SetText "Just a Foney-text... or whatever it's called."
+    printlog "Close the Properties-Dialogue with Ok"
+    ImageMapHyperlink.Ok
     kontext "ImageMapEditor"
     Zuweisen.Click
     sleep (1)
@@ -117,7 +128,8 @@ testcase tEditImageMapProperties
         kontext "DocumentImpress"
     end if
 
-    EditImageMap                                        '/// Check if what we wrote in the Properites-Dialogue still is visible."
+    EditImageMap
+    printlog "Check if what we wrote in the Properites-Dialogue still is visible."
     Kontext "ImageMapEditor"
     sleep (1)
     if ImageMapEditor.Exists (2) then   
@@ -128,32 +140,33 @@ testcase tEditImageMapProperties
 
     Dokument.TypeKeys "<TAB>"
     sleep (1)
+    printlog "Click on the properties icon to open up the properties for the Object"
+    Eigenschaften.Click                                 
+    kontext "ImageMapHyperlink"
+    sleep (1)
+    if ImageMapHyperlink.Exists (2) then
+        printlog "ImageMapHyperlink (properties) editor exists"
+    else
+        warnlog "Something is wrong, the ImageMapHyperlink (properties) didn't show up."
+    end if
 
-    Eigenschaften.Click                                 '/// Click on the properties icon to open up the properties for the Object ///'
-        kontext "ImageMapHyperlink"
-        sleep (1)
-        if ImageMapHyperlink.Exists (2) then   
-            printlog "ImageMapHyperlink (properties) editor exists"
-        else
-            warnlog "Something is wrong, the ImageMapHyperlink (properties) didn't show up."
-        end if
-
-        '/// Check if the entries we set before has remained the same, with one exception: cnn.com should now have a slash after it.  ///'
-        if URL.GetText <> "http://www.cnn.com/" then warnlog "URL should have been: http://www.cnn.com/ . But was " + URL.GetText
+    printlog "Check if the entries we set before has remained the same, with one exception: cnn.com should now have a slash after it. "
+    if URL.GetText <> "http://www.cnn.com/" then warnlog "URL should have been: http://www.cnn.com/ . But was " + URL.GetText
 '        if Frame.GetSelText <> "http://www.framed.com" then warnlog "Frame should have been: http://www.framed.com. But was " + Frame.GetSelText
-        if Objectname.GetText <> "This is a strange name: Huckillerry Bohaahw"  then warnlog "Objectname. should have been: This is a strange name: Huckillerry Bohaahw. But was " + Objectname.GetText
-        if Alternativetext.GetText <> "Alternative, the only way to fly..." then warnlog "Alternativetext should have been: . But was " + Alternativetext.GetText
-        if Description.GetText <> "Just a Foney-text... or whatever it's called." then warnlog "Description. should have been: . But was " + Description.GetText
-        ImageMapHyperlink.Ok      '/// Close the Properties-Dialogue ///'
-        sleep (1)
+    if Objectname.GetText <> "This is a strange name: Huckillerry Bohaahw"  then warnlog "Objectname. should have been: This is a strange name: Huckillerry Bohaahw. But was " + Objectname.GetText
+    if Alternativetext.GetText <> "Alternative, the only way to fly..." then warnlog "Alternativetext should have been: . But was " + Alternativetext.GetText
+    if Description.GetText <> "Just a Foney-text... or whatever it's called." then warnlog "Description. should have been: . But was " + Description.GetText
+    printlog "Close the Properties-Dialogue"
+    ImageMapHyperlink.Ok
+    sleep (1)
 
     kontext "ImageMapEditor"
     Zuweisen.Click
     sleep (1)
     ImageMapEditor.Close
     sleep (1)
-
-   Call  hCloseDocument             '/// close document ///'
+    printlog "close document"
+    Call  hCloseDocument
    
 endcase 'tEditImageMapProperties
 '------------------------------------------------------------------------------------------------------------------------------------

@@ -78,7 +78,7 @@ testcase WriterToHTMLText
      Call hCloseDocument
      printlog " + Close saved document "
      wait 500
-     Call hFileOpen (gOfficepath + "user\work\writer_to_html_text.html")
+     hFileOpen( gOfficepath + "user\work\writer_to_html_text.html")
      printlog " + Reopen saved document "
      Wait 500
      Call hCloseDocument
@@ -131,7 +131,7 @@ testcase WriterToHTMLField
      Call hCloseDocument
      printlog " + Close saved document "
      wait 500
-     Call hFileOpen (gOfficepath + "user\work\writer_to_html_field.html")
+     hFileOpen( gOfficepath + "user\work\writer_to_html_field.html")
      printlog " + Reopen saved document "
      Wait 500
      Call hCloseDocument
@@ -184,7 +184,7 @@ testcase WriterToHTMLTable
      Call hCloseDocument
      printlog " + Close saved document "
      wait 500
-     Call hFileOpen (gOfficepath + "user\work\writer_to_html_table.html")
+     hFileOpen( gOfficepath + "user\work\writer_to_html_table.html")
      printlog " + Reopen saved document "
      Wait 500
      Call hCloseDocument
@@ -237,7 +237,7 @@ testcase WriterToHTMLFrame
      Call hCloseDocument
      printlog " + Close saved document "
      wait 500
-     Call hFileOpen (gOfficepath + "user\work\writer_to_html_frame.html")
+     hFileOpen( gOfficepath + "user\work\writer_to_html_frame.html")
      printlog " + Reopen saved document "
      Wait 500
      Call hCloseDocument
@@ -290,7 +290,7 @@ testcase WriterToHTMLDrawingObject
      Call hCloseDocument
      printlog " + Close saved document "
      wait 500
-     Call hFileOpen (gOfficepath + "user\work\writer_to_html_draw.html")
+     hFileOpen( gOfficepath + "user\work\writer_to_html_draw.html")
      printlog " + Reopen saved document "
      Wait 500
      Call hCloseDocument
@@ -343,7 +343,7 @@ testcase WriterToHTMLGraphicLinked
      Call hCloseDocument
      printlog " + Close saved document "
      wait 500
-     Call hFileOpen (gOfficepath + "user\work\writer_to_html_graphic1.html")
+     hFileOpen( gOfficepath + "user\work\writer_to_html_graphic1.html")
      printlog " + Reopen saved document "
      Wait 500
      Call hCloseDocument
@@ -396,7 +396,7 @@ testcase WriterToHTMLGraphicEmbedded
      Call hCloseDocument
      printlog " + Close saved document "
      wait 500
-     Call hFileOpen (gOfficepath + "user\work\writer_to_html_graphic2.html")
+     hFileOpen( gOfficepath + "user\work\writer_to_html_graphic2.html")
      printlog " + Reopen saved document "
      Wait 500
      Call hCloseDocument
@@ -449,7 +449,7 @@ testcase WriterToHTMLOLEObject
      Call hCloseDocument
      printlog " + Close saved document "
      wait 500
-     Call hFileOpen (gOfficepath + "user\work\writer_to_html_ole.html")
+     hFileOpen( gOfficepath + "user\work\writer_to_html_ole.html")
      printlog " + Reopen saved document "
      Wait 500
      Call hCloseDocument
@@ -502,7 +502,7 @@ testcase WriterToHTMLControl
      Call hCloseDocument
      printlog " + Close saved document "
      wait 500
-     Call hFileOpen (gOfficepath + "user\work\writer_to_html_control.html")
+     hFileOpen( gOfficepath + "user\work\writer_to_html_control.html")
      printlog " + Reopen saved document "
      Wait 500
      Call hCloseDocument

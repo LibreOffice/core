@@ -29,31 +29,6 @@
 '*
 '* short description : Test the functionality of Paragraph Formatting - 2
 '*
-'************************************************************************
-'*
-' #1 tParagraphAlignment1       'Test 'Left' alignment
-' #1 tParagraphAlignment2       'Test 'Right' alignment
-' #1 tParagraphAlignment3       'Test 'Center' alignment
-' #1 tParagraphAlignment4       'Test 'Justified' alignment - Default
-' #1 tParagraphAlignment5       'Test 'Justified' alignment - Centered
-' #1 tParagraphAlignment6       'Test 'Justified' alignment - Justified
-' #1 tParagraphAlignment7       'Test 'Expand single word'
-' #1 tParagraphAlignment8       'Test Uncheck 'Snap to text grid(if active)'
-' #1 tParagraphAlignment9       'Test Check 'Snap to text grid(if active)'
-' #1 tParagraphTextFlow1        'Hyphenation must be processed while entering text WITHOUT inquiry
-' #1 tParagraphTextFlow2        'Hyphenation - Characters at line end
-' #1 tParagraphTextFlow3        'Hyphenation - Characters at line begin
-' #1 tParagraphTextFlow4        'Hyphenation - maxinum number of consecutive typhens
-' #1 tParagraphTextFlow5        'Paragraph break before Column
-' #1 tParagraphTextFlow6        'Paragraph break after Column
-' #1 tParagraphTextFlow7        'Paragraph break before Page
-' #1 tParagraphTextFlow8        'Paragraph break after Page
-' #1 tParagraphTextFlow9        'Do not split paragraph
-' #1 tParagraphTextFlow10       'Keep with next paragraph
-' #1 tParagraphTextFlow11       'Orphan control
-' #1 tParagraphTextFlow12       'widow control
-' #1 tParagraphTextFlow13       'Special test for Hyphenation
-'*
 '\***********************************************************************
 
 testcase tParagraphAlignment1
@@ -70,8 +45,7 @@ testcase tParagraphAlignment1
 
    '/// + Open the test file
    '/// + This file includes 1 paragraphs , and a pic is anchored to the character
-    Call hFileOpen(sTestFile)
-    Call sMakeReadOnlyDocumentEditable
+    hFileOpenLocally( sTestFile )
 
    'Get the original coordinate-X
     Call wTypeKeys ( "<Shift F4>" )
@@ -119,8 +93,7 @@ testcase tParagraphAlignment2
 
    '/// + Open the test file
    '/// + This file includes 1 paragraphs , and a pic is anchored to the laste character
-    Call hFileOpen(sTestFile)
-    Call sMakeReadOnlyDocumentEditable
+    hFileOpenLocally( sTestFile )
 
    '/// + Format/Paragraph / Alignment , choose Right/Bottom option
     Call fFormatParagraph("TabAusrichtungAbsatz")
@@ -156,8 +129,7 @@ testcase tParagraphAlignment3
 
    '/// + Open the test file
    '/// + This file includes 1 paragraphs , and a pic is anchored to the character
-    Call hFileOpen(sTestFile)
-    Call sMakeReadOnlyDocumentEditable
+    hFileOpenLocally( sTestFile )
 
    '/// + Format/Paragraph / Alignment , choose Center option
     Call fFormatParagraph("TabAusrichtungAbsatz")
@@ -196,8 +168,7 @@ testcase tParagraphAlignment4
 
    '/// Open the test file
    '/// + This file includes 1 paragraphs , and a pic is anchored to the last character
-    Call hFileOpen(sTestFile)
-    Call sMakeReadOnlyDocumentEditable
+    hFileOpenLocally( sTestFile )
 
     Call wTypeKeys ( "<Shift F4>" )
     Sleep 1
@@ -264,8 +235,7 @@ testcase tParagraphAlignment5
 
    '/// Open the test file
    '/// + This file includes 1 paragraphs , and a pic is anchored to the last character
-    Call hFileOpen(sTestFile)
-    Call sMakeReadOnlyDocumentEditable
+    hFileOpenLocally( sTestFile )
 
    '/// Format/Paragraph / Alignment ,
    '/// + choose Justified option , and select centered in last line
@@ -307,8 +277,7 @@ testcase tParagraphAlignment6
    '/// Open the test file
    '/// + This file includes 1 paragraphs,
    '/// + and 2 pics are in 2nd line
-    Call hFileOpen(sTestFile)
-    Call sMakeReadOnlyDocumentEditable
+    hFileOpenLocally( sTestFile )
 
     Call wTypeKeys ( "<Shift F4>" )
     Call wTypeKeys "<TAB>"
@@ -374,8 +343,7 @@ testcase tParagraphAlignment7
     '/// + This file includes 1 paragraphs ,
     '/// + there is only 1 word - "That" in last line ,
     '/// + and a drawring object is anchored as character after "That"
-    Call hFileOpen(sTestFile)
-    Call sMakeReadOnlyDocumentEditable
+    hFileOpenLocally( sTestFile )
 
     printlog "Select the object."
     Sleep 1
@@ -441,8 +409,7 @@ testcase tParagraphAlignment8
    '/// Open the test file
    '/// + This file includes 1 paragraphs ,
    '/// + and a drawring object is anchored as character after "That"
-    Call hFileOpen(sTestFile)
-    Call sMakeReadOnlyDocumentEditable
+    hFileOpenLocally( sTestFile )
 
    '/// Get the drawing object original position ///
     Call wTypeKeys ( "<Shift F4>" )
@@ -512,8 +479,7 @@ testcase tParagraphAlignment9
    '/// Open the test file
    '/// + This file includes 1 paragraphs ,
    '/// + and a drawring object is anchored as character after "That"
-    Call hFileOpen(sTestFile)
-    Call sMakeReadOnlyDocumentEditable
+    hFileOpenLocally( sTestFile )
 
    '/// Get the drawing object original position ///
     Call wTypeKeys ( "<Shift F4>" )
@@ -578,8 +544,7 @@ testcase tParagraphTextFlow1
     
     '/// Open the test file
     '/// + This file includes 2 words : AAA and Kilometerhigh
-    Call hFileOpen(sTestFile)
-    Call sMakeReadOnlyDocumentEditable
+    hFileOpenLocally( sTestFile )
     
     'the focus is in front of Kilometerhigh
     Call wTypeKeys "<Home>"
@@ -607,8 +572,7 @@ testcase tParagraphTextFlow1
     Call hCloseDocument
     
     Call hNewDocument
-    Call hFileOpen(sTestFile)
-    Call sMakeReadOnlyDocumentEditable
+    hFileOpenLocally( sTestFile )
     
     '/// 2. Test there is the Hyphenation configuratioin
     '/// + Format/Paragraph / Text Flow ,
@@ -657,8 +621,7 @@ testcase tParagraphTextFlow2
     
     '/// Open the test file
     '/// + This file includes 2 words : AAA and Kilometerhigh
-    Call hFileOpen(sTestFile)
-    Call sMakeReadOnlyDocumentEditable
+    hFileOpenLocally( sTestFile )
     
     '/// 1.Test Characters at line end ==> 6
     '/// + Format/Paragraph / Text Flow ,
@@ -689,8 +652,7 @@ testcase tParagraphTextFlow2
     
     Call hNewDocument
     
-    Call hFileOpen(sTestFile)
-    Call sMakeReadOnlyDocumentEditable
+    hFileOpenLocally( sTestFile )
     
     '/// 2.Test Characters at line end ==> 8
     '/// + Format/Paragraph / Text Flow ,
@@ -735,8 +697,7 @@ testcase tParagraphTextFlow3
     
     '/// Open the test file
     '/// + This file includes 2 words : AAA and Kilometerhigh
-    Call hFileOpen(sTestFile)
-    Call sMakeReadOnlyDocumentEditable
+    hFileOpenLocally( sTestFile )
     
     '/// 1.Test Characters at line begin ==> 4
     '/// + Format/Paragraph / Text Flow ,
@@ -766,8 +727,8 @@ testcase tParagraphTextFlow3
     
     Call hNewDocument
     
-    Call hFileOpen(sTestFile)
-    Call sMakeReadOnlyDocumentEditable
+    hFileOpenLocally( sTestFile )
+
     
     '/// 2.Test Characters at line end ==> 6
     '/// + Format/Paragraph / Text Flow ,
@@ -817,8 +778,7 @@ testcase tParagraphTextFlow4
    '/// Open the test file
    '/// + This file includes 4 words : KiloAmterhigh1 kiloAmeterhigh2 kiloAmeterhigh3 kiloAmeterhigh4
    '/// + the words' length is longer then page length
-    Call hFileOpen(sTestFile)
-    Call sMakeReadOnlyDocumentEditable
+    hFileOpenLocally( sTestFile )
 
    '/// 1.Test maxinum number of consecutive typhens (default => 0)
    '/// + Format/Paragraph / Text Flow ,
@@ -935,8 +895,7 @@ testcase tParagraphTextFlow5
    '/// + There are 2 columns/page ,includes  2 paragraph
    '/// + the 1st paragraph is in 1st and 2nd column
    '/// + the 2nd paragraph is is 2nd and 3rd column
-    Call hFileOpen(sTestFile)
-    Call sMakeReadOnlyDocumentEditable
+    hFileOpenLocally( sTestFile )
 
    '/// Set the focus to 2nd paragraph
     Kontext
@@ -987,8 +946,7 @@ testcase tParagraphTextFlow6
    '/// + There are 2 columns/page ,includes  1 paragraph
    '/// + the paragraph is in 1st and 2nd column
    '/// + and it is NOT full of 2nd column
-    Call hFileOpen(sTestFile)
-    Call sMakeReadOnlyDocumentEditable
+    hFileOpenLocally( sTestFile )
 
    '/// Format/Paragraph / Text Flow
    '/// + Set 'Breaks' enable
@@ -1031,8 +989,7 @@ testcase tParagraphTextFlow7
 
    '/// Open the test file
    '/// + There are 2 paragraphs in 1 page
-    Call hFileOpen(sTestFile)
-    Call sMakeReadOnlyDocumentEditable
+    hFileOpenLocally( sTestFile )
 
    '/// Set the focus to 2nd paragraph
     Kontext
@@ -1092,8 +1049,7 @@ testcase tParagraphTextFlow8
 
    '/// Open the test file
    '/// + There is 1 paragraph in the file
-    Call hFileOpen(sTestFile)
-    Call sMakeReadOnlyDocumentEditable
+    hFileOpenLocally( sTestFile )
 
    '/// Format/Paragraph / Text Flow
    '/// + Set 'Breaks' enable
@@ -1139,8 +1095,7 @@ testcase tParagraphTextFlow9
 
    '/// Open the test file
    '/// + There is 1 paragraph which cross 2 pages
-    Call hFileOpen(sTestFile)
-    Call sMakeReadOnlyDocumentEditable
+    hFileOpenLocally( sTestFile )
     Call wTypeKeys "<MOD1 Home>"
 
     Call fFindWord("She")
@@ -1173,8 +1128,7 @@ testcase tParagraphTextFlow9
 
    PrintLog "-  Check Don't split paragraph"
    Call hNewDocument
-    Call hFileOpen(sTestFile)
-    Call sMakeReadOnlyDocumentEditable
+    hFileOpenLocally( sTestFile )
 
     Call wTypeKeys "<MOD1 Home>"
 
@@ -1225,8 +1179,7 @@ testcase tParagraphTextFlow10
    '/// Open the test file
    '/// There are 2 paragraphes in the file , 1st one crosses
    '/// + 1st and 2nd page , 2nd one is in 2nd page
-    Call hFileOpen(sTestFile)
-    Call sMakeReadOnlyDocumentEditable
+    hFileOpenLocally( sTestFile )
     EditSearchAndReplace
     Kontext "FindAndReplace"
         SearchFor.SetText "He1"
@@ -1269,8 +1222,7 @@ testcase tParagraphTextFlow10
 
    Call hNewDocument
 
-    Call hFileOpen(sTestFile)
-    Call sMakeReadOnlyDocumentEditable
+    hFileOpenLocally( sTestFile )
 
     PrintLog "-  Check Keep with next paragraph"
    '/// 2. Test checking "Keep with next paragraph"
@@ -1331,8 +1283,7 @@ testcase tParagraphTextFlow11
 
    '/// Open the test file
    '/// + There is 1 paragraph (8 lines) in the file
-    Call hFileOpen(sTestFile)
-    Call sMakeReadOnlyDocumentEditable
+    hFileOpenLocally( sTestFile )
 
    '/// Format/Paragraph / Text Flow
    '/// + Check 'Orphan control' , set 3 in 'Lines'
@@ -1385,8 +1336,7 @@ testcase tParagraphTextFlow12
 
    '/// Open the test file
    '/// + There is 1 paragraph (8 lines) in the file
-    Call hFileOpen(sTestFile)
-    Call sMakeReadOnlyDocumentEditable
+    hFileOpenLocally( sTestFile )
 
    '/// Format/Paragraph / Text Flow
    '/// + Check 'Widow control' , set 3 in 'Lines'
@@ -1436,8 +1386,7 @@ testcase tParagraphTextFlow13
 
    '/// Open the test file
    '/// + There is 1 word TABC in the end of the first line
-    Call hFileOpen(sTestFile)
-    Call sMakeReadOnlyDocumentEditable
+    hFileOpenLocally( sTestFile )
 
    '/// Press spaces in the head of the first line , we hope
    '/// + the whole word - 'TABC' will go to 2nd line at one time

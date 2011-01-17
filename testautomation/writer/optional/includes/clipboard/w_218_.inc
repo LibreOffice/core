@@ -49,8 +49,8 @@ testcase HTMLToDRAWText
     printlog " + Jump to beginning of document "
     printlog " + Select first paragraph "
     printlog " + Copy selected text "
-    Call hFileOpen (gtesttoolpath & "writer\optional\input\clipboard\html.html")
-    Call sMakeReadOnlyDocumentEditable
+    hFileOpenLocally( gtesttoolpath & "writer\optional\input\clipboard\html.html")
+    
     printlog "  Jump to beginning of document "
     Call wTypeKeys "<Mod1 Home>"
     Call wTypeKeys "<Shift Down><Shift End>"
@@ -115,8 +115,8 @@ testcase HTMLToDRAWField
     printlog " + Jump to beginning of document "
     printlog " + Select paragraph with 'Date Field' "
     printlog " + Copy selected text "
-    Call hFileOpen (gtesttoolpath & "writer\optional\input\clipboard\html.html")
-    Call sMakeReadOnlyDocumentEditable
+    hFileOpenLocally( gtesttoolpath & "writer\optional\input\clipboard\html.html")
+    
     printlog "  Jump to beginning of document "
     Call wTypeKeys "<Mod1 Home>"
     Call wTypeKeys "<Down>",2
@@ -154,7 +154,7 @@ testcase HTMLToDRAWField
         Call hCloseDocument
         sleep (2)
         printlog " + Reopen saved document "
-        Call hFileOpen (gOfficepath + "user\work\html_to_draw_field.odg",false)
+        hFileOpen( gOfficepath + "user\work\html_to_draw_field.odg",false)
         Wait 500
         printlog " + Close saved document "
         Call hCloseDocument
@@ -177,8 +177,8 @@ testcase HTMLToDRAWTable
   printlog " + Jump to beginning of document "
   printlog " + Select 'Table' "
   printlog " + Copy selected table "
-  Call hFileOpen (gtesttoolpath & "writer\optional\input\clipboard\html.html")
-  Call sMakeReadOnlyDocumentEditable
+  hFileOpenLocally( gtesttoolpath & "writer\optional\input\clipboard\html.html")
+  
   printlog "  Jump to beginning of document "
   Call wTypeKeys "<Mod1 Home>"
   Call wTypeKeys "<Down>",5
@@ -211,7 +211,7 @@ testcase HTMLToDRAWTable
      Call hCloseDocument
      wait 500
      printlog " + Reopen saved document "
-     Call hFileOpen (gOfficepath + "user\work\html_to_draw_table.odg",false)
+     hFileOpen( gOfficepath + "user\work\html_to_draw_table.odg",false)
      Wait 500
      printlog " + Close saved document "
      Call hCloseDocument
@@ -234,8 +234,8 @@ testcase HTMLToDRAWGraphicLinked
     printlog " + Jump to beginning of document "
     printlog " + Select 'Linked Graphic' "
     printlog " + Copy selected Linked Graphic "
-    Call hFileOpen (gtesttoolpath & "writer\optional\input\clipboard\html.html")
-    Call sMakeReadOnlyDocumentEditable
+    hFileOpenLocally( gtesttoolpath & "writer\optional\input\clipboard\html.html")
+    
     printlog "  Jump to beginning of document "
     Call wTypeKeys "<Mod1 Home>"
     Call wTypeKeys ( "<Shift F4>" )
@@ -267,7 +267,7 @@ testcase HTMLToDRAWGraphicLinked
         Call hCloseDocument
         wait 500
         printlog " + Reopen saved document "
-        Call hFileOpen (gOfficepath + "user\work\html_to_draw_graphic1.odg",false)
+        hFileOpen( gOfficepath + "user\work\html_to_draw_graphic1.odg",false)
         Wait 500
         printlog " + Close saved document "
         Call hCloseDocument
@@ -290,8 +290,8 @@ testcase HTMLToDRAWControl
     printlog " + Jump to beginning of document "
     printlog " + Select 'Control' "
     printlog " + Copy selected Control "
-    Call hFileOpen (gtesttoolpath & "writer\optional\input\clipboard\html.html")
-    Call sMakeReadOnlyDocumentEditable
+    hFileOpenLocally( gtesttoolpath & "writer\optional\input\clipboard\html.html")
+    
     printlog "  Jump to beginning of document "
     Call wTypeKeys "<Mod1 Home>"
     Call wTypeKeys ( "<Shift F4>" )
@@ -324,7 +324,7 @@ testcase HTMLToDRAWControl
         Call hCloseDocument
         wait 500
         printlog " + Reopen saved document "
-        Call hFileOpen (gOfficepath + "user\work\html_to_draw_control.odg",false)
+        hFileOpen( gOfficepath + "user\work\html_to_draw_control.odg",false)
         Wait 500
         printlog " + Close saved document "
         Call hCloseDocument
@@ -347,8 +347,8 @@ testcase HTMLToDRAWFloatingFrame
     printlog " + Jump to beginning of document "
     printlog " + Select 'Floating Frame' "
     printlog " + Copy selected Floating Frame "
-    Call hFileOpen (gtesttoolpath & "writer\optional\input\clipboard\html.html")
-    Call sMakeReadOnlyDocumentEditable
+    hFileOpenLocally( gtesttoolpath & "writer\optional\input\clipboard\html.html")
+    
     printlog "  Jump to beginning of document "
     Call wTypeKeys "<Mod1 Home>"
     Call wTypeKeys ( "<Shift F4>" )
@@ -386,7 +386,7 @@ testcase HTMLToDRAWFloatingFrame
         Call hCloseDocument
         wait 500
         printlog " + Reopen saved document "
-        Call hFileOpen (gOfficepath + "user\work\html_to_draw_float.odg",false)
+        hFileOpen( gOfficepath + "user\work\html_to_draw_float.odg",false)
         Wait 500
         printlog " + Close saved document "
         Call hCloseDocument

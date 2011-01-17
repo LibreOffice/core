@@ -273,8 +273,8 @@ testcase tTextframes_36
     '/// + This test file is designed for testing link
     '/// + frames which are placed on different pages
     '/// + There are 2 pages in the file and 1 frame/page
-    Call hFileOpen(sTestFile,false)
-    Call sMakeReadOnlyDocumentEditable
+    hFileOpenLocally( sTestFile )
+    
     
     'Set focus to first frame
     Call wTypeKeys ( "<Shift F4>" )
@@ -364,8 +364,8 @@ testcase tTextframes_37
     '/// + frames which are placed on header
     '/// + There are 2 frames in the header
     
-    Call hFileOpen(sTestFile,false)
-    Call sMakeReadOnlyDocumentEditable
+    hFileOpenLocally( sTestFile )
+    
     
     '/// Set focus to first frame
     Call wTypeKeys ( "<Shift F4>" )
@@ -427,8 +427,8 @@ testcase tTextframes_38
     '/// + This test file is designed for testing link
     '/// + frames which are placed on header
     '/// + There are 2 frames in the header
-    Call hFileOpen(sTestFile,false)
-    Call sMakeReadOnlyDocumentEditable
+    hFileOpenLocally( sTestFile )
+    
     
     '/// Set focus to first frame
     Call wTypeKeys ( "<Shift F4>" )

@@ -270,6 +270,12 @@ function hMenuFindSelect(MenuID as variant, SelectSlot as Boolean, ExpectedNr as
                         warnlog "The real Position (Separators included) was: " + i
                     endif
                     i = RealEnd
+                else
+                    if ( i = ExpectedNr ) then
+                        if nID = "" then
+                           warnlog "#i115132#Missing .uno Slots in context menus"
+                        endif
+                    endif
                 endif
             next i
         else

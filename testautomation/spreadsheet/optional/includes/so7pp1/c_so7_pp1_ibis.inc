@@ -27,7 +27,7 @@
 '**
 '** owner : oliver.craemer@Sun.COM
 '**
-'** short description :  Test IBIS bug fixes 
+'** short description :  Test IBIS bug fixes
 '**
 '************************************************************************
 ' **
@@ -40,21 +40,17 @@
 testcase tIBIS111099
 
     Dim testdoc as string
-    testdoc = convertpath(gOfficePath & "user/work/111099.xls")
-    Printlog "Copy testdocument locally"
-    app.FileCopy convertpath(gTesttoolpath & "spreadsheet\optional\input\111099.xls"),gOfficePath + ConvertPath("user/work/111099.xls")
+    testdoc = convertpath( gTesttoolpath & "spreadsheet\optional\input\111099.xls" )
+
     printlog " Open the test document"
-    Call hFileOpen(testdoc)
-    Call sMakeReadOnlyDocumentEditable    
-    '/// Invoke Control Toolbar
-    '///+ Try to click control 'Push Button'
-    '///+> <ul><li>Click successful - BUG #111099#</li>
-    '///+ <li>Click fails - document opened as expected in non-design mode</li>
+    hFileOpenLocally(testdoc)
+
+    printlog " Select formcontrols toolbar"
     Call hToolbarSelect("CONTROLS", true)
     sleep(2)
     Kontext "FormControls"
-    if SwitchControlDesignMode.IsEnabled then 
-        if SwitchControlDesignMode.getState(2) = 0 then 
+    if SwitchControlDesignMode.IsEnabled then
+        if SwitchControlDesignMode.getState(2) = 0 then
             printlog "OK, design mode is disabled"
         else
             warnlog "#i108315# Document is opened in design mode -> #111099#"
@@ -63,28 +59,27 @@ testcase tIBIS111099
         printlog "Form controls toolbar was not enabled."
     end if
     call hCloseDocument
+    hDeleteFile( gLastWorkFile )
 endcase
 
 '-------------------------------------------------------------------------
 
 testcase tIBIS111158
 
-    Dim testdoc as string 
+    Dim testdoc as string
     Dim testString as string
-    testdoc = convertpath(gOfficePath & "user/work/111158.xls")
-    
-    Printlog "Copy testdocument locally"
-    app.FileCopy convertpath(gTesttoolpath & "spreadsheet\optional\input\111158.xls"),gOfficePath + ConvertPath("user/work/111158.xls")
+    testdoc = convertpath( gTesttoolpath & "spreadsheet\optional\input\111158.xls" )
+
     printlog " Open the test document"
-    Call hFileOpen(testdoc)
-    Call sMakeReadOnlyDocumentEditable      
+    hFileOpenLocally(testdoc)
+
     Kontext "Standardbar"
-    '/// If 'Form Controls' toolbar is not visible: View / Toolbars / Form Controls     
+    '/// If 'Form Controls' toolbar is not visible: View / Toolbars / Form Controls
     Call hToolbarSelect("CONTROLS", true)
     sleep(2)
     Kontext "FormControls"
     try
-    	if SwitchControlDesignMode.GetState(2) = 0 then
+        if SwitchControlDesignMode.GetState(2) = 0 then
             '/// Click on 'Design Mode on/off' button on 'Form Controls'-toolbar
             SwitchControlDesignMode.click
             sleep(2)
@@ -95,7 +90,7 @@ testcase tIBIS111158
         call hCloseDocument
         goto endsub
     endcatch
-    '/// Click on 'Form Design' button on 'Form Controls'-toolbar                
+    '/// Click on 'Form Design' button on 'Form Controls'-toolbar
     FormDesignTools.Click
     sleep(2)
     Kontext "FormDesignTools"
@@ -111,9 +106,9 @@ testcase tIBIS111158
         Call hCloseDocument
         goto endsub
     end if
-      
-'/// Select the first 'ComboxBox' (9th entry from the top)
-'/// Open context menu
+
+    '/// Select the first 'ComboxBox' (9th entry from the top)
+    '/// Open context menu
     Kontext "FormularNavigator"
     Liste.TypeKeys "<HOME>" , true
     sleep(1)
@@ -123,32 +118,33 @@ testcase tIBIS111158
     sleep(2)
     '/// Open 'Properties' (last entry)
     hMenuSelectNr(5)
-    sleep(2)      
+    sleep(2)
     Kontext "ControlPropertiesDialog"
     Kontext "ControlPropertiesTabControl"
     ControlPropertiesTabControl.SetPage TabGeneralControl
     Kontext "TabGeneralControl"
     '/// Enter in 'Help URL' as value exactly 'HID:123456'
-    TabGeneralControl.TypeKeys "<TAB>" , true        
-    HelpURL.setText "HID:123456"
+    TabGeneralControl.TypeKeys "<TAB>" , true
+    HelpURL.setText "customcontrol1"
     HelpURL.TypeKeys "<RETURN>",true
-    if HelpURL.GetText <> "HID:123456" then 
-        warnlog "'HID:123456' has not been accepted as 'Help URL' value."
+    if HelpURL.GetText <> "customcontrol1" then
+        warnlog "'customcontrol1' has not been accepted as 'Help URL' value."
     end if
-    '/// Close all disturbing menus
-    Kontext "ControlPropertiesDialog" 
-    sleep(1)
-    ControlPropertiesDialog.close
-    sleep(2)
+
+    Kontext "ControlPropertiesDialog"
+    hCloseDialog( ControlPropertiesDialog, "close" )
+
     Kontext "FormularNavigator"
-    FormularNavigator.close
+    hCloseDialog( FormularNavigator, "close" )
+
     Kontext "FormDesignTools"
-    FormDesignTools.close
+    hCloseDialog( FormDesignTools, "close" )
+
     Kontext "FormControls"
     '/// Switch back from the design mode
     SwitchControlDesignMode.click
-    FormControls.close
-    sleep(1)
+    hCloseDialog( FormControls, "close" )
+
     '/// Check for right initial string ('Please select one:')in control
     Kontext "MSC_Special_Dialog"
     if MSC_Special_Dialog.Exists(3) then
@@ -162,12 +158,13 @@ testcase tIBIS111158
         warnlog "The control seems to be not named in the document?! Verify! If Solaris: #i100870#"
     end if
     call hCloseDocument
+    hFileDelete( gLastWorkFile )
 endcase
 
 '-------------------------------------------------------------------------
 
 testcase tIBIS111711
-printlog "iBIS Task 111711"
+    printlog "iBIS Task 111711"
 
     printlog " Create a new document"
     call hNewDocument
@@ -176,12 +173,12 @@ printlog "iBIS Task 111711"
     DocumentCalc.typekeys "1<RETURN>2<RETURN><UP>"
     sleep(2)
 
-'/// create a chart from the content
-'/// + NOTE: Do NOT leave the Implace mode
+    '/// create a chart from the content
+    '/// + NOTE: Do NOT leave the Implace mode
     InsertChartCalc
     '/// The Chart wizard occours
     Kontext "ChartWizard"
-    '/// On the chart wizard press OK button 
+    '/// On the chart wizard press OK button
     if ChartWizard.Exists(2) then
         printlog "Create chart"
         ChartWizard.OK
@@ -190,31 +187,31 @@ printlog "iBIS Task 111711"
         warnlog "Chart wizard did not occour! Exiting test case."
         call hCloseDocument
         goto endsub
-    end if    
-'/// Call slot Window->New Window
+    end if
+    '/// Call slot Window->New Window
     Kontext "DocumentCalc"
     DocumentCalc.typekeys "<ESCAPE>"
     WindowNewWindow
     sleep(2)
     call gMouseClick(95,95)
 
-'/// Select chart in new window
+    '/// Select chart in new window
     Kontext "DocumentCalc"
     call fselectFirstOLE
     sleep(2)
-  
-'/// Delete chart in new window ...
-'/// ... and check for crash
+
+    '/// Delete chart in new window ...
+    '/// ... and check for crash
     Kontext "DocumentCalc"
-    try  
+    try
         DocumentCalc.typekeys "<DELETE>"
         sleep (2)
         printlog "OK, there are still " & GetDocumentCount & " documents open"
-    catch 
+    catch
         warnlog "Probably the office did crash -> #111711#"
         call hCloseDocument
         goto endsub
-    endcatch  
+    endcatch
     call hCloseDocument
 endcase
 

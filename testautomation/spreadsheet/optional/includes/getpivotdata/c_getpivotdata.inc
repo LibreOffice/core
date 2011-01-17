@@ -54,11 +54,7 @@ testcase tgetpivotdata_function_wizard
         
     '/// Load testdocument <i>gTestToolPath</i>/spreadsheet/optional/input/datapilot.ods
     printlog "Load testdocument datapilot.ods"
-    call hFileOpen ( stestdocument )
-    sleep (2)
-    '/// If the file is not editable, click the edit button on standardbar
-    printlog "If the file is not editable, click the edit button on standardbar"
-    sMakeReadOnlyDocumentEditable()
+    call hFileOpenLocally( stestdocument )
         
     '/// Select cell I8 and open function wizard by INSERT FUNCTION
     printlog "Select cell I8 and open function wizard by INSERT FUNCTION"
@@ -187,11 +183,7 @@ testcase tgetpivotdata_xls_filter
     
     '/// Load testdocument <i>gTestToolPath</i>/spreadsheet/optional/input/getpivotdata2.xls
     printlog "Load testdocument getpivotdata2.xls"
-    call hFileOpen ( stestdocument )
-    sleep (2)
-    '/// If the file is not editable, click the edit button on standardbar
-    printlog "If the file is not editable, click the edit button on standardbar"
-    call sMakeReadOnlyDocumentEditable    
+    call hFileOpenLocally( stestdocument )
     '/// Verify that Cell G12 shows 2.5
     printlog "Verify that Cell G12 shows 2" & sdecimalseperator & "5"
     call fCalcCompareCellValue ("G12","2" & sdecimalseperator & "5")

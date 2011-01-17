@@ -35,22 +35,34 @@ Global CharsetSet as integer
 Global ExportSet as integer
 
 sub main
-  use "writer\tools\includes\w_tools.inc"
-  use "writer\optional\includes\clipboard\clipbrd_func.inc"
-  use "writer\optional\includes\clipboard\w_210_.inc"
-  use "writer\optional\includes\clipboard\w_211_.inc"
-  use "writer\optional\includes\clipboard\w_212_.inc"
-  use "writer\optional\includes\clipboard\w_213_.inc"
-  use "writer\optional\includes\clipboard\w_214_.inc"
-  use "writer\optional\includes\clipboard\w_215_.inc"
-  use "writer\optional\includes\clipboard\w_216_.inc"
-  use "writer\optional\includes\clipboard\w_217_.inc"
-  use "writer\optional\includes\clipboard\w_218_.inc"
-  use "writer\optional\includes\clipboard\w_219_.inc"
-  use "writer\optional\includes\clipboard\w_220_.inc"
-  use "writer\optional\includes\clipboard\w_221_.inc"
-  use "writer\optional\includes\clipboard\w_222_.inc"
-  Dim Start : Start = Now()
+    use "writer\tools\includes\w_tools.inc"
+    use "writer\optional\includes\clipboard\clipbrd_func.inc"
+    use "writer\optional\includes\clipboard\w_210_.inc"
+    use "writer\optional\includes\clipboard\w_211_.inc"
+    use "writer\optional\includes\clipboard\w_212_.inc"
+    use "writer\optional\includes\clipboard\w_213_.inc"
+    use "writer\optional\includes\clipboard\w_214_.inc"
+    use "writer\optional\includes\clipboard\w_215_.inc"
+    use "writer\optional\includes\clipboard\w_216_.inc"
+    use "writer\optional\includes\clipboard\w_217_.inc"
+    use "writer\optional\includes\clipboard\w_218_.inc"
+    use "writer\optional\includes\clipboard\w_219_.inc"
+    use "writer\optional\includes\clipboard\w_220_.inc"
+    use "writer\optional\includes\clipboard\w_221_.inc"
+    use "writer\optional\includes\clipboard\w_222_.inc"
+    Dim Start : Start = Now()
+    Dim lsSourceList(3) as string
+
+    ' copy needed files linked in test documents lo local file system if needed Issue #112208
+    lsSourceList(0) = 3
+    lsSourceList(1) = ConvertPath ( gtesttoolpath & "writer\optional\input\clipboard\dummy.sxw" )
+    lsSourceList(2) = ConvertPath ( gtesttoolpath & "writer\optional\input\clipboard\dummy.txt" )
+    lsSourceList(3) = ConvertPath ( gtesttoolpath & "writer\optional\input\clipboard\flower.gif" )
+
+    if hFileListCopyLocal(lsSourceList()) = false then
+        warnlog "Copying of elementary files failed. Test interrupted!"
+        exit sub
+    end if
 
     ExportSet = wChangeHTMLCompatibilityExport
     CharsetSet = wChangeHTMLCompatibility
@@ -72,9 +84,9 @@ sub main
 
     Call hStatusOut
     Call wChangeHTMLCompatibility(CharsetSet)
-	Call wChangeHTMLCompatibilityExport(ExportSet)
+    Call wChangeHTMLCompatibilityExport(ExportSet)
 
-   printlog "Duration : " +  Wielange ( Start )
+    printlog "Duration : " +  Wielange ( Start )
 end sub
 
 '---------------------------------------------------------

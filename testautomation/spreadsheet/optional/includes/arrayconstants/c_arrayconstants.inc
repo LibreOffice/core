@@ -204,6 +204,7 @@ testcase tArrayconstants01
     '///Close Document
     printlog "Close Document"
     call hCloseDocument
+    hFileDelete( sLocalFile )
 
 endcase
 '
@@ -212,23 +213,17 @@ endcase
 testcase tArrayconstants02
 
     Dim sImportFile as string
-    Dim sLocalFile as string
     Dim sFunctionSUM as string
     Dim sFunctionMDETERM as string
     Dim sCellcontent as string
     
     sImportFile = convertpath ( gTesttoolpath & "spreadsheet/optional/input/arrayconstants.xls" )
-    sLocalFile = convertpath ( gOfficepath & "user/work/arrayconstants.xls" )
     sFunctionSUM = fFunctionName ("SUM")
     sFunctionMDETERM = fFunctionName ("MDETERM")
     
     '///Load xls testdocument <i>gTestToolPath</i>/spreadsheet/optional/input/arrayconstants.xls
     printlog "Load xls testdocument <i>gTestToolPath</i>/spreadsheet/optional/input/arrayconstants.xls"
-    call hFileOpen ( sImportFile )
-    sleep(2)
-    '///If the file is not editable, click the edit button on standardbar
-    printlog "If the file is not editable, click the edit button on standardbar"
-    call sMakeReadOnlyDocumentEditable
+    call hFileOpenLocally( sImportFile )
     
     '///Check that the cell contents of B4 is 1
     printlog "Check that the cell contents of B4 is 1"
@@ -264,7 +259,7 @@ testcase tArrayconstants02
     
     '/// Save document back to xls locally
     printlog "Save document back to xls locally"
-    call hFileSaveAsKill ( slocalfile )
+    call hFileSaveAsKill ( gLastWorkFile )
     
     '/// Close document
     printlog "Close document"
@@ -272,7 +267,7 @@ testcase tArrayconstants02
 
     '/// Load Document
     printlog "Load Document"
-    call hFileOpen ( slocalfile )
+    call hFileOpen ( gLastWorkFile )
     sleep (2)
 
     '///Check that all cellvalues are the same as before
@@ -312,5 +307,6 @@ testcase tArrayconstants02
     '///Close document
     printlog "Close document"
     call hCloseDocument
+    hFileDelete( gLastWorkFile )
 
 endcase

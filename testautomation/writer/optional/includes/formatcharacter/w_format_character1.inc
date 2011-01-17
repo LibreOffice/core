@@ -243,9 +243,9 @@ testcase tFormatCharacter3
     Call hCloseDocument
     printlog "reopen previous saved document and check saved character format"    
     if gApplication = "WRITER" then
-        Call hFileOpen ( gOfficePath + "user\work\format1.odt" )
+        hFileOpen( gOfficePath & "user\work\format1.odt" )
     else
-        Call hFileOpen ( gOfficePath + "user\work\format1.odm" )
+        hFileOpen( gOfficePath & "user\work\format1.odm" )
     end if
     Call wTypeKeys "<Mod1 Home><Right>"
     Wait 500
@@ -343,10 +343,10 @@ testcase tFormatStyles1
     '/// Write 'Style Bold' - execute Context menu 'Style Bold'
     Call wTypeKeys "Style Bold"
     Call wTypeKeys "<Shift Home>"
-        Kontext "DocumentWriter"
-        DocumentWriter.OpenContextMenu
-        Call hMenuFindSelect (".uno:StyleMenu", true, 5, false)   'Find 'Style' and call the slot.
-        Call hMenuFindSelect (".uno:Bold", true, 1, false)   'Find 'Bold' and call the slot.
+    Kontext "DocumentWriter"
+    DocumentWriter.OpenContextMenu
+    Call hMenuFindSelect (".uno:StyleMenu", true, 5, false)   'Find 'Style' and call the slot.
+    if hMenuFindSelect (".uno:Bold", true, 1, false) = true then  'Find 'Bold' and call the slot.
         '/// Check if changes to style have been made ///
         Kontext "TextObjectbar"
         if Fett.Getstate(2) = 0 then
@@ -354,114 +354,121 @@ testcase tFormatStyles1
         end if
 
         Call wTypeKeys "<End><Mod1 Shift X>"
-        wait 500                                                                           
+        wait 500
         Call wTypeKeys "<Return>"
+    endif
 
     printlog "- Style 'Italic' "
     '/// Write 'Style Italic' - execute Context menu 'Style Italic'
     Call wTypeKeys "Style Italic"
     Call wTypeKeys "<Shift Home>"
-        Kontext "DocumentWriter"
-        DocumentWriter.OpenContextMenu
-        Call hMenuFindSelect (".uno:StyleMenu", true, 5, false)   'Find 'Style' and call the slot.
-        Call hMenuFindSelect (".uno:Italic", true, 2, false)   'Find 'Italic' and call the slot.
-	' /// Check if changes to style have been made ///
+    Kontext "DocumentWriter"
+    DocumentWriter.OpenContextMenu
+    Call hMenuFindSelect (".uno:StyleMenu", true, 5, false)   'Find 'Style' and call the slot.
+    if hMenuFindSelect (".uno:Italic", true, 2, false) = true then  'Find 'Italic' and call the slot.
+        ' /// Check if changes to style have been made ///
         Kontext "TextObjectbar"
         if Kursiv.Getstate(2) = 0 then
             Warnlog "#58722#Style 'Italic' with context menu has not been set!"
         end if
 
-	Call wTypeKeys "<End><Right>"
-	Call wTypeKeys "<Return>"
+        Call wTypeKeys "<End><Right>"
+        Call wTypeKeys "<Return>"
+    end if
 
     printlog "- Style 'Underline' "
     '/// Write 'Style Underline' - execute Context menu 'Style Underline'
     Call wTypeKeys "Style Underline"
     Call wTypeKeys "<Shift Home>"
-        Kontext "DocumentWriter"
-        DocumentWriter.OpenContextMenu
-        Call hMenuFindSelect (".uno:StyleMenu", true, 5, false)   'Find 'Style' and call the slot.
-        Call hMenuFindSelect (".uno:Underline", true, 4, false)   'Find 'Underline' and call the slot.
-	' /// Check if changes to style have been made ///
-	FormatCharacter
-	Kontext
-	Active.Setpage TabFontEffects
-	Kontext "TabFontEffects"
-	if Underline.GetSelIndex <> 2 then Warnlog "Style 'Underline' with context menu has not been set!"
-	TabFontEffects.Cancel
-	Call wTypeKeys "<End><Right>"
-	Call wTypeKeys "<Return>"
-	
+    Kontext "DocumentWriter"
+    DocumentWriter.OpenContextMenu
+    Call hMenuFindSelect (".uno:StyleMenu", true, 5, false)   'Find 'Style' and call the slot.
+    if hMenuFindSelect (".uno:Underline", true, 4, false) = true then   'Find 'Underline' and call the slot.
+        ' /// Check if changes to style have been made ///
+        FormatCharacter
+        Kontext
+        Active.Setpage TabFontEffects
+        Kontext "TabFontEffects"
+        if Underline.GetSelIndex <> 2 then Warnlog "Style 'Underline' with context menu has not been set!"
+        TabFontEffects.Cancel
+        Call wTypeKeys "<End><Right>"
+        Call wTypeKeys "<Return>"
+    end if
+
     printlog "- Style 'Overline' "
     '/// Write 'Style Overline' - execute Context menu 'Style Strikethrough'
     Call wTypeKeys "Style Overline"
     Call wTypeKeys "<Shift Home>"
-        Kontext "DocumentWriter"
-        DocumentWriter.OpenContextMenu
-        Call hMenuFindSelect (".uno:StyleMenu", true, 5, false)   'Find 'Style' and call the slot.
-        Call hMenuFindSelect (".uno:Overline", true, 3, false)   'Find 'Overline' and call the slot.
-	' /// Check if changes to style have been made ///
-	FormatCharacter
-	Kontext
-	Active.Setpage TabFontEffects
-	Kontext "TabFontEffects"
-	if Overline.GetSelIndex <> 2 then Warnlog "Style 'Overline' with context menu has not been set!"
-	TabFontEffects.Cancel
-	Call wTypeKeys "<End><Right>"
-	Call wTypeKeys "<Return>"
+    Kontext "DocumentWriter"
+    DocumentWriter.OpenContextMenu
+    Call hMenuFindSelect (".uno:StyleMenu", true, 5, false)   'Find 'Style' and call the slot.
+    if hMenuFindSelect (".uno:Overline", true, 3, false) = true then  'Find 'Overline' and call the slot.
+        ' /// Check if changes to style have been made ///
+        FormatCharacter
+        Kontext
+        Active.Setpage TabFontEffects
+        Kontext "TabFontEffects"
+        if Overline.GetSelIndex <> 2 then Warnlog "Style 'Overline' with context menu has not been set!"
+        TabFontEffects.Cancel
+        Call wTypeKeys "<End><Right>"
+        Call wTypeKeys "<Return>"
+    end if
 
     printlog "- Style 'StrikeThrough' "
     '/// Write 'Style Strikethrough' - execute Context menu 'Style Strikethrough'
     Call wTypeKeys "Style Strikethrough"
     Call wTypeKeys "<Shift Home>"
     Kontext "DocumentWriter"
-        DocumentWriter.OpenContextMenu
-        Call hMenuFindSelect (".uno:StyleMenu", true, 5, false)   'Find 'Style' and call the slot.
-        Call hMenuFindSelect (".uno:Strikeout", true, 5, false)   'Find 'Strikethrough' and call the slot.
-	' /// Check if changes to style have been made ///
-	FormatCharacter
-	Kontext
-	Active.Setpage TabFontEffects
-	Kontext "TabFontEffects"
-	if StrikeThrough.GetSelIndex <> 2 then Warnlog "Style 'StrikeThrough' with context menu has not been set!"
-	TabFontEffects.Cancel
-	Call wTypeKeys "<End>"
-	Call wTypeKeys "<Right><Return>"
+    DocumentWriter.OpenContextMenu
+    Call hMenuFindSelect (".uno:StyleMenu", true, 5, false)   'Find 'Style' and call the slot.
+    if hMenuFindSelect (".uno:Strikeout", true, 5, false) = true then  'Find 'Strikethrough' and call the slot.
+        ' /// Check if changes to style have been made ///
+        FormatCharacter
+        Kontext
+        Active.Setpage TabFontEffects
+        Kontext "TabFontEffects"
+        if StrikeThrough.GetSelIndex <> 2 then Warnlog "Style 'StrikeThrough' with context menu has not been set!"
+        TabFontEffects.Cancel
+        Call wTypeKeys "<End>"
+        Call wTypeKeys "<Right><Return>"
+    end if
 
     printlog "- Style 'Shadow' "
     '/// Write 'Style Shadow' - execute Context menu 'Style Shadow'
     Call wTypeKeys "Style Shadow"
     Call wTypeKeys "<Shift Home>"
     Kontext "DocumentWriter"
-        DocumentWriter.OpenContextMenu
-        Call hMenuFindSelect (".uno:StyleMenu", true, 5, false)   'Find 'Style' and call the slot.
-        Call hMenuFindSelect (".uno:Shadowed", true, 6, false)   'Find 'Shadowed' and call the slot.
-	' /// Check if changes to style have been made ///
-	FormatCharacter
-	Kontext
-	Active.Setpage TabFontEffects
-	Kontext "TabFontEffects"
-	if Shadow.IsChecked = False then Warnlog "Style 'Shadow' with context menu has not been set!"
-	TabFontEffects.Cancel
-	Call wTypeKeys "<End><Right>"
-	Call wTypeKeys "<Return>"
+    DocumentWriter.OpenContextMenu
+    Call hMenuFindSelect (".uno:StyleMenu", true, 5, false)   'Find 'Style' and call the slot.
+    if hMenuFindSelect (".uno:Shadowed", true, 6, false) = true then  'Find 'Shadowed' and call the slot.
+        ' /// Check if changes to style have been made ///
+        FormatCharacter
+        Kontext
+        Active.Setpage TabFontEffects
+        Kontext "TabFontEffects"
+        if Shadow.IsChecked = False then Warnlog "Style 'Shadow' with context menu has not been set!"
+        TabFontEffects.Cancel
+        Call wTypeKeys "<End><Right>"
+        Call wTypeKeys "<Return>"
+    end if
 
     printlog "- Style 'Outline' "
     '/// Write 'Style Outline' - execute Context menu 'Style Outline'
     Call wTypeKeys "Style Outline"
     Call wTypeKeys "<Shift Home>"
     Kontext "DocumentWriter"
-        DocumentWriter.OpenContextMenu
-        Call hMenuFindSelect (".uno:StyleMenu", true, 5, false)   'Find 'Style' and call the slot.
-        Call hMenuFindSelect (".uno:OutlineFont", true, 7, false)   'Find 'Outline' and call the slot.
-	' /// Check if changes to style have been made ///
-	FormatCharacter
-	Kontext
-	Active.Setpage TabFontEffects
-	Kontext "TabFontEffects"
-	if Outline.IsChecked = false then Warnlog "Style 'Outline' with context menu has not been set!"
-	TabFontEffects.Cancel
-
+    DocumentWriter.OpenContextMenu
+    Call hMenuFindSelect (".uno:StyleMenu", true, 5, false)   'Find 'Style' and call the slot.
+    if hMenuFindSelect (".uno:OutlineFont", true, 7, false) = true then   'Find 'Outline' and call the slot.
+        ' /// Check if changes to style have been made ///
+        FormatCharacter
+        Kontext
+        Active.Setpage TabFontEffects
+        Kontext "TabFontEffects"
+        if Outline.IsChecked = false then Warnlog "Style 'Outline' with context menu has not been set!"
+        TabFontEffects.Cancel
+    end if
+    
     printlog "Close Document."
     Call hCloseDocument
 endcase
@@ -579,9 +586,9 @@ testcase tFormatCharacter
 	Call hCloseDocument
 	printlog "re-open previous saved document"
 	if gApplication = "WRITER" then
-    	Call hFileOpen ( gOfficePath + "user\work\format1.odt" )
+    	hFileOpen( gOfficePath & "user\work\format1.odt" )
 	else
-  	    Call hFileOpen ( gOfficePath + "user\work\format1.odm" )
+  	    hFileOpen( gOfficePath & "user\work\format1.odm" )
 	end if
    	Call wTypeKeys "<Mod1 Home><Right>"
 	Wait 500

@@ -162,9 +162,7 @@ end function
 '
 function fOpenTestDocumentAndSelectDataRange(sInputFile as string) as BOOLEAN
     fOpenTestDocumentAndSelectDataRange = FALSE
-    call hFileOpen(sInputFile)
-    sleep(2)
-    Call sMakeReadOnlyDocumentEditable()
+    hFileOpenLocally(sInputFile)
     '/// Select chart using navigator
     printlog "Select chart using navigator"
     call fSelectFirstOLE
@@ -191,9 +189,7 @@ end function
 '
 function fOpenTestDocumentAndInsertChart(sInputFile as string) as BOOLEAN
     fOpenTestDocumentAndInsertChart = FALSE
-    call hFileOpen(sInputFile)
-    sleep(2)
-    Call sMakeReadOnlyDocumentEditable()
+    hFileOpenLocally(sInputFile)
     Kontext "DocumentCalc"
     printlog "Type <STRG+HOME>"
     DocumentCalc.TypeKeys "<MOD1 HOME>"

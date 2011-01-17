@@ -183,7 +183,7 @@ testcase tFormatNumberingBullets
 	Sleep 2
 	Call hCloseDocument
 	Sleep 2
-	Call hFileOpen ( gOfficePath + "user\work\format4." & WriterFilterExtension(0) )
+	hFileOpen( gOfficePath & "user\work\format4." & WriterFilterExtension(0) )
 	Sleep 2
 	'/// Close document ///
 	Call hCloseDocument
@@ -315,7 +315,7 @@ testcase tFormatNumberingPosition
     Sleep 2
     Call hCloseDocument
     Sleep 2
-    Call hFileOpen ( gOfficePath + "user\work\tFormatNumberingPosition." & WriterFilterExtension(0) )
+    hFileOpen( gOfficePath & "user\work\tFormatNumberingPosition." & WriterFilterExtension(0) )
 
     '/// check settings on Format / NumberingBullets ///
     FormatNumberingBullets
@@ -499,7 +499,7 @@ testcase tFormatNumberingOptions
     Sleep 2
     Call hCloseDocument
     Sleep 2
-    Call hFileOpen ( gOfficePath + "user\work\format6." & WriterFilterExtension(0) )
+    hFileOpen( gOfficePath & "user\work\format6." & WriterFilterExtension(0) )
     For i = 1 to 15
         call wTypeKeys "<Up>"
         Wait 500
@@ -713,7 +713,7 @@ testcase tFormatNumberingAll
 	Sleep 2
 	Call hCloseDocument
 	Sleep 2
-	Call hFileOpen ( gOfficePath + "user\work\format7." & WriterFilterExtension(0) )
+	hFileOpen( gOfficePath & "user\work\format7." & WriterFilterExtension(0) )
 	Sleep 2
 	FormatNumberingBullets
 	'/// reopen Format / NumberingBullets and check saved settings ///
