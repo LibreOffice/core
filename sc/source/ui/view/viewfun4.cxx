@@ -596,7 +596,6 @@ void ScViewFunc::DoSheetConversion( const ScConversionParam& rConvParam, BOOL bR
     rViewData.SetSpellingView( NULL );
     KillEditView(TRUE);
     delete pEngine;
-    delete pEditSel;
     pDocSh->PostPaintGridAll();
     rViewData.GetViewShell()->UpdateInputHandler();
     pDoc->DisableIdle(bOldDis);
