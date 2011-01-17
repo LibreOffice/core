@@ -31,7 +31,7 @@
 #include "SchXMLAxisContext.hxx"
 #include "SchXMLChartContext.hxx"
 #include "SchXMLTools.hxx"
-#include "xmlnmspe.hxx"
+#include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmlement.hxx>
 #include <xmloff/xmlstyle.hxx>
 #include <xmloff/prstylei.hxx>
