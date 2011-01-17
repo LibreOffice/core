@@ -348,8 +348,8 @@ public:
             Name of the page to return.
         @param rbIsMasterPage
             Is set by the method to indicate whether the returned index
-            belongs to a master page (<sal_True/>) or a regular or notes page
-            (<sal_False/>). The given value is ignored.
+            belongs to a master page (<TRUE/>) or a regular or notes page
+            (<FALSE/>). The given value is ignored.
         @return
             Returns the index of the page with the given name or
             SDRPAGE_NOTFOUND (=0xffff) when such a page does not exist.

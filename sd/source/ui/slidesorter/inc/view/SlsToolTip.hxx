@@ -82,7 +82,7 @@ private:
 
     /** Request to show the tool tip.
         @param bForce
-            When <sal_True/> then the tool tip is show right away.  Otherwise it
+            When <TRUE/> then the tool tip is show right away.  Otherwise it
             is shown after a short delay.
     */
     void Show (const bool bForce);

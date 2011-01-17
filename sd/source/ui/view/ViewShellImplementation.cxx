@@ -93,7 +93,7 @@ ViewShell::Implementation::~Implementation (void)
         if (pLock.get() != NULL)
         {
             // Force the ToolBarManagerLock to be released even when the
-            // IsUICaptured() returns <sal_True/>.
+            // IsUICaptured() returns <TRUE/>.
             pLock->Release(true);
         }
     }

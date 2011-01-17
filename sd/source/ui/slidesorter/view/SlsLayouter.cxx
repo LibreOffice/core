@@ -108,11 +108,11 @@ public:
         @param nYPosition
             Vertical position in model coordinates.
         @param bIncludeBordersAndGaps
-            When this flag is <sal_True/> then the area of borders and gaps are
+            When this flag is <TRUE/> then the area of borders and gaps are
             interpreted as belonging to one of the rows.
         @param eGapMembership
             Specifies to what row the gap areas belong.  Here GM_NONE
-            corresponds to bIncludeBordersAndGaps being <sal_False/>.  When
+            corresponds to bIncludeBordersAndGaps being <FALSE/>.  When
             GM_BOTH is given then the upper half is associated to the row
             above and the lower half to the row below.  Values of
             GM_PREVIOUS and GM_NEXT associate the whole gap area with the
@@ -128,7 +128,7 @@ public:
         @param nXPosition
             Horizontal position in model coordinates.
         @param bIncludeBordersAndGaps
-            When this flag is <sal_True/> then the area of borders and gaps are
+            When this flag is <TRUE/> then the area of borders and gaps are
             interpreted as belonging to one of the columns.
         @param eGapMembership
             Specifies to what column the gap areas belong.

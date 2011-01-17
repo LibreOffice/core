@@ -73,7 +73,7 @@ public:
     /** Return the number of buttons that are to be displayed in page
         objects which the mouse hovers over.
         @param bIsExcluded
-            When this flag is <sal_True/> then return the number of
+            When this flag is <TRUE/> then return the number of
             buttons that is to be displayed for pages that are
             excluded from the slide show.
     */
@@ -83,7 +83,7 @@ public:
         @param nIndex
             Valid values lie in the range [0,GetButtonCount()).
         @param bIsExcluded
-            When this flag is <sal_True/> then return a button that is to
+            When this flag is <TRUE/> then return a button that is to
             be displayed for pages that are excluded from the slide
             show.
         @return
@@ -116,8 +116,8 @@ public:
 
     /** Request the button bar to be shown.
         @param bAnimate
-            This flag controls whether to just show the button bar (<sal_False/>)
-            or to fade it in smoothly (<sal_True/>.)
+            This flag controls whether to just show the button bar (<FALSE/>)
+            or to fade it in smoothly (<TRUE/>.)
     */
     void RequestFadeIn (
         const model::SharedPageDescriptor& rpDescriptor,
@@ -125,8 +125,8 @@ public:
 
     /** Request the button bar to be hidden.
         @param bAnimate
-            This flag controls whether to just hide the button bar (<sal_False/>)
-            or to fade it out smoothly (<sal_True/>.)
+            This flag controls whether to just hide the button bar (<FALSE/>)
+            or to fade it out smoothly (<TRUE/>.)
     */
     void RequestFadeOut (
         const model::SharedPageDescriptor& rpDescriptor,
@@ -217,7 +217,7 @@ public:
     /** Set a new state.
         @return
             When the new state is different from the old state
-            then <sal_True/> is returned.
+            then <TRUE/> is returned.
     */
     bool SetState (const State eState);
     State GetState (void) const;

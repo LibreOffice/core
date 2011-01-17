@@ -123,7 +123,7 @@ private:
         @param nTime
             Time measured in milli seconds with some arbitrary reference point.
         @return
-            When one or more animation has finished then <sal_True/> is
+            When one or more animation has finished then <TRUE/> is
             returned.  Call CleanUpAnimationList() in this case.
     */
     bool ProcessAnimations (const double nTime);

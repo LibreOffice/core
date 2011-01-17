@@ -131,7 +131,7 @@ public:
 
     /** Paint a mouse over effect.
         @param bVisible
-            When bVisible is <sal_False/> then paint the area of the mouse over
+            When bVisible is <FALSE/> then paint the area of the mouse over
             effect in the background color, i.e. erase it.
     */
     drawinglayer::primitive2d::Primitive2DSequence createMouseOverEffectPrimitive2DSequence();
@@ -197,7 +197,7 @@ private:
     static const sal_Int32 mnMouseOverEffectOffset;
     static const sal_Int32 mnMouseOverEffectThickness;
 
-    /** This flag is set to <sal_True/> when the destructor is called to
+    /** This flag is set to <TRUE/> when the destructor is called to
         indicate that further calls made to it must not call outside.
     */
     bool mbInDestructor;

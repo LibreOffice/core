@@ -363,7 +363,7 @@ public:
     DrawView*   GetDrawView() const { return mpDrawView; }
 
     /** Relocation to a new parent window is not supported for DrawViewShell
-        objects so this method always returns <sal_False/>.
+        objects so this method always returns <FALSE/>.
     */
     virtual bool RelocateToParentWindow (::Window* pParentWindow);
 
@@ -459,11 +459,11 @@ private:
         b) the given flag bCloseFrame is true.
         @param bCloseFrame
             Be carefull with this flag when stopping a full screen show.
-            When called from the destructor the flag has to be <sal_False/> or
+            When called from the destructor the flag has to be <FALSE/> or
             otherwise we run into a loop of calls to destructors of the view
             and the frame.
-            When called from other places the flag should be <sal_True/> so that
-            not an empty frame remains. When called with <sal_True/> it is the
+            When called from other places the flag should be <TRUE/> so that
+            not an empty frame remains. When called with <TRUE/> it is the
             responsibility of the caller to avoid an illegal reentrant
             call.
     */

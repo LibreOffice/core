@@ -184,7 +184,7 @@ public:
 
     /** This method transfers the template folders from the template scanner
         to the internal structures of this class.  On termination it sets
-        the flag <member>mbTemplatesReady</member> to <sal_True/> to indicate
+        the flag <member>mbTemplatesReady</member> to <TRUE/> to indicate
         that the templates are available.
         @param rTemplateFolders
             This is a list of template folders.  This method takes ownership
@@ -199,7 +199,7 @@ public:
     sal_Bool mbTemplatesReady;
 
     /** Flag used to prevent nested or concurrent calls to the
-        <member>UpdatePreview</memember> method.  A <sal_True/> value indicates
+        <member>UpdatePreview</memember> method.  A <TRUE/> value indicates
         that a preview update is currently active.
     */
     sal_Bool mbPreviewUpdating;

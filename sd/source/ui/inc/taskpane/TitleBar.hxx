@@ -110,7 +110,7 @@ private:
 
     /** Return whether this TitleBar object has an expansion indicator
         bitmap.  It is safe to call GetExpansionIndicator() when this method
-        returns <sal_False/> but unnecessary.
+        returns <FALSE/> but unnecessary.
     */
     bool HasExpansionIndicator (void) const;
 

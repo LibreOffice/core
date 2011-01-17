@@ -103,7 +103,7 @@ public:
 
     /** Deselect the descriptor that is associated with the given page.
         @param bUpdateCurrentPage
-            When <sal_True/> then the current page is updated to the first slide
+            When <TRUE/> then the current page is updated to the first slide
             of the remaining selection.
     */
     void DeselectPage (
@@ -151,7 +151,7 @@ public:
             this method with the selection.  When pages have been inserted
             or removed the result may be unexpected.
         @param bUpdateCurrentPage
-            When <sal_True/> (the default value) then after setting the
+            When <TRUE/> (the default value) then after setting the
             selection update the current page to the first page of the
             selection.
             When called from withing UpdateCurrentPage() then this flag is

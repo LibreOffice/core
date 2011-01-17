@@ -227,18 +227,18 @@ private:
     /// Number of objects on the current page / in the current selection.
     sal_Int32 mnObjectCount;
 
-    /** A <sal_True/> value indicates that the end of the find&replace or spell
+    /** A <TRUE/> value indicates that the end of the find&replace or spell
         check has been reached.
     */
     bool mbEndOfSearch;
 
-    /** Set to <sal_True/> when an object has been prepared successfully for
+    /** Set to <TRUE/> when an object has been prepared successfully for
         searching/spell checking.  This flag directs the internal iteration
         which stops when set to </TRUE>.
     */
     bool mbFoundObject;
 
-    /** When set to <sal_True/> this flag indicates that an error has occured
+    /** When set to <TRUE/> this flag indicates that an error has occured
         that should terminate the iteration over the objects to search/spell
         check.
     */
@@ -385,7 +385,7 @@ private:
 
     /** Detect whether the selection has changed.
         @return
-            Return <sal_True/> when the selection has been changed since the
+            Return <TRUE/> when the selection has been changed since the
             last call to this method.
     */
     bool DetectSelectionChange (void);
@@ -440,7 +440,7 @@ private:
 
     /** Prepare to do spell checking on the current text object.  This
         includes putting it into edit mode.  Under certain conditions this
-        method sets <member>mbEndOfSearch</member> to <sal_True/>.
+        method sets <member>mbEndOfSearch</member> to <TRUE/>.
     */
     void PrepareSpellCheck (void);
 
@@ -533,9 +533,9 @@ private:
         When the outline view is active then this method is called
         after a wrap arround to continue at the beginning of the document.
         @return
-            Returns <sal_True/> to indicate that another call to this method is
+            Returns <TRUE/> to indicate that another call to this method is
             required.  When all text objects have been processed then
-            <sal_False/> is returned.
+            <FALSE/> is returned.
     */
     virtual sal_Bool SpellNextDocument (void);
 

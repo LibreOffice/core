@@ -114,7 +114,7 @@ public:
         factor.
 
         <p>This calculation is performed only when the
-        <member>bMinZoomAutoCalc</member> is set (to <sal_True/>).</p>
+        <member>bMinZoomAutoCalc</member> is set (to <TRUE/>).</p>
     */
     void CalcMinZoom (void);
     void SetMinZoom (long int nMin);

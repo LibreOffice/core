@@ -957,7 +957,7 @@ void Outliner::RestoreStartPosition (void)
     until a text object has been found that contains at least one match or
     until no such object can be found anymore.   These two conditions are
     expressed by setting one of the flags <member>mbFoundObject</member> or
-    <member>mbEndOfSearch</member> to <sal_True/>.
+    <member>mbEndOfSearch</member> to <TRUE/>.
 */
 void Outliner::ProvideNextTextObject (void)
 {

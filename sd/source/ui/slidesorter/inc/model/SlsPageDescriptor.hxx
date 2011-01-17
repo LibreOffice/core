@@ -112,9 +112,9 @@ public:
         page it describes and determine whether a redraw to update the
         selection indicator is necessary.
         @return
-            When the two selection states were different <sal_True/> is
+            When the two selection states were different <TRUE/> is
             returned.  When they were the same this method returns
-            <sal_False/>.
+            <FALSE/>.
     */
     bool GetCoreSelection (void);
 

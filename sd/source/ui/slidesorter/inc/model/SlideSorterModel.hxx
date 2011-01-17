@@ -86,7 +86,7 @@ public:
         previous page descriptor list is replaced by a new one which
         has to be repainted.
         @return
-            A return value of <sal_True/> indicates that the edit mode has
+            A return value of <TRUE/> indicates that the edit mode has
             changed and thus the page descriptor list has been set up
             to reflect that change.  A repaint is necessary.
     */
@@ -112,8 +112,8 @@ public:
             The index of the requested slide.  The valid values
             are 0 to GetPageCount()-1.
         @param bCreate
-            When <sal_True/> and the requested page descriptor is missing then
-            it is created.  When <sal_False/> then an empty reference is
+            When <TRUE/> and the requested page descriptor is missing then
+            it is created.  When <FALSE/> then an empty reference is
             returned for missing descriptors.
         @return
             When the given index is not valid, i.e. lower then zero or
@@ -221,7 +221,7 @@ public:
     /** Typically called from controller::Listener this method handles the
         insertion and deletion of single pages.
         @return
-            Returns <sal_True/> when the given page is relevant for the current
+            Returns <TRUE/> when the given page is relevant for the current
             page kind and edit mode.
     */
     bool NotifyPageEvent (const SdrPage* pPage);

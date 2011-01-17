@@ -457,7 +457,7 @@ css::uno::Reference<css::drawing::XDrawSubController> DrawViewShell::CreateSubCo
 bool DrawViewShell::RelocateToParentWindow (::Window* pParentWindow)
 {
     // DrawViewShells can not be relocated to a new parent window at the
-    // moment, so return <sal_False/> except when the given parent window is the
+    // moment, so return <FALSE/> except when the given parent window is the
     // parent window that is already in use.
     return pParentWindow==GetParentWindow();
 }

@@ -72,7 +72,7 @@ public:
         @param nSlideIndex
             Zero based index in the range [0,number-of-slides).
         @param bUpdateSelection
-            When <sal_True/> then the page selection is cleared and only the new
+            When <TRUE/> then the page selection is cleared and only the new
             current slide is selected.
     */
     void SwitchCurrentSlide (

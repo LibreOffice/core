@@ -218,7 +218,7 @@ namespace {
 
         /** When the value of the property with name pName is a boolean then
             return its value. When the property is unknown then
-            bDefaultValue is returned.  Otherwise <sal_False/> is returned.
+            bDefaultValue is returned.  Otherwise <FALSE/> is returned.
         */
         bool GetBoolValue (
             const sal_Char* pName,
@@ -228,9 +228,9 @@ namespace {
             return bValue;
         }
 
-        /** Return <sal_True/> when the value of the property with name pName is
+        /** Return <TRUE/> when the value of the property with name pName is
             a string and its value equals pValue. When the property is
-            unknown then bDefaultValue is returned.  Otherwise <sal_False/> is
+            unknown then bDefaultValue is returned.  Otherwise <FALSE/> is
             returned.
         */
         bool GetBoolValue (
@@ -245,8 +245,8 @@ namespace {
                 return bDefaultValue;
         }
 
-        /** Return <sal_True/> when the value of the property with name pName is
-            an integer and its value is nTriggerValue. Otherwise <sal_False/> is
+        /** Return <TRUE/> when the value of the property with name pName is
+            an integer and its value is nTriggerValue. Otherwise <FALSE/> is
             returned.
         */
         bool GetBoolValue (

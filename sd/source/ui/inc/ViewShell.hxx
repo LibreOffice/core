@@ -335,11 +335,11 @@ public:
     /** Return the border that is drawn arround the actual document view.
         The border contains typically rulers and scroll bars.
         @param bOuterResize
-            When this flag is <sal_True/> then the border is used for an
+            When this flag is <TRUE/> then the border is used for an
             OuterResizePixel(), i.e. there is a given window size and the
             border elements are placed inside so that the document view has
             the given window size minus the border.
-            When the flag is <sal_False/> then the border is used for an
+            When the flag is <FALSE/> then the border is used for an
             InnerResizePixel(), i.e. the document view has a given size and
             the border is placed outside.  In this scenario the parent
             window has the size of the document view plus the border.
@@ -385,7 +385,7 @@ public:
 
     ViewShellBase& GetViewShellBase (void) const;
 
-    /** Return <sal_True/> when the called view shell is the main sub shell of
+    /** Return <TRUE/> when the called view shell is the main sub shell of
         its ViewShellBase object, i.e. is display in the center pane.  This
         convenience function is equivalent to comparing the this pointer to
         the result of ViewShellBase::GetViewShell(PT_CENTER).
@@ -394,7 +394,7 @@ public:
 
     /** Set or reset the flag that indicates whether the called shell is the
         one displayed in the center pane.  By default this flag is set to
-        <sal_False/>.  For the main view shell it thus has to be set to <sal_True/>.
+        <FALSE/>.  For the main view shell it thus has to be set to <TRUE/>.
     */
     void SetIsMainViewShell (bool bIsMainViewShell);
 

@@ -388,7 +388,7 @@ public:
         master pages from being deleted automatically.  For pages
         other than master pages this flag can be ignored.
         @return
-            When this method returns <sal_True/> for a master page then this
+            When this method returns <TRUE/> for a master page then this
             master page should not be deleted automatically.
     */
     bool IsPrecious (void) const;

@@ -190,7 +190,7 @@ public:
     virtual SdrView* GetDrawView (void) const;
     virtual void AdjustPosSizePixel (const Point &rOfs, const Size &rSize);
 
-    /** When <sal_True/> is given, then the mouse shape is set to hour glass (or
+    /** When <TRUE/> is given, then the mouse shape is set to hour glass (or
         whatever the busy shape looks like on the system.)
     */
     void SetBusyState (bool bBusy);

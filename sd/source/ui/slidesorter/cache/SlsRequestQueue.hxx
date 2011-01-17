@@ -57,8 +57,8 @@ public:
             The priority class in which to insert the request with highest
             or lowest priority.
         @param bInsertWithHighestPriority
-            When this flag is <sal_True/> the request is inserted with highes
-            priority in its class.  When <sal_False/> the request is inserted
+            When this flag is <TRUE/> the request is inserted with highes
+            priority in its class.  When <FALSE/> the request is inserted
             with lowest priority.
     */
     void AddRequest (
@@ -71,9 +71,9 @@ public:
             It is OK when the specified request is not a member of the
             queue.
         @return
-            Returns <sal_True/> when the request has been successfully been
+            Returns <TRUE/> when the request has been successfully been
             removed from the queue.  Otherwise, e.g. because the request was
-            not a member of the queue, <sal_False/> is returned.
+            not a member of the queue, <FALSE/> is returned.
     */
     bool RemoveRequest (CacheKey aKey);
 
@@ -94,7 +94,7 @@ public:
     */
     void PopFront (void);
 
-    /** Returns <sal_True/> when there is no element in the queue.
+    /** Returns <TRUE/> when there is no element in the queue.
     */
     bool IsEmpty (void);
 

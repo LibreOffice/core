@@ -171,7 +171,7 @@ public:
 
     /** Show or hide the ViewTabBar.
         @param bShow
-            When <sal_True/> then the ViewTabBar is shown, otherwise it is hidden.
+            When <TRUE/> then the ViewTabBar is shown, otherwise it is hidden.
     */
     void ShowViewTabBar (bool bShow);
 

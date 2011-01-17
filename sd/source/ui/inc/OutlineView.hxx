@@ -154,7 +154,7 @@ public:
     // #97766# Re-implement GetScriptType for this view to get correct results
     virtual sal_uInt16 GetScriptType() const;
 
-    /** After this method has been called with <sal_True/> following changes of
+    /** After this method has been called with <TRUE/> following changes of
         the current page are ignored in that the corresponding text is not
         selected.
         This is used to supress unwanted side effects between selection and

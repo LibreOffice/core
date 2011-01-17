@@ -179,7 +179,7 @@ private:
     */
     void SelectPageRange (sal_Int32 nFirstIndex, sal_Int32 nPageCount);
 
-    /** Return <sal_True/> when the current transferable in the current state of
+    /** Return <TRUE/> when the current transferable in the current state of
         the slidesorter is acceptable to be pasted.  For this the
         transferable has to
         a) exist,

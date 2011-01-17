@@ -216,8 +216,8 @@ private:
     sal_uInt16          mnSlidesPerRow;     // Dias pro Reihe auf dem Diatisch
     sal_uLong           mnDrawMode;        // Drawmode fuer das normale Fenster
     double          mnTabCtrlPercent;
-    /** Remember whether the navigator shows all shapes (<sal_True/>) or only
-        the names ones (<sal_False/>).  Not persistent.
+    /** Remember whether the navigator shows all shapes (<TRUE/>) or only
+        the names ones (<FALSE/>).  Not persistent.
     */
     bool            mbIsNavigatorShowingAllShapes;
 

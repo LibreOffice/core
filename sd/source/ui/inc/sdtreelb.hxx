@@ -122,7 +122,7 @@ public:
             Pointer to the page for which to check whether it belongs to the
             show.
         @return
-            Returns <sal_False/> if there is no custom show or if the current
+            Returns <FALSE/> if there is no custom show or if the current
             show does not contain the specified page at least once.
     */
     bool PageBelongsToCurrentShow (const SdPage* pPage) const;
@@ -159,10 +159,10 @@ protected:
     void                    OnDragFinished( sal_uInt8 nDropAction );
 
     /** Return the name of the object.  When the object has no user supplied
-        name and the bCreate flag is <sal_True/> then a name is created
+        name and the bCreate flag is <TRUE/> then a name is created
         automatically.  Additionally the mbShowAllShapes flag is taken into
         account when there is no user supplied name.  When this flag is
-        <sal_False/> then no name is created.
+        <FALSE/> then no name is created.
         @param pObject
             When this is NULL then an empty string is returned, regardless
             of the value of bCreate.
@@ -228,7 +228,7 @@ private:
     */
     bool mbShowAllPages;
 
-    /** Return <sal_True/> when the current transferable may be dropped at the
+    /** Return <TRUE/> when the current transferable may be dropped at the
         given list box entry.
     */
     bool IsDropAllowed (SvLBoxEntry* pEntry);

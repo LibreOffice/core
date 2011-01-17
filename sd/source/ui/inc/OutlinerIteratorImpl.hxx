@@ -59,7 +59,7 @@ public:
         @param pViewShellWeak
             Some information has to be taken from the view shell.
         @param bDirectionIsForward
-            This flag defines the iteration direction.  When <sal_True/> then
+            This flag defines the iteration direction.  When <TRUE/> then
             the direction is forwards otherwise it is backwards.
     */
     IteratorImplBase (SdDrawDocument* pDocument,
@@ -99,7 +99,7 @@ public:
         @param rIterator
             The iterator to compare to.
         @return
-            When both iterators ar equal <sal_True/> is returned, <sal_False/> otherwise.
+            When both iterators ar equal <TRUE/> is returned, <FALSE/> otherwise.
     */
     virtual bool operator== (const IteratorImplBase& rIterator) const;
     /** This method is used by the equality operator.  Additionaly to the
@@ -110,7 +110,7 @@ public:
         @param aType
             The type of the iterator.
         @return
-            Returns <sal_True/> when both iterators point to the same object.
+            Returns <TRUE/> when both iterators point to the same object.
     */
     virtual bool IsEqual (const IteratorImplBase& rIterator, IteratorType aType) const;
     /** Reverse the direction of iteration.  The current object stays the same.
@@ -169,7 +169,7 @@ private:
         @param aType
             The type of the iterator.
         @return
-            Returns <sal_True/> when both iterators point to the same object.
+            Returns <TRUE/> when both iterators point to the same object.
     */
     virtual bool IsEqual (const IteratorImplBase& rIterator, IteratorType aType) const;
 

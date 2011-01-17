@@ -1242,7 +1242,7 @@ IMPL_STATIC_LINK(SdPageObjsTLB, ExecDragHdl, void*, EMPTYARG)
 
 bool SdPageObjsTLB::PageBelongsToCurrentShow (const SdPage* pPage) const
 {
-    // Return <sal_True/> as default when there is no custom show or when none
+    // Return <TRUE/> as default when there is no custom show or when none
     // is used.  The page does then belong to the standard show.
     bool bBelongsToShow = true;
 
