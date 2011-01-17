@@ -112,6 +112,27 @@ namespace svt { namespace table
         ColPos  m_nResizingColumn;
     };
 
+    //==================================================================================================================
+    //= RowSelection
+    //==================================================================================================================
+    class RowSelection : public MouseFunction
+    {
+    public:
+        RowSelection()
+            :m_bActive( false )
+        {
+        }
+
+    public:
+        // IMouseFunction
+        virtual FunctionResult  handleMouseMove( ITableControl& i_tableControl, MouseEvent const & i_event );
+        virtual FunctionResult  handleMouseDown( ITableControl& i_tableControl, MouseEvent const & i_event );
+        virtual FunctionResult  handleMouseUp( ITableControl& i_tableControl, MouseEvent const & i_event );
+
+    private:
+        bool    m_bActive;
+    };
+
 //......................................................................................................................
 } } // namespace svt::table
 //......................................................................................................................

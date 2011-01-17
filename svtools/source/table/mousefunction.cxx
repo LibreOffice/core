@@ -189,6 +189,72 @@ namespace svt { namespace table
         return DeactivateFunction;
     }
 
+    //==================================================================================================================
+    //= RowSelection
+    //==================================================================================================================
+    //------------------------------------------------------------------------------------------------------------------
+    FunctionResult RowSelection::handleMouseMove( ITableControl& i_tableControl, MouseEvent const & i_event )
+    {
+        return SkipFunction;
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    FunctionResult RowSelection::handleMouseDown( ITableControl& i_tableControl, MouseEvent const & i_event )
+    {
+        bool handled = false;
+
+        Point const aPoint = i_event.GetPosPixel();
+        TableCell const tableCell( i_tableControl.hitTest( aPoint ) );
+        if ( tableCell.nRow >= 0 )
+        {
+            bool bSetCursor = false;
+            if ( i_tableControl.getSelEngine()->GetSelectionMode() == NO_SELECTION )
+            {
+                bSetCursor = true;
+            }
+            else
+            {
+                if ( !i_tableControl.isRowSelected( tableCell.nRow ) )
+                {
+                    handled = i_tableControl.getSelEngine()->SelMouseButtonDown( i_event );
+                }
+                else
+                {
+                    bSetCursor = true;
+                }
+            }
+
+            if ( bSetCursor )
+            {
+                i_tableControl.activateCellAt( aPoint );
+                handled = true;
+            }
+        }
+
+        if ( handled )
+            m_bActive = true;
+        return handled ? ActivateFunction : SkipFunction;
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    FunctionResult RowSelection::handleMouseUp( ITableControl& i_tableControl, MouseEvent const & i_event )
+    {
+        Point const aPoint = i_event.GetPosPixel();
+        if ( i_tableControl.getRowAtPoint( aPoint ) >= 0 )
+        {
+            if ( i_tableControl.getSelEngine()->GetSelectionMode() != NO_SELECTION )
+            {
+                i_tableControl.getSelEngine()->SelMouseButtonUp( i_event );
+            }
+        }
+        if ( m_bActive )
+        {
+            m_bActive = false;
+            return DeactivateFunction;
+        }
+        return SkipFunction;
+    }
+
 //......................................................................................................................
 } } // namespace svt::table
 //......................................................................................................................

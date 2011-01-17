@@ -190,30 +190,34 @@ namespace svt { namespace table
         impl_hideTipWindow();
 
         Point const aPoint = rMEvt.GetPosPixel();
-        RowPos const nCurRow = m_rTableControl.getRowAtPoint( aPoint );
+        RowPos const hitRow = m_rTableControl.getRowAtPoint( aPoint );
+        bool const wasRowSelected = m_rTableControl.isRowSelected( hitRow );
+
         if ( !m_rTableControl.getInputHandler()->MouseButtonDown( m_rTableControl, rMEvt ) )
-            Window::MouseButtonDown( rMEvt );
-        else
         {
-            if(nCurRow >= 0 && m_rTableControl.getSelEngine()->GetSelectionMode() != NO_SELECTION)
-            {
-                if( !m_rTableControl.isRowSelected( nCurRow ) )
-                {
-                    m_aSelectHdl.Call( NULL );
-                }
-            }
+            Window::MouseButtonDown( rMEvt );
+            return;
+        }
+
+        bool const isRowSelected = m_rTableControl.isRowSelected( hitRow );
+        if ( isRowSelected != wasRowSelected )
+        {
+            m_aSelectHdl.Call( NULL );
         }
         m_aMouseButtonDownHdl.Call((MouseEvent*) &rMEvt);
     }
+
     //------------------------------------------------------------------------------------------------------------------
     void TableDataWindow::MouseButtonUp( const MouseEvent& rMEvt )
     {
         if ( !m_rTableControl.getInputHandler()->MouseButtonUp( m_rTableControl, rMEvt ) )
             Window::MouseButtonUp( rMEvt );
+
         m_aMouseButtonUpHdl.Call((MouseEvent*) &rMEvt);
         m_rTableControl.getAntiImpl().GrabFocus();
     }
-    // -----------------------------------------------------------------------
+
+    //------------------------------------------------------------------------------------------------------------------
     long TableDataWindow::Notify(NotifyEvent& rNEvt )
     {
         long nDone = 0;

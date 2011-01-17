@@ -58,6 +58,7 @@ namespace svt { namespace table
         :m_pImpl( new DefaultInputHandler_Impl )
     {
         m_pImpl->aMouseFunctions.push_back( new ColumnResize );
+        m_pImpl->aMouseFunctions.push_back( new RowSelection );
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -132,65 +133,13 @@ namespace svt { namespace table
     //------------------------------------------------------------------------------------------------------------------
     bool DefaultInputHandler::MouseButtonDown( ITableControl& i_tableControl, const MouseEvent& i_event )
     {
-        if ( lcl_delegateMouseEvent( *m_pImpl, i_tableControl, i_event, &IMouseFunction::handleMouseDown ) )
-            return true;
-
-        bool bHandled = false;
-
-        // TODO: move the below to a IMouseFunction implementation, too
-        Point const aPoint = i_event.GetPosPixel();
-        TableCell const tableCell( i_tableControl.hitTest( aPoint ) );
-        if ( tableCell.nRow >= 0 )
-        {
-            bool bSetCursor = false;
-            if ( i_tableControl.getSelEngine()->GetSelectionMode() == NO_SELECTION )
-            {
-                bSetCursor = true;
-            }
-            else
-            {
-                if ( !i_tableControl.isRowSelected( tableCell.nRow ) )
-                {
-                    bHandled = i_tableControl.getSelEngine()->SelMouseButtonDown( i_event );
-                }
-                else
-                {
-                    bSetCursor = true;
-                }
-            }
-
-            if ( bSetCursor )
-            {
-                i_tableControl.activateCellAt( aPoint );
-                bHandled = true;
-            }
-        }
-
-        return bHandled;
+        return lcl_delegateMouseEvent( *m_pImpl, i_tableControl, i_event, &IMouseFunction::handleMouseDown );
     }
 
     //------------------------------------------------------------------------------------------------------------------
     bool DefaultInputHandler::MouseButtonUp( ITableControl& i_tableControl, const MouseEvent& i_event )
     {
-        if ( lcl_delegateMouseEvent( *m_pImpl, i_tableControl, i_event, &IMouseFunction::handleMouseUp ) )
-            return true;
-
-        bool bHandled = false;
-
-        // TODO: move the below to a IMouseFunction implementation, too
-        Point const aPoint = i_event.GetPosPixel();
-        if ( i_tableControl.getRowAtPoint( aPoint ) >= 0 )
-        {
-            if ( i_tableControl.getSelEngine()->GetSelectionMode() == NO_SELECTION )
-            {
-                bHandled = true;
-            }
-            else
-            {
-                bHandled = i_tableControl.getSelEngine()->SelMouseButtonUp( i_event );
-            }
-        }
-        return bHandled;
+        return lcl_delegateMouseEvent( *m_pImpl, i_tableControl, i_event, &IMouseFunction::handleMouseUp );
     }
 
     //------------------------------------------------------------------------------------------------------------------
