@@ -197,13 +197,11 @@ void SAL_CALL ChartView::initialize( const uno::Sequence< uno::Any >& aArguments
 
     if( !m_pDrawModelWrapper.get() )
     {
-        // /--
         SolarMutexGuard aSolarGuard;
         m_pDrawModelWrapper = ::boost::shared_ptr< DrawModelWrapper >( new DrawModelWrapper( m_xCC ) );
         m_xShapeFactory = m_pDrawModelWrapper->getShapeFactory();
         m_xDrawPage = m_pDrawModelWrapper->getMainDrawPage();
         StartListening( m_pDrawModelWrapper->getSdrModel(), FALSE /*bPreventDups*/ );
-        // \--
     }
 }
 
@@ -463,7 +461,6 @@ struct AxisUsage
     void addCoordinateSystem( VCoordinateSystem* pCooSys, sal_Int32 nDimensionIndex, sal_Int32 nAxisIndex );
     ::std::vector< VCoordinateSystem* > getCoordinateSystems( sal_Int32 nDimensionIndex, sal_Int32 nAxisIndex );
     sal_Int32 getMaxAxisIndexForDimension( sal_Int32 nDimensionIndex );
-    //tFullAxisIndex getDimensionAndIndexForCooSys( VCoordinateSystem* pCooSys );
 
     ScaleAutomatism         aScaleAutomatism;
 
@@ -481,19 +478,6 @@ AxisUsage::~AxisUsage()
 {
     aCoordinateSystems.clear();
 }
-
-/*
-tFullScaleIndex AxisUsage::getDimensionAndIndexForCooSys( VCoordinateSystem* pCooSys )
-{
-    tFullScaleIndex aRet(0,0);
-
-    tCoordinateSystemMap::const_iterator aFound( aCoordinateSystems.find(pCooSys) );
-    if(aFound!=aCoordinateSystems.end())
-        aRet = aFound->second;
-
-    return aRet;
-}
-*/
 
 void AxisUsage::addCoordinateSystem( VCoordinateSystem* pCooSys, sal_Int32 nDimensionIndex, sal_Int32 nAxisIndex )
 {
@@ -1557,24 +1541,6 @@ awt::Rectangle ChartView::impl_createDiagramAndContent( SeriesPlotterContainer& 
             m_bPointsWereSkipped = m_bPointsWereSkipped || pSeriesPlotter->PointsWereSkipped();
         }
 
-        /*
-        uno::Reference< drawing::XShape > xDiagramPlusAxes_KeepRatio( xDiagramPlusAxes_Shapes, uno::UNO_QUERY );
-
-        awt::Size aNewSize( rAvailableSize );
-        awt::Point aNewPos( rAvailablePos );
-        if( bKeepAspectRatio )
-        {
-            awt::Size aCurrentSize( xDiagramPlusAxes_KeepRatio->getSize());
-
-            aNewSize = ShapeFactory::calculateNewSizeRespectingAspectRatio(
-                            rAvailableSize, aCurrentSize );
-            aNewPos = ShapeFactory::calculateTopLeftPositionToCenterObject(
-                    rAvailablePos, rAvailableSize, aNewSize );
-        }
-
-        xDiagramPlusAxes_KeepRatio->setPosition( aNewPos );
-        xDiagramPlusAxes_KeepRatio->setSize( aNewSize );
-        */
         for( aPlotterIter = rSeriesPlotterList.begin(); aPlotterIter != aPlotterEnd; aPlotterIter++ )
         {
             VSeriesPlotter* pSeriesPlotter = *aPlotterIter;
@@ -1584,8 +1550,6 @@ awt::Rectangle ChartView::impl_createDiagramAndContent( SeriesPlotterContainer& 
 
     if( bUseFixedInnerSize )
     {
-        //if( !bIsPieOrDonut )
-        //    aConsumedOuterRect = ::basegfx::B2IRectangle( ShapeFactory::getRectangleOfShape(xBoundingShape) );
         aUsedOuterRect = awt::Rectangle( aConsumedOuterRect.getMinX(), aConsumedOuterRect.getMinY(), aConsumedOuterRect.getWidth(), aConsumedOuterRect.getHeight() );
     }
     else
@@ -2598,12 +2562,10 @@ void ChartView::createShapes()
     impl_deleteCoordinateSystems();
     if( m_pDrawModelWrapper )
     {
-        // /--
         SolarMutexGuard aSolarGuard;
         // #i12587# support for shapes in chart
         m_pDrawModelWrapper->getSdrModel().EnableUndo( FALSE );
         m_pDrawModelWrapper->clearMainDrawPage();
-        // \--
     }
 
     lcl_setDefaultWritingMode( m_pDrawModelWrapper, m_xChartModel );
@@ -2807,10 +2769,8 @@ void ChartView::impl_updateView()
 
             //prepare draw model
             {
-                // /--
                 SolarMutexGuard aSolarGuard;
                 m_pDrawModelWrapper->lockControllers();
-                // \--
             }
 
             //create chart view
@@ -2844,10 +2804,8 @@ void ChartView::impl_updateView()
         }
 
         {
-            // /--
             SolarMutexGuard aSolarGuard;
             m_pDrawModelWrapper->unlockControllers();
-            // \--
         }
 
         impl_notifyModeChangeListener(C2U("valid"));

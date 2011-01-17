@@ -124,7 +124,6 @@ uno::Reference< beans::XPropertySetInfo > SAL_CALL
 {
     static uno::Reference< beans::XPropertySetInfo > xInfo;
 
-    // /--
     ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
     if( !xInfo.is())
     {
@@ -133,7 +132,6 @@ uno::Reference< beans::XPropertySetInfo > SAL_CALL
     }
 
     return xInfo;
-    // \--
 }
 
 //-----------------------------------------------------------------------------

@@ -98,7 +98,6 @@ const Sequence< Property > & lcl_GetPropertySequence()
 {
     static Sequence< Property > aPropSeq;
 
-    // /--
     ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
     if( 0 == aPropSeq.getLength() )
     {
@@ -155,7 +154,6 @@ uno::Reference< util::XCloneable > SAL_CALL ScatterChartType::createClone()
     return uno::Reference< util::XCloneable >( new ScatterChartType( *this ));
 }
 
-// ____ XChartType ____
 // ____ XChartType ____
 Reference< chart2::XCoordinateSystem > SAL_CALL
     ScatterChartType::createCoordinateSystem( ::sal_Int32 DimensionCount )
@@ -217,13 +215,6 @@ uno::Sequence< ::rtl::OUString > SAL_CALL ScatterChartType::getSupportedOptional
 {
     static uno::Sequence< ::rtl::OUString > aOptRolesSeq;
 
-//     if( aOptRolesSeq.getLength() == 0 )
-//     {
-//         aOptRolesSeq.realloc( 2 );
-//         aOptRolesSeq[0] = C2U( "error-bars-x" );
-//         aOptRolesSeq[1] = C2U( "error-bars-y" );
-//     }
-
     return aOptRolesSeq;
 }
 
@@ -234,7 +225,6 @@ uno::Any ScatterChartType::GetDefaultValue( sal_Int32 nHandle ) const
 {
     static tPropertyValueMap aStaticDefaults;
 
-    // /--
     ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
     if( 0 == aStaticDefaults.size() )
     {
@@ -249,7 +239,6 @@ uno::Any ScatterChartType::GetDefaultValue( sal_Int32 nHandle ) const
         return uno::Any();
 
     return (*aFound).second;
-    // \--
 }
 
 // ____ OPropertySet ____
@@ -269,7 +258,6 @@ uno::Reference< beans::XPropertySetInfo > SAL_CALL
 {
     static uno::Reference< beans::XPropertySetInfo > xInfo;
 
-    // /--
     ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
     if( !xInfo.is())
     {
@@ -278,7 +266,6 @@ uno::Reference< beans::XPropertySetInfo > SAL_CALL
     }
 
     return xInfo;
-    // \--
 }
 
 uno::Sequence< ::rtl::OUString > ScatterChartType::getSupportedServiceNames_Static()

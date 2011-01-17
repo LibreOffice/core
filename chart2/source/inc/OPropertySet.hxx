@@ -56,14 +56,11 @@ class OOO_DLLPUBLIC_CHARTTOOLS OPropertySet :
     // includes beans::XPropertySet, XMultiPropertySet and XFastPropertySet
     public ::cppu::OPropertySetHelper,
     // includes uno::XWeak (and XInterface, esp. ref-counting)
-//     public virtual ::cppu::OWeakObject,
 
-//     public virtual ::com::sun::star::lang::XServiceInfo,
     public ::com::sun::star::lang::XTypeProvider,
     public ::com::sun::star::beans::XPropertyState,
     public ::com::sun::star::beans::XMultiPropertyStates,
     public ::com::sun::star::style::XStyleSupplier
-//     public ::com::sun::star::beans::XFastPropertyState
 {
 public:
     OPropertySet( ::osl::Mutex & rMutex );
@@ -101,7 +98,6 @@ protected:
         {
             static uno::Reference&lt; beans::XPropertySetInfo &gt; xInfo;
 
-            // /--
             ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
             if( !xInfo.is())
             {
@@ -110,7 +106,6 @@ protected:
             }
 
             return xInfo;
-            // \--
         }
         </pre>
 
@@ -121,9 +116,6 @@ protected:
 
         @see ::cppu::OPropertySetHelper
     */
-//     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL
-//         getPropertySetInfo()
-//         throw (::com::sun::star::uno::RuntimeException) = 0;
 
     /** Try to convert the value <code>rValue</code> to the type required by the
         property associated with <code>nHandle</code>.
@@ -206,20 +198,6 @@ protected:
     // ____ XInterface ____
     virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& aType )
         throw (::com::sun::star::uno::RuntimeException);
-//     virtual void SAL_CALL acquire() throw ();
-//     virtual void SAL_CALL release() throw ();
-
-
-    // ____ XServiceInfo ____
-//     virtual ::rtl::OUString SAL_CALL
-//         getImplementationName()
-//         throw (::com::sun::star::uno::RuntimeException);
-//     virtual sal_Bool SAL_CALL
-//         supportsService( const ::rtl::OUString& ServiceName )
-//         throw (::com::sun::star::uno::RuntimeException);
-//     virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL
-//         getSupportedServiceNames()
-//         throw (::com::sun::star::uno::RuntimeException);
 
     // ____ XTypeProvider ____
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL
@@ -270,21 +248,6 @@ protected:
     virtual void SAL_CALL setStyle( const ::com::sun::star::uno::Reference< ::com::sun::star::style::XStyle >& xStyle )
         throw (::com::sun::star::lang::IllegalArgumentException,
                ::com::sun::star::uno::RuntimeException);
-
-    // ____ XFastPropertyState ____
-//     virtual ::com::sun::star::beans::PropertyState SAL_CALL getFastPropertyState( sal_Int32 nHandle )
-//         throw (::com::sun::star::beans::UnknownPropertyException,
-//                ::com::sun::star::uno::RuntimeException);
-//     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyState > SAL_CALL getFastPropertyStates( const ::com::sun::star::uno::Sequence< sal_Int32 >& aHandles )
-//         throw (::com::sun::star::beans::UnknownPropertyException,
-//                ::com::sun::star::uno::RuntimeException);
-//     virtual void SAL_CALL setFastPropertyToDefault( sal_Int32 nHandle )
-//         throw (::com::sun::star::beans::UnknownPropertyException,
-//                ::com::sun::star::uno::RuntimeException);
-//     virtual ::com::sun::star::uno::Any SAL_CALL getFastPropertyDefault( sal_Int32 nHandle )
-//         throw (::com::sun::star::beans::UnknownPropertyException,
-//                ::com::sun::star::lang::WrappedTargetException,
-//                ::com::sun::star::uno::RuntimeException);
 
     // ____ XMultiPropertySet ____
     virtual void SAL_CALL setPropertyValues(

@@ -182,11 +182,10 @@ void ThreeD_SceneAppearance_TabPage::applyRoundedEdgeAndObjectLinesToModel()
             break;
     }
 
-    // /-- locked controllers
+    // locked controllers
     ControllerLockHelperGuard aGuard( m_rControllerLockHelper );
     ThreeDHelper::setRoundedEdgesAndObjectLines(
         ::chart::ChartModelHelper::findDiagram( m_xChartModel ), nCurrentRoundedEdges, nObjectLines );
-    // \-- locked controllers
 }
 
 void ThreeD_SceneAppearance_TabPage::applyShadeModeToModel()
@@ -307,7 +306,7 @@ IMPL_LINK( ThreeD_SceneAppearance_TabPage, SelectSchemeHdl, void*, EMPTYARG )
         return 0;
 
     {
-        // /-- locked controllers
+        // locked controllers
         ControllerLockHelperGuard aGuard( m_rControllerLockHelper );
 
         uno::Reference< chart2::XDiagram > xDiagram( ::chart::ChartModelHelper::findDiagram( m_xChartModel ) );
@@ -320,7 +319,6 @@ IMPL_LINK( ThreeD_SceneAppearance_TabPage, SelectSchemeHdl, void*, EMPTYARG )
         {
             OSL_ENSURE( false, "Invalid Entry selected" );
         }
-        // \-- locked controllers
     }
 
     // update other controls

@@ -67,7 +67,6 @@ Reference< beans::XPropertyState > WrappedPropertySet::getInnerPropertyState()
 
 void WrappedPropertySet::clearWrappedPropertySet()
 {
-    // /--
     ::osl::MutexGuard aGuard( m_aMutex );
 
     //delete all wrapped properties
@@ -85,7 +84,6 @@ void WrappedPropertySet::clearWrappedPropertySet()
     DELETEZ(m_pWrappedPropertyMap);
 
     m_xInfo = NULL;
-    // \--
 }
 
 //XPropertySet
@@ -94,13 +92,11 @@ Reference< beans::XPropertySetInfo > SAL_CALL WrappedPropertySet::getPropertySet
 {
     if( !m_xInfo.is() )
     {
-        // /--
         ::osl::MutexGuard aGuard( m_aMutex );
         if( !m_xInfo.is() )
         {
             m_xInfo = ::cppu::OPropertySetHelper::createPropertySetInfo( getInfoHelper() );
         }
-        // \--
     }
     return m_xInfo;
 }
@@ -208,7 +204,6 @@ void SAL_CALL WrappedPropertySet::addPropertyChangeListener( const OUString& rPr
         else
             xInnerPropertySet->addPropertyChangeListener( rPropertyName, xListener );
     }
-//     m_aBoundListenerContainer.addInterface( (sal_Int32)nHandle, xListener );
 }
 void SAL_CALL WrappedPropertySet::removePropertyChangeListener( const OUString& rPropertyName, const Reference< beans::XPropertyChangeListener >& aListener )
                                     throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
@@ -438,14 +433,12 @@ Sequence< Any > SAL_CALL WrappedPropertySet::getPropertyDefaults( const Sequence
 {
     if(!m_pPropertyArrayHelper)
     {
-        // /--
         ::osl::MutexGuard aGuard( m_aMutex );
         if(!m_pPropertyArrayHelper)
         {
             sal_Bool bSorted = sal_True;
             m_pPropertyArrayHelper = new ::cppu::OPropertyArrayHelper( getPropertySequence(), bSorted );
         }
-        // \--
     }
     return *m_pPropertyArrayHelper;
 }
@@ -456,7 +449,6 @@ tWrappedPropertyMap& WrappedPropertySet::getWrappedPropertyMap()
 {
     if(!m_pWrappedPropertyMap)
     {
-        // /--
         ::osl::MutexGuard aGuard( m_aMutex );
         if(!m_pWrappedPropertyMap)
         {
@@ -486,7 +478,6 @@ tWrappedPropertyMap& WrappedPropertySet::getWrappedPropertyMap()
                 }
             }
         }
-        // \--
     }
     return *m_pWrappedPropertyMap;
 }

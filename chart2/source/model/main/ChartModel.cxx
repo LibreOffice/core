@@ -773,10 +773,8 @@ sal_Bool SAL_CALL ChartModel::hasInternalDataProvider()
 uno::Reference< chart2::data::XDataProvider > SAL_CALL ChartModel::getDataProvider()
             throw (uno::RuntimeException)
 {
-    // /--
     MutexGuard aGuard( m_aModelMutex );
     return m_xDataProvider;
-    // \--
 }
 
 // ____ XDataReceiver ____
@@ -785,7 +783,6 @@ void SAL_CALL ChartModel::attachDataProvider( const uno::Reference< chart2::data
             throw (uno::RuntimeException)
 {
     {
-        // /--
         MutexGuard aGuard( m_aModelMutex );
         uno::Reference< beans::XPropertySet > xProp( xDataProvider, uno::UNO_QUERY );
         if( xProp.is() )
@@ -804,7 +801,6 @@ void SAL_CALL ChartModel::attachDataProvider( const uno::Reference< chart2::data
         m_xInternalDataProvider.clear();
 
         //the numberformatter is kept independent of the data provider!
-        // \--
     }
     setModified( sal_True );
 }
@@ -813,7 +809,6 @@ void SAL_CALL ChartModel::attachNumberFormatsSupplier( const uno::Reference< uti
             throw (uno::RuntimeException)
 {
     {
-        // /--
         MutexGuard aGuard( m_aModelMutex );
         if( xNewSupplier==m_xNumberFormatsSupplier )
             return;
@@ -836,7 +831,6 @@ void SAL_CALL ChartModel::attachNumberFormatsSupplier( const uno::Reference< uti
 
         m_xNumberFormatsSupplier.set( xNewSupplier );
         m_xOwnNumberFormatsSupplier.clear();
-        // \--
     }
     setModified( sal_True );
 }
@@ -846,7 +840,6 @@ void SAL_CALL ChartModel::setArguments( const Sequence< beans::PropertyValue >& 
                    uno::RuntimeException)
 {
     {
-        // /--
         MutexGuard aGuard( m_aModelMutex );
         if( !m_xDataProvider.is() )
             return;
@@ -890,7 +883,6 @@ void SAL_CALL ChartModel::setArguments( const Sequence< beans::PropertyValue >& 
             ASSERT_EXCEPTION( ex );
         }
         unlockControllers();
-        // \--
     }
     setModified( sal_True );
 }
@@ -932,10 +924,8 @@ void SAL_CALL ChartModel::setChartTypeManager( const uno::Reference< chart2::XCh
             throw (uno::RuntimeException)
 {
     {
-        // /--
         MutexGuard aGuard( m_aModelMutex );
         m_xChartTypeManager = xNewManager;
-        // \--
     }
     setModified( sal_True );
 }
@@ -943,42 +933,34 @@ void SAL_CALL ChartModel::setChartTypeManager( const uno::Reference< chart2::XCh
 uno::Reference< chart2::XChartTypeManager > SAL_CALL ChartModel::getChartTypeManager()
             throw (uno::RuntimeException)
 {
-    // /--
     MutexGuard aGuard( m_aModelMutex );
     return m_xChartTypeManager;
-    // \--
 }
 
 uno::Reference< beans::XPropertySet > SAL_CALL ChartModel::getPageBackground()
     throw (uno::RuntimeException)
 {
-    // /--
     MutexGuard aGuard( m_aModelMutex );
     return m_xPageBackground;
-    // \--
 }
 
 // ____ XTitled ____
 uno::Reference< chart2::XTitle > SAL_CALL ChartModel::getTitleObject()
     throw (uno::RuntimeException)
 {
-    // /--
     MutexGuard aGuard( m_aModelMutex );
     return m_xTitle;
-    // \--
 }
 
 void SAL_CALL ChartModel::setTitleObject( const uno::Reference< chart2::XTitle >& xTitle )
     throw (uno::RuntimeException)
 {
     {
-        // /--
         MutexGuard aGuard( m_aModelMutex );
         if( m_xTitle.is() )
             ModifyListenerHelper::removeListener( m_xTitle, this );
         m_xTitle = xTitle;
         ModifyListenerHelper::addListener( m_xTitle, this );
-        // \--
     }
     setModified( sal_True );
 }

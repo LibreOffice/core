@@ -113,10 +113,9 @@ void WrappedStockProperty::setPropertyValue( const ::com::sun::star::uno::Any& r
         {
             try
             {
-                // /-- locked controllers
+                // locked controllers
                 ControllerLockGuard aCtrlLockGuard( m_spChart2ModelContact->getChartModel() );
                 xTemplate->changeDiagram( xDiagram );
-                // \-- locked controllers
             }
             catch( uno::Exception & ex )
             {

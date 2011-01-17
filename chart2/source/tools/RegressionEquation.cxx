@@ -67,7 +67,6 @@ enum
 {
     PROP_EQUATION_SHOW,
     PROP_EQUATION_SHOW_CORRELATION_COEFF,
-//     PROP_EQUATION_SEPARATOR,
     PROP_EQUATION_REF_PAGE_SIZE,
     PROP_EQUATION_REL_POS,
     PROP_EQUATION_NUMBER_FORMAT
@@ -89,13 +88,6 @@ void lcl_AddPropertiesToVector(
                   ::getBooleanCppuType(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
-
-//     rOutProperties.push_back(
-//         Property( C2U( "Separator" ),
-//                   PROP_EQUATION_SEPARATOR,
-//                   ::getCppuType( reinterpret_cast< ::rtl::OUString * >(0)),
-//                   beans::PropertyAttribute::BOUND
-//                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
     rOutProperties.push_back(
         Property( C2U( "ReferencePageSize" ),
@@ -124,7 +116,6 @@ void lcl_AddDefaultsToMap(
 {
     ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_EQUATION_SHOW, false );
     ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_EQUATION_SHOW_CORRELATION_COEFF, false );
-//     ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_EQUATION_SEPARATOR, ::rtl::OUString( sal_Unicode( '\n' )));
 
     // override other defaults
     ::chart::PropertyHelper::setPropertyValue( rOutMap, ::chart::FillProperties::PROP_FILL_STYLE, drawing::FillStyle_NONE );
@@ -140,7 +131,6 @@ const uno::Sequence< Property > & lcl_GetPropertySequence()
 {
     static uno::Sequence< Property > aPropSeq;
 
-    // /--
     MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
     if( 0 == aPropSeq.getLength() )
     {
@@ -209,7 +199,6 @@ uno::Any RegressionEquation::GetDefaultValue( sal_Int32 nHandle ) const
 {
     static tPropertyValueMap aStaticDefaults;
 
-    // /--
     ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
     if( 0 == aStaticDefaults.size() )
     {
@@ -229,7 +218,6 @@ uno::Any RegressionEquation::GetDefaultValue( sal_Int32 nHandle ) const
         return uno::Any();
 
     return (*aFound).second;
-    // \--
 }
 
 ::cppu::IPropertyArrayHelper & SAL_CALL RegressionEquation::getInfoHelper()
@@ -244,7 +232,6 @@ Reference< beans::XPropertySetInfo > SAL_CALL
 {
     static Reference< beans::XPropertySetInfo > xInfo;
 
-    // /--
     ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
     if( !xInfo.is())
     {
@@ -253,7 +240,6 @@ Reference< beans::XPropertySetInfo > SAL_CALL
     }
 
     return xInfo;
-    // \--
 }
 
 
@@ -317,16 +303,13 @@ void RegressionEquation::fireModifyEvent()
 uno::Sequence< uno::Reference< chart2::XFormattedString > > SAL_CALL RegressionEquation::getText()
     throw (uno::RuntimeException)
 {
-    // /--
     MutexGuard aGuard( GetMutex() );
     return m_aStrings;
-    // \--
 }
 
 void SAL_CALL RegressionEquation::setText( const uno::Sequence< uno::Reference< chart2::XFormattedString > >& Strings )
     throw (uno::RuntimeException)
 {
-    // /--
     MutexGuard aGuard( GetMutex() );
     ModifyListenerHelper::removeListenerFromAllElements(
         ContainerHelper::SequenceToVector( m_aStrings ), m_xModifyEventForwarder );
@@ -334,7 +317,6 @@ void SAL_CALL RegressionEquation::setText( const uno::Sequence< uno::Reference< 
     ModifyListenerHelper::addListenerToAllElements(
         ContainerHelper::SequenceToVector( m_aStrings ), m_xModifyEventForwarder );
     fireModifyEvent();
-    // \--
 }
 
 // ================================================================================

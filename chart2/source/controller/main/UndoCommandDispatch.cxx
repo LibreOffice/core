@@ -113,13 +113,11 @@ void SAL_CALL UndoCommandDispatch::dispatch(
     if( m_xUndoManager.is() )
     {
         // why is it necessary to lock the solar mutex here?
-        // /--
         SolarMutexGuard aSolarGuard;
         if( URL.Path.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Undo" )))
             m_xUndoManager->undo( m_xModel );
         else
             m_xUndoManager->redo( m_xModel );
-        // \--
     }
 }
 

@@ -222,7 +222,6 @@ const Sequence< Property > & lcl_GetPropertySequence()
 {
     static Sequence< Property > aPropSeq;
 
-    // /--
     MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
     if( 0 == aPropSeq.getLength() )
     {
@@ -444,27 +443,21 @@ void SAL_CALL Axis::setScaleData( const chart2::ScaleData& rScaleData )
 chart2::ScaleData SAL_CALL Axis::getScaleData()
     throw (uno::RuntimeException)
 {
-    // /--
     MutexGuard aGuard( m_aMutex );
     return m_aScaleData;
-    // \--
 }
 
 Reference< beans::XPropertySet > SAL_CALL Axis::getGridProperties()
     throw (uno::RuntimeException)
 {
-    // /--
     MutexGuard aGuard( m_aMutex );
     return m_xGrid;
-    // \--
 }
 Sequence< Reference< beans::XPropertySet > > SAL_CALL Axis::getSubGridProperties()
     throw (uno::RuntimeException)
 {
-    // /--
     MutexGuard aGuard( m_aMutex );
     return m_aSubGridProperties;
-    // \--
 }
 
 Sequence< Reference< beans::XPropertySet > > SAL_CALL Axis::getSubTickProperties()
@@ -479,10 +472,8 @@ Sequence< Reference< beans::XPropertySet > > SAL_CALL Axis::getSubTickProperties
 Reference< chart2::XTitle > SAL_CALL Axis::getTitleObject()
     throw (uno::RuntimeException)
 {
-    // /--
     MutexGuard aGuard( GetMutex() );
     return m_xTitle;
-    // \--
 }
 
 void SAL_CALL Axis::setTitleObject( const Reference< chart2::XTitle >& xNewTitle )
@@ -580,7 +571,6 @@ uno::Any Axis::GetDefaultValue( sal_Int32 nHandle ) const
 {
     static tPropertyValueMap aStaticDefaults;
 
-    // /--
     ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
     if( 0 == aStaticDefaults.size() )
     {
@@ -598,7 +588,6 @@ uno::Any Axis::GetDefaultValue( sal_Int32 nHandle ) const
         return uno::Any();
 
     return (*aFound).second;
-    // \--
 }
 
 ::cppu::IPropertyArrayHelper & SAL_CALL Axis::getInfoHelper()
@@ -614,7 +603,6 @@ Reference< beans::XPropertySetInfo > SAL_CALL
 {
     static Reference< beans::XPropertySetInfo > xInfo;
 
-    // /--
     MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
     if( !xInfo.is())
     {
@@ -623,7 +611,6 @@ Reference< beans::XPropertySetInfo > SAL_CALL
     }
 
     return xInfo;
-    // \--
 }
 
 // ================================================================================

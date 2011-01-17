@@ -58,7 +58,6 @@ static const OUString lcl_aServiceName(
 
 enum
 {
-//     PROP_SOURCE_IDENTIFIER,
     PROP_NUMBERFORMAT_KEY,
     PROP_PROPOSED_ROLE,
     PROP_XML_RANGE
@@ -186,7 +185,6 @@ Sequence< double > SAL_CALL UncachedDataSequence::getNumericalData()
     throw (uno::RuntimeException)
 {
     Sequence< double > aResult;
-    // /--
     MutexGuard aGuard( GetMutex() );
     if( m_xDataProvider.is())
     {
@@ -196,7 +194,6 @@ Sequence< double > SAL_CALL UncachedDataSequence::getNumericalData()
                           aResult.getArray(), CommonFunctors::AnyToDouble());
     }
     return aResult;
-    // \--
 }
 
 // ________ XTextualDataSequence ________
@@ -204,7 +201,6 @@ Sequence< OUString > SAL_CALL UncachedDataSequence::getTextualData()
     throw (uno::RuntimeException)
 {
     Sequence< OUString > aResult;
-    // /--
     MutexGuard aGuard( GetMutex() );
     if( m_xDataProvider.is())
     {
@@ -214,19 +210,16 @@ Sequence< OUString > SAL_CALL UncachedDataSequence::getTextualData()
                           aResult.getArray(), CommonFunctors::AnyToString());
     }
     return aResult;
-    // \--
 }
 
 // ________ XDataSequence  ________
 Sequence< Any > SAL_CALL UncachedDataSequence::getData()
     throw (uno::RuntimeException)
 {
-    // /--
     MutexGuard aGuard( GetMutex() );
     if( m_xDataProvider.is())
         return m_xDataProvider->getDataByRangeRepresentation( m_aSourceRepresentation );
     return Sequence< Any >();
-    // \--
 }
 
 OUString SAL_CALL UncachedDataSequence::getSourceRangeRepresentation()
@@ -258,7 +251,6 @@ void SAL_CALL UncachedDataSequence::replaceByIndex( ::sal_Int32 Index, const uno
            lang::WrappedTargetException,
            uno::RuntimeException)
 {
-    // /--
     MutexGuard aGuard( GetMutex() );
     Sequence< Any > aData( getData());
     if( Index < aData.getLength() &&

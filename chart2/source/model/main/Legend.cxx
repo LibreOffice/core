@@ -125,7 +125,6 @@ const Sequence< Property > & lcl_GetPropertySequence()
 {
     static Sequence< Property > aPropSeq;
 
-    // /--
     ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
     if( 0 == aPropSeq.getLength() )
     {
@@ -312,7 +311,6 @@ Any Legend::GetDefaultValue( sal_Int32 nHandle ) const
 {
     static tPropertyValueMap aStaticDefaults;
 
-    // /--
     ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
     if( 0 == aStaticDefaults.size() )
     {
@@ -330,7 +328,6 @@ Any Legend::GetDefaultValue( sal_Int32 nHandle ) const
         return Any();
 
     return (*aFound).second;
-    // \--
 }
 
 ::cppu::IPropertyArrayHelper & SAL_CALL Legend::getInfoHelper()
@@ -346,7 +343,6 @@ Reference< beans::XPropertySetInfo > SAL_CALL
 {
     static Reference< beans::XPropertySetInfo > xInfo;
 
-    // /--
     ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
     if( !xInfo.is())
     {
@@ -355,7 +351,6 @@ Reference< beans::XPropertySetInfo > SAL_CALL
     }
 
     return xInfo;
-    // \--
 }
 
 // implement XServiceInfo methods basing upon getSupportedServiceNames_Static

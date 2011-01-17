@@ -118,7 +118,6 @@ const Sequence< Property > & lcl_GetPropertySequence()
 {
     static Sequence< Property > aPropSeq;
 
-    // /--
     MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
     if( 0 == aPropSeq.getLength() )
     {
@@ -183,7 +182,6 @@ uno::Any StockChartTypeTemplate::GetDefaultValue( sal_Int32 nHandle ) const
 {
     static tPropertyValueMap aStaticDefaults;
 
-    // /--
     ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
     if( 0 == aStaticDefaults.size() )
     {
@@ -198,7 +196,6 @@ uno::Any StockChartTypeTemplate::GetDefaultValue( sal_Int32 nHandle ) const
         return uno::Any();
 
     return (*aFound).second;
-    // \--
 }
 
 ::cppu::IPropertyArrayHelper & SAL_CALL StockChartTypeTemplate::getInfoHelper()
@@ -214,7 +211,6 @@ uno::Reference< beans::XPropertySetInfo > SAL_CALL
 {
     static uno::Reference< beans::XPropertySetInfo > xInfo;
 
-    // /--
     MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
     if( !xInfo.is())
     {
@@ -223,7 +219,6 @@ uno::Reference< beans::XPropertySetInfo > SAL_CALL
     }
 
     return xInfo;
-    // \--
 }
 
 sal_Int32 StockChartTypeTemplate::getAxisCountByDimension( sal_Int32 nDimension )

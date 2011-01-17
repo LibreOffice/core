@@ -87,7 +87,6 @@ const Sequence< Property > & lcl_getPropertySequence()
 {
     static Sequence< Property > aPropSeq;
 
-    // /--
     MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
     if( 0 == aPropSeq.getLength() )
     {
@@ -152,7 +151,6 @@ uno::Any GridProperties::GetDefaultValue( sal_Int32 nHandle ) const
 {
     static tPropertyValueMap aStaticDefaults;
 
-    // /--
     ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
     if( 0 == aStaticDefaults.size() )
         lcl_addDefaultsToMap( aStaticDefaults );
@@ -164,7 +162,6 @@ uno::Any GridProperties::GetDefaultValue( sal_Int32 nHandle ) const
         return uno::Any();
 
     return (*aFound).second;
-    // \--
 }
 
 ::cppu::IPropertyArrayHelper & SAL_CALL GridProperties::getInfoHelper()
@@ -179,7 +176,6 @@ Reference< beans::XPropertySetInfo > SAL_CALL
 {
     static Reference< beans::XPropertySetInfo > xInfo;
 
-    // /--
     ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
     if( !xInfo.is())
     {
@@ -188,7 +184,6 @@ Reference< beans::XPropertySetInfo > SAL_CALL
     }
 
     return xInfo;
-    // \--
 }
 
 // ____ XCloneable ____

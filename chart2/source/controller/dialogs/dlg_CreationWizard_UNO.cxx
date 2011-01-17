@@ -144,7 +144,6 @@ uno::Sequence< uno::Type > CreationWizardUnoDlg::getTypes() throw(uno::RuntimeEx
 {
     static uno::Sequence< uno::Type > aTypeList;
 
-    // /--
     ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
     if( !aTypeList.getLength() )
     {
@@ -162,7 +161,6 @@ uno::Sequence< uno::Type > CreationWizardUnoDlg::getTypes() throw(uno::RuntimeEx
     }
 
     return aTypeList;
-    // \--
 }
 uno::Sequence< sal_Int8 > SAL_CALL CreationWizardUnoDlg::getImplementationId( void ) throw( uno::RuntimeException )
 {
@@ -294,7 +292,6 @@ void SAL_CALL CreationWizardUnoDlg::disposing()
     m_xChartModel.clear();
     m_xParentWindow.clear();
 
-    // /--
     SolarMutexGuard aSolarGuard;
     if( m_pDialog )
     {
@@ -317,7 +314,6 @@ void SAL_CALL CreationWizardUnoDlg::disposing()
     {
         ASSERT_EXCEPTION( ex );
     }
-    // \--
 }
 
 //XPropertySet

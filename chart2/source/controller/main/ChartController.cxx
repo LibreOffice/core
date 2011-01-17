@@ -784,7 +784,7 @@ void ChartController::impl_deleteDrawViewController()
             uno::Reference< util::XModeChangeBroadcaster > xViewBroadcaster( m_xChartView, uno::UNO_QUERY );
             if( xViewBroadcaster.is() )
                 xViewBroadcaster->removeModeChangeListener(this);
-            // /--
+
             impl_invalidateAccessible();
             SolarMutexGuard aSolarGuard;
             impl_deleteDrawViewController();
@@ -797,7 +797,6 @@ void ChartController::impl_deleteDrawViewController()
             m_pChartWindow = NULL;//m_pChartWindow is deleted via UNO due to dispose of m_xViewWindow (trigerred by Framework (Controller pretends to be XWindow also))
             m_xViewWindow->dispose();
             m_xChartView.clear();
-            // \--
         }
 
         // remove as listener to layout manager events
@@ -1312,7 +1311,6 @@ void SAL_CALL ChartController::executeDispatch_ChartType()
     UndoLiveUpdateGuard aUndoGuard = UndoLiveUpdateGuard(
         ::rtl::OUString( String( SchResId( STR_ACTION_EDIT_CHARTTYPE ))), m_xUndoManager, getModel() );
 
-    // /--
     SolarMutexGuard aSolarGuard;
     //prepare and open dialog
     ChartTypeDialog aDlg( m_pChartWindow, getModel(), m_xCC );
@@ -1321,7 +1319,6 @@ void SAL_CALL ChartController::executeDispatch_ChartType()
         impl_adaptDataSeriesAutoResize();
         aUndoGuard.commitAction();
     }
-    // \--
 }
 
 void SAL_CALL ChartController::executeDispatch_SourceData()
@@ -1338,7 +1335,6 @@ void SAL_CALL ChartController::executeDispatch_SourceData()
         ::rtl::OUString( String( SchResId( STR_ACTION_EDIT_DATA_RANGES ))), m_xUndoManager, getModel() );
     if( xChartDoc.is())
     {
-        // /--
         SolarMutexGuard aSolarGuard;
         ::chart::DataSourceDialog aDlg( m_pChartWindow, xChartDoc, m_xCC );
         if( aDlg.Execute() == RET_OK )
@@ -1346,7 +1342,6 @@ void SAL_CALL ChartController::executeDispatch_SourceData()
             impl_adaptDataSeriesAutoResize();
             aUndoGuard.commitAction();
         }
-        // \--
     }
 }
 

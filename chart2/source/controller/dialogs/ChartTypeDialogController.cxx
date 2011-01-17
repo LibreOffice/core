@@ -338,7 +338,7 @@ bool ChartTypeDialogController::commitToModel( const ChartTypeParameter& rParame
     {
         uno::Reference< frame::XModel > xModel( xChartModel, uno::UNO_QUERY);
 
-        // /-- locked controllers
+        // locked controllers
         ControllerLockGuard aCtrlLockGuard( xModel );
         uno::Reference< XDiagram > xDiagram = ChartModelHelper::findDiagram( xModel );
         DiagramHelper::tTemplateWithServiceName aTemplateWithService(
@@ -357,7 +357,6 @@ bool ChartTypeDialogController::commitToModel( const ChartTypeParameter& rParame
             if( xDiaProp.is() )
                 xDiaProp->setPropertyValue( C2U( "SortByXValues" ), uno::makeAny( rParameter.bSortByXValues ) );
         }
-        // \-- locked controllers
     }
     return false;
 }

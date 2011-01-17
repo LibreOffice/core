@@ -106,7 +106,7 @@ namespace
         DBG_ERROR("unknown ObjectType");
         return NULL;
     }
-    //--
+
     rtl::OUString aParticleID = ObjectIdentifier::getParticleID( aObjectCID );
     bool bAffectsMultipleObjects = aParticleID.equals(C2U("ALLELEMENTS"));
     //-------------------------------------------------------------
@@ -842,13 +842,11 @@ void SAL_CALL ChartController::executeDispatch_View3D()
             ::rtl::OUString( String( SchResId( STR_ACTION_EDIT_3D_VIEW ))),
             m_xUndoManager, getModel());
 
-        // /--
         //open dialog
         SolarMutexGuard aSolarGuard;
         View3DDialog aDlg( m_pChartWindow, getModel(), m_pDrawModelWrapper->GetColorTable() );
         if( aDlg.Execute() == RET_OK )
             aUndoGuard.commitAction();
-        // \--
     }
     catch( uno::RuntimeException& e)
     {

@@ -84,7 +84,6 @@ const Sequence< Property > & lcl_GetPropertySequence()
 {
     static Sequence< Property > aPropSeq;
 
-    // /--
     ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
     if( 0 == aPropSeq.getLength() )
     {
@@ -141,7 +140,6 @@ uno::Any ColumnChartType::GetDefaultValue( sal_Int32 nHandle ) const
 {
     static tPropertyValueMap aStaticDefaults;
 
-    // /--
     ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
     if( 0 == aStaticDefaults.size() )
     {
@@ -156,7 +154,6 @@ uno::Any ColumnChartType::GetDefaultValue( sal_Int32 nHandle ) const
         return uno::Any();
 
     return (*aFound).second;
-    // \--
 }
 
 ::cppu::IPropertyArrayHelper & SAL_CALL ColumnChartType::getInfoHelper()
@@ -174,7 +171,6 @@ uno::Reference< beans::XPropertySetInfo > SAL_CALL
 {
     static uno::Reference< beans::XPropertySetInfo > xInfo;
 
-    // /--
     ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
     if( !xInfo.is())
     {
@@ -183,10 +179,8 @@ uno::Reference< beans::XPropertySetInfo > SAL_CALL
     }
 
     return xInfo;
-    // \--
 }
 
-//
 
 uno::Sequence< ::rtl::OUString > ColumnChartType::getSupportedServiceNames_Static()
 {

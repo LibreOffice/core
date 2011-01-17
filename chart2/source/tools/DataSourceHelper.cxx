@@ -463,10 +463,9 @@ void DataSourceHelper::setRangeSegmentation(
     if( !xTemplate.is() )
         return;
 
-    // /-- locked controllers
+    // locked controllers
     ControllerLockGuard aCtrlLockGuard( xChartModel );
     xTemplate->changeDiagramData( xDiagram, xDataSource, aArguments );
-    // \-- locked controllers
 }
 
 Sequence< OUString > DataSourceHelper::getRangesFromLabeledDataSequence(

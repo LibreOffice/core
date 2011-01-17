@@ -63,7 +63,6 @@ void ChartController::executeDispatch_EditData()
         Reference< ::com::sun::star::chart2::data::XDataProvider > xDataProvider( xChartDoc->getDataProvider());
 
         {
-            // /--
             SolarMutexGuard aSolarGuard;
             // using assignment for broken gcc 3.3
             UndoLiveUpdateGuardWithData aUndoGuard = UndoLiveUpdateGuardWithData(
@@ -73,7 +72,6 @@ void ChartController::executeDispatch_EditData()
             // the dialog has no OK/Cancel
             aDataEditorDialog.Execute();
             aUndoGuard.commitAction();
-            // \--
         }
     }
 }
