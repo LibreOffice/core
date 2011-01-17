@@ -40,6 +40,7 @@
 #include <QLabel>
 
 #include <kapplication.h>
+#include <kdebug.h>
 
 #undef Region
 
@@ -383,17 +384,16 @@ BOOL KDESalGraphics::drawNativeControl( ControlType type, ControlPart part,
               vclStateValue2StateFlag(nControlState, value) );
     }
     else if ( (type == CTRL_TOOLBAR) && (part == PART_THUMB_VERT) )
-    {
-        const int tw = widgetRect.width();
-        widgetRect.setWidth(kapp->style()->pixelMetric(QStyle::PM_ToolBarHandleExtent));
+    {   // reduce paint area only to the handle area
+        const int width = kapp->style()->pixelMetric(QStyle::PM_ToolBarHandleExtent);
+        QRect rect( 0, 0, width, widgetRect.height());
+        clipRegion = new QRegion( widgetRect.x(), widgetRect.y(), width, widgetRect.height());
 
         QStyleOption option;
         option.state = QStyle::State_Horizontal;
 
         draw( QStyle::PE_IndicatorToolBarHandle, &option, m_image,
-              vclStateValue2StateFlag(nControlState, value) );
-
-        widgetRect.setWidth(tw);
+              vclStateValue2StateFlag(nControlState, value), rect );
     }
     else if (type == CTRL_EDITBOX)
     {
