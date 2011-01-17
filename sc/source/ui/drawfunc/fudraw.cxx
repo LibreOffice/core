@@ -92,17 +92,10 @@ void FuDraw::DoModifiers(const MouseEvent& rMEvt)
     //  Alt     = zentrisch
 
     BOOL bShift = rMEvt.IsShift();
-//    BOOL bCtrl  = rMEvt.IsMod1();
     BOOL bAlt   = rMEvt.IsMod2();
-
-//    ScViewData* pViewData = pViewShell->GetViewData();
-//    const ScViewOptions& rOpt = pViewData->GetOptions();
-//    const ScGridOptions& rGrid = rOpt.GetGridOptions();
-//    BOOL bGridOpt = rGrid.GetUseGridSnap();
 
     bool bOrtho     = bShift;
     BOOL bAngleSnap = bShift;
-//    BOOL bGridSnap  = ( bGridOpt != bCtrl );        // andere Snap's nicht unterstuetzt
     BOOL bCenter    = bAlt;
 
     // #i33136#
@@ -116,13 +109,6 @@ void FuDraw::DoModifiers(const MouseEvent& rMEvt)
     if (pView->IsAngleSnapEnabled() != bAngleSnap)
         pView->SetAngleSnapEnabled(bAngleSnap);
 
-/*  Control fuer Snap beisst sich beim Verschieben mit "kopieren" !!!
-
-    if (pView->IsGridSnap() != bGridSnap)
-        pView->SetGridSnap(bGridSnap);
-    if (pView->IsSnapEnabled() != bGridSnap)
-        pView->SetSnapEnabled(bGridSnap);
-*/
     if (pView->IsCreate1stPointAsCenter() != bCenter)
         pView->SetCreate1stPointAsCenter(bCenter);
     if (pView->IsResizeAtCenter() != bCenter)

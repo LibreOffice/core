@@ -155,51 +155,6 @@ bool lcl_deleteDataCurve(
     return bResult;
 }
 
-// void lcl_CopyPageContentToPage(
-//     const Reference< drawing::XDrawPage > & xSourcePage,
-//     const Reference< drawing::XDrawPage > & xDestPage )
-// {
-//     try
-//     {
-//         Reference< container::XIndexAccess > xSourceIA( xSourcePage, uno::UNO_QUERY_THROW );
-//         sal_Int32 nCount( xSourceIA->getCount());
-//         for( sal_Int32 i=0; i<nCount; ++i )
-//         {
-//             Reference< drawing::XShape > xShape;
-//             if( xSourceIA->getByIndex( i ) >>= xShape )
-//                 xDestPage->add( xShape );
-//         }
-//     }
-//     catch( const uno::Exception & ex )
-//     {
-//         ASSERT_EXCEPTION( ex );
-//     }
-// }
-
-// // copies all shapes on all pages of xSource to the only page of xDestination
-// void lcl_CopyShapesToChart(
-//     const Reference< frame::XModel > & xSource, const Reference< frame::XModel > & xDestination )
-// {
-//     try
-//     {
-//         Reference< drawing::XDrawPageSupplier > xDestPGSupp( xDestination, uno::UNO_QUERY_THROW );
-//         Reference< drawing::XDrawPage > xDestPage( xDestPGSupp->getDrawPage());
-//         Reference< drawing::XDrawPagesSupplier > xSourcePGsSupp( xSource, uno::UNO_QUERY_THROW );
-//         Reference< drawing::XDrawPages > xSourcePages( xSourcePGsSupp->getDrawPages());
-
-//         sal_Int32 nCount( xSourcePages->getCount());
-//         for( sal_Int32 i=0; i<nCount; ++i )
-//         {
-//             Reference< drawing::XDrawPage > xSourcePage( xSourcePages->getByIndex( i ), uno::UNO_QUERY_THROW );
-//             lcl_CopyPageContentToPage( xSourcePage, xDestPage );
-//         }
-//     }
-//     catch( const uno::Exception & ex )
-//     {
-//         ASSERT_EXCEPTION( ex );
-//     }
-// }
-
 } // anonymous namespace
 
 

@@ -75,7 +75,6 @@ using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
 using namespace xmloff::token;
-//using namespace ::com::sun::star::text;
 using namespace ::formula;
 
 using rtl::OUString;

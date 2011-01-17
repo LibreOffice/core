@@ -139,22 +139,10 @@ protected:
         getPropertySetInfo()
         throw (::com::sun::star::uno::RuntimeException);
 
-//  virtual sal_Bool SAL_CALL convertFastPropertyValue
-//         ( ::com::sun::star::uno::Any & rConvertedValue,
-//           ::com::sun::star::uno::Any & rOldValue,
-//           sal_Int32 nHandle,
-//           const ::com::sun::star::uno::Any& rValue )
-//      throw (::com::sun::star::lang::IllegalArgumentException);
-
     /// merge XInterface implementations
      DECLARE_XINTERFACE()
     /// merge XTypeProvider implementations
      DECLARE_XTYPEPROVIDER()
-
-    // not implemented
-// ____ XCloneable ____
-//    virtual ::com::sun::star::uno::Reference< ::com::sun::star::util::XCloneable > SAL_CALL createClone()
-//         throw (::com::sun::star::uno::RuntimeException);
 
 protected:
     ::com::sun::star::uno::Reference< ::com::sun::star::util::XModifyListener > m_xModifyEventForwarder;

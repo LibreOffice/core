@@ -87,9 +87,6 @@ public:
     void setModel(
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::frame::XModel > & xModel );
-//     void setUndoManager(
-//         const ::com::sun::star::uno::Reference<
-//             ::com::sun::star::chart2::XUndoManager > & xUndoManager );
 
     /** Set a chart dispatcher that is used for all commands contained in
         rChartCommands

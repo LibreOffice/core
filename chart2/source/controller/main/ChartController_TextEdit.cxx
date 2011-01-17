@@ -58,7 +58,6 @@ namespace chart
 {
 //.............................................................................
 using namespace ::com::sun::star;
-//using namespace ::com::sun::star::chart2;
 
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
@@ -81,10 +80,6 @@ void ChartController::StartTextEdit( const Point* pMousePixel )
 
     m_xUndoManager->preAction( getModel());
     SdrOutliner* pOutliner = m_pDrawViewWrapper->getOutliner();
-    //pOutliner->SetRefDevice(m_pChartWindow);
-    //pOutliner->SetStyleSheetPool((SfxStyleSheetPool*)pStyleSheetPool);
-    //pOutliner->SetDefaultLanguage( eLang );
-    //pOutliner->SetHyphenator( xHyphenator );
 
     //#i77362 change notification for changes on additional shapes are missing
     uno::Reference< beans::XPropertySet > xChartViewProps( m_xChartView, uno::UNO_QUERY );
@@ -102,12 +97,6 @@ void ChartController::StartTextEdit( const Point* pMousePixel )
                     );
     if(bEdit)
     {
-        // set undo manager at topmost shell ( SdDrawTextObjectBar )
-        /*
-        if( pViewSh )
-            pViewSh->GetViewFrame()->GetDispatcher()->GetShell( 0 )->
-                SetUndoManager(&pOutliner->GetUndoManager());
-        */
         m_pDrawViewWrapper->SetEditMode();
 
         // #i12587# support for shapes in chart
@@ -236,16 +225,12 @@ void SAL_CALL ChartController::executeDispatch_InsertSpecialCharacter()
         // attributes become unique (sel. has to be erased anyway)
         pOutlinerView->InsertText(String());
 
-        //SfxUndoManager& rUndoMgr =  pOutliner->GetUndoManager();
-        //rUndoMgr.EnterListAction( String( SchResId( STR_UNDO_INSERT_SPECCHAR )), String( SchResId( STR_UNDO_INSERT_SPECCHAR )));
         pOutlinerView->InsertText(aString, TRUE);
 
         ESelection aSel = pOutlinerView->GetSelection();
         aSel.nStartPara = aSel.nEndPara;
         aSel.nStartPos = aSel.nEndPos;
         pOutlinerView->SetSelection(aSel);
-
-        //rUndoMgr.LeaveListAction();
 
         // show changes
         pOutliner->SetUpdateMode(TRUE);

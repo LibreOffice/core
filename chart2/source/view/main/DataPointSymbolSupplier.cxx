@@ -38,7 +38,6 @@ namespace chart
 {
 //.............................................................................
 using namespace ::com::sun::star;
-//using namespace ::com::sun::star::chart2;
 
 uno::Reference< drawing::XShapes > DataPointSymbolSupplier::create2DSymbolList(
             uno::Reference< lang::XMultiServiceFactory > xShapeFactory

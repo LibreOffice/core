@@ -35,8 +35,6 @@
 namespace chart
 {
 //.............................................................................
-//using namespace ::com::sun::star;
-//using namespace ::com::sun::star::chart2;
 
 CategoryPositionHelper::CategoryPositionHelper( double fSeriesCount, double fCategoryWidth )
     : m_fSeriesCount(fSeriesCount)

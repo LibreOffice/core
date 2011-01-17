@@ -281,7 +281,6 @@ drawing::PolyPolygonShape3D BezierToPoly(
     const drawing::PolyPolygonBezierCoords& rBezier )
 {
     const drawing::PointSequenceSequence& rPointSequence = rBezier.Coordinates;
-//     const drawing::FlagSequenceSequence& rFlags = rBezier.Flags;
 
     drawing::PolyPolygonShape3D aRet;
     aRet.SequenceX.realloc( rPointSequence.getLength() );

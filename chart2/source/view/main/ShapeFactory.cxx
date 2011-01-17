@@ -185,7 +185,6 @@ uno::Any createPolyPolygon_Cube(
     //fWidthH stands for Half Width
     const double fWidthH = rSize.DirectionX >=0.0?  rSize.DirectionX/2.0  : -rSize.DirectionX/2.0;
     const double fHeight = rSize.DirectionY;
-//     const double fDepth  = rSize.DirectionZ >=0.0?  rSize.DirectionZ      : -rSize.DirectionZ ;
 
     const double fHeightSign = fHeight >= 0.0 ? 1.0 : -1.0;
 
@@ -214,7 +213,6 @@ uno::Any createPolyPolygon_Cube(
 
     for(sal_Int32 nN = nPointCount; nN--;)
         *pInnerSequenceZ++ = 0.0;
-        //*pInnerSequenceZ++ = -fDepth/2.0;
 
     if(nPointCount == 5)
     {
@@ -952,26 +950,6 @@ drawing::PolyPolygonBezierCoords getRingBezierCoords(
         fStartAngleRadian, fWidthAngleRadian, fUnitCircleInnerRadius, aTransformationFromUnitCircle, fAngleSubdivisionRadian );
     appendAndCloseBezierCoords( aReturn, aInnerArc, sal_True );
 
-    //fill rMarkHandlePoints
-    /*
-    {
-        rMarkHandlePoints.realloc(1);
-        rMarkHandlePoints[0].realloc(6);
-        sal_Int32 nHandleCount=0;
-        sal_Int32 nOuterArcCount = aOuterArc.Coordinates[0].getLength();
-        if(nOuterArcCount>0)
-            rMarkHandlePoints[0][nHandleCount++]=aOuterArc.Coordinates[0][0];
-        if(nOuterArcCount>1)
-            rMarkHandlePoints[0][nHandleCount++]=aOuterArc.Coordinates[0][nOuterArcCount-1];
-        sal_Int32 nInnerArcCount = aInnerArc.Coordinates[0].getLength();
-        if(nInnerArcCount>0)
-            rMarkHandlePoints[0][nHandleCount++]=aInnerArc.Coordinates[0][0];
-        if(nInnerArcCount>1)
-            rMarkHandlePoints[0][nHandleCount++]=aInnerArc.Coordinates[0][nInnerArcCount-1];
-        rMarkHandlePoints[0].realloc(nHandleCount);
-    }
-    */
-
     return aReturn;
 }
 
@@ -1017,19 +995,6 @@ uno::Reference< drawing::XShape >
                 , aTransformationFromUnitCircle, fAngleSubdivisionRadian );
 
             xProp->setPropertyValue( C2U( "PolyPolygonBezier" ), uno::makeAny( aCoords ) );
-
-            //add shape for markhandles
-            /*
-            drawing::PointSequenceSequence aMarkHandlePoints(1); to be filled within getRingBezierCoords
-            if( xGroup.is() )
-            {
-                VLineProperties aHandleLineProperties;
-                aHandleLineProperties.LineStyle    = uno::makeAny( drawing::LineStyle_NONE );
-                uno::Reference< drawing::XShape > xHandleShape =
-                    this->createLine2D( xGroup, aMarkHandlePoints, &aHandleLineProperties );
-                this->setShapeName( xHandleShape, C2U("HandlesOnly") );
-            }
-            */
         }
         catch( uno::Exception& e )
         {
@@ -1493,7 +1458,7 @@ drawing::PolyPolygonShape3D createPolyPolygon_Symbol( const drawing::Position3D&
             break;
         }
     }
-    //return uno::Any( &aPP, ::getCppuType((const drawing::PolyPolygonShape3D*)0) );
+
     return aPP;
 }
 
@@ -1804,11 +1769,7 @@ uno::Reference< drawing::XShape >
     //create shape
     uno::Reference< drawing::XShape > xShape(
         m_xShapeFactory->createInstance( C2U(
-            //"com.sun.star.drawing.LineShape") ), uno::UNO_QUERY );
             "com.sun.star.drawing.PolyLineShape") ), uno::UNO_QUERY );
-            //"com.sun.star.drawing.PolyLinePathShape") ), uno::UNO_QUERY );
-            //"com.sun.star.drawing.PolyPolygonPathShape") ), uno::UNO_QUERY );
-            //"com.sun.star.drawing.PolyPolygonShape") ), uno::UNO_QUERY );
     xTarget->add(xShape);
 
     //set properties

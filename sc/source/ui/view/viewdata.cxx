@@ -2581,12 +2581,6 @@ void ScViewData::ReadExtOptions( const ScExtDocOptions& rDocOpt )
             // get some settings from displayed Excel sheet, set at Calc document
             if( nTab == GetTabNo() )
             {
-                // selection only for displayed sheet, do not select single cell
-// Disabled, does not work correctly. Anyway, our own XML filters do not import a selection at all.
-//                const ScRangeList& rSel = rTabSett.maSelection;
-//                if( (rSel.Count() >= 2) || ((rSel.Count() == 1) && (*rSel.GetObject( 0 ) != ScRange( rCursor ))) )
-//                    rMarkData.MarkFromRangeList( rTabSett.maSelection, FALSE );
-
                 // grid color -- #i47435# set automatic grid color explicitly
                 if( pOptions )
                 {

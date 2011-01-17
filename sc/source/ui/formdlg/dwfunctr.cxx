@@ -137,7 +137,6 @@ ScFunctionDockWin::ScFunctionDockWin( SfxBindings* pBindingsP,
     aFont.SetColor(Color(COL_BLACK));
     aFiFuncDesc.SetFont(aFont);
     aFiFuncDesc.SetBackground( GetBackground() );       //! never transparent?
-//? SetBackground();
 
     Link aLink=LINK( this, ScFunctionDockWin, SelHdl);
     aCatBox.SetSelectHdl(aLink);
@@ -154,7 +153,6 @@ ScFunctionDockWin::ScFunctionDockWin( SfxBindings* pBindingsP,
     StartListening( *pBindingsP, TRUE );
 
     Point aTopLeft=aCatBox.GetPosPixel();
-    //String aString=aCatBox.GetEntry( 0)+String("www");
     String aString=String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("ww"));
     Size aTxtSize( aFiFuncDesc.GetTextWidth(aString), aFiFuncDesc.GetTextHeight() );
     nMinWidth=aTxtSize.Width()+aTopLeft.X()
@@ -353,8 +351,6 @@ void ScFunctionDockWin::SetLeftRightSize()
         aDiffSize.Width()-=aNewSize.Width();
         aDiffSize.Height()-=aNewSize.Height();
 
-        //@ SetUpdateMode( FALSE);
-
         String aString = String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("ww"));
 
         Size aTxtSize( aFuncList.GetTextWidth(aString), aFuncList.GetTextHeight() );
@@ -373,8 +369,6 @@ void ScFunctionDockWin::SetLeftRightSize()
         aOldSize=aNewSize;
         aNewSize.Width()+=aDiffSize.Width();
         aNewSize.Height()+=aDiffSize.Height();
-        //SetSizePixel(aNewSize);
-        //@ SetUpdateMode( TRUE);
         bSizeFlag=FALSE;
     }
 
@@ -409,8 +403,6 @@ void ScFunctionDockWin::SetTopBottonSize()
 
         aNewSize.Width()+=aDiffSize.Width();
         aNewSize.Height()+=aDiffSize.Height();
-        //SetSizePixel(aNewSize);
-        //@ SetUpdateMode( TRUE);
         bSizeFlag=FALSE;
     }
 }
@@ -719,9 +711,7 @@ SfxChildAlignment ScFunctionDockWin::CheckAlignment(SfxChildAlignment /* abla */
         case SFX_ALIGN_TOOLBOXTOP:
         case SFX_ALIGN_TOOLBOXBOTTOM:
 
-                        nMinWidth= 0;/*aDDFuncList.GetPosPixel().X()+
-                                    10*aTxtSize.Width()+
-                                    aFuncList.GetPosPixel().X();*/
+                        nMinWidth= 0;
                         nMinHeight=0;
 
                         break;
@@ -737,7 +727,6 @@ SfxChildAlignment ScFunctionDockWin::CheckAlignment(SfxChildAlignment /* abla */
                         nMinWidth=aTxtSize.Width()+aTopLeft.X()
                                 +2*aFuncList.GetPosPixel().X();
                         nMinHeight=19*aTxtSize.Height();
-                            //aCatBox.SelectEntryPos(0);
 
                         break;
     }
@@ -1068,12 +1057,6 @@ IMPL_LINK( ScFunctionDockWin, SetSplitHdl, ScPrivatSplit*, pCtrl )
         aFuncList.SetSizePixel(aFLSize);
         aFiFuncDesc.SetPosPixel(aFDTopLeft);
         aFiFuncDesc.SetSizePixel(aFDSize);
-        /*
-        aFuncList.Invalidate();
-        aFuncList.Update();
-        aFiFuncDesc.Invalidate();
-        aFiFuncDesc.Update();
-        */
     }
     //...
 

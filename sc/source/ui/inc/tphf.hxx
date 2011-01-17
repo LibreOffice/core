@@ -53,8 +53,6 @@ protected:
                               const SfxItemSet& rSet,
                               USHORT nSetId );
 
-//    using SvxHFPage::ActivatePage;
-//    using SvxHFPage::DeactivatePage;
     virtual void    ActivatePage();
     virtual void    DeactivatePage();
     virtual void    ActivatePage( const SfxItemSet& rSet );

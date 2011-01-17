@@ -114,7 +114,6 @@ const uno::Sequence< Property > & lcl_GetPropertySequence()
 {
     static uno::Sequence< Property > aPropSeq;
 
-    // /--
     MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
     if( 0 == aPropSeq.getLength() )
     {
@@ -171,7 +170,6 @@ uno::Any PieChartTypeTemplate::GetDefaultValue( sal_Int32 nHandle ) const
 {
     static tPropertyValueMap aStaticDefaults;
 
-    // /--
     ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
     if( 0 == aStaticDefaults.size() )
     {
@@ -186,7 +184,6 @@ uno::Any PieChartTypeTemplate::GetDefaultValue( sal_Int32 nHandle ) const
         return uno::Any();
 
     return (*aFound).second;
-    // \--
 }
 
 ::cppu::IPropertyArrayHelper & SAL_CALL PieChartTypeTemplate::getInfoHelper()
@@ -202,7 +199,6 @@ uno::Reference< beans::XPropertySetInfo > SAL_CALL
 {
     static uno::Reference< beans::XPropertySetInfo > xInfo;
 
-    // /--
     MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
     if( !xInfo.is())
     {
@@ -211,7 +207,6 @@ uno::Reference< beans::XPropertySetInfo > SAL_CALL
     }
 
     return xInfo;
-    // \--
 }
 
 
@@ -237,11 +232,6 @@ sal_Int32 PieChartTypeTemplate::getAxisCountByDimension( sal_Int32 /*nDimension*
 {
     return 0;
 }
-
-// void PieChartTypeTemplate::createAxes(
-//     const Sequence< Reference< chart2::XCoordinateSystem > > & rCoordSys )
-// {
-// }
 
 void PieChartTypeTemplate::adaptAxes(
     const uno::Sequence< uno::Reference< chart2::XCoordinateSystem > > & /*rCoordSys*/ )
@@ -273,8 +263,6 @@ void PieChartTypeTemplate::adaptScales(
                 aScaleData.Orientation = chart2::AxisOrientation_MATHEMATICAL;
                 xAxis->setScaleData( aScaleData );
             }
-
-            //------
 
             xAxis = AxisHelper::getAxis( 0 /*nDimensionIndex*/,0 /*nAxisIndex*/
                     , aCooSysSeq[nCooSysIdx] );
