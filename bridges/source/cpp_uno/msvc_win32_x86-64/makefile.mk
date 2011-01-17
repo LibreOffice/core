@@ -37,7 +37,7 @@ ENABLE_EXCEPTIONS=TRUE
 .INCLUDE :  settings.mk
 
 # --- Files --------------------------------------------------------
-.IF "$(COM)$(CPU)" == "MSCI"
+.IF "$(COM)$(CPU)" == "MSCX"
 
 .IF "$(debug)" != ""
 CFLAGS += -Ob0
