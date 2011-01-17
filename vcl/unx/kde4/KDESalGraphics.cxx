@@ -174,12 +174,10 @@ namespace
         kapp->style()->drawControl(element, option, &painter);
     }
 
-    void draw( QStyle::PrimitiveElement element, QStyleOption* option, QImage* image, QStyle::State state, int nAdjust = 0 )
+    void draw( QStyle::PrimitiveElement element, QStyleOption* option, QImage* image, QStyle::State state, QRect rect = QRect())
     {
         option->state |= state;
-        option->rect = image->rect();
-        if( nAdjust )
-            option->rect.adjust( nAdjust, nAdjust, -nAdjust, -nAdjust );
+        option->rect = !rect.isNull() ? rect : image->rect();
 
         QPainter painter(image);
         kapp->style()->drawPrimitive(element, option, &painter);
@@ -401,10 +399,10 @@ BOOL KDESalGraphics::drawNativeControl( ControlType type, ControlPart part,
     {
         QStyleOptionFrameV2 option;
         draw( QStyle::PE_PanelLineEdit, &option, m_image,
-              vclStateValue2StateFlag(nControlState, value), 2 );
+              vclStateValue2StateFlag(nControlState, value), m_image->rect().adjusted( 2, 2, -2, -2 ));
 
         draw( QStyle::PE_FrameLineEdit, &option, m_image,
-              vclStateValue2StateFlag(nControlState, value), 0 );
+              vclStateValue2StateFlag(nControlState, value));
     }
     else if (type == CTRL_COMBOBOX)
     {
