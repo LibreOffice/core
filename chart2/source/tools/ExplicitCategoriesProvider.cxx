@@ -214,7 +214,6 @@ void ExplicitCategoriesProvider::convertCategoryAnysToText( uno::Sequence< rtl::
     bool bColorChanged = false;
 
     NumberFormatterWrapper aNumberFormatterWrapper( xNumberFormatsSupplier );
-    SvNumberFormatter* pSvNumberFormatter = aNumberFormatterWrapper.getSvNumberFormatter();
 
     for(sal_Int32 nN=0;nN<nCount;nN++)
     {

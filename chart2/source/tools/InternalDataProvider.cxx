@@ -365,7 +365,6 @@ InternalDataProvider::InternalDataProvider( const Reference< chart2::XChartDocum
                 vector< vector< uno::Any > > aNewCategories;//inner count is level
                 {
                     ExplicitCategoriesProvider aExplicitCategoriesProvider( ChartModelHelper::getFirstCoordinateSystem(xChartModel), xChartModel );
-                    bool bIsDateAxis = aExplicitCategoriesProvider.isDateAxis();
 
                     const Sequence< Reference< chart2::data::XLabeledDataSequence> >& rSplitCategoriesList( aExplicitCategoriesProvider.getSplitCategoriesList() );
                     sal_Int32 nLevelCount = rSplitCategoriesList.getLength();
@@ -385,7 +384,7 @@ InternalDataProvider::InternalDataProvider( const Reference< chart2::XChartDocum
                         else if( nLength < nCatLength )
                             aDataSeq.realloc( nCatLength );
                         transform( aNewCategories.begin(), aNewCategories.end(), aDataSeq.getConstArray(),
-                            aNewCategories.begin(), lcl_setStringAtLevel(nL) );
+                            aNewCategories.begin(), lcl_setAnyAtLevel(nL) );
                     }
                     if( !nLevelCount )
                     {

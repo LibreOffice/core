@@ -63,7 +63,7 @@ private: //private member
 };
 
 
-class FixedNumberFormatter
+class OOO_DLLPUBLIC_CHARTTOOLS FixedNumberFormatter
 {
 public:
     FixedNumberFormatter( const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier >& xSupplier
