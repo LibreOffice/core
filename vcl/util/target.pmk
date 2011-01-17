@@ -37,8 +37,3 @@ ONLYDLL .SETDIR=$(PRJ)$/util: $(SLOFILES)
     dmake debug=t prjpch=t linkinc=t compinc=t ..$/$(OUTPATH)$/bin$/sv$(DLLPOSTFIX).dll
     @echo "READY"
 
-.IF "$(USE_XPRINT)"!="TRUE"
-.ELSE
-CFLAGS+=-D_USE_PRINT_EXTENSION_=1
-.ENDIF
-

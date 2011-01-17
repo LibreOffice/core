@@ -52,7 +52,6 @@ sal_Bool SvtTabAppearanceCfg::bInitialized = sal_False;
  --------------------------------------------------------------------*/
 SvtTabAppearanceCfg::SvtTabAppearanceCfg()
     :ConfigItem(OUString::createFromAscii("Office.Common/View"))
-    ,nLookNFeel         ( DEFAULT_LOOKNFEEL )
     ,nDragMode          ( DEFAULT_DRAGMODE )
     ,nScaleFactor       ( DEFAULT_SCALEFACTOR )
     ,nSnapMode          ( DEFAULT_SNAPMODE )
@@ -61,8 +60,6 @@ SvtTabAppearanceCfg::SvtTabAppearanceCfg()
     ,nAAMinPixelHeight  ( DEFAULT_AAMINHEIGHT )
 #endif
     ,bMenuMouseFollow(FALSE)
-    ,bSingleLineTabCtrl(FALSE)
-    ,bColoredTabCtrl(FALSE)
 #if defined( UNX ) || defined ( FS_PRIV_DEBUG )
     ,bFontAntialiasing  ( TRUE )
 #endif
@@ -83,16 +80,13 @@ SvtTabAppearanceCfg::SvtTabAppearanceCfg()
                 switch(nProp)
                 {
                     case  0: *pValues >>= nScaleFactor; break; //"FontScaling",
-                    case  1: *pValues >>= nLookNFeel; break;  //"LookAndFeel",
-                    case  2: *pValues >>= nDragMode; break;   //"Window/Drag",
-                    case  3: bMenuMouseFollow = *(sal_Bool*)pValues->getValue(); break; //"Menu/FollowMouse",
-                    case  4: bSingleLineTabCtrl      = *(sal_Bool*)pValues->getValue(); break; //"Dialog/SingleLineTab",
-                    case  5: bColoredTabCtrl = *(sal_Bool*)pValues->getValue(); break; //"Dialog/ColoredTab",
-                    case  6: *pValues >>= nSnapMode; break; //"Dialog/MousePositioning",
-                    case  7: *pValues >>= nMiddleMouse; break; //"Dialog/MiddleMouseButton",
+                    case  1: *pValues >>= nDragMode; break;   //"Window/Drag",
+                    case  2: bMenuMouseFollow = *(sal_Bool*)pValues->getValue(); break; //"Menu/FollowMouse",
+                    case  3: *pValues >>= nSnapMode; break; //"Dialog/MousePositioning",
+                    case  4: *pValues >>= nMiddleMouse; break; //"Dialog/MiddleMouseButton",
 #if defined( UNX ) || defined ( FS_PRIV_DEBUG )
-                    case  8: bFontAntialiasing = *(sal_Bool*)pValues->getValue(); break;    // "FontAntialising/Enabled",
-                    case  9: *pValues >>= nAAMinPixelHeight; break;                         // "FontAntialising/MinPixelHeight",
+                    case  5: bFontAntialiasing = *(sal_Bool*)pValues->getValue(); break;    // "FontAntialising/Enabled",
+                    case  6: *pValues >>= nAAMinPixelHeight; break;                         // "FontAntialising/MinPixelHeight",
 #endif
                 }
             }
@@ -116,16 +110,13 @@ const Sequence<OUString>& SvtTabAppearanceCfg::GetPropertyNames()
         static const sal_Char* aPropNames[] =
         {
              "FontScaling"                       //  0
-            ,"LookAndFeel"                       //  1
-            ,"Window/Drag"                       //  2
-            ,"Menu/FollowMouse"                  //  3
-            ,"Dialog/SingleLineTab"              //  4
-            ,"Dialog/ColoredTab"                 //  5
-            ,"Dialog/MousePositioning"           //  6
-            ,"Dialog/MiddleMouseButton"          //  7
+            ,"Window/Drag"                       //  1
+            ,"Menu/FollowMouse"                  //  2
+            ,"Dialog/MousePositioning"           //  3
+            ,"Dialog/MiddleMouseButton"          //  4
 #if defined( UNX ) || defined ( FS_PRIV_DEBUG )
-            ,"FontAntiAliasing/Enabled"         //  8
-            ,"FontAntiAliasing/MinPixelHeight"  //  9
+            ,"FontAntiAliasing/Enabled"         //  5
+            ,"FontAntiAliasing/MinPixelHeight"  //  6
 #endif
         };
         const int nCount = sizeof( aPropNames ) / sizeof( aPropNames[0] );
@@ -153,16 +144,13 @@ void  SvtTabAppearanceCfg::Commit()
         switch(nProp)
         {
             case  0: pValues[nProp] <<= nScaleFactor; break;            // "FontScaling",
-            case  1: pValues[nProp] <<= nLookNFeel; break;              //"LookAndFeel",
-            case  2: pValues[nProp] <<= nDragMode; break;               //"Window/Drag",
-            case  3: pValues[nProp].setValue(&bMenuMouseFollow, rType); break; //"Menu/FollowMouse",
-            case  4: pValues[nProp].setValue(&bSingleLineTabCtrl, rType); break; //"Dialog/SingleLineTab",
-            case  5: pValues[nProp].setValue(&bColoredTabCtrl, rType); break; //"Dialog/ColoredTab",
-            case  6: pValues[nProp] <<= nSnapMode; break;               //"Dialog/MousePositioning",
-            case  7: pValues[nProp] <<= nMiddleMouse; break;               //"Dialog/MiddleMouseButton",
+            case  1: pValues[nProp] <<= nDragMode; break;               //"Window/Drag",
+            case  2: pValues[nProp].setValue(&bMenuMouseFollow, rType); break; //"Menu/FollowMouse",
+            case  3: pValues[nProp] <<= nSnapMode; break;               //"Dialog/MousePositioning",
+            case  4: pValues[nProp] <<= nMiddleMouse; break;               //"Dialog/MiddleMouseButton",
 #if defined( UNX ) || defined ( FS_PRIV_DEBUG )
-            case  8: pValues[nProp].setValue(&bFontAntialiasing, rType); break; // "FontAntialising/Enabled",
-            case  9: pValues[nProp] <<= nAAMinPixelHeight; break;               // "FontAntialising/MinPixelHeight",
+            case  5: pValues[nProp].setValue(&bFontAntialiasing, rType); break; // "FontAntialising/Enabled",
+            case  6: pValues[nProp] <<= nAAMinPixelHeight; break;               // "FontAntialising/MinPixelHeight",
 #endif
         }
     }
@@ -171,16 +159,6 @@ void  SvtTabAppearanceCfg::Commit()
 
 void SvtTabAppearanceCfg::Notify( const com::sun::star::uno::Sequence< rtl::OUString >& )
 {
-}
-
-/*--------------------------------------------------------------------
-     Beschreibung:
- --------------------------------------------------------------------*/
-
-void SvtTabAppearanceCfg::SetLookNFeel ( USHORT nSet )
-{
-    nLookNFeel = nSet;
-    SetModified();
 }
 
 /*--------------------------------------------------------------------
@@ -234,26 +212,7 @@ void SvtTabAppearanceCfg::SetApplicationDefaults ( Application* pApp )
     // SetStandard...Styles() resets the UseSystemUIFonts flag,
     // but we don't want to change it now, so save the flag before ...
     BOOL bUseSystemUIFonts = hAppStyle.GetUseSystemUIFonts();
-
-    switch ( nLookNFeel )
-    {
-        case LookMotif:
-            hAppStyle.SetStandardUnixStyles();  break;
-
-        case LookOSTwo:
-            hAppStyle.SetStandardOS2Styles();   break;
-
-        case LookMacintosh:
-            hAppStyle.SetStandardMacStyles();   break;
-
-        case LookWindows:
-            hAppStyle.SetStandardWinStyles();   break;
-
-        case LookStardivision:
-        default:
-            hAppStyle.SetStandardStyles();      break;
-    }
-
+    hAppStyle.SetStandardStyles();
     // and set it here
     hAppStyle.SetUseSystemUIFonts( bUseSystemUIFonts );
 
@@ -298,14 +257,6 @@ void SvtTabAppearanceCfg::SetApplicationDefaults ( Application* pApp )
     else
         nFollow &= ~MOUSE_FOLLOW_MENU;
     hMouseSettings.SetFollow( nFollow );
-    sal_uInt16 nTabStyle = 0;
-    if(bSingleLineTabCtrl)
-        nTabStyle |= STYLE_TABCONTROL_SINGLELINE;
-
-    if(bColoredTabCtrl)
-        nTabStyle |= STYLE_TABCONTROL_COLOR;
-    hAppStyle.SetTabControlStyle(nTabStyle);
-
 
     hAppSettings.SetMouseSettings( hMouseSettings );
 
