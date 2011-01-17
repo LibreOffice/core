@@ -526,6 +526,8 @@ endif
 # ComponentTarget
 
 gb_ComponentTarget_XSLTPROCPRECOMMAND := PATH="$${PATH}:$(OUTDIR)/bin"
-gb_ComponentTarget_PREFIXBASISNATIVE := vnd.sun.star.expand:$$BRAND_BASE_DIR/program/
+gb_Library_COMPONENTPREFIXES := \
+    OOOLIB:vnd.sun.star.expand:\dOOO_BASE_DIR/program/ \
+    URELIB:vnd.sun.star.expand:\dURE_INTERNAL_LIB_DIR/
 
 # vim: set noet sw=4 ts=4:
