@@ -421,7 +421,7 @@ endef
 gb_ComponentTarget_XSLTPROCPRECOMMAND := DYLD_LIBRARY_PATH=$(OUTDIR)/lib
 gb_Library_COMPONENTPREFIXES := \
     OOOLIB:vnd.sun.star.expand:\dOOO_BASE_DIR/program/ \
-    URELIB:vnd.sun.star.expand:\dURE_INTERNAL_LIB_DIR/
+    URELIB:vnd.sun.star.expand:\dURE_INTERNAL_LIB_DIR/ \
 
 
 # vim: set noet sw=4 ts=4:

@@ -169,12 +169,12 @@ $(patsubst $(1):%,%,$(filter $(1):%,$(gb_LinkTarget__RPATHS)))
 endef
 
 gb_LinkTarget__RPATHS := \
-    URELIB:$$$$ORIGIN \
-    UREBIN:$$$$ORIGIN/../lib:$$$$ORIGIN \
-    OOO:$$$$ORIGIN:$$$$ORIGIN/../ure-link/lib \
-    BRAND:$$$$ORIGIN:$$$$ORIGIN/../basis-link/program:$$$$ORIGIN/../basis-link/ure-link/lib \
-    SDKBIN:$$$$ORIGIN/../../ure-link/lib \
-    NONEBIN:$$$$ORIGIN/../lib:$$$$ORIGIN \
+    URELIB:\dORIGIN \
+    UREBIN:\dORIGIN/../lib:\dORIGIN \
+    OOO:\dORIGIN:\dORIGIN/../ure-link/lib \
+    BRAND:\dORIGIN:\dORIGIN/../basis-link/program:\dORIGIN/../basis-link/ure-link/lib \
+    SDKBIN:\dORIGIN/../../ure-link/lib \
+    NONEBIN:\dORIGIN/../lib:\dORIGIN \
 
 gb_LinkTarget_CXXFLAGS := $(gb_CXXFLAGS) $(gb_COMPILEROPTFLAGS)
 gb_LinkTarget_CFLAGS := $(gb_CFLAGS) $(gb_COMPILEROPTFLAGS)
@@ -363,8 +363,8 @@ endef
 
 gb_ComponentTarget_XSLTPROCPRECOMMAND := LD_LIBRARY_PATH=$(OUTDIR)/lib
 gb_Library_COMPONENTPREFIXES := \
-    OOOLIB:vnd.sun.star.expand:\dOOO_BASE_DIR/program/ \
-    URELIB:vnd.sun.star.expand:\dURE_INTERNAL_LIB_DIR/
+    OOO:vnd.sun.star.expand:\dOOO_BASE_DIR/program/ \
+    URELIB:vnd.sun.star.expand:\dURE_INTERNAL_LIB_DIR/ \
 
 
 # vim: set noet sw=4 ts=4:
