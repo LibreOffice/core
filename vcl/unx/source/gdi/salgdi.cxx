@@ -1017,18 +1017,9 @@ XID X11SalGraphics::GetXRenderPicture()
     if( !m_aXRenderPicture )
     {
         // check xrender support for matching visual
-        // find a XRenderPictFormat compatible with the Drawable
         XRenderPictFormat* pVisualFormat = GetXRenderFormat();
         if( !pVisualFormat )
-        {
-            Visual* pVisual = GetDisplay()->GetVisual( m_nScreen ).GetVisual();
-            pVisualFormat = rRenderPeer.FindVisualFormat( pVisual );
-            if( !pVisualFormat )
-                return 0;
-            // cache the XRenderPictFormat
-            SetXRenderFormat( pVisualFormat );
-        }
-
+            return 0;
         // get the matching xrender target for drawable
         m_aXRenderPicture = rRenderPeer.CreatePicture( hDrawable_, pVisualFormat, 0, NULL );
     }
@@ -1042,6 +1033,13 @@ XID X11SalGraphics::GetXRenderPicture()
     }
 
     return m_aXRenderPicture;
+}
+
+XRenderPictFormat* X11SalGraphics::GetXRenderFormat() const
+{
+    if( m_pXRenderFormat == NULL )
+        m_pXRenderFormat = XRenderPeer::GetInstance().FindVisualFormat( GetVisual().visual );
+    return m_pXRenderFormat;
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
