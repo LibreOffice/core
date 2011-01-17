@@ -54,6 +54,7 @@
 #include <vcl/metric.hxx>
 #include <vcl/fontsubset.hxx>
 #include <vcl/textlayout.hxx>
+#include <vcl/cvtgrf.hxx>
 #include <svsys.h>
 #include <vcl/salgdi.hxx>
 #include <vcl/svapp.hxx>
@@ -887,34 +888,44 @@ static void appendDouble( double fValue, OStringBuffer& rBuffer, sal_Int32 nPrec
 }
 
 
-static void appendColor( const Color& rColor, OStringBuffer& rBuffer )
+static void appendColor( const Color& rColor, OStringBuffer& rBuffer, bool bConvertToGrey = false )
 {
 
     if( rColor != Color( COL_TRANSPARENT ) )
     {
-        appendDouble( (double)rColor.GetRed() / 255.0, rBuffer );
-        rBuffer.append( ' ' );
-        appendDouble( (double)rColor.GetGreen() / 255.0, rBuffer );
-        rBuffer.append( ' ' );
-        appendDouble( (double)rColor.GetBlue() / 255.0, rBuffer );
+        if( bConvertToGrey )
+        {
+            sal_uInt8 cByte = rColor.GetLuminance();
+            appendDouble( (double)cByte / 255.0, rBuffer );
+        }
+        else
+        {
+            appendDouble( (double)rColor.GetRed() / 255.0, rBuffer );
+            rBuffer.append( ' ' );
+            appendDouble( (double)rColor.GetGreen() / 255.0, rBuffer );
+            rBuffer.append( ' ' );
+            appendDouble( (double)rColor.GetBlue() / 255.0, rBuffer );
+        }
     }
 }
 
-static void appendStrokingColor( const Color& rColor, OStringBuffer& rBuffer )
+void PDFWriterImpl::appendStrokingColor( const Color& rColor, OStringBuffer& rBuffer )
 {
     if( rColor != Color( COL_TRANSPARENT ) )
     {
-        appendColor( rColor, rBuffer );
-        rBuffer.append( " RG" );
+        bool bGrey = m_aContext.ColorMode == PDFWriter::DrawGreyscale;
+        appendColor( rColor, rBuffer, bGrey );
+        rBuffer.append( bGrey ? " G" : " RG" );
     }
 }
 
-static void appendNonStrokingColor( const Color& rColor, OStringBuffer& rBuffer )
+void PDFWriterImpl::appendNonStrokingColor( const Color& rColor, OStringBuffer& rBuffer )
 {
     if( rColor != Color( COL_TRANSPARENT ) )
     {
-        appendColor( rColor, rBuffer );
-        rBuffer.append( " rg" );
+        bool bGrey = m_aContext.ColorMode == PDFWriter::DrawGreyscale;
+        appendColor( rColor, rBuffer, bGrey );
+        rBuffer.append( bGrey ? " g" : " rg" );
     }
 }
 
@@ -9411,6 +9422,10 @@ bool PDFWriterImpl::writeGradientFunction( GradientEmit& rObject )
     VirtualDevice aDev;
     aDev.SetOutputSizePixel( rObject.m_aSize );
     aDev.SetMapMode( MapMode( MAP_PIXEL ) );
+    if( m_aContext.ColorMode == PDFWriter::DrawGreyscale )
+        aDev.SetDrawMode( aDev.GetDrawMode() |
+                          ( DRAWMODE_GRAYLINE | DRAWMODE_GRAYFILL | DRAWMODE_GRAYTEXT |
+                            DRAWMODE_GRAYBITMAP | DRAWMODE_GRAYGRADIENT ) );
     aDev.DrawGradient( Rectangle( Point( 0, 0 ), rObject.m_aSize ), rObject.m_aGradient );
 
     Bitmap aSample = aDev.GetBitmap( Point( 0, 0 ), rObject.m_aSize );
@@ -9882,8 +9897,25 @@ void PDFWriterImpl::drawJPGBitmap( SvStream& rDCTData, bool bIsTrueColor, const 
     if( ! (rSizePixel.Width() && rSizePixel.Height()) )
         return;
 
-    SvMemoryStream* pStream = new SvMemoryStream;
     rDCTData.Seek( 0 );
+    if( bIsTrueColor && m_aContext.ColorMode == PDFWriter::DrawGreyscale )
+    {
+        // need to convert to grayscale;
+        // load stream to bitmap and draw the bitmap instead
+        Graphic aGraphic;
+        GraphicConverter::Import( rDCTData, aGraphic, CVT_JPG );
+        Bitmap aBmp( aGraphic.GetBitmap() );
+        if( !!rMask && rMask.GetSizePixel() == aBmp.GetSizePixel() )
+        {
+            BitmapEx aBmpEx( aBmp, rMask );
+            drawBitmap( rTargetArea.TopLeft(), rTargetArea.GetSize(), aBmpEx );
+        }
+        else
+            drawBitmap( rTargetArea.TopLeft(), rTargetArea.GetSize(), aBmp );
+        return;
+    }
+
+    SvMemoryStream* pStream = new SvMemoryStream;
     *pStream << rDCTData;
     pStream->Seek( STREAM_SEEK_TO_END );
 
@@ -9974,18 +10006,28 @@ void PDFWriterImpl::drawBitmap( const Point& rDestPoint, const Size& rDestSize, 
     writeBuffer( aLine.getStr(), aLine.getLength() );
 }
 
-const PDFWriterImpl::BitmapEmit& PDFWriterImpl::createBitmapEmit( const BitmapEx& rBitmap, bool bDrawMask )
+const PDFWriterImpl::BitmapEmit& PDFWriterImpl::createBitmapEmit( const BitmapEx& i_rBitmap, bool bDrawMask )
 {
+    BitmapEx aBitmap( i_rBitmap );
+    if( m_aContext.ColorMode == PDFWriter::DrawGreyscale )
+    {
+        BmpConversion eConv = BMP_CONVERSION_8BIT_GREYS;
+        int nDepth = aBitmap.GetBitmap().GetBitCount();
+        if( nDepth <= 4 )
+            eConv = BMP_CONVERSION_4BIT_GREYS;
+        if( nDepth > 1 )
+            aBitmap.Convert( eConv );
+    }
     BitmapID aID;
-    aID.m_aPixelSize        = rBitmap.GetSizePixel();
-    aID.m_nSize             = rBitmap.GetBitCount();
-    aID.m_nChecksum         = rBitmap.GetBitmap().GetChecksum();
+    aID.m_aPixelSize        = aBitmap.GetSizePixel();
+    aID.m_nSize             = aBitmap.GetBitCount();
+    aID.m_nChecksum         = aBitmap.GetBitmap().GetChecksum();
     aID.m_nMaskChecksum     = 0;
-    if( rBitmap.IsAlpha() )
-        aID.m_nMaskChecksum = rBitmap.GetAlpha().GetChecksum();
+    if( aBitmap.IsAlpha() )
+        aID.m_nMaskChecksum = aBitmap.GetAlpha().GetChecksum();
     else
     {
-        Bitmap aMask = rBitmap.GetMask();
+        Bitmap aMask = aBitmap.GetMask();
         if( ! aMask.IsEmpty() )
             aID.m_nMaskChecksum = aMask.GetChecksum();
     }
@@ -9999,7 +10041,7 @@ const PDFWriterImpl::BitmapEmit& PDFWriterImpl::createBitmapEmit( const BitmapEx
     {
         m_aBitmaps.push_front( BitmapEmit() );
         m_aBitmaps.front().m_aID        = aID;
-        m_aBitmaps.front().m_aBitmap    = rBitmap;
+        m_aBitmaps.front().m_aBitmap    = aBitmap;
         m_aBitmaps.front().m_nObject    = createObject();
         m_aBitmaps.front().m_bDrawMask  = bDrawMask;
         it = m_aBitmaps.begin();

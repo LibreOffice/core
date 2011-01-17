@@ -537,6 +537,11 @@ The following structure describes the permissions used in PDF security
         String          Producer;       // OpenOffice
     };
 
+    enum ColorMode
+    {
+        DrawColor, DrawGreyscale
+    };
+
     struct PDFWriterContext
     {
         /* must be a valid file: URL usable by osl */
@@ -599,6 +604,7 @@ The following structure describes the permissions used in PDF security
         com::sun::star::lang::Locale    DocumentLocale; // defines the document default language
         sal_uInt32                      DPIx, DPIy;     // how to handle MapMode( MAP_PIXEL )
                                                         // 0 here specifies a default handling
+        PDFWriter::ColorMode            ColorMode;
 
         PDFWriterContext() :
                 RelFsys( false ), //i56629, i49415?, i64585?
@@ -627,7 +633,8 @@ The following structure describes the permissions used in PDF security
                 OpenBookmarkLevels( -1 ),
                 Encryption(),
                 DPIx( 0 ),
-                DPIy( 0 )
+                DPIy( 0 ),
+                ColorMode( PDFWriter::DrawColor )
         {}
     };
 

@@ -126,6 +126,15 @@ void PDFWriterImpl::implWriteBitmapEx( const Point& i_rPoint, const Size& i_rSiz
         const Size aSizePixel( aBitmapEx.GetSizePixel() );
         if ( aSizePixel.Width() && aSizePixel.Height() )
         {
+            if( m_aContext.ColorMode == PDFWriter::DrawGreyscale )
+            {
+                BmpConversion eConv = BMP_CONVERSION_8BIT_GREYS;
+                int nDepth = aBitmapEx.GetBitmap().GetBitCount();
+                if( nDepth <= 4 )
+                    eConv = BMP_CONVERSION_4BIT_GREYS;
+                if( nDepth > 1 )
+                    aBitmapEx.Convert( eConv );
+            }
             sal_Bool bUseJPGCompression = !i_rContext.m_bOnlyLosslessCompression;
             if ( ( aSizePixel.Width() < 32 ) || ( aSizePixel.Height() < 32 ) )
                 bUseJPGCompression = sal_False;

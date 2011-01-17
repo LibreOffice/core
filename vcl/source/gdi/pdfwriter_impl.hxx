@@ -1060,6 +1060,10 @@ i12626
     void putG4Bits( sal_uInt32 i_nLength, sal_uInt32 i_nCode, BitStreamState& io_rState );
     void putG4Span( long i_nSpan, bool i_bWhitePixel, BitStreamState& io_rState );
     void writeG4Stream( BitmapReadAccess* i_pBitmap );
+
+    // color helper functions
+    void appendStrokingColor( const Color& rColor, rtl::OStringBuffer& rBuffer );
+    void appendNonStrokingColor( const Color& rColor, rtl::OStringBuffer& rBuffer );
 public:
     PDFWriterImpl( const PDFWriter::PDFWriterContext& rContext, const com::sun::star::uno::Reference< com::sun::star::beans::XMaterialHolder >&, PDFWriter& );
     ~PDFWriterImpl();
