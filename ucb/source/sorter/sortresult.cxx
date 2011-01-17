@@ -938,7 +938,6 @@ Any SAL_CALL SortedResultSet::getPropertyValue( const OUString& PropertyName )
     }
     else if ( PropertyName.compareToAscii( "IsRowCountFinal" ) == 0 )
     {
-        sal_uInt32  nOrgCount = 0;
         sal_Bool    bOrgFinal = false;
         Any         aOrgRet;
 
@@ -952,6 +951,7 @@ Any SAL_CALL SortedResultSet::getPropertyValue( const OUString& PropertyName )
         {
             aOrgRet = Reference< XPropertySet >::query(mxOriginal)->
                 getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("RowCount")) );
+            sal_uInt32  nOrgCount = 0;
             aOrgRet >>= nOrgCount;
             if ( nOrgCount == maS2O.Count() )
                 aRet <<= (sal_Bool) sal_True;
