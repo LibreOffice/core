@@ -189,9 +189,6 @@ BOOL IsMarqueeTextObj( const SdrObject& rObj )
 |*
 |*  SwContact, Ctor und Dtor
 |*
-|*  Ersterstellung      AMA 27.Sep.96 18:13
-|*  Letzte Aenderung    AMA 27.Sep.96
-|*
 |*************************************************************************/
 
 SwContact::SwContact( SwFrmFmt *pToRegisterIn ) :
@@ -456,9 +453,6 @@ sal_uInt32 SwContact::GetMaxOrdNum() const
 |*
 |*  SwFlyDrawContact, Ctor und Dtor
 |*
-|*  Ersterstellung      OK 23.11.94 18:13
-|*  Letzte Aenderung    MA 06. Apr. 95
-|*
 |*************************************************************************/
 
 SwFlyDrawContact::SwFlyDrawContact( SwFlyFrmFmt *pToRegisterIn, SdrModel * ) :
@@ -542,9 +536,6 @@ void SwFlyDrawContact::SetMaster( SdrObject* _pNewMaster )
 |*
 |*  SwFlyDrawContact::CreateNewRef()
 |*
-|*  Ersterstellung      MA 14. Dec. 94
-|*  Letzte Aenderung    MA 24. Apr. 95
-|*
 |*************************************************************************/
 
 SwVirtFlyDrawObj *SwFlyDrawContact::CreateNewRef( SwFlyFrm *pFly )
@@ -623,9 +614,6 @@ sal_uInt32 SwFlyDrawContact::_GetOrdNumForNewRef( const SwFlyFrm* _pFlyFrm )
 /*************************************************************************
 |*
 |*  SwFlyDrawContact::Modify()
-|*
-|*  Ersterstellung      OK 08.11.94 10:21
-|*  Letzte Aenderung    MA 06. Dec. 94
 |*
 |*************************************************************************/
 
@@ -727,9 +715,6 @@ void SwFlyDrawContact::GetAnchoredObjs( std::vector<SwAnchoredObject*>& _roAncho
 /*************************************************************************
 |*
 |*  SwDrawContact, Ctor+Dtor
-|*
-|*  Ersterstellung      MA 09. Jan. 95
-|*  Letzte Aenderung    MA 22. Jul. 98
 |*
 |*************************************************************************/
 bool CheckControlLayer( const SdrObject *pObj )
@@ -1112,9 +1097,6 @@ SdrObject* SwDrawContact::GetDrawObjectByAnchorFrm( const SwFrm& _rAnchorFrm )
 /*************************************************************************
 |*
 |*  SwDrawContact::Changed
-|*
-|*  Ersterstellung      MA 09. Jan. 95
-|*  Letzte Aenderung    MA 29. May. 96
 |*
 |*************************************************************************/
 
@@ -1595,9 +1577,6 @@ namespace
 |*
 |*  SwDrawContact::Modify()
 |*
-|*  Ersterstellung      MA 09. Jan. 95
-|*  Letzte Aenderung    MA 03. Dec. 95
-|*
 |*************************************************************************/
 
 void SwDrawContact::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew )
@@ -1763,9 +1742,6 @@ void SwDrawContact::_InvalidateObjs( const bool _bUpdateSortedObjsList )
 |*
 |*  SwDrawContact::DisconnectFromLayout()
 |*
-|*  Ersterstellung      MA 09. Jan. 95
-|*  Letzte Aenderung    MA 25. Mar. 99
-|*
 |*************************************************************************/
 
 void SwDrawContact::DisconnectFromLayout( bool _bMoveMasterToInvisibleLayer )
@@ -1887,9 +1863,6 @@ void SwDrawContact::DisconnectObjFromLayout( SdrObject* _pDrawObj )
 /*************************************************************************
 |*
 |*  SwDrawContact::ConnectToLayout()
-|*
-|*  Ersterstellung      MA 09. Jan. 95
-|*  Letzte Aenderung    MA 25. Mar. 99
 |*
 |*************************************************************************/
 SwTxtFrm* lcl_GetFlyInCntntAnchor( SwTxtFrm* _pProposedAnchorFrm,
@@ -2108,9 +2081,6 @@ void SwDrawContact::InsertMasterIntoDrawPage()
 |*
 |*  SwDrawContact::FindPage(), ChkPage()
 |*
-|*  Ersterstellung      MA 21. Mar. 95
-|*  Letzte Aenderung    MA 19. Jul. 96
-|*
 |*************************************************************************/
 
 SwPageFrm* SwDrawContact::FindPage( const SwRect &rRect )
@@ -2163,9 +2133,6 @@ void SwDrawContact::ChkPage()
 /*************************************************************************
 |*
 |*  SwDrawContact::ChangeMasterObject()
-|*
-|*  Ersterstellung      MA 07. Aug. 95
-|*  Letzte Aenderung    MA 20. Apr. 99
 |*
 |*************************************************************************/
 // OD 10.07.2003 #110742# - Important note:

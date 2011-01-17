@@ -243,7 +243,7 @@ int SwPtrItem::operator==( const SfxPoolItem& rAttr ) const
 }
 
 
-/*-----------------12.11.97 12:55-------------------------------
+/*--------------------------------------------------------------
  SwUINumRuleItem fuer die NumTabPages der FormatNumRule/Stylisten
 ---------------------------------------------------------------*/
 SwUINumRuleItem::SwUINumRuleItem( const SwNumRule& rRul, const USHORT nId )

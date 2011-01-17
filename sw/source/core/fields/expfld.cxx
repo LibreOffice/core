@@ -498,7 +498,7 @@ bool SwGetExpField::PutValue( const uno::Any& rAny, USHORT nWhichId )
     return true;
 }
 
-/*-----------------JP: 17.06.93 -------------------
+/*-------------------------------------------------
  Set-Expression-Type
  --------------------------------------------------*/
 
@@ -904,7 +904,7 @@ void SwGetExpField::SetValue( const double& rAny )
     sExpand = ((SwValueFieldType*)GetTyp())->ExpandValue( rAny, GetFormat(),
                                                             GetLanguage());
 }
-/* -----------------14.07.99 12:21-------------------
+/* --------------------------------------------------
     Description: Find the index of the reference text
     following the current field
  --------------------------------------------------*/

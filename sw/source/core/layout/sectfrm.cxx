@@ -71,9 +71,6 @@ SV_IMPL_PTRARR_SORT( SwDestroyList, SwSectionFrmPtr )
 |*
 |*  SwSectionFrm::SwSectionFrm(), ~SwSectionFrm()
 |*
-|*  Ersterstellung      AMA 26. Nov. 97
-|*  Letzte Aenderung    AMA 26. Nov. 97
-|*
 |*************************************************************************/
 SwSectionFrm::SwSectionFrm( SwSection &rSect ) :
     SwLayoutFrm( rSect.GetFmt() ),
@@ -183,9 +180,6 @@ SwSectionFrm::~SwSectionFrm()
 |*
 |*  SwSectionFrm::DelEmpty()
 |*
-|*  Ersterstellung      AMA 17. Dec. 97
-|*  Letzte Aenderung    AMA 17. Dec. 97
-|*
 |*************************************************************************/
 void SwSectionFrm::DelEmpty( BOOL bRemove )
 {
@@ -250,9 +244,6 @@ void SwSectionFrm::DelEmpty( BOOL bRemove )
 /*************************************************************************
 |*
 |*  SwSectionFrm::Cut()
-|*
-|*  Ersterstellung      AMA 02. Dec. 97
-|*  Letzte Aenderung    AMA 02. Dec. 97
 |*
 |*************************************************************************/
 void SwSectionFrm::Cut()
@@ -339,9 +330,6 @@ void SwSectionFrm::_Cut( BOOL bRemove )
 /*************************************************************************
 |*
 |*  SwSectionFrm::Paste()
-|*
-|*  Ersterstellung      AMA 04. Dec. 97
-|*  Letzte Aenderung    AMA 04. Dec. 97
 |*
 |*************************************************************************/
 
@@ -456,9 +444,6 @@ void SwSectionFrm::Paste( SwFrm* pParent, SwFrm* pSibling )
 |*  Zunaechst werden uebergeordnete Bereiche immer aufgebrochen,
 |*  spaeter koennte man es einstellbar machen.
 |*
-|*  Ersterstellung      AMA 12. Dec. 97
-|*  Letzte Aenderung    AMA 12. Dec. 97
-|*
 |*************************************************************************/
 
 BOOL SwSectionFrm::HasToBreak( const SwFrm* pFrm ) const
@@ -484,9 +469,6 @@ BOOL SwSectionFrm::HasToBreak( const SwFrm* pFrm ) const
 /*************************************************************************
 |*
 |*  SwSectionFrm::MergeNext()
-|*
-|*  Ersterstellung      AMA 04. Dec. 97
-|*  Letzte Aenderung    AMA 04. Dec. 97
 |*
 |*  Verschmilzt zwei SectionFrms, falls es sich um den
 |*  gleichen Bereich handelt.
@@ -533,9 +515,6 @@ void SwSectionFrm::MergeNext( SwSectionFrm* pNxt )
 /*************************************************************************
 |*
 |*  SwSectionFrm::SplitSect()
-|*
-|*  Ersterstellung      AMA 29. Apr. 99
-|*  Letzte Aenderung    AMA 29. Apr. 99
 |*
 |*  Zerteilt einen SectionFrm in zwei Teile, der zweite Teil beginnt mit dem
 |*  uebergebenen Frame.
@@ -589,9 +568,6 @@ BOOL SwSectionFrm::SplitSect( SwFrm* pFrm, BOOL bApres )
 /*************************************************************************
 |*
 |*  SwSectionFrm::MoveCntntAndDelete()
-|*
-|*  Ersterstellung      AMA 29. Jan 99
-|*  Letzte Aenderung    AMA 29. Jan 99
 |*
 |*  MoveCntnt wird zur Zerstoerung eines SectionFrms wg. Aufhebung oder
 |*  Verstecken des Bereichs gerufen, um den Inhalt umzuhaengen.
@@ -941,9 +917,6 @@ BOOL SwSectionFrm::CalcMinDiff( SwTwips& rMinDiff ) const
 /*************************************************************************
  *
  *  SwSectionFrm::CollectEndnotes(  )
- *
- *  Ersterstellung      AMA 03. Nov 99
- *  Letzte Aenderung    AMA 03. Nov 99
  *
  *  CollectEndnotes looks for endnotes in the sectionfrm and his follows,
  *  the endnotes will cut off the layout and put into the array.
@@ -1326,8 +1299,6 @@ class ExtraFormatToPositionObjs
 |*  SwSectionFrm::Format()
 |*
 |*  Beschreibung:       "Formatiert" den Frame; Frm und PrtArea.
-|*  Ersterstellung      AMA 03. Dec. 97
-|*  Letzte Aenderung    MA 09. Oct. 98
 |*
 |*************************************************************************/
 
@@ -1559,8 +1530,6 @@ void SwSectionFrm::Format( const SwBorderAttrs *pAttr )
 |*  Beschreibung        Liefert das naechste Layoutblatt in das der Frame
 |*      gemoved werden kann.
 |*      Neue Seiten werden nur dann erzeugt, wenn der Parameter TRUE ist.
-|*  Ersterstellung      AMA 07. Jan. 98
-|*  Letzte Aenderung    AMA 07. Jan. 98
 |*
 |*************************************************************************/
 
@@ -1796,8 +1765,6 @@ SwLayoutFrm *SwFrm::GetNextSctLeaf( MakePageType eMakePage )
 |*
 |*  Beschreibung        Liefert das vorhergehende LayoutBlatt in das der
 |*      Frame gemoved werden kann.
-|*  Ersterstellung      AMA 07. Jan. 98
-|*  Letzte Aenderung    AMA 07. Jan. 98
 |*
 |*************************************************************************/
 
@@ -2027,9 +1994,6 @@ BOOL SwSectionFrm::Growable() const
 |*
 |*  SwSectionFrm::_Grow(), _Shrink()
 |*
-|*  Ersterstellung      AMA 14. Jan. 98
-|*  Letzte Aenderung    AMA 14. Jan. 98
-|*
 |*************************************************************************/
 
 SwTwips SwSectionFrm::_Grow( SwTwips nDist, BOOL bTst )
@@ -2232,9 +2196,6 @@ SwTwips SwSectionFrm::_Shrink( SwTwips nDist, BOOL bTst )
 |*
 |*  SwSectionFrm::MoveAllowed()
 |*
-|*  Ersterstellung      MA 08. Oct. 98
-|*  Letzte Aenderung    MA 08. Oct. 98
-|*
 |*  Wann sind Frms innerhalb eines SectionFrms moveable?
 |*  Wenn sie noch nicht in der letzten Spalte des SectionFrms sind,
 |*  wenn es einen Follow gibt,
@@ -2434,9 +2395,6 @@ void SwSectionFrm::CalcEndAtEndFlag()
 |*
 |*  SwSectionFrm::Modify()
 |*
-|*  Ersterstellung      MA 08. Oct. 98
-|*  Letzte Aenderung    MA 08. Oct. 98
-|*
 |*************************************************************************/
 
 void SwSectionFrm::Modify( SfxPoolItem * pOld, SfxPoolItem * pNew )
@@ -2588,7 +2546,7 @@ void SwSectionFrm::_UpdateAttr( SfxPoolItem *pOld, SfxPoolItem *pNew,
     }
 }
 
-/*-----------------09.06.99 14:58-------------------
+/*--------------------------------------------------
  * SwSectionFrm::ToMaximize(..): A follow or a ftncontainer at the end of the
  * page causes a maximal Size of the sectionframe.
  * --------------------------------------------------*/
@@ -2621,7 +2579,7 @@ BOOL SwSectionFrm::ToMaximize( BOOL bCheckFollow ) const
     return bRet;
 }
 
-/*-----------------09.06.99 15:07-------------------
+/*--------------------------------------------------
  * BOOL SwSectionFrm::ContainsFtnCont()
  * checks every Column for FtnContFrms.
  * --------------------------------------------------*/
@@ -2666,7 +2624,7 @@ void SwSectionFrm::InvalidateFtnPos()
     }
 }
 
-/*-----------------18.03.99 10:37-------------------
+/*--------------------------------------------------
  * SwSectionFrm::Undersize() liefert den Betrag, um den der Bereich gern
  * groesser waere, wenn in ihm Undersized TxtFrms liegen, ansonsten Null.
  * Das Undersized-Flag wird ggf. korrigiert.
@@ -2720,7 +2678,7 @@ void SwSectionFrm::CalcFtnCntnt()
     }
 }
 
-/* -----------------09.02.99 14:26-------------------
+/* --------------------------------------------------
  * Wenn ein SectionFrm leerlaeuft, z.B. weil sein Inhalt die Seite/Spalte wechselt,
  * so wird er nicht sofort zerstoert (es koennte noch jemand auf dem Stack einen Pointer
  * auf ihn halten), sondern er traegt sich in eine Liste am RootFrm ein, die spaeter

@@ -97,9 +97,6 @@ USHORT GetDefaultFontHeight( SwDrawTextInfo &rInf )
 |*
 |*  SwFntCache::Flush()
 |*
-|*  Ersterstellung      AMA 16. Dez. 94
-|*  Letzte Aenderung    AMA 16. Dez. 94
-|*
 |*************************************************************************/
 
 void SwFntCache::Flush( )
@@ -115,9 +112,6 @@ void SwFntCache::Flush( )
 /*************************************************************************
 |*
 |*  SwFntObj::SwFntObj(), ~SwFntObj()
-|*
-|*  Ersterstellung      AMA 7. Nov. 94
-|*  Letzte Aenderung    AMA 7. Nov. 94
 |*
 |*************************************************************************/
 
@@ -292,9 +286,6 @@ void lcl_calcLinePos( const CalcLinePosData &rData,
  *
  *  USHORT SwFntObj::GetFontAscent( const OutputDevice& rOut )
  *
- *  Ersterstellung      AMA 7. Nov. 94
- *  Letzte Aenderung    AMA 7. Nov. 94
- *
  *  Beschreibung: liefern den Ascent des Fonts auf dem
  *  gewuenschten Outputdevice zurueck, ggf. muss der Bildschirmfont erst
  *  erzeugt werden.
@@ -338,9 +329,6 @@ USHORT SwFntObj::GetFontAscent( const ViewShell *pSh, const OutputDevice& rOut )
 /*************************************************************************
  *
  *  USHORT SwFntObj::GetFontHeight( const OutputDevice* pOut )
- *
- *  Ersterstellung      AMA 7. Nov. 94
- *  Letzte Aenderung    AMA 7. Nov. 94
  *
  *  Beschreibung: liefern die H?he des Fonts auf dem
  *  gewuenschten Outputdevice zurueck, ggf. muss der Bildschirmfont erst
@@ -423,9 +411,6 @@ USHORT SwFntObj::GetFontLeading( const ViewShell *pSh, const OutputDevice& rOut 
 /*************************************************************************
  *
  *  SwFntObj::CreateScrFont( const ViewShell& rSh, const OutputDevice& rOut )
- *
- *  Ersterstellung      AMA 7. Nov. 94
- *  Letzte Aenderung    AMA 7. Nov. 94
  *
  *  pOut is the output device, not the reference device
  *
@@ -603,9 +588,6 @@ void SwFntObj::GuessLeading( const ViewShell&
  *
  *  void SwFntObj::SetDeviceFont( const OutputDevice *pOut ),
  *
- *  Ersterstellung      AMA 7. Nov. 94
- *  Letzte Aenderung    AMA 7. Nov. 94
- *
  *  Beschreibung: stellt den Font am gewuenschten OutputDevice ein,
  *  am Bildschirm muss eventuell erst den Abgleich durchgefuehrt werden.
  *
@@ -642,9 +624,6 @@ void SwFntObj::SetDevFont( const ViewShell *pSh, OutputDevice& rOut )
 /*************************************************************************
  *
  * void SwFntObj::DrawText( ... )
- *
- *  Ersterstellung      AMA 16. Dez. 94
- *  Letzte Aenderung    AMA 16. Dez. 94
  *
  *  Beschreibung: Textausgabe
  *                  auf dem Bildschirm          => DrawTextArray
@@ -1869,9 +1848,6 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
  *  Size SwFntObj::GetTextSize( const OutputDevice *pOut, const String &rTxt,
  *           const USHORT nIdx, const USHORT nLen, const short nKern = 0 );
  *
- *  Ersterstellung      AMA 16. Dez. 94
- *  Letzte Aenderung    AMA 16. Dez. 94
- *
  *  Beschreibung: ermittelt die TextSize (des Druckers)
  *
  *************************************************************************/
@@ -2296,9 +2272,6 @@ xub_StrLen SwFntObj::GetCrsrOfst( SwDrawTextInfo &rInf )
 /*************************************************************************
 |*
 |*  SwFntAccess::SwFntAccess()
-|*
-|*  Ersterstellung      AMA 9. Nov. 94
-|*  Letzte Aenderung    AMA 9. Nov. 94
 |*
 |*************************************************************************/
 

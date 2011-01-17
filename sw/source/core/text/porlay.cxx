@@ -2328,7 +2328,7 @@ void SwLineLayout::Init( SwLinePortion* pNextPortion )
     SetPortion( pNextPortion );
 }
 
-/*-----------------16.11.00 11:04-------------------
+/*--------------------------------------------------
  * HangingMargin()
  * looks for hanging punctuation portions in the paragraph
  * and return the maximum right offset of them.

@@ -83,9 +83,6 @@ using namespace ::com::sun::star;
 |*
 |*  SwFrm::SwFrm()
 |*
-|*  Ersterstellung      AK 12-Feb-1991
-|*  Letzte Aenderung    MA 05. Apr. 94
-|*
 |*************************************************************************/
 
 SwFrm::SwFrm( SwModify *pMod ) :
@@ -232,9 +229,6 @@ void SwTxtFrm::CheckDirection( BOOL bVert )
 |*
 |*  SwFrm::Modify()
 |*
-|*  Ersterstellung      AK 01-Mar-1991
-|*  Letzte Aenderung    MA 20. Jun. 96
-|*
 |*************************************************************************/
 void SwFrm::Modify( SfxPoolItem * pOld, SfxPoolItem * pNew )
 {
@@ -348,8 +342,6 @@ void SwFrm::_UpdateAttrFrm( SfxPoolItem *pOld, SfxPoolItem *pNew,
 /*************************************************************************
 |*
 |*    SwFrm::Prepare()
-|*    Ersterstellung    MA 13. Apr. 93
-|*    Letzte Aenderung  MA 26. Jun. 96
 |*
 |*************************************************************************/
 void SwFrm::Prepare( const PrepareHint, const void *, BOOL )
@@ -363,8 +355,6 @@ void SwFrm::Prepare( const PrepareHint, const void *, BOOL )
 |*    Beschreibung:     Invalidiert die Seite, in der der Frm gerade steht.
 |*      Je nachdem ob es ein Layout, Cntnt oder FlyFrm ist wird die Seite
 |*      entsprechend Invalidiert.
-|*    Ersterstellung    MA 22. Jul. 92
-|*    Letzte Aenderung  MA 14. Oct. 94
 |*
 |*************************************************************************/
 void SwFrm::InvalidatePage( const SwPageFrm *pPage ) const
@@ -481,9 +471,6 @@ void SwFrm::InvalidatePage( const SwPageFrm *pPage ) const
 |*
 |*  SwFrm::ChgSize()
 |*
-|*  Ersterstellung      AK 15-Feb-1991
-|*  Letzte Aenderung    MA 18. Nov. 98
-|*
 |*************************************************************************/
 Size SwFrm::ChgSize( const Size& aNewSize )
 {
@@ -566,7 +553,6 @@ Size SwFrm::ChgSize( const Size& aNewSize )
 |*                      Eingefuegt wird unterhalb des Parent und entweder
 |*                      vor pBehind oder am Ende der Kette wenn pBehind
 |*                      leer ist.
-|*  Letzte Aenderung    MA 06. Aug. 99
 |*
 |*************************************************************************/
 void SwFrm::InsertBefore( SwLayoutFrm* pParent, SwFrm* pBehind )
@@ -607,7 +593,6 @@ void SwFrm::InsertBefore( SwLayoutFrm* pParent, SwFrm* pBehind )
 |*                      Eingefuegt wird unterhalb des Parent und entweder
 |*                      hinter pBefore oder am Anfang der Kette wenn pBefore
 |*                      leer ist.
-|*  Letzte Aenderung    MA 06. Aug. 99
 |*
 |*************************************************************************/
 void SwFrm::InsertBehind( SwLayoutFrm *pParent, SwFrm *pBefore )
@@ -641,7 +626,6 @@ void SwFrm::InsertBehind( SwLayoutFrm *pParent, SwFrm *pBefore )
 |*
 |*  Beschreibung        Eine Kette von SwFrms wird in eine bestehende Struktur
 |*                      eingefuegt
-|*  Letzte Aenderung    AMA 9. Dec. 97
 |*
 |*  Bisher wird dies genutzt, um einen SectionFrame, der ggf. schon Geschwister
 |*  mit sich bringt, in eine bestehende Struktur einzufuegen.
@@ -761,9 +745,6 @@ void SwFrm::InsertGroupBefore( SwFrm* pParent, SwFrm* pBehind, SwFrm* pSct )
 |*
 |*  SwFrm::Remove()
 |*
-|*  Ersterstellung      AK 01-Mar-1991
-|*  Letzte Aenderung    MA 07. Dec. 95
-|*
 |*************************************************************************/
 void SwFrm::Remove()
 {
@@ -787,9 +768,6 @@ void SwFrm::Remove()
 /*************************************************************************
 |*
 |*  SwCntntFrm::Paste()
-|*
-|*  Ersterstellung      MA 23. Feb. 94
-|*  Letzte Aenderung    MA 09. Sep. 98
 |*
 |*************************************************************************/
 void SwCntntFrm::Paste( SwFrm* pParent, SwFrm* pSibling)
@@ -895,9 +873,6 @@ void SwCntntFrm::Paste( SwFrm* pParent, SwFrm* pSibling)
 /*************************************************************************
 |*
 |*  SwCntntFrm::Cut()
-|*
-|*  Ersterstellung      AK 14-Feb-1991
-|*  Letzte Aenderung    MA 09. Sep. 98
 |*
 |*************************************************************************/
 void SwCntntFrm::Cut()
@@ -1089,9 +1064,6 @@ void SwCntntFrm::Cut()
 |*
 |*  SwLayoutFrm::Paste()
 |*
-|*  Ersterstellung      MA 23. Feb. 94
-|*  Letzte Aenderung    MA 23. Feb. 94
-|*
 |*************************************************************************/
 void SwLayoutFrm::Paste( SwFrm* pParent, SwFrm* pSibling)
 {
@@ -1194,9 +1166,6 @@ void SwLayoutFrm::Paste( SwFrm* pParent, SwFrm* pSibling)
 |*
 |*  SwLayoutFrm::Cut()
 |*
-|*  Ersterstellung      MA 23. Feb. 94
-|*  Letzte Aenderung    MA 23. Feb. 94
-|*
 |*************************************************************************/
 void SwLayoutFrm::Cut()
 {
@@ -1259,9 +1228,6 @@ void SwLayoutFrm::Cut()
 |*
 |*  SwFrm::Grow()
 |*
-|*  Ersterstellung      AK 19-Feb-1991
-|*  Letzte Aenderung    MA 05. May. 94
-|*
 |*************************************************************************/
 SwTwips SwFrm::Grow( SwTwips nDist, BOOL bTst, BOOL bInfo )
 {
@@ -1310,9 +1276,6 @@ SwTwips SwFrm::Grow( SwTwips nDist, BOOL bTst, BOOL bInfo )
 /*************************************************************************
 |*
 |*  SwFrm::Shrink()
-|*
-|*  Ersterstellung      AK 14-Feb-1991
-|*  Letzte Aenderung    MA 05. May. 94
 |*
 |*************************************************************************/
 SwTwips SwFrm::Shrink( SwTwips nDist, BOOL bTst, BOOL bInfo )
@@ -1381,9 +1344,6 @@ SwTwips SwFrm::Shrink( SwTwips nDist, BOOL bTst, BOOL bInfo )
 |*      Minimalwert fuer die Hoehe des Bodys nicht unterschritten wird.
 |*
 |*  Parameter: nDiff ist der Betrag, um den Platz geschaffen werden muss
-|*
-|*  Ersterstellung      MA 07. May. 92
-|*  Letzte Aenderung    AMA 02. Nov. 98
 |*
 |*************************************************************************/
 SwTwips SwFrm::AdjustNeighbourhood( SwTwips nDiff, BOOL bTst )
@@ -1687,9 +1647,6 @@ SwTwips SwFrm::AdjustNeighbourhood( SwTwips nDiff, BOOL bTst )
 |*  SwFrm::ImplInvalidateSize(), ImplInvalidatePrt(), ImplInvalidatePos(),
 |*         ImplInvalidateLineNum()
 |*
-|*  Ersterstellung      MA 15. Oct. 92
-|*  Letzte Aenderung    MA 24. Mar. 94
-|*
 |*************************************************************************/
 /** method to perform additional actions on an invalidation
 
@@ -1779,9 +1736,6 @@ void SwFrm::ImplInvalidateLineNum()
 /*************************************************************************
 |*
 |*  SwFrm::ReinitializeFrmSizeAttrFlags
-|*
-|*  Ersterstellung      MA 15. Oct. 96
-|*  Letzte Aenderung    MA 15. Oct. 96
 |*
 |*************************************************************************/
 void SwFrm::ReinitializeFrmSizeAttrFlags()
@@ -1876,9 +1830,6 @@ void SwFrm::ValidateThisAndAllLowers( const USHORT nStage )
 /*************************************************************************
 |*
 |*  SwCntntFrm::GrowFrm()
-|*
-|*  Ersterstellung      MA 30. Jul. 92
-|*  Letzte Aenderung    MA 25. Mar. 99
 |*
 |*************************************************************************/
 SwTwips SwCntntFrm::GrowFrm( SwTwips nDist, BOOL bTst, BOOL bInfo )
@@ -1988,9 +1939,6 @@ SwTwips SwCntntFrm::GrowFrm( SwTwips nDist, BOOL bTst, BOOL bInfo )
 /*************************************************************************
 |*
 |*  SwCntntFrm::ShrinkFrm()
-|*
-|*  Ersterstellung      MA 30. Jul. 92
-|*  Letzte Aenderung    MA 05. May. 94
 |*
 |*************************************************************************/
 SwTwips SwCntntFrm::ShrinkFrm( SwTwips nDist, BOOL bTst, BOOL bInfo )
@@ -2110,10 +2058,6 @@ SwTwips SwCntntFrm::ShrinkFrm( SwTwips nDist, BOOL bTst, BOOL bInfo )
 /*************************************************************************
 |*
 |*    SwCntntFrm::Modify()
-|*
-|*    Beschreibung
-|*    Ersterstellung    AK 05-Mar-1991
-|*    Letzte Aenderung  MA 13. Oct. 95
 |*
 |*************************************************************************/
 void SwCntntFrm::Modify( SfxPoolItem * pOld, SfxPoolItem * pNew )
@@ -2344,9 +2288,6 @@ void SwCntntFrm::_UpdateAttr( SfxPoolItem* pOld, SfxPoolItem* pNew,
 |*
 |*  SwLayoutFrm::SwLayoutFrm()
 |*
-|*  Ersterstellung      AK 14-Feb-1991
-|*  Letzte Aenderung    MA 12. May. 95
-|*
 |*************************************************************************/
 SwLayoutFrm::SwLayoutFrm( SwFrmFmt* pFmt ):
     SwFrm( pFmt ),
@@ -2360,7 +2301,7 @@ SwLayoutFrm::SwLayoutFrm( SwFrmFmt* pFmt ):
 // --> OD 2004-06-29 #i28701#
 TYPEINIT1(SwLayoutFrm,SwFrm);
 // <--
-/*-----------------10.06.99 09:42-------------------
+/*--------------------------------------------------
  * SwLayoutFrm::InnerHeight()
  * --------------------------------------------------*/
 
@@ -2405,9 +2346,6 @@ SwTwips SwLayoutFrm::InnerHeight() const
 /*************************************************************************
 |*
 |*  SwLayoutFrm::GrowFrm()
-|*
-|*  Ersterstellung      MA 30. Jul. 92
-|*  Letzte Aenderung    MA 23. Sep. 96
 |*
 |*************************************************************************/
 SwTwips SwLayoutFrm::GrowFrm( SwTwips nDist, BOOL bTst, BOOL bInfo )
@@ -2571,9 +2509,6 @@ SwTwips SwLayoutFrm::GrowFrm( SwTwips nDist, BOOL bTst, BOOL bInfo )
 /*************************************************************************
 |*
 |*  SwLayoutFrm::ShrinkFrm()
-|*
-|*  Ersterstellung      MA 30. Jul. 92
-|*  Letzte Aenderung    MA 25. Mar. 99
 |*
 |*************************************************************************/
 SwTwips SwLayoutFrm::ShrinkFrm( SwTwips nDist, BOOL bTst, BOOL bInfo )
@@ -2750,8 +2685,6 @@ SwTwips SwLayoutFrm::ShrinkFrm( SwTwips nDist, BOOL bTst, BOOL bInfo )
 |*      PrtArea des Frm's.
 |*      Die Variablen Frm's werden auch proportional angepasst; sie werden
 |*      sich schon wieder zurechtwachsen/-schrumpfen.
-|*  Ersterstellung      MA 11.03.92
-|*  Letzte Aenderung    AMA 2. Nov. 98
 |*
 |*************************************************************************/
 void SwLayoutFrm::ChgLowersProp( const Size& rOldSize )
@@ -3153,8 +3086,6 @@ void SwLayoutFrm::ChgLowersProp( const Size& rOldSize )
 |*
 |*  Beschreibung:       "Formatiert" den Frame; Frm und PrtArea.
 |*                      Die Fixsize wird hier nicht eingestellt.
-|*  Ersterstellung      MA 28. Jul. 92
-|*  Letzte Aenderung    MA 21. Mar. 95
 |*
 |*************************************************************************/
 void SwLayoutFrm::Format( const SwBorderAttrs *pAttrs )
@@ -3245,9 +3176,6 @@ void SwLayoutFrm::Format( const SwBorderAttrs *pAttrs )
 |*
 |*  SwLayoutFrm::InvalidatePercentLowers()
 |*
-|*  Ersterstellung      MA 13. Jun. 96
-|*  Letzte Aenderung    MA 13. Jun. 96
-|*
 |*************************************************************************/
 static void InvaPercentFlys( SwFrm *pFrm, SwTwips nDiff )
 {
@@ -3317,9 +3245,6 @@ void SwLayoutFrm::InvaPercentLowers( SwTwips nDiff )
 /*************************************************************************
 |*
 |*  SwLayoutFrm::CalcRel()
-|*
-|*  Ersterstellung      MA 13. Jun. 96
-|*  Letzte Aenderung    MA 10. Oct. 96
 |*
 |*************************************************************************/
 long SwLayoutFrm::CalcRel( const SwFmtFrmSize &rSz, BOOL ) const
@@ -3785,9 +3710,6 @@ void SwLayoutFrm::FormatWidthCols( const SwBorderAttrs &rAttrs,
 /*************************************************************************
 |*
 |*  SwRootFrm::InvalidateAllCntnt()
-|*
-|*  Ersterstellung      MA 13. Feb. 98
-|*  Letzte Aenderung    MA 12. Aug. 00
 |*
 |*************************************************************************/
 

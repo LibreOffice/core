@@ -622,34 +622,6 @@ SwTOXBase & SwTOXBase::operator = (const SwTOXBase & rSource)
     return *this;
 }
 
-/* -----------------16.07.99 16:02-------------------
-
-SwTOXBase & SwTOXBase::operator = (const SwTOXBase & rSource)
-{
-    aForm = rSource.aForm;
-    aName = rSource.aName;
-    aTitle = rSource.aTitle;
-    sMainEntryCharStyle = rSource.sMainEntryCharStyle;
-    sSequenceName = rSource.sSequenceName;
-    eLanguage = rSource.eLanguage;
-    sSortAlgorithm = rSource.sSortAlgorithm;
-    aData = rSource.aData;
-    nCreateType = rSource.nCreateType;
-    nOLEOptions = rSource.nOLEOptions;
-    eCaptionDisplay = rSource.eCaptionDisplay;
-    bProtected = rSource.bProtected;
-    bFromChapter = rSource.bFromChapter;
-    bFromObjectNames = rSource.bFromObjectNames;
-    bLevelFromChapter = rSource.bLevelFromChapter;
-
-    if (rSource.GetAttrSet())
-        SetAttrSet(*rSource.GetAttrSet());
-
-    return *this;
-}
-
- --------------------------------------------------*/
-
 String SwFormToken::GetString() const
 {
     String sRet;

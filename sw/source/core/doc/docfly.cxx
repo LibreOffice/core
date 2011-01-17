@@ -159,8 +159,6 @@ SwFrmFmt* SwDoc::GetFlyNum( USHORT nIdx, FlyCntType eType )
 #*  Class       :  SwDoc
 #*  Methode     :  SetFlyFrmAnchor
 #*  Beschreibung:  Das Ankerattribut des FlyFrms aendert sich.
-#*  Datum       :  MA 01. Feb. 94
-#*  Update      :  JP 09.03.98
 #***********************************************************************/
 Point lcl_FindAnchorLayPos( SwDoc& rDoc, const SwFmtAnchor& rAnch,
                             const SwFrmFmt* pFlyFmt )
@@ -521,8 +519,6 @@ void SwDoc::SetFlyFrmDescription( SwFlyFrmFmt& rFlyFrmFmt,
 /***************************************************************************
  *  Methode     :   BOOL SwDoc::SetFrmFmtToFly( SwFlyFrm&, SwFrmFmt& )
  *  Beschreibung:
- *  Erstellt    :   OK 14.04.94 15:40
- *  Aenderung   :   JP 23.04.98
  ***************************************************************************/
 BOOL SwDoc::SetFrmFmtToFly( SwFrmFmt& rFmt, SwFrmFmt& rNewFmt,
                             SfxItemSet* pSet, BOOL bKeepOrient )
@@ -631,9 +627,6 @@ void SwDoc::GetGrfNms( const SwFlyFrmFmt& rFmt, String* pGrfName,
 /*************************************************************************
 |*
 |*  SwDoc::ChgAnchor()
-|*
-|*  Ersterstellung      MA 10. Jan. 95
-|*  Letzte Aenderung    JP 08.07.98
 |*
 *************************************************************************/
 sal_Bool SwDoc::ChgAnchor( const SdrMarkList& _rMrkList,

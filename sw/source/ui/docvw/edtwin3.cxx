@@ -114,8 +114,6 @@ void PageNumNotify( ViewShell* pVwSh, USHORT nPhyNum, USHORT nVirtNum,
 /******************************************************************************
  *  Methode     :   void FrameNotify( DocMDIBase *pWin, FlyMode eMode )
  *  Beschreibung:
- *  Erstellt    :   OK 08.02.94 13:49
- *  Aenderung   :
  ******************************************************************************/
 
 

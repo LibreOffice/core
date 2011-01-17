@@ -443,7 +443,7 @@ SwGlossaries::SwGlossaries() :
     Beschreibung: Neuen Pfad einstellen und internes Array neu aufbauen
 ------------------------------------------------------------------------*/
 
-/* -----------------21.01.99 15:36-------------------
+/* --------------------------------------------------
 *   #61050# Doppelte Pfade fuehren zu Verwirrung - als raus damit
  * --------------------------------------------------*/
 sal_Bool lcl_FindSameEntry(const SvStrings& rDirArr, const String& rEntryURL)

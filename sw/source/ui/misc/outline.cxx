@@ -927,7 +927,7 @@ USHORT lcl_DrawGraphic(VirtualDevice* pVDev, const SwNumFmt &rFmt, USHORT nXStar
 
 }
 
-/*-----------------02.12.97 10:34-------------------
+/*--------------------------------------------------
     Vorschau der Numerierung painten
 --------------------------------------------------*/
 void    NumberingPreview::Paint( const Rectangle& /*rRect*/ )

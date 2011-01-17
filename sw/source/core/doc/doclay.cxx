@@ -223,8 +223,6 @@ SwFrmFmt *SwDoc::MakeLayoutFmt( RndStdIds eRequest, const SfxItemSet* pSet )
 |*
 |*  Beschreibung        Loescht das angegebene Format, der Inhalt wird mit
 |*      geloescht.
-|*  Ersterstellung      MA 23. Sep. 92
-|*  Letzte Aenderung    MA 05. Feb. 93
 |*
 |*************************************************************************/
 void SwDoc::DelLayoutFmt( SwFrmFmt *pFmt )
@@ -368,9 +366,6 @@ void SwDoc::DelLayoutFmt( SwFrmFmt *pFmt )
 |*                          Dokument, so kopiere auch dann noch richtig !!
 |*                          Vom chaos::Anchor-Attribut wird die Position immer
 |*                          auf 0 gesetzt !!!
-|*
-|*  Ersterstellung      BP 18.12.92
-|*  Letzte Aenderung    MA 17. Jul. 96
 |*
 |*************************************************************************/
 SwFrmFmt *SwDoc::CopyLayoutFmt( const SwFrmFmt& rSource,
@@ -1127,9 +1122,6 @@ void SwDoc::GetAllFlyFmts( SwPosFlyFrms& rPosFlyFmts,
 |*
 |*  SwDoc::InsertLabel()
 |*
-|*  Ersterstellung      MA 11. Feb. 94
-|*  Letzte Aenderung    MA 12. Nov. 97
-|*
 |*************************************************************************/
 
 /* #i6447# changed behaviour if lcl_CpyAttr:
@@ -1491,9 +1483,6 @@ SwFlyFrmFmt* SwDoc::InsertLabel( const SwLabelType eType, const String &rTxt, co
 |*
 |*  SwDoc::InsertDrawLabel()
 |*
-|*  Ersterstellung      MIB 7. Dez. 98
-|*  Letzte Aenderung    MIB 7. Dez. 98
-|*
 |*************************************************************************/
 SwFlyFrmFmt* SwDoc::InsertDrawLabel( const String &rTxt,
                                      const String& rSeparator,
@@ -1793,9 +1782,6 @@ void SwDoc::UnblockIdling()
 /*************************************************************************
 |*
 |*  SwDoc::DoIdleJobs()
-|*
-|*  Ersterstellung      OK 30.03.94
-|*  Letzte Aenderung    MA 09. Jun. 95
 |*
 |*************************************************************************/
 IMPL_LINK( SwDoc, DoIdleJobs, Timer *, pTimer )

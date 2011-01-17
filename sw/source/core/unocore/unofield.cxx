@@ -960,28 +960,6 @@ void SwXFieldMaster::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew)
         m_pDoc = 0;
     }
 }
-/* -----------------------------06.11.00 09:44--------------------------------
-
-const Programmatic2UIName_Impl* lcl_GetFieldNameTable()
-{
-    static BOOL bInitialized = FALSE;
-    static Programmatic2UIName_Impl aFieldNames[5];
-    if(!bInitialized)
-    {
-        bInitialized = TRUE;
-        int nName = 0;
-        aFieldNames[nName].sUIName = String             (SW_RES(STR_POOLCOLL_LABEL_ABB ));
-        aFieldNames[nName++].sProgrammaticName = String (SW_RES(STR_POCO_PRGM_LABEL_ABB));
-        aFieldNames[nName].sUIName = String             (SW_RES(STR_POOLCOLL_LABEL_TABLE ));
-        aFieldNames[nName++].sProgrammaticName = String (SW_RES(STR_POCO_PRGM_LABEL_TABLE));
-        aFieldNames[nName].sUIName = String             (SW_RES(STR_POOLCOLL_LABEL_FRAME));
-        aFieldNames[nName++].sProgrammaticName = String (SW_RES(STR_POCO_PRGM_LABEL_FRAME));
-        aFieldNames[nName].sUIName = String             (SW_RES(STR_POOLCOLL_LABEL_DRAWING ));
-        aFieldNames[nName++].sProgrammaticName = String (SW_RES(STR_POCO_PRGM_LABEL_DRAWING));
-    }
-    return &aFieldNames[0];
-}
- ---------------------------------------------------------------------------*/
 
 OUString SwXFieldMaster::GetProgrammaticName(const SwFieldType& rType, SwDoc& rDoc)
 {
@@ -2419,7 +2397,7 @@ SwXTextFieldMasters::~SwXTextFieldMasters()
 
 }
 
-/*-- 21.12.98 10:37:33---------------------------------------------------
+/*-----------------------------------------------------------------------
     Iteration ueber nicht-Standard Feldtypen
     USER/SETEXP/DDE/DATABASE
     Der Name ist demnach:

@@ -273,7 +273,7 @@ bool SwAuthorityFieldType::ChangeEntryContent(const SwAuthEntry* pNewEntry)
     }
     return bChanged;
 }
-/*-- 11.10.99 08:49:22---------------------------------------------------
+/*-----------------------------------------------------------------------
     Description:    appends a new entry (if new) and returns the array position
 
   -----------------------------------------------------------------------*/
