@@ -133,17 +133,17 @@ void MenuBarFactory::CreateUIElement(const ::rtl::OUString& ResourceURL
 
     for ( sal_Int32 n = 0; n < Args.getLength(); n++ )
     {
-        if ( Args[n].Name.equalsAscii( "ConfigurationSource" ))
+        if ( Args[n].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("ConfigurationSource")) )
             Args[n].Value >>= xConfigSource;
-        else if ( Args[n].Name.equalsAscii( "Frame" ))
+        else if ( Args[n].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Frame")) )
             Args[n].Value >>= xFrame;
-        else if ( Args[n].Name.equalsAscii( "ResourceURL" ))
+        else if ( Args[n].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("ResourceURL")) )
             Args[n].Value >>= aResourceURL;
-        else if ( Args[n].Name.equalsAscii( "Persistent" ))
+        else if ( Args[n].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Persistent")) )
             Args[n].Value >>= bPersistent;
         else if ( _pExtraMode && Args[n].Name.equalsAscii( _pExtraMode ))
             Args[n].Value >>= bExtraMode;
-    } // for ( sal_Int32 n = 0; n < Args.getLength(); n++ )
+    }
     if ( aResourceURL.indexOf( rtl::OUString::createFromAscii(_pAsciiName)) != 0 )
         throw IllegalArgumentException();
 

@@ -1393,7 +1393,7 @@ WindowStateConfiguration::WindowStateConfiguration( const Reference< XMultiServi
             ::rtl::OUString aWindowStateFileStr;
             for ( sal_Int32 y = 0; y < aSeq.getLength(); y++ )
             {
-                if ( aSeq[y].Name.equalsAscii("ooSetupFactoryWindowStateConfigRef") )
+                if ( aSeq[y].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("ooSetupFactoryWindowStateConfigRef")) )
                 {
                     aSeq[y].Value >>= aWindowStateFileStr;
                     break;

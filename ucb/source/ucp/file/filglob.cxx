@@ -224,7 +224,7 @@ namespace fileaccess {
         if( aParent[ aParent.getLength()-1] == sal_Unicode(':') && aParent.getLength() == 6 )
             aParent += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
 
-        if( 0 == aParent.compareToAscii( "file://" ) )
+        if( aParent.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("file://")) )
             aParent = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("file:///"));
 
         return aParent;
