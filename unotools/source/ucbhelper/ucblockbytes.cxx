@@ -956,10 +956,10 @@ static sal_Bool UCBOpenContentSync(
         aScheme = xContId->getContentProviderScheme();
 
     // now determine wether we use a timeout or not;
-    if( ! aScheme.equalsIgnoreAsciiCaseAscii("http")                &&
-        ! aScheme.equalsIgnoreAsciiCaseAscii("https")                &&
-        ! aScheme.equalsIgnoreAsciiCaseAscii("vnd.sun.star.webdav") &&
-        ! aScheme.equalsIgnoreAsciiCaseAscii("ftp"))
+    if( ! aScheme.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("http"))                &&
+        ! aScheme.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("https"))               &&
+        ! aScheme.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("vnd.sun.star.webdav")) &&
+        ! aScheme.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("ftp")))
         return _UCBOpenContentSync(
             xLockBytes,xContent,rArg,xSink,xInteract,xProgress,xHandler);
 
