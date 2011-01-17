@@ -82,7 +82,6 @@ void SwHTMLNumRuleInfo::Set( const SwTxtNode& rTxtNd )
         pNumRule = const_cast<SwNumRule*>(pTxtNdNumRule);
         nDeep = static_cast< sal_uInt16 >(pNumRule ? rTxtNd.GetActualListLevel() + 1 : 0);
         bNumbered = rTxtNd.IsCountedInList();
-        // --> OD 2008-02-27 #refactorlists#
         // --> OD 2005-11-16 #i57919#
         // correction of refactoring done by cws swnumtree:
         // <bRestart> has to be set to <true>, if numbering is restarted at this
@@ -528,11 +527,7 @@ void SwHTMLParser::NewNumBulListItem( int nToken )
         AppendTxtNode( AM_NOSPACE, sal_False );
     bNoParSpace = sal_False;    // In <LI> wird kein Abstand eingefuegt!
 
-    // --> OD 2008-04-02 #refactorlists#
-//    if( HTML_LISTHEADER_ON==nToken )
-//        SetNoNum(&nLevel, TRUE);
     const bool bCountedInList( HTML_LISTHEADER_ON==nToken ? false : true );
-    // <--
 
     _HTMLAttrContext *pCntxt = new _HTMLAttrContext( static_cast< sal_uInt16 >(nToken) );
 
@@ -578,9 +573,7 @@ void SwHTMLParser::NewNumBulListItem( int nToken )
     // #i57656# - <IsCounted()> state of text node has to be adjusted accordingly.
     if ( nLevel < MAXLEVEL )
     {
-        // --> OD 2008-04-02 #refactorlists#
         pTxtNode->SetCountedInList( bCountedInList );
-        // <--
     }
     // <--
     // --> OD 2005-11-15 #i57919#
@@ -669,7 +662,6 @@ void SwHTMLParser::EndNumBulListItem( int nToken, sal_Bool bSetColl,
 
 /*  */
 
-// --> OD 2008-04-02 #refactorlists#
 void SwHTMLParser::SetNodeNum( sal_uInt8 nLevel, bool bCountedInList )
 {
     SwTxtNode* pTxtNode = pPam->GetNode()->GetTxtNode();

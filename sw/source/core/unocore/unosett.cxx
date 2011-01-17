@@ -2181,13 +2181,11 @@ void SwXNumberingRules::setPropertyValue( const OUString& rPropertyName, const A
         pDocRule ? pDocRule->SetRuleType(eNumRuleType) :
             pCreatedRule ? pCreatedRule->SetRuleType(eNumRuleType) : pNumRule->SetRuleType(eNumRuleType);
     }
-    // --> OD 2008-04-23 #refactorlists#
     else if(rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_DEFAULT_LIST_ID)))
     {
         delete pDocRule;
         throw IllegalArgumentException();
     }
-    // <--
     else
         throw UnknownPropertyException();
 
@@ -2236,14 +2234,12 @@ Any SwXNumberingRules::getPropertyValue( const OUString& rPropertyName )
         BOOL bVal = pRule->IsOutlineRule();
         aRet.setValue(&bVal, ::getBooleanCppuType());
     }
-    // --> OD 2008-04-23 #refactorlists#
     else if(rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_DEFAULT_LIST_ID)))
     {
         OSL_ENSURE( pRule->GetDefaultListId().Len() != 0,
                 "<SwXNumberingRules::getPropertyValue(..)> - no default list id found. Serious defect -> please inform OD." );
         aRet <<= OUString(pRule->GetDefaultListId());
     }
-    // <--
     else
         throw UnknownPropertyException();
     return aRet;

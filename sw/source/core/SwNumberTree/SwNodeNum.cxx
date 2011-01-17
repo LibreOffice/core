@@ -42,7 +42,6 @@
 #include <doc.hxx>
 // <--
 
-// --> OD 2008-02-19 #refactorlists#
 SwNodeNum::SwNodeNum( SwTxtNode* pTxtNode )
     : SwNumberTreeNode(),
       mpTxtNode( pTxtNode ),
@@ -56,7 +55,6 @@ SwNodeNum::SwNodeNum( SwNumRule* pNumRule )
       mpNumRule( pNumRule )
 {
 }
-// <--
 
 SwNodeNum::~SwNodeNum()
 {
@@ -98,16 +96,11 @@ SwPosition SwNodeNum::GetPosition() const
 
 SwNumberTreeNode * SwNodeNum::Create() const
 {
-    // --> OD 2008-02-19 #refactorlists#
-//    SwNodeNum * pResult = new SwNodeNum();
-//    pResult->SetNumRule(mpNumRule);
     SwNodeNum * pResult = new SwNodeNum( GetNumRule() );
-    // <--
 
     return pResult;
 }
 
-// --> OD 2008-02-19 #refactorlists#
 void SwNodeNum::PreAdd()
 {
     OSL_ENSURE( GetTxtNode(),
@@ -307,7 +300,6 @@ bool SwNodeNum::LessThan(const SwNumberTreeNode & rNode) const
 //    // <--
 //}
 
-// --> OD 2008-02-25 #refactorlists#
 bool SwNodeNum::IsRestart() const
 {
     bool bIsRestart = false;
@@ -319,7 +311,6 @@ bool SwNodeNum::IsRestart() const
 
     return bIsRestart;
 }
-// <--
 
 //void SwNodeNum::SetStart(SwNumberTree::tSwNumTreeNumber nStart)
 //{
@@ -356,9 +347,7 @@ bool SwNodeNum::IsCountPhantoms() const
     return bResult;
 }
 
-// --> OD 2008-02-25 #refactorlists#
 SwNumberTree::tSwNumTreeNumber SwNodeNum::GetStartValue() const
-//SwNumberTree::tSwNumTreeNumber SwNodeNum::GetStart() const
 {
     SwNumberTree::tSwNumTreeNumber aResult = 1;
 

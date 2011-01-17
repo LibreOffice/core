@@ -259,9 +259,8 @@ SfxPoolItem* SwNumRuleItem::Clone( SfxItemPool * ) const
 int SwNumRuleItem::operator==( const SfxPoolItem& rAttr ) const
 {
     OSL_ENSURE( SfxPoolItem::operator==( rAttr ), "keine gleichen Attribute" );
-    // --> OD 2008-03-04 #refactorlists# - removed <pDefinedIn>
+
     return GetValue() == ((SwNumRuleItem&)rAttr).GetValue();
-    // <--
 }
 
 bool    SwNumRuleItem::QueryValue( uno::Any& rVal, BYTE ) const

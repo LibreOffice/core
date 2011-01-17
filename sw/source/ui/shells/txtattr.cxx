@@ -409,10 +409,8 @@ SET_LINESPACE:
                                         pCurRule->Get( 0 ).GetPositionAndSpaceMode() );
                     aSetRule.SetSvxRule( aRule, GetShell().GetDoc());
                     aSetRule.SetAutoRule( TRUE );
-                    // --> OD 2008-03-17 #refactorlists#
                     // no start or continuation of a list - list style is only changed
                     GetShell().SetCurNumRule( aSetRule, false );
-                    // <--
                 }
             }
         }

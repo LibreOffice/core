@@ -1665,10 +1665,8 @@ void SwAutoFormat::BuildEnum( USHORT nLvl, USHORT nDigitLevel )
             pAktTxtNd->SetAttrListLevel(nLvl);
             pAktTxtNd->SetNumLSpace( TRUE );
 
-            // --> OD 2008-03-17 #refactorlists#
             // start new list
             pDoc->SetNumRule( aDelPam, aRule, true );
-            // <--
             aDelPam.DeleteMark();
 
             aDelPam.GetPoint()->nContent.Assign( pAktTxtNd, 0 );

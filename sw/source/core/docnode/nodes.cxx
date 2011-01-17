@@ -266,10 +266,7 @@ void SwNodes::ChgNode( SwNodeIndex& rDelPos, ULONG nSz,
                     // Numerierungen auch aktualisiert werden.
                     pTxtNd->InvalidateNumRule();
 
-                // --> OD 2008-03-13 #refactorlists#
-//                pTxtNd->UnregisterNumber();
                 pTxtNd->RemoveFromList();
-                // <--
             }
 
             RemoveNode( rDelPos.GetIndex(), 1, FALSE );     // Indizies verschieben !!

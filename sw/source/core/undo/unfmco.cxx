@@ -45,7 +45,6 @@ inline SwDoc& SwUndoIter::GetDoc() const { return *pAktPam->GetDoc(); }
 //--------------------------------------------------
 
 
-// --> OD 2008-04-15 #refactorlists#
 SwUndoFmtColl::SwUndoFmtColl( const SwPaM& rRange,
                               SwFmtColl* pColl,
                               const bool bReset,
@@ -56,7 +55,6 @@ SwUndoFmtColl::SwUndoFmtColl( const SwPaM& rRange,
       pFmtColl( pColl ),
       mbReset( bReset ),
       mbResetListAttrs( bResetListAttrs )
-// <--
 {
     // --> FME 2004-08-06 #i31191#
     if ( pColl )
@@ -107,12 +105,10 @@ void SwUndoFmtColl::Repeat( SwUndoIter& rUndoIter )
     // ist das Format ueberhaupt noch vorhanden?
     if( USHRT_MAX != nPos )
     {
-        // --> OD 2008-04-15 #refactorlists#
         rUndoIter.GetDoc().SetTxtFmtColl( *rUndoIter.pAktPam,
                                           (SwTxtFmtColl*)pFmtColl,
                                           mbReset,
                                           mbResetListAttrs );
-        // <--
     }
 
     rUndoIter.pLastUndoObj = this;

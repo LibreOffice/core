@@ -874,9 +874,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
 
             SfxItemSet aCoreSet( GetPool(),
                             RES_PARATR_BEGIN,           RES_PARATR_END - 1,
-                            // --> OD 2008-02-25 #refactorlists#
                             RES_PARATR_LIST_BEGIN,      RES_PARATR_LIST_END - 1,
-                            // <--
                             RES_FRMATR_BEGIN,           RES_FRMATR_END - 1,
                             SID_ATTR_TABSTOP_POS,       SID_ATTR_TABSTOP_POS,
                             SID_ATTR_TABSTOP_DEFAULTS,  SID_ATTR_TABSTOP_DEFAULTS,
@@ -1049,7 +1047,6 @@ void SwTextShell::Execute(SfxRequest &rReq)
         break;
         case FN_NUM_CONTINUE:
         {
-            // --> OD 2008-03-18 #refactorlists#
             String sContinuedListId;
             const SwNumRule* pRule =
                 rWrtSh.SearchNumRule( false, true, false, -1, sContinuedListId );
@@ -1064,7 +1061,6 @@ void SwTextShell::Execute(SfxRequest &rReq)
             {
                 rWrtSh.SetCurNumRule( *pRule, false, sContinuedListId );
             }
-            // <--
         }
         break;
         case FN_SELECT_PARA:
