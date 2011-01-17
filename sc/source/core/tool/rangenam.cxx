@@ -426,7 +426,7 @@ void ScRangeData::UpdateTabRef(SCTAB nOldTable, USHORT nFlag, SCTAB nNewTable)
 }
 
 
-void ScRangeData::MakeValidName( String& rName )        // static
+void ScRangeData::MakeValidName( String& rName )
 {
 
     // strip leading invalid characters

@@ -201,7 +201,6 @@ void ScAreaLinkSaveCollection::Restore( ScDocument* pDoc ) const
     }
 }
 
-// static
 ScAreaLinkSaveCollection* ScAreaLinkSaveCollection::CreateFromDoc( const ScDocument* pDoc )
 {
     ScAreaLinkSaveCollection* pColl = NULL;

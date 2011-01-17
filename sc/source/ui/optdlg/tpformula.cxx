@@ -213,7 +213,6 @@ IMPL_LINK( ScTpFormulaOptions, SepEditOnFocusHdl, Edit*, pEdit )
     return 0;
 }
 
-// static
 SfxTabPage* ScTpFormulaOptions::Create(Window* pParent, const SfxItemSet& rCoreSet)
 {
     return new ScTpFormulaOptions(pParent, rCoreSet);

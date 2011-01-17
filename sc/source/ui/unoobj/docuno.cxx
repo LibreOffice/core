@@ -341,7 +341,6 @@ void ScPrintUIOptions::SetDefaults()
     }
 }
 
-// static
 void ScModelObj::CreateAndSet(ScDocShell* pDocSh)
 {
     if (pDocSh)
@@ -2060,7 +2059,6 @@ sal_Int64 SAL_CALL ScModelObj::getSomething(
     return 0;
 }
 
-// static
 const uno::Sequence<sal_Int8>& ScModelObj::getUnoTunnelId()
 {
     static uno::Sequence<sal_Int8> * pSeq = 0;
@@ -2077,7 +2075,6 @@ const uno::Sequence<sal_Int8>& ScModelObj::getUnoTunnelId()
     return *pSeq;
 }
 
-// static
 ScModelObj* ScModelObj::getImplementation( const uno::Reference<uno::XInterface> xObj )
 {
     ScModelObj* pRet = NULL;

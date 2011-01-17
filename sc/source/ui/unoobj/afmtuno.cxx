@@ -470,7 +470,6 @@ sal_Int64 SAL_CALL ScAutoFormatObj::getSomething(
     return 0;
 }
 
-// static
 const uno::Sequence<sal_Int8>& ScAutoFormatObj::getUnoTunnelId()
 {
     static uno::Sequence<sal_Int8> * pSeq = 0;
@@ -487,7 +486,6 @@ const uno::Sequence<sal_Int8>& ScAutoFormatObj::getUnoTunnelId()
     return *pSeq;
 }
 
-// static
 ScAutoFormatObj* ScAutoFormatObj::getImplementation(
                         const uno::Reference<uno::XInterface> xObj )
 {

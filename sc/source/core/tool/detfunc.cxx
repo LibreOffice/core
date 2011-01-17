@@ -461,7 +461,7 @@ BOOL ScDetectiveFunc::HasArrow( const ScAddress& rStart,
     return bFound;
 }
 
-BOOL ScDetectiveFunc::IsNonAlienArrow( SdrObject* pObject )         // static
+BOOL ScDetectiveFunc::IsNonAlienArrow( SdrObject* pObject )
 {
     if ( pObject->GetLayer()==SC_LAYER_INTERN &&
             pObject->IsPolyObj() && pObject->GetPointCount()==2 )
@@ -1706,7 +1706,6 @@ void ScDetectiveFunc::InsertObject( ScDetectiveObjType eType,
     }
 }
 
-// static
 ColorData ScDetectiveFunc::GetArrowColor()
 {
     if (!bColorsInitialized)
@@ -1714,7 +1713,6 @@ ColorData ScDetectiveFunc::GetArrowColor()
     return nArrowColor;
 }
 
-// static
 ColorData ScDetectiveFunc::GetErrorColor()
 {
     if (!bColorsInitialized)
@@ -1722,7 +1720,6 @@ ColorData ScDetectiveFunc::GetErrorColor()
     return nErrorColor;
 }
 
-// static
 ColorData ScDetectiveFunc::GetCommentColor()
 {
     if (!bColorsInitialized)
@@ -1730,7 +1727,6 @@ ColorData ScDetectiveFunc::GetCommentColor()
     return nCommentColor;
 }
 
-// static
 void ScDetectiveFunc::InitializeColors()
 {
     // may be called several times to update colors from configuration
@@ -1743,7 +1739,6 @@ void ScDetectiveFunc::InitializeColors()
     bColorsInitialized = TRUE;
 }
 
-// static
 BOOL ScDetectiveFunc::IsColorsInitialized()
 {
     return bColorsInitialized;

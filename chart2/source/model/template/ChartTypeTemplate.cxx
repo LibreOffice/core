@@ -883,7 +883,6 @@ void ChartTypeTemplate::createChartTypes(
     }
 }
 
-//static
 void ChartTypeTemplate::copyPropertiesFromOldToNewCoordianteSystem(
                     const Sequence< Reference< XChartType > > & rOldChartTypesSeq,
                     const Reference< XChartType > & xNewChartType )

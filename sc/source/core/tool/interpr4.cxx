@@ -3614,7 +3614,7 @@ ScInterpreter::~ScInterpreter()
 }
 
 
-void ScInterpreter::GlobalExit()        // static
+void ScInterpreter::GlobalExit()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::GlobalExit" );
     DBG_ASSERT(!bGlobalStackInUse, "wer benutzt noch den TokenStack?");

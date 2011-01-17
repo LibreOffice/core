@@ -39,7 +39,6 @@
 
 //------------------------------------------------------------------
 
-// static
 BOOL ScOptionsUtil::IsMetricSystem()
 {
     //! which language should be used here - system language or installed office language?

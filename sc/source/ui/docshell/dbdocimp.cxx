@@ -80,7 +80,6 @@ using namespace com::sun::star;
 #define SC_DBPROP_SELECTION         "Selection"
 #define SC_DBPROP_CURSOR            "Cursor"
 
-// static
 void ScDBDocFunc::ShowInBeamer( const ScImportParam& rParam, SfxViewFrame* pFrame )
 {
     //  called after opening the database beamer

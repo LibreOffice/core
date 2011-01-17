@@ -1637,7 +1637,6 @@ String lcl_GetDataFieldName( const String& rSourceName, sheet::GeneralFunction e
     return aRet;
 }
 
-// static
 void ScDPOutput::GetDataDimensionNames( String& rSourceName, String& rGivenName,
                                         const uno::Reference<uno::XInterface>& xDim )
 {

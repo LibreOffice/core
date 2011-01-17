@@ -2289,7 +2289,6 @@ sal_Int64 SAL_CALL ScTabViewObj::getSomething(
     return 0;
 }
 
-// static
 const uno::Sequence<sal_Int8>& ScTabViewObj::getUnoTunnelId()
 {
     static uno::Sequence<sal_Int8> * pSeq = 0;
@@ -2306,7 +2305,6 @@ const uno::Sequence<sal_Int8>& ScTabViewObj::getUnoTunnelId()
     return *pSeq;
 }
 
-// static
 ScTabViewObj* ScTabViewObj::getImplementation( const uno::Reference<uno::XInterface> xObj )
 {
     ScTabViewObj* pRet = NULL;

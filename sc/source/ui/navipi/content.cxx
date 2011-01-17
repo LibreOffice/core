@@ -738,7 +738,7 @@ void ScContentTree::GetDbNames()
     }
 }
 
-bool ScContentTree::IsPartOfType( USHORT nContentType, USHORT nObjIdentifier )  // static
+bool ScContentTree::IsPartOfType( USHORT nContentType, USHORT nObjIdentifier )
 {
     bool bRet = false;
     switch ( nContentType )

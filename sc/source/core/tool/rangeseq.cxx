@@ -378,7 +378,6 @@ bool ScApiTypeConversion::ConvertAnyToDouble( double & o_fVal,
 
 //------------------------------------------------------------------------
 
-// static
 ScMatrixRef ScSequenceToMatrix::CreateMixedMatrix( const com::sun::star::uno::Any & rAny )
 {
     ScMatrixRef xMatrix;

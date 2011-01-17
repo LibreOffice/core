@@ -220,7 +220,6 @@ ULONG ScGlobal::GetStandardFormat( double fNumber, SvNumberFormatter& rFormatter
 }
 
 
-// static
 SvNumberFormatter* ScGlobal::GetEnglishFormatter()
 {
     if ( !pEnglishFormatter )
@@ -685,7 +684,6 @@ void ScGlobal::Clear()
 
 //------------------------------------------------------------------------
 
-// static
 CharSet ScGlobal::GetCharsetValue( const String& rCharSet )
 {
     // new TextEncoding values
@@ -711,7 +709,6 @@ CharSet ScGlobal::GetCharsetValue( const String& rCharSet )
 
 //------------------------------------------------------------------------
 
-// static
 String ScGlobal::GetCharsetString( CharSet eVal )
 {
     const sal_Char* pChar;
@@ -770,7 +767,6 @@ void ScGlobal::ResetFunctionList()
 
 //------------------------------------------------------------------------
 
-// static
 ScUnitConverter* ScGlobal::GetUnitConverter()
 {
     if ( !pUnitConverter )
@@ -782,7 +778,6 @@ ScUnitConverter* ScGlobal::GetUnitConverter()
 
 //------------------------------------------------------------------------
 
-// static
 const sal_Unicode* ScGlobal::UnicodeStrChr( const sal_Unicode* pStr,
             sal_Unicode c )
 {

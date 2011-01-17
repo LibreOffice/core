@@ -94,7 +94,6 @@ void NamedFillProperties::AddDefaultsToMap(
 {
 }
 
-// static
 OUString NamedFillProperties::GetPropertyNameForHandle( sal_Int32 nHandle )
 {
     //will return e.g. "FillGradientName" for PROP_FILL_GRADIENT_NAME

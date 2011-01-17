@@ -630,7 +630,7 @@ void ScDocumentPool::Remove( const SfxPoolItem& rItem )
     SfxItemPool::Remove( rItem );
 }
 
-void ScDocumentPool::CheckRef( const SfxPoolItem& rItem )   // static
+void ScDocumentPool::CheckRef( const SfxPoolItem& rItem )
 {
     ULONG nRef = rItem.GetRefCount();
     if ( nRef >= (ULONG) SC_MAX_POOLREF && nRef <= (ULONG) SFX_ITEMS_OLD_MAXREF )

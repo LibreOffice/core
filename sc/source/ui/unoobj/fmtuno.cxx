@@ -491,7 +491,6 @@ sal_Int64 SAL_CALL ScTableConditionalFormat::getSomething(
     return 0;
 }
 
-// static
 const uno::Sequence<sal_Int8>& ScTableConditionalFormat::getUnoTunnelId()
 {
     static uno::Sequence<sal_Int8> * pSeq = 0;
@@ -508,7 +507,6 @@ const uno::Sequence<sal_Int8>& ScTableConditionalFormat::getUnoTunnelId()
     return *pSeq;
 }
 
-// static
 ScTableConditionalFormat* ScTableConditionalFormat::getImplementation(
                                 const uno::Reference<sheet::XSheetConditionalEntries> xObj )
 {
@@ -1027,7 +1025,6 @@ sal_Int64 SAL_CALL ScTableValidationObj::getSomething(
     return 0;
 }
 
-// static
 const uno::Sequence<sal_Int8>& ScTableValidationObj::getUnoTunnelId()
 {
     static uno::Sequence<sal_Int8> * pSeq = 0;
@@ -1044,7 +1041,6 @@ const uno::Sequence<sal_Int8>& ScTableValidationObj::getUnoTunnelId()
     return *pSeq;
 }
 
-// static
 ScTableValidationObj* ScTableValidationObj::getImplementation(
                                 const uno::Reference<beans::XPropertySet> xObj )
 {

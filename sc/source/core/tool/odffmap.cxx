@@ -138,13 +138,11 @@ ScCompiler::AddInMap ScCompiler::maAddInMap[] =
     { "FVSCHEDULE", "FVSCHEDULE", false, "com.sun.star.sheet.addin.Analysis.getFvschedule", "COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETFVSCHEDULE" },
 };
 
-// static
 const ScCompiler::AddInMap* ScCompiler::GetAddInMap()
 {
     return maAddInMap;
 }
 
-// static
 size_t ScCompiler::GetAddInMapCount()
 {
     return SAL_N_ELEMENTS(maAddInMap);

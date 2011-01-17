@@ -242,7 +242,6 @@ sal_Int64 SAL_CALL ScCellSearchObj::getSomething(
     return 0;
 }
 
-// static
 const uno::Sequence<sal_Int8>& ScCellSearchObj::getUnoTunnelId()
 {
     static uno::Sequence<sal_Int8> * pSeq = 0;
@@ -259,7 +258,6 @@ const uno::Sequence<sal_Int8>& ScCellSearchObj::getUnoTunnelId()
     return *pSeq;
 }
 
-// static
 ScCellSearchObj* ScCellSearchObj::getImplementation(
                                 const uno::Reference<util::XSearchDescriptor> xObj )
 {

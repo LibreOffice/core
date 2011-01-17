@@ -185,7 +185,6 @@ SdrPageView* DrawViewWrapper::GetPageView() const
     return pSdrPageView;
 };
 
-//virtual
 void DrawViewWrapper::SetMarkHandles()
 {
     if( m_pMarkHandleProvider && m_pMarkHandleProvider->getMarkHandles( aHdl ) )
@@ -385,7 +384,6 @@ void DrawViewWrapper::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
     }
 }
 
-//static
 SdrObject* DrawViewWrapper::getSdrObject( const uno::Reference<
                     drawing::XShape >& xShape )
 {

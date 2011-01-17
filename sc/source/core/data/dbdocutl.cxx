@@ -56,7 +56,6 @@ ScDatabaseDocUtil::StrData::StrData() :
 
 // ----------------------------------------------------------------------------
 
-// static
 void ScDatabaseDocUtil::PutData( ScDocument* pDoc, SCCOL nCol, SCROW nRow, SCTAB nTab,
                                 const uno::Reference<sdbc::XRow>& xRow, long nRowPos,
                                 long nType, BOOL bCurrency, StrData* pStrData )

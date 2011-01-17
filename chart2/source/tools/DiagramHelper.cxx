@@ -74,7 +74,6 @@ using ::rtl::OUString;
 namespace chart
 {
 
-// static
 DiagramHelper::tTemplateWithServiceName
     DiagramHelper::getTemplateForDiagram(
         const Reference< XDiagram > & xDiagram,
@@ -133,7 +132,6 @@ DiagramHelper::tTemplateWithServiceName
     return aResult;
 }
 
-// static
 void DiagramHelper::setVertical(
     const Reference< XDiagram > & xDiagram,
     bool bVertical /* = true */ )
@@ -211,7 +209,6 @@ void DiagramHelper::setVertical(
     }
 }
 
-//static
 bool DiagramHelper::getVertical( const uno::Reference< chart2::XDiagram > & xDiagram,
                              bool& rbFound, bool& rbAmbiguous )
 {
@@ -249,7 +246,6 @@ bool DiagramHelper::getVertical( const uno::Reference< chart2::XDiagram > & xDia
     return bValue;
 }
 
-//static
 void DiagramHelper::setStackMode(
     const Reference< XDiagram > & xDiagram,
     StackMode eStackMode,
@@ -341,8 +337,6 @@ void DiagramHelper::setStackMode(
     }
 }
 
-//static
-
 StackMode DiagramHelper::getStackMode( const Reference< XDiagram > & xDiagram, bool& rbFound, bool& rbAmbiguous )
 {
     rbFound=false;
@@ -384,7 +378,6 @@ StackMode DiagramHelper::getStackMode( const Reference< XDiagram > & xDiagram, b
     return eGlobalStackMode;
 }
 
-// static
 StackMode DiagramHelper::getStackModeFromChartType(
     const Reference< XChartType > & xChartType,
     bool& rbFound, bool& rbAmbiguous,
@@ -468,7 +461,6 @@ StackMode DiagramHelper::getStackModeFromChartType(
     return eStackMode;
 }
 
-// static
 sal_Int32 DiagramHelper::getDimension( const Reference< XDiagram > & xDiagram )
 {
     // -1: not yet set
@@ -501,7 +493,6 @@ sal_Int32 DiagramHelper::getDimension( const Reference< XDiagram > & xDiagram )
     return nResult;
 }
 
-// static
 void DiagramHelper::setDimension(
     const Reference< XDiagram > & xDiagram,
     sal_Int32 nNewDimensionCount )
@@ -562,7 +553,6 @@ void DiagramHelper::setDimension(
     }
 }
 
-// static
 void DiagramHelper::replaceCoordinateSystem(
     const Reference< XDiagram > & xDiagram,
     const Reference< XCoordinateSystem > & xCooSysToReplace,
@@ -598,7 +588,6 @@ void DiagramHelper::replaceCoordinateSystem(
     }
 }
 
-//static
 bool DiagramHelper::isSeriesAttachedToMainAxis(
                           const uno::Reference< chart2::XDataSeries >& xDataSeries )
 {
@@ -606,7 +595,6 @@ bool DiagramHelper::isSeriesAttachedToMainAxis(
     return (nAxisIndex==0);
 }
 
-//static
 bool DiagramHelper::attachSeriesToAxis( bool bAttachToMainAxis
                         , const uno::Reference< chart2::XDataSeries >& xDataSeries
                         , const uno::Reference< chart2::XDiagram >& xDiagram
@@ -652,7 +640,6 @@ bool DiagramHelper::attachSeriesToAxis( bool bAttachToMainAxis
     return bChanged;
 }
 
-//static
 uno::Reference< XAxis > DiagramHelper::getAttachedAxis(
         const uno::Reference< XDataSeries >& xSeries,
         const uno::Reference< XDiagram >& xDiagram )
@@ -660,7 +647,6 @@ uno::Reference< XAxis > DiagramHelper::getAttachedAxis(
     return AxisHelper::getAxis( 1, DiagramHelper::isSeriesAttachedToMainAxis( xSeries ), xDiagram );
 }
 
-//static
 uno::Reference< XChartType > DiagramHelper::getChartTypeOfSeries(
                                 const uno::Reference< chart2::XDiagram >&   xDiagram
                               , const uno::Reference< XDataSeries >&        xGivenDataSeries )
@@ -710,7 +696,6 @@ uno::Reference< XChartType > DiagramHelper::getChartTypeOfSeries(
     return 0;
 }
 
-// static
 ::std::vector< Reference< XDataSeries > >
     DiagramHelper::getDataSeriesFromDiagram(
         const Reference< XDiagram > & xDiagram )
@@ -857,7 +842,6 @@ std::vector< Reference< XAxis > > lcl_getAxisHoldingCategoriesFromDiagram(
 
 } // anonymous namespace
 
-//static
 bool DiagramHelper::isCategoryDiagram(
             const Reference< XDiagram >& xDiagram )
 {
@@ -896,7 +880,6 @@ bool DiagramHelper::isCategoryDiagram(
     return false;
 }
 
-// static
 void DiagramHelper::setCategoriesToDiagram(
     const Reference< chart2::data::XLabeledDataSequence >& xCategories,
     const Reference< XDiagram >& xDiagram,
@@ -928,7 +911,6 @@ void DiagramHelper::setCategoriesToDiagram(
     }
 }
 
-// static
 Reference< data::XLabeledDataSequence >
     DiagramHelper::getCategoriesFromDiagram(
         const Reference< XDiagram > & xDiagram )
@@ -1023,7 +1005,6 @@ Sequence< rtl::OUString > DiagramHelper::generateAutomaticCategoriesFromCooSys( 
     return aRet;
 }
 
-//static
 Sequence< rtl::OUString > DiagramHelper::getExplicitSimpleCategories(
             const Reference< XChartDocument >& xChartDoc )
 {
@@ -1038,7 +1019,6 @@ Sequence< rtl::OUString > DiagramHelper::getExplicitSimpleCategories(
     return aRet;
 }
 
-// static
 Sequence< Reference< XChartType > >
     DiagramHelper::getChartTypesFromDiagram(
         const Reference< XDiagram > & xDiagram )
@@ -1068,7 +1048,6 @@ Sequence< Reference< XChartType > >
     return ContainerHelper::ContainerToSequence( aResult );
 }
 
-//static
 bool DiagramHelper::areChartTypesCompatible( const Reference< ::chart2::XChartType >& xFirstType,
                 const Reference< ::chart2::XChartType >& xSecondType )
 {
@@ -1328,7 +1307,6 @@ bool DiagramHelper::isPieOrDonutChart( const ::com::sun::star::uno::Reference<
     return false;
 }
 
-// static
 sal_Int32 DiagramHelper::getGeometry3D(
     const uno::Reference< chart2::XDiagram > & xDiagram,
     bool& rbFound, bool& rbAmbiguous )
@@ -1375,7 +1353,6 @@ sal_Int32 DiagramHelper::getGeometry3D(
     return nCommonGeom;
 }
 
-// static
 void DiagramHelper::setGeometry3D(
     const Reference< chart2::XDiagram > & xDiagram,
     sal_Int32 nNewGeometry )
@@ -1391,7 +1368,6 @@ void DiagramHelper::setGeometry3D(
     }
 }
 
-//static
 sal_Int32 DiagramHelper::getCorrectedMissingValueTreatment(
             const Reference< chart2::XDiagram > & xDiagram,
             const Reference< chart2::XChartType >& xChartType )
@@ -1419,7 +1395,6 @@ sal_Int32 DiagramHelper::getCorrectedMissingValueTreatment(
     return nResult;
 }
 
-//static
 DiagramPositioningMode DiagramHelper::getDiagramPositioningMode( const uno::Reference<
                 chart2::XDiagram > & xDiagram )
 {
@@ -1451,7 +1426,6 @@ void lcl_ensureRange0to1( double& rValue )
         rValue=1.0;
 }
 
-//static
 bool DiagramHelper::setDiagramPositioning( const uno::Reference< frame::XModel >& xChartModel,
         const awt::Rectangle& rPosRect /*100th mm*/ )
 {
@@ -1497,7 +1471,6 @@ bool DiagramHelper::setDiagramPositioning( const uno::Reference< frame::XModel >
     return bChanged;
 }
 
-//static
 awt::Rectangle DiagramHelper::getDiagramRectangleFromModel( const uno::Reference< frame::XModel >& xChartModel )
 {
     awt::Rectangle aRet(-1,-1,-1,-1);
@@ -1528,7 +1501,6 @@ awt::Rectangle DiagramHelper::getDiagramRectangleFromModel( const uno::Reference
     return aRet;
 }
 
-//static
 bool DiagramHelper::switchDiagramPositioningToExcludingPositioning(
     const uno::Reference< frame::XModel >& xChartModel
     , bool bResetModifiedState, bool bConvertAlsoFromAutoPositioning )

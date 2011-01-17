@@ -83,7 +83,6 @@ uno::Reference<sheet::XSolver> lcl_CreateSolver( const uno::Reference<uno::XInte
     return xSolver;
 }
 
-// static
 void ScSolverUtil::GetImplementations( uno::Sequence<rtl::OUString>& rImplNames,
                                        uno::Sequence<rtl::OUString>& rDescriptions )
 {
@@ -142,7 +141,6 @@ void ScSolverUtil::GetImplementations( uno::Sequence<rtl::OUString>& rImplNames,
     }
 }
 
-// static
 uno::Reference<sheet::XSolver> ScSolverUtil::GetSolver( const rtl::OUString& rImplName )
 {
     uno::Reference<sheet::XSolver> xSolver;
@@ -188,7 +186,6 @@ uno::Reference<sheet::XSolver> ScSolverUtil::GetSolver( const rtl::OUString& rIm
     return xSolver;
 }
 
-// static
 uno::Sequence<beans::PropertyValue> ScSolverUtil::GetDefaults( const rtl::OUString& rImplName )
 {
     uno::Sequence<beans::PropertyValue> aDefaults;

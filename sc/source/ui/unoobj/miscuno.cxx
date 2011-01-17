@@ -47,7 +47,6 @@ SC_SIMPLE_SERVICE_INFO( ScNameToIndexAccess, "ScNameToIndexAccess", "stardiv.unk
 
 //------------------------------------------------------------------------
 
-//  static
 uno::Reference<uno::XInterface> ScUnoHelpFunctions::AnyToInterface( const uno::Any& rAny )
 {
     if ( rAny.getValueTypeClass() == uno::TypeClass_INTERFACE )
@@ -57,7 +56,6 @@ uno::Reference<uno::XInterface> ScUnoHelpFunctions::AnyToInterface( const uno::A
     return uno::Reference<uno::XInterface>();   //! Exception?
 }
 
-//  static
 sal_Bool ScUnoHelpFunctions::GetBoolProperty( const uno::Reference<beans::XPropertySet>& xProp,
                                             const rtl::OUString& rName, sal_Bool bDefault )
 {
@@ -83,7 +81,6 @@ sal_Bool ScUnoHelpFunctions::GetBoolProperty( const uno::Reference<beans::XPrope
     return bRet;
 }
 
-//  static
 sal_Int32 ScUnoHelpFunctions::GetLongProperty( const uno::Reference<beans::XPropertySet>& xProp,
                                             const rtl::OUString& rName, long nDefault )
 {
@@ -103,7 +100,6 @@ sal_Int32 ScUnoHelpFunctions::GetLongProperty( const uno::Reference<beans::XProp
     return nRet;
 }
 
-//  static
 sal_Int32 ScUnoHelpFunctions::GetEnumProperty( const uno::Reference<beans::XPropertySet>& xProp,
                                             const rtl::OUString& rName, long nDefault )
 {
@@ -133,7 +129,6 @@ sal_Int32 ScUnoHelpFunctions::GetEnumProperty( const uno::Reference<beans::XProp
     return nRet;
 }
 
-// static
 OUString ScUnoHelpFunctions::GetStringProperty(
     const Reference<beans::XPropertySet>& xProp, const OUString& rName, const OUString& rDefault )
 {
@@ -153,7 +148,6 @@ OUString ScUnoHelpFunctions::GetStringProperty(
     return aRet;
 }
 
-//  static
 sal_Bool ScUnoHelpFunctions::GetBoolFromAny( const uno::Any& aAny )
 {
     if ( aAny.getValueTypeClass() == uno::TypeClass_BOOLEAN )
@@ -161,7 +155,6 @@ sal_Bool ScUnoHelpFunctions::GetBoolFromAny( const uno::Any& aAny )
     return FALSE;
 }
 
-//  static
 sal_Int16 ScUnoHelpFunctions::GetInt16FromAny( const uno::Any& aAny )
 {
     sal_Int16 nRet = 0;
@@ -170,7 +163,6 @@ sal_Int16 ScUnoHelpFunctions::GetInt16FromAny( const uno::Any& aAny )
     return 0;
 }
 
-//  static
 sal_Int32 ScUnoHelpFunctions::GetInt32FromAny( const uno::Any& aAny )
 {
     sal_Int32 nRet = 0;
@@ -179,7 +171,6 @@ sal_Int32 ScUnoHelpFunctions::GetInt32FromAny( const uno::Any& aAny )
     return 0;
 }
 
-//  static
 sal_Int32 ScUnoHelpFunctions::GetEnumFromAny( const uno::Any& aAny )
 {
     sal_Int32 nRet = 0;
@@ -190,13 +181,11 @@ sal_Int32 ScUnoHelpFunctions::GetEnumFromAny( const uno::Any& aAny )
     return nRet;
 }
 
-//  static
 void ScUnoHelpFunctions::SetBoolInAny( uno::Any& rAny, sal_Bool bValue )
 {
     rAny.setValue( &bValue, getBooleanCppuType() );
 }
 
-//  static
 void ScUnoHelpFunctions::SetOptionalPropertyValue(
     Reference<beans::XPropertySet>& rPropSet, const sal_Char* pPropName, const Any& rVal )
 {

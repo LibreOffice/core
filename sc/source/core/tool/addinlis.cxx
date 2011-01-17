@@ -54,7 +54,6 @@ List ScAddInListener::aAllListeners;
 
 //------------------------------------------------------------------------
 
-//  static
 ScAddInListener* ScAddInListener::CreateListener(
                         uno::Reference<sheet::XVolatileResult> xVR, ScDocument* pDoc )
 {
@@ -81,7 +80,6 @@ ScAddInListener::~ScAddInListener()
     delete pDocs;
 }
 
-// static
 ScAddInListener* ScAddInListener::Get( uno::Reference<sheet::XVolatileResult> xVR )
 {
     sheet::XVolatileResult* pComp = xVR.get();
@@ -97,7 +95,6 @@ ScAddInListener* ScAddInListener::Get( uno::Reference<sheet::XVolatileResult> xV
 }
 
 //! move to some container object?
-// static
 void ScAddInListener::RemoveDocument( ScDocument* pDocumentP )
 {
     ULONG nPos = aAllListeners.Count();

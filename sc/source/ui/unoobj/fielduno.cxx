@@ -808,7 +808,6 @@ sal_Int64 SAL_CALL ScCellFieldObj::getSomething(
     return 0;
 }
 
-// static
 const uno::Sequence<sal_Int8>& ScCellFieldObj::getUnoTunnelId()
 {
     static uno::Sequence<sal_Int8> * pSeq = 0;
@@ -825,7 +824,6 @@ const uno::Sequence<sal_Int8>& ScCellFieldObj::getUnoTunnelId()
     return *pSeq;
 }
 
-// static
 ScCellFieldObj* ScCellFieldObj::getImplementation(
                                 const uno::Reference<text::XTextContent> xObj )
 {
@@ -1469,7 +1467,6 @@ sal_Int64 SAL_CALL ScHeaderFieldObj::getSomething(
     return 0;
 }
 
-// static
 const uno::Sequence<sal_Int8>& ScHeaderFieldObj::getUnoTunnelId()
 {
     static uno::Sequence<sal_Int8> * pSeq = 0;
@@ -1486,7 +1483,6 @@ const uno::Sequence<sal_Int8>& ScHeaderFieldObj::getUnoTunnelId()
     return *pSeq;
 }
 
-// static
 ScHeaderFieldObj* ScHeaderFieldObj::getImplementation(
                                 const uno::Reference<text::XTextContent> xObj )
 {

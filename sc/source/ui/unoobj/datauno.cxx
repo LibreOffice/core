@@ -151,7 +151,6 @@ SC_SIMPLE_SERVICE_INFO( ScSubTotalFieldObj, "ScSubTotalFieldObj", "com.sun.star.
 
 //------------------------------------------------------------------------
 
-// static
 ScSubTotalFunc ScDataUnoConversion::GeneralToSubTotal( sheet::GeneralFunction eSummary )
 {
     ScSubTotalFunc eSubTotal;
@@ -177,7 +176,6 @@ ScSubTotalFunc ScDataUnoConversion::GeneralToSubTotal( sheet::GeneralFunction eS
     return eSubTotal;
 }
 
-// static
 sheet::GeneralFunction  ScDataUnoConversion::SubTotalToGeneral( ScSubTotalFunc eSubTotal )
 {
     sheet::GeneralFunction eGeneral;
@@ -856,7 +854,6 @@ sal_Int64 SAL_CALL ScSubTotalDescriptorBase::getSomething(
     return 0;
 }
 
-// static
 const uno::Sequence<sal_Int8>& ScSubTotalDescriptorBase::getUnoTunnelId()
 {
     static uno::Sequence<sal_Int8> * pSeq = 0;
@@ -873,7 +870,6 @@ const uno::Sequence<sal_Int8>& ScSubTotalDescriptorBase::getUnoTunnelId()
     return *pSeq;
 }
 
-// static
 ScSubTotalDescriptorBase* ScSubTotalDescriptorBase::getImplementation(
                                 const uno::Reference<sheet::XSubTotalDescriptor> xObj )
 {

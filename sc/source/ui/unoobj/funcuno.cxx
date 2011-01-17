@@ -89,7 +89,6 @@ public:
 
 //------------------------------------------------------------------------
 
-// static
 ScDocument* ScTempDocSource::CreateDocument()
 {
     ScDocument* pDoc = new ScDocument;                  // SCDOCMODE_DOCUMENT

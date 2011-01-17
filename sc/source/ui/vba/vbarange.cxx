@@ -407,7 +407,7 @@ ScVbaRange::getScDocShell() throw (uno::RuntimeException)
     return excel::GetDocShellFromRange( mxRange );
 }
 
-/*static*/ ScVbaRange* ScVbaRange::getImplementation( const uno::Reference< excel::XRange >& rxRange )
+ScVbaRange* ScVbaRange::getImplementation( const uno::Reference< excel::XRange >& rxRange )
 {
     // FIXME: always save to use dynamic_cast? Or better to (implement and) use XTunnel?
     return dynamic_cast< ScVbaRange* >( rxRange.get() );
@@ -420,7 +420,7 @@ uno::Reference< frame::XModel > ScVbaRange::getUnoModel() throw (uno::RuntimeExc
     throw uno::RuntimeException();
 }
 
-/*static*/ uno::Reference< frame::XModel > ScVbaRange::getUnoModel( const uno::Reference< excel::XRange >& rxRange ) throw (uno::RuntimeException)
+uno::Reference< frame::XModel > ScVbaRange::getUnoModel( const uno::Reference< excel::XRange >& rxRange ) throw (uno::RuntimeException)
 {
     if( ScVbaRange* pScVbaRange = getImplementation( rxRange ) )
         return pScVbaRange->getUnoModel();
@@ -434,7 +434,7 @@ const ScRangeList& ScVbaRange::getScRangeList() throw (uno::RuntimeException)
     throw uno::RuntimeException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Cannot obtain UNO range implementation object" ) ), uno::Reference< uno::XInterface >() );
 }
 
-/*static*/ const ScRangeList& ScVbaRange::getScRangeList( const uno::Reference< excel::XRange >& rxRange ) throw (uno::RuntimeException)
+const ScRangeList& ScVbaRange::getScRangeList( const uno::Reference< excel::XRange >& rxRange ) throw (uno::RuntimeException)
 {
     if( ScVbaRange* pScVbaRange = getImplementation( rxRange ) )
         return pScVbaRange->getScRangeList();
@@ -2822,7 +2822,7 @@ uno::Any SAL_CALL ScVbaRange::getCellRange(  ) throw (uno::RuntimeException)
     return aAny;
 }
 
-/*static*/ uno::Any ScVbaRange::getCellRange( const uno::Reference< excel::XRange >& rxRange ) throw (uno::RuntimeException)
+uno::Any ScVbaRange::getCellRange( const uno::Reference< excel::XRange >& rxRange ) throw (uno::RuntimeException)
 {
     if( ScVbaRange* pVbaRange = getImplementation( rxRange ) )
         return pVbaRange->getCellRange();

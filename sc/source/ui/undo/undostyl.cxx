@@ -141,7 +141,6 @@ void lcl_DocStyleChanged( ScDocument* pDoc, SfxStyleSheetBase* pStyle, BOOL bRem
         pHdl->ForgetLastPattern();
 }
 
-// static
 void ScUndoModifyStyle::DoChange( ScDocShell* pDocSh, const String& rName,
                                     SfxStyleFamily eStyleFamily, const ScStyleSaveData& rData )
 {

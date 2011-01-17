@@ -1309,7 +1309,6 @@ BOOL ScUnoAddInCollection::FillFunctionDesc( long nFunc, ScFuncDesc& rDesc )
     return FillFunctionDescFromData( rFuncData, rDesc );
 }
 
-// static
 BOOL ScUnoAddInCollection::FillFunctionDescFromData( const ScUnoAddInFuncData& rFuncData, ScFuncDesc& rDesc )
 {
     rDesc.Clear();

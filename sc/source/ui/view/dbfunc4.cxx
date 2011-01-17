@@ -53,7 +53,6 @@ using namespace com::sun::star;
 
 //==================================================================
 
-// static
 USHORT ScDBFunc::DoUpdateCharts( const ScAddress& rPos, ScDocument* pDoc, BOOL bAllCharts )
 {
     ScDrawLayer* pModel = pDoc->GetDrawLayer();

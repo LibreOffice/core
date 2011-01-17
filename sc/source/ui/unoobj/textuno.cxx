@@ -383,7 +383,7 @@ uno::Reference<text::XTextCursor> SAL_CALL ScHeaderFooterTextObj::createTextCurs
     //! wie ScCellObj::createTextCursorByRange, wenn SvxUnoTextRange_getReflection verfuegbar
 }
 
-void ScHeaderFooterTextObj::FillDummyFieldData( ScHeaderFieldData& rData )  // static
+void ScHeaderFooterTextObj::FillDummyFieldData( ScHeaderFieldData& rData )
 {
     String aDummy(String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM( "???" )));
     rData.aTitle        = aDummy;

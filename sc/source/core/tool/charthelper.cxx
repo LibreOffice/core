@@ -126,13 +126,11 @@ BOOL lcl_AdjustRanges( ScRangeList& rRanges, SCTAB nSourceTab, SCTAB nDestTab, S
 }//end anonymous namespace
 
 // === ScChartHelper ======================================
-//static
 USHORT ScChartHelper::DoUpdateAllCharts( ScDocument* pDoc )
 {
     return lcl_DoUpdateCharts( ScAddress(), pDoc, TRUE );
 }
 
-//static
 void ScChartHelper::AdjustRangesOfChartsOnDestinationPage( ScDocument* pSrcDoc, ScDocument* pDestDoc, const SCTAB nSrcTab, const SCTAB nDestTab )
 {
     if( !pSrcDoc || !pDestDoc )
@@ -173,7 +171,6 @@ void ScChartHelper::AdjustRangesOfChartsOnDestinationPage( ScDocument* pSrcDoc, 
     }
 }
 
-//static
 uno::Reference< chart2::XChartDocument > ScChartHelper::GetChartFromSdrObject( SdrObject* pObject )
 {
     uno::Reference< chart2::XChartDocument > xReturn;

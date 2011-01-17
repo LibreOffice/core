@@ -911,7 +911,6 @@ inline void ScInterpreter::TreatDoubleError( double& rVal )
 }
 
 
-// static
 inline double ScInterpreter::div( const double& fNumerator, const double& fDenominator )
 {
     return (fDenominator != 0.0) ? (fNumerator / fDenominator) :

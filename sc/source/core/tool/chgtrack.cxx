@@ -1744,7 +1744,6 @@ BOOL ScChangeActionContent::Select( ScDocument* pDoc, ScChangeTrack* pTrack,
 }
 
 
-// static
 void ScChangeActionContent::GetStringOfCell( String& rStr,
         const ScBaseCell* pCell, const ScDocument* pDoc, const ScAddress& rPos )
 {
@@ -1760,7 +1759,6 @@ void ScChangeActionContent::GetStringOfCell( String& rStr,
 }
 
 
-// static
 void ScChangeActionContent::GetStringOfCell( String& rStr,
         const ScBaseCell* pCell, const ScDocument* pDoc, ULONG nFormat )
 {
@@ -1793,7 +1791,6 @@ void ScChangeActionContent::GetStringOfCell( String& rStr,
 }
 
 
-// static
 ScChangeActionContentCellType ScChangeActionContent::GetContentCellType( const ScBaseCell* pCell )
 {
     if ( pCell )
@@ -1829,14 +1826,12 @@ ScChangeActionContentCellType ScChangeActionContent::GetContentCellType( const S
 }
 
 
-// static
 BOOL ScChangeActionContent::NeedsNumberFormat( const ScBaseCell* pCell )
 {
     return pCell && pCell->GetCellType() == CELLTYPE_VALUE;
 }
 
 
-// static
 void ScChangeActionContent::SetValue( String& rStr, ScBaseCell*& pCell,
         const ScAddress& rPos, const ScBaseCell* pOrgCell,
         const ScDocument* pFromDoc, ScDocument* pToDoc )
@@ -1845,8 +1840,6 @@ void ScChangeActionContent::SetValue( String& rStr, ScBaseCell*& pCell,
     SetValue( rStr, pCell, nFormat, pOrgCell, pFromDoc, pToDoc );
 }
 
-
-// static
 void ScChangeActionContent::SetValue( String& rStr, ScBaseCell*& pCell,
         ULONG nFormat, const ScBaseCell* pOrgCell,
         const ScDocument* pFromDoc, ScDocument* pToDoc )
@@ -1880,7 +1873,6 @@ void ScChangeActionContent::SetValue( String& rStr, ScBaseCell*& pCell,
 }
 
 
-// static
 void ScChangeActionContent::SetCell( String& rStr, ScBaseCell* pCell,
         ULONG nFormat, const ScDocument* pDoc )
 {
@@ -2212,7 +2204,6 @@ const SCROW ScChangeTrack::nContentRowsPerSlot = InitContentRowsPerSlot();
 const SCSIZE ScChangeTrack::nContentSlots =
     (MAXROWCOUNT) / InitContentRowsPerSlot() + 2;
 
-// static
 SCROW ScChangeTrack::InitContentRowsPerSlot()
 {
     const SCSIZE nMaxSlots = 0xffe0 / sizeof( ScChangeActionContent* ) - 2;
@@ -2726,7 +2717,6 @@ void ScChangeTrack::AppendMove( const ScRange& rFromRange,
 }
 
 
-// static
 BOOL ScChangeTrack::IsMatrixFormulaRangeDifferent( const ScBaseCell* pOldCell,
         const ScBaseCell* pNewCell )
 {
@@ -3338,7 +3328,6 @@ void ScChangeTrack::Undo( ULONG nStartAction, ULONG nEndAction, bool bMerge )
 }
 
 
-// static
 BOOL ScChangeTrack::MergeIgnore( const ScChangeAction& rAction, ULONG nFirstMerge )
 {
     if ( rAction.IsRejected() )

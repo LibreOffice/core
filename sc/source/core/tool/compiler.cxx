@@ -288,7 +288,6 @@ void dbg_call_generateMappingDiff()
 }
 #endif  // erGENERATEMAPPINGDIFF
 
-// static
 void ScCompiler::DeInit()
 {
     if (pCharClassEnglish)
@@ -325,7 +324,6 @@ bool ScCompiler::IsEnglishSymbol( const String& rName )
     return false;       // no valid function name
 }
 
-// static
 void ScCompiler::InitCharClassEnglish()
 {
     ::com::sun::star::lang::Locale aLocale(
@@ -4184,7 +4182,6 @@ void ScCompiler::MoveRelWrap( SCCOL nMaxCol, SCROW nMaxRow )
     }
 }
 
-// static
 // Wrap-adjust relative references of a RangeName to current position,
 // don't call for other token arrays!
 void ScCompiler::MoveRelWrap( ScTokenArray& rArr, ScDocument* pDoc, const ScAddress& rPos,

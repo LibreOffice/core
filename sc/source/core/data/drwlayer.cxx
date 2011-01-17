@@ -1649,7 +1649,6 @@ void ScDrawLayer::MirrorRTL( SdrObject* pObj )
     }
 }
 
-// static
 void ScDrawLayer::MirrorRectRTL( Rectangle& rRect )
 {
     //  mirror and swap left/right
@@ -1699,7 +1698,6 @@ Rectangle ScDrawLayer::GetCellRect( ScDocument& rDoc, const ScAddress& rPos, boo
     return aCellRect;
 }
 
-// static
 String ScDrawLayer::GetVisibleName( SdrObject* pObj )
 {
     String aName = pObj->GetName();
@@ -1826,7 +1824,7 @@ ScAnchorType ScDrawLayer::GetAnchor( const SdrObject* pObj )
     return ( aAnchor.Y() != 0 ) ? SCA_PAGE : SCA_CELL;
 }
 
-ScDrawObjData* ScDrawLayer::GetObjData( SdrObject* pObj, BOOL bCreate )     // static
+ScDrawObjData* ScDrawLayer::GetObjData( SdrObject* pObj, BOOL bCreate )
 {
     USHORT nCount = pObj ? pObj->GetUserDataCount() : 0;
     for( USHORT i = 0; i < nCount; i++ )
@@ -1845,7 +1843,7 @@ ScDrawObjData* ScDrawLayer::GetObjData( SdrObject* pObj, BOOL bCreate )     // s
     return 0;
 }
 
-ScDrawObjData* ScDrawLayer::GetObjDataTab( SdrObject* pObj, SCTAB nTab )    // static
+ScDrawObjData* ScDrawLayer::GetObjDataTab( SdrObject* pObj, SCTAB nTab )
 {
     ScDrawObjData* pData = GetObjData( pObj );
     if ( pData )
@@ -1870,7 +1868,7 @@ ScDrawObjData* ScDrawLayer::GetNoteCaptionData( SdrObject* pObj, SCTAB nTab )
     return (pData && pData->mbNote) ? pData : 0;
 }
 
-ScIMapInfo* ScDrawLayer::GetIMapInfo( SdrObject* pObj )             // static
+ScIMapInfo* ScDrawLayer::GetIMapInfo( SdrObject* pObj )
 {
     USHORT nCount = pObj->GetUserDataCount();
     for( USHORT i = 0; i < nCount; i++ )
@@ -1883,7 +1881,6 @@ ScIMapInfo* ScDrawLayer::GetIMapInfo( SdrObject* pObj )             // static
     return NULL;
 }
 
-// static:
 IMapObject* ScDrawLayer::GetHitIMapObject( SdrObject* pObj,
                                           const Point& rWinPoint, const Window& rCmpWnd )
 {
@@ -1949,7 +1946,7 @@ IMapObject* ScDrawLayer::GetHitIMapObject( SdrObject* pObj,
     return pIMapObj;
 }
 
-ScMacroInfo* ScDrawLayer::GetMacroInfo( SdrObject* pObj, BOOL bCreate )             // static
+ScMacroInfo* ScDrawLayer::GetMacroInfo( SdrObject* pObj, BOOL bCreate )
 {
     USHORT nCount = pObj->GetUserDataCount();
     for( USHORT i = 0; i < nCount; i++ )
@@ -1968,7 +1965,7 @@ ScMacroInfo* ScDrawLayer::GetMacroInfo( SdrObject* pObj, BOOL bCreate )         
     return 0;
 }
 
-void ScDrawLayer::SetGlobalDrawPersist(SfxObjectShell* pPersist)            // static
+void ScDrawLayer::SetGlobalDrawPersist(SfxObjectShell* pPersist)
 {
     DBG_ASSERT(!pGlobalDrawPersist,"SetGlobalDrawPersist mehrfach");
     pGlobalDrawPersist = pPersist;

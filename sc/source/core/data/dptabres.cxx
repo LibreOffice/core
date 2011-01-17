@@ -3315,7 +3315,6 @@ ScDPDataMember* ScDPResultDimension::GetRowReferenceMember( const ScDPRelativePo
     return pColMember;
 }
 
-// static
 ScDPDataMember* ScDPResultDimension::GetColReferenceMember( const ScDPRelativePos* pRelativePos, const String* pName,
                             long nRefDimPos, const ScDPRunningTotalState& rRunning )
 {

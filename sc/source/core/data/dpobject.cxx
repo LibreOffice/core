@@ -2134,7 +2134,6 @@ bool hasFieldColumn(const vector<PivotField>* pRefFields, SCCOL nCol)
 
 }
 
-// static
 void ScDPObject::ConvertOrientation(
     ScDPSaveData& rSaveData, const vector<PivotField>& rFields, USHORT nOrient,
     const Reference<XDimensionsSupplier>& xSource,
@@ -2240,7 +2239,6 @@ void ScDPObject::ConvertOrientation(
     }
 }
 
-// static
 bool ScDPObject::IsOrientationAllowed( USHORT nOrient, sal_Int32 nDimFlags )
 {
     bool bAllowed = true;
@@ -2268,7 +2266,6 @@ bool ScDPObject::IsOrientationAllowed( USHORT nOrient, sal_Int32 nDimFlags )
 
 // -----------------------------------------------------------------------
 
-//  static
 BOOL ScDPObject::HasRegisteredSources()
 {
     BOOL bFound = FALSE;
@@ -2286,7 +2283,6 @@ BOOL ScDPObject::HasRegisteredSources()
     return bFound;
 }
 
-//  static
 uno::Sequence<rtl::OUString> ScDPObject::GetRegisteredSources()
 {
     uno::Sequence<rtl::OUString> aSeq(0);
@@ -2332,7 +2328,6 @@ uno::Sequence<rtl::OUString> ScDPObject::GetRegisteredSources()
 // use getContext from addincol.cxx
 uno::Reference<uno::XComponentContext> getContext(uno::Reference<lang::XMultiServiceFactory> xMSF);
 
-//  static
 uno::Reference<sheet::XDimensionsSupplier> ScDPObject::CreateSource( const ScDPServiceDesc& rDesc )
 {
     rtl::OUString aImplName = rDesc.aServiceName;

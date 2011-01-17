@@ -85,7 +85,6 @@ using namespace com::sun::star;
 
 // -----------------------------------------------------------------------
 
-// static
 void ScTransferObj::GetAreaSize( ScDocument* pDoc, SCTAB nTab1, SCTAB nTab2, SCROW& nRow, SCCOL& nCol )
 {
     SCCOL nMaxCol = 0;
@@ -107,7 +106,6 @@ void ScTransferObj::GetAreaSize( ScDocument* pDoc, SCTAB nTab1, SCTAB nTab2, SCR
     nCol = nMaxCol;
 }
 
-// static
 void ScTransferObj::PaintToDev( OutputDevice* pDev, ScDocument* pDoc, double nPrintFactor,
                                 const ScRange& rBlock, BOOL bMetaFile )
 {
@@ -216,7 +214,6 @@ ScTransferObj::~ScTransferObj()
 
 }
 
-// static
 ScTransferObj* ScTransferObj::GetOwnClipboard( Window* pUIWin )
 {
     ScTransferObj* pObj = SC_MOD()->GetClipData().pCellClipboard;
@@ -732,7 +729,6 @@ void ScTransferObj::InitDocShell()
     }
 }
 
-//  static
 SfxObjectShell* ScTransferObj::SetDrawClipDoc( BOOL bAnyOle )
 {
     // update ScGlobal::pDrawClipDocShellRef
@@ -752,7 +748,6 @@ SfxObjectShell* ScTransferObj::SetDrawClipDoc( BOOL bAnyOle )
     }
 }
 
-//  static
 void ScTransferObj::StripRefs( ScDocument* pDoc,
                     SCCOL nStartX, SCROW nStartY, SCCOL nEndX, SCROW nEndY,
                     ScDocument* pDestDoc, SCCOL nSubX, SCROW nSubY )

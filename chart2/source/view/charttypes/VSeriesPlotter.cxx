@@ -761,7 +761,6 @@ void lcl_AddErrorBottomLine( const drawing::Position3D& rPosition, ::basegfx::B2
 
 } // anonymous namespace
 
-// virtual
 void VSeriesPlotter::createErrorBar(
       const uno::Reference< drawing::XShapes >& xTarget
     , const drawing::Position3D& rUnscaledLogicPosition
@@ -882,7 +881,6 @@ void VSeriesPlotter::createErrorBar(
 
 }
 
-// virtual
 void VSeriesPlotter::createErrorBar_Y( const drawing::Position3D& rUnscaledLogicPosition
                             , VDataSeries& rVDataSeries, sal_Int32 nPointIndex
                             , const uno::Reference< drawing::XShapes >& xTarget )
@@ -2071,7 +2069,6 @@ std::vector< ViewLegendEntry > SAL_CALL VSeriesPlotter::createLegendEntriesForCh
     return std::vector< ViewLegendEntry >();
 }
 
-//static
 VSeriesPlotter* VSeriesPlotter::createSeriesPlotter(
     const uno::Reference<XChartType>& xChartTypeModel
     , sal_Int32 nDimensionCount

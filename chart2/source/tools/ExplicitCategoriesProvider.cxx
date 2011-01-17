@@ -356,7 +356,6 @@ Sequence< OUString > lcl_getExplicitSimpleCategories(
     return aRet;
 }
 
-//static
 Sequence< OUString > ExplicitCategoriesProvider::getExplicitSimpleCategories(
     const SplitCategoriesProvider& rSplitCategoriesProvider )
 {
@@ -402,7 +401,6 @@ std::vector< ComplexCategory >  ExplicitCategoriesProvider::getCategoriesByLevel
     return aRet;
 }
 
-// static
 OUString ExplicitCategoriesProvider::getCategoryByIndex(
           const Reference< XCoordinateSystem >& xCooSysModel
         , const uno::Reference< frame::XModel >& xChartModel

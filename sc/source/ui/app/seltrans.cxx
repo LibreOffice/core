@@ -84,7 +84,6 @@ BOOL lcl_IsURLButton( SdrObject* pObject )
     return bRet;
 }
 
-// static
 
 ScSelectionTransferObj* ScSelectionTransferObj::CreateFromView( ScTabView* pView )
 {

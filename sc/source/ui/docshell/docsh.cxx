@@ -2408,7 +2408,7 @@ void ScDocShell::PrepareReload()
 }
 
 
-String ScDocShell::GetOwnFilterName()           // static
+String ScDocShell::GetOwnFilterName()
 {
     return String::CreateFromAscii(pFilterSc50);
 }
@@ -2418,32 +2418,32 @@ String ScDocShell::GetHtmlFilterName()
     return String::CreateFromAscii(pFilterHtml);
 }
 
-String ScDocShell::GetWebQueryFilterName()      // static
+String ScDocShell::GetWebQueryFilterName()
 {
     return String::CreateFromAscii(pFilterHtmlWebQ);
 }
 
-String ScDocShell::GetAsciiFilterName()         // static
+String ScDocShell::GetAsciiFilterName()
 {
     return String::CreateFromAscii(pFilterAscii);
 }
 
-String ScDocShell::GetLotusFilterName()         // static
+String ScDocShell::GetLotusFilterName()
 {
     return String::CreateFromAscii(pFilterLotus);
 }
 
-String ScDocShell::GetDBaseFilterName()         // static
+String ScDocShell::GetDBaseFilterName()
 {
     return String::CreateFromAscii(pFilterDBase);
 }
 
-String ScDocShell::GetDifFilterName()           // static
+String ScDocShell::GetDifFilterName()
 {
     return String::CreateFromAscii(pFilterDif);
 }
 
-BOOL ScDocShell::HasAutomaticTableName( const String& rFilter )     // static
+BOOL ScDocShell::HasAutomaticTableName( const String& rFilter )
 {
     //  TRUE for those filters that keep the default table name
     //  (which is language specific)

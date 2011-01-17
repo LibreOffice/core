@@ -268,7 +268,6 @@ ScDrawTransferObj::~ScDrawTransferObj()
     delete pDragSourceView;
 }
 
-// static
 ScDrawTransferObj* ScDrawTransferObj::GetOwnClipboard( Window* )
 {
     ScDrawTransferObj* pObj = SC_MOD()->GetClipData().pDrawClipboard;

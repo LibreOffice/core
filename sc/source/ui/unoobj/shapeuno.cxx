@@ -81,7 +81,6 @@ const SfxItemPropertyMapEntry* lcl_GetShapeMap()
     return aShapeMap_Impl;
 }
 
-// static
 const SvEventDescription* ScShapeObj::GetSupportedMacroItems()
 {
     static const SvEventDescription aMacroDescriptionsImpl[] =

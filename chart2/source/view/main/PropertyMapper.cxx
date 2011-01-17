@@ -59,7 +59,6 @@ void lcl_overwriteOrAppendValues(
 
 } // anonymous namespace
 
-//static
 void PropertyMapper::setMappedProperties(
           const uno::Reference< beans::XPropertySet >& xTarget
         , const uno::Reference< beans::XPropertySet >& xSource
@@ -174,7 +173,6 @@ uno::Any* PropertyMapper::getValuePointerForLimitedSpace( tAnySequence& rPropVal
         , bLimitedHeight ? C2U("TextMaximumFrameHeight") : C2U("TextMaximumFrameWidth") );
 }
 
-//static
 const tMakePropertyNameMap& PropertyMapper::getPropertyNameMapForCharacterProperties()
 {
     //shape property -- chart model object property
@@ -241,7 +239,6 @@ const tMakePropertyNameMap& PropertyMapper::getPropertyNameMapForCharacterProper
     return m_aShapePropertyMapForCharacterProperties;
 }
 
-//static
 const tMakePropertyNameMap& PropertyMapper::getPropertyNameMapForParagraphProperties()
 {
     //shape property -- chart model object property
@@ -258,7 +255,6 @@ const tMakePropertyNameMap& PropertyMapper::getPropertyNameMapForParagraphProper
     return m_aShapePropertyMapForParagraphProperties;
 }
 
-//static
 const tMakePropertyNameMap& PropertyMapper::getPropertyNameMapForFillProperties()
 {
     //shape property -- chart model object property
@@ -287,7 +283,6 @@ const tMakePropertyNameMap& PropertyMapper::getPropertyNameMapForFillProperties(
     return m_aShapePropertyMapForFillProperties;
 }
 
-//static
 const tMakePropertyNameMap& PropertyMapper::getPropertyNameMapForLineProperties()
 {
     //shape property -- chart model object property
@@ -303,7 +298,6 @@ const tMakePropertyNameMap& PropertyMapper::getPropertyNameMapForLineProperties(
     return m_aShapePropertyMapForLineProperties;
 }
 
-//static
 const tMakePropertyNameMap& PropertyMapper::getPropertyNameMapForFillAndLineProperties()
 {
     static tMakePropertyNameMap m_aShapePropertyMapForFillAndLineProperties =
@@ -315,7 +309,6 @@ const tMakePropertyNameMap& PropertyMapper::getPropertyNameMapForFillAndLineProp
     return m_aShapePropertyMapForFillAndLineProperties;
 }
 
-//static
 const tMakePropertyNameMap& PropertyMapper::getPropertyNameMapForTextShapeProperties()
 {
     static tMakePropertyNameMap m_aShapePropertyMapForTextShapeProperties =
@@ -327,7 +320,6 @@ const tMakePropertyNameMap& PropertyMapper::getPropertyNameMapForTextShapeProper
     return m_aShapePropertyMapForTextShapeProperties;
 }
 
-//static
 const tMakePropertyNameMap& PropertyMapper::getPropertyNameMapForLineSeriesProperties()
 {
     //shape property -- chart model object property
@@ -343,7 +335,6 @@ const tMakePropertyNameMap& PropertyMapper::getPropertyNameMapForLineSeriesPrope
     return m_aShapePropertyMapForLineSeriesProperties;
 }
 
-//static
 const tMakePropertyNameMap& PropertyMapper::getPropertyNameMapForFilledSeriesProperties()
 {
     //shape property -- chart model object property
@@ -379,7 +370,6 @@ const tMakePropertyNameMap& PropertyMapper::getPropertyNameMapForFilledSeriesPro
     return m_aShapePropertyMapForFilledSeriesProperties;
 }
 
-// static
 void PropertyMapper::setMultiProperties(
                   const tNameSequence& rNames
                 , const tAnySequence&  rValues

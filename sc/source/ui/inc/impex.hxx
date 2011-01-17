@@ -157,7 +157,6 @@ public:
 };
 
 
-// static
 inline BOOL ScImportExport::IsEndianSwap( const SvStream& rStrm )
 {
 #ifdef OSL_BIGENDIAN
@@ -167,7 +166,6 @@ inline BOOL ScImportExport::IsEndianSwap( const SvStream& rStrm )
 #endif
 }
 
-// static
 inline void ScImportExport::SetNoEndianSwap( SvStream& rStrm )
 {
 #ifdef OSL_BIGENDIAN

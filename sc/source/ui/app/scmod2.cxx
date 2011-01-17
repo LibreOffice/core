@@ -50,7 +50,6 @@ using namespace com::sun::star;
 
 //------------------------------------------------------------------
 
-// static
 void ScModule::GetSpellSettings( USHORT& rDefLang, USHORT& rCjkLang, USHORT& rCtlLang,
                                     BOOL& rAutoSpell )
 {
@@ -67,7 +66,6 @@ void ScModule::GetSpellSettings( USHORT& rDefLang, USHORT& rCjkLang, USHORT& rCt
     rAutoSpell = aOptions.bIsSpellAuto;
 }
 
-// static
 void ScModule::SetAutoSpellProperty( BOOL bSet )
 {
     //  use SvtLinguConfig instead of service LinguProperties to avoid
@@ -81,7 +79,6 @@ void ScModule::SetAutoSpellProperty( BOOL bSet )
 
 
 
-// static
 BOOL ScModule::HasThesaurusLanguage( USHORT nLang )
 {
     if ( nLang == LANGUAGE_NONE )

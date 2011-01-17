@@ -1219,7 +1219,6 @@ void ScDocument::DisposeFieldEditEngine(ScFieldEditEngine*& rpEditEngine)
 
 //  ----------------------------------------------------------------------------
 
-// static
 ScRecursionHelper* ScDocument::CreateRecursionHelperInstance()
 {
     return new ScRecursionHelper;

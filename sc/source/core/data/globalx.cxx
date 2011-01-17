@@ -56,7 +56,6 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::ucb;
 
 
-// static
 void ScGlobal::InitAddIns()
 {
     // multi paths separated by semicolons
@@ -135,7 +134,6 @@ void ScGlobal::InitAddIns()
 }
 
 
-// static
 String ScGlobal::GetOrdinalSuffix( sal_Int32 nNumber)
 {
     if (!xOrdinalSuffix.is())

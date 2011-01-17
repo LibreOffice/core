@@ -454,7 +454,7 @@ IMPL_LINK( ScTableLink, TableEndEditHdl, ::sfx2::SvBaseLink*, pLink )
 
 // === ScDocumentLoader ==================================================
 
-String ScDocumentLoader::GetOptions( SfxMedium& rMedium )       // static
+String ScDocumentLoader::GetOptions( SfxMedium& rMedium )
 {
     SfxItemSet* pSet = rMedium.GetItemSet();
     const SfxPoolItem* pItem;
@@ -466,7 +466,7 @@ String ScDocumentLoader::GetOptions( SfxMedium& rMedium )       // static
 
 BOOL ScDocumentLoader::GetFilterName( const String& rFileName,
                                     String& rFilter, String& rOptions,
-                                    BOOL bWithContent, BOOL bWithInteraction )  // static
+                                    BOOL bWithContent, BOOL bWithInteraction )
 {
     TypeId aScType = TYPE(ScDocShell);
     SfxObjectShell* pDocSh = SfxObjectShell::GetFirst( &aScType );
@@ -520,7 +520,7 @@ BOOL ScDocumentLoader::GetFilterName( const String& rFileName,
     return bOK;
 }
 
-void ScDocumentLoader::RemoveAppPrefix( String& rFilterName )       // static
+void ScDocumentLoader::RemoveAppPrefix( String& rFilterName )
 {
     String aAppPrefix = String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM( STRING_SCAPP ));
     aAppPrefix.AppendAscii(RTL_CONSTASCII_STRINGPARAM( ": " ));

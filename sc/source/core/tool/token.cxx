@@ -527,7 +527,6 @@ BOOL ScToken::Is3DRef() const
     return FALSE;
 }
 
-// static
 FormulaTokenRef ScToken::ExtendRangeReference( FormulaToken & rTok1, FormulaToken & rTok2,
         const ScAddress & rPos, bool bReuseDoubleRef )
 {

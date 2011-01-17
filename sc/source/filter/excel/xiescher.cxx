@@ -214,7 +214,7 @@ XclImpDrawObjBase::~XclImpDrawObjBase()
 {
 }
 
-/*static*/ XclImpDrawObjRef XclImpDrawObjBase::ReadObj3( const XclImpRoot& rRoot, XclImpStream& rStrm )
+XclImpDrawObjRef XclImpDrawObjBase::ReadObj3( const XclImpRoot& rRoot, XclImpStream& rStrm )
 {
     XclImpDrawObjRef xDrawObj;
 
@@ -246,7 +246,7 @@ XclImpDrawObjBase::~XclImpDrawObjBase()
     return xDrawObj;
 }
 
-/*static*/ XclImpDrawObjRef XclImpDrawObjBase::ReadObj4( const XclImpRoot& rRoot, XclImpStream& rStrm )
+XclImpDrawObjRef XclImpDrawObjBase::ReadObj4( const XclImpRoot& rRoot, XclImpStream& rStrm )
 {
     XclImpDrawObjRef xDrawObj;
 
@@ -279,7 +279,7 @@ XclImpDrawObjBase::~XclImpDrawObjBase()
     return xDrawObj;
 }
 
-/*static*/ XclImpDrawObjRef XclImpDrawObjBase::ReadObj5( const XclImpRoot& rRoot, XclImpStream& rStrm )
+XclImpDrawObjRef XclImpDrawObjBase::ReadObj5( const XclImpRoot& rRoot, XclImpStream& rStrm )
 {
     XclImpDrawObjRef xDrawObj;
 
@@ -322,7 +322,7 @@ XclImpDrawObjBase::~XclImpDrawObjBase()
     return xDrawObj;
 }
 
-/*static*/ XclImpDrawObjRef XclImpDrawObjBase::ReadObj8( const XclImpRoot& rRoot, XclImpStream& rStrm )
+XclImpDrawObjRef XclImpDrawObjBase::ReadObj8( const XclImpRoot& rRoot, XclImpStream& rStrm )
 {
     XclImpDrawObjRef xDrawObj;
 
@@ -3704,7 +3704,7 @@ XclImpDrawing::~XclImpDrawing()
 {
 }
 
-/*static*/ Graphic XclImpDrawing::ReadImgData( const XclImpRoot& rRoot, XclImpStream& rStrm )
+Graphic XclImpDrawing::ReadImgData( const XclImpRoot& rRoot, XclImpStream& rStrm )
 {
     Graphic aGraphic;
     sal_uInt16 nFormat, nEnv;

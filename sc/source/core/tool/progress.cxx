@@ -141,7 +141,6 @@ ScProgress::~ScProgress()
     }
 }
 
-// static
 
 void ScProgress::CreateInterpretProgress( ScDocument* pDoc, BOOL bWait )
 {
@@ -167,7 +166,6 @@ void ScProgress::CreateInterpretProgress( ScDocument* pDoc, BOOL bWait )
 }
 
 
-// static
 
 void ScProgress::DeleteInterpretProgress()
 {

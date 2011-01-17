@@ -4090,7 +4090,6 @@ sal_Int64 SAL_CALL ScCellRangesBase::getSomething(
     return 0;
 }
 
-// static
 const uno::Sequence<sal_Int8>& ScCellRangesBase::getUnoTunnelId()
 {
     static uno::Sequence<sal_Int8> * pSeq = 0;
@@ -4107,7 +4106,6 @@ const uno::Sequence<sal_Int8>& ScCellRangesBase::getUnoTunnelId()
     return *pSeq;
 }
 
-// static
 ScCellRangesBase* ScCellRangesBase::getImplementation( const uno::Reference<uno::XInterface> xObj )
 {
     ScCellRangesBase* pRet = NULL;
@@ -4741,7 +4739,6 @@ uno::Sequence<rtl::OUString> SAL_CALL ScCellRangesObj::getSupportedServiceNames(
 
 //------------------------------------------------------------------------
 
-// static
 uno::Reference<table::XCellRange> ScCellRangeObj::CreateRangeFromDoc( ScDocument* pDoc, const ScRange& rR )
 {
     SfxObjectShell* pObjSh = pDoc->GetDocumentShell();
@@ -6054,7 +6051,7 @@ uno::Sequence<rtl::OUString> SAL_CALL ScCellRangeObj::getSupportedServiceNames()
 
 //------------------------------------------------------------------------
 
-const SvxItemPropertySet* ScCellObj::GetEditPropertySet()      // static
+const SvxItemPropertySet* ScCellObj::GetEditPropertySet()
 {
     return lcl_GetEditPropertySet();
 }
@@ -8707,7 +8704,6 @@ sal_Int64 SAL_CALL ScTableSheetObj::getSomething(
     return ScCellRangeObj::getSomething( rId );
 }
 
-// static
 const uno::Sequence<sal_Int8>& ScTableSheetObj::getUnoTunnelId()
 {
     static uno::Sequence<sal_Int8> * pSeq = 0;
@@ -8724,7 +8720,6 @@ const uno::Sequence<sal_Int8>& ScTableSheetObj::getUnoTunnelId()
     return *pSeq;
 }
 
-// static
 ScTableSheetObj* ScTableSheetObj::getImplementation( const uno::Reference<uno::XInterface> xObj )
 {
     ScTableSheetObj* pRet = NULL;

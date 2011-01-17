@@ -43,7 +43,6 @@
 using namespace com::sun::star;
 
 //------------------------------------------------------------------------
-// static
 const SfxItemPropertyMapEntry* ScDocOptionsHelper::GetPropertyMap()
 {
     static SfxItemPropertyMapEntry aMap[] =
@@ -65,7 +64,6 @@ const SfxItemPropertyMapEntry* ScDocOptionsHelper::GetPropertyMap()
     return aMap;
 }
 
-// static
 sal_Bool ScDocOptionsHelper::setPropertyValue( ScDocOptions& rOptions,
                 const SfxItemPropertyMap& rPropMap,
                 const rtl::OUString& aPropertyName, const uno::Any& aValue )
@@ -138,7 +136,6 @@ sal_Bool ScDocOptionsHelper::setPropertyValue( ScDocOptions& rOptions,
     return sal_True;
 }
 
-// static
 uno::Any ScDocOptionsHelper::getPropertyValue(
                 const ScDocOptions& rOptions,
                 const SfxItemPropertyMap& rPropMap,

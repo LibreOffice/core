@@ -193,7 +193,6 @@ VCartesianGrid::~VCartesianGrid()
     m_pPosHelper = NULL;
 }
 
-//static
 void VCartesianGrid::fillLinePropertiesFromGridModel( ::std::vector<VLineProperties>& rLinePropertiesList
                                      , const Sequence< Reference< beans::XPropertySet > > & rGridPropertiesList )
 {

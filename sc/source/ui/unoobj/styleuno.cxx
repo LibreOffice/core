@@ -492,7 +492,6 @@ BOOL lcl_EndsWithUser( const String& rString )
            pChar[nLen-1] == ')';
 }
 
-// static
 String ScStyleNameConversion::DisplayToProgrammaticName( const String& rDispName, UINT16 nType )
 {
     BOOL bDisplayIsProgrammatic = FALSE;
@@ -523,7 +522,6 @@ String ScStyleNameConversion::DisplayToProgrammaticName( const String& rDispName
     return rDispName;
 }
 
-// static
 String ScStyleNameConversion::ProgrammaticToDisplayName( const String& rProgName, UINT16 nType )
 {
     if ( lcl_EndsWithUser( rProgName ) )
@@ -1132,7 +1130,6 @@ sal_Int64 SAL_CALL ScStyleObj::getSomething(
     return 0;
 }
 
-// static
 const uno::Sequence<sal_Int8>& ScStyleObj::getUnoTunnelId()
 {
     static uno::Sequence<sal_Int8> * pSeq = 0;
@@ -1149,7 +1146,6 @@ const uno::Sequence<sal_Int8>& ScStyleObj::getUnoTunnelId()
     return *pSeq;
 }
 
-// static
 ScStyleObj* ScStyleObj::getImplementation(
                         const uno::Reference<uno::XInterface> xObj )
 {
@@ -1304,7 +1300,6 @@ void SAL_CALL ScStyleObj::setName( const rtl::OUString& aNewName )
     }
 }
 
-// static
 uno::Reference<container::XIndexReplace> ScStyleObj::CreateEmptyNumberingRules()
 {
     SvxNumRule aRule( 0, 0, TRUE );         // nothing supported

@@ -96,7 +96,6 @@ void InsertErrorBarsDialog::SetAxisMinorStepWidthForErrorBarDecimals( double fMi
     m_apErrorBarResources->SetAxisMinorStepWidthForErrorBarDecimals( fMinorStepWidth );
 }
 
-//static
 double InsertErrorBarsDialog::getAxisMinorStepWidthForErrorBarDecimals(
     const Reference< frame::XModel >& xChartModel,
     const Reference< uno::XInterface >& xChartView,

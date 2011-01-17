@@ -461,7 +461,6 @@ sal_Int64 SAL_CALL ScNamedRangeObj::getSomething(
     return 0;
 }
 
-// static
 const uno::Sequence<sal_Int8>& ScNamedRangeObj::getUnoTunnelId()
 {
     static uno::Sequence<sal_Int8> * pSeq = 0;
@@ -478,7 +477,6 @@ const uno::Sequence<sal_Int8>& ScNamedRangeObj::getUnoTunnelId()
     return *pSeq;
 }
 
-// static
 ScNamedRangeObj* ScNamedRangeObj::getImplementation( const uno::Reference<uno::XInterface> xObj )
 {
     ScNamedRangeObj* pRet = NULL;

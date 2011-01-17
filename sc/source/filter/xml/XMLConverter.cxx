@@ -585,7 +585,7 @@ bool lclSkipEmptyParentheses( const sal_Unicode*& rpcString, const sal_Unicode* 
 
 // ----------------------------------------------------------------------------
 
-/*static*/ void ScXMLConditionHelper::parseCondition(
+void ScXMLConditionHelper::parseCondition(
         ScXMLConditionParseResult& rParseResult, const OUString& rAttribute, sal_Int32 nStartIndex )
 {
     rParseResult.meToken = XML_COND_INVALID;

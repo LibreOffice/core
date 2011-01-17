@@ -371,7 +371,6 @@ SdrObject* DrawModelWrapper::getNamedSdrObject( const rtl::OUString& rName )
     return getNamedSdrObject( rName, GetPage(0) );
 }
 
-//static
 SdrObject* DrawModelWrapper::getNamedSdrObject( const String& rObjectCID, SdrObjList* pSearchList )
 {
     if(!pSearchList || rObjectCID.Len()==0)
@@ -391,7 +390,6 @@ SdrObject* DrawModelWrapper::getNamedSdrObject( const String& rObjectCID, SdrObj
     return 0;
 }
 
-//static
 bool DrawModelWrapper::removeShape( const uno::Reference< drawing::XShape >& xShape )
 {
     uno::Reference< container::XChild > xChild( xShape, uno::UNO_QUERY );

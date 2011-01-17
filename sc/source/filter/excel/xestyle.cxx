@@ -842,7 +842,7 @@ sal_Int16 lclCheckFontItems( const SfxItemSet& rItemSet,
 
 } // namespace
 
-/*static*/ sal_Int16 XclExpFontHelper::GetFirstUsedScript( const XclExpRoot& rRoot, const SfxItemSet& rItemSet )
+sal_Int16 XclExpFontHelper::GetFirstUsedScript( const XclExpRoot& rRoot, const SfxItemSet& rItemSet )
 {
     namespace ApiScriptType = ::com::sun::star::i18n::ScriptType;
 
@@ -884,7 +884,7 @@ sal_Int16 lclCheckFontItems( const SfxItemSet& rItemSet,
     return nScript;
 }
 
-/*static*/ Font XclExpFontHelper::GetFontFromItemSet( const XclExpRoot& rRoot, const SfxItemSet& rItemSet, sal_Int16 nScript )
+Font XclExpFontHelper::GetFontFromItemSet( const XclExpRoot& rRoot, const SfxItemSet& rItemSet, sal_Int16 nScript )
 {
     namespace ApiScriptType = ::com::sun::star::i18n::ScriptType;
 
@@ -908,7 +908,7 @@ sal_Int16 lclCheckFontItems( const SfxItemSet& rItemSet,
     return aFont;
 }
 
-/*static*/ bool XclExpFontHelper::CheckItems( const XclExpRoot& rRoot, const SfxItemSet& rItemSet, sal_Int16 nScript, bool bDeep )
+bool XclExpFontHelper::CheckItems( const XclExpRoot& rRoot, const SfxItemSet& rItemSet, sal_Int16 nScript, bool bDeep )
 {
     static const USHORT pnCommonIds[] = {
         ATTR_FONT_UNDERLINE, ATTR_FONT_CROSSEDOUT, ATTR_FONT_CONTOUR,

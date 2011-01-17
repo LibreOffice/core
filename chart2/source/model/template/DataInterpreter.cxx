@@ -330,7 +330,6 @@ Reference< data::XDataSource > SAL_CALL DataInterpreter::mergeInterpretedData(
 
 // convenience methods
 
-// static
 OUString DataInterpreter::GetRole( const Reference< data::XDataSequence > & xSeq )
 {
     OUString aResult;
@@ -349,7 +348,6 @@ OUString DataInterpreter::GetRole( const Reference< data::XDataSequence > & xSeq
     return aResult;
 }
 
-// static
 void DataInterpreter::SetRole( const Reference< data::XDataSequence > & xSeq, const OUString & rRole )
 {
     if( ! xSeq.is())
@@ -365,7 +363,6 @@ void DataInterpreter::SetRole( const Reference< data::XDataSequence > & xSeq, co
     }
 }
 
-// static
 uno::Any DataInterpreter::GetProperty(
     const Sequence< beans::PropertyValue > & aArguments,
     const OUString & rName )
@@ -378,7 +375,6 @@ uno::Any DataInterpreter::GetProperty(
     return uno::Any();
 }
 
-// static
 bool DataInterpreter::HasCategories(
     const Sequence< beans::PropertyValue > & rArguments,
     const Sequence< Reference< data::XLabeledDataSequence > > & rData )

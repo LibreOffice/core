@@ -145,14 +145,14 @@ void ScSimpleUndo::EndRedo()
     pDocShell->SetInUndo( FALSE );
 }
 
-void ScSimpleUndo::ShowTable( SCTAB nTab )          // static
+void ScSimpleUndo::ShowTable( SCTAB nTab )
 {
     ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
     if (pViewShell)
         pViewShell->SetTabNo( nTab );
 }
 
-void ScSimpleUndo::ShowTable( const ScRange& rRange )           // static
+void ScSimpleUndo::ShowTable( const ScRange& rRange )
 {
     ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
     if (pViewShell)

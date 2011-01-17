@@ -75,7 +75,6 @@ ScDataObject* ScUnitConverterData::Clone() const
 }
 
 
-// static
 void ScUnitConverterData::BuildIndexString( String& rStr,
             const String& rFromUnit, const String& rToUnit )
 {

@@ -335,8 +335,6 @@ bool Selection::isAdditionalShapeSelected() const
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
-
-//static
 bool SelectionHelper::findNamedParent( SdrObject*& pInOutObject
                                       , rtl::OUString& rOutName
                                       , bool bGivenObjectMayBeResult )
@@ -370,7 +368,6 @@ bool SelectionHelper::findNamedParent( SdrObject*& pInOutObject
     return true;
 }
 
-//static
 bool SelectionHelper::findNamedParent( SdrObject*& pInOutObject
                                       , ObjectIdentifier& rOutObject
                                       , bool bGivenObjectMayBeResult )
@@ -384,7 +381,6 @@ bool SelectionHelper::findNamedParent( SdrObject*& pInOutObject
     return false;
 }
 
-//static
 bool SelectionHelper::isDragableObjectHitTwice( const Point& rMPos
                     , const rtl::OUString& rNameOfSelectedObject
                     , const DrawViewWrapper& rDrawViewWrapper )
@@ -400,7 +396,6 @@ bool SelectionHelper::isDragableObjectHitTwice( const Point& rMPos
     return true;
 }
 
-// static
 ::rtl::OUString SelectionHelper::getHitObjectCID(
     const Point& rMPos,
     DrawViewWrapper& rDrawViewWrapper,
@@ -466,7 +461,6 @@ bool SelectionHelper::isDragableObjectHitTwice( const Point& rMPos
     // \\- solar mutex
 }
 
-//static
 bool SelectionHelper::isRotateableObject( const ::rtl::OUString& rCID
                     , const uno::Reference< frame::XModel >& xChartModel )
 {
@@ -489,7 +483,6 @@ SelectionHelper::~SelectionHelper()
 {
 }
 
-//virtual
 bool SelectionHelper::getFrameDragSingles()
 {
     bool bFrameDragSingles = true;//true == green == surrounding handles
@@ -498,7 +491,6 @@ bool SelectionHelper::getFrameDragSingles()
     return bFrameDragSingles;
 }
 
-//static
 SdrObject* SelectionHelper::getMarkHandlesObject( SdrObject* pObj )
 {
     if(!pObj)
@@ -554,7 +546,6 @@ SdrObject* SelectionHelper::getObjectToMark()
     return m_pMarkObj;
 }
 
-//static
 E3dScene* SelectionHelper::getSceneToRotate( SdrObject* pObj )
 {
     //search wether the object or one of its children is a 3D object
@@ -591,7 +582,6 @@ E3dScene* SelectionHelper::getSceneToRotate( SdrObject* pObj )
 
 }
 
-//virtual
 bool SelectionHelper::getMarkHandles( SdrHdlList& rHdlList )
 {
     SolarMutexGuard aSolarGuard;

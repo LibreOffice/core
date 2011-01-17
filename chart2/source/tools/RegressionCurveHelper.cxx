@@ -89,7 +89,6 @@ namespace chart
 {
 //.............................................................................
 
-// static
 Reference< XRegressionCurve > RegressionCurveHelper::createMeanValueLine(
     const Reference< XComponentContext > & xContext )
 {
@@ -97,7 +96,6 @@ Reference< XRegressionCurve > RegressionCurveHelper::createMeanValueLine(
         new MeanValueRegressionCurve( xContext ));
 }
 
-// static
 Reference< XRegressionCurve > RegressionCurveHelper::createRegressionCurveByServiceName(
     const Reference< XComponentContext > & xContext,
     ::rtl::OUString aServiceName )
@@ -135,7 +133,6 @@ Reference< XRegressionCurve > RegressionCurveHelper::createRegressionCurveByServ
 
 // ------------------------------------------------------------
 
-// static
 Reference< XRegressionCurveCalculator > RegressionCurveHelper::createRegressionCurveCalculatorByServiceName(
     ::rtl::OUString aServiceName )
 {
@@ -171,7 +168,6 @@ Reference< XRegressionCurveCalculator > RegressionCurveHelper::createRegressionC
     return xResult;
 }
 
-// static
 void RegressionCurveHelper::initializeCurveCalculator(
     const Reference< XRegressionCurveCalculator > & xOutCurveCalculator,
     const Reference< data::XDataSource > & xSource,
@@ -236,7 +232,6 @@ void RegressionCurveHelper::initializeCurveCalculator(
         xOutCurveCalculator->recalculateRegression( aXValues, aYValues );
 }
 
-// static
 void RegressionCurveHelper::initializeCurveCalculator(
     const Reference< XRegressionCurveCalculator > & xOutCurveCalculator,
     const Reference< XDataSeries > & xSeries,
@@ -252,7 +247,6 @@ void RegressionCurveHelper::initializeCurveCalculator(
 
 // ----------------------------------------
 
-// static
 bool RegressionCurveHelper::hasMeanValueLine(
     const uno::Reference< XRegressionCurveContainer > & xRegCnt )
 {
@@ -277,7 +271,6 @@ bool RegressionCurveHelper::hasMeanValueLine(
     return false;
 }
 
-// static
 bool RegressionCurveHelper::isMeanValueLine(
     const uno::Reference< chart2::XRegressionCurve > & xRegCurve )
 {
@@ -289,7 +282,6 @@ bool RegressionCurveHelper::isMeanValueLine(
     return false;
 }
 
-// static
 uno::Reference< chart2::XRegressionCurve >
     RegressionCurveHelper::getMeanValueLine(
         const uno::Reference< chart2::XRegressionCurveContainer > & xRegCnt )
@@ -315,7 +307,6 @@ uno::Reference< chart2::XRegressionCurve >
     return uno::Reference< chart2::XRegressionCurve >();
 }
 
-// static
 void RegressionCurveHelper::addMeanValueLine(
     uno::Reference< XRegressionCurveContainer > & xRegCnt,
     const uno::Reference< XComponentContext > & xContext,
@@ -340,7 +331,6 @@ void RegressionCurveHelper::addMeanValueLine(
     }
 }
 
-// static
 void RegressionCurveHelper::removeMeanValueLine(
     Reference< XRegressionCurveContainer > & xRegCnt )
 {
@@ -488,7 +478,6 @@ void RegressionCurveHelper::removeEquations(
     }
 }
 
-// static
 void RegressionCurveHelper::replaceOrAddCurveAndReduceToOne(
     tRegressionType eType,
     uno::Reference< XRegressionCurveContainer > & xRegCnt,
@@ -511,7 +500,6 @@ void RegressionCurveHelper::replaceOrAddCurveAndReduceToOne(
     }
 }
 
-// static
 uno::Reference< chart2::XRegressionCurve > RegressionCurveHelper::getFirstCurveNotMeanValueLine(
     const Reference< XRegressionCurveContainer > & xRegCnt )
 {
@@ -539,7 +527,6 @@ uno::Reference< chart2::XRegressionCurve > RegressionCurveHelper::getFirstCurveN
     return NULL;
 }
 
-// static
 RegressionCurveHelper::tRegressionType RegressionCurveHelper::getRegressionType(
     const Reference< XRegressionCurve > & xCurve )
 {
@@ -587,7 +574,6 @@ RegressionCurveHelper::tRegressionType RegressionCurveHelper::getRegressionType(
     return eResult;
 }
 
-// static
 RegressionCurveHelper::tRegressionType RegressionCurveHelper::getFirstRegressTypeNotMeanValueLine(
     const Reference< XRegressionCurveContainer > & xRegCnt )
 {
@@ -651,7 +637,6 @@ OUString RegressionCurveHelper::getUINameForRegressionCurve( const Reference< XR
     return aResult;
 }
 
-// static
 ::std::vector< Reference< chart2::XRegressionCurve > >
     RegressionCurveHelper::getAllRegressionCurvesNotMeanValueLine(
         const Reference< chart2::XDiagram > & xDiagram )
@@ -677,7 +662,6 @@ OUString RegressionCurveHelper::getUINameForRegressionCurve( const Reference< XR
     return aResult;
 }
 
-// static
 void RegressionCurveHelper::resetEquationPosition(
     const Reference< chart2::XRegressionCurve > & xCurve )
 {

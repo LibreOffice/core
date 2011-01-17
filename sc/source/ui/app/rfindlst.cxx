@@ -59,7 +59,7 @@ ScRangeFindList::~ScRangeFindList()
     }
 }
 
-ColorData ScRangeFindList::GetColorName( size_t nIndex )        // static
+ColorData ScRangeFindList::GetColorName( size_t nIndex )
 {
     return aColNames[nIndex % SC_RANGECOLORS];
 }

@@ -1002,7 +1002,6 @@ void ScDocument::GetAutoFormatData(SCTAB nTab, SCCOL nStartCol, SCROW nStartRow,
     }
 }
 
-// static
 void ScDocument::GetSearchAndReplaceStart( const SvxSearchItem& rSearchItem,
         SCCOL& rCol, SCROW& rRow )
 {

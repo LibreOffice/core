@@ -56,7 +56,6 @@ RegressionCurveCalculator::RegressionCurveCalculator() :
 RegressionCurveCalculator::~RegressionCurveCalculator()
 {}
 
-// static
 bool RegressionCurveCalculator::isLinearScaling(
     const Reference< chart2::XScaling > & xScaling )
 {
@@ -68,7 +67,6 @@ bool RegressionCurveCalculator::isLinearScaling(
     return (xServiceName.is() && xServiceName->getServiceName().equals( aLinScalingServiceName ));
 }
 
-// static
 bool RegressionCurveCalculator::isLogarithmicScaling(
     const Reference< chart2::XScaling > & xScaling )
 {
