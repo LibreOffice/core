@@ -99,17 +99,12 @@ class SwLineInfo
     const SvxLineSpacingItem *pSpace;
     USHORT nVertAlign;
     KSHORT nDefTabStop;
-    // --> OD 2008-02-04 #newlistlevelattrs#
     bool bListTabStopIncluded;
     long nListTabStopPosition;
-    // <--
 
-    // --> OD 2008-01-17 #newlistlevelattrs#
     void CtorInitLineInfo( const SwAttrSet& rAttrSet,
                            const SwTxtNode& rTxtNode );
-    // <--
 
-    // --> OD 2008-01-17 #newlistlevelattrs#
     SwLineInfo();
     ~SwLineInfo();
 public:
@@ -133,7 +128,6 @@ public:
 
     USHORT NumberOfTabStops() const;
 
-    // --> OD 2008-02-04 #newlistlevelattrs#
     inline bool IsListTabStopIncluded() const
     {
         return bListTabStopIncluded;
@@ -142,8 +136,6 @@ public:
     {
         return nListTabStopPosition;
     }
-    // <--
-
 
 //  friend ostream &operator<<( ostream &rOS, const SwLineInfo &rInf );
     friend SvStream &operator<<( SvStream &rOS, const SwLineInfo &rInf );

@@ -2020,13 +2020,11 @@ long SwBorderAttrs::CalcRight( const SwFrm* pCaller ) const
     else
         nRight += rLR.GetRight();
 
-    // --> OD 2008-01-21 #newlistlevelattrs#
     // correction: retrieve left margin for numbering in R2L-layout
     if ( pCaller->IsTxtFrm() && pCaller->IsRightToLeft() )
     {
         nRight += ((SwTxtFrm*)pCaller)->GetTxtNode()->GetLeftMarginWithNum();
     }
-    // <--
 
     return nRight;
 }
@@ -2051,11 +2049,9 @@ long SwBorderAttrs::CalcLeft( const SwFrm *pCaller ) const
         nLeft += rLR.GetLeft();
 
 
-    // --> OD 2008-01-21 #newlistlevelattrs#
     // correction: do not retrieve left margin for numbering in R2L-layout
 //    if ( pCaller->IsTxtFrm() )
     if ( pCaller->IsTxtFrm() && !pCaller->IsRightToLeft() )
-    // <--
     {
         nLeft += ((SwTxtFrm*)pCaller)->GetTxtNode()->GetLeftMarginWithNum();
     }

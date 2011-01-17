@@ -84,13 +84,11 @@ class SwTxtFrm: public SwCntntFrm
     // OD 2004-03-17 #i11860# - re-factoring of #i11859#
     // member for height of last line (value needed for proportional line spacing)
     SwTwips mnHeightOfLastLine;
-    // --> OD 2008-01-31 #newlistlevelattrs#
     // member for the additional first line offset, which is caused by the list
     // label alignment for list level position and space mode LABEL_ALIGNMENT.
     // This additional first line offset is used for the text formatting.
     // It is NOT used for the determination of printing area.
     SwTwips mnAdditionalFirstLineOffset;
-    // <--
 
 
     xub_StrLen nOfst;           //nOfst gibt den Offset im Cntnt (Anzahl Zeichen) an.
@@ -502,18 +500,14 @@ public:
         line offset for the real text formatting due to the value of label
         adjustment attribute of the list level.
 
-        OD 2008-01-31 #newlistlevelattrs#
-
         @author OD
     */
     void CalcAdditionalFirstLineOffset();
 
-    // --> OD 2008-01-31 #newlistlevelattrs#
     inline SwTwips GetAdditionalFirstLineOffset() const
     {
         return mnAdditionalFirstLineOffset;
     }
-    // <--
 
     // liefert den zusaetzlichen Zeilenabstand fuer den naechsten Absatz
     // OD 07.01.2004 #i11859# - change return data type;

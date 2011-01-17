@@ -1873,9 +1873,7 @@ void SwTxtFrm::Format( const SwBorderAttrs * )
 
     SWRECTFN( this )
 
-    // --> OD 2008-01-31 #newlistlevelattrs#
     CalcAdditionalFirstLineOffset();
-    // <--
 
     // Vom Berichtsautopiloten oder ueber die BASIC-Schnittstelle kommen
     // gelegentlich TxtFrms mit einer Breite <=0.

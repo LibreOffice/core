@@ -41,9 +41,7 @@
 #include <editeng/emphitem.hxx>
 #include <editeng/charscaleitem.hxx>
 #include <editeng/charrotateitem.hxx>
-// --> OD 2008-01-16 #newlistlevelattrs#
 #include <editeng/lrspitem.hxx>
-// <--
 #include <txtinet.hxx>
 #include <txtflcnt.hxx>
 #include <fmtfld.hxx>
@@ -1812,7 +1810,6 @@ public:
     SwPoolItemEndPair() : mpItem( 0 ), mnEndPos( 0 ) {};
 };
 
-// --> OD 2008-01-16 #newlistlevelattrs#
 void lcl_MergeListLevelIndentAsLRSpaceItem( const SwTxtNode& rTxtNode,
                                             SfxItemSet& rSet )
 {
@@ -1834,7 +1831,6 @@ void lcl_MergeListLevelIndentAsLRSpaceItem( const SwTxtNode& rTxtNode,
 }
 
 // erfrage die Attribute vom TextNode ueber den Bereich
-// --> OD 2008-01-16 #newlistlevelattrs#
 BOOL SwTxtNode::GetAttr( SfxItemSet& rSet, xub_StrLen nStt, xub_StrLen nEnd,
                          BOOL bOnlyTxtAttr, BOOL bGetFromChrFmt,
                          const bool bMergeIndentValuesOfNumRule ) const
@@ -1862,12 +1858,10 @@ BOOL SwTxtNode::GetAttr( SfxItemSet& rSet, xub_StrLen nStt, xub_StrLen nEnd,
         if( !bOnlyTxtAttr )
         {
             SwCntntNode::GetAttr( aFmtSet );
-            // --> OD 2008-01-16 #newlistlevelattrs#
             if ( bMergeIndentValuesOfNumRule )
             {
                 lcl_MergeListLevelIndentAsLRSpaceItem( *this, aFmtSet );
             }
-            // <--
         }
 
         const USHORT nSize = m_pSwpHints->Count();
@@ -2051,12 +2045,10 @@ BOOL SwTxtNode::GetAttr( SfxItemSet& rSet, xub_StrLen nStt, xub_StrLen nEnd,
     {
         // dann besorge mal die Auto-(Fmt)Attribute
         SwCntntNode::GetAttr( rSet );
-        // --> OD 2008-01-16 #newlistlevelattrs#
         if ( bMergeIndentValuesOfNumRule )
         {
             lcl_MergeListLevelIndentAsLRSpaceItem( *this, rSet );
         }
-        // <--
     }
 
     return rSet.Count() ? TRUE : FALSE;

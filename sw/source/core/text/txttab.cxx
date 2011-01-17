@@ -210,7 +210,6 @@ SwTabPortion *SwTxtFormatter::NewTabPortion( SwTxtFormatInfo &rInf, bool bAuto )
             cFill = 0;
             eAdj = SVX_TAB_ADJUST_LEFT;
         }
-        // --> OD 2008-02-07 #newlistlevelattrs#
         long nForced = 0;
         if ( !bTabsRelativeToIndent )
         {
@@ -234,7 +233,6 @@ SwTabPortion *SwTxtFormatter::NewTabPortion( SwTxtFormatInfo &rInf, bool bAuto )
                 nForced += pPor->Width();
         }
 
-        // <--
         // --> OD 2009-04-03 #i100732#
         // correction of condition, when a tab stop at the left margin can
         // be applied:

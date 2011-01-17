@@ -83,9 +83,7 @@
 #include <fmtflcnt.hxx>     // SwFmtFlyCnt
 #include <fmtcntnt.hxx>     // SwFmtCntnt
 // <--
-// --> OD 2008-01-31 #newlistlevelattrs#
 #include <numrule.hxx>
-// <--
 #include <swtable.hxx>
 #include <fldupde.hxx>
 #include <IGrammarContact.hxx>
@@ -339,9 +337,7 @@ void SwTxtFrm::InitCtor()
     mnFtnLine = 0;
     // OD 2004-03-17 #i11860#
     mnHeightOfLastLine = 0;
-    // --> OD 2008-01-31 #newlistlevelattrs#
     mnAdditionalFirstLineOffset = 0;
-    // <--
 
     nType = FRMC_TXT;
     bLocked = bFormatted = bWidow = bUndersized = bJustWidow =
@@ -2180,8 +2176,6 @@ SwTwips SwTxtFrm::CalcFitToContent()
     are in LABEL_ALIGNMENT mode, in order to determine additional first
     line offset for the real text formatting due to the value of label
     adjustment attribute of the list level.
-
-    OD 2008-01-31 #newlistlevelattrs#
 
     @author OD
 */

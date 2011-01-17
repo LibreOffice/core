@@ -63,11 +63,9 @@ USHORT MSWordExportBase::DuplicateNumRule( const SwNumRule *pRule, BYTE nLevel, 
     USHORT nNumId = USHRT_MAX;
     String sPrefix( CREATE_CONST_ASC( "WW8TempExport" ) );
     sPrefix += String::CreateFromInt32( nUniqueList++ );
-    // --> OD 2008-02-11 #newlistlevelattrs#
     SwNumRule* pMyNumRule =
             new SwNumRule( pDoc->GetUniqueNumRuleName( &sPrefix ),
                            SvxNumberFormat::LABEL_WIDTH_AND_POSITION );
-    // <--
     pUsedNumTbl->Insert( pMyNumRule, pUsedNumTbl->Count() );
 
     for ( USHORT i = 0; i < MAXLEVEL; i++ )

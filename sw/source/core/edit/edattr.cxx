@@ -71,10 +71,8 @@ const USHORT& getMaxLookup()
     return nMaxLookup;
 }
 
-// --> OD 2008-01-16 #newlistlevelattrs#
 BOOL SwEditShell::GetCurAttr( SfxItemSet& rSet,
                               const bool bMergeIndentValuesOfNumRule ) const
-// <--
 {
     if( GetCrsrCnt() > getMaxLookup() )
     {
@@ -143,11 +141,10 @@ BOOL SwEditShell::GetCurAttr( SfxItemSet& rSet,
                     xub_StrLen nStt = n == nSttNd ? nSttCnt : 0,
                                   nEnd = n == nEndNd ? nEndCnt
                                         : ((SwTxtNode*)pNd)->GetTxt().Len();
-                    // --> OD 2008-01-16 #newlistlevelattrs#
+
                     ((SwTxtNode*)pNd)->GetAttr( *pSet, nStt, nEnd,
                                                 FALSE, TRUE,
                                                 bMergeIndentValuesOfNumRule );
-                    // <--
                 }
                 break;
             case ND_GRFNODE:

@@ -631,8 +631,6 @@ bool SwUndoFmtAttr::RestoreFlyAnchor( SwUndoIter& rIter )
 }
 
 // -----------------------------------------------------
-
-// --> OD 2008-02-12 #newlistlevelattrs#
 SwUndoFmtResetAttr::SwUndoFmtResetAttr( SwFmt& rChangedFormat,
                                         const USHORT nWhichId )
     : SwUndo( UNDO_RESETATTR )

@@ -455,7 +455,6 @@ USHORT SwTxtFmtColl::ResetAllFmtAttr()
 }
 // <--
 
-// --> OD 2008-02-13 #newlistlevelattrs#
 bool SwTxtFmtColl::AreListLevelIndentsApplicable() const
 {
     bool bAreListLevelIndentsApplicable( true );

@@ -970,7 +970,6 @@ void    NumberingPreview::Paint( const Rectangle& /*rRect*/ )
         // #101524# OJ
         aStdFont.SetColor( SwViewOption::GetFontColor() );
 
-        //
         USHORT nFontHeight = nYStep * 6 / 10;
         if(bPosition)
             nFontHeight = nYStep * 15 / 10;
@@ -996,7 +995,6 @@ void    NumberingPreview::Paint( const Rectangle& /*rRect*/ )
                 const SwNumFmt &rFmt = pActNum->Get(nLevel);
                 aNumVector.push_back(rFmt.GetStart());
 
-                // --> OD 2008-02-01 #newlistlevelattrs#
                 USHORT nXStart( 0 );
                 short nTextOffset( 0 );
                 USHORT nNumberXPos( 0 );
@@ -1026,7 +1024,6 @@ void    NumberingPreview::Paint( const Rectangle& /*rRect*/ )
                         nNumberXPos = static_cast<USHORT>(nTmpNumberXPos);
                     }
                 }
-                // <--
 
                 USHORT nBulletWidth = 0;
                 if( SVX_NUM_BITMAP == rFmt.GetNumberingType() )
@@ -1051,7 +1048,6 @@ void    NumberingPreview::Paint( const Rectangle& /*rRect*/ )
                     nBulletWidth = (USHORT)pVDev->GetTextWidth(aText);
                     nPreNum++;
                 }
-                // --> OD 2008-02-01 #newlistlevelattrs#
                 if ( rFmt.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_ALIGNMENT &&
                      rFmt.GetLabelFollowedBy() == SvxNumberFormat::SPACE )
                 {
@@ -1060,9 +1056,7 @@ void    NumberingPreview::Paint( const Rectangle& /*rRect*/ )
                     pVDev->DrawText( Point(nNumberXPos, nYStart), aText );
                     nBulletWidth = nBulletWidth + (USHORT)pVDev->GetTextWidth(aText);
                 }
-                // <--
 
-                // --> OD 2008-02-01 #newlistlevelattrs#
                 USHORT nTextXPos( 0 );
                 if ( rFmt.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
                 {
@@ -1096,7 +1090,6 @@ void    NumberingPreview::Paint( const Rectangle& /*rRect*/ )
 
                     nXStart = static_cast<USHORT>( rFmt.GetIndentAt() / nWidthRelation );
                 }
-                // <--
 
 
                 Rectangle aRect1(Point(nTextXPos, nYStart + nFontHeight / 2), Size(aSize.Width() / 2, 2));
@@ -1117,7 +1110,6 @@ void    NumberingPreview::Paint( const Rectangle& /*rRect*/ )
             {
                 const SwNumFmt &rFmt = pActNum->Get(nLevel);
                 aNumVector.push_back(rFmt.GetStart());
-                // --> OD 2008-02-01 #newlistlevelattrs#
                 USHORT nXStart( 0 );
                 if ( rFmt.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
                 {
@@ -1139,7 +1131,6 @@ void    NumberingPreview::Paint( const Rectangle& /*rRect*/ )
                 }
                 nXStart /= 2;
                 nXStart += 2;
-                // <--
                 USHORT nTextOffset = 2 * nXStep;
                 if( SVX_NUM_BITMAP == rFmt.GetNumberingType() )
                 {
