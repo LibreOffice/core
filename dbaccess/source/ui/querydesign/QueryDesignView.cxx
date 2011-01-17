@@ -2496,9 +2496,10 @@ namespace
         {
             OQueryController& rController = static_cast<OQueryController&>(_pView->getController());
             ::connectivity::OSQLParseNode* pGroupBy = pSelectRoot->getChild(3)->getChild(2)->getChild(2);
-            OTableFieldDescRef aDragInfo = new OTableFieldDesc();
+
             for( sal_uInt32 i=0 ; i < pGroupBy->count() && eOk == eErrorCode; ++i )
             {
+                OTableFieldDescRef aDragInfo = new OTableFieldDesc();
                 ::connectivity::OSQLParseNode* pParamRef = NULL;
                 ::connectivity::OSQLParseNode* pArgument = pGroupBy->getChild( i );
                 if(SQL_ISRULE(pArgument,column_ref))
