@@ -76,7 +76,7 @@ namespace cairo
         nScreen(pSysDat.nScreen),
         nDepth(pSysDat.nDepth),
         aColormap(pSysDat.aColormap),
-        pRenderFormat(pSysDat.pRenderFormat)
+        pXRenderFormat(pSysDat.pRenderFormat)
     {}
 
     X11SysData::X11SysData( const SystemEnvData& pSysDat ) :
@@ -263,7 +263,7 @@ namespace cairo
 
         aSystemGraphicsData.nSize = sizeof(SystemGraphicsData);
         aSystemGraphicsData.hDrawable = getDrawable();
-        aSystemGraphicsData.pRenderFormat = getRenderFormat();
+        aSystemGraphicsData.pXRenderFormat = getRenderFormat();
 
         return boost::shared_ptr<VirtualDevice>(
             new VirtualDevice( &aSystemGraphicsData, getDepth() ));
