@@ -51,7 +51,7 @@ namespace svt { namespace table
     //--------------------------------------------------------------------
     DefaultInputHandler::DefaultInputHandler()
         :m_pImpl( new DefaultInputHandler_Impl )
-        ,m_bResize(false)
+        ,m_nResizingColumn( COL_INVALID )
     {
     }
 
@@ -62,40 +62,84 @@ namespace svt { namespace table
     }
 
     //--------------------------------------------------------------------
-    bool DefaultInputHandler::MouseMove( ITableControl& _rControl, const MouseEvent& _rMEvt )
+    bool DefaultInputHandler::MouseMove( ITableControl& i_control, const MouseEvent& _rMEvt )
     {
-        Point aPoint = _rMEvt.GetPosPixel();
-        if ( m_bResize )
+        Point const aPoint = _rMEvt.GetPosPixel();
+
+        // resize test
+        if ( m_nResizingColumn != COL_INVALID )
         {
-            _rControl.resizeColumn( aPoint );
+            ::Size const tableSize = i_control.getTableSizePixel();
+
+            // set proper pointer
+            Pointer aNewPointer( POINTER_ARROW );
+            ColumnMetrics const & columnMetrics( i_control.getColumnMetrics( m_nResizingColumn ) );
+            if  (   ( aPoint.X() > tableSize.Width() )
+                ||  ( aPoint.X() < columnMetrics.nStartPixel )
+                )
+            {
+                aNewPointer = Pointer( POINTER_NOTALLOWED );
+            }
+            else
+            {
+                aNewPointer = Pointer( POINTER_HSPLIT );
+            }
+            i_control.setPointer( aNewPointer );
+
+            // show tracking line
+            i_control.hideTracking();
+            i_control.showTracking(
+                Rectangle(
+                    Point( aPoint.X(), 0 ),
+                    Size( 1, tableSize.Height() )
+                ),
+                SHOWTRACK_SPLIT | SHOWTRACK_WINDOW
+            );
             return true;
         }
-        return false;
+
+        // test for column divider, adjust the mouse pointer, if necessary
+        Pointer aNewPointer( POINTER_ARROW );
+
+        TableCell const tableCell = i_control.hitTest( aPoint );
+        if ( ( tableCell.nRow == ROW_COL_HEADERS ) && ( tableCell.eArea == ColumnDivider ) )
+        {
+            aNewPointer = Pointer( POINTER_HSPLIT );
+        }
+
+        i_control.setPointer( aNewPointer );
+        return true;
     }
 
     //--------------------------------------------------------------------
-    bool DefaultInputHandler::MouseButtonDown( ITableControl& _rControl, const MouseEvent& _rMEvt )
+    bool DefaultInputHandler::MouseButtonDown( ITableControl& i_tableControl, const MouseEvent& _rMEvt )
     {
         bool bHandled = false;
-        Point aPoint = _rMEvt.GetPosPixel();
-        RowPos nRow = _rControl.getRowAtPoint( aPoint );
-        if ( nRow == ROW_COL_HEADERS )
+        Point const aPoint = _rMEvt.GetPosPixel();
+        TableCell const tableCell( i_tableControl.hitTest( aPoint ) );
+        if ( tableCell.nRow == ROW_COL_HEADERS )
         {
-            m_bResize = _rControl.checkResizeColumn(aPoint);
+            if  (   ( tableCell.nColumn != COL_INVALID )
+                &&  ( tableCell.eArea == ColumnDivider )
+                )
+            {
+                m_nResizingColumn = tableCell.nColumn;
+                i_tableControl.captureMouse();
+            }
             bHandled = true;
         }
-        else if(nRow >= 0)
+        else if ( tableCell.nRow >= 0 )
         {
             bool bSetCursor = false;
-            if ( _rControl.getSelEngine()->GetSelectionMode() == NO_SELECTION )
+            if ( i_tableControl.getSelEngine()->GetSelectionMode() == NO_SELECTION )
             {
                 bSetCursor = true;
             }
             else
             {
-                if ( !_rControl.isRowSelected( nRow ) )
+                if ( !i_tableControl.isRowSelected( tableCell.nRow ) )
                 {
-                    bHandled = _rControl.getSelEngine()->SelMouseButtonDown( _rMEvt );
+                    bHandled = i_tableControl.getSelEngine()->SelMouseButtonDown( _rMEvt );
                 }
                 else
                 {
@@ -105,32 +149,71 @@ namespace svt { namespace table
 
             if ( bSetCursor )
             {
-                _rControl.activateCellAt( aPoint );
+                i_tableControl.activateCellAt( aPoint );
                 bHandled = true;
             }
         }
         return bHandled;
     }
     //--------------------------------------------------------------------
-    bool DefaultInputHandler::MouseButtonUp( ITableControl& _rControl, const MouseEvent& _rMEvt )
+    bool DefaultInputHandler::MouseButtonUp( ITableControl& i_tableControl, const MouseEvent& _rMEvt )
     {
         bool bHandled = false;
-        const Point aPoint = _rMEvt.GetPosPixel();
-
-        if ( m_bResize )
+        Point const aPoint = _rMEvt.GetPosPixel();
+        if ( m_nResizingColumn != COL_INVALID )
         {
-            m_bResize = _rControl.endResizeColumn( aPoint );
+            i_tableControl.hideTracking();
+            PColumnModel const pColumn = i_tableControl.getModel()->getColumnModel( m_nResizingColumn );
+            long const maxWidthLogical = pColumn->getMaxWidth();
+            long const minWidthLogical = pColumn->getMinWidth();
+
+            // new position of mouse
+            long const requestedEnd = aPoint.X();
+
+            // old position of right border
+            long const oldEnd = i_tableControl.getColumnMetrics( m_nResizingColumn ).nEndPixel;
+
+            // position of left border if cursor in the to-be-resized column
+            long const columnStart = i_tableControl.getColumnMetrics( m_nResizingColumn ).nStartPixel;
+            long const requestedWidth = requestedEnd - columnStart;
+                // TODO: this is not correct, strictly: It assumes that the mouse was pressed exactly on the "end" pos,
+                // but for a while now, we have relaxed this, and allow clicking a few pixels aside, too
+
+            if ( requestedEnd >= columnStart )
+            {
+                long requestedWidthLogical = i_tableControl.pixelWidthToAppFont( requestedWidth );
+                // respect column width limits
+                if ( oldEnd > requestedEnd )
+                {
+                    // column has become smaller, check against minimum width
+                    if ( ( minWidthLogical != 0 ) && ( requestedWidthLogical < minWidthLogical ) )
+                        requestedWidthLogical = minWidthLogical;
+                }
+                else if ( oldEnd < requestedEnd )
+                {
+                    // column has become larger, check against max width
+                    if ( ( maxWidthLogical != 0 ) && ( requestedWidthLogical >= maxWidthLogical ) )
+                        requestedWidthLogical = maxWidthLogical;
+                }
+                pColumn->setWidth( requestedWidthLogical );
+                i_tableControl.invalidate();
+            }
+
+            i_tableControl.setPointer( Pointer() );
+            i_tableControl.releaseMouse();
+
+            m_nResizingColumn = COL_INVALID;
             bHandled = true;
         }
-        else if ( _rControl.getRowAtPoint( aPoint ) >= 0 )
+        else if ( i_tableControl.getRowAtPoint( aPoint ) >= 0 )
         {
-            if ( _rControl.getSelEngine()->GetSelectionMode() == NO_SELECTION )
+            if ( i_tableControl.getSelEngine()->GetSelectionMode() == NO_SELECTION )
             {
                 bHandled = true;
             }
             else
             {
-                bHandled = _rControl.getSelEngine()->SelMouseButtonUp( _rMEvt );
+                bHandled = i_tableControl.getSelEngine()->SelMouseButtonUp( _rMEvt );
             }
         }
         return bHandled;

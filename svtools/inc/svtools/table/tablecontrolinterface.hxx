@@ -34,11 +34,16 @@
 #include "svtools/table/tabletypes.hxx"
 #include "svtools/table/tablemodel.hxx"
 
-//........................................................................
+class Pointer;
+
+//......................................................................................................................
 namespace svt { namespace table
 {
-//........................................................................
+//......................................................................................................................
 
+    //==================================================================================================================
+    //= TableControlAction
+    //==================================================================================================================
     enum TableControlAction
     {
         /// moves the cursor in the table control one row up, if possible, by keeping the current column
@@ -80,9 +85,70 @@ namespace svt { namespace table
         invalidTableControlAction
     };
 
-    //====================================================================
+    //==================================================================================================================
+    //= TableCellArea
+    //==================================================================================================================
+    enum TableCellArea
+    {
+        CellContent,
+        ColumnDivider
+    };
+
+    //==================================================================================================================
+    //= TableCell
+    //==================================================================================================================
+    struct TableCell
+    {
+        ColPos          nColumn;
+        RowPos          nRow;
+        TableCellArea   eArea;
+
+        TableCell()
+            :nColumn( COL_INVALID )
+            ,nRow( ROW_INVALID )
+            ,eArea( CellContent )
+        {
+        }
+
+        TableCell( ColPos const i_column, RowPos const i_row )
+            :nColumn( i_column )
+            ,nRow( i_row )
+            ,eArea( CellContent )
+        {
+        }
+    };
+
+    //==================================================================================================================
+    //= ColumnMetrics
+    //==================================================================================================================
+    struct ColumnMetrics
+    {
+        /** the start of the column, in pixels. Might be negative, in case the column is scrolled out of the visible
+            area.
+        */
+        long    nStartPixel;
+
+        /** the end of the column, in pixels, plus 1. Effectively, this is the accumulated width of a all columns
+            up to the current one.
+        */
+        long    nEndPixel;
+
+        ColumnMetrics()
+            :nStartPixel(0)
+            ,nEndPixel(0)
+        {
+        }
+
+        ColumnMetrics( long const i_start, long const i_end )
+            :nStartPixel( i_start )
+            ,nEndPixel( i_end )
+        {
+        }
+    };
+
+    //==================================================================================================================
     //= ITableControl
-    //====================================================================
+    //==================================================================================================================
     /** defines a callback interface to be implemented by a concrete table control
     */
     class SAL_NO_VTABLE ITableControl
@@ -126,24 +192,35 @@ namespace svt { namespace table
         virtual PTableModel getModel() const = 0;
 
         /// returns the index of the currently active column
-        virtual ColPos getCurrentColumn() const = 0;
+        virtual ColPos  getCurrentColumn() const = 0;
 
         /// returns the index of the currently active row
-        virtual RowPos getCurrentRow() const = 0;
+        virtual RowPos  getCurrentRow() const = 0;
+
+        virtual ::Size  getTableSizePixel() const = 0;
+        virtual void    setPointer( Pointer const & i_pointer ) = 0;
+        virtual void    captureMouse() = 0;
+        virtual void    releaseMouse() = 0;
+        virtual void    invalidate() = 0;
+        virtual long    pixelWidthToAppFont( long const i_pixels ) const = 0;
+
+        virtual void    hideTracking() = 0;
+        virtual void    showTracking( Rectangle const & i_location, sal_uInt16 const i_flags ) = 0;
 
         virtual void activateCellAt( const Point& rPoint ) = 0;
-        virtual RowPos getRowAtPoint( const Point& rPoint ) const = 0;
-        virtual ColPos getColAtPoint( const Point& rPoint ) const = 0;
-        virtual void resizeColumn(const Point& rPoint ) = 0;
-        virtual bool checkResizeColumn(const Point& rPoint) = 0;
-        virtual bool endResizeColumn(const Point& rPoint) = 0;
+
+        virtual RowPos          getRowAtPoint( const Point& rPoint ) const = 0;
+        virtual ColPos          getColAtPoint( const Point& rPoint ) const = 0;
+        virtual TableCell       hitTest( const Point& rPoint ) const = 0;
+        virtual ColumnMetrics   getColumnMetrics( ColPos const i_column ) const = 0;
+
         virtual bool isRowSelected( RowPos _nRow ) const = 0;
 
         virtual ~ITableControl() {};
     };
 
-//........................................................................
+//......................................................................................................................
 } } // namespace svt::table
-//........................................................................
+//......................................................................................................................
 
 #endif // SVTOOLS_INC_TABLE_ABSTRACTTABLECONTROL_HXX

@@ -202,7 +202,7 @@ namespace svt { namespace table
         _rDevice.Push( PUSH_LINECOLOR);
 
         String sHeaderText;
-        PColumnModel pColumn = m_pImpl->rModel.getColumnModel( _nCol );
+        PColumnModel const pColumn = m_pImpl->rModel.getColumnModel( _nCol );
         DBG_ASSERT( !!pColumn, "GridTableRenderer::PaintColumnHeader: invalid column model object!" );
         if ( !!pColumn )
             sHeaderText = pColumn->getName();
@@ -214,7 +214,7 @@ namespace svt { namespace table
         ULONG const nDrawTextFlags = lcl_getAlignmentTextDrawFlags( *m_pImpl, _nCol ) | TEXT_DRAW_CLIP;
         _rDevice.DrawText( aTextRect, sHeaderText, nDrawTextFlags );
 
-        ::boost::optional< ::Color > aLineColor( m_pImpl->rModel.getLineColor() );
+        ::boost::optional< ::Color > const aLineColor( m_pImpl->rModel.getLineColor() );
         ::Color const lineColor = !aLineColor ? _rStyle.GetSeparatorColor() : *aLineColor;
         _rDevice.SetLineColor( lineColor );
         _rDevice.DrawLine( _rArea.BottomRight(), _rArea.TopRight());

@@ -27,7 +27,8 @@
 #ifndef SVTOOLS_INC_TABLE_DEFAULTINPUTHANDLER_HXX
 #define SVTOOLS_INC_TABLE_DEFAULTINPUTHANDLER_HXX
 
-#include <svtools/table/tableinputhandler.hxx>
+#include "svtools/table/tableinputhandler.hxx"
+#include "svtools/table/tabletypes.hxx"
 
 //........................................................................
 namespace svt { namespace table
@@ -44,7 +45,7 @@ namespace svt { namespace table
             friend class TableDataWindow;
     private:
         DefaultInputHandler_Impl*   m_pImpl;
-        bool                        m_bResize;
+        ColPos                      m_nResizingColumn;
 
     public:
         DefaultInputHandler();

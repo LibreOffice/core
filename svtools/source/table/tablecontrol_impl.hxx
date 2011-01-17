@@ -46,17 +46,15 @@ namespace svt { namespace table
 {
 //........................................................................
 
-    struct ColumnWidthInfo
+    struct MutableColumnMetrics : protected ColumnMetrics
     {
-        ColumnWidthInfo()
-            :nStartPixel( 0 )
-            ,nEndPixel( 0 )
+        MutableColumnMetrics()
+            :ColumnMetrics()
         {
         }
 
-        ColumnWidthInfo( long const i_startPixel, long const i_endPixel )
-            :nStartPixel( i_startPixel )
-            ,nEndPixel( i_endPixel )
+        MutableColumnMetrics( long const i_startPixel, long const i_endPixel )
+            :ColumnMetrics( i_startPixel, i_endPixel )
         {
         }
 
@@ -68,31 +66,22 @@ namespace svt { namespace table
 
         long getWidth() const { return nEndPixel - nStartPixel; }
 
-    private:
-        /** the start of the column, in pixels. Might be negative, in case the column is scrolled out of the visible
-            area.
-        */
-        long    nStartPixel;
-
-        /** the end of the column, in pixels, plus 1. Effectively, this is the accumulated width of a all columns
-            up to the current one.
-        */
-        long    nEndPixel;
+        ColumnMetrics const & operator()() { return *this; }
     };
 
     struct ColumnInfoPositionLess
     {
-        bool operator()( ColumnWidthInfo const& i_colInfo, long const i_position )
+        bool operator()( MutableColumnMetrics const& i_colInfo, long const i_position )
         {
             return i_colInfo.getEnd() < i_position;
         }
-        bool operator()( long const i_position, ColumnWidthInfo const& i_colInfo )
+        bool operator()( long const i_position, MutableColumnMetrics const& i_colInfo )
         {
             return i_position < i_colInfo.getStart();
         }
     };
 
-    typedef ::std::vector< ColumnWidthInfo >    ColumnPositions;
+    typedef ::std::vector< MutableColumnMetrics >    ColumnPositions;
 
     class TableControl;
     class TableDataWindow;
@@ -159,8 +148,6 @@ namespace svt { namespace table
         TableFunctionSet*       m_pTableFunctionSet;
         //part of selection engine
         RowPos                  m_nAnchor;
-        bool                    m_bResizingColumn;
-        ColPos                  m_nResizingColumn;
         bool                    m_bResizingGrid;
         bool                    m_bUpdatingColWidths;
 
@@ -287,12 +274,19 @@ namespace svt { namespace table
         virtual PTableModel         getModel() const;
         virtual ColPos              getCurrentColumn() const;
         virtual RowPos              getCurrentRow() const;
+        virtual ::Size              getTableSizePixel() const;
+        virtual void                setPointer( Pointer const & i_pointer );
+        virtual void                captureMouse();
+        virtual void                releaseMouse();
+        virtual void                invalidate();
+        virtual long                pixelWidthToAppFont( long const i_pixels ) const;
+        virtual void                hideTracking();
+        virtual void                showTracking( Rectangle const & i_location, sal_uInt16 const i_flags );
         virtual void                activateCellAt( const Point& rPoint );
         virtual RowPos              getRowAtPoint( const Point& rPoint ) const;
         virtual ColPos              getColAtPoint( const Point& rPoint ) const;
-        virtual void                resizeColumn(const Point& rPoint);
-        virtual bool                checkResizeColumn(const Point& rPoint);
-        virtual bool                endResizeColumn(const Point& rPoint);
+        virtual TableCell           hitTest( const Point& rPoint ) const;
+        virtual ColumnMetrics       getColumnMetrics( ColPos const i_column ) const;
         virtual bool                isRowSelected( RowPos i_row ) const;
 
 

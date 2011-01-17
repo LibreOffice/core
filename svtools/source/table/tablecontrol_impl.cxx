@@ -434,8 +434,6 @@ namespace svt { namespace table
         ,m_aSelectedRows        (                               )
         ,m_pTableFunctionSet    ( new TableFunctionSet( this  ) )
         ,m_nAnchor              ( -1                            )
-        ,m_bResizingColumn      ( false                         )
-        ,m_nResizingColumn      ( 0                             )
         ,m_bResizingGrid        ( false                         )
         ,m_bUpdatingColWidths   ( false                         )
         ,m_pAccessibleTable     ( NULL                          )
@@ -712,7 +710,10 @@ namespace svt { namespace table
         if ( nGroup & COL_ATTRS_WIDTH )
         {
             if ( !m_bUpdatingColWidths )
+            {
                 impl_ni_updateColumnWidths();
+                impl_ni_updateScrollbars();
+            }
 
             nGroup &= ~COL_ATTRS_WIDTH;
         }
@@ -901,7 +902,7 @@ namespace svt { namespace table
 
             const long columnStart = accumulatedPixelWidth;
             const long columnEnd = columnStart + aPrePixelWidths[i];
-            m_aColumnWidths.push_back( ColumnWidthInfo( columnStart, columnEnd ) );
+            m_aColumnWidths.push_back( MutableColumnMetrics( columnStart, columnEnd ) );
             accumulatedPixelWidth = columnEnd;
         }
 
@@ -925,7 +926,7 @@ namespace svt { namespace table
             )
         {
             // make the last resizable column wider
-            ColumnWidthInfo& rResizeColInfo( m_aColumnWidths[ lastResizableCol ] );
+            MutableColumnMetrics& rResizeColInfo( m_aColumnWidths[ lastResizableCol ] );
             rResizeColInfo.setEnd( rResizeColInfo.getEnd() + freeSpaceRight );
 
             // update the column model
@@ -1198,8 +1199,7 @@ namespace svt { namespace table
         {
             if ( m_nColumnCount != 0 )
             {
-                if ( m_bResizingGrid )
-                    impl_ni_updateColumnWidths();
+                impl_ni_updateColumnWidths();
                 impl_ni_updateScrollbars();
                 checkCursorPosition();
                 m_bResizingGrid = true;
@@ -1207,16 +1207,15 @@ namespace svt { namespace table
         }
         else
         {
-            //In the case that column headers are defined but data hasn't yet been set,
-            //only column headers will be shown
+            // In the case that column headers are defined but data hasn't yet been set,
+            // only column headers will be shown
             if ( m_pModel->hasColumnHeaders() )
             {
                 if ( m_nColHeaderHeightPixel > 1 )
                 {
                     m_pDataWindow->SetSizePixel( m_rAntiImpl.GetOutputSizePixel() );
-                    if ( m_bResizingGrid )
-                        //update column widths to fit in grid
-                        impl_ni_updateColumnWidths();
+                    // update column widths to fit in grid
+                    impl_ni_updateColumnWidths();
                     m_bResizingGrid = true;
                 }
             }
@@ -1826,18 +1825,36 @@ namespace svt { namespace table
         if ( ( rPoint.X() >= 0 ) && ( rPoint.X() < m_nRowHeaderWidthPixel ) )
             return COL_ROW_HEADERS;
 
-        Rectangle aAllCellsArea;
-        impl_getAllVisibleCellsArea( aAllCellsArea );
+        return impl_getColumnForOrdinate( rPoint.X() );
+    }
 
-        TableColumnGeometry aHitTest( *this, aAllCellsArea, COL_ROW_HEADERS );
-        while ( aHitTest.isValid() )
+    //------------------------------------------------------------------------------------------------------------------
+    TableCell TableControl_Impl::hitTest( Point const & i_point ) const
+    {
+        TableCell aCell( getColAtPoint( i_point ), getRowAtPoint( i_point ) );
+        if ( aCell.nColumn > COL_ROW_HEADERS )
         {
-            if ( aHitTest.getRect().IsInside( rPoint ) )
-                return aHitTest.getCol();
-            aHitTest.moveRight();
+            PColumnModel const pColumn = m_pModel->getColumnModel( aCell.nColumn );
+            MutableColumnMetrics const & rColInfo( m_aColumnWidths[ aCell.nColumn ] );
+            if  (   ( rColInfo.getEnd() - 3 <= i_point.X() )
+                &&  ( rColInfo.getEnd() >= i_point.X() )
+                &&  pColumn->isResizable()
+                )
+            {
+                aCell.eArea = ColumnDivider;
+            }
         }
+        return aCell;
+    }
 
-        return COL_INVALID;
+    //------------------------------------------------------------------------------------------------------------------
+    ColumnMetrics TableControl_Impl::getColumnMetrics( ColPos const i_column ) const
+    {
+        DBG_CHECK_ME();
+
+        ENSURE_OR_RETURN( ( i_column >= 0 ) && ( i_column < m_pModel->getColumnCount() ),
+            "TableControl_Impl::getColumnMetrics: illegal column index!", ColumnMetrics() );
+        return (ColumnMetrics const &)m_aColumnWidths[ i_column ];
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -1856,6 +1873,55 @@ namespace svt { namespace table
     RowPos TableControl_Impl::getCurrentRow() const
     {
         return m_nCurRow;
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    ::Size TableControl_Impl::getTableSizePixel() const
+    {
+        return m_pDataWindow->GetOutputSizePixel();
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    void TableControl_Impl::setPointer( Pointer const & i_pointer )
+    {
+        DBG_CHECK_ME();
+        m_pDataWindow->SetPointer( i_pointer );
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    void TableControl_Impl::captureMouse()
+    {
+        m_pDataWindow->CaptureMouse();
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    void TableControl_Impl::releaseMouse()
+    {
+        m_pDataWindow->ReleaseMouse();
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    void TableControl_Impl::invalidate()
+    {
+        m_pDataWindow->Invalidate();
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    long TableControl_Impl::pixelWidthToAppFont( long const i_pixels ) const
+    {
+        return m_pDataWindow->PixelToLogic( Size( i_pixels, 0 ), MAP_APPFONT ).Width();
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    void TableControl_Impl::hideTracking()
+    {
+        m_pDataWindow->HideTracking();
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    void TableControl_Impl::showTracking( Rectangle const & i_location, sal_uInt16 const i_flags )
+    {
+        m_pDataWindow->ShowTracking( i_location, i_flags );
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -2342,135 +2408,6 @@ namespace svt { namespace table
             m_aSelectedRows.push_back(i);
 
         return true;
-    }
-
-    //--------------------------------------------------------------------
-    void TableControl_Impl::resizeColumn( const Point& rPoint )
-    {
-        Pointer aNewPointer( POINTER_ARROW );
-        const ColPos hitColumn = impl_getColumnForOrdinate( rPoint.X() );
-        if ( m_bResizingColumn )
-        {
-            const ColumnWidthInfo& rColInfo( m_aColumnWidths[ m_nResizingColumn ] );
-            if  (   ( rPoint.X() > m_pDataWindow->GetOutputSizePixel().Width() )
-                ||  ( rPoint.X() < rColInfo.getStart() )
-                )
-            {
-                aNewPointer = Pointer( POINTER_NOTALLOWED );
-            }
-            else
-            {
-                aNewPointer = Pointer( POINTER_HSPLIT );
-            }
-            m_pDataWindow->HideTracking();
-
-            int lineHeight = m_nColHeaderHeightPixel;
-            lineHeight += m_nRowHeightPixel * m_nRowCount;
-            const int gridHeight = m_pDataWindow->GetOutputSizePixel().Height();
-            if ( lineHeight >= gridHeight )
-                lineHeight = gridHeight;
-
-            m_pDataWindow->ShowTracking(
-                Rectangle(
-                    Point( rPoint.X(), 0 ),
-                    Size( 1, lineHeight )
-                ),
-                SHOWTRACK_SPLIT | SHOWTRACK_WINDOW
-            );
-        }
-        else if ( hitColumn != COL_INVALID )
-        {
-            // hit test for the column separator
-            const PColumnModel pColumn = m_pModel->getColumnModel( hitColumn );
-            const ColumnWidthInfo& rColInfo( m_aColumnWidths[ hitColumn ] );
-            if  (   ( rColInfo.getEnd() - 2 <= rPoint.X() )
-                &&  ( rColInfo.getEnd() + 2 > rPoint.X() )
-                &&  pColumn->isResizable()
-                )
-                aNewPointer = Pointer( POINTER_HSPLIT );
-        }
-
-        m_pDataWindow->SetPointer( aNewPointer );
-    }
-
-    //--------------------------------------------------------------------
-    bool TableControl_Impl::checkResizeColumn( const Point& rPoint )
-    {
-        m_bResizingGrid = false;
-
-        if ( m_bResizingColumn )
-            return true;
-
-        const ColPos hitColumn = impl_getColumnForOrdinate( rPoint.X() );
-        if ( hitColumn == COL_INVALID )
-            return false;
-
-        const PColumnModel pColumn = m_pModel->getColumnModel( hitColumn );
-        const ColumnWidthInfo& rColInfo( m_aColumnWidths[ hitColumn ] );
-
-        // hit test for the column separator
-        if  (   ( rColInfo.getEnd() - 2 <= rPoint.X() )
-            &&  ( rColInfo.getEnd() + 2 > rPoint.X() )
-            &&  pColumn->isResizable()
-            )
-        {
-            m_nResizingColumn = hitColumn;
-            m_pDataWindow->CaptureMouse();
-            m_bResizingColumn = true;
-        }
-        return m_bResizingColumn;
-    }
-    //--------------------------------------------------------------------
-    bool TableControl_Impl::endResizeColumn( const Point& rPoint )
-    {
-        DBG_CHECK_ME();
-        ENSURE_OR_RETURN_FALSE( m_bResizingColumn, "TableControl_Impl::endResizeColumn: not resizing currently!" );
-
-        m_pDataWindow->HideTracking();
-        const PColumnModel pColumn = m_pModel->getColumnModel( m_nResizingColumn );
-        const long maxWidthLogical = pColumn->getMaxWidth();
-        const long minWidthLogical = pColumn->getMinWidth();
-
-        // new position of mouse
-        const long requestedEnd = rPoint.X();
-
-        // old position of right border
-        const long oldEnd = m_aColumnWidths[ m_nResizingColumn ].getEnd();
-
-        // position of left border if cursor in the to-be-resized column
-        const long columnStart = m_aColumnWidths[ m_nResizingColumn ].getStart();
-        const long requestedWidth = requestedEnd - columnStart;
-            // TODO: this is not correct, strictly: It assumes that the mouse was pressed exactly on the "end" pos,
-            // but for a while now, we have relaxed this, and allow clicking a few pixels aside, too
-
-        if ( requestedEnd >= columnStart )
-        {
-            long requestedWidthLogical = m_rAntiImpl.PixelToLogic( Size( requestedWidth, 0 ), MAP_APPFONT ).Width();
-            // respect column width limits
-            if ( oldEnd > requestedEnd )
-            {
-                // column has become smaller, check against minimum width
-                if ( ( minWidthLogical != 0 ) && ( requestedWidthLogical < minWidthLogical ) )
-                    requestedWidthLogical = minWidthLogical;
-            }
-            else if ( oldEnd < requestedEnd )
-            {
-                // column has become larger, check against max width
-                if ( ( maxWidthLogical != 0 ) && ( requestedWidthLogical >= maxWidthLogical ) )
-                    requestedWidthLogical = maxWidthLogical;
-            }
-            pColumn->setPreferredWidth( requestedWidthLogical );
-        }
-
-        impl_ni_updateColumnWidths();
-        impl_ni_updateScrollbars();
-        m_pDataWindow->Invalidate( INVALIDATE_UPDATE );
-        m_pDataWindow->SetPointer( Pointer() );
-        m_bResizingColumn = false;
-        m_bResizingGrid = true;
-
-        m_pDataWindow->ReleaseMouse();
-        return m_bResizingColumn;
     }
 
     //--------------------------------------------------------------------

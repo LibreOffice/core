@@ -96,71 +96,71 @@ namespace svt { namespace table
     void TableDataWindow::RequestHelp( const HelpEvent& rHEvt )
     {
         USHORT const nHelpMode = rHEvt.GetMode();
-        if ( ( nHelpMode & HELPMODE_QUICK ) != 0 )
-        {
-            ITableControl& rTableControl = m_rTableControl;
-            PTableModel const pTableModel( rTableControl.getModel() );
-
-            Point const aMousePos( ScreenToOutputPixel( rHEvt.GetMousePosPixel() ) );
-
-            RowPos const hitRow = rTableControl.getRowAtPoint( aMousePos );
-            ColPos const hitCol = rTableControl.getColAtPoint( aMousePos );
-
-            ::rtl::OUString sHelpText;
-            USHORT nHelpStyle = 0;
-
-            if ( ( hitCol >= 0 ) && ( hitCol < pTableModel->getColumnCount() ) )
-            {
-                if ( hitRow == ROW_COL_HEADERS )
-                {
-                    sHelpText = pTableModel->getColumnModel( hitCol )->getHelpText();
-                }
-                else if ( ( hitRow >= 0 ) && ( hitRow < pTableModel->getRowCount() ) )
-                {
-                    Any aCellToolTip;
-                    pTableModel->getCellToolTip( hitCol, hitRow, aCellToolTip );
-                    if ( !aCellToolTip.hasValue() )
-                    {
-                        // use the cell content
-                        pTableModel->getCellContent( hitCol, hitRow, aCellToolTip );
-
-                        // use the cell content as tool tip only if it doesn't fit into the cell.
-                        bool const activeCell = ( hitRow == rTableControl.getCurrentRow() ) && ( hitCol == rTableControl.getCurrentColumn() );
-                        bool const selectedCell = rTableControl.isRowSelected( hitRow );
-
-                        Rectangle const aWindowRect( Point( 0, 0 ), GetOutputSizePixel() );
-                        TableCellGeometry const aCell( m_rTableControl, aWindowRect, hitCol, hitRow );
-                        Rectangle const aCellRect( aCell.getRect() );
-
-                        PTableRenderer const pRenderer = pTableModel->getRenderer();
-                        if ( pRenderer->FitsIntoCell( aCellToolTip, hitCol, hitRow, activeCell, selectedCell, *this, aCellRect ) )
-                            aCellToolTip.clear();
-                    }
-
-                    sHelpText = CellValueConversion::convertToString( aCellToolTip );
-
-                    if ( sHelpText.indexOf( '\n' ) >= 0 )
-                        nHelpStyle = QUICKHELP_TIP_STYLE_BALLOON;
-                }
-            }
-
-            if ( sHelpText.getLength() )
-            {
-                Rectangle const aControlScreenRect(
-                    OutputToScreenPixel( Point( 0, 0 ) ),
-                    GetOutputSizePixel()
-                );
-
-                if ( m_nTipWindowHandle )
-                    Help::UpdateTip( m_nTipWindowHandle, this, aControlScreenRect, sHelpText );
-                else
-                    m_nTipWindowHandle = Help::ShowTip( this, aControlScreenRect, sHelpText, nHelpStyle );
-            }
-        }
-        else
+        if  (   ( IsMouseCaptured() )
+            ||  ( ( nHelpMode & HELPMODE_QUICK ) == 0 )
+            )
         {
             Window::RequestHelp( rHEvt );
+            return;
         }
+
+        ::rtl::OUString sHelpText;
+        USHORT nHelpStyle = 0;
+
+        Point const aMousePos( ScreenToOutputPixel( rHEvt.GetMousePosPixel() ) );
+        RowPos const hitRow = m_rTableControl.getRowAtPoint( aMousePos );
+        ColPos const hitCol = m_rTableControl.getColAtPoint( aMousePos );
+
+        PTableModel const pTableModel( m_rTableControl.getModel() );
+        if ( ( hitCol >= 0 ) && ( hitCol < pTableModel->getColumnCount() ) )
+        {
+            if ( hitRow == ROW_COL_HEADERS )
+            {
+                sHelpText = pTableModel->getColumnModel( hitCol )->getHelpText();
+            }
+            else if ( ( hitRow >= 0 ) && ( hitRow < pTableModel->getRowCount() ) )
+            {
+                Any aCellToolTip;
+                pTableModel->getCellToolTip( hitCol, hitRow, aCellToolTip );
+                if ( !aCellToolTip.hasValue() )
+                {
+                    // use the cell content
+                    pTableModel->getCellContent( hitCol, hitRow, aCellToolTip );
+
+                    // use the cell content as tool tip only if it doesn't fit into the cell.
+                    bool const activeCell = ( hitRow == m_rTableControl.getCurrentRow() ) && ( hitCol == m_rTableControl.getCurrentColumn() );
+                    bool const selectedCell = m_rTableControl.isRowSelected( hitRow );
+
+                    Rectangle const aWindowRect( Point( 0, 0 ), GetOutputSizePixel() );
+                    TableCellGeometry const aCell( m_rTableControl, aWindowRect, hitCol, hitRow );
+                    Rectangle const aCellRect( aCell.getRect() );
+
+                    PTableRenderer const pRenderer = pTableModel->getRenderer();
+                    if ( pRenderer->FitsIntoCell( aCellToolTip, hitCol, hitRow, activeCell, selectedCell, *this, aCellRect ) )
+                        aCellToolTip.clear();
+                }
+
+                sHelpText = CellValueConversion::convertToString( aCellToolTip );
+
+                if ( sHelpText.indexOf( '\n' ) >= 0 )
+                    nHelpStyle = QUICKHELP_TIP_STYLE_BALLOON;
+            }
+        }
+
+        if ( sHelpText.getLength() )
+        {
+            Rectangle const aControlScreenRect(
+                OutputToScreenPixel( Point( 0, 0 ) ),
+                GetOutputSizePixel()
+            );
+
+            if ( m_nTipWindowHandle )
+                Help::UpdateTip( m_nTipWindowHandle, this, aControlScreenRect, sHelpText );
+            else
+                m_nTipWindowHandle = Help::ShowTip( this, aControlScreenRect, sHelpText, nHelpStyle );
+        }
+        else
+            impl_hideTipWindow();
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -179,24 +179,18 @@ namespace svt { namespace table
         if ( rMEvt.IsLeaveWindow() )
             impl_hideTipWindow();
 
-        Point aPoint = rMEvt.GetPosPixel();
         if ( !m_rTableControl.getInputHandler()->MouseMove( m_rTableControl, rMEvt ) )
         {
-            if ( m_rTableControl.getRowAtPoint( aPoint ) == ROW_COL_HEADERS )
-            {
-                m_rTableControl.resizeColumn( aPoint );
-            }
-            else
-            {
-                Window::MouseMove( rMEvt );
-            }
+            Window::MouseMove( rMEvt );
         }
     }
     //------------------------------------------------------------------------------------------------------------------
     void TableDataWindow::MouseButtonDown( const MouseEvent& rMEvt )
     {
-        const Point aPoint = rMEvt.GetPosPixel();
-        const RowPos nCurRow = m_rTableControl.getRowAtPoint( aPoint );
+        impl_hideTipWindow();
+
+        Point const aPoint = rMEvt.GetPosPixel();
+        RowPos const nCurRow = m_rTableControl.getRowAtPoint( aPoint );
         if ( !m_rTableControl.getInputHandler()->MouseButtonDown( m_rTableControl, rMEvt ) )
             Window::MouseButtonDown( rMEvt );
         else
@@ -218,21 +212,6 @@ namespace svt { namespace table
             Window::MouseButtonUp( rMEvt );
         m_aMouseButtonUpHdl.Call((MouseEvent*) &rMEvt);
         m_rTableControl.getAntiImpl().GrabFocus();
-    }
-    //------------------------------------------------------------------------------------------------------------------
-    void TableDataWindow::SetPointer( const Pointer& rPointer )
-    {
-        Window::SetPointer(rPointer);
-    }
-    //------------------------------------------------------------------------------------------------------------------
-    void TableDataWindow::CaptureMouse()
-    {
-        Window::CaptureMouse();
-    }
-    //------------------------------------------------------------------------------------------------------------------
-    void TableDataWindow::ReleaseMouse(  )
-    {
-        Window::ReleaseMouse();
     }
     // -----------------------------------------------------------------------
     long TableDataWindow::Notify(NotifyEvent& rNEvt )
