@@ -97,7 +97,6 @@ namespace svt { namespace table
         friend class TableRowGeometry;
         friend class TableColumnGeometry;
         friend class SuspendInvariants;
-        friend class TableFunctionSet;
 
     private:
         /// the control whose impl-instance we implemnt
@@ -167,14 +166,18 @@ namespace svt { namespace table
 #endif
 
     public:
-
-
         void        setModel( PTableModel _pModel );
 
         inline  const PTableInputHandler&   getInputHandler() const { return m_pInputHandler; }
 
-        inline  void    setCurRow(RowPos curRow){ m_nCurRow = curRow; }
+        inline  RowPos  getCurRow() const           { return m_nCurRow; }
+        inline  void    setCurRow( RowPos i_curRow ){ m_nCurRow = i_curRow; }
+
+        RowPos  getAnchor() const { return m_nAnchor; }
+        void    setAnchor( RowPos const i_anchor ) { m_nAnchor = i_anchor; }
+
         inline  RowPos  getTopRow() const       { return m_nTopRow; }
+        inline  ColPos  getLeftColumn() const { return m_nLeftColumn; }
 
         inline  const TableControl&   getAntiImpl() const { return m_rAntiImpl; }
         inline        TableControl&   getAntiImpl()       { return m_rAntiImpl; }
@@ -449,10 +452,10 @@ namespace svt { namespace table
     //see seleng.hxx, seleng.cxx, FunctionSet overridables, part of selection engine
     class TableFunctionSet : public FunctionSet
     {
-        friend class TableDataWindow;
     private:
-        TableControl_Impl* m_pTableControl;
-        RowPos m_nCurrentRow;
+        TableControl_Impl*  m_pTableControl;
+        RowPos              m_nCurrentRow;
+
     public:
         TableFunctionSet(TableControl_Impl* _pTableControl);
         virtual ~TableFunctionSet();
