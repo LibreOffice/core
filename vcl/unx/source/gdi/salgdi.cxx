@@ -1051,10 +1051,10 @@ SystemGraphicsData X11SalGraphics::GetGraphicsData() const
     aRes.nSize = sizeof(aRes);
     aRes.pDisplay  = GetXDisplay();
     aRes.hDrawable = hDrawable_;
-    aRes.pVisual   = GetDisplay()->GetVisual( m_nScreen ).GetVisual();
+    aRes.pVisual   = GetVisual().visual;
     aRes.nScreen   = m_nScreen;
-    aRes.nDepth    = GetDisplay()->GetVisual( m_nScreen ).GetDepth();
-    aRes.aColormap = GetDisplay()->GetColormap( m_nScreen ).GetXColormap();
+    aRes.nDepth    = GetBitCount();
+    aRes.aColormap = GetColormap().GetXColormap();
     aRes.pXRenderFormat = m_pXRenderFormat;
     return aRes;
 }
