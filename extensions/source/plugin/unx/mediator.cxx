@@ -248,7 +248,7 @@ sal_uLong MediatorMessage::ExtractULONG()
     if( ! m_pRun )
         m_pRun = m_pBytes;
 
-    medDebug( (ULONG)(m_pRun - m_pBytes) >= m_nBytes, "Overflow in MediatorMessage::ExtractULONG\n" );
+    medDebug( (sal_uLong)(m_pRun - m_pBytes) >= m_nBytes, "Overflow in MediatorMessage::ExtractULONG\n" );
     sal_uLong nCount;
     memcpy( &nCount, m_pRun, sizeof( sal_uLong ) );
     m_pRun += sizeof( sal_uLong );
@@ -260,13 +260,13 @@ void* MediatorMessage::GetBytes( sal_uLong& rBytes )
     if( ! m_pRun )
         m_pRun = m_pBytes;
 
-    medDebug( (ULONG)(m_pRun - m_pBytes) >= m_nBytes, "Overflow in MediatorMessage::GetBytes\n" );
+    medDebug( (sal_uLong)(m_pRun - m_pBytes) >= m_nBytes, "Overflow in MediatorMessage::GetBytes\n" );
     sal_uLong nBytes = ExtractULONG();
 
     if( nBytes == 0 )
         return NULL;
 
-    medDebug( (ULONG)(m_pRun - m_pBytes) >= m_nBytes, "Overflow in MediatorMessage::GetBytes\n" );
+    medDebug( (sal_uLong)(m_pRun - m_pBytes) >= m_nBytes, "Overflow in MediatorMessage::GetBytes\n" );
     char* pBuffer = new char[ nBytes ];
     memcpy( pBuffer, m_pRun, nBytes );
     m_pRun += nBytes;
@@ -279,13 +279,13 @@ char* MediatorMessage::GetString()
     if( ! m_pRun )
         m_pRun = m_pBytes;
 
-    medDebug( (ULONG)(m_pRun - m_pBytes) >= m_nBytes, "Overflow in MediatorMessage::GetString\n" );
+    medDebug( (sal_uLong)(m_pRun - m_pBytes) >= m_nBytes, "Overflow in MediatorMessage::GetString\n" );
     sal_uLong nBytes = ExtractULONG();
 
     if( nBytes == 0 )
         return NULL;
 
-    medDebug( (ULONG)(m_pRun - m_pBytes) >= m_nBytes, "Overflow in MediatorMessage::GetString\n" );
+    medDebug( (sal_uLong)(m_pRun - m_pBytes) >= m_nBytes, "Overflow in MediatorMessage::GetString\n" );
     char* pBuffer = new char[ nBytes+1 ];
     memcpy( pBuffer, m_pRun, nBytes );
     pBuffer[ nBytes ] = 0;
@@ -298,10 +298,10 @@ sal_uInt32 MediatorMessage::GetUINT32()
     if( ! m_pRun )
         m_pRun = m_pBytes;
 
-    medDebug( (ULONG)(m_pRun - m_pBytes) >= m_nBytes, "Overflow in MediatorMessage::GetUINT32\n" );
+    medDebug( (sal_uLong)(m_pRun - m_pBytes) >= m_nBytes, "Overflow in MediatorMessage::GetUINT32\n" );
     sal_uLong nBytes = ExtractULONG();
-    medDebug( nBytes != sizeof( UINT32 ), "No UINT32 in MediatorMessage::GetUINT32\n" );
-    medDebug( (ULONG)(m_pRun - m_pBytes) >= m_nBytes, "Overflow in MediatorMessage::GetUINT32\n" );
+    medDebug( nBytes != sizeof( sal_uInt32 ), "No sal_uInt32 in MediatorMessage::GetUINT32\n" );
+    medDebug( (sal_uLong)(m_pRun - m_pBytes) >= m_nBytes, "Overflow in MediatorMessage::GetUINT32\n" );
     sal_uInt32 nRet;
     memcpy( &nRet, m_pRun, sizeof( nRet ) );
     m_pRun += sizeof( sal_uInt32 );

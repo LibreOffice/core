@@ -307,7 +307,7 @@ sal_Bool Sane::Open( const char* name )
     int i;
 
     SANE_Status nStatus = p_open( (SANE_String_Const)name, &maHandle );
-    FAIL_STATE( nStatus, "sane_open", FALSE );
+    FAIL_STATE( nStatus, "sane_open", sal_False );
 
     ReloadOptions();
 
