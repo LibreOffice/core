@@ -76,7 +76,7 @@ namespace cairo
         nScreen(pSysDat.nScreen),
         nDepth(pSysDat.nDepth),
         aColormap(pSysDat.aColormap),
-        pXRenderFormat(pSysDat.pRenderFormat)
+        pRenderFormat(pSysDat.pXRenderFormat)
     {}
 
     X11SysData::X11SysData( const SystemEnvData& pSysDat ) :
