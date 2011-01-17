@@ -1979,7 +1979,7 @@ void UCBStorage_Impl::ReadContent()
                 if ( m_bIsLinked )
                 {
                     // unpacked storages have to deal with the meta-inf folder by themselves
-                    if( aTitle.equalsAscii("META-INF") )
+                    if( aTitle.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("META-INF")) )
                         continue;
                 }
                 else
@@ -2103,7 +2103,7 @@ sal_Int32 UCBStorage_Impl::GetObjectCount()
         for ( sal_Int32 nProps=0; nProps<rMyProps.getLength(); nProps++ )
         {
             const PropertyValue& rAny = rMyProps[nProps];
-            if ( rAny.Name.equalsAscii("FullPath") )
+            if ( rAny.Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("FullPath")) )
             {
                 rtl::OUString aTmp;
                 if ( ( rAny.Value >>= aTmp ) && aTmp == rPath )
@@ -2111,7 +2111,7 @@ sal_Int32 UCBStorage_Impl::GetObjectCount()
                 if ( aType.getLength() )
                     break;
             }
-            else if ( rAny.Name.equalsAscii("MediaType") )
+            else if ( rAny.Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("MediaType")) )
             {
                 if ( ( rAny.Value >>= aType ) && aType.getLength() && bFound )
                     break;
