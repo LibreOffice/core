@@ -1017,11 +1017,11 @@ XID X11SalGraphics::GetXRenderPicture()
     if( !m_aXRenderPicture )
     {
         // check xrender support for matching visual
-        XRenderPictFormat* pVisualFormat = GetXRenderFormat();
-        if( !pVisualFormat )
+        XRenderPictFormat* pXRenderFormat = GetXRenderFormat();
+        if( !pXRenderFormat )
             return 0;
         // get the matching xrender target for drawable
-        m_aXRenderPicture = rRenderPeer.CreatePicture( hDrawable_, pVisualFormat, 0, NULL );
+        m_aXRenderPicture = rRenderPeer.CreatePicture( hDrawable_, pXRenderFormat, 0, NULL );
     }
 
     {
