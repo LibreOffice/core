@@ -76,7 +76,6 @@ class SwStyleManager : public IStyleAccess
     SwStyleCache *mpParaCache;
 
 public:
-    // --> OD 2008-03-07 #refactorlists#
     // accept empty item set for ignorable paragraph items.
     SwStyleManager( SfxItemSet* pIgnorableParagraphItems )
         : aAutoCharPool(),
@@ -84,7 +83,6 @@ public:
           mpCharCache(0),
           mpParaCache(0)
     {}
-    // <--
     virtual ~SwStyleManager();
     virtual StylePool::SfxItemSet_Pointer_t getAutomaticStyle( const SfxItemSet& rSet,
                                                                IStyleAccess::SwAutoStyleFamily eFamily );
@@ -159,10 +157,8 @@ void SwStyleManager::getAllStyles( std::vector<StylePool::SfxItemSet_Pointer_t> 
                                    IStyleAccess::SwAutoStyleFamily eFamily )
 {
     StylePool& rAutoPool = eFamily == IStyleAccess::AUTO_STYLE_CHAR ? aAutoCharPool : aAutoParaPool;
-    // --> OD 2008-03-07 #refactorlists#
     // setup <StylePool> iterator, which skips unused styles and ignorable items
     IStylePoolIteratorAccess *pIter = rAutoPool.createIterator( true, true );
-    // <--
     StylePool::SfxItemSet_Pointer_t pStyle = pIter->getNext();
     while( pStyle.get() )
     {

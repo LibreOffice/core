@@ -536,14 +536,12 @@ void SwNumberTreeNode::AddChild( SwNumberTreeNode * pChild,
 
 */
 
-    // --> OD 2008-03-13 #refactorlists#
     if ( nDepth < 0 )
     {
         OSL_ENSURE( false,
                 "<SwNumberTreeNode::AddChild(..)> - parameter <nDepth> out of valid range. Serious defect -> please inform OD." );
         return;
     }
-    // <--
 
     if ( pChild->GetParent() != NULL || pChild->GetChildCount() > 0 )
     {
@@ -578,9 +576,7 @@ void SwNumberTreeNode::AddChild( SwNumberTreeNode * pChild,
     }
     else
     {
-        // --> OD 2008-02-19 #refactorlists#
         pChild->PreAdd();
-        // <--
         std::pair<tSwNumberTreeChildren::iterator, bool> aResult =
             mChildren.insert(pChild);
 
@@ -717,10 +713,8 @@ void SwNumberTreeNode::RemoveChild(SwNumberTreeNode * pChild)
         if (! pRemove->mChildren.empty())
         {
             pRemove->MoveChildren(*aItPred);
-            // --> OD 2008-04-04 #refactorlists#
             (*aItPred)->InvalidateTree();
             (*aItPred)->NotifyInvalidChildren();
-            // <--
         }
 
         // --> OD 2006-01-17 #i60652#
@@ -735,20 +729,14 @@ void SwNumberTreeNode::RemoveChild(SwNumberTreeNode * pChild)
 
         mChildren.erase(aRemoveIt);
 
-        // --> OD 2008-04-04 #refactorlists#
-//        if (aItPred != mChildren.end())
-//            NotifyInvalidChildren();
         NotifyInvalidChildren();
-        // <--
     }
     else
     {
         OSL_ENSURE(false, "RemoveChild: failed!");
     }
 
-    // --> OD 2008-02-19 #refactorlists#
     pChild->PostRemove();
-    // <--
 }
 
 void SwNumberTreeNode::RemoveMe()
@@ -928,7 +916,6 @@ bool SwNumberTreeNode::IsFirst() const
     return bResult;
 }
 
-// --> OD 2008-03-13 #refactorlists#
 void SwNumberTreeNode::SetLevelInListTree( const int nLevel )
 {
     if ( nLevel < 0 )
@@ -953,7 +940,6 @@ void SwNumberTreeNode::SetLevelInListTree( const int nLevel )
         }
     }
 }
-// <--
 
 int SwNumberTreeNode::GetLevelInListTree() const
 {
@@ -1370,7 +1356,6 @@ const SwNumberTreeNode* SwNumberTreeNode::GetPrecedingNodeOf(
 }
 // <--
 
-// --> OD 2008-04-17 #refactorlists#
 void SwNumberTreeNode::NotifyNodesOnListLevel( const int nListLevel )
 {
     if ( nListLevel < 0 )
@@ -1406,6 +1391,5 @@ void SwNumberTreeNode::NotifyChildrenOnDepth( const int nDepth )
         ++aChildIter;
     }
 }
-// <--
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

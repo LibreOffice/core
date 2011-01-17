@@ -29,13 +29,9 @@
 #define _SWSTYLEMANAGER_HXX
 
 class IStyleAccess;
-// --> OD 2008-03-07 #refactorlists#
 class SfxItemSet;
-// <--
 
-// --> OD 2008-03-07 #refactorlists#
 IStyleAccess *createStyleManager( SfxItemSet* pIgnorableParagraphItems = 0 );
-// <--
 #endif  //_SWSTYLEMANAGER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

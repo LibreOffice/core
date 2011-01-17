@@ -57,7 +57,6 @@ TYPEINIT1( SwCollCondition, SwClient );
 
 SV_IMPL_PTRARR( SwFmtCollConditions, SwCollConditionPtr );
 
-// --> OD 2008-03-04 #refactorlists#
 namespace TxtFmtCollFunc
 {
 
@@ -370,7 +369,6 @@ BOOL SwTxtFmtColl::IsAtDocNodeSet() const
     return FALSE;
 }
 
-// --> OD 2008-03-04 #refactorlists#
 BOOL SwTxtFmtColl::SetFmtAttr( const SfxPoolItem& rAttr )
 {
     const bool bIsNumRuleItem = rAttr.Which() == RES_PARATR_NUMRULE;

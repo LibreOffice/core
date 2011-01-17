@@ -156,7 +156,6 @@ void SwUndoInsNum::Redo( SwUndoIter& rUndoIter )
         else
         {
             // --> OD 2005-02-25 #i42921# - adapt to changed signature
-            // --> OD 2008-03-18 #refactorlists#
             rDoc.SetNumRule( *rUndoIter.pAktPam, aNumRule, false );
             // <--
         }
@@ -176,7 +175,6 @@ void SwUndoInsNum::Repeat( SwUndoIter& rUndoIter )
         if( !sReplaceRule.Len() )
         {
             // --> OD 2005-02-25 #i42921# - adapt to changed signature
-            // --> OD 2008-03-18 #refactorlists#
             rUndoIter.GetDoc().SetNumRule( *rUndoIter.pAktPam, aNumRule, false );
             // <--
         }
@@ -420,7 +418,6 @@ SwUndoNumRuleStart::SwUndoNumRuleStart( const SwPosition& rPos, USHORT nStt )
     SwTxtNode* pTxtNd = rPos.nNode.GetNode().GetTxtNode();
     if ( pTxtNd )
     {
-        // --> OD 2008-02-28 #refactorlists#
         if ( pTxtNd->HasAttrListRestartValue() )
         {
             nOldStt = static_cast<USHORT>(pTxtNd->GetAttrListRestartValue());
@@ -429,7 +426,6 @@ SwUndoNumRuleStart::SwUndoNumRuleStart( const SwPosition& rPos, USHORT nStt )
         {
             nOldStt = USHRT_MAX; // indicating, that the list restart value is not set
         }
-        // <--
     }
 }
 

@@ -1347,7 +1347,6 @@ void SwWrtShell::NumOrBulletOn(BOOL bNum)
         }
         // <--
         // reset indent attribute on applying list style
-        // --> OD 2008-03-17 #refactorlists#
         // start new list
         SetCurNumRule( aNumRule, true, String(), true );
     }
@@ -1382,10 +1381,8 @@ void SwWrtShell::NumOrBulletOff()
                 aFmt.SetNumberingType(SVX_NUM_NUMBER_NONE);
                 aNumRule.Set(nLevel, aFmt);
 
-                // --> OD 2008-03-17 #refactorlists#
                 // no start or continuation of a list - the outline style is only changed.
                 SetCurNumRule( aNumRule, false );
-                // <--
             }
         }
         else
@@ -1489,9 +1486,7 @@ SelectionType SwWrtShell::GetSelectionType() const
         const SwTxtNode* pTxtNd =
             GetCrsr()->GetPoint()->nNode.GetNode().GetTxtNode();
 
-        // --> OD 2008-03-19 #refactorlists#
         if ( pTxtNd && pTxtNd->IsInList() )
-        // <--
         {
             const SwNumFmt& rFmt = pNumRule->Get(sal::static_int_cast< sal_uInt8, sal_Int32>(pTxtNd->GetActualListLevel()));
             if ( SVX_NUM_NUMBER_NONE != rFmt.GetNumberingType() )

@@ -152,7 +152,6 @@ USHORT aBreakSetRange[] = {
     0 };
 
     // AttrSet-Range fuer die TxtFmtColl
-    // OD 2008-02-27 #refactorlists# :
     // list attributes ( RES_PARATR_LIST_BEGIN - RES_PARATR_LIST_END ) are not
     // included in the paragraph style's itemset.
 USHORT aTxtFmtCollSetRange[] = {
@@ -176,9 +175,7 @@ USHORT aTxtNodeSetRange[] = {
     RES_FRMATR_BEGIN, RES_FRMATR_END-1,
     RES_CHRATR_BEGIN, RES_CHRATR_END-1,
     RES_PARATR_BEGIN, RES_PARATR_END-1,
-    // --> OD 2008-02-25 #refactorlists#
     RES_PARATR_LIST_BEGIN, RES_PARATR_LIST_END-1,
-    // <--
     RES_UNKNOWNATR_BEGIN, RES_UNKNOWNATR_END-1,
     0
 };
@@ -335,10 +332,8 @@ SfxItemInfo aSlotTab[] =
     { SID_ATTR_PARA_HYPHENZONE, SFX_ITEM_POOLABLE },    // RES_PARATR_HYPHENZONE
     { FN_FORMAT_DROPCAPS, 0 },                          // RES_PARATR_DROP
     { SID_ATTR_PARA_REGISTER, SFX_ITEM_POOLABLE },      // RES_PARATR_REGISTER
-    // --> OD 2008-03-04 #refactorlists#
     // RES_PARATR_NUMRULE is now poolable
     { SID_ATTR_PARA_NUMRULE, SFX_ITEM_POOLABLE },       // RES_PARATR_NUMRULE
-    // <--
     { SID_ATTR_PARA_SCRIPTSPACE, SFX_ITEM_POOLABLE },   // RES_PARATR_SCRIPTSPACE
     { SID_ATTR_PARA_HANGPUNCTUATION, SFX_ITEM_POOLABLE },// RES_PARATR_HANGINGPUNCTUATION
 
@@ -349,13 +344,11 @@ SfxItemInfo aSlotTab[] =
 
     { SID_ATTR_PARA_OUTLINE_LEVEL, SFX_ITEM_POOLABLE }, // RES_PARATR_OUTLINELEVEL //#outline level,zhaojianwei
 
-    // --> OD 2008-02-19 #refactorlists#
     { 0, SFX_ITEM_POOLABLE },                           // RES_PARATR_LIST_ID
     { 0, SFX_ITEM_POOLABLE },                           // RES_PARATR_LIST_LEVEL
     { 0, SFX_ITEM_POOLABLE },                           // RES_PARATR_LIST_ISRESTART
     { 0, SFX_ITEM_POOLABLE },                           // RES_PARATR_LIST_RESTARTVALUE
     { 0, SFX_ITEM_POOLABLE },                           // RES_PARATR_LIST_ISCOUNTED
-    // <--
 
     { 0, SFX_ITEM_POOLABLE },                           // RES_FILL_ORDER
     { 0, SFX_ITEM_POOLABLE },                           // RES_FRM_SIZE
@@ -571,13 +564,11 @@ void _InitCore()
 
     aAttrTab[ RES_PARATR_OUTLINELEVEL - POOLATTR_BEGIN ] = new SfxUInt16Item( RES_PARATR_OUTLINELEVEL, 0 );//#outline level,zhaojianwei
 
-    // --> OD 2008-02-19 #refactorlists#
     aAttrTab[ RES_PARATR_LIST_ID - POOLATTR_BEGIN ] = new SfxStringItem( RES_PARATR_LIST_ID, aEmptyStr );
     aAttrTab[ RES_PARATR_LIST_LEVEL - POOLATTR_BEGIN ] = new SfxInt16Item( RES_PARATR_LIST_LEVEL, 0 );
     aAttrTab[ RES_PARATR_LIST_ISRESTART - POOLATTR_BEGIN ] = new SfxBoolItem( RES_PARATR_LIST_ISRESTART, FALSE );
     aAttrTab[ RES_PARATR_LIST_RESTARTVALUE - POOLATTR_BEGIN ] = new SfxInt16Item( RES_PARATR_LIST_RESTARTVALUE, 1 );
     aAttrTab[ RES_PARATR_LIST_ISCOUNTED - POOLATTR_BEGIN ] = new SfxBoolItem( RES_PARATR_LIST_ISCOUNTED, TRUE );
-    // <--
 
     aAttrTab[ RES_FILL_ORDER- POOLATTR_BEGIN ] = new SwFmtFillOrder;
     aAttrTab[ RES_FRM_SIZE- POOLATTR_BEGIN ] = new SwFmtFrmSize;

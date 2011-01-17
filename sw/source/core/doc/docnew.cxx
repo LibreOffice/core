@@ -113,10 +113,8 @@
 #include <pausethreadstarting.hxx>
 // <--
 #include <numrule.hxx>
-// --> OD 2008-03-13 #refactorlists#
 #include <list.hxx>
 #include <listfunc.hxx>
-// <--
 
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 
@@ -255,19 +253,15 @@ SwDoc::SwDoc() :
     pURLStateChgd( 0 ),
     pNumberFormatter( 0 ),
     pNumRuleTbl( new SwNumRuleTbl ),
-    // --> OD 2008-03-26 #refactorlists#
     maLists(),
     maListStyleLists(),
-    // <--
     pRedlineTbl( new SwRedlineTbl ),
     pAutoFmtRedlnComment( 0 ),
     pUnoCrsrTbl( new SwUnoCrsrTbl( 0, 16 ) ),
     pPgPViewPrtData( 0 ),
     pExtInputRing( 0 ),
     pLayouter( 0 ),
-    // --> OD 2008-03-07 #refactorlists#
     pStyleAccess( 0 ),
-    // <--
     pLayoutCache( 0 ),
     pUnoCallBack(new SwModify(0)),
     mpGrammarContact( 0 ),
@@ -446,7 +440,6 @@ SwDoc::SwDoc() :
     // create TOXTypes
     InitTOXTypes();
 
-    // --> OD 2008-03-07 #refactorlists#
     // pass empty item set containing the paragraph's list attributes
     // as ignorable items to the stype manager.
     {
@@ -455,7 +448,6 @@ SwDoc::SwDoc() :
                                              0 );
         pStyleAccess = createStyleManager( &aIgnorableParagraphItems );
     }
-    // <--
 
     ResetModified();
 }
@@ -663,7 +655,6 @@ SwDoc::~SwDoc()
     delete pDfltGrfFmtColl;
     delete pNumRuleTbl;
 
-    // --> OD 2008-03-26 #refactorlists#
     {
         for ( std::hash_map< String, SwList*, StringHash >::iterator
                                                     aListIter = maLists.begin();
@@ -675,7 +666,6 @@ SwDoc::~SwDoc()
         maLists.clear();
     }
     maListStyleLists.clear();
-    // <--
 
     delete pPrtData;
     delete pNumberFormatter;
@@ -1067,9 +1057,7 @@ SfxObjectShell* SwDoc::CreateCopy(bool bCallInitNew ) const
         RES_FRMATR_BEGIN, RES_FRMATR_END-1,
         RES_CHRATR_BEGIN, RES_CHRATR_END-1,
         RES_PARATR_BEGIN, RES_PARATR_END-1,
-        // --> OD 2008-02-25 #refactorlists##
         RES_PARATR_LIST_BEGIN, RES_PARATR_LIST_END-1,
-        // <--
         RES_UNKNOWNATR_BEGIN, RES_UNKNOWNATR_END-1,
         0
     };

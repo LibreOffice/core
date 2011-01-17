@@ -3715,10 +3715,7 @@ BOOL lcl_SetAFmtBox( const _FndBox*& rpBox, void *pPara )
     {
         SwTableBox* pSetBox = (SwTableBox*)rpBox->GetBox();
         SwDoc* pDoc = pSetBox->GetFrmFmt()->GetDoc();
-        // --> OD 2008-02-25 #refactorlists#
-//        SfxItemSet aCharSet( pDoc->GetAttrPool(), RES_CHRATR_BEGIN, RES_PARATR_END-1 );
         SfxItemSet aCharSet( pDoc->GetAttrPool(), RES_CHRATR_BEGIN, RES_PARATR_LIST_END-1 );
-        // <--
         SfxItemSet aBoxSet( pDoc->GetAttrPool(), aTableBoxSetRange );
         BYTE nPos = pSetPara->nAFmtLine * 4 + pSetPara->nAFmtBox;
         pSetPara->rTblFmt.UpdateToSet( nPos, aCharSet,

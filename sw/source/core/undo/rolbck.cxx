@@ -184,9 +184,7 @@ SwHistorySetFmt::~SwHistorySetFmt()
 }
 
 
-// --> OD 2008-02-27 #refactorlists# - removed <rDoc>
 SwHistoryResetFmt::SwHistoryResetFmt(const SfxPoolItem* pFmtHt, ULONG nNodeIdx)
-// <--
     : SwHistoryHint( HSTRY_RESETFMTHNT )
     , m_nNodeIndex( nNodeIdx )
     , m_nWhich( pFmtHt->Which() )
@@ -1045,10 +1043,8 @@ SwHistory::~SwHistory()
 |*
 *************************************************************************/
 
-// --> OD 2008-02-27 #refactorlists# - removed <rDoc>
 void SwHistory::Add( const SfxPoolItem* pOldValue, const SfxPoolItem* pNewValue,
                      ULONG nNodeIdx )
-// <--
 {
     OSL_ENSURE( !m_nEndDiff, "History was not deleted after REDO" );
 

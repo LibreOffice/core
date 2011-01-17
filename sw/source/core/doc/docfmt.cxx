@@ -209,7 +209,6 @@ BOOL lcl_RstAttr( const SwNodePtr& rpNd, void* pArgs )
 
         SwDoc* pDoc = pNode->GetDoc();
 
-        // --> OD 2008-04-14 #refactorlists#
         // remove unused attribute RES_LR_SPACE
         // add list attributes
         SfxItemSet aSet( pDoc->GetAttrPool(),
@@ -220,11 +219,7 @@ BOOL lcl_RstAttr( const SwNodePtr& rpNd, void* pArgs )
                          0 );
         const SfxItemSet* pSet = pNode->GetpSwAttrSet();
 
-        // --> OD 2008-04-15 #refactorlists#
-//        std::vector<USHORT> aClearWhichIds;
         SvUShorts aClearWhichIds;
-        // <--
-        // --> OD 2008-04-15 #refactorlists#
         // restoring all paragraph list attributes
         {
             SfxItemSet aListAttrSet( pDoc->GetAttrPool(),
@@ -243,7 +238,6 @@ BOOL lcl_RstAttr( const SwNodePtr& rpNd, void* pArgs )
                 }
             }
         }
-        // <--
 
         const SfxPoolItem* pItem;
 
@@ -277,24 +271,19 @@ BOOL lcl_RstAttr( const SwNodePtr& rpNd, void* pArgs )
                 if( bSave )
                 {
                     aSet.Put( *pItem );
-                    // --> OD 2008-04-15 #refactorlists#
-//                    aClearWhichIds.push_back( aSavIds[n] );
                     aClearWhichIds.Insert( aSavIds[n], aClearWhichIds.Count() );
                 }
             }
         }
 
-        // --> OD 2008-04-14 #refactorlists#
         // do not clear items directly from item set and only clear to be kept
         // attributes, if no deletion item set is found.
-//        pNode->ClearItemsFromAttrSet( aClearWhichIds );
         const bool bKeepAttributes =
                     !pPara || !pPara->pDelSet || pPara->pDelSet->Count() == 0;
         if ( bKeepAttributes )
         {
             pNode->ResetAttr( aClearWhichIds );
         }
-        // <--
 
         if( !bLocked )
             pNode->UnlockModify();
@@ -305,16 +294,12 @@ BOOL lcl_RstAttr( const SwNodePtr& rpNd, void* pArgs )
 
             if( pPara->pDelSet && pPara->pDelSet->Count() )
             {
-                // --> OD 2008-04-15 #refactorlists#
                 OSL_ENSURE( !bKeepAttributes,
                         "<lcl_RstAttr(..)> - certain attributes are kept, but not needed. -> please inform OD" );
-                // <--
                 SfxItemIter aIter( *pPara->pDelSet );
                 pItem = aIter.FirstItem();
                 while( TRUE )
                 {
-                    // --> OD 2008-04-14 #refactorlists#
-                    //
                     if ( ( pItem->Which() != RES_PAGEDESC &&
                            pItem->Which() != RES_BREAK &&
                            pItem->Which() != RES_PARATR_NUMRULE ) ||
@@ -322,7 +307,6 @@ BOOL lcl_RstAttr( const SwNodePtr& rpNd, void* pArgs )
                     {
                         pNode->ResetAttr( pItem->Which() );
                     }
-                    // <--
                     if( aIter.IsAtEnd() )
                         break;
                     pItem = aIter.NextItem();
@@ -336,10 +320,8 @@ BOOL lcl_RstAttr( const SwNodePtr& rpNd, void* pArgs )
         else
             pNode->ResetAllAttr();
 
-        // --> OD 2008-04-15 #refactorlists#
         // only restore saved attributes, if needed
         if ( bKeepAttributes && aSet.Count() )
-        // <--
         {
             pNode->LockModify();
 
@@ -461,9 +443,7 @@ void SwDoc::ResetAttrs( const SwPaM &rRg,
         RES_FRMATR_BEGIN, RES_FRMATR_END-1,
         RES_CHRATR_BEGIN, RES_CHRATR_END-1,
         RES_PARATR_BEGIN, RES_PARATR_END-1,
-        // --> OD 2008-02-25 #refactorlists#
         RES_PARATR_LIST_BEGIN, RES_PARATR_LIST_END-1,
-        // <--
         RES_TXTATR_INETFMT, RES_TXTATR_INETFMT,
         RES_TXTATR_CHARFMT, RES_TXTATR_CHARFMT,
         RES_TXTATR_CJK_RUBY, RES_TXTATR_CJK_RUBY,
@@ -627,9 +607,7 @@ lcl_InsAttr(SwDoc *const pDoc, const SwPaM &rRg, const SfxItemSet& rChgSet,
         }
 
         if (    isPARATR(nWhich)
-             // --> OD 2008-02-25 #refactorlists#
              || isPARATR_LIST(nWhich)
-             // <--
              || isFRMATR(nWhich)
              || isGRFATR(nWhich)
              || isUNKNOWNATR(nWhich) )
@@ -654,9 +632,7 @@ lcl_InsAttr(SwDoc *const pDoc, const SwPaM &rRg, const SfxItemSet& rChgSet,
 
         SfxItemSet* pTmpOtherItemSet = new SfxItemSet( pDoc->GetAttrPool(),
                                     RES_PARATR_BEGIN, RES_PARATR_END-1,
-                                    // --> OD 2008-02-25 #refactorlists#
                                     RES_PARATR_LIST_BEGIN, RES_PARATR_LIST_END-1,
-                                    // <--
                                     RES_FRMATR_BEGIN, RES_FRMATR_END-1,
                                     RES_GRFATR_BEGIN, RES_GRFATR_END-1,
                                     RES_UNKNOWNATR_BEGIN, RES_UNKNOWNATR_END-1,
@@ -1279,9 +1255,7 @@ void SwDoc::SetDefault( const SfxItemSet& rSet )
             bCheckSdrDflt = 0 != pSdrPool;
         }
         else if ( isPARATR(nWhich) ||
-                  // --> OD 2008-02-25 #refactorlists#
                   isPARATR_LIST(nWhich) )
-                  // <--
         {
             aCallMod.Add( pDfltTxtFmtColl );
             bCheckSdrDflt = 0 != pSdrPool;
@@ -1733,7 +1707,6 @@ BOOL lcl_SetTxtFmtColl( const SwNodePtr& rpNode, void* pArgs )
             lcl_RstAttr( pCNd, pPara );
 
             // --> OD 2007-11-06 #i62675#
-            // --> OD 2008-04-15 #refactorlists#
             // check, if paragraph style has changed
             if ( pPara->bResetListAttrs &&
                  pFmt != pCNd->GetFmtColl() &&
@@ -1761,7 +1734,6 @@ BOOL lcl_SetTxtFmtColl( const SwNodePtr& rpNode, void* pArgs )
 
                 if ( bChangeOfListStyleAtParagraph )
                 {
-                    // --> OD 2008-04-08 #refactorlists#
                     std::auto_ptr< SwRegHistory > pRegH;
                     if ( pPara->pHistory )
                     {
@@ -1808,11 +1780,9 @@ BOOL SwDoc::SetTxtFmtColl( const SwPaM &rRg,
     if( DoesUndo() )
     {
         ClearRedo();
-        // --> OD 2008-04-15 #refactorlists#
         SwUndoFmtColl* pUndo = new SwUndoFmtColl( rRg, pFmt,
                                                   bReset,
                                                   bResetListAttrs );
-        // <--
         pHst = pUndo->GetHistory();
         AppendUndo( pUndo );
     }

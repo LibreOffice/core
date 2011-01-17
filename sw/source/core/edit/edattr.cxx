@@ -410,7 +410,6 @@ BOOL lcl_IsNoEndTxtAttrAtPos( const SwTxtNode& rTNd, xub_StrLen nPos,
     {
         bRet = FALSE;
 
-        // --> OD 2008-03-19 #refactorlists#
         if ( rTNd.IsInList() )
         {
             OSL_ENSURE( rTNd.GetNumRule(),

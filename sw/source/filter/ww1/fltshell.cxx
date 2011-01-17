@@ -457,10 +457,8 @@ void SwFltControlStack::SetAttrInDoc(const SwPosition& rTmpPos, SwFltStackEntry*
                                                 aTmpStart, aTmpEnd ) )
                     {
                         SwPaM aTmpPam( aTmpStart, aTmpEnd );
-                        // --> OD 2008-03-17 #refactorlists#
                         // no start of a new list
                         pDoc->SetNumRule( aTmpPam, *pRul, false );
-                        // <--
 
                         aTmpStart = aTmpEnd;    // Start fuer naechstes Teilstueck
                         aTmpStart++;

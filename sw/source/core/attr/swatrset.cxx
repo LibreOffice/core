@@ -47,9 +47,7 @@
 #include <cmdid.h>
 #include <istyleaccess.hxx>
 #include <numrule.hxx>
-// --> OD 2008-03-19 #refactorlists#
 #include <list.hxx>
-// <--
 
 
 SwAttrPool::SwAttrPool( SwDoc* pD )
@@ -272,7 +270,6 @@ void SwAttrSet::CopyToModify( SwModify& rMod ) const
                 }
             }
 
-            // --> OD 2008-03-19 #refactorlists#
             // copy list and if needed also the corresponding list style
             // for text nodes
             if ( pSrcDoc != pDstDoc &&
@@ -322,7 +319,6 @@ void SwAttrSet::CopyToModify( SwModify& rMod ) const
                     // <--
                 }
             }
-            // <--
 
             // JP 04.02.99: Task #61467# Seitenvorlagenwechsel mit kopieren
             //              Gegenueber dem alten Verhalten, sie zu entfernen

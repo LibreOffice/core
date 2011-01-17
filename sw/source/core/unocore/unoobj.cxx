@@ -568,11 +568,7 @@ throw (lang::IllegalArgumentException)
         {
             // multi selection is not considered
             SwTxtNode *const pTxtNd = rPam.GetNode()->GetTxtNode();
-            // --> OD 2008-05-14 #refactorlists# - check on list style not needed
-//                const SwNumRule* pRule = pTxtNd->GetNumRule();
-//                if( FN_UNO_NUM_LEVEL == rEntry.nWID  &&  pRule != NULL )
             if (FN_UNO_NUM_LEVEL == rEntry.nWID)
-            // <--
             {
                 sal_Int16 nLevel = 0;
                 if (rValue >>= nLevel)
@@ -2331,9 +2327,7 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
 static USHORT g_ParaResetableSetRange[] = {
     RES_FRMATR_BEGIN, RES_FRMATR_END-1,
     RES_PARATR_BEGIN, RES_PARATR_END-1,
-    // --> OD 2008-02-25 #refactorlists#
     RES_PARATR_LIST_BEGIN, RES_PARATR_LIST_END-1,
-    // <--
     RES_UNKNOWNATR_BEGIN, RES_UNKNOWNATR_END-1,
     0
 };

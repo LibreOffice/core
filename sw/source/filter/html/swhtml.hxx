@@ -571,10 +571,8 @@ class SwHTMLParser : public SfxHTMLParser, public SwClient
     SwTwips GetCurrentBrowseWidth();
 
     SwHTMLNumRuleInfo& GetNumInfo() { return *pNumRuleInfo; }
-    // --> OD 2008-04-02 #refactorlists#
     // add parameter <bCountedInList>
     void SetNodeNum( sal_uInt8 nLevel, bool bCountedInList );
-    // <--
 
     // Verwalten von Absatz-Vorlagen
 

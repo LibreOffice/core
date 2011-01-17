@@ -125,11 +125,9 @@ void SwTextShell::ExecEnterNum(SfxRequest &rReq)
                 aRule.SetFeatureFlag(NUM_ENABLE_EMBEDDED_BMP, FALSE);
 
             aSet.Put(SvxNumBulletItem(aRule));
-            // --> OD 2008-02-29 #refactorlists# - removed <bHasChild>
             OSL_ENSURE( GetShell().GetNumLevel() < MAXLEVEL,
                     "<SwTextShell::ExecEnterNum()> - numbered node without valid list level. Serious defect -> please inform OD." );
             USHORT nLevel = GetShell().GetNumLevel();
-            // <--
             if( nLevel < MAXLEVEL )
             {
                 nLevel = 1<<nLevel;
@@ -198,12 +196,10 @@ void SwTextShell::ExecEnterNum(SfxRequest &rReq)
                                     // <--
                 aSetRule.SetSvxRule( *pSetRule, GetShell().GetDoc());
                 aSetRule.SetAutoRule( TRUE );
-                // --> OD 2008-03-17 #refactorlists#
                 // No start of new list, if an existing list style is edited.
                 // Otherwise start a new list.
                 const bool bCreateList = (pCurRule == 0);
                 GetShell().SetCurNumRule( aSetRule, bCreateList );
-                // <--
             }
             // wenn der Dialog mit OK verlassen wurde, aber nichts ausgewaehlt
             // wurde dann muss die Numerierung zumindest eingeschaltet werden,
@@ -219,10 +215,8 @@ void SwTextShell::ExecEnterNum(SfxRequest &rReq)
                                     // <--
                 aSetRule.SetSvxRule(*pSetRule, GetShell().GetDoc());
                 aSetRule.SetAutoRule( TRUE );
-                // --> OD 2008-03-17 #refactorlists#
                 // start new list
                 GetShell().SetCurNumRule( aSetRule, true );
-                // <--
             }
         }
         else if(RET_USER == nRet)

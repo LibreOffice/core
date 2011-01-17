@@ -402,7 +402,6 @@ BOOL SwCrsrShell::LeftRight( BOOL bLeft, USHORT nCnt, USHORT nMode,
     return bRet;
 }
 
-// --> OD 2008-04-02 #refactorlists#
 void SwCrsrShell::MarkListLevel( const String& sListId,
                                  const int nListLevel )
 {
@@ -2546,10 +2545,8 @@ SwCrsrShell::SwCrsrShell( SwCrsrShell& rShell, Window *pInitWin )
     SwModify( 0 ), pCrsrStk( 0 ), pBlockCrsr( 0 ), pTblCrsr( 0 ),
     pBoxIdx( 0 ), pBoxPtr( 0 ), nCrsrMove( 0 ), nBasicActionCnt( 0 ),
     eMvState( MV_NONE ),
-    // --> OD 2008-04-02 #refactorlists#
     sMarkedListId(),
     nMarkedListLevel( 0 )
-    // <--
 {
     SET_CURR_SHELL( this );
     // Nur die Position vom aktuellen Cursor aus der Copy-Shell uebernehmen
@@ -2577,10 +2574,8 @@ SwCrsrShell::SwCrsrShell( SwDoc& rDoc, Window *pInitWin,
     SwModify( 0 ), pCrsrStk( 0 ), pBlockCrsr( 0 ), pTblCrsr( 0 ),
     pBoxIdx( 0 ), pBoxPtr( 0 ), nCrsrMove( 0 ), nBasicActionCnt( 0 ),
     eMvState( MV_NONE ), // state for crsr-travelling - GetCrsrOfst
-    // --> OD 2008-04-02 #refactorlists#
     sMarkedListId(),
     nMarkedListLevel( 0 )
-    // <--
 {
     SET_CURR_SHELL( this );
     /*

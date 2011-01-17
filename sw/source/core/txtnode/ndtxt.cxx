@@ -2607,7 +2607,6 @@ SwCntntNode* SwTxtNode::AppendNode( const SwPosition & rPos )
     SwNodeIndex aIdx( rPos.nNode, 1 );
     SwTxtNode* pNew = _MakeNewTxtNode( aIdx, TRUE );
 
-    // --> OD 2008-05-14 #refactorlists#
     // reset list attributes at appended text node
     pNew->ResetAttr( RES_PARATR_LIST_ISRESTART );
     pNew->ResetAttr( RES_PARATR_LIST_RESTARTVALUE );
@@ -2622,7 +2621,6 @@ SwCntntNode* SwTxtNode::AppendNode( const SwPosition & rPos )
     {
         AddToList();
     }
-    // <--
 
     if( GetDepends() )
         MakeFrms( *pNew );
@@ -3325,7 +3323,6 @@ void SwTxtNode::ReplaceText( const SwIndex& rStart, const xub_StrLen nDelLen,
     SwModify::Modify( 0, &aHint );
 }
 
-// --> OD 2008-03-27 #refactorlists#
 namespace {
     // Helper method for special handling of modified attributes at text node.
     // The following is handled:
@@ -3532,12 +3529,10 @@ void SwTxtNode::Modify( SfxPoolItem* pOldValue, SfxPoolItem* pNewValue )
                         (SwTxtFmtColl*)((SwFmtChg*)pNewValue)->pChangedFmt );
     }
 
-    // --> OD 2008-03-27 #refactorlists#
     if ( !mbInSetOrResetAttr )
     {
         HandleModifyAtTxtNode( *this, pOldValue, pNewValue );
     }
-    // <--
 
     SwCntntNode::Modify( pOldValue, pNewValue );
 
@@ -3569,8 +3564,6 @@ SwFmtColl* SwTxtNode::ChgFmtColl( SwFmtColl *pNewColl )
     {
         SetCalcHiddenCharFlags();
         SwCntntNode::ChgFmtColl( pNewColl );
-        // --> OD 2008-03-27 #refactorlists#
-//        NumRuleChgd();
 #if OSL_DEBUG_LEVEL > 1
         OSL_ENSURE( !mbInSetOrResetAttr,
                 "DEBUG OSL_ENSURE(ON - <SwTxtNode::ChgFmtColl(..)> called during <Set/ResetAttr(..)>" );
@@ -3581,7 +3574,6 @@ SwFmtColl* SwTxtNode::ChgFmtColl( SwFmtColl *pNewColl )
             SwFmtChg aTmp2( pNewColl );
             HandleModifyAtTxtNode( *this, &aTmp1, &aTmp2  );
         }
-        // <--
     }
 
     // nur wenn im normalen Nodes-Array
@@ -3599,9 +3591,7 @@ SwNodeNum* SwTxtNode::CreateNum() const
 {
     if ( !mpNodeNum )
     {
-        // --> OD 2008-02-19 #refactorlists#
         mpNodeNum = new SwNodeNum( const_cast<SwTxtNode*>(this) );
-        // <--
     }
     return mpNodeNum;
 }
@@ -3691,7 +3681,6 @@ void SwTxtNode::ResetEmptyListStyleDueToResetOutlineLevelAttr()
 // <--
 
 
-// --> OD 2008-02-27 #refactorlists#
 void SwTxtNode::SetAttrListLevel( int nLevel )
 {
     if ( nLevel < 0 || nLevel >= MAXLEVEL )
@@ -3705,15 +3694,13 @@ void SwTxtNode::SetAttrListLevel( int nLevel )
                                     static_cast<INT16>(nLevel) );
     SetAttr( aNewListLevelItem );
 }
-// <--
-// --> OD 2008-02-27 #refactorlists#
+
 bool SwTxtNode::HasAttrListLevel() const
 {
     return GetpSwAttrSet() &&
            GetpSwAttrSet()->GetItemState( RES_PARATR_LIST_LEVEL, FALSE ) == SFX_ITEM_SET;
 }
-// <--
-// --> OD 2008-02-27 #refactorlists#
+
 int SwTxtNode::GetAttrListLevel() const
 {
     int nAttrListLevel = 0;
@@ -3724,14 +3711,12 @@ int SwTxtNode::GetAttrListLevel() const
 
     return nAttrListLevel;
 }
-// <--
 
 int SwTxtNode::GetActualListLevel() const
 {
     return GetNum() ? GetNum()->GetLevelInListTree() : -1;
 }
 
-// --> OD 2008-02-25 #refactorlists#
 void SwTxtNode::SetListRestart( bool bRestart )
 {
 //    CreateNum()->SetRestart(bRestart);
@@ -3749,7 +3734,6 @@ void SwTxtNode::SetListRestart( bool bRestart )
     }
 }
 
-// --> OD 2008-02-25 #refactorlists#
 bool SwTxtNode::IsListRestart() const
 {
 //    return GetNum() ? GetNum()->IsRestart() : false;
@@ -3758,7 +3742,6 @@ bool SwTxtNode::IsListRestart() const
 
     return aIsRestartItem.GetValue() ? true : false;
 }
-// <--
 
 /** Returns if the paragraph has a visible numbering or bullet.
     This includes all kinds of numbering/bullet/outlines.
@@ -3786,7 +3769,6 @@ bool SwTxtNode::HasVisibleNumberingOrBullet() const
     return bRet;
 }
 
-// --> OD 2008-02-25 #refactorlists#
 void SwTxtNode::SetAttrListRestartValue( SwNumberTree::tSwNumTreeNumber nNumber )
 {
 //    CreateNum()->SetStart(nNumber);
@@ -3808,15 +3790,12 @@ void SwTxtNode::SetAttrListRestartValue( SwNumberTree::tSwNumTreeNumber nNumber 
         }
     }
 }
-// <--
 
-// --> OD 2008-02-27 #refactorlists#
 bool SwTxtNode::HasAttrListRestartValue() const
 {
     return GetpSwAttrSet() &&
            GetpSwAttrSet()->GetItemState( RES_PARATR_LIST_RESTARTVALUE, FALSE ) == SFX_ITEM_SET;
 }
-// <--
 SwNumberTree::tSwNumTreeNumber SwTxtNode::GetAttrListRestartValue() const
 {
     OSL_ENSURE( HasAttrListRestartValue(),
@@ -3827,7 +3806,6 @@ SwNumberTree::tSwNumTreeNumber SwTxtNode::GetAttrListRestartValue() const
     return static_cast<SwNumberTree::tSwNumTreeNumber>(aListRestartValueItem.GetValue());
 }
 
-// --> OD 2008-02-25 #refactorlists#
 SwNumberTree::tSwNumTreeNumber SwTxtNode::GetActualListStartValue() const
 {
 //    return GetNum() ? GetNum()->GetStart() : 1;
@@ -3853,7 +3831,6 @@ SwNumberTree::tSwNumTreeNumber SwTxtNode::GetActualListStartValue() const
 
     return nListRestartValue;
 }
-// <--
 
 bool SwTxtNode::IsNotifiable() const
 {
@@ -3871,7 +3848,6 @@ bool SwTxtNode::IsNotificationEnabled() const
     return bResult;
 }
 
-// --> OD 2008-02-27 #refactorlists#
 void SwTxtNode::SetCountedInList( bool bCounted )
 {
     if ( bCounted )
@@ -3886,7 +3862,6 @@ void SwTxtNode::SetCountedInList( bool bCounted )
         SetAttr( aIsCountedInListItem );
     }
 }
-// <--
 
 bool SwTxtNode::IsCountedInList() const
 {
@@ -3896,7 +3871,6 @@ bool SwTxtNode::IsCountedInList() const
     return aIsCountedInListItem.GetValue() ? true : false;
 }
 
-// --> OD 2008-03-13 #refactorlists#
 void SwTxtNode::AddToList()
 {
     if ( IsInList() )
@@ -3944,7 +3918,6 @@ bool SwTxtNode::IsInList() const
 {
     return GetNum() != 0 && GetNum()->GetParent() != 0;
 }
-// <--
 
 bool SwTxtNode::IsFirstOfNumRule() const
 {
@@ -3956,7 +3929,6 @@ bool SwTxtNode::IsFirstOfNumRule() const
     return bResult;
 }
 
-// --> OD 2008-02-20 #refactorlists#
 void SwTxtNode::SetListId( const String sListId )
 {
     const SfxStringItem& rListIdItem =
@@ -3996,7 +3968,6 @@ String SwTxtNode::GetListId() const
 
     return sListId;
 }
-// <--
 
 /** Determines, if the list level indent attributes can be applied to the
     paragraph.
@@ -4183,7 +4154,6 @@ bool SwTxtNode::IsHidden() const
 }
 // <--
 
-// --> OD 2008-03-13 #refactorlists#
 namespace {
     // Helper class for special handling of setting attributes at text node:
     // In constructor an instance of the helper class recognize whose attributes

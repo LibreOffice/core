@@ -874,7 +874,6 @@ USHORT SwDocShell::ApplyStyles(const String &rName, USHORT nFamily,
         case SFX_STYLE_FAMILY_PSEUDO:
         {
             // reset indent attribute on applying list style
-            // --> OD 2008-03-17 #refactorlists#
             // continue list of list style
             const SwNumRule* pNumRule = pStyle->GetNumRule();
             const String sListIdForStyle =pNumRule->GetDefaultListId();

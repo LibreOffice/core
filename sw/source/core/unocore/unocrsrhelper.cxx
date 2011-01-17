@@ -600,7 +600,6 @@ sal_Bool getCrsrPropertyValue(const SfxItemPropertySimpleEntry& rEntry
 sal_Int16 IsNodeNumStart(SwPaM& rPam, PropertyState& eState)
 {
     const SwTxtNode* pTxtNd = rPam.GetNode()->GetTxtNode();
-    // --> OD 2008-02-28 #refactorlists#
     // correction: check, if restart value is set at the text node and use
     // new method <SwTxtNode::GetAttrListRestartValue()> to retrieve the value
     if ( pTxtNd && pTxtNd->GetNumRule() && pTxtNd->IsListRestart() &&
@@ -610,7 +609,6 @@ sal_Int16 IsNodeNumStart(SwPaM& rPam, PropertyState& eState)
         sal_Int16 nTmp = sal::static_int_cast< sal_Int16 >(pTxtNd->GetAttrListRestartValue());
         return nTmp;
     }
-    // <--
     eState = PropertyState_DEFAULT_VALUE;
     return -1;
 }
@@ -707,19 +705,15 @@ void setNumberingProperty(const Any& rValue, SwPaM& rPam)
                     SwPaM aPam( *rPam.GetPoint() );
                     for( sal_uInt16 n = 0; n < aRangeArr.Count(); ++n )
                     {
-                        // --> OD 2008-03-17 #refactorlists#
                         // no start of a new list
                         pDoc->SetNumRule( aRangeArr.SetPam( n, aPam ), aRule, false );
-                        // <--
                     }
                     pDoc->EndUndo( UNDO_END, NULL );
                 }
                 else
                 {
-                    // --> OD 2008-03-17 #refactorlists#
                     // no start of a new list
                     pDoc->SetNumRule( rPam, aRule, false );
-                    // <--
                 }
 
 
@@ -730,10 +724,8 @@ void setNumberingProperty(const Any& rValue, SwPaM& rPam)
                 SwNumRule* pRule = pDoc->FindNumRulePtr( pSwNum->GetCreatedNumRuleName() );
                 if(!pRule)
                     throw RuntimeException();
-                // --> OD 2008-03-17 #refactorlists#
                 // no start of a new list
                 pDoc->SetNumRule( rPam, *pRule, false );
-                // <--
             }
             // --> OD 2009-08-18 #i103817#
             // outline numbering
