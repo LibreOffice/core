@@ -96,7 +96,7 @@
 #include "vbaworksheets.hxx"
 #include "vbahyperlinks.hxx"
 #include "vbasheetobjects.hxx"
-#include "viewuno.hxx" //liuchen 2009-9-2
+#include "viewuno.hxx"
 
 #define STANDARDWIDTH 2267
 #define STANDARDHEIGHT 427
@@ -247,7 +247,6 @@ ScVbaWorksheet::setVisible( ::sal_Int32 _Visible ) throw (uno::RuntimeException)
 {
     uno::Reference< beans::XPropertySet > xProps( getSheet(), uno::UNO_QUERY_THROW );
 
-    //VBA by minz@cn.ibm.com.
     sal_Bool bVisible = true;
     switch( _Visible )
     {
@@ -479,7 +478,7 @@ ScVbaWorksheet::Activate() throw (uno::RuntimeException)
     xSpreadsheet->setActiveSheet(getSheet());
 }
 
-//liuchen 2009-9-2, support expand (but not replace) the active sheet
+// support expand (but not replace) the active sheet
 void
 ScVbaWorksheet::Select(const css::uno::Any& aReplace) throw (uno::RuntimeException)
 {
@@ -651,7 +650,7 @@ ScVbaWorksheet::getSheetAtOffset(SCTAB offset) throw (uno::RuntimeException)
 uno::Reference< excel::XWorksheet >
 ScVbaWorksheet::getNext() throw (uno::RuntimeException)
 {
-    //VBA, minz@cn.ibm.com. catch the exception for index out of bound
+    // catch the exception for index out of bound
     try{
         return getSheetAtOffset(static_cast<SCTAB>(1));
     }catch( lang::IndexOutOfBoundsException& /*e*/ )
@@ -663,7 +662,7 @@ ScVbaWorksheet::getNext() throw (uno::RuntimeException)
 uno::Reference< excel::XWorksheet >
 ScVbaWorksheet::getPrevious() throw (uno::RuntimeException)
 {
-    //VBA, minz@cn.ibm.com. catch the exception for index out of bound
+    // catch the exception for index out of bound
     try{
         return getSheetAtOffset(-1);
     }catch( lang::IndexOutOfBoundsException& /*e*/ )
@@ -753,7 +752,7 @@ ScVbaWorksheet::ChartObjects( const uno::Any& Index ) throw (uno::RuntimeExcepti
         uno::Reference< table::XTableChartsSupplier > xChartSupplier( getSheet(), uno::UNO_QUERY_THROW );
         uno::Reference< table::XTableCharts > xTableCharts = xChartSupplier->getCharts();
 
-        uno::Reference< drawing::XDrawPageSupplier > xDrawPageSupplier( getSheet(), uno::UNO_QUERY_THROW ); //VBA, minz@cn.ibm.com.
+        uno::Reference< drawing::XDrawPageSupplier > xDrawPageSupplier( getSheet(), uno::UNO_QUERY_THROW );
         mxCharts = new ScVbaChartObjects(  this, mxContext, xTableCharts, xDrawPageSupplier );
     }
     if ( Index.hasValue() )
@@ -1072,7 +1071,7 @@ ScVbaWorksheet::getCodeName() throw (css::uno::RuntimeException)
 sal_Int16
 ScVbaWorksheet::getSheetID() throw (uno::RuntimeException)
 {
-    uno::Reference< sheet::XCellRangeAddressable > xAddressable( getSheet(), uno::UNO_QUERY_THROW ); //VBA. minz@cn.ibm.com. if ActiveSheet, mxSheet is null.
+    uno::Reference< sheet::XCellRangeAddressable > xAddressable( getSheet(), uno::UNO_QUERY_THROW ); // if ActiveSheet, mxSheet is null.
     return xAddressable->getRangeAddress().Sheet;
 }
 

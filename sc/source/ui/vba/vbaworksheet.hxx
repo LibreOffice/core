@@ -117,7 +117,7 @@ public:
 
     // Methods
     virtual void SAL_CALL Activate() throw (css::uno::RuntimeException);
-    virtual void SAL_CALL Select(const css::uno::Any& aReplace) throw (css::uno::RuntimeException); //liuchen 2009-9-2, add the input parameter to support expand selection
+    virtual void SAL_CALL Select(const css::uno::Any& aReplace) throw (css::uno::RuntimeException); // add the input parameter to support expand selection
     virtual css::uno::Reference< ov::excel::XRange > SAL_CALL Range( const css::uno::Any& Cell1, const css::uno::Any& Cell2 ) throw (css::uno::RuntimeException);
     virtual void SAL_CALL Move( const css::uno::Any& Before, const css::uno::Any& After ) throw (css::uno::RuntimeException) ;
      virtual void SAL_CALL Copy( const css::uno::Any& Before, const css::uno::Any& After ) throw (css::uno::RuntimeException);

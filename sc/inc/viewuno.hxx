@@ -315,13 +315,11 @@ public:
                                 ::com::sun::star::sheet::XSpreadsheet >& xActiveSheet )
                                     throw(::com::sun::star::uno::RuntimeException);
 
-    //liuchen 2009-9-2 support expand (but not replace) the active sheet
+    // support expand (but not replace) the active sheet
     virtual void SAL_CALL   selectSheet( const ::com::sun::star::uno::Reference<
                                     ::com::sun::star::sheet::XSpreadsheet >& xActiveSheet,
                                     sal_Bool bExpand)
                                         throw(::com::sun::star::uno::RuntimeException);
-    //liuchen 2009-9-2
-
                             //XEnhancedMouseClickBroadcaster
 
     virtual void SAL_CALL addEnhancedMouseClickHandler( const ::com::sun::star::uno::Reference<

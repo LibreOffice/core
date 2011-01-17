@@ -1202,7 +1202,7 @@ uno::Reference<sheet::XSpreadsheet> SAL_CALL ScTabViewObj::getActiveSheet()
     return NULL;
 }
 
-//liuchen 2009-9-2 support expand (but not replace) the active sheet
+// support expand (but not replace) the active sheet
 void SAL_CALL ScTabViewObj::setActiveSheet( const uno::Reference<sheet::XSpreadsheet>& xActiveSheet )
                                                 throw(uno::RuntimeException)
 {

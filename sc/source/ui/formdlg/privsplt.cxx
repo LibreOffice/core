@@ -34,7 +34,7 @@
 #include "privsplt.hxx"
 
 /*************************************************************************
-#*  Member:     ScPrivatSplit                               Datum:13.10.97
+#*  Member:     ScPrivatSplit
 #*------------------------------------------------------------------------
 #*
 #*  Klasse:     MD_Test
@@ -78,7 +78,7 @@ ScPrivatSplit::ScPrivatSplit( Window* pParent, const ResId& rResId,
 
 
 /*************************************************************************
-#*  Member:     MouseButtonDown                         Datum:13.10.97
+#*  Member:     MouseButtonDown
 #*------------------------------------------------------------------------
 #*
 #*  Klasse:     ScPrivatSplit
@@ -103,7 +103,7 @@ void ScPrivatSplit::MouseButtonDown( const MouseEvent& rMEvt )
 }
 
 /*************************************************************************
-#*  Member:     MouseButtonUp                           Datum:13.10.97
+#*  Member:     MouseButtonUp
 #*------------------------------------------------------------------------
 #*
 #*  Klasse:     ScPrivatSplit
@@ -165,7 +165,7 @@ void ScPrivatSplit::MouseButtonUp( const MouseEvent& rMEvt )
 }
 
 /*************************************************************************
-#*  Member:     MouseMove                                   Datum:13.10.97
+#*  Member:     MouseMove
 #*------------------------------------------------------------------------
 #*
 #*  Klasse:     ScPrivatSplit
@@ -230,7 +230,7 @@ void ScPrivatSplit::MouseMove( const MouseEvent& rMEvt )
 }
 
 /*************************************************************************
-#*  Member:     SetYRange                                   Datum:14.10.97
+#*  Member:     SetYRange
 #*------------------------------------------------------------------------
 #*
 #*  Klasse:     ScPrivatSplit
@@ -250,7 +250,7 @@ void ScPrivatSplit::SetYRange(Range cRgeY)
 
 
 /*************************************************************************
-#*  Member:     GetDeltaY                                   Datum:13.10.97
+#*  Member:     GetDeltaY
 #*------------------------------------------------------------------------
 #*
 #*  Klasse:     ScPrivatSplit
@@ -268,7 +268,7 @@ short ScPrivatSplit::GetDeltaX()
 }
 
 /*************************************************************************
-#*  Member:     GetDeltaY                                   Datum:13.10.97
+#*  Member:     GetDeltaY
 #*------------------------------------------------------------------------
 #*
 #*  Klasse:     ScPrivatSplit
@@ -286,7 +286,7 @@ short ScPrivatSplit::GetDeltaY()
 }
 
 /*************************************************************************
-#*  Member:     CtrModified                                 Datum:13.10.97
+#*  Member:     CtrModified
 #*------------------------------------------------------------------------
 #*
 #*  Klasse:     ScPrivatSplit

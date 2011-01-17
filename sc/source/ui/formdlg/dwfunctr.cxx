@@ -60,7 +60,7 @@
 SFX_IMPL_DOCKINGWINDOW( ScFunctionChildWindow, FID_FUNCTION_BOX )
 
 /*************************************************************************
-#*  Member:     ScFunctionChildWindow                       Datum:06.10.97
+#*  Member:     ScFunctionChildWindow
 #*------------------------------------------------------------------------
 #*
 #*  Klasse:     ScFunctionChildWindow
@@ -91,7 +91,7 @@ ScFunctionChildWindow::ScFunctionChildWindow( Window* pParentP,
 }
 
 /*************************************************************************
-#*  Member:     ScFunctionDockWin                           Datum:06.10.97
+#*  Member:     ScFunctionDockWin
 #*------------------------------------------------------------------------
 #*
 #*  Klasse:     ScFunctionDockWin
@@ -168,7 +168,7 @@ ScFunctionDockWin::ScFunctionDockWin( SfxBindings* pBindingsP,
 }
 
 /*************************************************************************
-#*  Member:     ScFunctionDockWin                           Datum:06.10.97
+#*  Member:     ScFunctionDockWin
 #*------------------------------------------------------------------------
 #*
 #*  Klasse:     ScFunctionDockWin
@@ -187,7 +187,7 @@ ScFunctionDockWin::~ScFunctionDockWin()
 }
 
 /*************************************************************************
-#*  Member:     UpdateFunctionList                          Datum:06.10.97
+#*  Member:     UpdateFunctionList
 #*------------------------------------------------------------------------
 #*
 #*  Klasse:     ScFunctionDockWin
@@ -225,7 +225,7 @@ void ScFunctionDockWin::InitLRUList()
 }
 
 /*************************************************************************
-#*  Member:     UpdateFunctionList                          Datum:10.12.99
+#*  Member:     UpdateFunctionList
 #*------------------------------------------------------------------------
 #*
 #*  Klasse:     ScFunctionDockWin
@@ -249,7 +249,7 @@ void ScFunctionDockWin::UpdateLRUList()
 
 
 /*************************************************************************
-#*  Member:     SetSize                                     Datum:06.10.97
+#*  Member:     SetSize
 #*------------------------------------------------------------------------
 #*
 #*  Klasse:     ScFunctionDockWin
@@ -326,7 +326,7 @@ void ScFunctionDockWin::SetSize()
     }
 }
 /*************************************************************************
-#*  Member:     SetLeftRightSize                            Datum:15.10.97
+#*  Member:     SetLeftRightSize
 #*------------------------------------------------------------------------
 #*
 #*  Klasse:     ScFunctionDockWin
@@ -374,7 +374,7 @@ void ScFunctionDockWin::SetLeftRightSize()
 
 }
 /*************************************************************************
-#*  Member:     SetTopBottonSize                            Datum:15.10.97
+#*  Member:     SetTopBottonSize
 #*------------------------------------------------------------------------
 #*
 #*  Klasse:     ScFunctionDockWin
@@ -408,7 +408,7 @@ void ScFunctionDockWin::SetTopBottonSize()
 }
 
 /*************************************************************************
-#*  Member:     SetMyWidthLeRi                              Datum:15.10.97
+#*  Member:     SetMyWidthLeRi
 #*------------------------------------------------------------------------
 #*
 #*  Klasse:     ScFunctionDockWin
@@ -448,7 +448,7 @@ void ScFunctionDockWin::SetMyWidthLeRi(Size &aNewSize)
 }
 
 /*************************************************************************
-#*  Member:     SetHeight                                   Datum:06.10.97
+#*  Member:     SetHeight
 #*------------------------------------------------------------------------
 #*
 #*  Klasse:     ScFunctionDockWin
@@ -496,7 +496,7 @@ void ScFunctionDockWin::SetMyHeightLeRi(Size &aNewSize)
 }
 
 /*************************************************************************
-#*  Member:     SetMyWidthToBo                              Datum:16.10.97
+#*  Member:     SetMyWidthToBo
 #*------------------------------------------------------------------------
 #*
 #*  Klasse:     ScFunctionDockWin
@@ -537,7 +537,7 @@ void ScFunctionDockWin::SetMyWidthToBo(Size &aNewSize)
 }
 
 /*************************************************************************
-#*  Member:     SetHeight                                   Datum:16.10.97
+#*  Member:     SetHeight
 #*------------------------------------------------------------------------
 #*
 #*  Klasse:     ScFunctionDockWin
@@ -566,7 +566,7 @@ void ScFunctionDockWin::SetMyHeightToBo(Size &aNewSize)
 }
 
 /*************************************************************************
-#*  Member:     SetDescription                              Datum:13.10.97
+#*  Member:     SetDescription
 #*------------------------------------------------------------------------
 #*
 #*  Klasse:     ScFunctionDockWin
@@ -621,7 +621,7 @@ void ScFunctionDockWin::SetDescription()
  }
 
 /*************************************************************************
-#*  Member:     Resizing                                    Datum:06.10.97
+#*  Member:     Resizing
 #*------------------------------------------------------------------------
 #*
 #*  Klasse:     ScFunctionDockWin
@@ -643,7 +643,7 @@ void ScFunctionDockWin::Resizing( Size& rNewSize )
 }
 
 /*************************************************************************
-#*  Member:     Close                                       Datum:07.10.97
+#*  Member:     Close
 #*------------------------------------------------------------------------
 #*
 #*  Klasse:     ScFunctionDockWin
@@ -671,7 +671,7 @@ BOOL ScFunctionDockWin::Close()
 
 
 /*************************************************************************
-#*  Member:     CheckAlignment                              Datum:16.10.97
+#*  Member:     CheckAlignment
 #*------------------------------------------------------------------------
 #*
 #*  Klasse:     ScFunctionDockWin
@@ -734,7 +734,7 @@ SfxChildAlignment ScFunctionDockWin::CheckAlignment(SfxChildAlignment /* abla */
     return aChildAlign;
 }
 /*************************************************************************
-#*  Member:     Close                                       Datum:07.10.97
+#*  Member:     Close
 #*------------------------------------------------------------------------
 #*
 #*  Klasse:     ScFunctionDockWin
@@ -762,7 +762,7 @@ void ScFunctionDockWin::Notify( SfxBroadcaster&, const SfxHint& /* rHint */ )
 
 
 /*************************************************************************
-#*  Member:     Resize                                  Datum:06.10.97
+#*  Member:     Resize
 #*------------------------------------------------------------------------
 #*
 #*  Klasse:     ScFunctionDockWin
@@ -789,7 +789,7 @@ void ScFunctionDockWin::Resize()
 }
 
 /*************************************************************************
-#*  Member:     UpdateFunctionList                          Datum:06.10.97
+#*  Member:     UpdateFunctionList
 #*------------------------------------------------------------------------
 #*
 #*  Klasse:     ScFunctionDockWin
@@ -852,7 +852,7 @@ void ScFunctionDockWin::UpdateFunctionList()
 }
 
 /*************************************************************************
-#*  Member:     DoEnter                                     Datum:06.10.97
+#*  Member:     DoEnter
 #*------------------------------------------------------------------------
 #*
 #*  Klasse:     ScFunctionDockWin
@@ -968,7 +968,7 @@ void ScFunctionDockWin::DoEnter(BOOL /* bOk */) //@@ ???
 
 
 /*************************************************************************
-#*  Handle:     SelHdl                                      Datum:06.10.97
+#*  Handle:     SelHdl
 #*------------------------------------------------------------------------
 #*
 #*  Klasse:     ScFunctionDockWin
@@ -1001,7 +1001,7 @@ IMPL_LINK( ScFunctionDockWin, SelHdl, ListBox*, pLb )
 }
 
 /*************************************************************************
-#*  Handle:     SelHdl                                      Datum:06.10.97
+#*  Handle:     SelHdl
 #*------------------------------------------------------------------------
 #*
 #*  Klasse:     ScFunctionDockWin
@@ -1028,7 +1028,7 @@ IMPL_LINK( ScFunctionDockWin, SetSelectionHdl, void*, pCtrl )
 }
 
 /*************************************************************************
-#*  Handle:     SetSplitHdl                                 Datum:13.10.97
+#*  Handle:     SetSplitHdl
 #*------------------------------------------------------------------------
 #*
 #*  Klasse:     ScFunctionDockWin

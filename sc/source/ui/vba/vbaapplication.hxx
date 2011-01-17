@@ -37,7 +37,6 @@
 #include <vbahelper/vbaapplicationbase.hxx>
 #include <cppuhelper/implbase1.hxx>
 
-//typedef InheritedHelperInterfaceImpl1< ov::excel::XApplication > ScVbaApplication_BASE;
 typedef cppu::ImplInheritanceHelper1< VbaApplicationBase, ov::excel::XApplication > ScVbaApplication_BASE;
 
 class ScVbaApplication : public ScVbaApplication_BASE
@@ -48,7 +47,7 @@ private:
      sal_Bool m_bEnableEvents;
 
     rtl::OUString getOfficePath( const rtl::OUString& sPath ) throw ( css::uno::RuntimeException );
-    css::uno::Reference< ov::XFileSearch > m_xFileSearch; //
+    css::uno::Reference< ov::XFileSearch > m_xFileSearch;
 
 protected:
     virtual css::uno::Reference< css::frame::XModel > getCurrentDocument() throw (css::uno::RuntimeException);
@@ -91,7 +90,7 @@ public:
     virtual void SAL_CALL setDisplayFormulaBar( ::sal_Bool _displayformulabar ) throw ( css::uno::RuntimeException );
 
     virtual css::uno::Reference< ov::XAssistant > SAL_CALL getAssistant() throw (css::uno::RuntimeException);
-    virtual css::uno::Reference< ov::XFileSearch > SAL_CALL getFileSearch() throw (css::uno::RuntimeException); //liuchen 2009-8-18 add the support of Application.FileSearch
+    virtual css::uno::Reference< ov::XFileSearch > SAL_CALL getFileSearch() throw (css::uno::RuntimeException); // add the support of Application.FileSearch
     virtual css::uno::Reference< ov::excel::XWorkbook > SAL_CALL getThisWorkbook() throw (css::uno::RuntimeException);
     virtual css::uno::Any SAL_CALL Workbooks( const css::uno::Any& aIndex ) throw (css::uno::RuntimeException);
     virtual css::uno::Any SAL_CALL Worksheets( const css::uno::Any& aIndex ) throw (css::uno::RuntimeException);
@@ -108,10 +107,10 @@ public:
     virtual sal_Bool SAL_CALL getVisible() throw (css::uno::RuntimeException);
     virtual void SAL_CALL setVisible( sal_Bool bVisible ) throw (css::uno::RuntimeException);
 
-    virtual sal_Bool SAL_CALL getIteration() throw (css::uno::RuntimeException);  //liuchen 2009-11-25 add the support of Iteration
-    virtual void SAL_CALL setIteration( sal_Bool bIteration ) throw (css::uno::RuntimeException);  //liuchen 2009-11-25 add the support of Iteration
-    virtual sal_Int32 SAL_CALL getEnableCancelKey() throw (css::uno::RuntimeException);  //liuchen 2009-11-26 add the support of EnableCancelKey
-    virtual void SAL_CALL setEnableCancelKey( sal_Int32 lEnableCancelKey ) throw (css::uno::RuntimeException);  //liuchen 2009-11-26 add the support of EnableCancelKey
+    virtual sal_Bool SAL_CALL getIteration() throw (css::uno::RuntimeException);  // add the support of Iteration
+    virtual void SAL_CALL setIteration( sal_Bool bIteration ) throw (css::uno::RuntimeException);  // add the support of Iteration
+    virtual sal_Int32 SAL_CALL getEnableCancelKey() throw (css::uno::RuntimeException);  // add the support of EnableCancelKey
+    virtual void SAL_CALL setEnableCancelKey( sal_Int32 lEnableCancelKey ) throw (css::uno::RuntimeException);  // add the support of EnableCancelKey
 
     virtual sal_Int32 SAL_CALL getSheetsInNewWorkbook() throw (css::uno::RuntimeException);
     virtual void SAL_CALL setSheetsInNewWorkbook( sal_Int32 SheetsInNewWorkbook ) throw (css::script::BasicErrorException, css::uno::RuntimeException);
@@ -131,9 +130,8 @@ public:
     virtual css::uno::Any SAL_CALL Caller( const css::uno::Any& aIndex ) throw (css::uno::RuntimeException);
     virtual css::uno::Any SAL_CALL MenuBars( const css::uno::Any& aIndex ) throw (css::uno::RuntimeException);
     virtual css::uno::Any SAL_CALL GetOpenFilename( const css::uno::Any& FileFilter, const css::uno::Any& FilterIndex, const css::uno::Any& Title, const css::uno::Any& ButtonText, const css::uno::Any& MultiSelect ) throw (css::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Reference< ::ooo::vba::XFileDialog > SAL_CALL getFileDialog() throw (::com::sun::star::uno::RuntimeException); //liminl 2009-08-12 add
-    virtual css::uno::Any SAL_CALL International( sal_Int32 Index ) throw (css::uno::RuntimeException); //liuchen 2009-11-26
-    //2009-12-04 add by limingl
+    virtual ::com::sun::star::uno::Reference< ::ooo::vba::XFileDialog > SAL_CALL getFileDialog() throw (::com::sun::star::uno::RuntimeException);
+    virtual css::uno::Any SAL_CALL International( sal_Int32 Index ) throw (css::uno::RuntimeException);
     virtual css::uno::Any SAL_CALL GetSaveAsFilename( const ::com::sun::star::uno::Any& InitialFilename, const ::com::sun::star::uno::Any& FileFilter, const ::com::sun::star::uno::Any& FilterIndex, const ::com::sun::star::uno::Any& Title, const ::com::sun::star::uno::Any& ButtonText ) throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL Undo(  ) throw (::com::sun::star::uno::RuntimeException);
     virtual double SAL_CALL InchesToPoints( double Inches ) throw (css::uno::RuntimeException);

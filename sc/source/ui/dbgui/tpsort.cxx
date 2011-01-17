@@ -81,7 +81,6 @@ static USHORT pSortRanges[] =
  * geloest. Wird eine Seite Aktiviert/Deaktiviert, so gleicht sie diese
  * Datenmember mit dem eigenen Zustand ab (->Activate()/Deactivate()).
  *
- * 31.01.95:
  * Die Klasse SfxTabPage bietet mittlerweile ein Verfahren an:
  *
  * virtual BOOL HasExchangeSupport() const; -> return TRUE;

@@ -37,7 +37,7 @@
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <ooo/vba/excel/XlFileFormat.hpp>
-#include <ooo/vba/excel/XApplication.hpp>  //liuchen 2009-12-16
+#include <ooo/vba/excel/XApplication.hpp>
 
 #include "scextopt.hxx"
 #include "vbaworksheet.hxx"
@@ -49,7 +49,7 @@
 #include "vbapalette.hxx"
 #include <osl/file.hxx>
 #include <stdio.h>
-#include "vbanames.hxx"  // Amelia Wang
+#include "vbanames.hxx"
 #include "nameuno.hxx"
 #include "docoptio.hxx"
 #include "unonames.hxx"
@@ -187,7 +187,7 @@ ScVbaWorkbook::getFileFormat(  ) throw (::uno::RuntimeException)
         return aFileFormat;
 }
 
-//VBA by minz@cn.ibm.com. Convert Excel fileformat to OO file filter
+// Convert Excel fileformat to OO file filter
 ::rtl::OUString ScVbaWorkbook::convertFileFormat(sal_Int32 aFileFormat)
 {
     rtl::OUString aFilterName;
@@ -325,13 +325,13 @@ ScVbaWorkbook::SaveCopyAs( const rtl::OUString& sFileName ) throw ( uno::Runtime
     xStor->storeToURL( aURL, storeProps );
 }
 
-//VBA by minz@cn.ibm.com. Add Workbook.SaveAs.
+// Add Workbook.SaveAs.
 void
 ScVbaWorkbook::SaveAs( const rtl::OUString& FileName, const uno::Any& FileFormat, const uno::Any& /*CreateBackup*/ ) throw ( uno::RuntimeException)
 {
     rtl::OUString aURL;
     osl::FileBase::getFileURLFromSystemPath( FileName, aURL );
-    //liuchen 2009-12-16 if the input parameter "FileName" takes the form as "MyFile", we need to get the current directory and combine the current directory and the file name
+    //if the input parameter "FileName" takes the form as "MyFile", we need to get the current directory and combine the current directory and the file name
     INetURLObject aFileNameURL( aURL );
     aURL = aFileNameURL.GetMainURL( INetURLObject::NO_DECODE );
     if ( aURL.getLength() == 0 )
@@ -344,7 +344,7 @@ ScVbaWorkbook::SaveAs( const rtl::OUString& FileName, const uno::Any& FileFormat
         aPathURL.Append( FileName );
         aURL = aPathURL.GetMainURL( INetURLObject::NO_DECODE );
     }
-    //liuchen 2009-12-16
+
     uno::Reference< frame::XStorable > xStor( getModel(), uno::UNO_QUERY_THROW );
 
     sal_Int32 aFileFormat = excel::XlFileFormat::xlExcel9795;
@@ -381,7 +381,6 @@ ScVbaWorkbook::Styles( const::uno::Any& Item ) throw (uno::RuntimeException)
     return uno::makeAny( dStyles );
 }
 
-// Amelia Wang
 uno::Any SAL_CALL
 ScVbaWorkbook::Names( const css::uno::Any& aIndex ) throw (uno::RuntimeException)
 {

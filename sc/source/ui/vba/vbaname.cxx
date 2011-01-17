@@ -70,8 +70,6 @@ ScVbaName::getWorkSheet() throw (css::uno::RuntimeException)
 ScVbaName::getName() throw (css::uno::RuntimeException)
 {
     String sName;
-    //sName += UniString( getWorkSheet()->getName()); //liuchen 2009-9-9 resolve the defect that the name get by macro code are not the same with that in UI (for example, if a name of "AA" is found in the UI "Define Names" dialog box, the result of get that name through macro code will be "Sheet1!AA")
-    //sName += String::CreateFromAscii("!");
     sName += UniString ( mxNamedRange->getName() );
     return ::rtl::OUString( sName );
 }

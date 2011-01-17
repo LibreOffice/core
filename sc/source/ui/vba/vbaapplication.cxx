@@ -49,14 +49,12 @@
 #include <com/sun/star/ui/dialogs/XFilePicker2.hpp>
 #include <com/sun/star/ui/dialogs/XFilePickerControlAccess.hpp>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
-//2009-11-06 add by limingl
 #include <com/sun/star/ui/dialogs/XFilterManager.hpp>
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
-//end
 #include<ooo/vba/XCommandBars.hpp>
-#include <ooo/vba/excel/XlEnableCancelKey.hpp> //liuchen 2009-11-26
-#include <ooo/vba/excel/XlApplicationInternational.hpp> //liuchen 2009-11-26
-#include <unotools/localedatawrapper.hxx> //liuchen 2009-11-26
+#include <ooo/vba/excel/XlEnableCancelKey.hpp>
+#include <ooo/vba/excel/XlApplicationInternational.hpp>
+#include <unotools/localedatawrapper.hxx>
 
 #include "vbaapplication.hxx"
 #include "vbaworkbooks.hxx"
@@ -75,12 +73,12 @@
 #include <vbahelper/vbashape.hxx>
 #include "vbatextboxshape.hxx"
 #include "vbaassistant.hxx"
-#include "vbafilesearch.hxx" //liuchen 2009-8-18, add the support of VBA Application.FileSearch
+#include "vbafilesearch.hxx" // add the support of VBA Application.FileSearch
 #include "sc.hrc"
 #include "macromgr.hxx"
-#include "global.hxx" //liuchen 2009-11-26
-#include "scmod.hxx" //liuchen 2009-11-26
-#include "docoptio.hxx" //liuchen 2009-11-26
+#include "global.hxx"
+#include "scmod.hxx"
+#include "docoptio.hxx"
 #include "appoptio.hxx"
 
 #include <osl/file.hxx>
@@ -122,7 +120,7 @@
 #include <basic/sbx.hxx>
 #include <basic/sbxobj.hxx>
 #include <basic/sbuno.hxx>
-//limingl 2009-07-20
+
 #include "vbafiledialog.hxx"
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
@@ -280,7 +278,7 @@ ScVbaApplication::getAssistant() throw (uno::RuntimeException)
     return uno::Reference< XAssistant >( new ScVbaAssistant( this, mxContext ) );
 }
 
-//liuchen 2009-8-18, add support of VBA Application.FileSearch
+// add support of VBA Application.FileSearch
 uno::Reference< XFileSearch > SAL_CALL
 ScVbaApplication::getFileSearch() throw (uno::RuntimeException)
 {
@@ -291,7 +289,6 @@ ScVbaApplication::getFileSearch() throw (uno::RuntimeException)
 
     return m_xFileSearch;
 }
-//liuchen
 
 uno::Any SAL_CALL
 ScVbaApplication::getSelection() throw (uno::RuntimeException)
@@ -867,7 +864,7 @@ ScVbaApplication::setVisible(sal_Bool /*bVisible*/) throw (uno::RuntimeException
 {
 }
 
-//liuchen 2009-11-25 add the support of Excel VBA Application.Iteration
+//add the support of Excel VBA Application.Iteration
 //The Excel Iteration option is global and unique, but in Symphony there is an Iteration property in ScModule and one in every ScDocument,
 //so the set method will set all the Iteration properties
 sal_Bool SAL_CALL
@@ -906,9 +903,8 @@ ScVbaApplication::setIteration(sal_Bool bIteration) throw (uno::RuntimeException
         xPropertySet->setPropertyValue( aPropName, aIteration );
     }
 }
-//liuchen 2009-11-25 end
 
-//liuchen 2009-11-26 add the support of Excel VBA Application.EnableCancelKey
+//add the support of Excel VBA Application.EnableCancelKey
 sal_Int32 SAL_CALL
 ScVbaApplication::getEnableCancelKey() throw (uno::RuntimeException)
 {
@@ -919,7 +915,6 @@ void SAL_CALL
 ScVbaApplication::setEnableCancelKey(sal_Int32 /*lEnableCancelKey*/) throw (uno::RuntimeException)
 {
 }
-//liuchen 2009-11-26 end
 
 sal_Int32 SAL_CALL ScVbaApplication::getSheetsInNewWorkbook() throw (uno::RuntimeException)
 {
@@ -1370,7 +1365,6 @@ ScVbaApplication::Caller( const uno::Any& /*aIndex*/ ) throw ( uno::RuntimeExcep
     return aRet;
 }
 
-//Add by minz@cn.ibm.com. 2009-07-08.
 uno::Any SAL_CALL
 ScVbaApplication::GetOpenFilename(const uno::Any& FileFilter, const uno::Any& FilterIndex, const uno::Any& Title, const uno::Any& ButtonText, const uno::Any& MultiSelect)  throw (uno::RuntimeException)
 {
@@ -1516,7 +1510,6 @@ ScVbaApplication::GetOpenFilename(const uno::Any& FileFilter, const uno::Any& Fi
     return aRet;
 }
 
-//liming 2009-7-17
 ::com::sun::star::uno::Reference< ::ooo::vba::XFileDialog > SAL_CALL
 ScVbaApplication::getFileDialog() throw (::com::sun::star::uno::RuntimeException)
 {
@@ -1526,7 +1519,6 @@ ScVbaApplication::getFileDialog() throw (::com::sun::star::uno::RuntimeException
 
 typedef std::map< ::rtl::OUString, ::rtl::OUString > FileFilterMap;
 
-//2009-11-06 add by limingl
 uno::Any SAL_CALL
 ScVbaApplication::GetSaveAsFilename( const ::com::sun::star::uno::Any& InitialFilename, const ::com::sun::star::uno::Any& FileFilter, const ::com::sun::star::uno::Any& FilterIndex, const ::com::sun::star::uno::Any& Title, const ::com::sun::star::uno::Any& ButtonText ) throw (::com::sun::star::uno::RuntimeException)
 {
@@ -1706,7 +1698,7 @@ ScVbaApplication::MenuBars( const uno::Any& aIndex ) throw (uno::RuntimeExceptio
     return uno::Any( xMenuBars );
 }
 
-//liuchen 2009-11-26 add the support of Application.International
+//add the support of Application.International
 sal_Int32 SAL_CALL
 ConvertCountryCode(const OUString& language)
 {
@@ -1767,9 +1759,7 @@ ScVbaApplication::International( sal_Int32 Index ) throw (uno::RuntimeException)
     }
     return aRet;
 }
-//liuchen 2009-11-26 end
 
-//2009-12-11 add by limingl
 void SAL_CALL ScVbaApplication::Undo(  ) throw (::com::sun::star::uno::RuntimeException)
 {
     SfxAllItemSet reqList(  SFX_APP()->GetPool() );
@@ -1781,7 +1771,6 @@ void SAL_CALL ScVbaApplication::Undo(  ) throw (::com::sun::star::uno::RuntimeEx
         pViewShell->ExecuteUndo(rReq);
     }
 }
-//end
 
 double SAL_CALL ScVbaApplication::InchesToPoints( double Inches ) throw (uno::RuntimeException)
 {

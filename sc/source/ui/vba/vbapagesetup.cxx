@@ -630,8 +630,6 @@ ScVbaPageSetup::getServiceNames()
     return aServiceNames;
 }
 
-//liuchen 2009-12-11
-
 struct PaperSizeMap
 {
     Paper ePaper;

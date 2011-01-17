@@ -63,7 +63,7 @@ const ULONG nEntryDataDelim = 2;
 
 
 /*************************************************************************
-#*  Member:     ScColRowNameRangesDlg                       Datum:04.09.97
+#*  Member:     ScColRowNameRangesDlg
 #*------------------------------------------------------------------------
 #*
 #*  Klasse:     ScColRowNameRangesDlg
@@ -87,7 +87,7 @@ ScColRowNameRangesDlg::ScColRowNameRangesDlg( SfxBindings* pB,
                                 ScViewData* ptrViewData )
 
     :   ScAnyRefDlg ( pB, pCW, pParent, RID_SCDLG_COLROWNAMERANGES ),
-        //
+
         aFlAssign       ( this, ScResId( FL_ASSIGN ) ),
         aLbRange        ( this, ScResId( LB_RANGE ) ),
 
@@ -119,7 +119,7 @@ ScColRowNameRangesDlg::ScColRowNameRangesDlg( SfxBindings* pB,
 
 
 /*************************************************************************
-#*  Member:     ~ScColRowNameRangesDlg                      Datum:04.09.97
+#*  Member:     ~ScColRowNameRangesDlg
 #*------------------------------------------------------------------------
 #*
 #*  Klasse:     ScColRowNameRangesDlg
@@ -138,7 +138,7 @@ ScColRowNameRangesDlg::~ScColRowNameRangesDlg()
 
 
 /*************************************************************************
-#*  Member:     Init                                        Datum:04.09.97
+#*  Member:     Init
 #*------------------------------------------------------------------------
 #*
 #*  Klasse:     ScColRowNameRangesDlg
@@ -208,15 +208,13 @@ void ScColRowNameRangesDlg::Init()
     aEdAssign.Enable();
     aEdAssign.GrabFocus();
     aRbAssign.Enable();
-    //@BugID 54702 Enablen/Disablen nur noch in Basisklasse
-    //SFX_APPWINDOW->Enable();      // Ref-Feld hat Focus
 
     Range1SelectHdl( 0 );
 }
 
 
 /*************************************************************************
-#*  Member:     SetColRowData                               Datum:04.09.97
+#*  Member:     SetColRowData
 #*------------------------------------------------------------------------
 #*
 #*  Klasse:     ScColRowNameRangesDlg
@@ -317,7 +315,7 @@ void ScColRowNameRangesDlg::SetColRowData( const ScRange& rLabelRange,BOOL bRef)
 
 
 /*************************************************************************
-#*  Member:     AdjustColRowData                            Datum:04.09.97
+#*  Member:     AdjustColRowData
 #*------------------------------------------------------------------------
 #*
 #*  Klasse:     ScColRowNameRangesDlg
@@ -393,7 +391,7 @@ void ScColRowNameRangesDlg::AdjustColRowData( const ScRange& rDataRange,BOOL bRe
 
 
 /*************************************************************************
-#*  Member:     SetReference                                Datum:04.09.97
+#*  Member:     SetReference
 #*------------------------------------------------------------------------
 #*
 #*  Klasse:     ScColRowNameRangesDlg
@@ -430,7 +428,7 @@ void ScColRowNameRangesDlg::SetReference( const ScRange& rRef, ScDocument* /* pD
 
 
 /*************************************************************************
-#*  Member:     Close                                       Datum:04.09.97
+#*  Member:     Close
 #*------------------------------------------------------------------------
 #*
 #*  Klasse:     ScColRowNameRangesDlg
@@ -450,7 +448,7 @@ BOOL ScColRowNameRangesDlg::Close()
 
 
 /*************************************************************************
-#*  Member:     SetActive                                   Datum:04.09.97
+#*  Member:     SetActive
 #*------------------------------------------------------------------------
 #*
 #*  Klasse:     ScColRowNameRangesDlg
@@ -484,7 +482,7 @@ void ScColRowNameRangesDlg::SetActive()
 
 
 /*************************************************************************
-#*  Member:     UpdateNames                                 Datum:04.09.97
+#*  Member:     UpdateNames
 #*------------------------------------------------------------------------
 #*
 #*  Klasse:     ScColRowNameRangesDlg
@@ -508,7 +506,7 @@ void ScColRowNameRangesDlg::UpdateNames()
     size_t nCount, j;
     USHORT nPos; //@008 Hilfsvariable q eingefuegt
 
-    SCCOL nCol1;    //@008 04.09.97
+    SCCOL nCol1;
     SCROW nRow1;    //Erweiterung fuer Bereichsnamen
     SCTAB nTab1;
     SCCOL nCol2;
@@ -619,7 +617,7 @@ void ScColRowNameRangesDlg::UpdateNames()
 
 
 /*************************************************************************
-#*  Member:     UpdateRangeData                             Datum:04.09.97
+#*  Member:     UpdateRangeData
 #*------------------------------------------------------------------------
 #*
 #*  Klasse:     ScColRowNameRangesDlg
@@ -670,7 +668,7 @@ void ScColRowNameRangesDlg::UpdateRangeData( const ScRange& rRange, BOOL bColNam
 
 
 /*************************************************************************
-#*  Member:     IsRefInputMode                              Datum:04.09.97
+#*  Member:     IsRefInputMode
 #*------------------------------------------------------------------------
 #*
 #*  Klasse:     ScColRowNameRangesDlg
@@ -694,7 +692,7 @@ BOOL ScColRowNameRangesDlg::IsRefInputMode() const
 // ========
 
 /*************************************************************************
-#*  Handler:    OkBtnHdl                                    Datum:04.09.97
+#*  Handler:    OkBtnHdl
 #*------------------------------------------------------------------------
 #*
 #*  Klasse:     ScColRowNameRangesDlg
@@ -728,7 +726,7 @@ IMPL_LINK( ScColRowNameRangesDlg, OkBtnHdl, void *, EMPTYARG )
 
 
 /*************************************************************************
-#*  Handler:    CancelBtnHdl                                Datum:04.09.97
+#*  Handler:    CancelBtnHdl
 #*------------------------------------------------------------------------
 #*
 #*  Klasse:     ScColRowNameRangesDlg
@@ -750,7 +748,7 @@ IMPL_LINK_INLINE_END( ScColRowNameRangesDlg, CancelBtnHdl, void *, EMPTYARG )
 
 
 /*************************************************************************
-#*  Handler:    AddBtnHdl                                   Datum:04.09.97
+#*  Handler:    AddBtnHdl
 #*------------------------------------------------------------------------
 #*
 #*  Klasse:     ScColRowNameRangesDlg
@@ -823,7 +821,7 @@ IMPL_LINK( ScColRowNameRangesDlg, AddBtnHdl, void *, EMPTYARG )
 
 
 /*************************************************************************
-#*  Handler:    RemoveBtnHdl                                Datum:04.09.97
+#*  Handler:    RemoveBtnHdl
 #*------------------------------------------------------------------------
 #*
 #*  Klasse:     ScColRowNameRangesDlg
@@ -900,7 +898,7 @@ IMPL_LINK( ScColRowNameRangesDlg, RemoveBtnHdl, void *, EMPTYARG )
 
 
 /*************************************************************************
-#*  Handler:    Range1SelectHdl                             Datum:04.09.97
+#*  Handler:    Range1SelectHdl
 #*------------------------------------------------------------------------
 #*
 #*  Klasse:     ScColRowNameRangesDlg
@@ -981,14 +979,12 @@ IMPL_LINK( ScColRowNameRangesDlg, Range1SelectHdl, void *, EMPTYARG )
     aEdAssign.Enable();
     aRbAssign.Enable();
 
-    //@BugID 54702 Enablen/Disablen nur noch in Basisklasse
-    //SFX_APPWINDOW->Enable();
     return 0;
 }
 
 
 /*************************************************************************
-#*  Handler:    Range1DataModifyHdl                         Datum:04.09.97
+#*  Handler:    Range1DataModifyHdl
 #*------------------------------------------------------------------------
 #*
 #*  Klasse:     ScColRowNameRangesDlg
@@ -1037,7 +1033,7 @@ IMPL_LINK( ScColRowNameRangesDlg, Range1DataModifyHdl, void *, EMPTYARG )
 
 
 /*************************************************************************
-#*  Handler:    Range2DataModifyHdl                         Datum:04.09.97
+#*  Handler:    Range2DataModifyHdl
 #*------------------------------------------------------------------------
 #*
 #*  Klasse:     ScColRowNameRangesDlg
@@ -1074,7 +1070,7 @@ IMPL_LINK( ScColRowNameRangesDlg, Range2DataModifyHdl, void *, EMPTYARG )
 
 
 /*************************************************************************
-#*  Handler:    ColClickHdl                                 Datum:04.09.97
+#*  Handler:    ColClickHdl
 #*------------------------------------------------------------------------
 #*
 #*  Klasse:     ScColRowNameRangesDlg
@@ -1112,7 +1108,7 @@ IMPL_LINK( ScColRowNameRangesDlg, ColClickHdl, void *, EMPTYARG )
 
 
 /*************************************************************************
-#*  Handler:    RowClickHdl                                 Datum:04.09.97
+#*  Handler:    RowClickHdl
 #*------------------------------------------------------------------------
 #*
 #*  Klasse:     ScColRowNameRangesDlg

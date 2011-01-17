@@ -117,7 +117,7 @@ sal_Int32 SAL_CALL RangePageBreaks::getCount(  ) throw (uno::RuntimeException)
     {
         sal_Int32 nPos = aTablePageBreakData[i].Position;
 
-        // VBA. minz@cn.ibm.com. All page breaks before the used range should be counted.
+        // All page breaks before the used range should be counted.
         // And the page break at the end of the used range also should be counted.
         if(  nPos <= nUsedEnd + 1 )
             nCount++;
@@ -154,7 +154,7 @@ sheet::TablePageBreakData RangePageBreaks::getTablePageBreakData( sal_Int32 nAPI
     uno::Sequence<sheet::TablePageBreakData> aTablePageBreakDataList = getAllPageBreaks();
 
     sal_Int32 nLength = aTablePageBreakDataList.getLength();
-    //VBA. minz@cn.ibm.com. No need to filter the page break. All page breaks before the used range are counted.
+    // No need to filter the page break. All page breaks before the used range are counted.
     if ( nAPIItemIndex < nLength && nAPIItemIndex>=0 )
         aTablePageBreakData = aTablePageBreakDataList[nAPIItemIndex];
 

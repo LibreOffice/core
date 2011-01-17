@@ -32,7 +32,6 @@
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 
-//liuchen 2009-7-27
 //solve the problem that "Application.Dialogs.Item(***).Show" and "Application.Dialogs.Count" cannot get the correct result
 struct DialogMatch
 {
@@ -72,7 +71,6 @@ static const DialogMatch aDialogMatchList[] =
 
 const sal_Int32 nDialogSize = SAL_N_ELEMENTS( aDialogMatchList ) ;
 
-//liuchen modified 2009-2-27
 rtl::OUString
 ScVbaDialog::mapIndexToName( sal_Int32 nIndex )
 {
@@ -106,7 +104,6 @@ ScVbaDialog::getServiceNames()
     return aServiceNames;
 }
 
-//liuchen add 2009-7-27
 sal_Int32 ScVbaDialog::GetSupportedDialogCount()
 {
     return nDialogSize;

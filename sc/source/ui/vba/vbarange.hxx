@@ -52,7 +52,7 @@
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
 #include <com/sun/star/sheet/XSheetCellRangeContainer.hpp>
 #include <com/sun/star/table/CellAddress.hpp>
-#include "vbaquerytable.hxx" //09-09-18 add by limingl
+#include "vbaquerytable.hxx"
 
 #include "vbaformat.hxx"
 #include <formula/grammar.hxx>
@@ -101,7 +101,7 @@ class ScVbaRange : public ScVbaRange_BASE
     sal_Bool mbIsRows;
     sal_Bool mbIsColumns;
     css::uno::Reference< ov::excel::XValidation > m_xValidation;
-    css::uno::Reference<excel::XQueryTable> m_xQueryTable; //09-09-16 add by limingl
+    css::uno::Reference<excel::XQueryTable> m_xQueryTable;
     double getCalcColWidth( const css::table::CellRangeAddress& ) throw (css::uno::RuntimeException);
     double getCalcRowHeight( const css::table::CellRangeAddress& ) throw (css::uno::RuntimeException);
     void visitArray( ArrayVisitor& vistor );
@@ -195,7 +195,7 @@ public:
     virtual css::uno::Any SAL_CALL getPrefixCharacter() throw (css::uno::RuntimeException);
     virtual css::uno::Any SAL_CALL getShowDetail() throw (css::uno::RuntimeException);
     virtual void SAL_CALL setShowDetail(const css::uno::Any& aShowDetail) throw (css::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Reference< ::ooo::vba::excel::XQueryTable > SAL_CALL getQueryTable() throw (::com::sun::star::uno::RuntimeException); //09-09-16 add by limingl
+    virtual ::com::sun::star::uno::Reference< ::ooo::vba::excel::XQueryTable > SAL_CALL getQueryTable() throw (::com::sun::star::uno::RuntimeException);
     // Methods
     sal_Bool IsRows() const { return mbIsRows; }
     sal_Bool IsColumns() const { return mbIsColumns; }
@@ -275,7 +275,7 @@ public:
 
     virtual css::uno::Reference< ov::excel::XPivotTable > SAL_CALL PivotTable(  ) throw (css::uno::RuntimeException);
 
-    virtual ::sal_Int32 SAL_CALL CopyFromRecordset( const ::com::sun::star::uno::Any& Data,  const ::com::sun::star::uno::Any& MaxRows, const ::com::sun::star::uno::Any& MaxColumns ) throw (::com::sun::star::script::BasicErrorException, ::com::sun::star::uno::RuntimeException); //2008-08-25 add by limingl
+    virtual ::sal_Int32 SAL_CALL CopyFromRecordset( const ::com::sun::star::uno::Any& Data,  const ::com::sun::star::uno::Any& MaxRows, const ::com::sun::star::uno::Any& MaxColumns ) throw (::com::sun::star::script::BasicErrorException, ::com::sun::star::uno::RuntimeException);
     // XEnumerationAccess
     virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration() throw (css::uno::RuntimeException);
     // XElementAccess

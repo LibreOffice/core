@@ -70,7 +70,7 @@ private:
     CheckBox            aBtnDoSize;
     CheckBox            aBtnKeepFmt;
     CheckBox            aBtnStripData;
-    ScExpandedFixedText aFTSource;     //@18.09.97 erweiterter FixedText
+    ScExpandedFixedText aFTSource;
     FixedText           aFTOperations;
 
     OKButton        aBtnOk;

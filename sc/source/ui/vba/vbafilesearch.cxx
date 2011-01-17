@@ -196,7 +196,7 @@ sal_Int32 SAL_CALL ScVbaFileSearch::Execute( )  throw (css::uno::RuntimeExceptio
     return m_aSearchedFiles.getLength();
 }
 
-//liuchen 2009-11-5 set ScVbaApplication::getDefaultFilePath(  ) as the InitPath for FileSearch
+// set ScVbaApplication::getDefaultFilePath(  ) as the InitPath for FileSearch
  ::rtl::OUString ScVbaFileSearch::getInitPath() throw (css::uno::RuntimeException)
 {
     String aPath;

@@ -2001,7 +2001,6 @@ ScVbaRange::getFormulaArray() throw (uno::RuntimeException)
     uno::Reference< script::XTypeConverter > xConverter = getTypeConverter( mxContext );
     uno::Any aMatrix;
 
-    //VBA, minz@cn.ibm.com
     uno::Sequence< uno::Sequence<rtl::OUString> > aFmArray = xCellRangeFormula->getFormulaArray();
     if( aFmArray.getLength() )
     {
@@ -2569,7 +2568,6 @@ ScVbaRange::Cut(const ::uno::Any& Destination) throw (uno::RuntimeException)
         uno::Reference< sheet::XCellRangeAddressable > xSource( mxRange, uno::UNO_QUERY);
         xMover->moveRange( xDestination->getCellAddress(), xSource->getRangeAddress() );
     }
-    //VBA, minz@cn.ibm.com.
     else {
         uno::Reference< frame::XModel > xModel = excel::GetModelFromRange( mxRange );
         Select();
@@ -3139,8 +3137,8 @@ ScVbaRange::Replace( const ::rtl::OUString& What, const ::rtl::OUString& Replace
         if ( xIndexAccess.is() && xIndexAccess->getCount() > 0 )
         {
             // Fires the range change event.
-            ScCellRangesBase* pScCellRangesBase = ScCellRangesBase::getImplementation( xIndexAccess ); //liuchen 2010-01-05
-            lcl_NotifyRangeChanges( getScDocShell()->GetModel(), pScCellRangesBase ); //liuchen 2010-01-05 the original convert method will fail in SUSE
+            ScCellRangesBase* pScCellRangesBase = ScCellRangesBase::getImplementation( xIndexAccess );
+            lcl_NotifyRangeChanges( getScDocShell()->GetModel(), pScCellRangesBase ); // the original convert method will fail in SUSE
         }
     }
     return sal_True; // always
@@ -5184,18 +5182,17 @@ void ScVbaRange::setShowDetail(const uno::Any& aShowDetail) throw ( css::uno::Ru
     }
 }
 
-//09-09-16 add by limingl
 ::com::sun::star::uno::Reference< ::ooo::vba::excel::XQueryTable > SAL_CALL
 ScVbaRange::getQueryTable() throw (::com::sun::star::uno::RuntimeException)
 {
     if (!m_xQueryTable.is())
     {
-        m_xQueryTable = new ScVbaQueryTable(mxParent ,mxContext, getScDocument(), this); //add by limingl
+        m_xQueryTable = new ScVbaQueryTable(mxParent ,mxContext, getScDocument(), this);
     }
 
     return m_xQueryTable;
 }
-//end add
+
 uno::Reference< excel::XRange > SAL_CALL
 ScVbaRange::MergeArea() throw (script::BasicErrorException, uno::RuntimeException)
 {
@@ -5225,7 +5222,6 @@ ScVbaRange::MergeArea() throw (script::BasicErrorException, uno::RuntimeExceptio
     return new ScVbaRange( mxParent, mxContext, mxRange );
 }
 
-//2008-08-25 add by limingl
 //The recordset's member: Recordset.Fields.Item will get a Field obj.
 //Field.value is the column value.
 ::sal_Int32 SAL_CALL
@@ -5335,7 +5331,7 @@ throw (::com::sun::star::script::BasicErrorException, ::com::sun::star::uno::Run
 
     return 0;
 }
-//end add
+
 void SAL_CALL
 ScVbaRange::PrintOut( const uno::Any& From, const uno::Any& To, const uno::Any& Copies, const uno::Any& Preview, const uno::Any& ActivePrinter, const uno::Any& PrintToFile, const uno::Any& Collate, const uno::Any& PrToFileName ) throw (uno::RuntimeException)
 {
@@ -6106,7 +6102,7 @@ uno::Any SAL_CALL ScVbaRange::AdvancedFilter( sal_Int32 Action, const uno::Any& 
     return aRet;
 }
 
-//Add by minz@cn.ibm.com. Range.PivotTable.
+//Range.PivotTable.
 //Returns a PivotTable object that represents the PivotTable report containing the upper-left corner of the specified range.
 uno::Reference< excel::XPivotTable >
 ScVbaRange::PivotTable() throw (uno::RuntimeException)
@@ -6127,8 +6123,6 @@ ScVbaRange::PivotTable() throw (uno::RuntimeException)
         xSheet = thisRange.getSpreadSheet();
     }
 
-//  RangeHelper thisRange( mxRange );
-//  uno::Reference< sheet::XSpreadsheet > xSheet = thisRange.getSpreadSheet();
     uno::Reference< sheet::XDataPilotTablesSupplier > xTables(xSheet, uno::UNO_QUERY_THROW ) ;
     uno::Reference< container::XIndexAccess > xIndexAccess( xTables->getDataPilotTables(), uno::UNO_QUERY_THROW );
     if ( xIndexAccess.is() )

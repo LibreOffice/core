@@ -200,13 +200,6 @@ void ScBlockUndo::EndUndo()
     ScSimpleUndo::EndUndo();
 }
 
-/*
-void ScBlockUndo::BeginRedo()
-{
-    ScSimpleUndo::BeginRedo();
-}
-*/
-
 void ScBlockUndo::EndRedo()
 {
     if (eMode == SC_UNDO_AUTOHEIGHT)
@@ -317,7 +310,6 @@ void ScMoveUndo::BeginUndo()
 
 void ScMoveUndo::EndUndo()
 {
-    //@17.12.97 Reihenfolge der Fkt.s geaendert
     DoSdrUndoAction( pDrawUndo, pDocShell->GetDocument() );     // #125875# must also be called when pointer is null
 
     if (pRefUndoDoc && eMode == SC_UNDO_REFLAST)
@@ -327,20 +319,6 @@ void ScMoveUndo::EndUndo()
 
     ScSimpleUndo::EndUndo();
 }
-
-/*
-void ScMoveUndo::BeginRedo()
-{
-    ScSimpleUndo::BeginRedo();
-}
-*/
-
-/*
-void ScMoveUndo::EndRedo()
-{
-    ScSimpleUndo::EndRedo();
-}
-*/
 
 // -----------------------------------------------------------------------
 

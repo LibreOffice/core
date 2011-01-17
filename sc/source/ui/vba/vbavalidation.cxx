@@ -295,13 +295,13 @@ ScVbaValidation::Add( const uno::Any& Type, const uno::Any& AlertStyle, const un
 
     xProps->setPropertyValue( ALERTSTYLE, uno::makeAny( eStyle ) );
 
-    //2009-11-11 fix the defect that validatation cannot work when the input should be limited between a lower bound and an upper bound
+    // fix the defect that validatation cannot work when the input should be limited between a lower bound and an upper bound
     if ( Operator.hasValue() )
     {
         css::sheet::ConditionOperator conOperator = ScVbaFormatCondition::retrieveAPIOperator( Operator );
         xCond->setOperator( conOperator );
     }
-    //2009-11-11
+
     if ( sFormula1.getLength() )
         xCond->setFormula1( sFormula1 );
     if ( sFormula2.getLength() )

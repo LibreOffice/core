@@ -35,7 +35,7 @@
 #include <vcl/help.hxx>
 
 /*************************************************************************
-#*  Member:     ScExpandedFixedText                         Datum:18.09.97
+#*  Member:     ScExpandedFixedText
 #*------------------------------------------------------------------------
 #*
 #*  Klasse:     MD_Test
@@ -56,7 +56,7 @@ ScExpandedFixedText::ScExpandedFixedText( Window* pParent,
 }
 
 /*************************************************************************
-#*  Member:     RequestHelp                                 Datum:18.09.97
+#*  Member:     RequestHelp
 #*------------------------------------------------------------------------
 #*
 #*  Klasse:     ScExpandedFixedText

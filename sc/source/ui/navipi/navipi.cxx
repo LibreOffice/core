@@ -77,7 +77,6 @@ static const xub_StrLen SCNAV_COLLETTERS = ::ScColToAlpha(SCNAV_MAXCOL).Len();  
 
 //------------------------------------------------------------------------
 
-//  static
 void ScNavigatorDlg::ReleaseFocus()
 {
     SfxViewShell* pCurSh = SfxViewShell::Current();
@@ -625,14 +624,6 @@ ScNavigatorDialogWrapper::ScNavigatorDialogWrapper(
     }
 
     pNavigator->bFirstBig = ( nCmdId == 0 );    // dann spaeter
-
-/*???
-    FloatingWindow* pFloat = GetFloatingWindow();
-    if ( pFloat )
-        pFloat->SetMinOutputSizePixel( pNavigator->GetMinOutputSizePixel() );
-*/
-
-//!?    pNavigator->Show();
 }
 
 void ScNavigatorDialogWrapper::Resizing( Size& rSize )
@@ -708,12 +699,6 @@ ScNavigatorDlg::ScNavigatorDlg( SfxBindings* pB, SfxChildWindowContext* pCW, Win
     nListModeHeight =  aInitSize.Height()
                      + nInitListHeight;
 
-    //  kein Resize, eh der ganze Kontext-Kram initialisiert ist!
-//  SetOutputSizePixel( aInitSize );        //???
-/*! FloatingWindow* pFloat = pContextWin->GetFloatingWindow();
-    if ( pFloat)
-        pFloat->SetMinOutputSizePixel( aInitSize );
-*/
     ppBoundItems = new ScNavigatorControllerItem* [CTRL_ITEMS];
 
     rBindings.ENTERREGISTRATIONS();
@@ -798,8 +783,6 @@ void ScNavigatorDlg::Resizing( Size& rNewSize )  // Size = Outputsize?
                 rNewSize.Height() = aMinOut.Height();
         }
     }
-//  else
-//      SfxDockingWindow::Resizing(rNewSize);
 }
 
 
@@ -862,7 +845,6 @@ void ScNavigatorDlg::DoResize()
     //  auch wenn die Inhalte nicht sichtbar sind, die Groessen anpassen,
     //  damit die Breite stimmt
 
-    //@@ 03.11.97 changes begin
     Point aEntryPos = aLbEntries.GetPosPixel();
     Point aListPos = aLbDocuments.GetPosPixel();
     aNewSize.Width() -= 2*nBorderOffset;
@@ -885,8 +867,6 @@ void ScNavigatorDlg::DoResize()
     aLbEntries.SetSizePixel( aNewSize );
     aWndScenarios.SetSizePixel( aNewSize );
     aLbDocuments.SetSizePixel( aDocSize );
-
-    //@@ 03.11.97 end
 
     BOOL bListMode = (eListMode != NAV_LMODE_NONE);
     FloatingWindow* pFloat = pContextWin->GetFloatingWindow();
@@ -1152,7 +1132,6 @@ void ScNavigatorDlg::UpdateTable( const SCTAB* pTab )
     else if ( GetViewData() )
         nCurTab = pViewData->GetTabNo();
 
-//  aLbTables.SetTab( nCurTab );
     CheckDataArea();
 }
 
