@@ -128,11 +128,11 @@ namespace chelp {
 
         bool isPicture() const { return m_aModule.compareToAscii("picture") == 0; }
         bool isActive() const { return m_aActive.getLength() > 0 && m_aActive.compareToAscii( "true" ) == 0; }
-        bool isQuery() const { return m_aId.compareToAscii("") == 0 && m_aQuery.compareToAscii("") != 0; }
+        bool isQuery() const { return m_aId.getLength() == 0 && m_aQuery.getLength() != 0; }
         bool isEntryForModule() const { return m_aId.compareToAscii("start") == 0 || m_bStart; }
-        bool isFile() const { return m_aId.compareToAscii( "" ) != 0; }
-        bool isModule() const { return m_aId.compareToAscii("") == 0 && m_aModule.compareToAscii("") != 0; }
-        bool isRoot() const { return m_aModule.compareToAscii("") == 0; }
+        bool isFile() const { return m_aId.getLength() != 0; }
+        bool isModule() const { return m_aId.getLength() == 0 && m_aModule.getLength() != 0; }
+        bool isRoot() const { return m_aModule.getLength() == 0; }
         bool isErrorDocument();
 
         rtl::OUString get_url() const { return m_aURL; }
