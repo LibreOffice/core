@@ -442,6 +442,10 @@ namespace svt { namespace table
         */
         ColPos      impl_getColumnForOrdinate( long const i_ordinate ) const;
 
+        /** retrieves the row which covers the given abscissa
+        */
+        RowPos      impl_getRowForAbscissa( long const i_abscissa ) const;
+
         /// invalidates the window area occupied by the given column
         void        impl_invalidateColumn( ColPos const i_column );
 

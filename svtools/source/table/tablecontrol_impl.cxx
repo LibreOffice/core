@@ -1800,31 +1800,13 @@ namespace svt { namespace table
     RowPos TableControl_Impl::getRowAtPoint( const Point& rPoint ) const
     {
         DBG_CHECK_ME();
-
-        if ( ( rPoint.Y() >= 0 ) && ( rPoint.Y() < m_nColHeaderHeightPixel ) )
-            return ROW_COL_HEADERS;
-
-        Rectangle aAllCellsArea;
-        impl_getAllVisibleCellsArea( aAllCellsArea );
-
-        TableRowGeometry aHitTest( *this, aAllCellsArea, ROW_COL_HEADERS );
-        while ( aHitTest.isValid() )
-        {
-            if ( aHitTest.getRect().IsInside( rPoint ) )
-                return aHitTest.getRow();
-            aHitTest.moveDown();
-        }
-        return ROW_INVALID;
+        return impl_getRowForAbscissa( rPoint.Y() );
     }
 
     //------------------------------------------------------------------------------------------------------------------
     ColPos TableControl_Impl::getColAtPoint( const Point& rPoint ) const
     {
         DBG_CHECK_ME();
-
-        if ( ( rPoint.X() >= 0 ) && ( rPoint.X() < m_nRowHeaderWidthPixel ) )
-            return COL_ROW_HEADERS;
-
         return impl_getColumnForOrdinate( rPoint.X() );
     }
 
@@ -2327,6 +2309,22 @@ namespace svt { namespace table
             return COL_INVALID;
         }
         return lowerBound - m_aColumnWidths.begin();
+    }
+
+    //--------------------------------------------------------------------
+    RowPos TableControl_Impl::impl_getRowForAbscissa( long const i_abscissa ) const
+    {
+        DBG_CHECK_ME();
+
+        if ( i_abscissa < 0 )
+            return ROW_INVALID;
+
+        if ( i_abscissa < m_nColHeaderHeightPixel )
+            return ROW_COL_HEADERS;
+
+        long const abscissa = i_abscissa - m_nColHeaderHeightPixel;
+        long const row = m_nTopRow + abscissa / m_nRowHeightPixel;
+        return row < m_pModel->getRowCount() ? row : ROW_INVALID;
     }
 
     //--------------------------------------------------------------------
