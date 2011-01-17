@@ -299,6 +299,8 @@ void Help::UpdateTip( ULONG nId, Window* pParent, const Rectangle& rScreenRect, 
     pHelpWin->SetOutputSizePixel( aSz );
     ImplSetHelpWindowPos( pHelpWin, pHelpWin->GetWinStyle(), pHelpWin->GetStyle(),
         pParent->OutputToScreenPixel( pParent->GetPointerPosPixel() ), &rScreenRect );
+
+    pHelpWin->SetHelpText( rText );
 }
 
 // -----------------------------------------------------------------------
