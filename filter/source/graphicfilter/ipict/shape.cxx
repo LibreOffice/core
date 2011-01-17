@@ -212,8 +212,8 @@ namespace PictReaderShape {
     double const Y[2] = { oval.Top(), oval.Bottom() };
     double width = X[1] - X[0];
     double height = Y[1] - Y[0];
-    if (ovalW > width) ovalW = width;
-    if (ovalH > height) ovalH = height;
+    if (ovalW > width) ovalW = static_cast< int >( width );
+    if (ovalH > height) ovalH = static_cast< int >( height );
 
     B2DRectangle rect(B2DPoint(X[0],Y[0]), B2DPoint(X[1],Y[1]));
     B2DPolygon poly = tools::createPolygonFromRect(rect, (width != 0.0) ? ovalW/width : 0.0, (height != 0.0) ? ovalH/height : 0.0);
@@ -233,7 +233,7 @@ namespace PictReaderShape {
       decalBR[0] -= (penSize+1)/2; decalBR[1] -= (penSize+1)/2;
     }
     // Quickdraw Drawing Reference 3-82: the pen size is only used for frame
-    else decalBR[0] = decalBR[1] = 0.0;
+    else decalBR[0] = decalBR[1] = 0;
 
 
     int numPt = orig.GetSize();
