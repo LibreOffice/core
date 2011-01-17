@@ -42,8 +42,8 @@ class NumberingPreview : public Window
     Font                aStdFont;
     long                nPageWidth;
     const String*       pOutlineNames;
-    BOOL                bPosition;
-    UINT16              nActLevel;
+    sal_Bool                bPosition;
+    sal_uInt16              nActLevel;
 
     protected:
         virtual void        Paint( const Rectangle& rRect );
@@ -51,7 +51,7 @@ class NumberingPreview : public Window
     public:
         NumberingPreview(Window* pParent, const ResId& rResId ) :
             Window(pParent, rResId),
-            pActNum(0),nPageWidth(0), pOutlineNames(0), bPosition(FALSE), nActLevel(USHRT_MAX) {}
+            pActNum(0),nPageWidth(0), pOutlineNames(0), bPosition(sal_False), nActLevel(USHRT_MAX) {}
         ~NumberingPreview();
 
         void    SetNumRule(const SwNumRule* pNum)
@@ -61,8 +61,8 @@ class NumberingPreview : public Window
         void    SetOutlineNames(const String* pNames)
                         {pOutlineNames = pNames;}
         void    SetPositionMode()
-                        { bPosition = TRUE;}
-        void    SetLevel(USHORT nSet) {nActLevel = nSet;}
+                        { bPosition = sal_True;}
+        void    SetLevel(sal_uInt16 nSet) {nActLevel = nSet;}
 
 };
 

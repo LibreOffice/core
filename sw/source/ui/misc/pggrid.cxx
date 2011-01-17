@@ -149,14 +149,14 @@ SwTextGridPage::SwTextGridPage(Window *pParent, const SfxItemSet &rSet) :
 
     XColorTable* pColorTbl = XColorTable::GetStdColorTable();
     aColorLB.InsertAutomaticEntry();
-    for( USHORT i = 0; i < pColorTbl->Count(); ++i )
+    for( sal_uInt16 i = 0; i < pColorTbl->Count(); ++i )
     {
         XColorEntry* pEntry = pColorTbl->GetColor( i );
         Color aColor = pEntry->GetColor();
         String sName = pEntry->GetName();
         aColorLB.InsertEntry( aColor, sName );
     }
-    aColorLB.SetUpdateMode( TRUE );
+    aColorLB.SetUpdateMode( sal_True );
     //Get the default paper mode
     SwView *pView   = ::GetActiveView();
     if( pView )
@@ -202,9 +202,9 @@ SfxTabPage *SwTextGridPage::Create(Window *pParent, const SfxItemSet &rSet)
 /*-- 06.02.2002 15:25:40---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-BOOL    SwTextGridPage::FillItemSet(SfxItemSet &rSet)
+sal_Bool    SwTextGridPage::FillItemSet(SfxItemSet &rSet)
 {
-    BOOL bRet = FALSE;
+    sal_Bool bRet = sal_False;
     if(aNoGridRB.GetSavedValue() != aNoGridRB.IsChecked()||
         aLinesGridRB.GetSavedValue() != aLinesGridRB.IsChecked()||
         aLinesPerPageNF.GetSavedValue().ToInt32()
@@ -221,7 +221,7 @@ BOOL    SwTextGridPage::FillItemSet(SfxItemSet &rSet)
         aColorLB.GetSavedValue() != aColorLB.GetSelectEntryPos())
     {
         PutGridItem(rSet);
-        bRet = TRUE;
+        bRet = sal_True;
     }
 
     return bRet;
@@ -231,7 +231,7 @@ BOOL    SwTextGridPage::FillItemSet(SfxItemSet &rSet)
   -----------------------------------------------------------------------*/
 void    SwTextGridPage::Reset(const SfxItemSet &rSet)
 {
-    if(SFX_ITEM_AVAILABLE <= rSet.GetItemState(RES_TEXTGRID, TRUE))
+    if(SFX_ITEM_AVAILABLE <= rSet.GetItemState(RES_TEXTGRID, sal_True))
     {
         const SwTextGridItem& rGridItem = (const SwTextGridItem&)rSet.Get(RES_TEXTGRID);
         RadioButton* pButton = 0;
@@ -315,7 +315,7 @@ void SwTextGridPage::PutGridItem(SfxItemSet& rSet)
  ---------------------------------------------------------------------------*/
 void SwTextGridPage::UpdatePageSize(const SfxItemSet& rSet)
 {
-    if( SFX_ITEM_UNKNOWN !=  rSet.GetItemState( RES_FRAMEDIR, TRUE ))
+    if( SFX_ITEM_UNKNOWN !=  rSet.GetItemState( RES_FRAMEDIR, sal_True ))
     {
         const SvxFrameDirectionItem& rDirItem =
                     (const SvxFrameDirectionItem&)rSet.Get(RES_FRAMEDIR);
@@ -374,9 +374,9 @@ void SwTextGridPage::UpdatePageSize(const SfxItemSet& rSet)
 /* -----------------------------06.02.2002 15:24------------------------------
 
  ---------------------------------------------------------------------------*/
-USHORT* SwTextGridPage::GetRanges()
+sal_uInt16* SwTextGridPage::GetRanges()
 {
-    static USHORT __FAR_DATA aPageRg[] = {
+    static sal_uInt16 __FAR_DATA aPageRg[] = {
         RES_TEXTGRID, RES_TEXTGRID,
         0};
     return aPageRg;

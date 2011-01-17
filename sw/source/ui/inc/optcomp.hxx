@@ -60,7 +60,7 @@ private:
     // impl object
     SwCompatibilityOptPage_Impl* m_pImpl;
     // saved options after "Reset"; used in "FillItemSet" for comparison
-    ULONG                   m_nSavedOptions;
+    sal_uLong                   m_nSavedOptions;
 
     // handler
     DECL_LINK(              SelectHdl, ListBox* );
@@ -69,8 +69,8 @@ private:
     // private methods
     void                    InitControls( const SfxItemSet& rSet );
     void                    ReplaceFormatName( String& rEntry );
-    void                    SetCurrentOptions( ULONG nOptions );
-    ULONG                   GetDocumentOptions() const;
+    void                    SetCurrentOptions( sal_uLong nOptions );
+    sal_uLong                   GetDocumentOptions() const;
     void                    WriteOptions();
 
 public:
@@ -79,7 +79,7 @@ public:
 
     static SfxTabPage*      Create( Window* pParent, const SfxItemSet& rAttrSet );
 
-    virtual BOOL            FillItemSet( SfxItemSet& rSet );
+    virtual sal_Bool            FillItemSet( SfxItemSet& rSet );
     virtual void            Reset( const SfxItemSet& rSet );
 };
 

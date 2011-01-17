@@ -72,17 +72,17 @@ SwInsertAbstractDlg::~SwInsertAbstractDlg()
 
 --------------------------------------------------*/
 
-BYTE SwInsertAbstractDlg::GetLevel() const
+sal_uInt8 SwInsertAbstractDlg::GetLevel() const
 {
-    return static_cast< BYTE >(aLevelNF.GetValue() - 1);
+    return static_cast< sal_uInt8 >(aLevelNF.GetValue() - 1);
 }
 /*-----------------22.02.97 15.34-------------------
 
 --------------------------------------------------*/
 
-BYTE SwInsertAbstractDlg::GetPara() const
+sal_uInt8 SwInsertAbstractDlg::GetPara() const
 {
-    return (BYTE) aParaNF.GetValue();
+    return (sal_uInt8) aParaNF.GetValue();
 }
 
 

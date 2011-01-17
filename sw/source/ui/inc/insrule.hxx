@@ -43,7 +43,7 @@ class SwInsertGrfRulerDlg  : public SfxModalDialog
     List            aGrfNames;
     String          sSimple;
     String          sRulers;
-    USHORT          nSelPos;
+    sal_uInt16          nSelPos;
 
     SwRulerValueSet* pExampleVS;
 
@@ -56,8 +56,8 @@ public:
     ~SwInsertGrfRulerDlg();
 
     String          GetGraphicName();
-    BOOL            IsSimpleLine() {return nSelPos == 1;}
-    BOOL            HasImages() const {return 0 != aGrfNames.Count();}
+    sal_Bool            IsSimpleLine() {return nSelPos == 1;}
+    sal_Bool            HasImages() const {return 0 != aGrfNames.Count();}
 };
 
 #endif

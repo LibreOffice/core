@@ -47,7 +47,7 @@ SwUndoMove::SwUndoMove( const SwPaM& rRange, const SwPosition& rMvPos )
     nMvDestCntnt( rMvPos.nContent.GetIndex() ),
     bMoveRedlines( false )
 {
-    bMoveRange = bJoinNext = bJoinPrev = FALSE;
+    bMoveRange = bJoinNext = bJoinPrev = sal_False;
 
     // StartNode vorm loeschen von Fussnoten besorgen!
     SwDoc* pDoc = rRange.GetDoc();
@@ -106,8 +106,8 @@ SwUndoMove::SwUndoMove( SwDoc* pDoc, const SwNodeRange& rRg,
     nMvDestNode( rMvPos.GetIndex() ),
     bMoveRedlines( false )
 {
-    bMoveRange = TRUE;
-    bJoinNext = bJoinPrev = FALSE;
+    bMoveRange = sal_True;
+    bJoinNext = bJoinPrev = sal_False;
 
     nSttCntnt = nEndCntnt = nMvDestCntnt = STRING_MAXLEN;
 
@@ -117,7 +117,7 @@ SwUndoMove::SwUndoMove( SwDoc* pDoc, const SwNodeRange& rRg,
 //  DelFtn( rRange );
 
     // wird aus dem CntntBereich in den Sonderbereich verschoben ?
-    ULONG nCntntStt = pDoc->GetNodes().GetEndOfAutotext().GetIndex();
+    sal_uLong nCntntStt = pDoc->GetNodes().GetEndOfAutotext().GetIndex();
     if( nMvDestNode < nCntntStt && rRg.aStart.GetIndex() > nCntntStt )
     {
         // loesche alle Fussnoten. Diese sind dort nicht erwuenscht.
@@ -142,7 +142,7 @@ SwUndoMove::SwUndoMove( SwDoc* pDoc, const SwNodeRange& rRg,
 
 void SwUndoMove::SetDestRange( const SwPaM& rRange,
                                 const SwPosition& rInsPos,
-                                BOOL bJoin, BOOL bCorrPam )
+                                sal_Bool bJoin, sal_Bool bCorrPam )
 {
     const SwPosition *pStt = rRange.Start(),
                     *pEnd = rRange.GetPoint() == pStt
@@ -190,8 +190,8 @@ void SwUndoMove::SetDestRange( const SwNodeIndex& rStt,
 void SwUndoMove::Undo( SwUndoIter& rUndoIter )
 {
     SwDoc* pDoc = &rUndoIter.GetDoc();
-    BOOL bUndo = pDoc->DoesUndo();
-    pDoc->DoUndo( FALSE );
+    sal_Bool bUndo = pDoc->DoesUndo();
+    pDoc->DoUndo( sal_False );
 
     // Block, damit aus diesem gesprungen werden kann
     do {
@@ -217,7 +217,7 @@ void SwUndoMove::Undo( SwUndoIter& rUndoIter )
             // #i17764# if redlines are to be moved, we may not remove them before
             //          pDoc->Move gets a chance to handle them
             if( ! bMoveRedlines )
-                RemoveIdxFromRange( aPam, FALSE );
+                RemoveIdxFromRange( aPam, sal_False );
 
             SwPosition aPos( *pDoc->GetNodes()[ nInsPosNode] );
             SwCntntNode* pCNd = aPos.nNode.GetNode().GetCntntNode();
@@ -238,7 +238,7 @@ void SwUndoMove::Undo( SwUndoIter& rUndoIter )
 
             aPam.Exchange();
             aPam.DeleteMark();
-//          pDoc->ResetAttr( aPam, FALSE );
+//          pDoc->ResetAttr( aPam, sal_False );
             if( aPam.GetNode()->IsCntntNode() )
                 aPam.GetNode()->GetCntntNode()->ResetAllAttr();
             // der Pam wird jetzt aufgegeben.
@@ -266,7 +266,7 @@ void SwUndoMove::Undo( SwUndoIter& rUndoIter )
             pTxtNd->JoinNext();
         }
 
-    } while( FALSE );
+    } while( sal_False );
 
     if( pHistory )
     {
@@ -308,10 +308,10 @@ void SwUndoMove::Redo( SwUndoIter& rUndoIter )
                                         nMvDestCntnt ));
 
         DelFtn( aPam );
-        RemoveIdxFromRange( aPam, FALSE );
+        RemoveIdxFromRange( aPam, sal_False );
 
         aIdx = aPam.Start()->nNode;
-        BOOL bJoinTxt = aIdx.GetNode().IsTxtNode();
+        sal_Bool bJoinTxt = aIdx.GetNode().IsTxtNode();
 
         aIdx--;
         rDoc.MoveRange( aPam, aMvPos,
@@ -341,7 +341,7 @@ void SwUndoMove::DelFtn( const SwPaM& rRange )
 {
     // wird aus dem CntntBereich in den Sonderbereich verschoben ?
     SwDoc* pDoc = rRange.GetDoc();
-    ULONG nCntntStt = pDoc->GetNodes().GetEndOfAutotext().GetIndex();
+    sal_uLong nCntntStt = pDoc->GetNodes().GetEndOfAutotext().GetIndex();
     if( nMvDestNode < nCntntStt &&
         rRange.GetPoint()->nNode.GetIndex() >= nCntntStt )
     {

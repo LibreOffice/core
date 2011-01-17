@@ -52,10 +52,10 @@ inline SwDoc& SwUndoIter::GetDoc() const { return *pAktPam->GetDoc(); }
 
 
 SwUndoSplitNode::SwUndoSplitNode( SwDoc* pDoc, const SwPosition& rPos,
-                                    BOOL bChkTable )
+                                    sal_Bool bChkTable )
     : SwUndo( UNDO_SPLITNODE ), pHistory( 0 ), pRedlData( 0 ), nNode( rPos.nNode.GetIndex() ),
         nCntnt( rPos.nContent.GetIndex() ),
-        bTblFlag( FALSE ), bChkTblStt( bChkTable )
+        bTblFlag( sal_False ), bChkTblStt( bChkTable )
 {
     SwTxtNode* pTxtNd = pDoc->GetNodes()[ rPos.nNode ]->GetTxtNode();
     ASSERT( pTxtNd, "nur beim TextNode rufen!" );
@@ -108,11 +108,11 @@ void SwUndoSplitNode::Undo( SwUndoIter& rUndoIter )
             if( pNdSet )
             {
                 const SfxPoolItem *pItem;
-                if( SFX_ITEM_SET == pNdSet->GetItemState( RES_PAGEDESC, FALSE,
+                if( SFX_ITEM_SET == pNdSet->GetItemState( RES_PAGEDESC, sal_False,
                     &pItem ) )
                     pTableFmt->SetFmtAttr( *pItem );
 
-                if( SFX_ITEM_SET == pNdSet->GetItemState( RES_BREAK, FALSE,
+                if( SFX_ITEM_SET == pNdSet->GetItemState( RES_BREAK, sal_False,
                      &pItem ) )
                     pTableFmt->SetFmtAttr( *pItem );
             }
@@ -151,7 +151,7 @@ void SwUndoSplitNode::Undo( SwUndoIter& rUndoIter )
                 rPam.SetMark();
                 rPam.GetPoint()->nContent = pTNd->GetTxt().Len();
 
-                pDoc->RstTxtAttrs( rPam, TRUE );
+                pDoc->RstTxtAttrs( rPam, sal_True );
                 pHistory->TmpRollback( pDoc, 0, false );
             }
         }
@@ -176,7 +176,7 @@ void SwUndoSplitNode::Repeat( SwUndoIter& rUndoIter )
 void SwUndoSplitNode::Redo( SwUndoIter& rUndoIter )
 {
     SwPaM& rPam = *rUndoIter.pAktPam;
-    ULONG nOldNode = rPam.GetPoint()->nNode.GetIndex();
+    sal_uLong nOldNode = rPam.GetPoint()->nNode.GetIndex();
     rPam.GetPoint()->nNode = nNode;
     SwTxtNode * pTNd = rPam.GetNode()->GetTxtNode();
     if( pTNd )              // sollte eigentlich immer ein TextNode sein !!

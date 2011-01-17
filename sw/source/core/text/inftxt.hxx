@@ -98,7 +98,7 @@ class SwLineInfo
 
     SvxTabStopItem* pRuler;
     const SvxLineSpacingItem *pSpace;
-    USHORT nVertAlign;
+    sal_uInt16 nVertAlign;
     KSHORT nDefTabStop;
     // --> OD 2008-02-04 #newlistlevelattrs#
     bool bListTabStopIncluded;
@@ -125,14 +125,14 @@ public:
         { ( (SwLineInfo*)this )->nDefTabStop = nNew; }
 
     // vertical alignment
-    inline USHORT GetVertAlign() const { return nVertAlign; }
+    inline sal_uInt16 GetVertAlign() const { return nVertAlign; }
     inline sal_Bool HasSpecialAlign( sal_Bool bVert ) const
         { return bVert ?
                  ( SvxParaVertAlignItem::BASELINE  != nVertAlign ) :
                  ( SvxParaVertAlignItem::BASELINE  != nVertAlign &&
                    SvxParaVertAlignItem::AUTOMATIC != nVertAlign ); }
 
-    USHORT NumberOfTabStops() const;
+    sal_uInt16 NumberOfTabStops() const;
 
     // --> OD 2008-02-04 #newlistlevelattrs#
     inline bool IsListTabStopIncluded() const
@@ -202,7 +202,7 @@ protected:
     const SwViewOption *pOpt;
     const XubString *pTxt;
     xub_StrLen nIdx, nLen;
-    USHORT nKanaIdx;
+    sal_uInt16 nKanaIdx;
     sal_Bool bOnWin     : 1;
     sal_Bool bNotEOL    : 1;
     sal_Bool bURLNotify : 1;
@@ -302,13 +302,13 @@ public:
     //
     SwPosSize GetTxtSize( OutputDevice* pOut, const SwScriptInfo* pSI,
                           const XubString& rTxt, const xub_StrLen nIdx,
-                          const xub_StrLen nLen, const USHORT nComp ) const;
+                          const xub_StrLen nLen, const sal_uInt16 nComp ) const;
     SwPosSize GetTxtSize() const;
     void GetTxtSize( const SwScriptInfo* pSI, const xub_StrLen nIdx,
-                      const xub_StrLen nLen, const USHORT nComp,
-                      USHORT& nMinSize, USHORT& nMaxSizeDiff ) const;
+                      const xub_StrLen nLen, const sal_uInt16 nComp,
+                      sal_uInt16& nMinSize, sal_uInt16& nMaxSizeDiff ) const;
     inline SwPosSize GetTxtSize( const SwScriptInfo* pSI, const xub_StrLen nIdx,
-                                 const xub_StrLen nLen, const USHORT nComp ) const;
+                                 const xub_StrLen nLen, const sal_uInt16 nComp ) const;
     inline SwPosSize GetTxtSize( const XubString &rTxt ) const;
 
     //
@@ -316,10 +316,10 @@ public:
     //
     xub_StrLen GetTxtBreak( const long nLineWidth,
                                            const xub_StrLen nMaxLen,
-                                           const USHORT nComp ) const;
+                                           const sal_uInt16 nComp ) const;
     xub_StrLen GetTxtBreak( const long nLineWidth,
                                            const xub_StrLen nMaxLen,
-                                           const USHORT nComp,
+                                           const sal_uInt16 nComp,
                                            xub_StrLen& rExtraCharPos ) const;
 
     inline KSHORT GetAscent() const;
@@ -351,13 +351,13 @@ public:
     // space among compressed kanas.
     // During formatting, the maximum values of compressable portions are
     // stored in aMaxWidth and discarded after a line has been formatted.
-    inline void SetMaxWidthDiff( ULONG nKey, USHORT nVal )
+    inline void SetMaxWidthDiff( sal_uLong nKey, sal_uInt16 nVal )
     {
         aMaxWidth.Insert( nKey, nVal );
     };
-    inline USHORT GetMaxWidthDiff( ULONG nKey )
+    inline sal_uInt16 GetMaxWidthDiff( sal_uLong nKey )
     {
-        return (USHORT)aMaxWidth.Get( nKey );
+        return (sal_uInt16)aMaxWidth.Get( nKey );
     };
     inline void ResetMaxWidthDiff()
     {
@@ -377,7 +377,7 @@ public:
     inline void IncKanaIdx() { ++nKanaIdx; }
     inline void SetKanaComp( SvUShorts *pNew ){ pKanaComp = pNew; }
     inline SvUShorts* GetpKanaComp() const { return pKanaComp; }
-    inline USHORT GetKanaComp() const
+    inline sal_uInt16 GetKanaComp() const
         { return ( pKanaComp && nKanaIdx < pKanaComp->Count() )
                    ? (*pKanaComp)[nKanaIdx] : 0; }
 
@@ -542,7 +542,7 @@ class SwTxtFormatInfo : public SwTxtPaintInfo
     xub_StrLen nHyphWrdLen;     // gefundene Wort-Laenge
     xub_StrLen nLineStart;      // aktueller Zeilenbeginn im rTxt
     xub_StrLen nUnderScorePos;  // enlarge repaint if underscore has been found
-    // --> FME 2004-11-25 #i34348# Changed type from USHORT to SwTwips
+    // --> FME 2004-11-25 #i34348# Changed type from sal_uInt16 to SwTwips
     SwTwips nLeft;          // linker Rand
     SwTwips nRight;           // rechter Rand
     SwTwips nFirst;           // EZE
@@ -553,9 +553,9 @@ class SwTxtFormatInfo : public SwTxtPaintInfo
     KSHORT nLineNettoHeight;   // line height without spacing
     KSHORT nForcedLeftMargin;   // Verschiebung des linken Rands wg. Rahmen
 
-    INT16  nMinLeading;     // minimum number of chars before hyphenation point
-    INT16  nMinTrailing;    // minimum number of chars after hyphenation point
-    INT16  nMinWordLength;  // minimum length of word to be hyphenated
+    sal_Int16  nMinLeading;     // minimum number of chars before hyphenation point
+    sal_Int16  nMinTrailing;    // minimum number of chars after hyphenation point
+    sal_Int16  nMinWordLength;  // minimum length of word to be hyphenated
 
     sal_Bool bFull   : 1;      // Zeile ist voll
     sal_Bool bFtnDone  : 1;    // Ftn bereits formatiert
@@ -723,7 +723,7 @@ public:
     // ruft HyphenateWord() des Hyphenators
     ::com::sun::star::uno::Reference<
         ::com::sun::star::linguistic2::XHyphenatedWord >
-                HyphWord( const String &rTxt, const USHORT nMinTrail );
+                HyphWord( const String &rTxt, const sal_uInt16 nMinTrail );
     const com::sun::star::beans::PropertyValues &
                 GetHyphValues() const;
 
@@ -737,7 +737,7 @@ public:
     void Reset( const SwTxtFrm *pFrame); // , const sal_Bool bAll );
 
     // Sets the last SwKernPortion as pLast, if it is followed by empty portions
-    BOOL LastKernPortion();
+    sal_Bool LastKernPortion();
 
     // Sucht ab nIdx bis nEnd nach Tabs, TabDec, TXTATR und BRK.
     // Return: gefundene Position, setzt ggf. cHookChar
@@ -831,7 +831,7 @@ inline SwPosSize SwTxtSizeInfo::GetTxtSize( const XubString &rTxt ) const
 inline SwPosSize SwTxtSizeInfo::GetTxtSize( const SwScriptInfo* pSI,
                                             const xub_StrLen nNewIdx,
                                             const xub_StrLen nNewLen,
-                                            const USHORT nCompress ) const
+                                            const sal_uInt16 nCompress ) const
 {
     return GetTxtSize( pOut, pSI, *pTxt, nNewIdx, nNewLen, nCompress );
 }

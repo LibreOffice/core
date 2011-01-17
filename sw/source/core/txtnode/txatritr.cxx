@@ -107,7 +107,7 @@ sal_Bool SwScriptIterator::Next()
 
 // --------------------------------------------------------------------
 
-SwTxtAttrIterator::SwTxtAttrIterator( const SwTxtNode& rTNd, USHORT nWhchId,
+SwTxtAttrIterator::SwTxtAttrIterator( const SwTxtNode& rTNd, sal_uInt16 nWhchId,
                                         xub_StrLen nStt,
                                         sal_Bool bUseGetWhichOfScript )
     : aSIter( rTNd.GetTxt(), nStt ), rTxtNd( rTNd ),
@@ -127,7 +127,7 @@ sal_Bool SwTxtAttrIterator::Next()
         {
             do {
                 const SwTxtAttr* pHt = (SwTxtAttr*)aStack[ 0 ];
-                USHORT nEndPos = *pHt->GetEnd();
+                sal_uInt16 nEndPos = *pHt->GetEnd();
                 if( nChgPos >= nEndPos )
                     aStack.Remove( 0 );
                 else
@@ -142,7 +142,7 @@ sal_Bool SwTxtAttrIterator::Next()
             if( aStack.Count() )
             {
                 const SwTxtAttr* pHt = (SwTxtAttr*)aStack[ 0 ];
-                USHORT nEndPos = *pHt->GetEnd();
+                sal_uInt16 nEndPos = *pHt->GetEnd();
                 if( nChgPos >= nEndPos )
                 {
                     nChgPos = nEndPos;
@@ -171,7 +171,7 @@ sal_Bool SwTxtAttrIterator::Next()
 void SwTxtAttrIterator::AddToStack( const SwTxtAttr& rAttr )
 {
     void* pAdd = (void*)&rAttr;
-    USHORT nIns = 0, nEndPos = *rAttr.GetEnd();
+    sal_uInt16 nIns = 0, nEndPos = *rAttr.GetEnd();
     for( ; nIns < aStack.Count(); ++nIns )
         if( *((SwTxtAttr*)aStack[ nIns ] )->GetEnd() > nEndPos )
             break;
@@ -181,7 +181,7 @@ void SwTxtAttrIterator::AddToStack( const SwTxtAttr& rAttr )
 
 void SwTxtAttrIterator::SearchNextChg()
 {
-    USHORT nWh = 0;
+    sal_uInt16 nWh = 0;
     if( nChgPos == aSIter.GetScriptChgPos() )
     {
         aSIter.Next();
@@ -217,8 +217,8 @@ void SwTxtAttrIterator::SearchNextChg()
         for( ; nAttrPos < pHts->Count(); ++nAttrPos )
         {
             const SwTxtAttr* pHt = (*pHts)[ nAttrPos ];
-            const USHORT* pEnd = pHt->GetEnd();
-            const USHORT nHtStt = *pHt->GetStart();
+            const sal_uInt16* pEnd = pHt->GetEnd();
+            const sal_uInt16 nHtStt = *pHt->GetStart();
             if( nHtStt < nStt && ( !pEnd || *pEnd <= nStt ))
                 continue;
 

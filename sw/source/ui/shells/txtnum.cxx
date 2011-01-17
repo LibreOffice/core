@@ -59,7 +59,7 @@ void SwTextShell::ExecEnterNum(SfxRequest &rReq)
     case FN_NUM_NUMBERING_ON:
     {
         SFX_REQUEST_ARG( rReq, pItem, SfxBoolItem, FN_PARAM_1 , sal_False );
-        BOOL bMode = !GetShell().HasNumber(); // #i29560#
+        sal_Bool bMode = !GetShell().HasNumber(); // #i29560#
         if ( pItem )
             bMode = pItem->GetValue();
         else
@@ -78,7 +78,7 @@ void SwTextShell::ExecEnterNum(SfxRequest &rReq)
     case FN_NUM_BULLET_ON:
     {
         SFX_REQUEST_ARG( rReq, pItem, SfxBoolItem, FN_PARAM_1 , sal_False );
-        BOOL bMode = !GetShell().HasBullet(); // #i29560#
+        sal_Bool bMode = !GetShell().HasBullet(); // #i29560#
         if ( pItem )
             bMode = pItem->GetValue();
         else
@@ -97,22 +97,22 @@ void SwTextShell::ExecEnterNum(SfxRequest &rReq)
     case FN_NUMBER_BULLETS:
     {
         // --> OD 2008-02-29 #refactorlists#
-//        // per default TRUE, damit die Schleife im Dialog richtig arbeitet!
-//        BOOL bHasChild = TRUE;
+//        // per default sal_True, damit die Schleife im Dialog richtig arbeitet!
+//        sal_Bool bHasChild = sal_True;
         // <--
         SfxItemSet aSet(GetPool(),
                 SID_HTML_MODE, SID_HTML_MODE,
                 SID_ATTR_NUMBERING_RULE, SID_PARAM_CUR_NUM_LEVEL,
                 0 );
         SwDocShell* pDocSh = GetView().GetDocShell();
-        BOOL bHtml = 0 != PTR_CAST(SwWebDocShell, pDocSh);
+        sal_Bool bHtml = 0 != PTR_CAST(SwWebDocShell, pDocSh);
         const SwNumRule* pCurRule = GetShell().GetCurNumRule();
         if( pCurRule )
         {
             SvxNumRule aRule = pCurRule->MakeSvxNumRule();
 
             //convert type of linked bitmaps from SVX_NUM_BITMAP to (SVX_NUM_BITMAP|LINK_TOKEN)
-            for(USHORT i = 0; i < aRule.GetLevelCount(); i++)
+            for(sal_uInt16 i = 0; i < aRule.GetLevelCount(); i++)
             {
                 SvxNumberFormat aFmt(aRule.GetLevel(i));
                 if(SVX_NUM_BITMAP == aFmt.GetNumberingType())
@@ -127,13 +127,13 @@ void SwTextShell::ExecEnterNum(SfxRequest &rReq)
                 }
             }
             if(bHtml)
-                aRule.SetFeatureFlag(NUM_ENABLE_EMBEDDED_BMP, FALSE);
+                aRule.SetFeatureFlag(NUM_ENABLE_EMBEDDED_BMP, sal_False);
 
             aSet.Put(SvxNumBulletItem(aRule));
             // --> OD 2008-02-29 #refactorlists# - removed <bHasChild>
             ASSERT( GetShell().GetNumLevel() < MAXLEVEL,
                     "<SwTextShell::ExecEnterNum()> - numbered node without valid list level. Serious defect -> please inform OD." );
-            USHORT nLevel = GetShell().GetNumLevel();
+            sal_uInt16 nLevel = GetShell().GetNumLevel();
             // <--
             if( nLevel < MAXLEVEL )
             {
@@ -154,7 +154,7 @@ void SwTextShell::ExecEnterNum(SfxRequest &rReq)
 
             if( bHtml || bRightToLeft )
             {
-                for( BYTE n = 0; n < MAXLEVEL; ++n )
+                for( sal_uInt8 n = 0; n < MAXLEVEL; ++n )
                 {
                     SvxNumberFormat aFmt( aSvxRule.GetLevel( n ) );
                     if ( n && bHtml )
@@ -170,14 +170,14 @@ void SwTextShell::ExecEnterNum(SfxRequest &rReq)
                         aFmt.SetNumAdjust( SVX_ADJUST_RIGHT );
                     }
                     // <--
-                    aSvxRule.SetLevel( n, aFmt, FALSE );
+                    aSvxRule.SetLevel( n, aFmt, sal_False );
                 }
-                aSvxRule.SetFeatureFlag(NUM_ENABLE_EMBEDDED_BMP, FALSE);
+                aSvxRule.SetFeatureFlag(NUM_ENABLE_EMBEDDED_BMP, sal_False);
             }
             aSet.Put(SvxNumBulletItem(aSvxRule));
         }
 
-        aSet.Put( SfxBoolItem( SID_PARAM_NUM_PRESET,FALSE ));
+        aSet.Put( SfxBoolItem( SID_PARAM_NUM_PRESET,sal_False ));
 
         // vor dem Dialog wird der HtmlMode an der DocShell versenkt
         pDocSh->PutItem(SfxUInt16Item(SID_HTML_MODE, ::GetHtmlMode(pDocSh)));
@@ -187,11 +187,11 @@ void SwTextShell::ExecEnterNum(SfxRequest &rReq)
         SfxAbstractTabDialog* pDlg = pFact->CreateSwTabDialog( DLG_SVXTEST_NUM_BULLET,
                                                         GetView().GetWindow(), &aSet, GetShell());
         DBG_ASSERT(pDlg, "Dialogdiet fail!");
-        USHORT nRet = pDlg->Execute();
+        sal_uInt16 nRet = pDlg->Execute();
         const SfxPoolItem* pItem;
         if( RET_OK == nRet )
         {
-            if( SFX_ITEM_SET == pDlg->GetOutputItemSet()->GetItemState( SID_ATTR_NUMBERING_RULE, FALSE, &pItem ))
+            if( SFX_ITEM_SET == pDlg->GetOutputItemSet()->GetItemState( SID_ATTR_NUMBERING_RULE, sal_False, &pItem ))
             {
                 rReq.AppendItem(*pItem);
                 rReq.Done();
@@ -206,7 +206,7 @@ void SwTextShell::ExecEnterNum(SfxRequest &rReq)
                                     // <--
                 // <--
                 aSetRule.SetSvxRule( *pSetRule, GetShell().GetDoc());
-                aSetRule.SetAutoRule( TRUE );
+                aSetRule.SetAutoRule( sal_True );
                 // --> OD 2008-03-17 #refactorlists#
                 // No start of new list, if an existing list style is edited.
                 // Otherwise start a new list.
@@ -217,7 +217,7 @@ void SwTextShell::ExecEnterNum(SfxRequest &rReq)
             // wenn der Dialog mit OK verlassen wurde, aber nichts ausgewaehlt
             // wurde dann muss die Numerierung zumindest eingeschaltet werden,
             // wenn sie das noch nicht ist
-            else if( !pCurRule && SFX_ITEM_SET == aSet.GetItemState( SID_ATTR_NUMBERING_RULE, FALSE, &pItem ))
+            else if( !pCurRule && SFX_ITEM_SET == aSet.GetItemState( SID_ATTR_NUMBERING_RULE, sal_False, &pItem ))
             {
                 rReq.AppendItem( *pItem );
                 rReq.Done();
@@ -229,7 +229,7 @@ void SwTextShell::ExecEnterNum(SfxRequest &rReq)
                                     // <--
                 // <--
                 aSetRule.SetSvxRule(*pSetRule, GetShell().GetDoc());
-                aSetRule.SetAutoRule( TRUE );
+                aSetRule.SetAutoRule( sal_True );
                 // --> OD 2008-03-17 #refactorlists#
                 // start new list
                 GetShell().SetCurNumRule( aSetRule, true );
@@ -243,7 +243,7 @@ void SwTextShell::ExecEnterNum(SfxRequest &rReq)
     }
     break;
     default:
-        ASSERT(FALSE,  falscher Dispatcher);
+        ASSERT(sal_False,  falscher Dispatcher);
         return;
     }
 }

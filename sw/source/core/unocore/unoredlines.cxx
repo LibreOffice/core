@@ -84,7 +84,7 @@ uno::Any SwXRedlines::getByIndex(sal_Int32 nIndex)
     uno::Any aRet;
     if(rRedTbl.Count() > nIndex && nIndex >= 0)
     {
-        uno::Reference <beans::XPropertySet> xRet = SwXRedlines::GetObject( *rRedTbl.GetObject((USHORT)nIndex), *GetDoc() );
+        uno::Reference <beans::XPropertySet> xRet = SwXRedlines::GetObject( *rRedTbl.GetObject((sal_uInt16)nIndex), *GetDoc() );
         aRet <<= xRet;
     }
     else
@@ -130,11 +130,11 @@ OUString SwXRedlines::getImplementationName(void) throw( uno::RuntimeException )
 /*-- 11.01.01 15:28:56---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-BOOL SwXRedlines::supportsService(const rtl::OUString& /*ServiceName*/)
+sal_Bool SwXRedlines::supportsService(const rtl::OUString& /*ServiceName*/)
     throw( uno::RuntimeException )
 {
     DBG_ERROR("not implemented");
-    return FALSE;
+    return sal_False;
 }
 /*-- 11.01.01 15:28:57---------------------------------------------------
 
@@ -181,7 +181,7 @@ SwXRedlineEnumeration::~SwXRedlineEnumeration()
 /*-- 12.01.01 15:06:10---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-BOOL SwXRedlineEnumeration::hasMoreElements(void) throw( uno::RuntimeException )
+sal_Bool SwXRedlineEnumeration::hasMoreElements(void) throw( uno::RuntimeException )
 {
     if(!pDoc)
         throw uno::RuntimeException();
@@ -213,9 +213,9 @@ rtl::OUString SwXRedlineEnumeration::getImplementationName(void) throw( uno::Run
 /*-- 12.01.01 15:06:10---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-BOOL SwXRedlineEnumeration::supportsService(const rtl::OUString& /*ServiceName*/) throw( uno::RuntimeException )
+sal_Bool SwXRedlineEnumeration::supportsService(const rtl::OUString& /*ServiceName*/) throw( uno::RuntimeException )
 {
-    return FALSE;
+    return sal_False;
 }
 /*-- 12.01.01 15:06:11---------------------------------------------------
 

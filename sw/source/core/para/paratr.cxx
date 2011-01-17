@@ -199,7 +199,7 @@ sal_Bool SwFmtDrop::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
             sal_Int8 nTemp = 0;
             rVal >>= nTemp;
             if(nTemp >=1 && nTemp < 0x7f)
-                nLines = (BYTE)nTemp;
+                nLines = (sal_uInt8)nTemp;
         }
         break;
         case MID_DROPCAP_COUNT :
@@ -207,7 +207,7 @@ sal_Bool SwFmtDrop::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
             sal_Int16 nTemp = 0;
             rVal >>= nTemp;
             if(nTemp >=1 && nTemp < 0x7f)
-                nChars = (BYTE)nTemp;
+                nChars = (sal_uInt8)nTemp;
         }
         break;
         case MID_DROPCAP_DISTANCE :
@@ -267,21 +267,21 @@ int SwNumRuleItem::operator==( const SfxPoolItem& rAttr ) const
 /* -----------------------------27.06.00 11:05--------------------------------
 
  ---------------------------------------------------------------------------*/
-BOOL    SwNumRuleItem::QueryValue( uno::Any& rVal, BYTE ) const
+sal_Bool    SwNumRuleItem::QueryValue( uno::Any& rVal, sal_uInt8 ) const
 {
     rtl::OUString sRet = SwStyleNameMapper::GetProgName(GetValue(), nsSwGetPoolIdFromName::GET_POOLID_NUMRULE );
     rVal <<= sRet;
-    return TRUE;
+    return sal_True;
 }
 /* -----------------------------27.06.00 11:05--------------------------------
 
  ---------------------------------------------------------------------------*/
-BOOL    SwNumRuleItem::PutValue( const uno::Any& rVal, BYTE )
+sal_Bool    SwNumRuleItem::PutValue( const uno::Any& rVal, sal_uInt8 )
 {
     rtl::OUString uName;
     rVal >>= uName;
     SetValue(SwStyleNameMapper::GetUIName(uName, nsSwGetPoolIdFromName::GET_POOLID_NUMRULE));
-    return TRUE;
+    return sal_True;
 }
 /* -----------------19.05.2003 10:44-----------------
 

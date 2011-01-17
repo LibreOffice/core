@@ -33,11 +33,11 @@
 
 class SwPagePreViewPrtData
 {
-    ULONG nLeftSpace, nRightSpace, nTopSpace, nBottomSpace,
+    sal_uLong nLeftSpace, nRightSpace, nTopSpace, nBottomSpace,
             nHorzSpace, nVertSpace;
-    BYTE nRow, nCol;
-    BOOL bLandscape : 1;
-    BOOL bStretch : 1;
+    sal_uInt8 nRow, nCol;
+    sal_Bool bLandscape : 1;
+    sal_Bool bStretch : 1;
 public:
     SwPagePreViewPrtData()
         : nLeftSpace(0), nRightSpace(0), nTopSpace(0), nBottomSpace(0),
@@ -45,32 +45,32 @@ public:
             bLandscape(0),bStretch(0)
     {}
 
-    ULONG GetLeftSpace() const          { return nLeftSpace; }
-    void SetLeftSpace( ULONG n )        { nLeftSpace = n; }
+    sal_uLong GetLeftSpace() const          { return nLeftSpace; }
+    void SetLeftSpace( sal_uLong n )        { nLeftSpace = n; }
 
-    ULONG GetRightSpace() const         { return nRightSpace; }
-    void SetRightSpace( ULONG n )       { nRightSpace = n; }
+    sal_uLong GetRightSpace() const         { return nRightSpace; }
+    void SetRightSpace( sal_uLong n )       { nRightSpace = n; }
 
-    ULONG GetTopSpace() const           { return nTopSpace; }
-    void SetTopSpace( ULONG n )         { nTopSpace = n; }
+    sal_uLong GetTopSpace() const           { return nTopSpace; }
+    void SetTopSpace( sal_uLong n )         { nTopSpace = n; }
 
-    ULONG GetBottomSpace() const        { return nBottomSpace; }
-    void SetBottomSpace( ULONG n )      { nBottomSpace = n; }
+    sal_uLong GetBottomSpace() const        { return nBottomSpace; }
+    void SetBottomSpace( sal_uLong n )      { nBottomSpace = n; }
 
-    ULONG GetHorzSpace() const          { return nHorzSpace; }
-    void SetHorzSpace( ULONG n )        { nHorzSpace = n; }
+    sal_uLong GetHorzSpace() const          { return nHorzSpace; }
+    void SetHorzSpace( sal_uLong n )        { nHorzSpace = n; }
 
-    ULONG GetVertSpace() const          { return nVertSpace; }
-    void SetVertSpace( ULONG n )        { nVertSpace = n; }
+    sal_uLong GetVertSpace() const          { return nVertSpace; }
+    void SetVertSpace( sal_uLong n )        { nVertSpace = n; }
 
-    BYTE GetRow() const                 { return nRow; }
-    void SetRow(BYTE n )                { nRow = n; }
+    sal_uInt8 GetRow() const                { return nRow; }
+    void SetRow(sal_uInt8 n )               { nRow = n; }
 
-    BYTE GetCol() const                 { return nCol; }
-    void SetCol( BYTE n )               { nCol = n; }
+    sal_uInt8 GetCol() const                { return nCol; }
+    void SetCol( sal_uInt8 n )              { nCol = n; }
 
-    BOOL GetLandscape() const           { return bLandscape; }
-    void SetLandscape( BOOL b )         { bLandscape = b; }
+    sal_Bool GetLandscape() const           { return bLandscape; }
+    void SetLandscape( sal_Bool b )         { bLandscape = b; }
 };
 
 

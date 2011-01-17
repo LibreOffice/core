@@ -172,7 +172,7 @@ static RTF_FLD_TYPES _WhichFld( String& rName, String& rNext )
     return RTFFLD_UNKNOWN;      // nichts gefunden.
 }
 
-static USHORT CheckNumberFmtStr( const String& rNStr )
+static sal_uInt16 CheckNumberFmtStr( const String& rNStr )
 {
     const static sal_Char* aNumberTypeTab[] =
     {
@@ -189,12 +189,12 @@ static USHORT CheckNumberFmtStr( const String& rNStr )
     ASSERT(sizeof(aNumberTypeTab) / sizeof(sal_Char *)
            >= SVX_NUM_PAGEDESC - SVX_NUM_CHARS_UPPER_LETTER, "impossible");
 
-    for (USHORT n = SVX_NUM_CHARS_UPPER_LETTER;  n <= SVX_NUM_PAGEDESC; ++n)
+    for (sal_uInt16 n = SVX_NUM_CHARS_UPPER_LETTER;  n <= SVX_NUM_PAGEDESC; ++n)
     {
         const sal_Char* pCmp = aNumberTypeTab[n - SVX_NUM_CHARS_UPPER_LETTER];
         int nLen = *pCmp++;
         if( rNStr.EqualsAscii( pCmp, 0, static_cast< xub_StrLen >(nLen) ))
-            return static_cast< USHORT >(2 <= n ? n : (n + SVX_NUM_CHARS_UPPER_LETTER_N));
+            return static_cast< sal_uInt16 >(2 <= n ? n : (n + SVX_NUM_CHARS_UPPER_LETTER_N));
     }
     return SVX_NUM_PAGEDESC;        // default-Wert
 }
@@ -207,7 +207,7 @@ public:
     RtfFieldSwitch( const String& rParam );
     sal_Unicode GetSwitch( String& rParam );
 
-    BOOL IsAtEnd() const                { return nCurPos >= sParam.Len(); }
+    sal_Bool IsAtEnd() const                { return nCurPos >= sParam.Len(); }
     xub_StrLen GetCurPos() const        { return nCurPos; }
     void Erase( xub_StrLen nEndPos )    { sParam.Erase( 0, nEndPos ); }
     void Insert( const String& rIns )   { sParam.Insert( rIns, 0 ); }
@@ -238,7 +238,7 @@ sal_Unicode RtfFieldSwitch::GetSwitch( String& rParam )
 
     // dann alles in Hochkommatas oder bis zum naechsten // als
     // Param returnen
-    USHORT nOffset;
+    sal_uInt16 nOffset;
     if( '"' != c && '\'' != c )
         c = '\\', nOffset = 0;
     else
@@ -296,7 +296,7 @@ void lcl_ScanEquationField( const String& rStr, RTF_EquationData& rData,
         else if( 1 < nSubSupFlag )
             nSubSupFlag = 0;
 
-        BOOL bCheckBracket = FALSE;
+        sal_Bool bCheckBracket = sal_False;
         switch( cKey )
         {
         case 0:
@@ -330,7 +330,7 @@ void lcl_ScanEquationField( const String& rStr, RTF_EquationData& rData,
                 2 == nSubSupFlag )
             {
                 rData.nUp = sParam.Copy( 1 ).ToInt32();
-                bCheckBracket = TRUE;
+                bCheckBracket = sal_True;
             }
             break;
 
@@ -339,12 +339,12 @@ void lcl_ScanEquationField( const String& rStr, RTF_EquationData& rData,
                 2 == nSubSupFlag )
             {
                 rData.nDown = sParam.Copy( 1 ).ToInt32();
-                bCheckBracket = TRUE;
+                bCheckBracket = sal_True;
             }
             break;
 
         default:
-            bCheckBracket = TRUE;
+            bCheckBracket = sal_True;
             cKey = 0;
             break;
         }
@@ -495,11 +495,11 @@ int SwRTFParser::MakeFieldInst( String& rFieldStr )
                 // and get the rtf filter to use it
                 SwField *pFld = 0;
                 short nNumFmtType = NUMBERFORMAT_UNDEFINED;
-                ULONG nFmtIdx = NUMBERFORMAT_UNDEFINED;
+                sal_uLong nFmtIdx = NUMBERFORMAT_UNDEFINED;
 
-                USHORT rLang(0);
+                sal_uInt16 rLang(0);
                 RES_CHRATR eLang = maPageDefaults.mbRTLdoc ? RES_CHRATR_CTL_LANGUAGE : RES_CHRATR_LANGUAGE;
-                const SvxLanguageItem *pLang = (SvxLanguageItem*)&pDoc->GetAttrPool().GetDefaultItem( static_cast< USHORT >(eLang) );
+                const SvxLanguageItem *pLang = (SvxLanguageItem*)&pDoc->GetAttrPool().GetDefaultItem( static_cast< sal_uInt16 >(eLang) );
                 rLang = pLang ? pLang->GetValue() : LANGUAGE_ENGLISH_US;
 
                 SvNumberFormatter* pFormatter = pDoc->GetNumberFormatter();
@@ -540,7 +540,7 @@ int SwRTFParser::MakeFieldInst( String& rFieldStr )
             // werden:
             //  \\data -> Datenbank-Name als Field
             //  DATA -> Datenbank-Info
-            BOOL bField = rFieldStr.GetChar( 0 ) != 'D';
+            sal_Bool bField = rFieldStr.GetChar( 0 ) != 'D';
 
             // nur der Name interressiert
             if( STRING_NOTFOUND != (nPos = aSaveStr.Search( '.' )) )
@@ -576,11 +576,11 @@ int SwRTFParser::MakeFieldInst( String& rFieldStr )
             // loesche fuehrende Blanks
             if( IsNewGroup() )
                 GetAttrSet();
-            SetNewGroup( TRUE );
+            SetNewGroup( sal_True );
 
             SfxItemSet& rSet = GetAttrSet();
 
-            BOOL bCharIns = FALSE;
+            sal_Bool bCharIns = sal_False;
             RtfFieldSwitch aRFS( aSaveStr );
             while( !aRFS.IsAtEnd() )
             {
@@ -596,7 +596,7 @@ int SwRTFParser::MakeFieldInst( String& rFieldStr )
                             if( nChar )
                             {
                                 pDoc->InsertString( *pPam, nChar );
-                                bCharIns = TRUE;
+                                bCharIns = sal_True;
                             }
                         }
                         break;
@@ -626,7 +626,7 @@ int SwRTFParser::MakeFieldInst( String& rFieldStr )
                     case 's': case 'S':
                         // Fontsize setzen
                         {
-                            const USHORT nVal = (USHORT)(sParam.ToInt32() * 20);
+                            const sal_uInt16 nVal = (sal_uInt16)(sParam.ToInt32() * 20);
                             rSet.Put( SvxFontHeightItem( nVal,
                                                 100, RES_CHRATR_FONTSIZE ));
                         }
@@ -635,7 +635,7 @@ int SwRTFParser::MakeFieldInst( String& rFieldStr )
             }
 
             if( !IsNewGroup() ) AttrGroupEnd();
-            SetNewGroup( FALSE );
+            SetNewGroup( sal_False );
 
             SkipGroup();        // ueberlese den Rest
         }
@@ -704,22 +704,22 @@ int SwRTFParser::MakeFieldInst( String& rFieldStr )
                 if( !pCharFmt )
                 {
                     //Make a guess at which of asian of western we should be setting
-                    USHORT nScript;
+                    sal_uInt16 nScript;
                     if (pBreakIt->GetBreakIter().is())
                         nScript = pBreakIt->GetBreakIter()->getScriptType( aData.sUp, 0);
                     else
                         nScript = i18n::ScriptType::ASIAN;
 
-                    USHORT nFntHWhich = GetWhichOfScript( RES_CHRATR_FONTSIZE, nScript ),
+                    sal_uInt16 nFntHWhich = GetWhichOfScript( RES_CHRATR_FONTSIZE, nScript ),
                            nFntWhich = GetWhichOfScript( RES_CHRATR_FONT, nScript );
 
                     //Check to see if we already have a ruby charstyle that this fits
-                    for(USHORT i=0; i < aRubyCharFmts.Count(); ++i )
+                    for(sal_uInt16 i=0; i < aRubyCharFmts.Count(); ++i )
                     {
                         SwCharFmt *pFmt = (SwCharFmt *)aRubyCharFmts[i];
                         const SvxFontHeightItem &rF = (const SvxFontHeightItem &)
                                                     pFmt->GetFmtAttr( nFntHWhich );
-                        if( rF.GetHeight() == USHORT(aData.nFontSize * 10 ))
+                        if( rF.GetHeight() == sal_uInt16(aData.nFontSize * 10 ))
                         {
                             const SvxFontItem &rFI = (const SvxFontItem &)
                                                     pFmt->GetFmtAttr( nFntWhich );
@@ -757,7 +757,7 @@ int SwRTFParser::MakeFieldInst( String& rFieldStr )
                 //Set the charstyle and justification
                 aRuby.SetCharFmtName( pCharFmt->GetName() );
                 aRuby.SetCharFmtId( pCharFmt->GetPoolFmtId() );
-                aRuby.SetAdjustment( (USHORT)aData.nJustificationCode );
+                aRuby.SetAdjustment( (sal_uInt16)aData.nJustificationCode );
 
                 // im FieldStr steht der anzuzeigenden Text, im
                 pDoc->InsertString( *pPam, aData.sText );
@@ -896,7 +896,7 @@ void SwRTFParser::ReadXEField()
     bReadSwFly = false; //#it may be that any uses of this need to be removed and replaced
     int nNumOpenBrakets = 1;
     String sFieldStr;
-    BYTE cCh;
+    sal_uInt8 cCh;
 
     int nToken;
     while (nNumOpenBrakets && IsParserWorking())
@@ -920,7 +920,7 @@ void SwRTFParser::ReadXEField()
                     if( SFX_ITEM_SET == rSet.GetItemState( RES_CHRATR_HIDDEN, sal_True, &pItem ) )
                     {
                         SvxCharHiddenItem aCharHidden(*(SvxCharHiddenItem*)pItem);
-                        aCharHidden.SetValue(FALSE);
+                        aCharHidden.SetValue(sal_False);
                         rSet.Put(aCharHidden);
                     }
 
@@ -1004,9 +1004,9 @@ void SwRTFParser::ReadField()
     bReadSwFly = false; //#it may be that any uses of this need to be removed and replaced
     int nRet = 0;
     int nNumOpenBrakets = 1;        // die erste wurde schon vorher erkannt !!
-    int bFldInst = FALSE, bFldRslt = FALSE;
+    int bFldInst = sal_False, bFldRslt = sal_False;
     String sFieldStr, sFieldNm;
-    BYTE cCh;
+    sal_uInt8 cCh;
 
     int nToken;
     while (nNumOpenBrakets && IsParserWorking())
@@ -1138,11 +1138,11 @@ void SwRTFParser::ReadField()
             break;
 
         case RTF_FLDINST:
-            bFldInst = TRUE;
+            bFldInst = sal_True;
             break;
 
         case RTF_FLDRSLT:
-            bFldRslt = TRUE;
+            bFldRslt = sal_True;
             break;
 
         case RTF_U:

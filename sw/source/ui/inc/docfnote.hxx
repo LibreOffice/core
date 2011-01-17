@@ -36,7 +36,7 @@ class SwFootNoteOptionDlg :public SfxTabDialog
     SwWrtShell &rSh;
     Link aOldOkHdl;
 
-    virtual void PageCreated( USHORT nId, SfxTabPage &rPage );
+    virtual void PageCreated( sal_uInt16 nId, SfxTabPage &rPage );
 
 #ifdef _SOLAR__PRIVATE
     DECL_LINK( OkHdl, Button * );

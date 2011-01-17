@@ -331,7 +331,7 @@ void SwSidebarWin::InitControls()
     SwDocShell* aShell = mrView.GetDocShell();
     mpOutliner = new Outliner(&aShell->GetPool(),OUTLINERMODE_TEXTOBJECT);
     aShell->GetDoc()->SetCalcFieldValueHdl( mpOutliner );
-    mpOutliner->SetUpdateMode( TRUE );
+    mpOutliner->SetUpdateMode( sal_True );
     Rescale();
 
     mpOutlinerView = new OutlinerView ( mpOutliner, mpSidebarTxtControl );
@@ -354,7 +354,7 @@ void SwSidebarWin::InitControls()
     mpVScrollbar->AddEventListener( LINK( this, SwSidebarWin, WindowEventListener ) );
 
     const SwViewOption* pVOpt = mrView.GetWrtShellPtr()->GetViewOptions();
-    ULONG nCntrl = mpOutliner->GetControlWord();
+    sal_uLong nCntrl = mpOutliner->GetControlWord();
     // TODO: crash when AUTOCOMPLETE enabled
     nCntrl |= EE_CNTRL_MARKFIELDS | EE_CNTRL_PASTESPECIAL | EE_CNTRL_AUTOCORRECT  | EV_CNTRL_AUTOSCROLL | EE_CNTRL_URLSFXEXECUTE; // | EE_CNTRL_AUTOCOMPLETE;
     if (pVOpt->IsFieldShadings())
@@ -770,7 +770,7 @@ void SwSidebarWin::SetSidebarPosition(sw::sidebarwindows::SidebarPosition eSideb
     meSidebarPosition = eSidebarPosition;
 }
 
-void SwSidebarWin::SetReadonly(BOOL bSet)
+void SwSidebarWin::SetReadonly(sal_Bool bSet)
 {
     mbReadonly = bSet;
     GetOutlinerView()->SetReadOnly(bSet);
@@ -782,7 +782,7 @@ void SwSidebarWin::SetLanguage(const SvxLanguageItem aNewItem)
     Engine()->SetModifyHdl( Link() );
     ESelection aOld = GetOutlinerView()->GetSelection();
 
-    ESelection aNewSelection( 0, 0, (USHORT)Engine()->GetParagraphCount()-1, USHRT_MAX );
+    ESelection aNewSelection( 0, 0, (sal_uInt16)Engine()->GetParagraphCount()-1, USHRT_MAX );
     GetOutlinerView()->SetSelection( aNewSelection );
     SfxItemSet aEditAttr(GetOutlinerView()->GetAttribs());
     aEditAttr.Put(aNewItem);
@@ -792,7 +792,7 @@ void SwSidebarWin::SetLanguage(const SvxLanguageItem aNewItem)
     Engine()->SetModifyHdl( pLink );
 
     const SwViewOption* pVOpt = mrView.GetWrtShellPtr()->GetViewOptions();
-    ULONG nCntrl = Engine()->GetControlWord();
+    sal_uLong nCntrl = Engine()->GetControlWord();
     // turn off
     if (!pVOpt->IsOnlineSpell())
         nCntrl &= ~EE_CNTRL_ONLINESPELLING;
@@ -912,7 +912,7 @@ void SwSidebarWin::ToggleInsMode()
     }
 }
 
-void SwSidebarWin::ExecuteCommand(USHORT nSlot)
+void SwSidebarWin::ExecuteCommand(sal_uInt16 nSlot)
 {
     mrMgr.AssureStdModeAtShell();
 
@@ -970,7 +970,7 @@ long SwSidebarWin::GetPostItTextHeight()
     return mpOutliner ? LogicToPixel(mpOutliner->CalcTextSize()).Height() : 0;
 }
 
-void SwSidebarWin::SwitchToPostIt(USHORT aDirection)
+void SwSidebarWin::SwitchToPostIt(sal_uInt16 aDirection)
 {
     SwSidebarWin* pPostIt = mrMgr.GetNextPostIt(aDirection, this);
     if (pPostIt)
@@ -1014,8 +1014,8 @@ IMPL_LINK( SwSidebarWin, WindowEventListener, VclSimpleEvent*, pEvent )
         else if ( pWinEvent->GetId() == VCLEVENT_WINDOW_ACTIVATE &&
                   pWinEvent->GetWindow() == mpSidebarTxtControl )
         {
-            const BOOL bLockView = mrView.GetWrtShell().IsViewLocked();
-            mrView.GetWrtShell().LockView( TRUE );
+            const sal_Bool bLockView = mrView.GetWrtShell().IsViewLocked();
+            mrView.GetWrtShell().LockView( sal_True );
 
             if ( !IsPreview() )
             {
@@ -1075,8 +1075,8 @@ IMPL_LINK(SwSidebarWin, DeleteHdl, void*, pVoid)
 
 void SwSidebarWin::ResetAttributes()
 {
-    mpOutlinerView->RemoveAttribsKeepLanguages(TRUE);
-    mpOutliner->RemoveFields(TRUE);
+    mpOutlinerView->RemoveAttribsKeepLanguages(sal_True);
+    mpOutliner->RemoveFields(sal_True);
     mpOutlinerView->SetAttribs(DefaultItem());
 }
 
@@ -1114,7 +1114,7 @@ sal_Int32 SwSidebarWin::GetMinimumSizeWithoutMeta()
 void SwSidebarWin::SetSpellChecking()
 {
     const SwViewOption* pVOpt = mrView.GetWrtShellPtr()->GetViewOptions();
-    ULONG nCntrl = mpOutliner->GetControlWord();
+    sal_uLong nCntrl = mpOutliner->GetControlWord();
     if (pVOpt->IsOnlineSpell())
         nCntrl |= EE_CNTRL_ONLINESPELLING;
     else
@@ -1210,7 +1210,7 @@ void SwSidebarWin::SwitchToFieldPos()
     GotoPos();
     sal_uInt32 aCount = MoveCaret();
     if (aCount)
-        mrView.GetDocShell()->GetWrtShell()->SwCrsrShell::Right(aCount, 0, FALSE);
+        mrView.GetDocShell()->GetWrtShell()->SwCrsrShell::Right(aCount, 0, sal_False);
     GrabFocusToDocument();
 }
 
@@ -1313,7 +1313,7 @@ void SwRedComment::UpdateData()
 void SwRedComment::SetPostItText()
 {
     Engine()->SetModifyHdl( Link() );
-    Engine()->EnableUndo( FALSE );
+    Engine()->EnableUndo( sal_False );
 
     Engine()->Clear();
     View()->SetAttribs(DefaultItem());
@@ -1321,7 +1321,7 @@ void SwRedComment::SetPostItText()
 
     Engine()->ClearModifyFlag();
     Engine()->GetUndoManager().Clear();
-    Engine()->EnableUndo( TRUE );
+    Engine()->EnableUndo( sal_True );
     Engine()->SetModifyHdl( LINK( this, SwSidebarWin, ModifyHdl ) );
     Invalidate();
 }

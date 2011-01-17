@@ -98,8 +98,8 @@ class SwSortDlg : public SvxStandardDialog
     SwWrtShell          &rSh;
     CollatorRessource* pColRes;
 
-    USHORT nX;
-    USHORT nY;
+    sal_uInt16 nX;
+    sal_uInt16 nY;
 
     virtual void        Apply();
     sal_Unicode         GetDelimChar() const;

@@ -51,7 +51,7 @@ class SvStream;
 class SwLayoutCache
 {
     SwLayCacheImpl *pImpl;
-    USHORT nLockCount;
+    sal_uInt16 nLockCount;
 public:
     SwLayoutCache() : pImpl( NULL ), nLockCount( 0 ) {}
     ~SwLayoutCache();
@@ -61,7 +61,7 @@ public:
 
     void ClearImpl();
     sal_Bool IsLocked() const { return nLockCount > 0; }
-    USHORT& GetLockCount() { return nLockCount; }
+    sal_uInt16& GetLockCount() { return nLockCount; }
     SwLayCacheImpl *LockImpl()
         { if( nLockCount & 0x8000 ) return NULL;
           if ( pImpl )

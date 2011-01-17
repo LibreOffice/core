@@ -67,10 +67,10 @@
 SwFrmDlg::SwFrmDlg( SfxViewFrame*       pViewFrame,
                     Window*             pParent,
                     const SfxItemSet&   rCoreSet,
-                    BOOL                bNewFrm,
-                    USHORT              nResType,
-                    BOOL                bFormat,
-                    UINT16              nDefPage,
+                    sal_Bool                bNewFrm,
+                    sal_uInt16              nResType,
+                    sal_Bool                bFormat,
+                    sal_uInt16              nDefPage,
                     const String*       pStr) :
 
     SfxTabDialog(pViewFrame, pParent, SW_RES(nResType), &rCoreSet, pStr != 0),
@@ -81,8 +81,8 @@ SwFrmDlg::SwFrmDlg( SfxViewFrame*       pViewFrame,
     m_pWrtShell(((SwView*)pViewFrame->GetViewShell())->GetWrtShellPtr())
 {
     FreeResource();
-    USHORT nHtmlMode = ::GetHtmlMode(m_pWrtShell->GetView().GetDocShell());
-    m_bHTMLMode = static_cast< BOOL >(nHtmlMode & HTMLMODE_ON);
+    sal_uInt16 nHtmlMode = ::GetHtmlMode(m_pWrtShell->GetView().GetDocShell());
+    m_bHTMLMode = static_cast< sal_Bool >(nHtmlMode & HTMLMODE_ON);
 
     // BspFont fuer beide Bsp-TabPages
     //
@@ -153,7 +153,7 @@ SwFrmDlg::~SwFrmDlg()
 
 
 
-void SwFrmDlg::PageCreated( USHORT nId, SfxTabPage &rPage )
+void SwFrmDlg::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
 {
     SfxAllItemSet aSet(*(GetInputSetImpl()->GetPool()));
     switch ( nId )
@@ -173,13 +173,13 @@ void SwFrmDlg::PageCreated( USHORT nId, SfxTabPage &rPage )
 
     case TP_FRM_WRAP:
         ((SwWrapTabPage&)rPage).SetNewFrame(m_bNew);
-        ((SwWrapTabPage&)rPage).SetFormatUsed(m_bFormat, FALSE);
+        ((SwWrapTabPage&)rPage).SetFormatUsed(m_bFormat, sal_False);
         ((SwWrapTabPage&)rPage).SetShell(m_pWrtShell);
         break;
 
     case TP_COLUMN:
         {
-            ((SwColumnPage&)rPage).SetFrmMode(TRUE);
+            ((SwColumnPage&)rPage).SetFrmMode(sal_True);
             ((SwColumnPage&)rPage).SetFormatUsed(m_bFormat);
 
             const SwFmtFrmSize& rSize = (const SwFmtFrmSize&)

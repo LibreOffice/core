@@ -87,12 +87,12 @@ class SwGlTreeListBox : public SvTreeListBox
     virtual sal_Bool    NotifyMoving(   SvLBoxEntry*  pTarget,
                                     SvLBoxEntry*  pEntry,
                                     SvLBoxEntry*& rpNewParent,
-                                    ULONG&        rNewChildPos
+                                    sal_uLong&        rNewChildPos
                                 );
     virtual sal_Bool    NotifyCopying(  SvLBoxEntry*  pTarget,
                                     SvLBoxEntry*  pEntry,
                                     SvLBoxEntry*& rpNewParent,
-                                    ULONG&        rNewChildPos);
+                                    sal_uLong&        rNewChildPos);
 public:
     SwGlTreeListBox(Window* pParent, const ResId& rResId);
 
@@ -136,7 +136,7 @@ class SwGlossaryDlg : public SvxStandardDialog
 
     String          sResumeGroup;
     String          sResumeShortName;
-    BOOL            bResume;
+    sal_Bool            bResume;
 
 
     const sal_Bool      bSelection : 1;
@@ -167,11 +167,11 @@ class SwGlossaryDlg : public SvxStandardDialog
     void            ShowAutoText(const String& rGroup, const String& rShortName);
     void            ResumeShowAutoText();
 
-    BOOL            GetResumeData(String& rGroup, String& rShortName)
+    sal_Bool            GetResumeData(String& rGroup, String& rShortName)
                         {rGroup = sResumeGroup; rShortName = sResumeShortName; return bResume;}
     void            SetResumeData(const String& rGroup, const String& rShortName)
-                        {sResumeGroup = rGroup; sResumeShortName = rShortName; bResume = TRUE;}
-    void            ResetResumeData() {bResume = FALSE;}
+                        {sResumeGroup = rGroup; sResumeShortName = rShortName; bResume = sal_True;}
+    void            ResetResumeData() {bResume = sal_False;}
 public:
     SwGlossaryDlg(SfxViewFrame* pViewFrame, SwGlossaryHdl* pGlosHdl, SwWrtShell *pWrtShell);
     ~SwGlossaryDlg();

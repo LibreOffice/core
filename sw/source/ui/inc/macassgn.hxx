@@ -46,7 +46,7 @@ class SwMacroAssignDlg
 {
 public:
     static SfxEventNamesItem AddEvents( DlgEventType eType );
-    static BOOL INetFmtDlg( Window* pParent, SwWrtShell& rSh,
+    static sal_Bool INetFmtDlg( Window* pParent, SwWrtShell& rSh,
                             SvxMacroItem*& rpINetItem );
 };
 

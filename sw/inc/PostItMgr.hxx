@@ -156,7 +156,7 @@ class SwPostItMgr: public SfxListener
         SwEditWin*                      mpEditWin;
         std::list< SwSidebarItem*>      mvPostItFlds;
         std::vector<SwPostItPageItem*>  mPages;
-        ULONG                           mnEventId;
+        sal_uLong                           mnEventId;
         bool                            mbWaitingForCalcRects;
         sw::sidebarwindows::SwSidebarWin* mpActivePostIt;
         bool                            mbLayout;
@@ -184,7 +184,7 @@ class SwPostItMgr: public SfxListener
                                       const Rectangle aBorder,
                                       long lNeededHeight);
         void            CheckForRemovedPostIts();
-            bool                ArrowEnabled(USHORT aDirection,unsigned long aPage) const;
+            bool                ArrowEnabled(sal_uInt16 aDirection,unsigned long aPage) const;
             bool                BorderOverPageBorder(unsigned long aPage) const;
             bool                HasScrollbars() const;
         void            Focus(SfxBroadcaster& rBC);
@@ -247,11 +247,11 @@ class SwPostItMgr: public SfxListener
             Rectangle GetTopScrollRect(const unsigned long aPage) const;
 
             bool IsHit(const Point &aPointPixel);
-            Color GetArrowColor(USHORT aDirection,unsigned long aPage) const;
+            Color GetArrowColor(sal_uInt16 aDirection,unsigned long aPage) const;
 
             sw::annotation::SwAnnotationWin* GetAnnotationWin(const SwPostItField* pFld) const;
 
-            sw::sidebarwindows::SwSidebarWin* GetNextPostIt( USHORT aDirection,
+            sw::sidebarwindows::SwSidebarWin* GetNextPostIt( sal_uInt16 aDirection,
                                                              sw::sidebarwindows::SwSidebarWin* aPostIt);
             long GetNextBorder();
 

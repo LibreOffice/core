@@ -37,13 +37,13 @@
 class SW_DLLPUBLIC AuthorCharAttr
 {
 public:
-    USHORT  nItemId;
-    USHORT  nAttr;
+    sal_uInt16  nItemId;
+    sal_uInt16  nAttr;
     ColorData nColor;
 
     AuthorCharAttr();
 
-    inline BOOL operator == ( const AuthorCharAttr& rAttr ) const
+    inline sal_Bool operator == ( const AuthorCharAttr& rAttr ) const
     {
         return  nItemId == rAttr.nItemId && nAttr == rAttr.nAttr &&
                 nColor == rAttr.nColor;

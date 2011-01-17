@@ -67,7 +67,7 @@ public:
 class SW_DLLPUBLIC SwChapterField : public SwField
 {
     friend class SwChapterFieldType;
-    BYTE nLevel;
+    sal_uInt8 nLevel;
     String sTitle, sNumber, sPre, sPost;
 
     virtual String   Expand() const;
@@ -79,24 +79,24 @@ public:
     // --> OD 2008-02-14 #i53420#
 //    void ChangeExpansion( const SwFrm*,
 //                          const SwTxtNode*,
-//                          BOOL bSrchNum = FALSE);
+//                          sal_Bool bSrchNum = sal_False);
     void ChangeExpansion( const SwFrm*,
                           const SwCntntNode*,
-        BOOL bSrchNum = FALSE);
+        sal_Bool bSrchNum = sal_False);
     // <--
-    void ChangeExpansion(const SwTxtNode &rNd, BOOL bSrchNum);
+    void ChangeExpansion(const SwTxtNode &rNd, sal_Bool bSrchNum);
 
-    inline BYTE GetLevel() const;
-    inline void SetLevel(BYTE);
+    inline sal_uInt8 GetLevel() const;
+    inline void SetLevel(sal_uInt8);
 
     inline const String& GetNumber() const;
     inline const String& GetTitle() const;
-    virtual BOOL        QueryValue( com::sun::star::uno::Any& rVal, USHORT nWhich ) const;
-    virtual BOOL        PutValue( const com::sun::star::uno::Any& rVal, USHORT nWhich );
+    virtual sal_Bool        QueryValue( com::sun::star::uno::Any& rVal, sal_uInt16 nWhich ) const;
+    virtual sal_Bool        PutValue( const com::sun::star::uno::Any& rVal, sal_uInt16 nWhich );
 };
 
-inline BYTE SwChapterField::GetLevel() const    { return nLevel; }
-inline void SwChapterField::SetLevel(BYTE nLev) { nLevel = nLev; }
+inline sal_uInt8 SwChapterField::GetLevel() const   { return nLevel; }
+inline void SwChapterField::SetLevel(sal_uInt8 nLev) { nLevel = nLev; }
 inline const String& SwChapterField::GetNumber() const { return sNumber; }
 inline const String& SwChapterField::GetTitle() const { return sTitle; }
 

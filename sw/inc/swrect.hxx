@@ -84,18 +84,18 @@ public:
            SwRect &_Intersection( const SwRect &rRect );
     inline SwRect  GetIntersection( const SwRect& rRect ) const;
 
-           BOOL IsInside( const Point& rPOINT ) const;
-           BOOL IsNear(const Point& rPoint, long nTolerance ) const;
-           BOOL IsInside( const SwRect& rRect ) const;
-           BOOL IsOver( const SwRect& rRect ) const;
-    inline BOOL HasArea() const;
-    inline BOOL IsEmpty() const;
+           sal_Bool IsInside( const Point& rPOINT ) const;
+           sal_Bool IsNear(const Point& rPoint, long nTolerance ) const;
+           sal_Bool IsInside( const SwRect& rRect ) const;
+           sal_Bool IsOver( const SwRect& rRect ) const;
+    inline sal_Bool HasArea() const;
+    inline sal_Bool IsEmpty() const;
     inline void Clear();
 
     inline SwRect &operator = ( const SwRect &rRect );
 
-    inline BOOL operator == ( const SwRect& rRect ) const;
-    inline BOOL operator != ( const SwRect& rRect ) const;
+    inline sal_Bool operator == ( const SwRect& rRect ) const;
+    inline sal_Bool operator != ( const SwRect& rRect ) const;
 
     inline SwRect &operator+=( const Point &rPt );
     inline SwRect &operator-=( const Point &rPt );
@@ -151,10 +151,10 @@ public:
     long GetBottomDistance( long ) const;
     long GetRightDistance( long ) const;
     long GetTopDistance( long ) const;
-    BOOL OverStepLeft( long ) const;
-    BOOL OverStepBottom( long ) const;
-    BOOL OverStepTop( long ) const;
-    BOOL OverStepRight( long ) const;
+    sal_Bool OverStepLeft( long ) const;
+    sal_Bool OverStepBottom( long ) const;
+    sal_Bool OverStepTop( long ) const;
+    sal_Bool OverStepRight( long ) const;
 };
 
 // Implementation in in swrect.cxx
@@ -164,7 +164,7 @@ typedef void (SwRect:: *SwRectSet)( const long nNew );
 typedef long (SwRect:: *SwRectGet)() const;
 typedef const Point (SwRect:: *SwRectPoint)() const;
 typedef const Size (SwRect:: *SwRectSize)() const;
-typedef BOOL (SwRect:: *SwRectMax)( long ) const;
+typedef sal_Bool (SwRect:: *SwRectMax)( long ) const;
 typedef long (SwRect:: *SwRectDist)( long ) const;
 typedef void (SwRect:: *SwRectSetTwice)( long, long );
 typedef void (SwRect:: *SwRectSetPos)( const Point& );
@@ -269,11 +269,11 @@ inline SwRect &SwRect::operator = ( const SwRect &rRect )
     m_Size = rRect.m_Size;
     return *this;
 }
-inline BOOL SwRect::operator == ( const SwRect& rRect ) const
+inline sal_Bool SwRect::operator == ( const SwRect& rRect ) const
 {
     return (m_Point == rRect.m_Point && m_Size == rRect.m_Size);
 }
-inline BOOL SwRect::operator != ( const SwRect& rRect ) const
+inline sal_Bool SwRect::operator != ( const SwRect& rRect ) const
 {
     return (m_Point != rRect.m_Point || m_Size != rRect.m_Size);
 }
@@ -317,11 +317,11 @@ inline SwRect SwRect::GetIntersection( const SwRect& rRect ) const
     return SwRect( *this ).Intersection( rRect );
 }
 
-inline BOOL SwRect::HasArea() const
+inline sal_Bool SwRect::HasArea() const
 {
     return !IsEmpty();
 }
-inline BOOL SwRect::IsEmpty() const
+inline sal_Bool SwRect::IsEmpty() const
 {
     return !(m_Size.getHeight() && m_Size.getWidth());
 }

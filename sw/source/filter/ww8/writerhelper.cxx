@@ -129,7 +129,7 @@ namespace
     };
     // <--
 
-    bool IsValidSlotWhich(USHORT nSlotId, USHORT nWhichId)
+    bool IsValidSlotWhich(sal_uInt16 nSlotId, sal_uInt16 nWhichId)
     {
         return (nSlotId != 0 && nWhichId != 0 && nSlotId != nWhichId);
     }
@@ -144,8 +144,8 @@ namespace
     sw::Frames SwPosFlyFrmsToFrames(const SwPosFlyFrms &rFlys)
     {
         sw::Frames aRet;
-        USHORT nEnd = rFlys.Count();
-        for (USHORT nI = 0; nI < nEnd; ++nI)
+        sal_uInt16 nEnd = rFlys.Count();
+        for (sal_uInt16 nI = 0; nI < nEnd; ++nI)
         {
             const SwFrmFmt &rEntry = rFlys[nI]->GetFmt();
             if (const SwPosition* pAnchor = rEntry.GetAnchor().GetCntntAnchor())
@@ -165,9 +165,9 @@ namespace
     class anchoredto: public std::unary_function<const sw::Frame&, bool>
     {
     private:
-        ULONG mnNode;
+        sal_uLong mnNode;
     public:
-        anchoredto(ULONG nNode) : mnNode(nNode) {}
+        anchoredto(sal_uLong nNode) : mnNode(nNode) {}
         bool operator()(const sw::Frame &rFrame) const
         {
             return (mnNode == rFrame.GetPosition().nNode.GetNode().GetIndex());
@@ -268,10 +268,10 @@ namespace sw
     namespace hack
     {
 
-        USHORT TransformWhichBetweenPools(const SfxItemPool &rDestPool,
-            const SfxItemPool &rSrcPool, USHORT nWhich)
+        sal_uInt16 TransformWhichBetweenPools(const SfxItemPool &rDestPool,
+            const SfxItemPool &rSrcPool, sal_uInt16 nWhich)
         {
-            USHORT nSlotId = rSrcPool.GetSlotId(nWhich);
+            sal_uInt16 nSlotId = rSrcPool.GetSlotId(nWhich);
             if (IsValidSlotWhich(nSlotId, nWhich))
                 nWhich = rDestPool.GetWhich(nSlotId);
             else
@@ -279,8 +279,8 @@ namespace sw
             return nWhich;
         }
 
-        USHORT GetSetWhichFromSwDocWhich(const SfxItemSet &rSet,
-            const SwDoc &rDoc, USHORT nWhich)
+        sal_uInt16 GetSetWhichFromSwDocWhich(const SfxItemSet &rSet,
+            const SwDoc &rDoc, sal_uInt16 nWhich)
         {
             if (RES_WHICHHINT_END < *(rSet.GetRanges()))
             {
@@ -373,7 +373,7 @@ namespace sw
         void DumpStream(const SvStream &rSrc, SvStream &rDest, sal_uInt32 nLen)
         {
             SvStream &rSource = const_cast<SvStream&>(rSrc);
-            ULONG nOrigPos = rSource.Tell();
+            sal_uLong nOrigPos = rSource.Tell();
             if (nLen == STREAM_SEEK_TO_END)
             {
                 rSource.Seek(STREAM_SEEK_TO_END);
@@ -470,8 +470,8 @@ namespace sw
         {
             if( bExportParentItemSet )
             {
-                USHORT nTotal = rSet.TotalCount();
-                for( USHORT nItem =0; nItem < nTotal; ++nItem )
+                sal_uInt16 nTotal = rSet.TotalCount();
+                for( sal_uInt16 nItem =0; nItem < nTotal; ++nItem )
                 {
                     const SfxPoolItem* pItem = 0;
                     if( SFX_ITEM_SET == rSet.GetItemState( rSet.GetWhichByPos( nItem ), true, &pItem ) )
@@ -525,7 +525,7 @@ namespace sw
             mysizet nCount = pColls ? pColls->Count() : 0;
             aStyles.reserve(nCount);
             for (mysizet nI = 0; nI < nCount; ++nI)
-                aStyles.push_back((*pColls)[ static_cast< USHORT >(nI) ]);
+                aStyles.push_back((*pColls)[ static_cast< sal_uInt16 >(nI) ]);
             return aStyles;
         }
 
@@ -574,7 +574,7 @@ namespace sw
             SwPosFlyFrms aFlys;
             rDoc.GetAllFlyFmts(aFlys, pPaM, true);
             sw::Frames aRet(SwPosFlyFrmsToFrames(aFlys));
-            for (USHORT i = aFlys.Count(); i > 0;)
+            for (sal_uInt16 i = aFlys.Count(); i > 0;)
                 delete aFlys[--i];
             return aRet;
         }
@@ -584,8 +584,8 @@ namespace sw
             const SwNode &rStart, const SwNode &rEnd)
         {
             Frames aRet;
-            ULONG nEnd = rEnd.GetIndex();
-            for (ULONG nI = rStart.GetIndex(); nI < nEnd; ++nI)
+            sal_uLong nEnd = rEnd.GetIndex();
+            for (sal_uLong nI = rStart.GetIndex(); nI < nEnd; ++nI)
             {
                 my_copy_if(rFrames.begin(), rFrames.end(),
                     std::back_inserter(aRet), anchoredto(nI));
@@ -610,7 +610,7 @@ namespace sw
                 0 != (pRule = rTxtNode.GetNumRule())
                 )
             {
-                return &(pRule->Get( static_cast< USHORT >(rTxtNode.GetActualListLevel()) ));
+                return &(pRule->Get( static_cast< sal_uInt16 >(rTxtNode.GetActualListLevel()) ));
             }
 
             ASSERT(rTxtNode.GetDoc(), "No document for node?, suspicious");
@@ -622,7 +622,7 @@ namespace sw
                 0 != (pRule = rTxtNode.GetDoc()->GetOutlineNumRule())
                 )
             {
-                return &(pRule->Get( static_cast< USHORT >(rTxtNode.GetActualListLevel()) ));
+                return &(pRule->Get( static_cast< sal_uInt16 >(rTxtNode.GetActualListLevel()) ));
             }
 
             return 0;
@@ -846,16 +846,16 @@ namespace sw
             std::for_each(maStack.begin(), maStack.end(), SetInDocAndDelete(mrDoc));
         }
 
-        USHORT WrtRedlineAuthor::AddName( const String& rNm )
+        sal_uInt16 WrtRedlineAuthor::AddName( const String& rNm )
         {
-            USHORT nRet;
+            sal_uInt16 nRet;
             typedef std::vector<String>::iterator myiter;
             myiter aIter = std::find(maAuthors.begin(), maAuthors.end(), rNm);
             if (aIter != maAuthors.end())
-                nRet = static_cast< USHORT >(aIter - maAuthors.begin());
+                nRet = static_cast< sal_uInt16 >(aIter - maAuthors.begin());
             else
             {
-                nRet = static_cast< USHORT >(maAuthors.size());
+                nRet = static_cast< sal_uInt16 >(maAuthors.size());
                 maAuthors.push_back(rNm);
             }
             return nRet;

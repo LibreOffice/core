@@ -142,7 +142,7 @@ SwUndoFmtAttr::SwUndoFmtAttr( const SfxPoolItem& rItem, SwFmt& rChgFmt,
                               bool bSaveDrawPt )
     : SwUndo( UNDO_INSFMTATTR )
     , m_pFmt( &rChgFmt )
-    , m_pOldSet( m_pFmt->GetAttrSet().Clone( FALSE ) )
+    , m_pOldSet( m_pFmt->GetAttrSet().Clone( sal_False ) )
     , m_nNodeIndex( 0 )
     , m_nFmtWhich( rChgFmt.Which() )
     , m_bSaveDrawPt( bSaveDrawPt )
@@ -154,7 +154,7 @@ SwUndoFmtAttr::SwUndoFmtAttr( const SfxPoolItem& rItem, SwFmt& rChgFmt,
 void SwUndoFmtAttr::Init()
 {
     // treat change of anchor specially
-    if ( SFX_ITEM_SET == m_pOldSet->GetItemState( RES_ANCHOR, FALSE ))
+    if ( SFX_ITEM_SET == m_pOldSet->GetItemState( RES_ANCHOR, sal_False ))
     {
         SaveFlyAnchor( m_bSaveDrawPt );
     }
@@ -206,7 +206,7 @@ void SwUndoFmtAttr::Undo( SwUndoIter& rUndoIter)
     // restored, all other attributes are also restored.
     // Thus, keep track of its restoration
     bool bAnchorAttrRestored( false );
-    if ( SFX_ITEM_SET == m_pOldSet->GetItemState( RES_ANCHOR, FALSE ))
+    if ( SFX_ITEM_SET == m_pOldSet->GetItemState( RES_ANCHOR, sal_False ))
     {
         bAnchorAttrRestored = RestoreFlyAnchor( rUndoIter );
         if ( bAnchorAttrRestored )
@@ -249,7 +249,7 @@ bool SwUndoFmtAttr::IsFmtInDoc( SwDoc* pDoc )
 {
     // search for the Format in the Document; if it does not exist any more,
     // the attribute is not restored!
-    USHORT nPos = USHRT_MAX;
+    sal_uInt16 nPos = USHRT_MAX;
     switch ( m_nFmtWhich )
     {
         case RES_TXTFMTCOLL:
@@ -451,7 +451,7 @@ void SwUndoFmtAttr::SaveFlyAnchor( bool bSvDrwPt )
 */  }
 
     const SwFmtAnchor& rAnchor =
-        static_cast<const SwFmtAnchor&>( m_pOldSet->Get( RES_ANCHOR, FALSE ) );
+        static_cast<const SwFmtAnchor&>( m_pOldSet->Get( RES_ANCHOR, sal_False ) );
     if( !rAnchor.GetCntntAnchor() )
         return;
 
@@ -482,7 +482,7 @@ bool SwUndoFmtAttr::RestoreFlyAnchor( SwUndoIter& rIter )
     SwDoc* pDoc = &rIter.GetDoc();
     SwFlyFrmFmt* pFrmFmt = static_cast<SwFlyFrmFmt*>(m_pFmt);
     const SwFmtAnchor& rAnchor =
-        static_cast<const SwFmtAnchor&>( m_pOldSet->Get( RES_ANCHOR, FALSE ) );
+        static_cast<const SwFmtAnchor&>( m_pOldSet->Get( RES_ANCHOR, sal_False ) );
 
     SwFmtAnchor aNewAnchor( rAnchor.GetAnchorId() );
     if (FLY_AT_PAGE != rAnchor.GetAnchorId())
@@ -633,14 +633,14 @@ bool SwUndoFmtAttr::RestoreFlyAnchor( SwUndoIter& rIter )
 
 // --> OD 2008-02-12 #newlistlevelattrs#
 SwUndoFmtResetAttr::SwUndoFmtResetAttr( SwFmt& rChangedFormat,
-                                        const USHORT nWhichId )
+                                        const sal_uInt16 nWhichId )
     : SwUndo( UNDO_RESETATTR )
     , m_pChangedFormat( &rChangedFormat )
     , m_nWhichId( nWhichId )
     , m_pOldItem( 0 )
 {
     const SfxPoolItem* pItem = 0;
-    if (rChangedFormat.GetItemState( nWhichId, FALSE, &pItem ) == SFX_ITEM_SET)
+    if (rChangedFormat.GetItemState( nWhichId, sal_False, &pItem ) == SFX_ITEM_SET)
     {
         m_pOldItem.reset( pItem->Clone() );
     }
@@ -669,14 +669,14 @@ void SwUndoFmtResetAttr::Redo( SwUndoIter& )
 
 // -----------------------------------------------------
 
-SwUndoResetAttr::SwUndoResetAttr( const SwPaM& rRange, USHORT nFmtId )
+SwUndoResetAttr::SwUndoResetAttr( const SwPaM& rRange, sal_uInt16 nFmtId )
     : SwUndo( UNDO_RESETATTR ), SwUndRng( rRange )
     , m_pHistory( new SwHistory )
     , m_nFormatId( nFmtId )
 {
 }
 
-SwUndoResetAttr::SwUndoResetAttr( const SwPosition& rPos, USHORT nFmtId )
+SwUndoResetAttr::SwUndoResetAttr( const SwPosition& rPos, sal_uInt16 nFmtId )
     : SwUndo( UNDO_RESETATTR )
     , m_pHistory( new SwHistory )
     , m_nFormatId( nFmtId )
@@ -703,7 +703,7 @@ void SwUndoResetAttr::Undo( SwUndoIter& rUndoIter )
         if( pTNd )
         {
             SwIndex aIdx( pTNd, nSttCntnt );
-            pTNd->DontExpandFmt( aIdx, FALSE );
+            pTNd->DontExpandFmt( aIdx, sal_False );
         }
     }
 
@@ -725,10 +725,10 @@ void SwUndoResetAttr::Redo( SwUndoIter& rUndoIter )
         rUndoIter.GetDoc().RstTxtAttrs( *rUndoIter.pAktPam );
         break;
     case RES_TXTFMTCOLL:
-        rUndoIter.GetDoc().ResetAttrs( *rUndoIter.pAktPam, FALSE, pIdArr );
+        rUndoIter.GetDoc().ResetAttrs( *rUndoIter.pAktPam, sal_False, pIdArr );
         break;
     case RES_CONDTXTFMTCOLL:
-        rUndoIter.GetDoc().ResetAttrs( *rUndoIter.pAktPam, TRUE, pIdArr );
+        rUndoIter.GetDoc().ResetAttrs( *rUndoIter.pAktPam, sal_True, pIdArr );
 
         break;
     case RES_TXTATR_TOXMARK:
@@ -739,7 +739,7 @@ void SwUndoResetAttr::Redo( SwUndoIter& rUndoIter )
             SwPosition aPos( aIdx, SwIndex( aIdx.GetNode().GetCntntNode(),
                                                                 nSttCntnt ));
 
-            USHORT nCnt = rDoc.GetCurTOXMark( aPos, aArr );
+            sal_uInt16 nCnt = rDoc.GetCurTOXMark( aPos, aArr );
             if( nCnt )
             {
                 if( 1 < nCnt )
@@ -790,10 +790,10 @@ void SwUndoResetAttr::Repeat( SwUndoIter& rUndoIter )
         rUndoIter.GetDoc().RstTxtAttrs( *rUndoIter.pAktPam );
         break;
     case RES_TXTFMTCOLL:
-        rUndoIter.GetDoc().ResetAttrs( *rUndoIter.pAktPam, FALSE, pIdArr );
+        rUndoIter.GetDoc().ResetAttrs( *rUndoIter.pAktPam, sal_False, pIdArr );
         break;
     case RES_CONDTXTFMTCOLL:
-        rUndoIter.GetDoc().ResetAttrs( *rUndoIter.pAktPam, TRUE, pIdArr );
+        rUndoIter.GetDoc().ResetAttrs( *rUndoIter.pAktPam, sal_True, pIdArr );
         break;
     }
     rUndoIter.pLastUndoObj = this;
@@ -841,7 +841,7 @@ SwUndoAttr::~SwUndoAttr()
 {
 }
 
-void SwUndoAttr::SaveRedlineData( const SwPaM& rPam, BOOL bIsCntnt )
+void SwUndoAttr::SaveRedlineData( const SwPaM& rPam, sal_Bool bIsCntnt )
 {
     SwDoc* pDoc = rPam.GetDoc();
     if ( pDoc->IsRedlineOn() )
@@ -944,7 +944,7 @@ void SwUndoAttr::Repeat( SwUndoIter& rUndoIter )
 
 
     // RefMarks are not repeat capable
-    if ( SFX_ITEM_SET != m_AttrSet.GetItemState( RES_TXTATR_REFMARK, FALSE ) )
+    if ( SFX_ITEM_SET != m_AttrSet.GetItemState( RES_TXTATR_REFMARK, sal_False ) )
     {
         rUndoIter.GetDoc().InsertItemSet( *rUndoIter.pAktPam,
                                            m_AttrSet, m_nInsertFlags );
@@ -1002,15 +1002,15 @@ void SwUndoAttr::Redo( SwUndoIter& rUndoIter )
 
 void SwUndoAttr::RemoveIdx( SwDoc& rDoc )
 {
-    if ( SFX_ITEM_SET != m_AttrSet.GetItemState( RES_TXTATR_FTN, FALSE ))
+    if ( SFX_ITEM_SET != m_AttrSet.GetItemState( RES_TXTATR_FTN, sal_False ))
         return ;
 
     SwHistoryHint* pHstHnt;
     SwNodes& rNds = rDoc.GetNodes();
-    for ( USHORT n = 0; n < m_pHistory->Count(); ++n )
+    for ( sal_uInt16 n = 0; n < m_pHistory->Count(); ++n )
     {
         xub_StrLen nCntnt = 0;
-        ULONG nNode = 0;
+        sal_uLong nNode = 0;
         pHstHnt = (*m_pHistory)[ n ];
         switch ( pHstHnt->Which() )
         {
@@ -1034,7 +1034,7 @@ void SwUndoAttr::RemoveIdx( SwDoc& rDoc )
                     if ( STRING_MAXLEN != nCntnt )
                     {
                         const SvUShorts& rArr = pHistoryHint->GetArr();
-                        for ( USHORT i = rArr.Count(); i; )
+                        for ( sal_uInt16 i = rArr.Count(); i; )
                         {
                             if ( RES_TXTATR_FTN == rArr[ --i ] )
                             {
@@ -1077,7 +1077,7 @@ SwUndoDefaultAttr::SwUndoDefaultAttr( const SfxItemSet& rSet )
     , m_pTabStop( 0 )
 {
     const SfxPoolItem* pItem;
-    if( SFX_ITEM_SET == rSet.GetItemState( RES_PARATR_TABSTOP, FALSE, &pItem ) )
+    if( SFX_ITEM_SET == rSet.GetItemState( RES_PARATR_TABSTOP, sal_False, &pItem ) )
     {
         // store separately, because it may change!
         m_pTabStop.reset( static_cast<SvxTabStopItem*>(pItem->Clone()) );
@@ -1128,7 +1128,7 @@ void SwUndoDefaultAttr::Redo( SwUndoIter& rUndoIter)
 // -----------------------------------------------------
 
 SwUndoMoveLeftMargin::SwUndoMoveLeftMargin(
-            const SwPaM& rPam, BOOL bFlag, BOOL bMod )
+            const SwPaM& rPam, sal_Bool bFlag, sal_Bool bMod )
     : SwUndo( bFlag ? UNDO_INC_LEFTMARGIN : UNDO_DEC_LEFTMARGIN )
     , SwUndRng( rPam )
     , m_pHistory( new SwHistory )
@@ -1143,8 +1143,8 @@ SwUndoMoveLeftMargin::~SwUndoMoveLeftMargin()
 void SwUndoMoveLeftMargin::Undo( SwUndoIter& rIter )
 {
     SwDoc* pDoc = &rIter.GetDoc();
-    BOOL bUndo = pDoc->DoesUndo();
-    pDoc->DoUndo( FALSE );
+    sal_Bool bUndo = pDoc->DoesUndo();
+    pDoc->DoUndo( sal_False );
 
     // restore old values
     m_pHistory->TmpRollback( pDoc, 0 );
@@ -1174,7 +1174,7 @@ void SwUndoMoveLeftMargin::Repeat( SwUndoIter& rIter )
 
 SwUndoChangeFootNote::SwUndoChangeFootNote(
             const SwPaM& rRange, const String& rTxt,
-            USHORT nNum, bool bIsEndNote )
+            sal_uInt16 nNum, bool bIsEndNote )
     : SwUndo( UNDO_CHGFTN ), SwUndRng( rRange )
     , m_pHistory( new SwHistory() )
     , m_Text( rTxt )
@@ -1192,8 +1192,8 @@ void SwUndoChangeFootNote::Undo( SwUndoIter& rIter )
     SwDoc& rDoc = rIter.GetDoc();
     SetPaM( rIter );
 
-    BOOL bUndo = rDoc.DoesUndo();
-    rDoc.DoUndo( FALSE );
+    sal_Bool bUndo = rDoc.DoesUndo();
+    rDoc.DoUndo( sal_False );
 
     m_pHistory->TmpRollback( &rDoc, 0 );
     m_pHistory->SetTmpEnd( m_pHistory->Count() );
@@ -1294,7 +1294,7 @@ void SwUndoDontExpandFmt::Undo( SwUndoIter& rIter )
     SwPosition& rPos = *pPam->GetPoint();
     rPos.nNode = m_nNodeIndex;
     rPos.nContent.Assign( rPos.nNode.GetNode().GetCntntNode(), m_nContentIndex);
-    pDoc->DontExpandFmt( rPos, FALSE );
+    pDoc->DontExpandFmt( rPos, sal_False );
 }
 
 

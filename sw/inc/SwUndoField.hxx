@@ -35,7 +35,7 @@ class SwMsgPoolItem;
 
 class SwUndoField : public SwUndo
 {
-    ULONG nNodeIndex;
+    sal_uLong nNodeIndex;
     xub_StrLen nOffset;
 
 protected:
@@ -51,12 +51,12 @@ class SwUndoFieldFromDoc : public SwUndoField
 {
     SwField * pOldField, * pNewField;
     SwMsgPoolItem * pHnt;
-    BOOL bUpdate;
+    sal_Bool bUpdate;
 
 public:
     SwUndoFieldFromDoc(const SwPosition & rPos, const SwField & aOldField,
                        const SwField & aNewField,
-                       SwMsgPoolItem * pHnt, BOOL bUpdate,
+                       SwMsgPoolItem * pHnt, sal_Bool bUpdate,
                        SwUndoId nId = UNDO_FIELD );
     virtual ~SwUndoFieldFromDoc();
 
@@ -68,13 +68,13 @@ public:
 class SwUndoFieldFromAPI : public SwUndoField
 {
     com::sun::star::uno::Any aOldVal, aNewVal;
-    USHORT nWhich;
+    sal_uInt16 nWhich;
 
 public:
     SwUndoFieldFromAPI(const SwPosition & rPos,
                        const com::sun::star::uno::Any & rOldVal,
                        const com::sun::star::uno::Any & rNewVal,
-                       USHORT nWhich);
+                       sal_uInt16 nWhich);
     virtual ~SwUndoFieldFromAPI();
 
     virtual void Undo(SwUndoIter & rIt);

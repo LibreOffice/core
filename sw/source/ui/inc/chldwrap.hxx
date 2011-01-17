@@ -41,10 +41,10 @@ class SwChildWinWrapper : public SfxChildWindow
 
     // Implementation in fldtdlg.cxx
 protected:
-    SwChildWinWrapper(Window *pParentWindow, USHORT nId);
+    SwChildWinWrapper(Window *pParentWindow, sal_uInt16 nId);
 
 public:
-    virtual BOOL    ReInitDlg(SwDocShell *pDocSh);
+    virtual sal_Bool    ReInitDlg(SwDocShell *pDocSh);
 
     inline SwDocShell*  GetOldDocShell()                    { return m_pDocSh; }
     inline void         SetOldDocShell(SwDocShell *pDcSh)   { m_pDocSh = pDcSh; }

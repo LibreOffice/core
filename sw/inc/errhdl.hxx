@@ -33,7 +33,7 @@
 #include <sal/types.h>
 #include "swdllapi.h"
 
-extern BOOL bAssert;                // TRUE, wenn eine ASSERT-Box hochkam
+extern sal_Bool bAssert;                // sal_True, wenn eine ASSERT-Box hochkam
 
 
 // -----------------------------------------------------------------------
@@ -41,8 +41,8 @@ extern BOOL bAssert;                // TRUE, wenn eine ASSERT-Box hochkam
 // wo der Fehler auftrat.
 // Die Funktion darf nicht direkt benutzt werden!
 // -----------------------------------------------------------------------
-SW_DLLPUBLIC void AssertFail( const sal_Char*, const sal_Char*, USHORT );
-SW_DLLPUBLIC void AssertFail( USHORT, const sal_Char*, USHORT );
+SW_DLLPUBLIC void AssertFail( const sal_Char*, const sal_Char*, sal_uInt16 );
+SW_DLLPUBLIC void AssertFail( sal_uInt16, const sal_Char*, sal_uInt16 );
 
 #define ASSERT( cond, message ) \
     if( !(cond) ) { \
@@ -58,7 +58,7 @@ SW_DLLPUBLIC void AssertFail( USHORT, const sal_Char*, USHORT );
 #define ASSERT_ID( cond, id ) \
     if( !(cond) ) { \
         const char   *_pFileName  = __FILE__; \
-       ::AssertFail( (USHORT)id, _pFileName, __LINE__ ); \
+       ::AssertFail( (sal_uInt16)id, _pFileName, __LINE__ ); \
     }
 
 

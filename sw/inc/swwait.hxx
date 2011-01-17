@@ -35,9 +35,9 @@ class SwDocShell;
 class SW_DLLPUBLIC SwWait
 {
     SwDocShell &rDoc;
-    BOOL        bLock;
+    sal_Bool        bLock;
 public:
-    SwWait( SwDocShell &rDocShell, BOOL bLockDispatcher );
+    SwWait( SwDocShell &rDocShell, sal_Bool bLockDispatcher );
     ~SwWait();
 };
 

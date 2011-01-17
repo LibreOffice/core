@@ -110,11 +110,11 @@ SwFldEditDlg::SwFldEditDlg(SwView& rVw) :
     /* #108536# Only create selection if there is none
         already. Normalize PaM instead of swapping. */
     if ( ! pSh->HasSelection() )
-        pSh->Right(CRSR_SKIP_CHARS, TRUE, 1, FALSE );
+        pSh->Right(CRSR_SKIP_CHARS, sal_True, 1, sal_False );
 
     pSh->NormalizePam();
 
-    USHORT nGroup = aMgr.GetGroup(FALSE, pCurFld->GetTypeId(), pCurFld->GetSubType());
+    sal_uInt16 nGroup = aMgr.GetGroup(sal_False, pCurFld->GetTypeId(), pCurFld->GetSubType());
 
     CreatePage(nGroup);
 
@@ -124,7 +124,7 @@ SwFldEditDlg::SwFldEditDlg(SwView& rVw) :
     // Fontgroessen im Wald stehen, und da PB im SingleTabDlg feste Pixelgroessen
     // fuer seine Buttons und die Dialogbreite verwendet.
     aPrevBT.SetPosPixel(Point(GetOKButton()->GetPosPixel().X(), aPrevBT.GetPosPixel().Y()));
-    USHORT nWidth = static_cast< USHORT >(GetOKButton()->GetOutputSize().Width() / 2 - 3);
+    sal_uInt16 nWidth = static_cast< sal_uInt16 >(GetOKButton()->GetOutputSize().Width() / 2 - 3);
     Size aNewSize(LogicToPixel(Size(nWidth, GetOKButton()->GetOutputSize().Height())));
     aPrevBT.SetSizePixel(aNewSize);
 
@@ -167,7 +167,7 @@ void SwFldEditDlg::Init()
         pSh->StartAction();
         pSh->CreateCrsr();
 
-        BOOL bMove = rMgr.GoNext();
+        sal_Bool bMove = rMgr.GoNext();
         if( bMove )
             rMgr.GoPrev();
         aNextBT.Enable(bMove);
@@ -191,7 +191,7 @@ void SwFldEditDlg::Init()
     Beschreibung:
  --------------------------------------------------------------------*/
 
-SfxTabPage* SwFldEditDlg::CreatePage(USHORT nGroup)
+SfxTabPage* SwFldEditDlg::CreatePage(sal_uInt16 nGroup)
 {
     // TabPage erzeugen
     SfxTabPage* pTabPage = 0;
@@ -275,10 +275,10 @@ SwFldEditDlg::~SwFldEditDlg()
     Beschreibung:
  --------------------------------------------------------------------*/
 
-void SwFldEditDlg::EnableInsert(BOOL bEnable)
+void SwFldEditDlg::EnableInsert(sal_Bool bEnable)
 {
     if( bEnable && pSh->IsReadOnlyAvailable() && pSh->HasReadonlySel() )
-        bEnable = FALSE;
+        bEnable = sal_False;
     GetOKButton()->Enable( bEnable );
 }
 
@@ -327,7 +327,7 @@ short SwFldEditDlg::Execute()
 
 IMPL_LINK( SwFldEditDlg, NextPrevHdl, Button *, pButton )
 {
-    BOOL bNext = pButton == &aNextBT;
+    sal_Bool bNext = pButton == &aNextBT;
 
     pSh->EnterStdMode();
 
@@ -350,11 +350,11 @@ IMPL_LINK( SwFldEditDlg, NextPrevHdl, Button *, pButton )
     /* #108536# Only create selection if there is none
         already. Normalize PaM instead of swapping. */
     if ( ! pSh->HasSelection() )
-        pSh->Right(CRSR_SKIP_CHARS, TRUE, 1, FALSE );
+        pSh->Right(CRSR_SKIP_CHARS, sal_True, 1, sal_False );
 
     pSh->NormalizePam();
 
-    USHORT nGroup = rMgr.GetGroup(FALSE, pCurFld->GetTypeId(), pCurFld->GetSubType());
+    sal_uInt16 nGroup = rMgr.GetGroup(sal_False, pCurFld->GetTypeId(), pCurFld->GetSubType());
 
     if (nGroup != pTabPage->GetGroup())
         pTabPage = (SwFldPage*)CreatePage(nGroup);
@@ -380,7 +380,7 @@ IMPL_LINK( SwFldEditDlg, AddressHdl, PushButton *, EMPTYARG )
                         SID_FIELD_GRABFOCUS, SID_FIELD_GRABFOCUS,
                         0L );
 
-    USHORT nEditPos = UNKNOWN_EDIT;
+    sal_uInt16 nEditPos = UNKNOWN_EDIT;
 
     switch(pCurFld->GetSubType())
     {

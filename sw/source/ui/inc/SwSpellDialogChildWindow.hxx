@@ -61,7 +61,7 @@ protected:
 public:
     SwSpellDialogChildWindow (
         Window*pParent,
-        USHORT nId,
+        sal_uInt16 nId,
         SfxBindings* pBindings,
         SfxChildWinInfo* pInfo);
     ~SwSpellDialogChildWindow();

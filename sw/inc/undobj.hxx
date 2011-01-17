@@ -125,21 +125,21 @@ SV_DECL_PTRARR_DEL( SwRedlineSaveDatas, SwRedlineSaveDataPtr, 8, 8 )
 class SwUndo
 {
     SwUndoId nId;
-    USHORT nOrigRedlineMode;
+    sal_uInt16 nOrigRedlineMode;
 
 protected:
     bool bCacheComment;
     mutable String * pComment;
 
-    void RemoveIdxFromSection( SwDoc&, ULONG nSttIdx, ULONG* pEndIdx = 0 );
-    void RemoveIdxFromRange( SwPaM& rPam, BOOL bMoveNext );
-    void RemoveIdxRel( ULONG, const SwPosition& );
+    void RemoveIdxFromSection( SwDoc&, sal_uLong nSttIdx, sal_uLong* pEndIdx = 0 );
+    void RemoveIdxFromRange( SwPaM& rPam, sal_Bool bMoveNext );
+    void RemoveIdxRel( sal_uLong, const SwPosition& );
 
     void SetId( SwUndoId nNew ) { nId = nNew; }
 
-    static BOOL CanRedlineGroup( SwRedlineSaveDatas& rCurr,
+    static sal_Bool CanRedlineGroup( SwRedlineSaveDatas& rCurr,
                                 const SwRedlineSaveDatas& rCheck,
-                                BOOL bCurrIsEnd );
+                                sal_Bool bCurrIsEnd );
 
     // #111827#
     /**
@@ -172,20 +172,20 @@ public:
 
         // das UndoObject merkt sich, welcher Mode eingeschaltet war.
         // In Undo/Redo/Repeat wird dann immer auf diesen zurueck geschaltet
-    USHORT GetRedlineMode() const { return nOrigRedlineMode; }
-    void SetRedlineMode( USHORT eMode ) { nOrigRedlineMode = eMode; }
+    sal_uInt16 GetRedlineMode() const { return nOrigRedlineMode; }
+    void SetRedlineMode( sal_uInt16 eMode ) { nOrigRedlineMode = eMode; }
 
     bool IsDelBox() const;
 
         // sicher und setze die RedlineDaten
-    static BOOL FillSaveData( const SwPaM& rRange, SwRedlineSaveDatas& rSData,
-                            BOOL bDelRange = TRUE, BOOL bCopyNext = TRUE );
-    static BOOL FillSaveDataForFmt( const SwPaM& , SwRedlineSaveDatas& );
+    static sal_Bool FillSaveData( const SwPaM& rRange, SwRedlineSaveDatas& rSData,
+                            sal_Bool bDelRange = sal_True, sal_Bool bCopyNext = sal_True );
+    static sal_Bool FillSaveDataForFmt( const SwPaM& , SwRedlineSaveDatas& );
     static void SetSaveData( SwDoc& rDoc, const SwRedlineSaveDatas& rSData );
-    static BOOL HasHiddenRedlines( const SwRedlineSaveDatas& rSData );
+    static sal_Bool HasHiddenRedlines( const SwRedlineSaveDatas& rSData );
 };
 
-typedef USHORT DelCntntType;
+typedef sal_uInt16 DelCntntType;
 namespace nsDelCntntType
 {
     const DelCntntType DELCNT_FTN = 0x01;
@@ -217,17 +217,17 @@ protected:
     // MoveFrom..   verschiebt aus dem UndoNodesArray in das NodesArray
     void MoveToUndoNds( SwPaM& rPam,
                         SwNodeIndex* pNodeIdx = 0, SwIndex* pCntIdx = 0,
-                        ULONG* pEndNdIdx = 0, xub_StrLen * pEndCntIdx = 0 );
-    void MoveFromUndoNds( SwDoc& rDoc, ULONG nNodeIdx, xub_StrLen nCntntIdx,
+                        sal_uLong* pEndNdIdx = 0, xub_StrLen * pEndCntIdx = 0 );
+    void MoveFromUndoNds( SwDoc& rDoc, sal_uLong nNodeIdx, xub_StrLen nCntntIdx,
                           SwPosition& rInsPos,
-                          ULONG* pEndNdIdx = 0, xub_StrLen * pEndCntIdx = 0 );
+                          sal_uLong* pEndNdIdx = 0, xub_StrLen * pEndCntIdx = 0 );
 
     // diese beiden Methoden bewegen den SPoint vom Pam zurueck/vor. Damit
     // kann fuer ein Undo/Redo ein Bereich aufgespannt werden. (Der
     // SPoint liegt dann vor dem manipuliertem Bereich !!)
     // Das Flag gibt an, ob noch vorm SPoint Inhalt steht.
-    BOOL MovePtBackward( SwPaM& rPam );
-    void MovePtForward( SwPaM& rPam, BOOL bMvBkwrd );
+    sal_Bool MovePtBackward( SwPaM& rPam );
+    void MovePtForward( SwPaM& rPam, sal_Bool bMvBkwrd );
 
     // vor dem Move ins UndoNodes-Array muss dafuer gesorgt werden, das
     // die Inhaltstragenden Attribute aus dem Nodes-Array entfernt werden.
@@ -245,12 +245,12 @@ class SwUndoSaveSection : private SwUndoSaveCntnt
 {
     SwNodeIndex *pMvStt;
     SwRedlineSaveDatas* pRedlSaveData;
-    ULONG nMvLen;           // Index ins UndoNodes-Array
-    ULONG nStartPos;
+    sal_uLong nMvLen;           // Index ins UndoNodes-Array
+    sal_uLong nStartPos;
 
 protected:
     SwNodeIndex* GetMvSttIdx() const { return pMvStt; }
-    ULONG GetMvNodeCnt() const { return nMvLen; }
+    sal_uLong GetMvNodeCnt() const { return nMvLen; }
 
 public:
     SwUndoSaveSection();
@@ -258,7 +258,7 @@ public:
 
     void SaveSection( SwDoc* pDoc, const SwNodeIndex& rSttIdx );
     void SaveSection( SwDoc* pDoc, const SwNodeRange& rRange );
-    void RestoreSection( SwDoc* pDoc, SwNodeIndex* pIdx, USHORT nSectType );
+    void RestoreSection( SwDoc* pDoc, SwNodeIndex* pIdx, sal_uInt16 nSectType );
     void RestoreSection( SwDoc* pDoc, const SwNodeIndex& rInsPos );
 
     const SwHistory* GetHistory() const { return pHistory; }
@@ -266,20 +266,20 @@ public:
 };
 
 
-// Diese Klasse speichert den Pam als USHORT's und kann diese wieder zu
+// Diese Klasse speichert den Pam als sal_uInt16's und kann diese wieder zu
 // einem PaM zusammensetzen
 class SwUndRng
 {
 public:
-    ULONG nSttNode, nEndNode;
+    sal_uLong nSttNode, nEndNode;
     xub_StrLen nSttCntnt, nEndCntnt;
 
     SwUndRng();
     SwUndRng( const SwPaM& );
 
     void SetValues( const SwPaM& rPam );
-    void SetPaM( SwPaM&, BOOL bCorrToCntnt = FALSE ) const;
-    void SetPaM( SwUndoIter&, BOOL bCorrToCntnt = FALSE ) const;
+    void SetPaM( SwPaM&, sal_Bool bCorrToCntnt = sal_False ) const;
+    void SetPaM( SwUndoIter&, sal_Bool bCorrToCntnt = sal_False ) const;
 };
 
 
@@ -290,7 +290,7 @@ class SwUndoStart: public SwUndo
     // GetUserId() erfragt werden.
     SwUndoId nUserId;
     // fuer die "Verpointerung" von Start- und End-Undos
-    USHORT nEndOffset;
+    sal_uInt16 nEndOffset;
 
     SwRewriter mRewriter;
 
@@ -309,8 +309,8 @@ public:
     virtual SwUndoId GetEffectiveId() const;
     SwUndoId GetUserId() const { return nUserId; }
     // Setzen vom End-Undo-Offset geschieht im Doc::EndUndo
-    USHORT GetEndOffset() const { return nEndOffset; }
-    void SetEndOffset( USHORT n ) { nEndOffset = n; }
+    sal_uInt16 GetEndOffset() const { return nEndOffset; }
+    void SetEndOffset( sal_uInt16 n ) { nEndOffset = n; }
 };
 
 class SwUndoEnd: public SwUndo
@@ -320,7 +320,7 @@ class SwUndoEnd: public SwUndo
     // GetUserId() erfragt werden.
     SwUndoId nUserId;
     // fuer die "Verpointerung" von Start- und End-Undos
-    USHORT nSttOffset;
+    sal_uInt16 nSttOffset;
 
     SwRewriter mRewriter;
 
@@ -340,8 +340,8 @@ public:
     SwUndoId GetUserId() const { return nUserId; }
 
     // Setzen vom Start-Undo-Offset geschieht im Doc::EndUndo
-    void SetSttOffset(USHORT _nSttOffSet) { nSttOffset = _nSttOffSet; }
-    USHORT GetSttOffset() const { return nSttOffset; }
+    void SetSttOffset(sal_uInt16 _nSttOffSet) { nSttOffset = _nSttOffSet; }
+    sal_uInt16 GetSttOffset() const { return nSttOffset; }
 };
 
 class SwUndoInsert: public SwUndo, private SwUndoSaveCntnt
@@ -349,16 +349,16 @@ class SwUndoInsert: public SwUndo, private SwUndoSaveCntnt
     SwPosition *pPos;                   // Inhalt fuers Redo
     String *pTxt, *pUndoTxt;
     SwRedlineData* pRedlData;
-    ULONG nNode;
+    sal_uLong nNode;
     xub_StrLen nCntnt, nLen;
-    BOOL bIsWordDelim : 1;
-    BOOL bIsAppend : 1;
+    sal_Bool bIsWordDelim : 1;
+    sal_Bool bIsAppend : 1;
 
     const IDocumentContentOperations::InsertFlags m_nInsertFlags;
 
     friend class SwDoc;     // eigentlich nur SwDoc::Insert( String )
-    BOOL CanGrouping( sal_Unicode cIns );
-    BOOL CanGrouping( const SwPosition& rPos );
+    sal_Bool CanGrouping( sal_Unicode cIns );
+    sal_Bool CanGrouping( const SwPosition& rPos );
 
     SwDoc * pDoc;
 
@@ -368,7 +368,7 @@ class SwUndoInsert: public SwUndo, private SwUndoSaveCntnt
 public:
     SwUndoInsert( const SwNodeIndex& rNode, xub_StrLen nCntnt, xub_StrLen nLen,
                   const IDocumentContentOperations::InsertFlags nInsertFlags,
-                  BOOL bWDelim = TRUE );
+                  sal_Bool bWDelim = sal_True );
     SwUndoInsert( const SwNodeIndex& rNode );
     virtual ~SwUndoInsert();
 
@@ -406,25 +406,25 @@ class SwUndoDelete: public SwUndo, private SwUndRng, private SwUndoSaveCntnt
 
     String sTableName;
 
-    ULONG nNode;
-    ULONG nNdDiff;              // Differenz von Nodes vor-nach Delete
-    ULONG nSectDiff;            // Diff. von Nodes vor/nach Move mit SectionNodes
-    ULONG nReplaceDummy;        // Diff. to a temporary dummy object
-    USHORT nSetPos;
+    sal_uLong nNode;
+    sal_uLong nNdDiff;              // Differenz von Nodes vor-nach Delete
+    sal_uLong nSectDiff;            // Diff. von Nodes vor/nach Move mit SectionNodes
+    sal_uLong nReplaceDummy;        // Diff. to a temporary dummy object
+    sal_uInt16 nSetPos;
 
-    BOOL bGroup : 1;    // TRUE: ist schon eine Gruppe; wird in CanGrouping() ausgwertet !!
-    BOOL bBackSp : 1;   // TRUE: wenn Gruppierung und der Inhalt davor geloescht wird
-    BOOL bJoinNext: 1;  // TRUE: wenn der Bereich von Oben nach unten geht
-    BOOL bTblDelLastNd : 1; // TRUE: TextNode hinter der Tabelle einf./loeschen
-    BOOL bDelFullPara : 1;  // TRUE: gesamte Nodes wurden geloescht
-    BOOL bResetPgDesc : 1;  // TRUE: am nachfolgenden Node das PgDsc zuruecksetzen
-    BOOL bResetPgBrk : 1;   // TRUE: am nachfolgenden Node das PgBreak zuruecksetzen
-    BOOL bFromTableCopy : 1; // TRUE: called by SwUndoTblCpyTbl
+    sal_Bool bGroup : 1;    // sal_True: ist schon eine Gruppe; wird in CanGrouping() ausgwertet !!
+    sal_Bool bBackSp : 1;   // sal_True: wenn Gruppierung und der Inhalt davor geloescht wird
+    sal_Bool bJoinNext: 1;  // sal_True: wenn der Bereich von Oben nach unten geht
+    sal_Bool bTblDelLastNd : 1; // sal_True: TextNode hinter der Tabelle einf./loeschen
+    sal_Bool bDelFullPara : 1;  // sal_True: gesamte Nodes wurden geloescht
+    sal_Bool bResetPgDesc : 1;  // sal_True: am nachfolgenden Node das PgDsc zuruecksetzen
+    sal_Bool bResetPgBrk : 1;   // sal_True: am nachfolgenden Node das PgBreak zuruecksetzen
+    sal_Bool bFromTableCopy : 1; // sal_True: called by SwUndoTblCpyTbl
 
-    BOOL SaveCntnt( const SwPosition* pStt, const SwPosition* pEnd,
+    sal_Bool SaveCntnt( const SwPosition* pStt, const SwPosition* pEnd,
                     SwTxtNode* pSttTxtNd, SwTxtNode* pEndTxtNd );
 public:
-    SwUndoDelete( SwPaM&, BOOL bFullPara = FALSE, BOOL bCalledByTblCpy = FALSE );
+    SwUndoDelete( SwPaM&, sal_Bool bFullPara = sal_False, sal_Bool bCalledByTblCpy = sal_False );
     virtual ~SwUndoDelete();
     virtual void Undo( SwUndoIter& );
     virtual void Redo( SwUndoIter& );
@@ -444,12 +444,12 @@ public:
     */
     virtual SwRewriter GetRewriter() const;
 
-    BOOL CanGrouping( SwDoc*, const SwPaM& );
+    sal_Bool CanGrouping( SwDoc*, const SwPaM& );
 
-    void SetTblDelLastNd()      { bTblDelLastNd = TRUE; }
+    void SetTblDelLastNd()      { bTblDelLastNd = sal_True; }
 
     // fuer die PageDesc/PageBreak Attribute einer Tabelle
-    void SetPgBrkFlags( BOOL bPageBreak, BOOL bPageDesc )
+    void SetPgBrkFlags( sal_Bool bPageBreak, sal_Bool bPageDesc )
         { bResetPgDesc = bPageDesc; bResetPgBrk = bPageBreak; }
 
     void SetTableName(const String & rName);
@@ -457,7 +457,7 @@ public:
     // SwUndoTblCpyTbl needs this information:
     long NodeDiff() const { return nSttNode - nEndNode; }
     xub_StrLen ContentStart() const { return nSttCntnt; }
-    BOOL IsDelFullPara() const { return bDelFullPara; }
+    sal_Bool IsDelFullPara() const { return bDelFullPara; }
 
     DECL_FIXEDMEMPOOL_NEWDEL(SwUndoDelete)
 };
@@ -467,10 +467,10 @@ class SwUndoOverwrite: public SwUndo, private SwUndoSaveCntnt
 {
     String aDelStr, aInsStr;
     SwRedlineSaveDatas* pRedlSaveData;
-    ULONG nSttNode;
+    sal_uLong nSttNode;
     xub_StrLen nSttCntnt;
-    BOOL bInsChar : 1;      // kein Overwrite mehr; sondern Insert
-    BOOL bGroup : 1;        // TRUE: ist schon eine Gruppe; wird in
+    sal_Bool bInsChar : 1;      // kein Overwrite mehr; sondern Insert
+    sal_Bool bGroup : 1;        // sal_True: ist schon eine Gruppe; wird in
                             //       CanGrouping() ausgwertet !!
 public:
     SwUndoOverwrite( SwDoc*, SwPosition&, sal_Unicode cIns );
@@ -493,7 +493,7 @@ public:
      */
     virtual SwRewriter GetRewriter() const;
 
-    BOOL CanGrouping( SwDoc*, SwPosition&, sal_Unicode cIns );
+    sal_Bool CanGrouping( SwDoc*, SwPosition&, sal_Unicode cIns );
 };
 
 
@@ -501,17 +501,17 @@ class SwUndoSplitNode: public SwUndo
 {
     SwHistory* pHistory;
     SwRedlineData* pRedlData;
-    ULONG nNode;
+    sal_uLong nNode;
     xub_StrLen nCntnt;
-    BOOL bTblFlag : 1;
-    BOOL bChkTblStt : 1;
+    sal_Bool bTblFlag : 1;
+    sal_Bool bChkTblStt : 1;
 public:
-    SwUndoSplitNode( SwDoc* pDoc, const SwPosition& rPos, BOOL bChkTbl );
+    SwUndoSplitNode( SwDoc* pDoc, const SwPosition& rPos, sal_Bool bChkTbl );
     virtual ~SwUndoSplitNode();
     virtual void Undo( SwUndoIter& );
     virtual void Redo( SwUndoIter& );
     virtual void Repeat( SwUndoIter& );
-    void SetTblFlag()       { bTblFlag = TRUE; }
+    void SetTblFlag()       { bTblFlag = sal_True; }
 };
 
 
@@ -520,12 +520,12 @@ class SwUndoMove : public SwUndo, private SwUndRng, private SwUndoSaveCntnt
     // nDest.. - Bereich, in den verschoben wurde (nach dem Move!)
     // nIns.. - Position, von der verschoben wurde und wieder die neue InsPos. ist
     // nMv.. Position auf die verschoben wird (vor dem Move!) ; fuers REDO
-    ULONG nDestSttNode, nDestEndNode, nInsPosNode, nMvDestNode;
+    sal_uLong nDestSttNode, nDestEndNode, nInsPosNode, nMvDestNode;
     xub_StrLen nDestSttCntnt, nDestEndCntnt, nInsPosCntnt, nMvDestCntnt;
 
-    USHORT nFtnStt;         // StartPos der Fussnoten in der History
+    sal_uInt16 nFtnStt;         // StartPos der Fussnoten in der History
 
-    BOOL bJoinNext : 1,
+    sal_Bool bJoinNext : 1,
          bJoinPrev : 1,
          bMoveRange : 1;
 
@@ -538,13 +538,13 @@ public:
     virtual void Undo( SwUndoIter& );
     virtual void Redo( SwUndoIter& );
     // setze den Destination-Bereich nach dem Verschieben.
-    void SetDestRange( const SwPaM&, const SwPosition&, BOOL, BOOL );
+    void SetDestRange( const SwPaM&, const SwPosition&, sal_Bool, sal_Bool );
     void SetDestRange( const SwNodeIndex& rStt, const SwNodeIndex& rEnd,
                         const SwNodeIndex& rInsPos );
 
-    BOOL IsMoveRange() const        { return bMoveRange; }
-    ULONG GetEndNode() const        { return nEndNode; }
-    ULONG GetDestSttNode() const    { return nDestSttNode; }
+    sal_Bool IsMoveRange() const        { return bMoveRange; }
+    sal_uLong GetEndNode() const        { return nEndNode; }
+    sal_uLong GetDestSttNode() const    { return nDestSttNode; }
     xub_StrLen GetDestSttCntnt() const  { return nDestSttCntnt; }
 
     void SetMoveRedlines( bool b )       { bMoveRedlines = b; }
@@ -558,7 +558,7 @@ class SwUndoAttr : public SwUndo, private SwUndRng
     const ::std::auto_ptr<SwHistory> m_pHistory;    // History for Undo
     ::std::auto_ptr<SwRedlineData> m_pRedlineData;  // Redlining
     ::std::auto_ptr<SwRedlineSaveDatas> m_pRedlineSaveData;
-    ULONG m_nNodeIndex;                             // Offset: for Redlining
+    sal_uLong m_nNodeIndex;                             // Offset: for Redlining
     const SetAttrMode m_nInsertFlags;               // insert flags
 
     void RemoveIdx( SwDoc& rDoc );
@@ -570,7 +570,7 @@ public:
     virtual void Undo( SwUndoIter& );
     virtual void Redo( SwUndoIter& );
     virtual void Repeat( SwUndoIter& );
-    void SaveRedlineData( const SwPaM& rPam, BOOL bInsCntnt );
+    void SaveRedlineData( const SwPaM& rPam, sal_Bool bInsCntnt );
 
     SwHistory& GetHistory() { return *m_pHistory; }
 
@@ -580,11 +580,11 @@ class SwUndoResetAttr : public SwUndo, private SwUndRng
 {
     const ::std::auto_ptr<SwHistory> m_pHistory;
     SvUShortsSort m_Ids;
-    const USHORT m_nFormatId;             // Format-Id for Redo
+    const sal_uInt16 m_nFormatId;             // Format-Id for Redo
 
 public:
-    SwUndoResetAttr( const SwPaM&, USHORT nFmtId );
-    SwUndoResetAttr( const SwPosition&, USHORT nFmtId );
+    SwUndoResetAttr( const SwPaM&, sal_uInt16 nFmtId );
+    SwUndoResetAttr( const SwPosition&, sal_uInt16 nFmtId );
     virtual ~SwUndoResetAttr();
     virtual void Undo( SwUndoIter& );
     virtual void Redo( SwUndoIter& );
@@ -600,8 +600,8 @@ class SwUndoFmtAttr : public SwUndo
     friend class SwUndoDefaultAttr;
     SwFmt * m_pFmt;
     ::std::auto_ptr<SfxItemSet> m_pOldSet;    // old attributes
-    ULONG m_nNodeIndex;
-    const USHORT m_nFmtWhich;
+    sal_uLong m_nNodeIndex;
+    const sal_uInt16 m_nFmtWhich;
     const bool m_bSaveDrawPt;
 
     bool IsFmtInDoc( SwDoc* );   //is the attribute format still in the Doc?
@@ -647,7 +647,7 @@ class SwUndoFmtResetAttr : public SwUndo
 {
     public:
         SwUndoFmtResetAttr( SwFmt& rChangedFormat,
-                            const USHORT nWhichId );
+                            const sal_uInt16 nWhichId );
         ~SwUndoFmtResetAttr();
 
         virtual void Undo( SwUndoIter& );
@@ -657,7 +657,7 @@ class SwUndoFmtResetAttr : public SwUndo
         // format at which a certain attribute is reset.
         SwFmt * const m_pChangedFormat;
         // which ID of the reset attribute
-        const USHORT m_nWhichId;
+        const sal_uInt16 m_nWhichId;
         // old attribute which has been reset - needed for undo.
         ::std::auto_ptr<SfxPoolItem> m_pOldItem;
 };
@@ -665,7 +665,7 @@ class SwUndoFmtResetAttr : public SwUndo
 
 class SwUndoDontExpandFmt : public SwUndo
 {
-    const ULONG m_nNodeIndex;
+    const sal_uLong m_nNodeIndex;
     const xub_StrLen m_nContentIndex;
 
 public:
@@ -744,7 +744,7 @@ class SwUndoMoveLeftMargin : public SwUndo, private SwUndRng
     const bool m_bModulus;
 
 public:
-    SwUndoMoveLeftMargin( const SwPaM&, BOOL bRight, BOOL bModulus );
+    SwUndoMoveLeftMargin( const SwPaM&, sal_Bool bRight, sal_Bool bModulus );
     virtual ~SwUndoMoveLeftMargin();
     virtual void Undo( SwUndoIter& );
     virtual void Redo( SwUndoIter& );
@@ -761,11 +761,11 @@ class SwUndoInserts : public SwUndo, public SwUndRng, private SwUndoSaveCntnt
     SvPtrarr* pFrmFmts;
     SwUndos* pFlyUndos;
     SwRedlineData* pRedlData;
-    BOOL bSttWasTxtNd;
+    sal_Bool bSttWasTxtNd;
 protected:
-    ULONG nNdDiff;
+    sal_uLong nNdDiff;
     SwPosition *pPos;                   // Inhalt fuers Redo
-    USHORT nSetPos;                     // Start in der History-Liste
+    sal_uInt16 nSetPos;                     // Start in der History-Liste
 
     SwUndoInserts( SwUndoId nUndoId, const SwPaM& );
 public:
@@ -775,8 +775,8 @@ public:
     virtual void Redo( SwUndoIter& );
     virtual void Repeat( SwUndoIter& );
     // setze den Destination-Bereich nach dem Einlesen.
-    void SetInsertRange( const SwPaM&, BOOL bScanFlys = TRUE,
-                        BOOL bSttWasTxtNd = TRUE );
+    void SetInsertRange( const SwPaM&, sal_Bool bScanFlys = sal_True,
+                        sal_Bool bSttWasTxtNd = sal_True );
 };
 
 class SwUndoInsDoc : public SwUndoInserts
@@ -799,13 +799,13 @@ class SwUndoInsTbl : public SwUndo
     SvUShorts* pColWidth;
     SwRedlineData*  pRedlData;
     SwTableAutoFmt* pAutoFmt;
-    ULONG nSttNode;
-    USHORT nRows, nCols;
-    USHORT nAdjust;
+    sal_uLong nSttNode;
+    sal_uInt16 nRows, nCols;
+    sal_uInt16 nAdjust;
 
 public:
-    SwUndoInsTbl( const SwPosition&, USHORT nCols, USHORT nRows,
-                    USHORT eAdjust, const SwInsertTableOptions& rInsTblOpts,
+    SwUndoInsTbl( const SwPosition&, sal_uInt16 nCols, sal_uInt16 nRows,
+                    sal_uInt16 eAdjust, const SwInsertTableOptions& rInsTblOpts,
                     const SwTableAutoFmt* pTAFmt, const SvUShorts* pColArr,
                   const String & rName);
     virtual ~SwUndoInsTbl();
@@ -825,11 +825,11 @@ class SwUndoTxtToTbl : public SwUndo, public SwUndRng
     SwTableAutoFmt* pAutoFmt;
     SwHistory* pHistory;
     sal_Unicode cTrenner;
-    USHORT nAdjust;
-    BOOL bSplitEnd : 1;
+    sal_uInt16 nAdjust;
+    sal_Bool bSplitEnd : 1;
 
 public:
-    SwUndoTxtToTbl( const SwPaM&, const SwInsertTableOptions&, sal_Unicode , USHORT,
+    SwUndoTxtToTbl( const SwPaM&, const SwInsertTableOptions&, sal_Unicode , sal_uInt16,
                     const SwTableAutoFmt* pAFmt );
     virtual ~SwUndoTxtToTbl();
 
@@ -848,11 +848,11 @@ class SwUndoTblToTxt : public SwUndo
     _SaveTable* pTblSave;
     SwTblToTxtSaves* pBoxSaves;
     SwHistory* pHistory;
-    ULONG nSttNd, nEndNd;
-    USHORT nAdjust;
+    sal_uLong nSttNd, nEndNd;
+    sal_uInt16 nAdjust;
     sal_Unicode cTrenner;
-    USHORT nHdlnRpt;
-    BOOL bCheckNumFmt : 1;
+    sal_uInt16 nHdlnRpt;
+    sal_Bool bCheckNumFmt : 1;
 
 public:
     SwUndoTblToTxt( const SwTable& rTbl, sal_Unicode cCh );
@@ -862,17 +862,17 @@ public:
     virtual void Repeat( SwUndoIter& );
 
     void SetRange( const SwNodeRange& );
-    void AddBoxPos( SwDoc& rDoc, ULONG nNdIdx, ULONG nEndIdx,
+    void AddBoxPos( SwDoc& rDoc, sal_uLong nNdIdx, sal_uLong nEndIdx,
                     xub_StrLen nCntntIdx = STRING_MAXLEN);
 };
 
 class SwUndoAttrTbl : public SwUndo
 {
-    ULONG nSttNode;
+    sal_uLong nSttNode;
     _SaveTable* pSaveTbl;
-    BOOL bClearTabCol : 1;
+    sal_Bool bClearTabCol : 1;
 public:
-    SwUndoAttrTbl( const SwTableNode& rTblNd, BOOL bClearTabCols = FALSE );
+    SwUndoAttrTbl( const SwTableNode& rTblNd, sal_Bool bClearTabCols = sal_False );
     virtual ~SwUndoAttrTbl();
     virtual void Undo( SwUndoIter& );
     virtual void Redo( SwUndoIter& );
@@ -880,12 +880,12 @@ public:
 
 class SwUndoTblAutoFmt : public SwUndo
 {
-    ULONG nSttNode;
+    sal_uLong nSttNode;
     _SaveTable* pSaveTbl;
     SwUndos* pUndos;
-    BOOL bSaveCntntAttr;
+    sal_Bool bSaveCntntAttr;
 
-    void UndoRedo( BOOL bUndo, SwUndoIter& rUndoIter );
+    void UndoRedo( sal_Bool bUndo, SwUndoIter& rUndoIter );
 
 public:
     SwUndoTblAutoFmt( const SwTableNode& rTblNd, const SwTableAutoFmt& );
@@ -906,16 +906,16 @@ class SwUndoTblNdsChg : public SwUndo
     } Ptrs;
     SvBools aMvBoxes;       // fuers SplitRow (aufgeteilte Nodes einer Box)
     long nMin, nMax;        // for redo of delete column
-    ULONG nSttNode, nCurrBox;
-    USHORT nCount, nRelDiff, nAbsDiff, nSetColType;
-    BOOL bFlag;
-    BOOL bSameHeight;                   // only used for SplitRow
+    sal_uLong nSttNode, nCurrBox;
+    sal_uInt16 nCount, nRelDiff, nAbsDiff, nSetColType;
+    sal_Bool bFlag;
+    sal_Bool bSameHeight;                   // only used for SplitRow
 public:
     SwUndoTblNdsChg( SwUndoId UndoId,
                     const SwSelBoxes& rBoxes,
                     const SwTableNode& rTblNd,
                     long nMn, long nMx,
-                    USHORT nCnt, BOOL bFlg, BOOL bSameHeight );
+                    sal_uInt16 nCnt, sal_Bool bFlg, sal_Bool bSameHeight );
 
     // fuer SetColWidth
     SwUndoTblNdsChg( SwUndoId UndoId, const SwSelBoxes& rBoxes,
@@ -932,21 +932,21 @@ public:
     void ReNewBoxes( const SwSelBoxes& rBoxes );
 
 
-    void SetColWidthParam( ULONG nBoxIdx, USHORT nMode, USHORT nType,
+    void SetColWidthParam( sal_uLong nBoxIdx, sal_uInt16 nMode, sal_uInt16 nType,
                             SwTwips nAbsDif, SwTwips nRelDif )
     {
         nCurrBox = nBoxIdx;
         nCount = nMode;
         nSetColType = nType;
-        nAbsDiff = (USHORT)nAbsDif;
-        nRelDiff = (USHORT)nRelDif;
+        nAbsDiff = (sal_uInt16)nAbsDif;
+        nRelDiff = (sal_uInt16)nRelDif;
     }
 
 };
 
 class SwUndoTblMerge : public SwUndo, private SwUndRng
 {
-    ULONG nTblNode;
+    sal_uLong nTblNode;
     _SaveTable* pSaveTbl;
     SvULongs aBoxes, aNewSttNds;
     SwUndoMoves* pMoves;
@@ -962,7 +962,7 @@ public:
 
     void SetSelBoxes( const SwSelBoxes& rBoxes );
 
-    void AddNewBox( ULONG nSttNdIdx )
+    void AddNewBox( sal_uLong nSttNdIdx )
         { aNewSttNds.Insert( nSttNdIdx, aNewSttNds.Count() ); }
 
     void SaveCollection( const SwTableBox& rBox );
@@ -976,14 +976,14 @@ class SwUndoTblNumFmt : public SwUndo
     SwHistory* pHistory;
     String aStr, aNewFml;
 
-    ULONG nFmtIdx, nNewFmtIdx;
+    sal_uLong nFmtIdx, nNewFmtIdx;
     double fNum, fNewNum;
-    ULONG nNode;
-    ULONG nNdPos;
+    sal_uLong nNode;
+    sal_uLong nNdPos;
 
-    BOOL bNewFmt : 1;
-    BOOL bNewFml : 1;
-    BOOL bNewValue : 1;
+    sal_Bool bNewFmt : 1;
+    sal_Bool bNewFml : 1;
+    sal_Bool bNewValue : 1;
 
 public:
     SwUndoTblNumFmt( const SwTableBox& rBox, const SfxItemSet* pNewSet = 0 );
@@ -991,7 +991,7 @@ public:
     virtual void Undo( SwUndoIter& );
     virtual void Redo( SwUndoIter& );
 
-    void SetNumFmt( ULONG nNewNumFmtIdx, const double& rNewNumber )
+    void SetNumFmt( sal_uLong nNewNumFmtIdx, const double& rNewNumber )
             { nFmtIdx = nNewNumFmtIdx; fNum = rNewNumber; }
     void SetBox( const SwTableBox& rBox );
 };
@@ -1013,42 +1013,42 @@ public:
     virtual void Undo( SwUndoIter& );
     virtual void Redo( SwUndoIter& );
 
-    void AddBoxBefore( const SwTableBox& rBox, BOOL bDelCntnt );
-    void AddBoxAfter( const SwTableBox& rBox, const SwNodeIndex& rIdx, BOOL bDelCntnt );
+    void AddBoxBefore( const SwTableBox& rBox, sal_Bool bDelCntnt );
+    void AddBoxAfter( const SwTableBox& rBox, const SwNodeIndex& rIdx, sal_Bool bDelCntnt );
 
-    BOOL IsEmpty() const;
-    BOOL InsertRow( SwTable& rTbl, const SwSelBoxes& rBoxes, USHORT nCnt );
+    sal_Bool IsEmpty() const;
+    sal_Bool InsertRow( SwTable& rTbl, const SwSelBoxes& rBoxes, sal_uInt16 nCnt );
 };
 
 class SwUndoCpyTbl : public SwUndo
 {
     SwUndoDelete* pDel;
-    ULONG nTblNode;
+    sal_uLong nTblNode;
 public:
     SwUndoCpyTbl();
     virtual ~SwUndoCpyTbl();
     virtual void Undo( SwUndoIter& );
     virtual void Redo( SwUndoIter& );
 
-    void SetTableSttIdx( ULONG nIdx )           { nTblNode = nIdx; }
+    void SetTableSttIdx( sal_uLong nIdx )           { nTblNode = nIdx; }
 };
 
 class SwUndoSplitTbl : public SwUndo
 {
-    ULONG nTblNode, nOffset;
+    sal_uLong nTblNode, nOffset;
     SwSaveRowSpan* mpSaveRowSpan; // stores the row span values at the splitting row
     _SaveTable* pSavTbl;
     SwHistory* pHistory;
-    USHORT nMode, nFmlEnd;
-    BOOL bCalcNewSize;
+    sal_uInt16 nMode, nFmlEnd;
+    sal_Bool bCalcNewSize;
 public:
-    SwUndoSplitTbl( const SwTableNode& rTblNd, SwSaveRowSpan* pRowSp, USHORT nMode, BOOL bCalcNewSize );
+    SwUndoSplitTbl( const SwTableNode& rTblNd, SwSaveRowSpan* pRowSp, sal_uInt16 nMode, sal_Bool bCalcNewSize );
     virtual ~SwUndoSplitTbl();
     virtual void Undo( SwUndoIter& );
     virtual void Redo( SwUndoIter& );
     virtual void Repeat( SwUndoIter& );
 
-    void SetTblNodeOffset( ULONG nIdx )     { nOffset = nIdx - nTblNode; }
+    void SetTblNodeOffset( sal_uLong nIdx )     { nOffset = nIdx - nTblNode; }
     SwHistory* GetHistory()                 { return pHistory; }
     void SaveFormula( SwHistory& rHistory );
 };
@@ -1056,14 +1056,14 @@ public:
 class SwUndoMergeTbl : public SwUndo
 {
     String aName;
-    ULONG nTblNode;
+    sal_uLong nTblNode;
     _SaveTable* pSavTbl, *pSavHdl;
     SwHistory* pHistory;
-    USHORT nMode;
-    BOOL bWithPrev;
+    sal_uInt16 nMode;
+    sal_Bool bWithPrev;
 public:
     SwUndoMergeTbl( const SwTableNode& rTblNd, const SwTableNode& rDelTblNd,
-                    BOOL bWithPrev, USHORT nMode );
+                    sal_Bool bWithPrev, sal_uInt16 nMode );
     virtual ~SwUndoMergeTbl();
     virtual void Undo( SwUndoIter& );
     virtual void Redo( SwUndoIter& );
@@ -1120,8 +1120,8 @@ struct SwSortUndoElement
 {
     union {
         struct {
-            ULONG nKenn;
-            ULONG nSource, nTarget;
+            sal_uLong nKenn;
+            sal_uLong nSource, nTarget;
         } TXT;
         struct {
             String *pSource, *pTarget;
@@ -1133,7 +1133,7 @@ struct SwSortUndoElement
         SORT_TXT_TBL.TBL.pSource = new String( aS );
         SORT_TXT_TBL.TBL.pTarget = new String( aT );
     }
-    SwSortUndoElement( ULONG nS, ULONG nT )
+    SwSortUndoElement( sal_uLong nS, sal_uLong nT )
     {
         SORT_TXT_TBL.TXT.nSource = nS;
         SORT_TXT_TBL.TXT.nTarget = nT;
@@ -1151,13 +1151,13 @@ class SwUndoSort : public SwUndo, private SwUndRng
     SwSortList      aSortList;
     SwUndoAttrTbl*  pUndoTblAttr;
     SwRedlineData*  pRedlData;
-    ULONG           nTblNd;
+    sal_uLong           nTblNd;
 
     void RemoveIdx( SwPaM& rPam );
 public:
     SwUndoSort( const SwPaM&, const SwSortOptions& );
-    SwUndoSort( ULONG nStt, ULONG nEnd, const SwTableNode&,
-                const SwSortOptions&, BOOL bSaveTable );
+    SwUndoSort( sal_uLong nStt, sal_uLong nEnd, const SwTableNode&,
+                const SwSortOptions&, sal_Bool bSaveTable );
     virtual ~SwUndoSort();
 
     virtual void Undo( SwUndoIter& );
@@ -1165,7 +1165,7 @@ public:
     virtual void Repeat( SwUndoIter& );
 
     void Insert( const String& rOrgPos, const String& rNewPos );
-    void Insert( ULONG nOrgPos, ULONG nNewPos );
+    void Insert( sal_uLong nOrgPos, sal_uLong nNewPos );
 
 };
 
@@ -1177,18 +1177,18 @@ class SwUndoFlyBase : public SwUndo, private SwUndoSaveSection
 {
 protected:
     SwFrmFmt* pFrmFmt;                  // das gespeicherte FlyFormat
-    ULONG nNdPgPos;
+    sal_uLong nNdPgPos;
     xub_StrLen nCntPos;                 // Seite/am Absatz/im Absatz
-    USHORT nRndId;
-    BOOL bDelFmt;                       // loesche das gespeicherte Format
+    sal_uInt16 nRndId;
+    sal_Bool bDelFmt;                       // loesche das gespeicherte Format
 
-    void InsFly( SwUndoIter&, BOOL bShowSel = TRUE );
+    void InsFly( SwUndoIter&, sal_Bool bShowSel = sal_True );
     void DelFly( SwDoc* );
 
     SwUndoFlyBase( SwFrmFmt* pFormat, SwUndoId nUndoId );
 
     SwNodeIndex* GetMvSttIdx() const { return SwUndoSaveSection::GetMvSttIdx(); }
-    ULONG GetMvNodeCnt() const { return SwUndoSaveSection::GetMvNodeCnt(); }
+    sal_uLong GetMvNodeCnt() const { return SwUndoSaveSection::GetMvNodeCnt(); }
 
 public:
     virtual ~SwUndoFlyBase();
@@ -1200,10 +1200,10 @@ public:
 
 class SwUndoInsLayFmt : public SwUndoFlyBase
 {
-    ULONG mnCrsrSaveIndexPara;           // Cursor position
+    sal_uLong mnCrsrSaveIndexPara;           // Cursor position
     xub_StrLen mnCrsrSaveIndexPos;            // for undo
 public:
-    SwUndoInsLayFmt( SwFrmFmt* pFormat, ULONG nNodeIdx, xub_StrLen nCntIdx );
+    SwUndoInsLayFmt( SwFrmFmt* pFormat, sal_uLong nNodeIdx, xub_StrLen nCntIdx );
     ~SwUndoInsLayFmt();
 
     virtual void Undo( SwUndoIter& );
@@ -1216,7 +1216,7 @@ public:
 
 class SwUndoDelLayFmt : public SwUndoFlyBase
 {
-    BOOL bShowSelFrm;
+    sal_Bool bShowSelFrm;
 public:
     SwUndoDelLayFmt( SwFrmFmt* pFormat );
 
@@ -1224,7 +1224,7 @@ public:
     virtual void Redo( SwUndoIter& );
     void Redo();        // Schnittstelle fuers Rollback
 
-    void ChgShowSel( BOOL bNew ) { bShowSelFrm = bNew; }
+    void ChgShowSel( sal_Bool bNew ) { bShowSelFrm = bNew; }
 
     virtual SwRewriter GetRewriter() const;
 
@@ -1237,14 +1237,14 @@ class SwUndoSetFlyFmt : public SwUndo, public SwClient
     SwFrmFmt* pOldFmt;                  // die alte Fly Vorlage
     SwFrmFmt* pNewFmt;                  // die neue Fly Vorlage
     SfxItemSet* pItemSet;               // die zurueck-/ gesetzten Attribute
-    ULONG nOldNode, nNewNode;
+    sal_uLong nOldNode, nNewNode;
     xub_StrLen nOldCntnt, nNewCntnt;
-    USHORT nOldAnchorTyp, nNewAnchorTyp;
-    BOOL bAnchorChgd;
+    sal_uInt16 nOldAnchorTyp, nNewAnchorTyp;
+    sal_Bool bAnchorChgd;
 
-    void PutAttr( USHORT nWhich, const SfxPoolItem* pItem );
+    void PutAttr( sal_uInt16 nWhich, const SfxPoolItem* pItem );
     void Modify( SfxPoolItem*, SfxPoolItem* );
-    void GetAnchor( SwFmtAnchor& rAnhor, ULONG nNode, xub_StrLen nCntnt );
+    void GetAnchor( SwFmtAnchor& rAnhor, sal_uLong nNode, xub_StrLen nCntnt );
 
 public:
     SwUndoSetFlyFmt( SwFrmFmt& rFlyFmt, SwFrmFmt& rNewFrmFmt );
@@ -1265,8 +1265,8 @@ class SwUndoReplace : public SwUndo
 {
     friend class SwDoc;
 
-    BOOL bOldIterFlag;      // Status vom Undo-Iter vorm 1. Aufruf
-    USHORT nAktPos;         // fuer GetUndoRange und Undo/Redo
+    sal_Bool bOldIterFlag;      // Status vom Undo-Iter vorm 1. Aufruf
+    sal_uInt16 nAktPos;         // fuer GetUndoRange und Undo/Redo
     _UnReplaceDatas aArr;
     SwRedlineData* pRedlData;
 
@@ -1298,10 +1298,10 @@ public:
     */
     virtual SwRewriter GetRewriter() const;
 
-    void AddEntry( const SwPaM& rPam, const String& rInsert, BOOL bRegExp );
+    void AddEntry( const SwPaM& rPam, const String& rInsert, sal_Bool bRegExp );
     void SetEntryEnd( const SwPaM& rPam );
 
-    BOOL IsFull() const
+    sal_Bool IsFull() const
         { return ((USHRT_MAX / sizeof( void* )) - 50 ) < aArr.Count(); }
 
 };
@@ -1312,11 +1312,11 @@ public:
 
 class SwUndoTblHeadline : public SwUndo
 {
-    ULONG nTblNd;
-    USHORT nOldHeadline;
-    USHORT nNewHeadline;
+    sal_uLong nTblNd;
+    sal_uInt16 nOldHeadline;
+    sal_uInt16 nNewHeadline;
 public:
-    SwUndoTblHeadline( const SwTable&, USHORT nOldHdl,  USHORT nNewHdl );
+    SwUndoTblHeadline( const SwTable&, sal_uInt16 nOldHdl,  sal_uInt16 nNewHdl );
     virtual void Undo( SwUndoIter& );
     virtual void Redo( SwUndoIter& );
     virtual void Repeat( SwUndoIter& );
@@ -1333,12 +1333,12 @@ private:
     const ::std::auto_ptr<SfxItemSet> m_pAttrSet;
     ::std::auto_ptr<SwHistory> m_pHistory;
     ::std::auto_ptr<SwRedlineData> m_pRedlData;
-    ULONG m_nSectionNodePos;
+    sal_uLong m_nSectionNodePos;
     bool m_bSplitAtStart : 1;
     bool m_bSplitAtEnd : 1;
     bool m_bUpdateFtn : 1;
 
-    void Join( SwDoc& rDoc, ULONG nNode );
+    void Join( SwDoc& rDoc, sal_uLong nNode );
 
 public:
     SwUndoInsSection(SwPaM const&, SwSectionData const&,
@@ -1348,7 +1348,7 @@ public:
     virtual void Redo( SwUndoIter& );
     virtual void Repeat( SwUndoIter& );
 
-    void SetSectNdPos(ULONG const nPos)     { m_nSectionNodePos = nPos; }
+    void SetSectNdPos(sal_uLong const nPos)     { m_nSectionNodePos = nPos; }
     void SaveSplitNode(SwTxtNode *const pTxtNd, bool const bAtStart);
     void SetUpdtFtnFlag(bool const bFlag)   { m_bUpdateFtn = bFlag; }
 };
@@ -1392,10 +1392,10 @@ class SwUndoInsNum : public SwUndo, private SwUndRng
 {
     SwNumRule aNumRule;
     SwHistory* pHistory;
-    ULONG nSttSet;
+    sal_uLong nSttSet;
     SwNumRule* pOldNumRule;
     String sReplaceRule;
-    USHORT nLRSavePos;
+    sal_uInt16 nLRSavePos;
 public:
     SwUndoInsNum( const SwPaM& rPam, const SwNumRule& rRule );
     SwUndoInsNum( const SwNumRule& rOldRule, const SwNumRule& rNewRule,
@@ -1409,7 +1409,7 @@ public:
     virtual SwRewriter GetRewriter() const;
 
     SwHistory* GetHistory();        // wird ggfs. neu angelegt!
-    void SetSttNum( ULONG nNdIdx ) { nSttSet = nNdIdx; }
+    void SetSttNum( sal_uLong nNdIdx ) { nSttSet = nNdIdx; }
     void SaveOldNumRule( const SwNumRule& rOld );
 
     void SetLRSpaceEndPos();
@@ -1429,21 +1429,21 @@ public:
     virtual void Redo( SwUndoIter& );
     virtual void Repeat( SwUndoIter& );
 
-    void AddNode( const SwTxtNode& rNd, BOOL bResetLRSpace );
+    void AddNode( const SwTxtNode& rNd, sal_Bool bResetLRSpace );
     SwHistory* GetHistory() { return pHistory; }
 
 };
 
 class SwUndoMoveNum : public SwUndo, private SwUndRng
 {
-    ULONG nNewStt;
+    sal_uLong nNewStt;
     long nOffset;
 public:
-    SwUndoMoveNum( const SwPaM& rPam, long nOffset, BOOL bIsOutlMv = FALSE );
+    SwUndoMoveNum( const SwPaM& rPam, long nOffset, sal_Bool bIsOutlMv = sal_False );
     virtual void Undo( SwUndoIter& );
     virtual void Redo( SwUndoIter& );
     virtual void Repeat( SwUndoIter& );
-    void SetStartNode( ULONG nValue ) { nNewStt = nValue; }
+    void SetStartNode( sal_uLong nValue ) { nNewStt = nValue; }
 };
 
 class SwUndoNumUpDown : public SwUndo, private SwUndRng
@@ -1458,12 +1458,12 @@ public:
 
 class SwUndoNumOrNoNum : public SwUndo
 {
-    ULONG nIdx;
-    BOOL mbNewNum, mbOldNum;
+    sal_uLong nIdx;
+    sal_Bool mbNewNum, mbOldNum;
 
 public:
-    SwUndoNumOrNoNum( const SwNodeIndex& rIdx, BOOL mbOldNum,
-                      BOOL mbNewNum );
+    SwUndoNumOrNoNum( const SwNodeIndex& rIdx, sal_Bool mbOldNum,
+                      sal_Bool mbNewNum );
     virtual void Undo( SwUndoIter& );
     virtual void Redo( SwUndoIter& );
     virtual void Repeat( SwUndoIter& );
@@ -1471,13 +1471,13 @@ public:
 
 class SwUndoNumRuleStart : public SwUndo
 {
-    ULONG nIdx;
-    USHORT nOldStt, nNewStt;
-    BOOL bSetSttValue : 1;
-    BOOL bFlag : 1;
+    sal_uLong nIdx;
+    sal_uInt16 nOldStt, nNewStt;
+    sal_Bool bSetSttValue : 1;
+    sal_Bool bFlag : 1;
 public:
-    SwUndoNumRuleStart( const SwPosition& rPos, BOOL bDelete );
-    SwUndoNumRuleStart( const SwPosition& rPos, USHORT nStt );
+    SwUndoNumRuleStart( const SwPosition& rPos, sal_Bool bDelete );
+    SwUndoNumRuleStart( const SwPosition& rPos, sal_uInt16 nStt );
     virtual void Undo( SwUndoIter& );
     virtual void Redo( SwUndoIter& );
     virtual void Repeat( SwUndoIter& );
@@ -1502,16 +1502,16 @@ public:
 class SwUndoDrawGroup : public SwUndo
 {
     SwUndoGroupObjImpl* pObjArr;
-    USHORT nSize;
-    BOOL bDelFmt;
+    sal_uInt16 nSize;
+    sal_Bool bDelFmt;
 
 public:
-    SwUndoDrawGroup( USHORT nCnt );
+    SwUndoDrawGroup( sal_uInt16 nCnt );
     virtual ~SwUndoDrawGroup();
     virtual void Undo( SwUndoIter& );
     virtual void Redo( SwUndoIter& );
 
-    void AddObj( USHORT nPos, SwDrawFrmFmt*, SdrObject* );
+    void AddObj( sal_uInt16 nPos, SwDrawFrmFmt*, SdrObject* );
     void SetGroupFmt( SwDrawFrmFmt* );
 };
 
@@ -1530,8 +1530,8 @@ public:
 class SwUndoDrawUnGroup : public SwUndo
 {
     SwUndoGroupObjImpl* pObjArr;
-    USHORT nSize;
-    BOOL bDelFmt;
+    sal_uInt16 nSize;
+    sal_Bool bDelFmt;
 
 public:
     SwUndoDrawUnGroup( SdrObjGroup* );
@@ -1539,7 +1539,7 @@ public:
     virtual void Undo( SwUndoIter& );
     virtual void Redo( SwUndoIter& );
 
-    void AddObj( USHORT nPos, SwDrawFrmFmt* );
+    void AddObj( sal_uInt16 nPos, SwDrawFrmFmt* );
 };
 
 // --> OD 2006-11-01 #130889#
@@ -1564,16 +1564,16 @@ class SwUndoDrawDelete : public SwUndo
 {
     SwUndoGroupObjImpl* pObjArr;
     SdrMarkList* pMarkLst;  // MarkList for all selected SdrObjects
-    USHORT nSize;
-    BOOL bDelFmt;
+    sal_uInt16 nSize;
+    sal_Bool bDelFmt;
 
 public:
-    SwUndoDrawDelete( USHORT nCnt );
+    SwUndoDrawDelete( sal_uInt16 nCnt );
     virtual ~SwUndoDrawDelete();
     virtual void Undo( SwUndoIter& );
     virtual void Redo( SwUndoIter& );
 
-    void AddObj( USHORT nPos, SwDrawFrmFmt*, const SdrMark& );
+    void AddObj( sal_uInt16 nPos, SwDrawFrmFmt*, const SdrMark& );
 };
 
 //--------------------------------------------------------------------
@@ -1582,8 +1582,8 @@ class SwUndoReRead : public SwUndo
 {
     Graphic *pGrf;
     String *pNm, *pFltr;
-    ULONG nPos;
-    USHORT nMirr;
+    sal_uLong nPos;
+    sal_uInt16 nMirr;
 
     void SaveGraphicData( const SwGrfNode& );
     void SetAndSave( SwUndoIter& );
@@ -1609,7 +1609,7 @@ class SwUndoInsertLabel : public SwUndo
         struct {
             // fuer Tabelle/TextRahmen
             SwUndoDelete* pUndoInsNd;
-            ULONG nNode;
+            sal_uLong nNode;
         } NODE;
     };
 
@@ -1620,12 +1620,12 @@ class SwUndoInsertLabel : public SwUndo
     String sNumberSeparator;
     String sCharacterStyle;
     // OD 2004-04-15 #i26791# - re-store of drawing object position no longer needed
-    USHORT nFldId;
+    sal_uInt16 nFldId;
     SwLabelType eType;
-    BYTE nLayerId;              // fuer Zeichen-Objekte
-    BOOL bBefore        :1;
-    BOOL bUndoKeep      :1;
-    BOOL bCpyBrd        :1;
+    sal_uInt8 nLayerId;             // fuer Zeichen-Objekte
+    sal_Bool bBefore        :1;
+    sal_Bool bUndoKeep      :1;
+    sal_Bool bCpyBrd        :1;
 
 public:
     SwUndoInsertLabel( const SwLabelType eTyp, const String &rText,
@@ -1633,9 +1633,9 @@ public:
                         const String& rSeparator,
     // <--
                         const String& rNumberSeparator, //#i61007# order of captions
-                        const BOOL bBefore, const USHORT nId,
+                        const sal_Bool bBefore, const sal_uInt16 nId,
                         const String& rCharacterStyle,
-                        const BOOL bCpyBrd );
+                        const sal_Bool bCpyBrd );
     virtual ~SwUndoInsertLabel();
 
     virtual void Undo( SwUndoIter& );
@@ -1657,12 +1657,12 @@ public:
      */
     virtual SwRewriter GetRewriter() const;
 
-    void SetNodePos( ULONG nNd )
+    void SetNodePos( sal_uLong nNd )
         { if( LTYPE_OBJECT != eType ) NODE.nNode = nNd; }
 
-    void SetUndoKeep()  { bUndoKeep = TRUE; }
+    void SetUndoKeep()  { bUndoKeep = sal_True; }
     void SetFlys( SwFrmFmt& rOldFly, SfxItemSet& rChgSet, SwFrmFmt& rNewFly );
-    void SetDrawObj( BYTE nLayerId );
+    void SetDrawObj( sal_uInt8 nLayerId );
 };
 
 //--------------------------------------------------------------------
@@ -1671,12 +1671,12 @@ class SwUndoChangeFootNote : public SwUndo, private SwUndRng
 {
     const ::std::auto_ptr<SwHistory> m_pHistory;
     const String m_Text;
-    const USHORT m_nNumber;
+    const sal_uInt16 m_nNumber;
     const bool m_bEndNote;
 
 public:
     SwUndoChangeFootNote( const SwPaM& rRange, const String& rTxt,
-                          USHORT nNum, bool bIsEndNote );
+                          sal_uInt16 nNum, bool bIsEndNote );
     virtual ~SwUndoChangeFootNote();
 
     virtual void Undo( SwUndoIter& );
@@ -1730,7 +1730,7 @@ public:
 
     void AddChanges( SwTxtNode& rTNd, xub_StrLen nStart, xub_StrLen nLen,
                      ::com::sun::star::uno::Sequence <sal_Int32>& rOffsets );
-    BOOL HasData() const { return aChanges.size() > 0; }
+    sal_Bool HasData() const { return aChanges.size() > 0; }
 };
 
 //--------------------------------------------------------------------
@@ -1741,7 +1741,7 @@ protected:
     SwRedlineData* pRedlData;
     SwRedlineSaveDatas* pRedlSaveData;
     SwUndoId nUserId;
-    BOOL bHiddenRedlines;
+    sal_Bool bHiddenRedlines;
 
     virtual void _Undo( SwUndoIter& );
     virtual void _Redo( SwUndoIter& );
@@ -1753,15 +1753,15 @@ public:
     virtual void Redo( SwUndoIter& );
 
     SwUndoId GetUserId() const { return nUserId; }
-    USHORT GetRedlSaveCount() const
+    sal_uInt16 GetRedlSaveCount() const
         { return pRedlSaveData ? pRedlSaveData->Count() : 0; }
 };
 
 class SwUndoRedlineDelete : public SwUndoRedline
 {
-    BOOL bCanGroup : 1;
-    BOOL bIsDelim : 1;
-    BOOL bIsBackspace : 1;
+    sal_Bool bCanGroup : 1;
+    sal_Bool bIsDelim : 1;
+    sal_Bool bIsBackspace : 1;
 
     virtual void _Undo( SwUndoIter& );
     virtual void _Redo( SwUndoIter& );
@@ -1769,13 +1769,13 @@ class SwUndoRedlineDelete : public SwUndoRedline
 public:
     SwUndoRedlineDelete( const SwPaM& rRange, SwUndoId nUserId = UNDO_EMPTY );
 
-    BOOL CanGrouping( const SwUndoRedlineDelete& rPrev );
+    sal_Bool CanGrouping( const SwUndoRedlineDelete& rPrev );
 };
 
 class SwUndoRedlineSort : public SwUndoRedline
 {
     SwSortOptions* pOpt;
-    ULONG nSaveEndNode, nOffset;
+    sal_uLong nSaveEndNode, nOffset;
     xub_StrLen nSaveEndCntnt;
 
     virtual void _Undo( SwUndoIter& );
@@ -1813,9 +1813,9 @@ class SwUndoCompDoc : public SwUndo, public SwUndRng
     SwRedlineData* pRedlData;
     SwUndoDelete* pUnDel, *pUnDel2;
     SwRedlineSaveDatas* pRedlSaveData;
-    BOOL bInsert;
+    sal_Bool bInsert;
 public:
-    SwUndoCompDoc( const SwPaM& rRg, BOOL bIns );
+    SwUndoCompDoc( const SwPaM& rRg, sal_Bool bIns );
     SwUndoCompDoc( const SwRedline& rRedl );
 
     virtual ~SwUndoCompDoc();
@@ -1842,9 +1842,9 @@ class SwUndoIter
     friend void SwUndoReplace::Redo( SwUndoIter& );
 
     SwUndoId nUndoId;
-    USHORT nEndCnt;
-    BOOL bWeiter : 1;
-    BOOL bUpdateAttr : 1;   // Setze das GCAttr an der CursorShell
+    sal_uInt16 nEndCnt;
+    sal_Bool bWeiter : 1;
+    sal_Bool bUpdateAttr : 1;   // Setze das GCAttr an der CursorShell
 
 public:
     SwPaM * pAktPam;        // Member fuer das Undo
@@ -1854,9 +1854,9 @@ public:
 
     SwUndoIter( SwPaM * pPam, SwUndoId nId = UNDO_EMPTY );
 
-    BOOL IsNextUndo() const             { return bWeiter; }
-    BOOL IsUpdateAttr() const           { return bUpdateAttr; }
-    void SetUpdateAttr( BOOL bNew )     { bUpdateAttr = bNew; }
+    sal_Bool IsNextUndo() const             { return bWeiter; }
+    sal_Bool IsUpdateAttr() const           { return bUpdateAttr; }
+    void SetUpdateAttr( sal_Bool bNew )     { bUpdateAttr = bNew; }
 
     inline SwDoc& GetDoc() const;
     SwUndoId GetId() const  { return nUndoId; }

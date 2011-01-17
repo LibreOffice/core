@@ -90,11 +90,11 @@ friend class SwEnvPreview;
     SfxItemSet      *pAddresseeSet;
     SfxItemSet      *pSenderSet;
 
-    virtual void    PageCreated( USHORT nId, SfxTabPage &rPage );
+    virtual void    PageCreated( sal_uInt16 nId, SfxTabPage &rPage );
     virtual short   Ok();
 
 public:
-     SwEnvDlg(Window* pParent, const SfxItemSet& rSet, SwWrtShell* pWrtSh, Printer* pPrt, BOOL bInsert);
+     SwEnvDlg(Window* pParent, const SfxItemSet& rSet, SwWrtShell* pWrtSh, Printer* pPrt, sal_Bool bInsert);
     ~SwEnvDlg();
 };
 
@@ -140,7 +140,7 @@ public:
     virtual void ActivatePage(const SfxItemSet& rSet);
     virtual int  DeactivatePage(SfxItemSet* pSet = 0);
             void FillItem(SwEnvItem& rItem);
-    virtual BOOL FillItemSet(SfxItemSet& rSet);
+    virtual sal_Bool FillItemSet(SfxItemSet& rSet);
     virtual void Reset(const SfxItemSet& rSet);
 };
 

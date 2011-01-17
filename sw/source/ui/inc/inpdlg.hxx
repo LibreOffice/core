@@ -70,7 +70,7 @@ class SwFldInputDlg: public SvxStandardDialog
     DECL_LINK(NextHdl, PushButton*);
 public:
     SwFldInputDlg(  Window *pParent, SwWrtShell &rSh,
-                    SwField* pField, BOOL bNextButton = FALSE );
+                    SwField* pField, sal_Bool bNextButton = sal_False );
     ~SwFldInputDlg();
 };
 

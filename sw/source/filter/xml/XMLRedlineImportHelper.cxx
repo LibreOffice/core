@@ -667,8 +667,8 @@ void XMLRedlineImportHelper::InsertIntoDocument(RedlineInfo* pRedlineInfo)
         // create redline (using pRedlineData which gets copied in SwRedline())
         SwRedlineData* pRedlineData = ConvertRedline(pRedlineInfo, pDoc);
         SwRedline* pRedline =
-            new SwRedline( pRedlineData, *aPaM.GetPoint(), TRUE,
-                           !pRedlineInfo->bMergeLastParagraph, FALSE );
+            new SwRedline( pRedlineData, *aPaM.GetPoint(), sal_True,
+                           !pRedlineInfo->bMergeLastParagraph, sal_False );
 
         // set mark
         if( aPaM.HasMark() )
@@ -680,7 +680,7 @@ void XMLRedlineImportHelper::InsertIntoDocument(RedlineInfo* pRedlineInfo)
         // set content node (if necessary)
         if (NULL != pRedlineInfo->pContentIndex)
         {
-            ULONG nPoint = aPaM.GetPoint()->nNode.GetIndex();
+            sal_uLong nPoint = aPaM.GetPoint()->nNode.GetIndex();
             if( nPoint < pRedlineInfo->pContentIndex->GetIndex() ||
                 nPoint > pRedlineInfo->pContentIndex->GetNode().EndOfSectionIndex() )
                 pRedline->SetContentIdx(pRedlineInfo->pContentIndex);

@@ -67,7 +67,7 @@ void SwURLStateChanged::Notify( SfxBroadcaster& , const SfxHint& rHint )
             sURL == pDoc->GetDocShell()->GetMedium()->GetName() )
             (sBkmk = pIURL->GetMark()).Insert( INET_MARK_TOKEN, 0 );
 
-        BOOL bAction = FALSE, bUnLockView = FALSE;
+        sal_Bool bAction = sal_False, bUnLockView = sal_False;
         const SwFmtINetFmt* pItem;
         const SwTxtINetFmt* pTxtAttr;
         const SwTxtNode* pTxtNd;
@@ -83,9 +83,9 @@ void SwURLStateChanged::Notify( SfxBroadcaster& , const SfxHint& rHint )
                 if( !bAction && pESh )
                 {
                     pESh->StartAllAction();
-                    bAction = TRUE;
+                    bAction = sal_True;
                     bUnLockView = !pESh->IsViewLocked();
-                    pESh->LockView( TRUE );
+                    pESh->LockView( sal_True );
                 }
                 const_cast<SwTxtINetFmt*>(pTxtAttr)->SetVisitedValid( false );
                 const SwTxtAttr* pAttr = pTxtAttr;
@@ -98,20 +98,20 @@ void SwURLStateChanged::Notify( SfxBroadcaster& , const SfxHint& rHint )
         if( bAction )
             pESh->EndAllAction();
          if( bUnLockView )
-             pESh->LockView( FALSE );
+             pESh->LockView( sal_False );
     }
 }
 
     // erfrage ob die URL besucht war. Uebers Doc, falls nur ein Bookmark
     // angegeben ist. Dann muss der Doc. Name davor gesetzt werden!
-BOOL SwDoc::IsVisitedURL( const String& rURL ) const
+sal_Bool SwDoc::IsVisitedURL( const String& rURL ) const
 {
 #if OSL_DEBUG_LEVEL > 1
     static long nTmp = 0;
     ++nTmp;
 #endif
 
-    BOOL bRet = FALSE;
+    sal_Bool bRet = sal_False;
     if( rURL.Len() )
     {
         INetURLHistory *pHist = INetURLHistory::GetOrCreate();

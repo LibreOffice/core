@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,7 +30,7 @@
 #define _SVSTDARR_STRINGS
 
 #include <string.h>
-#include <stdio.h>          // sscanf
+#include <stdio.h>                      // sscanf
 #include <hintids.hxx>
 #include <i18npool/lang.h>
 #include <i18npool/mslangid.hxx>
@@ -79,7 +79,7 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star;
 
 SwRead ReadAscii = 0, /*ReadSwg = 0, ReadSw3 = 0,*/
-        ReadHTML = 0, ReadXML = 0;
+                ReadHTML = 0, ReadXML = 0;
 
 Reader* GetRTFReader();
 Reader* GetWW8Reader();
@@ -88,17 +88,17 @@ Reader* GetWW8Reader();
 // ReaderWriterEnum and aFilterDetect in shellio.hxx
 SwReaderWriterEntry aReaderWriter[] =
 {
-    SwReaderWriterEntry( &::GetRTFReader, &::GetRTFWriter,  TRUE  ),
-    SwReaderWriterEntry( 0,               &::GetASCWriter,  FALSE ),
-    SwReaderWriterEntry( &::GetWW8Reader, &::GetWW8Writer,  TRUE  ),
-    SwReaderWriterEntry( &::GetWW8Reader, &::GetWW8Writer,  TRUE  ),
-    SwReaderWriterEntry( &::GetRTFReader, &::GetRTFWriter,  TRUE  ),
-    SwReaderWriterEntry( 0,               &::GetHTMLWriter, TRUE  ),
-    SwReaderWriterEntry( 0,               0,                TRUE  ),
-    SwReaderWriterEntry( &::GetWW8Reader, 0,                TRUE  ),
-    SwReaderWriterEntry( 0,               &::GetXMLWriter,  TRUE  ),
-    SwReaderWriterEntry( 0,               &::GetASCWriter,  TRUE  ),
-    SwReaderWriterEntry( 0,               &::GetASCWriter,  TRUE  )
+    SwReaderWriterEntry( &::GetRTFReader, &::GetRTFWriter,  sal_True  ),
+    SwReaderWriterEntry( 0,               &::GetASCWriter,  sal_False ),
+    SwReaderWriterEntry( &::GetWW8Reader, &::GetWW8Writer,  sal_True  ),
+    SwReaderWriterEntry( &::GetWW8Reader, &::GetWW8Writer,  sal_True  ),
+    SwReaderWriterEntry( &::GetRTFReader, &::GetRTFWriter,  sal_True  ),
+    SwReaderWriterEntry( 0,               &::GetHTMLWriter, sal_True  ),
+    SwReaderWriterEntry( 0,               0,                sal_True  ),
+    SwReaderWriterEntry( &::GetWW8Reader, 0,                sal_True  ),
+    SwReaderWriterEntry( 0,               &::GetXMLWriter,  sal_True  ),
+    SwReaderWriterEntry( 0,               &::GetASCWriter,  sal_True  ),
+    SwReaderWriterEntry( 0,               &::GetASCWriter,  sal_True  )
 };
 
 Reader* SwReaderWriterEntry::GetReader()
@@ -123,12 +123,12 @@ void SwReaderWriterEntry::GetWriter( const String& rNm, const String& rBaseURL, 
 
 /*SwRead SwGetReaderSw3() // SW_DLLPUBLIC
 {
-    return ReadSw3;
+        return ReadSw3;
 }
 */
 SwRead SwGetReaderXML() // SW_DLLPUBLIC
 {
-    return ReadXML;
+        return ReadXML;
 }
 
 bool IsDocShellRegistered()
@@ -136,9 +136,9 @@ bool IsDocShellRegistered()
     return 0 != SwDocShell::_GetInterface();
 }
 
-inline void _SetFltPtr( USHORT rPos, SwRead pReader )
+inline void _SetFltPtr( sal_uInt16 rPos, SwRead pReader )
 {
-    aReaderWriter[ rPos ].pReader = pReader;
+        aReaderWriter[ rPos ].pReader = pReader;
 }
 
 void _InitFilter()
@@ -159,13 +159,13 @@ void _InitFilter()
 
 void _FinitFilter()
 {
-    // die Reader vernichten
-    for( USHORT n = 0; n < MAXFILTER; ++n )
-    {
-        SwReaderWriterEntry& rEntry = aReaderWriter[n];
-        if( rEntry.bDelReader && rEntry.pReader )
-            delete rEntry.pReader, rEntry.pReader = NULL;
-    }
+        // die Reader vernichten
+        for( sal_uInt16 n = 0; n < MAXFILTER; ++n )
+        {
+                SwReaderWriterEntry& rEntry = aReaderWriter[n];
+                if( rEntry.bDelReader && rEntry.pReader )
+                        delete rEntry.pReader, rEntry.pReader = NULL;
+        }
 }
 
 
@@ -180,27 +180,27 @@ Reader* GetReader( ReaderWriterEnum eReader )
 
 void GetWriter( const String& rFltName, const String& rBaseURL, WriterRef& xRet )
 {
-    for( USHORT n = 0; n < MAXFILTER; ++n )
-        if( aFilterDetect[n].IsFilter( rFltName ) )
-        {
+        for( sal_uInt16 n = 0; n < MAXFILTER; ++n )
+                if( aFilterDetect[n].IsFilter( rFltName ) )
+                {
             aReaderWriter[n].GetWriter( rFltName, rBaseURL, xRet );
-            break;
-        }
+                        break;
+                }
 }
 
 SwRead GetReader( const String& rFltName )
 {
-    SwRead pRead = 0;
-    for( USHORT n = 0; n < MAXFILTER; ++n )
-        if( aFilterDetect[n].IsFilter( rFltName ) )
-        {
-            pRead = aReaderWriter[n].GetReader();
-            // fuer einige Reader noch eine Sonderbehandlung:
-            if ( pRead )
-                pRead->SetFltName( rFltName );
-            break;
-        }
-    return pRead;
+        SwRead pRead = 0;
+        for( sal_uInt16 n = 0; n < MAXFILTER; ++n )
+                if( aFilterDetect[n].IsFilter( rFltName ) )
+                {
+                        pRead = aReaderWriter[n].GetReader();
+                        // fuer einige Reader noch eine Sonderbehandlung:
+                        if ( pRead )
+                                pRead->SetFltName( rFltName );
+                        break;
+                }
+        return pRead;
 }
 
 } // namespace SwReaderWriter
@@ -212,111 +212,111 @@ SwRead GetReader( const String& rFltName )
 /*void GetSw3Writer( const String&, const String& rBaseURL, WriterRef& xRet )
 {
     DBG_ERROR( "Shouldn't happen!");
-    xRet = new Sw3Writer;
+        xRet = new Sw3Writer;
 }
 */
 
-ULONG StgReader::OpenMainStream( SvStorageStreamRef& rRef, USHORT& rBuffSize )
+sal_uLong StgReader::OpenMainStream( SvStorageStreamRef& rRef, sal_uInt16& rBuffSize )
 {
-    ULONG nRet = ERR_SWG_READ_ERROR;
-    ASSERT( pStg, "wo ist mein Storage?" );
-    const SfxFilter* pFltr = SwIoSystem::GetFilterOfFormat( aFltName );
-    if( pFltr )
-    {
-        rRef = pStg->OpenSotStream( SwIoSystem::GetSubStorageName( *pFltr ),
-                                    STREAM_READ | STREAM_SHARE_DENYALL );
-
-        if( rRef.Is() )
+        sal_uLong nRet = ERR_SWG_READ_ERROR;
+        ASSERT( pStg, "wo ist mein Storage?" );
+        const SfxFilter* pFltr = SwIoSystem::GetFilterOfFormat( aFltName );
+        if( pFltr )
         {
-            if( SVSTREAM_OK == rRef->GetError() )
-            {
-                USHORT nOld = rRef->GetBufferSize();
-                rRef->SetBufferSize( rBuffSize );
-                rBuffSize = nOld;
-                nRet = 0;
-            }
-            else
-                nRet = rRef->GetError();
+        rRef = pStg->OpenSotStream( SwIoSystem::GetSubStorageName( *pFltr ),
+                                                                        STREAM_READ | STREAM_SHARE_DENYALL );
+
+                if( rRef.Is() )
+                {
+                        if( SVSTREAM_OK == rRef->GetError() )
+                        {
+                                sal_uInt16 nOld = rRef->GetBufferSize();
+                                rRef->SetBufferSize( rBuffSize );
+                                rBuffSize = nOld;
+                                nRet = 0;
+                        }
+                        else
+                                nRet = rRef->GetError();
+                }
         }
-    }
-    return nRet;
+        return nRet;
 }
 
 /*  */
 /*
-ULONG Sw3Reader::Read( SwDoc &rDoc, SwPaM &rPam, const String & )
+sal_uLong Sw3Reader::Read( SwDoc &rDoc, SwPaM &rPam, const String & )
 {
-    ULONG nRet;
-    if( pStg && pIO )
-    {
-        // TRUE: Vorlagen ueberschreiben
-        pIO->SetReadOptions( aOpt,TRUE );
-        if( !bInsertMode )
+        sal_uLong nRet;
+        if( pStg && pIO )
         {
-            // Im Laden-Modus darf der PaM-Content-Teil nicht
-            // in den Textbereich zeigen (Nodes koennen geloescht werden)
-            rPam.GetBound( TRUE ).nContent.Assign( 0, 0 );
-            rPam.GetBound( FALSE ).nContent.Assign( 0, 0 );
+                // sal_True: Vorlagen ueberschreiben
+                pIO->SetReadOptions( aOpt,sal_True );
+                if( !bInsertMode )
+                {
+                        // Im Laden-Modus darf der PaM-Content-Teil nicht
+                        // in den Textbereich zeigen (Nodes koennen geloescht werden)
+                        rPam.GetBound( sal_True ).nContent.Assign( 0, 0 );
+                        rPam.GetBound( sal_False ).nContent.Assign( 0, 0 );
+                }
+                nRet = pIO->Load( pStg, bInsertMode ? &rPam : 0 );
+                aOpt.ResetAllFmtsOnly();
+                pIO->SetReadOptions( aOpt, sal_True );
         }
-        nRet = pIO->Load( pStg, bInsertMode ? &rPam : 0 );
-        aOpt.ResetAllFmtsOnly();
-        pIO->SetReadOptions( aOpt, TRUE );
-    }
-    else
-    {
-        ASSERT( !this, "Sw3-Read ohne Storage und/oder IO-System" );
-        nRet = ERR_SWG_READ_ERROR;
-    }
-    return nRet;
+        else
+        {
+                ASSERT( !this, "Sw3-Read ohne Storage und/oder IO-System" );
+                nRet = ERR_SWG_READ_ERROR;
+        }
+        return nRet;
 }
 
-    // read the sections of the document, which is equal to the medium.
-    // returns the count of it
-USHORT Sw3Reader::GetSectionList( SfxMedium& rMedium,
-                                    SvStrings& rStrings ) const
+        // read the sections of the document, which is equal to the medium.
+        // returns the count of it
+sal_uInt16 Sw3Reader::GetSectionList( SfxMedium& rMedium,
+                                                                        SvStrings& rStrings ) const
 {
-    SvStorageRef aStg( rMedium.GetStorage() );
-    const SfxFilter* pFlt = rMedium.GetFilter();
-    ASSERT( pFlt && pFlt->GetVersion(),
-                                "Kein Filter oder Filter ohne FF-Version" );
-    if( pFlt && pFlt->GetVersion() )
-        aStg->SetVersion( (long)pFlt->GetVersion() );
+        SvStorageRef aStg( rMedium.GetStorage() );
+        const SfxFilter* pFlt = rMedium.GetFilter();
+        ASSERT( pFlt && pFlt->GetVersion(),
+                                                                "Kein Filter oder Filter ohne FF-Version" );
+        if( pFlt && pFlt->GetVersion() )
+                aStg->SetVersion( (long)pFlt->GetVersion() );
 
-    if( pIO )
-        pIO->GetSectionList( &aStg, rStrings );
-    return rStrings.Count();
+        if( pIO )
+                pIO->GetSectionList( &aStg, rStrings );
+        return rStrings.Count();
     return 0;
 }
 */
 
-/*ULONG Sw3Writer::WriteStorage()
+/*sal_uLong Sw3Writer::WriteStorage()
 {
-    ULONG nRet;
-    if( pIO )
-    {
-        // der gleiche Storage -> Save, sonst SaveAs aufrufen
-        if( !bSaveAs )
-            nRet = pIO->Save( pOrigPam, bWriteAll );
-        else
-            nRet = pIO->SaveAs( pStg, pOrigPam, bWriteAll );
+    sal_uLong nRet;
+        if( pIO )
+        {
+                // der gleiche Storage -> Save, sonst SaveAs aufrufen
+                if( !bSaveAs )
+                        nRet = pIO->Save( pOrigPam, bWriteAll );
+                else
+                        nRet = pIO->SaveAs( pStg, pOrigPam, bWriteAll );
 
-        pIO = 0;        // nach dem Schreiben ist der Pointer ungueltig !!
-    }
-    else
-    {
-        ASSERT( !this, "Sw3-Writer ohne IO-System" )
-        nRet = ERR_SWG_WRITE_ERROR;
+                pIO = 0;                // nach dem Schreiben ist der Pointer ungueltig !!
+        }
+        else
+        {
+                ASSERT( !this, "Sw3-Writer ohne IO-System" )
+                nRet = ERR_SWG_WRITE_ERROR;
     }
     return nRet;
 }
 
-ULONG Sw3Writer::WriteMedium( SfxMedium& )
+sal_uLong Sw3Writer::WriteMedium( SfxMedium& )
 {
     DBG_ERROR( "Shouldn't be used currently!");
-    return WriteStorage();
+        return WriteStorage();
 }
 
-BOOL Sw3Writer::IsSw3Writer() const { return TRUE; }
+sal_Bool Sw3Writer::IsSw3Writer() const { return sal_True; }
 */
 
 void Writer::SetPasswd( const String& ) {}
@@ -325,25 +325,25 @@ void Writer::SetPasswd( const String& ) {}
 void Writer::SetVersion( const String&, long ) {}
 
 
-BOOL Writer::IsStgWriter() const { return FALSE; }
-//BOOL Writer::IsSw3Writer() const { return FALSE; }
+sal_Bool Writer::IsStgWriter() const { return sal_False; }
+//sal_Bool Writer::IsSw3Writer() const { return sal_False; }
 
-BOOL StgWriter::IsStgWriter() const { return TRUE; }
+sal_Bool StgWriter::IsStgWriter() const { return sal_True; }
 
 /*  */
 
 
 
-BOOL SwReader::NeedsPasswd( const Reader& /*rOptions*/ )
+sal_Bool SwReader::NeedsPasswd( const Reader& /*rOptions*/ )
 {
-    BOOL bRes = FALSE;
+        sal_Bool bRes = sal_False;
     return bRes;
 }
 
 
-BOOL SwReader::CheckPasswd( const String& /*rPasswd*/, const Reader& /*rOptions*/ )
+sal_Bool SwReader::CheckPasswd( const String& /*rPasswd*/, const Reader& /*rOptions*/ )
 {
-    return TRUE;
+    return sal_True;
 }
 
 
@@ -388,38 +388,38 @@ BOOL SwReader::CheckPasswd( const String& /*rPasswd*/, const Reader& /*rOptions*
 </FilterFlags>
 */
 
-#define FILTER_OPTION_ROOT      String::CreateFromAscii( \
-                RTL_CONSTASCII_STRINGPARAM( "Office.Writer/FilterFlags" ) )
+#define FILTER_OPTION_ROOT              String::CreateFromAscii( \
+                                RTL_CONSTASCII_STRINGPARAM( "Office.Writer/FilterFlags" ) )
 
 SwFilterOptions::SwFilterOptions( sal_uInt16 nCnt, const sal_Char** ppNames,
-                                  sal_uInt32* pValues )
-    : ConfigItem( FILTER_OPTION_ROOT )
+                                                                sal_uInt32* pValues )
+        : ConfigItem( FILTER_OPTION_ROOT )
 {
-    GetValues( nCnt, ppNames, pValues );
+        GetValues( nCnt, ppNames, pValues );
 }
 
 void SwFilterOptions::GetValues( sal_uInt16 nCnt, const sal_Char** ppNames,
-                                      sal_uInt32* pValues )
+                                                                        sal_uInt32* pValues )
 {
-    Sequence<OUString> aNames( nCnt );
-    OUString* pNames = aNames.getArray();
-    USHORT n;
+        Sequence<OUString> aNames( nCnt );
+        OUString* pNames = aNames.getArray();
+        sal_uInt16 n;
 
-    for( n = 0; n < nCnt; ++n )
-        pNames[ n ] = OUString::createFromAscii( ppNames[ n ] );
-    Sequence<Any> aValues = GetProperties( aNames );
+        for( n = 0; n < nCnt; ++n )
+                pNames[ n ] = OUString::createFromAscii( ppNames[ n ] );
+        Sequence<Any> aValues = GetProperties( aNames );
 
-    if( nCnt == aValues.getLength() )
-    {
-        const Any* pAnyValues = aValues.getConstArray();
-        for( n = 0; n < nCnt; ++n )
-            pValues[ n ] = pAnyValues[ n ].hasValue()
-                            ? *(sal_uInt32*)pAnyValues[ n ].getValue()
-                            : 0;
-    }
-    else
-        for( n = 0; n < nCnt; ++n )
-            pValues[ n ] = 0;
+        if( nCnt == aValues.getLength() )
+        {
+                const Any* pAnyValues = aValues.getConstArray();
+                for( n = 0; n < nCnt; ++n )
+                        pValues[ n ] = pAnyValues[ n ].hasValue()
+                                                        ? *(sal_uInt32*)pAnyValues[ n ].getValue()
+                                                        : 0;
+        }
+        else
+                for( n = 0; n < nCnt; ++n )
+                        pValues[ n ] = 0;
 }
 
 void SwFilterOptions::Commit() {}
@@ -430,73 +430,73 @@ void SwFilterOptions::Notify( const ::com::sun::star::uno::Sequence< rtl::OUStri
 
 void StgReader::SetFltName( const String& rFltNm )
 {
-    if( SW_STORAGE_READER & GetReaderType() )
-        aFltName = rFltNm;
+        if( SW_STORAGE_READER & GetReaderType() )
+                aFltName = rFltNm;
 }
 
 
 /*  */
 
-SwRelNumRuleSpaces::SwRelNumRuleSpaces( SwDoc& rDoc, BOOL bNDoc )
-    : bNewDoc( bNDoc )
+SwRelNumRuleSpaces::SwRelNumRuleSpaces( SwDoc& rDoc, sal_Bool bNDoc )
+        : bNewDoc( bNDoc )
 {
-    pNumRuleTbl = new SwNumRuleTbl( 8, 8 );
-    if( !bNDoc )
-        pNumRuleTbl->Insert( &rDoc.GetNumRuleTbl(), 0 );
+        pNumRuleTbl = new SwNumRuleTbl( 8, 8 );
+        if( !bNDoc )
+                pNumRuleTbl->Insert( &rDoc.GetNumRuleTbl(), 0 );
 }
 
 SwRelNumRuleSpaces::~SwRelNumRuleSpaces()
 {
-    if( pNumRuleTbl )
-    {
-        pNumRuleTbl->Remove( 0, pNumRuleTbl->Count() );
-        delete pNumRuleTbl;
-    }
+        if( pNumRuleTbl )
+        {
+                pNumRuleTbl->Remove( 0, pNumRuleTbl->Count() );
+                delete pNumRuleTbl;
+        }
 }
 
 void SwRelNumRuleSpaces::SetNumRelSpaces( SwDoc& rDoc )
 {
-    const SwNumRuleTbl* pRuleTbl = NULL;
+        const SwNumRuleTbl* pRuleTbl = NULL;
 
-    if( !bNewDoc )
-    {
-        // jetzt alle schon vorhanden NumRules aus dem Array entfernen,
-        // damit nur die neuen angepasst werden
-        SwNumRuleTbl aNumRuleTbl;
-        aNumRuleTbl.Insert( pNumRuleTbl, 0 );
-        pNumRuleTbl->Remove( 0, pNumRuleTbl->Count() );
-        const SwNumRuleTbl& rRuleTbl = rDoc.GetNumRuleTbl();
-        SwNumRule* pRule;
+        if( !bNewDoc )
+        {
+                // jetzt alle schon vorhanden NumRules aus dem Array entfernen,
+                // damit nur die neuen angepasst werden
+                SwNumRuleTbl aNumRuleTbl;
+                aNumRuleTbl.Insert( pNumRuleTbl, 0 );
+                pNumRuleTbl->Remove( 0, pNumRuleTbl->Count() );
+                const SwNumRuleTbl& rRuleTbl = rDoc.GetNumRuleTbl();
+                SwNumRule* pRule;
 
-        for( USHORT n = 0; n < rRuleTbl.Count(); ++n )
-            if( USHRT_MAX == aNumRuleTbl.GetPos( ( pRule = rRuleTbl[ n ] )))
-                // war noch nicht vorhanden, also neu
-                pNumRuleTbl->Insert( pRule, pNumRuleTbl->Count() );
+                for( sal_uInt16 n = 0; n < rRuleTbl.Count(); ++n )
+                        if( USHRT_MAX == aNumRuleTbl.GetPos( ( pRule = rRuleTbl[ n ] )))
+                                // war noch nicht vorhanden, also neu
+                                pNumRuleTbl->Insert( pRule, pNumRuleTbl->Count() );
 
-        aNumRuleTbl.Remove( 0, aNumRuleTbl.Count() );
+                aNumRuleTbl.Remove( 0, aNumRuleTbl.Count() );
 
         pRuleTbl = pNumRuleTbl;
-    }
+        }
     else
     {
         pRuleTbl = &rDoc.GetNumRuleTbl();
     }
 
-    if( pRuleTbl )
-    {
-        for( USHORT n = pRuleTbl->Count(); n; )
+        if( pRuleTbl )
         {
-            SwNumRule* pRule = (*pRuleTbl)[ --n ];
-            // Rule noch gueltig und am Doc vorhanden?
-            if( USHRT_MAX != rDoc.GetNumRuleTbl().GetPos( pRule ))
-            {
+                for( sal_uInt16 n = pRuleTbl->Count(); n; )
+                {
+                        SwNumRule* pRule = (*pRuleTbl)[ --n ];
+                        // Rule noch gueltig und am Doc vorhanden?
+                        if( USHRT_MAX != rDoc.GetNumRuleTbl().GetPos( pRule ))
+                        {
                 // --> OD 2008-02-19 #refactorlists#
 //                SwNumRuleInfo aUpd( pRule->GetName() );
 //                aUpd.MakeList( rDoc );
 
 //                // bei allen nmumerierten Absaetzen vom linken Rand
 //                // den absoluten Wert des NumFormates abziehen
-//                for( ULONG nUpdPos = 0; nUpdPos < aUpd.GetList().Count();
+//                for( sal_uLong nUpdPos = 0; nUpdPos < aUpd.GetList().Count();
 //                    ++nUpdPos )
 //                {
 //                    SwTxtNode* pNd = aUpd.GetList().GetObject( nUpdPos );
@@ -511,224 +511,224 @@ void SwRelNumRuleSpaces::SetNumRelSpaces( SwDoc& rDoc )
                     SetNumLSpace( *pNd, *pRule );
                 }
                 // <--
-            }
+                        }
+                }
         }
-    }
 
-    if( pNumRuleTbl )
-    {
-        pNumRuleTbl->Remove( 0, pNumRuleTbl->Count() );
-        delete pNumRuleTbl, pNumRuleTbl = 0;
-    }
+        if( pNumRuleTbl )
+        {
+                pNumRuleTbl->Remove( 0, pNumRuleTbl->Count() );
+                delete pNumRuleTbl, pNumRuleTbl = 0;
+        }
 
-    if( bNewDoc )
-    {
-        SetOultineRelSpaces( SwNodeIndex( rDoc.GetNodes() ),
-                            SwNodeIndex( rDoc.GetNodes().GetEndOfContent()));
-    }
+        if( bNewDoc )
+        {
+                SetOultineRelSpaces( SwNodeIndex( rDoc.GetNodes() ),
+                                                        SwNodeIndex( rDoc.GetNodes().GetEndOfContent()));
+        }
 }
 
 void SwRelNumRuleSpaces::SetOultineRelSpaces( const SwNodeIndex& rStt,
-                                            const SwNodeIndex& rEnd )
+                                                                                        const SwNodeIndex& rEnd )
 {
-    SwDoc* pDoc = rStt.GetNode().GetDoc();
-    const SwOutlineNodes& rOutlNds = pDoc->GetNodes().GetOutLineNds();
-    if( rOutlNds.Count() )
-    {
-        USHORT nPos;
-        rOutlNds.Seek_Entry( &rStt.GetNode(), &nPos );
-        for( ; nPos < rOutlNds.Count() &&
-                rOutlNds[ nPos ]->GetIndex() < rEnd.GetIndex(); ++nPos )
+        SwDoc* pDoc = rStt.GetNode().GetDoc();
+        const SwOutlineNodes& rOutlNds = pDoc->GetNodes().GetOutLineNds();
+        if( rOutlNds.Count() )
         {
-            SwTxtNode* pNd = rOutlNds[ nPos ]->GetTxtNode();
-            if( pNd->IsOutline() && !pNd->GetNumRule() )
-                SetNumLSpace( *pNd, *pDoc->GetOutlineNumRule() );
+                sal_uInt16 nPos;
+                rOutlNds.Seek_Entry( &rStt.GetNode(), &nPos );
+                for( ; nPos < rOutlNds.Count() &&
+                                rOutlNds[ nPos ]->GetIndex() < rEnd.GetIndex(); ++nPos )
+                {
+                        SwTxtNode* pNd = rOutlNds[ nPos ]->GetTxtNode();
+                        if( pNd->IsOutline() && !pNd->GetNumRule() )
+                                SetNumLSpace( *pNd, *pDoc->GetOutlineNumRule() );
+                }
         }
-    }
 }
 
 void SwRelNumRuleSpaces::SetNumLSpace( SwTxtNode& rNd, const SwNumRule& rRule )
 {
-    BOOL bOutlineRule = OUTLINE_RULE == rRule.GetRuleType();
+        sal_Bool bOutlineRule = OUTLINE_RULE == rRule.GetRuleType();
     // --> OD 2005-11-18 #128056#
     // correction of refactoring done by cws swnumtree:
     // - assure a correct level for retrieving numbering format.
-//    BYTE nLvl = rNd.GetLevel();
-    BYTE nLvl = 0;
+//    sal_uInt8 nLvl = rNd.GetLevel();
+    sal_uInt8 nLvl = 0;
     if ( rNd.GetActualListLevel() >= 0 && rNd.GetActualListLevel() < MAXLEVEL )
     {
-        nLvl = static_cast< BYTE >(rNd.GetActualListLevel());
+        nLvl = static_cast< sal_uInt8 >(rNd.GetActualListLevel());
     }
     // <--
-    const SwNumFmt& rFmt = rRule.Get( nLvl );
-    const SvxLRSpaceItem& rLR = rNd.GetSwAttrSet().GetLRSpace();
+        const SwNumFmt& rFmt = rRule.Get( nLvl );
+        const SvxLRSpaceItem& rLR = rNd.GetSwAttrSet().GetLRSpace();
 
-    SvxLRSpaceItem aLR( rLR );
-    aLR.SetTxtFirstLineOfst( 0 );
+        SvxLRSpaceItem aLR( rLR );
+        aLR.SetTxtFirstLineOfst( 0 );
 
-    // sagt der Node, das die Numerierung den Wert vorgibt?
-    if( !bOutlineRule && rNd.IsSetNumLSpace() )
-        aLR.SetTxtLeft( 0 );
-    else
-    {
-        long nLeft = rFmt.GetAbsLSpace(), nParaLeft = rLR.GetTxtLeft();
-        if( 0 < rLR.GetTxtFirstLineOfst() )
-            nParaLeft += rLR.GetTxtFirstLineOfst();
-        else if( nParaLeft >= nLeft )
-            // #82963#/#82962#: set correct paragraph indent
-            nParaLeft -= nLeft;
+        // sagt der Node, das die Numerierung den Wert vorgibt?
+        if( !bOutlineRule && rNd.IsSetNumLSpace() )
+                aLR.SetTxtLeft( 0 );
         else
-            //#83154#, Don't think any of the older #80856# bugfix code is
-            //relevent anymore.
-            nParaLeft = rLR.GetTxtLeft()+rLR.GetTxtFirstLineOfst();
-        aLR.SetTxtLeft( nParaLeft );
-    }
+        {
+                long nLeft = rFmt.GetAbsLSpace(), nParaLeft = rLR.GetTxtLeft();
+                if( 0 < rLR.GetTxtFirstLineOfst() )
+                        nParaLeft += rLR.GetTxtFirstLineOfst();
+                else if( nParaLeft >= nLeft )
+                        // #82963#/#82962#: set correct paragraph indent
+                        nParaLeft -= nLeft;
+                else
+                        //#83154#, Don't think any of the older #80856# bugfix code is
+                        //relevent anymore.
+                        nParaLeft = rLR.GetTxtLeft()+rLR.GetTxtFirstLineOfst();
+                aLR.SetTxtLeft( nParaLeft );
+        }
 
-    if( aLR.GetTxtLeft() != rLR.GetTxtLeft() )
-    {
-        //bevor rLR geloescht wird!
-        long nOffset = rLR.GetTxtLeft() - aLR.GetTxtLeft();
+        if( aLR.GetTxtLeft() != rLR.GetTxtLeft() )
+        {
+                //bevor rLR geloescht wird!
+                long nOffset = rLR.GetTxtLeft() - aLR.GetTxtLeft();
         rNd.SetAttr( aLR );
 
-        // Tabs anpassen !!
-        const SfxPoolItem* pItem;
-        if( SFX_ITEM_SET == rNd.GetSwAttrSet().GetItemState(
-                RES_PARATR_TABSTOP, TRUE, &pItem ))
-        {
-            SvxTabStopItem aTStop( *(SvxTabStopItem*)pItem );
-            for( USHORT n = 0; n < aTStop.Count(); ++n )
-            {
-                SvxTabStop& rTab = (SvxTabStop&)aTStop[ n ];
-                if( SVX_TAB_ADJUST_DEFAULT != rTab.GetAdjustment() )
+                // Tabs anpassen !!
+                const SfxPoolItem* pItem;
+                if( SFX_ITEM_SET == rNd.GetSwAttrSet().GetItemState(
+                                RES_PARATR_TABSTOP, sal_True, &pItem ))
                 {
-                    if( !rTab.GetTabPos() )
-                    {
-                        aTStop.Remove( n );
-                        --n;
-                    }
-                    else
-                        rTab.GetTabPos() += nOffset;
-                }
-            }
+                        SvxTabStopItem aTStop( *(SvxTabStopItem*)pItem );
+                        for( sal_uInt16 n = 0; n < aTStop.Count(); ++n )
+                        {
+                                SvxTabStop& rTab = (SvxTabStop&)aTStop[ n ];
+                                if( SVX_TAB_ADJUST_DEFAULT != rTab.GetAdjustment() )
+                                {
+                                        if( !rTab.GetTabPos() )
+                                        {
+                                                aTStop.Remove( n );
+                                                --n;
+                                        }
+                                        else
+                                                rTab.GetTabPos() += nOffset;
+                                }
+                        }
             rNd.SetAttr( aTStop );
+                }
         }
-    }
 }
 
 /*  */
 
 
 void CalculateFlySize(SfxItemSet& rFlySet, const SwNodeIndex& rAnchor,
-    SwTwips nPageWidth)
+        SwTwips nPageWidth)
 {
-    const SfxPoolItem* pItem = 0;
-    if( SFX_ITEM_SET != rFlySet.GetItemState( RES_FRM_SIZE, TRUE, &pItem ) ||
-        MINFLY > ((SwFmtFrmSize*)pItem)->GetWidth() )
-    {
-        SwFmtFrmSize aSz((SwFmtFrmSize&)rFlySet.Get(RES_FRM_SIZE, TRUE));
-        if (pItem)
-            aSz = (SwFmtFrmSize&)(*pItem);
-
-        SwTwips nWidth;
-        // dann die Breite des Flys selbst bestimmen. Ist eine Tabelle
-        // defininiert, dann benutze deren Breite, sonst die Breite der
-        // Seite
-        const SwTableNode* pTblNd = rAnchor.GetNode().FindTableNode();
-        if( pTblNd )
-            nWidth = pTblNd->GetTable().GetFrmFmt()->GetFrmSize().GetWidth();
-        else
-            nWidth = nPageWidth;
-
-        const SwNodeIndex* pSttNd = ((SwFmtCntnt&)rFlySet.Get( RES_CNTNT )).
-                                    GetCntntIdx();
-        if( pSttNd )
+        const SfxPoolItem* pItem = 0;
+        if( SFX_ITEM_SET != rFlySet.GetItemState( RES_FRM_SIZE, sal_True, &pItem ) ||
+                MINFLY > ((SwFmtFrmSize*)pItem)->GetWidth() )
         {
-            BOOL bOnlyOneNode = TRUE;
-            ULONG nMinFrm = 0;
-            ULONG nMaxFrm = 0;
-            SwTxtNode* pFirstTxtNd = 0;
-            SwNodeIndex aIdx( *pSttNd, 1 );
-            SwNodeIndex aEnd( *pSttNd->GetNode().EndOfSectionNode() );
-            while( aIdx < aEnd )
-            {
-                SwTxtNode *pTxtNd = aIdx.GetNode().GetTxtNode();
-                if( pTxtNd )
-                {
-                    if( !pFirstTxtNd )
-                        pFirstTxtNd = pTxtNd;
-                    else if( pFirstTxtNd != pTxtNd )
-                    {
-                        // forget it
-                        bOnlyOneNode = FALSE;
-                        break;
-                    }
+                SwFmtFrmSize aSz((SwFmtFrmSize&)rFlySet.Get(RES_FRM_SIZE, sal_True));
+                if (pItem)
+                        aSz = (SwFmtFrmSize&)(*pItem);
 
-                    ULONG nAbsMinCnts;
-                    pTxtNd->GetMinMaxSize( aIdx.GetIndex(), nMinFrm,
-                                            nMaxFrm, nAbsMinCnts );
-                }
-                aIdx++;
-            }
+                SwTwips nWidth;
+                // dann die Breite des Flys selbst bestimmen. Ist eine Tabelle
+                // defininiert, dann benutze deren Breite, sonst die Breite der
+                // Seite
+                const SwTableNode* pTblNd = rAnchor.GetNode().FindTableNode();
+                if( pTblNd )
+                        nWidth = pTblNd->GetTable().GetFrmFmt()->GetFrmSize().GetWidth();
+                else
+                        nWidth = nPageWidth;
 
-            if( bOnlyOneNode )
-            {
-                if( nMinFrm < MINLAY && pFirstTxtNd )
+                const SwNodeIndex* pSttNd = ((SwFmtCntnt&)rFlySet.Get( RES_CNTNT )).
+                                                                        GetCntntIdx();
+                if( pSttNd )
                 {
-                    // if the first node dont contained any content, then
-                    // insert one char in it calc again and delete once again
-                    SwIndex aNdIdx( pFirstTxtNd );
+                        sal_Bool bOnlyOneNode = sal_True;
+                        sal_uLong nMinFrm = 0;
+                        sal_uLong nMaxFrm = 0;
+                        SwTxtNode* pFirstTxtNd = 0;
+                        SwNodeIndex aIdx( *pSttNd, 1 );
+                        SwNodeIndex aEnd( *pSttNd->GetNode().EndOfSectionNode() );
+                        while( aIdx < aEnd )
+                        {
+                                SwTxtNode *pTxtNd = aIdx.GetNode().GetTxtNode();
+                                if( pTxtNd )
+                                {
+                                        if( !pFirstTxtNd )
+                                                pFirstTxtNd = pTxtNd;
+                                        else if( pFirstTxtNd != pTxtNd )
+                                        {
+                                                // forget it
+                                                bOnlyOneNode = sal_False;
+                                                break;
+                                        }
+
+                                        sal_uLong nAbsMinCnts;
+                                        pTxtNd->GetMinMaxSize( aIdx.GetIndex(), nMinFrm,
+                                                                                        nMaxFrm, nAbsMinCnts );
+                                }
+                                aIdx++;
+                        }
+
+                        if( bOnlyOneNode )
+                        {
+                                if( nMinFrm < MINLAY && pFirstTxtNd )
+                                {
+                                        // if the first node dont contained any content, then
+                                        // insert one char in it calc again and delete once again
+                                        SwIndex aNdIdx( pFirstTxtNd );
                     pFirstTxtNd->InsertText( String::CreateFromAscii(
                             RTL_CONSTASCII_STRINGPARAM( "MM" )), aNdIdx );
-                    ULONG nAbsMinCnts;
-                    pFirstTxtNd->GetMinMaxSize( pFirstTxtNd->GetIndex(),
-                                            nMinFrm, nMaxFrm, nAbsMinCnts );
-                    aNdIdx -= 2;
+                                        sal_uLong nAbsMinCnts;
+                                        pFirstTxtNd->GetMinMaxSize( pFirstTxtNd->GetIndex(),
+                                                                                        nMinFrm, nMaxFrm, nAbsMinCnts );
+                                        aNdIdx -= 2;
                     pFirstTxtNd->EraseText( aNdIdx, 2 );
                 }
 
-                // Umrandung und Abstand zum Inhalt beachten
-                const SvxBoxItem& rBoxItem = (SvxBoxItem&)rFlySet.Get( RES_BOX );
-                USHORT nLine = BOX_LINE_LEFT;
-                for( int i = 0; i < 2; ++i )
-                {
-                    const SvxBorderLine* pLn = rBoxItem.GetLine( nLine );
-                    if( pLn )
-                    {
-                        USHORT nWidthTmp = pLn->GetOutWidth() + pLn->GetInWidth();
+                                // Umrandung und Abstand zum Inhalt beachten
+                                const SvxBoxItem& rBoxItem = (SvxBoxItem&)rFlySet.Get( RES_BOX );
+                                sal_uInt16 nLine = BOX_LINE_LEFT;
+                                for( int i = 0; i < 2; ++i )
+                                {
+                                        const SvxBorderLine* pLn = rBoxItem.GetLine( nLine );
+                                        if( pLn )
+                                        {
+                                                sal_uInt16 nWidthTmp = pLn->GetOutWidth() + pLn->GetInWidth();
                         nWidthTmp = nWidthTmp + rBoxItem.GetDistance( nLine );
-                        nMinFrm += nWidthTmp;
-                        nMaxFrm += nWidthTmp;
-                    }
-                    nLine = BOX_LINE_RIGHT;
+                                                nMinFrm += nWidthTmp;
+                                                nMaxFrm += nWidthTmp;
+                                        }
+                                        nLine = BOX_LINE_RIGHT;
+                                }
+
+                                // Mindestbreite fuer Inhalt einhalten
+                                if( nMinFrm < MINLAY )
+                                        nMinFrm = MINLAY;
+                                if( nMaxFrm < MINLAY )
+                                        nMaxFrm = MINLAY;
+
+                                if( nWidth > (sal_uInt16)nMaxFrm )
+                                        nWidth = nMaxFrm;
+                                else if( nWidth > (sal_uInt16)nMinFrm )
+                                        nWidth = nMinFrm;
+                        }
                 }
 
-                // Mindestbreite fuer Inhalt einhalten
-                if( nMinFrm < MINLAY )
-                    nMinFrm = MINLAY;
-                if( nMaxFrm < MINLAY )
-                    nMaxFrm = MINLAY;
+                if( MINFLY > nWidth )
+                        nWidth = MINFLY;
 
-                if( nWidth > (USHORT)nMaxFrm )
-                    nWidth = nMaxFrm;
-                else if( nWidth > (USHORT)nMinFrm )
-                    nWidth = nMinFrm;
-            }
+                aSz.SetWidth( nWidth );
+                if( MINFLY > aSz.GetHeight() )
+                        aSz.SetHeight( MINFLY );
+                rFlySet.Put( aSz );
         }
-
-        if( MINFLY > nWidth )
-            nWidth = MINFLY;
-
-        aSz.SetWidth( nWidth );
-        if( MINFLY > aSz.GetHeight() )
-            aSz.SetHeight( MINFLY );
-        rFlySet.Put( aSz );
-    }
-    else if( MINFLY > ((SwFmtFrmSize*)pItem)->GetHeight() )
-    {
-        SwFmtFrmSize aSz( *(SwFmtFrmSize*)pItem );
-        aSz.SetHeight( MINFLY );
-        rFlySet.Put( aSz );
-    }
+        else if( MINFLY > ((SwFmtFrmSize*)pItem)->GetHeight() )
+        {
+                SwFmtFrmSize aSz( *(SwFmtFrmSize*)pItem );
+                aSz.SetHeight( MINFLY );
+                rFlySet.Put( aSz );
+        }
 }
 
 /*  */
@@ -858,7 +858,7 @@ rtl_TextEncoding CharSetFromName(const String& rChrSetStr)
 
     ASSERT(nRet != pStart->eCode, "TXT: That was an unknown language!");
 
-    return nRet;
+        return nRet;
 }
 
 
@@ -887,55 +887,55 @@ String NameFromCharSet(rtl_TextEncoding nChrSet)
 // for the automatic conversion (mail/news/...)
 // The user data contains the options for the ascii import/export filter.
 // The format is:
-//  1. CharSet - as ascii chars
-//  2. LineEnd - as CR/LR/CRLF
-//  3. Fontname
-//  4. Language
+//      1. CharSet - as ascii chars
+//      2. LineEnd - as CR/LR/CRLF
+//      3. Fontname
+//      4. Language
 // the delimetercharacter is ","
 //
 
 void SwAsciiOptions::ReadUserData( const String& rStr )
 {
-    xub_StrLen nToken = 0;
-    USHORT nCnt = 0;
-    String sToken;
-    do {
-        if( 0 != (sToken = rStr.GetToken( 0, ',', nToken )).Len() )
-        {
-            switch( nCnt )
-            {
-            case 0:     // CharSet
+        xub_StrLen nToken = 0;
+        sal_uInt16 nCnt = 0;
+        String sToken;
+        do {
+                if( 0 != (sToken = rStr.GetToken( 0, ',', nToken )).Len() )
+                {
+                        switch( nCnt )
+                        {
+                        case 0:         // CharSet
                 eCharSet = CharSetFromName(sToken);
-                break;
-            case 1:     // LineEnd
-                if( sToken.EqualsIgnoreCaseAscii( "CRLF" ))
-                    eCRLF_Flag = LINEEND_CRLF;
-                else if( sToken.EqualsIgnoreCaseAscii( "LF" ))
-                    eCRLF_Flag = LINEEND_LF;
-                else
-                    eCRLF_Flag = LINEEND_CR;
-                break;
-            case 2:     // fontname
-                sFont = sToken;
-                break;
-            case 3:     // Language
+                                break;
+                        case 1:         // LineEnd
+                                if( sToken.EqualsIgnoreCaseAscii( "CRLF" ))
+                                        eCRLF_Flag = LINEEND_CRLF;
+                                else if( sToken.EqualsIgnoreCaseAscii( "LF" ))
+                                        eCRLF_Flag = LINEEND_LF;
+                                else
+                                        eCRLF_Flag = LINEEND_CR;
+                                break;
+                        case 2:         // fontname
+                                sFont = sToken;
+                                break;
+                        case 3:         // Language
                 nLanguage = MsLangId::convertIsoStringToLanguage( sToken );
-                break;
-            }
-        }
-        ++nCnt;
-    } while( STRING_NOTFOUND != nToken );
+                                break;
+                        }
+                }
+                ++nCnt;
+        } while( STRING_NOTFOUND != nToken );
 }
 
 void SwAsciiOptions::WriteUserData( String& rStr )
 {
-    // 1. charset
-    rStr = NameFromCharSet(eCharSet);
-    rStr += ',';
+        // 1. charset
+        rStr = NameFromCharSet(eCharSet);
+        rStr += ',';
 
-    // 2. LineEnd
-    switch(eCRLF_Flag)
-    {
+        // 2. LineEnd
+        switch(eCRLF_Flag)
+        {
         case LINEEND_CRLF:
             rStr.AppendAscii( "CRLF" );
             break;
@@ -945,20 +945,20 @@ void SwAsciiOptions::WriteUserData( String& rStr )
         case LINEEND_LF:
             rStr.AppendAscii(  "LF" );
             break;
-    }
-    rStr += ',';
+        }
+        rStr += ',';
 
-    // 3. Fontname
-    rStr += sFont;
-    rStr += ',';
+        // 3. Fontname
+        rStr += sFont;
+        rStr += ',';
 
-    // 4. Language
-    if (nLanguage)
-    {
+        // 4. Language
+        if (nLanguage)
+        {
         rtl::OUString sTmp = MsLangId::convertLanguageToIsoString( nLanguage );
         rStr += (String)sTmp;
-    }
-    rStr += ',';
+        }
+        rStr += ',';
 }
 
 extern "C" { static void SAL_CALL thisModule() {} }
@@ -966,11 +966,11 @@ extern "C" { static void SAL_CALL thisModule() {} }
 static oslGenericFunction GetMswordLibSymbol( const char *pSymbol )
 {
     static ::osl::Module aModule;
-    static sal_Bool bLoaded = sal_False;
+        static sal_Bool bLoaded = sal_False;
     static ::rtl::OUString aLibName( RTL_CONSTASCII_USTRINGPARAM( SVLIBRARY( "msword" ) ) );
-    if (!bLoaded)
-        bLoaded = SvLibrary::LoadModule( aModule, aLibName, &thisModule );
-    if (bLoaded)
+        if (!bLoaded)
+                bLoaded = SvLibrary::LoadModule( aModule, aLibName, &thisModule );
+        if (bLoaded)
         return aModule.getFunctionSymbol( ::rtl::OUString::createFromAscii( pSymbol ) );
     return NULL;
 }
@@ -1015,23 +1015,23 @@ void GetWW8Writer( const String& rFltName, const String& rBaseURL, WriterRef& xR
         xRet = WriterRef(0);
 }
 
-typedef ULONG ( __LOADONCALLAPI *SaveOrDel )( SfxObjectShell&, SotStorage&, BOOL, const String& );
-typedef ULONG ( __LOADONCALLAPI *GetSaveWarning )( SfxObjectShell& );
+typedef sal_uLong ( __LOADONCALLAPI *SaveOrDel )( SfxObjectShell&, SotStorage&, sal_Bool, const String& );
+typedef sal_uLong ( __LOADONCALLAPI *GetSaveWarning )( SfxObjectShell& );
 
-ULONG SaveOrDelMSVBAStorage( SfxObjectShell& rDoc, SotStorage& rStor, BOOL bSaveInto, const String& rStorageName )
+sal_uLong SaveOrDelMSVBAStorage( SfxObjectShell& rDoc, SotStorage& rStor, sal_Bool bSaveInto, const String& rStorageName )
 {
     SaveOrDel pFunction = reinterpret_cast<SaveOrDel>( GetMswordLibSymbol( "SaveOrDelMSVBAStorage_ww8" ) );
     if( pFunction )
-        return pFunction( rDoc, rStor, bSaveInto, rStorageName );
-    return ERRCODE_NONE;
+                return pFunction( rDoc, rStor, bSaveInto, rStorageName );
+        return ERRCODE_NONE;
 }
 
-ULONG GetSaveWarningOfMSVBAStorage( SfxObjectShell &rDocS )
+sal_uLong GetSaveWarningOfMSVBAStorage( SfxObjectShell &rDocS )
 {
     GetSaveWarning pFunction = reinterpret_cast<GetSaveWarning>( GetMswordLibSymbol( "GetSaveWarningOfMSVBAStorage_ww8" ) );
     if( pFunction )
-            return pFunction( rDocS );
-    return ERRCODE_NONE;
+                        return pFunction( rDocS );
+        return ERRCODE_NONE;
 }
 
 

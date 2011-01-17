@@ -376,7 +376,7 @@ SwNumberTree::tSwNumTreeNumber SwNodeNum::GetStartValue() const
 
             if (nLevel >= 0 && nLevel < MAXLEVEL)
             {
-                const SwNumFmt * pFmt = pRule->GetNumFmt( static_cast<USHORT>(nLevel));
+                const SwNumFmt * pFmt = pRule->GetNumFmt( static_cast<sal_uInt16>(nLevel));
 
                 if (pFmt)
                     aResult = pFmt->GetStart();

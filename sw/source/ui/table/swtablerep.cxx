@@ -81,9 +81,9 @@
 
 #ifdef DEBUG_TBLDLG
 
-void DbgTColumn(TColumn* pTColumn, USHORT nCount)
+void DbgTColumn(TColumn* pTColumn, sal_uInt16 nCount)
 {
-    for(USHORT i = 0; i < nCount; i++)
+    for(sal_uInt16 i = 0; i < nCount; i++)
     {
         String sMsg(i);
         sMsg += pTColumn[i].bVisible ? " v " : " h ";
@@ -96,7 +96,7 @@ void DbgTColumn(TColumn* pTColumn, USHORT nCount)
 
 /*-----------------20.08.96 09.43-------------------
 --------------------------------------------------*/
-SwTableRep::SwTableRep( const SwTabCols& rTabCol, BOOL bCplx )
+SwTableRep::SwTableRep( const SwTabCols& rTabCol, sal_Bool bCplx )
     :
     nTblWidth(0),
     nSpace(0),
@@ -105,15 +105,15 @@ SwTableRep::SwTableRep( const SwTabCols& rTabCol, BOOL bCplx )
     nAlign(0),
     nWidthPercent(0),
     bComplex(bCplx),
-    bLineSelected(FALSE),
-    bWidthChanged(FALSE),
-    bColsChanged(FALSE)
+    bLineSelected(sal_False),
+    bWidthChanged(sal_False),
+    bColsChanged(sal_False)
 {
     nAllCols = nColCount = rTabCol.Count();
     pTColumns = new TColumn[ nColCount + 1 ];
     SwTwips nStart = 0,
             nEnd;
-    for( USHORT i = 0; i < nAllCols; ++i )
+    for( sal_uInt16 i = 0; i < nAllCols; ++i )
     {
         nEnd  = rTabCol[ i ] - rTabCol.GetLeft();
         pTColumns[ i ].nWidth = nEnd - nStart;
@@ -123,7 +123,7 @@ SwTableRep::SwTableRep( const SwTabCols& rTabCol, BOOL bCplx )
         nStart = nEnd;
     }
     pTColumns[ nAllCols ].nWidth = rTabCol.GetRight() - rTabCol.GetLeft() - nStart;
-    pTColumns[ nAllCols ].bVisible = TRUE;
+    pTColumns[ nAllCols ].bVisible = sal_True;
     nColCount++;
     nAllCols++;
 }
@@ -137,18 +137,18 @@ SwTableRep::~SwTableRep()
 
 /*-----------------20.08.96 13.33-------------------
 --------------------------------------------------*/
-BOOL SwTableRep::FillTabCols( SwTabCols& rTabCols ) const
+sal_Bool SwTableRep::FillTabCols( SwTabCols& rTabCols ) const
 {
     long nOldLeft = rTabCols.GetLeft(),
          nOldRight = rTabCols.GetRight();
 
-    BOOL bSingleLine = FALSE;
-    USHORT i;
+    sal_Bool bSingleLine = sal_False;
+    sal_uInt16 i;
 
     for ( i = 0; i < rTabCols.Count(); ++i )
         if(!pTColumns[i].bVisible)
         {
-            bSingleLine = TRUE;
+            bSingleLine = sal_True;
             break;
         }
 
@@ -174,18 +174,18 @@ BOOL SwTableRep::FillTabCols( SwTabCols& rTabCols ) const
             nStart = nEnd;
         }
         pOldTColumns[nAllCols - 1].nWidth = rTabCols.GetRight() - rTabCols.GetLeft() - nStart;
-        pOldTColumns[nAllCols - 1].bVisible = TRUE;
+        pOldTColumns[nAllCols - 1].bVisible = sal_True;
 
 #ifdef DEBUG_TBLDLG
 #define DbgTColumn(pOldTColumns, nAllCols);
 #endif
 
-        USHORT nOldPos = 0;
-        USHORT nNewPos = 0;
+        sal_uInt16 nOldPos = 0;
+        sal_uInt16 nNewPos = 0;
         SwTwips nOld = 0;
         SwTwips nNew = 0;
-        BOOL bOld = FALSE;
-        BOOL bFirst = TRUE;
+        sal_Bool bOld = sal_False;
+        sal_Bool bFirst = sal_True;
         i = 0;
 
         while ( i < nAllCols -1 )
@@ -204,10 +204,10 @@ BOOL SwTableRep::FillTabCols( SwTabCols& rTabCols ) const
                 if(pOldTColumns[nNewPos - 1].bVisible)
                     break;
             }
-            bFirst = FALSE;
+            bFirst = sal_False;
             // sie muessen sortiert eingefuegt werden
             bOld = nOld < nNew;
-            nPos = USHORT(bOld ? nOld : nNew);
+            nPos = sal_uInt16(bOld ? nOld : nNew);
             rTabCols[i] = nPos + nLeft;
             rTabCols.SetHidden( i, bOld );
             i++;

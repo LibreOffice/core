@@ -46,7 +46,7 @@
 SwUndoInserts::SwUndoInserts( SwUndoId nUndoId, const SwPaM& rPam )
     : SwUndo( nUndoId ), SwUndRng( rPam ),
     pTxtFmtColl( 0 ), pLastNdColl(0), pFrmFmts( 0 ), pFlyUndos(0), pRedlData( 0 ),
-    bSttWasTxtNd( TRUE ), nNdDiff( 0 ), pPos( 0 ), nSetPos( 0 )
+    bSttWasTxtNd( sal_True ), nNdDiff( 0 ), pPos( 0 ), nSetPos( 0 )
 {
     pHistory = new SwHistory;
     SwDoc* pDoc = (SwDoc*)rPam.GetDoc();
@@ -62,8 +62,8 @@ SwUndoInserts::SwUndoInserts( SwUndoId nUndoId, const SwPaM& rPam )
 
         if( !nSttCntnt )    // dann werden Flys mitgenommen !!
         {
-            USHORT nArrLen = pDoc->GetSpzFrmFmts()->Count();
-            for( USHORT n = 0; n < nArrLen; ++n )
+            sal_uInt16 nArrLen = pDoc->GetSpzFrmFmts()->Count();
+            for( sal_uInt16 n = 0; n < nArrLen; ++n )
             {
                 SwFrmFmt* pFmt = (*pDoc->GetSpzFrmFmts())[n];
                 SwFmtAnchor const*const  pAnchor = &pFmt->GetAnchor();
@@ -89,8 +89,8 @@ SwUndoInserts::SwUndoInserts( SwUndoId nUndoId, const SwPaM& rPam )
 
 // setze den Destination-Bereich nach dem Einlesen.
 
-void SwUndoInserts::SetInsertRange( const SwPaM& rPam, BOOL bScanFlys,
-                                    BOOL bSttIsTxtNd )
+void SwUndoInserts::SetInsertRange( const SwPaM& rPam, sal_Bool bScanFlys,
+                                    sal_Bool bSttIsTxtNd )
 {
     const SwPosition* pTmpPos = rPam.End();
     nEndNode = pTmpPos->nNode.GetIndex();
@@ -108,7 +108,7 @@ void SwUndoInserts::SetInsertRange( const SwPaM& rPam, BOOL bScanFlys,
         if( !bSttIsTxtNd )      // wird eine Tabellenselektion eingefuegt,
         {
             ++nSttNode;         // dann stimmt der CopyPam nicht ganz
-            bSttWasTxtNd = FALSE;
+            bSttWasTxtNd = sal_False;
         }
     }
 
@@ -117,8 +117,8 @@ void SwUndoInserts::SetInsertRange( const SwPaM& rPam, BOOL bScanFlys,
         // dann alle neuen Flys zusammen sammeln !!
         SwDoc* pDoc = (SwDoc*)rPam.GetDoc();
         pFlyUndos = new SwUndos();
-        USHORT nFndPos, nArrLen = pDoc->GetSpzFrmFmts()->Count();
-        for( USHORT n = 0; n < nArrLen; ++n )
+        sal_uInt16 nFndPos, nArrLen = pDoc->GetSpzFrmFmts()->Count();
+        for( sal_uInt16 n = 0; n < nArrLen; ++n )
         {
             SwFrmFmt* pFmt = (*pDoc->GetSpzFrmFmts())[n];
             SwFmtAnchor const*const pAnchor = &pFmt->GetAnchor();
@@ -176,15 +176,15 @@ void SwUndoInserts::Undo( SwUndoIter& rUndoIter )
     SwPaM * pPam = rUndoIter.pAktPam;
     SwDoc* pDoc = pPam->GetDoc();
     SetPaM( rUndoIter );
-    BOOL bUndo = pDoc->DoesUndo();
-    pDoc->DoUndo( FALSE );
+    sal_Bool bUndo = pDoc->DoesUndo();
+    pDoc->DoUndo( sal_False );
 
     if( IDocumentRedlineAccess::IsRedlineOn( GetRedlineMode() ))
         pDoc->DeleteRedline( *pPam, true, USHRT_MAX );
 
     // sind an Point/Mark 2 unterschiedliche TextNodes, dann muss ein
     // JoinNext ausgefuehrt werden.
-    BOOL bJoinNext = nSttNode != nEndNode &&
+    sal_Bool bJoinNext = nSttNode != nEndNode &&
                 pPam->GetMark()->nNode.GetNode().GetTxtNode() &&
                 pPam->GetPoint()->nNode.GetNode().GetTxtNode();
 
@@ -199,7 +199,7 @@ void SwUndoInserts::Undo( SwUndoIter& rUndoIter )
                 pLastNdColl = pTxtNd->GetTxtColl();
         }
 
-        RemoveIdxFromRange( *pPam, FALSE );
+        RemoveIdxFromRange( *pPam, sal_False );
         SetPaM( rUndoIter );
 
         // sind Fussnoten oder CntntFlyFrames im Text ??
@@ -220,8 +220,8 @@ void SwUndoInserts::Undo( SwUndoIter& rUndoIter )
 
     if( pFlyUndos )
     {
-        ULONG nTmp = pPam->GetPoint()->nNode.GetIndex();
-        for( USHORT n = pFlyUndos->Count(); n; )
+        sal_uLong nTmp = pPam->GetPoint()->nNode.GetIndex();
+        for( sal_uInt16 n = pFlyUndos->Count(); n; )
             (*pFlyUndos)[ --n ]->Undo( rUndoIter );
         nNdDiff += nTmp - pPam->GetPoint()->nNode.GetIndex();
     }
@@ -293,10 +293,10 @@ void SwUndoInserts::Redo( SwUndoIter& rUndoIter )
     // alte Anfangs-Position fuers Rollback zurueckholen
     if( ( nSttNode != nEndNode || nSttCntnt != nEndCntnt ) && pPos )
     {
-        BOOL bMvBkwrd = MovePtBackward( *pPam );
+        sal_Bool bMvBkwrd = MovePtBackward( *pPam );
 
         // Inhalt wieder einfuegen. (erst pPos abmelden !!)
-        ULONG nMvNd = pPos->nNode.GetIndex();
+        sal_uLong nMvNd = pPos->nNode.GetIndex();
         xub_StrLen nMvCnt = pPos->nContent.GetIndex();
         DELETEZ( pPos );
         MoveFromUndoNds( *pDoc, nMvNd, nMvCnt, *pPam->GetMark() );
@@ -322,7 +322,7 @@ void SwUndoInserts::Redo( SwUndoIter& rUndoIter )
     }
 
     if( pFlyUndos )
-        for( USHORT n = pFlyUndos->Count(); n; )
+        for( sal_uInt16 n = pFlyUndos->Count(); n; )
             (*pFlyUndos)[ --n ]->Redo( rUndoIter );
 
     pHistory->Rollback( pDoc, nSetPos );

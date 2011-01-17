@@ -59,8 +59,8 @@ public:
     SwOLEObj( const String &rName, sal_Int64 nAspect );
     ~SwOLEObj();
 
-    BOOL UnloadObject();
-    static BOOL UnloadObject( ::com::sun::star::uno::Reference< ::com::sun::star::embed::XEmbeddedObject > xObj,
+    sal_Bool UnloadObject();
+    static sal_Bool UnloadObject( ::com::sun::star::uno::Reference< ::com::sun::star::embed::XEmbeddedObject > xObj,
                                 const SwDoc* pDoc,
                                 sal_Int64 nAspect );
 
@@ -70,7 +70,7 @@ public:
     const com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject > GetOleRef();
     svt::EmbeddedObjectRef& GetObject();
     const String& GetCurrentPersistName() const { return aName; }
-    BOOL IsOleRef() const;  //Damit das Objekt nicht unnoetig geladen werden muss.
+    sal_Bool IsOleRef() const;  //Damit das Objekt nicht unnoetig geladen werden muss.
 #endif
 };
 
@@ -85,7 +85,7 @@ class SW_DLLPUBLIC SwOLENode: public SwNoTxtNode
     mutable SwOLEObj aOLEObj;
     Graphic*    pGraphic;
     String sChartTblName;       // bei Chart Objecten: Name der ref. Tabelle
-    BOOL   bOLESizeInvalid;     //Soll beim SwDoc::PrtOLENotify beruecksichtig
+    sal_Bool   bOLESizeInvalid;     //Soll beim SwDoc::PrtOLENotify beruecksichtig
                                 //werden (zum Beispiel kopiert). Ist nicht
                                 //Persistent.
 
@@ -124,14 +124,14 @@ public:
     Graphic* GetHCGraphic(); // tries to retrieve HighContrast representation if possible
     void GetNewReplacement();
 
-    virtual BOOL SavePersistentData();
-    virtual BOOL RestorePersistentData();
+    virtual sal_Bool SavePersistentData();
+    virtual sal_Bool RestorePersistentData();
 
-    BOOL IsInGlobalDocSection() const;
-    BOOL IsOLEObjectDeleted() const;
+    sal_Bool IsInGlobalDocSection() const;
+    sal_Bool IsOLEObjectDeleted() const;
 
-    BOOL IsOLESizeInvalid() const   { return bOLESizeInvalid; }
-    void SetOLESizeInvalid( BOOL b ){ bOLESizeInvalid = b; }
+    sal_Bool IsOLESizeInvalid() const   { return bOLESizeInvalid; }
+    void SetOLESizeInvalid( sal_Bool b ){ bOLESizeInvalid = b; }
 
     sal_Int64 GetAspect() const { return aOLEObj.GetObject().GetViewAspect(); }
     void SetAspect( sal_Int64 nAspect) { aOLEObj.GetObject().SetViewAspect( nAspect ); }

@@ -49,7 +49,7 @@ void DbgLoopStack::Reset()
 {
     nPtr = 0;
     pDbg = 0;
-    for( USHORT i = 0; i < DBG_MAX_STACK; ++i )
+    for( sal_uInt16 i = 0; i < DBG_MAX_STACK; ++i )
         aCount[i] = 0;
 }
 
@@ -103,7 +103,7 @@ void DbgLoopStack::Pop()
 void DbgLoopStack::Print( SvStream &rOS ) const
 {
     rOS << "POS: " << nPtr << '\n';
-    USHORT i;
+    sal_uInt16 i;
     for( i = 0; i < DBG_MAX_STACK; ++i )
         rOS << i << " ";
     rOS << '\n';
@@ -121,7 +121,7 @@ void DbgLoopStack::Print( SvStream &rOS ) const
 
 #include <stdlib.h>
 
-void AssertFail( const char *pErr, const char *pFile, USHORT nLine )
+void AssertFail( const char *pErr, const char *pFile, sal_uInt16 nLine )
 {
     cout << pErr << '\n';
     PrintLoopStack( cout );
@@ -137,12 +137,12 @@ public:
 void Test::Run() const
 {
     cout << "---" << '\n';
-    for( USHORT i = 0; i < 10; ++i )
+    for( sal_uInt16 i = 0; i < 10; ++i )
     {
         cout << "i" << i;
         DBG_LOOP;
         PrintLoopStack( cout );
-        for( USHORT j = 0; j < 10; ++j )
+        for( sal_uInt16 j = 0; j < 10; ++j )
         {
             cout << " j" << j;
             DBG_LOOP;

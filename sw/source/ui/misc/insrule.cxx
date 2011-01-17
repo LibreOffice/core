@@ -82,7 +82,7 @@ SwInsertGrfRulerDlg::SwInsertGrfRulerDlg( Window* pParent ) :
     pExampleVS->InsertItem( 1, 1);
     pExampleVS->SetItemText( 1, sSimple);
 
-    for(USHORT i = 1; i <= aGrfNames.Count(); i++)
+    for(sal_uInt16 i = 1; i <= aGrfNames.Count(); i++)
     {
         pExampleVS->InsertItem( i + 1, i);
         pExampleVS->SetItemText( i + 1, *((String*)aGrfNames.GetObject(i-1)));
@@ -107,7 +107,7 @@ SwInsertGrfRulerDlg::~SwInsertGrfRulerDlg()
 String SwInsertGrfRulerDlg::GetGraphicName()
 {
     String sRet;
-    USHORT nSel = nSelPos - 2; //align selection position with ValueSet index
+    sal_uInt16 nSel = nSelPos - 2; //align selection position with ValueSet index
     if(nSel < aGrfNames.Count())
         sRet = URIHelper::SmartRel2Abs(
             INetURLObject(), *(String*) aGrfNames.GetObject(nSel),
@@ -147,7 +147,7 @@ void __EXPORT SwRulerValueSet::UserDraw( const UserDrawEvent& rUDEvt )
 {
     Rectangle aRect = rUDEvt.GetRect();
     OutputDevice*  pDev = rUDEvt.GetDevice();
-    USHORT  nItemId = rUDEvt.GetItemId();
+    sal_uInt16  nItemId = rUDEvt.GetItemId();
     Point aBLPos = aRect.TopLeft();
 
     // Itemzaehlung beginnt bei 1, und die 1. ist die einfache Linie
@@ -189,7 +189,7 @@ void __EXPORT SwRulerValueSet::UserDraw( const UserDrawEvent& rUDEvt )
         }
         else
         {
-            SetGrfNotFound(TRUE);
+            SetGrfNotFound(sal_True);
         }
     }
     else

@@ -44,7 +44,7 @@
 SwUndoFmtCreate::SwUndoFmtCreate
 (SwUndoId nUndoId, SwFmt * _pNew, SwFmt * _pDerivedFrom, SwDoc * _pDoc)
     : SwUndo(nUndoId), pNew(_pNew),
-      pDoc(_pDoc), pNewSet(NULL), nId(0), bAuto(FALSE)
+      pDoc(_pDoc), pNewSet(NULL), nId(0), bAuto(sal_False)
 {
     if (_pDerivedFrom)
         sDerivedFrom = _pDerivedFrom->GetName();
@@ -70,9 +70,9 @@ void SwUndoFmtCreate::Undo(SwUndoIter &)
             nId = pNew->GetPoolFmtId() & COLL_GET_RANGE_BITS;
             bAuto = pNew->IsAuto();
 
-            BOOL bDoesUndo = pDoc->DoesUndo();
+            sal_Bool bDoesUndo = pDoc->DoesUndo();
 
-            pDoc->DoUndo(FALSE);
+            pDoc->DoUndo(sal_False);
             Delete();
             pDoc->DoUndo(bDoesUndo);
         }
@@ -81,9 +81,9 @@ void SwUndoFmtCreate::Undo(SwUndoIter &)
 
 void SwUndoFmtCreate::Redo(SwUndoIter &)
 {
-    BOOL bDoesUndo = pDoc->DoesUndo();
+    sal_Bool bDoesUndo = pDoc->DoesUndo();
 
-    pDoc->DoUndo(FALSE);
+    pDoc->DoUndo(sal_False);
     SwFmt * pDerivedFrom = Find(sDerivedFrom);
     SwFmt * pFmt = Create(pDerivedFrom);
 
@@ -132,9 +132,9 @@ SwUndoFmtDelete::~SwUndoFmtDelete()
 
 void SwUndoFmtDelete::Undo(SwUndoIter &)
 {
-    BOOL bDoesUndo = pDoc->DoesUndo();
+    sal_Bool bDoesUndo = pDoc->DoesUndo();
 
-    pDoc->DoUndo(FALSE);
+    pDoc->DoUndo(sal_False);
 
     SwFmt * pDerivedFrom = Find(sDerivedFrom);
 
@@ -159,9 +159,9 @@ void SwUndoFmtDelete::Redo(SwUndoIter &)
 
     if (pOld)
     {
-        BOOL bDoesUndo = pDoc->DoesUndo();
+        sal_Bool bDoesUndo = pDoc->DoesUndo();
 
-        pDoc->DoUndo(FALSE);
+        pDoc->DoUndo(sal_False);
         Delete(pOld);
         pDoc->DoUndo(bDoesUndo);
     }
@@ -196,10 +196,10 @@ void SwUndoRenameFmt::Undo(SwUndoIter &)
 
     if (pFmt)
     {
-        BOOL bDoesUndo = pDoc->DoesUndo();
+        sal_Bool bDoesUndo = pDoc->DoesUndo();
 
-        pDoc->DoUndo(FALSE);
-        pDoc->RenameFmt(*pFmt, sOldName, TRUE);
+        pDoc->DoUndo(sal_False);
+        pDoc->RenameFmt(*pFmt, sOldName, sal_True);
         pDoc->DoUndo(bDoesUndo);
     }
 }
@@ -210,10 +210,10 @@ void SwUndoRenameFmt::Redo(SwUndoIter &)
 
     if (pFmt)
     {
-        BOOL bDoesUndo = pDoc->DoesUndo();
+        sal_Bool bDoesUndo = pDoc->DoesUndo();
 
-        pDoc->DoUndo(FALSE);
-        pDoc->RenameFmt(*pFmt, sNewName, TRUE);
+        pDoc->DoUndo(sal_False);
+        pDoc->RenameFmt(*pFmt, sNewName, sal_True);
         pDoc->DoUndo(bDoesUndo);
     }
 }
@@ -237,12 +237,12 @@ SwUndoTxtFmtCollCreate::SwUndoTxtFmtCollCreate
 
 SwFmt * SwUndoTxtFmtCollCreate::Create(SwFmt * pDerivedFrom)
 {
-    return pDoc->MakeTxtFmtColl(sNewName, (SwTxtFmtColl *)pDerivedFrom, TRUE);
+    return pDoc->MakeTxtFmtColl(sNewName, (SwTxtFmtColl *)pDerivedFrom, sal_True);
 }
 
 void SwUndoTxtFmtCollCreate::Delete()
 {
-    pDoc->DelTxtFmtColl((SwTxtFmtColl *) pNew, TRUE);
+    pDoc->DelTxtFmtColl((SwTxtFmtColl *) pNew, sal_True);
 }
 
 SwFmt * SwUndoTxtFmtCollCreate::Find(const String & rName) const
@@ -258,12 +258,12 @@ SwUndoTxtFmtCollDelete::SwUndoTxtFmtCollDelete(SwTxtFmtColl * _pOld,
 
 SwFmt * SwUndoTxtFmtCollDelete::Create(SwFmt * pDerivedFrom)
 {
-    return pDoc->MakeTxtFmtColl(sOldName, (SwTxtFmtColl *) pDerivedFrom, TRUE);
+    return pDoc->MakeTxtFmtColl(sOldName, (SwTxtFmtColl *) pDerivedFrom, sal_True);
 }
 
 void SwUndoTxtFmtCollDelete::Delete(SwFmt * pOld)
 {
-    pDoc->DelTxtFmtColl((SwTxtFmtColl *) pOld, TRUE);
+    pDoc->DelTxtFmtColl((SwTxtFmtColl *) pOld, sal_True);
 }
 
 SwFmt * SwUndoTxtFmtCollDelete::Find(const String & rName) const
@@ -292,12 +292,12 @@ SwUndoCharFmtCreate::SwUndoCharFmtCreate(SwCharFmt * pNewFmt,
 
 SwFmt * SwUndoCharFmtCreate::Create(SwFmt * pDerivedFrom)
 {
-    return pDoc->MakeCharFmt(sNewName, (SwCharFmt *) pDerivedFrom, TRUE);
+    return pDoc->MakeCharFmt(sNewName, (SwCharFmt *) pDerivedFrom, sal_True);
 }
 
 void SwUndoCharFmtCreate::Delete()
 {
-    pDoc->DelCharFmt((SwCharFmt *) pNew, TRUE);
+    pDoc->DelCharFmt((SwCharFmt *) pNew, sal_True);
 }
 
 SwFmt * SwUndoCharFmtCreate::Find(const String & rName) const
@@ -312,12 +312,12 @@ SwUndoCharFmtDelete::SwUndoCharFmtDelete(SwCharFmt * pOld, SwDoc * pDocument)
 
 SwFmt * SwUndoCharFmtDelete::Create(SwFmt * pDerivedFrom)
 {
-    return pDoc->MakeCharFmt(sOldName, (SwCharFmt *) pDerivedFrom, TRUE);
+    return pDoc->MakeCharFmt(sOldName, (SwCharFmt *) pDerivedFrom, sal_True);
 }
 
 void SwUndoCharFmtDelete::Delete(SwFmt * pFmt)
 {
-    pDoc->DelCharFmt((SwCharFmt *) pFmt, TRUE);
+    pDoc->DelCharFmt((SwCharFmt *) pFmt, sal_True);
 }
 
 SwFmt * SwUndoCharFmtDelete::Find(const String & rName) const
@@ -347,12 +347,12 @@ SwUndoFrmFmtCreate::SwUndoFrmFmtCreate(SwFrmFmt * pNewFmt,
 
 SwFmt * SwUndoFrmFmtCreate::Create(SwFmt * pDerivedFrom)
 {
-    return pDoc->MakeFrmFmt(sNewName, (SwFrmFmt *) pDerivedFrom, TRUE, bAuto);
+    return pDoc->MakeFrmFmt(sNewName, (SwFrmFmt *) pDerivedFrom, sal_True, bAuto);
 }
 
 void SwUndoFrmFmtCreate::Delete()
 {
-    pDoc->DelFrmFmt((SwFrmFmt *) pNew, TRUE);
+    pDoc->DelFrmFmt((SwFrmFmt *) pNew, sal_True);
 }
 
 SwFmt * SwUndoFrmFmtCreate::Find(const String & rName) const
@@ -367,12 +367,12 @@ SwUndoFrmFmtDelete::SwUndoFrmFmtDelete(SwFrmFmt * pOld, SwDoc * pDocument)
 
 SwFmt * SwUndoFrmFmtDelete::Create(SwFmt * pDerivedFrom)
 {
-    return pDoc->MakeFrmFmt(sOldName, (SwFrmFmt *) pDerivedFrom, TRUE);
+    return pDoc->MakeFrmFmt(sOldName, (SwFrmFmt *) pDerivedFrom, sal_True);
 }
 
 void SwUndoFrmFmtDelete::Delete(SwFmt * pFmt)
 {
-    pDoc->DelFrmFmt((SwFrmFmt *) pFmt, TRUE);
+    pDoc->DelFrmFmt((SwFrmFmt *) pFmt, sal_True);
 }
 
 SwFmt * SwUndoFrmFmtDelete::Find(const String & rName) const
@@ -401,9 +401,9 @@ SwUndoNumruleCreate::SwUndoNumruleCreate(const SwNumRule * _pNew,
 
 void SwUndoNumruleCreate::Undo(SwUndoIter &)
 {
-    BOOL bDoesUndo = pDoc->DoesUndo();
+    sal_Bool bDoesUndo = pDoc->DoesUndo();
 
-    pDoc->DoUndo(FALSE);
+    pDoc->DoUndo(sal_False);
 
     if (! bInitialized)
     {
@@ -411,16 +411,16 @@ void SwUndoNumruleCreate::Undo(SwUndoIter &)
         bInitialized = true;
     }
 
-    pDoc->DelNumRule(aNew.GetName(), TRUE);
+    pDoc->DelNumRule(aNew.GetName(), sal_True);
     pDoc->DoUndo(bDoesUndo);
 }
 
 void SwUndoNumruleCreate::Redo(SwUndoIter &)
 {
-    BOOL bDoesUndo = pDoc->DoesUndo();
+    sal_Bool bDoesUndo = pDoc->DoesUndo();
 
-    pDoc->DoUndo(FALSE);
-    pDoc->MakeNumRule(aNew.GetName(), &aNew, TRUE);
+    pDoc->DoUndo(sal_False);
+    pDoc->MakeNumRule(aNew.GetName(), &aNew, sal_True);
     pDoc->DoUndo(bDoesUndo);
 }
 
@@ -447,19 +447,19 @@ SwUndoNumruleDelete::SwUndoNumruleDelete(const SwNumRule & rRule,
 
 void SwUndoNumruleDelete::Undo(SwUndoIter &)
 {
-    BOOL bDoesUndo = pDoc->DoesUndo();
+    sal_Bool bDoesUndo = pDoc->DoesUndo();
 
-    pDoc->DoUndo(FALSE);
-    pDoc->MakeNumRule(aOld.GetName(), &aOld, TRUE);
+    pDoc->DoUndo(sal_False);
+    pDoc->MakeNumRule(aOld.GetName(), &aOld, sal_True);
     pDoc->DoUndo(bDoesUndo);
 }
 
 void SwUndoNumruleDelete::Redo(SwUndoIter &)
 {
-    BOOL bDoesUndo = pDoc->DoesUndo();
+    sal_Bool bDoesUndo = pDoc->DoesUndo();
 
-    pDoc->DoUndo(FALSE);
-    pDoc->DelNumRule(aOld.GetName(), TRUE);
+    pDoc->DoUndo(sal_False);
+    pDoc->DelNumRule(aOld.GetName(), sal_True);
     pDoc->DoUndo(bDoesUndo);
 }
 
@@ -482,19 +482,19 @@ SwUndoNumruleRename::SwUndoNumruleRename(const String & _aOldName,
 
 void SwUndoNumruleRename::Undo(SwUndoIter &)
 {
-    BOOL bDoesUndo = pDoc->DoesUndo();
+    sal_Bool bDoesUndo = pDoc->DoesUndo();
 
-    pDoc->DoUndo(FALSE);
-    pDoc->RenameNumRule(aNewName, aOldName, TRUE);
+    pDoc->DoUndo(sal_False);
+    pDoc->RenameNumRule(aNewName, aOldName, sal_True);
     pDoc->DoUndo(bDoesUndo);
 }
 
 void SwUndoNumruleRename::Redo(SwUndoIter &)
 {
-    BOOL bDoesUndo = pDoc->DoesUndo();
+    sal_Bool bDoesUndo = pDoc->DoesUndo();
 
-    pDoc->DoUndo(FALSE);
-    pDoc->RenameNumRule(aOldName, aNewName, TRUE);
+    pDoc->DoUndo(sal_False);
+    pDoc->RenameNumRule(aOldName, aNewName, sal_True);
     pDoc->DoUndo(bDoesUndo);
 }
 

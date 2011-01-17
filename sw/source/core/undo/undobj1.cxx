@@ -65,7 +65,7 @@ SwUndoFlyBase::~SwUndoFlyBase()
         delete pFrmFmt;
 }
 
-void SwUndoFlyBase::InsFly( SwUndoIter& rUndoIter, BOOL bShowSelFrm )
+void SwUndoFlyBase::InsFly( SwUndoIter& rUndoIter, sal_Bool bShowSelFrm )
 {
     SwDoc* pDoc = &rUndoIter.GetDoc();
 
@@ -92,7 +92,7 @@ void SwUndoFlyBase::InsFly( SwUndoIter& rUndoIter, BOOL bShowSelFrm )
 
     if (FLY_AT_PAGE == nRndId)
     {
-        aAnchor.SetPageNum( (USHORT)nNdPgPos );
+        aAnchor.SetPageNum( (sal_uInt16)nNdPgPos );
     }
     else
     {
@@ -157,12 +157,12 @@ void SwUndoFlyBase::InsFly( SwUndoIter& rUndoIter, BOOL bShowSelFrm )
     case FLY_AT_PAGE:
         break;
     }
-    bDelFmt =  FALSE;
+    bDelFmt =  sal_False;
 }
 
 void SwUndoFlyBase::DelFly( SwDoc* pDoc )
 {
-    bDelFmt = TRUE;                     // im DTOR das Format loeschen
+    bDelFmt = sal_True;                     // im DTOR das Format loeschen
     pFrmFmt->DelFrms();                 // Frms vernichten.
 
     // alle Uno-Objecte sollten sich jetzt abmelden
@@ -194,7 +194,7 @@ void SwUndoFlyBase::DelFly( SwDoc* pDoc )
     const SwFmtAnchor& rAnchor = pFrmFmt->GetAnchor();
     const SwPosition* pPos = rAnchor.GetCntntAnchor();
     // die Positionen im Nodes-Array haben sich verschoben
-    nRndId = static_cast<USHORT>(rAnchor.GetAnchorId());
+    nRndId = static_cast<sal_uInt16>(rAnchor.GetAnchorId());
     if (FLY_AS_CHAR == nRndId)
     {
         nNdPgPos = pPos->nNode.GetIndex();
@@ -236,14 +236,14 @@ void SwUndoFlyBase::DelFly( SwDoc* pDoc )
 
 // ----- Undo-InsertFly ------
 
-SwUndoInsLayFmt::SwUndoInsLayFmt( SwFrmFmt* pFormat, ULONG nNodeIdx, xub_StrLen nCntIdx )
+SwUndoInsLayFmt::SwUndoInsLayFmt( SwFrmFmt* pFormat, sal_uLong nNodeIdx, xub_StrLen nCntIdx )
     : SwUndoFlyBase( pFormat, RES_DRAWFRMFMT == pFormat->Which() ?
                                             UNDO_INSDRAWFMT : UNDO_INSLAYFMT ),
     mnCrsrSaveIndexPara( nNodeIdx ), mnCrsrSaveIndexPos( nCntIdx )
 {
     const SwFmtAnchor& rAnchor = pFrmFmt->GetAnchor();
-    nRndId = static_cast<USHORT>(rAnchor.GetAnchorId());
-    bDelFmt = FALSE;
+    nRndId = static_cast<sal_uInt16>(rAnchor.GetAnchorId());
+    bDelFmt = sal_False;
     switch( nRndId )
     {
     case FLY_AT_PAGE:
@@ -262,7 +262,7 @@ SwUndoInsLayFmt::SwUndoInsLayFmt( SwFrmFmt* pFormat, ULONG nNodeIdx, xub_StrLen 
         }
         break;
     default:
-        ASSERT( FALSE, "Was denn fuer ein FlyFrame?" );
+        ASSERT( sal_False, "Was denn fuer ein FlyFrame?" );
     }
 }
 
@@ -285,7 +285,7 @@ void SwUndoInsLayFmt::Undo( SwUndoIter& rUndoIter )
                 SwNodeIndex aEndIdx( rUndoIter.GetDoc().GetNodes(), aIdx.GetNode().EndOfSectionIndex() );
                 SwIndex aIndex( pNode, mnCrsrSaveIndexPos );
                 SwPosition aPos( *pNode, aIndex );
-                rUndoIter.GetDoc().CorrAbs( aIdx, aEndIdx, aPos, TRUE );
+                rUndoIter.GetDoc().CorrAbs( aIdx, aEndIdx, aPos, sal_True );
                 bRemoveIdx = false;
             }
         }
@@ -342,7 +342,7 @@ void SwUndoInsLayFmt::Repeat( SwUndoIter& rUndoIter )
                                         rUndoIter.pAktPam ));
     }
     else {
-        ASSERT( FALSE, "was fuer ein Anker ist es denn nun?" );
+        ASSERT( sal_False, "was fuer ein Anker ist es denn nun?" );
     }
 
     SwFrmFmt* pFlyFmt = pDoc->CopyLayoutFmt( *pFrmFmt, aAnchor, true, true );
@@ -386,7 +386,7 @@ String SwUndoInsLayFmt::GetComment() const
 // ----- Undo-DeleteFly ------
 
 SwUndoDelLayFmt::SwUndoDelLayFmt( SwFrmFmt* pFormat )
-    : SwUndoFlyBase( pFormat, UNDO_DELLAYFMT ), bShowSelFrm( TRUE )
+    : SwUndoFlyBase( pFormat, UNDO_DELLAYFMT ), bShowSelFrm( sal_True )
 {
     SwDoc* pDoc = pFormat->GetDoc();
     DelFly( pDoc );
@@ -466,7 +466,7 @@ SwUndoSetFlyFmt::SwUndoSetFlyFmt( SwFrmFmt& rFlyFmt, SwFrmFmt& rNewFrmFmt )
                                 rFlyFmt.GetAttrSet().GetRanges() )),
     nOldNode( 0 ), nNewNode( 0 ),
     nOldCntnt( 0 ), nNewCntnt( 0 ),
-    nOldAnchorTyp( 0 ), nNewAnchorTyp( 0 ), bAnchorChgd( FALSE )
+    nOldAnchorTyp( 0 ), nNewAnchorTyp( 0 ), bAnchorChgd( sal_False )
 {
 }
 
@@ -487,7 +487,7 @@ SwUndoSetFlyFmt::~SwUndoSetFlyFmt()
 }
 
 void SwUndoSetFlyFmt::GetAnchor( SwFmtAnchor& rAnchor,
-                                ULONG nNode, xub_StrLen nCntnt )
+                                sal_uLong nNode, xub_StrLen nCntnt )
 {
     RndStdIds nAnchorTyp = rAnchor.GetAnchorId();
     if (FLY_AT_PAGE != nAnchorTyp)
@@ -630,7 +630,7 @@ void SwUndoSetFlyFmt::Redo( SwUndoIter& rIter )
     }
 }
 
-void SwUndoSetFlyFmt::PutAttr( USHORT nWhich, const SfxPoolItem* pItem )
+void SwUndoSetFlyFmt::PutAttr( sal_uInt16 nWhich, const SfxPoolItem* pItem )
 {
     if( pItem && pItem != GetDfltAttr( nWhich ) )
     {
@@ -640,10 +640,10 @@ void SwUndoSetFlyFmt::PutAttr( USHORT nWhich, const SfxPoolItem* pItem )
             // nur den 1. Ankerwechsel vermerken
             ASSERT( !bAnchorChgd, "mehrfacher Ankerwechsel nicht erlaubt!" );
 
-            bAnchorChgd = TRUE;
+            bAnchorChgd = sal_True;
 
             const SwFmtAnchor* pAnchor = (SwFmtAnchor*)pItem;
-            switch( nOldAnchorTyp = static_cast<USHORT>(pAnchor->GetAnchorId()) )
+            switch( nOldAnchorTyp = static_cast<sal_uInt16>(pAnchor->GetAnchorId()) )
             {
             case FLY_AS_CHAR:
             case FLY_AT_CHAR:
@@ -658,7 +658,7 @@ void SwUndoSetFlyFmt::PutAttr( USHORT nWhich, const SfxPoolItem* pItem )
             }
 
             pAnchor = (SwFmtAnchor*)&pFrmFmt->GetAnchor();
-            switch( nNewAnchorTyp = static_cast<USHORT>(pAnchor->GetAnchorId()) )
+            switch( nNewAnchorTyp = static_cast<sal_uInt16>(pAnchor->GetAnchorId()) )
             {
             case FLY_AS_CHAR:
             case FLY_AT_CHAR:
@@ -683,7 +683,7 @@ void SwUndoSetFlyFmt::Modify( SfxPoolItem* pOld, SfxPoolItem* )
 {
     if( pOld )
     {
-        USHORT nWhich = pOld->Which();
+        sal_uInt16 nWhich = pOld->Which();
 
         if( nWhich < POOLATTR_END )
             PutAttr( nWhich, pOld );

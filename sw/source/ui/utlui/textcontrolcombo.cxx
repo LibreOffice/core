@@ -45,7 +45,7 @@ TextControlCombo::~TextControlCombo()
 {
 }
 
-void TextControlCombo::Arrange( FixedText& _rFTcomplete, BOOL /*bShow*/ )
+void TextControlCombo::Arrange( FixedText& _rFTcomplete, sal_Bool /*bShow*/ )
 {
     Point           aBasePos( GetPosPixel() );
     Size            aMetricVals( GetSizePixel() );
@@ -96,14 +96,14 @@ void TextControlCombo::Arrange( FixedText& _rFTcomplete, BOOL /*bShow*/ )
     Window::Hide();
 }
 
-void TextControlCombo::Show( BOOL _bVisible, USHORT _nFlags )
+void TextControlCombo::Show( sal_Bool _bVisible, sal_uInt16 _nFlags )
 {
     mrCtrl.Show( _bVisible, _nFlags );
     mrFTbefore.Show( _bVisible, _nFlags );
     mrFTafter.Show( _bVisible, _nFlags );
 }
 
-void TextControlCombo::Enable( BOOL _bEnable, BOOL _bChild )
+void TextControlCombo::Enable( sal_Bool _bEnable, sal_Bool _bChild )
 {
     mrCtrl.Enable( _bEnable, _bChild );
     mrFTbefore.Enable( _bEnable, _bChild );

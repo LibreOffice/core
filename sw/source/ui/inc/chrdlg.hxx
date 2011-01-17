@@ -62,15 +62,15 @@ class SvxMacroItem;
 class SwCharDlg: public SfxTabDialog
 {
     SwView&   rView;
-    BOOL      bIsDrwTxtMode;
+    sal_Bool      bIsDrwTxtMode;
 
 public:
     SwCharDlg(Window* pParent, SwView& pVw, const SfxItemSet& rCoreSet,
-              const String* pFmtStr = 0, BOOL bIsDrwTxtDlg = FALSE);
+              const String* pFmtStr = 0, sal_Bool bIsDrwTxtDlg = sal_False);
 
     ~SwCharDlg();
 
-    virtual void PageCreated( USHORT nId, SfxTabPage &rPage );
+    virtual void PageCreated( sal_uInt16 nId, SfxTabPage &rPage );
 };
 
 /*-----------------14.08.96 11.03-------------------
@@ -98,7 +98,7 @@ class SwCharURLPage : public SfxTabPage
     ListBox             aNotVisitedLB;
 
     SvxMacroItem*       pINetItem;
-    BOOL                bModified;
+    sal_Bool                bModified;
 
     DECL_LINK( InsertFileHdl, PushButton * );
     DECL_LINK( EventHdl, PushButton * );
@@ -111,7 +111,7 @@ public:
     static SfxTabPage*  Create( Window* pParent,
                                 const SfxItemSet& rAttrSet);
 
-    virtual BOOL        FillItemSet( SfxItemSet& rSet );
+    virtual sal_Bool        FillItemSet( SfxItemSet& rSet );
     virtual void        Reset( const SfxItemSet& rSet );
 };
 

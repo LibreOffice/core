@@ -45,35 +45,35 @@ class SW_DLLPUBLIC SwDDEFieldType : public SwFieldType
     ::sfx2::SvBaseLinkRef refLink;
     SwDoc* pDoc;
 
-    USHORT nRefCnt;
-    BOOL bCRLFFlag : 1;
-    BOOL bDeleted : 1;
+    sal_uInt16 nRefCnt;
+    sal_Bool bCRLFFlag : 1;
+    sal_Bool bDeleted : 1;
 
     SW_DLLPRIVATE void _RefCntChgd();
 
 public:
     SwDDEFieldType( const String& rName, const String& rCmd,
-                    USHORT = sfx2::LINKUPDATE_ONCALL );
+                    sal_uInt16 = sfx2::LINKUPDATE_ONCALL );
     ~SwDDEFieldType();
 
     const String& GetExpansion() const          { return aExpansion; }
     void SetExpansion( const String& rStr )     { aExpansion = rStr,
-                                                  bCRLFFlag = FALSE; }
+                                                  bCRLFFlag = sal_False; }
 
     virtual SwFieldType* Copy() const;
     virtual const String& GetName() const;
 
-    virtual BOOL        QueryValue( com::sun::star::uno::Any& rVal, USHORT nWhich ) const;
-    virtual BOOL        PutValue( const com::sun::star::uno::Any& rVal, USHORT nWhich );
+    virtual sal_Bool        QueryValue( com::sun::star::uno::Any& rVal, sal_uInt16 nWhich ) const;
+    virtual sal_Bool        PutValue( const com::sun::star::uno::Any& rVal, sal_uInt16 nWhich );
 
     String GetCmd() const;
     void SetCmd( const String& rStr );
 
-    USHORT GetType() const          { return refLink->GetUpdateMode();  }
-    void SetType( USHORT nType )    { refLink->SetUpdateMode( nType );  }
+    sal_uInt16 GetType() const          { return refLink->GetUpdateMode();  }
+    void SetType( sal_uInt16 nType )    { refLink->SetUpdateMode( nType );  }
 
-    BOOL IsDeleted() const          { return bDeleted; }
-    void SetDeleted( BOOL b )       { bDeleted = b; }
+    sal_Bool IsDeleted() const          { return bDeleted; }
+    void SetDeleted( sal_Bool b )       { bDeleted = b; }
 
     void UpdateNow()                { refLink->Update(); }
     void Disconnect()               { refLink->Disconnect(); }
@@ -88,7 +88,7 @@ public:
     void IncRefCnt() {  if( !nRefCnt++ && pDoc ) _RefCntChgd(); }
     void DecRefCnt() {  if( !--nRefCnt && pDoc ) _RefCntChgd(); }
 
-    void SetCRLFDelFlag( BOOL bFlag = TRUE )    { bCRLFFlag = bFlag; }
+    void SetCRLFDelFlag( sal_Bool bFlag = sal_True )    { bCRLFFlag = bFlag; }
 };
 
 /*--------------------------------------------------------------------

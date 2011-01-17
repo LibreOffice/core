@@ -46,7 +46,7 @@
 using namespace ::com::sun::star;
 
 
-USHORT SwDoc::nUndoActions = UNDO_ACTION_COUNT;     // anzahl von Undo-Action
+sal_uInt16 SwDoc::nUndoActions = UNDO_ACTION_COUNT;     // anzahl von Undo-Action
 
 // the undo array should never grow beyond this limit:
 #define UNDO_ACTION_LIMIT (USHRT_MAX - 1000)
@@ -60,11 +60,11 @@ SV_IMPL_PTRARR( SwUndoIds, SwUndoIdAndNamePtr )
 
 class UndoArrStatus : public WorkWindow
 {
-    USHORT nUndo, nUndoNds;
+    sal_uInt16 nUndo, nUndoNds;
     virtual void Paint( const Rectangle& );
 public:
     UndoArrStatus();
-    void Set( USHORT, USHORT );
+    void Set( sal_uInt16, sal_uInt16 );
 };
 static UndoArrStatus* pUndoMsgWin = 0;
 
@@ -78,7 +78,7 @@ UndoArrStatus::UndoArrStatus()
 }
 
 
-void UndoArrStatus::Set( USHORT n1, USHORT n2 )
+void UndoArrStatus::Set( sal_uInt16 n1, sal_uInt16 n2 )
 {
     nUndo = n1; nUndoNds = n2;
     Invalidate();
@@ -197,14 +197,14 @@ void SwDoc::AppendUndo( SwUndo* pUndo )
     //  - AttrHistory       Grenze:  USHRT_MAX - 1000
     // (defined in UNDO_ACTION_LIMIT at the top of this file)
 
-    USHORT nEnde = UNDO_ACTION_LIMIT;
+    sal_uInt16 nEnde = UNDO_ACTION_LIMIT;
 
 // nur zum Testen der neuen DOC-Member
 #ifdef DBG_UTIL
 {
     SwUndoId nId = UNDO_EMPTY;
-    USHORT nUndosCnt = 0, nSttEndCnt = 0;
-    for( USHORT nCnt = 0; nCnt < nUndoPos; ++nCnt )
+    sal_uInt16 nUndosCnt = 0, nSttEndCnt = 0;
+    for( sal_uInt16 nCnt = 0; nCnt < nUndoPos; ++nCnt )
     {
         if( UNDO_START == ( nId = (*pUndos)[ nCnt ]->GetId()) )
             ++nSttEndCnt;
@@ -225,7 +225,7 @@ void SwDoc::AppendUndo( SwUndo* pUndo )
         DelUndoObj( nUndoCnt - SwDoc::nUndoActions );
     else
     {
-        USHORT nUndosCnt = nUndoCnt;
+        sal_uInt16 nUndosCnt = nUndoCnt;
             // immer 1/10 loeschen bis der "Ausloeser" behoben ist
         while( aUndoNodes.Count() && nEnde < aUndoNodes.Count() )
             DelUndoObj( nUndosCnt / 10 );
@@ -242,7 +242,7 @@ void SwDoc::ClearRedo()
         {
             // setze UndoCnt auf den neuen Wert
             SwUndo* pUndo;
-            for( USHORT nCnt = pUndos->Count(); nUndoPos < nCnt; --nUndoCnt )
+            for( sal_uInt16 nCnt = pUndos->Count(); nUndoPos < nCnt; --nUndoCnt )
                 // Klammerung ueberspringen
                 if( UNDO_END == (pUndo = (*pUndos)[ --nCnt ])->GetId() )
                     nCnt = nCnt - ((SwUndoEnd*)pUndo)->GetSttOffset();
@@ -259,11 +259,11 @@ void SwDoc::DelAllUndoObj()
 {
     ClearRedo();
 
-    DoUndo( FALSE );
+    DoUndo( sal_False );
 
     // Offene Undo-Klammerungen erhalten !!
     SwUndo* pUndo;
-    USHORT nSize = pUndos->Count();
+    sal_uInt16 nSize = pUndos->Count();
     while( nSize )
         if( UNDO_START != ( pUndo = (*pUndos)[ --nSize ] )->GetId() ||
             ((SwUndoStart*)pUndo)->GetEndOffset() )
@@ -279,26 +279,26 @@ void SwDoc::DelAllUndoObj()
     nUndoCnt = nUndoSttEnd = nUndoPos = 0;
 */
     nUndoSavePos = USHRT_MAX;
-    DoUndo( TRUE );
+    DoUndo( sal_True );
 }
 
 
     // loescht alle UndoObjecte vom Anfang bis zum angegebenen Ende
-BOOL SwDoc::DelUndoObj( USHORT nEnde )
+sal_Bool SwDoc::DelUndoObj( sal_uInt16 nEnde )
 {
     if( !nEnde )                    // sollte mal 0 uebergeben werden,
     {
         if( !pUndos->Count() )
-            return FALSE;
+            return sal_False;
         ++nEnde;                    // dann korrigiere es auf 1
     }
 
-    DoUndo( FALSE );
+    DoUndo( sal_False );
 
     // pruefe erstmal, wo das Ende steht
     SwUndoId nId = UNDO_EMPTY;
-    USHORT nSttEndCnt = 0;
-    USHORT nCnt;
+    sal_uInt16 nSttEndCnt = 0;
+    sal_uInt16 nCnt;
 
     for( nCnt = 0; nEnde && nCnt < nUndoPos; ++nCnt )
     {
@@ -324,8 +324,8 @@ BOOL SwDoc::DelUndoObj( USHORT nEnde )
         pUndos->DeleteAndDestroy( --nSttEndCnt, 1 );
     nUndoPos = pUndos->Count();
 
-    DoUndo( TRUE );
-    return TRUE;
+    DoUndo( sal_True );
+    return sal_True;
 }
 
 /**************** UNDO ******************/
@@ -345,7 +345,7 @@ SwUndoNoModifiedPosition SwDoc::getUndoNoModifiedPosition() const
 
 bool SwDoc::HasUndoId(SwUndoId eId) const
 {
-    USHORT nSize = nUndoPos;
+    sal_uInt16 nSize = nUndoPos;
     SwUndo * pUndo;
     while( nSize-- )
         if( ( pUndo = (*pUndos)[nSize])->GetId() == eId ||
@@ -354,10 +354,10 @@ bool SwDoc::HasUndoId(SwUndoId eId) const
             || ( UNDO_END == pUndo->GetId() &&
                 ((SwUndoEnd*)pUndo)->GetUserId() == eId ) )
         {
-            return TRUE;
+            return sal_True;
         }
 
-    return FALSE;
+    return sal_False;
 }
 
 
@@ -365,13 +365,13 @@ bool SwDoc::Undo( SwUndoIter& rUndoIter )
 {
     if ( (rUndoIter.GetId()!=0) && (!HasUndoId(rUndoIter.GetId())) )
     {
-        rUndoIter.bWeiter = FALSE;
-        return FALSE;
+        rUndoIter.bWeiter = sal_False;
+        return sal_False;
     }
     if( !nUndoPos )
     {
-        rUndoIter.bWeiter = FALSE;
-        return FALSE;
+        rUndoIter.bWeiter = sal_False;
+        return sal_False;
     }
 
     SwUndo *pUndo = (*pUndos)[ --nUndoPos ];
@@ -408,7 +408,7 @@ bool SwDoc::Undo( SwUndoIter& rUndoIter )
     if( UNDO_REPLACE == nAktId && ((SwUndoReplace*)pUndo)->nAktPos )
     {
         ++nUndoPos;
-        return TRUE;
+        return sal_True;
     }
 
     // Objekt aus History entfernen und zerstoeren
@@ -427,7 +427,7 @@ bool SwDoc::Undo( SwUndoIter& rUndoIter )
     if( nUndoSavePos == nUndoPos )
         ResetModified();
 
-    return TRUE;
+    return sal_True;
 }
 
 
@@ -456,7 +456,7 @@ SwUndoId SwDoc::StartUndo( SwUndoId eUndoId, const SwRewriter * pRewriter )
 
 SwUndoId SwDoc::EndUndo(SwUndoId eUndoId, const SwRewriter * pRewriter)
 {
-    USHORT nSize = nUndoPos;
+    sal_uInt16 nSize = nUndoPos;
     if( !mbUndo || !nSize-- )
         return UNDO_EMPTY;
 
@@ -477,7 +477,7 @@ SwUndoId SwDoc::EndUndo(SwUndoId eUndoId, const SwRewriter * pRewriter)
     if( nUndoPos != pUndos->Count() )
     {
         // setze UndoCnt auf den neuen Wert
-        for( USHORT nCnt = pUndos->Count(); nUndoPos < nCnt; --nUndoCnt )
+        for( sal_uInt16 nCnt = pUndos->Count(); nUndoPos < nCnt; --nUndoCnt )
             // Klammerung ueberspringen
             if( UNDO_END == (pUndo = (*pUndos)[ --nCnt ])->GetId() )
                 nCnt = nCnt - ((SwUndoEnd*)pUndo)->GetSttOffset();
@@ -505,7 +505,7 @@ SwUndoId SwDoc::EndUndo(SwUndoId eUndoId, const SwRewriter * pRewriter)
         nUndoCnt = 0;
         // setze UndoCnt auf den neuen Wert
         SwUndo* pTmpUndo;
-        for( USHORT nCnt = 0; nCnt < pUndos->Count(); ++nCnt, ++nUndoCnt )
+        for( sal_uInt16 nCnt = 0; nCnt < pUndos->Count(); ++nCnt, ++nUndoCnt )
             // Klammerung ueberspringen
             if( UNDO_START == (pTmpUndo = (*pUndos)[ nCnt ])->GetId() )
                 nCnt = nCnt + ((SwUndoStart*)pTmpUndo)->GetEndOffset();
@@ -530,8 +530,8 @@ SwUndoId SwDoc::EndUndo(SwUndoId eUndoId, const SwRewriter * pRewriter)
                 DelUndoObj( nUndoCnt - SwDoc::nUndoActions );
             else
             {
-                USHORT nEnde = USHRT_MAX - 1000;
-                USHORT nUndosCnt = nUndoCnt;
+                sal_uInt16 nEnde = USHRT_MAX - 1000;
+                sal_uInt16 nUndosCnt = nUndoCnt;
                     // immer 1/10 loeschen bis der "Ausloeser" behoben ist
                 while( aUndoNodes.Count() && nEnde < aUndoNodes.Count() )
                     DelUndoObj( nUndosCnt / 10 );
@@ -550,7 +550,7 @@ SwUndoId SwDoc::EndUndo(SwUndoId eUndoId, const SwRewriter * pRewriter)
 // nur zum Testen der Start/End-Verpointerung vom Start/End Undo
 #ifdef DBG_UTIL
     {
-        USHORT nEndCnt = 1, nCnt = pUndos->Count();
+        sal_uInt16 nEndCnt = 1, nCnt = pUndos->Count();
         SwUndoId nTmpId = UNDO_EMPTY;
         while( nCnt )
         {
@@ -684,7 +684,7 @@ SwUndoIdAndName * lcl_GetUndoIdAndName(const SwUndos & rUndos, sal_uInt16 nPos )
                     do
                     {
                         nTmpPos--;
-                        pTmpUndo = rUndos[ static_cast<USHORT>(nTmpPos) ];
+                        pTmpUndo = rUndos[ static_cast<sal_uInt16>(nTmpPos) ];
 
                         if (pTmpUndo->GetEffectiveId() > UNDO_END)
                             nSubstitute = nTmpPos;
@@ -693,7 +693,7 @@ SwUndoIdAndName * lcl_GetUndoIdAndName(const SwUndos & rUndos, sal_uInt16 nPos )
 
                     if (nSubstitute >= 0)
                     {
-                        SwUndo * pSubUndo = rUndos[ static_cast<USHORT>(nSubstitute) ];
+                        SwUndo * pSubUndo = rUndos[ static_cast<sal_uInt16>(nSubstitute) ];
                         nId = pSubUndo->GetEffectiveId();
                         sStr = pSubUndo->GetComment();
                     }
@@ -728,7 +728,7 @@ SwUndoIdAndName * lcl_GetUndoIdAndName(const SwUndos & rUndos, sal_uInt16 nPos )
                     do
                     {
                         nTmpPos--;
-                        pTmpUndo = rUndos[ static_cast<USHORT>(nTmpPos) ];
+                        pTmpUndo = rUndos[ static_cast<sal_uInt16>(nTmpPos) ];
 
                         if (pTmpUndo->GetEffectiveId() > UNDO_END)
                             nSubstitute = nTmpPos;
@@ -737,7 +737,7 @@ SwUndoIdAndName * lcl_GetUndoIdAndName(const SwUndos & rUndos, sal_uInt16 nPos )
 
                     if (nSubstitute >= 0)
                     {
-                        SwUndo * pSubUndo = rUndos[ static_cast<USHORT>(nSubstitute) ];
+                        SwUndo * pSubUndo = rUndos[ static_cast<sal_uInt16>(nSubstitute) ];
                         nId = pSubUndo->GetEffectiveId();
                         sStr = pSubUndo->GetComment();
                     }
@@ -764,7 +764,7 @@ SwUndoId SwDoc::GetUndoIds( String* pStr, SwUndoIds *pUndoIds) const
 
     while (nTmpPos >= 0)
     {
-        SwUndo * pUndo = (*pUndos)[ static_cast<USHORT>(nTmpPos) ];
+        SwUndo * pUndo = (*pUndos)[ static_cast<sal_uInt16>(nTmpPos) ];
 
         SwUndoIdAndName * pIdAndName = lcl_GetUndoIdAndName( *pUndos, static_cast<sal_uInt16>(nTmpPos) );
 
@@ -808,13 +808,13 @@ bool SwDoc::Redo( SwUndoIter& rUndoIter )
 {
     if( rUndoIter.GetId() && !HasUndoId( rUndoIter.GetId() ) )
     {
-        rUndoIter.bWeiter = FALSE;
-        return FALSE;
+        rUndoIter.bWeiter = sal_False;
+        return sal_False;
     }
     if( nUndoPos == pUndos->Count() )
     {
-        rUndoIter.bWeiter = FALSE;
-        return FALSE;
+        rUndoIter.bWeiter = sal_False;
+        return sal_False;
     }
 
     SwUndo *pUndo = (*pUndos)[ nUndoPos++ ];
@@ -840,11 +840,11 @@ bool SwDoc::Redo( SwUndoIter& rUndoIter )
         USHRT_MAX != ((SwUndoReplace*)pUndo)->nAktPos )
     {
         --nUndoPos;
-        return TRUE;
+        return sal_True;
     }
 
     if( rUndoIter.bWeiter && nUndoPos >= pUndos->Count() )
-        rUndoIter.bWeiter = FALSE;
+        rUndoIter.bWeiter = sal_False;
 
     // ist die History leer und wurde nicht wegen Speichermangel
     // verworfen, so kann das Dokument als unveraendert gelten
@@ -852,7 +852,7 @@ bool SwDoc::Redo( SwUndoIter& rUndoIter )
         ResetModified();
     else
         SetModified();
-    return TRUE;
+    return sal_True;
 }
 
 
@@ -916,14 +916,14 @@ bool SwDoc::Repeat( SwUndoIter& rUndoIter, sal_uInt16 nRepeatCnt )
 {
     if( rUndoIter.GetId() && !HasUndoId( rUndoIter.GetId() ) )
     {
-        rUndoIter.bWeiter = FALSE;
-        return FALSE;
+        rUndoIter.bWeiter = sal_False;
+        return sal_False;
     }
-    USHORT nSize = nUndoPos;
+    sal_uInt16 nSize = nUndoPos;
     if( !nSize )
     {
-        rUndoIter.bWeiter = FALSE;
-        return FALSE;
+        rUndoIter.bWeiter = sal_False;
+        return sal_False;
     }
 
     // dann suche jetzt ueber die End/Start-Gruppen die gueltige Repeat-Aktion
@@ -931,8 +931,8 @@ bool SwDoc::Repeat( SwUndoIter& rUndoIter, sal_uInt16 nRepeatCnt )
     if( UNDO_END == pUndo->GetId() )
         nSize = nSize - ((SwUndoEnd*)pUndo)->GetSttOffset();
 
-    USHORT nEndCnt = nUndoPos;
-    BOOL bOneUndo = nSize + 1 == nUndoPos;
+    sal_uInt16 nEndCnt = nUndoPos;
+    sal_Bool bOneUndo = nSize + 1 == nUndoPos;
 
     SwPaM* pTmpCrsr = rUndoIter.pAktPam;
     SwUndoId nId = UNDO_EMPTY;
@@ -950,10 +950,10 @@ bool SwDoc::Repeat( SwUndoIter& rUndoIter, sal_uInt16 nRepeatCnt )
         StartUndo( nId, NULL );
     }
     do {        // dann durchlaufe mal den gesamten Ring
-        for( USHORT nRptCnt = nRepeatCnt; nRptCnt > 0; --nRptCnt )
+        for( sal_uInt16 nRptCnt = nRepeatCnt; nRptCnt > 0; --nRptCnt )
         {
             rUndoIter.pLastUndoObj = 0;
-            for( USHORT nCnt = nSize; nCnt < nEndCnt; ++nCnt )
+            for( sal_uInt16 nCnt = nSize; nCnt < nEndCnt; ++nCnt )
                 (*pUndos)[ nCnt ]->Repeat( rUndoIter );     // Repeat ausfuehren
         }
     } while( pTmpCrsr !=
@@ -961,7 +961,7 @@ bool SwDoc::Repeat( SwUndoIter& rUndoIter, sal_uInt16 nRepeatCnt )
     if( pTmpCrsr != pTmpCrsr->GetNext() || !bOneUndo )
         EndUndo( nId, NULL );
 
-    return TRUE;
+    return sal_True;
 }
 
 // liefert die Id der letzten Repeatfaehigen Aktion zurueck oder 0

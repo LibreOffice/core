@@ -37,7 +37,7 @@
 #include "drawbase.hxx"
 #include "dselect.hxx"
 
-extern BOOL bNoInterrupt;       // in mainwn.cxx
+extern sal_Bool bNoInterrupt;       // in mainwn.cxx
 
 /*************************************************************************
 |*
@@ -48,21 +48,21 @@ extern BOOL bNoInterrupt;       // in mainwn.cxx
 DrawSelection::DrawSelection(SwWrtShell* pWrtShell, SwEditWin* pEditWin, SwView* pSwView) :
                 SwDrawBase(pWrtShell, pEditWin, pSwView)
 {
-    m_bCreateObj = FALSE;
+    m_bCreateObj = sal_False;
 }
 
 /*************************************************************************
 |*
 |* Tastaturereignisse bearbeiten
 |*
-|* Wird ein KeyEvent bearbeitet, so ist der Return-Wert TRUE, andernfalls
-|* FALSE.
+|* Wird ein KeyEvent bearbeitet, so ist der Return-Wert sal_True, andernfalls
+|* sal_False.
 |*
 \************************************************************************/
 
-BOOL DrawSelection::KeyInput(const KeyEvent& rKEvt)
+sal_Bool DrawSelection::KeyInput(const KeyEvent& rKEvt)
 {
-    BOOL bReturn = FALSE;
+    sal_Bool bReturn = sal_False;
 
     switch (rKEvt.GetKeyCode().GetCode())
     {
@@ -73,7 +73,7 @@ BOOL DrawSelection::KeyInput(const KeyEvent& rKEvt)
                 m_pSh->BreakMark();
                 m_pWin->ReleaseMouse();
             }
-            bReturn = TRUE;
+            bReturn = sal_True;
         }
         break;
     }
@@ -90,10 +90,10 @@ BOOL DrawSelection::KeyInput(const KeyEvent& rKEvt)
 |*
 \************************************************************************/
 
-void DrawSelection::Activate(const USHORT nSlotId)
+void DrawSelection::Activate(const sal_uInt16 nSlotId)
 {
     m_pWin->SetSdrDrawMode(OBJ_NONE);
-    m_pWin->SetObjectSelect( TRUE );
+    m_pWin->SetObjectSelect( sal_True );
     SwDrawBase::Activate(nSlotId);
 
     m_pSh->GetView().GetViewFrame()->GetBindings().Invalidate(SID_INSERT_DRAW);

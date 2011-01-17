@@ -45,7 +45,7 @@ SwDocStat::SwDocStat() :
     nAllPara(1),
     nWord(0),
     nChar(0),
-    bModified(TRUE)
+    bModified(sal_True)
 {}
 
 /************************************************************************
@@ -62,6 +62,6 @@ void SwDocStat::Reset()
     nAllPara= 1;
     nWord   = 0;
     nChar   = 0;
-    bModified = TRUE;
+    bModified = sal_True;
 }
 

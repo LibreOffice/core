@@ -38,16 +38,16 @@ class SwFmtColl : public SwFmt
 {
 protected:
     SwFmtColl( SwAttrPool& rPool, const sal_Char* pFmtName,
-                const USHORT* pWhichRanges, SwFmtColl* pDerFrom,
-                USHORT nFmtWhich )
+                const sal_uInt16* pWhichRanges, SwFmtColl* pDerFrom,
+                sal_uInt16 nFmtWhich )
           : SwFmt( rPool, pFmtName, pWhichRanges, pDerFrom, nFmtWhich )
-    { SetAuto( FALSE ); }
+    { SetAuto( sal_False ); }
 
     SwFmtColl( SwAttrPool& rPool, const String &rFmtName,
-                const USHORT* pWhichRanges, SwFmtColl* pDerFrom,
-                USHORT nFmtWhich )
+                const sal_uInt16* pWhichRanges, SwFmtColl* pDerFrom,
+                sal_uInt16 nFmtWhich )
           : SwFmt( rPool, rFmtName, pWhichRanges, pDerFrom, nFmtWhich )
-    { SetAuto( FALSE ); }
+    { SetAuto( sal_False ); }
 
 
 private:
@@ -68,14 +68,14 @@ class SW_DLLPUBLIC SwTxtFmtColl: public SwFmtColl
     // <--
 
 protected:
-    //BYTE nOutlineLevel;        //<-#outline level, removed by zhaojianwei
+    //sal_uInt8 nOutlineLevel;       //<-#outline level, removed by zhaojianwei
     bool mbAssignedToOutlineStyle;//<-#outline level added by zhaojianwei
 
     SwTxtFmtColl *pNextTxtFmtColl;
 
     SwTxtFmtColl( SwAttrPool& rPool, const sal_Char* pFmtCollName,
                     SwTxtFmtColl* pDerFrom = 0,
-                    USHORT nFmtWh = RES_TXTFMTCOLL )
+                    sal_uInt16 nFmtWh = RES_TXTFMTCOLL )
         : SwFmtColl( rPool, pFmtCollName, aTxtFmtCollSetRange,
                         pDerFrom, nFmtWh ),
           // --> OD 2007-01-24 #i73790#
@@ -87,7 +87,7 @@ protected:
 
     SwTxtFmtColl( SwAttrPool& rPool, const String &rFmtCollName,
                     SwTxtFmtColl* pDerFrom = 0,
-                    USHORT nFmtWh = RES_TXTFMTCOLL )
+                    sal_uInt16 nFmtWh = RES_TXTFMTCOLL )
         : SwFmtColl( rPool, rFmtCollName, aTxtFmtCollSetRange,
                         pDerFrom, nFmtWh ),
           // --> OD 2007-01-24 #i73790#
@@ -106,7 +106,7 @@ public:
     inline void SetNextTxtFmtColl(SwTxtFmtColl& rNext);
     SwTxtFmtColl& GetNextTxtFmtColl() const { return *pNextTxtFmtColl; }
 
-    BOOL IsAtDocNodeSet() const;
+    sal_Bool IsAtDocNodeSet() const;
 
     // --> OD 2006-11-22 #i71574#
    //<-#outline level,zhaojianwei
@@ -125,14 +125,14 @@ public:
     // --> OD 2008-03-04 #refactorlists#
     // override to recognize changes on the <SwNumRuleItem> and register/unregister
     // the paragragh style at the corresponding <SwNumRule> instance
-    virtual BOOL SetFmtAttr( const SfxPoolItem& rAttr );
-    virtual BOOL SetFmtAttr( const SfxItemSet& rSet );
-    virtual BOOL ResetFmtAttr( USHORT nWhich1, USHORT nWhich2 = 0 );
+    virtual sal_Bool SetFmtAttr( const SfxPoolItem& rAttr );
+    virtual sal_Bool SetFmtAttr( const SfxItemSet& rSet );
+    virtual sal_Bool ResetFmtAttr( sal_uInt16 nWhich1, sal_uInt16 nWhich2 = 0 );
     // <--
 
     // --> OD 2007-01-24 #i73790#
     // override <ResetAllFmtAttr()> to stay assigned to list level of outline style
-    virtual USHORT ResetAllFmtAttr();
+    virtual sal_uInt16 ResetAllFmtAttr();
 
     inline bool StayAssignedToListLevelOfOutlineStyle() const
     {
@@ -152,15 +152,15 @@ public:
  Attset fuer die Char-Attribute angelegt werden; damit die Vererbung
  und der Zugriff auf die gesetzen Attribute richtig funktioniert!!
 
-    virtual BOOL SetDerivedFrom( SwFmtColl* pDerFrom = 0 );
+    virtual sal_Bool SetDerivedFrom( SwFmtColl* pDerFrom = 0 );
 
     inline SwCharFmt* GetCharFmt() const;
-    inline BOOL IsCharFmtSet() const;
+    inline sal_Bool IsCharFmtSet() const;
     void SetCharFmt(SwCharFmt *);
     void ResetCharFmt();
-inline BOOL SwTxtFmtColl::IsCharFmtSet() const
+inline sal_Bool SwTxtFmtColl::IsCharFmtSet() const
 {
-    return aCharDepend.GetRegisteredIn() ? TRUE : FALSE;
+    return aCharDepend.GetRegisteredIn() ? sal_True : sal_False;
 }
 inline SwCharFmt* SwTxtFmtColl::GetCharFmt() const
 {
@@ -220,10 +220,10 @@ enum Master_CollConditions
 
 class SW_DLLPUBLIC SwCollCondition : public SwClient
 {
-    ULONG nCondition;
+    sal_uLong nCondition;
     union
     {
-        ULONG nSubCondition;
+        sal_uLong nSubCondition;
         String* pFldExpression;
     } aSubCondition;
 
@@ -231,9 +231,9 @@ public:
     TYPEINFO();     //Bereits in Basisklasse Client drin.
 
 
-    SwCollCondition( SwTxtFmtColl* pColl, ULONG nMasterCond,
-                    ULONG nSubCond = 0 );
-    SwCollCondition( SwTxtFmtColl* pColl, ULONG nMasterCond,
+    SwCollCondition( SwTxtFmtColl* pColl, sal_uLong nMasterCond,
+                    sal_uLong nSubCond = 0 );
+    SwCollCondition( SwTxtFmtColl* pColl, sal_uLong nMasterCond,
                     const String& rSubExp );
     virtual ~SwCollCondition();
 
@@ -248,12 +248,12 @@ public:
     int operator!=( const SwCollCondition& rCmp ) const
                             { return ! (*this == rCmp); }
 
-    ULONG GetCondition() const      { return nCondition; }
-    ULONG GetSubCondition() const   { return aSubCondition.nSubCondition; }
+    sal_uLong GetCondition() const      { return nCondition; }
+    sal_uLong GetSubCondition() const   { return aSubCondition.nSubCondition; }
     const String* GetFldExpression() const
                                     { return aSubCondition.pFldExpression; }
 
-    void SetCondition( ULONG nCond, ULONG nSubCond );
+    void SetCondition( sal_uLong nCond, sal_uLong nSubCond );
     SwTxtFmtColl* GetTxtFmtColl() const     { return (SwTxtFmtColl*)GetRegisteredIn(); }
 };
 
@@ -287,7 +287,7 @@ public:
     const SwCollCondition* HasCondition( const SwCollCondition& rCond ) const;
     const SwFmtCollConditions& GetCondColls() const     { return aCondColls; }
     void InsertCondition( const SwCollCondition& rCond );
-    BOOL RemoveCondition( const SwCollCondition& rCond );
+    sal_Bool RemoveCondition( const SwCollCondition& rCond );
 
     void SetConditions( const SwFmtCollConditions& );
 };

@@ -68,13 +68,13 @@ void SwTxtTOXMark::CopyTOXMark( SwDoc* pDoc )
 {
     SwTOXMark& rTOX = (SwTOXMark&)GetTOXMark();
     TOXTypes    eType   = rTOX.GetTOXType()->GetType();
-    USHORT      nCount  = pDoc->GetTOXTypeCount( eType );
+    sal_uInt16      nCount  = pDoc->GetTOXTypeCount( eType );
     const SwTOXType* pType = 0;
     const XubString& rNm = rTOX.GetTOXType()->GetTypeName();
 
     // kein entsprechender Verzeichnistyp vorhanden -> anlegen
     // sonst verwenden
-    for(USHORT i=0; i < nCount; ++i)
+    for(sal_uInt16 i=0; i < nCount; ++i)
     {
         const SwTOXType* pSrcType = pDoc->GetTOXType(eType, i);
         if(pSrcType->GetTypeName() == rNm )

@@ -94,16 +94,16 @@ void SwDrawShell::Execute(SfxRequest &rReq)
     SdrView             *pSdrView = rSh.GetDrawView();
     const SfxItemSet    *pArgs = rReq.GetArgs();
     SfxBindings         &rBnd  = GetView().GetViewFrame()->GetBindings();
-    USHORT               nSlotId = rReq.GetSlot();
-    BOOL                 bChanged = pSdrView->GetModel()->IsChanged();
+    sal_uInt16               nSlotId = rReq.GetSlot();
+    sal_Bool                 bChanged = pSdrView->GetModel()->IsChanged();
 
-    pSdrView->GetModel()->SetChanged(FALSE);
+    pSdrView->GetModel()->SetChanged(sal_False);
 
     const SfxPoolItem* pItem;
     if(pArgs)
-        pArgs->GetItemState(nSlotId, FALSE, &pItem);
+        pArgs->GetItemState(nSlotId, sal_False, &pItem);
 
-    BOOL bMirror = TRUE;
+    sal_Bool bMirror = sal_True;
 
     switch (nSlotId)
     {
@@ -173,7 +173,7 @@ void SwDrawShell::Execute(SfxRequest &rReq)
             break;
 
         case FN_FLIP_HORZ_GRAFIC:
-            bMirror = FALSE;
+            bMirror = sal_False;
             /* no break */
         case FN_FLIP_VERT_GRAFIC:
             rSh.MirrorSelection( bMirror );
@@ -182,7 +182,7 @@ void SwDrawShell::Execute(SfxRequest &rReq)
         case SID_FONTWORK:
         {
             FieldUnit eMetric = ::GetDfltMetric(0 != PTR_CAST(SwWebView, &rSh.GetView()));
-            SW_MOD()->PutItem(SfxUInt16Item(SID_ATTR_METRIC, static_cast< UINT16 >(eMetric)) );
+            SW_MOD()->PutItem(SfxUInt16Item(SID_ATTR_METRIC, static_cast< sal_uInt16 >(eMetric)) );
             SfxViewFrame* pVFrame = GetView().GetViewFrame();
             if (pArgs)
             {
@@ -239,7 +239,7 @@ void SwDrawShell::Execute(SfxRequest &rReq)
             SwDocStat aCurr;
             SwDocStat aDocStat( rSh.getIDocumentStatistics()->GetDocStat() );
             {
-                SwWait aWait( *GetView().GetDocShell(), TRUE );
+                SwWait aWait( *GetView().GetDocShell(), sal_True );
                 rSh.StartAction();
                 rSh.CountWords( aCurr );
                 rSh.UpdateDocStat( aDocStat );
@@ -295,7 +295,7 @@ void SwDrawShell::Execute(SfxRequest &rReq)
     if (pSdrView->GetModel()->IsChanged())
         rSh.SetModified();
     else if (bChanged)
-        pSdrView->GetModel()->SetChanged(TRUE);
+        pSdrView->GetModel()->SetChanged(sal_True);
 }
 
 /*--------------------------------------------------------------------
@@ -309,8 +309,8 @@ void SwDrawShell::GetState(SfxItemSet& rSet)
     SwWrtShell &rSh = GetShell();
     SdrView* pSdrView = rSh.GetDrawViewWithValidMarkList();
     SfxWhichIter aIter( rSet );
-    USHORT nWhich = aIter.FirstWhich();
-    BOOL bProtected = rSh.IsSelObjProtected(FLYPROTECT_CONTENT);
+    sal_uInt16 nWhich = aIter.FirstWhich();
+    sal_Bool bProtected = rSh.IsSelObjProtected(FLYPROTECT_CONTENT);
 
     if (!bProtected)    // Im Parent nachsehen
         bProtected |= rSh.IsSelObjProtected( FLYPROTECT_CONTENT|FLYPROTECT_PARENT ) != 0;
@@ -336,7 +336,7 @@ void SwDrawShell::GetState(SfxItemSet& rSet)
 
             case SID_OBJECT_ROTATE:
             {
-                const BOOL bIsRotate = GetView().IsDrawRotate();
+                const sal_Bool bIsRotate = GetView().IsDrawRotate();
                 if ( (!bIsRotate && !pSdrView->IsRotateAllowed()) || bProtected )
                     rSet.DisableItem( nWhich );
                 else
@@ -365,7 +365,7 @@ void SwDrawShell::GetState(SfxItemSet& rSet)
                     rSet.DisableItem( nWhich );
                 else
                 {
-                    const USHORT nId = SvxFontWorkChildWindow::GetChildWindowId();
+                    const sal_uInt16 nId = SvxFontWorkChildWindow::GetChildWindowId();
                     rSet.Put(SfxBoolItem( nWhich , GetView().GetViewFrame()->HasChildWindow(nId)));
                 }
             }
@@ -402,8 +402,8 @@ void SwDrawShell::ExecFormText(SfxRequest& rReq)
 {
     SwWrtShell &rSh = GetShell();
     SdrView*    pDrView = rSh.GetDrawView();
-    BOOL        bChanged = pDrView->GetModel()->IsChanged();
-    pDrView->GetModel()->SetChanged(FALSE);
+    sal_Bool        bChanged = pDrView->GetModel()->IsChanged();
+    pDrView->GetModel()->SetChanged(sal_False);
 
     const SdrMarkList& rMarkList = pDrView->GetMarkedObjectList();
 
@@ -414,16 +414,16 @@ void SwDrawShell::ExecFormText(SfxRequest& rReq)
 
         if ( pDrView->IsTextEdit() )
         {
-            pDrView->SdrEndTextEdit( TRUE );
+            pDrView->SdrEndTextEdit( sal_True );
             GetView().AttrChangedNotify(&rSh);
         }
 
-        if ( rSet.GetItemState(XATTR_FORMTXTSTDFORM, TRUE, &pItem) ==
+        if ( rSet.GetItemState(XATTR_FORMTXTSTDFORM, sal_True, &pItem) ==
              SFX_ITEM_SET &&
             ((const XFormTextStdFormItem*) pItem)->GetValue() != XFTFORM_NONE )
         {
 
-            const USHORT nId = SvxFontWorkChildWindow::GetChildWindowId();
+            const sal_uInt16 nId = SvxFontWorkChildWindow::GetChildWindowId();
 
             SvxFontWorkDialog* pDlg = (SvxFontWorkDialog*)(GetView().GetViewFrame()->
                                         GetChildWindow(nId)->GetWindow());
@@ -441,7 +441,7 @@ void SwDrawShell::ExecFormText(SfxRequest& rReq)
         rSh.SetModified();
     else
         if (bChanged)
-            pDrView->GetModel()->SetChanged(TRUE);
+            pDrView->GetModel()->SetChanged(sal_True);
 }
 
 /*************************************************************************
@@ -460,7 +460,7 @@ void SwDrawShell::GetFormTextState(SfxItemSet& rSet)
     const SdrObject* pObj = NULL;
     SvxFontWorkDialog* pDlg = NULL;
 
-    const USHORT nId = SvxFontWorkChildWindow::GetChildWindowId();
+    const sal_uInt16 nId = SvxFontWorkChildWindow::GetChildWindowId();
 
     SfxViewFrame* pVFrame = GetView().GetViewFrame();
     if ( pVFrame->HasChildWindow(nId) )
@@ -473,14 +473,14 @@ void SwDrawShell::GetFormTextState(SfxItemSet& rSet)
         !((SdrTextObj*) pObj)->HasText() )
     {
 #define XATTR_ANZ 12
-        static const USHORT nXAttr[ XATTR_ANZ ] =
+        static const sal_uInt16 nXAttr[ XATTR_ANZ ] =
         {
             XATTR_FORMTXTSTYLE, XATTR_FORMTXTADJUST, XATTR_FORMTXTDISTANCE,
             XATTR_FORMTXTSTART, XATTR_FORMTXTMIRROR, XATTR_FORMTXTSTDFORM,
             XATTR_FORMTXTHIDEFORM, XATTR_FORMTXTOUTLINE, XATTR_FORMTXTSHADOW,
             XATTR_FORMTXTSHDWCOLOR, XATTR_FORMTXTSHDWXVAL, XATTR_FORMTXTSHDWYVAL
         };
-        for( USHORT i = 0; i < XATTR_ANZ; )
+        for( sal_uInt16 i = 0; i < XATTR_ANZ; )
             rSet.DisableItem( nXAttr[ i++ ] );
     }
     else

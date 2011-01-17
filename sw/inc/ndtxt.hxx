@@ -118,7 +118,7 @@ class SW_DLLPUBLIC SwTxtNode: public SwCntntNode, public ::sfx2::Metadatable
     mutable bool m_bLastOutlineState : 1;
     bool m_bNotifiable;
 
-    // BYTE nOutlineLevel; //#outline level, removed by zhaojianwei.
+    // sal_uInt8 nOutlineLevel; //#outline level, removed by zhaojianwei.
     // --> OD 2008-11-19 #i70748#
     bool mbEmptyListStyleSetDueToSetOutlineLevelAttr;
     // <--
@@ -145,8 +145,8 @@ class SW_DLLPUBLIC SwTxtNode: public SwCntntNode, public ::sfx2::Metadatable
     // Kopiert die Attribute an nStart nach pDest.
     SW_DLLPRIVATE void CopyAttr( SwTxtNode *pDest, const xub_StrLen nStart, const xub_StrLen nOldPos);
 
-    SW_DLLPRIVATE SwTxtNode* _MakeNewTxtNode( const SwNodeIndex&, BOOL bNext = TRUE,
-                                BOOL bChgFollow = TRUE );
+    SW_DLLPRIVATE SwTxtNode* _MakeNewTxtNode( const SwNodeIndex&, sal_Bool bNext = sal_True,
+                                sal_Bool bChgFollow = sal_True );
 
     SW_DLLPRIVATE void CutImpl(
           SwTxtNode * const pDest, const SwIndex & rDestStart,
@@ -160,7 +160,7 @@ class SW_DLLPUBLIC SwTxtNode: public SwCntntNode, public ::sfx2::Metadatable
     SW_DLLPRIVATE virtual void NewAttrSet( SwAttrPool& );
 
     SW_DLLPRIVATE void Replace0xFF( XubString& rTxt, xub_StrLen& rTxtStt,
-                        xub_StrLen nEndPos, BOOL bExpandFlds ) const;
+                        xub_StrLen nEndPos, sal_Bool bExpandFlds ) const;
 
     // Optimization: Asking for information about hidden characters at SwScriptInfo
     // updates these flags.
@@ -175,19 +175,19 @@ class SW_DLLPUBLIC SwTxtNode: public SwCntntNode, public ::sfx2::Metadatable
 
     SW_DLLPRIVATE void CalcHiddenCharFlags() const;
 
-    SW_DLLPRIVATE SwNumRule * _GetNumRule(BOOL bInParent = TRUE) const;
+    SW_DLLPRIVATE SwNumRule * _GetNumRule(sal_Bool bInParent = sal_True) const;
 
     SW_DLLPRIVATE void SetLanguageAndFont( const SwPaM &rPaM,
-            LanguageType nLang, USHORT nLangWhichId,
-            const Font *pFont,  USHORT nFontWhichId );
+            LanguageType nLang, sal_uInt16 nLangWhichId,
+            const Font *pFont,  sal_uInt16 nFontWhichId );
 
     //
     // Start: Data collected during idle time
     //
-    SW_DLLPRIVATE void SetParaNumberOfWords( ULONG nTmpWords ) const;
-    SW_DLLPRIVATE ULONG GetParaNumberOfWords() const;
-    SW_DLLPRIVATE void SetParaNumberOfChars( ULONG nTmpChars ) const;
-    SW_DLLPRIVATE ULONG GetParaNumberOfChars() const;
+    SW_DLLPRIVATE void SetParaNumberOfWords( sal_uLong nTmpWords ) const;
+    SW_DLLPRIVATE sal_uLong GetParaNumberOfWords() const;
+    SW_DLLPRIVATE void SetParaNumberOfChars( sal_uLong nTmpChars ) const;
+    SW_DLLPRIVATE sal_uLong GetParaNumberOfChars() const;
     SW_DLLPRIVATE void InitSwParaStatistics( bool bNew );
 
     /** create number for this text node, if not already existing
@@ -247,16 +247,16 @@ public:
     virtual xub_StrLen Len() const;
 
     // steht in itratr
-    void GetMinMaxSize( ULONG nIndex, ULONG& rMin, ULONG &rMax, ULONG &rAbs,
+    void GetMinMaxSize( sal_uLong nIndex, sal_uLong& rMin, sal_uLong &rMax, sal_uLong &rAbs,
                         OutputDevice* pOut = 0 ) const;
 
     // --> OD 2008-03-13 #refactorlists#
     // overriding to handle change of certain paragraph attributes
-    virtual BOOL SetAttr( const SfxPoolItem& );
-    virtual BOOL SetAttr( const SfxItemSet& rSet );
-    virtual BOOL ResetAttr( USHORT nWhich1, USHORT nWhich2 = 0 );
-    virtual BOOL ResetAttr( const SvUShorts& rWhichArr );
-    virtual USHORT ResetAllAttr();
+    virtual sal_Bool SetAttr( const SfxPoolItem& );
+    virtual sal_Bool SetAttr( const SfxItemSet& rSet );
+    virtual sal_Bool ResetAttr( sal_uInt16 nWhich1, sal_uInt16 nWhich2 = 0 );
+    virtual sal_Bool ResetAttr( const SvUShorts& rWhichArr );
+    virtual sal_uInt16 ResetAllAttr();
     // <--
 
     /// insert text content
@@ -283,8 +283,8 @@ public:
             refmarks, toxmarks, and metas will be ignored unless this is true
         ATTENTION: setting bInclRefToxMark is only allowed from UNDO!
      */
-    void    RstAttr( const SwIndex &rIdx, xub_StrLen nLen, USHORT nWhich = 0,
-                    const SfxItemSet* pSet = 0, BOOL bInclRefToxMark = FALSE );
+    void    RstAttr( const SwIndex &rIdx, xub_StrLen nLen, sal_uInt16 nWhich = 0,
+                    const SfxItemSet* pSet = 0, sal_Bool bInclRefToxMark = sal_False );
     void    GCAttr();
 
     // loesche das Text-Attribut (muss beim Pool abgemeldet werden!)
@@ -304,20 +304,20 @@ public:
 
     // setze diese Attribute am TextNode. Wird der gesamte Bereich umspannt,
     // dann setze sie nur im AutoAttrSet (SwCntntNode:: SetAttr)
-    BOOL SetAttr( const SfxItemSet& rSet,
+    sal_Bool SetAttr( const SfxItemSet& rSet,
                   xub_StrLen nStt, xub_StrLen nEnd,
                   const SetAttrMode nMode = nsSetAttrMode::SETATTR_DEFAULT );
     // erfrage die Attribute vom TextNode ueber den Bereich
     // --> OD 2008-01-16 #newlistlevelattrs#
     // Introduce 4th optional parameter <bMergeIndentValuesOfNumRule>.
-    // If <bMergeIndentValuesOfNumRule> == TRUE, the indent attributes of
+    // If <bMergeIndentValuesOfNumRule> == sal_True, the indent attributes of
     // the corresponding list level of an applied list style is merged into
-    // the requested item set as a LR-SPACE item, if <bOnlyTxtAttr> == FALSE,
+    // the requested item set as a LR-SPACE item, if <bOnlyTxtAttr> == sal_False,
     // corresponding node has not its own indent attributes and the
     // position-and-space mode of the list level is SvxNumberFormat::LABEL_ALIGNMENT.
-    BOOL GetAttr( SfxItemSet& rSet, xub_StrLen nStt, xub_StrLen nEnd,
-                  BOOL bOnlyTxtAttr  = FALSE,
-                  BOOL bGetFromChrFmt = TRUE,
+    sal_Bool GetAttr( SfxItemSet& rSet, xub_StrLen nStt, xub_StrLen nEnd,
+                  sal_Bool bOnlyTxtAttr  = sal_False,
+                  sal_Bool bGetFromChrFmt = sal_True,
                   const bool bMergeIndentValuesOfNumRule = false ) const;
     // <--
 
@@ -325,7 +325,7 @@ public:
     void FmtToTxtAttr( SwTxtNode* pNd );
 
     /// delete all attributes of type nWhich at nStart (opt. end nEnd)
-    void DeleteAttributes( const USHORT nWhich,
+    void DeleteAttributes( const sal_uInt16 nWhich,
                   const xub_StrLen nStart, const xub_StrLen nEnd = 0 );
     /// delete the attribute pTxtAttr
     void DeleteAttribute ( SwTxtAttr * const pTxtAttr );
@@ -364,8 +364,8 @@ public:
     SwCntntNode *AppendNode( const SwPosition & );
 
     // setze ggf. das DontExpand-Flag an INet bzw. Zeichenvorlagen
-    BOOL DontExpandFmt( const SwIndex& rIdx, bool bFlag = true,
-                        BOOL bFmtToTxtAttributes = TRUE );
+    sal_Bool DontExpandFmt( const SwIndex& rIdx, bool bFlag = true,
+                        sal_Bool bFmtToTxtAttributes = sal_True );
 
     enum GetTxtAttrMode {
         DEFAULT,    /// DEFAULT: (Start <  nIndex <= End)
@@ -404,8 +404,8 @@ public:
 
     // Aktuelles Wort zurueckliefern
     XubString GetCurWord(xub_StrLen) const;
-    USHORT Spell(SwSpellArgs*);
-    USHORT Convert( SwConversionArgs & );
+    sal_uInt16 Spell(SwSpellArgs*);
+    sal_uInt16 Convert( SwConversionArgs & );
 
     inline SwTxtFmtColl *GetTxtColl() const;
     virtual SwFmtColl *ChgFmtColl( SwFmtColl* );
@@ -430,7 +430,7 @@ public:
 
        @return numbering rule of this text node or NULL if none is set
      */
-    SwNumRule *GetNumRule(BOOL bInParent = TRUE) const;
+    SwNumRule *GetNumRule(sal_Bool bInParent = sal_True) const;
 
     inline const SwNodeNum* GetNum() const
     {
@@ -460,10 +460,10 @@ public:
           - it has a SwNodeNum and it has a numbering rule and the according
             SwNumFmt defines a numbering type that is an enumeration.
 
-       @retval TRUE      this text node may be numbered
-       @retval FALSE     else
+       @retval sal_True      this text node may be numbered
+       @retval sal_False     else
      */
-    //BOOL MayBeNumbered() const;
+    //sal_Bool MayBeNumbered() const;
 
     /**
        Notify this textnode that its numbering rule has changed.
@@ -494,7 +494,7 @@ public:
 
        @return additional indents
      */
-     long GetLeftMarginWithNum( BOOL bTxtLeft = FALSE ) const;
+     long GetLeftMarginWithNum( sal_Bool bTxtLeft = sal_False ) const;
 
     /**
        Returns the combined first line indent of this text node and
@@ -503,10 +503,10 @@ public:
        @param the first line indent of this text node taking the
                numbering into account (return parameter)
 
-       @retval TRUE   this node has SwNodeNum and has numbering rule
-       @retval FALSE  else
+       @retval sal_True   this node has SwNodeNum and has numbering rule
+       @retval sal_False  else
      */
-    BOOL GetFirstLineOfsWithNum( short& rFirstOffset ) const;
+    sal_Bool GetFirstLineOfsWithNum( short& rFirstOffset ) const;
 
     // --> OD 2010-01-05 #b6884103#
     SwTwips GetAdditionalIndentForStartingNewList() const;
@@ -533,10 +533,10 @@ public:
         numbering rule and the numbering format specified for the
         level of the SwNodeNum is of an enumeration type.
 
-        @retval TRUE    This text node has a number.
-        @retval FALSE   else
+        @retval sal_True    This text node has a number.
+        @retval sal_False   else
      */
-    BOOL HasNumber() const;
+    sal_Bool HasNumber() const;
 
     /** -> #i29560
         Returns if this text node has a bullet.
@@ -545,10 +545,10 @@ public:
         numbering rule and the numbering format specified for the
         level of the SwNodeNum is of a bullet type.
 
-        @retval TRUE    This text node has a bullet.
-        @retval FALSE   else
+        @retval sal_True    This text node has a bullet.
+        @retval sal_False   else
      */
-    BOOL HasBullet() const;
+    sal_Bool HasBullet() const;
 
     /** -> #i27615#
         Returns is this text node is numbered.
@@ -556,13 +556,13 @@ public:
         This node is numbered if it has a SwNodeNum and it has a
         numbering rule and has not a hidden SwNodeNum.
 
-        ATTENTION: Returns TRUE even if the SwNumFmt has type
+        ATTENTION: Returns sal_True even if the SwNumFmt has type
         SVX_NUM_NUMBER_NONE.
 
-        @retval TRUE      This node is numbered.
-        @retval FALSE     else
+        @retval sal_True      This node is numbered.
+        @retval sal_False     else
      */
-    BOOL IsNumbered() const;
+    sal_Bool IsNumbered() const;
 
     /** -> #i27615#
         Returns if this text node has a marked label.
@@ -644,7 +644,7 @@ public:
 
        @return     the width of the leading whitespace
      */
-    USHORT GetWidthOfLeadingTabs() const;
+    sal_uInt16 GetWidthOfLeadingTabs() const;
 
 
     /**
@@ -653,7 +653,7 @@ public:
        Note: This function returns false, if the numbering format is
        SVX_NUM_NUMBER_NONE or if the numbering/bullet has been deleted.
 
-       @return     TRUE if the paragraph has a visible numbering/bullet/outline
+       @return     sal_True if the paragraph has a visible numbering/bullet/outline
      */
     bool HasVisibleNumberingOrBullet() const;
 
@@ -712,15 +712,15 @@ public:
 
     void fillSoftPageBreakList( SwSoftPageBreakList& rBreak ) const;
 
-    USHORT GetLang( const xub_StrLen nBegin, const xub_StrLen nLen = 0,
-                    USHORT nScript = 0 ) const;
+    sal_uInt16 GetLang( const xub_StrLen nBegin, const xub_StrLen nLen = 0,
+                    sal_uInt16 nScript = 0 ) const;
 
     // steht in ndcopy.cxx
-    BOOL IsSymbol( const xub_StrLen nBegin ) const; // steht in itratr.cxx
+    sal_Bool IsSymbol( const xub_StrLen nBegin ) const; // steht in itratr.cxx
     virtual SwCntntNode* MakeCopy( SwDoc*, const SwNodeIndex& ) const;
 
     // interaktive Trennung: wir finden den TxtFrm und rufen sein CalcHyph
-    BOOL Hyphenate( SwInterHyphInfo &rHyphInf );
+    sal_Bool Hyphenate( SwInterHyphInfo &rHyphInf );
     void DelSoftHyph( const xub_StrLen nStart, const xub_StrLen nEnd );
 
     // --> OD 2007-11-15 #i83479#
@@ -736,10 +736,10 @@ public:
                             const bool bAddSpaceAfterListLabelStr = false,
                             const bool bWithSpacesForLevel = false ) const;
     // <--
-    BOOL GetExpandTxt( SwTxtNode& rDestNd, const SwIndex* pDestIdx = 0,
+    sal_Bool GetExpandTxt( SwTxtNode& rDestNd, const SwIndex* pDestIdx = 0,
                         xub_StrLen nIdx = 0, xub_StrLen nLen = STRING_LEN,
-                       BOOL bWithNum = FALSE, BOOL bWithFtn = TRUE,
-                       BOOL bReplaceTabsWithSpaces = FALSE ) const;
+                       sal_Bool bWithNum = sal_False, sal_Bool bWithFtn = sal_True,
+                       sal_Bool bReplaceTabsWithSpaces = sal_False ) const;
 
     /*
      *
@@ -749,11 +749,11 @@ public:
 
     XubString GetRedlineTxt( xub_StrLen nIdx = 0,
                           xub_StrLen nLen = STRING_LEN,
-                          BOOL bExpandFlds = FALSE,
-                          BOOL bWithNum = FALSE ) const;
+                          sal_Bool bExpandFlds = sal_False,
+                          sal_Bool bWithNum = sal_False ) const;
     //Liefert fuer die Initalfunktion tatsaechliche Anzahl der Initialzeichen
     //bei nWishLen == 0 die des ersten Wortes
-    USHORT GetDropLen( USHORT nWishLen) const;
+    sal_uInt16 GetDropLen( sal_uInt16 nWishLen) const;
 
     // Passes back info needed on the dropcap dimensions
     bool GetDropSize(int& rFontHeight, int& rDropHeight, int& rDropDescent) const;
@@ -839,7 +839,7 @@ public:
 
     bool IsFirstOfNumRule() const;
 
-    USHORT GetScalingOfSelectedText( xub_StrLen nStt, xub_StrLen nEnd ) const;
+    sal_uInt16 GetScalingOfSelectedText( xub_StrLen nStt, xub_StrLen nEnd ) const;
 
     SW_DLLPRIVATE ::com::sun::star::uno::WeakReference<
         ::com::sun::star::text::XTextContent> const& GetXParagraph() const

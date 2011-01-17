@@ -220,7 +220,7 @@ public:
     void SetCondHidden(bool const bFlag = true);
     bool IsCondHidden() const { return m_Data.IsCondHidden(); }
     // erfrage (auch ueber die Parents), ob diese Section versteckt sein soll.
-    BOOL CalcHiddenFlag() const;
+    sal_Bool CalcHiddenFlag() const;
 
 
     inline SwSection* GetParent() const;
@@ -249,8 +249,8 @@ public:
     bool IsServer() const                   {  return m_RefObj.Is(); }
 
     // Methoden fuer gelinkte Bereiche
-    USHORT GetUpdateType() const    { return m_RefLink->GetUpdateMode(); }
-    void SetUpdateType(USHORT const nType )
+    sal_uInt16 GetUpdateType() const    { return m_RefLink->GetUpdateMode(); }
+    void SetUpdateType(sal_uInt16 const nType )
         { m_RefLink->SetUpdateMode(nType); }
 
     bool IsConnected() const        { return m_RefLink.Is(); }
@@ -313,7 +313,7 @@ public:
 
     virtual void Modify( SfxPoolItem* pOld, SfxPoolItem* pNew );
         // erfrage vom Format Informationen
-    virtual BOOL GetInfo( SfxPoolItem& ) const;
+    virtual sal_Bool GetInfo( SfxPoolItem& ) const;
 
     SwSection* GetSection() const;
     inline SwSectionFmt* GetParent() const;
@@ -322,13 +322,13 @@ public:
     // alle Sections, die von dieser abgeleitet sind
     //  - sortiert nach : Name oder Position oder unsortiert
     //  - alle oder nur die, die sich im normalten Nodes-Array befinden
-    USHORT GetChildSections( SwSections& rArr,
+    sal_uInt16 GetChildSections( SwSections& rArr,
                             SectionSort eSort = SORTSECT_NOT,
-                            BOOL bAllSections = TRUE ) const;
+                            sal_Bool bAllSections = sal_True ) const;
 
     // erfrage, ob sich die Section im Nodes-Array oder UndoNodes-Array
     // befindet.
-    BOOL IsInNodesArr() const;
+    sal_Bool IsInNodesArr() const;
 
           SwSectionNode* GetSectionNode(bool const bEvenIfInUndo = false);
     const SwSectionNode* GetSectionNode(bool const bEvenIfInUndo = false) const

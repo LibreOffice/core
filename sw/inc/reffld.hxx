@@ -83,8 +83,8 @@ public:
     void MergeWithOtherDoc( SwDoc& rDestDoc );
 
     static SwTxtNode* FindAnchor( SwDoc* pDoc, const String& rRefMark,
-                                        USHORT nSubType, USHORT nSeqNo,
-                                        USHORT* pStt, USHORT* pEnd = 0 );
+                                        sal_uInt16 nSubType, sal_uInt16 nSeqNo,
+                                        sal_uInt16* pStt, sal_uInt16* pEnd = 0 );
 };
 
 /*--------------------------------------------------------------------
@@ -96,8 +96,8 @@ class SW_DLLPUBLIC SwGetRefField : public SwField
 private:
     String sSetRefName;
     String sTxt;
-    USHORT nSubType;
-    USHORT nSeqNo;
+    sal_uInt16 nSubType;
+    sal_uInt16 nSeqNo;
 
     virtual String      Expand() const;
     virtual SwField*    Copy() const;
@@ -109,7 +109,7 @@ private:
     // <--
 public:
     SwGetRefField( SwGetRefFieldType*, const String& rSetRef,
-                    USHORT nSubType, USHORT nSeqNo, ULONG nFmt );
+                    sal_uInt16 nSubType, sal_uInt16 nSeqNo, sal_uLong nFmt );
 
     virtual ~SwGetRefField();
 
@@ -129,8 +129,8 @@ public:
     void                SetExpand( const String& rStr ) { sTxt = rStr; }
 
     // SubType erfragen/setzen
-    virtual USHORT      GetSubType() const;
-    virtual void        SetSubType( USHORT n );
+    virtual sal_uInt16      GetSubType() const;
+    virtual void        SetSubType( sal_uInt16 n );
 
     // --> OD 2007-11-09 #i81002#
     bool IsRefToHeadingCrossRefBookmark() const;
@@ -142,16 +142,16 @@ public:
     // <--
 
     // SequenceNo erfragen/setzen (nur fuer REF_SEQUENCEFLD interressant)
-    USHORT              GetSeqNo() const        { return nSeqNo; }
-    void                SetSeqNo( USHORT n )    { nSeqNo = n; }
+    sal_uInt16              GetSeqNo() const        { return nSeqNo; }
+    void                SetSeqNo( sal_uInt16 n )    { nSeqNo = n; }
 
     // Name der Referenz
     virtual const String& GetPar1() const;
     virtual void        SetPar1(const String& rStr);
 
     virtual String      GetPar2() const;
-    virtual BOOL        QueryValue( com::sun::star::uno::Any& rVal, USHORT nWhichId ) const;
-    virtual BOOL        PutValue( const com::sun::star::uno::Any& rVal, USHORT nWhichId );
+    virtual sal_Bool        QueryValue( com::sun::star::uno::Any& rVal, sal_uInt16 nWhichId ) const;
+    virtual sal_Bool        PutValue( const com::sun::star::uno::Any& rVal, sal_uInt16 nWhichId );
 
     void                ConvertProgrammaticToUIName();
 

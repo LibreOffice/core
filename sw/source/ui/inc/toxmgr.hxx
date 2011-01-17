@@ -50,9 +50,9 @@ class SW_DLLPUBLIC SwTOXDescription
     String*             pTitle;
     String*             pTOUName;
     SwForm*             pForm;
-    USHORT              nContent;
-    USHORT              nIndexOptions;
-    USHORT              nOLEOptions;
+    sal_uInt16              nContent;
+    sal_uInt16              nIndexOptions;
+    sal_uInt16              nOLEOptions;
     LanguageType        eLanguage;
     String              sSortAlgorithm;
 
@@ -61,13 +61,13 @@ class SW_DLLPUBLIC SwTOXDescription
     SwTOXSortKey        eSortKey1;
     SwTOXSortKey        eSortKey2;
     SwTOXSortKey        eSortKey3;
-    BYTE                nLevel;
-    BOOL                bFromObjectNames : 1;
-    BOOL                bFromChapter : 1;
-    BOOL                bReadonly: 1;
-    BOOL                bLevelFromChapter : 1;
-    BOOL                bIsAuthSequence :1;
-    BOOL                bSortByDocument :1;
+    sal_uInt8               nLevel;
+    sal_Bool                bFromObjectNames : 1;
+    sal_Bool                bFromChapter : 1;
+    sal_Bool                bReadonly: 1;
+    sal_Bool                bLevelFromChapter : 1;
+    sal_Bool                bIsAuthSequence :1;
+    sal_Bool                bSortByDocument :1;
 
     //TODO: TemplateNames
     //const String* pTemplateName = 0, ???
@@ -90,12 +90,12 @@ public:
         eLanguage((LanguageType)::GetAppLanguage()),
         eCaptionDisplay(CAPTION_COMPLETE),
         nLevel(MAXLEVEL),
-        bFromObjectNames(FALSE),
-        bFromChapter(FALSE),
-        bReadonly(TRUE),
-        bLevelFromChapter(FALSE),
-        bIsAuthSequence(FALSE),
-        bSortByDocument(TRUE)
+        bFromObjectNames(sal_False),
+        bFromChapter(sal_False),
+        bReadonly(sal_True),
+        bLevelFromChapter(sal_False),
+        bIsAuthSequence(sal_False),
+        bSortByDocument(sal_True)
         {}
     ~SwTOXDescription()
         {
@@ -107,9 +107,9 @@ public:
     void            SetTOXType(TOXTypes eSet) { eTOXType = eSet;}
     TOXTypes        GetTOXType() const { return eTOXType;}
 
-    const String&   GetStyleNames(USHORT nLvl) const
+    const String&   GetStyleNames(sal_uInt16 nLvl) const
                                 {return aStyleNames[nLvl];}
-    void            SetStyleNames(const String& rSet, USHORT nLvl)
+    void            SetStyleNames(const String& rSet, sal_uInt16 nLvl)
                                 {aStyleNames[nLvl] = rSet; }
 
     const String&   GetAutoMarkURL() const { return sAutoMarkURL;}
@@ -124,20 +124,20 @@ public:
     void            SetForm(const SwForm& rSet) {delete pForm; pForm = new SwForm(rSet);}
     const SwForm*   GetForm() const {return pForm;}
 
-    void            SetContentOptions(USHORT nSet) { nContent = nSet;}
-    USHORT          GetContentOptions() const { return nContent;}
+    void            SetContentOptions(sal_uInt16 nSet) { nContent = nSet;}
+    sal_uInt16          GetContentOptions() const { return nContent;}
 
-    void            SetIndexOptions(USHORT nSet) { nIndexOptions = nSet;}
-    USHORT          GetIndexOptions() const { return nIndexOptions;}
+    void            SetIndexOptions(sal_uInt16 nSet) { nIndexOptions = nSet;}
+    sal_uInt16          GetIndexOptions() const { return nIndexOptions;}
 
     const String&   GetMainEntryCharStyle() const {return sMainEntryCharStyle;}
     void            SetMainEntryCharStyle(const String& rSet)  {sMainEntryCharStyle = rSet;}
 
-    void            SetLevel(BYTE nSet) {nLevel = nSet;}
-    BYTE            GetLevel()const  {return nLevel; }
+    void            SetLevel(sal_uInt8 nSet) {nLevel = nSet;}
+    sal_uInt8           GetLevel()const  {return nLevel; }
 
-    void            SetCreateFromObjectNames(BOOL bSet) { bFromObjectNames = bSet;}
-    BOOL            IsCreateFromObjectNames() const {return bFromObjectNames;}
+    void            SetCreateFromObjectNames(sal_Bool bSet) { bFromObjectNames = bSet;}
+    sal_Bool            IsCreateFromObjectNames() const {return bFromObjectNames;}
 
     const String&   GetSequenceName() const {return sSequenceName;}
     void            SetSequenceName(const String& rSet) {sSequenceName = rSet;}
@@ -145,26 +145,26 @@ public:
     SwCaptionDisplay    GetCaptionDisplay() const { return eCaptionDisplay;}
     void                SetCaptionDisplay(SwCaptionDisplay eSet) {eCaptionDisplay = eSet;}
 
-    void            SetFromChapter(BOOL bSet) { bFromChapter = bSet;}
-    BOOL            IsFromChapter() const {return bFromChapter;}
+    void            SetFromChapter(sal_Bool bSet) { bFromChapter = bSet;}
+    sal_Bool            IsFromChapter() const {return bFromChapter;}
 
-    void            SetReadonly(BOOL bSet){bReadonly = bSet;}
-    BOOL            IsReadonly() const {return bReadonly;}
+    void            SetReadonly(sal_Bool bSet){bReadonly = bSet;}
+    sal_Bool            IsReadonly() const {return bReadonly;}
 
-    USHORT          GetOLEOptions() const {return nOLEOptions;}
-    void            SetOLEOptions(USHORT nOpt) {nOLEOptions = nOpt;}
+    sal_uInt16          GetOLEOptions() const {return nOLEOptions;}
+    void            SetOLEOptions(sal_uInt16 nOpt) {nOLEOptions = nOpt;}
 
-    BOOL            IsLevelFromChapter() const {return bLevelFromChapter;}
-    void            SetLevelFromChapter(BOOL bSet) {bLevelFromChapter = bSet;}
+    sal_Bool            IsLevelFromChapter() const {return bLevelFromChapter;}
+    void            SetLevelFromChapter(sal_Bool bSet) {bLevelFromChapter = bSet;}
 
     String          GetAuthBrackets() const {return sAuthBrackets;}
     void            SetAuthBrackets(const String& rSet) {sAuthBrackets = rSet;}
 
-    BOOL            IsAuthSequence() const {return bIsAuthSequence;}
-    void            SetAuthSequence(BOOL bSet){bIsAuthSequence = bSet;}
+    sal_Bool            IsAuthSequence() const {return bIsAuthSequence;}
+    void            SetAuthSequence(sal_Bool bSet){bIsAuthSequence = bSet;}
 
-    BOOL            IsSortByDocument()const {return bSortByDocument ;}
-    void            SetSortByDocument(BOOL bSet) {bSortByDocument = bSet;}
+    sal_Bool            IsSortByDocument()const {return bSortByDocument ;}
+    void            SetSortByDocument(sal_Bool bSet) {bSortByDocument = bSet;}
 
     void SetSortKeys(SwTOXSortKey eKey1,
                         SwTOXSortKey eKey2,
@@ -188,7 +188,7 @@ class SwTOXMarkDescription
 {
     TOXTypes    eTOXType;
     int         nLevel;
-    BOOL        bMainEntry;
+    sal_Bool        bMainEntry;
 
     String*     pPrimKey;
     String*     pSecKey;
@@ -209,7 +209,7 @@ public:
     explicit SwTOXMarkDescription(TOXTypes eType) :
         eTOXType(eType),
         nLevel(0),
-        bMainEntry(FALSE),
+        bMainEntry(sal_False),
         pPrimKey(0),
         pSecKey(0),
         pAltStr(0),
@@ -235,8 +235,8 @@ public:
     void            SetLevel(int nSet) {nLevel = nSet;}
     int             GetLevel() const {return nLevel;}
 
-    void            SetMainEntry(BOOL bSet) {bMainEntry = bSet;}
-    BOOL            IsMainEntry() const {return bMainEntry;}
+    void            SetMainEntry(sal_Bool bSet) {bMainEntry = bSet;}
+    sal_Bool            IsMainEntry() const {return bMainEntry;}
 
     void            SetPrimKey(const String& rSet)
                                 {delete pPrimKey; pPrimKey = new String(rSet);}
@@ -274,7 +274,7 @@ class SW_DLLPUBLIC SwTOXMgr
     SwTOXMark*          pCurTOXMark;
     SwTOXMarks          aCurMarks;
 
-    SW_DLLPRIVATE USHORT                GetUserTypeID(const String& rStr);
+    SW_DLLPRIVATE sal_uInt16                GetUserTypeID(const String& rStr);
 
 public:
     // single argument ctors shall be explicit.
@@ -289,22 +289,22 @@ public:
 
 
     void                DeleteTOXMark();
-    void                NextTOXMark(BOOL bSame=FALSE);
-    void                PrevTOXMark(BOOL bSame=FALSE);
+    void                NextTOXMark(sal_Bool bSame=sal_False);
+    void                PrevTOXMark(sal_Bool bSame=sal_False);
 
     // Aktuelle TOXmarks holen
-    USHORT              GetTOXMarks();
-    USHORT              GetTOXMarkCount();
-    SwTOXMark*          GetTOXMark(USHORT nId);
+    sal_uInt16              GetTOXMarks();
+    sal_uInt16              GetTOXMarkCount();
+    SwTOXMark*          GetTOXMark(sal_uInt16 nId);
     SwTOXMark*          GetCurTOXMark();
-    void                SetCurTOXMark(USHORT nId);
+    void                SetCurTOXMark(sal_uInt16 nId);
 
     //
     // Methoden fuer Verzeichnisse
     //
-    BOOL    UpdateOrInsertTOX(const SwTOXDescription& rDesc, SwTOXBase** ppBase = 0, const SfxItemSet* pSet = 0);
+    sal_Bool    UpdateOrInsertTOX(const SwTOXDescription& rDesc, SwTOXBase** ppBase = 0, const SfxItemSet* pSet = 0);
 
-    const SwTOXType*    GetTOXType(TOXTypes eTyp, USHORT nId) const;
+    const SwTOXType*    GetTOXType(TOXTypes eTyp, sal_uInt16 nId) const;
     const SwTOXBase*    GetCurTOX();
 
 };
@@ -314,7 +314,7 @@ public:
     Beschreibung: Inlines
  --------------------------------------------------------------------*/
 
-inline USHORT SwTOXMgr::GetTOXMarkCount()
+inline sal_uInt16 SwTOXMgr::GetTOXMarkCount()
     {   return aCurMarks.Count();   }
 
 

@@ -435,7 +435,7 @@ void SwHTMLParser::FixHeaderFooterDistance( sal_Bool bHeader,
     const SwFmtCntnt& rFlyCntnt = pHdFtFmt->GetCntnt();
     const SwNodeIndex& rCntntStIdx = *rFlyCntnt.GetCntntIdx();
 
-    ULONG nPrvNxtIdx;
+    sal_uLong nPrvNxtIdx;
     if( bHeader )
     {
         nPrvNxtIdx = pDoc->GetNodes()[rCntntStIdx]->EndOfSectionIndex()-1;
@@ -810,7 +810,7 @@ void SwHTMLParser::InsertFlyFrame( const SfxItemSet& rItemSet,
 /*  */
 
 void SwHTMLParser::MovePageDescAttrs( SwNode *pSrcNd,
-                                      ULONG nDestIdx,
+                                      sal_uLong nDestIdx,
                                       sal_Bool bFmtBreak )
 {
     SwCntntNode* pDestCntntNd =

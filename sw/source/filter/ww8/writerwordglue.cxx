@@ -792,25 +792,25 @@ namespace sw
             DateTime aDateTime(Date( 0 ), Time( 0 ));
             if( lDTTM )
             {
-                USHORT lMin = (USHORT)(lDTTM & 0x0000003F);
+                sal_uInt16 lMin = (sal_uInt16)(lDTTM & 0x0000003F);
                 lDTTM >>= 6;
-                USHORT lHour= (USHORT)(lDTTM & 0x0000001F);
+                sal_uInt16 lHour= (sal_uInt16)(lDTTM & 0x0000001F);
                 lDTTM >>= 5;
-                USHORT lDay = (USHORT)(lDTTM & 0x0000001F);
+                sal_uInt16 lDay = (sal_uInt16)(lDTTM & 0x0000001F);
                 lDTTM >>= 5;
-                USHORT lMon = (USHORT)(lDTTM & 0x0000000F);
+                sal_uInt16 lMon = (sal_uInt16)(lDTTM & 0x0000000F);
                 lDTTM >>= 4;
-                USHORT lYear= (USHORT)(lDTTM & 0x000001FF) + 1900;
+                sal_uInt16 lYear= (sal_uInt16)(lDTTM & 0x000001FF) + 1900;
                 aDateTime = DateTime(Date(lDay, lMon, lYear), Time(lHour, lMin));
             }
             return aDateTime;
         }
 
-        ULONG MSDateTimeFormatToSwFormat(String& rParams,
-            SvNumberFormatter *pFormatter, USHORT &rLang, bool bHijri)
+        sal_uLong MSDateTimeFormatToSwFormat(String& rParams,
+            SvNumberFormatter *pFormatter, sal_uInt16 &rLang, bool bHijri)
         {
             // tell the Formatter about the new entry
-            UINT16 nCheckPos = 0;
+            sal_uInt16 nCheckPos = 0;
             short  nType = NUMBERFORMAT_DEFINED;
             sal_uInt32  nKey = 0;
 

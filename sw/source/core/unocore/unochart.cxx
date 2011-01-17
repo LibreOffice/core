@@ -164,7 +164,7 @@ void SwChartLockController_Helper::LockUnlockAllCharts( sal_Bool bLock )
         return;
 
     const SwFrmFmts& rTblFmts = *pDoc->GetTblFrmFmts();
-    for( USHORT n = 0; n < rTblFmts.Count(); ++n )
+    for( sal_uInt16 n = 0; n < rTblFmts.Count(); ++n )
     {
         SwTable* pTmpTbl;
         const SwTableNode* pTblNd;
@@ -678,7 +678,7 @@ uno::Reference< chart2::data::XDataSource > SwChartDataProvider::Impl_createData
         String aChartTableName;
 
         const SwNodes& rNodes = pDoc->GetNodes();
-        for( ULONG nN = rNodes.Count(); nN--; )
+        for( sal_uLong nN = rNodes.Count(); nN--; )
         {
             SwNodePtr pNode = rNodes[nN];
             if( !pNode )
@@ -1747,12 +1747,12 @@ void SwChartDataProvider::DisposeAllDataSequences( const SwTable *pTable )
 void SwChartDataProvider::AddRowCols(
         const SwTable &rTable,
         const SwSelBoxes& rBoxes,
-        USHORT nLines, BOOL bBehind )
+        sal_uInt16 nLines, sal_Bool bBehind )
 {
     if (rTable.IsTblComplex())
         return;
 
-    const USHORT nBoxes     = rBoxes.Count();
+    const sal_uInt16 nBoxes     = rBoxes.Count();
     if (nBoxes < 1 || nLines < 1)
         return;
 
@@ -1851,7 +1851,7 @@ rtl::OUString SAL_CALL SwChartDataProvider::convertRangeToXML( const rtl::OUStri
     // "Table1.A1:A4;Table1.C2:C5" the same table must be used in all ranges!
     xub_StrLen nNumRanges = aRangeRepresentation.GetTokenCount( ';' );
     SwTable* pFirstFoundTable = 0;  // to check that only one table will be used
-    for (USHORT i = 0;  i < nNumRanges;  ++i)
+    for (sal_uInt16 i = 0;  i < nNumRanges;  ++i)
     {
         String aRange( aRangeRepresentation.GetToken(i, ';') );
         SwFrmFmt    *pTblFmt  = 0;      // pointer to table format
@@ -1924,7 +1924,7 @@ rtl::OUString SAL_CALL SwChartDataProvider::convertRangeFromXML( const rtl::OUSt
     // "Table1.$A$1:.$A$4 Table1.$C$2:.$C$5" the same table must be used in all ranges!
     xub_StrLen nNumRanges = aXMLRange.GetTokenCount( ' ' );
     rtl::OUString aFirstFoundTable; // to check that only one table will be used
-    for (USHORT i = 0;  i < nNumRanges;  ++i)
+    for (sal_uInt16 i = 0;  i < nNumRanges;  ++i)
     {
         String aRange( aXMLRange.GetToken(i, ' ') );
 

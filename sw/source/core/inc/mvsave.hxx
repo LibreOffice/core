@@ -74,8 +74,8 @@ namespace sw { namespace mark
             bool m_bSavePos;
             bool m_bSaveOtherPos;
             IDocumentMarkAccess::MarkType m_eOrigBkmType;
-            ULONG m_nNode1;
-            ULONG m_nNode2;
+            sal_uLong m_nNode1;
+            sal_uLong m_nNode2;
             xub_StrLen m_nCntnt1;
             xub_StrLen m_nCntnt2;
             ::boost::shared_ptr< ::sfx2::MetadatableUndo > m_pMetadataUndo;
@@ -90,11 +90,11 @@ void _DelBookmarks(const SwNodeIndex& rStt,
     ::std::vector< ::sw::mark::SaveBookmark> * SaveBkmk =0,
     const SwIndex* pSttIdx =0,
     const SwIndex* pEndIdx =0);
-void _SaveCntntIdx( SwDoc* pDoc, ULONG nNode, xub_StrLen nCntnt,
-                    SvULongs& rSaveArr, BYTE nSaveFly = 0 );
+void _SaveCntntIdx( SwDoc* pDoc, sal_uLong nNode, xub_StrLen nCntnt,
+                    SvULongs& rSaveArr, sal_uInt8 nSaveFly = 0 );
 void _RestoreCntntIdx( SwDoc* pDoc, SvULongs& rSaveArr,
-                        ULONG nNode, xub_StrLen nOffset = 0,
-                        BOOL bAuto = FALSE );
+                        sal_uLong nNode, xub_StrLen nOffset = 0,
+                        sal_Bool bAuto = sal_False );
 void _RestoreCntntIdx( SvULongs& rSaveArr, const SwNode& rNd,
                         xub_StrLen nLen, xub_StrLen nCorrLen );
 
@@ -103,11 +103,11 @@ void _RestoreCntntIdx( SvULongs& rSaveArr, const SwNode& rNd,
  *  location. */
 struct _SaveFly
 {
-    ULONG nNdDiff;              /// relative node difference
+    sal_uLong nNdDiff;              /// relative node difference
     SwFrmFmt* pFrmFmt;          /// the fly's frame format
     sal_Bool bInsertPosition;   /// if true, anchor _at_ insert position
 
-    _SaveFly( ULONG nNodeDiff, SwFrmFmt* pFmt, sal_Bool bInsert )
+    _SaveFly( sal_uLong nNodeDiff, SwFrmFmt* pFmt, sal_Bool bInsert )
         : nNdDiff( nNodeDiff ), pFrmFmt( pFmt ), bInsertPosition( bInsert )
     { }
 };
@@ -129,16 +129,16 @@ class SwDataChanged
     const SwPaM* pPam;
     const SwPosition* pPos;
     SwDoc* pDoc;
-    ULONG nNode;
+    sal_uLong nNode;
     xub_StrLen nCntnt;
-    USHORT nType;       // Insert/Move/Delete/... (UndoIds)
+    sal_uInt16 nType;       // Insert/Move/Delete/... (UndoIds)
 
 public:
-    SwDataChanged( const SwPaM& rPam, USHORT nType );
-    SwDataChanged( SwDoc* pDoc, const SwPosition& rPos, USHORT nType );
+    SwDataChanged( const SwPaM& rPam, sal_uInt16 nType );
+    SwDataChanged( SwDoc* pDoc, const SwPosition& rPos, sal_uInt16 nType );
     ~SwDataChanged();
 
-    ULONG GetNode() const           { return nNode; }
+    sal_uLong GetNode() const           { return nNode; }
     xub_StrLen GetCntnt() const     { return nCntnt; }
 };
 
@@ -164,18 +164,18 @@ class _ZSortFly
 {
     const SwFrmFmt* pFmt;
     const SwFmtAnchor* pAnchor;
-    UINT32 nOrdNum;
+    sal_uInt32 nOrdNum;
 
 public:
     _ZSortFly( const SwFrmFmt* pFrmFmt, const SwFmtAnchor* pFlyAnchor,
-                UINT32 nArrOrdNum );
+                sal_uInt32 nArrOrdNum );
     _ZSortFly& operator=( const _ZSortFly& rCpy )
     {
         pFmt = rCpy.pFmt, pAnchor = rCpy.pAnchor, nOrdNum = rCpy.nOrdNum;
         return *this;
     }
 
-    int operator==( const _ZSortFly& ) const { return FALSE; }
+    int operator==( const _ZSortFly& ) const { return sal_False; }
     int operator<( const _ZSortFly& rCmp ) const
         { return nOrdNum < rCmp.nOrdNum; }
 

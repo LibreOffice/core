@@ -51,7 +51,7 @@ public:
 
     // "pure virtual Methoden" vom SfxPoolItem
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
-    virtual USHORT          GetValueCount() const;
+    virtual sal_uInt16          GetValueCount() const;
 
     SwFillOrder GetFillOrder() const { return SwFillOrder(GetValue()); }
 };
@@ -62,10 +62,10 @@ inline SwFmtFillOrder &SwFmtFillOrder::operator=( const SwFmtFillOrder &rCpy )
     return *this;
 }
 
-inline const SwFmtFillOrder &SwAttrSet::GetFillOrder(BOOL bInP) const
+inline const SwFmtFillOrder &SwAttrSet::GetFillOrder(sal_Bool bInP) const
     { return (const SwFmtFillOrder&)Get( RES_FILL_ORDER,bInP); }
 
-inline const SwFmtFillOrder &SwFmt::GetFillOrder(BOOL bInP) const
+inline const SwFmtFillOrder &SwFmt::GetFillOrder(sal_Bool bInP) const
     { return aSet.GetFillOrder(bInP); }
 
 #endif

@@ -60,26 +60,26 @@ class SW_DLLPUBLIC SwDocDisplayItem : public SfxPoolItem
     friend class SwShdwCrsrOptionsTabPage;
     friend class SwModule;
 
-    BOOL bParagraphEnd      :1;
-    BOOL bTab               :1;
-    BOOL bSpace             :1;
-    BOOL bNonbreakingSpace  :1;
-    BOOL bSoftHyphen        :1;
-    BOOL bCharHiddenText    :1;
-    BOOL bFldHiddenText     :1;
-    BOOL bManualBreak       :1;
-    BOOL bShowHiddenPara    :1;
+    sal_Bool bParagraphEnd      :1;
+    sal_Bool bTab               :1;
+    sal_Bool bSpace             :1;
+    sal_Bool bNonbreakingSpace  :1;
+    sal_Bool bSoftHyphen        :1;
+    sal_Bool bCharHiddenText    :1;
+    sal_Bool bFldHiddenText     :1;
+    sal_Bool bManualBreak       :1;
+    sal_Bool bShowHiddenPara    :1;
 
     Color aIndexBackgrndCol;
 
 
 public:
                                 TYPEINFO();
-                                SwDocDisplayItem( USHORT nWhich = FN_PARAM_DOCDISP );
+                                SwDocDisplayItem( sal_uInt16 nWhich = FN_PARAM_DOCDISP );
                                 SwDocDisplayItem(
                                     const SwDocDisplayItem& rSwDocDisplayItem );
                                 SwDocDisplayItem( const SwViewOption& rVOpt,
-                                                                USHORT nWhich );
+                                                                sal_uInt16 nWhich );
 
 
     virtual SfxPoolItem*        Clone( SfxItemPool *pPool = 0 ) const;
@@ -93,31 +93,31 @@ Item fuer Einstellungsdialog, Elementeseite
 class SW_DLLPUBLIC SwElemItem : public SfxPoolItem
 {
     //view
-    BOOL bHorzScrollbar :1;
-    BOOL bVertScrollbar :1;
-    BOOL bAnyRuler : 1;
-    BOOL bHorzRuler     :1;
-    BOOL bVertRuler     :1;
-    BOOL bVertRulerRight:1;
-    BOOL bSmoothScroll  :1;
+    sal_Bool bHorzScrollbar :1;
+    sal_Bool bVertScrollbar :1;
+    sal_Bool bAnyRuler : 1;
+    sal_Bool bHorzRuler     :1;
+    sal_Bool bVertRuler     :1;
+    sal_Bool bVertRulerRight:1;
+    sal_Bool bSmoothScroll  :1;
     //visual aids
-    BOOL bCrosshair     :1;
-    BOOL bHandles       :1;
-    BOOL bBigHandles    :1;
+    sal_Bool bCrosshair     :1;
+    sal_Bool bHandles       :1;
+    sal_Bool bBigHandles    :1;
     //display
-    BOOL bTable             :1;
-    BOOL bGraphic           :1;
-    BOOL bDrawing           :1;
-    BOOL bFieldName         :1;
-    BOOL bNotes             :1;
+    sal_Bool bTable             :1;
+    sal_Bool bGraphic           :1;
+    sal_Bool bDrawing           :1;
+    sal_Bool bFieldName         :1;
+    sal_Bool bNotes             :1;
 
     friend class SwContentOptPage;
 
 public:
                             TYPEINFO();
-                            SwElemItem( USHORT nWhich = FN_PARAM_ELEM );
+                            SwElemItem( sal_uInt16 nWhich = FN_PARAM_ELEM );
                             SwElemItem(const SwElemItem& rElemItem);
-                            SwElemItem(const SwViewOption& rVOpt, USHORT nWhich);
+                            SwElemItem(const SwViewOption& rVOpt, sal_uInt16 nWhich);
 
 
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
@@ -139,8 +139,8 @@ class SW_DLLPUBLIC SwAddPrinterItem : public SfxPoolItem, public SwPrintData
 
 public:
     TYPEINFO();
-    SwAddPrinterItem( USHORT nWhich = FN_PARAM_ADDPRINTER );
-    SwAddPrinterItem( USHORT nWhich, const SwPrintData& rPrtData );
+    SwAddPrinterItem( sal_uInt16 nWhich = FN_PARAM_ADDPRINTER );
+    SwAddPrinterItem( sal_uInt16 nWhich, const SwPrintData& rPrtData );
     SwAddPrinterItem( const SwAddPrinterItem& rAddPrinterItem);
 
     virtual SfxPoolItem* Clone( SfxItemPool *pPool = 0 ) const;
@@ -151,27 +151,27 @@ public:
     void          SetFax( const String& rFax) { sFaxName = rFax; }
 
 
-    BOOL   IsPrintProspect() const      { return bPrintProspect; }
-    BOOL   IsPrintProspectRTL() const      { return bPrintProspectRTL; }
-    void   SetPrintProspect(BOOL bFlag ){ bPrintProspect = bFlag; }
-    void   SetPrintProspectRTL(BOOL bFlag ){ bPrintProspectRTL = bFlag; }
-    BOOL IsPrintGraphic () const { return bPrintGraphic; }
-    BOOL IsPrintTable () const { return bPrintTable; }
-    BOOL IsPrintDraw () const { return bPrintDraw; }
-    BOOL IsPrintControl () const { return bPrintControl; }
-    BOOL IsPrintLeftPage () const { return bPrintLeftPages; }
-    BOOL IsPrintRightPage() const { return bPrintRightPages; }
-    BOOL IsPrintReverse  () const { return bPrintReverse; }
-    BOOL IsPaperFromSetup() const { return bPaperFromSetup; }
-    BOOL IsPrintEmptyPages() const { return bPrintEmptyPages; }
-    BOOL IsPrintPageBackground() const { return bPrintPageBackground; }
-    BOOL IsPrintBlackFont() const { return bPrintBlackFont; }
+    sal_Bool   IsPrintProspect() const      { return bPrintProspect; }
+    sal_Bool   IsPrintProspectRTL() const      { return bPrintProspectRTL; }
+    void   SetPrintProspect(sal_Bool bFlag ){ bPrintProspect = bFlag; }
+    void   SetPrintProspectRTL(sal_Bool bFlag ){ bPrintProspectRTL = bFlag; }
+    sal_Bool IsPrintGraphic () const { return bPrintGraphic; }
+    sal_Bool IsPrintTable () const { return bPrintTable; }
+    sal_Bool IsPrintDraw () const { return bPrintDraw; }
+    sal_Bool IsPrintControl () const { return bPrintControl; }
+    sal_Bool IsPrintLeftPage () const { return bPrintLeftPages; }
+    sal_Bool IsPrintRightPage() const { return bPrintRightPages; }
+    sal_Bool IsPrintReverse  () const { return bPrintReverse; }
+    sal_Bool IsPaperFromSetup() const { return bPaperFromSetup; }
+    sal_Bool IsPrintEmptyPages() const { return bPrintEmptyPages; }
+    sal_Bool IsPrintPageBackground() const { return bPrintPageBackground; }
+    sal_Bool IsPrintBlackFont() const { return bPrintBlackFont; }
     //#i81434# - printing of hidden text
     sal_Bool IsPrintHiddenText() const { return bPrintHiddenText; }
     sal_Bool IsPrintTextPlaceholder() const { return bPrintTextPlaceholder; }
 
-    BOOL IsPrintSingleJobs() const { return bPrintSingleJobs; }
-    ULONG GetPrintPostIts () const { return nPrintPostIts; }
+    sal_Bool IsPrintSingleJobs() const { return bPrintSingleJobs; }
+    sal_uLong GetPrintPostIts () const { return nPrintPostIts; }
 
 };
 
@@ -182,13 +182,13 @@ Item fuer Einstellungsdialog, ShadowCursorSeite
 
 class SW_DLLPUBLIC SwShadowCursorItem : public SfxPoolItem
 {
-    BYTE eMode;
-    BOOL bOn;
+    sal_uInt8 eMode;
+    sal_Bool bOn;
 public:
     TYPEINFO();
-    SwShadowCursorItem( USHORT nWhich = FN_PARAM_SHADOWCURSOR );
+    SwShadowCursorItem( sal_uInt16 nWhich = FN_PARAM_SHADOWCURSOR );
     SwShadowCursorItem( const SwShadowCursorItem& rElemItem );
-    SwShadowCursorItem( const SwViewOption& rVOpt, USHORT nWhich );
+    SwShadowCursorItem( const SwViewOption& rVOpt, sal_uInt16 nWhich );
 
 
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
@@ -197,11 +197,11 @@ public:
 
     void FillViewOptions( SwViewOption& rVOpt) const;
 
-    BYTE GetMode() const                { return eMode; }
-    BOOL IsOn() const                   { return bOn; }
+    sal_uInt8 GetMode() const               { return eMode; }
+    sal_Bool IsOn() const                   { return bOn; }
 
-    void SetMode( BYTE eM )             { eMode = eM; }
-    void SetOn( BOOL bFlag )            { bOn = bFlag; }
+    void SetMode( sal_uInt8 eM )            { eMode = eM; }
+    void SetOn( sal_Bool bFlag )            { bOn = bFlag; }
 };
 
 #ifdef DBG_UTIL
@@ -215,19 +215,19 @@ class SW_DLLPUBLIC SwTestItem : public SfxPoolItem
     friend class SwTestTabPage;
     friend class SwDocEditDialog;
 
-    BOOL    bTest1:1;
-    BOOL    bTest2:1;
-    BOOL    bTest3:1;
-    BOOL    bTest4:1;
-    BOOL    bTest5:1;
-    BOOL    bTest6:1;
-    BOOL    bTest7:1;
-    BOOL    bTest8:1;
-    BOOL    bTest9:1;
-    BOOL    bTest10:1;
+    sal_Bool    bTest1:1;
+    sal_Bool    bTest2:1;
+    sal_Bool    bTest3:1;
+    sal_Bool    bTest4:1;
+    sal_Bool    bTest5:1;
+    sal_Bool    bTest6:1;
+    sal_Bool    bTest7:1;
+    sal_Bool    bTest8:1;
+    sal_Bool    bTest9:1;
+    sal_Bool    bTest10:1;
 
 public:
-                            SwTestItem( USHORT _nWhich):
+                            SwTestItem( sal_uInt16 _nWhich):
                                             SfxPoolItem(_nWhich){};
                             SwTestItem( const SwTestItem& pTestItem);
 

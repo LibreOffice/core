@@ -144,7 +144,7 @@ void SAL_CALL SwXTextMarkup::commitTextMarkup(
     {
         nStart = aStartPos.mnSubPos;
         const xub_StrLen nFieldPosModel = static_cast< xub_StrLen >(aStartPos.mnPos);
-        const USHORT nInsertPos = pWList->GetWrongPos( nFieldPosModel );
+        const sal_uInt16 nInsertPos = pWList->GetWrongPos( nFieldPosModel );
 
         SwWrongList* pSubList = pWList->SubList( nInsertPos );
         if ( !pSubList )
@@ -173,7 +173,7 @@ void SAL_CALL SwXTextMarkup::commitTextMarkup(
         if( bStartInField && nType != text::TextMarkupType::SENTENCE )
         {
             const xub_StrLen nFieldPosModel = static_cast< xub_StrLen >(aStartPos.mnPos);
-            const USHORT nInsertPos = pWList->GetWrongPos( nFieldPosModel );
+            const sal_uInt16 nInsertPos = pWList->GetWrongPos( nFieldPosModel );
             SwWrongList* pSubList = pWList->SubList( nInsertPos );
             if ( !pSubList )
             {
@@ -199,7 +199,7 @@ void SAL_CALL SwXTextMarkup::commitTextMarkup(
         if( bEndInField && nType != text::TextMarkupType::SENTENCE )
         {
             const xub_StrLen nFieldPosModel = static_cast< xub_StrLen >(aEndPos.mnPos);
-            const USHORT nInsertPos = pWList->GetWrongPos( nFieldPosModel );
+            const sal_uInt16 nInsertPos = pWList->GetWrongPos( nFieldPosModel );
             SwWrongList* pSubList = pWList->SubList( nInsertPos );
             if ( !pSubList )
             {
@@ -254,7 +254,7 @@ void lcl_commitGrammarMarkUp(
     {
         nStart = aStartPos.mnSubPos;
         const xub_StrLen nFieldPosModel = static_cast< xub_StrLen >(aStartPos.mnPos);
-        const USHORT nInsertPos = pWList->GetWrongPos( nFieldPosModel );
+        const sal_uInt16 nInsertPos = pWList->GetWrongPos( nFieldPosModel );
 
         SwGrammarMarkUp* pSubList = (SwGrammarMarkUp*)pWList->SubList( nInsertPos );
         if ( !pSubList )
@@ -280,7 +280,7 @@ void lcl_commitGrammarMarkUp(
         if( bStartInField && nType != text::TextMarkupType::SENTENCE )
         {
             const xub_StrLen nFieldPosModel = static_cast< xub_StrLen >(aStartPos.mnPos);
-            const USHORT nInsertPos = pWList->GetWrongPos( nFieldPosModel );
+            const sal_uInt16 nInsertPos = pWList->GetWrongPos( nFieldPosModel );
             SwGrammarMarkUp* pSubList = (SwGrammarMarkUp*)pWList->SubList( nInsertPos );
             if ( !pSubList )
             {
@@ -298,7 +298,7 @@ void lcl_commitGrammarMarkUp(
         if( bEndInField && nType != text::TextMarkupType::SENTENCE )
         {
             const xub_StrLen nFieldPosModel = static_cast< xub_StrLen >(aEndPos.mnPos);
-            const USHORT nInsertPos = pWList->GetWrongPos( nFieldPosModel );
+            const sal_uInt16 nInsertPos = pWList->GetWrongPos( nFieldPosModel );
             SwGrammarMarkUp* pSubList = (SwGrammarMarkUp*)pWList->SubList( nInsertPos );
             if ( !pSubList )
             {

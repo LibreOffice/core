@@ -50,7 +50,7 @@ void DumpHints( const SwpHtStart &rHtStart,
 #ifdef DBG_UTIL
     aDbstream << "DumpHints:" << endl;
     (aDbstream << "\tStarts:" ).WriteNumber(rHtStart.Count()) << endl;
-    for( USHORT i = 0; i < rHtStart.Count(); ++i )
+    for( sal_uInt16 i = 0; i < rHtStart.Count(); ++i )
     {
         const SwTxtAttr *pHt = rHtStart[i];
         ((((aDbstream << '\t').WriteNumber( i )<< " [").WriteNumber( pHt->Which() )
@@ -81,7 +81,7 @@ inline void DumpHints(const SwpHtStart &, const SwpHtEnd &) { }
  *                        inline IsEqual()
  *************************************************************************/
 
-inline BOOL IsEqual( const SwTxtAttr &rHt1, const SwTxtAttr &rHt2 )
+inline sal_Bool IsEqual( const SwTxtAttr &rHt1, const SwTxtAttr &rHt2 )
 {
     return (long)(&rHt1) == (long)(&rHt2);
 }
@@ -97,7 +97,7 @@ inline BOOL IsEqual( const SwTxtAttr &rHt1, const SwTxtAttr &rHt2 )
 // Sortierreihenfolge: Start, Ende (umgekehrt!), Which-Wert (umgekehrt!),
 //                     als letztes die Adresse selbst
 
-static BOOL lcl_IsLessStart( const SwTxtAttr &rHt1, const SwTxtAttr &rHt2 )
+static sal_Bool lcl_IsLessStart( const SwTxtAttr &rHt1, const SwTxtAttr &rHt2 )
 {
     if ( *rHt1.GetStart() == *rHt2.GetStart() )
     {
@@ -105,14 +105,14 @@ static BOOL lcl_IsLessStart( const SwTxtAttr &rHt1, const SwTxtAttr &rHt2 )
         const xub_StrLen nHt2 = *rHt2.GetAnyEnd();
         if ( nHt1 == nHt2 )
         {
-            const USHORT nWhich1 = rHt1.Which();
-            const USHORT nWhich2 = rHt2.Which();
+            const sal_uInt16 nWhich1 = rHt1.Which();
+            const sal_uInt16 nWhich2 = rHt2.Which();
             if ( nWhich1 == nWhich2 )
             {
                 if ( RES_TXTATR_CHARFMT == nWhich1 )
                 {
-                    const USHORT nS1 = static_cast<const SwTxtCharFmt&>(rHt1).GetSortNumber();
-                    const USHORT nS2 = static_cast<const SwTxtCharFmt&>(rHt2).GetSortNumber();
+                    const sal_uInt16 nS1 = static_cast<const SwTxtCharFmt&>(rHt1).GetSortNumber();
+                    const sal_uInt16 nS2 = static_cast<const SwTxtCharFmt&>(rHt2).GetSortNumber();
                     ASSERT( nS1 != nS2, "AUTOSTYLES: lcl_IsLessStart trouble" )
                     if ( nS1 != nS2 ) // robust
                         return nS1 < nS2;
@@ -133,7 +133,7 @@ static BOOL lcl_IsLessStart( const SwTxtAttr &rHt1, const SwTxtAttr &rHt2 )
  *************************************************************************/
 
 // Zuerst nach Ende danach nach Ptr
-static BOOL lcl_IsLessEnd( const SwTxtAttr &rHt1, const SwTxtAttr &rHt2 )
+static sal_Bool lcl_IsLessEnd( const SwTxtAttr &rHt1, const SwTxtAttr &rHt2 )
 {
     const xub_StrLen nHt1 = *rHt1.GetAnyEnd();
     const xub_StrLen nHt2 = *rHt2.GetAnyEnd();
@@ -141,14 +141,14 @@ static BOOL lcl_IsLessEnd( const SwTxtAttr &rHt1, const SwTxtAttr &rHt2 )
     {
         if ( *rHt1.GetStart() == *rHt2.GetStart() )
         {
-            const USHORT nWhich1 = rHt1.Which();
-            const USHORT nWhich2 = rHt2.Which();
+            const sal_uInt16 nWhich1 = rHt1.Which();
+            const sal_uInt16 nWhich2 = rHt2.Which();
             if ( nWhich1 == nWhich2 )
             {
                 if ( RES_TXTATR_CHARFMT == nWhich1 )
                 {
-                    const USHORT nS1 = static_cast<const SwTxtCharFmt&>(rHt1).GetSortNumber();
-                    const USHORT nS2 = static_cast<const SwTxtCharFmt&>(rHt2).GetSortNumber();
+                    const sal_uInt16 nS1 = static_cast<const SwTxtCharFmt&>(rHt1).GetSortNumber();
+                    const sal_uInt16 nS2 = static_cast<const SwTxtCharFmt&>(rHt2).GetSortNumber();
                     ASSERT( nS1 != nS2, "AUTOSTYLES: lcl_IsLessEnd trouble" )
                     if ( nS1 != nS2 ) // robust
                         return nS1 > nS2;
@@ -169,9 +169,9 @@ static BOOL lcl_IsLessEnd( const SwTxtAttr &rHt1, const SwTxtAttr &rHt2 )
  *                      SwpHtStart::Seek_Entry()
  *************************************************************************/
 
-BOOL SwpHtStart::Seek_Entry( const SwTxtAttr *pElement, USHORT *pPos ) const
+sal_Bool SwpHtStart::Seek_Entry( const SwTxtAttr *pElement, sal_uInt16 *pPos ) const
 {
-    USHORT nOben = Count(), nMitte, nUnten = 0;
+    sal_uInt16 nOben = Count(), nMitte, nUnten = 0;
     if( nOben > 0 )
     {
         nOben--;
@@ -182,7 +182,7 @@ BOOL SwpHtStart::Seek_Entry( const SwTxtAttr *pElement, USHORT *pPos ) const
             if( IsEqual( *pMitte, *pElement ) )
             {
                 *pPos = nMitte;
-                return TRUE;
+                return sal_True;
             }
             else
                 if( lcl_IsLessStart( *pMitte, *pElement ) )
@@ -191,23 +191,23 @@ BOOL SwpHtStart::Seek_Entry( const SwTxtAttr *pElement, USHORT *pPos ) const
                     if( nMitte == 0 )
                     {
                         *pPos = nUnten;
-                        return FALSE;
+                        return sal_False;
                     }
                     else
                         nOben = nMitte - 1;
         }
     }
     *pPos = nUnten;
-    return FALSE;
+    return sal_False;
 }
 
 /*************************************************************************
  *                      SwpHtEnd::Seek_Entry()
  *************************************************************************/
 
-BOOL SwpHtEnd::Seek_Entry( const SwTxtAttr *pElement, USHORT *pPos ) const
+sal_Bool SwpHtEnd::Seek_Entry( const SwTxtAttr *pElement, sal_uInt16 *pPos ) const
 {
-    USHORT nOben = Count(), nMitte, nUnten = 0;
+    sal_uInt16 nOben = Count(), nMitte, nUnten = 0;
     if( nOben > 0 )
     {
         nOben--;
@@ -218,7 +218,7 @@ BOOL SwpHtEnd::Seek_Entry( const SwTxtAttr *pElement, USHORT *pPos ) const
             if( IsEqual( *pMitte, *pElement ) )
             {
                 *pPos = nMitte;
-                return TRUE;
+                return sal_True;
             }
             else
                 if( lcl_IsLessEnd( *pMitte, *pElement ) )
@@ -227,14 +227,14 @@ BOOL SwpHtEnd::Seek_Entry( const SwTxtAttr *pElement, USHORT *pPos ) const
                     if( nMitte == 0 )
                     {
                         *pPos = nUnten;
-                        return FALSE;
+                        return sal_False;
                     }
                     else
                         nOben = nMitte - 1;
         }
     }
     *pPos = nUnten;
-    return FALSE;
+    return sal_False;
 }
 
 /*************************************************************************
@@ -245,7 +245,7 @@ void SwpHintsArray::Insert( const SwTxtAttr *pHt )
 {
     Resort();
 #ifdef DBG_UTIL
-    USHORT nPos;
+    sal_uInt16 nPos;
     ASSERT(!m_HintStarts.Seek_Entry( pHt, &nPos ),
             "Insert: hint already in HtStart");
     ASSERT(!m_HintEnds.Seek_Entry( pHt, &nPos ),
@@ -261,7 +261,7 @@ void SwpHintsArray::Insert( const SwTxtAttr *pHt )
 #endif
 }
 
-void SwpHintsArray::DeleteAtPos( const USHORT nPos )
+void SwpHintsArray::DeleteAtPos( const sal_uInt16 nPos )
 {
     // optimization: nPos is the position in the Starts array
     const SwTxtAttr *pHt = m_HintStarts[ nPos ];
@@ -269,7 +269,7 @@ void SwpHintsArray::DeleteAtPos( const USHORT nPos )
 
     Resort();
 
-    USHORT nEndPos;
+    sal_uInt16 nEndPos;
     m_HintEnds.Seek_Entry( pHt, &nEndPos );
     m_HintEnds.Remove( nEndPos );
 #ifdef DBG_UTIL
@@ -306,7 +306,7 @@ bool SwpHintsArray::Check() const
     const SwTxtAttr *pLastStart = 0;
     const SwTxtAttr *pLastEnd = 0;
 
-    for( USHORT i = 0; i < Count(); ++i )
+    for( sal_uInt16 i = 0; i < Count(); ++i )
     {
         // --- Start-Kontrolle ---
 
@@ -358,7 +358,7 @@ bool SwpHintsArray::Check() const
         CHECK_ERR( STRING_LEN != nIdx, "HintsCheck: no GetEndOf" );
 
         // 7a) character attributes in array?
-        USHORT nWhich = pHt->Which();
+        sal_uInt16 nWhich = pHt->Which();
         CHECK_ERR( !isCHRATR(nWhich),
                    "HintsCheck: Character attribute in start array" );
 
@@ -390,7 +390,7 @@ bool SwpHintsArray::Check() const
         // 9) nesting portion check
         if (pHtThis->IsNesting())
         {
-            for ( USHORT j = 0; j < Count(); ++j )
+            for ( sal_uInt16 j = 0; j < Count(); ++j )
             {
                 SwTxtAttr const * const pOther( m_HintStarts[j] );
                 if ( pOther->IsNesting() &&  (i != j) )
@@ -408,7 +408,7 @@ bool SwpHintsArray::Check() const
         // 10) dummy char check (unfortunately cannot check SwTxtNode::m_Text)
         if (pHtThis->HasDummyChar())
         {
-            for ( USHORT j = 0; j < i; ++j )
+            for ( sal_uInt16 j = 0; j < i; ++j )
             {
                 SwTxtAttr const * const pOther( m_HintStarts[j] );
                 if (pOther->HasDummyChar())
@@ -438,7 +438,7 @@ bool SwpHintsArray::Resort()
 {
     bool bResort = false;
     const SwTxtAttr *pLast = 0;
-    USHORT i;
+    sal_uInt16 i;
 
     for ( i = 0; i < m_HintStarts.Count(); ++i )
     {

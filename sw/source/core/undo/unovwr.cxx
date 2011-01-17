@@ -68,14 +68,14 @@ inline SwDoc& SwUndoIter::GetDoc() const { return *pAktPam->GetDoc(); }
 SwUndoOverwrite::SwUndoOverwrite( SwDoc* pDoc, SwPosition& rPos,
                                     sal_Unicode cIns )
     : SwUndo(UNDO_OVERWRITE),
-      pRedlSaveData( 0 ), bGroup( FALSE )
+      pRedlSaveData( 0 ), bGroup( sal_False )
 {
     if( !pDoc->IsIgnoreRedline() && pDoc->GetRedlineTbl().Count() )
     {
         SwPaM aPam( rPos.nNode, rPos.nContent.GetIndex(),
                     rPos.nNode, rPos.nContent.GetIndex()+1 );
         pRedlSaveData = new SwRedlineSaveDatas;
-        if( !FillSaveData( aPam, *pRedlSaveData, FALSE ))
+        if( !FillSaveData( aPam, *pRedlSaveData, sal_False ))
             delete pRedlSaveData, pRedlSaveData = 0;
     }
 
@@ -85,7 +85,7 @@ SwUndoOverwrite::SwUndoOverwrite( SwDoc* pDoc, SwPosition& rPos,
     SwTxtNode* pTxtNd = rPos.nNode.GetNode().GetTxtNode();
     ASSERT( pTxtNd, "Overwrite nicht im TextNode?" );
 
-    bInsChar = TRUE;
+    bInsChar = sal_True;
     xub_StrLen nTxtNdLen = pTxtNd->GetTxt().Len();
     if( nSttCntnt < nTxtNdLen )     // kein reines Einfuegen ?
     {
@@ -96,11 +96,11 @@ SwUndoOverwrite::SwUndoOverwrite( SwDoc* pDoc, SwPosition& rPos,
         pHistory->CopyAttr( pTxtNd->GetpSwpHints(), nSttNode, 0,
                             nTxtNdLen, false );
         rPos.nContent++;
-        bInsChar = FALSE;
+        bInsChar = sal_False;
     }
 
-    BOOL bOldExpFlg = pTxtNd->IsIgnoreDontExpand();
-    pTxtNd->SetIgnoreDontExpand( TRUE );
+    sal_Bool bOldExpFlg = pTxtNd->IsIgnoreDontExpand();
+    pTxtNd->SetIgnoreDontExpand( sal_True );
 
     pTxtNd->InsertText( cIns, rPos.nContent,
             IDocumentContentOperations::INS_EMPTYEXPAND );
@@ -121,7 +121,7 @@ SwUndoOverwrite::~SwUndoOverwrite()
     delete pRedlSaveData;
 }
 
-BOOL SwUndoOverwrite::CanGrouping( SwDoc* pDoc, SwPosition& rPos,
+sal_Bool SwUndoOverwrite::CanGrouping( SwDoc* pDoc, SwPosition& rPos,
                                     sal_Unicode cIns )
 {
 ///  ?? was ist mit nur eingefuegten Charaktern ???
@@ -129,14 +129,14 @@ BOOL SwUndoOverwrite::CanGrouping( SwDoc* pDoc, SwPosition& rPos,
     // es kann nur das Loeschen von einzelnen char's zusammengefasst werden
     if( rPos.nNode != nSttNode || !aInsStr.Len()  ||
         ( !bGroup && aInsStr.Len() != 1 ))
-        return FALSE;
+        return sal_False;
 
     // ist der Node ueberhaupt ein TextNode?
     SwTxtNode * pDelTxtNd = rPos.nNode.GetNode().GetTxtNode();
     if( !pDelTxtNd ||
         ( pDelTxtNd->GetTxt().Len() != rPos.nContent.GetIndex() &&
             rPos.nContent.GetIndex() != ( nSttCntnt + aInsStr.Len() )))
-        return FALSE;
+        return sal_False;
 
     CharClass& rCC = GetAppCharClass();
 
@@ -144,23 +144,23 @@ BOOL SwUndoOverwrite::CanGrouping( SwDoc* pDoc, SwPosition& rPos,
     if (( CH_TXTATR_BREAKWORD == cIns || CH_TXTATR_INWORD == cIns ) ||
         rCC.isLetterNumeric( String( cIns ), 0 ) !=
         rCC.isLetterNumeric( aInsStr, aInsStr.Len()-1 ) )
-        return FALSE;
+        return sal_False;
 
     {
         SwRedlineSaveDatas* pTmpSav = new SwRedlineSaveDatas;
         SwPaM aPam( rPos.nNode, rPos.nContent.GetIndex(),
                     rPos.nNode, rPos.nContent.GetIndex()+1 );
 
-        if( !FillSaveData( aPam, *pTmpSav, FALSE ))
+        if( !FillSaveData( aPam, *pTmpSav, sal_False ))
             delete pTmpSav, pTmpSav = 0;
 
-        BOOL bOk = ( !pRedlSaveData && !pTmpSav ) ||
+        sal_Bool bOk = ( !pRedlSaveData && !pTmpSav ) ||
                    ( pRedlSaveData && pTmpSav &&
                         SwUndo::CanRedlineGroup( *pRedlSaveData, *pTmpSav,
                             nSttCntnt > rPos.nContent.GetIndex() ));
         delete pTmpSav;
         if( !bOk )
-            return FALSE;
+            return sal_False;
 
         pDoc->DeleteRedline( aPam, false, USHRT_MAX );
     }
@@ -175,11 +175,11 @@ BOOL SwUndoOverwrite::CanGrouping( SwDoc* pDoc, SwPosition& rPos,
             rPos.nContent++;
         }
         else
-            bInsChar = TRUE;
+            bInsChar = sal_True;
     }
 
-    BOOL bOldExpFlg = pDelTxtNd->IsIgnoreDontExpand();
-    pDelTxtNd->SetIgnoreDontExpand( TRUE );
+    sal_Bool bOldExpFlg = pDelTxtNd->IsIgnoreDontExpand();
+    pDelTxtNd->SetIgnoreDontExpand( sal_True );
 
     pDelTxtNd->InsertText( cIns, rPos.nContent,
             IDocumentContentOperations::INS_EMPTYEXPAND );
@@ -192,8 +192,8 @@ BOOL SwUndoOverwrite::CanGrouping( SwDoc* pDoc, SwPosition& rPos,
     }
     pDelTxtNd->SetIgnoreDontExpand( bOldExpFlg );
 
-    bGroup = TRUE;
-    return TRUE;
+    bGroup = sal_True;
+    return sal_True;
 }
 
 
@@ -233,8 +233,8 @@ void SwUndoOverwrite::Undo( SwUndoIter& rUndoIter )
         String aTmpStr( '1' );
         sal_Unicode* pTmpStr = aTmpStr.GetBufferAccess();
 
-        BOOL bOldExpFlg = pTxtNd->IsIgnoreDontExpand();
-        pTxtNd->SetIgnoreDontExpand( TRUE );
+        sal_Bool bOldExpFlg = pTxtNd->IsIgnoreDontExpand();
+        pTxtNd->SetIgnoreDontExpand( sal_True );
 
         rIdx++;
         for( xub_StrLen n = 0; n < aDelStr.Len(); n++  )
@@ -275,8 +275,8 @@ void SwUndoOverwrite::Repeat( SwUndoIter& rUndoIter )
 
     SwDoc& rDoc = *pAktPam->GetDoc();
 
-    BOOL bGroupUndo = rDoc.DoesGroupUndo();
-    rDoc.DoGroupUndo( FALSE );
+    sal_Bool bGroupUndo = rDoc.DoesGroupUndo();
+    rDoc.DoGroupUndo( sal_False );
     rDoc.Overwrite( *pAktPam, aInsStr.GetChar( 0 ));
     rDoc.DoGroupUndo( bGroupUndo );
     for( xub_StrLen n = 1; n < aInsStr.Len(); ++n )
@@ -305,8 +305,8 @@ void SwUndoOverwrite::Redo( SwUndoIter& rUndoIter )
     }
     rIdx.Assign( pTxtNd, aDelStr.Len() ? nSttCntnt+1 : nSttCntnt );
 
-    BOOL bOldExpFlg = pTxtNd->IsIgnoreDontExpand();
-    pTxtNd->SetIgnoreDontExpand( TRUE );
+    sal_Bool bOldExpFlg = pTxtNd->IsIgnoreDontExpand();
+    pTxtNd->SetIgnoreDontExpand( sal_True );
 
     for( xub_StrLen n = 0; n < aInsStr.Len(); n++  )
     {
@@ -355,10 +355,10 @@ struct _UndoTransliterate_Data
     String          sText;
     SwHistory*      pHistory;
     Sequence< sal_Int32 >*  pOffsets;
-    ULONG           nNdIdx;
+    sal_uLong           nNdIdx;
     xub_StrLen      nStart, nLen;
 
-    _UndoTransliterate_Data( ULONG nNd, xub_StrLen nStt, xub_StrLen nStrLen, const String& rTxt )
+    _UndoTransliterate_Data( sal_uLong nNd, xub_StrLen nStt, xub_StrLen nStrLen, const String& rTxt )
         : sText( rTxt ), pHistory( 0 ), pOffsets( 0 ),
         nNdIdx( nNd ), nStart( nStt ), nLen( nStrLen )
     {}
@@ -383,8 +383,8 @@ SwUndoTransliterate::~SwUndoTransliterate()
 void SwUndoTransliterate::Undo( SwUndoIter& rUndoIter )
 {
     SwDoc& rDoc = rUndoIter.GetDoc();
-    BOOL bUndo = rDoc.DoesUndo();
-    rDoc.DoUndo( FALSE );
+    sal_Bool bUndo = rDoc.DoesUndo();
+    rDoc.DoUndo( sal_False );
 
     // since the changes were added to the vector from the end of the string/node towards
     // the start, we need to revert them from the start towards the end now to keep the
@@ -394,12 +394,12 @@ void SwUndoTransliterate::Undo( SwUndoIter& rUndoIter )
         aChanges[i]->SetChangeAtNode( rDoc );
 
     rDoc.DoUndo( bUndo );
-    SetPaM( rUndoIter, TRUE );
+    SetPaM( rUndoIter, sal_True );
 }
 
 void SwUndoTransliterate::Redo( SwUndoIter& rUndoIter )
 {
-/* ??? */   rUndoIter.SetUpdateAttr( TRUE );
+/* ??? */   rUndoIter.SetUpdateAttr( sal_True );
 
     SetPaM( *rUndoIter.pAktPam );
     Repeat( rUndoIter );

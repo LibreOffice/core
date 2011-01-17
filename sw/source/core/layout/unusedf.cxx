@@ -36,18 +36,18 @@
 
 void SwFrm::Format( const SwBorderAttrs * )
 {
-    ASSERT( FALSE, "Format() der Basisklasse gerufen." );
+    ASSERT( sal_False, "Format() der Basisklasse gerufen." );
 }
 
 void SwFrm::Paint(SwRect const&, SwPrintData const*const) const
 {
-    ASSERT( FALSE, "Paint() der Basisklasse gerufen." );
+    ASSERT( sal_False, "Paint() der Basisklasse gerufen." );
 }
 
 sal_Bool SwCntntFrm::WouldFit( SwTwips &, sal_Bool&, sal_Bool )
 {
-    ASSERT( FALSE, "WouldFit des CntntFrm gerufen." );
-    return FALSE;
+    ASSERT( sal_False, "WouldFit des CntntFrm gerufen." );
+    return sal_False;
 }
 
 bool SwFrm::FillSelection( SwSelectionList& , const SwRect& ) const
@@ -56,36 +56,36 @@ bool SwFrm::FillSelection( SwSelectionList& , const SwRect& ) const
     return false;
 }
 
-BOOL SwFrm::GetCrsrOfst( SwPosition *, Point&, SwCrsrMoveState*  ) const
+sal_Bool SwFrm::GetCrsrOfst( SwPosition *, Point&, SwCrsrMoveState*  ) const
 {
-    ASSERT( FALSE, "GetCrsrOfst der Basisklasse, hi!" );
-    return FALSE;
+    ASSERT( sal_False, "GetCrsrOfst der Basisklasse, hi!" );
+    return sal_False;
 }
 
 #ifdef DBG_UTIL
 
 void SwRootFrm::Cut()
 {
-    ASSERT( FALSE, "Cut() des RootFrm gerufen." );
+    ASSERT( sal_False, "Cut() des RootFrm gerufen." );
 }
 
 void SwRootFrm::Paste( SwFrm *, SwFrm * )
 {
-    ASSERT( FALSE, "Paste() des RootFrm gerufen." );
+    ASSERT( sal_False, "Paste() des RootFrm gerufen." );
 }
 
 void SwFlyFrm::Paste( SwFrm *, SwFrm * )
 {
-    ASSERT( FALSE, "Paste() des FlyFrm gerufen." );
+    ASSERT( sal_False, "Paste() des FlyFrm gerufen." );
 }
 
 #endif
 
-BOOL SwFrm::GetCharRect( SwRect&, const SwPosition&,
+sal_Bool SwFrm::GetCharRect( SwRect&, const SwPosition&,
                          SwCrsrMoveState* ) const
 {
-    ASSERT( FALSE, "GetCharRect() der Basis gerufen." );
-    return FALSE;
+    ASSERT( sal_False, "GetCharRect() der Basis gerufen." );
+    return sal_False;
 }
 
 

@@ -42,15 +42,15 @@
  --------------------------------------------------------------------*/
 
 InsCaptionOpt::InsCaptionOpt(const SwCapObjType eType, const SvGlobalName* pOleId) :
-    bUseCaption(FALSE),
+    bUseCaption(sal_False),
     eObjType(eType),
     nNumType(SVX_NUM_ARABIC),
     sNumberSeparator( ::rtl::OUString::createFromAscii(". ") ),
     nPos(1),
     nLevel(0),
     sSeparator( String::CreateFromAscii( ": " ) ),
-    bIgnoreSeqOpts(FALSE),
-    bCopyAttributes(FALSE)
+    bIgnoreSeqOpts(sal_False),
+    bCopyAttributes(sal_False)
 {
     if (pOleId)
         aOleId = *pOleId;
@@ -100,7 +100,7 @@ InsCaptionOpt& InsCaptionOpt::operator=( const InsCaptionOpt& rOpt )
     Beschreibung:
  --------------------------------------------------------------------*/
 
-BOOL InsCaptionOpt::operator==( const InsCaptionOpt& rOpt ) const
+sal_Bool InsCaptionOpt::operator==( const InsCaptionOpt& rOpt ) const
 {
     return (eObjType == rOpt.eObjType &&
             aOleId == rOpt.aOleId); // Damit gleiche Ole-IDs nicht mehrfach eingefuegt
@@ -127,9 +127,9 @@ BOOL InsCaptionOpt::operator==( const InsCaptionOpt& rOpt ) const
 /*SvStream& operator>>( SvStream& rIStream, InsCaptionOpt& rCapOpt )
 {
     rtl_TextEncoding eEncoding = gsl_getSystemTextEncoding();
-    UINT16 nVal;
-    BYTE   cVal;
-    BYTE   nVersion;
+    sal_uInt16 nVal;
+    sal_uInt8   cVal;
+    sal_uInt8   nVersion;
 
     rIStream >> nVersion;
     rIStream >> cVal;               rCapOpt.UseCaption() = cVal != 0;
@@ -160,20 +160,20 @@ BOOL InsCaptionOpt::operator==( const InsCaptionOpt& rOpt ) const
 /*SvStream& operator<<( SvStream& rOStream, const InsCaptionOpt& rCapOpt )
 {
     rtl_TextEncoding eEncoding = gsl_getSystemTextEncoding();
-    rOStream    << (BYTE)CAPTION_VERSION
-                << (BYTE)rCapOpt.UseCaption()
-                << (UINT16)rCapOpt.eObjType
+    rOStream    << (sal_uInt8)CAPTION_VERSION
+                << (sal_uInt8)rCapOpt.UseCaption()
+                << (sal_uInt16)rCapOpt.eObjType
                 << rCapOpt.aOleId;
 
     rOStream.WriteByteString( rCapOpt.sCategory, eEncoding );
 
-    rOStream    << (UINT16)rCapOpt.nNumType;
+    rOStream    << (sal_uInt16)rCapOpt.nNumType;
 
     rOStream.WriteByteString( rCapOpt.sCaption, eEncoding );
 
-    BYTE cSep = ByteString(rCapOpt.sSeparator, eEncoding).GetChar(0);
-    rOStream    << (UINT16)rCapOpt.nPos
-                << (UINT16)rCapOpt.nLevel
+    sal_uInt8 cSep = ByteString(rCapOpt.sSeparator, eEncoding).GetChar(0);
+    rOStream    << (sal_uInt16)rCapOpt.nPos
+                << (sal_uInt16)rCapOpt.nLevel
                 << cSep;
 
     return rOStream;

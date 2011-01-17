@@ -118,8 +118,8 @@ void SwTxtFlyCnt::CopyFlyFmt( SwDoc* pDoc )
     // und der Inhalt dupliziert.
 
     // fuers kopieren vom Attribut das Undo immer abschalten
-    BOOL bUndo = pDoc->DoesUndo();
-    pDoc->DoUndo( FALSE );
+    sal_Bool bUndo = pDoc->DoesUndo();
+    pDoc->DoUndo( sal_False );
     SwFmtAnchor aAnchor( pFmt->GetAnchor() );
     if ((FLY_AT_PAGE != aAnchor.GetAnchorId()) &&
         (pDoc != pFmt->GetDoc()))   // different documents?
@@ -194,13 +194,13 @@ void SwTxtFlyCnt::SetAnchor( const SwTxtNode *pNode )
     if( pDoc != pFmt->GetDoc() )
     {
         // fuers kopieren vom Attribut das Undo immer abschalten
-        BOOL bUndo = pDoc->DoesUndo();
-        pDoc->DoUndo( FALSE );
+        sal_Bool bUndo = pDoc->DoesUndo();
+        pDoc->DoUndo( sal_False );
         SwFrmFmt* pNew = pDoc->CopyLayoutFmt( *pFmt, aAnchor, false, false );
         pDoc->DoUndo( bUndo );
 
         bUndo = pFmt->GetDoc()->DoesUndo();
-        pFmt->GetDoc()->DoUndo( FALSE );
+        pFmt->GetDoc()->DoUndo( sal_False );
         pFmt->GetDoc()->DelLayoutFmt( pFmt );
         pFmt->GetDoc()->DoUndo( bUndo );
         ((SwFmtFlyCnt&)GetFlyCnt()).SetFlyFmt( pNew );

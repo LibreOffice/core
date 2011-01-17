@@ -77,8 +77,8 @@ SwNavigationConfig::SwNavigationConfig() :
     nOutlineLevel(MAXLEVEL),
     nRegionMode(REGION_MODE_NONE),
     nActiveBlock(0),
-    bIsSmall(FALSE),
-    bIsGlobalActive(TRUE)
+    bIsSmall(sal_False),
+    bIsGlobalActive(sal_True)
 {
     Sequence<OUString> aNames = GetPropertyNames();
     Sequence<Any> aValues = GetProperties(aNames);

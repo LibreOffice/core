@@ -282,7 +282,7 @@ SwLinePortion *SwTxtFormatter::UnderFlow( SwTxtFormatInfo &rInf )
 
     // line width is adjusted, so that pPor does not fit to current
     // line anymore
-    rInf.Width( (USHORT)(rInf.X() + (pPor->Width() ? pPor->Width() - 1 : 0)) );
+    rInf.Width( (sal_uInt16)(rInf.X() + (pPor->Width() ? pPor->Width() - 1 : 0)) );
     rInf.SetLen( pPor->GetLen() );
     rInf.SetFull( sal_False );
     if( pFly )
@@ -419,7 +419,7 @@ void SwTxtFormatter::BuildPortions( SwTxtFormatInfo &rInf )
                               GRID_LINES_CHARS == pGrid->GetGridType();
 
     const SwDoc *pDoc = rInf.GetTxtFrm()->GetNode()->GetDoc();
-    const USHORT nGridWidth = bHasGrid ?
+    const sal_uInt16 nGridWidth = bHasGrid ?
                                 GETGRIDWIDTH(pGrid,pDoc) : 0;   //for textgrid refactor
 
     // used for grid mode only:
@@ -447,9 +447,9 @@ void SwTxtFormatter::BuildPortions( SwTxtFormatInfo &rInf )
             rInf.GetLast() && rInf.GetLast()->InTxtGrp() &&
             rInf.GetLast()->Width() && !rInf.GetLast()->InNumberGrp() )
         {
-            BYTE nNxtActual = rInf.GetFont()->GetActual();
-            BYTE nLstActual = nNxtActual;
-            USHORT nLstHeight = (USHORT)rInf.GetFont()->GetHeight();
+            sal_uInt8 nNxtActual = rInf.GetFont()->GetActual();
+            sal_uInt8 nLstActual = nNxtActual;
+            sal_uInt16 nLstHeight = (sal_uInt16)rInf.GetFont()->GetHeight();
             sal_Bool bAllowBefore = sal_False;
             sal_Bool bAllowBehind = sal_False;
             const CharClass& rCC = GetAppCharClass();
@@ -487,7 +487,7 @@ void SwTxtFormatter::BuildPortions( SwTxtFormatInfo &rInf )
                         if ( pTmpFnt )
                         {
                             nLstActual = pTmpFnt->GetActual();
-                            nLstHeight = (USHORT)pTmpFnt->GetHeight();
+                            nLstHeight = (sal_uInt16)pTmpFnt->GetHeight();
                         }
                     }
                 }
@@ -541,14 +541,14 @@ void SwTxtFormatter::BuildPortions( SwTxtFormatInfo &rInf )
             const SwTwips nOfst = nStartX - nGridOrigin;
             if ( nOfst )
             {
-                const ULONG i = ( nOfst > 0 ) ?
+                const sal_uLong i = ( nOfst > 0 ) ?
                                 ( ( nOfst - 1 ) / nGridWidth + 1 ) :
                                 0;
                 const SwTwips nKernWidth = i * nGridWidth - nOfst;
                 const SwTwips nRestWidth = rInf.Width() - rInf.X();
 
                 if ( nKernWidth <= nRestWidth )
-                    pGridKernPortion->Width( (USHORT)nKernWidth );
+                    pGridKernPortion->Width( (sal_uInt16)nKernWidth );
             }
 
             if ( pGridKernPortion != pPor )
@@ -631,7 +631,7 @@ void SwTxtFormatter::BuildPortions( SwTxtFormatInfo &rInf )
                 if( nTmp == pScriptInfo->NextScriptChg( nTmp - 1 ) &&
                     nTmp != rInf.GetTxt().Len() )
                 {
-                    USHORT nDist = (USHORT)(rInf.GetFont()->GetHeight()/5);
+                    sal_uInt16 nDist = (sal_uInt16)(rInf.GetFont()->GetHeight()/5);
 
                     if( nDist )
                     {
@@ -657,8 +657,8 @@ void SwTxtFormatter::BuildPortions( SwTxtFormatInfo &rInf )
             xub_StrLen nTmp = rInf.GetIdx() + pPor->GetLen();
             const SwTwips nRestWidth = rInf.Width() - rInf.X() - pPor->Width();
 
-            const BYTE nCurrScript = pFnt->GetActual(); // pScriptInfo->ScriptType( rInf.GetIdx() );
-            const BYTE nNextScript = nTmp >= rInf.GetTxt().Len() ?
+            const sal_uInt8 nCurrScript = pFnt->GetActual(); // pScriptInfo->ScriptType( rInf.GetIdx() );
+            const sal_uInt8 nNextScript = nTmp >= rInf.GetTxt().Len() ?
                                      SW_CJK :
                                      SwScriptInfo::WhichFont( nTmp, 0, pScriptInfo );
 
@@ -673,20 +673,20 @@ void SwTxtFormatter::BuildPortions( SwTxtFormatInfo &rInf )
 
                 // calculate size
                 SwLinePortion* pTmpPor = pGridKernPortion->GetPortion();
-                USHORT nSumWidth = pPor->Width();
+                sal_uInt16 nSumWidth = pPor->Width();
                 while ( pTmpPor )
                 {
                     nSumWidth = nSumWidth + pTmpPor->Width();
                     pTmpPor = pTmpPor->GetPortion();
                 }
 
-                const USHORT i = nSumWidth ?
+                const sal_uInt16 i = nSumWidth ?
                                  ( nSumWidth - 1 ) / nGridWidth + 1 :
                                  0;
                 const SwTwips nTmpWidth = i * nGridWidth;
                 const SwTwips nKernWidth = Min( (SwTwips)(nTmpWidth - nSumWidth),
                                                 nRestWidth );
-                const USHORT nKernWidth_1 = (USHORT)(nKernWidth / 2);
+                const sal_uInt16 nKernWidth_1 = (sal_uInt16)(nKernWidth / 2);
 
                 ASSERT( nKernWidth <= nRestWidth,
                         "Not enough space left for adjusting non-asian text in grid mode" )
@@ -957,7 +957,7 @@ SwTxtPortion *SwTxtFormatter::NewTxtPortion( SwTxtFormatInfo &rInf )
                           KSHORT( pPor->GetAscent() ) ) / 8;
     if ( !nExpect )
         nExpect = 1;
-    nExpect = (USHORT)(rInf.GetIdx() + ((rInf.Width() - rInf.X()) / nExpect));
+    nExpect = (sal_uInt16)(rInf.GetIdx() + ((rInf.Width() - rInf.X()) / nExpect));
     if( nExpect > rInf.GetIdx() && nNextChg > nExpect )
         nNextChg = Min( nExpect, rInf.GetTxt().Len() );
 
@@ -1350,7 +1350,7 @@ SwLinePortion *SwTxtFormatter::NewPortion( SwTxtFormatInfo &rInf )
                          POR_TABDECIMAL == pLastTabPortion->GetWhichPor() )
                     {
                         ASSERT( rInf.X() >= pLastTabPortion->Fix(), "Decimal tab stop position cannot be calculated" )
-                        const USHORT nWidthOfPortionsUpToDecimalPosition = (USHORT)(rInf.X() - pLastTabPortion->Fix() );
+                        const sal_uInt16 nWidthOfPortionsUpToDecimalPosition = (sal_uInt16)(rInf.X() - pLastTabPortion->Fix() );
                         static_cast<SwTabDecimalPortion*>(pLastTabPortion)->SetWidthOfPortionsUpToDecimalPosition( nWidthOfPortionsUpToDecimalPosition );
                         rInf.SetTabDecimal( 0 );
                     }
@@ -1414,7 +1414,7 @@ SwLinePortion *SwTxtFormatter::NewPortion( SwTxtFormatInfo &rInf )
                 const SwAttrSet& rSet = pInfo->GetAnchorCharFmt((SwDoc&)*pDoc)->GetAttrSet();
 
                 const SfxPoolItem* pItem;
-                USHORT nDir = 0;
+                sal_uInt16 nDir = 0;
                 if( SFX_ITEM_SET == rSet.GetItemState( RES_CHRATR_ROTATE,
                     sal_True, &pItem ))
                     nDir = ((SvxCharRotateItem*)pItem)->GetValue();
@@ -1434,7 +1434,7 @@ SwLinePortion *SwTxtFormatter::NewPortion( SwTxtFormatInfo &rInf )
 
             if ( pNumFnt )
             {
-                USHORT nDir = pNumFnt->GetOrientation( rInf.GetTxtFrm()->IsVertical() );
+                sal_uInt16 nDir = pNumFnt->GetOrientation( rInf.GetTxtFrm()->IsVertical() );
                 if ( 0 != nDir )
                 {
                     delete pPor;
@@ -1524,7 +1524,7 @@ xub_StrLen SwTxtFormatter::FormatLine( const xub_StrLen nStartPos )
         pFlyStart = new SvLongs;
         SwLinePortion* pPor = pCurr->GetFirstPortion();
         long nPOfst = 0;
-        USHORT nCnt = 0;
+        sal_uInt16 nCnt = 0;
 
         while ( pPor )
         {
@@ -1696,12 +1696,12 @@ void SwTxtFormatter::CalcRealHeight( sal_Bool bNewLine )
     GETGRID( pFrm->FindPageFrm() )
     if ( pGrid && GetInfo().SnapToGrid() )
     {
-        const USHORT nGridWidth = pGrid->GetBaseHeight();
-        const USHORT nRubyHeight = pGrid->GetRubyHeight();
+        const sal_uInt16 nGridWidth = pGrid->GetBaseHeight();
+        const sal_uInt16 nRubyHeight = pGrid->GetRubyHeight();
         const sal_Bool bRubyTop = ! pGrid->GetRubyTextBelow();
 
         nLineHeight = nGridWidth + nRubyHeight;
-        USHORT nLineDist = nLineHeight;
+        sal_uInt16 nLineDist = nLineHeight;
 
         while ( pCurr->Height() > nLineHeight )
             nLineHeight = nLineHeight + nLineDist;
@@ -1720,13 +1720,13 @@ void SwTxtFormatter::CalcRealHeight( sal_Bool bNewLine )
         if ( ! IsParaLine() && pSpace &&
              SVX_INTER_LINE_SPACE_PROP == pSpace->GetInterLineSpaceRule() )
         {
-            ULONG nTmp = pSpace->GetPropLineSpace();
+            sal_uLong nTmp = pSpace->GetPropLineSpace();
 
             if( nTmp < 100 )
                 nTmp = 100;
 
             nTmp *= nLineHeight;
-            nLineHeight = (USHORT)(nTmp / 100);
+            nLineHeight = (sal_uInt16)(nTmp / 100);
         }
 
         pCurr->SetRealHeight( nLineHeight );
@@ -1831,7 +1831,7 @@ void SwTxtFormatter::FeedInf( SwTxtFormatInfo &rInf ) const
     rInf.SetIdx( nStart );
 
     // Handle overflows:
-    // --> FME 2004-11-25 #i34348# Changed type from USHORT to SwTwips
+    // --> FME 2004-11-25 #i34348# Changed type from sal_uInt16 to SwTwips
     SwTwips nTmpLeft = Left();
     SwTwips nTmpRight = Right();
     SwTwips nTmpFirst = FirstLeft();
@@ -2079,9 +2079,9 @@ long SwTxtFormatter::CalcOptRepaint( xub_StrLen nOldLineEnd,
         // if anything has changed, we carefully have to adjust the right
         // repaint position
         long nPOfst = 0;
-        USHORT nCnt = 0;
-        USHORT nX = 0;
-        USHORT nIdx = GetInfo().GetLineStart();
+        sal_uInt16 nCnt = 0;
+        sal_uInt16 nX = 0;
+        sal_uInt16 nIdx = GetInfo().GetLineStart();
         SwLinePortion* pPor = pCurr->GetFirstPortion();
 
         while ( pPor )
@@ -2115,7 +2115,7 @@ bool lcl_BuildHiddenPortion( const SwTxtSizeInfo& rInf, xub_StrLen &rPos )
     // Only if hidden text should not be shown:
 //    if ( rInf.GetVsh() && rInf.GetVsh()->GetWin() && rInf.GetOpt().IsShowHiddenChar() )
     const bool bShowInDocView = rInf.GetVsh() && rInf.GetVsh()->GetWin() && rInf.GetOpt().IsShowHiddenChar();
-    const bool bShowForPrinting = rInf.GetOpt().IsShowHiddenChar( TRUE ) && rInf.GetOpt().IsPrinting();
+    const bool bShowForPrinting = rInf.GetOpt().IsShowHiddenChar( sal_True ) && rInf.GetOpt().IsPrinting();
     if (bShowInDocView || bShowForPrinting)
         return false;
 

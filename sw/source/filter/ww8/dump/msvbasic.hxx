@@ -56,34 +56,34 @@
 class VBA_Impl
 {
 public:
-        VBA_Impl( SvStorage &rIn, BOOL bCmmntd = TRUE )
+        VBA_Impl( SvStorage &rIn, sal_Bool bCmmntd = sal_True )
             : xStor(&rIn), pOffsets(0), nOffsets(0), bCommented(bCmmntd)
             {}
         ~VBA_Impl() {if (nOffsets) delete [] pOffsets;}
         //0 for failure, 1 for success
-        BOOL Open( const String &rToplevel, const String &rSublevel);
-        const String & Decompress( UINT16 nIndex, int *pOverflow=0);
-        UINT16 GetNoStreams() const                 { return nOffsets; }
-        const String &GetStreamName( UINT16 nIndex ) const
+        sal_Bool Open( const String &rToplevel, const String &rSublevel);
+        const String & Decompress( sal_uInt16 nIndex, int *pOverflow=0);
+        sal_uInt16 GetNoStreams() const                 { return nOffsets; }
+        const String &GetStreamName( sal_uInt16 nIndex ) const
             {
                 DBG_ASSERT( nIndex < nOffsets, "Index out of range" );
                 return pOffsets[ nIndex ].sName;
             }
-        virtual void Output(int len,const BYTE *data);
+        virtual void Output(int len,const sal_uInt8 *data);
 private:
         struct VBAOffset_Impl
         {
             String sName;
-            UINT32 nOffset;
+            sal_uInt32 nOffset;
         };
 
         SvStorageRef xVBA;
         String sVBAString;
         SvStorageRef xStor;
         VBAOffset_Impl *pOffsets;
-        UINT16 nOffsets;
-        BYTE aHistory[ WINDOWLEN ];
-        BOOL bCommented;
+        sal_uInt16 nOffsets;
+        sal_uInt8 aHistory[ WINDOWLEN ];
+        sal_Bool bCommented;
 
         //0 for failure, anything else for success
         int ReadVBAProject(const SvStorageRef &rxVBAStorage);
@@ -93,7 +93,7 @@ private:
         void ConfirmFixedMiddle(SvStorageStreamRef &xVBAProject);
         void ConfirmFixedMiddle2(SvStorageStreamRef &xVBAProject);
         void ConfirmFixedOctect(SvStorageStreamRef &xVBAProject);
-        BYTE ReadPString(SvStorageStreamRef &xVBAProject);
+        sal_uInt8 ReadPString(SvStorageStreamRef &xVBAProject);
 };
 
 

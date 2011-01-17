@@ -44,8 +44,8 @@ struct SwTabColsEntry
     long    nPos;
     long    nMin;
     long    nMax;
-    BOOL    bHidden;    //Fuer jeden Eintrag ein Flag, Hidden oder nicht.
-                        //Wenn das Flag Hidden TRUE ist liegt der Spalten-
+    sal_Bool    bHidden;    //Fuer jeden Eintrag ein Flag, Hidden oder nicht.
+                        //Wenn das Flag Hidden sal_True ist liegt der Spalten-
                         //trenner nicht in der aktuellen Zeile; er muss
                         //mit gepflegt werden, darf aber nicht angezeigt
                         //werden.
@@ -72,23 +72,23 @@ class SW_DLLPUBLIC SwTabCols
     const SwTabColsEntries& GetData() const { return aData; }
 
 public:
-    SwTabCols( USHORT nSize = 0 );
+    SwTabCols( sal_uInt16 nSize = 0 );
     SwTabCols( const SwTabCols& );
     SwTabCols &operator=( const SwTabCols& );
-    BOOL operator==( const SwTabCols& rCmp ) const;
-    long& operator[]( USHORT nPos ) { return aData[nPos].nPos; }
-    long operator[]( USHORT nPos ) const { return aData[nPos].nPos; }
-    USHORT Count() const { return sal::static_int_cast< USHORT >(aData.size()); }
+    sal_Bool operator==( const SwTabCols& rCmp ) const;
+    long& operator[]( sal_uInt16 nPos ) { return aData[nPos].nPos; }
+    long operator[]( sal_uInt16 nPos ) const { return aData[nPos].nPos; }
+    sal_uInt16 Count() const { return sal::static_int_cast< sal_uInt16 >(aData.size()); }
 
-    BOOL IsHidden( USHORT nPos ) const         { return aData[nPos].bHidden; }
-    void SetHidden( USHORT nPos, BOOL bValue ) { aData[nPos].bHidden = bValue; }
+    sal_Bool IsHidden( sal_uInt16 nPos ) const         { return aData[nPos].bHidden; }
+    void SetHidden( sal_uInt16 nPos, sal_Bool bValue ) { aData[nPos].bHidden = bValue; }
 
-    void Insert( long nValue, BOOL bValue, USHORT nPos );
-    void Insert( long nValue, long nMin, long nMax, BOOL bValue, USHORT nPos );
-    void Remove( USHORT nPos, USHORT nAnz = 1 );
+    void Insert( long nValue, sal_Bool bValue, sal_uInt16 nPos );
+    void Insert( long nValue, long nMin, long nMax, sal_Bool bValue, sal_uInt16 nPos );
+    void Remove( sal_uInt16 nPos, sal_uInt16 nAnz = 1 );
 
-    const SwTabColsEntry& GetEntry( USHORT nPos ) const { return aData[nPos]; }
-          SwTabColsEntry& GetEntry( USHORT nPos )  { return aData[nPos]; }
+    const SwTabColsEntry& GetEntry( sal_uInt16 nPos ) const { return aData[nPos]; }
+          SwTabColsEntry& GetEntry( sal_uInt16 nPos )  { return aData[nPos]; }
 
     long GetLeftMin() const { return nLeftMin; }
     long GetLeft()  const { return nLeft;    }

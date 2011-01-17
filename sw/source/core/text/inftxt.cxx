@@ -180,7 +180,7 @@ void SwLineInfo::CtorInitLineInfo( const SwAttrSet& rAttrSet,
         pRuler->Insert( aListTabStop );
 
         // remove default tab stops, which are before the inserted list tab stop
-        for ( USHORT i = 0; i < pRuler->Count(); i++ )
+        for ( sal_uInt16 i = 0; i < pRuler->Count(); i++ )
         {
             if ( (*pRuler)[i].GetTabPos() < nListTabStopPosition &&
                  (*pRuler)[i].GetAdjustment() == SVX_TAB_ADJUST_DEFAULT )
@@ -195,7 +195,7 @@ void SwLineInfo::CtorInitLineInfo( const SwAttrSet& rAttrSet,
     if ( !rTxtNode.getIDocumentSettingAccess()->get(IDocumentSettingAccess::TABS_RELATIVE_TO_INDENT) )
     {
         // remove default tab stop at position 0
-        for ( USHORT i = 0; i < pRuler->Count(); i++ )
+        for ( sal_uInt16 i = 0; i < pRuler->Count(); i++ )
         {
             if ( (*pRuler)[i].GetTabPos() == 0 &&
                  (*pRuler)[i].GetAdjustment() == SVX_TAB_ADJUST_DEFAULT )
@@ -453,7 +453,7 @@ SwPosSize SwTxtSizeInfo::GetTxtSize( OutputDevice* pOutDev,
                                      const XubString& rTxt,
                                      const xub_StrLen nIndex,
                                      const xub_StrLen nLength,
-                                     const USHORT nComp ) const
+                                     const sal_uInt16 nComp ) const
 {
     SwDrawTextInfo aDrawInf( pVsh, *pOutDev, pSI, rTxt, nIndex, nLength );
     aDrawInf.SetFrm( pFrm );
@@ -475,7 +475,7 @@ SwPosSize SwTxtSizeInfo::GetTxtSize() const
 
     // in some cases, compression is not allowed or surpressed for
     // performance reasons
-    USHORT nComp =( SW_CJK == GetFont()->GetActual() &&
+    sal_uInt16 nComp =( SW_CJK == GetFont()->GetActual() &&
                     rSI.CountCompChg() &&
                     ! IsMulti() ) ?
                     GetKanaComp() :
@@ -494,8 +494,8 @@ SwPosSize SwTxtSizeInfo::GetTxtSize() const
  *************************************************************************/
 
 void SwTxtSizeInfo::GetTxtSize( const SwScriptInfo* pSI, const xub_StrLen nIndex,
-                                const xub_StrLen nLength, const USHORT nComp,
-                                USHORT& nMinSize, USHORT& nMaxSizeDiff ) const
+                                const xub_StrLen nLength, const sal_uInt16 nComp,
+                                sal_uInt16& nMinSize, sal_uInt16& nMaxSizeDiff ) const
 {
     SwDrawTextInfo aDrawInf( pVsh, *pOut, pSI, *pTxt, nIndex, nLength );
     aDrawInf.SetFrm( pFrm );
@@ -503,7 +503,7 @@ void SwTxtSizeInfo::GetTxtSize( const SwScriptInfo* pSI, const xub_StrLen nIndex
     aDrawInf.SetSnapToGrid( SnapToGrid() );
     aDrawInf.SetKanaComp( nComp );
     SwPosSize aSize = pFnt->_GetTxtSize( aDrawInf );
-    nMaxSizeDiff = (USHORT)aDrawInf.GetKanaDiff();
+    nMaxSizeDiff = (sal_uInt16)aDrawInf.GetKanaDiff();
     nMinSize = aSize.Width();
 }
 
@@ -513,7 +513,7 @@ void SwTxtSizeInfo::GetTxtSize( const SwScriptInfo* pSI, const xub_StrLen nIndex
 
 xub_StrLen SwTxtSizeInfo::GetTxtBreak( const long nLineWidth,
                                        const xub_StrLen nMaxLen,
-                                       const USHORT nComp ) const
+                                       const sal_uInt16 nComp ) const
 {
     const SwScriptInfo& rScriptInfo =
                      ( (SwParaPortion*)GetParaPortion() )->GetScriptInfo();
@@ -536,7 +536,7 @@ xub_StrLen SwTxtSizeInfo::GetTxtBreak( const long nLineWidth,
 
 xub_StrLen SwTxtSizeInfo::GetTxtBreak( const long nLineWidth,
                                        const xub_StrLen nMaxLen,
-                                       const USHORT nComp,
+                                       const sal_uInt16 nComp,
                                        xub_StrLen& rExtraCharPos ) const
 {
     const SwScriptInfo& rScriptInfo =
@@ -624,7 +624,7 @@ sal_Bool lcl_IsDarkBackground( const SwTxtPaintInfo& rInf )
         /// OD 21.08.2002 #99657#
         ///     There is a background color, if there is a background brush and
         ///     its color is *not* "no fill"/"auto fill".
-        if( rInf.GetTxtFrm()->GetBackgroundBrush( pItem, pCol, aOrigBackRect, FALSE ) )
+        if( rInf.GetTxtFrm()->GetBackgroundBrush( pItem, pCol, aOrigBackRect, sal_False ) )
         {
             if ( !pCol )
                 pCol = &pItem->GetColor();
@@ -698,7 +698,7 @@ void SwTxtPaintInfo::_DrawText( const XubString &rText, const SwLinePortion &rPo
 
     // in some cases, kana compression is not allowed or surpressed for
     // performance reasons
-    USHORT nComp = 0;
+    sal_uInt16 nComp = 0;
     if ( ! IsMulti() )
         nComp = GetKanaComp();
 
@@ -818,8 +818,8 @@ void SwTxtPaintInfo::CalcRect( const SwLinePortion& rPor,
     }
 
     // Adjust x coordinate if we are inside a bidi portion
-    const BOOL bFrmDir = GetTxtFrm()->IsRightToLeft();
-    BOOL bCounterDir = ( ! bFrmDir && DIR_RIGHT2LEFT == GetDirection() ) ||
+    const sal_Bool bFrmDir = GetTxtFrm()->IsRightToLeft();
+    sal_Bool bCounterDir = ( ! bFrmDir && DIR_RIGHT2LEFT == GetDirection() ) ||
                        (   bFrmDir && DIR_LEFT2RIGHT == GetDirection() );
 
     if ( bCounterDir )
@@ -863,7 +863,7 @@ void SwTxtPaintInfo::CalcRect( const SwLinePortion& rPor,
 
 static void lcl_DrawSpecial( const SwTxtPaintInfo& rInf, const SwLinePortion& rPor,
                       SwRect& rRect, const Color* pCol, sal_Unicode cChar,
-                      BYTE nOptions )
+                      sal_uInt8 nOptions )
 {
     sal_Bool bCenter = 0 != ( nOptions & DRAW_SPECIAL_OPTIONS_CENTER );
     sal_Bool bRotate = 0 != ( nOptions & DRAW_SPECIAL_OPTIONS_ROTATE );
@@ -904,7 +904,7 @@ static void lcl_DrawSpecial( const SwTxtPaintInfo& rInf, const SwLinePortion& rP
     ((SwTxtPaintInfo&)rInf).SetFont( pFnt );
 
     // The maximum width depends on the current orientation
-    const USHORT nDir = pFnt->GetOrientation( rInf.GetTxtFrm()->IsVertical() );
+    const sal_uInt16 nDir = pFnt->GetOrientation( rInf.GetTxtFrm()->IsVertical() );
     SwTwips nMaxWidth = 0;
     switch ( nDir )
     {
@@ -929,7 +929,7 @@ static void lcl_DrawSpecial( const SwTxtPaintInfo& rInf, const SwLinePortion& rP
         const SwTwips nOldWidth = aFontSize.Width();
 
         // new height for font
-        const BYTE nAct = pFnt->GetActual();
+        const sal_uInt8 nAct = pFnt->GetActual();
         aFontSize.Height() = ( 100 * pFnt->GetSize( nAct ).Height() ) / nFactor;
         aFontSize.Width() = ( 100 * pFnt->GetSize( nAct).Width() ) / nFactor;
 
@@ -970,8 +970,8 @@ static void lcl_DrawSpecial( const SwTxtPaintInfo& rInf, const SwLinePortion& rP
 
     Point aTmpPos( nX, nY );
     ((SwTxtPaintInfo&)rInf).SetPos( aTmpPos );
-    USHORT nOldWidth = rPor.Width();
-    ((SwLinePortion&)rPor).Width( (USHORT)aFontSize.Width() );
+    sal_uInt16 nOldWidth = rPor.Width();
+    ((SwLinePortion&)rPor).Width( (sal_uInt16)aFontSize.Width() );
     rInf.DrawText( aTmp, rPor );
     ((SwLinePortion&)rPor).Width( nOldWidth );
     ((SwTxtPaintInfo&)rInf).SetFont( (SwFont*)pOldFnt );
@@ -1016,7 +1016,7 @@ void SwTxtPaintInfo::DrawTab( const SwLinePortion &rPor ) const
 
         const sal_Unicode cChar = GetTxtFrm()->IsRightToLeft() ?
                                   CHAR_TAB_RTL : CHAR_TAB;
-        const BYTE nOptions = DRAW_SPECIAL_OPTIONS_CENTER |
+        const sal_uInt8 nOptions = DRAW_SPECIAL_OPTIONS_CENTER |
                               DRAW_SPECIAL_OPTIONS_ROTATE;
         lcl_DrawSpecial( *this, rPor, aRect, 0, cChar, nOptions );
     }
@@ -1040,7 +1040,7 @@ void SwTxtPaintInfo::DrawLineBreak( const SwLinePortion &rPor ) const
         {
             const sal_Unicode cChar = GetTxtFrm()->IsRightToLeft() ?
                                       CHAR_LINEBREAK_RTL : CHAR_LINEBREAK;
-            const BYTE nOptions = 0;
+            const sal_uInt8 nOptions = 0;
             lcl_DrawSpecial( *this, rPor, aRect, 0, cChar, nOptions );
         }
 
@@ -1082,7 +1082,7 @@ void SwTxtPaintInfo::DrawRedArrow( const SwLinePortion &rPor ) const
 
     if( aRect.HasArea() )
     {
-        const BYTE nOptions = 0;
+        const sal_uInt8 nOptions = 0;
         lcl_DrawSpecial( *this, rPor, aRect, &aCol, cChar, nOptions );
     }
 }
@@ -1099,9 +1099,9 @@ void SwTxtPaintInfo::DrawPostIts( const SwLinePortion&, sal_Bool bScript ) const
         Size aSize;
         Point aTmp;
 
-        const USHORT nPostItsWidth = pOpt->GetPostItsWidth( GetOut() );
-        const USHORT nFontHeight = pFnt->GetHeight( pVsh, *GetOut() );
-        const USHORT nFontAscent = pFnt->GetAscent( pVsh, *GetOut() );
+        const sal_uInt16 nPostItsWidth = pOpt->GetPostItsWidth( GetOut() );
+        const sal_uInt16 nFontHeight = pFnt->GetHeight( pVsh, *GetOut() );
+        const sal_uInt16 nFontAscent = pFnt->GetAscent( pVsh, *GetOut() );
 
         switch ( pFnt->GetOrientation( GetTxtFrm()->IsVertical() ) )
         {
@@ -1339,9 +1339,9 @@ void SwTxtPaintInfo::_NotifyURL( const SwLinePortion &rPor ) const
  *************************************************************************/
 
 static void lcl_InitHyphValues( PropertyValues &rVals,
-            INT16 nMinLeading, INT16 nMinTrailing )
+            sal_Int16 nMinLeading, sal_Int16 nMinTrailing )
 {
-    INT32 nLen = rVals.getLength();
+    sal_Int32 nLen = rVals.getLength();
 
     if (0 == nLen)  // yet to be initialized?
     {
@@ -1396,8 +1396,8 @@ sal_Bool SwTxtFormatInfo::InitHyph( const sal_Bool bAutoHyphen )
         nHyphStart = nHyphWrdStart = STRING_LEN;
         nHyphWrdLen = 0;
 
-        const INT16 nMinimalLeading  = Max(rAttr.GetMinLead(), sal_uInt8(2));
-        const INT16 nMinimalTrailing = rAttr.GetMinTrail();
+        const sal_Int16 nMinimalLeading  = Max(rAttr.GetMinLead(), sal_uInt8(2));
+        const sal_Int16 nMinimalTrailing = rAttr.GetMinTrail();
         lcl_InitHyphValues( aHyphVals, nMinimalLeading, nMinimalTrailing);
     }
     return bAuto;
@@ -1558,23 +1558,23 @@ SwTxtFormatInfo::SwTxtFormatInfo( const SwTxtFormatInfo& rInf,
     nMinLeading = 0;
     nMinTrailing = 0;
     nMinWordLength = 0;
-    bFull = FALSE;
-    bFtnDone = TRUE;
-    bErgoDone = TRUE;
-    bNumDone = TRUE;
-    bArrowDone = TRUE;
-    bStop = FALSE;
-    bNewLine = TRUE;
-    bShift  = FALSE;
-    bUnderFlow = FALSE;
-    bInterHyph = FALSE;
-    bAutoHyph = FALSE;
-    bDropInit = FALSE;
+    bFull = sal_False;
+    bFtnDone = sal_True;
+    bErgoDone = sal_True;
+    bNumDone = sal_True;
+    bArrowDone = sal_True;
+    bStop = sal_False;
+    bNewLine = sal_True;
+    bShift  = sal_False;
+    bUnderFlow = sal_False;
+    bInterHyph = sal_False;
+    bAutoHyph = sal_False;
+    bDropInit = sal_False;
     bQuick  = rInf.bQuick;
-    bNoEndHyph  = FALSE;
-    bNoMidHyph  = FALSE;
-    bIgnoreFly = FALSE;
-    bFakeLineStart = FALSE;
+    bNoEndHyph  = sal_False;
+    bNoMidHyph  = sal_False;
+    bIgnoreFly = sal_False;
+    bFakeLineStart = sal_False;
 
     cTabDecimal = 0;
     cHookChar = 0;
@@ -1718,15 +1718,15 @@ xub_StrLen SwTxtFormatInfo::ScanPortionEnd( const xub_StrLen nStart,
     return i;
 }
 
-BOOL SwTxtFormatInfo::LastKernPortion()
+sal_Bool SwTxtFormatInfo::LastKernPortion()
 {
     if( GetLast() )
     {
          if( GetLast()->IsKernPortion() )
-            return TRUE;
+            return sal_True;
         if( GetLast()->Width() || ( GetLast()->GetLen() &&
             !GetLast()->IsHolePortion() ) )
-            return FALSE;
+            return sal_False;
     }
     SwLinePortion* pPor = GetRoot();
     SwLinePortion *pKern = NULL;
@@ -1741,9 +1741,9 @@ BOOL SwTxtFormatInfo::LastKernPortion()
     if( pKern )
     {
         SetLast( pKern );
-        return TRUE;
+        return sal_True;
     }
-    return FALSE;
+    return sal_False;
 }
 
 /*************************************************************************
@@ -1782,7 +1782,7 @@ SwTxtSlot::SwTxtSlot( const SwTxtSizeInfo *pNew, const SwLinePortion *pPor,
             pOldSmartTagList = static_cast<SwTxtPaintInfo*>(pInf)->GetSmartTags();
             if ( pOldSmartTagList )
             {
-                const USHORT nPos = pOldSmartTagList->GetWrongPos(nIdx);
+                const sal_uInt16 nPos = pOldSmartTagList->GetWrongPos(nIdx);
                 const xub_StrLen nListPos = pOldSmartTagList->Pos(nPos);
                 if( nListPos == nIdx )
                     ((SwTxtPaintInfo*)pInf)->SetSmartTags( pOldSmartTagList->SubList( nPos ) );
@@ -1798,7 +1798,7 @@ SwTxtSlot::SwTxtSlot( const SwTxtSizeInfo *pNew, const SwLinePortion *pPor,
             pOldGrammarCheckList = static_cast<SwTxtPaintInfo*>(pInf)->GetGrammarCheckList();
             if ( pOldGrammarCheckList )
             {
-                const USHORT nPos = pOldGrammarCheckList->GetWrongPos(nIdx);
+                const sal_uInt16 nPos = pOldGrammarCheckList->GetWrongPos(nIdx);
                 const xub_StrLen nListPos = pOldGrammarCheckList->Pos(nPos);
                 if( nListPos == nIdx )
                     ((SwTxtPaintInfo*)pInf)->SetGrammarCheckList( pOldGrammarCheckList->SubList( nPos ) );
@@ -1903,7 +1903,7 @@ SwFontSave::~SwFontSave()
 SwDefFontSave::SwDefFontSave( const SwTxtSizeInfo &rInf )
         : pFnt( ((SwTxtSizeInfo&)rInf).GetFont()  )
 {
-    const BOOL bTmpAlter = pFnt->GetFixKerning() ||
+    const sal_Bool bTmpAlter = pFnt->GetFixKerning() ||
          ( RTL_TEXTENCODING_SYMBOL == pFnt->GetCharSet(pFnt->GetActual()) )
         ;
 

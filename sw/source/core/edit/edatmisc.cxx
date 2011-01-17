@@ -47,7 +47,7 @@ void SwEditShell::ResetAttr( const SvUShortsSort* pAttrs )
 {
     SET_CURR_SHELL( this );
     StartAllAction();
-    BOOL bUndoGroup = GetCrsr()->GetNext() != GetCrsr();
+    sal_Bool bUndoGroup = GetCrsr()->GetNext() != GetCrsr();
     if( bUndoGroup )
         GetDoc()->StartUndo(UNDO_RESETATTR, NULL);
 
@@ -118,21 +118,21 @@ void SwEditShell::SetDefault( const SfxItemSet& rSet )
 
 // Erfrage das Default Attribut in diesem Dokument.
 
-const SfxPoolItem& SwEditShell::GetDefault( USHORT nFmtHint ) const
+const SfxPoolItem& SwEditShell::GetDefault( sal_uInt16 nFmtHint ) const
 {
     return GetDoc()->GetDefault( nFmtHint );
 
 }
 
 
-void SwEditShell::SetAttr( const SfxPoolItem& rHint, USHORT nFlags )
+void SwEditShell::SetAttr( const SfxPoolItem& rHint, sal_uInt16 nFlags )
 {
     SET_CURR_SHELL( this );
     StartAllAction();
     SwPaM* pCrsr = GetCrsr();
     if( pCrsr->GetNext() != pCrsr )     // Ring von Cursorn
     {
-        BOOL bIsTblMode = IsTableMode();
+        sal_Bool bIsTblMode = IsTableMode();
         GetDoc()->StartUndo(UNDO_INSATTR, NULL);
 
         FOREACHPAM_START(this)
@@ -155,14 +155,14 @@ void SwEditShell::SetAttr( const SfxPoolItem& rHint, USHORT nFlags )
 }
 
 
-void SwEditShell::SetAttr( const SfxItemSet& rSet, USHORT nFlags )
+void SwEditShell::SetAttr( const SfxItemSet& rSet, sal_uInt16 nFlags )
 {
     SET_CURR_SHELL( this );
     StartAllAction();
     SwPaM* pCrsr = GetCrsr();
     if( pCrsr->GetNext() != pCrsr )     // Ring von Cursorn
     {
-        BOOL bIsTblMode = IsTableMode();
+        sal_Bool bIsTblMode = IsTableMode();
         GetDoc()->StartUndo(UNDO_INSATTR, NULL);
 
         FOREACHPAM_START(this)

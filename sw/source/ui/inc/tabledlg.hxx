@@ -43,9 +43,9 @@ struct TColumn;
 class SwTableTabDlg : public SfxTabDialog
 {
     SwWrtShell* pShell;
-    USHORT      nHtmlMode;
+    sal_uInt16      nHtmlMode;
 
-    virtual void        PageCreated(USHORT nId, SfxTabPage& rPage);
+    virtual void        PageCreated(sal_uInt16 nId, SfxTabPage& rPage);
 public:
      SwTableTabDlg( Window* pParent, SfxItemPool& Pool,
                     const SfxItemSet* pItemSet, SwWrtShell* pSh );

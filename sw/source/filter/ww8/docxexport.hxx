@@ -91,7 +91,7 @@ public:
     virtual bool HackIsWW8OrHigher() const { return true; }
 
     /// Guess the script (asian/western).
-    virtual bool CollapseScriptsforWordOk( USHORT nScript, USHORT nWhich );
+    virtual bool CollapseScriptsforWordOk( sal_uInt16 nScript, sal_uInt16 nWhich );
 
     virtual void AppendBookmarks( const SwTxtNode& rNode, xub_StrLen nAktPos, xub_StrLen nLen );
 
@@ -107,12 +107,12 @@ public:
     virtual bool DisallowInheritingOutlineNumbering( const SwFmt &rFmt );
 
     /// Output the actual headers and footers.
-    virtual void WriteHeadersFooters( BYTE nHeadFootFlags,
+    virtual void WriteHeadersFooters( sal_uInt8 nHeadFootFlags,
             const SwFrmFmt& rFmt, const SwFrmFmt& rLeftFmt, const SwFrmFmt& rFirstPageFmt );
 
     /// Write the field
     virtual void OutputField( const SwField* pFld, ww::eField eFldType,
-            const String& rFldCmd, BYTE nMode = nsFieldFlags::WRITEFIELD_ALL );
+            const String& rFldCmd, sal_uInt8 nMode = nsFieldFlags::WRITEFIELD_ALL );
 
     /// Write the data of the form field
     virtual void WriteFormData( const ::sw::mark::IFieldmark& rFieldmark );
@@ -125,7 +125,7 @@ public:
 
     virtual void DoFormText(const SwInputField * pFld);
 
-    virtual ULONG ReplaceCr( BYTE nChar );
+    virtual sal_uLong ReplaceCr( sal_uInt8 nChar );
 
 protected:
     /// Format-dependant part of the actual export.
@@ -147,7 +147,7 @@ protected:
     virtual void OutputOLENode( const SwOLENode& );
 
 
-    virtual void AppendSection( const SwPageDesc *pPageDesc, const SwSectionFmt* pFmt, ULONG nLnNum );
+    virtual void AppendSection( const SwPageDesc *pPageDesc, const SwSectionFmt* pFmt, sal_uLong nLnNum );
 
     virtual void SectionBreaksAndFrames( const SwTxtNode& rNode ) {}
 

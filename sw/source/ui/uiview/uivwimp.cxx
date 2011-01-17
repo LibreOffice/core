@@ -105,7 +105,7 @@ SwView_Impl::~SwView_Impl()
            pScanEvtLstnr->ViewDestroyed();
     if( xClipEvtLstnr.is() )
     {
-        pClipEvtLstnr->AddRemoveListener( FALSE );
+        pClipEvtLstnr->AddRemoveListener( sal_False );
         pClipEvtLstnr->ViewDestroyed();
     }
     delete pConfigItem;
@@ -141,12 +141,12 @@ SwXTextView*    SwView_Impl::GetUNOObject_Impl()
  ---------------------------------------------------------------------------*/
 void SwView_Impl::ExecuteScan( SfxRequest& rReq )
 {
-    USHORT nSlot = rReq.GetSlot();
+    sal_uInt16 nSlot = rReq.GetSlot();
     switch(nSlot)
     {
         case SID_TWAIN_SELECT:
         {
-            BOOL bDone = FALSE;
+            sal_Bool bDone = sal_False;
             Reference< XScannerManager > xScanMgr = SW_MOD()->GetScannerManager();
 
             if( xScanMgr.is() )
@@ -180,7 +180,7 @@ void SwView_Impl::ExecuteScan( SfxRequest& rReq )
 
         case SID_TWAIN_TRANSFER:
         {
-            BOOL bDone = FALSE;
+            sal_Bool bDone = sal_False;
 
             Reference< XScannerManager > xScanMgr = SW_MOD()->GetScannerManager();
             if( xScanMgr.is() )
@@ -193,7 +193,7 @@ void SwView_Impl::ExecuteScan( SfxRequest& rReq )
                     {
                         Reference< XEventListener > xLstner = &rListener;
                         xScanMgr->startScan( aContexts.getConstArray()[ 0 ], xLstner );
-                        bDone = TRUE;
+                        bDone = sal_True;
                     }
                 }
                 catch(...)
@@ -234,7 +234,7 @@ void SwView_Impl::AddClipboardListener()
     if(!xClipEvtLstnr.is())
     {
         xClipEvtLstnr = pClipEvtLstnr = new SwClipboardChangeListener( *pView );
-        pClipEvtLstnr->AddRemoveListener( TRUE );
+        pClipEvtLstnr->AddRemoveListener( sal_True );
     }
 }
 /* -----------------3/31/2003 11:42AM----------------
@@ -337,7 +337,7 @@ void SAL_CALL SwClipboardChangeListener::changedContents( const CLIP_NMSPC::Clip
     }
 }
 
-void SwClipboardChangeListener::AddRemoveListener( BOOL bAdd )
+void SwClipboardChangeListener::AddRemoveListener( sal_Bool bAdd )
 {
     pView->AddRemoveClipboardListener( Reference< XClipboardListener >( this ), bAdd );
 }

@@ -91,7 +91,7 @@ void SwRenderData::CreatePostItData( SwDoc *pDoc, const SwViewOption *pViewOpt, 
     //!! Otherwise the grammar checker might process it and crash if we later on
     //!! simply delete this document while he is still at it.
     SwViewOption  aViewOpt( *pViewOpt );
-    aViewOpt.SetOnlineSpell( FALSE );
+    aViewOpt.SetOnlineSpell( sal_False );
 
     m_pPostItShell  = new ViewShell( *m_pPostItDoc, 0, &aViewOpt, pOutDev );
 }
@@ -154,7 +154,7 @@ void SwRenderData::MakeSwPrtOptions(
 
     // get default print options
     const TypeId aSwWebDocShellTypeId = TYPE(SwWebDocShell);
-    BOOL bWeb = pDocShell->IsA( aSwWebDocShellTypeId );
+    sal_Bool bWeb = pDocShell->IsA( aSwWebDocShellTypeId );
     ::sw::InitPrintOptionsFromApplication(rOptions, bWeb);
 
     // get print options to use from provided properties

@@ -41,7 +41,7 @@ public:
      // SW_BORDER_MODE_TABLE
      // SW_BORDER_MODE_FRAME
 
-     SwBorderDlg(Window* pParent, SfxItemSet& rSet, USHORT nType);
+     SwBorderDlg(Window* pParent, SfxItemSet& rSet, sal_uInt16 nType);
     ~SwBorderDlg();
 };
 

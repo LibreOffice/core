@@ -48,15 +48,15 @@ void lcl_SelectSdrMarkList( SwEditShell* pShell,
                             const SdrMarkList* pSdrMarkList );
 
 
-BOOL SwEditShell::Undo( SwUndoId nUndoId, USHORT nCnt )
+sal_Bool SwEditShell::Undo( SwUndoId nUndoId, sal_uInt16 nCnt )
 {
     SET_CURR_SHELL( this );
 
     // #105332# current undo state was not saved
-    BOOL bRet = FALSE;
-    BOOL bSaveDoesUndo = GetDoc()->DoesUndo();
+    sal_Bool bRet = sal_False;
+    sal_Bool bSaveDoesUndo = GetDoc()->DoesUndo();
 
-    GetDoc()->DoUndo( FALSE );
+    GetDoc()->DoUndo( sal_False );
     StartAllAction();
     {
         // eigentlich muesste ja nur der aktuelle Cursor berarbeitet
@@ -70,7 +70,7 @@ BOOL SwEditShell::Undo( SwUndoId nUndoId, USHORT nCnt )
         // JP 02.04.98: Cursor merken - beim Auto-Format/-Korrektur
         //              soll dieser wieder an die Position
         SwUndoId nLastUndoId = GetDoc()->GetUndoIds(NULL, NULL);
-        BOOL bRestoreCrsr = 1 == nCnt && ( UNDO_AUTOFORMAT == nLastUndoId ||
+        sal_Bool bRestoreCrsr = 1 == nCnt && ( UNDO_AUTOFORMAT == nLastUndoId ||
                                            UNDO_AUTOCORRECT == nLastUndoId );
         Push();
 
@@ -98,7 +98,7 @@ BOOL SwEditShell::Undo( SwUndoId nUndoId, USHORT nCnt )
                     CreateCrsr();
                     aUndoIter.pAktPam = GetCrsr();
                 }
-            } while( TRUE );
+            } while( sal_True );
         }
 
         Pop( !bRestoreCrsr );
@@ -114,9 +114,9 @@ BOOL SwEditShell::Undo( SwUndoId nUndoId, USHORT nCnt )
             {
                 Point aPt;
                 SwFlyFrm* pFly = ((SwFlyFrmFmt*)aUndoIter.pSelFmt)->GetFrm(
-                                                            &aPt, FALSE );
+                                                            &aPt, sal_False );
                 if( pFly )
-                    ((SwFEShell*)this)->SelectFlyFrm( *pFly, TRUE );
+                    ((SwFEShell*)this)->SelectFlyFrm( *pFly, sal_True );
             }
         }
         else if( aUndoIter.pMarkList )
@@ -134,21 +134,21 @@ BOOL SwEditShell::Undo( SwUndoId nUndoId, USHORT nCnt )
     }
     EndAllAction();
 
-    // #105332# undo state was not restored but set to FALSE everytime
+    // #105332# undo state was not restored but set to sal_False everytime
     GetDoc()->DoUndo( bSaveDoesUndo );
     return bRet;
 }
 
-USHORT SwEditShell::Redo( USHORT nCnt )
+sal_uInt16 SwEditShell::Redo( sal_uInt16 nCnt )
 {
     SET_CURR_SHELL( this );
 
-    BOOL bRet = FALSE;
+    sal_Bool bRet = sal_False;
 
     // #105332# undo state was not saved
-    BOOL bSaveDoesUndo = GetDoc()->DoesUndo();
+    sal_Bool bSaveDoesUndo = GetDoc()->DoesUndo();
 
-    GetDoc()->DoUndo( FALSE );
+    GetDoc()->DoUndo( sal_False );
     StartAllAction();
 
     {
@@ -183,7 +183,7 @@ USHORT SwEditShell::Redo( USHORT nCnt )
                     CreateCrsr();
                     aUndoIter.pAktPam = GetCrsr();
                 }
-            } while( TRUE );
+            } while( sal_True );
         }
 
         if( aUndoIter.IsUpdateAttr() )
@@ -200,9 +200,9 @@ USHORT SwEditShell::Redo( USHORT nCnt )
             {
                 Point aPt;
                 SwFlyFrm* pFly = ((SwFlyFrmFmt*)aUndoIter.pSelFmt)->GetFrm(
-                                                            &aPt, FALSE );
+                                                            &aPt, sal_False );
                 if( pFly )
-                    ((SwFEShell*)this)->SelectFlyFrm( *pFly, TRUE );
+                    ((SwFEShell*)this)->SelectFlyFrm( *pFly, sal_True );
             }
         }
         else if( aUndoIter.pMarkList )
@@ -221,17 +221,17 @@ USHORT SwEditShell::Redo( USHORT nCnt )
 
     EndAllAction();
 
-    // #105332# undo state was not restored but set FALSE everytime
+    // #105332# undo state was not restored but set sal_False everytime
     GetDoc()->DoUndo( bSaveDoesUndo );
     return bRet;
 }
 
 
-USHORT SwEditShell::Repeat( USHORT nCount )
+sal_uInt16 SwEditShell::Repeat( sal_uInt16 nCount )
 {
     SET_CURR_SHELL( this );
 
-    BOOL bRet = FALSE;
+    sal_Bool bRet = sal_False;
     StartAllAction();
 
         SwUndoIter aUndoIter( GetCrsr(), UNDO_EMPTY );
@@ -243,13 +243,13 @@ USHORT SwEditShell::Repeat( USHORT nCount )
 
         // abfragen/setzen der Anzahl von wiederherstellbaren Undo-Actions
 
-USHORT SwEditShell::GetUndoActionCount()
+sal_uInt16 SwEditShell::GetUndoActionCount()
 {
     return SwDoc::GetUndoActionCount();
 }
 
 
-void SwEditShell::SetUndoActionCount( USHORT nNew )
+void SwEditShell::SetUndoActionCount( sal_uInt16 nNew )
 {
     SwDoc::SetUndoActionCount( nNew );
 }
@@ -266,7 +266,7 @@ void lcl_SelectSdrMarkList( SwEditShell* pShell,
     if( pShell->ISA( SwFEShell ) )
     {
         SwFEShell* pFEShell = static_cast<SwFEShell*>( pShell );
-        for( USHORT i = 0; i < pSdrMarkList->GetMarkCount(); ++i )
+        for( sal_uInt16 i = 0; i < pSdrMarkList->GetMarkCount(); ++i )
             pFEShell->SelectObj( Point(),
                                  (i==0) ? 0 : SW_ADD_SELECT,
                                  pSdrMarkList->GetMark( i )->GetMarkedSdrObj() );

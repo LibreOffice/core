@@ -43,11 +43,11 @@ SV_IMPL_PTRARR(SwSortKeys, SwSortKey*)
 SwSortKey::SwSortKey() :
     eSortOrder( SRT_ASCENDING ),
     nColumnId( 0 ),
-    bIsNumeric( TRUE )
+    bIsNumeric( sal_True )
 {
 }
 
-SwSortKey::SwSortKey(USHORT nId, const String& rSrtType, SwSortOrder eOrder) :
+SwSortKey::SwSortKey(sal_uInt16 nId, const String& rSrtType, SwSortOrder eOrder) :
     sSortType( rSrtType ),
     eSortOrder( eOrder ),
     nColumnId( nId ),
@@ -73,8 +73,8 @@ SwSortOptions::SwSortOptions()
     : eDirection( SRT_ROWS ),
     cDeli( 9 ),
     nLanguage( LANGUAGE_SYSTEM ),
-    bTable( FALSE ),
-    bIgnoreCase( FALSE )
+    bTable( sal_False ),
+    bIgnoreCase( sal_False )
 {
 }
 
@@ -86,7 +86,7 @@ SwSortOptions::SwSortOptions(const SwSortOptions& rOpt) :
     bTable( rOpt.bTable ),
     bIgnoreCase( rOpt.bIgnoreCase )
 {
-    for( USHORT i=0; i < rOpt.aKeys.Count(); ++i )
+    for( sal_uInt16 i=0; i < rOpt.aKeys.Count(); ++i )
     {
         SwSortKey* pNew = new SwSortKey(*rOpt.aKeys[i]);
         aKeys.C40_INSERT( SwSortKey, pNew, aKeys.Count());

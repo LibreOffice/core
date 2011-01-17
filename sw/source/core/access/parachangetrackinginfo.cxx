@@ -94,7 +94,7 @@ namespace {
 
         // iteration over the redlines which overlap with the text node.
         const SwRedlineTbl& rRedlineTbl = pIDocChangeTrack->GetRedlineTbl();
-        const USHORT nRedlineCount( rRedlineTbl.Count() );
+        const sal_uInt16 nRedlineCount( rRedlineTbl.Count() );
         for ( sal_uInt16 nActRedline = nIdxOfFirstRedlineForTxtNode;
               nActRedline < nRedlineCount;
               ++nActRedline)

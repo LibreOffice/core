@@ -44,7 +44,7 @@ SwShadowCursor::~SwShadowCursor()
         DrawCrsr( aOldPt, nOldHeight, nOldMode );
 }
 
-void SwShadowCursor::SetPos( const Point& rPt, long nHeight, USHORT nMode )
+void SwShadowCursor::SetPos( const Point& rPt, long nHeight, sal_uInt16 nMode )
 {
     Point aPt( pWin->LogicToPixel( rPt ));
     nHeight = pWin->LogicToPixel( Size( 0, nHeight )).Height();
@@ -60,7 +60,7 @@ void SwShadowCursor::SetPos( const Point& rPt, long nHeight, USHORT nMode )
     }
 }
 
-void SwShadowCursor::DrawTri( const Point& rPt, long nHeight, BOOL bLeft )
+void SwShadowCursor::DrawTri( const Point& rPt, long nHeight, sal_Bool bLeft )
 {
     long nLineDiff = ( nHeight / 2 );
     long nLineDiffHalf = nLineDiff / 2;
@@ -79,7 +79,7 @@ void SwShadowCursor::DrawTri( const Point& rPt, long nHeight, BOOL bLeft )
     }
 }
 
-void SwShadowCursor::DrawCrsr( const Point& rPt, long nHeight, USHORT nMode )
+void SwShadowCursor::DrawCrsr( const Point& rPt, long nHeight, sal_uInt16 nMode )
 {
     nHeight = (((nHeight / 4)+1) * 4) + 1;
 
@@ -96,9 +96,9 @@ void SwShadowCursor::DrawCrsr( const Point& rPt, long nHeight, USHORT nMode )
 
     // 2. das Dreieck
     if( text::HoriOrientation::LEFT == nMode || text::HoriOrientation::CENTER == nMode )    // Pfeil nach rechts
-        DrawTri( rPt, nHeight, FALSE );
+        DrawTri( rPt, nHeight, sal_False );
     if( text::HoriOrientation::RIGHT == nMode || text::HoriOrientation::CENTER == nMode )   // Pfeil nach links
-        DrawTri( rPt, nHeight, TRUE );
+        DrawTri( rPt, nHeight, sal_True );
 
     pWin->Pop();
 }

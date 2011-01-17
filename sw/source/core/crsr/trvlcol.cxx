@@ -91,9 +91,9 @@ SwPosColumn fnColumnStart = &GetColumnStt;
 SwPosColumn fnColumnEnd = &GetColumnEnd;
 
 
-BOOL SwCrsrShell::MoveColumn( SwWhichColumn fnWhichCol, SwPosColumn fnPosCol )
+sal_Bool SwCrsrShell::MoveColumn( SwWhichColumn fnWhichCol, SwPosColumn fnPosCol )
 {
-    BOOL bRet = FALSE;
+    sal_Bool bRet = sal_False;
     if( !pTblCrsr )
     {
         SwLayoutFrm* pLayFrm = GetCurrFrm()->GetUpper();
@@ -117,11 +117,11 @@ BOOL SwCrsrShell::MoveColumn( SwWhichColumn fnWhichCol, SwPosColumn fnPosCol )
 
                 pCnt->GetCrsrOfst( pCurCrsr->GetPoint(), aPt );
 
-                if( !pCurCrsr->IsInProtectTable( TRUE ) &&
+                if( !pCurCrsr->IsInProtectTable( sal_True ) &&
                     !pCurCrsr->IsSelOvr() )
                 {
                     UpdateCrsr();
-                    bRet = TRUE;
+                    bRet = sal_True;
                 }
             }
         }

@@ -107,7 +107,7 @@ class SwTabDecimalPortion : public SwTabPortion
      * following the tab stop up to the decimal position. This value is
      * evaluated during pLastTab->FormatEOL. FME 2006-01-06 #127428#.
      */
-    USHORT mnWidthOfPortionsUpTpDecimalPosition;
+    sal_uInt16 mnWidthOfPortionsUpTpDecimalPosition;
 
 public:
     inline SwTabDecimalPortion( const KSHORT nTabPosVal, const xub_Unicode cTab,
@@ -119,11 +119,11 @@ public:
 
     inline xub_Unicode GetTabDecimal() const { return mcTab; }
 
-    inline void SetWidthOfPortionsUpToDecimalPosition( USHORT nNew )
+    inline void SetWidthOfPortionsUpToDecimalPosition( sal_uInt16 nNew )
     {
         mnWidthOfPortionsUpTpDecimalPosition = nNew;
     }
-    inline USHORT GetWidthOfPortionsUpToDecimalPosition() const
+    inline sal_uInt16 GetWidthOfPortionsUpToDecimalPosition() const
     {
         return mnWidthOfPortionsUpTpDecimalPosition;
     }

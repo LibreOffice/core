@@ -40,18 +40,18 @@ class SW_DLLPUBLIC SwPosFlyFrm
     const SwFrmFmt* pFrmFmt;    // das FlyFrmFmt
 //  SwPosition* pPos;           // Position in den ContentNode
     SwNodeIndex* pNdIdx;        // es reicht ein Index auf den Node
-    UINT32 nOrdNum;
+    sal_uInt32 nOrdNum;
 public:
-    SwPosFlyFrm( const SwNodeIndex& , const SwFrmFmt*, USHORT nArrPos );
+    SwPosFlyFrm( const SwNodeIndex& , const SwFrmFmt*, sal_uInt16 nArrPos );
     virtual ~SwPosFlyFrm(); // virtual fuer die Writer (DLL !!)
 
     // operatoren fuer das Sort-Array
-    BOOL operator==( const SwPosFlyFrm& );
-    BOOL operator<( const SwPosFlyFrm& );
+    sal_Bool operator==( const SwPosFlyFrm& );
+    sal_Bool operator<( const SwPosFlyFrm& );
 
     const SwFrmFmt& GetFmt() const { return *pFrmFmt; }
     const SwNodeIndex& GetNdIndex() const { return *pNdIdx; }
-    UINT32 GetOrdNum() const { return nOrdNum; }
+    sal_uInt32 GetOrdNum() const { return nOrdNum; }
 };
 
 typedef SwPosFlyFrm* SwPosFlyFrmPtr;

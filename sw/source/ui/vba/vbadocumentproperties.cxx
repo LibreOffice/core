@@ -150,7 +150,7 @@ public:
                 SwFEShell* pFEShell = mpDocShell->GetFEShell();
                 if(pFEShell)
                 {
-                    aReturn <<= pFEShell->GetLineCount(FALSE);
+                    aReturn <<= pFEShell->GetLineCount(sal_False);
                 }
             }
         }

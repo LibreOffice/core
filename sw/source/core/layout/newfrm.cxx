@@ -57,8 +57,8 @@
 #include <viewopt.hxx>
 
 SwLayVout     *SwRootFrm::pVout = 0;
-BOOL           SwRootFrm::bInPaint = FALSE;
-BOOL           SwRootFrm::bNoVirDev = FALSE;
+sal_Bool           SwRootFrm::bInPaint = sal_False;
+sal_Bool           SwRootFrm::bNoVirDev = sal_False;
 
 SwCache *SwFrm::pCache = 0;
 
@@ -321,7 +321,7 @@ void _FrmFinit()
 {
 #ifdef DBG_UTIL
     // im Chache duerfen nur noch 0-Pointer stehen
-    for( USHORT n = SwFrm::GetCachePtr()->Count(); n; )
+    for( sal_uInt16 n = SwFrm::GetCachePtr()->Count(); n; )
         if( (*SwFrm::GetCachePtr())[ --n ] )
         {
             SwCacheObj* pObj = (*SwFrm::GetCachePtr())[ n ];
@@ -394,7 +394,7 @@ void SwRootFrm::DeRegisterShell( ViewShell *pSh )
         pWaitingCurrShell = 0;
 
     //Referenzen entfernen.
-    for ( USHORT i = 0; i < pCurrShells->Count(); ++i )
+    for ( sal_uInt16 i = 0; i < pCurrShells->Count(); ++i )
     {
         CurrShell *pC = (*pCurrShells)[i];
         if (pC->pPrev == pSh)
@@ -444,8 +444,8 @@ SwRootFrm::SwRootFrm( SwFrmFmt *pFmt, ViewShell * pSh ) :
     nAccessibleShells( 0 )
 {
     nType = FRMC_ROOT;
-    bIdleFormat = bTurboAllowed = bAssertFlyPages = bIsNewLayout = TRUE;
-    bCheckSuperfluous = bBrowseWidthValid = FALSE;
+    bIdleFormat = bTurboAllowed = bAssertFlyPages = bIsNewLayout = sal_True;
+    bCheckSuperfluous = bBrowseWidthValid = sal_False;
 
     InitCurrShells( this );
 
@@ -455,7 +455,7 @@ SwRootFrm::SwRootFrm( SwFrmFmt *pFmt, ViewShell * pSh ) :
     const IDocumentSettingAccess *pSettingAccess = pFmt->getIDocumentSettingAccess();
     pTimerAccess->StopIdling();
     pLayoutAccess->SetRootFrm( this );      //Fuer das Erzeugen der Flys durch MakeFrms()
-    bCallbackActionEnabled = FALSE; //vor Verlassen auf TRUE setzen!
+    bCallbackActionEnabled = sal_False; //vor Verlassen auf sal_True setzen!
 
     SdrModel *pMd = pFmt->getIDocumentDrawModelAccess()->GetDrawModel();
 
@@ -472,7 +472,7 @@ SwRootFrm::SwRootFrm( SwFrmFmt *pFmt, ViewShell * pSh ) :
 
     SwDoc* pDoc = pFmt->GetDoc();
     SwNodeIndex aIndex( *pDoc->GetNodes().GetEndOfContent().StartOfSectionNode() );
-    SwCntntNode *pNode = pDoc->GetNodes().GoNextSection( &aIndex, TRUE, FALSE );
+    SwCntntNode *pNode = pDoc->GetNodes().GoNextSection( &aIndex, sal_True, sal_False );
     // --> FME 2005-05-25 #123067# pNode = 0 can really happen:
     SwTableNode *pTblNd= pNode ? pNode->FindTableNode() : 0;
     // <--
@@ -480,7 +480,7 @@ SwRootFrm::SwRootFrm( SwFrmFmt *pFmt, ViewShell * pSh ) :
     //PageDesc besorgen (entweder vom FrmFmt des ersten Node oder den
     //initialen.)
     SwPageDesc *pDesc = 0;
-    USHORT nPgNum = 1;
+    sal_uInt16 nPgNum = 1;
 
     if ( pTblNd )
     {
@@ -497,14 +497,14 @@ SwRootFrm::SwRootFrm( SwFrmFmt *pFmt, ViewShell * pSh ) :
         bIsVirtPageNum = 0 != ( nPgNum = rDesc.GetNumOffset() );
     }
     else
-        bIsVirtPageNum = FALSE;
+        bIsVirtPageNum = sal_False;
     if ( !pDesc )
         pDesc = (SwPageDesc*)
             &const_cast<const SwDoc *>(pDoc)->GetPageDesc( 0 );
-    const BOOL bOdd = !nPgNum || 0 != ( nPgNum % 2 );
+    const sal_Bool bOdd = !nPgNum || 0 != ( nPgNum % 2 );
 
     //Eine Seite erzeugen und in das Layout stellen
-    SwPageFrm *pPage = ::InsertNewPage( *pDesc, this, bOdd, FALSE, FALSE, 0 );
+    SwPageFrm *pPage = ::InsertNewPage( *pDesc, this, bOdd, sal_False, sal_False, 0 );
 
     //Erstes Blatt im Bodytext-Bereich suchen.
     SwLayoutFrm *pLay = pPage->FindBodyCont();
@@ -512,7 +512,7 @@ SwRootFrm::SwRootFrm( SwFrmFmt *pFmt, ViewShell * pSh ) :
         pLay = (SwLayoutFrm*)pLay->Lower();
 
     SwNodeIndex aTmp( *pDoc->GetNodes().GetEndOfContent().StartOfSectionNode(), 1 );
-    ::_InsertCnt( pLay, pDoc, aTmp.GetIndex(), TRUE );
+    ::_InsertCnt( pLay, pDoc, aTmp.GetIndex(), sal_True );
     //Noch nicht ersetzte Master aus der Liste entfernen.
     RemoveMasterObjs( pDrawPage );
     if( pSettingAccess->get(IDocumentSettingAccess::GLOBAL_DOCUMENT) )
@@ -527,7 +527,7 @@ SwRootFrm::SwRootFrm( SwFrmFmt *pFmt, ViewShell * pSh ) :
     // <---
 
     pTimerAccess->StartIdling();
-    bCallbackActionEnabled = TRUE;
+    bCallbackActionEnabled = sal_True;
 
     ViewShell *pViewSh  = GetCurrShell();
     if (pViewSh)
@@ -547,7 +547,7 @@ SwRootFrm::SwRootFrm( SwFrmFmt *pFmt, ViewShell * pSh ) :
 
 SwRootFrm::~SwRootFrm()
 {
-    bTurboAllowed = FALSE;
+    bTurboAllowed = sal_False;
     pTurbo = 0;
     if(pBlink)
         pBlink->FrmDelete( this );
@@ -555,7 +555,7 @@ SwRootFrm::~SwRootFrm()
     delete pDestroy;
 
     //Referenzen entfernen.
-    for ( USHORT i = 0; i < pCurrShells->Count(); ++i )
+    for ( sal_uInt16 i = 0; i < pCurrShells->Count(); ++i )
         (*pCurrShells)[i]->pRoot = 0;
 
     delete pCurrShells;
@@ -576,7 +576,7 @@ SwRootFrm::~SwRootFrm()
 void SwRootFrm::RemoveMasterObjs( SdrPage *pPg )
 {
     //Alle Masterobjekte aus der Page entfernen. Nicht loeschen!!
-    for( ULONG i = pPg ? pPg->GetObjCount() : 0; i; )
+    for( sal_uLong i = pPg ? pPg->GetObjCount() : 0; i; )
     {
         SdrObject* pObj = pPg->GetObj( --i );
         if( pObj->ISA(SwFlyDrawObj ) )

@@ -90,17 +90,17 @@ class SwViewImp
     mutable const SdrObject * pSdrObjCached;
     mutable String sSdrObjCachedComment;
 
-    BOOL bFirstPageInvalid  :1; //Pointer auf erste Seite ungueltig?
+    sal_Bool bFirstPageInvalid  :1; //Pointer auf erste Seite ungueltig?
 
-    //BOOL bResetXorVisibility:1; //StartAction/EndAction
+    //sal_Bool bResetXorVisibility:1; //StartAction/EndAction
     //HMHBOOL bShowHdlPaint     :1; //LockPaint/UnlockPaint
-    BOOL bResetHdlHiddenPaint:1;//  -- "" --
+    sal_Bool bResetHdlHiddenPaint:1;//  -- "" --
 
-    BOOL bSmoothUpdate      :1; //Meber fuer SmoothScroll
-    BOOL bStopSmooth        :1;
-    BOOL bStopPrt           :1; // Stop Printing
+    sal_Bool bSmoothUpdate      :1; //Meber fuer SmoothScroll
+    sal_Bool bStopSmooth        :1;
+    sal_Bool bStopPrt           :1; // Stop Printing
 
-    USHORT nRestoreActions  ; //Die Anzahl der zu restaurierenden Actions (UNO)
+    sal_uInt16 nRestoreActions  ; //Die Anzahl der zu restaurierenden Actions (UNO)
     SwRect aSmoothRect;
 
     // OD 12.12.2002 #103492#
@@ -116,16 +116,16 @@ class SwViewImp
     /**
        Returns if printer shall be stopped.
 
-       @retval TRUE The printer shall be stopped.
-       @retval FALSE else
+       @retval sal_True The printer shall be stopped.
+       @retval sal_False else
     */
-    BOOL IsStopPrt() { return bStopPrt; }
+    sal_Bool IsStopPrt() { return bStopPrt; }
 
     /**
        Resets signal for stopping printing.
 
     */
-    void ResetStopPrt() { bStopPrt = FALSE; }
+    void ResetStopPrt() { bStopPrt = sal_False; }
 
     void SetFirstVisPage();     //Neue Ermittlung der ersten sichtbaren Seite
 
@@ -192,14 +192,14 @@ public:
     //Verwaltung zur ersten sichtbaren Seite
     inline const SwPageFrm *GetFirstVisPage() const;
     inline       SwPageFrm *GetFirstVisPage();
-    void SetFirstVisPageInvalid() { bFirstPageInvalid = TRUE; }
+    void SetFirstVisPageInvalid() { bFirstPageInvalid = sal_True; }
 
-    BOOL AddPaintRect( const SwRect &rRect );
+    sal_Bool AddPaintRect( const SwRect &rRect );
     SwRegionRects *GetRegion()      { return pRegion; }
     void DelRegion();
 
     // neues Interface fuer StarView Drawing
-    inline BOOL HasDrawView()       const { return 0 != pDrawView; }
+    inline sal_Bool HasDrawView()       const { return 0 != pDrawView; }
           SwDrawView* GetDrawView()       { return pDrawView; }
     const SwDrawView* GetDrawView() const { return pDrawView; }
           SdrPageView*GetPageView()       { return pSdrPageView; }
@@ -227,12 +227,12 @@ public:
     //DECL_LINK( PaintDispatcher, SdrPaintProcRec * );
 
     // Interface Drawing
-    BOOL IsDragPossible( const Point &rPoint );
+    sal_Bool IsDragPossible( const Point &rPoint );
     void NotifySizeChg( const Size &rNewSz );
 
     //SS Fuer die Lay- bzw. IdleAction und verwandtes
-    BOOL  IsAction() const                   { return pLayAct  != 0; }
-    BOOL  IsIdleAction() const               { return pIdleAct != 0; }
+    sal_Bool  IsAction() const                   { return pLayAct  != 0; }
+    sal_Bool  IsIdleAction() const               { return pIdleAct != 0; }
           SwLayAction &GetLayAction()        { return *pLayAct; }
     const SwLayAction &GetLayAction() const  { return *pLayAct; }
           SwLayIdle   &GetIdleAction()       { return *pIdleAct;}
@@ -241,13 +241,13 @@ public:
     //Wenn eine Aktion laueft wird diese gebeten zu pruefen ob es
     //an der zeit ist den WaitCrsr einzuschalten.
     void CheckWaitCrsr();
-    BOOL IsCalcLayoutProgress() const;  //Fragt die LayAction wenn vorhanden.
-    //TRUE wenn eine LayAction laeuft, dort wird dann auch das Flag fuer
+    sal_Bool IsCalcLayoutProgress() const;  //Fragt die LayAction wenn vorhanden.
+    //sal_True wenn eine LayAction laeuft, dort wird dann auch das Flag fuer
     //ExpressionFields gesetzt.
-    BOOL IsUpdateExpFlds();
+    sal_Bool IsUpdateExpFlds();
 
-    void    SetRestoreActions(USHORT nSet){nRestoreActions = nSet;}
-    USHORT  GetRestoreActions() const{return nRestoreActions;}
+    void    SetRestoreActions(sal_uInt16 nSet){nRestoreActions = nSet;}
+    sal_uInt16  GetRestoreActions() const{return nRestoreActions;}
 
     // OD 12.12.2002 #103492#
     void InitPagePreviewLayout();

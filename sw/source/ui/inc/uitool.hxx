@@ -62,7 +62,7 @@ SW_DLLPUBLIC void   MakeDefTabs(SwTwips nDefDist, SvxTabStopItem& rTabs);
 //void  EraseDefTabs(SvxTabStopItem& rTabs);
 
 // Abstand zwischen dem 1. und zweitem Element ermitteln
-SW_DLLPUBLIC USHORT     GetTabDist(const SvxTabStopItem& rTabs);
+SW_DLLPUBLIC sal_uInt16     GetTabDist(const SvxTabStopItem& rTabs);
 
 // erfrage ob im Set eine Sfx-PageDesc-Kombination vorliegt
 // und setze diesen im Set und loesche die Transport Items
@@ -70,23 +70,23 @@ SW_DLLPUBLIC USHORT     GetTabDist(const SvxTabStopItem& rTabs);
 void SwToSfxPageDescAttr( SfxItemSet& rSet );
 void SfxToSwPageDescAttr( const SwWrtShell& rShell, SfxItemSet& rSet );
 
-SW_DLLPUBLIC FieldUnit  GetDfltMetric(BOOL bWeb);
-void        SetDfltMetric(FieldUnit eMetric, BOOL bWeb);
+SW_DLLPUBLIC FieldUnit  GetDfltMetric(sal_Bool bWeb);
+void        SetDfltMetric(FieldUnit eMetric, sal_Bool bWeb);
 
 // ListBox mit allen Zeichenvorlagen fuellen - ausser Standard!
-SW_DLLPUBLIC void FillCharStyleListBox(ListBox& rToFill, SwDocShell* pDocSh, BOOL bSorted = FALSE, BOOL bWithDefault = FALSE);
+SW_DLLPUBLIC void FillCharStyleListBox(ListBox& rToFill, SwDocShell* pDocSh, sal_Bool bSorted = sal_False, sal_Bool bWithDefault = sal_False);
 
 //inserts a string sorted into a ListBox,
-SW_DLLPUBLIC USHORT InsertStringSorted(const String& rEntry, ListBox& rToFill, USHORT nOffset);
+SW_DLLPUBLIC sal_uInt16 InsertStringSorted(const String& rEntry, ListBox& rToFill, sal_uInt16 nOffset);
 
 // Tabellenbreite und Ausrichtung ermitteln
-SwTwips GetTableWidth( SwFrmFmt* pFmt, SwTabCols& rCols, USHORT *pPercent,
+SwTwips GetTableWidth( SwFrmFmt* pFmt, SwTabCols& rCols, sal_uInt16 *pPercent,
         SwWrtShell* pSh );
 
 String GetAppLangDateTimeString( const DateTime& );
 
 // search for a command string withing the menu structure and execute it
 // at the dispatcher if there is one, if executed return true
-bool ExecuteMenuCommand( PopupMenu& rMenu, SfxViewFrame& rViewFrame, USHORT nId );
+bool ExecuteMenuCommand( PopupMenu& rMenu, SfxViewFrame& rViewFrame, sal_uInt16 nId );
 
 #endif // _UITOOL_HXX

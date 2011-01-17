@@ -40,12 +40,12 @@ class SwDoc;
 
 class SW_DLLPUBLIC SwUserFieldType : public SwValueFieldType
 {
-    BOOL    bValidValue : 1;
-    BOOL    bDeleted : 1;
+    sal_Bool    bValidValue : 1;
+    sal_Bool    bDeleted : 1;
     double  nValue;
     String  aName;
     String  aContent;
-    USHORT  nType;
+    sal_uInt16  nType;
 
 public:
     SwUserFieldType( SwDoc* pDocPtr, const String& );
@@ -53,13 +53,13 @@ public:
     virtual const String&   GetName() const;
     virtual SwFieldType*    Copy() const;
 
-    String                  Expand(sal_uInt32 nFmt, USHORT nSubType, USHORT nLng);
+    String                  Expand(sal_uInt32 nFmt, sal_uInt16 nSubType, sal_uInt16 nLng);
 
     String                  GetContent( sal_uInt32 nFmt = 0 );
            void             SetContent( const String& rStr, sal_uInt32 nFmt = 0 );
 
-    inline BOOL             IsValid() const;
-    inline void             ChgValid( BOOL bNew );
+    inline sal_Bool             IsValid() const;
+    inline void             ChgValid( sal_Bool bNew );
 
     virtual void            Modify( SfxPoolItem* pOld, SfxPoolItem* pNew );
 
@@ -67,20 +67,20 @@ public:
     inline double           GetValue() const;
     inline void             SetValue(const double nVal);
 
-    inline USHORT           GetType() const;
-    inline void             SetType(USHORT);
+    inline sal_uInt16           GetType() const;
+    inline void             SetType(sal_uInt16);
 
-    BOOL                    IsDeleted() const       { return bDeleted; }
-    void                    SetDeleted( BOOL b )    { bDeleted = b; }
+    sal_Bool                    IsDeleted() const       { return bDeleted; }
+    void                    SetDeleted( sal_Bool b )    { bDeleted = b; }
 
-    virtual BOOL        QueryValue( com::sun::star::uno::Any& rVal, USHORT nMId ) const;
-    virtual BOOL        PutValue( const com::sun::star::uno::Any& rVal, USHORT nMId );
+    virtual sal_Bool        QueryValue( com::sun::star::uno::Any& rVal, sal_uInt16 nMId ) const;
+    virtual sal_Bool        PutValue( const com::sun::star::uno::Any& rVal, sal_uInt16 nMId );
 };
 
-inline BOOL SwUserFieldType::IsValid() const
+inline sal_Bool SwUserFieldType::IsValid() const
     { return bValidValue; }
 
-inline void SwUserFieldType::ChgValid( BOOL bNew )
+inline void SwUserFieldType::ChgValid( sal_Bool bNew )
     { bValidValue = bNew; }
 
 inline double SwUserFieldType::GetValue() const
@@ -89,10 +89,10 @@ inline double SwUserFieldType::GetValue() const
 inline void SwUserFieldType::SetValue(const double nVal)
     { nValue = nVal; }
 
-inline USHORT SwUserFieldType::GetType() const
+inline sal_uInt16 SwUserFieldType::GetType() const
     { return nType; }
 
-inline void SwUserFieldType::SetType(USHORT nSub)
+inline void SwUserFieldType::SetType(sal_uInt16 nSub)
 {
     nType = nSub;
     EnableFormat(!(nSub & nsSwGetSetExpType::GSE_STRING));
@@ -104,16 +104,16 @@ inline void SwUserFieldType::SetType(USHORT nSub)
 
 class SW_DLLPUBLIC SwUserField : public SwValueField
 {
-    USHORT  nSubType;
+    sal_uInt16  nSubType;
 
     virtual String          Expand() const;
     virtual SwField*        Copy() const;
 
 public:
-    SwUserField(SwUserFieldType*, USHORT nSub = 0, sal_uInt32 nFmt = 0);
+    SwUserField(SwUserFieldType*, sal_uInt16 nSub = 0, sal_uInt32 nFmt = 0);
 
-    virtual USHORT          GetSubType() const;
-    virtual void            SetSubType(USHORT nSub);
+    virtual sal_uInt16          GetSubType() const;
+    virtual void            SetSubType(sal_uInt16 nSub);
 
     virtual double          GetValue() const;
     virtual void            SetValue( const double& rVal );
@@ -126,8 +126,8 @@ public:
     // Inhalt
     virtual String          GetPar2() const;
     virtual void            SetPar2(const String& rStr);
-    virtual BOOL        QueryValue( com::sun::star::uno::Any& rVal, USHORT nWhichId ) const;
-    virtual BOOL        PutValue( const com::sun::star::uno::Any& rVal, USHORT nWhichId );
+    virtual sal_Bool        QueryValue( com::sun::star::uno::Any& rVal, sal_uInt16 nWhichId ) const;
+    virtual sal_Bool        PutValue( const com::sun::star::uno::Any& rVal, sal_uInt16 nWhichId );
 };
 
 #endif // SW_USRFLD_HXX

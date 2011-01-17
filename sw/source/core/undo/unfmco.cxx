@@ -101,7 +101,7 @@ void SwUndoFmtColl::Repeat( SwUndoIter& rUndoIter )
 
     // es kann nur eine TextFmtColl auf einen Bereich angewendet werden,
     // also erfrage auch nur in dem Array
-    USHORT nPos = rUndoIter.GetDoc().GetTxtFmtColls()->GetPos(
+    sal_uInt16 nPos = rUndoIter.GetDoc().GetTxtFmtColls()->GetPos(
                                                      (SwTxtFmtColl*)pFmtColl );
     // ist das Format ueberhaupt noch vorhanden?
     if( USHRT_MAX != nPos )

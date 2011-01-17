@@ -50,7 +50,7 @@ class SwFldVarPage;
 class SelectionListBox : public ListBox
 {
     SwFldVarPage*   pDlg;
-    BOOL            bCallAddSelection;
+    sal_Bool            bCallAddSelection;
 
     virtual long        PreNotify( NotifyEvent& rNEvt );
 
@@ -58,8 +58,8 @@ public:
     SelectionListBox( SwFldVarPage* pDialog, const ResId& rResId );
 
     //  Selektieren per Ctrl oder Alt erkennen und mit SelectHdl auswerten
-    BOOL            IsCallAddSelection() const {return bCallAddSelection;}
-    void            ResetCallAddSelection() {bCallAddSelection = FALSE;}
+    sal_Bool            IsCallAddSelection() const {return bCallAddSelection;}
+    void            ResetCallAddSelection() {bCallAddSelection = sal_False;}
 };
 
 /*--------------------------------------------------------------------
@@ -92,8 +92,8 @@ class SwFldVarPage : public SwFldPage
     String              sOldValueFT;
     String              sOldNameFT;
 
-    ULONG               nOldFormat;
-    BOOL                bInit;
+    sal_uLong               nOldFormat;
+    sal_Bool                bInit;
 
     DECL_LINK( TypeHdl, ListBox* pLB = 0 );
     DECL_LINK( SubTypeHdl, ListBox* pLB = 0 );
@@ -103,10 +103,10 @@ class SwFldVarPage : public SwFldPage
     DECL_LINK( SeparatorHdl, Edit *pED = 0 );
 
     void                UpdateSubType();
-    USHORT              FillFormatLB(USHORT nTypeId);
+    sal_uInt16              FillFormatLB(sal_uInt16 nTypeId);
 
 protected:
-    virtual USHORT      GetGroup();
+    virtual sal_uInt16      GetGroup();
 
 public:
                         SwFldVarPage(Window* pParent, const SfxItemSet& rSet);
@@ -115,7 +115,7 @@ public:
 
     static SfxTabPage*  Create(Window* pParent, const SfxItemSet& rAttrSet);
 
-    virtual BOOL        FillItemSet( SfxItemSet& rSet );
+    virtual sal_Bool        FillItemSet( SfxItemSet& rSet );
     virtual void        Reset( const SfxItemSet& rSet );
 
     virtual void        FillUserData();

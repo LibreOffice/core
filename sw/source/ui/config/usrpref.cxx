@@ -56,7 +56,7 @@ void SwMasterUsrPref::SetUsrPref(const SwViewOption &rCopy)
     *((SwViewOption*)this) = rCopy;
 }
 
-SwMasterUsrPref::SwMasterUsrPref(BOOL bWeb) :
+SwMasterUsrPref::SwMasterUsrPref(sal_Bool bWeb) :
     eFldUpdateFlags(AUTOUPD_OFF),
     nLinkUpdateMode(0),
     bIsHScrollMetricSet(sal_False),
@@ -129,7 +129,7 @@ Sequence<OUString> SwContentViewConfig::GetPropertyNames()
 /*-- 28.09.00 09:55:33---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-SwContentViewConfig::SwContentViewConfig(BOOL bIsWeb, SwMasterUsrPref& rPar) :
+SwContentViewConfig::SwContentViewConfig(sal_Bool bIsWeb, SwMasterUsrPref& rPar) :
     ConfigItem(bIsWeb ? C2U("Office.WriterWeb/Content") :  C2U("Office.Writer/Content")),
     rParent(rPar),
     bWeb(bIsWeb)
@@ -162,7 +162,7 @@ void SwContentViewConfig::Commit()
 
     for(int nProp = 0; nProp < aNames.getLength(); nProp++)
     {
-        sal_Bool bVal = FALSE;
+        sal_Bool bVal = sal_False;
         switch(nProp)
         {
             case  0: bVal = rParent.IsGraphic();    break;// "Display/GraphicObject",
@@ -228,11 +228,11 @@ void SwContentViewConfig::Load()
                     {
                         sal_Int32 nSet = 0;
                         pValues[nProp] >>= nSet;
-                        rParent.SetUpdateLinkMode(nSet, TRUE);
+                        rParent.SetUpdateLinkMode(nSet, sal_True);
                     }
                     break;// "Update/Link",
-                    case 17: rParent.SetUpdateFields(bSet, TRUE); break;// "Update/Field",
-                    case 18: rParent.SetUpdateCharts(bSet, TRUE); break;// "Update/Chart"
+                    case 17: rParent.SetUpdateFields(bSet, sal_True); break;// "Update/Field",
+                    case 18: rParent.SetUpdateCharts(bSet, sal_True); break;// "Update/Chart"
                 }
             }
         }
@@ -279,7 +279,7 @@ Sequence<OUString> SwLayoutViewConfig::GetPropertyNames()
 /*-- 28.09.00 09:55:34---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-SwLayoutViewConfig::SwLayoutViewConfig(BOOL bIsWeb, SwMasterUsrPref& rPar) :
+SwLayoutViewConfig::SwLayoutViewConfig(sal_Bool bIsWeb, SwMasterUsrPref& rPar) :
     ConfigItem(bIsWeb ? C2U("Office.WriterWeb/Layout") :  C2U("Office.Writer/Layout"),
         CONFIG_MODE_DELAYED_UPDATE|CONFIG_MODE_RELEASE_TREE),
     rParent(rPar),
@@ -313,10 +313,10 @@ void SwLayoutViewConfig::Commit()
             case  3: rVal <<= (sal_Bool) rParent.IsViewHScrollBar(); break;         // "Window/HorizontalScroll",
             case  4: rVal <<= (sal_Bool) rParent.IsViewVScrollBar(); break;         // "Window/VerticalScroll",
             case  5: rVal <<= (sal_Bool) rParent.IsViewAnyRuler(); break;           // "Window/ShowRulers"
-            // #i14593# use IsView*Ruler(TRUE) instead of IsView*Ruler()
+            // #i14593# use IsView*Ruler(sal_True) instead of IsView*Ruler()
             // this preserves the single ruler states even if "Window/ShowRulers" is off
-            case  6: rVal <<= (sal_Bool) rParent.IsViewHRuler(TRUE); break;         // "Window/HorizontalRuler",
-            case  7: rVal <<= (sal_Bool) rParent.IsViewVRuler(TRUE); break;         // "Window/VerticalRuler",
+            case  6: rVal <<= (sal_Bool) rParent.IsViewHRuler(sal_True); break;         // "Window/HorizontalRuler",
+            case  7: rVal <<= (sal_Bool) rParent.IsViewVRuler(sal_True); break;         // "Window/VerticalRuler",
             case  8:
                 if(rParent.bIsHScrollMetricSet)
                     rVal <<= (sal_Int32)rParent.eHScrollMetric;                     // "Window/HorizontalRulerUnit"
@@ -382,15 +382,15 @@ void SwLayoutViewConfig::Load()
                     }
                     break;
                     case 10: rParent.SetSmoothScroll(bSet); break;// "Window/SmoothScroll",
-                    case 11: rParent.SetZoom( static_cast< USHORT >(nInt32Val) ); break;// "Zoom/Value",
+                    case 11: rParent.SetZoom( static_cast< sal_uInt16 >(nInt32Val) ); break;// "Zoom/Value",
                     case 12: rParent.SetZoomType( static_cast< SvxZoomType >(nInt32Val) ); break;// "Zoom/Type",
                     case 13: rParent.SetAlignMathObjectsToBaseline(bSet); break;// "Other/IsAlignMathObjectsToBaseline"
-                    case 14: rParent.SetMetric((FieldUnit)nInt32Val, TRUE); break;// "Other/MeasureUnit",
-                    case 15: rParent.SetDefTab(MM100_TO_TWIP(nInt32Val), TRUE); break;// "Other/TabStop",
+                    case 14: rParent.SetMetric((FieldUnit)nInt32Val, sal_True); break;// "Other/MeasureUnit",
+                    case 15: rParent.SetDefTab(MM100_TO_TWIP(nInt32Val), sal_True); break;// "Other/TabStop",
                     case 16: rParent.SetVRulerRight(bSet); break;// "Window/IsVerticalRulerRight",
-                    case 17: rParent.SetViewLayoutColumns( static_cast<USHORT>(nInt32Val) ); break;// "ViewLayout/Columns",
+                    case 17: rParent.SetViewLayoutColumns( static_cast<sal_uInt16>(nInt32Val) ); break;// "ViewLayout/Columns",
                     case 18: rParent.SetViewLayoutBookMode(bSet); break;// "ViewLayout/BookMode",
-                    case 19: rParent.SetDefaultPageMode(bSet,TRUE); break;// "Other/IsSquaredPageMode",
+                    case 19: rParent.SetDefaultPageMode(bSet,sal_True); break;// "Other/IsSquaredPageMode",
                 }
             }
         }
@@ -426,7 +426,7 @@ Sequence<OUString> SwGridConfig::GetPropertyNames()
 /* -----------------------------19.01.01 13:07--------------------------------
 
  ---------------------------------------------------------------------------*/
-SwGridConfig::SwGridConfig(BOOL bIsWeb, SwMasterUsrPref& rPar) :
+SwGridConfig::SwGridConfig(sal_Bool bIsWeb, SwMasterUsrPref& rPar) :
     ConfigItem(bIsWeb ? C2U("Office.WriterWeb/Grid") :  C2U("Office.Writer/Grid"),
         CONFIG_MODE_DELAYED_UPDATE|CONFIG_MODE_RELEASE_TREE),
     rParent(rPar),
@@ -587,7 +587,7 @@ void SwCursorConfig::Load()
                 switch(nProp)
                 {
                     case  0: rParent.SetShadowCursor(bSet);         break;//  "DirectCursor/UseDirectCursor",
-                    case  1: rParent.SetShdwCrsrFillMode((BYTE)nSet); break;//  "DirectCursor/Insert",
+                    case  1: rParent.SetShdwCrsrFillMode((sal_uInt8)nSet); break;//  "DirectCursor/Insert",
                     case  2: rParent.SetCursorInProtectedArea(bSet); break;// "Option/ProtectedArea"
                 }
             }

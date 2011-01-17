@@ -149,8 +149,8 @@ SwMailMergeLayoutPage::SwMailMergeLayoutPage( SwMailMergeWizard* _pParent) :
     m_pExampleFrame = new SwOneExampleFrame( m_aExampleWIN,
                                     EX_SHOW_DEFAULT_PAGE, &aLink, &m_sExampleURL );
 
-    m_aExampleWIN.Show( FALSE );
-    m_aExampleContainerWIN.Show(TRUE);
+    m_aExampleWIN.Show( sal_False );
+    m_aExampleContainerWIN.Show(sal_True);
 
     m_aLeftMF.SetValue(m_aLeftMF.Normalize(DEFAULT_LEFT_DISTANCE), FUNIT_TWIP);
     m_aTopMF.SetValue(m_aTopMF.Normalize(DEFAULT_TOP_DISTANCE), FUNIT_TWIP);
@@ -236,7 +236,7 @@ void SwMailMergeLayoutPage::ActivatePage()
                 m_pExampleWrtShell->GotoFly( m_pAddressBlockFormat->GetName() );
                 m_pExampleWrtShell->DelRight();
                 m_pAddressBlockFormat = 0;
-                m_pExampleWrtShell->Pop(FALSE);
+                m_pExampleWrtShell->Pop(sal_False);
             }
             else
             {
@@ -380,7 +380,7 @@ SwFrmFmt* SwMailMergeLayoutPage::InsertAddressFrame(
             if(aItem.bIsColumn)
             {
                 String sConvertedColumn = aItem.sText;
-                for(USHORT nColumn = 0;
+                for(sal_uInt16 nColumn = 0;
                         nColumn < rHeaders.Count() && nColumn < aAssignment.getLength();
                                                                                     ++nColumn)
                 {
@@ -474,7 +474,7 @@ void SwMailMergeLayoutPage::InsertGreeting(SwWrtShell& rShell, SwMailMergeConfig
     {
         //there's already text at the desired position
         //go to start of the doc, directly!
-        rShell.SttEndDoc(TRUE);
+        rShell.SttEndDoc(sal_True);
         //and go by paragraph until the position is reached
         long nYPos = rShell.GetCharRect().Top();
         while(nYPos < GREETING_TOP_DISTANCE)
@@ -641,7 +641,7 @@ void SwMailMergeLayoutPage::InsertGreeting(SwWrtShell& rShell, SwMailMergeConfig
                         {
                             String sDB(sDBName);
                             String sConvertedColumn = aItem.sText;
-                            for(USHORT nColumn = 0;
+                            for(sal_uInt16 nColumn = 0;
                                     nColumn < rHeaders.Count() && nColumn < aAssignment.getLength();
                                                                                                 ++nColumn)
                             {
@@ -682,7 +682,7 @@ void SwMailMergeLayoutPage::InsertGreeting(SwWrtShell& rShell, SwMailMergeConfig
     {
         rShell.Push();
         rShell.SplitNode();
-        rShell.Pop(FALSE);
+        rShell.Pop(sal_False);
     }
     //put the cursor to the start of the paragraph
     rShell.SttPara();
@@ -694,8 +694,8 @@ void SwMailMergeLayoutPage::InsertGreeting(SwWrtShell& rShell, SwMailMergeConfig
   -----------------------------------------------------------------------*/
 IMPL_LINK(SwMailMergeLayoutPage, PreviewLoadedHdl_Impl, void*, EMPTYARG)
 {
-    m_aExampleWIN.Show( TRUE );
-    m_aExampleContainerWIN.Show(FALSE);
+    m_aExampleWIN.Show( sal_True );
+    m_aExampleContainerWIN.Show(sal_False);
 
     Reference< XModel > & xModel = m_pExampleFrame->GetModel();
     //now the ViewOptions should be set properly
@@ -792,7 +792,7 @@ IMPL_LINK(SwMailMergeLayoutPage, ChangeAddressHdl_Impl, MetricField*, EMPTYARG)
 IMPL_LINK(SwMailMergeLayoutPage, GreetingsHdl_Impl, PushButton*, pButton)
 {
     bool bDown = pButton == &m_aDownPB;
-    BOOL bMoved = m_pExampleWrtShell->MoveParagraph( bDown ? 1 : -1 );
+    sal_Bool bMoved = m_pExampleWrtShell->MoveParagraph( bDown ? 1 : -1 );
     if (bMoved || bDown)
         m_pWizard->GetConfigItem().MoveGreeting(bDown ? 1 : -1 );
     if(!bMoved && bDown)

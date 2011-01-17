@@ -50,7 +50,7 @@ inline void SwWrtShell::OpenMark()
     SetMark();
 }
 
-inline void SwWrtShell::CloseMark( BOOL bOkFlag )
+inline void SwWrtShell::CloseMark( sal_Bool bOkFlag )
 {
     if( bOkFlag )
         UpdateAttr();
@@ -62,9 +62,9 @@ inline void SwWrtShell::CloseMark( BOOL bOkFlag )
 }
 
 // #i23725#
-BOOL SwWrtShell::TryRemoveIndent()
+sal_Bool SwWrtShell::TryRemoveIndent()
 {
-    BOOL bResult = FALSE;
+    sal_Bool bResult = sal_False;
 
     SfxItemSet aAttrSet(GetAttrPool(), RES_LR_SPACE, RES_LR_SPACE);
     GetCurAttr(aAttrSet);
@@ -75,19 +75,19 @@ BOOL SwWrtShell::TryRemoveIndent()
     if (aOldFirstLineOfst > 0)
     {
         aItem.SetTxtFirstLineOfst(0);
-        bResult = TRUE;
+        bResult = sal_True;
     }
     else if (aOldFirstLineOfst < 0)
     {
         aItem.SetTxtFirstLineOfst(0);
         aItem.SetLeft(aItem.GetLeft() + aOldFirstLineOfst);
 
-        bResult = TRUE;
+        bResult = sal_True;
     }
     else if (aItem.GetLeft() != 0)
     {
         aItem.SetLeft(0);
-        bResult = TRUE;
+        bResult = sal_True;
     }
 
     if (bResult)
@@ -119,7 +119,7 @@ long SwWrtShell::DelLine()
 //  if(!IsEndOfPara())
 //      SwCrsrShell::Right();
     long nRet = Delete();
-    Pop(FALSE);
+    Pop(sal_False);
     if( nRet )
         UpdateAttr();
     return nRet;
@@ -203,7 +203,7 @@ long SwWrtShell::DelLeft()
     }
 
     // JP 29.06.95: nie eine davor stehende Tabelle loeschen.
-    BOOL bSwap = FALSE;
+    sal_Bool bSwap = sal_False;
     const SwTableNode * pWasInTblNd = SwCrsrShell::IsCrsrInTbl();
 
     if( SwCrsrShell::IsSttPara())
@@ -239,7 +239,7 @@ long SwWrtShell::DelLeft()
         OpenMark();
         SwCrsrShell::Right(1,CRSR_SKIP_CHARS);
         SwCrsrShell::SwapPam();
-        bSwap = TRUE;
+        bSwap = sal_True;
     }
     else
     {
@@ -316,7 +316,7 @@ long SwWrtShell::DelRight()
             }
 
             // restore cursor
-            SwCrsrShell::Pop( FALSE );
+            SwCrsrShell::Pop( sal_False );
 
             if( bDelFull )
             {
@@ -356,14 +356,14 @@ long SwWrtShell::DelRight()
                             have moved to a different cell */
                         if (pSNdOld != pSNdNew)
                         {
-                            SwCrsrShell::Pop( TRUE );
+                            SwCrsrShell::Pop( sal_True );
                             break;
                         }
                     }
                 }
 
                 // restore cursor
-                SwCrsrShell::Pop( FALSE );
+                SwCrsrShell::Pop( sal_False );
             }
         }
 
@@ -440,11 +440,11 @@ long SwWrtShell::DelToEndOfPara()
     SetMark();
     if( !MovePara(fnParaCurr,fnParaEnd))
     {
-        Pop(FALSE);
+        Pop(sal_False);
         return 0;
     }
     long nRet = Delete();
-    Pop(FALSE);
+    Pop(sal_False);
     if( nRet )
         UpdateAttr();
     return nRet;
@@ -460,11 +460,11 @@ long SwWrtShell::DelToStartOfPara()
     SetMark();
     if( !MovePara(fnParaCurr,fnParaStart))
     {
-        Pop(FALSE);
+        Pop(sal_False);
         return 0;
     }
     long nRet = Delete();
-    Pop(FALSE);
+    Pop(sal_False);
     if( nRet )
         UpdateAttr();
     return nRet;
@@ -544,11 +544,11 @@ long SwWrtShell::DelPrvWord()
             {
                 // skip over all-1 spaces
                 short n = -1;
-                while( ' ' == GetChar( FALSE, n ))
+                while( ' ' == GetChar( sal_False, n ))
                     --n;
 
                 if( ++n )
-                    ExtendSelection( FALSE, -n );
+                    ExtendSelection( sal_False, -n );
             }
         }
         else if( IsSttPara())

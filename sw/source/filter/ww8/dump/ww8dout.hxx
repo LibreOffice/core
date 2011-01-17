@@ -32,7 +32,7 @@
   #include <fstream.h>          // ostream
 #endif
 #ifndef SOLAR_H
-  #include <tools/solar.h>          // BYTE
+  #include <tools/solar.h>          // sal_uInt8
 #endif
 
 class SvStream;

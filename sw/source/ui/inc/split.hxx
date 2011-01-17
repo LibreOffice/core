@@ -68,8 +68,8 @@ public:
     SwSplitTableDlg(Window *pParent, SwWrtShell& rShell );
     DECL_LINK( ClickHdl, Button * );
 
-    BOOL                IsHorizontal() const { return aHorzBox.IsChecked(); }
-    BOOL                IsProportional() const { return aPropCB.IsChecked() && aHorzBox.IsChecked(); }
+    sal_Bool                IsHorizontal() const { return aHorzBox.IsChecked(); }
+    sal_Bool                IsProportional() const { return aPropCB.IsChecked() && aHorzBox.IsChecked(); }
     long                GetCount() const { return sal::static_int_cast< long >(aCountEdit.GetValue()); }
 };
 

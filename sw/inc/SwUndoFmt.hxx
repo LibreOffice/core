@@ -44,8 +44,8 @@ protected:
     SwDoc * pDoc;
     mutable String sNewName;
     SfxItemSet * pNewSet;
-    USHORT nId;     // FmtId related
-    BOOL bAuto;
+    sal_uInt16 nId;     // FmtId related
+    sal_Bool bAuto;
 
 public:
 
@@ -70,8 +70,8 @@ protected:
     SwDoc * pDoc;
     String sOldName;
     SfxItemSet aOldSet;
-    USHORT nId;     // FmtId related
-    BOOL bAuto;
+    sal_uInt16 nId;     // FmtId related
+    sal_Bool bAuto;
 
 public:
     SwUndoFmtDelete(SwUndoId nUndoId, SwFmt * pOld, SwDoc * pDoc);
@@ -172,7 +172,7 @@ public:
 
 class SwUndoFrmFmtCreate : public SwUndoFmtCreate
 {
-    BOOL bAuto;
+    sal_Bool bAuto;
 
 public:
     SwUndoFrmFmtCreate(SwFrmFmt * pNew, SwFrmFmt * pDerivedFrom,

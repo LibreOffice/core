@@ -86,16 +86,16 @@ private:
     utl::SourceViewConfig* pSourceViewConfig;
 
     long            nCurTextWidth;
-    USHORT          nStartLine;
+    sal_uInt16          nStartLine;
     rtl_TextEncoding eSourceEncoding;
-    BOOL            bReadonly;
-    BOOL            bDoSyntaxHighlight;
-    BOOL            bHighlighting;
+    sal_Bool            bReadonly;
+    sal_Bool            bDoSyntaxHighlight;
+    sal_Bool            bHighlighting;
 
     Timer           aSyntaxIdleTimer;
     Table           aSyntaxLineTable;
 
-    void            ImpDoHighlight( const String& rSource, USHORT nLineOff );
+    void            ImpDoHighlight( const String& rSource, sal_uInt16 nLineOff );
 
     using OutputDevice::SetFont;
     void            SetFont();
@@ -114,7 +114,7 @@ protected:
 //  virtual void    LoseFocus();
 
     void            CreateTextEngine();
-    void            DoSyntaxHighlight( USHORT nPara );
+    void            DoSyntaxHighlight( sal_uInt16 nPara );
 
     virtual void    Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
     virtual void    ConfigurationChanged( utl::ConfigurationBroadcaster*, sal_uInt32 );
@@ -127,9 +127,9 @@ public:
 
     void            SetScrollBarRanges();
     void            InitScrollBars();
-    ULONG           Read( SvStream& rInput)
+    sal_uLong           Read( SvStream& rInput)
                         {return pTextEngine->Read(rInput);}
-    ULONG           Write( SvStream& rOutput)
+    sal_uLong           Write( SvStream& rOutput)
                         {return pTextEngine->Write(rOutput);}
 
     ExtTextView*    GetTextView()
@@ -140,20 +140,20 @@ public:
 
     TextViewOutWin* GetOutWin() {return pOutWin;}
 
-    virtual void    Invalidate( USHORT nFlags = 0 );
+    virtual void    Invalidate( sal_uInt16 nFlags = 0 );
 
     void            ClearModifyFlag()
-                        { pTextEngine->SetModified(FALSE); }
-    BOOL            IsModified() const
+                        { pTextEngine->SetModified(sal_False); }
+    sal_Bool            IsModified() const
                         { return pTextEngine->IsModified();}
     void            CreateScrollbars();
 
-    void            SetReadonly(BOOL bSet){bReadonly = bSet;}
-    BOOL            IsReadonly(){return bReadonly;}
+    void            SetReadonly(sal_Bool bSet){bReadonly = bSet;}
+    sal_Bool            IsReadonly(){return bReadonly;}
 
-    void            DoDelayedSyntaxHighlight( USHORT nPara );
+    void            DoDelayedSyntaxHighlight( sal_uInt16 nPara );
 
-    void            SetStartLine(USHORT nLine){nStartLine = nLine;}
+    void            SetStartLine(sal_uInt16 nLine){nStartLine = nLine;}
 
     virtual void    Command( const CommandEvent& rCEvt );
     void            HandleWheelCommand( const CommandEvent& rCEvt );

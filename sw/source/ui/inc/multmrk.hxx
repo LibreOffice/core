@@ -64,7 +64,7 @@ class SwMultiTOXMarkDlg : public SvxStandardDialog
     CancelButton        aCancelBT;
 
     SwTOXMgr           &rMgr;
-    USHORT              nPos;
+    sal_uInt16              nPos;
 
     void                Apply();
 public:

@@ -99,7 +99,7 @@ SwASCWriter::SwASCWriter( const String& rFltNm )
 
 SwASCWriter::~SwASCWriter() {}
 
-ULONG SwASCWriter::WriteStream()
+sal_uLong SwASCWriter::WriteStream()
 {
     sal_Char cLineEnd[ 3 ];
     sal_Char* pCEnd = cLineEnd;
@@ -125,7 +125,7 @@ ULONG SwASCWriter::WriteStream()
 
     SwPaM* pPam = pOrigPam;
 
-    BOOL bWriteSttTag = bUCS2_WithStartChar &&
+    sal_Bool bWriteSttTag = bUCS2_WithStartChar &&
         (RTL_TEXTENCODING_UCS2 == GetAsciiOptions().GetCharSet() ||
         RTL_TEXTENCODING_UTF8 == GetAsciiOptions().GetCharSet());
 
@@ -134,7 +134,7 @@ ULONG SwASCWriter::WriteStream()
 
     // gebe alle Bereich des Pams in das ASC-File aus.
     do {
-        BOOL bTstFly = TRUE;
+        sal_Bool bTstFly = sal_True;
         while( pCurPam->GetPoint()->nNode.GetIndex() < pCurPam->GetMark()->nNode.GetIndex() ||
               (pCurPam->GetPoint()->nNode.GetIndex() == pCurPam->GetMark()->nNode.GetIndex() &&
                pCurPam->GetPoint()->nContent.GetIndex() <= pCurPam->GetMark()->nContent.GetIndex()) )
@@ -177,25 +177,25 @@ ULONG SwASCWriter::WriteStream()
                         switch(GetAsciiOptions().GetCharSet())
                         {
                             case RTL_TEXTENCODING_UTF8:
-                                Strm() << BYTE(0xEF) << BYTE(0xBB) <<
-                                    BYTE(0xBF);
+                                Strm() << sal_uInt8(0xEF) << sal_uInt8(0xBB) <<
+                                    sal_uInt8(0xBF);
                                 break;
                             case RTL_TEXTENCODING_UCS2:
                                 //Strm().StartWritingUnicodeText();
-                                Strm().SetEndianSwap(FALSE);
+                                Strm().SetEndianSwap(sal_False);
 #ifdef OSL_LITENDIAN
-                                Strm() << BYTE(0xFF) << BYTE(0xFE);
+                                Strm() << sal_uInt8(0xFF) << sal_uInt8(0xFE);
 #else
-                                Strm() << BYTE(0xFE) << BYTE(0xFF);
+                                Strm() << sal_uInt8(0xFE) << sal_uInt8(0xFF);
 #endif
                                 break;
 
                         }
-                        bWriteSttTag = FALSE;
+                        bWriteSttTag = sal_False;
                     }
                     Out( aASCNodeFnTab, *pNd, *this );
                 }
-                bTstFly = FALSE;        // eimal Testen reicht
+                bTstFly = sal_False;        // eimal Testen reicht
             }
 
             if( !pCurPam->Move( fnMoveForward, fnGoNode ) )

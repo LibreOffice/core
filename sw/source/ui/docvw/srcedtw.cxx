@@ -68,8 +68,8 @@
 
 struct SwTextPortion
 {
-    USHORT nLine;
-    USHORT nStart, nEnd;
+    sal_uInt16 nLine;
+    sal_uInt16 nStart, nEnd;
     svtools::ColorConfigEntry eType;
 };
 
@@ -93,12 +93,12 @@ static void lcl_Highlight(const String& rSource, SwTextPortions& aPortionList)
     const sal_Unicode cCR          = 0x0d;
 
 
-    const USHORT nStrLen = rSource.Len();
-    USHORT nInsert = 0;             // Number of inserted Portions
-    USHORT nActPos = 0;             // Position, at the '<' was found
-    USHORT nOffset = 0;             // Offset of nActPos for '<'
-    USHORT nPortStart = USHRT_MAX;  // For the TextPortion
-    USHORT nPortEnd  =  0;          //
+    const sal_uInt16 nStrLen = rSource.Len();
+    sal_uInt16 nInsert = 0;             // Number of inserted Portions
+    sal_uInt16 nActPos = 0;             // Position, at the '<' was found
+    sal_uInt16 nOffset = 0;             // Offset of nActPos for '<'
+    sal_uInt16 nPortStart = USHRT_MAX;  // For the TextPortion
+    sal_uInt16 nPortEnd  =  0;          //
     SwTextPortion aText;
     while(nActPos < nStrLen)
     {
@@ -143,7 +143,7 @@ static void lcl_Highlight(const String& rSource, SwTextPortions& aPortionList)
             if(svtools::HTMLUNKNOWN == eFoundType)
             {
                 //jetzt koennte hier ein keyword folgen
-                USHORT nSrchPos = nActPos;
+                sal_uInt16 nSrchPos = nActPos;
                 while(++nSrchPos < nStrLen - 1)
                 {
                     sal_Unicode cNext = rSource.GetChar(nSrchPos);
@@ -184,18 +184,18 @@ static void lcl_Highlight(const String& rSource, SwTextPortions& aPortionList)
             // jetzt muss noch '>' gesucht werden
             if(svtools::HTMLUNKNOWN != eFoundType)
             {
-                BOOL bFound = FALSE;
-                for(USHORT i = nPortEnd; i < nStrLen; i++)
+                sal_Bool bFound = sal_False;
+                for(sal_uInt16 i = nPortEnd; i < nStrLen; i++)
                     if(cCloseBracket == rSource.GetChar(i))
                     {
-                        bFound = TRUE;
+                        bFound = sal_True;
                         nPortEnd = i;
                         break;
                     }
                 if(!bFound && (eFoundType == svtools::HTMLCOMMENT))
                 {
                     // Kommentar ohne Ende in dieser Zeile
-                    bFound  = TRUE;
+                    bFound  = sal_True;
                     nPortEnd = nStrLen - 1;
                 }
 
@@ -246,8 +246,8 @@ SwSrcEditWindow::SwSrcEditWindow( Window* pParent, SwSrcView* pParentView ) :
     nCurTextWidth(0),
     nStartLine(USHRT_MAX),
     eSourceEncoding(gsl_getSystemTextEncoding()),
-    bDoSyntaxHighlight(TRUE),
-    bHighlighting(FALSE)
+    bDoSyntaxHighlight(sal_True),
+    bHighlighting(sal_False)
 {
     SetHelpId(HID_SOURCE_EDITWIN);
     CreateTextEngine();
@@ -448,9 +448,9 @@ void  TextViewOutWin::Command( const CommandEvent& rCEvt )
 
 void  TextViewOutWin::KeyInput( const KeyEvent& rKEvt )
 {
-    BOOL bDone = FALSE;
+    sal_Bool bDone = sal_False;
     SwSrcEditWindow* pSrcEditWin = (SwSrcEditWindow*)GetParent();
-    BOOL bChange = !pSrcEditWin->IsReadonly() || !TextEngine::DoesKeyChangeText( rKEvt );
+    sal_Bool bChange = !pSrcEditWin->IsReadonly() || !TextEngine::DoesKeyChangeText( rKEvt );
     if(bChange)
         bDone = pTextView->KeyInput( rKEvt );
 
@@ -521,14 +521,14 @@ void SwSrcEditWindow::CreateTextEngine()
 
     pTextEngine = new ExtTextEngine;
     pTextView = new ExtTextView( pTextEngine, pOutWin );
-    pTextView->SetAutoIndentMode(TRUE);
+    pTextView->SetAutoIndentMode(sal_True);
     pOutWin->SetTextView(pTextView);
 
-    pTextEngine->SetUpdateMode( FALSE );
+    pTextEngine->SetUpdateMode( sal_False );
     pTextEngine->InsertView( pTextView );
 
     Font aFont;
-    aFont.SetTransparent( FALSE );
+    aFont.SetTransparent( sal_False );
     aFont.SetFillColor( rCol );
     SetPointFont( aFont );
     aFont = GetFont();
@@ -539,10 +539,10 @@ void SwSrcEditWindow::CreateTextEngine()
     aSyntaxIdleTimer.SetTimeout( SYNTAX_HIGHLIGHT_TIMEOUT );
     aSyntaxIdleTimer.SetTimeoutHdl( LINK( this, SwSrcEditWindow, SyntaxTimerHdl ) );
 
-    pTextEngine->EnableUndo( TRUE );
-    pTextEngine->SetUpdateMode( TRUE );
+    pTextEngine->EnableUndo( sal_True );
+    pTextEngine->SetUpdateMode( sal_True );
 
-    pTextView->ShowCursor( TRUE, TRUE );
+    pTextView->ShowCursor( sal_True, sal_True );
     InitScrollBars();
     StartListening( *pTextEngine );
 
@@ -600,14 +600,14 @@ IMPL_LINK(SwSrcEditWindow, ScrollHdl, ScrollBar*, pScroll)
     {
         long nDiff = pTextView->GetStartDocPos().Y() - pScroll->GetThumbPos();
         GetTextView()->Scroll( 0, nDiff );
-        pTextView->ShowCursor( FALSE, TRUE );
+        pTextView->ShowCursor( sal_False, sal_True );
         pScroll->SetThumbPos( pTextView->GetStartDocPos().Y() );
     }
     else
     {
         long nDiff = pTextView->GetStartDocPos().X() - pScroll->GetThumbPos();
         GetTextView()->Scroll( nDiff, 0 );
-        pTextView->ShowCursor( FALSE, TRUE );
+        pTextView->ShowCursor( sal_False, sal_True );
         pScroll->SetThumbPos( pTextView->GetStartDocPos().X() );
     }
     GetSrcView()->GetViewFrame()->GetBindings().Invalidate( SID_TABLE_CELL );
@@ -622,20 +622,20 @@ IMPL_LINK( SwSrcEditWindow, SyntaxTimerHdl, Timer *, pTimer )
 {
     Time aSyntaxCheckStart;
     DBG_ASSERT( pTextView, "Noch keine View, aber Syntax-Highlight ?!" );
-    // pTextEngine->SetUpdateMode( FALSE );
+    // pTextEngine->SetUpdateMode( sal_False );
 
-    bHighlighting = TRUE;
-    USHORT nLine;
-    USHORT nCount  = 0;
+    bHighlighting = sal_True;
+    sal_uInt16 nLine;
+    sal_uInt16 nCount  = 0;
     // zuerst wird der Bereich um dem Cursor bearbeitet
     TextSelection aSel = pTextView->GetSelection();
-    USHORT nCur = (USHORT)aSel.GetStart().GetPara();
+    sal_uInt16 nCur = (sal_uInt16)aSel.GetStart().GetPara();
     if(nCur > 40)
         nCur -= 40;
     else
         nCur = 0;
     if(aSyntaxLineTable.Count())
-        for(USHORT i = 0; i < 80 && nCount < 40; i++, nCur++)
+        for(sal_uInt16 i = 0; i < 80 && nCount < 40; i++, nCur++)
         {
             void * p = aSyntaxLineTable.Get(nCur);
             if(p)
@@ -657,9 +657,9 @@ IMPL_LINK( SwSrcEditWindow, SyntaxTimerHdl, Timer *, pTimer )
     void* p = aSyntaxLineTable.First();
     while ( p && nCount < MAX_SYNTAX_HIGHLIGHT)
     {
-        nLine = (USHORT)aSyntaxLineTable.GetCurKey();
+        nLine = (sal_uInt16)aSyntaxLineTable.GetCurKey();
         DoSyntaxHighlight( nLine );
-        USHORT nCurKey = (USHORT)aSyntaxLineTable.GetCurKey();
+        sal_uInt16 nCurKey = (sal_uInt16)aSyntaxLineTable.GetCurKey();
         p = aSyntaxLineTable.Next();
         aSyntaxLineTable.Remove(nCurKey);
         nCount ++;
@@ -675,9 +675,9 @@ IMPL_LINK( SwSrcEditWindow, SyntaxTimerHdl, Timer *, pTimer )
 
         TextView* pTmp = pTextEngine->GetActiveView();
         pTextEngine->SetActiveView(0);
-        // pTextEngine->SetUpdateMode( TRUE );
+        // pTextEngine->SetUpdateMode( sal_True );
         pTextEngine->SetActiveView(pTmp);
-        pTextView->ShowCursor(FALSE, FALSE);
+        pTextView->ShowCursor(sal_False, sal_False);
     */
 
     if(aSyntaxLineTable.Count() && !pTimer->IsActive())
@@ -688,7 +688,7 @@ IMPL_LINK( SwSrcEditWindow, SyntaxTimerHdl, Timer *, pTimer )
     nCurTextWidth = pTextEngine->CalcTextWidth() + 25;  // kleine Toleranz
     if ( nCurTextWidth != nPrevTextWidth )
         SetScrollBarRanges();
-    bHighlighting = FALSE;
+    bHighlighting = sal_False;
 
     return 0;
 }
@@ -696,27 +696,27 @@ IMPL_LINK( SwSrcEditWindow, SyntaxTimerHdl, Timer *, pTimer )
 
 --------------------------------------------------*/
 
-void SwSrcEditWindow::DoSyntaxHighlight( USHORT nPara )
+void SwSrcEditWindow::DoSyntaxHighlight( sal_uInt16 nPara )
 {
     // Durch das DelayedSyntaxHighlight kann es passieren,
     // dass die Zeile nicht mehr existiert!
     if ( nPara < pTextEngine->GetParagraphCount() )
     {
-        BOOL bTempModified = IsModified();
-        pTextEngine->RemoveAttribs( nPara, (BOOL)TRUE );
+        sal_Bool bTempModified = IsModified();
+        pTextEngine->RemoveAttribs( nPara, (sal_Bool)sal_True );
         String aSource( pTextEngine->GetText( nPara ) );
-        pTextEngine->SetUpdateMode( FALSE );
+        pTextEngine->SetUpdateMode( sal_False );
         ImpDoHighlight( aSource, nPara );
         // os: #43050# hier wird ein TextView-Problem umpopelt:
         // waehrend des Highlightings funktionierte das Scrolling nicht
         TextView* pTmp = pTextEngine->GetActiveView();
-        pTmp->SetAutoScroll(FALSE);
+        pTmp->SetAutoScroll(sal_False);
         pTextEngine->SetActiveView(0);
-        pTextEngine->SetUpdateMode( TRUE );
+        pTextEngine->SetUpdateMode( sal_True );
         pTextEngine->SetActiveView(pTmp);
         // Bug 72887 show the cursor
-        pTmp->SetAutoScroll(TRUE);
-        pTmp->ShowCursor( FALSE/*pTmp->IsAutoScroll()*/ );
+        pTmp->SetAutoScroll(sal_True);
+        pTmp->ShowCursor( sal_False/*pTmp->IsAutoScroll()*/ );
 
         if(!bTempModified)
             ClearModifyFlag();
@@ -727,11 +727,11 @@ void SwSrcEditWindow::DoSyntaxHighlight( USHORT nPara )
 
 --------------------------------------------------*/
 
-void SwSrcEditWindow::DoDelayedSyntaxHighlight( USHORT nPara )
+void SwSrcEditWindow::DoDelayedSyntaxHighlight( sal_uInt16 nPara )
 {
     if ( !bHighlighting && bDoSyntaxHighlight )
     {
-        aSyntaxLineTable.Insert( nPara, (void*)(USHORT)1 );
+        aSyntaxLineTable.Insert( nPara, (void*)(sal_uInt16)1 );
         aSyntaxIdleTimer.Start();
     }
 }
@@ -740,7 +740,7 @@ void SwSrcEditWindow::DoDelayedSyntaxHighlight( USHORT nPara )
 
 --------------------------------------------------*/
 
-void SwSrcEditWindow::ImpDoHighlight( const String& rSource, USHORT nLineOff )
+void SwSrcEditWindow::ImpDoHighlight( const String& rSource, sal_uInt16 nLineOff )
 {
     SwTextPortions aPortionList;
     lcl_Highlight(rSource, aPortionList);
@@ -762,16 +762,16 @@ void SwSrcEditWindow::ImpDoHighlight( const String& rSource, USHORT nLineOff )
     // Wenn haufig gleiche Farbe, dazwischen Blank ohne Farbe,
     // ggf. zusammenfassen, oder zumindest das Blank,
     // damit weniger Attribute
-    BOOL bOptimizeHighlight = TRUE; // war in der BasicIDE static
+    sal_Bool bOptimizeHighlight = sal_True; // war in der BasicIDE static
     if ( bOptimizeHighlight )
     {
         // Es muessen nur die Blanks und Tabs mit attributiert werden.
         // Wenn zwei gleiche Attribute hintereinander eingestellt werden,
         // optimiert das die TextEngine.
-        USHORT nLastEnd = 0;
+        sal_uInt16 nLastEnd = 0;
 
 #ifdef DBG_UTIL
-        USHORT nLine = aPortionList[0].nLine;
+        sal_uInt16 nLine = aPortionList[0].nLine;
 #endif
         for ( size_t i = 0; i < nCount; i++ )
         {
@@ -803,8 +803,8 @@ void SwSrcEditWindow::ImpDoHighlight( const String& rSource, USHORT nLineOff )
             r.eType != svtools::HTMLUNKNOWN)
                 r.eType = svtools::HTMLUNKNOWN;
         Color aColor((ColorData)SW_MOD()->GetColorConfig().GetColorValue((svtools::ColorConfigEntry)r.eType).nColor);
-        USHORT nLine = nLineOff+r.nLine; //
-        pTextEngine->SetAttrib( TextAttribFontColor( aColor ), nLine, r.nStart, r.nEnd+1, TRUE );
+        sal_uInt16 nLine = nLineOff+r.nLine; //
+        pTextEngine->SetAttrib( TextAttribFontColor( aColor ), nLine, r.nStart, r.nEnd+1, sal_True );
     }
 }
 
@@ -832,7 +832,7 @@ void SwSrcEditWindow::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
         else if( ( rTextHint.GetId() == TEXT_HINT_PARAINSERTED ) ||
                  ( rTextHint.GetId() == TEXT_HINT_PARACONTENTCHANGED ) )
         {
-            DoDelayedSyntaxHighlight( (USHORT)rTextHint.GetValue() );
+            DoDelayedSyntaxHighlight( (sal_uInt16)rTextHint.GetValue() );
         }
     }
 }
@@ -847,7 +847,7 @@ void SwSrcEditWindow::ConfigurationChanged( utl::ConfigurationBroadcaster* pBrdC
 
 --------------------------------------------------*/
 
-void    SwSrcEditWindow::Invalidate(USHORT )
+void    SwSrcEditWindow::Invalidate(sal_uInt16 )
 {
     pOutWin->Invalidate();
     Window::Invalidate();
@@ -892,7 +892,7 @@ void SwSrcEditWindow::GetFocus()
 /* -----------------------------29.08.2002 13:21------------------------------
 
  ---------------------------------------------------------------------------*/
-BOOL  lcl_GetLanguagesForEncoding(rtl_TextEncoding eEnc, LanguageType aLanguages[])
+sal_Bool  lcl_GetLanguagesForEncoding(rtl_TextEncoding eEnc, LanguageType aLanguages[])
 {
     switch(eEnc)
     {

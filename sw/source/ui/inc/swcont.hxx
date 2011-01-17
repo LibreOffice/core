@@ -69,13 +69,13 @@ class SwContentType;
 //mini rtti
 class SwTypeNumber
 {
-    BYTE nTypeId;
+    sal_uInt8 nTypeId;
 
     public:
-        SwTypeNumber(BYTE nId) :nTypeId(nId){}
+        SwTypeNumber(sal_uInt8 nId) :nTypeId(nId){}
         virtual ~SwTypeNumber();
 
-        virtual BYTE    GetTypeId();
+        virtual sal_uInt8   GetTypeId();
 };
 //----------------------------------------------------------------------------
 
@@ -84,17 +84,17 @@ class SwContent : public SwTypeNumber
     const SwContentType*    pParent;
     String                  sContentName;
     long                    nYPosition;
-    BOOL                    bInvisible;
+    sal_Bool                    bInvisible;
 public:
         SwContent(const SwContentType* pCnt, const String& rName, long nYPos );
 
-    virtual BOOL            IsProtect() const;
+    virtual sal_Bool            IsProtect() const;
     const SwContentType*    GetParent() const {return pParent;}
     const String&           GetName()   const {return sContentName;}
     int                     operator==(const SwContent& /*rCont*/) const
                                 {
                                     //gleich sind sie nie, sonst fallen sie aus dem Array
-                                    return FALSE;
+                                    return sal_False;
                                 }
     int                     operator<(const SwContent& rCont) const
                                 {
@@ -106,8 +106,8 @@ public:
 
     long        GetYPos() const {return nYPosition;}
 
-    BOOL        IsInvisible() const {return bInvisible;}
-    void        SetInvisible(){ bInvisible = TRUE;}
+    sal_Bool        IsInvisible() const {return bInvisible;}
+    void        SetInvisible(){ bInvisible = sal_True;}
 };
 
 #endif

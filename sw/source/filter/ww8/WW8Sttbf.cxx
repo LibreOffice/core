@@ -38,7 +38,7 @@ namespace ww8
     {
         rSt.Seek(nPos);
 
-        mp_data.reset(new BYTE[nSize]);
+        mp_data.reset(new sal_uInt8[nSize]);
         rSt.Read(mp_data.get(), nSize);
     }
 

@@ -57,7 +57,7 @@
 using namespace ::com::sun::star;
 using namespace nsSwDocInfoSubType;
 
-USHORT lcl_GetLanguageOfFormat( USHORT nLng, ULONG nFmt,
+sal_uInt16 lcl_GetLanguageOfFormat( sal_uInt16 nLng, sal_uLong nFmt,
                                 const SvNumberFormatter& rFormatter )
 {
     if( nLng == LANGUAGE_NONE ) // wegen Bug #60010
@@ -85,7 +85,7 @@ SvStringsDtor* SwFieldType::pFldNames = 0;
 
 DBG_NAME(SwFieldType)
 
-    USHORT __FAR_DATA aTypeTab[] = {
+    sal_uInt16 __FAR_DATA aTypeTab[] = {
     /* RES_DBFLD            */      TYP_DBFLD,
     /* RES_USERFLD          */      TYP_USERFLD,
     /* RES_FILENAMEFLD      */      TYP_FILENAMEFLD,
@@ -131,7 +131,7 @@ DBG_NAME(SwFieldType)
 
 
 
-const String& SwFieldType::GetTypeStr(USHORT nTypeId)
+const String& SwFieldType::GetTypeStr(sal_uInt16 nTypeId)
 {
     if( !pFldNames )
         _GetFldName();
@@ -148,7 +148,7 @@ const String& SwFieldType::GetTypeStr(USHORT nTypeId)
  jedes Dokument einmalig ist.
  --------------------------------------------------*/
 
-SwFieldType::SwFieldType( USHORT nWhichId )
+SwFieldType::SwFieldType( sal_uInt16 nWhichId )
     : SwModify(0),
     nWhich( nWhichId )
 {
@@ -169,13 +169,13 @@ const String& SwFieldType::GetName() const
     return aEmptyStr;
 }
 
-BOOL SwFieldType::QueryValue( uno::Any&, USHORT ) const
+sal_Bool SwFieldType::QueryValue( uno::Any&, sal_uInt16 ) const
 {
-    return FALSE;
+    return sal_False;
 }
-BOOL SwFieldType::PutValue( const uno::Any& , USHORT )
+sal_Bool SwFieldType::PutValue( const uno::Any& , sal_uInt16 )
 {
-    return FALSE;
+    return sal_False;
 }
 
 /*--------------------------------------------------------------------
@@ -184,9 +184,9 @@ BOOL SwFieldType::PutValue( const uno::Any& , USHORT )
                     Felder sind n-mal vorhanden, Feldtypen nur einmal
  --------------------------------------------------------------------*/
 
-SwField::SwField(SwFieldType* pTyp, sal_uInt32 nFmt, USHORT nLng) :
+SwField::SwField(SwFieldType* pTyp, sal_uInt32 nFmt, sal_uInt16 nLng) :
     nLang(nLng),
-    bIsAutomaticLanguage(TRUE),
+    bIsAutomaticLanguage(sal_True),
     nFormat(nFmt)
 {
     ASSERT( pTyp, "SwField: ungueltiger SwFieldType" );
@@ -202,7 +202,7 @@ SwField::~SwField()
  --------------------------------------------------------------------*/
 
 #ifdef DBG_UTIL
-USHORT SwField::Which() const
+sal_uInt16 SwField::Which() const
 {
     ASSERT(pType, "Kein Typ vorhanden");
     return pType->Which();
@@ -213,20 +213,20 @@ USHORT SwField::Which() const
     Beschreibung:
  --------------------------------------------------------------------*/
 
-USHORT SwField::GetTypeId() const
+sal_uInt16 SwField::GetTypeId() const
 {
 
-    USHORT nRet;
+    sal_uInt16 nRet;
     switch( pType->Which() )
     {
     case RES_DATETIMEFLD:
         if (GetSubType() & FIXEDFLD)
-            nRet = static_cast<USHORT>(GetSubType() & DATEFLD ? TYP_FIXDATEFLD : TYP_FIXTIMEFLD);
+            nRet = static_cast<sal_uInt16>(GetSubType() & DATEFLD ? TYP_FIXDATEFLD : TYP_FIXTIMEFLD);
         else
-            nRet = static_cast<USHORT>(GetSubType() & DATEFLD ? TYP_DATEFLD : TYP_TIMEFLD);
+            nRet = static_cast<sal_uInt16>(GetSubType() & DATEFLD ? TYP_DATEFLD : TYP_TIMEFLD);
         break;
     case RES_GETEXPFLD:
-        nRet = static_cast<USHORT>(nsSwGetSetExpType::GSE_FORMULA & GetSubType() ? TYP_FORMELFLD : TYP_GETFLD);
+        nRet = static_cast<sal_uInt16>(nsSwGetSetExpType::GSE_FORMULA & GetSubType() ? TYP_FORMELFLD : TYP_GETFLD);
         break;
 
     case RES_HIDDENTXTFLD:
@@ -265,10 +265,10 @@ USHORT SwField::GetTypeId() const
 
 String SwField::GetFieldName() const
 {
-    USHORT nTypeId = GetTypeId();
+    sal_uInt16 nTypeId = GetTypeId();
     if (RES_DATETIMEFLD == GetTyp()->Which())
     {
-        nTypeId = static_cast<USHORT>(
+        nTypeId = static_cast<sal_uInt16>(
             ((GetSubType() & DATEFLD) != 0) ? TYP_DATEFLD : TYP_TIMEFLD);
     }
     String sRet = SwFieldType::GetTypeStr( nTypeId );
@@ -305,39 +305,39 @@ void SwField::SetPar1(const String& )
 void SwField::SetPar2(const String& )
 {}
 
-USHORT SwField::GetSubType() const
+sal_uInt16 SwField::GetSubType() const
 {
 //  ASSERT(0, "Sorry Not implemented");
     return 0;
 }
 
-void SwField::SetSubType(USHORT )
+void SwField::SetSubType(sal_uInt16 )
 {
 //  ASSERT(0, "Sorry Not implemented");
 }
 
-BOOL  SwField::QueryValue( uno::Any& rVal, USHORT nWhichId ) const
+sal_Bool  SwField::QueryValue( uno::Any& rVal, sal_uInt16 nWhichId ) const
 {
     switch( nWhichId )
     {
         case FIELD_PROP_BOOL4:
         {
-            BOOL bFixed = !bIsAutomaticLanguage;
+            sal_Bool bFixed = !bIsAutomaticLanguage;
             rVal.setValue(&bFixed, ::getCppuBooleanType());
         }
         break;
         default:
             DBG_ERROR("illegal property");
     }
-    return TRUE;
+    return sal_True;
 }
-BOOL SwField::PutValue( const uno::Any& rVal, USHORT nWhichId )
+sal_Bool SwField::PutValue( const uno::Any& rVal, sal_uInt16 nWhichId )
 {
     switch( nWhichId )
     {
         case FIELD_PROP_BOOL4:
         {
-            BOOL bFixed = FALSE;
+            sal_Bool bFixed = sal_False;
             if(rVal >>= bFixed)
                 bIsAutomaticLanguage = !bFixed;
         }
@@ -345,7 +345,7 @@ BOOL SwField::PutValue( const uno::Any& rVal, USHORT nWhichId )
         default:
             DBG_ERROR("illegal property");
     }
-    return TRUE;
+    return sal_True;
 }
 
 
@@ -366,9 +366,9 @@ SwFieldType* SwField::ChgTyp( SwFieldType* pNewType )
 }
 
     // hat das Feld eine Action auf dem ClickHandler ? (z.B. INetFelder,..)
-BOOL SwField::HasClickHdl() const
+sal_Bool SwField::HasClickHdl() const
 {
-    BOOL bRet = FALSE;
+    sal_Bool bRet = sal_False;
     switch( pType->Which() )
     {
     case RES_INTERNETFLD:
@@ -377,7 +377,7 @@ BOOL SwField::HasClickHdl() const
     case RES_MACROFLD:
     case RES_INPUTFLD:
     case RES_DROPDOWN :
-        bRet = TRUE;
+        bRet = sal_True;
         break;
 
     case RES_SETEXPFLD:
@@ -387,7 +387,7 @@ BOOL SwField::HasClickHdl() const
     return bRet;
 }
 
-void SwField::SetLanguage(USHORT nLng)
+void SwField::SetLanguage(sal_uInt16 nLng)
 {
     nLang = nLng;
 }
@@ -397,14 +397,14 @@ void SwField::ChangeFormat(sal_uInt32 n)
     nFormat = n;
 }
 
-BOOL SwField::IsFixed() const
+sal_Bool SwField::IsFixed() const
 {
-    BOOL bRet = FALSE;
+    sal_Bool bRet = sal_False;
     switch( pType->Which() )
     {
     case RES_FIXDATEFLD:
     case RES_FIXTIMEFLD:
-        bRet = TRUE;
+        bRet = sal_True;
         break;
 
     case RES_DATETIMEFLD:
@@ -449,7 +449,7 @@ SwField * SwField::CopyField() const
     Beschreibung: Numerierung expandieren
  --------------------------------------------------------------------*/
 
-String FormatNumber(USHORT nNum, sal_uInt32 nFormat)
+String FormatNumber(sal_uInt16 nNum, sal_uInt32 nFormat)
 {
     if(SVX_NUM_PAGEDESC == nFormat)
         return  String::CreateFromInt32( nNum );
@@ -465,10 +465,10 @@ String FormatNumber(USHORT nNum, sal_uInt32 nFormat)
     Beschreibung: CTOR SwValueFieldType
  --------------------------------------------------------------------*/
 
-SwValueFieldType::SwValueFieldType( SwDoc* pDocPtr, USHORT nWhichId )
+SwValueFieldType::SwValueFieldType( SwDoc* pDocPtr, sal_uInt16 nWhichId )
     : SwFieldType(nWhichId),
     pDoc(pDocPtr),
-    bUseFormat(TRUE)
+    bUseFormat(sal_True)
 {
 }
 
@@ -484,7 +484,7 @@ SwValueFieldType::SwValueFieldType( const SwValueFieldType& rTyp )
  --------------------------------------------------------------------*/
 
 String SwValueFieldType::ExpandValue( const double& rVal,
-                                        sal_uInt32 nFmt, USHORT nLng) const
+                                        sal_uInt32 nFmt, sal_uInt16 nLng) const
 {
     if (rVal >= DBL_MAX)        // FehlerString fuer Calculator
         return ViewShell::GetShellRes()->aCalc_Error;
@@ -494,7 +494,7 @@ String SwValueFieldType::ExpandValue( const double& rVal,
     Color* pCol = 0;
 
     // wegen Bug #60010
-    USHORT nFmtLng = ::lcl_GetLanguageOfFormat( nLng, nFmt, *pFormatter );
+    sal_uInt16 nFmtLng = ::lcl_GetLanguageOfFormat( nLng, nFmt, *pFormatter );
 
     if( nFmt < SV_COUNTRY_LANGUAGE_OFFSET && LANGUAGE_SYSTEM != nFmtLng )
     {
@@ -553,7 +553,7 @@ void SwValueFieldType::DoubleToString( String &rValue, const double &rVal,
  --------------------------------------------------------------------*/
 
 void SwValueFieldType::DoubleToString( String &rValue, const double &rVal,
-                                        USHORT nLng ) const
+                                        sal_uInt16 nLng ) const
 {
     SvNumberFormatter* pFormatter = pDoc->GetNumberFormatter();
 
@@ -571,7 +571,7 @@ void SwValueFieldType::DoubleToString( String &rValue, const double &rVal,
  --------------------------------------------------------------------*/
 
 SwValueField::SwValueField( SwValueFieldType* pFldType, sal_uInt32 nFmt,
-                            USHORT nLng, const double fVal )
+                            sal_uInt16 nLng, const double fVal )
     : SwField(pFldType, nFmt, nLng),
     fValue(fVal)
 {
@@ -616,7 +616,7 @@ SwFieldType* SwValueField::ChgTyp( SwFieldType* pNewType )
 sal_uInt32 SwValueField::GetSystemFormat(SvNumberFormatter* pFormatter, sal_uInt32 nFmt)
 {
     const SvNumberformat* pEntry = pFormatter->GetEntry(nFmt);
-    USHORT nLng = SvxLocaleToLanguage( SvtSysLocale().GetLocaleData().getLocale() );
+    sal_uInt16 nLng = SvxLocaleToLanguage( SvtSysLocale().GetLocaleData().getLocale() );
 
     if (pEntry && nLng != pEntry->GetLanguage())
     {
@@ -647,7 +647,7 @@ sal_uInt32 SwValueField::GetSystemFormat(SvNumberFormatter* pFormatter, sal_uInt
     Beschreibung: Sprache im Format anpassen
  --------------------------------------------------------------------*/
 
-void SwValueField::SetLanguage( USHORT nLng )
+void SwValueField::SetLanguage( sal_uInt16 nLng )
 {
     if( IsAutomaticLanguage() &&
             ((SwValueFieldType *)GetTyp())->UseFormat() &&
@@ -655,7 +655,7 @@ void SwValueField::SetLanguage( USHORT nLng )
     {
         // wegen Bug #60010
         SvNumberFormatter* pFormatter = GetDoc()->GetNumberFormatter();
-        USHORT nFmtLng = ::lcl_GetLanguageOfFormat( nLng, GetFormat(),
+        sal_uInt16 nFmtLng = ::lcl_GetLanguageOfFormat( nLng, GetFormat(),
                                                     *pFormatter );
 
         if( (GetFormat() >= SV_COUNTRY_LANGUAGE_OFFSET ||
@@ -735,7 +735,7 @@ void SwFormulaField::SetFormula(const String& rStr)
 {
     sFormula = rStr;
 
-    ULONG nFmt(GetFormat());
+    sal_uLong nFmt(GetFormat());
 
     if( nFmt && SAL_MAX_UINT32 != nFmt )
     {

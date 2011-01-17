@@ -48,7 +48,7 @@
 // ist, muss die fuer die weiteren Aktionen beruecksichtigt werden.
 
 
-void SwWrtShell::Do( DoType eDoType, USHORT nCnt )
+void SwWrtShell::Do( DoType eDoType, sal_uInt16 nCnt )
 {
     // #105332# save current state of DoesUndo()
     sal_Bool bSaveDoesUndo = DoesUndo();
@@ -77,8 +77,8 @@ void SwWrtShell::Do( DoType eDoType, USHORT nCnt )
     // #105332# restore undo state
     DoUndo(bSaveDoesUndo);
 
-    BOOL bCreateXSelection = FALSE;
-    const BOOL bFrmSelected = IsFrmSelected() || IsObjSelected();
+    sal_Bool bCreateXSelection = sal_False;
+    const sal_Bool bFrmSelected = IsFrmSelected() || IsObjSelected();
     if ( IsSelection() )
     {
         if ( bFrmSelected )
@@ -88,18 +88,18 @@ void SwWrtShell::Do( DoType eDoType, USHORT nCnt )
         // bei Cursor setzen
         fnKillSel = &SwWrtShell::ResetSelect;
         fnSetCrsr = &SwWrtShell::SetCrsrKillSel;
-        bCreateXSelection = TRUE;
+        bCreateXSelection = sal_True;
     }
     else if ( bFrmSelected )
     {
         EnterSelFrmMode();
-        bCreateXSelection = TRUE;
+        bCreateXSelection = sal_True;
     }
     else if( (CNT_GRF | CNT_OLE ) & GetCntType() )
     {
         SelectObj( GetCharRect().Pos() );
         EnterSelFrmMode();
-        bCreateXSelection = TRUE;
+        bCreateXSelection = sal_True;
     }
 
     if( bCreateXSelection )
@@ -114,7 +114,7 @@ void SwWrtShell::Do( DoType eDoType, USHORT nCnt )
 String SwWrtShell::GetDoString( DoType eDoType ) const
 {
     String aStr, aUndoStr;
-    USHORT nResStr = STR_UNDO;
+    sal_uInt16 nResStr = STR_UNDO;
     switch( eDoType )
     {
     case UNDO:
@@ -134,7 +134,7 @@ String SwWrtShell::GetDoString( DoType eDoType ) const
     return aStr;
 }
 
-USHORT SwWrtShell::GetDoStrings( DoType eDoType, SfxStringListItem& rStrs ) const
+sal_uInt16 SwWrtShell::GetDoStrings( DoType eDoType, SfxStringListItem& rStrs ) const
 {
     SwUndoIds aIds;
     switch( eDoType )
@@ -149,7 +149,7 @@ USHORT SwWrtShell::GetDoStrings( DoType eDoType, SfxStringListItem& rStrs ) cons
     }
 
     String sList;
-    for( USHORT n = 0, nEnd = aIds.Count(); n < nEnd; ++n )
+    for( sal_uInt16 n = 0, nEnd = aIds.Count(); n < nEnd; ++n )
     {
         const SwUndoIdAndName& rIdNm = *aIds[ n ];
         if( rIdNm.GetUndoStr() )

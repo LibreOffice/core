@@ -58,9 +58,9 @@ void SwTextShell::ExecIdx(SfxRequest &rReq)
 {
     const SfxItemSet *pArgs = rReq.GetArgs();
     const SfxPoolItem* pItem = 0;
-    USHORT nSlot = rReq.GetSlot();
+    sal_uInt16 nSlot = rReq.GetSlot();
     if(pArgs)
-       pArgs->GetItemState(nSlot, FALSE, &pItem );
+       pArgs->GetItemState(nSlot, sal_False, &pItem );
 
     SfxViewFrame* pVFrame = GetView().GetViewFrame();
     Window *pMDI = &pVFrame->GetWindow();
@@ -93,7 +93,7 @@ void SwTextShell::ExecIdx(SfxRequest &rReq)
         case FN_EDIT_IDX_ENTRY_DLG:
         {
             SwTOXMgr aMgr(GetShellPtr());
-            USHORT nRet = RET_OK;
+            sal_uInt16 nRet = RET_OK;
             if(aMgr.GetTOXMarkCount() > 1)
             {   // Mehrere Marken, welche solls denn sein ?
                 //
@@ -140,11 +140,11 @@ void SwTextShell::ExecIdx(SfxRequest &rReq)
             // Hoehe=Breite fuer konsistentere Vorschau (analog zu Bereich bearbeiten)
             aSet.Put(SvxSizeItem(SID_ATTR_PAGE_SIZE, Size(nWidth, nWidth)));
             const SwTOXBase* pCurTOX = 0;
-            BOOL bGlobal = FALSE;
+            sal_Bool bGlobal = sal_False;
             if(pItem)
             {
                 pCurTOX = (const SwTOXBase* )((SwPtrItem*)pItem)->GetValue();
-                bGlobal = TRUE;
+                bGlobal = sal_True;
             }
             else
                 pCurTOX = rSh.GetCurTOX();
@@ -170,7 +170,7 @@ void SwTextShell::ExecIdx(SfxRequest &rReq)
             const SwTOXBase* pBase = rSh.GetCurTOX();
             DBG_ASSERT(pBase, "no TOXBase to remove");
             if( pBase )
-                rSh.DeleteTOX(*pBase, TRUE);
+                rSh.DeleteTOX(*pBase, sal_True);
         }
         break;
         default:
@@ -189,7 +189,7 @@ void SwTextShell::GetIdxState(SfxItemSet &rSet)
 
     SfxChildWindow* pAuthMark = pVFrame->GetChildWindow(FN_INSERT_AUTH_ENTRY_DLG);
 
-    const BOOL bHtmlMode = 0 != ::GetHtmlMode( GetView().GetDocShell() );
+    const sal_Bool bHtmlMode = 0 != ::GetHtmlMode( GetView().GetDocShell() );
     const SwTOXBase* pBase = 0;
     if( bHtmlMode || 0 != ( pBase = rSh.GetCurTOX()) )
     {
@@ -207,27 +207,27 @@ void SwTextShell::GetIdxState(SfxItemSet &rSet)
         if(!pIdxMrk)
             rSet.DisableItem( FN_INSERT_IDX_ENTRY_DLG );
         else
-            rSet.Put(SfxBoolItem(FN_INSERT_IDX_ENTRY_DLG, TRUE));
+            rSet.Put(SfxBoolItem(FN_INSERT_IDX_ENTRY_DLG, sal_True));
 
         if(!pAuthMark)
             rSet.DisableItem( FN_INSERT_AUTH_ENTRY_DLG );
         else
-            rSet.Put(SfxBoolItem(FN_INSERT_AUTH_ENTRY_DLG, TRUE));
+            rSet.Put(SfxBoolItem(FN_INSERT_AUTH_ENTRY_DLG, sal_True));
 
     }
     else //if( SFX_ITEM_UNKNOWN != rSet.GetItemState( FN_EDIT_IDX_ENTRY_DLG ))
     {
 
-        BOOL bEnableEdit = TRUE;
-        BOOL bInReadonly = rSh.HasReadonlySel();
+        sal_Bool bEnableEdit = sal_True;
+        sal_Bool bInReadonly = rSh.HasReadonlySel();
         if( rSh.HasSelection() || bInReadonly)
-            bEnableEdit = FALSE;
+            bEnableEdit = sal_False;
         else
         {
             SwTOXMarks aArr;
             rSh.GetCurTOXMarks( aArr );
             if( !aArr.Count())
-                bEnableEdit = FALSE;
+                bEnableEdit = sal_False;
         }
 
         if(!bEnableEdit)

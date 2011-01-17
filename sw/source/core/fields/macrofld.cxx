@@ -63,7 +63,7 @@ SwFieldType* SwMacroFieldType::Copy() const
 
 SwMacroField::SwMacroField(SwMacroFieldType* pInitType,
                            const String& rLibAndName, const String& rTxt) :
-    SwField(pInitType), aMacro(rLibAndName), aText(rTxt), bIsScriptURL(FALSE)
+    SwField(pInitType), aMacro(rLibAndName), aText(rTxt), bIsScriptURL(sal_False)
 {
     bIsScriptURL = isScriptURL(aMacro);
 }
@@ -96,9 +96,9 @@ String SwMacroField::GetLibName() const
 
     if (aMacro.Len())
     {
-        USHORT nPos = aMacro.Len();
+        sal_uInt16 nPos = aMacro.Len();
 
-        for (USHORT i = 0; i < 3 && nPos > 0; i++)
+        for (sal_uInt16 i = 0; i < 3 && nPos > 0; i++)
             while (aMacro.GetChar(--nPos) != '.' && nPos > 0) ;
 
         return aMacro.Copy(0, nPos );
@@ -118,9 +118,9 @@ String SwMacroField::GetMacroName() const
         }
         else
         {
-            USHORT nPos = aMacro.Len();
+            sal_uInt16 nPos = aMacro.Len();
 
-            for (USHORT i = 0; i < 3 && nPos > 0; i++)
+            for (sal_uInt16 i = 0; i < 3 && nPos > 0; i++)
                 while (aMacro.GetChar(--nPos) != '.' && nPos > 0) ;
 
             return aMacro.Copy( ++nPos );
@@ -175,7 +175,7 @@ String SwMacroField::GetPar2() const
 /*-----------------05.03.98 13:38-------------------
 
 --------------------------------------------------*/
-BOOL SwMacroField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
+sal_Bool SwMacroField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
 {
     switch( nWhichId )
     {
@@ -194,12 +194,12 @@ BOOL SwMacroField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
     default:
         DBG_ERROR("illegal property");
     }
-    return TRUE;
+    return sal_True;
 }
 /*-----------------05.03.98 13:38-------------------
 
 --------------------------------------------------*/
-BOOL SwMacroField::PutValue( const uno::Any& rAny, USHORT nWhichId )
+sal_Bool SwMacroField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
 {
     String sTmp;
     switch( nWhichId )
@@ -221,7 +221,7 @@ BOOL SwMacroField::PutValue( const uno::Any& rAny, USHORT nWhichId )
         DBG_ERROR("illegal property");
     }
 
-    return TRUE;
+    return sal_True;
 }
 
 // create an internally used macro name from the library and macro name parts
@@ -237,7 +237,7 @@ void SwMacroField::CreateMacroString(
     rMacro += rMacroName;
 }
 
-BOOL SwMacroField::isScriptURL( const String& str )
+sal_Bool SwMacroField::isScriptURL( const String& str )
 {
     uno::Reference< lang::XMultiServiceFactory > xSMgr =
         ::comphelper::getProcessServiceFactory();
@@ -254,8 +254,8 @@ BOOL SwMacroField::isScriptURL( const String& str )
 
         if ( xUrl.is() )
         {
-            return TRUE;
+            return sal_True;
         }
     }
-    return FALSE;
+    return sal_False;
 }

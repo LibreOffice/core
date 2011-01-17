@@ -70,10 +70,10 @@
 SwParaDlg::SwParaDlg(Window *pParent,
                     SwView& rVw,
                     const SfxItemSet& rCoreSet,
-                    BYTE nDialogMode,
+                    sal_uInt8 nDialogMode,
                     const String *pTitle,
-                    BOOL bDraw,
-                    UINT16 nDefPage):
+                    sal_Bool bDraw,
+                    sal_uInt16 nDefPage):
 
     SfxTabDialog(pParent, bDraw ? SW_RES(DLG_DRAWPARA) : SW_RES(DLG_PARA),
                     &rCoreSet,  0 != pTitle),
@@ -86,7 +86,7 @@ SwParaDlg::SwParaDlg(Window *pParent,
     FreeResource();
 
     nHtmlMode = ::GetHtmlMode(rVw.GetDocShell());
-    BOOL bHtmlMode = static_cast< BOOL >(nHtmlMode & HTMLMODE_ON);
+    sal_Bool bHtmlMode = static_cast< sal_Bool >(nHtmlMode & HTMLMODE_ON);
     if(pTitle)
     {
             // Update des Titels
@@ -127,8 +127,8 @@ SwParaDlg::SwParaDlg(Window *pParent,
     else
         RemoveTabPage(TP_PARA_ASIAN);
 
-    USHORT nWhich(rCoreSet.GetPool()->GetWhich(SID_ATTR_LRSPACE));
-    BOOL bLRValid = SFX_ITEM_AVAILABLE <= rCoreSet.GetItemState(nWhich);
+    sal_uInt16 nWhich(rCoreSet.GetPool()->GetWhich(SID_ATTR_LRSPACE));
+    sal_Bool bLRValid = SFX_ITEM_AVAILABLE <= rCoreSet.GetItemState(nWhich);
     if(bHtmlMode || !bLRValid)
         RemoveTabPage(TP_TABULATOR);
     else
@@ -182,7 +182,7 @@ __EXPORT SwParaDlg::~SwParaDlg()
 }
 
 
-void __EXPORT SwParaDlg::PageCreated(USHORT nId, SfxTabPage& rPage)
+void __EXPORT SwParaDlg::PageCreated(sal_uInt16 nId, SfxTabPage& rPage)
 {
     SwWrtShell& rSh = rView.GetWrtShell();
     SfxAllItemSet aSet(*(GetInputSetImpl()->GetPool()));
@@ -196,7 +196,7 @@ void __EXPORT SwParaDlg::PageCreated(USHORT nId, SfxTabPage& rPage)
     else if( nId == TP_PARA_STD )
     {
         aSet.Put(SfxUInt16Item(SID_SVXSTDPARAGRAPHTABPAGE_PAGEWIDTH,
-                            static_cast< UINT16 >(rSh.GetAnyCurRect(RECT_PAGE_PRT).Width()) ));
+                            static_cast< sal_uInt16 >(rSh.GetAnyCurRect(RECT_PAGE_PRT).Width()) ));
 
         if (!bDrawParaDlg)
         {
@@ -210,7 +210,7 @@ void __EXPORT SwParaDlg::PageCreated(USHORT nId, SfxTabPage& rPage)
     {
         if (!bDrawParaDlg)
         {
-            aSet.Put(SfxBoolItem(SID_SVXPARAALIGNTABPAGE_ENABLEJUSTIFYEXT,TRUE));
+            aSet.Put(SfxBoolItem(SID_SVXPARAALIGNTABPAGE_ENABLEJUSTIFYEXT,sal_True));
             rPage.PageCreated(aSet);
         }
     }
@@ -218,17 +218,17 @@ void __EXPORT SwParaDlg::PageCreated(USHORT nId, SfxTabPage& rPage)
     {
         // Seitenumbruch nur, wenn der Cursor im Body-Bereich und nicht in
         // einer Tabelle steht
-        const USHORT eType = rSh.GetFrmType(0,TRUE);
+        const sal_uInt16 eType = rSh.GetFrmType(0,sal_True);
         if( !(FRMTYPE_BODY & eType) ||
             rSh.GetSelectionType() & nsSelectionType::SEL_TBL )
         {
-            aSet.Put(SfxBoolItem(SID_DISABLE_SVXEXTPARAGRAPHTABPAGE_PAGEBREAK,TRUE));
+            aSet.Put(SfxBoolItem(SID_DISABLE_SVXEXTPARAGRAPHTABPAGE_PAGEBREAK,sal_True));
             rPage.PageCreated(aSet);
         }
     }
     else if( TP_DROPCAPS == nId )
     {
-        ((SwDropCapsPage&)rPage).SetFormat(FALSE);
+        ((SwDropCapsPage&)rPage).SetFormat(sal_False);
     }
     else if( TP_BACKGROUND == nId )
     {
@@ -259,7 +259,7 @@ void __EXPORT SwParaDlg::PageCreated(USHORT nId, SfxTabPage& rPage)
             aNames.Insert(new String(pBase->GetName()));
             pBase = pPool->Next();
         }
-        for(USHORT i = 0; i < aNames.Count(); i++)
+        for(sal_uInt16 i = 0; i < aNames.Count(); i++)
             rBox.InsertEntry(*aNames.GetObject(i));
     }
 

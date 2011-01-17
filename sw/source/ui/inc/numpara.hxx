@@ -66,8 +66,8 @@ class SwParagraphNumTabPage : public SfxTabPage
     const String msOutlineNumbering;
     // <--
 
-    BOOL                    bModified : 1;
-    BOOL                    bCurNumrule : 1;
+    sal_Bool                    bModified : 1;
+    sal_Bool                    bCurNumrule : 1;
 
     DECL_LINK( NewStartHdl_Impl, CheckBox* );
     DECL_LINK( StyleHdl_Impl, ListBox* );
@@ -81,9 +81,9 @@ public:
 
     static SfxTabPage*  Create( Window* pParent,
                                 const SfxItemSet& rSet );
-    static USHORT*      GetRanges();
+    static sal_uInt16*      GetRanges();
 
-    virtual BOOL        FillItemSet( SfxItemSet& rSet );
+    virtual sal_Bool        FillItemSet( SfxItemSet& rSet );
     virtual void        Reset( const SfxItemSet& rSet );
 
     void                EnableNewStart();

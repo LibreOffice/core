@@ -121,8 +121,8 @@ void lcl_EnsureValidPam( SwPaM& rPam )
         // else: point was already valid
 
         // if mark is invalid, we delete it
-        if( ( rPam.GetCntntNode( FALSE ) == NULL ) ||
-            ( rPam.GetCntntNode( FALSE ) != rPam.GetMark()->nContent.GetIdxReg() ) )
+        if( ( rPam.GetCntntNode( sal_False ) == NULL ) ||
+            ( rPam.GetCntntNode( sal_False ) != rPam.GetMark()->nContent.GetIdxReg() ) )
         {
             rPam.DeleteMark();
         }
@@ -416,7 +416,7 @@ void lcl_AdjustOutlineStylesForOOo( SwDoc& _rDoc )
     String aDefOutlStyleNames[ MAXLEVEL ];
     {
         String sStyleName;
-        for ( BYTE i = 0; i < MAXLEVEL; ++i )
+        for ( sal_uInt8 i = 0; i < MAXLEVEL; ++i )
         {
             sStyleName =
                 SwStyleNameMapper::GetProgName( static_cast< sal_uInt16 >(RES_POOLCOLL_HEADLINE1 + i),
@@ -431,7 +431,7 @@ void lcl_AdjustOutlineStylesForOOo( SwDoc& _rDoc )
     SwTxtFmtColl* aCreatedDefaultOutlineStyles[ MAXLEVEL ];
 
     {
-        for ( BYTE i = 0; i < MAXLEVEL; ++i )
+        for ( sal_uInt8 i = 0; i < MAXLEVEL; ++i )
         {
             aOutlineLevelAssigned[ i ] = false;
             aCreatedDefaultOutlineStyles[ i ] = 0L;
@@ -441,7 +441,7 @@ void lcl_AdjustOutlineStylesForOOo( SwDoc& _rDoc )
     // determine, which outline level has already a style assigned and
     // which of the default outline styles is created.
     const SwTxtFmtColls& rColls = *(_rDoc.GetTxtFmtColls());
-    for ( USHORT n = 1; n < rColls.Count(); ++n )
+    for ( sal_uInt16 n = 1; n < rColls.Count(); ++n )
     {
         SwTxtFmtColl* pColl = rColls[ n ];
         //if ( pColl->GetOutlineLevel() != NO_NUMBERING )       //#outline level zhaojianwei
@@ -451,7 +451,7 @@ void lcl_AdjustOutlineStylesForOOo( SwDoc& _rDoc )
             aOutlineLevelAssigned[ pColl->GetAssignedOutlineStyleLevel() ] = true;//<-end,zhaojianwei
         }
 
-        for ( BYTE i = 0; i < MAXLEVEL; ++i )
+        for ( sal_uInt8 i = 0; i < MAXLEVEL; ++i )
         {
             if ( aCreatedDefaultOutlineStyles[ i ] == 0L &&
                  pColl->GetName() == aDefOutlStyleNames[i] )
@@ -465,7 +465,7 @@ void lcl_AdjustOutlineStylesForOOo( SwDoc& _rDoc )
     // assign already created default outline style to outline level, which
     // doesn't have a style assigned to it.
     const SwNumRule* pOutlineRule = _rDoc.GetOutlineNumRule();
-    for ( BYTE i = 0; i < MAXLEVEL; ++i )
+    for ( sal_uInt8 i = 0; i < MAXLEVEL; ++i )
     {
         // --> OD 2007-01-11 #i73361#
         // Do not change assignment of already created default outline style
@@ -482,7 +482,7 @@ void lcl_AdjustOutlineStylesForOOo( SwDoc& _rDoc )
 
             // apply outline numbering rule, if none is set.
             const SfxPoolItem& rItem =
-                aCreatedDefaultOutlineStyles[ i ]->GetFmtAttr( RES_PARATR_NUMRULE, FALSE );
+                aCreatedDefaultOutlineStyles[ i ]->GetFmtAttr( RES_PARATR_NUMRULE, sal_False );
             if ( static_cast<const SwNumRuleItem&>(rItem).GetValue().Len() == 0 )
             {
                 SwNumRuleItem aItem( pOutlineRule->GetName() );
@@ -535,7 +535,7 @@ void lcl_ConvertSdrOle2ObjsToSdrGrafObjs( SwDoc& _rDoc )
 // <--
 
 
-ULONG XMLReader::Read( SwDoc &rDoc, const String& rBaseURL, SwPaM &rPaM, const String & rName )
+sal_uLong XMLReader::Read( SwDoc &rDoc, const String& rBaseURL, SwPaM &rPaM, const String & rName )
 {
     // Get service factory
     uno::Reference< lang::XMultiServiceFactory > xServiceFactory =
@@ -665,7 +665,7 @@ ULONG XMLReader::Read( SwDoc &rDoc, const String& rBaseURL, SwPaM &rPaM, const S
         // Note: Text documents read via the binary filter are also finally
         //       read using the OpenOffice.org file format. Thus, e.g. for text
         //       documents in StarOffice 5.2 binary file format this property
-        //       will be TRUE.
+        //       will be sal_True.
         { "TextDocInOOoFileFormat", sizeof("TextDocInOOoFileFormat")-1, 0,
               &::getBooleanCppuType(),
               beans::PropertyAttribute::MAYBEVOID, 0 },
@@ -976,9 +976,9 @@ ULONG XMLReader::Read( SwDoc &rDoc, const String& rBaseURL, SwPaM &rPaM, const S
 
     // Notify math objects
     if( bInsertMode )
-        rDoc.PrtOLENotify( FALSE );
+        rDoc.PrtOLENotify( sal_False );
     else if ( rDoc.IsOLEPrtNotifyPending() )
-        rDoc.PrtOLENotify( TRUE );
+        rDoc.PrtOLENotify( sal_True );
 
     nRet = nRet ? nRet : (nWarn ? nWarn : (nWarn2 ? nWarn2 : nWarnRDF ) );
 
@@ -1036,7 +1036,7 @@ ULONG XMLReader::Read( SwDoc &rDoc, const String& rBaseURL, SwPaM &rPaM, const S
         // <--
         // Fix #i58251#: Unfortunately is the static default different to SO7 behaviour,
         // so we have to set a dynamic default after importing SO7
-        rDoc.SetDefault( SfxBoolItem( RES_ROW_SPLIT, FALSE ) );
+        rDoc.SetDefault( SfxBoolItem( RES_ROW_SPLIT, sal_False ) );
     }
     // <--
 
@@ -1081,7 +1081,7 @@ ULONG XMLReader::Read( SwDoc &rDoc, const String& rBaseURL, SwPaM &rPaM, const S
 
     // read the sections of the document, which is equal to the medium.
     // returns the count of it
-USHORT XMLReader::GetSectionList( SfxMedium& rMedium,
+sal_uInt16 XMLReader::GetSectionList( SfxMedium& rMedium,
                                     SvStrings& rStrings ) const
 {
     uno::Reference< lang::XMultiServiceFactory > xServiceFactory =

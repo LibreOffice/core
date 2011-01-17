@@ -65,7 +65,7 @@ SwPosition SwUndoField::GetPosition()
 SwUndoFieldFromDoc::SwUndoFieldFromDoc(const SwPosition & rPos,
                          const SwField & rOldField,
                          const SwField & rNewField,
-                         SwMsgPoolItem * _pHnt, BOOL _bUpdate, SwUndoId _nId)
+                         SwMsgPoolItem * _pHnt, sal_Bool _bUpdate, SwUndoId _nId)
     : SwUndoField(rPos,_nId)
     , pOldField(rOldField.CopyField())
     , pNewField(rNewField.CopyField())
@@ -90,9 +90,9 @@ void SwUndoFieldFromDoc::Undo( SwUndoIter& )
 
     if (pField)
     {
-        BOOL bUndo = pDoc->DoesUndo();
+        sal_Bool bUndo = pDoc->DoesUndo();
 
-        pDoc->DoUndo(FALSE);
+        pDoc->DoUndo(sal_False);
         pDoc->UpdateFld(pTxtFld, *pOldField, pHnt, bUpdate);
         pDoc->DoUndo(bUndo);
     }
@@ -105,9 +105,9 @@ void SwUndoFieldFromDoc::Redo( SwUndoIter& )
 
     if (pField)
     {
-        BOOL bUndo = pDoc->DoesUndo();
+        sal_Bool bUndo = pDoc->DoesUndo();
 
-        pDoc->DoUndo(FALSE);
+        pDoc->DoUndo(sal_False);
         pDoc->UpdateFld(pTxtFld, *pNewField, pHnt, bUpdate);
         SwFmtFld* pDstFmtFld = (SwFmtFld*)&pTxtFld->GetFld();
 
@@ -124,7 +124,7 @@ void SwUndoFieldFromDoc::Repeat(SwUndoIter & rIt)
 
 SwUndoFieldFromAPI::SwUndoFieldFromAPI(const SwPosition & rPos,
                                        const Any & rOldVal, const Any & rNewVal,
-                                       USHORT _nWhich)
+                                       sal_uInt16 _nWhich)
     : SwUndoField(rPos), aOldVal(rOldVal), aNewVal(rNewVal), nWhich(_nWhich)
 {
 }

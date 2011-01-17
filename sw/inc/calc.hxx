@@ -133,7 +133,7 @@ public:
 
 
     // Strings sonderbehandeln
-    BOOL GetBool() const;
+    sal_Bool GetBool() const;
     // Strings sonderbehandeln BOOLs sonderbehandeln
     double GetDouble() const;
     SwSbxValue& MakeDouble();
@@ -163,9 +163,9 @@ struct SwCalcExp : public SwHash
 };
 
 SwHash* Find( const String& rSrch, SwHash** ppTable,
-                USHORT nTblSize, USHORT* pPos = 0 );
+                sal_uInt16 nTblSize, sal_uInt16* pPos = 0 );
 
-void DeleteHashTable( SwHash** ppTable, USHORT nTblSize );
+void DeleteHashTable( SwHash** ppTable, sal_uInt16 nTblSize );
 
 // falls _CalcOp != 0, dann ist das ein gueltiger Operator
 struct _CalcOp;
@@ -190,7 +190,7 @@ class SwCalc
     const LocaleDataWrapper* pLclData;
     CharClass*  pCharClass;
 
-    USHORT      nListPor;
+    sal_uInt16      nListPor;
     SwCalcOper  eCurrOper;
     SwCalcOper  eCurrListOper;
     SwCalcError eError;
@@ -201,7 +201,7 @@ class SwCalc
     SwSbxValue  Term();
     SwSbxValue  Prim();
 
-    BOOL        ParseTime( USHORT*, USHORT*, USHORT* );
+    sal_Bool        ParseTime( sal_uInt16*, sal_uInt16*, sal_uInt16* );
 
     String  GetColumnName( const String& rName );
     String  GetDBName( const String& rName );
@@ -215,20 +215,20 @@ public:
         ~SwCalc();
 
     SwSbxValue  Calculate( const String &rStr );
-    String      GetStrResult( const SwSbxValue& rValue, BOOL bRound = TRUE );
-    String      GetStrResult( double, BOOL bRound = TRUE );
+    String      GetStrResult( const SwSbxValue& rValue, sal_Bool bRound = sal_True );
+    String      GetStrResult( double, sal_Bool bRound = sal_True );
 
     SwCalcExp*  VarInsert( const String& r );
-    SwCalcExp*  VarLook( const String &rStr, USHORT ins = 0 );
+    SwCalcExp*  VarLook( const String &rStr, sal_uInt16 ins = 0 );
     void        VarChange( const String& rStr, const SwSbxValue& rValue );
     void        VarChange( const String& rStr, double );
     SwHash**    GetVarTable()                       { return VarTable; }
 
-    BOOL        Push( const VoidPtr pPtr );
+    sal_Bool        Push( const VoidPtr pPtr );
     void        Pop( const VoidPtr pPtr );
 
     void        SetCalcError( SwCalcError eErr )    { eError = eErr; }
-    BOOL        IsCalcError() const                 { return 0 != eError; }
+    sal_Bool        IsCalcError() const                 { return 0 != eError; }
 
     static bool Str2Double( const String& rStr, xub_StrLen& rPos,
                                 double& rVal,
@@ -236,7 +236,7 @@ public:
     static bool Str2Double( const String& rStr, xub_StrLen& rPos,
                                 double& rVal, SwDoc *const pDoc );
 
-    SW_DLLPUBLIC static BOOL IsValidVarName( const String& rStr,
+    SW_DLLPUBLIC static sal_Bool IsValidVarName( const String& rStr,
                                     String* pValidName = 0 );
 };
 

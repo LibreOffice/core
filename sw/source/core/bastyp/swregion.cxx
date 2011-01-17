@@ -48,9 +48,9 @@ SV_IMPL_VARARR( SwRects, SwRect );
 |*
 |*************************************************************************/
 
-SwRegionRects::SwRegionRects( const SwRect &rStartRect, USHORT nInit,
-                                                        USHORT nGrow ) :
-    SwRects( (BYTE)nInit, (BYTE)nGrow ),
+SwRegionRects::SwRegionRects( const SwRect &rStartRect, sal_uInt16 nInit,
+                                                        sal_uInt16 nGrow ) :
+    SwRects( (sal_uInt8)nInit, (sal_uInt8)nGrow ),
     aOrigin( rStartRect )
 {
     Insert( aOrigin, 0 );
@@ -60,18 +60,18 @@ SwRegionRects::SwRegionRects( const SwRect &rStartRect, USHORT nInit,
  *                      inline InsertRect()
  *
  * InsertRect() wird nur von operator-=() gerufen.
- * Wenn bDel == TRUE ist, dann wird das Rect an der Position nPos mit
+ * Wenn bDel == sal_True ist, dann wird das Rect an der Position nPos mit
  * rRect ueberschrieben, ansonsten wird rRect hinten angehaengt.
  *************************************************************************/
 
-inline void SwRegionRects::InsertRect( const SwRect &rRect, const USHORT nPos,
-                                       BOOL &rDel )
+inline void SwRegionRects::InsertRect( const SwRect &rRect, const sal_uInt16 nPos,
+                                       sal_Bool &rDel )
 {
     if( rDel )
     {
         pData = (SwRect*)pData; // looks weird but seems to help gcc ->i78417
         *(pData+nPos) = rRect;
-        rDel = FALSE;
+        rDel = sal_False;
     }
     else
         Insert( rRect, Count() );
@@ -93,8 +93,8 @@ inline void SwRegionRects::InsertRect( const SwRect &rRect, const USHORT nPos,
 
 void SwRegionRects::operator-=( const SwRect &rRect )
 {
-    USHORT nMax = Count();
-    for ( USHORT i = 0; i < nMax; ++i )
+    sal_uInt16 nMax = Count();
+    for ( sal_uInt16 i = 0; i < nMax; ++i )
     {
         if ( rRect.IsOver( *(pData+i) ) )
         {
@@ -104,7 +104,7 @@ void SwRegionRects::operator-=( const SwRect &rRect )
 
             // Das erste Rect, das wir inserten wollen, nimmt die
             // Stelle von i ein. So ersparen wir uns das Delete().
-            BOOL bDel = TRUE;
+            sal_Bool bDel = sal_True;
 
             //Jetzt aufteilen das Teil: Es sollen diejenigen Rechtecke
             //zurueckbleiben, die im alten aber nicht im neuen liegen.
@@ -173,10 +173,10 @@ void SwRegionRects::Invert()
 
     SwRegionRects aInvRegion( aOrigin, Count()*2+2 );
     const SwRect *pDat = GetData();
-    for( USHORT i = 0; i < Count(); ++pDat, ++i )
+    for( sal_uInt16 i = 0; i < Count(); ++pDat, ++i )
         aInvRegion -= *pDat;
 
-    USHORT nCpy = Count(), nDel = 0;
+    sal_uInt16 nCpy = Count(), nDel = 0;
     if( aInvRegion.Count() < Count() )
     {
         nDel = Count() - aInvRegion.Count();
@@ -205,7 +205,7 @@ inline SwTwips CalcArea( const SwRect &rRect )
 }
 
 
-void SwRegionRects::Compress( BOOL bFuzzy )
+void SwRegionRects::Compress( sal_Bool bFuzzy )
 {
     for ( int i = 0; i < Count(); ++i )
     {
@@ -215,13 +215,13 @@ void SwRegionRects::Compress( BOOL bFuzzy )
             //uberfluessig.
             if ( (*(pData + i)).IsInside( *(pData + j) ) )
             {
-                Remove( static_cast<USHORT>(j), 1 );
+                Remove( static_cast<sal_uInt16>(j), 1 );
                 --j;
             }
             else if ( (*(pData + j)).IsInside( *(pData + i) ) )
             {
                 *(pData + i) = *(pData + j);
-                Remove( static_cast<USHORT>(j), 1 );
+                Remove( static_cast<sal_uInt16>(j), 1 );
                 i = -1;
                 break;
             }
@@ -243,7 +243,7 @@ void SwRegionRects::Compress( BOOL bFuzzy )
                      (::CalcArea( aUnion ) - CalcArea( aInter )) )
                 {
                     *(pData + i) = aUnion;
-                    Remove( static_cast<USHORT>(j), 1 );
+                    Remove( static_cast<sal_uInt16>(j), 1 );
                     i = -1;
                     break;
                 }

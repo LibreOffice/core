@@ -57,7 +57,7 @@ class SwCondCollPage : public SfxTabPage
 
     CollName*           pNms;
 
-    BOOL                bNewTemplate;
+    sal_Bool                bNewTemplate;
 
 
     SwCondCollPage(Window *pParent, const SfxItemSet &rSet);
@@ -75,12 +75,12 @@ class SwCondCollPage : public SfxTabPage
 public:
 
     static SfxTabPage *Create(Window *pParent, const SfxItemSet &rSet);
-    static USHORT* GetRanges();
+    static sal_uInt16* GetRanges();
 
-    virtual BOOL FillItemSet(      SfxItemSet &rSet);
+    virtual sal_Bool FillItemSet(      SfxItemSet &rSet);
     virtual void Reset      (const SfxItemSet &rSet);
 
-    void SetCollection( SwFmt* pFormat, BOOL bNew );
+    void SetCollection( SwFmt* pFormat, sal_Bool bNew );
 };
 
 
