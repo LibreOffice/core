@@ -269,14 +269,9 @@ public:
 
 class SalI18N_InputMethod;
 class SalI18N_KeyboardExtension;
-class XlfdStorage;
-class ExtendedFontStruct;
-class ExtendedXlfd;
 class AttributeProvider;
 class SalUnicodeConverter;
 class SalConverterCache;
-
-DECLARE_LIST( SalFontCache, ExtendedFontStruct* )
 
 extern "C" {
     struct SnDisplay;
@@ -349,8 +344,6 @@ protected:
     SalI18N_KeyboardExtension   *mpKbdExtension;
 
     AttributeProvider           *mpFactory;
-    XlfdStorage                 *mpFontList;
-    const ExtendedXlfd          *mpFallbackFactory;
 
     Display        *pDisp_;             // X Display
     int             m_nDefaultScreen;           // XDefaultScreen
@@ -374,8 +367,6 @@ protected:
     XLIB_Cursor     aPointerCache_[POINTER_COUNT];
     SalFrame*       m_pCapture;
 
-    mutable SalFontCache* m_pFontCache;
-
     // Keyboard
     BOOL            bNumLockFromXS_;    // Num Lock handled by X Server
     int             nNumLockIndex_;     // modifier index in modmap
@@ -397,7 +388,6 @@ protected:
 
     mutable XLIB_Time  m_nLastUserEventTime; // mutable because changed on first access
 
-    void            DestroyFontCache();
     virtual long    Dispatch( XEvent *pEvent ) = 0;
     void            InitXinerama();
     void            InitRandR( XLIB_Window aRoot ) const;
@@ -405,7 +395,7 @@ protected:
     int             processRandREvent( XEvent* );
 
     void            doDestruct();
-    void            addXineramaScreenUnique( long i_nX, long i_nY, long i_nWidth, long i_nHeight );
+    int             addXineramaScreenUnique( long i_nX, long i_nY, long i_nWidth, long i_nHeight );
 public:
     static  SalDisplay     *GetSalDisplay( Display* display );
     static  BOOL            BestVisual( Display     *pDisp,
@@ -433,14 +423,6 @@ public:
 
     void            PrintEvent( const ByteString &rComment,
                                 XEvent       *pEvent ) const;
-
-    XlfdStorage*    GetXlfdList() const;
-    ExtendedFontStruct*
-    GetFont( const ExtendedXlfd *pFont,
-             const Size& rPixelSize, sal_Bool bVertical ) const;
-    const ExtendedXlfd*
-    GetFallbackFactory()
-    { return mpFallbackFactory; }
 
     void            Beep() const;
 
@@ -475,6 +457,7 @@ public:
     XLIB_Window     GetDrawable( int nScreen ) const { return getDataForScreen( nScreen ).m_aRefWindow; }
     Display        *GetDisplay() const { return pDisp_; }
     int             GetDefaultScreenNumber() const { return m_nDefaultScreen; }
+    virtual int     GetDefaultMonitorNumber() const { return 0; }
     const Size&     GetScreenSize( int nScreen ) const { return getDataForScreen( nScreen ).m_aSize; }
     srv_vendor_t    GetServerVendor() const { return meServerVendor; }
     void            SetServerVendor() { meServerVendor = sal_GetServerVendor(pDisp_); }

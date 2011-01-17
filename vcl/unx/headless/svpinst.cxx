@@ -38,7 +38,7 @@
 
 #include <vcl/salframe.hxx>
 #include <vcl/svdata.hxx>
-#include <vcl/salatype.hxx>
+#include <vcl/apptypes.hxx>
 #include <vcl/saldatabasic.hxx>
 #include <sal/types.h>
 
@@ -327,6 +327,19 @@ void SvpSalInstance::AcquireYieldMutex( ULONG nCount )
     }
 }
 
+bool SvpSalInstance::CheckYieldMutex()
+{
+    bool bRet = true;
+
+    if ( m_aYieldMutex.GetThreadId() !=
+         vos::OThread::getCurrentIdentifier() )
+    {
+        bRet = false;
+    }
+
+    return bRet;
+}
+
 void SvpSalInstance::Yield( bool bWait, bool bHandleAllCurrentEvents )
 {
     // first, check for already queued events.
@@ -417,24 +430,6 @@ bool SvpSalInstance::AnyInput( USHORT nType )
     if( (nType & INPUT_TIMER) != 0 )
         return CheckTimeout( false );
     return false;
-}
-
-SalMenu* SvpSalInstance::CreateMenu( BOOL )
-{
-    return NULL;
-}
-
-void SvpSalInstance::DestroyMenu( SalMenu* )
-{
-}
-
-SalMenuItem* SvpSalInstance::CreateMenuItem( const SalItemParams* )
-{
-    return NULL;
-}
-
-void SvpSalInstance::DestroyMenuItem( SalMenuItem* )
-{
 }
 
 SalSession* SvpSalInstance::CreateSalSession()

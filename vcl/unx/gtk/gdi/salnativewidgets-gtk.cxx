@@ -411,6 +411,9 @@ void GtkData::initNWF( void )
     // open first menu on F10
     pSVData->maNWFData.mbOpenMenuOnF10 = true;
 
+    // omit GetNativeControl while painting (see brdwin.cxx)
+    pSVData->maNWFData.mbCanDrawWidgetAnySize = true;
+
     int nScreens = GetX11SalData()->GetDisplay()->GetScreenCount();
     gWidgetData = std::vector<NWFWidgetData>( nScreens );
     for( int i = 0; i < nScreens; i++ )
@@ -734,7 +737,7 @@ BOOL GtkSalGraphics::drawNativeControl( ControlType nType,
 {
     BOOL            returnVal = FALSE;
     // get a GC with current clipping region set
-    SelectFont();
+    GetFontGC();
 
 
     // theme changed ?
@@ -3684,7 +3687,8 @@ GdkPixmap* GtkSalGraphics::NWGetPixmapFromScreen( Rectangle srcRect )
 BOOL GtkSalGraphics::NWRenderPixmapToScreen( GdkPixmap* pPixmap, Rectangle dstRect )
 {
     // The GC can't be null, otherwise we'd have no clip region
-    if( SelectFont() == NULL )
+    GC aFontGC = GetFontGC();
+    if( aFontGC == NULL )
     {
         std::fprintf(stderr, "salnativewidgets.cxx: no valid GC\n" );
         return( FALSE );
@@ -3699,7 +3703,7 @@ BOOL GtkSalGraphics::NWRenderPixmapToScreen( GdkPixmap* pPixmap, Rectangle dstRe
               gdk_screen_get_number( gdk_drawable_get_screen( GDK_DRAWABLE(pPixmap) ) ),
               gdk_drawable_get_depth( GDK_DRAWABLE(pPixmap) ),
               GetDrawable(), m_nScreen, GetVisual().GetDepth(),
-              SelectFont(),
+              aFontGC,
               0, 0, dstRect.GetWidth(), dstRect.GetHeight(), dstRect.Left(), dstRect.Top() );
 
     return( TRUE );

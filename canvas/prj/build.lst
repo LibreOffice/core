@@ -1,4 +1,4 @@
-cv	canvas	:	javaunohelper comphelper cppuhelper offuh unoil tools svtools vcl AGG:agg basegfx CAIRO:cairo NULL
+cv	canvas	:	javaunohelper comphelper cppuhelper offuh unoil tools svtools vcl AGG:agg basegfx CAIRO:cairo LIBXSLT:libxslt NULL
 cv	canvas											 usr1	-	all	cv_mkout NULL
 cv	canvas\inc										 nmake	-	all	cv_inc NULL
 cv	canvas\source\tools								 nmake	-	all cv_tools cv_inc NULL

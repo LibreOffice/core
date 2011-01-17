@@ -304,8 +304,8 @@ public:
     void                SetHelpCommand( USHORT nItemId, const XubString& rString );
     const XubString&    GetHelpCommand( USHORT nItemId ) const;
 
-    void                SetHelpId( USHORT nItemId, ULONG nHelpId );
-    ULONG               GetHelpId( USHORT nItemId ) const;
+    void                SetHelpId( USHORT nItemId, const rtl::OString& rHelpId );
+    rtl::OString        GetHelpId( USHORT nItemId ) const;
 
     void                SetActivateHdl( const Link& rLink )     { aActivateHdl = rLink; }
     const Link&         GetActivateHdl() const                  { return aActivateHdl; }

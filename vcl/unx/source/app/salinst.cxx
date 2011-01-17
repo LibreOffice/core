@@ -45,7 +45,7 @@
 #include "sm.hxx"
 
 #include "vcl/salwtype.hxx"
-#include "vcl/salatype.hxx"
+#include "vcl/apptypes.hxx"
 #include "vcl/helper.hxx"
 #include <tools/solarmutex.hxx>
 #include "vos/mutex.hxx"
@@ -258,6 +258,24 @@ void X11SalInstance::AcquireYieldMutex( ULONG nCount )
         nCount--;
     }
 }
+
+// -----------------------------------------------------------------------
+
+bool X11SalInstance::CheckYieldMutex()
+{
+    bool bRet = true;
+
+    SalYieldMutex* pYieldMutex = mpSalYieldMutex;
+    if ( pYieldMutex->GetThreadId() !=
+         vos::OThread::getCurrentIdentifier() )
+    {
+        bRet = false;
+    }
+
+    return bRet;
+}
+
+// -----------------------------------------------------------------------
 
 void X11SalInstance::Yield( bool bWait, bool bHandleAllCurrentEvents )
 { GetX11SalData()->GetLib()->Yield( bWait, bHandleAllCurrentEvents ); }

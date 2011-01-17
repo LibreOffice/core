@@ -48,8 +48,8 @@
 #include <com/sun/star/document/XDocumentProperties.hpp>
 
 #include <svtools/parhtml.hxx>
-#include "htmltokn.h"
-#include "htmlkywd.hxx"
+#include <svtools/htmltokn.h>
+#include <svtools/htmlkywd.hxx>
 
 
 using namespace ::com::sun::star;

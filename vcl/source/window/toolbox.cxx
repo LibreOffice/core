@@ -4820,15 +4820,15 @@ const XubString& ToolBox::ImplGetHelpText( USHORT nItemId ) const
 
     if ( pItem )
     {
-        if ( !pItem->maHelpText.Len() && ( pItem->mnHelpId || pItem->maCommandStr.Len() ))
+        if ( !pItem->maHelpText.Len() && ( pItem->maHelpId.getLength() || pItem->maCommandStr.Len() ))
         {
             Help* pHelp = Application::GetHelp();
             if ( pHelp )
             {
                 if ( pItem->maCommandStr.Len() )
                     pItem->maHelpText = pHelp->GetHelpText( pItem->maCommandStr, this );
-                if ( !pItem->maHelpText.Len() && pItem->mnHelpId )
-                    pItem->maHelpText = pHelp->GetHelpText( pItem->mnHelpId, this );
+                if ( !pItem->maHelpText.Len() && pItem->maHelpId.getLength() )
+                    pItem->maHelpText = pHelp->GetHelpText( rtl::OStringToOUString( pItem->maHelpId, RTL_TEXTENCODING_UTF8 ), this );
             }
         }
 
@@ -4894,9 +4894,9 @@ void ToolBox::RequestHelp( const HelpEvent& rHEvt )
         else if ( rHEvt.GetMode() & HELPMODE_EXTENDED )
         {
             String aCommand = GetItemCommand( nItemId );
-            ULONG  nHelpId  = GetHelpId( nItemId );
+            rtl::OString  aHelpId( GetHelpId( nItemId ) );
 
-            if ( aCommand.Len() || nHelpId )
+            if ( aCommand.Len() || aHelpId.getLength() )
             {
                 // Wenn eine Hilfe existiert, dann ausloesen
                 Help* pHelp = Application::GetHelp();
@@ -4904,8 +4904,8 @@ void ToolBox::RequestHelp( const HelpEvent& rHEvt )
                 {
                     if ( aCommand.Len() )
                         pHelp->Start( aCommand, this );
-                    else if ( nHelpId )
-                        pHelp->Start( nHelpId, this );
+                    else if ( aHelpId.getLength() )
+                        pHelp->Start( rtl::OStringToOUString( aHelpId, RTL_TEXTENCODING_UTF8 ), this );
                 }
                 return;
             }

@@ -375,11 +375,6 @@ sal_GetServerVendor( Display *p_display )
         { vendor_none,        NULL,                               0 },
     };
 
-#ifdef _USE_PRINT_EXTENSION_
-    if ( ! XSalIsDisplay( p_display ) )
-        return vendor_xprinter;
-#endif
-
     // handle regular server vendors
     char     *p_name   = ServerVendor( p_display );
     vendor_t *p_vendor;
@@ -508,7 +503,6 @@ BOOL SalDisplay::BestVisual( Display     *pDisplay,
 
 SalDisplay::SalDisplay( Display *display ) :
         mpInputMethod( NULL ),
-        mpFallbackFactory ( NULL ),
         pDisp_( display ),
         m_pWMAdaptor( NULL ),
         m_pDtIntegrator( NULL ),
@@ -557,7 +551,6 @@ void SalDisplay::doDestruct()
     m_pDtIntegrator = NULL;
     X11SalBitmap::ImplDestroyCache();
     X11SalGraphics::releaseGlyphPeer();
-    DestroyFontCache();
 
     if( IsDisplay() )
     {
@@ -814,8 +807,6 @@ void SalDisplay::Init()
     eWindowManager_     = otherwm;
     nProperties_        = PROPERTY_DEFAULT;
     hEventGuard_        = NULL;
-    m_pFontCache        = NULL;
-    mpFontList          = (XlfdStorage*)NULL;
     mpFactory           = (AttributeProvider*)NULL;
     m_pCapture          = NULL;
     m_bXinerama         = false;
@@ -2575,6 +2566,7 @@ void SalDisplay::PrintInfo() const
             fprintf( stderr, "\tProperties        \t0x%lX\n", GetProperties() );
         if( eWindowManager_ != otherwm )
             fprintf( stderr, "\tWindowmanager     \t%d\n", eWindowManager_ );
+        fprintf( stderr, "\tWMName            \t%s\n", rtl::OUStringToOString( getWMAdaptor()->getWindowManagerName(), osl_getThreadTextEncoding() ).getStr() );
     }
     fprintf( stderr, "Screen\n" );
     fprintf( stderr, "\tResolution/Size   \t%ld*%ld %ld*%ld %.1lf\"\n",
@@ -2592,7 +2584,7 @@ void SalDisplay::PrintInfo() const
              sal::static_int_cast< unsigned int >(GetVisual(m_nDefaultScreen).GetVisualId()) );
 }
 
-void SalDisplay::addXineramaScreenUnique( long i_nX, long i_nY, long i_nWidth, long i_nHeight )
+int SalDisplay::addXineramaScreenUnique( long i_nX, long i_nY, long i_nWidth, long i_nHeight )
 {
     // see if any frame buffers are at the same coordinates
     // this can happen with weird configuration e.g. on
@@ -2608,10 +2600,11 @@ void SalDisplay::addXineramaScreenUnique( long i_nX, long i_nY, long i_nWidth, l
             {
                 m_aXineramaScreens[n].SetSize( Size( i_nWidth, i_nHeight ) );
             }
-            return;
+            return (int)n;
         }
     }
     m_aXineramaScreens.push_back( Rectangle( Point( i_nX, i_nY ), Size( i_nWidth, i_nHeight ) ) );
+    return (int)m_aXineramaScreens.size()-1;
 }
 
 void SalDisplay::InitXinerama()

@@ -31,12 +31,11 @@
 #define _SVT_UNOIFACE_CXX
 #include <tools/debug.hxx>
 #include <vcl/svapp.hxx>
-
 #include <svtools/svmedit.hxx>
 #include <unoiface.hxx>
-#include "filedlg.hxx"
-#include "filectrl.hxx"
-#include "roadmap.hxx"
+#include <svtools/filedlg.hxx>
+#include <svtools/filectrl.hxx>
+#include <svtools/roadmap.hxx>
 #include <svtools/fixedhyper.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
@@ -46,9 +45,8 @@
 #include <toolkit/helper/property.hxx>
 #include <svtools/fmtfield.hxx>
 #include <svl/numuno.hxx>
-#include <calendar.hxx>
-#include <prgsbar.hxx>
-
+#include <svtools/calendar.hxx>
+#include <svtools/prgsbar.hxx>
 #include <svtools/svtreebx.hxx>
 #include "treecontrolpeer.hxx"
 #include "svtxgridcontrol.hxx"

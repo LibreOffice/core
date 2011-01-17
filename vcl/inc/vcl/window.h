@@ -38,7 +38,7 @@
 #ifndef _SV_POINTR_HXX
 #include <vcl/pointr.hxx>
 #endif
-#include <vcl/wintypes.hxx>
+#include <tools/wintypes.hxx>
 #include <vcl/vclevent.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <cppuhelper/weakref.hxx>
@@ -56,7 +56,6 @@ class VirtualDevice;
 class Cursor;
 class ImplDevFontList;
 class ImplFontCache;
-class SmartId;
 class VCLXWindow;
 class SalFrame;
 class SalObject;
@@ -99,10 +98,24 @@ namespace dnd {
     class XDropTarget;
 } } } } }
 
-namespace vcl { struct ControlLayoutData; }
+namespace vcl {
+    struct ControlLayoutData;
+    struct ExtWindowImpl;
+}
 
 
+// --------------
+// - Prototypes -
+// --------------
 
+long ImplWindowFrameProc( Window* pInst, SalFrame* pFrame, USHORT nEvent, const void* pEvent );
+
+// -----------
+// - HitTest -
+// -----------
+
+#define WINDOW_HITTEST_INSIDE           ((USHORT)0x0001)
+#define WINDOW_HITTEST_TRANSPARENT      ((USHORT)0x0002)
 
 // ---------------
 // - ImplWinData -
@@ -120,8 +133,6 @@ struct ImplWinData
     USHORT              mnIsTopWindow;
     BOOL                mbMouseOver;          // tracks mouse over for native widget paint effect
     BOOL                mbEnableNativeWidget; // toggle native widget rendering
-    SmartId*            mpSmartHelpId;
-    SmartId*            mpSmartUniqueId;
     ::std::list< Window* >
                         maTopWindowChildren;
 };
@@ -239,6 +250,7 @@ public:
 
     ImplDelData*        mpFirstDel;
     void*               mpUserData;
+    vcl::ExtWindowImpl* mpExtImpl;
     Cursor*             mpCursor;
     Pointer             maPointer;
     Fraction            maZoom;
@@ -254,8 +266,8 @@ public:
     long                mnY;
     long                mnAbsScreenX;
     Point               maPos;
-    ULONG               mnHelpId;
-    ULONG               mnUniqId;
+    rtl::OString        maHelpId;
+    rtl::OString        maUniqId;
     XubString           maHelpText;
     XubString           maQuickHelpText;
     InputContext        maInputContext;
@@ -355,7 +367,8 @@ public:
                         mbDisableAccessibleLabelForRelation:1,
                         mbDisableAccessibleLabeledByRelation:1,
                         mbHelpTextDynamic:1,
-                        mbFakeFocusSet:1;
+                        mbFakeFocusSet:1,
+                        mbInterceptChildWindowKeyDown:1;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > mxDNDListenerContainer;
 };

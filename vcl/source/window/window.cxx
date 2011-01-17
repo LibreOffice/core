@@ -35,7 +35,6 @@
 #include "vcl/salinst.hxx"
 #include "vcl/salgtype.hxx"
 #include "vcl/salgdi.hxx"
-#include "vcl/salctrlhandle.hxx"
 
 #include "vcl/unohelp.hxx"
 #include "tools/time.hxx"
@@ -44,7 +43,6 @@
 #include "tools/rc.h"
 #endif
 #include "vcl/svdata.hxx"
-#include "vcl/windata.hxx"
 #include "vcl/dbggui.hxx"
 #include "vcl/outfont.hxx"
 #include "vcl/outdev.h"
@@ -68,6 +66,7 @@
 #include "unotools/fontcfg.hxx"
 #include "vcl/sysdata.hxx"
 #include "vcl/sallayout.hxx"
+#include "vcl/salctype.hxx"
 #include "vcl/button.hxx" // Button::GetStandardText
 #include "vcl/taskpanelist.hxx"
 #include "com/sun/star/awt/XWindowPeer.hpp"
@@ -90,7 +89,6 @@
 #include "vcl/unowrap.hxx"
 #include "vcl/dndlcon.hxx"
 #include "vcl/dndevdis.hxx"
-#include "vcl/impbmpconv.hxx"
 #include "unotools/confignode.hxx"
 #include "vcl/gdimtf.hxx"
 
@@ -270,19 +268,41 @@ bool Window::ImplCheckUIFont( const Font& rFont )
     if( ImplGetSVData()->maGDIData.mbNativeFontConfig )
         return true;
 
+    // create a text string using the localized text of important buttons
     String aTestText;
-    aTestText.Append( Button::GetStandardText( BUTTON_OK ) );
-    aTestText.Append( Button::GetStandardText( BUTTON_CANCEL ) );
-    aTestText.Append( Button::GetStandardText( BUTTON_YES ) );
-    aTestText.Append( Button::GetStandardText( BUTTON_NO ) );
-    aTestText.Append( Button::GetStandardText( BUTTON_RETRY ) );
-    aTestText.Append( Button::GetStandardText( BUTTON_HELP ) );
-    aTestText.Append( Button::GetStandardText( BUTTON_CLOSE ) );
-    aTestText.Append( Button::GetStandardText( BUTTON_MORE ) );
-    aTestText.Append( Button::GetStandardText( BUTTON_LESS ) );
-    aTestText.Append( Button::GetStandardText( BUTTON_ABORT ) );
+    static const StandardButtonType aTestButtons[] =
+    {
+        BUTTON_OK, BUTTON_CANCEL, BUTTON_CLOSE, BUTTON_ABORT,
+        BUTTON_YES, BUTTON_NO, BUTTON_MORE, BUTTON_IGNORE,
+        BUTTON_RETRY, BUTTON_HELP
+    };
 
-    return HasGlyphs( rFont, aTestText ) >= aTestText.Len();
+    const int nTestButtonCount = sizeof(aTestButtons)/sizeof(*aTestButtons);
+    for( int n = 0; n < nTestButtonCount; ++n )
+    {
+        String aButtonStr = Button::GetStandardText( aTestButtons[n] );
+        // #i115432# ignore mnemonic+accelerator part of each string
+        // TODO: use a string filtering method when it becomes available
+        const int nLen = aButtonStr.Len();
+        bool bInside = false;
+        for( int i = 0; i < nLen; ++i ) {
+            const sal_Unicode c = aButtonStr.GetChar( i );
+            if( (c == '('))
+                bInside = true;
+            if( (c == ')'))
+                bInside = false;
+            if( (c == '~')
+            ||  (c == '(') || (c == ')')
+            || ((c >= 'A') && (c <= 'Z') && bInside) )
+                aButtonStr.SetChar( i, ' ' );
+        }
+        // append sanitized button text to test string
+        aTestText.Append( aButtonStr );
+    }
+
+    const int nFirstChar = HasGlyphs( rFont, aTestText );
+    const bool bUIFontOk = (nFirstChar >= aTestText.Len());
+    return bUIFontOk;
 }
 
 // -----------------------------------------------------------------------
@@ -295,6 +315,8 @@ void Window::ImplUpdateGlobalSettings( AllSettings& rSettings, BOOL bCallHdl )
     aTmpSt.SetHighContrastMode( FALSE );
     rSettings.SetStyleSettings( aTmpSt );
     ImplGetFrame()->UpdateSettings( rSettings );
+    // reset default border width for layouters
+    ImplGetSVData()->maAppData.mnDefaultLayoutBorder = -1;
 
     // Verify availability of the configured UI font, otherwise choose "Andale Sans UI"
     String aUserInterfaceFont;
@@ -599,6 +621,7 @@ void Window::ImplInitWindowData( WindowType nType )
     mpWindowImpl->mpDlgCtrlDownWindow = NULL;         // window for dialog control
     mpWindowImpl->mpFirstDel          = NULL;         // Dtor notification list
     mpWindowImpl->mpUserData          = NULL;         // user data
+    mpWindowImpl->mpExtImpl           = NULL;         // extended implementation data
     mpWindowImpl->mpCursor            = NULL;         // cursor
     mpWindowImpl->mpControlFont       = NULL;         // font propertie
     mpWindowImpl->mpVCLXWindow        = NULL;
@@ -612,8 +635,6 @@ void Window::ImplInitWindowData( WindowType nType )
     mpWindowImpl->mnX                 = 0;            // X-Position to Parent
     mpWindowImpl->mnY                 = 0;            // Y-Position to Parent
     mpWindowImpl->mnAbsScreenX        = 0;            // absolute X-position on screen, used for RTL window positioning
-    mpWindowImpl->mnHelpId            = 0;            // help id
-    mpWindowImpl->mnUniqId            = 0;            // unique id
     mpWindowImpl->mpChildClipRegion   = NULL;         // Child-Clip-Region when ClipChildren
     mpWindowImpl->mpPaintRegion       = NULL;         // Paint-ClipRegion
     mpWindowImpl->mnStyle             = 0;            // style (init in ImplInitWindow)
@@ -1131,6 +1152,8 @@ void Window::ImplCallResize()
     // #88419# Most classes don't call the base class in Resize() and Move(),
     // => Call ImpleResize/Move instead of Resize/Move directly...
     ImplCallEventListeners( VCLEVENT_WINDOW_RESIZE );
+
+    ImplExtResize();
 }
 
 // -----------------------------------------------------------------------
@@ -1179,20 +1202,14 @@ void Window::ImplCallMove()
 
 // -----------------------------------------------------------------------
 
-static ULONG ImplAutoHelpID( ResMgr* pResMgr )
+static rtl::OString ImplAutoHelpID( ResMgr* pResMgr )
 {
-    if ( !Application::IsAutoHelpIdEnabled() )
-        return 0;
+    rtl::OString aRet;
 
-    ULONG nHID = 0;
+    if( pResMgr && Application::IsAutoHelpIdEnabled() )
+        aRet = pResMgr->GetAutoHelpId();
 
-    DBG_ASSERT( pResMgr, "No res mgr for auto help id" );
-    if( ! pResMgr )
-        return 0;
-
-    nHID = pResMgr->GetAutoHelpId();
-
-    return nHID;
+    return aRet;
 }
 
 // -----------------------------------------------------------------------
@@ -1212,22 +1229,23 @@ WinBits Window::ImplInitRes( const ResId& rResId )
 
 void Window::ImplLoadRes( const ResId& rResId )
 {
-    // newer move this line after IncrementRes
-    char* pRes = (char*)GetClassRes();
-    pRes += 12;
-    sal_uInt32 nHelpId = (sal_uInt32)GetLongRes( (void*)pRes );
-    if ( !nHelpId )
-        nHelpId = ImplAutoHelpID( rResId.GetResMgr() );
-    SetHelpId( nHelpId );
-
     ULONG nObjMask = ReadLongRes();
+
+    // we need to calculate auto helpids before the resource gets closed
+    // if the resource  only contains flags, it will be closed before we try to read a help id
+    // so we always create an auto help id that might be overwritten later
+    // HelpId
+    rtl::OString aHelpId = ImplAutoHelpID( rResId.GetResMgr() );
 
     // ResourceStyle
     ULONG nRSStyle = ReadLongRes();
     // WinBits
     ReadLongRes();
-    // HelpId
-    ReadLongRes();
+
+    if( nObjMask & WINDOW_HELPID )
+        aHelpId = ReadByteStringRes();
+
+    SetHelpId( aHelpId );
 
     BOOL  bPos  = FALSE;
     BOOL  bSize = FALSE;
@@ -1294,7 +1312,7 @@ void Window::ImplLoadRes( const ResId& rResId )
     if ( nObjMask & WINDOW_EXTRALONG )
         SetData( (void*)ReadLongRes() );
     if ( nObjMask & WINDOW_UNIQUEID )
-        SetUniqueId( (ULONG)ReadLongRes() );
+        SetUniqueId( ReadByteStringRes() );
 
     if ( nObjMask & WINDOW_BORDER_STYLE )
     {
@@ -1322,8 +1340,6 @@ ImplWinData* Window::ImplGetWinData() const
         mpWindowImpl->mpWinData->mnIsTopWindow  = (USHORT) ~0;  // not initialized yet, 0/1 will indicate TopWindow (see IsTopWindow())
         mpWindowImpl->mpWinData->mbMouseOver      = FALSE;
         mpWindowImpl->mpWinData->mbEnableNativeWidget = (pNoNWF && *pNoNWF) ? FALSE : TRUE; // TRUE: try to draw this control with native theme API
-        mpWindowImpl->mpWinData->mpSmartHelpId    = NULL;
-        mpWindowImpl->mpWinData->mpSmartUniqueId  = NULL;
    }
 
     return mpWindowImpl->mpWinData;
@@ -4351,6 +4367,8 @@ namespace
 
 Window::~Window()
 {
+    ImplFreeExtWindowImpl();
+
     vcl::LazyDeletor<Window>::Undelete( this );
 
     DBG_DTOR( Window, ImplDbgCheckWindow );
@@ -4734,10 +4752,6 @@ Window::~Window()
             delete mpWindowImpl->mpWinData->mpFocusRect;
         if ( mpWindowImpl->mpWinData->mpTrackRect )
             delete mpWindowImpl->mpWinData->mpTrackRect;
-        if ( mpWindowImpl->mpWinData->mpSmartHelpId )
-            delete mpWindowImpl->mpWinData->mpSmartHelpId;
-        if ( mpWindowImpl->mpWinData->mpSmartUniqueId )
-            delete mpWindowImpl->mpWinData->mpSmartUniqueId;
 
         delete mpWindowImpl->mpWinData;
     }
@@ -4789,6 +4803,13 @@ void Window::doLazyDelete()
         SetParent( ImplGetDefaultWindow() );
     }
     vcl::LazyDeletor<Window>::Delete( this );
+}
+
+// -----------------------------------------------------------------------
+void Window::InterceptChildWindowKeyDown( sal_Bool bIntercept )
+{
+    if( mpWindowImpl->mpSysObj )
+        mpWindowImpl->mpSysObj->InterceptChildWindowKeyDown( bIntercept );
 }
 
 // -----------------------------------------------------------------------
@@ -4871,6 +4892,12 @@ void Window::Paint( const Rectangle& rRect )
     }
 
     ImplCallEventListeners( VCLEVENT_WINDOW_PAINT, (void*)&rRect );
+}
+
+// -----------------------------------------------------------------------
+
+void Window::PostPaint()
+{
 }
 
 // -----------------------------------------------------------------------
@@ -4979,29 +5006,18 @@ void Window::RequestHelp( const HelpEvent& rHEvt )
     }
     else
     {
-        SmartId aSmartId = GetSmartHelpId();
-
-        ULONG nNumHelpId = 0;
-        String aStrHelpId;
-        if( aSmartId.HasString() )
-            aStrHelpId = aSmartId.GetStr();
-        if( aSmartId.HasNumeric() )
-            nNumHelpId = aSmartId.GetNum();
-
-        if ( !nNumHelpId && aStrHelpId.Len() == 0 && ImplGetParent() )
+        String aStrHelpId( rtl::OStringToOUString( GetHelpId(), RTL_TEXTENCODING_UTF8 ) );
+        if ( aStrHelpId.Len() == 0 && ImplGetParent() )
             ImplGetParent()->RequestHelp( rHEvt );
         else
         {
-            if ( !nNumHelpId && aStrHelpId.Len() == 0 )
-                nNumHelpId = OOO_HELP_INDEX;
-
             Help* pHelp = Application::GetHelp();
             if ( pHelp )
             {
                 if( aStrHelpId.Len() > 0 )
                     pHelp->Start( aStrHelpId, this );
                 else
-                    pHelp->Start( nNumHelpId, this );
+                    pHelp->Start( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OOO_HELP_INDEX ) ), this );
             }
         }
     }
@@ -8130,32 +8146,22 @@ const XubString& Window::GetHelpText() const
 {
     DBG_CHKTHIS( Window, ImplDbgCheckWindow );
 
-    SmartId aSmartId = GetSmartHelpId();
-
-    ULONG nNumHelpId = 0;
-    String aStrHelpId;
-    if( aSmartId.HasString() )
-        aStrHelpId = aSmartId.GetStr();
-    if( aSmartId.HasNumeric() )
-        nNumHelpId = aSmartId.GetNum();
+    String aStrHelpId( rtl::OStringToOUString( GetHelpId(), RTL_TEXTENCODING_UTF8 ) );
     bool bStrHelpId = (aStrHelpId.Len() > 0);
 
-    if ( !mpWindowImpl->maHelpText.Len() && (nNumHelpId || bStrHelpId) )
+    if ( !mpWindowImpl->maHelpText.Len() && bStrHelpId )
     {
         if ( !IsDialog() && (mpWindowImpl->mnType != WINDOW_TABPAGE) && (mpWindowImpl->mnType != WINDOW_FLOATINGWINDOW) )
         {
             Help* pHelp = Application::GetHelp();
             if ( pHelp )
             {
-                if( bStrHelpId )
-                    ((Window*)this)->mpWindowImpl->maHelpText = pHelp->GetHelpText( aStrHelpId, this );
-                else
-                    ((Window*)this)->mpWindowImpl->maHelpText = pHelp->GetHelpText( nNumHelpId, this );
+                ((Window*)this)->mpWindowImpl->maHelpText = pHelp->GetHelpText( aStrHelpId, this );
                 mpWindowImpl->mbHelpTextDynamic = FALSE;
             }
         }
     }
-    else if( mpWindowImpl->mbHelpTextDynamic && (nNumHelpId || bStrHelpId) )
+    else if( mpWindowImpl->mbHelpTextDynamic && bStrHelpId )
     {
         static const char* pEnv = getenv( "HELP_DEBUG" );
         if( pEnv && *pEnv )
@@ -8163,10 +8169,7 @@ const XubString& Window::GetHelpText() const
             rtl::OUStringBuffer aTxt( 64+mpWindowImpl->maHelpText.Len() );
             aTxt.append( mpWindowImpl->maHelpText );
             aTxt.appendAscii( "\n------------------\n" );
-            if( bStrHelpId )
-                aTxt.append( rtl::OUString( aStrHelpId ) );
-            else
-                aTxt.append( sal_Int32( nNumHelpId ) );
+            aTxt.append( rtl::OUString( aStrHelpId ) );
             mpWindowImpl->maHelpText = aTxt.makeStringAndClear();
         }
         mpWindowImpl->mbHelpTextDynamic = FALSE;
@@ -9401,7 +9404,7 @@ void Window::DrawSelectionBackground( const Rectangle& rRect,
         if( bDark )
             aSelectionFillCol = COL_BLACK;
         else
-            nPercent = bRoundEdges ? 90 : 80;  // just checked (light)
+            nPercent = 80;  // just checked (light)
     }
     else
     {
@@ -9416,7 +9419,7 @@ void Window::DrawSelectionBackground( const Rectangle& rRect,
                 nPercent = 0;
             }
             else
-                nPercent = bRoundEdges ? 50 : 20;          // selected, pressed or checked ( very dark )
+                nPercent = bRoundEdges ? 40 : 20;          // selected, pressed or checked ( very dark )
         }
         else if( bChecked || highlight == 1 )
         {
@@ -9429,7 +9432,7 @@ void Window::DrawSelectionBackground( const Rectangle& rRect,
                 nPercent = 0;
             }
             else
-                nPercent = bRoundEdges ? 70 : 35;          // selected, pressed or checked ( very dark )
+                nPercent = bRoundEdges ? 60 : 35;          // selected, pressed or checked ( very dark )
         }
         else
         {
@@ -9445,7 +9448,7 @@ void Window::DrawSelectionBackground( const Rectangle& rRect,
                     nPercent = 0;
             }
             else
-                nPercent = bRoundEdges ? 80 : 70;          // selected ( dark )
+                nPercent = 70;          // selected ( dark )
         }
     }
 
@@ -9733,11 +9736,14 @@ Reference< rendering::XCanvas > Window::ImplGetCanvas( const Size& rFullscreenSi
     // =========================================
     if ( xFactory.is() )
     {
-        static Reference<lang::XMultiServiceFactory> xCanvasFactory(
-            xFactory->createInstance(
-                OUString( RTL_CONSTASCII_USTRINGPARAM(
-                              "com.sun.star."
-                              "rendering.CanvasFactory") ) ), UNO_QUERY );
+        static ::vcl::DeleteUnoReferenceOnDeinit<XMultiServiceFactory> xStaticCanvasFactory(
+            Reference<XMultiServiceFactory>(
+                xFactory->createInstance(
+                    OUString( RTL_CONSTASCII_USTRINGPARAM(
+                            "com.sun.star.rendering.CanvasFactory") ) ),
+                UNO_QUERY ));
+        uno::Reference<XMultiServiceFactory> xCanvasFactory(xStaticCanvasFactory.get());
+
         if(xCanvasFactory.is())
         {
 #ifdef WNT

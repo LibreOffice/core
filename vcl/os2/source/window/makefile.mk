@@ -40,7 +40,7 @@ CXXFILES__YD=	salframe.cxx			\
             salobj.cxx 
 
 SLOFILES=	$(SLO)$/salframe.obj 	\
-            $(SLO)$/salobj.obj $(SLO)$/salmenu.obj
+            $(SLO)$/salobj.obj
 
 # --- Targets ------------------------------------------------------
 

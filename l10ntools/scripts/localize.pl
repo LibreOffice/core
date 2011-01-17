@@ -175,8 +175,9 @@ sub splitfile{
         exit( -1 );
     }
     my $src_root = $ENV{SOURCE_ROOT_DIR};
+    my $ooo_src_root = $ENV{SRC_ROOT};
     my $so_l10n_path  = $src_root."/sun/l10n_so/source";
-    my $ooo_l10n_path = $src_root."/ooo/l10n/source";
+    my $ooo_l10n_path = $ooo_src_root."/l10n/source";
 
     #print "$so_l10n_path\n";
     #print "$ooo_l10n_path\n";

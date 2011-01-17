@@ -63,14 +63,9 @@ private:
     long                mnMaxPageWidth;
     USHORT              mnActPageId;
     USHORT              mnCurPageId;
-    USHORT              mnFirstPagePos;
-    USHORT              mnLastFirstPagePos;
     BOOL                mbFormat;
     BOOL                mbRestoreHelpId;
     BOOL                mbRestoreUnqId;
-    BOOL                mbSingleLine;
-    BOOL                mbScroll;
-    BOOL                mbRestoreSmartId;
     BOOL                mbSmallInvalidate;
     BOOL                mbExtraSpace;
     Link                maActivateHdl;
@@ -79,22 +74,17 @@ private:
     using Control::ImplInitSettings;
     SAL_DLLPRIVATE void         ImplInitSettings( BOOL bFont, BOOL bForeground, BOOL bBackground );
     SAL_DLLPRIVATE ImplTabItem* ImplGetItem( USHORT nId ) const;
-    SAL_DLLPRIVATE void         ImplScrollBtnsColor();
-    SAL_DLLPRIVATE void         ImplSetScrollBtnsState();
-    SAL_DLLPRIVATE void         ImplPosScrollBtns();
     SAL_DLLPRIVATE Size         ImplGetItemSize( ImplTabItem* pItem, long nMaxWidth );
     SAL_DLLPRIVATE Rectangle    ImplGetTabRect( USHORT nPos, long nWidth = -1, long nHeight = -1 );
     SAL_DLLPRIVATE void         ImplChangeTabPage( USHORT nId, USHORT nOldId );
     SAL_DLLPRIVATE BOOL         ImplPosCurTabPage();
     SAL_DLLPRIVATE void         ImplActivateTabPage( BOOL bNext );
-    SAL_DLLPRIVATE void         ImplSetFirstPagePos( USHORT nPagePos );
     SAL_DLLPRIVATE void         ImplShowFocus();
     SAL_DLLPRIVATE void         ImplDrawItem( ImplTabItem* pItem, const Rectangle& rCurRect, bool bLayout = false, bool bFirstInGroup = false, bool bLastInGroup = false, bool bIsCurrentItem = false );
     SAL_DLLPRIVATE void         ImplPaint( const Rectangle& rRect, bool bLayout = false );
     SAL_DLLPRIVATE void         ImplFreeLayoutData();
     SAL_DLLPRIVATE long         ImplHandleKeyEvent( const KeyEvent& rKeyEvent );
 
-    DECL_DLLPRIVATE_LINK(       ImplScrollBtnHdl, PushButton* pBtn );
     DECL_DLLPRIVATE_LINK(       ImplListBoxSelectHdl, ListBox* );
     DECL_DLLPRIVATE_LINK(       ImplWindowEventListener, VclSimpleEvent* );
 
@@ -157,9 +147,6 @@ public:
     void                SetCurPageId( USHORT nPageId );
     USHORT              GetCurPageId() const;
 
-    void                SetFirstPageId( USHORT nPageId );
-    USHORT              GetFirstPageId() const { return GetPageId( mnFirstPagePos ); }
-
     void                SelectTabPage( USHORT nPageId );
 
     void                SetMaxPageWidth( long nMaxWidth ) { mnMaxPageWidth = nMaxWidth; }
@@ -177,8 +164,8 @@ public:
     void                SetHelpText( USHORT nPageId, const XubString& rText );
     const XubString&    GetHelpText( USHORT nPageId ) const;
 
-    void                SetHelpId( USHORT nPageId, ULONG nHelpId );
-    ULONG               GetHelpId( USHORT nPageId ) const;
+    void                SetHelpId( USHORT nPageId, const rtl::OString& rHelpId );
+    rtl::OString        GetHelpId( USHORT nPageId ) const;
 
     void                SetPageImage( USHORT nPageId, const Image& rImage );
     const Image*        GetPageImage( USHORT nPageId ) const;
@@ -188,9 +175,9 @@ public:
     const XubString&    GetHelpText() const
                             { return Control::GetHelpText(); }
 
-    void                SetHelpId( ULONG nId )
-                            { Control::SetHelpId( nId ); }
-    ULONG               GetHelpId() const
+    void                SetHelpId( const rtl::OString& rId )
+                            { Control::SetHelpId( rId ); }
+    const rtl::OString& GetHelpId() const
                             { return Control::GetHelpId(); }
 
     void                SetActivatePageHdl( const Link& rLink ) { maActivateHdl = rLink; }

@@ -79,10 +79,14 @@ const AquaSalMenu* AquaSalMenu::pCurrentMenuBar = NULL;
 
 -(void)showPreferences: (id) sender
 {
+    YIELD_GUARD;
+
     [self showDialog: SHOWDIALOG_ID_PREFERENCES];
 }
 -(void)showAbout: (id) sender
 {
+    YIELD_GUARD;
+
     [self showDialog: SHOWDIALOG_ID_ABOUT];
 }
 @end
@@ -203,11 +207,12 @@ static void initAppMenu()
 
 // =======================================================================
 
-SalMenu* AquaSalInstance::CreateMenu( BOOL bMenuBar )
+SalMenu* AquaSalInstance::CreateMenu( BOOL bMenuBar, Menu* pVCLMenu )
 {
     initAppMenu();
 
     AquaSalMenu *pAquaSalMenu = new AquaSalMenu( bMenuBar );
+    pAquaSalMenu->mpVCLMenu = pVCLMenu;
 
     return pAquaSalMenu;
 }

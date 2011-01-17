@@ -112,7 +112,7 @@ sub makenumber
     $h = shift;
     #                  1         2         3         4
     #         1234567890123456789012345678901234567890
-    $symbols="0123456789abcdefghijklmnopqrstuvwxyz+-<=>";
+    $symbols="0123456789abcdefghijklmnopqrstuvwxyz+-[=]";
     $order = length($symbols);
     $result = "";
     while ( length( $result ) < 6 )
