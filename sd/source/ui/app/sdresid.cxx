@@ -38,7 +38,7 @@
 |*
 \************************************************************************/
 
-SdResId::SdResId(USHORT nId) :
+SdResId::SdResId(sal_uInt16 nId) :
     ResId(nId, *SD_MOD()->GetResMgr())
 {
 }

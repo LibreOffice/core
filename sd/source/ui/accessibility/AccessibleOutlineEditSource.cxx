@@ -109,12 +109,12 @@ namespace accessibility
         return *( const_cast< AccessibleOutlineEditSource* > (this) );
     }
 
-    BOOL AccessibleOutlineEditSource::IsValid() const
+    sal_Bool AccessibleOutlineEditSource::IsValid() const
     {
         if( mpOutliner && mpOutlinerView )
         {
             // Our view still on outliner?
-            ULONG nCurrView, nViews;
+            sal_uLong nCurrView, nViews;
 
             for( nCurrView=0, nViews=mpOutliner->GetViewCount(); nCurrView<nViews; ++nCurrView )
             {

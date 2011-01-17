@@ -54,7 +54,7 @@ public:
         @param pTemplate
             May be NULL.
         @param bPaintFrame
-            When <TRUE/> (the default) then a frame is painted around the
+            When <sal_True/> (the default) then a frame is painted around the
             preview.  This makes the actual preview smaller.
     */
     PreviewRenderer (
@@ -76,12 +76,12 @@ public:
             this text is painted in an empty rectangle of the requested size
             instead.
         @param bObeyHighContrastMode
-            When <FALSE/> then the high contrast mode of the application is
+            When <sal_False/> then the high contrast mode of the application is
             ignored and the preview is rendered in normal mode.  When
-            <TRUE/> and high contrast mode is active then the preview is
+            <sal_True/> and high contrast mode is active then the preview is
             rendered in high contrast mode.
         @param bDisplayPresentationObjects
-            When <FALSE/> then the PresObj place holders are not displayed
+            When <sal_False/> then the PresObj place holders are not displayed
             in the returned preview.
     */
     Image RenderPage (
@@ -101,12 +101,12 @@ public:
             this text is painted in an empty rectangle of the requested size
             instead.
         @param bObeyHighContrastMode
-            When <FALSE/> then the high contrast mode of the application is
+            When <sal_False/> then the high contrast mode of the application is
             ignored and the preview is rendered in normal mode.  When
-            <TRUE/> and high contrast mode is active then the preview is
+            <sal_True/> and high contrast mode is active then the preview is
             rendered in high contrast mode.
         @param bDisplayPresentationObjects
-            When <FALSE/> then the PresObj place holders are not displayed
+            When <sal_False/> then the PresObj place holders are not displayed
             in the returned preview.
     */
     Image RenderPage (

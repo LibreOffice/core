@@ -48,7 +48,7 @@ public:
         bitmap and replaces that color in all bitmaps by the given new
         color.  Alpha values are not modified.
         @param bClearCenterBitmap
-            When <TRUE/> then the center bitmap is erased.
+            When <sal_True/> then the center bitmap is erased.
     */
     void AdaptColor (const Color aNewColor, const bool bClearCenterBitmap);
 

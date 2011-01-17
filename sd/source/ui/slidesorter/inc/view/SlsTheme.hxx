@@ -227,7 +227,7 @@ private:
     /** Guarded initialization of the specified icon in the maIcons
         container.  Call only while a LocalResource object is active.
     */
-    void InitializeIcon (const IconType eType, USHORT nResourceId);
+    void InitializeIcon (const IconType eType, sal_uInt16 nResourceId);
 };
 
 

@@ -85,7 +85,7 @@ public:
     and collect the supported ones in a tree structure.  This structure is
     returned by GetFolderList().
     2. The new way implements the AsynchronousTask interface.  Call
-    RunNextStep() as long HasNextStep() returns <TRUE/>.  After every step
+    RunNextStep() as long HasNextStep() returns <sal_True/>.  After every step
     GetLastAddedEntry() returns the template that was scanned (and has a
     supported format) last.  When a step does not add a new template then
     the value of the previous step is returned.

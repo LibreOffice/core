@@ -68,7 +68,7 @@ class SD_DLLPUBLIC SdPageObjsTLB : public SvTreeListBox
 {
 private:
 
-    static BOOL  SD_DLLPRIVATE bIsInDrag;      // static, falls der Navigator im ExecuteDrag geloescht wird
+    static sal_Bool  SD_DLLPRIVATE bIsInDrag;      // static, falls der Navigator im ExecuteDrag geloescht wird
 
 public:
 
@@ -122,7 +122,7 @@ public:
             Pointer to the page for which to check whether it belongs to the
             show.
         @return
-            Returns <FALSE/> if there is no custom show or if the current
+            Returns <sal_False/> if there is no custom show or if the current
             show does not contain the specified page at least once.
     */
     bool PageBelongsToCurrentShow (const SdPage* pPage) const;
@@ -138,8 +138,8 @@ protected:
     Image                   maImgGraphic;
     Image                   maImgOleH;
     Image                   maImgGraphicH;
-    BOOL                    mbLinkableSelected;
-    BOOL                    mbDragEnabled;
+    sal_Bool                    mbLinkableSelected;
+    sal_Bool                    mbDragEnabled;
     String                  maDocName;
     ::sd::DrawDocShellRef       mxBookmarkDocShRef; // Zum Laden von Bookmarks
     ::sd::DrawDocShell*         mpDropDocSh;
@@ -159,10 +159,10 @@ protected:
     void                    OnDragFinished( sal_uInt8 nDropAction );
 
     /** Return the name of the object.  When the object has no user supplied
-        name and the bCreate flag is <TRUE/> then a name is created
+        name and the bCreate flag is <sal_True/> then a name is created
         automatically.  Additionally the mbShowAllShapes flag is taken into
         account when there is no user supplied name.  When this flag is
-        <FALSE/> then no name is created.
+        <sal_False/> then no name is created.
         @param pObject
             When this is NULL then an empty string is returned, regardless
             of the value of bCreate.
@@ -181,11 +181,11 @@ protected:
         reorders both the involved shapes in their page as well as the
         associated list box entries.
     */
-    virtual BOOL NotifyMoving(
+    virtual sal_Bool NotifyMoving(
         SvLBoxEntry*  pTarget,
         SvLBoxEntry*  pEntry,
         SvLBoxEntry*& rpNewParent,
-        ULONG&        rNewChildPos);
+        sal_uLong&        rNewChildPos);
 
     using Window::GetDropTarget;
     virtual SvLBoxEntry* GetDropTarget (const Point& rLocation);
@@ -201,21 +201,21 @@ public:
     void                    SetViewFrame( SfxViewFrame* pViewFrame ) { mpFrame = pViewFrame; }
     SfxViewFrame*           GetViewFrame() const { return mpFrame; }
 
-    void                    Fill( const SdDrawDocument*, BOOL bAllPages, const String& rDocName );
+    void                    Fill( const SdDrawDocument*, sal_Bool bAllPages, const String& rDocName );
     void                    Fill( const SdDrawDocument*, SfxMedium* pSfxMedium, const String& rDocName );
     void                    SetShowAllShapes (const bool bShowAllShapes, const bool bFill);
     bool                    GetShowAllShapes (void) const;
-    BOOL                    IsEqualToDoc( const SdDrawDocument* pInDoc = NULL );
-    BOOL                    HasSelectedChilds( const String& rName );
-    BOOL                    SelectEntry( const String& rName );
+    sal_Bool                    IsEqualToDoc( const SdDrawDocument* pInDoc = NULL );
+    sal_Bool                    HasSelectedChilds( const String& rName );
+    sal_Bool                    SelectEntry( const String& rName );
     String                  GetSelectEntry();
-    List*                   GetSelectEntryList( USHORT nDepth );
+    List*                   GetSelectEntryList( sal_uInt16 nDepth );
     SdDrawDocument*         GetBookmarkDoc(SfxMedium* pMedium = NULL);
     ::sd::DrawDocShell*         GetDropDocSh() { return(mpDropDocSh); }
 
-    BOOL                    IsLinkableSelected() const { return mbLinkableSelected; }
+    sal_Bool                    IsLinkableSelected() const { return mbLinkableSelected; }
 
-    static BOOL             IsInDrag();
+    static sal_Bool             IsInDrag();
     using SvLBox::ExecuteDrop;
 
     using SvTreeListBox::SelectEntry;
@@ -228,7 +228,7 @@ private:
     */
     bool mbShowAllPages;
 
-    /** Return <TRUE/> when the current transferable may be dropped at the
+    /** Return <sal_True/> when the current transferable may be dropped at the
         given list box entry.
     */
     bool IsDropAllowed (SvLBoxEntry* pEntry);

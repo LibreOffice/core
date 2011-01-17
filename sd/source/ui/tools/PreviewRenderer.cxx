@@ -211,12 +211,12 @@ Image PreviewRenderer::RenderSubstitution (
         const Rectangle aPaintRectangle (
             Point(0,0),
             mpPreviewDevice->GetOutputSizePixel());
-        mpPreviewDevice->EnableMapMode(FALSE);
+        mpPreviewDevice->EnableMapMode(sal_False);
         mpPreviewDevice->SetLineColor();
         svtools::ColorConfig aColorConfig;
         mpPreviewDevice->SetFillColor(aColorConfig.GetColorValue(svtools::DOCCOLOR).nColor);
         mpPreviewDevice->DrawRect (aPaintRectangle);
-        mpPreviewDevice->EnableMapMode(TRUE);
+        mpPreviewDevice->EnableMapMode(sal_True);
 
         // Paint substitution text and a frame around it.
         PaintSubstitutionText (rSubstitutionText);
@@ -327,7 +327,7 @@ void PreviewRenderer::PaintPage (
 
     // Turn off online spelling and redlining.
     SdrOutliner* pOutliner = NULL;
-    ULONG nSavedControlWord (0);
+    sal_uLong nSavedControlWord (0);
     if (mpDocShellOfView!=NULL && mpDocShellOfView->GetDoc()!=NULL)
     {
         pOutliner = &mpDocShellOfView->GetDoc()->GetDrawOutliner();
@@ -373,7 +373,7 @@ void PreviewRenderer::PaintSubstitutionText (const String& rSubstitutionText)
             Point(0,0),
             mpPreviewDevice->PixelToLogic(
                 mpPreviewDevice->GetOutputSizePixel()));
-        USHORT nTextStyle =
+        sal_uInt16 nTextStyle =
             TEXT_DRAW_CENTER
             | TEXT_DRAW_VCENTER
             | TEXT_DRAW_MULTILINE
@@ -396,11 +396,11 @@ void PreviewRenderer::PaintFrame (void)
         Rectangle aPaintRectangle (
             Point(0,0),
             mpPreviewDevice->GetOutputSizePixel());
-        mpPreviewDevice->EnableMapMode(FALSE);
+        mpPreviewDevice->EnableMapMode(sal_False);
         mpPreviewDevice->SetLineColor(maFrameColor);
         mpPreviewDevice->SetFillColor();
         mpPreviewDevice->DrawRect(aPaintRectangle);
-        mpPreviewDevice->EnableMapMode(TRUE);
+        mpPreviewDevice->EnableMapMode(sal_True);
      }
 }
 

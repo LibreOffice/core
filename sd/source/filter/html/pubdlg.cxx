@@ -76,7 +76,7 @@ using namespace com::sun::star::beans;
 extern void InterpolateFixedBitmap( FixedBitmap * pBitmap );
 
 // Kennung fuer die Config Datei mit den Html Einstellungen
-const UINT16 nMagic = (UINT16)0x1977;
+const sal_uInt16 nMagic = (sal_uInt16)0x1977;
 
 // Key fuer die soffice.ini
 #define KEY_QUALITY     "JPG-EXPORT-QUALITY"
@@ -108,39 +108,39 @@ public:
     String           m_aURL;
 
     // special Kiosk options
-    BOOL    m_bAutoSlide;
-    UINT32  m_nSlideDuration;
-    BOOL    m_bEndless;
+    sal_Bool    m_bAutoSlide;
+    sal_uInt32  m_nSlideDuration;
+    sal_Bool    m_bEndless;
 
     // special HTML options
-    BOOL    m_bContentPage;
-    BOOL    m_bNotes;
+    sal_Bool    m_bContentPage;
+    sal_Bool    m_bNotes;
 
     // misc options
-    UINT16  m_nResolution;
+    sal_uInt16  m_nResolution;
     String  m_aCompression;
     PublishingFormat m_eFormat;
-    BOOL    m_bSlideSound;
-    BOOL    m_bHiddenSlides;
+    sal_Bool    m_bSlideSound;
+    sal_Bool    m_bHiddenSlides;
 
     // titel page information
     String  m_aAuthor;
     String  m_aEMail;
     String  m_aWWW;
     String  m_aMisc;
-    BOOL    m_bDownload;
-    BOOL    m_bCreated;         // not used
+    sal_Bool    m_bDownload;
+    sal_Bool    m_bCreated;         // not used
 
     // buttons and colorscheme
-    INT16   m_nButtonThema;
-    BOOL    m_bUserAttr;
+    sal_Int16   m_nButtonThema;
+    sal_Bool    m_bUserAttr;
     Color   m_aBackColor;
     Color   m_aTextColor;
     Color   m_aLinkColor;
     Color   m_aVLinkColor;
     Color   m_aALinkColor;
-    BOOL    m_bUseAttribs;
-    BOOL    m_bUseColor;
+    sal_Bool    m_bUseAttribs;
+    sal_Bool    m_bUseColor;
 
     SdPublishingDesign();
 
@@ -155,8 +155,8 @@ public:
 SdPublishingDesign::SdPublishingDesign()
 {
     m_eMode = PUBLISH_HTML;
-    m_bContentPage = TRUE;
-    m_bNotes = TRUE;
+    m_bContentPage = sal_True;
+    m_bNotes = sal_True;
 
     m_eFormat = FORMAT_PNG;
 
@@ -174,13 +174,13 @@ SdPublishingDesign::SdPublishingDesign()
         m_aAuthor      += sal_Unicode(' ');
     m_aAuthor      += (String)aUserOptions.GetLastName();
     m_aEMail        = aUserOptions.GetEmail();
-    m_bDownload     = FALSE;
-//-/    m_bCreated      = TRUE;
+    m_bDownload     = sal_False;
+//-/    m_bCreated      = sal_True;
     m_nButtonThema  = -1;
 
-    m_bUserAttr     = FALSE;
-    m_bUseAttribs   = TRUE;
-    m_bUseColor     = TRUE;
+    m_bUserAttr     = sal_False;
+    m_bUseAttribs   = sal_True;
+    m_bUseColor     = sal_True;
 
     m_aBackColor    = COL_WHITE;
     m_aTextColor    = COL_BLACK;
@@ -190,12 +190,12 @@ SdPublishingDesign::SdPublishingDesign()
 
     m_eScript       = SCRIPT_ASP;
 
-    m_bAutoSlide     = TRUE;
+    m_bAutoSlide     = sal_True;
     m_nSlideDuration = 15;
-    m_bEndless       = TRUE;
+    m_bEndless       = sal_True;
 
-    m_bSlideSound    = TRUE;
-    m_bHiddenSlides  = FALSE;
+    m_bSlideSound    = sal_True;
+    m_bHiddenSlides  = sal_False;
 }
 
 // =====================================================================
@@ -270,7 +270,7 @@ SvStream& operator >> (SvStream& rIn, SdPublishingDesign& rDesign)
 {
     SdIOCompat aIO(rIn, STREAM_READ);
 
-    UINT16 nTemp16;
+    sal_uInt16 nTemp16;
 
     rIn.ReadByteString( rDesign.m_aDesignName, RTL_TEXTENCODING_UTF8 );
     rIn >> nTemp16;
@@ -322,12 +322,12 @@ SvStream& operator << (SvStream& rOut, const SdPublishingDesign& rDesign)
     // Name
     rOut.WriteByteString( rDesign.m_aDesignName, RTL_TEXTENCODING_UTF8 );
 
-    rOut << (UINT16)rDesign.m_eMode;
+    rOut << (sal_uInt16)rDesign.m_eMode;
     rOut << rDesign.m_bContentPage;
     rOut << rDesign.m_bNotes;
     rOut << rDesign.m_nResolution;
     rOut.WriteByteString( rDesign.m_aCompression, RTL_TEXTENCODING_UTF8 );
-    rOut << (UINT16)rDesign.m_eFormat;
+    rOut << (sal_uInt16)rDesign.m_eFormat;
     rOut.WriteByteString( rDesign.m_aAuthor, RTL_TEXTENCODING_UTF8 );
     rOut.WriteByteString( rDesign.m_aEMail, RTL_TEXTENCODING_UTF8 );
     rOut.WriteByteString( rDesign.m_aWWW, RTL_TEXTENCODING_UTF8 );
@@ -344,7 +344,7 @@ SvStream& operator << (SvStream& rOut, const SdPublishingDesign& rDesign)
     rOut << rDesign.m_bUseAttribs;
     rOut << rDesign.m_bUseColor;
 
-    rOut << (UINT16)rDesign.m_eScript;
+    rOut << (sal_uInt16)rDesign.m_eScript;
     rOut.WriteByteString( rDesign.m_aURL, RTL_TEXTENCODING_UTF8 );
     rOut.WriteByteString( rDesign.m_aCGI, RTL_TEXTENCODING_UTF8 );
 
@@ -391,8 +391,8 @@ SdPublishingDlg::SdPublishingDlg(Window* pWindow, DocumentType eDocType)
 ,   aNextPageButton(this,SdResId(BUT_NEXT))
 ,   aFinishButton(this,SdResId(BUT_FINISH))
 ,   aAssistentFunc(NOOFPAGES)
-,   m_bButtonsDirty(TRUE)
-,   m_bDesignListDirty(FALSE)
+,   m_bButtonsDirty(sal_True)
+,   m_bDesignListDirty(sal_False)
 ,   m_pDesign(NULL)
 {
     m_bImpress = eDocType == DOCUMENT_TYPE_IMPRESS;
@@ -435,7 +435,7 @@ SdPublishingDlg::SdPublishingDlg(Window* pWindow, DocumentType eDocType)
     pPage3_Png->SetClickHdl(LINK(this,SdPublishingDlg, GfxFormatHdl));
     pPage3_Gif->SetClickHdl(LINK(this,SdPublishingDlg, GfxFormatHdl));
     pPage3_Jpg->SetClickHdl(LINK(this,SdPublishingDlg, GfxFormatHdl));
-    pPage3_Quality->Enable(FALSE);
+    pPage3_Quality->Enable(sal_False);
 
     pPage3_Resolution_1->SetClickHdl(LINK(this,SdPublishingDlg, ResolutionHdl ));
     pPage3_Resolution_2->SetClickHdl(LINK(this,SdPublishingDlg, ResolutionHdl ));
@@ -467,7 +467,7 @@ SdPublishingDlg::SdPublishingDlg(Window* pWindow, DocumentType eDocType)
     pPage5_Buttons->SetLineCount( 4 );
     pPage5_Buttons->SetExtraSpacing( 1 );
 
-    for( UINT16 nIndex = 0; nIndex < m_pDesignList->Count(); nIndex++ )
+    for( sal_uInt16 nIndex = 0; nIndex < m_pDesignList->Count(); nIndex++ )
     {
         SdPublishingDesign *pDesign = (SdPublishingDesign*)
                                         m_pDesignList->GetObject(nIndex);
@@ -491,7 +491,7 @@ SdPublishingDlg::~SdPublishingDlg()
 {
     if( m_pDesignList )
     {
-        for( UINT16 nIndex = 0; nIndex < m_pDesignList->Count(); nIndex++ )
+        for( sal_uInt16 nIndex = 0; nIndex < m_pDesignList->Count(); nIndex++ )
             delete (SdPublishingDesign*)m_pDesignList->GetObject(nIndex);
     }
 
@@ -795,8 +795,8 @@ void SdPublishingDlg::SetDefaults()
     SdPublishingDesign aDefault;
     SetDesign(&aDefault);
 
-    pPage1_NewDesign->Check(TRUE);
-    pPage1_OldDesign->Check(FALSE);
+    pPage1_NewDesign->Check(sal_True);
+    pPage1_OldDesign->Check(sal_False);
     UpdatePage();
 }
 
@@ -984,8 +984,8 @@ IMPL_LINK( SdPublishingDlg, DesignHdl, RadioButton *, pButton )
 {
     if(pButton == pPage1_NewDesign)
     {
-        pPage1_NewDesign->Check(TRUE); // wegen DesignDeleteHdl
-        pPage1_OldDesign->Check(FALSE);
+        pPage1_NewDesign->Check(sal_True); // wegen DesignDeleteHdl
+        pPage1_OldDesign->Check(sal_False);
         pPage1_Designs->Disable();
         pPage1_DelDesign->Disable();
         m_pDesign = NULL;
@@ -995,14 +995,14 @@ IMPL_LINK( SdPublishingDlg, DesignHdl, RadioButton *, pButton )
     }
     else
     {
-        pPage1_NewDesign->Check(FALSE);
+        pPage1_NewDesign->Check(sal_False);
         pPage1_Designs->Enable();
         pPage1_DelDesign->Enable();
 
         if(pPage1_Designs->GetSelectEntryCount() == 0)
             pPage1_Designs->SelectEntryPos(0);
 
-        USHORT nPos = pPage1_Designs->GetSelectEntryPos();
+        sal_uInt16 nPos = pPage1_Designs->GetSelectEntryPos();
         m_pDesign = (SdPublishingDesign*)m_pDesignList->GetObject(nPos);
         DBG_ASSERT(m_pDesign, "Kein Design? Das darf nicht sein! (CL)");
 
@@ -1018,7 +1018,7 @@ IMPL_LINK( SdPublishingDlg, DesignHdl, RadioButton *, pButton )
 // =====================================================================
 IMPL_LINK( SdPublishingDlg, DesignSelectHdl, ListBox *, EMPTYARG )
 {
-    USHORT nPos = pPage1_Designs->GetSelectEntryPos();
+    sal_uInt16 nPos = pPage1_Designs->GetSelectEntryPos();
     m_pDesign = (SdPublishingDesign*)m_pDesignList->GetObject(nPos);
     DBG_ASSERT(m_pDesign, "Kein Design? Das darf nicht sein! (CL)");
 
@@ -1035,7 +1035,7 @@ IMPL_LINK( SdPublishingDlg, DesignSelectHdl, ListBox *, EMPTYARG )
 // =====================================================================
 IMPL_LINK( SdPublishingDlg, DesignDeleteHdl, PushButton *, EMPTYARG )
 {
-    USHORT nPos = pPage1_Designs->GetSelectEntryPos();
+    sal_uInt16 nPos = pPage1_Designs->GetSelectEntryPos();
     SdPublishingDesign* pDesign = (SdPublishingDesign*)
                                     m_pDesignList->GetObject(nPos);
     DBG_ASSERT(pDesign, "Kein Design? Das darf nicht sein! (CL)");
@@ -1051,7 +1051,7 @@ IMPL_LINK( SdPublishingDlg, DesignDeleteHdl, PushButton *, EMPTYARG )
 
     delete pDesign;
 
-    m_bDesignListDirty = TRUE;
+    m_bDesignListDirty = sal_True;
 
     UpdatePage();
 
@@ -1063,7 +1063,7 @@ IMPL_LINK( SdPublishingDlg, DesignDeleteHdl, PushButton *, EMPTYARG )
 // =====================================================================
 IMPL_LINK( SdPublishingDlg, WebServerHdl, RadioButton *, pButton )
 {
-    BOOL bASP = pButton == pPage2_ASP;
+    sal_Bool bASP = pButton == pPage2_ASP;
 
     pPage2_ASP->Check( bASP );
     pPage2_PERL->Check( !bASP );
@@ -1093,7 +1093,7 @@ IMPL_LINK( SdPublishingDlg, BaseHdl, RadioButton *, EMPTYARG )
     if(pButton == pPage3_Standard)
     pPage3_Frames->Check( pButton == pPage3 );
     else
-        pPage3_Standard->Check(FALSE);
+        pPage3_Standard->Check(sal_False);
 */
     UpdatePage();
 
@@ -1142,7 +1142,7 @@ IMPL_LINK( SdPublishingDlg, ResolutionHdl, RadioButton *, pButton )
 IMPL_LINK( SdPublishingDlg, ButtonsHdl, ValueSet *, EMPTYARG )
 {
     // wird eine Bitmap Schaltflaeche gewaehlt, TexOnly ausschalten
-    pPage5_TextOnly->Check(FALSE);
+    pPage5_TextOnly->Check(sal_False);
     return 0;
 }
 
@@ -1184,7 +1184,7 @@ IMPL_LINK( SdPublishingDlg, ColorHdl, PushButton *, pButton)
             m_aALinkColor = aDlg.GetColor();
     }
 
-    pPage6_User->Check(TRUE);
+    pPage6_User->Check(sal_True);
     pPage6_Preview->SetColors( m_aBackColor, m_aTextColor, m_aLinkColor,
                                m_aVLinkColor, m_aALinkColor );
     pPage6_Preview->Invalidate();
@@ -1206,19 +1206,19 @@ IMPL_LINK( SdPublishingDlg, FinishHdl, OKButton *, EMPTYARG )
     SdPublishingDesign* pDesign = new SdPublishingDesign();
     GetDesign(pDesign);
 
-    BOOL bSave = FALSE;
+    sal_Bool bSave = sal_False;
 
     if(pPage1_OldDesign->IsChecked() && m_pDesign)
     {
         // aenderungen??
         if(!(*pDesign == *m_pDesign))
-            bSave = TRUE;
+            bSave = sal_True;
     }
     else
     {
         SdPublishingDesign aDefaultDesign;
         if(!(aDefaultDesign == *pDesign))
-            bSave = TRUE;
+            bSave = sal_True;
     }
 
     if(bSave)
@@ -1227,10 +1227,10 @@ IMPL_LINK( SdPublishingDlg, FinishHdl, OKButton *, EMPTYARG )
         if(m_pDesign)
             aName = m_pDesign->m_aDesignName;
 
-        BOOL bRetry;
+        sal_Bool bRetry;
         do
         {
-            bRetry = FALSE;
+            bRetry = sal_False;
 
             SdDesignNameDlg aDlg(this, aName );
 
@@ -1239,7 +1239,7 @@ IMPL_LINK( SdPublishingDlg, FinishHdl, OKButton *, EMPTYARG )
                 pDesign->m_aDesignName = aDlg.GetDesignName();
 
                 SdPublishingDesign* pSameNameDes = NULL;
-                UINT16 nIndex;
+                sal_uInt16 nIndex;
                 for( nIndex = 0; nIndex < m_pDesignList->Count(); nIndex++ )
                 {
                     pSameNameDes = (SdPublishingDesign*)
@@ -1264,7 +1264,7 @@ IMPL_LINK( SdPublishingDlg, FinishHdl, OKButton *, EMPTYARG )
                 if(!bRetry)
                 {
                     m_pDesignList->Insert(pDesign);
-                    m_bDesignListDirty = TRUE;
+                    m_bDesignListDirty = sal_True;
                     pDesign = NULL;
                 }
             }
@@ -1334,7 +1334,7 @@ void SdPublishingDlg::UpdatePage()
             pPage2_Index_txt->Show();
             pPage2_Index->Show();
 
-            BOOL bPerl = pPage2_PERL->IsChecked();
+            sal_Bool bPerl = pPage2_PERL->IsChecked();
             pPage2_Index->Enable(bPerl);
             pPage2_Index_txt->Enable(bPerl);
             pPage2_URL_txt->Enable(bPerl);
@@ -1363,7 +1363,7 @@ void SdPublishingDlg::UpdatePage()
             pPage2_Duration_txt->Show();
             pPage2_Duration->Show();
             pPage2_Endless->Show();
-            BOOL bAuto = pPage2_ChgAuto->IsChecked();
+            sal_Bool bAuto = pPage2_ChgAuto->IsChecked();
             pPage2_Duration->Enable(bAuto);
             pPage2_Endless->Enable(bAuto);
         }
@@ -1441,14 +1441,14 @@ void SdPublishingDlg::LoadPreviewButtons()
         {
             if( mpButtonSet->getPreview( nSet, aButtonNames, aImage ) )
             {
-                pPage5_Buttons->InsertItem( (USHORT)nSet+1, aImage );
+                pPage5_Buttons->InsertItem( (sal_uInt16)nSet+1, aImage );
                 if( nHeight < aImage.GetSizePixel().Height() )
                     nHeight = aImage.GetSizePixel().Height();
             }
         }
 
         pPage5_Buttons->SetItemHeight( nHeight );
-        m_bButtonsDirty = FALSE;
+        m_bButtonsDirty = sal_False;
     }
 }
 
@@ -1581,7 +1581,7 @@ void SdPublishingDlg::GetDesign( SdPublishingDesign* pDesign )
     pDesign->m_aEMail = pPage4_Email->GetText();
     pDesign->m_aWWW = pPage4_WWW->GetText();
     pDesign->m_aMisc = pPage4_Misc->GetText();
-    pDesign->m_bDownload = m_bImpress?pPage4_Download->IsChecked():FALSE;
+    pDesign->m_bDownload = m_bImpress?pPage4_Download->IsChecked():sal_False;
 //-/    pDesign->m_bCreated = pPage4_Created->IsChecked();
 
     if(pPage5_TextOnly->IsChecked())
@@ -1603,7 +1603,7 @@ void SdPublishingDlg::GetDesign( SdPublishingDesign* pDesign )
     pDesign->m_aURL = pPage2_URL->GetText();
 
     pDesign->m_bAutoSlide = pPage2_ChgAuto->IsChecked();
-    pDesign->m_nSlideDuration = (UINT32)pPage2_Duration->GetTime().GetMSFromTime() / 1000;
+    pDesign->m_nSlideDuration = (sal_uInt32)pPage2_Duration->GetTime().GetMSFromTime() / 1000;
     pDesign->m_bEndless = pPage2_Endless->IsChecked();
 }
 
@@ -1620,9 +1620,9 @@ IMPL_LINK( SdPublishingDlg, LastPageHdl, PushButton *, EMPTYARG )
 // =====================================================================
 // Designs laden
 // =====================================================================
-BOOL SdPublishingDlg::Load()
+sal_Bool SdPublishingDlg::Load()
 {
-    m_bDesignListDirty = FALSE;
+    m_bDesignListDirty = sal_False;
 
     m_pDesignList = new List();
 
@@ -1643,25 +1643,25 @@ BOOL SdPublishingDlg::Load()
             return sal_False;
     }
 
-    SfxMedium aMedium( aURL.GetMainURL( INetURLObject::NO_DECODE ), STREAM_READ | STREAM_NOCREATE, TRUE );
+    SfxMedium aMedium( aURL.GetMainURL( INetURLObject::NO_DECODE ), STREAM_READ | STREAM_NOCREATE, sal_True );
 
     SvStream* pStream = aMedium.GetInStream();
 
     if( !pStream )
-        return( FALSE );
+        return( sal_False );
 
-    UINT16 aCheck;
+    sal_uInt16 aCheck;
     *pStream >> aCheck;
 
     if(aCheck != nMagic)
-        return FALSE;
+        return sal_False;
 
     SdIOCompat aIO(*pStream, STREAM_READ);
 
-    UINT16 nDesigns;
+    sal_uInt16 nDesigns;
     *pStream >> nDesigns;
 
-    for( UINT16 nIndex = 0;
+    for( sal_uInt16 nIndex = 0;
          pStream->GetError() == SVSTREAM_OK && nIndex < nDesigns;
          nIndex++ )
     {
@@ -1677,29 +1677,29 @@ BOOL SdPublishingDlg::Load()
 // =====================================================================
 // Designs speichern
 // =====================================================================
-BOOL SdPublishingDlg::Save()
+sal_Bool SdPublishingDlg::Save()
 {
     INetURLObject aURL( SvtPathOptions().GetUserConfigPath() );
     aURL.Append( UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "designs.sod" ) ) );
-    SfxMedium aMedium( aURL.GetMainURL( INetURLObject::NO_DECODE ), STREAM_WRITE | STREAM_TRUNC, FALSE );
+    SfxMedium aMedium( aURL.GetMainURL( INetURLObject::NO_DECODE ), STREAM_WRITE | STREAM_TRUNC, sal_False );
     aMedium.IsRemote();
 
     SvStream* pStream = aMedium.GetOutStream();
 
     if( !pStream )
-        return( FALSE );
+        return( sal_False );
 
-    UINT16 aCheck = nMagic;
+    sal_uInt16 aCheck = nMagic;
     *pStream << aCheck;
 
     // damit SdIOCompat vor dem Stream destruiert wird
     {
         SdIOCompat aIO(*pStream, STREAM_WRITE, 0);
 
-        UINT16 nDesigns = (UINT16) m_pDesignList->Count();
+        sal_uInt16 nDesigns = (sal_uInt16) m_pDesignList->Count();
         *pStream << nDesigns;
 
-        for( UINT16 nIndex = 0;
+        for( sal_uInt16 nIndex = 0;
              pStream->GetError() == SVSTREAM_OK && nIndex < nDesigns;
              nIndex++ )
         {

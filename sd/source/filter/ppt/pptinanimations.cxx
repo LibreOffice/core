@@ -933,9 +933,9 @@ bool AnimationImporter::convertAnimationValue( MS_AttributeNames eAttribute, Any
             if( aString.getLength() >= 7 && aString[0] == '#' )
             {
                 Color aColor;
-                aColor.SetRed( (UINT8)(lcl_gethex( aString[1] ) * 16 + lcl_gethex( aString[2] )) );
-                aColor.SetGreen( (UINT8)(lcl_gethex( aString[3] ) * 16 + lcl_gethex( aString[4] )) );
-                aColor.SetBlue( (UINT8)(lcl_gethex( aString[5] ) * 16 + lcl_gethex( aString[6] )) );
+                aColor.SetRed( (sal_uInt8)(lcl_gethex( aString[1] ) * 16 + lcl_gethex( aString[2] )) );
+                aColor.SetGreen( (sal_uInt8)(lcl_gethex( aString[3] ) * 16 + lcl_gethex( aString[4] )) );
+                aColor.SetBlue( (sal_uInt8)(lcl_gethex( aString[5] ) * 16 + lcl_gethex( aString[6] )) );
                 rValue <<= (sal_Int32)aColor.GetColor();
                 bRet = true;
             }
@@ -944,9 +944,9 @@ bool AnimationImporter::convertAnimationValue( MS_AttributeNames eAttribute, Any
                 aString = aString.copy( 4, aString.getLength() - 5 );
                 Color aColor;
                 sal_Int32 index = 0;
-                aColor.SetRed( (UINT8)aString.getToken( 0, (sal_Unicode)',', index ).toInt32() );
-                aColor.SetGreen( (UINT8)aString.getToken( 0, (sal_Unicode)',', index ).toInt32() );
-                aColor.SetRed( (UINT8)aString.getToken( 0, (sal_Unicode)',', index ).toInt32() );
+                aColor.SetRed( (sal_uInt8)aString.getToken( 0, (sal_Unicode)',', index ).toInt32() );
+                aColor.SetGreen( (sal_uInt8)aString.getToken( 0, (sal_Unicode)',', index ).toInt32() );
+                aColor.SetRed( (sal_uInt8)aString.getToken( 0, (sal_Unicode)',', index ).toInt32() );
                 rValue <<= (sal_Int32)aColor.GetColor();
                 bRet = true;
             }
@@ -1843,7 +1843,7 @@ Any AnimationImporter::implGetColorAny( sal_Int32 nMode, sal_Int32  nA, sal_Int3
             dump( "rgb(%ld", nA );
             dump( ",%ld", nB );
             dump( ",%ld)", nC );
-            Color aColor( (UINT8)nA, (UINT8)nB, (UINT8)nC );
+            Color aColor( (sal_uInt8)nA, (sal_uInt8)nB, (sal_uInt8)nC );
             return makeAny( (sal_Int32)aColor.GetRGBColor() );
         }
     case 1: // hsl
@@ -1861,7 +1861,7 @@ Any AnimationImporter::implGetColorAny( sal_Int32 nMode, sal_Int32  nA, sal_Int3
     case 2: // index
         {
             Color aColor;
-            mpPPTImport->GetColorFromPalette((USHORT)nA, aColor );
+            mpPPTImport->GetColorFromPalette((sal_uInt16)nA, aColor );
             dump( "index(%ld", nA );
             dump( " [%ld", (sal_Int32)aColor.GetRed() );
             dump( ",%ld", (sal_Int32)aColor.GetGreen() );
@@ -3082,9 +3082,9 @@ sal_Int32 AnimationImporter::importTargetElementContainer( const Atom* pAtom, An
 
                         const EditTextObject& rEditTextObject = pOPO->GetTextObject();
 
-                        const USHORT nParaCount = rEditTextObject.GetParagraphCount();
+                        const sal_uInt16 nParaCount = rEditTextObject.GetParagraphCount();
 
-                        USHORT nPara = 0;
+                        sal_uInt16 nPara = 0;
 
                         while( (nPara < nParaCount) && (begin > 0) )
                         {
@@ -3259,11 +3259,11 @@ void AnimationImporter::dump_atom_header( const Atom* pAtom, bool bOpen, bool bA
 
 // --------------------------------------------------------------------
 
-void AnimationImporter::dump( UINT32 nLen, bool bNewLine )
+void AnimationImporter::dump( sal_uInt32 nLen, bool bNewLine )
 {
     char * faul = "0123456789abcdef";
 
-    UINT32 i = 0;
+    sal_uInt32 i = 0;
     int b = 0;
     sal_Int8 nData;
 

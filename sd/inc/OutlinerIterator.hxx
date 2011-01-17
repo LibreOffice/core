@@ -148,7 +148,7 @@ public:
         @param rIterator
             The iterator to test equality with.
         @return
-            Returns <TRUE/> when both iterators point to the same object.
+            Returns <sal_True/> when both iterators point to the same object.
     */
     bool operator== (const Iterator& rIterator);
     /** Test whether two iterators point to different objects.  This is just
@@ -156,7 +156,7 @@ public:
         @param rIterator
             The iterator to test inequality with.
         @return
-            Returns <TRUE/> when both iterators point to the different objects.
+            Returns <sal_True/> when both iterators point to the different objects.
     */
     bool operator!= (const Iterator& rIterator);
     /** Reverse the direction of iteration.  The position of the iterator is
@@ -343,7 +343,7 @@ public:
     IteratorPosition& operator= (const IteratorPosition& aPosition);
     /** Compare two positions for equality.
         @return
-            <TRUE/> is returned only when all data members have the same
+            <sal_True/> is returned only when all data members have the same
             values in both position objects.
     */
     bool operator== (const IteratorPosition& aPosition) const;

@@ -53,7 +53,7 @@ SdPresentationLayoutUndoAction::SdPresentationLayoutUndoAction(
                             String          aTheNewLayoutName,
                             AutoLayout      eTheOldAutoLayout,
                             AutoLayout      eTheNewAutoLayout,
-                            BOOL            bSet,
+                            sal_Bool            bSet,
                             SdPage*         pThePage):
                       SdUndoAction(pTheDoc)
 {
@@ -76,9 +76,9 @@ SdPresentationLayoutUndoAction::SdPresentationLayoutUndoAction(
 
 void SdPresentationLayoutUndoAction::Undo()
 {
-    pPage->SetPresentationLayout(aOldLayoutName, TRUE, TRUE, TRUE);
+    pPage->SetPresentationLayout(aOldLayoutName, sal_True, sal_True, sal_True);
     if (bSetAutoLayout)
-        pPage->SetAutoLayout(eOldAutoLayout, TRUE);
+        pPage->SetAutoLayout(eOldAutoLayout, sal_True);
 }
 
 /*************************************************************************
@@ -91,7 +91,7 @@ void SdPresentationLayoutUndoAction::Redo()
 {
     pPage->SetPresentationLayout(aNewLayoutName);
     if (bSetAutoLayout)
-        pPage->SetAutoLayout(eNewAutoLayout, TRUE);
+        pPage->SetAutoLayout(eNewAutoLayout, sal_True);
 }
 
 /*************************************************************************

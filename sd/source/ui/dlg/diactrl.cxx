@@ -107,7 +107,7 @@ void SdPagesField::UpdatePagesField( const SfxUInt16Item* pItem )
 
 void SdPagesField::Modify()
 {
-    SfxUInt16Item aItem( SID_PAGES_PER_ROW, (UINT16) GetValue() );
+    SfxUInt16Item aItem( SID_PAGES_PER_ROW, (sal_uInt16) GetValue() );
 
     ::uno::Any a;
     ::uno::Sequence< ::beans::PropertyValue > aArgs( 1 );
@@ -129,7 +129,7 @@ void SdPagesField::Modify()
 |*
 \************************************************************************/
 
-SdTbxCtlDiaPages::SdTbxCtlDiaPages( USHORT nSlotId, USHORT nId, ToolBox& rTbx ) :
+SdTbxCtlDiaPages::SdTbxCtlDiaPages( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx ) :
     SfxToolBoxControl( nSlotId, nId, rTbx )
 {
 }
@@ -142,7 +142,7 @@ SdTbxCtlDiaPages::~SdTbxCtlDiaPages()
 
 //========================================================================
 
-void SdTbxCtlDiaPages::StateChanged( USHORT,
+void SdTbxCtlDiaPages::StateChanged( sal_uInt16,
                 SfxItemState eState, const SfxPoolItem* pState )
 {
     SdPagesField* pFld = (SdPagesField*) GetToolBox().GetItemWindow( GetId() );

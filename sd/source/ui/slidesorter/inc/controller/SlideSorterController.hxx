@@ -100,7 +100,7 @@ public:
         filler, the actual slide sorter view--are visible and place them in
         the area last passed to Resize().
         @param bForce
-            When <TRUE/> is given (<FALSE/> is the default) then the content
+            When <sal_True/> is given (<sal_False/> is the default) then the content
             window and with it the SlideSorterView is resized event when its
             size does not change (the size does change when the visibility
             of scroll bars changes.)
@@ -203,7 +203,7 @@ public:
         this method should be called between calls to
         PrepareEditModeChange() and FinishEditModeChange().
         @return
-            A return value of <TRUE/> indicates that the edit mode has
+            A return value of <sal_True/> indicates that the edit mode has
             changed.
     */
     bool ChangeEditMode (EditMode eEditMode);

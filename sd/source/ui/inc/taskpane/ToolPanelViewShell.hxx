@@ -126,7 +126,7 @@ public:
     */
     virtual bool RelocateToParentWindow (::Window* pParentWindow);
 
-    /// returns <TRUE/> if and only if the given window is the panel anchor window of our ToolPanelDeck
+    /// returns <sal_True/> if and only if the given window is the panel anchor window of our ToolPanelDeck
     bool    IsPanelAnchorWindow( const ::Window& i_rWindow ) const;
 
     /** creates an XUIElement for the given standard panel
@@ -145,7 +145,7 @@ private:
     /** The id of the menu in the menu bar/tool box of the parent docking
         window.
     */
-    USHORT mnMenuId;
+    sal_uInt16 mnMenuId;
 
     /** Create a popup menu.  it contains two sections, one for
         docking or un-docking the tool panel, one for toggling the
@@ -158,7 +158,7 @@ private:
 
 
     /** Initialize the task pane view shell if that has not yet been done
-        before.  If mbIsInitialized is already set to <TRUE/> then this
+        before.  If mbIsInitialized is already set to <sal_True/> then this
         method returns immediately.
     */
     void Initialize (void);

@@ -131,7 +131,7 @@ HideSlideFunction::ExclusionState HideSlideFunction::GetExclusionState (
     model::PageEnumeration& rPageSet)
 {
     ExclusionState eState (UNDEFINED);
-    BOOL bState;
+    sal_Bool bState;
 
     // Get toggle state of the selected pages.
     while (rPageSet.HasMoreElements() && eState!=MIXED)

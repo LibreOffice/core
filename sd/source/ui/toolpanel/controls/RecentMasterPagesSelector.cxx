@@ -90,8 +90,8 @@ void RecentMasterPagesSelector::Fill (ItemList& rItemList)
 {
     // Create a set of names of the master pages used by the document.
     MasterPageObserver::MasterPageNameSet aCurrentNames;
-    USHORT nMasterPageCount = mrDocument.GetMasterSdPageCount(PK_STANDARD);
-    USHORT nIndex;
+    sal_uInt16 nMasterPageCount = mrDocument.GetMasterSdPageCount(PK_STANDARD);
+    sal_uInt16 nIndex;
     for (nIndex=0; nIndex<nMasterPageCount; nIndex++)
     {
         SdPage* pMasterPage = mrDocument.GetMasterSdPage (nIndex, PK_STANDARD);
@@ -129,7 +129,7 @@ void RecentMasterPagesSelector::AssignMasterPageToPageList (
     SdPage* pMasterPage,
     const ::boost::shared_ptr<std::vector<SdPage*> >& rpPageList)
 {
-    USHORT nSelectedItemId = mpPageSet->GetSelectItemId();
+    sal_uInt16 nSelectedItemId = mpPageSet->GetSelectItemId();
 
     MasterPagesSelector::AssignMasterPageToPageList(pMasterPage, rpPageList);
 

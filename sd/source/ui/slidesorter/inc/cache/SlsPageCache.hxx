@@ -108,9 +108,9 @@ public:
         @param rRequestData
             This data is used to determine the preview.
         @param bResize
-            When <TRUE/> then when the available bitmap has not the
+            When <sal_True/> then when the available bitmap has not the
             requested size, it is scaled before it is returned.  When
-            <FALSE/> then the bitmap is returned in the wrong size and it is
+            <sal_False/> then the bitmap is returned in the wrong size and it is
             the task of the caller to scale it.
         @return
             Returns a bitmap that is either empty, contains a scaled (up or
@@ -137,7 +137,7 @@ public:
         data is not up-to-date anymore.  This will invalidate all previews
         in other caches that represent the same page as well.
         @param bRequestPreview
-            When <TRUE/> then a new preview is requested and will lead
+            When <sal_True/> then a new preview is requested and will lead
             eventually to a repaint of the associated page object.
     */
     void InvalidatePreviewBitmap (
@@ -154,8 +154,8 @@ public:
         This is the case when the size of the page objects on the screen has
         changed or when the model has changed.
         @param bUpdateCache
-            When this flags is <TRUE/> then requests for updated previews
-            are created.  When it is <FALSE/> the existing previews are only
+            When this flags is <sal_True/> then requests for updated previews
+            are created.  When it is <sal_False/> the existing previews are only
             marked as not being up-to-date anymore.
     */
     void InvalidateCache (const bool bUpdateCache = true);

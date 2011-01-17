@@ -82,7 +82,7 @@ public:
     /** Use the PreviewProvider to get access to a preview of the master
         page.
 
-        Note that this is only done, when either bForce is <TRUE/> or
+        Note that this is only done, when either bForce is <sal_True/> or
         the PreviewProvider::GetCostIndex() returns 0.
 
         The small preview is created by scaling the large one, not by
@@ -91,7 +91,7 @@ public:
         It is the responsibility of the caller to call UpdatePageObject()
         before calling this method  when the PreviewProvider can only work
         when the master page object is present, i.e. its NeedsPageObject()
-        method returns <TRUE/>.
+        method returns <sal_True/>.
 
         @param nCostThreshold
             When this is zero or positive then the preview is created only
@@ -105,7 +105,7 @@ public:
         @param rRenderer
             A PreviewRenderer object that may be used to create a preview.
         @return
-            When the previews are successfully provided then <TRUE/> is
+            When the previews are successfully provided then <sal_True/> is
             returned.
     */
     bool UpdatePreview (
@@ -116,7 +116,7 @@ public:
 
     /** Use the PageObjectProvider to get access to the master page object.
 
-        Note that this is only done, when either bForce is <TRUE/> or the
+        Note that this is only done, when either bForce is <sal_True/> or the
         PreviewProvider::GetCostIndex() returns 0.
 
         @param nCostThreshold
@@ -129,7 +129,7 @@ public:
             a page object with or store one in.
         @return
             When the master page object is successfully provided then
-            <TRUE/> is returned.
+            <sal_True/> is returned.
     */
     bool UpdatePageObject (
         sal_Int32 nCostThreshold,

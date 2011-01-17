@@ -50,9 +50,9 @@ class SlideFunction
 public:
     TYPEINFO();
 
-    virtual BOOL MouseMove (const MouseEvent& rMEvt);
-    virtual BOOL MouseButtonUp (const MouseEvent& rMEvt);
-    virtual BOOL MouseButtonDown (const MouseEvent& rMEvt);
+    virtual sal_Bool MouseMove (const MouseEvent& rMEvt);
+    virtual sal_Bool MouseButtonUp (const MouseEvent& rMEvt);
+    virtual sal_Bool MouseButtonDown (const MouseEvent& rMEvt);
 
     /** Called from ForceScroll() before the actual scrolling.
     */

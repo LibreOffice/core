@@ -97,8 +97,8 @@ Size ColorMenu::GetPreferredSize (void)
     Size aItemSize = maSet.CalcItemSizePixel (Size());
     Size aPreferredWindowSize = maSet.CalcWindowSizePixel (
         aItemSize,
-        (USHORT)mnPreferredColumnCount,
-        (USHORT)CalculateRowCount (aItemSize, (USHORT)mnPreferredColumnCount));
+        (sal_uInt16)mnPreferredColumnCount,
+        (sal_uInt16)CalculateRowCount (aItemSize, (sal_uInt16)mnPreferredColumnCount));
     return aPreferredWindowSize;
 }
 
@@ -193,9 +193,9 @@ void ColorMenu::Resize (void)
             else if (nColumnCount > 4)
                 nColumnCount = 4;
 
-            USHORT nRowCount = (USHORT)CalculateRowCount (aItemSize, nColumnCount);
+            sal_uInt16 nRowCount = (sal_uInt16)CalculateRowCount (aItemSize, nColumnCount);
 
-            maSet.SetColCount ((USHORT)nColumnCount);
+            maSet.SetColCount ((sal_uInt16)nColumnCount);
             maSet.SetLineCount (nRowCount);
         }
     }
@@ -229,7 +229,7 @@ void ColorMenu::Fill (void)
     maSet.Clear();
     maSet.SetItemWidth (30);
     maSet.SetItemHeight (30);
-    USHORT i = 0;
+    sal_uInt16 i = 0;
     maSet.InsertItem (++i, rSettings.GetFaceColor());
     maSet.SetItemText (i, String::CreateFromAscii("FaceColor"));
     maSet.InsertItem (++i, rSettings.GetCheckedColor());

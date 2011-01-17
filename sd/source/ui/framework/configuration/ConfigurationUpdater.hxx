@@ -198,7 +198,7 @@ private:
     bool IsUpdatePossible (void);
 
     /** Lock updates of the current configuration.  For intermediate requests
-        for updates mbUpdatePending is set to <TRUE/>.
+        for updates mbUpdatePending is set to <sal_True/>.
     */
     void LockUpdates (void);
 

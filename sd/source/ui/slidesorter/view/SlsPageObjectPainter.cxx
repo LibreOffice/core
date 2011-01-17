@@ -52,9 +52,9 @@ namespace sd { namespace slidesorter { namespace view {
 
 namespace {
 
-UINT8 Blend (
-    const UINT8 nValue1,
-    const UINT8 nValue2,
+sal_uInt8 Blend (
+    const sal_uInt8 nValue1,
+    const sal_uInt8 nValue2,
     const double nWeight)
 {
     const double nValue (nValue1*(1-nWeight) + nValue2 * nWeight);
@@ -63,7 +63,7 @@ UINT8 Blend (
     else if (nValue > 255)
         return 255;
     else
-        return (UINT8)nValue;
+        return (sal_uInt8)nValue;
 }
 
 sal_uInt8 ClampColorChannel (const double nValue)
@@ -118,7 +118,7 @@ PageObjectPainter::PageObjectPainter (
     // Replace the color (not the alpha values) in the focus border with a
     // color derived from the current selection color.
     Color aColor (mpTheme->GetColor(Theme::Color_Selection));
-    USHORT nHue, nSat, nBri;
+    sal_uInt16 nHue, nSat, nBri;
     aColor.RGBtoHSB(nHue, nSat, nBri);
     aColor = Color::HSBtoRGB(nHue, 28, 65);
     mpFocusBorderPainter->AdaptColor(aColor, true);
@@ -149,7 +149,7 @@ void PageObjectPainter::PaintPageObject (
 
     // Turn off antialiasing to avoid the bitmaps from being shifted by
     // fractions of a pixel and thus show blurry edges.
-    const USHORT nSavedAntialiasingMode (rDevice.GetAntialiasing());
+    const sal_uInt16 nSavedAntialiasingMode (rDevice.GetAntialiasing());
     rDevice.SetAntialiasing(nSavedAntialiasingMode & ~ANTIALIASING_ENABLE_B2DDRAW);
 
     PaintBackground(rDevice, rpDescriptor);

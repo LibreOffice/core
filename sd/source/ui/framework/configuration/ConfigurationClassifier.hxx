@@ -56,8 +56,8 @@ public:
         that belong to one configuration but not the other, or that belong
         to both configurations.
         @return
-            When the two configurations differ then return <TRUE/>.  When
-            they are equivalent then return <FALSE/>.
+            When the two configurations differ then return <sal_True/>.  When
+            they are equivalent then return <sal_False/>.
     */
     bool Partition (void);
 

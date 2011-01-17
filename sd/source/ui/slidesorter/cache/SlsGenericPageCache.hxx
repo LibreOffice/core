@@ -48,7 +48,7 @@ public:
         @param rPreviewSize
             The size of the previews is expected in pixel values.
         @param bDoSuperSampling
-            When <TRUE/> the previews are rendered larger and then scaled
+            When <sal_True/> the previews are rendered larger and then scaled
             down to the requested size to improve image quality.
     */
     GenericPageCache (
@@ -77,9 +77,9 @@ public:
         @param rRequestData
             This data is used to determine the preview.
         @param bResize
-            When <TRUE/> then when the available bitmap has not the
+            When <sal_True/> then when the available bitmap has not the
             requested size, it is scaled before it is returned.  When
-            <FALSE/> then the bitmap is returned in the wrong size and it is
+            <sal_False/> then the bitmap is returned in the wrong size and it is
             the task of the caller to scale it.
         @return
             Returns a bitmap that is either empty, contains a scaled (up or
@@ -103,9 +103,9 @@ public:
         @param bMayBeUpToDate
             This flag helps the method to determine whether an existing
             preview that matches the request is up to date.  If the caller
-            knows that it is not then by passing <FALSE/> he tells us that we
+            knows that it is not then by passing <sal_False/> he tells us that we
             do not have to check the up-to-date flag a second time.  If
-            unsure use <TRUE/>.
+            unsure use <sal_True/>.
     */
     void RequestPreviewBitmap (
         const CacheKey aKey,
@@ -115,7 +115,7 @@ public:
         request data with a new one that reflects recent changes in the
         content of the page object.
         @return
-            When the key is kown then return <TRUE/>.
+            When the key is kown then return <sal_True/>.
     */
     bool InvalidatePreviewBitmap (const CacheKey aKey);
 

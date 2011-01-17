@@ -127,7 +127,7 @@ TableDesignPane::TableDesignPane( ::Window* pParent, ViewShellBase& rBase, bool 
     pValueSet->SetSelectHdl (LINK(this, TableDesignPane, implValueSetHdl));
 
     mxControls[FL_STYLE_OPTIONS].reset( new FixedLine( pControlParent, SdResId( FL_STYLE_OPTIONS + 1 ) ) );
-    USHORT i;
+    sal_uInt16 i;
     for( i = CB_HEADER_ROW; i <= CB_BANDED_COLUMNS; ++i )
     {
         CheckBox *pCheckBox = new CheckBox( pControlParent, SdResId( i+1 ) );
@@ -388,7 +388,7 @@ void TableDesignPane::updateLayout()
                 Size aSize( mxControls[nId]->GetSizePixel() );
                 aSize.Width() = aPaneSize.Width() - aOffset.X() - mxControls[nId]->GetPosPixel().X();
                 mxControls[nId]->SetSizePixel( aSize );
-                mxControls[nId]->SetPaintTransparent(TRUE);
+                mxControls[nId]->SetPaintTransparent(sal_True);
                 mxControls[nId]->SetBackground();
             }
             aValueSetSize = Size( pValueSet->GetSizePixel().Width(), nStylesHeight - mxControls[FL_TABLE_STYLES]->GetSizePixel().Height() - mnOrgOffsetY[FL_TABLE_STYLES]  );
@@ -419,10 +419,10 @@ void TableDesignPane::updateLayout()
 
             int nVisibleRowCount = (aValueSetSize.Height()+2) / aItemSize.Height();
 
-            pValueSet->SetLineCount ( (nRowCount < nVisibleRowCount) ? (USHORT)nRowCount : 0 );
+            pValueSet->SetLineCount ( (nRowCount < nVisibleRowCount) ? (sal_uInt16)nRowCount : 0 );
 
-            pValueSet->SetColCount ((USHORT)nColumnCount);
-            pValueSet->SetLineCount ((USHORT)nRowCount);
+            pValueSet->SetColCount ((sal_uInt16)nColumnCount);
+            pValueSet->SetLineCount ((sal_uInt16)nRowCount);
 
             if( !mbModal )
             {
@@ -476,7 +476,7 @@ void TableDesignPane::updateControls()
     const bool bHasTable = mxSelectedTable.is();
     const OUString* pPropNames = getPropertyNames();
 
-    for( USHORT i = CB_HEADER_ROW; i <= CB_BANDED_COLUMNS; ++i )
+    for( sal_uInt16 i = CB_HEADER_ROW; i <= CB_BANDED_COLUMNS; ++i )
     {
         sal_Bool bUse = gDefaults[i-CB_HEADER_ROW];
         if( bHasTable ) try
@@ -487,15 +487,15 @@ void TableDesignPane::updateControls()
         {
             DBG_ERROR("sd::TableDesignPane::updateControls(), exception caught!");
         }
-        static_cast< CheckBox* >( mxControls[i].get() )->Check( bUse ? TRUE : FALSE );
-        mxControls[i]->Enable(bHasTable ? TRUE : FALSE );
+        static_cast< CheckBox* >( mxControls[i].get() )->Check( bUse ? sal_True : sal_False );
+        mxControls[i]->Enable(bHasTable ? sal_True : sal_False );
     }
 
     FillDesignPreviewControl();
     updateLayout();
 
 
-    USHORT nSelection = 0;
+    sal_uInt16 nSelection = 0;
     if( mxSelectedTable.is() )
     {
         Reference< XNamed > xNamed( mxSelectedTable->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "TableTemplate" ) ) ), UNO_QUERY );
@@ -511,7 +511,7 @@ void TableDesignPane::updateControls()
                 {
                     if( aNames[nIndex] == sStyleName )
                     {
-                        nSelection = (USHORT)nIndex+1;
+                        nSelection = (sal_uInt16)nIndex+1;
                         break;
                     }
                 }
@@ -809,7 +809,7 @@ const Bitmap CreateDesignPreview( const Reference< XIndexAccess >& xTableStyle, 
                     sal_Int32* pDiff = &border_diffs[0];
 
                     // draw top border
-                    for( USHORT nLine = 0; nLine < 4; ++nLine )
+                    for( sal_uInt16 nLine = 0; nLine < 4; ++nLine )
                     {
                         const SvxBorderLine* pBorderLine = xCellInfo->maBorder.GetLine(nLine);
                         if( !pBorderLine || ((pBorderLine->GetOutWidth() == 0) && (pBorderLine->GetInWidth()==0)) )
@@ -823,7 +823,7 @@ const Bitmap CreateDesignPreview( const Reference< XIndexAccess >& xTableStyle, 
                             boost::shared_ptr< CellInfo > xBorderInfo( aMatrix[nBorderCol][nBorderRow] );
                             if( xBorderInfo.get() )
                             {
-                                const USHORT nOtherLine = nLine ^ 1;
+                                const sal_uInt16 nOtherLine = nLine ^ 1;
                                 const SvxBorderLine* pBorderLine2 = xBorderInfo->maBorder.GetLine(nOtherLine^1);
                                 if( pBorderLine2 && pBorderLine2->HasPriority(*pBorderLine) )
                                     continue; // other border line wins
@@ -853,7 +853,7 @@ void TableDesignPane::FillDesignPreviewControl()
 {
     ValueSet* pValueSet = static_cast< ValueSet* >( mxControls[CT_TABLE_STYLES].get() );
 
-    USHORT nSelectedItem = pValueSet->GetSelectItemId();
+    sal_uInt16 nSelectedItem = pValueSet->GetSelectItemId();
     pValueSet->Clear();
     try
     {
@@ -883,7 +883,7 @@ void TableDesignPane::FillDesignPreviewControl()
         {
             Reference< XIndexAccess > xTableStyle( mxTableFamily->getByIndex( nIndex ), UNO_QUERY );
             if( xTableStyle.is() )
-                pValueSet->InsertItem( sal::static_int_cast<USHORT>( nIndex + 1 ), Image( CreateDesignPreview( xTableStyle, aSettings, bIsPageDark ) ) );
+                pValueSet->InsertItem( sal::static_int_cast<sal_uInt16>( nIndex + 1 ), Image( CreateDesignPreview( xTableStyle, aSettings, bIsPageDark ) ) );
         }
         catch( Exception& )
         {
@@ -925,9 +925,9 @@ short TableDesignDialog::Execute()
 
         if( mpDesignPane->isOptionsChanged() )
             mpDesignPane->ApplyOptions();
-        return TRUE;
+        return sal_True;
     }
-    return FALSE;
+    return sal_False;
 }
 
 // ====================================================================

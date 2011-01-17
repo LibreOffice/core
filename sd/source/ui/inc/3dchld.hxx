@@ -41,7 +41,7 @@
 class Sd3DChildWindow : public SfxChildWindow
 {
  public:
-    Sd3DChildWindow( Window*, USHORT, SfxBindings*, SfxChildWinInfo* );
+    Sd3DChildWindow( Window*, sal_uInt16, SfxBindings*, SfxChildWinInfo* );
 
     SFX_DECL_CHILDWINDOW(Sd3DChildWindow);
 };

@@ -189,7 +189,7 @@ void SelectionManager::DeleteSelectedNormalPages (const ::std::vector<SdPage*>& 
             if (xPages->getCount() <= 1)
                 break;
 
-            const USHORT nPage (model::FromCoreIndex((*aI)->GetPageNum()));
+            const sal_uInt16 nPage (model::FromCoreIndex((*aI)->GetPageNum()));
 
             Reference< XDrawPage > xPage( xPages->getByIndex( nPage ), UNO_QUERY_THROW );
             xPages->remove(xPage);
@@ -225,7 +225,7 @@ void SelectionManager::DeleteSelectedMasterPages (const ::std::vector<SdPage*>& 
             if (xPages->getCount() <= 1)
                 break;
 
-            const USHORT nPage (model::FromCoreIndex((*aI)->GetPageNum()));
+            const sal_uInt16 nPage (model::FromCoreIndex((*aI)->GetPageNum()));
 
             Reference< XDrawPage > xPage( xPages->getByIndex( nPage ), UNO_QUERY_THROW );
             xPages->remove(xPage);

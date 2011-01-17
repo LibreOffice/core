@@ -59,7 +59,7 @@ public:
             The new page enumeration enumerates the pages of this model.
         @param rPredicate
             This predicate determines which pages to include in the
-            enumeration.  Pages for which rPredicate returns <FALSE/> are
+            enumeration.  Pages for which rPredicate returns <sal_False/> are
             exclude.
     */
     typedef ::boost::function<bool(const SharedPageDescriptor&)> PagePredicate;
@@ -78,8 +78,8 @@ public:
         constructor only when you know what you are doing.  When in doubt,
         use the one argument version.
         @param bCloneImpl
-            When <TRUE/> is given this constructor behaves exactly like its
-            one argument version.  When <FALSE/> is given then the
+            When <sal_True/> is given this constructor behaves exactly like its
+            one argument version.  When <sal_False/> is given then the
             implementation object is not copied but moved from the given
             enumeration to the newly created one.  The given enumeration
             thus becomes empty.
@@ -92,7 +92,7 @@ public:
 
     PageEnumeration& operator= (const PageEnumeration& rEnumeration);
 
-    /** Return <TRUE/> when the enumeration has more elements, i.e. it is
+    /** Return <sal_True/> when the enumeration has more elements, i.e. it is
         save to call GetNextElement() at least one more time.
     */
     virtual bool HasMoreElements (void) const;
@@ -100,7 +100,7 @@ public:
     /** Return the next element of the enumeration.  Call the
         HasMoreElements() before to make sure that there exists at least one
         more element.  Calling this method with HasMoreElements() returning
-        <FALSE/> is an error.
+        <sal_False/> is an error.
     */
     virtual SharedPageDescriptor GetNextElement (void);
 

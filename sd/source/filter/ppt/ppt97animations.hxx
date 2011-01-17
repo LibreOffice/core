@@ -40,22 +40,22 @@ class Ppt97AnimationInfoAtom
     friend class Ppt97Animation;
 
 //-- member
-    UINT32          nDimColor;
-    UINT32          nFlags;         // 0x0004: time instead of click
-    UINT32          nSoundRef;
-    INT32           nDelayTime;     // 1/1000 sec
-    UINT16          nOrderID;
-    UINT16          nSlideCount;
-    UINT8           nBuildType;
-    UINT8           nFlyMethod;
-    UINT8           nFlyDirection;
-    UINT8           nAfterEffect; //nAfterEffect: 0: none; 1: change color; 2: dim on next effect; 3: dim after effect;
-    UINT8           nSubEffect;
-    UINT8           nOLEVerb;
+    sal_uInt32          nDimColor;
+    sal_uInt32          nFlags;         // 0x0004: time instead of click
+    sal_uInt32          nSoundRef;
+    sal_Int32           nDelayTime;     // 1/1000 sec
+    sal_uInt16          nOrderID;
+    sal_uInt16          nSlideCount;
+    sal_uInt8           nBuildType;
+    sal_uInt8           nFlyMethod;
+    sal_uInt8           nFlyDirection;
+    sal_uInt8           nAfterEffect; //nAfterEffect: 0: none; 1: change color; 2: dim on next effect; 3: dim after effect;
+    sal_uInt8           nSubEffect;
+    sal_uInt8           nOLEVerb;
 
     // unknown, because whole size needs to be 28
-    UINT8           nUnknown1;
-    UINT8           nUnknown2;
+    sal_uInt8           nUnknown1;
+    sal_uInt8           nUnknown2;
 
 //-- methods
     void ReadStream( SvStream& rIn );
@@ -106,7 +106,7 @@ public: //public methods
     bool HasParagraphEffect() const;
     bool HasSoundEffect() const;
     sal_Int32 GetDimColor() const;
-    UINT32 GetSoundRef() const;
+    sal_uInt32 GetSoundRef() const;
     bool HasAnimateAssociatedShape() const; //true if the shape should be animated in addition to the text
 
     //set methods

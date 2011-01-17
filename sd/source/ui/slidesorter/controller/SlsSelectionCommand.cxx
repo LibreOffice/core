@@ -54,7 +54,7 @@ SelectionCommand::SelectionCommand (
 
 
 
-void SelectionCommand::AddSlide (USHORT nPageIndex)
+void SelectionCommand::AddSlide (sal_uInt16 nPageIndex)
 {
     maPagesToSelect.push_back(nPageIndex);
 }

@@ -66,8 +66,8 @@ public:
     */
     virtual void RunNextStep (void);
 
-    /** Return <TRUE/> when there is at least one more step to execute.
-        When the task has been executed completely then <FALSE/> is
+    /** Return <sal_True/> when there is at least one more step to execute.
+        When the task has been executed completely then <sal_False/> is
         returned.
     */
     virtual bool HasNextStep (void);

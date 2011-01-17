@@ -32,14 +32,14 @@
 
 using namespace sd;
 
-UndoManager::UndoManager( USHORT nMaxUndoActionCount /* = 20 */ )
+UndoManager::UndoManager( sal_uInt16 nMaxUndoActionCount /* = 20 */ )
 : SfxUndoManager( nMaxUndoActionCount )
 , mnListLevel( 0 )
 , mpLinkedUndoManager(NULL)
 {
 }
 
-void UndoManager::EnterListAction(const UniString &rComment, const UniString& rRepeatComment, USHORT nId /* =0 */)
+void UndoManager::EnterListAction(const UniString &rComment, const UniString& rRepeatComment, sal_uInt16 nId /* =0 */)
 {
     if( !isInUndo() )
     {
@@ -65,7 +65,7 @@ void UndoManager::LeaveListAction()
     }
 }
 
-void UndoManager::AddUndoAction( SfxUndoAction *pAction, BOOL bTryMerg /* = FALSE */ )
+void UndoManager::AddUndoAction( SfxUndoAction *pAction, sal_Bool bTryMerg /* = sal_False */ )
 {
     if( !isInUndo() )
     {
@@ -79,13 +79,13 @@ void UndoManager::AddUndoAction( SfxUndoAction *pAction, BOOL bTryMerg /* = FALS
 }
 
 
-BOOL UndoManager::Undo( USHORT nCount )
+sal_Bool UndoManager::Undo( sal_uInt16 nCount )
 {
     ScopeLockGuard aGuard( maIsInUndoLock );
     return SfxUndoManager::Undo( nCount );
 }
 
-BOOL UndoManager::Redo( USHORT nCount )
+sal_Bool UndoManager::Redo( sal_uInt16 nCount )
 {
     ScopeLockGuard aGuard( maIsInUndoLock );
     return SfxUndoManager::Redo( nCount );

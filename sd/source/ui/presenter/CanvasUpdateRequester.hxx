@@ -70,7 +70,7 @@ private:
     static RequesterMap maRequesterMap;
 
     css::uno::Reference<css::rendering::XSpriteCanvas> mxCanvas;
-    ULONG mnUserEventId;
+    sal_uLong mnUserEventId;
     sal_Bool mbUpdateFlag;
     DECL_LINK(Callback, void*);
 };

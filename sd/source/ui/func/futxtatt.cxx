@@ -78,7 +78,7 @@ void FuTextAttrDlg::DoExecute( SfxRequest& rReq )
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
         SfxAbstractTabDialog *pDlg = pFact->CreateTextTabDialog( NULL, &aNewAttr, mpView );
 
-        USHORT nResult = pDlg->Execute();
+        sal_uInt16 nResult = pDlg->Execute();
 
         switch( nResult )
         {

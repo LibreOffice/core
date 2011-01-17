@@ -80,7 +80,7 @@ public:
 class SdAttrLayerVisible : public SfxBoolItem
 {
 public:
-    SdAttrLayerVisible( BOOL bValue = TRUE ) :
+    SdAttrLayerVisible( sal_Bool bValue = sal_True ) :
         SfxBoolItem( ATTR_LAYER_VISIBLE, bValue ) {}
 };
 
@@ -89,7 +89,7 @@ public:
 class SdAttrLayerPrintable : public SfxBoolItem
 {
 public:
-    SdAttrLayerPrintable( BOOL bValue = TRUE ) :
+    SdAttrLayerPrintable( sal_Bool bValue = sal_True ) :
         SfxBoolItem( ATTR_LAYER_PRINTABLE, bValue ) {}
 };
 
@@ -98,7 +98,7 @@ public:
 class SdAttrLayerLocked : public SfxBoolItem
 {
 public:
-    SdAttrLayerLocked( BOOL bValue = FALSE ) :
+    SdAttrLayerLocked( sal_Bool bValue = sal_False ) :
         SfxBoolItem( ATTR_LAYER_LOCKED, bValue ) {}
 };
 
@@ -107,7 +107,7 @@ public:
 class SdAttrLayerThisPage : public SfxBoolItem
 {
 public:
-    SdAttrLayerThisPage( BOOL bValue = FALSE ) :
+    SdAttrLayerThisPage( sal_Bool bValue = sal_False ) :
         SfxBoolItem( ATTR_LAYER_THISPAGE, bValue ) {}
 };
 
@@ -121,8 +121,8 @@ public:
             DiaEffectItem( SvStream& rIn );
 
     virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const;
-    virtual SfxPoolItem*    Create( SvStream& rIn, USHORT nVer ) const;
-            USHORT          GetValueCount() const { return FADE_EFFECT_COUNT; }
+    virtual SfxPoolItem*    Create( SvStream& rIn, sal_uInt16 nVer ) const;
+            sal_uInt16          GetValueCount() const { return FADE_EFFECT_COUNT; }
             ::com::sun::star::presentation::FadeEffect      GetValue() const
                             { return (::com::sun::star::presentation::FadeEffect) SfxEnumItem::GetValue(); }
 };
@@ -137,8 +137,8 @@ public:
             DiaSpeedItem( SvStream& rIn );
 
     virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const;
-    virtual SfxPoolItem*    Create( SvStream& rIn, USHORT nVer ) const;
-            USHORT          GetValueCount() const { return FADE_SPEED_COUNT; }
+    virtual SfxPoolItem*    Create( SvStream& rIn, sal_uInt16 nVer ) const;
+            sal_uInt16          GetValueCount() const { return FADE_SPEED_COUNT; }
             FadeSpeed       GetValue() const
                             { return (FadeSpeed) SfxEnumItem::GetValue(); }
 };
@@ -153,8 +153,8 @@ public:
             DiaAutoItem( SvStream& rIn );
 
     virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const;
-    virtual SfxPoolItem*    Create( SvStream& rIn, USHORT nVer ) const;
-            USHORT          GetValueCount() const { return PRESCHANGE_COUNT; }
+    virtual SfxPoolItem*    Create( SvStream& rIn, sal_uInt16 nVer ) const;
+            sal_uInt16          GetValueCount() const { return PRESCHANGE_COUNT; }
             PresChange      GetValue() const { return (PresChange) SfxEnumItem::GetValue(); }
 };
 
@@ -164,7 +164,7 @@ class DiaTimeItem : public SfxUInt32Item
 {
 public:
             TYPEINFO();
-            DiaTimeItem( UINT32 nValue = 0L );
+            DiaTimeItem( sal_uInt32 nValue = 0L );
 
     virtual SfxPoolItem* Clone( SfxItemPool* pPool = 0 ) const;
     virtual int          operator==( const SfxPoolItem& ) const;

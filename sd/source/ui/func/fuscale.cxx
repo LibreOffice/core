@@ -86,7 +86,7 @@ FunctionReference FuScale::Create( ViewShell* pViewSh, ::sd::Window* pWin, ::sd:
 
 void FuScale::DoExecute( SfxRequest& rReq )
 {
-    INT16 nValue;
+    sal_Int16 nValue;
 
     const SfxItemSet* pArgs = rReq.GetArgs();
 
@@ -94,9 +94,9 @@ void FuScale::DoExecute( SfxRequest& rReq )
     {
         SfxItemSet aNewAttr( mpDoc->GetPool(), SID_ATTR_ZOOM, SID_ATTR_ZOOM );
         SvxZoomItem* pZoomItem;
-        USHORT nZoomValues = SVX_ZOOM_ENABLE_ALL;
+        sal_uInt16 nZoomValues = SVX_ZOOM_ENABLE_ALL;
 
-        nValue = (INT16) mpWindow->GetZoom();
+        nValue = (sal_Int16) mpWindow->GetZoom();
 
         // Zoom auf Seitengroesse ?
         if( mpViewShell && mpViewShell->ISA( DrawViewShell ) &&
@@ -141,8 +141,8 @@ void FuScale::DoExecute( SfxRequest& rReq )
 
         if( pDlg )
         {
-            pDlg->SetLimits( (USHORT)mpWindow->GetMinZoom(), (USHORT)mpWindow->GetMaxZoom() );
-            USHORT nResult = pDlg->Execute();
+            pDlg->SetLimits( (sal_uInt16)mpWindow->GetMinZoom(), (sal_uInt16)mpWindow->GetMaxZoom() );
+            sal_uInt16 nResult = pDlg->Execute();
             switch( nResult )
             {
                 case RET_CANCEL:
@@ -205,7 +205,7 @@ void FuScale::DoExecute( SfxRequest& rReq )
     }
     else if(mpViewShell && (pArgs->Count () == 1))
     {
-        SFX_REQUEST_ARG (rReq, pScale, SfxUInt32Item, ID_VAL_ZOOM, FALSE);
+        SFX_REQUEST_ARG (rReq, pScale, SfxUInt32Item, ID_VAL_ZOOM, sal_False);
         mpViewShell->SetZoom (pScale->GetValue ());
 
         mpViewShell->GetViewFrame()->GetBindings().Invalidate( SidArrayZoom );

@@ -45,7 +45,7 @@ private:
     XHatchList*         mpHatchingList;
     XBitmapList*        mpBitmapList;
 
-    virtual void                PageCreated( USHORT nId, SfxTabPage &rPage );
+    virtual void                PageCreated( sal_uInt16 nId, SfxTabPage &rPage );
     virtual const SfxItemSet*   GetRefreshedSet();
 
 public:

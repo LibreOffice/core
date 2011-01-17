@@ -106,13 +106,13 @@ void DrawViewShell::ExecIMap( SfxRequest& rReq )
 
 void DrawViewShell::GetIMapState( SfxItemSet& rSet )
 {
-    BOOL bDisable = TRUE;
+    sal_Bool bDisable = sal_True;
 
     if( GetViewFrame()->HasChildWindow( SvxIMapDlgChildWindow::GetChildWindowId() ) )
     {
         const SdrMarkList&  rMarkList = mpDrawView->GetMarkedObjectList();
         const SdrObject*    pObj = NULL;
-        ULONG               nMarkCount = rMarkList.GetMarkCount();
+        sal_uLong               nMarkCount = rMarkList.GetMarkCount();
 
         if ( nMarkCount == 1 )
         {
@@ -123,7 +123,7 @@ void DrawViewShell::GetIMapState( SfxItemSet& rSet )
                 && pImageMapDialog!=NULL
                 && ( pImageMapDialog->GetEditingObject() == (void*) pObj ) )
             {
-                bDisable = FALSE;
+                bDisable = sal_False;
             }
         }
     }
@@ -143,8 +143,8 @@ void DrawViewShell::ExecOptionsBar( SfxRequest& rReq )
     if(HasCurrentFunction(SID_PRESENTATION))
         return;
 
-    BOOL   bDefault = FALSE;
-    USHORT nSlot = rReq.GetSlot();
+    sal_Bool   bDefault = sal_False;
+    sal_uInt16 nSlot = rReq.GetSlot();
 
     SdOptions* pOptions = SD_MOD()->GetSdOptions(GetDoc()->GetDocumentType());
 
@@ -242,7 +242,7 @@ void DrawViewShell::ExecOptionsBar( SfxRequest& rReq )
         break;
 
         default:
-            bDefault = TRUE;
+            bDefault = sal_True;
         break;
     }
 
@@ -285,7 +285,7 @@ void DrawViewShell::GetOptionsBarState( SfxItemSet& rSet )
     rSet.Put( SfxBoolItem( SID_SNAP_POINTS, mpDrawView->IsOPntSnap() ) );
 
     rSet.Put( SfxBoolItem( SID_QUICKEDIT, mpDrawView->IsQuickTextEditMode() ) );
-    rSet.Put( SfxBoolItem( SID_PICK_THROUGH, (BOOL)
+    rSet.Put( SfxBoolItem( SID_PICK_THROUGH, (sal_Bool)
                 mpDrawView->GetModel()->IsPickThroughTransparentTextFrames() ) );
 
     rSet.Put( SfxBoolItem( SID_BIG_HANDLES, mpFrameView->IsBigHandles() ) );

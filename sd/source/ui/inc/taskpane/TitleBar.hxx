@@ -110,7 +110,7 @@ private:
 
     /** Return whether this TitleBar object has an expansion indicator
         bitmap.  It is safe to call GetExpansionIndicator() when this method
-        returns <FALSE/> but unnecessary.
+        returns <sal_False/> but unnecessary.
     */
     bool HasExpansionIndicator (void) const;
 
@@ -152,7 +152,7 @@ private:
 
     void PaintText (const Rectangle& rTextBox);
 
-    USHORT GetTextStyle (void);
+    sal_uInt16 GetTextStyle (void);
 
     const static int snIndentationWidth;
 

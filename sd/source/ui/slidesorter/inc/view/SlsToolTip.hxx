@@ -77,12 +77,12 @@ private:
     model::SharedPageDescriptor mpDescriptor;
     ::rtl::OUString msDefaultHelpText;
     ::rtl::OUString msCurrentHelpText;
-    ULONG mnHelpWindowHandle;
+    sal_uLong mnHelpWindowHandle;
     Timer maTimer;
 
     /** Request to show the tool tip.
         @param bForce
-            When <TRUE/> then the tool tip is show right away.  Otherwise it
+            When <sal_True/> then the tool tip is show right away.  Otherwise it
             is shown after a short delay.
     */
     void Show (const bool bForce);

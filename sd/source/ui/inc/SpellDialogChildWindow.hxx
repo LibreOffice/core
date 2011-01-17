@@ -45,7 +45,7 @@ class SpellDialogChildWindow
 public:
     SpellDialogChildWindow (
         ::Window* pParent,
-        USHORT nId,
+        sal_uInt16 nId,
         SfxBindings* pBindings,
         SfxChildWinInfo* pInfo);
     virtual ~SpellDialogChildWindow (void);
@@ -77,7 +77,7 @@ private:
     */
     Outliner* mpSdOutliner;
 
-    /** When this flag is <TRUE/> then eventually we have to destroy
+    /** When this flag is <sal_True/> then eventually we have to destroy
         the outliner in mpSdOutliner.
     */
     bool mbOwnOutliner;

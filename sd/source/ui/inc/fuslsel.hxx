@@ -42,8 +42,8 @@ class Window;
 
 struct FSS_IsShowingEffectInfo
 {
-    BOOL bIsShowingEffect;          // TRUE while we show a fade effect one the slide view
-    BOOL bDisposed;                 // TRUE if the FuSlideSelection was deleted during fade effect
+    sal_Bool bIsShowingEffect;          // sal_True while we show a fade effect one the slide view
+    sal_Bool bDisposed;                 // sal_True if the FuSlideSelection was deleted during fade effect
 };
 
 
@@ -57,10 +57,10 @@ public:
     virtual void DoExecute( SfxRequest& rReq );
 
     // Mouse- & Key-Events
-    virtual BOOL                KeyInput(const KeyEvent& rKEvt);
-    virtual BOOL                MouseMove(const MouseEvent& rMEvt);
-    virtual BOOL                MouseButtonUp(const MouseEvent& rMEvt);
-    virtual BOOL                MouseButtonDown(const MouseEvent& rMEvt);
+    virtual sal_Bool                KeyInput(const KeyEvent& rKEvt);
+    virtual sal_Bool                MouseMove(const MouseEvent& rMEvt);
+    virtual sal_Bool                MouseButtonUp(const MouseEvent& rMEvt);
+    virtual sal_Bool                MouseButtonDown(const MouseEvent& rMEvt);
     virtual void                Paint(const Rectangle& rRect, ::sd::Window* pWin);
 
     virtual void                Activate();        // Function aktivieren
@@ -69,7 +69,7 @@ public:
     virtual void                ScrollStart();
     virtual void                ScrollEnd();
 
-    BOOL                        IsShowingEffect() const { return pIsShowingEffectInfo && pIsShowingEffectInfo->bIsShowingEffect; }
+    sal_Bool                        IsShowingEffect() const { return pIsShowingEffectInfo && pIsShowingEffectInfo->bIsShowingEffect; }
 
     /** is called when the currenct function should be aborted. <p>
         This is used when a function gets a KEY_ESCAPE but can also
@@ -89,27 +89,27 @@ protected:
     virtual ~FuSlideSelection (void);
 
 private:
-    BOOL                        bSubstShown;
-    BOOL                        bPageHit;
+    sal_Bool                        bSubstShown;
+    sal_Bool                        bPageHit;
     List                        aSubstList;       // Liste mit Ertsatzdarstellungen
     Point                       aDragPos;             // hier wird die Seite angefasst
-    BOOL                        bDragSelection;
+    sal_Bool                        bDragSelection;
     Point                       aDragSelRectAnchor;  // fester Punkt des Selektionsrechtecks
     Rectangle                   aDragSelRect;
     Point                       aPosOfInsertMarker;
     FSS_IsShowingEffectInfo*    pIsShowingEffectInfo;
 
-    void                        DrawInsertMarker(BOOL bShow);
+    void                        DrawInsertMarker(sal_Bool bShow);
     Point                       CalcPosOfInsertMarker(const Point& rPoint);
 
-    USHORT                      GetTargetPage(const Point& rPoint) const;
+    sal_uInt16                      GetTargetPage(const Point& rPoint) const;
 
     void                        CreateSubst();
     void                        DeleteSubst();
     void                        DrawSubst() const;
     void                        ChangeSubstPos(const Point& rVector);
     void                        DrawDragSelectionRect() const;
-    void                        ShowEffect(USHORT nPageNo);
+    void                        ShowEffect(sal_uInt16 nPageNo);
 
                                 DECL_LINK( DragSlideHdl, Timer* );
 };

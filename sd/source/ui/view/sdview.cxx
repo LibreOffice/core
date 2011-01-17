@@ -130,7 +130,7 @@ View::View(SdDrawDocument* pDrawDoc, OutputDevice* pOutDev,
     mnAction(DND_ACTION_NONE),
     mnLockRedrawSmph(0),
     mpLockedRedraws(NULL),
-    mbIsDropAllowed(TRUE),
+    mbIsDropAllowed(sal_True),
     maSmartTags(*this),
     mpClipboard (new ViewClipboard (*this))
 {
@@ -140,13 +140,13 @@ View::View(SdDrawDocument* pDrawDoc, OutputDevice* pOutDev,
     // #i74769#, #i75172# Use default from the configuration
     SetBufferedOutputAllowed(getOptionsDrawinglayer().IsPaintBuffer_DrawImpress());
 
-    EnableExtendedKeyInputDispatcher(FALSE);
-    EnableExtendedMouseEventDispatcher(FALSE);
-    EnableExtendedCommandEventDispatcher(FALSE);
+    EnableExtendedKeyInputDispatcher(sal_False);
+    EnableExtendedMouseEventDispatcher(sal_False);
+    EnableExtendedCommandEventDispatcher(sal_False);
 
-    SetUseIncompatiblePathCreateInterface(FALSE);
-    SetMarkHdlWhenTextEdit(TRUE);
-    EnableTextEditOnObjectsWithoutTextIfTextTool(TRUE);
+    SetUseIncompatiblePathCreateInterface(sal_False);
+    SetMarkHdlWhenTextEdit(sal_True);
+    EnableTextEditOnObjectsWithoutTextIfTextTool(sal_True);
 
     SetMinMoveDistancePixel(2);
     SetHitTolerancePixel(2);
@@ -179,7 +179,7 @@ View::~View()
     maSmartTags.Dispose();
 
     // release content of selection clipboard, if we own the content
-    UpdateSelectionClipboard( TRUE );
+    UpdateSelectionClipboard( sal_True );
 
     maDropErrorTimer.Stop();
     maDropInsertFileTimer.Stop();
@@ -576,9 +576,9 @@ void View::MarkListHasChanged()
 |*
 \************************************************************************/
 
-BOOL View::SetAttributes(const SfxItemSet& rSet, BOOL bReplaceAll)
+sal_Bool View::SetAttributes(const SfxItemSet& rSet, sal_Bool bReplaceAll)
 {
-    BOOL bOk = FmFormView::SetAttributes(rSet, bReplaceAll);
+    sal_Bool bOk = FmFormView::SetAttributes(rSet, bReplaceAll);
     return (bOk);
 }
 
@@ -589,7 +589,7 @@ BOOL View::SetAttributes(const SfxItemSet& rSet, BOOL bReplaceAll)
 |*
 \************************************************************************/
 
-BOOL View::GetAttributes( SfxItemSet& rTargetSet, BOOL bOnlyHardAttr ) const
+sal_Bool View::GetAttributes( SfxItemSet& rTargetSet, sal_Bool bOnlyHardAttr ) const
 {
     return( FmFormView::GetAttributes( rTargetSet, bOnlyHardAttr ) );
 }
@@ -601,7 +601,7 @@ BOOL View::GetAttributes( SfxItemSet& rTargetSet, BOOL bOnlyHardAttr ) const
 |*
 \************************************************************************/
 
-BOOL View::IsPresObjSelected(BOOL bOnPage, BOOL bOnMasterPage, BOOL bCheckPresObjListOnly, BOOL bCheckLayoutOnly) const
+sal_Bool View::IsPresObjSelected(sal_Bool bOnPage, sal_Bool bOnMasterPage, sal_Bool bCheckPresObjListOnly, sal_Bool bCheckLayoutOnly) const
 {
     /**************************************************************************
     * Ist ein Presentationsobjekt selektiert?
@@ -626,8 +626,8 @@ BOOL View::IsPresObjSelected(BOOL bOnPage, BOOL bOnMasterPage, BOOL bCheckPresOb
     SdPage* pPage;
     SdrObject* pObj;
 
-    BOOL bSelected = FALSE;
-    BOOL bMasterPage = FALSE;
+    sal_Bool bSelected = sal_False;
+    sal_Bool bMasterPage = sal_False;
     long nMark;
     long nMarkMax = long(pMarkList->GetMarkCount()) - 1;
 
@@ -651,11 +651,11 @@ BOOL View::IsPresObjSelected(BOOL bOnPage, BOOL bOnMasterPage, BOOL bCheckPresOb
                         PresObjKind eKind = pPage->GetPresObjKind(pObj);
 
                         if((eKind != PRESOBJ_FOOTER) && (eKind != PRESOBJ_HEADER) && (eKind != PRESOBJ_DATETIME) && (eKind != PRESOBJ_SLIDENUMBER) )
-                            bSelected = TRUE;
+                            bSelected = sal_True;
                     }
                     else
                     {
-                        bSelected = TRUE;
+                        bSelected = sal_True;
                     }
                 }
             }
@@ -682,7 +682,7 @@ void View::SelectAll()
     {
         OutlinerView* pOLV = GetTextEditOutlinerView();
         const ::Outliner* pOutliner = GetTextEditOutliner();
-        pOLV->SelectRange( 0, (USHORT) pOutliner->GetParagraphCount() );
+        pOLV->SelectRange( 0, (sal_uInt16) pOutliner->GetParagraphCount() );
     }
     else
     {
@@ -709,7 +709,7 @@ void View::ModelHasChanged()
 |*
 \************************************************************************/
 
-BOOL View::SetStyleSheet(SfxStyleSheet* pStyleSheet, BOOL bDontRemoveHardAttr)
+sal_Bool View::SetStyleSheet(SfxStyleSheet* pStyleSheet, sal_Bool bDontRemoveHardAttr)
 {
     // weiter an SdrView
     return FmFormView::SetStyleSheet(pStyleSheet, bDontRemoveHardAttr);
@@ -722,9 +722,9 @@ BOOL View::SetStyleSheet(SfxStyleSheet* pStyleSheet, BOOL bDontRemoveHardAttr)
 |*
 \************************************************************************/
 
-static void SetSpellOptions( SdDrawDocument* pDoc, ULONG& rCntrl )
+static void SetSpellOptions( SdDrawDocument* pDoc, sal_uLong& rCntrl )
 {
-    BOOL bOnlineSpell = pDoc->GetOnlineSpell();
+    sal_Bool bOnlineSpell = pDoc->GetOnlineSpell();
 
     if( bOnlineSpell )
         rCntrl |= EE_CNTRL_ONLINESPELLING;
@@ -749,7 +749,7 @@ sal_Bool View::SdrBeginTextEdit(
     {
         pOutl->SetStyleSheetPool((SfxStyleSheetPool*) mpDoc->GetStyleSheetPool());
         pOutl->SetCalcFieldValueHdl(LINK(SD_MOD(), SdModule, CalcFieldValueHdl));
-        ULONG nCntrl = pOutl->GetControlWord();
+        sal_uLong nCntrl = pOutl->GetControlWord();
         nCntrl |= EE_CNTRL_ALLOWBIGOBJS;
         nCntrl |= EE_CNTRL_URLSFXEXECUTE;
         nCntrl |= EE_CNTRL_MARKFIELDS;
@@ -805,11 +805,11 @@ sal_Bool View::SdrBeginTextEdit(
 }
 
 /** ends current text editing */
-SdrEndTextEditKind View::SdrEndTextEdit(BOOL bDontDeleteReally )
+SdrEndTextEditKind View::SdrEndTextEdit(sal_Bool bDontDeleteReally )
 {
     SdrObjectWeakRef xObj( GetTextEditObject() );
 
-    BOOL bDefaultTextRestored = RestoreDefaultText( dynamic_cast< SdrTextObj* >( GetTextEditObject() ) );
+    sal_Bool bDefaultTextRestored = RestoreDefaultText( dynamic_cast< SdrTextObj* >( GetTextEditObject() ) );
 
     SdrEndTextEditKind eKind = FmFormView::SdrEndTextEdit(bDontDeleteReally);
 
@@ -817,7 +817,7 @@ SdrEndTextEditKind View::SdrEndTextEdit(BOOL bDontDeleteReally )
     {
         if( xObj.is() && !xObj->IsEmptyPresObj() )
         {
-            xObj->SetEmptyPresObj( TRUE );
+            xObj->SetEmptyPresObj( sal_True );
         }
         else
         {
@@ -831,7 +831,7 @@ SdrEndTextEditKind View::SdrEndTextEdit(BOOL bDontDeleteReally )
         {
             SdrPage* pPage = pObj->GetPage();
             if( !pPage || !pPage->IsMasterPage() )
-                pObj->SetEmptyPresObj( FALSE );
+                pObj->SetEmptyPresObj( sal_False );
         }
     }
 
@@ -888,8 +888,8 @@ bool View::RestoreDefaultText( SdrTextObj* pTextObj )
 void View::SetMarkedOriginalSize()
 {
     SdrUndoGroup*   pUndoGroup = new SdrUndoGroup(*mpDoc);
-    ULONG           nCount = GetMarkedObjectCount();
-    BOOL            bOK = FALSE;
+    sal_uLong           nCount = GetMarkedObjectCount();
+    sal_Bool            bOK = sal_False;
 
     for( sal_uInt32 i = 0; i < nCount; i++ )
     {
@@ -911,7 +911,7 @@ void View::SetMarkedOriginalSize()
                     {
                         MapMode aMap100( MAP_100TH_MM );
                         aOleSize = ((SdrOle2Obj*)pObj)->GetOrigObjSize( &aMap100 );
-                        bOK = TRUE;
+                        bOK = sal_True;
                     }
                     else
                     {
@@ -920,7 +920,7 @@ void View::SetMarkedOriginalSize()
                         {
                             awt::Size aSz = xObj->getVisualAreaSize( nAspect );
                             aOleSize = OutputDevice::LogicToLogic( Size( aSz.Width, aSz.Height ), aUnit, MAP_100TH_MM );
-                            bOK = TRUE;
+                            bOK = sal_True;
                         }
                         catch( embed::NoVisualAreaSizeException& )
                         {}
@@ -955,7 +955,7 @@ void View::SetMarkedOriginalSize()
                 aRect.SetSize( aSize );
                 pObj->SetLogicRect( aRect );
 
-                bOK = TRUE;
+                bOK = sal_True;
             }
         }
     }
@@ -1018,17 +1018,17 @@ void View::DoConnect(SdrOle2Obj* pObj)
 |*
 \************************************************************************/
 
-BOOL View::IsMorphingAllowed() const
+sal_Bool View::IsMorphingAllowed() const
 {
     const SdrMarkList&  rMarkList = GetMarkedObjectList();
-    BOOL                bRet = FALSE;
+    sal_Bool                bRet = sal_False;
 
     if ( rMarkList.GetMarkCount() == 2 )
     {
         const SdrObject*    pObj1 = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
         const SdrObject*    pObj2 = rMarkList.GetMark( 1 )->GetMarkedSdrObj();
-        const UINT16        nKind1 = pObj1->GetObjIdentifier();
-        const UINT16        nKind2 = pObj2->GetObjIdentifier();
+        const sal_uInt16        nKind1 = pObj1->GetObjIdentifier();
+        const sal_uInt16        nKind2 = pObj2->GetObjIdentifier();
 
         if ( ( nKind1 != OBJ_TEXT && nKind2 != OBJ_TEXT ) &&
              ( nKind1 != OBJ_TITLETEXT && nKind2 != OBJ_TITLETEXT ) &&
@@ -1057,7 +1057,7 @@ BOOL View::IsMorphingAllowed() const
 
             if( ( eFillStyle1 == XFILL_NONE || eFillStyle1 == XFILL_SOLID ) &&
                 ( eFillStyle2 == XFILL_NONE || eFillStyle2 == XFILL_SOLID ) )
-                bRet = TRUE;
+                bRet = sal_True;
         }
     }
 
@@ -1070,17 +1070,17 @@ BOOL View::IsMorphingAllowed() const
 |*
 \************************************************************************/
 
-BOOL View::IsVectorizeAllowed() const
+sal_Bool View::IsVectorizeAllowed() const
 {
     const SdrMarkList&  rMarkList = GetMarkedObjectList();
-    BOOL                bRet = FALSE;
+    sal_Bool                bRet = sal_False;
 
     if( rMarkList.GetMarkCount() == 1 )
     {
         const SdrObject* pObj = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
 
         if( pObj->ISA( SdrGrafObj ) && ( (SdrGrafObj*) pObj )->GetGraphicType() == GRAPHIC_BITMAP )
-            bRet = TRUE;
+            bRet = sal_True;
     }
 
     return bRet;
@@ -1095,7 +1095,7 @@ void View::onAccessibilityOptionsChanged()
         {
             const StyleSettings& rStyleSettings = pWindow->GetSettings().GetStyleSettings();
 
-            USHORT nOutputSlot, nPreviewSlot;
+            sal_uInt16 nOutputSlot, nPreviewSlot;
 
             SvtAccessibilityOptions& aAccOptions = getAccessibilityOptions();
 
@@ -1194,7 +1194,7 @@ SdrViewContext View::GetContext() const
         return FmFormView::GetContext();
 }
 
-BOOL View::HasMarkablePoints() const
+sal_Bool View::HasMarkablePoints() const
 {
     if( maSmartTags.HasMarkablePoints() )
         return true;
@@ -1202,14 +1202,14 @@ BOOL View::HasMarkablePoints() const
         return FmFormView::HasMarkablePoints();
 }
 
-ULONG View::GetMarkablePointCount() const
+sal_uLong View::GetMarkablePointCount() const
 {
-    ULONG nCount = FmFormView::GetMarkablePointCount();
+    sal_uLong nCount = FmFormView::GetMarkablePointCount();
     nCount += maSmartTags.GetMarkablePointCount();
     return nCount;
 }
 
-BOOL View::HasMarkedPoints() const
+sal_Bool View::HasMarkedPoints() const
 {
     if( maSmartTags.HasMarkedPoints() )
         return true;
@@ -1217,14 +1217,14 @@ BOOL View::HasMarkedPoints() const
         return FmFormView::HasMarkedPoints();
 }
 
-ULONG View::GetMarkedPointCount() const
+sal_uLong View::GetMarkedPointCount() const
 {
-    ULONG nCount = FmFormView::GetMarkedPointCount();
+    sal_uLong nCount = FmFormView::GetMarkedPointCount();
     nCount += maSmartTags.GetMarkedPointCount();
     return nCount;
 }
 
-BOOL View::IsPointMarkable(const SdrHdl& rHdl) const
+sal_Bool View::IsPointMarkable(const SdrHdl& rHdl) const
 {
     if( maSmartTags.IsPointMarkable( rHdl ) )
         return true;
@@ -1232,7 +1232,7 @@ BOOL View::IsPointMarkable(const SdrHdl& rHdl) const
         return FmFormView::IsPointMarkable( rHdl );
 }
 
-BOOL View::MarkPoint(SdrHdl& rHdl, BOOL bUnmark )
+sal_Bool View::MarkPoint(SdrHdl& rHdl, sal_Bool bUnmark )
 {
     if( maSmartTags.MarkPoint( rHdl, bUnmark ) )
         return true;
@@ -1240,7 +1240,7 @@ BOOL View::MarkPoint(SdrHdl& rHdl, BOOL bUnmark )
         return FmFormView::MarkPoint( rHdl, bUnmark );
 }
 
-BOOL View::MarkPoints(const Rectangle* pRect, BOOL bUnmark)
+sal_Bool View::MarkPoints(const Rectangle* pRect, sal_Bool bUnmark)
 {
     if( maSmartTags.MarkPoints( pRect, bUnmark ) )
         return true;

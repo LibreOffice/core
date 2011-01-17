@@ -215,7 +215,7 @@ private:
             present independently of psFirstAnchorURL.
         @param eMode
             This specifies whether the called resource has to be directly
-            bound to the given anchor in order to return <TRUE/> or whether
+            bound to the given anchor in order to return <sal_True/> or whether
             it can be bound indirectly, too.
     */
     bool IsBoundToAnchor (
@@ -229,7 +229,7 @@ private:
             A possibly empty list of anchor URLs.
         @param eMode
             This specifies whether the called resource has to be directly
-            bound to the given anchor in order to return <TRUE/> or whether
+            bound to the given anchor in order to return <sal_True/> or whether
             it can be bound indirectly, too.
     */
     bool IsBoundToAnchor (

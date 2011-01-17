@@ -87,7 +87,7 @@ public:
     static SdPage* AddMasterPage (
         SdDrawDocument* pTargetDocument,
         SdPage* pMasterPage,
-        USHORT nInsertionIndex);
+        sal_uInt16 nInsertionIndex);
 
     virtual Size GetPreferredSize (void);
     virtual sal_Int32 GetPreferredWidth (sal_Int32 nHeight);
@@ -152,7 +152,7 @@ protected:
         eventually.  Filled by InvalidatePreview() and operated upon by
         UpdatePreviews().
     */
-    ::std::queue<USHORT> maPreviewUpdateQueue;
+    ::std::queue<sal_uInt16> maPreviewUpdateQueue;
 
     virtual SdPage* GetSelectedMasterPage (void);
 
@@ -221,13 +221,13 @@ private:
     DECL_LINK(ContainerChangeListener, MasterPageContainerChangeEvent*);
 
     void SetItem (
-        USHORT nIndex,
+        sal_uInt16 nIndex,
         MasterPageContainer::Token aToken);
     void AddTokenToIndexEntry (
-        USHORT nIndex,
+        sal_uInt16 nIndex,
         MasterPageContainer::Token aToken);
     void RemoveTokenToIndexEntry (
-        USHORT nIndex,
+        sal_uInt16 nIndex,
         MasterPageContainer::Token aToken);
 };
 

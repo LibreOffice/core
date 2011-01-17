@@ -104,7 +104,7 @@ private:
 
     DECL_LINK(TimeoutHandler, Timer*);
 
-    /** Return <TRUE/> when the printer is printing.  Return <FALSE/> when
+    /** Return <sal_True/> when the printer is printing.  Return <sal_False/> when
         the printer is not printing, or there is no printer, or someting
         else went wrong.
     */

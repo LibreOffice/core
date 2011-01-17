@@ -45,44 +45,44 @@ public:
     */
     void HandleDataChangeEvent (void);
 
-    /** When this method returns <TRUE/> then the current slide is
-        highlighted in the view.  The default value is <FALSE/>.
+    /** When this method returns <sal_True/> then the current slide is
+        highlighted in the view.  The default value is <sal_False/>.
     */
     bool IsHighlightCurrentSlide (void) const;
     void SetHighlightCurrentSlide (const bool bIsHighlightCurrentSlide);
 
-    /** When this method returns <TRUE/> then the selection is indicated in
+    /** When this method returns <sal_True/> then the selection is indicated in
         the view (typically by drawing rectangles around the selected
-        slides.)  The default value is <TRUE/>.
+        slides.)  The default value is <sal_True/>.
     */
     bool IsShowSelection (void) const;
     void SetShowSelection (const bool bIsShowSelection);
 
-    /** When this method returns <TRUE/> then the focusdselection is indicated in
+    /** When this method returns <sal_True/> then the focusdselection is indicated in
         the view (typically by drawing dotted rectangles around the selected
-        slides.)  The default value is <TRUE/>.
+        slides.)  The default value is <sal_True/>.
     */
     bool IsShowFocus (void) const;
     void SetShowFocus (const bool bIsShowFocus);
 
-    /** When this method returns <TRUE/> then on a selection change the
+    /** When this method returns <sal_True/> then on a selection change the
         visible area is adapted so that the selected slides are shown
         centered in the view.  This can be used to center the current slide
-        by selecting only the current slide.  The default value is <FALSE/>.
+        by selecting only the current slide.  The default value is <sal_False/>.
     */
     bool IsCenterSelection (void) const;
     void SetCenterSelection (const bool bIsCenterSelection);
 
-    /** When this mehod returns <TRUE/> then the view may try to change the
+    /** When this mehod returns <sal_True/> then the view may try to change the
         visible area by scrolling it smoothly on the screen.  Experimental.
-        Default value is <FALSE/>.
+        Default value is <sal_False/>.
     */
     bool IsSmoothSelectionScrolling (void) const;
     void SetSmoothSelectionScrolling (const bool bIsSmoothSelectionScrolling);
 
-    /** When this method returns <TRUE/> then during a full screen
+    /** When this method returns <sal_True/> then during a full screen
         presentation the previews in a slide sorter are not updated.
-        Default value is <TRUE/>.
+        Default value is <sal_True/>.
     */
     bool IsSuspendPreviewUpdatesDuringFullScreenPresentation (void) const;
     void SetSuspendPreviewUpdatesDuringFullScreenPresentation (const bool bFlag);

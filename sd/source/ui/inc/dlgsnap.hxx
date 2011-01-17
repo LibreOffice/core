@@ -93,7 +93,7 @@ public:
 
     void HideRadioGroup();
     void HideDeleteBtn() { aBtnDelete.Hide(); }
-    void SetInputFields(BOOL bEnableX, BOOL bEnableY);
+    void SetInputFields(sal_Bool bEnableX, sal_Bool bEnableY);
 };
 
 

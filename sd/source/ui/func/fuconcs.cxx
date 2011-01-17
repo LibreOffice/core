@@ -133,16 +133,16 @@ void FuConstructCustomShape::DoExecute( SfxRequest& rReq )
 |*
 \************************************************************************/
 
-BOOL FuConstructCustomShape::MouseButtonDown(const MouseEvent& rMEvt)
+sal_Bool FuConstructCustomShape::MouseButtonDown(const MouseEvent& rMEvt)
 {
-    BOOL bReturn = FuConstruct::MouseButtonDown(rMEvt);
+    sal_Bool bReturn = FuConstruct::MouseButtonDown(rMEvt);
 
     if ( rMEvt.IsLeft() && !mpView->IsAction() )
     {
         Point aPnt( mpWindow->PixelToLogic( rMEvt.GetPosPixel() ) );
 
         mpWindow->CaptureMouse();
-        USHORT nDrgLog = USHORT ( mpWindow->PixelToLogic(Size(DRGPIX,0)).Width() );
+        sal_uInt16 nDrgLog = sal_uInt16 ( mpWindow->PixelToLogic(Size(DRGPIX,0)).Width() );
 
         mpView->BegCreateObj(aPnt, (OutputDevice*) NULL, nDrgLog);
 
@@ -172,7 +172,7 @@ BOOL FuConstructCustomShape::MouseButtonDown(const MouseEvent& rMEvt)
 |*
 \************************************************************************/
 
-BOOL FuConstructCustomShape::MouseMove(const MouseEvent& rMEvt)
+sal_Bool FuConstructCustomShape::MouseMove(const MouseEvent& rMEvt)
 {
     return FuConstruct::MouseMove(rMEvt);
 }
@@ -183,7 +183,7 @@ BOOL FuConstructCustomShape::MouseMove(const MouseEvent& rMEvt)
 |*
 \************************************************************************/
 
-BOOL FuConstructCustomShape::MouseButtonUp(const MouseEvent& rMEvt)
+sal_Bool FuConstructCustomShape::MouseButtonUp(const MouseEvent& rMEvt)
 {
     sal_Bool bReturn(sal_False);
 
@@ -207,14 +207,14 @@ BOOL FuConstructCustomShape::MouseButtonUp(const MouseEvent& rMEvt)
 |*
 |* Tastaturereignisse bearbeiten
 |*
-|* Wird ein KeyEvent bearbeitet, so ist der Return-Wert TRUE, andernfalls
-|* FALSE.
+|* Wird ein KeyEvent bearbeitet, so ist der Return-Wert sal_True, andernfalls
+|* sal_False.
 |*
 \************************************************************************/
 
-BOOL FuConstructCustomShape::KeyInput(const KeyEvent& rKEvt)
+sal_Bool FuConstructCustomShape::KeyInput(const KeyEvent& rKEvt)
 {
-    BOOL bReturn = FuConstruct::KeyInput(rKEvt);
+    sal_Bool bReturn = FuConstruct::KeyInput(rKEvt);
     return(bReturn);
 }
 

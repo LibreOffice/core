@@ -98,7 +98,7 @@ sal_uInt32 ControlContainer::AddControl (::std::auto_ptr<TreeNode> pControl)
 
 
 void ControlContainer::SetExpansionState (
-    UINT32 nIndex,
+    sal_uInt32 nIndex,
     ExpansionState aState)
 {
     ::osl::MutexGuard aGuard (maMutex);
@@ -177,7 +177,7 @@ void ControlContainer::SetExpansionState (
             }
 
             // Update the expansion state of all controls.
-            for (UINT32 i=0; i<GetControlCount(); i=GetNextIndex(i))
+            for (sal_uInt32 i=0; i<GetControlCount(); i=GetNextIndex(i))
             {
                 TreeNode* pControl = GetControl(i);
                 bResizeNecessary |= pControl->Expand(i == mnActiveControlIndex);
@@ -237,7 +237,7 @@ sal_uInt32 ControlContainer::GetVisibleControlCount (void) const
 {
     sal_uInt32 nCount (0);
 
-    UINT32 nIndex;
+    sal_uInt32 nIndex;
     sal_uInt32 nAllCount (maControlList.size());
     for (nIndex=0; nIndex<nAllCount; nIndex=GetNextIndex(nIndex,true))
     {

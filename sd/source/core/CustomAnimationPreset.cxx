@@ -219,8 +219,8 @@ Reference< XAnimationNode > CustomAnimationPreset::create( const rtl::OUString& 
 UStringList CustomAnimationPreset::getProperties() const
 {
     String aProperties( maProperty );
-    USHORT nTokens = aProperties.GetTokenCount();
-    USHORT nToken;
+    sal_uInt16 nTokens = aProperties.GetTokenCount();
+    sal_uInt16 nToken;
     UStringList aPropertyList;
     for( nToken = 0; nToken < nTokens; nToken++ )
         aPropertyList.push_back( aProperties.GetToken( nToken ) );
@@ -233,8 +233,8 @@ bool CustomAnimationPreset::hasProperty( const OUString& rProperty )const
 {
     String aProperties( maProperty );
     String aProperty( rProperty );
-    USHORT nTokens = aProperties.GetTokenCount();
-    USHORT nToken;
+    sal_uInt16 nTokens = aProperties.GetTokenCount();
+    sal_uInt16 nToken;
     for( nToken = 0; nToken < nTokens; nToken++ )
     {
         if( aProperties.GetToken( nToken ) == aProperty )

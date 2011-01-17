@@ -40,7 +40,7 @@ class AsynchronousTask;
     nMillisecondsBetweenSteps milliseconds as much steps are executed as fit
     into a nMaxTimePerStep millisecond intervall.
 
-    When a task is executed completely, i.e. HasNextStep() returns <FALSE/>,
+    When a task is executed completely, i.e. HasNextStep() returns <sal_False/>,
     the TimerBasedTaskExecution destroys itself.  This, of course, works
     only if the creating instance does not hold a shared_ptr to  that object.
 */

@@ -172,7 +172,7 @@ public:
 
     /** Test whether the called FrameworkHelper object is valid.
         @return
-            When the object has already been disposed then <FALSE/> is returned.
+            When the object has already been disposed then <sal_False/> is returned.
     */
     bool IsValid (void);
 
@@ -226,9 +226,9 @@ public:
         @param rsTaskPanelURL
             The panel that is to be activated.
         @param bEnsureTaskPaneIsVisible
-            When this is <TRUE/> then the task pane is activated when not
+            When this is <sal_True/> then the task pane is activated when not
             yet active.
-            When this flag is <FALSE/> then the requested panel
+            When this flag is <sal_False/> then the requested panel
             is activated only when the task pane is already active.  When it
             is not active then this call is silently ignored.
     */
@@ -239,7 +239,7 @@ public:
     /** Process a slot call that requests a view shell change.
     */
     void HandleModeChangeSlot (
-        ULONG nSlotId,
+        sal_uLong nSlotId,
         SfxRequest& rRequest);
 
     /** Run the given callback when the specified event is notified by the
@@ -376,7 +376,7 @@ private:
         @param rsEventType
             Run rCallback only on this event.
         @param rFilter
-            This filter has to return <TRUE/> in order for rCallback to be
+            This filter has to return <sal_True/> in order for rCallback to be
             called.
         @param rCallback
             The callback functor to be called.

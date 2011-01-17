@@ -135,7 +135,7 @@ Reference<awt::XWindow> SAL_CALL PresenterHelper::createWindow (
         // Make the frame window transparent and make the parent able to
         // draw behind it.
         if (pParentWindow != NULL)
-            pParentWindow->EnableChildTransparentMode(TRUE);
+            pParentWindow->EnableChildTransparentMode(sal_True);
     }
 
     if (pWindow != NULL)
@@ -147,12 +147,12 @@ Reference<awt::XWindow> SAL_CALL PresenterHelper::createWindow (
         if ( ! bEnableParentClip)
         {
             pWindow->SetParentClipMode(PARENTCLIPMODE_NOCLIP);
-            pWindow->SetPaintTransparent(TRUE);
+            pWindow->SetPaintTransparent(sal_True);
         }
         else
         {
             pWindow->SetParentClipMode(PARENTCLIPMODE_CLIP);
-            pWindow->SetPaintTransparent(FALSE);
+            pWindow->SetPaintTransparent(sal_False);
         }
 
     }

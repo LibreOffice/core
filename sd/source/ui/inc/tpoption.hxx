@@ -60,7 +60,7 @@ public:
             ~SdTpOptionsSnap();
 
     static  SfxTabPage* Create( Window*, const SfxItemSet& );
-    virtual BOOL FillItemSet( SfxItemSet& );
+    virtual sal_Bool FillItemSet( SfxItemSet& );
     virtual void Reset( const SfxItemSet & );
 
 //    virtual void ActivatePage( const SfxItemSet& rSet );
@@ -86,7 +86,7 @@ public:
             ~SdTpOptionsContents();
 
     static  SfxTabPage* Create( Window*, const SfxItemSet& );
-    virtual BOOL FillItemSet( SfxItemSet& );
+    virtual sal_Bool FillItemSet( SfxItemSet& );
     virtual void Reset( const SfxItemSet & );
 };
 
@@ -145,15 +145,15 @@ private:
     MetricField     aMtrFldInfo1;
     MetricField     aMtrFldInfo2;
 
-    UINT32          nWidth;
-    UINT32          nHeight;
+    sal_uInt32          nWidth;
+    sal_uInt32          nHeight;
     String          aInfo1;
     String          aInfo2;
 
     SfxMapUnit          ePoolUnit;
 
-    String          GetScale( INT32 nX, INT32 nY );
-    BOOL            SetScale( const String& aScale, INT32& rX, INT32& rY );
+    String          GetScale( sal_Int32 nX, sal_Int32 nY );
+    sal_Bool            SetScale( const String& aScale, sal_Int32& rX, sal_Int32& rY );
 
     DECL_LINK( ModifyScaleHdl, void * );
     DECL_LINK( ModifyOriginalScaleHdl, void * );
@@ -174,7 +174,7 @@ public:
             ~SdTpOptionsMisc();
 
     static  SfxTabPage* Create( Window*, const SfxItemSet& );
-    virtual BOOL FillItemSet( SfxItemSet& );
+    virtual sal_Bool FillItemSet( SfxItemSet& );
     virtual void Reset( const SfxItemSet & );
 
     /** Hide Impress specific controls, make Draw specific controls visible

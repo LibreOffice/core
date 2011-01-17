@@ -120,7 +120,7 @@ public:
             <const>OUTLINERMODE_OUTLINEVIEW</const> are defined in
             editeng/outliner.hxx.
     */
-    Outliner( SdDrawDocument* pDoc, USHORT nMode );
+    Outliner( SdDrawDocument* pDoc, sal_uInt16 nMode );
     virtual ~Outliner();
 
     /** Despite the name this method is called prior to spell cheking *and*
@@ -163,8 +163,8 @@ public:
 
     /** Starts the text conversion (hangul/hanja or Chinese simplified/traditional)
     for the current viewshell */
-    void StartConversion( INT16 nSourceLanguage,  INT16 nTargetLanguage,
-                const Font *pTargetFont, INT32 nOptions, BOOL bIsInteractive );
+    void StartConversion( sal_Int16 nSourceLanguage,  sal_Int16 nTargetLanguage,
+                const Font *pTargetFont, sal_Int32 nOptions, sal_Bool bIsInteractive );
 
     /** This is called internaly when text conversion is started.
         The position of current view mode/page/object/caret position
@@ -203,7 +203,7 @@ private:
     /** this is the language that is used for current text conversion.
         Only valid if meMode is TEXT_CONVERSION.
     */
-    INT16 mnConversionLanguage;
+    sal_Int16 mnConversionLanguage;
 
     /** While the value of this flag is greater than 0 changes of the current page
         do not lead to selecting the corresponding text in the outliner.
@@ -222,23 +222,23 @@ private:
     bool mbMatchMayExist;
 
     /// The number of pages in the current view.
-    USHORT mnPageCount;
+    sal_uInt16 mnPageCount;
 
     /// Number of objects on the current page / in the current selection.
-    INT32 mnObjectCount;
+    sal_Int32 mnObjectCount;
 
-    /** A <TRUE/> value indicates that the end of the find&replace or spell
+    /** A <sal_True/> value indicates that the end of the find&replace or spell
         check has been reached.
     */
     bool mbEndOfSearch;
 
-    /** Set to <TRUE/> when an object has been prepared successfully for
+    /** Set to <sal_True/> when an object has been prepared successfully for
         searching/spell checking.  This flag directs the internal iteration
         which stops when set to </TRUE>.
     */
     bool mbFoundObject;
 
-    /** When set to <TRUE/> this flag indicates that an error has occured
+    /** When set to <sal_True/> this flag indicates that an error has occured
         that should terminate the iteration over the objects to search/spell
         check.
     */
@@ -296,7 +296,7 @@ private:
     EditMode meStartEditMode;
 
     /// The current page index on starting to search/spell check.
-    USHORT mnStartPageIndex;
+    sal_uInt16 mnStartPageIndex;
 
     /// The object in edit mode when searching /spell checking was started
     /// (if any).
@@ -385,7 +385,7 @@ private:
 
     /** Detect whether the selection has changed.
         @return
-            Return <TRUE/> when the selection has been changed since the
+            Return <sal_True/> when the selection has been changed since the
             last call to this method.
     */
     bool DetectSelectionChange (void);
@@ -440,7 +440,7 @@ private:
 
     /** Prepare to do spell checking on the current text object.  This
         includes putting it into edit mode.  Under certain conditions this
-        method sets <member>mbEndOfSearch</member> to <TRUE/>.
+        method sets <member>mbEndOfSearch</member> to <sal_True/>.
     */
     void PrepareSpellCheck (void);
 
@@ -469,11 +469,11 @@ private:
         @param nPageIndex
             The new page index.
     */
-    void SetPage (EditMode eEditMode, USHORT nPageIndex);
+    void SetPage (EditMode eEditMode, sal_uInt16 nPageIndex);
 
     /** Switch on edit mode for the currently selected text object.
     */
-    void EnterEditMode (BOOL bGrabFocus=TRUE);
+    void EnterEditMode (sal_Bool bGrabFocus=sal_True);
 
     /** Return the position at which a new search is started with respect to
         the search direction as specified by the argument.
@@ -533,18 +533,18 @@ private:
         When the outline view is active then this method is called
         after a wrap arround to continue at the beginning of the document.
         @return
-            Returns <TRUE/> to indicate that another call to this method is
+            Returns <sal_True/> to indicate that another call to this method is
             required.  When all text objects have been processed then
-            <FALSE/> is returned.
+            <sal_False/> is returned.
     */
-    virtual BOOL SpellNextDocument (void);
+    virtual sal_Bool SpellNextDocument (void);
 
     /** Show the given message box and make it modal.  It is assumed that
         the parent of the given dialog is NULL, i.e. the application
         window.  This function makes sure that the otherwise non-modal
         search dialog, if visible, is locked, too.
     */
-    USHORT ShowModalMessageBox (Dialog& rMessageBox);
+    sal_uInt16 ShowModalMessageBox (Dialog& rMessageBox);
 };
 
 } // end of namespace sd

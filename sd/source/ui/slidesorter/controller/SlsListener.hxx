@@ -87,7 +87,7 @@ public:
         This method is called once during initialization and every time a
         FrameActionEvent signals the current controller being exchanged.
         When the connection is successfull then the flag
-        mbListeningToController is set to <TRUE/>.
+        mbListeningToController is set to <sal_True/>.
     */
     void ConnectToController (void);
 
@@ -95,7 +95,7 @@ public:
         listener.  This method is called once during initialization and
         every time a FrameActionEvent signals the current controller being
         exchanged.  When this method terminates then mbListeningToController
-        is <FALSE/>.
+        is <sal_False/>.
     */
     void DisconnectFromController (void);
 

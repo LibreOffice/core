@@ -78,11 +78,11 @@ public:
         static ::boost::shared_ptr<ToolBarManagerLock> Create (
             const ::boost::shared_ptr<ToolBarManager>& rpManager);
         /** Release the lock.  When the UI is captured
-            (Application::IsUICaptured() returns <TRUE/>) then the lock is
+            (Application::IsUICaptured() returns <sal_True/>) then the lock is
             released later asynchronously.
             @param bForce
-                When this flag is <TRUE/> then the lock is released even
-                when IsUICaptured() returns <TRUE/>.
+                When this flag is <sal_True/> then the lock is released even
+                when IsUICaptured() returns <sal_True/>.
         */
         void Release (bool bForce = false);
         DECL_LINK(TimeoutCallback,Timer*);
