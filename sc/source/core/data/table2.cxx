@@ -790,7 +790,7 @@ void ScTable::CopyToTable(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                             nLastRow = nRow2;
 
                         //pDestTab->SetRowHidden(i, nLastRow, bThisHidden);
-                        aEntries.push_back(ScShowRowsEntry(i, nLastRow, bThisHidden));
+                        aEntries.push_back(ScShowRowsEntry(i, nLastRow, !bThisHidden));
 
                         bool bThisHiddenChange = (bThisHidden != bDestHidden);
                         if (bThisHiddenChange && pCharts)
