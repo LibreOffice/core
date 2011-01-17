@@ -51,7 +51,7 @@ struct ContextInfo
     bool                mbTrimSpaces;       /// True = trims leading/trailing spaces from text data.
 
     explicit            ContextInfo();
-                        ContextInfo( sal_Int32 nElement ) : mnElement( nElement ) {}
+                        ContextInfo( sal_Int32 nElement ) : mnElement( nElement ), mbTrimSpaces(false) {}
 };
 
 ContextInfo::ContextInfo() :

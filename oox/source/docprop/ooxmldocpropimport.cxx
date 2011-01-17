@@ -87,10 +87,10 @@ uno::Sequence< xml::sax::InputSource > OOXMLDocPropImportImpl::GetRelatedStreams
 
     uno::Sequence< uno::Sequence< beans::StringPair > > aPropsInfo = xRelation->getRelationshipsByType( aStreamType );
 
-    sal_Int32 nLength = 0;
     uno::Sequence< xml::sax::InputSource > aResult( aPropsInfo.getLength() );
     if ( aPropsInfo.getLength() )
     {
+        sal_Int32 nLength = 0;
         for ( sal_Int32 nInd = 0; nInd < aPropsInfo.getLength(); nInd++ )
             for ( sal_Int32 nEntryInd = 0; nEntryInd < aPropsInfo[nInd].getLength(); nEntryInd++ )
                 if ( aPropsInfo[nInd][nEntryInd].First.equals( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Target" ) ) ) )

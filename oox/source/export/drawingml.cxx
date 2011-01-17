@@ -134,7 +134,6 @@ void lcl_dump_pset(Reference< XPropertySet > rXPropSet)
         sal_Int32 intValue;
         bool boolValue;
     LineSpacing spacing;
-//         RectanglePoint pointValue;
 
         if( value >>= strValue )
             fprintf (stderr,"\"%s\"\n", USS( strValue ) );
@@ -145,11 +144,9 @@ void lcl_dump_pset(Reference< XPropertySet > rXPropSet)
     else if( value >>= spacing ) {
         fprintf (stderr, "mode: %d value: %d\n", spacing.Mode, spacing.Height);
     }
-//         else if( value >>= pointValue )
-//             fprintf (stderr,"%d            (RectanglePoint)\n", pointValue);
         else
             fprintf (stderr,"???           <unhandled type>\n");
-    } catch(Exception e) {
+    } catch(const Exception &e) {
         fprintf (stderr,"unable to get '%s' value\n", USS(props [i].Name));
     }
     }
@@ -172,7 +169,7 @@ bool DrawingML::GetProperty( Reference< XPropertySet > rXPropSet, String aName )
         mAny = rXPropSet->getPropertyValue( aName );
         if ( mAny.hasValue() )
             bRetValue = true;
-    } catch( Exception& ) { /* printf ("exception when trying to get value of property: %s\n", ST(aName)); */ }
+    } catch( const Exception& ) { /* printf ("exception when trying to get value of property: %s\n", ST(aName)); */ }
 
     return bRetValue;
 }
@@ -187,7 +184,7 @@ bool DrawingML::GetPropertyAndState( Reference< XPropertySet > rXPropSet, Refere
             bRetValue = true;
             eState = rXPropState->getPropertyState( aName );
         }
-    } catch( Exception& ) { /* printf ("exception when trying to get value of property: %s\n", ST(aName)); */ }
+    } catch( const Exception& ) { /* printf ("exception when trying to get value of property: %s\n", ST(aName)); */ }
 
     return bRetValue;
 }
@@ -948,7 +945,8 @@ void DrawingML::WriteRun( Reference< XTextRange > rRun )
             return;
         if( sText.getLength() < 1 )
             return;
-        } catch (Exception e) {
+        }
+        catch (const Exception &e) {
             return;
         }
     }

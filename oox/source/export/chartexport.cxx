@@ -1621,10 +1621,10 @@ void ChartExport::exportSeries( Reference< chart2::XChartType > xChartType, sal_
         {
             Sequence< Reference< chart2::data::XLabeledDataSequence > > aSeqCnt(
                 xSource->getDataSequences());
-            sal_Int32 nMainSequenceIndex = -1;
-            sal_Int32 nSeriesLength = 0;
             // search for main sequence and create a series element
             {
+                sal_Int32 nMainSequenceIndex = -1;
+                sal_Int32 nSeriesLength = 0;
                 Reference< chart2::data::XDataSequence > xValuesSeq;
                 Reference< chart2::data::XDataSequence > xLabelSeq;
                 sal_Int32 nSeqIdx=0;
