@@ -700,10 +700,7 @@ bool ScDPTableDataCache::ValidQuery( SCROW nRow, const ScQueryParam &rParam, boo
                     if (bMatchWholeCell)
                     {
                         bOk = pTransliteration->isEqual( aCellStr, *rEntry.pStr );
-                        //Added by zhaosz,for sodc_2702,20060808
-                        String aStr = *rEntry.pStr;//"f*"
-                        //modified by weihuaw,for SODC_16698
-                        //use another way to find "*" in aStr
+                        String aStr = *rEntry.pStr;
                         sal_Bool bHasStar = sal_False;
                         xub_StrLen nIndex;
                         if (( nIndex = aStr.Search('*') ) != STRING_NOTFOUND)
@@ -723,8 +720,6 @@ bool ScDPTableDataCache::ValidQuery( SCROW nRow, const ScQueryParam &rParam, boo
                                 }
                             }
                         }
-                        //end modified
-                        //Added end,20060808
                     }
                     else
                     {
