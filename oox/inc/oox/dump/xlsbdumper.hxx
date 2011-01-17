@@ -29,7 +29,6 @@
 #define OOX_DUMP_XLSBDUMPER_HXX
 
 #include "oox/dump/dumperbase.hxx"
-#include "oox/helper/recordinputstream.hxx"
 
 #if OOX_INCLUDE_DUMPER
 
@@ -96,9 +95,9 @@ private:
     bool                readCompressedInt( BinaryInputStream& rStrm, sal_Int32& ornValue );
 
 private:
-    typedef ::boost::shared_ptr< RecordInputStream > RecordInputStreamRef;
+    typedef ::boost::shared_ptr< SequenceInputStream > SequenceInputStreamRef;
 
-    RecordInputStreamRef mxBiffStrm;
+    SequenceInputStreamRef mxBiffStrm;
     NameListRef         mxErrCodes;
 };
 
