@@ -126,10 +126,10 @@ namespace chelp {
                       Databases* pDatabases )
             throw( com::sun::star::ucb::IllegalIdentifierException );
 
-        bool isPicture() const { return m_aModule.compareToAscii("picture") == 0; }
-        bool isActive() const { return m_aActive.getLength() > 0 && m_aActive.compareToAscii( "true" ) == 0; }
+        bool isPicture() const { return m_aModule.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("picture")); }
+        bool isActive() const { return m_aActive.getLength() > 0 && m_aActive.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("true")); }
         bool isQuery() const { return m_aId.getLength() == 0 && m_aQuery.getLength() != 0; }
-        bool isEntryForModule() const { return m_aId.compareToAscii("start") == 0 || m_bStart; }
+        bool isEntryForModule() const { return m_aId.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("start")) || m_bStart; }
         bool isFile() const { return m_aId.getLength() != 0; }
         bool isModule() const { return m_aId.getLength() == 0 && m_aModule.getLength() != 0; }
         bool isRoot() const { return m_aModule.getLength() == 0; }
