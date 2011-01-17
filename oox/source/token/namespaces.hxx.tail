@@ -1,8 +1,8 @@
 
 // ============================================================================
 
-const sal_Int32 TOKEN_MASK          = static_cast< sal_Int32 >( (1 << NMSP_SHIFT) - 1 );
-const sal_Int32 NMSP_MASK           = static_cast< sal_Int32 >( SAL_MAX_INT16 & ~TOKEN_MASK );
+const sal_Int32 TOKEN_MASK      = static_cast< sal_Int32 >( (1 << NMSP_SHIFT) - 1 );
+const sal_Int32 NMSP_MASK       = static_cast< sal_Int32 >( SAL_MAX_INT16 & ~TOKEN_MASK );
 
 /** Returns the raw token identifier without namespace of the passed token. */
 inline sal_Int32 getBaseToken( sal_Int32 nToken ) { return nToken & TOKEN_MASK; }
@@ -10,23 +10,26 @@ inline sal_Int32 getBaseToken( sal_Int32 nToken ) { return nToken & TOKEN_MASK; 
 /** Returns the namespace without token identifier of the passed token. */
 inline sal_Int32 getNamespace( sal_Int32 nToken ) { return nToken & NMSP_MASK; }
 
+
 // defines for tokens with specific namespaces
-#define A_TOKEN( token )            (::oox::NMSP_dml | XML_##token)
-#define AX_TOKEN( token )           (::oox::NMSP_ax | XML_##token)
-#define C_TOKEN( token )            (::oox::NMSP_dmlChart | XML_##token)
-#define CDR_TOKEN( token )          (::oox::NMSP_dmlChartDr | XML_##token)
-#define DGM_TOKEN( token )          (::oox::NMSP_dmlDiagram | XML_##token)
-#define O_TOKEN( token )            (::oox::NMSP_vmlOffice | XML_##token)
-#define PC_TOKEN( token )           (::oox::NMSP_packageContentTypes | XML_##token)
-#define PPT_TOKEN( token )          (::oox::NMSP_ppt | XML_##token)
-#define PR_TOKEN( token )           (::oox::NMSP_packageRel | XML_##token)
-#define R_TOKEN( token )            (::oox::NMSP_officeRel | XML_##token)
-#define VML_TOKEN( token )          (::oox::NMSP_vml | XML_##token)
-#define VMLX_TOKEN( token )         (::oox::NMSP_vmlExcel | XML_##token)
-#define XDR_TOKEN( token )          (::oox::NMSP_dmlSpreadDr | XML_##token)
-#define XLS_TOKEN( token )          (::oox::NMSP_xls | XML_##token)
-#define XM_TOKEN( token )           (::oox::NMSP_xm | XML_##token)
-#define XML_TOKEN( token )          (::oox::NMSP_xml | XML_##token)
+#define OOX_TOKEN( token, namespace ) (::oox::XML_##token | ::oox::NMSP_##namespace)
+
+#define A_TOKEN( token )        OOX_TOKEN( token, dml )
+#define AX_TOKEN( token )       OOX_TOKEN( token, ax )
+#define C_TOKEN( token )        OOX_TOKEN( token, dmlChart )
+#define CDR_TOKEN( token )      OOX_TOKEN( token, dmlChartDr )
+#define DGM_TOKEN( token )      OOX_TOKEN( token, dmlDiagram )
+#define O_TOKEN( token )        OOX_TOKEN( token, vmlOffice )
+#define PC_TOKEN( token )       OOX_TOKEN( token, packageContentTypes )
+#define PPT_TOKEN( token )      OOX_TOKEN( token, ppt )
+#define PR_TOKEN( token )       OOX_TOKEN( token, packageRel )
+#define R_TOKEN( token )        OOX_TOKEN( token, officeRel )
+#define VML_TOKEN( token )      OOX_TOKEN( token, vml )
+#define VMLX_TOKEN( token )     OOX_TOKEN( token, vmlExcel )
+#define XDR_TOKEN( token )      OOX_TOKEN( token, dmlSpreadDr )
+#define XLS_TOKEN( token )      OOX_TOKEN( token, xls )
+#define XM_TOKEN( token )       OOX_TOKEN( token, xm )
+#define XML_TOKEN( token )      OOX_TOKEN( token, xml )
 
 // ============================================================================
 
