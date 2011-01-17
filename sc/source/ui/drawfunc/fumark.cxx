@@ -51,8 +51,8 @@
 FuMarkRect::FuMarkRect(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* pViewP,
                SdrModel* pDoc, SfxRequest& rReq) :
     FuPoor(pViewSh, pWin, pViewP, pDoc, rReq),
-    bVisible(FALSE),
-    bStartDrag(FALSE)
+    bVisible(sal_False),
+    bStartDrag(sal_False)
 {
 }
 
@@ -72,18 +72,18 @@ FuMarkRect::~FuMarkRect()
 |*
 \************************************************************************/
 
-BOOL FuMarkRect::MouseButtonDown(const MouseEvent& rMEvt)
+sal_Bool FuMarkRect::MouseButtonDown(const MouseEvent& rMEvt)
 {
     // #95491# remember button state for creation of own MouseEvents
     SetMouseButtonCode(rMEvt.GetButtons());
 
     pWindow->CaptureMouse();
     pView->UnmarkAll();         // der Einheitlichkeit halber und wegen #50558#
-    bStartDrag = TRUE;
+    bStartDrag = sal_True;
 
     aBeginPos = pWindow->PixelToLogic( rMEvt.GetPosPixel() );
     aZoomRect = Rectangle( aBeginPos, Size() );
-    return TRUE;
+    return sal_True;
 }
 
 /*************************************************************************
@@ -92,7 +92,7 @@ BOOL FuMarkRect::MouseButtonDown(const MouseEvent& rMEvt)
 |*
 \************************************************************************/
 
-BOOL FuMarkRect::MouseMove(const MouseEvent& rMEvt)
+sal_Bool FuMarkRect::MouseMove(const MouseEvent& rMEvt)
 {
     if ( bStartDrag )
     {
@@ -106,7 +106,7 @@ BOOL FuMarkRect::MouseMove(const MouseEvent& rMEvt)
         aZoomRect = aRect;
         aZoomRect.Justify();
         pViewShell->DrawMarkRect(aZoomRect);
-        bVisible = TRUE;
+        bVisible = sal_True;
     }
 
     ForcePointer(&rMEvt);
@@ -120,7 +120,7 @@ BOOL FuMarkRect::MouseMove(const MouseEvent& rMEvt)
 |*
 \************************************************************************/
 
-BOOL FuMarkRect::MouseButtonUp(const MouseEvent& rMEvt)
+sal_Bool FuMarkRect::MouseButtonUp(const MouseEvent& rMEvt)
 {
     // #95491# remember button state for creation of own MouseEvents
     SetMouseButtonCode(rMEvt.GetButtons());
@@ -129,12 +129,12 @@ BOOL FuMarkRect::MouseButtonUp(const MouseEvent& rMEvt)
     {
         // Hide ZoomRect
         pViewShell->DrawMarkRect(aZoomRect);
-        bVisible = FALSE;
+        bVisible = sal_False;
     }
 
     Size aZoomSizePixel = pWindow->LogicToPixel(aZoomRect).GetSize();
 
-    USHORT nMinMove = pView->GetMinMoveDistancePixel();
+    sal_uInt16 nMinMove = pView->GetMinMoveDistancePixel();
     if ( aZoomSizePixel.Width() < nMinMove || aZoomSizePixel.Height() < nMinMove )
     {
         // Klick auf der Stelle
@@ -142,7 +142,7 @@ BOOL FuMarkRect::MouseButtonUp(const MouseEvent& rMEvt)
         aZoomRect.SetSize(Size());      // dann ganz leer
     }
 
-    bStartDrag = FALSE;
+    bStartDrag = sal_False;
     pWindow->ReleaseMouse();
 
     pViewShell->GetViewData()->GetDispatcher().
@@ -154,11 +154,11 @@ BOOL FuMarkRect::MouseButtonUp(const MouseEvent& rMEvt)
 
         //  Chart-Dialog starten:
 
-//  USHORT nId  = ScChartDlgWrapper::GetChildWindowId();
+//  sal_uInt16 nId  = ScChartDlgWrapper::GetChildWindowId();
 //  SfxChildWindow* pWnd = pViewShell->GetViewFrame()->GetChildWindow( nId );
-//  SC_MOD()->SetRefDialog( nId, pWnd ? FALSE : TRUE );
+//  SC_MOD()->SetRefDialog( nId, pWnd ? sal_False : sal_True );
 
-    return TRUE;
+    return sal_True;
 }
 
 /*************************************************************************
@@ -167,7 +167,7 @@ BOOL FuMarkRect::MouseButtonUp(const MouseEvent& rMEvt)
 |*
 \************************************************************************/
 
-BYTE FuMarkRect::Command(const CommandEvent& rCEvt)
+sal_uInt8 FuMarkRect::Command(const CommandEvent& rCEvt)
 {
     if ( COMMAND_STARTDRAG == rCEvt.GetCommand() )
     {
@@ -183,14 +183,14 @@ BYTE FuMarkRect::Command(const CommandEvent& rCEvt)
 |*
 |* Tastaturereignisse bearbeiten
 |*
-|* Wird ein KeyEvent bearbeitet, so ist der Return-Wert TRUE, andernfalls
+|* Wird ein KeyEvent bearbeitet, so ist der Return-Wert sal_True, andernfalls
 |* FALSE.
 |*
 \************************************************************************/
 
-BOOL FuMarkRect::KeyInput(const KeyEvent& rKEvt)
+sal_Bool FuMarkRect::KeyInput(const KeyEvent& rKEvt)
 {
-    BOOL bReturn = FALSE;
+    sal_Bool bReturn = sal_False;
 
     switch ( rKEvt.GetKeyCode().GetCode() )
     {
@@ -198,7 +198,7 @@ BOOL FuMarkRect::KeyInput(const KeyEvent& rKEvt)
             //  beenden
             pViewShell->GetViewData()->GetDispatcher().
                 Execute(aSfxRequest.GetSlot(), SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD);
-            bReturn = TRUE;
+            bReturn = sal_True;
             break;
     }
 
@@ -246,7 +246,7 @@ void FuMarkRect::Activate()
     ScMarkData& rMark = pViewData->GetMarkData();
 
     if ( !rMark.IsMultiMarked() && !rMark.IsMarked() )
-        pViewShell->MarkDataArea( TRUE );
+        pViewShell->MarkDataArea( sal_True );
 
     pViewData->GetMultiArea( aSourceRange );        // Mehrfachselektion erlaubt
 
@@ -269,8 +269,8 @@ void FuMarkRect::Deactivate()
     {
         // Hide ZoomRect
         pViewShell->DrawMarkRect(aZoomRect);
-        bVisible = FALSE;
-        bStartDrag = FALSE;
+        bVisible = sal_False;
+        bStartDrag = sal_False;
     }
 }
 

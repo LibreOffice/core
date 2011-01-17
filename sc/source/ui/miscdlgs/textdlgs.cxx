@@ -68,7 +68,7 @@ ScCharDlg::ScCharDlg( Window* pParent, const SfxItemSet* pAttr,
 
 // -----------------------------------------------------------------------
 
-void __EXPORT ScCharDlg::PageCreated( USHORT nId, SfxTabPage &rPage )
+void __EXPORT ScCharDlg::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
 {
     SfxAllItemSet aSet(*(GetInputSetImpl()->GetPool())); //CHINA001
     switch( nId )
@@ -118,7 +118,7 @@ ScParagraphDlg::ScParagraphDlg( Window* pParent, const SfxItemSet* pAttr ) :
 
 // -----------------------------------------------------------------------
 
-void __EXPORT ScParagraphDlg::PageCreated( USHORT nId, SfxTabPage &rPage )
+void __EXPORT ScParagraphDlg::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
 {
     switch( nId )
     {

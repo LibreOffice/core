@@ -54,14 +54,14 @@ private:
 
 public:
             ScSelEntryDlg(      Window* pParent,
-                                USHORT  nResId,
+                                sal_uInt16  nResId,
                           const String& aTitle,
                           const String& aLbTitle,
                                 List&   aEntryList );
             ~ScSelEntryDlg();
 
     String GetSelectEntry() const;
-//UNUSED2008-05  USHORT GetSelectEntryPos() const;
+//UNUSED2008-05  sal_uInt16 GetSelectEntryPos() const;
 };
 
 

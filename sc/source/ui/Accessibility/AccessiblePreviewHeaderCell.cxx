@@ -104,7 +104,7 @@ void ScAccessiblePreviewHeaderCell::Notify( SfxBroadcaster& rBC, const SfxHint& 
     if (rHint.ISA( SfxSimpleHint ))
     {
         const SfxSimpleHint& rRef = (const SfxSimpleHint&)rHint;
-        ULONG nId = rRef.GetId();
+        sal_uLong nId = rRef.GetId();
         if (nId == SC_HINT_ACC_VISAREACHANGED)
         {
             if (mpTextHelper)

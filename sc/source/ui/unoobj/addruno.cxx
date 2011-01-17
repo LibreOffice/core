@@ -78,7 +78,7 @@ sal_Bool ScAddressConversionObj::ParseUIString( const String& rUIString )
     sal_Bool bSuccess = sal_False;
     if ( bIsRange )
     {
-        USHORT nResult = aRange.ParseAny( rUIString, pDoc );
+        sal_uInt16 nResult = aRange.ParseAny( rUIString, pDoc );
         if ( nResult & SCA_VALID )
         {
             if ( ( nResult & SCA_TAB_3D ) == 0 )
@@ -92,7 +92,7 @@ sal_Bool ScAddressConversionObj::ParseUIString( const String& rUIString )
     }
     else
     {
-        USHORT nResult = aRange.aStart.Parse( rUIString, pDoc );
+        sal_uInt16 nResult = aRange.aStart.Parse( rUIString, pDoc );
         if ( nResult & SCA_VALID )
         {
             if ( ( nResult & SCA_TAB_3D ) == 0 )
@@ -256,7 +256,7 @@ uno::Any SAL_CALL ScAddressConversionObj::getPropertyValue( const rtl::OUString&
     {
         //  generate UI representation string - include sheet only if different from ref sheet
         String aFormatStr;
-        USHORT nFlags = SCA_VALID;
+        sal_uInt16 nFlags = SCA_VALID;
         if ( aRange.aStart.Tab() != nRefSheet )
             nFlags |= SCA_TAB_3D;
         if ( bIsRange )

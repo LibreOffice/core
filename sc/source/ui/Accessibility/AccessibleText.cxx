@@ -66,7 +66,7 @@ public:
                         ScViewForwarder(ScTabViewShell* pViewShell, ScSplitPos eSplitPos, const ScAddress& rCell);
     virtual             ~ScViewForwarder();
 
-    virtual BOOL        IsValid() const;
+    virtual sal_Bool        IsValid() const;
     virtual Rectangle   GetVisArea() const;
     virtual Point       LogicToPixel( const Point& rPoint, const MapMode& rMapMode ) const;
     virtual Point       PixelToLogic( const Point& rPoint, const MapMode& rMapMode ) const;
@@ -86,7 +86,7 @@ ScViewForwarder::~ScViewForwarder()
 {
 }
 
-BOOL ScViewForwarder::IsValid() const
+sal_Bool ScViewForwarder::IsValid() const
 {
     return mpViewShell != NULL;
 }
@@ -170,7 +170,7 @@ public:
                         // <--
     virtual             ~ScEditObjectViewForwarder();
 
-    virtual BOOL        IsValid() const;
+    virtual sal_Bool        IsValid() const;
     virtual Rectangle   GetVisArea() const;
     virtual Point       LogicToPixel( const Point& rPoint, const MapMode& rMapMode ) const;
     virtual Point       PixelToLogic( const Point& rPoint, const MapMode& rMapMode ) const;
@@ -192,7 +192,7 @@ ScEditObjectViewForwarder::~ScEditObjectViewForwarder()
 {
 }
 
-BOOL ScEditObjectViewForwarder::IsValid() const
+sal_Bool ScEditObjectViewForwarder::IsValid() const
 {
     return (mpWindow != NULL);
 }
@@ -275,7 +275,7 @@ public:
                         ScPreviewViewForwarder(ScPreviewShell* pViewShell);
     virtual             ~ScPreviewViewForwarder();
 
-    virtual BOOL        IsValid() const;
+    virtual sal_Bool        IsValid() const;
     virtual Rectangle   GetVisArea() const;
     virtual Point       LogicToPixel( const Point& rPoint, const MapMode& rMapMode ) const;
     virtual Point       PixelToLogic( const Point& rPoint, const MapMode& rMapMode ) const;
@@ -300,7 +300,7 @@ ScPreviewViewForwarder::~ScPreviewViewForwarder()
     delete mpTableInfo;
 }
 
-BOOL ScPreviewViewForwarder::IsValid() const
+sal_Bool ScPreviewViewForwarder::IsValid() const
 {
     return mpViewShell != NULL;
 }
@@ -588,7 +588,7 @@ public:
                         ScEditViewForwarder(EditView* pEditView, Window* pWin);
     virtual             ~ScEditViewForwarder();
 
-    virtual BOOL        IsValid() const;
+    virtual sal_Bool        IsValid() const;
     virtual Rectangle   GetVisArea() const;
     virtual Point       LogicToPixel( const Point& rPoint, const MapMode& rMapMode ) const;
     virtual Point       PixelToLogic( const Point& rPoint, const MapMode& rMapMode ) const;
@@ -614,7 +614,7 @@ ScEditViewForwarder::~ScEditViewForwarder()
 {
 }
 
-BOOL ScEditViewForwarder::IsValid() const
+sal_Bool ScEditViewForwarder::IsValid() const
 {
     sal_Bool bResult(sal_False);
     if (mpWindow && mpEditView)
@@ -777,7 +777,7 @@ void ScAccessibleCellTextData::Notify( SfxBroadcaster& rBC, const SfxHint& rHint
 {
     if ( rHint.ISA( SfxSimpleHint ) )
     {
-        ULONG nId = ((const SfxSimpleHint&)rHint).GetId();
+        sal_uLong nId = ((const SfxSimpleHint&)rHint).GetId();
         if ( nId == SFX_HINT_DYING )
         {
             mpViewShell = NULL;                     // invalid now
@@ -1092,7 +1092,7 @@ void ScAccessibleEditObjectTextData::Notify( SfxBroadcaster& rBC, const SfxHint&
 {
     if ( rHint.ISA( SfxSimpleHint ) )
     {
-        ULONG nId = ((const SfxSimpleHint&)rHint).GetId();
+        sal_uLong nId = ((const SfxSimpleHint&)rHint).GetId();
         if ( nId == SFX_HINT_DYING )
         {
             mpWindow = NULL;
@@ -1243,12 +1243,12 @@ SvxTextForwarder* ScAccessibleEditLineTextData::GetTextForwarder()
             {
                 SfxItemPool* pEnginePool = EditEngine::CreatePool();
                 pEnginePool->FreezeIdRanges();
-                mpEditEngine = new ScFieldEditEngine( pEnginePool, NULL, TRUE );
+                mpEditEngine = new ScFieldEditEngine( pEnginePool, NULL, sal_True );
                 mbEditEngineCreated = sal_True;
-                //  currently, GetPortions doesn't work if UpdateMode is FALSE,
+                //  currently, GetPortions doesn't work if UpdateMode is sal_False,
                 //  this will be fixed (in EditEngine) by src600
-        //      pEditEngine->SetUpdateMode( FALSE );
-                mpEditEngine->EnableUndo( FALSE );
+        //      pEditEngine->SetUpdateMode( sal_False );
+                mpEditEngine->EnableUndo( sal_False );
                 mpEditEngine->SetRefMapMode( MAP_100TH_MM );
                 mpForwarder = new SvxEditEngineForwarder(*mpEditEngine);
 
@@ -1363,7 +1363,7 @@ void ScAccessiblePreviewCellTextData::Notify( SfxBroadcaster& rBC, const SfxHint
 {
     if ( rHint.ISA( SfxSimpleHint ) )
     {
-        ULONG nId = ((const SfxSimpleHint&)rHint).GetId();
+        sal_uLong nId = ((const SfxSimpleHint&)rHint).GetId();
         if ( nId == SFX_HINT_DYING )
         {
             mpViewShell = NULL;                     // invalid now
@@ -1456,7 +1456,7 @@ void ScAccessiblePreviewHeaderCellTextData::Notify( SfxBroadcaster& rBC, const S
 {
     if ( rHint.ISA( SfxSimpleHint ) )
     {
-        ULONG nId = ((const SfxSimpleHint&)rHint).GetId();
+        sal_uLong nId = ((const SfxSimpleHint&)rHint).GetId();
         if ( nId == SFX_HINT_DYING )
         {
             mpViewShell = NULL;                     // invalid now
@@ -1485,12 +1485,12 @@ SvxTextForwarder* ScAccessiblePreviewHeaderCellTextData::GetTextForwarder()
         {
             SfxItemPool* pEnginePool = EditEngine::CreatePool();
             pEnginePool->FreezeIdRanges();
-            pEditEngine = new ScFieldEditEngine( pEnginePool, NULL, TRUE );
+            pEditEngine = new ScFieldEditEngine( pEnginePool, NULL, sal_True );
         }
-        //  currently, GetPortions doesn't work if UpdateMode is FALSE,
+        //  currently, GetPortions doesn't work if UpdateMode is sal_False,
         //  this will be fixed (in EditEngine) by src600
-//      pEditEngine->SetUpdateMode( FALSE );
-        pEditEngine->EnableUndo( FALSE );
+//      pEditEngine->SetUpdateMode( sal_False );
+        pEditEngine->EnableUndo( sal_False );
         if (pDocShell)
             pEditEngine->SetRefDevice(pDocShell->GetRefDevice());
         else
@@ -1520,7 +1520,7 @@ SvxTextForwarder* ScAccessiblePreviewHeaderCellTextData::GetTextForwarder()
         pEditEngine->SetText( maText );
     }
 
-    bDataValid = TRUE;
+    bDataValid = sal_True;
 
     if (pEditEngine)
         pEditEngine->SetNotifyHdl( LINK(this, ScAccessibleCellTextData, NotifyHdl) );
@@ -1599,7 +1599,7 @@ void ScAccessibleHeaderTextData::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
     if ( rHint.ISA( SfxSimpleHint ) )
     {
-        ULONG nId = ((const SfxSimpleHint&)rHint).GetId();
+        sal_uLong nId = ((const SfxSimpleHint&)rHint).GetId();
         if ( nId == SFX_HINT_DYING )
         {
             mpViewShell = NULL;// invalid now
@@ -1616,9 +1616,9 @@ SvxTextForwarder* ScAccessibleHeaderTextData::GetTextForwarder()
     {
         SfxItemPool* pEnginePool = EditEngine::CreatePool();
         pEnginePool->FreezeIdRanges();
-        ScHeaderEditEngine* pHdrEngine = new ScHeaderEditEngine( pEnginePool, TRUE );
+        ScHeaderEditEngine* pHdrEngine = new ScHeaderEditEngine( pEnginePool, sal_True );
 
-        pHdrEngine->EnableUndo( FALSE );
+        pHdrEngine->EnableUndo( sal_False );
         pHdrEngine->SetRefMapMode( MAP_TWIP );
 
         //  default font must be set, independently of document
@@ -1716,7 +1716,7 @@ void ScAccessibleNoteTextData::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
     if ( rHint.ISA( SfxSimpleHint ) )
     {
-        ULONG nId = ((const SfxSimpleHint&)rHint).GetId();
+        sal_uLong nId = ((const SfxSimpleHint&)rHint).GetId();
         if ( nId == SFX_HINT_DYING )
         {
             mpViewShell = NULL;// invalid now
@@ -1740,12 +1740,12 @@ SvxTextForwarder* ScAccessibleNoteTextData::GetTextForwarder()
         {
             SfxItemPool* pEnginePool = EditEngine::CreatePool();
             pEnginePool->FreezeIdRanges();
-            mpEditEngine = new ScFieldEditEngine( pEnginePool, NULL, TRUE );
+            mpEditEngine = new ScFieldEditEngine( pEnginePool, NULL, sal_True );
         }
-        //  currently, GetPortions doesn't work if UpdateMode is FALSE,
+        //  currently, GetPortions doesn't work if UpdateMode is sal_False,
         //  this will be fixed (in EditEngine) by src600
-//      pEditEngine->SetUpdateMode( FALSE );
-        mpEditEngine->EnableUndo( FALSE );
+//      pEditEngine->SetUpdateMode( sal_False );
+        mpEditEngine->EnableUndo( sal_False );
         if (mpDocSh)
             mpEditEngine->SetRefDevice(mpDocSh->GetRefDevice());
         else
@@ -1775,7 +1775,7 @@ SvxTextForwarder* ScAccessibleNoteTextData::GetTextForwarder()
         mpEditEngine->SetText( msText );
     }
 
-    mbDataValid = TRUE;
+    mbDataValid = sal_True;
 
     if (mpEditEngine)
         mpEditEngine->SetNotifyHdl( LINK(this, ScAccessibleCellTextData, NotifyHdl) );
@@ -1801,7 +1801,7 @@ class ScCsvViewForwarder : public SvxViewForwarder
 public:
     explicit                    ScCsvViewForwarder( Window* pWindow, const Rectangle& rBoundBox );
 
-    virtual BOOL                IsValid() const;
+    virtual sal_Bool                IsValid() const;
     virtual Rectangle           GetVisArea() const;
     virtual Point               LogicToPixel( const Point& rPoint, const MapMode& rMapMode ) const;
     virtual Point               PixelToLogic( const Point& rPoint, const MapMode& rMapMode ) const;
@@ -1815,7 +1815,7 @@ ScCsvViewForwarder::ScCsvViewForwarder( Window* pWindow, const Rectangle& rBound
 {
 }
 
-BOOL ScCsvViewForwarder::IsValid() const
+sal_Bool ScCsvViewForwarder::IsValid() const
 {
     return mpWindow != NULL;
 }
@@ -1863,7 +1863,7 @@ void ScAccessibleCsvTextData::Notify( SfxBroadcaster& rBC, const SfxHint& rHint 
 {
     if ( rHint.ISA( SfxSimpleHint ) )
     {
-        ULONG nId = ((const SfxSimpleHint&)rHint).GetId();
+        sal_uLong nId = ((const SfxSimpleHint&)rHint).GetId();
         if( nId == SFX_HINT_DYING )
         {
             mpWindow = NULL;

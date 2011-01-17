@@ -59,10 +59,10 @@ public:
                     ~ScTabOpDlg();
 
     virtual void    SetReference( const ScRange& rRef, ScDocument* pDoc );
-    virtual BOOL    IsRefInputMode() const { return TRUE; }
+    virtual sal_Bool    IsRefInputMode() const { return sal_True; }
     virtual void    SetActive();
 
-    virtual BOOL    Close();
+    virtual sal_Bool    Close();
 
 private:
     FixedLine       aFlVariables;
@@ -90,7 +90,7 @@ private:
     ScDocument*     pDoc;
     const SCTAB     nCurTab;
     formula::RefEdit*       pEdActive;
-    BOOL            bDlgLostFocus;
+    sal_Bool            bDlgLostFocus;
     const String    errMsgNoFormula;
     const String    errMsgNoColRow;
     const String    errMsgWrongFormula;

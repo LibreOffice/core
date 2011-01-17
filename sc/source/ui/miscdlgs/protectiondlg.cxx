@@ -41,7 +41,7 @@ static const ScTableProtection::Option aOptions[] = {
     ScTableProtection::SELECT_LOCKED_CELLS,
     ScTableProtection::SELECT_UNLOCKED_CELLS,
 };
-static const USHORT nOptionCount = sizeof(aOptions)/sizeof(aOptions[0]);
+static const sal_uInt16 nOptionCount = sizeof(aOptions)/sizeof(aOptions[0]);
 
 
 ScTableProtectionDlg::ScTableProtectionDlg(Window* pParent) :
@@ -78,7 +78,7 @@ short ScTableProtectionDlg::Execute()
 
 void ScTableProtectionDlg::SetDialogData(const ScTableProtection& rData)
 {
-    for (USHORT i = 0; i < nOptionCount; ++i)
+    for (sal_uInt16 i = 0; i < nOptionCount; ++i)
         maOptionsListBox.CheckEntryPos(i, rData.isOptionEnabled(aOptions[i]));
 }
 
@@ -89,7 +89,7 @@ void ScTableProtectionDlg::WriteData(ScTableProtection& rData) const
     // We assume that the two password texts match.
     rData.setPassword(maPassword1Edit.GetText());
 
-    for (USHORT i = 0; i < nOptionCount; ++i)
+    for (sal_uInt16 i = 0; i < nOptionCount; ++i)
         rData.setOption(aOptions[i], maOptionsListBox.IsChecked(i));
 }
 

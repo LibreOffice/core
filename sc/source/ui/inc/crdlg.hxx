@@ -45,7 +45,7 @@ public:
             ScColOrRowDlg( Window*          pParent,
                            const String&    rStrTitle,
                            const String&    rStrLabel,
-                           BOOL             bColDefault = TRUE );
+                           sal_Bool             bColDefault = sal_True );
             ~ScColOrRowDlg();
 
 private:

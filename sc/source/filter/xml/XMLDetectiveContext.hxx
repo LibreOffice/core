@@ -96,14 +96,14 @@ private:
 public:
                                 ScXMLDetectiveContext(
                                     ScXMLImport& rImport,
-                                    USHORT nPrfx,
+                                    sal_uInt16 nPrfx,
                                     const ::rtl::OUString& rLName,
                                     ScMyImpDetectiveObjVec* pNewDetectiveObjVec
                                     );
     virtual                     ~ScXMLDetectiveContext();
 
     virtual SvXMLImportContext* CreateChildContext(
-                                    USHORT nPrefix,
+                                    sal_uInt16 nPrefix,
                                     const ::rtl::OUString& rLocalName,
                                     const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList
                                     );
@@ -126,7 +126,7 @@ private:
 public:
                                 ScXMLDetectiveHighlightedContext(
                                     ScXMLImport& rImport,
-                                    USHORT nPrfx,
+                                    sal_uInt16 nPrfx,
                                     const ::rtl::OUString& rLName,
                                     const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList,
                                     ScMyImpDetectiveObjVec* pNewDetectiveObjVec
@@ -134,7 +134,7 @@ public:
     virtual                     ~ScXMLDetectiveHighlightedContext();
 
     virtual SvXMLImportContext* CreateChildContext(
-                                    USHORT nPrefix,
+                                    sal_uInt16 nPrefix,
                                     const ::rtl::OUString& rLocalName,
                                     const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList
                                     );
@@ -156,14 +156,14 @@ private:
 public:
                                 ScXMLDetectiveOperationContext(
                                     ScXMLImport& rImport,
-                                    USHORT nPrfx,
+                                    sal_uInt16 nPrfx,
                                     const ::rtl::OUString& rLName,
                                     const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList
                                     );
     virtual                     ~ScXMLDetectiveOperationContext();
 
     virtual SvXMLImportContext* CreateChildContext(
-                                    USHORT nPrefix,
+                                    sal_uInt16 nPrefix,
                                     const ::rtl::OUString& rLocalName,
                                     const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList
                                     );

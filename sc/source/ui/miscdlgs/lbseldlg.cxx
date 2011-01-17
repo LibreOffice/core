@@ -44,7 +44,7 @@
 //==================================================================
 
 ScSelEntryDlg::ScSelEntryDlg(      Window*  pParent,
-                                   USHORT   nResId,
+                                   sal_uInt16   nResId,
                              const String&  aTitle,
                              const String&  aLbTitle,
                                    List&    aEntryList ) :
@@ -84,7 +84,7 @@ String ScSelEntryDlg::GetSelectEntry() const
 
 //------------------------------------------------------------------------
 
-//UNUSED2008-05  USHORT ScSelEntryDlg::GetSelectEntryPos() const
+//UNUSED2008-05  sal_uInt16 ScSelEntryDlg::GetSelectEntryPos() const
 //UNUSED2008-05  {
 //UNUSED2008-05      return aLb.GetSelectEntryPos();
 //UNUSED2008-05  }

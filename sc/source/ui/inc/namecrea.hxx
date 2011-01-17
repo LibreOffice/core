@@ -50,9 +50,9 @@ protected:
     CancelButton    aCancelButton;
     HelpButton      aHelpButton;
 public:
-    ScNameCreateDlg( Window * pParent, USHORT nFlags );
+    ScNameCreateDlg( Window * pParent, sal_uInt16 nFlags );
 
-    USHORT          GetFlags() const;
+    sal_uInt16          GetFlags() const;
 };
 
 

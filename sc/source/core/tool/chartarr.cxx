@@ -84,7 +84,7 @@ ScChartArray::ScChartArray( ScDocument* pDoc, SCTAB nTab,
         aName( rChartName ),
         pDocument( pDoc ),
         aPositioner(pDoc, nTab, nStartColP, nStartRowP, nEndColP, nEndRowP),
-        bValid( TRUE )
+        bValid( sal_True )
 {
 }
 
@@ -93,7 +93,7 @@ ScChartArray::ScChartArray( ScDocument* pDoc, const ScRangeListRef& rRangeList,
         aName( rChartName ),
         pDocument( pDoc ),
         aPositioner(pDoc, rRangeList),
-        bValid( TRUE )
+        bValid( sal_True )
 {
 }
 
@@ -115,7 +115,7 @@ ScDataObject* ScChartArray::Clone() const
     return new ScChartArray(*this);
 }
 
-BOOL ScChartArray::operator==(const ScChartArray& rCmp) const
+sal_Bool ScChartArray::operator==(const ScChartArray& rCmp) const
 {
     return aPositioner == rCmp.aPositioner
         && aName == rCmp.aName;
@@ -128,7 +128,7 @@ BOOL ScChartArray::operator==(const ScChartArray& rCmp) const
 ScMemChart* ScChartArray::CreateMemChart()
 {
     ScRangeListRef aRangeListRef(GetRangeList());
-    ULONG nCount = aRangeListRef->Count();
+    sal_uLong nCount = aRangeListRef->Count();
     if ( nCount > 1 )
         return CreateMemChartMulti();
     else if ( nCount == 1 )
@@ -225,16 +225,16 @@ ScMemChart* ScChartArray::CreateMemChartSingle()
         nRowCount = 0;
     }
 
-    BOOL bValidData = TRUE;
+    sal_Bool bValidData = sal_True;
     if ( !nColCount )
     {
-        bValidData = FALSE;
+        bValidData = sal_False;
         nColCount = 1;
         aCols.push_back(nStrCol);
     }
     if ( !nRowCount )
     {
-        bValidData = FALSE;
+        bValidData = sal_False;
         nRowCount = 1;
         aRows.push_back(nStrRow);
     }
@@ -251,7 +251,7 @@ ScMemChart* ScChartArray::CreateMemChartSingle()
 //      pMemChart->SetNumberFormatter( pFormatter );
         if ( bValidData )
         {
-            BOOL bCalcAsShown = pDocument->GetDocOptions().IsCalcAsShown();
+            sal_Bool bCalcAsShown = pDocument->GetDocOptions().IsCalcAsShown();
             ScBaseCell* pCell;
             for (nCol=0; nCol<nColCount; nCol++)
             {
@@ -314,7 +314,7 @@ ScMemChart* ScChartArray::CreateMemChartSingle()
             }
             pMemChart->SetColText( static_cast<short>(nCol), aString);
 
-//            ULONG nNumberAttr = (nTotalRows ? pDocument->GetNumberFormat(
+//            sal_uLong nNumberAttr = (nTotalRows ? pDocument->GetNumberFormat(
 //                        ScAddress( pCols[nCol], nRow1, nTab1)) : 0);
 //          pMemChart->SetNumFormatIdCol( static_cast<long>(nCol), nNumberAttr );
         }
@@ -339,7 +339,7 @@ ScMemChart* ScChartArray::CreateMemChartSingle()
             }
             pMemChart->SetRowText( static_cast<short>(nRow), aString);
 
-//            ULONG nNumberAttr = (nTotalCols ? pDocument->GetNumberFormat(
+//            sal_uLong nNumberAttr = (nTotalCols ? pDocument->GetNumberFormat(
 //                        ScAddress( nCol1, pRows[nRow], nTab1)) : 0);
 //          pMemChart->SetNumFormatIdRow( static_cast<long>(nRow), nNumberAttr );
         }
@@ -358,7 +358,7 @@ ScMemChart* ScChartArray::CreateMemChartSingle()
         //  Zahlen-Typ
         //
 
-//        ULONG nNumberAttr = (nTotalCols && nTotalRows ?
+//        sal_uLong nNumberAttr = (nTotalCols && nTotalRows ?
 //                pDocument->GetNumberFormat( ScAddress( nCol1, nRow1, nTab1)) :
 //                0);
 //      if (pFormatter)
@@ -389,15 +389,15 @@ ScMemChart* ScChartArray::CreateMemChartMulti()
         nRowCount = 0;
     }
 
-    BOOL bValidData = TRUE;
+    sal_Bool bValidData = sal_True;
     if ( !nColCount )
     {
-        bValidData = FALSE;
+        bValidData = sal_False;
         nColCount = 1;
     }
     if ( !nRowCount )
     {
-        bValidData = FALSE;
+        bValidData = sal_False;
         nRowCount = 1;
     }
 
@@ -410,8 +410,8 @@ ScMemChart* ScChartArray::CreateMemChartMulti()
     if (pMemChart)
     {
 //      pMemChart->SetNumberFormatter( pDocument->GetFormatTable() );
-        BOOL bCalcAsShown = pDocument->GetDocOptions().IsCalcAsShown();
-        ULONG nIndex = 0;
+        sal_Bool bCalcAsShown = pDocument->GetDocOptions().IsCalcAsShown();
+        sal_uLong nIndex = 0;
         if (bValidData)
         {
             for ( nCol = 0; nCol < nColCount; nCol++ )
@@ -431,7 +431,7 @@ ScMemChart* ScChartArray::CreateMemChartMulti()
                                 nVal = ((ScValueCell*)pCell)->GetValue();
                                 if ( bCalcAsShown && nVal != 0.0 )
                                 {
-                                    ULONG nFormat = pDocument->GetNumberFormat( *pPos );
+                                    sal_uLong nFormat = pDocument->GetNumberFormat( *pPos );
                                     nVal = pDocument->RoundValueAsShown( nVal, nFormat );
                                 }
                             }
@@ -464,7 +464,7 @@ ScMemChart* ScChartArray::CreateMemChartMulti()
                             nVal = ((ScValueCell*)pCell)->GetValue();
                             if ( bCalcAsShown && nVal != 0.0 )
                             {
-                                ULONG nFormat = pDocument->GetNumberFormat( *pPos );
+                                sal_uLong nFormat = pDocument->GetNumberFormat( *pPos );
                                 nVal = pDocument->RoundValueAsShown( nVal, nFormat );
                             }
                         }
@@ -509,7 +509,7 @@ ScMemChart* ScChartArray::CreateMemChartMulti()
             }
             pMemChart->SetColText( static_cast<short>(nCol), aString);
 
-//          ULONG nNumberAttr = 0;
+//          sal_uLong nNumberAttr = 0;
 //          pPos = GetPositionMap()->GetPosition( nCol, 0 );
 //          if ( pPos )
 //              nNumberAttr = pDocument->GetNumberFormat( *pPos );
@@ -542,7 +542,7 @@ ScMemChart* ScChartArray::CreateMemChartMulti()
             }
             pMemChart->SetRowText( static_cast<short>(nRow), aString);
 
-//          ULONG nNumberAttr = 0;
+//          sal_uLong nNumberAttr = 0;
 //          pPos = GetPositionMap()->GetPosition( 0, nRow );
 //          if ( pPos )
 //              nNumberAttr = pDocument->GetNumberFormat( *pPos );
@@ -566,14 +566,14 @@ ScMemChart* ScChartArray::CreateMemChartMulti()
 //      SvNumberFormatter* pFormatter = pDocument->GetFormatTable();
 //      if (pFormatter)
 //      {
-//          ULONG nIndex = 0;
-//          ULONG nCount = GetPositionMap()->GetCount();
+//          sal_uLong nIndex = 0;
+//          sal_uLong nCount = GetPositionMap()->GetCount();
 //          const ScAddress* pPos;
 //          do
 //          {
 //              pPos = GetPositionMap()->GetPosition( nIndex );
 //          } while ( !pPos && ++nIndex < nCount );
-//          ULONG nFormat = ( pPos ? pDocument->GetNumberFormat( *pPos ) : 0 );
+//          sal_uLong nFormat = ( pPos ? pDocument->GetNumberFormat( *pPos ) : 0 );
 //          pMemChart->SetDataType( pFormatter->GetType( nFormat ) );
 //      }
 
@@ -601,15 +601,15 @@ ScDataObject*   ScChartCollection::Clone() const
     return new ScChartCollection(*this);
 }
 
-BOOL ScChartCollection::operator==(const ScChartCollection& rCmp) const
+sal_Bool ScChartCollection::operator==(const ScChartCollection& rCmp) const
 {
     if (nCount != rCmp.nCount)
-        return FALSE;
+        return sal_False;
 
-    for (USHORT i=0; i<nCount; i++)
+    for (sal_uInt16 i=0; i<nCount; i++)
         if (!((*(const ScChartArray*)pItems[i]) == (*(const ScChartArray*)rCmp.pItems[i])))
-            return FALSE;
+            return sal_False;
 
-    return TRUE;
+    return sal_True;
 }
 

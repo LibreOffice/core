@@ -103,7 +103,7 @@ void XclExpUserBView::SaveCont( XclExpStream& rStrm )
         rStrm << sUsername;
 }
 
-UINT16 XclExpUserBView::GetNum() const
+sal_uInt16 XclExpUserBView::GetNum() const
 {
     return 0x01A9;
 }
@@ -120,7 +120,7 @@ XclExpUserBViewList::XclExpUserBViewList( const ScChangeTrack& rChangeTrack )
     sal_uInt8 aGUID[ 16 ];
     sal_Bool bValidGUID = sal_False;
     const ScStrCollection& rStrColl = rChangeTrack.GetUserCollection();
-    for( USHORT nIndex = 0; nIndex < rStrColl.GetCount(); nIndex++ )
+    for( sal_uInt16 nIndex = 0; nIndex < rStrColl.GetCount(); nIndex++ )
     {
         const StrData* pStrData = (const StrData*) rStrColl.At( nIndex );
         lcl_GenerateGUID( aGUID, bValidGUID );
@@ -167,7 +167,7 @@ void XclExpUsersViewBegin::SaveCont( XclExpStream& rStrm )
             << (sal_Int16)  -1;
 }
 
-UINT16 XclExpUsersViewBegin::GetNum() const
+sal_uInt16 XclExpUsersViewBegin::GetNum() const
 {
     return 0x01AA;
 }
@@ -184,7 +184,7 @@ void XclExpUsersViewEnd::SaveCont( XclExpStream& rStrm )
     rStrm << (sal_uInt16) 0x0001;
 }
 
-UINT16 XclExpUsersViewEnd::GetNum() const
+sal_uInt16 XclExpUsersViewEnd::GetNum() const
 {
     return 0x01AB;
 }
@@ -201,7 +201,7 @@ void XclExpChTr0x0191::SaveCont( XclExpStream& rStrm )
     rStrm << (sal_uInt16) 0x0000;
 }
 
-UINT16 XclExpChTr0x0191::GetNum() const
+sal_uInt16 XclExpChTr0x0191::GetNum() const
 {
     return 0x0191;
 }
@@ -219,7 +219,7 @@ void XclExpChTr0x0198::SaveCont( XclExpStream& rStrm )
             << (sal_uInt16) 0x0000;
 }
 
-UINT16 XclExpChTr0x0198::GetNum() const
+sal_uInt16 XclExpChTr0x0198::GetNum() const
 {
     return 0x0198;
 }
@@ -237,7 +237,7 @@ void XclExpChTr0x0192::SaveCont( XclExpStream& rStrm )
     rStrm.WriteZeroBytes( 510 );
 }
 
-UINT16 XclExpChTr0x0192::GetNum() const
+sal_uInt16 XclExpChTr0x0192::GetNum() const
 {
     return 0x0192;
 }
@@ -254,7 +254,7 @@ void XclExpChTr0x0197::SaveCont( XclExpStream& rStrm )
     rStrm << (sal_uInt16) 0x0000;
 }
 
-UINT16 XclExpChTr0x0197::GetNum() const
+sal_uInt16 XclExpChTr0x0197::GetNum() const
 {
     return 0x0197;
 }
@@ -270,7 +270,7 @@ XclExpChTrEmpty::~XclExpChTrEmpty()
 {
 }
 
-UINT16 XclExpChTrEmpty::GetNum() const
+sal_uInt16 XclExpChTrEmpty::GetNum() const
 {
     return nRecNum;
 }
@@ -291,7 +291,7 @@ void XclExpChTr0x0195::SaveCont( XclExpStream& rStrm )
     rStrm.WriteZeroBytes( 162 );
 }
 
-UINT16 XclExpChTr0x0195::GetNum() const
+sal_uInt16 XclExpChTr0x0195::GetNum() const
 {
     return 0x0195;
 }
@@ -315,7 +315,7 @@ void XclExpChTr0x0194::SaveCont( XclExpStream& rStrm )
     lcl_WriteFixedString( rStrm, sUsername, 147 );
 }
 
-UINT16 XclExpChTr0x0194::GetNum() const
+sal_uInt16 XclExpChTr0x0194::GetNum() const
 {
     return 0x0194;
 }
@@ -344,7 +344,7 @@ void XclExpChTrHeader::SaveCont( XclExpStream& rStrm )
             << (sal_uInt16) 0x001E;
 }
 
-UINT16 XclExpChTrHeader::GetNum() const
+sal_uInt16 XclExpChTrHeader::GetNum() const
 {
     return 0x0196;
 }
@@ -374,7 +374,7 @@ void XclExpChTrInfo::SaveCont( XclExpStream& rStrm )
             << (sal_uInt16) 0x0002;
 }
 
-UINT16 XclExpChTrInfo::GetNum() const
+sal_uInt16 XclExpChTrInfo::GetNum() const
 {
     return 0x0138;
 }
@@ -497,7 +497,7 @@ void XclExpChTrTabId::SaveCont( XclExpStream& rStrm )
             rStrm << nIndex;
 }
 
-UINT16 XclExpChTrTabId::GetNum() const
+sal_uInt16 XclExpChTrTabId::GetNum() const
 {
     return 0x013D;
 }
@@ -813,7 +813,7 @@ void XclExpChTrCellContent::SaveActionData( XclExpStream& rStrm ) const
         pNewData->Write( rStrm, rIdBuffer );
 }
 
-UINT16 XclExpChTrCellContent::GetNum() const
+sal_uInt16 XclExpChTrCellContent::GetNum() const
 {
     return 0x013B;
 }
@@ -891,7 +891,7 @@ void XclExpChTrInsert::CompleteSaveAction( XclExpStream& rStrm ) const
         XclExpChTrEmpty( 0x0151 ).Save( rStrm );
 }
 
-UINT16 XclExpChTrInsert::GetNum() const
+sal_uInt16 XclExpChTrInsert::GetNum() const
 {
     return 0x0137;
 }
@@ -928,7 +928,7 @@ void XclExpChTrInsertTab::SaveActionData( XclExpStream& rStrm ) const
     rStrm.WriteZeroBytes( 133 );
 }
 
-UINT16 XclExpChTrInsertTab::GetNum() const
+sal_uInt16 XclExpChTrInsertTab::GetNum() const
 {
     return 0x014D;
 }
@@ -984,7 +984,7 @@ void XclExpChTrMoveRange::CompleteSaveAction( XclExpStream& rStrm ) const
     XclExpChTrEmpty( 0x014F ).Save( rStrm );
 }
 
-UINT16 XclExpChTrMoveRange::GetNum() const
+sal_uInt16 XclExpChTrMoveRange::GetNum() const
 {
     return 0x0140;
 }
@@ -1015,7 +1015,7 @@ void XclExpChTr0x014A::SaveActionData( XclExpStream& rStrm ) const
     Write2DRange( rStrm, aRange );
 }
 
-UINT16 XclExpChTr0x014A::GetNum() const
+sal_uInt16 XclExpChTr0x014A::GetNum() const
 {
     return 0x014A;
 }

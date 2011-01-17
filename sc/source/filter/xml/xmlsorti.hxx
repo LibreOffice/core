@@ -56,7 +56,7 @@ class ScXMLSortContext : public SvXMLImportContext
 
 public:
 
-    ScXMLSortContext( ScXMLImport& rImport, USHORT nPrfx,
+    ScXMLSortContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
                         const ::rtl::OUString& rLName,
                         const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
@@ -64,7 +64,7 @@ public:
 
     virtual ~ScXMLSortContext();
 
-    virtual SvXMLImportContext *CreateChildContext( USHORT nPrefix,
+    virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                                      const ::rtl::OUString& rLocalName,
                                      const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
@@ -87,7 +87,7 @@ class ScXMLSortByContext : public SvXMLImportContext
 
 public:
 
-    ScXMLSortByContext( ScXMLImport& rImport, USHORT nPrfx,
+    ScXMLSortByContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
                         const ::rtl::OUString& rLName,
                         const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
@@ -95,7 +95,7 @@ public:
 
     virtual ~ScXMLSortByContext();
 
-    virtual SvXMLImportContext *CreateChildContext( USHORT nPrefix,
+    virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                                      const ::rtl::OUString& rLocalName,
                                      const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList );

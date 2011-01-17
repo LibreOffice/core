@@ -166,7 +166,7 @@ bool ScBroadcastAreaSlot::CheckHardRecalcStateCondition() const
             if ( pShell )
                 pShell->SetError( SCWARN_CORE_HARD_RECALC, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ) );
 
-            pDoc->SetAutoCalc( FALSE );
+            pDoc->SetAutoCalc( sal_False );
             pDoc->SetHardRecalcState( 2 );
         }
         return true;
@@ -278,11 +278,11 @@ ScBroadcastAreas::iterator ScBroadcastAreaSlot::FindBroadcastArea(
 }
 
 
-BOOL ScBroadcastAreaSlot::AreaBroadcast( const ScHint& rHint) const
+sal_Bool ScBroadcastAreaSlot::AreaBroadcast( const ScHint& rHint) const
 {
     if (aBroadcastAreaTbl.empty())
-        return FALSE;
-    BOOL bIsBroadcasted = FALSE;
+        return sal_False;
+    sal_Bool bIsBroadcasted = sal_False;
     const ScAddress& rAddress = rHint.GetAddress();
     for (ScBroadcastAreas::const_iterator aIter( aBroadcastAreaTbl.begin());
             aIter != aBroadcastAreaTbl.end(); /* increment in body */ )
@@ -298,7 +298,7 @@ BOOL ScBroadcastAreaSlot::AreaBroadcast( const ScHint& rHint) const
             if (!pBASM->IsInBulkBroadcast() || pBASM->InsertBulkArea( pArea))
             {
                 pArea->GetBroadcaster().Broadcast( rHint);
-                bIsBroadcasted = TRUE;
+                bIsBroadcasted = sal_True;
             }
         }
     }
@@ -306,12 +306,12 @@ BOOL ScBroadcastAreaSlot::AreaBroadcast( const ScHint& rHint) const
 }
 
 
-BOOL ScBroadcastAreaSlot::AreaBroadcastInRange( const ScRange& rRange,
+sal_Bool ScBroadcastAreaSlot::AreaBroadcastInRange( const ScRange& rRange,
         const ScHint& rHint) const
 {
     if (aBroadcastAreaTbl.empty())
-        return FALSE;
-    BOOL bIsBroadcasted = FALSE;
+        return sal_False;
+    sal_Bool bIsBroadcasted = sal_False;
     for (ScBroadcastAreas::const_iterator aIter( aBroadcastAreaTbl.begin());
             aIter != aBroadcastAreaTbl.end(); /* increment in body */ )
     {
@@ -326,7 +326,7 @@ BOOL ScBroadcastAreaSlot::AreaBroadcastInRange( const ScRange& rRange,
             if (!pBASM->IsInBulkBroadcast() || pBASM->InsertBulkArea( pArea))
             {
                 pArea->GetBroadcaster().Broadcast( rHint);
-                bIsBroadcasted = TRUE;
+                bIsBroadcasted = sal_True;
             }
         }
     }
@@ -389,7 +389,7 @@ void ScBroadcastAreaSlot::UpdateRemove( UpdateRefMode eUpdateRefMode,
                 pArea->DecRef();
                 if (pBASM->IsInBulkBroadcast())
                     pBASM->RemoveBulkArea( pArea);
-                pArea->SetInUpdateChain( TRUE );
+                pArea->SetInUpdateChain( sal_True );
                 ScBroadcastArea* pUC = pBASM->GetEOUpdateChain();
                 if ( pUC )
                     pUC->SetUpdateChainNext( pArea );
@@ -643,7 +643,7 @@ void ScBroadcastAreaSlotMachine::EndListeningArea( const ScRange& rRange,
 }
 
 
-BOOL ScBroadcastAreaSlotMachine::AreaBroadcast( const ScHint& rHint ) const
+sal_Bool ScBroadcastAreaSlotMachine::AreaBroadcast( const ScHint& rHint ) const
 {
     const ScAddress& rAddress = rHint.GetAddress();
     if ( rAddress == BCA_BRDCST_ALWAYS )
@@ -651,30 +651,30 @@ BOOL ScBroadcastAreaSlotMachine::AreaBroadcast( const ScHint& rHint ) const
         if ( pBCAlways )
         {
             pBCAlways->Broadcast( rHint );
-            return TRUE;
+            return sal_True;
         }
         else
-            return FALSE;
+            return sal_False;
     }
     else
     {
         TableSlotsMap::const_iterator iTab( aTableSlotsMap.find( rAddress.Tab()));
         if (iTab == aTableSlotsMap.end())
-            return FALSE;
+            return sal_False;
         ScBroadcastAreaSlot* pSlot = (*iTab).second->getAreaSlot(
                 ComputeSlotOffset( rAddress));
         if ( pSlot )
             return pSlot->AreaBroadcast( rHint );
         else
-            return FALSE;
+            return sal_False;
     }
 }
 
 
-BOOL ScBroadcastAreaSlotMachine::AreaBroadcastInRange( const ScRange& rRange,
+sal_Bool ScBroadcastAreaSlotMachine::AreaBroadcastInRange( const ScRange& rRange,
         const ScHint& rHint ) const
 {
-    BOOL bBroadcasted = FALSE;
+    sal_Bool bBroadcasted = sal_False;
     SCTAB nEndTab = rRange.aEnd.Tab();
     for (TableSlotsMap::const_iterator iTab( aTableSlotsMap.lower_bound( rRange.aStart.Tab()));
             iTab != aTableSlotsMap.end() && (*iTab).first <= nEndTab; ++iTab)
@@ -898,7 +898,7 @@ void ScBroadcastAreaSlotMachine::UpdateBroadcastAreas(
 
         // unchain
         pArea->SetUpdateChainNext( NULL );
-        pArea->SetInUpdateChain( FALSE );
+        pArea->SetInUpdateChain( sal_False );
 
         // Delete if not inserted to any slot. RemoveBulkArea(pArea) was
         // already executed in UpdateRemove().

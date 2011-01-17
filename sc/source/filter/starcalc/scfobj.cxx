@@ -59,7 +59,7 @@ using namespace com::sun::star;
 //==================================================================
 
 void Sc10InsertObject::InsertChart( ScDocument* pDoc, SCTAB nDestTab, const Rectangle& rRect,
-                                SCTAB nSrcTab, USHORT nX1, USHORT nY1, USHORT nX2, USHORT nY2 )
+                                SCTAB nSrcTab, sal_uInt16 nX1, sal_uInt16 nY1, sal_uInt16 nX2, sal_uInt16 nY2 )
 {
     //  wenn Chart nicht installiert ist, darf nicht auf SCH_MOD zugegriffen werden!
     if ( !SvtModuleOptions().IsChart() )

@@ -51,18 +51,18 @@ using namespace com::sun::star;
 
 static ScProgress theDummyInterpretProgress;
 SfxProgress*    ScProgress::pGlobalProgress = NULL;
-ULONG           ScProgress::nGlobalRange = 0;
-ULONG           ScProgress::nGlobalPercent = 0;
-BOOL            ScProgress::bGlobalNoUserBreak = TRUE;
+sal_uLong           ScProgress::nGlobalRange = 0;
+sal_uLong           ScProgress::nGlobalPercent = 0;
+sal_Bool            ScProgress::bGlobalNoUserBreak = sal_True;
 ScProgress*     ScProgress::pInterpretProgress = &theDummyInterpretProgress;
 ScProgress*     ScProgress::pOldInterpretProgress = NULL;
-ULONG           ScProgress::nInterpretProgress = 0;
-BOOL            ScProgress::bAllowInterpretProgress = TRUE;
+sal_uLong           ScProgress::nInterpretProgress = 0;
+sal_Bool            ScProgress::bAllowInterpretProgress = sal_True;
 ScDocument*     ScProgress::pInterpretDoc;
-BOOL            ScProgress::bIdleWasDisabled = FALSE;
+sal_Bool            ScProgress::bIdleWasDisabled = sal_False;
 
 
-BOOL lcl_IsHiddenDocument( SfxObjectShell* pObjSh )
+sal_Bool lcl_IsHiddenDocument( SfxObjectShell* pObjSh )
 {
     if (pObjSh)
     {
@@ -71,12 +71,12 @@ BOOL lcl_IsHiddenDocument( SfxObjectShell* pObjSh )
         {
             SfxItemSet* pSet = pMed->GetItemSet();
             const SfxPoolItem* pItem;
-            if ( pSet && SFX_ITEM_SET == pSet->GetItemState( SID_HIDDEN, TRUE, &pItem ) &&
+            if ( pSet && SFX_ITEM_SET == pSet->GetItemState( SID_HIDDEN, sal_True, &pItem ) &&
                         ((const SfxBoolItem*)pItem)->GetValue() )
-                return TRUE;
+                return sal_True;
         }
     }
-    return FALSE;
+    return sal_False;
 }
 
 bool lcl_HasControllersLocked( SfxObjectShell& rObjSh )
@@ -88,7 +88,7 @@ bool lcl_HasControllersLocked( SfxObjectShell& rObjSh )
 }
 
 ScProgress::ScProgress( SfxObjectShell* pObjSh, const String& rText,
-                        ULONG nRange, BOOL bAllDocs, BOOL bWait )
+                        sal_uLong nRange, sal_Bool bAllDocs, sal_Bool bWait )
 {
 
     if ( pGlobalProgress || SfxProgress::GetActiveProgress( NULL ) )
@@ -128,7 +128,7 @@ ScProgress::ScProgress( SfxObjectShell* pObjSh, const String& rText,
         pGlobalProgress = pProgress;
         nGlobalRange = nRange;
         nGlobalPercent = 0;
-        bGlobalNoUserBreak = TRUE;
+        bGlobalNoUserBreak = sal_True;
     }
 }
 
@@ -147,13 +147,13 @@ ScProgress::~ScProgress()
         pGlobalProgress = NULL;
         nGlobalRange = 0;
         nGlobalPercent = 0;
-        bGlobalNoUserBreak = TRUE;
+        bGlobalNoUserBreak = sal_True;
     }
 }
 
 // static
 
-void ScProgress::CreateInterpretProgress( ScDocument* pDoc, BOOL bWait )
+void ScProgress::CreateInterpretProgress( ScDocument* pDoc, sal_Bool bWait )
 {
     if ( bAllowInterpretProgress )
     {
@@ -163,14 +163,14 @@ void ScProgress::CreateInterpretProgress( ScDocument* pDoc, BOOL bWait )
         {
             nInterpretProgress = 1;
             bIdleWasDisabled = pDoc->IsIdleDisabled();
-            pDoc->DisableIdle( TRUE );
+            pDoc->DisableIdle( sal_True );
             // Interpreter may be called in many circumstances, also if another
             // progress bar is active, for example while adapting row heights.
             // Keep the dummy interpret progress.
             if ( !pGlobalProgress )
                 pInterpretProgress = new ScProgress( pDoc->GetDocumentShell(),
                     ScGlobal::GetRscString( STR_PROGRESS_CALCULATING ),
-                    pDoc->GetFormulaCodeInTree()/MIN_NO_CODES_PER_PROGRESS_UPDATE, FALSE, bWait );
+                    pDoc->GetFormulaCodeInTree()/MIN_NO_CODES_PER_PROGRESS_UPDATE, sal_False, bWait );
             pInterpretDoc = pDoc;
         }
     }

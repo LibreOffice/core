@@ -184,14 +184,14 @@ public:
 
     void    Update( const ScDPValueData& rNext, ScSubTotalFunc eFunc, const ScDPSubTotalState& rSubState );
     void    Calculate( ScSubTotalFunc eFunc, const ScDPSubTotalState& rSubState );
-    BOOL    IsCalculated() const;
+    sal_Bool    IsCalculated() const;
 
     double  GetResult() const;
-    BOOL    HasError() const;
-    BOOL    HasData() const;
+    sal_Bool    HasError() const;
+    sal_Bool    HasData() const;
 
     void    SetResult( double fNew );
-    void    SetEmpty( BOOL bSet );
+    void    SetEmpty( sal_Bool bSet );
     void    SetError();
 
     double  GetAuxiliary() const;
@@ -211,7 +211,7 @@ class ScDPRowTotals
 {
     ScDPAggData aRowTotal;
     ScDPAggData aGrandTotal;
-    BOOL        bIsInColRoot;
+    sal_Bool        bIsInColRoot;
 
 public:
             ScDPRowTotals();
@@ -220,8 +220,8 @@ public:
     ScDPAggData*    GetRowTotal( long nMeasure );
     ScDPAggData*    GetGrandTotal( long nMeasure );
 
-    BOOL            IsInColRoot() const     { return bIsInColRoot; }
-    void            SetInColRoot(BOOL bSet) { bIsInColRoot = bSet; }
+    sal_Bool            IsInColRoot() const     { return bIsInColRoot; }
+    void            SetInColRoot(sal_Bool bSet) { bIsInColRoot = bSet; }
 };
 
 // --------------------------------------------------------------------
@@ -263,12 +263,12 @@ typedef std::hash_map < SCROW, ScDPParentDimData *, MemberHashIndexFunc>  DimMem
 class ResultMembers
 {
     DimMemberHash      maMemberHash;
-    BOOL                mbHasHideDetailsMember;
+    sal_Bool                mbHasHideDetailsMember;
 public:
     ScDPParentDimData* FindMember( const SCROW& nIndex ) const;
     void                             InsertMember(  ScDPParentDimData* pNew );
-    BOOL            IsHasHideDetailsMembers() const { return mbHasHideDetailsMember; }
-    void            SetHasHideDetailsMembers( BOOL b ) { mbHasHideDetailsMember=b; }
+    sal_Bool            IsHasHideDetailsMembers() const { return mbHasHideDetailsMember; }
+    void            SetHasHideDetailsMembers( sal_Bool b ) { mbHasHideDetailsMember=b; }
     ResultMembers();
     virtual ~ResultMembers();
 };
@@ -279,24 +279,24 @@ private:
     const ::std::vector<ScDPDimension*>& mppDim;
     const ::std::vector<ScDPLevel*>& mppLev;
 
-    BOOL      mbRow;
-    BOOL      mbInitChild;
-    BOOL      mbAllChildren;
+    sal_Bool      mbRow;
+    sal_Bool      mbInitChild;
+    sal_Bool      mbAllChildren;
 public:
     LateInitParams( const ::std::vector<ScDPDimension*>& ppDim, const ::std::vector<ScDPLevel*>& ppLev,
-        BOOL bRow, BOOL bInitChild = TRUE , BOOL bAllChildren = FALSE);
+        sal_Bool bRow, sal_Bool bInitChild = sal_True , sal_Bool bAllChildren = sal_False);
     ~LateInitParams();
 
-    void  SetInitChild( BOOL b ) { mbInitChild = b; }
-    void  SetInitAllChildren( BOOL b ) { mbAllChildren = b; }
+    void  SetInitChild( sal_Bool b ) { mbInitChild = b; }
+    void  SetInitAllChildren( sal_Bool b ) { mbAllChildren = b; }
 
     inline ScDPDimension* GetDim( size_t nPos ) const { return mppDim[nPos];}
     inline ScDPLevel*         GetLevel( size_t nPos ) const { return mppLev[nPos];}
 
-    inline BOOL  GetInitChild() const {return mbInitChild; }
-    inline BOOL  GetInitAllChild() const { return mbAllChildren; }
-    inline BOOL  IsRow() const { return mbRow; }
-    BOOL  IsEnd( size_t nPos ) const ;
+    inline sal_Bool  GetInitChild() const {return mbInitChild; }
+    inline sal_Bool  GetInitAllChild() const { return mbAllChildren; }
+    inline sal_Bool  IsRow() const { return mbRow; }
+    sal_Bool  IsEnd( size_t nPos ) const ;
 };
 // End Comments
 
@@ -309,11 +309,11 @@ private:
     long                    nMeasCount;
     ScSubTotalFunc*         pMeasFuncs;
     ::com::sun::star::sheet::DataPilotFieldReference* pMeasRefs;
-    USHORT*                 pMeasRefOrient;
+    sal_uInt16*                 pMeasRefOrient;
     String*                 pMeasNames;
-    BOOL                    bLateInit;
-    BOOL                    bDataAtCol;
-    BOOL                    bDataAtRow;
+    sal_Bool                    bLateInit;
+    sal_Bool                    bDataAtCol;
+    sal_Bool                    bDataAtRow;
 
     //! add "displayed values" settings
         mutable std::vector< ResultMembers* > mpDimMembers;
@@ -323,20 +323,20 @@ public:
 
     void                SetMeasureData( long nCount, const ScSubTotalFunc* pFunctions,
                                         const ::com::sun::star::sheet::DataPilotFieldReference* pRefs,
-                                        const USHORT* pRefOrient, const String* pNames );
-    void                SetDataLayoutOrientation( USHORT nOrient );
-    void                SetLateInit( BOOL bSet );
+                                        const sal_uInt16* pRefOrient, const String* pNames );
+    void                SetDataLayoutOrientation( sal_uInt16 nOrient );
+    void                SetLateInit( sal_Bool bSet );
 
     long                GetMeasureCount() const     { return nMeasCount; }
     ScSubTotalFunc      GetMeasureFunction(long nMeasure) const;
-    String              GetMeasureString(long nMeasure, BOOL bForce, ScSubTotalFunc eForceFunc, bool& rbTotalResult) const;
+    String              GetMeasureString(long nMeasure, sal_Bool bForce, ScSubTotalFunc eForceFunc, bool& rbTotalResult) const;
     String              GetMeasureDimensionName(long nMeasure) const;
     const ::com::sun::star::sheet::DataPilotFieldReference& GetMeasureRefVal(long nMeasure) const;
-    USHORT              GetMeasureRefOrient(long nMeasure) const;
+    sal_uInt16              GetMeasureRefOrient(long nMeasure) const;
 
-    BOOL                IsDataAtCol() const             { return bDataAtCol; }
-    BOOL                IsDataAtRow() const             { return bDataAtRow; }
-    BOOL                IsLateInit() const              { return bLateInit; }
+    sal_Bool                IsDataAtCol() const             { return bDataAtCol; }
+    sal_Bool                IsDataAtRow() const             { return bDataAtRow; }
+    sal_Bool                IsLateInit() const              { return bLateInit; }
 
     long                GetColStartMeasure() const;
     long                GetRowStartMeasure() const;
@@ -344,16 +344,16 @@ public:
     long                GetCountForMeasure( long nMeas ) const
                                 { return ( nMeas == SC_DPMEASURE_ALL ) ? nMeasCount : 1; }
 
-    BOOL                IsBaseForGroup( long nDim ) const;              // any group
+    sal_Bool                IsBaseForGroup( long nDim ) const;              // any group
     long                GetGroupBase( long nGroupDim ) const;
-    BOOL                IsNumOrDateGroup( long nDim ) const;
+    sal_Bool                IsNumOrDateGroup( long nDim ) const;
  // Wang Xu Ming -- 2009-8-17
 // DataPilot Migration - Cache&&Performance
-    BOOL                IsInGroup( const ScDPItemData& rGroupData, long nGroupIndex,
+    sal_Bool                IsInGroup( const ScDPItemData& rGroupData, long nGroupIndex,
                                                long nBaseDataId, long nBaseIndex ) const;
-    BOOL                IsInGroup( SCROW nGroupDataId, long nGroupIndex,
+    sal_Bool                IsInGroup( SCROW nGroupDataId, long nGroupIndex,
                                               const ScDPItemData& rBaseData, long nBaseIndex ) const;
-    BOOL                HasCommonElement( SCROW nFirstDataId, long nFirstIndex,
+    sal_Bool                HasCommonElement( SCROW nFirstDataId, long nFirstIndex,
                                           const ScDPItemData& rSecondData, long nSecondIndex ) const;
 
     ResultMembers* GetDimResultMembers( long nDim , ScDPDimension* pDim , ScDPLevel*   pLevel) const ;
@@ -373,20 +373,20 @@ private:
     // End Comments
     ScDPResultDimension*    pChildDimension;
     ScDPDataMember*         pDataRoot;
-    BOOL                    bHasElements;
-    BOOL                    bForceSubTotal;
-    BOOL                    bHasHiddenDetails;
-    BOOL                    bInitialized;
-    BOOL                    bAutoHidden;
+    sal_Bool                    bHasElements;
+    sal_Bool                    bForceSubTotal;
+    sal_Bool                    bHasHiddenDetails;
+    sal_Bool                    bInitialized;
+    sal_Bool                    bAutoHidden;
     ScDPAggData             aColTotal;              // to store column totals
 
-    USHORT                  nMemberStep;            // step to show details
+    sal_uInt16                  nMemberStep;            // step to show details
 public:
     // Wang Xu Ming -- 2009-8-17
     // DataPilot Migration - Cache&&Performance
     ScDPResultMember(  const ScDPResultData* pData,  const ScDPParentDimData& rParentDimData,
-        BOOL bForceSub );  //! Ref
-    ScDPResultMember(  const ScDPResultData* pData, BOOL bForceSub );
+        sal_Bool bForceSub );  //! Ref
+    ScDPResultMember(  const ScDPResultData* pData, sal_Bool bForceSub );
     // End Comments
     ~ScDPResultMember();
 
@@ -396,33 +396,33 @@ public:
                                         const ::std::vector<ScDPLevel*>& ppLev,
                                         size_t nPos,
                                         ScDPInitState& rInitState,
-                                        BOOL bInitChild = TRUE );
+                                        sal_Bool bInitChild = sal_True );
     void               LateInitFrom(
                                         LateInitParams& rParams,
                                         const ::std::vector< SCROW >& pItemData,
                                         size_t nPos,
                                         ScDPInitState& rInitState);
-    void              CheckShowEmpty( BOOL bShow = FALSE );
+    void              CheckShowEmpty( sal_Bool bShow = sal_False );
     // End Comments
     String              GetName() const;
     void                FillItemData( ScDPItemData& rData ) const;
-    BOOL                IsValid() const;
-    BOOL                IsVisible() const;
+    sal_Bool                IsValid() const;
+    sal_Bool                IsVisible() const;
     long                GetSize(long nMeasure) const;
-    BOOL                HasHiddenDetails() const;
-    BOOL                IsSubTotalInTitle(long nMeasure) const;
+    sal_Bool                HasHiddenDetails() const;
+    sal_Bool                IsSubTotalInTitle(long nMeasure) const;
 
-//  BOOL                SubTotalEnabled() const;
+//  sal_Bool                SubTotalEnabled() const;
     long                GetSubTotalCount( long* pUserSubStart = NULL ) const;
 
     // Wang Xu Ming -- 2009-8-17
     // DataPilot Migration - Cache&&Performance
-    BOOL              IsNamedItem( SCROW nIndex ) const;
+    sal_Bool              IsNamedItem( SCROW nIndex ) const;
     bool IsValidEntry( const ::std::vector< SCROW >& aMembers ) const;
     // End Comments
 
-    void                SetHasElements()    { bHasElements = TRUE; }
-    void                SetAutoHidden()     { bAutoHidden = TRUE; }
+    void                SetHasElements()    { bHasElements = sal_True; }
+    void                SetAutoHidden()     { bAutoHidden = sal_True; }
 
     // Wang Xu Ming -- 2009-8-17
     // DataPilot Migration - Cache&&Performance
@@ -433,7 +433,7 @@ public:
     // End Comments
     void                FillMemberResults( com::sun::star::uno::Sequence<
                                                 com::sun::star::sheet::MemberResult>* pSequences,
-                                            long& rPos, long nMeasure, BOOL bRoot,
+                                            long& rPos, long nMeasure, sal_Bool bRoot,
                                             const String* pMemberName,
                                             const String* pMemberCaption );
 
@@ -450,7 +450,7 @@ public:
     void                SortMembers( ScDPResultMember* pRefMember );
     void                DoAutoShow( ScDPResultMember* pRefMember );
 
-    void                ResetResults( BOOL bRoot );
+    void                ResetResults( sal_Bool bRoot );
 
     void                DumpState( const ScDPResultMember* pRefMember, ScDocument* pDoc, ScAddress& rPos ) const;
 
@@ -466,7 +466,7 @@ public:
     const ScDPLevel*         GetParentLevel() const         { return aParentDimData.mpParentLevel; }   //! Ref
     const ScDPMember*     GetDPMember()const              { return aParentDimData.mpMemberDesc; }    //! Ref
     inline SCROW               GetOrder() const                           { return aParentDimData.mnOrder; }         //! Ref
-    inline BOOL                  IsRoot() const                       { return GetParentLevel() == NULL; }
+    inline sal_Bool                  IsRoot() const                       { return GetParentLevel() == NULL; }
     SCROW                       GetDataId( ) const ;
     // End Comments
     ScDPAggData*        GetColTotal( long nMeasure ) const;
@@ -491,33 +491,33 @@ public:
     void                InitFrom( const ScDPResultDimension* pDim );
 
     String              GetName() const;
-    BOOL                IsVisible() const;
-    BOOL                HasData( long nMeasure, const ScDPSubTotalState& rSubState ) const;
+    sal_Bool                IsVisible() const;
+    sal_Bool                HasData( long nMeasure, const ScDPSubTotalState& rSubState ) const;
 
     // Wang Xu Ming -- 2009-8-17
     // DataPilot Migration - Cache&&Performance
-    BOOL              IsNamedItem(   SCROW r ) const;
+    sal_Bool              IsNamedItem(   SCROW r ) const;
     // End Comments
-    BOOL                HasHiddenDetails() const;
+    sal_Bool                HasHiddenDetails() const;
 
     // Wang Xu Ming -- 2009-8-17
     // DataPilot Migration - Cache&&Performance
     void                ProcessData( const ::std::vector< SCROW >& aChildMembers, const ::std::vector<ScDPValueData>& aValues,
                                        const ScDPSubTotalState& rSubState );
     // End Comments
-    BOOL                HasError( long nMeasure, const ScDPSubTotalState& rSubState ) const;
+    sal_Bool                HasError( long nMeasure, const ScDPSubTotalState& rSubState ) const;
     double              GetAggregate( long nMeasure, const ScDPSubTotalState& rSubState ) const;
     const ScDPAggData*  GetConstAggData( long nMeasure, const ScDPSubTotalState& rSubState ) const;
     ScDPAggData*        GetAggData( long nMeasure, const ScDPSubTotalState& rSubState );
 
     void                FillDataRow( const ScDPResultMember* pRefMember,
                                     com::sun::star::uno::Sequence<com::sun::star::sheet::DataResult>& rSequence,
-                                    long& rCol, long nMeasure, BOOL bIsSubTotalRow,
+                                    long& rCol, long nMeasure, sal_Bool bIsSubTotalRow,
                                     const ScDPSubTotalState& rSubState ) const;
 
-    void                UpdateDataRow( const ScDPResultMember* pRefMember, long nMeasure, BOOL bIsSubTotalRow,
+    void                UpdateDataRow( const ScDPResultMember* pRefMember, long nMeasure, sal_Bool bIsSubTotalRow,
                                     const ScDPSubTotalState& rSubState );
-    void                UpdateRunningTotals( const ScDPResultMember* pRefMember, long nMeasure, BOOL bIsSubTotalRow,
+    void                UpdateRunningTotals( const ScDPResultMember* pRefMember, long nMeasure, sal_Bool bIsSubTotalRow,
                                     const ScDPSubTotalState& rSubState, ScDPRunningTotalState& rRunning,
                                     ScDPRowTotals& rTotals, const ScDPResultMember& rRowParent );
 
@@ -553,15 +553,15 @@ private:
         const ScDPResultData*   pResultData;
     MemberArray             maMemberArray;
     MemberHash              maMemberHash;
-    BOOL                    bInitialized;
+    sal_Bool                    bInitialized;
     String                  aDimensionName;     //! or ptr to IntDimension?
-    BOOL                    bIsDataLayout;      //! or ptr to IntDimension?
-    BOOL                    bSortByData;
-    BOOL                    bSortAscending;
+    sal_Bool                    bIsDataLayout;      //! or ptr to IntDimension?
+    sal_Bool                    bSortByData;
+    sal_Bool                    bSortAscending;
     long                    nSortMeasure;
     ScMemberSortOrder       aMemberOrder;       // used when sorted by measure
-    BOOL                    bAutoShow;
-    BOOL                    bAutoTopItems;
+    sal_Bool                    bAutoShow;
+    sal_Bool                    bAutoTopItems;
     long                    nAutoMeasure;
     long                    nAutoCount;
 
@@ -586,12 +586,12 @@ public:
     void                InitFrom( const ::std::vector<ScDPDimension*>& ppDim,
                                         const ::std::vector<ScDPLevel*>& ppLev,
                                         size_t nPos,
-                                        ScDPInitState& rInitState ,  BOOL bInitChild = TRUE );
+                                        ScDPInitState& rInitState ,  sal_Bool bInitChild = sal_True );
     void                LateInitFrom(  LateInitParams& rParams,
                                         const ::std::vector< SCROW >& pItemData,
                                         size_t nPos,
                                         ScDPInitState& rInitState );
-    void               CheckShowEmpty( BOOL bShow = FALSE );
+    void               CheckShowEmpty( sal_Bool bShow = sal_False );
 
     // End Comments
     long                GetSize(long nMeasure) const;
@@ -645,15 +645,15 @@ public:
     const ScMemberSortOrder& GetMemberOrder() const     { return aMemberOrder; }
     ScMemberSortOrder&  GetMemberOrder()                { return aMemberOrder; }
 
-    BOOL                IsDataLayout() const    { return bIsDataLayout; }
+    sal_Bool                IsDataLayout() const    { return bIsDataLayout; }
     String              GetName() const         { return aDimensionName; }
 
-    BOOL                IsSortByData() const    { return bSortByData; }
-    BOOL                IsSortAscending() const { return bSortAscending; }
+    sal_Bool                IsSortByData() const    { return bSortByData; }
+    sal_Bool                IsSortAscending() const { return bSortAscending; }
     long                GetSortMeasure() const  { return nSortMeasure; }
 
-    BOOL                IsAutoShow() const      { return bAutoShow; }
-    BOOL                IsAutoTopItems() const  { return bAutoTopItems; }
+    sal_Bool                IsAutoShow() const      { return bAutoShow; }
+    sal_Bool                IsAutoTopItems() const  { return bAutoTopItems; }
     long                GetAutoMeasure() const  { return nAutoMeasure; }
     long                GetAutoCount() const    { return nAutoCount; }
 
@@ -668,7 +668,7 @@ private:
     const ScDPResultData*       pResultData;
     const ScDPResultDimension* pResultDimension;  // column
     ScDPDataMembers     aMembers;
-    BOOL                bIsDataLayout;      //! or ptr to IntDimension?
+    sal_Bool                bIsDataLayout;      //! or ptr to IntDimension?
 
 public:
                         ScDPDataDimension( const ScDPResultData* pData );
@@ -682,12 +682,12 @@ public:
     // End Comments
     void                FillDataRow( const ScDPResultDimension* pRefDim,
                                     com::sun::star::uno::Sequence<com::sun::star::sheet::DataResult>& rSequence,
-                                    long nCol, long nMeasure, BOOL bIsSubTotalRow,
+                                    long nCol, long nMeasure, sal_Bool bIsSubTotalRow,
                                     const ScDPSubTotalState& rSubState ) const;
 
-    void                UpdateDataRow( const ScDPResultDimension* pRefDim, long nMeasure, BOOL bIsSubTotalRow,
+    void                UpdateDataRow( const ScDPResultDimension* pRefDim, long nMeasure, sal_Bool bIsSubTotalRow,
                                     const ScDPSubTotalState& rSubState ) const;
-    void                UpdateRunningTotals( const ScDPResultDimension* pRefDim, long nMeasure, BOOL bIsSubTotalRow,
+    void                UpdateRunningTotals( const ScDPResultDimension* pRefDim, long nMeasure, sal_Bool bIsSubTotalRow,
                                     const ScDPSubTotalState& rSubState, ScDPRunningTotalState& rRunning,
                                     ScDPRowTotals& rTotals, const ScDPResultMember& rRowParent ) const;
 

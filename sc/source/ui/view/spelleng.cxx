@@ -115,7 +115,7 @@ bool ScConversionEngineBase::FindNextConversionCell()
 
         String aNewStr = GetText();
 
-        BOOL bMultiTab = (rMark.GetSelectCount() > 1);
+        sal_Bool bMultiTab = (rMark.GetSelectCount() > 1);
         String aVisibleStr;
         if( bMultiTab )
             mrDoc.GetString( mnCurrCol, mnCurrRow, mnStartTab, aVisibleStr );
@@ -249,7 +249,7 @@ bool ScConversionEngineBase::FindNextConversionCell()
     if( bFound )
     {
         pViewShell->AlignToCursor( nNewCol, nNewRow, SC_FOLLOW_JUMP );
-        pViewShell->SetCursor( nNewCol, nNewRow, TRUE );
+        pViewShell->SetCursor( nNewCol, nNewRow, sal_True );
         mrViewData.GetView()->MakeEditView( this, nNewCol, nNewRow );
         EditView* pEditView = mrViewData.GetSpellingView();
         // maSelState.GetEditSelection() returns (0,0) if not in edit mode -> ok
@@ -329,7 +329,7 @@ void ScSpellingEngine::ConvertAll( EditView& rEditView )
 {
     EESpellState eState = EE_SPELL_OK;
     if( FindNextConversionCell() )
-        eState = rEditView.StartSpeller( static_cast< BOOL >( TRUE ) );
+        eState = rEditView.StartSpeller( static_cast< sal_Bool >( sal_True ) );
 
     DBG_ASSERT( eState != EE_SPELL_NOSPELLER, "ScSpellingEngine::Convert - no spell checker" );
     if( eState == EE_SPELL_NOLANGUAGE )
@@ -340,7 +340,7 @@ void ScSpellingEngine::ConvertAll( EditView& rEditView )
     }
 }
 
-BOOL ScSpellingEngine::SpellNextDocument()
+sal_Bool ScSpellingEngine::SpellNextDocument()
 {
     return FindNextConversionCell();
 }
@@ -369,7 +369,7 @@ void ScSpellingEngine::ShowFinishDialog()
 
 Window* ScSpellingEngine::GetDialogParent()
 {
-    USHORT nWinId = ScSpellDialogChildWindow::GetChildWindowId();
+    sal_uInt16 nWinId = ScSpellDialogChildWindow::GetChildWindowId();
     SfxViewFrame* pViewFrm = mrViewData.GetViewShell()->GetViewFrame();
     if( pViewFrm->HasChildWindow( nWinId ) )
         if( SfxChildWindow* pChild = pViewFrm->GetChildWindow( nWinId ) )
@@ -438,13 +438,13 @@ void ScTextConversionEngine::ConvertAll( EditView& rEditView )
     {
         rEditView.StartTextConversion(
             maConvParam.GetSourceLang(), maConvParam.GetTargetLang(), maConvParam.GetTargetFont(),
-            maConvParam.GetOptions(), maConvParam.IsInteractive(), TRUE );
+            maConvParam.GetOptions(), maConvParam.IsInteractive(), sal_True );
         // #i34769# restore initial cursor position
         RestoreCursorPos();
     }
 }
 
-BOOL ScTextConversionEngine::ConvertNextDocument()
+sal_Bool ScTextConversionEngine::ConvertNextDocument()
 {
     return FindNextConversionCell();
 }

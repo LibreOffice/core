@@ -464,10 +464,10 @@ void ScXMLChangeTrackingImportHelper::ConvertInfo(const ScMyActionInfo& aInfo, S
 
     // #97286# old files didn't store 100th seconds, enable again
     if ( aInfo.aDateTime.HundredthSeconds )
-        pTrack->SetTime100thSeconds( TRUE );
+        pTrack->SetTime100thSeconds( sal_True );
 
     StrData aStrData( aInfo.sUser );
-    USHORT nPos;
+    sal_uInt16 nPos;
     if ( pTrack->GetUserCollection().Search( &aStrData, nPos ) )
     {
         const StrData* pUser = static_cast<const StrData*>( pTrack->GetUserCollection().At( nPos ) );
@@ -835,7 +835,7 @@ void ScXMLChangeTrackingImportHelper::CreateChangeTrack(ScDocument* pTempDoc)
     {
         pTrack = new ScChangeTrack(pDoc, aUsers);
         // #97286# old files didn't store 100th seconds, disable until encountered
-        pTrack->SetTime100thSeconds( FALSE );
+        pTrack->SetTime100thSeconds( sal_False );
 
         ScMyActions::iterator aItr(aActions.begin());
         ScMyActions::iterator aEndItr(aActions.end());

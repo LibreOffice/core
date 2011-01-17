@@ -104,8 +104,8 @@
 //CHINA001   aStrDelMsg      ( ScResId( STR_DEL_MSG ) ) ,
 //CHINA001   //
 //CHINA001   nIndex          ( 0 ),
-//CHINA001   bFmtInserted    ( FALSE ),
-//CHINA001   bCoreDataChanged( FALSE ),
+//CHINA001   bFmtInserted    ( sal_False ),
+//CHINA001   bCoreDataChanged( sal_False ),
 //CHINA001   pFormat         ( pAutoFormat ),
 //CHINA001   pSelFmtData     ( pSelFormatData )
 //CHINA001 {
@@ -125,7 +125,7 @@
 //CHINA001
 //CHINA001 void ScAutoFormatDlg::Init()
 //CHINA001 {
-//CHINA001   USHORT nCount;
+//CHINA001   sal_uInt16 nCount;
 //CHINA001   String aEntry;
 //CHINA001
 //CHINA001   aLbFormat    .SetSelectHdl( LINK( this, ScAutoFormatDlg, SelFmtHdl ) );
@@ -153,7 +153,7 @@
 //CHINA001
 //CHINA001   nCount = pFormat->GetCount();
 //CHINA001
-//CHINA001   for ( USHORT i = 0; i < nCount; i++ )
+//CHINA001   for ( sal_uInt16 i = 0; i < nCount; i++ )
 //CHINA001   {
 //CHINA001     ((*pFormat)[i])->GetName( aEntry );
 //CHINA001     aLbFormat.InsertEntry( aEntry );
@@ -173,7 +173,7 @@
 //CHINA001   {
 //CHINA001     aBtnAdd.Disable();
 //CHINA001     aBtnRemove.Disable();
-//CHINA001     bFmtInserted = TRUE;
+//CHINA001     bFmtInserted = sal_True;
 //CHINA001   }
 //CHINA001 }
 //CHINA001
@@ -224,7 +224,7 @@
 //CHINA001 IMPL_LINK( ScAutoFormatDlg, CheckHdl, Button *, pBtn )
 //CHINA001 {
 //CHINA001   ScAutoFormatData* pData  = (*pFormat)[nIndex];
-//CHINA001   BOOL              bCheck = ((CheckBox*)pBtn)->IsChecked();
+//CHINA001   sal_Bool              bCheck = ((CheckBox*)pBtn)->IsChecked();
 //CHINA001
 //CHINA001   if ( pBtn == &aBtnNumFormat )
 //CHINA001     pData->SetIncludeValueFormat( bCheck );
@@ -242,7 +242,7 @@
 //CHINA001   if ( !bCoreDataChanged )
 //CHINA001   {
 //CHINA001     aBtnCancel.SetText( aStrClose );
-//CHINA001     bCoreDataChanged = TRUE;
+//CHINA001     bCoreDataChanged = sal_True;
 //CHINA001   }
 //CHINA001
 //CHINA001   pWndPreview->NotifyChange( pData );
@@ -259,7 +259,7 @@
 //CHINA001     String              aStrStandard( ScResId(STR_STANDARD) );
 //CHINA001     String              aFormatName;
 //CHINA001     ScStringInputDlg*   pDlg;
-//CHINA001     BOOL                bOk = FALSE;
+//CHINA001     sal_Bool                bOk = sal_False;
 //CHINA001
 //CHINA001     while ( !bOk )
 //CHINA001     {
@@ -283,7 +283,7 @@
 //CHINA001
 //CHINA001                 if ( bFmtInserted )
 //CHINA001                 {
-//CHINA001                     USHORT nAt = pFormat->IndexOf( pNewData );
+//CHINA001                     sal_uInt16 nAt = pFormat->IndexOf( pNewData );
 //CHINA001
 //CHINA001                     aLbFormat.InsertEntry( aFormatName, nAt );
 //CHINA001                     aLbFormat.SelectEntry( aFormatName );
@@ -292,11 +292,11 @@
 //CHINA001                     if ( !bCoreDataChanged )
 //CHINA001                     {
 //CHINA001                         aBtnCancel.SetText( aStrClose );
-//CHINA001                         bCoreDataChanged = TRUE;
+//CHINA001                         bCoreDataChanged = sal_True;
 //CHINA001                     }
 //CHINA001
 //CHINA001                     SelFmtHdl( 0 );
-//CHINA001                     bOk = TRUE;
+//CHINA001                     bOk = sal_True;
 //CHINA001                 }
 //CHINA001                 else
 //CHINA001                     delete pNewData;
@@ -305,7 +305,7 @@
 //CHINA001
 //CHINA001             if ( !bFmtInserted )
 //CHINA001             {
-//CHINA001                 USHORT nRet = ErrorBox( this,
+//CHINA001                 sal_uInt16 nRet = ErrorBox( this,
 //CHINA001                                         WinBits( WB_OK_CANCEL | WB_DEF_OK),
 //CHINA001                                         ScGlobal::GetRscString(STR_INVALID_AFNAME)
 //CHINA001                                       ).Execute();
@@ -314,7 +314,7 @@
 //CHINA001             }
 //CHINA001         }
 //CHINA001         else
-//CHINA001             bOk = TRUE;
+//CHINA001             bOk = sal_True;
 //CHINA001
 //CHINA001         delete pDlg;
 //CHINA001     }
@@ -346,7 +346,7 @@
 //CHINA001         if ( !bCoreDataChanged )
 //CHINA001         {
 //CHINA001             aBtnCancel.SetText( aStrClose );
-//CHINA001             bCoreDataChanged = TRUE;
+//CHINA001             bCoreDataChanged = sal_True;
 //CHINA001         }
 //CHINA001
 //CHINA001         pFormat->AtFree( nIndex ); // in der Core loeschen
@@ -363,7 +363,7 @@
 //CHINA001
 //CHINA001 IMPL_LINK( ScAutoFormatDlg, RenameHdl, void *, pBtn)
 //CHINA001 {
-//CHINA001   BOOL bOk = FALSE;
+//CHINA001   sal_Bool bOk = sal_False;
 //CHINA001   while( !bOk )
 //CHINA001   {
 //CHINA001
@@ -377,9 +377,9 @@
 //CHINA001                                      HID_SC_RENAME_AUTOFMT );
 //CHINA001     if( pDlg->Execute() == RET_OK )
 //CHINA001     {
-//CHINA001         BOOL bFmtRenamed = FALSE;
+//CHINA001         sal_Bool bFmtRenamed = sal_False;
 //CHINA001         pDlg->GetInputString( aFormatName );
-//CHINA001         USHORT n;
+//CHINA001         sal_uInt16 n;
 //CHINA001
 //CHINA001         if ( aFormatName.Len() > 0 )
 //CHINA001         {
@@ -405,29 +405,29 @@
 //CHINA001
 //CHINA001                 pFormat->Insert( pNewData);
 //CHINA001
-//CHINA001                 USHORT nCount = pFormat->GetCount();
+//CHINA001                 sal_uInt16 nCount = pFormat->GetCount();
 //CHINA001
-//CHINA001                 aLbFormat.SetUpdateMode(FALSE);
+//CHINA001                 aLbFormat.SetUpdateMode(sal_False);
 //CHINA001                 aLbFormat.Clear();
-//CHINA001                 for ( USHORT i = 0; i < nCount; i++ )
+//CHINA001                 for ( sal_uInt16 i = 0; i < nCount; i++ )
 //CHINA001                 {
 //CHINA001                     ((*pFormat)[i])->GetName( aEntry );
 //CHINA001                     aLbFormat.InsertEntry( aEntry );
 //CHINA001                 }
 //CHINA001
-//CHINA001                 aLbFormat.SetUpdateMode( TRUE);
+//CHINA001                 aLbFormat.SetUpdateMode( sal_True);
 //CHINA001                 aLbFormat.SelectEntry( aFormatName);
 //CHINA001
 //CHINA001                 if ( !bCoreDataChanged )
 //CHINA001                 {
 //CHINA001                     aBtnCancel.SetText( aStrClose );
-//CHINA001                     bCoreDataChanged = TRUE;
+//CHINA001                     bCoreDataChanged = sal_True;
 //CHINA001                 }
 //CHINA001
 //CHINA001
 //CHINA001                 SelFmtHdl( 0 );
-//CHINA001                 bOk = TRUE;
-//CHINA001                 bFmtRenamed = TRUE;
+//CHINA001                 bOk = sal_True;
+//CHINA001                 bFmtRenamed = sal_True;
 //CHINA001             }
 //CHINA001         }
 //CHINA001         if( !bFmtRenamed )
@@ -439,7 +439,7 @@
 //CHINA001         }
 //CHINA001     }
 //CHINA001     else
-//CHINA001         bOk = TRUE;
+//CHINA001         bOk = sal_True;
 //CHINA001     delete pDlg;
 //CHINA001   }
 //CHINA001
@@ -489,7 +489,7 @@ ScAutoFmtPreview::ScAutoFmtPreview( Window* pParent, const ResId& rRes, ScDocume
         aVD             ( *this ),
         aScriptedText   ( aVD ),
         xBreakIter      ( pDoc->GetBreakIterator() ),
-        bFitWidth       ( FALSE ),
+        bFitWidth       ( sal_False ),
         mbRTL           ( false ),
         aPrvSize        ( GetSizePixel().Width() - 6, GetSizePixel().Height() - 30 ),
         mnLabelColWidth ( (aPrvSize.Width() - 4) / 4 - 12 ),
@@ -532,7 +532,7 @@ void lcl_SetFontProperties(
     rFont.SetItalic     ( (FontItalic)rPostureItem.GetValue() );
 }
 
-void ScAutoFmtPreview::MakeFonts( USHORT nIndex, Font& rFont, Font& rCJKFont, Font& rCTLFont )
+void ScAutoFmtPreview::MakeFonts( sal_uInt16 nIndex, Font& rFont, Font& rCJKFont, Font& rCTLFont )
 {
     if ( pCurData )
     {
@@ -573,7 +573,7 @@ rFont.MethodName( Value ); rCJKFont.MethodName( Value ); rCTLFont.MethodName( Va
         SETONALLFONTS( SetShadow,       pShadowedItem->GetValue() )
         SETONALLFONTS( SetColor,        aColor )
         SETONALLFONTS( SetSize,         aFontSize )
-        SETONALLFONTS( SetTransparent,  TRUE )
+        SETONALLFONTS( SetTransparent,  sal_True )
 
 #undef SETONALLFONTS
     }
@@ -581,9 +581,9 @@ rFont.MethodName( Value ); rCJKFont.MethodName( Value ); rCTLFont.MethodName( Va
 
 //------------------------------------------------------------------------
 
-USHORT ScAutoFmtPreview::GetFormatIndex( size_t nCol, size_t nRow ) const
+sal_uInt16 ScAutoFmtPreview::GetFormatIndex( size_t nCol, size_t nRow ) const
 {
-    static const USHORT pnFmtMap[] =
+    static const sal_uInt16 pnFmtMap[] =
     {
         0,  1,  2,  1,  3,
         4,  5,  6,  5,  7,
@@ -617,11 +617,11 @@ void ScAutoFmtPreview::DrawString( size_t nCol, size_t nRow )
         //------------------------
 
         String  cellString;
-        BOOL    bNumFormat  = pCurData->GetIncludeValueFormat();
-        ULONG   nNum;
+        sal_Bool    bNumFormat  = pCurData->GetIncludeValueFormat();
+        sal_uLong   nNum;
         double  nVal;
         Color*  pDummy = NULL;
-        USHORT  nIndex = static_cast< USHORT >( maArray.GetCellIndex( nCol, nRow, mbRTL ) );
+        sal_uInt16  nIndex = static_cast< sal_uInt16 >( maArray.GetCellIndex( nCol, nRow, mbRTL ) );
 
         switch( nIndex )
         {
@@ -660,7 +660,7 @@ void ScAutoFmtPreview::DrawString( size_t nCol, size_t nRow )
             mknum:
                 if( bNumFormat )
                 {
-                    ScNumFormatAbbrev& rNumFormat = (ScNumFormatAbbrev&)pCurData->GetNumFormat( (USHORT) nNum );
+                    ScNumFormatAbbrev& rNumFormat = (ScNumFormatAbbrev&)pCurData->GetNumFormat( (sal_uInt16) nNum );
                     nNum = rNumFormat.GetFormatIndex( *pNumFmt );
                 }
                 else
@@ -672,11 +672,11 @@ void ScAutoFmtPreview::DrawString( size_t nCol, size_t nRow )
         if ( cellString.Len() > 0 )
         {
             Size                aStrSize;
-            USHORT              nFmtIndex       = GetFormatIndex( nCol, nRow );
+            sal_uInt16              nFmtIndex       = GetFormatIndex( nCol, nRow );
             Rectangle           cellRect        = maArray.GetCellRect( nCol, nRow );
             Point               aPos            = cellRect.TopLeft();
-            USHORT              nRightX         = 0;
-            BOOL                bJustify        = pCurData->GetIncludeJustify();
+            sal_uInt16              nRightX         = 0;
+            sal_Bool                bJustify        = pCurData->GetIncludeJustify();
             SvxHorJustifyItem    aHorJustifyItem( SVX_HOR_JUSTIFY_STANDARD, ATTR_HOR_JUSTIFY );
             SvxCellHorJustify      eJustification;
 
@@ -729,21 +729,21 @@ void ScAutoFmtPreview::DrawString( size_t nCol, size_t nRow )
                 aStrSize = aScriptedText.GetTextSize();
             }
 
-            nRightX  = (USHORT)(  cellRect.GetWidth()
+            nRightX  = (sal_uInt16)(  cellRect.GetWidth()
                                   - aStrSize.Width()
                                   - FRAME_OFFSET );
 
             //-----------------------------
             // vertikal (immer zentrieren):
             //-----------------------------
-            aPos.Y() += (mnRowHeight - (USHORT)aStrSize.Height()) / 2;
+            aPos.Y() += (mnRowHeight - (sal_uInt16)aStrSize.Height()) / 2;
 
             //-----------
             // horizontal
             //-----------
             if ( eJustification != SVX_HOR_JUSTIFY_STANDARD )
             {
-                USHORT nHorPos = (USHORT)
+                sal_uInt16 nHorPos = (sal_uInt16)
                                  ((cellRect.GetWidth()-aStrSize.Width())/2);
 
                 switch ( eJustification )
@@ -849,7 +849,7 @@ void ScAutoFmtPreview::Init()
     SetBorderStyle( WINDOW_BORDER_MONO );
     maArray.Initialize( 5, 5 );
     maArray.SetUseDiagDoubleClipping( false );
-    CalcCellArray( FALSE );
+    CalcCellArray( sal_False );
     CalcLineMap();
 
     TypeId aType(TYPE(ScDocShell));
@@ -865,7 +865,7 @@ void ScAutoFmtPreview::Init()
 
 //------------------------------------------------------------------------
 
-void ScAutoFmtPreview::CalcCellArray( BOOL bFitWidthP )
+void ScAutoFmtPreview::CalcCellArray( sal_Bool bFitWidthP )
 {
     maArray.SetXOffset( 2 );
     maArray.SetAllColWidths( bFitWidthP ? mnDataColWidth2 : mnDataColWidth1 );
@@ -940,7 +940,7 @@ void ScAutoFmtPreview::NotifyChange( ScAutoFormatData* pNewData )
 void ScAutoFmtPreview::DoPaint( const Rectangle& /* rRect */ )
 {
     sal_uInt32 nOldDrawMode = aVD.GetDrawMode();
-    //  #105733# SvtAccessibilityOptions::GetIsForBorders is no longer used (always assumed TRUE)
+    //  #105733# SvtAccessibilityOptions::GetIsForBorders is no longer used (always assumed sal_True)
     if( GetSettings().GetStyleSettings().GetHighContrastMode() )
         aVD.SetDrawMode( DRAWMODE_SETTINGSLINE | DRAWMODE_SETTINGSFILL | DRAWMODE_SETTINGSTEXT | DRAWMODE_SETTINGSGRADIENT );
 
@@ -950,7 +950,7 @@ void ScAutoFmtPreview::DoPaint( const Rectangle& /* rRect */ )
     Point aTmpPoint;
     Rectangle aRect( aTmpPoint, aWndSize );
 
-    aFont.SetTransparent( TRUE );
+    aFont.SetTransparent( sal_True );
     aVD.SetFont( aFont );
     aVD.SetLineColor();
     aVD.SetFillColor( aBackCol );

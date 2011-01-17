@@ -966,7 +966,7 @@ void XclImpPTField::ConvertRowColField( ScDPSaveData& rSaveData ) const
     DBG_ASSERT( maFieldInfo.mnAxes & EXC_SXVD_AXIS_ROWCOL, "XclImpPTField::ConvertRowColField - no row/column field" );
     // special data orientation field?
     if( maFieldInfo.mnCacheIdx == EXC_SXIVD_DATA )
-        rSaveData.GetDataLayoutDimension()->SetOrientation( static_cast< USHORT >( maFieldInfo.GetApiOrient( EXC_SXVD_AXIS_ROWCOL ) ) );
+        rSaveData.GetDataLayoutDimension()->SetOrientation( static_cast< sal_uInt16 >( maFieldInfo.GetApiOrient( EXC_SXVD_AXIS_ROWCOL ) ) );
     else
         ConvertRCPField( rSaveData );
 }
@@ -1067,7 +1067,7 @@ ScDPSaveDimension* XclImpPTField::ConvertRCPField( ScDPSaveData& rSaveData ) con
     ScDPSaveDimension& rSaveDim = *rSaveData.GetNewDimensionByName( rFieldName );
 
     // orientation
-    rSaveDim.SetOrientation( static_cast< USHORT >( maFieldInfo.GetApiOrient( EXC_SXVD_AXIS_ROWCOLPAGE ) ) );
+    rSaveDim.SetOrientation( static_cast< sal_uInt16 >( maFieldInfo.GetApiOrient( EXC_SXVD_AXIS_ROWCOLPAGE ) ) );
 
     // general field info
     ConvertFieldInfo( rSaveDim );
@@ -1141,7 +1141,7 @@ void XclImpPTField::ConvertDataFieldInfo( ScDPSaveDimension& rSaveDim, const Xcl
             rSaveDim.SetLayoutName( *pVisName );
 
     // aggregation function
-    rSaveDim.SetFunction( static_cast< USHORT >( rDataInfo.GetApiAggFunc() ) );
+    rSaveDim.SetFunction( static_cast< sal_uInt16 >( rDataInfo.GetApiAggFunc() ) );
 
     // result field reference
     sal_Int32 nRefType = rDataInfo.GetApiRefType();
@@ -1354,7 +1354,7 @@ void XclImpPivotTable::Convert()
 
     aSaveData.SetRowGrand( ::get_flag( maPTInfo.mnFlags, EXC_SXVIEW_ROWGRAND ) );
     aSaveData.SetColumnGrand( ::get_flag( maPTInfo.mnFlags, EXC_SXVIEW_COLGRAND ) );
-    aSaveData.SetFilterButton( FALSE );
+    aSaveData.SetFilterButton( sal_False );
     aSaveData.SetDrillDown( ::get_flag( maPTExtInfo.mnFlags, EXC_SXEX_DRILLDOWN ) );
 
     // *** fields ***
@@ -1417,7 +1417,7 @@ void XclImpPivotTable::Convert()
     pDPObj->SetSaveData( aSaveData );
     pDPObj->SetSheetDesc( aDesc );
     pDPObj->SetOutRange( aOutRange );
-    pDPObj->SetAlive( TRUE );
+    pDPObj->SetAlive( sal_True );
     pDPObj->SetHeaderLayout( maPTViewEx9Info.mnGridLayout == 0 );
 
     GetDoc().GetDPCollection()->InsertNewTable(pDPObj);

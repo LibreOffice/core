@@ -110,7 +110,7 @@ private:
     Timer           aTimer;
     ScPopupMenu*    pPopupMenu;
     Link            aMLink;
-    USHORT          nSelected;
+    sal_uInt16          nSelected;
 
     SC_DLLPRIVATE  DECL_LINK( TimerHdl, Timer*);
 
@@ -130,7 +130,7 @@ public:
 
     void            SetPopupMenu(ScPopupMenu* pPopUp);
 
-    USHORT          GetSelected();
+    sal_uInt16          GetSelected();
 
     void            SetMenuHdl( const Link& rLink ) { aMLink = rLink; }
     const Link&     GetMenuHdl() const { return aMLink; }
@@ -144,16 +144,16 @@ public:
 //CHINA001 class ScHFEditPage : public SfxTabPage
 //CHINA001 {
 //CHINA001 public:
-//CHINA001 virtual  BOOL    FillItemSet ( SfxItemSet& rCoreSet );
+//CHINA001 virtual  sal_Bool    FillItemSet ( SfxItemSet& rCoreSet );
 //CHINA001 virtual  void    Reset       ( const SfxItemSet& rCoreSet );
 //CHINA001
 //CHINA001 void         SetNumType(SvxNumType eNumType);
 //CHINA001
 //CHINA001 protected:
 //CHINA001 ScHFEditPage( Window*            pParent,
-//CHINA001 USHORT           nResId,
+//CHINA001 sal_uInt16           nResId,
 //CHINA001 const SfxItemSet&    rCoreSet,
-//CHINA001 USHORT           nWhich );
+//CHINA001 sal_uInt16           nWhich );
 //CHINA001 virtual      ~ScHFEditPage();
 //CHINA001
 //CHINA001 private:
@@ -174,7 +174,7 @@ public:
 //CHINA001 FixedInfo        aFtInfo;
 //CHINA001 ScPopupMenu      aPopUpFile;
 //CHINA001
-//CHINA001 USHORT           nWhich;
+//CHINA001 sal_uInt16           nWhich;
 //CHINA001 String           aCmdArr[6];
 //CHINA001
 //CHINA001 private:
@@ -191,7 +191,7 @@ public:
 //CHINA001 {
 //CHINA001 public:
 //CHINA001 static SfxTabPage*   Create( Window* pParent, const SfxItemSet& rCoreSet );
-//CHINA001 static USHORT*       GetRanges();
+//CHINA001 static sal_uInt16*       GetRanges();
 //CHINA001
 //CHINA001 private:
 //CHINA001 ScRightHeaderEditPage( Window* pParent, const SfxItemSet& rSet );
@@ -203,7 +203,7 @@ public:
 //CHINA001 {
 //CHINA001 public:
 //CHINA001 static SfxTabPage*   Create( Window* pParent, const SfxItemSet& rCoreSet );
-//CHINA001 static USHORT*       GetRanges();
+//CHINA001 static sal_uInt16*       GetRanges();
 //CHINA001
 //CHINA001 private:
 //CHINA001 ScLeftHeaderEditPage( Window* pParent, const SfxItemSet& rSet );
@@ -215,7 +215,7 @@ public:
 //CHINA001 {
 //CHINA001 public:
 //CHINA001 static SfxTabPage*   Create( Window* pParent, const SfxItemSet& rCoreSet );
-//CHINA001 static USHORT*       GetRanges();
+//CHINA001 static sal_uInt16*       GetRanges();
 //CHINA001
 //CHINA001 private:
 //CHINA001 ScRightFooterEditPage( Window* pParent, const SfxItemSet& rSet );
@@ -227,7 +227,7 @@ public:
 //CHINA001 {
 //CHINA001 public:
 //CHINA001 static SfxTabPage*   Create( Window* pParent, const SfxItemSet& rCoreSet );
-//CHINA001 static USHORT*       GetRanges();
+//CHINA001 static sal_uInt16*       GetRanges();
 //CHINA001
 //CHINA001 private:
 //CHINA001 ScLeftFooterEditPage( Window* pParent, const SfxItemSet& rSet );

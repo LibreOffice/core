@@ -41,7 +41,7 @@
 void __EXPORT ScPopupMenu::Select()
 {
     nSel = GetCurItemId();
-    bHit = TRUE;
+    bHit = sal_True;
 }
 
 

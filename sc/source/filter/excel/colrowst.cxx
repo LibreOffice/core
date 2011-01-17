@@ -282,7 +282,7 @@ void XclImpColRowSettings::ConvertHiddenFlags( SCTAB nScTab )
     // hide the columns
     for( SCCOL nScCol = 0; nScCol <= MAXCOL; ++nScCol )
         if( ::get_flag( maColFlags[ nScCol ], EXC_COLROW_HIDDEN ) )
-            rDoc.ShowCol( nScCol, nScTab, FALSE );
+            rDoc.ShowCol( nScCol, nScTab, sal_False );
 
     // #i38093# rows hidden by filter need extra flag
     SCROW nFirstFilterScRow = SCROW_MAX;
@@ -304,7 +304,7 @@ void XclImpColRowSettings::ConvertHiddenFlags( SCTAB nScTab )
         if( ::get_flag( maRowFlags[ nScRow ], EXC_COLROW_HIDDEN ) )
         {
             // hide the row
-            rDoc.ShowRow( nScRow, nScTab, FALSE );
+            rDoc.ShowRow( nScRow, nScTab, sal_False );
             // #i38093# rows hidden by filter need extra flag
             if( (nFirstFilterScRow <= nScRow) && (nScRow <= nLastFilterScRow) )
                 rDoc.SetRowFiltered(nScRow, nScRow, nScTab, true);
@@ -313,6 +313,6 @@ void XclImpColRowSettings::ConvertHiddenFlags( SCTAB nScTab )
 
     // #i47438# if default row format is hidden, hide remaining rows
     if( ::get_flag( mnDefRowFlags, EXC_DEFROW_HIDDEN ) && (mnLastScRow < MAXROW) )
-        rDoc.ShowRows( mnLastScRow + 1, MAXROW, nScTab, FALSE );
+        rDoc.ShowRows( mnLastScRow + 1, MAXROW, nScTab, sal_False );
 }
 

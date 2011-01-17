@@ -85,21 +85,21 @@ ScCellSearchObj::ScCellSearchObj() :
 {
     pSearchItem = new SvxSearchItem( SCITEM_SEARCHDATA );
     //  Defaults:
-    pSearchItem->SetWordOnly(FALSE);
-    pSearchItem->SetExact(FALSE);
-    pSearchItem->SetMatchFullHalfWidthForms(FALSE);
-    pSearchItem->SetUseAsianOptions(FALSE);     // or all asian bits would have to be handled
-    pSearchItem->SetBackward(FALSE);
-    pSearchItem->SetSelection(FALSE);
-    pSearchItem->SetRegExp(FALSE);
-    pSearchItem->SetPattern(FALSE);
-    pSearchItem->SetLevenshtein(FALSE);
-    pSearchItem->SetLEVRelaxed(FALSE);
+    pSearchItem->SetWordOnly(sal_False);
+    pSearchItem->SetExact(sal_False);
+    pSearchItem->SetMatchFullHalfWidthForms(sal_False);
+    pSearchItem->SetUseAsianOptions(sal_False);     // or all asian bits would have to be handled
+    pSearchItem->SetBackward(sal_False);
+    pSearchItem->SetSelection(sal_False);
+    pSearchItem->SetRegExp(sal_False);
+    pSearchItem->SetPattern(sal_False);
+    pSearchItem->SetLevenshtein(sal_False);
+    pSearchItem->SetLEVRelaxed(sal_False);
     pSearchItem->SetLEVOther(2);
     pSearchItem->SetLEVShorter(2);
     pSearchItem->SetLEVLonger(2);
     //  Calc-Flags
-    pSearchItem->SetRowDirection(FALSE);
+    pSearchItem->SetRowDirection(sal_False);
     pSearchItem->SetCellType(SVX_SEARCHIN_FORMULA);
 
     //  Selection-Flag wird beim Aufruf gesetzt

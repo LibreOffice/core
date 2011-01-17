@@ -67,7 +67,7 @@ class SC_DLLPUBLIC ScDPTableDataCache
     std::vector<SCROW>*          mpGlobalOrder;     //Sorted members index
     std::vector<SCROW>*          mpIndexOrder;      //Index the sorted number
     std::vector<ScDPItemData*>   mrLabelNames;      //Source Label data
-    std::vector<BOOL>            mbEmptyRow;        //If empty row?
+    std::vector<sal_Bool>            mbEmptyRow;        //If empty row?
     mutable ScDPItemDataPool                 maAdditionalDatas;
 public:
     SCROW GetOrder( long nDim, SCROW nIndex ) const;
@@ -79,26 +79,26 @@ public:
 
     SCCOL GetDimensionIndex( String sName) const;
     const ScDPItemData* GetSortedItemData( SCCOL nDim, SCROW nOrder ) const;
-    ULONG GetNumType ( ULONG nFormat ) const;
-    ULONG GetNumberFormat( long nDim ) const;
-    BOOL  IsDateDimension( long nDim ) const ;
-    ULONG GetDimNumType( SCCOL nDim) const;
+    sal_uLong GetNumType ( sal_uLong nFormat ) const;
+    sal_uLong GetNumberFormat( long nDim ) const;
+    sal_Bool  IsDateDimension( long nDim ) const ;
+    sal_uLong GetDimNumType( SCCOL nDim) const;
     SCROW GetDimMemberCount( SCCOL nDim ) const;
 
     SCROW GetSortedItemDataId( SCCOL nDim, SCROW nOrder ) const;
     const std::vector<ScDPItemData*>& GetDimMemberValues( SCCOL nDim )const;
     void    SetId( long nId ){ mnID = nId;}
-    void    AddRow( ScDPItemData* pRow, USHORT nCount );
+    void    AddRow( ScDPItemData* pRow, sal_uInt16 nCount );
     bool    InitFromDoc(  ScDocument* pDoc, const ScRange& rRange );
     bool InitFromDataBase (const  ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet>& xRowSet, const Date& rNullDate);
 
     SCROW   GetRowCount() const;
-    SCROW   GetItemDataId( USHORT nDim, SCROW nRow, BOOL bRepeatIfEmpty ) const;
-    String  GetDimensionName( USHORT nColumn ) const;
-    bool    IsEmptyMember( SCROW nRow, USHORT nColumn ) const;
+    SCROW   GetItemDataId( sal_uInt16 nDim, SCROW nRow, sal_Bool bRepeatIfEmpty ) const;
+    String  GetDimensionName( sal_uInt16 nColumn ) const;
+    bool    IsEmptyMember( SCROW nRow, sal_uInt16 nColumn ) const;
     bool    IsRowEmpty( SCROW nRow ) const;
     bool    IsValid() const;
-    bool    ValidQuery( SCROW nRow, const ScQueryParam& rQueryParam, BOOL* pSpecial );
+    bool    ValidQuery( SCROW nRow, const ScQueryParam& rQueryParam, sal_Bool* pSpecial );
 
     ScDocument* GetDoc() const;//ms-cache-core
     long GetColumnCount() const;
@@ -106,7 +106,7 @@ public:
 
     const ScDPItemData* GetItemDataById( long nDim, SCROW nId ) const;
 
-    BOOL operator== ( const ScDPTableDataCache& r ) const;
+    sal_Bool operator== ( const ScDPTableDataCache& r ) const;
 
 //construction
     ScDPTableDataCache( ScDocument* pDoc );
@@ -116,7 +116,7 @@ public:
 protected:
 private:
     void        AddLabel( ScDPItemData* pData);
-    BOOL    AddData( long nDim, ScDPItemData* itemData );
+    sal_Bool    AddData( long nDim, ScDPItemData* itemData );
 };
 
 #endif //DPTABLECACHE_HXX

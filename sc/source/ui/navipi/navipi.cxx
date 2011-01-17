@@ -115,7 +115,7 @@ long __EXPORT ColumnEdit::Notify( NotifyEvent& rNEvt )
 {
     long nHandled = SpinField::Notify( rNEvt );
 
-    USHORT nType = rNEvt.GetType();
+    sal_uInt16 nType = rNEvt.GetType();
     if ( nType == EVENT_KEYINPUT )
     {
         const KeyEvent* pKEvt = rNEvt.GetKeyEvent();
@@ -397,8 +397,8 @@ CommandToolBox::CommandToolBox( ScNavigatorDlg* pParent, const ResId& rResId )
     SetSizePixel( CalcWindowSizePixel() );
     SetDropdownClickHdl( LINK(this, CommandToolBox, ToolBoxDropdownClickHdl) );
     SetItemBits( IID_DROPMODE, GetItemBits( IID_DROPMODE ) | TIB_DROPDOWNONLY );
-//  EnableItem( IID_UP, FALSE );
-//  EnableItem( IID_DOWN, FALSE );
+//  EnableItem( IID_UP, sal_False );
+//  EnableItem( IID_DOWN, sal_False );
 }
 
 //------------------------------------------------------------------------
@@ -409,7 +409,7 @@ __EXPORT CommandToolBox::~CommandToolBox()
 
 //------------------------------------------------------------------------
 
-void CommandToolBox::Select( USHORT nSelId )
+void CommandToolBox::Select( sal_uInt16 nSelId )
 {
     //  Modus umschalten ?
 
@@ -478,7 +478,7 @@ IMPL_LINK( CommandToolBox, ToolBoxDropdownClickHdl, ToolBox*, EMPTYARG )
         ScPopupMenu aPop( ScResId( RID_POPUP_DROPMODE ) );
         aPop.CheckItem( RID_DROPMODE_URL + rDlg.GetDropMode() );
         aPop.Execute( this, GetItemRect(IID_DROPMODE), POPUPMENU_EXECUTE_DOWN );
-        USHORT nId = aPop.GetSelected();
+        sal_uInt16 nId = aPop.GetSelected();
 
         EndSelection();     // vor SetDropMode (SetDropMode ruft SetItemImage)
 
@@ -505,19 +505,19 @@ void CommandToolBox::UpdateButtons()
     //  Umschalten-Button:
     if ( eMode == NAV_LMODE_SCENARIOS || eMode == NAV_LMODE_NONE )
     {
-        EnableItem( IID_CHANGEROOT, FALSE );
-        CheckItem( IID_CHANGEROOT, FALSE );
+        EnableItem( IID_CHANGEROOT, sal_False );
+        CheckItem( IID_CHANGEROOT, sal_False );
     }
     else
     {
-        EnableItem( IID_CHANGEROOT, TRUE );
-        BOOL bRootSet = rDlg.aLbEntries.GetRootType() != SC_CONTENT_ROOT;
+        EnableItem( IID_CHANGEROOT, sal_True );
+        sal_Bool bRootSet = rDlg.aLbEntries.GetRootType() != SC_CONTENT_ROOT;
         CheckItem( IID_CHANGEROOT, bRootSet );
     }
 
-    BOOL bHC = GetSettings().GetStyleSettings().GetHighContrastMode();
+    sal_Bool bHC = GetSettings().GetStyleSettings().GetHighContrastMode();
 
-    USHORT nImageId = 0;
+    sal_uInt16 nImageId = 0;
     switch ( rDlg.nDropMode )
     {
         case SC_DROPMODE_URL:   nImageId = bHC ? RID_IMG_H_DROP_URL  : RID_IMG_DROP_URL;  break;
@@ -529,14 +529,14 @@ void CommandToolBox::UpdateButtons()
 
 void CommandToolBox::InitImageList()
 {
-    BOOL bHC = GetSettings().GetStyleSettings().GetHighContrastMode();
+    sal_Bool bHC = GetSettings().GetStyleSettings().GetHighContrastMode();
 
     ImageList& rImgLst = bHC ? rDlg.aCmdImageListH : rDlg.aCmdImageList;
 
-    USHORT nCount = GetItemCount();
-    for (USHORT i = 0; i < nCount; i++)
+    sal_uInt16 nCount = GetItemCount();
+    for (sal_uInt16 i = 0; i < nCount; i++)
     {
-        USHORT nId = GetItemId(i);
+        sal_uInt16 nId = GetItemId(i);
         SetItemImage( nId, rImgLst.GetImage( nId ) );
     }
 }
@@ -559,7 +559,7 @@ void CommandToolBox::DataChanged( const DataChangedEvent& rDCEvt )
 //==================================================================
 
 ScNavigatorSettings::ScNavigatorSettings() :
-    maExpandedVec( SC_CONTENT_COUNT, FALSE ),
+    maExpandedVec( SC_CONTENT_COUNT, sal_False ),
     mnRootSelected( SC_CONTENT_ROOT ),
     mnChildSelected( SC_CONTENT_NOCHILD )
 {
@@ -575,7 +575,7 @@ SFX_IMPL_CHILDWINDOWCONTEXT( ScNavigatorDialogWrapper, SID_NAVIGATOR )
 
 ScNavigatorDialogWrapper::ScNavigatorDialogWrapper(
                                     Window*          pParent,
-                                    USHORT           nId,
+                                    sal_uInt16           nId,
                                     SfxBindings*     pBind,
                                     SfxChildWinInfo* /* pInfo */ ) :
         SfxChildWindowContext( nId )
@@ -597,7 +597,7 @@ ScNavigatorDialogWrapper::ScNavigatorDialogWrapper(
     //  deshalb muessen in Abhaengigkeit von der momentanen Groesse die
     //  Inhalte eingeblendet werden oder nicht
 
-    BOOL bSmall = ( aInfoSize.Height() <= pNavigator->aInitSize.Height() + SCNAV_MINTOL );
+    sal_Bool bSmall = ( aInfoSize.Height() <= pNavigator->aInitSize.Height() + SCNAV_MINTOL );
     NavListMode eNavMode = NAV_LMODE_NONE;
     if (!bSmall)
     {
@@ -611,12 +611,12 @@ ScNavigatorDialogWrapper::ScNavigatorDialogWrapper(
             eNavMode = NAV_LMODE_AREAS;
     }
 
-    //  Die Groesse des Floats nicht neu setzen (FALSE bei SetListMode), damit der
+    //  Die Groesse des Floats nicht neu setzen (sal_False bei SetListMode), damit der
     //  Navigator nicht aufgeklappt wird, wenn er minimiert war (#38872#).
 
-    pNavigator->SetListMode( eNavMode, FALSE );     // FALSE: Groesse des Float nicht setzen
+    pNavigator->SetListMode( eNavMode, sal_False );     // FALSE: Groesse des Float nicht setzen
 
-    USHORT nCmdId;
+    sal_uInt16 nCmdId;
     switch (eNavMode)
     {
         case NAV_LMODE_DOCS:        nCmdId = IID_DOCS;      break;
@@ -682,7 +682,7 @@ ScNavigatorDlg::ScNavigatorDlg( SfxBindings* pB, SfxChildWindowContext* pCW, Win
         nCurCol     ( 0 ),
         nCurRow     ( 0 ),
         nCurTab     ( 0 ),
-        bFirstBig   ( FALSE )
+        bFirstBig   ( sal_False )
 {
     ScNavipiCfg& rCfg = SC_MOD()->GetNavipiCfg();
     nDropMode = rCfg.GetDragMode();
@@ -738,7 +738,7 @@ ScNavigatorDlg::ScNavigatorDlg( SfxBindings* pB, SfxChildWindowContext* pCW, Win
 
     aLbDocuments.Hide();        // bei NAV_LMODE_NONE gibts die nicht
 
-    aLbEntries.InitWindowBits(TRUE);
+    aLbEntries.InitWindowBits(sal_True);
 
     aLbEntries.SetSpaceBetweenEntries(0);
     aLbEntries.SetSelectionMode( SINGLE_SELECTION );
@@ -747,7 +747,7 @@ ScNavigatorDlg::ScNavigatorDlg( SfxBindings* pB, SfxChildWindowContext* pCW, Win
                                     SV_DRAGDROP_ENABLE_TOP );
 
     //  war eine Kategorie als Root ausgewaehlt?
-    USHORT nLastRoot = rCfg.GetRootType();
+    sal_uInt16 nLastRoot = rCfg.GetRootType();
     if ( nLastRoot )
         aLbEntries.SetRootType( nLastRoot );
 
@@ -775,7 +775,7 @@ __EXPORT ScNavigatorDlg::~ScNavigatorDlg()
 {
     aContentTimer.Stop();
 
-    USHORT i;
+    sal_uInt16 i;
     for ( i=0; i<CTRL_ITEMS; i++ )
         delete ppBoundItems[i];
 
@@ -853,18 +853,18 @@ void ScNavigatorDlg::DoResize()
     //  #41403# bei angedocktem Navigator wird das Fenster evtl. erst klein erzeugt,
     //  dann kommt ein Resize auf die wirkliche Groesse -> dann Inhalte einschalten
 
-    BOOL bSmall = ( nTotalHeight <= aInitSize.Height() + SCNAV_MINTOL );
+    sal_Bool bSmall = ( nTotalHeight <= aInitSize.Height() + SCNAV_MINTOL );
     if ( !bSmall && bFirstBig )
     {
         //  Inhalte laut Config wieder einschalten
 
-        bFirstBig = FALSE;
+        bFirstBig = sal_False;
         NavListMode eNavMode = NAV_LMODE_AREAS;
         ScNavipiCfg& rCfg = SC_MOD()->GetNavipiCfg();
         NavListMode eLastMode = (NavListMode) rCfg.GetListMode();
         if ( eLastMode == NAV_LMODE_SCENARIOS )
             eNavMode = NAV_LMODE_SCENARIOS;
-        SetListMode( eNavMode, FALSE );         // FALSE: Groesse des Float nicht setzen
+        SetListMode( eNavMode, sal_False );         // FALSE: Groesse des Float nicht setzen
     }
 
     //  auch wenn die Inhalte nicht sichtbar sind, die Groessen anpassen,
@@ -896,7 +896,7 @@ void ScNavigatorDlg::DoResize()
 
     //@@ 03.11.97 end
 
-    BOOL bListMode = (eListMode != NAV_LMODE_NONE);
+    sal_Bool bListMode = (eListMode != NAV_LMODE_NONE);
     FloatingWindow* pFloat = pContextWin->GetFloatingWindow();
     if ( pFloat && bListMode )
         nListModeHeight = nTotalHeight;
@@ -908,7 +908,7 @@ void __EXPORT ScNavigatorDlg::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
     if ( rHint.ISA(SfxSimpleHint) )
     {
-        ULONG nHintId = ((SfxSimpleHint&)rHint).GetId();
+        sal_uLong nHintId = ((SfxSimpleHint&)rHint).GetId();
 
         if ( nHintId == SC_HINT_DOCNAME_CHANGED )
         {
@@ -962,7 +962,7 @@ void __EXPORT ScNavigatorDlg::Notify( SfxBroadcaster&, const SfxHint& rHint )
     }
     else if ( rHint.ISA(SfxEventHint) )
     {
-        ULONG nEventId = ((SfxEventHint&)rHint).GetEventId();
+        sal_uLong nEventId = ((SfxEventHint&)rHint).GetEventId();
         if ( nEventId == SFX_EVENT_ACTIVATEDOC )
         {
             aLbEntries.ActiveDocChanged();
@@ -984,7 +984,7 @@ IMPL_LINK( ScNavigatorDlg, TimeHdl, Timer*, pTimer )
 
 //------------------------------------------------------------------------
 
-void ScNavigatorDlg::SetDropMode(USHORT nNew)
+void ScNavigatorDlg::SetDropMode(sal_uInt16 nNew)
 {
     nDropMode = nNew;
     aTbxCmd.UpdateButtons();
@@ -1017,7 +1017,7 @@ void ScNavigatorDlg::SetCurrentCell( SCCOL nColNo, SCROW nRowNo )
         String  aAddr;
         aScAddress.Format( aAddr, SCA_ABS );
 
-        BOOL bUnmark = FALSE;
+        sal_Bool bUnmark = sal_False;
         if ( GetViewData() )
             bUnmark = !pViewData->GetMarkData().IsCellMarked( nColNo, nRowNo );
 
@@ -1117,7 +1117,7 @@ ScNavigatorSettings* ScNavigatorDlg::GetNavigatorSettings()
 
 //------------------------------------------------------------------------
 
-BOOL ScNavigatorDlg::GetViewData()
+sal_Bool ScNavigatorDlg::GetViewData()
 {
     ScTabViewShell* pViewSh = GetTabViewShell();
     pViewData = pViewSh ? pViewSh->GetViewData() : NULL;
@@ -1189,30 +1189,30 @@ void ScNavigatorDlg::UpdateAll()
 
 //------------------------------------------------------------------------
 
-void ScNavigatorDlg::SetListMode( NavListMode eMode, BOOL bSetSize )
+void ScNavigatorDlg::SetListMode( NavListMode eMode, sal_Bool bSetSize )
 {
     if ( eMode != eListMode )
     {
         if ( eMode != NAV_LMODE_NONE )
-            bFirstBig = FALSE;              // nicht mehr automatisch umschalten
+            bFirstBig = sal_False;              // nicht mehr automatisch umschalten
 
         eListMode = eMode;
 
         switch ( eMode )
         {
             case NAV_LMODE_NONE:
-                ShowList( FALSE, bSetSize );
+                ShowList( sal_False, bSetSize );
                 break;
 
             case NAV_LMODE_AREAS:
             case NAV_LMODE_DBAREAS:
             case NAV_LMODE_DOCS:
                 aLbEntries.Refresh();
-                ShowList( TRUE, bSetSize );
+                ShowList( sal_True, bSetSize );
                 break;
 
             case NAV_LMODE_SCENARIOS:
-                ShowScenarios( TRUE, bSetSize );
+                ShowScenarios( sal_True, bSetSize );
                 break;
         }
 
@@ -1221,7 +1221,7 @@ void ScNavigatorDlg::SetListMode( NavListMode eMode, BOOL bSetSize )
         if ( eMode != NAV_LMODE_NONE )
         {
             ScNavipiCfg& rCfg = SC_MOD()->GetNavipiCfg();
-            rCfg.SetListMode( (USHORT) eMode );
+            rCfg.SetListMode( (sal_uInt16) eMode );
         }
     }
 
@@ -1231,7 +1231,7 @@ void ScNavigatorDlg::SetListMode( NavListMode eMode, BOOL bSetSize )
 
 //------------------------------------------------------------------------
 
-void ScNavigatorDlg::ShowList( BOOL bShow, BOOL bSetSize )
+void ScNavigatorDlg::ShowList( sal_Bool bShow, sal_Bool bSetSize )
 {
     FloatingWindow* pFloat = pContextWin->GetFloatingWindow();
     Size aSize = GetParent()->GetOutputSizePixel();
@@ -1276,7 +1276,7 @@ void ScNavigatorDlg::ShowList( BOOL bShow, BOOL bSetSize )
 
 //------------------------------------------------------------------------
 
-void ScNavigatorDlg::ShowScenarios( BOOL bShow, BOOL bSetSize )
+void ScNavigatorDlg::ShowScenarios( sal_Bool bShow, sal_Bool bSetSize )
 {
     FloatingWindow* pFloat = pContextWin->GetFloatingWindow();
     Size aSize = GetParent()->GetOutputSizePixel();
@@ -1332,7 +1332,7 @@ void ScNavigatorDlg::ShowScenarios( BOOL bShow, BOOL bSetSize )
 void ScNavigatorDlg::GetDocNames( const String* pManualSel )
 {
     aLbDocuments.Clear();
-    aLbDocuments.SetUpdateMode( FALSE );
+    aLbDocuments.SetUpdateMode( sal_False );
 
     ScDocShell* pCurrentSh = PTR_CAST( ScDocShell, SfxObjectShell::Current() );
 
@@ -1371,7 +1371,7 @@ void ScNavigatorDlg::GetDocNames( const String* pManualSel )
             aSelEntry = aEntry;
     }
 
-    aLbDocuments.SetUpdateMode( TRUE );
+    aLbDocuments.SetUpdateMode( sal_True );
 
     aLbDocuments.SelectEntry( aSelEntry );
 }
@@ -1512,9 +1512,9 @@ SfxChildAlignment __EXPORT ScNavigatorDlg::CheckAlignment(
 //------------------------------------------------------------------------
 
 #if 0
-BOOL __EXPORT ScNavigatorDlg::Drop( const DropEvent& rEvt )
+sal_Bool __EXPORT ScNavigatorDlg::Drop( const DropEvent& rEvt )
 {
-    BOOL bReturn = FALSE;
+    sal_Bool bReturn = sal_False;
 
     if ( !aLbEntries.IsInDrag() )       // kein Verschieben innerhalb der TreeListBox
     {
@@ -1522,7 +1522,7 @@ BOOL __EXPORT ScNavigatorDlg::Drop( const DropEvent& rEvt )
 
         SvScDataObjectRef pObject = SvScDataObject::PasteDragServer(rEvt);
 
-        ULONG nFormat = INetBookmark::HasFormat(*pObject);
+        sal_uLong nFormat = INetBookmark::HasFormat(*pObject);
         INetBookmark aBookmark;
         if (aBookmark.Paste(*pObject,nFormat))
             aFileName = aBookmark.GetURL();
@@ -1530,8 +1530,8 @@ BOOL __EXPORT ScNavigatorDlg::Drop( const DropEvent& rEvt )
         {
             //  FORMAT_FILE direkt aus DragServer
 
-            USHORT nCount = DragServer::GetItemCount();
-            for ( USHORT i = 0; i < nCount && !aFileName.Len(); ++i )
+            sal_uInt16 nCount = DragServer::GetItemCount();
+            for ( sal_uInt16 i = 0; i < nCount && !aFileName.Len(); ++i )
                 if (DragServer::HasFormat( i, FORMAT_FILE ))
                     aFileName = DragServer::PasteFile( i );
         }
@@ -1542,9 +1542,9 @@ BOOL __EXPORT ScNavigatorDlg::Drop( const DropEvent& rEvt )
     return bReturn;
 }
 
-BOOL __EXPORT ScNavigatorDlg::QueryDrop( DropEvent& rEvt )
+sal_Bool __EXPORT ScNavigatorDlg::QueryDrop( DropEvent& rEvt )
 {
-    BOOL bReturn = FALSE;
+    sal_Bool bReturn = sal_False;
 
     if ( !aLbEntries.IsInDrag() )       // kein Verschieben innerhalb der TreeListBox
     {
@@ -1553,7 +1553,7 @@ BOOL __EXPORT ScNavigatorDlg::QueryDrop( DropEvent& rEvt )
             || INetBookmark::HasFormat(*pObject) )
         {
             rEvt.SetAction(DROP_COPY);      // Kopier-Cursor anzeigen
-            bReturn = TRUE;
+            bReturn = sal_True;
         }
     }
 

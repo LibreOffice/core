@@ -371,7 +371,7 @@ sal_uInt16 ScServiceProvider::GetProviderType(const String& rServiceName)
             }
         }
 
-        USHORT i;
+        sal_uInt16 i;
         for (i=0; i<SC_SERVICE_COUNT; i++)
         {
             DBG_ASSERT( aOldNames[i], "ScServiceProvider::GetProviderType: no oldname => crash");

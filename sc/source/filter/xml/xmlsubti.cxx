@@ -606,9 +606,9 @@ void ScMyTables::UpdateRowHeights()
             {
                 const SdrPage* pPage = pDrawLayer ? pDrawLayer->GetPage(nTab) : NULL;
                 if ( nTab == nVisible || ( pPage && pPage->GetObjCount() != 0 ) )
-                    aUpdateSheets.SelectTable( nTab, TRUE );
+                    aUpdateSheets.SelectTable( nTab, sal_True );
                 else
-                    pDoc->SetPendingRowHeights( nTab, TRUE );
+                    pDoc->SetPendingRowHeights( nTab, sal_True );
             }
 
             if (aUpdateSheets.GetSelectCount())

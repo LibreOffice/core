@@ -51,11 +51,11 @@ private:
     HelpButton      aBtnHelp;
 
 public:
-            ScDataPilotSourceTypeDlg( Window* pParent, BOOL bEnableExternal );
+            ScDataPilotSourceTypeDlg( Window* pParent, sal_Bool bEnableExternal );
             ~ScDataPilotSourceTypeDlg();
 
-    BOOL    IsDatabase() const;
-    BOOL    IsExternal() const;
+    sal_Bool    IsDatabase() const;
+    sal_Bool    IsExternal() const;
 };
 
 

@@ -49,7 +49,7 @@ enum ScConflictAction
     SC_CONFLICT_ACTION_KEEP_OTHER
 };
 
-typedef ::std::vector< ULONG > ScChangeActionList;
+typedef ::std::vector< sal_uLong > ScChangeActionList;
 
 
 //=============================================================================
@@ -62,8 +62,8 @@ struct ScConflictsListEntry
     ScChangeActionList  maSharedActions;
     ScChangeActionList  maOwnActions;
 
-    bool                HasSharedAction( ULONG nSharedAction ) const;
-    bool                HasOwnAction( ULONG nOwnAction ) const;
+    bool                HasSharedAction( sal_uLong nSharedAction ) const;
+    bool                HasOwnAction( sal_uLong nOwnAction ) const;
 };
 
 
@@ -82,11 +82,11 @@ private:
     static void                     Transform_Impl( ScChangeActionList& rActionList, ScChangeActionMergeMap* pMergeMap );
 
 public:
-//UNUSED2008-05  static bool                     HasSharedAction( ScConflictsList& rConflictsList, ULONG nSharedAction );
-    static bool                     HasOwnAction( ScConflictsList& rConflictsList, ULONG nOwnAction );
+//UNUSED2008-05  static bool                     HasSharedAction( ScConflictsList& rConflictsList, sal_uLong nSharedAction );
+    static bool                     HasOwnAction( ScConflictsList& rConflictsList, sal_uLong nOwnAction );
 
-    static ScConflictsListEntry*    GetSharedActionEntry( ScConflictsList& rConflictsList, ULONG nSharedAction );
-    static ScConflictsListEntry*    GetOwnActionEntry( ScConflictsList& rConflictsList, ULONG nOwnAction );
+    static ScConflictsListEntry*    GetSharedActionEntry( ScConflictsList& rConflictsList, sal_uLong nSharedAction );
+    static ScConflictsListEntry*    GetOwnActionEntry( ScConflictsList& rConflictsList, sal_uLong nOwnAction );
 
     static void                     TransformConflictsList( ScConflictsList& rConflictsList,
                                         ScChangeActionMergeMap* pSharedMap, ScChangeActionMergeMap* pOwnMap );
@@ -101,19 +101,19 @@ class ScConflictsFinder
 {
 private:
     ScChangeTrack*          mpTrack;
-    ULONG                   mnStartShared;
-    ULONG                   mnEndShared;
-    ULONG                   mnStartOwn;
-    ULONG                   mnEndOwn;
+    sal_uLong                   mnStartShared;
+    sal_uLong                   mnEndShared;
+    sal_uLong                   mnStartOwn;
+    sal_uLong                   mnEndOwn;
     ScConflictsList&        mrConflictsList;
 
     static bool             DoActionsIntersect( const ScChangeAction* pAction1, const ScChangeAction* pAction2 );
     ScConflictsListEntry*   GetIntersectingEntry( const ScChangeAction* pAction ) const;
-    ScConflictsListEntry*   GetEntry( ULONG nSharedAction, const ScChangeActionList& rOwnActions );
+    ScConflictsListEntry*   GetEntry( sal_uLong nSharedAction, const ScChangeActionList& rOwnActions );
 
 public:
-                            ScConflictsFinder( ScChangeTrack* pTrack, ULONG nStartShared, ULONG nEndShared,
-                                ULONG nStartOwn, ULONG nEndOwn, ScConflictsList& rConflictsList );
+                            ScConflictsFinder( ScChangeTrack* pTrack, sal_uLong nStartShared, sal_uLong nEndShared,
+                                sal_uLong nStartOwn, sal_uLong nEndOwn, ScConflictsList& rConflictsList );
     virtual                 ~ScConflictsFinder();
 
     bool                    Find();
@@ -152,7 +152,7 @@ public:
                         ScConflictsListBox( Window* pParent, const ResId& rResId );
                         ~ScConflictsListBox();
 
-//UNUSED2008-05  ULONG               GetRootEntryPos( const SvLBoxEntry* pRootEntry ) const;
+//UNUSED2008-05  sal_uLong               GetRootEntryPos( const SvLBoxEntry* pRootEntry ) const;
 };
 
 //=============================================================================

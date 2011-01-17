@@ -62,7 +62,7 @@ void ScDrawUtil::CalcScale( ScDocument* pDoc, SCTAB nTab,
     long nTwipsY = 0;
     for (SCCOL i=nStartCol; i<nEndCol; i++)
     {
-        USHORT nWidth = pDoc->GetColWidth(i,nTab);
+        sal_uInt16 nWidth = pDoc->GetColWidth(i,nTab);
         nTwipsX += (long) nWidth;
         nPixelX += ScViewData::ToPixel( nWidth, nPPTX );
     }
@@ -76,7 +76,7 @@ void ScDrawUtil::CalcScale( ScDocument* pDoc, SCTAB nTab,
             continue;
         }
 
-        USHORT nHeight = pDoc->GetRowHeight(nRow, nTab);
+        sal_uInt16 nHeight = pDoc->GetRowHeight(nRow, nTab);
         nTwipsY += static_cast<long>(nHeight);
         nPixelY += ScViewData::ToPixel(nHeight, nPPTY);
     }

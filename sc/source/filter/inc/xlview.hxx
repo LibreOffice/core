@@ -152,7 +152,7 @@ struct XclTabViewData
     bool                mbShowZeros;        /// true = Show zero value zells.
     bool                mbShowOutline;      /// true = Show outlines.
     Color               maTabBgColor;       /// Tab Color default = (COL_AUTO )
-    bool                IsDefaultTabBgColor() const { return maTabBgColor == Color(COL_AUTO) ? TRUE : FALSE; };
+    bool                IsDefaultTabBgColor() const { return maTabBgColor == Color(COL_AUTO) ? sal_True : sal_False; };
     sal_uInt32          mnTabBgColorId;         /// pallette color id
 
     explicit            XclTabViewData();

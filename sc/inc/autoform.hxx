@@ -187,11 +187,11 @@ public:
     void    SetRotateAngle( const SfxInt32Item& rRotateAngle )      { aRotateAngle.SetValue( rRotateAngle.GetValue() ); }
     void    SetRotateMode( const SvxRotateModeItem& rRotateMode )   { aRotateMode.SetValue( rRotateMode.GetValue() ); }
 
-    BOOL                        Load( SvStream& rStream, const ScAfVersions& rVersions, USHORT nVer );
-    BOOL                        Save( SvStream& rStream );
+    sal_Bool                        Load( SvStream& rStream, const ScAfVersions& rVersions, sal_uInt16 nVer );
+    sal_Bool                        Save( SvStream& rStream );
 
 #ifdef READ_OLDVERS
-    BOOL                        LoadOld( SvStream& rStream, const ScAfVersions& rVersions );
+    sal_Bool                        LoadOld( SvStream& rStream, const ScAfVersions& rVersions );
 #endif
 };
 
@@ -200,21 +200,21 @@ class SC_DLLPUBLIC ScAutoFormatData : public ScDataObject
 {
 private:
     String                      aName;
-    USHORT                      nStrResId;
+    sal_uInt16                      nStrResId;
     // common flags of Calc and Writer
-    BOOL                        bIncludeFont : 1;
-    BOOL                        bIncludeJustify : 1;
-    BOOL                        bIncludeFrame : 1;
-    BOOL                        bIncludeBackground : 1;
+    sal_Bool                        bIncludeFont : 1;
+    sal_Bool                        bIncludeJustify : 1;
+    sal_Bool                        bIncludeFrame : 1;
+    sal_Bool                        bIncludeBackground : 1;
 
     // Calc specific flags
-    BOOL                        bIncludeValueFormat : 1;
-    BOOL                        bIncludeWidthHeight : 1;
+    sal_Bool                        bIncludeValueFormat : 1;
+    sal_Bool                        bIncludeWidthHeight : 1;
 
     ScAutoFormatDataField**     ppDataField;
 
-    SC_DLLPRIVATE ScAutoFormatDataField&       GetField( USHORT nIndex );
-    SC_DLLPRIVATE const ScAutoFormatDataField& GetField( USHORT nIndex ) const;
+    SC_DLLPRIVATE ScAutoFormatDataField&       GetField( sal_uInt16 nIndex );
+    SC_DLLPRIVATE const ScAutoFormatDataField& GetField( sal_uInt16 nIndex ) const;
 
 public:
                     ScAutoFormatData();
@@ -226,56 +226,56 @@ public:
     void            SetName( const String& rName )              { aName = rName; nStrResId = USHRT_MAX; }
     void            GetName( String& rName ) const              { rName = aName; }
 
-    BOOL            GetIncludeValueFormat() const               { return bIncludeValueFormat; }
-    BOOL            GetIncludeFont() const                      { return bIncludeFont; }
-    BOOL            GetIncludeJustify() const                   { return bIncludeJustify; }
-    BOOL            GetIncludeFrame() const                     { return bIncludeFrame; }
-    BOOL            GetIncludeBackground() const                { return bIncludeBackground; }
-    BOOL            GetIncludeWidthHeight() const               { return bIncludeWidthHeight; }
+    sal_Bool            GetIncludeValueFormat() const               { return bIncludeValueFormat; }
+    sal_Bool            GetIncludeFont() const                      { return bIncludeFont; }
+    sal_Bool            GetIncludeJustify() const                   { return bIncludeJustify; }
+    sal_Bool            GetIncludeFrame() const                     { return bIncludeFrame; }
+    sal_Bool            GetIncludeBackground() const                { return bIncludeBackground; }
+    sal_Bool            GetIncludeWidthHeight() const               { return bIncludeWidthHeight; }
 
-    void            SetIncludeValueFormat( BOOL bValueFormat )  { bIncludeValueFormat = bValueFormat; }
-    void            SetIncludeFont( BOOL bFont )                { bIncludeFont = bFont; }
-    void            SetIncludeJustify( BOOL bJustify )          { bIncludeJustify = bJustify; }
-    void            SetIncludeFrame( BOOL bFrame )              { bIncludeFrame = bFrame; }
-    void            SetIncludeBackground( BOOL bBackground )    { bIncludeBackground = bBackground; }
-    void            SetIncludeWidthHeight( BOOL bWidthHeight )  { bIncludeWidthHeight = bWidthHeight; }
+    void            SetIncludeValueFormat( sal_Bool bValueFormat )  { bIncludeValueFormat = bValueFormat; }
+    void            SetIncludeFont( sal_Bool bFont )                { bIncludeFont = bFont; }
+    void            SetIncludeJustify( sal_Bool bJustify )          { bIncludeJustify = bJustify; }
+    void            SetIncludeFrame( sal_Bool bFrame )              { bIncludeFrame = bFrame; }
+    void            SetIncludeBackground( sal_Bool bBackground )    { bIncludeBackground = bBackground; }
+    void            SetIncludeWidthHeight( sal_Bool bWidthHeight )  { bIncludeWidthHeight = bWidthHeight; }
 
-    const SfxPoolItem*          GetItem( USHORT nIndex, USHORT nWhich ) const;
-    void                        PutItem( USHORT nIndex, const SfxPoolItem& rItem );
-    void                        CopyItem( USHORT nToIndex, USHORT nFromIndex, USHORT nWhich );
+    const SfxPoolItem*          GetItem( sal_uInt16 nIndex, sal_uInt16 nWhich ) const;
+    void                        PutItem( sal_uInt16 nIndex, const SfxPoolItem& rItem );
+    void                        CopyItem( sal_uInt16 nToIndex, sal_uInt16 nFromIndex, sal_uInt16 nWhich );
 
-    const ScNumFormatAbbrev&    GetNumFormat( USHORT nIndex ) const;
+    const ScNumFormatAbbrev&    GetNumFormat( sal_uInt16 nIndex ) const;
 
-    BOOL                        IsEqualData( USHORT nIndex1, USHORT nIndex2 ) const;
+    sal_Bool                        IsEqualData( sal_uInt16 nIndex1, sal_uInt16 nIndex2 ) const;
 
-    void                        FillToItemSet( USHORT nIndex, SfxItemSet& rItemSet, ScDocument& rDoc ) const;
-    void                        GetFromItemSet( USHORT nIndex, const SfxItemSet& rItemSet, const ScNumFormatAbbrev& rNumFormat );
+    void                        FillToItemSet( sal_uInt16 nIndex, SfxItemSet& rItemSet, ScDocument& rDoc ) const;
+    void                        GetFromItemSet( sal_uInt16 nIndex, const SfxItemSet& rItemSet, const ScNumFormatAbbrev& rNumFormat );
 
-    BOOL                        Load( SvStream& rStream, const ScAfVersions& rVersions );
-    BOOL                        Save( SvStream& rStream );
+    sal_Bool                        Load( SvStream& rStream, const ScAfVersions& rVersions );
+    sal_Bool                        Save( SvStream& rStream );
 
 #ifdef READ_OLDVERS
-    BOOL                        LoadOld( SvStream& rStream, const ScAfVersions& rVersions );
+    sal_Bool                        LoadOld( SvStream& rStream, const ScAfVersions& rVersions );
 #endif
 };
 
 class SC_DLLPUBLIC ScAutoFormat : public ScSortedCollection
 {
 private:
-    BOOL                        bSaveLater;
+    sal_Bool                        bSaveLater;
 
 public:
-                                ScAutoFormat( USHORT nLim = 4, USHORT nDel = 4, BOOL bDup = FALSE );
+                                ScAutoFormat( sal_uInt16 nLim = 4, sal_uInt16 nDel = 4, sal_Bool bDup = sal_False );
                                 ScAutoFormat( const ScAutoFormat& AutoFormat );
     virtual                     ~ScAutoFormat();
     virtual                     ScDataObject*         Clone() const { return new ScAutoFormat( *this ); }
-                                ScAutoFormatData*   operator[]( const USHORT nIndex ) const {return (ScAutoFormatData*)At( nIndex );}
+                                ScAutoFormatData*   operator[]( const sal_uInt16 nIndex ) const {return (ScAutoFormatData*)At( nIndex );}
     virtual short               Compare( ScDataObject* pKey1, ScDataObject* pKey2 ) const;
-    BOOL                        Load();
-    BOOL                        Save();
-    USHORT                      FindIndexPerName( const String& rName ) const;
-    void                        SetSaveLater( BOOL bSet );
-    BOOL                        IsSaveLater() const         { return bSaveLater; }
+    sal_Bool                        Load();
+    sal_Bool                        Save();
+    sal_uInt16                      FindIndexPerName( const String& rName ) const;
+    void                        SetSaveLater( sal_Bool bSet );
+    sal_Bool                        IsSaveLater() const         { return bSaveLater; }
 };
 
 

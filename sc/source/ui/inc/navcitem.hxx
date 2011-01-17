@@ -39,11 +39,11 @@ class ScNavigatorDlg;
 class ScNavigatorControllerItem : public SfxControllerItem
 {
 public:
-    ScNavigatorControllerItem( USHORT nId,
+    ScNavigatorControllerItem( sal_uInt16 nId,
                                ScNavigatorDlg& rDlg,
                                SfxBindings& rBindings );
 protected:
-    virtual void    StateChanged( USHORT nSID, SfxItemState eState,
+    virtual void    StateChanged( sal_uInt16 nSID, SfxItemState eState,
                                       const SfxPoolItem* pItem );
 
 private:
