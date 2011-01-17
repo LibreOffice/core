@@ -88,7 +88,7 @@ public:
                                     @param nParameter
                                         Which parameter, 0-based */
     static  Type                GetParameterType( const formula::FormulaToken* pToken,
-                                        USHORT nParameter);
+                                        sal_uInt16 nParameter);
 
                                 /** Whether OpCode has a parameter of type
                                     ForceArray or ReferenceOrForceArray. */
@@ -124,7 +124,7 @@ private:
     struct RunData
     {
         CommonData  aData;
-        BYTE        nMinParams;         // fix or minimum, or repeat start
+        sal_uInt8        nMinParams;         // fix or minimum, or repeat start
         bool        bHasForceArray;
     };
 
@@ -133,7 +133,7 @@ private:
 
     // ocExternal AddIns
     static  Type                GetExternalParameterType(
-                                    const formula::FormulaToken* pToken, USHORT nParameter);
+                                    const formula::FormulaToken* pToken, sal_uInt16 nParameter);
 
 #if OSL_DEBUG_LEVEL > 1
     // Generate documentation to stdout if environment variable
@@ -151,14 +151,14 @@ private:
 
                                 /** Minimum number of parameters, or fix number
                                     of parameters if HasRepeatParameters()
-                                    returns FALSE. For opcodes not specified in
+                                    returns sal_False. For opcodes not specified in
                                     the implementation a parameter count of 1
                                     is assumed, for opcodes out of range 0 is
                                     assumed. If HasRepeatParameters() returns
-                                    TRUE, information is NOT related to whether
+                                    sal_True, information is NOT related to whether
                                     any parameters are optional, only the type
                                     of parameters is significant. */
-    static  inline  BYTE        GetMinimumParameters( OpCode eOp)
+    static  inline  sal_uInt8        GetMinimumParameters( OpCode eOp)
                                     {
                                         if ( eOp <= SC_OPCODE_LAST_OPCODE_ID )
                                             return pData[eOp].aData.nParam[0]

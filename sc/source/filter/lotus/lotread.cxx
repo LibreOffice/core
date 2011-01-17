@@ -56,10 +56,10 @@ FltError ImportLotus::Read()
         S_END           // Import finished
     };
 
-    UINT16          nOp;
-    UINT16          nSubType;
-    UINT16          nRecLen;
-    UINT32          nNextRec = 0UL;
+    sal_uInt16          nOp;
+    sal_uInt16          nSubType;
+    sal_uInt16          nRecLen;
+    sal_uInt32          nNextRec = 0UL;
     FltError        eRet = eERR_OK;
 //  ScFormulaCell   *pLastFormCell;
 
@@ -245,10 +245,10 @@ FltError ImportLotus::Read( SvStream& rIn )
 {
     pIn = &rIn;
 
-    BOOL            bRead = TRUE;
-    UINT16          nOp;
-    UINT16          nRecLen;
-    UINT32          nNextRec = 0UL;
+    sal_Bool            bRead = sal_True;
+    sal_uInt16          nOp;
+    sal_uInt16          nRecLen;
+    sal_uInt32          nNextRec = 0UL;
     FltError        eRet = eERR_OK;
 
     nTab = 0;
@@ -264,7 +264,7 @@ FltError ImportLotus::Read( SvStream& rIn )
         *pIn >> nOp >> nRecLen;
 
         if( pIn->IsEof() )
-            bRead = FALSE;
+            bRead = sal_False;
         else
         {
             nNextRec += nRecLen + 4;
@@ -274,13 +274,13 @@ FltError ImportLotus::Read( SvStream& rIn )
                 case 0x0000:                            // BOF
                 if( nRecLen != 26 || !BofFm3() )
                 {
-                    bRead = FALSE;
+                    bRead = sal_False;
                     eRet = eERR_FORMAT;
                 }
                 break;
 
                 case 0x0001:                            // EOF
-                    bRead = FALSE;
+                    bRead = sal_False;
                     DBG_ASSERT( nTab == 0,
                         "-ImportLotus::Read( SvStream& ): Zweimal EOF nicht erlaubt" );
                     nTab++;

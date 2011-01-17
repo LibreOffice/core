@@ -38,16 +38,16 @@ class SvStream;
 class ScInputOptions
 {
 private:
-    USHORT      nMoveDir;           // enum ScDirection
-    BOOL        bMoveSelection;
-    BOOL        bEnterEdit;
-    BOOL        bExtendFormat;
-    BOOL        bRangeFinder;
-    BOOL        bExpandRefs;
-    BOOL        bMarkHeader;
-    BOOL        bUseTabCol;
-    BOOL        bTextWysiwyg;
-    BOOL        bReplCellsWarn;
+    sal_uInt16      nMoveDir;           // enum ScDirection
+    sal_Bool        bMoveSelection;
+    sal_Bool        bEnterEdit;
+    sal_Bool        bExtendFormat;
+    sal_Bool        bRangeFinder;
+    sal_Bool        bExpandRefs;
+    sal_Bool        bMarkHeader;
+    sal_Bool        bUseTabCol;
+    sal_Bool        bTextWysiwyg;
+    sal_Bool        bReplCellsWarn;
 
 public:
                 ScInputOptions();
@@ -56,26 +56,26 @@ public:
 
     void        SetDefaults();
 
-    void        SetMoveDir(USHORT nNew)         { nMoveDir = nNew;       }
-    USHORT      GetMoveDir() const              { return nMoveDir;       }
-    void        SetMoveSelection(BOOL bSet)     { bMoveSelection = bSet; }
-    BOOL        GetMoveSelection() const        { return bMoveSelection; }
-    void        SetEnterEdit(BOOL bSet)         { bEnterEdit = bSet;     }
-    BOOL        GetEnterEdit() const            { return bEnterEdit;     }
-    void        SetExtendFormat(BOOL bSet)      { bExtendFormat = bSet;  }
-    BOOL        GetExtendFormat() const         { return bExtendFormat;  }
-    void        SetRangeFinder(BOOL bSet)       { bRangeFinder = bSet;   }
-    BOOL        GetRangeFinder() const          { return bRangeFinder;   }
-    void        SetExpandRefs(BOOL bSet)        { bExpandRefs = bSet;    }
-    BOOL        GetExpandRefs() const           { return bExpandRefs;    }
-    void        SetMarkHeader(BOOL bSet)        { bMarkHeader = bSet;    }
-    BOOL        GetMarkHeader() const           { return bMarkHeader;    }
-    void        SetUseTabCol(BOOL bSet)         { bUseTabCol = bSet;     }
-    BOOL        GetUseTabCol() const            { return bUseTabCol;     }
-    void        SetTextWysiwyg(BOOL bSet)       { bTextWysiwyg = bSet;   }
-    BOOL        GetTextWysiwyg() const          { return bTextWysiwyg;   }
-    void        SetReplaceCellsWarn(BOOL bSet)  { bReplCellsWarn = bSet; }
-    BOOL        GetReplaceCellsWarn() const     { return bReplCellsWarn; }
+    void        SetMoveDir(sal_uInt16 nNew)         { nMoveDir = nNew;       }
+    sal_uInt16      GetMoveDir() const              { return nMoveDir;       }
+    void        SetMoveSelection(sal_Bool bSet)     { bMoveSelection = bSet; }
+    sal_Bool        GetMoveSelection() const        { return bMoveSelection; }
+    void        SetEnterEdit(sal_Bool bSet)         { bEnterEdit = bSet;     }
+    sal_Bool        GetEnterEdit() const            { return bEnterEdit;     }
+    void        SetExtendFormat(sal_Bool bSet)      { bExtendFormat = bSet;  }
+    sal_Bool        GetExtendFormat() const         { return bExtendFormat;  }
+    void        SetRangeFinder(sal_Bool bSet)       { bRangeFinder = bSet;   }
+    sal_Bool        GetRangeFinder() const          { return bRangeFinder;   }
+    void        SetExpandRefs(sal_Bool bSet)        { bExpandRefs = bSet;    }
+    sal_Bool        GetExpandRefs() const           { return bExpandRefs;    }
+    void        SetMarkHeader(sal_Bool bSet)        { bMarkHeader = bSet;    }
+    sal_Bool        GetMarkHeader() const           { return bMarkHeader;    }
+    void        SetUseTabCol(sal_Bool bSet)         { bUseTabCol = bSet;     }
+    sal_Bool        GetUseTabCol() const            { return bUseTabCol;     }
+    void        SetTextWysiwyg(sal_Bool bSet)       { bTextWysiwyg = bSet;   }
+    sal_Bool        GetTextWysiwyg() const          { return bTextWysiwyg;   }
+    void        SetReplaceCellsWarn(sal_Bool bSet)  { bReplCellsWarn = bSet; }
+    sal_Bool        GetReplaceCellsWarn() const     { return bReplCellsWarn; }
 
     const ScInputOptions&   operator=   ( const ScInputOptions& rOpt );
 };

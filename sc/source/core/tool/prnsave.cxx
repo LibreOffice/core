@@ -49,7 +49,7 @@
 ScPrintSaverTab::ScPrintSaverTab() :
     mpRepeatCol(NULL),
     mpRepeatRow(NULL),
-    mbEntireSheet(FALSE)
+    mbEntireSheet(sal_False)
 {
 }
 
@@ -59,7 +59,7 @@ ScPrintSaverTab::~ScPrintSaverTab()
     delete mpRepeatRow;
 }
 
-void ScPrintSaverTab::SetAreas( const ScRangeVec& rRanges, BOOL bEntireSheet )
+void ScPrintSaverTab::SetAreas( const ScRangeVec& rRanges, sal_Bool bEntireSheet )
 {
     maPrintRanges = rRanges;
     mbEntireSheet = bEntireSheet;
@@ -73,12 +73,12 @@ void ScPrintSaverTab::SetRepeat( const ScRange* pCol, const ScRange* pRow )
     mpRepeatRow = pRow ? new ScRange(*pRow) : NULL;
 }
 
-inline BOOL PtrEqual( const ScRange* p1, const ScRange* p2 )
+inline sal_Bool PtrEqual( const ScRange* p1, const ScRange* p2 )
 {
     return ( !p1 && !p2 ) || ( p1 && p2 && *p1 == *p2 );
 }
 
-BOOL ScPrintSaverTab::operator==( const ScPrintSaverTab& rCmp ) const
+sal_Bool ScPrintSaverTab::operator==( const ScPrintSaverTab& rCmp ) const
 {
     return
         PtrEqual( mpRepeatCol, rCmp.mpRepeatCol ) &&
@@ -117,14 +117,14 @@ const ScPrintSaverTab& ScPrintRangeSaver::GetTabData(SCTAB nTab) const
     return pData[nTab];
 }
 
-BOOL ScPrintRangeSaver::operator==( const ScPrintRangeSaver& rCmp ) const
+sal_Bool ScPrintRangeSaver::operator==( const ScPrintRangeSaver& rCmp ) const
 {
-    BOOL bEqual = ( nTabCount == rCmp.nTabCount );
+    sal_Bool bEqual = ( nTabCount == rCmp.nTabCount );
     if (bEqual)
         for (SCTAB i=0; i<nTabCount; i++)
             if (!(pData[i]==rCmp.pData[i]))
             {
-                bEqual = FALSE;
+                bEqual = sal_False;
                 break;
             }
     return bEqual;

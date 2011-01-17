@@ -47,23 +47,23 @@ namespace ScDPGlobal
         return rcResult;
     }
 
-    String GetFuncString( const String &rString, const USHORT nIndex )
+    String GetFuncString( const String &rString, const sal_uInt16 nIndex )
     {
         if ( nIndex <= 1 ) return rString;
-        ULONG uch = rString.Len() ? rString.GetChar( rString.Len()-1 ) : (L'9'+1);
+        sal_uLong uch = rString.Len() ? rString.GetChar( rString.Len()-1 ) : (L'9'+1);
         bool bEndWithDigital = ( L'0'<=uch && uch<=L'9');
         char szTemp[__MAX_NUM_LEN+1];
         int nLen = sprintf( szTemp, bEndWithDigital ? DATA_RENAME_SEPARATOR"%hu" : "%hu", nIndex );
         String strRet = rString;
-        strRet.Append( String::CreateFromAscii( szTemp, static_cast<USHORT>(nLen) ));
+        strRet.Append( String::CreateFromAscii( szTemp, static_cast<sal_uInt16>(nLen) ));
         return strRet;
     }
 
-   bool ChkDPTableOverlap( ScDocument *pDestDoc, std::list<ScDPObject> & rClipboard, SCCOL nClipStartCol, SCROW nClipStartRow, SCCOL nStartCol, SCROW nStartRow, SCTAB nStartTab, USHORT nEndTab, BOOL bExcludeClip /*= FALSE*/ )
+   bool ChkDPTableOverlap( ScDocument *pDestDoc, std::list<ScDPObject> & rClipboard, SCCOL nClipStartCol, SCROW nClipStartRow, SCCOL nStartCol, SCROW nStartRow, SCTAB nStartTab, sal_uInt16 nEndTab, sal_Bool bExcludeClip /*= sal_False*/ )
     {
         if ( ScDPCollection* pDPCollection = pDestDoc->GetDPCollection() )
         {
-            USHORT nCount = pDPCollection->GetCount();
+            sal_uInt16 nCount = pDPCollection->GetCount();
             SCsCOL nOffsetX = nStartCol - nClipStartCol;
             SCsROW nOffsetY = nStartRow - nClipStartRow;
 
@@ -71,12 +71,12 @@ namespace ScDPGlobal
             {
                 ScRange aRange = iter->GetOutRange();
 
-                for( USHORT nCurrTab = nStartTab; nCurrTab<=nEndTab; nCurrTab++ )
+                for( sal_uInt16 nCurrTab = nStartTab; nCurrTab<=nEndTab; nCurrTab++ )
                 {
                     SCsTAB nOffsetZ = nCurrTab - aRange.aStart.Tab();
                     aRange.Move( nOffsetX, nOffsetY, nOffsetZ );
 
-                    for ( USHORT i = 0; i<nCount; i++)
+                    for ( sal_uInt16 i = 0; i<nCount; i++)
                     {
                         if ( (*pDPCollection)[i] && aRange.Intersects( (*pDPCollection)[i]->GetOutRange()))
                         {

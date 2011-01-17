@@ -41,7 +41,7 @@ ScGridMerger::ScGridMerger( OutputDevice* pOutDev, long nOnePixelX, long nOnePix
     nOneX( nOnePixelX ),
     nOneY( nOnePixelY ),
     nCount( 0 ),
-    bVertical( FALSE )
+    bVertical( sal_False )
 {
     //  optimize (DrawGrid) only for pixel MapMode,
     //  to avoid rounding errors
@@ -104,7 +104,7 @@ void ScGridMerger::AddHorLine( long nX1, long nX2, long nY )
         if ( bVertical )
         {
             Flush();
-            bVertical = FALSE;
+            bVertical = sal_False;
         }
         AddLine( nX1, nX2, nY );
     }
@@ -119,7 +119,7 @@ void ScGridMerger::AddVerLine( long nX, long nY1, long nY2 )
         if ( !bVertical )
         {
             Flush();
-            bVertical = TRUE;
+            bVertical = sal_True;
         }
         AddLine( nY1, nY2, nX );
     }

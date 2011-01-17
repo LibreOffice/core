@@ -95,7 +95,7 @@ namespace { ScTabViewShell * lcl_GetTabViewShell( SfxBindings *pBindings ); }
 
 #define IMPL_CHILD_CTOR(Class,sid) \
     Class::Class( Window*               pParentP,                   \
-                    USHORT              nId,                        \
+                    sal_uInt16              nId,                        \
                     SfxBindings*        p,                          \
                     SfxChildWinInfo*    pInfo )                     \
         : SfxChildWindow(pParentP, nId)                             \
@@ -115,7 +115,7 @@ namespace { ScTabViewShell * lcl_GetTabViewShell( SfxBindings *pBindings ); }
         pWindow = pViewShell ?                                      \
             pViewShell->CreateRefDialog( p, this, pInfo, pParentP, sid ) : NULL;    \
         if (pViewShell && !pWindow)                                             \
-            pViewShell->GetViewFrame()->SetChildWindow( nId, FALSE );           \
+            pViewShell->GetViewFrame()->SetChildWindow( nId, sal_False );           \
     }
 
 
@@ -204,15 +204,15 @@ IMPL_CHILD_CTOR( ScFormulaDlgWrapper, SID_OPENDLG_FUNCTION )
 // ScSimpleRefDlgWrapper
 //-------------------------------------------------------------------------
 
-static BOOL     bScSimpleRefFlag;
+static sal_Bool     bScSimpleRefFlag;
 static long     nScSimpleRefHeight;
 static long     nScSimpleRefWidth;
 static long     nScSimpleRefX;
 static long     nScSimpleRefY;
-static BOOL     bAutoReOpen=TRUE;
+static sal_Bool     bAutoReOpen=sal_True;
 
 ScSimpleRefDlgWrapper::ScSimpleRefDlgWrapper( Window* pParentP,
-                                USHORT              nId,
+                                sal_uInt16              nId,
                                 SfxBindings*        p,
                                 SfxChildWinInfo*    pInfo )
         : SfxChildWindow(pParentP, nId)
@@ -245,11 +245,11 @@ ScSimpleRefDlgWrapper::ScSimpleRefDlgWrapper( Window* pParentP,
 
     if (!pWindow)
     {
-        SC_MOD()->SetRefDialog( nId, FALSE );
+        SC_MOD()->SetRefDialog( nId, sal_False );
     }
 }
 
-void ScSimpleRefDlgWrapper::SetDefaultPosSize(Point aPos, Size aSize, BOOL bSet)
+void ScSimpleRefDlgWrapper::SetDefaultPosSize(Point aPos, Size aSize, sal_Bool bSet)
 {
     bScSimpleRefFlag=bSet;
     if(bScSimpleRefFlag)
@@ -272,7 +272,7 @@ String ScSimpleRefDlgWrapper::GetRefString()
     return aResult;
 }
 
-void ScSimpleRefDlgWrapper::SetAutoReOpen(BOOL bFlag)
+void ScSimpleRefDlgWrapper::SetAutoReOpen(sal_Bool bFlag)
 {
     bAutoReOpen=bFlag;
 }
@@ -302,7 +302,7 @@ void ScSimpleRefDlgWrapper::SetUnoLinks( const Link& rDone,
     }
 }
 
-void ScSimpleRefDlgWrapper::SetFlags( BOOL bCloseOnButtonUp, BOOL bSingleCell, BOOL bMultiSelection )
+void ScSimpleRefDlgWrapper::SetFlags( sal_Bool bCloseOnButtonUp, sal_Bool bSingleCell, sal_Bool bMultiSelection )
 {
     if(pWindow!=NULL)
     {
@@ -325,7 +325,7 @@ void ScSimpleRefDlgWrapper::StartRefInput()
 //-------------------------------------------------------------------------
 
 ScAcceptChgDlgWrapper::ScAcceptChgDlgWrapper(   Window* pParentP,
-                                            USHORT nId,
+                                            sal_uInt16 nId,
                                             SfxBindings* pBindings,
                                             SfxChildWinInfo* pInfo ) :
                                             SfxChildWindow( pParentP, nId )
@@ -341,7 +341,7 @@ ScAcceptChgDlgWrapper::ScAcceptChgDlgWrapper(   Window* pParentP,
             ((ScAcceptChgDlg*)pWindow)->Initialize( pInfo );
         }
         if (pViewShell && !pWindow)
-            pViewShell->GetViewFrame()->SetChildWindow( nId, FALSE );
+            pViewShell->GetViewFrame()->SetChildWindow( nId, sal_False );
 }
 
 void ScAcceptChgDlgWrapper::ReInitDlg()
@@ -401,7 +401,7 @@ namespace
 }
 
 ScValidityRefChildWin::ScValidityRefChildWin( Window*               pParentP,                   \
-                                             USHORT             nId,                        \
+                                             sal_uInt16             nId,                        \
                                              SfxBindings*       p,                          \
                                              SfxChildWinInfo*   /*pInfo*/ )                     \
                                              : SfxChildWindow(pParentP, nId),
@@ -409,7 +409,7 @@ ScValidityRefChildWin::ScValidityRefChildWin( Window*               pParentP,   
                                              m_bFreeWindowLock( false ),
                                              m_pSavedWndParent( NULL )
 {
-    SetWantsFocus( FALSE );\
+    SetWantsFocus( sal_False );\
         ScTabViewShell* pViewShell =                                \
             NULL != ( pWindow =  ScValidationDlg::Find1AliveObject( pParentP ) ) ? static_cast<ScValidationDlg*>(pWindow)->GetTabViewShell() :
             lcl_GetTabViewShell( p );
@@ -417,7 +417,7 @@ ScValidityRefChildWin::ScValidityRefChildWin( Window*               pParentP,   
             pViewShell = PTR_CAST( ScTabViewShell, SfxViewShell::Current() );
         DBG_ASSERT( pViewShell, "missing view shell :-(" );         \
         if (pViewShell && !pWindow)                                             \
-            pViewShell->GetViewFrame()->SetChildWindow( nId, FALSE );           \
+            pViewShell->GetViewFrame()->SetChildWindow( nId, sal_False );           \
         else if( pWindow /*&& pWindow->ISA(ScValidationDlg)*/ )
         {}//pWindow = new Window( pParentP, WB_HIDE );
 

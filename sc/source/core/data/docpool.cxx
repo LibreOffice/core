@@ -81,17 +81,17 @@
 
 // STATIC DATA -----------------------------------------------------------
 
-USHORT* ScDocumentPool::pVersionMap1 = 0;
-USHORT* ScDocumentPool::pVersionMap2 = 0;
-USHORT* ScDocumentPool::pVersionMap3 = 0;
-USHORT* ScDocumentPool::pVersionMap4 = 0;
-USHORT* ScDocumentPool::pVersionMap5 = 0;
-USHORT* ScDocumentPool::pVersionMap6 = 0;
-USHORT* ScDocumentPool::pVersionMap7 = 0;
-USHORT* ScDocumentPool::pVersionMap8 = 0;
-USHORT* ScDocumentPool::pVersionMap9 = 0;
-USHORT* ScDocumentPool::pVersionMap10 = 0;
-USHORT* ScDocumentPool::pVersionMap11 = 0;
+sal_uInt16* ScDocumentPool::pVersionMap1 = 0;
+sal_uInt16* ScDocumentPool::pVersionMap2 = 0;
+sal_uInt16* ScDocumentPool::pVersionMap3 = 0;
+sal_uInt16* ScDocumentPool::pVersionMap4 = 0;
+sal_uInt16* ScDocumentPool::pVersionMap5 = 0;
+sal_uInt16* ScDocumentPool::pVersionMap6 = 0;
+sal_uInt16* ScDocumentPool::pVersionMap7 = 0;
+sal_uInt16* ScDocumentPool::pVersionMap8 = 0;
+sal_uInt16* ScDocumentPool::pVersionMap9 = 0;
+sal_uInt16* ScDocumentPool::pVersionMap10 = 0;
+sal_uInt16* ScDocumentPool::pVersionMap11 = 0;
 
 // ATTR_FONT_TWOLINES (not used) was changed to ATTR_USERDEF (not saved in binary format) in 641c
 
@@ -190,7 +190,7 @@ static SfxItemInfo __READONLY_DATA  aItemInfos[] =
 
 // -----------------------------------------------------------------------
 
-ScDocumentPool::ScDocumentPool( SfxItemPool* pSecPool, BOOL bLoadRefCounts )
+ScDocumentPool::ScDocumentPool( SfxItemPool* pSecPool, sal_Bool bLoadRefCounts )
 
     :   SfxItemPool ( String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("ScDocumentPool")),
                         ATTR_STARTINDEX, ATTR_ENDINDEX,
@@ -222,9 +222,9 @@ ScDocumentPool::ScDocumentPool( SfxItemPool* pSecPool, BOOL bLoadRefCounts )
 
     pGlobalBorderInnerAttr->SetLine(NULL, BOXINFO_LINE_HORI);
     pGlobalBorderInnerAttr->SetLine(NULL, BOXINFO_LINE_VERT);
-    pGlobalBorderInnerAttr->SetTable(TRUE);
-    pGlobalBorderInnerAttr->SetDist(TRUE);
-    pGlobalBorderInnerAttr->SetMinDist(FALSE);
+    pGlobalBorderInnerAttr->SetTable(sal_True);
+    pGlobalBorderInnerAttr->SetDist(sal_True);
+    pGlobalBorderInnerAttr->SetMinDist(sal_False);
 
     ppPoolDefaults = new SfxPoolItem*[ATTR_ENDINDEX-ATTR_STARTINDEX+1];
 
@@ -262,7 +262,7 @@ ScDocumentPool::ScDocumentPool( SfxItemPool* pSecPool, BOOL bLoadRefCounts )
     ppPoolDefaults[ ATTR_HOR_JUSTIFY     - ATTR_STARTINDEX ] = new SvxHorJustifyItem( SVX_HOR_JUSTIFY_STANDARD, ATTR_HOR_JUSTIFY);
     ppPoolDefaults[ ATTR_INDENT          - ATTR_STARTINDEX ] = new SfxUInt16Item( ATTR_INDENT, 0 );
     ppPoolDefaults[ ATTR_VER_JUSTIFY     - ATTR_STARTINDEX ] = new SvxVerJustifyItem( SVX_VER_JUSTIFY_STANDARD, ATTR_VER_JUSTIFY);
-    ppPoolDefaults[ ATTR_STACKED         - ATTR_STARTINDEX ] = new SfxBoolItem( ATTR_STACKED, FALSE );
+    ppPoolDefaults[ ATTR_STACKED         - ATTR_STARTINDEX ] = new SfxBoolItem( ATTR_STACKED, sal_False );
     ppPoolDefaults[ ATTR_ROTATE_VALUE    - ATTR_STARTINDEX ] = new SfxInt32Item( ATTR_ROTATE_VALUE, 0 );
     ppPoolDefaults[ ATTR_ROTATE_MODE     - ATTR_STARTINDEX ] = new SvxRotateModeItem( SVX_ROTATE_MODE_BOTTOM, ATTR_ROTATE_MODE );
     ppPoolDefaults[ ATTR_VERTICAL_ASIAN  - ATTR_STARTINDEX ] = new SfxBoolItem( ATTR_VERTICAL_ASIAN );
@@ -305,16 +305,16 @@ ScDocumentPool::ScDocumentPool( SfxItemPool* pSecPool, BOOL bLoadRefCounts )
     ppPoolDefaults[ ATTR_PAGE_MAXSIZE    - ATTR_STARTINDEX ] = new SvxSizeItem( ATTR_PAGE_MAXSIZE );
     ppPoolDefaults[ ATTR_PAGE_HORCENTER  - ATTR_STARTINDEX ] = new SfxBoolItem( ATTR_PAGE_HORCENTER );
     ppPoolDefaults[ ATTR_PAGE_VERCENTER  - ATTR_STARTINDEX ] = new SfxBoolItem( ATTR_PAGE_VERCENTER );
-    ppPoolDefaults[ ATTR_PAGE_ON         - ATTR_STARTINDEX ] = new SfxBoolItem( ATTR_PAGE_ON, TRUE );
-    ppPoolDefaults[ ATTR_PAGE_DYNAMIC    - ATTR_STARTINDEX ] = new SfxBoolItem( ATTR_PAGE_DYNAMIC, TRUE );
-    ppPoolDefaults[ ATTR_PAGE_SHARED     - ATTR_STARTINDEX ] = new SfxBoolItem( ATTR_PAGE_SHARED, TRUE );
-    ppPoolDefaults[ ATTR_PAGE_NOTES      - ATTR_STARTINDEX ] = new SfxBoolItem( ATTR_PAGE_NOTES, FALSE );
-    ppPoolDefaults[ ATTR_PAGE_GRID       - ATTR_STARTINDEX ] = new SfxBoolItem( ATTR_PAGE_GRID, FALSE );
-    ppPoolDefaults[ ATTR_PAGE_HEADERS    - ATTR_STARTINDEX ] = new SfxBoolItem( ATTR_PAGE_HEADERS, FALSE );
+    ppPoolDefaults[ ATTR_PAGE_ON         - ATTR_STARTINDEX ] = new SfxBoolItem( ATTR_PAGE_ON, sal_True );
+    ppPoolDefaults[ ATTR_PAGE_DYNAMIC    - ATTR_STARTINDEX ] = new SfxBoolItem( ATTR_PAGE_DYNAMIC, sal_True );
+    ppPoolDefaults[ ATTR_PAGE_SHARED     - ATTR_STARTINDEX ] = new SfxBoolItem( ATTR_PAGE_SHARED, sal_True );
+    ppPoolDefaults[ ATTR_PAGE_NOTES      - ATTR_STARTINDEX ] = new SfxBoolItem( ATTR_PAGE_NOTES, sal_False );
+    ppPoolDefaults[ ATTR_PAGE_GRID       - ATTR_STARTINDEX ] = new SfxBoolItem( ATTR_PAGE_GRID, sal_False );
+    ppPoolDefaults[ ATTR_PAGE_HEADERS    - ATTR_STARTINDEX ] = new SfxBoolItem( ATTR_PAGE_HEADERS, sal_False );
     ppPoolDefaults[ ATTR_PAGE_CHARTS     - ATTR_STARTINDEX ] = new ScViewObjectModeItem( ATTR_PAGE_CHARTS );
     ppPoolDefaults[ ATTR_PAGE_OBJECTS    - ATTR_STARTINDEX ] = new ScViewObjectModeItem( ATTR_PAGE_OBJECTS );
     ppPoolDefaults[ ATTR_PAGE_DRAWINGS   - ATTR_STARTINDEX ] = new ScViewObjectModeItem( ATTR_PAGE_DRAWINGS );
-    ppPoolDefaults[ ATTR_PAGE_TOPDOWN    - ATTR_STARTINDEX ] = new SfxBoolItem( ATTR_PAGE_TOPDOWN, TRUE );
+    ppPoolDefaults[ ATTR_PAGE_TOPDOWN    - ATTR_STARTINDEX ] = new SfxBoolItem( ATTR_PAGE_TOPDOWN, sal_True );
     ppPoolDefaults[ ATTR_PAGE_SCALE      - ATTR_STARTINDEX ] = new SfxUInt16Item( ATTR_PAGE_SCALE, 100 );
     ppPoolDefaults[ ATTR_PAGE_SCALETOPAGES-ATTR_STARTINDEX ] = new SfxUInt16Item( ATTR_PAGE_SCALETOPAGES, 1 );
     ppPoolDefaults[ ATTR_PAGE_FIRSTPAGENO- ATTR_STARTINDEX ] = new SfxUInt16Item( ATTR_PAGE_FIRSTPAGENO, 1 );
@@ -328,8 +328,8 @@ ScDocumentPool::ScDocumentPool( SfxItemPool* pSecPool, BOOL bLoadRefCounts )
     ppPoolDefaults[ ATTR_PAGE_FOOTERRIGHT- ATTR_STARTINDEX ] = new ScPageHFItem( ATTR_PAGE_FOOTERRIGHT );
     ppPoolDefaults[ ATTR_PAGE_HEADERSET  - ATTR_STARTINDEX ] = new SvxSetItem( ATTR_PAGE_HEADERSET, aSetItemItemSet );
     ppPoolDefaults[ ATTR_PAGE_FOOTERSET  - ATTR_STARTINDEX ] = new SvxSetItem( ATTR_PAGE_FOOTERSET, aSetItemItemSet );
-    ppPoolDefaults[ ATTR_PAGE_FORMULAS   - ATTR_STARTINDEX ] = new SfxBoolItem( ATTR_PAGE_FORMULAS, FALSE );
-    ppPoolDefaults[ ATTR_PAGE_NULLVALS   - ATTR_STARTINDEX ] = new SfxBoolItem( ATTR_PAGE_NULLVALS, TRUE );
+    ppPoolDefaults[ ATTR_PAGE_FORMULAS   - ATTR_STARTINDEX ] = new SfxBoolItem( ATTR_PAGE_FORMULAS, sal_False );
+    ppPoolDefaults[ ATTR_PAGE_NULLVALS   - ATTR_STARTINDEX ] = new SfxBoolItem( ATTR_PAGE_NULLVALS, sal_True );
     ppPoolDefaults[ ATTR_PAGE_SCALETO    - ATTR_STARTINDEX ] = new ScPageScaleToItem( 1, 1 );
 //  ppPoolDefaults[ ATTR_ITEM_DOUBLE     - ATTR_STARTINDEX ] = new ScDoubleItem( ATTR_ITEM_DOUBLE, 0 );
 
@@ -379,7 +379,7 @@ __EXPORT ScDocumentPool::~ScDocumentPool()
 {
     Delete();
 
-    for ( USHORT i=0; i < ATTR_ENDINDEX-ATTR_STARTINDEX+1; i++ )
+    for ( sal_uInt16 i=0; i < ATTR_ENDINDEX-ATTR_STARTINDEX+1; i++ )
     {
         SetRefCount( *ppPoolDefaults[i], 0 );
         delete ppPoolDefaults[i];
@@ -403,12 +403,12 @@ void ScDocumentPool::InitVersionMaps()
 
     //  erste Map: ATTR_LANGUAGE_FORMAT ab sv329 eingefuegt
 
-    const USHORT nMap1Start = 100;  // alter ATTR_STARTINDEX
-    const USHORT nMap1End   = 157;  // alter ATTR_ENDINDEX
-    const USHORT nMap1Count = nMap1End - nMap1Start + 1;
-    const USHORT nMap1New   = 18;   // ATTR_LANGUAGE_FORMAT - ATTR_STARTINDEX
-    pVersionMap1 = new USHORT [ nMap1Count ];
-    USHORT i, j;
+    const sal_uInt16 nMap1Start = 100;  // alter ATTR_STARTINDEX
+    const sal_uInt16 nMap1End   = 157;  // alter ATTR_ENDINDEX
+    const sal_uInt16 nMap1Count = nMap1End - nMap1Start + 1;
+    const sal_uInt16 nMap1New   = 18;   // ATTR_LANGUAGE_FORMAT - ATTR_STARTINDEX
+    pVersionMap1 = new sal_uInt16 [ nMap1Count ];
+    sal_uInt16 i, j;
     for ( i=0, j=nMap1Start; i < nMap1New; i++, j++ )
         pVersionMap1[i] = j;
     // ein Eintrag eingefuegt...
@@ -417,11 +417,11 @@ void ScDocumentPool::InitVersionMaps()
 
     //  zweite Map: ATTR_VALIDDATA und ATTR_CONDITIONAL ab 341 eingefuegt
 
-    const USHORT nMap2Start = 100;  // ATTR_STARTINDEX
-    const USHORT nMap2End   = 158;  // ATTR_ENDINDEX
-    const USHORT nMap2Count = nMap2End - nMap2Start + 1;
-    const USHORT nMap2New   = 24;   // ATTR_VALIDDATA - ATTR_STARTINDEX
-    pVersionMap2 = new USHORT [ nMap2Count ];
+    const sal_uInt16 nMap2Start = 100;  // ATTR_STARTINDEX
+    const sal_uInt16 nMap2End   = 158;  // ATTR_ENDINDEX
+    const sal_uInt16 nMap2Count = nMap2End - nMap2Start + 1;
+    const sal_uInt16 nMap2New   = 24;   // ATTR_VALIDDATA - ATTR_STARTINDEX
+    pVersionMap2 = new sal_uInt16 [ nMap2Count ];
     for ( i=0, j=nMap2Start; i < nMap2New; i++, j++ )
         pVersionMap2[i] = j;
     // zwei Eintraege eingefuegt...
@@ -430,11 +430,11 @@ void ScDocumentPool::InitVersionMaps()
 
     //  dritte Map: ATTR_INDENT ab 350 eingefuegt
 
-    const USHORT nMap3Start = 100;  // ATTR_STARTINDEX
-    const USHORT nMap3End   = 160;  // ATTR_ENDINDEX
-    const USHORT nMap3Count = nMap3End - nMap3Start + 1;
-    const USHORT nMap3New   = 11;   // ATTR_INDENT - ATTR_STARTINDEX
-    pVersionMap3 = new USHORT [ nMap3Count ];
+    const sal_uInt16 nMap3Start = 100;  // ATTR_STARTINDEX
+    const sal_uInt16 nMap3End   = 160;  // ATTR_ENDINDEX
+    const sal_uInt16 nMap3Count = nMap3End - nMap3Start + 1;
+    const sal_uInt16 nMap3New   = 11;   // ATTR_INDENT - ATTR_STARTINDEX
+    pVersionMap3 = new sal_uInt16 [ nMap3Count ];
     for ( i=0, j=nMap3Start; i < nMap3New; i++, j++ )
         pVersionMap3[i] = j;
     // ein Eintrag eingefuegt...
@@ -443,11 +443,11 @@ void ScDocumentPool::InitVersionMaps()
 
     //  vierte Map: ATTR_ROTATE_VALUE und ATTR_ROTATE_MODE ab 367 eingefuegt
 
-    const USHORT nMap4Start = 100;  // ATTR_STARTINDEX
-    const USHORT nMap4End   = 161;  // ATTR_ENDINDEX
-    const USHORT nMap4Count = nMap4End - nMap4Start + 1;
-    const USHORT nMap4New   = 14;   // ATTR_ROTATE_VALUE - ATTR_STARTINDEX
-    pVersionMap4 = new USHORT [ nMap4Count ];
+    const sal_uInt16 nMap4Start = 100;  // ATTR_STARTINDEX
+    const sal_uInt16 nMap4End   = 161;  // ATTR_ENDINDEX
+    const sal_uInt16 nMap4Count = nMap4End - nMap4Start + 1;
+    const sal_uInt16 nMap4New   = 14;   // ATTR_ROTATE_VALUE - ATTR_STARTINDEX
+    pVersionMap4 = new sal_uInt16 [ nMap4Count ];
     for ( i=0, j=nMap4Start; i < nMap4New; i++, j++ )
         pVersionMap4[i] = j;
     // zwei Eintraege eingefuegt...
@@ -456,11 +456,11 @@ void ScDocumentPool::InitVersionMaps()
 
     //  fifth map: CJK..., CTL..., EMPHASISMARK, TWOLINES (12 items) added in 614
 
-    const USHORT nMap5Start = 100;  // ATTR_STARTINDEX
-    const USHORT nMap5End   = 163;  // ATTR_ENDINDEX
-    const USHORT nMap5Count = nMap5End - nMap5Start + 1;
-    const USHORT nMap5New   = 10;   // ATTR_CJK_FONT - ATTR_STARTINDEX
-    pVersionMap5 = new USHORT [ nMap5Count ];
+    const sal_uInt16 nMap5Start = 100;  // ATTR_STARTINDEX
+    const sal_uInt16 nMap5End   = 163;  // ATTR_ENDINDEX
+    const sal_uInt16 nMap5Count = nMap5End - nMap5Start + 1;
+    const sal_uInt16 nMap5New   = 10;   // ATTR_CJK_FONT - ATTR_STARTINDEX
+    pVersionMap5 = new sal_uInt16 [ nMap5Count ];
     for ( i=0, j=nMap5Start; i < nMap5New; i++, j++ )
         pVersionMap5[i] = j;
     // 12 entries inserted
@@ -469,11 +469,11 @@ void ScDocumentPool::InitVersionMaps()
 
     // sixth map: ATTR_SCRIPTSPACE, ATTR_HANGPUNCTUATION, ATTR_FORBIDDEN_RULES added in 614d
 
-    const USHORT nMap6Start = 100;  // ATTR_STARTINDEX
-    const USHORT nMap6End   = 175;  // ATTR_ENDINDEX
-    const USHORT nMap6Count = nMap6End - nMap6Start + 1;
-    const USHORT nMap6New   = 22;   // ATTR_SCRIPTSPACE - ATTR_STARTINDEX
-    pVersionMap6 = new USHORT [ nMap6Count ];
+    const sal_uInt16 nMap6Start = 100;  // ATTR_STARTINDEX
+    const sal_uInt16 nMap6End   = 175;  // ATTR_ENDINDEX
+    const sal_uInt16 nMap6Count = nMap6End - nMap6Start + 1;
+    const sal_uInt16 nMap6New   = 22;   // ATTR_SCRIPTSPACE - ATTR_STARTINDEX
+    pVersionMap6 = new sal_uInt16 [ nMap6Count ];
     for ( i=0, j=nMap6Start; i < nMap6New; i++, j++ )
         pVersionMap6[i] = j;
     // 3 entries inserted
@@ -482,11 +482,11 @@ void ScDocumentPool::InitVersionMaps()
 
     //  seventh map: ATTR_FONT_WORDLINE, ATTR_FONT_RELIEF, ATTR_HYPHENATE added in 632b
 
-    const USHORT nMap7Start = 100;  // ATTR_STARTINDEX
-    const USHORT nMap7End   = 178;  // ATTR_ENDINDEX
-    const USHORT nMap7Count = nMap7End - nMap7Start + 1;
-    const USHORT nMap7New   = 22;   // ATTR_FONT_WORDLINE - ATTR_STARTINDEX
-    pVersionMap7 = new USHORT [ nMap7Count ];
+    const sal_uInt16 nMap7Start = 100;  // ATTR_STARTINDEX
+    const sal_uInt16 nMap7End   = 178;  // ATTR_ENDINDEX
+    const sal_uInt16 nMap7Count = nMap7End - nMap7Start + 1;
+    const sal_uInt16 nMap7New   = 22;   // ATTR_FONT_WORDLINE - ATTR_STARTINDEX
+    pVersionMap7 = new sal_uInt16 [ nMap7Count ];
     for ( i=0, j=nMap7Start; i < nMap7New; i++, j++ )
         pVersionMap7[i] = j;
     // 3 entries inserted
@@ -495,11 +495,11 @@ void ScDocumentPool::InitVersionMaps()
 
     //  eighth map: ATTR_VERTICAL_ASIAN added in 642q
 
-    const USHORT nMap8Start = 100;  // ATTR_STARTINDEX
-    const USHORT nMap8End   = 181;  // ATTR_ENDINDEX
-    const USHORT nMap8Count = nMap8End - nMap8Start + 1;
-    const USHORT nMap8New   = 34;   // ATTR_VERTICAL_ASIAN - ATTR_STARTINDEX
-    pVersionMap8 = new USHORT [ nMap8Count ];
+    const sal_uInt16 nMap8Start = 100;  // ATTR_STARTINDEX
+    const sal_uInt16 nMap8End   = 181;  // ATTR_ENDINDEX
+    const sal_uInt16 nMap8Count = nMap8End - nMap8Start + 1;
+    const sal_uInt16 nMap8New   = 34;   // ATTR_VERTICAL_ASIAN - ATTR_STARTINDEX
+    pVersionMap8 = new sal_uInt16 [ nMap8Count ];
     for ( i=0, j=nMap8Start; i < nMap8New; i++, j++ )
         pVersionMap8[i] = j;
     // 1 entry inserted
@@ -508,11 +508,11 @@ void ScDocumentPool::InitVersionMaps()
 
     //  9th map: ATTR_WRITINGDIR added in 643y
 
-    const USHORT nMap9Start = 100;  // ATTR_STARTINDEX
-    const USHORT nMap9End   = 182;  // ATTR_ENDINDEX
-    const USHORT nMap9Count = nMap9End - nMap9Start + 1;
-    const USHORT nMap9New   = 35;   // ATTR_WRITINGDIR - ATTR_STARTINDEX
-    pVersionMap9 = new USHORT [ nMap9Count ];
+    const sal_uInt16 nMap9Start = 100;  // ATTR_STARTINDEX
+    const sal_uInt16 nMap9End   = 182;  // ATTR_ENDINDEX
+    const sal_uInt16 nMap9Count = nMap9End - nMap9Start + 1;
+    const sal_uInt16 nMap9New   = 35;   // ATTR_WRITINGDIR - ATTR_STARTINDEX
+    pVersionMap9 = new sal_uInt16 [ nMap9Count ];
     for ( i=0, j=nMap9Start; i < nMap9New; i++, j++ )
         pVersionMap9[i] = j;
     // 1 entry inserted
@@ -523,11 +523,11 @@ void ScDocumentPool::InitVersionMaps()
 
     // 10th map: ATTR_SHRINKTOFIT, ATTR_BORDER_TL_BR, ATTR_BORDER_BL_TR added in 680/dr14
 
-    const USHORT nMap10Start = 100;  // ATTR_STARTINDEX
-    const USHORT nMap10End   = 184;  // ATTR_ENDINDEX
-    const USHORT nMap10Count = nMap10End - nMap10Start + 1;
-    const USHORT nMap10New   = 37;   // ATTR_SHRINKTOFIT - ATTR_STARTINDEX
-    pVersionMap10 = new USHORT [ nMap10Count ];
+    const sal_uInt16 nMap10Start = 100;  // ATTR_STARTINDEX
+    const sal_uInt16 nMap10End   = 184;  // ATTR_ENDINDEX
+    const sal_uInt16 nMap10Count = nMap10End - nMap10Start + 1;
+    const sal_uInt16 nMap10New   = 37;   // ATTR_SHRINKTOFIT - ATTR_STARTINDEX
+    pVersionMap10 = new sal_uInt16 [ nMap10Count ];
     for ( i=0, j=nMap10Start; i < nMap10New; i++, j++ )
         pVersionMap10[i] = j;
     // 3 entries inserted
@@ -536,11 +536,11 @@ void ScDocumentPool::InitVersionMaps()
 
     // 11th map: ATTR_FONT_OVERLINE added in DEV300/overline2
 
-    const USHORT nMap11Start = 100;  // ATTR_STARTINDEX
-    const USHORT nMap11End   = 187;  // ATTR_ENDINDEX
-    const USHORT nMap11Count = nMap11End - nMap11Start + 1;
-    const USHORT nMap11New   = 5;    // ATTR_FONT_OVERLINE - ATTR_STARTINDEX
-    pVersionMap11 = new USHORT [ nMap11Count ];
+    const sal_uInt16 nMap11Start = 100;  // ATTR_STARTINDEX
+    const sal_uInt16 nMap11End   = 187;  // ATTR_ENDINDEX
+    const sal_uInt16 nMap11Count = nMap11End - nMap11Start + 1;
+    const sal_uInt16 nMap11New   = 5;    // ATTR_FONT_OVERLINE - ATTR_STARTINDEX
+    pVersionMap11 = new sal_uInt16 [ nMap11Count ];
     for ( i=0, j=nMap11Start; i < nMap11New; i++, j++ )
         pVersionMap11[i] = j;
     // 1 entry inserted
@@ -583,7 +583,7 @@ void ScDocumentPool::DeleteVersionMaps()
 
 // ----------------------------------------------------------------------------------------
 //
-//  Fuer die Pattern-Attribute (SetItems) kann der USHORT RefCount leicht ueberlaufen
+//  Fuer die Pattern-Attribute (SetItems) kann der sal_uInt16 RefCount leicht ueberlaufen
 //  (z.B. 600 ganze Zeilen abwechselnd formatieren).
 //  Darum wird der RefCount bei SC_MAX_POOLREF festgehalten und nicht mehr hoch- oder
 //  heruntergezaehlt. Dieser RefCount wird dann erst beim naechsten Laden neu gezaehlt.
@@ -592,7 +592,7 @@ void ScDocumentPool::DeleteVersionMaps()
 //  wird (Assertions).
 //
 
-const SfxPoolItem& __EXPORT ScDocumentPool::Put( const SfxPoolItem& rItem, USHORT nWhich )
+const SfxPoolItem& __EXPORT ScDocumentPool::Put( const SfxPoolItem& rItem, sal_uInt16 nWhich )
 {
     if ( rItem.Which() != ATTR_PATTERN )                // nur Pattern ist special
         return SfxItemPool::Put( rItem, nWhich );
@@ -611,13 +611,13 @@ void __EXPORT ScDocumentPool::Remove( const SfxPoolItem& rItem )
 {
     if ( rItem.Which() == ATTR_PATTERN )                // nur Pattern ist special
     {
-        ULONG nRef = rItem.GetRefCount();
-        if ( nRef >= (ULONG) SC_MAX_POOLREF && nRef <= (ULONG) SFX_ITEMS_OLD_MAXREF )
+        sal_uLong nRef = rItem.GetRefCount();
+        if ( nRef >= (sal_uLong) SC_MAX_POOLREF && nRef <= (sal_uLong) SFX_ITEMS_OLD_MAXREF )
         {
-            if ( nRef != (ULONG) SC_SAFE_POOLREF )
+            if ( nRef != (sal_uLong) SC_SAFE_POOLREF )
             {
                 DBG_ERROR("Wer fummelt da an meinen Ref-Counts herum");
-                SetRefCount( (SfxPoolItem&)rItem, (ULONG) SC_SAFE_POOLREF );
+                SetRefCount( (SfxPoolItem&)rItem, (sal_uLong) SC_SAFE_POOLREF );
             }
             return;                 // nicht herunterzaehlen
         }
@@ -627,14 +627,14 @@ void __EXPORT ScDocumentPool::Remove( const SfxPoolItem& rItem )
 
 void ScDocumentPool::CheckRef( const SfxPoolItem& rItem )   // static
 {
-    ULONG nRef = rItem.GetRefCount();
-    if ( nRef >= (ULONG) SC_MAX_POOLREF && nRef <= (ULONG) SFX_ITEMS_OLD_MAXREF )
+    sal_uLong nRef = rItem.GetRefCount();
+    if ( nRef >= (sal_uLong) SC_MAX_POOLREF && nRef <= (sal_uLong) SFX_ITEMS_OLD_MAXREF )
     {
         // beim Apply vom Cache wird evtl. um 2 hochgezaehlt (auf MAX+1 oder SAFE+2),
         // heruntergezaehlt wird nur einzeln (in LoadCompleted)
-        DBG_ASSERT( nRef<=(ULONG)SC_MAX_POOLREF+1 || (nRef>=(ULONG)SC_SAFE_POOLREF-1 && nRef<=(ULONG)SC_SAFE_POOLREF+2),
+        DBG_ASSERT( nRef<=(sal_uLong)SC_MAX_POOLREF+1 || (nRef>=(sal_uLong)SC_SAFE_POOLREF-1 && nRef<=(sal_uLong)SC_SAFE_POOLREF+2),
                 "ScDocumentPool::CheckRef" );
-        SetRefCount( (SfxPoolItem&)rItem, (ULONG) SC_SAFE_POOLREF );
+        SetRefCount( (SfxPoolItem&)rItem, (sal_uLong) SC_SAFE_POOLREF );
     }
 }
 
@@ -675,7 +675,7 @@ void ScDocumentPool::CellStyleCreated( const String& rName )
 
 SfxItemPool* __EXPORT ScDocumentPool::Clone() const
 {
-    return new SfxItemPool (*this, TRUE);
+    return new SfxItemPool (*this, sal_True);
 }
 
 SfxItemPresentation lcl_HFPresentation
@@ -691,9 +691,9 @@ SfxItemPresentation lcl_HFPresentation
     const SfxItemSet& rSet = ((const SfxSetItem&)rItem).GetItemSet();
     const SfxPoolItem* pItem;
 
-    if ( SFX_ITEM_SET == rSet.GetItemState(ATTR_PAGE_ON,FALSE,&pItem) )
+    if ( SFX_ITEM_SET == rSet.GetItemState(ATTR_PAGE_ON,sal_False,&pItem) )
     {
-        if( FALSE == ((const SfxBoolItem*)pItem)->GetValue() )
+        if( sal_False == ((const SfxBoolItem*)pItem)->GetValue() )
             return SFX_ITEM_PRESENTATION_NONE;
     }
 
@@ -704,7 +704,7 @@ SfxItemPresentation lcl_HFPresentation
 
     while( pItem )
     {
-        USHORT nWhich = pItem->Which();
+        sal_uInt16 nWhich = pItem->Which();
 
         aText.Erase();
 
@@ -718,14 +718,14 @@ SfxItemPresentation lcl_HFPresentation
             case ATTR_LRSPACE:
             {
                 SvxLRSpaceItem& rLRItem = (SvxLRSpaceItem&)*pItem;
-                USHORT nPropLeftMargin  = rLRItem.GetPropLeft();
-                USHORT nPropRightMargin = rLRItem.GetPropRight();
-                USHORT nLeftMargin, nRightMargin;
+                sal_uInt16 nPropLeftMargin  = rLRItem.GetPropLeft();
+                sal_uInt16 nPropRightMargin = rLRItem.GetPropRight();
+                sal_uInt16 nLeftMargin, nRightMargin;
                 long nTmp;
                 nTmp = rLRItem.GetLeft();
-                nLeftMargin = nTmp < 0 ? 0 : USHORT(nTmp);
+                nLeftMargin = nTmp < 0 ? 0 : sal_uInt16(nTmp);
                 nTmp = rLRItem.GetRight();
-                nRightMargin = nTmp < 0 ? 0 : USHORT(nTmp);
+                nRightMargin = nTmp < 0 ? 0 : sal_uInt16(nTmp);
 
                 aText = EE_RESSTR(RID_SVXITEMS_LRSPACE_LEFT);
                 if ( 100 != nPropLeftMargin )
@@ -788,7 +788,7 @@ SfxItemPresentation __EXPORT ScDocumentPool::GetPresentation(
     String&             rText,
     const IntlWrapper* pIntl ) const
 {
-    USHORT  nW = rItem.Which();
+    sal_uInt16  nW = rItem.Which();
     String aStrYes  ( ScGlobal::GetRscString(STR_YES) );
     String aStrNo   ( ScGlobal::GetRscString(STR_NO) );
     String aStrSep = String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM(": "));
@@ -901,7 +901,7 @@ SfxItemPresentation __EXPORT ScDocumentPool::GetPresentation(
 
         case ATTR_PAGE_SCALETOPAGES:
         {
-            USHORT  nPagNo = ((const SfxUInt16Item&)rItem).GetValue();
+            sal_uInt16  nPagNo = ((const SfxUInt16Item&)rItem).GetValue();
 
             if( nPagNo )
             {
@@ -934,7 +934,7 @@ SfxItemPresentation __EXPORT ScDocumentPool::GetPresentation(
 
         case ATTR_PAGE_FIRSTPAGENO:
         {
-            USHORT  nPagNo = ((const SfxUInt16Item&)rItem).GetValue();
+            sal_uInt16  nPagNo = ((const SfxUInt16Item&)rItem).GetValue();
 
             if( nPagNo )
             {
@@ -962,7 +962,7 @@ SfxItemPresentation __EXPORT ScDocumentPool::GetPresentation(
 
         case ATTR_PAGE_SCALE:
         {
-            USHORT  nPercent = ((const SfxUInt16Item&)rItem).GetValue();
+            sal_uInt16  nPercent = ((const SfxUInt16Item&)rItem).GetValue();
 
             if( nPercent )
             {
@@ -1045,7 +1045,7 @@ SfxItemPresentation __EXPORT ScDocumentPool::GetPresentation(
     return ePresentation;
 }
 
-SfxMapUnit __EXPORT ScDocumentPool::GetMetric( USHORT nWhich ) const
+SfxMapUnit __EXPORT ScDocumentPool::GetMetric( sal_uInt16 nWhich ) const
 {
     //  eigene Attribute: Twips, alles andere 1/100 mm
 

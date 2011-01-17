@@ -49,7 +49,7 @@ protected:
     ScTabEditEngine*    mpEngine;
     Table*              mpRowHeights;
 
-    BOOL                GraphicSize( SCCOL nCol, SCROW nRow, SCTAB nTab,
+    sal_Bool                GraphicSize( SCCOL nCol, SCROW nRow, SCTAB nTab,
                                      ScEEParseEntry* );
     void                InsertGraphic( SCCOL nCol, SCROW nRow, SCTAB nTab,
                                        ScEEParseEntry* );
@@ -57,9 +57,9 @@ public:
     ScEEImport( ScDocument* pDoc, const ScRange& rRange );
     virtual ~ScEEImport();
 
-    virtual ULONG    Read( SvStream& rStream, const String& rBaseURL );
+    virtual sal_uLong    Read( SvStream& rStream, const String& rBaseURL );
     virtual ScRange  GetRange() { return maRange; }
-    virtual void     WriteToDocument( BOOL bSizeColsRows = FALSE,
+    virtual void     WriteToDocument( sal_Bool bSizeColsRows = sal_False,
                                       double nOutputFactor = 1.0,
                                       SvNumberFormatter* pFormatter = NULL,
                                       bool bConvertDate = true );

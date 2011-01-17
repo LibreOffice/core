@@ -42,11 +42,11 @@
 
 ScSizeDeviceProvider::ScSizeDeviceProvider( ScDocShell* pDocSh )
 {
-    BOOL bTextWysiwyg = SC_MOD()->GetInputOptions().GetTextWysiwyg();
+    sal_Bool bTextWysiwyg = SC_MOD()->GetInputOptions().GetTextWysiwyg();
     if ( bTextWysiwyg )
     {
         pDevice = pDocSh->GetPrinter();
-        bOwner = FALSE;
+        bOwner = sal_False;
 
         aOldMapMode = pDevice->GetMapMode();
         pDevice->SetMapMode( MAP_PIXEL );       // GetNeededSize needs pixel MapMode
@@ -56,7 +56,7 @@ ScSizeDeviceProvider::ScSizeDeviceProvider( ScDocShell* pDocSh )
     {
         pDevice = new VirtualDevice;
         pDevice->SetDigitLanguage( SC_MOD()->GetOptDigitLanguage() );
-        bOwner = TRUE;
+        bOwner = sal_True;
     }
 
     Point aLogic = pDevice->LogicToPixel( Point(1000,1000), MAP_TWIP );

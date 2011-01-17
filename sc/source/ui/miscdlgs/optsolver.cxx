@@ -67,7 +67,7 @@ ScSolverProgressDialog::ScSolverProgressDialog( Window* pParent )
     maFlButtons     ( this, ScResId( FL_BUTTONS ) ),
     maBtnOk         ( this, ScResId( BTN_OK ) )
 {
-    maBtnOk.Enable(FALSE);
+    maBtnOk.Enable(sal_False);
     FreeResource();
 }
 
@@ -159,7 +159,7 @@ void ScCursorRefEdit::KeyInput( const KeyEvent& rKEvt )
 
 //----------------------------------------------------------------------------
 
-ScOptSolverSave::ScOptSolverSave( const String& rObjective, BOOL bMax, BOOL bMin, BOOL bValue,
+ScOptSolverSave::ScOptSolverSave( const String& rObjective, sal_Bool bMax, sal_Bool bMin, sal_Bool bValue,
                              const String& rTarget, const String& rVariable,
                              const std::vector<ScOptConditionRow>& rConditions,
                              const String& rEngine,
@@ -289,8 +289,8 @@ void ScOptSolverDlg::Init(const ScAddress& rCursorPos)
     rtl::OUString aSlotURL( RTL_CONSTASCII_USTRINGPARAM( "slot:" ));
     aSlotURL += rtl::OUString::valueOf( sal_Int32( SID_DEL_ROWS ) );
     uno::Reference<frame::XFrame> xFrame = GetBindings().GetActiveFrame();
-    Image aDelNm = ::GetImage( xFrame, aSlotURL, FALSE, FALSE );
-    Image aDelHC = ::GetImage( xFrame, aSlotURL, FALSE, TRUE );     // high contrast
+    Image aDelNm = ::GetImage( xFrame, aSlotURL, sal_False, sal_False );
+    Image aDelHC = ::GetImage( xFrame, aSlotURL, sal_False, sal_True );     // high contrast
 
     for ( sal_uInt16 nRow = 0; nRow < EDIT_ROW_COUNT; ++nRow )
     {
@@ -451,7 +451,7 @@ void ScOptSolverDlg::EnableButtons()
 
 //----------------------------------------------------------------------------
 
-BOOL ScOptSolverDlg::Close()
+sal_Bool ScOptSolverDlg::Close()
 {
     return DoClose( ScOptSolverDlgWrapper::GetChildWindowId() );
 }
@@ -496,7 +496,7 @@ void ScOptSolverDlg::SetReference( const ScRange& rRef, ScDocument* pDocP )
             aStr = aName;
         else                                                        // format cell/range reference
         {
-            USHORT nFmt = ( aAdr.Tab() == mnCurTab ) ? SCA_ABS : SCA_ABS_3D;
+            sal_uInt16 nFmt = ( aAdr.Tab() == mnCurTab ) ? SCA_ABS : SCA_ABS_3D;
             if ( bSingle )
                 aAdr.Format( aStr, nFmt, pDocP, pDocP->GetAddressConvention() );
             else
@@ -529,7 +529,7 @@ void ScOptSolverDlg::SetReference( const ScRange& rRef, ScDocument* pDocP )
 
 //----------------------------------------------------------------------------
 
-BOOL ScOptSolverDlg::IsRefInputMode() const
+sal_Bool ScOptSolverDlg::IsRefInputMode() const
 {
     return mpEdActive != NULL;
 }
@@ -543,7 +543,7 @@ IMPL_LINK( ScOptSolverDlg, BtnHdl, PushButton*, pBtn )
     {
         bool bSolve = ( pBtn == &maBtnSolve );
 
-        SetDispatcherLock( FALSE );
+        SetDispatcherLock( sal_False );
         SwitchToDocument();
 
         bool bClose = true;
@@ -563,7 +563,7 @@ IMPL_LINK( ScOptSolverDlg, BtnHdl, PushButton*, pBtn )
         else
         {
             // no solution -> dialog is kept open
-            SetDispatcherLock( TRUE );
+            SetDispatcherLock( sal_True );
         }
     }
     else if ( pBtn == &maBtnOpt )
@@ -628,7 +628,7 @@ IMPL_LINK( ScOptSolverDlg, DelBtnHdl, PushButton*, pBtn )
     for ( sal_uInt16 nRow = 0; nRow < EDIT_ROW_COUNT; ++nRow )
         if( pBtn == mpDelButton[nRow] )
         {
-            BOOL bHadFocus = pBtn->HasFocus();
+            sal_Bool bHadFocus = pBtn->HasFocus();
 
             ReadConditions();
             long nVecPos = nScrollPos + nRow;
@@ -771,7 +771,7 @@ bool ScOptSolverDlg::ParseRef( ScRange& rRange, const String& rInput, bool bAllo
 {
     ScRangeUtil aRangeUtil;
     ScAddress::Details aDetails(mpDoc->GetAddressConvention(), 0, 0);
-    USHORT nFlags = rRange.ParseAny( rInput, mpDoc, aDetails );
+    sal_uInt16 nFlags = rRange.ParseAny( rInput, mpDoc, aDetails );
     if ( nFlags & SCA_VALID )
     {
         if ( (nFlags & SCA_TAB_3D) == 0 )
@@ -842,8 +842,8 @@ bool ScOptSolverDlg::CallSolver()       // return true -> close dialog after cal
     }
     uno::Sequence<table::CellAddress> aVariables;
     sal_Int32 nVarPos = 0;
-       ULONG nRangeCount = aVarRanges.Count();
-    for (ULONG nRangePos=0; nRangePos<nRangeCount; ++nRangePos)
+       sal_uLong nRangeCount = aVarRanges.Count();
+    for (sal_uLong nRangePos=0; nRangePos<nRangeCount; ++nRangePos)
     {
         ScRange aRange(*aVarRanges.GetObject(nRangePos));
         aRange.Justify();
@@ -1021,7 +1021,7 @@ bool ScOptSolverDlg::CallSolver()       // return true -> close dialog after cal
             {
                 ScAddress aCellPos;
                 ScUnoConversion::FillScAddress( aCellPos, aVariables[nVarPos] );
-                aFunc.PutCell( aCellPos, new ScValueCell( aSolution[nVarPos] ), TRUE );
+                aFunc.PutCell( aCellPos, new ScValueCell( aSolution[nVarPos] ), sal_True );
             }
             mpDocShell->UnlockPaint();
         }
@@ -1056,7 +1056,7 @@ bool ScOptSolverDlg::CallSolver()       // return true -> close dialog after cal
         {
             ScAddress aCellPos;
             ScUnoConversion::FillScAddress( aCellPos, aVariables[nVarPos] );
-            aFunc.PutCell( aCellPos, new ScValueCell( aOldValues[nVarPos] ), TRUE );
+            aFunc.PutCell( aCellPos, new ScValueCell( aOldValues[nVarPos] ), sal_True );
         }
         mpDocShell->UnlockPaint();
     }

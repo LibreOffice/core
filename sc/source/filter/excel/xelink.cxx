@@ -1068,7 +1068,7 @@ sal_uInt16 XclExpExtNameBuffer::InsertDde(
     sal_uInt16 nIndex = GetIndex( rItem );
     if( nIndex == 0 )
     {
-        USHORT nPos;
+        sal_uInt16 nPos;
         if( GetDoc().FindDdeLink( rApplic, rTopic, rItem, SC_DDE_IGNOREMODE, nPos ) )
         {
             // create the leading 'StdDocumentName' EXTERNNAME record
@@ -1162,7 +1162,7 @@ void XclExpCrn::WriteDouble( XclExpStream& rStrm, double fValue )
 {
     if( ::rtl::math::isNan( fValue ) )
     {
-        USHORT nScError = static_cast< USHORT >( reinterpret_cast< const sal_math_Double* >( &fValue )->nan_parts.fraction_lo );
+        sal_uInt16 nScError = static_cast< sal_uInt16 >( reinterpret_cast< const sal_math_Double* >( &fValue )->nan_parts.fraction_lo );
         WriteError( rStrm, XclTools::GetXclErrorCode( nScError ) );
     }
     else
@@ -1283,7 +1283,7 @@ void XclExpXct::Save( XclExpStream& rStrm )
         ::std::pair< SCCOL, SCCOL > aColRange = mxCacheTable->getColRange( nScRow );
         for( SCCOL nScCol = aColRange.first; bValid && (nScCol < aColRange.second); ++nScCol )
         {
-            if( maUsedCells.IsCellMarked( nScCol, nScRow, TRUE ) )
+            if( maUsedCells.IsCellMarked( nScCol, nScRow, sal_True ) )
             {
                 sal_uInt32 nScNumFmt = 0;
                 ScExternalRefCache::TokenRef xToken = mxCacheTable->getCell( nScCol, nScRow, &nScNumFmt );

@@ -38,7 +38,7 @@
 //------------------------------------------------------------------
 
 ScXMLEmptyContext::ScXMLEmptyContext( ScXMLImport& rImport,
-                                      USHORT nPrfx,
+                                      sal_uInt16 nPrfx,
                                       const ::rtl::OUString& rLName) :
     SvXMLImportContext( rImport, nPrfx, rLName )
 {
@@ -48,7 +48,7 @@ ScXMLEmptyContext::~ScXMLEmptyContext()
 {
 }
 
-SvXMLImportContext *ScXMLEmptyContext::CreateChildContext( USHORT nPrefix,
+SvXMLImportContext *ScXMLEmptyContext::CreateChildContext( sal_uInt16 nPrefix,
                                             const ::rtl::OUString& rLName,
                                             const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::xml::sax::XAttributeList>& /* xAttrList */ )

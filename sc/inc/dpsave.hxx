@@ -58,23 +58,23 @@ class ScDPSaveMember
 private:
     String      aName;
     ::std::auto_ptr<rtl::OUString> mpLayoutName; // custom name to be displayed in the table.
-    USHORT      nVisibleMode;
-    USHORT      nShowDetailsMode;
+    sal_uInt16      nVisibleMode;
+    sal_uInt16      nShowDetailsMode;
 
 public:
                             ScDPSaveMember(const String& rName);
                             ScDPSaveMember(const ScDPSaveMember& r);
                             ~ScDPSaveMember();
 
-    BOOL                    operator== ( const ScDPSaveMember& r ) const;
+    sal_Bool                    operator== ( const ScDPSaveMember& r ) const;
 
     const String&           GetName() const { return aName; }
-    BOOL                    HasIsVisible() const;
-    SC_DLLPUBLIC void                   SetIsVisible(BOOL bSet);
-    BOOL                    GetIsVisible() const { return BOOL(nVisibleMode); }
-    BOOL                    HasShowDetails() const;
-    SC_DLLPUBLIC void                   SetShowDetails(BOOL bSet);
-    BOOL                    GetShowDetails() const { return BOOL(nShowDetailsMode); }
+    sal_Bool                    HasIsVisible() const;
+    SC_DLLPUBLIC void                   SetIsVisible(sal_Bool bSet);
+    sal_Bool                    GetIsVisible() const { return sal_Bool(nVisibleMode); }
+    sal_Bool                    HasShowDetails() const;
+    SC_DLLPUBLIC void                   SetShowDetails(sal_Bool bSet);
+    sal_Bool                    GetShowDetails() const { return sal_Bool(nShowDetailsMode); }
 
     void                    SetName( const String& rNew );  // used if the source member was renamed (groups)
 
@@ -98,15 +98,15 @@ private:
     String*     pSelectedPage;
     ::std::auto_ptr<rtl::OUString> mpLayoutName;
     ::std::auto_ptr<rtl::OUString> mpSubtotalName;
-    BOOL        bIsDataLayout;
-    BOOL        bDupFlag;
-    USHORT      nOrientation;
-    USHORT      nFunction;          // enum GeneralFunction, for data dimensions
+    sal_Bool        bIsDataLayout;
+    sal_Bool        bDupFlag;
+    sal_uInt16      nOrientation;
+    sal_uInt16      nFunction;          // enum GeneralFunction, for data dimensions
     long        nUsedHierarchy;
-    USHORT      nShowEmptyMode;     //! at level
-    BOOL        bSubTotalDefault;   //! at level
+    sal_uInt16      nShowEmptyMode;     //! at level
+    sal_Bool        bSubTotalDefault;   //! at level
     long        nSubTotalCount;
-    USHORT*     pSubTotalFuncs;     // enum GeneralFunction
+    sal_uInt16*     pSubTotalFuncs;     // enum GeneralFunction
     ::com::sun::star::sheet::DataPilotFieldReference* pReferenceValue;
     ::com::sun::star::sheet::DataPilotFieldSortInfo*  pSortInfo;            // (level)
     ::com::sun::star::sheet::DataPilotFieldAutoShowInfo* pAutoShowInfo;     // (level)
@@ -119,32 +119,32 @@ private:
     MemberHash maMemberHash;
     MemberList maMemberList;
 public:
-                            ScDPSaveDimension(const String& rName, BOOL bDataLayout);
+                            ScDPSaveDimension(const String& rName, sal_Bool bDataLayout);
                             ScDPSaveDimension(const ScDPSaveDimension& r);
                             ~ScDPSaveDimension();
 
-    BOOL                    operator== ( const ScDPSaveDimension& r ) const;
+    sal_Bool                    operator== ( const ScDPSaveDimension& r ) const;
 
     const MemberList&       GetMembers() const { return maMemberList; }
     void                    AddMember(ScDPSaveMember* pMember);
 
-    void                    SetDupFlag(BOOL bSet)   { bDupFlag = bSet; }
-    BOOL                    GetDupFlag() const      { return bDupFlag; }
+    void                    SetDupFlag(sal_Bool bSet)   { bDupFlag = bSet; }
+    sal_Bool                    GetDupFlag() const      { return bDupFlag; }
 
     const String&           GetName() const         { return aName; }
-    BOOL                    IsDataLayout() const    { return bIsDataLayout; }
+    sal_Bool                    IsDataLayout() const    { return bIsDataLayout; }
 
     void                    SetName( const String& rNew );  // used if the source dim was renamed (groups)
 
-    void                    SetOrientation(USHORT nNew);
-    void                    SetSubTotals(long nCount, const USHORT* pFuncs);
+    void                    SetOrientation(sal_uInt16 nNew);
+    void                    SetSubTotals(long nCount, const sal_uInt16* pFuncs);
     long                    GetSubTotalsCount() const { return nSubTotalCount; }
-    USHORT                  GetSubTotalFunc(long nIndex) const { return pSubTotalFuncs[nIndex]; }
+    sal_uInt16                  GetSubTotalFunc(long nIndex) const { return pSubTotalFuncs[nIndex]; }
     bool                    HasShowEmpty() const;
-    void                    SetShowEmpty(BOOL bSet);
-    BOOL                    GetShowEmpty() const { return BOOL(nShowEmptyMode); }
-    void                    SetFunction(USHORT nNew);       // enum GeneralFunction
-    USHORT                  GetFunction() const { return nFunction; }
+    void                    SetShowEmpty(sal_Bool bSet);
+    sal_Bool                    GetShowEmpty() const { return sal_Bool(nShowEmptyMode); }
+    void                    SetFunction(sal_uInt16 nNew);       // enum GeneralFunction
+    sal_uInt16                  GetFunction() const { return nFunction; }
     void                    SetUsedHierarchy(long nNew);
     long                    GetUsedHierarchy() const { return nUsedHierarchy; }
 
@@ -167,10 +167,10 @@ public:
     void                    SetLayoutInfo(const ::com::sun::star::sheet::DataPilotFieldLayoutInfo* pNew);
 
     void                    SetCurrentPage( const String* pPage );      // NULL = no selection (all)
-    BOOL                    HasCurrentPage() const;
+    sal_Bool                    HasCurrentPage() const;
     const String&           GetCurrentPage() const;
 
-    USHORT                  GetOrientation() const  { return nOrientation; }
+    sal_uInt16                  GetOrientation() const  { return nOrientation; }
 
     ScDPSaveMember*         GetExistingMemberByName(const String& rName);
     ScDPSaveMember*         GetMemberByName(const String& rName);
@@ -194,12 +194,12 @@ class ScDPSaveData
 private:
     List        aDimList;
     ScDPDimensionSaveData* pDimensionData;      // settings that create new dimensions
-    USHORT      nColumnGrandMode;
-    USHORT      nRowGrandMode;
-    USHORT      nIgnoreEmptyMode;
-    USHORT      nRepeatEmptyMode;
-    BOOL        bFilterButton;      // not passed to DataPilotSource
-    BOOL        bDrillDown;         // not passed to DataPilotSource
+    sal_uInt16      nColumnGrandMode;
+    sal_uInt16      nRowGrandMode;
+    sal_uInt16      nIgnoreEmptyMode;
+    sal_uInt16      nRepeatEmptyMode;
+    sal_Bool        bFilterButton;      // not passed to DataPilotSource
+    sal_Bool        bDrillDown;         // not passed to DataPilotSource
     // Wang Xu Ming -- 2009-8-17
     // DataPilot Migration - Cache&&Performance
     long      mnCacheId;
@@ -218,7 +218,7 @@ public:
 
     ScDPSaveData&           operator= ( const ScDPSaveData& r );
 
-    BOOL                    operator== ( const ScDPSaveData& r ) const;
+    sal_Bool                    operator== ( const ScDPSaveData& r ) const;
 
     SC_DLLPUBLIC void                    SetGrandTotalName(const ::rtl::OUString& rName);
     SC_DLLPUBLIC const ::rtl::OUString*  GetGrandTotalName() const;
@@ -238,25 +238,25 @@ public:
 
     void                    RemoveDimensionByName(const String& rName);
 
-    ScDPSaveDimension*      GetInnermostDimension(USHORT nOrientation);
+    ScDPSaveDimension*      GetInnermostDimension(sal_uInt16 nOrientation);
     ScDPSaveDimension*      GetFirstDimension(::com::sun::star::sheet::DataPilotFieldOrientation eOrientation);
     long                    GetDataDimensionCount() const;
 
 
     void                    SetPosition( ScDPSaveDimension* pDim, long nNew );
-    SC_DLLPUBLIC void                   SetColumnGrand( BOOL bSet );
-    BOOL                    GetColumnGrand() const { return BOOL(nColumnGrandMode); }
-    SC_DLLPUBLIC void                   SetRowGrand( BOOL bSet );
-    BOOL                    GetRowGrand() const { return BOOL(nRowGrandMode); }
-    void                    SetIgnoreEmptyRows( BOOL bSet );
-    BOOL                    GetIgnoreEmptyRows() const { return BOOL(nIgnoreEmptyMode); }
-    void                    SetRepeatIfEmpty( BOOL bSet );
-    BOOL                    GetRepeatIfEmpty() const { return BOOL(nRepeatEmptyMode); }
+    SC_DLLPUBLIC void                   SetColumnGrand( sal_Bool bSet );
+    sal_Bool                    GetColumnGrand() const { return sal_Bool(nColumnGrandMode); }
+    SC_DLLPUBLIC void                   SetRowGrand( sal_Bool bSet );
+    sal_Bool                    GetRowGrand() const { return sal_Bool(nRowGrandMode); }
+    void                    SetIgnoreEmptyRows( sal_Bool bSet );
+    sal_Bool                    GetIgnoreEmptyRows() const { return sal_Bool(nIgnoreEmptyMode); }
+    void                    SetRepeatIfEmpty( sal_Bool bSet );
+    sal_Bool                    GetRepeatIfEmpty() const { return sal_Bool(nRepeatEmptyMode); }
 
-    SC_DLLPUBLIC void                    SetFilterButton( BOOL bSet );
-    BOOL                    GetFilterButton() const { return bFilterButton; }
-    SC_DLLPUBLIC void                    SetDrillDown( BOOL bSet );
-    BOOL                    GetDrillDown() const { return bDrillDown; }
+    SC_DLLPUBLIC void                    SetFilterButton( sal_Bool bSet );
+    sal_Bool                    GetFilterButton() const { return bFilterButton; }
+    SC_DLLPUBLIC void                    SetDrillDown( sal_Bool bSet );
+    sal_Bool                    GetDrillDown() const { return bDrillDown; }
 
     void                    WriteToSource( const com::sun::star::uno::Reference<
         com::sun::star::sheet::XDimensionsSupplier>& xSource );
@@ -264,7 +264,7 @@ public:
     // DataPilot Migration - Cache&&Performance
     void                    Refresh( const com::sun::star::uno::Reference<
                                             com::sun::star::sheet::XDimensionsSupplier>& xSource );
-    BOOL                    IsEmpty() const;
+    sal_Bool                    IsEmpty() const;
     inline long GetCacheId() const{ return mnCacheId; }
     inline void SetCacheId( long nCacheId ){ mnCacheId = nCacheId; }
     // End Comments

@@ -45,28 +45,28 @@ struct ScAutoStyleInitData
 {
     ScRange aRange;
     String  aStyle1;
-    ULONG   nTimeout;
+    sal_uLong   nTimeout;
     String  aStyle2;
 
-    ScAutoStyleInitData( const ScRange& rR, const String& rSt1, ULONG nT, const String& rSt2 ) :
+    ScAutoStyleInitData( const ScRange& rR, const String& rSt1, sal_uLong nT, const String& rSt2 ) :
         aRange(rR), aStyle1(rSt1), nTimeout(nT), aStyle2(rSt2) {}
 };
 
 struct ScAutoStyleData
 {
-    ULONG   nTimeout;
+    sal_uLong   nTimeout;
     ScRange aRange;
     String  aStyle;
 
-    ScAutoStyleData( ULONG nT, const ScRange& rR, const String& rT ) :
+    ScAutoStyleData( sal_uLong nT, const ScRange& rR, const String& rT ) :
         nTimeout(nT), aRange(rR), aStyle(rT) {}
 };
 
 //==================================================================
 
-inline ULONG TimeNow()          // Sekunden
+inline sal_uLong TimeNow()          // Sekunden
 {
-    return (ULONG) time(0);
+    return (sal_uLong) time(0);
 }
 
 //==================================================================
@@ -81,8 +81,8 @@ ScAutoStyleList::ScAutoStyleList(ScDocShell* pShell) :
 
 ScAutoStyleList::~ScAutoStyleList()
 {
-    ULONG i;
-    ULONG nCount = aEntries.Count();
+    sal_uLong i;
+    sal_uLong nCount = aEntries.Count();
     for (i=0; i<nCount; i++)
         delete (ScAutoStyleData*) aEntries.GetObject(i);
     nCount = aInitials.Count();
@@ -95,7 +95,7 @@ ScAutoStyleList::~ScAutoStyleList()
 //  initial short delay (asynchronous call)
 
 void ScAutoStyleList::AddInitial( const ScRange& rRange, const String& rStyle1,
-                                    ULONG nTimeout, const String& rStyle2 )
+                                    sal_uLong nTimeout, const String& rStyle2 )
 {
     ScAutoStyleInitData* pNew =
         new ScAutoStyleInitData( rRange, rStyle1, nTimeout, rStyle2 );
@@ -105,8 +105,8 @@ void ScAutoStyleList::AddInitial( const ScRange& rRange, const String& rStyle1,
 
 IMPL_LINK( ScAutoStyleList, InitHdl, Timer*, EMPTYARG )
 {
-    ULONG nCount = aInitials.Count();
-    for (ULONG i=0; i<nCount; i++)
+    sal_uLong nCount = aInitials.Count();
+    for (sal_uLong i=0; i<nCount; i++)
     {
         ScAutoStyleInitData* pData = (ScAutoStyleInitData*) aInitials.GetObject(i);
 
@@ -126,15 +126,15 @@ IMPL_LINK( ScAutoStyleList, InitHdl, Timer*, EMPTYARG )
 
 //==================================================================
 
-void ScAutoStyleList::AddEntry( ULONG nTimeout, const ScRange& rRange, const String& rStyle )
+void ScAutoStyleList::AddEntry( sal_uLong nTimeout, const ScRange& rRange, const String& rStyle )
 {
     aTimer.Stop();
-    ULONG nNow = TimeNow();
+    sal_uLong nNow = TimeNow();
 
     //  alten Eintrag loeschen
 
-    ULONG nCount = aEntries.Count();
-    ULONG i;
+    sal_uLong nCount = aEntries.Count();
+    sal_uLong i;
     for (i=0; i<nCount; i++)
     {
         ScAutoStyleData* pData = (ScAutoStyleData*) aEntries.GetObject(i);
@@ -157,7 +157,7 @@ void ScAutoStyleList::AddEntry( ULONG nTimeout, const ScRange& rRange, const Str
 
     //  Einfuege-Position suchen
 
-    ULONG nPos = LIST_APPEND;
+    sal_uLong nPos = LIST_APPEND;
     for (i=0; i<nCount && nPos == LIST_APPEND; i++)
         if (nTimeout <= ((ScAutoStyleData*) aEntries.GetObject(i))->nTimeout)
             nPos = i;
@@ -171,10 +171,10 @@ void ScAutoStyleList::AddEntry( ULONG nTimeout, const ScRange& rRange, const Str
     StartTimer(nNow);
 }
 
-void ScAutoStyleList::AdjustEntries( ULONG nDiff )  // Millisekunden
+void ScAutoStyleList::AdjustEntries( sal_uLong nDiff )  // Millisekunden
 {
-    ULONG nCount = aEntries.Count();
-    for (ULONG i=0; i<nCount; i++)
+    sal_uLong nCount = aEntries.Count();
+    for (sal_uLong i=0; i<nCount; i++)
     {
         ScAutoStyleData* pData = (ScAutoStyleData*) aEntries.GetObject(i);
         if ( pData->nTimeout <= nDiff )
@@ -192,7 +192,7 @@ void ScAutoStyleList::ExecuteEntries()
         pDocSh->DoAutoStyle( pData->aRange, pData->aStyle );    //! oder Request ???
 
         delete pData;
-        aEntries.Remove((ULONG)0);
+        aEntries.Remove((sal_uLong)0);
     }
 }
 
@@ -200,8 +200,8 @@ void ScAutoStyleList::ExecuteAllNow()
 {
     aTimer.Stop();
 
-    ULONG nCount = aEntries.Count();
-    for (ULONG i=0; i<nCount; i++)
+    sal_uLong nCount = aEntries.Count();
+    for (sal_uLong i=0; i<nCount; i++)
     {
         ScAutoStyleData* pData = (ScAutoStyleData*) aEntries.GetObject(i);
 
@@ -212,11 +212,11 @@ void ScAutoStyleList::ExecuteAllNow()
     aEntries.Clear();
 }
 
-void ScAutoStyleList::StartTimer( ULONG nNow )      // Sekunden
+void ScAutoStyleList::StartTimer( sal_uLong nNow )      // Sekunden
 {
     // ersten Eintrag mit Timeout != 0 suchen
 
-    ULONG nPos = 0;
+    sal_uLong nPos = 0;
     ScAutoStyleData* pData;
     while ( (pData = (ScAutoStyleData*) aEntries.GetObject(nPos)) != NULL && pData->nTimeout == 0 )
         ++nPos;
@@ -231,7 +231,7 @@ void ScAutoStyleList::StartTimer( ULONG nNow )      // Sekunden
 
 IMPL_LINK( ScAutoStyleList, TimerHdl, Timer*, EMPTYARG )
 {
-    ULONG nNow = TimeNow();
+    sal_uLong nNow = TimeNow();
     AdjustEntries(aTimer.GetTimeout());             // eingestellte Wartezeit
     ExecuteEntries();
     StartTimer(nNow);

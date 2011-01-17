@@ -114,7 +114,7 @@ void ScTabViewShell::ConnectObject( SdrOle2Obj* pObj )
     }
 }
 
-BOOL ScTabViewShell::ActivateObject( SdrOle2Obj* pObj, long nVerb )
+sal_Bool ScTabViewShell::ActivateObject( SdrOle2Obj* pObj, long nVerb )
 {
     // #41081# Gueltigkeits-Hinweisfenster nicht ueber dem Objekt stehenlassen
     RemoveHintWindow();
@@ -122,7 +122,7 @@ BOOL ScTabViewShell::ActivateObject( SdrOle2Obj* pObj, long nVerb )
     uno::Reference < embed::XEmbeddedObject > xObj = pObj->GetObjRef();
     Window* pWin = GetActiveWin();
     ErrCode nErr = ERRCODE_NONE;
-    BOOL bErrorShown = FALSE;
+    sal_Bool bErrorShown = sal_False;
 
     // linked objects aren't supported
 //  if ( xIPObj->IsLink() )
@@ -176,7 +176,7 @@ BOOL ScTabViewShell::ActivateObject( SdrOle2Obj* pObj, long nVerb )
             ((ScClient*)pClient)->SetGrafEdit( NULL );
 
             nErr = pClient->DoVerb( nVerb );
-            bErrorShown = TRUE;
+            bErrorShown = sal_True;
             // SfxViewShell::DoVerb zeigt seine Fehlermeldungen selber an
 
             // attach listener to selection changes in chart that affect cell
@@ -268,7 +268,7 @@ void ScTabViewShell::DeactivateOle()
 
 void ScTabViewShell::ExecDrawIns(SfxRequest& rReq)
 {
-    USHORT nSlot = rReq.GetSlot();
+    sal_uInt16 nSlot = rReq.GetSlot();
     if (nSlot != SID_OBJECTRESIZE )
     {
         SC_MOD()->InputEnterHandler();
@@ -338,7 +338,7 @@ void ScTabViewShell::ExecDrawIns(SfxRequest& rReq)
                             SdrMark* pMark = rMarkList.GetMark(0);
                             SdrObject* pObj = pMark->GetMarkedSdrObj();
 
-                            UINT16 nSdrObjKind = pObj->GetObjIdentifier();
+                            sal_uInt16 nSdrObjKind = pObj->GetObjIdentifier();
 
                             if (nSdrObjKind == OBJ_OLE2)
                             {
@@ -431,13 +431,13 @@ void ScTabViewShell::ExecDrawIns(SfxRequest& rReq)
 
 void ScTabViewShell::GetDrawInsState(SfxItemSet &rSet)
 {
-    BOOL bOle = GetViewFrame()->GetFrame().IsInPlace();
-    BOOL bTabProt = GetViewData()->GetDocument()->IsTabProtected(GetViewData()->GetTabNo());
+    sal_Bool bOle = GetViewFrame()->GetFrame().IsInPlace();
+    sal_Bool bTabProt = GetViewData()->GetDocument()->IsTabProtected(GetViewData()->GetTabNo());
     ScDocShell* pDocShell = ( GetViewData() ? GetViewData()->GetDocShell() : NULL );
     bool bShared = ( pDocShell ? pDocShell->IsDocShared() : false );
 
     SfxWhichIter aIter(rSet);
-    USHORT nWhich = aIter.FirstWhich();
+    sal_uInt16 nWhich = aIter.FirstWhich();
     while ( nWhich )
     {
         switch ( nWhich )

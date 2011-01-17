@@ -55,8 +55,8 @@ using namespace formula;
 
 // Interner ctor fuer das Suchen nach einem Index
 
-ScRangeData::ScRangeData( USHORT n )
-           : pCode( NULL ), nIndex( n ), bModified( FALSE ), mnMaxRow(-1), mnMaxCol(-1)
+ScRangeData::ScRangeData( sal_uInt16 n )
+           : pCode( NULL ), nIndex( n ), bModified( sal_False ), mnMaxRow(-1), mnMaxCol(-1)
 {}
 
 ScRangeData::ScRangeData( ScDocument* pDok,
@@ -72,7 +72,7 @@ ScRangeData::ScRangeData( ScDocument* pDok,
                 eType       ( nType ),
                 pDoc        ( pDok ),
                 nIndex      ( 0 ),
-                bModified   ( FALSE ),
+                bModified   ( sal_False ),
                 mnMaxRow    (-1),
                 mnMaxCol    (-1)
 {
@@ -120,7 +120,7 @@ ScRangeData::ScRangeData( ScDocument* pDok,
                 eType       ( nType ),
                 pDoc        ( pDok ),
                 nIndex      ( 0 ),
-                bModified   ( FALSE ),
+                bModified   ( sal_False ),
                 mnMaxRow    (-1),
                 mnMaxCol    (-1)
 {
@@ -157,13 +157,13 @@ ScRangeData::ScRangeData( ScDocument* pDok,
                 eType       ( RT_NAME ),
                 pDoc        ( pDok ),
                 nIndex      ( 0 ),
-                bModified   ( FALSE ),
+                bModified   ( sal_False ),
                 mnMaxRow    (-1),
                 mnMaxCol    (-1)
 {
     ScSingleRefData aRefData;
     aRefData.InitAddress( rTarget );
-    aRefData.SetFlag3D( TRUE );
+    aRefData.SetFlag3D( sal_True );
     pCode->AddSingleReference( aRefData );
     ScCompiler aComp( pDoc, aPos, *pCode );
     aComp.SetGrammar(pDoc->GetGrammar());
@@ -259,15 +259,15 @@ void ScRangeData::UpdateReference(  UpdateRefMode eUpdateRefMode,
                                     const ScRange& r,
                                     SCsCOL nDx, SCsROW nDy, SCsTAB nDz )
 {
-    BOOL bChanged = FALSE;
+    sal_Bool bChanged = sal_False;
 
     pCode->Reset();
     if( pCode->GetNextReference() )
     {
-        BOOL bSharedFormula = ((eType & RT_SHARED) == RT_SHARED);
+        sal_Bool bSharedFormula = ((eType & RT_SHARED) == RT_SHARED);
         ScCompiler aComp( pDoc, aPos, *pCode );
         aComp.SetGrammar(pDoc->GetGrammar());
-        const BOOL bRelRef = aComp.UpdateNameReference( eUpdateRefMode, r,
+        const sal_Bool bRelRef = aComp.UpdateNameReference( eUpdateRefMode, r,
                                                     nDx, nDy, nDz,
                                                     bChanged, bSharedFormula);
         if (bSharedFormula)
@@ -285,7 +285,7 @@ void ScRangeData::UpdateReference(  UpdateRefMode eUpdateRefMode,
 
 void ScRangeData::UpdateTranspose( const ScRange& rSource, const ScAddress& rDest )
 {
-    BOOL bChanged = FALSE;
+    sal_Bool bChanged = sal_False;
 
     ScToken* t;
     pCode->Reset();
@@ -303,7 +303,7 @@ void ScRangeData::UpdateTranspose( const ScRange& rSource, const ScAddress& rDes
                     (!rRef.Ref2.IsFlag3D() || !rRef.Ref2.IsTabRel()))))
             {
                 if ( ScRefUpdate::UpdateTranspose( pDoc, rSource, rDest, rRef ) != UR_NOTHING )
-                    bChanged = TRUE;
+                    bChanged = sal_True;
             }
         }
     }
@@ -313,7 +313,7 @@ void ScRangeData::UpdateTranspose( const ScRange& rSource, const ScAddress& rDes
 
 void ScRangeData::UpdateGrow( const ScRange& rArea, SCCOL nGrowX, SCROW nGrowY )
 {
-    BOOL bChanged = FALSE;
+    sal_Bool bChanged = sal_False;
 
     ScToken* t;
     pCode->Reset();
@@ -331,7 +331,7 @@ void ScRangeData::UpdateGrow( const ScRange& rArea, SCCOL nGrowX, SCROW nGrowY )
                     (!rRef.Ref2.IsFlag3D() || !rRef.Ref2.IsTabRel()))))
             {
                 if ( ScRefUpdate::UpdateGrow( rArea,nGrowX,nGrowY, rRef ) != UR_NOTHING )
-                    bChanged = TRUE;
+                    bChanged = sal_True;
             }
         }
     }
@@ -339,29 +339,29 @@ void ScRangeData::UpdateGrow( const ScRange& rArea, SCCOL nGrowX, SCROW nGrowY )
     bModified = bChanged;           // muss direkt hinterher ausgewertet werden
 }
 
-BOOL ScRangeData::operator== (const ScRangeData& rData) const       // fuer Undo
+sal_Bool ScRangeData::operator== (const ScRangeData& rData) const       // fuer Undo
 {
     if ( nIndex != rData.nIndex ||
          aName  != rData.aName  ||
          aPos   != rData.aPos   ||
-         eType  != rData.eType     ) return FALSE;
+         eType  != rData.eType     ) return sal_False;
 
-    USHORT nLen = pCode->GetLen();
-    if ( nLen != rData.pCode->GetLen() ) return FALSE;
+    sal_uInt16 nLen = pCode->GetLen();
+    if ( nLen != rData.pCode->GetLen() ) return sal_False;
 
     FormulaToken** ppThis = pCode->GetArray();
     FormulaToken** ppOther = rData.pCode->GetArray();
 
-    for ( USHORT i=0; i<nLen; i++ )
+    for ( sal_uInt16 i=0; i<nLen; i++ )
         if ( ppThis[i] != ppOther[i] && !(*ppThis[i] == *ppOther[i]) )
-            return FALSE;
+            return sal_False;
 
-    return TRUE;
+    return sal_True;
 }
 
-//UNUSED2009-05 BOOL ScRangeData::IsRangeAtCursor( const ScAddress& rPos, BOOL bStartOnly ) const
+//UNUSED2009-05 sal_Bool ScRangeData::IsRangeAtCursor( const ScAddress& rPos, sal_Bool bStartOnly ) const
 //UNUSED2009-05 {
-//UNUSED2009-05     BOOL bRet = FALSE;
+//UNUSED2009-05     sal_Bool bRet = sal_False;
 //UNUSED2009-05     ScRange aRange;
 //UNUSED2009-05     if ( IsReference(aRange) )
 //UNUSED2009-05     {
@@ -373,24 +373,24 @@ BOOL ScRangeData::operator== (const ScRangeData& rData) const       // fuer Undo
 //UNUSED2009-05     return bRet;
 //UNUSED2009-05 }
 
-BOOL ScRangeData::IsRangeAtBlock( const ScRange& rBlock ) const
+sal_Bool ScRangeData::IsRangeAtBlock( const ScRange& rBlock ) const
 {
-    BOOL bRet = FALSE;
+    sal_Bool bRet = sal_False;
     ScRange aRange;
     if ( IsReference(aRange) )
         bRet = ( rBlock == aRange );
     return bRet;
 }
 
-BOOL ScRangeData::IsReference( ScRange& rRange ) const
+sal_Bool ScRangeData::IsReference( ScRange& rRange ) const
 {
     if ( (eType & ( RT_ABSAREA | RT_REFAREA | RT_ABSPOS )) && pCode )
         return pCode->IsReference( rRange );
 
-    return FALSE;
+    return sal_False;
 }
 
-BOOL ScRangeData::IsReference( ScRange& rRange, const ScAddress& rPos ) const
+sal_Bool ScRangeData::IsReference( ScRange& rRange, const ScAddress& rPos ) const
 {
     if ( (eType & ( RT_ABSAREA | RT_REFAREA | RT_ABSPOS ) ) && pCode )
     {
@@ -401,37 +401,37 @@ BOOL ScRangeData::IsReference( ScRange& rRange, const ScAddress& rPos ) const
         return pTemp->IsReference( rRange );
     }
 
-    return FALSE;
+    return sal_False;
 }
 
-BOOL ScRangeData::IsValidReference( ScRange& rRange ) const
+sal_Bool ScRangeData::IsValidReference( ScRange& rRange ) const
 {
     if ( (eType & ( RT_ABSAREA | RT_REFAREA | RT_ABSPOS ) ) && pCode )
         return pCode->IsValidReference( rRange );
 
-    return FALSE;
+    return sal_False;
 }
 
-void ScRangeData::UpdateTabRef(SCTAB nOldTable, USHORT nFlag, SCTAB nNewTable)
+void ScRangeData::UpdateTabRef(SCTAB nOldTable, sal_uInt16 nFlag, SCTAB nNewTable)
 {
     pCode->Reset();
     if( pCode->GetNextReference() )
     {
         ScRangeData* pRangeData = NULL;     // must not be dereferenced
-        BOOL bChanged;
+        sal_Bool bChanged;
         ScCompiler aComp( pDoc, aPos, *pCode);
         aComp.SetGrammar(pDoc->GetGrammar());
         switch (nFlag)
         {
             case 1:                                     // einfache InsertTab (doc.cxx)
-                pRangeData = aComp.UpdateInsertTab(nOldTable, TRUE );   // und CopyTab (doc2.cxx)
+                pRangeData = aComp.UpdateInsertTab(nOldTable, sal_True );   // und CopyTab (doc2.cxx)
                 break;
             case 2:                                     // einfaches delete (doc.cxx)
-                pRangeData = aComp.UpdateDeleteTab(nOldTable, FALSE, TRUE, bChanged);
+                pRangeData = aComp.UpdateDeleteTab(nOldTable, sal_False, sal_True, bChanged);
                 break;
             case 3:                                     // move (doc2.cxx)
             {
-                pRangeData = aComp.UpdateMoveTab(nOldTable, nNewTable, TRUE );
+                pRangeData = aComp.UpdateMoveTab(nOldTable, nNewTable, sal_True );
             }
                 break;
             default:
@@ -494,18 +494,18 @@ void ScRangeData::MakeValidName( String& rName )        // static
     }
 }
 
-BOOL ScRangeData::IsNameValid( const String& rName, ScDocument* pDoc )
+sal_Bool ScRangeData::IsNameValid( const String& rName, ScDocument* pDoc )
 {
     /* XXX If changed, sc/source/filter/ftools/ftools.cxx
      * ScfTools::ConvertToScDefinedName needs to be changed too. */
     xub_StrLen nPos = 0;
     xub_StrLen nLen = rName.Len();
     if ( !nLen || !ScCompiler::IsCharFlagAllConventions( rName, nPos++, SC_COMPILER_C_CHAR_NAME ) )
-        return FALSE;
+        return sal_False;
     while ( nPos < nLen )
     {
         if ( !ScCompiler::IsCharFlagAllConventions( rName, nPos++, SC_COMPILER_C_NAME ) )
-            return FALSE;
+            return sal_False;
     }
     ScAddress aAddr;
     ScRange aRange;
@@ -515,9 +515,9 @@ BOOL ScRangeData::IsNameValid( const String& rName, ScDocument* pDoc )
         // Don't check Parse on VALID, any partial only VALID may result in
         // #REF! during compile later!
         if (aRange.Parse( rName, pDoc, details) || aAddr.Parse( rName, pDoc, details))
-            return FALSE;
+            return sal_False;
     }
-    return TRUE;
+    return sal_True;
 }
 
 void ScRangeData::SetMaxRow(SCROW nRow)
@@ -541,15 +541,15 @@ SCCOL ScRangeData::GetMaxCol() const
 }
 
 
-USHORT ScRangeData::GetErrCode()
+sal_uInt16 ScRangeData::GetErrCode()
 {
     return pCode ? pCode->GetCodeError() : 0;
 }
 
-BOOL ScRangeData::HasReferences() const
+sal_Bool ScRangeData::HasReferences() const
 {
     pCode->Reset();
-    return BOOL( pCode->GetNextReference() != NULL );
+    return sal_Bool( pCode->GetNextReference() != NULL );
 }
 
 // bei TransferTab von einem in ein anderes Dokument anpassen,
@@ -690,7 +690,7 @@ ScRangeName::ScRangeName(const ScRangeName& rScRangeName, ScDocument* pDocument)
                 pDoc ( pDocument ),
                 nSharedMaxIndex (rScRangeName.nSharedMaxIndex)
 {
-    for (USHORT i = 0; i < nCount; i++)
+    for (sal_uInt16 i = 0; i < nCount; i++)
     {
         ((ScRangeData*)At(i))->SetDocument(pDocument);
         ((ScRangeData*)At(i))->SetIndex(((ScRangeData*)rScRangeName.At(i))->GetIndex());
@@ -699,63 +699,63 @@ ScRangeName::ScRangeName(const ScRangeName& rScRangeName, ScDocument* pDocument)
 
 short ScRangeName::Compare(ScDataObject* pKey1, ScDataObject* pKey2) const
 {
-    USHORT i1 = ((ScRangeData*)pKey1)->GetIndex();
-    USHORT i2 = ((ScRangeData*)pKey2)->GetIndex();
+    sal_uInt16 i1 = ((ScRangeData*)pKey1)->GetIndex();
+    sal_uInt16 i2 = ((ScRangeData*)pKey2)->GetIndex();
     return (short) i1 - (short) i2;
 }
 
-BOOL ScRangeName::SearchNameUpper( const String& rUpperName, USHORT& rIndex ) const
+sal_Bool ScRangeName::SearchNameUpper( const String& rUpperName, sal_uInt16& rIndex ) const
 {
     // SearchNameUpper must be called with an upper-case search string
 
-    USHORT i = 0;
+    sal_uInt16 i = 0;
     while (i < nCount)
     {
         if ( ((*this)[i])->GetUpperName() == rUpperName )
         {
             rIndex = i;
-            return TRUE;
+            return sal_True;
         }
         i++;
     }
-    return FALSE;
+    return sal_False;
 }
 
-BOOL ScRangeName::SearchName( const String& rName, USHORT& rIndex ) const
+sal_Bool ScRangeName::SearchName( const String& rName, sal_uInt16& rIndex ) const
 {
     if ( nCount > 0 )
         return SearchNameUpper( ScGlobal::pCharClass->upper( rName ), rIndex );
     else
-        return FALSE;
+        return sal_False;
 }
 
 void ScRangeName::UpdateReference(  UpdateRefMode eUpdateRefMode,
                                     const ScRange& rRange,
                                     SCsCOL nDx, SCsROW nDy, SCsTAB nDz )
 {
-    for (USHORT i=0; i<nCount; i++)
+    for (sal_uInt16 i=0; i<nCount; i++)
         ((ScRangeData*)pItems[i])->UpdateReference(eUpdateRefMode, rRange,
                                                    nDx, nDy, nDz);
 }
 
 void ScRangeName::UpdateTranspose( const ScRange& rSource, const ScAddress& rDest )
 {
-    for (USHORT i=0; i<nCount; i++)
+    for (sal_uInt16 i=0; i<nCount; i++)
         ((ScRangeData*)pItems[i])->UpdateTranspose( rSource, rDest );
 }
 
 void ScRangeName::UpdateGrow( const ScRange& rArea, SCCOL nGrowX, SCROW nGrowY )
 {
-    for (USHORT i=0; i<nCount; i++)
+    for (sal_uInt16 i=0; i<nCount; i++)
         ((ScRangeData*)pItems[i])->UpdateGrow( rArea, nGrowX, nGrowY );
 }
 
-BOOL ScRangeName::IsEqual(ScDataObject* pKey1, ScDataObject* pKey2) const
+sal_Bool ScRangeName::IsEqual(ScDataObject* pKey1, ScDataObject* pKey2) const
 {
     return *(ScRangeData*)pKey1 == *(ScRangeData*)pKey2;
 }
 
-BOOL ScRangeName::Insert(ScDataObject* pScDataObject)
+sal_Bool ScRangeName::Insert(ScDataObject* pScDataObject)
 {
     if (!((ScRangeData*)pScDataObject)->GetIndex())     // schon gesetzt?
     {
@@ -767,12 +767,12 @@ BOOL ScRangeName::Insert(ScDataObject* pScDataObject)
 
 // Suche nach einem freien Index
 
-USHORT ScRangeName::GetEntryIndex()
+sal_uInt16 ScRangeName::GetEntryIndex()
 {
-    USHORT nLast = 0;
-    for ( USHORT i = 0; i < nCount; i++ )
+    sal_uInt16 nLast = 0;
+    for ( sal_uInt16 i = 0; i < nCount; i++ )
     {
-        USHORT nIdx = ((ScRangeData*)pItems[i])->GetIndex();
+        sal_uInt16 nIdx = ((ScRangeData*)pItems[i])->GetIndex();
         if( nIdx > nLast )
         {
             nLast = nIdx;
@@ -781,21 +781,21 @@ USHORT ScRangeName::GetEntryIndex()
     return nLast + 1;
 }
 
-ScRangeData* ScRangeName::FindIndex( USHORT nIndex )
+ScRangeData* ScRangeName::FindIndex( sal_uInt16 nIndex )
 {
     ScRangeData aDataObj( nIndex );
-    USHORT n;
+    sal_uInt16 n;
     if( Search( &aDataObj, n ) )
         return (*this)[ n ];
     else
         return NULL;
 }
 
-//UNUSED2009-05 ScRangeData* ScRangeName::GetRangeAtCursor( const ScAddress& rPos, BOOL bStartOnly ) const
+//UNUSED2009-05 ScRangeData* ScRangeName::GetRangeAtCursor( const ScAddress& rPos, sal_Bool bStartOnly ) const
 //UNUSED2009-05 {
 //UNUSED2009-05     if ( pItems )
 //UNUSED2009-05     {
-//UNUSED2009-05         for ( USHORT i = 0; i < nCount; i++ )
+//UNUSED2009-05         for ( sal_uInt16 i = 0; i < nCount; i++ )
 //UNUSED2009-05             if ( ((ScRangeData*)pItems[i])->IsRangeAtCursor( rPos, bStartOnly ) )
 //UNUSED2009-05                 return (ScRangeData*)pItems[i];
 //UNUSED2009-05     }
@@ -806,16 +806,16 @@ ScRangeData* ScRangeName::GetRangeAtBlock( const ScRange& rBlock ) const
 {
     if ( pItems )
     {
-        for ( USHORT i = 0; i < nCount; i++ )
+        for ( sal_uInt16 i = 0; i < nCount; i++ )
             if ( ((ScRangeData*)pItems[i])->IsRangeAtBlock( rBlock ) )
                 return (ScRangeData*)pItems[i];
     }
     return NULL;
 }
 
-void ScRangeName::UpdateTabRef(SCTAB nOldTable, USHORT nFlag, SCTAB nNewTable)
+void ScRangeName::UpdateTabRef(SCTAB nOldTable, sal_uInt16 nFlag, SCTAB nNewTable)
 {
-    for (USHORT i=0; i<nCount; i++)
+    for (sal_uInt16 i=0; i<nCount; i++)
         ((ScRangeData*)pItems[i])->UpdateTabRef(nOldTable, nFlag, nNewTable);
 }
 

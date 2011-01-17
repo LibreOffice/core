@@ -36,7 +36,7 @@
 class ScOptionsUtil
 {
 public:
-    static BOOL     IsMetricSystem();
+    static sal_Bool     IsMetricSystem();
 };
 
 

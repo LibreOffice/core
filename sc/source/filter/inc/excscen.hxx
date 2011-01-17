@@ -45,10 +45,10 @@ class ExcScenarioCell
 private:
     String                      aValue;
 public:
-    const UINT16                nCol;
-    const UINT16                nRow;
+    const sal_uInt16                nCol;
+    const sal_uInt16                nRow;
 
-                                ExcScenarioCell( const UINT16 nC, const UINT16 nR );
+                                ExcScenarioCell( const sal_uInt16 nC, const sal_uInt16 nR );
     void                        SetValue( const String& rVal );
     inline const String&        GetValue( void ) const;
 };
@@ -64,11 +64,11 @@ protected:
     String*                     pName;
     String*                     pComment;
     String*                     pUserName;
-    UINT8                       nProtected;
+    sal_uInt8                       nProtected;
 
-    const UINT16                nTab;
+    const sal_uInt16                nTab;
 
-    void                        Apply( const XclImpRoot& rRoot, const BOOL bLast = FALSE );
+    void                        Apply( const XclImpRoot& rRoot, const sal_Bool bLast = sal_False );
 public:
                                 ExcScenario( XclImpStream& rIn, const RootData& rRoot );
     virtual                     ~ExcScenario();
@@ -80,7 +80,7 @@ public:
 class ExcScenarioList : protected List
 {
 private:
-    UINT16                      nLastScenario;
+    sal_uInt16                      nLastScenario;
     inline ExcScenario*         _First( void )  { return ( ExcScenario* ) List::First(); }
     inline ExcScenario*         _Next( void )   { return ( ExcScenario* ) List::Next(); }
     inline ExcScenario*         _Last( void )   { return ( ExcScenario* ) List::Last(); }
@@ -92,7 +92,7 @@ public:
 
     inline void                 Append( ExcScenario* pNew );
 
-    inline void                 SetLast( const UINT16 nIndex4Last );
+    inline void                 SetLast( const sal_uInt16 nIndex4Last );
 
     inline const ExcScenario*   First( void );
     inline const ExcScenario*   Next( void );
@@ -137,7 +137,7 @@ inline const ExcScenario* ExcScenarioList::Next( void )
 }
 
 
-inline void ExcScenarioList::SetLast( const UINT16 n )
+inline void ExcScenarioList::SetLast( const sal_uInt16 n )
 {
     nLastScenario = n;
 }

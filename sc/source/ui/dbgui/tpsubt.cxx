@@ -47,7 +47,7 @@
 
 // STATIC DATA -----------------------------------------------------------
 
-static USHORT pSubTotalsRanges[] =
+static sal_uInt16 pSubTotalsRanges[] =
 {
     SID_SUBTOTALS,
     SID_SUBTOTALS,
@@ -57,7 +57,7 @@ static USHORT pSubTotalsRanges[] =
 //========================================================================
 // Zwischenergebnisgruppen-Tabpage:
 
-ScTpSubTotalGroup::ScTpSubTotalGroup( Window* pParent, USHORT nResId,
+ScTpSubTotalGroup::ScTpSubTotalGroup( Window* pParent, sal_uInt16 nResId,
                                       const SfxItemSet& rArgSet )
         :   SfxTabPage      ( pParent,
                               ScResId( nResId ),
@@ -94,15 +94,15 @@ ScTpSubTotalGroup::ScTpSubTotalGroup( Window* pParent, USHORT nResId,
 
 __EXPORT ScTpSubTotalGroup::~ScTpSubTotalGroup()
 {
-    USHORT  nCount = (USHORT)aLbColumns.GetEntryCount();
+    sal_uInt16  nCount = (sal_uInt16)aLbColumns.GetEntryCount();
 
     if ( nCount > 0 )
     {
-        USHORT* pData = NULL;
+        sal_uInt16* pData = NULL;
 
-        for ( USHORT i=0; i<nCount; i++ )
+        for ( sal_uInt16 i=0; i<nCount; i++ )
         {
-            pData = (USHORT*)(aLbColumns.GetEntryData( i ));
+            pData = (sal_uInt16*)(aLbColumns.GetEntryData( i ));
             DBG_ASSERT( pData, "EntryData not found" );
 
             delete pData;
@@ -133,32 +133,32 @@ void ScTpSubTotalGroup::Init()
 
 //------------------------------------------------------------------------
 
-USHORT* __EXPORT ScTpSubTotalGroup::GetRanges()
+sal_uInt16* __EXPORT ScTpSubTotalGroup::GetRanges()
 {
     return pSubTotalsRanges;
 }
 
 // -----------------------------------------------------------------------
 
-BOOL ScTpSubTotalGroup::DoReset( USHORT             nGroupNo,
+sal_Bool ScTpSubTotalGroup::DoReset( sal_uInt16             nGroupNo,
                                  const SfxItemSet&  rArgSet  )
 {
-    USHORT nGroupIdx = 0;
+    sal_uInt16 nGroupIdx = 0;
 
     DBG_ASSERT( (nGroupNo<=3) && (nGroupNo>0), "Invalid group" );
 
     if ( (nGroupNo > 3) || (nGroupNo == 0) )
-        return FALSE;
+        return sal_False;
     else
         nGroupIdx = nGroupNo-1;
 
     //----------------------------------------------------------
 
     // #79058# first we have to clear the listboxes...
-    for ( USHORT nLbEntry = 0; nLbEntry < aLbColumns.GetEntryCount(); ++nLbEntry )
+    for ( sal_uInt16 nLbEntry = 0; nLbEntry < aLbColumns.GetEntryCount(); ++nLbEntry )
     {
-        aLbColumns.CheckEntryPos( nLbEntry, FALSE );
-        *((USHORT*)aLbColumns.GetEntryData( nLbEntry )) = 0;
+        aLbColumns.CheckEntryPos( nLbEntry, sal_False );
+        *((sal_uInt16*)aLbColumns.GetEntryData( nLbEntry )) = 0;
     }
     aLbFunctions.SelectEntryPos( 0 );
 
@@ -175,10 +175,10 @@ BOOL ScTpSubTotalGroup::DoReset( USHORT             nGroupNo,
 
         aLbGroup.SelectEntryPos( GetFieldSelPos( nField )+1 );
 
-        for ( USHORT i=0; i<nSubTotals; i++ )
+        for ( sal_uInt16 i=0; i<nSubTotals; i++ )
         {
-            USHORT  nCheckPos = GetFieldSelPos( pSubTotals[i] );
-            USHORT* pFunction = (USHORT*)aLbColumns.GetEntryData( nCheckPos );
+            sal_uInt16  nCheckPos = GetFieldSelPos( pSubTotals[i] );
+            sal_uInt16* pFunction = (sal_uInt16*)aLbColumns.GetEntryData( nCheckPos );
 
             aLbColumns.CheckEntryPos( nCheckPos );
             *pFunction = FuncToLbPos( pFunctions[i] );
@@ -192,15 +192,15 @@ BOOL ScTpSubTotalGroup::DoReset( USHORT             nGroupNo,
         aLbFunctions.SelectEntryPos( 0 );
     }
 
-    return TRUE;
+    return sal_True;
 }
 
 // -----------------------------------------------------------------------
 
-BOOL ScTpSubTotalGroup::DoFillItemSet( USHORT       nGroupNo,
+sal_Bool ScTpSubTotalGroup::DoFillItemSet( sal_uInt16       nGroupNo,
                                        SfxItemSet&  rArgSet  )
 {
-    USHORT nGroupIdx = 0;
+    sal_uInt16 nGroupIdx = 0;
 
     DBG_ASSERT( (nGroupNo<=3) && (nGroupNo>0), "Invalid group" );
     DBG_ASSERT(    (aLbGroup.GetEntryCount() > 0)
@@ -214,7 +214,7 @@ BOOL ScTpSubTotalGroup::DoFillItemSet( USHORT       nGroupNo,
         || (aLbColumns.GetEntryCount() == 0)
         || (aLbFunctions.GetEntryCount() == 0)
        )
-        return FALSE;
+        return sal_False;
     else
         nGroupIdx = nGroupNo-1;
 
@@ -226,15 +226,15 @@ BOOL ScTpSubTotalGroup::DoFillItemSet( USHORT       nGroupNo,
     {
         const SfxItemSet* pExample = pDlg->GetExampleSet();
         const SfxPoolItem* pItem;
-        if ( pExample && pExample->GetItemState( nWhichSubTotals, TRUE, &pItem ) == SFX_ITEM_SET )
+        if ( pExample && pExample->GetItemState( nWhichSubTotals, sal_True, &pItem ) == SFX_ITEM_SET )
             theSubTotalData = ((const ScSubTotalItem*)pItem)->GetSubTotalData();
     }
 
     ScSubTotalFunc* pFunctions  = NULL;
     SCCOL*          pSubTotals  = NULL;
-    USHORT          nGroup      = aLbGroup.GetSelectEntryPos();
-    USHORT          nEntryCount = (USHORT)aLbColumns.GetEntryCount();
-    USHORT          nCheckCount = aLbColumns.GetCheckedEntryCount();
+    sal_uInt16          nGroup      = aLbGroup.GetSelectEntryPos();
+    sal_uInt16          nEntryCount = (sal_uInt16)aLbColumns.GetEntryCount();
+    sal_uInt16          nCheckCount = aLbColumns.GetCheckedEntryCount();
 
     theSubTotalData.nCol1                   = rSubTotalData.nCol1;
     theSubTotalData.nRow1                   = rSubTotalData.nRow1;
@@ -247,18 +247,18 @@ BOOL ScTpSubTotalGroup::DoFillItemSet( USHORT       nGroupNo,
 
     if ( nEntryCount>0 && nCheckCount>0 && nGroup!=0 )
     {
-        USHORT nFunction    = 0;
+        sal_uInt16 nFunction    = 0;
 
         pSubTotals = new SCCOL          [nCheckCount];
         pFunctions = new ScSubTotalFunc [nCheckCount];
 
-        for ( USHORT i=0, nCheck=0; i<nEntryCount; i++ )
+        for ( sal_uInt16 i=0, nCheck=0; i<nEntryCount; i++ )
         {
             if ( aLbColumns.IsChecked( i ) )
             {
                 DBG_ASSERT( nCheck <= nCheckCount,
                             "Range error :-(" );
-                nFunction = *((USHORT*)aLbColumns.GetEntryData( i ));
+                nFunction = *((sal_uInt16*)aLbColumns.GetEntryData( i ));
                 pSubTotals[nCheck] = nFieldArr[i];
                 pFunctions[nCheck] = LbPosToFunc( nFunction );
                 nCheck++;
@@ -276,7 +276,7 @@ BOOL ScTpSubTotalGroup::DoFillItemSet( USHORT       nGroupNo,
     if ( pSubTotals ) delete [] pSubTotals;
     if ( pFunctions ) delete [] pFunctions;
 
-    return TRUE;
+    return sal_True;
 }
 
 // -----------------------------------------------------------------------
@@ -292,7 +292,7 @@ void ScTpSubTotalGroup::FillListBoxes()
         SCTAB   nTab        = pViewData->GetTabNo();
         SCCOL   nMaxCol     = rSubTotalData.nCol2;
         SCCOL   col;
-        USHORT  i=0;
+        sal_uInt16  i=0;
         String  aFieldName;
 
         aLbGroup.Clear();
@@ -312,27 +312,27 @@ void ScTpSubTotalGroup::FillListBoxes()
             nFieldArr[i] = col;
             aLbGroup.InsertEntry( aFieldName, i+1 );
             aLbColumns.InsertEntry( aFieldName, i );
-            aLbColumns.SetEntryData( i, new USHORT(0) );
+            aLbColumns.SetEntryData( i, new sal_uInt16(0) );
             i++;
         }
         // Nachtraegliche "Konstanteninitialisierung":
-        (USHORT&)nFieldCount = i;
+        (sal_uInt16&)nFieldCount = i;
     }
 }
 
 // -----------------------------------------------------------------------
 
-USHORT ScTpSubTotalGroup::GetFieldSelPos( SCCOL nField )
+sal_uInt16 ScTpSubTotalGroup::GetFieldSelPos( SCCOL nField )
 {
-    USHORT  nFieldPos   = 0;
-    BOOL    bFound      = FALSE;
+    sal_uInt16  nFieldPos   = 0;
+    sal_Bool    bFound      = sal_False;
 
-    for ( USHORT n=0; n<nFieldCount && !bFound; n++ )
+    for ( sal_uInt16 n=0; n<nFieldCount && !bFound; n++ )
     {
         if ( nFieldArr[n] == nField )
         {
             nFieldPos = n;
-            bFound = TRUE;
+            bFound = sal_True;
         }
     }
 
@@ -341,7 +341,7 @@ USHORT ScTpSubTotalGroup::GetFieldSelPos( SCCOL nField )
 
 // -----------------------------------------------------------------------
 
-ScSubTotalFunc ScTpSubTotalGroup::LbPosToFunc( USHORT nPos )
+ScSubTotalFunc ScTpSubTotalGroup::LbPosToFunc( sal_uInt16 nPos )
 {
     switch ( nPos )
     {
@@ -365,7 +365,7 @@ ScSubTotalFunc ScTpSubTotalGroup::LbPosToFunc( USHORT nPos )
 
 // -----------------------------------------------------------------------
 
-USHORT ScTpSubTotalGroup::FuncToLbPos( ScSubTotalFunc eFunc )
+sal_uInt16 ScTpSubTotalGroup::FuncToLbPos( ScSubTotalFunc eFunc )
 {
     switch ( eFunc )
     {
@@ -396,9 +396,9 @@ IMPL_LINK( ScTpSubTotalGroup, SelectHdl, ListBox *, pLb )
     if (   (aLbColumns.GetEntryCount() > 0)
         && (aLbColumns.GetSelectionCount() > 0) )
     {
-        USHORT      nFunction   = aLbFunctions.GetSelectEntryPos();
-        USHORT      nColumn     = aLbColumns.GetSelectEntryPos();
-        USHORT*     pFunction   = (USHORT*)aLbColumns.GetEntryData( nColumn );
+        sal_uInt16      nFunction   = aLbFunctions.GetSelectEntryPos();
+        sal_uInt16      nColumn     = aLbColumns.GetSelectEntryPos();
+        sal_uInt16*     pFunction   = (sal_uInt16*)aLbColumns.GetEntryData( nColumn );
 
         DBG_ASSERT( pFunction, "EntryData nicht gefunden!" );
         if ( !pFunction )
@@ -412,7 +412,7 @@ IMPL_LINK( ScTpSubTotalGroup, SelectHdl, ListBox *, pLb )
         {
             *pFunction = nFunction;
 //          aLbColumns.CheckEntryPos( nColumn, (nFunction != 0) );//XXX
-            aLbColumns.CheckEntryPos( nColumn, TRUE );
+            aLbColumns.CheckEntryPos( nColumn, sal_True );
         }
     }
     return 0;
@@ -428,7 +428,7 @@ IMPL_LINK( ScTpSubTotalGroup, CheckHdl, ListBox *, pLb )
 
         if ( pEntry )
         {
-            aLbColumns.SelectEntryPos( (USHORT)aLbColumns.GetModel()->GetAbsPos( pEntry ) );
+            aLbColumns.SelectEntryPos( (sal_uInt16)aLbColumns.GetModel()->GetAbsPos( pEntry ) );
             SelectHdl( pLb );
         }
     }
@@ -485,11 +485,11 @@ void __EXPORT ScTpSubTotalGroup3::Reset( const SfxItemSet& rArgSet ) { RESET(3);
 
 #define FILLSET(i) (ScTpSubTotalGroup::DoFillItemSet( (i), rArgSet ))
 
-BOOL __EXPORT ScTpSubTotalGroup1::FillItemSet( SfxItemSet& rArgSet ) { return FILLSET(1); }
+sal_Bool __EXPORT ScTpSubTotalGroup1::FillItemSet( SfxItemSet& rArgSet ) { return FILLSET(1); }
 
-BOOL __EXPORT ScTpSubTotalGroup2::FillItemSet( SfxItemSet& rArgSet ) { return FILLSET(2); }
+sal_Bool __EXPORT ScTpSubTotalGroup2::FillItemSet( SfxItemSet& rArgSet ) { return FILLSET(2); }
 
-BOOL __EXPORT ScTpSubTotalGroup3::FillItemSet( SfxItemSet& rArgSet ) { return FILLSET(3); }
+sal_Bool __EXPORT ScTpSubTotalGroup3::FillItemSet( SfxItemSet& rArgSet ) { return FILLSET(3); }
 
 #undef FILL
 
@@ -570,13 +570,13 @@ void __EXPORT ScTpSubTotalOptions::Reset( const SfxItemSet& /* rArgSet */ )
 
     if ( rSubTotalData.bUserDef )
     {
-        aBtnUserDef.Check( TRUE );
+        aBtnUserDef.Check( sal_True );
         aLbUserDef.Enable();
         aLbUserDef.SelectEntryPos( rSubTotalData.nUserIndex );
     }
     else
     {
-        aBtnUserDef.Check( FALSE );
+        aBtnUserDef.Check( sal_False );
         aLbUserDef.Disable();
         aLbUserDef.SelectEntryPos( 0 );
     }
@@ -586,7 +586,7 @@ void __EXPORT ScTpSubTotalOptions::Reset( const SfxItemSet& /* rArgSet */ )
 
 // -----------------------------------------------------------------------
 
-BOOL __EXPORT ScTpSubTotalOptions::FillItemSet( SfxItemSet& rArgSet )
+sal_Bool __EXPORT ScTpSubTotalOptions::FillItemSet( SfxItemSet& rArgSet )
 {
     ScSubTotalParam theSubTotalData;            // auslesen, wenn schon teilweise gefuellt
     SfxTabDialog* pDlg = GetTabDialog();
@@ -594,12 +594,12 @@ BOOL __EXPORT ScTpSubTotalOptions::FillItemSet( SfxItemSet& rArgSet )
     {
         const SfxItemSet* pExample = pDlg->GetExampleSet();
         const SfxPoolItem* pItem;
-        if ( pExample && pExample->GetItemState( nWhichSubTotals, TRUE, &pItem ) == SFX_ITEM_SET )
+        if ( pExample && pExample->GetItemState( nWhichSubTotals, sal_True, &pItem ) == SFX_ITEM_SET )
             theSubTotalData = ((const ScSubTotalItem*)pItem)->GetSubTotalData();
     }
 
     theSubTotalData.bPagebreak      = aBtnPagebreak.IsChecked();
-    theSubTotalData.bReplace        = TRUE;
+    theSubTotalData.bReplace        = sal_True;
     theSubTotalData.bCaseSens       = aBtnCase.IsChecked();
     theSubTotalData.bIncludePattern = aBtnFormats.IsChecked();
     theSubTotalData.bDoSort         = aBtnSort.IsChecked();
@@ -611,7 +611,7 @@ BOOL __EXPORT ScTpSubTotalOptions::FillItemSet( SfxItemSet& rArgSet )
 
     rArgSet.Put( ScSubTotalItem( nWhichSubTotals, &theSubTotalData ) );
 
-    return TRUE;
+    return sal_True;
 }
 
 // -----------------------------------------------------------------------
@@ -623,9 +623,9 @@ void ScTpSubTotalOptions::FillUserSortListBox()
     aLbUserDef.Clear();
     if ( pUserLists )
     {
-        USHORT nCount = pUserLists->GetCount();
+        sal_uInt16 nCount = pUserLists->GetCount();
         if ( nCount > 0 )
-            for ( USHORT i=0; i<nCount; i++ )
+            for ( sal_uInt16 i=0; i<nCount; i++ )
                 aLbUserDef.InsertEntry( (*pUserLists)[i]->GetString() );
     }
 }

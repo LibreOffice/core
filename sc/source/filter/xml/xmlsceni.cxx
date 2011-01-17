@@ -53,7 +53,7 @@ using ::rtl::OUString;
 
 ScXMLTableScenarioContext::ScXMLTableScenarioContext(
         ScXMLImport& rImport,
-        USHORT nPrfx,
+        sal_uInt16 nPrfx,
         const OUString& rLName,
         const uno::Reference< xml::sax::XAttributeList >& xAttrList ):
     SvXMLImportContext( rImport, nPrfx, rLName ),
@@ -72,7 +72,7 @@ ScXMLTableScenarioContext::ScXMLTableScenarioContext(
     {
         const rtl::OUString& sAttrName(xAttrList->getNameByIndex( i ));
         OUString aLocalName;
-        USHORT nPrefix(GetScImport().GetNamespaceMap().GetKeyByAttrName(
+        sal_uInt16 nPrefix(GetScImport().GetNamespaceMap().GetKeyByAttrName(
                                             sAttrName, &aLocalName ));
         const rtl::OUString& sValue(xAttrList->getValueByIndex( i ));
 
@@ -134,7 +134,7 @@ ScXMLTableScenarioContext::~ScXMLTableScenarioContext()
 }
 
 SvXMLImportContext *ScXMLTableScenarioContext::CreateChildContext(
-        USHORT nPrefix,
+        sal_uInt16 nPrefix,
         const OUString& rLName,
         const uno::Reference< xml::sax::XAttributeList >& /* xAttrList */ )
 {
@@ -147,8 +147,8 @@ void ScXMLTableScenarioContext::EndElement()
     ScDocument* pDoc(GetScImport().GetDocument());
     if (pDoc)
     {
-        pDoc->SetScenario( nCurrTable, TRUE );
-        USHORT nFlags( 0 );
+        pDoc->SetScenario( nCurrTable, sal_True );
+        sal_uInt16 nFlags( 0 );
         if( bDisplayBorder )
             nFlags |= SC_SCENARIO_SHOWFRAME;
         if( bCopyBack )

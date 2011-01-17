@@ -102,7 +102,7 @@ void ScTabBgColorDlg::FillColorValueSets_Impl()
     const Size aSize15x15 = Size( 15, 15 );
     const Size aSize10x10 = Size( 10, 10 );
     const Size aSize5x5 = Size( 5, 5 );
-    USHORT nSelectedItem = 0;
+    sal_uInt16 nSelectedItem = 0;
 
     DBG_ASSERT( pDocSh, "DocShell not found!" );
 
@@ -155,10 +155,10 @@ IMPL_LINK( ScTabBgColorDlg, TabBgColorDblClickHdl_Impl, ValueSet*, EMPTYARG )
     Handler, called when color selection is changed
 */
 {
-    USHORT nItemId = aTabBgColorSet.GetSelectItemId();
+    sal_uInt16 nItemId = aTabBgColorSet.GetSelectItemId();
     Color aColor = nItemId ? ( aTabBgColorSet.GetItemColor( nItemId ) ) : Color( COL_AUTO );
     aTabBgColor = aColor;
-    EndDialog( TRUE );
+    EndDialog( sal_True );
     return 0;
 }
 
@@ -167,10 +167,10 @@ IMPL_LINK( ScTabBgColorDlg, TabBgColorOKHdl_Impl, OKButton*, EMPTYARG )
 
 //    Handler, called when the OK button is pushed
 
-    USHORT nItemId = aTabBgColorSet.GetSelectItemId();
+    sal_uInt16 nItemId = aTabBgColorSet.GetSelectItemId();
     Color aColor = nItemId ? ( aTabBgColorSet.GetItemColor( nItemId ) ) : Color( COL_AUTO );
     aTabBgColor = aColor;
-    EndDialog( TRUE );
+    EndDialog( sal_True );
     return 0;
 }
 
@@ -187,10 +187,10 @@ void ScTabBgColorDlg::ScTabBgColorValueSet::KeyInput( const KeyEvent& rKEvt )
         case KEY_SPACE:
         case KEY_RETURN:
         {
-            USHORT nItemId = GetSelectItemId();
+            sal_uInt16 nItemId = GetSelectItemId();
             const Color& aColor = nItemId ? ( GetItemColor( nItemId ) ) : Color( COL_AUTO );
             aTabBgColorDlg->aTabBgColor = aColor;
-            aTabBgColorDlg->EndDialog(TRUE);
+            aTabBgColorDlg->EndDialog(sal_True);
         }
         break;
     }

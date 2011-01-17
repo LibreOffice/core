@@ -70,28 +70,28 @@ void ScDDComboBoxButton::SetOptSizePixel()
 
 void ScDDComboBoxButton::Draw( const Point& rAt,
                                const Size&  rSize,
-                               BOOL         bState,
-                               BOOL         bBtnIn  /* = FALSE */ )
+                               sal_Bool         bState,
+                               sal_Bool         bBtnIn  /* = sal_False */ )
 {
     if ( rSize.Width() == 0 || rSize.Height() == 0 )
         return;     // #i43092# rectangle with size 0 would have RECT_EMPTY as end position
 
     // save old state
-    BOOL        bHadFill   = pOut->IsFillColor();
+    sal_Bool        bHadFill   = pOut->IsFillColor();
     Color       aOldFill   = pOut->GetFillColor();
-    BOOL        bHadLine   = pOut->IsLineColor();
+    sal_Bool        bHadLine   = pOut->IsLineColor();
     Color       aOldLine   = pOut->GetLineColor();
-    BOOL        bOldEnable = pOut->IsMapModeEnabled();
+    sal_Bool        bOldEnable = pOut->IsMapModeEnabled();
 
     Size        aLogPix( 1, 1 );
     Rectangle   aBtnRect( rAt, rSize );
     Rectangle   aInnerRect = aBtnRect;
 
-    pOut->EnableMapMode( FALSE );
+    pOut->EnableMapMode( sal_False );
 
     DecorationView aDecoView( pOut);
 
-    USHORT nButtonStyle = BUTTON_DRAW_DEFAULT;
+    sal_uInt16 nButtonStyle = BUTTON_DRAW_DEFAULT;
     if( bBtnIn )    // gedrueckt?
     {
         nButtonStyle = BUTTON_DRAW_PRESSED;
@@ -129,7 +129,7 @@ void ScDDComboBoxButton::Draw( const Point& rAt,
 //------------------------------------------------------------------------
 
 void ScDDComboBoxButton::ImpDrawArrow( const Rectangle& rRect,
-                                       BOOL             bState )
+                                       sal_Bool             bState )
 {
     // no need to save old line and fill color here (is restored after the call)
 

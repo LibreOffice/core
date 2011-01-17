@@ -51,7 +51,7 @@ class ScSpellDialogChildWindow : public ::svx::SpellDialogChildWindow
 public:
     SFX_DECL_CHILDWINDOW( ScSpellDialogChildWindow );
 
-    explicit            ScSpellDialogChildWindow( Window* pParent, USHORT nId,
+    explicit            ScSpellDialogChildWindow( Window* pParent, sal_uInt16 nId,
                             SfxBindings* pBindings, SfxChildWinInfo* pInfo );
     virtual             ~ScSpellDialogChildWindow();
 

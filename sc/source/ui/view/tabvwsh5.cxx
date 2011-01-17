@@ -60,7 +60,7 @@ void __EXPORT ScTabViewShell::Notify( SfxBroadcaster& rBC, const SfxHint& rHint 
 {
     if (rHint.ISA(SfxSimpleHint))                       // ohne Parameter
     {
-        ULONG nSlot = ((SfxSimpleHint&)rHint).GetId();
+        sal_uLong nSlot = ((SfxSimpleHint&)rHint).GetId();
         switch ( nSlot )
         {
             case FID_DATACHANGED:
@@ -69,13 +69,13 @@ void __EXPORT ScTabViewShell::Notify( SfxBroadcaster& rBC, const SfxHint& rHint 
 
             case FID_REFMODECHANGED:
                 {
-                    BOOL bRefMode = SC_MOD()->IsFormulaMode();
+                    sal_Bool bRefMode = SC_MOD()->IsFormulaMode();
                     if (!bRefMode)
                         StopRefMode();
                     else
                     {
                         GetSelEngine()->Reset();
-                        GetFunctionSet()->SetAnchorFlag(TRUE);
+                        GetFunctionSet()->SetAnchorFlag(sal_True);
                         //  AnchorFlag, damit gleich mit Control angehaengt werden kann
                     }
                 }
@@ -140,7 +140,7 @@ void __EXPORT ScTabViewShell::Notify( SfxBroadcaster& rBC, const SfxHint& rHint 
                 break;
 
             case SC_HINT_FORCESETTAB:
-                SetTabNo( GetViewData()->GetTabNo(), TRUE );
+                SetTabNo( GetViewData()->GetTabNo(), sal_True );
                 break;
 
             default:
@@ -150,7 +150,7 @@ void __EXPORT ScTabViewShell::Notify( SfxBroadcaster& rBC, const SfxHint& rHint 
     else if (rHint.ISA(ScPaintHint))                    // neu zeichnen
     {
         ScPaintHint* pHint = (ScPaintHint*) &rHint;
-        USHORT nParts = pHint->GetParts();
+        sal_uInt16 nParts = pHint->GetParts();
         SCTAB nTab = GetViewData()->GetTabNo();
         if (pHint->GetStartTab() <= nTab && pHint->GetEndTab() >= nTab)
         {
@@ -211,7 +211,7 @@ void __EXPORT ScTabViewShell::Notify( SfxBroadcaster& rBC, const SfxHint& rHint 
 
                     EditView* pView = GetViewData()->GetEditView(eActive);  // ist nicht 0
 
-                    SetEditShell(pView ,TRUE);
+                    SetEditShell(pView ,sal_True);
                 }
             }
         }
@@ -224,7 +224,7 @@ void __EXPORT ScTabViewShell::Notify( SfxBroadcaster& rBC, const SfxHint& rHint 
         const ScTablesHint& rTabHint = (const ScTablesHint&)rHint;
         SCTAB nTab1 = rTabHint.GetTab1();
         SCTAB nTab2 = rTabHint.GetTab2();
-        USHORT nId  = rTabHint.GetId();
+        sal_uInt16 nId  = rTabHint.GetId();
         switch (nId)
         {
             case SC_TAB_INSERTED:
@@ -290,14 +290,14 @@ void __EXPORT ScTabViewShell::Notify( SfxBroadcaster& rBC, const SfxHint& rHint 
         if ( nNewTab >= pDoc->GetTableCount() )
             nNewTab = pDoc->GetTableCount() - 1;
 
-        BOOL bForce = !bStayOnActiveTab;
-        SetTabNo( nNewTab, bForce, FALSE, bStayOnActiveTab );
+        sal_Bool bForce = !bStayOnActiveTab;
+        SetTabNo( nNewTab, bForce, sal_False, bStayOnActiveTab );
     }
     else if (rHint.ISA(ScIndexHint))
     {
         const ScIndexHint& rIndexHint = (const ScIndexHint&)rHint;
-        USHORT nId = rIndexHint.GetId();
-        USHORT nIndex = rIndexHint.GetIndex();
+        sal_uInt16 nId = rIndexHint.GetId();
+        sal_uInt16 nIndex = rIndexHint.GetIndex();
         switch (nId)
         {
             case SC_HINT_SHOWRANGEFINDER:
@@ -396,7 +396,7 @@ void ScTabViewShell::MakeNumberInfoItem( ScDocument*         pDoc,
         default:
             *ppItem = new SvxNumberInfoItem(
                                 pDoc->GetFormatTable(),
-                                (const USHORT)
+                                (const sal_uInt16)
                                 SID_ATTR_NUMBERFORMAT_INFO );
     }
 }
@@ -413,7 +413,7 @@ void ScTabViewShell::UpdateNumberFormatter(
     {
         const sal_uInt32* pDelArr = rInfoItem.GetDelArray();
 
-        for ( USHORT i=0; i<nDelCount; i++ )
+        for ( sal_uInt16 i=0; i<nDelCount; i++ )
             rInfoItem.GetNumberFormatter()->DeleteEntry( pDelArr[i] );
     }
 

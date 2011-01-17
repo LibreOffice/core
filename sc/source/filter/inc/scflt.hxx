@@ -187,37 +187,37 @@
 // Datum/Uhrzeit
 struct Sc10DateTime
 {
-    USHORT      Year;
-    USHORT      Month;
-    USHORT      Day;
-    USHORT      Hour;
-    USHORT      Min;
-    USHORT      Sec;
+    sal_uInt16      Year;
+    sal_uInt16      Month;
+    sal_uInt16      Day;
+    sal_uInt16      Hour;
+    sal_uInt16      Min;
+    sal_uInt16      Sec;
 };
 
 // ZahlenFormate
 struct Sc10ValueFormat
 {
-    BYTE        Format;         // Zahl, Waehrung, Prozent etc.
-    BYTE        Info;           // Anzahl Nachkommastellen, Anzahl Stellen, bzw. Datums/Zeitformat
+    sal_uInt8       Format;         // Zahl, Waehrung, Prozent etc.
+    sal_uInt8       Info;           // Anzahl Nachkommastellen, Anzahl Stellen, bzw. Datums/Zeitformat
 };
 
 // Fontbeschreibung
 struct Sc10LogFont
 {
-    INT16       lfHeight;
-    INT16       lfWidth;
-    INT16       lfEscapement;
-    INT16       lfOrientation;
-    INT16       lfWeight;
-    BYTE        lfItalic;
-    BYTE        lfUnderline;
-    BYTE        lfStrikeOut;
-    BYTE        lfCharSet;
-    BYTE        lfOutPrecision;
-    BYTE        lfClipPrecision;
-    BYTE        lfQuality;
-    BYTE        lfPitchAndFamily;
+    sal_Int16       lfHeight;
+    sal_Int16       lfWidth;
+    sal_Int16       lfEscapement;
+    sal_Int16       lfOrientation;
+    sal_Int16       lfWeight;
+    sal_uInt8       lfItalic;
+    sal_uInt8       lfUnderline;
+    sal_uInt8       lfStrikeOut;
+    sal_uInt8       lfCharSet;
+    sal_uInt8       lfOutPrecision;
+    sal_uInt8       lfClipPrecision;
+    sal_uInt8       lfQuality;
+    sal_uInt8       lfPitchAndFamily;
     sal_Char    lfFaceName[32];
 
     int operator==( const Sc10LogFont& rData ) const;
@@ -226,51 +226,51 @@ struct Sc10LogFont
 // RGB-Frabwerte
 struct Sc10Color
 {
-    BYTE        Dummy;
-    BYTE        Blue;
-    BYTE        Green;
-    BYTE        Red;
+    sal_uInt8       Dummy;
+    sal_uInt8       Blue;
+    sal_uInt8       Green;
+    sal_uInt8       Red;
     int operator==( const Sc10Color& rColor ) const;
 };
 
 // Blockbeschreibung
 struct Sc10BlockRect
 {
-    INT16       x1;
-    INT16       y1;
-    INT16       x2;
-    INT16       y2;
+    sal_Int16       x1;
+    sal_Int16       y1;
+    sal_Int16       x2;
+    sal_Int16       y2;
 };
 
 // Datenbank-Bereich
 struct Sc10DataBaseRec
 {
     sal_Char        Name[32];
-    INT16           Tab;
+    sal_Int16           Tab;
     Sc10BlockRect   Block;
-    BYTE            RowHeader;
-    INT16           SortField0;
-    BYTE            SortUpOrder0;
-    INT16           SortField1;
-    BYTE            SortUpOrder1;
-    INT16           SortField2;
-    BYTE            SortUpOrder2;
-    BYTE            IncludeFormat;
-    INT16           QueryField0;
-    INT16           QueryOp0;
-    BYTE            QueryByString0;
+    sal_uInt8           RowHeader;
+    sal_Int16           SortField0;
+    sal_uInt8           SortUpOrder0;
+    sal_Int16           SortField1;
+    sal_uInt8           SortUpOrder1;
+    sal_Int16           SortField2;
+    sal_uInt8           SortUpOrder2;
+    sal_uInt8           IncludeFormat;
+    sal_Int16           QueryField0;
+    sal_Int16           QueryOp0;
+    sal_uInt8           QueryByString0;
     sal_Char        QueryString0[64];
     double          QueryValue0;
-    INT16           QueryConnect1;
-    INT16           QueryField1;
-    INT16           QueryOp1;
-    BYTE            QueryByString1;
+    sal_Int16           QueryConnect1;
+    sal_Int16           QueryField1;
+    sal_Int16           QueryOp1;
+    sal_uInt8           QueryByString1;
     sal_Char        QueryString1[64];
     double          QueryValue1;
-    INT16           QueryConnect2;
-    INT16           QueryField2;
-    INT16           QueryOp2;
-    BYTE            QueryByString2;
+    sal_Int16           QueryConnect2;
+    sal_Int16           QueryField2;
+    sal_Int16           QueryOp2;
+    sal_uInt8           QueryByString2;
     sal_Char        QueryString2[64];
     double          QueryValue2;
 };
@@ -280,15 +280,15 @@ struct Sc10HeadFootLine
 {
     sal_Char        Title[128];
     Sc10LogFont     LogFont;
-    BYTE            HorJustify;
-    BYTE            VerJustify;
-    USHORT          Raster;
-    USHORT          Frame;
+    sal_uInt8           HorJustify;
+    sal_uInt8           VerJustify;
+    sal_uInt16          Raster;
+    sal_uInt16          Frame;
     Sc10Color       TextColor;
     Sc10Color       BackColor;
     Sc10Color       RasterColor;
-    USHORT          FrameColor; // Nibble Codierte Farben link oben rechts unten
-    USHORT          Reserved;
+    sal_uInt16          FrameColor; // Nibble Codierte Farben link oben rechts unten
+    sal_uInt16          Reserved;
 
     int operator==( const Sc10HeadFootLine& rData ) const;
 };
@@ -298,31 +298,31 @@ struct Sc10PageFormat
 {
     Sc10HeadFootLine    HeadLine;
     Sc10HeadFootLine    FootLine;
-    INT16               Orientation;
-    INT16               Width;
-    INT16               Height;
-    INT16               NonPrintableX;
-    INT16               NonPrintableY;
-    INT16               Left;
-    INT16               Top;
-    INT16               Right;
-    INT16               Bottom;
-    INT16               Head;
-    INT16               Foot;
-    BYTE                HorCenter;
-    BYTE                VerCenter;
-    BYTE                PrintGrid;
-    BYTE                PrintColRow;
-    BYTE                PrintNote;
-    BYTE                TopBottomDir;
+    sal_Int16               Orientation;
+    sal_Int16               Width;
+    sal_Int16               Height;
+    sal_Int16               NonPrintableX;
+    sal_Int16               NonPrintableY;
+    sal_Int16               Left;
+    sal_Int16               Top;
+    sal_Int16               Right;
+    sal_Int16               Bottom;
+    sal_Int16               Head;
+    sal_Int16               Foot;
+    sal_uInt8               HorCenter;
+    sal_uInt8               VerCenter;
+    sal_uInt8               PrintGrid;
+    sal_uInt8               PrintColRow;
+    sal_uInt8               PrintNote;
+    sal_uInt8               TopBottomDir;
     sal_Char            PrintAreaName[32];
     Sc10BlockRect       PrintArea;
     sal_Char            PrnZoom[6]; // Pascal 6 Byte Realzahl
-    USHORT              FirstPageNo;
-    INT16               RowRepeatStart;
-    INT16               RowRepeatEnd;
-    INT16               ColRepeatStart;
-    INT16               ColRepeatEnd;
+    sal_uInt16              FirstPageNo;
+    sal_Int16               RowRepeatStart;
+    sal_Int16               RowRepeatEnd;
+    sal_Int16               ColRepeatStart;
+    sal_Int16               ColRepeatEnd;
     sal_Char            Reserved[26];
 
     int operator==( const Sc10PageFormat& rData ) const;
@@ -332,23 +332,23 @@ struct Sc10PageFormat
 struct Sc10TableProtect
 {
     sal_Char    PassWord[16];
-    USHORT      Flags;
-    BYTE        Protect;
+    sal_uInt16      Flags;
+    sal_uInt8       Protect;
 };
 
 // Documentschutz
 struct Sc10SheetProtect
 {
     sal_Char    PassWord[16];
-    USHORT      Flags;
-    BYTE        Protect;
+    sal_uInt16      Flags;
+    sal_uInt8       Protect;
 };
 
 // Dateikopf StarCalc 1.0 Datei
 struct Sc10FileHeader
 {
     sal_Char    CopyRight[30];
-    USHORT      Version;
+    sal_uInt16      Version;
     sal_Char    Reserved[32];
 };
 
@@ -390,29 +390,29 @@ struct Sc10FileInfo
 struct Sc10EditStateInfo
 {
     // Cursor Position
-    USHORT      CarretX;
-    USHORT      CarretY;
-    USHORT      CarretZ;
+    sal_uInt16      CarretX;
+    sal_uInt16      CarretY;
+    sal_uInt16      CarretZ;
     // Linke obere Ecke der Tabelle im Fenster
-    USHORT      DeltaX;
-    USHORT      DeltaY;
-    USHORT      DeltaZ;
+    sal_uInt16      DeltaX;
+    sal_uInt16      DeltaY;
+    sal_uInt16      DeltaZ;
     // Ueberfluessig in StarCalc 3.0
-    BYTE        DataBaseMode;
+    sal_uInt8       DataBaseMode;
     sal_Char    Reserved[51];
 };
 
 // Attribut-Eintrag
 struct Sc10ColData
 {
-    USHORT      Row;
-    USHORT      Value;
+    sal_uInt16      Row;
+    sal_uInt16      Value;
 };
 
 // ZellAttribut-Beschreibung
 struct Sc10ColAttr
 {
-    USHORT          Count;
+    sal_uInt16          Count;
     Sc10ColData*    pData;
 
     Sc10ColAttr() : pData(NULL) {}
@@ -421,18 +421,18 @@ struct Sc10ColAttr
 // GraphHeader
 struct Sc10GraphHeader
 {
-    BYTE        Typ;            // Typ der Grafik (Ole-Objekt, Image (Bitmap oder MetaFile), Chart-Object)
-    INT16       CarretX;        // ZellPosition der Grafik
-    INT16       CarretY;
-    INT16       CarretZ;
-    INT32       x;              // x,y Abstand zum Zellrand in Pixel (Pixel weil ich Grafiken in Fenstern ablege)
-    INT32       y;
-    INT32       w;              // w,h Breite und Hoehe in Pixel
-    INT32       h;
-    BYTE        IsRelPos;       // Ist die Position relativ zur Zelle oder absolute in der Tabelle
-    BYTE        DoPrint;        // Soll die Grafik ausgedruckt werden
-    USHORT      FrameType;      // Art der Umrandung um die Grafik (Keine, Einfach, Doppelt, Einfach Dick, Doppelt Dick)
-    BYTE        IsTransparent;  // Soll der Hintergrund gezeichnet werden
+    sal_uInt8       Typ;            // Typ der Grafik (Ole-Objekt, Image (Bitmap oder MetaFile), Chart-Object)
+    sal_Int16       CarretX;        // ZellPosition der Grafik
+    sal_Int16       CarretY;
+    sal_Int16       CarretZ;
+    sal_Int32       x;              // x,y Abstand zum Zellrand in Pixel (Pixel weil ich Grafiken in Fenstern ablege)
+    sal_Int32       y;
+    sal_Int32       w;              // w,h Breite und Hoehe in Pixel
+    sal_Int32       h;
+    sal_uInt8       IsRelPos;       // Ist die Position relativ zur Zelle oder absolute in der Tabelle
+    sal_uInt8       DoPrint;        // Soll die Grafik ausgedruckt werden
+    sal_uInt16      FrameType;      // Art der Umrandung um die Grafik (Keine, Einfach, Doppelt, Einfach Dick, Doppelt Dick)
+    sal_uInt8       IsTransparent;  // Soll der Hintergrund gezeichnet werden
     Sc10Color   FrameColor;     // Umrandungsfarbe als RGB-Wert
     Sc10Color   BackColor;      // Hintergrundfarbe als RGB-Wert
     sal_Char    Reserved[32];   // Na was wohl
@@ -442,50 +442,50 @@ struct Sc10GraphHeader
 struct Sc10ImageHeader
 {
     sal_Char    FileName[128];  // Dateiname des urspruenglich eingefuegten Bildes
-    INT16   Typ;                // Typ der Grafik (Bitmap oder Metafile)
-    BYTE    Linked;             // Kann nicht vorkommen
-    INT16   x1;                 // Urspruengliche Groesse der Grafik (nur fuer Metafiles)
-    INT16   y1;
-    INT16   x2;
-    INT16   y2;
+    sal_Int16   Typ;                // Typ der Grafik (Bitmap oder Metafile)
+    sal_uInt8   Linked;             // Kann nicht vorkommen
+    sal_Int16   x1;                 // Urspruengliche Groesse der Grafik (nur fuer Metafiles)
+    sal_Int16   y1;
+    sal_Int16   x2;
+    sal_Int16   y2;
     sal_uInt32 Size;                // Groesse der Grafik in BYTES
 };
 
 // ChartHeader
 struct Sc10ChartHeader
 {
-    INT16   MM;                 // Meatfile Struktur MapMode, Breite, Hoehe
-    INT16   xExt;
-    INT16   yExt;
+    sal_Int16   MM;                 // Meatfile Struktur MapMode, Breite, Hoehe
+    sal_Int16   xExt;
+    sal_Int16   yExt;
     sal_uInt32 Size;                // Groesse der Grafik in BYTES
 };
 
 // ChartSheetData
 struct Sc10ChartSheetData
 {
-    BYTE        HasTitle;       // Hat das Chart Daten aus der Tabell fuer einen Titel
-    INT16       TitleX;         // Zellposition des Titels
-    INT16       TitleY;
-    BYTE        HasSubTitle;    // Hat das Chart Daten aus der Tabell fuer einen Untertitel
-    INT16       SubTitleX;      // Zellposition des Untertitels
-    INT16       SubTitleY;
-    BYTE        HasLeftTitle;   // Hat das Chart Daten aus der Tabelle fuer einen Linken-Titel
-    INT16       LeftTitleX;     // Zellposition des Linken-Titels
-    INT16       LeftTitleY;
-    BYTE        HasLegend;      // Hat das Chart Daten aus der Tabelle fuer eine Legende
-    INT16       LegendX1;       // Zellen der Legende
-    INT16       LegendY1;
-    INT16       LegendX2;
-    INT16       LegendY2;
-    BYTE        HasLabel;       // Hat das Chart Daten aus der Tabelle fuer die Achsbeschriftung
-    INT16       LabelX1;        // Zellen der Achsbeschriftung
-    INT16       LabelY1;
-    INT16       LabelX2;
-    INT16       LabelY2;
-    INT16       DataX1;         // Zellen der Daten
-    INT16       DataY1;
-    INT16       DataX2;
-    INT16       DataY2;
+    sal_uInt8       HasTitle;       // Hat das Chart Daten aus der Tabell fuer einen Titel
+    sal_Int16       TitleX;         // Zellposition des Titels
+    sal_Int16       TitleY;
+    sal_uInt8       HasSubTitle;    // Hat das Chart Daten aus der Tabell fuer einen Untertitel
+    sal_Int16       SubTitleX;      // Zellposition des Untertitels
+    sal_Int16       SubTitleY;
+    sal_uInt8       HasLeftTitle;   // Hat das Chart Daten aus der Tabelle fuer einen Linken-Titel
+    sal_Int16       LeftTitleX;     // Zellposition des Linken-Titels
+    sal_Int16       LeftTitleY;
+    sal_uInt8       HasLegend;      // Hat das Chart Daten aus der Tabelle fuer eine Legende
+    sal_Int16       LegendX1;       // Zellen der Legende
+    sal_Int16       LegendY1;
+    sal_Int16       LegendX2;
+    sal_Int16       LegendY2;
+    sal_uInt8       HasLabel;       // Hat das Chart Daten aus der Tabelle fuer die Achsbeschriftung
+    sal_Int16       LabelX1;        // Zellen der Achsbeschriftung
+    sal_Int16       LabelY1;
+    sal_Int16       LabelX2;
+    sal_Int16       LabelY2;
+    sal_Int16       DataX1;         // Zellen der Daten
+    sal_Int16       DataY1;
+    sal_Int16       DataX2;
+    sal_Int16       DataY2;
     sal_Char    Reserved[64];
 };
 
@@ -504,29 +504,29 @@ typedef sal_Char Sc10ChartText[30];
 
 struct Sc10ChartTypeData
 {
-    INT16           NumSets;
-    INT16           NumPoints;
-    INT16           DrawMode;
-    INT16           GraphType;
-    INT16           GraphStyle;
+    sal_Int16           NumSets;
+    sal_Int16           NumPoints;
+    sal_Int16           DrawMode;
+    sal_Int16           GraphType;
+    sal_Int16           GraphStyle;
     sal_Char        GraphTitle[80];
     sal_Char        BottomTitle[80];
-    INT16           SymbolData[256];
-    INT16           ColorData[256];
-    INT16           ThickLines[256];
-    INT16           PatternData[256];
-    INT16           LinePatternData[256];
-    INT16           NumGraphStyles[11];
-    INT16           ShowLegend;
+    sal_Int16           SymbolData[256];
+    sal_Int16           ColorData[256];
+    sal_Int16           ThickLines[256];
+    sal_Int16           PatternData[256];
+    sal_Int16           LinePatternData[256];
+    sal_Int16           NumGraphStyles[11];
+    sal_Int16           ShowLegend;
     Sc10ChartText   LegendText[256];
-    INT16           ExplodePie;
-    INT16           FontUse;
-    INT16           FontFamily[5];
-    INT16           FontStyle[5];
-    INT16           FontSize[5];
-    INT16           GridStyle;
-    INT16           Labels;
-    INT16           LabelEvery;
+    sal_Int16           ExplodePie;
+    sal_Int16           FontUse;
+    sal_Int16           FontFamily[5];
+    sal_Int16           FontStyle[5];
+    sal_Int16           FontSize[5];
+    sal_Int16           GridStyle;
+    sal_Int16           Labels;
+    sal_Int16           LabelEvery;
     Sc10ChartText   LabelText[50];
     sal_Char        LeftTitle[80];
     sal_Char        Reserved[4646];
@@ -537,9 +537,9 @@ struct Sc10ChartTypeData
 class Sc10FontData : public ScDataObject
 {
 public:
-    INT16               Height;
-    BYTE                CharSet;
-    BYTE                PitchAndFamily;
+    sal_Int16               Height;
+    sal_uInt8               CharSet;
+    sal_uInt8               PitchAndFamily;
     sal_Char            FaceName[32];
 
                         Sc10FontData( const Sc10FontData& rData ) :
@@ -560,11 +560,11 @@ public:
 class Sc10FontCollection : public ScCollection
 {
 protected:
-    ULONG nError;
+    sal_uLong nError;
 public:
                         Sc10FontCollection( SvStream& rStream );
-    ULONG               GetError() { return nError; }
-    Sc10FontData*       At(USHORT nIndex) { return (Sc10FontData*)ScCollection::At(nIndex); }
+    sal_uLong               GetError() { return nError; }
+    Sc10FontData*       At(sal_uInt16 nIndex) { return (Sc10FontData*)ScCollection::At(nIndex); }
 private:
     using               ScCollection::At;
 };
@@ -596,11 +596,11 @@ public :
 class Sc10NameCollection : public ScCollection
 {
 protected:
-    ULONG               nError;
+    sal_uLong               nError;
 public:
                         Sc10NameCollection(SvStream& rStream);
-ULONG                   GetError() { return nError; }
-Sc10NameData*           At(USHORT nIndex) { return (Sc10NameData*)ScCollection::At(nIndex); }
+sal_uLong                   GetError() { return nError; }
+Sc10NameData*           At(sal_uInt16 nIndex) { return (Sc10NameData*)ScCollection::At(nIndex); }
 private:
     using               ScCollection::At;
 };
@@ -613,14 +613,14 @@ public:
     sal_Char            Name[32];
     Sc10ValueFormat     ValueFormat;
     Sc10LogFont         LogFont;
-    USHORT              Attr;
-    USHORT              Justify;
-    USHORT              Frame;
-    USHORT              Raster;
-    USHORT              nColor;
-    USHORT              FrameColor;
-    USHORT              Flags;
-    USHORT              FormatFlags;
+    sal_uInt16              Attr;
+    sal_uInt16              Justify;
+    sal_uInt16              Frame;
+    sal_uInt16              Raster;
+    sal_uInt16              nColor;
+    sal_uInt16              FrameColor;
+    sal_uInt16              Flags;
+    sal_uInt16              FormatFlags;
     sal_Char            Reserved[8];
 
                         Sc10PatternData(const Sc10PatternData& rData) :
@@ -649,11 +649,11 @@ virtual ScDataObject*       Clone() const { return new Sc10PatternData(*this); }
 class Sc10PatternCollection : public ScCollection
 {
 protected:
-    ULONG               nError;
+    sal_uLong               nError;
 public:
                         Sc10PatternCollection(SvStream& rStream);
-    ULONG               GetError() { return nError; }
-    Sc10PatternData*    At(USHORT nIndex) { return (Sc10PatternData*)ScCollection::At(nIndex); }
+    sal_uLong               GetError() { return nError; }
+    Sc10PatternData*    At(sal_uInt16 nIndex) { return (Sc10PatternData*)ScCollection::At(nIndex); }
 private:
     using               ScCollection::At;
 };
@@ -679,12 +679,12 @@ virtual ScDataObject*       Clone() const { return new Sc10DataBaseData(*this); 
 class Sc10DataBaseCollection : public ScCollection
 {
 protected:
-    ULONG               nError;
+    sal_uLong               nError;
     sal_Char            ActName[32];
 public:
                         Sc10DataBaseCollection(SvStream& rStream);
-    ULONG               GetError() { return nError; }
-    Sc10DataBaseData*   At(USHORT nIndex) { return (Sc10DataBaseData*)ScCollection::At(nIndex); }
+    sal_uLong               GetError() { return nError; }
+    Sc10DataBaseData*   At(sal_uInt16 nIndex) { return (Sc10DataBaseData*)ScCollection::At(nIndex); }
 private:
     using               ScCollection::At;
 };
@@ -705,8 +705,8 @@ class Sc10PageCollection : public ScCollection
 {
 public:
                         Sc10PageCollection() : ScCollection(1,1) {};
-    Sc10PageData*       At(USHORT nIndex) { return (Sc10PageData*)ScCollection::At(nIndex); }
-    USHORT              InsertFormat( const Sc10PageFormat& rData );
+    Sc10PageData*       At(sal_uInt16 nIndex) { return (Sc10PageData*)ScCollection::At(nIndex); }
+    sal_uInt16              InsertFormat( const Sc10PageFormat& rData );
     void                PutToDoc( ScDocument* pDoc );
 private:
     using               ScCollection::At;
@@ -729,8 +729,8 @@ class Sc10Import
     Sc10NameCollection*     pNameCollection;
     Sc10PatternCollection*  pPatternCollection;
     Sc10DataBaseCollection* pDataBaseCollection;
-    ULONG                   nError;
-    INT16                   TabCount;
+    sal_uLong                   nError;
+    sal_Int16                   TabCount;
     SCTAB                   nShowTab;
     ScViewOptions           aSc30ViewOpt;
     ScfStreamProgressBar*   pPrgrsBar;
@@ -739,7 +739,7 @@ public:
                               Sc10Import( SvStream& rStr, ScDocument* pDocument );
                               ~Sc10Import();
 
-    ULONG                   Import();
+    sal_uLong                   Import();
     void                    LoadFileHeader();
     void                    LoadFileInfo();
     void                    LoadEditStateInfo();
@@ -756,7 +756,7 @@ public:
     void                    LoadCol(SCCOL Col, SCTAB Tab);
     void                    LoadColAttr(SCCOL Col, SCTAB Tab);
     void                    LoadAttr(Sc10ColAttr& rAttr);
-    void                    ChangeFormat(USHORT nFormat, USHORT nInfo, ULONG& nKey);
+    void                    ChangeFormat(sal_uInt16 nFormat, sal_uInt16 nInfo, sal_uLong& nKey);
     void                    LoadObjects();
 };
 

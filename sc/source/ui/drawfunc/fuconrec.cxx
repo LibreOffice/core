@@ -73,12 +73,12 @@ FuConstRectangle::~FuConstRectangle()
 |*
 \************************************************************************/
 
-BOOL __EXPORT FuConstRectangle::MouseButtonDown(const MouseEvent& rMEvt)
+sal_Bool __EXPORT FuConstRectangle::MouseButtonDown(const MouseEvent& rMEvt)
 {
     // #95491# remember button state for creation of own MouseEvents
     SetMouseButtonCode(rMEvt.GetButtons());
 
-    BOOL bReturn = FuConstruct::MouseButtonDown(rMEvt);
+    sal_Bool bReturn = FuConstruct::MouseButtonDown(rMEvt);
 
     if ( rMEvt.IsLeft() && !pView->IsAction() )
     {
@@ -106,7 +106,7 @@ BOOL __EXPORT FuConstRectangle::MouseButtonDown(const MouseEvent& rMEvt)
 |*
 \************************************************************************/
 
-BOOL __EXPORT FuConstRectangle::MouseMove(const MouseEvent& rMEvt)
+sal_Bool __EXPORT FuConstRectangle::MouseMove(const MouseEvent& rMEvt)
 {
     return FuConstruct::MouseMove(rMEvt);
 }
@@ -117,12 +117,12 @@ BOOL __EXPORT FuConstRectangle::MouseMove(const MouseEvent& rMEvt)
 |*
 \************************************************************************/
 
-BOOL __EXPORT FuConstRectangle::MouseButtonUp(const MouseEvent& rMEvt)
+sal_Bool __EXPORT FuConstRectangle::MouseButtonUp(const MouseEvent& rMEvt)
 {
     // #95491# remember button state for creation of own MouseEvents
     SetMouseButtonCode(rMEvt.GetButtons());
 
-    BOOL bReturn = FALSE;
+    sal_Bool bReturn = sal_False;
 
     if ( pView->IsCreateObj() && rMEvt.IsLeft() )
     {
@@ -142,11 +142,11 @@ BOOL __EXPORT FuConstRectangle::MouseButtonUp(const MouseEvent& rMEvt)
                     ((SdrTextObj*)pObj)->ForceOutlinerParaObject();
                 OutlinerParaObject* pOPO = pObj->GetOutlinerParaObject();
                 if( pOPO && !pOPO->IsVertical() )
-                    pOPO->SetVertical( TRUE );
+                    pOPO->SetVertical( sal_True );
             }
         }
 
-        bReturn = TRUE;
+        bReturn = sal_True;
     }
     return (FuConstruct::MouseButtonUp(rMEvt) || bReturn);
 }
@@ -155,14 +155,14 @@ BOOL __EXPORT FuConstRectangle::MouseButtonUp(const MouseEvent& rMEvt)
 |*
 |* Tastaturereignisse bearbeiten
 |*
-|* Wird ein KeyEvent bearbeitet, so ist der Return-Wert TRUE, andernfalls
+|* Wird ein KeyEvent bearbeitet, so ist der Return-Wert sal_True, andernfalls
 |* FALSE.
 |*
 \************************************************************************/
 
-BOOL __EXPORT FuConstRectangle::KeyInput(const KeyEvent& rKEvt)
+sal_Bool __EXPORT FuConstRectangle::KeyInput(const KeyEvent& rKEvt)
 {
-    BOOL bReturn = FuConstruct::KeyInput(rKEvt);
+    sal_Bool bReturn = FuConstruct::KeyInput(rKEvt);
     return(bReturn);
 }
 
@@ -205,7 +205,7 @@ void FuConstRectangle::Activate()
             break;
     }
 
-    pView->SetCurrentObj(sal::static_int_cast<UINT16>(aObjKind));
+    pView->SetCurrentObj(sal::static_int_cast<sal_uInt16>(aObjKind));
 
     aOldPointer = pWindow->GetPointer();
     pViewShell->SetActivePointer( aNewPointer );

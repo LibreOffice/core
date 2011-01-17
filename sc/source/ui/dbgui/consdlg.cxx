@@ -64,7 +64,7 @@ public:
     ScAreaData()  {}
     ~ScAreaData() {}
 
-    void Set( const String& rName, const String& rArea, BOOL bDb )
+    void Set( const String& rName, const String& rArea, sal_Bool bDb )
                 {
                     aStrName  = rName;
                     aStrArea  = rArea;
@@ -73,7 +73,7 @@ public:
 
     String  aStrName;
     String  aStrArea;
-    BOOL    bIsDbArea;
+    sal_Bool    bIsDbArea;
 };
 
 
@@ -155,7 +155,7 @@ void ScConsolidateDlg::Init()
     DBG_ASSERT( pViewData && pDoc && pRangeUtil, "Error in Ctor" );
 
     String aStr;
-    USHORT i=0;
+    sal_uInt16 i=0;
 
     aEdDataArea .SetGetFocusHdl( LINK( this, ScConsolidateDlg, GetFocusHdl ) );
     aEdDestArea .SetGetFocusHdl( LINK( this, ScConsolidateDlg, GetFocusHdl ) );
@@ -221,8 +221,8 @@ void ScConsolidateDlg::Init()
 
     ScRangeName*    pRangeNames  = pDoc->GetRangeName();
     ScDBCollection* pDbNames     = pDoc->GetDBCollection();
-    const USHORT    nRangeCount  = pRangeNames ? pRangeNames->GetCount() : 0;
-    const USHORT    nDbCount     = pDbNames    ? pDbNames   ->GetCount() : 0;
+    const sal_uInt16    nRangeCount  = pRangeNames ? pRangeNames->GetCount() : 0;
+    const sal_uInt16    nDbCount     = pDbNames    ? pDbNames   ->GetCount() : 0;
 
     nAreaDataCount = nRangeCount+nDbCount;
     pAreaData      = NULL;
@@ -233,7 +233,7 @@ void ScConsolidateDlg::Init()
 
         String aStrName;
         String aStrArea;
-        USHORT nAt = 0;
+        sal_uInt16 nAt = 0;
         ScRange aRange;
         ScAreaNameIterator aIter( pDoc );
         while ( aIter.Next( aStrName, aRange ) )
@@ -268,7 +268,7 @@ void ScConsolidateDlg::FillAreaLists()
     {
         String aString;
 
-        for ( USHORT i=0;
+        for ( sal_uInt16 i=0;
               (i<nAreaDataCount) && (pAreaData[i].aStrName.Len()>0);
               i++ )
         {
@@ -294,7 +294,7 @@ void ScConsolidateDlg::SetReference( const ScRange& rRef, ScDocument* pDocP )
             RefInputStart( pRefInputEdit );
 
         String      aStr;
-        USHORT      nFmt = SCR_ABS_3D;       //!!! nCurTab fehlt noch
+        sal_uInt16      nFmt = SCR_ABS_3D;       //!!! nCurTab fehlt noch
         const formula::FormulaGrammar::AddressConvention eConv = pDocP->GetAddressConvention();
 
         if ( rRef.aStart.Tab() != rRef.aEnd.Tab() )
@@ -314,7 +314,7 @@ void ScConsolidateDlg::SetReference( const ScRange& rRef, ScDocument* pDocP )
 
 //----------------------------------------------------------------------------
 
-BOOL __EXPORT ScConsolidateDlg::Close()
+sal_Bool __EXPORT ScConsolidateDlg::Close()
 {
     return DoClose( ScConsolidateDlgWrapper::GetChildWindowId() );
 }
@@ -326,7 +326,7 @@ void ScConsolidateDlg::SetActive()
 {
     if ( bDlgLostFocus )
     {
-        bDlgLostFocus = FALSE;
+        bDlgLostFocus = sal_False;
 
         if ( pRefInputEdit )
         {
@@ -345,20 +345,20 @@ void ScConsolidateDlg::SetActive()
 
 void __EXPORT ScConsolidateDlg::Deactivate()
 {
-    bDlgLostFocus = TRUE;
+    bDlgLostFocus = sal_True;
 }
 
 
 //----------------------------------------------------------------------------
 
-BOOL ScConsolidateDlg::VerifyEdit( formula::RefEdit* pEd )
+sal_Bool ScConsolidateDlg::VerifyEdit( formula::RefEdit* pEd )
 {
     if ( !pRangeUtil || !pDoc || !pViewData ||
          ((pEd != &aEdDataArea) && (pEd != &aEdDestArea)) )
-        return FALSE;
+        return sal_False;
 
     SCTAB   nTab    = pViewData->GetTabNo();
-    BOOL    bEditOk = FALSE;
+    sal_Bool    bEditOk = sal_False;
     String  theCompleteStr;
     const formula::FormulaGrammar::AddressConvention eConv = pDoc->GetAddressConvention();
 
@@ -410,7 +410,7 @@ IMPL_LINK( ScConsolidateDlg, GetFocusHdl, Control*, pCtr )
 
 IMPL_LINK( ScConsolidateDlg, OkHdl, void*, EMPTYARG )
 {
-    USHORT nDataAreaCount = aLbConsAreas.GetEntryCount();
+    sal_uInt16 nDataAreaCount = aLbConsAreas.GetEntryCount();
 
     if ( nDataAreaCount > 0 )
     {
@@ -424,7 +424,7 @@ IMPL_LINK( ScConsolidateDlg, OkHdl, void*, EMPTYARG )
             ScConsolidateParam  theOutParam( theConsData );
             ScArea**            ppDataAreas = new ScArea*[nDataAreaCount];
             ScArea*             pArea;
-            USHORT              i=0;
+            sal_uInt16              i=0;
 
             for ( i=0; i<nDataAreaCount; i++ )
             {
@@ -449,7 +449,7 @@ IMPL_LINK( ScConsolidateDlg, OkHdl, void*, EMPTYARG )
 
             ScConsolidateItem aOutItem( nWhichCons, &theOutParam );
 
-            SetDispatcherLock( FALSE );
+            SetDispatcherLock( sal_False );
             SwitchToDocument();
             GetBindings().GetDispatcher()->Execute( SID_CONSOLIDATE,
                                       SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD,
@@ -480,16 +480,16 @@ IMPL_LINK( ScConsolidateDlg, ClickHdl, PushButton*, pBtn )
         {
             String      aNewEntry( aEdDataArea.GetText() );
             ScArea**    ppAreas = NULL;
-            USHORT      nAreaCount = 0;
+            sal_uInt16      nAreaCount = 0;
             const formula::FormulaGrammar::AddressConvention eConv = pDoc->GetAddressConvention();
 
-            if ( pRangeUtil->IsAbsTabArea( aNewEntry, pDoc, &ppAreas, &nAreaCount, TRUE, eConv ) )
+            if ( pRangeUtil->IsAbsTabArea( aNewEntry, pDoc, &ppAreas, &nAreaCount, sal_True, eConv ) )
             {
                 // IsAbsTabArea() legt ein Array von ScArea-Zeigern an,
                 // welche ebenfalls dynamisch erzeugt wurden.
                 // Diese Objekte muessen hier abgeraeumt werden.
 
-                for ( USHORT i=0; i<nAreaCount; i++ )
+                for ( sal_uInt16 i=0; i<nAreaCount; i++ )
                 {
                     String aNewArea;
 
@@ -550,7 +550,7 @@ IMPL_LINK( ScConsolidateDlg, SelectHdl, ListBox*, pLb )
     else if ( (pLb == &aLbDataArea) || (pLb == &aLbDestArea) )
     {
         Edit*   pEd = (pLb == &aLbDataArea) ? &aEdDataArea : &aEdDestArea;
-        USHORT  nSelPos = pLb->GetSelectEntryPos();
+        sal_uInt16  nSelPos = pLb->GetSelectEntryPos();
 
         if (    pRangeUtil
             && (nSelPos > 0)
@@ -609,7 +609,7 @@ IMPL_LINK( ScConsolidateDlg, ModifyHdl, formula::RefEdit*, pEd )
 // auch noch in tpsubt bzw. ueberall, wo StarCalc-Funktionen
 // auswaehlbar sind.
 
-ScSubTotalFunc ScConsolidateDlg::LbPosToFunc( USHORT nPos )
+ScSubTotalFunc ScConsolidateDlg::LbPosToFunc( sal_uInt16 nPos )
 {
     switch ( nPos )
     {
@@ -632,7 +632,7 @@ ScSubTotalFunc ScConsolidateDlg::LbPosToFunc( USHORT nPos )
 
 //----------------------------------------------------------------------------
 
-USHORT ScConsolidateDlg::FuncToLbPos( ScSubTotalFunc eFunc )
+sal_uInt16 ScConsolidateDlg::FuncToLbPos( ScSubTotalFunc eFunc )
 {
     switch ( eFunc )
     {

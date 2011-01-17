@@ -800,7 +800,7 @@ sal_Bool ScXMLImportWrapper::ExportToComponent(uno::Reference<lang::XMultiServic
                 SCTAB nTabCount = rDoc.GetTableCount();
                 for (SCTAB nTab=0; nTab<nTabCount; nTab++)
                     if (rDoc.IsStreamValid(nTab))
-                        rDoc.SetStreamValid(nTab, FALSE);
+                        rDoc.SetStreamValid(nTab, sal_False);
             }
         }
         else
@@ -942,7 +942,7 @@ sal_Bool ScXMLImportWrapper::Export(sal_Bool bStylesOnly)
 
         if( xStorage.is() )
         {
-            pGraphicHelper = SvXMLGraphicHelper::Create( xStorage, GRAPHICHELPER_MODE_WRITE, FALSE );
+            pGraphicHelper = SvXMLGraphicHelper::Create( xStorage, GRAPHICHELPER_MODE_WRITE, sal_False );
             xGrfContainer = pGraphicHelper;
         }
 

@@ -57,7 +57,7 @@ public:
 
     inline const sal_uInt8*     GetGUID() const { return aGUID; }
 
-    virtual UINT16              GetNum() const;
+    virtual sal_uInt16              GetNum() const;
     virtual sal_Size            GetLen() const;
 };
 
@@ -93,7 +93,7 @@ private:
 
 public:
                                 XclExpUsersViewBegin( const sal_uInt8* pGUID, sal_uInt32 nTab );
-    virtual UINT16              GetNum() const;
+    virtual sal_uInt16              GetNum() const;
     virtual sal_Size            GetLen() const;
 };
 
@@ -106,7 +106,7 @@ private:
     virtual void                SaveCont( XclExpStream& rStrm );
 
 public:
-    virtual UINT16              GetNum() const;
+    virtual sal_uInt16              GetNum() const;
     virtual sal_Size            GetLen() const;
 };
 
@@ -119,7 +119,7 @@ private:
     virtual void                SaveCont( XclExpStream& rStrm );
 
 public:
-    virtual UINT16              GetNum() const;
+    virtual sal_uInt16              GetNum() const;
     virtual sal_Size            GetLen() const;
 };
 
@@ -132,7 +132,7 @@ private:
     virtual void                SaveCont( XclExpStream& rStrm );
 
 public:
-    virtual UINT16              GetNum() const;
+    virtual sal_uInt16              GetNum() const;
     virtual sal_Size            GetLen() const;
 };
 
@@ -145,7 +145,7 @@ private:
     virtual void                SaveCont( XclExpStream& rStrm );
 
 public:
-    virtual UINT16              GetNum() const;
+    virtual sal_uInt16              GetNum() const;
     virtual sal_Size            GetLen() const;
 };
 
@@ -158,7 +158,7 @@ private:
     virtual void                SaveCont( XclExpStream& rStrm );
 
 public:
-    virtual UINT16              GetNum() const;
+    virtual sal_uInt16              GetNum() const;
     virtual sal_Size            GetLen() const;
 };
 
@@ -168,13 +168,13 @@ public:
 class XclExpChTrEmpty : public ExcRecord
 {
 private:
-    UINT16                      nRecNum;
+    sal_uInt16                      nRecNum;
 
 public:
-    inline                      XclExpChTrEmpty( UINT16 nNum ) : nRecNum( nNum ) {}
+    inline                      XclExpChTrEmpty( sal_uInt16 nNum ) : nRecNum( nNum ) {}
     virtual                     ~XclExpChTrEmpty();
 
-    virtual UINT16              GetNum() const;
+    virtual sal_uInt16              GetNum() const;
     virtual sal_Size            GetLen() const;
 };
 
@@ -189,7 +189,7 @@ private:
 public:
     virtual                     ~XclExpChTr0x0195();
 
-    virtual UINT16              GetNum() const;
+    virtual sal_uInt16              GetNum() const;
     virtual sal_Size            GetLen() const;
 };
 
@@ -208,7 +208,7 @@ public:
     inline                      XclExpChTr0x0194( const ScChangeTrack& rChangeTrack );
     virtual                     ~XclExpChTr0x0194();
 
-    virtual UINT16              GetNum() const;
+    virtual sal_uInt16              GetNum() const;
     virtual sal_Size            GetLen() const;
 };
 
@@ -236,7 +236,7 @@ public:
     inline void                 SetGUID( const sal_uInt8* pGUID )   { memcpy( aGUID, pGUID, 16 ); }
     inline void                 SetCount( sal_uInt32 nNew )         { nCount = nNew; }
 
-    virtual UINT16              GetNum() const;
+    virtual sal_uInt16              GetNum() const;
     virtual sal_Size            GetLen() const;
 };
 
@@ -259,7 +259,7 @@ public:
                                     const sal_uInt8* pGUID );
     virtual                     ~XclExpChTrInfo();
 
-    virtual UINT16              GetNum() const;
+    virtual sal_uInt16              GetNum() const;
     virtual sal_Size            GetLen() const;
 };
 
@@ -335,7 +335,7 @@ public:
 
     void                        Copy( const XclExpChTrTabIdBuffer& rBuffer );
 
-    virtual UINT16              GetNum() const;
+    virtual sal_uInt16              GetNum() const;
     virtual sal_Size            GetLen() const;
 };
 
@@ -479,7 +479,7 @@ public:
                                     const XclExpChTrTabIdBuffer& rTabIdBuffer );
     virtual                     ~XclExpChTrCellContent();
 
-    virtual UINT16              GetNum() const;
+    virtual sal_uInt16              GetNum() const;
     virtual sal_Size            GetActionByteCount() const;
 };
 
@@ -506,7 +506,7 @@ public:
                                     ScChangeTrack& rChangeTrack );
     virtual                     ~XclExpChTrInsert();
 
-    virtual UINT16              GetNum() const;
+    virtual sal_uInt16              GetNum() const;
     virtual sal_Size            GetActionByteCount() const;
 };
 
@@ -528,7 +528,7 @@ public:
                                     const XclExpChTrTabIdBuffer& rTabIdBuffer );
     virtual                     ~XclExpChTrInsertTab();
 
-    virtual UINT16              GetNum() const;
+    virtual sal_uInt16              GetNum() const;
     virtual sal_Size            GetActionByteCount() const;
 };
 
@@ -553,7 +553,7 @@ public:
                                     ScChangeTrack& rChangeTrack );
     virtual                     ~XclExpChTrMoveRange();
 
-    virtual UINT16              GetNum() const;
+    virtual sal_uInt16              GetNum() const;
     virtual sal_Size            GetActionByteCount() const;
 };
 
@@ -569,7 +569,7 @@ public:
                                 XclExpChTr0x014A( const XclExpChTrInsert& rAction );
     virtual                     ~XclExpChTr0x014A();
 
-    virtual UINT16              GetNum() const;
+    virtual sal_uInt16              GetNum() const;
     virtual sal_Size            GetActionByteCount() const;
 };
 

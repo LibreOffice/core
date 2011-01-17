@@ -37,10 +37,10 @@
 
 struct OldSingleRefBools
 {
-    BYTE    bRelCol;    // Flag values (see further down), 2 bits each in file format
-    BYTE    bRelRow;
-    BYTE    bRelTab;
-    BYTE    bOldFlag3D; // two BOOL flags (see further down)
+    sal_uInt8    bRelCol;    // Flag values (see further down), 2 bits each in file format
+    sal_uInt8    bRelRow;
+    sal_uInt8    bRelTab;
+    sal_uInt8    bOldFlag3D; // two sal_Bool flags (see further down)
 };
 
 #define SR_ABSOLUTE 0       // Absolute value
@@ -48,7 +48,7 @@ struct OldSingleRefBools
 #define SR_RELATIVE 2       // Relative value as delta value (after release 3.1)
 #define SR_DELETED  3       // Deleted col/row/tab
 
-#define SRF_3D      0x01    // 3D reference, was the BOOL (before build 304a)
+#define SRF_3D      0x01    // 3D reference, was the sal_Bool (before build 304a)
 #define SRF_RELNAME 0x02    // Reference derived from RangeName with relative values
 #define SRF_BITS    0x03    // Mask of possible bits
 
@@ -64,17 +64,17 @@ struct SC_DLLPUBLIC ScSingleRefData        // Single reference (one address) int
 
     union
     {
-        BOOL bFlags;
+        sal_Bool bFlags;
         struct
         {
-            BOOL    bColRel     :1;
-            BOOL    bColDeleted :1;
-            BOOL    bRowRel     :1;
-            BOOL    bRowDeleted :1;
-            BOOL    bTabRel     :1;
-            BOOL    bTabDeleted :1;
-            BOOL    bFlag3D     :1;     // 3D-Ref
-            BOOL    bRelName    :1;     // Reference derived from RangeName with relative values
+            sal_Bool    bColRel     :1;
+            sal_Bool    bColDeleted :1;
+            sal_Bool    bRowRel     :1;
+            sal_Bool    bRowDeleted :1;
+            sal_Bool    bTabRel     :1;
+            sal_Bool    bTabDeleted :1;
+            sal_Bool    bFlag3D     :1;     // 3D-Ref
+            sal_Bool    bRelName    :1;     // Reference derived from RangeName with relative values
         }Flags;
     };
 
@@ -85,34 +85,34 @@ struct SC_DLLPUBLIC ScSingleRefData        // Single reference (one address) int
     inline  void InitAddress( SCCOL nCol, SCROW nRow, SCTAB nTab );
     // InitAddressRel: InitFlags and set address, everything relative to rPos
     inline  void InitAddressRel( const ScAddress& rAdr, const ScAddress& rPos );
-    inline  void SetColRel( BOOL bVal ) { Flags.bColRel = (bVal ? TRUE : FALSE ); }
-    inline  BOOL IsColRel() const       { return Flags.bColRel; }
-    inline  void SetRowRel( BOOL bVal ) { Flags.bRowRel = (bVal ? TRUE : FALSE ); }
-    inline  BOOL IsRowRel() const       { return Flags.bRowRel; }
-    inline  void SetTabRel( BOOL bVal ) { Flags.bTabRel = (bVal ? TRUE : FALSE ); }
-    inline  BOOL IsTabRel() const       { return Flags.bTabRel; }
+    inline  void SetColRel( sal_Bool bVal ) { Flags.bColRel = (bVal ? sal_True : sal_False ); }
+    inline  sal_Bool IsColRel() const       { return Flags.bColRel; }
+    inline  void SetRowRel( sal_Bool bVal ) { Flags.bRowRel = (bVal ? sal_True : sal_False ); }
+    inline  sal_Bool IsRowRel() const       { return Flags.bRowRel; }
+    inline  void SetTabRel( sal_Bool bVal ) { Flags.bTabRel = (bVal ? sal_True : sal_False ); }
+    inline  sal_Bool IsTabRel() const       { return Flags.bTabRel; }
 
-    inline  void SetColDeleted( BOOL bVal ) { Flags.bColDeleted = (bVal ? TRUE : FALSE ); }
-    inline  BOOL IsColDeleted() const       { return Flags.bColDeleted; }
-    inline  void SetRowDeleted( BOOL bVal ) { Flags.bRowDeleted = (bVal ? TRUE : FALSE ); }
-    inline  BOOL IsRowDeleted() const       { return Flags.bRowDeleted; }
-    inline  void SetTabDeleted( BOOL bVal ) { Flags.bTabDeleted = (bVal ? TRUE : FALSE ); }
-    inline  BOOL IsTabDeleted() const       { return Flags.bTabDeleted; }
-    inline  BOOL IsDeleted() const          { return IsColDeleted() || IsRowDeleted() || IsTabDeleted(); }
+    inline  void SetColDeleted( sal_Bool bVal ) { Flags.bColDeleted = (bVal ? sal_True : sal_False ); }
+    inline  sal_Bool IsColDeleted() const       { return Flags.bColDeleted; }
+    inline  void SetRowDeleted( sal_Bool bVal ) { Flags.bRowDeleted = (bVal ? sal_True : sal_False ); }
+    inline  sal_Bool IsRowDeleted() const       { return Flags.bRowDeleted; }
+    inline  void SetTabDeleted( sal_Bool bVal ) { Flags.bTabDeleted = (bVal ? sal_True : sal_False ); }
+    inline  sal_Bool IsTabDeleted() const       { return Flags.bTabDeleted; }
+    inline  sal_Bool IsDeleted() const          { return IsColDeleted() || IsRowDeleted() || IsTabDeleted(); }
 
-    inline  void SetFlag3D( BOOL bVal ) { Flags.bFlag3D = (bVal ? TRUE : FALSE ); }
-    inline  BOOL IsFlag3D() const       { return Flags.bFlag3D; }
-    inline  void SetRelName( BOOL bVal )    { Flags.bRelName = (bVal ? TRUE : FALSE ); }
-    inline  BOOL IsRelName() const          { return Flags.bRelName; }
+    inline  void SetFlag3D( sal_Bool bVal ) { Flags.bFlag3D = (bVal ? sal_True : sal_False ); }
+    inline  sal_Bool IsFlag3D() const       { return Flags.bFlag3D; }
+    inline  void SetRelName( sal_Bool bVal )    { Flags.bRelName = (bVal ? sal_True : sal_False ); }
+    inline  sal_Bool IsRelName() const          { return Flags.bRelName; }
 
-    inline  BOOL Valid() const;
+    inline  sal_Bool Valid() const;
     /// In external references nTab is -1
     inline  bool ValidExternal() const;
 
             void SmartRelAbs( const ScAddress& rPos );
             void CalcRelFromAbs( const ScAddress& rPos );
             void CalcAbsIfRel( const ScAddress& rPos );
-            BOOL operator==( const ScSingleRefData& ) const;
+            sal_Bool operator==( const ScSingleRefData& ) const;
             bool operator!=( const ScSingleRefData& ) const;
 };
 
@@ -133,13 +133,13 @@ inline void ScSingleRefData::InitAddressRel( const ScAddress& rAdr,
                                             const ScAddress& rPos )
 {
     InitAddress( rAdr.Col(), rAdr.Row(), rAdr.Tab());
-    SetColRel( TRUE );
-    SetRowRel( TRUE );
-    SetTabRel( TRUE );
+    SetColRel( sal_True );
+    SetRowRel( sal_True );
+    SetTabRel( sal_True );
     CalcRelFromAbs( rPos );
 }
 
-inline BOOL ScSingleRefData::Valid() const
+inline sal_Bool ScSingleRefData::Valid() const
 {
     return  nCol >= 0 && nCol <= MAXCOL &&
             nRow >= 0 && nRow <= MAXROW &&
@@ -183,9 +183,9 @@ struct ScComplexRefData         // Complex reference (a range) into the sheet
         { Ref1.CalcRelFromAbs( rPos ); Ref2.CalcRelFromAbs( rPos ); }
     inline  void CalcAbsIfRel( const ScAddress& rPos )
         { Ref1.CalcAbsIfRel( rPos ); Ref2.CalcAbsIfRel( rPos ); }
-    inline  BOOL IsDeleted() const
+    inline  sal_Bool IsDeleted() const
         { return Ref1.IsDeleted() || Ref2.IsDeleted(); }
-    inline  BOOL Valid() const
+    inline  sal_Bool Valid() const
         { return Ref1.Valid() && Ref2.Valid(); }
     /** In external references nTab is -1 for the start tab and -1 for the end
         tab if one sheet, or >=0 if more than one sheets. */
@@ -193,7 +193,7 @@ struct ScComplexRefData         // Complex reference (a range) into the sheet
 
     /// Absolute references have to be up-to-date when calling this!
     void PutInOrder();
-    inline  BOOL operator==( const ScComplexRefData& r ) const
+    inline  sal_Bool operator==( const ScComplexRefData& r ) const
         { return Ref1 == r.Ref1 && Ref2 == r.Ref2; }
     /** Enlarge range if reference passed is not within existing range.
         ScAddress position is used to calculate absolute references from

@@ -101,12 +101,12 @@ SfxTabPage* __EXPORT ScRedlineOptionsTabPage::Create( Window* pParent, const Sfx
     Beschreibung:
  -----------------------------------------------------------------------*/
 
-BOOL __EXPORT ScRedlineOptionsTabPage::FillItemSet( SfxItemSet& /* rSet */ )
+sal_Bool __EXPORT ScRedlineOptionsTabPage::FillItemSet( SfxItemSet& /* rSet */ )
 {
     ScAppOptions aAppOptions=SC_MOD()->GetAppOptions();
 
-    ULONG nNew=0;
-    USHORT nPos=0;
+    sal_uLong nNew=0;
+    sal_uInt16 nPos=0;
 
     nPos = aContentColorLB.GetSelectEntryPos();
     if (nPos != LISTBOX_ENTRY_NOTFOUND)
@@ -165,7 +165,7 @@ BOOL __EXPORT ScRedlineOptionsTabPage::FillItemSet( SfxItemSet& /* rSet */ )
     if (pDocSh)
         pDocSh->PostPaintGridAll();
 
-    return FALSE;
+    return sal_False;
 }
 
 /*-----------------------------------------------------------------------
@@ -181,12 +181,12 @@ void __EXPORT ScRedlineOptionsTabPage::Reset( const SfxItemSet& /* rSet */ )
     aInsertColorLB.InsertEntry(aAuthorStr);
     aRemoveColorLB.InsertEntry(aAuthorStr);
 
-    aContentColorLB.SetUpdateMode( FALSE);
-    aMoveColorLB.SetUpdateMode( FALSE);
-    aInsertColorLB.SetUpdateMode( FALSE);
-    aRemoveColorLB.SetUpdateMode( FALSE);
+    aContentColorLB.SetUpdateMode( sal_False);
+    aMoveColorLB.SetUpdateMode( sal_False);
+    aInsertColorLB.SetUpdateMode( sal_False);
+    aRemoveColorLB.SetUpdateMode( sal_False);
 
-    for( USHORT i = 0; i < pColorTbl->Count(); ++i )
+    for( sal_uInt16 i = 0; i < pColorTbl->Count(); ++i )
     {
         XColorEntry* pEntry = pColorTbl->GetColor( i );
         Color aColor = pEntry->GetColor();
@@ -197,15 +197,15 @@ void __EXPORT ScRedlineOptionsTabPage::Reset( const SfxItemSet& /* rSet */ )
         aInsertColorLB.InsertEntry( aColor, sName );
         aRemoveColorLB.InsertEntry( aColor, sName );
     }
-    aContentColorLB.SetUpdateMode( TRUE );
-    aMoveColorLB.SetUpdateMode( TRUE );
-    aInsertColorLB.SetUpdateMode( TRUE );
-    aRemoveColorLB.SetUpdateMode( TRUE );
+    aContentColorLB.SetUpdateMode( sal_True );
+    aMoveColorLB.SetUpdateMode( sal_True );
+    aInsertColorLB.SetUpdateMode( sal_True );
+    aRemoveColorLB.SetUpdateMode( sal_True );
 
 
     ScAppOptions aAppOptions=SC_MOD()->GetAppOptions();
 
-    ULONG nColor = aAppOptions.GetTrackContentColor();
+    sal_uLong nColor = aAppOptions.GetTrackContentColor();
     if (nColor == COL_TRANSPARENT)
         aContentColorLB.SelectEntryPos(0);
     else
@@ -252,7 +252,7 @@ IMPL_LINK( ScRedlineOptionsTabPage, ColorHdl, ColorListBox *, EMPTYARG )
     }
 
     SvxFont& rFont = pPrev->GetFont();
-    USHORT nPos = pLB->GetSelectEntryPos();
+    sal_uInt16 nPos = pLB->GetSelectEntryPos();
     if (nPos == LISTBOX_ENTRY_NOTFOUND)
         nPos = 0;
 

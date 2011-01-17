@@ -46,11 +46,11 @@ public:
                     ScMoveTableDlg( Window* pParent );
                     ~ScMoveTableDlg();
 
-    USHORT  GetSelectedDocument     () const;
+    sal_uInt16  GetSelectedDocument     () const;
     SCTAB   GetSelectedTable        () const;
-    BOOL    GetCopyTable            () const;
-    void    SetCopyTable            (BOOL bFlag=TRUE);
-    void    EnableCopyTable         (BOOL bFlag=TRUE);
+    sal_Bool    GetCopyTable            () const;
+    void    SetCopyTable            (sal_Bool bFlag=sal_True);
+    void    EnableCopyTable         (sal_Bool bFlag=sal_True);
 
 private:
     FixedText       aFtDoc;
@@ -62,9 +62,9 @@ private:
     CancelButton    aBtnCancel;
     HelpButton      aBtnHelp;
 
-    USHORT          nDocument;
+    sal_uInt16          nDocument;
     SCTAB           nTable;
-    BOOL            bCopyTable;
+    sal_Bool            bCopyTable;
     //--------------------------------------
     void    Init            ();
     void    InitDocListBox  ();

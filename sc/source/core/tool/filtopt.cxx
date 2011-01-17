@@ -71,7 +71,7 @@ Sequence<OUString> ScFilterOptions::GetPropertyNames()
 
 ScFilterOptions::ScFilterOptions() :
     ConfigItem( OUString::createFromAscii( CFGPATH_FILTER ) ),
-    bWK3Flag( FALSE ),
+    bWK3Flag( sal_False ),
     fExcelColScale( 0 ),
     fExcelRowScale( 0 )
 {

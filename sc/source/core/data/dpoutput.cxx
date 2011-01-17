@@ -115,7 +115,7 @@ struct ScDPOutLevelData
         mbHasHiddenMember = false;
     }
 
-    BOOL operator<(const ScDPOutLevelData& r) const
+    sal_Bool operator<(const ScDPOutLevelData& r) const
         { return nDimPos<r.nDimPos || ( nDimPos==r.nDimPos && nHier<r.nHier ) ||
             ( nDimPos==r.nDimPos && nHier==r.nHier && nLevel<r.nLevel ); }
 
@@ -130,7 +130,7 @@ struct ScDPOutLevelData
 
 void lcl_SetStyleById( ScDocument* pDoc, SCTAB nTab,
                     SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
-                    USHORT nStrId )
+                    sal_uInt16 nStrId )
 {
     if ( nCol1 > nCol2 || nRow1 > nRow2 )
     {
@@ -160,7 +160,7 @@ void lcl_SetStyleById( ScDocument* pDoc, SCTAB nTab,
 
 void lcl_SetFrame( ScDocument* pDoc, SCTAB nTab,
                     SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
-                    USHORT nWidth )
+                    sal_uInt16 nWidth )
 {
     SvxBorderLine aLine;
     aLine.SetOutWidth(nWidth);
@@ -170,16 +170,16 @@ void lcl_SetFrame( ScDocument* pDoc, SCTAB nTab,
     aBox.SetLine(&aLine, BOX_LINE_RIGHT);
     aBox.SetLine(&aLine, BOX_LINE_BOTTOM);
     SvxBoxInfoItem aBoxInfo( ATTR_BORDER_INNER );
-    aBoxInfo.SetValid(VALID_HORI,FALSE);
-    aBoxInfo.SetValid(VALID_VERT,FALSE);
-    aBoxInfo.SetValid(VALID_DISTANCE,FALSE);
+    aBoxInfo.SetValid(VALID_HORI,sal_False);
+    aBoxInfo.SetValid(VALID_VERT,sal_False);
+    aBoxInfo.SetValid(VALID_DISTANCE,sal_False);
 
     pDoc->ApplyFrameAreaTab( ScRange( nCol1, nRow1, nTab, nCol2, nRow2, nTab ), &aBox, &aBoxInfo );
 }
 
 // -----------------------------------------------------------------------
 
-void lcl_FillNumberFormats( UINT32*& rFormats, long& rCount,
+void lcl_FillNumberFormats( sal_uInt32*& rFormats, long& rCount,
                             const uno::Reference<sheet::XDataPilotMemberResults>& xLevRes,
                             const uno::Reference<container::XIndexAccess>& xDims )
 {
@@ -198,9 +198,9 @@ void lcl_FillNumberFormats( UINT32*& rFormats, long& rCount,
         //! merge this with the loop to collect ScDPOutLevelData?
 
         String aDataNames[SC_DPOUT_MAXLEVELS];
-        UINT32 nDataFormats[SC_DPOUT_MAXLEVELS];
+        sal_uInt32 nDataFormats[SC_DPOUT_MAXLEVELS];
         long nDataCount = 0;
-        BOOL bAnySet = FALSE;
+        sal_Bool bAnySet = sal_False;
 
         long nDimCount = xDims->getCount();
         for (long nDim=0; nDim<nDimCount; nDim++)
@@ -223,7 +223,7 @@ void lcl_FillNumberFormats( UINT32*& rFormats, long& rCount,
                                             rtl::OUString::createFromAscii(DP_PROP_NUMBERFORMAT) );
                     nDataFormats[nDataCount] = nFormat;
                     if ( nFormat != 0 )
-                        bAnySet = TRUE;
+                        bAnySet = sal_True;
                     ++nDataCount;
                 }
             }
@@ -234,7 +234,7 @@ void lcl_FillNumberFormats( UINT32*& rFormats, long& rCount,
             const sheet::MemberResult* pArray = aResult.getConstArray();
 
             String aName;
-            UINT32* pNumFmt = new UINT32[nSize];
+            sal_uInt32* pNumFmt = new sal_uInt32[nSize];
             if (nDataCount == 1)
             {
                 //  only one data dimension -> use its numberformat everywhere
@@ -251,7 +251,7 @@ void lcl_FillNumberFormats( UINT32*& rFormats, long& rCount,
                     if ( !(pArray[nPos].Flags & sheet::MemberResultFlags::CONTINUE) )
                         aName = String( pArray[nPos].Name );
 
-                    UINT32 nFormat = 0;
+                    sal_uInt32 nFormat = 0;
                     for (long i=0; i<nDataCount; i++)
                         if (aName == aDataNames[i])         //! search more efficiently?
                         {
@@ -268,7 +268,7 @@ void lcl_FillNumberFormats( UINT32*& rFormats, long& rCount,
     }
 }
 
-UINT32 lcl_GetFirstNumberFormat( const uno::Reference<container::XIndexAccess>& xDims )
+sal_uInt32 lcl_GetFirstNumberFormat( const uno::Reference<container::XIndexAccess>& xDims )
 {
     long nDimCount = xDims->getCount();
     for (long nDim=0; nDim<nDimCount; nDim++)
@@ -306,7 +306,7 @@ void lcl_SortFields( ScDPOutLevelData* pFields, long nFieldCount )
     }
 }
 
-BOOL lcl_MemberEmpty( const uno::Sequence<sheet::MemberResult>& rSeq )
+sal_Bool lcl_MemberEmpty( const uno::Sequence<sheet::MemberResult>& rSeq )
 {
     //  used to skip levels that have no members
 
@@ -314,9 +314,9 @@ BOOL lcl_MemberEmpty( const uno::Sequence<sheet::MemberResult>& rSeq )
     const sheet::MemberResult* pArray = rSeq.getConstArray();
     for (long i=0; i<nLen; i++)
         if (pArray[i].Flags & sheet::MemberResultFlags::HASMEMBER)
-            return FALSE;
+            return sal_False;
 
-    return TRUE;    // no member data -> empty
+    return sal_True;    // no member data -> empty
 }
 
 uno::Sequence<sheet::MemberResult> lcl_GetSelectedPageAsResult( const uno::Reference<beans::XPropertySet>& xDimProp )
@@ -356,20 +356,20 @@ uno::Sequence<sheet::MemberResult> lcl_GetSelectedPageAsResult( const uno::Refer
 }
 
 ScDPOutput::ScDPOutput( ScDocument* pD, const uno::Reference<sheet::XDimensionsSupplier>& xSrc,
-                                const ScAddress& rPos, BOOL bFilter ) :
+                                const ScAddress& rPos, sal_Bool bFilter ) :
     pDoc( pD ),
     xSource( xSrc ),
     aStartPos( rPos ),
     bDoFilter( bFilter ),
-    bResultsError( FALSE ),
+    bResultsError( sal_False ),
     mbHasDataLayout(false),
     pColNumFmt( NULL ),
     pRowNumFmt( NULL ),
     nColFmtCount( 0 ),
     nRowFmtCount( 0 ),
     nSingleNumFmt( 0 ),
-    bSizesValid( FALSE ),
-    bSizeOverflow( FALSE ),
+    bSizesValid( sal_False ),
+    bSizeOverflow( sal_False ),
     mbHeaderLayout( false )
 {
     nTabStartCol = nMemberStartCol = nDataStartCol = nTabEndCol = 0;
@@ -404,7 +404,7 @@ ScDPOutput::ScDPOutput( ScDocument* pD, const uno::Reference<sheet::XDimensionsS
                         sheet::DataPilotFieldOrientation_HIDDEN );
                 long nDimPos = ScUnoHelpFunctions::GetLongProperty( xDimProp,
                         rtl::OUString::createFromAscii(DP_PROP_POSITION) );
-                BOOL bIsDataLayout = ScUnoHelpFunctions::GetBoolProperty(
+                sal_Bool bIsDataLayout = ScUnoHelpFunctions::GetBoolProperty(
                                                 xDimProp,
                                                 rtl::OUString::createFromAscii(DP_PROP_ISDATALAYOUT) );
                 bool bHasHiddenMember = ScUnoHelpFunctions::GetBoolProperty(
@@ -532,7 +532,7 @@ ScDPOutput::ScDPOutput( ScDocument* pD, const uno::Reference<sheet::XDimensionsS
         }
         catch (uno::RuntimeException&)
         {
-            bResultsError = TRUE;
+            bResultsError = sal_True;
         }
     }
 
@@ -568,7 +568,7 @@ ScDPOutput::~ScDPOutput()
 void ScDPOutput::SetPosition( const ScAddress& rPos )
 {
     aStartPos = rPos;
-    bSizesValid = bSizeOverflow = FALSE;
+    bSizesValid = bSizeOverflow = sal_False;
 }
 
 void ScDPOutput::DataCell( SCCOL nCol, SCROW nRow, SCTAB nTab, const sheet::DataResult& rData )
@@ -585,7 +585,7 @@ void ScDPOutput::DataCell( SCCOL nCol, SCROW nRow, SCTAB nTab, const sheet::Data
         //  use number formats from source
 
         DBG_ASSERT( bSizesValid, "DataCell: !bSizesValid" );
-        UINT32 nFormat = 0;
+        sal_uInt32 nFormat = 0;
         if ( pColNumFmt )
         {
             if ( nCol >= nDataStartCol )
@@ -618,7 +618,7 @@ void ScDPOutput::DataCell( SCCOL nCol, SCROW nRow, SCTAB nTab, const sheet::Data
 }
 
 void ScDPOutput::HeaderCell( SCCOL nCol, SCROW nRow, SCTAB nTab,
-                                const sheet::MemberResult& rData, BOOL bColHeader, long nLevel )
+                                const sheet::MemberResult& rData, sal_Bool bColHeader, long nLevel )
 {
     long nFlags = rData.Flags;
 
@@ -664,7 +664,7 @@ void ScDPOutput::HeaderCell( SCCOL nCol, SCROW nRow, SCTAB nTab,
         {
             // Wang Xu Ming -- 2009-8-17
             // DataPilot Migration - Cache&&Performance
-            //lcl_SetFrame( pDoc,nTab, nMemberStartCol+(USHORT)nLevel,nRow, nTabEndCol,nRow, SC_DP_FRAME_INNER_BOLD );
+            //lcl_SetFrame( pDoc,nTab, nMemberStartCol+(sal_uInt16)nLevel,nRow, nTabEndCol,nRow, SC_DP_FRAME_INNER_BOLD );
             outputimp.OutputBlockFrame( nMemberStartCol+(SCCOL)nLevel,nRow, nDataStartCol-1,nRow );
             // End Comments
             lcl_SetStyleById( pDoc,nTab, nMemberStartCol+(SCCOL)nLevel,nRow, nDataStartCol-1,nRow,
@@ -728,7 +728,7 @@ void ScDPOutput::CalcSizes()
         if ( aStartPos.Col() + nRowFieldCount + nColCount - 1 > MAXCOL ||
              aStartPos.Row() + nPageSize + nHeaderSize + nColFieldCount + nRowCount > MAXROW )
         {
-            bSizeOverflow = TRUE;
+            bSizeOverflow = sal_True;
         }
 
         nTabStartCol = aStartPos.Col();
@@ -748,7 +748,7 @@ void ScDPOutput::CalcSizes()
             nTabEndRow = nDataStartRow + (SCROW)nRowCount - 1;
         else
             nTabEndRow = nDataStartRow;     // single row will remain empty
-        bSizesValid = TRUE;
+        bSizesValid = sal_True;
     }
 }
 
@@ -890,7 +890,7 @@ void ScDPOutput::Output()
         for (long nCol=0; nCol<nThisColCount; nCol++)
         {
             SCCOL nColPos = nDataStartCol + (SCCOL)nCol;                //! check for overflow
-            HeaderCell( nColPos, nRowPos, nTab, pArray[nCol], TRUE, nField );
+            HeaderCell( nColPos, nRowPos, nTab, pArray[nCol], sal_True, nField );
             // Wang Xu Ming -- 2009-8-17
             // DataPilot Migration - Cache&&Performance
             if ( ( pArray[nCol].Flags & sheet::MemberResultFlags::HASMEMBER ) &&
@@ -908,7 +908,7 @@ void ScDPOutput::Output()
                     {
                         outputimp.AddCol( nColPos );
                         if ( nColPos + 1 == nEndColPos  )
-                            outputimp.OutputBlockFrame( nColPos,nRowPos, nEndColPos,nRowPos+1, TRUE );
+                            outputimp.OutputBlockFrame( nColPos,nRowPos, nEndColPos,nRowPos+1, sal_True );
                     }
                     else
                         outputimp.OutputBlockFrame( nColPos,nRowPos, nEndColPos,nRowPos );
@@ -927,8 +927,8 @@ void ScDPOutput::Output()
     }
 
     //  output row headers:
-    std::vector<BOOL> vbSetBorder;
-    vbSetBorder.resize( nTabEndRow - nDataStartRow + 1, FALSE );
+    std::vector<sal_Bool> vbSetBorder;
+    vbSetBorder.resize( nTabEndRow - nDataStartRow + 1, sal_False );
     for (nField=0; nField<nRowFieldCount; nField++)
     {
         bool bDataLayout = mbHasDataLayout && (nField == nRowFieldCount-1);
@@ -946,7 +946,7 @@ void ScDPOutput::Output()
         for (long nRow=0; nRow<nThisRowCount; nRow++)
         {
             SCROW nRowPos = nDataStartRow + (SCROW)nRow;                //! check for overflow
-            HeaderCell( nColPos, nRowPos, nTab, pArray[nRow], FALSE, nField );
+            HeaderCell( nColPos, nRowPos, nTab, pArray[nRow], sal_False, nField );
             if ( ( pArray[nRow].Flags & sheet::MemberResultFlags::HASMEMBER ) &&
                 !( pArray[nRow].Flags & sheet::MemberResultFlags::SUBTOTAL ) )
             {
@@ -961,10 +961,10 @@ void ScDPOutput::Output()
                     //  lcl_SetFrame( pDoc,nTab, nColPos,nRowPos, nColPos,nEndRowPos, SC_DP_FRAME_INNER_BOLD );
                     //lcl_SetFrame( pDoc,nTab, nColPos,nRowPos, nTabEndCol,nEndRowPos, SC_DP_FRAME_INNER_BOLD );
                     outputimp.AddRow( nRowPos );
-                    if ( vbSetBorder[ nRow ] == FALSE )
+                    if ( vbSetBorder[ nRow ] == sal_False )
                     {
                         outputimp.OutputBlockFrame( nColPos, nRowPos, nTabEndCol, nEndRowPos );
-                        vbSetBorder[ nRow ]  = TRUE;
+                        vbSetBorder[ nRow ]  = sal_True;
                     }
                     outputimp.OutputBlockFrame( nColPos, nRowPos, nColPos, nEndRowPos );
 
@@ -1017,7 +1017,7 @@ ScRange ScDPOutput::GetOutputRange( sal_Int32 nRegionType )
     return ScRange(aStartPos.Col(), aStartPos.Row(), nTab, nTabEndCol, nTabEndRow, nTab);
 }
 
-BOOL ScDPOutput::HasError()
+sal_Bool ScDPOutput::HasError()
 {
     CalcSizes();
 
@@ -1098,12 +1098,12 @@ void lcl_GetTableVars( sal_Int32& rGrandTotalCols, sal_Int32& rGrandTotalRows, s
     rDataOrient = sheet::DataPilotFieldOrientation_HIDDEN;
 
     uno::Reference<beans::XPropertySet> xSrcProp( xSource, uno::UNO_QUERY );
-    BOOL bColGrand = ScUnoHelpFunctions::GetBoolProperty( xSrcProp,
+    sal_Bool bColGrand = ScUnoHelpFunctions::GetBoolProperty( xSrcProp,
                                          rtl::OUString::createFromAscii(DP_PROP_COLUMNGRAND) );
     if ( bColGrand )
         rGrandTotalCols = 1;    // default if data layout not in columns
 
-    BOOL bRowGrand = ScUnoHelpFunctions::GetBoolProperty( xSrcProp,
+    sal_Bool bRowGrand = ScUnoHelpFunctions::GetBoolProperty( xSrcProp,
                                          rtl::OUString::createFromAscii(DP_PROP_ROWGRAND) );
     if ( bRowGrand )
         rGrandTotalRows = 1;    // default if data layout not in rows
@@ -1375,13 +1375,13 @@ bool lcl_IsCondition( const sheet::MemberResult& rResultEntry, const ScDPGetPivo
 
 bool lcl_CheckPageField( const ScDPOutLevelData& rField,
                         const std::vector< ScDPGetPivotDataField >& rFilters,
-                        std::vector< BOOL >& rFilterUsed )
+                        std::vector< sal_Bool >& rFilterUsed )
 {
     for (SCSIZE nFilterPos = 0; nFilterPos < rFilters.size(); ++nFilterPos)
     {
         if ( lcl_IsNamedCategoryField( rFilters[nFilterPos], rField ) )
         {
-            rFilterUsed[nFilterPos] = TRUE;
+            rFilterUsed[nFilterPos] = sal_True;
 
             // page field result is empty or the selection as single entry (see lcl_GetSelectedPageAsResult)
             if ( rField.aResult.getLength() == 1 &&
@@ -1459,10 +1459,10 @@ uno::Sequence<sheet::GeneralFunction> lcl_GetSubTotals(
     return aSubTotals;
 }
 
-void lcl_FilterInclude( std::vector< BOOL >& rResult, std::vector< sal_Int32 >& rSubtotal,
+void lcl_FilterInclude( std::vector< sal_Bool >& rResult, std::vector< sal_Int32 >& rSubtotal,
                         const ScDPOutLevelData& rField,
                         const std::vector< ScDPGetPivotDataField >& rFilters,
-                        std::vector< BOOL >& rFilterUsed,
+                        std::vector< sal_Bool >& rFilterUsed,
                         bool& rBeforeDataLayout,
                         sal_Int32 nGrandTotals, sal_Int32 nDataLayoutIndex,
                         const std::vector<String>& rDataNames, const std::vector<String>& rGivenNames,
@@ -1485,7 +1485,7 @@ void lcl_FilterInclude( std::vector< BOOL >& rResult, std::vector< sal_Int32 >& 
             if ( lcl_IsNamedCategoryField( rFilters[nFilterPos], rField ) )
             {
                 aFilter = rFilters[nFilterPos];
-                rFilterUsed[nFilterPos] = TRUE;
+                rFilterUsed[nFilterPos] = sal_True;
                 bHasFilter = true;
             }
         }
@@ -1597,7 +1597,7 @@ void lcl_FilterInclude( std::vector< BOOL >& rResult, std::vector< sal_Int32 >& 
 
                     // if a function was specified, automatic subtotals never match
                     if ( bHasFunc )
-                        rResult[j] = FALSE;
+                        rResult[j] = sal_False;
                 }
             }
 
@@ -1631,7 +1631,7 @@ void lcl_FilterInclude( std::vector< BOOL >& rResult, std::vector< sal_Int32 >& 
 
                 // if a function was specified, simple (non-subtotal) values never match
                 if ( bHasFunc && nSubTotalCount == 0 )
-                    rResult[j] = FALSE;
+                    rResult[j] = sal_False;
             }
             // if no condition is given, keep the columns/rows included
         }
@@ -1639,7 +1639,7 @@ void lcl_FilterInclude( std::vector< BOOL >& rResult, std::vector< sal_Int32 >& 
     }
 }
 
-void lcl_StripSubTotals( std::vector< BOOL >& rResult, const std::vector< sal_Int32 >& rSubtotal )
+void lcl_StripSubTotals( std::vector< sal_Bool >& rResult, const std::vector< sal_Int32 >& rSubtotal )
 {
     sal_Int32 nSize = rResult.size();
     DBG_ASSERT( (sal_Int32)rSubtotal.size() == nSize, "sizes don't match" );
@@ -1652,13 +1652,13 @@ void lcl_StripSubTotals( std::vector< BOOL >& rResult, const std::vector< sal_In
             DBG_ASSERT( nStart >= 0, "invalid subtotal count" );
 
             for (sal_Int32 nPrev = nStart; nPrev < nPos; nPrev++)
-                rResult[nPrev] = FALSE;
+                rResult[nPrev] = sal_False;
         }
 }
 
 String lcl_GetDataFieldName( const String& rSourceName, sheet::GeneralFunction eFunc )
 {
-    USHORT nStrId = 0;
+    sal_uInt16 nStrId = 0;
     switch ( eFunc )
     {
         case sheet::GeneralFunction_SUM:        nStrId = STR_FUN_TEXT_SUM;      break;
@@ -1711,9 +1711,9 @@ void ScDPOutput::GetDataDimensionNames( String& rSourceName, String& rGivenName,
     }
 }
 
-// Returns TRUE on success and stores the result in rTarget
-// Returns FALSE if rFilters or rTarget describes something that is not visible
-BOOL ScDPOutput::GetPivotData( ScDPGetPivotDataField& rTarget,
+// Returns sal_True on success and stores the result in rTarget
+// Returns sal_False if rFilters or rTarget describes something that is not visible
+sal_Bool ScDPOutput::GetPivotData( ScDPGetPivotDataField& rTarget,
                                const std::vector< ScDPGetPivotDataField >& rFilters )
 {
     CalcSizes();
@@ -1728,7 +1728,7 @@ BOOL ScDPOutput::GetPivotData( ScDPGetPivotDataField& rTarget,
     lcl_GetTableVars( nGrandTotalCols, nGrandTotalRows, nDataLayoutIndex, aDataNames, aGivenNames, eDataOrient, xSource );
 
     if ( aDataNames.empty() )
-        return FALSE;               // incomplete table without data fields -> no result
+        return sal_False;               // incomplete table without data fields -> no result
 
     if ( eDataOrient == sheet::DataPilotFieldOrientation_HIDDEN )
     {
@@ -1736,15 +1736,15 @@ BOOL ScDPOutput::GetPivotData( ScDPGetPivotDataField& rTarget,
 
         DBG_ASSERT( aDataNames.size() == 1, "several data fields but no data layout field" );
         if ( !lcl_IsNamedDataField( rTarget, aDataNames[0], aGivenNames[0] ) )
-            return FALSE;
+            return sal_False;
     }
 
-    std::vector< BOOL > aIncludeCol( nColCount, TRUE );
+    std::vector< sal_Bool > aIncludeCol( nColCount, sal_True );
     std::vector< sal_Int32 > aSubtotalCol( nColCount, 0 );
-    std::vector< BOOL > aIncludeRow( nRowCount, TRUE );
+    std::vector< sal_Bool > aIncludeRow( nRowCount, sal_True );
     std::vector< sal_Int32 > aSubtotalRow( nRowCount, 0 );
 
-    std::vector< BOOL > aFilterUsed( rFilters.size(), FALSE );
+    std::vector< sal_Bool > aFilterUsed( rFilters.size(), sal_False );
 
     long nField;
     long nCol;
@@ -1769,12 +1769,12 @@ BOOL ScDPOutput::GetPivotData( ScDPGetPivotDataField& rTarget,
 
     for (nField=0; nField<nPageFieldCount; nField++)
         if ( !lcl_CheckPageField( pPageFields[nField], rFilters, aFilterUsed ) )
-            return FALSE;
+            return sal_False;
 
     // all filter fields must be used
     for (SCSIZE nFilter=0; nFilter<aFilterUsed.size(); nFilter++)
         if (!aFilterUsed[nFilter])
-            return FALSE;
+            return sal_False;
 
     lcl_StripSubTotals( aIncludeCol, aSubtotalCol );
     lcl_StripSubTotals( aIncludeRow, aSubtotalRow );
@@ -1798,35 +1798,35 @@ BOOL ScDPOutput::GetPivotData( ScDPGetPivotDataField& rTarget,
         }
 
     if ( nColIncluded != 1 || nRowIncluded != 1 )
-        return FALSE;
+        return sal_False;
 
     const uno::Sequence<sheet::DataResult>& rDataRow = aData[nRowPos];
     if ( nColPos >= rDataRow.getLength() )
-        return FALSE;
+        return sal_False;
 
     const sheet::DataResult& rResult = rDataRow[nColPos];
     if ( rResult.Flags & sheet::DataResultFlags::ERROR )
-        return FALSE;                                       //! different error?
+        return sal_False;                                       //! different error?
 
-    rTarget.mbValIsStr = FALSE;
+    rTarget.mbValIsStr = sal_False;
     rTarget.mnValNum = rResult.Value;
 
-    return TRUE;
+    return sal_True;
 }
 
-BOOL ScDPOutput::IsFilterButton( const ScAddress& rPos )
+sal_Bool ScDPOutput::IsFilterButton( const ScAddress& rPos )
 {
     SCCOL nCol = rPos.Col();
     SCROW nRow = rPos.Row();
     SCTAB nTab = rPos.Tab();
     if ( nTab != aStartPos.Tab() || !bDoFilter )
-        return FALSE;                               // wrong sheet or no button at all
+        return sal_False;                               // wrong sheet or no button at all
 
     //  filter button is at top left
     return ( nCol == aStartPos.Col() && nRow == aStartPos.Row() );
 }
 
-long ScDPOutput::GetHeaderDim( const ScAddress& rPos, USHORT& rOrient )
+long ScDPOutput::GetHeaderDim( const ScAddress& rPos, sal_uInt16& rOrient )
 {
     SCCOL nCol = rPos.Col();
     SCROW nRow = rPos.Row();
@@ -1872,9 +1872,9 @@ long ScDPOutput::GetHeaderDim( const ScAddress& rPos, USHORT& rOrient )
     return -1;      // invalid
 }
 
-BOOL ScDPOutput::GetHeaderDrag( const ScAddress& rPos, BOOL bMouseLeft, BOOL bMouseTop,
+sal_Bool ScDPOutput::GetHeaderDrag( const ScAddress& rPos, sal_Bool bMouseLeft, sal_Bool bMouseTop,
                                 long nDragDim,
-                                Rectangle& rPosRect, USHORT& rOrient, long& rDimPos )
+                                Rectangle& rPosRect, sal_uInt16& rOrient, long& rDimPos )
 {
     //  Rectangle instead of ScRange for rPosRect to allow for negative values
 
@@ -1882,7 +1882,7 @@ BOOL ScDPOutput::GetHeaderDrag( const ScAddress& rPos, BOOL bMouseLeft, BOOL bMo
     SCROW nRow = rPos.Row();
     SCTAB nTab = rPos.Tab();
     if ( nTab != aStartPos.Tab() )
-        return FALSE;                                       // wrong sheet
+        return sal_False;                                       // wrong sheet
 
     //  calculate output positions and sizes
 
@@ -1897,25 +1897,25 @@ BOOL ScDPOutput::GetHeaderDrag( const ScAddress& rPos, BOOL bMouseLeft, BOOL bMo
         if (nField < 0)
         {
             nField = 0;
-            bMouseTop = TRUE;
+            bMouseTop = sal_True;
         }
         //! find start of dimension
 
         rPosRect = Rectangle( nDataStartCol, nMemberStartRow + nField,
                               nTabEndCol, nMemberStartRow + nField -1 );
 
-        BOOL bFound = FALSE;            // is this within the same orientation?
-        BOOL bBeforeDrag = FALSE;
-        BOOL bAfterDrag = FALSE;
+        sal_Bool bFound = sal_False;            // is this within the same orientation?
+        sal_Bool bBeforeDrag = sal_False;
+        sal_Bool bAfterDrag = sal_False;
         for (long nPos=0; nPos<nColFieldCount && !bFound; nPos++)
         {
             if (pColFields[nPos].nDim == nDragDim)
             {
-                bFound = TRUE;
+                bFound = sal_True;
                 if ( nField < nPos )
-                    bBeforeDrag = TRUE;
+                    bBeforeDrag = sal_True;
                 else if ( nField > nPos )
-                    bAfterDrag = TRUE;
+                    bAfterDrag = sal_True;
             }
         }
 
@@ -1940,13 +1940,13 @@ BOOL ScDPOutput::GetHeaderDrag( const ScAddress& rPos, BOOL bMouseLeft, BOOL bMo
 
         rOrient = sheet::DataPilotFieldOrientation_COLUMN;
         rDimPos = nField;                       //!...
-        return TRUE;
+        return sal_True;
     }
 
     //  test for row header
 
     //  special case if no row fields
-    BOOL bSpecial = ( nRow+1 >= nDataStartRow && nRow <= nTabEndRow &&
+    sal_Bool bSpecial = ( nRow+1 >= nDataStartRow && nRow <= nTabEndRow &&
                         nRowFieldCount == 0 && nCol == nTabStartCol && bMouseLeft );
 
     if ( bSpecial || ( nRow+1 >= nDataStartRow && nRow <= nTabEndRow &&
@@ -1958,18 +1958,18 @@ BOOL ScDPOutput::GetHeaderDrag( const ScAddress& rPos, BOOL bMouseLeft, BOOL bMo
         rPosRect = Rectangle( nTabStartCol + nField, nDataStartRow - 1,
                               nTabStartCol + nField - 1, nTabEndRow );
 
-        BOOL bFound = FALSE;            // is this within the same orientation?
-        BOOL bBeforeDrag = FALSE;
-        BOOL bAfterDrag = FALSE;
+        sal_Bool bFound = sal_False;            // is this within the same orientation?
+        sal_Bool bBeforeDrag = sal_False;
+        sal_Bool bAfterDrag = sal_False;
         for (long nPos=0; nPos<nRowFieldCount && !bFound; nPos++)
         {
             if (pRowFields[nPos].nDim == nDragDim)
             {
-                bFound = TRUE;
+                bFound = sal_True;
                 if ( nField < nPos )
-                    bBeforeDrag = TRUE;
+                    bBeforeDrag = sal_True;
                 else if ( nField > nPos )
-                    bAfterDrag = TRUE;
+                    bAfterDrag = sal_True;
             }
         }
 
@@ -1994,7 +1994,7 @@ BOOL ScDPOutput::GetHeaderDrag( const ScAddress& rPos, BOOL bMouseLeft, BOOL bMo
 
         rOrient = sheet::DataPilotFieldOrientation_ROW;
         rDimPos = nField;                       //!...
-        return TRUE;
+        return sal_True;
     }
 
     //  test for page fields
@@ -2007,25 +2007,25 @@ BOOL ScDPOutput::GetHeaderDrag( const ScAddress& rPos, BOOL bMouseLeft, BOOL bMo
         if (nField < 0)
         {
             nField = 0;
-            bMouseTop = TRUE;
+            bMouseTop = sal_True;
         }
         //! find start of dimension
 
         rPosRect = Rectangle( aStartPos.Col(), nPageStartRow + nField,
                               nTabEndCol, nPageStartRow + nField - 1 );
 
-        BOOL bFound = FALSE;            // is this within the same orientation?
-        BOOL bBeforeDrag = FALSE;
-        BOOL bAfterDrag = FALSE;
+        sal_Bool bFound = sal_False;            // is this within the same orientation?
+        sal_Bool bBeforeDrag = sal_False;
+        sal_Bool bAfterDrag = sal_False;
         for (long nPos=0; nPos<nPageFieldCount && !bFound; nPos++)
         {
             if (pPageFields[nPos].nDim == nDragDim)
             {
-                bFound = TRUE;
+                bFound = sal_True;
                 if ( nField < nPos )
-                    bBeforeDrag = TRUE;
+                    bBeforeDrag = sal_True;
                 else if ( nField > nPos )
-                    bAfterDrag = TRUE;
+                    bAfterDrag = sal_True;
             }
         }
 
@@ -2050,10 +2050,10 @@ BOOL ScDPOutput::GetHeaderDrag( const ScAddress& rPos, BOOL bMouseLeft, BOOL bMo
 
         rOrient = sheet::DataPilotFieldOrientation_PAGE;
         rDimPos = nField;                       //!...
-        return TRUE;
+        return sal_True;
     }
 
-    return FALSE;
+    return sal_False;
 }
 
 

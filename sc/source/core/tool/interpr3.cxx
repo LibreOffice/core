@@ -211,7 +211,7 @@ double ScInterpreter::integralPhi(double x)
     return 0.5 * ::rtl::math::erfc(-x * 0.7071067811865475); // * 1/sqrt(2)
 }
 
-double ScInterpreter::taylor(double* pPolynom, USHORT nMax, double x)
+double ScInterpreter::taylor(double* pPolynom, sal_uInt16 nMax, double x)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::taylor" );
     double nVal = pPolynom[nMax];
@@ -250,7 +250,7 @@ double ScInterpreter::gauss(double x)
     double asympt[] = { -1.0, 1.0, -3.0, 15.0, -105.0 };
 
     double xAbs = fabs(x);
-    USHORT xShort = (USHORT)::rtl::math::approxFloor(xAbs);
+    sal_uInt16 xShort = (sal_uInt16)::rtl::math::approxFloor(xAbs);
     double nVal = 0.0;
     if (xShort == 0)
         nVal = taylor(t0, 11, (xAbs * xAbs)) * xAbs;
@@ -683,7 +683,7 @@ double ScInterpreter::GetTDist(double T, double fDF)
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::GetTDist" );
     return 0.5 * GetBetaDist(fDF/(fDF+T*T), fDF/2.0, 0.5);
 /*
-    USHORT DF = (USHORT) fDF;
+    sal_uInt16 DF = (sal_uInt16) fDF;
     double A = T / sqrt(DF);
     double B = 1.0 + A*A;
     double R;
@@ -693,7 +693,7 @@ double ScInterpreter::GetTDist(double T, double fDF)
     {
         double S0 = A/(2.0 * sqrt(B));
         double C0 = S0;
-        for (USHORT i = 2; i <= DF-2; i+=2)
+        for (sal_uInt16 i = 2; i <= DF-2; i+=2)
         {
             C0 *= (1.0 - 1.0/(double)i)/B;
             S0 += C0;
@@ -704,7 +704,7 @@ double ScInterpreter::GetTDist(double T, double fDF)
     {
         double S1 = A / (B * F_PI);
         double C1 = S1;
-        for (USHORT i = 3; i <= DF-2; i+=2)
+        for (sal_uInt16 i = 3; i <= DF-2; i+=2)
         {
             C1 *= (1.0 - 1.0/(double)i)/B;
             S1 += C1;
@@ -779,7 +779,7 @@ double ScInterpreter::GetChiSqDistPDF(double fX, double fDF)
 
 void ScInterpreter::ScChiSqDist()
 {
-    BYTE nParamCount = GetByte();
+    sal_uInt8 nParamCount = GetByte();
     if ( !MustHaveParamCount( nParamCount, 2, 3 ) )
         return;
     double fX;
@@ -1069,7 +1069,7 @@ double ScInterpreter::GetBetaDist(double fXin, double fAlpha, double fBeta)
 
   void ScInterpreter::ScBetaDist()
   {
-      BYTE nParamCount = GetByte();
+      sal_uInt8 nParamCount = GetByte();
     if ( !MustHaveParamCount( nParamCount, 3, 6 ) ) // expanded, see #i91547#
           return;
     double fLowerBound, fUpperBound;
@@ -1205,7 +1205,7 @@ void ScInterpreter::ScVariationen()
         else
         {
             double nVal = n;
-            for (ULONG i = (ULONG)k-1; i >= 1; i--)
+            for (sal_uLong i = (sal_uLong)k-1; i >= 1; i--)
                 nVal *= n-(double)i;
             PushDouble(nVal);
         }
@@ -1229,7 +1229,7 @@ void ScInterpreter::ScVariationen2()
 void ScInterpreter::ScB()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScB" );
-    BYTE nParamCount = GetByte();
+    sal_uInt8 nParamCount = GetByte();
     if ( !MustHaveParamCount( nParamCount, 3, 4 ) )
         return ;
     if (nParamCount == 3)
@@ -1250,16 +1250,16 @@ void ScInterpreter::ScB()
                     PushNoValue();
                 else
                 {
-                    ULONG max = (ULONG) (n - x);
-                    for (ULONG i = 0; i < max && fFactor > 0.0; i++)
+                    sal_uLong max = (sal_uLong) (n - x);
+                    for (sal_uLong i = 0; i < max && fFactor > 0.0; i++)
                         fFactor *= (n-i)/(i+1)*q/p;
                     PushDouble(fFactor);
                 }
             }
             else
             {
-                ULONG max = (ULONG) x;
-                for (ULONG i = 0; i < max && fFactor > 0.0; i++)
+                sal_uLong max = (sal_uLong) x;
+                for (sal_uLong i = 0; i < max && fFactor > 0.0; i++)
                     fFactor *= (n-i)/(i+1)*p/q;
                 PushDouble(fFactor);
             }
@@ -1294,16 +1294,16 @@ void ScInterpreter::ScB()
                 else
                 {
                     double fSum = 0.0;
-                    ULONG max;
-                    if (xe < (ULONG) n)
-                        max = (ULONG) (n-xe)-1;
+                    sal_uLong max;
+                    if (xe < (sal_uLong) n)
+                        max = (sal_uLong) (n-xe)-1;
                     else
                         max = 0;
-                    ULONG i;
+                    sal_uLong i;
                     for (i = 0; i < max && fFactor > 0.0; i++)
                         fFactor *= (n-i)/(i+1)*q/p;
-                    if (xs < (ULONG) n)
-                        max = (ULONG) (n-xs);
+                    if (xs < (sal_uLong) n)
+                        max = (sal_uLong) (n-xs);
                     else
                         fSum = fFactor;
                     for (; i < max && fFactor > 0.0; i++)
@@ -1316,25 +1316,25 @@ void ScInterpreter::ScB()
             }
             else
             {
-                ULONG max;
+                sal_uLong max;
                 double fSum;
-                if ( (ULONG) xs == 0)
+                if ( (sal_uLong) xs == 0)
                 {
                     fSum = fFactor;
                     max = 0;
                 }
                 else
                 {
-                    max = (ULONG) xs-1;
+                    max = (sal_uLong) xs-1;
                     fSum = 0.0;
                 }
-                ULONG i;
+                sal_uLong i;
                 for (i = 0; i < max && fFactor > 0.0; i++)
                     fFactor *= (n-i)/(i+1)*p/q;
-                if ((ULONG)xe == 0)                     // beide 0
+                if ((sal_uLong)xe == 0)                     // beide 0
                     fSum = fFactor;
                 else
-                    max = (ULONG) xe;
+                    max = (sal_uLong) xe;
                 for (; i < max && fFactor > 0.0; i++)
                 {
                     fFactor *= (n-i)/(i+1)*p/q;
@@ -1383,16 +1383,16 @@ void ScInterpreter::ScBinomDist()
                     PushNoValue();
                 else
                 {
-                    ULONG max = (ULONG) (n - x);
-                    for (ULONG i = 0; i < max && fFactor > 0.0; i++)
+                    sal_uLong max = (sal_uLong) (n - x);
+                    for (sal_uLong i = 0; i < max && fFactor > 0.0; i++)
                         fFactor *= (n-i)/(i+1)*q/p;
                     PushDouble(fFactor);
                 }
             }
             else
             {
-                ULONG max = (ULONG) x;
-                for (ULONG i = 0; i < max && fFactor > 0.0; i++)
+                sal_uLong max = (sal_uLong) x;
+                for (sal_uLong i = 0; i < max && fFactor > 0.0; i++)
                     fFactor *= (n-i)/(i+1)*p/q;
                 PushDouble(fFactor);
             }
@@ -1413,8 +1413,8 @@ void ScInterpreter::ScBinomDist()
                     else
                     {
                         fSum = 1.0 - fFactor;
-                        ULONG max = (ULONG) (n - x) - 1;
-                        for (ULONG i = 0; i < max && fFactor > 0.0; i++)
+                        sal_uLong max = (sal_uLong) (n - x) - 1;
+                        for (sal_uLong i = 0; i < max && fFactor > 0.0; i++)
                         {
                             fFactor *= (n-i)/(i+1)*q/p;
                             fSum -= fFactor;
@@ -1428,8 +1428,8 @@ void ScInterpreter::ScBinomDist()
                 else
                 {
                     fSum = fFactor;
-                    ULONG max = (ULONG) x;
-                    for (ULONG i = 0; i < max && fFactor > 0.0; i++)
+                    sal_uLong max = (sal_uLong) x;
+                    for (sal_uLong i = 0; i < max && fFactor > 0.0; i++)
                     {
                         fFactor *= (n-i)/(i+1)*p/q;
                         fSum += fFactor;
@@ -1462,8 +1462,8 @@ void ScInterpreter::ScCritBinom()
                     PushNoValue();
                 else
                 {
-                    double fSum = 1.0 - fFactor; ULONG max = (ULONG) n;
-                    ULONG i;
+                    double fSum = 1.0 - fFactor; sal_uLong max = (sal_uLong) n;
+                    sal_uLong i;
 
                     for ( i = 0; i < max && fSum >= alpha; i++)
                     {
@@ -1475,8 +1475,8 @@ void ScInterpreter::ScCritBinom()
             }
             else
             {
-                double fSum = fFactor; ULONG max = (ULONG) n;
-                ULONG i;
+                double fSum = fFactor; sal_uLong max = (sal_uLong) n;
+                sal_uLong i;
 
                 for ( i = 0; i < max && fSum < alpha; i++)
                 {
@@ -1513,7 +1513,7 @@ void ScInterpreter::ScNegBinomDist()
 void ScInterpreter::ScNormDist()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScNormDist" );
-    BYTE nParamCount = GetByte();
+    sal_uInt8 nParamCount = GetByte();
     if ( !MustHaveParamCount( nParamCount, 3, 4))
         return;
     bool bCumulative = nParamCount == 4 ? GetBool() : true;
@@ -1534,7 +1534,7 @@ void ScInterpreter::ScNormDist()
 void ScInterpreter::ScLogNormDist() //expanded, see #i100119#
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScLogNormDist" );
-    BYTE nParamCount = GetByte();
+    sal_uInt8 nParamCount = GetByte();
     if ( !MustHaveParamCount( nParamCount, 1, 4))
         return;
     bool bCumulative = nParamCount == 4 ? GetBool() : true; // cumulative
@@ -1675,7 +1675,7 @@ void ScInterpreter::ScWeibull()
 void ScInterpreter::ScPoissonDist()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScPoissonDist" );
-    BYTE nParamCount = GetByte();
+    sal_uInt8 nParamCount = GetByte();
     if ( MustHaveParamCount( nParamCount, 2, 3 ) )
     {
         bool bCumulative = (nParamCount == 3 ? GetBool() : true); // default cumulative
@@ -1977,7 +1977,7 @@ void ScInterpreter::ScHypGeomDist()
 void ScInterpreter::ScGammaDist()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScGammaDist" );
-    BYTE nParamCount = GetByte();
+    sal_uInt8 nParamCount = GetByte();
     if ( !MustHaveParamCount( nParamCount, 3, 4 ) )
         return;
     double bCumulative;
@@ -2097,7 +2097,7 @@ public:
 void ScInterpreter::ScBetaInv()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScBetaInv" );
-    BYTE nParamCount = GetByte();
+    sal_uInt8 nParamCount = GetByte();
     if ( !MustHaveParamCount( nParamCount, 3, 5 ) )
         return;
     double fP, fA, fB, fAlpha, fBeta;
@@ -2289,7 +2289,7 @@ void ScInterpreter::ScConfidence()
 void ScInterpreter::ScZTest()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScZTest" );
-    BYTE nParamCount = GetByte();
+    sal_uInt8 nParamCount = GetByte();
     if ( !MustHaveParamCount( nParamCount, 2, 3 ) )
         return;
     double sigma = 0.0, mue, x;
@@ -2340,7 +2340,7 @@ void ScInterpreter::ScZTest()
             while (nParam-- > 0)
             {
                 ScRange aRange;
-                USHORT nErr = 0;
+                sal_uInt16 nErr = 0;
                 PopDoubleRef( aRange, nParam, nRefInList);
                 ScValueIterator aValIter(pDok, aRange, glSubTotal);
                 if (aValIter.GetFirst(fVal, nErr))
@@ -2405,7 +2405,7 @@ void ScInterpreter::ScZTest()
             PushDouble(0.5 - gauss((mue-x)*sqrt(rValCount)/sigma));
     }
 }
-bool ScInterpreter::CalculateTest(BOOL _bTemplin
+bool ScInterpreter::CalculateTest(sal_Bool _bTemplin
                                   ,const SCSIZE nC1, const SCSIZE nC2,const SCSIZE nR1,const SCSIZE nR2
                                   ,const ScMatrixRef& pMat1,const ScMatrixRef& pMat2
                                   ,double& fT,double& fF)
@@ -2538,11 +2538,11 @@ void ScInterpreter::ScTTest()
     }
     else if (fTyp == 2.0)
     {
-        CalculateTest(FALSE,nC1, nC2,nR1, nR2,pMat1,pMat2,fT,fF);
+        CalculateTest(sal_False,nC1, nC2,nR1, nR2,pMat1,pMat2,fT,fF);
     }
     else if (fTyp == 3.0)
     {
-        CalculateTest(TRUE,nC1, nC2,nR1, nR2,pMat1,pMat2,fT,fF);
+        CalculateTest(sal_True,nC1, nC2,nR1, nR2,pMat1,pMat2,fT,fF);
     }
 
     else
@@ -2795,7 +2795,7 @@ void ScInterpreter::ScHarMean()
             case formula::svDoubleRef :
             case svRefList :
             {
-                USHORT nErr = 0;
+                sal_uInt16 nErr = 0;
                 PopDoubleRef( aRange, nParamCount, nRefInList);
                 double nCellVal;
                 ScValueIterator aValIter(pDok, aRange, glSubTotal);
@@ -2916,7 +2916,7 @@ void ScInterpreter::ScGeoMean()
             case formula::svDoubleRef :
             case svRefList :
             {
-                USHORT nErr = 0;
+                sal_uInt16 nErr = 0;
                 PopDoubleRef( aRange, nParamCount, nRefInList);
                 double nCellVal;
                 ScValueIterator aValIter(pDok, aRange, glSubTotal);
@@ -3050,7 +3050,7 @@ bool ScInterpreter::CalculateSkew(double& fSum,double& fCount,double& vSum,std::
             case svRefList :
             {
                 PopDoubleRef( aRange, nParamCount, nRefInList);
-                USHORT nErr = 0;
+                sal_uInt16 nErr = 0;
                 ScValueIterator aValIter(pDok, aRange);
                 if (aValIter.GetFirst(fVal, nErr))
                 {
@@ -3172,7 +3172,7 @@ double ScInterpreter::GetMedian( vector<double> & rArray )
 void ScInterpreter::ScMedian()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScMedian" );
-    BYTE nParamCount = GetByte();
+    sal_uInt8 nParamCount = GetByte();
     if ( !MustHaveParamCountMin( nParamCount, 1 )  )
         return;
     vector<double> aArray;
@@ -3246,7 +3246,7 @@ void ScInterpreter::ScQuartile()
 void ScInterpreter::ScModalValue()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScModalValue" );
-    BYTE nParamCount = GetByte();
+    sal_uInt8 nParamCount = GetByte();
     if ( !MustHaveParamCountMin( nParamCount, 1 ) )
         return;
     vector<double> aSortArray;
@@ -3289,7 +3289,7 @@ void ScInterpreter::ScModalValue()
     }
 }
 
-void ScInterpreter::CalculateSmallLarge(BOOL bSmall)
+void ScInterpreter::CalculateSmallLarge(sal_Bool bSmall)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::CalculateSmallLarge" );
     if ( !MustHaveParamCount( GetByte(), 2 )  )
@@ -3323,19 +3323,19 @@ void ScInterpreter::CalculateSmallLarge(BOOL bSmall)
 void ScInterpreter::ScLarge()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScLarge" );
-    CalculateSmallLarge(FALSE);
+    CalculateSmallLarge(sal_False);
 }
 
 void ScInterpreter::ScSmall()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScSmall" );
-    CalculateSmallLarge(TRUE);
+    CalculateSmallLarge(sal_True);
 }
 
 void ScInterpreter::ScPercentrank()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScPercentrank" );
-    BYTE nParamCount = GetByte();
+    sal_uInt8 nParamCount = GetByte();
     if ( !MustHaveParamCount( nParamCount, 2 ) )
         return;
 #if 0
@@ -3425,7 +3425,7 @@ void ScInterpreter::ScTrimMean()
         PushNoValue();
     else
     {
-        ULONG nIndex = (ULONG) ::rtl::math::approxFloor(alpha*(double)nSize);
+        sal_uLong nIndex = (sal_uLong) ::rtl::math::approxFloor(alpha*(double)nSize);
         if (nIndex % 2 != 0)
             nIndex--;
         nIndex /= 2;
@@ -3437,7 +3437,7 @@ void ScInterpreter::ScTrimMean()
     }
 }
 
-void ScInterpreter::GetNumberSequenceArray( BYTE nParamCount, vector<double>& rArray )
+void ScInterpreter::GetNumberSequenceArray( sal_uInt8 nParamCount, vector<double>& rArray )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::GetSortArray" );
     ScAddress aAdr;
@@ -3471,7 +3471,7 @@ void ScInterpreter::GetNumberSequenceArray( BYTE nParamCount, vector<double>& rA
                 nCellCount *= aRange.aEnd.Row() - aRange.aStart.Row() + 1;
                 rArray.reserve( rArray.size() + nCellCount);
 
-                USHORT nErr = 0;
+                sal_uInt16 nErr = 0;
                 double fCellVal;
                 ScValueIterator aValIter(pDok, aRange);
                 if (aValIter.GetFirst( fCellVal, nErr))
@@ -3519,7 +3519,7 @@ void ScInterpreter::GetNumberSequenceArray( BYTE nParamCount, vector<double>& rA
         PopError();
 }
 
-void ScInterpreter::GetSortArray( BYTE nParamCount, vector<double>& rSortArray, vector<long>* pIndexOrder )
+void ScInterpreter::GetSortArray( sal_uInt8 nParamCount, vector<double>& rSortArray, vector<long>* pIndexOrder )
 {
     GetNumberSequenceArray( nParamCount, rSortArray);
 
@@ -3614,16 +3614,16 @@ void ScInterpreter::QuickSort( vector<double>& rSortArray, vector<long>* pIndexO
 void ScInterpreter::ScRank()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScRank" );
-    BYTE nParamCount = GetByte();
+    sal_uInt8 nParamCount = GetByte();
     if ( !MustHaveParamCount( nParamCount, 2, 3 ) )
         return;
-    BOOL bDescending;
+    sal_Bool bDescending;
     if (nParamCount == 3)
         bDescending = GetBool();
     else
-        bDescending = FALSE;
+        bDescending = sal_False;
     double fCount = 1.0;
-    BOOL bValid = FALSE;
+    sal_Bool bValid = sal_False;
     switch (GetStackType())
     {
         case formula::svDouble    :
@@ -3631,7 +3631,7 @@ void ScInterpreter::ScRank()
             double x = GetDouble();
             double fVal = GetDouble();
             if (x == fVal)
-                bValid = TRUE;
+                bValid = sal_True;
             break;
         }
         case svSingleRef :
@@ -3644,7 +3644,7 @@ void ScInterpreter::ScRank()
             {
                 double x = GetCellValue( aAdr, pCell );
                 if (x == fVal)
-                    bValid = TRUE;
+                    bValid = sal_True;
             }
             break;
         }
@@ -3656,9 +3656,9 @@ void ScInterpreter::ScRank()
             size_t nRefInList = 0;
             while (nParam-- > 0)
             {
-                USHORT nErr = 0;
+                sal_uInt16 nErr = 0;
                 // Preserve stack until all RefList elements are done!
-                USHORT nSaveSP = sp;
+                sal_uInt16 nSaveSP = sp;
                 PopDoubleRef( aRange, nParam, nRefInList);
                 if (nParam)
                     --sp;   // simulate pop
@@ -3670,7 +3670,7 @@ void ScInterpreter::ScRank()
                 if (aValIter.GetFirst(nCellVal, nErr))
                 {
                     if (nCellVal == fVal)
-                        bValid = TRUE;
+                        bValid = sal_True;
                     else if ((!bDescending && nCellVal > fVal) ||
                             (bDescending && nCellVal < fVal) )
                         fCount++;
@@ -3678,7 +3678,7 @@ void ScInterpreter::ScRank()
                     while ((nErr == 0) && aValIter.GetNext(nCellVal, nErr))
                     {
                         if (nCellVal == fVal)
-                            bValid = TRUE;
+                            bValid = sal_True;
                         else if ((!bDescending && nCellVal > fVal) ||
                                 (bDescending && nCellVal < fVal) )
                             fCount++;
@@ -3701,7 +3701,7 @@ void ScInterpreter::ScRank()
                     {
                         double x = pMat->GetDouble(i);
                         if (x == fVal)
-                            bValid = TRUE;
+                            bValid = sal_True;
                         else if ((!bDescending && x > fVal) ||
                                     (bDescending && x < fVal) )
                             fCount++;
@@ -3714,7 +3714,7 @@ void ScInterpreter::ScRank()
                         {
                             double x = pMat->GetDouble(i);
                             if (x == fVal)
-                                bValid = TRUE;
+                                bValid = sal_True;
                             else if ((!bDescending && x > fVal) ||
                                         (bDescending && x < fVal) )
                                 fCount++;
@@ -3734,10 +3734,10 @@ void ScInterpreter::ScRank()
 void ScInterpreter::ScAveDev()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScAveDev" );
-    BYTE nParamCount = GetByte();
+    sal_uInt8 nParamCount = GetByte();
     if ( !MustHaveParamCountMin( nParamCount, 1 ) )
         return;
-    USHORT SaveSP = sp;
+    sal_uInt16 SaveSP = sp;
     double nMiddle = 0.0;
     double rVal = 0.0;
     double rValCount = 0.0;
@@ -3767,7 +3767,7 @@ void ScInterpreter::ScAveDev()
             case formula::svDoubleRef :
             case svRefList :
             {
-                USHORT nErr = 0;
+                sal_uInt16 nErr = 0;
                 double nCellVal;
                 PopDoubleRef( aRange, nParam, nRefInList);
                 ScValueIterator aValIter(pDok, aRange);
@@ -3844,7 +3844,7 @@ void ScInterpreter::ScAveDev()
             case formula::svDoubleRef :
             case svRefList :
             {
-                USHORT nErr = 0;
+                sal_uInt16 nErr = 0;
                 double nCellVal;
                 PopDoubleRef( aRange, nParam, nRefInList);
                 ScValueIterator aValIter(pDok, aRange);
@@ -3898,7 +3898,7 @@ void ScInterpreter::ScDevSq()
 void ScInterpreter::ScProbability()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScProbability" );
-    BYTE nParamCount = GetByte();
+    sal_uInt8 nParamCount = GetByte();
     if ( !MustHaveParamCount( nParamCount, 3, 4 ) )
         return;
     double fUp, fLo;
@@ -3930,7 +3930,7 @@ void ScInterpreter::ScProbability()
         {
             double fSum = 0.0;
             double fRes = 0.0;
-            BOOL bStop = FALSE;
+            sal_Bool bStop = sal_False;
             double fP, fW;
             SCSIZE nCount1 = nC1 * nR1;
             for ( SCSIZE i = 0; i < nCount1 && !bStop; i++ )
@@ -3940,7 +3940,7 @@ void ScInterpreter::ScProbability()
                     fP = pMatP->GetDouble(i);
                     fW = pMatW->GetDouble(i);
                     if (fP < 0.0 || fP > 1.0)
-                        bStop = TRUE;
+                        bStop = sal_True;
                     else
                     {
                         fSum += fP;
@@ -3969,15 +3969,15 @@ void ScInterpreter::ScCorrel()
 void ScInterpreter::ScCovar()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScCovar" );
-    CalculatePearsonCovar(FALSE,FALSE);
+    CalculatePearsonCovar(sal_False,sal_False);
 }
 
 void ScInterpreter::ScPearson()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScPearson" );
-    CalculatePearsonCovar(TRUE,FALSE);
+    CalculatePearsonCovar(sal_True,sal_False);
 }
-void ScInterpreter::CalculatePearsonCovar(BOOL _bPearson,BOOL _bStexy)
+void ScInterpreter::CalculatePearsonCovar(sal_Bool _bPearson,sal_Bool _bStexy)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::CalculatePearsonCovar" );
     if ( !MustHaveParamCount( GetByte(), 2 ) )
@@ -4088,9 +4088,9 @@ void ScInterpreter::ScRSQ()
 void ScInterpreter::ScSTEXY()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScSTEXY" );
-    CalculatePearsonCovar(TRUE,TRUE);
+    CalculatePearsonCovar(sal_True,sal_True);
 }
-void ScInterpreter::CalculateSlopeIntercept(BOOL bSlope)
+void ScInterpreter::CalculateSlopeIntercept(sal_Bool bSlope)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::CalculateSlopeIntercept" );
     if ( !MustHaveParamCount( GetByte(), 2 ) )
@@ -4165,13 +4165,13 @@ void ScInterpreter::CalculateSlopeIntercept(BOOL bSlope)
 void ScInterpreter::ScSlope()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScSlope" );
-    CalculateSlopeIntercept(TRUE);
+    CalculateSlopeIntercept(sal_True);
 }
 
 void ScInterpreter::ScIntercept()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScIntercept" );
-    CalculateSlopeIntercept(FALSE);
+    CalculateSlopeIntercept(sal_False);
 }
 
 void ScInterpreter::ScForecast()

@@ -47,7 +47,7 @@ using namespace xmloff::token;
 //------------------------------------------------------------------
 
 ScXMLContentContext::ScXMLContentContext( ScXMLImport& rImport,
-                                      USHORT nPrfx,
+                                      sal_uInt16 nPrfx,
                                       const ::rtl::OUString& rLName,
                                       const ::com::sun::star::uno::Reference<
                                       ::com::sun::star::xml::sax::XAttributeList>& /* xAttrList */,
@@ -62,7 +62,7 @@ ScXMLContentContext::~ScXMLContentContext()
 {
 }
 
-SvXMLImportContext *ScXMLContentContext::CreateChildContext( USHORT nPrefix,
+SvXMLImportContext *ScXMLContentContext::CreateChildContext( sal_uInt16 nPrefix,
                                             const ::rtl::OUString& rLName,
                                             const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList )
@@ -78,7 +78,7 @@ SvXMLImportContext *ScXMLContentContext::CreateChildContext( USHORT nPrefix,
             const rtl::OUString& sAttrName(xAttrList->getNameByIndex( i ));
             const rtl::OUString& sAttrValue(xAttrList->getValueByIndex( i ));
             rtl::OUString aLocalName;
-            USHORT nPrfx = GetScImport().GetNamespaceMap().GetKeyByAttrName(
+            sal_uInt16 nPrfx = GetScImport().GetNamespaceMap().GetKeyByAttrName(
                                                 sAttrName, &aLocalName );
             if ((nPrfx == XML_NAMESPACE_TEXT) && IsXMLToken(aLocalName, XML_C))
                 nRepeat = sAttrValue.toInt32();

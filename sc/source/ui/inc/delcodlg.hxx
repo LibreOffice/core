@@ -51,21 +51,21 @@ private:
     CancelButton    aBtnCancel;
     HelpButton      aBtnHelp;
 
-    BOOL            bObjectsDisabled;
+    sal_Bool            bObjectsDisabled;
 
-    static BOOL     bPreviousAllCheck;
-    static USHORT   nPreviousChecks;
+    static sal_Bool     bPreviousAllCheck;
+    static sal_uInt16   nPreviousChecks;
 
-    void DisableChecks( BOOL bDelAllChecked = TRUE );
+    void DisableChecks( sal_Bool bDelAllChecked = sal_True );
     DECL_LINK( DelAllHdl, void * );
 
 public:
             ScDeleteContentsDlg( Window* pParent,
-                                 USHORT  nCheckDefaults = 0 );
+                                 sal_uInt16  nCheckDefaults = 0 );
             ~ScDeleteContentsDlg();
     void    DisableObjects();
 
-    USHORT  GetDelContentsCmdBits() const;
+    sal_uInt16  GetDelContentsCmdBits() const;
 };
 
 

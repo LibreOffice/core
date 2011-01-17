@@ -46,20 +46,20 @@ class ScInsertContentsDlg : public ModalDialog
 {
 public:
             ScInsertContentsDlg( Window*        pParent,
-                                 USHORT         nCheckDefaults = 0,
+                                 sal_uInt16         nCheckDefaults = 0,
                                  const String*  pStrTitle = NULL );
             ~ScInsertContentsDlg();
 
-    USHORT      GetInsContentsCmdBits() const;
-    USHORT      GetFormulaCmdBits() const;
-    BOOL        IsSkipEmptyCells() const {return aBtnSkipEmptyCells.IsChecked();}
-    BOOL        IsTranspose() const {return aBtnTranspose.IsChecked();}
-    BOOL        IsLink() const {return aBtnLink.IsChecked();}
+    sal_uInt16      GetInsContentsCmdBits() const;
+    sal_uInt16      GetFormulaCmdBits() const;
+    sal_Bool        IsSkipEmptyCells() const {return aBtnSkipEmptyCells.IsChecked();}
+    sal_Bool        IsTranspose() const {return aBtnTranspose.IsChecked();}
+    sal_Bool        IsLink() const {return aBtnLink.IsChecked();}
     InsCellCmd  GetMoveMode();
 
-    void    SetOtherDoc( BOOL bSet );
-    void    SetFillMode( BOOL bSet );
-    void    SetChangeTrack( BOOL bSet );
+    void    SetOtherDoc( sal_Bool bSet );
+    void    SetFillMode( sal_Bool bSet );
+    void    SetChangeTrack( sal_Bool bSet );
     void    SetCellShiftDisabled( int nDisable );
 
 private:
@@ -96,19 +96,19 @@ private:
     CancelButton    aBtnCancel;
     HelpButton      aBtnHelp;
 
-    BOOL            bOtherDoc;
-    BOOL            bFillMode;
-    BOOL            bChangeTrack;
-    BOOL            bMoveDownDisabled;
-    BOOL            bMoveRightDisabled;
+    sal_Bool            bOtherDoc;
+    sal_Bool            bFillMode;
+    sal_Bool            bChangeTrack;
+    sal_Bool            bMoveDownDisabled;
+    sal_Bool            bMoveRightDisabled;
 
-    static BOOL     bPreviousAllCheck;
-    static USHORT   nPreviousChecks;
-    static USHORT   nPreviousChecks2;
-    static USHORT   nPreviousFormulaChecks;
-    static USHORT   nPreviousMoveMode;          // enum InsCellCmd
+    static sal_Bool     bPreviousAllCheck;
+    static sal_uInt16   nPreviousChecks;
+    static sal_uInt16   nPreviousChecks2;
+    static sal_uInt16   nPreviousFormulaChecks;
+    static sal_uInt16   nPreviousMoveMode;          // enum InsCellCmd
 
-    void DisableChecks( BOOL bInsAllChecked = TRUE );
+    void DisableChecks( sal_Bool bInsAllChecked = sal_True );
     void TestModes();
 
     // Handler

@@ -52,7 +52,7 @@ using namespace com::sun::star::uno;
 //------------------------------------------------------------------
 
 //  Version, ab der das Item kompatibel ist
-#define SC_VERSION ((USHORT)351)
+#define SC_VERSION ((sal_uInt16)351)
 
 
 //========================================================================
@@ -82,15 +82,15 @@ ScInputOptions::~ScInputOptions()
 void ScInputOptions::SetDefaults()
 {
     nMoveDir        = DIR_BOTTOM;
-    bMoveSelection  = TRUE;
-    bEnterEdit      = FALSE;
-    bExtendFormat   = FALSE;
-    bRangeFinder    = TRUE;
-    bExpandRefs     = FALSE;
-    bMarkHeader     = TRUE;
-    bUseTabCol      = FALSE;
-    bTextWysiwyg    = FALSE;
-    bReplCellsWarn  = TRUE;
+    bMoveSelection  = sal_True;
+    bEnterEdit      = sal_False;
+    bExtendFormat   = sal_False;
+    bRangeFinder    = sal_True;
+    bExpandRefs     = sal_False;
+    bMarkHeader     = sal_True;
+    bUseTabCol      = sal_False;
+    bTextWysiwyg    = sal_False;
+    bReplCellsWarn  = sal_True;
 }
 
 //------------------------------------------------------------------------
@@ -174,7 +174,7 @@ ScInputCfg::ScInputCfg() :
                 {
                     case SCINPUTOPT_MOVEDIR:
                         if ( pValues[nProp] >>= nIntVal )
-                            SetMoveDir( (USHORT)nIntVal );
+                            SetMoveDir( (sal_uInt16)nIntVal );
                         break;
                     case SCINPUTOPT_MOVESEL:
                         SetMoveSelection( ScUnoHelpFunctions::GetBoolFromAny( pValues[nProp] ) );
