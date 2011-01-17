@@ -1402,25 +1402,25 @@ sal_uInt32 SvtModuleOptions::GetFeatures() const
 -----------------------------------------------*/
 SvtModuleOptions::EFactory SvtModuleOptions::ClassifyFactoryByShortName(const ::rtl::OUString& sName)
 {
-    if (sName.equalsAscii("swriter"))
+    if (sName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("swriter")))
         return E_WRITER;
-    if (sName.equalsIgnoreAsciiCaseAscii("swriter/Web")) // sometimes they are registerd for swriter/web :-(
+    if (sName.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("swriter/Web"))) // sometimes they are registerd for swriter/web :-(
         return E_WRITERWEB;
-    if (sName.equalsIgnoreAsciiCaseAscii("swriter/GlobalDocument")) // sometimes they are registerd for swriter/globaldocument :-(
+    if (sName.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("swriter/GlobalDocument"))) // sometimes they are registerd for swriter/globaldocument :-(
         return E_WRITERGLOBAL;
-    if (sName.equalsAscii("scalc"))
+    if (sName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("scalc")))
         return E_CALC;
-    if (sName.equalsAscii("sdraw"))
+    if (sName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("sdraw")))
         return E_DRAW;
-    if (sName.equalsAscii("simpress"))
+    if (sName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("simpress")))
         return E_IMPRESS;
-    if (sName.equalsAscii("schart"))
+    if (sName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("schart")))
         return E_CHART;
-    if (sName.equalsAscii("smath"))
+    if (sName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("smath")))
         return E_MATH;
-    if (sName.equalsAscii("sbasic"))
+    if (sName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("sbasic")))
         return E_BASIC;
-    if (sName.equalsAscii("sdatabase"))
+    if (sName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("sdatabase")))
         return E_DATABASE;
 
     return E_UNKNOWN_FACTORY;
