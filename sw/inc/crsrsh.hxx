@@ -438,8 +438,8 @@ public:
     /**
        Ensure point and mark of the current PaM are in a specific order.
 
-       @param bPointFirst sal_True: If the point is behind the mark then
-       swap the PaM. sal_False: If the mark is behind the point then swap
+       @param bPointFirst TRUE: If the point is behind the mark then
+       swap the PaM. FALSE: If the mark is behind the point then swap
        the PaM.
     */
     void NormalizePam(sal_Bool bPointFirst = sal_True);

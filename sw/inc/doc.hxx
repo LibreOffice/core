@@ -2036,8 +2036,8 @@ public:
 
         @param sListId    list Id of the list whose level has to be marked/unmarked
         @param nListLevel level to mark
-        @param bValue     - sal_True  mark the level
-                          - sal_False unmark the level
+        @param bValue     - TRUE  mark the level
+                          - FALSE unmark the level
     */
     void MarkListLevel( const String& sListId,
                         const int nListLevel,
@@ -2050,8 +2050,8 @@ public:
 
         @param rList      list whose level has to be marked/unmarked
         @param nListLevel level to mark
-        @param bValue     - sal_True  mark the level
-                          - sal_False unmark the level
+        @param bValue     - TRUE  mark the level
+                          - FALSE unmark the level
      */
     void MarkListLevel( SwList& rList,
                         const int nListLevel,
