@@ -311,7 +311,7 @@ location: <project>/uiconfig/[swriter|sweb|sglobal]/menubar/menubar.xml
     {\
         Identifier = FN_FORMAT_RESET ; \
         HelpID = FN_FORMAT_RESET ; \
-        Text [ en-US ] = "~Default Formatting" ; \
+        Text [ en-US ] = "~Clear Direct Formatting" ; \
     };
 
 #define _NUMBERING_RELATED_MENU \
