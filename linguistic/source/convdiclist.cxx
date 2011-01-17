@@ -661,7 +661,7 @@ sal_Bool SAL_CALL ConvDicList::supportsService( const OUString& rServiceName )
     throw (RuntimeException)
 {
     MutexGuard  aGuard( GetLinguMutex() );
-    return rServiceName.equalsAscii( SN_CONV_DICTIONARY_LIST );
+    return rServiceName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(SN_CONV_DICTIONARY_LIST));
 }
 
 
