@@ -78,9 +78,6 @@ public: //methods
 
     ::basegfx::B2IRectangle    adjustInnerSize( const ::basegfx::B2IRectangle& rConsumedOuterRect );
 
-    //    updateShapes(..);
-    // const awt::Point& rPos, const awt::Size& rSize );
-
 private: //methods
     void    createShapes_2d();
     void    createShapes_3d();

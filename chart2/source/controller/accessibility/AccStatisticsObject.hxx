@@ -38,15 +38,6 @@ namespace chart
 class AccStatisticsObject : public AccessibleChartElement
 {
 public:
-    /*
-    enum StatisticsObjectType
-    {
-        MEAN_VAL_LINE = OBJECTTYPE_AVERAGEVALUE,
-        ERROR_BARS    = OBJECTTYPE_ERROR,
-        REGRESSION    = OBJECTTYPE_REGRESSION
-    };
-    */
-
     AccStatisticsObject( const AccessibleElementInfo& rAccInfo );
 
     virtual ~AccStatisticsObject();

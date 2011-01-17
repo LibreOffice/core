@@ -387,7 +387,6 @@ BOOL ScPrintAreasDlg::Impl_CheckRefStrings()
         const USHORT nValidRange = nValidAddr | SCA_VALID_ROW2 | SCA_VALID_COL2;
         const formula::FormulaGrammar::AddressConvention eConv = pDoc->GetAddressConvention();
         const sal_Unicode sep  = ScCompiler::GetNativeSymbol(ocSep).GetChar(0);
-        // const sal_Unicode rsep = ScCompiler::GetNativeSymbol(ocRange).GetChar(0);
 
         ScAddress aAddr;
         ScRange aRange;

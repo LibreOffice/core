@@ -341,8 +341,6 @@ UString ScTestAddIn::getDisplayCategoryName(const UString& aProgrammaticFunction
 void ScTestAddIn::setLocale(const lang::Locale& eLocale) THROWS( (UsrSystemException) )
 {
     aFuncLoc = eLocale;
-//  DBG_ERROR( UStringToString(aFuncLoc.Language, CHARSET_SYSTEM) + String("-") +
-//             UStringToString(aFuncLoc.Country, CHARSET_SYSTEM) );
 }
 
 ::com::sun::star::lang::Locale SAL_CALL ScTestAddIn::getLocale(  ) throw(::com::sun::star::uno::RuntimeException)
@@ -375,14 +373,10 @@ double SAL_CALL ScTestAddIn::addOne( double fValue ) throw(::com::sun::star::uno
 ::rtl::OUString SAL_CALL ScTestAddIn::getDateString( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xCaller, double fValue ) throw(::com::sun::star::uno::RuntimeException)
 {
     uno::Any aDateAny = xCaller->getPropertyValue( L"NullDate" );
-//! if ( aDateAny.getReflection()->equals( *Date_getReflection() ) )
     {
         util::Date aDate;
         aDateAny >>= aDate;
-        //const Date* pDate = (const Date*)aDateAny.get();
-        //if (pDate)
         {
-            //Date aNewDate = *pDate;
             Date aNewDate( aDate.Day, aDate.Month, aDate.Year );
 
             aNewDate += (long)(fValue+0.5);
@@ -412,7 +406,6 @@ sal_Int32 SAL_CALL ScTestAddIn::getColorValue( const ::com::sun::star::uno::Refe
         if (!bIsTrans)
         {
             uno::Any aCol = xProp->getPropertyValue( L"CellBackColor" );
-            //nRet = NAMESPACE_USR(OPropertyTypeConversion)::toINT32( aCol );
             aCol >>= nRet;
         }
         return nRet;
@@ -530,8 +523,6 @@ INT32 lcl_GetLongElement( const uno::Sequence< uno::Sequence<INT32> >& aMatrix, 
         aInner.getArray()[1] = L"Fasel";
         aInner.getArray()[2] = L"Suelz";
         uno::Sequence< uno::Sequence<rtl::OUString> > aOuter( &aInner, 1 );
-
-        //return uno::Any( &aOuter, Sequence< Sequence<UString> >::getReflection() );
 
         aRet <<= aOuter;
         return aRet;

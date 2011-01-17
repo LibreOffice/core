@@ -767,8 +767,6 @@ void ChartController::execute_MouseMove( const MouseEvent& rMEvt )
         pDrawViewWrapper->MovAction( pWindow->PixelToLogic( rMEvt.GetPosPixel() ) );
     }
 
-    //??    pDrawViewWrapper->GetPageView()->DragPoly();
-
     impl_SetMousePointer( rMEvt );
 }
 void ChartController::execute_Tracking( const TrackingEvent& /* rTEvt */ )
@@ -1087,7 +1085,6 @@ void ChartController::execute_Command( const CommandEvent& rCEvt )
                         }
                     }
 
-                    //const sal_Int32 nIdBeforeFormat = nUniqueId;
                     if( bIsPoint )
                     {
                         if( bHasDataLabelAtPoint )
@@ -1139,10 +1136,7 @@ void ChartController::execute_Command( const CommandEvent& rCEvt )
                     if( bHasYErrorBars )
                         lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:FormatYErrorBars") );
 
-                    //if( nIdBeforeFormat != nUniqueId )
-                        xPopupMenu->insertSeparator( -1 );
-
-                    //const sal_Int32 nIdBeforeInsert = nUniqueId;
+                    xPopupMenu->insertSeparator( -1 );
 
                     if( !bHasDataLabelsAtSeries )
                         lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:InsertDataLabels") );
@@ -1155,10 +1149,6 @@ void ChartController::execute_Command( const CommandEvent& rCEvt )
                     if( !bHasYErrorBars )
                         lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:InsertYErrorBars") );
 
-                    //if( nIdBeforeInsert != nUniqueId )
-                    //    xPopupMenu->insertSeparator( -1 );
-
-                    //const sal_Int32 nIdBeforeDelete = nUniqueId;
 
                     if( bHasDataLabelsAtSeries || ( bHasDataLabelsAtPoints && bHasFormattedDataPointsOtherThanSelected ) )
                         lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:DeleteDataLabels") );
@@ -1174,8 +1164,7 @@ void ChartController::execute_Command( const CommandEvent& rCEvt )
                     if( bHasFormattedDataPointsOtherThanSelected )
                         lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:ResetAllDataPoints"));
 
-                    //if( nIdBeforeDelete != nUniqueId )
-                        xPopupMenu->insertSeparator( -1 );
+                    xPopupMenu->insertSeparator( -1 );
 
                     lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId, C2U(".uno:ArrangeRow"));
                     uno::Reference< awt::XPopupMenu > xArrangePopupMenu(
@@ -1328,7 +1317,6 @@ bool ChartController::execute_KeyInput( const KeyEvent& rKEvt )
 
     KeyCode aKeyCode( rKEvt.GetKeyCode());
     sal_uInt16 nCode = aKeyCode.GetCode();
-//     bool bShift = aKeyCode.IsShift();
     bool bAlternate = aKeyCode.IsMod2();
 
     if( m_apAccelExecute.get() )
@@ -1347,8 +1335,6 @@ bool ChartController::execute_KeyInput( const KeyEvent& rKEvt )
             }
         }
     }
-
-    //if( m_pDrawViewWrapper->IsAction() );
 
     // keyboard accessibility
     ObjectType eObjectType = ObjectIdentifier::getObjectType( m_aSelection.getSelectedCID() );
@@ -1562,21 +1548,6 @@ bool ChartController::execute_KeyInput( const KeyEvent& rKEvt )
         }
     }
 
-    /* old chart:
-    // Ctrl-Shift-R: Repaint
-    if (!bReturn && GetWindow())
-    {
-        KeyCode aKeyCode = rKEvt.GetKeyCode();
-
-        if (aKeyCode.IsMod1() && aKeyCode.IsShift()
-            && aKeyCode.GetCode() == KEY_R)
-        {
-                // 3D-Kontext wieder zerstoeren
-            GetWindow()->Invalidate();
-            bReturn = TRUE;
-        }
-    }
-    */
     return bReturn;
 }
 

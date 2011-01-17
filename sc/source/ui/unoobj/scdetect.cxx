@@ -637,8 +637,6 @@ static BOOL lcl_MayBeDBase( SvStream& rStream )
                             pFilterQPro6
                             };
 
-                        // const UINT16 nByteMask = 0xFF;
-
                         // suchen Sie jetzt!
                         // ... realisiert ueber 'Mustererkennung'
 

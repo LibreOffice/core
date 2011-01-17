@@ -113,7 +113,6 @@ void ScDrawShell::ExecDrawAttr( SfxRequest& rReq )
 {
     USHORT              nSlot       = rReq.GetSlot();
     Window*             pWin        = pViewData->GetActiveWin();
-//  SfxViewFrame*       pViewFrame  = SfxViewShell::Current()->GetViewFrame(); //!!! koennte knallen
     ScDrawView*         pView       = pViewData->GetScDrawView();
     SdrModel*           pDoc        = pViewData->GetDocument()->GetDrawLayer();
 
@@ -242,7 +241,6 @@ void ScDrawShell::ExecDrawAttr( SfxRequest& rReq )
 
                     if( !pArgs )
                     {
-                        // const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
                         if( rMarkList.GetMark(0) != 0 )
                         {
                             SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
@@ -254,7 +252,6 @@ void ScDrawShell::ExecDrawAttr( SfxRequest& rReq )
                                 // --------- Itemset fuer Groesse und Position --------
                                 SfxItemSet aNewGeoAttr(pView->GetGeoAttrFromMarked());
 
-                                //SvxCaptionTabDialog* pDlg = new SvxCaptionTabDialog(pWin, pView);
                                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                                 if ( pFact )
                                 {
