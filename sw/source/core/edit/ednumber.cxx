@@ -681,8 +681,7 @@ const SwNumRule* SwEditShell::GetCurNumRule() const
     return GetDoc()->GetCurrNumRule( *GetCrsr()->GetPoint() );
 }
 
-// OD 2008-02-08 #newlistlevelattrs# - add handling of parameter <bResetIndentAttrs>
-// --> OD 2008-03-17 #refactorlists#
+// add handling of parameter <bResetIndentAttrs>
 void SwEditShell::SetCurNumRule( const SwNumRule& rRule,
                                  const bool bCreateNewList,
                                  const String sContinuedListId,
@@ -699,12 +698,9 @@ void SwEditShell::SetCurNumRule( const SwNumRule& rRule,
         for( USHORT n = 0; n < aRangeArr.Count(); ++n )
           {
             aRangeArr.SetPam( n, aPam );
-            // --> OD 2008-02-08 #newlistlevelattrs#
-            // --> OD 2008-03-17 #refactorlists#
             GetDoc()->SetNumRule( aPam, rRule,
                                   bCreateNewList, sContinuedListId,
                                   sal_True, bResetIndentAttrs );
-            // <--
             GetDoc()->SetCounted( aPam, true );
           }
         GetDoc()->EndUndo( UNDO_END, NULL );
@@ -713,8 +709,6 @@ void SwEditShell::SetCurNumRule( const SwNumRule& rRule,
     {
         GetDoc()->StartUndo( UNDO_START, NULL );
 
-        // --> OD 2008-02-08 #newlistlevelattrs#
-        // --> OD 2008-03-17 #refactorlists#
         GetDoc()->SetNumRule( *pCrsr, rRule,
                               bCreateNewList, sContinuedListId,
                               sal_True, bResetIndentAttrs );

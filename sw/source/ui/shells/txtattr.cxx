@@ -405,10 +405,8 @@ SET_LINESPACE:
 
                         aRule.SetLevel(i, aFmt, aRule.Get(i) != 0);
                     }
-                    // --> OD 2008-02-11 #newlistlevelattrs#
                     SwNumRule aSetRule( pCurRule->GetName(),
                                         pCurRule->Get( 0 ).GetPositionAndSpaceMode() );
-                    // <--
                     aSetRule.SetSvxRule( aRule, GetShell().GetDoc());
                     aSetRule.SetAutoRule( TRUE );
                     // --> OD 2008-03-17 #refactorlists#

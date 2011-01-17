@@ -417,7 +417,6 @@ SwDoc::SwDoc() :
     _InitFieldTypes();
 
     // lege (fuer die Filter) eine Default-OutlineNumRule an
-    // --> OD 2008-02-11 #newlistlevelattrs#
     pOutlineRule = new SwNumRule( String::CreateFromAscii( SwNumRule::GetOutlineRuleName() ),
                                   // --> OD 2008-06-06 #i89178#
                                   numfunc::GetDefaultPositionAndSpaceMode(),
@@ -831,7 +830,6 @@ void SwDoc::ClearDoc()
     pOutlineRule = NULL;
     pNumRuleTbl->DeleteAndDestroy( 0, pNumRuleTbl->Count() );
     // creation of new outline numbering rule
-    // --> OD 2008-02-11 #newlistlevelattrs#
     pOutlineRule = new SwNumRule( String::CreateFromAscii( SwNumRule::GetOutlineRuleName() ),
                                   // --> OD 2008-06-06 #i89178#
                                   numfunc::GetDefaultPositionAndSpaceMode(),

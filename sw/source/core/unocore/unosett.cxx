@@ -72,10 +72,8 @@
 #include <editeng/unofdesc.hxx>
 #include <fmtornt.hxx>
 #include <SwStyleNameMapper.hxx>
-// --> OD 2008-01-15 #newlistlevelattrs#
 #include <com/sun/star/text/PositionAndSpaceMode.hpp>
 #include <com/sun/star/text/LabelFollow.hpp>
-// <--
 #include <numrule.hxx>
 
 using ::rtl::OUString;
@@ -1217,12 +1215,10 @@ SwXNumberingRules::SwXNumberingRules(SwDoc& rDoc) :
 #if OSL_DEBUG_LEVEL > 1
     sal_uInt16 nIndex =
 #endif
-    // --> OD 2008-02-11 #newlistlevelattrs#
     rDoc.MakeNumRule( sCreatedNumRuleName, 0, FALSE,
                       // --> OD 2008-06-06 #i89178#
                       numfunc::GetDefaultPositionAndSpaceMode() );
                       // <--
-    // <--
 #if OSL_DEBUG_LEVEL > 1
     (void)nIndex;
 #endif
@@ -1414,7 +1410,6 @@ uno::Sequence<beans::PropertyValue> SwXNumberingRules::GetNumberingRuleByIndex(
     pData = new PropValData((void*)&nINT16, "StartWith", ::getCppuType((const sal_Int16*)0));
     aPropertyValues.Insert(pData, aPropertyValues.Count());
 
-    // --> OD 2008-01-23 #newlistlevelattrs#
     if ( rFmt.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
     {
         //leftmargin
@@ -1432,9 +1427,7 @@ uno::Sequence<beans::PropertyValue> SwXNumberingRules::GetNumberingRuleByIndex(
         pData = new PropValData((void*)&nINT32, SW_PROP_NAME_STR(UNO_NAME_FIRST_LINE_OFFSET), ::getCppuType((const sal_Int32*)0));
         aPropertyValues.Insert(pData, aPropertyValues.Count());
     }
-    // <--
 
-    // --> OD 2008-01-15 #newlistlevelattrs#
     // PositionAndSpaceMode
     nINT16 = PositionAndSpaceMode::LABEL_WIDTH_AND_POSITION;
     if ( rFmt.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_ALIGNMENT )
@@ -1484,7 +1477,6 @@ uno::Sequence<beans::PropertyValue> SwXNumberingRules::GetNumberingRuleByIndex(
                                  ::getCppuType((const sal_Int32*)0));
         aPropertyValues.Insert(pData, aPropertyValues.Count());
     }
-    // <--
 
     //numberingtype
     nINT16 = rFmt.GetNumberingType();
@@ -1653,13 +1645,11 @@ void SwXNumberingRules::SetNumberingRuleByIndex(
         SW_PROP_NAME_STR(UNO_NAME_LEFT_MARGIN),                   //6
         SW_PROP_NAME_STR(UNO_NAME_SYMBOL_TEXT_DISTANCE),          //7
         SW_PROP_NAME_STR(UNO_NAME_FIRST_LINE_OFFSET),             //8
-        // --> OD 2008-01-15 #newlistlevelattrs#
         SW_PROP_NAME_STR(UNO_NAME_POSITION_AND_SPACE_MODE), //9
         SW_PROP_NAME_STR(UNO_NAME_LABEL_FOLLOWED_BY),       //10
         SW_PROP_NAME_STR(UNO_NAME_LISTTAB_STOP_POSITION),   //11
         SW_PROP_NAME_STR(UNO_NAME_FIRST_LINE_INDENT),       //12
         SW_PROP_NAME_STR(UNO_NAME_INDENT_AT),               //13
-        // <--
         "NumberingType",                        //14
         "BulletId",                             //15
         SW_PROP_NAME_STR(UNO_NAME_BULLET_FONT), //16
@@ -1671,10 +1661,8 @@ void SwXNumberingRules::SetNumberingRuleByIndex(
         SW_PROP_NAME_STR(UNO_NAME_VERT_ORIENT),    //22
         SW_PROP_NAME_STR(UNO_NAME_HEADING_STYLE_NAME) //23
     };
-    // --> OD 2008-01-15 #newlistlevelattrs#
     const sal_uInt16 nPropNameCount = 24;
     const sal_uInt16 nNotInChapter = 15;
-    // <--
 
     const beans::PropertyValue* pPropArray = rProperties.getConstArray();
     PropValDataArr aPropertyValues;
@@ -1842,7 +1830,6 @@ void SwXNumberingRules::SetNumberingRuleByIndex(
                     aFmt.SetFirstLineOffset((short)nValue);
                 }
                 break;
-                // --> OD 2008-01-15 #newlistlevelattrs#
                 case 9: // UNO_NAME_POSITION_AND_SPACE_MODE
                 {
                     sal_Int16 nValue = 0;
@@ -1914,7 +1901,6 @@ void SwXNumberingRules::SetNumberingRuleByIndex(
                     aFmt.SetIndentAt( nValue );
                 }
                 break;
-                // <--
                 case 14: //"NumberingType"
                 {
                     sal_Int16 nSet = 0;

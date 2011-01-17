@@ -138,12 +138,10 @@ void SwTextShell::ExecEnterNum(SfxRequest &rReq)
         }
         else
         {
-            // --> OD 2008-02-11 #newlistlevelattrs#
             SwNumRule aRule( GetShell().GetUniqueNumRuleName(),
                              // --> OD 2008-06-06 #i89178#
                              numfunc::GetDefaultPositionAndSpaceMode() );
                              // <--
-            // <--
             SvxNumRule aSvxRule = aRule.MakeSvxNumRule();
             const bool bRightToLeft = GetShell().IsInRightToLeftText( 0 );
 
@@ -192,14 +190,12 @@ void SwTextShell::ExecEnterNum(SfxRequest &rReq)
                 rReq.Done();
                 SvxNumRule* pSetRule = ((SvxNumBulletItem*)pItem)->GetNumRule();
                 pSetRule->UnLinkGraphics();
-                // --> OD 2008-02-11 #newlistlevelattrs#
                 SwNumRule aSetRule( pCurRule
                                         ? pCurRule->GetName()
                                         : GetShell().GetUniqueNumRuleName(),
                                     // --> OD 2008-06-06 #i89178#
                                     numfunc::GetDefaultPositionAndSpaceMode() );
                                     // <--
-                // <--
                 aSetRule.SetSvxRule( *pSetRule, GetShell().GetDoc());
                 aSetRule.SetAutoRule( TRUE );
                 // --> OD 2008-03-17 #refactorlists#
@@ -217,12 +213,10 @@ void SwTextShell::ExecEnterNum(SfxRequest &rReq)
                 rReq.AppendItem( *pItem );
                 rReq.Done();
                 SvxNumRule* pSetRule = ((SvxNumBulletItem*)pItem)->GetNumRule();
-                // --> OD 2008-02-11 #newlistlevelattrs#
                 SwNumRule aSetRule( GetShell().GetUniqueNumRuleName(),
                                     // --> OD 2008-06-06 #i89178#
                                     numfunc::GetDefaultPositionAndSpaceMode() );
                                     // <--
-                // <--
                 aSetRule.SetSvxRule(*pSetRule, GetShell().GetDoc());
                 aSetRule.SetAutoRule( TRUE );
                 // --> OD 2008-03-17 #refactorlists#

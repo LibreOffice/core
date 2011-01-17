@@ -42,9 +42,7 @@
 #include <editeng/brshitem.hxx>
 #include <editeng/splwrap.hxx>
 #include <editeng/pgrditem.hxx>
-// --> OD 2008-01-17 #newlistlevelattrs#
 #include <editeng/tstpitem.hxx>
-// <--
 
 #include <SwSmartTagMgr.hxx>
 #include <linguistic/lngprops.hxx>
@@ -148,7 +146,6 @@ sal_Bool SwTxtSizeInfo::IsOptTest8() const { return GetOpt().IsTest8(); }
  *                      SwLineInfo::SwLineInfo()
  *************************************************************************/
 
-// --> OD 2008-01-17 #newlistlevelattrs#
 SwLineInfo::SwLineInfo()
     : pRuler( 0 ),
       pSpace( 0 ),
@@ -165,9 +162,7 @@ SwLineInfo::~SwLineInfo()
 }
 void SwLineInfo::CtorInitLineInfo( const SwAttrSet& rAttrSet,
                                    const SwTxtNode& rTxtNode )
-// <--
 {
-    // --> OD 2008-01-17 #newlistlevelattrs#
 //    pRuler = &rAttrSet.GetTabStops();
     delete pRuler;
     pRuler = new SvxTabStopItem( rAttrSet.GetTabStops() );
@@ -191,8 +186,7 @@ void SwLineInfo::CtorInitLineInfo( const SwAttrSet& rAttrSet,
             }
         }
     }
-    // <--
-    // --> OD 2008-02-15 #newlistlevelattrs#
+
     if ( !rTxtNode.getIDocumentSettingAccess()->get(IDocumentSettingAccess::TABS_RELATIVE_TO_INDENT) )
     {
         // remove default tab stop at position 0
@@ -206,7 +200,7 @@ void SwLineInfo::CtorInitLineInfo( const SwAttrSet& rAttrSet,
             }
         }
     }
-    // <--
+
     pSpace = &rAttrSet.GetLineSpacing();
     nVertAlign = rAttrSet.GetParaVertAlign().GetValue();
     nDefTabStop = MSHRT_MAX;

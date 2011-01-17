@@ -932,10 +932,8 @@ void SwView::StateTabWin(SfxItemSet& rSet)
 
     SfxItemSet aCoreSet( GetPool(), RES_PARATR_TABSTOP, RES_PARATR_TABSTOP,
                                     RES_LR_SPACE,        RES_UL_SPACE, 0 );
-    // --> OD 2008-01-17 #newlistlevelattrs#
     // get also the list level indent values merged as LR-SPACE item, if needed.
     rSh.GetCurAttr( aCoreSet, true );
-    // <--
     SelectionType nSelType = rSh.GetSelectionType();
 
     SfxWhichIter aIter( rSet );

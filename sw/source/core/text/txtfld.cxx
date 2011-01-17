@@ -397,16 +397,13 @@ SwNumberPortion *SwTxtFormatter::NewNumberPortion( SwTxtFormatInfo &rInf ) const
         const SwNumFmt &rNumFmt = pNumRule->Get( static_cast<USHORT>(pTxtNd->GetActualListLevel()) );
         const sal_Bool bLeft = SVX_ADJUST_LEFT == rNumFmt.GetNumAdjust();
         const sal_Bool bCenter = SVX_ADJUST_CENTER == rNumFmt.GetNumAdjust();
-        // --> OD 2008-01-23 #newlistlevelattrs#
         const bool bLabelAlignmentPosAndSpaceModeActive(
                 rNumFmt.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_ALIGNMENT );
         const KSHORT nMinDist = bLabelAlignmentPosAndSpaceModeActive
                                 ? 0 : rNumFmt.GetCharTextDistance();
-        // <--
 
         if( SVX_NUM_BITMAP == rNumFmt.GetNumberingType() )
         {
-            // --> OD 2008-01-23 #newlistlevelattrs#
             pRet = new SwGrfNumPortion( (SwFrm*)GetTxtFrm(),
                                         pTxtNd->GetLabelFollowedBy(),
                                         rNumFmt.GetBrush(),
@@ -414,7 +411,6 @@ SwNumberPortion *SwTxtFormatter::NewNumberPortion( SwTxtFormatInfo &rInf ) const
                                         rNumFmt.GetGraphicSize(),
                                         bLeft, bCenter, nMinDist,
                                         bLabelAlignmentPosAndSpaceModeActive );
-            // <--
             long nTmpA = rInf.GetLast()->GetAscent();
             long nTmpD = rInf.GetLast()->Height() - nTmpA;
             if( !rInf.IsTest() )
@@ -496,12 +492,10 @@ SwNumberPortion *SwTxtFormatter::NewNumberPortion( SwTxtFormatInfo &rInf ) const
 //                XubString aTxt( pTxtNd->GetNumString() );
                 XubString aTxt( pNumRule->MakeNumString( *(pTxtNd->GetNum()) ) );
                 // <--
-                // --> OD 2008-01-23 #newlistlevelattrs#
                 if ( aTxt.Len() > 0 )
                 {
                     aTxt.Insert( pTxtNd->GetLabelFollowedBy() );
                 }
-                // <--
 
                 // 7974: Nicht nur eine Optimierung...
                 // Eine Numberportion ohne Text wird die Breite von 0
@@ -536,11 +530,9 @@ SwNumberPortion *SwTxtFormatter::NewNumberPortion( SwTxtFormatInfo &rInf ) const
                     // we do not allow a vertical font
                     pNumFnt->SetVertical( pNumFnt->GetOrientation(), pFrm->IsVertical() );
 
-                    // --> OD 2008-01-23 #newlistlevelattrs#
                     pRet = new SwNumberPortion( aTxt, pNumFnt,
                                                 bLeft, bCenter, nMinDist,
                                                 bLabelAlignmentPosAndSpaceModeActive );
-                    // <--
                 }
             }
         }

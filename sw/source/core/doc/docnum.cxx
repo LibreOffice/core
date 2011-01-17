@@ -811,8 +811,7 @@ void lcl_ChgNumRule( SwDoc& rDoc, const SwNumRule& rRule )
     rDoc.UpdateNumRule();
 }
 
-// OD 2008-02-08 #newlistlevelattrs# - add handling of parameter <bResetIndentAttrs>
-// --> OD 2008-03-17 #refactorlists#
+// add handling of parameter <bResetIndentAttrs>
 void SwDoc::SetNumRule( const SwPaM& rPam,
                         const SwNumRule& rRule,
                         const bool bCreateNewList,

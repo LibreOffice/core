@@ -148,19 +148,15 @@ class SwNumberPortion : public SwFldPortion
 protected:
     KSHORT  nFixWidth;      // vgl. Glues
     KSHORT  nMinDist;       // minimaler Abstand zum Text
-    // --> OD 2008-01-23 #newlistlevelattrs#
     bool    mbLabelAlignmentPosAndSpaceModeActive;
-    // <--
 
 public:
-    // --> OD 2008-01-23 #newlistlevelattrs#
     SwNumberPortion( const XubString &rExpand,
                      SwFont *pFnt,
                      const sal_Bool bLeft,
                      const sal_Bool bCenter,
                      const KSHORT nMinDst,
                      const bool bLabelAlignmentPosAndSpaceModeActive );
-    // <--
     virtual void Paint( const SwTxtPaintInfo &rInf ) const;
     virtual xub_StrLen GetCrsrOfst( const MSHORT nOfst ) const;
     virtual sal_Bool Format( SwTxtFormatInfo &rInf );
@@ -179,7 +175,6 @@ public:
 class SwBulletPortion : public SwNumberPortion
 {
 public:
-    // --> OD 2008-01-23 #newlistlevelattrs#
     SwBulletPortion( const xub_Unicode cCh,
                      const XubString& rBulletFollowedBy,
                      SwFont *pFnt,
@@ -187,7 +182,6 @@ public:
                      const sal_Bool bCenter,
                      const KSHORT nMinDst,
                      const bool bLabelAlignmentPosAndSpaceModeActive );
-    // <--
     OUTPUT_OPERATOR
 };
 
@@ -203,7 +197,6 @@ class SwGrfNumPortion : public SwNumberPortion
     SwTwips         nGrfHeight;
     sal_Int16       eOrient;
 public:
-    // --> OD 2008-01-23 #newlistlevelattrs#
     SwGrfNumPortion( SwFrm *pFrm,
                      const XubString& rGraphicFollowedBy,
                      const SvxBrushItem* pGrfBrush,
@@ -213,7 +206,6 @@ public:
                      const sal_Bool bCenter,
                      const KSHORT nMinDst,
                      const bool bLabelAlignmentPosAndSpaceModeActive );
-    // <--
     ~SwGrfNumPortion();
     virtual void Paint( const SwTxtPaintInfo &rInf ) const;
     virtual sal_Bool Format( SwTxtFormatInfo &rInf );

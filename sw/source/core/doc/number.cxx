@@ -87,11 +87,9 @@ const SwNumFmt& SwNumRule::Get( USHORT i ) const
     ASSERT_ID( i < MAXLEVEL && eRuleType < RULE_END, ERR_NUMLEVEL);
     return aFmts[ i ]
            ? *aFmts[ i ]
-           // --> OD 2008-02-11 #newlistlevelattrs#
            : ( meDefaultNumberFormatPositionAndSpaceMode == SvxNumberFormat::LABEL_WIDTH_AND_POSITION
                ? *aBaseFmts[ eRuleType ][ i ]
                : *aLabelAlignmentBaseFmts[ eRuleType ][ i ] );
-           // <--
 }
 
 const SwNumFmt* SwNumRule::GetNumFmt( USHORT i ) const
@@ -552,13 +550,11 @@ SwNumRule::~SwNumRule()
             for( n = 0; n < MAXLEVEL; ++n, ++ppFmts )
                 delete *ppFmts, *ppFmts = 0;
 
-            // --> OD 2008-02-11 #newlistlevelattrs#
             ppFmts = (SwNumFmt**)SwNumRule::aLabelAlignmentBaseFmts;
             for( n = 0; n < MAXLEVEL; ++n, ++ppFmts )
                 delete *ppFmts, *ppFmts = 0;
             for( n = 0; n < MAXLEVEL; ++n, ++ppFmts )
                 delete *ppFmts, *ppFmts = 0;
-            // <--
     }
 
     maTxtNodeList.clear();

@@ -864,11 +864,9 @@ void SwWW8ImplReader::Read_ANLevelDesc( USHORT, const BYTE* pData, short nLen ) 
         pAktColl->SetFmtAttr( SwNumRuleItem() );
 
         String aName(CREATE_CONST_ASC( "Outline" ));
-        // --> OD 2008-02-11 #newlistlevelattrs#
         SwNumRule aNR( rDoc.GetUniqueNumRuleName( &aName ),
                        SvxNumberFormat::LABEL_WIDTH_AND_POSITION,
                        OUTLINE_RULE );
-        // <--
         aNR = *rDoc.GetOutlineNumRule();
 
         SetAnld(&aNR, (WW8_ANLD*)pData, nSwNumLevel, true);

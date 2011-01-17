@@ -72,9 +72,7 @@ class SwFtnNumPortion : public SwNumberPortion
 {
 public:
     inline SwFtnNumPortion( const XubString &rExpand, SwFont *pFntL )
-         // --> OD 2008-01-23 #newlistlevelattrs#
          : SwNumberPortion( rExpand, pFntL, sal_True, sal_False, 0, false )
-         // <--
          { SetWhichPor( POR_FTNNUM ); }
 
     OUTPUT_OPERATOR

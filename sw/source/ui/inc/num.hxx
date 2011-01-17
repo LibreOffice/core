@@ -63,7 +63,6 @@ class SwNumPositionTabPage : public SfxTabPage
     FixedLine       aLevelFL;
     MultiListBox    aLevelLB;
 
-    // --> OD 2008-02-01 #newlistlevelattrs#
     // former set of controls shown for numbering rules containing list level
     // attributes in SvxNumberFormat::SvxNumPositionAndSpaceMode == LABEL_WIDTH_AND_POSITION
     FixedText           aDistBorderFT;
@@ -75,9 +74,7 @@ class SwNumPositionTabPage : public SfxTabPage
     MetricField         aDistNumMF;
     FixedText           aAlignFT;
     ListBox             aAlignLB;
-    // <--
 
-    // --> OD 2008-02-01 #newlistlevelattrs#
     // new set of controls shown for numbering rules containing list level
     // attributes in SvxNumberFormat::SvxNumPositionAndSpaceMode == LABEL_ALIGNMENT
     FixedText           aLabelFollowedByFT;
@@ -90,7 +87,6 @@ class SwNumPositionTabPage : public SfxTabPage
     MetricField         aAlignedAtMF;
     FixedText           aIndentAtFT;
     MetricField         aIndentAtMF;
-    // <--
 
     PushButton          aStandardPB;
 
@@ -106,9 +102,7 @@ class SwNumPositionTabPage : public SfxTabPage
     BOOL                bModified           : 1;
     BOOL                bPreset             : 1;
     BOOL                bInInintControl     : 1;  //Modify-Fehler umgehen, soll ab 391 behoben sein
-    // --> OD 2008-02-01 #newlistlevelattrs#
     bool                bLabelAlignmentPosAndSpaceModeActive;
-    // <--
 
     void                InitControls();
 
@@ -118,7 +112,6 @@ class SwNumPositionTabPage : public SfxTabPage
     DECL_LINK( RelativeHdl, CheckBox * );
     DECL_LINK( StandardHdl, PushButton * );
 
-    // --> OD 2008-02-01 #newlistlevelattrs#
     void InitPosAndSpaceMode();
     void ShowControlsDependingOnPosAndSpaceMode();
 
@@ -126,7 +119,6 @@ class SwNumPositionTabPage : public SfxTabPage
     DECL_LINK( ListtabPosHdl_Impl, MetricField* );
     DECL_LINK( AlignAtHdl_Impl, MetricField* );
     DECL_LINK( IndentAtHdl_Impl, MetricField* );
-    // <--
 
     using SfxTabPage::ActivatePage;
     using SfxTabPage::DeactivatePage;

@@ -1195,7 +1195,6 @@ void SwDoc::SetAttr( const SfxItemSet& rSet, SwFmt& rFmt )
     SetModified();
 }
 
-// --> OD 2008-02-12 #newlistlevelattrs#
 void SwDoc::ResetAttrAtFormat( const USHORT nWhichId,
                                SwFmt& rChangedFormat )
 {

@@ -3762,7 +3762,6 @@ bool SwTxtNode::IsListRestart() const
 
 /** Returns if the paragraph has a visible numbering or bullet.
     This includes all kinds of numbering/bullet/outlines.
-    OD 2008-02-28 #newlistlevelattrs#
     The concrete list label string has to be checked, too.
  */
 bool SwTxtNode::HasVisibleNumberingOrBullet() const
@@ -4002,7 +4001,6 @@ String SwTxtNode::GetListId() const
 /** Determines, if the list level indent attributes can be applied to the
     paragraph.
 
-    OD 2008-01-17 #newlistlevelattrs#
     The list level indents can be applied to the paragraph under the one
     of following conditions:
     - the list style is directly applied to the paragraph and the paragraph
@@ -4074,8 +4072,6 @@ bool SwTxtNode::AreListLevelIndentsApplicable() const
 /** Retrieves the list tab stop position, if the paragraph's list level defines
     one and this list tab stop has to merged into the tap stops of the paragraph
 
-    OD 2008-01-17 #newlistlevelattrs#
-
     @author OD
 
     @param nListTabStopPosition
@@ -4119,8 +4115,6 @@ bool SwTxtNode::GetListTabStopPosition( long& nListTabStopPosition ) const
 
 /** Retrieves the character following the list label, if the paragraph's
     list level defines one.
-
-    OD 2008-01-17 #newlistlevelattrs#
 
     @author OD
 

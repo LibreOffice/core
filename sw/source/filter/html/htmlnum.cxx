@@ -544,10 +544,8 @@ void SwHTMLParser::NewNumBulListItem( int nToken )
     else
     {
         aNumRuleName = pDoc->GetUniqueNumRuleName();
-        // --> OD 2008-02-11 #newlistlevelattrs#
         SwNumRule aNumRule( aNumRuleName,
                             SvxNumberFormat::LABEL_WIDTH_AND_POSITION );
-        // <--
         SwNumFmt aNumFmt( aNumRule.Get( 0 ) );
         // --> OD 2008-06-03 #i63395#
         // Only apply user defined default bullet font

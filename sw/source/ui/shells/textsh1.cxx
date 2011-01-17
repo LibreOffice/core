@@ -889,10 +889,8 @@ void SwTextShell::Execute(SfxRequest &rReq)
                             FN_NUMBER_NEWSTART,         FN_NUMBER_NEWSTART_AT,
                             FN_DROP_TEXT,               FN_DROP_CHAR_STYLE_NAME,
                             0);
-            // --> OD 2008-01-16 #newlistlevelattrs#
             // get also the list level indent values merged as LR-SPACE item, if needed.
             rWrtSh.GetCurAttr( aCoreSet, true );
-            // <--
             aCoreSet.Put(SfxUInt16Item(SID_HTML_MODE,
                             ::GetHtmlMode(GetView().GetDocShell())));
 

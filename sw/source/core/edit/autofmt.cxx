@@ -1466,12 +1466,11 @@ void SwAutoFormat::BuildEnum( USHORT nLvl, USHORT nDigitLevel )
     xub_StrLen nAutoCorrPos = 0;
 
     // falls die Numerierung gesetzt werden, die akt. besorgen
-    // --> OD 2008-02-11 #newlistlevelattrs#
     SwNumRule aRule( pDoc->GetUniqueNumRuleName(),
                      // --> OD 2008-06-06 #i89178#
                      numfunc::GetDefaultPositionAndSpaceMode() );
                      // <--
-    // <--
+
     const SwNumRule* pCur = 0;
     if( aFlags.bSetNumRule && 0 != (pCur = pAktTxtNd->GetNumRule()) )
         aRule = *pCur;

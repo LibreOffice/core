@@ -201,7 +201,6 @@ void SwTxtMargin::CtorInitTxtMargin( SwTxtFrm *pNewFrm, SwTxtSizeInfo *pNewInf )
     const int nLMWithNum = pNode->GetLeftMarginWithNum( sal_True );
     if ( pFrm->IsRightToLeft() )
     {
-        // --> OD 2008-01-23 #newlistlevelattrs#
         // this calculation is identical this the calculation for L2R layout - see below
         nLeft = pFrm->Frm().Left() +
                 pFrm->Prt().Left() +
@@ -339,13 +338,11 @@ void SwTxtMargin::CtorInitTxtMargin( SwTxtFrm *pNewFrm, SwTxtSizeInfo *pNewInf )
                           pFrm->Prt().Left() );
         }
 
-        // --> OD 2008-01-31 #newlistlevelattrs#
         // Note: <SwTxtFrm::GetAdditionalFirstLineOffset()> returns a negative
         //       value for the new list label postion and space mode LABEL_ALIGNMENT
         //       and label alignment CENTER and RIGHT in L2R layout respectively
         //       label alignment LEFT and CENTER in R2L layout
         nFirst += pFrm->GetAdditionalFirstLineOffset();
-        // <--
 
         if( nFirst >= nRight )
             nFirst = nRight - 1;
@@ -576,10 +573,8 @@ void SwTxtCursor::_GetCharRect( SwRect* pOrig, const xub_StrLen nOfst,
             if( bNoTxt )
                 nTmpFirst = nX;
             // 8670: EndPortions zaehlen hier einmal als TxtPortions.
-            // --> OD 2008-01-28 #newlistlevelattrs#
 //            if( pPor->InTxtGrp() || pPor->IsBreakPortion() )
             if( pPor->InTxtGrp() || pPor->IsBreakPortion() || pPor->InTabGrp() )
-            // <--
             {
                 bNoTxt = sal_False;
                 nTmpFirst = nX;

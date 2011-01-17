@@ -1346,12 +1346,10 @@ void SwWrtShell::NumOrBulletOn(BOOL bNum)
             }
         }
         // <--
-        // --> OD 2008-02-08 #newlistlevelattrs#
         // reset indent attribute on applying list style
         // --> OD 2008-03-17 #refactorlists#
         // start new list
         SetCurNumRule( aNumRule, true, String(), true );
-        // <--
     }
 
     EndUndo(UNDO_NUMORNONUM);
