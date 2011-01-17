@@ -89,8 +89,8 @@ protected:
     SalColormap    *m_pDeleteColormap;
     Drawable        hDrawable_;     // use
     int             m_nScreen;
-    void*           m_pRenderFormat;
-    XID             m_aRenderPicture;
+    XRenderPictFormat* m_pXRenderFormat;
+    XID             m_aXRenderPicture;
     CairoFontsCache m_aCairoFontsCache;
 
     XLIB_Region     pPaintRegion_;
@@ -221,8 +221,8 @@ public:
     inline  Drawable        GetDrawable() const { return hDrawable_; }
     void                    SetDrawable( Drawable d, int nScreen );
     XID                     GetXRenderPicture();
-    void*                   GetXRenderFormat() const { return m_pRenderFormat; }
-    inline  void            SetXRenderFormat( void* pRenderFormat ) { m_pRenderFormat = pRenderFormat; }
+    XRenderPictFormat*      GetXRenderFormat() const { return m_pXRenderFormat; }
+    inline  void            SetXRenderFormat( XRenderPictFormat* pXRenderFormat ) { m_pXRenderFormat = pXRenderFormat; }
     inline  const SalColormap&    GetColormap() const { return *m_pColormap; }
     using SalGraphics::GetPixel;
     inline  Pixel           GetPixel( SalColor nSalColor ) const;

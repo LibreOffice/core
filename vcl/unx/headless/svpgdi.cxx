@@ -577,7 +577,7 @@ SystemGraphicsData SvpSalGraphics::GetGraphicsData() const
     SystemGraphicsData aRes;
     aRes.nSize = sizeof(aRes);
     aRes.hDrawable = 0;
-    aRes.pRenderFormat = 0;
+    aRes.pXRenderFormat = 0;
     return aRes;
 }
 

@@ -102,8 +102,8 @@ X11SalGraphics::X11SalGraphics()
     m_pVDev             = NULL;
     m_pDeleteColormap   = NULL;
     hDrawable_          = None;
-    m_aRenderPicture    = 0;
-    m_pRenderFormat     = NULL;
+    m_aXRenderPicture    = 0;
+    m_pXRenderFormat     = NULL;
 
     pClipRegion_            = NULL;
     pPaintRegion_       = NULL;
@@ -187,8 +187,8 @@ void X11SalGraphics::freeResources()
     if( m_pDeleteColormap )
         delete m_pDeleteColormap, m_pColormap = m_pDeleteColormap = NULL;
 
-    if( m_aRenderPicture )
-        XRenderPeer::GetInstance().FreePicture( m_aRenderPicture ), m_aRenderPicture = 0;
+    if( m_aXRenderPicture )
+        XRenderPeer::GetInstance().FreePicture( m_aXRenderPicture ), m_aXRenderPicture = 0;
 
     bPenGC_ = bFontGC_ = bBrushGC_ = bMonoGC_ = bCopyGC_ = bInvertGC_ = bInvert50GC_ = bStippleGC_ = bTrackingGC_ = false;
 }
@@ -209,10 +209,10 @@ void X11SalGraphics::SetDrawable( Drawable aDrawable, int nScreen )
 
     hDrawable_ = aDrawable;
     SetXRenderFormat( NULL );
-    if( m_aRenderPicture )
+    if( m_aXRenderPicture )
     {
-        XRenderPeer::GetInstance().FreePicture( m_aRenderPicture );
-        m_aRenderPicture = 0;
+        XRenderPeer::GetInstance().FreePicture( m_aXRenderPicture );
+        m_aXRenderPicture = 0;
     }
 
     if( hDrawable_ )
@@ -1014,11 +1014,11 @@ XID X11SalGraphics::GetXRenderPicture()
 {
     XRenderPeer& rRenderPeer = XRenderPeer::GetInstance();
 
-    if( !m_aRenderPicture )
+    if( !m_aXRenderPicture )
     {
         // check xrender support for matching visual
         // find a XRenderPictFormat compatible with the Drawable
-        XRenderPictFormat* pVisualFormat = static_cast<XRenderPictFormat*>(GetXRenderFormat());
+        XRenderPictFormat* pVisualFormat = GetXRenderFormat();
         if( !pVisualFormat )
         {
             Visual* pVisual = GetDisplay()->GetVisual( m_nScreen ).GetVisual();
@@ -1026,11 +1026,11 @@ XID X11SalGraphics::GetXRenderPicture()
             if( !pVisualFormat )
                 return 0;
             // cache the XRenderPictFormat
-            SetXRenderFormat( static_cast<void*>(pVisualFormat) );
+            SetXRenderFormat( pVisualFormat );
         }
 
         // get the matching xrender target for drawable
-        m_aRenderPicture = rRenderPeer.CreatePicture( hDrawable_, pVisualFormat, 0, NULL );
+        m_aXRenderPicture = rRenderPeer.CreatePicture( hDrawable_, pVisualFormat, 0, NULL );
     }
 
     {
@@ -1038,10 +1038,10 @@ XID X11SalGraphics::GetXRenderPicture()
         // TODO: avoid clip reset if already done
         XRenderPictureAttributes aAttr;
         aAttr.clip_mask = None;
-        rRenderPeer.ChangePicture( m_aRenderPicture, CPClipMask, &aAttr );
+        rRenderPeer.ChangePicture( m_aXRenderPicture, CPClipMask, &aAttr );
     }
 
-    return m_aRenderPicture;
+    return m_aXRenderPicture;
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -1057,7 +1057,7 @@ SystemGraphicsData X11SalGraphics::GetGraphicsData() const
     aRes.nScreen   = m_nScreen;
     aRes.nDepth    = GetDisplay()->GetVisual( m_nScreen ).GetDepth();
     aRes.aColormap = GetDisplay()->GetColormap( m_nScreen ).GetXColormap();
-    aRes.pRenderFormat = m_pRenderFormat;
+    aRes.pXRenderFormat = m_pXRenderFormat;
     return aRes;
 }
 

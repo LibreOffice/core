@@ -62,7 +62,7 @@ public:
                           USHORT nBitCount,
                           int nScreen,
                           Pixmap hDrawable = None,
-                          void* pRenderFormat = NULL );
+                          XRenderPictFormat* pXRenderFormat = NULL );
     inline  void            InitGraphics( X11SalVirtualDevice *pVD );
 
     inline  Display        *GetXDisplay() const;
