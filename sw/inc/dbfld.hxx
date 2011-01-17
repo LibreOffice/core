@@ -24,8 +24,8 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef _DBFLD_HXX
-#define _DBFLD_HXX
+#ifndef SW_DBFLD_HXX
+#define SW_DBFLD_HXX
 
 #include "swdllapi.h"
 #include "fldbas.hxx"
@@ -79,6 +79,9 @@ class SW_DLLPUBLIC SwDBField : public SwValueField
     BOOL    bValidValue     : 1;
     BOOL    bInitialized    : 1;
 
+    virtual String      Expand() const;
+    virtual SwField*    Copy() const;
+
 public:
     SwDBField(SwDBFieldType*, ULONG nFmt = 0);
     virtual ~SwDBField();
@@ -87,14 +90,11 @@ public:
 
     // Der aktuelle Text
     inline  void        SetExpansion(const String& rStr);
-    virtual String      Expand() const;
-    virtual SwField*    Copy() const;
 
     virtual USHORT      GetSubType() const;
     virtual void        SetSubType(USHORT nType);
 
-    // Name oder Inhalt
-    virtual String      GetCntnt(BOOL bName = FALSE) const;
+    virtual String      GetFieldName() const;
 
     // fuer Berechnungen in Ausdruecken
     void                ChgValue( double d, BOOL bVal );
@@ -157,8 +157,8 @@ public:
     SwDBData                GetDBData(SwDoc* pDoc);
     void                    SetDBData(const SwDBData& rDBData); // #111840#
 
-    // Name oder Inhalt
-    virtual String          GetCntnt(BOOL bName = FALSE) const;
+    virtual String          GetFieldName() const;
+
     virtual BOOL            QueryValue( com::sun::star::uno::Any& rVal, USHORT nWhich ) const;
     virtual BOOL            PutValue( const com::sun::star::uno::Any& rVal, USHORT nWhich );
     virtual USHORT          GetSubType() const;
@@ -335,4 +335,4 @@ inline void SwDBSetNumberField::SetSetNumber(long nNum)
     { nNumber = nNum; }
 
 
-#endif // _DBFLD_HXX
+#endif // SW_DBFLD_HXX

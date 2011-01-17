@@ -57,7 +57,6 @@ class SvxRuler;
 class SvxLRSpaceItem;
 class SwDocShell;
 class SwScrollbar;
-class PrintDialog;
 class SvxVCBrowser;
 class SvBorder;
 class Ruler;
@@ -83,7 +82,6 @@ class CommandEvent;
 class InsCaptionOpt;
 class SvGlobalName;
 class SvtAccessibilityOptions;
-class SwPrtOptions;
 class SwTransferable;
 class SwMailMergeConfigItem;
 class SwTxtNode; // #i23726#
@@ -356,7 +354,6 @@ class SW_DLLPUBLIC SwView: public SfxViewShell
 
     // Methoden fuers Printing
     SW_DLLPRIVATE virtual   SfxPrinter*     GetPrinter( BOOL bCreate = FALSE );
-    SW_DLLPRIVATE virtual PrintDialog*  CreatePrintDialog( Window* pParent );
             SfxTabPage*     CreatePrintOptionsPage( Window* pParent,
                                                     const SfxItemSet& rSet);
     // fuer Readonly-Umschaltung

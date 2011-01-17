@@ -24,8 +24,8 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef _NOTXTFRM_HXX
-#define _NOTXTFRM_HXX
+#ifndef SW_NOTXTFRM_HXX
+#define SW_NOTXTFRM_HXX
 
 #include <cntfrm.hxx>
 
@@ -56,7 +56,8 @@ public:
     ~SwNoTxtFrm();
 
     virtual void Modify( SfxPoolItem*, SfxPoolItem* );
-    virtual void Paint(const SwRect&, const SwPrtOptions *pPrintData = NULL ) const;
+    virtual void Paint( SwRect const&,
+                        SwPrintData const*const pPrintData = NULL ) const;
     virtual BOOL GetCharRect( SwRect &, const SwPosition&,
                               SwCrsrMoveState* = 0) const;
     BOOL GetCrsrOfst(SwPosition* pPos, Point& aPoint,

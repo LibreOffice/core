@@ -210,21 +210,15 @@ sal_Bool SwDocShell::InitNew( const uno::Reference < embed::XStorage >& xStor )
             if(!pStdFont->IsFontDefault(nFontId))
             {
                 sEntry = pStdFont->GetFontFor(nFontId);
-                sal_Bool bDelete = sal_False;
-                const SfxFont* pFnt = pPrt ? pPrt->GetFontByName(sEntry): 0;
-                if(!pFnt)
+
+                Font aFont( sEntry, Size( 0, 10 ) );
+                if( pPrt )
                 {
-                    pFnt = new SfxFont( FAMILY_DONTKNOW, sEntry, PITCH_DONTKNOW,
-                                        ::gsl_getSystemTextEncoding() );
-                    bDelete = sal_True;
+                    aFont = pPrt->GetFontMetric( aFont );
                 }
-                pFontItem = new SvxFontItem(pFnt->GetFamily(), pFnt->GetName(),
-                                    aEmptyStr, pFnt->GetPitch(), pFnt->GetCharSet(), nFontWhich);
-                if(bDelete)
-                {
-                    delete (SfxFont*) pFnt;
-                    bDelete = sal_False;
-                }
+
+                pFontItem = new SvxFontItem(aFont.GetFamily(), aFont.GetName(),
+                                            aEmptyStr, aFont.GetPitch(), aFont.GetCharSet(), nFontWhich);
             }
             else
             {
@@ -303,25 +297,18 @@ sal_Bool SwDocShell::InitNew( const uno::Reference < embed::XStorage >& xStor )
             if(!pStdFont->IsFontDefault(aFontIdPoolId[nIdx]))
             {
                 sEntry = pStdFont->GetFontFor(aFontIdPoolId[nIdx]);
-                sal_Bool bDelete = sal_False;
-                const SfxFont* pFnt = pPrt ? pPrt->GetFontByName(sEntry): 0;
-                if(!pFnt)
-                {
-                    pFnt = new SfxFont( FAMILY_DONTKNOW, sEntry, PITCH_DONTKNOW,
-                                        ::gsl_getSystemTextEncoding() );
-                    bDelete = sal_True;
-                }
+
+                Font aFont( sEntry, Size( 0, 10 ) );
+                if( pPrt )
+                    aFont = pPrt->GetFontMetric( aFont );
+
                 pColl = pDoc->GetTxtCollFromPool(aFontIdPoolId[nIdx + 1]);
                 if( !bHTMLTemplSet ||
                     SFX_ITEM_SET != pColl->GetAttrSet().GetItemState(
                                                     nFontWhich, sal_False ) )
                 {
-                    pColl->SetFmtAttr(SvxFontItem(pFnt->GetFamily(), pFnt->GetName(),
-                                        aEmptyStr, pFnt->GetPitch(), pFnt->GetCharSet(), nFontWhich));
-                }
-                if(bDelete)
-                {
-                    delete (SfxFont*) pFnt;
+                    pColl->SetFmtAttr(SvxFontItem(aFont.GetFamily(), aFont.GetName(),
+                                                  aEmptyStr, aFont.GetPitch(), aFont.GetCharSet(), nFontWhich));
                 }
             }
             sal_Int32 nFontHeight = pStdFont->GetFontHeight( static_cast< sal_Int8 >(aFontIdPoolId[nIdx]), 0, eLanguage );
@@ -336,6 +323,12 @@ sal_Bool SwDocShell::InitNew( const uno::Reference < embed::XStorage >& xStor )
                 pColl->SetFmtAttr( aFontHeight );
             }
         }
+
+        // the default for documents created via 'File/New' should be 'on'
+        // (old documents, where this property was not yet implemented, will get the
+        // value 'false' in the SwDoc c-tor)
+        pDoc->set( IDocumentSettingAccess::MATH_BASELINE_ALIGNMENT,
+                SW_MOD()->GetUsrPref( bWeb )->IsAlignMathObjectsToBaseline() );
     }
 
     /* #106748# If the default frame direction of a document is RTL
@@ -823,4 +816,3 @@ void SwDocShell::SubInitNew()
 IDocumentDeviceAccess* SwDocShell::getIDocumentDeviceAccess() { return pDoc; }
 const IDocumentSettingAccess* SwDocShell::getIDocumentSettingAccess() const { return pDoc; }
 IDocumentChartDataProviderAccess* SwDocShell::getIDocumentChartDataProviderAccess() { return pDoc; }
-

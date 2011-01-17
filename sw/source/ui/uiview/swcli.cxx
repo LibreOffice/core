@@ -27,16 +27,17 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
+
 #include <com/sun/star/embed/NoVisualAreaSizeException.hpp>
 
-
 #include <wrtsh.hxx>
+#include <doc.hxx>
 #include <swtypes.hxx>
-#ifndef _VIEW_HXX
 #include <view.hxx>
-#endif
 #include <edtwin.hxx>
 #include <swcli.hxx>
+#include <cmdid.h>
+#include <cfgitems.hxx>
 
 #include <toolkit/helper/vclunohelper.hxx>
 
@@ -169,3 +170,18 @@ void SwOleClient::MakeVisible()
     const SwWrtShell &rSh  = ((SwView*)GetViewShell())->GetWrtShell();
     rSh.MakeObjVisible( GetObject() );
 }
+
+// --> #i972#
+void SwOleClient::FormatChanged()
+{
+    const uno::Reference < embed::XEmbeddedObject >& xObj( GetObject() );
+    SwView * pView = dynamic_cast< SwView * >( GetViewShell() );
+    if ( pView && xObj.is() && SotExchange::IsMath( xObj->getClassID() ) )
+    {
+        SwWrtShell & rWrtSh = pView->GetWrtShell();
+        if (rWrtSh.GetDoc()->get( IDocumentSettingAccess::MATH_BASELINE_ALIGNMENT ))
+            rWrtSh.AlignFormulaToBaseline( xObj );
+    }
+}
+// <--
+

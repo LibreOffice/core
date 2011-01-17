@@ -39,7 +39,6 @@
 #include <svl/eitem.hxx>
 #include <unotools/undoopt.hxx>
 #include <unotools/lingucfg.hxx>
-#include <svtools/printdlg.hxx>
 #include <unotools/useroptions.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/request.hxx>
@@ -94,7 +93,6 @@
 #include <frmui.hrc>
 #include <cfgitems.hxx>
 #include <prtopt.hxx>
-#include <swprtopt.hxx>
 #include <linguistic/lngprops.hxx>
 #include <editeng/unolingu.hxx>
 //#include <sfx2/app.hxx>
@@ -184,7 +182,7 @@ void SwView::ImpSetVerb( int nSelType )
     }
     if ( bResetVerbs )
     {
-        SetVerbs( 0 );
+        SetVerbs( Sequence< embed::VerbDescriptor >() );
         bVerbsActive = sal_False;
     }
 }
@@ -1180,8 +1178,8 @@ bool lcl_IsOwnDocument( SwView& rView )
     String Created = xDocProps->getAuthor();
     String Changed = xDocProps->getModifiedBy();
     String FullName = SW_MOD()->GetUserOptions().GetFullName();
-    return FullName.Len() &&
-            (Changed.Len() && Changed == FullName ) ||
+    return (FullName.Len() &&
+            (Changed.Len() && Changed == FullName )) ||
             (!Changed.Len() && Created.Len() && Created == FullName );
 }
 
@@ -1912,8 +1910,7 @@ SfxObjectShellRef & SwView::GetOrCreateTmpSelectionDoc()
     if (!rxTmpDoc.Is())
     {
         SwXTextView *pImpl = GetViewImpl()->GetUNOObject_Impl();
-        rxTmpDoc = pImpl->BuildTmpSelectionDoc(
-                    GetViewImpl()->GetEmbeddedObjRef() );
+        rxTmpDoc = pImpl->BuildTmpSelectionDoc();
     }
     return rxTmpDoc;
 }
@@ -1927,17 +1924,12 @@ void SwView::AddTransferable(SwTransferable& rTransferable)
 
 /* --------------------------------------------------*/
 
-void SwPrtOptions::MakeOptions( BOOL bWeb )
+namespace sw {
+
+void InitPrintOptionsFromApplication(SwPrintData & o_rData, bool const bWeb)
 {
-    *this = *SW_MOD()->GetPrtOptions(bWeb);
-
-    nCopyCount = 1;
-    bCollate = FALSE;
-    bPrintSelection = FALSE;
-    bJobStartet = FALSE;
-
-    aMulti.SetTotalRange( Range( 0, RANGE_MAX ) );
-    aMulti.SelectAll();
-    aMulti.Select( 0, FALSE );
+    o_rData = *SW_MOD()->GetPrtOptions(bWeb);
 }
+
+} // namespace sw
 

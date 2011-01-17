@@ -32,7 +32,7 @@
 #include <unotools/configitem.hxx>
 #include <fldupde.hxx>
 #include "viewopt.hxx"
-#include <vcl/fldunit.hxx>
+#include <tools/fldunit.hxx>
 
 /* -----------------------------28.09.00 09:45--------------------------------
 
@@ -147,6 +147,8 @@ class SwMasterUsrPref : public SwViewOption
     sal_Int32   nDefTab;            //default tab stop distance
 
     sal_Bool    bIsSquaredPageMode; //default page mode for text grid
+    sal_Bool    bIsAlignMathObjectsToBaseline;
+
     SwContentViewConfig aContentConfig;
     SwLayoutViewConfig  aLayoutConfig;
     SwGridConfig        aGridConfig;
@@ -271,6 +273,13 @@ public:
                         aLayoutConfig.SetModified();
                 }
 
+    sal_Bool    IsAlignMathObjectsToBaseline() const { return bIsAlignMathObjectsToBaseline; }
+    void        SetAlignMathObjectsToBaseline( sal_Bool bVal, sal_Bool bNoModify = sal_False )
+                {
+                    bIsAlignMathObjectsToBaseline = bVal;
+                    if(!bNoModify)
+                        aLayoutConfig.SetModified();
+                }
 };
 
 #endif

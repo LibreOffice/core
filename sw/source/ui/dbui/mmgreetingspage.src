@@ -144,6 +144,7 @@ TabPage DLG_MM_GREETINGS_PAGE
     };
     CheckBox    CB_GREETINGLINE
     {
+        HelpID = "sw:CheckBox:DLG_MM_GREETINGS_PAGE:CB_GREETINGLINE";
         Pos = MAP_APPFONT ( 12 , 27 );
         Size = MAP_APPFONT ( 242 , 10 );
         Text[ en-US ] = "This document should contain a salutation";
@@ -163,6 +164,7 @@ TabPage DLG_MM_GREETINGS_PAGE
     };
     PushButton      PB_ASSIGN
     {
+        HelpID = "sw:PushButton:DLG_MM_GREETINGS_PAGE:PB_ASSIGN";
         Pos = MAP_APPFONT ( 204 , 179 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Text[ en-US ] = "~Match fields...";
@@ -175,6 +177,7 @@ TabPage DLG_MM_GREETINGS_PAGE
     };
     ImageButton     IB_PREVSET
     {
+        HelpID = "sw:ImageButton:DLG_MM_GREETINGS_PAGE:IB_PREVSET";
         Pos = MAP_APPFONT ( 177 , 204 ) ;
         Size = MAP_APPFONT ( 10 , 10 ) ;
         SYMBOL = IMAGEBUTTON_PREV;
@@ -182,6 +185,7 @@ TabPage DLG_MM_GREETINGS_PAGE
     };
     ImageButton     IB_NEXTSET
     {
+        HelpID = "sw:ImageButton:DLG_MM_GREETINGS_PAGE:IB_NEXTSET";
         Pos = MAP_APPFONT ( 188 , 204 ) ;
         Size = MAP_APPFONT ( 10 , 10 ) ;
         SYMBOL = IMAGEBUTTON_NEXT ;
@@ -208,6 +212,7 @@ ModalDialog DLG_MM_MAILBODY
     Text [ en-US ] = "E-Mail Message";
     CheckBox    CB_GREETINGLINE
     {
+        HelpID = "sw:CheckBox:DLG_MM_MAILBODY:CB_GREETINGLINE";
         Pos = MAP_APPFONT ( 6  , 3 ) ;
         Size = MAP_APPFONT ( 242 , 10 ) ;
         Text[ en-US ] = "This e-mail should contain a salutation";
@@ -221,6 +226,7 @@ ModalDialog DLG_MM_MAILBODY
     };
     MultiLineEdit MLE_BODY
     {
+        HelpID = "sw:MultiLineEdit:DLG_MM_MAILBODY:MLE_BODY";
         Pos = MAP_APPFONT ( 12,   151 ) ;
         Size = MAP_APPFONT ( 180 , 50 ) ;
         Border = TRUE;

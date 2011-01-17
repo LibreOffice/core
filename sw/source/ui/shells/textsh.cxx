@@ -282,7 +282,6 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
     break;
     case SID_INSERT_OBJECT:
     case SID_INSERT_PLUGIN:
-    case SID_INSERT_APPLET:
     {
         SFX_REQUEST_ARG( rReq, pNameItem, SfxGlobalNameItem, SID_INSERT_OBJECT, sal_False );
         SvGlobalName *pName = NULL;
@@ -293,18 +292,13 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
             pName = &aName;
         }
 
-        SFX_REQUEST_ARG( rReq, pClassItem,          SfxStringItem, FN_PARAM_1, sal_False );
         SFX_REQUEST_ARG( rReq, pClassLocationItem,  SfxStringItem, FN_PARAM_2, sal_False );
         SFX_REQUEST_ARG( rReq, pCommandsItem,       SfxStringItem, FN_PARAM_3, sal_False );
         //TODO/LATER: recording currently not working, need code for Commandlist
         svt::EmbeddedObjectRef xObj;
-        if((SID_INSERT_APPLET == nSlot || SID_INSERT_PLUGIN)
-                && (pClassItem || pClassLocationItem || pCommandsItem))
+        if( nSlot == SID_INSERT_PLUGIN && ( pClassLocationItem || pCommandsItem ) )
         {
-            String sClass;
             String sClassLocation;
-            if(pClassItem)
-                sClass = pClassItem->GetValue();
             if(pClassLocationItem)
                 sClassLocation = pClassLocationItem->GetValue();
 
@@ -315,36 +309,6 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
                 aCommandList.AppendCommands( pCommandsItem->GetValue(), &nTemp );
             }
 
-            if(SID_INSERT_APPLET == nSlot)
-            {
-                SwApplet_Impl aApplImpl( rSh.GetAttrPool(),
-                                         RES_FRMATR_BEGIN, RES_FRMATR_END-1 );
-                String sBaseURL;
-                SfxMedium* pMedium = GetView().GetDocShell()->GetMedium();
-                if(pMedium)
-                    sBaseURL = pMedium->GetURLObject().GetMainURL(INetURLObject::NO_DECODE);
-
-                aApplImpl.CreateApplet(sClass, aEmptyStr, FALSE, sClassLocation, sBaseURL );
-                aApplImpl.FinishApplet();
-                xObj.Assign( aApplImpl.GetApplet(), embed::Aspects::MSOLE_CONTENT );
-                if( aCommandList.Count() )
-                {
-                    uno::Reference < beans::XPropertySet > xSet( xObj->getComponent(), uno::UNO_QUERY );
-                    if ( xSet.is() )
-                    {
-                        uno::Sequence < beans::PropertyValue > aSeq;
-                        aCommandList.FillSequence( aSeq );
-                        try
-                        {
-                            xSet->setPropertyValue( ::rtl::OUString::createFromAscii("AppletCommands"), uno::makeAny( aSeq ) );
-                        }
-                        catch ( uno::Exception& )
-                        {
-                        }
-                    }
-                }
-            }
-            else
             {
                 comphelper::EmbeddedObjectContainer aCnt;
                 ::rtl::OUString sName;
@@ -663,16 +627,18 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
             DBG_ASSERT(pDlg, "Dialogdiet fail!");
             if(pDlg->Execute() && pDlg->GetOutputItemSet())
             {
-                GetShell().LockPaint();
-                GetShell().StartAllAction();
-                GetShell().StartUndo(UNDO_INSERT);
+                //local variable necessary at least after call of .AutoCaption() because this could be deleted at this point
+                SwWrtShell& rShell = GetShell();
+                rShell.LockPaint();
+                rShell.StartAllAction();
+                rShell.StartUndo(UNDO_INSERT);
 
                 const SfxItemSet* pOutSet = pDlg->GetOutputItemSet();
                 aMgr.SetAttrSet(*pOutSet);
 
                 // beim ClickToEditFeld erst die Selektion loeschen
-                if( GetShell().IsInClickToEdit() )
-                    GetShell().DelRight();
+                if( rShell.IsInClickToEdit() )
+                    rShell.DelRight();
 
                 aMgr.InsertFlyFrm();
 
@@ -683,8 +649,8 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
                     //FN_INSERT_FRAME
                     USHORT nAnchor = (USHORT)aMgr.GetAnchor();
                         rReq.AppendItem(SfxUInt16Item(nSlot, nAnchor));
-                        rReq.AppendItem(SfxPointItem(FN_PARAM_1, GetShell().GetObjAbsPos()));
-                        rReq.AppendItem(SvxSizeItem(FN_PARAM_2, GetShell().GetObjSize()));
+                        rReq.AppendItem(SfxPointItem(FN_PARAM_1, rShell.GetObjAbsPos()));
+                        rReq.AppendItem(SvxSizeItem(FN_PARAM_2, rShell.GetObjSize()));
                     rReq.Done();
                 }
 
@@ -695,10 +661,10 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
 
                     aRewriter.AddRule(UNDO_ARG1, SW_RES(STR_FRAME));
 
-                    GetShell().EndUndo(UNDO_INSERT, &aRewriter);
+                    rShell.EndUndo(UNDO_INSERT, &aRewriter);
                 }
-                GetShell().EndAllAction();
-                GetShell().UnlockPaint();
+                rShell.EndAllAction();
+                rShell.UnlockPaint();
             }
 
             DELETEZ(pDlg);
@@ -851,13 +817,8 @@ void SwTextShell::StateInsert( SfxItemSet &rSet )
             case SID_INSERT_FLOATINGFRAME:
             case SID_INSERT_OBJECT:
             case SID_INSERT_PLUGIN:
-            case SID_INSERT_APPLET:
             {
-                if(
-#ifndef SOLAR_JAVA
-                    nWhich == SID_INSERT_APPLET ||
-#endif
-                    eCreateMode == SFX_CREATE_MODE_EMBEDDED || bCrsrInHidden )
+                if( eCreateMode == SFX_CREATE_MODE_EMBEDDED || bCrsrInHidden )
                 {
                     rSet.DisableItem( nWhich );
                 }
@@ -941,7 +902,7 @@ void SwTextShell::StateInsert( SfxItemSet &rSet )
                 }
             break;
             case FN_INSERT_HRULER :
-                if(rSh.IsReadOnlyAvailable() && rSh.HasReadonlySel() || bCrsrInHidden )
+                if((rSh.IsReadOnlyAvailable() && rSh.HasReadonlySel()) || bCrsrInHidden )
                     rSet.DisableItem(nWhich);
             break;
             case FN_FORMAT_COLUMN :

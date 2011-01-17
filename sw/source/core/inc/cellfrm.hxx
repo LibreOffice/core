@@ -24,8 +24,8 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef _CELLFRM_HXX
-#define _CELLFRM_HXX
+#ifndef SW_CELLFRM_HXX
+#define SW_CELLFRM_HXX
 
 #include <tools/mempool.hxx>
 
@@ -48,7 +48,8 @@ public:
 
     virtual BOOL GetCrsrOfst( SwPosition *, Point&, SwCrsrMoveState* = 0 ) const;
     virtual void Modify( SfxPoolItem*, SfxPoolItem* );
-    virtual void Paint( const SwRect&, const SwPrtOptions *pPrintData = NULL ) const;
+    virtual void Paint( SwRect const&,
+                        SwPrintData const*const pPrintData = NULL ) const;
     virtual void CheckDirection( BOOL bVert );
 
     // --> OD 2010-02-17 #i103961#

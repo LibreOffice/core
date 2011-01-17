@@ -44,6 +44,7 @@ ModalDialog DLG_RENAME_XNAMED
     };
     Edit ED_NEW_NAME
     {
+        HelpID = "sw:Edit:DLG_RENAME_XNAMED:ED_NEW_NAME";
         Pos = MAP_APPFONT ( 65 , 13 ) ;
         Size = MAP_APPFONT ( 87 , 12 ) ;
         Border = TRUE;

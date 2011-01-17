@@ -129,7 +129,6 @@ class SfxViewFrame;
 class SwPrintUIOptions;
 class SwPrintData;
 class SwRenderData;
-class SwPrtOptions;
 class SwWrtShell;
 
 
@@ -606,7 +605,7 @@ public:
     SwViewOptionAdjust_Impl( SwWrtShell& rSh, const SwViewOption &rViewOptions );
     ~SwViewOptionAdjust_Impl();
 
-    void AdjustViewOptions( const SwPrtOptions *pPrtOptions );
+    void AdjustViewOptions( SwPrintData const*const pPrtOptions );
 
     bool checkShell( const SwWrtShell& rCompare ) const
     { return &rCompare == &m_rShell; }

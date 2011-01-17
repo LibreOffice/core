@@ -538,7 +538,7 @@ void SwView::ExecTabWin( SfxRequest& rReq )
                     aUL.SetLower( (USHORT)aLongULSpace.GetLower() );
                 aDesc.GetMaster().SetFmtAttr( aUL );
 
-                if( bHead && pHeaderFmt || !bHead && pFooterFmt )
+                if( (bHead && pHeaderFmt) || (!bHead && pFooterFmt) )
                 {
                     SwFmtFrmSize aSz( bHead ? pHeaderFmt->GetFrmSize() :
                                               pFooterFmt->GetFrmSize() );
@@ -703,7 +703,7 @@ void SwView::ExecTabWin( SfxRequest& rReq )
         SvxColumnItem aColItem((const SvxColumnItem&)rReq.
                                             GetArgs()->Get(nSlot));
 
-        if( bSetTabColFromDoc || !bSect && rSh.GetTableFmt() )
+        if( bSetTabColFromDoc || (!bSect && rSh.GetTableFmt()) )
         {
             ASSERT(aColItem.Count(), "ColDesc ist leer!!");
 
@@ -835,7 +835,7 @@ void SwView::ExecTabWin( SfxRequest& rReq )
         SvxColumnItem aColItem((const SvxColumnItem&)rReq.
                                             GetArgs()->Get(nSlot));
 
-        if( bSetTabColFromDoc || !bSect && rSh.GetTableFmt() )
+        if( bSetTabColFromDoc || (!bSect && rSh.GetTableFmt()) )
         {
             ASSERT(aColItem.Count(), "ColDesc ist leer!!");
 
@@ -1087,8 +1087,8 @@ void SwView::StateTabWin(SfxItemSet& rSet)
                     (nSelType & nsSelectionType::SEL_FRM) ||
                     (nSelType & nsSelectionType::SEL_OLE) ||
                     SFX_ITEM_AVAILABLE > aCoreSet.GetItemState(RES_LR_SPACE)||
-                    !bVerticalWriting && (SID_ATTR_TABSTOP_VERTICAL == nWhich)||
-                    bVerticalWriting && (RES_PARATR_TABSTOP == nWhich)
+                    (!bVerticalWriting && (SID_ATTR_TABSTOP_VERTICAL == nWhich))||
+                    (bVerticalWriting && (RES_PARATR_TABSTOP == nWhich))
                  )
                 rSet.DisableItem( nWhich );
             else
@@ -1115,8 +1115,8 @@ void SwView::StateTabWin(SfxItemSet& rSet)
                     nSelType & nsSelectionType::SEL_FRM ||
                     nSelType & nsSelectionType::SEL_OLE ||
                     nFrmType == FRMTYPE_DRAWOBJ ||
-                    !bVerticalWriting && (SID_ATTR_PARA_LRSPACE_VERTICAL == nWhich)||
-                    bVerticalWriting && (SID_ATTR_PARA_LRSPACE == nWhich)
+                    (!bVerticalWriting && (SID_ATTR_PARA_LRSPACE_VERTICAL == nWhich))||
+                    (bVerticalWriting && (SID_ATTR_PARA_LRSPACE == nWhich))
                     )
             {
                 rSet.DisableItem(nWhich);
@@ -1296,9 +1296,9 @@ void SwView::StateTabWin(SfxItemSet& rSet)
 
             BOOL bTableVertical = bHasTable && rSh.IsTableVertical();
 
-            if((SID_RULER_BORDERS_VERTICAL == nWhich) &&
+            if( ( (SID_RULER_BORDERS_VERTICAL == nWhich) &&
                     ((bHasTable && !bTableVertical)||
-                        (!bVerticalWriting && !bFrmSelection && !bHasTable ) || (bFrmSelection && !bFrameHasVerticalColumns)) ||
+                        (!bVerticalWriting && !bFrmSelection && !bHasTable ) || (bFrmSelection && !bFrameHasVerticalColumns)) ) ||
                 ((SID_RULER_BORDERS == nWhich) &&
                     ((bHasTable && bTableVertical)||
                         (bVerticalWriting && !bFrmSelection&& !bHasTable) || bFrameHasVerticalColumns)))
@@ -1520,8 +1520,8 @@ void SwView::StateTabWin(SfxItemSet& rSet)
                                            bFrmSelection;
             }
 
-            if((SID_RULER_ROWS == nWhich) &&
-                    ((!bVerticalWriting && !bFrmSelection) || (bFrmSelection && !bFrameHasVerticalColumns)) ||
+            if( ( (SID_RULER_ROWS == nWhich) &&
+                    ((!bVerticalWriting && !bFrmSelection) || (bFrmSelection && !bFrameHasVerticalColumns)) ) ||
                 ((SID_RULER_ROWS_VERTICAL == nWhich) &&
                     ((bVerticalWriting && !bFrmSelection) || bFrameHasVerticalColumns)))
                 rSet.DisableItem(nWhich);

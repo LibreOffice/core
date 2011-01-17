@@ -48,24 +48,28 @@ TabPage DLG_MM_OUTPUT_PAGE
     };
     RadioButton RB_SAVESTARTDOC
     {
+        HelpID = "sw:RadioButton:DLG_MM_OUTPUT_PAGE:RB_SAVESTARTDOC";
         Pos = MAP_APPFONT ( 45 , 40 ) ;
         Size = MAP_APPFONT ( 209 , 10 ) ;
         Text[ en-US ] = "~Save starting document";
     };
     RadioButton RB_SAVEMERGEDDOC
     {
+        HelpID = "sw:RadioButton:DLG_MM_OUTPUT_PAGE:RB_SAVEMERGEDDOC";
         Pos = MAP_APPFONT ( 45 , 53 ) ;
         Size = MAP_APPFONT ( 209 , 10 ) ;
         Text[ en-US ] = "Save ~merged document" ;
     };
     RadioButton RB_PRINT
     {
+        HelpID = "sw:RadioButton:DLG_MM_OUTPUT_PAGE:RB_PRINT";
         Pos = MAP_APPFONT ( 45 , 66 ) ;
         Size = MAP_APPFONT ( 209 , 10 ) ;
         Text[ en-US ] = "~Print merged document";
     };
     RadioButton RB_SENDMAIL
     {
+        HelpID = "sw:RadioButton:DLG_MM_OUTPUT_PAGE:RB_SENDMAIL";
         Pos = MAP_APPFONT ( 45 , 79 ) ;
         Size = MAP_APPFONT ( 209 , 10 ) ;
         Text[ en-US ] = "Send merged document as ~E-Mail";
@@ -77,30 +81,35 @@ TabPage DLG_MM_OUTPUT_PAGE
     };
     PushButton  PB_SAVESTARTDOC
     {
+        HelpID = "sw:PushButton:DLG_MM_OUTPUT_PAGE:PB_SAVESTARTDOC";
         Pos = MAP_APPFONT ( 55 , 108 ) ;
         Size = MAP_APPFONT ( 100 , 14 ) ;
         Text[ en-US ] = "Save starting ~document";
     };
     RadioButton RB_SAVEASONE
     {
+        HelpID = "sw:RadioButton:DLG_MM_OUTPUT_PAGE:RB_SAVEASONE";
         Pos = MAP_APPFONT ( 45 , 109 ) ;
         Size = MAP_APPFONT ( 150 , 10 ) ;
         Text[ en-US ] = "S~ave as single document";
     };
     RadioButton RB_SAVEINDIVIDUAL
     {
+        HelpID = "sw:RadioButton:DLG_MM_OUTPUT_PAGE:RB_SAVEINDIVIDUAL";
         Pos = MAP_APPFONT (  45, 123 ) ;
         Size = MAP_APPFONT ( 150 , 10 ) ;
         Text[ en-US ] = "Sa~ve as individual documents";
     };
     RadioButton RB_FROM
     {
+        HelpID = "sw:RadioButton:DLG_MM_OUTPUT_PAGE:RB_FROM";
         Pos = MAP_APPFONT ( 45 , 137 ) ;
         Size = MAP_APPFONT ( 30 , 10 ) ;
         Text[ en-US ] = "~From";
     };
     NumericField NF_FROM
     {
+        HelpID = "sw:NumericField:DLG_MM_OUTPUT_PAGE:NF_FROM";
         Pos = MAP_APPFONT ( 78 , 136 ) ;
         Size = MAP_APPFONT ( 20 , 10 ) ;
         Border = TRUE;
@@ -120,6 +129,7 @@ TabPage DLG_MM_OUTPUT_PAGE
     };
     NumericField NF_TO
     {
+        HelpID = "sw:NumericField:DLG_MM_OUTPUT_PAGE:NF_TO";
         Pos = MAP_APPFONT ( 124 , 136 ) ;
         Size = MAP_APPFONT ( 20 , 10 ) ;
         Border = TRUE;
@@ -132,6 +142,7 @@ TabPage DLG_MM_OUTPUT_PAGE
     };
     PushButton  PB_SAVENOW
     {
+        HelpID = "sw:PushButton:DLG_MM_OUTPUT_PAGE:PB_SAVENOW";
         Pos = MAP_APPFONT ( 45 , 150 ) ;
         Size = MAP_APPFONT ( 80 , 14 ) ;
         Text[ en-US ] = "Save Do~cuments";
@@ -144,6 +155,7 @@ TabPage DLG_MM_OUTPUT_PAGE
     };
     ListBox     LB_PRINT
     {
+        HelpID = "sw:ListBox:DLG_MM_OUTPUT_PAGE:LB_PRINT";
         Pos = MAP_APPFONT ( 45 , 109 ) ;
         Size = MAP_APPFONT ( 147 , 50 ) ;
         Border = TRUE;
@@ -152,18 +164,21 @@ TabPage DLG_MM_OUTPUT_PAGE
     };
     PushButton  PB_PRINTERSETTINGS
     {
+        HelpID = "sw:PushButton:DLG_MM_OUTPUT_PAGE:PB_PRINTERSETTINGS";
         Pos = MAP_APPFONT ( 198 , 108 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Text[ en-US ] = "P~roperties...";
     };
     RadioButton RB_PRINTALL
     {
+        HelpID = "sw:RadioButton:DLG_MM_OUTPUT_PAGE:RB_PRINTALL";
         Pos = MAP_APPFONT ( 45 , 126 ) ;
         Size = MAP_APPFONT ( 150 , 10 ) ;
         Text[ en-US ] = "Print ~all documents";
     };
     PushButton  PB_PRINTNOW
     {
+        HelpID = "sw:PushButton:DLG_MM_OUTPUT_PAGE:PB_PRINTNOW";
         Pos = MAP_APPFONT ( 45 , 155 ) ;
         Size = MAP_APPFONT ( 80 , 14 ) ;
         Text[ en-US ] = "Prin~t Documents";
@@ -177,6 +192,7 @@ TabPage DLG_MM_OUTPUT_PAGE
     };
     ListBox          LB_MAILTO
     {
+        HelpID = "sw:ListBox:DLG_MM_OUTPUT_PAGE:LB_MAILTO";
         Pos = MAP_APPFONT ( 45 , 109 ) ;
         Size = MAP_APPFONT ( 147 , 50 ) ;
         DropDown = TRUE;
@@ -184,6 +200,7 @@ TabPage DLG_MM_OUTPUT_PAGE
     };
     PushButton       PB_COPYTO
     {
+        HelpID = "sw:PushButton:DLG_MM_OUTPUT_PAGE:PB_COPYTO";
         Pos = MAP_APPFONT ( 198 , 108 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Text[ en-US ] = "~Copy to...";
@@ -196,6 +213,7 @@ TabPage DLG_MM_OUTPUT_PAGE
     };
     Edit             ED_SUBJECT
     {
+        HelpID = "sw:Edit:DLG_MM_OUTPUT_PAGE:ED_SUBJECT";
         Pos = MAP_APPFONT ( 45 , 125 ) ;
         Size = MAP_APPFONT ( 147 , 12 ) ;
         Border = TRUE;
@@ -208,6 +226,7 @@ TabPage DLG_MM_OUTPUT_PAGE
     };
     ListBox          LB_SENDAS
     {
+        HelpID = "sw:ListBox:DLG_MM_OUTPUT_PAGE:LB_SENDAS";
         Pos = MAP_APPFONT ( 45 , 141 ) ;
         Size = MAP_APPFONT (147  , 70 ) ;
         DropDown = TRUE;
@@ -231,6 +250,7 @@ TabPage DLG_MM_OUTPUT_PAGE
     };
     PushButton       PB_SENDAS
     {
+        HelpID = "sw:PushButton:DLG_MM_OUTPUT_PAGE:PB_SENDAS";
         Pos = MAP_APPFONT ( 198 , 140 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Text[ en-US ] = "Pr~operties...";
@@ -243,18 +263,21 @@ TabPage DLG_MM_OUTPUT_PAGE
     };
     Edit ED_ATTACHMENT
     {
+        HelpID = "sw:Edit:DLG_MM_OUTPUT_PAGE:ED_ATTACHMENT";
         Pos = MAP_APPFONT ( 45 , 168 ) ;
         Size = MAP_APPFONT ( 147 , 12 ) ;
         Border = TRUE;
     };
     RadioButton      RB_SENDALL
     {
+        HelpID = "sw:RadioButton:DLG_MM_OUTPUT_PAGE:RB_SENDALL";
         Pos = MAP_APPFONT ( 45 , 184 ) ;
         Size = MAP_APPFONT ( 153 , 10 ) ;
         Text[ en-US ] = "S~end all documents";
     };
     PushButton       PB_SENDDOCUMENTS
     {
+        HelpID = "sw:PushButton:DLG_MM_OUTPUT_PAGE:PB_SENDDOCUMENTS";
         Pos = MAP_APPFONT ( 45 , 212 ) ;
         Size = MAP_APPFONT ( 80 , 14 ) ;
         Text[ en-US ] = "Se~nd documents";
@@ -321,6 +344,7 @@ ModalDialog DLG_MM_COPYTO
     };
     Edit ED_CC
     {
+        HelpID = "sw:Edit:DLG_MM_COPYTO:ED_CC";
         Pos = MAP_APPFONT ( 40 , 15 ) ;
         Size = MAP_APPFONT ( 204 , 12 ) ;
         Border = TRUE;
@@ -333,6 +357,7 @@ ModalDialog DLG_MM_COPYTO
     };
     Edit ED_BCC
     {
+        HelpID = "sw:Edit:DLG_MM_COPYTO:ED_BCC";
         Pos = MAP_APPFONT ( 40 , 31 ) ;
         Size = MAP_APPFONT ( 204 , 12 ) ;
         Border = TRUE;
@@ -396,6 +421,7 @@ ModalDialog DLG_MM_SAVEWARNING
     };
     Edit ED_FILENAME
     {
+        HelpID = "sw:Edit:DLG_MM_SAVEWARNING:ED_FILENAME";
         Pos = MAP_APPFONT ( 40 , 50 ) ;
         Size = MAP_APPFONT ( 154 , 12 ) ;
         Border = TRUE;
@@ -439,6 +465,7 @@ ModalDialog DLG_MM_QUERY
     };
     Edit ED_TEXT
     {
+        HelpID = "sw:Edit:DLG_MM_QUERY:ED_TEXT";
         Pos = MAP_APPFONT ( 40 , 39 ) ;
         Size = MAP_APPFONT ( 194 , 12 ) ;
         Border = TRUE;

@@ -271,20 +271,21 @@ void MSWordExportBase::ExportPoolItemsToCHP( sw::PoolItems &rItems, USHORT nScri
  *      - gebe die Attribute aus; ohne Parents!
  */
 
-void MSWordExportBase::OutputItemSet( const SfxItemSet& rSet, bool bPapFmt, bool bChpFmt, USHORT nScript )
+void MSWordExportBase::OutputItemSet( const SfxItemSet& rSet, bool bPapFmt, bool bChpFmt, USHORT nScript,
+                                      bool bExportParentItemSet )
 {
-    if ( rSet.Count() )
+    if( bExportParentItemSet || rSet.Count() )
     {
         const SfxPoolItem* pItem;
         pISet = &rSet;                  // fuer Doppel-Attribute
 
         // If frame dir is set, but not adjust, then force adjust as well
-        if ( bPapFmt && SFX_ITEM_SET == rSet.GetItemState( RES_FRAMEDIR, false ) )
+        if ( bPapFmt && SFX_ITEM_SET == rSet.GetItemState( RES_FRAMEDIR, bExportParentItemSet ) )
         {
             // No explicit adjust set ?
-            if ( SFX_ITEM_SET != rSet.GetItemState( RES_PARATR_ADJUST, false ) )
+            if ( SFX_ITEM_SET != rSet.GetItemState( RES_PARATR_ADJUST, bExportParentItemSet ) )
             {
-                if ( 0 != ( pItem = rSet.GetItem( RES_PARATR_ADJUST ) ) )
+                if ( 0 != ( pItem = rSet.GetItem( RES_PARATR_ADJUST, bExportParentItemSet ) ) )
                 {
                     // then set the adjust used by the parent format
                     AttrOutput().OutputItem( *pItem );
@@ -292,7 +293,7 @@ void MSWordExportBase::OutputItemSet( const SfxItemSet& rSet, bool bPapFmt, bool
             }
         }
 
-        if ( bPapFmt && SFX_ITEM_SET == rSet.GetItemState( RES_PARATR_NUMRULE, false, &pItem ) )
+        if ( bPapFmt && SFX_ITEM_SET == rSet.GetItemState( RES_PARATR_NUMRULE, bExportParentItemSet, &pItem ) )
         {
             AttrOutput().OutputItem( *pItem );
 
@@ -307,7 +308,7 @@ void MSWordExportBase::OutputItemSet( const SfxItemSet& rSet, bool bPapFmt, bool
         }
 
         sw::PoolItems aItems;
-        GetPoolItems( rSet, aItems );
+        GetPoolItems( rSet, aItems, bExportParentItemSet );
         if ( bChpFmt )
             ExportPoolItemsToCHP(aItems, nScript);
 
@@ -783,7 +784,7 @@ void MSWordExportBase::OutputFormat( const SwFmt& rFmt, bool bPapFmt, bool bChpF
                     aSet.Put( aLR );
                     CorrectTabStopInSet( aSet, rNFmt.GetAbsLSpace() );
                     OutputItemSet( aSet, bPapFmt, bChpFmt,
-                        i18n::ScriptType::LATIN);
+                        i18n::ScriptType::LATIN, mbExportModeRTF);
                     bCallOutSet = false;
                 }
             }
@@ -801,7 +802,7 @@ void MSWordExportBase::OutputFormat( const SwFmt& rFmt, bool bPapFmt, bool bChpF
                         ItemGet<SvxLRSpaceItem>(aSet, RES_LR_SPACE));
                     aSet.Put( aLR );
                     OutputItemSet( aSet, bPapFmt, bChpFmt,
-                        com::sun::star::i18n::ScriptType::LATIN);
+                        com::sun::star::i18n::ScriptType::LATIN, mbExportModeRTF);
                     bCallOutSet = false;
                 }
                 // <--
@@ -841,7 +842,7 @@ void MSWordExportBase::OutputFormat( const SwFmt& rFmt, bool bPapFmt, bool bChpF
                 bOutFlyFrmAttrs = true;
                 //script doesn't matter if not exporting chp
                 OutputItemSet(aSet, true, false,
-                    i18n::ScriptType::LATIN);
+                    i18n::ScriptType::LATIN, mbExportModeRTF);
                 bOutFlyFrmAttrs = false;
 
                 bCallOutSet = false;
@@ -855,7 +856,7 @@ void MSWordExportBase::OutputFormat( const SwFmt& rFmt, bool bPapFmt, bool bChpF
 
     if( bCallOutSet )
         OutputItemSet( rFmt.GetAttrSet(), bPapFmt, bChpFmt,
-            i18n::ScriptType::LATIN);
+            i18n::ScriptType::LATIN, mbExportModeRTF);
     pOutFmtNode = pOldMod;
 }
 
@@ -1743,9 +1744,9 @@ static void InsertSpecialChar( WW8Export& rWrt, BYTE c,
         aItems.GetData());
 }
 
-String lcl_GetExpandedField(const SwField &rFld, SwDoc const& rDoc)
+String lcl_GetExpandedField(const SwField &rFld)
 {
-    String sRet(rFld.ExpandField(rDoc.IsClipBoard()));
+    String sRet(rFld.ExpandField(true));
 
     //replace LF 0x0A with VT 0x0B
     sRet.SearchAndReplaceAll(0x0A, 0x0B);
@@ -1871,7 +1872,7 @@ void WW8Export::OutputField( const SwField* pFld, ww::eField eFldType,
     {
         String sOut;
         if( pFld )
-            sOut = lcl_GetExpandedField(*pFld, *pDoc);
+            sOut = lcl_GetExpandedField(*pFld);
         else
             sOut = rFldCmd;
         if( sOut.Len() )
@@ -2598,7 +2599,7 @@ void WW8AttributeOutput::RefField( const SwField &rFld, const String &rRef)
     sStr.APPEND_CONST_ASC( "\" " );
     m_rWW8Export.OutputField( &rFld, ww::eREF, sStr, WRITEFIELD_START |
         WRITEFIELD_CMD_START | WRITEFIELD_CMD_END );
-    String sVar = lcl_GetExpandedField( rFld, *GetExport().pDoc );
+    String sVar = lcl_GetExpandedField( rFld );
     if ( sVar.Len() )
     {
         if ( m_rWW8Export.IsUnicode() )
@@ -2614,7 +2615,7 @@ void WW8AttributeOutput::RefField( const SwField &rFld, const String &rRef)
 
 void WW8AttributeOutput::WriteExpand( const SwField* pFld )
 {
-    String sExpand( lcl_GetExpandedField( *pFld, *GetExport().pDoc ) );
+    String sExpand( lcl_GetExpandedField( *pFld ) );
     if ( m_rWW8Export.IsUnicode() )
         SwWW8Writer::WriteString16( m_rWW8Export.Strm(), sExpand, false );
     else
@@ -2776,7 +2777,7 @@ void AttributeOutputBase::TextField( const SwFmtFld& rField )
 
                         if (pDocInfoField != NULL)
                         {
-                            String sFieldname = pDocInfoField->GetCntnt(TRUE);
+                            String sFieldname = pDocInfoField->GetFieldName();
                             xub_StrLen nIndex = sFieldname.Search(':');
 
                             if (nIndex != sFieldname.Len())
@@ -3340,7 +3341,7 @@ void WW8AttributeOutput::CharTwoLines( const SvxTwoLinesItem& rTwoLines )
         m_rWW8Export.pO->Insert( (BYTE)0x02, m_rWW8Export.pO->Count() );
 
         sal_Unicode cStart = rTwoLines.GetStartBracket();
-        sal_Unicode cEnd = rTwoLines.GetStartBracket();
+        sal_Unicode cEnd = rTwoLines.GetEndBracket();
 
         /*
         As per usual we have problems. We can have seperate left and right brackets

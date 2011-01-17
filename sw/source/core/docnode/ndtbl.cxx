@@ -2126,9 +2126,10 @@ BOOL SwDoc::DeleteRowCol( const SwSelBoxes& rBoxes, bool bColumn )
                 *aSavePaM.GetMark() = SwPosition( *pTblNd );
                 aSavePaM.Move( fnMoveBackward, fnGoNode );
             }
-            ::PaMCorrAbs( SwNodeIndex( *pTblNd ),
-                          SwNodeIndex( *pTblNd->EndOfSectionNode() ),
-                          *aSavePaM.GetMark() );
+            {
+                SwPaM const tmpPaM(*pTblNd, *pTblNd->EndOfSectionNode());
+                ::PaMCorrAbs(tmpPaM, *aSavePaM.GetMark());
+            }
 
             // harte SeitenUmbrueche am nachfolgenden Node verschieben
             BOOL bSavePageBreak = FALSE, bSavePageDesc = FALSE;
@@ -2182,9 +2183,10 @@ BOOL SwDoc::DeleteRowCol( const SwSelBoxes& rBoxes, bool bColumn )
                 *aSavePaM.GetMark() = SwPosition( *pTblNd );
                 aSavePaM.Move( fnMoveBackward, fnGoNode );
             }
-            ::PaMCorrAbs( SwNodeIndex( *pTblNd ),
-                          SwNodeIndex( *pTblNd->EndOfSectionNode() ),
-                          *aSavePaM.GetMark() );
+            {
+                SwPaM const tmpPaM(*pTblNd, *pTblNd->EndOfSectionNode());
+                ::PaMCorrAbs(tmpPaM, *aSavePaM.GetMark());
+            }
 
             // harte SeitenUmbrueche am nachfolgenden Node verschieben
             SwCntntNode* pNextNd = GetNodes()[ pTblNd->EndOfSectionIndex()+1 ]->GetCntntNode();

@@ -1043,8 +1043,7 @@ SwTxtAttr* MakeTxtAttr( SwDoc & rDoc, SfxPoolItem& rAttr,
         pNew = new SwTxtINetFmt( (SwFmtINetFmt&)rNew, nStt, nEnd );
         break;
     case RES_TXTATR_FIELD:
-        pNew = new SwTxtFld( static_cast<SwFmtFld &>(rNew), nStt,
-                    rDoc.IsClipBoard() );
+        pNew = new SwTxtFld( static_cast<SwFmtFld &>(rNew), nStt );
         break;
     case RES_TXTATR_FLYCNT:
         {
