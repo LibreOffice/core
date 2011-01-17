@@ -317,10 +317,8 @@ void SwEditShell::ChangeIndentOfAllListLevels( short nDiff )
         aRule.ChangeIndent( nDiff );
         // <--
 
-        // --> OD 2008-03-17 #refactorlists#
         // no start of new list
         SetCurNumRule( aRule, false );
-        // <--
     }
 
     EndAllAction();
@@ -357,7 +355,6 @@ void SwEditShell::SetIndent(short nIndent, const SwPosition & rPos)
 
         // --> OD 2005-02-18 #i42921# - 3rd parameter = false in order to
         // suppress setting of num rule at <aPaM>.
-        // --> OD 2008-03-17 #refactorlists#
         // do not apply any list
         GetDoc()->SetNumRule( aPaM, aRule, false, String(), sal_False );
         // <--
@@ -646,7 +643,6 @@ BOOL SwEditShell::IsNoNum( BOOL bChkStart ) const
     return bResult;
 }
 
-// --> OD 2008-02-29 #refactorlists# - removed <pHasChilds>
 BYTE SwEditShell::GetNumLevel() const
 {
     // gebe die akt. Ebene zurueck, auf der sich der Point vom Cursor befindet
@@ -664,13 +660,11 @@ BYTE SwEditShell::GetNumLevel() const
     const SwNumRule* pRule = pTxtNd->GetNumRule();
     if(pRule)
     {
-        // --> OD 2008-05-09 #refactorlists#
         const int nListLevelOfTxtNode( pTxtNd->GetActualListLevel() );
         if ( nListLevelOfTxtNode >= 0 )
         {
             nLevel = static_cast<BYTE>( nListLevelOfTxtNode );
         }
-        // <--
     }
 
     return nLevel;
@@ -681,7 +675,6 @@ const SwNumRule* SwEditShell::GetCurNumRule() const
     return GetDoc()->GetCurrNumRule( *GetCrsr()->GetPoint() );
 }
 
-// add handling of parameter <bResetIndentAttrs>
 void SwEditShell::SetCurNumRule( const SwNumRule& rRule,
                                  const bool bCreateNewList,
                                  const String sContinuedListId,
@@ -792,7 +785,6 @@ void SwEditShell::SetNodeNumStart( USHORT nStt )
 USHORT SwEditShell::GetNodeNumStart() const
 {
     const SwTxtNode* pTxtNd = GetCrsr()->GetNode()->GetTxtNode();
-    // --> OD 2008-02-28 #refactorlists#
     // correction: check, if list restart value is set at text node and
     // use new method <SwTxtNode::GetAttrListRestartValue()>.
     // return USHRT_MAX, if no list restart value is found.
@@ -801,10 +793,8 @@ USHORT SwEditShell::GetNodeNumStart() const
         return static_cast<USHORT>(pTxtNd->GetAttrListRestartValue());
     }
     return USHRT_MAX;
-    // <--
 }
 
-// --> OD 2008-03-18 #refactorlists#
 const SwNumRule * SwEditShell::SearchNumRule( const bool bForward,
                                               const bool bNum,
                                               const bool bOutline,
@@ -815,6 +805,5 @@ const SwNumRule * SwEditShell::SearchNumRule( const bool bForward,
                                     bForward, bNum, bOutline, nNonEmptyAllowed,
                                     sListId );
 }
-// <--
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
