@@ -346,7 +346,7 @@ namespace dbaui
             String sUrl = pUrlItem->GetValue();
             setURL( sUrl );
 
-            const BOOL bEnableJDBC = m_pCollection->determineType(m_eType) == ::dbaccess::DST_JDBC;
+            const sal_Bool bEnableJDBC = m_pCollection->determineType(m_eType) == ::dbaccess::DST_JDBC;
             if ( !pJdbcDrvItem->GetValue().Len() )
             {
                 String sDefaultJdbcDriverName = m_pCollection->getJavaDriverClass(m_eType);
@@ -436,7 +436,7 @@ namespace dbaui
         {
         }
 
-        USHORT nMessage = bSuccess ? STR_JDBCDRIVER_SUCCESS : STR_JDBCDRIVER_NO_SUCCESS;
+        sal_uInt16 nMessage = bSuccess ? STR_JDBCDRIVER_SUCCESS : STR_JDBCDRIVER_NO_SUCCESS;
         OSQLMessageBox aMsg( this, String( ModuleRes( nMessage ) ), String() );
         aMsg.Execute();
         return 0L;
@@ -445,7 +445,7 @@ namespace dbaui
     bool OConnectionTabPage::checkTestConnection()
     {
         OSL_ENSURE(m_pAdminDialog,"No Admin dialog set! ->GPF");
-        BOOL bEnableTestConnection = !m_aConnectionURL.IsVisible() || (m_aConnectionURL.GetTextNoPrefix().Len() != 0);
+        sal_Bool bEnableTestConnection = !m_aConnectionURL.IsVisible() || (m_aConnectionURL.GetTextNoPrefix().Len() != 0);
         if ( m_pCollection->determineType(m_eType) ==  ::dbaccess::DST_JDBC )
             bEnableTestConnection = bEnableTestConnection && (m_aJavaDriver.GetText().Len() != 0);
         m_aTestConnection.Enable(bEnableTestConnection);
