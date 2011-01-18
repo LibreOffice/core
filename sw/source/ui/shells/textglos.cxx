@@ -36,7 +36,6 @@
 
 #include "errhdl.hxx"
 #include "view.hxx"
-#include "initui.hxx"
 #include "cmdid.h"
 #include "textsh.hxx"
 #include "initui.hxx"

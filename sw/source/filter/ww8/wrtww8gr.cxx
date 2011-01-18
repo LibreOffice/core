@@ -49,7 +49,6 @@
 #include <hintids.hxx>
 #include <editeng/boxitem.hxx>
 #include <editeng/shaditem.hxx>
-#include <editeng/shaditem.hxx>
 #include <filter/msfilter/msoleexp.hxx>
 #include <editeng/lrspitem.hxx> // SvxLRSpaceItem
 #include <editeng/ulspitem.hxx>

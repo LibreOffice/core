@@ -37,7 +37,6 @@
 #include <vcl/graph.hxx>
 #include <svl/urihelper.hxx>
 #include <editeng/boxitem.hxx>
-#include <editeng/boxitem.hxx>
 #include <editeng/wghtitem.hxx>
 #include <editeng/cmapitem.hxx>
 #include <editeng/cntritem.hxx>

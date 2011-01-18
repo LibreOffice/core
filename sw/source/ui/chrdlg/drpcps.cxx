@@ -35,6 +35,9 @@
 #include <hintids.hxx>
 #define _SVSTDARR_STRINGSDTOR
 #define _SVSTDARR_STRINGSISORTDTOR
+#define _SVSTDARR_XUB_STRLEN
+#define _SVSTDARR_USHORTS
+#define _SVSTDARR_ULONGS
 #include <svl/svstdarr.hxx>
 
 #include "cmdid.h"
@@ -55,11 +58,6 @@
 #include <editeng/scripttypeitem.hxx>
 #include <com/sun/star/i18n/XBreakIterator.hpp>
 #include <comphelper/processfactory.hxx>
-
-#define _SVSTDARR_XUB_STRLEN
-#define _SVSTDARR_USHORTS
-#define _SVSTDARR_ULONGS
-#include <svl/svstdarr.hxx>
 
 #include "charatr.hxx"
 #include "viewopt.hxx"

@@ -118,7 +118,6 @@
 
 #include <sfx2/fcontnr.hxx>
 
-#include "swabstdlg.hxx"
 #include "dialog.hrc"
 #include "swabstdlg.hxx"
 

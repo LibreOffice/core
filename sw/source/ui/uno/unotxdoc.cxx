@@ -43,9 +43,7 @@
 #include <swtypes.hxx>
 #include <wdocsh.hxx>
 #include <wrtsh.hxx>
-#include <view.hxx>
 #include <pview.hxx>
-#include <srcview.hxx>
 #include <viewsh.hxx>
 #include <pvprtdat.hxx>
 #include <swprtopt.hxx>
@@ -78,7 +76,6 @@
 #include <globdoc.hxx>
 #include <viewopt.hxx>
 #include <unochart.hxx>
-#include <doc.hxx>
 #include <charatr.hxx>
 #include <svx/xmleohlp.hxx>
 #include <globals.hrc>
@@ -123,11 +120,7 @@
 // <--
 #include <numrule.hxx>
 
-///////////////////////////Modified on Jun. 14th//////////////////////////
-///////////////////////for getDocumentLanguages///////////////////////////
-//-->
 #include <editeng/langitem.hxx>
-#include <doc.hxx>
 #include <docary.hxx>      //SwCharFmts
 #include <i18npool/mslangid.hxx>
 
@@ -153,8 +146,6 @@
 #include <svl/languageoptions.hxx>
 #include <svx/svdview.hxx>
 
-//
-//<--
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::i18n;

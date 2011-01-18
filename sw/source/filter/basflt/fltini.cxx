@@ -60,7 +60,6 @@
 #include <swtable.hxx>
 #include <fmtcntnt.hxx>
 #include <editeng/boxitem.hxx>
-#include <frmatr.hxx>
 #include <frmfmt.hxx>
 #include <numrule.hxx>
 #include <ndtxt.hxx>

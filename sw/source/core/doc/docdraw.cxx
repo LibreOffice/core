@@ -67,9 +67,7 @@
 
 #include <svx/svdpagv.hxx>
 
-#include <dcontact.hxx>
 #include <txtfrm.hxx>
-#include <frmfmt.hxx>
 #include <editeng/frmdiritem.hxx>
 #include <fmtornt.hxx>
 

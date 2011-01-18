@@ -760,7 +760,6 @@
 #include "svx/layctrl.hxx"
 #include "svx/lboxctrl.hxx"
 #include "svx/linectrl.hxx"
-#include "sfx2/linkmgr.hxx"
 #include "filter/msfilter/mscodec.hxx"
 #include "filter/msfilter/msdffimp.hxx"
 #include "filter/msfilter/msfiltertracer.hxx"
@@ -954,7 +953,6 @@
 #include "vcl/wintypes.hxx"
 #include "vcl/wrkwin.hxx"
 
-#include "osl/mutex.hxx"
 #include "rtl/ref.hxx"
 
 #include "xmloff/DocumentSettingsContext.hxx"

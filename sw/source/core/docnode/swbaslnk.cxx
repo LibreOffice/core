@@ -38,7 +38,6 @@
 #include <comphelper/mediadescriptor.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/lnkbase.hxx>
-#include <sfx2/linkmgr.hxx>
 #include <sfx2/objsh.hxx>
 #include <editeng/boxitem.hxx>
 #include <svx/svxids.hrc>       // fuer die EventIds

@@ -56,7 +56,6 @@
 #include <view.hxx>
 #include <wrtsh.hxx>
 #include <basesh.hxx>
-#include <wrtsh.hxx>
 #include <flddat.hxx>
 #include <numrule.hxx>
 #include <textsh.hxx>
@@ -72,7 +71,6 @@
 #include <shells.hrc>
 
 #include <sfx2/app.hxx>
-#include <svx/svxdlg.hxx>
 #include <svx/dialogs.hrc>
 #include "swabstdlg.hxx"
 #include "dialog.hrc"

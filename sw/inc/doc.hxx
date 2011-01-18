@@ -49,7 +49,6 @@
 #include <IDocumentChartDataProviderAccess.hxx>
 #include <IDocumentOutlineNodes.hxx>
 #include <IDocumentListItems.hxx>
-#include <set>
 
 #include <IDocumentListsAccess.hxx>
 class SwList;

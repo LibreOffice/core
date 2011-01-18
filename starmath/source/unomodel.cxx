@@ -31,7 +31,6 @@
 
 
 #include <osl/mutex.hxx>
-#include <osl/mutex.hxx>
 #include <sfx2/printer.hxx>
 #include <vcl/svapp.hxx>
 #include <svtools/ctrltool.hxx>

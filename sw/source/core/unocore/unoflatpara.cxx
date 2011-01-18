@@ -45,7 +45,6 @@
 #include <viewimp.hxx>
 #include <breakit.hxx>
 #include <pam.hxx>
-#include <unobaseclass.hxx>
 #include <unotextrange.hxx>
 #include <pagefrm.hxx>
 #include <cntfrm.hxx>

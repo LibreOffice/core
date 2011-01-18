@@ -44,8 +44,6 @@
 #include <svl/itemprop.hxx>
 #include <sfx2/objsh.hxx>   // SfxObjectShellRef
 
-#include <functional>
-
 namespace com { namespace sun { namespace star {
 
     namespace sdbc {

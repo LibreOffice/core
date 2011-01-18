@@ -35,7 +35,6 @@
 #include <sfx2/module.hxx>
 
 #include <tools/shl.hxx>
-#include <svl/lstner.hxx>
 #include "swdllapi.h"
 #include "shellid.hxx"
 #include <fldupde.hxx>

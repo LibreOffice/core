@@ -133,7 +133,6 @@
 #include <osl/file.hxx>
 #include <swabstdlg.hxx>
 #include <fmthdft.hxx>
-#include <dbui.hrc>
 #include <envelp.hrc>
 #include <memory>
 #include <vector>

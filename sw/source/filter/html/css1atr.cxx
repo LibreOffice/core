@@ -50,7 +50,6 @@
 #include <editeng/lspcitem.hxx>
 #include <editeng/adjitem.hxx>
 #include <editeng/lrspitem.hxx>
-#include <editeng/ulspitem.hxx>
 #include <editeng/brshitem.hxx>
 #include <editeng/brkitem.hxx>
 #include <editeng/keepitem.hxx>

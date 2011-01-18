@@ -48,8 +48,6 @@
 #include <unocrsrhelper.hxx>
 #include <hintids.hxx>
 
-#include <unomid.h>
-
 
 using rtl::OUString;
 using namespace rtl;

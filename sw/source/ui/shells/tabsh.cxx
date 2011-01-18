@@ -97,7 +97,6 @@
 
 #include <popup.hrc>
 #include <shells.hrc>
-#include <table.hrc>
 #include <cmdid.h>
 #include <globals.hrc>
 #include <helpid.h>

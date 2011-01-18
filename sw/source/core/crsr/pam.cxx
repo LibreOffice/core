@@ -39,7 +39,6 @@
 #include <pam.hxx>
 #include <pamtyp.hxx>
 #include <txtfrm.hxx>
-#include <section.hxx>
 #include <fmtcntnt.hxx>
 #include <frmatr.hxx>
 #include <swtable.hxx>

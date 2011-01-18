@@ -61,7 +61,6 @@
 #include <vbahelper/vbashaperange.hxx>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/drawing/XDrawPage.hpp>
-#include <com/sun/star/text/ControlCharacter.hpp>
 #include "vbarows.hxx"
 #include "vbacolumns.hxx"
 #include "vbatablehelper.hxx"

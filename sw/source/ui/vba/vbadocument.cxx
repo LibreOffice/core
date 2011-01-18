@@ -37,7 +37,6 @@
 #include <com/sun/star/document/XDocumentProperties.hpp>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/drawing/XControlShape.hpp>
-#include <com/sun/star/drawing/XControlShape.hpp>
 #include <com/sun/star/form/XFormsSupplier.hpp>
 #include <com/sun/star/document/XRedlinesSupplier.hpp>
 #include <ooo/vba/XControlProvider.hpp>

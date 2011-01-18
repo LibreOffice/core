@@ -39,7 +39,6 @@
 #include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <comphelper/processfactory.hxx>
-#include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/task/XInteractionHandler.hpp>
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
@@ -47,7 +46,6 @@
 #include <com/sun/star/ucb/InteractiveAppException.hpp>
 #include <com/sun/star/ucb/XContent.hpp>
 #include <com/sun/star/packages/zip/ZipIOException.hpp>
-#include <framework/interaction.hxx>
 
 #include <toolkit/helper/vclunohelper.hxx>
 #include <ucbhelper/simpleinteractionrequest.hxx>

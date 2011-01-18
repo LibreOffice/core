@@ -61,7 +61,6 @@
 #include <doctxm.hxx>
 #include <fmtftntx.hxx>
 #include <fmtclbl.hxx>
-#include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <editeng/frmdiritem.hxx>
 #include <fmtcntnt.hxx>
 /* #109700# */

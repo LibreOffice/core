@@ -66,7 +66,6 @@
 
 #include <comphelper/seqstream.hxx>
 #include <unotools/ucbstreamhelper.hxx>
-#include <svtools/filter.hxx>
 #include <svx/fmglob.hxx>
 #include <svx/svdouno.hxx>
 #include <svx/unoapi.hxx>

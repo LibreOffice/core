@@ -44,7 +44,6 @@
 #include <editeng/boxitem.hxx>
 #include <editeng/fontitem.hxx>
 #include <editeng/tstpitem.hxx>
-#include <editeng/boxitem.hxx>
 #include <editeng/brshitem.hxx>
 #include <editeng/langitem.hxx>
 

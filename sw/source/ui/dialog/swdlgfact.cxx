@@ -39,7 +39,6 @@
 #include "dialog.hrc"
 #include "misc.hrc"
 #include "chrdlg.hrc"
-#include "fldui.hrc"
 #include "table.hrc"
 #include "frmui.hrc"
 #include "dbui.hrc"

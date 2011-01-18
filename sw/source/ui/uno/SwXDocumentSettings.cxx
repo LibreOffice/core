@@ -55,11 +55,6 @@
 #include "cfgitems.hxx"
 #include "prtopt.hxx"
 
-
-#include "swmodule.hxx"
-#include "cfgitems.hxx"
-#include "prtopt.hxx"
-
 using rtl::OUString;
 
 using namespace comphelper;

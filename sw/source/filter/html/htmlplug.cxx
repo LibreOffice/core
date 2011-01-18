@@ -65,7 +65,6 @@
 #include "htmlfly.hxx"
 #include "swcss1.hxx"
 #include <com/sun/star/embed/XClassifiedObject.hpp>
-#include <com/sun/star/embed/EmbedStates.hpp>
 #include <comphelper/embeddedobjectcontainer.hxx>
 #include <sot/clsids.hxx>
 

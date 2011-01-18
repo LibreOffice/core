@@ -37,7 +37,6 @@
 #include <fmturl.hxx>
 #include <frmfmt.hxx>
 #include <doc.hxx>
-#include <docsh.hxx>
 #include <shellres.hxx>
 #include <viewimp.hxx>
 #include <pagefrm.hxx>

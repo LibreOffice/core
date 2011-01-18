@@ -32,7 +32,6 @@
 #include <vcl/dialog.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/button.hxx>
-#include <vcl/image.hxx>
 #include <sfx2/tabdlg.hxx>
 #include <vcl/combobox.hxx>
 #include <svx/charmap.hxx>

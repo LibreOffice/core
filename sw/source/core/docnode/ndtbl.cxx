@@ -60,7 +60,6 @@
 #include <swcrsr.hxx>
 #include <viscrs.hxx>
 #include <swtable.hxx>
-#include <ndtxt.hxx>
 #include <swundo.hxx>
 #include <tblsel.hxx>
 #include <fldbas.hxx>
@@ -87,7 +86,6 @@
 #include <node2lay.hxx>
 #include <comcore.hrc>
 #include "docsh.hxx"
-#include <tabcol.hxx>
 #include <unochart.hxx>
 
 #include <node.hxx>

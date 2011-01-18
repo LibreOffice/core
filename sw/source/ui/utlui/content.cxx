@@ -84,7 +84,6 @@
 #include <svx/svdpage.hxx>
 #include <svx/svdview.hxx>
 #include <vcl/scrbar.hxx>
-#include <comcore.hrc>
 #include <undobj.hxx>
 #include <swundo.hxx>
 #include <ndtxt.hxx>

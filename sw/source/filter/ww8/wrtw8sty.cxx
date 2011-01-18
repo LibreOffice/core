@@ -39,7 +39,6 @@
 #include <editeng/fontitem.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/svdotext.hxx>
-#include <svx/svdotext.hxx>
 #include <svx/fmglob.hxx>
 #include <editeng/frmdiritem.hxx>
 #include <editeng/lrspitem.hxx>

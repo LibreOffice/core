@@ -67,9 +67,6 @@
 #include <annotation.hrc>
 #include "cmdid.h"
 
-#include <SwRewriter.hxx>
-#include <undobj.hxx>
-
 #include <sfx2/request.hxx>
 #include <sfx2/event.hxx>
 #include <svl/srchitem.hxx>

@@ -76,7 +76,6 @@
 #include <navsh.hxx>
 #include <globdoc.hxx>
 #include <scroll.hxx>
-#include <globdoc.hxx>
 #include <navipi.hxx>
 #include <gloshdl.hxx>
 #include <usrpref.hxx>

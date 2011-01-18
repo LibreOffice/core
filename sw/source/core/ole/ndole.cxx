@@ -57,7 +57,6 @@
 #include <section.hxx>
 #include <cntfrm.hxx>
 #include <frmatr.hxx>
-#include <docsh.hxx>
 #include <ndole.hxx>
 
 #include <comphelper/classids.hxx>

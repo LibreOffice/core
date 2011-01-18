@@ -49,11 +49,9 @@
 #include <dbmgr.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <wrtsh.hxx>
-#include <sfx2/viewfrm.hxx>
 #include "vcl/msgbox.hxx" // RET_CANCEL
 
 #include <helpid.h>
-#include <dbui.hrc>
 #include <mailmergewizard.hrc>
 
 using namespace svt;

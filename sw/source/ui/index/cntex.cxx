@@ -37,7 +37,6 @@
 
 #include <rsc/rscsfx.hxx>
 #include <com/sun/star/text/XDocumentIndexesSupplier.hpp>
-#include <com/sun/star/text/XDocumentIndex.hpp>
 #include <com/sun/star/text/XTextSectionsSupplier.hpp>
 #include <com/sun/star/style/BreakType.hpp>
 #include <com/sun/star/text/XTextFieldsSupplier.hpp>

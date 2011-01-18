@@ -102,7 +102,6 @@
 #include <fmtfordr.hxx>
 #include <fmtflcnt.hxx>
 #include <fchrfmt.hxx>
-#include <fmtautofmt.hxx>
 #include <fmtinfmt.hxx>
 #include <fmtcnct.hxx>
 #include <fmtline.hxx>

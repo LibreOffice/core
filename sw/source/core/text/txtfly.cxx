@@ -74,11 +74,6 @@
 #include <IDocumentDrawModelAccess.hxx>
 #include <IDocumentLayoutAccess.hxx>
 #include <IDocumentSettingAccess.hxx>
-#include <svx/obj3d.hxx>
-#include <editeng/txtrange.hxx>
-#include <editeng/lrspitem.hxx>
-#include <editeng/ulspitem.hxx>
-#include <editeng/lspcitem.hxx>
 #include <svx/svdoedge.hxx>
 #include "doc.hxx"
 

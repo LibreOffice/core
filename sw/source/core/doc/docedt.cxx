@@ -67,7 +67,6 @@
 #include <undobj.hxx>
 #include <breakit.hxx>
 #include <hhcwrp.hxx>
-#include <breakit.hxx>
 #include <vcl/msgbox.hxx>
 #include "comcore.hrc"
 #include "editsh.hxx"

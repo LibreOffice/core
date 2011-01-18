@@ -43,7 +43,6 @@
 #include <editeng/lrspitem.hxx>
 #include <editeng/ulspitem.hxx>
 #include <editeng/boxitem.hxx>
-#include <editeng/fhgtitem.hxx>
 #include <editeng/flstitem.hxx>
 #include <editeng/brkitem.hxx>
 #include <editeng/keepitem.hxx>

@@ -36,7 +36,6 @@
 #include <svtools/svtreebx.hxx>
 #include <svx/stddlg.hxx>
 #include "dbtree.hxx"
-#include <vcl/fixed.hxx>
 
 class SwFldMgr;
 class SwView;

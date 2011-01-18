@@ -29,13 +29,8 @@
 #define _ROWHT_HXX
 
 #include <svx/stddlg.hxx>
-
 #include <vcl/field.hxx>
-
 #include <vcl/fixed.hxx>
-
-#include <vcl/button.hxx>
-
 #include <vcl/button.hxx>
 
 class SwWrtShell;

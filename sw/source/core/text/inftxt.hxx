@@ -40,7 +40,6 @@
 #include "porlay.hxx"
 #include "txtfrm.hxx"
 #include "ndtxt.hxx"
-#include "txttypes.hxx"
 #include <editeng/paravertalignitem.hxx>
 
 class Font;

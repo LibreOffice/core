@@ -36,7 +36,6 @@
 #include <com/sun/star/chart2/data/LabelOrigin.hpp>
 #include <cppuhelper/interfacecontainer.hxx>
 #include <osl/mutex.hxx>
-#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <svl/zforlist.hxx>     // SvNumberFormatter
 #include <svtools/chartprettypainter.hxx>
@@ -55,7 +54,6 @@
 #include <frmfmt.hxx>
 #include <docsh.hxx>
 #include <ndole.hxx>
-#include <swtable.hxx>
 #include <swtypes.hxx>
 #include <unocore.hrc>
 

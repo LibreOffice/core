@@ -103,7 +103,6 @@
 #include <web.hrc>
 #include "paratr.hxx"
 #include <crsskip.hxx>
-#include <docstat.hxx>
 #include <vcl/svapp.hxx>
 #include <sfx2/app.hxx>
 #include <breakit.hxx>
@@ -117,7 +116,6 @@
 #include <IDocumentStatistics.hxx>
 
 #include <sfx2/sfxdlg.hxx>
-#include <svl/languageoptions.hxx>
 #include <unotools/lingucfg.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/util/XChangesBatch.hpp>

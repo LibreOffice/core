@@ -37,7 +37,6 @@
 #include <tools/errinf.hxx>
 #endif
 #include <vcl/msgbox.hxx>
-#include <vcl/msgbox.hxx>
 #include <svl/macitem.hxx>
 #include <sfx2/fcontnr.hxx>
 #include <sfx2/docfile.hxx>

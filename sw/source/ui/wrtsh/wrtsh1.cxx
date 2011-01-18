@@ -106,8 +106,6 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #include <sfx2/viewfrm.hxx>
 
-#include <editeng/acorrcfg.hxx>
-
 #include "PostItMgr.hxx"
 
 using namespace sw::mark;

@@ -44,7 +44,6 @@
 #include <editeng/brkitem.hxx>
 #include <svl/whiter.hxx>
 #ifndef _ZFORLIST_HXX //autogen
-#define _ZFORLIST_DECLARE_TABLE
 #include <svl/zforlist.hxx>
 #endif
 #include <comphelper/processfactory.hxx>

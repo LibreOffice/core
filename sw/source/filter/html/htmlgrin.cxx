@@ -40,7 +40,6 @@
 #include <editeng/fhgtitem.hxx>
 #include <editeng/lrspitem.hxx>
 #include <editeng/adjitem.hxx>
-#include <editeng/fhgtitem.hxx>
 #include <editeng/brshitem.hxx>
 #include <editeng/colritem.hxx>
 #include <editeng/boxitem.hxx>
@@ -55,13 +54,11 @@
 
 #include <fmtornt.hxx>
 #include <fmturl.hxx>
-#include <fmtanchr.hxx>
 #include <fmtsrnd.hxx>
 #include <fmtinfmt.hxx>
 #include <fmtcntnt.hxx>
 #include <fmtanchr.hxx>
 #include <fmtfsize.hxx>
-#include <fmtinfmt.hxx>
 #include "frmatr.hxx"
 #include "charatr.hxx"
 #include <frmfmt.hxx>

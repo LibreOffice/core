@@ -35,10 +35,6 @@
 #include <vcl/button.hxx>
 #include <vcl/fixed.hxx>
 
-#include <vcl/button.hxx>
-
-#include <vcl/fixed.hxx>
-
 #include <vcl/combobox.hxx>
 
 #include <vcl/menubtn.hxx>

@@ -40,7 +40,6 @@
 #include <editeng/boxitem.hxx>
 #include <editeng/lrspitem.hxx>
 #include <editeng/fhgtitem.hxx>
-#include <editeng/fhgtitem.hxx>
 #include <editeng/hyznitem.hxx>
 #include <editeng/frmdiritem.hxx>
 #include <editeng/langitem.hxx>

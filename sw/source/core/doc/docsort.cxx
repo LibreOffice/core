@@ -49,7 +49,6 @@
 #include <docsort.hxx>
 #include <undobj.hxx>
 #include <tblsel.hxx>
-#include <cellatr.hxx>
 #include <redline.hxx>
 #include <node2lay.hxx>
 #include <unochart.hxx>

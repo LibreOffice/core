@@ -31,13 +31,9 @@
 
 
 #include <svx/stddlg.hxx>
-
 #include <vcl/fixed.hxx>
 #include <svtools/stdctrl.hxx>
-
 #include <vcl/lstbox.hxx>
-#include <vcl/fixed.hxx>
-
 #include <vcl/button.hxx>
 
 class SwTOXMgr;

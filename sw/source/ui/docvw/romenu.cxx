@@ -65,7 +65,6 @@
 #include <cmdid.h>
 #include <helpid.h>
 #include <docvw.hrc>
-#include <docvw.hrc>
 #include <com/sun/star/ui/dialogs/XFilePicker.hpp>
 #include <com/sun/star/ui/dialogs/XFilterManager.hpp>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>

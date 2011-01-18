@@ -45,7 +45,6 @@
 
 #include <sfx2/progress.hxx>
 #include <sfx2/app.hxx>
-#include <svl/flagitem.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/oldprintadaptor.hxx>
 #include <svtools/printdlg.hxx>
@@ -83,7 +82,6 @@
 #include <globals.hrc>
 #include <view.hrc>
 #include <app.hrc>
-#include <svl/eitem.hxx>
 #include <swwrtshitem.hxx>
 #include "swabstdlg.hxx"
 #include <svl/slstitm.hxx>

@@ -35,7 +35,6 @@
 #include <vcl/msgbox.hxx>
 #include <svl/stritem.hxx>
 #include <svl/intitem.hxx>
-#include <svx/htmlmode.hxx>
 #include <editeng/keepitem.hxx>
 #include <editeng/brkitem.hxx>
 #include <editeng/ulspitem.hxx>

@@ -83,9 +83,6 @@
 #include <svx/svxdlg.hxx>
 #include <svx/dialogs.hrc>
 
-#include <svx/svxdlg.hxx>
-#include <svx/dialogs.hrc>
-
 #include <cppuhelper/bootstrap.hxx>
 
 #include "swabstdlg.hxx"

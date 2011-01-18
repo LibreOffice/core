@@ -74,7 +74,6 @@
 #include <SwRewriter.hxx>
 #include <undobj.hxx>
 
-#include "swuiidxmrk.hxx"
 #include <unomid.h>
 
 

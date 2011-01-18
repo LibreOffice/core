@@ -46,7 +46,6 @@
 
 
 #include <mmpreparemergepage.hrc>
-#include <dbui.hrc>
 
 #include <unomid.h>
 

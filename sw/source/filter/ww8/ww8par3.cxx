@@ -96,7 +96,6 @@
 #include <xmloff/odffields.hxx>
 
 #include <stdio.h>
-#include <algorithm>
 
 using namespace com::sun::star;
 using namespace sw::util;

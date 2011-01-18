@@ -62,7 +62,6 @@
 #include <ndtxt.hxx>
 #include <fmtruby.hxx>
 #include <breakit.hxx>
-#include <docsh.hxx>
 
 #include <olmenu.hrc>
 

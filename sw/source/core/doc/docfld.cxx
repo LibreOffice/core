@@ -40,7 +40,6 @@
 #include <svl/svarray.hxx>
 #endif
 #include <vcl/svapp.hxx>
-#include <vcl/svapp.hxx>
 #include <unotools/charclass.hxx>
 #include <unotools/transliterationwrapper.hxx>
 #include <doc.hxx>

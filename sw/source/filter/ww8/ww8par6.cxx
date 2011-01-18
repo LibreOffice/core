@@ -45,7 +45,6 @@
 #include <editeng/crsditem.hxx>
 #include <editeng/postitem.hxx>
 #include <editeng/wghtitem.hxx>
-#include <editeng/adjitem.hxx>
 #include <editeng/colritem.hxx>
 #include <editeng/brshitem.hxx>
 #include <editeng/spltitem.hxx>

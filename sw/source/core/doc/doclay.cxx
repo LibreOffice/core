@@ -68,7 +68,6 @@
 #include <fmtflcnt.hxx>
 #include <fmtcnct.hxx>
 #include <frmfmt.hxx>
-#include <dcontact.hxx>
 #include <txtflcnt.hxx>
 #include <docfld.hxx>   // fuer Expression-Felder
 #include <pam.hxx>

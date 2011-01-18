@@ -85,7 +85,6 @@
 #include <fmtclds.hxx>
 #include <pagedesc.hxx>
 #include <SwStyleNameMapper.hxx>
-#include <IMark.hxx>
 
 #include "ww8scan.hxx"          // WW8FieldDesc
 #include "ww8par.hxx"

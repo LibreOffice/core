@@ -42,7 +42,6 @@
 #include <ndindex.hxx>
 #include <swtable.hxx>
 #include <ndtxt.hxx>
-#include <ndole.hxx>
 #include <calc.hxx>
 #include <frmfmt.hxx>
 #include <cellfml.hxx>

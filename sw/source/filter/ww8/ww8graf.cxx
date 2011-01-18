@@ -38,7 +38,6 @@
 #include <svx/xlineit.hxx>
 #include <svx/xfillit.hxx>
 #include <svx/svdmodel.hxx>
-#include <svx/sdtaitm.hxx>
 #include <svx/svdocapt.hxx>
 #include <svx/sxctitm.hxx>
 #include <editeng/editeng.hxx>
@@ -63,7 +62,6 @@
 #include <editeng/brshitem.hxx>
 #include <svx/rectenum.hxx>
 #include <editeng/opaqitem.hxx>
-#include <editeng/shaditem.hxx>
 #include <editeng/shaditem.hxx>
 #include <editeng/boxitem.hxx>
 #include <editeng/outliner.hxx>         // #79453#

@@ -37,7 +37,6 @@
 #include <rootfrm.hxx>
 #include <txtfrm.hxx>
 #include <sectfrm.hxx>
-#include <pagefrm.hxx>
 #include <section.hxx>
 #include <viewsh.hxx>
 #include <viewopt.hxx>

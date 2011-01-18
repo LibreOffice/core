@@ -105,7 +105,6 @@
 #include <app.hrc>
 
 #include <cfgid.h>
-#include <unotools/moduleoptions.hxx>
 #include <unotools/fltrcfg.hxx>
 #include <svtools/htmlcfg.hxx>
 #include <sfx2/fcontnr.hxx>

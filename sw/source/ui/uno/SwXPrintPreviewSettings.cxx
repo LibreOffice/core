@@ -33,7 +33,6 @@
 #include <pvprtdat.hxx>
 #include <swtypes.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
-#include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <doc.hxx>
 #include <vcl/svapp.hxx>
 using namespace ::com::sun::star;

@@ -48,7 +48,6 @@
 #include <editeng/adjitem.hxx>
 #include <editeng/crsditem.hxx>
 #include <editeng/shdditem.hxx>
-#include <editeng/hyznitem.hxx>
 #include <editeng/udlnitem.hxx>
 #include <editeng/fontitem.hxx>
 #include <editeng/fhgtitem.hxx>
@@ -64,18 +63,13 @@
 #include <svl/ctloptions.hxx>
 #include <svtools/langtab.hxx>
 #include <svl/languageoptions.hxx>
-#include <sfx2/bindings.hxx>
 #include <vcl/msgbox.hxx>
-#include <sfx2/dispatch.hxx>
-#include <sfx2/request.hxx>
 #include <editeng/flditem.hxx>
 #include <editeng/editstat.hxx>
 #include <svx/hlnkitem.hxx>
 #include <svx/htmlmode.hxx>
-#include <svl/languageoptions.hxx>
 #include <svl/slstitm.hxx>
 #include <editeng/langitem.hxx>
-#include <svtools/langtab.hxx>
 #include <editeng/unolingu.hxx>
 #include <editeng/scripttypeitem.hxx>
 #include <editeng/writingmodeitem.hxx>
@@ -87,26 +81,6 @@
 #include <editeng/editview.hxx>
 #include <vcl/outdev.hxx>
 #include <editeng/hyznitem.hxx>
-#include <editeng/kernitem.hxx>
-#include <editeng/langitem.hxx>
-#include <editeng/lspcitem.hxx>
-#include <editeng/orphitem.hxx>
-#include <editeng/outliner.hxx>
-#include <editeng/postitem.hxx>
-#include <editeng/scripttypeitem.hxx>
-#include <editeng/shdditem.hxx>
-#include <editeng/spltitem.hxx>
-#include <svx/svdoutl.hxx>
-#include <svx/svdview.hxx>
-#include <editeng/udlnitem.hxx>
-#include <editeng/unolingu.hxx>
-#include <editeng/wghtitem.hxx>
-#include <editeng/widwitem.hxx>
-#include <editeng/writingmodeitem.hxx>
-#include <tools/shl.hxx>
-#include <vcl/msgbox.hxx>
-#include <vcl/outdev.hxx>
-#include <vcl/window.hxx>
 
 #include <cmdid.h>
 #include <doc.hxx>
@@ -132,8 +106,6 @@
 #include "chrdlg.hrc"
 #include "misc.hrc"
 
-
-#include <langhelper.hxx>
 
 using namespace ::com::sun::star;
 

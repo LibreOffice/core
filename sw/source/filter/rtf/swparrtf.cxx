@@ -106,7 +106,6 @@
 #include <editeng/outlobj.hxx>
 #include <editeng/paperinf.hxx>
 
-#include <tools/stream.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/range/b2drange.hxx>

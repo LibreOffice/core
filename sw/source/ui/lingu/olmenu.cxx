@@ -54,9 +54,6 @@
 #include "viewopt.hxx"
 #include "wrtsh.hxx"
 #include "wview.hxx"
-#include "swabstdlg.hxx"
-#include "chrdlg.hrc"
-
 
 #ifndef _SVSTDARR_HXX
 #define _SVSTDARR_STRINGSDTOR
@@ -83,7 +80,6 @@
 #include <svl/itemset.hxx>
 #include <svl/languageoptions.hxx>
 #include <svl/stritem.hxx>
-#include <svtools/filter.hxx>
 #include <svtools/langtab.hxx>
 #include <svx/dlgutil.hxx>
 #include <unotools/lingucfg.hxx>
