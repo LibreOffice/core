@@ -1,5 +1,4 @@
 /*************************************************************************
- *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
@@ -24,31 +23,31 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_awt_DefaultGridDataModel_idl__
-#define __com_sun_star_awt_DefaultGridDataModel_idl__
+
+#ifndef __com_sun_star_awt_grid_XSortableMutableGridDataModel_idl__
+#define __com_sun_star_awt_grid_XSortableMutableGridDataModel_idl__
 
 #include <com/sun/star/awt/grid/XMutableGridDataModel.idl>
+#include <com/sun/star/awt/grid/XSortableGridData.idl>
 
-//=============================================================================
+//==================================================================================================================
 
- module com {  module sun {  module star {  module awt {  module grid {
+module com { module sun { module star { module awt { module grid {
 
-//=============================================================================
+//==================================================================================================================
 
-/** If you do not want to implement the <type>XGridDataModel</type> yourself, use this service.
-
-    <p>The <code>DefaultGridDataModel</code> implementation is a dumb container of tabular data. You can add
-    and remove rows, modify cell values, and the like.</p>
-
-    <p>The implementation will implicitly increase its column count if you add a row which has more values than
-    the current column count.</p>
-
-    @since OOo 3.3.0
+/** describes a grid control data model whose data can be modified and sorted.
  */
-service DefaultGridDataModel : ::com::sun::star::awt::grid::XMutableGridDataModel;
+interface XSortableMutableGridDataModel
+{
+    interface XMutableGridDataModel;
+    interface XSortableGridData;
+};
 
-//=============================================================================
+//==================================================================================================================
 
-}; }; }; };};
+}; }; }; }; };
+
+//==================================================================================================================
 
 #endif

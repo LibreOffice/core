@@ -56,6 +56,9 @@ IDLFILES=\
     UnoControlGridModel.idl\
     GridInvalidDataException.idl\
     GridInvalidModelException.idl\
+    XSortableGridData.idl\
+    SortableGridDataModel.idl\
+    XSortableMutableGridDataModel.idl\
 
 # ------------------------------------------------------------------
 
