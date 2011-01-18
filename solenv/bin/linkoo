@@ -212,7 +212,7 @@ sub scan_one_dir($$$$)
 			    }
 			}
 			if (!$known && !$solver) {
-			    print "Unknown duplicate file '$file' in: '" . 
+			    print STDERR "\nlinkoo:: Unknown duplicate file '$file' in: '" . 
 				$build_files->{$file} . "' vs '" .
 				$module_path . "' in module $path\n";
 			    exit (1);
