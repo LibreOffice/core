@@ -133,6 +133,27 @@ namespace svt { namespace table
         bool    m_bActive;
     };
 
+    //==================================================================================================================
+    //= ColumnSortHandler
+    //==================================================================================================================
+    class ColumnSortHandler : public MouseFunction
+    {
+    public:
+        ColumnSortHandler()
+            :m_nActiveColumn( COL_INVALID )
+        {
+        }
+
+    public:
+        // IMouseFunction
+        virtual FunctionResult  handleMouseMove( ITableControl& i_tableControl, MouseEvent const & i_event );
+        virtual FunctionResult  handleMouseDown( ITableControl& i_tableControl, MouseEvent const & i_event );
+        virtual FunctionResult  handleMouseUp( ITableControl& i_tableControl, MouseEvent const & i_event );
+
+    private:
+        ColPos  m_nActiveColumn;
+    };
+
 //......................................................................................................................
 } } // namespace svt::table
 //......................................................................................................................

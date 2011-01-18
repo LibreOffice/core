@@ -200,6 +200,10 @@ namespace svt { namespace table
         {
             return com::sun::star::style::VerticalAlignment(0);
         }
+        virtual ITableDataSort* getSortAdapter()
+        {
+            return NULL;
+        }
         virtual void getCellContent( ColPos const i_col, RowPos const i_row, ::com::sun::star::uno::Any& o_cellContent )
         {
             (void)i_row;
@@ -1907,18 +1911,12 @@ namespace svt { namespace table
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    void TableControl_Impl::activateCellAt(const Point& rPoint)
+    bool TableControl_Impl::activateCell( ColPos const i_col, RowPos const i_row )
     {
         DBG_CHECK_ME();
-
-        RowPos const newRowPos = getRowAtPoint( rPoint );
-        ColPos const newColPos = getColAtPoint( rPoint );
-
-        if ( ( newRowPos >= 0 ) && ( newColPos >= 0 ) )
-        {   // don't activate invalid or header cells
-            goTo( newColPos, newRowPos );
-        }
+        return goTo( i_col, i_row );
     }
+
     //------------------------------------------------------------------------------------------------------------------
     void TableControl_Impl::invalidateSelectedRegion(RowPos _nPrevRow, RowPos _nCurRow, Rectangle& _rCellRect)
     {

@@ -91,8 +91,8 @@ sal_Int32 SAL_CALL SVTXGridControl::getRowAtPoint(::sal_Int32 x, ::sal_Int32 y) 
     TableControl* pTable = dynamic_cast< TableControl* >( GetWindow() );
     ENSURE_OR_RETURN( pTable != NULL, "SVTXGridControl::getRowAtPoint: no control (anymore)!", -1 );
 
-    sal_Int32 const nRow = pTable->getTableControlInterface().getRowAtPoint( Point( x, y ) );
-    return ( nRow >= 0 ) ? nRow : -1;
+    TableCell const tableCell = pTable->getTableControlInterface().hitTest( Point( x, y ) );
+    return ( tableCell.nRow >= 0 ) ? tableCell.nRow : -1;
 }
 
 // ---------------------------------------------------------------------------------------------------------------------
@@ -103,8 +103,8 @@ sal_Int32 SAL_CALL SVTXGridControl::getColumnAtPoint(::sal_Int32 x, ::sal_Int32 
     TableControl* pTable = dynamic_cast< TableControl* >( GetWindow() );
     ENSURE_OR_RETURN( pTable != NULL, "SVTXGridControl::getColumnAtPoint: no control (anymore)!", -1 );
 
-    sal_Int32 const nColumn = pTable->getTableControlInterface().getColAtPoint( Point( x, y ) );
-    return ( nColumn >= 0 ) ? nColumn : -1;
+    TableCell const tableCell = pTable->getTableControlInterface().hitTest( Point( x, y ) );
+    return ( tableCell.nColumn >= 0 ) ? tableCell.nColumn : -1;
 }
 
 // ---------------------------------------------------------------------------------------------------------------------

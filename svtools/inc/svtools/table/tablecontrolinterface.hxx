@@ -197,23 +197,40 @@ namespace svt { namespace table
         /// returns the index of the currently active row
         virtual RowPos  getCurrentRow() const = 0;
 
+        /// activates the given cell
+        virtual bool    activateCell( ColPos const i_col, RowPos const i_row ) = 0;
+
+        /// retrieves the size of the table window, in pixels
         virtual ::Size  getTableSizePixel() const = 0;
+
+        /// sets a new mouse pointer for the table window
         virtual void    setPointer( Pointer const & i_pointer ) = 0;
+
+        /// captures the mouse to the table window
         virtual void    captureMouse() = 0;
+
+        /// releases the mouse, after it had previously been captured
         virtual void    releaseMouse() = 0;
+
+        /// invalidates the table window
         virtual void    invalidate() = 0;
+
+        /// calculates a width, given in pixels, into a AppFont-based width
         virtual long    pixelWidthToAppFont( long const i_pixels ) const = 0;
 
-        virtual void    hideTracking() = 0;
+        /// shows a trackign rectangle
         virtual void    showTracking( Rectangle const & i_location, sal_uInt16 const i_flags ) = 0;
 
-        virtual void activateCellAt( const Point& rPoint ) = 0;
+        /// hides a prviously shown tracking rectangle
+        virtual void    hideTracking() = 0;
 
-        virtual RowPos          getRowAtPoint( const Point& rPoint ) const = 0;
-        virtual ColPos          getColAtPoint( const Point& rPoint ) const = 0;
+        /// does a hit test for the given pixel coordinates
         virtual TableCell       hitTest( const Point& rPoint ) const = 0;
+
+        /// retrieves the metrics for a given column
         virtual ColumnMetrics   getColumnMetrics( ColPos const i_column ) const = 0;
 
+        /// determines whether a given row is selected
         virtual bool isRowSelected( RowPos _nRow ) const = 0;
 
         virtual ~ITableControl() {};

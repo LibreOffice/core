@@ -69,6 +69,8 @@ namespace svt { namespace table
     using ::com::sun::star::uno::Any;
     using ::com::sun::star::style::HorizontalAlignment_LEFT;
     using ::com::sun::star::style::HorizontalAlignment;
+    using ::com::sun::star::style::VerticalAlignment_TOP;
+    using ::com::sun::star::style::VerticalAlignment;
     using ::com::sun::star::uno::WeakReference;
     using ::com::sun::star::awt::grid::GridDataEvent;
     /** === end UNO using === **/
@@ -96,7 +98,7 @@ namespace svt { namespace table
         ::boost::optional< ::Color >                    m_aTextColor;
         ::boost::optional< ::Color >                    m_aTextLineColor;
         ::boost::optional< ::std::vector< ::Color > >   m_aRowColors;
-        ::com::sun::star::style::VerticalAlignment      m_eVerticalAlign;
+        VerticalAlignment                               m_eVerticalAlign;
         ModellListeners                                 m_aListeners;
         WeakReference< XGridDataModel >                 m_aDataModel;
         WeakReference< XGridColumnModel >               m_aColumnModel;
@@ -118,7 +120,7 @@ namespace svt { namespace table
             ,m_aTextColor               ( )
             ,m_aTextLineColor           ( )
             ,m_aRowColors               ( )
-            ,m_eVerticalAlign           ( com::sun::star::style::VerticalAlignment_TOP )
+            ,m_eVerticalAlign           ( VerticalAlignment_TOP )
         {
         }
     };
@@ -704,20 +706,20 @@ namespace svt { namespace table
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    ::com::sun::star::style::VerticalAlignment UnoControlTableModel::getVerticalAlign() const
+    VerticalAlignment UnoControlTableModel::getVerticalAlign() const
     {
         DBG_CHECK_ME();
         return  m_pImpl->m_eVerticalAlign;
     }
 
-    //--------------------------------------------------------------------
-    void UnoControlTableModel::setVerticalAlign( com::sun::star::style::VerticalAlignment _xAlign )
+    //------------------------------------------------------------------------------------------------------------------
+    void UnoControlTableModel::setVerticalAlign( VerticalAlignment _xAlign )
     {
         DBG_CHECK_ME();
         m_pImpl->m_eVerticalAlign = _xAlign;
     }
 
-    //--------------------------------------------------------------------
+    //------------------------------------------------------------------------------------------------------------------
     ColPos UnoControlTableModel::getColumnPos( UnoGridColumnFacade const & i_column ) const
     {
         DBG_CHECK_ME();
@@ -731,6 +733,28 @@ namespace svt { namespace table
         }
         OSL_ENSURE( false, "UnoControlTableModel::getColumnPos: column not found!" );
         return COL_INVALID;
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    ITableDataSort* UnoControlTableModel::getSortAdapter()
+    {
+        // TODO: make this depend on whether or not our XGridDataModel has sorting support
+        return this;
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    void UnoControlTableModel::sortByColumn( ColPos const i_column, ColumnSortDirection const i_sortDirection )
+    {
+        // TODO
+        OSL_UNUSED( i_column );
+        OSL_UNUSED( i_sortDirection );
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    ColumnSort UnoControlTableModel::getCurrentSortOrder() const
+    {
+        // TODO
+        return ColumnSort();
     }
 
     //--------------------------------------------------------------------

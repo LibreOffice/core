@@ -277,6 +277,7 @@ namespace svt { namespace table
         virtual PTableModel         getModel() const;
         virtual ColPos              getCurrentColumn() const;
         virtual RowPos              getCurrentRow() const;
+        virtual bool                activateCell( ColPos const i_col, RowPos const i_row );
         virtual ::Size              getTableSizePixel() const;
         virtual void                setPointer( Pointer const & i_pointer );
         virtual void                captureMouse();
@@ -285,7 +286,6 @@ namespace svt { namespace table
         virtual long                pixelWidthToAppFont( long const i_pixels ) const;
         virtual void                hideTracking();
         virtual void                showTracking( Rectangle const & i_location, sal_uInt16 const i_flags );
-        virtual void                activateCellAt( const Point& rPoint );
         virtual RowPos              getRowAtPoint( const Point& rPoint ) const;
         virtual ColPos              getColAtPoint( const Point& rPoint ) const;
         virtual TableCell           hitTest( const Point& rPoint ) const;

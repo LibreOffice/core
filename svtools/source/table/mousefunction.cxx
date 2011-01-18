@@ -120,8 +120,7 @@ namespace svt { namespace table
             return ContinueFunction;
         }
 
-        Point const aPoint = i_event.GetPosPixel();
-        TableCell const tableCell( i_tableControl.hitTest( aPoint ) );
+        TableCell const tableCell( i_tableControl.hitTest( i_event.GetPosPixel() ) );
         if ( tableCell.nRow == ROW_COL_HEADERS )
         {
             if  (   ( tableCell.nColumn != COL_INVALID )
@@ -205,8 +204,7 @@ namespace svt { namespace table
     {
         bool handled = false;
 
-        Point const aPoint = i_event.GetPosPixel();
-        TableCell const tableCell( i_tableControl.hitTest( aPoint ) );
+        TableCell const tableCell( i_tableControl.hitTest( i_event.GetPosPixel() ) );
         if ( tableCell.nRow >= 0 )
         {
             bool bSetCursor = false;
@@ -228,7 +226,7 @@ namespace svt { namespace table
 
             if ( bSetCursor )
             {
-                i_tableControl.activateCellAt( aPoint );
+                i_tableControl.activateCell( tableCell.nColumn, tableCell.nRow );
                 handled = true;
             }
         }
@@ -241,8 +239,8 @@ namespace svt { namespace table
     //------------------------------------------------------------------------------------------------------------------
     FunctionResult RowSelection::handleMouseUp( ITableControl& i_tableControl, MouseEvent const & i_event )
     {
-        Point const aPoint = i_event.GetPosPixel();
-        if ( i_tableControl.getRowAtPoint( aPoint ) >= 0 )
+        TableCell const tableCell = i_tableControl.hitTest( i_event.GetPosPixel() );
+        if ( tableCell.nRow >= 0 )
         {
             if ( i_tableControl.getSelEngine()->GetSelectionMode() != NO_SELECTION )
             {
@@ -255,6 +253,68 @@ namespace svt { namespace table
             return DeactivateFunction;
         }
         return SkipFunction;
+    }
+
+    //==================================================================================================================
+    //= ColumnSortHandler
+    //==================================================================================================================
+    //------------------------------------------------------------------------------------------------------------------
+    FunctionResult ColumnSortHandler::handleMouseMove( ITableControl& i_tableControl, MouseEvent const & i_event )
+    {
+        OSL_UNUSED( i_tableControl );
+        OSL_UNUSED( i_event );
+        return SkipFunction;
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    FunctionResult ColumnSortHandler::handleMouseDown( ITableControl& i_tableControl, MouseEvent const & i_event )
+    {
+        if ( m_nActiveColumn != COL_INVALID )
+        {
+            OSL_ENSURE( false, "ColumnSortHandler::handleMouseDown: called while already active - suspicious!" );
+            return ContinueFunction;
+        }
+
+        if ( i_tableControl.getModel()->getSortAdapter() == NULL )
+            // no sorting support at the model
+            return SkipFunction;
+
+        TableCell const tableCell( i_tableControl.hitTest( i_event.GetPosPixel() ) );
+        if ( ( tableCell.nRow != ROW_COL_HEADERS ) || ( tableCell.nColumn < 0 ) )
+            return SkipFunction;
+
+        // TODO: ensure the column header is rendered in some special way, indicating its current state
+
+        m_nActiveColumn = tableCell.nColumn;
+        return ActivateFunction;
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    FunctionResult ColumnSortHandler::handleMouseUp( ITableControl& i_tableControl, MouseEvent const & i_event )
+    {
+        if ( m_nActiveColumn == COL_INVALID )
+            return SkipFunction;
+
+        TableCell const tableCell( i_tableControl.hitTest( i_event.GetPosPixel() ) );
+        if ( ( tableCell.nRow != ROW_COL_HEADERS ) || ( tableCell.nColumn != m_nActiveColumn ) )
+            // mouse was pressed on a column header, but released outside of it.
+            // => just deactivate, without sorting
+            return DeactivateFunction;
+
+        ITableDataSort* pSort = i_tableControl.getModel()->getSortAdapter();
+        ENSURE_OR_RETURN( pSort != NULL, "ColumnSortHandler::handleMouseUp: somebody is mocking with us!", DeactivateFunction );
+            // in handleMousButtonDown, the model claimed to have sort support ...
+
+        ColumnSortDirection eSortDirection = ColumnSortAscending;
+        ColumnSort const aCurrentSort = pSort->getCurrentSortOrder();
+        if ( aCurrentSort.nColumnPos == m_nActiveColumn )
+            // invert existing sort order
+            eSortDirection = ( aCurrentSort.eSortDirection == ColumnSortAscending ) ? ColumnSortDescending : ColumnSortAscending;
+
+        pSort->sortByColumn( m_nActiveColumn, eSortDirection );
+
+        m_nActiveColumn = COL_INVALID;
+        return DeactivateFunction;
     }
 
 //......................................................................................................................

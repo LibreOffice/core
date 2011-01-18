@@ -59,6 +59,7 @@ namespace svt { namespace table
     {
         m_pImpl->aMouseFunctions.push_back( new ColumnResize );
         m_pImpl->aMouseFunctions.push_back( new RowSelection );
+        m_pImpl->aMouseFunctions.push_back( new ColumnSortHandler );
     }
 
     //------------------------------------------------------------------------------------------------------------------

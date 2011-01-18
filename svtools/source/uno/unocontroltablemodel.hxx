@@ -57,7 +57,7 @@ namespace svt { namespace table
     //==================================================================================================================
     class UnoGridColumnFacade;
     struct UnoControlTableModel_Impl;
-    class UnoControlTableModel : public ITableModel
+    class UnoControlTableModel : public ITableModel, public ITableDataSort
     {
     private:
         UnoControlTableModel_Impl*     m_pImpl;
@@ -95,6 +95,11 @@ namespace svt { namespace table
                                                 getRowBackgroundColors() const;
         virtual ::com::sun::star::style::VerticalAlignment
                                                 getVerticalAlign() const;
+        virtual ITableDataSort*                 getSortAdapter();
+
+        // ITableDataSort overridables
+        virtual void        sortByColumn( ColPos const i_column, ColumnSortDirection const i_sortDirection );
+        virtual ColumnSort  getCurrentSortOrder() const;
 
         // column write access
         void    appendColumn( ::com::sun::star::uno::Reference< ::com::sun::star::awt::grid::XGridColumn > const & i_column );

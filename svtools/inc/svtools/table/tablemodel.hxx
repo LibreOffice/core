@@ -31,6 +31,7 @@
 #include "svtools/table/tabletypes.hxx"
 #include "svtools/table/tablerenderer.hxx"
 #include "svtools/table/tableinputhandler.hxx"
+#include "svtools/table/tablesort.hxx"
 
 #include <com/sun/star/util/Color.hpp>
 #include <com/sun/star/style/VerticalAlignment.hpp>
@@ -313,6 +314,7 @@ namespace svt { namespace table
             @see getWidth
         */
         virtual TableMetrics    getPreferredWidth() const = 0;
+
          /** sets the preferred width of the column, to be used when user resizes column
 
             @see getMaxWidth
@@ -506,7 +508,15 @@ namespace svt { namespace table
         virtual ::boost::optional< ::std::vector< ::Color > >
                                                 getRowBackgroundColors() const = 0;
 
+        /** determines the vertical alignment of content within a cell
+        */
         virtual ::com::sun::star::style::VerticalAlignment getVerticalAlign() const = 0;
+
+        /** returns an adapter to the sorting functionality of the model
+
+            It is legitimate to return <NULL/> here, in this case, the table model does not support sorting.
+        */
+        virtual ITableDataSort* getSortAdapter() = 0;
 
         /// destroys the table model instance
         virtual ~ITableModel() { }
