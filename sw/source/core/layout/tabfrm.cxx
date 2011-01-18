@@ -92,9 +92,6 @@ using namespace ::com::sun::star;
 |*
 |*  SwTabFrm::SwTabFrm(), ~SwTabFrm()
 |*
-|*  Ersterstellung      MA 09. Mar. 93
-|*  Letzte Aenderung    MA 30. May. 96
-|*
 |*************************************************************************/
 SwTabFrm::SwTabFrm( SwTable &rTab ):
     SwLayoutFrm( rTab.GetFrmFmt() ),
@@ -176,9 +173,6 @@ SwTabFrm::~SwTabFrm()
 |*
 |*  SwTabFrm::JoinAndDelFollows()
 |*
-|*  Ersterstellung      MA 30. May. 96
-|*  Letzte Aenderung    MA 30. May. 96
-|*
 |*************************************************************************/
 void SwTabFrm::JoinAndDelFollows()
 {
@@ -193,9 +187,6 @@ void SwTabFrm::JoinAndDelFollows()
 /*************************************************************************
 |*
 |*  SwTabFrm::RegistFlys()
-|*
-|*  Ersterstellung      MA 08. Jul. 93
-|*  Letzte Aenderung    MA 27. Jan. 99
 |*
 |*************************************************************************/
 void SwTabFrm::RegistFlys()
@@ -1018,9 +1009,6 @@ bool lcl_FindSectionsInRow( const SwRowFrm& rRow )
 |*
 |*  SwTabFrm::Split(), Join()
 |*
-|*  Ersterstellung      MA 03. Jun. 93
-|*  Letzte Aenderung    MA 03. Sep. 96
-|*
 |*************************************************************************/
 bool SwTabFrm::Split( const SwTwips nCutPos, bool bTryToSplit, bool bTableRowKeep )
 {
@@ -1422,9 +1410,6 @@ bool SwTabFrm::Join()
 /*************************************************************************
 |*
 |*  SwTabFrm::MakeAll()
-|*
-|*  Ersterstellung      MA 09. Mar. 93
-|*  Letzte Aenderung    MA 10. Apr. 97
 |*
 |*************************************************************************/
 void MA_FASTCALL SwInvalidatePositions( SwFrm *pFrm, long nBottom )
@@ -2720,8 +2705,6 @@ void SwTabFrm::MakeAll()
 |*
 |*  Beschreibung:       Berechnet die Offsets, die durch FlyFrames
 |*                      entstehen.
-|*  Ersterstellung      MA/MIB 14. Apr. 99
-|*  Letzte Aenderung
 |*
 |*************************************************************************/
 BOOL SwTabFrm::CalcFlyOffsets( SwTwips& rUpper,
@@ -2880,8 +2863,6 @@ BOOL SwTabFrm::CalcFlyOffsets( SwTwips& rUpper,
 |*
 |*  Beschreibung:       "Formatiert" den Frame; Frm und PrtArea
 |*                      Die Fixsize wird hier nicht eingestellt.
-|*  Ersterstellung      MA 09. Mar. 93
-|*  Letzte Aenderung    MA 18. Jun. 97
 |*
 |*************************************************************************/
 void SwTabFrm::Format( const SwBorderAttrs *pAttrs )
@@ -3153,9 +3134,6 @@ void SwTabFrm::Format( const SwBorderAttrs *pAttrs )
 |*
 |*  SwTabFrm::GrowFrm()
 |*
-|*  Ersterstellung      MA 12. Mar. 93
-|*  Letzte Aenderung    MA 23. Sep. 96
-|*
 |*************************************************************************/
 SwTwips SwTabFrm::GrowFrm( SwTwips nDist, BOOL bTst, BOOL bInfo )
 {
@@ -3238,9 +3216,6 @@ SwTwips SwTabFrm::GrowFrm( SwTwips nDist, BOOL bTst, BOOL bInfo )
 /*************************************************************************
 |*
 |*    SwTabFrm::Modify()
-|*
-|*    Ersterstellung    MA 14. Mar. 93
-|*    Letzte Aenderung  MA 06. Dec. 96
 |*
 |*************************************************************************/
 void SwTabFrm::Modify( SfxPoolItem * pOld, SfxPoolItem * pNew )
@@ -3401,9 +3376,6 @@ void SwTabFrm::_UpdateAttr( SfxPoolItem *pOld, SfxPoolItem *pNew,
 |*
 |*    SwTabFrm::GetInfo()
 |*
-|*    Ersterstellung    MA 06. Dec. 96
-|*    Letzte Aenderung  MA 26. Jun. 98
-|*
 |*************************************************************************/
 BOOL SwTabFrm::GetInfo( SfxPoolItem &rHnt ) const
 {
@@ -3434,9 +3406,6 @@ BOOL SwTabFrm::GetInfo( SfxPoolItem &rHnt ) const
 /*************************************************************************
 |*
 |*    SwTabFrm::FindLastCntnt()
-|*
-|*    Ersterstellung    MA 13. Apr. 93
-|*    Letzte Aenderung  MA 15. May. 98
 |*
 |*************************************************************************/
 SwCntntFrm *SwTabFrm::FindLastCntnt()
@@ -3513,9 +3482,6 @@ SwCntntFrm *SwTabFrm::FindLastCntnt()
 |*
 |*  SwTabFrm::GetLeaf()
 |*
-|*  Ersterstellung      MA 19. Mar. 93
-|*  Letzte Aenderung    MA 25. Apr. 95
-|*
 |*************************************************************************/
 SwLayoutFrm *SwTabFrm::GetLeaf( MakePageType eMakePage, BOOL bFwd )
 {
@@ -3538,8 +3504,6 @@ SwLayoutFrm *SwTabFrm::GetLeaf( MakePageType eMakePage, BOOL bFwd )
 |*  SwTabFrm::ShouldBwdMoved()
 |*
 |*  Beschreibung        Returnwert sagt ob der Frm verschoben werden sollte
-|*  Ersterstellung      MA 10. Jul. 95
-|*  Letzte Aenderung    MA 04. Mar. 97
 |*
 |*************************************************************************/
 BOOL SwTabFrm::ShouldBwdMoved( SwLayoutFrm *pNewUpper, BOOL, BOOL &rReformat )
@@ -3648,9 +3612,6 @@ BOOL SwTabFrm::ShouldBwdMoved( SwLayoutFrm *pNewUpper, BOOL, BOOL &rReformat )
 |*
 |*  SwTabFrm::Cut()
 |*
-|*  Ersterstellung      MA 23. Feb. 94
-|*  Letzte Aenderung    MA 09. Sep. 98
-|*
 |*************************************************************************/
 void SwTabFrm::Cut()
 {
@@ -3743,9 +3704,6 @@ void SwTabFrm::Cut()
 |*
 |*  SwTabFrm::Paste()
 |*
-|*  Ersterstellung      MA 23. Feb. 94
-|*  Letzte Aenderung    MA 09. Sep. 98
-|*
 |*************************************************************************/
 void SwTabFrm::Paste( SwFrm* pParent, SwFrm* pSibling )
 {
@@ -3814,9 +3772,6 @@ void SwTabFrm::Paste( SwFrm* pParent, SwFrm* pSibling )
 |*
 |*  SwTabFrm::Prepare()
 |*
-|*  Created        AMA 01/10/02
-|*  Last Change    AMA 01/10/02
-|*
 |*************************************************************************/
 void SwTabFrm::Prepare( const PrepareHint eHint, const void *, BOOL )
 {
@@ -3827,9 +3782,6 @@ void SwTabFrm::Prepare( const PrepareHint eHint, const void *, BOOL )
 /*************************************************************************
 |*
 |*  SwRowFrm::SwRowFrm(), ~SwRowFrm()
-|*
-|*  Ersterstellung      MA 09. Mar. 93
-|*  Letzte Aenderung    MA 30. May. 96
 |*
 |*************************************************************************/
 SwRowFrm::SwRowFrm( const SwTableLine &rLine, bool bInsertContent ):
@@ -3875,9 +3827,6 @@ SwRowFrm::~SwRowFrm()
 |*
 |*  SwRowFrm::RegistFlys()
 |*
-|*  Ersterstellung      MA 08. Jul. 93
-|*  Letzte Aenderung    MA 08. Jul. 93
-|*
 |*************************************************************************/
 void SwRowFrm::RegistFlys( SwPageFrm *pPage )
 {
@@ -3887,9 +3836,6 @@ void SwRowFrm::RegistFlys( SwPageFrm *pPage )
 /*************************************************************************
 |*
 |*    SwRowFrm::Modify()
-|*
-|*    Ersterstellung    MA 12. Nov. 97
-|*    Letzte Aenderung  MA 12. Nov. 97
 |*
 |*************************************************************************/
 void SwRowFrm::Modify( SfxPoolItem * pOld, SfxPoolItem * pNew )
@@ -3935,9 +3881,6 @@ void SwRowFrm::Modify( SfxPoolItem * pOld, SfxPoolItem * pNew )
 |*
 |*  SwRowFrm::MakeAll()
 |*
-|*  Ersterstellung      MA 01. Mar. 94
-|*  Letzte Aenderung    MA 01. Mar. 94
-|*
 |*************************************************************************/
 void SwRowFrm::MakeAll()
 {
@@ -3949,9 +3892,6 @@ void SwRowFrm::MakeAll()
 /*************************************************************************
 |*
 |*  SwRowFrm::Format()
-|*
-|*  Ersterstellung      MA 13. Mar. 93
-|*  Letzte Aenderung    MA 20. Jun. 96
 |*
 |*************************************************************************/
 long MA_FASTCALL CalcHeightWidthFlys( const SwFrm *pFrm )
@@ -4481,9 +4421,6 @@ void SwRowFrm::Format( const SwBorderAttrs *pAttrs )
 |*
 |*  SwRowFrm::AdjustCells()
 |*
-|*  Ersterstellung      MA 10. Aug. 93
-|*  Letzte Aenderung    MA 16. Dec. 96
-|*
 |*************************************************************************/
 void SwRowFrm::AdjustCells( const SwTwips nHeight, const BOOL bHeight )
 {
@@ -4585,9 +4522,6 @@ void SwRowFrm::AdjustCells( const SwTwips nHeight, const BOOL bHeight )
 |*
 |*  SwRowFrm::Cut()
 |*
-|*  Ersterstellung      MA 12. Nov. 97
-|*  Letzte Aenderung    MA 12. Nov. 97
-|*
 |*************************************************************************/
 void SwRowFrm::Cut()
 {
@@ -4626,9 +4560,6 @@ void SwRowFrm::Cut()
 /*************************************************************************
 |*
 |*  SwRowFrm::GrowFrm()
-|*
-|*  Ersterstellung      MA 15. Mar. 93
-|*  Letzte Aenderung    MA 05. May. 94
 |*
 |*************************************************************************/
 
@@ -4702,9 +4633,6 @@ SwTwips SwRowFrm::GrowFrm( SwTwips nDist, BOOL bTst, BOOL bInfo )
 /*************************************************************************
 |*
 |*  SwRowFrm::ShrinkFrm()
-|*
-|*  Ersterstellung      MA 15. Mar. 93
-|*  Letzte Aenderung    MA 20. Jun. 96
 |*
 |*************************************************************************/
 SwTwips SwRowFrm::ShrinkFrm( SwTwips nDist, BOOL bTst, BOOL bInfo )
@@ -4846,9 +4774,6 @@ bool SwRowFrm::ShouldRowKeepWithNext() const
 |*
 |*  SwCellFrm::SwCellFrm(), ~SwCellFrm()
 |*
-|*  Ersterstellung      MA 09. Mar. 93
-|*  Letzte Aenderung    MA 30. May. 96
-|*
 |*************************************************************************/
 SwCellFrm::SwCellFrm( const SwTableBox &rBox, bool bInsertContent ) :
     SwLayoutFrm( rBox.GetFrmFmt() ),
@@ -4903,9 +4828,6 @@ SwCellFrm::~SwCellFrm()
 /*************************************************************************
 |*
 |*  SwCellFrm::Format()
-|*
-|*  Ersterstellung      MA 09. Mar. 93
-|*  Letzte Aenderung    MA 29. Jan. 98
 |*
 |*************************************************************************/
 BOOL lcl_ArrangeLowers( SwLayoutFrm *pLay, long lYStart, BOOL bInva )
@@ -5406,9 +5328,6 @@ void SwCellFrm::Format( const SwBorderAttrs *pAttrs )
 /*************************************************************************
 |*
 |*    SwCellFrm::Modify()
-|*
-|*    Ersterstellung    MA 20. Dec. 96
-|*    Letzte Aenderung  MA 20. Dec. 96
 |*
 |*************************************************************************/
 

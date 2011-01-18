@@ -255,8 +255,6 @@ BOOL SwFmtFld::IsProtect() const
 |*                SwTxtFld::SwTxtFld()
 |*
 |*    Beschreibung      Attribut fuer automatischen Text, Ctor
-|*    Ersterstellung    BP 30.04.92
-|*    Letzte Aenderung  JP 15.08.94
 |*
 *************************************************************************/
 
@@ -284,8 +282,6 @@ SwTxtFld::~SwTxtFld( )
 |*                SwTxtFld::Expand()
 |*
 |*    Beschreibung      exandiert das Feld und tauscht den Text im Node
-|*    Ersterstellung    BP 30.04.92
-|*    Letzte Aenderung  JP 15.08.94
 |*
 *************************************************************************/
 

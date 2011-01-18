@@ -1038,8 +1038,6 @@ SwHistory::~SwHistory()
 |*    void SwHistory::Add()
 |*
 |*    Beschreibung      Dokument 1.0
-|*    Ersterstellung    JP 18.02.91
-|*    Letzte Aenderung  JP 18.02.91
 |*
 *************************************************************************/
 
@@ -1192,8 +1190,6 @@ void SwHistory::Add(const SfxItemSet & rSet, const SwCharFmt & rFmt)
 |*    BOOL SwHistory::Rollback()
 |*
 |*    Beschreibung      Dokument 1.0
-|*    Ersterstellung    JP 18.02.91
-|*    Letzte Aenderung  JP 18.02.91
 |*
 *************************************************************************/
 

@@ -70,9 +70,6 @@ using namespace ::com::sun::star;
 |*
 |*  SwFlyFreeFrm::SwFlyFreeFrm(), ~SwFlyFreeFrm()
 |*
-|*  Ersterstellung      MA 03. Dec. 92
-|*  Letzte Aenderung    MA 09. Apr. 99
-|*
 |*************************************************************************/
 
 SwFlyFreeFrm::SwFlyFreeFrm( SwFlyFrmFmt *pFmt, SwFrm *pAnch ) :
@@ -127,8 +124,6 @@ TYPEINIT1(SwFlyFreeFrm,SwFlyFrm);
 |*      ueberlappt werden.
 |*      Es werden auch die CntntFrms innerhalb von anderen Flys
 |*      beruecksichtigt.
-|*  Ersterstellung      MA 03. Dec. 92
-|*  Letzte Aenderung    MA 26. Aug. 93
 |*
 |*************************************************************************/
 
@@ -141,9 +136,6 @@ void SwFlyFreeFrm::NotifyBackground( SwPageFrm *pPageFrm,
 /*************************************************************************
 |*
 |*  SwFlyFreeFrm::MakeAll()
-|*
-|*  Ersterstellung      MA 18. Feb. 94
-|*  Letzte Aenderung    MA 03. Mar. 97
 |*
 |*************************************************************************/
 
@@ -310,9 +302,6 @@ bool SwFlyFreeFrm::HasEnvironmentAutoSize() const
 /*************************************************************************
 |*
 |*  SwFlyFreeFrm::CheckClip()
-|*
-|*  Ersterstellung      MA 21. Feb. 94
-|*  Letzte Aenderung    MA 03. Mar. 97
 |*
 |*************************************************************************/
 
@@ -529,9 +518,6 @@ bool SwFlyFreeFrm::IsFormatPossible() const
 |*
 |*  SwFlyLayFrm::SwFlyLayFrm()
 |*
-|*  Ersterstellung      MA 25. Aug. 92
-|*  Letzte Aenderung    MA 09. Apr. 99
-|*
 |*************************************************************************/
 
 SwFlyLayFrm::SwFlyLayFrm( SwFlyFrmFmt *pFmt, SwFrm *pAnch ) :
@@ -546,9 +532,6 @@ TYPEINIT1(SwFlyLayFrm,SwFlyFreeFrm);
 /*************************************************************************
 |*
 |*  SwFlyLayFrm::Modify()
-|*
-|*  Ersterstellung      MA 08. Feb. 93
-|*  Letzte Aenderung    MA 28. Aug. 93
 |*
 |*************************************************************************/
 
@@ -630,9 +613,6 @@ void SwFlyLayFrm::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew )
 /*************************************************************************
 |*
 |*  SwPageFrm::AppendFly()
-|*
-|*  Ersterstellung      MA 10. Oct. 92
-|*  Letzte Aenderung    MA 08. Jun. 96
 |*
 |*************************************************************************/
 
@@ -743,9 +723,6 @@ void SwPageFrm::AppendFlyToPage( SwFlyFrm *pNew )
 |*
 |*  SwPageFrm::RemoveFly()
 |*
-|*  Ersterstellung      MA 10. Oct. 92
-|*  Letzte Aenderung    MA 26. Aug. 96
-|*
 |*************************************************************************/
 
 void SwPageFrm::RemoveFlyFromPage( SwFlyFrm *pToRemove )
@@ -795,9 +772,6 @@ void SwPageFrm::RemoveFlyFromPage( SwFlyFrm *pToRemove )
 /*************************************************************************
 |*
 |*  SwPageFrm::MoveFly
-|*
-|*  Ersterstellung      MA 25. Jan. 97
-|*  Letzte Aenderung    MA 25. Jan. 97
 |*
 |*************************************************************************/
 
@@ -998,9 +972,6 @@ void SwPageFrm::RemoveDrawObjFromPage( SwAnchoredObject& _rToRemoveObj )
 |*
 |*  SwPageFrm::PlaceFly
 |*
-|*  Ersterstellung      MA 08. Feb. 93
-|*  Letzte Aenderung    MA 27. Feb. 93
-|*
 |*************************************************************************/
 
 // --> OD 2005-06-09 #i50432# - adjust method description and synopsis.
@@ -1033,9 +1004,6 @@ void SwPageFrm::PlaceFly( SwFlyFrm* pFly, SwFlyFrmFmt* pFmt )
 /*************************************************************************
 |*
 |*  ::CalcClipRect
-|*
-|*  Ersterstellung      AMA 24. Sep. 96
-|*  Letzte Aenderung    MA  18. Dec. 96
 |*
 |*************************************************************************/
 // OD 22.09.2003 #i18732# - adjustments for following text flow or not

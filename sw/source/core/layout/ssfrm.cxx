@@ -361,66 +361,6 @@ Point SwFrm::GetFrmAnchorPos( sal_Bool bIgnoreFlysAnchoredAtThisFrame ) const
 |*
 |*  SwFrm::~SwFrm()
 |*
-|*  Ersterstellung      MA 02. Mar. 94
-|*  Letzte Aenderung    MA 25. Jun. 95
-|*
-|*************************************************************************/
-
-
-SwFrm::~SwFrm()
-{
-    // accessible objects for fly and cell frames have been already disposed
-    // by the destructors of the derived classes.
-    if( IsAccessibleFrm() && !(IsFlyFrm() || IsCellFrm()) && GetDep() )
-    {
-        SwRootFrm *pRootFrm = FindRootFrm();
-        if( pRootFrm && pRootFrm->IsAnyShellAccessible() )
-        {
-            ViewShell *pVSh = pRootFrm->GetCurrShell();
-            if( pVSh && pVSh->Imp() )
-            {
-                OSL_ENSURE( !GetLower(), "Lowers should be dispose already!" );
-                pVSh->Imp()->DisposeAccessibleFrm( this );
-            }
-        }
-    }
-
-    if( pDrawObjs )
-    {
-        for ( sal_uInt32 i = pDrawObjs->Count(); i; )
-        {
-            SwAnchoredObject* pAnchoredObj = (*pDrawObjs)[--i];
-            if ( pAnchoredObj->ISA(SwFlyFrm) )
-                delete pAnchoredObj;
-            else
-            {
-                SdrObject* pSdrObj = pAnchoredObj->DrawObj();
-                SwDrawContact* pContact =
-                        static_cast<SwDrawContact*>(pSdrObj->GetUserCall());
-                OSL_ENSURE( pContact,
-                        "<SwFrm::~SwFrm> - missing contact for drawing object" );
-                if ( pContact )
-                {
-                    pContact->DisconnectObjFromLayout( pSdrObj );
-                }
-            }
-        }
-        if ( pDrawObjs )
-            delete pDrawObjs;
-    }
-
-#if OSL_DEBUG_LEVEL > 1
-    // JP 15.10.2001: for detection of access to deleted frames
-    pDrawObjs = (SwSortedObjs*)0x33333333;
-#endif
-}
-
-/*************************************************************************
-|*
-|*    SwLayoutFrm::SetFrmFmt()
-|*    Ersterstellung    MA 22. Apr. 93
-|*    Letzte Aenderung  MA 02. Nov. 94
-|*
 |*************************************************************************/
 
 
@@ -490,9 +430,6 @@ SwCntntFrm::~SwCntntFrm()
 /*************************************************************************
 |*
 |*  SwLayoutFrm::~SwLayoutFrm
-|*
-|*  Ersterstellung      AK 28-Feb-1991
-|*  Letzte Aenderung    MA 11. Jan. 95
 |*
 |*************************************************************************/
 
@@ -584,9 +521,6 @@ SwLayoutFrm::~SwLayoutFrm()
 /*************************************************************************
 |*
 |*  SwFrm::PaintArea()
-|*
-|*  Created     AMA 08/22/2000
-|*  Last change AMA 08/23/2000
 |*
 |*  The paintarea is the area, in which the content of a frame is allowed
 |*  to be displayed. This region could be larger than the printarea (Prt())
@@ -687,9 +621,6 @@ const SwRect SwFrm::PaintArea() const
 /*************************************************************************
 |*
 |*  SwFrm::UnionFrm()
-|*
-|*  Created     AMA 08/22/2000
-|*  Last change AMA 08/23/2000
 |*
 |*  The unionframe is the framearea (Frm()) of a frame expanded by the
 |*  printarea, if there's a negative margin at the left or right side.

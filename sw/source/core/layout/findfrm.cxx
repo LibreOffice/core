@@ -57,8 +57,6 @@
 |*
 |*  Beschreibung        Sucht den ersten/letzten CntntFrm im BodyText unterhalb
 |*      der Seite.
-|*  Ersterstellung      MA 15. Feb. 93
-|*  Letzte Aenderung    MA 18. Apr. 94
 |*
 |*************************************************************************/
 SwLayoutFrm *SwFtnBossFrm::FindBodyCont()
@@ -87,9 +85,6 @@ SwCntntFrm *SwPageFrm::FindLastBodyCntnt()
 |*  Beschreibung            Prueft, ob der Frame irgendwo in seiner
 |*          untergeordneten Struktur einen oder mehrere CntntFrm's enthaelt;
 |*          Falls ja wird der erste gefundene CntntFrm zurueckgegeben.
-|*
-|*  Ersterstellung      MA 13. May. 92
-|*  Letzte Aenderung    MA 20. Apr. 94
 |*
 |*************************************************************************/
 
@@ -143,8 +138,6 @@ const SwCntntFrm *SwLayoutFrm::ContainsCntnt() const
 |*                  hineinzukommen. Dort hangelt es sich wieder hoch zum
 |*                  ersten SwCellFrm, seit es SectionFrms gibt, reicht kein
 |*                  ContainsCntnt()->GetUpper() mehr...
-|*  Ersterstellung      AMA 17. Mar. 99
-|*  Letzte Aenderung    AMA 17. Mar. 99
 |*
 |*************************************************************************/
 
@@ -162,8 +155,6 @@ const SwCellFrm *SwLayoutFrm::FirstCell() const
 |*
 |*  Beschreibung wie ContainsCntnt, nur dass nicht nur CntntFrms, sondern auch
 |*          Bereiche und Tabellen zurueckgegeben werden.
-|*  Ersterstellung      AMA 10. Mar. 99
-|*  Letzte Aenderung    AMA 10. Mar. 99
 |*
 |*************************************************************************/
 
@@ -217,9 +208,6 @@ const SwFrm *SwLayoutFrm::ContainsAny( const bool _bInvestigateFtnForSections ) 
 |*
 |*  SwFrm::GetLower()
 |*
-|*  Ersterstellung      MA 27. Jul. 92
-|*  Letzte Aenderung    MA 09. Oct. 97
-|*
 |*************************************************************************/
 const SwFrm* SwFrm::GetLower() const
 {
@@ -234,9 +222,6 @@ SwFrm* SwFrm::GetLower()
 /*************************************************************************
 |*
 |*  SwLayoutFrm::IsAnLower()
-|*
-|*  Ersterstellung      MA 18. Mar. 93
-|*  Letzte Aenderung    MA 18. Mar. 93
 |*
 |*************************************************************************/
 BOOL SwLayoutFrm::IsAnLower( const SwFrm *pAssumed ) const
@@ -411,9 +396,6 @@ const SwLayoutFrm *SwFrm::ImplGetNextLayoutLeaf( bool bFwd ) const
 |*      Frms rueckwaerts gegangen wird.
 |*      Vorwaetzwander funktioniert analog.
 |*
-|*    Ersterstellung    ??
-|*    Letzte Aenderung  MA 30. Oct. 97
-|*
 |*************************************************************************/
 
 // Achtung: Fixes in ImplGetNextCntntFrm() muessen moeglicherweise auch in
@@ -464,9 +446,6 @@ const SwCntntFrm* SwCntntFrm::ImplGetNextCntntFrm( bool bFwd ) const
 |*
 |*  SwFrm::FindRootFrm(), FindTabFrm(), FindFtnFrm(), FindFlyFrm(),
 |*         FindPageFrm(), FindColFrm()
-|*
-|*  Ersterstellung      ??
-|*  Letzte Aenderung    MA 05. Sep. 93
 |*
 |*************************************************************************/
 SwRootFrm* SwFrm::FindRootFrm()
@@ -676,9 +655,6 @@ const SwPageFrm* SwRootFrm::GetPageAtPos( const Point& rPt, const Size* pSize, b
 |*
 |*  SwFrmFrm::GetAttrSet()
 |*
-|*  Ersterstellung      MA 02. Aug. 93
-|*  Letzte Aenderung    MA 02. Aug. 93
-|*
 |*************************************************************************/
 const SwAttrSet* SwFrm::GetAttrSet() const
 {
@@ -706,8 +682,6 @@ const SwAttrSet* SwFrm::GetAttrSet() const
 |*        auf.
 |*      - Tabellen verhalten sich prinzipiell analog zu den Cntnts
 |*      - Bereiche ebenfalls
-|*  Ersterstellung      AK 14-Feb-1991
-|*  Letzte Aenderung    AMA 10. Mar. 99
 |*
 |*************************************************************************/
 
@@ -1330,9 +1304,6 @@ BOOL lcl_IsInColSct( const SwFrm *pUp )
 |*
 |*    SwFrm::IsMoveable();
 |*
-|*    Ersterstellung    MA 09. Mar. 93
-|*    Letzte Aenderung  MA 05. May. 95
-|*
 |*************************************************************************/
 /** determine, if frame is moveable in given environment
 
@@ -1410,9 +1381,6 @@ bool SwFrm::IsMoveable( const SwLayoutFrm* _pLayoutFrm ) const
 /*************************************************************************
 |*
 |*    SwFrm::SetInfFlags();
-|*
-|*    Ersterstellung    MA 05. Apr. 94
-|*    Letzte Aenderung  MA 05. Apr. 94
 |*
 |*************************************************************************/
 void SwFrm::SetInfFlags()

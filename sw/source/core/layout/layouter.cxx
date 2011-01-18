@@ -229,9 +229,6 @@ void SwLooping::Control( SwPageFrm* pPage )
 |*
 |*  SwLayouter::SwLayouter()
 |*
-|*  Ersterstellung      AMA 02. Nov. 99
-|*  Letzte Aenderung    AMA 02. Nov. 99
-|*
 |*************************************************************************/
 
 SwLayouter::SwLayouter()

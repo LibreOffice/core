@@ -102,9 +102,6 @@
 |*
 |*  SwLayAction Statisches Geraffel
 |*
-|*  Ersterstellung      MA 22. Dec. 93
-|*  Letzte Aenderung    MA 22. Dec. 93
-|*
 |*************************************************************************/
 
 #define IS_FLYS (pPage->GetSortedObjs())
@@ -178,9 +175,6 @@ void SwLayAction::CheckWaitCrsr()
 |*
 |*  SwLayAction::CheckIdleEnd()
 |*
-|*  Ersterstellung      MA 12. Aug. 94
-|*  Letzte Aenderung    MA 24. Jun. 96
-|*
 |*************************************************************************/
 //Ist es wirklich schon soweit...
 inline void SwLayAction::CheckIdleEnd()
@@ -192,9 +186,6 @@ inline void SwLayAction::CheckIdleEnd()
 /*************************************************************************
 |*
 |*  SwLayAction::SetStatBar()
-|*
-|*  Ersterstellung      MA 10. Aug. 94
-|*  Letzte Aenderung    MA 06. Aug. 95
 |*
 |*************************************************************************/
 void SwLayAction::SetStatBar( BOOL bNew )
@@ -216,8 +207,6 @@ void SwLayAction::SetStatBar( BOOL bNew )
 |*      Veraenderungen ausgegeben bzw. wird die auszugebende Flaeche in der
 |*      Region eingetragen.
 |*      PaintCntnt:  fuellt die Region,
-|*  Ersterstellung      BP 19. Jan. 92
-|*  Letzte Aenderung    MA 10. Sep. 96
 |*
 |*************************************************************************/
 BOOL SwLayAction::PaintWithoutFlys( const SwRect &rRect, const SwCntntFrm *pCnt,
@@ -372,9 +361,6 @@ void SwLayAction::PaintCntnt( const SwCntntFrm *pCnt,
 |*
 |*  SwLayAction::SwLayAction()
 |*
-|*  Ersterstellung      MA 30. Oct. 92
-|*  Letzte Aenderung    MA 09. Jun. 95
-|*
 |*************************************************************************/
 SwLayAction::SwLayAction( SwRootFrm *pRt, SwViewImp *pI ) :
     pRoot( pRt ),
@@ -408,9 +394,6 @@ SwLayAction::~SwLayAction()
 |*
 |*  SwLayAction::Reset()
 |*
-|*  Ersterstellung      MA 11. Aug. 94
-|*  Letzte Aenderung    MA 09. Jun. 95
-|*
 |*************************************************************************/
 void SwLayAction::Reset()
 {
@@ -426,9 +409,6 @@ void SwLayAction::Reset()
 /*************************************************************************
 |*
 |*  SwLayAction::RemoveEmptyBrowserPages()
-|*
-|*  Ersterstellung      MA 10. Sep. 97
-|*  Letzte Aenderung    MA 10. Sep. 97
 |*
 |*************************************************************************/
 
@@ -462,9 +442,6 @@ BOOL SwLayAction::RemoveEmptyBrowserPages()
 /*************************************************************************
 |*
 |*  SwLayAction::Action()
-|*
-|*  Ersterstellung      MA 10. Aug. 94
-|*  Letzte Aenderung    MA 06. Aug. 95
 |*
 |*************************************************************************/
 void SwLayAction::Action()
@@ -978,9 +955,6 @@ void SwLayAction::InternalAction()
 |*
 |*  SwLayAction::TurboAction(), _TurboAction()
 |*
-|*  Ersterstellung      MA 04. Dec. 92
-|*  Letzte Aenderung    MA 15. Aug. 93
-|*
 |*************************************************************************/
 BOOL SwLayAction::_TurboAction( const SwCntntFrm *pCnt )
 {
@@ -1069,8 +1043,6 @@ BOOL SwLayAction::TurboAction()
 |*      Fuer den BrowseMode kann auch dann der ShortCut aktiviert werden,
 |*      wenn der ungueltige Inhalt der Seite unterhalb des sichbaren
 |*      bereiches liegt.
-|*  Ersterstellung      MA 30. Oct. 92
-|*  Letzte Aenderung    MA 18. Jul. 96
 |*
 |*************************************************************************/
 static bool lcl_IsInvaLay( const SwFrm *pFrm, long nBottom )
@@ -1410,9 +1382,6 @@ BOOL SwLayAction::IsShortCut( SwPageFrm *&prPage )
 /*************************************************************************
 |*
 |*  SwLayAction::FormatLayout(), FormatLayoutFly, FormatLayoutTab()
-|*
-|*  Ersterstellung      MA 30. Oct. 92
-|*  Letzte Aenderung    MA 18. May. 98
 |*
 |*************************************************************************/
 // OD 15.11.2002 #105155# - introduce support for vertical layout
@@ -1833,9 +1802,6 @@ BOOL SwLayAction::FormatLayoutTab( SwTabFrm *pTab, BOOL bAddRect )
 |*
 |*  SwLayAction::FormatCntnt()
 |*
-|*  Ersterstellung      MA 30. Oct. 92
-|*  Letzte Aenderung    MA 16. Nov. 95
-|*
 |*************************************************************************/
 BOOL SwLayAction::FormatCntnt( const SwPageFrm *pPage )
 {
@@ -2026,8 +1992,6 @@ BOOL SwLayAction::FormatCntnt( const SwPageFrm *pPage )
 |*
 |*  Beschreibung        Returnt TRUE wenn der Absatz verarbeitet wurde,
 |*                      FALSE wenn es nichts zu verarbeiten gab.
-|*  Ersterstellung      MA 07. Dec. 92
-|*  Letzte Aenderung    MA 11. Mar. 98
 |*
 |*************************************************************************/
 void SwLayAction::_FormatCntnt( const SwCntntFrm *pCntnt,
@@ -2067,8 +2031,6 @@ void SwLayAction::_FormatCntnt( const SwCntntFrm *pCntnt,
 |*  Beschreibung:
 |*      - Returnt TRUE wenn alle Cntnts des Flys vollstaendig verarbeitet
 |*        wurden. FALSE wenn vorzeitig unterbrochen wurde.
-|*  Ersterstellung      MA 02. Dec. 92
-|*  Letzte Aenderung    MA 24. Jun. 96
 |*
 |*************************************************************************/
 BOOL SwLayAction::_FormatFlyCntnt( const SwFlyFrm *pFly )
@@ -2136,9 +2098,6 @@ BOOL SwLayAction::IsStopPrt() const
 /*************************************************************************
 |*
 |*  SwLayAction::FormatSpelling(), _FormatSpelling()
-|*
-|*  Ersterstellung      AMA 01. Feb. 96
-|*  Letzte Aenderung    AMA 01. Feb. 96
 |*
 |*************************************************************************/
 BOOL SwLayIdle::_DoIdleJob( const SwCntntFrm *pCnt, IdleJobType eJob )
@@ -2353,9 +2312,6 @@ BOOL SwLayIdle::DoIdleJob( IdleJobType eJob, BOOL bVisAreaOnly )
 |*
 |*  void SwLayIdle::SwLayIdle()
 |*
-|*  Ersterstellung      MA ??
-|*  Letzte Aenderung    MA 09. Jun. 94
-|*
 |*************************************************************************/
 void SwLayIdle::ShowIdle( ColorData eColorData )
 {
@@ -2387,9 +2343,6 @@ void SwLayIdle::ShowIdle( ColorData eColorData )
 /*************************************************************************
 |*
 |*  void SwLayIdle::SwLayIdle()
-|*
-|*  Ersterstellung      MA 30. Oct. 92
-|*  Letzte Aenderung    MA 23. May. 95
 |*
 |*************************************************************************/
 SwLayIdle::SwLayIdle( SwRootFrm *pRt, SwViewImp *pI ) :

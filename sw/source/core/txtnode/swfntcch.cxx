@@ -46,9 +46,6 @@ SwFontCache *pSwFontCache = NULL;
 |*
 |*  SwFontObj::SwFontObj(), ~SwFontObj()
 |*
-|*  Ersterstellung      AMA 25. Jun. 95
-|*  Letzte Aenderung    AMA 25. Jun. 95
-|*
 |*************************************************************************/
 
 SwFontObj::SwFontObj( const void *pOwn, ViewShell *pSh ) :
@@ -68,9 +65,6 @@ SwFontObj::~SwFontObj()
 /*************************************************************************
 |*
 |*  SwFontAccess::SwFontAccess()
-|*
-|*  Ersterstellung      AMA 25. Jun. 95
-|*  Letzte Aenderung    AMA 25. Jun. 95
 |*
 |*************************************************************************/
 

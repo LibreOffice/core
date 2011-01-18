@@ -41,12 +41,7 @@
 SV_IMPL_VARARR( SwRects, SwRect );
 
 /*************************************************************************
-|*
 |*  SwRegionRects::SwRegionRects()
-|*
-|*  Ersterstellung      MA 28. Oct. 92
-|*  Letzte Aenderung    MA 01. Feb. 93
-|*
 |*************************************************************************/
 
 SwRegionRects::SwRegionRects( const SwRect &rStartRect, USHORT nInit,
@@ -87,8 +82,6 @@ inline void SwRegionRects::InsertRect( const SwRect &rRect, const USHORT nPos,
 |*      entfernt.
 |*      Dazu muessen die vorhandenen Rechtecke entweder aufgeteilt oder
 |*      geloescht werden.
-|*  Ersterstellung      MA 28. Oct. 92
-|*  Letzte Aenderung    MA 09. Sep. 93
 |*
 |*************************************************************************/
 
@@ -196,8 +189,6 @@ void SwRegionRects::Invert()
 |*  SwRegionRects::Compress()
 |*
 |*  Beschreibung        Zusammenfassen von benachbarten Rechtecken.
-|*  Ersterstellung      MA 16. Apr. 93
-|*  Letzte Aenderung    MA 21. Apr. 93
 |*
 |*************************************************************************/
 inline SwTwips CalcArea( const SwRect &rRect )

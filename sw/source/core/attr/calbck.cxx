@@ -48,8 +48,6 @@ TYPEINIT0(SwClient);    //rtti
 |*    SwClient::SwClient(SwModify *)
 |*
 |*    Beschreibung      callback.doc V1.14
-|*    Ersterstellung    VB 20.03.91
-|*    Letzte Aenderung  MA 20. Mar. 95
 *************************************************************************/
 
 
@@ -70,8 +68,6 @@ SwClient::SwClient(SwModify *pToRegisterIn)
 |*    SwClient::Modify()
 |*
 |*    Beschreibung      callback.doc V1.14
-|*    Ersterstellung    VB 20.03.91
-|*    Letzte Aenderung  VB 20.03.91
 *************************************************************************/
 
 
@@ -97,8 +93,6 @@ void SwClient::Modify( SfxPoolItem *pOld, SfxPoolItem * )
 |*    SwClient::~SwClient()
 |*
 |*    Beschreibung      callback.doc V1.14
-|*    Ersterstellung    VB 20.03.91
-|*    Letzte Aenderung  MA 25. Jan. 94
 *************************************************************************/
 
 
@@ -121,8 +115,6 @@ BOOL SwClient::GetInfo( SfxPoolItem& ) const
 |*    SwModify::SwModify( SwModify * )
 |*
 |*    Beschreibung      Dokument 1.7
-|*    Ersterstellung    JP 20.11.90
-|*    Letzte Aenderung  VB 20.03.91
 *************************************************************************/
 
 
@@ -142,8 +134,6 @@ SwModify::SwModify( const SwModify & )
 |*    SwModify::~SwModify()
 |*
 |*    Beschreibung      Dokument 1.7
-|*    Ersterstellung    JP 20.11.90
-|*    Letzte Aenderung  JP 15.04.94
 *************************************************************************/
 
 
@@ -189,8 +179,6 @@ SwModify::~SwModify()
 |*    SwModify::Modify( SwHint * pOldValue, SwHint * pNewValue )
 |*
 |*    Beschreibung      Dokument 1.7
-|*    Ersterstellung    JP 20.11.90
-|*    Letzte Aenderung  MA 20. Mar. 95
 *************************************************************************/
 
 
@@ -272,8 +260,6 @@ BOOL SwModify::GetInfo( SfxPoolItem& rInfo ) const
 |*    SwModify::Add( SwClient *pDepend )
 |*
 |*    Beschreibung      Dokument 1.7
-|*    Ersterstellung    JP 20.11.90
-|*    Letzte Aenderung  JP 14.09.94
 *************************************************************************/
 
 
@@ -322,8 +308,6 @@ void SwModify::Add(SwClient *pDepend)
 |*    SwModify::_Remove( SwClient *pDepend )
 |*
 |*    Beschreibung      Dokument 1.7
-|*    Ersterstellung    JP 20.11.90
-|*    Letzte Aenderung  JP 14.09.94
 *************************************************************************/
 
 
@@ -377,9 +361,6 @@ SwClient *SwModify::_Remove(SwClient * pDepend)
 
 /*************************************************************************
 |*    SwModify::CheckCaching( const USHORT nWhich )
-|*
-|*    Ersterstellung    JP 25.06.95
-|*    Letzte Aenderung  JP 25.06.95
 *************************************************************************/
 
 
@@ -423,8 +404,6 @@ void SwModify::CheckCaching( const USHORT nWhich )
 |*    SwDepend::SwDepend(SwClient *pTellHim,SwModify *pDepend)
 |*
 |*    Beschreibung      callback.doc V1.14
-|*    Ersterstellung    VB 20.03.91
-|*    Letzte Aenderung  VB 20.03.91
 *************************************************************************/
 
 
@@ -439,8 +418,6 @@ SwDepend::SwDepend(SwClient *pTellHim, SwModify *pDepend)
 |*    SwDepend::Modify(SwHint *, SwHint *)
 |*
 |*    Beschreibung      callback.doc V1.14
-|*    Ersterstellung    VB 20.03.91
-|*    Letzte Aenderung  VB 20.03.91
 |*
 *************************************************************************/
 

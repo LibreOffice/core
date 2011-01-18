@@ -69,8 +69,6 @@ inline xub_StrLen GetSttOrEnd( BOOL bCondition, const SwCntntNode& rNd )
 |*  SwPosition
 |*
 |*  Beschreibung        PAM.DOC
-|*  Ersterstellung      VB  4.3.91
-|*  Letzte Aenderung    VB  4.3.91
 |*
 *************************************************************************/
 
@@ -390,8 +388,6 @@ SwCntntNode* GoPreviousNds( SwNodeIndex * pIdx, BOOL bChk )
 |*  SwPointAndMark
 |*
 |*  Beschreibung        PAM.DOC
-|*  Ersterstellung      VB  4.3.91
-|*  Letzte Aenderung    JP  6.5.91
 |*
 *************************************************************************/
 
@@ -590,9 +586,6 @@ BOOL SwPaM::Move( SwMoveFn fnMove, SwGoInDoc fnGo )
 |*                      SwPaM *         der zu setzende Bereich
 |*                      const SwPaM&    der enventuell vorgegeben Bereich
 |*    Return-Werte      SwPaM*          der entsprehend neu gesetzte Bereich
-|*
-|*    Ersterstellung    JP 26.04.91
-|*    Letzte Aenderung  JP 26.04.91
 |*
 *************************************************************************/
 

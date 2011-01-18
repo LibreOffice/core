@@ -86,9 +86,6 @@ using namespace ::com::sun::star;
 |*
 |*  SwBodyFrm::SwBodyFrm()
 |*
-|*  Ersterstellung      MA ??
-|*  Letzte Aenderung    MA 01. Aug. 93
-|*
 |*************************************************************************/
 SwBodyFrm::SwBodyFrm( SwFrmFmt *pFmt ):
     SwLayoutFrm( pFmt )
@@ -99,9 +96,6 @@ SwBodyFrm::SwBodyFrm( SwFrmFmt *pFmt ):
 /*************************************************************************
 |*
 |*  SwBodyFrm::Format()
-|*
-|*  Ersterstellung      MA 30. May. 94
-|*  Letzte Aenderung    MA 20. Jan. 99
 |*
 |*************************************************************************/
 void SwBodyFrm::Format( const SwBorderAttrs * )
@@ -208,9 +202,6 @@ void SwBodyFrm::Paint( const SwRect& rRect, const SwPrtOptions* ) const
 /*************************************************************************
 |*
 |*  SwPageFrm::SwPageFrm(), ~SwPageFrm()
-|*
-|*  Ersterstellung      MA 20. Oct. 92
-|*  Letzte Aenderung    MA 08. Dec. 97
 |*
 |*************************************************************************/
 SwPageFrm::SwPageFrm( SwFrmFmt *pFmt, SwPageDesc *pPgDsc ) :
@@ -382,8 +373,6 @@ void SwPageFrm::CheckDirection( BOOL bVert )
 |*
 |*  Beschreibung        Erzeugt die Spezifischen Flys zur Seite und formatiert
 |*      generischen Cntnt
-|*  Ersterstellung      MA 20. Oct. 92
-|*  Letzte Aenderung    MA 09. Nov. 95
 |*
 |*************************************************************************/
 void MA_FASTCALL lcl_FormatLay( SwLayoutFrm *pLay )
@@ -538,9 +527,6 @@ void SwPageFrm::PreparePage( BOOL bFtn )
 /*************************************************************************
 |*
 |*  SwPageFrm::Modify()
-|*
-|*  Ersterstellung      MA 20. Oct. 92
-|*  Letzte Aenderung    MA 03. Mar. 96
 |*
 |*************************************************************************/
 void SwPageFrm::Modify( SfxPoolItem * pOld, SfxPoolItem * pNew )
@@ -735,8 +721,6 @@ void SwPageFrm::_UpdateAttr( SfxPoolItem *pOld, SfxPoolItem *pNew,
 |*                SwPageFrm::GetInfo()
 |*
 |*    Beschreibung      erfragt Informationen
-|*    Ersterstellung    JP 31.03.94
-|*    Letzte Aenderung  JP 31.03.94
 |*
 *************************************************************************/
     // erfrage vom Modify Informationen
@@ -753,9 +737,6 @@ BOOL SwPageFrm::GetInfo( SfxPoolItem & rInfo ) const
 /*************************************************************************
 |*
 |*  SwPageFrm::SetPageDesc()
-|*
-|*  Ersterstellung      MA 02. Nov. 94
-|*  Letzte Aenderung    MA 02. Nov. 94
 |*
 |*************************************************************************/
 void  SwPageFrm::SetPageDesc( SwPageDesc *pNew, SwFrmFmt *pFmt )
@@ -780,8 +761,6 @@ void  SwPageFrm::SetPageDesc( SwPageDesc *pNew, SwFrmFmt *pFmt )
 |*          Dokument oder Standard (der 0-te) wenn der erste Absatz keinen
 |*          wuenscht.
 |*     (6.  Im HTML-Mode ist der Pagedesc immer die HTML-Seitenvorlage.)
-|*  Ersterstellung      MA 15. Feb. 93
-|*  Letzte Aenderung    MA 17. Jun. 99
 |*
 |*************************************************************************/
 SwPageDesc *SwPageFrm::FindPageDesc()
@@ -880,9 +859,6 @@ inline void SetLastPage( SwPageFrm *pPage )
 |*
 |*  SwPageFrm::Cut()
 |*
-|*  Ersterstellung      MA 23. Feb. 94
-|*  Letzte Aenderung    MA 22. Jun. 95
-|*
 |*************************************************************************/
 void SwPageFrm::Cut()
 {
@@ -954,9 +930,6 @@ void SwPageFrm::Cut()
 |*
 |*  SwPageFrm::Paste()
 |*
-|*  Ersterstellung      MA 23. Feb. 94
-|*  Letzte Aenderung    MA 07. Dec. 94
-|*
 |*************************************************************************/
 void SwPageFrm::Paste( SwFrm* pParent, SwFrm* pSibling )
 {
@@ -1003,9 +976,6 @@ void SwPageFrm::Paste( SwFrm* pParent, SwFrm* pSibling )
 /*************************************************************************
 |*
 |*  SwPageFrm::PrepareRegisterChg()
-|*
-|*  Ersterstellung      AMA 22. Jul. 96
-|*  Letzte Aenderung    AMA 22. Jul. 96
 |*
 |*************************************************************************/
 void lcl_PrepFlyInCntRegister( SwCntntFrm *pFrm )
@@ -1070,9 +1040,6 @@ void SwPageFrm::PrepareRegisterChg()
 |*      ob sie das richtige FrmFmt verwenden. Wenn 'falsche' Seiten
 |*      aufgespuehrt werden, so wird versucht die Situation moeglichst
 |*      einfache zu bereinigen.
-|*
-|*  Ersterstellung      MA 10. Feb. 93
-|*  Letzte Aenderung    MA 18. Apr. 96
 |*
 |*************************************************************************/
 void SwFrm::CheckPageDescs( SwPageFrm *pStart, BOOL bNotifyFields )
@@ -1284,10 +1251,6 @@ void SwFrm::CheckPageDescs( SwPageFrm *pStart, BOOL bNotifyFields )
 |*
 |*  SwFrm::InsertPage()
 |*
-|*  Beschreibung
-|*  Ersterstellung      MA 10. Feb. 93
-|*  Letzte Aenderung    MA 27. Jul. 93
-|*
 |*************************************************************************/
 SwPageFrm *SwFrm::InsertPage( SwPageFrm *pPrevPage, BOOL bFtn )
 {
@@ -1423,9 +1386,6 @@ sw::sidebarwindows::SidebarPosition SwPageFrm::SidebarPosition() const
 |*
 |*  SwRootFrm::GrowFrm()
 |*
-|*  Ersterstellung      MA 30. Jul. 92
-|*  Letzte Aenderung    MA 05. May. 94
-|*
 |*************************************************************************/
 
 SwTwips SwRootFrm::GrowFrm( SwTwips nDist, BOOL bTst, BOOL )
@@ -1437,9 +1397,6 @@ SwTwips SwRootFrm::GrowFrm( SwTwips nDist, BOOL bTst, BOOL )
 /*************************************************************************
 |*
 |*  SwRootFrm::ShrinkFrm()
-|*
-|*  Ersterstellung      MA 30. Jul. 92
-|*  Letzte Aenderung    MA 05. May. 94
 |*
 |*************************************************************************/
 SwTwips SwRootFrm::ShrinkFrm( SwTwips nDist, BOOL bTst, BOOL )
@@ -1466,9 +1423,6 @@ SwTwips SwRootFrm::ShrinkFrm( SwTwips nDist, BOOL bTst, BOOL )
 |*          Es muss zweimal angesetzt werden um leeren Seiten aufzuspueren:
 |*              - einmal fuer die Endnotenseiten.
 |*              - und einmal fuer die Seiten des Bodytextes.
-|*
-|*  Ersterstellung      MA 20. May. 92
-|*  Letzte Aenderung    MA 10. Jan. 95
 |*
 |*************************************************************************/
 void SwRootFrm::RemoveSuperfluous()
@@ -1568,9 +1522,6 @@ void SwRootFrm::RemoveSuperfluous()
 |*      sind, damit alle Seitengebundenen Rahmen und DrawObject
 |*      untergebracht sind.
 |*
-|*  Ersterstellung      MA 27. Jul. 93
-|*  Letzte Aenderung    MA 24. Apr. 97
-|*
 |*************************************************************************/
 void SwRootFrm::AssertFlyPages()
 {
@@ -1654,9 +1605,6 @@ void SwRootFrm::AssertFlyPages()
 |*      auf allen Seiten die Seitengebunden Objecte auf der richtigen
 |*      Seite (Seitennummer stehen).
 |*
-|*  Ersterstellung      MA 02. Nov. 94
-|*  Letzte Aenderung    MA 10. Aug. 95
-|*
 |*************************************************************************/
 void SwRootFrm::AssertPageFlys( SwPageFrm *pPage )
 {
@@ -1706,9 +1654,6 @@ void SwRootFrm::AssertPageFlys( SwPageFrm *pPage )
 |*
 |*  SwRootFrm::ChgSize()
 |*
-|*  Ersterstellung      MA 24. Jul. 92
-|*  Letzte Aenderung    MA 13. Aug. 93
-|*
 |*************************************************************************/
 Size SwRootFrm::ChgSize( const Size& aNewSize )
 {
@@ -1721,9 +1666,6 @@ Size SwRootFrm::ChgSize( const Size& aNewSize )
 /*************************************************************************
 |*
 |*  SwRootFrm::MakeAll()
-|*
-|*  Ersterstellung      MA 17. Nov. 92
-|*  Letzte Aenderung    MA 19. Apr. 93
 |*
 |*************************************************************************/
 void SwRootFrm::MakeAll()
@@ -1746,9 +1688,6 @@ void SwRootFrm::MakeAll()
 |*
 |*  SwRootFrm::ImplInvalidateBrowseWidth()
 |*
-|*  Ersterstellung      MA 08. Jun. 96
-|*  Letzte Aenderung    MA 08. Jun. 96
-|*
 |*************************************************************************/
 void SwRootFrm::ImplInvalidateBrowseWidth()
 {
@@ -1764,9 +1703,6 @@ void SwRootFrm::ImplInvalidateBrowseWidth()
 /*************************************************************************
 |*
 |*  SwRootFrm::ImplCalcBrowseWidth()
-|*
-|*  Ersterstellung      MA 07. Jun. 96
-|*  Letzte Aenderung    MA 13. Jun. 96
 |*
 |*************************************************************************/
 void SwRootFrm::ImplCalcBrowseWidth()
@@ -1899,9 +1835,6 @@ void SwRootFrm::ImplCalcBrowseWidth()
 /*************************************************************************
 |*
 |*  SwRootFrm::StartAllAction()
-|*
-|*  Ersterstellung      MA 08. Mar. 98
-|*  Letzte Aenderung    MA 08. Mar. 98
 |*
 |*************************************************************************/
 

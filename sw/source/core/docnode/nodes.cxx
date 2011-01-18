@@ -115,12 +115,6 @@ SwNodes::SwNodes( SwDoc* pDocument )
 |*      Arrays nicht erzeugt werden koennen und somit auch nicht
 |*      in mehreren drin sein koennen
 |*
-|*  Ersterstellung
-|*      VER0100 vb 901214
-|*
-|*  Stand
-|*      VER0100 vb 901214
-|*
 *******************************************************************/
 
 SwNodes::~SwNodes()
@@ -438,8 +432,6 @@ void SwNodes::ChgNode( SwNodeIndex& rDelPos, ULONG nSz,
 |*
 |*  Allg.: aRange beschreibt den Bereich  -exklusive- aEnd !!
 |*              ( 1.Node: aStart, letzer Node: aEnd-1 !! )
-|*
-|*
 |*
 ***********************************************************************/
 
@@ -980,12 +972,6 @@ extern Writer* GetDebugWriter(const String&);
 |*      die Debugging Tools geben rRange beim Eintritt und beim
 |*      Verlassen der Funktion aus
 |*
-|*  Ersterstellung
-|*      VER0100 vb 901214
-|*
-|*  Stand
-|*      VER0100 vb 901214
-|*
 *******************************************************************/
 void SwNodes::SectionDown(SwNodeRange *pRange, SwStartNodeType eSttNdTyp )
 {
@@ -1056,12 +1042,6 @@ void SwNodes::SectionDown(SwNodeRange *pRange, SwStartNodeType eSttNdTyp )
 |*  Debug-Funktionen
 |*      die Debugging Tools geben rRange beim Eintritt und beim
 |*      Verlassen der Funktion aus
-|*
-|*  Ersterstellung
-|*      VER0100 vb 901214
-|*
-|*  Stand
-|*      VER0100 vb 901214
 |*
 *******************************************************************/
 void SwNodes::SectionUp(SwNodeRange *pRange)
@@ -1137,9 +1117,6 @@ void SwNodes::SectionUp(SwNodeRange *pRange)
 |*                      SwIndex & aStart        StartNode !!!
 |*                      SwIndex & aEnd          EndPunkt
 |*
-|*    Ersterstellung    JP 23.04.91
-|*    Letzte Aenderung  JP 23.04.91
-|*
 *************************************************************************/
 void SwNodes::SectionUpDown( const SwNodeIndex & aStart, const SwNodeIndex & aEnd )
 {
@@ -1207,12 +1184,6 @@ void SwNodes::SectionUpDown( const SwNodeIndex & aStart, const SwNodeIndex & aEn
 |*  Debug-Funktionen
 |*      geben beim Eintritt in die Funktion Position und Anzahl
 |*      der zu loeschenden Nodes aus.
-|*
-|*  Ersterstellung
-|*      VER0100 vb 901214
-|*
-|*  Stand
-|*      VER0100 vb 901214
 |*
 *******************************************************************/
 void SwNodes::Delete(const SwNodeIndex &rIndex, ULONG nNodes)
@@ -1410,12 +1381,6 @@ void SwNodes::Delete(const SwNodeIndex &rIndex, ULONG nNodes)
 |*      eine Sonderbehandlung; es wird davon ausgegangen, dass der
 |*      erste Node auch ein Startnode ist.
 |*
-|*  Ersterstellung
-|*      VER0100 vb 901214
-|*
-|*  Stand
-|*      VER0100 vb 901214
-|*
 *******************************************************************/
 USHORT SwNodes::GetSectionLevel(const SwNodeIndex &rIdx) const {
     // Sonderbehandlung 1. Node
@@ -1581,9 +1546,6 @@ SwNode* SwNodes::GoPreviousWithFrm(SwNodeIndex *pIdx) const
 |*    Return-Wert       BOOL        TRUE:   gueltiger SRange
 |*                                  FALSE:  ungueltiger SRange
 |*
-|*    Ersterstellung    JP 23.04.91
-|*    Letzte Aenderung  JP 18.06.92
-|*
 *************************************************************************/
 
 inline int TstIdx( ULONG nSttIdx, ULONG nEndIdx, ULONG nStt, ULONG nEnd )
@@ -1619,9 +1581,6 @@ BOOL SwNodes::CheckNodesRange( const SwNodeIndex& rStt, const SwNodeIndex& rEnd 
 |*
 |*    Parameter         SwIndex &   Der Startpunkt im Nodes-Array
 |*                      USHORT      die Anzahl
-|*
-|*    Ersterstellung    JP 23.04.91
-|*    Letzte Aenderung  JP 23.04.91
 |*
 *************************************************************************/
 void SwNodes::DelNodes( const SwNodeIndex & rStart, ULONG nCnt )
@@ -1694,9 +1653,6 @@ void SwNodes::DelNodes( const SwNodeIndex & rStart, ULONG nCnt )
 |*                      SwNodeRange &   der zu ueberpruefende Bereich
 |*    Return            USHORT      der hoechste Level
 |*
-|*    Ersterstellung    JP 24.04.91
-|*    Letzte Aenderung  JP 24.04.91
-|*
 *************************************************************************/
 
 struct HighLevel
@@ -1735,8 +1691,6 @@ USHORT HighestLevel( SwNodes & rNodes, const SwNodeRange & rRange )
 |*    Parameter         SwPaM&      zu kopierender Bereich
 |*                      SwNodes&    in dieses Nodes-Array
 |*                      SwPosition& auf diese Position im Nodes-Array
-|*    Ersterstellung    JP 09.07.92
-|*    Letzte Aenderung  JP 09.07.92
 |*
 *************************************************************************/
 void SwNodes::MoveRange( SwPaM & rPam, SwPosition & rPos, SwNodes& rNodes )
@@ -1992,8 +1946,6 @@ void SwNodes::MoveRange( SwPaM & rPam, SwPosition & rPos, SwNodes& rNodes )
 |*    Parameter         SwNodeRange&    zu kopierender Bereich
 |*                      SwDoc&      in dieses Dokument
 |*                      SwIndex&    auf diese Position im Nodes-Array
-|*    Ersterstellung    JP 11.11.92
-|*    Letzte Aenderung  JP 11.11.92
 |*
 *************************************************************************/
 

@@ -676,8 +676,6 @@ BOOL SwHeadFootFrm::GetEatSpacing() const
 |*  SwPageFrm::PrepareHeader()
 |*
 |*  Beschreibung        Erzeugt oder Entfernt Header
-|*  Ersterstellung      MA 04. Feb. 93
-|*  Letzte Aenderung    MA 12. May. 96
 |*
 |*************************************************************************/
 
@@ -745,8 +743,6 @@ void SwPageFrm::PrepareHeader()
 |*  SwPageFrm::PrepareFooter()
 |*
 |*  Beschreibung        Erzeugt oder Entfernt Footer
-|*  Ersterstellung      MA 04. Feb. 93
-|*  Letzte Aenderung    MA 12. May. 96
 |*
 |*************************************************************************/
 

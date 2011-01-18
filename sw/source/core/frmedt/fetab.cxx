@@ -1420,9 +1420,6 @@ BOOL SwFEShell::DeleteTblSel()
 |*
 |*  SwFEShell::GetCurTabColNum()
 |*
-|*  Ersterstellung      MA 03. Feb. 95
-|*  Letzte Aenderung    MA 21. May. 95
-|
 |*************************************************************************/
 USHORT SwFEShell::GetCurTabColNum() const
 {
@@ -1488,9 +1485,6 @@ USHORT SwFEShell::GetCurTabColNum() const
 /*************************************************************************
 |*
 |*  SwFEShell::GetBox()
-|*
-|*  Ersterstellung      MA 22. Jun. 95
-|*  Letzte Aenderung    MA 21. Nov. 96
 |*
 |*************************************************************************/
 
@@ -2010,9 +2004,6 @@ bool SwFEShell::SelTblRowCol( const Point& rPt, const Point* pEnd, bool bRowDrag
 |*
 |*  SwFEShell::WhichMouseTabCol()
 |*
-|*  Ersterstellung      MA 22. Jun. 95
-|*  Last change         AMA 12. Jun. 02
-|
 |*************************************************************************/
 BYTE SwFEShell::WhichMouseTabCol( const Point &rPt ) const
 {
@@ -2157,9 +2148,6 @@ bool SwFEShell::IsVerticalModeAtNdAndPos( const SwTxtNode& _rTxtNode,
 |*
 |*  SwFEShell::GetMouseTabCols()
 |*
-|*  Ersterstellung      MA 22. Jun. 95
-|*  Letzte Aenderung    MA 27. Aug. 96
-|
 |*************************************************************************/
 void SwFEShell::GetMouseTabCols( SwTabCols &rToFill, const Point &rPt ) const
 {
@@ -2185,9 +2173,6 @@ void SwFEShell::SetMouseTabCols( const SwTabCols &rNew, BOOL bCurRowOnly,
 |*
 |*  SwFEShell::GetMouseColNum(), GetMouseTabColNum()
 |*
-|*  Ersterstellung      MA 04. Jul. 95
-|*  Letzte Aenderung    MA 04. Jul. 95
-|
 |*************************************************************************/
 USHORT SwFEShell::GetCurMouseColNum( const Point &rPt,
                                     SwGetCurColNumPara* pPara ) const
@@ -2235,9 +2220,6 @@ void ClearFEShellTabCols()
 |*
 |*  SwFEShell::GetTblAttr(), SetTblAttr()
 |*
-|*  Ersterstellung      MA 09. Dec. 96
-|*  Letzte Aenderung    MA 09. Dec. 96
-|
 |*************************************************************************/
 void SwFEShell::GetTblAttr( SfxItemSet &rSet ) const
 {
