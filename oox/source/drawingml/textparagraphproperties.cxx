@@ -443,6 +443,9 @@ void TextParagraphProperties::pushToPropSet( const ::oox::core::XmlFilterBase* p
         {
             if( !rioBulletMap.empty() )
             {
+                // fix default bullet size to be 100%
+                if( rioBulletMap.find( PROP_BulletRelSize ) == rioBulletMap.end() )
+                    rioBulletMap[ PROP_BulletRelSize ] <<= static_cast< sal_Int16 >( 100 );
                 Sequence< PropertyValue > aBulletPropSeq = rioBulletMap.makePropertyValueSequence();
                 xNumRule->replaceByIndex( getLevel(), makeAny( aBulletPropSeq ) );
             }
