@@ -33,8 +33,12 @@ module com {  module sun {  module star {  module i18n {
 
 //=============================================================================
 
-/** Old transliteration module enumeration to use with
-    <member>XTransliteration::loadModule()</member>
+/** Old transliteration module enumeration.
+
+    <p> Use with <member>XTransliteration::loadModule()</member> and
+    <member scope="com::sun::star::util">SearchOptions::transliterateFlags</member> </p>
+
+    <p> Note that values &gt;=0x100 are logically or'ed with other values! </p>
  */
 
 published enum TransliterationModules
