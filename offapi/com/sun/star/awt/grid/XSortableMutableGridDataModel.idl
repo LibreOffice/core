@@ -28,7 +28,7 @@
 #define __com_sun_star_awt_grid_XSortableMutableGridDataModel_idl__
 
 #include <com/sun/star/awt/grid/XMutableGridDataModel.idl>
-#include <com/sun/star/awt/grid/XSortableGridData.idl>
+#include <com/sun/star/awt/grid/XSortableGridDataModel.idl>
 
 //==================================================================================================================
 
@@ -41,7 +41,7 @@ module com { module sun { module star { module awt { module grid {
 interface XSortableMutableGridDataModel
 {
     interface XMutableGridDataModel;
-    interface XSortableGridData;
+    interface XSortableGridDataModel;
 };
 
 //==================================================================================================================

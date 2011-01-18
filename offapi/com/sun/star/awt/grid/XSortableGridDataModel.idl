@@ -38,7 +38,7 @@ module com { module sun { module star { module awt { module grid {
 
 /** allows to sort the data represented by a <type>XGridDataModel</type>
  */
-interface XSortableGridData
+interface XSortableGridDataModel
 {
     /** sorts the rows represented by the model by a given column's data.
 
@@ -51,6 +51,10 @@ interface XSortableGridData
     */
     void    sortByColumn( [in] long ColumnIndex, [in] boolean SortAscending )
         raises ( ::com::sun::star::lang::IndexOutOfBoundsException );
+
+    /** removes any possibly present sorting of the grid data
+    */
+    void    removeColumnSort();
 
     /** returns the current sort order.
 
