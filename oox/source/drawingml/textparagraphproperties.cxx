@@ -307,6 +307,7 @@ void BulletList::pushToPropMap( const ::oox::core::XmlFilterBase* pFilterBase, P
     OUString aBulletFontName;
     sal_Int16 nBulletFontPitch = 0;
     sal_Int16 nBulletFontFamily = 0;
+    sal_Bool bSymbolFont = sal_False;
     if( pFilterBase) {
         if (maBulletFont.getFontData( aBulletFontName, nBulletFontPitch, nBulletFontFamily, *pFilterBase ) )
         {
@@ -319,6 +320,18 @@ void BulletList::pushToPropMap( const ::oox::core::XmlFilterBase* pFilterBase, P
             aFontDesc.Name = aBulletFontName;
             aFontDesc.Pitch = nBulletFontPitch;
             aFontDesc.Family = nBulletFontFamily;
+            if ( aBulletFontName.equalsIgnoreAsciiCaseAscii( "Wingdings" ) ||
+                 aBulletFontName.equalsIgnoreAsciiCaseAscii( "Wingdings 2" ) ||
+                 aBulletFontName.equalsIgnoreAsciiCaseAscii( "Wingdings 3" ) ||
+                 aBulletFontName.equalsIgnoreAsciiCaseAscii( "Monotype Sorts" ) ||
+                 aBulletFontName.equalsIgnoreAsciiCaseAscii( "Monotype Sorts 2" ) ||
+                 aBulletFontName.equalsIgnoreAsciiCaseAscii( "Webdings" ) ||
+                 aBulletFontName.equalsIgnoreAsciiCaseAscii( "StarBats" ) ||
+                 aBulletFontName.equalsIgnoreAsciiCaseAscii( "StarMath" ) ||
+                 aBulletFontName.equalsIgnoreAsciiCaseAscii( "ZapfDingbats" ) ) {
+                aFontDesc.CharSet = RTL_TEXTENCODING_SYMBOL;
+                bSymbolFont = sal_True;
+            }
             rPropMap[ PROP_BulletFont ] <<= aFontDesc;
             rPropMap[ PROP_BulletFontName ] <<= aBulletFontName;
         }
@@ -328,16 +341,7 @@ void BulletList::pushToPropMap( const ::oox::core::XmlFilterBase* pFilterBase, P
 
         msBulletChar >>= sBuChar;
 
-        if( pFilterBase && sBuChar.getLength() == 1 && maBulletFont.getFontData( aBulletFontName, nBulletFontPitch, nBulletFontFamily, *pFilterBase )
-            && ( aBulletFontName.equalsIgnoreAsciiCaseAscii( "Wingdings" ) ||
-                 aBulletFontName.equalsIgnoreAsciiCaseAscii( "Wingdings 2" ) ||
-                 aBulletFontName.equalsIgnoreAsciiCaseAscii( "Wingdings 3" ) ||
-                 aBulletFontName.equalsIgnoreAsciiCaseAscii( "Monotype Sorts" ) ||
-                 aBulletFontName.equalsIgnoreAsciiCaseAscii( "Monotype Sorts 2" ) ||
-                 aBulletFontName.equalsIgnoreAsciiCaseAscii( "Webdings" ) ||
-                 aBulletFontName.equalsIgnoreAsciiCaseAscii( "StarBats" ) ||
-                 aBulletFontName.equalsIgnoreAsciiCaseAscii( "StarMath" ) ||
-                 aBulletFontName.equalsIgnoreAsciiCaseAscii( "ZapfDingbats" ) ) )
+        if( pFilterBase && sBuChar.getLength() == 1 && maBulletFont.getFontData( aBulletFontName, nBulletFontPitch, nBulletFontFamily, *pFilterBase ) && bSymbolFont )
         {
             sal_Unicode nBuChar = sBuChar.toChar();
             nBuChar &= 0x00ff;
