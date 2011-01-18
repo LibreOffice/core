@@ -53,6 +53,7 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     lng \
     msfilter \
     msword \
+    oox \
     qstart_gtk \
     sax \
     sb \
