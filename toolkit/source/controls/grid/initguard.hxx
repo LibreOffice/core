@@ -24,68 +24,41 @@
  *
  ************************************************************************/
 
-#ifndef SVTOOLS_TABLESORT_HXX
-#define SVTOOLS_TABLESORT_HXX
+#ifndef SVTOOLS_INITGUARD_HXX
+#define SVTOOLS_INITGUARD_HXX
 
-#include "svtools/table/tabletypes.hxx"
+/** === begin UNO includes === **/
+#include <com/sun/star/lang/NotInitializedException.hpp>
+/** === end UNO includes === **/
+
+#include <comphelper/componentguard.hxx>
 
 //......................................................................................................................
-namespace svt { namespace table
+namespace toolkit
 {
 //......................................................................................................................
 
     //==================================================================================================================
-    //= ColumnSortDirection
+    //= InitGuard
     //==================================================================================================================
-    enum ColumnSortDirection
-    {
-        ColumnSortAscending,
-        ColumnSortDescending
-    };
-
-    //==================================================================================================================
-    //= ColumnSort
-    //==================================================================================================================
-    struct ColumnSort
-    {
-        ColPos              nColumnPos;
-        ColumnSortDirection eSortDirection;
-
-        ColumnSort()
-            :nColumnPos( COL_INVALID )
-            ,eSortDirection( ColumnSortAscending )
-        {
-        }
-
-        ColumnSort( ColPos const i_columnPos, ColumnSortDirection const i_sortDirection )
-            :nColumnPos( i_columnPos )
-            ,eSortDirection( i_sortDirection )
-        {
-        }
-    };
-
-    //==================================================================================================================
-    //= ITableDataSort
-    //==================================================================================================================
-    /** provides sorting functionality for the datta underlying an ITableModel
-    */
-    class SAL_NO_VTABLE ITableDataSort
+    template < class IMPL >
+    class InitGuard : public ::comphelper::ComponentGuard
     {
     public:
-        /** sorts the rows in the model by the given column's data, in the given direction.
-        */
-        virtual void        sortByColumn( ColPos const i_column, ColumnSortDirection const i_sortDirection ) = 0;
+        InitGuard( IMPL& i_component, ::cppu::OBroadcastHelper & i_broadcastHelper )
+            :comphelper::ComponentGuard( i_component, i_broadcastHelper )
+        {
+            if ( !i_component.isInitialized() )
+                throw ::com::sun::star::lang::NotInitializedException( ::rtl::OUString(), *&i_component );
+        }
 
-        /** retrieves the current sort order of the data
-
-            If the <code>nColumnIndex</code> member of the returned srtructure is <code>COL_INVALID</code>, then
-            the data is currently not sorted.
-        */
-        virtual ColumnSort  getCurrentSortOrder() const = 0;
+        ~InitGuard()
+        {
+        }
     };
 
 //......................................................................................................................
-} } // namespace svt::table
+} // namespace toolkit
 //......................................................................................................................
 
-#endif // SVTOOLS_TABLESORT_HXX
+#endif // SVTOOLS_INITGUARD_HXX

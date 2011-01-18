@@ -38,6 +38,7 @@
 #include <com/sun/star/awt/grid/XGridColumn.hpp>
 #include <com/sun/star/view/SelectionType.hpp>
 #include <com/sun/star/awt/grid/XGridColumnListener.hpp>
+#include <com/sun/star/awt/grid/XSortableGridData.hpp>
 /** === end UNO includes === **/
 
 #include <comphelper/stlunosequence.hxx>
@@ -73,6 +74,8 @@ namespace svt { namespace table
     using ::com::sun::star::style::VerticalAlignment;
     using ::com::sun::star::uno::WeakReference;
     using ::com::sun::star::awt::grid::GridDataEvent;
+    using ::com::sun::star::awt::grid::XSortableGridData;
+    using ::com::sun::star::beans::Pair;
     /** === end UNO using === **/
 
     //==================================================================================================================
@@ -738,23 +741,48 @@ namespace svt { namespace table
     //------------------------------------------------------------------------------------------------------------------
     ITableDataSort* UnoControlTableModel::getSortAdapter()
     {
-        // TODO: make this depend on whether or not our XGridDataModel has sorting support
-        return this;
+        DBG_CHECK_ME();
+
+        Reference< XSortableGridData > const xSortAccess( getDataModel(), UNO_QUERY );
+        if ( xSortAccess.is() )
+            return this;
+        return NULL;
     }
 
     //------------------------------------------------------------------------------------------------------------------
     void UnoControlTableModel::sortByColumn( ColPos const i_column, ColumnSortDirection const i_sortDirection )
     {
-        // TODO
-        OSL_UNUSED( i_column );
-        OSL_UNUSED( i_sortDirection );
+        DBG_CHECK_ME();
+
+        try
+        {
+            Reference< XSortableGridData > const xSortAccess( getDataModel(), UNO_QUERY_THROW );
+            xSortAccess->sortByColumn( i_column, i_sortDirection == ColumnSortAscending );
+        }
+        catch( const Exception& )
+        {
+            DBG_UNHANDLED_EXCEPTION();
+        }
     }
 
     //------------------------------------------------------------------------------------------------------------------
     ColumnSort UnoControlTableModel::getCurrentSortOrder() const
     {
-        // TODO
-        return ColumnSort();
+        DBG_CHECK_ME();
+
+        ColumnSort currentSort;
+        try
+        {
+            Reference< XSortableGridData > const xSortAccess( getDataModel(), UNO_QUERY_THROW );
+            Pair< ::sal_Int32, ::sal_Bool > const aCurrentSortOrder( xSortAccess->getCurrentSortOrder() );
+            currentSort.nColumnPos = aCurrentSortOrder.First;
+            currentSort.eSortDirection = aCurrentSortOrder.Second ? ColumnSortAscending : ColumnSortDescending;
+        }
+        catch( const Exception& )
+        {
+            DBG_UNHANDLED_EXCEPTION();
+        }
+        return currentSort;
     }
 
     //--------------------------------------------------------------------

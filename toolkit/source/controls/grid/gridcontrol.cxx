@@ -35,6 +35,8 @@
 #include <com/sun/star/view/SelectionType.hpp>
 #include <com/sun/star/awt/grid/XGridDataModel.hpp>
 #include <com/sun/star/awt/grid/XMutableGridDataModel.hpp>
+#include <com/sun/star/awt/grid/DefaultGridDataModel.hpp>
+#include <com/sun/star/awt/grid/SortableGridDataModel.hpp>
 #include <com/sun/star/awt/grid/XGridColumnModel.hpp>
 #include <toolkit/helper/unopropertyarrayhelper.hxx>
 #include <toolkit/helper/property.hxx>
@@ -55,9 +57,25 @@ using namespace ::com::sun::star::view;
 
 namespace toolkit
 {
-//  ----------------------------------------------------
-//  class UnoGridModel
-//  ----------------------------------------------------
+//======================================================================================================================
+//= UnoGridModel
+//======================================================================================================================
+namespace
+{
+    Reference< XGridDataModel > lcl_getDefaultDataModel_throw( ::comphelper::ComponentContext const & i_context )
+    {
+        Reference< XMutableGridDataModel > const xDelegatorModel( DefaultGridDataModel::create( i_context.getUNOContext() ), UNO_QUERY_THROW );
+        Reference< XGridDataModel > const xDataModel( SortableGridDataModel::create( i_context.getUNOContext(), xDelegatorModel ), UNO_QUERY_THROW );
+        return xDataModel;
+    }
+
+    Reference< XGridColumnModel > lcl_getDefaultColumnModel_throw( ::comphelper::ComponentContext const & i_context )
+    {
+        Reference< XGridColumnModel > const xColumnModel( i_context.createComponent( "com.sun.star.awt.grid.DefaultGridColumnModel" ), UNO_QUERY_THROW );
+        return xColumnModel;
+    }
+}
+
 //----------------------------------------------------------------------------------------------------------------------
 UnoGridModel::UnoGridModel( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& i_factory )
         :UnoControlModel( i_factory )
@@ -80,8 +98,8 @@ UnoGridModel::UnoGridModel( const ::com::sun::star::uno::Reference< ::com::sun::
     ImplRegisterProperty( BASEPROPERTY_GRID_SHOWCOLUMNHEADER );
     ImplRegisterProperty( BASEPROPERTY_COLUMN_HEADER_HEIGHT );
     ImplRegisterProperty( BASEPROPERTY_ROW_HEIGHT );
-    ImplRegisterProperty( BASEPROPERTY_GRID_DATAMODEL, makeAny( maContext.createComponent( "com.sun.star.awt.grid.DefaultGridDataModel" ) ) );
-    ImplRegisterProperty( BASEPROPERTY_GRID_COLUMNMODEL, makeAny( maContext.createComponent( "com.sun.star.awt.grid.DefaultGridColumnModel" ) ) );
+    ImplRegisterProperty( BASEPROPERTY_GRID_DATAMODEL, makeAny( lcl_getDefaultDataModel_throw( maContext ) ) );
+    ImplRegisterProperty( BASEPROPERTY_GRID_COLUMNMODEL, makeAny( lcl_getDefaultColumnModel_throw( maContext ) ) );
     ImplRegisterProperty( BASEPROPERTY_GRID_SELECTIONMODE );
     ImplRegisterProperty( BASEPROPERTY_FONTRELIEF );
     ImplRegisterProperty( BASEPROPERTY_FONTEMPHASISMARK );
@@ -114,7 +132,7 @@ UnoGridModel::UnoGridModel( const UnoGridModel& rModel )
         DBG_UNHANDLED_EXCEPTION();
     }
     if ( !success )
-        setFastPropertyValue( BASEPROPERTY_GRID_DATAMODEL, makeAny( maContext.createComponent( "com.sun.star.awt.grid.DefaultGridDataModel" ) ) );
+        setFastPropertyValue( BASEPROPERTY_GRID_DATAMODEL, makeAny( lcl_getDefaultDataModel_throw( maContext ) ) );
 
     // clone the column model
     success = false;
@@ -129,7 +147,7 @@ UnoGridModel::UnoGridModel( const UnoGridModel& rModel )
         DBG_UNHANDLED_EXCEPTION();
     }
     if ( !success )
-        setFastPropertyValue( BASEPROPERTY_GRID_COLUMNMODEL, makeAny( maContext.createComponent( "com.sun.star.awt.grid.DefaultGridColumnModel" ) ) );
+        setFastPropertyValue( BASEPROPERTY_GRID_COLUMNMODEL, makeAny( lcl_getDefaultColumnModel_throw( maContext ) ) );
 }
 
 //----------------------------------------------------------------------------------------------------------------------

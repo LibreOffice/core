@@ -44,8 +44,9 @@ SLOFILES=   \
             $(SLO)$/defaultgriddatamodel.obj\
             $(SLO)$/defaultgridcolumnmodel.obj\
             $(SLO)$/gridcolumn.obj\
-            $(SLO)$/grideventforwarder.obj
-            
+            $(SLO)$/grideventforwarder.obj\
+            $(SLO)$/sortablegriddatamodel.obj
+
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :	target.mk

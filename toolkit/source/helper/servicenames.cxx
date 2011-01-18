@@ -102,3 +102,5 @@ const sal_Char __FAR_DATA szServiceName_GridControlModel[] = "com.sun.star.awt.g
 const sal_Char __FAR_DATA szServiceName_DefaultGridDataModel[] = "com.sun.star.awt.grid.DefaultGridDataModel";
 const sal_Char __FAR_DATA szServiceName_DefaultGridColumnModel[] = "com.sun.star.awt.grid.DefaultGridColumnModel";
 const sal_Char __FAR_DATA szServiceName_GridColumn[] = "com.sun.star.awt.grid.GridColumn";
+const sal_Char __FAR_DATA szServiceName_SortableGridDataModel[] = "com.sun.star.awt.grid.SortableGridDataModel";
+
