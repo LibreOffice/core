@@ -342,7 +342,7 @@ void OCommonEmbeddedObject::PostEvent_Impl( const ::rtl::OUString& aEventName,
             aEvent.Source = uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >( this ) );
             // For now all the events are sent as object events
             // aEvent.Source = ( xSource.is() ? xSource
-            //                     : uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >( this ) ) );
+            //                       : uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >( this ) ) );
             ::cppu::OInterfaceIteratorHelper aIt( *pIC );
             while( aIt.hasMoreElements() )
             {
@@ -476,9 +476,8 @@ uno::Sequence< sal_Int8 > SAL_CALL OCommonEmbeddedObject::getImplementationId()
 uno::Sequence< sal_Int8 > SAL_CALL OCommonEmbeddedObject::getClassID()
         throw ( uno::RuntimeException )
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
     if ( m_bDisposed )
-        throw lang::DisposedException(); // TODO
+        throw lang::DisposedException();
 
     return m_aClassID;
 }
@@ -487,9 +486,8 @@ uno::Sequence< sal_Int8 > SAL_CALL OCommonEmbeddedObject::getClassID()
 ::rtl::OUString SAL_CALL OCommonEmbeddedObject::getClassName()
         throw ( uno::RuntimeException )
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
     if ( m_bDisposed )
-        throw lang::DisposedException(); // TODO
+        throw lang::DisposedException();
 
     return m_aClassName;
 }
@@ -521,9 +519,9 @@ uno::Reference< util::XCloseable > SAL_CALL OCommonEmbeddedObject::getComponent(
     }
 
     // if ( m_bWaitSaveCompleted )
-    //  throw embed::WrongStateException(
-    //              ::rtl::OUString::createFromAscii( "The object waits for saveCompleted() call!\n" ),
-    //              uno::Reference< uno::XInterface >( reinterpret_cast< ::cppu::OWeakObject* >(this) ) );
+    //     throw embed::WrongStateException(
+    //                 ::rtl::OUString::createFromAscii( "The object waits for saveCompleted() call!\n" ),
+    //                 uno::Reference< uno::XInterface >( reinterpret_cast< ::cppu::OWeakObject* >(this) ) );
 
     return uno::Reference< util::XCloseable >( m_pDocHolder->GetComponent(), uno::UNO_QUERY );
 }
