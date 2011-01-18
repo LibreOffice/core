@@ -2767,9 +2767,6 @@ void SwTabFrmPainter::Insert( SwLineEntry& rNew, bool bHori )
 |*      3. Den Dokumentinhalt (Text) Painten.
 |*      4. Den Drawlayer der ueber dem Dokuemnt liegt painten.
 |*
-|*  Ersterstellung      MA 01. Jun. 92
-|*  Letzte Aenderung    MA 10. Oct. 97
-|*
 |*************************************************************************/
 
 void SwRootFrm::Paint( const SwRect& rRect, const SwPrtOptions *pPrintData ) const
@@ -3119,9 +3116,6 @@ void SwRootFrm::Paint( const SwRect& rRect, const SwPrtOptions *pPrintData ) con
 |*
 |*  SwRootFrm::HackPrepareLongTblPaint()
 |*
-|*  Ersterstellung      MA 27. Sep. 96
-|*  Letzte Aenderung    MA 18. Nov. 97
-|*
 |*************************************************************************/
 
 void SwRootFrm::HackPrepareLongTblPaint( int nMode )
@@ -3152,9 +3146,6 @@ void SwRootFrm::HackPrepareLongTblPaint( int nMode )
 /*************************************************************************
 |*
 |*  SwLayoutFrm::Paint()
-|*
-|*  Ersterstellung      MA 19. May. 92
-|*  Letzte Aenderung    MA 19. Apr. 95
 |*
 |*************************************************************************/
 
@@ -3397,9 +3388,6 @@ sal_Bool SwFlyFrm::IsShadowTransparent() const
 |*
 |*  SwFlyFrm::IsPaint()
 |*
-|*  Ersterstellung      MA 16. Jan. 97
-|*  Letzte Aenderung    MA 16. Jan. 97
-|*
 |*************************************************************************/
 
 BOOL SwFlyFrm::IsPaint( SdrObject *pObj, const ViewShell *pSh )
@@ -3505,9 +3493,6 @@ void SwCellFrm::Paint( const SwRect& rRect, const SwPrtOptions* /* pPrintData */
 /*************************************************************************
 |*
 |*  SwFlyFrm::Paint()
-|*
-|*  Ersterstellung      MA ??
-|*  Letzte Aenderung    MA 16. Jan. 97
 |*
 |*************************************************************************/
 
@@ -3745,9 +3730,6 @@ void SwFlyFrm::Paint( const SwRect& rRect, const SwPrtOptions* /* pPrintData */ 
 |*
 |*    SwTabFrm::Paint()
 |*
-|*    Ersterstellung    MA 11. May. 93
-|*    Letzte Aenderung  MA 23. Mar. 95
-|*
 |*************************************************************************/
 
 void SwTabFrm::Paint( const SwRect& rRect, const SwPrtOptions* /* pPrintData */ ) const
@@ -3798,8 +3780,6 @@ void SwTabFrm::Paint( const SwRect& rRect, const SwPrtOptions* /* pPrintData */ 
 |*      Der Schatten wird immer an den auesseren Rand des OutRect gemalt.
 |*      Das OutRect wird ggf. so verkleinert, dass auf diesem das
 |*      malen der Umrandung stattfinden kann.
-|*  Ersterstellung      MA 21. Dec. 92
-|*  Letzte Aenderung    MA 29. May. 97
 |*
 |*************************************************************************/
 /// OD 23.08.2002 #99657#
@@ -4007,9 +3987,6 @@ void SwFrm::PaintShadow( const SwRect& rRect, SwRect& rOutRect,
 |*
 |*  SwFrm::PaintBorderLine()
 |*
-|*  Ersterstellung      MA 22. Dec. 92
-|*  Letzte Aenderung    MA 22. Jan. 95
-|*
 |*************************************************************************/
 
 void SwFrm::PaintBorderLine( const SwRect& rRect,
@@ -4050,8 +4027,6 @@ void SwFrm::PaintBorderLine( const SwRect& rRect,
 |*  SwFrm::PaintBorderLines()
 |*
 |*  Beschreibung        Nur alle Linien einfach oder alle Linien doppelt!!!!
-|*  Ersterstellung      MA 22. Dec. 92
-|*  Letzte Aenderung    MA 22. Mar. 95
 |*
 |*************************************************************************/
 
@@ -4518,8 +4493,6 @@ const SwFrm* lcl_HasNextCell( const SwFrm& rFrm )
 |*  SwFrm::PaintBorder()
 |*
 |*  Beschreibung        Malt Schatten und Umrandung
-|*  Ersterstellung      MA 23.01.92
-|*  Letzte Aenderung    MA 29. Jul. 96
 |*
 |*************************************************************************/
 
@@ -4840,8 +4813,6 @@ void SwFrm::PaintBorder( const SwRect& rRect, const SwPageFrm *pPage,
 |*  Beschreibung        Spezialimplementierung wg. der Fussnotenlinie.
 |*      Derzeit braucht nur der obere Rand beruecksichtigt werden.
 |*      Auf andere Linien und Schatten wird verzichtet.
-|*  Ersterstellung      MA 27. Feb. 93
-|*  Letzte Aenderung    MA 08. Sep. 93
 |*
 |*************************************************************************/
 
@@ -4860,8 +4831,6 @@ void SwFtnContFrm::PaintBorder( const SwRect& rRect, const SwPageFrm *pPage,
 |*  SwFtnContFrm::PaintLine()
 |*
 |*  Beschreibung        Fussnotenline malen.
-|*  Ersterstellung      MA 02. Mar. 93
-|*  Letzte Aenderung    MA 28. Mar. 94
 |*
 |*************************************************************************/
 
@@ -4909,8 +4878,6 @@ void SwFtnContFrm::PaintLine( const SwRect& rRect,
 |*
 |*  Beschreibung        Painted die Trennlinien fuer die innenliegenden
 |*                      Spalten.
-|*  Ersterstellung      MA 21. Jun. 93
-|*  Letzte Aenderung    MA 28. Mar. 94
 |*
 |*************************************************************************/
 
@@ -5630,9 +5597,6 @@ const sal_Int8 SwPageFrm::mnShadowPxWidth = 2;
 |*
 |*  SwFrm::PaintBaBo()
 |*
-|*  Ersterstellung      MA 22. Oct. 93
-|*  Letzte Aenderung    MA 19. Jun. 96
-|*
 |*************************************************************************/
 
 void SwFrm::PaintBaBo( const SwRect& rRect, const SwPageFrm *pPage,
@@ -5682,9 +5646,6 @@ void SwFrm::PaintBaBo( const SwRect& rRect, const SwPageFrm *pPage,
 /*************************************************************************
 |*
 |*  SwFrm::PaintBackground()
-|*
-|*  Ersterstellung      MA 04. Jan. 93
-|*  Letzte Aenderung    MA 06. Feb. 97
 |*
 |*************************************************************************/
 /// OD 05.09.2002 #102912#
@@ -5878,8 +5839,6 @@ void SwFrm::PaintBackground( const SwRect &rRect, const SwPageFrm *pPage,
 |*  SwPageFrm::RefreshSubsidiary()
 |*
 |*  Beschreibung        Erneuert alle Hilfslinien der Seite.
-|*  Ersterstellung      MA 04. Nov. 92
-|*  Letzte Aenderung    MA 10. May. 95
 |*
 |*************************************************************************/
 
@@ -5923,9 +5882,6 @@ void SwPageFrm::RefreshSubsidiary( const SwRect &rRect ) const
 /*************************************************************************
 |*
 |*  SwLayoutFrm::RefreshLaySubsidiary()
-|*
-|*  Ersterstellung      MA 04. Nov. 92
-|*  Letzte Aenderung    MA 22. Jan. 95
 |*
 |*************************************************************************/
 void SwLayoutFrm::RefreshLaySubsidiary( const SwPageFrm *pPage,
@@ -6002,8 +5958,6 @@ void SwLayoutFrm::RefreshLaySubsidiary( const SwPageFrm *pPage,
 |*
 |*  Beschreibung        Hilfslinien um die PrtAreas malen
 |*      Nur die LayoutFrm's die direkt Cntnt enthalten.
-|*  Ersterstellung      MA 21. May. 92
-|*  Letzte Aenderung    MA 22. Jan. 95
 |*
 |*************************************************************************/
 
@@ -6283,8 +6237,6 @@ void SwLayoutFrm::PaintSubsidiaryLines( const SwPageFrm *pPage,
 |*  Beschreibung        Erneuert alle Extradaten (Zeilennummern usw) der Seite.
 |*                      Grundsaetzlich sind nur diejenigen Objekte beruecksichtig,
 |*                      die in die seitliche Ausdehnung des Rects ragen.
-|*  Ersterstellung      MA 20. Jan. 98
-|*  Letzte Aenderung    MA 18. Feb. 98
 |*
 |*************************************************************************/
 
@@ -6410,8 +6362,6 @@ const Font& SwPageFrm::GetEmptyPageFont()
 |*      Retouche wird nur dann durchgefuehrt, wenn der Frm der letzte seiner
 |*      Kette ist. Der Gesamte Bereich des Upper unterhalb des Frm wird
 |*      per PaintBackground gecleared.
-|*    Ersterstellung    MA 13. Apr. 93
-|*    Letzte Aenderung  MA 25. Jul. 96
 |*
 |*************************************************************************/
 
@@ -6499,8 +6449,6 @@ void SwFrm::Retouche( const SwPageFrm * pPage, const SwRect &rRect ) const
         Upper vorgegeben, die erste Brush wird benutzt.
         Ist fuer keinen Frm eine Brush angegeben, so wird FALSE zurueck-
         geliefert.
-    Ersterstellung      MA 23. Dec. 92
-    Letzte Aenderung    MA 04. Feb. 97
 
     @param rpBrush
     output parameter - constant reference pointer the found background brush
@@ -6517,10 +6465,6 @@ void SwFrm::Retouche( const SwPageFrm * pPage, const SwRect &rRect ) const
     @parem bLowerMode
     input parameter - boolean indicating, if background brush should *not* be
     taken from parent.
-
-    @author MA
-    @change 20.08.2002 by OD
-    @docdate 20.08.2002
 
     @return true, if a background brush for the frame is found
 */
@@ -6625,9 +6569,6 @@ BOOL SwFrm::GetBackgroundBrush( const SvxBrushItem* & rpBrush,
 /*************************************************************************
 |*
 |*  SwFrmFmt::GetGraphic()
-|*
-|*  Ersterstellung      MA 23. Jul. 96
-|*  Letzte Aenderung    MA 23. Jul. 96
 |*
 |*************************************************************************/
 

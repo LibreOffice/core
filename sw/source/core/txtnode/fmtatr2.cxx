@@ -71,9 +71,6 @@ TYPEINIT1_AUTOFACTORY(SwFmtAutoFmt, SfxPoolItem);
 /*************************************************************************
 |*
 |*    class SwFmtCharFmt
-|*    Beschreibung
-|*    Ersterstellung    JP 23.11.90
-|*    Letzte Aenderung  JP 09.08.94
 |*
 *************************************************************************/
 
@@ -145,9 +142,6 @@ bool SwFmtCharFmt::PutValue( const uno::Any& , BYTE   )
 /*************************************************************************
 |*
 |*    class SwFmtAutoFmt
-|*    Beschreibung
-|*    Ersterstellung    AMA 12.05.06
-|*    Letzte Aenderung  AMA 12.05.06
 |*
 *************************************************************************/
 
@@ -192,9 +186,6 @@ bool SwFmtAutoFmt::PutValue( const uno::Any& , BYTE )
 /*************************************************************************
 |*
 |*    class SwFmtINetFmt
-|*    Beschreibung
-|*    Ersterstellung    AMA 02.08.96
-|*    Letzte Aenderung  AMA 02.08.96
 |*
 *************************************************************************/
 

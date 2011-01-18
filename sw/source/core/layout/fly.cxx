@@ -110,9 +110,6 @@ TYPEINIT2(SwFlyFrm,SwLayoutFrm,SwAnchoredObject);
 |*
 |*  SwFlyFrm::SwFlyFrm()
 |*
-|*  Ersterstellung      MA 28. Sep. 92
-|*  Letzte Aenderung    MA 09. Apr. 99
-|*
 |*************************************************************************/
 
 SwFlyFrm::SwFlyFrm( SwFlyFrmFmt *pFmt, SwFrm *pAnch ) :
@@ -279,9 +276,6 @@ void SwFlyFrm::InsertCnt()
 |*
 |*  SwFlyFrm::~SwFlyFrm()
 |*
-|*  Ersterstellung      MA 28. Sep. 92
-|*  Letzte Aenderung    MA 07. Jul. 95
-|*
 |*************************************************************************/
 
 SwFlyFrm::~SwFlyFrm()
@@ -379,9 +373,6 @@ void SwFlyFrm::DeleteCnt()
 |*
 |*  SwFlyFrm::InitDrawObj()
 |*
-|*  Ersterstellung      MA 02. Dec. 94
-|*  Letzte Aenderung    MA 30. Nov. 95
-|*
 |*************************************************************************/
 void SwFlyFrm::InitDrawObj( BOOL bNotify )
 {
@@ -418,9 +409,6 @@ void SwFlyFrm::InitDrawObj( BOOL bNotify )
 /*************************************************************************
 |*
 |*  SwFlyFrm::FinitDrawObj()
-|*
-|*  Ersterstellung      MA 12. Dec. 94
-|*  Letzte Aenderung    MA 15. May. 95
 |*
 |*************************************************************************/
 
@@ -483,9 +471,6 @@ void SwFlyFrm::FinitDrawObj()
 /*************************************************************************
 |*
 |*  SwFlyFrm::ChainFrames()
-|*
-|*  Ersterstellung      MA 29. Oct. 97
-|*  Letzte Aenderung    MA 20. Jan. 98
 |*
 |*************************************************************************/
 
@@ -580,9 +565,6 @@ void SwFlyFrm::UnchainFrames( SwFlyFrm *pMaster, SwFlyFrm *pFollow )
 |*
 |*  SwFlyFrm::FindChainNeighbour()
 |*
-|*  Ersterstellung      MA 11. Nov. 97
-|*  Letzte Aenderung    MA 09. Apr. 99
-|*
 |*************************************************************************/
 
 SwFlyFrm *SwFlyFrm::FindChainNeighbour( SwFrmFmt &rChain, SwFrm *pAnch )
@@ -636,9 +618,6 @@ SwFlyFrm *SwFlyFrm::FindChainNeighbour( SwFrmFmt &rChain, SwFrm *pAnch )
 |*
 |*  SwFlyFrm::FindLastLower()
 |*
-|*  Ersterstellung      MA 29. Oct. 97
-|*  Letzte Aenderung    MA 29. Oct. 97
-|*
 |*************************************************************************/
 
 SwFrm *SwFlyFrm::FindLastLower()
@@ -658,9 +637,6 @@ SwFrm *SwFlyFrm::FindLastLower()
 /*************************************************************************
 |*
 |*  SwFlyFrm::FrmSizeChg()
-|*
-|*  Ersterstellung      MA 17. Dec. 92
-|*  Letzte Aenderung    MA 24. Jul. 96
 |*
 |*************************************************************************/
 
@@ -718,9 +694,6 @@ BOOL SwFlyFrm::FrmSizeChg( const SwFmtFrmSize &rFrmSize )
 /*************************************************************************
 |*
 |*  SwFlyFrm::Modify()
-|*
-|*  Ersterstellung      MA 17. Dec. 92
-|*  Letzte Aenderung    MA 17. Jan. 97
 |*
 |*************************************************************************/
 
@@ -1099,8 +1072,6 @@ void SwFlyFrm::_UpdateAttr( SfxPoolItem *pOld, SfxPoolItem *pNew,
 |*                SwFlyFrm::GetInfo()
 |*
 |*    Beschreibung      erfragt Informationen
-|*    Ersterstellung    JP 31.03.94
-|*    Letzte Aenderung  JP 31.03.94
 |*
 *************************************************************************/
 
@@ -1115,9 +1086,6 @@ BOOL SwFlyFrm::GetInfo( SfxPoolItem & rInfo ) const
 /*************************************************************************
 |*
 |*  SwFlyFrm::_Invalidate()
-|*
-|*  Ersterstellung      MA 15. Oct. 92
-|*  Letzte Aenderung    MA 26. Jun. 96
 |*
 |*************************************************************************/
 
@@ -1158,8 +1126,6 @@ void SwFlyFrm::_Invalidate( SwPageFrm *pPage )
 |*
 |*  Beschreibung        Aenderung der relativen Position, die Position wird
 |*      damit automatisch Fix, das Attribut wird entprechend angepasst.
-|*  Ersterstellung      MA 25. Aug. 92
-|*  Letzte Aenderung    MA 09. Aug. 95
 |*
 |*************************************************************************/
 
@@ -1283,8 +1249,6 @@ void SwFlyFrm::ChgRelPos( const Point &rNewPos )
 |*
 |*  Beschreibung:       "Formatiert" den Frame; Frm und PrtArea.
 |*                      Die Fixsize wird hier nicht eingestellt.
-|*  Ersterstellung      MA 14. Jun. 93
-|*  Letzte Aenderung    MA 13. Jun. 96
 |*
 |*************************************************************************/
 
@@ -1792,9 +1756,6 @@ void CalcCntnt( SwLayoutFrm *pLay,
 |*
 |*  SwFlyFrm::MakeFlyPos()
 |*
-|*  Ersterstellung      MA ??
-|*  Letzte Aenderung    MA 14. Nov. 96
-|*
 |*************************************************************************/
 // OD 2004-03-23 #i26791#
 //void SwFlyFrm::MakeFlyPos()
@@ -1828,9 +1789,6 @@ void SwFlyFrm::MakeObjPos()
 |*
 |*  SwFlyFrm::MakePrtArea()
 |*
-|*  Ersterstellung      MA 23. Jun. 93
-|*  Letzte Aenderung    MA 23. Jun. 93
-|*
 |*************************************************************************/
 void SwFlyFrm::MakePrtArea( const SwBorderAttrs &rAttrs )
 {
@@ -1851,9 +1809,6 @@ void SwFlyFrm::MakePrtArea( const SwBorderAttrs &rAttrs )
 /*************************************************************************
 |*
 |*  SwFlyFrm::_Grow(), _Shrink()
-|*
-|*  Ersterstellung      MA 05. Oct. 92
-|*  Letzte Aenderung    MA 05. Sep. 96
 |*
 |*************************************************************************/
 
@@ -2043,9 +1998,6 @@ SwTwips SwFlyFrm::_Shrink( SwTwips nDist, BOOL bTst )
 |*
 |*  SwFlyFrm::ChgSize()
 |*
-|*  Ersterstellung      MA 05. Oct. 92
-|*  Letzte Aenderung    MA 04. Sep. 96
-|*
 |*************************************************************************/
 
 Size SwFlyFrm::ChgSize( const Size& aNewSize )
@@ -2096,9 +2048,6 @@ Size SwFlyFrm::ChgSize( const Size& aNewSize )
 |*
 |*  SwFlyFrm::IsLowerOf()
 |*
-|*  Ersterstellung      MA 27. Dec. 93
-|*  Letzte Aenderung    MA 27. Dec. 93
-|*
 |*************************************************************************/
 
 BOOL SwFlyFrm::IsLowerOf( const SwLayoutFrm* pUpperFrm ) const
@@ -2120,9 +2069,6 @@ BOOL SwFlyFrm::IsLowerOf( const SwLayoutFrm* pUpperFrm ) const
 |*
 |*  SwFlyFrm::Cut()
 |*
-|*  Ersterstellung      MA 23. Feb. 94
-|*  Letzte Aenderung    MA 23. Feb. 94
-|*
 |*************************************************************************/
 
 void SwFlyFrm::Cut()
@@ -2132,9 +2078,6 @@ void SwFlyFrm::Cut()
 /*************************************************************************
 |*
 |*  SwFrm::AppendFly(), RemoveFly()
-|*
-|*  Ersterstellung      MA 25. Aug. 92
-|*  Letzte Aenderung    MA 09. Jun. 95
 |*
 |*************************************************************************/
 
@@ -2321,9 +2264,6 @@ void SwFrm::RemoveDrawObj( SwAnchoredObject& _rToRemoveObj )
 |*
 |*  SwFrm::InvalidateObjs()
 |*
-|*  Ersterstellung      MA 29. Nov. 96
-|*  Letzte Aenderung    MA 29. Nov. 96
-|*
 |*************************************************************************/
 // --> OD 2004-07-01 #i28701# - change purpose of method and adjust its name
 void SwFrm::InvalidateObjs( const bool _bInvaPosOnly,
@@ -2488,9 +2428,6 @@ void SwLayoutFrm::NotifyLowerObjs( const bool _bUnlockPosOfObjs )
 |*
 |*  SwFlyFrm::NotifyDrawObj()
 |*
-|*  Ersterstellung      OK 22. Nov. 94
-|*  Letzte Aenderung    MA 10. Jan. 97
-|*
 |*************************************************************************/
 
 void SwFlyFrm::NotifyDrawObj()
@@ -2507,9 +2444,6 @@ void SwFlyFrm::NotifyDrawObj()
 /*************************************************************************
 |*
 |*  SwFlyFrm::CalcRel()
-|*
-|*  Ersterstellung      MA 13. Jun. 96
-|*  Letzte Aenderung    MA 10. Oct. 96
 |*
 |*************************************************************************/
 
@@ -2631,31 +2565,7 @@ SwTwips SwFlyFrm::CalcAutoWidth() const
 
 /*************************************************************************
 |*
-|*  SwFlyFrm::AddSpacesToFrm
-|*
-|*  Ersterstellung      MA 11. Nov. 96
-|*  Letzte Aenderung    MA 10. Mar. 97
-|*
-|*************************************************************************/
-
-//SwRect SwFlyFrm::AddSpacesToFrm() const
-//{
-//  SwRect aRect( Frm() );
-//  const SvxULSpaceItem &rUL = GetFmt()->GetULSpace();
-//  const SvxLRSpaceItem &rLR = GetFmt()->GetLRSpace();
-//  aRect.Left( Max( aRect.Left() - long(rLR.GetLeft()), 0L ) );
-//  aRect.SSize().Width() += rLR.GetRight();
-//  aRect.Top( Max( aRect.Top() - long(rUL.GetUpper()), 0L ) );
-//  aRect.SSize().Height()+= rUL.GetLower();
-//  return aRect;
-//}
-
-/*************************************************************************
-|*
 |*  SwFlyFrm::GetContour()
-|*
-|*  Ersterstellung      MA 09. Jan. 97
-|*  Letzte Aenderung    MA 10. Jan. 97
 |*
 |*************************************************************************/
 /// OD 16.04.2003 #i13147# - If called for paint and the <SwNoTxtFrm> contains

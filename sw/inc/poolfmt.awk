@@ -2,10 +2,6 @@
 #*
 #*    $Workfile:        dbgxtor.awk
 #*
-#*    Ersterstellung    JP  05.10.95
-#*    Letzte Aenderung  $Author: hr $ $Date: 2000-09-18 17:14:27 $
-#*    $Revision: 1.1.1.1 $
-#*
 #*    $Logfile:   T:/sw/inc/poolfmt.awv  $
 #*
 #*    Copyright (c) 1990-1996, STAR DIVISION

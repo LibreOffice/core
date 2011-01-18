@@ -96,9 +96,6 @@ using namespace ::com::sun::star;
 |*  SwFEShell::Copy()   Copy fuer das Interne Clipboard.
 |*      Kopiert alle Selektionen in das Clipboard.
 |*
-|*  Ersterstellung      JP ??
-|*  Letzte Aenderung    MA 22. Feb. 95
-|
 |*************************************************************************/
 
 BOOL SwFEShell::Copy( SwDoc* pClpDoc, const String* pNewClpTxt )
@@ -693,9 +690,6 @@ BOOL SwFEShell::Copy( SwFEShell* pDestShell, const Point& rSttPt,
 |*  SwFEShell::Paste()  Paste fuer das Interne Clipboard.
 |*      Kopiert den Inhalt vom Clipboard in das Dokument.
 |*
-|*  Ersterstellung      JP ??
-|*  Letzte Aenderung    MA 22. Feb. 95
-|
 |*************************************************************************/
 
 namespace {

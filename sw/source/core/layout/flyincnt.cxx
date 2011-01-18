@@ -49,9 +49,6 @@ void DeepCalc( const SwFrm *pFrm );
 |*
 |*  SwFlyInCntFrm::SwFlyInCntFrm(), ~SwFlyInCntFrm()
 |*
-|*  Ersterstellung      MA 01. Dec. 92
-|*  Letzte Aenderung    MA 09. Apr. 99
-|*
 |*************************************************************************/
 SwFlyInCntFrm::SwFlyInCntFrm( SwFlyFrmFmt *pFmt, SwFrm *pAnch ) :
     SwFlyFrm( pFmt, pAnch )
@@ -83,9 +80,6 @@ TYPEINIT1(SwFlyInCntFrm,SwFlyFrm);
 /*************************************************************************
 |*
 |*  SwFlyInCntFrm::SetRefPoint(),
-|*
-|*  Ersterstellung      MA 01. Dec. 92
-|*  Letzte Aenderung    MA 06. Aug. 95
 |*
 |*************************************************************************/
 void SwFlyInCntFrm::SetRefPoint( const Point& rPoint,
@@ -119,9 +113,6 @@ void SwFlyInCntFrm::SetRefPoint( const Point& rPoint,
 /*************************************************************************
 |*
 |*  SwFlyInCntFrm::Modify()
-|*
-|*  Ersterstellung      MA 16. Dec. 92
-|*  Letzte Aenderung    MA 02. Sep. 93
 |*
 |*************************************************************************/
 void SwFlyInCntFrm::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew )
@@ -168,8 +159,6 @@ void SwFlyInCntFrm::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew )
 |*  SwFlyInCntFrm::Format()
 |*
 |*  Beschreibung:       Hier wird der Inhalt initial mit Formatiert.
-|*  Ersterstellung      MA 16. Dec. 92
-|*  Letzte Aenderung    MA 19. May. 93
 |*
 |*************************************************************************/
 void SwFlyInCntFrm::Format( const SwBorderAttrs *pAttrs )
@@ -193,8 +182,6 @@ void SwFlyInCntFrm::Format( const SwBorderAttrs *pAttrs )
 |*  Beschreibung        Im Unterschied zu anderen Frms wird hier nur die
 |*      die RelPos berechnet. Die absolute Position wird ausschliesslich
 |*      per SetAbsPos errechnet.
-|*  Ersterstellung      MA 03. Dec. 92
-|*  Letzte Aenderung    MA 12. Apr. 96
 |*
 |*************************************************************************/
 // OD 2004-03-23 #i26791#
@@ -236,9 +223,6 @@ void SwFlyInCntFrm::_ActionOnInvalidation( const InvalidationType _nInvalid )
 |*
 |*  SwFlyInCntFrm::NotifyBackground()
 |*
-|*  Ersterstellung      MA 03. Dec. 92
-|*  Letzte Aenderung    MA 26. Aug. 93
-|*
 |*************************************************************************/
 void SwFlyInCntFrm::NotifyBackground( SwPageFrm *, const SwRect& rRect,
                                        PrepareHint eHint)
@@ -253,9 +237,6 @@ void SwFlyInCntFrm::NotifyBackground( SwPageFrm *, const SwRect& rRect,
 |*
 |*  SwFlyInCntFrm::GetRelPos()
 |*
-|*  Ersterstellung      MA 04. Dec. 92
-|*  Letzte Aenderung    MA 04. Dec. 92
-|*
 |*************************************************************************/
 const Point SwFlyInCntFrm::GetRelPos() const
 {
@@ -266,9 +247,6 @@ const Point SwFlyInCntFrm::GetRelPos() const
 /*************************************************************************
 |*
 |*  SwFlyInCntFrm::RegistFlys()
-|*
-|*  Ersterstellung      MA 26. Nov. 93
-|*  Letzte Aenderung    MA 26. Nov. 93
 |*
 |*************************************************************************/
 void SwFlyInCntFrm::RegistFlys()
@@ -282,9 +260,6 @@ void SwFlyInCntFrm::RegistFlys()
 /*************************************************************************
 |*
 |*  SwFlyInCntFrm::MakeAll()
-|*
-|*  Ersterstellung      MA 18. Feb. 94
-|*  Letzte Aenderung    MA 13. Jun. 96
 |*
 |*************************************************************************/
 void SwFlyInCntFrm::MakeAll()

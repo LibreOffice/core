@@ -287,12 +287,6 @@ USHORT ClearItem_BC( boost::shared_ptr<const SfxItemSet>& mrpAttrSet,
 |*      alle EndNodes der GrundSection haben den Level 0
 |*      alle StartNodes der GrundSection haben den Level 1
 |*
-|*  Ersterstellung
-|*      VER0100 vb 901214
-|*
-|*  Aenderung:  JP  11.08.93
-|*      keine Rekursion mehr !!
-|*
 *******************************************************************/
 
 
@@ -328,12 +322,6 @@ USHORT SwNode::GetSectionLevel() const
 |*      IN
 |*      rWhere bezeichnet die Position innerhalb dieses Arrays,
 |*      an der der Node eingefuegt werden soll
-|*
-|*  Ersterstellung
-|*      VER0100 vb 901214
-|*
-|*  Stand
-|*      VER0100 vb 901214
 |*
 *******************************************************************/
 
@@ -940,11 +928,6 @@ BYTE SwNode::HasPrevNextLayNode() const
 |*      IN
 |*      rNodes bezeichnet das variable Array, in dem sich der Node
 |*      befindet
-|*  Ersterstellung
-|*      VER0100 vb 901214
-|*
-|*  Stand
-|*      VER0100 vb 901214
 |*
 *******************************************************************/
 
@@ -998,12 +981,6 @@ void SwStartNode::CheckSectionCondColl() const
 |*      an der der Node eingefuegt werden soll
 |*      !!!!!!!!!!!!
 |*      Es wird eine Kopie uebergeben!
-|*
-|*  Ersterstellung
-|*      VER0100 vb 901214
-|*
-|*  Stand
-|*      VER0100 vb 901214
 |*
 *******************************************************************/
 

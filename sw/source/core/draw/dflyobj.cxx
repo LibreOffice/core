@@ -83,9 +83,6 @@ TYPEINIT1( SwVirtFlyDrawObj, SdrVirtObj )
 |*
 |*  SwFlyDrawObj::Ctor
 |*
-|*  Ersterstellung      MA 18. Apr. 95
-|*  Letzte Aenderung    MA 28. May. 96
-|*
 *************************************************************************/
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -154,9 +151,6 @@ SwFlyDrawObj::~SwFlyDrawObj()
 |*
 |*  SwFlyDrawObj::Factory-Methoden
 |*
-|*  Ersterstellung      MA 23. Feb. 95
-|*  Letzte Aenderung    MA 23. Feb. 95
-|*
 *************************************************************************/
 
 UINT32 SwFlyDrawObj::GetObjInventor() const
@@ -179,9 +173,6 @@ UINT16 SwFlyDrawObj::GetObjVersion() const
 /*************************************************************************
 |*
 |*  SwVirtFlyDrawObj::CToren, Dtor
-|*
-|*  Ersterstellung      MA 08. Dec. 94
-|*  Letzte Aenderung    MA 28. May. 96
 |*
 *************************************************************************/
 
@@ -447,9 +438,6 @@ SwVirtFlyDrawObj::~SwVirtFlyDrawObj()
 |*
 |*  SwVirtFlyDrawObj::GetFmt()
 |*
-|*  Ersterstellung      MA 08. Dec. 94
-|*  Letzte Aenderung    MA 08. Dec. 94
-|*
 *************************************************************************/
 
 const SwFrmFmt *SwVirtFlyDrawObj::GetFmt() const
@@ -466,9 +454,6 @@ SwFrmFmt *SwVirtFlyDrawObj::GetFmt()
 /*************************************************************************
 |*
 |*  SwVirtFlyDrawObj::Paint()
-|*
-|*  Ersterstellung      MA 20. Dec. 94
-|*  Letzte Aenderung    MA 18. Dec. 95
 |*
 *************************************************************************/
 
@@ -515,9 +500,6 @@ void SwVirtFlyDrawObj::wrap_DoPaintObject() const
 |*
 |*  SwVirtFlyDrawObj::TakeObjInfo()
 |*
-|*  Ersterstellung      MA 03. May. 95
-|*  Letzte Aenderung    MA 03. May. 95
-|*
 *************************************************************************/
 
 void SwVirtFlyDrawObj::TakeObjInfo( SdrObjTransformInfoRec& rInfo ) const
@@ -536,9 +518,6 @@ void SwVirtFlyDrawObj::TakeObjInfo( SdrObjTransformInfoRec& rInfo ) const
 /*************************************************************************
 |*
 |*  SwVirtFlyDrawObj::Groessenermittlung
-|*
-|*  Ersterstellung      MA 12. Jan. 95
-|*  Letzte Aenderung    MA 10. Nov. 95
 |*
 *************************************************************************/
 
@@ -637,9 +616,6 @@ void SwVirtFlyDrawObj::NbcSetLogicRect(const Rectangle& )
 /*************************************************************************
 |*
 |*  SwVirtFlyDrawObj::Move() und Resize()
-|*
-|*  Ersterstellung      MA 12. Jan. 95
-|*  Letzte Aenderung    MA 26. Jul. 96
 |*
 *************************************************************************/
 

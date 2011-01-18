@@ -337,9 +337,6 @@ void _FrmFinit()
 |*
 |*  RootFrm::Alles was so zur CurrShell gehoert
 |*
-|*  Ersterstellung      MA 09. Sep. 98
-|*  Letzte Aenderung    MA 18. Feb. 99
-|*
 |*************************************************************************/
 
 typedef CurrShell* CurrShellPtr;
@@ -417,8 +414,6 @@ void InitCurrShells( SwRootFrm *pRoot )
 |*      Der RootFrm laesst sich grundsaetzlich vom Dokument ein eigenes
 |*      FrmFmt geben. Dieses loescht er dann selbst im DTor.
 |*      Das eigene FrmFmt wird vom uebergebenen Format abgeleitet.
-|*  Ersterstellung      SS 05-Apr-1991
-|*  Letzte Aenderung    MA 12. Dec. 94
 |*
 |*************************************************************************/
 
@@ -539,9 +534,6 @@ SwRootFrm::SwRootFrm( SwFrmFmt *pFmt, ViewShell * pSh ) :
 |*
 |*  SwRootFrm::~SwRootFrm()
 |*
-|*  Ersterstellung      SS 05-Apr-1991
-|*  Letzte Aenderung    MA 12. Dec. 94
-|*
 |*************************************************************************/
 
 
@@ -567,9 +559,6 @@ SwRootFrm::~SwRootFrm()
 /*************************************************************************
 |*
 |*  SwRootFrm::RemoveMasterObjs()
-|*
-|*  Ersterstellung      MA 19.10.95
-|*  Letzte Aenderung    MA 19.10.95
 |*
 |*************************************************************************/
 

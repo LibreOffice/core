@@ -105,9 +105,6 @@ const SwFrm *lcl_FindAnchor( const SdrObject *pObj, BOOL bAll )
 |*
 |*  SwDrawView::Ctor
 |*
-|*  Ersterstellung      OK 18.11.94
-|*  Letzte Aenderung    MA 22. Jul. 96
-|*
 *************************************************************************/
 
 
@@ -228,9 +225,6 @@ SdrObject* SwDrawView::CheckSingleSdrObjectHit(const Point& rPnt, USHORT nTol, S
 |*
 |*  Gets called every time the handles need to be build
 |*
-|*  Ersterstellung      AW 06. Sep. 99
-|*  Letzte Aenderung    AW 06. Sep. 99
-|*
 *************************************************************************/
 
 void SwDrawView::AddCustomHdl()
@@ -281,9 +275,6 @@ void SwDrawView::AddCustomHdl()
 /*************************************************************************
 |*
 |*  SwDrawView::GetMaxToTopObj(), _GetMaxToTopObj()
-|*
-|*  Ersterstellung      MA 13. Jan. 95
-|*  Letzte Aenderung    MA 18. Mar. 97
 |*
 *************************************************************************/
 
@@ -338,9 +329,6 @@ SdrObject* SwDrawView::GetMaxToTopObj( SdrObject* pObj ) const
 |*
 |*  SwDrawView::GetMaxToBtmObj()
 |*
-|*  Ersterstellung      MA 13. Jan. 95
-|*  Letzte Aenderung    MA 05. Sep. 96
-|*
 *************************************************************************/
 
 
@@ -366,9 +354,6 @@ SdrObject* SwDrawView::GetMaxToBtmObj(SdrObject* pObj) const
 /*************************************************************************
 |*
 |*  SwDrawView::ObjOrderChanged()
-|*
-|*  Ersterstellung      MA 31. Jul. 95
-|*  Letzte Aenderung    MA 18. Mar. 97
 |*
 *************************************************************************/
 
@@ -754,9 +739,6 @@ void SwDrawView::ObjOrderChanged( SdrObject* pObj, ULONG nOldPos,
 |*
 |*  SwDrawView::TakeDragLimit()
 |*
-|*  Ersterstellung      AMA 26. Apr. 96
-|*  Letzte Aenderung    MA 03. May. 96
-|*
 *************************************************************************/
 
 
@@ -781,9 +763,6 @@ BOOL SwDrawView::TakeDragLimit( SdrDragMode eMode,
 /*************************************************************************
 |*
 |*  SwDrawView::CalcAnchor()
-|*
-|*  Ersterstellung      MA 13. Jan. 95
-|*  Letzte Aenderung    MA 08. Nov. 96
 |*
 *************************************************************************/
 
@@ -873,9 +852,6 @@ const SwFrm* SwDrawView::CalcAnchor()
 |*
 |*  SwDrawView::ShowDragXor(), HideDragXor()
 |*
-|*  Ersterstellung      MA 17. Jan. 95
-|*  Letzte Aenderung    MA 27. Jan. 95
-|*
 *************************************************************************/
 
 
@@ -895,9 +871,6 @@ void SwDrawView::ShowDragAnchor()
 /*************************************************************************
 |*
 |*  SwDrawView::MarkListHasChanged()
-|*
-|*  Ersterstellung      OM 02. Feb. 95
-|*  Letzte Aenderung    OM 07. Jul. 95
 |*
 *************************************************************************/
 

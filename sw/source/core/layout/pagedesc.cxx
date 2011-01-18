@@ -56,9 +56,6 @@
 |*
 |*  SwPageDesc::SwPageDesc()
 |*
-|*  Ersterstellung      MA 25. Jan. 93
-|*  Letzte Aenderung    MA 16. Feb. 94
-|*
 |*************************************************************************/
 
 
@@ -123,8 +120,6 @@ SwPageDesc::~SwPageDesc()
 |*
 |*  Beschreibung        Gespiegelt werden nur die Raender.
 |*      Attribute wie Umrandung und dergleichen werden 1:1 kopiert.
-|*  Ersterstellung      MA 25. Jan. 93
-|*  Letzte Aenderung    01. Nov. 94
 |*
 |*************************************************************************/
 
@@ -168,8 +163,6 @@ void SwPageDesc::ResetAllAttr( sal_Bool bLeft )
 |*                SwPageDesc::GetInfo()
 |*
 |*    Beschreibung      erfragt Informationen
-|*    Ersterstellung    JP 31.03.94
-|*    Letzte Aenderung  JP 31.03.94
 |*
 *************************************************************************/
 
@@ -187,8 +180,6 @@ BOOL SwPageDesc::GetInfo( SfxPoolItem & rInfo ) const
 |*                SwPageDesc::SetRegisterFmtColl()
 |*
 |*    Beschreibung      setzt die Vorlage fuer die Registerhaltigkeit
-|*    Ersterstellung    AMA 22.07.96
-|*    Letzte Aenderung  AMA 22.07.96
 |*
 *************************************************************************/
 
@@ -211,8 +202,6 @@ void SwPageDesc::SetRegisterFmtColl( const SwTxtFmtColl* pFmt )
 |*                SwPageDesc::GetRegisterFmtColl()
 |*
 |*    Beschreibung      holt die Vorlage fuer die Registerhaltigkeit
-|*    Ersterstellung    AMA 22.07.96
-|*    Letzte Aenderung  AMA 22.07.96
 |*
 *************************************************************************/
 
@@ -228,8 +217,6 @@ const SwTxtFmtColl* SwPageDesc::GetRegisterFmtColl() const
 |*                SwPageDesc::RegisterChange()
 |*
 |*    Beschreibung      benachrichtigt alle betroffenen PageFrames
-|*    Ersterstellung    AMA 22.07.96
-|*    Letzte Aenderung  AMA 22.07.96
 |*
 *************************************************************************/
 
@@ -278,8 +265,6 @@ void SwPageDesc::RegisterChange()
 |*
 |*    Beschreibung      reagiert insbesondere auf Aenderungen
 |*                      der Vorlage fuer die Registerhaltigkeit
-|*    Ersterstellung    AMA 22.07.96
-|*    Letzte Aenderung  AMA 22.07.96
 |*
 *************************************************************************/
 
@@ -374,9 +359,6 @@ BOOL SwPageDesc::IsFollowNextPageOfNode( const SwNode& rNd ) const
 |*
 |*  SwPageFtnInfo::SwPageFtnInfo()
 |*
-|*  Ersterstellung      MA 24. Feb. 93
-|*  Letzte Aenderung    MA 24. Feb. 93
-|*
 |*************************************************************************/
 
 
@@ -412,9 +394,6 @@ SwPageFtnInfo::SwPageFtnInfo( const SwPageFtnInfo &rCpy ) :
 |*
 |*  SwPageFtnInfo::operator=
 |*
-|*  Ersterstellung      MA 24. Feb. 93
-|*  Letzte Aenderung    MA 24. Feb. 93
-|*
 |*************************************************************************/
 
 
@@ -433,9 +412,6 @@ SwPageFtnInfo &SwPageFtnInfo::operator=( const SwPageFtnInfo& rCpy )
 /*************************************************************************
 |*
 |*  SwPageFtnInfo::operator==
-|*
-|*  Ersterstellung      MA 01. Mar. 93
-|*  Letzte Aenderung    MA 01. Mar. 93
 |*
 |*************************************************************************/
 

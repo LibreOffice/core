@@ -243,13 +243,7 @@ IDX_CHK_ARRAY
 }
 
 /*************************************************************************
-|*
 |*    SwIndex & SwIndex::operator=( const SwIndex & aSwIndex )
-|*
-|*    Beschreibung
-|*    Ersterstellung    JP 07.11.90
-|*    Letzte Aenderung  JP 07.03.94
-|*
 *************************************************************************/
 
 
@@ -272,13 +266,7 @@ SwIndex& SwIndex::operator=( const SwIndex& rIdx )
 }
 
 /*************************************************************************
-|*
 |*    SwIndex &SwIndex::Assign
-|*
-|*    Beschreibung
-|*    Ersterstellung    VB 25.03.91
-|*    Letzte Aenderung  JP 07.03.94
-|*
 *************************************************************************/
 
 
@@ -372,13 +360,7 @@ ARR_CHK_ARRAY
 #if OSL_DEBUG_LEVEL > 1
 
 /*************************************************************************
-|*
 |*    SwIndex::operator++()
-|*
-|*    Beschreibung
-|*    Ersterstellung    JP 07.11.90
-|*    Letzte Aenderung  JP 07.03.94
-|*
 *************************************************************************/
 xub_StrLen SwIndex::operator++(int)
 {
@@ -399,13 +381,7 @@ xub_StrLen SwIndex::operator++()
 }
 
 /*************************************************************************
-|*
 |*    SwIndex::operator--()
-|*
-|*    Beschreibung
-|*    Ersterstellung    JP 07.11.90
-|*    Letzte Aenderung  JP 07.03.94
-|*
 *************************************************************************/
 
 
@@ -426,13 +402,7 @@ xub_StrLen SwIndex::operator--()
 }
 
 /*************************************************************************
-|*
 |*    SwIndex::operator+=( xub_StrLen )
-|*
-|*    Beschreibung
-|*    Ersterstellung    JP 07.11.90
-|*    Letzte Aenderung  JP 07.03.94
-|*
 *************************************************************************/
 
 xub_StrLen SwIndex::operator+=( xub_StrLen nWert )
@@ -442,13 +412,7 @@ xub_StrLen SwIndex::operator+=( xub_StrLen nWert )
 }
 
 /*************************************************************************
-|*
 |*    SwIndex::operator-=( xub_StrLen )
-|*
-|*    Beschreibung
-|*    Ersterstellung    JP 07.11.90
-|*    Letzte Aenderung  JP 07.03.94
-|*
 *************************************************************************/
 
 xub_StrLen SwIndex::operator-=( xub_StrLen nWert )
@@ -458,13 +422,7 @@ xub_StrLen SwIndex::operator-=( xub_StrLen nWert )
 }
 
 /*************************************************************************
-|*
 |*    SwIndex::operator+=( const SwIndex & )
-|*
-|*    Beschreibung
-|*    Ersterstellung    JP 07.11.90
-|*    Letzte Aenderung  JP 07.03.94
-|*
 *************************************************************************/
 
 xub_StrLen SwIndex::operator+=( const SwIndex & rIndex )
@@ -474,13 +432,7 @@ xub_StrLen SwIndex::operator+=( const SwIndex & rIndex )
 }
 
 /*************************************************************************
-|*
 |*    SwIndex::operator-=( const SwIndex & )
-|*
-|*    Beschreibung
-|*    Ersterstellung    JP 07.11.90
-|*    Letzte Aenderung  JP 07.03.94
-|*
 *************************************************************************/
 
 xub_StrLen SwIndex::operator-=( const SwIndex & rIndex )
@@ -490,13 +442,7 @@ xub_StrLen SwIndex::operator-=( const SwIndex & rIndex )
 }
 
 /*************************************************************************
-|*
 |*    SwIndex::operator<( const SwIndex & )
-|*
-|*    Beschreibung
-|*    Ersterstellung    JP 07.11.90
-|*    Letzte Aenderung  JP 07.03.94
-|*
 *************************************************************************/
 
 BOOL SwIndex::operator<( const SwIndex & rIndex ) const
@@ -506,13 +452,7 @@ BOOL SwIndex::operator<( const SwIndex & rIndex ) const
 }
 
 /*************************************************************************
-|*
 |*    SwIndex::operator<=( const SwIndex & )
-|*
-|*    Beschreibung
-|*    Ersterstellung    JP 07.11.90
-|*    Letzte Aenderung  JP 04.06.92
-|*
 *************************************************************************/
 
 BOOL SwIndex::operator<=( const SwIndex & rIndex ) const
@@ -522,13 +462,7 @@ BOOL SwIndex::operator<=( const SwIndex & rIndex ) const
 }
 
 /*************************************************************************
-|*
 |*    SwIndex::operator>( const SwIndex & )
-|*
-|*    Beschreibung
-|*    Ersterstellung    JP 07.11.90
-|*    Letzte Aenderung  JP 04.06.92
-|*
 *************************************************************************/
 
 BOOL SwIndex::operator>( const SwIndex & rIndex ) const
@@ -538,13 +472,7 @@ BOOL SwIndex::operator>( const SwIndex & rIndex ) const
 }
 
 /*************************************************************************
-|*
 |*    SwIndex::operator>=( const SwIndex & )
-|*
-|*    Beschreibung
-|*    Ersterstellung    JP 07.11.90
-|*    Letzte Aenderung  JP 04.06.92
-|*
 *************************************************************************/
 
 BOOL SwIndex::operator>=( const SwIndex & rIndex ) const
@@ -554,13 +482,7 @@ BOOL SwIndex::operator>=( const SwIndex & rIndex ) const
 }
 
 /*************************************************************************
-|*
 |*    SwIndex & SwIndex::operator=( xub_StrLen )
-|*
-|*    Beschreibung
-|*    Ersterstellung    JP 10.12.90
-|*    Letzte Aenderung  JP 07.03.94
-|*
 *************************************************************************/
 
 SwIndex& SwIndex::operator=( xub_StrLen nWert )

@@ -77,9 +77,6 @@ SwDPage::~SwDPage()
 |*
 |*  SwDPage::ReplaceObject()
 |*
-|*  Ersterstellung      MA 07. Aug. 95
-|*  Letzte Aenderung    MA 07. Aug. 95
-|*
 *************************************************************************/
 
 SdrObject*  SwDPage::ReplaceObject( SdrObject* pNewObj, ULONG nObjNum )
@@ -96,9 +93,6 @@ SdrObject*  SwDPage::ReplaceObject( SdrObject* pNewObj, ULONG nObjNum )
 /*************************************************************************
 |*
 |*  SwDPage::GetGridFrameList()
-|*
-|*  Ersterstellung      MA 04. Sep. 95
-|*  Letzte Aenderung    MA 15. Feb. 96
 |*
 *************************************************************************/
 

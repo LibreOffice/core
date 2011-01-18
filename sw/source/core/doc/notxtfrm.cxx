@@ -154,10 +154,6 @@ void lcl_PaintReplacement( const SwRect &rRect, const String &rText,
 |*
 |*    SwGrfFrm::SwGrfFrm(ViewShell * const,SwGrfNode *)
 |*
-|*    Beschreibung
-|*    Ersterstellung    JP 05.03.91
-|*    Letzte Aenderung  MA 03. Mar. 93
-|*
 *************************************************************************/
 
 
@@ -184,10 +180,6 @@ void SwNoTxtFrm::InitCtor()
 |*
 |*    SwNoTxtNode::MakeFrm()
 |*
-|*    Beschreibung
-|*    Ersterstellung    JP 05.03.91
-|*    Letzte Aenderung  MA 03. Mar. 93
-|*
 *************************************************************************/
 
 
@@ -200,10 +192,6 @@ SwCntntFrm *SwNoTxtNode::MakeFrm()
 |*
 |*    SwNoTxtFrm::~SwNoTxtFrm()
 |*
-|*    Beschreibung
-|*    Ersterstellung    JP 05.03.91
-|*    Letzte Aenderung  MA 30. Apr. 96
-|*
 *************************************************************************/
 
 SwNoTxtFrm::~SwNoTxtFrm()
@@ -214,10 +202,6 @@ SwNoTxtFrm::~SwNoTxtFrm()
 /*************************************************************************
 |*
 |*    void SwNoTxtFrm::Modify( SwHint * pOld, SwHint * pNew )
-|*
-|*    Beschreibung
-|*    Ersterstellung    JP 05.03.91
-|*    Letzte Aenderung  JP 05.03.91
 |*
 *************************************************************************/
 
@@ -258,10 +242,6 @@ void lcl_ClearArea( const SwFrm &rFrm,
 /*************************************************************************
 |*
 |*    void SwNoTxtFrm::Paint()
-|*
-|*    Beschreibung
-|*    Ersterstellung    JP 05.03.91
-|*    Letzte Aenderung  MA 10. Jan. 97
 |*
 *************************************************************************/
 
@@ -367,8 +347,6 @@ void SwNoTxtFrm::Paint( const SwRect &rRect, const SwPrtOptions * /*pPrintData*/
 |*    Parameter         Point&  die Position im Frame  ( auch Return-Wert )
 |*                      Size&   die Groesse der Grafik ( auch Return-Wert )
 |*                      MirrorGrf   akt. Spiegelungs-Attribut
-|*    Ersterstellung    JP 04.03.91
-|*    Letzte Aenderung  JP 31.08.94
 |*
 *************************************************************************/
 
@@ -394,9 +372,6 @@ void lcl_CalcRect( Point& rPt, Size& rDim, USHORT nMirror )
 |*
 |*    Beschreibung      Errechne die Position und die Groesse der Bitmap
 |*                      innerhalb des uebergebenem Rechtecks.
-|*
-|*    Ersterstellung    JP 03.09.91
-|*    Letzte Aenderung  MA 11. Oct. 94
 |*
 *************************************************************************/
 
@@ -523,8 +498,6 @@ void SwNoTxtFrm::GetGrfArea( SwRect &rRect, SwRect* pOrigRect,
 |*
 |*    Beschreibung      Gebe die Groesse des umgebenen FLys und
 |*                      damit die der Grafik zurueck.
-|*    Ersterstellung    JP 04.03.91
-|*    Letzte Aenderung  JP 31.08.94
 |*
 *************************************************************************/
 
@@ -541,9 +514,6 @@ const Size& SwNoTxtFrm::GetSize() const
 /*************************************************************************
 |*
 |*    SwNoTxtFrm::MakeAll()
-|*
-|*    Ersterstellung    MA 29. Nov. 96
-|*    Letzte Aenderung  MA 29. Nov. 96
 |*
 *************************************************************************/
 
@@ -575,8 +545,6 @@ void SwNoTxtFrm::MakeAll()
 |*    SwNoTxtFrm::Format()
 |*
 |*    Beschreibung      Errechne die Groesse der Bitmap, wenn noetig
-|*    Ersterstellung    JP 11.03.91
-|*    Letzte Aenderung  MA 13. Mar. 96
 |*
 *************************************************************************/
 
@@ -598,10 +566,6 @@ void SwNoTxtFrm::Format( const SwBorderAttrs * )
 /*************************************************************************
 |*
 |*    SwNoTxtFrm::GetCharRect()
-|*
-|*    Beschreibung
-|*    Ersterstellung    SS 29-Apr-1991
-|*    Letzte Aenderung  MA 10. Oct. 94
 |*
 |*************************************************************************/
 

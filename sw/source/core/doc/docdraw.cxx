@@ -413,9 +413,6 @@ void SwDoc::UnGroupSelection( SdrView& rDrawView )
 |*
 |*  SwDoc::DeleteSelection()
 |*
-|*  Ersterstellung      MA 14. Nov. 95
-|*  Letzte Aenderung    MA 14. Nov. 95
-|*
 |*************************************************************************/
 
 BOOL SwDoc::DeleteSelection( SwDrawView& rDrawView )
@@ -513,9 +510,6 @@ BOOL SwDoc::DeleteSelection( SwDrawView& rDrawView )
 /*************************************************************************
 |*
 |*  SwDoc::DeleteSelection()
-|*
-|*  Ersterstellung      JP 11.01.96
-|*  Letzte Aenderung    JP 11.01.96
 |*
 |*************************************************************************/
 

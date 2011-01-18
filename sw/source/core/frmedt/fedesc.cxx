@@ -47,9 +47,6 @@
 |*
 |*  SwFEShell::GetPageDescCnt()
 |*
-|*  Ersterstellung      MA 25. Jan. 93
-|*  Letzte Aenderung    MA 25. Jan. 93
-|*
 |*************************************************************************/
 
 USHORT SwFEShell::GetPageDescCnt() const
@@ -60,9 +57,6 @@ USHORT SwFEShell::GetPageDescCnt() const
 /*************************************************************************
 |*
 |*  SwFEShell::ChgCurPageDesc()
-|*
-|*  Ersterstellung      ST ??
-|*  Letzte Aenderung    MA 01. Aug. 94
 |*
 |*************************************************************************/
 
@@ -134,9 +128,6 @@ void SwFEShell::ChgCurPageDesc( const SwPageDesc& rDesc )
 |*
 |*  SwFEShell::ChgPageDesc()
 |*
-|*  Ersterstellung      MA 25. Jan. 93
-|*  Letzte Aenderung    MA 24. Jan. 95
-|*
 |*************************************************************************/
 
 void SwFEShell::ChgPageDesc( USHORT i, const SwPageDesc &rChged )
@@ -158,9 +149,6 @@ void SwFEShell::ChgPageDesc( USHORT i, const SwPageDesc &rChged )
 |*
 |*  SwFEShell::GetPageDesc(), GetCurPageDesc()
 |*
-|*  Ersterstellung      MA 25. Jan. 93
-|*  Letzte Aenderung    MA 23. Apr. 93
-|
 |*************************************************************************/
 
 const SwPageDesc& SwFEShell::GetPageDesc( USHORT i ) const

@@ -1116,9 +1116,6 @@ BOOL SwCntntFrm::MakePrtArea( const SwBorderAttrs &rAttrs )
 |*
 |*  SwCntntFrm::MakeAll()
 |*
-|*  Ersterstellung      MA ??
-|*  Letzte Aenderung    MA 16. Dec. 96
-|*
 |*************************************************************************/
 
 #define STOP_FLY_FORMAT 10

@@ -79,9 +79,6 @@ BOOL SwFlowFrm::bMoveBwdJump = FALSE;
 |*
 |*  SwFlowFrm::SwFlowFrm()
 |*
-|*  Ersterstellung      MA 26. Apr. 95
-|*  Letzte Aenderung    MA 26. Apr. 95
-|*
 |*************************************************************************/
 
 
@@ -117,9 +114,6 @@ sal_Bool SwFlowFrm::HasLockedFollow() const
 |*
 |*  SwFlowFrm::IsKeepFwdMoveAllowed()
 |*
-|*  Ersterstellung      MA 20. Jul. 94
-|*  Letzte Aenderung    MA 16. May. 95
-|*
 |*************************************************************************/
 
 
@@ -147,10 +141,6 @@ BOOL SwFlowFrm::IsKeepFwdMoveAllowed()
 /*************************************************************************
 |*
 |*    SwFlowFrm::CheckKeep()
-|*
-|*    Beschreibung
-|*    Ersterstellung    MA 20. Jun. 95
-|*    Letzte Aenderung  MA 09. Apr. 97
 |*
 |*************************************************************************/
 
@@ -190,9 +180,6 @@ void SwFlowFrm::CheckKeep()
 /*************************************************************************
 |*
 |*  SwFlowFrm::IsKeep()
-|*
-|*  Ersterstellung      MA 09. Apr. 97
-|*  Letzte Aenderung    MA 09. Apr. 97
 |*
 |*************************************************************************/
 
@@ -290,9 +277,6 @@ BOOL SwFlowFrm::IsKeep( const SwAttrSet& rAttrs, bool bCheckIfLastRowShouldKeep 
 /*************************************************************************
 |*
 |*  SwFlowFrm::BwdMoveNecessary()
-|*
-|*  Ersterstellung      MA 20. Jul. 94
-|*  Letzte Aenderung    MA 02. May. 96
 |*
 |*************************************************************************/
 
@@ -410,8 +394,6 @@ BYTE SwFlowFrm::BwdMoveNecessary( const SwPageFrm *pPage, const SwRect &rRect )
 |*  Beschreibung        Eine Spezialisierte Form des Cut() und Paste(), die
 |*      eine ganze Kette umhaengt (naehmlich this und folgende). Dabei werden
 |*      nur minimale Operationen und Benachrichtigungen ausgefuehrt.
-|*  Ersterstellung      MA 18. Mar. 93
-|*  Letzte Aenderung    MA 18. May. 95
 |*
 |*************************************************************************/
 
@@ -687,9 +669,6 @@ void SwFlowFrm::MoveSubTree( SwLayoutFrm* pParent, SwFrm* pSibling )
 |*
 |*  SwFlowFrm::IsAnFollow()
 |*
-|*  Ersterstellung      MA 26. Apr. 95
-|*  Letzte Aenderung    MA 26. Apr. 95
-|*
 |*************************************************************************/
 
 
@@ -708,9 +687,6 @@ BOOL SwFlowFrm::IsAnFollow( const SwFlowFrm *pAssumed ) const
 /*************************************************************************
 |*
 |*  SwFlowFrm::FindMaster()
-|*
-|*  Ersterstellung      MA 26. Apr. 95
-|*  Letzte Aenderung    MA 26. Apr. 95
 |*
 |*************************************************************************/
 
@@ -812,8 +788,6 @@ SwTabFrm* SwTabFrm::FindMaster( bool bFirstMaster ) const
 |*      das _nicht_ unterhalb von this liegt (oder gar this selbst ist).
 |*      Ausserdem muss dieses LayoutBlatt im gleichen Textfluss wie
 |*      pAnch Ausgangsfrm liegen (Body, Ftn)
-|*  Ersterstellung      MA 25. Nov. 92
-|*  Letzte Aenderung    MA 25. Apr. 95
 |*
 |*************************************************************************/
 
@@ -850,9 +824,6 @@ const SwLayoutFrm *SwFrm::GetLeaf( MakePageType eMakePage, BOOL bFwd,
 |*  SwFrm::GetLeaf()
 |*
 |*  Beschreibung        Ruft Get[Next|Prev]Leaf
-|*
-|*  Ersterstellung      MA 20. Mar. 93
-|*  Letzte Aenderung    MA 25. Apr. 95
 |*
 |*************************************************************************/
 
@@ -975,9 +946,6 @@ BOOL SwFrm::WrongPageDesc( SwPageFrm* pNew )
 |*
 |*  Beschreibung        Liefert das naechste LayoutBlatt in den das
 |*      Frame gemoved werden kann.
-|*
-|*  Ersterstellung      MA 16. Nov. 92
-|*  Letzte Aenderung    MA 05. Dec. 96
 |*
 |*************************************************************************/
 
@@ -1119,8 +1087,6 @@ SwLayoutFrm *SwFrm::GetNextLeaf( MakePageType eMakePage )
 |*
 |*  Beschreibung        Liefert das vorhergehende LayoutBlatt in das der
 |*      Frame gemoved werden kann.
-|*  Ersterstellung      MA 16. Nov. 92
-|*  Letzte Aenderung    MA 25. Apr. 95
 |*
 |*************************************************************************/
 
@@ -1161,9 +1127,6 @@ SwLayoutFrm *SwFrm::GetPrevLeaf( MakePageType )
 /*************************************************************************
 |*
 |*  SwFlowFrm::IsPrevObjMove()
-|*
-|*  Ersterstellung      MA 20. Feb. 96
-|*  Letzte Aenderung    MA 22. Feb. 96
 |*
 |*************************************************************************/
 
@@ -1244,8 +1207,6 @@ BOOL SwFlowFrm::IsPrevObjMove() const
 |*      im FrmFmt ein PageDesc angegeben wird.
 |*      Die Implementierung arbeitet zuaechst nur auf CntntFrms!
 |*      -->Fuer LayoutFrms ist die Definition des Vorgaengers unklar.
-|*  Ersterstellung      MA ??
-|*  Letzte Aenderung    MA 21. Mar. 95
 |*
 |*************************************************************************/
 
@@ -1308,8 +1269,6 @@ BOOL SwFlowFrm::IsPageBreak( BOOL bAct ) const
 |*      gibt ist jede weitere Ueberlegung ueberfluessig.
 |*      Die Implementierung arbeitet zuaechst nur auf CntntFrms!
 |*      -->Fuer LayoutFrms ist die Definition des Vorgaengers unklar.
-|*  Ersterstellung      MA 11. Jun. 93
-|*  Letzte Aenderung    MA 21. Mar. 95
 |*
 |*************************************************************************/
 
@@ -1847,8 +1806,6 @@ SwTwips SwFlowFrm::CalcAddLowerSpaceAsLastInTableCell(
 |*
 |*  Beschreibung        Moved den Frm vorwaerts wenn es durch die aktuellen
 |*      Bedingungen und Attribute notwendig erscheint.
-|*  Ersterstellung      MA 05. Dec. 96
-|*  Letzte Aenderung    MA 09. Mar. 98
 |*
 |*************************************************************************/
 
@@ -1942,8 +1899,6 @@ BOOL SwFlowFrm::CheckMoveFwd( BOOL &rbMakePage, BOOL bKeep, BOOL )
 |*  BOOL SwFlowFrm::MoveFwd()
 |*
 |*  Beschreibung        Returnwert sagt, ob der Frm die Seite gewechselt hat.
-|*  Ersterstellung      MA 05. Dec. 96
-|*  Letzte Aenderung    MA 05. Dec. 96
 |*
 |*************************************************************************/
 
@@ -2150,8 +2105,6 @@ BOOL SwFlowFrm::MoveFwd( BOOL bMakePage, BOOL bPageBreak, BOOL bMoveAlways )
 |*  Beschreibung        Returnwert sagt, ob der Frm die Seite wechseln soll.
 |*                      Sollte von abgeleiteten Klassen gerufen werden.
 |*                      Das moven selbst muessen die abgeleiteten uebernehmen.
-|*  Ersterstellung      MA 05. Dec. 96
-|*  Letzte Aenderung    MA 05. Dec. 96
 |*
 |*************************************************************************/
 
@@ -2708,9 +2661,6 @@ BOOL SwFlowFrm::MoveBwd( BOOL &rbReformat )
 /*************************************************************************
 |*
 |*  SwFlowFrm::CastFlowFrm
-|*
-|*  Ersterstellung      MA 03. May. 95
-|*  Letzte Aenderung    AMA 02. Dec. 97
 |*
 |*************************************************************************/
 
