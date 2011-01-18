@@ -41,6 +41,7 @@
 #include "drawview.hxx"
 #include "gridwin.hxx"
 #include "AccessibleEditObject.hxx"
+#include "userdat.hxx"
 #include "scresid.hxx"
 #include "sc.hrc"
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
@@ -977,35 +978,10 @@ ScAddress* ScChildrenShapes::GetAnchor(const uno::Reference<drawing::XShape>& xS
         uno::Reference<beans::XPropertySet> xShapeProp(xShape, uno::UNO_QUERY);
         if (pShapeImp && xShapeProp.is())
         {
-            SdrObject *pSdrObj = pShapeImp->GetSdrObject();
-            if (pSdrObj)
+            if (SdrObject *pSdrObj = pShapeImp->GetSdrObject())
             {
-                if (ScDrawLayer::GetAnchor(pSdrObj) == SCA_CELL)
-                {
-                    ScDocument* pDoc = mpViewShell->GetViewData()->GetDocument();
-                    if (pDoc)
-                    {
-                        rtl::OUString sCaptionShape(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.CaptionShape"));
-                        awt::Point aPoint(xShape->getPosition());
-                        awt::Size aSize(xShape->getSize());
-                        rtl::OUString sType(xShape->getShapeType());
-                        Rectangle aRectangle(aPoint.X, aPoint.Y, aPoint.X + aSize.Width, aPoint.Y + aSize.Height);
-                        if ( sType.equals(sCaptionShape) )
-                        {
-                            awt::Point aRelativeCaptionPoint;
-                            rtl::OUString sCaptionPoint( RTL_CONSTASCII_USTRINGPARAM( "CaptionPoint" ));
-                            xShapeProp->getPropertyValue( sCaptionPoint ) >>= aRelativeCaptionPoint;
-                            Point aCoreRelativeCaptionPoint(aRelativeCaptionPoint.X, aRelativeCaptionPoint.Y);
-                            Point aCoreAbsoluteCaptionPoint(aPoint.X, aPoint.Y);
-                            aCoreAbsoluteCaptionPoint += aCoreRelativeCaptionPoint;
-                            aRectangle.Union(Rectangle(aCoreAbsoluteCaptionPoint, aCoreAbsoluteCaptionPoint));
-                        }
-                        ScRange aRange = pDoc->GetRange(mpAccessibleDocument->getVisibleTable(), aRectangle);
-                        pAddress = new ScAddress(aRange.aStart);
-                    }
-                }
-//              else
-//                  do nothing, because it is always a NULL Pointer
+                if (ScDrawObjData *pAnchor = ScDrawLayer::GetObjData(pSdrObj))
+                    return new ScAddress(pAnchor->maStart);
             }
         }
     }

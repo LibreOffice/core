@@ -159,7 +159,7 @@ ScXMLTabProtectionData::ScXMLTabProtectionData() :
 
 ScMyTables::ScMyTables(ScXMLImport& rTempImport)
     : rImport(rTempImport),
-    aResizeShapes(rTempImport),
+    aFixupOLEs(rTempImport),
     nCurrentColStylePos(0),
     nCurrentDrawPage( -1 ),
     nCurrentXShapes( -1 ),
@@ -761,12 +761,10 @@ sal_Bool ScMyTables::HasXShapes()
     return !((nCurrentSheet != nCurrentXShapes) || !xShapes.is());
 }
 
-void ScMyTables::AddShape(uno::Reference <drawing::XShape>& rShape,
-    rtl::OUString* pRangeList,
-    table::CellAddress& rStartAddress, table::CellAddress& rEndAddress,
-    sal_Int32 nEndX, sal_Int32 nEndY)
+void ScMyTables::AddOLE(uno::Reference <drawing::XShape>& rShape,
+      const rtl::OUString &rRangeList)
 {
-    aResizeShapes.AddShape(rShape, pRangeList, rStartAddress, rEndAddress, nEndX, nEndY);
+      aFixupOLEs.AddOLE(rShape, rRangeList);
 }
 
 void ScMyTables::AddMatrixRange(

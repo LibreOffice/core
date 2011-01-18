@@ -682,39 +682,21 @@ void ScXMLExport::CollectSharedData(sal_Int32& nTableCount, sal_Int32& nShapesCo
                                                 else
                                                 {
                                                     ++nShapesCount;
-                                                    SvxShape* pShapeImp(SvxShape::getImplementation(xShape));
-                                                    if (pShapeImp)
+                                                    if (SvxShape* pShapeImp = SvxShape::getImplementation(xShape))
                                                     {
-                                                        SdrObject *pSdrObj(pShapeImp->GetSdrObject());
-                                                        if (pSdrObj)
+                                                        if (SdrObject *pSdrObj = pShapeImp->GetSdrObject())
                                                         {
-                                                            if (ScDrawLayer::GetAnchor(pSdrObj) == SCA_CELL)
+                                                            if (ScDrawObjData *pAnchor = ScDrawLayer::GetObjData( pSdrObj ))
                                                             {
-                                                                if (pDoc)
-                                                                {
-
-                                                                    awt::Point aPoint(xShape->getPosition());
-                                                                    awt::Size aSize(xShape->getSize());
-                                                                    rtl::OUString sType(xShape->getShapeType());
-                                                                    Rectangle aRectangle(aPoint.X, aPoint.Y, aPoint.X + aSize.Width, aPoint.Y + aSize.Height);
-                                                                    if ( sType.equals(sCaptionShape) )
-                                                                    {
-                                                                        awt::Point aRelativeCaptionPoint;
-                                                                        xShapeProp->getPropertyValue( sCaptionPoint ) >>= aRelativeCaptionPoint;
-                                                                        Point aCoreRelativeCaptionPoint(aRelativeCaptionPoint.X, aRelativeCaptionPoint.Y);
-                                                                        Point aCoreAbsoluteCaptionPoint(aPoint.X, aPoint.Y);
-                                                                        aCoreAbsoluteCaptionPoint += aCoreRelativeCaptionPoint;
-                                                                        aRectangle.Union(Rectangle(aCoreAbsoluteCaptionPoint, aCoreAbsoluteCaptionPoint));
-                                                                    }
-                                                                    ScRange aRange(pDoc->GetRange(static_cast<SCTAB>(nTable), aRectangle));
-                                                                    ScMyShape aMyShape;
-                                                                    aMyShape.aAddress = aRange.aStart;
-                                                                    aMyShape.aEndAddress = aRange.aEnd;
-                                                                    aMyShape.xShape = xShape;
-                                                                    pSharedData->AddNewShape(aMyShape);
-                                                                    pSharedData->SetLastColumn(nTable, aRange.aStart.Col());
-                                                                    pSharedData->SetLastRow(nTable, aRange.aStart.Row());
-                                                                }
+                                                                ScMyShape aMyShape;
+                                                                aMyShape.aAddress = pAnchor->maStart;
+                                                                aMyShape.aEndAddress = pAnchor->maEnd;
+                                                                aMyShape.nEndX = pAnchor->maEndOffset.X();
+                                                                aMyShape.nEndY = pAnchor->maEndOffset.Y();
+                                                                aMyShape.xShape = xShape;
+                                                                pSharedData->AddNewShape(aMyShape);
+                                                                pSharedData->SetLastColumn(nTable, pAnchor->maStart.Col());
+                                                                pSharedData->SetLastRow(nTable, pAnchor->maStart.Row());
                                                             }
                                                             else
                                                                 pSharedData->AddTableShape(nTable, xShape);
@@ -3208,29 +3190,15 @@ void ScXMLExport::WriteShapes(const ScMyCell& rMyCell)
                     aPoint.X = 2 * aItr->xShape->getPosition().X + aItr->xShape->getSize().Width - aPoint.X;
                 if ( !aItr->xShape->getShapeType().equals(sCaptionShape) )
                 {
-                    awt::Point aEndPoint;
                     Rectangle aEndRec(pDoc->GetMMRect(aItr->aEndAddress.Col(), aItr->aEndAddress.Row(),
                         aItr->aEndAddress.Col(), aItr->aEndAddress.Row(), aItr->aEndAddress.Tab()));
                     rtl::OUString sEndAddress;
                     ScRangeStringConverter::GetStringFromAddress(sEndAddress, aItr->aEndAddress, pDoc, FormulaGrammar::CONV_OOO);
                     AddAttribute(XML_NAMESPACE_TABLE, XML_END_CELL_ADDRESS, sEndAddress);
-                    if (bNegativePage)
-                        aEndPoint.X = -aEndRec.Right();
-                    else
-                        aEndPoint.X = aEndRec.Left();
-                    aEndPoint.Y = aEndRec.Top();
-                    awt::Point aStartPoint(aItr->xShape->getPosition());
-                    awt::Size aSize(aItr->xShape->getSize());
-                    sal_Int32 nEndX;
-                    if (bNegativePage)
-                        nEndX = -aStartPoint.X - aEndPoint.X;
-                    else
-                        nEndX = aStartPoint.X + aSize.Width - aEndPoint.X;
-                    sal_Int32 nEndY(aStartPoint.Y + aSize.Height - aEndPoint.Y);
                     rtl::OUStringBuffer sBuffer;
-                    GetMM100UnitConverter().convertMeasure(sBuffer, nEndX);
+                    GetMM100UnitConverter().convertMeasure(sBuffer, aItr->nEndX);
                     AddAttribute(XML_NAMESPACE_TABLE, XML_END_X, sBuffer.makeStringAndClear());
-                    GetMM100UnitConverter().convertMeasure(sBuffer, nEndY);
+                    GetMM100UnitConverter().convertMeasure(sBuffer, aItr->nEndY);
                     AddAttribute(XML_NAMESPACE_TABLE, XML_END_Y, sBuffer.makeStringAndClear());
                 }
                 ExportShape(aItr->xShape, &aPoint);

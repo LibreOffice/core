@@ -61,12 +61,15 @@ class ScDrawObjData : public SdrObjUserData
 public:
     ScAddress           maStart;
     ScAddress           maEnd;
+    Point               maStartOffset;
+    Point               maEndOffset;
     bool                mbNote;
+    Rectangle           maLastRect;
 
     explicit            ScDrawObjData();
 
 private:
-    virtual ScDrawObjData* Clone( SdrObject* pObj ) const;
+     virtual ScDrawObjData* Clone( SdrObject* pObj ) const;
 };
 
 //-------------------------------------------------------------------------

@@ -34,6 +34,7 @@
 #include "drwlayer.hxx"
 #include "xmlannoi.hxx"
 #include "rangeutl.hxx"
+#include "userdat.hxx"
 #include "docuno.hxx"
 #include "sheetdata.hxx"
 #include <xmloff/nmspmap.hxx>
@@ -90,6 +91,11 @@ void XMLTableShapeImportHelper::finishShape(
     {
         if (!pAnnotationContext)
         {
+            ScDrawObjData aAnchor;
+            aAnchor.maStart = ScAddress(aStartCell.Column, aStartCell.Row, aStartCell.Sheet);
+            awt::Point aStartPoint(rShape->getPosition());
+            aAnchor.maStartOffset = Point(aStartPoint.X, aStartPoint.Y);
+
             sal_Int32 nEndX(-1);
             sal_Int32 nEndY(-1);
             sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
@@ -111,11 +117,18 @@ void XMLTableShapeImportHelper::finishShape(
                     {
                         sal_Int32 nOffset(0);
                         ScRangeStringConverter::GetAddressFromString(aEndCell, rValue, static_cast<ScXMLImport&>(mrImporter).GetDocument(), ::formula::FormulaGrammar::CONV_OOO, nOffset);
+                        aAnchor.maEnd = ScAddress(aEndCell.Column, aEndCell.Row, aEndCell.Sheet);
                     }
                     else if (IsXMLToken(aLocalName, XML_END_X))
+                    {
                         static_cast<ScXMLImport&>(mrImporter).GetMM100UnitConverter().convertMeasure(nEndX, rValue);
+                        aAnchor.maEndOffset.X() = nEndX;
+                    }
                     else if (IsXMLToken(aLocalName, XML_END_Y))
+                    {
                         static_cast<ScXMLImport&>(mrImporter).GetMM100UnitConverter().convertMeasure(nEndY, rValue);
+                        aAnchor.maEndOffset.Y() = nEndY;
+                    }
                     else if (IsXMLToken(aLocalName, XML_TABLE_BACKGROUND))
                         if (IsXMLToken(rValue, XML_TRUE))
                             nLayerID = SC_LAYER_BACK;
@@ -128,39 +141,28 @@ void XMLTableShapeImportHelper::finishShape(
             }
             SetLayer(rShape, nLayerID, rShape->getShapeType());
 
-            if (!bOnTable)
+            if (SvxShape* pShapeImp = SvxShape::getImplementation(rShape))
             {
-                rTables.AddShape(rShape,
-                    pRangeList, aStartCell, aEndCell, nEndX, nEndY);
-                SvxShape* pShapeImp = SvxShape::getImplementation(rShape);
-                if (pShapeImp)
+                if (SdrObject *pSdrObj = pShapeImp->GetSdrObject())
                 {
-                    SdrObject *pSdrObj = pShapeImp->GetSdrObject();
-                    if (pSdrObj)
-                        ScDrawLayer::SetAnchor(pSdrObj, SCA_CELL);
+                    if (!bOnTable)
+                        ScDrawLayer::SetCellAnchored(*pSdrObj, aAnchor);
+                    else
+                        ScDrawLayer::SetPageAnchored(*pSdrObj);
                 }
             }
-            else
+
+            if ( bOnTable && pRangeList )
             {
-                if ( pRangeList )
-                {
-                    // #i78086# If there are notification ranges, the ChartListener must be created
-                    // also when anchored to the sheet
-                    // -> call AddShape with invalid cell position (checked in ScMyShapeResizer::ResizeShapes)
+                // #i78086# If there are notification ranges, the ChartListener must be created
+                // also when anchored to the sheet
+                // -> call AddOLE with invalid cell position (checked in ScMyShapeResizer::ResizeShapes)
 
-                    table::CellAddress aInvalidPos( -1, -1, -1 );
-                    rTables.AddShape(rShape,
-                        pRangeList, aInvalidPos, aInvalidPos, 0, 0);
-                }
-
-                SvxShape* pShapeImp = SvxShape::getImplementation(rShape);
-                if (pShapeImp)
-                {
-                    SdrObject *pSdrObj = pShapeImp->GetSdrObject();
-                    if (pSdrObj)
-                        ScDrawLayer::SetAnchor(pSdrObj, SCA_PAGE);
-                }
+                if (rTables.IsOLE(rShape))
+                    rTables.AddOLE(rShape, *pRangeList);
             }
+
+            delete pRangeList;
         }
         else // shape is annotation
         {

@@ -1575,7 +1575,7 @@ bool lcl_AddTwipsWhile( long & rTwips, long nStopTwips, SCROW & rPosY, SCROW nEn
     return bAdded;
 }
 
-ScRange ScDocument::GetRange( SCTAB nTab, const Rectangle& rMMRect )
+ScRange ScDocument::GetRange( SCTAB nTab, const Rectangle& rMMRect ) const
 {
     ScTable* pTable = pTab[nTab];
     if (!pTable)
@@ -1875,8 +1875,7 @@ void ScDocument::SetDrawDefaults()
     UpdateDrawDefaults();
 }
 
-Rectangle ScDocument::GetMMRect( SCCOL nStartCol, SCROW nStartRow,
-                                SCCOL nEndCol, SCROW nEndRow, SCTAB nTab )
+Rectangle ScDocument::GetMMRect( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow, SCTAB nTab ) const
 {
     if (!ValidTab(nTab) || !pTab[nTab])
     {

@@ -502,7 +502,6 @@ BOOL ScDetectiveFunc::InsertArrow( SCCOL nCol, SCROW nRow,
 
         pBox->SetMergedItemSetAndBroadcast(rData.GetBoxSet());
 
-        ScDrawLayer::SetAnchor( pBox, SCA_CELL );
         pBox->SetLayer( SC_LAYER_INTERN );
         pPage->InsertObject( pBox );
         pModel->AddCalcUndo( new SdrUndoInsertObj( *pBox ) );
@@ -544,7 +543,6 @@ BOOL ScDetectiveFunc::InsertArrow( SCCOL nCol, SCROW nRow,
     pArrow->NbcSetLogicRect(Rectangle(aStartPos,aEndPos));  //! noetig ???
     pArrow->SetMergedItemSetAndBroadcast(rAttrSet);
 
-    ScDrawLayer::SetAnchor( pArrow, SCA_CELL );
     pArrow->SetLayer( SC_LAYER_INTERN );
     pPage->InsertObject( pArrow );
     pModel->AddCalcUndo( new SdrUndoInsertObj( *pArrow ) );
@@ -576,7 +574,6 @@ BOOL ScDetectiveFunc::InsertToOtherTab( SCCOL nStartCol, SCROW nStartRow,
 
         pBox->SetMergedItemSetAndBroadcast(rData.GetBoxSet());
 
-        ScDrawLayer::SetAnchor( pBox, SCA_CELL );
         pBox->SetLayer( SC_LAYER_INTERN );
         pPage->InsertObject( pBox );
         pModel->AddCalcUndo( new SdrUndoInsertObj( *pBox ) );
@@ -611,7 +608,6 @@ BOOL ScDetectiveFunc::InsertToOtherTab( SCCOL nStartCol, SCROW nStartRow,
 
     pArrow->SetMergedItemSetAndBroadcast(rAttrSet);
 
-    ScDrawLayer::SetAnchor( pArrow, SCA_CELL );
     pArrow->SetLayer( SC_LAYER_INTERN );
     pPage->InsertObject( pArrow );
     pModel->AddCalcUndo( new SdrUndoInsertObj( *pArrow ) );
@@ -680,7 +676,6 @@ void ScDetectiveFunc::DrawCircle( SCCOL nCol, SCROW nRow, ScDetectiveData& rData
 
     pCircle->SetMergedItemSetAndBroadcast(rAttrSet);
 
-    ScDrawLayer::SetAnchor( pCircle, SCA_CELL );
     pCircle->SetLayer( SC_LAYER_INTERN );
     pPage->InsertObject( pCircle );
     pModel->AddCalcUndo( new SdrUndoInsertObj( *pCircle ) );

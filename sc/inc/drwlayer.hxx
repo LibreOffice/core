@@ -107,12 +107,10 @@ private:
     BOOL            bHyphenatorSet;
 
 private:
-    void            MoveAreaTwips( SCTAB nTab, const Rectangle& rArea, const Point& rMove,
-                                const Point& rTopLeft );
     void            MoveCells( SCTAB nTab, SCCOL nCol1,SCROW nRow1, SCCOL nCol2,SCROW nRow2,
                                 SCsCOL nDx,SCsROW nDy, bool bUpdateNoteCaptionPos );
 
-    void            RecalcPos( SdrObject* pObj, const ScDrawObjData& rData, bool bNegativePage, bool bUpdateNoteCaptionPos );
+    void            RecalcPos( SdrObject* pObj, ScDrawObjData& rData, bool bNegativePage, bool bUpdateNoteCaptionPos );
 
 public:
                     ScDrawLayer( ScDocument* pDocument, const String& rName );
@@ -154,8 +152,6 @@ public:
 
     void            MoveArea( SCTAB nTab, SCCOL nCol1,SCROW nRow1, SCCOL nCol2,SCROW nRow2,
                                 SCsCOL nDx,SCsROW nDy, BOOL bInsDel, bool bUpdateNoteCaptionPos = true );
-    void            WidthChanged( SCTAB nTab, SCCOL nCol, long nDifTwips );
-    void            HeightChanged( SCTAB nTab, SCROW nRow, long nDifTwips );
 
     BOOL            HasObjectsInRows( SCTAB nTab, SCROW nStartRow, SCROW nEndRow, bool bIncludeNotes = true );
 
@@ -188,8 +184,11 @@ public:
     String          GetNewGraphicName( long* pnCounter = NULL ) const;
     void            EnsureGraphicNames();
 
-    static void     SetAnchor( SdrObject*, ScAnchorType );
-    static ScAnchorType GetAnchor( const SdrObject* );
+    static void             SetPageAnchored( SdrObject& );
+    static void             SetCellAnchored( SdrObject&, const ScDrawObjData &rAnchor );
+    static void             SetCellAnchoredFromPosition( SdrObject &rObj, const ScDocument &rDoc, SCTAB nTab );
+    static void             UpdateCellAnchorFromPositionEnd( SdrObject &rObj, const ScDocument &rDoc, SCTAB nTab );
+    static ScAnchorType     GetAnchorType( const SdrObject& );
 
     // positions for detektive lines
     static ScDrawObjData* GetObjData( SdrObject* pObj, BOOL bCreate=FALSE );

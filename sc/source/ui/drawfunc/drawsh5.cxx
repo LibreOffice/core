@@ -385,26 +385,26 @@ void ScDrawShell::ExecDrawFunc( SfxRequest& rReq )
             break;
 
         case SID_ANCHOR_PAGE:
-            pView->SetAnchor( SCA_PAGE );
+            pView->SetPageAnchored();
             rBindings.Invalidate( SID_ANCHOR_PAGE );
             rBindings.Invalidate( SID_ANCHOR_CELL );
             break;
 
         case SID_ANCHOR_CELL:
-            pView->SetAnchor( SCA_CELL );
+            pView->SetCellAnchored();
             rBindings.Invalidate( SID_ANCHOR_PAGE );
             rBindings.Invalidate( SID_ANCHOR_CELL );
             break;
 
         case SID_ANCHOR_TOGGLE:
             {
-                switch( pView->GetAnchor() )
+                switch( pView->GetAnchorType() )
                 {
                     case SCA_CELL:
-                    pView->SetAnchor( SCA_PAGE );
+                    pView->SetPageAnchored();
                     break;
                     default:
-                    pView->SetAnchor( SCA_CELL );
+                    pView->SetCellAnchored();
                     break;
                 }
             }

@@ -978,7 +978,7 @@ GetEditAs( XclObjAny& rObj )
     if( const SdrObject* pShape = EscherEx::GetSdrObject( rObj.GetShape() ) )
     {
         // OOXTODO: returning "twoCell"
-        switch( ScDrawLayer::GetAnchor( pShape ) )
+        switch( ScDrawLayer::GetAnchorType( *pShape ) )
         {
             case SCA_CELL:  return "oneCell";
             default:        break;

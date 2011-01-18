@@ -113,7 +113,7 @@ void ScDrawShell::GetState( SfxItemSet& rSet )          // Zustaende / Toggles
 
     if ( !bDisableAnchor )
     {
-        switch( pView->GetAnchor() )
+        switch( pView->GetAnchorType() )
         {
         case SCA_PAGE:
             rSet.Put( SfxBoolItem( SID_ANCHOR_PAGE, TRUE ) );

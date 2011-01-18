@@ -71,6 +71,8 @@ struct ScMyShape
 {
     ScAddress   aAddress;
     ScAddress   aEndAddress;
+    sal_Int32       nEndX;
+    sal_Int32       nEndY;
     com::sun::star::uno::Reference<com::sun::star::drawing::XShape> xShape;
 
     sal_Bool operator<(const ScMyShape& aShape) const;

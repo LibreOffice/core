@@ -1742,11 +1742,6 @@ SCSIZE ScTable::Query(ScQueryParam& rParamOrg, BOOL bKeepSub)
         std::vector<ScShowRowsEntry>::const_iterator aIter = aEntries.begin();
         if ( aIter != aEnd )
         {
-            // do only one HeightChanged call with the final difference in heights
-            long nOldHeight = 0;
-            if ( pDrawLayer )
-                nOldHeight = static_cast<long>(GetRowHeight(aParam.nRow1 + nHeader, aParam.nRow2));
-
             // clear the range first instead of many changes in the middle of the filled array
             SetRowHidden(aParam.nRow1 + nHeader, aParam.nRow2, false);
             SetRowFiltered(aParam.nRow1 + nHeader, aParam.nRow2, false);
@@ -1769,13 +1764,6 @@ SCSIZE ScTable::Query(ScQueryParam& rParamOrg, BOOL bKeepSub)
 
             mpHiddenRows->setInsertFromBack(false);
             mpFilteredRows->setInsertFromBack(false);
-
-            if ( pDrawLayer )
-            {
-                // if there are no objects in the filtered range, a single HeightChanged call is enough
-                long nNewHeight = static_cast<long>(GetRowHeight(aParam.nRow1 + nHeader, aParam.nRow2));
-                pDrawLayer->HeightChanged( nTab, aParam.nRow1 + nHeader, nNewHeight - nOldHeight );
-            }
         }
     }
 

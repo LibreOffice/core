@@ -2102,9 +2102,6 @@ void ScTable::SetColWidth( SCCOL nCol, USHORT nNewWidth )
         {
             IncRecalcLevel();
             InitializeNoteCaptions();
-            ScDrawLayer* pDrawLayer = pDocument->GetDrawLayer();
-            if (pDrawLayer)
-                pDrawLayer->WidthChanged( nTab, nCol, ((long) nNewWidth) - (long) pColWidth[nCol] );
             pColWidth[nCol] = nNewWidth;
             DecRecalcLevel();
 
@@ -2144,9 +2141,6 @@ void ScTable::SetRowHeight( SCROW nRow, USHORT nNewHeight )
         {
             IncRecalcLevel();
             InitializeNoteCaptions();
-            ScDrawLayer* pDrawLayer = pDocument->GetDrawLayer();
-            if (pDrawLayer)
-                pDrawLayer->HeightChanged( nTab, nRow, ((long) nNewHeight) - (long) nOldHeight );
             mpRowHeights->setValue(nRow, nRow, nNewHeight);
             DecRecalcLevel();
 
@@ -2227,22 +2221,7 @@ BOOL ScTable::SetRowHeightRange( SCROW nStartRow, SCROW nEndRow, USHORT nNewHeig
                 if (!bChanged)
                     bChanged = lcl_pixelSizeChanged(*mpRowHeights, nStartRow, nEndRow, nNewHeight, nPPTY);
 
-                /*  #i94028# #i94991# If drawing objects are involved, each row
-                    has to be changed for its own, because each call to
-                    ScDrawLayer::HeightChanged expects correct row heights
-                    above passed row in the document. Cannot use array iterator
-                    because array changes in every cycle. */
-                if( pDrawLayer )
-                {
-                    for( SCROW nRow = nStartRow; nRow <= nEndRow ; ++nRow )
-                    {
-                        pDrawLayer->HeightChanged( nTab, nRow,
-                             static_cast<long>(nNewHeight) - static_cast<long>(mpRowHeights->getValue(nRow)));
-                        mpRowHeights->setValue(nRow, nRow, nNewHeight);
-                    }
-                }
-                else
-                    mpRowHeights->setValue(nStartRow, nEndRow, nNewHeight);
+                mpRowHeights->setValue(nStartRow, nEndRow, nNewHeight);
             }
             else
             {
@@ -2255,17 +2234,6 @@ BOOL ScTable::SetRowHeightRange( SCROW nStartRow, SCROW nEndRow, USHORT nNewHeig
         }
         else
         {
-            if (pDrawLayer)
-            {
-                // #i115025# When comparing to nNewHeight for the whole range, the height
-                // including hidden rows has to be used (same behavior as 3.2).
-                unsigned long nOldHeights = mpRowHeights->getSumValue(nStartRow, nEndRow);
-                // FIXME: should we test for overflows?
-                long nHeightDif = (long) (unsigned long) nNewHeight *
-                    (nEndRow - nStartRow + 1) - nOldHeights;
-                pDrawLayer->HeightChanged( nTab, nEndRow, nHeightDif );
-            }
-
             if (!bChanged)
                 bChanged = lcl_pixelSizeChanged(*mpRowHeights, nStartRow, nEndRow, nNewHeight, nPPTY);
 
@@ -2519,17 +2487,9 @@ void ScTable::ShowCol(SCCOL nCol, bool bShow)
         {
             IncRecalcLevel();
             InitializeNoteCaptions();
-            ScDrawLayer* pDrawLayer = pDocument->GetDrawLayer();
-            if (pDrawLayer)
-            {
-                if (bShow)
-                    pDrawLayer->WidthChanged( nTab, nCol, (long) pColWidth[nCol] );
-                else
-                    pDrawLayer->WidthChanged( nTab, nCol, -(long) pColWidth[nCol] );
-            }
 
             SetColHidden(nCol, nCol, !bShow);
-        DecRecalcLevel();
+            DecRecalcLevel();
 
             ScChartListenerCollection* pCharts = pDocument->GetChartListenerCollection();
             if ( pCharts )
@@ -2550,17 +2510,6 @@ void ScTable::ShowRow(SCROW nRow, bool bShow)
         bool bWasVis = !RowHidden(nRow);
         if (bWasVis != bShow)
         {
-            ScDrawLayer* pDrawLayer = pDocument->GetDrawLayer();
-            if (pDrawLayer)
-            {
-                if (bShow)
-                    pDrawLayer->HeightChanged(
-                        nTab, nRow, static_cast<long>(mpRowHeights->getValue(nRow)));
-                else
-                    pDrawLayer->HeightChanged(
-                        nTab, nRow, -static_cast<long>(mpRowHeights->getValue(nRow)));
-            }
-
             SetRowHidden(nRow, nRow, !bShow);
             if (bShow)
                 SetRowFiltered(nRow, nRow, false);
@@ -2585,19 +2534,6 @@ void ScTable::DBShowRow(SCROW nRow, bool bShow)
         bool bWasVis = !RowHidden(nRow);
         IncRecalcLevel();
         InitializeNoteCaptions();
-        if (bWasVis != bShow)
-        {
-            ScDrawLayer* pDrawLayer = pDocument->GetDrawLayer();
-            if (pDrawLayer)
-            {
-                if (bShow)
-                    pDrawLayer->HeightChanged(
-                        nTab, nRow, static_cast<long>(mpRowHeights->getValue(nRow)));
-                else
-                    pDrawLayer->HeightChanged(
-                        nTab, nRow, -static_cast<long>(mpRowHeights->getValue(nRow)));
-            }
-        }
 
         //  Filter-Flag immer setzen, auch wenn Hidden unveraendert
         SetRowHidden(nRow, nRow, !bShow);
@@ -2635,18 +2571,6 @@ void ScTable::DBShowRows(SCROW nRow1, SCROW nRow2, bool bShow, bool bSetFlags)
             nEndRow = nRow2;
 
         BOOL bChanged = ( bWasVis != bShow );
-        if ( bChanged && bSetFlags )
-        {
-            ScDrawLayer* pDrawLayer = pDocument->GetDrawLayer();
-            if (pDrawLayer)
-            {
-                long nHeight = static_cast<long>(mpRowHeights->getSumValue(nStartRow, nEndRow));
-                if (bShow)
-                    pDrawLayer->HeightChanged( nTab, nStartRow, nHeight );
-                else
-                    pDrawLayer->HeightChanged( nTab, nStartRow, -nHeight );
-            }
-        }
 
         // #i116164# Directly modify the flags only if there are drawing objects within the area.
         // Otherwise, all modifications are made together in ScTable::Query, so the tree isn't constantly rebuilt.
@@ -2683,9 +2607,6 @@ void ScTable::ShowRows(SCROW nRow1, SCROW nRow2, bool bShow)
     // #i116164# if there are no drawing objects within the row range, a single HeightChanged call is enough
     ScDrawLayer* pDrawLayer = pDocument->GetDrawLayer();
     bool bHasObjects = pDrawLayer && pDrawLayer->HasObjectsInRows( nTab, nRow1, nRow2, false );
-    long nOldHeight = 0;
-    if ( pDrawLayer && !bHasObjects )
-        nOldHeight = static_cast<long>(GetRowHeight(nRow1, nRow2));
 
     while (nStartRow <= nRow2)
     {
@@ -2695,17 +2616,6 @@ void ScTable::ShowRows(SCROW nRow1, SCROW nRow2, bool bShow)
             nEndRow = nRow2;
 
         BOOL bChanged = ( bWasVis != bShow );
-        if ( bChanged && bHasObjects )
-        {
-            if (pDrawLayer)
-            {
-                long nHeight = static_cast<long>(mpRowHeights->getSumValue(nStartRow, nEndRow));
-                if (bShow)
-                    pDrawLayer->HeightChanged( nTab, nStartRow, nHeight );
-                else
-                    pDrawLayer->HeightChanged( nTab, nStartRow, -nHeight );
-            }
-        }
 
         // #i116164# Directly modify the flags only if there are drawing objects within the area.
         // Otherwise, all rows are modified together after the loop, so the tree isn't constantly rebuilt.
@@ -2734,16 +2644,6 @@ void ScTable::ShowRows(SCROW nRow1, SCROW nRow2, bool bShow)
         SetRowHidden(nRow1, nRow2, !bShow);
         if (bShow)
             SetRowFiltered(nRow1, nRow2, false);
-
-        if ( pDrawLayer )
-        {
-            // if there are no objects in the range, a single HeightChanged call is enough
-            long nNewHeight = 0;
-            if ( bShow )
-                nNewHeight = static_cast<long>(GetRowHeight(nRow1, nRow2));
-            if ( nNewHeight != nOldHeight )
-                pDrawLayer->HeightChanged( nTab, nRow1, nNewHeight - nOldHeight );
-        }
     }
 
     DecRecalcLevel();

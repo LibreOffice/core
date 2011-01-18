@@ -2918,7 +2918,7 @@ throw( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeE
         }
 
         aTables.UpdateRowHeights();
-        aTables.ResizeShapes();
+        aTables.FixupOLEs();
     }
     if (GetModel().is())
     {

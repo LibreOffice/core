@@ -1432,8 +1432,8 @@ public:
     void            RestorePrintRanges( const ScPrintRangeSaver& rSaver );
 
     SC_DLLPUBLIC Rectangle      GetMMRect( SCCOL nStartCol, SCROW nStartRow,
-                                SCCOL nEndCol, SCROW nEndRow, SCTAB nTab );
-    SC_DLLPUBLIC ScRange            GetRange( SCTAB nTab, const Rectangle& rMMRect );
+                                           SCCOL nEndCol, SCROW nEndRow, SCTAB nTab ) const;
+    SC_DLLPUBLIC ScRange            GetRange( SCTAB nTab, const Rectangle& rMMRect ) const;
 
     void            UpdStlShtPtrsFrmNms();
     void            StylesToNames();

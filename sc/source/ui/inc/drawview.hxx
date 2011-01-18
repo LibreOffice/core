@@ -93,8 +93,9 @@ public:
 
     void            CalcNormScale( Fraction& rFractX, Fraction& rFractY ) const;
 
-    void            SetAnchor( ScAnchorType );
-    ScAnchorType    GetAnchor() const;
+    void            SetPageAnchored();
+    void            SetCellAnchored();
+    ScAnchorType    GetAnchorType() const;
 
     void            VCAddWin( Window* pWin );
     void            VCRemoveWin( Window* pWin );

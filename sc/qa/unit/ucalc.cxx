@@ -65,10 +65,14 @@
 #include <document.hxx>
 #include <stringutil.hxx>
 #include <scmatrix.hxx>
+#include <drwlayer.hxx>
 
 #include <dpshttab.hxx>
 #include <dpobject.hxx>
 #include <dpsave.hxx>
+
+#include <svx/svdograf.hxx>
+#include <svx/svdpage.hxx>
 
 #include <com/sun/star/sheet/DataPilotFieldOrientation.hpp>
 #include <com/sun/star/sheet/GeneralFunction.hpp>
@@ -105,6 +109,8 @@ public:
     void testDataPilot();
     void testSheetCopy();
 
+    void testGraphicsInGroup();
+
     CPPUNIT_TEST_SUITE(Test);
     CPPUNIT_TEST(testCollator);
     CPPUNIT_TEST(testSUM);
@@ -113,6 +119,7 @@ public:
     CPPUNIT_TEST(testMatrix);
     CPPUNIT_TEST(testDataPilot);
     CPPUNIT_TEST(testSheetCopy);
+    CPPUNIT_TEST(testGraphicsInGroup);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -593,6 +600,50 @@ void Test::testSheetCopy()
     bHidden = m_pDoc->RowHidden(11, 1, &nRow1, &nRow2);
     CPPUNIT_ASSERT_MESSAGE("rows 11 - maxrow should be visible", !bHidden && nRow1 == 11 && nRow2 == MAXROW);
 #endif
+    m_pDoc->DeleteTab(0);
+}
+
+void Test::testGraphicsInGroup()
+{
+    OUString aTabName(RTL_CONSTASCII_USTRINGPARAM("TestTab"));
+    m_pDoc->InsertTab(0, aTabName);
+    CPPUNIT_ASSERT_MESSAGE("document should have one sheet to begin with.", m_pDoc->GetTableCount() == 1);
+    SCROW nRow1, nRow2;
+    bool bHidden = m_pDoc->RowHidden(0, 0, &nRow1, &nRow2);
+    CPPUNIT_ASSERT_MESSAGE("new sheet should have all rows visible", !bHidden && nRow1 == 0 && nRow2 == MAXROW);
+
+    m_pDoc->InitDrawLayer();
+    ScDrawLayer *pDrawLayer = m_pDoc->GetDrawLayer();
+    CPPUNIT_ASSERT_MESSAGE("must have a draw layer", pDrawLayer != NULL);
+    SdrPage* pPage = pDrawLayer->GetPage(0);
+    CPPUNIT_ASSERT_MESSAGE("must have a draw page", pPage != NULL);
+
+    //Add a square
+    Rectangle aOrigRect(2,2,100,100);
+    SdrRectObj *pObj = new SdrRectObj(aOrigRect);
+    pPage->InsertObject(pObj);
+    const Rectangle &rNewRect = pObj->GetLogicRect();
+    CPPUNIT_ASSERT_MESSAGE("must have equal position and size", aOrigRect == rNewRect);
+
+    ScDrawLayer::SetPageAnchored(*pObj);
+
+    //Use a range of rows guaranteed to include all of the square
+    m_pDoc->ShowRows(0, 100, 0, false);
+    CPPUNIT_ASSERT_MESSAGE("Should not change when page anchored", aOrigRect == rNewRect);
+    m_pDoc->ShowRows(0, 100, 0, true);
+    CPPUNIT_ASSERT_MESSAGE("Should not change when page anchored", aOrigRect == rNewRect);
+
+    ScDrawLayer::SetCellAnchoredFromPosition(*pObj, *m_pDoc, 0);
+    CPPUNIT_ASSERT_MESSAGE("That shouldn't change size or positioning", aOrigRect == rNewRect);
+
+    m_pDoc->ShowRows(0, 100, 0, false);
+    CPPUNIT_ASSERT_MESSAGE("Left and Right should be unchanged",
+        aOrigRect.nLeft == rNewRect.nLeft && aOrigRect.nRight == rNewRect.nRight);
+    CPPUNIT_ASSERT_MESSAGE("Height should be minimum allowed height",
+        (rNewRect.nBottom - rNewRect.nTop) <= 1);
+    m_pDoc->ShowRows(0, 100, 0, true);
+    CPPUNIT_ASSERT_MESSAGE("Should not change when page anchored", aOrigRect == rNewRect);
+
     m_pDoc->DeleteTab(0);
 }
 

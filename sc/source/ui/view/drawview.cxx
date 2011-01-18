@@ -155,46 +155,15 @@ ScDrawView::~ScDrawView()
 
 void ScDrawView::AddCustomHdl()
 {
-    BOOL bNegativePage = pDoc->IsNegativePage( nTab );
-
     const SdrMarkList &rMrkList = GetMarkedObjectList();
     UINT32 nCount = rMrkList.GetMarkCount();
     for(UINT32 nPos=0; nPos<nCount; nPos++ )
     {
-        const SdrObject* pObj = rMrkList.GetMark(nPos)->GetMarkedSdrObj();
-        if(ScDrawLayer::GetAnchor(pObj) == SCA_CELL)
+        SdrObject* pObj = rMrkList.GetMark(nPos)->GetMarkedSdrObj();
+        if (ScDrawObjData *pAnchor = ScDrawLayer::GetObjDataTab(pObj, nTab))
         {
-            const INT32 nDelta = 1;
-
-            Rectangle aBoundRect = pObj->GetCurrentBoundRect();
-            Point aPos;
-            if (bNegativePage)
-            {
-                aPos = aBoundRect.TopRight();
-                aPos.X() = -aPos.X();           // so the loop below is the same
-            }
-            else
-                aPos = aBoundRect.TopLeft();
-            long nPosX = (long) (aPos.X() / HMM_PER_TWIPS) + nDelta;
-            long nPosY = (long) (aPos.Y() / HMM_PER_TWIPS) + nDelta;
-
-            SCCOL nCol;
-            INT32 nWidth = 0;
-
-            for(nCol=0; nCol<=MAXCOL && nWidth<=nPosX; nCol++)
-                nWidth += pDoc->GetColWidth(nCol,nTab);
-
-            if(nCol > 0)
-                --nCol;
-
-            SCROW nRow = nPosY <= 0 ? 0 : pDoc->GetRowForHeight( nTab,
-                    (ULONG) nPosY);
-            if(nRow > 0)
-                --nRow;
-
-            ScTabView* pView = pViewData->GetView();
-            ScAddress aScAddress(nCol, nRow, nTab);
-            pView->CreateAnchorHandles(aHdl, aScAddress);
+            if (ScTabView* pView = pViewData->GetView())
+                pView->CreateAnchorHandles(aHdl, pAnchor->maStart);
         }
     }
 }

@@ -100,7 +100,6 @@ void ScCaptionUtil::SetCaptionLayer( SdrCaptionObj& rCaption, bool bShown )
 
 void ScCaptionUtil::SetBasicCaptionSettings( SdrCaptionObj& rCaption, bool bShown )
 {
-    ScDrawLayer::SetAnchor( &rCaption, SCA_PAGE );
     SetCaptionLayer( rCaption, bShown );
     rCaption.SetFixedTail();
     rCaption.SetSpecialTextBoxShadow();

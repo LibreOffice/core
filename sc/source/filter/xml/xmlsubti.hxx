@@ -129,7 +129,7 @@ private:
 
     ScXMLImport&                        rImport;
 
-    ScMyShapeResizer                    aResizeShapes;
+    ScMyOLEFixer                        aFixupOLEs;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XSpreadsheet > xCurrentSheet;
     ::com::sun::star::uno::Reference< ::com::sun::star::table::XCellRange > xCurrentCellRange;
@@ -164,7 +164,9 @@ public:
     void                                AddColumn(sal_Bool bIsCovered);
     void                                NewTable(sal_Int32 nTempSpannedCols);
     void                                UpdateRowHeights();
-    void                                ResizeShapes() { aResizeShapes.ResizeShapes(); }
+    void                                FixupOLEs() { aFixupOLEs.FixupOLEs(); }
+    sal_Bool                            IsOLE(com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& rShape) const
+        { return ScMyOLEFixer::IsOLE(rShape); }
     void                                DeleteTable();
     com::sun::star::table::CellAddress  GetRealCellPos();
     void                                AddColCount(sal_Int32 nTempColCount);
@@ -184,11 +186,8 @@ public:
                                         GetCurrentXShapes();
     sal_Bool                            HasDrawPage();
     sal_Bool                            HasXShapes();
-    void                                AddShape(com::sun::star::uno::Reference <com::sun::star::drawing::XShape>& rShape,
-                                                rtl::OUString* pRangeList,
-                                                com::sun::star::table::CellAddress& rStartAddress,
-                                                com::sun::star::table::CellAddress& rEndAddress,
-                                                sal_Int32 nEndX, sal_Int32 nEndY);
+    void                                AddOLE(com::sun::star::uno::Reference <com::sun::star::drawing::XShape>& rShape,
+                                               const rtl::OUString &rRangeList);
 
     void                                AddMatrixRange( sal_Int32 nStartColumn,
                                                 sal_Int32 nStartRow,
