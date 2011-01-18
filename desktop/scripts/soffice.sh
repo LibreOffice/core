@@ -63,7 +63,7 @@ fi
 if [ "$VALGRIND" != "" ]; then
     VALGRINDCHECK="valgrind --tool=$VALGRIND --error-exitcode=101"
     export VALGRINDCHECK
-    G_SLICE=malloc
+    G_SLICE=always-malloc
     export G_SLICE
 fi
 
