@@ -2800,23 +2800,19 @@ void XMLMacroFieldImportContext::PrepareField(
         sal_Int32 nLength = aValues.getLength();
         for( sal_Int32 i = 0; i < nLength; i++ )
         {
-            if ( aValues[i].Name.equalsAsciiL( "ScriptType",
-                                               sizeof("ScriptType")-1 ) )
+            if ( aValues[i].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("ScriptType")) )
             {
                 // ignore ScriptType
             }
-            else if ( aValues[i].Name.equalsAsciiL( "Library",
-                                                    sizeof("Library")-1 ) )
+            else if ( aValues[i].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Library")) )
             {
                 aValues[i].Value >>= sLibraryName;
             }
-            else if ( aValues[i].Name.equalsAsciiL( "MacroName",
-                                                    sizeof("MacroName")-1 ) )
+            else if ( aValues[i].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("MacroName")) )
             {
                 aValues[i].Value >>= sMacroName;
             }
-            if ( aValues[i].Name.equalsAsciiL( "Script",
-                                               sizeof("Script")-1 ) )
+            if ( aValues[i].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Script")) )
             {
                 aValues[i].Value >>= sScriptURL;
             }
