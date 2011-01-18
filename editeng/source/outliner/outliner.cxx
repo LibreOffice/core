@@ -2198,8 +2198,6 @@ sal_Bool DrawPortionInfo::IsRTL() const
         ubidi_setPara(pBidi, reinterpret_cast<const UChar *>(mrText.GetBuffer()), mrText.Len(), nDefaultDir, NULL, &nError);    // UChar != sal_Unicode in MinGW
         nError = U_ZERO_ERROR;
 
-//        sal_Int32 nCount(ubidi_countRuns(pBidi, &nError));
-
         int32_t nStart(0);
         int32_t nEnd;
         UBiDiLevel nCurrDir;
