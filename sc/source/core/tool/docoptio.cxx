@@ -482,7 +482,7 @@ ScDocCfg::ScDocCfg() :
                 break;
                 case SCFORMULAOPT_ENGLISH_FUNCNAME:
                 {
-                    sal_Bool bEnglish;
+                    sal_Bool bEnglish = false;
                     if (pValues[nProp] >>= bEnglish)
                         SetUseEnglishFuncName(bEnglish);
                 }
