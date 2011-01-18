@@ -316,7 +316,7 @@ bool SvxVerJustifyItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
             }
         default:
             {
-                sal_Int32 eUno;
+                sal_Int32 eUno = table::CellVertJustify2::STANDARD;
                 if(!(rVal >>= eUno))
                 {
                     eUno = table::CellVertJustify2::STANDARD;
