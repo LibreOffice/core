@@ -2406,8 +2406,6 @@ BOOL SwCrsrShell::ParkTblCrsr()
 #*  Methode     :  ParkCrsr
 #*  Beschreibung:  Vernichtet Selektionen und zus. Crsr aller Shell der
 #*                 verbleibende Crsr der Shell wird geparkt.
-#*  Datum       :  MA 05. Nov. 92
-#*  Update      :  JP 19.09.97
 #***********************************************************************/
 
 void SwCrsrShell::_ParkPams( SwPaM* pDelRg, SwShellCrsr** ppDelRing )

@@ -2322,9 +2322,6 @@ void SwTxtNode::EraseText(const SwIndex &rIdx, const xub_StrLen nCount,
 #*
 #*  Beschreibung
 #*                  text.doc
-#*
-#*  Datum       :   MS 28.11.90
-#*  Update      :   VB 24.07.91
 #***********************************************************************/
 
 void SwTxtNode::GCAttr()
