@@ -52,7 +52,7 @@ int HBox::Read(HWPFile & )
 
 // skip block
 
-int SkipBlock::Read(HWPFile & hwpf)
+int SkipData::Read(HWPFile & hwpf)
 {
     hwpf.Read4b(&data_block_len, 1);
     hwpf.Read2b(&dummy, 1);
