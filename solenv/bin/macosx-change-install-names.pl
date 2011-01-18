@@ -67,6 +67,10 @@ if ($type eq "Executable")
 {
     $type = "app"
 }
+if ($type eq "Library")
+{
+    $type = "shl"
+}
 if ($type eq "extshl")
 {
     $type = "shl";

@@ -33,6 +33,7 @@ gb_MKTEMP := TMPDIR= /usr/bin/mktemp -t
 gb_CC := cc
 gb_CXX := g++
 gb_GCCP := gcc
+gb_AR := ar
 gb_AWK := awk
 
 # use CC/CXX if they are nondefaults
@@ -48,6 +49,7 @@ gb_OSDEFS := \
     -D$(OS) \
     -D_PTHREADS \
     -DUNIX \
+    -DUNX \
     -D_REENTRANT \
     -DNO_PTHREAD_PRIORITY \
     -DQUARTZ \
@@ -76,12 +78,11 @@ gb_CFLAGS := \
     -Wall \
     -Wendif-labels \
     -Wextra \
+    -Wshadow \
     -fPIC \
     -fmessage-length=0 \
     -fno-common \
     -fno-strict-aliasing \
-    -fsigned-char \
-    -fvisibility=hidden \
     -pipe \
 
 gb_CXXFLAGS := \
@@ -91,17 +92,12 @@ gb_CXXFLAGS := \
     -Wno-ctor-dtor-privacy \
     -Wno-long-double \
     -Wno-non-virtual-dtor \
-    -Wreturn-type \
-    -Wshadow \
-    -Wuninitialized \
     -fPIC \
     -fmessage-length=0 \
     -fno-common \
     -fno-strict-aliasing \
-    -fsigned-char \
-    -isysroot $(gb_SDKDIR) \
-    -malign-natural \
     -pipe \
+    #-Wshadow \ break in compiler headers already
 
 # these are to get g++ to switch to Objective-C++ mode
 # (see toolkit module for a case where it is necessary to do it this way)
@@ -227,25 +223,33 @@ gb_LinkTarget_INCLUDE_STL := $(filter %/stl, $(subst -I. , ,$(SOLARINC)))
 
 # FIXME framework handling very hackish
 define gb_LinkTarget__get_liblinkflags
-$(patsubst lib%.dylib,-l%,$(foreach lib,$(filter-out $(gb_Library__FRAMEWORKS),$(4)),$(call gb_Library_get_filename,$(lib)))) \
-$(addprefix -framework ,$(filter $(gb_Library__FRAMEWORKS),$(4)))
+$(patsubst lib%.dylib,-l%,$(foreach lib,$(filter-out $(gb_Library__FRAMEWORKS),$(1)),$(call gb_Library_get_filename,$(lib)))) \
+$(addprefix -framework ,$(filter $(gb_Library__FRAMEWORKS),$(1)))
 endef
 
 define gb_LinkTarget__get_layer
 $(if $(filter Executable,$(1)),\
-    $(call gb_Executable_get_layer,$(2)),\
-    $(call gb_Library_get_layer,$(2)))
+    $$(call gb_Executable_get_layer,$(2)),\
+    $$(call gb_Library_get_layer,$(2)))
 endef
 
 # FIXME the DYLIB_FILE mess is only necessary because
 # solver layout is different from installation layout
 define gb_LinkTarget__command_dynamiclink
+$(info :::$(2) $(call gb_Library_get_layer,$(2)) $(gb_Library_LAYER))
+$(info :::$(2) $(call gb_Executable_get_layer,$(2)) $(gb_Executable_LAYER))
 $(call gb_Helper_abbreviate_dirs,\
     mkdir -p $(dir $(1)) && \
     DYLIB_FILE=`$(gb_MKTEMP) $(dir $(1))` && \
-    $(PERL) $(SOLARENV)/bin/macosx-dylib-link-list.pl $(LDFLAGS) $(patsubst lib%.dylib,-l%,$(foreach lib,$(LINKED_LIBS),$(call gb_Library_get_filename,$(lib)))) > $${DYLIB_FILE} && \
+    $(PERL) $(SOLARENV)/bin/macosx-dylib-link-list.pl \
+        $(if $(filter Executable,$(TARGETTYPE)),$(gb_Executable_TARGETTYPEFLAGS)) \
+        $(if $(filter Library CppunitTest,$(TARGETTYPE)),$(gb_Library_TARGETTYPEFLAGS)) \
+        $(subst \d,$$,$(RPATH)) $(LDFLAGS) \
+        $(patsubst lib%.dylib,-l%,$(foreach lib,$(LINKED_LIBS),$(call gb_Library_get_filename,$(lib)))) > $${DYLIB_FILE} && \
     $(gb_CXX) \
-        $(RPATH) $(LDFLAGS) \
+        $(if $(filter Executable,$(TARGETTYPE)),$(gb_Executable_TARGETTYPEFLAGS)) \
+        $(if $(filter Library CppunitTest,$(TARGETTYPE)),$(gb_Library_TARGETTYPEFLAGS)) \
+        $(subst \d,$$,$(RPATH)) $(LDFLAGS) \
         $(call gb_LinkTarget__get_liblinkflags,$(LINKED_LIBS)) \
         $(foreach object,$(COBJECTS),$(call gb_CObject_get_target,$(object))) \
         $(foreach object,$(CXXOBJECTS),$(call gb_CxxObject_get_target,$(object))) \
@@ -253,8 +257,9 @@ $(call gb_Helper_abbreviate_dirs,\
         $(foreach lib,$(LINKED_STATIC_LIBS),$(call gb_StaticLibrary_get_target,$(lib))) \
         -o $(1) \
         `cat $${DYLIB_FILE}` && \
-    $(PERL) $(SOLARENV)/bin/macosx-change-install-names.pl $(TARGETTYPE) $(call gb_LinkTarget__get_layer,$(TARGETTYPE),$(1)) $(1) && \
-    $(if $(filter-out Executable,$(TARGETTYPE)),ln -sf $(1) $(patsubst %.dynlib,%.jnilib,$(1)) && )
+    $(if $(filter-out Executable,$(TARGETTYPE)),\
+        $(PERL) $(SOLARENV)/bin/macosx-change-install-names.pl $(TARGETTYPE) $(LAYER) $(1) && \
+        ln -sf $(1) $(patsubst %.dylib,%.jnilib,$(1)) &&) \
     rm -f $${DYLIB_FILE})
 endef
 
@@ -269,7 +274,7 @@ endef
 
 define gb_LinkTarget__command
 $(call gb_Output_announce,$(2),$(true),LNK,4)
-$(if $(filter Library CppunitTest Executable,$(TARGETTYPE)),$(call gb_LinkTarget__command_dynamiclink,$(1)))
+$(if $(filter Library CppunitTest Executable,$(TARGETTYPE)),$(call gb_LinkTarget__command_dynamiclink,$(1),$(2)))
 $(if $(filter StaticLibrary,$(TARGETTYPE)),$(call gb_LinkTarget__command_staticlink,$(1)))
 endef
 
@@ -337,6 +342,7 @@ endef
 
 define gb_Library_Library_platform
 $(call gb_LinkTarget_get_target,$(2)) : RPATH := $(call gb_Library_get_rpath,$(1))
+$(call gb_LinkTarget_get_target,$(2)) : LAYER := $(call gb_Library_get_layer,$(1))
 
 endef
 
@@ -374,13 +380,13 @@ endef
 
 define gb_Executable_Executable_platform
 $(call gb_LinkTarget_get_target,$(2)) : RPATH := $(call gb_Executable_get_rpath,$(1))
+$(call gb_LinkTarget_get_target,$(2)) : LAYER := $(call gb_Executable_get_layer,$(1))
 
 endef
 
 
 # CppunitTest class
 
-gb_CppunitTest_TARGETTYPEFLAGS := $(gb_Library_TARGETTYPEFLAGS)
 gb_CppunitTest_CPPTESTPRECOMMAND :=
 gb_CppunitTest_SYSPRE := libtest_
 gb_CppunitTest_EXT := .dylib
@@ -420,7 +426,7 @@ endef
 
 gb_ComponentTarget_XSLTPROCPRECOMMAND := DYLD_LIBRARY_PATH=$(OUTDIR)/lib
 gb_Library_COMPONENTPREFIXES := \
-    OOOLIB:vnd.sun.star.expand:\dOOO_BASE_DIR/program/ \
+    OOO:vnd.sun.star.expand:\dOOO_BASE_DIR/program/ \
     URELIB:vnd.sun.star.expand:\dURE_INTERNAL_LIB_DIR/ \
 
 

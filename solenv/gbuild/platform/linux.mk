@@ -77,11 +77,11 @@ gb_CFLAGS := \
     -Wall \
     -Wendif-labels \
     -Wextra \
+    -Wshadow \
     -fPIC \
     -fmessage-length=0 \
     -fno-common \
     -fno-strict-aliasing \
-    -fsigned-char \
     -fvisibility=hidden \
     -pipe \
 
@@ -91,9 +91,7 @@ gb_CXXFLAGS := \
     -Wextra \
     -Wno-ctor-dtor-privacy \
     -Wno-non-virtual-dtor \
-    -Wreturn-type \
     -Wshadow \
-    -Wuninitialized \
     -fPIC \
     -fmessage-length=0 \
     -fno-common \
