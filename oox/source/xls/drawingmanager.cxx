@@ -311,10 +311,10 @@ void BiffDrawingObjectContainer::convertAndInsert( BiffDrawingBase& rDrawing, co
 BiffDrawingObjectBase::BiffDrawingObjectBase( const WorksheetHelper& rHelper ) :
     WorksheetHelper( rHelper ),
     maAnchor( rHelper ),
-    mnObjId( BIFF_OBJ_INVALID_ID ),
-    mnObjType( BIFF_OBJTYPE_UNKNOWN ),
     mnDffShapeId( 0 ),
     mnDffFlags( 0 ),
+    mnObjId( BIFF_OBJ_INVALID_ID ),
+    mnObjType( BIFF_OBJTYPE_UNKNOWN ),
     mbHasAnchor( false ),
     mbHidden( false ),
     mbVisible( true ),

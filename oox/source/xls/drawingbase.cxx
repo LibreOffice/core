@@ -200,8 +200,6 @@ void ShapeAnchor::importBiffAnchor( BinaryInputStream& rStrm )
 EmuRectangle ShapeAnchor::calcAnchorRectEmu( const Size& rPageSizeHmm ) const
 {
     AddressConverter& rAddrConv = getAddressConverter();
-    const UnitConverter& rUnitConv = getUnitConverter();
-
     EmuSize aPageSize( lclHmmToEmu( rPageSizeHmm.Width ), lclHmmToEmu( rPageSizeHmm.Height ) );
     EmuRectangle aAnchorRect( -1, -1, -1, -1 );
 
