@@ -25,18 +25,16 @@
 #
 #*************************************************************************
 
-PRJ = ..$/..
-PRJNAME = vcl
-TARGET = salmain
-ENABLE_EXCEPTIONS = TRUE
+PRJ=..
+TARGET=prj
 
-.INCLUDE: settings.mk
+.INCLUDE : settings.mk
 
-OBJFILES = $(OBJ)$/salmain.obj
+.IF "$(VERBOSE)"!=""
+VERBOSEFLAG :=
+.ELSE
+VERBOSEFLAG := -s
+.ENDIF
 
-LIB1TARGET=$(LB)$/vclmain.lib
-LIB1ARCHIV=$(LB)$/libvclmain.a
-LIB1FILES=$(LB)$/salmain.lib
-
-
-.INCLUDE: target.mk
+all:
+    cd $(PRJ) && $(GNUMAKE) $(VERBOSEFLAG) -r -j$(MAXPROCESS) $(gb_MAKETARGET)

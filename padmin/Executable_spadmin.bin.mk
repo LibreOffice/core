@@ -14,29 +14,57 @@
 #
 # OpenOffice.org is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	See the
 # GNU Lesser General Public License version 3 for more details
 # (a copy is included in the LICENSE file that accompanied this code).
 #
 # You should have received a copy of the GNU Lesser General Public License
-# version 3 along with OpenOffice.org.  If not, see
+# version 3 along with OpenOffice.org.	If not, see
 # <http://www.openoffice.org/license.html>
 # for a copy of the LGPLv3 License.
 #
 #*************************************************************************
 
-PRJ = ..$/..
-PRJNAME = vcl
-TARGET = salmain
-ENABLE_EXCEPTIONS = TRUE
+$(eval $(call gb_Executable_Executable,spadmin.bin))
 
-.INCLUDE: settings.mk
+$(eval $(call gb_Executable_set_include,spadmin.bin,\
+    $$(INCLUDE) \
+    -I$(OUTDIR)/inc \
+    -I$(OUTDIR)/inc/offuh \
+))
 
-OBJFILES = $(OBJ)$/salmain.obj
+$(eval $(call gb_Executable_set_cxxflags,spadmin.bin,\
+    $$(CXXFLAGS) \
+))
 
-LIB1TARGET=$(LB)$/vclmain.lib
-LIB1ARCHIV=$(LB)$/libvclmain.a
-LIB1FILES=$(LB)$/salmain.lib
+$(eval $(call gb_Executable_add_linked_static_libs,spadmin.bin,\
+    vclmain \
+))
 
+$(eval $(call gb_Executable_add_linked_libs,spadmin.bin,\
+    spa \
+    svt \
+    vcl \
+    utl \
+    ucbhelper \
+    comphelper \
+    tl \
+    cppuhelper \
+    cppu \
+    sal \
+    stl \
+))
 
-.INCLUDE: target.mk
+$(eval $(call gb_Executable_add_exception_objects,spadmin.bin,\
+    padmin/source/desktopcontext \
+    padmin/source/pamain \
+))
+
+ifeq ($(OS),LINUX)
+$(eval $(call gb_Executable_add_linked_libs,spadmin.bin,\
+    dl \
+    pthread \
+))
+endif
+
+# vim: set noet sw=4 ts=4:

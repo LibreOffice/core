@@ -14,29 +14,17 @@
 #
 # OpenOffice.org is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	See the
 # GNU Lesser General Public License version 3 for more details
 # (a copy is included in the LICENSE file that accompanied this code).
 #
 # You should have received a copy of the GNU Lesser General Public License
-# version 3 along with OpenOffice.org.  If not, see
+# version 3 along with OpenOffice.org.	If not, see
 # <http://www.openoffice.org/license.html>
 # for a copy of the LGPLv3 License.
 #
 #*************************************************************************
 
-PRJ = ..$/..
-PRJNAME = vcl
-TARGET = salmain
-ENABLE_EXCEPTIONS = TRUE
+$(eval $(call gb_Package_Package,padmin_src,$(SRCDIR)/padmin/source))
+$(eval $(call gb_Package_add_file,padmin_src,bin/spadmin,spadmin.sh))
 
-.INCLUDE: settings.mk
-
-OBJFILES = $(OBJ)$/salmain.obj
-
-LIB1TARGET=$(LB)$/vclmain.lib
-LIB1ARCHIV=$(LB)$/libvclmain.a
-LIB1FILES=$(LB)$/salmain.lib
-
-
-.INCLUDE: target.mk

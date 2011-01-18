@@ -25,18 +25,17 @@
 #
 #*************************************************************************
 
-PRJ = ..$/..
-PRJNAME = vcl
-TARGET = salmain
-ENABLE_EXCEPTIONS = TRUE
 
-.INCLUDE: settings.mk
+$(eval $(call gb_Module_Module,padmin))
 
-OBJFILES = $(OBJ)$/salmain.obj
+ifeq ($(GUIBASE),unx)
 
-LIB1TARGET=$(LB)$/vclmain.lib
-LIB1ARCHIV=$(LB)$/libvclmain.a
-LIB1FILES=$(LB)$/salmain.lib
+$(eval $(call gb_Module_add_targets,padmin,\
+    Executable_spadmin.bin \
+    Library_spa \
+    AllLangResTarget_spa \
+    Package_inc \
+))
+endif
 
-
-.INCLUDE: target.mk
+# vim: set noet sw=4 ts=4:

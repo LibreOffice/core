@@ -1,3 +1,3 @@
 pd	padmin	:	vcl svtools NULL
 pd	padmin									usr1	-	all	pd_mkout NULL
-pd	padmin\source							nmake	-	all	pd_source NULL
+pd	padmin\prj							nmake	-	all	pd_prj NULL

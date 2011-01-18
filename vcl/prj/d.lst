@@ -12,6 +12,8 @@ mkdir: %_DEST%\inc%_EXT%\vcl
 ..\%__SRC%\misc\vcl?????.map %_DEST%\bin%_EXT%\vcl?????.map
 ..\%__SRC%\obj\salmain.obj %_DEST%\lib%_EXT%\salmain.obj
 ..\%__SRC%\obj\salmain.o %_DEST%\lib%_EXT%\salmain.o
+..\%__SRC%\lib\libvclmain.a %_DEST%\lib%_EXT%\libvclmain.a
+..\%__SRC%\lib\vclmain.lib %_DEST%\lib%_EXT%\vclmain.lib
 
 ..\inc\vcl\accel.hxx %_DEST%\inc%_EXT%\vcl\accel.hxx
 ..\inc\vcl\alpha.hxx %_DEST%\inc%_EXT%\vcl\alpha.hxx
