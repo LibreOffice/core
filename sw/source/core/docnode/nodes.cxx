@@ -231,6 +231,9 @@ void SwNodes::ChgNode( SwNodeIndex& rDelPos, ULONG nSz,
         bool bSavePersData(GetDoc()->GetIDocumentUndoRedo().IsUndoNodes(rNds));
         bool bRestPersData(GetDoc()->GetIDocumentUndoRedo().IsUndoNodes(*this));
         SwDoc* pDestDoc = rNds.GetDoc() != GetDoc() ? rNds.GetDoc() : 0;
+        OSL_ENSURE(!pDestDoc, "SwNodes::ChgNode(): "
+            "the code to handle text fields here looks broken\n"
+            "if the target is in a different document.");
         if( !bRestPersData && !bSavePersData && pDestDoc )
             bSavePersData = bRestPersData = TRUE;
 
@@ -307,7 +310,9 @@ void SwNodes::ChgNode( SwNodeIndex& rDelPos, ULONG nSz,
                     // Sonderbehandlung fuer die Felder!
                     if( pHts && pHts->Count() )
                     {
-                        int bToUndo = &pDestDoc->GetNodes() != &rNds;
+                        // this looks fishy if pDestDoc != 0
+                        bool const bToUndo = !pDestDoc &&
+                            GetDoc()->GetIDocumentUndoRedo().IsUndoNodes(rNds);
                         for( USHORT i = pHts->Count(); i; )
                         {
                             USHORT nDelMsg = 0;
