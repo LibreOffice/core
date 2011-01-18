@@ -33,7 +33,7 @@
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 /** === end UNO includes === **/
 
-#include <cppuhelper/extract.hxx>
+#include <comphelper/extract.hxx>
 
 #include <functional>
 #include <memory>
