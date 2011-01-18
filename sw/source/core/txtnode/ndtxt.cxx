@@ -90,6 +90,7 @@
 #include <swtable.hxx>
 #include <docsh.hxx>
 #include <SwNodeNum.hxx>
+#include <svl/intitem.hxx>
 #include <list.hxx>
 
 SV_DECL_PTRARR( TmpHints, SwTxtAttr*, 0, 4 )
