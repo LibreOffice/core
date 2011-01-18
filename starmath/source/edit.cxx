@@ -81,19 +81,19 @@ using namespace com::sun::star::uno;
 ////////////////////////////////////////
 
 
-void SmGetLeftSelectionPart(const ESelection aSel,
+void SmGetLeftSelectionPart(const ESelection &rSel,
                             USHORT &nPara, USHORT &nPos)
     // returns paragraph number and position of the selections left part
 {
     // compare start and end of selection and use the one that comes first
-    if (    aSel.nStartPara <  aSel.nEndPara
-        ||  (aSel.nStartPara == aSel.nEndPara  &&  aSel.nStartPos < aSel.nEndPos) )
-    {   nPara = aSel.nStartPara;
-        nPos  = aSel.nStartPos;
+    if (    rSel.nStartPara <  rSel.nEndPara
+        ||  (rSel.nStartPara == rSel.nEndPara  &&  rSel.nStartPos < rSel.nEndPos) )
+    {   nPara = rSel.nStartPara;
+        nPos  = rSel.nStartPos;
     }
     else
-    {   nPara = aSel.nEndPara;
-        nPos  = aSel.nEndPos;
+    {   nPara = rSel.nEndPara;
+        nPos  = rSel.nEndPos;
     }
 }
 
