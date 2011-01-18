@@ -49,6 +49,7 @@
 #include "osl/thread.h"
 #include "rtl/strbuf.hxx"
 #include "rtl/ustrbuf.hxx"
+#include "rtl/instance.hxx"
 #include <sal/macros.h>
 
 #include "com/sun/star/lang/Locale.hpp"
@@ -245,6 +246,26 @@ namespace psp
         }
         return aResult;
     }
+
+    class PPDCache
+    {
+    public:
+        std::list< PPDParser* > aAllParsers;
+        std::hash_map< rtl::OUString, rtl::OUString, rtl::OUStringHash >* pAllPPDFiles;
+        PPDCache()
+            : pAllPPDFiles(NULL)
+        {}
+        ~PPDCache()
+        {
+            while( aAllParsers.begin() != aAllParsers.end() )
+            {
+                delete aAllParsers.front();
+                aAllParsers.pop_front();
+            }
+            delete pAllPPDFiles;
+            pAllPPDFiles = NULL;
+        }
+    };
 }
 
 using namespace psp;
@@ -258,8 +279,10 @@ using namespace rtl;
 #define DBG_ASSERT( x, y )
 #endif
 
-std::list< PPDParser* > PPDParser::aAllParsers;
-std::hash_map< OUString, OUString, OUStringHash >* PPDParser::pAllPPDFiles = NULL;
+namespace
+{
+    struct thePPDCache : public rtl::Static<PPDCache, thePPDCache> {};
+}
 
 class PPDDecompressStream
 {
@@ -406,6 +429,8 @@ void PPDParser::scanPPDDir( const String& rDir )
 
     const int nSuffixes = SAL_N_ELEMENTS(pSuffixes);
 
+    PPDCache &rPPDCache = thePPDCache::get();
+
     osl::Directory aDir( rDir );
     aDir.open();
     osl::DirectoryItem aItem;
@@ -438,7 +463,7 @@ void PPDParser::scanPPDDir( const String& rDir )
                         {
                             if( aFileName.endsWithIgnoreAsciiCaseAsciiL( pSuffixes[nSuffix].pSuffix, pSuffixes[nSuffix].nSuffixLen ) )
                             {
-                                (*pAllPPDFiles)[ aFileName.copy( 0, aFileName.getLength() - pSuffixes[nSuffix].nSuffixLen ) ] = aPPDFile.PathToFileName();
+                                (*rPPDCache.pAllPPDFiles)[ aFileName.copy( 0, aFileName.getLength() - pSuffixes[nSuffix].nSuffixLen ) ] = aPPDFile.PathToFileName();
                                 break;
                             }
                         }
@@ -456,10 +481,11 @@ void PPDParser::scanPPDDir( const String& rDir )
 
 void PPDParser::initPPDFiles()
 {
-    if( pAllPPDFiles )
+    PPDCache &rPPDCache = thePPDCache::get();
+    if( rPPDCache.pAllPPDFiles )
         return;
 
-    pAllPPDFiles = new std::hash_map< OUString, OUString, OUStringHash >();
+    rPPDCache.pAllPPDFiles = new std::hash_map< OUString, OUString, OUStringHash >();
 
     // check installation directories
     std::list< OUString > aPathList;
@@ -469,7 +495,7 @@ void PPDParser::initPPDFiles()
         INetURLObject aPPDDir( *ppd_it, INET_PROT_FILE, INetURLObject::ENCODE_ALL );
         scanPPDDir( aPPDDir.GetMainURL( INetURLObject::NO_DECODE ) );
     }
-    if( pAllPPDFiles->find( OUString( RTL_CONSTASCII_USTRINGPARAM( "SGENPRT" ) ) ) == pAllPPDFiles->end() )
+    if( rPPDCache.pAllPPDFiles->find( OUString( RTL_CONSTASCII_USTRINGPARAM( "SGENPRT" ) ) ) == rPPDCache.pAllPPDFiles->end() )
     {
         // last try: search in directory of executable (mainly for setup)
         OUString aExe;
@@ -482,7 +508,7 @@ void PPDParser::initPPDFiles()
 #endif
             scanPPDDir( aDir.GetMainURL( INetURLObject::NO_DECODE ) );
 #ifdef DEBUG
-            fprintf( stderr, "SGENPRT %s\n", pAllPPDFiles->find( OUString( RTL_CONSTASCII_USTRINGPARAM( "SGENPRT" ) ) ) == pAllPPDFiles->end() ? "not found" : "found" );
+            fprintf( stderr, "SGENPRT %s\n", rPPDCache.pAllPPDFiles->find( OUString( RTL_CONSTASCII_USTRINGPARAM( "SGENPRT" ) ) ) == rPPDCache.pAllPPDFiles->end() ? "not found" : "found" );
 #endif
         }
     }
@@ -490,17 +516,19 @@ void PPDParser::initPPDFiles()
 
 void PPDParser::getKnownPPDDrivers( std::list< rtl::OUString >& o_rDrivers, bool bRefresh )
 {
+    PPDCache &rPPDCache = thePPDCache::get();
+
     if( bRefresh )
     {
-        delete pAllPPDFiles;
-        pAllPPDFiles = NULL;
+        delete rPPDCache.pAllPPDFiles;
+        rPPDCache.pAllPPDFiles = NULL;
     }
 
     initPPDFiles();
     o_rDrivers.clear();
 
     std::hash_map< OUString, OUString, OUStringHash >::const_iterator it;
-    for( it = pAllPPDFiles->begin(); it != pAllPPDFiles->end(); ++it )
+    for( it = rPPDCache.pAllPPDFiles->begin(); it != rPPDCache.pAllPPDFiles->end(); ++it )
         o_rDrivers.push_back( it->first );
 }
 
@@ -512,6 +540,7 @@ String PPDParser::getPPDFile( const String& rFile )
     if( ! aStream.IsOpen() )
     {
         std::hash_map< OUString, OUString, OUStringHash >::const_iterator it;
+        PPDCache &rPPDCache = thePPDCache::get();
 
         bool bRetry = true;
         do
@@ -525,23 +554,23 @@ String PPDParser::getPPDFile( const String& rFile )
                 aBase = aBase.copy( nLastIndex+1 );
             do
             {
-                it = pAllPPDFiles->find( aBase );
+                it = rPPDCache.pAllPPDFiles->find( aBase );
                 nLastIndex = aBase.lastIndexOf( sal_Unicode( '.' ) );
                 if( nLastIndex > 0 )
                     aBase = aBase.copy( 0, nLastIndex );
-            } while( it == pAllPPDFiles->end() && nLastIndex > 0 );
+            } while( it == rPPDCache.pAllPPDFiles->end() && nLastIndex > 0 );
 
-            if( it == pAllPPDFiles->end() && bRetry )
+            if( it == rPPDCache.pAllPPDFiles->end() && bRetry )
             {
                 // a new file ? rehash
-                delete pAllPPDFiles; pAllPPDFiles = NULL;
+                delete rPPDCache.pAllPPDFiles; rPPDCache.pAllPPDFiles = NULL;
                 bRetry = false;
                 // note this is optimized for office start where
                 // no new files occur and initPPDFiles is called only once
             }
-        } while( ! pAllPPDFiles );
+        } while( ! rPPDCache.pAllPPDFiles );
 
-        if( it != pAllPPDFiles->end() )
+        if( it != rPPDCache.pAllPPDFiles->end() )
             aStream.Open( it->second );
     }
 
@@ -625,7 +654,8 @@ const PPDParser* PPDParser::getParser( const String& rFile )
         return NULL;
     }
 
-    for( ::std::list< PPDParser* >::const_iterator it = aAllParsers.begin(); it != aAllParsers.end(); ++it )
+    PPDCache &rPPDCache = thePPDCache::get();
+    for( ::std::list< PPDParser* >::const_iterator it = rPPDCache.aAllParsers.begin(); it != rPPDCache.aAllParsers.end(); ++it )
         if( (*it)->m_aFile == aFile )
             return *it;
 
@@ -644,22 +674,11 @@ const PPDParser* PPDParser::getParser( const String& rFile )
     {
         // this may actually be the SGENPRT parser,
         // so ensure uniquness here
-        aAllParsers.remove( pNewParser );
+        rPPDCache.aAllParsers.remove( pNewParser );
         // insert new parser to list
-        aAllParsers.push_front( pNewParser );
+        rPPDCache.aAllParsers.push_front( pNewParser );
     }
     return pNewParser;
-}
-
-void PPDParser::freeAll()
-{
-    while( aAllParsers.begin() != aAllParsers.end() )
-    {
-        delete aAllParsers.front();
-        aAllParsers.pop_front();
-    }
-    delete pAllPPDFiles;
-    pAllPPDFiles = NULL;
 }
 
 PPDParser::PPDParser( const String& rFile ) :

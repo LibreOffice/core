@@ -125,6 +125,7 @@ class PPDParser
 {
     friend class PPDContext;
     friend class CUPSManager;
+    friend class PPDCache;
 
     typedef ::std::hash_map< ::rtl::OUString, PPDKey*, ::rtl::OUStringHash > hash_type;
     typedef ::std::vector< PPDKey* > value_type;
@@ -141,11 +142,6 @@ public:
         PPDConstraint() : m_pKey1( NULL ), m_pOption1( NULL ), m_pKey2( NULL ), m_pOption2( NULL ) {}
     };
 private:
-
-    static ::std::list< PPDParser* >           aAllParsers;
-    static ::std::hash_map< rtl::OUString, rtl::OUString, rtl::OUStringHash >*
-                                                pAllPPDFiles;
-
     hash_type                                   m_aKeys;
     value_type                                  m_aOrderedKeys;
     ::std::list< PPDConstraint >                m_aConstraints;
