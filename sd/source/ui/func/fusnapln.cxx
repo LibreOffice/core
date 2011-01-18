@@ -88,7 +88,7 @@ void FuSnapLine::DoExecute( SfxRequest& rReq )
 
     SdrPageView* pPV = mpView->GetSdrPageView();
 
-    if ( !pArgs )
+    if (!pArgs)
     {
         SfxItemSet aNewAttr(mpViewShell->GetPool(), ATTR_SNAPLINE_START, ATTR_SNAPLINE_END);
         bool bLineExist (false);
@@ -130,53 +130,54 @@ void FuSnapLine::DoExecute( SfxRequest& rReq )
 
         SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
         AbstractSdSnapLineDlg* pDlg = pFact ? pFact->CreateSdSnapLineDlg( NULL, aNewAttr, mpView ) : 0;
-        if( pDlg )
+        OSL_ASSERT(pDlg);
+        if (!pDlg)
+            return;
+
+        if ( bLineExist )
         {
-            if ( bLineExist )
+            pDlg->HideRadioGroup();
+
+            const SdrHelpLine& rHelpLine = (pPV->GetHelpLines())[nHelpLine];
+
+            if ( rHelpLine.GetKind() == SDRHELPLINE_POINT )
             {
-                pDlg->HideRadioGroup();
-
-                const SdrHelpLine& rHelpLine = (pPV->GetHelpLines())[nHelpLine];
-
-                if ( rHelpLine.GetKind() == SDRHELPLINE_POINT )
-                {
-                    pDlg->SetText(String(SdResId(STR_SNAPDLG_SETPOINT)));
-                    pDlg->SetInputFields(TRUE, TRUE);
-                }
-                else
-                {
-                    pDlg->SetText(String(SdResId(STR_SNAPDLG_SETLINE)));
-
-                    if ( rHelpLine.GetKind() == SDRHELPLINE_VERTICAL )
-                        pDlg->SetInputFields(TRUE, FALSE);
-                    else
-                        pDlg->SetInputFields(FALSE, TRUE);
-                }
-                bCreateNew = FALSE;
+                pDlg->SetText(String(SdResId(STR_SNAPDLG_SETPOINT)));
+                pDlg->SetInputFields(TRUE, TRUE);
             }
             else
-                pDlg->HideDeleteBtn();
-
-            USHORT nResult = pDlg->Execute();
-
-            pDlg->GetAttr(aNewAttr);
-            delete pDlg;
-
-            switch( nResult )
             {
-                case RET_OK:
-                    rReq.Done(aNewAttr);
-                    pArgs = rReq.GetArgs();
-                    break;
+                pDlg->SetText(String(SdResId(STR_SNAPDLG_SETLINE)));
 
-                case RET_SNAP_DELETE:
-                    // Fangobjekt loeschen
-                    if ( !bCreateNew )
-                        pPV->DeleteHelpLine(nHelpLine);
-                    /*fall-through*/
-                default:
-                    return;
+                if ( rHelpLine.GetKind() == SDRHELPLINE_VERTICAL )
+                    pDlg->SetInputFields(TRUE, FALSE);
+                else
+                    pDlg->SetInputFields(FALSE, TRUE);
             }
+            bCreateNew = FALSE;
+        }
+        else
+            pDlg->HideDeleteBtn();
+
+        USHORT nResult = pDlg->Execute();
+
+        pDlg->GetAttr(aNewAttr);
+        delete pDlg;
+
+        switch( nResult )
+        {
+            case RET_OK:
+                rReq.Done(aNewAttr);
+                pArgs = rReq.GetArgs();
+                break;
+
+            case RET_SNAP_DELETE:
+                // Fangobjekt loeschen
+                if ( !bCreateNew )
+                    pPV->DeleteHelpLine(nHelpLine);
+                /*fall-through*/
+            default:
+                return;
         }
     }
     Point aHlpPos;
