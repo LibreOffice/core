@@ -2141,7 +2141,7 @@ if test "$_os" = "WINNT"; then
         AC_MSG_CHECKING([for a friendly Microsoft C/C++ compiler installation path])
         if test -z "$with_cl_home"; then
             vctest=`./oowintool --msvc-productdir`;
-            if test $CL_X64 = ""; then
+            if test "$CL_X64" = ""; then
                 if test -x "$vctest/bin/cl.exe"; then
                     with_cl_home=$vctest;
                 fi
@@ -2194,7 +2194,7 @@ if test "$_os" = "WINNT"; then
         PATH="$MSPDB_PATH:$PATH"
 
         AC_MSG_CHECKING([the Microsoft C/C++ Compiler])
-        if test $CL_X64 = ""; then
+        if test "$CL_X64" = ""; then
             if test -x "$with_cl_home/bin/cl.exe"; then
                 CC="$with_cl_home/bin/cl.exe"
             fi
@@ -2213,7 +2213,7 @@ if test "$_os" = "WINNT"; then
             CC=`cygpath -u "$CC"`
             # Remove /cl.exe from CC case insensitive
             AC_MSG_RESULT([found ($CC)])
-            if test $CL_X64 = ""; then
+            if test "$CL_X64" = ""; then
                 COMPATH=`echo $CC | $SED 's@\/[[Bb]][[Ii]][[Nn]]\/[[cC]][[lL]]\.[[eE]][[xX]][[eE]]@@'`
             else
                 if test -n "$with_cl_home"; then
@@ -6053,7 +6053,7 @@ AC_SUBST(CYGWIN_PATH)
 dnl ***************************************
 dnl testing assembler path
 dnl ***************************************
-if test $CL_X64 = ""; then
+if test "$CL_X64" = ""; then
   assembler=ml.exe
   assembler_bin=bin
 else
