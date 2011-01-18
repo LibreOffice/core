@@ -232,7 +232,8 @@ void SAL_CALL ScChartsObj::addNewByName( const rtl::OUString& aName,
             //  Rechteck anpassen
             //! Fehler/Exception, wenn leer/ungueltig ???
             Point aRectPos( aRect.X, aRect.Y );
-            if (aRectPos.X() < 0) aRectPos.X() = 0;
+            bool bLayoutRTL = pDoc->IsLayoutRTL( nTab );
+            if ( ( aRectPos.X() < 0 && !bLayoutRTL ) || ( aRectPos.X() > 0 && bLayoutRTL ) ) aRectPos.X() = 0;
             if (aRectPos.Y() < 0) aRectPos.Y() = 0;
             Size aRectSize( aRect.Width, aRect.Height );
             if (aRectSize.Width() <= 0) aRectSize.Width() = 5000;   // Default-Groesse
@@ -298,7 +299,7 @@ void SAL_CALL ScChartsObj::addNewByName( const rtl::OUString& aName,
                 xObj->setVisualAreaSize( nAspect, aSz );
 
             pPage->InsertObject( pObj );
-            pModel->AddUndo( new SdrUndoInsertObj( *pObj ) );       //! Undo-Kommentar?
+            pModel->AddUndo( new SdrUndoNewObj( *pObj ) );
 
             // Dies veranlaesst Chart zum sofortigen Update
             //SvData aEmpty;
@@ -318,7 +319,7 @@ void SAL_CALL ScChartsObj::removeByName( const rtl::OUString& aName )
         ScDrawLayer* pModel = pDoc->GetDrawLayer();     // ist nicht 0
         SdrPage* pPage = pModel->GetPage(static_cast<sal_uInt16>(nTab));    // ist nicht 0
 
-        pModel->AddUndo( new SdrUndoRemoveObj( *pObj ) );   //! Undo-Kommentar?
+        pModel->AddUndo( new SdrUndoDelObj( *pObj ) );
         pPage->RemoveObject( pObj->GetOrdNum() );
 
         //! Notify etc.???
