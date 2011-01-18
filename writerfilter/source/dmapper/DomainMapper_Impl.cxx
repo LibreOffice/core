@@ -555,7 +555,6 @@ bool lcl_removeShape( const uno::Reference<  text::XTextDocument >& rDoc, const 
             {
                 xDrawPage->remove( rShape );
             }
-            osl_trace("**** after removing shape ");
             rAnchoredStack.pop();
             rTextAppendStack.pop();
             bRet = true;
