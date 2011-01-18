@@ -25,6 +25,7 @@
  *
  ************************************************************************/
 
+#include <stdio.h>
 #include <resourcemodel/XPathLogger.hxx>
 
 namespace writerfilter
