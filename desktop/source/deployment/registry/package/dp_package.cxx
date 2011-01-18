@@ -1620,7 +1620,8 @@ BackendImpl::PackageImpl::getPackagesFromDb(
         Reference<deployment::XPackage> xExtension =
             bindBundleItem(i->first, i->second, true, m_identifier, xCmdEnv);
         OSL_ASSERT(xExtension.is());
-        retVector.push_back(xExtension);
+        if (xExtension.is())
+            retVector.push_back(xExtension);
     }
 
     return retVector;
