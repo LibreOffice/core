@@ -41,7 +41,9 @@ TARFILE_MD5=48a9f787f43a09c0a9b7b00cd1fddbbf
 
 ADDITIONAL_FILES += makefile.mk
 
-PATCH_FILES=hyphen-2.7.1.patch
+PATCH_FILES= \
+    hyphen-2.7.1.patch \
+    hyphen-2.7.1-read-charset.patch
 
 .IF "$(GUI)"=="UNX"
 CONFIGURE_DIR=$(BUILD_DIR)
