@@ -63,10 +63,11 @@ namespace comphelper
     using ::com::sun::star::uno::TypeClass_TYPE;
     using ::com::sun::star::uno::TypeClass_ENUM;
     using ::com::sun::star::uno::TypeClass_INTERFACE;
+    using ::com::sun::star::i18n::XCollator;
     /** === end UNO using === **/
 
     //------------------------------------------------------------------------------------------------------------------
-    ::std::auto_ptr< IKeyPredicateLess > getStandardLessPredicate( ::com::sun::star::uno::Type const & i_type )
+    ::std::auto_ptr< IKeyPredicateLess > getStandardLessPredicate( Type const & i_type, Reference< XCollator > const & i_collator )
     {
         ::std::auto_ptr< IKeyPredicateLess > pComparator;
         switch ( i_type.getTypeClass() )
@@ -105,7 +106,10 @@ namespace comphelper
             pComparator.reset( new ScalarPredicateLess< double >() );
             break;
         case TypeClass_STRING:
-            pComparator.reset( new StringPredicateLess() );
+            if ( i_collator.is() )
+                pComparator.reset( new StringCollationPredicateLess( i_collator ) );
+            else
+                pComparator.reset( new StringPredicateLess() );
             break;
         case TypeClass_TYPE:
             pComparator.reset( new TypePredicateLess() );

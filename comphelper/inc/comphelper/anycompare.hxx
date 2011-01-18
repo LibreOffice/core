@@ -31,6 +31,7 @@
 
 /** === begin UNO includes === **/
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
+#include <com/sun/star/i18n/XCollator.hpp>
 /** === end UNO includes === **/
 
 #include <comphelper/extract.hxx>
@@ -88,7 +89,7 @@ namespace comphelper
             if  (   !( _lhs >>= lhs )
                 ||  !( _rhs >>= rhs )
                 )
-                throw ::com::sun::star::lang::IllegalArgumentException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Unsupported key type." ) ), NULL, 1 );
+                throw ::com::sun::star::lang::IllegalArgumentException();
             return lhs < rhs;
         }
     };
@@ -105,9 +106,34 @@ namespace comphelper
             if  (   !( _lhs >>= lhs )
                 ||  !( _rhs >>= rhs )
                 )
-                throw ::com::sun::star::lang::IllegalArgumentException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Unsupported key type." ) ), NULL, 1 );
+                throw ::com::sun::star::lang::IllegalArgumentException();
             return lhs < rhs;
         }
+    };
+
+    //==================================================================================================================
+    //= StringCollationPredicateLess
+    //==================================================================================================================
+    class StringCollationPredicateLess : public IKeyPredicateLess
+    {
+    public:
+        StringCollationPredicateLess( ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XCollator > const & i_collator )
+            :m_collator( i_collator )
+        {
+        }
+
+        virtual bool isLess( ::com::sun::star::uno::Any const & _lhs, ::com::sun::star::uno::Any const & _rhs ) const
+        {
+            ::rtl::OUString lhs, rhs;
+            if  (   !( _lhs >>= lhs )
+                ||  !( _rhs >>= rhs )
+                )
+                throw ::com::sun::star::lang::IllegalArgumentException();
+            return m_collator->compareString( lhs, rhs ) < 0;
+        }
+
+    private:
+        ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XCollator > const m_collator;
     };
 
     //==================================================================================================================
@@ -122,7 +148,7 @@ namespace comphelper
             if  (   !( _lhs >>= lhs )
                 ||  !( _rhs >>= rhs )
                 )
-                throw ::com::sun::star::lang::IllegalArgumentException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Unsupported key type." ) ), NULL, 1 );
+                throw ::com::sun::star::lang::IllegalArgumentException();
             return lhs.getTypeName() < rhs.getTypeName();
         }
     };
@@ -146,7 +172,7 @@ namespace comphelper
                 ||  !_lhs.getValueType().equals( m_enumType )
                 ||  !_rhs.getValueType().equals( m_enumType )
                 )
-                throw ::com::sun::star::lang::IllegalArgumentException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Unsupported key type." ) ), NULL, 1 );
+                throw ::com::sun::star::lang::IllegalArgumentException();
             return lhs < rhs;
         }
 
@@ -165,7 +191,7 @@ namespace comphelper
             if  (   ( _lhs.getValueTypeClass() != ::com::sun::star::uno::TypeClass_INTERFACE )
                 ||  ( _rhs.getValueTypeClass() != ::com::sun::star::uno::TypeClass_INTERFACE )
                 )
-                throw ::com::sun::star::lang::IllegalArgumentException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Unsupported key type." ) ), NULL, 1 );
+                throw ::com::sun::star::lang::IllegalArgumentException();
 
             ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > lhs( _lhs, ::com::sun::star::uno::UNO_QUERY );
             ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > rhs( _rhs, ::com::sun::star::uno::UNO_QUERY );
@@ -174,9 +200,24 @@ namespace comphelper
     };
 
     //==================================================================================================================
-    //= InterfacePredicateLess
+    //= getStandardLessPredicate
     //==================================================================================================================
-    ::std::auto_ptr< IKeyPredicateLess > COMPHELPER_DLLPUBLIC getStandardLessPredicate( ::com::sun::star::uno::Type const & i_type );
+    /** creates a default IKeyPredicateLess instance for the given UNO type
+        @param i_type
+            the type for which a predicate instance should be created
+        @param i_collator
+            specifies a collator instance to use, or <NULL/>. If <NULL/>, strings will be compared using the <code>&lt</code>
+            operator, otherwise the collator will be used. The parameter is ignored if <arg>i_type</arg> does not specify
+            the string type.
+        @return
+            a default implementation of IKeyPredicateLess, which is able to compare values of the given type. If no
+            such default implementation is known for the given type, then <NULL/> is returned.
+    */
+    ::std::auto_ptr< IKeyPredicateLess > COMPHELPER_DLLPUBLIC
+        getStandardLessPredicate(
+            ::com::sun::star::uno::Type const & i_type,
+            ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XCollator > const & i_collator
+        );
 
 //......................................................................................................................
 } // namespace comphelper

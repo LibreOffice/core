@@ -405,7 +405,7 @@ namespace comphelper
             throw IllegalTypeException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Unsupported value type." ) ), *this );
 
         // create the comparator for the KeyType, and throw if the type is not supported
-        ::std::auto_ptr< IKeyPredicateLess > pComparator( getStandardLessPredicate( aKeyType ) );
+        ::std::auto_ptr< IKeyPredicateLess > pComparator( getStandardLessPredicate( aKeyType, NULL ) );
         if ( !pComparator.get() )
             throw IllegalTypeException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Unsupported key type." ) ), *this );
 
