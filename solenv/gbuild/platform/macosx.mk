@@ -75,6 +75,7 @@ endif
 
 
 gb_CFLAGS := \
+    -isysroot $(gb_SDKDIR) \
     -Wall \
     -Wendif-labels \
     -Wextra \
@@ -86,6 +87,7 @@ gb_CFLAGS := \
     -pipe \
 
 gb_CXXFLAGS := \
+    -isysroot $(gb_SDKDIR) \
     -Wall \
     -Wendif-labels \
     -Wextra \
@@ -96,8 +98,12 @@ gb_CXXFLAGS := \
     -fmessage-length=0 \
     -fno-common \
     -fno-strict-aliasing \
+    -fsigned-char \
+    -malign-natural \
     -pipe \
     #-Wshadow \ break in compiler headers already
+    #-fsigned-char \ might be removed?
+    #-malign-natural \ might be removed?
 
 # these are to get g++ to switch to Objective-C++ mode
 # (see toolkit module for a case where it is necessary to do it this way)
@@ -155,7 +161,7 @@ endef
 
 # CxxObject class
 
-# N.B: $(4) or $(5) may contain -x objective-c++, which must come before -c
+# N.B: $(CXXFLAGS) may contain -x objective-c++, which must come before -c
 define gb_CxxObject__command
 $(call gb_Output_announce,$(2),$(true),CXX,3)
 $(call gb_Helper_abbreviate_dirs,\
@@ -180,13 +186,13 @@ $(call gb_Helper_abbreviate_dirs,\
     mkdir -p $(dir $(1)) && \
     mkdir -p $(dir $(call gb_ObjCxxObject_get_dep_target,$(2))) && \
     $(gb_CXX) \
-        $(4) $(5) \
+        $(DEFS) $(OBJCXXFLAGS) \
         -c $(3) \
         -o $(1) \
         -MMD -MT $(call gb_ObjCxxObject_get_target,$(2)) \
         -MF $(call gb_ObjCxxObject_get_dep_target,$(2)) \
         -I$(dir $(3)) \
-        $(6))
+        $(INCLUDE_STL) $(INCLUDE))
 endef
 
 
@@ -236,8 +242,6 @@ endef
 # FIXME the DYLIB_FILE mess is only necessary because
 # solver layout is different from installation layout
 define gb_LinkTarget__command_dynamiclink
-$(info :::$(2) $(call gb_Library_get_layer,$(2)) $(gb_Library_LAYER))
-$(info :::$(2) $(call gb_Executable_get_layer,$(2)) $(gb_Executable_LAYER))
 $(call gb_Helper_abbreviate_dirs,\
     mkdir -p $(dir $(1)) && \
     DYLIB_FILE=`$(gb_MKTEMP) $(dir $(1))` && \
@@ -257,8 +261,8 @@ $(call gb_Helper_abbreviate_dirs,\
         $(foreach lib,$(LINKED_STATIC_LIBS),$(call gb_StaticLibrary_get_target,$(lib))) \
         -o $(1) \
         `cat $${DYLIB_FILE}` && \
-    $(if $(filter-out Executable,$(TARGETTYPE)),\
-        $(PERL) $(SOLARENV)/bin/macosx-change-install-names.pl $(TARGETTYPE) $(LAYER) $(1) && \
+    $(if $(filter Library CppunitTest,$(TARGETTYPE)),\
+        $(PERL) $(SOLARENV)/bin/macosx-change-install-names.pl Library $(LAYER) $(1) && \
         ln -sf $(1) $(patsubst %.dylib,%.jnilib,$(1)) &&) \
     rm -f $${DYLIB_FILE})
 endef
@@ -301,7 +305,7 @@ gb_Library_OOOEXT := mxp$(gb_Library_PLAINEXT)
 gb_Library_UNOEXT := .uno$(gb_Library_PLAINEXT)
 endif
 
-gb_Library__FRAMEWORKS += \
+gb_Library__FRAMEWORKS := \
     Cocoa \
 
 gb_Library_PLAINLIBS_NONE += \
@@ -387,13 +391,14 @@ endef
 
 # CppunitTest class
 
-gb_CppunitTest_CPPTESTPRECOMMAND :=
+gb_CppunitTest_CPPTESTPRECOMMAND := DYLD_LIBRARY_PATH=$(OUTDIR)/lib
 gb_CppunitTest_SYSPRE := libtest_
 gb_CppunitTest_EXT := .dylib
 gb_CppunitTest_get_filename = $(gb_CppunitTest_SYSPRE)$(1)$(gb_CppunitTest_EXT)
 
 define gb_CppunitTest_CppunitTest_platform
 $(call gb_LinkTarget_get_target,$(2)) : RPATH :=
+$(call gb_LinkTarget_get_target,$(2)) : LAYER := NONE
 
 endef
 
