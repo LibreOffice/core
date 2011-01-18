@@ -314,7 +314,7 @@ namespace svt { namespace table
 
         // m_aSelectedRows should have reasonable content
         {
-            if ( m_aSelectedRows.size() > m_pModel->getRowCount() )
+            if ( m_aSelectedRows.size() > size_t( m_pModel->getRowCount() ) )
                 return "there are more rows selected than actually exist";
             for (   ::std::vector< RowPos >::const_iterator selRow = m_aSelectedRows.begin();
                     selRow != m_aSelectedRows.end();
@@ -2625,9 +2625,6 @@ namespace svt { namespace table
     void TableFunctionSet::DeselectAtPoint( const Point& rPoint )
     {
         (void)rPoint;
-        long pos = 0;
-        long i = 0;
-
         Rectangle aCellRange;
         m_pTableControl->invalidateSelectedRegion( m_nCurrentRow, m_nCurrentRow, aCellRange );
         m_pTableControl->markRowAsDeselected( m_nCurrentRow );

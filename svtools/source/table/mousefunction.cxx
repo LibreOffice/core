@@ -195,6 +195,8 @@ namespace svt { namespace table
     //------------------------------------------------------------------------------------------------------------------
     FunctionResult RowSelection::handleMouseMove( ITableControl& i_tableControl, MouseEvent const & i_event )
     {
+        OSL_UNUSED( i_tableControl );
+        OSL_UNUSED( i_event );
         return SkipFunction;
     }
 

@@ -71,7 +71,8 @@ namespace toolkit
 
     //------------------------------------------------------------------------------------------------------------------
     DefaultGridDataModel::DefaultGridDataModel( DefaultGridDataModel const & i_copySource )
-        :DefaultGridDataModel_Base( m_aMutex )
+        :cppu::BaseMutex()
+        ,DefaultGridDataModel_Base( m_aMutex )
         ,m_aData( i_copySource.m_aData )
         ,m_aRowHeaders( i_copySource.m_aRowHeaders )
         ,m_nColumnCount( i_copySource.m_nColumnCount )
