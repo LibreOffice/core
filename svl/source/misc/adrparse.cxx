@@ -769,7 +769,7 @@ SvAddressParser_Impl::SvAddressParser_Impl(SvAddressParser * pParser,
 
 SvAddressParser::SvAddressParser(UniString const & rInput): m_bHasFirst(false)
 {
-    SvAddressParser_Impl(this, rInput);
+    SvAddressParser_Impl aDoParse(this, rInput);
 }
 
 //============================================================================
