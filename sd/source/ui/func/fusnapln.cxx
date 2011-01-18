@@ -173,7 +173,6 @@ void FuSnapLine::DoExecute( SfxRequest& rReq )
                     // Fangobjekt loeschen
                     if ( !bCreateNew )
                         pPV->DeleteHelpLine(nHelpLine);
-                    // und weiter wie bei default
                     /*fall-through*/
                 default:
                     return;
