@@ -494,6 +494,13 @@ CellPropertyValuesSeq_t DomainMapperTableHandler::endTableGetCellProperties(Tabl
 
     CellPropertyValuesSeq_t aCellProperties( m_aCellProperties.size() );
 
+    if ( !m_aCellProperties.size() )
+    {
+        #ifdef DEBUG_DOMAINMAPPER
+        dmapper_logger->endElement();
+        #endif
+        return aCellProperties;
+    }
     // std::vector< std::vector<PropertyMapPtr> > m_aCellProperties
     PropertyMapVector2::const_iterator aRowOfCellsIterator = m_aCellProperties.begin();
     PropertyMapVector2::const_iterator aRowOfCellsIteratorEnd = m_aCellProperties.end();
