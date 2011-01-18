@@ -314,13 +314,13 @@ namespace DOM
 
     } // extern "C"
 
-    void throwEx(xmlParserCtxtPtr ctxt) {
-        OUString msg = make_error_message(ctxt);
-        xmlFreeParserCtxt(ctxt);
+    void throwEx(xmlParserCtxtPtr ctxt)
+    {
         com::sun::star::xml::sax::SAXParseException saxex;
-        saxex.Message = msg;
+        saxex.Message = make_error_message(ctxt);
         saxex.LineNumber = static_cast<sal_Int32>(ctxt->lastError.line);
         saxex.ColumnNumber = static_cast<sal_Int32>(ctxt->lastError.int2);
+        xmlFreeParserCtxt(ctxt);
         throw saxex;
     }
 
