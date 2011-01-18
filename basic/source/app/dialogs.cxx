@@ -817,12 +817,12 @@ void GenericOptions::LoadData()
     LINK( this, GenericOptions, LoadGroup ).Call( NULL );
 }
 
-void GenericOptions::ShowSelectPath( const String aType )
+void GenericOptions::ShowSelectPath( const String &rType )
 {
     Point aNPos = aPbNewValue.GetPosPixel();
     Point aDPos = aPbDelValue.GetPosPixel();
     long nDelta = aDPos.Y() - aNPos.Y();
-    if ( aType.EqualsIgnoreCaseAscii( "PATH" ) && !bShowSelectPath )
+    if ( rType.EqualsIgnoreCaseAscii( "PATH" ) && !bShowSelectPath )
     {   // Show Path button
         nMoveButtons += nDelta;
         aMoveTimer.Start();
@@ -830,7 +830,7 @@ void GenericOptions::ShowSelectPath( const String aType )
         aPbSelectPath.Show( TRUE );
         aPbSelectPath.Enable( TRUE );
     }
-    else if ( !aType.EqualsIgnoreCaseAscii( "PATH" ) && bShowSelectPath )
+    else if ( !rType.EqualsIgnoreCaseAscii( "PATH" ) && bShowSelectPath )
     {   // Hide Path button
         nMoveButtons -= nDelta;
         aMoveTimer.Start();

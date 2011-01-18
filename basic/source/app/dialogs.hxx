@@ -273,7 +273,7 @@ class GenericOptions : public TabPage
     StringList* GetAllGroups();
     void LoadData();
 
-    void ShowSelectPath( const String aType );
+    void ShowSelectPath( const String& rType );
 
     DECL_LINK( LoadGroup, ComboBox* );
     DECL_LINK( DelGroup, Button* );
