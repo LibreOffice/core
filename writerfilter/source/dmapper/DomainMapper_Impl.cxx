@@ -535,6 +535,38 @@ void DomainMapper_Impl::clearDeferredBreaks()
     m_bIsColumnBreakDeferred = false;
     m_bIsPageBreakDeferred = false;
 }
+
+bool lcl_removeShape( const uno::Reference<  text::XTextDocument >& rDoc, const uno::Reference< drawing::XShape >& rShape, TextContentStack& rAnchoredStack,TextAppendStack&  rTextAppendStack )
+{
+    bool bRet = false;
+    // probably unecessary but just double check that indeed the top of Anchored stack
+    // does contain the shape we intend to remove
+    uno::Reference< drawing::XShape > xAnchorShape(rAnchoredStack.top( ), uno::UNO_QUERY );
+    if ( xAnchorShape == rShape )
+    {
+        // because we only want to process the embedded object and not the associated
+        // shape we need to get rid of that shape from the Draw page and Anchored and
+        // Append stacks  so it wont be processed further
+        try
+        {
+            uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(rDoc, uno::UNO_QUERY_THROW);
+            uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPageSupplier->getDrawPage();
+            if ( xDrawPage.is() )
+            {
+                xDrawPage->remove( rShape );
+            }
+            osl_trace("**** after removing shape ");
+            rAnchoredStack.pop();
+            rTextAppendStack.pop();
+            bRet = true;
+        }
+        catch( uno::Exception& e )
+        {
+        }
+    }
+    return bRet;
+}
+
 /*-------------------------------------------------------------------------
 
   -----------------------------------------------------------------------*/
@@ -992,6 +1024,15 @@ void DomainMapper_Impl::appendOLE( const ::rtl::OUString& rStreamName, OLEHandle
         uno::Reference< graphic::XGraphic > xGraphic = pOLEHandler->getReplacement();
         xOLEProperties->setPropertyValue(PropertyNameSupplier::GetPropertyNameSupplier().GetName( PROP_GRAPHIC ),
                         uno::makeAny(xGraphic));
+        // mimic the treatment of graphics here.. it seems anchoring as character
+        // gives a better ( visually ) result
+        xOLEProperties->setPropertyValue(PropertyNameSupplier::GetPropertyNameSupplier().GetName( PROP_ANCHOR_TYPE ),  uno::makeAny( text::TextContentAnchorType_AS_CHARACTER ) );
+        // remove ( if valid ) associated shape ( used for graphic replacement )
+        if ( m_bShapeContextAdded )
+        {
+            if ( lcl_removeShape(  m_xTextDocument, pOLEHandler->getShape(), m_aAnchoredStack, m_aTextAppendStack ) )
+                m_bShapeContextAdded = false; // ensure PopShapeContext processing doesn't pop the append stack
+        }
 
         //
         appendTextContent( xOLE, uno::Sequence< beans::PropertyValue >() );
