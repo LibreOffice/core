@@ -364,6 +364,63 @@ Point SwFrm::GetFrmAnchorPos( sal_Bool bIgnoreFlysAnchoredAtThisFrame ) const
 |*************************************************************************/
 
 
+SwFrm::~SwFrm()
+{
+    // accessible objects for fly and cell frames have been already disposed
+    // by the destructors of the derived classes.
+    if( IsAccessibleFrm() && !(IsFlyFrm() || IsCellFrm()) && GetDep() )
+    {
+        SwRootFrm *pRootFrm = FindRootFrm();
+        if( pRootFrm && pRootFrm->IsAnyShellAccessible() )
+        {
+            ViewShell *pVSh = pRootFrm->GetCurrShell();
+            if( pVSh && pVSh->Imp() )
+            {
+                OSL_ENSURE( !GetLower(), "Lowers should be dispose already!" );
+                pVSh->Imp()->DisposeAccessibleFrm( this );
+            }
+        }
+    }
+
+    if( pDrawObjs )
+    {
+        for ( sal_uInt32 i = pDrawObjs->Count(); i; )
+        {
+            SwAnchoredObject* pAnchoredObj = (*pDrawObjs)[--i];
+            if ( pAnchoredObj->ISA(SwFlyFrm) )
+                delete pAnchoredObj;
+            else
+            {
+                SdrObject* pSdrObj = pAnchoredObj->DrawObj();
+                SwDrawContact* pContact =
+                        static_cast<SwDrawContact*>(pSdrObj->GetUserCall());
+                OSL_ENSURE( pContact,
+                        "<SwFrm::~SwFrm> - missing contact for drawing object" );
+                if ( pContact )
+                {
+                    pContact->DisconnectObjFromLayout( pSdrObj );
+                }
+            }
+        }
+        if ( pDrawObjs )
+            delete pDrawObjs;
+    }
+
+#if OSL_DEBUG_LEVEL > 1
+    // JP 15.10.2001: for detection of access to deleted frames
+    pDrawObjs = (SwSortedObjs*)0x33333333;
+#endif
+}
+
+/*************************************************************************
+|*
+|*    SwLayoutFrm::SetFrmFmt()
+|*    Ersterstellung    MA 22. Apr. 93
+|*    Letzte Aenderung  MA 02. Nov. 94
+|*
+|*************************************************************************/
+
+
 void SwLayoutFrm::SetFrmFmt( SwFrmFmt *pNew )
 {
     if ( pNew != GetFmt() )
