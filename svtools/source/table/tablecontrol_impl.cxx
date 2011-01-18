@@ -1242,10 +1242,6 @@ namespace svt { namespace table
         // our current style settings, to be passed to the renderer
         const StyleSettings& rStyle = m_rAntiImpl.GetSettings().GetStyleSettings();
         m_nRowCount = m_pModel->getRowCount();
-        TableSize nVisibleRows = impl_getVisibleRows(true);
-        TableSize nActualRows = m_nRowCount;
-        if(m_nRowCount>nVisibleRows)
-            nActualRows = nVisibleRows;
         // the area occupied by all (at least partially) visible cells, including
         // headers
         Rectangle aAllCellsWithHeaders;
@@ -1285,10 +1281,13 @@ namespace svt { namespace table
         {
             aRowHeaderArea = aAllCellsWithHeaders;
             aRowHeaderArea.Right() = m_nRowHeaderWidthPixel - 1;
+
+            TableSize const nVisibleRows = impl_getVisibleRows( true );
+            TableSize nActualRows = nVisibleRows;
             if ( m_nTopRow + nActualRows > m_nRowCount )
-                aRowHeaderArea.Bottom() = m_nRowHeightPixel * (nActualRows - 1 ) + m_nColHeaderHeightPixel - 1;
-            else
-                aRowHeaderArea.Bottom() = m_nRowHeightPixel * nActualRows + m_nColHeaderHeightPixel - 1;
+                nActualRows = m_nRowCount - m_nTopRow;
+            aRowHeaderArea.Bottom() = m_nColHeaderHeightPixel + m_nRowHeightPixel * nActualRows - 1;
+
             pRenderer->PaintHeaderArea( *m_pDataWindow, aRowHeaderArea, false, true, rStyle );
             // Note that strictly, aRowHeaderArea also contains the intersection between column
             // and row header area. However, below we go to paint this intersection, again,
