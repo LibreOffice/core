@@ -137,8 +137,8 @@ int splash_load_bmp( const char *filename )
                   PNG_TRANSFORM_GRAY_TO_RGB | PNG_TRANSFORM_BGR, NULL);
 
     bitmap_rows = png_get_rows( png_ptr, info_ptr );
-    width = info_ptr->width;
-    height = info_ptr->height;
+    width = png_get_image_width( png_ptr, info_ptr );
+    height = png_get_image_height( png_ptr, info_ptr );
 
 #if 0
     {
