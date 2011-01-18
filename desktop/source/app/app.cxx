@@ -671,14 +671,17 @@ void Desktop::Init()
     }
 
     // create service factory...
-    Reference < XMultiServiceFactory > rSMgr = CreateApplicationServiceManager();
-    if( rSMgr.is() )
+    if( !::comphelper::getProcessServiceFactory().is()) // may be set from Desktop::EarlyCommandLineArgsPrepare()
     {
-        ::comphelper::setProcessServiceFactory( rSMgr );
-    }
-    else
-    {
-        SetBootstrapError( BE_UNO_SERVICEMANAGER );
+        Reference < XMultiServiceFactory > rSMgr = CreateApplicationServiceManager();
+        if( rSMgr.is() )
+        {
+            ::comphelper::setProcessServiceFactory( rSMgr );
+        }
+        else
+        {
+            SetBootstrapError( BE_UNO_SERVICEMANAGER );
+        }
     }
 
     if ( GetBootstrapError() == BE_OK )
@@ -696,18 +699,6 @@ void Desktop::Init()
     if ( GetBootstrapError() == BE_OK )
     {
         CommandLineArgs* pCmdLineArgs = GetCommandLineArgs();
-#ifdef UNX
-    //  check whether we need to print cmdline help
-    if ( pCmdLineArgs->IsHelp() ) {
-        displayCmdlineHelp();
-        SetBootstrapStatus(BS_TERMINATE);
-    }
-    else if ( pCmdLineArgs->IsVersion() )
-    {
-        displayVersion();
-        SetBootstrapStatus(BS_TERMINATE);
-    }
-#endif
         // start ipc thread only for non-remote offices
         RTL_LOGFILE_CONTEXT( aLog2, "desktop (cd100003) ::OfficeIPCThread::EnableOfficeIPCThread" );
         OfficeIPCThread::Status aStatus = OfficeIPCThread::EnableOfficeIPCThread();
@@ -735,6 +726,19 @@ void Desktop::InitFinished()
 
     CloseSplashScreen();
 }
+
+#ifdef UNX
+// GetCommandLineArgs() requires this code to work, otherwise it will abort, and
+// on Unix command line args needs to be checked before Desktop::Init()
+void Desktop::EarlyCommandLineArgsPrepare()
+{
+    Reference < XMultiServiceFactory > rSMgr = CreateApplicationServiceManager();
+    if( rSMgr.is() )
+    {
+        ::comphelper::setProcessServiceFactory( rSMgr );
+    }
+}
+#endif
 
 void Desktop::DeInit()
 {

@@ -30,6 +30,8 @@
 #include "precompiled_desktop.hxx"
 
 #include "app.hxx"
+#include "cmdlineargs.hxx"
+#include "cmdlinehelp.hxx"
 
 #include <rtl/logfile.hxx>
 #include <tools/extendapplicationenvironment.hxx>
@@ -47,6 +49,22 @@ extern "C" int soffice_main()
     desktop::Desktop aDesktop;
     // This string is used during initialization of the Gtk+ VCL module
     aDesktop.SetAppName( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("soffice")) );
+#ifdef UNX
+    // handle --version and --help already here, otherwise they would be handled
+    // after VCL initialization that might fail if $DISPLAY is not set
+    aDesktop.EarlyCommandLineArgsPrepare();
+    desktop::CommandLineArgs* pCmdLineArgs = aDesktop.GetCommandLineArgs();
+    if ( pCmdLineArgs->IsHelp() )
+    {
+        desktop::displayCmdlineHelp();
+        return EXIT_SUCCESS;
+    }
+    else if ( pCmdLineArgs->IsVersion() )
+    {
+        desktop::displayVersion();
+        return EXIT_SUCCESS;
+    }
+#endif
     return SVMain();
 }
 

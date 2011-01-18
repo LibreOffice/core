@@ -137,6 +137,10 @@ class Desktop : public Application
         void                    SetSplashScreenText( const ::rtl::OUString& rText );
         void                    SetSplashScreenProgress( sal_Int32 );
 
+#ifdef UNX
+        void EarlyCommandLineArgsPrepare();
+#endif
+
     private:
         // Bootstrap methods
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > CreateApplicationServiceManager();
