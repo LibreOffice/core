@@ -49,7 +49,7 @@ class CommandEvent;
 
 /**************************************************************************/
 
-    void SmGetLeftSelectionPart(const ESelection aSelection,
+    void SmGetLeftSelectionPart(const ESelection &rSelection,
                                 USHORT &nPara, USHORT &nPos);
 
 /**************************************************************************/

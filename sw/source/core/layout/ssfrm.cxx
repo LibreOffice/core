@@ -217,7 +217,7 @@ void SwFrm::SetRightLeftMargins( long nRight, long nLeft)
 
 const USHORT nMinVertCellHeight = 1135;
 
-/*-----------------11.9.2001 11:11------------------
+/*--------------------------------------------------
  * SwFrm::CheckDirChange(..)
  * checks the layout direction and
  * invalidates the lower frames rekursivly, if necessary.
@@ -316,7 +316,7 @@ void SwFrm::CheckDirChange()
     }
 }
 
-/*-----------------13.9.2002 11:11------------------
+/*--------------------------------------------------
  * SwFrm::GetFrmAnchorPos(..)
  * returns the position for anchors based on frame direction
  * --------------------------------------------------*/
@@ -360,6 +360,61 @@ Point SwFrm::GetFrmAnchorPos( sal_Bool bIgnoreFlysAnchoredAtThisFrame ) const
 /*************************************************************************
 |*
 |*  SwFrm::~SwFrm()
+|*
+|*************************************************************************/
+
+
+SwFrm::~SwFrm()
+{
+    // accessible objects for fly and cell frames have been already disposed
+    // by the destructors of the derived classes.
+    if( IsAccessibleFrm() && !(IsFlyFrm() || IsCellFrm()) && GetDep() )
+    {
+        SwRootFrm *pRootFrm = FindRootFrm();
+        if( pRootFrm && pRootFrm->IsAnyShellAccessible() )
+        {
+            ViewShell *pVSh = pRootFrm->GetCurrShell();
+            if( pVSh && pVSh->Imp() )
+            {
+                OSL_ENSURE( !GetLower(), "Lowers should be dispose already!" );
+                pVSh->Imp()->DisposeAccessibleFrm( this );
+            }
+        }
+    }
+
+    if( pDrawObjs )
+    {
+        for ( sal_uInt32 i = pDrawObjs->Count(); i; )
+        {
+            SwAnchoredObject* pAnchoredObj = (*pDrawObjs)[--i];
+            if ( pAnchoredObj->ISA(SwFlyFrm) )
+                delete pAnchoredObj;
+            else
+            {
+                SdrObject* pSdrObj = pAnchoredObj->DrawObj();
+                SwDrawContact* pContact =
+                        static_cast<SwDrawContact*>(pSdrObj->GetUserCall());
+                OSL_ENSURE( pContact,
+                        "<SwFrm::~SwFrm> - missing contact for drawing object" );
+                if ( pContact )
+                {
+                    pContact->DisconnectObjFromLayout( pSdrObj );
+                }
+            }
+        }
+        if ( pDrawObjs )
+            delete pDrawObjs;
+    }
+
+#if OSL_DEBUG_LEVEL > 1
+    // JP 15.10.2001: for detection of access to deleted frames
+    pDrawObjs = (SwSortedObjs*)0x33333333;
+#endif
+}
+
+/*************************************************************************
+|*
+|*    SwLayoutFrm::SetFrmFmt()
 |*
 |*************************************************************************/
 
