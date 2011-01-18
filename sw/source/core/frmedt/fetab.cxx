@@ -201,8 +201,6 @@ void SwFEShell::ParkCursorInTab()
 /***********************************************************************
 #*  Class      :  SwFEShell
 #*  Methoden   :  InsertRow(), InsertCol
-#*  Datum      :  MA 03. May. 93
-#*  Update     :  MA 19. Apr. 95
 #***********************************************************************/
 BOOL SwFEShell::InsertRow( USHORT nCnt, BOOL bBehind )
 {
@@ -276,8 +274,6 @@ BOOL SwFEShell::InsertCol( USHORT nCnt, BOOL bBehind )
 /***********************************************************************
 #*  Class      :  SwFEShell
 #*  Methoden   :  DeleteRow(), DeleteCol()
-#*  Datum      :  MA 03. May. 93
-#*  Update     :  MA 19. Apr. 95
 #***********************************************************************/
 
 /**
@@ -469,8 +465,6 @@ BOOL SwFEShell::DeleteRow()
 /***********************************************************************
 #*  Class      :  SwFEShell
 #*  Methoden   :  MergeTab(), SplitTab()
-#*  Datum      :  MA 03. May. 93
-#*  Update     :  MA 19. Apr. 95
 #***********************************************************************/
 
 USHORT SwFEShell::MergeTab()
@@ -551,8 +545,6 @@ BOOL SwFEShell::SplitTab( BOOL bVert, USHORT nCnt, BOOL bSameHeight )
 /***********************************************************************
 #*  Class      :  SwFEShell
 #*  Methoden   :  _GetTabCols
-#*  Datum      :  MA 30. Nov. 95
-#*  Update     :  MA 08. Jan. 97
 #***********************************************************************/
 void SwFEShell::_GetTabCols( SwTabCols &rToFill, const SwFrm *pBox ) const
 {
@@ -631,8 +623,6 @@ void SwFEShell::_GetTabCols( SwTabCols &rToFill, const SwFrm *pBox ) const
 /***********************************************************************
 #*  Class      :  SwFEShell
 #*  Methoden   :  _GetTabRows
-#*  Datum      :  FME 2004-01-14
-#*  Update     :
 #***********************************************************************/
 void SwFEShell::_GetTabRows( SwTabCols &rToFill, const SwFrm *pBox ) const
 {
@@ -685,8 +675,6 @@ void SwFEShell::_GetTabRows( SwTabCols &rToFill, const SwFrm *pBox ) const
 /***********************************************************************
 #*  Class      :  SwFEShell
 #*  Methoden   :  SetTabCols(), GetTabCols()
-#*  Datum      :  MA 03. May. 93
-#*  Update     :  MA 18. May. 93
 #***********************************************************************/
 void SwFEShell::SetTabCols( const SwTabCols &rNew, BOOL bCurRowOnly )
 {
@@ -768,7 +756,6 @@ void SwFEShell::SetMouseTabRows( const SwTabCols &rNew, BOOL bCurColOnly, const 
 /***********************************************************************
  *  Class      :  SwFEShell
  *  Methoden   :  SetRowSplit(), GetRowSplit()
- *  Datum      :  FME 13.11.2003
  ***********************************************************************/
 
 void SwFEShell::SetRowSplit( const SwFmtRowSplit& rNew )
@@ -788,8 +775,6 @@ void SwFEShell::GetRowSplit( SwFmtRowSplit*& rpSz ) const
 /***********************************************************************
 #*  Class      :  SwFEShell
 #*  Methoden   :  SetRowHeight(), GetRowHeight()
-#*  Datum      :  MA 17. May. 93
-#*  Update     :  JP 29.04.98
 #***********************************************************************/
 
 void SwFEShell::SetRowHeight( const SwFmtFrmSize &rNew )
@@ -841,8 +826,6 @@ BOOL SwFEShell::GetRowBackground( SvxBrushItem &rToFill ) const
 /***********************************************************************
 #*  Class      :  SwFEShell
 #*  Methoden   :  SetTabBorders(), GetTabBorders()
-#*  Datum      :  MA 18. May. 93
-#*  Update     :  JP 29.04.98
 #***********************************************************************/
 
 void SwFEShell::SetTabBorders( const SfxItemSet& rSet )
@@ -872,8 +855,6 @@ void SwFEShell::GetTabBorders( SfxItemSet& rSet ) const
 /***********************************************************************
 #*  Class      :  SwFEShell
 #*  Methoden   :  SetBoxBackground(), GetBoxBackground()
-#*  Datum      :  MA 01. Jun. 93
-#*  Update     :  MA 03. Jul. 96
 #***********************************************************************/
 void SwFEShell::SetBoxBackground( const SvxBrushItem &rNew )
 {
@@ -891,8 +872,6 @@ BOOL SwFEShell::GetBoxBackground( SvxBrushItem &rToFill ) const
 /***********************************************************************
 #*  Class      :  SwFEShell
 #*  Methoden   :  SetBoxDirection(), GetBoxDirection()
-#*  Datum      :  FME 2004-02-03
-#*  Update     :  FME 2004-02-03
 #***********************************************************************/
 void SwFEShell::SetBoxDirection( const SvxFrameDirectionItem& rNew )
 {
@@ -910,8 +889,6 @@ BOOL SwFEShell::GetBoxDirection( SvxFrameDirectionItem&  rToFill ) const
 /***********************************************************************
 #*  Class      :  SwFEShell
 #*  Methoden   :  SetBoxAlign, SetBoxAlign
-#*  Datum      :  MA 18. Dec. 96
-#*  Update     :  JP 29.04.98
 #***********************************************************************/
 void SwFEShell::SetBoxAlign( USHORT nAlign )
 {
@@ -929,8 +906,6 @@ USHORT SwFEShell::GetBoxAlign() const
 /***********************************************************************
 #*  Class      :  SwFEShell
 #*  Methoden   :  SetTabBackground(), GetTabBackground()
-#*  Datum      :  MA 08. Jul. 96
-#*  Update     :  MA 08. Jul. 96
 #***********************************************************************/
 void SwFEShell::SetTabBackground( const SvxBrushItem &rNew )
 {
@@ -956,8 +931,6 @@ void SwFEShell::GetTabBackground( SvxBrushItem &rToFill ) const
 /***********************************************************************
 #*  Class      :  SwFEShell
 #*  Methoden   :  HasWholeTabSelection()
-#*  Datum      :  MA 18. May. 93
-#*  Update     :  MA 20. Jul. 93
 #***********************************************************************/
 BOOL SwFEShell::HasWholeTabSelection() const
 {
@@ -1022,8 +995,6 @@ BOOL SwFEShell::HasBoxSelection() const
 /***********************************************************************
 #*  Class      :  SwFEShell
 #*  Methoden   :  ProtectCells(), UnProtectCells()
-#*  Datum      :  MA 20. Jul. 93
-#*  Update     :  JP 25. Sep. 93
 #***********************************************************************/
 void SwFEShell::ProtectCells()
 {
@@ -1237,8 +1208,6 @@ BOOL SwFEShell::CheckHeadline( bool bRepeat ) const
 /***********************************************************************
 #*  Class      :  SwFEShell
 #*  Methoden   :  AdjustCellWidth()
-#*  Datum      :  MA 20. Feb. 95
-#*  Update     :  MA 27. Jul. 95
 #***********************************************************************/
 
 void SwFEShell::AdjustCellWidth( BOOL bBalance )
@@ -1370,8 +1339,6 @@ BOOL SwFEShell::GetTableAutoFmt( SwTableAutoFmt& rGet )
 /***********************************************************************
 #*  Class      :  SwFEShell
 #*  Methoden   :  DeleteTblSel()
-#*  Datum      :  MA 03. May. 93
-#*  Update     :  MA 19. Apr. 95
 #***********************************************************************/
 BOOL SwFEShell::DeleteTblSel()
 {

@@ -160,8 +160,6 @@ BOOL lcl_GetBoxSel( const SwCursor& rCursor, SwSelBoxes& rBoxes,
 /***********************************************************************
 #*  Class      :  SwDoc
 #*  Methoden   :  SetRowHeight(), GetRowHeight()
-#*  Datum      :  MA 17. May. 93
-#*  Update     :  JP 28.04.98
 #***********************************************************************/
 //Die Zeilenhoehe wird ausgehend von der Selektion ermittelt/gesetzt.
 //Ausgehend von jeder Zelle innerhalb der Selektion werden nach oben alle
@@ -553,8 +551,6 @@ BOOL SwDoc::GetRowBackground( const SwCursor& rCursor, SvxBrushItem &rToFill ) c
 /***********************************************************************
 #*  Class      :  SwDoc
 #*  Methoden   :  SetTabBorders(), GetTabBorders()
-#*  Datum      :  MA 18. May. 93
-#*  Update     :  JP 29.04.98
 #***********************************************************************/
 inline void InsertCell( SvPtrarr& rCellArr, SwCellFrm* pCellFrm )
 {
@@ -1123,8 +1119,6 @@ void SwDoc::GetTabBorders( const SwCursor& rCursor, SfxItemSet& rSet ) const
 /***********************************************************************
 #*  Class      :  SwDoc
 #*  Methoden   :  SetBoxAttr
-#*  Datum      :  MA 18. Dec. 96
-#*  Update     :  JP 29.04.98
 #***********************************************************************/
 void SwDoc::SetBoxAttr( const SwCursor& rCursor, const SfxPoolItem &rNew )
 {
@@ -1173,8 +1167,6 @@ void SwDoc::SetBoxAttr( const SwCursor& rCursor, const SfxPoolItem &rNew )
 /***********************************************************************
 #*  Class      :  SwDoc
 #*  Methoden   :  GetBoxAttr()
-#*  Datum      :  MA 01. Jun. 93
-#*  Update     :  JP 29.04.98
 #***********************************************************************/
 
 BOOL SwDoc::GetBoxAttr( const SwCursor& rCursor, SfxPoolItem& rToFill ) const
@@ -1229,8 +1221,6 @@ BOOL SwDoc::GetBoxAttr( const SwCursor& rCursor, SfxPoolItem& rToFill ) const
 /***********************************************************************
 #*  Class      :  SwDoc
 #*  Methoden   :  SetBoxAlign, SetBoxAlign
-#*  Datum      :  MA 18. Dec. 96
-#*  Update     :  JP 29.04.98
 #***********************************************************************/
 void SwDoc::SetBoxAlign( const SwCursor& rCursor, USHORT nAlign )
 {
@@ -1266,8 +1256,6 @@ USHORT SwDoc::GetBoxAlign( const SwCursor& rCursor ) const
 /***********************************************************************
 #*  Class      :  SwDoc
 #*  Methoden   :  AdjustCellWidth()
-#*  Datum      :  MA 20. Feb. 95
-#*  Update     :  JP 29.04.98
 #***********************************************************************/
 USHORT lcl_CalcCellFit( const SwLayoutFrm *pCell )
 {
