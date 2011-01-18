@@ -956,7 +956,7 @@ void X11SalFrame::updateGraphics( bool bClear )
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
-void X11SalFrame::Enable( BOOL /*bEnable*/ )
+void X11SalFrame::Enable( sal_Bool /*bEnable*/ )
 {
     // NYI: enable/disable frame
 }
@@ -1065,7 +1065,7 @@ void X11SalFrame::SetIcon( sal_uInt16 nIcon )
         }
         pHints = &Hints;
 
-        BOOL bOk = SelectAppIconPixmap( GetDisplay(), m_nScreen,
+        sal_Bool bOk = SelectAppIconPixmap( GetDisplay(), m_nScreen,
                                         nIcon, iconSize,
                                         pHints->icon_pixmap, pHints->icon_mask );
         if ( !bOk )
@@ -1138,7 +1138,7 @@ void X11SalFrame::SetMinClientSize( long nWidth, long nHeight )
 
 // Show + Pos (x,y,z) + Size (width,height)
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-void X11SalFrame::Show( BOOL bVisible, BOOL bNoActivate )
+void X11SalFrame::Show( sal_Bool bVisible, sal_Bool bNoActivate )
 {
     if( ( bVisible && bMapped_ )
         || ( !bVisible && !bMapped_ ) )
@@ -1631,7 +1631,7 @@ void X11SalFrame::SetPosSize( long nX, long nY, long nWidth, long nHeight, sal_u
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-void X11SalFrame::SetAlwaysOnTop( BOOL bOnTop )
+void X11SalFrame::SetAlwaysOnTop( sal_Bool bOnTop )
 {
     if( ! IsOverrideRedirect() )
     {
@@ -1812,7 +1812,7 @@ void X11SalFrame::SetWindowState( const SalFrameState *pState )
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-BOOL X11SalFrame::GetWindowState( SalFrameState* pState )
+sal_Bool X11SalFrame::GetWindowState( SalFrameState* pState )
 {
     if( SHOWSTATE_MINIMIZED == nShowState_ )
         pState->mnState = SAL_FRAMESTATE_MINIMIZED;
@@ -2192,7 +2192,7 @@ void X11SalFrame::SetScreenNumber( unsigned int nNewScreen )
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
-void X11SalFrame::ShowFullScreen( BOOL bFullScreen, sal_Int32 nScreen )
+void X11SalFrame::ShowFullScreen( sal_Bool bFullScreen, sal_Int32 nScreen )
 {
     if( GetDisplay()->IsXinerama() && GetDisplay()->GetXineramaScreens().size() > 1 )
     {
@@ -2362,7 +2362,7 @@ void X11SalFrame::StartPresentation( sal_Bool bStart )
     static bool DPMSExtensionAvailable =
 #ifndef SOLARIS
         (DPMSQueryExtension(GetXDisplay(), &dummy, &dummy) != 0);
-    static BOOL DPMSEnabled = false;
+    static sal_Bool DPMSEnabled = false;
 #else
         false;
     bool DPMSEnabled = false;
@@ -2541,7 +2541,7 @@ X11SalFrame::HandleExtTextEvent (XClientMessageEvent *pEvent)
 
 // PostEvent
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-BOOL X11SalFrame::PostEvent( void *pData )
+sal_Bool X11SalFrame::PostEvent( void *pData )
 {
     GetDisplay()->SendInternalEvent( this, pData );
     return sal_True;
@@ -2634,7 +2634,7 @@ XubString X11SalFrame::GetSymbolKeyName( const XubString&, sal_uInt16 nKeyCode )
   return GetKeyName( nKeyCode );
 }
 
-BOOL X11SalFrame::MapUnicodeToKeyCode( sal_Unicode , LanguageType , KeyCode& )
+sal_Bool X11SalFrame::MapUnicodeToKeyCode( sal_Unicode , LanguageType , KeyCode& )
 {
     // not supported yet
     return sal_False;
@@ -2665,7 +2665,7 @@ void X11SalFrame::UpdateSettings( AllSettings& rSettings )
         pIntegrator->GetSystemLook( rSettings );
 }
 
-void X11SalFrame::CaptureMouse( BOOL bCapture )
+void X11SalFrame::CaptureMouse( sal_Bool bCapture )
 {
     nCaptured_ = pDisplay_->CaptureMouse( bCapture ? this : NULL );
 }
@@ -3814,9 +3814,9 @@ long X11SalFrame::HandleReparentEvent( XReparentEvent *pEvent )
     XLIB_Window     hWM_Parent;
     XLIB_Window     hRoot, *Children, hDummy;
     unsigned int    nChildren;
-    BOOL            bNone = pDisplay_->GetProperties()
+    sal_Bool            bNone = pDisplay_->GetProperties()
                             & PROPERTY_SUPPORT_WM_Parent_Pixmap_None;
-    BOOL            bAccessParentWindow = ! (pDisplay_->GetProperties()
+    sal_Bool            bAccessParentWindow = ! (pDisplay_->GetProperties()
                             & PROPERTY_FEATURE_TrustedSolaris);
 
     static const char* pDisableStackingCheck = getenv( "SAL_DISABLE_STACKING_CHECK" );
