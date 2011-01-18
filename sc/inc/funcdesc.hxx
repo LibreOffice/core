@@ -230,8 +230,11 @@ public:
     const ScFuncDesc*   Next()
                         { return (const ScFuncDesc*) aFunctionList.Next(); }
 
-    const ScFuncDesc*   GetFunction( sal_uInt32 nIndex ) const
-                    { return (const ScFuncDesc*) aFunctionList.GetObject( nIndex ); }
+    const ScFuncDesc* GetFunction( sal_uInt32 nIndex ) const
+        { return static_cast<const ScFuncDesc*>(aFunctionList.GetObject(nIndex)); }
+
+    ScFuncDesc* GetFunction( sal_uInt32 nIndex )
+        { return static_cast<ScFuncDesc*>(aFunctionList.GetObject(nIndex)); }
 
     xub_StrLen      GetMaxFuncNameLen() const
                     { return nMaxFuncNameLen; }

@@ -103,7 +103,6 @@ public:
                         // name and description of parameter nParam.
                         // nParam==0 => Desc := function description,
                         // Name := n/a
-            BOOL        GetParamDesc( String& aName, String& aDesc, USHORT nParam );
             bool        getParamDesc( ::rtl::OUString& aName, ::rtl::OUString& aDesc, sal_uInt16 nParam );
 
 };

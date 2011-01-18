@@ -222,7 +222,7 @@ void ScFuncDesc::Clear()
 
 ::rtl::OUString ScFuncDesc::getFormula( const ::std::vector< ::rtl::OUString >& _aArguments ) const
 {
-    ::rtl::OUString sep(ScCompiler::GetNativeSymbol(ocSep));
+    ::rtl::OUString sep = ScCompiler::GetNativeSymbol(ocSep);
 
     ::rtl::OUStringBuffer aFormula;
 
@@ -401,14 +401,14 @@ ScFunctionList::ScFunctionList() :
 
     aFunctionList.Clear();
 
-    for ( sal_uInt16 k = 0; k < SAL_N_ELEMENTS(nDescBlock); k++ )
+    for (sal_uInt16 k = 0; k < SAL_N_ELEMENTS(nDescBlock); ++k)
     {
         ::std::auto_ptr<ScResourcePublisher> pBlock( new ScResourcePublisher( ScResId( nDescBlock[k] ) ) );
         // Browse for all possible OpCodes. This is not the fastest method, but
         // otherwise the sub resources within the resource blocks and the
         // resource blocks themselfs would had to be ordered according to
         // OpCodes, which is utopian..
-        for (sal_uInt16 i = 0; i <= SC_OPCODE_LAST_OPCODE_ID; i++)
+        for (sal_uInt16 i = 0; i <= SC_OPCODE_LAST_OPCODE_ID; ++i)
         {
             ScResId aRes(i);
             aRes.SetRT(RSC_RESOURCE);
@@ -439,21 +439,22 @@ ScFunctionList::ScFunctionList() :
     sal_uInt16 nNextId = SC_OPCODE_LAST_OPCODE_ID + 1; // FuncID for AddIn functions
 
     // Interpretation of AddIn list
-    ::rtl::OUString aDefArgNameValue = ::rtl::OUString::createFromAscii("value");
-    ::rtl::OUString aDefArgNameString = ::rtl::OUString::createFromAscii("string");
-    ::rtl::OUString aDefArgNameValues = ::rtl::OUString::createFromAscii("values");
-    ::rtl::OUString aDefArgNameStrings = ::rtl::OUString::createFromAscii("strings");
-    ::rtl::OUString aDefArgNameCells = ::rtl::OUString::createFromAscii("cells");
-    ::rtl::OUString aDefArgNameNone = ::rtl::OUString::createFromAscii("none");
-    ::rtl::OUString aDefArgDescValue = ::rtl::OUString::createFromAscii("a value");
-    ::rtl::OUString aDefArgDescString = ::rtl::OUString::createFromAscii("a string");
-    ::rtl::OUString aDefArgDescValues = ::rtl::OUString::createFromAscii("array of values");
-    ::rtl::OUString aDefArgDescStrings = ::rtl::OUString::createFromAscii("array of strings");
-    ::rtl::OUString aDefArgDescCells = ::rtl::OUString::createFromAscii("range of cells");
-    ::rtl::OUString aDefArgDescNone = ::rtl::OUString::createFromAscii("none");
+    ::rtl::OUString aDefArgNameValue   = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("value"));
+    ::rtl::OUString aDefArgNameString  = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("string"));
+    ::rtl::OUString aDefArgNameValues  = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("values"));
+    ::rtl::OUString aDefArgNameStrings = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("strings"));
+    ::rtl::OUString aDefArgNameCells   = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("cells"));
+    ::rtl::OUString aDefArgNameNone    = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("none"));
+    ::rtl::OUString aDefArgDescValue   = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("a value"));
+    ::rtl::OUString aDefArgDescString  = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("a string"));
+    ::rtl::OUString aDefArgDescValues  = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("array of values"));
+    ::rtl::OUString aDefArgDescStrings = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("array of strings"));
+    ::rtl::OUString aDefArgDescCells   = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("range of cells"));
+    ::rtl::OUString aDefArgDescNone    = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("none"));
+
     ::rtl::OUString aArgName, aArgDesc;
     pFuncColl = ScGlobal::GetFuncCollection();
-    for (sal_uInt16 i = 0; i < pFuncColl->GetCount(); i++)
+    for (sal_uInt16 i = 0; i < pFuncColl->GetCount(); ++i)
     {
         pDesc = new ScFuncDesc;
         FuncData *pAddInFuncData = (FuncData*)pFuncColl->At(i);
@@ -477,7 +478,7 @@ ScFunctionList::ScFunctionList() :
             pDesc->pDefArgFlags  = new ScFuncDesc::ParameterFlags[nArgs];
             pDesc->ppDefArgNames = new ::rtl::OUString*[nArgs];
             pDesc->ppDefArgDescs = new ::rtl::OUString*[nArgs];
-            for (sal_uInt16 j = 0; j < nArgs; j++)
+            for (sal_uInt16 j = 0; j < nArgs; ++j)
             {
                 pDesc->pDefArgFlags[j].bOptional = false;
                 pDesc->pDefArgFlags[j].bSuppress = false;
@@ -616,17 +617,17 @@ sal_uInt32 ScFunctionCategory::getNumber() const
 //========================================================================
 // class ScFunctionMgr:
 
-ScFunctionMgr::ScFunctionMgr()
-    :   pFuncList( ScGlobal::GetStarCalcFunctionList() ),
-        pCurCatList( NULL )
+ScFunctionMgr::ScFunctionMgr() :
+    pFuncList( ScGlobal::GetStarCalcFunctionList() ),
+    pCurCatList( NULL )
 {
     DBG_ASSERT( pFuncList, "Funktionsliste nicht gefunden." );
     sal_uInt32 nCount = pFuncList->GetCount();
-    const ScFuncDesc* pDesc;
+    ScFuncDesc* pDesc;
     List* pRootList;
     sal_uInt32 n;
 
-    for ( sal_uInt16 i=0; i<MAX_FUNCCAT; i++ ) // create category lists
+    for (sal_uInt16 i = 0; i < MAX_FUNCCAT; ++i) // create category lists
         aCatLists[i] = new List;
 
     pRootList = aCatLists[0]; // create cumulative list ("All")
@@ -639,19 +640,20 @@ ScFunctionMgr::ScFunctionMgr()
         {
             // it's case sensitiv, but special characters have to be put the right place
 
-            const ScFuncDesc* pTmpDesc = (const ScFuncDesc*)pRootList->GetObject(nTmpCnt);
+            const ScFuncDesc* pTmpDesc = static_cast<const ScFuncDesc*>(
+                pRootList->GetObject(nTmpCnt));
             if ( pCaseCollator->compareString(*pDesc->pFuncName, *pTmpDesc->pFuncName ) == COMPARE_LESS )
                 break;
         }
-        pRootList->Insert((void*)pDesc, nTmpCnt); // insert the right place
+        pRootList->Insert(static_cast<void*>(pDesc), nTmpCnt); // insert the right place
     }
 
     for ( n=0; n<nCount; n++ ) // copy to group list
     {
-        pDesc = (const ScFuncDesc*)pRootList->GetObject(n);
+        pDesc = static_cast<ScFuncDesc*>(pRootList->GetObject(n));
         DBG_ASSERT((pDesc->nCategory) < MAX_FUNCCAT, "Unbekannte Kategorie");
         if ((pDesc->nCategory) < MAX_FUNCCAT)
-            aCatLists[pDesc->nCategory]->Insert((void*)pDesc, LIST_APPEND);
+            aCatLists[pDesc->nCategory]->Insert(static_cast<void*>(pDesc), LIST_APPEND);
     }
 }
 
@@ -659,7 +661,7 @@ ScFunctionMgr::ScFunctionMgr()
 
 ScFunctionMgr::~ScFunctionMgr()
 {
-    for (sal_uInt16 i = 0; i < MAX_FUNCCAT; i++)
+    for (sal_uInt16 i = 0; i < MAX_FUNCCAT; ++i)
         delete aCatLists[i];
 }
 
@@ -742,7 +744,7 @@ void ScFunctionMgr::fillLastRecentlyUsedFunctions(::std::vector< const formula::
 
     if ( pLRUListIds )
     {
-        for ( sal_uInt16 i=0; i<nLRUFuncCount; i++ )
+        for (sal_uInt16 i = 0; i < nLRUFuncCount; ++i)
             _rLastRUFunctions.push_back( Get( pLRUListIds[i] ) );
     }
 }
@@ -756,7 +758,7 @@ void ScFunctionMgr::fillLastRecentlyUsedFunctions(::std::vector< const formula::
     }
 
     ::std::auto_ptr<ScResourcePublisher> pCategories( new ScResourcePublisher( ScResId( RID_FUNCTION_CATEGORIES ) ) );
-    return ResId::toString(ScResId((sal_uInt16)_nCategoryNumber));
+    return ResId::toString(ScResId(static_cast<sal_uInt16>(_nCategoryNumber)));
 }
 sal_Unicode ScFunctionMgr::getSingleToken(const formula::IFunctionManager::EToken _eToken) const
 {
@@ -789,7 +791,7 @@ ScFuncRes::ScFuncRes( ResId &aRes, ScFuncDesc* pDesc, bool & rbSuppressed )
     if (nArgs)
     {
         pDesc->pDefArgFlags = new ScFuncDesc::ParameterFlags[nArgs];
-        for (sal_uInt16 i = 0; i < nArgs; i++)
+        for (sal_uInt16 i = 0; i < nArgs; ++i)
         {
             pDesc->pDefArgFlags[i].bOptional = (bool)GetNum();
         }
@@ -805,7 +807,7 @@ ScFuncRes::ScFuncRes( ResId &aRes, ScFuncDesc* pDesc, bool & rbSuppressed )
                     aRes.GetId(), (int)nSuppressed, (int)nArgs);
             nSuppressed = nArgs;    // sanitize
         }
-        for (sal_uInt16 i=0; i < nSuppressed; ++i)
+        for (sal_uInt16 i = 0; i < nSuppressed; ++i)
         {
             sal_uInt16 nParam = GetNum();
             if (nParam < nArgs)
@@ -836,7 +838,7 @@ ScFuncRes::ScFuncRes( ResId &aRes, ScFuncDesc* pDesc, bool & rbSuppressed )
     {
         pDesc->ppDefArgNames = new ::rtl::OUString*[nArgs];
         pDesc->ppDefArgDescs = new ::rtl::OUString*[nArgs];
-        for (sal_uInt16 i = 0; i < nArgs; i++)
+        for (sal_uInt16 i = 0; i < nArgs; ++i)
         {
             pDesc->ppDefArgNames[i] = new ::rtl::OUString(ResId::toString(ScResId(2*(i+1)  )));
             pDesc->ppDefArgDescs[i] = new ::rtl::OUString(ResId::toString(ScResId(2*(i+1)+1)));

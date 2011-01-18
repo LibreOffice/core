@@ -436,36 +436,6 @@ const String& FuncData::GetModuleName() const
     return pModuleData->GetName();
 }
 
-//------------------------------------------------------------------------
-
-BOOL FuncData::GetParamDesc( String& aName, String& aDesc, USHORT nParam )
-{
-    BOOL bRet = FALSE;
-    if ( nParam <= nParamCount )
-    {
-        osl::Module* pLib = pModuleData->GetInstance();
-        FARPROC fProc = (FARPROC) pLib->getFunctionSymbol( LIBFUNCNAME(GETPARAMDESC) );
-        if ( fProc != NULL )
-        {
-            sal_Char pcName[256];
-            sal_Char pcDesc[256];
-            *pcName = *pcDesc = 0;
-            USHORT nFuncNo = nNumber;   // nicht per Reference versauen lassen..
-            ((::GetParamDesc)fProc)( nFuncNo, nParam, pcName, pcDesc );
-            aName = String( pcName, osl_getThreadTextEncoding() );
-            aDesc = String( pcDesc, osl_getThreadTextEncoding() );
-            bRet = TRUE;
-        }
-    }
-    if ( !bRet )
-    {
-        aName.Erase();
-        aDesc.Erase();
-    }
-    return bRet;
-}
-
-
 bool FuncData::getParamDesc( ::rtl::OUString& aName, ::rtl::OUString& aDesc, sal_uInt16 nParam )
 {
     bool bRet = false;
