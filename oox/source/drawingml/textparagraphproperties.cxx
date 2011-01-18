@@ -464,7 +464,7 @@ float TextParagraphProperties::getCharHeightPoints( float fDefault ) const
 
 #if OSL_DEBUG_LEVEL > 0
 
-void TextParagraphProperties::dump()
+void TextParagraphProperties::dump() const
 {
     Reference< ::com::sun::star::lang::XMultiServiceFactory > xFactory = comphelper::getProcessServiceFactory();
     Reference< ::com::sun::star::drawing::XShape > xShape( oox::ppt::PowerPointImport::mpDebugFilterBase->getModelFactory()->createInstance( CREATE_OUSTRING( "com.sun.star.presentation.TitleTextShape" ) ), UNO_QUERY );

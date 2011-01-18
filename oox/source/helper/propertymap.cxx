@@ -32,6 +32,7 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
+#include <com/sun/star/container/XIndexReplace.hpp>
 #include "properties.hxx"
 #include "oox/token/propertylist.hxx"
 
@@ -50,6 +51,7 @@ using ::com::sun::star::beans::XPropertyChangeListener;
 using ::com::sun::star::beans::XPropertySet;
 using ::com::sun::star::beans::XPropertySetInfo;
 using ::com::sun::star::beans::XVetoableChangeListener;
+using ::com::sun::star::container::XIndexReplace;
 
 #if OSL_DEBUG_LEVEL > 0
 #include <cstdio>
@@ -248,20 +250,8 @@ Reference< XPropertySet > PropertyMap::makePropertySet() const
 }
 
 #if OSL_DEBUG_LEVEL > 0
-void PropertyMap::dump( Reference< XPropertySet > rXPropSet )
+static void lclDumpAnyValue( Any value)
 {
-    Reference< XPropertySetInfo > info = rXPropSet->getPropertySetInfo ();
-    Sequence< beans::Property > props = info->getProperties ();
-
-    OSL_TRACE("dump props, len: %d", props.getLength ());
-
-    for (int i=0; i < props.getLength (); i++) {
-        OString name = OUStringToOString( props [i].Name, RTL_TEXTENCODING_UTF8);
-        fprintf (stderr,"%30s = ", name.getStr() );
-
-    try {
-        Any value = rXPropSet->getPropertyValue( props [i].Name );
-
         OUString strValue;
         sal_Int32 intValue = 0;
         sal_uInt32 uintValue = 0;
@@ -274,6 +264,7 @@ void PropertyMap::dump( Reference< XPropertySet > rXPropSet )
     WritingMode aWritingMode;
     TextVerticalAdjust aTextVertAdj;
     TextHorizontalAdjust aTextHorizAdj;
+    Reference< XIndexReplace > xNumRule;
 
         if( value >>= strValue )
             fprintf (stderr,"\"%s\"\n", USS( strValue ) );
@@ -289,11 +280,23 @@ void PropertyMap::dump( Reference< XPropertySet > rXPropSet )
             fprintf (stderr,"%f\n", floatValue);
         else if( value >>= boolValue )
             fprintf (stderr,"%d            (bool)\n", boolValue);
-    else if( value >>= aWritingMode )
-        fprintf (stderr, "%d writing mode\n", aWritingMode);
-    else if( value >>= aTextVertAdj ) {
-        const char* s = "uknown";
-        switch( aTextVertAdj ) {
+        else if( value >>= xNumRule ) {
+            fprintf (stderr, "XIndexReplace\n");
+            for (int k=0; k<xNumRule->getCount(); k++) {
+                Sequence< PropertyValue > aBulletPropSeq;
+                fprintf (stderr, "level %d\n", k);
+                if (xNumRule->getByIndex (k) >>= aBulletPropSeq) {
+                    for (int j=0; j<aBulletPropSeq.getLength(); j++) {
+                        fprintf(stderr, "%46s = ", USS (aBulletPropSeq[j].Name));
+                        lclDumpAnyValue (aBulletPropSeq[j].Value);
+                    }
+                }
+            }
+        } else if( value >>= aWritingMode )
+            fprintf (stderr, "%d writing mode\n", aWritingMode);
+        else if( value >>= aTextVertAdj ) {
+            const char* s = "uknown";
+            switch( aTextVertAdj ) {
             case TextVerticalAdjust_TOP:
                 s = "top";
                 break;
@@ -340,9 +343,24 @@ void PropertyMap::dump( Reference< XPropertySet > rXPropSet )
 //             fprintf (stderr,"%d            (RectanglePoint)\n", pointValue);
         else
       fprintf (stderr,"???           <unhandled type %s>\n", USS(value.getValueTypeName()));
-    } catch(Exception e) {
-        fprintf (stderr,"unable to get '%s' value\n", USS(props [i].Name));
-    }
+}
+
+void PropertyMap::dump( Reference< XPropertySet > rXPropSet )
+{
+    Reference< XPropertySetInfo > info = rXPropSet->getPropertySetInfo ();
+    Sequence< beans::Property > props = info->getProperties ();
+
+    OSL_TRACE("dump props, len: %d", props.getLength ());
+
+    for (int i=0; i < props.getLength (); i++) {
+        OString name = OUStringToOString( props [i].Name, RTL_TEXTENCODING_UTF8);
+        fprintf (stderr,"%30s = ", name.getStr() );
+
+        try {
+            lclDumpAnyValue (rXPropSet->getPropertyValue( props [i].Name ));
+        } catch(Exception e) {
+            fprintf (stderr,"unable to get '%s' value\n", USS(props [i].Name));
+        }
     }
 }
 

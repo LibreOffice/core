@@ -115,7 +115,7 @@ public:
     float                               getCharHeightPoints( float fDefault ) const;
 
 #if OSL_DEBUG_LEVEL > 0
-    void dump();
+    void dump() const;
 #endif
 
 protected:
