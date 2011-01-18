@@ -251,26 +251,7 @@ void LwpOleObject::Read()
     }
 
 }
-/**
- * @descr:   Construct ole-storage name by ObjectID
- * @param:  pObjName - input&output string of object name, spaces allocated outside and at least length should be MAX_STREAMORSTORAGENAME
- * @return:  None
- * @date:    2/22/2005
- */
-void LwpOleObject::GetChildStorageName(char *pObjName)
-{
-    /*LwpObjectFactory * pObjMgr = LwpObjectFactory::Instance();
-    LwpIndexManager * pIdxMgr = pObjMgr->GetIndexManager();
-    sal_uInt32 nLowID = pIdxMgr->GetObjTime(static_cast<sal_uInt16>(GetObjectID()->GetLow()));*/
 
-    char sName[MAX_STREAMORSTORAGENAME];
-    //LwpObjectID ID(nLowID, GetObjectID()->GetHigh());
-    sprintf( sName, "%s%X,%X", "Ole",
-      GetObjectID()->GetHigh(), GetObjectID()->GetLow());
-
-    strcpy( pObjName, sName);
-    return;
-}
 /**
  * @descr:   Parse VO_OLEOBJECT and dump to XML stream only on WIN32 platform
  * @param:  pOutputStream - stream to dump OLE object

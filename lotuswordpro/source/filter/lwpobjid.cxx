@@ -235,7 +235,7 @@ LwpObject* LwpObjectID::obj(VO_TYPE tag) const
     LwpObject* pObj = pObjMgr->QueryObject(*this);
     if( tag!=VO_INVALID &&  (pObj) )
     {
-        if(tag!=pObj->GetTag())
+        if(static_cast<sal_uInt32>(tag) != pObj->GetTag())
         {
             pObj=NULL;
         }

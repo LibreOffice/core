@@ -657,7 +657,7 @@ void LwpParaStyle::ApplyTab(XFParaStyle *pParaStyle, LwpTabOverride *pTabOverRid
         double fLen = LwpTools::ConvertFromUnitsToMetric(nPos) - dMarginLeft;
 
         //get leader type
-        sal_Unicode cLeader;
+        sal_Unicode cLeader = 0x00;
         LwpTab::LeaderType leader= pTab->GetLeaderType();
         switch(leader)
         {
