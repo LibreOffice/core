@@ -38,7 +38,7 @@
 #include <com/sun/star/awt/grid/XGridColumn.hpp>
 #include <com/sun/star/view/SelectionType.hpp>
 #include <com/sun/star/awt/grid/XGridColumnListener.hpp>
-#include <com/sun/star/awt/grid/XSortableGridData.hpp>
+#include <com/sun/star/awt/grid/XSortableGridDataModel.hpp>
 /** === end UNO includes === **/
 
 #include <comphelper/stlunosequence.hxx>
@@ -74,7 +74,7 @@ namespace svt { namespace table
     using ::com::sun::star::style::VerticalAlignment;
     using ::com::sun::star::uno::WeakReference;
     using ::com::sun::star::awt::grid::GridDataEvent;
-    using ::com::sun::star::awt::grid::XSortableGridData;
+    using ::com::sun::star::awt::grid::XSortableGridDataModel;
     using ::com::sun::star::beans::Pair;
     /** === end UNO using === **/
 
@@ -743,7 +743,7 @@ namespace svt { namespace table
     {
         DBG_CHECK_ME();
 
-        Reference< XSortableGridData > const xSortAccess( getDataModel(), UNO_QUERY );
+        Reference< XSortableGridDataModel > const xSortAccess( getDataModel(), UNO_QUERY );
         if ( xSortAccess.is() )
             return this;
         return NULL;
@@ -756,7 +756,7 @@ namespace svt { namespace table
 
         try
         {
-            Reference< XSortableGridData > const xSortAccess( getDataModel(), UNO_QUERY_THROW );
+            Reference< XSortableGridDataModel > const xSortAccess( getDataModel(), UNO_QUERY_THROW );
             xSortAccess->sortByColumn( i_column, i_sortDirection == ColumnSortAscending );
         }
         catch( const Exception& )
@@ -773,7 +773,7 @@ namespace svt { namespace table
         ColumnSort currentSort;
         try
         {
-            Reference< XSortableGridData > const xSortAccess( getDataModel(), UNO_QUERY_THROW );
+            Reference< XSortableGridDataModel > const xSortAccess( getDataModel(), UNO_QUERY_THROW );
             Pair< ::sal_Int32, ::sal_Bool > const aCurrentSortOrder( xSortAccess->getCurrentSortOrder() );
             currentSort.nColumnPos = aCurrentSortOrder.First;
             currentSort.eSortDirection = aCurrentSortOrder.Second ? ColumnSortAscending : ColumnSortDescending;
