@@ -174,6 +174,7 @@ void FuSnapLine::DoExecute( SfxRequest& rReq )
                     if ( !bCreateNew )
                         pPV->DeleteHelpLine(nHelpLine);
                     // und weiter wie bei default
+                    /*fall-through*/
                 default:
                     return;
             }
