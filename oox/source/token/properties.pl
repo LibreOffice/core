@@ -25,43 +25,33 @@
 #
 #*************************************************************************
 
-$ARGV0 = shift @ARGV;
-$ARGV1 = shift @ARGV;
-$ARGV2 = shift @ARGV;
+# operation mode (1 = identifiers, 2 = names)
+$op = shift @ARGV;
+die "Error: invalid operation" unless( $op >= 1 && $op <= 2);
 
-# parse input file
-
-open( INFILE, $ARGV0 ) or die "Error: cannot open input file: $!";
-my %props;
-while( <INFILE> )
-{
+$i = 0;
+while( <> ) {
     # trim newline
     chomp( $_ );
     # trim leading/trailing whitespace
     $_ =~ s/^\s*//g;
     $_ =~ s/\s*$//g;
-    # check for valid characters
-    $_ =~ /^[A-Z][a-zA-Z0-9]*$/ or die "Error: invalid character in property '$_'";
-    $id = "PROP_$_";
-    $props{$_} = $id;
-}
-close( INFILE );
-
-# generate output files
-
-open( IDFILE, ">$ARGV1" ) or die "Error: cannot open output file: $!";
-open( NAMEFILE, ">$ARGV2" ) or die "Error: cannot open output file: $!";
-
-$i = 0;
-foreach( sort( keys( %props ) ) )
-{
-    print( IDFILE "const sal_Int32 $props{$_} = $i;\n" );
-    print( NAMEFILE "/* $i */ \"$_\",\n" );
-    ++$i;
+    # skip empty lines
+    if( $_ ) {
+        # check for valid characters
+        $_ =~ /^[A-Z][a-zA-Z0-9]+$/ or die "Error: invalid entry: '$_'";
+        # generate output
+        if( $op == 1 ) {
+            print( "const sal_Int32 PROP_$_ = $i;\n" );
+        } elsif( $op == 2 ) {
+            print( "/* $i */ \"$_\",\n" );
+        }
+        ++$i;
+    }
 }
 
-print( IDFILE "const sal_Int32 PROP_COUNT = $i;\n" );
-print( IDFILE "const sal_Int32 PROP_INVALID = -1;\n" );
-
-close( IDFILE );
-close( NAMEFILE );
+if( $op == 1 ) {
+    print( "const sal_Int32 PROP_COUNT = $i;\nconst sal_Int32 PROP_INVALID = -1;\n" );
+} elsif( $op == 2 ) {
+    print( "    \"\"" );
+}

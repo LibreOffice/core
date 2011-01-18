@@ -44,7 +44,7 @@ using ::rtl::OUString;
 
 namespace {
 // include auto-generated Perfect_Hash
-#include "tokenhash.inc"
+#include <token/tokenhash.inc>
 } // namespace
 
 // ============================================================================
@@ -55,7 +55,7 @@ TokenMap::TokenMap() :
     static const sal_Char* sppcTokenNames[] =
     {
 // include auto-generated C array with token names as C strings
-#include "tokennames.inc"
+#include <token/tokennames.inc>
         ""
     };
 

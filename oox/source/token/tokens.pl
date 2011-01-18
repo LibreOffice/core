@@ -25,56 +25,50 @@
 #
 #*************************************************************************
 
-$ARGV0 = shift @ARGV;
-$ARGV1 = shift @ARGV;
-$ARGV2 = shift @ARGV;
-$ARGV3 = shift @ARGV;
+# operation mode (1 = identifiers, 2 = names, 3 = gperf)
+$op = shift @ARGV;
+die "Error: invalid operation" unless( $op >= 1 && $op <= 3);
 
-open( INFILE, $ARGV0 ) or die "Error: cannot open input file: $!";
-my %tokens;
-while ( <INFILE> )
+if( $op == 3 ) {
+    print( "%language=C++\n" );
+    print( "%global-table\n" );
+    print( "%null-strings\n" );
+    print( "%struct-type\n" );
+    print( "struct xmltoken {\n" );
+    print( "    const sal_Char *name;\n" );
+    print( "    sal_Int32 nToken;\n" );
+    print( "};\n" );
+    print( "%%\n" );
+}
+
+$i = 0;
+while( <> )
 {
     # trim newline
     chomp( $_ );
     # trim leading/trailing whitespace
     $_ =~ s/^\s*//g;
     $_ =~ s/\s*$//g;
-    # check for valid characters
-    $_ =~ /^[a-zA-Z0-9-_]+$/ or die "Error: invalid character in token '$_'";
-    $id = "XML_$_";
-    $id =~ s/-/_/g;
-    $tokens{$_} = $id;
-}
-close ( INFILE );
-
-# generate output files
-
-open ( IDFILE, ">$ARGV1" ) or die "Error: cannot open output file: $!";
-open ( NAMEFILE, ">$ARGV2" ) or die "Error: cannot open output file: $!";
-open ( GPERFFILE, ">$ARGV3" ) or die "Error: cannot open output file: $!";
-
-print( GPERFFILE "%language=C++\n" );
-print( GPERFFILE "%global-table\n" );
-print( GPERFFILE "%null-strings\n" );
-print( GPERFFILE "%struct-type\n" );
-print( GPERFFILE "struct xmltoken {\n" );
-print( GPERFFILE "    const sal_Char *name;\n" );
-print( GPERFFILE "    sal_Int32 nToken;\n" );
-print( GPERFFILE "};\n" );
-print( GPERFFILE "%%\n" );
-
-$i = 0;
-foreach( sort( keys( %tokens ) ) )
-{
-    print( IDFILE "const sal_Int32 $tokens{$_} = $i;\n" );
-    print( NAMEFILE "\"$_\",\n" );
-    print( GPERFFILE "$_,$tokens{$_}\n" );
-    ++$i;
+    # skip empty lines
+    if( $_ ) {
+        # check for valid characters
+        $_ =~ /^[a-zA-Z0-9-_]+$/ or die "Error: invalid entry: '$_'";
+        # generate output
+        $id = "XML_$_";
+        $id =~ s/-/_/g;
+        if( $op == 1 ) {
+            print( "const sal_Int32 $id = $i;\n" );
+        } elsif( $op == 2 ) {
+            print( "\"$_\",\n" );
+        } elsif( $op == 3 ) {
+            print( "$_,$id\n" );
+        }
+        ++$i;
+    }
 }
 
-print( IDFILE "const sal_Int32 XML_TOKEN_COUNT = $i;\n" );
-print( GPERFFILE "%%\n" );
-
-close( IDFILE );
-close( NAMEFILE );
-close( GPERFFILE );
+if( $op == 1 ) {
+    print( "const sal_Int32 XML_TOKEN_COUNT = $i;\n" );
+} elsif( $op == 3 ) {
+    print( "%%\n" );
+}

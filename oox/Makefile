@@ -2,7 +2,7 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2000, 2010 Oracle and/or its affiliates.
+# Copyright 2000, 2011 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
 #
@@ -25,42 +25,14 @@
 #
 #*************************************************************************
 
-PRJ=..$/..
+ifeq ($(strip $(SOLARENV)),)
+$(error No environment set!)
+endif
 
-PRJNAME=oox
-TARGET=core
-AUTOSEG=true
+gb_PARTIALBUILD := T
+GBUILDDIR := $(SOLARENV)/gbuild
+include $(GBUILDDIR)/gbuild.mk
 
-ENABLE_EXCEPTIONS=TRUE
+$(eval $(call gb_Module_make_global_targets,$(shell ls $(dir $(realpath $(firstword $(MAKEFILE_LIST))))/Module*.mk)))
 
-# --- Settings -----------------------------------------------------
-
-.INCLUDE :  settings.mk
-.INCLUDE: $(PRJ)$/util$/makefile.pmk
-
-.IF "$(SYSTEM_OPENSSL)" == "YES"
-CFLAGS+= $(OPENSSL_CFLAGS)
-.ENDIF
-
-# --- Files --------------------------------------------------------
-
-SLOFILES =	\
-        $(SLO)$/binarycodec.obj				\
-        $(SLO)$/binaryfilterbase.obj		\
-        $(SLO)$/contexthandler.obj			\
-        $(SLO)$/contexthandler2.obj			\
-        $(SLO)$/fastparser.obj				\
-        $(SLO)$/fasttokenhandler.obj		\
-        $(SLO)$/filterbase.obj				\
-        $(SLO)$/filterdetect.obj			\
-        $(SLO)$/fragmenthandler.obj			\
-        $(SLO)$/fragmenthandler2.obj		\
-        $(SLO)$/recordparser.obj			\
-        $(SLO)$/relations.obj				\
-        $(SLO)$/relationshandler.obj		\
-        $(SLO)$/services.obj				\
-        $(SLO)$/xmlfilterbase.obj
-
-# --- Targets -------------------------------------------------------
-
-.INCLUDE :  target.mk
+# vim: set noet sw=4 ts=4:
