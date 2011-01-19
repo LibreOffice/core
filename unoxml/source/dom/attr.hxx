@@ -28,6 +28,8 @@
 #ifndef DOM_ATTR_HXX
 #define DOM_ATTR_HXX
 
+#include <memory>
+
 #include <libxml/tree.h>
 
 #include <cppuhelper/implbase1.hxx>
@@ -44,6 +46,8 @@ using namespace com::sun::star::xml::dom;
 
 namespace DOM
 {
+    typedef ::std::pair< ::rtl::OString, ::rtl::OString > stringpair_t;
+
     typedef ::cppu::ImplInheritanceHelper1< CNode, XAttr > CAttr_Base;
 
     class CAttr
@@ -54,12 +58,16 @@ namespace DOM
 
     private:
         xmlAttrPtr m_aAttrPtr;
+        ::std::auto_ptr< stringpair_t > m_pNamespace;
 
     protected:
         CAttr(CDocument const& rDocument, ::osl::Mutex const& rMutex,
                 xmlAttrPtr const pAttr);
 
     public:
+        /// return the libxml namespace corresponding to m_pNamespace on pNode
+        xmlNsPtr GetNamespace(xmlNodePtr const pNode);
+
         /**
         Returns the name of this attribute.
         */
@@ -129,10 +137,7 @@ namespace DOM
         return CNode::getLastChild();
     }
     virtual OUString SAL_CALL getNamespaceURI()
-        throw (RuntimeException)
-    {
-        return CNode::getNamespaceURI();
-    }
+        throw (RuntimeException);
     virtual Reference< XNode > SAL_CALL getNextSibling()
         throw (RuntimeException)
     {
@@ -154,10 +159,7 @@ namespace DOM
         return CNode::getParentNode();
     }
     virtual OUString SAL_CALL getPrefix()
-        throw (RuntimeException)
-    {
-        return CNode::getPrefix();
-    }
+        throw (RuntimeException);
     virtual Reference< XNode > SAL_CALL getPreviousSibling()
         throw (RuntimeException)
     {
@@ -206,10 +208,7 @@ namespace DOM
         return setValue(nodeValue);
     }
     virtual void SAL_CALL setPrefix(const OUString& prefix)
-        throw (RuntimeException, DOMException)
-    {
-        return CNode::setPrefix(prefix);
-    }
+        throw (RuntimeException, DOMException);
 
     };
 }

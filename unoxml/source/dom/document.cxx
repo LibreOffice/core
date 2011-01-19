@@ -425,36 +425,29 @@ namespace DOM
         // libxml does not allow a NS definition to be attached to an
         // attribute node - which is a good thing, since namespaces are
         // only defined as parts of element nodes
-        // thus, we create a temporary element node which carries the ns definition
-        // and is removed/merged as soon as the attribute gets append to it's
-        // actual parent
+        // thus the namespace data is stored in CAttr::m_pNamespace
         sal_Int32 i = qname.indexOf(':');
         OString oPrefix, oName, oUri;
-        xmlChar *xPrefix, *xName, *xUri;
         if (i != -1)
         {
             oPrefix = OUStringToOString(qname.copy(0, i), RTL_TEXTENCODING_UTF8);
-            xPrefix = (xmlChar*)oPrefix.getStr();
             oName = OUStringToOString(qname.copy(i+1, qname.getLength()-i-1), RTL_TEXTENCODING_UTF8);
         }
         else
         {
-            xPrefix = (xmlChar*)"";
             oName = OUStringToOString(qname, RTL_TEXTENCODING_UTF8);
         }
-        xName = (xmlChar*)oName.getStr();
         oUri = OUStringToOString(ns, RTL_TEXTENCODING_UTF8);
-        xUri = (xmlChar*)oUri.getStr();
+        xmlAttrPtr const pAttr = xmlNewDocProp(m_aDocPtr,
+                reinterpret_cast<xmlChar const*>(oName.getStr()), 0);
+        ::rtl::Reference< CAttr > const pCAttr(
+            dynamic_cast< CAttr* >(GetCNode(
+                    reinterpret_cast<xmlNodePtr>(pAttr)).get()));
+        if (!pCAttr.is()) { throw RuntimeException(); }
+        // store the namespace data!
+        pCAttr->m_pNamespace.reset( new stringpair_t(oUri, oPrefix) );
 
-        // create the carrier node
-        xmlNodePtr pNode = xmlNewDocNode(m_aDocPtr, NULL, (xmlChar*)"__private", NULL);
-        xmlNsPtr pNs = xmlNewNs(pNode, xUri, xPrefix);
-        xmlAttrPtr pAttr = xmlNewNsProp(pNode, pNs, xName, NULL);
-        Reference< XAttr > const xRet(
-            static_cast< XNode* >(GetCNode(
-                    reinterpret_cast<xmlNodePtr>(pAttr)).get()),
-            UNO_QUERY_THROW);
-        return xRet;
+        return pCAttr.get();
     };
 
     // Creates a CDATASection node whose value is the specified string.

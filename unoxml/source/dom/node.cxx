@@ -43,6 +43,7 @@
 #include <com/sun/star/xml/sax/FastToken.hpp>
 
 #include <document.hxx>
+#include <attr.hxx>
 #include <childlist.hxx>
 
 #include "../events/eventdispatcher.hxx"
@@ -317,67 +318,40 @@ namespace DOM
             e.Code = DOMExceptionType_HIERARCHY_REQUEST_ERR;
             throw e;
         }
-        // already has parent and is not attribute
-        if (cur->parent != NULL && cur->type != XML_ATTRIBUTE_NODE) {
+        if (cur->parent != NULL) {
             DOMException e;
             e.Code = DOMExceptionType_HIERARCHY_REQUEST_ERR;
             throw e;
         }
 
-        // check whether this is an attribute node so we remove it's
-        // carrier node if it has one
+        // check whether this is an attribute node; it needs special handling
         xmlNodePtr res = NULL;
         if (cur->type == XML_ATTRIBUTE_NODE)
         {
-            if (cur->parent != NULL) {
-                if (m_aNodePtr->type != XML_ELEMENT_NODE ||
-                    strcmp((char*)cur->parent->name, "__private") != 0)
-                {
-                    DOMException e;
-                    e.Code = DOMExceptionType_HIERARCHY_REQUEST_ERR;
-                    throw e;
-                }
-
-                xmlNsPtr pAttrNs = cur->ns;
-                xmlNsPtr pParentNs =
-                    xmlSearchNs(m_aNodePtr->doc, m_aNodePtr, pAttrNs->prefix);
-                if (pParentNs == NULL ||
-                    strcmp((char*)pParentNs->href, (char*)pAttrNs->href) != 0)
-                {
-                    pParentNs =
-                        xmlNewNs(m_aNodePtr, pAttrNs->href, pAttrNs->prefix);
-                }
-
-                if (cur->children != NULL) {
-                    res = (xmlNodePtr)xmlNewNsProp(m_aNodePtr,
-                            pParentNs, cur->name, cur->children->content);
-                } else {
-                    res = (xmlNodePtr)xmlNewProp(m_aNodePtr,
-                            cur->name, (xmlChar*) "");
-                }
-
-                xmlFreeNode(cur->parent);
-                cur->parent = NULL;
+            xmlChar const*const pChildren((cur->children)
+                    ? cur->children->content
+                    : reinterpret_cast<xmlChar const*>(""));
+            CAttr *const pCAttr(dynamic_cast<CAttr *>(pNewChild));
+            if (!pCAttr) { throw RuntimeException(); }
+            xmlNsPtr const pNs( pCAttr->GetNamespace(m_aNodePtr) );
+            if (pNs) {
+                res = reinterpret_cast<xmlNodePtr>(
+                        xmlNewNsProp(m_aNodePtr, pNs, cur->name, pChildren));
             } else {
-                if (cur->children != NULL) {
-                    res = (xmlNodePtr)xmlNewProp(m_aNodePtr,
-                            cur->name, cur->children->content);
-                } else {
-                    res = (xmlNodePtr)xmlNewProp(m_aNodePtr,
-                            cur->name, (xmlChar*) "");
-                }
+                res = reinterpret_cast<xmlNodePtr>(
+                        xmlNewProp(m_aNodePtr, cur->name, pChildren));
             }
         }
         else
         {
             res = xmlAddChild(m_aNodePtr, cur);
-        }
 
-        // libxml can do optimizations, when appending nodes.
-        // if res != cur, something was optimized and the newchild-wrapper
-        // should be updated
-        if (res && (cur != res)) {
-            pNewChild->invalidate(); // cur has been freed
+            // libxml can do optimization when appending nodes.
+            // if res != cur, something was optimized and the newchild-wrapper
+            // should be updated
+            if (res && (cur != res)) {
+                pNewChild->invalidate(); // cur has been freed
+            }
         }
 
         if (!res) { return 0; }
@@ -696,7 +670,7 @@ namespace DOM
             throw e;
         }
 
-        ::osl::MutexGuard const g(m_rMutex);
+        ::osl::ClearableMutexGuard guard(m_rMutex);
 
         CNode *const pNewNode(CNode::GetImplementation(newChild));
         CNode *const pRefNode(CNode::GetImplementation(refChild));
@@ -710,12 +684,18 @@ namespace DOM
             e.Code = DOMExceptionType_HIERARCHY_REQUEST_ERR;
             throw e;
         }
-        // already has parent and is not attribute
-        if (pNewChild->parent != NULL && pNewChild->type != XML_ATTRIBUTE_NODE)
+        // already has parent
+        if (pNewChild->parent != NULL)
         {
             DOMException e;
             e.Code = DOMExceptionType_HIERARCHY_REQUEST_ERR;
             throw e;
+        }
+
+        // attributes are unordered anyway, so just do appendChild
+        if (XML_ATTRIBUTE_NODE == pNewChild->type) {
+            guard.clear();
+            return appendChild(newChild);
         }
 
         xmlNodePtr cur = m_aNodePtr->children;
@@ -881,8 +861,8 @@ namespace DOM
             e.Code = DOMExceptionType_HIERARCHY_REQUEST_ERR;
             throw e;
         }
-        // already has parent and is not attribute
-        if (pNew->parent != NULL && pNew->type != XML_ATTRIBUTE_NODE) {
+        // already has parent
+        if (pNew->parent != NULL) {
             DOMException e;
             e.Code = DOMExceptionType_HIERARCHY_REQUEST_ERR;
             throw e;

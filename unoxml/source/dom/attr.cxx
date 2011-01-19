@@ -47,6 +47,29 @@ namespace DOM
     {
     }
 
+    xmlNsPtr CAttr::GetNamespace(xmlNodePtr const pNode)
+    {
+        if (!m_pNamespace.get()) {
+            return 0;
+        }
+        xmlChar const*const pUri(reinterpret_cast<xmlChar const*>(
+                m_pNamespace->first.getStr()));
+        xmlChar const*const pPrefix(reinterpret_cast<xmlChar const*>(
+                m_pNamespace->second.getStr()));
+        xmlNsPtr pNs = xmlSearchNs(pNode->doc, pNode, pPrefix);
+        if (pNs && (0 != xmlStrcmp(pNs->href, pUri))) {
+            return pNs;
+        }
+        pNs = xmlNewNs(pNode, pUri, pPrefix);
+        if (pNs) {
+            return pNs;
+        }
+        pNs = xmlSearchNsByHref(pNode->doc, pNode, pUri);
+        // if (!pNs) hmm... now what? throw?
+        if (!pNs) { OSL_TRACE("CAtttr: cannot create namespace"); }
+        return pNs;
+    }
+
     OUString SAL_CALL CAttr::getNodeName()
         throw (RuntimeException)
     {
@@ -183,4 +206,53 @@ namespace DOM
         dispatchSubtreeModified();
     }
 
+    void SAL_CALL CAttr::setPrefix(const OUString& prefix)
+        throw (RuntimeException, DOMException)
+    {
+        ::osl::MutexGuard const g(m_rMutex);
+
+        if (!m_aNodePtr) { return; }
+
+        if (m_pNamespace.get()) {
+            OSL_ASSERT(!m_aNodePtr->parent);
+            m_pNamespace->second =
+                OUStringToOString(prefix, RTL_TEXTENCODING_UTF8);
+        } else {
+            CNode::setPrefix(prefix);
+        }
+    }
+
+    OUString SAL_CALL CAttr::getPrefix()
+        throw (RuntimeException)
+    {
+        ::osl::MutexGuard const g(m_rMutex);
+
+        if (!m_aNodePtr) { return ::rtl::OUString(); }
+
+        if (m_pNamespace.get()) {
+            OSL_ASSERT(!m_aNodePtr->parent);
+            OUString const ret(::rtl::OStringToOUString(
+                        m_pNamespace->second, RTL_TEXTENCODING_UTF8));
+            return ret;
+        } else {
+            return CNode::getPrefix();
+        }
+    }
+
+    OUString SAL_CALL CAttr::getNamespaceURI()
+        throw (RuntimeException)
+    {
+        ::osl::MutexGuard const g(m_rMutex);
+
+        if (!m_aNodePtr) { return ::rtl::OUString(); }
+
+        if (m_pNamespace.get()) {
+            OSL_ASSERT(!m_aNodePtr->parent);
+            OUString const ret(::rtl::OStringToOUString(
+                        m_pNamespace->first, RTL_TEXTENCODING_UTF8));
+            return ret;
+        } else {
+            return CNode::getNamespaceURI();
+        }
+    }
 }

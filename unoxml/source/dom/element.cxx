@@ -503,9 +503,9 @@ namespace DOM
     */
     Reference< XAttr >
     CElement::setAttributeNode_Impl_Lock(
-            Reference< XAttr > const& newAttr, bool const bNS)
+            Reference< XAttr > const& xNewAttr, bool const bNS)
     {
-        if (newAttr->getOwnerDocument() != getOwnerDocument()) {
+        if (xNewAttr->getOwnerDocument() != getOwnerDocument()) {
             DOMException e;
             e.Code = DOMExceptionType_WRONG_DOCUMENT_ERR;
             throw e;
@@ -518,46 +518,28 @@ namespace DOM
         }
 
         // get the implementation
-        CNode *const pCNode = CNode::GetImplementation(newAttr);
-        if (!pCNode) { throw RuntimeException(); }
+        CAttr *const pCAttr = dynamic_cast<CAttr*>(
+                CNode::GetImplementation(xNewAttr));
+        if (!pCAttr) { throw RuntimeException(); }
         xmlAttrPtr const pAttr =
-            reinterpret_cast<xmlAttrPtr>(pCNode->GetNodePtr());
+            reinterpret_cast<xmlAttrPtr>(pCAttr->GetNodePtr());
         if (!pAttr) { throw RuntimeException(); }
 
         // check whether the attribute is not in use by another element
-        xmlNsPtr pNs = NULL;
-        if (pAttr->parent != NULL)
-        {
-            if (strcmp((char*)pAttr->parent->name, "__private") == 0
-                && pNs && pAttr->ns != NULL)
-            {
-                pNs = xmlSearchNs(m_aNodePtr->doc, m_aNodePtr,
-                        pAttr->ns->prefix);
-                if (pNs == NULL ||
-                    strcmp((char*)pNs->href, (char*)pAttr->ns->href) != 0)
-                {
-                    pNs = xmlNewNs(m_aNodePtr, pAttr->ns->href,
-                            pAttr->ns->href);
-                } else {
-                    throw RuntimeException();
-                }
-            }
+        if (pAttr->parent) {
+            DOMException e;
+            e.Code = DOMExceptionType_INUSE_ATTRIBUTE_ERR;
+            throw e;
         }
 
         xmlAttrPtr res = NULL;
 
         if (bNS) {
+            xmlNsPtr const pNs( pCAttr->GetNamespace(m_aNodePtr) );
             res = xmlNewNsProp(m_aNodePtr,
                     pNs, pAttr->name, pAttr->children->content);
         } else {
             res = xmlNewProp(m_aNodePtr, pAttr->name, pAttr->children->content);
-        }
-
-        // free carrier node ...
-        if (pAttr->parent != NULL &&
-            strcmp((char*)pAttr->parent->name, "__private") == 0)
-        {
-            xmlFreeNode(pAttr->parent);
         }
 
         // get the new attr node
