@@ -49,8 +49,9 @@ namespace DOM
     class CAttr
         : public CAttr_Base
     {
-        friend class CNode;
-        friend class CElement;
+    private:
+        friend class CDocument;
+
     private:
         xmlAttrPtr m_aAttrPtr;
 

@@ -52,7 +52,8 @@ namespace DOM
     class CText
         : public CText_Base
     {
-        friend class CNode;
+    private:
+        friend class CDocument;
 
     protected:
         CText(CDocument const& rDocument,

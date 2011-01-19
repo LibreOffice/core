@@ -25,10 +25,15 @@
  *
  ************************************************************************/
 
-#include "attr.hxx"
-#include "element.hxx"
-#include <com/sun/star/xml/dom/DOMException.hdl>
+#include <attr.hxx>
+
 #include <string.h>
+
+#include <com/sun/star/xml/dom/DOMException.hdl>
+#include <com/sun/star/xml/dom/events/XMutationEvent.hpp>
+
+#include <document.hxx>
+
 
 namespace DOM
 {
@@ -81,7 +86,8 @@ namespace DOM
             return 0;
         }
         Reference< XElement > const xRet(
-            static_cast< XNode* >(CNode::getCNode(m_aAttrPtr->parent).get()),
+            static_cast< XNode* >(GetOwnerDocument().GetCNode(
+                    m_aAttrPtr->parent).get()),
             UNO_QUERY_THROW);
         return xRet;
     }

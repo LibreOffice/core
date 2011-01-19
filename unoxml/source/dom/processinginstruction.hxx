@@ -48,7 +48,8 @@ namespace DOM
     class CProcessingInstruction
         : public CProcessingInstruction_Base
     {
-        friend class CNode;
+    private:
+        friend class CDocument;
 
     protected:
         CProcessingInstruction(CDocument const& rDocument,

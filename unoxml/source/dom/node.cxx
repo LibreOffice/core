@@ -40,19 +40,8 @@
 
 #include <com/sun/star/xml/sax/FastToken.hpp>
 
-#include "element.hxx"
-#include "text.hxx"
-#include "cdatasection.hxx"
-#include "entityreference.hxx"
-#include "entity.hxx"
-#include "processinginstruction.hxx"
-#include "comment.hxx"
-#include "document.hxx"
-#include "documenttype.hxx"
-#include "documentfragment.hxx"
-#include "notation.hxx"
-#include "childlist.hxx"
-#include "attr.hxx"
+#include <document.hxx>
+#include <childlist.hxx>
 
 #include "../events/eventdispatcher.hxx"
 #include "../events/mutationevent.hxx"
@@ -63,8 +52,6 @@ using namespace ::com::sun::star;
 
 
 namespace {
-//see CNode::remove
-    struct NodeMutex: public ::rtl::Static<osl::Mutex, NodeMutex> {};
     struct UnoTunnelId
         : public ::rtl::StaticWithInit< Sequence<sal_Int8>, UnoTunnelId >
     {
@@ -154,151 +141,6 @@ namespace DOM
         return nNamespaceToken;
     }
 
-    typedef std::map< const xmlNodePtr,
-                ::std::pair< WeakReference<XNode>, CNode* > > nodemap_t;
-    static nodemap_t g_theNodeMap;
-
-    void CNode::removeCNode(xmlNodePtr const pNode, CNode const*const pCNode)
-    {
-        ::osl::MutexGuard guard(NodeMutex::get());
-        nodemap_t::iterator const i = g_theNodeMap.find(pNode);
-        if (i != g_theNodeMap.end()) {
-            // #i113681# consider this scenario:
-            // T1 calls ~CNode
-            // T2 calls getCNode:    lookup will find i->second->first invalid
-            //                       so a new CNode is created and inserted
-            // T1 calls removeCNode: i->second->second now points to a
-            //                       different CNode instance!
-            //
-            // check that the CNode is the right one
-            CNode *const pCurrent = i->second.second;
-            if (pCurrent == pCNode) {
-                g_theNodeMap.erase(i);
-            }
-        }
-    }
-
-    ::rtl::Reference<CNode>
-    CNode::getCNode(xmlNodePtr const pNode, bool const bCreate)
-    {
-        if (0 == pNode) {
-            return 0;
-        }
-        //see CNode::remove
-        ::osl::MutexGuard guard(NodeMutex::get());
-        //check whether there is already an instance for this node
-        nodemap_t::const_iterator const i = g_theNodeMap.find(pNode);
-        if (i != g_theNodeMap.end()) {
-            // #i113681# check that the CNode is still alive
-            uno::Reference<XNode> const xNode(i->second.first);
-            if (xNode.is())
-            {
-                ::rtl::Reference<CNode> ret(i->second.second);
-                OSL_ASSERT(ret.is());
-                return ret;
-            }
-        }
-
-        if (!bCreate) { return 0; }
-
-        // there is not yet an instance wrapping this node,
-        // create it and store it in the map
-
-        ::rtl::Reference<CNode> pCNode;
-        switch (pNode->type)
-        {
-        case XML_ELEMENT_NODE:
-            // m_aNodeType = NodeType::ELEMENT_NODE;
-            pCNode = static_cast< CNode* >(new CElement(*(CDocument*)0, pNode));
-            break;
-        case XML_TEXT_NODE:
-            // m_aNodeType = NodeType::TEXT_NODE;
-            pCNode = static_cast< CNode* >(new CText(*(CDocument*)0, pNode));
-            break;
-        case XML_CDATA_SECTION_NODE:
-            // m_aNodeType = NodeType::CDATA_SECTION_NODE;
-            pCNode = static_cast< CNode* >(new CCDATASection(*(CDocument*)0, pNode));
-            break;
-        case XML_ENTITY_REF_NODE:
-            // m_aNodeType = NodeType::ENTITY_REFERENCE_NODE;
-            pCNode = static_cast< CNode* >(new CEntityReference(*(CDocument*)0, pNode));
-            break;
-        case XML_ENTITY_NODE:
-            // m_aNodeType = NodeType::ENTITY_NODE;
-            pCNode = static_cast< CNode* >(new CEntity(*(CDocument*)0,
-                        reinterpret_cast<xmlEntityPtr>(pNode)));
-            break;
-        case XML_PI_NODE:
-            // m_aNodeType = NodeType::PROCESSING_INSTRUCTION_NODE;
-            pCNode = static_cast< CNode* >(new CProcessingInstruction(*(CDocument*)0, pNode));
-            break;
-        case XML_COMMENT_NODE:
-            // m_aNodeType = NodeType::COMMENT_NODE;
-            pCNode = static_cast< CNode* >(new CComment(*(CDocument*)0, pNode));
-            break;
-        case XML_DOCUMENT_NODE:
-            // m_aNodeType = NodeType::DOCUMENT_NODE;
-            pCNode = static_cast< CNode* >(new CDocument(
-                        reinterpret_cast<xmlDocPtr>(pNode)));
-            break;
-        case XML_DOCUMENT_TYPE_NODE:
-        case XML_DTD_NODE:
-            // m_aNodeType = NodeType::DOCUMENT_TYPE_NODE;
-            pCNode = static_cast< CNode* >(new CDocumentType(*(CDocument*)0,
-                        reinterpret_cast<xmlDtdPtr>(pNode)));
-            break;
-        case XML_DOCUMENT_FRAG_NODE:
-            // m_aNodeType = NodeType::DOCUMENT_FRAGMENT_NODE;
-            pCNode = static_cast< CNode* >(new CDocumentFragment(*(CDocument*)0, pNode));
-            break;
-        case XML_NOTATION_NODE:
-            // m_aNodeType = NodeType::NOTATION_NODE;
-            pCNode = static_cast< CNode* >(new CNotation(*(CDocument*)0,
-                        reinterpret_cast<xmlNotationPtr>(pNode)));
-            break;
-        case XML_ATTRIBUTE_NODE:
-            // m_aNodeType = NodeType::ATTRIBUTE_NODE;
-            pCNode = static_cast< CNode* >(new CAttr(*(CDocument*)0,
-                        reinterpret_cast<xmlAttrPtr>(pNode)));
-            break;
-        // unsupported node types
-        case XML_HTML_DOCUMENT_NODE:
-        case XML_ELEMENT_DECL:
-        case XML_ATTRIBUTE_DECL:
-        case XML_ENTITY_DECL:
-        case XML_NAMESPACE_DECL:
-        default:
-            break;
-        }
-
-        if (pCNode != 0) {
-            bool const bInserted = g_theNodeMap.insert(
-                    nodemap_t::value_type(pNode,
-                        ::std::make_pair(WeakReference<XNode>(pCNode.get()),
-                        pCNode.get()))
-                ).second;
-            OSL_ASSERT(bInserted);
-            if (!bInserted) {
-                // if insertion failed, delete new instance and return null
-                return 0;
-            }
-        }
-
-        OSL_ENSURE(pCNode.is(), "no node produced during CNode::getCNode!");
-        return pCNode;
-    }
-
-    xmlNodePtr CNode::getNodePtr(const Reference< XNode >& aNode)
-    {
-      try {
-          CNode *const pNode = GetImplementation(aNode);
-          if( pNode )
-              return pNode->m_aNodePtr;
-      }
-      catch(...) {}
-      return 0;
-    }
-
 
     CNode::CNode(CDocument const& rDocument,
                 NodeType const& reNodeType, xmlNodePtr const& rpNode)
@@ -316,8 +158,8 @@ namespace DOM
     void CNode::invalidate()
     {
         //remove from list if this wrapper goes away
-        if (m_aNodePtr != 0) {
-            CNode::removeCNode(m_aNodePtr, this);
+        if (m_aNodePtr != 0 && m_xDocument.is()) {
+            m_xDocument->RemoveCNode(m_aNodePtr, this);
         }
         // #i113663#: unlinked nodes will not be freed by xmlFreeDoc
         if (m_bUnlinked) {
@@ -342,15 +184,10 @@ namespace DOM
         return pCNode;
     }
 
-    ::rtl::Reference< CDocument > CNode::GetOwnerDocument_Impl()
+    CDocument & CNode::GetOwnerDocument()
     {
-        if (0 == m_aNodePtr) {
-            return 0;
-        }
-        ::rtl::Reference< CDocument > const xDoc(
-            dynamic_cast<CDocument *>(CNode::getCNode(
-                reinterpret_cast<xmlNodePtr>(m_aNodePtr->doc)).get()));
-        return xDoc;
+        OSL_ASSERT(m_xDocument.is());
+        return *m_xDocument; // needs overriding in CDocument!
     }
 
 
@@ -443,12 +280,15 @@ namespace DOM
     /**
     Adds the node newChild to the end of the list of children of this node.
     */
-    Reference< XNode > CNode::appendChild(const Reference< XNode >& newChild)
+    Reference< XNode > CNode::appendChild(Reference< XNode > const& xNewChild)
         throw (RuntimeException, DOMException)
     {
         ::rtl::Reference<CNode> pNode;
         if (m_aNodePtr != NULL) {
-        xmlNodePtr cur = CNode::getNodePtr(newChild.get());
+            CNode *const pNewChild(CNode::GetImplementation(xNewChild));
+            if (!pNewChild) { throw RuntimeException(); }
+            xmlNodePtr const cur = pNewChild->GetNodePtr();
+            if (!cur) { throw RuntimeException(); }
 
             // error checks:
             // from other document
@@ -515,11 +355,7 @@ namespace DOM
             // if res != cur, something was optimized and the newchild-wrapper
             // should be updated
             if (res && (cur != res)) {
-                ::rtl::Reference<CNode> pCNode(CNode::getCNode(cur));
-                OSL_ASSERT(pCNode.is());
-                if (pCNode.is()) {
-                    pCNode->invalidate(); // cur has been freed
-                }
+                pNewChild->invalidate(); // cur has been freed
             }
 
         // use custom ns cleanup instaead of
@@ -527,7 +363,7 @@ namespace DOM
         // because that will not remove unneeded ns decls
         _nscleanup(res, m_aNodePtr);
 
-            pNode = CNode::getCNode(res);
+            pNode = GetOwnerDocument().GetCNode(res);
         }
         //XXX check for errors
 
@@ -542,7 +378,7 @@ namespace DOM
                 OUString::createFromAscii("DOMNodeInserted")), UNO_QUERY);
             event->initMutationEvent(OUString::createFromAscii("DOMNodeInserted")
                 , sal_True, sal_False,
-                Reference< XNode >(CNode::getCNode(m_aNodePtr).get()),
+                this,
                 OUString(), OUString(), OUString(), (AttrChangeType)0 );
             dispatchEvent(Reference< XEvent >(event, UNO_QUERY));
 
@@ -562,7 +398,7 @@ namespace DOM
         if (0 == m_aNodePtr) {
             return 0;
         }
-        ::rtl::Reference<CNode> const pNode = CNode::getCNode(
+        ::rtl::Reference<CNode> const pNode = GetOwnerDocument().GetCNode(
             xmlCopyNode(m_aNodePtr, (bDeep) ? 1 : 0));
         pNode->m_bUnlinked = true; // not linked yet
         //XXX check for errors
@@ -610,7 +446,7 @@ namespace DOM
             return 0;
         }
         Reference< XNode > const xNode(
-                CNode::getCNode(m_aNodePtr->children).get());
+                GetOwnerDocument().GetCNode(m_aNodePtr->children).get());
         return xNode;
     }
 
@@ -624,7 +460,7 @@ namespace DOM
             return 0;
         }
         Reference< XNode > const xNode(
-                CNode::getCNode(xmlGetLastChild(m_aNodePtr)).get());
+            GetOwnerDocument().GetCNode(xmlGetLastChild(m_aNodePtr)).get());
         return xNode;
     }
 
@@ -674,7 +510,8 @@ namespace DOM
         if (0 == m_aNodePtr) {
             return 0;
         }
-        Reference< XNode > const xNode(CNode::getCNode(m_aNodePtr->next).get());
+        Reference< XNode > const xNode(
+                GetOwnerDocument().GetCNode(m_aNodePtr->next).get());
         return xNode;
     }
 
@@ -731,7 +568,10 @@ namespace DOM
     Reference< XDocument > SAL_CALL CNode::getOwnerDocument()
         throw (RuntimeException)
     {
-        Reference< XDocument > const xDoc(GetOwnerDocument_Impl().get());
+        if (0 == m_aNodePtr) {
+            return 0;
+        }
+        Reference< XDocument > const xDoc(& GetOwnerDocument());
         return xDoc;
     }
 
@@ -745,7 +585,7 @@ namespace DOM
             return 0;
         }
         Reference< XNode > const xNode(
-                CNode::getCNode(m_aNodePtr->parent).get());
+                GetOwnerDocument().GetCNode(m_aNodePtr->parent).get());
         return xNode;
     }
 
@@ -778,7 +618,7 @@ namespace DOM
             return 0;
         }
         Reference< XNode > const xNode(
-                CNode::getCNode(m_aNodePtr->prev).get());
+                GetOwnerDocument().GetCNode(m_aNodePtr->prev).get());
         return xNode;
     }
 
@@ -819,8 +659,11 @@ namespace DOM
             throw e;
         }
 
-    xmlNodePtr pRefChild = CNode::getNodePtr(refChild.get());
-        xmlNodePtr pNewChild = CNode::getNodePtr(newChild.get());
+        CNode *const pNewNode(CNode::GetImplementation(newChild));
+        CNode *const pRefNode(CNode::GetImplementation(refChild));
+        if (!pNewNode || !pRefNode) { throw RuntimeException(); }
+        xmlNodePtr const pNewChild(pNewNode->GetNodePtr());
+        xmlNodePtr const pRefChild(pRefNode->GetNodePtr());
         xmlNodePtr cur = m_aNodePtr->children;
 
         //search cild before which to insert
@@ -833,8 +676,7 @@ namespace DOM
                 cur->prev = pNewChild;
                 if( pNewChild->prev != NULL)
                     pNewChild->prev->next = pNewChild;
-                ::rtl::Reference<CNode> const pNode(CNode::getCNode(pNewChild));
-                pNode->m_bUnlinked = false; // will be deleted by xmlFreeDoc
+                pNewNode->m_bUnlinked = false; // will be deleted by xmlFreeDoc
             }
             cur = cur->next;
         }
@@ -884,8 +726,8 @@ namespace DOM
 
         Reference<XNode> xReturn( oldChild );
 
-        xmlNodePtr old = CNode::getNodePtr(oldChild);
-        ::rtl::Reference<CNode> const pOld( CNode::getCNode(old) );
+        ::rtl::Reference<CNode> const pOld(CNode::GetImplementation(oldChild));
+        xmlNodePtr const old = pOld->GetNodePtr();
         pOld->m_bUnlinked = true;
 
         if( old->type == XML_ATTRIBUTE_NODE )
@@ -915,7 +757,7 @@ namespace DOM
                 OUString::createFromAscii("DOMNodeRemoved")), UNO_QUERY);
             event->initMutationEvent(OUString::createFromAscii("DOMNodeRemoved"), sal_True,
                 sal_False,
-                Reference< XNode >(CNode::getCNode(m_aNodePtr).get()),
+                this,
                 OUString(), OUString(), OUString(), (AttrChangeType)0 );
             dispatchEvent(Reference< XEvent >(event, UNO_QUERY));
 
@@ -930,15 +772,16 @@ namespace DOM
     and returns the oldChild node.
     */
     Reference< XNode > SAL_CALL CNode::replaceChild(
-            const Reference< XNode >& newChild, const Reference< XNode >& oldChild)
+            Reference< XNode > const& xNewChild,
+            Reference< XNode > const& xOldChild)
         throw (RuntimeException, DOMException)
     {
-        if (!oldChild.is()) {
+        if (!xOldChild.is()) {
             throw RuntimeException();
         }
         // XXX check node types
 
-        if (oldChild->getParentNode() != Reference< XNode >(this)) {
+        if (xOldChild->getParentNode() != Reference< XNode >(this)) {
             DOMException e;
             e.Code = DOMExceptionType_HIERARCHY_REQUEST_ERR;
             throw e;
@@ -948,8 +791,12 @@ namespace DOM
         Reference< XNode > aNode = removeChild(oldChild);
         appendChild(newChild);
 */
-    xmlNodePtr pOld = CNode::getNodePtr(oldChild);
-        xmlNodePtr pNew = CNode::getNodePtr(newChild);
+        ::rtl::Reference<CNode> const pOldNode(
+                CNode::GetImplementation(xOldChild));
+        ::rtl::Reference<CNode> const pNewNode(
+                CNode::GetImplementation(xNewChild));
+        xmlNodePtr const pOld = pOldNode->GetNodePtr();
+        xmlNodePtr const pNew = pNewNode->GetNodePtr();
 
         if( pOld->type == XML_ATTRIBUTE_NODE )
         {
@@ -963,9 +810,8 @@ namespace DOM
 
             xmlAttrPtr pAttr = (xmlAttrPtr)pOld;
             xmlRemoveProp( pAttr );
-            ::rtl::Reference<CNode> const pOldNode( CNode::getCNode(pOld) );
             pOldNode->invalidate(); // freed by xmlRemoveProp
-            appendChild( newChild );
+            appendChild(xNewChild);
         }
         else
         {
@@ -991,9 +837,7 @@ namespace DOM
                 pOld->next = NULL;
                 pOld->prev = NULL;
                 pOld->parent = NULL;
-                ::rtl::Reference<CNode> const pOldNode(CNode::getCNode(pOld));
                 pOldNode->m_bUnlinked = true;
-                ::rtl::Reference<CNode> const pNewNode(CNode::getCNode(pNew));
                 pNewNode->m_bUnlinked = false; // will be deleted by xmlFreeDoc
             }
             cur = cur->next;
@@ -1002,7 +846,7 @@ namespace DOM
 
         dispatchSubtreeModified();
 
-        return oldChild;
+        return xOldChild;
     }
 
     void CNode::dispatchSubtreeModified()
@@ -1054,8 +898,8 @@ namespace DOM
         sal_Bool useCapture)
         throw (RuntimeException)
     {
-        events::CEventDispatcher & rDispatcher(
-                m_xDocument->GetEventDispatcher());
+        CDocument & rDocument(GetOwnerDocument());
+        events::CEventDispatcher & rDispatcher(rDocument.GetEventDispatcher());
         rDispatcher.addListener(m_aNodePtr, eventType, listener, useCapture);
     }
 
@@ -1064,17 +908,17 @@ namespace DOM
         sal_Bool useCapture)
         throw (RuntimeException)
     {
-        events::CEventDispatcher & rDispatcher(
-                m_xDocument->GetEventDispatcher());
+        CDocument & rDocument(GetOwnerDocument());
+        events::CEventDispatcher & rDispatcher(rDocument.GetEventDispatcher());
         rDispatcher.removeListener(m_aNodePtr, eventType, listener, useCapture);
     }
 
     sal_Bool SAL_CALL CNode::dispatchEvent(const Reference< XEvent >& evt)
         throw(RuntimeException, EventException)
     {
-        events::CEventDispatcher & rDispatcher(
-                m_xDocument->GetEventDispatcher());
-        rDispatcher.dispatchEvent(this, evt);
+        CDocument & rDocument(GetOwnerDocument());
+        events::CEventDispatcher & rDispatcher(rDocument.GetEventDispatcher());
+        rDispatcher.dispatchEvent(rDocument, m_aNodePtr, this, evt);
         return sal_True;
     }
 

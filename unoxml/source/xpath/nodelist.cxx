@@ -63,8 +63,8 @@ namespace XPath
         if (0 == m_pNodeSet) {
             return 0;
         }
-        Reference< XNode > const xNode(
-            DOM::CNode::getCNode(xmlXPathNodeSetItem(m_pNodeSet, index)).get());
+        xmlNodePtr const pNode = xmlXPathNodeSetItem(m_pNodeSet, index);
+        Reference< XNode > const xNode(m_pDocument->GetCNode(pNode).get());
         return xNode;
     }
 }

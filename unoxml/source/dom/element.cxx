@@ -40,6 +40,8 @@
 
 #include "../events/mutationevent.hxx"
 
+#include <document.hxx>
+
 
 namespace DOM
 {
@@ -73,8 +75,8 @@ namespace DOM
         // add attributes
         for (xmlAttrPtr pAttr = m_aNodePtr->properties;
                         pAttr != 0; pAttr = pAttr->next) {
-            ::rtl::Reference<CNode> const pNode =
-                CNode::getCNode(reinterpret_cast<xmlNodePtr>(pAttr));
+            ::rtl::Reference<CNode> const pNode = GetOwnerDocument().GetCNode(
+                    reinterpret_cast<xmlNodePtr>(pAttr));
             OSL_ENSURE(pNode != 0, "CNode::get returned 0");
             OUString prefix = pNode->getPrefix();
             OUString name = (prefix.getLength() == 0)
@@ -92,7 +94,8 @@ namespace DOM
         // recurse
         for (xmlNodePtr pChild = m_aNodePtr->children;
                         pChild != 0; pChild = pChild->next) {
-            ::rtl::Reference<CNode> const pNode = CNode::getCNode(pChild);
+            ::rtl::Reference<CNode> const pNode(
+                    GetOwnerDocument().GetCNode(pChild));
             OSL_ENSURE(pNode != 0, "CNode::get returned 0");
             pNode->saxify(i_xHandler);
         }
@@ -108,8 +111,8 @@ namespace DOM
         i_rContext.mxAttribList->clear();
         for (xmlAttrPtr pAttr = m_aNodePtr->properties;
                         pAttr != 0; pAttr = pAttr->next) {
-            ::rtl::Reference<CNode> const pNode =
-                CNode::getCNode(reinterpret_cast<xmlNodePtr>(pAttr));
+            ::rtl::Reference<CNode> const pNode = GetOwnerDocument().GetCNode(
+                    reinterpret_cast<xmlNodePtr>(pAttr));
             OSL_ENSURE(pNode != 0, "CNode::get returned 0");
 
             const xmlChar* xName = pAttr->name;
@@ -172,7 +175,8 @@ namespace DOM
         // recurse
         for (xmlNodePtr pChild = m_aNodePtr->children;
                         pChild != 0; pChild = pChild->next) {
-            ::rtl::Reference<CNode> const pNode = CNode::getCNode(pChild);
+            ::rtl::Reference<CNode> const pNode(
+                    GetOwnerDocument().GetCNode(pChild));
             OSL_ENSURE(pNode != 0, "CNode::get returned 0");
             pNode->fastSaxify(i_rContext);
         }
@@ -236,7 +240,7 @@ namespace DOM
             return 0;
         }
         Reference< XAttr > const xRet(
-            static_cast< XNode* >(CNode::getCNode(
+            static_cast< XNode* >(GetOwnerDocument().GetCNode(
                     reinterpret_cast<xmlNodePtr>(pAttr)).get()),
             UNO_QUERY_THROW);
         return xRet;
@@ -263,7 +267,7 @@ namespace DOM
             return 0;
         }
         Reference< XAttr > const xRet(
-            static_cast< XNode* >(CNode::getCNode(
+            static_cast< XNode* >(GetOwnerDocument().GetCNode(
                     reinterpret_cast<xmlNodePtr>(pAttr)).get()),
             UNO_QUERY_THROW);
         return xRet;
@@ -403,7 +407,11 @@ namespace DOM
         Reference< XAttr > aAttr;
         if(m_aNodePtr != NULL)
         {
-            xmlNodePtr const pNode = CNode::getNodePtr(oldAttr.get());
+            ::rtl::Reference<CNode> const pCNode(
+                CNode::GetImplementation(Reference<XNode>(oldAttr.get())));
+            if (!pCNode.is()) { throw RuntimeException(); }
+
+            xmlNodePtr const pNode = pCNode->GetNodePtr();
             xmlAttrPtr const pAttr = (xmlAttrPtr) pNode;
 
             if (pAttr->parent != m_aNodePtr)
@@ -426,7 +434,6 @@ namespace DOM
                 aAttr = oldAttr->getOwnerDocument()->createAttribute(oldAttr->getName());
             aAttr->setValue(oldAttr->getValue());
             xmlRemoveProp(pAttr);
-            ::rtl::Reference<CNode> const pCNode( CNode::getCNode(pNode) );
             pCNode->invalidate(); // freed by xmlRemoveProp
         }
         return aAttr;
@@ -449,7 +456,11 @@ namespace DOM
             }
 
             // get the implementation
-        xmlAttrPtr pAttr = (xmlAttrPtr) CNode::getNodePtr(newAttr.get());
+            CNode *const pCNode = CNode::GetImplementation(newAttr);
+            if (!pCNode) { throw RuntimeException(); }
+            xmlAttrPtr const pAttr =
+                reinterpret_cast<xmlAttrPtr>(pCNode->GetNodePtr());
+            if (!pAttr) { throw RuntimeException(); }
 
             // check whether the attribute is not in use by another element
             xmlNsPtr pNs = NULL;
@@ -477,7 +488,7 @@ namespace DOM
 
             // get the new attr node
             aAttr = Reference< XAttr >(
-                static_cast< XNode* >(CNode::getCNode(
+                static_cast< XNode* >(GetOwnerDocument().GetCNode(
                         reinterpret_cast<xmlNodePtr>(res)).get()),
                 UNO_QUERY_THROW);
         }

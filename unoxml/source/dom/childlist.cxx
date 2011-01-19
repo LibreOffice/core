@@ -30,6 +30,7 @@
 #include <libxml/tree.h>
 
 #include <node.hxx>
+#include <document.hxx>
 
 
 namespace DOM
@@ -75,7 +76,8 @@ namespace DOM
             while (cur != NULL)
             {
                 if (index-- == 0) {
-                    return Reference< XNode >(CNode::getCNode(cur).get());
+                    return Reference< XNode >(
+                            m_pNode->GetOwnerDocument().GetCNode(cur).get());
                 }
                 cur = cur->next;
             }

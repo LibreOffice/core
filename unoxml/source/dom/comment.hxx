@@ -46,7 +46,8 @@ namespace DOM
     class CComment
         : public CComment_Base
     {
-        friend class CNode;
+    private:
+        friend class CDocument;
 
     protected:
         CComment(CDocument const& rDocument, xmlNodePtr const pNode);

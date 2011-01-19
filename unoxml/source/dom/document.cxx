@@ -40,6 +40,8 @@
 #include "documenttype.hxx"
 #include "elementlist.hxx"
 #include "domimplementation.hxx"
+#include <entity.hxx>
+#include <notation.hxx>
 
 #include "../events/event.hxx"
 #include "../events/mutationevent.hxx"
@@ -68,19 +70,42 @@ namespace DOM
         return cur;
     }
 
-    CDocument::~CDocument()
-    {
-        xmlFreeDoc(m_aDocPtr);
-    }
-
-    CDocument::CDocument(xmlDocPtr aDocPtr)
+    CDocument::CDocument(xmlDocPtr const pDoc)
         : CDocument_Base(*this,
-                NodeType_DOCUMENT_NODE, reinterpret_cast<xmlNodePtr>(aDocPtr))
-        , m_aDocPtr(aDocPtr)
+                NodeType_DOCUMENT_NODE, reinterpret_cast<xmlNodePtr>(pDoc))
+        , m_aDocPtr(pDoc)
         , m_streamListeners()
         , m_pEventDispatcher(new events::CEventDispatcher())
     {
     }
+
+    ::rtl::Reference<CDocument> CDocument::CreateCDocument(xmlDocPtr const pDoc)
+    {
+        ::rtl::Reference<CDocument> const xDoc(new CDocument(pDoc));
+        // add the doc itself to its nodemap!
+        xDoc->m_NodeMap.insert(
+            nodemap_t::value_type(reinterpret_cast<xmlNodePtr>(pDoc),
+                ::std::make_pair(
+                    WeakReference<XNode>(static_cast<XDocument*>(xDoc.get())),
+                    xDoc.get())));
+        return xDoc;
+    }
+
+    CDocument::~CDocument()
+    {
+#ifdef DBG_UTIL
+        // node map must be empty now, otherwise CDocument must not die!
+        for (nodemap_t::iterator i = m_NodeMap.begin();
+                i != m_NodeMap.end(); ++i)
+        {
+            Reference<XNode> const xNode(i->second.first);
+            OSL_ENSURE(!xNode.is(),
+            "CDocument::~CDocument(): ERROR: live node in document node map!");
+        }
+#endif
+        xmlFreeDoc(m_aDocPtr);
+    }
+
 
     events::CEventDispatcher & CDocument::GetEventDispatcher()
     {
@@ -91,17 +116,162 @@ namespace DOM
     {
         xmlNodePtr const pNode = lcl_getDocumentRootPtr(m_aDocPtr);
         ::rtl::Reference< CElement > const xRet(
-            dynamic_cast<CElement*>(CNode::getCNode(pNode).get()));
+            dynamic_cast<CElement*>(GetCNode(pNode).get()));
         return xRet;
     }
 
+    namespace {
+        struct NodeMutex : public ::rtl::Static<osl::Mutex, NodeMutex> {};
+    }
+
+    void
+    CDocument::RemoveCNode(xmlNodePtr const pNode, CNode const*const pCNode)
+    {
+        ::osl::MutexGuard guard(NodeMutex::get());
+        nodemap_t::iterator const i = m_NodeMap.find(pNode);
+        if (i != m_NodeMap.end()) {
+            // #i113681# consider this scenario:
+            // T1 calls ~CNode
+            // T2 calls getCNode:    lookup will find i->second->first invalid
+            //                       so a new CNode is created and inserted
+            // T1 calls removeCNode: i->second->second now points to a
+            //                       different CNode instance!
+            //
+            // check that the CNode is the right one
+            CNode *const pCurrent = i->second.second;
+            if (pCurrent == pCNode) {
+                m_NodeMap.erase(i);
+            }
+        }
+    }
+
+    ::rtl::Reference<CNode>
+    CDocument::GetCNode(xmlNodePtr const pNode, bool const bCreate)
+    {
+        if (0 == pNode) {
+            return 0;
+        }
+        //see CNode::remove
+        ::osl::MutexGuard guard(NodeMutex::get());
+        //check whether there is already an instance for this node
+        nodemap_t::const_iterator const i = m_NodeMap.find(pNode);
+        if (i != m_NodeMap.end()) {
+            // #i113681# check that the CNode is still alive
+            uno::Reference<XNode> const xNode(i->second.first);
+            if (xNode.is())
+            {
+                ::rtl::Reference<CNode> ret(i->second.second);
+                OSL_ASSERT(ret.is());
+                return ret;
+            }
+        }
+
+        if (!bCreate) { return 0; }
+
+        // there is not yet an instance wrapping this node,
+        // create it and store it in the map
+
+        ::rtl::Reference<CNode> pCNode;
+        switch (pNode->type)
+        {
+            case XML_ELEMENT_NODE:
+                // m_aNodeType = NodeType::ELEMENT_NODE;
+                pCNode = static_cast< CNode* >(new CElement(*this, pNode));
+            break;
+            case XML_TEXT_NODE:
+                // m_aNodeType = NodeType::TEXT_NODE;
+                pCNode = static_cast< CNode* >(new CText(*this, pNode));
+            break;
+            case XML_CDATA_SECTION_NODE:
+                // m_aNodeType = NodeType::CDATA_SECTION_NODE;
+                pCNode = static_cast< CNode* >(new CCDATASection(*this, pNode));
+            break;
+            case XML_ENTITY_REF_NODE:
+                // m_aNodeType = NodeType::ENTITY_REFERENCE_NODE;
+                pCNode = static_cast< CNode* >(new CEntityReference(*this,
+                            pNode));
+            break;
+            case XML_ENTITY_NODE:
+                // m_aNodeType = NodeType::ENTITY_NODE;
+                pCNode = static_cast< CNode* >(new CEntity(*this,
+                            reinterpret_cast<xmlEntityPtr>(pNode)));
+            break;
+            case XML_PI_NODE:
+                // m_aNodeType = NodeType::PROCESSING_INSTRUCTION_NODE;
+                pCNode = static_cast< CNode* >(
+                            new CProcessingInstruction(*this, pNode));
+            break;
+            case XML_COMMENT_NODE:
+                // m_aNodeType = NodeType::COMMENT_NODE;
+                pCNode = static_cast< CNode* >(new CComment(*this, pNode));
+            break;
+            case XML_DOCUMENT_NODE:
+                // m_aNodeType = NodeType::DOCUMENT_NODE;
+                OSL_ENSURE(false, "CDocument::GetCNode is not supposed to"
+                        " create a CDocument!!!");
+                pCNode = static_cast< CNode* >(new CDocument(
+                            reinterpret_cast<xmlDocPtr>(pNode)));
+            break;
+            case XML_DOCUMENT_TYPE_NODE:
+            case XML_DTD_NODE:
+                // m_aNodeType = NodeType::DOCUMENT_TYPE_NODE;
+                pCNode = static_cast< CNode* >(new CDocumentType(*this,
+                            reinterpret_cast<xmlDtdPtr>(pNode)));
+            break;
+            case XML_DOCUMENT_FRAG_NODE:
+                // m_aNodeType = NodeType::DOCUMENT_FRAGMENT_NODE;
+                pCNode = static_cast< CNode* >(new CDocumentFragment(*this,
+                            pNode));
+            break;
+            case XML_NOTATION_NODE:
+                // m_aNodeType = NodeType::NOTATION_NODE;
+                pCNode = static_cast< CNode* >(new CNotation(*this,
+                            reinterpret_cast<xmlNotationPtr>(pNode)));
+            break;
+            case XML_ATTRIBUTE_NODE:
+                // m_aNodeType = NodeType::ATTRIBUTE_NODE;
+                pCNode = static_cast< CNode* >(new CAttr(*this,
+                            reinterpret_cast<xmlAttrPtr>(pNode)));
+            break;
+            // unsupported node types
+            case XML_HTML_DOCUMENT_NODE:
+            case XML_ELEMENT_DECL:
+            case XML_ATTRIBUTE_DECL:
+            case XML_ENTITY_DECL:
+            case XML_NAMESPACE_DECL:
+            default:
+            break;
+        }
+
+        if (pCNode != 0) {
+            bool const bInserted = m_NodeMap.insert(
+                    nodemap_t::value_type(pNode,
+                        ::std::make_pair(WeakReference<XNode>(pCNode.get()),
+                        pCNode.get()))
+                ).second;
+            OSL_ASSERT(bInserted);
+            if (!bInserted) {
+                // if insertion failed, delete new instance and return null
+                return 0;
+            }
+        }
+
+        OSL_ENSURE(pCNode.is(), "no node produced during CDocument::GetCNode!");
+        return pCNode;
+    }
+
+
+    CDocument & CDocument::GetOwnerDocument()
+    {
+        return *this;
+    }
 
     void SAL_CALL CDocument::saxify(
             const Reference< XDocumentHandler >& i_xHandler) {
         i_xHandler->startDocument();
         for (xmlNodePtr pChild = m_aNodePtr->children;
                         pChild != 0; pChild = pChild->next) {
-            ::rtl::Reference<CNode> const pNode = CNode::getCNode(pChild);
+            ::rtl::Reference<CNode> const pNode = GetCNode(pChild);
             OSL_ENSURE(pNode != 0, "CNode::get returned 0");
             pNode->saxify(i_xHandler);
         }
@@ -112,7 +282,7 @@ namespace DOM
         rContext.mxDocHandler->startDocument();
         for (xmlNodePtr pChild = m_aNodePtr->children;
                         pChild != 0; pChild = pChild->next) {
-            ::rtl::Reference<CNode> const pNode = CNode::getCNode(pChild);
+            ::rtl::Reference<CNode> const pNode = GetCNode(pChild);
             OSL_ENSURE(pNode != 0, "CNode::get returned 0");
             pNode->fastSaxify(rContext);
         }
@@ -214,7 +384,7 @@ namespace DOM
         xmlChar *xName = (xmlChar*)o1.getStr();
         xmlAttrPtr const pAttr = xmlNewDocProp(m_aDocPtr, xName, NULL);
         Reference< XAttr > const xRet(
-            static_cast< XNode* >(CNode::getCNode(
+            static_cast< XNode* >(GetCNode(
                     reinterpret_cast<xmlNodePtr>(pAttr)).get()),
             UNO_QUERY_THROW);
         return xRet;
@@ -255,7 +425,7 @@ namespace DOM
         xmlNsPtr pNs = xmlNewNs(pNode, xUri, xPrefix);
         xmlAttrPtr pAttr = xmlNewNsProp(pNode, pNs, xName, NULL);
         Reference< XAttr > const xRet(
-            static_cast< XNode* >(CNode::getCNode(
+            static_cast< XNode* >(GetCNode(
                     reinterpret_cast<xmlNodePtr>(pAttr)).get()),
             UNO_QUERY_THROW);
         return xRet;
@@ -268,7 +438,7 @@ namespace DOM
         xmlChar *xData = (xmlChar*)OUStringToOString(data, RTL_TEXTENCODING_UTF8).getStr();
         xmlNodePtr pText = xmlNewCDataBlock(m_aDocPtr, xData, strlen((char*)xData));
         Reference< XCDATASection > const xRet(
-            static_cast< XNode* >(CNode::getCNode(pText).get()),
+            static_cast< XNode* >(GetCNode(pText).get()),
             UNO_QUERY_THROW);
         return xRet;
     }
@@ -281,7 +451,7 @@ namespace DOM
         xmlChar *xData = (xmlChar*)o1.getStr();
         xmlNodePtr pComment = xmlNewDocComment(m_aDocPtr, xData);
         Reference< XComment > const xRet(
-            static_cast< XNode* >(CNode::getCNode(pComment).get()),
+            static_cast< XNode* >(GetCNode(pComment).get()),
             UNO_QUERY_THROW);
         return xRet;
     }
@@ -292,7 +462,7 @@ namespace DOM
     {
         xmlNodePtr pFrag = xmlNewDocFragment(m_aDocPtr);
         Reference< XDocumentFragment > const xRet(
-            static_cast< XNode* >(CNode::getCNode(pFrag).get()),
+            static_cast< XNode* >(GetCNode(pFrag).get()),
             UNO_QUERY_THROW);
         return xRet;
     }
@@ -305,7 +475,7 @@ namespace DOM
         xmlChar *xName = (xmlChar*)o1.getStr();
         xmlNodePtr const pNode = xmlNewDocNode(m_aDocPtr, NULL, xName, NULL);
         Reference< XElement > const xRet(
-            static_cast< XNode* >(CNode::getCNode(pNode).get()),
+            static_cast< XNode* >(GetCNode(pNode).get()),
             UNO_QUERY_THROW);
         return xRet;
     }
@@ -340,7 +510,7 @@ namespace DOM
         xmlNsPtr const pNs = xmlNewNs(pNode, xUri, xPrefix);
         xmlSetNs(pNode, pNs);
         Reference< XElement > const xRet(
-            static_cast< XNode* >(CNode::getCNode(pNode).get()),
+            static_cast< XNode* >(GetCNode(pNode).get()),
             UNO_QUERY_THROW);
         return xRet;
     }
@@ -353,7 +523,7 @@ namespace DOM
         xmlChar *xName = (xmlChar*)o1.getStr();
         xmlNodePtr const pNode = xmlNewReference(m_aDocPtr, xName);
         Reference< XEntityReference > const xRet(
-            static_cast< XNode* >(CNode::getCNode(pNode).get()),
+            static_cast< XNode* >(GetCNode(pNode).get()),
             UNO_QUERY_THROW);
         return xRet;
     }
@@ -371,7 +541,7 @@ namespace DOM
         xmlNodePtr const pNode = xmlNewPI(xTarget, xData);
         pNode->doc = m_aDocPtr;
         Reference< XProcessingInstruction > const xRet(
-            static_cast< XNode* >(CNode::getCNode(pNode).get()),
+            static_cast< XNode* >(GetCNode(pNode).get()),
             UNO_QUERY_THROW);
         return xRet;
     }
@@ -384,7 +554,7 @@ namespace DOM
         xmlChar *xData = (xmlChar*)o1.getStr();
         xmlNodePtr const pNode = xmlNewDocText(m_aDocPtr, xData);
         Reference< XText > const xRet(
-            static_cast< XNode* >(CNode::getCNode(pNode).get()),
+            static_cast< XNode* >(GetCNode(pNode).get()),
             UNO_QUERY_THROW);
         return xRet;
     }
@@ -402,7 +572,7 @@ namespace DOM
                 break;
         }
         Reference< XDocumentType > const xRet(
-            static_cast< XNode* >(CNode::getCNode(cur).get()),
+            static_cast< XNode* >(GetCNode(cur).get()),
             UNO_QUERY_THROW);
         return xRet;
     }
@@ -414,7 +584,7 @@ namespace DOM
     {
         xmlNodePtr const pNode = lcl_getDocumentRootPtr(m_aDocPtr);
         Reference< XElement > const xRet(
-            static_cast< XNode* >(CNode::getCNode(pNode).get()),
+            static_cast< XNode* >(GetCNode(pNode).get()),
             UNO_QUERY_THROW);
         return xRet;
     }
@@ -452,10 +622,10 @@ namespace DOM
         // search the tree for an element with the given ID
         OString o1 = OUStringToOString(elementId, RTL_TEXTENCODING_UTF8);
         xmlChar *xId = (xmlChar*)o1.getStr();
-        xmlNodePtr pStart = CNode::getNodePtr(getDocumentElement().get());
+        xmlNodePtr const pStart = lcl_getDocumentRootPtr(m_aDocPtr);
         xmlNodePtr const pNode = _search_element_by_id(pStart, xId);
         Reference< XElement > const xRet(
-            static_cast< XNode* >(CNode::getCNode(pNode).get()),
+            static_cast< XNode* >(GetCNode(pNode).get()),
             UNO_QUERY_THROW);
         return xRet;
     }

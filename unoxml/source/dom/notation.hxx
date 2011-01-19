@@ -47,7 +47,9 @@ namespace DOM
     class CNotation
         : public CNotation_Base
     {
-        friend class CNode;
+    private:
+        friend class CDocument;
+
     private:
         xmlNotationPtr m_aNotationPtr;
 

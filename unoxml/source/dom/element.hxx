@@ -50,8 +50,9 @@ namespace DOM
     class CElement
         : public CElement_Base
     {
-        friend class CNode;
     private:
+        friend class CDocument;
+
         Reference< XAttr > _setAttributeNode(const Reference< XAttr >& newAttr, sal_Bool bNS)
             throw (RuntimeException);
 

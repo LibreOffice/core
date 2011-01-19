@@ -52,7 +52,9 @@ namespace DOM
     class CDocumentType
         : public CDocumentType_Base
     {
-        friend class CNode;
+    private:
+        friend class CDocument;
+
     private:
         xmlDtdPtr m_aDtdPtr;
 

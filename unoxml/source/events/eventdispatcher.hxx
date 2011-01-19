@@ -46,8 +46,11 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star::xml::dom;
 using namespace com::sun::star::xml::dom::events;
 
-namespace DOM { namespace events
-{
+namespace DOM {
+
+class CDocument;
+
+namespace events {
 
 typedef std::vector< xmlNodePtr > NodeVector;
 typedef std::multimap< xmlNodePtr, Reference< com::sun::star::xml::dom::events::XEventListener> > ListenerMap;
@@ -80,6 +83,8 @@ public:
         sal_Bool const bCapture) const;
 
     bool dispatchEvent(
+        DOM::CDocument & rDocument,
+        xmlNodePtr const pNode,
         Reference<XNode> const& xNode,
         Reference< XEvent > const& xEvent) const;
 };

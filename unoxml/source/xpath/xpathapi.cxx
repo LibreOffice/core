@@ -143,12 +143,13 @@ namespace XPath
     }
 
     // get all ns decls on a node (and parent nodes, if any) and register them
-    static void _collectNamespaces(
-            CXPathAPI* pAPI,
-            const Reference< XNode >&  namespaceNode)
+    static void lcl_collectNamespaces(
+            CXPathAPI *const pAPI,
+            Reference< XNode > const& xNamespaceNode)
     {
         // get namespace decls from node...
-        xmlNodePtr pNode = DOM::CNode::getNodePtr(namespaceNode);
+        DOM::CNode *const pCNode(DOM::CNode::GetImplementation(xNamespaceNode));
+        xmlNodePtr pNode = pCNode->GetNodePtr();
         while (pNode != 0) {
             xmlNsPtr curDef = pNode->nsDef;
             while (curDef != 0) {
@@ -214,7 +215,7 @@ namespace XPath
             const Reference< XNode >&  namespaceNode)
         throw (RuntimeException, XPathException)
     {
-        _collectNamespaces(this, namespaceNode);
+        lcl_collectNamespaces(this, namespaceNode);
         return selectNodeList(contextNode, expr);
     }
 
@@ -241,7 +242,7 @@ namespace XPath
             const Reference< XNode >&  namespaceNode )
         throw (RuntimeException, XPathException)
     {
-        _collectNamespaces(this, namespaceNode);
+        lcl_collectNamespaces(this, namespaceNode);
         return selectSingleNode(contextNode, expr);
     }
 
@@ -320,7 +321,9 @@ namespace XPath
         xmlXPathObjectPtr xpathObj;
 
         // get the node and document
-        xmlNodePtr pNode = DOM::CNode::getNodePtr(contextNode);
+        DOM::CNode *const pCNode = DOM::CNode::GetImplementation(contextNode);
+        if (!pCNode) { throw RuntimeException(); }
+        xmlNodePtr const pNode = pCNode->GetNodePtr();
         if (!pNode) { throw RuntimeException(); }
         xmlDocPtr pDoc = pNode->doc;
 
@@ -359,8 +362,7 @@ namespace XPath
         }
         xmlXPathFreeContext(xpathCtx);
         ::rtl::Reference<DOM::CDocument> const pCDoc(
-            dynamic_cast<DOM::CDocument*>(DOM::CNode::getCNode(
-                reinterpret_cast<xmlNodePtr>(pDoc)).get()));
+                & pCNode->GetOwnerDocument());
         OSL_ASSERT(pCDoc.is());
         Reference<XXPathObject> const xObj(new CXPathObject(pCDoc, xpathObj));
         return xObj;
@@ -375,7 +377,7 @@ namespace XPath
             const Reference< XNode >& namespaceNode)
         throw (RuntimeException, XPathException)
     {
-        _collectNamespaces(this, namespaceNode);
+        lcl_collectNamespaces(this, namespaceNode);
         return eval(contextNode, expr);
     }
 

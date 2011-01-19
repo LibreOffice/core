@@ -30,6 +30,7 @@
 #include <string.h>
 
 #include <element.hxx>
+#include <document.hxx>
 
 
 namespace DOM
@@ -126,7 +127,7 @@ namespace DOM
             throw RuntimeException();
         }
         Reference< XNode > const xRet(
-            CNode::getCNode(m_nodevector[index]).get());
+            m_pElement->GetOwnerDocument().GetCNode(m_nodevector[index]).get());
         return xRet;
     }
 

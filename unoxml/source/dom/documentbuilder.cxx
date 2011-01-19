@@ -185,9 +185,7 @@ namespace DOM
         // create a new document
         xmlDocPtr pDocument = xmlNewDoc((const xmlChar*)"1.0");
         Reference< XDocument > const xRet(
-            static_cast< XNode* >(CNode::getCNode(
-                reinterpret_cast<xmlNodePtr>(pDocument)).get()),
-            UNO_QUERY_THROW);
+                CDocument::CreateCDocument(pDocument).get());
         return xRet;
     }
 
@@ -361,9 +359,7 @@ namespace DOM
         }
         xmlFreeParserCtxt(ctxt);
         Reference< XDocument > const xRet(
-            static_cast< XNode* >(CNode::getCNode(
-                reinterpret_cast<xmlNodePtr>(pDoc)).get()),
-            UNO_QUERY_THROW);
+                CDocument::CreateCDocument(pDoc).get());
         return xRet;
     }
 
@@ -414,9 +410,7 @@ namespace DOM
         }
         xmlFreeParserCtxt(ctxt);
         Reference< XDocument > const xRet(
-            static_cast< XNode* >(CNode::getCNode(
-                reinterpret_cast<xmlNodePtr>(pDoc)).get()),
-            UNO_QUERY_THROW);
+                CDocument::CreateCDocument(pDoc).get());
         return xRet;
     }
 

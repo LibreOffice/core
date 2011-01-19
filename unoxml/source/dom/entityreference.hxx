@@ -48,7 +48,9 @@ namespace DOM
     class CEntityReference
         : public CEntityReference_Base
     {
-        friend class CNode;
+    private:
+        friend class CDocument;
+
     protected:
         CEntityReference(CDocument const& rDocument, xmlNodePtr const pNode);
 

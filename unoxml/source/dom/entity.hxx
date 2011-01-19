@@ -50,7 +50,9 @@ namespace DOM
     class CEntity
         : public CEntity_Base
     {
-        friend class CNode;
+    private:
+        friend class CDocument;
+
     private:
         xmlEntityPtr m_aEntityPtr;
 

@@ -46,7 +46,7 @@ namespace DOM
     class CCDATASection
         : public CCDATASection_Base
     {
-        friend class CNode;
+        friend class CDocument;
 
     protected:
         CCDATASection(CDocument const& rDocument, xmlNodePtr const pNode);

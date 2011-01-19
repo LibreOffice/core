@@ -25,12 +25,15 @@
  *
  ************************************************************************/
 
-#include "eventdispatcher.hxx"
-#include "event.hxx"
-#include "mutationevent.hxx"
-#include "uievent.hxx"
-#include "mouseevent.hxx"
-#include "../dom/node.hxx"
+#include <eventdispatcher.hxx>
+
+#include <event.hxx>
+#include <mutationevent.hxx>
+#include <uievent.hxx>
+#include <mouseevent.hxx>
+
+#include "../dom/document.hxx"
+
 
 namespace DOM { namespace events {
 
@@ -100,7 +103,8 @@ namespace DOM { namespace events {
         }
     }
 
-    bool CEventDispatcher::dispatchEvent(Reference<XNode> const& xNode,
+    bool CEventDispatcher::dispatchEvent(DOM::CDocument & rDocument,
+            xmlNodePtr const pNode, Reference<XNode> const& xNode,
             Reference< XEvent > const& i_xEvent) const
     {
         CEvent *pEvent = 0; // pointer to internal event representation
@@ -174,7 +178,7 @@ namespace DOM { namespace events {
 
         // build the path from target node to the root
         NodeVector captureVector;
-        xmlNodePtr cur = DOM::CNode::getNodePtr(Reference< XNode >(xEvent->getTarget(), UNO_QUERY_THROW));
+        xmlNodePtr cur = pNode;
         while (cur != NULL)
         {
             captureVector.push_back(cur);
@@ -196,9 +200,8 @@ namespace DOM { namespace events {
             while (rinode !=
                     const_cast<const NodeVector&>(captureVector).rend())
             {
-                //pEvent->m_currentTarget = *inode;
                 pEvent->m_currentTarget = Reference< XEventTarget >(
-                        DOM::CNode::getCNode(*rinode).get());
+                        rDocument.GetCNode(*rinode).get());
                 callListeners(*rinode, aType, xEvent, sal_True);
                 if  (pEvent->m_canceled) return sal_True;
                 rinode++;
@@ -217,7 +220,7 @@ namespace DOM { namespace events {
                 while (inode != captureVector.end())
                 {
                     pEvent->m_currentTarget = Reference< XEventTarget >(
-                            DOM::CNode::getCNode(*inode).get());
+                            rDocument.GetCNode(*inode).get());
                     callListeners(*inode, aType, xEvent, sal_False);
                     if  (pEvent->m_canceled) return sal_True;
                     inode++;

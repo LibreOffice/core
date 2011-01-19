@@ -46,7 +46,9 @@ namespace DOM
     class CDocumentFragment
         : public CDocumentFragment_Base
     {
-        friend class CNode;
+    private:
+        friend class CDocument;
+
     protected:
         CDocumentFragment(CDocument const& rDocument,
                 xmlNodePtr const pNode);

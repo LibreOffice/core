@@ -28,34 +28,32 @@
 #ifndef DOM_NODE_HXX
 #define DOM_NODE_HXX
 
+#include <hash_map>
+
+#include <libxml/tree.h>
+
+#include <sal/types.h>
 #include <rtl/ref.hxx>
 #include <rtl/string.hxx>
 #include <rtl/ustring.hxx>
-#include <sal/types.h>
-#include <sax/fastattribs.hxx>
-#include <cppuhelper/implbase1.hxx>
+
 #include <cppuhelper/implbase3.hxx>
+
+#include <sax/fastattribs.hxx>
+
 #include <com/sun/star/uno/Reference.h>
-#include <com/sun/star/uno/Exception.hpp>
+#include <com/sun/star/uno/Sequence.h>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/xml/dom/XNode.hpp>
 #include <com/sun/star/xml/dom/XNodeList.hpp>
 #include <com/sun/star/xml/dom/XNamedNodeMap.hpp>
 #include <com/sun/star/xml/dom/NodeType.hpp>
-#include <com/sun/star/uno/Sequence.h>
 #include <com/sun/star/xml/dom/events/XEventTarget.hpp>
-#include <com/sun/star/xml/dom/events/XDocumentEvent.hpp>
 #include <com/sun/star/xml/dom/events/XEvent.hpp>
-#include <com/sun/star/xml/dom/events/XMutationEvent.hpp>
-#include <com/sun/star/xml/dom/events/XUIEvent.hpp>
-#include <com/sun/star/xml/dom/events/XMouseEvent.hpp>
 #include <com/sun/star/xml/dom/DOMException.hpp>
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 #include <com/sun/star/xml/sax/XFastDocumentHandler.hpp>
-#include <libxml/tree.h>
 
-#include <map>
-#include <hash_map>
 
 using ::rtl::OUString;
 using ::rtl::OString;
@@ -64,8 +62,8 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star::xml::sax;
 using namespace com::sun::star::xml::dom;
 using namespace com::sun::star::xml::dom::events;
-
 using com::sun::star::lang::XUnoTunnel;
+
 
 namespace DOM
 {
@@ -124,6 +122,7 @@ namespace DOM
         friend class CElementList;
         friend class CEntitiesMap;
         friend class CNotationsMap;
+
     private:
         bool m_bUnlinked; /// node has been removed from document
 
@@ -141,24 +140,16 @@ namespace DOM
 
         void dispatchSubtreeModified();
 
-        ::rtl::Reference< CDocument > GetOwnerDocument_Impl();
-
     public:
 
         virtual ~CNode();
 
-        /// get UNO wrapper instance for a libxml node
-        static ::rtl::Reference<CNode> getCNode(
-                xmlNodePtr const pNode, bool const bCreate = true);
-        /// remove a UNO wrapper instance
-        static void removeCNode(
-                xmlNodePtr const pNode, CNode const*const pCNode);
-
-        // get the libxml node implementation
-        static xmlNodePtr getNodePtr(const Reference< XNode >& aNode);
-
         static CNode * GetImplementation(::com::sun::star::uno::Reference<
                 ::com::sun::star::uno::XInterface> const& xNode);
+
+        xmlNodePtr GetNodePtr() { return m_aNodePtr; }
+
+        virtual CDocument & GetOwnerDocument();
 
         // recursively create SAX events
         virtual void SAL_CALL saxify(

@@ -30,6 +30,7 @@
 #include <string.h>
 
 #include <element.hxx>
+#include <document.hxx>
 
 
 namespace DOM
@@ -75,7 +76,8 @@ namespace DOM
             {
                 if( strcmp((char*)xName, (char*)cur->name) == 0)
                 {
-                    aNode = Reference< XNode >( CNode::getCNode(
+                    aNode = Reference< XNode >(
+                            m_pElement->GetOwnerDocument().GetCNode(
                                 reinterpret_cast<xmlNodePtr>(cur)).get() );
                     break;
                 }
@@ -108,7 +110,8 @@ namespace DOM
                 if( strcmp((char*)xName, (char*)cur->name) == 0 &&
                     cur->ns == pNs)
                 {
-                    aNode = Reference< XNode >( CNode::getCNode(
+                    aNode = Reference< XNode >(
+                            m_pElement->GetOwnerDocument().GetCNode(
                                 reinterpret_cast<xmlNodePtr>(cur)).get() );
                     break;
                 }
@@ -134,7 +137,8 @@ namespace DOM
             {
                 if (count == index)
                 {
-                    aNode = Reference< XNode >( CNode::getCNode(
+                    aNode = Reference< XNode >(
+                            m_pElement->GetOwnerDocument().GetCNode(
                                 reinterpret_cast<xmlNodePtr>(cur)).get() );
                     break;
                 }
@@ -161,7 +165,8 @@ namespace DOM
             while (cur != NULL)
             {
                 if (strcmp((char*)xName, (char*)cur->name) == 0) {
-                    ::rtl::Reference<CNode> const pCNode = CNode::getCNode(
+                    ::rtl::Reference<CNode> const pCNode =
+                            m_pElement->GetOwnerDocument().GetCNode(
                                 reinterpret_cast<xmlNodePtr>(cur)).get();
                     // this seems to be legal...
                     xmlUnlinkNode(reinterpret_cast<xmlNodePtr>(cur));
@@ -196,7 +201,8 @@ namespace DOM
                 if (strcmp((char*)xName, (char*)cur->name) == 0 &&
                     cur->ns == pNs)
                 {
-                    ::rtl::Reference<CNode> const pCNode = CNode::getCNode(
+                    ::rtl::Reference<CNode> const pCNode =
+                            m_pElement->GetOwnerDocument().GetCNode(
                                 reinterpret_cast<xmlNodePtr>(cur)).get();
                     // this seems to be legal...
                     xmlUnlinkNode(reinterpret_cast<xmlNodePtr>(cur));

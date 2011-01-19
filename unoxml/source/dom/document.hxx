@@ -82,27 +82,42 @@ namespace DOM
     class CDocument
         : public CDocument_Base
     {
-        friend class CNode;
-        typedef set< Reference< XStreamListener > > listenerlist_t;
+
     private:
 
         xmlDocPtr const m_aDocPtr;
 
         // datacontrol/source state
+        typedef set< Reference< XStreamListener > > listenerlist_t;
         listenerlist_t m_streamListeners;
         Reference< XOutputStream > m_rOutputStream;
 
+        typedef std::map< const xmlNodePtr,
+                    ::std::pair< WeakReference<XNode>, CNode* > > nodemap_t;
+        nodemap_t m_NodeMap;
+
         ::std::auto_ptr<events::CEventDispatcher> const m_pEventDispatcher;
 
-    protected:
-        CDocument(xmlDocPtr aDocPtr);
+        CDocument(xmlDocPtr const pDocPtr);
+
+
+    public:
+        /// factory: only way to create instance!
+        static ::rtl::Reference<CDocument>
+            CreateCDocument(xmlDocPtr const pDoc);
+
+        virtual ~CDocument();
 
         events::CEventDispatcher & GetEventDispatcher();
         ::rtl::Reference< CElement > GetDocumentElement();
 
-    public:
+        /// get UNO wrapper instance for a libxml node
+        ::rtl::Reference<CNode> GetCNode(
+                xmlNodePtr const pNode, bool const bCreate = true);
+        /// remove a UNO wrapper instance
+        void RemoveCNode(xmlNodePtr const pNode, CNode const*const pCNode);
 
-        virtual ~CDocument();
+        virtual CDocument & GetOwnerDocument();
 
         virtual void SAL_CALL saxify(
             const Reference< XDocumentHandler >& i_xHandler);
