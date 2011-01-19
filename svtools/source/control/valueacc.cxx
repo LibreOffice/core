@@ -317,7 +317,7 @@ sal_Int16 SAL_CALL ValueSetAcc::getAccessibleRole()
 
     if ( !aRet.Len() )
     {
-        Window* pLabel = mpParent->GetLabeledBy();
+        Window* pLabel = mpParent->GetAccessibleRelationLabeledBy();
         if ( pLabel && pLabel != mpParent )
             aRet = OutputDevice::GetNonMnemonicString( pLabel->GetText() );
     }

@@ -200,6 +200,24 @@ struct ImplFrameData
     BOOL                mbInternalDragGestureRecognizer;
 };
 
+// -----------------------
+// - ImplAccessibleInfos -
+// -----------------------
+
+struct ImplAccessibleInfos
+{
+    USHORT  nAccessibleRole;
+    String* pAccessibleName;
+    String* pAccessibleDescription;
+    Window* pLabeledByWindow;
+    Window* pLabelForWindow;
+    Window* pMemberOfWindow;
+
+    ImplAccessibleInfos();
+    ~ImplAccessibleInfos();
+};
+
+
 // ---------------
 // - WindowImpl -
 // ---------------
