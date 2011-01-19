@@ -712,7 +712,7 @@ sal_Bool ScXMLImportWrapper::ExportToComponent(uno::Reference<lang::XMultiServic
         pExport->SetSharedData(pSharedData);
 
         // if there are sheets to copy, get the source stream
-        if ( sName.equalsAscii("content.xml") && lcl_HasValidStream(rDoc) &&
+        if ( sName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("content.xml")) && lcl_HasValidStream(rDoc) &&
              ( pExport->getExportFlags() & EXPORT_OASIS ) )
         {
             // old stream is still in this file's storage - open read-only

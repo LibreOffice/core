@@ -135,52 +135,52 @@ ScVbaWorkbook::getFileFormat(  ) throw (::uno::RuntimeException)
 
         // #FIXME - seems suspect should we not walk through the properties
         // to find the FilterName
-        if (aArgs[0].Name.equalsAscii( "FilterName")) {
+        if (aArgs[0].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("FilterName"))) {
             aArgs[0].Value >>= aFilterName;
         } else {
            aArgs[1].Value >>= aFilterName;
         }
 
-        if (aFilterName.equalsAscii("Text - txt - csv (StarCalc)")) {
+        if (aFilterName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Text - txt - csv (StarCalc)"))) {
             aFileFormat = excel::XlFileFormat::xlCSV; //xlFileFormat.
         }
 
-        if (aFilterName.equalsAscii("DBF")) {
+        if (aFilterName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("DBF"))) {
             aFileFormat = excel::XlFileFormat::xlDBF4;
         }
 
-        if (aFilterName.equalsAscii("DIF")) {
+        if (aFilterName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("DIF"))) {
             aFileFormat = excel::XlFileFormat::xlDIF;
         }
 
-        if (aFilterName.equalsAscii("Lotus")) {
+        if (aFilterName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Lotus"))) {
             aFileFormat = excel::XlFileFormat::xlWK3;
         }
 
-        if (aFilterName.equalsAscii("MS Excel 4.0")) {
+        if (aFilterName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("MS Excel 4.0"))) {
             aFileFormat = excel::XlFileFormat::xlExcel4Workbook;
         }
 
-        if (aFilterName.equalsAscii("MS Excel 5.0/95")) {
+        if (aFilterName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("MS Excel 5.0/95"))) {
             aFileFormat = excel::XlFileFormat::xlExcel5;
         }
 
-        if (aFilterName.equalsAscii("MS Excel 97")) {
+        if (aFilterName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("MS Excel 97"))) {
             aFileFormat = excel::XlFileFormat::xlExcel9795;
         }
 
-        if (aFilterName.equalsAscii("HTML (StarCalc)")) {
+        if (aFilterName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("HTML (StarCalc)"))) {
             aFileFormat = excel::XlFileFormat::xlHtml;
         }
 
-        if (aFilterName.equalsAscii("calc_StarOffice_XML_Calc_Template")) {
+        if (aFilterName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("calc_StarOffice_XML_Calc_Template"))) {
             aFileFormat = excel::XlFileFormat::xlTemplate;
         }
 
-        if (aFilterName.equalsAscii("StarOffice XML (Calc)")) {
+        if (aFilterName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("StarOffice XML (Calc)"))) {
             aFileFormat = excel::XlFileFormat::xlWorkbookNormal;
         }
-        if (aFilterName.equalsAscii("calc8")) {
+        if (aFilterName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("calc8"))) {
             aFileFormat = excel::XlFileFormat::xlWorkbookNormal;
         }
 

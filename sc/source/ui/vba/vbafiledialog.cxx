@@ -108,8 +108,8 @@ ScVbaFileDialog::Show( ) throw (::com::sun::star::uno::RuntimeException)
                 if (xServiceInfo.is())
                 {
                     rtl::OUString sImplName = xServiceInfo->getImplementationName();
-                    if (sImplName.equalsAscii("com.sun.star.comp.fpicker.VistaFileDialog") ||
-                        sImplName.equalsAscii("com.sun.star.ui.dialogs.SalGtkFilePicker"))
+                    if (sImplName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.comp.fpicker.VistaFileDialog")) ||
+                        sImplName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.ui.dialogs.SalGtkFilePicker")))
                     {
                         bUseXFilePicker2 = sal_True;
                     }
