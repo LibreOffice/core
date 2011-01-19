@@ -26,18 +26,23 @@
  ************************************************************************/
 
 #include "xpathapi.hxx"
-#include "nodelist.hxx"
-#include "xpathobject.hxx"
-#include "../dom/node.hxx"
 
-#include <rtl/ustrbuf.hxx>
+#include <stdarg.h>
+#include <string.h>
 
 #include <libxml/xmlerror.h>
 #include <libxml/xpath.h>
 #include <libxml/xpathInternals.h>
 
-#include <stdarg.h>
-#include <string.h>
+#include <rtl/ustrbuf.hxx>
+
+#include <nodelist.hxx>
+#include <xpathobject.hxx>
+#include "../dom/node.hxx"
+#include "../dom/document.hxx"
+
+
+using ::com::sun::star::lang::XMultiServiceFactory;
 
 
 namespace XPath
@@ -316,6 +321,7 @@ namespace XPath
 
         // get the node and document
         xmlNodePtr pNode = DOM::CNode::getNodePtr(contextNode);
+        if (!pNode) { throw RuntimeException(); }
         xmlDocPtr pDoc = pNode->doc;
 
         /* NB: workaround for #i87252#:
@@ -352,8 +358,12 @@ namespace XPath
             throw XPathException();
         }
         xmlXPathFreeContext(xpathCtx);
-        Reference< XXPathObject > aObj(new CXPathObject(xpathObj, contextNode));
-        return aObj;
+        ::rtl::Reference<DOM::CDocument> const pCDoc(
+            dynamic_cast<DOM::CDocument*>(DOM::CNode::getCNode(
+                reinterpret_cast<xmlNodePtr>(pDoc)).get()));
+        OSL_ASSERT(pCDoc.is());
+        Reference<XXPathObject> const xObj(new CXPathObject(pCDoc, xpathObj));
+        return xObj;
     }
 
     /**

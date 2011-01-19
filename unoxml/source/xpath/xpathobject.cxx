@@ -25,51 +25,52 @@
  *
  ************************************************************************/
 
+#include <xpathobject.hxx>
+
 #include <string.h>
-#include "xpathobject.hxx"
-#include "nodelist.hxx"
+
+#include "../dom/document.hxx"
+#include <nodelist.hxx>
+
 
 namespace XPath
 {
-    CXPathObject::CXPathObject(xmlXPathObjectPtr xpathObj, const Reference< XNode >& contextNode)
-        : m_pXPathObj(xpathObj, xmlXPathFreeObject), m_xContextNode(contextNode)
+    static XPathObjectType lcl_GetType(xmlXPathObjectPtr const pXPathObj)
     {
-        switch (m_pXPathObj->type)
+        switch (pXPathObj->type)
         {
-        case XPATH_UNDEFINED:
-            m_xPathObjectType = XPathObjectType_XPATH_UNDEFINED;
-            break;
-        case XPATH_NODESET:
-            m_xPathObjectType = XPathObjectType_XPATH_NODESET;
-            break;
-        case XPATH_BOOLEAN:
-            m_xPathObjectType = XPathObjectType_XPATH_BOOLEAN;
-            break;
-        case XPATH_NUMBER:
-            m_xPathObjectType = XPathObjectType_XPATH_NUMBER;
-            break;
-        case XPATH_STRING:
-            m_xPathObjectType = XPathObjectType_XPATH_STRING;
-            break;
-        case XPATH_POINT:
-            m_xPathObjectType = XPathObjectType_XPATH_POINT;
-            break;
-        case XPATH_RANGE:
-            m_xPathObjectType = XPathObjectType_XPATH_RANGE;
-            break;
-        case XPATH_LOCATIONSET:
-            m_xPathObjectType = XPathObjectType_XPATH_LOCATIONSET;
-            break;
-        case XPATH_USERS:
-            m_xPathObjectType = XPathObjectType_XPATH_USERS;
-            break;
-        case XPATH_XSLT_TREE:
-            m_xPathObjectType = XPathObjectType_XPATH_XSLT_TREE;
-            break;
-        default:
-            m_xPathObjectType = XPathObjectType_XPATH_UNDEFINED;
-            break;
+            case XPATH_UNDEFINED:
+                return XPathObjectType_XPATH_UNDEFINED;
+            case XPATH_NODESET:
+                return XPathObjectType_XPATH_NODESET;
+            case XPATH_BOOLEAN:
+                return XPathObjectType_XPATH_BOOLEAN;
+            case XPATH_NUMBER:
+                return XPathObjectType_XPATH_NUMBER;
+            case XPATH_STRING:
+                return XPathObjectType_XPATH_STRING;
+            case XPATH_POINT:
+                return XPathObjectType_XPATH_POINT;
+            case XPATH_RANGE:
+                return XPathObjectType_XPATH_RANGE;
+            case XPATH_LOCATIONSET:
+                return XPathObjectType_XPATH_LOCATIONSET;
+            case XPATH_USERS:
+                return XPathObjectType_XPATH_USERS;
+            case XPATH_XSLT_TREE:
+                return XPathObjectType_XPATH_XSLT_TREE;
+            default:
+                return XPathObjectType_XPATH_UNDEFINED;
         }
+    }
+
+    CXPathObject::CXPathObject(
+            ::rtl::Reference<DOM::CDocument> const& pDocument,
+            xmlXPathObjectPtr const xpathObj)
+        : m_pDocument(pDocument)
+        , m_pXPathObj(xpathObj, xmlXPathFreeObject)
+        , m_XPathObjectType(lcl_GetType(xpathObj))
+    {
     }
 
     /**
@@ -77,16 +78,17 @@ namespace XPath
     */
     XPathObjectType CXPathObject::getObjectType() throw (RuntimeException)
     {
-        return m_xPathObjectType;
+        return m_XPathObjectType;
     }
 
     /**
         get the nodes from a nodelist type object
     */
-    Reference< XNodeList > SAL_CALL CXPathObject::getNodeList() throw (RuntimeException)
+    Reference< XNodeList > SAL_CALL
+    CXPathObject::getNodeList() throw (RuntimeException)
     {
         Reference< XNodeList > const xRet(
-            new CNodeList(m_xContextNode, m_pXPathObj));
+            new CNodeList(m_pDocument, m_pXPathObj));
         return xRet;
     }
 

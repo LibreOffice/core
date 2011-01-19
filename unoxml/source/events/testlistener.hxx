@@ -47,19 +47,24 @@
 
 using ::rtl::OUString;
 using namespace com::sun::star::uno;
-using namespace com::sun::star::lang;
 using namespace com::sun::star::xml::dom;
 using namespace com::sun::star::xml::dom::events;
 
 namespace DOM { namespace events
 {
 
+    typedef ::cppu::WeakImplHelper3
+        < ::com::sun::star::xml::dom::events::XEventListener
+        , ::com::sun::star::lang::XInitialization
+        , ::com::sun::star::lang::XServiceInfo
+        > CTestListener_Base;
+
     class  CTestListener
-        : public ::cppu::WeakImplHelper3< com::sun::star::xml::dom::events::XEventListener, XInitialization, XServiceInfo >
+        : public CTestListener_Base
     {
 
     private:
-        Reference< XMultiServiceFactory > m_factory;
+        Reference< ::com::sun::star::lang::XMultiServiceFactory > m_factory;
         Reference <XEventTarget> m_target;
         OUString m_type;
         sal_Bool m_capture;
@@ -72,9 +77,13 @@ namespace DOM { namespace events
         static const char* aSupportedServiceNames[];
         static OUString _getImplementationName();
         static Sequence< OUString > _getSupportedServiceNames();
-        static Reference< XInterface > _getInstance(const Reference< XMultiServiceFactory >& rSMgr);
+        static Reference< XInterface > _getInstance(
+            const Reference< ::com::sun::star::lang::XMultiServiceFactory >&
+                rSMgr);
 
-        CTestListener(const Reference< XMultiServiceFactory >& rSMgr)
+        CTestListener(
+                const Reference< ::com::sun::star::lang::XMultiServiceFactory >&
+                    rSMgr)
             : m_factory(rSMgr){};
 
         virtual ~CTestListener();

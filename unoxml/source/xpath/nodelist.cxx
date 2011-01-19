@@ -26,14 +26,14 @@
  ************************************************************************/
 
 #include "nodelist.hxx"
-#include "../dom/node.hxx"
+#include "../dom/document.hxx"
 
 namespace XPath
 {
     CNodeList::CNodeList(
-                Reference<XNode> const& xContextNode,
-                boost::shared_ptr<xmlXPathObject>& rxpathObj)
-        : m_xContextNode(xContextNode)
+                ::rtl::Reference<DOM::CDocument> const& pDocument,
+                boost::shared_ptr<xmlXPathObject> const& rxpathObj)
+        : m_pDocument(pDocument)
         , m_pNodeSet(0)
     {
         if (rxpathObj != NULL && rxpathObj->type == XPATH_NODESET)
@@ -57,7 +57,8 @@ namespace XPath
     /**
     Returns the indexth item in the collection.
     */
-    Reference< XNode > SAL_CALL CNodeList::item(sal_Int32 index) throw (RuntimeException)
+    Reference< XNode > SAL_CALL CNodeList::item(sal_Int32 index)
+        throw (RuntimeException)
     {
         if (0 == m_pNodeSet) {
             return 0;

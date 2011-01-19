@@ -25,26 +25,33 @@
  *
  ************************************************************************/
 
-#ifndef _NODELIST_HXX
-#define _NODELIST_HXX
+#ifndef XPATH_NODELIST_HXX
+#define XPATH_NODELIST_HXX
 
-#include <vector>
 #include <sal/types.h>
+#include <rtl/ref.hxx>
+
 #include <cppuhelper/implbase1.hxx>
+
 #include <com/sun/star/uno/Reference.h>
-#include <com/sun/star/uno/Exception.hpp>
 #include <com/sun/star/xml/dom/XNode.hpp>
 #include <com/sun/star/xml/dom/XNodeList.hpp>
 #include <com/sun/star/xml/xpath/XXPathObject.hpp>
+
 #include "libxml/tree.h"
 #include "libxml/xpath.h"
+
 #include <boost/shared_ptr.hpp>
+
 
 using ::rtl::OUString;
 using namespace com::sun::star::uno;
-using namespace com::sun::star::lang;
 using namespace com::sun::star::xml::dom;
 using namespace com::sun::star::xml::xpath;
+
+namespace DOM {
+    class CDocument;
+}
 
 namespace XPath
 {
@@ -53,14 +60,14 @@ namespace XPath
     {
     private:
         /// #i115995# retain context node to keep document alive
-        const Reference< XNode > m_xContextNode;
+        ::rtl::Reference< DOM::CDocument > const m_pDocument;
         boost::shared_ptr<xmlXPathObject> m_pXPathObj;
         xmlNodeSetPtr m_pNodeSet;
 
     public:
         CNodeList(
-                Reference<XNode> const& xContextNode,
-                boost::shared_ptr<xmlXPathObject> &rxpathObj);
+                ::rtl::Reference<DOM::CDocument> const& pDocument,
+                boost::shared_ptr<xmlXPathObject> const& rxpathObj);
         /**
         The number of nodes in the list.
         */
@@ -68,7 +75,8 @@ namespace XPath
         /**
         Returns the indexth item in the collection.
         */
-        virtual Reference< XNode > SAL_CALL item(sal_Int32 index) throw (RuntimeException);
+        virtual Reference< XNode > SAL_CALL item(sal_Int32 index)
+            throw (RuntimeException);
     };
 }
 

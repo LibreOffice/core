@@ -54,7 +54,6 @@
 
 using ::rtl::OUString;
 using namespace com::sun::star::uno;
-using namespace com::sun::star::lang;
 using namespace com::sun::star::xml::dom;
 using namespace com::sun::star::xml::xpath;
 
@@ -63,28 +62,39 @@ namespace XPath
     typedef std::map<OUString, OUString> nsmap_t;
     typedef std::vector< Reference<XXPathExtension> > extensions_t;
 
+    typedef ::cppu::WeakImplHelper2
+        <   XXPathAPI
+        ,   ::com::sun::star::lang::XServiceInfo
+        > CXPathAPI_Base;
+
     class  CXPathAPI
-        : public ::cppu::WeakImplHelper2< XXPathAPI, XServiceInfo >
+        : public CXPathAPI_Base
     {
 
     private:
         nsmap_t m_nsmap;
-        const Reference< XMultiServiceFactory > m_aFactory;
+        const Reference< ::com::sun::star::lang::XMultiServiceFactory > m_aFactory;
         extensions_t m_extensions;
 
     public:
         // ctor
-        CXPathAPI(const Reference< XMultiServiceFactory >& rSMgr);
+        CXPathAPI(
+            const Reference< ::com::sun::star::lang::XMultiServiceFactory >&
+                rSMgr);
 
         // call for factory
-        static Reference< XInterface > getInstance(const Reference < XMultiServiceFactory >& xFactory);
+        static Reference< XInterface > getInstance(
+            const Reference < ::com::sun::star::lang::XMultiServiceFactory >&
+                xFactory);
 
         // static helpers for service info and component management
         static const char* aImplementationName;
         static const char* aSupportedServiceNames[];
         static OUString _getImplementationName();
         static Sequence< OUString > _getSupportedServiceNames();
-        static Reference< XInterface > _getInstance(const Reference< XMultiServiceFactory >& rSMgr);
+        static Reference< XInterface > _getInstance(
+            const Reference< ::com::sun::star::lang::XMultiServiceFactory >&
+                rSMgr);
 
         // XServiceInfo
         virtual OUString SAL_CALL getImplementationName()

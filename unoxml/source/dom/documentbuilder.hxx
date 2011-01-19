@@ -58,28 +58,37 @@ using namespace com::sun::star::io;
 
 namespace DOM
 {
-    class  CDocumentBuilder
-        : public ::cppu::WeakImplHelper2< XDocumentBuilder, XServiceInfo >
+    typedef ::cppu::WeakImplHelper2
+        < XDocumentBuilder
+        , ::com::sun::star::lang::XServiceInfo
+        > CDocumentBuilder_Base;
+
+    class CDocumentBuilder
+        : public CDocumentBuilder_Base
     {
     private:
-        Reference< XMultiServiceFactory > m_aFactory;
+        Reference< ::com::sun::star::lang::XMultiServiceFactory > m_aFactory;
         Reference< XEntityResolver > m_aEntityResolver;
         Reference< XErrorHandler > m_aErrorHandler;
 
     public:
 
         // ctor
-        CDocumentBuilder(const Reference< XMultiServiceFactory >& xFactory);
+        CDocumentBuilder(
+            Reference< ::com::sun::star::lang::XMultiServiceFactory > const&
+                xFactory);
 
         // call for factory
-        static Reference< XInterface > getInstance(const Reference < XMultiServiceFactory >& xFactory);
+        static Reference< XInterface > getInstance(const Reference < ::com::sun::star::lang::XMultiServiceFactory >& xFactory);
 
         // static helpers for service info and component management
         static const char* aImplementationName;
         static const char* aSupportedServiceNames[];
         static OUString _getImplementationName();
         static Sequence< OUString > _getSupportedServiceNames();
-        static Reference< XInterface > _getInstance(const Reference< XMultiServiceFactory >& rSMgr);
+        static Reference< XInterface > _getInstance(
+            Reference< ::com::sun::star::lang::XMultiServiceFactory > const&
+                rSMgr);
 
         // XServiceInfo
         virtual OUString SAL_CALL getImplementationName()
