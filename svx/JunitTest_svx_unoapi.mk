@@ -2,7 +2,7 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2009 by Sun Microsystems, Inc.
+# Copyright 2000, 2011 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
 #
@@ -14,40 +14,40 @@
 #
 # OpenOffice.org is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	See the
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU Lesser General Public License version 3 for more details
 # (a copy is included in the LICENSE file that accompanied this code).
 #
 # You should have received a copy of the GNU Lesser General Public License
-# version 3 along with OpenOffice.org.	If not, see
+# version 3 along with OpenOffice.org.  If not, see
 # <http://www.openoffice.org/license.html>
 # for a copy of the LGPLv3 License.
 #
 #*************************************************************************
 
-$(eval $(call gb_Module_Module,svx))
+$(eval $(call gb_JunitTest_JunitTest,svx_unoapi))
 
-$(eval $(call gb_Module_add_targets,svx,\
-    Library_svx \
-    Library_svxcore \
-    Library_textconversiondlgs \
-    AllLangResTarget_svx \
-    AllLangResTarget_ofa \
-    AllLangResTarget_about \
-    AllLangResTarget_textconversiondlgs \
-    Package_inc \
-    Package_sdi \
+$(eval $(call gb_JunitTest_set_defs,svx_unoapi,\
+    $$(DEFS) \
+    -Dorg.openoffice.test.arg.sce=$(SRCDIR)/svx/qa/unoapi/svx.sce \
+    -Dorg.openoffice.test.arg.xcl=$(SRCDIR)/svx/qa/unoapi/knownissues.xcl \
+    -Dorg.openoffice.test.arg.tdoc=$(SRCDIR)/svx/qa/unoapi/testdocuments \
 ))
 
-$(eval $(call gb_Module_add_subsequentcheck_targets,svx,\
-    JunitTest_svx_unoapi \
+$(eval $(call gb_JunitTest_add_jars,svx_unoapi,\
+    $(OUTDIR)/bin/OOoRunner.jar \
+    $(OUTDIR)/bin/ridl.jar \
+    $(OUTDIR)/bin/test.jar \
+    $(OUTDIR)/bin/unoil.jar \
+    $(OUTDIR)/bin/jurt.jar \
 ))
 
-#	 Executable_gengal \
+$(eval $(call gb_JunitTest_add_sourcefiles,svx_unoapi,\
+    svx/qa/unoapi/Test \
+))
 
-#todo: noopt for EnhanceCustomShapesFunctionParser.cxx on Solaris Sparc and MacOSX
-#todo: -DBOOST_SPIRIT_USE_OLD_NAMESPACE only in CustomShapes ?
-#todo: -DUNICODE and -D_UNICODE on WNT for source/dialog
-#todo: globlmn.hrc
-#todo: component file
-# vim: set noet ts=4 sw=4:
+$(eval $(call gb_JunitTest_add_classes,svx_unoapi,\
+    org.openoffice.svx.qa.unoapi.Test \
+))
+
+# vim: set noet sw=4 ts=4:
