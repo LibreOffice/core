@@ -162,13 +162,11 @@ Test::~Test()
 
 void Test::testCollator()
 {
-#if 0 // This currently fails, and because of this the data pilot test fails too.
     OUString s1(RTL_CONSTASCII_USTRINGPARAM("A"));
     OUString s2(RTL_CONSTASCII_USTRINGPARAM("B"));
     CollatorWrapper* p = ScGlobal::GetCollator();
     sal_Int32 nRes = p->compareString(s1, s2);
     CPPUNIT_ASSERT_MESSAGE("these strings are supposed to be different!", nRes != 0);
-#endif
 }
 
 void Test::testSUM()

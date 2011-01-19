@@ -101,7 +101,8 @@ $(MISC)/$(TARGET)/udkapi.rdb .ERRREMOVE : $(SOLARBINDIR)$/udkapi.rdb
 $(MISC)/$(TARGET)/services.rdb .ERRREMOVE : $(MISC)/$(TARGET)/udkapi.rdb makefile.mk
     $(MKDIRHIER) $(@:d)
     $(REGCOMP) -register -br $(MISC)/$(TARGET)/udkapi.rdb -r $@ -wop \
-        -c $(DLLPRE)fwk$(DLLPOSTFIX)$(DLLPOST)
+        -c $(DLLPRE)fwk$(DLLPOSTFIX)$(DLLPOST) \
+        -c i18npool.uno$(DLLPOST)
 
 #Tweak things so that we use the .res files in the solver
 STAR_RESOURCEPATH:=$(PWD)/$(BIN)$(PATH_SEPERATOR)$(SOLARBINDIR)
