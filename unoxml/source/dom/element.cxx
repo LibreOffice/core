@@ -298,11 +298,12 @@ namespace DOM
     in the order in which they are
     encountered in a preorder traversal of this Element tree.
     */
-    Reference< XNodeList > CElement::getElementsByTagName(const OUString& name)
+    Reference< XNodeList > SAL_CALL
+    CElement::getElementsByTagName(OUString const& rLocalName)
         throw (RuntimeException)
     {
-        Reference< XNodeList > aList = Reference< XNodeList >(new CElementList(this, name));
-        return aList;
+        Reference< XNodeList > const xList(new CElementList(this, rLocalName));
+        return xList;
     }
 
     /**
@@ -310,12 +311,14 @@ namespace DOM
     name and namespace URI in the order in which they are encountered in
     a preorder traversal of this Element tree.
     */
-    Reference< XNodeList > CElement::getElementsByTagNameNS(const OUString& namespaceURI,
-            const OUString& localName)
+    Reference< XNodeList > SAL_CALL
+    CElement::getElementsByTagNameNS(
+            OUString const& rNamespaceURI, OUString const& rLocalName)
         throw (RuntimeException)
     {
-        Reference< XNodeList > aList = Reference< XNodeList >(new CElementList(this, localName, namespaceURI));
-        return aList;
+        Reference< XNodeList > const xList(
+            new CElementList(this, rLocalName, &rNamespaceURI));
+        return xList;
     }
 
     /**

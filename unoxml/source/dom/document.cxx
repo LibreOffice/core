@@ -54,6 +54,20 @@
 
 namespace DOM
 {
+    /// get the pointer to the root element node of the document
+    static xmlNodePtr lcl_getDocumentRootPtr(xmlDocPtr const i_pDocument)
+    {
+        // find the document element
+        xmlNodePtr cur = i_pDocument->children;
+        while (cur != NULL)
+        {
+            if (cur->type == XML_ELEMENT_NODE)
+                break;
+            cur = cur->next;
+        }
+        return cur;
+    }
+
     CDocument::~CDocument()
     {
         xmlFreeDoc(m_aDocPtr);
@@ -71,6 +85,14 @@ namespace DOM
     events::CEventDispatcher & CDocument::GetEventDispatcher()
     {
         return *m_pEventDispatcher;
+    }
+
+    ::rtl::Reference< CElement > CDocument::GetDocumentElement()
+    {
+        xmlNodePtr const pNode = lcl_getDocumentRootPtr(m_aDocPtr);
+        ::rtl::Reference< CElement > const xRet(
+            dynamic_cast<CElement*>(CNode::getCNode(pNode).get()));
+        return xRet;
     }
 
 
@@ -385,25 +407,12 @@ namespace DOM
         return xRet;
     }
 
-    /// get the pointer to the root element node of the document
-    static xmlNodePtr SAL_CALL _getDocumentRootPtr(xmlDocPtr i_pDocument) {
-        // find the document element
-        xmlNodePtr cur = i_pDocument->children;
-        while (cur != NULL)
-        {
-            if (cur->type == XML_ELEMENT_NODE)
-                break;
-            cur = cur->next;
-        }
-        return cur;
-    }
-
     // This is a convenience attribute that allows direct access to the child
     // node that is the root element of the document.
     Reference< XElement > SAL_CALL CDocument::getDocumentElement()
         throw (RuntimeException)
     {
-        xmlNodePtr const pNode = _getDocumentRootPtr(m_aDocPtr);
+        xmlNodePtr const pNode = lcl_getDocumentRootPtr(m_aDocPtr);
         Reference< XElement > const xRet(
             static_cast< XNode* >(CNode::getCNode(pNode).get()),
             UNO_QUERY_THROW);
@@ -452,22 +461,23 @@ namespace DOM
     }
 
 
-    Reference< XNodeList > SAL_CALL CDocument::getElementsByTagName(const OUString& tagname)
+    Reference< XNodeList > SAL_CALL
+    CDocument::getElementsByTagName(OUString const& rTagname)
             throw (RuntimeException)
     {
-        // build a list
-        return Reference< XNodeList >(
-            new CElementList(static_cast< CElement* >(
-            this->getDocumentElement().get()), tagname));
+        Reference< XNodeList > const xRet(
+            new CElementList(this->GetDocumentElement(), rTagname));
+        return xRet;
     }
 
     Reference< XNodeList > SAL_CALL CDocument::getElementsByTagNameNS(
-            const OUString& namespaceURI, const OUString& localName)
+            OUString const& rNamespaceURI, OUString const& rLocalName)
         throw (RuntimeException)
     {
-        return Reference< XNodeList >(
-            new CElementList(static_cast< CElement* >(
-            this->getDocumentElement().get()), namespaceURI, localName));
+        Reference< XNodeList > const xRet(
+            new CElementList(
+                this->GetDocumentElement(), rLocalName, &rNamespaceURI));
+        return xRet;
     }
 
     Reference< XDOMImplementation > SAL_CALL CDocument::getImplementation()
@@ -742,7 +752,7 @@ namespace DOM
         throw (RuntimeException, SAXException)
     {
         // add new namespaces to root node
-        xmlNodePtr pRoot = _getDocumentRootPtr(m_aDocPtr);
+        xmlNodePtr const pRoot = lcl_getDocumentRootPtr(m_aDocPtr);
         if (0 != pRoot) {
             const beans::StringPair * pSeq = i_rNamespaces.getConstArray();
             for (const beans::StringPair *pNsDef = pSeq;
@@ -769,7 +779,7 @@ namespace DOM
         throw (SAXException, RuntimeException)
     {
         // add new namespaces to root node
-        xmlNodePtr pRoot = _getDocumentRootPtr(m_aDocPtr);
+        xmlNodePtr const pRoot = lcl_getDocumentRootPtr(m_aDocPtr);
         if (0 != pRoot) {
             const beans::StringPair * pSeq = i_rNamespaces.getConstArray();
             for (const beans::StringPair *pNsDef = pSeq;

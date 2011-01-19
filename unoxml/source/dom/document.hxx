@@ -72,6 +72,8 @@ namespace DOM
         class CEventDispatcher;
     }
 
+    class CElement;
+
     typedef ::cppu::ImplInheritanceHelper6<
             CNode, XDocument, XDocumentEvent,
             XActiveDataControl, XActiveDataSource,
@@ -97,6 +99,7 @@ namespace DOM
         CDocument(xmlDocPtr aDocPtr);
 
         events::CEventDispatcher & GetEventDispatcher();
+        ::rtl::Reference< CElement > GetDocumentElement();
 
     public:
 
