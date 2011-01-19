@@ -323,7 +323,8 @@ namespace DOM
     {
         ::osl::MutexGuard const g(m_rMutex);
 
-        Reference< XNodeList > const xList(new CElementList(this, rLocalName));
+        Reference< XNodeList > const xList(
+                new CElementList(this, m_rMutex, rLocalName));
         return xList;
     }
 
@@ -340,7 +341,7 @@ namespace DOM
         ::osl::MutexGuard const g(m_rMutex);
 
         Reference< XNodeList > const xList(
-            new CElementList(this, rLocalName, &rNamespaceURI));
+            new CElementList(this, m_rMutex, rLocalName, &rNamespaceURI));
         return xList;
     }
 
@@ -693,7 +694,8 @@ namespace DOM
         ::osl::MutexGuard const g(m_rMutex);
 
         if (!hasAttributes()) { return 0; }
-        Reference< XNamedNodeMap > const xMap(new CAttributesMap(this));
+        Reference< XNamedNodeMap > const xMap(
+                new CAttributesMap(this, m_rMutex));
         return xMap;
     }
 

@@ -452,7 +452,7 @@ namespace DOM
         if (0 == m_aNodePtr) {
             return 0;
         }
-        Reference< XNodeList > const xNodeList(new CChildList(this));
+        Reference< XNodeList > const xNodeList(new CChildList(this, m_rMutex));
         return xNodeList;
     }
 

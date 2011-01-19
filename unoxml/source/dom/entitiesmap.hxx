@@ -51,9 +51,11 @@ namespace DOM
     {
     private:
         ::rtl::Reference<CDocumentType> const m_pDocType;
+        ::osl::Mutex & m_rMutex;
 
     public:
-        CEntitiesMap(::rtl::Reference<CDocumentType> const& pDocType);
+        CEntitiesMap(::rtl::Reference<CDocumentType> const& pDocType,
+                ::osl::Mutex & rMutex);
 
         /**
         The number of nodes in this map.

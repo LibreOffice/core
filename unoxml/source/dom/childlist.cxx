@@ -35,8 +35,10 @@
 
 namespace DOM
 {
-    CChildList::CChildList(::rtl::Reference<CNode> const& pBase)
+    CChildList::CChildList(::rtl::Reference<CNode> const& pBase,
+                ::osl::Mutex & rMutex)
         : m_pNode(pBase)
+        , m_rMutex(rMutex)
     {
     }
 
@@ -45,6 +47,8 @@ namespace DOM
     */
     sal_Int32 SAL_CALL CChildList::getLength() throw (RuntimeException)
     {
+        ::osl::MutexGuard const g(m_rMutex);
+
         sal_Int32 length = 0;
         if (m_pNode != NULL)
         {
@@ -67,6 +71,8 @@ namespace DOM
     Reference< XNode > SAL_CALL CChildList::item(sal_Int32 index)
         throw (RuntimeException)
     {
+        ::osl::MutexGuard const g(m_rMutex);
+
         if (m_pNode != NULL)
         {
             xmlNodePtr cur = m_pNode->m_aNodePtr;

@@ -64,6 +64,7 @@ namespace DOM
     {
     private:
         ::rtl::Reference<CElement> const m_pElement;
+        ::osl::Mutex & m_rMutex;
         ::boost::scoped_array<xmlChar> const m_pName;
         ::boost::scoped_array<xmlChar> const m_pURI;
         bool m_bRebuild;
@@ -74,6 +75,7 @@ namespace DOM
 
     public:
         CElementList(::rtl::Reference<CElement> const& pElement,
+                ::osl::Mutex & rMutex,
                 OUString const& rName, OUString const*const pURI = 0);
 
         /**

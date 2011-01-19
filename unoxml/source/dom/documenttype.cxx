@@ -56,7 +56,7 @@ namespace DOM
         Reference< XNamedNodeMap > aMap;
         if (m_aDtdPtr != NULL)
         {
-            aMap = Reference< XNamedNodeMap >(new CEntitiesMap(this));
+            aMap.set(new CEntitiesMap(this, m_rMutex));
         }
         return aMap;
     }
@@ -96,7 +96,7 @@ namespace DOM
         Reference< XNamedNodeMap > aMap;
         if (m_aDtdPtr != NULL)
         {
-            aMap.set(new CNotationsMap(this));
+            aMap.set(new CNotationsMap(this, m_rMutex));
         }
         return aMap;
     }

@@ -686,7 +686,7 @@ namespace DOM
         ::osl::MutexGuard const g(m_Mutex);
 
         Reference< XNodeList > const xRet(
-            new CElementList(this->GetDocumentElement(), rTagname));
+            new CElementList(this->GetDocumentElement(), m_Mutex, rTagname));
         return xRet;
     }
 
@@ -697,8 +697,8 @@ namespace DOM
         ::osl::MutexGuard const g(m_Mutex);
 
         Reference< XNodeList > const xRet(
-            new CElementList(
-                this->GetDocumentElement(), rLocalName, &rNamespaceURI));
+            new CElementList(this->GetDocumentElement(), m_Mutex,
+                rLocalName, &rNamespaceURI));
         return xRet;
     }
 

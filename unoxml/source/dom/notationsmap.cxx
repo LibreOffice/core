@@ -33,8 +33,10 @@
 namespace DOM
 {
     CNotationsMap::CNotationsMap(
-            ::rtl::Reference<CDocumentType> const& pDocType)
+            ::rtl::Reference<CDocumentType> const& pDocType,
+            ::osl::Mutex & rMutex)
         : m_pDocType(pDocType)
+        , m_rMutex(rMutex)
     {
     }
 

@@ -46,8 +46,10 @@ namespace DOM
     }
 
     CElementList::CElementList(::rtl::Reference<CElement> const& pElement,
+            ::osl::Mutex & rMutex,
             OUString const& rName, OUString const*const pURI)
         : m_pElement(pElement)
+        , m_rMutex(rMutex)
         , m_pName(lcl_initXmlString(rName))
         , m_pURI((pURI) ? lcl_initXmlString(*pURI) : 0)
         , m_bRebuild(true)
@@ -111,6 +113,8 @@ namespace DOM
     */
     sal_Int32 SAL_CALL CElementList::getLength() throw (RuntimeException)
     {
+        ::osl::MutexGuard const g(m_rMutex);
+
         // this has to be 'live'
         buildlist(static_cast<const CNode*>(m_pElement.get())->m_aNodePtr);
         return m_nodevector.size();
@@ -122,6 +126,9 @@ namespace DOM
         throw (RuntimeException)
     {
         if (index < 0) throw RuntimeException();
+
+        ::osl::MutexGuard const g(m_rMutex);
+
         buildlist(static_cast<const CNode*>(m_pElement.get())->m_aNodePtr);
         if (m_nodevector.size() <= static_cast<size_t>(index)) {
             throw RuntimeException();
@@ -135,6 +142,8 @@ namespace DOM
     void SAL_CALL CElementList::handleEvent(Reference< XEvent > const&)
         throw (RuntimeException)
     {
+        ::osl::MutexGuard const g(m_rMutex);
+
         m_bRebuild = true;
     }
 }

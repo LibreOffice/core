@@ -32,8 +32,10 @@
 
 namespace DOM
 {
-    CEntitiesMap::CEntitiesMap(::rtl::Reference<CDocumentType> const& pDocType)
+    CEntitiesMap::CEntitiesMap(::rtl::Reference<CDocumentType> const& pDocType,
+            ::osl::Mutex & rMutex)
         : m_pDocType(pDocType)
+        , m_rMutex(rMutex)
     {
     }
 
