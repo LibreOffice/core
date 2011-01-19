@@ -35,9 +35,7 @@
 class SwPaM;
 class SwNodeIndex;
 
-/*
- * MACROS um ueber alle Bereiche zu iterieren
- */
+// Macros to iterate over all ranges.
 #define PCURCRSR (_pStartCrsr)
 
 #define FOREACHPAM_START(pCURSH) \
