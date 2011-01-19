@@ -33,7 +33,7 @@ gb_MKTEMP := mktemp -p
 gb_CC := cl
 gb_CXX := cl
 gb_LINK := link
-gb_AWK := gawk
+gb_AWK := awk
 gb_CLASSPATHSEP := ;
 
 # use CC/CXX if they are nondefaults
