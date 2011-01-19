@@ -31,12 +31,17 @@ die "Error: invalid operation" unless( $op >= 1 && $op <= 3);
 
 if( $op == 3 ) {
     print( "%language=C++\n" );
-    print( "%global-table\n" );
+    print( "%define slot-name mpcName\n" );
+    print( "%define initializer-suffix ,0\n" );
+    print( "%define lookup-function-name getTokenInfo\n" );
+    print( "%compare-strncmp\n" );
+    print( "%readonly-tables\n" );
+    print( "%enum\n" );
     print( "%null-strings\n" );
     print( "%struct-type\n" );
-    print( "struct xmltoken {\n" );
-    print( "    const sal_Char *name;\n" );
-    print( "    sal_Int32 nToken;\n" );
+    print( "struct XMLTokenInfo {\n" );
+    print( "    const sal_Char* mpcName;\n" );
+    print( "    sal_Int32       mnToken;\n" );
     print( "};\n" );
     print( "%%\n" );
 }

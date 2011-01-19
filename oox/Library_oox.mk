@@ -380,7 +380,7 @@ $(SRCDIR_TOKEN)/tokenmap.cxx : $(WORKDIR_TOKEN)/tokenhash.inc
 $(WORKDIR_TOKEN)/tokenhash.inc : $(WORKDIR_TOKEN)/tokenhash.gperf
     $(call gb_Output_announce,$@,$(true),GPF,3)
     $(call gb_Helper_abbreviate_dirs, \
-        gperf --compare-strncmp $< | $(gb_AWK) -- '{ if ($$0 !~ /^#line/){ gsub("\\(char\\*\\)0", "(char*)0, 0", $$0); print; } }' > $@ \
+        gperf $< | $(gb_AWK) -- '{ if ($$0 !~ /^#line/){ gsub("\\(char\\*\\)0", "0", $$0); print; } }' > $@ \
     )
 
 $(WORKDIR_TOKEN)/tokenhash.gperf : $(SRCDIR_TOKEN)/tokens.txt $(SRCDIR_TOKEN)/tokens.pl
