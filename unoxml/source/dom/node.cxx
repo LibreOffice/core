@@ -132,31 +132,29 @@ namespace DOM
         return nNamespaceToken;
     }
 
+    typedef std::map< const xmlNodePtr,
+                ::std::pair< WeakReference<XNode>, CNode* > > nodemap_t;
+    static nodemap_t g_theNodeMap;
 
-    nodemap_t CNode::theNodeMap;
-
-    void CNode::remove(const xmlNodePtr aNode)
+    void CNode::removeCNode(xmlNodePtr const pNode, CNode const*const pCNode)
     {
-        //Using the guard here protects against races when at the same time
-        //CNode::get() is called. This fix helps in many cases but is still
-        //incorrect. remove is called from ~CNode. That is, while the object
-        //is being destructed it can still be obtained by calling CNode::get().
-        //Another bug currently prevents the correct destruction of CNodes. So
-        //the destructor is rarely called.
-        //
-        //Doing this right would probably mean to store WeakReferences in the
-        //map and also guard oder functions. To keep the risk at a minimum
-        //we keep this imperfect fix for the upcoming release and fix it later
-        //properly (http://qa.openoffice.org/issues/show_bug.cgi?id=113682)
         ::osl::MutexGuard guard(NodeMutex::get());
-        nodemap_t::iterator i = CNode::theNodeMap.find(aNode);
-        if (i != CNode::theNodeMap.end())
-        {
-            // CNode *pNode = i->second;
-            CNode::theNodeMap.erase(i);
+        nodemap_t::iterator const i = g_theNodeMap.find(pNode);
+        if (i != g_theNodeMap.end()) {
+            // #i113681# consider this scenario:
+            // T1 calls ~CNode
+            // T2 calls getCNode:    lookup will find i->second->first invalid
+            //                       so a new CNode is created and inserted
+            // T1 calls removeCNode: i->second->second now points to a
+            //                       different CNode instance!
+            //
+            // check that the CNode is the right one
+            CNode *const pCurrent = i->second.second;
+            if (pCurrent == pCNode) {
+                g_theNodeMap.erase(i);
+            }
         }
     }
-
 
     ::rtl::Reference<CNode>
     CNode::getCNode(xmlNodePtr const pNode, bool const bCreate)
@@ -167,10 +165,16 @@ namespace DOM
         //see CNode::remove
         ::osl::MutexGuard guard(NodeMutex::get());
         //check whether there is already an instance for this node
-        nodemap_t::const_iterator i = CNode::theNodeMap.find(pNode);
-        if (i != CNode::theNodeMap.end()) {
-            OSL_ASSERT(i->second);
-            return i->second;
+        nodemap_t::const_iterator const i = g_theNodeMap.find(pNode);
+        if (i != g_theNodeMap.end()) {
+            // #i113681# check that the CNode is still alive
+            uno::Reference<XNode> const xNode(i->second.first);
+            if (xNode.is())
+            {
+                ::rtl::Reference<CNode> ret(i->second.second);
+                OSL_ASSERT(ret.is());
+                return ret;
+            }
         }
 
         if (!bCreate) { return 0; }
@@ -246,8 +250,11 @@ namespace DOM
         }
 
         if (pCNode != 0) {
-            bool const bInserted = CNode::theNodeMap.insert(
-                nodemap_t::value_type(pNode, pCNode.get())).second;
+            bool const bInserted = g_theNodeMap.insert(
+                    nodemap_t::value_type(pNode,
+                        ::std::make_pair(WeakReference<XNode>(pCNode.get()),
+                        pCNode.get()))
+                ).second;
             OSL_ASSERT(bInserted);
             if (!bInserted) {
                 // if insertion failed, delete new instance and return null
@@ -289,8 +296,9 @@ namespace DOM
     CNode::~CNode()
     {
         //remove from list if this wrapper goes away
-        if (m_aNodePtr != 0)
-            CNode::remove(m_aNodePtr);
+        if (m_aNodePtr != 0) {
+            CNode::removeCNode(m_aNodePtr, this);
+        }
         // #i113663#: unlinked nodes will not be freed by xmlFreeDoc
         if (m_bUnlinked) {
             xmlFreeNode(m_aNodePtr);
@@ -457,8 +465,14 @@ namespace DOM
             // libxml can do optimizations, when appending nodes.
             // if res != cur, something was optimized and the newchild-wrapper
             // should be updated
-            if (cur != res)
-                CNode::remove(cur);
+            if (res && (cur != res)) {
+                ::rtl::Reference<CNode> pCNode(CNode::getCNode(cur));
+                OSL_ASSERT(pCNode.is());
+                if (pCNode.is()) {
+                    pCNode->m_aNodePtr = 0; // has been freed
+                    CNode::removeCNode(cur, pCNode.get());
+                }
+            }
 
         // use custom ns cleanup instaead of
             // xmlReconciliateNs(m_aNodePtr->doc, m_aNodePtr);

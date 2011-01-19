@@ -113,9 +113,6 @@ namespace DOM
     /// add namespaces on this node to context
     void addNamespaces(Context& io_rContext, xmlNodePtr pNode);
 
-    class CNode;
-    typedef std::map< const xmlNodePtr, CNode* > nodemap_t;
-
 
     class CNode : public cppu::WeakImplHelper3< XNode, XUnoTunnel, XEventTarget >
     {
@@ -127,7 +124,6 @@ namespace DOM
         friend class CEntitiesMap;
         friend class CNotationsMap;
     private:
-        static nodemap_t theNodeMap;
         bool m_bUnlinked; /// node has been removed from document
 
     protected:
@@ -149,8 +145,9 @@ namespace DOM
         /// get UNO wrapper instance for a libxml node
         static ::rtl::Reference<CNode> getCNode(
                 xmlNodePtr const pNode, bool const bCreate = true);
-        // remove a wrapper instance
-        static void remove(const xmlNodePtr aNode);
+        /// remove a UNO wrapper instance
+        static void removeCNode(
+                xmlNodePtr const pNode, CNode const*const pCNode);
 
         // get the libxml node implementation
         static xmlNodePtr getNodePtr(const Reference< XNode >& aNode);

@@ -469,8 +469,6 @@ namespace DOM
             // free carrier node ...
             if(pAttr->parent != NULL && strcmp((char*)pAttr->parent->name, "__private")== 0)
                 xmlFreeNode(pAttr->parent);
-            // ... remove the old attr from the node cache
-            CNode::remove((xmlNodePtr)pAttr);
 
             // get the new attr node
             aAttr = Reference< XAttr >(
