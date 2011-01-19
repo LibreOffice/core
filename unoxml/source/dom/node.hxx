@@ -342,7 +342,7 @@ namespace DOM
     };
 
     /// eliminate redundant namespace declarations
-    void _nscleanup(const xmlNodePtr aNode, const xmlNodePtr aParent);
+    void nscleanup(const xmlNodePtr aNode, const xmlNodePtr aParent);
 }
 
 #endif

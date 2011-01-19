@@ -994,7 +994,7 @@ namespace DOM
                          reinterpret_cast<const xmlChar*>(prefix.getStr()));
             }
             // eliminate duplicate namespace declarations
-            _nscleanup(pRoot->children, pRoot);
+            nscleanup(pRoot->children, pRoot);
         }
         saxify(i_xHandler);
     }
@@ -1023,7 +1023,7 @@ namespace DOM
                          reinterpret_cast<const xmlChar*>(prefix.getStr()));
             }
             // eliminate duplicate namespace declarations
-            _nscleanup(pRoot->children, pRoot);
+            nscleanup(pRoot->children, pRoot);
         }
 
         Context aContext(i_xHandler,

@@ -488,67 +488,79 @@ namespace DOM
 
         ::osl::ClearableMutexGuard guard(m_rMutex);
 
-        Reference< XAttr > aAttr;
-        if (m_aNodePtr != NULL)
-        {
-            // get the implementation
-            CNode *const pCNode = CNode::GetImplementation(newAttr);
-            if (!pCNode) { throw RuntimeException(); }
-            xmlAttrPtr const pAttr =
-                reinterpret_cast<xmlAttrPtr>(pCNode->GetNodePtr());
-            if (!pAttr) { throw RuntimeException(); }
+        if (0 == m_aNodePtr) {
+            throw RuntimeException();
+        }
 
-            // check whether the attribute is not in use by another element
-            xmlNsPtr pNs = NULL;
-            if (pAttr->parent != NULL)
-                if(strcmp((char*)pAttr->parent->name, "__private") == 0
-                    && pNs && pAttr->ns != NULL)
+        // get the implementation
+        CNode *const pCNode = CNode::GetImplementation(newAttr);
+        if (!pCNode) { throw RuntimeException(); }
+        xmlAttrPtr const pAttr =
+            reinterpret_cast<xmlAttrPtr>(pCNode->GetNodePtr());
+        if (!pAttr) { throw RuntimeException(); }
+
+        // check whether the attribute is not in use by another element
+        xmlNsPtr pNs = NULL;
+        if (pAttr->parent != NULL)
+        {
+            if (strcmp((char*)pAttr->parent->name, "__private") == 0
+                && pNs && pAttr->ns != NULL)
+            {
+                pNs = xmlSearchNs(m_aNodePtr->doc, m_aNodePtr,
+                        pAttr->ns->prefix);
+                if (pNs == NULL ||
+                    strcmp((char*)pNs->href, (char*)pAttr->ns->href) != 0)
                 {
-                    pNs = xmlSearchNs(m_aNodePtr->doc, m_aNodePtr, pAttr->ns->prefix);
-                    if (pNs == NULL || strcmp((char*)pNs->href, (char*)pAttr->ns->href) !=0 )
-                        pNs = xmlNewNs(m_aNodePtr, pAttr->ns->href, pAttr->ns->href);
-                else
+                    pNs = xmlNewNs(m_aNodePtr, pAttr->ns->href,
+                            pAttr->ns->href);
+                } else {
                     throw RuntimeException();
+                }
             }
-
-            xmlAttrPtr res = NULL;
-
-            if (bNS)
-                res = xmlNewNsProp(m_aNodePtr, pNs, pAttr->name, pAttr->children->content);
-            else
-                res = xmlNewProp(m_aNodePtr, pAttr->name, pAttr->children->content);
-
-            // free carrier node ...
-            if(pAttr->parent != NULL && strcmp((char*)pAttr->parent->name, "__private")== 0)
-                xmlFreeNode(pAttr->parent);
-
-            // get the new attr node
-            aAttr = Reference< XAttr >(
-                static_cast< XNode* >(GetOwnerDocument().GetCNode(
-                        reinterpret_cast<xmlNodePtr>(res)).get()),
-                UNO_QUERY_THROW);
         }
 
-        if (aAttr.is())
+        xmlAttrPtr res = NULL;
+
+        if (bNS) {
+            res = xmlNewNsProp(m_aNodePtr,
+                    pNs, pAttr->name, pAttr->children->content);
+        } else {
+            res = xmlNewProp(m_aNodePtr, pAttr->name, pAttr->children->content);
+        }
+
+        // free carrier node ...
+        if (pAttr->parent != NULL &&
+            strcmp((char*)pAttr->parent->name, "__private") == 0)
         {
-            // attribute adition event
-            // dispatch DOMAttrModified event
-            Reference< XDocumentEvent > docevent(getOwnerDocument(), UNO_QUERY);
-            Reference< XMutationEvent > event(docevent->createEvent(
-                OUString::createFromAscii("DOMAttrModified")), UNO_QUERY);
-            event->initMutationEvent(OUString::createFromAscii("DOMAttrModified"),
-                sal_True, sal_False, Reference< XNode >(aAttr, UNO_QUERY),
-                OUString(), aAttr->getValue(), aAttr->getName(), AttrChangeType_ADDITION);
-
-            guard.clear(); // release mutex before calling event handlers
-
-            dispatchEvent(Reference< XEvent >(event, UNO_QUERY));
-            dispatchSubtreeModified();
+            xmlFreeNode(pAttr->parent);
         }
-        return aAttr;
+
+        // get the new attr node
+        Reference< XAttr > const xAttr(
+            static_cast< XNode* >(GetOwnerDocument().GetCNode(
+                    reinterpret_cast<xmlNodePtr>(res)).get()),
+            UNO_QUERY_THROW);
+
+        // attribute adition event
+        // dispatch DOMAttrModified event
+        Reference< XDocumentEvent > docevent(getOwnerDocument(), UNO_QUERY);
+        Reference< XMutationEvent > event(docevent->createEvent(
+            OUString::createFromAscii("DOMAttrModified")), UNO_QUERY);
+        event->initMutationEvent(OUString::createFromAscii("DOMAttrModified"),
+            sal_True, sal_False, Reference< XNode >(xAttr, UNO_QUERY),
+            OUString(), xAttr->getValue(), xAttr->getName(),
+            AttrChangeType_ADDITION);
+
+        guard.clear(); // release mutex before calling event handlers
+
+        dispatchEvent(Reference< XEvent >(event, UNO_QUERY));
+        dispatchSubtreeModified();
+
+        return xAttr;
     }
 
-    Reference< XAttr > CElement::setAttributeNode(const Reference< XAttr >& newAttr)
+    Reference< XAttr >
+    CElement::setAttributeNode(const Reference< XAttr >& newAttr)
         throw (RuntimeException, DOMException)
     {
         return setAttributeNode_Impl_Lock(newAttr, false);
@@ -557,7 +569,8 @@ namespace DOM
     /**
     Adds a new attribute.
     */
-    Reference< XAttr > CElement::setAttributeNodeNS(const Reference< XAttr >& newAttr)
+    Reference< XAttr >
+    CElement::setAttributeNodeNS(const Reference< XAttr >& newAttr)
         throw (RuntimeException, DOMException)
     {
         return setAttributeNode_Impl_Lock(newAttr, true);
@@ -576,35 +589,34 @@ namespace DOM
         xmlChar *xName = (xmlChar*)o1.getStr();
         OString o2 = OUStringToOString(value, RTL_TEXTENCODING_UTF8);
         xmlChar *xValue = (xmlChar*)o2.getStr();
-        if (m_aNodePtr != NULL)
-        {
-            OUString oldValue;
-            AttrChangeType aChangeType = AttrChangeType_MODIFICATION;
-            xmlChar *xOld = xmlGetProp(m_aNodePtr, xName);
-            if (xOld == NULL)
-            {
-                aChangeType = AttrChangeType_ADDITION;
-                xmlNewProp(m_aNodePtr, xName, xValue);
-            }
-            else
-            {
-                oldValue = OUString((char*)xOld, strlen((char*)xOld), RTL_TEXTENCODING_UTF8);
-                xmlSetProp(m_aNodePtr, xName, xValue);
-            }
 
-            // dispatch DOMAttrModified event
-
-            Reference< XDocumentEvent > docevent(getOwnerDocument(), UNO_QUERY);
-            Reference< XMutationEvent > event(docevent->createEvent(
-                OUString::createFromAscii("DOMAttrModified")), UNO_QUERY);
-            event->initMutationEvent(OUString::createFromAscii("DOMAttrModified"),
-                sal_True, sal_False, Reference< XNode >(getAttributeNode(name), UNO_QUERY),
-                oldValue, value, name, aChangeType);
-
-            guard.clear(); // release mutex before calling event handlers
-            dispatchEvent(Reference< XEvent >(event, UNO_QUERY));
-            dispatchSubtreeModified();
+        if (0 == m_aNodePtr) {
+            throw RuntimeException();
         }
+        OUString oldValue;
+        AttrChangeType aChangeType = AttrChangeType_MODIFICATION;
+        xmlChar const*const pOld = xmlGetProp(m_aNodePtr, xName);
+        if (pOld == NULL) {
+            aChangeType = AttrChangeType_ADDITION;
+            xmlNewProp(m_aNodePtr, xName, xValue);
+        } else {
+            oldValue = OUString((char*)pOld, strlen((char*)pOld),
+                    RTL_TEXTENCODING_UTF8);
+            xmlSetProp(m_aNodePtr, xName, xValue);
+        }
+
+        // dispatch DOMAttrModified event
+        Reference< XDocumentEvent > docevent(getOwnerDocument(), UNO_QUERY);
+        Reference< XMutationEvent > event(docevent->createEvent(
+            OUString::createFromAscii("DOMAttrModified")), UNO_QUERY);
+        event->initMutationEvent(OUString::createFromAscii("DOMAttrModified"),
+            sal_True, sal_False,
+            Reference< XNode >(getAttributeNode(name), UNO_QUERY),
+            oldValue, value, name, aChangeType);
+
+        guard.clear(); // release mutex before calling event handlers
+        dispatchEvent(Reference< XEvent >(event, UNO_QUERY));
+        dispatchSubtreeModified();
     }
 
     /**
@@ -643,49 +655,49 @@ namespace DOM
         o5 = OUStringToOString(value, RTL_TEXTENCODING_UTF8);
         xmlChar *xURI= (xmlChar*)o4.getStr();
         xmlChar *xValue = (xmlChar*)o5.getStr();
-        if (m_aNodePtr != NULL)
-        {
-            //find the right namespace
-            xmlNsPtr pNs = xmlSearchNs(m_aNodePtr->doc, m_aNodePtr, xPrefix);
-            // if no namespace found, create a new one
-            if (pNs == NULL)
-                pNs = xmlNewNs(m_aNodePtr, xURI, xPrefix);
 
-            if (strcmp((char*)pNs->href, (char*)xURI) == 0)
-            {
-                // found namespace matches
-
-                OUString oldValue;
-                AttrChangeType aChangeType = AttrChangeType_MODIFICATION;
-                xmlChar *xOld = xmlGetNsProp(m_aNodePtr, xLName, pNs->href);
-                if (xOld == NULL)
-                {
-                    aChangeType = AttrChangeType_ADDITION;
-                    xmlNewNsProp(m_aNodePtr, pNs, xLName, xValue);
-                }
-                else
-                {
-                    oldValue = OUString((char *)xOld, strlen((char *)xOld), RTL_TEXTENCODING_UTF8);
-                    xmlSetNsProp(m_aNodePtr, pNs, xLName, xValue);
-                }
-                // dispatch DOMAttrModified event
-                Reference< XDocumentEvent > docevent(getOwnerDocument(), UNO_QUERY);
-                Reference< XMutationEvent > event(docevent->createEvent(
-                    OUString::createFromAscii("DOMAttrModified")), UNO_QUERY);
-                event->initMutationEvent(OUString::createFromAscii("DOMAttrModified"), sal_True, sal_False,
-                    Reference< XNode >(getAttributeNodeNS(namespaceURI, OUString((char*)xLName, strlen((char*)xLName), RTL_TEXTENCODING_UTF8)), UNO_QUERY),
-                    oldValue, value, qualifiedName, aChangeType);
-
-                guard.clear(); // release mutex before calling event handlers
-                dispatchEvent(Reference< XEvent >(event, UNO_QUERY));
-                dispatchSubtreeModified();
-
-            } else {
-                // ambigious ns prefix
-                throw RuntimeException();
-            }
-
+        if (0 == m_aNodePtr) {
+            throw RuntimeException();
         }
+
+        //find the right namespace
+        xmlNsPtr pNs = xmlSearchNs(m_aNodePtr->doc, m_aNodePtr, xPrefix);
+        // if no namespace found, create a new one
+        if (pNs == NULL) {
+            pNs = xmlNewNs(m_aNodePtr, xURI, xPrefix);
+        }
+
+        if (strcmp((char*)pNs->href, (char*)xURI) != 0) {
+            // ambiguous ns prefix
+            throw RuntimeException();
+        }
+
+        // found namespace matches
+
+        OUString oldValue;
+        AttrChangeType aChangeType = AttrChangeType_MODIFICATION;
+        xmlChar const*const pOld = xmlGetNsProp(m_aNodePtr, xLName, pNs->href);
+        if (pOld == NULL) {
+            aChangeType = AttrChangeType_ADDITION;
+            xmlNewNsProp(m_aNodePtr, pNs, xLName, xValue);
+        } else {
+            oldValue = OUString((char *)pOld, strlen((char *)pOld),
+                    RTL_TEXTENCODING_UTF8);
+            xmlSetNsProp(m_aNodePtr, pNs, xLName, xValue);
+        }
+        // dispatch DOMAttrModified event
+        Reference< XDocumentEvent > docevent(getOwnerDocument(), UNO_QUERY);
+        Reference< XMutationEvent > event(docevent->createEvent(
+            OUString::createFromAscii("DOMAttrModified")), UNO_QUERY);
+        event->initMutationEvent(
+            OUString::createFromAscii("DOMAttrModified"),
+            sal_True, sal_False,
+            Reference< XNode >(getAttributeNodeNS(namespaceURI, OUString((char*)xLName, strlen((char*)xLName), RTL_TEXTENCODING_UTF8)), UNO_QUERY),
+            oldValue, value, qualifiedName, aChangeType);
+
+        guard.clear(); // release mutex before calling event handlers
+        dispatchEvent(Reference< XEvent >(event, UNO_QUERY));
+        dispatchSubtreeModified();
     }
 
     Reference< XNamedNodeMap > SAL_CALL
