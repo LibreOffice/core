@@ -1283,8 +1283,9 @@ void StyleSheetTable::applyDefaults(bool bParaProperties)
             }
         }
     }
-    catch( const uno::Exception& )
+    catch( const uno::Exception& e)
     {
+        (void) e;
     }
 }
 /*-- 05.02.2008 10:27:36---------------------------------------------------

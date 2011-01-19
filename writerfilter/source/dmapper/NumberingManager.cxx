@@ -507,8 +507,9 @@ uno::Reference< container::XNameContainer > lcl_getUnoNumberingStyles(
 
         oFamily >>= xStyles;
     }
-    catch ( const uno::Exception )
+    catch ( const uno::Exception e)
     {
+        (void) e;
     }
 
     return xStyles;

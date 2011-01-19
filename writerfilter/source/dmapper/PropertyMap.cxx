@@ -133,6 +133,7 @@ void lcl_AnyToTag(XMLTag::Pointer_t pTag, const uno::Any & rAny)
         pTag->addAttr("stringValue", aStr);
     }
     catch (...) {
+        pTag->addAttr("exception", "true");
     }
 }
 
@@ -199,6 +200,7 @@ XMLTag::Pointer_t PropertyMap::toTag() const
                     pTag->addAttr("stringValue", aStr);
                 }
                 catch (...) {
+                    pTag->addAttr("exception", "true");
                 }
             }
                 break;
@@ -426,8 +428,9 @@ uno::Reference< beans::XPropertySet > SectionPropertyMap::GetPageStyle(
         }
 
     }
-    catch( const uno::Exception& )
+    catch( const uno::Exception& e)
     {
+        (void) e;
     }
 
     return xRet;
@@ -733,6 +736,7 @@ void SectionPropertyMap::CopyLastHeaderFooter( bool bFirstPage, DomainMapper_Imp
         }
         catch ( const uno::Exception& e )
         {
+            (void) e;
 #if DEBUG
             clog << "An exception occured in SectionPropertyMap::CopyLastHeaderFooter( ) - ";
             clog << rtl::OUStringToOString( e.Message, RTL_TEXTENCODING_UTF8 ).getStr( ) << endl;

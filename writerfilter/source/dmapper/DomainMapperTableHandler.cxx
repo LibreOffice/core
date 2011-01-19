@@ -730,12 +730,14 @@ void DomainMapperTableHandler::endTable()
         }
         catch (lang::IllegalArgumentException e)
         {
+            (void) e;
 #ifdef DEBUG_DMAPPER_TABLE_HANDLER
             dmapper_logger->chars("failed to import table!");
 #endif
         }
         catch ( uno::Exception e )
         {
+            (void) e;
 #ifdef DEBUG_DMAPPER_TABLE_HANDLER
             dmapper_logger->startElement("exception");
             dmapper_logger->chars(rtl::OUStringToOString( e.Message, RTL_TEXTENCODING_UTF8 ).getStr( ));

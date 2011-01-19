@@ -2837,7 +2837,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
                 {
                     //get value from style sheet and invert it
                     sal_Int16 nStyleValue = 0;
-                    double fDoubleValue;
+                    double fDoubleValue = 0.0;
                     uno::Any aStyleVal = m_pImpl->GetPropertyFromStyleSheet(ePropertyId);
                     if( !aStyleVal.hasValue() )
                     {
@@ -3846,8 +3846,9 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
                 xLineNumberingPropSet->setPropertyValue(rNameSupplier.GetName( PROP_DISTANCE ), uno::makeAny(aSettings.nDistance) );
             xLineNumberingPropSet->setPropertyValue(rNameSupplier.GetName( PROP_RESTART_AT_EACH_PAGE ), uno::makeAny(aSettings.bRestartAtEachPage) );
         }
-        catch( const uno::Exception& )
+        catch( const uno::Exception& e)
         {
+            (void) e;
         }
 
     }
@@ -4133,8 +4134,9 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
                                                                     uno::makeAny( nNumType ));
             }
         }
-        catch( const uno::Exception& )
+        catch( const uno::Exception& e)
         {
+            (void) e;
         }
     }
     break;
@@ -4508,8 +4510,9 @@ void DomainMapper::lcl_utext(const sal_uInt8 * data_, size_t len)
 
         }
     }
-    catch( const uno::RuntimeException& )
+    catch( const uno::RuntimeException& e)
     {
+        (void) e;
     }
 }
 /*-- 09.06.2006 09:52:15---------------------------------------------------

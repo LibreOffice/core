@@ -71,8 +71,8 @@ DomainMapperTableManager::DomainMapperTableManager(bool bOOXML) :
   -----------------------------------------------------------------------*/
 DomainMapperTableManager::~DomainMapperTableManager()
 {
-    if ( m_pTablePropsHandler )
-        delete m_pTablePropsHandler, m_pTablePropsHandler = NULL;
+    delete m_pTablePropsHandler;
+  m_pTablePropsHandler = NULL;
 }
 /*-- 23.04.2007 15:25:37---------------------------------------------------
 

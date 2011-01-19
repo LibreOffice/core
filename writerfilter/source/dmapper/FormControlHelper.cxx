@@ -189,6 +189,7 @@ bool FormControlHelper::createCheckbox(uno::Reference<text::XTextRange> xTextRan
         }
         catch (beans::UnknownPropertyException & rException)
         {
+            (void) rException;
         }
     }
 
