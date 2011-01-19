@@ -39,7 +39,6 @@
 #include "oox/drawingml/chart/chartspacemodel.hxx"
 #include "oox/drawingml/chart/plotareaconverter.hxx"
 #include "oox/drawingml/chart/titleconverter.hxx"
-#include "properties.hxx"
 
 using ::rtl::OUString;
 using ::com::sun::star::awt::Point;
