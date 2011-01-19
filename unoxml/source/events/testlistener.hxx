@@ -25,31 +25,25 @@
  *
  ************************************************************************/
 
-#ifndef _TESTLISTENER_HXX
-#define _TESTLISTENER_HXX
-
-#include <map>
+#ifndef EVENT_TESTLISTENER_HXX
+#define EVENT_TESTLISTENER_HXX
 
 #include <sal/types.h>
-#include <cppuhelper/implbase3.hxx>
+
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/Sequence.h>
 
 #include <com/sun/star/uno/XInterface.hpp>
 #include <com/sun/star/uno/Exception.hpp>
-#include <com/sun/star/xml/dom/XNode.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
-#include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/xml/dom/events/XEventTarget.hpp>
 #include <com/sun/star/xml/dom/events/XEventListener.hpp>
 #include <com/sun/star/xml/dom/events/XEvent.hpp>
-#include <com/sun/star/xml/dom/events/EventType.hpp>
-#include <com/sun/star/xml/dom/events/XMutationEvent.hpp>
 
-#include "libxml/tree.h"
+#include <cppuhelper/implbase3.hxx>
+
 
 using ::rtl::OUString;
 using namespace com::sun::star::uno;
