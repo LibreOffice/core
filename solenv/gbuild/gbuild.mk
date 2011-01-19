@@ -62,6 +62,11 @@ endef
 
 COMMA :=,
 
+# optional extensions that should never be essential
+ifneq ($(wildcard $(GBUILDDIR)/extensions/pre_*.mk),)
+include $(wildcard $(GBUILDDIR)/extensions/pre_*.mk)
+endif
+
 include $(GBUILDDIR)/Output.mk
 
 # BuildDirs uses the Output functions already
@@ -224,8 +229,8 @@ include $(foreach class, \
 ,$(GBUILDDIR)/$(class).mk)
 
 # optional extensions that should never be essential
-ifneq ($(wildcard $(GBUILDDIR)/extensions/*.mk),)
-include $(wildcard $(GBUILDDIR)/extensions/*.mk)
+ifneq ($(wildcard $(GBUILDDIR)/extensions/post_*.mk),)
+include $(wildcard $(GBUILDDIR)/extensions/post_*.mk)
 endif
 
 # vim: set noet sw=4 ts=4:
