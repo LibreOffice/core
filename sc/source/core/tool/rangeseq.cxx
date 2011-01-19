@@ -345,7 +345,6 @@ BOOL ScRangeToSequence::FillMixedArray( uno::Any& rAny, const ScMatrix* pMatrix,
 
 //------------------------------------------------------------------------
 
-// static
 bool ScApiTypeConversion::ConvertAnyToDouble( double & o_fVal,
         com::sun::star::uno::TypeClass & o_eClass,
         const com::sun::star::uno::Any & rAny )

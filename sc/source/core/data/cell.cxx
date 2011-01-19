@@ -480,7 +480,6 @@ String ScBaseCell::GetStringData() const
     return aStr;
 }
 
-//  static
 BOOL ScBaseCell::CellEqual( const ScBaseCell* pCell1, const ScBaseCell* pCell2 )
 {
     CellType eType1 = CELLTYPE_NONE;

@@ -282,7 +282,6 @@ enum
 }//anonymous namespace
 
 //-----------------------------------------------------------------------------
-//static
 void WrappedStockProperties::addProperties( ::std::vector< Property > & rOutProperties )
 {
     rOutProperties.push_back(
@@ -302,7 +301,6 @@ void WrappedStockProperties::addProperties( ::std::vector< Property > & rOutProp
 }
 
 //-----------------------------------------------------------------------------
-//static
 void WrappedStockProperties::addWrappedProperties( std::vector< WrappedProperty* >& rList
                                     , ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact )
 {

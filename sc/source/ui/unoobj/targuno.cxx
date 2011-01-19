@@ -225,7 +225,6 @@ void SAL_CALL ScLinkTargetTypeObj::setPropertyValue(const rtl::OUString& /* aPro
     //! exception?
 }
 
-//  static
 void ScLinkTargetTypeObj::SetLinkTargetBitmap( uno::Any& rRet, sal_uInt16 nType )
 {
     sal_uInt16 nImgId = 0;

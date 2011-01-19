@@ -570,7 +570,7 @@ OUString lcl_getDiagramType( const OUString & rTemplateServiceName )
 }
 
 typedef ::comphelper::MakeMap< ::rtl::OUString, ::rtl::OUString > tMakeStringStringMap;
-//static
+
 const tMakeStringStringMap& lcl_getChartTypeNameMap()
 {
     static tMakeStringStringMap g_aChartTypeNameMap =
@@ -1694,12 +1694,11 @@ void WrappedNumberOfLinesProperty::setPropertyValue( const Any& rOuterValue, con
         {
             try
             {
-                // /-- locked controllers
+                // locked controllers
                 ControllerLockGuard aCtrlLockGuard( m_spChart2ModelContact->getChartModel() );
                 uno::Reference< beans::XPropertySet > xProp( xTemplate, uno::UNO_QUERY );
                 xProp->setPropertyValue( C2U( "NumberOfLines" ), uno::makeAny(nNewValue) );
                 xTemplate->changeDiagram( xDiagram );
-                // \-- locked controllers
             }
             catch( uno::Exception & ex )
             {

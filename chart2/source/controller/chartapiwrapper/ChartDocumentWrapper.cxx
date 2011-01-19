@@ -254,7 +254,6 @@ const uno::Sequence< Property > & lcl_GetPropertySequence()
 {
     static uno::Sequence< Property > aPropSeq;
 
-    // /--
     MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
     if( 0 == aPropSeq.getLength() )
     {
@@ -1321,7 +1320,7 @@ uno::Reference< uno::XInterface > SAL_CALL ChartDocumentWrapper::createInstance(
                 uno::Reference< chart2::XDiagram > xDia( xChartDoc->getFirstDiagram());
                 if( xDia.is())
                 {
-                    // /-- locked controllers
+                    // locked controllers
                     Reference< frame::XModel > xModel( xChartDoc, uno::UNO_QUERY );
                     ControllerLockGuard aCtrlLockGuard( xModel );
                     Reference< chart2::XDiagram > xDiagram = ChartModelHelper::findDiagram( xModel );
@@ -1335,17 +1334,15 @@ uno::Reference< uno::XInterface > SAL_CALL ChartDocumentWrapper::createInstance(
                     if( Application::GetSettings().GetLayoutRTL() )
                         AxisHelper::setRTLAxisLayout( AxisHelper::getCoordinateSystemByIndex( xDiagram, 0 ) );
                     ThreeDHelper::setScheme( xDiagram, e3DScheme );
-                    // \-- locked controllers
                 }
                 else
                 {
-                    // /-- locked controllers
+                    // locked controllers
                     ControllerLockGuard aCtrlLockGuard( Reference< frame::XModel >( xChartDoc, uno::UNO_QUERY ));
                     xDia.set( xTemplate->createDiagramByDataSource(
                                   uno::Reference< chart2::data::XDataSource >(),
                                   uno::Sequence< beans::PropertyValue >()));
                     xChartDoc->setFirstDiagram( xDia );
-                    // \-- locked controllers
                 }
 
                 xResult = static_cast< ::cppu::OWeakObject* >( new DiagramWrapper( m_spChart2ModelContact ));

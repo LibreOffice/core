@@ -179,7 +179,6 @@ const uno::Sequence< Property > & lcl_GetPropertySequence( DataSeriesPointWrappe
     static uno::Sequence< Property > aSeriesPropSeq;
     static uno::Sequence< Property > aPointPropSeq;
 
-    // /--
     MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
     uno::Sequence< Property >& rPropSeq =
         (_eType == DataSeriesPointWrapper::DATA_SERIES) ? aSeriesPropSeq : aPointPropSeq;

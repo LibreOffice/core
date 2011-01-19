@@ -109,10 +109,8 @@ void SAL_CALL MinMaxLineWrapper::dispose()
     Reference< uno::XInterface > xSource( static_cast< ::cppu::OWeakObject* >( this ) );
     m_aEventListenerContainer.disposeAndClear( lang::EventObject( xSource ) );
 
-    // /--
     MutexGuard aGuard( GetMutex());
     m_xInfo.clear();
-    // \--
 }
 
 void SAL_CALL MinMaxLineWrapper::addEventListener(
@@ -351,7 +349,6 @@ uno::Any SAL_CALL MinMaxLineWrapper::getPropertyDefault( const ::rtl::OUString& 
 {
     static tPropertyValueMap aStaticDefaults;
 
-    // /--
     ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
     if( 0 == aStaticDefaults.size() )
     {

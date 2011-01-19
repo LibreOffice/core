@@ -103,7 +103,6 @@ GridWrapper::GridWrapper(
 GridWrapper::~GridWrapper()
 {}
 
-// static
 void GridWrapper::getDimensionAndSubGridBool( tGridType eType, sal_Int32& rnDimensionIndex, bool& rbSubGrid )
 {
     rnDimensionIndex = 1;
