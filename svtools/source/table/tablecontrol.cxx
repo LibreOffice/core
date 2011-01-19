@@ -564,7 +564,7 @@ namespace svt { namespace table
     Rectangle TableControl::calcHeaderRect(sal_Bool _bIsColumnBar,BOOL _bOnScreen)
     {
         (void)_bOnScreen;
-        return m_pImpl->calcHeaderRect(_bIsColumnBar);
+        return m_pImpl->calcHeaderRect( _bIsColumnBar ? false : true );
     }
 
     //------------------------------------------------------------------------------------------------------------------

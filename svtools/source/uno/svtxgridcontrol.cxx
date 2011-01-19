@@ -524,7 +524,8 @@ void SAL_CALL SVTXGridControl::rowsInserted( const GridDataEvent& i_event ) thro
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-void SAL_CALL SVTXGridControl::rowsRemoved( const GridDataEvent& i_event ) throw (RuntimeException)
+void SAL_CALL//----------------------------------------------------------------------------------------------------------------------
+ SVTXGridControl::rowsRemoved( const GridDataEvent& i_event ) throw (RuntimeException)
 {
     ::vos::OGuard aGuard( GetMutex() );
     m_pTableModel->notifyRowsRemoved( i_event );
@@ -544,6 +545,10 @@ void SAL_CALL SVTXGridControl::dataChanged( const GridDataEvent& i_event ) throw
         pTable->InvalidateDataWindow( 0, m_pTableModel->getRowCount() );
     else
         pTable->InvalidateDataWindow( i_event.FirstRow, i_event.LastRow );
+
+    // if the data model is sortable, a dataChanged event is also fired in case the sort order changed.
+    // So, invalidate the column header area, too.
+    pTable->getTableControlInterface().invalidate( TableAreaColumnHeaders );
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -556,7 +561,7 @@ void SAL_CALL SVTXGridControl::rowHeadingChanged( const GridDataEvent& i_event )
     ENSURE_OR_RETURN_VOID( pTable, "SVTXGridControl::rowHeadingChanged: no control (anymore)!" );
 
     // TODO: we could do better than this - invalidate the header area only
-    pTable->Invalidate();
+    pTable->getTableControlInterface().invalidate( TableAreaRowHeaders );
 }
 
 
@@ -609,6 +614,7 @@ void SAL_CALL SVTXGridControl::selectRow( ::sal_Int32 i_rowIndex ) throw (::com:
     pTable->SelectRow( i_rowIndex, true );
 }
 
+//----------------------------------------------------------------------------------------------------------------------
 void SAL_CALL SVTXGridControl::selectAllRows() throw (::com::sun::star::uno::RuntimeException)
 {
     ::vos::OGuard aGuard( GetMutex() );
@@ -619,6 +625,7 @@ void SAL_CALL SVTXGridControl::selectAllRows() throw (::com::sun::star::uno::Run
     pTable->SelectAllRows( true );
 }
 
+//----------------------------------------------------------------------------------------------------------------------
 void SAL_CALL SVTXGridControl::deselectRow( ::sal_Int32 i_rowIndex ) throw (::com::sun::star::uno::RuntimeException)
 {
     ::vos::OGuard aGuard( GetMutex() );
@@ -629,6 +636,7 @@ void SAL_CALL SVTXGridControl::deselectRow( ::sal_Int32 i_rowIndex ) throw (::co
     pTable->SelectRow( i_rowIndex, false );
 }
 
+//----------------------------------------------------------------------------------------------------------------------
 void SAL_CALL SVTXGridControl::deselectAllRows() throw (::com::sun::star::uno::RuntimeException)
 {
     ::vos::OGuard aGuard( GetMutex() );
@@ -639,6 +647,7 @@ void SAL_CALL SVTXGridControl::deselectAllRows() throw (::com::sun::star::uno::R
     pTable->SelectAllRows( false );
 }
 
+//----------------------------------------------------------------------------------------------------------------------
 ::com::sun::star::uno::Sequence< ::sal_Int32 > SAL_CALL SVTXGridControl::getSelection() throw (::com::sun::star::uno::RuntimeException)
 {
     ::vos::OGuard aGuard( GetMutex() );
@@ -653,6 +662,7 @@ void SAL_CALL SVTXGridControl::deselectAllRows() throw (::com::sun::star::uno::R
     return selectedRows;
 }
 
+//----------------------------------------------------------------------------------------------------------------------
 ::sal_Bool SAL_CALL SVTXGridControl::isSelectionEmpty() throw (::com::sun::star::uno::RuntimeException)
 {
     ::vos::OGuard aGuard( GetMutex() );
@@ -663,6 +673,7 @@ void SAL_CALL SVTXGridControl::deselectAllRows() throw (::com::sun::star::uno::R
     return pTable->GetSelectedRowCount() > 0;
 }
 
+//----------------------------------------------------------------------------------------------------------------------
 ::sal_Bool SAL_CALL SVTXGridControl::isSelectedIndex( ::sal_Int32 index ) throw (::com::sun::star::uno::RuntimeException)
 {
     ::vos::OGuard aGuard( GetMutex() );
@@ -673,6 +684,7 @@ void SAL_CALL SVTXGridControl::deselectAllRows() throw (::com::sun::star::uno::R
     return pTable->IsRowSelected( index );
 }
 
+//----------------------------------------------------------------------------------------------------------------------
 void SVTXGridControl::dispose() throw(::com::sun::star::uno::RuntimeException)
 {
     ::com::sun::star::lang::EventObject aObj;
@@ -681,6 +693,7 @@ void SVTXGridControl::dispose() throw(::com::sun::star::uno::RuntimeException)
     VCLXWindow::dispose();
 }
 
+//----------------------------------------------------------------------------------------------------------------------
 void SVTXGridControl::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
 {
     ::vos::OGuard aGuard( GetMutex() );
@@ -703,6 +716,7 @@ void SVTXGridControl::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent 
     }
 }
 
+//----------------------------------------------------------------------------------------------------------------------
 void SVTXGridControl::ImplCallItemListeners()
 {
     TableControl* pTable = dynamic_cast< TableControl* >( GetWindow() );
@@ -750,6 +764,7 @@ void SVTXGridControl::ImplCallItemListeners()
     }
 }
 
+//----------------------------------------------------------------------------------------------------------------------
 void SVTXGridControl::impl_updateColumnsFromModel_nothrow()
 {
     Reference< XGridColumnModel > const xColumnModel( m_pTableModel->getColumnModel() );

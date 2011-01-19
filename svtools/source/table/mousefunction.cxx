@@ -178,7 +178,7 @@ namespace svt { namespace table
                     requestedWidthLogical = maxWidthLogical;
             }
             pColumn->setWidth( requestedWidthLogical );
-            i_tableControl.invalidate();
+            i_tableControl.invalidate( TableAreaAll );
         }
 
         i_tableControl.setPointer( Pointer() );

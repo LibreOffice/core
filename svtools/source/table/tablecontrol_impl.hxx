@@ -282,7 +282,7 @@ namespace svt { namespace table
         virtual void                setPointer( Pointer const & i_pointer );
         virtual void                captureMouse();
         virtual void                releaseMouse();
-        virtual void                invalidate();
+        virtual void                invalidate( TableArea const i_what );
         virtual long                pixelWidthToAppFont( long const i_pixels ) const;
         virtual void                hideTracking();
         virtual void                showTracking( Rectangle const & i_location, sal_uInt16 const i_flags );
@@ -429,14 +429,14 @@ namespace svt { namespace table
             As a result of respecting the partial visibility of rows and columns,
             the returned area might be larger than the data window's output size.
         */
-        void        impl_getAllVisibleCellsArea( Rectangle& _rCellArea ) const;
+        Rectangle   impl_getAllVisibleCellsArea() const;
 
         /** retrieves the area occupied by all (at least partially) visible data cells.
 
             Effectively, the returned area is the same as returned by ->impl_getAllVisibleCellsArea,
             minus the row and column header areas.
         */
-        void        impl_getAllVisibleDataCellArea( Rectangle& _rCellArea ) const;
+        Rectangle   impl_getAllVisibleDataCellArea() const;
 
         /** retrieves the column which covers the given ordinate
         */

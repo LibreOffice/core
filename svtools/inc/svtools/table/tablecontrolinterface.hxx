@@ -147,6 +147,17 @@ namespace svt { namespace table
     };
 
     //==================================================================================================================
+    //= TableArea
+    //==================================================================================================================
+    enum TableArea
+    {
+        TableAreaColumnHeaders,
+        TableAreaRowHeaders,
+        TableAreaDataArea,
+        TableAreaAll
+    };
+
+    //==================================================================================================================
     //= ITableControl
     //==================================================================================================================
     /** defines a callback interface to be implemented by a concrete table control
@@ -213,7 +224,7 @@ namespace svt { namespace table
         virtual void    releaseMouse() = 0;
 
         /// invalidates the table window
-        virtual void    invalidate() = 0;
+        virtual void    invalidate( TableArea const i_what ) = 0;
 
         /// calculates a width, given in pixels, into a AppFont-based width
         virtual long    pixelWidthToAppFont( long const i_pixels ) const = 0;

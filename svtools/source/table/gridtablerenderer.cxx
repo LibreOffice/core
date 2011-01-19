@@ -39,6 +39,8 @@
 #include <tools/diagnose_ex.h>
 #include <vcl/window.hxx>
 #include <vcl/image.hxx>
+#include <vcl/virdev.hxx>
+#include <vcl/decoview.hxx>
 
 //......................................................................................................................
 namespace svt { namespace table
@@ -60,11 +62,65 @@ namespace svt { namespace table
     using ::com::sun::star::style::VerticalAlignment_BOTTOM;
     /** === end UNO using === **/
 
+    //==================================================================================================================
+    //= CachedSortIndicator
+    //==================================================================================================================
+    class CachedSortIndicator
+    {
+    public:
+        CachedSortIndicator()
+            :m_lastHeaderHeight( 0 )
+            ,m_lastArrowColor( COL_TRANSPARENT )
+        {
+        }
+
+        BitmapEx const & getBitmapFor( OutputDevice const & i_device, long const i_headerHeight, StyleSettings const & i_style, bool const i_sortAscending );
+
+    private:
+        long        m_lastHeaderHeight;
+        Color       m_lastArrowColor;
+        BitmapEx    m_sortAscending;
+        BitmapEx    m_sortDescending;
+    };
+
+    //------------------------------------------------------------------------------------------------------------------
+    BitmapEx const & CachedSortIndicator::getBitmapFor( OutputDevice const & i_device, long const i_headerHeight,
+        StyleSettings const & i_style, bool const i_sortAscending )
+    {
+        BitmapEx & rBitmap( i_sortAscending ? m_sortAscending : m_sortDescending );
+        if ( !rBitmap || ( i_headerHeight != m_lastHeaderHeight ) || ( i_style.GetActiveColor() != m_lastArrowColor ) )
+        {
+            long const nSortIndicatorWidth = 2 * i_headerHeight / 3;
+            long const nSortIndicatorHeight = 2 * nSortIndicatorWidth / 3;
+
+            Point const aBitmapPos( 0, 0 );
+            Size const aBitmapSize( nSortIndicatorWidth, nSortIndicatorHeight );
+            VirtualDevice aDevice( i_device, 0, 0 );
+            aDevice.SetOutputSizePixel( aBitmapSize );
+
+            DecorationView aDecoView( &aDevice );
+            aDecoView.DrawSymbol(
+                Rectangle( aBitmapPos, aBitmapSize ),
+                i_sortAscending ? SYMBOL_SPIN_DOWN : SYMBOL_SPIN_UP,
+                i_style.GetActiveColor()
+            );
+
+            rBitmap = aDevice.GetBitmapEx( aBitmapPos, aBitmapSize );
+            m_lastHeaderHeight = i_headerHeight;
+            m_lastArrowColor = i_style.GetActiveColor();
+        }
+        return rBitmap;
+    }
+
+    //==================================================================================================================
+    //= GridTableRenderer_Impl
+    //==================================================================================================================
     struct GridTableRenderer_Impl
     {
-        ITableModel&    rModel;
-        RowPos          nCurrentRow;
-        bool            bUseGridLines;
+        ITableModel&        rModel;
+        RowPos              nCurrentRow;
+        bool                bUseGridLines;
+        CachedSortIndicator aSortIndicator;
 
         GridTableRenderer_Impl( ITableModel& _rModel )
             :rModel( _rModel )
@@ -73,6 +129,10 @@ namespace svt { namespace table
         {
         }
     };
+
+    //==================================================================================================================
+    //= helper
+    //==================================================================================================================
     namespace
     {
         static Rectangle lcl_getContentArea( GridTableRenderer_Impl const & i_impl, Rectangle const & i_cellArea )
@@ -219,6 +279,38 @@ namespace svt { namespace table
         _rDevice.SetLineColor( lineColor );
         _rDevice.DrawLine( _rArea.BottomRight(), _rArea.TopRight());
         _rDevice.DrawLine( _rArea.BottomLeft(), _rArea.BottomRight() );
+
+        // draw sort indicator if the model data is sorted by the given column
+        ITableDataSort const * pSortAdapter = m_pImpl->rModel.getSortAdapter();
+        ColumnSort aCurrentSortOrder;
+        if ( pSortAdapter != NULL )
+            aCurrentSortOrder = pSortAdapter->getCurrentSortOrder();
+        if ( aCurrentSortOrder.nColumnPos == _nCol )
+        {
+            long const nHeaderHeight( _rArea.GetHeight() );
+            BitmapEx const aIndicatorBitmap = m_pImpl->aSortIndicator.getBitmapFor( _rDevice, nHeaderHeight, _rStyle,
+                aCurrentSortOrder.eSortDirection == ColumnSortAscending );
+            Size const aBitmapSize( aIndicatorBitmap.GetSizePixel() );
+            long const nSortIndicatorPaddingX = 2;
+            long const nSortIndicatorPaddingY = ( nHeaderHeight - aBitmapSize.Height() ) / 2;
+
+            if ( ( nDrawTextFlags & TEXT_DRAW_RIGHT ) != 0 )
+            {
+                // text is right aligned => draw the sort indicator at the left hand side
+                _rDevice.DrawBitmapEx(
+                    Point( nSortIndicatorPaddingX, nSortIndicatorPaddingY ),
+                    aIndicatorBitmap
+                );
+            }
+            else
+            {
+                // text is left-aligned or centered => draw the sort indicator at the right hand side
+                _rDevice.DrawBitmapEx(
+                    Point( _rArea.Right() - nSortIndicatorPaddingX - aBitmapSize.Width(), nSortIndicatorPaddingY ),
+                    aIndicatorBitmap
+                );
+            }
+        }
 
         _rDevice.Pop();
 

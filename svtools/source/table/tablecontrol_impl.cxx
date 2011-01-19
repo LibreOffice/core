@@ -693,8 +693,7 @@ namespace svt { namespace table
     {
         DBG_CHECK_ME();
 
-        Rectangle aAllCellsArea;
-        impl_getAllVisibleCellsArea( aAllCellsArea );
+        Rectangle const aAllCellsArea( impl_getAllVisibleCellsArea() );
 
         const TableColumnGeometry aColumn( *this, aAllCellsArea, i_column );
         if ( aColumn.isValid() )
@@ -727,16 +726,15 @@ namespace svt { namespace table
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    void TableControl_Impl::impl_getAllVisibleCellsArea( Rectangle& _rCellArea ) const
+    Rectangle TableControl_Impl::impl_getAllVisibleCellsArea() const
     {
         DBG_CHECK_ME();
 
-        _rCellArea.Left() = 0;
-        _rCellArea.Top() = 0;
+        Rectangle aArea( Point( 0, 0 ), Size( 0, 0 ) );
 
         // determine the right-most border of the last column which is
         // at least partially visible
-        _rCellArea.Right() = m_nRowHeaderWidthPixel;
+        aArea.Right() = m_nRowHeaderWidthPixel;
         if ( !m_aColumnWidths.empty() )
         {
             // the number of pixels which are scrolled out of the left hand
@@ -746,31 +744,34 @@ namespace svt { namespace table
             ColumnPositions::const_reverse_iterator loop = m_aColumnWidths.rbegin();
             do
             {
-                _rCellArea.Right() = loop->getEnd() - nScrolledOutLeft + m_nRowHeaderWidthPixel;
+                aArea.Right() = loop->getEnd() - nScrolledOutLeft + m_nRowHeaderWidthPixel;
                 ++loop;
             }
             while ( (   loop != m_aColumnWidths.rend() )
-                 && (   loop->getEnd() - nScrolledOutLeft >= _rCellArea.Right() )
+                 && (   loop->getEnd() - nScrolledOutLeft >= aArea.Right() )
                  );
         }
-        // so far, _rCellArea.Right() denotes the first pixel *after* the cell area
-        --_rCellArea.Right();
+        // so far, aArea.Right() denotes the first pixel *after* the cell area
+        --aArea.Right();
 
         // determine the last row which is at least partially visible
-        _rCellArea.Bottom() =
+        aArea.Bottom() =
                 m_nColHeaderHeightPixel
             +   impl_getVisibleRows( true ) * m_nRowHeightPixel
             -   1;
+
+        return aArea;
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    void TableControl_Impl::impl_getAllVisibleDataCellArea( Rectangle& _rCellArea ) const
+    Rectangle TableControl_Impl::impl_getAllVisibleDataCellArea() const
     {
         DBG_CHECK_ME();
 
-        impl_getAllVisibleCellsArea( _rCellArea );
-        _rCellArea.Left() = m_nRowHeaderWidthPixel;
-        _rCellArea.Top() = m_nColHeaderHeightPixel;
+        Rectangle aArea( impl_getAllVisibleCellsArea() );
+        aArea.Left() = m_nRowHeaderWidthPixel;
+        aArea.Top() = m_nColHeaderHeightPixel;
+        return aArea;
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -1244,8 +1245,7 @@ namespace svt { namespace table
         m_nRowCount = m_pModel->getRowCount();
         // the area occupied by all (at least partially) visible cells, including
         // headers
-        Rectangle aAllCellsWithHeaders;
-        impl_getAllVisibleCellsArea( aAllCellsWithHeaders );
+        Rectangle const aAllCellsWithHeaders( impl_getAllVisibleCellsArea() );
 
         // ............................
         // draw the header column area
@@ -1310,8 +1310,7 @@ namespace svt { namespace table
         TableSize colCount = getModel()->getColumnCount();
 
         // paint all rows
-        Rectangle aAllDataCellsArea;
-        impl_getAllVisibleDataCellArea( aAllDataCellsArea );
+        Rectangle const aAllDataCellsArea( impl_getAllVisibleDataCellArea() );
         for ( TableRowGeometry aRowIterator( *this, aAllCellsWithHeaders, getTopRow() );
               aRowIterator.isValid();
               aRowIterator.moveDown() )
@@ -1792,10 +1791,7 @@ namespace svt { namespace table
             return;
         }
 
-        Rectangle aAllCells;
-        impl_getAllVisibleCellsArea( aAllCells );
-
-        TableCellGeometry aCell( *this, aAllCells, _nColumn, _nRow );
+        TableCellGeometry aCell( *this, impl_getAllVisibleCellsArea(), _nColumn, _nRow );
         _rCellRect = aCell.getRect();
     }
 
@@ -1886,9 +1882,26 @@ namespace svt { namespace table
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    void TableControl_Impl::invalidate()
+    void TableControl_Impl::invalidate( TableArea const i_what )
     {
-        m_pDataWindow->Invalidate();
+        switch ( i_what )
+        {
+        case TableAreaColumnHeaders:
+            m_pDataWindow->Invalidate( calcHeaderRect( true ) );
+            break;
+
+        case TableAreaRowHeaders:
+            m_pDataWindow->Invalidate( calcHeaderRect( false ) );
+            break;
+
+        case TableAreaDataArea:
+            m_pDataWindow->Invalidate( impl_getAllVisibleDataCellArea() );
+            break;
+
+        case TableAreaAll:
+            m_pDataWindow->Invalidate();
+            break;
+        }
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -1920,9 +1933,8 @@ namespace svt { namespace table
     void TableControl_Impl::invalidateSelectedRegion(RowPos _nPrevRow, RowPos _nCurRow, Rectangle& _rCellRect)
     {
         DBG_CHECK_ME();
-        Rectangle aAllCells;
         //get the visible area of the table control and set the Left and right border of the region to be repainted
-        impl_getAllVisibleCellsArea( aAllCells );
+        Rectangle const aAllCells( impl_getAllVisibleCellsArea() );
         _rCellRect.Left() = aAllCells.Left();
         _rCellRect.Right() = aAllCells.Right();
         //if only one row is selected
@@ -1967,9 +1979,7 @@ namespace svt { namespace table
 
         Rectangle aInvalidateRect;
 
-        Rectangle aVisibleCellsArea;
-        impl_getAllVisibleCellsArea( aVisibleCellsArea );
-
+        Rectangle const aVisibleCellsArea( impl_getAllVisibleCellsArea() );
         TableRowGeometry aRow( *this, aVisibleCellsArea, firstRow, true );
         while ( aRow.isValid() && ( aRow.getRow() <= lastRow ) )
         {
@@ -2409,23 +2419,18 @@ namespace svt { namespace table
     //--------------------------------------------------------------------
     Rectangle TableControl_Impl::calcHeaderRect(bool bColHeader)
     {
-        Rectangle aRectTable, aRectTableWithHeaders;
-        impl_getAllVisibleDataCellArea(aRectTable);
-        impl_getAllVisibleCellsArea(aRectTableWithHeaders);
-        Size aSizeTable(aRectTable.GetSize());
-        Size aSizeTableWithHeaders(aRectTableWithHeaders.GetSize());
-        if(bColHeader)
-            return Rectangle(aRectTableWithHeaders.TopLeft(),Size(aSizeTableWithHeaders.Width()-aSizeTable.Width(), aSizeTableWithHeaders.Height()));
+        Rectangle const aRectTableWithHeaders( impl_getAllVisibleCellsArea() );
+        Size const aSizeTableWithHeaders( aRectTableWithHeaders.GetSize() );
+        if ( bColHeader )
+            return Rectangle( aRectTableWithHeaders.TopLeft(), Size( aSizeTableWithHeaders.Width(), m_nColHeaderHeightPixel ) );
         else
-            return Rectangle(aRectTableWithHeaders.TopLeft(),Size(aSizeTableWithHeaders.Width(), aSizeTableWithHeaders.Height()-aSizeTable.Height()));
+            return Rectangle( aRectTableWithHeaders.TopLeft(), Size( m_nRowHeaderWidthPixel, aSizeTableWithHeaders.Height() ) );
     }
 
     //--------------------------------------------------------------------
     Rectangle TableControl_Impl::calcTableRect()
     {
-        Rectangle aRect;
-        impl_getAllVisibleDataCellArea(aRect);
-        return aRect;
+        return impl_getAllVisibleDataCellArea();
     }
 
     //--------------------------------------------------------------------
