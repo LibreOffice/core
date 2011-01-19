@@ -137,9 +137,7 @@ class Desktop : public Application
         void                    SetSplashScreenText( const ::rtl::OUString& rText );
         void                    SetSplashScreenProgress( sal_Int32 );
 
-#ifdef UNX
-        void EarlyCommandLineArgsPrepare();
-#endif
+        void                    CreateProcessServiceFactory();
 
     private:
         // Bootstrap methods

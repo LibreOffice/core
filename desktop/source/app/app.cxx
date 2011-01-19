@@ -670,18 +670,11 @@ void Desktop::Init()
         }
     }
 
-    // create service factory...
-    if( !::comphelper::getProcessServiceFactory().is()) // may be set from Desktop::EarlyCommandLineArgsPrepare()
+    // We need to have service factory before going further.
+    if( !::comphelper::getProcessServiceFactory().is())
     {
-        Reference < XMultiServiceFactory > rSMgr = CreateApplicationServiceManager();
-        if( rSMgr.is() )
-        {
-            ::comphelper::setProcessServiceFactory( rSMgr );
-        }
-        else
-        {
-            SetBootstrapError( BE_UNO_SERVICEMANAGER );
-        }
+        OSL_ENSURE(0, "Service factory should have been crated in soffice_main().");
+        SetBootstrapError( BE_UNO_SERVICEMANAGER );
     }
 
     if ( GetBootstrapError() == BE_OK )
@@ -727,10 +720,9 @@ void Desktop::InitFinished()
     CloseSplashScreen();
 }
 
-#ifdef UNX
 // GetCommandLineArgs() requires this code to work, otherwise it will abort, and
 // on Unix command line args needs to be checked before Desktop::Init()
-void Desktop::EarlyCommandLineArgsPrepare()
+void Desktop::CreateProcessServiceFactory()
 {
     Reference < XMultiServiceFactory > rSMgr = CreateApplicationServiceManager();
     if( rSMgr.is() )
@@ -738,7 +730,6 @@ void Desktop::EarlyCommandLineArgsPrepare()
         ::comphelper::setProcessServiceFactory( rSMgr );
     }
 }
-#endif
 
 void Desktop::DeInit()
 {
