@@ -1119,10 +1119,16 @@ ScBaseCell* ScTable::GetCell( SCCOL nCol, SCROW nRow ) const
 void ScTable::GetFirstDataPos(SCCOL& rCol, SCROW& rRow) const
 {
     rCol = 0;
-    rRow = 0;
+    rRow = MAXROW+1;
     while (aCol[rCol].IsEmptyData() && rCol < MAXCOL)
         ++rCol;
-    rRow = aCol[rCol].GetFirstDataPos();
+    SCCOL nCol = rCol;
+    while (nCol <= MAXCOL && rRow > 0)
+    {
+        if (!aCol[nCol].IsEmptyData())
+            rRow = ::std::min( rRow, aCol[nCol].GetFirstDataPos());
+        ++nCol;
+    }
 }
 
 void ScTable::GetLastDataPos(SCCOL& rCol, SCROW& rRow) const
@@ -1132,11 +1138,8 @@ void ScTable::GetLastDataPos(SCCOL& rCol, SCROW& rRow) const
     while (aCol[rCol].IsEmptyData() && (rCol > 0))
         rCol--;
     SCCOL nCol = rCol;
-    while ((SCsCOL)nCol >= 0)
-    {
-        rRow = Max(rRow, aCol[nCol].GetLastDataPos());
-        nCol--;
-    }
+    while (nCol >= 0 && rRow < MAXROW)
+        rRow = ::std::max( rRow, aCol[nCol--].GetLastDataPos());
 }
 
 
