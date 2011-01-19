@@ -40,7 +40,15 @@ module com { module sun { module star { module awt { module grid {
  */
 interface XSortableMutableGridDataModel
 {
+    /** provides access to the basic functionality of a grid data model, plus functions to modify it.
+    */
     interface XMutableGridDataModel;
+
+    /** provides means to sort the data represented by the model.
+
+        <p>If you set a new column sort order, the implementation will notify the registered <type>XGridDataListener</type>s
+        via a call to its <member>XGridDataListener::dataChanged</member> method.</p>
+    */
     interface XSortableGridDataModel;
 };
 
