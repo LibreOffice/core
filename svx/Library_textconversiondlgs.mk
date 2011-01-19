@@ -36,7 +36,6 @@ $(eval $(call gb_Library_set_include,textconversiondlgs,\
 
 $(eval $(call gb_Library_set_defs,textconversiondlgs,\
     $$(DEFS) \
-    -DACCESSIBLE_LAYOUT \
 ))
 
 $(eval $(call gb_Library_add_linked_libs,textconversiondlgs,\
@@ -61,7 +60,7 @@ $(eval $(call gb_Library_add_exception_objects,textconversiondlgs,\
 ))
 
 ifeq ($(OS),LINUX)
-$(eval $(call gb_Library_add_linked_libs,svxcore,\
+$(eval $(call gb_Library_add_linked_libs,textconversiondlgs,\
     dl \
     m \
     pthread \
@@ -70,7 +69,7 @@ $(eval $(call gb_Library_add_linked_libs,svxcore,\
 endif
 
 ifeq ($(OS),WNT)
-$(eval $(call gb_Library_add_linked_libs,svxcore,\
+$(eval $(call gb_Library_add_linked_libs,textconversiondlgs,\
     advapi32 \
     kernel32 \
     msvcrt \

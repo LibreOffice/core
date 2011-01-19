@@ -28,7 +28,6 @@
 $(eval $(call gb_AllLangResTarget_AllLangResTarget,svx))
 
 $(eval $(call gb_AllLangResTarget_set_reslocation,svx,svx))
-#$(eval $(call gb_AllLangResTarget_set_reslocation,svx,svx/source/svdraw))
 
 $(eval $(call gb_AllLangResTarget_add_srs,svx,\
     svx/res \
@@ -40,28 +39,11 @@ $(eval $(call gb_SrsTarget_set_include,svx/res,\
     $$(INCLUDE) \
     -I$(OUTDIR)/inc \
     -I$(WORKDIR)/inc \
+    -I$(WORKDIR)/inc/svx \
     -I$(SRCDIR)/svx/source/inc \
     -I$(SRCDIR)/svx/source/dialog \
     -I$(SRCDIR)/svx/inc/ \
 ))
-
-# ofa res:
-#svx/source/src/errtxt.src
-#svx/source/src/app.src
-
-#svx/source/intro/iso.src
-#svx/source/intro/ooo.src
-
-# textconversiondlgs res:
-#svx/source/unodialogs/textconversiondlgs/chinese_dictionarydialog.src
-#svx/source/unodialogs/textconversiondlgs/chinese_translationdialog.src
-
-# localization of globlmn.hrc
-#echo LASTRUN_MERGED:=TRUE > ../unxlngx6.pro/inc/inc_lastrun.mk
-#mkdir ../unxlngx6.pro/inc/
-#rm -f ../unxlngx6.pro/inc/globlmn.hrc
-#: &&     LD_LIBRARY_PATH=/home/mathias/OOO/o_gnumake3/DEV300/ooo/solver/300/unxlngx6.pro/lib${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}} /home/mathias/OOO/o_gnumake3/DEV300/ooo/solver/300/unxlngx6.pro/bin/transex3 -p svx -i globlmn_tmpl.hrc -o ../unxlngx6.pro/inc//globlmn_tmpl.hrc.unxlngx6.pro -m /home/mathias/OOO/o_gnumake3/DEV300/ooo/l10n/unxlngx6.pro/misc/sdf/svx/inc/localize.sdf -l all
-#mv ../unxlngx6.pro/inc/globlmn_tmpl.hrc.unxlngx6.pro ../unxlngx6.pro/inc/globlmn.hrc
 
 $(eval $(call gb_SrsTarget_add_files,svx/res,\
     svx/source/accessibility/accessibility.src \
@@ -117,3 +99,39 @@ $(eval $(call gb_SrsTarget_add_files,svx/res,\
     svx/source/unodraw/unodraw.src \
 ))
 
+$(call gb_SrsPartTarget_get_target,svx/source/fmcomp/gridctrl.src) : $(WORKDIR)/inc/svx/globlmn.hrc
+$(call gb_SrsPartTarget_get_target,svx/source/form/fmexpl.src) : $(WORKDIR)/inc/svx/globlmn.hrc
+$(call gb_SrsPartTarget_get_target,svx/source/form/datanavi.src) : $(WORKDIR)/inc/svx/globlmn.hrc
+$(call gb_SrsPartTarget_get_target,svx/source/form/formshell.src) : $(WORKDIR)/inc/svx/globlmn.hrc
+$(call gb_SrsTarget_get_clean_target,svx/res) : $(WORKDIR)/inc/svx/globlmn.hrc_clean
+
+# hack !!!
+# just a temporary - globlmn.hrc about to be removed!
+ifeq ($(WITH_LANG),)
+$(WORKDIR)/inc/svx/globlmn.hrc : $(SRCDIR)/svx/inc/globlmn_tmpl.hrc
+    echo copying $@
+    -mkdir -p $(WORKDIR)/inc/svx
+    cp $(SRCDIR)/svx/inc/globlmn_tmpl.hrc $(WORKDIR)/inc/svx/globlmn.hrc
+    rm -f $(WORKDIR)/inc/svx/lastrun.mk 
+else
+-include $(WORKDIR)/inc/svx/lastrun.mk
+ifneq ($(gb_lastrun_globlmn),MERGED)
+.PHONY : $(WORKDIR)/inc/svx/globlmn.hrc
+endif
+$(WORKDIR)/inc/svx/globlmn.hrc : $(SRCDIR)/svx/inc/globlmn_tmpl.hrc $(gb_SrsPartMergeTarget_SDFLOCATION)/svx/inc/localize.sdf
+    echo merging $@
+    -mkdir -p $(WORKDIR)/inc/svx
+    rm -f $(WORKDIR)/inc/svx/lastrun.mk
+    echo gb_lastrun_globlmn:=MERGED > $(WORKDIR)/inc/svx/lastrun.mk
+    $(gb_SrsPartMergeTarget_TRANSEXCOMMAND) \
+        -p svx \
+         -i $< -o $@ -m $(gb_SrsPartMergeTarget_SDFLOCATION)/svx/inc/localize.sdf -l all
+endif
+
+.PHONY : $(WORKDIR)/inc/svx/globlmn.hrc_clean
+$(WORKDIR)/inc/svx/globlmn.hrc_clean :
+    rm -f $(WORKDIR)/inc/svx/lastrun.mk \
+        $(WORKDIR)/inc/svx/globlmn.hrc
+
+
+# vim: set noet sw=4 ts=4:

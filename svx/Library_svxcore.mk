@@ -74,6 +74,7 @@ $(eval $(call gb_Library_add_linked_libs,svxcore,\
     sal \
     sfx \
     sot \
+    stl \
     svl \
     svt \
     tk \
@@ -435,7 +436,6 @@ $(eval $(call gb_Library_add_linked_libs,svxcore,\
     dl \
     m \
     pthread \
-    stl \
 ))
 endif
 
