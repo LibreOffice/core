@@ -46,7 +46,6 @@ typedef ::cppu::ImplInheritanceHelper1< CUIEvent, XMouseEvent >
 class CMouseEvent
     : public CMouseEvent_Base
 {
-    friend class CEventDispatcher;
 protected:
     sal_Int32 m_screenX;
     sal_Int32 m_screenY;

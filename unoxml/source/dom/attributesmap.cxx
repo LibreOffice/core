@@ -50,7 +50,7 @@ namespace DOM
         ::osl::MutexGuard const g(m_rMutex);
 
         sal_Int32 count = 0;
-        xmlNodePtr pNode = m_pElement->m_aNodePtr;
+        xmlNodePtr pNode = m_pElement->GetNodePtr();
         if (pNode != NULL)
         {
             xmlAttrPtr cur = pNode->properties;
@@ -72,7 +72,7 @@ namespace DOM
         ::osl::MutexGuard const g(m_rMutex);
 
         Reference< XNode > aNode;
-        xmlNodePtr pNode = m_pElement->m_aNodePtr;
+        xmlNodePtr pNode = m_pElement->GetNodePtr();
         if (pNode != NULL)
         {
             OString o1 = OUStringToOString(name, RTL_TEXTENCODING_UTF8);
@@ -104,7 +104,7 @@ namespace DOM
         ::osl::MutexGuard const g(m_rMutex);
 
         Reference< XNode > aNode;
-        xmlNodePtr pNode = m_pElement->m_aNodePtr;
+        xmlNodePtr pNode = m_pElement->GetNodePtr();
         if (pNode != NULL)
         {
             OString o1 = OUStringToOString(localName, RTL_TEXTENCODING_UTF8);
@@ -138,7 +138,7 @@ namespace DOM
         ::osl::MutexGuard const g(m_rMutex);
 
         Reference< XNode > aNode;
-        xmlNodePtr pNode = m_pElement->m_aNodePtr;
+        xmlNodePtr pNode = m_pElement->GetNodePtr();
         if (pNode != NULL)
         {
             xmlAttrPtr cur = pNode->properties;
@@ -168,7 +168,7 @@ namespace DOM
     {
         ::osl::MutexGuard const g(m_rMutex);
 
-        xmlNodePtr const pNode = m_pElement->m_aNodePtr;
+        xmlNodePtr const pNode = m_pElement->GetNodePtr();
         if (pNode != NULL)
         {
             OString o1 = OUStringToOString(name, RTL_TEXTENCODING_UTF8);
@@ -201,7 +201,7 @@ namespace DOM
     {
         ::osl::MutexGuard const g(m_rMutex);
 
-        xmlNodePtr const pNode = m_pElement->m_aNodePtr;
+        xmlNodePtr const pNode = m_pElement->GetNodePtr();
         if (pNode != NULL)
         {
             OString o1 = OUStringToOString(localName, RTL_TEXTENCODING_UTF8);

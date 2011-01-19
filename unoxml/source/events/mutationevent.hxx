@@ -51,7 +51,6 @@ typedef ::cppu::ImplInheritanceHelper1< CEvent, XMutationEvent >
 class CMutationEvent
     : public CMutationEvent_Base
 {
-    friend class CEventDispatcher;
 protected:
     Reference< XNode > m_relatedNode;
     OUString m_prevValue;

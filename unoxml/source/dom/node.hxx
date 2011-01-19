@@ -118,10 +118,6 @@ namespace DOM
         friend class CDocument;
         friend class CElement;
         friend class CAttributesMap;
-        friend class CChildList;
-        friend class CElementList;
-        friend class CEntitiesMap;
-        friend class CNotationsMap;
 
     private:
         bool m_bUnlinked; /// node has been removed from document

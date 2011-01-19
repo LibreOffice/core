@@ -50,12 +50,6 @@ namespace DOM {namespace events
 class CEvent : public cppu::WeakImplHelper1< XEvent >
 {
 friend class CEventDispatcher;
-friend class CNode;
-friend class CDocument;
-friend class CElement;
-friend class CText;
-friend class CCharacterData;
-friend class CAttr;
 
 protected:
     ::osl::Mutex m_Mutex;

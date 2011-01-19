@@ -49,7 +49,6 @@ typedef ::cppu::ImplInheritanceHelper1< CEvent, XUIEvent > CUIEvent_Base;
 class CUIEvent
     : public CUIEvent_Base
 {
-    friend class CEventDispatcher;
 protected:
     sal_Int32 m_detail;
     Reference< XAbstractView > m_view;

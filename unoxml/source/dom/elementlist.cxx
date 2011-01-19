@@ -116,7 +116,7 @@ namespace DOM
         ::osl::MutexGuard const g(m_rMutex);
 
         // this has to be 'live'
-        buildlist(static_cast<const CNode*>(m_pElement.get())->m_aNodePtr);
+        buildlist(m_pElement->GetNodePtr());
         return m_nodevector.size();
     }
     /**
@@ -129,7 +129,7 @@ namespace DOM
 
         ::osl::MutexGuard const g(m_rMutex);
 
-        buildlist(static_cast<const CNode*>(m_pElement.get())->m_aNodePtr);
+        buildlist(m_pElement->GetNodePtr());
         if (m_nodevector.size() <= static_cast<size_t>(index)) {
             throw RuntimeException();
         }

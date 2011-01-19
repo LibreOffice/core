@@ -52,7 +52,7 @@ namespace DOM
         sal_Int32 length = 0;
         if (m_pNode != NULL)
         {
-            xmlNodePtr cur = m_pNode->m_aNodePtr;
+            xmlNodePtr cur = m_pNode->GetNodePtr();
             if (0 != cur) {
                 cur = cur->children;
             }
@@ -75,7 +75,7 @@ namespace DOM
 
         if (m_pNode != NULL)
         {
-            xmlNodePtr cur = m_pNode->m_aNodePtr;
+            xmlNodePtr cur = m_pNode->GetNodePtr();
             if (0 != cur) {
                 cur = cur->children;
             }
