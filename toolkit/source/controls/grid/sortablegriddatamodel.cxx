@@ -603,7 +603,9 @@ namespace toolkit
         MethodGuard aGuard( *this, rBHelper );
         DBG_CHECK_ME();
 
-        m_delegator->addRow( i_heading, i_data );
+        Reference< XMutableGridDataModel > const delegator( m_delegator );
+        aGuard.clear();
+        delegator->addRow( i_heading, i_data );
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -612,7 +614,9 @@ namespace toolkit
         MethodGuard aGuard( *this, rBHelper );
         DBG_CHECK_ME();
 
-        m_delegator->addRows( i_headings, i_data );
+        Reference< XMutableGridDataModel > const delegator( m_delegator );
+        aGuard.clear();
+        delegator->addRows( i_headings, i_data );
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -622,7 +626,10 @@ namespace toolkit
         DBG_CHECK_ME();
 
         ::sal_Int32 const rowIndex = impl_getPrivateRowIndex_throw( i_rowIndex );
-        m_delegator->removeRow( rowIndex );
+
+        Reference< XMutableGridDataModel > const delegator( m_delegator );
+        aGuard.clear();
+        delegator->removeRow( rowIndex );
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -631,7 +638,9 @@ namespace toolkit
         MethodGuard aGuard( *this, rBHelper );
         DBG_CHECK_ME();
 
-        m_delegator->removeAllRows();
+        Reference< XMutableGridDataModel > const delegator( m_delegator );
+        aGuard.clear();
+        delegator->removeAllRows();
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -641,7 +650,10 @@ namespace toolkit
         DBG_CHECK_ME();
 
         ::sal_Int32 const rowIndex = impl_getPrivateRowIndex_throw( i_rowIndex );
-        m_delegator->updateCellData( i_columnIndex, rowIndex, i_value );
+
+        Reference< XMutableGridDataModel > const delegator( m_delegator );
+        aGuard.clear();
+        delegator->updateCellData( i_columnIndex, rowIndex, i_value );
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -651,7 +663,10 @@ namespace toolkit
         DBG_CHECK_ME();
 
         ::sal_Int32 const rowIndex = impl_getPrivateRowIndex_throw( i_rowIndex );
-        m_delegator->updateRowData( i_columnIndexes, rowIndex, i_values );
+
+        Reference< XMutableGridDataModel > const delegator( m_delegator );
+        aGuard.clear();
+        delegator->updateRowData( i_columnIndexes, rowIndex, i_values );
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -661,7 +676,10 @@ namespace toolkit
         DBG_CHECK_ME();
 
         ::sal_Int32 const rowIndex = impl_getPrivateRowIndex_throw( i_rowIndex );
-        m_delegator->setRowHeading( rowIndex, i_heading );
+
+        Reference< XMutableGridDataModel > const delegator( m_delegator );
+        aGuard.clear();
+        delegator->setRowHeading( rowIndex, i_heading );
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -671,7 +689,10 @@ namespace toolkit
         DBG_CHECK_ME();
 
         ::sal_Int32 const rowIndex = impl_getPrivateRowIndex_throw( i_rowIndex );
-        m_delegator->updateCellToolTip( i_columnIndex, rowIndex, i_value );
+
+        Reference< XMutableGridDataModel > const delegator( m_delegator );
+        aGuard.clear();
+        delegator->updateCellToolTip( i_columnIndex, rowIndex, i_value );
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -681,7 +702,10 @@ namespace toolkit
         DBG_CHECK_ME();
 
         ::sal_Int32 const rowIndex = impl_getPrivateRowIndex_throw( i_rowIndex );
-        m_delegator->updateRowToolTip( rowIndex, i_value );
+
+        Reference< XMutableGridDataModel > const delegator( m_delegator );
+        aGuard.clear();
+        delegator->updateRowToolTip( rowIndex, i_value );
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -702,7 +726,9 @@ namespace toolkit
         MethodGuard aGuard( *this, rBHelper );
         DBG_CHECK_ME();
 
-        return m_delegator->getRowCount();
+        Reference< XMutableGridDataModel > const delegator( m_delegator );
+        aGuard.clear();
+        return delegator->getRowCount();
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -711,7 +737,9 @@ namespace toolkit
         MethodGuard aGuard( *this, rBHelper );
         DBG_CHECK_ME();
 
-        return m_delegator->getColumnCount();
+        Reference< XMutableGridDataModel > const delegator( m_delegator );
+        aGuard.clear();
+        return delegator->getColumnCount();
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -721,7 +749,10 @@ namespace toolkit
         DBG_CHECK_ME();
 
         ::sal_Int32 const rowIndex = impl_getPrivateRowIndex_throw( i_rowIndex );
-        return m_delegator->getCellData( i_columnIndex, rowIndex );
+
+        Reference< XMutableGridDataModel > const delegator( m_delegator );
+        aGuard.clear();
+        return delegator->getCellData( i_columnIndex, rowIndex );
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -731,7 +762,10 @@ namespace toolkit
         DBG_CHECK_ME();
 
         ::sal_Int32 const rowIndex = impl_getPrivateRowIndex_throw( i_rowIndex );
-        return m_delegator->getCellToolTip( i_columnIndex, rowIndex );
+
+        Reference< XMutableGridDataModel > const delegator( m_delegator );
+        aGuard.clear();
+        return delegator->getCellToolTip( i_columnIndex, rowIndex );
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -741,7 +775,10 @@ namespace toolkit
         DBG_CHECK_ME();
 
         ::sal_Int32 const rowIndex = impl_getPrivateRowIndex_throw( i_rowIndex );
-        return m_delegator->getRowHeading( rowIndex );
+
+        Reference< XMutableGridDataModel > const delegator( m_delegator );
+        aGuard.clear();
+        return delegator->getRowHeading( rowIndex );
     }
 
     //------------------------------------------------------------------------------------------------------------------
