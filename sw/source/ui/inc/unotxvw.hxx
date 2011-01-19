@@ -156,7 +156,7 @@ public:
     void                    Invalidate();
 
     // temporary document used for PDF export of selections/multi-selections
-    SfxObjectShellRef       BuildTmpSelectionDoc();
+    SfxObjectShellLock      BuildTmpSelectionDoc();
 };
 
 /* -----------------17.09.98 12:52-------------------

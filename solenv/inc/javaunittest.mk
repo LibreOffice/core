@@ -52,9 +52,8 @@
 # <platform>/class/, so that they are not accidentally included in jar files
 # packed from <platform>/class/ subdirectories.
 
-TESTS := $(subst,.java,.test $(JAVATESTFILES))
 JAVAFILES +:= $(JAVATESTFILES)
-JARFILES +:= OOoRunner.jar
+EXTRAJARFILES += $(OOO_JUNIT_JAR)
 
 .INCLUDE: settings.mk
 
@@ -67,22 +66,26 @@ CLASSDIR !:= $(CLASSDIR)/test
 
 .INCLUDE: target.mk
 
-ALLTAR: $(TESTS)
-
-$(JAVAFILES): $(MISC)/$(TARGET).classdir.flag
+$(JAVATARGET) : $(MISC)/$(TARGET).classdir.flag
 
 $(MISC)/$(TARGET).classdir.flag:
     - $(MKDIR) $(CLASSDIR)
     $(TOUCH) $@
 
-.IF "$(TESTS)" != ""
-$(TESTS): $(JAVACLASSFILES)
-.ENDIF
+.IF "$(JAVATESTFILES)" != ""
+ALLTAR : test
+.END
 
-%.test .PHONY: %.java
-    $(JAVAI) $(JAVAIFLAGS) $(JAVACPS) $(CLASSPATH) org.openoffice.Runner \
-        -TestBase java_complex -NoOffice yes \
-        -o $(subst,/,. $(subst,.test, $(PACKAGE).$@))
+.IF "$(SOLAR_JAVA)" == "TRUE" && "$(OOO_JUNIT_JAR)" != ""
+test .PHONY : $(JAVATARGET)
+    $(JAVAI) $(JAVAIFLAGS) $(JAVACPS) \
+        '$(OOO_JUNIT_JAR)$(PATH_SEPERATOR)$(CLASSPATH)' \
+        org.junit.runner.JUnitCore \
+        $(foreach,i,$(JAVATESTFILES) $(subst,/,. $(PACKAGE)).$(i:s/.java//))
+.ELSE
+test .PHONY :
+    echo 'test needs SOLAR_JAVA=TRUE and OOO_JUNIT_JAR'
+.END
 
 .IF "$(IDLTESTFILES)" != ""
 

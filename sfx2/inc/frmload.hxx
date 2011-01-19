@@ -113,7 +113,7 @@ private:
                             const ::rtl::OUString& i_rFactoryURL
                         ) const;
 
-    SfxObjectShellLock  impl_findObjectShell(
+    SfxObjectShellRef   impl_findObjectShell(
                             const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel2 >& i_rxDocument
                         ) const;
 

@@ -91,7 +91,7 @@ curl_CC+=-shared-libgcc
 .ENDIF
 curl_LIBS=-lws2_32 -lwinmm
 .IF "$(MINGW_SHARED_GXXLIB)"=="YES"
-curl_LIBS+=-lstdc++_s
+curl_LIBS+=$(MINGW_SHARED_LIBSTDCPP)
 .ENDIF
 CONFIGURE_DIR=.$/
 #relative to CONFIGURE_DIR

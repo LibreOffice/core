@@ -1394,6 +1394,23 @@ void ScDataPilotTableObj::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
     {
         Refreshed_Impl();
     }
+    else if ( rHint.ISA( ScUpdateRefHint ) )
+    {
+        ScRange aRange( 0, 0, nTab );
+        ScRangeList aRanges;
+        aRanges.Append( aRange );
+        const ScUpdateRefHint& rRef = static_cast< const ScUpdateRefHint& >( rHint );
+        if ( aRanges.UpdateReference( rRef.GetMode(), GetDocShell()->GetDocument(), rRef.GetRange(),
+                 rRef.GetDx(), rRef.GetDy(), rRef.GetDz() ) &&
+             aRanges.Count() == 1 )
+        {
+            const ScRange* pRange = aRanges.GetObject( 0 );
+            if ( pRange )
+            {
+                nTab = pRange->aStart.Tab();
+            }
+        }
+    }
 
     ScDataPilotDescriptorBase::Notify( rBC, rHint );
 }

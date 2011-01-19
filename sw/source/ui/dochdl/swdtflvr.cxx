@@ -454,14 +454,14 @@ sal_Bool SwTransferable::GetData( const DATA_FLAVOR& rFlavor )
         pClpDocFac = new SwDocFac;
         SwDoc *const pTmpDoc = lcl_GetDoc(*pClpDocFac);
 
-        pTmpDoc->SetRefForDocShell( boost::addressof(aDocShellRef) );
         pTmpDoc->LockExpFlds();     // nie die Felder updaten - Text so belassen
         pWrtShell->Copy( pTmpDoc );
 
         // es wurde in der CORE eine neu angelegt (OLE-Objekte kopiert!)
+        aDocShellRef = pTmpDoc->GetTmpDocShell();
         if( aDocShellRef.Is() )
             SwTransferable::InitOle( aDocShellRef, *pTmpDoc );
-        pTmpDoc->SetRefForDocShell( 0 );
+        pTmpDoc->SetTmpDocShell( (SfxObjectShell*)NULL );
 
         if( nSelectionType & nsSelectionType::SEL_TXT && !pWrtShell->HasMark() )
         {
@@ -869,7 +869,6 @@ int SwTransferable::PrepareForCopy( BOOL bIsCut )
 
         SwDoc *const pTmpDoc = lcl_GetDoc(*pClpDocFac);
 
-        pTmpDoc->SetRefForDocShell( boost::addressof(aDocShellRef) );
         pTmpDoc->LockExpFlds();     // nie die Felder updaten - Text so belassen
         pWrtShell->Copy( pTmpDoc );
 
@@ -892,9 +891,10 @@ int SwTransferable::PrepareForCopy( BOOL bIsCut )
         }
 
         // es wurde in der CORE eine neu angelegt (OLE-Objekte kopiert!)
+        aDocShellRef = pTmpDoc->GetTmpDocShell();
         if( aDocShellRef.Is() )
             SwTransferable::InitOle( aDocShellRef, *pTmpDoc );
-        pTmpDoc->SetRefForDocShell( 0 );
+        pTmpDoc->SetTmpDocShell( (SfxObjectShell*)NULL );
 
         if( pWrtShell->IsObjSelected() )
             eBufferType = TRNSFR_DRAWING;
@@ -1052,15 +1052,15 @@ int SwTransferable::CopyGlossary( SwTextBlocks& rGlossary,
     SwCntntNode* pCNd = rNds.GoNext( &aNodeIdx ); // gehe zum 1. ContentNode
     SwPaM aPam( *pCNd );
 
-    pCDoc->SetRefForDocShell( boost::addressof(aDocShellRef) );
     pCDoc->LockExpFlds();   // nie die Felder updaten - Text so belassen
 
     pCDoc->InsertGlossary( rGlossary, rStr, aPam, 0 );
 
     // es wurde in der CORE eine neu angelegt (OLE-Objekte kopiert!)
+    aDocShellRef = pCDoc->GetTmpDocShell();
     if( aDocShellRef.Is() )
         SwTransferable::InitOle( aDocShellRef, *pCDoc );
-    pCDoc->SetRefForDocShell( 0 );
+    pCDoc->SetTmpDocShell( (SfxObjectShell*)NULL );
 
     eBufferType = TRNSFR_DOCUMENT;
 

@@ -73,7 +73,8 @@ ColorData HGBAdapt (
 
 
 Theme::Theme (const ::boost::shared_ptr<controller::Properties>& rpProperties)
-    : maBackgroundColor(rpProperties->GetBackgroundColor().GetColor()),
+    : mbIsHighContrastMode(false),
+      maBackgroundColor(rpProperties->GetBackgroundColor().GetColor()),
       maPageBackgroundColor(COL_WHITE),
       maGradients(),
       maIcons(),

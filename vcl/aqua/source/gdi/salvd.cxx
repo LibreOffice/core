@@ -33,6 +33,7 @@
 #include "salgdi.h"
 #include "saldata.hxx"
 #include "salframe.h"
+#include <vcl/svapp.hxx>
 
 #include "vcl/sysdata.hxx"
 
@@ -197,9 +198,27 @@ BOOL AquaSalVirtualDevice::SetSize( long nDX, long nDY )
             pSalFrame = *GetSalData()->maFrames.begin();
         if( pSalFrame )
         {
-            NSGraphicsContext* pNSContext = [NSGraphicsContext graphicsContextWithWindow: pSalFrame->getWindow()];
-            if( pNSContext )
-                xCGContext = reinterpret_cast<CGContextRef>([pNSContext graphicsPort]);
+            // #i91990#
+            NSWindow* pWindow = pSalFrame->getWindow();
+            if ( pWindow )
+            {
+                NSGraphicsContext* pNSContext = [NSGraphicsContext graphicsContextWithWindow: pWindow];
+                if( pNSContext )
+                    xCGContext = reinterpret_cast<CGContextRef>([pNSContext graphicsPort]);
+            }
+            else
+            {
+                // fall back to a bitmap context
+                mnBitmapDepth = 32;
+                const CGColorSpaceRef aCGColorSpace = GetSalData()->mxRGBSpace;
+                const CGBitmapInfo aCGBmpInfo = kCGImageAlphaNoneSkipFirst;
+                const int nBytesPerRow = (mnBitmapDepth * nDX) / 8;
+
+                void* pRawData = rtl_allocateMemory( nBytesPerRow * nDY );
+                mxBitmapContext = ::CGBitmapContextCreate( pRawData, nDX, nDY,
+                                                           8, nBytesPerRow, aCGColorSpace, aCGBmpInfo );
+                xCGContext = mxBitmapContext;
+            }
         }
     }
 

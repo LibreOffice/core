@@ -69,9 +69,9 @@
 +goto finished
 +
 +:shared_gxxlib
-+gcc --shared -shared-libgcc --enable-pseudo-reloc -Wl,-Map,out/libeay32.map ms/libeay32.def -o out/libeay32.dll out/libcrypto_static.a -lwsock32 -lgdi32 -lstdc++_s 
++gcc --shared -shared-libgcc --enable-pseudo-reloc -Wl,-Map,out/libeay32.map ms/libeay32.def -o out/libeay32.dll out/libcrypto_static.a -lwsock32 -lgdi32 %MINGW_SHARED_LIBSTDSPP%
 +if errorlevel 1 goto end
-+gcc --shared -shared-libgcc --enable-pseudo-reloc -Wl,-Map,out/ssleay32.map -Lout ms/ssleay32.def -o out/ssleay32.dll out/libssl_static.a -lcrypto -lstdc++_s
++gcc --shared -shared-libgcc --enable-pseudo-reloc -Wl,-Map,out/ssleay32.map -Lout ms/ssleay32.def -o out/ssleay32.dll out/libssl_static.a -lcrypto %MINGW_SHARED_LIBSTDSPP%
 +if errorlevel 1 goto end
 +goto finished
  

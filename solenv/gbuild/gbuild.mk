@@ -112,7 +112,11 @@ ifeq ($(OS),LINUX)
 include $(GBUILDDIR)/platform/linux.mk
 else
 ifeq ($(OS),WNT)
+ifneq ($(USE_MINGW),)
+include $(GBUILDDIR)/platform/winmingw.mk
+else
 include $(GBUILDDIR)/platform/windows.mk
+endif
 else
 ifeq ($(OS),SOLARIS)
 include $(GBUILDDIR)/platform/solaris.mk

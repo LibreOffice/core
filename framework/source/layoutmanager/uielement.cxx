@@ -132,24 +132,27 @@ namespace framework
 
 UIElement& UIElement::operator= ( const UIElement& rUIElement )
 {
-    m_aType             = rUIElement.m_aType;
-    m_aName             = rUIElement.m_aName;
-    m_aUIName           = rUIElement.m_aUIName;
-    m_xUIElement        = rUIElement.m_xUIElement;
-    m_bFloating         = rUIElement.m_bFloating;
-    m_bVisible          = rUIElement.m_bVisible;
-    m_bUserActive       = rUIElement.m_bUserActive;
-    m_bCreateNewRowCol0 = rUIElement.m_bCreateNewRowCol0;
-    m_bDeactiveHide     = rUIElement.m_bDeactiveHide;
-    m_bMasterHide       = rUIElement.m_bMasterHide;
-    m_bContextSensitive = rUIElement.m_bContextSensitive;
-    m_bContextActive    = rUIElement.m_bContextActive;
-    m_bNoClose          = rUIElement.m_bNoClose;
-    m_bSoftClose        = rUIElement.m_bSoftClose;
-    m_bStateRead        = rUIElement.m_bStateRead;
-    m_nStyle            = rUIElement.m_nStyle;
-    m_aDockedData       = rUIElement.m_aDockedData;
-    m_aFloatingData     = rUIElement.m_aFloatingData;
+    if (&rUIElement != this)
+    {
+        m_aType             = rUIElement.m_aType;
+        m_aName             = rUIElement.m_aName;
+        m_aUIName           = rUIElement.m_aUIName;
+        m_xUIElement        = rUIElement.m_xUIElement;
+        m_bFloating         = rUIElement.m_bFloating;
+        m_bVisible          = rUIElement.m_bVisible;
+        m_bUserActive       = rUIElement.m_bUserActive;
+        m_bCreateNewRowCol0 = rUIElement.m_bCreateNewRowCol0;
+        m_bDeactiveHide     = rUIElement.m_bDeactiveHide;
+        m_bMasterHide       = rUIElement.m_bMasterHide;
+        m_bContextSensitive = rUIElement.m_bContextSensitive;
+        m_bContextActive    = rUIElement.m_bContextActive;
+        m_bNoClose          = rUIElement.m_bNoClose;
+        m_bSoftClose        = rUIElement.m_bSoftClose;
+        m_bStateRead        = rUIElement.m_bStateRead;
+        m_nStyle            = rUIElement.m_nStyle;
+        m_aDockedData       = rUIElement.m_aDockedData;
+        m_aFloatingData     = rUIElement.m_aFloatingData;
+    }
     return *this;
 }
 

@@ -76,10 +76,18 @@ sal_Int16 lcl_SubTypeToAPI(USHORT nSubType)
         sal_Int16 nRet = 0;
         switch(nSubType)
         {
-            case nsSwGetSetExpType::GSE_EXPR    :   nRet = SetVariableType::VAR /*0*/; break;
-            case nsSwGetSetExpType::GSE_SEQ     :   nRet = SetVariableType::SEQUENCE /*1*/; break;
-            case nsSwGetSetExpType::GSE_FORMULA :   nRet = SetVariableType::FORMULA /*2*/; break;
-            case nsSwGetSetExpType::GSE_STRING  :   nRet = SetVariableType::STRING /*3*/; break;
+            case nsSwGetSetExpType::GSE_EXPR:
+                nRet = SetVariableType::VAR;      // 0
+                break;
+            case nsSwGetSetExpType::GSE_SEQ:
+                nRet = SetVariableType::SEQUENCE; // 1
+                break;
+            case nsSwGetSetExpType::GSE_FORMULA:
+                nRet = SetVariableType::FORMULA;  // 2
+                break;
+            case nsSwGetSetExpType::GSE_STRING:
+                nRet = SetVariableType::STRING;   // 3
+                break;
         }
         return nRet;
 }

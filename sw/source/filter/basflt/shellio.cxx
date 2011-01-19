@@ -530,7 +530,7 @@ SwDoc* Reader::GetTemplateDoc()
                 {
                     SwDocShell *pDocSh =
                         new SwDocShell ( SFX_CREATE_MODE_INTERNAL );
-                    SfxObjectShellRef xDocSh = pDocSh;
+                    SfxObjectShellLock xDocSh = pDocSh;
                     if( pDocSh->DoInitNew( 0 ) )
                     {
                         pTemplate = pDocSh->GetDoc();
@@ -805,15 +805,12 @@ ULONG SwWriter::Write( WriterRef& rxWriter, const String* pRealFileName )
     SwPaM * pPam;
 
     SwDoc *pDoc = 0;
-    SfxObjectShellRef* pRefForDocSh = 0;
 
     if ( pShell && !bWriteAll && pShell->IsTableMode() )
     {
         bWriteAll = TRUE;
         pDoc = new SwDoc;
         pDoc->acquire();
-        pRefForDocSh = new SfxObjectShellRef();
-        pDoc->SetRefForDocShell( pRefForDocSh );
 
         // kopiere Teile aus einer Tabelle: lege eine Tabelle mit der Breite
         // von der Originalen an und kopiere die selectierten Boxen.
@@ -971,7 +968,6 @@ ULONG SwWriter::Write( WriterRef& rxWriter, const String* pRealFileName )
 
     if ( pDoc )
     {
-        delete pRefForDocSh;
         if ( !pDoc->release() )
             delete pDoc;
         bWriteAll = FALSE;

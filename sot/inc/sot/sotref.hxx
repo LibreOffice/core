@@ -33,14 +33,12 @@
 #endif
 
 //========================================================================
-enum SvCastEnum { SV_AGGREGATION_CAST };
 #ifndef SVT_DECL_SOTOBJECT_DEFINED
 #define SVT_DECL_SOTOBJECT_DEFINED
 class SotObject;
 class SotObjectRef
 {
     PRV_SV_DECL_REF(SotObject)
-    inline SotObjectRef( SotObject * pObjP, SvCastEnum );
 };
 #endif
 
@@ -52,7 +50,6 @@ class ClassName##Ref                                                      \
     PRV_SV_DECL_REF(ClassName)                                            \
     inline          ClassName##Ref( const SotObjectRef & );               \
     inline          ClassName##Ref( SotObject * pObjP );                  \
-    inline          ClassName##Ref( SotObject * pObjP, SvCastEnum );      \
 };
 
 #define SO2_IMPL_REF(ClassName)                                           \
@@ -64,11 +61,8 @@ inline ClassName##Ref::ClassName##Ref( const SotObjectRef & r )           \
 inline ClassName##Ref::ClassName##Ref( SotObject * pObjP )                \
 {                                                                         \
     pObj = (ClassName *)ClassName::ClassFactory()->CastAndAddRef( pObjP );\
-}                                                                         \
-inline ClassName##Ref::ClassName##Ref( SotObject * pObjP, SvCastEnum )    \
-{                                                                         \
-    pObj = (ClassName *)ClassName::ClassFactory()->AggCastAndAddRef( pObjP );\
 }
+
 
 #define SO2_DECL_IMPL_REF(ClassName)                                      \
     SO2_DECL_REF(ClassName)                                               \

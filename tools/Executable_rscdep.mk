@@ -55,14 +55,37 @@ $(eval $(call gb_Executable_add_exception_objects,rscdep,\
 ))
 
 ifeq ($(OS),WNT)
+ifneq ($(USE_MINGW),)
+ifeq ($(HAVE_GETOPT),YES)
+$(eval $(call gb_Executable_set_cxxflags,rscdep,\
+    $$(CXXFLAGS) \
+    -DHAVE_GETOPT \
+))
+endif
+$(eval $(call gb_Executable_add_linked_libs,rscdep,\
+    mingwthrd \
+    $(gb_MINGW_LIBSTDCPP) \
+    mingw32 \
+    $(gb_MINGW_LIBGCC) \
+    uwinapi \
+    moldname \
+    mingwex \
+    kernel32 \
+    msvcrt \
+    user32 \
+))
+else
 $(eval $(call gb_Executable_add_linked_libs,rscdep,\
     gnu_getopt \
+))
+$(eval $(call gb_Executable_add_linked_libs,rscdep,\
     kernel32 \
     msvcrt \
     oldnames \
     user32 \
     uwinapi \
 ))
+endif
 endif
 
 ifeq ($(OS),LINUX)

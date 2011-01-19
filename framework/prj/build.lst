@@ -1,2 +1,3 @@
 fr framework : LIBXSLT:libxslt l10n svtools NULL
 fr framework\prj nmake - all fr_all NULL
+fr framework\qa\unoapi nmake - all fr_qa_unoapi NULL

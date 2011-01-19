@@ -78,7 +78,8 @@ SchAxisLabelTabPage::SchAxisLabelTabPage( Window* pParent, const SfxItemSet& rIn
         m_nInitialDegrees( 0 ),
         m_bHasInitialDegrees( true ),
         m_bInitialStacking( false ),
-        m_bHasInitialStacking( true )
+        m_bHasInitialStacking( true ),
+        m_bComplexCategories( false )
 {
     FreeResource();
 
@@ -295,6 +296,11 @@ void SchAxisLabelTabPage::ShowStaggeringControls( BOOL bShowStaggeringControls )
     }
 }
 
+void SchAxisLabelTabPage::SetComplexCategories( bool bComplexCategories )
+{
+    m_bComplexCategories = bComplexCategories;
+}
+
 // event handling routines
 // -----------------------
 
@@ -310,7 +316,7 @@ IMPL_LINK ( SchAxisLabelTabPage, ToggleShowLabel, void *, EMPTYARG )
     aRbAuto.Enable( bEnable );
 
     aFlTextFlow.Enable( bEnable );
-    aCbTextOverlap.Enable( bEnable );
+    aCbTextOverlap.Enable( bEnable && !m_bComplexCategories );
     aCbTextBreak.Enable( bEnable );
 
     m_aFtTextDirection.Enable( bEnable );

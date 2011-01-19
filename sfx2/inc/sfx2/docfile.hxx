@@ -75,7 +75,6 @@ class SvStringsDtor;
 #define OWEAKOBJECT                 ::cppu::OWeakObject
 #define REFERENCE                   ::com::sun::star::uno::Reference
 #define XINTERFACE                  ::com::sun::star::uno::XInterface
-#define SEQUENCE                    ::com::sun::star::uno::Sequence
 #define EXCEPTION                   ::com::sun::star::uno::Exception
 #define RUNTIMEEXCEPTION            ::com::sun::star::uno::RuntimeException
 #define ANY                         ::com::sun::star::uno::Any

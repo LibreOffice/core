@@ -523,7 +523,7 @@ BOOL SimpleTokenizer_Impl::getNextToken( /*out*/TokenTypes& reType,
                 c = getChar();  // '/' entfernen
 
                 // Alle Zeichen bis Zeilen-Ende oder EOF entfernen
-                sal_Unicode cPeek = peekChar();
+                sal_Unicode cPeek = c;
                 while( cPeek != CHAR_EOF && testCharFlags( cPeek, CHAR_EOL ) == FALSE )
                 {
                     getChar();

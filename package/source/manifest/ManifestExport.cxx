@@ -166,6 +166,11 @@ ManifestExport::ManifestExport(Reference < XDocumentHandler > xHandler,  const S
             {
                 // this is ODF12 generation, let encrypted streams contain start-key-generation entry
                 bStoreStartKeyGeneration = sal_True;
+
+                // starting from ODF12 the version should be also in manifest:manifest element
+                pRootAttrList->AddAttribute ( OUString( RTL_CONSTASCII_USTRINGPARAM ( ATTRIBUTE_VERSION ) ),
+                                            sCdataAttribute,
+                                            aDocVersion );
             }
         }
         else

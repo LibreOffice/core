@@ -935,6 +935,7 @@ void InsertFile(SwUnoCrsr* pUnoCrsr,
     if( !pMed )
         return;
 
+    // this sourcecode is not responsible for the lifetime of the shell, SfxObjectShellLock should not be used
     SfxObjectShellRef aRef( pDocSh );
 
     pDocSh->RegisterTransfer( *pMed );

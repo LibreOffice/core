@@ -53,6 +53,20 @@ $(eval $(call gb_Executable_add_exception_objects,bmp,\
 ))
 
 ifeq ($(OS),WNT)
+ifneq ($(USE_MINGW),)
+$(eval $(call gb_Executable_add_linked_libs,bmp,\
+    mingwthrd \
+    $(gb_MINGW_LIBSTDCPP) \
+    mingw32 \
+    $(gb_MINGW_LIBGCC) \
+    uwinapi \
+    moldname \
+    mingwex \
+    kernel32 \
+    msvcrt \
+    user32 \
+))
+else
 $(eval $(call gb_Executable_add_linked_libs,bmp,\
     kernel32 \
     msvcrt \
@@ -60,6 +74,7 @@ $(eval $(call gb_Executable_add_linked_libs,bmp,\
     user32 \
     uwinapi \
 ))
+endif
 endif
 
 ifeq ($(OS),LINUX)

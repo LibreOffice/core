@@ -209,7 +209,7 @@ static sal_uInt16 nBCTitleNo = 0;
         aLabCfg.Commit();
 
         // Neues Dokument erzeugen.
-        SfxObjectShellRef xDocSh( new SwDocShell( SFX_CREATE_MODE_STANDARD));
+        SfxObjectShellLock xDocSh( new SwDocShell( SFX_CREATE_MODE_STANDARD));
         xDocSh->DoInitNew( 0 );
 
         // Drucker

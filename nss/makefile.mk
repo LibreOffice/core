@@ -113,7 +113,7 @@ nss_CXX+=-shared-libgcc
 
 nss_LIBS=
 .IF "$(MINGW_SHARED_GXXLIB)"=="YES"
-nss_LIBS+=-lstdc++_s
+nss_LIBS+=$(MINGW_SHARED_LIBSTDCPP)
 .ENDIF
 
 

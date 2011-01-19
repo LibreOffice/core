@@ -734,7 +734,7 @@ ANY SfxBaseController::getViewData() throw( ::com::sun::star::uno::RuntimeExcept
     if ( m_pData->m_pViewShell )
     {
         m_pData->m_pViewShell->WriteUserData( sData1 ) ;
-        OUSTRING    sData( sData1 );
+        ::rtl::OUString    sData( sData1 );
         aAny <<= sData ;
     }
 
@@ -750,7 +750,7 @@ void SAL_CALL SfxBaseController::restoreViewData( const ANY& aValue ) throw( ::c
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
     if ( m_pData->m_pViewShell )
     {
-        OUSTRING sData;
+        ::rtl::OUString sData;
         aValue >>= sData ;
         m_pData->m_pViewShell->ReadUserData( sData ) ;
     }
@@ -781,7 +781,7 @@ REFERENCE< XMODEL > SAL_CALL SfxBaseController::getModel() throw( ::com::sun::st
 //________________________________________________________________________________________________________
 
 REFERENCE< XDISPATCH > SAL_CALL SfxBaseController::queryDispatch(   const   UNOURL&             aURL            ,
-                                                                    const   OUSTRING&           sTargetFrameName,
+                                                                    const   ::rtl::OUString&            sTargetFrameName,
                                                                             sal_Int32           eSearchFlags    ) throw( RUNTIMEEXCEPTION )
 {
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
@@ -938,12 +938,12 @@ REFERENCE< XDISPATCH > SAL_CALL SfxBaseController::queryDispatch(   const   UNOU
 //  SfxBaseController -> XDispatchProvider
 //________________________________________________________________________________________________________
 
-SEQUENCE< REFERENCE< XDISPATCH > > SAL_CALL SfxBaseController::queryDispatches( const SEQUENCE< DISPATCHDESCRIPTOR >& seqDescripts ) throw( ::com::sun::star::uno::RuntimeException )
+uno::Sequence< REFERENCE< XDISPATCH > > SAL_CALL SfxBaseController::queryDispatches( const uno::Sequence< DISPATCHDESCRIPTOR >& seqDescripts ) throw( ::com::sun::star::uno::RuntimeException )
 {
     // Create return list - which must have same size then the given descriptor
     // It's not allowed to pack it!
     sal_Int32 nCount = seqDescripts.getLength();
-    SEQUENCE< REFERENCE< XDISPATCH > > lDispatcher( nCount );
+    uno::Sequence< REFERENCE< XDISPATCH > > lDispatcher( nCount );
 
     for( sal_Int32 i=0; i<nCount; ++i )
     {

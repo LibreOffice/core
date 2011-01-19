@@ -97,7 +97,8 @@ cpptest .PHONY :
         -env:UNO_TYPES=$(my_file)$(SOLARBINDIR)/types.rdb \
         -env:arg-soffice=$(my_soffice) -env:arg-user=$(MISC)/$(TARGET)/user \
         $(my_cppenv) $(TEST_ARGUMENTS:^"-env:arg-testarg.") $(CPPTEST_LIBRARY)
-    $(RM) -r $(MISC)/$(TARGET)/user
+    # As a workaround for #i111400#, ignore failure of $(RM):
+    - $(RM) -r $(MISC)/$(TARGET)/user
 .IF "$(OS)" == "WNT" && "$(OOO_TEST_SOFFICE)" == ""
     $(RM) -r $(installationtest_instpath) $(MISC)/$(TARGET)/installation.flag
 cpptest : $(MISC)/$(TARGET)/installation.flag

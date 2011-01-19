@@ -159,7 +159,7 @@ public:
         {}
     virtual ~Test_Impl()
         {
-            OSL_TRACE( "> scalar Test_Impl dtor <\n" );
+            OSL_TRACE( "> scalar Test_Impl dtor <" );
         }
 
     void SAL_CALL acquire() throw ()

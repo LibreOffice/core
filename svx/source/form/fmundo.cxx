@@ -130,6 +130,8 @@ private:
                 {
                     Reference< XMultiComponentFactory > xMFac(
                     xCtx->getServiceManager(), UNO_QUERY );
+
+                    // SfxObjectShellRef is good here since the model controls the lifetime of the shell
                     SfxObjectShellRef xObjSh = pModel->GetObjectShell();
                     Reference< XMultiServiceFactory > xDocFac;
                     if ( xObjSh.Is() )
@@ -150,6 +152,7 @@ private:
         {
             try
             {
+                // SfxObjectShellRef is good here since the model controls the lifetime of the shell
                 SfxObjectShellRef xObjSh = pModel->GetObjectShell();
                 if ( xObjSh.Is() && m_vbaListener.is() )
                 {

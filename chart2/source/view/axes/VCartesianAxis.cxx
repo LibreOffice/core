@@ -48,6 +48,8 @@
 #include <com/sun/star/text/XText.hpp>
 #include <com/sun/star/text/WritingMode2.hpp>
 #include <editeng/unoprnms.hxx>
+#include <svx/unoshape.hxx>
+#include <svx/unoshtxt.hxx>
 
 #include <algorithm>
 #include <memory>
@@ -110,7 +112,7 @@ Reference< drawing::XShape > createSingleLabel(
 
     //correctPositionForRotation
     LabelPositionHelper::correctPositionForRotation( xShape2DText
-        , rAxisProperties.m_aLabelAlignment, rAxisLabelProperties.fRotationAngleDegree, false );
+        , rAxisProperties.m_aLabelAlignment, rAxisLabelProperties.fRotationAngleDegree, rAxisProperties.m_bComplexCategories );
 
     return xShape2DText;
 }
@@ -259,7 +261,7 @@ TickInfo* EquidistantLabelIterator::nextInfo()
     return pTickInfo;
 }
 
-B2DVector lcl_getLabelsDistance( TickIter& rIter, const B2DVector& rDistanceTickToText )
+B2DVector lcl_getLabelsDistance( TickIter& rIter, const B2DVector& rDistanceTickToText, double fRotationAngleDegree )
 {
     //calculates the height or width of a line of labels
     //thus a following line of labels can be shifted for that distance
@@ -282,7 +284,7 @@ B2DVector lcl_getLabelsDistance( TickIter& rIter, const B2DVector& rDistanceTick
         xShape2DText = pTickInfo->xTextShape;
         if( xShape2DText.is() )
         {
-            awt::Size aSize  = xShape2DText->getSize();
+            awt::Size aSize = ShapeFactory::getSizeAfterRotation( xShape2DText, fRotationAngleDegree );
             if(fabs(aStaggerDirection.getX())>fabs(aStaggerDirection.getY()))
                 nDistance = ::std::max(nDistance,aSize.Width);
             else
@@ -317,6 +319,47 @@ void lcl_shiftLables( TickIter& rIter, const B2DVector& rStaggerDistance )
             xShape2DText->setPosition( aPos );
         }
     }
+}
+
+bool lcl_hasWordBreak( const Reference< drawing::XShape >& rxShape )
+{
+    if ( rxShape.is() )
+    {
+        SvxShape* pShape = SvxShape::getImplementation( rxShape );
+        SvxShapeText* pShapeText = dynamic_cast< SvxShapeText* >( pShape );
+        if ( pShapeText )
+        {
+            SvxTextEditSource* pTextEditSource = dynamic_cast< SvxTextEditSource* >( pShapeText->GetEditSource() );
+            if ( pTextEditSource )
+            {
+                pTextEditSource->UpdateOutliner();
+                SvxTextForwarder* pTextForwarder = pTextEditSource->GetTextForwarder();
+                if ( pTextForwarder )
+                {
+                    USHORT nParaCount = pTextForwarder->GetParagraphCount();
+                    for ( USHORT nPara = 0; nPara < nParaCount; ++nPara )
+                    {
+                        USHORT nLineCount = pTextForwarder->GetLineCount( nPara );
+                        for ( USHORT nLine = 0; nLine < nLineCount; ++nLine )
+                        {
+                            USHORT nLineStart = 0;
+                            USHORT nLineEnd = 0;
+                            pTextForwarder->GetLineBoundaries( nLineStart, nLineEnd, nPara, nLine );
+                            USHORT nWordStart = 0;
+                            USHORT nWordEnd = 0;
+                            if ( pTextForwarder->GetWordIndices( nPara, nLineStart, nWordStart, nWordEnd ) &&
+                                 ( nWordStart != nLineStart ) )
+                            {
+                                return true;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    return false;
 }
 
 class MaxLabelEquidistantTickIter : public EquidistantTickIter
@@ -714,10 +757,23 @@ bool VCartesianAxis::createTextShapes(
 
         recordMaximumTextSize( pTickInfo->xTextShape, rAxisLabelProperties.fRotationAngleDegree );
 
+         //better rotate if single words are broken apart
+        if( nLimitedSpaceForText>0 && !rAxisLabelProperties.bOverlapAllowed
+                && ::rtl::math::approxEqual( rAxisLabelProperties.fRotationAngleDegree, 0.0 )
+                && m_aAxisProperties.m_bComplexCategories
+                && lcl_hasWordBreak( pTickInfo->xTextShape ) )
+        {
+            rAxisLabelProperties.fRotationAngleDegree = 90;
+            rAxisLabelProperties.bLineBreakAllowed = false;
+            m_aAxisLabelProperties.fRotationAngleDegree = rAxisLabelProperties.fRotationAngleDegree;
+            removeTextShapesFromTicks();
+            return false;
+        }
+
         //if NO OVERLAP -> remove overlapping shapes
         if( pLastVisibleNeighbourTickInfo && !rAxisLabelProperties.bOverlapAllowed )
         {
-            if( doesOverlap( pLastVisibleNeighbourTickInfo->xTextShape, pTickInfo->xTextShape, m_aAxisLabelProperties.fRotationAngleDegree ) )
+            if( doesOverlap( pLastVisibleNeighbourTickInfo->xTextShape, pTickInfo->xTextShape, rAxisLabelProperties.fRotationAngleDegree ) )
             {
                 bool bOverlapAlsoAfterSwitchingOnAutoStaggering = true;
                 if( !bIsStaggered && isAutoStaggeringOfLabelsAllowed( rAxisLabelProperties, bIsHorizontalAxis, bIsVerticalAxis ) )
@@ -1286,10 +1342,15 @@ void VCartesianAxis::doStaggeringOfLabels( const AxisLabelProperties& rAxisLabel
             ::std::auto_ptr< TickIter > apTickIter = createLabelTickIterator( nTextLevel );
             if(apTickIter.get())
             {
+                double fRotationAngleDegree = m_aAxisLabelProperties.fRotationAngleDegree;
                 if( nTextLevel>0 )
+                {
                     lcl_shiftLables( *apTickIter.get(), aCummulatedLabelsDistance );
+                    fRotationAngleDegree = 0.0;
+                }
                 aCummulatedLabelsDistance += lcl_getLabelsDistance( *apTickIter.get()
-                    , pTickmarkHelper2D->getDistanceAxisTickToText( m_aAxisProperties ) );
+                    , pTickmarkHelper2D->getDistanceAxisTickToText( m_aAxisProperties )
+                    , fRotationAngleDegree );
             }
         }
     }
@@ -1302,7 +1363,7 @@ void VCartesianAxis::doStaggeringOfLabels( const AxisLabelProperties& rAxisLabel
 
         lcl_shiftLables( aOuterIter
             , lcl_getLabelsDistance( aInnerIter
-                , pTickmarkHelper2D->getDistanceAxisTickToText( m_aAxisProperties ) ) );
+                , pTickmarkHelper2D->getDistanceAxisTickToText( m_aAxisProperties ), 0.0 ) );
     }
 }
 
@@ -1344,10 +1405,23 @@ void SAL_CALL VCartesianAxis::createLabels()
                         nScreenDistanceBetweenTicks*=2; //the above used tick iter does contain also the sub ticks -> thus the given distance is only the half
                 }
 
-                AxisLabelProperties aCopy(m_aAxisLabelProperties);
-                aCopy.bRhythmIsFix = true;
-                aCopy.nRhythm = 1;
-                AxisLabelProperties& rAxisLabelProperties = nTextLevel==0 ? m_aAxisLabelProperties : aCopy;
+                AxisLabelProperties aComplexProps(m_aAxisLabelProperties);
+                if( m_aAxisProperties.m_bComplexCategories )
+                {
+                    if( nTextLevel==0 )
+                    {
+                        aComplexProps.bLineBreakAllowed = true;
+                        aComplexProps.bOverlapAllowed = !::rtl::math::approxEqual( aComplexProps.fRotationAngleDegree, 0.0 );
+                    }
+                    else
+                    {
+                        aComplexProps.bOverlapAllowed = true;
+                        aComplexProps.bRhythmIsFix = true;
+                        aComplexProps.nRhythm = 1;
+                        aComplexProps.fRotationAngleDegree = 0.0;
+                    }
+                }
+                AxisLabelProperties& rAxisLabelProperties =  m_aAxisProperties.m_bComplexCategories ? aComplexProps : m_aAxisLabelProperties;
                 while( !createTextShapes( m_xTextTarget, *apTickIter.get(), rAxisLabelProperties, pTickmarkHelper2D, nScreenDistanceBetweenTicks ) )
                 {
                 };
@@ -1417,7 +1491,7 @@ void SAL_CALL VCartesianAxis::updatePositions()
 
         ::std::vector< ::std::vector< TickInfo > >::iterator aDepthIter = m_aAllTickInfos.begin();
         const ::std::vector< ::std::vector< TickInfo > >::const_iterator aDepthEnd  = m_aAllTickInfos.end();
-        for( ; aDepthIter != aDepthEnd; aDepthIter++ )
+        for( sal_Int32 nDepth=0; aDepthIter != aDepthEnd; aDepthIter++, nDepth++ )
         {
             ::std::vector< TickInfo >::iterator aTickIter = aDepthIter->begin();
             const ::std::vector< TickInfo >::const_iterator aTickEnd  = aDepthIter->end();
@@ -1434,8 +1508,12 @@ void SAL_CALL VCartesianAxis::updatePositions()
                         static_cast<sal_Int32>(aTickScreenPos2D.getX())
                         ,static_cast<sal_Int32>(aTickScreenPos2D.getY()));
 
+                    double fRotationAngleDegree = m_aAxisLabelProperties.fRotationAngleDegree;
+                    if( nDepth>0 )
+                        fRotationAngleDegree = 0.0;
+
                     // #i78696# use mathematically correct rotation now
-                    const double fRotationAnglePi(m_aAxisLabelProperties.fRotationAngleDegree * (F_PI / -180.0));
+                    const double fRotationAnglePi(fRotationAngleDegree * (F_PI / -180.0));
                     uno::Any aATransformation = ShapeFactory::makeTransformation(aAnchorScreenPosition2D, fRotationAnglePi);
 
                     //set new position
@@ -1454,7 +1532,7 @@ void SAL_CALL VCartesianAxis::updatePositions()
 
                     //correctPositionForRotation
                     LabelPositionHelper::correctPositionForRotation( xShape2DText
-                        , m_aAxisProperties.m_aLabelAlignment, m_aAxisLabelProperties.fRotationAngleDegree, false );
+                        , m_aAxisProperties.m_aLabelAlignment, fRotationAngleDegree, m_aAxisProperties.m_bComplexCategories );
                 }
             }
         }
@@ -1526,7 +1604,10 @@ void SAL_CALL VCartesianAxis::createShapes()
                 ::std::auto_ptr< TickIter > apTickIter = createLabelTickIterator( nTextLevel );
                 if( apTickIter.get() )
                 {
-                    B2DVector aLabelsDistance( lcl_getLabelsDistance( *apTickIter.get(), pTickmarkHelper2D->getDistanceAxisTickToText( m_aAxisProperties, false ) ) );
+                    double fRotationAngleDegree = m_aAxisLabelProperties.fRotationAngleDegree;
+                    if( nTextLevel>0 )
+                        fRotationAngleDegree = 0.0;
+                    B2DVector aLabelsDistance( lcl_getLabelsDistance( *apTickIter.get(), pTickmarkHelper2D->getDistanceAxisTickToText( m_aAxisProperties, false ), fRotationAngleDegree ) );
                     sal_Int32 nCurrentLength = static_cast<sal_Int32>(aLabelsDistance.getLength());
                     aTickmarkPropertiesList.push_back( m_aAxisProperties.makeTickmarkPropertiesForComplexCategories( nOffset + nCurrentLength, 0, nTextLevel ) );
                     nOffset += nCurrentLength;

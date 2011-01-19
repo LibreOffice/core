@@ -2211,14 +2211,23 @@ _ACEOF
       MINGW_GCCLIB_EH=YES
   fi
   AC_MSG_CHECKING([whether to use dynamic libstdc++])
+  MINGW_SHARED_LIBSTDCPP=
   if test -e "$MINGW_CLIB_DIR/libstdc++_s.a" ; then
+    MINGW_SHARED_LIBSTDCPP=stdc++_s
+  fi
+  if test -e "$MINGW_CLIB_DIR/libstdc++.dll.a" ; then
+    MINGW_SHARED_LIBSTDCPP=stdc++.dll
+  fi
+  if test -n "$MINGW_SHARED_LIBSTDCPP" ; then
     AC_MSG_CHECKING([dynamic libstdc++ name])
-    MINGW_GXXDLL_pattern=`nm $MINGW_CLIB_DIR/libstdc++_s.a | sed -ne 's@.* _libstdc__\(.*\)_dll_iname@libstdc++\1.dll@p' | uniq | sed -e 's@_@?@g'`
+    MINGW_GXXDLL_pattern=`nm $MINGW_CLIB_DIR/lib$MINGW_SHARED_LIBSTDCPP.a | sed -ne 's@.* _libstdc__\(.*\)_dll_iname@libstdc++\1.dll@p' | uniq | sed -e 's@_@?@g'`
     MINGW_GXXDLL=`cd $COMPATH/bin && ls $MINGW_GXXDLL_pattern 2>/dev/null`
     if test -n "$MINGW_GXXDLL"; then
+        MINGW_SHARED_LIBSTDCPP=-l$MINGW_SHARED_LIBSTDCPP
         MINGW_SHARED_GXXLIB=YES
         AC_MSG_RESULT([use $MINGW_GXXDLL])
     else
+        MINGW_SHARED_LIBSTDCPP=
         AC_MSG_RESULT([no])
     fi
   else
@@ -2229,6 +2238,7 @@ _ACEOF
   AC_SUBST(MINGW_SHARED_GCCLIB)
   AC_SUBST(MINGW_GCCLIB_EH)
   AC_SUBST(MINGW_SHARED_GXXLIB)
+  AC_SUBST(MINGW_SHARED_LIBSTDCPP)
   AC_SUBST(MINGW_GCCDLL)
   AC_SUBST(MINGW_GXXDLL)
 fi

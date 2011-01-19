@@ -41,7 +41,7 @@
 #include <com/sun/star/beans/PropertyChangeEvent.hpp>
 #include <com/sun/star/text/XMailMergeBroadcaster.hpp>
 #include <svl/itemprop.hxx>
-#include <sfx2/objsh.hxx>   // SfxObjectShellRef
+#include <sfx2/objsh.hxx>
 
 #include <functional>
 
