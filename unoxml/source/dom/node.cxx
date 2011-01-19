@@ -293,7 +293,7 @@ namespace DOM
             m_rDocument = getOwnerDocument();
     }
 
-    CNode::~CNode()
+    void CNode::invalidate()
     {
         //remove from list if this wrapper goes away
         if (m_aNodePtr != 0) {
@@ -303,6 +303,12 @@ namespace DOM
         if (m_bUnlinked) {
             xmlFreeNode(m_aNodePtr);
         }
+        m_aNodePtr = 0;
+    }
+
+    CNode::~CNode()
+    {
+        invalidate();
     }
 
     static void _nsexchange(const xmlNodePtr aNode, xmlNsPtr oldNs, xmlNsPtr newNs)
@@ -469,8 +475,7 @@ namespace DOM
                 ::rtl::Reference<CNode> pCNode(CNode::getCNode(cur));
                 OSL_ASSERT(pCNode.is());
                 if (pCNode.is()) {
-                    pCNode->m_aNodePtr = 0; // has been freed
-                    CNode::removeCNode(cur, pCNode.get());
+                    pCNode->invalidate(); // cur has been freed
                 }
             }
 
@@ -852,7 +857,7 @@ namespace DOM
         {
         xmlAttrPtr pAttr = (xmlAttrPtr) old;
             xmlRemoveProp( pAttr );
-            pOld->m_aNodePtr = NULL; // freed by xmlRemoveProp
+            pOld->invalidate(); // freed by xmlRemoveProp
             xReturn.clear();
         }
         else
@@ -924,7 +929,7 @@ namespace DOM
             xmlAttrPtr pAttr = (xmlAttrPtr)pOld;
             xmlRemoveProp( pAttr );
             ::rtl::Reference<CNode> const pOldNode( CNode::getCNode(pOld) );
-            pOldNode->m_aNodePtr = NULL; // freed by xmlRemoveProp
+            pOldNode->invalidate(); // freed by xmlRemoveProp
             appendChild( newChild );
         }
         else

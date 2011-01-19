@@ -422,7 +422,7 @@ namespace DOM
             aAttr->setValue(oldAttr->getValue());
             xmlRemoveProp(pAttr);
             ::rtl::Reference<CNode> const pCNode( CNode::getCNode(pNode) );
-            pCNode->m_aNodePtr = NULL; // freed by xmlRemoveProp
+            pCNode->invalidate(); // freed by xmlRemoveProp
         }
         return aAttr;
     }

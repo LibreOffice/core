@@ -135,6 +135,7 @@ namespace DOM
         // for initialization by classes derived through ImplInheritanceHelper
         CNode();
         void init_node(const xmlNodePtr aNode);
+        void invalidate();
 
         void dispatchSubtreeModified();
 
