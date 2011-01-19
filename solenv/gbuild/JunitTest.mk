@@ -43,7 +43,7 @@ $(call gb_JunitTest_get_target,%) : $(gb_JunitTest_JAVACOMMAND)
         $(gb_JunitTest_JAVACOMMAND) -cp "$(CLASSPATH)" $(DEFS) org.junit.runner.JUnitCore $(CLASSES) 2>&1 > $@.log || (cat $@.log && false))
 
 define gb_JunitTest_JunitTest
-$(call gb_JunitTest_get_target,$(1)) : CLASSPATH := $(value XCLASSPATH):$(OOO_JUNIT_JAR):$(OUTDIR)/bin/OOoRunner.jar:$(OUTDIR)/bin/ridl.jar:$(OUTDIR)/bin/test.jar:$(OUTDIR)/bin/unoil.jar:$(OUTDIR)/bin/jurt.jar:$(OUTDIR)/lib:$(OUTDIR)/bin/ConnectivityTools.jar:$(call gb_JavaClassSet_get_classdir,$(call gb_JunitTest_get_classsetname,$(1)))
+$(call gb_JunitTest_get_target,$(1)) : CLASSPATH := $(value XCLASSPATH)$(gb_CLASSPATHSEP)$(call gb_JavaClassSet_get_classdir,$(call gb_JunitTest_get_classsetname,$(1)))$(gb_CLASSPATHSEP)$(OOO_JUNIT_JAR)$(gb_CLASSPATHSEP)$(OUTDIR)/lib
 $(call gb_JunitTest_get_target,$(1)) : CLASSES :=
 $(call gb_JunitTest_get_target,$(1)) : DEFS := \
     -Dorg.openoffice.test.arg.soffice=path:$(OUTDIR)/installation/opt/openoffice.org3/program/soffice \
@@ -62,10 +62,12 @@ endef
 
 define gb_JunitTest_add_classes
 $(call gb_JunitTest_get_target,$(1)) : CLASSES += $(2)
+
 endef
 
 define gb_JunitTest_add_class
 $(call gb_JunitTest_add_classes,$(1),$(2))
+
 endef
 
 
@@ -84,4 +86,14 @@ $(call gb_JunitTest_get_target,$(1)) : CLASSPATH := $(2)
 
 endef
 
+define gb_JunitTest_add_jar
+$(call gb_JunitTest_get_target,$(1)) : CLASSPATH := $$(CLASSPATH)$(gb_CLASSPATHSEP)$(2)
+$(call gb_JunitTest_get_target,$(1)) : $(2)
+
+endef
+
+define gb_JunitTest_add_jars
+$(foreach jar,$(2),$(call gb_JunitTest_add_jar,$(1),$(jar)))
+
+endef
 # vim: set noet sw=4 ts=4:

@@ -35,6 +35,7 @@ gb_CXX := g++
 gb_GCCP := gcc
 gb_AR := ar
 gb_AWK := awk
+gb_CLASSPATHSEP := :
 
 # normalize setsolar and configure env.
 ifeq ($(CPU),X)
@@ -117,10 +118,15 @@ gb_LinkTarget_NOEXCEPTIONFLAGS := \
 gb_LinkTarget_LDFLAGS := \
     -Wl,--sysroot=$(SYSBASE) \
     -Wl,-rpath-link=$(SOLARLIBDIR):$(SYSBASE)/lib:$(SYSBASE)/usr/lib \
-    -Wl,--hash-style=both \
     -Wl,-z,combreloc \
     -Wl,-z,defs \
     $(subst -L../lib , ,$(SOLARLIB)) \
+
+ifeq ($(HAVE_LD_HASH_STYLE),TRUE)
+gb_LinkTarget_LDFLAGS += \
+    -Wl,--hash-style=both \
+
+endif
 
 ifneq ($(HAVE_LD_BSYMBOLIC_FUNCTIONS),)
 gb_LinkTarget_LDFLAGS += \

@@ -35,6 +35,7 @@ gb_CXX := g++
 gb_GCCP := gcc
 gb_AR := ar
 gb_AWK := awk
+gb_CLASSPATHSEP := :
 
 # use CC/CXX if they are nondefaults
 ifneq ($(origin CC),default)
