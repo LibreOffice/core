@@ -151,9 +151,6 @@ namespace svt { namespace table
                 void    SetSelectHdl( const Link& rLink );
         const Link&     GetSelectHdl() const;
 
-        /// invalidates those areas of the data window which are covered by the given rows
-        void InvalidateDataWindow( RowPos const i_firstRow, RowPos const i_lastRow );
-
         /**after removing a row, updates the vector which contains the selected rows
             if the row, which should be removed, is selected, it will be erased from the vector
         */

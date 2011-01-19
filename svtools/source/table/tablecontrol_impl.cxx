@@ -670,14 +670,12 @@ namespace svt { namespace table
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    void TableControl_Impl::cellsUpdated( ColPos firstCol, ColPos lastCol, RowPos firstRow, RowPos lastRow )
+    void TableControl_Impl::cellsUpdated( ColPos const i_firstCol, ColPos i_lastCol, RowPos const i_firstRow, RowPos const i_lastRow )
     {
-        OSL_ENSURE( false, "TableControl_Impl::cellsUpdated: not implemented!" );
-            // there's no known implementation (yet) which calls this method
-        OSL_UNUSED( firstCol );
-        OSL_UNUSED( lastCol );
-        OSL_UNUSED( firstRow );
-        OSL_UNUSED( lastRow );
+        invalidateRowRange( i_firstRow, i_lastRow );
+
+        OSL_UNUSED( i_firstCol );
+        OSL_UNUSED( i_lastCol );
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -1966,7 +1964,6 @@ namespace svt { namespace table
         m_pDataWindow->Invalidate(_rCellRect);
     }
     //------------------------------------------------------------------------------------------------------------------
-    //this method is to be called, when a new row is added
     void TableControl_Impl::invalidateRowRange( RowPos const i_firstRow, RowPos const i_lastRow )
     {
         if ( m_nCursorHidden == 2 )

@@ -50,6 +50,7 @@ namespace toolkit
         :GridColumn_Base( m_aMutex )
         ,m_aIdentifier()
         ,m_nIndex(-1)
+        ,m_nDataColumnIndex(-1)
         ,m_nColumnWidth(4)
         ,m_nPreferredWidth(0)
         ,m_nMaxWidth(0)
@@ -65,6 +66,7 @@ namespace toolkit
         ,GridColumn_Base( m_aMutex )
         ,m_aIdentifier( i_copySource.m_aIdentifier )
         ,m_nIndex( -1 )
+        ,m_nDataColumnIndex( i_copySource.m_nDataColumnIndex )
         ,m_nColumnWidth( i_copySource.m_nColumnWidth )
         ,m_nPreferredWidth( i_copySource.m_nPreferredWidth )
         ,m_nMaxWidth( i_copySource.m_nMaxWidth )
@@ -246,6 +248,19 @@ namespace toolkit
     {
         ::comphelper::ComponentGuard aGuard( *this, rBHelper );
         m_nIndex = i_index;
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    ::sal_Int32 SAL_CALL GridColumn::getDataColumnIndex() throw(RuntimeException)
+    {
+        ::comphelper::ComponentGuard aGuard( *this, rBHelper );
+        return m_nDataColumnIndex;
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    void SAL_CALL GridColumn::setDataColumnIndex( ::sal_Int32 i_dataColumnIndex ) throw(RuntimeException)
+    {
+        impl_set( m_nDataColumnIndex, i_dataColumnIndex, "DataColumnIndex" );
     }
 
     //------------------------------------------------------------------------------------------------------------------

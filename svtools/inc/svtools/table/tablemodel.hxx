@@ -142,7 +142,7 @@ namespace svt { namespace table
             they have about the cells in question, in particular any possibly
             cached cell values.
         */
-        virtual void    cellsUpdated( ColPos firstCol, ColPos lastCol, RowPos firstRow, RowPos lastRow ) = 0;
+        virtual void    cellsUpdated( ColPos const i_firstCol, ColPos i_lastCol, RowPos const i_firstRow, RowPos const i_lastRow ) = 0;
 
         /** notifies the listener that attributes of a given column changed
 

@@ -523,12 +523,18 @@ namespace svt { namespace table
     {
         DBG_CHECK_ME();
 
+        o_cellContent.clear();
         try
         {
             Reference< XGridDataModel > const xDataModel( m_pImpl->m_aDataModel );
-            ENSURE_OR_THROW( xDataModel.is(), "no data model anymore!" );
+            ENSURE_OR_RETURN_VOID( xDataModel.is(), "UnoControlTableModel::getCellContent: no data model anymore!" );
 
-            if ( i_col >= xDataModel->getColumnCount() )
+            PColumnModel const pColumn = getColumnModel( i_col );
+            UnoGridColumnFacade* pColumnImpl = dynamic_cast< UnoGridColumnFacade* >( pColumn.get() );
+            ENSURE_OR_RETURN_VOID( pColumnImpl != NULL, "UnoControlTableModel::getCellContent: no (valid) column at this position!" );
+            sal_Int32 const nDataColumnIndex = pColumnImpl->getDataColumnIndex() >= 0 ? pColumnImpl->getDataColumnIndex() : i_col;
+
+            if ( nDataColumnIndex >= xDataModel->getColumnCount() )
             {
                 // this is allowed, in case the column model has been dynamically extended, but the data model does
                 // not (yet?) know about it.
@@ -540,11 +546,10 @@ namespace svt { namespace table
                         "UnoControlTableModel::getCellContent: request a column's value which the ColumnModel doesn't know about!" );
                 }
             #endif
-                o_cellContent.clear();
             }
             else
             {
-                o_cellContent = xDataModel->getCellData( i_col, i_row );
+                o_cellContent = xDataModel->getCellData( nDataColumnIndex, i_row );
             }
         }
         catch( const Exception& )
@@ -803,7 +808,7 @@ namespace svt { namespace table
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    void UnoControlTableModel::notifyRowsInserted( GridDataEvent const & i_event )
+    void UnoControlTableModel::notifyRowsInserted( GridDataEvent const & i_event ) const
     {
         // check sanity of the event
         ENSURE_OR_RETURN_VOID( i_event.FirstRow >= 0, "UnoControlTableModel::notifyRowsInserted: invalid first row!" );
@@ -840,9 +845,8 @@ namespace svt { namespace table
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    void UnoControlTableModel::notifyRowsRemoved( GridDataEvent const & i_event )
+    void UnoControlTableModel::notifyRowsRemoved( GridDataEvent const & i_event ) const
     {
-        // multiplex the event to our own listeners
         ModellListeners aListeners( m_pImpl->m_aListeners );
         for (   ModellListeners::const_iterator loop = aListeners.begin();
                 loop != aListeners.end();
@@ -850,6 +854,37 @@ namespace svt { namespace table
             )
         {
             (*loop)->rowsRemoved( i_event.FirstRow, i_event.LastRow );
+        }
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    void UnoControlTableModel::notifyDataChanged( ::com::sun::star::awt::grid::GridDataEvent const & i_event ) const
+    {
+        ColPos const firstCol = i_event.FirstColumn == -1 ? 0 : i_event.FirstColumn;
+        ColPos const lastCol = i_event.FirstColumn == -1 ? getColumnCount() - 1 : i_event.LastColumn;
+        RowPos const firstRow = i_event.FirstRow == -1 ? 0 : i_event.FirstRow;
+        RowPos const lastRow = i_event.FirstRow == -1 ? getRowCount() - 1 : i_event.LastRow;
+
+        ModellListeners aListeners( m_pImpl->m_aListeners );
+        for (   ModellListeners::const_iterator loop = aListeners.begin();
+                loop != aListeners.end();
+                ++loop
+            )
+        {
+            (*loop)->cellsUpdated( firstCol, lastCol, firstRow, lastRow );
+        }
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    void UnoControlTableModel::notifyAllDataChanged() const
+    {
+        ModellListeners aListeners( m_pImpl->m_aListeners );
+        for (   ModellListeners::const_iterator loop = aListeners.begin();
+                loop != aListeners.end();
+                ++loop
+            )
+        {
+            (*loop)->cellsUpdated( 0, getColumnCount() - 1, 0, getRowCount() - 1 );
         }
     }
 

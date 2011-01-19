@@ -73,6 +73,8 @@ public:
     virtual ::rtl::OUString SAL_CALL getHelpText() throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL setHelpText(const ::rtl::OUString & value) throw (::com::sun::star::uno::RuntimeException);
     virtual ::sal_Int32 SAL_CALL getIndex() throw (::com::sun::star::uno::RuntimeException);
+    virtual ::sal_Int32 SAL_CALL getDataColumnIndex() throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setDataColumnIndex( ::sal_Int32 i_dataColumnIndex ) throw(::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::style::HorizontalAlignment SAL_CALL getHorizontalAlign() throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL setHorizontalAlign(::com::sun::star::style::HorizontalAlignment align) throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL addGridColumnListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::grid::XGridColumnListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
@@ -119,6 +121,7 @@ private:
 
     ::com::sun::star::uno::Any                      m_aIdentifier;
     sal_Int32                                       m_nIndex;
+    sal_Int32                                       m_nDataColumnIndex;
     sal_Int32                                       m_nColumnWidth;
     sal_Int32                                       m_nPreferredWidth;
     sal_Int32                                       m_nMaxWidth;

@@ -137,14 +137,20 @@ namespace svt { namespace table
         void    setVerticalAlign(::com::sun::star::style::VerticalAlignment _rAlign);
 
         // multiplexing of XGridDataListener events
-        void    notifyRowsInserted( ::com::sun::star::awt::grid::GridDataEvent const & i_event );
-        void    notifyRowsRemoved( ::com::sun::star::awt::grid::GridDataEvent const & i_event );
+        void    notifyRowsInserted( ::com::sun::star::awt::grid::GridDataEvent const & i_event ) const;
+        void    notifyRowsRemoved( ::com::sun::star::awt::grid::GridDataEvent const & i_event ) const;
+        void    notifyDataChanged( ::com::sun::star::awt::grid::GridDataEvent const & i_event ) const;
 
         /// retrieves the index of a column within the model
         ColPos getColumnPos( UnoGridColumnFacade const & i_column ) const;
 
         /// notifies a change in a column belonging to the model
         void    notifyColumnChange( ColPos const i_columnPos, ColumnAttributeGroup const i_attributeGroup ) const;
+
+        /** notifies a change in all data represented by the model. To be used if you cannot specified the changed data
+            in more detail.
+        */
+        void    notifyAllDataChanged() const;
 
 #ifdef DBG_UTIL
         const char* checkInvariants() const;

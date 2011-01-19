@@ -249,12 +249,6 @@ namespace svt { namespace table
     }
 
     // -----------------------------------------------------------------------------------------------------------------
-    void TableControl::InvalidateDataWindow( RowPos const i_firstRow, RowPos const i_lastRow )
-    {
-        m_pImpl->invalidateRowRange( i_firstRow, i_lastRow );
-    }
-
-    // -----------------------------------------------------------------------------------------------------------------
     ITableControl& TableControl::getTableControlInterface()
     {
         return *m_pImpl;

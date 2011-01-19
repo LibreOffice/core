@@ -148,6 +148,14 @@ namespace svt { namespace table
     //------------------------------------------------------------------------------------------------------------------
     void SAL_CALL ColumnChangeMultiplexer::columnChanged( const GridColumnEvent& i_event ) throw (RuntimeException)
     {
+        if ( i_event.AttributeName.equalsAscii( "DataColumnIndex" ) )
+        {
+            ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+            if ( m_pColumnImplementation != NULL )
+                m_pColumnImplementation->dataColumnIndexChanged();
+            return;
+        }
+
         ColumnAttributeGroup nChangedAttributes( COL_ATTRS_NONE );
 
         if ( i_event.AttributeName.equalsAscii( "HorizontalAlign" ) )
@@ -182,9 +190,11 @@ namespace svt { namespace table
     UnoGridColumnFacade::UnoGridColumnFacade( UnoControlTableModel const & i_owner, Reference< XGridColumn > const & i_gridColumn )
         :m_pOwner( &i_owner )
         ,m_xGridColumn( i_gridColumn, UNO_QUERY_THROW )
+        ,m_nDataColumnIndex( -1 )
         ,m_pChangeMultiplexer( new ColumnChangeMultiplexer( *this ) )
     {
         m_xGridColumn->addGridColumnListener( m_pChangeMultiplexer.get() );
+        impl_updateDataColumnIndex_nothrow();
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -203,6 +213,30 @@ namespace svt { namespace table
         m_pChangeMultiplexer.clear();
         m_xGridColumn.clear();
         m_pOwner = NULL;
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    void UnoGridColumnFacade::impl_updateDataColumnIndex_nothrow()
+    {
+        m_nDataColumnIndex = -1;
+        ENSURE_OR_RETURN_VOID( m_xGridColumn.is(), "UnoGridColumnFacade: already disposed!" );
+        try
+        {
+            m_nDataColumnIndex = m_xGridColumn->getDataColumnIndex();
+        }
+        catch( const Exception& )
+        {
+            DBG_UNHANDLED_EXCEPTION();
+        }
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    void UnoGridColumnFacade::dataColumnIndexChanged()
+    {
+        DBG_TESTSOLARMUTEX();
+        impl_updateDataColumnIndex_nothrow();
+        if ( m_pOwner != NULL )
+            m_pOwner->notifyAllDataChanged();
     }
 
     //------------------------------------------------------------------------------------------------------------------

@@ -536,18 +536,12 @@ void SAL_CALL SVTXGridControl::dataChanged( const GridDataEvent& i_event ) throw
 {
     ::vos::OGuard aGuard( GetMutex() );
 
-    TableControl* pTable = dynamic_cast< TableControl* >( GetWindow() );
-    ENSURE_OR_RETURN_VOID( pTable, "SVTXGridControl::dataChanged: no control (anymore)!" );
-
-    // TODO: Our UnoControlTableModel should be a listener at the data model, and multiplex those events,
-    // so the TableControl/_Impl can react on it.
-    if ( i_event.FirstRow == -1 )
-        pTable->InvalidateDataWindow( 0, m_pTableModel->getRowCount() );
-    else
-        pTable->InvalidateDataWindow( i_event.FirstRow, i_event.LastRow );
+    m_pTableModel->notifyDataChanged( i_event );
 
     // if the data model is sortable, a dataChanged event is also fired in case the sort order changed.
-    // So, invalidate the column header area, too.
+    // So, just in case, invalidate the column header area, too.
+    TableControl* pTable = dynamic_cast< TableControl* >( GetWindow() );
+    ENSURE_OR_RETURN_VOID( pTable, "SVTXGridControl::dataChanged: no control (anymore)!" );
     pTable->getTableControlInterface().invalidate( TableAreaColumnHeaders );
 }
 
@@ -563,7 +557,6 @@ void SAL_CALL SVTXGridControl::rowHeadingChanged( const GridDataEvent& i_event )
     // TODO: we could do better than this - invalidate the header area only
     pTable->getTableControlInterface().invalidate( TableAreaRowHeaders );
 }
-
 
 //----------------------------------------------------------------------------------------------------------------------
 void SAL_CALL SVTXGridControl::elementInserted( const ContainerEvent& i_event ) throw (RuntimeException)

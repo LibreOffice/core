@@ -90,11 +90,19 @@ namespace svt { namespace table
         */
         void    dispose();
 
-        // callback for the XGridColumnListener
+        sal_Int32
+                getDataColumnIndex() const { return m_nDataColumnIndex; }
+
+        // callbacks for the XGridColumnListener
         void    columnChanged( ColumnAttributeGroup const i_attributeGroup );
+        void    dataColumnIndexChanged();
 
     private:
-        const UnoControlTableModel*                                                     m_pOwner;
+        void    impl_updateDataColumnIndex_nothrow();
+
+    private:
+        UnoControlTableModel const *                                                    m_pOwner;
+        sal_Int32                                                                       m_nDataColumnIndex;
         ::com::sun::star::uno::Reference< ::com::sun::star::awt::grid::XGridColumn >    m_xGridColumn;
         ::rtl::Reference< ColumnChangeMultiplexer >                                     m_pChangeMultiplexer;
     };

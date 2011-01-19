@@ -234,6 +234,7 @@ namespace toolkit
                 colTitle.append( i + 1 );
                 pGridColumn->setTitle( colTitle.makeStringAndClear() );
                 pGridColumn->setPreferredWidth( 80 /* APPFONT */ );
+                pGridColumn->setDataColumnIndex( i );
 
                 ContainerEvent aEvent;
                 aEvent.Source = *this;

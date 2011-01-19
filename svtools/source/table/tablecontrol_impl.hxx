@@ -312,7 +312,7 @@ namespace svt { namespace table
         virtual void    columnInserted( ColPos const i_colIndex );
         virtual void    columnRemoved( ColPos const i_colIndex );
         virtual void    allColumnsRemoved();
-        virtual void    cellsUpdated( ColPos firstCol, ColPos lastCol, RowPos firstRow, RowPos lastRow );
+        virtual void    cellsUpdated( ColPos const i_firstCol, ColPos i_lastCol, RowPos const i_firstRow, RowPos const i_lastRow );
         virtual void    columnChanged( ColPos const i_column, ColumnAttributeGroup const i_attributeGroup );
         virtual void    tableMetricsChanged();
 
