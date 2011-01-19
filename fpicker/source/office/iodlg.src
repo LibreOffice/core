@@ -251,6 +251,10 @@ ModalDialog DLG_SVT_EXPLORERFILE
     {
         Text [ en-US ] = "Current version";
     };
+    String STR_PREVIEW
+    {
+        Text [ en-US ] = "File Preview";
+    };
 };
 
 // QueryFolderNameDialog ----------------------------------------------------------

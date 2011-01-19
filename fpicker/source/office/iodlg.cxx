@@ -3015,6 +3015,7 @@ void SvtFileDialog::AddControls_Impl( )
         _pPrevBmp = new FixedBitmap( this, WinBits( WB_BORDER ) );
         _pPrevBmp->SetBackground( Wallpaper( Color( COL_WHITE ) ) );
         _pPrevBmp->Show();
+        _pPrevBmp->SetAccessibleName(SvtResId(STR_PREVIEW));
     }
 
     if ( _nExtraBits & SFX_EXTRA_AUTOEXTENSION )
