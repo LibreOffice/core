@@ -80,8 +80,12 @@
 #include <iostream>
 #include <vector>
 
+#define MDDS_HASH_CONTAINER_STLPORT 1
+#include <mdds/mixed_type_matrix.hpp>
+
 using namespace ::com::sun::star;
 using ::rtl::OUString;
+using ::rtl::OUStringBuffer;
 using ::std::cout;
 using ::std::endl;
 using ::std::vector;
@@ -92,6 +96,77 @@ namespace {
 {
     return os << ::rtl::OUStringToOString(str, RTL_TEXTENCODING_UTF8).getStr();
 }
+
+/**
+ * Print nicely formatted sheet content to stdout.  Indispensable when
+ * debugging the unit test code involving testing of sheet contents.
+ */
+class SheetPrinter
+{
+    typedef ::mdds::mixed_type_matrix<OUString, bool> MatrixType;
+public:
+    SheetPrinter(size_t rows, size_t cols) :
+        maMatrix(rows, cols, ::mdds::matrix_density_sparse_empty) {}
+
+    void set(size_t row, size_t col, const OUString& aStr)
+    {
+        maMatrix.set_string(row, col, new OUString(aStr));
+    }
+
+    void print()
+    {
+        MatrixType::size_pair_type ns = maMatrix.size();
+        vector<sal_Int32> aColWidths(ns.second, 0);
+
+        // Calculate column widths first.
+        for (size_t row = 0; row < ns.first; ++row)
+        {
+            for (size_t col = 0; col < ns.second; ++col)
+            {
+                const OUString* p = maMatrix.get_string(row, col);
+                if (aColWidths[col] < p->getLength())
+                    aColWidths[col] = p->getLength();
+            }
+        }
+
+        // Make the row separator string.
+        OUStringBuffer aBuf;
+        aBuf.appendAscii("+");
+        for (size_t col = 0; col < ns.second; ++col)
+        {
+            aBuf.appendAscii("-");
+            for (size_t i = 0; i < aColWidths[col]; ++i)
+                aBuf.append(sal_Unicode('-'));
+            aBuf.appendAscii("-+");
+        }
+
+        OUString aSep = aBuf.makeStringAndClear();
+
+        // Now print to stdout.
+        cout << aSep << endl;
+        for (size_t row = 0; row < ns.first; ++row)
+        {
+            cout << "| ";
+            for (size_t col = 0; col < ns.second; ++col)
+            {
+                const OUString* p = maMatrix.get_string(row, col);
+                size_t nPadding = aColWidths[col] - p->getLength();
+                aBuf.append(*p);
+                for (size_t i = 0; i < nPadding; ++i)
+                    aBuf.append(sal_Unicode(' '));
+                cout << aBuf.makeStringAndClear() << " | ";
+            }
+            cout << endl;
+            cout << aSep << endl;
+        }
+    }
+
+    void clear() { maMatrix.clear(); }
+    void resize(size_t rows, size_t cols) { maMatrix.resize(rows, cols); }
+
+private:
+    MatrixType maMatrix;
+};
 
 class Test : public CppUnit::TestFixture {
 public:
@@ -429,16 +504,18 @@ void Test::testDataPilot()
                            nCol2 == static_cast<SCCOL>(nFieldCount - 1) && nRow2 == static_cast<SCROW>(nDataCount));
 
 #if 0
+    SheetPrinter printer(nRow2 - nRow1 + 1, nCol2 - nCol1 + 1);
     for (SCROW nRow = nRow1; nRow <= nRow2; ++nRow)
     {
         for (SCCOL nCol = nCol1; nCol <= nCol2; ++nCol)
         {
             String aVal;
             m_pDoc->GetString(nCol, nRow, 0, aVal);
-            cout << aVal << " | ";
+            printer.set(nRow, nCol, aVal);
         }
-        cout << endl;
     }
+    printer.print();
+    printer.clear();
 #endif
 
     ScSheetSourceDesc aSheetDesc;
@@ -540,16 +617,18 @@ void Test::testDataPilot()
     aOutRange = pDPObj->GetOutRange();
     const ScAddress& s = aOutRange.aStart;
     const ScAddress& e = aOutRange.aEnd;
+    printer.resize(e.Row() - s.Row() + 1, e.Col() - s.Col() + 1);
     for (SCROW nRow = s.Row(); nRow <= e.Row(); ++nRow)
     {
         for (SCCOL nCol = s.Col(); nCol <= e.Col(); ++nCol)
         {
             String aVal;
             m_pDoc->GetString(nCol, nRow, s.Tab(), aVal);
-            cout << aVal << " | ";
+            printer.set(nRow, nCol, aVal);
         }
-        cout << endl;
     }
+    printer.print();
+    printer.clear();
 #endif
 
     // Now, delete the datapilot object.
