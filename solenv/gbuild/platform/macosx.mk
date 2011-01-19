@@ -311,7 +311,7 @@ gb_Library__FRAMEWORKS := \
 
 gb_Library_PLAINLIBS_NONE += \
     Cocoa \
-     objc \
+    objc \
     jpeg \
     m \
     pthread \

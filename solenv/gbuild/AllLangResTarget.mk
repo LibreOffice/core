@@ -211,21 +211,22 @@ $(call gb_ResTarget_get_target,%) : $(gb_Helper_MISCDUMMY) | $(gb_ResTarget_RSCT
     $(call gb_Output_announce,$*,$(true),RES,2)
     $(call gb_Helper_abbreviate_dirs_native,\
         mkdir -p $(dir $@) $(OUTDIR)/bin \
-            $(dir $(call gb_ResTarget_get_imagelist_target,$(1))) && \
+            $(dir $(call gb_ResTarget_get_imagelist_target,$*)) && \
         RESPONSEFILE=`$(gb_MKTEMP) $(gb_Helper_MISC)` && \
         echo "-r -p \
             -lg$(LANGUAGE) \
             -fs=$@ \
-            -lip=$(gb_ResTarget_DEFIMAGESLOCATION)$(RESLOCATION)/imglst/$(LANGUAGE) \
-            -lip=$(gb_ResTarget_DEFIMAGESLOCATION)$(RESLOCATION)/imglst \
-            -lip=$(gb_ResTarget_DEFIMAGESLOCATION)$(RESLOCATION)/res/$(LANGUAGE) \
-            -lip=$(gb_ResTarget_DEFIMAGESLOCATION)$(RESLOCATION)/res \
-            -lip=$(gb_ResTarget_DEFIMAGESLOCATION)$(RESLOCATION) \
+            -lip=$(realpath $(gb_ResTarget_DEFIMAGESLOCATION)$(RESLOCATION)/$(LIBRARY)) \
+            -lip=$(realpath $(gb_ResTarget_DEFIMAGESLOCATION)$(RESLOCATION)/imglst/$(LANGUAGE)) \
+            -lip=$(realpath $(gb_ResTarget_DEFIMAGESLOCATION)$(RESLOCATION)/imglst) \
+            -lip=$(realpath $(gb_ResTarget_DEFIMAGESLOCATION)$(RESLOCATION)/res/$(LANGUAGE)) \
+            -lip=$(realpath $(gb_ResTarget_DEFIMAGESLOCATION)$(RESLOCATION)/res) \
+            -lip=$(realpath $(gb_ResTarget_DEFIMAGESLOCATION)$(RESLOCATION)) \
             -lip=$(gb_ResTarget_DEFIMAGESLOCATION)res/$(LANGUAGE) \
             -lip=$(gb_ResTarget_DEFIMAGESLOCATION)res \
-            -subMODULE=$(gb_ResTarget_DEFIMAGESLOCATION) \
+            -subMODULE=$(dir $(realpath $(gb_ResTarget_DEFIMAGESLOCATION)$(RESLOCATION))) \
             -subGLOBALRES=$(gb_ResTarget_DEFIMAGESLOCATION)res \
-            -oil=$(dir $(call gb_ResTarget_get_imagelist_target,$(1))) \
+            -oil=$(dir $(call gb_ResTarget_get_imagelist_target,$*)) \
             $(filter-out $(gb_Helper_MISCDUMMY),$^)" > $${RESPONSEFILE} && \
         $(gb_ResTarget_RSCCOMMAND) @$${RESPONSEFILE} && \
         rm -f $${RESPONSEFILE})
