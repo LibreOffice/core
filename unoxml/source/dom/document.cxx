@@ -45,6 +45,7 @@
 #include "../events/mutationevent.hxx"
 #include "../events/uievent.hxx"
 #include "../events/mouseevent.hxx"
+#include "../events/eventdispatcher.hxx"
 
 #include <string.h>
 
@@ -63,8 +64,15 @@ namespace DOM
                 NodeType_DOCUMENT_NODE, reinterpret_cast<xmlNodePtr>(aDocPtr))
         , m_aDocPtr(aDocPtr)
         , m_streamListeners()
+        , m_pEventDispatcher(new events::CEventDispatcher())
     {
     }
+
+    events::CEventDispatcher & CDocument::GetEventDispatcher()
+    {
+        return *m_pEventDispatcher;
+    }
+
 
     void SAL_CALL CDocument::saxify(
             const Reference< XDocumentHandler >& i_xHandler) {

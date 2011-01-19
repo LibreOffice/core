@@ -285,7 +285,7 @@ namespace DOM
         // keep containing document alive
         // (but not if this is a document; that would create a leak!)
         ,   m_xDocument( (m_aNodePtr->type != XML_DOCUMENT_NODE)
-                ? getOwnerDocument() : 0 )
+                ? GetOwnerDocument_Impl() : 0 )
     {
         OSL_ASSERT(m_aNodePtr);
     }
@@ -307,6 +307,18 @@ namespace DOM
     {
         invalidate();
     }
+
+    ::rtl::Reference< CDocument > CNode::GetOwnerDocument_Impl()
+    {
+        if (0 == m_aNodePtr) {
+            return 0;
+        }
+        ::rtl::Reference< CDocument > const xDoc(
+            dynamic_cast<CDocument *>(CNode::getCNode(
+                reinterpret_cast<xmlNodePtr>(m_aNodePtr->doc)).get()));
+        return xDoc;
+    }
+
 
     static void _nsexchange(const xmlNodePtr aNode, xmlNsPtr oldNs, xmlNsPtr newNs)
     {
@@ -687,13 +699,7 @@ namespace DOM
     Reference< XDocument > SAL_CALL CNode::getOwnerDocument()
         throw (RuntimeException)
     {
-        if (0 == m_aNodePtr) {
-            return 0;
-        }
-        Reference< XDocument > const xDoc(
-            static_cast<XNode*>(CNode::getCNode(
-                reinterpret_cast<xmlNodePtr>(m_aNodePtr->doc)).get()),
-            UNO_QUERY_THROW);
+        Reference< XDocument > const xDoc(GetOwnerDocument_Impl().get());
         return xDoc;
     }
 
@@ -1016,7 +1022,9 @@ namespace DOM
         sal_Bool useCapture)
         throw (RuntimeException)
     {
-        events::CEventDispatcher::addListener(m_aNodePtr, eventType, listener, useCapture);
+        events::CEventDispatcher & rDispatcher(
+                m_xDocument->GetEventDispatcher());
+        rDispatcher.addListener(m_aNodePtr, eventType, listener, useCapture);
     }
 
     void SAL_CALL CNode::removeEventListener(const OUString& eventType,
@@ -1024,13 +1032,17 @@ namespace DOM
         sal_Bool useCapture)
         throw (RuntimeException)
     {
-        events::CEventDispatcher::removeListener(m_aNodePtr, eventType, listener, useCapture);
+        events::CEventDispatcher & rDispatcher(
+                m_xDocument->GetEventDispatcher());
+        rDispatcher.removeListener(m_aNodePtr, eventType, listener, useCapture);
     }
 
     sal_Bool SAL_CALL CNode::dispatchEvent(const Reference< XEvent >& evt)
         throw(RuntimeException, EventException)
     {
-        events::CEventDispatcher::dispatchEvent(m_aNodePtr, evt);
+        events::CEventDispatcher & rDispatcher(
+                m_xDocument->GetEventDispatcher());
+        rDispatcher.dispatchEvent(this, evt);
         return sal_True;
     }
 

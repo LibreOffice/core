@@ -113,6 +113,7 @@ namespace DOM
     /// add namespaces on this node to context
     void addNamespaces(Context& io_rContext, xmlNodePtr pNode);
 
+    class CDocument;
 
     class CNode : public cppu::WeakImplHelper3< XNode, XUnoTunnel, XEventTarget >
     {
@@ -131,13 +132,15 @@ namespace DOM
         /// libxml node; NB: not const, because invalidate may reset it to 0!
         xmlNodePtr m_aNodePtr;
 
-        Reference< XDocument > const m_xDocument;
+        ::rtl::Reference< CDocument > const m_xDocument;
 
         // for initialization by classes derived through ImplInheritanceHelper
         CNode(NodeType const& reNodeType, xmlNodePtr const& rpNode);
         void invalidate();
 
         void dispatchSubtreeModified();
+
+        ::rtl::Reference< CDocument > GetOwnerDocument_Impl();
 
     public:
 

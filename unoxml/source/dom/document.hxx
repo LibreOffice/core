@@ -30,6 +30,8 @@
 
 #include <list>
 #include <set>
+#include <memory>
+
 #include <sal/types.h>
 #include <cppuhelper/implbase6.hxx>
 #include <com/sun/star/uno/Reference.h>
@@ -66,6 +68,10 @@ using namespace com::sun::star::xml::dom::events;
 
 namespace DOM
 {
+    namespace events {
+        class CEventDispatcher;
+    }
+
     typedef ::cppu::ImplInheritanceHelper6<
             CNode, XDocument, XDocumentEvent,
             XActiveDataControl, XActiveDataSource,
@@ -85,8 +91,12 @@ namespace DOM
         listenerlist_t m_streamListeners;
         Reference< XOutputStream > m_rOutputStream;
 
+        ::std::auto_ptr<events::CEventDispatcher> const m_pEventDispatcher;
+
     protected:
         CDocument(xmlDocPtr aDocPtr);
+
+        events::CEventDispatcher & GetEventDispatcher();
 
     public:
 

@@ -34,13 +34,10 @@
 
 namespace DOM { namespace events {
 
-    TypeListenerMap CEventDispatcher::captureListeners;
-    TypeListenerMap CEventDispatcher::targetListeners;
-
     void CEventDispatcher::addListener(xmlNodePtr pNode, OUString aType, const Reference<XEventListener>& aListener, sal_Bool bCapture)
     {
-        TypeListenerMap* pTMap = &targetListeners;
-        if (bCapture) pTMap = &captureListeners;
+        TypeListenerMap *const pTMap = (bCapture)
+            ? (& m_CaptureListeners) : (& m_TargetListeners);
 
         // get the multimap for the specified type
         ListenerMap *pMap = 0;
@@ -58,8 +55,8 @@ namespace DOM { namespace events {
 
     void CEventDispatcher::removeListener(xmlNodePtr pNode, OUString aType, const Reference<XEventListener>& aListener, sal_Bool bCapture)
     {
-        TypeListenerMap *pTMap = &targetListeners;
-        if (bCapture) pTMap = &captureListeners;
+        TypeListenerMap *const pTMap = (bCapture)
+            ? (& m_CaptureListeners) : (& m_TargetListeners);
 
         // get the multimap for the specified type
         TypeListenerMap::const_iterator tIter = pTMap->find(aType);
@@ -82,10 +79,12 @@ namespace DOM { namespace events {
         }
     }
 
-    void CEventDispatcher::callListeners(xmlNodePtr pNode, OUString aType, const Reference< XEvent >& xEvent, sal_Bool bCapture)
+    void CEventDispatcher::callListeners(xmlNodePtr const pNode,
+            OUString aType, Reference< XEvent > const& xEvent,
+            sal_Bool const bCapture) const
     {
-        TypeListenerMap *pTMap = &targetListeners;
-        if (bCapture) pTMap = &captureListeners;
+        TypeListenerMap const*const pTMap = (bCapture)
+            ? (& m_CaptureListeners) : (& m_TargetListeners);
 
         // get the multimap for the specified type
         TypeListenerMap::const_iterator tIter = pTMap->find(aType);
@@ -101,12 +100,12 @@ namespace DOM { namespace events {
         }
     }
 
-    sal_Bool CEventDispatcher::dispatchEvent(xmlNodePtr aNodePtr, const Reference< XEvent >& aEvent)
+    bool CEventDispatcher::dispatchEvent(Reference<XNode> const& xNode,
+            Reference< XEvent > const& i_xEvent) const
     {
         CEvent *pEvent = 0; // pointer to internal event representation
-        Reference< XEvent > xEvent; // reference to the event being dispatched;
 
-        OUString aType = aEvent->getType();
+        OUString const aType = i_xEvent->getType();
         if (aType.compareToAscii("DOMSubtreeModified")          == 0||
             aType.compareToAscii("DOMNodeInserted")             == 0||
             aType.compareToAscii("DOMNodeRemoved")              == 0||
@@ -115,7 +114,8 @@ namespace DOM { namespace events {
             aType.compareToAscii("DOMAttrModified")             == 0||
             aType.compareToAscii("DOMCharacterDataModified")    == 0)
         {
-                Reference< XMutationEvent > aMEvent(aEvent, UNO_QUERY);
+                Reference< XMutationEvent > const aMEvent(i_xEvent,
+                        UNO_QUERY_THROW);
                 // dispatch a mutation event
                 // we need to clone the event in order to have complete control
                 // over the implementation
@@ -131,7 +131,7 @@ namespace DOM { namespace events {
             aType.compareToAscii("DOMFocusOut") == 0||
             aType.compareToAscii("DOMActivate") == 0)
         {
-            Reference< XUIEvent > aUIEvent(aEvent, UNO_QUERY);
+            Reference< XUIEvent > const aUIEvent(i_xEvent, UNO_QUERY_THROW);
             CUIEvent* pUIEvent = new CUIEvent;
             pUIEvent->initUIEvent(aType,
                 aUIEvent->getBubbles(), aUIEvent->getCancelable(),
@@ -145,7 +145,8 @@ namespace DOM { namespace events {
             aType.compareToAscii("mousemove") == 0||
             aType.compareToAscii("mouseout")  == 0)
         {
-            Reference< XMouseEvent > aMouseEvent(aEvent, UNO_QUERY);
+            Reference< XMouseEvent > const aMouseEvent(i_xEvent,
+                    UNO_QUERY_THROW);
             CMouseEvent *pMouseEvent = new CMouseEvent;
             pMouseEvent->initMouseEvent(aType,
                 aMouseEvent->getBubbles(), aMouseEvent->getCancelable(),
@@ -161,16 +162,15 @@ namespace DOM { namespace events {
         {
             pEvent = new CEvent;
             pEvent->initEvent(
-                aType, aEvent->getBubbles(), aEvent->getCancelable());
+                aType, i_xEvent->getBubbles(), i_xEvent->getCancelable());
         }
-        pEvent->m_target =
-            Reference< XEventTarget >(DOM::CNode::getCNode(aNodePtr).get());
-        pEvent->m_currentTarget = aEvent->getCurrentTarget();
-        pEvent->m_time = aEvent->getTimeStamp();
+        pEvent->m_target.set(xNode, UNO_QUERY_THROW);
+        pEvent->m_currentTarget = i_xEvent->getCurrentTarget();
+        pEvent->m_time = i_xEvent->getTimeStamp();
 
         // create the reference to the provate event implementation
         // that will be dispatched to the listeners
-        xEvent = Reference< XEvent >(pEvent);
+        Reference< XEvent > const xEvent(pEvent);
 
         // build the path from target node to the root
         NodeVector captureVector;
@@ -211,7 +211,7 @@ namespace DOM { namespace events {
             if  (pEvent->m_canceled) return sal_True;
             // bubbeling phase
             inode++;
-            if (aEvent->getBubbles()) {
+            if (i_xEvent->getBubbles()) {
                 pEvent->m_phase = PhaseType_BUBBLING_PHASE;
                 while (inode != captureVector.end())
                 {

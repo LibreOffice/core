@@ -36,6 +36,7 @@
 #include <rtl/ustring.hxx>
 
 #include <com/sun/star/uno/Reference.h>
+#include <com/sun/star/xml/dom/XNode.hpp>
 #include <com/sun/star/xml/dom/events/EventType.hpp>
 #include <com/sun/star/xml/dom/events/PhaseType.hpp>
 #include <com/sun/star/xml/dom/events/XEvent.hpp>
@@ -56,30 +57,33 @@ typedef std::vector<ListenerMap::value_type> ListenerPairVector;
 class CEventDispatcher
 {
 private:
-    static TypeListenerMap captureListeners;
-    static TypeListenerMap targetListeners;
+    TypeListenerMap m_CaptureListeners;
+    TypeListenerMap m_TargetListeners;
 
 public:
-    static sal_Bool dispatchEvent(xmlNodePtr aNode, const Reference< XEvent >& aEvent);
-
-    static void addListener(
+    void addListener(
         xmlNodePtr pNode,
         ::rtl::OUString aType,
         const Reference<com::sun::star::xml::dom::events::XEventListener>& aListener,
         sal_Bool bCapture);
 
-    static void removeListener(
+    void removeListener(
         xmlNodePtr pNode,
         ::rtl::OUString aType,
         const Reference<com::sun::star::xml::dom::events::XEventListener>& aListener,
         sal_Bool bCapture);
 
-    static void callListeners(
-        xmlNodePtr pNode,
+    void callListeners(
+        xmlNodePtr const pNode,
         ::rtl::OUString aType,
         const Reference< XEvent >& xEvent,
-        sal_Bool bCapture);
+        sal_Bool const bCapture) const;
+
+    bool dispatchEvent(
+        Reference<XNode> const& xNode,
+        Reference< XEvent > const& xEvent) const;
 };
+
 }}
 
 #endif
