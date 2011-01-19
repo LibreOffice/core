@@ -91,6 +91,8 @@ XMLFilterSettingsDialog::XMLFilterSettingsDialog( Window* pParent, ResMgr& rResM
     mpFilterListBox->SetSelectHdl( LINK( this, XMLFilterSettingsDialog, SelectionChangedHdl_Impl ) );
     mpFilterListBox->SetDeselectHdl( LINK( this, XMLFilterSettingsDialog, SelectionChangedHdl_Impl ) );
     mpFilterListBox->SetDoubleClickHdl( LINK( this, XMLFilterSettingsDialog, DoubleClickHdl_Impl ) );
+    mpFilterListBox->SetAccessibleName(String( RESID( STR_XML_FILTER_LISTBOX )));
+    maCtrlFilterList.SetAccessibleName(String( RESID( STR_XML_FILTER_LISTBOX )));
     mpFilterListBox->SetHelpId( HID_XML_FILTER_LIST );
 
     maPBNew.SetClickHdl(LINK( this, XMLFilterSettingsDialog, ClickHdl_Impl ) );

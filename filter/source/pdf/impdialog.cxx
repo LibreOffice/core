@@ -473,6 +473,10 @@ ImpPDFTabGeneralPage::ImpPDFTabGeneralPage( Window* pParent,
         aNewPos.Y() -= nDelta;
         maCbEmbedStandardFonts.SetPosPixel( aNewPos );
     }
+
+    maEdPages.SetAccessibleName(maRbRange.GetText());
+    maEdPages.SetAccessibleRelationLabeledBy(&maRbRange);
+
     maCbExportEmptyPages.SetStyle( maCbExportEmptyPages.GetStyle() | WB_VCENTER );
 }
 
@@ -658,7 +662,8 @@ SfxTabPage*  ImpPDFTabGeneralPage::Create( Window* pParent,
 IMPL_LINK( ImpPDFTabGeneralPage, TogglePagesHdl, void*, EMPTYARG )
 {
     maEdPages.Enable( maRbRange.IsChecked() );
-    maEdPages.SetReadOnly( !maRbRange.IsChecked() );
+    //Sym2_5805, When the control is disabled, it is also readonly. So here, it is not necessary to set it as readonly.
+    //maEdPages.SetReadOnly( !maRbRange.IsChecked() );
     return 0;
 }
 
@@ -695,7 +700,8 @@ IMPL_LINK( ImpPDFTabGeneralPage, ToggleAddStreamHdl, void*, EMPTYARG )
             maRbRange.Enable( FALSE );
             maRbSelection.Enable( FALSE );
             maEdPages.Enable( FALSE );
-            maEdPages.SetReadOnly( TRUE );
+            //Sym2_5805, When the control is disabled, it is also readonly. So here, it is not necessary to set it as readonly.
+            //maEdPages.SetReadOnly( TRUE );
             maRbAll.Enable( FALSE );
         }
         else
@@ -788,6 +794,8 @@ ImpPDFTabOpnFtrPage::ImpPDFTabOpnFtrPage( Window* pParent,
     maRbMagnFitWidth.SetToggleHdl( LINK( this, ImpPDFTabOpnFtrPage, ToggleRbMagnHdl ) );
     maRbMagnFitVisible.SetToggleHdl( LINK( this, ImpPDFTabOpnFtrPage, ToggleRbMagnHdl ) );
     maRbMagnZoom.SetToggleHdl( LINK( this, ImpPDFTabOpnFtrPage, ToggleRbMagnHdl ) );
+    maNumZoom.SetAccessibleName(maRbMagnZoom.GetText());
+    maNumZoom.SetAccessibleRelationLabeledBy(&maRbMagnZoom);
 }
 
 // -----------------------------------------------------------------------------
@@ -951,6 +959,8 @@ ImpPDFTabViewerPage::ImpPDFTabViewerPage( Window* pParent,
     FreeResource();
     maRbAllBookmarkLevels.SetToggleHdl( LINK( this, ImpPDFTabViewerPage, ToggleRbBookmarksHdl ) );
     maRbVisibleBookmarkLevels.SetToggleHdl( LINK( this, ImpPDFTabViewerPage, ToggleRbBookmarksHdl ) );
+    maNumBookmarkLevels.SetAccessibleName(maRbVisibleBookmarkLevels.GetText());
+    maNumBookmarkLevels.SetAccessibleRelationLabeledBy(&maRbVisibleBookmarkLevels);
 }
 
 // -----------------------------------------------------------------------------
