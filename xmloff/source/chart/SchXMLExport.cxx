@@ -2875,10 +2875,7 @@ void SchXMLExportHelper_Impl::exportSeries(
                                     {
                                         Reference< chart2::data::XDataSequence > xValues( xCategories->getValues() );
                                         if( !lcl_hasNoValuesButText( xValues ) )
-                                        {
-                                            if( lcl_exportDomainForThisSequence( xValues, aFirstXDomainRange, mrExport ) )
-                                                m_aDataSequencesToExport.push_back( tLabelValuesDataPair( 0, xValues ));
-                                        }
+                                            lcl_exportDomainForThisSequence( xValues, aFirstXDomainRange, mrExport );
                                     }
                                 }
                             }
