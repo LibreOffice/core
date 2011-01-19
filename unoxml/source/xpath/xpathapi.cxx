@@ -353,9 +353,6 @@ namespace XPath
             extensions = m_extensions;
         }
 
-        xmlXPathContextPtr xpathCtx;
-        xmlXPathObjectPtr xpathObj;
-
         // get the node and document
         ::rtl::Reference<DOM::CDocument> const pCDoc(
                 dynamic_cast<DOM::CDocument*>( DOM::CNode::GetImplementation(
@@ -383,8 +380,9 @@ namespace XPath
         }
 
         /* Create xpath evaluation context */
-        xpathCtx = xmlXPathNewContext(pDoc);
-        if (xpathCtx == NULL) throw XPathException();
+        ::boost::shared_ptr<xmlXPathContext> const xpathCtx(
+                xmlXPathNewContext(pDoc), xmlXPathFreeContext);
+        if (xpathCtx == NULL) { throw XPathException(); }
 
         // set context node
         xpathCtx->node = pNode;
@@ -393,18 +391,18 @@ namespace XPath
         xmlSetGenericErrorFunc(NULL, generic_error_func);
 
         // register namespaces and extension
-        lcl_registerNamespaces(xpathCtx, nsmap);
-        lcl_registerExtensions(xpathCtx, extensions);
+        lcl_registerNamespaces(xpathCtx.get(), nsmap);
+        lcl_registerExtensions(xpathCtx.get(), extensions);
 
         /* run the query */
         OString o1 = OUStringToOString(expr, RTL_TEXTENCODING_UTF8);
         xmlChar *xStr = (xmlChar*)o1.getStr();
-        if ((xpathObj = xmlXPathEval(xStr, xpathCtx)) == NULL) {
+        ::boost::shared_ptr<xmlXPathObject> const xpathObj(
+                xmlXPathEval(xStr, xpathCtx.get()), xmlXPathFreeObject);
+        if (0 == xpathObj) {
             // OSL_ENSURE(xpathCtx->lastError == NULL, xpathCtx->lastError->message);
-            xmlXPathFreeContext(xpathCtx);
             throw XPathException();
         }
-        xmlXPathFreeContext(xpathCtx);
         Reference<XXPathObject> const xObj(
                 new CXPathObject(pCDoc, pCDoc->GetMutex(), xpathObj));
         return xObj;

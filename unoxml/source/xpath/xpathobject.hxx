@@ -66,7 +66,7 @@ namespace XPath
     public:
         CXPathObject( ::rtl::Reference<DOM::CDocument> const& pDocument,
             ::osl::Mutex & rMutex,
-            xmlXPathObjectPtr const xpathObj);
+            ::boost::shared_ptr<xmlXPathObject> const& pXPathObj);
 
     /**
         get object type

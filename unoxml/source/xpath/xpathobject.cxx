@@ -67,11 +67,11 @@ namespace XPath
     CXPathObject::CXPathObject(
             ::rtl::Reference<DOM::CDocument> const& pDocument,
             ::osl::Mutex & rMutex,
-            xmlXPathObjectPtr const xpathObj)
+            ::boost::shared_ptr<xmlXPathObject> const& pXPathObj)
         : m_pDocument(pDocument)
         , m_rMutex(rMutex)
-        , m_pXPathObj(xpathObj, xmlXPathFreeObject)
-        , m_XPathObjectType(lcl_GetType(xpathObj))
+        , m_pXPathObj(pXPathObj)
+        , m_XPathObjectType(lcl_GetType(pXPathObj.get()))
     {
     }
 

@@ -62,6 +62,7 @@ namespace XPath
         /// #i115995# keep document alive
         ::rtl::Reference< DOM::CDocument > const m_pDocument;
         ::osl::Mutex & m_rMutex;
+        /// retain the result set in case the CXPathObject is released
         boost::shared_ptr<xmlXPathObject> m_pXPathObj;
         xmlNodeSetPtr m_pNodeSet;
 
