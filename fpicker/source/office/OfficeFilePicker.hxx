@@ -42,7 +42,7 @@
 #endif
 
 
-#include <vcl/wintypes.hxx>
+#include <tools/wintypes.hxx>
 #include "commonpicker.hxx"
 #include "pickercallbacks.hxx"
 

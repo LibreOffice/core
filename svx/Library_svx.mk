@@ -27,6 +27,8 @@
 
 $(eval $(call gb_Library_Library,svx))
 
+$(eval $(call gb_Library_set_componentfile,svx,svx/util/svx))
+
 $(eval $(call gb_Library_set_include,svx,\
     $$(SOLARINC) \
     -I$(SRCDIR)/svx/inc \
