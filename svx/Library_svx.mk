@@ -54,6 +54,7 @@ $(eval $(call gb_Library_add_linked_libs,svx,\
     sal \
     sfx \
     sot \
+    stl \
     svl \
     svt \
     svxcore \
@@ -65,7 +66,6 @@ $(eval $(call gb_Library_add_linked_libs,svx,\
     vos3 \
     xo \
     xcr \
-    stl \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,svx,\
@@ -229,19 +229,15 @@ $(eval $(call gb_Library_add_linked_libs,svx,\
     oldnames \
     user32 \
     uwinapi \
+))
 $(eval $(call gb_Library_add_exception_objects,svx,\
     svx/source/dialog/sendreportw32 \
-))
 ))
 else
 $(eval $(call gb_Library_add_exception_objects,svx,\
     svx/source/dialog/sendreportgen \
 ))
 endif
-
-$(eval $(call gb_Library_add_linked_libs,svx,\
-    shell \
-))
 endif
 
 # vim: set noet sw=4 ts=4:
