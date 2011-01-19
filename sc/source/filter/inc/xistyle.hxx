@@ -64,6 +64,9 @@ public:
         @return  The color from current or default palette or COL_AUTO, if nothing else found. */
     inline Color        GetColor( sal_uInt16 nXclIndex ) const
                             { return Color( GetColorData( nXclIndex ) ); }
+    /** Returns the palette colors as UNO sequence. */
+    ::com::sun::star::uno::Sequence< sal_Int32 >
+                        CreateColorSequence() const;
 
     /** Reads a PALETTE record. */
     void                ReadPalette( XclImpStream& rStrm );

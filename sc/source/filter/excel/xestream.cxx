@@ -32,6 +32,7 @@
 #include <utility>
 
 #include <rtl/ustring.hxx>
+#include <rtl/ustrbuf.hxx>
 #include <rtl/random.h>
 #include <sax/fshelper.hxx>
 #include <unotools/streamwrap.hxx>
@@ -46,27 +47,24 @@
 #include "rangelst.hxx"
 #include "compiler.hxx"
 
-#include <oox/core/tokens.hxx>
+#include <oox/xls/excelvbaproject.hxx>
 #include <formula/grammar.hxx>
 
 #define DEBUG_XL_ENCRYPTION 0
 
-using ::com::sun::star::beans::PropertyValue;
-using ::com::sun::star::io::XOutputStream;
-using ::com::sun::star::io::XStream;
-using ::com::sun::star::lang::XComponent;
-using ::com::sun::star::lang::XMultiServiceFactory;
-using ::com::sun::star::lang::XServiceInfo;
-using ::com::sun::star::uno::Reference;
-using ::com::sun::star::uno::Sequence;
-using ::com::sun::star::uno::UNO_QUERY;
 using ::rtl::OString;
 using ::rtl::OUString;
+using ::rtl::OUStringBuffer;
 using ::utl::OStreamWrapper;
 using ::std::vector;
 
-using namespace formula;
-using namespace ::com::sun::star;
+using namespace ::com::sun::star::beans;
+using namespace ::com::sun::star::io;
+using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::sheet;
+using namespace ::com::sun::star::uno;
+using namespace ::formula;
+using namespace ::oox;
 
 // ============================================================================
 
@@ -491,8 +489,8 @@ XclExpBiff8Encrypter::XclExpBiff8Encrypter( const XclExpRoot& rRoot ) :
     mnOldPos(STREAM_SEEK_TO_END),
     mbValid(false)
 {
-    uno::Sequence< beans::NamedValue > aEncryptionData = rRoot.GetEncryptionData();
-    if ( aEncryptionData.getLength() == 0 )
+    Sequence< NamedValue > aEncryptionData = rRoot.GetEncryptionData();
+    if( !aEncryptionData.hasElements() )
         // Empty password.  Get the default biff8 password.
         aEncryptionData = rRoot.GenerateDefaultEncryptionData();
     Init( aEncryptionData );
@@ -579,11 +577,11 @@ void XclExpBiff8Encrypter::Encrypt( SvStream& rStrm, sal_Int32 nData )
     Encrypt(rStrm, static_cast<sal_uInt32>(nData));
 }
 
-void XclExpBiff8Encrypter::Init( const uno::Sequence< beans::NamedValue >& aEncryptionData )
+void XclExpBiff8Encrypter::Init( const Sequence< NamedValue >& rEncryptionData )
 {
     mbValid = false;
 
-    if ( maCodec.InitCodec( aEncryptionData ) )
+    if( maCodec.InitCodec( rEncryptionData ) )
     {
         maCodec.GetDocId( mpnDocId );
 
@@ -599,7 +597,7 @@ void XclExpBiff8Encrypter::Init( const uno::Sequence< beans::NamedValue >& aEncr
 
         // generate salt hash.
         ::msfilter::MSCodec_Std97 aCodec;
-        aCodec.InitCodec( aEncryptionData );
+        aCodec.InitCodec( rEncryptionData );
         aCodec.CreateSaltDigest( mpnSalt, mpnSaltDigest );
 
         // verify to make sure it's in good shape.
@@ -609,12 +607,12 @@ void XclExpBiff8Encrypter::Init( const uno::Sequence< beans::NamedValue >& aEncr
 
 sal_uInt32 XclExpBiff8Encrypter::GetBlockPos( sal_Size nStrmPos ) const
 {
-    return static_cast<sal_uInt32>(nStrmPos / EXC_ENCR_BLOCKSIZE);
+    return static_cast< sal_uInt32 >( nStrmPos / EXC_ENCR_BLOCKSIZE );
 }
 
 sal_uInt16 XclExpBiff8Encrypter::GetOffsetInBlock( sal_Size nStrmPos ) const
 {
-    return static_cast<sal_uInt16>(nStrmPos % EXC_ENCR_BLOCKSIZE);
+    return static_cast< sal_uInt16 >( nStrmPos % EXC_ENCR_BLOCKSIZE );
 }
 
 void XclExpBiff8Encrypter::EncryptBytes( SvStream& rStrm, vector<sal_uInt8>& aBytes )
@@ -681,9 +679,9 @@ void XclExpBiff8Encrypter::EncryptBytes( SvStream& rStrm, vector<sal_uInt8>& aBy
     mnOldPos = nStrmPos;
 }
 
-rtl::OUString XclXmlUtils::GetStreamName( const char* sStreamDir, const char* sStream, sal_Int32 nId )
+OUString XclXmlUtils::GetStreamName( const char* sStreamDir, const char* sStream, sal_Int32 nId )
 {
-    rtl::OUStringBuffer sBuf;
+    OUStringBuffer sBuf;
     if( sStreamDir )
         sBuf.appendAscii( sStreamDir );
     sBuf.appendAscii( sStream );
@@ -693,7 +691,7 @@ rtl::OUString XclXmlUtils::GetStreamName( const char* sStreamDir, const char* sS
     return sBuf.makeStringAndClear();
 }
 
-rtl::OString XclXmlUtils::ToOString( const Color& rColor )
+OString XclXmlUtils::ToOString( const Color& rColor )
 {
     char buf[9];
     sprintf( buf, "%.2X%.2X%.2X%.2X", rColor.GetTransparency(), rColor.GetRed(), rColor.GetGreen(), rColor.GetBlue() );
@@ -701,37 +699,37 @@ rtl::OString XclXmlUtils::ToOString( const Color& rColor )
     return OString( buf );
 }
 
-rtl::OString XclXmlUtils::ToOString( const ::rtl::OUString& s )
+OString XclXmlUtils::ToOString( const OUString& s )
 {
     return OUStringToOString( s, RTL_TEXTENCODING_UTF8  );
 }
 
-rtl::OString XclXmlUtils::ToOString( const String& s )
+OString XclXmlUtils::ToOString( const String& s )
 {
-    return rtl::OString( s.GetBuffer(), s.Len(), RTL_TEXTENCODING_UTF8 );
+    return OString( s.GetBuffer(), s.Len(), RTL_TEXTENCODING_UTF8 );
 }
 
-rtl::OString XclXmlUtils::ToOString( const ScAddress& rAddress )
+OString XclXmlUtils::ToOString( const ScAddress& rAddress )
 {
     String sAddress;
     rAddress.Format( sAddress, SCA_VALID, NULL, ScAddress::Details( FormulaGrammar::CONV_XL_A1 ) );
     return ToOString( sAddress );
 }
 
-rtl::OString XclXmlUtils::ToOString( const ScfUInt16Vec& rBuffer )
+OString XclXmlUtils::ToOString( const ScfUInt16Vec& rBuffer )
 {
     const sal_uInt16* pBuffer = &rBuffer [0];
-    return ::rtl::OString( pBuffer, rBuffer.size(), RTL_TEXTENCODING_UTF8 );
+    return OString( pBuffer, rBuffer.size(), RTL_TEXTENCODING_UTF8 );
 }
 
-rtl::OString XclXmlUtils::ToOString( const ScRange& rRange )
+OString XclXmlUtils::ToOString( const ScRange& rRange )
 {
     String sRange;
     rRange.Format( sRange, SCA_VALID, NULL, ScAddress::Details( FormulaGrammar::CONV_XL_A1 ) );
     return ToOString( sRange );
 }
 
-rtl::OString XclXmlUtils::ToOString( const ScRangeList& rRangeList )
+OString XclXmlUtils::ToOString( const ScRangeList& rRangeList )
 {
     String s;
     rRangeList.Format( s, SCA_VALID, NULL, FormulaGrammar::CONV_XL_A1, ' ' );
@@ -751,12 +749,12 @@ static ScAddress lcl_ToAddress( const XclAddress& rAddress )
     return aAddress;
 }
 
-rtl::OString XclXmlUtils::ToOString( const XclAddress& rAddress )
+OString XclXmlUtils::ToOString( const XclAddress& rAddress )
 {
     return ToOString( lcl_ToAddress( rAddress ) );
 }
 
-rtl::OString XclXmlUtils::ToOString( const XclExpString& s )
+OString XclXmlUtils::ToOString( const XclExpString& s )
 {
     DBG_ASSERT( !s.IsRich(), "XclXmlUtils::ToOString(XclExpString): rich text string found!" );
     return ToOString( s.GetUnicodeBuffer() );
@@ -772,7 +770,7 @@ static ScRange lcl_ToRange( const XclRange& rRange )
     return aRange;
 }
 
-rtl::OString XclXmlUtils::ToOString( const XclRangeList& rRanges )
+OString XclXmlUtils::ToOString( const XclRangeList& rRanges )
 {
     ScRangeList aRanges;
     for( XclRangeList::const_iterator i = rRanges.begin(), end = rRanges.end();
@@ -801,7 +799,7 @@ OUString XclXmlUtils::ToOUString( const String& s )
     return OUString( s.GetBuffer(), s.Len() );
 }
 
-rtl::OUString XclXmlUtils::ToOUString( ScDocument& rDocument, const ScAddress& rAddress, ScTokenArray* pTokenArray )
+OUString XclXmlUtils::ToOUString( ScDocument& rDocument, const ScAddress& rAddress, ScTokenArray* pTokenArray )
 {
     ScCompiler aCompiler( &rDocument, rAddress, *pTokenArray);
     aCompiler.SetGrammar(FormulaGrammar::GRAM_NATIVE_XL_A1);
@@ -823,8 +821,8 @@ const char* XclXmlUtils::ToPsz( bool b )
 
 // ============================================================================
 
-XclExpXmlStream::XclExpXmlStream( const Reference< XMultiServiceFactory >& rSMgr, SvStream& rStrm, const XclExpRoot& rRoot )
-    : XmlFilterBase( rSMgr )
+XclExpXmlStream::XclExpXmlStream( const Reference< XComponentContext >& rxContext, SvStream& rStrm, const XclExpRoot& rRoot )
+    : XmlFilterBase( rxContext )
     , mrRoot( rRoot )
 {
     Sequence< PropertyValue > aArgs( 1 );
@@ -980,7 +978,7 @@ sax_fastparser::FSHelperPtr XclExpXmlStream::CreateOutputStream (
     const Reference< XOutputStream >& xParentRelation,
     const char* sContentType,
     const char* sRelationshipType,
-    ::rtl::OUString* pRelationshipId )
+    OUString* pRelationshipId )
 {
     OUString sRelationshipId;
     if (xParentRelation.is())
@@ -1029,7 +1027,12 @@ bool XclExpXmlStream::exportDocument() throw()
     return false;
 }
 
-::rtl::OUString XclExpXmlStream::implGetImplementationName() const
+::oox::ole::VbaProject* XclExpXmlStream::implCreateVbaProject() const
+{
+    return new ::oox::xls::ExcelVbaProject( getComponentContext(), Reference< XSpreadsheetDocument >( getModel(), UNO_QUERY ) );
+}
+
+OUString XclExpXmlStream::implGetImplementationName() const
 {
     return CREATE_OUSTRING( "TODO" );
 }
