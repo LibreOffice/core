@@ -37,4 +37,6 @@
 
 #define TBITEM_SHOW     1
 
+#define RID_STR_TLB_MACROS      ( RID_BASICIDE_START + 71 )
+
 #endif // _OBJDLG_HXX
