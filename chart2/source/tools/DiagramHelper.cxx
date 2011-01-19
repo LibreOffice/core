@@ -42,6 +42,7 @@
 #include "ChartModelHelper.hxx"
 #include "RelativePositionHelper.hxx"
 #include "ControllerLockGuard.hxx"
+#include "NumberFormatterWrapper.hxx"
 
 #include <com/sun/star/chart/MissingValueTreatment.hpp>
 #include <com/sun/star/chart/XChartDocument.hpp>
@@ -64,7 +65,7 @@
 
 #include <unotools/saveopt.hxx>
 #include <rtl/math.hxx>
-
+#include <svl/zformat.hxx>
 // header for class Application
 #include <vcl/svapp.hxx>
 
@@ -1191,6 +1192,16 @@ sal_Int32 DiagramHelper::getDateNumberFormat( const Reference< util::XNumberForm
         {
             nRet = aKeySeq[0];
         }
+    }
+
+    //try to get a date format with full year display
+    NumberFormatterWrapper aNumberFormatterWrapper( xNumberFormatsSupplier );
+    SvNumberFormatter* pNumFormatter = aNumberFormatterWrapper.getSvNumberFormatter();
+    if( pNumFormatter )
+    {
+        const SvNumberformat* pFormat = pNumFormatter->GetEntry( nRet );
+        if( pFormat )
+            nRet = pNumFormatter->GetFormatIndex( NF_DATE_SYS_DDMMYYYY, pFormat->GetLanguage() );
     }
     return nRet;
 }
