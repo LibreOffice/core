@@ -215,6 +215,27 @@ endef
 
 # CObject class
 
+ifeq ($(gb_FULLDEPS),$(true))
+define gb_CObject__command_deponcompile
+$(call gb_Helper_abbreviate_dirs_native,\
+    $(OUTDIR)/bin/makedepend$(gb_Executable_EXT) \
+        $(filter-out -DPRECOMPILED_HEADERS,$(4)) $(5) \
+        -I$(dir $(3)) \
+        $(filter-out -I$(COMPATH)% %/pch -I$(JAVA_HOME),$(6)) \
+        $(3) \
+        -f - \
+    | $(gb_AWK) -f $(GBUILDDIR)/processdeps.awk \
+        -v OBJECTFILE=$(1) \
+        -v OUTDIR=$(OUTDIR)/ \
+        -v WORKDIR=$(WORKDIR)/ \
+        -v SRCDIR=$(SRCDIR)/ \
+        -v REPODIR=$(REPODIR)/ \
+    > $(call gb_CObject_get_dep_target,$(2)))
+endef
+else
+CObject__command_deponcompile =
+endif
+
 define gb_CObject__command
 $(call gb_Output_announce,$(2),$(true),C  ,3)
 $(call gb_Helper_abbreviate_dirs_native,\
@@ -225,20 +246,33 @@ $(call gb_Helper_abbreviate_dirs_native,\
         -I$(dir $(3)) \
         $(INCLUDE) \
         -c $(3) \
-        -Fo$(1) \
-        -showIncludes > $(1).out; \
-    $(gb_AWK) -f (GBUILDDIR)/processdeps_msvc.awk \
-        -v OBJECTFILE=$(1) \
-        -v OUTDIR=$(OUTDIR)/ \
-        -v REPODIR=$(REPODIR)/ \
-        -v RETURNCODE=$$? \
-        -v SRCDIR=$(SRCDIR)/ \
-        -v WORKDIR=$(WORKDIR)/ \
-        -- $(1).out)
+        -Fo$(1))
+$(call gb_CObject__command_deponcompile,$(1),$(2),$(3),$(4),$(5),$(6))
 endef
 
 
 # CxxObject class
+
+ifeq ($(gb_FULLDEPS),$(true))
+define gb_CxxObject__command_deponcompile
+$(call gb_Helper_abbreviate_dirs_native,\
+    $(OUTDIR)/bin/makedepend$(gb_Executable_EXT) \
+        $(filter-out -DPRECOMPILED_HEADERS,$(4)) $(5) \
+        -I$(dir $(3)) \
+        $(filter-out -I$(COMPATH)% %/pch -I$(JAVA_HOME),$(6)) \
+        $(3) \
+        -f - \
+    | $(gb_AWK) -f $(GBUILDDIR)/processdeps.awk \
+         -v OBJECTFILE=$(1) \
+         -v OUTDIR=$(OUTDIR)/ \
+        -v WORKDIR=$(WORKDIR)/ \
+        -v SRCDIR=$(SRCDIR)/ \
+         -v REPODIR=$(REPODIR)/ \
+    > $(call gb_CxxObject_get_dep_target,$(2)))
+ endef
+else
+gb_CxxObject__command_deponcompile =
+endif
 
 define gb_CxxObject__command
 $(call gb_Output_announce,$(2),$(true),CXX,3)
@@ -246,20 +280,12 @@ $(call gb_Helper_abbreviate_dirs_native,\
     mkdir -p $(dir $(1)) && \
     unset INCLUDE && \
     $(gb_CXX) \
-        $(DEFS) $(CFLAGS) \
+        $(DEFS) $(CXXFLAGS) \
         -I$(dir $(3)) \
         $(INCLUDE_STL) $(INCLUDE) \
         -c $(3) \
-        -Fo$(1) \
-        -showIncludes > $(1).out; \
-    $(gb_AWK) -f (GBUILDDIR)/processdeps_msvc.awk \
-        -v OBJECTFILE=$(1) \
-        -v OUTDIR=$(OUTDIR)/ \
-        -v REPODIR=$(REPODIR)/ \
-        -v RETURNCODE=$$? \
-        -v SRCDIR=$(SRCDIR)/ \
-        -v WORKDIR=$(WORKDIR)/ \
-        -- $(1).out)
+        -Fo$(1))
+$(call gb_CxxObject__command_deponcompile,$(1),$(2),$(3),$(4),$(5),$(6))
 endef
 
 
@@ -268,6 +294,28 @@ endef
 gb_PrecompiledHeader_get_enableflags = -Yu$(1).hxx \
                                        -Fp$(call gb_PrecompiledHeader_get_target,$(1)) \
                                        -Fd$(call gb_PrecompiledHeader_get_target,$(1)).pdb
+
+ifeq ($(gb_FULLDEPS),$(true))
+define gb_PrecompiledHeader__command_deponcompile
+$(call gb_Helper_abbreviate_dirs_native,\
+    $(OUTDIR)/bin/makedepend$(gb_Executable_EXT) \
+        $(4) $(5) \
+        -I$(dir $(3)) \
+        $(filter-out -I$(COMPATH)% -I$(JAVA_HOME),$(6)) \
+        $(3) \
+        -f - \
+    | $(gb_AWK) -f $(GBUILDDIR)/processdeps.awk \
+        -v OBJECTFILE=$(1) \
+        -v OUTDIR=$(OUTDIR)/ \
+        -v WORKDIR=$(WORKDIR)/ \
+        -v SRCDIR=$(SRCDIR)/ \
+        -v REPODIR=$(REPODIR)/ \
+    > $(call gb_PrecompiledHeader_get_dep_target,$(2)))
+endef
+else
+gb_PrecompiledHeader__command_deponcompile =
+endif
+
 
 define gb_PrecompiledHeader__command
 $(call gb_Output_announce,$(2),$(true),PCH,1)
@@ -279,17 +327,9 @@ $(call gb_Helper_abbreviate_dirs_native,\
         -I$(dir $(3)) \
         $(6) \
         -c $(3) \
-        -Yc$(notdir $(patsubst %.cxx,%.hxx,$(3))) -Fp$(1) -Fd$(1).pdb -Fo$(1).obj \
-        -showIncludes > $(1).out; \
-    $(gb_AWK) -f (GBUILDDIR)/processdeps_msvc.awk \
-        -v OBJECTFILE=$(1) \
-        -v OUTDIR=$(OUTDIR)/ \
-        -v REPODIR=$(REPODIR)/ \
-        -v RETURNCODE=$$? \
-        -v SRCDIR=$(SRCDIR)/ \
-        -v WORKDIR=$(WORKDIR)/ \
-        -- $(1).out)
-rm $(1).obj
+        -Yc$(notdir $(patsubst %.cxx,%.hxx,$(3))) -Fp$(1) -Fd$(1).pdb -Fo$(1).obj)
+ rm $(1).obj
+$(call gb_PrecompiledHeader__command_deponcompile,$(1),$(2),$(3),$(4),$(5),$(6))
 endef
 
 # NoexPrecompiledHeader class
@@ -297,6 +337,28 @@ endef
 gb_NoexPrecompiledHeader_get_enableflags = -Yu$(1).hxx \
                                            -Fp$(call gb_NoexPrecompiledHeader_get_target,$(1)) \
                                            -Fd$(call gb_NoexPrecompiledHeader_get_target,$(1)).pdb
+
+ifeq ($(gb_FULLDEPS),$(true))
+define gb_NoexPrecompiledHeader__command_deponcompile
+$(call gb_Helper_abbreviate_dirs_native,\
+    $(OUTDIR)/bin/makedepend$(gb_Executable_EXT) \
+        $(4) $(5) \
+        -I$(dir $(3)) \
+        $(filter-out -I$(COMPATH)% -I$(JAVA_HOME),$(6)) \
+        $(3) \
+        -f - \
+    | $(gb_AWK) -f $(GBUILDDIR)/processdeps.awk \
+        -v OBJECTFILE=$(1) \
+        -v OUTDIR=$(OUTDIR)/ \
+        -v WORKDIR=$(WORKDIR)/ \
+        -v SRCDIR=$(SRCDIR)/ \
+        -v REPODIR=$(REPODIR)/ \
+    > $(call gb_NoexPrecompiledHeader_get_dep_target,$(2)))
+endef
+else
+gb_NoexPrecompiledHeader__command_deponcompile =
+endif
+
 
 define gb_NoexPrecompiledHeader__command
 $(call gb_Output_announce,$(2),$(true),PCH,1)
@@ -308,17 +370,9 @@ $(call gb_Helper_abbreviate_dirs_native,\
         -I$(dir $(3)) \
         $(6) \
         -c $(3) \
-        -Yc$(notdir $(patsubst %.cxx,%.hxx,$(3))) -Fp$(1) -Fd$(1).pdb -Fo$(1).obj \
-        -showIncludes > $(1).out; \
-    $(gb_AWK) -f (GBUILDDIR)/processdeps_msvc.awk \
-        -v OBJECTFILE=$(1) \
-        -v OUTDIR=$(OUTDIR)/ \
-        -v REPODIR=$(REPODIR)/ \
-        -v RETURNCODE=$$? \
-        -v SRCDIR=$(SRCDIR)/ \
-        -v WORKDIR=$(WORKDIR)/ \
-        -- $(1).out)
-rm $(1).obj
+        -Yc$(notdir $(patsubst %.cxx,%.hxx,$(3))) -Fp$(1) -Fd$(1).pdb -Fo$(1).obj)
+ rm $(1).obj
+$(call gb_NoexPrecompiledHeader__command_deponcompile,$(1),$(2),$(3),$(4),$(5),$(6))
 endef
 
 
@@ -344,7 +398,7 @@ $(call gb_Helper_abbreviate_dirs_native,\
         $(if $(filter Library CppunitTest,$(TARGETTYPE)),$(gb_Library_TARGETTYPEFLAGS)) \
         $(if $(filter StaticLibrary,$(TARGETTYPE)),$(gb_StaticLibrary_TARGETTYPEFLAGS)) \
         $(if $(filter Executable,$(TARGETTYPE)),$(gb_Executable_TARGETTYPEFLAGS)) \
-        $(DEFS) \
+        $(LDFLAGS) \
         @$${RESPONSEFILE} \
         $(foreach lib,$(LINKED_LIBS),$(call gb_Library_get_filename,$(lib))) \
         $(foreach lib,$(LINKED_STATIC_LIBS),$(call gb_StaticLibrary_get_filename,$(lib))) \
@@ -354,7 +408,7 @@ endef
 
 # Library class
 
-gb_Library_DEFS := -D_DLL
+gb_Library_DEFS :=
 gb_Library_TARGETTYPEFLAGS := -DLL
 gb_Library_get_rpath :=
 
@@ -378,17 +432,17 @@ gb_Library_PLAINLIBS_NONE += \
     uwinapi \
     z \
 
-gb_LinkTarget_LAYER := \
-    $(foreach lib,$(gb_Library_OOOLIBS),$(lib):OOOLIB) \
-    $(foreach lib,$(gb_Library_PLAINLIBS_NONE),$(lib):OOOLIB) \
-    $(foreach lib,$(gb_Library_PLAINLIBS_URE),$(lib):OOOLIB) \
-    $(foreach lib,$(gb_Library_PLAINLIBS_OOO),$(lib):OOOLIB) \
-    $(foreach lib,$(gb_Library_RTLIBS),$(lib):OOOLIB) \
-    $(foreach lib,$(gb_Library_RTVERLIBS),$(lib):OOOLIB) \
-    $(foreach lib,$(gb_Library_STLLIBS),$(lib):OOOLIB) \
-    $(foreach lib,$(gb_Library_UNOLIBS_URE),$(lib):OOOLIB) \
-    $(foreach lib,$(gb_Library_UNOLIBS_OOO),$(lib):OOOLIB) \
-    $(foreach lib,$(gb_Library_UNOVERLIBS),$(lib):OOOLIB) \
+gb_Library_LAYER := \
+    $(foreach lib,$(gb_Library_OOOLIBS),$(lib):OOO) \
+    $(foreach lib,$(gb_Library_PLAINLIBS_NONE),$(lib):OOO) \
+    $(foreach lib,$(gb_Library_PLAINLIBS_URE),$(lib):OOO) \
+    $(foreach lib,$(gb_Library_PLAINLIBS_OOO),$(lib):OOO) \
+    $(foreach lib,$(gb_Library_RTLIBS),$(lib):OOO) \
+    $(foreach lib,$(gb_Library_RTVERLIBS),$(lib):OOO) \
+    $(foreach lib,$(gb_Library_STLLIBS),$(lib):OOO) \
+    $(foreach lib,$(gb_Library_UNOLIBS_URE),$(lib):OOO) \
+    $(foreach lib,$(gb_Library_UNOLIBS_OOO),$(lib):OOO) \
+    $(foreach lib,$(gb_Library_UNOVERLIBS),$(lib):OOO) \
 
 gb_Library_FILENAMES :=\
     $(foreach lib,$(gb_Library_TARGETS),$(lib):$(gb_Library_SYSPRE)$(lib)$(gb_Library_PLAINEXT)) \
