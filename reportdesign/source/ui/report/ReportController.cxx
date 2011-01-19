@@ -106,6 +106,7 @@
 
 #include <svx/fmview.hxx>
 #include <editeng/paperinf.hxx>
+#include <editeng/memberids.hrc>
 #include <svx/svxids.hrc>
 #include <svx/svdobj.hxx>
 #include <svx/dataaccessdescriptor.hxx>
