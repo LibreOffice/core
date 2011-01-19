@@ -28,11 +28,10 @@
 #pragma warning(disable : 4701)
 #endif
 
-#include "node.hxx"
 #include "saxbuilder.hxx"
+
 #include <com/sun/star/xml/dom/XDocumentBuilder.hpp>
-#include <libxml/tree.h>
-#include <com/sun/star/uno/Sequence.h>
+
 
 namespace DOM
 {
@@ -93,12 +92,16 @@ namespace DOM
     SAXDocumentBuilderState SAL_CALL CSAXDocumentBuilder::getState()
         throw (RuntimeException)
     {
+        ::osl::MutexGuard g(m_Mutex);
+
         return m_aState;
     }
 
     void SAL_CALL CSAXDocumentBuilder::reset()
         throw (RuntimeException)
     {
+        ::osl::MutexGuard g(m_Mutex);
+
         m_aDocument = Reference< XDocument >();
         m_aFragment = Reference< XDocumentFragment >();
         while (!m_aNodeStack.empty()) m_aNodeStack.pop();
@@ -109,6 +112,8 @@ namespace DOM
     Reference< XDocument > SAL_CALL CSAXDocumentBuilder::getDocument()
         throw (RuntimeException)
     {
+        ::osl::MutexGuard g(m_Mutex);
+
         if (m_aState != SAXDocumentBuilderState_DOCUMENT_FINISHED)
             throw RuntimeException();
 
@@ -118,6 +123,8 @@ namespace DOM
     Reference< XDocumentFragment > SAL_CALL CSAXDocumentBuilder::getDocumentFragment()
          throw (RuntimeException)
     {
+        ::osl::MutexGuard g(m_Mutex);
+
         if (m_aState != SAXDocumentBuilderState_FRAGMENT_FINISHED)
             throw RuntimeException();
         return m_aFragment;
@@ -126,6 +133,8 @@ namespace DOM
     void SAL_CALL CSAXDocumentBuilder::startDocumentFragment(const Reference< XDocument >& ownerDoc)
         throw (RuntimeException)
     {
+        ::osl::MutexGuard g(m_Mutex);
+
         // start a new document fragment and push it onto the stack
         // we have to be in a clean state to do this
         if (!m_aState == SAXDocumentBuilderState_READY)
@@ -141,6 +150,8 @@ namespace DOM
     void SAL_CALL CSAXDocumentBuilder::endDocumentFragment()
         throw (RuntimeException)
     {
+        ::osl::MutexGuard g(m_Mutex);
+
         // there should only be the document left on the node stack
         if (m_aState != SAXDocumentBuilderState_BUILDING_FRAGMENT)
             throw RuntimeException();
@@ -156,6 +167,7 @@ namespace DOM
 
     void SAL_CALL  CSAXDocumentBuilder::startDocument() throw (RuntimeException, SAXException)
     {
+        ::osl::MutexGuard g(m_Mutex);
 
         // start a new document and push it onto the stack
         // we have to be in a clean state to do this
@@ -172,6 +184,8 @@ namespace DOM
 
     void SAL_CALL CSAXDocumentBuilder::endDocument() throw (RuntimeException, SAXException)
     {
+        ::osl::MutexGuard g(m_Mutex);
+
         // there should only be the document left on the node stack
         if (!m_aState == SAXDocumentBuilderState_BUILDING_DOCUMENT)
             throw SAXException();
@@ -186,6 +200,8 @@ namespace DOM
     void SAL_CALL CSAXDocumentBuilder::startElement(const OUString& aName, const Reference< XAttributeList>& attribs)
         throw (RuntimeException, SAXException)
     {
+        ::osl::MutexGuard g(m_Mutex);
+
         if ( m_aState != SAXDocumentBuilderState_BUILDING_DOCUMENT &&
              m_aState != SAXDocumentBuilderState_BUILDING_FRAGMENT)
         {
@@ -287,6 +303,8 @@ namespace DOM
     void SAL_CALL CSAXDocumentBuilder::endElement(const OUString& aName)
         throw (RuntimeException, SAXException)
     {
+        ::osl::MutexGuard g(m_Mutex);
+
         // pop the current element from the stack
         if ( m_aState != SAXDocumentBuilderState_BUILDING_DOCUMENT &&
              m_aState != SAXDocumentBuilderState_BUILDING_FRAGMENT)
@@ -314,6 +332,8 @@ namespace DOM
     void SAL_CALL CSAXDocumentBuilder::characters(const OUString& aChars)
         throw (RuntimeException, SAXException)
     {
+        ::osl::MutexGuard g(m_Mutex);
+
         //  append text node to the current top element
          if (m_aState != SAXDocumentBuilderState_BUILDING_DOCUMENT &&
              m_aState != SAXDocumentBuilderState_BUILDING_FRAGMENT)
@@ -326,6 +346,8 @@ namespace DOM
     void SAL_CALL CSAXDocumentBuilder::ignorableWhitespace(const OUString& )
         throw (RuntimeException, SAXException)
     {
+        ::osl::MutexGuard g(m_Mutex);
+
         //  ignore ignorable whitespace
         if ( m_aState != SAXDocumentBuilderState_BUILDING_DOCUMENT &&
              m_aState != SAXDocumentBuilderState_BUILDING_FRAGMENT)
@@ -335,6 +357,8 @@ namespace DOM
     void SAL_CALL CSAXDocumentBuilder::processingInstruction(const OUString& aTarget, const OUString& aData)
         throw (RuntimeException, SAXException)
     {
+        ::osl::MutexGuard g(m_Mutex);
+
         //  append PI node to the current top
         if ( m_aState != SAXDocumentBuilderState_BUILDING_DOCUMENT &&
              m_aState != SAXDocumentBuilderState_BUILDING_FRAGMENT)
@@ -348,6 +372,8 @@ namespace DOM
     void SAL_CALL CSAXDocumentBuilder::setDocumentLocator(const Reference< XLocator >& aLocator)
         throw (RuntimeException, SAXException)
     {
+        ::osl::MutexGuard g(m_Mutex);
+
         // set the document locator...
         m_aLocator = aLocator;
     }
