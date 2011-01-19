@@ -25,8 +25,8 @@
  *
  ************************************************************************/
 
-#ifndef _CDATASECTION_HXX
-#define _CDATASECTION_HXX
+#ifndef DOM_CDATASECTION_HXX
+#define DOM_CDATASECTION_HXX
 
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/Exception.hpp>
@@ -40,7 +40,11 @@ using namespace com::sun::star::xml::dom;
 
 namespace DOM
 {
-    class CCDATASection : public cppu::ImplInheritanceHelper1< CText, XCDATASection >
+    typedef ::cppu::ImplInheritanceHelper1< CText, XCDATASection >
+        CCDATASection_Base;
+
+    class CCDATASection
+        : public CCDATASection_Base
     {
         friend class CNode;
     protected:

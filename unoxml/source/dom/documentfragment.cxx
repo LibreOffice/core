@@ -30,10 +30,10 @@
 namespace DOM
 {
     CDocumentFragment::CDocumentFragment(const xmlNodePtr aNodePtr)
+        : CDocumentFragment_Base(NodeType_DOCUMENT_FRAGMENT_NODE, aNodePtr)
     {
-        m_aNodeType = NodeType_DOCUMENT_FRAGMENT_NODE;
-        init_node(aNodePtr);
     }
+
     OUString SAL_CALL CDocumentFragment::getNodeName()throw (RuntimeException)
     {
         return OUString::createFromAscii("#document-fragment");

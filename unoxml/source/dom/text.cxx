@@ -26,23 +26,23 @@
  ************************************************************************/
 
 #include "text.hxx"
+
 namespace DOM
 {
-    CText::CText(const xmlNodePtr aNodePtr)
+    CText::CText(NodeType const& reNodeType, xmlNodePtr const& rpNode)
+        : CText_Base(reNodeType, rpNode)
     {
-        m_aNodeType = NodeType_TEXT_NODE;
-        init_characterdata(aNodePtr);
+    }
+
+    CText::CText(const xmlNodePtr aNodePtr)
+        : CText_Base(NodeType_TEXT_NODE, aNodePtr)
+    {
     }
 
     void SAL_CALL CText::saxify(
             const Reference< XDocumentHandler >& i_xHandler) {
         if (!i_xHandler.is()) throw RuntimeException();
         i_xHandler->characters(getData());
-    }
-
-    void CText::init_text(const xmlNodePtr aNodePtr)
-    {
-        init_characterdata(aNodePtr);
     }
 
   Reference< XText > SAL_CALL CText::splitText(sal_Int32 /*offset*/)

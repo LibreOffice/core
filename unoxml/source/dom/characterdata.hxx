@@ -25,8 +25,8 @@
  *
  ************************************************************************/
 
-#ifndef _CHARACTERDATA_HXX
-#define _CHARACTERDATA_HXX
+#ifndef DOM_CHARACTERDATA_HXX
+#define DOM_CHARACTERDATA_HXX
 
 #include <sal/types.h>
 #include <cppuhelper/implbase1.hxx>
@@ -45,13 +45,15 @@ using namespace com::sun::star::xml::dom;
 
 namespace DOM
 {
-    class CCharacterData : public cppu::ImplInheritanceHelper1< CNode, XCharacterData >
+    typedef ::cppu::ImplInheritanceHelper1< CNode, XCharacterData >
+        CCharacterData_Base;
+
+    class CCharacterData
+        : public CCharacterData_Base
     {
 
-
     protected:
-        CCharacterData();
-        void init_characterdata(const xmlNodePtr aNodePtr);
+        CCharacterData(NodeType const& reNodeType, xmlNodePtr const& rpNode);
         void _dispatchEvent(const OUString& prevValue, const OUString& newValue);
 
     public:

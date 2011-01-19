@@ -32,9 +32,9 @@
 namespace DOM
 {
     CProcessingInstruction::CProcessingInstruction(const xmlNodePtr aNodePtr)
+        : CProcessingInstruction_Base(
+            NodeType_PROCESSING_INSTRUCTION_NODE, aNodePtr)
     {
-        m_aNodeType = NodeType_PROCESSING_INSTRUCTION_NODE;
-        init_node(aNodePtr);
     }
 
     void SAL_CALL CProcessingInstruction::saxify(

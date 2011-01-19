@@ -25,8 +25,8 @@
  *
  ************************************************************************/
 
-#ifndef _NOTATION_HXX
-#define _NOTATION_HXX
+#ifndef DOM_NOTATION_HXX
+#define DOM_NOTATION_HXX
 
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/Exception.hpp>
@@ -40,7 +40,10 @@ using namespace com::sun::star::xml::dom;
 
 namespace DOM
 {
-    class CNotation : public cppu::ImplInheritanceHelper1< CNode, XNotation >
+    typedef cppu::ImplInheritanceHelper1< CNode, XNotation > CNotation_Base;
+
+    class CNotation
+        : public CNotation_Base
     {
         friend class CNode;
     private:

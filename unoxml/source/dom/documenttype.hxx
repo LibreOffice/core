@@ -25,8 +25,8 @@
  *
  ************************************************************************/
 
-#ifndef _DOCUMENTTYPE_HXX
-#define _DOCUMENTTYPE_HXX
+#ifndef DOM_DOCUMENTTYPE_HXX
+#define DOM_DOCUMENTTYPE_HXX
 
 #include <sal/types.h>
 #include <com/sun/star/uno/Reference.h>
@@ -45,7 +45,11 @@ using namespace com::sun::star::xml::dom;
 
 namespace DOM
 {
-    class CDocumentType : public cppu::ImplInheritanceHelper1< CNode, XDocumentType >
+    typedef ::cppu::ImplInheritanceHelper1< CNode, XDocumentType >
+        CDocumentType_Base;
+
+    class CDocumentType
+        : public CDocumentType_Base
     {
         friend class CNode;
     private:

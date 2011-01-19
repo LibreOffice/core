@@ -25,8 +25,9 @@
  *
  ************************************************************************/
 
-#ifndef _ENTITYREFERENCE_HXX
-#define _ENTITYREFERENCE_HXX
+#ifndef DOM_ENTITYREFERENCE_HXX
+#define DOM_ENTITYREFERENCE_HXX
+
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/Exception.hpp>
 #include <com/sun/star/xml/dom/XEntityReference.hpp>
@@ -39,7 +40,11 @@ using namespace com::sun::star::xml::dom;
 
 namespace DOM
 {
-    class CEntityReference : public cppu::ImplInheritanceHelper1< CNode, XEntityReference >
+    typedef ::cppu::ImplInheritanceHelper1< CNode, XEntityReference >
+        CEntityReference_Base;
+
+    class CEntityReference
+        : public CEntityReference_Base
     {
         friend class CNode;
     protected:

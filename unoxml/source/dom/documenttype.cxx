@@ -35,10 +35,10 @@ namespace DOM
 {
 
     CDocumentType::CDocumentType(const xmlDtdPtr aDtdPtr)
+        : CDocumentType_Base(
+            NodeType_DOCUMENT_TYPE_NODE, reinterpret_cast<xmlNodePtr>(aDtdPtr))
+        , m_aDtdPtr(aDtdPtr)
     {
-        m_aNodeType = NodeType_DOCUMENT_TYPE_NODE;
-        m_aDtdPtr = aDtdPtr;
-        init_node((xmlNodePtr)aDtdPtr);
     }
 
     /**

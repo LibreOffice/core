@@ -42,9 +42,8 @@ namespace DOM
 {
 
     CElement::CElement(const xmlNodePtr aNodePtr)
+        : CElement_Base(NodeType_ELEMENT_NODE, aNodePtr)
     {
-        m_aNodeType = NodeType_ELEMENT_NODE;
-        init_node(aNodePtr);
     }
 
     void SAL_CALL CElement::saxify(

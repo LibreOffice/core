@@ -33,8 +33,11 @@
 namespace DOM
 {
 
-    CCharacterData::CCharacterData()
-    {}
+    CCharacterData::CCharacterData(
+            NodeType const& reNodeType, xmlNodePtr const& rpNode)
+        : CCharacterData_Base(reNodeType, rpNode)
+    {
+    }
 
     void CCharacterData::_dispatchEvent(const OUString& prevValue, const OUString& newValue)
     {
@@ -47,11 +50,6 @@ namespace DOM
                 prevValue, newValue, OUString(), (AttrChangeType)0 );
         dispatchEvent(Reference< XEvent >(event, UNO_QUERY));
         dispatchSubtreeModified();
-    }
-
-    void CCharacterData::init_characterdata(const xmlNodePtr aNodePtr)
-    {
-        init_node(aNodePtr);
     }
 
     /**

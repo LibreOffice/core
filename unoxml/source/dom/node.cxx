@@ -277,20 +277,17 @@ namespace DOM
       return 0;
     }
 
-    CNode::CNode()
+
+    CNode::CNode(NodeType const& reNodeType, xmlNodePtr const& rpNode)
         :   m_bUnlinked(false)
-        ,   m_aNodePtr(0)
-    {
-    }
-
-    void CNode::init_node(const xmlNodePtr aNode)
-    {
-        m_aNodePtr = aNode;
-
+        ,   m_aNodeType(reNodeType)
+        ,   m_aNodePtr(rpNode)
         // keep containing document alive
-        // (if we are not that document ourselves)
-        if (m_aNodePtr->type != XML_DOCUMENT_NODE)
-            m_rDocument = getOwnerDocument();
+        // (but not if this is a document; that would create a leak!)
+        ,   m_xDocument( (m_aNodePtr->type != XML_DOCUMENT_NODE)
+                ? getOwnerDocument() : 0 )
+    {
+        OSL_ASSERT(m_aNodePtr);
     }
 
     void CNode::invalidate()

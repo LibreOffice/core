@@ -25,8 +25,9 @@
  *
  ************************************************************************/
 
-#ifndef _ELEMENT_HXX
-#define _ELEMENT_HXX
+#ifndef DOM_ELEMENT_HXX
+#define DOM_ELEMENT_HXX
+
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/Exception.hpp>
 #include <com/sun/star/xml/dom/XNode.hpp>
@@ -42,7 +43,10 @@ using namespace com::sun::star::xml::dom;
 
 namespace DOM
 {
-    class CElement : public cppu::ImplInheritanceHelper1<CNode, XElement >
+    typedef ::cppu::ImplInheritanceHelper1<CNode, XElement > CElement_Base;
+
+    class CElement
+        : public CElement_Base
     {
         friend class CNode;
     private:

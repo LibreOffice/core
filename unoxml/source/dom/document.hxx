@@ -25,8 +25,8 @@
  *
  ************************************************************************/
 
-#ifndef _DOCUMENT_HXX
-#define _DOCUMENT_HXX
+#ifndef DOM_DOCUMENT_HXX
+#define DOM_DOCUMENT_HXX
 
 #include <list>
 #include <set>
@@ -66,10 +66,14 @@ using namespace com::sun::star::xml::dom::events;
 
 namespace DOM
 {
+    typedef ::cppu::ImplInheritanceHelper6<
+            CNode, XDocument, XDocumentEvent,
+            XActiveDataControl, XActiveDataSource,
+            XSAXSerializable, XFastSAXSerializable>
+        CDocument_Base;
 
-    class CDocument : public cppu::ImplInheritanceHelper6<
-        CNode, XDocument, XDocumentEvent,
-        XActiveDataControl, XActiveDataSource, XSAXSerializable, XFastSAXSerializable>
+    class CDocument
+        : public CDocument_Base
     {
         friend class CNode;
         typedef set< Reference< XStreamListener > > listenerlist_t;

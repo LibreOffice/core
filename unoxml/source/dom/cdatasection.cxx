@@ -32,9 +32,8 @@
 namespace DOM
 {
     CCDATASection::CCDATASection(const xmlNodePtr aNodePtr)
+        : CCDATASection_Base(NodeType_CDATA_SECTION_NODE, aNodePtr)
     {
-        m_aNodeType = NodeType_CDATA_SECTION_NODE;
-        init_text(aNodePtr);
     }
 
     void SAL_CALL CCDATASection::saxify(

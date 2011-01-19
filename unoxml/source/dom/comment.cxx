@@ -32,9 +32,8 @@
 namespace DOM
 {
     CComment::CComment(const xmlNodePtr aNodePtr)
+        : CComment_Base(NodeType_COMMENT_NODE, aNodePtr)
     {
-        m_aNodeType = NodeType_COMMENT_NODE;
-        init_node(aNodePtr);
     }
 
     void SAL_CALL CComment::saxify(

@@ -30,11 +30,11 @@
 
 namespace DOM
 {
-  CEntityReference::CEntityReference(const xmlNodePtr aNodePtr)
+    CEntityReference::CEntityReference(const xmlNodePtr aNodePtr)
+        : CEntityReference_Base(NodeType_ENTITY_REFERENCE_NODE, aNodePtr)
     {
-        m_aNodeType = NodeType_ENTITY_REFERENCE_NODE;
-        init_node(aNodePtr);
     }
+
     OUString SAL_CALL CEntityReference::getNodeName()throw (RuntimeException)
     {
        OUString aName;

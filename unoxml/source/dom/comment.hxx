@@ -25,8 +25,8 @@
  *
  ************************************************************************/
 
-#ifndef _COMMENT_HXX
-#define _COMMENT_HXX
+#ifndef DOM_COMMENT_HXX
+#define DOM_COMMENT_HXX
 
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/Exception.hpp>
@@ -39,9 +39,14 @@ using namespace com::sun::star::xml::dom;
 
 namespace DOM
 {
-    class CComment : public cppu::ImplInheritanceHelper1< CCharacterData, XComment >
+    typedef ::cppu::ImplInheritanceHelper1< CCharacterData, XComment >
+        CComment_Base;
+
+    class CComment
+        : public CComment_Base
     {
         friend class CNode;
+
     protected:
         CComment(const xmlNodePtr aNodePtr);
 

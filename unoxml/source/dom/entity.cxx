@@ -33,10 +33,10 @@ namespace DOM
 {
 
     CEntity::CEntity(const xmlEntityPtr aEntityPtr)
+        : CEntity_Base(
+            NodeType_ENTITY_NODE, reinterpret_cast<xmlNodePtr>(aEntityPtr))
+        , m_aEntityPtr(aEntityPtr)
     {
-        m_aNodeType = NodeType_ENTITY_NODE;
-        m_aEntityPtr = aEntityPtr;
-        init_node((xmlNodePtr)aEntityPtr);
     }
 
     /**

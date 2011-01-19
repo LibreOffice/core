@@ -25,8 +25,8 @@
  *
  ************************************************************************/
 
-#ifndef _ATTR_HXX
-#define _ATTR_HXX
+#ifndef DOM_ATTR_HXX
+#define DOM_ATTR_HXX
 
 #include <cppuhelper/implbase1.hxx>
 #include <com/sun/star/uno/Reference.h>
@@ -42,7 +42,10 @@ using namespace com::sun::star::xml::dom;
 
 namespace DOM
 {
-    class CAttr : public cppu::ImplInheritanceHelper1< CNode, XAttr >
+    typedef ::cppu::ImplInheritanceHelper1< CNode, XAttr > CAttr_Base;
+
+    class CAttr
+        : public CAttr_Base
     {
         friend class CNode;
         friend class CElement;

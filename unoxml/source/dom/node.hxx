@@ -127,14 +127,14 @@ namespace DOM
         bool m_bUnlinked; /// node has been removed from document
 
     protected:
-        NodeType m_aNodeType;
+        NodeType const m_aNodeType;
+        /// libxml node; NB: not const, because invalidate may reset it to 0!
         xmlNodePtr m_aNodePtr;
 
-        Reference< XDocument > m_rDocument;
+        Reference< XDocument > const m_xDocument;
 
         // for initialization by classes derived through ImplInheritanceHelper
-        CNode();
-        void init_node(const xmlNodePtr aNode);
+        CNode(NodeType const& reNodeType, xmlNodePtr const& rpNode);
         void invalidate();
 
         void dispatchSubtreeModified();

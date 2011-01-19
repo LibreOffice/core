@@ -25,8 +25,8 @@
  *
  ************************************************************************/
 
-#ifndef _TEXT_HXX
-#define _TEXT_HXX
+#ifndef DOM_TEXT_HXX
+#define DOM_TEXT_HXX
 
 #include <sal/types.h>
 #include <cppuhelper/implbase1.hxx>
@@ -45,14 +45,16 @@ using namespace com::sun::star::xml::dom;
 
 namespace DOM
 {
-    class CText : public cppu::ImplInheritanceHelper1< CCharacterData, XText >
+    typedef ::cppu::ImplInheritanceHelper1< CCharacterData, XText > CText_Base;
+
+    class CText
+        : public CText_Base
     {
         friend class CNode;
 
     protected:
-        CText(){}
+        CText(NodeType const& reNodeType, xmlNodePtr const& rpNode);
         CText(const xmlNodePtr aNodePtr);
-        void init_text(const xmlNodePtr aNodePtr);
 
     public:
 

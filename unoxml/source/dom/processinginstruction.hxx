@@ -25,8 +25,8 @@
  *
  ************************************************************************/
 
-#ifndef _PROCESSINGINSTRUCTION_HXX
-#define _PROCESSINGINSTRUCTION_HXX
+#ifndef DOM_PROCESSINGINSTRUCTION_HXX
+#define DOM_PROCESSINGINSTRUCTION_HXX
 
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/Exception.hpp>
@@ -40,7 +40,11 @@ using namespace com::sun::star::xml::dom;
 
 namespace DOM
 {
-    class CProcessingInstruction : public cppu::ImplInheritanceHelper1< CNode, XProcessingInstruction >
+    typedef ::cppu::ImplInheritanceHelper1< CNode, XProcessingInstruction >
+        CProcessingInstruction_Base;
+
+    class CProcessingInstruction
+        : public CProcessingInstruction_Base
     {
         friend class CNode;
 

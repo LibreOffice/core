@@ -58,13 +58,12 @@ namespace DOM
         xmlFreeDoc(m_aDocPtr);
     }
 
-    CDocument::CDocument(xmlDocPtr aDocPtr):
-        m_aDocPtr(aDocPtr),
-        m_streamListeners()
+    CDocument::CDocument(xmlDocPtr aDocPtr)
+        : CDocument_Base(
+                NodeType_DOCUMENT_NODE, reinterpret_cast<xmlNodePtr>(aDocPtr))
+        , m_aDocPtr(aDocPtr)
+        , m_streamListeners()
     {
-        // init node base
-        m_aNodeType = NodeType_DOCUMENT_NODE;
-        init_node((xmlNodePtr)m_aDocPtr);
     }
 
     void SAL_CALL CDocument::saxify(

@@ -25,8 +25,8 @@
  *
  ************************************************************************/
 
-#ifndef _DOCUMENTFRAGMENT_HXX
-#define _DOCUMENTFRAGMENT_HXX
+#ifndef DOM_DOCUMENTFRAGMENT_HXX
+#define DOM_DOCUMENTFRAGMENT_HXX
 
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/Exception.hpp>
@@ -40,7 +40,11 @@ using namespace com::sun::star::xml::dom;
 
 namespace DOM
 {
-    class CDocumentFragment : public cppu::ImplInheritanceHelper1< CNode, XDocumentFragment >
+    typedef ::cppu::ImplInheritanceHelper1< CNode, XDocumentFragment >
+        CDocumentFragment_Base;
+
+    class CDocumentFragment
+        : public CDocumentFragment_Base
     {
         friend class CNode;
     protected:

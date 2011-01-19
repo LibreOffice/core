@@ -33,10 +33,10 @@
 namespace DOM
 {
     CAttr::CAttr(const xmlAttrPtr pAttr)
+        : CAttr_Base(
+                NodeType_ATTRIBUTE_NODE, reinterpret_cast<xmlNodePtr>(pAttr))
+        , m_aAttrPtr(pAttr)
     {
-        m_aAttrPtr = pAttr;
-        m_aNodeType = NodeType_ATTRIBUTE_NODE;
-        init_node((xmlNodePtr)pAttr);
     }
 
     OUString SAL_CALL CAttr::getNodeName()

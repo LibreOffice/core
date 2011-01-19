@@ -31,10 +31,10 @@
 namespace DOM
 {
     CNotation::CNotation(const xmlNotationPtr aNotationPtr)
+        : CNotation_Base(
+            NodeType_NOTATION_NODE, reinterpret_cast<xmlNodePtr>(aNotationPtr))
+        , m_aNotationPtr(aNotationPtr)
     {
-        m_aNodeType = NodeType_NOTATION_NODE;
-        m_aNotationPtr = aNotationPtr;
-        init_node((xmlNodePtr)aNotationPtr);
     }
 
     OUString SAL_CALL CNotation::getPublicId() throw (RuntimeException)
