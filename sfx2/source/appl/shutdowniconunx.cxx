@@ -348,7 +348,7 @@ void SAL_DLLPUBLIC_EXPORT plugin_init_sys_tray()
     ::SolarMutexGuard aGuard;
 
     if( /* need gtk_status to resolve */
-        !gtk_check_version( 2, 10, 0 ) ||
+        (gtk_check_version( 2, 10, 0 ) != NULL) ||
         /* we need the vcl plugin and mainloop initialized */
         !g_type_from_name( "GdkDisplay" ) )
         return;
