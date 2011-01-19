@@ -8,6 +8,7 @@
 use strict;
 use File::Temp qw/ :mktemp  /;
 use File::Copy;
+use Cwd;
 
 $ENV{LC_ALL} = "C";
 
@@ -117,6 +118,20 @@ check using:"
 
 EOM
     exit( 1 );
+}
+
+# check for missing doxygen comments in new files
+my $doxycheck = "../../bin/find-undocumented-classes";
+if (! -e $doxycheck) {
+    # bootstrap repo
+    $doxycheck =~ s|../../||;
+}
+open(FILES, "git diff-index --cached --name-only --diff-filter=A $against |") || die "Cannot run git diff-index.";
+while (my $file = <FILES>) {
+    chomp($file);
+    if ($file =~ /\.hxx$/) {
+        system("$doxycheck -q $file | sed 's|".getcwd()."/||;'");
+    }
 }
 
 # be strict about tabs - we don't want them at all, setup your editor
