@@ -1719,6 +1719,12 @@ sub cancel_build {
 sub store_error {
     my ($pid, $error_code) = @_;
     return 0 if (!$error_code);
+
+    #we don't care if zenity itself crashes, e.g. rhbz#670895
+    if (zenity_enabled()) {
+        return 0 if ($zenity_pid == $pid);
+    }
+
     my $child_nick = $processes_hash{$pid};
     if ($ENV{GUI} eq 'WNT') {
         if (!defined $had_error{$child_nick}) {
@@ -2112,7 +2118,7 @@ sub zenity_enabled {
 sub zenity_open {
     if (zenity_enabled()) {
     $SIG{PIPE} = 'IGNORE';
-        my $zenity_pid = open3($zenity_in, $zenity_out, $zenity_err,
+        $zenity_pid = open3($zenity_in, $zenity_out, $zenity_err,
                                "zenity --notification --listen");
     };
 };
