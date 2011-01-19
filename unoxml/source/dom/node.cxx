@@ -562,9 +562,7 @@ namespace DOM
         if (0 == m_aNodePtr) {
             return 0;
         }
-        Reference< XNodeList > const xNodeList(
-                new CChildList(*CNode::getCNode(m_aNodePtr)));
-        // XXX check for errors?
+        Reference< XNodeList > const xNodeList(new CChildList(this));
         return xNodeList;
     }
 

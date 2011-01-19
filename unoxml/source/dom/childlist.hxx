@@ -25,18 +25,18 @@
  *
  ************************************************************************/
 
-#ifndef _CHILDLIST_HXX
-#define _CHILDLIST_HXX
+#ifndef DOM_CHILDLIST_HXX
+#define DOM_CHILDLIST_HXX
 
-#include <map>
 #include <sal/types.h>
-#include <cppuhelper/implbase1.hxx>
+#include <rtl/ref.hxx>
+
 #include <com/sun/star/uno/Reference.h>
-#include <com/sun/star/uno/Exception.hpp>
 #include <com/sun/star/xml/dom/XNode.hpp>
 #include <com/sun/star/xml/dom/XNodeList.hpp>
-#include "node.hxx"
-#include "libxml/tree.h"
+
+#include <cppuhelper/implbase1.hxx>
+
 
 using ::rtl::OUString;
 using namespace com::sun::star::uno;
@@ -44,12 +44,17 @@ using namespace com::sun::star::xml::dom;
 
 namespace DOM
 {
-    class CChildList : public cppu::WeakImplHelper1< XNodeList >
+    class CNode;
+
+    class CChildList
+        : public cppu::WeakImplHelper1< XNodeList >
     {
     private:
-        const xmlNodePtr m_pNode;
+        ::rtl::Reference<CNode> const m_pNode;
+
     public:
-        CChildList(CNode const& rBase);
+        CChildList(::rtl::Reference<CNode> const& pBase);
+
         /**
         The number of nodes in the list.
         */
@@ -57,7 +62,8 @@ namespace DOM
         /**
         Returns the indexth item in the collection.
         */
-        virtual Reference< XNode > SAL_CALL item(sal_Int32 index) throw (RuntimeException);
+        virtual Reference< XNode > SAL_CALL item(sal_Int32 index)
+            throw (RuntimeException);
     };
 }
 

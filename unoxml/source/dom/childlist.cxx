@@ -25,11 +25,17 @@
  *
  ************************************************************************/
 
-#include "childlist.hxx"
+#include <childlist.hxx>
+
+#include <libxml/tree.h>
+
+#include <node.hxx>
+
+
 namespace DOM
 {
-    CChildList::CChildList(CNode const& rBase)
-        : m_pNode(rBase.m_aNodePtr)
+    CChildList::CChildList(::rtl::Reference<CNode> const& pBase)
+        : m_pNode(pBase)
     {
     }
 
@@ -41,7 +47,10 @@ namespace DOM
         sal_Int32 length = 0;
         if (m_pNode != NULL)
         {
-            xmlNodePtr cur = m_pNode->children;
+            xmlNodePtr cur = m_pNode->m_aNodePtr;
+            if (0 != cur) {
+                cur = cur->children;
+            }
             while (cur != NULL)
             {
                 length++;
@@ -54,21 +63,23 @@ namespace DOM
     /**
     Returns the indexth item in the collection.
     */
-    Reference< XNode > SAL_CALL CChildList::item(sal_Int32 index) throw (RuntimeException)
+    Reference< XNode > SAL_CALL CChildList::item(sal_Int32 index)
+        throw (RuntimeException)
     {
-        Reference< XNode >aNode;
         if (m_pNode != NULL)
         {
-            xmlNodePtr cur = m_pNode->children;
+            xmlNodePtr cur = m_pNode->m_aNodePtr;
+            if (0 != cur) {
+                cur = cur->children;
+            }
             while (cur != NULL)
             {
                 if (index-- == 0) {
-                    aNode = Reference< XNode >(CNode::getCNode(cur).get());
-                    break;
+                    return Reference< XNode >(CNode::getCNode(cur).get());
                 }
                 cur = cur->next;
             }
         }
-        return aNode;
+        return 0;
     }
 }
