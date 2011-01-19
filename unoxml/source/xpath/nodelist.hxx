@@ -59,14 +59,16 @@ namespace XPath
     class CNodeList : public cppu::WeakImplHelper1< XNodeList >
     {
     private:
-        /// #i115995# retain context node to keep document alive
+        /// #i115995# keep document alive
         ::rtl::Reference< DOM::CDocument > const m_pDocument;
+        ::osl::Mutex & m_rMutex;
         boost::shared_ptr<xmlXPathObject> m_pXPathObj;
         xmlNodeSetPtr m_pNodeSet;
 
     public:
         CNodeList(
                 ::rtl::Reference<DOM::CDocument> const& pDocument,
+                ::osl::Mutex & rMutex,
                 boost::shared_ptr<xmlXPathObject> const& rxpathObj);
         /**
         The number of nodes in the list.

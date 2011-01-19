@@ -59,11 +59,13 @@ namespace XPath
     {
     private:
         ::rtl::Reference< DOM::CDocument > const m_pDocument;
+        ::osl::Mutex & m_rMutex;
         boost::shared_ptr<xmlXPathObject> const m_pXPathObj;
         XPathObjectType const m_XPathObjectType;
 
     public:
         CXPathObject( ::rtl::Reference<DOM::CDocument> const& pDocument,
+            ::osl::Mutex & rMutex,
             xmlXPathObjectPtr const xpathObj);
 
     /**

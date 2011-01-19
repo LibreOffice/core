@@ -25,11 +25,12 @@
  *
  ************************************************************************/
 
-#include "xpathapi.hxx"
+#include <xpathapi.hxx>
 
 #include <stdarg.h>
 #include <string.h>
 
+#include <libxml/tree.h>
 #include <libxml/xmlerror.h>
 #include <libxml/xpath.h>
 #include <libxml/xpathInternals.h>
@@ -38,6 +39,7 @@
 
 #include <nodelist.hxx>
 #include <xpathobject.hxx>
+
 #include "../dom/node.hxx"
 #include "../dom/document.hxx"
 
@@ -110,6 +112,8 @@ namespace XPath
             const OUString& aURI)
         throw (RuntimeException)
     {
+        ::osl::MutexGuard const g(m_Mutex);
+
         m_nsmap.insert(nsmap_t::value_type(aPrefix, aURI));
     }
 
@@ -118,13 +122,16 @@ namespace XPath
             const OUString& aURI)
         throw (RuntimeException)
     {
-        if ((m_nsmap.find(aPrefix))->second.equals(aURI))
+        ::osl::MutexGuard const g(m_Mutex);
+
+        if ((m_nsmap.find(aPrefix))->second.equals(aURI)) {
             m_nsmap.erase(aPrefix);
+        }
     }
 
     // register all namespaces stored in the namespace list for this object
     // with the current xpath evaluation context
-    static void _registerNamespaces(
+    static void lcl_registerNamespaces(
             xmlXPathContextPtr ctx,
             const nsmap_t& nsmap)
     {
@@ -142,13 +149,15 @@ namespace XPath
         }
     }
 
-    // get all ns decls on a node (and parent nodes, if any) and register them
+    // get all ns decls on a node (and parent nodes, if any)
     static void lcl_collectNamespaces(
-            CXPathAPI *const pAPI,
-            Reference< XNode > const& xNamespaceNode)
+            nsmap_t & rNamespaces, Reference< XNode > const& xNamespaceNode)
     {
-        // get namespace decls from node...
         DOM::CNode *const pCNode(DOM::CNode::GetImplementation(xNamespaceNode));
+        if (pCNode) { throw RuntimeException(); }
+
+        ::osl::MutexGuard const g(pCNode->GetOwnerDocument().GetMutex());
+
         xmlNodePtr pNode = pCNode->GetNodePtr();
         while (pNode != 0) {
             xmlNsPtr curDef = pNode->nsDef;
@@ -157,16 +166,32 @@ namespace XPath
                 OUString aURI((sal_Char*)xHref, strlen((char*)xHref), RTL_TEXTENCODING_UTF8);
                 const xmlChar* xPre = curDef->prefix;
                 OUString aPrefix((sal_Char*)xPre, strlen((char*)xPre), RTL_TEXTENCODING_UTF8);
-                pAPI->registerNS(aPrefix, aURI);
+                // we could already have this prefix from a child node
+                if (rNamespaces.find(aPrefix) == rNamespaces.end())
+                {
+                    rNamespaces.insert(::std::make_pair(aPrefix, aURI));
+                }
                 curDef = curDef->next;
             }
             pNode = pNode->parent;
         }
     }
 
+    static void lcl_collectRegisterNamespaces(
+            CXPathAPI & rAPI, Reference< XNode > const& xNamespaceNode)
+    {
+        nsmap_t namespaces;
+        lcl_collectNamespaces(namespaces, xNamespaceNode);
+        for (nsmap_t::const_iterator iter = namespaces.begin();
+                iter != namespaces.end(); ++iter)
+        {
+            rAPI.registerNS(iter->first, iter->second);
+        }
+    }
+
     // register function and variable lookup functions with the current
     // xpath evaluation context
-    static void _registerExtensions(
+    static void lcl_registerExtensions(
             xmlXPathContextPtr ctx,
             const extensions_t& extensions)
     {
@@ -215,7 +240,7 @@ namespace XPath
             const Reference< XNode >&  namespaceNode)
         throw (RuntimeException, XPathException)
     {
-        lcl_collectNamespaces(this, namespaceNode);
+        lcl_collectRegisterNamespaces(*this, namespaceNode);
         return selectNodeList(contextNode, expr);
     }
 
@@ -242,7 +267,7 @@ namespace XPath
             const Reference< XNode >&  namespaceNode )
         throw (RuntimeException, XPathException)
     {
-        lcl_collectNamespaces(this, namespaceNode);
+        lcl_collectRegisterNamespaces(*this, namespaceNode);
         return selectSingleNode(contextNode, expr);
     }
 
@@ -313,16 +338,35 @@ namespace XPath
      * the context Node
      */
     Reference< XXPathObject > SAL_CALL CXPathAPI::eval(
-            const Reference< XNode >& contextNode,
+            Reference< XNode > const& xContextNode,
             const OUString& expr)
         throw (RuntimeException, XPathException)
     {
+        if (!xContextNode.is()) { throw RuntimeException(); }
+
+        nsmap_t nsmap;
+        extensions_t extensions;
+
+        {
+            ::osl::MutexGuard const g(m_Mutex);
+            nsmap = m_nsmap;
+            extensions = m_extensions;
+        }
+
         xmlXPathContextPtr xpathCtx;
         xmlXPathObjectPtr xpathObj;
 
         // get the node and document
-        DOM::CNode *const pCNode = DOM::CNode::GetImplementation(contextNode);
+        ::rtl::Reference<DOM::CDocument> const pCDoc(
+                dynamic_cast<DOM::CDocument*>( DOM::CNode::GetImplementation(
+                        xContextNode->getOwnerDocument())));
+        if (!pCDoc.is()) { throw RuntimeException(); }
+
+        DOM::CNode *const pCNode = DOM::CNode::GetImplementation(xContextNode);
         if (!pCNode) { throw RuntimeException(); }
+
+        ::osl::MutexGuard const g(pCDoc->GetMutex()); // lock the document!
+
         xmlNodePtr const pNode = pCNode->GetNodePtr();
         if (!pNode) { throw RuntimeException(); }
         xmlDocPtr pDoc = pNode->doc;
@@ -349,8 +393,8 @@ namespace XPath
         xmlSetGenericErrorFunc(NULL, generic_error_func);
 
         // register namespaces and extension
-        _registerNamespaces(xpathCtx, m_nsmap);
-        _registerExtensions(xpathCtx, m_extensions);
+        lcl_registerNamespaces(xpathCtx, nsmap);
+        lcl_registerExtensions(xpathCtx, extensions);
 
         /* run the query */
         OString o1 = OUStringToOString(expr, RTL_TEXTENCODING_UTF8);
@@ -361,10 +405,8 @@ namespace XPath
             throw XPathException();
         }
         xmlXPathFreeContext(xpathCtx);
-        ::rtl::Reference<DOM::CDocument> const pCDoc(
-                & pCNode->GetOwnerDocument());
-        OSL_ASSERT(pCDoc.is());
-        Reference<XXPathObject> const xObj(new CXPathObject(pCDoc, xpathObj));
+        Reference<XXPathObject> const xObj(
+                new CXPathObject(pCDoc, pCDoc->GetMutex(), xpathObj));
         return xObj;
     }
 
@@ -377,7 +419,7 @@ namespace XPath
             const Reference< XNode >& namespaceNode)
         throw (RuntimeException, XPathException)
     {
-        lcl_collectNamespaces(this, namespaceNode);
+        lcl_collectRegisterNamespaces(*this, namespaceNode);
         return eval(contextNode, expr);
     }
 
@@ -390,9 +432,12 @@ namespace XPath
             const OUString& aName)
         throw (RuntimeException)
     {
+        ::osl::MutexGuard const g(m_Mutex);
+
         // get extension from service manager
-        Reference< XXPathExtension > aExtension(m_aFactory->createInstance(aName), UNO_QUERY_THROW);
-        m_extensions.push_back( aExtension );
+        Reference< XXPathExtension > const xExtension(
+                m_aFactory->createInstance(aName), UNO_QUERY_THROW);
+        m_extensions.push_back(xExtension);
     }
 
     /**
@@ -400,13 +445,13 @@ namespace XPath
      * XPathAPI instance
      */
     void SAL_CALL CXPathAPI::registerExtensionInstance(
-            const Reference< XXPathExtension>& aExtension)
+            Reference< XXPathExtension> const& xExtension)
         throw (RuntimeException)
     {
-        if (aExtension.is()) {
-            m_extensions.push_back( aExtension );
-        } else {
+        if (!xExtension.is()) {
             throw RuntimeException();
         }
+        ::osl::MutexGuard const g(m_Mutex);
+        m_extensions.push_back( xExtension );
     }
 }

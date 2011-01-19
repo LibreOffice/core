@@ -25,14 +25,16 @@
  *
  ************************************************************************/
 
-#ifndef _XPATHAPI_HXX
-#define _XPATHAPI_HXX
+#ifndef XPATH_XPATHAPI_HXX
+#define XPATH_XPATHAPI_HXX
 
 #include <map>
 #include <vector>
 
 #include <sal/types.h>
+
 #include <cppuhelper/implbase2.hxx>
+
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/Sequence.h>
 
@@ -50,7 +52,6 @@
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
-#include "libxml/tree.h"
 
 using ::rtl::OUString;
 using namespace com::sun::star::uno;
@@ -72,6 +73,7 @@ namespace XPath
     {
 
     private:
+        ::osl::Mutex m_Mutex;
         nsmap_t m_nsmap;
         const Reference< ::com::sun::star::lang::XMultiServiceFactory > m_aFactory;
         extensions_t m_extensions;

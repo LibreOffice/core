@@ -113,6 +113,9 @@ namespace DOM
 
         virtual ~CDocument();
 
+        // needed by CXPathAPI
+        ::osl::Mutex & GetMutex() { return m_Mutex; }
+
         events::CEventDispatcher & GetEventDispatcher();
         ::rtl::Reference< CElement > GetDocumentElement();
 

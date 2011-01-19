@@ -66,8 +66,10 @@ namespace XPath
 
     CXPathObject::CXPathObject(
             ::rtl::Reference<DOM::CDocument> const& pDocument,
+            ::osl::Mutex & rMutex,
             xmlXPathObjectPtr const xpathObj)
         : m_pDocument(pDocument)
+        , m_rMutex(rMutex)
         , m_pXPathObj(xpathObj, xmlXPathFreeObject)
         , m_XPathObjectType(lcl_GetType(xpathObj))
     {
@@ -87,8 +89,10 @@ namespace XPath
     Reference< XNodeList > SAL_CALL
     CXPathObject::getNodeList() throw (RuntimeException)
     {
+        ::osl::MutexGuard const g(m_rMutex);
+
         Reference< XNodeList > const xRet(
-            new CNodeList(m_pDocument, m_pXPathObj));
+            new CNodeList(m_pDocument, m_rMutex, m_pXPathObj));
         return xRet;
     }
 
@@ -97,6 +101,8 @@ namespace XPath
      */
     sal_Bool SAL_CALL CXPathObject::getBoolean() throw (RuntimeException)
     {
+        ::osl::MutexGuard const g(m_rMutex);
+
         return (sal_Bool) xmlXPathCastToBoolean(m_pXPathObj.get());
     }
 
@@ -105,6 +111,8 @@ namespace XPath
     */
     sal_Int8 SAL_CALL CXPathObject::getByte() throw (RuntimeException)
     {
+        ::osl::MutexGuard const g(m_rMutex);
+
         return (sal_Int8) xmlXPathCastToNumber(m_pXPathObj.get());
     }
 
@@ -113,6 +121,8 @@ namespace XPath
     */
     sal_Int16 SAL_CALL CXPathObject::getShort() throw (RuntimeException)
     {
+        ::osl::MutexGuard const g(m_rMutex);
+
         return (sal_Int16) xmlXPathCastToNumber(m_pXPathObj.get());
     }
 
@@ -121,6 +131,8 @@ namespace XPath
     */
     sal_Int32 SAL_CALL CXPathObject::getLong() throw (RuntimeException)
     {
+        ::osl::MutexGuard const g(m_rMutex);
+
         return (sal_Int32) xmlXPathCastToNumber(m_pXPathObj.get());
     }
 
@@ -129,6 +141,8 @@ namespace XPath
     */
     sal_Int64 SAL_CALL CXPathObject::getHyper() throw (RuntimeException)
     {
+        ::osl::MutexGuard const g(m_rMutex);
+
         return (sal_Int64) xmlXPathCastToNumber(m_pXPathObj.get());
     }
 
@@ -137,6 +151,8 @@ namespace XPath
     */
     float SAL_CALL CXPathObject::getFloat() throw (RuntimeException)
     {
+        ::osl::MutexGuard const g(m_rMutex);
+
         return (float) xmlXPathCastToNumber(m_pXPathObj.get());
     }
 
@@ -145,6 +161,8 @@ namespace XPath
     */
     double SAL_CALL CXPathObject::getDouble() throw (RuntimeException)
     {
+        ::osl::MutexGuard const g(m_rMutex);
+
         return  xmlXPathCastToNumber(m_pXPathObj.get());
     }
 
@@ -153,6 +171,8 @@ namespace XPath
     */
     OUString SAL_CALL CXPathObject::getString() throw (RuntimeException)
     {
+        ::osl::MutexGuard const g(m_rMutex);
+
         const sal_Char* x1 = (sal_Char*) xmlXPathCastToString(m_pXPathObj.get());
         return OUString(x1, strlen(x1), RTL_TEXTENCODING_UTF8);
     }
