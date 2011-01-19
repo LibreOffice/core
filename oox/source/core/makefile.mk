@@ -49,7 +49,7 @@ SLOFILES =	\
         $(SLO)$/binaryfilterbase.obj		\
         $(SLO)$/contexthandler.obj			\
         $(SLO)$/contexthandler2.obj			\
-        $(SLO)$/facreg.obj					\
+        $(SLO)$/fastparser.obj				\
         $(SLO)$/fasttokenhandler.obj		\
         $(SLO)$/filterbase.obj				\
         $(SLO)$/filterdetect.obj			\
@@ -58,6 +58,7 @@ SLOFILES =	\
         $(SLO)$/recordparser.obj			\
         $(SLO)$/relations.obj				\
         $(SLO)$/relationshandler.obj		\
+        $(SLO)$/services.obj				\
         $(SLO)$/xmlfilterbase.obj
 
 # --- Targets -------------------------------------------------------

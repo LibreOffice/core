@@ -26,26 +26,31 @@
  ************************************************************************/
 
 #include "oox/helper/binaryinputstream.hxx"
+
 #include <string.h>
 #include <vector>
 #include <rtl/strbuf.hxx>
 #include <rtl/ustrbuf.hxx>
 #include "oox/helper/binaryoutputstream.hxx"
 
+namespace oox {
+
+// ============================================================================
+
+using namespace ::com::sun::star::io;
+using namespace ::com::sun::star::uno;
+
 using ::rtl::OString;
 using ::rtl::OStringBuffer;
 using ::rtl::OStringToOUString;
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
-using ::com::sun::star::uno::UNO_QUERY;
-using ::com::sun::star::uno::Reference;
-using ::com::sun::star::uno::Exception;
-using ::com::sun::star::io::XInputStream;
-using ::com::sun::star::io::XSeekable;
 
-namespace oox {
+namespace {
 
 const sal_Int32 INPUTSTREAM_BUFFERSIZE      = 0x8000;
+
+} // namespace
 
 // ============================================================================
 
@@ -330,4 +335,3 @@ void RelativeInputStream::skip( sal_Int32 nBytes )
 // ============================================================================
 
 } // namespace oox
-

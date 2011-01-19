@@ -25,8 +25,6 @@
  *
  ************************************************************************/
 
-
-
 #include "oox/ppt/animationspersist.hxx"
 
 #include <rtl/ustring.hxx>
@@ -37,8 +35,6 @@
 #include <com/sun/star/presentation/ShapeAnimationSubType.hpp>
 
 #include "oox/drawingml/shape.hxx"
-
-#include "tokens.hxx"
 
 using rtl::OUString;
 using namespace ::com::sun::star::uno;

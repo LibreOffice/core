@@ -27,10 +27,7 @@
 
 #include "oox/drawingml/drawingmltypes.hxx"
 #include "oox/drawingml/textspacing.hxx"
-#include "oox/core/namespaces.hxx"
 #include "textspacingcontext.hxx"
-#include "tokens.hxx"
-
 
 using namespace ::oox::core;
 using namespace ::com::sun::star::xml::sax;
@@ -52,17 +49,17 @@ namespace oox { namespace drawingml {
     }
 
     Reference< XFastContextHandler > TextSpacingContext::createFastChildContext( ::sal_Int32 aElement,
-                                                                                                                                                        const Reference< XFastAttributeList >& xAttribs )
+            const Reference< XFastAttributeList >& xAttribs )
         throw ( SAXException, RuntimeException )
     {
         Reference< XFastContextHandler > xRet;
         switch( aElement )
         {
-        case NMSP_DRAWINGML|XML_spcPct:
+        case A_TOKEN( spcPct ):
             maSpacing.nUnit = TextSpacing::PERCENT;
             maSpacing.nValue = GetPercent( xAttribs->getValue( XML_val ) );
             break;
-        case NMSP_DRAWINGML|XML_spcPts:
+        case A_TOKEN( spcPts ):
             maSpacing.nUnit = TextSpacing::POINTS;
             maSpacing.nValue = GetTextSpacingPoint( xAttribs->getValue( XML_val ) );
             break;

@@ -27,7 +27,6 @@
 
 #include "oox/drawingml/diagram/datamodelcontext.hxx"
 #include "oox/helper/attributelist.hxx"
-#include "oox/core/namespaces.hxx"
 #include "oox/drawingml/fillpropertiesgroupcontext.hxx"
 #include "oox/drawingml/shapepropertiescontext.hxx"
 #include "oox/drawingml/textbodycontext.hxx"
@@ -38,8 +37,6 @@ using namespace ::com::sun::star::uno;
 using ::rtl::OUString;
 
 namespace oox { namespace drawingml {
-
-
 
 // CL_Cxn
 class CxnContext
@@ -73,7 +70,7 @@ public:
 
             switch( aElementToken )
             {
-            case NMSP_DIAGRAM|XML_extLst:
+            case DGM_TOKEN( extLst ):
                 return xRet;
             default:
                 break;
@@ -106,7 +103,7 @@ public:
 
             switch( aElementToken )
             {
-            case NMSP_DIAGRAM|XML_cxn:
+            case DGM_TOKEN( cxn ):
             {
                 dgm::ConnectionPtr pConnection( new dgm::Connection() );
                 maConnections.push_back( pConnection );
@@ -161,17 +158,17 @@ public:
 
             switch( aElementToken )
             {
-            case NMSP_DIAGRAM|XML_extLst:
+            case DGM_TOKEN( extLst ):
                 return xRet;
-            case NMSP_DIAGRAM|XML_prSet:
+            case DGM_TOKEN( prSet ):
                 // TODO
                 // CT_ElemPropSet
                 break;
-            case NMSP_DIAGRAM|XML_spPr:
+            case DGM_TOKEN( spPr ):
                 OSL_TRACE( "shape props for point");
                 xRet = new ShapePropertiesContext( *this, *mpPoint->getShape() );
                 break;
-            case NMSP_DIAGRAM|XML_t:
+            case DGM_TOKEN( t ):
             {
                 OSL_TRACE( "shape text body for point");
                 TextBodyPtr xTextBody( new TextBody );
@@ -212,7 +209,7 @@ public:
 
             switch( aElementToken )
             {
-            case NMSP_DIAGRAM|XML_pt:
+            case DGM_TOKEN( pt ):
             {
                 // CT_Pt
                 dgm::PointPtr pPoint( new dgm::Point() );
@@ -253,18 +250,18 @@ public:
 
             switch( aElementToken )
             {
-            case NMSP_DRAWINGML|XML_blipFill:
-            case NMSP_DRAWINGML|XML_gradFill:
-            case NMSP_DRAWINGML|XML_grpFill:
-            case NMSP_DRAWINGML|XML_noFill:
-            case NMSP_DRAWINGML|XML_pattFill:
-            case NMSP_DRAWINGML|XML_solidFill:
+            case A_TOKEN( blipFill ):
+            case A_TOKEN( gradFill ):
+            case A_TOKEN( grpFill ):
+            case A_TOKEN( noFill ):
+            case A_TOKEN( pattFill ):
+            case A_TOKEN( solidFill ):
                 // EG_FillProperties
                 xRet.set( FillPropertiesContext::createFillContext(
                     *this, aElementToken, xAttribs, *mpDataModel->getFillProperties() ) );
                 break;
-            case NMSP_DRAWINGML|XML_effectDag:
-            case NMSP_DRAWINGML|XML_effectLst:
+            case A_TOKEN( effectDag ):
+            case A_TOKEN( effectLst ):
                 // TODO
                 // EG_EffectProperties
                 break;
@@ -306,23 +303,23 @@ DataModelContext::createFastChildContext( ::sal_Int32 aElement,
 
     switch( aElement )
     {
-    case NMSP_DIAGRAM|XML_cxnLst:
+    case DGM_TOKEN( cxnLst ):
         // CT_CxnList
         xRet.set( new CxnListContext( *this, mpDataModel->getConnections() ) );
         break;
-    case NMSP_DIAGRAM|XML_ptLst:
+    case DGM_TOKEN( ptLst ):
         // CT_PtList
         xRet.set( new PtListContext( *this, mpDataModel->getPoints() ) );
         break;
-    case NMSP_DIAGRAM|XML_bg:
+    case DGM_TOKEN( bg ):
         // CT_BackgroundFormatting
         xRet.set( new BackgroundFormattingContext( *this, mpDataModel ) );
         break;
-    case NMSP_DIAGRAM|XML_whole:
+    case DGM_TOKEN( whole ):
         // CT_WholeE2oFormatting
         // TODO
         return xRet;
-    case NMSP_DIAGRAM|XML_extLst:
+    case DGM_TOKEN( extLst ):
         return xRet;
     default:
         break;
