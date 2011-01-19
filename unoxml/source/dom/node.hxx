@@ -25,8 +25,8 @@
  *
  ************************************************************************/
 
-#ifndef _NODE_HXX
-#define _NODE_HXX
+#ifndef DOM_NODE_HXX
+#define DOM_NODE_HXX
 
 #include <rtl/ref.hxx>
 #include <rtl/string.hxx>
@@ -128,6 +128,7 @@ namespace DOM
         friend class CNotationsMap;
     private:
         static nodemap_t theNodeMap;
+        bool m_bUnlinked; /// node has been removed from document
 
     protected:
         NodeType m_aNodeType;

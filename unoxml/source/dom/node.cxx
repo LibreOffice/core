@@ -265,7 +265,8 @@ namespace DOM
     }
 
     CNode::CNode()
-        : m_aNodePtr(0)
+        :   m_bUnlinked(false)
+        ,   m_aNodePtr(0)
     {
     }
 
@@ -284,6 +285,10 @@ namespace DOM
         //remove from list if this wrapper goes away
         if (m_aNodePtr != 0)
             CNode::remove(m_aNodePtr);
+        // #i113663#: unlinked nodes will not be freed by xmlFreeDoc
+        if (m_bUnlinked) {
+            xmlFreeNode(m_aNodePtr);
+        }
     }
 
     static void _nsexchange(const xmlNodePtr aNode, xmlNsPtr oldNs, xmlNsPtr newNs)
@@ -378,7 +383,7 @@ namespace DOM
     Reference< XNode > CNode::appendChild(const Reference< XNode >& newChild)
         throw (RuntimeException, DOMException)
     {
-        Reference< XNode> aNode;
+        CNode * pNode(0);
         if (m_aNodePtr != NULL) {
         xmlNodePtr cur = CNode::getNodePtr(newChild.get());
 
@@ -454,15 +459,16 @@ namespace DOM
         // because that will not remove unneeded ns decls
         _nscleanup(res, m_aNodePtr);
 
-            aNode = Reference< XNode>(CNode::get(res));
+            pNode = CNode::get(res);
         }
         //XXX check for errors
 
         // dispatch DOMNodeInserted event, target is the new node
         // this node is the related node
         // does bubble
-        if (aNode.is())
+        if (pNode)
         {
+            pNode->m_bUnlinked = false; // will be deleted by xmlFreeDoc
             Reference< XDocumentEvent > docevent(getOwnerDocument(), UNO_QUERY);
             Reference< XMutationEvent > event(docevent->createEvent(
                 OUString::createFromAscii("DOMNodeInserted")), UNO_QUERY);
@@ -474,7 +480,7 @@ namespace DOM
             // dispatch subtree modified for this node
             dispatchSubtreeModified();
         }
-        return aNode;
+        return pNode;
     }
 
     /**
@@ -484,15 +490,15 @@ namespace DOM
     Reference< XNode > CNode::cloneNode(sal_Bool bDeep)
         throw (RuntimeException)
     {
-        Reference< XNode> aNode;
+        CNode * pNode(0);
         if (m_aNodePtr != NULL)
         {
-            aNode = Reference< XNode>(CNode::get(
-                xmlCopyNode (m_aNodePtr, static_cast< int >(bDeep))
-                ));
+            pNode = CNode::get(
+                xmlCopyNode(m_aNodePtr, (bDeep) ? 1 : 0));
+            pNode->m_bUnlinked = true; // not linked yet
         }
         //XXX check for errors
-        return aNode;
+        return pNode;
     }
 
     /**
@@ -766,6 +772,8 @@ namespace DOM
                 cur->prev = pNewChild;
                 if( pNewChild->prev != NULL)
                     pNewChild->prev->next = pNewChild;
+                CNode *const pNode( CNode::get(pNewChild) );
+                pNode->m_bUnlinked = false; // will be deleted by xmlFreeDoc
             }
             cur = cur->next;
         }
@@ -803,6 +811,9 @@ namespace DOM
     Reference< XNode > SAL_CALL CNode::removeChild(const Reference< XNode >& oldChild)
         throw (RuntimeException, DOMException)
     {
+        if (!oldChild.is()) {
+            throw RuntimeException();
+        }
 
         if (oldChild->getParentNode() != Reference< XNode >(this)) {
             DOMException e;
@@ -813,6 +824,8 @@ namespace DOM
         Reference<XNode> xReturn( oldChild );
 
         xmlNodePtr old = CNode::getNodePtr(oldChild);
+        CNode *const pOld( CNode::get(old) );
+        pOld->m_bUnlinked = true;
 
         if( old->type == XML_ATTRIBUTE_NODE )
         {
@@ -822,30 +835,7 @@ namespace DOM
         }
         else
         {
-
-            // update .last
-            if (m_aNodePtr->last == old)
-                m_aNodePtr->last = old->prev;
-
-            xmlNodePtr cur = m_aNodePtr->children;
-            //find old node in child list
-            while (cur != NULL)
-            {
-                if(cur == old)
-                {
-                    // unlink node from list
-                    if (cur->prev != NULL)
-                        cur->prev->next = cur->next;
-                    if (cur->next != NULL)
-                        cur->next->prev = cur->prev;
-                    if (cur->parent != NULL && cur->parent->children == cur)
-                        cur->parent->children = cur->next;
-                    cur->prev = NULL;
-                    cur->next = NULL;
-                    cur->parent = NULL;
-                }
-                cur = cur->next;
-            }
+            xmlUnlinkNode(old);
         }
 
         /*DOMNodeRemoved
@@ -880,6 +870,9 @@ namespace DOM
             const Reference< XNode >& newChild, const Reference< XNode >& oldChild)
         throw (RuntimeException, DOMException)
     {
+        if (!oldChild.is()) {
+            throw RuntimeException();
+        }
         // XXX check node types
 
         if (oldChild->getParentNode() != Reference< XNode >(this)) {
@@ -933,6 +926,10 @@ namespace DOM
                 pOld->next = NULL;
                 pOld->prev = NULL;
                 pOld->parent = NULL;
+                CNode *const pOldNode( CNode::get(pOld) );
+                pOldNode->m_bUnlinked = true;
+                CNode *const pNewNode( CNode::get(pNew) );
+                pNewNode->m_bUnlinked = false; // will be deleted by xmlFreeDoc
             }
             cur = cur->next;
         }
