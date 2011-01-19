@@ -25,18 +25,18 @@
  *
  ************************************************************************/
 
-#ifndef _NOTATIONSMAP_HXX
-#define _NOTATIONSMAP_HXX
+#ifndef DOM_NOTATIONSMAP_HXX
+#define DOM_NOTATIONSMAP_HXX
 
-#include <map>
 #include <sal/types.h>
-#include <cppuhelper/implbase1.hxx>
+#include <rtl/ref.hxx>
+
 #include <com/sun/star/uno/Reference.h>
-#include <com/sun/star/uno/Exception.hpp>
 #include <com/sun/star/xml/dom/XNode.hpp>
 #include <com/sun/star/xml/dom/XNamedNodeMap.hpp>
-#include "document.hxx"
-#include "documenttype.hxx"
+
+#include <cppuhelper/implbase1.hxx>
+
 
 using ::rtl::OUString;
 using namespace com::sun::star::uno;
@@ -44,13 +44,16 @@ using namespace com::sun::star::xml::dom;
 
 namespace DOM
 {
-    class CNotationsMap : public cppu::WeakImplHelper1< XNamedNodeMap >
+    class CDocumentType;
+
+    class CNotationsMap
+        : public cppu::WeakImplHelper1< XNamedNodeMap >
     {
     private:
-        const CDocumentType* m_pDocType;
+        ::rtl::Reference<CDocumentType> const m_pDocType;
 
     public:
-        CNotationsMap(const CDocumentType* aDocType);
+        CNotationsMap(::rtl::Reference<CDocumentType> const& pDocType);
 
         /**
         The number of nodes in this map.
@@ -60,37 +63,48 @@ namespace DOM
         /**
         Retrieves a node specified by local name
         */
-        virtual Reference< XNode > SAL_CALL getNamedItem(const OUString& name) throw (RuntimeException);
+        virtual Reference< XNode > SAL_CALL
+            getNamedItem(OUString const& name) throw (RuntimeException);
 
         /**
         Retrieves a node specified by local name and namespace URI.
         */
-        virtual Reference< XNode > SAL_CALL getNamedItemNS(const OUString& namespaceURI,const OUString& localName) throw (RuntimeException);
+        virtual Reference< XNode > SAL_CALL getNamedItemNS(
+                OUString const& namespaceURI, OUString const& localName)
+            throw (RuntimeException);
 
         /**
         Returns the indexth item in the map.
         */
-        virtual Reference< XNode > SAL_CALL item(sal_Int32 index) throw (RuntimeException);
+        virtual Reference< XNode > SAL_CALL
+            item(sal_Int32 index) throw (RuntimeException);
 
         /**
         Removes a node specified by name.
         */
-        virtual Reference< XNode > SAL_CALL removeNamedItem(const OUString& name) throw (RuntimeException);
+        virtual Reference< XNode > SAL_CALL
+            removeNamedItem(OUString const& name) throw (RuntimeException);
 
         /**
         // Removes a node specified by local name and namespace URI.
         */
-        virtual Reference< XNode > SAL_CALL removeNamedItemNS(const OUString& namespaceURI, const OUString& localName) throw (RuntimeException);
+        virtual Reference< XNode > SAL_CALL removeNamedItemNS(
+                OUString const& namespaceURI, OUString const& localName)
+            throw (RuntimeException);
 
         /**
         // Adds a node using its nodeName attribute.
         */
-        virtual Reference< XNode > SAL_CALL setNamedItem(const Reference< XNode >& arg) throw (RuntimeException);
+        virtual Reference< XNode > SAL_CALL
+            setNamedItem(Reference< XNode > const& arg)
+            throw (RuntimeException);
 
         /**
         Adds a node using its namespaceURI and localName.
         */
-        virtual Reference< XNode > SAL_CALL setNamedItemNS(const Reference< XNode >& arg) throw (RuntimeException);
+        virtual Reference< XNode > SAL_CALL
+            setNamedItemNS(Reference< XNode > const& arg)
+            throw (RuntimeException);
     };
 }
 

@@ -25,12 +25,16 @@
  *
  ************************************************************************/
 
-#include "notationsmap.hxx"
+#include <notationsmap.hxx>
+
+#include <documenttype.hxx>
+
 
 namespace DOM
 {
-    CNotationsMap::CNotationsMap(const CDocumentType* aDocType)
-        : m_pDocType(aDocType)
+    CNotationsMap::CNotationsMap(
+            ::rtl::Reference<CDocumentType> const& pDocType)
+        : m_pDocType(pDocType)
     {
     }
 
@@ -45,7 +49,9 @@ namespace DOM
     /**
     Retrieves a node specified by local name
     */
-  Reference< XNode > SAL_CALL CNotationsMap::getNamedItem(const OUString& /* name */) throw (RuntimeException)
+    Reference< XNode > SAL_CALL
+    CNotationsMap::getNamedItem(OUString const& /*name*/)
+    throw (RuntimeException)
     {
         return Reference< XNode >();
     }
@@ -53,8 +59,10 @@ namespace DOM
     /**
     Retrieves a node specified by local name and namespace URI.
     */
-  Reference< XNode > SAL_CALL CNotationsMap::getNamedItemNS(const OUString& /*namespaceURI*/, const OUString& /*localName*/)
-throw (RuntimeException)
+    Reference< XNode > SAL_CALL
+    CNotationsMap::getNamedItemNS(
+        OUString const& /*namespaceURI*/, OUString const& /*localName*/)
+    throw (RuntimeException)
     {
         return Reference< XNode >();
     }
@@ -62,7 +70,8 @@ throw (RuntimeException)
     /**
     Returns the indexth item in the map.
     */
-  Reference< XNode > SAL_CALL CNotationsMap::item(sal_Int32 /*index*/) throw (RuntimeException)
+    Reference< XNode > SAL_CALL
+    CNotationsMap::item(sal_Int32 /*index*/) throw (RuntimeException)
     {
         return Reference< XNode >();
     }
@@ -70,7 +79,9 @@ throw (RuntimeException)
     /**
     Removes a node specified by name.
     */
-  Reference< XNode > SAL_CALL CNotationsMap::removeNamedItem(const OUString& /*name*/) throw (RuntimeException)
+    Reference< XNode > SAL_CALL
+    CNotationsMap::removeNamedItem(OUString const& /*name*/)
+    throw (RuntimeException)
     {
         return Reference< XNode >();
     }
@@ -78,7 +89,10 @@ throw (RuntimeException)
     /**
     // Removes a node specified by local name and namespace URI.
     */
-  Reference< XNode > SAL_CALL CNotationsMap::removeNamedItemNS(const OUString& /*namespaceURI*/, const OUString& /*localName*/) throw (RuntimeException)
+    Reference< XNode > SAL_CALL
+    CNotationsMap::removeNamedItemNS(
+        OUString const& /*namespaceURI*/, OUString const& /*localName*/)
+    throw (RuntimeException)
     {
         return Reference< XNode >();
     }
@@ -86,7 +100,9 @@ throw (RuntimeException)
     /**
     // Adds a node using its nodeName attribute.
     */
-  Reference< XNode > SAL_CALL CNotationsMap::setNamedItem(const Reference< XNode >& /*arg*/) throw (RuntimeException)
+    Reference< XNode > SAL_CALL
+    CNotationsMap::setNamedItem(Reference< XNode > const& /*arg*/)
+    throw (RuntimeException)
     {
         return Reference< XNode >();
     }
@@ -94,7 +110,9 @@ throw (RuntimeException)
     /**
     Adds a node using its namespaceURI and localName.
     */
-  Reference< XNode > SAL_CALL CNotationsMap::setNamedItemNS(const Reference< XNode >& /*arg*/) throw (RuntimeException)
+    Reference< XNode > SAL_CALL
+    CNotationsMap::setNamedItemNS(Reference< XNode > const& /*arg*/)
+    throw (RuntimeException)
     {
         return Reference< XNode >();
     }
