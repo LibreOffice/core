@@ -29,6 +29,8 @@
 
 #include <string.h>
 
+#include <boost/shared_ptr.hpp>
+
 #include <com/sun/star/xml/dom/DOMException.hdl>
 #include <com/sun/star/xml/dom/events/XMutationEvent.hpp>
 
@@ -69,11 +71,11 @@ namespace DOM
     {
         ::osl::MutexGuard const g(m_rMutex);
 
-        OUString aName;
-        if (m_aAttrPtr != NULL)
-        {
-            aName = OUString((char*)m_aAttrPtr->name, strlen((char*)m_aAttrPtr->name), RTL_TEXTENCODING_UTF8);
+        if ((0 == m_aNodePtr) || (0 == m_aAttrPtr)) {
+            return ::rtl::OUString();
         }
+        OUString const aName((char*)m_aAttrPtr->name,
+                strlen((char*)m_aAttrPtr->name), RTL_TEXTENCODING_UTF8);
         return aName;
     }
 
@@ -86,8 +88,10 @@ namespace DOM
     {
         ::osl::MutexGuard const g(m_rMutex);
 
-        if ((m_aAttrPtr == 0) || (m_aAttrPtr->parent == 0))
-        {
+        if ((0 == m_aNodePtr) || (0 == m_aAttrPtr)) {
+            return 0;
+        }
+        if (0 == m_aAttrPtr->parent) {
             return 0;
         }
         Reference< XElement > const xRet(
@@ -116,12 +120,15 @@ namespace DOM
     {
         ::osl::MutexGuard const g(m_rMutex);
 
-        OUString aName;
-        if (m_aAttrPtr != NULL && m_aAttrPtr->children != NULL)
-        {
-            aName = OUString((char*)m_aAttrPtr->children->content, strlen((char*)m_aAttrPtr->children->content),
-                RTL_TEXTENCODING_UTF8);
+        if ((0 == m_aNodePtr) || (0 == m_aAttrPtr)) {
+            return ::rtl::OUString();
         }
+        if (0 == m_aAttrPtr->children) {
+            return ::rtl::OUString();
+        }
+        OUString const aName((char*)m_aAttrPtr->children->content,
+                strlen((char*)m_aAttrPtr->children->content),
+                RTL_TEXTENCODING_UTF8);
         return aName;
     }
 
@@ -133,6 +140,10 @@ namespace DOM
     {
         ::osl::ClearableMutexGuard guard(m_rMutex);
 
+        if ((0 == m_aNodePtr) || (0 == m_aAttrPtr)) {
+            return;
+        }
+
         // remember old value (for mutation event)
         OUString sOldValue = getValue();
 
@@ -142,8 +153,11 @@ namespace DOM
         // this does not work if the attribute was created anew
         // xmlNodePtr pNode = m_aAttrPtr->parent;
         // xmlSetProp(pNode, m_aAttrPtr->name, xValue);
-        xmlChar *buffer = xmlEncodeEntitiesReentrant(m_aAttrPtr->doc, xValue);
-        m_aAttrPtr->children = xmlStringGetNodeList(m_aAttrPtr->doc, buffer);
+        ::boost::shared_ptr<xmlChar const> const buffer(
+                xmlEncodeEntitiesReentrant(m_aAttrPtr->doc, xValue), xmlFree);
+        xmlFreeNodeList(m_aAttrPtr->children);
+        m_aAttrPtr->children =
+            xmlStringGetNodeList(m_aAttrPtr->doc, buffer.get());
         xmlNodePtr tmp = m_aAttrPtr->children;
         while (tmp != NULL) {
             tmp->parent = (xmlNodePtr) m_aNodePtr;
@@ -167,7 +181,6 @@ namespace DOM
 
         dispatchEvent(Reference< XEvent >(event, UNO_QUERY));
         dispatchSubtreeModified();
-        xmlFree(buffer);
     }
 
 }
