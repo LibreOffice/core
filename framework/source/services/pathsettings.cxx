@@ -48,6 +48,7 @@
 #include <com/sun/star/container/XContainer.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/util/XChangesNotifier.hpp>
+#include <com/sun/star/lang/XComponent.hpp>
 
 // ______________________________________________
 // includes of other projects
@@ -98,10 +99,11 @@ namespace framework
 //-----------------------------------------------------------------------------
 // XInterface, XTypeProvider, XServiceInfo
 
-DEFINE_XINTERFACE_7                     (   PathSettings                                             ,
+DEFINE_XINTERFACE_8                     (   PathSettings                                             ,
                                             OWeakObject                                              ,
                                             DIRECT_INTERFACE ( css::lang::XTypeProvider              ),
                                             DIRECT_INTERFACE ( css::lang::XServiceInfo               ),
+                                            DIRECT_INTERFACE ( css::lang::XComponent                 ),
                                             DERIVED_INTERFACE( css::lang::XEventListener, css::util::XChangesListener),
                                             DIRECT_INTERFACE ( css::util::XChangesListener           ),
                                             DIRECT_INTERFACE ( css::beans::XPropertySet              ),
@@ -109,10 +111,11 @@ DEFINE_XINTERFACE_7                     (   PathSettings                        
                                             DIRECT_INTERFACE ( css::beans::XMultiPropertySet        )
                                         )
 
-DEFINE_XTYPEPROVIDER_7                  (   PathSettings                                            ,
+DEFINE_XTYPEPROVIDER_8                  (   PathSettings                                            ,
                                             css::lang::XTypeProvider                                ,
                                             css::lang::XServiceInfo                                 ,
                                             css::lang::XEventListener                               ,
+                                            css::lang::XComponent                                   ,
                                             css::util::XChangesListener                             ,
                                             css::beans::XPropertySet                                ,
                                             css::beans::XFastPropertySet                            ,
@@ -150,6 +153,7 @@ PathSettings::PathSettings( const css::uno::Reference< css::lang::XMultiServiceF
     ,   ::cppu::OWeakObject()
     // Init member
     ,   m_xSMGR    (xSMGR)
+    ,   m_aListenerContainer(m_aLock.getShareableOslMutex())
     ,   m_pPropHelp(0    )
     ,  m_bIgnoreEvents(sal_False)
 {
@@ -213,6 +217,29 @@ void SAL_CALL PathSettings::disposing(const css::lang::EventObject& aSource)
 
     aWriteLock.unlock();
     // <- SAFE
+}
+
+void SAL_CALL PathSettings::dispose() throw (css::uno::RuntimeException)
+{
+    css::uno::Reference< css::util::XChangesNotifier > xBroadcaster(m_xCfgNew, css::uno::UNO_QUERY_THROW);
+    if (xBroadcaster.is())
+        xBroadcaster->removeChangesListener(static_cast< css::util::XChangesListener* >(this));
+
+    css::uno::Reference< css::uno::XInterface > xThis ( static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY );
+    css::lang::EventObject aEvent( xThis );
+    m_aListenerContainer.disposeAndClear( aEvent );
+}
+
+void SAL_CALL PathSettings::addEventListener(const css::uno::Reference< css::lang::XEventListener >& xListener)
+    throw (css::uno::RuntimeException)
+{
+    m_aListenerContainer.addInterface( ::getCppuType( ( const css::uno::Reference< css::lang::XEventListener >*) NULL ), xListener );
+}
+
+void SAL_CALL PathSettings::removeEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener)
+    throw (css::uno::RuntimeException)
+{
+    m_aListenerContainer.addInterface( ::getCppuType( ( const css::uno::Reference< css::lang::XEventListener >*) NULL ), xListener );
 }
 
 //-----------------------------------------------------------------------------
