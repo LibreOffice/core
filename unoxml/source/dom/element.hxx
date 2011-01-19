@@ -54,8 +54,7 @@ namespace DOM
         friend class CDocument;
 
         Reference< XAttr > setAttributeNode_Impl_Lock(
-                Reference< XAttr > const& xNewAttr, bool const bNS)
-            throw (RuntimeException);
+                Reference< XAttr > const& xNewAttr, bool const bNS);
 
     protected:
         CElement(CDocument const& rDocument, ::osl::Mutex const& rMutex,
