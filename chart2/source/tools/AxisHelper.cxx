@@ -39,6 +39,7 @@
 #include "DataSeriesHelper.hxx"
 #include "Scaling.hxx"
 #include "ChartModelHelper.hxx"
+#include "DataSourceHelper.hxx"
 
 #include <tools/debug.hxx>
 #include <unotools/saveopt.hxx>
@@ -52,6 +53,8 @@
 
 // header for class OUStringBuffer
 #include <rtl/ustrbuf.hxx>
+#include <rtl/math.hxx>
+
 #include <com/sun/star/util/XCloneable.hpp>
 #include <com/sun/star/lang/XServiceName.hpp>
 
@@ -150,6 +153,12 @@ sal_Int32 AxisHelper::getExplicitNumberFormatKeyForAxis(
                 , bool bSearchForParallelAxisIfNothingIsFound )
 {
     sal_Int32 nNumberFormatKey(0);
+    bool bNumberFormatKeyFoundViaAttachedData = false;
+    sal_Int32 nAxisIndex = 0;
+    sal_Int32 nDimensionIndex = 1;
+    AxisHelper::getIndicesForAxis( xAxis, xCorrespondingCoordinateSystem, nDimensionIndex, nAxisIndex );
+    Reference< chart2::XChartDocument > xChartDoc( xNumberFormatsSupplier, uno::UNO_QUERY );
+
     Reference< beans::XPropertySet > xProp( xAxis, uno::UNO_QUERY );
     if( xProp.is() && !( xProp->getPropertyValue( C2U( "NumberFormat" ) ) >>= nNumberFormatKey ) )
     {
@@ -172,13 +181,55 @@ sal_Int32 AxisHelper::getExplicitNumberFormatKeyForAxis(
                 if( aData.Categories.is() )
                 {
                     Reference< data::XDataSequence > xSeq( aData.Categories->getValues());
-                    Reference< chart2::XChartDocument > xChartDoc( xNumberFormatsSupplier, uno::UNO_QUERY );
                     if( xSeq.is() && !( xChartDoc.is() && xChartDoc->hasInternalDataProvider()) )
                         nNumberFormatKey = xSeq->getNumberFormatKeyByIndex( -1 );
                     else
                         nNumberFormatKey = DiagramHelper::getDateNumberFormat( xNumberFormatsSupplier );
                     bFormatSet = true;
                 }
+            }
+            else if( xChartDoc.is() && xChartDoc->hasInternalDataProvider() && nDimensionIndex == 0 ) //maybe date axis
+            {
+                Reference< chart2::XDiagram > xDiagram( xChartDoc->getFirstDiagram() );
+                if( DiagramHelper::isSupportingDateAxis( xDiagram ) )
+                {
+                    nNumberFormatKey = DiagramHelper::getDateNumberFormat( xNumberFormatsSupplier );
+                }
+                else
+                {
+                    Reference< data::XDataSource > xSource( DataSourceHelper::getUsedData( xChartDoc ) );
+                    if( xSource.is() )
+                    {
+                        ::std::vector< Reference< chart2::data::XLabeledDataSequence > > aXValues(
+                            DataSeriesHelper::getAllDataSequencesByRole( xSource->getDataSequences(), C2U("values-x"), true ) );
+                        if( aXValues.empty() )
+                        {
+                            Reference< data::XLabeledDataSequence > xCategories( DiagramHelper::getCategoriesFromDiagram( xDiagram ) );
+                            if( xCategories.is() )
+                            {
+                                Reference< data::XDataSequence > xSeq( xCategories->getValues());
+                                if( xSeq.is() )
+                                {
+                                    bool bHasValidDoubles = false;
+                                    double fTest=0.0;
+                                    Sequence< uno::Any > aCats( xSeq->getData() );
+                                    sal_Int32 nCount = aCats.getLength();
+                                    for( sal_Int32 i = 0; i < nCount; ++i )
+                                    {
+                                        if( (aCats[i]>>=fTest) && !::rtl::math::isNan(fTest) )
+                                        {
+                                            bHasValidDoubles=true;
+                                            break;
+                                        }
+                                    }
+                                    if( bHasValidDoubles )
+                                        nNumberFormatKey = DiagramHelper::getDateNumberFormat( xNumberFormatsSupplier );
+                                }
+                            }
+                        }
+                    }
+                }
+                bFormatSet = true;
             }
         }
 
@@ -187,16 +238,11 @@ sal_Int32 AxisHelper::getExplicitNumberFormatKeyForAxis(
             typedef ::std::map< sal_Int32, sal_Int32 > tNumberformatFrequency;
             tNumberformatFrequency aKeyMap;
 
-            bool bNumberFormatKeyFoundViaAttachedData = false;
-            sal_Int32 nAxisIndex = 0;
-            sal_Int32 nDimensionIndex = 1;
-
             try
             {
                 Reference< XChartTypeContainer > xCTCnt( xCorrespondingCoordinateSystem, uno::UNO_QUERY_THROW );
                 if( xCTCnt.is() )
                 {
-                    AxisHelper::getIndicesForAxis( xAxis, xCorrespondingCoordinateSystem, nDimensionIndex, nAxisIndex );
                     ::rtl::OUString aRoleToMatch;
                     if( nDimensionIndex == 0 )
                         aRoleToMatch = C2U("values-x");

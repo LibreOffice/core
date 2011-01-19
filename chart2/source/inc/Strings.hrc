@@ -31,6 +31,7 @@
 #include <svl/solar.hrc>
 
 //next free is 293
+//single free: 139
 
 //#define RID_APP_START 30000
 ////#define STR_NULL                            (RID_APP_START +  1)
@@ -325,7 +326,6 @@
 #define STR_TIP_DATAPOINT                   (RID_APP_START + 140)
 #define STR_TIP_DATAPOINT_INDEX             (RID_APP_START + 141)
 #define STR_TIP_DATAPOINT_VALUES            (RID_APP_START + 142)
-#define STR_TIP_CATEGORY_VALUE              (RID_APP_START + 139)
 
 //-----------------------------------------------------------------------------
 //warning and info boxes
