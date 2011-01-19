@@ -469,136 +469,139 @@ namespace DOM
         return Reference< XDOMImplementation >(CDOMImplementation::get());
     }
 
-    // helper function to recall import for siblings
-    static Reference< XNode > _import_siblings (
-        const Reference< XNode > aNode, const Reference< XNode> parent, CDocument* pTarget)
+    // helper function to recursively import siblings
+    static void lcl_ImportSiblings(
+        Reference< XDocument > const& xTargetDocument,
+        Reference< XNode > const& xTargetParent,
+        Reference< XNode > const& xChild)
     {
-        Reference< XNode > sibling = aNode;
-        Reference< XNode > tmp;
-        Reference< XNode > firstImported;
-        while (sibling.is())
+        Reference< XNode > xSibling = xChild;
+        while (xSibling.is())
         {
-            tmp = pTarget->importNode(sibling, sal_True);
-            parent->appendChild(tmp);
-            if (!firstImported.is())
-                firstImported = tmp;
-            sibling = sibling->getNextSibling();
+            Reference< XNode > const xTmp(
+                    xTargetDocument->importNode(xSibling, sal_True));
+            xTargetParent->appendChild(xTmp);
+            xSibling = xSibling->getNextSibling();
         }
-        return firstImported;
     }
 
-    Reference< XNode > SAL_CALL CDocument::importNode(
-            const Reference< XNode >& importedNode, sal_Bool deep)
-        throw (RuntimeException, DOMException)
+    static Reference< XNode >
+    lcl_ImportNode( Reference< XDocument > const& xDocument,
+            Reference< XNode > const& xImportedNode, sal_Bool deep)
     {
-        // this node could be from another memory model
-        // only use uno interfaces to access is!!!
-
-        {
-            // already in doc?
-            Reference< XDocument > const xDocument(
-                static_cast< XNode* >(CNode::getCNode(
-                    reinterpret_cast<xmlNodePtr>(m_aDocPtr)).get()),
-                UNO_QUERY_THROW);
-            if (importedNode->getOwnerDocument() == xDocument) {
-                return importedNode;
-            }
-        }
-
-        Reference< XNode > aNode;
-        NodeType aNodeType = importedNode->getNodeType();
+        Reference< XNode > xNode;
+        NodeType aNodeType = xImportedNode->getNodeType();
         switch (aNodeType)
         {
         case NodeType_ATTRIBUTE_NODE:
         {
-            Reference< XAttr > attr(importedNode, UNO_QUERY);
-            Reference< XAttr > newAttr = createAttribute(attr->getName());
-            newAttr->setValue(attr->getValue());
-            aNode.set(newAttr, UNO_QUERY);
+            Reference< XAttr > const xAttr(xImportedNode, UNO_QUERY_THROW);
+            Reference< XAttr > const xNew =
+                xDocument->createAttribute(xAttr->getName());
+            xNew->setValue(xAttr->getValue());
+            xNode.set(xNew, UNO_QUERY);
             break;
         }
         case NodeType_CDATA_SECTION_NODE:
         {
-            Reference< XCDATASection > cdata(importedNode, UNO_QUERY);
-            Reference< XCDATASection > newCdata = createCDATASection(cdata->getData());
-            aNode.set(newCdata, UNO_QUERY);
+            Reference< XCDATASection > const xCData(xImportedNode,
+                    UNO_QUERY_THROW);
+            Reference< XCDATASection > const xNewCData =
+                xDocument->createCDATASection(xCData->getData());
+            xNode.set(xNewCData, UNO_QUERY);
             break;
         }
         case NodeType_COMMENT_NODE:
         {
-            Reference< XComment > comment(importedNode, UNO_QUERY);
-            Reference< XComment > newComment = createComment(comment->getData());
-            aNode.set(newComment, UNO_QUERY);
+            Reference< XComment > const xComment(xImportedNode,
+                    UNO_QUERY_THROW);
+            Reference< XComment > const xNewComment =
+                xDocument->createComment(xComment->getData());
+            xNode.set(xNewComment, UNO_QUERY);
             break;
         }
         case NodeType_DOCUMENT_FRAGMENT_NODE:
         {
-            Reference< XDocumentFragment > frag(importedNode, UNO_QUERY);
-            Reference< XDocumentFragment > newFrag = createDocumentFragment();
-            aNode.set(newFrag, UNO_QUERY);
+            Reference< XDocumentFragment > const xFrag(xImportedNode,
+                    UNO_QUERY_THROW);
+            Reference< XDocumentFragment > const xNewFrag =
+                xDocument->createDocumentFragment();
+            xNode.set(xNewFrag, UNO_QUERY);
             break;
         }
         case NodeType_ELEMENT_NODE:
         {
-            Reference< XElement > element(importedNode, UNO_QUERY);
-            OUString aNsUri = importedNode->getNamespaceURI();
-            OUString aNsPrefix = importedNode->getPrefix();
-            OUString aQName = element->getTagName();
-            Reference< XElement > newElement;
+            Reference< XElement > const xElement(xImportedNode,
+                    UNO_QUERY_THROW);
+            OUString const aNsUri = xImportedNode->getNamespaceURI();
+            OUString const aNsPrefix = xImportedNode->getPrefix();
+            OUString aQName = xElement->getTagName();
+            Reference< XElement > xNewElement;
             if (aNsUri.getLength() > 0)
             {
 
-                if (aNsPrefix.getLength() > 0)
-                    aQName = aNsPrefix + OUString::createFromAscii(":") + aQName;
-                newElement = createElementNS(aNsUri, aQName);
+                if (aNsPrefix.getLength() > 0) {
+                    aQName = aNsPrefix + OUString::createFromAscii(":")
+                                + aQName;
+                }
+                xNewElement = xDocument->createElementNS(aNsUri, aQName);
+            } else {
+                xNewElement = xDocument->createElement(aQName);
             }
-            else
-                newElement = createElement(aQName);
 
             // get attributes
-            if (element->hasAttributes())
+            if (xElement->hasAttributes())
             {
-                Reference< XNamedNodeMap > attribs = element->getAttributes();
-                Reference< XAttr > curAttr;
+                Reference< XNamedNodeMap > attribs = xElement->getAttributes();
                 for (sal_Int32 i = 0; i < attribs->getLength(); i++)
                 {
-                    curAttr = Reference< XAttr >(attribs->item(i), UNO_QUERY);
-                    OUString aAttrUri = curAttr->getNamespaceURI();
-                    OUString aAttrPrefix = curAttr->getPrefix();
+                    Reference< XAttr > const curAttr(attribs->item(i),
+                            UNO_QUERY_THROW);
+                    OUString const aAttrUri = curAttr->getNamespaceURI();
+                    OUString const aAttrPrefix = curAttr->getPrefix();
                     OUString aAttrName = curAttr->getName();
+                    OUString const sValue = curAttr->getValue();
                     if (aAttrUri.getLength() > 0)
                     {
-                        if (aAttrPrefix.getLength() > 0)
-                            aAttrName = aAttrPrefix + OUString::createFromAscii(":") + aAttrName;
-                        newElement->setAttributeNS(aAttrUri, aAttrName, curAttr->getValue());
+                        if (aAttrPrefix.getLength() > 0) {
+                            aAttrName = aAttrPrefix +
+                                OUString::createFromAscii(":") + aAttrName;
+                        }
+                        xNewElement->setAttributeNS(
+                                aAttrUri, aAttrName, sValue);
+                    } else {
+                        xNewElement->setAttribute(aAttrName, sValue);
                     }
-                    else
-                        newElement->setAttribute(aAttrName, curAttr->getValue());
                 }
             }
-            aNode.set(newElement, UNO_QUERY);
+            xNode.set(xNewElement, UNO_QUERY);
             break;
         }
         case NodeType_ENTITY_REFERENCE_NODE:
         {
-            Reference< XEntityReference > ref(importedNode, UNO_QUERY);
-            Reference< XEntityReference > newRef(createEntityReference(ref->getNodeName()));
-            aNode.set(newRef, UNO_QUERY);
+            Reference< XEntityReference > const xRef(xImportedNode,
+                    UNO_QUERY_THROW);
+            Reference< XEntityReference > const xNewRef(
+                xDocument->createEntityReference(xRef->getNodeName()));
+            xNode.set(xNewRef, UNO_QUERY);
             break;
         }
         case NodeType_PROCESSING_INSTRUCTION_NODE:
         {
-            Reference< XProcessingInstruction > pi(importedNode, UNO_QUERY);
-            Reference< XProcessingInstruction > newPi(
-                createProcessingInstruction(pi->getTarget(), pi->getData()));
-            aNode.set(newPi, UNO_QUERY);
+            Reference< XProcessingInstruction > const xPi(xImportedNode,
+                    UNO_QUERY_THROW);
+            Reference< XProcessingInstruction > const xNewPi(
+                xDocument->createProcessingInstruction(
+                    xPi->getTarget(), xPi->getData()));
+            xNode.set(xNewPi, UNO_QUERY);
             break;
         }
         case NodeType_TEXT_NODE:
         {
-            Reference< XText > text(importedNode, UNO_QUERY);
-            Reference< XText > newText(createTextNode(text->getData()));
-            aNode.set(newText, UNO_QUERY);
+            Reference< XText > const xText(xImportedNode, UNO_QUERY_THROW);
+            Reference< XText > const xNewText(
+                xDocument->createTextNode(xText->getData()));
+            xNode.set(xNewText, UNO_QUERY);
             break;
         }
         case NodeType_ENTITY_NODE:
@@ -613,10 +616,10 @@ namespace DOM
         if (deep)
         {
             // get children and import them
-            Reference< XNode > child = importedNode->getFirstChild();
-            if (child.is())
+            Reference< XNode > const xChild = xImportedNode->getFirstChild();
+            if (xChild.is())
             {
-                _import_siblings(child, aNode, this);
+                lcl_ImportSiblings(xDocument, xNode, xChild);
             }
         }
 
@@ -631,19 +634,53 @@ namespace DOM
          *   Cancelable: No
          *   Context Info: None
          */
-        if (aNode.is())
+        if (xNode.is())
         {
-            Reference< XDocumentEvent > docevent(getOwnerDocument(), UNO_QUERY);
-            Reference< XMutationEvent > event(docevent->createEvent(
-                OUString::createFromAscii("DOMNodeInsertedIntoDocument")), UNO_QUERY);
-            event->initMutationEvent(OUString::createFromAscii("DOMNodeInsertedIntoDocument")
+            Reference< XDocumentEvent > const xDocevent(xDocument, UNO_QUERY);
+            Reference< XMutationEvent > const event(xDocevent->createEvent(
+                OUString::createFromAscii("DOMNodeInsertedIntoDocument")),
+                UNO_QUERY_THROW);
+            event->initMutationEvent(
+                OUString::createFromAscii("DOMNodeInsertedIntoDocument")
                 , sal_True, sal_False, Reference< XNode >(),
                 OUString(), OUString(), OUString(), (AttrChangeType)0 );
-            dispatchEvent(Reference< XEvent >(event, UNO_QUERY));
+            Reference< XEventTarget > const xDocET(xDocument, UNO_QUERY);
+            xDocET->dispatchEvent(Reference< XEvent >(event, UNO_QUERY));
         }
 
-        return aNode;
+        return xNode;
     }
+
+    Reference< XNode > SAL_CALL CDocument::importNode(
+            Reference< XNode > const& xImportedNode, sal_Bool deep)
+        throw (RuntimeException, DOMException)
+    {
+        // NB: this whole operation inherently accesses 2 distinct documents.
+        // The imported node could even be from a different DOM implementation,
+        // so this implementation cannot make any assumptions about the
+        // locking strategy of the imported node.
+        // So the import takes no lock on this document;
+        // it only calls UNO methods on this document that temporarily
+        // lock the document, and UNO methods on the imported node that
+        // may temporarily lock the other document.
+        // As a consequence, the import is not atomic with regard to
+        // concurrent modifications of either document, but it should not
+        // deadlock.
+        // To ensure that no members are accessed, the implementation is in
+        // static non-member functions.
+
+        Reference< XDocument > const xDocument(this);
+        // already in doc?
+        if (xImportedNode->getOwnerDocument() == xDocument) {
+            return xImportedNode;
+        }
+
+        Reference< XNode > const xNode(
+            lcl_ImportNode(xDocument, xImportedNode, deep) );
+        return xNode;
+    }
+
+
     OUString SAL_CALL CDocument::getNodeName()throw (RuntimeException)
     {
         return OUString::createFromAscii("#document");
