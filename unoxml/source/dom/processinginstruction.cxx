@@ -25,15 +25,19 @@
  *
  ************************************************************************/
 
-#include "processinginstruction.hxx"
-#include <com/sun/star/xml/sax/XExtendedDocumentHandler.hpp>
+#include <processinginstruction.hxx>
+
 #include <string.h>
+
+#include <com/sun/star/xml/sax/XExtendedDocumentHandler.hpp>
+
 
 namespace DOM
 {
-    CProcessingInstruction::CProcessingInstruction(const xmlNodePtr aNodePtr)
-        : CProcessingInstruction_Base(
-            NodeType_PROCESSING_INSTRUCTION_NODE, aNodePtr)
+    CProcessingInstruction::CProcessingInstruction(
+            CDocument const& rDocument, xmlNodePtr const pNode)
+        : CProcessingInstruction_Base(rDocument,
+            NodeType_PROCESSING_INSTRUCTION_NODE, pNode)
     {
     }
 

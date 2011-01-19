@@ -28,11 +28,13 @@
 #ifndef DOM_ENTITYREFERENCE_HXX
 #define DOM_ENTITYREFERENCE_HXX
 
-#include <com/sun/star/uno/Reference.h>
-#include <com/sun/star/uno/Exception.hpp>
-#include <com/sun/star/xml/dom/XEntityReference.hpp>
-#include "node.hxx"
 #include <libxml/tree.h>
+
+#include <com/sun/star/uno/Reference.h>
+#include <com/sun/star/xml/dom/XEntityReference.hpp>
+
+#include <node.hxx>
+
 
 using ::rtl::OUString;
 using namespace com::sun::star::uno;
@@ -48,7 +50,7 @@ namespace DOM
     {
         friend class CNode;
     protected:
-        CEntityReference(const xmlNodePtr aNodePtr);
+        CEntityReference(CDocument const& rDocument, xmlNodePtr const pNode);
 
     public:
         // ---- resolve uno inheritance problems...

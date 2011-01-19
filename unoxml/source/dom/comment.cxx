@@ -25,14 +25,15 @@
  *
  ************************************************************************/
 
-#include "comment.hxx"
+#include <comment.hxx>
 
 #include <com/sun/star/xml/sax/XExtendedDocumentHandler.hpp>
 
+
 namespace DOM
 {
-    CComment::CComment(const xmlNodePtr aNodePtr)
-        : CComment_Base(NodeType_COMMENT_NODE, aNodePtr)
+    CComment::CComment(CDocument const& rDocument, xmlNodePtr const pNode)
+        : CComment_Base(rDocument, NodeType_COMMENT_NODE, pNode)
     {
     }
 

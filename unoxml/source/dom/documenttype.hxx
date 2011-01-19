@@ -28,16 +28,17 @@
 #ifndef DOM_DOCUMENTTYPE_HXX
 #define DOM_DOCUMENTTYPE_HXX
 
+#include <libxml/tree.h>
+
 #include <sal/types.h>
+
 #include <com/sun/star/uno/Reference.h>
-#include <com/sun/star/uno/Exception.hpp>
 #include <com/sun/star/xml/dom/XDocumentType.hpp>
 #include <com/sun/star/xml/dom/XNodeList.hpp>
 #include <com/sun/star/xml/dom/XNamedNodeMap.hpp>
 
-#include "node.hxx"
+#include <node.hxx>
 
-#include <libxml/tree.h>
 
 using ::rtl::OUString;
 using namespace com::sun::star::uno;
@@ -56,7 +57,7 @@ namespace DOM
         xmlDtdPtr m_aDtdPtr;
 
     protected:
-        CDocumentType(const xmlDtdPtr aDtdPtr);
+        CDocumentType(CDocument const& rDocument, xmlDtdPtr const pDtd);
 
     public:
         /**

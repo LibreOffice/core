@@ -25,17 +25,18 @@
  *
  ************************************************************************/
 
-#include "entity.hxx"
+#include <entity.hxx>
 
 #include <string.h>
+
 
 namespace DOM
 {
 
-    CEntity::CEntity(const xmlEntityPtr aEntityPtr)
-        : CEntity_Base(
-            NodeType_ENTITY_NODE, reinterpret_cast<xmlNodePtr>(aEntityPtr))
-        , m_aEntityPtr(aEntityPtr)
+    CEntity::CEntity(CDocument const& rDocument, xmlEntityPtr const pEntity)
+        : CEntity_Base(rDocument,
+            NodeType_ENTITY_NODE, reinterpret_cast<xmlNodePtr>(pEntity))
+        , m_aEntityPtr(pEntity)
     {
     }
 

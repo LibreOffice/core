@@ -25,24 +25,27 @@
  *
  ************************************************************************/
 
-#include "node.hxx"
-#include "element.hxx"
-#include "attr.hxx"
-#include "elementlist.hxx"
-#include "attributesmap.hxx"
-#include "../events/mutationevent.hxx"
-
-#include "comphelper/attributelist.hxx"
-#include <com/sun/star/xml/sax/FastToken.hdl>
+#include <element.hxx>
 
 #include <string.h>
+
+#include <com/sun/star/xml/sax/FastToken.hdl>
+
+#include <comphelper/attributelist.hxx>
+
+#include <node.hxx>
+#include <attr.hxx>
+#include <elementlist.hxx>
+#include <attributesmap.hxx>
+
+#include "../events/mutationevent.hxx"
 
 
 namespace DOM
 {
 
-    CElement::CElement(const xmlNodePtr aNodePtr)
-        : CElement_Base(NodeType_ELEMENT_NODE, aNodePtr)
+    CElement::CElement(CDocument const& rDocument, xmlNodePtr const pNode)
+        : CElement_Base(rDocument, NodeType_ELEMENT_NODE, pNode)
     {
     }
 

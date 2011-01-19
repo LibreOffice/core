@@ -32,8 +32,8 @@
 
 namespace DOM
 {
-    CAttr::CAttr(const xmlAttrPtr pAttr)
-        : CAttr_Base(
+    CAttr::CAttr(CDocument const& rDocument, xmlAttrPtr const pAttr)
+        : CAttr_Base(rDocument,
                 NodeType_ATTRIBUTE_NODE, reinterpret_cast<xmlNodePtr>(pAttr))
         , m_aAttrPtr(pAttr)
     {

@@ -29,10 +29,10 @@
 #define DOM_CDATASECTION_HXX
 
 #include <com/sun/star/uno/Reference.h>
-#include <com/sun/star/uno/Exception.hpp>
 #include <com/sun/star/xml/dom/XCDATASection.hpp>
 
-#include "text.hxx"
+#include <text.hxx>
+
 
 using ::rtl::OUString;
 using namespace com::sun::star::uno;
@@ -47,8 +47,9 @@ namespace DOM
         : public CCDATASection_Base
     {
         friend class CNode;
+
     protected:
-        CCDATASection(const xmlNodePtr aNodePtr);
+        CCDATASection(CDocument const& rDocument, xmlNodePtr const pNode);
 
     public:
 

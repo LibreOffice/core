@@ -28,11 +28,13 @@
 #ifndef DOM_NOTATION_HXX
 #define DOM_NOTATION_HXX
 
-#include <com/sun/star/uno/Reference.h>
-#include <com/sun/star/uno/Exception.hpp>
-#include <com/sun/star/xml/dom/XNotation.hpp>
-#include "node.hxx"
 #include <libxml/tree.h>
+
+#include <com/sun/star/uno/Reference.h>
+#include <com/sun/star/xml/dom/XNotation.hpp>
+
+#include <node.hxx>
+
 
 using ::rtl::OUString;
 using namespace com::sun::star::uno;
@@ -50,7 +52,7 @@ namespace DOM
         xmlNotationPtr m_aNotationPtr;
 
     protected:
-        CNotation(const xmlNotationPtr);
+        CNotation(CDocument const& rDocument, xmlNotationPtr const pNotation);
 
         /**
         The public identifier of this notation.

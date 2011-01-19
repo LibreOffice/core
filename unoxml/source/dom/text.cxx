@@ -25,17 +25,19 @@
  *
  ************************************************************************/
 
-#include "text.hxx"
+#include <text.hxx>
+
 
 namespace DOM
 {
-    CText::CText(NodeType const& reNodeType, xmlNodePtr const& rpNode)
-        : CText_Base(reNodeType, rpNode)
+    CText::CText(CDocument const& rDocument,
+            NodeType const& reNodeType, xmlNodePtr const& rpNode)
+        : CText_Base(rDocument, reNodeType, rpNode)
     {
     }
 
-    CText::CText(const xmlNodePtr aNodePtr)
-        : CText_Base(NodeType_TEXT_NODE, aNodePtr)
+    CText::CText(CDocument const& rDocument, xmlNodePtr const pNode)
+        : CText_Base(rDocument, NodeType_TEXT_NODE, pNode)
     {
     }
 

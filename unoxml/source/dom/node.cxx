@@ -209,32 +209,32 @@ namespace DOM
         {
         case XML_ELEMENT_NODE:
             // m_aNodeType = NodeType::ELEMENT_NODE;
-            pCNode = static_cast< CNode* >(new CElement(pNode));
+            pCNode = static_cast< CNode* >(new CElement(*(CDocument*)0, pNode));
             break;
         case XML_TEXT_NODE:
             // m_aNodeType = NodeType::TEXT_NODE;
-            pCNode = static_cast< CNode* >(new CText(pNode));
+            pCNode = static_cast< CNode* >(new CText(*(CDocument*)0, pNode));
             break;
         case XML_CDATA_SECTION_NODE:
             // m_aNodeType = NodeType::CDATA_SECTION_NODE;
-            pCNode = static_cast< CNode* >(new CCDATASection(pNode));
+            pCNode = static_cast< CNode* >(new CCDATASection(*(CDocument*)0, pNode));
             break;
         case XML_ENTITY_REF_NODE:
             // m_aNodeType = NodeType::ENTITY_REFERENCE_NODE;
-            pCNode = static_cast< CNode* >(new CEntityReference(pNode));
+            pCNode = static_cast< CNode* >(new CEntityReference(*(CDocument*)0, pNode));
             break;
         case XML_ENTITY_NODE:
             // m_aNodeType = NodeType::ENTITY_NODE;
-            pCNode = static_cast< CNode* >(new CEntity(
+            pCNode = static_cast< CNode* >(new CEntity(*(CDocument*)0,
                         reinterpret_cast<xmlEntityPtr>(pNode)));
             break;
         case XML_PI_NODE:
             // m_aNodeType = NodeType::PROCESSING_INSTRUCTION_NODE;
-            pCNode = static_cast< CNode* >(new CProcessingInstruction(pNode));
+            pCNode = static_cast< CNode* >(new CProcessingInstruction(*(CDocument*)0, pNode));
             break;
         case XML_COMMENT_NODE:
             // m_aNodeType = NodeType::COMMENT_NODE;
-            pCNode = static_cast< CNode* >(new CComment(pNode));
+            pCNode = static_cast< CNode* >(new CComment(*(CDocument*)0, pNode));
             break;
         case XML_DOCUMENT_NODE:
             // m_aNodeType = NodeType::DOCUMENT_NODE;
@@ -244,21 +244,21 @@ namespace DOM
         case XML_DOCUMENT_TYPE_NODE:
         case XML_DTD_NODE:
             // m_aNodeType = NodeType::DOCUMENT_TYPE_NODE;
-            pCNode = static_cast< CNode* >(new CDocumentType(
+            pCNode = static_cast< CNode* >(new CDocumentType(*(CDocument*)0,
                         reinterpret_cast<xmlDtdPtr>(pNode)));
             break;
         case XML_DOCUMENT_FRAG_NODE:
             // m_aNodeType = NodeType::DOCUMENT_FRAGMENT_NODE;
-            pCNode = static_cast< CNode* >(new CDocumentFragment(pNode));
+            pCNode = static_cast< CNode* >(new CDocumentFragment(*(CDocument*)0, pNode));
             break;
         case XML_NOTATION_NODE:
             // m_aNodeType = NodeType::NOTATION_NODE;
-            pCNode = static_cast< CNode* >(new CNotation(
+            pCNode = static_cast< CNode* >(new CNotation(*(CDocument*)0,
                         reinterpret_cast<xmlNotationPtr>(pNode)));
             break;
         case XML_ATTRIBUTE_NODE:
             // m_aNodeType = NodeType::ATTRIBUTE_NODE;
-            pCNode = static_cast< CNode* >(new CAttr(
+            pCNode = static_cast< CNode* >(new CAttr(*(CDocument*)0,
                         reinterpret_cast<xmlAttrPtr>(pNode)));
             break;
         // unsupported node types
@@ -300,14 +300,15 @@ namespace DOM
     }
 
 
-    CNode::CNode(NodeType const& reNodeType, xmlNodePtr const& rpNode)
+    CNode::CNode(CDocument const& rDocument,
+                NodeType const& reNodeType, xmlNodePtr const& rpNode)
         :   m_bUnlinked(false)
         ,   m_aNodeType(reNodeType)
         ,   m_aNodePtr(rpNode)
         // keep containing document alive
         // (but not if this is a document; that would create a leak!)
         ,   m_xDocument( (m_aNodePtr->type != XML_DOCUMENT_NODE)
-                ? GetOwnerDocument_Impl() : 0 )
+                ? &const_cast<CDocument&>(rDocument) : 0 )
     {
         OSL_ASSERT(m_aNodePtr);
     }

@@ -135,7 +135,8 @@ namespace DOM
         ::rtl::Reference< CDocument > const m_xDocument;
 
         // for initialization by classes derived through ImplInheritanceHelper
-        CNode(NodeType const& reNodeType, xmlNodePtr const& rpNode);
+        CNode(CDocument const& rDocument,
+                NodeType const& reNodeType, xmlNodePtr const& rpNode);
         void invalidate();
 
         void dispatchSubtreeModified();

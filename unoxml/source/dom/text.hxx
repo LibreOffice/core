@@ -28,15 +28,18 @@
 #ifndef DOM_TEXT_HXX
 #define DOM_TEXT_HXX
 
+#include <libxml/tree.h>
+
 #include <sal/types.h>
+
 #include <cppuhelper/implbase1.hxx>
+
 #include <com/sun/star/uno/Reference.h>
-#include <com/sun/star/uno/Exception.hpp>
 #include <com/sun/star/xml/dom/XNode.hpp>
 #include <com/sun/star/xml/dom/XText.hpp>
-#include <com/sun/star/xml/dom/XCharacterData.hpp>
-#include <libxml/tree.h>
-#include "characterdata.hxx"
+
+#include <characterdata.hxx>
+
 
 using ::rtl::OUString;
 using namespace com::sun::star::uno;
@@ -52,8 +55,9 @@ namespace DOM
         friend class CNode;
 
     protected:
-        CText(NodeType const& reNodeType, xmlNodePtr const& rpNode);
-        CText(const xmlNodePtr aNodePtr);
+        CText(CDocument const& rDocument,
+                NodeType const& reNodeType, xmlNodePtr const& rpNode);
+        CText(CDocument const& rDocument, xmlNodePtr const pNode);
 
     public:
 

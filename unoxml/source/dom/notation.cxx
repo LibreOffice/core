@@ -25,15 +25,17 @@
  *
  ************************************************************************/
 
-#include "notation.hxx"
+#include <notation.hxx>
+
 #include <string.h>
 
 namespace DOM
 {
-    CNotation::CNotation(const xmlNotationPtr aNotationPtr)
-        : CNotation_Base(
-            NodeType_NOTATION_NODE, reinterpret_cast<xmlNodePtr>(aNotationPtr))
-        , m_aNotationPtr(aNotationPtr)
+    CNotation::CNotation(CDocument const& rDocument,
+            xmlNotationPtr const pNotation)
+        : CNotation_Base(rDocument,
+            NodeType_NOTATION_NODE, reinterpret_cast<xmlNodePtr>(pNotation))
+        , m_aNotationPtr(pNotation)
     {
     }
 

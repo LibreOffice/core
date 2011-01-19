@@ -25,13 +25,16 @@
  *
  ************************************************************************/
 
-#include "entityreference.hxx"
+#include <entityreference.hxx>
+
 #include <string.h>
 
 namespace DOM
 {
-    CEntityReference::CEntityReference(const xmlNodePtr aNodePtr)
-        : CEntityReference_Base(NodeType_ENTITY_REFERENCE_NODE, aNodePtr)
+    CEntityReference::CEntityReference(
+            CDocument const& rDocument, xmlNodePtr const pNode)
+        : CEntityReference_Base(rDocument,
+                NodeType_ENTITY_REFERENCE_NODE, pNode)
     {
     }
 

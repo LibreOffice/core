@@ -28,13 +28,15 @@
 #ifndef DOM_ATTR_HXX
 #define DOM_ATTR_HXX
 
+#include <libxml/tree.h>
+
 #include <cppuhelper/implbase1.hxx>
+
 #include <com/sun/star/uno/Reference.h>
-#include <com/sun/star/uno/Exception.hpp>
 #include <com/sun/star/xml/dom/XNode.hpp>
 #include <com/sun/star/xml/dom/XAttr.hpp>
-#include "node.hxx"
-#include <libxml/tree.h>
+
+#include <node.hxx>
 
 using ::rtl::OUString;
 using namespace com::sun::star::uno;
@@ -53,7 +55,7 @@ namespace DOM
         xmlAttrPtr m_aAttrPtr;
 
     protected:
-        CAttr(const xmlAttrPtr aAttrPtr);
+        CAttr(CDocument const& rDocument, xmlAttrPtr const pAttr);
 
     public:
         /**

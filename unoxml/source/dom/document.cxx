@@ -74,7 +74,7 @@ namespace DOM
     }
 
     CDocument::CDocument(xmlDocPtr aDocPtr)
-        : CDocument_Base(
+        : CDocument_Base(*this,
                 NodeType_DOCUMENT_NODE, reinterpret_cast<xmlNodePtr>(aDocPtr))
         , m_aDocPtr(aDocPtr)
         , m_streamListeners()

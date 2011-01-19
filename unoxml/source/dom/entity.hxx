@@ -28,13 +28,16 @@
 #ifndef DOM_ENTITY_HXX
 #define DOM_ENTITY_HXX
 
-#include <sal/types.h>
-#include <com/sun/star/uno/Reference.h>
-#include <com/sun/star/uno/Exception.hpp>
-#include <com/sun/star/xml/dom/XEntity.hpp>
-#include "node.hxx"
 #include <libxml/tree.h>
 #include <libxml/entities.h>
+
+#include <sal/types.h>
+
+#include <com/sun/star/uno/Reference.h>
+#include <com/sun/star/xml/dom/XEntity.hpp>
+
+#include <node.hxx>
+
 
 using ::rtl::OUString;
 using namespace com::sun::star::uno;
@@ -52,7 +55,7 @@ namespace DOM
         xmlEntityPtr m_aEntityPtr;
 
     protected:
-        CEntity(const xmlEntityPtr aEntityPtr);
+        CEntity(CDocument const& rDocument, xmlEntityPtr const pEntity);
 
     public:
 

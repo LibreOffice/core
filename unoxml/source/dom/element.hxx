@@ -28,14 +28,16 @@
 #ifndef DOM_ELEMENT_HXX
 #define DOM_ELEMENT_HXX
 
+#include <libxml/tree.h>
+
 #include <com/sun/star/uno/Reference.h>
-#include <com/sun/star/uno/Exception.hpp>
 #include <com/sun/star/xml/dom/XNode.hpp>
 #include <com/sun/star/xml/dom/XNodeList.hpp>
 #include <com/sun/star/xml/dom/XNamedNodeMap.hpp>
 #include <com/sun/star/xml/dom/NodeType.hpp>
-#include <libxml/tree.h>
-#include "node.hxx"
+
+#include <node.hxx>
+
 
 using ::rtl::OUString;
 using namespace com::sun::star::uno;
@@ -54,7 +56,7 @@ namespace DOM
             throw (RuntimeException);
 
     protected:
-        CElement(const xmlNodePtr aNodePtr);
+        CElement(CDocument const& rDocument, xmlNodePtr const pNode);
 
     public:
 

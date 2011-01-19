@@ -25,12 +25,14 @@
  *
  ************************************************************************/
 
-#include "documentfragment.hxx"
+#include <documentfragment.hxx>
 
 namespace DOM
 {
-    CDocumentFragment::CDocumentFragment(const xmlNodePtr aNodePtr)
-        : CDocumentFragment_Base(NodeType_DOCUMENT_FRAGMENT_NODE, aNodePtr)
+    CDocumentFragment::CDocumentFragment(
+            CDocument const& rDocument, xmlNodePtr const pNode)
+        : CDocumentFragment_Base(rDocument,
+                NodeType_DOCUMENT_FRAGMENT_NODE, pNode)
     {
     }
 

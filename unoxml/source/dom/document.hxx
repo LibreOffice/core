@@ -86,7 +86,7 @@ namespace DOM
         typedef set< Reference< XStreamListener > > listenerlist_t;
     private:
 
-        xmlDocPtr m_aDocPtr;
+        xmlDocPtr const m_aDocPtr;
 
         // datacontrol/source state
         listenerlist_t m_streamListeners;

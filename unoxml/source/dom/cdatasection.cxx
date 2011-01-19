@@ -25,14 +25,15 @@
  *
  ************************************************************************/
 
-#include "cdatasection.hxx"
+#include <cdatasection.hxx>
 
 #include <com/sun/star/xml/sax/XExtendedDocumentHandler.hpp>
 
 namespace DOM
 {
-    CCDATASection::CCDATASection(const xmlNodePtr aNodePtr)
-        : CCDATASection_Base(NodeType_CDATA_SECTION_NODE, aNodePtr)
+    CCDATASection::CCDATASection(CDocument const& rDocument,
+            xmlNodePtr const pNode)
+        : CCDATASection_Base(rDocument, NodeType_CDATA_SECTION_NODE, pNode)
     {
     }
 

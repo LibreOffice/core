@@ -25,17 +25,21 @@
  *
  ************************************************************************/
 
-#include <com/sun/star/xml/dom/events/XDocumentEvent.hpp>
-#include "characterdata.hxx"
-#include "../events/mutationevent.hxx"
+#include <characterdata.hxx>
+
 #include <string.h>
+
+#include <com/sun/star/xml/dom/events/XDocumentEvent.hpp>
+
+#include "../events/mutationevent.hxx"
+
 
 namespace DOM
 {
 
-    CCharacterData::CCharacterData(
+    CCharacterData::CCharacterData(CDocument const& rDocument,
             NodeType const& reNodeType, xmlNodePtr const& rpNode)
-        : CCharacterData_Base(reNodeType, rpNode)
+        : CCharacterData_Base(rDocument, reNodeType, rpNode)
     {
     }
 

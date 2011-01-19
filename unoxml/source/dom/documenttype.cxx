@@ -25,19 +25,22 @@
  *
  ************************************************************************/
 
-#include "documenttype.hxx"
-#include "entitiesmap.hxx"
-#include "notationsmap.hxx"
+#include <documenttype.hxx>
 
 #include <string.h>
+
+#include <entitiesmap.hxx>
+#include <notationsmap.hxx>
+
 
 namespace DOM
 {
 
-    CDocumentType::CDocumentType(const xmlDtdPtr aDtdPtr)
-        : CDocumentType_Base(
-            NodeType_DOCUMENT_TYPE_NODE, reinterpret_cast<xmlNodePtr>(aDtdPtr))
-        , m_aDtdPtr(aDtdPtr)
+    CDocumentType::CDocumentType(
+            CDocument const& rDocument, xmlDtdPtr const pDtd)
+        : CDocumentType_Base(rDocument,
+            NodeType_DOCUMENT_TYPE_NODE, reinterpret_cast<xmlNodePtr>(pDtd))
+        , m_aDtdPtr(pDtd)
     {
     }
 

@@ -29,10 +29,10 @@
 #define DOM_DOCUMENTFRAGMENT_HXX
 
 #include <com/sun/star/uno/Reference.h>
-#include <com/sun/star/uno/Exception.hpp>
 #include <com/sun/star/xml/dom/XDocumentFragment.hpp>
 
-#include "node.hxx"
+#include <node.hxx>
+
 
 using ::rtl::OUString;
 using namespace com::sun::star::uno;
@@ -48,7 +48,8 @@ namespace DOM
     {
         friend class CNode;
     protected:
-        CDocumentFragment(const xmlNodePtr aNodePtr);
+        CDocumentFragment(CDocument const& rDocument,
+                xmlNodePtr const pNode);
 
     public:
         // ---- resolve uno inheritance problems...
