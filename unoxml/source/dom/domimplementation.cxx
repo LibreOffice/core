@@ -25,28 +25,39 @@
  *
  ************************************************************************/
 
-#include "domimplementation.hxx"
+#include <domimplementation.hxx>
+
+#include <rtl/instance.hxx>
+
 
 namespace DOM
 {
-    CDOMImplementation* CDOMImplementation::aDOMImplementation = new CDOMImplementation();
+    // why the heck is this thing static?
+    // perhaps it would be helpful to know what the implementation should
+    // do to answer this question...
+    namespace {
+        struct DOMImplementation
+            : public ::rtl::Static<CDOMImplementation, DOMImplementation> {};
+    }
+
     CDOMImplementation* CDOMImplementation::get()
     {
-        return CDOMImplementation::aDOMImplementation;
+        return & DOMImplementation::get();
     }
+
+    // there is just 1 static instance, so these must not delete it!
+    void SAL_CALL CDOMImplementation::acquire() throw () { }
+    void SAL_CALL CDOMImplementation::release() throw () { }
 
     /**
     Creates a DOM Document object of the specified type with its document element.
     */
     Reference <XDocument > SAL_CALL CDOMImplementation::createDocument(
-           const OUString& namespaceURI,
-           const OUString& qualifiedName,
-           const Reference< XDocumentType >& doctype)
+           OUString const& /*rNamespaceURI*/,
+           OUString const& /*rQualifiedName*/,
+           Reference< XDocumentType > const& /*xDoctype*/)
         throw (RuntimeException)
     {
-      OUString aNamespaceURI = namespaceURI;
-      OUString aQName = qualifiedName;
-      Reference< XDocumentType > aType = doctype;
         return Reference<XDocument>();
     }
 
@@ -54,22 +65,20 @@ namespace DOM
     Creates an empty DocumentType node.
     */
     Reference< XDocumentType > SAL_CALL CDOMImplementation::createDocumentType(
-            const OUString& qualifiedName, const OUString& publicId, const OUString& systemId)
+            OUString const& /*rQualifiedName*/,
+            OUString const& /*rPublicId*/, OUString const& /*rSystemId*/)
         throw (RuntimeException)
     {
-      OUString qName = qualifiedName;
-      OUString aPublicId = publicId;
-      OUString aSystemId = systemId;
         return Reference<XDocumentType>();
     }
+
     /**
     Test if the DOM implementation implements a specific feature.
     */
-    sal_Bool SAL_CALL CDOMImplementation::hasFeature(const OUString& feature, const OUString& ver)
+    sal_Bool SAL_CALL
+    CDOMImplementation::hasFeature(OUString const& /*feature*/, OUString const& /*ver*/)
         throw (RuntimeException)
     {
-      OUString aFeature = feature;
-      OUString aVersion = ver;
         return sal_False;
     }
 }

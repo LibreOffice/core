@@ -483,7 +483,6 @@ namespace DOM
     Reference< XDOMImplementation > SAL_CALL CDocument::getImplementation()
         throw (RuntimeException)
     {
-        // XXX
         return Reference< XDOMImplementation >(CDOMImplementation::get());
     }
 
