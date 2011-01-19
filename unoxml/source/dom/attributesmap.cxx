@@ -25,13 +25,17 @@
  *
  ************************************************************************/
 
-#include "attributesmap.hxx"
+#include <attributesmap.hxx>
+
 #include <string.h>
+
+#include <element.hxx>
+
 
 namespace DOM
 {
-    CAttributesMap::CAttributesMap(const CElement* aElement)
-        : m_pElement(aElement)
+    CAttributesMap::CAttributesMap(::rtl::Reference<CElement> const& pElement)
+        : m_pElement(pElement)
     {
     }
 
@@ -52,13 +56,13 @@ namespace DOM
             }
         }
         return count;
-
     }
 
     /**
     Retrieves a node specified by local name
     */
-    Reference< XNode > SAL_CALL CAttributesMap::getNamedItem(const OUString& name) throw (RuntimeException)
+    Reference< XNode > SAL_CALL
+    CAttributesMap::getNamedItem(OUString const& name) throw (RuntimeException)
     {
         Reference< XNode > aNode;
         xmlNodePtr pNode = m_pElement->m_aNodePtr;
@@ -84,7 +88,10 @@ namespace DOM
     /**
     Retrieves a node specified by local name and namespace URI.
     */
-    Reference< XNode > SAL_CALL CAttributesMap::getNamedItemNS(const OUString& namespaceURI,const OUString& localName) throw (RuntimeException)
+    Reference< XNode > SAL_CALL
+    CAttributesMap::getNamedItemNS(
+            OUString const& namespaceURI, OUString const& localName)
+    throw (RuntimeException)
     {
         Reference< XNode > aNode;
         xmlNodePtr pNode = m_pElement->m_aNodePtr;
@@ -114,7 +121,8 @@ namespace DOM
     /**
     Returns the indexth item in the map.
     */
-    Reference< XNode > SAL_CALL CAttributesMap::item(sal_Int32 index) throw (RuntimeException)
+    Reference< XNode > SAL_CALL
+    CAttributesMap::item(sal_Int32 index) throw (RuntimeException)
     {
         Reference< XNode > aNode;
         xmlNodePtr pNode = m_pElement->m_aNodePtr;
@@ -135,16 +143,16 @@ namespace DOM
             }
         }
         return aNode;
-
     }
 
     /**
     Removes a node specified by name.
     */
-    Reference< XNode > SAL_CALL CAttributesMap::removeNamedItem(const OUString& name) throw (RuntimeException)
+    Reference< XNode > SAL_CALL
+    CAttributesMap::removeNamedItem(OUString const& name)
+    throw (RuntimeException)
     {
-        Reference< XNode > aNode;
-        xmlNodePtr pNode = m_pElement->m_aNodePtr;
+        xmlNodePtr const pNode = m_pElement->m_aNodePtr;
         if (pNode != NULL)
         {
             OString o1 = OUStringToOString(name, RTL_TEXTENCODING_UTF8);
@@ -152,26 +160,29 @@ namespace DOM
             xmlAttrPtr cur = pNode->properties;
             while (cur != NULL)
             {
-                if( strcmp((char*)xName, (char*)cur->name) == 0)
-                {
-                    aNode = Reference< XNode >( CNode::getCNode(
-                                reinterpret_cast<xmlNodePtr>(cur)).get() );
-                    xmlUnlinkNode((xmlNodePtr)cur);
-                    break;
+                if (strcmp((char*)xName, (char*)cur->name) == 0) {
+                    ::rtl::Reference<CNode> const pCNode = CNode::getCNode(
+                                reinterpret_cast<xmlNodePtr>(cur)).get();
+                    // this seems to be legal...
+                    xmlUnlinkNode(reinterpret_cast<xmlNodePtr>(cur));
+                    pCNode->m_bUnlinked = true;
+                    return Reference< XNode >(pCNode.get());
                 }
                 cur = cur->next;
             }
         }
-        return aNode;
+        return 0;
     }
 
     /**
     // Removes a node specified by local name and namespace URI.
     */
-    Reference< XNode > SAL_CALL CAttributesMap::removeNamedItemNS(const OUString& namespaceURI, const OUString& localName) throw (RuntimeException)
+    Reference< XNode > SAL_CALL
+    CAttributesMap::removeNamedItemNS(
+            OUString const& namespaceURI, OUString const& localName)
+    throw (RuntimeException)
     {
-        Reference< XNode > aNode;
-        xmlNodePtr pNode = m_pElement->m_aNodePtr;
+        xmlNodePtr const pNode = m_pElement->m_aNodePtr;
         if (pNode != NULL)
         {
             OString o1 = OUStringToOString(localName, RTL_TEXTENCODING_UTF8);
@@ -182,24 +193,28 @@ namespace DOM
             xmlAttrPtr cur = pNode->properties;
             while (cur != NULL && pNs != NULL)
             {
-                if( strcmp((char*)xName, (char*)cur->name) == 0 &&
+                if (strcmp((char*)xName, (char*)cur->name) == 0 &&
                     cur->ns == pNs)
                 {
-                    aNode = Reference< XNode >( CNode::getCNode(
-                                reinterpret_cast<xmlNodePtr>(cur)).get() );
-                    xmlUnlinkNode((xmlNodePtr)cur);
-                    break;
+                    ::rtl::Reference<CNode> const pCNode = CNode::getCNode(
+                                reinterpret_cast<xmlNodePtr>(cur)).get();
+                    // this seems to be legal...
+                    xmlUnlinkNode(reinterpret_cast<xmlNodePtr>(cur));
+                    pCNode->m_bUnlinked = true;
+                    return Reference< XNode >(pCNode.get());
                 }
                 cur = cur->next;
             }
         }
-        return aNode;
+        return 0;
     }
 
     /**
     // Adds a node using its nodeName attribute.
     */
-    Reference< XNode > SAL_CALL CAttributesMap::setNamedItem(const Reference< XNode >& arg) throw (RuntimeException)
+    Reference< XNode > SAL_CALL
+    CAttributesMap::setNamedItem(Reference< XNode > const& arg)
+    throw (RuntimeException)
     {
       return arg;
       // return Reference< XNode >();
@@ -208,7 +223,9 @@ namespace DOM
     /**
     Adds a node using its namespaceURI and localName.
     */
-    Reference< XNode > SAL_CALL CAttributesMap::setNamedItemNS(const Reference< XNode >& arg) throw (RuntimeException)
+    Reference< XNode > SAL_CALL
+    CAttributesMap::setNamedItemNS(Reference< XNode > const& arg)
+    throw (RuntimeException)
     {
         return arg;
     // return Reference< XNode >();

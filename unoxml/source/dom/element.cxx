@@ -625,14 +625,14 @@ namespace DOM
         }
     }
 
-    Reference< XNamedNodeMap > SAL_CALL CElement::getAttributes()throw (RuntimeException)
+    Reference< XNamedNodeMap > SAL_CALL
+    CElement::getAttributes() throw (RuntimeException)
     {
-        Reference< XNamedNodeMap > aMap;
-        if (hasAttributes()) {
-            aMap = Reference< XNamedNodeMap >(new CAttributesMap(this));
-        }
-        return aMap;
+        if (!hasAttributes()) { return 0; }
+        Reference< XNamedNodeMap > const xMap(new CAttributesMap(this));
+        return xMap;
     }
+
     OUString SAL_CALL CElement::getNodeName()throw (RuntimeException)
     {
         return getLocalName();
