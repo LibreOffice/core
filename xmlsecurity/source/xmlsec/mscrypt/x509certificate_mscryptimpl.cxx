@@ -206,7 +206,7 @@ sal_Int16 SAL_CALL X509Certificate_MSCryptImpl :: getVersion() throw ( ::com::su
 
         return serial ;
     } else {
-        return NULL ;
+        return Sequence< sal_Int8 >();
     }
 }
 
@@ -367,7 +367,7 @@ sal_Int16 SAL_CALL X509Certificate_MSCryptImpl :: getVersion() throw ( ::com::su
 
         return issuerUid ;
     } else {
-        return NULL ;
+        return Sequence< sal_Int8 >();
     }
 }
 
@@ -379,7 +379,7 @@ sal_Int16 SAL_CALL X509Certificate_MSCryptImpl :: getVersion() throw ( ::com::su
 
         return subjectUid ;
     } else {
-        return NULL ;
+        return Sequence< sal_Int8 >();
     }
 }
 
@@ -403,7 +403,7 @@ sal_Int16 SAL_CALL X509Certificate_MSCryptImpl :: getVersion() throw ( ::com::su
 
         return xExtns ;
     } else {
-        return NULL ;
+        return Sequence< Reference< XCertificateExtension > >();
     }
 }
 
@@ -443,7 +443,7 @@ sal_Int16 SAL_CALL X509Certificate_MSCryptImpl :: getVersion() throw ( ::com::su
 
         return rawCert ;
     } else {
-        return NULL ;
+        return Sequence< sal_Int8 >();
     }
 }
 
@@ -548,7 +548,7 @@ X509Certificate_MSCryptImpl* X509Certificate_MSCryptImpl :: getImplementation( c
         }
     }
 
-    return NULL;
+    return Sequence< sal_Int8 >();
 }
 
 ::rtl::OUString SAL_CALL X509Certificate_MSCryptImpl::getSubjectPublicKeyAlgorithm()
@@ -582,7 +582,7 @@ X509Certificate_MSCryptImpl* X509Certificate_MSCryptImpl :: getImplementation( c
     }
     else
     {
-        return NULL ;
+        return Sequence< sal_Int8 >();
     }
 }
 
