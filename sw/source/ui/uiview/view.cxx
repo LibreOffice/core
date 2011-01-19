@@ -39,7 +39,6 @@
 #include <svl/eitem.hxx>
 #include <unotools/undoopt.hxx>
 #include <unotools/lingucfg.hxx>
-#include <svtools/printdlg.hxx>
 #include <unotools/useroptions.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/request.hxx>
@@ -183,7 +182,7 @@ void SwView::ImpSetVerb( int nSelType )
     }
     if ( bResetVerbs )
     {
-        SetVerbs( 0 );
+        SetVerbs( Sequence< embed::VerbDescriptor >() );
         bVerbsActive = sal_False;
     }
 }

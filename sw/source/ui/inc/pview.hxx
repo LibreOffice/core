@@ -223,7 +223,6 @@ class SW_DLLPUBLIC SwPagePreView: public SfxViewShell
     SW_DLLPRIVATE virtual USHORT          SetPrinter( SfxPrinter *pNewPrinter, USHORT nDiffFlags = SFX_PRINTER_ALL, bool bIsAPI=false );
     SW_DLLPRIVATE virtual SfxTabPage*     CreatePrintOptionsPage( Window *pParent,
                                                 const SfxItemSet &rOptions );
-    SW_DLLPRIVATE virtual PrintDialog*    CreatePrintDialog( Window *pParent );
 
     SW_DLLPRIVATE void CalcAndSetBorderPixel( SvBorder &rToFill, BOOL bInner );
 
