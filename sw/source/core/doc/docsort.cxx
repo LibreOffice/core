@@ -54,11 +54,6 @@
 #include <node2lay.hxx>
 #include <unochart.hxx>
 
-#if OSL_DEBUG_LEVEL > 1
-//nur zum debugen
-#include <cellatr.hxx>
-#endif
-
 using namespace ::com::sun::star::lang;
 
 SwSortOptions*      SwSortElement::pOptions = 0;
