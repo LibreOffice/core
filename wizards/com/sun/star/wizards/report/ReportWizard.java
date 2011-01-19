@@ -272,10 +272,17 @@ public class ReportWizard extends DatabaseObjectWizard implements XTextListener,
         final SQLQueryComposer sqlQueryComposer = recordParser.getSQLQueryComposer();
         if (this.CurDBCommandFieldSelection.getSelectedCommandType() == CommandType.TABLE)
         {
-            bQueryCreated = sqlQueryComposer.setQueryCommand(this.xWindow, false, false);
-            m_reportDocument.setCommandType(CommandType.COMMAND);
-            String sQuery = sqlQueryComposer.getQuery();
-            m_reportDocument.setCommand(sQuery);
+            if (m_reportDocument instanceof ReportTextImplementation)
+            {
+                bQueryCreated = sqlQueryComposer.setQueryCommand(this.xWindow, false, false);
+                m_reportDocument.setCommandType(CommandType.COMMAND);
+                String sQuery = sqlQueryComposer.getQuery();
+                m_reportDocument.setCommand(sQuery);
+            }
+            else
+            {
+                bQueryCreated = true;
+            }
         }
         else
         {
@@ -289,19 +296,20 @@ public class ReportWizard extends DatabaseObjectWizard implements XTextListener,
                 {
                     // String sCommand = (String) oCommand.xPropertySet.getPropertyValue("Command");
                     bQueryCreated = (!sCommand.equals(""));
-                    sqlQueryComposer.m_xQueryAnalyzer.setQuery(sCommand);
-                    sqlQueryComposer.prependSortingCriteria();
-// TODO: check with query
-                    m_reportDocument.setCommandType(CommandType.COMMAND);
-                    m_reportDocument.setCommand(sqlQueryComposer.getQuery());
-                    bQueryCreated = true;
+                    if (m_reportDocument instanceof ReportTextImplementation)
+                    {
+                        sqlQueryComposer.m_xQueryAnalyzer.setQuery(sCommand);
+                        sqlQueryComposer.prependSortingCriteria();
+                        m_reportDocument.setCommandType(CommandType.COMMAND);
+                        m_reportDocument.setCommand(sqlQueryComposer.getQuery());
+                    }
                 }
                 else
                 {
                     m_reportDocument.setCommandType(CommandType.COMMAND);
                     m_reportDocument.setCommand(sCommand);
-                    bQueryCreated = true;
                 }
+                bQueryCreated = true;
             }
             catch (Exception e)
             {
@@ -717,7 +725,7 @@ public class ReportWizard extends DatabaseObjectWizard implements XTextListener,
             else
             {
                 boolean bEnabled = (CurGroupFieldSelection.getSelectedFieldNames().length > 0);
-                Helper.setUnoPropertyValue(getRoadmapItemByID(SOGROUPPAGE), PropertyNames.PROPERTY_ENABLED, new Boolean(bEnabled));
+                Helper.setUnoPropertyValue(getRoadmapItemByID(SOGROUPPAGE), PropertyNames.PROPERTY_ENABLED, bEnabled);
             }
         }
 
@@ -732,7 +740,7 @@ public class ReportWizard extends DatabaseObjectWizard implements XTextListener,
             else
             {
                 boolean bEnabled = (CurGroupFieldSelection.getSelectedFieldNames().length > 0);
-                Helper.setUnoPropertyValue(getRoadmapItemByID(SOGROUPPAGE), PropertyNames.PROPERTY_ENABLED, new Boolean(bEnabled));
+                Helper.setUnoPropertyValue(getRoadmapItemByID(SOGROUPPAGE), PropertyNames.PROPERTY_ENABLED, bEnabled);
             }
         }
 

@@ -179,9 +179,9 @@ public class ReportFinalizer
         // String sStorePath = "";
         Short iState = (Short) CurUnoDialog.getControlProperty("optCreateReportTemplate", PropertyNames.PROPERTY_STATE);
         boolean bDoTemplateEnable = iState.shortValue() == 1;
-        CurUnoDialog.setControlProperty("optEditTemplate", PropertyNames.PROPERTY_ENABLED, new Boolean(bDoTemplateEnable));
-        CurUnoDialog.setControlProperty("optUseTemplate", PropertyNames.PROPERTY_ENABLED, new Boolean(bDoTemplateEnable));
-        CurUnoDialog.setControlProperty("lblHowProceed", PropertyNames.PROPERTY_ENABLED, new Boolean(bDoTemplateEnable));
+        CurUnoDialog.setControlProperty("optEditTemplate", PropertyNames.PROPERTY_ENABLED, bDoTemplateEnable);
+        CurUnoDialog.setControlProperty("optUseTemplate", PropertyNames.PROPERTY_ENABLED, bDoTemplateEnable);
+        CurUnoDialog.setControlProperty("lblHowProceed", PropertyNames.PROPERTY_ENABLED, bDoTemplateEnable);
 
         String sTitle = xTitleTextBox.getText();
         boolean bDoEnable = sTitle.equals("");

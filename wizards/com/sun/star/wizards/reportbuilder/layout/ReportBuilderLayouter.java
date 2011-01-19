@@ -42,6 +42,9 @@ import com.sun.star.beans.XPropertySet;
 import com.sun.star.beans.XPropertySetInfo;
 import com.sun.star.container.XEnumeration;
 import com.sun.star.container.XNameAccess;
+import com.sun.star.lang.IllegalArgumentException;
+import com.sun.star.lang.IndexOutOfBoundsException;
+import com.sun.star.lang.WrappedTargetException;
 import com.sun.star.lang.XComponent;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.report.XFixedLine;
@@ -72,6 +75,8 @@ import com.sun.star.wizards.report.IReportDefinitionReadAccess;
 import com.sun.star.wizards.ui.UIConsts;
 import java.util.HashMap;
 import java.util.Locale;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * This class is abstract and more like a helper for create different layouts for Report Builder Wizard.
@@ -83,6 +88,7 @@ abstract public class ReportBuilderLayouter implements IReportBuilderLayouter
 
     private IReportDefinitionReadAccess m_xReportDefinitionReadAccess;
     private Resource m_aResource;
+    private String[][] m_aSortNames;
 
     /**
      * dispose the ReportBuilderLayouter
@@ -91,7 +97,7 @@ abstract public class ReportBuilderLayouter implements IReportBuilderLayouter
     {
         closeDesignTemplate();
         m_xReportDefinitionReadAccess = null;
-    // m_xReportBuilderLayouter = null;
+        // m_xReportBuilderLayouter = null;
     }
 
     /**
@@ -148,11 +154,11 @@ abstract public class ReportBuilderLayouter implements IReportBuilderLayouter
             insertPageFooter();
 
             clearGroups();
-            insertGroups();
+            int lastGroupPostion = insertGroups();
 
             clearDetails();
             // clearFieldTitles();
-            insertDetailFieldTitles();
+            insertDetailFieldTitles(lastGroupPostion);
             insertDetailFields();
         }
         catch (java.lang.ArrayIndexOutOfBoundsException e)
@@ -163,13 +169,13 @@ abstract public class ReportBuilderLayouter implements IReportBuilderLayouter
         {
             throw e;
         }
-        catch (Exception e)
+        catch (Exception ex)
         {
-            // Exception not set. Not from interest here.
-            int dummy = 0;
+            Logger.getLogger(ReportBuilderLayouter.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     // -------------------------------------------------------------------------
+
     /**
      * Remove all Groups
      */
@@ -183,13 +189,14 @@ abstract public class ReportBuilderLayouter implements IReportBuilderLayouter
             {
                 xGroups.removeByIndex(0);
             }
-            catch (com.sun.star.uno.Exception e)
+            catch (com.sun.star.uno.Exception ex)
             {
-                // Exception not set. Not from interest here.
+                Logger.getLogger(ReportBuilderLayouter.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     }
     // -------------------------------------------------------------------------
+
     /**
      * Remove all fields
      * @param _xSectionToClear
@@ -209,10 +216,9 @@ abstract public class ReportBuilderLayouter implements IReportBuilderLayouter
                 final XShape aShape = (XShape) UnoRuntime.queryInterface(XShape.class, aObj);
                 _xSectionToClear.remove(aShape);
             }
-            catch (com.sun.star.uno.Exception e)
+            catch (com.sun.star.uno.Exception ex)
             {
-                // Exception not set.
-                int dummy = 0;
+                Logger.getLogger(ReportBuilderLayouter.class.getName()).log(Level.SEVERE, null, ex);
             }
 
         }
@@ -226,6 +232,7 @@ abstract public class ReportBuilderLayouter implements IReportBuilderLayouter
 //    public void clearFieldTitles()
 //    {
 //    }
+
     /**
      *
      * @param _nGroupCount
@@ -307,10 +314,9 @@ abstract public class ReportBuilderLayouter implements IReportBuilderLayouter
                 }
             }
         }
-        catch (com.sun.star.uno.Exception e)
+        catch (com.sun.star.uno.Exception ex)
         {
-            // TODO: Exception not set.
-            e.printStackTrace();
+            Logger.getLogger(ReportBuilderLayouter.class.getName()).log(Level.SEVERE, null, ex);
         }
         return aUsedStyle;
     }
@@ -352,6 +358,7 @@ abstract public class ReportBuilderLayouter implements IReportBuilderLayouter
         return m_nPageWidth;
     }
     // -------------------------------------------------------------------------
+
     /**
      * Stores the Group names. To insert/create a report with such group names, call layout()
      * @param _aGroupNames
@@ -361,6 +368,11 @@ abstract public class ReportBuilderLayouter implements IReportBuilderLayouter
         m_aGroupNames = _aGroupNames;
     }
 
+    public void insertSortingNames(String[][] _aSortFieldNames)
+    {
+        m_aSortNames = _aSortFieldNames;
+    }
+
     protected void copyGroupProperties(int _nGroup)
     {
         if (getDesignTemplate() != null)
@@ -368,103 +380,111 @@ abstract public class ReportBuilderLayouter implements IReportBuilderLayouter
             try
             {
                 final XGroups xForeignGroups = getDesignTemplate().getGroups();
-                int nGroups = xForeignGroups.getCount();
-                Object aForeignGroup = xForeignGroups.getByIndex(_nGroup);
-                XGroup xForeignGroup = (XGroup) UnoRuntime.queryInterface(XGroup.class, aForeignGroup);
-                XSection xForeignGroupSection = xForeignGroup.getHeader();
-
-                if (xForeignGroupSection != null)
+                if (_nGroup < xForeignGroups.getCount())
                 {
-                    final XGroups xGroups = getReportDefinition().getGroups();
-                    Object aGroup = xGroups.getByIndex(_nGroup);
-                    XGroup xGroup = (XGroup) UnoRuntime.queryInterface(XGroup.class, aGroup);
-                    XSection xGroupSection = xGroup.getHeader();
+                    XGroup xForeignGroup = UnoRuntime.queryInterface(XGroup.class, xForeignGroups.getByIndex(_nGroup));
+                    XSection xForeignGroupSection = xForeignGroup.getHeader();
 
-                    // copy Properties
-                    copyProperties(xForeignGroupSection, xGroupSection);
+                    if (xForeignGroupSection != null)
+                    {
+                        final XGroups xGroups = getReportDefinition().getGroups();
+                        Object aGroup = xGroups.getByIndex(_nGroup);
+                        XGroup xGroup = (XGroup) UnoRuntime.queryInterface(XGroup.class, aGroup);
+                        XSection xGroupSection = xGroup.getHeader();
+
+                        // copy Properties
+                        copyProperties(xForeignGroupSection, xGroupSection);
+                    }
                 }
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                int dummy = 0;
+                Logger.getLogger(ReportBuilderLayouter.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     }
     // -------------------------------------------------------------------------
-    protected void insertGroups()
+
+    protected int insertGroups()
     {
-        if (m_aGroupNames == null)
-        {
-            return;
-        }
-
         final XGroups xGroups = getReportDefinition().getGroups();
-        final int nLeftPageIndent = getLeftPageIndent();
-        final int nLabelWidth = getMaxLabelWidth(); // 3000;
-        final int nUsablePageWidth = getPageWidth() - getLeftPageIndent() - getRightPageIndent() - getLeftGroupIndent(getCountOfGroups());
-        final int nFieldWidth = nUsablePageWidth - nLabelWidth;
+        int lastGroupPosition = -1;
 
-        // after done with all groups, we need access to the last group, for set property 'KeepTogether' so we remember it.
-        XGroup aLastGroup = null;
-
-        for (int i = 0; i < m_aGroupNames.length; i++)
+        if (m_aGroupNames != null)
         {
-            final XGroup xGroup = xGroups.createGroup();
-            aLastGroup = xGroup;
+            final int nLeftPageIndent = getLeftPageIndent();
+            final int nLabelWidth = getMaxLabelWidth(); // 3000;
+            final int nUsablePageWidth = getPageWidth() - getLeftPageIndent() - getRightPageIndent() - getLeftGroupIndent(getCountOfGroups());
+            final int nFieldWidth = nUsablePageWidth - nLabelWidth;
 
-            // TODO: debug what the m_aGroupNames are, "field:[...]" or the "fieldname"
-            xGroup.setExpression(m_aGroupNames[i]);
-            xGroup.setHeaderOn(true);
-            // we don't want any group footer (default off)
-            // xGroup.setFooterOn(true);
+            XGroup aLastGroup = null;
+            // after done with all groups, we need access to the last group, for set property 'KeepTogether' so we remember it.
 
-            try
+            for (int i = 0; i < m_aGroupNames.length; i++)
             {
-                // we need to append by hand
-                // TODO: documentation is unclear here, that we have to insert by hand
-                int nCount = xGroups.getCount();
-                xGroups.insertByIndex(nCount, xGroup);
+                lastGroupPosition = i;
+                final XGroup xGroup = xGroups.createGroup();
+                aLastGroup = xGroup;
 
-                final XSection xGroupSection = xGroup.getHeader();
-                copyGroupProperties(nCount);
+                xGroup.setExpression(m_aGroupNames[i]);
+                xGroup.setHeaderOn(true);
 
-                Rectangle aRect = new Rectangle();
-                aRect.X = nLeftPageIndent + getLeftGroupIndent(i);
-                SectionObject aSO = getDesignTemplate().getGroupLabel(i);
-                int nLabelHeight = 0;
-//               if (aSO != null)
-//               {
-                nLabelHeight = aSO.getHeight(LayoutConstants.LabelHeight);
-                aRect = insertLabel(xGroupSection, getTitleFromFieldName(m_aGroupNames[i]), aRect, nLabelWidth, aSO);
-//               }
-//               else
-//               {
-//                   nLabelHeight = 500;
-//                   aRect = insertBoldLabel(xGroupSection, getTitleFromFieldName(m_aGroupNames[i]), aRect, nLabelWidth);
-//               }
-                final String sGroupName = convertToFieldName(m_aGroupNames[i]);
-                aSO = getDesignTemplate().getGroupTextField(i);
-                insertFormattedField(xGroupSection, sGroupName, aRect, nFieldWidth, aSO);
+                try
+                {
+                    int nCount = xGroups.getCount();
+                    xGroups.insertByIndex(nCount, xGroup);
+                    final XSection xGroupSection = xGroup.getHeader();
+                    copyGroupProperties(nCount);
 
-                // draw a line under the label/formattedfield
-                aRect.X = nLeftPageIndent + getLeftGroupIndent(i);
-                aRect.Y = nLabelHeight;
-                final int nLineWidth = getPageWidth() - getRightPageIndent() - aRect.X;
-                final int nLineHeight = LayoutConstants.LineHeight;
-                insertHorizontalLine(xGroupSection, aRect, nLineWidth, nLineHeight);
-                xGroupSection.setHeight(nLabelHeight + nLineHeight);
+                    Rectangle aRect = new Rectangle();
+                    aRect.X = nLeftPageIndent + getLeftGroupIndent(i);
+                    SectionObject aSO = getDesignTemplate().getGroupLabel(i);
+                    aRect = insertLabel(xGroupSection, getTitleFromFieldName(m_aGroupNames[i]), aRect, nLabelWidth, aSO);
+                    final String sGroupName = convertToFieldName(m_aGroupNames[i]);
+                    aSO = getDesignTemplate().getGroupTextField(i);
+                    aRect = insertFormattedField(xGroupSection, sGroupName, aRect, nFieldWidth, aSO);
+                    int height = aRect.Height;
+
+                    // draw a line under the label/formattedfield
+                    aRect.X = nLeftPageIndent + getLeftGroupIndent(i);
+                    aRect.Y = aRect.Height;
+                    final int nLineWidth = getPageWidth() - getRightPageIndent() - aRect.X;
+                    final int nLineHeight = LayoutConstants.LineHeight;
+                    insertHorizontalLine(xGroupSection, aRect, nLineWidth, nLineHeight);
+                    xGroupSection.setHeight(height + nLineHeight);
+                }
+                catch (com.sun.star.uno.Exception ex)
+                {
+                    Logger.getLogger(ReportBuilderLayouter.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
-            catch (com.sun.star.uno.Exception e)
+
+            // hold the inner group together
+            if (aLastGroup != null)
             {
-                // TODO: Exception not set.
+                doNotBreakInTable(aLastGroup);
             }
         }
-
-        // hold the inner group together
-        if (aLastGroup != null)
+        if (m_aSortNames != null)
         {
-            doNotBreakInTable(aLastGroup);
+            for (String[] sortFieldName : m_aSortNames)
+            {
+                try
+                {
+                    final XGroup xGroup = xGroups.createGroup();
+                    xGroup.setExpression(sortFieldName[0]);
+                    xGroup.setSortAscending("ASC".equals(sortFieldName[1]));
+                    xGroup.setHeaderOn(false);
+                    int nCount = xGroups.getCount();
+                    xGroups.insertByIndex(nCount, xGroup);
+                }
+                catch (java.lang.Exception ex)
+                {
+                    Logger.getLogger(ReportBuilderLayouter.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
         }
+        return lastGroupPosition;
     }
 
     // -------------------------------------------------------------------------
@@ -490,7 +510,7 @@ abstract public class ReportBuilderLayouter implements IReportBuilderLayouter
         return "";
     }
 
-        protected int getTypeFromFieldName(String _sField)
+    protected int getTypeFromFieldName(String _sField)
     {
         for (int i = 0; i < m_aFieldNames.length; i++)
         {
@@ -514,6 +534,7 @@ abstract public class ReportBuilderLayouter implements IReportBuilderLayouter
         return false;
     }
     // -------------------------------------------------------------------------
+
     /**
      * Helper to get all field names without the names which are already in the group names
      * @param _aList
@@ -578,8 +599,10 @@ abstract public class ReportBuilderLayouter implements IReportBuilderLayouter
         return getNamesWithoutGroupNames(m_aFieldNames, m_aFieldTitleNames);
     }
     // -------------------------------------------------------------------------
-    abstract protected void insertDetailFieldTitles();
+
+    abstract protected void insertDetailFieldTitles(int lastGroupPostion);
     // -------------------------------------------------------------------------
+
     /**
      * Give a list off all field names to insert the field names, call layout()
      * @param _aFieldNames
@@ -627,12 +650,14 @@ abstract public class ReportBuilderLayouter implements IReportBuilderLayouter
                     copyProperties(xForeignSection, xSection);
                 }
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
+                Logger.getLogger(ReportBuilderLayouter.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     }
     // -------------------------------------------------------------------------
+
     protected Rectangle insertLabel(XSection _xSection, String _sLabel, Rectangle _aRect, int _nWidth, SectionObject _aSO)
     {
         if (_xSection != null)
@@ -678,15 +703,15 @@ abstract public class ReportBuilderLayouter implements IReportBuilderLayouter
                 xFixedText.setHeight(nHeight);
                 _xSection.add(xFixedText);
             }
-            catch (com.sun.star.uno.Exception e)
+            catch (com.sun.star.uno.Exception ex)
             {
-                // TODO: Exception not set.
-                int dummy = 0;
+                Logger.getLogger(ReportBuilderLayouter.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
         return _aRect;
     }
     // -------------------------------------------------------------------------
+
     protected String convertToFieldName(String _sElementName)
     {
         final StringBuffer aDataField = new StringBuffer(32);
@@ -694,6 +719,7 @@ abstract public class ReportBuilderLayouter implements IReportBuilderLayouter
         return aDataField.toString();
 
     }
+
     protected String convertFromFieldName(String _sName)
     {
         if (_sName.startsWith("field:["))
@@ -705,6 +731,7 @@ abstract public class ReportBuilderLayouter implements IReportBuilderLayouter
         return _sName;
     }
     // -------------------------------------------------------------------------
+
     /**
      * Insert a already formatted field name into a given section
      *
@@ -732,9 +759,9 @@ abstract public class ReportBuilderLayouter implements IReportBuilderLayouter
                 int nHeight = LayoutConstants.FormattedFieldHeight;
 
                 int nType = getTypeFromFieldName(convertFromFieldName(_sFormattedfield));
-                if (nType == DataType.BINARY ||
-                    nType == DataType.VARBINARY ||
-                    nType == DataType.LONGVARBINARY)
+                if (nType == DataType.BINARY
+                        || nType == DataType.VARBINARY
+                        || nType == DataType.LONGVARBINARY)
                 {
                     aField = getMSFofReportDefinition().createInstance("com.sun.star.report.ImageControl");
                     nHeight = LayoutConstants.BinaryHeight;
@@ -744,6 +771,7 @@ abstract public class ReportBuilderLayouter implements IReportBuilderLayouter
                     aField = getMSFofReportDefinition().createInstance("com.sun.star.report.FormattedField");
                     nHeight = LayoutConstants.FormattedFieldHeight;
                     if (nType == DataType.LONGVARCHAR) /* memo */
+
                     {
                         nHeight = LayoutConstants.MemoFieldHeight; // special case for memo
                     }
@@ -757,7 +785,7 @@ abstract public class ReportBuilderLayouter implements IReportBuilderLayouter
                     xReportControlModel.setDataField(_sFormattedfield);
                     if (_aSO != null)
                     {
-    // TODO: there seems to be some problems with copy all properties from the design template to the current design
+                        // TODO: there seems to be some problems with copy all properties from the design template to the current design
                         final FontDescriptor aFD = _aSO.getFontDescriptor();
                         if (aFD != null)
                         {
@@ -772,9 +800,9 @@ abstract public class ReportBuilderLayouter implements IReportBuilderLayouter
                     _aRect.X += _nWidth;
                     xReportControlModel.setHeight(nHeight);
 
-                    if (nType == DataType.BINARY ||
-                        nType == DataType.VARBINARY ||
-                        nType == DataType.LONGVARBINARY)
+                    if (nType == DataType.BINARY
+                            || nType == DataType.VARBINARY
+                            || nType == DataType.LONGVARBINARY)
                     {
                         // aField = getMSFofReportDefinition().createInstance("com.sun.star.report.ImageControl");
                         final XImageControl xImageControl = (XImageControl) UnoRuntime.queryInterface(XImageControl.class, xReportControlModel);
@@ -795,9 +823,9 @@ abstract public class ReportBuilderLayouter implements IReportBuilderLayouter
                             //     xReportControlModel.???
                             // }
                         }
-                        catch (com.sun.star.beans.UnknownPropertyException e)
+                        catch (com.sun.star.beans.UnknownPropertyException ex)
                         {
-                            // seems we not able to set ParaAdjust
+                            Logger.getLogger(ReportBuilderLayouter.class.getName()).log(Level.SEVERE, null, ex);
                         }
                     }
                     // spezial case rpt:now() (default date format)
@@ -819,10 +847,9 @@ abstract public class ReportBuilderLayouter implements IReportBuilderLayouter
                     _xSection.add(xReportControlModel);
                 }
             }
-            catch (com.sun.star.uno.Exception e)
+            catch (com.sun.star.uno.Exception ex)
             {
-                // TODO: Exception not set.
-                int dummy = 0;
+                Logger.getLogger(ReportBuilderLayouter.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
         return _aRect;
@@ -851,6 +878,7 @@ abstract public class ReportBuilderLayouter implements IReportBuilderLayouter
         return m_xMSF;
     }
     // -------------------------------------------------------------------------
+
     protected Rectangle insertVerticalLine(XSection _xSection, Rectangle _aRect, int _nWidth, int _nHeight)
     {
         return insertLine(_xSection, _aRect, _nWidth, _nHeight, 1);
@@ -882,15 +910,15 @@ abstract public class ReportBuilderLayouter implements IReportBuilderLayouter
                 xFixedLine.setHeight(_nHeight);
                 _xSection.add(xFixedLine);
             }
-            catch (com.sun.star.uno.Exception e)
+            catch (com.sun.star.uno.Exception ex)
             {
-                // TODO: Exception not set.
-                int dummy = 0;
+                Logger.getLogger(ReportBuilderLayouter.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
         return _aRect;
     }
     // -------------------------------------------------------------------------
+
     protected void clearReportHeader()
     {
         XSection xSection;
@@ -902,9 +930,9 @@ abstract public class ReportBuilderLayouter implements IReportBuilderLayouter
                 emptySection(xSection);
             }
         }
-        catch (com.sun.star.container.NoSuchElementException e)
+        catch (com.sun.star.container.NoSuchElementException ex)
         {
-            // Exception not set. Not really from interest.
+            Logger.getLogger(ReportBuilderLayouter.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -930,6 +958,7 @@ abstract public class ReportBuilderLayouter implements IReportBuilderLayouter
                 }
                 catch (Exception e)
                 {
+                    Logger.getLogger(ReportBuilderLayouter.class.getName()).log(Level.SEVERE, null, e);
                 }
             }
             else
@@ -953,7 +982,7 @@ abstract public class ReportBuilderLayouter implements IReportBuilderLayouter
         }
         catch (com.sun.star.container.NoSuchElementException e)
         {
-            // Exception not set. Not really from interest.
+            Logger.getLogger(ReportBuilderLayouter.class.getName()).log(Level.SEVERE, null, e);
         }
     }
 
@@ -979,6 +1008,7 @@ abstract public class ReportBuilderLayouter implements IReportBuilderLayouter
                 }
                 catch (Exception e)
                 {
+                    Logger.getLogger(ReportBuilderLayouter.class.getName()).log(Level.SEVERE, null, e);
                 }
             }
             else
@@ -989,6 +1019,7 @@ abstract public class ReportBuilderLayouter implements IReportBuilderLayouter
         }
     }
     // -------------------------------------------------------------------------
+
     protected void clearPageHeader()
     {
         XSection xSection;
@@ -1002,7 +1033,7 @@ abstract public class ReportBuilderLayouter implements IReportBuilderLayouter
         }
         catch (com.sun.star.container.NoSuchElementException e)
         {
-            // Exception not set. Not really from interest.
+            Logger.getLogger(ReportBuilderLayouter.class.getName()).log(Level.SEVERE, null, e);
         }
     }
 
@@ -1017,7 +1048,6 @@ abstract public class ReportBuilderLayouter implements IReportBuilderLayouter
 //            // DebugHelper.writeInfo("Date: " + aBuf.toString());
 //            return aBuf.toString();
 //    }
-
 //    protected String getCurrentDate()
 //    {
 //        Calendar aCalendar = Calendar.getInstance();
@@ -1060,7 +1090,7 @@ abstract public class ReportBuilderLayouter implements IReportBuilderLayouter
         }
         catch (com.sun.star.container.NoSuchElementException e)
         {
-            // Exception not set. Should not from interest here.
+            Logger.getLogger(ReportBuilderLayouter.class.getName()).log(Level.SEVERE, null, e);
         }
     }
 
@@ -1150,7 +1180,7 @@ abstract public class ReportBuilderLayouter implements IReportBuilderLayouter
         }
         catch (Exception e)
         {
-            // TODO: Exception not set.
+            Logger.getLogger(ReportBuilderLayouter.class.getName()).log(Level.SEVERE, null, e);
         }
         return aSizeMM_100TH;
     }
@@ -1174,9 +1204,9 @@ abstract public class ReportBuilderLayouter implements IReportBuilderLayouter
             sFirstName = (String) Helper.getUnoObjectbyName(oProdNameAccess, "givenname");
             sLastName = (String) Helper.getUnoObjectbyName(oProdNameAccess, "sn");
         }
-        catch (Exception exception)
+        catch (Exception e)
         {
-            exception.printStackTrace(System.out);
+            Logger.getLogger(ReportBuilderLayouter.class.getName()).log(Level.SEVERE, null, e);
         }
         return sFirstName + " " + sLastName;
     }
@@ -1210,6 +1240,7 @@ abstract public class ReportBuilderLayouter implements IReportBuilderLayouter
                 }
                 catch (Exception e)
                 {
+                    Logger.getLogger(ReportBuilderLayouter.class.getName()).log(Level.SEVERE, null, e);
                 }
             }
         }
@@ -1238,14 +1269,7 @@ abstract public class ReportBuilderLayouter implements IReportBuilderLayouter
                     Object aClone = aComponent.createClone();
                     if (aClone != null)
                     {
-                        String sName = aComponent.getName();
-                        com.sun.star.awt.Point aPosition = aComponent.getPosition();
-                        Size aSize = aComponent.getSize();
-
                         XShape aShape = (XShape) UnoRuntime.queryInterface(XShape.class, aClone);
-                        String sShapeType = aShape.getShapeType();
-                        com.sun.star.awt.Point aShapePoint = aShape.getPosition();
-                        Size aShapeSize = aShape.getSize();
 
                         // normally 'createClone' will create a real clone of the component,
                         // but there seems some problems, we have to controll.
@@ -1260,9 +1284,10 @@ abstract public class ReportBuilderLayouter implements IReportBuilderLayouter
         }
         catch (Exception e)
         {
+            Logger.getLogger(ReportBuilderLayouter.class.getName()).log(Level.SEVERE, null, e);
         }
-    // String sName = xForeignSection.getName();
-    // int dummy = 0;
+        // String sName = xForeignSection.getName();
+        // int dummy = 0;
     }
 
     protected void insertPageHeader()
@@ -1287,6 +1312,7 @@ abstract public class ReportBuilderLayouter implements IReportBuilderLayouter
                 }
                 catch (Exception e)
                 {
+                    Logger.getLogger(ReportBuilderLayouter.class.getName()).log(Level.SEVERE, null, e);
                 }
                 return;
             }
@@ -1364,7 +1390,7 @@ abstract public class ReportBuilderLayouter implements IReportBuilderLayouter
             }
             catch (com.sun.star.uno.Exception e)
             {
-                // TODO: Exception not set.
+                Logger.getLogger(ReportBuilderLayouter.class.getName()).log(Level.SEVERE, null, e);
             }
         }
     }
@@ -1390,6 +1416,7 @@ abstract public class ReportBuilderLayouter implements IReportBuilderLayouter
                 }
                 catch (Exception e)
                 {
+                    Logger.getLogger(ReportBuilderLayouter.class.getName()).log(Level.SEVERE, null, e);
                 }
             }
             else
@@ -1455,7 +1482,7 @@ abstract public class ReportBuilderLayouter implements IReportBuilderLayouter
             }
             catch (Exception e)
             {
-                // TODO: Exception not set.
+                Logger.getLogger(ReportBuilderLayouter.class.getName()).log(Level.SEVERE, null, e);
             }
         }
     }
@@ -1595,7 +1622,7 @@ abstract public class ReportBuilderLayouter implements IReportBuilderLayouter
             }
             catch (com.sun.star.uno.Exception e)
             {
-                // TODO: Exception not set.
+                Logger.getLogger(ReportBuilderLayouter.class.getName()).log(Level.SEVERE, null, e);
             }
         }
         return nWidth;
@@ -1623,7 +1650,7 @@ abstract public class ReportBuilderLayouter implements IReportBuilderLayouter
             String sDefaultHeaderLayout = m_xReportDefinitionReadAccess.getDefaultHeaderLayout();
             loadAndSetBackgroundTemplate(sDefaultHeaderLayout);
 
-        // copy all functions from the design template to the current report definition
+            // copy all functions from the design template to the current report definition
 //            XFunctions xOtherFunctions = m_xDesignTemplate.getReportDefinition().getFunctions();
 //            final int nFunctionCount = xOtherFunctions.getCount();
 //            for (int i=0;i<nFunctionCount;i++)
@@ -1678,8 +1705,8 @@ abstract public class ReportBuilderLayouter implements IReportBuilderLayouter
         closeDesignTemplate();
 
         String sName = FileAccess.getFilename(LayoutTemplatePath);
-        if (sName.toLowerCase().equals("default.otr_") ||
-                LayoutTemplatePath.equals("DefaultLayoutOfHeaders"))
+        if (sName.toLowerCase().equals("default.otr_")
+                || LayoutTemplatePath.equals("DefaultLayoutOfHeaders"))
         {
             // this is the default layout, we don't want to have a layout for this.
         }
@@ -1690,4 +1717,3 @@ abstract public class ReportBuilderLayouter implements IReportBuilderLayouter
         }
     }
 }
-
