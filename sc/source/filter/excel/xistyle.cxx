@@ -1313,7 +1313,16 @@ void XclImpXF::ApplyPatternToAttrList(
 
     if (pPat)
     {
+        // Check for a gap between the last entry and this one.
+        bool bHasGap = false;
+        if (rAttrs.empty() && nRow1 > 0)
+            // First attribute range doesn't start at row 0.
+            bHasGap = true;
+
         if (!rAttrs.empty() && rAttrs.back().nRow + 1 < nRow1)
+            bHasGap = true;
+
+        if (bHasGap)
         {
             // Fill this gap with the default pattern.
             ScAttrEntry aEntry;
