@@ -34,6 +34,7 @@ gb_CC := cl
 gb_CXX := cl
 gb_LINK := link
 gb_AWK := gawk
+gb_CLASSPATHSEP := ;
 
 # use CC/CXX if they are nondefaults
 ifneq ($(origin CC),default)

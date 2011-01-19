@@ -35,6 +35,7 @@ gb_CXX := g++
 gb_GCCP := gcc
 gb_AR := ar
 gb_AWK := awk
+gb_CLASSPATHSEP := :
 
 # normalize setsolar and configure env.
 ifeq ($(CPU),X)
