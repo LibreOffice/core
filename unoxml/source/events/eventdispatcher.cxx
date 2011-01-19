@@ -136,7 +136,8 @@ namespace DOM { namespace events {
             pEvent->initEvent(
                 aType, aEvent->getBubbles(), aEvent->getCancelable());
         }
-        pEvent->m_target = Reference< XEventTarget >(DOM::CNode::get(aNodePtr));
+        pEvent->m_target =
+            Reference< XEventTarget >(DOM::CNode::getCNode(aNodePtr).get());
         pEvent->m_currentTarget = aEvent->getCurrentTarget();
         pEvent->m_time = aEvent->getTimeStamp();
 
@@ -170,7 +171,8 @@ namespace DOM { namespace events {
             while (inode != captureVector.begin())
             {
                 //pEvent->m_currentTarget = *inode;
-                pEvent->m_currentTarget = Reference< XEventTarget >(DOM::CNode::get(*inode));
+                pEvent->m_currentTarget = Reference< XEventTarget >(
+                        DOM::CNode::getCNode(*inode).get());
                 callListeners(*inode, aType, xEvent, sal_True);
                 if  (pEvent->m_canceled) return sal_True;
                 inode--;
@@ -186,7 +188,8 @@ namespace DOM { namespace events {
                 pEvent->m_phase = PhaseType_BUBBLING_PHASE;
                 while (inode != captureVector.end())
                 {
-                    pEvent->m_currentTarget = Reference< XEventTarget >(DOM::CNode::get(*inode));
+                    pEvent->m_currentTarget = Reference< XEventTarget >(
+                            DOM::CNode::getCNode(*inode).get());
                     callListeners(*inode, aType, xEvent, sal_False);
                     if  (pEvent->m_canceled) return sal_True;
                     inode++;

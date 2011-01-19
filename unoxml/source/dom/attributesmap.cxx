@@ -71,7 +71,8 @@ namespace DOM
             {
                 if( strcmp((char*)xName, (char*)cur->name) == 0)
                 {
-                    aNode = Reference< XNode >(static_cast<CNode*>(CNode::get((xmlNodePtr)cur)));
+                    aNode = Reference< XNode >( CNode::getCNode(
+                                reinterpret_cast<xmlNodePtr>(cur)).get() );
                     break;
                 }
                 cur = cur->next;
@@ -100,7 +101,8 @@ namespace DOM
                 if( strcmp((char*)xName, (char*)cur->name) == 0 &&
                     cur->ns == pNs)
                 {
-                    aNode = Reference< XNode >(static_cast< CNode* >(CNode::get((xmlNodePtr)cur)));
+                    aNode = Reference< XNode >( CNode::getCNode(
+                                reinterpret_cast<xmlNodePtr>(cur)).get() );
                     break;
                 }
                 cur = cur->next;
@@ -124,7 +126,8 @@ namespace DOM
             {
                 if (count == index)
                 {
-                    aNode = Reference< XNode >(static_cast< CNode* >(CNode::get((xmlNodePtr)cur)));
+                    aNode = Reference< XNode >( CNode::getCNode(
+                                reinterpret_cast<xmlNodePtr>(cur)).get() );
                     break;
                 }
                 count++;
@@ -151,7 +154,8 @@ namespace DOM
             {
                 if( strcmp((char*)xName, (char*)cur->name) == 0)
                 {
-                    aNode = Reference< XNode >(static_cast< CNode* >(CNode::get((xmlNodePtr)cur)));
+                    aNode = Reference< XNode >( CNode::getCNode(
+                                reinterpret_cast<xmlNodePtr>(cur)).get() );
                     xmlUnlinkNode((xmlNodePtr)cur);
                     break;
                 }
@@ -181,7 +185,8 @@ namespace DOM
                 if( strcmp((char*)xName, (char*)cur->name) == 0 &&
                     cur->ns == pNs)
                 {
-                    aNode = Reference< XNode >(static_cast< CNode* >(CNode::get((xmlNodePtr)cur)));
+                    aNode = Reference< XNode >( CNode::getCNode(
+                                reinterpret_cast<xmlNodePtr>(cur)).get() );
                     xmlUnlinkNode((xmlNodePtr)cur);
                     break;
                 }

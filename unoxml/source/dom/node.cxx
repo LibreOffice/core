@@ -158,99 +158,105 @@ namespace DOM
     }
 
 
-    CNode* CNode::get(const xmlNodePtr aNode, sal_Bool bCreate)
+    ::rtl::Reference<CNode>
+    CNode::getCNode(xmlNodePtr const pNode, bool const bCreate)
     {
-        CNode* pNode = 0;
-        if (aNode == NULL)
+        if (0 == pNode) {
             return 0;
+        }
         //see CNode::remove
         ::osl::MutexGuard guard(NodeMutex::get());
         //check whether there is already an instance for this node
-        nodemap_t::const_iterator i = CNode::theNodeMap.find(aNode);
-        if (i != CNode::theNodeMap.end())
+        nodemap_t::const_iterator i = CNode::theNodeMap.find(pNode);
+        if (i != CNode::theNodeMap.end()) {
+            OSL_ASSERT(i->second);
+            return i->second;
+        }
+
+        if (!bCreate) { return 0; }
+
+        // there is not yet an instance wrapping this node,
+        // create it and store it in the map
+
+        ::rtl::Reference<CNode> pCNode;
+        switch (pNode->type)
         {
-            pNode = i->second;
-        } else
-        {
+        case XML_ELEMENT_NODE:
+            // m_aNodeType = NodeType::ELEMENT_NODE;
+            pCNode = static_cast< CNode* >(new CElement(pNode));
+            break;
+        case XML_TEXT_NODE:
+            // m_aNodeType = NodeType::TEXT_NODE;
+            pCNode = static_cast< CNode* >(new CText(pNode));
+            break;
+        case XML_CDATA_SECTION_NODE:
+            // m_aNodeType = NodeType::CDATA_SECTION_NODE;
+            pCNode = static_cast< CNode* >(new CCDATASection(pNode));
+            break;
+        case XML_ENTITY_REF_NODE:
+            // m_aNodeType = NodeType::ENTITY_REFERENCE_NODE;
+            pCNode = static_cast< CNode* >(new CEntityReference(pNode));
+            break;
+        case XML_ENTITY_NODE:
+            // m_aNodeType = NodeType::ENTITY_NODE;
+            pCNode = static_cast< CNode* >(new CEntity(
+                        reinterpret_cast<xmlEntityPtr>(pNode)));
+            break;
+        case XML_PI_NODE:
+            // m_aNodeType = NodeType::PROCESSING_INSTRUCTION_NODE;
+            pCNode = static_cast< CNode* >(new CProcessingInstruction(pNode));
+            break;
+        case XML_COMMENT_NODE:
+            // m_aNodeType = NodeType::COMMENT_NODE;
+            pCNode = static_cast< CNode* >(new CComment(pNode));
+            break;
+        case XML_DOCUMENT_NODE:
+            // m_aNodeType = NodeType::DOCUMENT_NODE;
+            pCNode = static_cast< CNode* >(new CDocument(
+                        reinterpret_cast<xmlDocPtr>(pNode)));
+            break;
+        case XML_DOCUMENT_TYPE_NODE:
+        case XML_DTD_NODE:
+            // m_aNodeType = NodeType::DOCUMENT_TYPE_NODE;
+            pCNode = static_cast< CNode* >(new CDocumentType(
+                        reinterpret_cast<xmlDtdPtr>(pNode)));
+            break;
+        case XML_DOCUMENT_FRAG_NODE:
+            // m_aNodeType = NodeType::DOCUMENT_FRAGMENT_NODE;
+            pCNode = static_cast< CNode* >(new CDocumentFragment(pNode));
+            break;
+        case XML_NOTATION_NODE:
+            // m_aNodeType = NodeType::NOTATION_NODE;
+            pCNode = static_cast< CNode* >(new CNotation(
+                        reinterpret_cast<xmlNotationPtr>(pNode)));
+            break;
+        case XML_ATTRIBUTE_NODE:
+            // m_aNodeType = NodeType::ATTRIBUTE_NODE;
+            pCNode = static_cast< CNode* >(new CAttr(
+                        reinterpret_cast<xmlAttrPtr>(pNode)));
+            break;
+        // unsupported node types
+        case XML_HTML_DOCUMENT_NODE:
+        case XML_ELEMENT_DECL:
+        case XML_ATTRIBUTE_DECL:
+        case XML_ENTITY_DECL:
+        case XML_NAMESPACE_DECL:
+        default:
+            break;
+        }
 
-            // there is not yet an instance wrapping this node,
-            // create it and store it in the map
-            if (!bCreate) return NULL;
-
-            switch (aNode->type)
-            {
-            case XML_ELEMENT_NODE:
-                // m_aNodeType = NodeType::ELEMENT_NODE;
-                pNode = static_cast< CNode* >(new CElement(aNode));
-                break;
-            case XML_TEXT_NODE:
-                // m_aNodeType = NodeType::TEXT_NODE;
-                pNode = static_cast< CNode* >(new CText(aNode));
-                break;
-            case XML_CDATA_SECTION_NODE:
-                // m_aNodeType = NodeType::CDATA_SECTION_NODE;
-                pNode = static_cast< CNode* >(new CCDATASection(aNode));
-                break;
-            case XML_ENTITY_REF_NODE:
-                // m_aNodeType = NodeType::ENTITY_REFERENCE_NODE;
-                pNode = static_cast< CNode* >(new CEntityReference(aNode));
-                break;
-            case XML_ENTITY_NODE:
-                // m_aNodeType = NodeType::ENTITY_NODE;
-                pNode = static_cast< CNode* >(new CEntity((xmlEntityPtr)aNode));
-                break;
-            case XML_PI_NODE:
-                // m_aNodeType = NodeType::PROCESSING_INSTRUCTION_NODE;
-                pNode = static_cast< CNode* >(new CProcessingInstruction(aNode));
-                break;
-            case XML_COMMENT_NODE:
-                // m_aNodeType = NodeType::COMMENT_NODE;
-                pNode = static_cast< CNode* >(new CComment(aNode));
-                break;
-            case XML_DOCUMENT_NODE:
-                // m_aNodeType = NodeType::DOCUMENT_NODE;
-                pNode = static_cast< CNode* >(new CDocument((xmlDocPtr)aNode));
-                break;
-            case XML_DOCUMENT_TYPE_NODE:
-            case XML_DTD_NODE:
-                // m_aNodeType = NodeType::DOCUMENT_TYPE_NODE;
-                pNode = static_cast< CNode* >(new CDocumentType((xmlDtdPtr)aNode));
-                break;
-            case XML_DOCUMENT_FRAG_NODE:
-                // m_aNodeType = NodeType::DOCUMENT_FRAGMENT_NODE;
-                pNode = static_cast< CNode* >(new CDocumentFragment(aNode));
-                break;
-            case XML_NOTATION_NODE:
-                // m_aNodeType = NodeType::NOTATION_NODE;
-                pNode = static_cast< CNode* >(new CNotation((xmlNotationPtr)aNode));
-                break;
-            case XML_ATTRIBUTE_NODE:
-                // m_aNodeType = NodeType::NOTATION_NODE;
-                pNode = static_cast< CNode* >(new CAttr((xmlAttrPtr)aNode));
-                break;
-            // unsupported node types
-            case XML_HTML_DOCUMENT_NODE:
-            case XML_ELEMENT_DECL:
-            case XML_ATTRIBUTE_DECL:
-            case XML_ENTITY_DECL:
-            case XML_NAMESPACE_DECL:
-            default:
-                pNode = 0;
-                break;
-            }
-
-            if ( pNode != 0 )
-            {
-                if(!CNode::theNodeMap.insert(nodemap_t::value_type(aNode, pNode)).second)
-                {
-                    // if insertion failed, delete the new instance and return null
-                    delete pNode;
-                    pNode = 0;
-                }
+        if (pCNode != 0) {
+            bool const bInserted = CNode::theNodeMap.insert(
+                nodemap_t::value_type(pNode, pCNode.get())).second;
+            OSL_ASSERT(bInserted);
+            if (!bInserted) {
+                // if insertion failed, delete new instance and return null
+                return 0;
             }
         }
-        OSL_ENSURE(pNode, "no node produced during CNode::get!");
-        return pNode;
+
+        OSL_ENSURE(pCNode.is(), "no node produced during CNode::getCNode!");
+        return pCNode;
     }
 
     xmlNodePtr CNode::getNodePtr(const Reference< XNode >& aNode)
@@ -383,7 +389,7 @@ namespace DOM
     Reference< XNode > CNode::appendChild(const Reference< XNode >& newChild)
         throw (RuntimeException, DOMException)
     {
-        CNode * pNode(0);
+        ::rtl::Reference<CNode> pNode;
         if (m_aNodePtr != NULL) {
         xmlNodePtr cur = CNode::getNodePtr(newChild.get());
 
@@ -459,28 +465,29 @@ namespace DOM
         // because that will not remove unneeded ns decls
         _nscleanup(res, m_aNodePtr);
 
-            pNode = CNode::get(res);
+            pNode = CNode::getCNode(res);
         }
         //XXX check for errors
 
         // dispatch DOMNodeInserted event, target is the new node
         // this node is the related node
         // does bubble
-        if (pNode)
+        if (pNode.is())
         {
             pNode->m_bUnlinked = false; // will be deleted by xmlFreeDoc
             Reference< XDocumentEvent > docevent(getOwnerDocument(), UNO_QUERY);
             Reference< XMutationEvent > event(docevent->createEvent(
                 OUString::createFromAscii("DOMNodeInserted")), UNO_QUERY);
             event->initMutationEvent(OUString::createFromAscii("DOMNodeInserted")
-                , sal_True, sal_False, Reference< XNode >(CNode::get(m_aNodePtr)),
+                , sal_True, sal_False,
+                Reference< XNode >(CNode::getCNode(m_aNodePtr).get()),
                 OUString(), OUString(), OUString(), (AttrChangeType)0 );
             dispatchEvent(Reference< XEvent >(event, UNO_QUERY));
 
             // dispatch subtree modified for this node
             dispatchSubtreeModified();
         }
-        return pNode;
+        return pNode.get();
     }
 
     /**
@@ -490,15 +497,14 @@ namespace DOM
     Reference< XNode > CNode::cloneNode(sal_Bool bDeep)
         throw (RuntimeException)
     {
-        CNode * pNode(0);
-        if (m_aNodePtr != NULL)
-        {
-            pNode = CNode::get(
-                xmlCopyNode(m_aNodePtr, (bDeep) ? 1 : 0));
-            pNode->m_bUnlinked = true; // not linked yet
+        if (0 == m_aNodePtr) {
+            return 0;
         }
+        ::rtl::Reference<CNode> const pNode = CNode::getCNode(
+            xmlCopyNode(m_aNodePtr, (bDeep) ? 1 : 0));
+        pNode->m_bUnlinked = true; // not linked yet
         //XXX check for errors
-        return pNode;
+        return pNode.get();
     }
 
     /**
@@ -525,13 +531,13 @@ namespace DOM
     Reference< XNodeList > CNode::getChildNodes()
         throw (RuntimeException)
     {
-        Reference< XNodeList > aNodeList;
-        if (m_aNodePtr != NULL)
-        {
-            aNodeList = Reference< XNodeList >(new CChildList(CNode::get(m_aNodePtr)));
+        if (0 == m_aNodePtr) {
+            return 0;
         }
+        Reference< XNodeList > const xNodeList(
+                new CChildList(*CNode::getCNode(m_aNodePtr)));
         // XXX check for errors?
-        return aNodeList;
+        return xNodeList;
     }
 
     /**
@@ -540,11 +546,12 @@ namespace DOM
     Reference< XNode > CNode::getFirstChild()
         throw (RuntimeException)
     {
-        Reference< XNode > aNode;
-        if (m_aNodePtr != NULL) {
-            aNode = Reference< XNode >(CNode::get(m_aNodePtr->children));
+        if (0 == m_aNodePtr) {
+            return 0;
         }
-        return aNode;
+        Reference< XNode > const xNode(
+                CNode::getCNode(m_aNodePtr->children).get());
+        return xNode;
     }
 
     /**
@@ -553,11 +560,12 @@ namespace DOM
     Reference< XNode > SAL_CALL CNode::getLastChild()
         throw (RuntimeException)
     {
-        Reference< XNode > aNode;
-        if (m_aNodePtr != NULL) {
-            aNode = Reference< XNode >(CNode::get(xmlGetLastChild(m_aNodePtr)));
+        if (0 == m_aNodePtr) {
+            return 0;
         }
-        return aNode;
+        Reference< XNode > const xNode(
+                CNode::getCNode(xmlGetLastChild(m_aNodePtr)).get());
+        return xNode;
     }
 
     /**
@@ -603,12 +611,11 @@ namespace DOM
     Reference< XNode > SAL_CALL CNode::getNextSibling()
         throw (RuntimeException)
     {
-        Reference< XNode > aNode;
-        if(m_aNodePtr != NULL)
-        {
-            aNode = Reference< XNode >(CNode::get(m_aNodePtr->next));
+        if (0 == m_aNodePtr) {
+            return 0;
         }
-        return aNode;
+        Reference< XNode > const xNode(CNode::getCNode(m_aNodePtr->next).get());
+        return xNode;
     }
 
     /**
@@ -664,14 +671,14 @@ namespace DOM
     Reference< XDocument > SAL_CALL CNode::getOwnerDocument()
         throw (RuntimeException)
     {
-        Reference<XDocument> aDoc;
-        if (m_aNodePtr != NULL)
-        {
-            aDoc = Reference< XDocument >(static_cast< CDocument* >(
-                CNode::get((xmlNodePtr)m_aNodePtr->doc)));
+        if (0 == m_aNodePtr) {
+            return 0;
         }
-        return aDoc;
-
+        Reference< XDocument > const xDoc(
+            static_cast<XNode*>(CNode::getCNode(
+                reinterpret_cast<xmlNodePtr>(m_aNodePtr->doc)).get()),
+            UNO_QUERY_THROW);
+        return xDoc;
     }
 
     /**
@@ -680,12 +687,12 @@ namespace DOM
     Reference< XNode > SAL_CALL CNode::getParentNode()
         throw (RuntimeException)
     {
-        Reference<XNode> aNode;
-        if (m_aNodePtr != NULL)
-        {
-            aNode = Reference< XNode >(CNode::get(m_aNodePtr->parent));
+        if (0 == m_aNodePtr) {
+            return 0;
         }
-        return aNode;
+        Reference< XNode > const xNode(
+                CNode::getCNode(m_aNodePtr->parent).get());
+        return xNode;
     }
 
     /**
@@ -713,12 +720,12 @@ namespace DOM
     Reference< XNode > SAL_CALL CNode::getPreviousSibling()
         throw (RuntimeException)
     {
-        Reference< XNode > aNode;
-        if (m_aNodePtr != NULL)
-        {
-            aNode = Reference< XNode >(CNode::get(m_aNodePtr->prev));
+        if (0 == m_aNodePtr) {
+            return 0;
         }
-        return aNode;
+        Reference< XNode > const xNode(
+                CNode::getCNode(m_aNodePtr->prev).get());
+        return xNode;
     }
 
     /**
@@ -772,7 +779,7 @@ namespace DOM
                 cur->prev = pNewChild;
                 if( pNewChild->prev != NULL)
                     pNewChild->prev->next = pNewChild;
-                CNode *const pNode( CNode::get(pNewChild) );
+                ::rtl::Reference<CNode> const pNode(CNode::getCNode(pNewChild));
                 pNode->m_bUnlinked = false; // will be deleted by xmlFreeDoc
             }
             cur = cur->next;
@@ -824,7 +831,7 @@ namespace DOM
         Reference<XNode> xReturn( oldChild );
 
         xmlNodePtr old = CNode::getNodePtr(oldChild);
-        CNode *const pOld( CNode::get(old) );
+        ::rtl::Reference<CNode> const pOld( CNode::getCNode(old) );
         pOld->m_bUnlinked = true;
 
         if( old->type == XML_ATTRIBUTE_NODE )
@@ -853,7 +860,8 @@ namespace DOM
             Reference< XMutationEvent > event(docevent->createEvent(
                 OUString::createFromAscii("DOMNodeRemoved")), UNO_QUERY);
             event->initMutationEvent(OUString::createFromAscii("DOMNodeRemoved"), sal_True,
-                sal_False, Reference< XNode >(CNode::get(m_aNodePtr)),
+                sal_False,
+                Reference< XNode >(CNode::getCNode(m_aNodePtr).get()),
                 OUString(), OUString(), OUString(), (AttrChangeType)0 );
             dispatchEvent(Reference< XEvent >(event, UNO_QUERY));
 
@@ -901,7 +909,7 @@ namespace DOM
 
             xmlAttrPtr pAttr = (xmlAttrPtr)pOld;
             xmlRemoveProp( pAttr );
-            CNode *const pOldNode( CNode::get(pOld) );
+            ::rtl::Reference<CNode> const pOldNode( CNode::getCNode(pOld) );
             pOldNode->m_aNodePtr = NULL; // freed by xmlRemoveProp
             appendChild( newChild );
         }
@@ -929,9 +937,9 @@ namespace DOM
                 pOld->next = NULL;
                 pOld->prev = NULL;
                 pOld->parent = NULL;
-                CNode *const pOldNode( CNode::get(pOld) );
+                ::rtl::Reference<CNode> const pOldNode(CNode::getCNode(pOld));
                 pOldNode->m_bUnlinked = true;
-                CNode *const pNewNode( CNode::get(pNew) );
+                ::rtl::Reference<CNode> const pNewNode(CNode::getCNode(pNew));
                 pNewNode->m_bUnlinked = false; // will be deleted by xmlFreeDoc
             }
             cur = cur->next;

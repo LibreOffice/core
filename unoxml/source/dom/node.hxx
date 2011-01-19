@@ -146,8 +146,9 @@ namespace DOM
 
         virtual ~CNode();
 
-        // get a representaion for a libxml node
-        static CNode* get(const xmlNodePtr aNode, sal_Bool bCreate = sal_True);
+        /// get UNO wrapper instance for a libxml node
+        static ::rtl::Reference<CNode> getCNode(
+                xmlNodePtr const pNode, bool const bCreate = true);
         // remove a wrapper instance
         static void remove(const xmlNodePtr aNode);
 

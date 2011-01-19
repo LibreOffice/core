@@ -49,7 +49,7 @@ namespace DOM
     private:
         const xmlNodePtr m_pNode;
     public:
-        CChildList(const CNode* base);
+        CChildList(CNode const& rBase);
         /**
         The number of nodes in the list.
         */

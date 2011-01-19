@@ -72,7 +72,7 @@ namespace DOM
         i_xHandler->startDocument();
         for (xmlNodePtr pChild = m_aNodePtr->children;
                         pChild != 0; pChild = pChild->next) {
-            CNode * pNode = CNode::get(pChild);
+            ::rtl::Reference<CNode> const pNode = CNode::getCNode(pChild);
             OSL_ENSURE(pNode != 0, "CNode::get returned 0");
             pNode->saxify(i_xHandler);
         }
@@ -83,7 +83,7 @@ namespace DOM
         rContext.mxDocHandler->startDocument();
         for (xmlNodePtr pChild = m_aNodePtr->children;
                         pChild != 0; pChild = pChild->next) {
-            CNode * pNode = CNode::get(pChild);
+            ::rtl::Reference<CNode> const pNode = CNode::getCNode(pChild);
             OSL_ENSURE(pNode != 0, "CNode::get returned 0");
             pNode->fastSaxify(rContext);
         }
@@ -183,8 +183,12 @@ namespace DOM
     {
         OString o1 = OUStringToOString(name, RTL_TEXTENCODING_UTF8);
         xmlChar *xName = (xmlChar*)o1.getStr();
-        return Reference< XAttr >(static_cast< CAttr* >(
-                    CNode::get((xmlNodePtr)xmlNewDocProp(m_aDocPtr, xName, NULL))));
+        xmlAttrPtr const pAttr = xmlNewDocProp(m_aDocPtr, xName, NULL);
+        Reference< XAttr > const xRet(
+            static_cast< XNode* >(CNode::getCNode(
+                    reinterpret_cast<xmlNodePtr>(pAttr)).get()),
+            UNO_QUERY_THROW);
+        return xRet;
     };
 
     // Creates an attribute of the given qualified name and namespace URI.
@@ -221,7 +225,11 @@ namespace DOM
         xmlNodePtr pNode = xmlNewDocNode(m_aDocPtr, NULL, (xmlChar*)"__private", NULL);
         xmlNsPtr pNs = xmlNewNs(pNode, xUri, xPrefix);
         xmlAttrPtr pAttr = xmlNewNsProp(pNode, pNs, xName, NULL);
-        return Reference< XAttr >(static_cast< CAttr* >(CNode::get((xmlNodePtr)pAttr)));
+        Reference< XAttr > const xRet(
+            static_cast< XNode* >(CNode::getCNode(
+                    reinterpret_cast<xmlNodePtr>(pAttr)).get()),
+            UNO_QUERY_THROW);
+        return xRet;
     };
 
     // Creates a CDATASection node whose value is the specified string.
@@ -230,7 +238,10 @@ namespace DOM
     {
         xmlChar *xData = (xmlChar*)OUStringToOString(data, RTL_TEXTENCODING_UTF8).getStr();
         xmlNodePtr pText = xmlNewCDataBlock(m_aDocPtr, xData, strlen((char*)xData));
-        return Reference< XCDATASection >(static_cast< CCDATASection* >(CNode::get(pText)));
+        Reference< XCDATASection > const xRet(
+            static_cast< XNode* >(CNode::getCNode(pText).get()),
+            UNO_QUERY_THROW);
+        return xRet;
     }
 
     // Creates a Comment node given the specified string.
@@ -240,7 +251,10 @@ namespace DOM
         OString o1 = OUStringToOString(data, RTL_TEXTENCODING_UTF8);
         xmlChar *xData = (xmlChar*)o1.getStr();
         xmlNodePtr pComment = xmlNewDocComment(m_aDocPtr, xData);
-        return Reference< XComment >(static_cast< CComment* >(CNode::get(pComment)));
+        Reference< XComment > const xRet(
+            static_cast< XNode* >(CNode::getCNode(pComment).get()),
+            UNO_QUERY_THROW);
+        return xRet;
     }
 
     //Creates an empty DocumentFragment object.
@@ -248,7 +262,10 @@ namespace DOM
         throw (RuntimeException)
     {
         xmlNodePtr pFrag = xmlNewDocFragment(m_aDocPtr);
-        return Reference< XDocumentFragment >(static_cast< CDocumentFragment* >(CNode::get(pFrag)));
+        Reference< XDocumentFragment > const xRet(
+            static_cast< XNode* >(CNode::getCNode(pFrag).get()),
+            UNO_QUERY_THROW);
+        return xRet;
     }
 
     // Creates an element of the type specified.
@@ -257,8 +274,11 @@ namespace DOM
     {
         OString o1 = OUStringToOString(tagName, RTL_TEXTENCODING_UTF8);
         xmlChar *xName = (xmlChar*)o1.getStr();
-        xmlNodePtr aNodePtr = xmlNewDocNode(m_aDocPtr, NULL, xName, NULL);
-        return Reference< XElement >(static_cast< CElement* >(CNode::get(aNodePtr)));
+        xmlNodePtr const pNode = xmlNewDocNode(m_aDocPtr, NULL, xName, NULL);
+        Reference< XElement > const xRet(
+            static_cast< XNode* >(CNode::getCNode(pNode).get()),
+            UNO_QUERY_THROW);
+        return xRet;
     }
 
     // Creates an element of the given qualified name and namespace URI.
@@ -287,10 +307,13 @@ namespace DOM
 
         // xmlNsPtr aNsPtr = xmlNewReconciledNs?
         // xmlNsPtr aNsPtr = xmlNewGlobalNs?
-        xmlNodePtr aNodePtr = xmlNewDocNode(m_aDocPtr, NULL, xName, NULL);
-        xmlNsPtr pNs = xmlNewNs(aNodePtr, xUri, xPrefix);
-        xmlSetNs(aNodePtr, pNs);
-        return Reference< XElement >(static_cast< CElement* >(CNode::get(aNodePtr)));
+        xmlNodePtr const pNode = xmlNewDocNode(m_aDocPtr, NULL, xName, NULL);
+        xmlNsPtr const pNs = xmlNewNs(pNode, xUri, xPrefix);
+        xmlSetNs(pNode, pNs);
+        Reference< XElement > const xRet(
+            static_cast< XNode* >(CNode::getCNode(pNode).get()),
+            UNO_QUERY_THROW);
+        return xRet;
     }
 
     //Creates an EntityReference object.
@@ -299,8 +322,11 @@ namespace DOM
     {
         OString o1 = OUStringToOString(name, RTL_TEXTENCODING_UTF8);
         xmlChar *xName = (xmlChar*)o1.getStr();
-        xmlNodePtr aNodePtr = xmlNewReference(m_aDocPtr, xName);
-        return Reference< XEntityReference >(static_cast< CEntityReference* >(CNode::get(aNodePtr)));
+        xmlNodePtr const pNode = xmlNewReference(m_aDocPtr, xName);
+        Reference< XEntityReference > const xRet(
+            static_cast< XNode* >(CNode::getCNode(pNode).get()),
+            UNO_QUERY_THROW);
+        return xRet;
     }
 
     // Creates a ProcessingInstruction node given the specified name and
@@ -313,9 +339,12 @@ namespace DOM
         xmlChar *xTarget = (xmlChar*)o1.getStr();
         OString o2 = OUStringToOString(data, RTL_TEXTENCODING_UTF8);
         xmlChar *xData = (xmlChar*)o2.getStr();
-        xmlNodePtr aNodePtr = xmlNewPI(xTarget, xData);
-        aNodePtr->doc = m_aDocPtr;
-        return Reference< XProcessingInstruction >(static_cast< CProcessingInstruction* >(CNode::get(aNodePtr)));
+        xmlNodePtr const pNode = xmlNewPI(xTarget, xData);
+        pNode->doc = m_aDocPtr;
+        Reference< XProcessingInstruction > const xRet(
+            static_cast< XNode* >(CNode::getCNode(pNode).get()),
+            UNO_QUERY_THROW);
+        return xRet;
     }
 
     // Creates a Text node given the specified string.
@@ -324,8 +353,11 @@ namespace DOM
     {
         OString o1 = OUStringToOString(data, RTL_TEXTENCODING_UTF8);
         xmlChar *xData = (xmlChar*)o1.getStr();
-        xmlNodePtr aNodePtr = xmlNewDocText(m_aDocPtr, xData);
-        return Reference< XText >(static_cast< CText* >(CNode::get(aNodePtr)));
+        xmlNodePtr const pNode = xmlNewDocText(m_aDocPtr, xData);
+        Reference< XText > const xRet(
+            static_cast< XNode* >(CNode::getCNode(pNode).get()),
+            UNO_QUERY_THROW);
+        return xRet;
     }
 
     // The Document Type Declaration (see DocumentType) associated with this
@@ -340,7 +372,10 @@ namespace DOM
             if (cur->type == XML_DOCUMENT_TYPE_NODE || cur->type == XML_DTD_NODE)
                 break;
         }
-        return Reference< XDocumentType >(static_cast< CDocumentType* >(CNode::get(cur)));
+        Reference< XDocumentType > const xRet(
+            static_cast< XNode* >(CNode::getCNode(cur).get()),
+            UNO_QUERY_THROW);
+        return xRet;
     }
 
     /// get the pointer to the root element node of the document
@@ -361,8 +396,11 @@ namespace DOM
     Reference< XElement > SAL_CALL CDocument::getDocumentElement()
         throw (RuntimeException)
     {
-        xmlNodePtr cur = _getDocumentRootPtr(m_aDocPtr);
-        return Reference< XElement >(static_cast< CElement* >(CNode::get(cur)));
+        xmlNodePtr const pNode = _getDocumentRootPtr(m_aDocPtr);
+        Reference< XElement > const xRet(
+            static_cast< XNode* >(CNode::getCNode(pNode).get()),
+            UNO_QUERY_THROW);
+        return xRet;
     }
 
     static xmlNodePtr _search_element_by_id(const xmlNodePtr cur, const xmlChar* id)
@@ -399,8 +437,11 @@ namespace DOM
         OString o1 = OUStringToOString(elementId, RTL_TEXTENCODING_UTF8);
         xmlChar *xId = (xmlChar*)o1.getStr();
         xmlNodePtr pStart = CNode::getNodePtr(getDocumentElement().get());
-        xmlNodePtr aNodePtr = _search_element_by_id(pStart, xId);
-        return Reference< XElement >(static_cast< CElement* >(CNode::get(aNodePtr)));
+        xmlNodePtr const pNode = _search_element_by_id(pStart, xId);
+        Reference< XElement > const xRet(
+            static_cast< XNode* >(CNode::getCNode(pNode).get()),
+            UNO_QUERY_THROW);
+        return xRet;
     }
 
 
@@ -454,10 +495,16 @@ namespace DOM
         // this node could be from another memory model
         // only use uno interfaces to access is!!!
 
-        // allready in doc?
-        if ( importedNode->getOwnerDocument() ==
-            Reference< XDocument>(static_cast< CDocument* >(CNode::get((xmlNodePtr)m_aDocPtr))))
-            return importedNode;
+        {
+            // already in doc?
+            Reference< XDocument > const xDocument(
+                static_cast< XNode* >(CNode::getCNode(
+                    reinterpret_cast<xmlNodePtr>(m_aDocPtr)).get()),
+                UNO_QUERY_THROW);
+            if (importedNode->getOwnerDocument() == xDocument) {
+                return importedNode;
+            }
+        }
 
         Reference< XNode > aNode;
         NodeType aNodeType = importedNode->getNodeType();

@@ -71,7 +71,8 @@ namespace DOM
         // add attributes
         for (xmlAttrPtr pAttr = m_aNodePtr->properties;
                         pAttr != 0; pAttr = pAttr->next) {
-            CNode * pNode = CNode::get(reinterpret_cast<xmlNodePtr>(pAttr));
+            ::rtl::Reference<CNode> const pNode =
+                CNode::getCNode(reinterpret_cast<xmlNodePtr>(pAttr));
             OSL_ENSURE(pNode != 0, "CNode::get returned 0");
             OUString prefix = pNode->getPrefix();
             OUString name = (prefix.getLength() == 0)
@@ -89,7 +90,7 @@ namespace DOM
         // recurse
         for (xmlNodePtr pChild = m_aNodePtr->children;
                         pChild != 0; pChild = pChild->next) {
-            CNode * pNode = CNode::get(pChild);
+            ::rtl::Reference<CNode> const pNode = CNode::getCNode(pChild);
             OSL_ENSURE(pNode != 0, "CNode::get returned 0");
             pNode->saxify(i_xHandler);
         }
@@ -105,7 +106,8 @@ namespace DOM
         i_rContext.mxAttribList->clear();
         for (xmlAttrPtr pAttr = m_aNodePtr->properties;
                         pAttr != 0; pAttr = pAttr->next) {
-            CNode * pNode = CNode::get(reinterpret_cast<xmlNodePtr>(pAttr));
+            ::rtl::Reference<CNode> const pNode =
+                CNode::getCNode(reinterpret_cast<xmlNodePtr>(pAttr));
             OSL_ENSURE(pNode != 0, "CNode::get returned 0");
 
             const xmlChar* xName = pAttr->name;
@@ -168,7 +170,7 @@ namespace DOM
         // recurse
         for (xmlNodePtr pChild = m_aNodePtr->children;
                         pChild != 0; pChild = pChild->next) {
-            CNode * pNode = CNode::get(pChild);
+            ::rtl::Reference<CNode> const pNode = CNode::getCNode(pChild);
             OSL_ENSURE(pNode != 0, "CNode::get returned 0");
             pNode->fastSaxify(i_rContext);
         }
@@ -221,15 +223,21 @@ namespace DOM
     Reference< XAttr > CElement::getAttributeNode(const OUString& name)
         throw (RuntimeException)
     {
-        Reference< XAttr > aAttr;
-        if (m_aNodePtr != NULL)
-        {
-            OString o1 = OUStringToOString(name, RTL_TEXTENCODING_UTF8);
-            xmlChar *xName = (xmlChar*)o1.getStr();
-            xmlAttrPtr pAttr = xmlHasProp(m_aNodePtr, xName);
-            aAttr = Reference< XAttr >(static_cast< CAttr* >(CNode::get((xmlNodePtr)pAttr)));
+        if (0 == m_aNodePtr) {
+            return 0;
         }
-        return aAttr;
+        OString o1 = OUStringToOString(name, RTL_TEXTENCODING_UTF8);
+        xmlChar const*const pName =
+            reinterpret_cast<xmlChar const*>(o1.getStr());
+        xmlAttrPtr const pAttr = xmlHasProp(m_aNodePtr, pName);
+        if (0 == pAttr) {
+            return 0;
+        }
+        Reference< XAttr > const xRet(
+            static_cast< XNode* >(CNode::getCNode(
+                    reinterpret_cast<xmlNodePtr>(pAttr)).get()),
+            UNO_QUERY_THROW);
+        return xRet;
     }
 
     /**
@@ -239,17 +247,24 @@ namespace DOM
             const OUString& namespaceURI, const OUString& localName)
         throw (RuntimeException)
     {
-        Reference< XAttr > aAttr;
-        if (m_aNodePtr != NULL)
-        {
-            OString o1 = OUStringToOString(localName, RTL_TEXTENCODING_UTF8);
-            xmlChar *xName = (xmlChar*)o1.getStr();
-            OString o2 = OUStringToOString(namespaceURI, RTL_TEXTENCODING_UTF8);
-            xmlChar *xNS = (xmlChar*)o2.getStr();
-            xmlAttrPtr pAttr = xmlHasNsProp(m_aNodePtr, xName, xNS);
-            aAttr = Reference< XAttr >(static_cast< CAttr* >(CNode::get((xmlNodePtr)pAttr)));
+        if (0 == m_aNodePtr) {
+            return 0;
         }
-        return aAttr;
+        OString o1 = OUStringToOString(localName, RTL_TEXTENCODING_UTF8);
+        xmlChar const*const pName =
+            reinterpret_cast<xmlChar const*>(o1.getStr());
+        OString o2 = OUStringToOString(namespaceURI, RTL_TEXTENCODING_UTF8);
+        xmlChar const*const pNS =
+            reinterpret_cast<xmlChar const*>(o2.getStr());
+        xmlAttrPtr const pAttr = xmlHasNsProp(m_aNodePtr, pName, pNS);
+        if (0 == pAttr) {
+            return 0;
+        }
+        Reference< XAttr > const xRet(
+            static_cast< XNode* >(CNode::getCNode(
+                    reinterpret_cast<xmlNodePtr>(pAttr)).get()),
+            UNO_QUERY_THROW);
+        return xRet;
     }
 
     /**
@@ -259,21 +274,24 @@ namespace DOM
     OUString CElement::getAttributeNS(const OUString& namespaceURI, const OUString& localName)
         throw (RuntimeException)
     {
-        OUString aValue;
-        // search properties
-        if (m_aNodePtr != NULL)
-        {
-            OString o1 = OUStringToOString(localName, RTL_TEXTENCODING_UTF8);
-            xmlChar *xName = (xmlChar*)o1.getStr();
-            OString o2 = OUStringToOString(namespaceURI, RTL_TEXTENCODING_UTF8);
-            xmlChar *xNS = (xmlChar*)o2.getStr();
-            xmlChar *xValue = (xmlChar*)xmlGetNsProp(m_aNodePtr, xName, xNS);
-            if (xValue != NULL) {
-                aValue = OUString((sal_Char*)xValue, strlen((char*)xValue), RTL_TEXTENCODING_UTF8);
-                xmlFree(xValue);
-            }
+        if (0 == m_aNodePtr) {
+            return ::rtl::OUString();
         }
-        return aValue;
+        OString o1 = OUStringToOString(localName, RTL_TEXTENCODING_UTF8);
+        xmlChar const*const pName =
+            reinterpret_cast<xmlChar const*>(o1.getStr());
+        OString o2 = OUStringToOString(namespaceURI, RTL_TEXTENCODING_UTF8);
+        xmlChar const*const pNS =
+            reinterpret_cast<xmlChar const*>(o2.getStr());
+        xmlChar *const pValue = xmlGetNsProp(m_aNodePtr, pName, pNS);
+        if (0 == pValue) {
+            return ::rtl::OUString();
+        }
+        OUString const ret(reinterpret_cast<sal_Char const*>(pValue),
+                        strlen(reinterpret_cast<char const*>(pValue)),
+                        RTL_TEXTENCODING_UTF8);
+        xmlFree(pValue);
+        return ret;
     }
 
     /**
@@ -403,7 +421,7 @@ namespace DOM
                 aAttr = oldAttr->getOwnerDocument()->createAttribute(oldAttr->getName());
             aAttr->setValue(oldAttr->getValue());
             xmlRemoveProp(pAttr);
-            CNode *const pCNode( CNode::get(pNode) );
+            ::rtl::Reference<CNode> const pCNode( CNode::getCNode(pNode) );
             pCNode->m_aNodePtr = NULL; // freed by xmlRemoveProp
         }
         return aAttr;
@@ -455,7 +473,10 @@ namespace DOM
             CNode::remove((xmlNodePtr)pAttr);
 
             // get the new attr node
-            aAttr = Reference< XAttr >(static_cast< CAttr*  >(CNode::get((xmlNodePtr)res)));
+            aAttr = Reference< XAttr >(
+                static_cast< XNode* >(CNode::getCNode(
+                        reinterpret_cast<xmlNodePtr>(res)).get()),
+                UNO_QUERY_THROW);
         }
 
         if (aAttr.is())

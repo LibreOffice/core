@@ -59,10 +59,12 @@ namespace XPath
     */
     Reference< XNode > SAL_CALL CNodeList::item(sal_Int32 index) throw (RuntimeException)
     {
-        Reference< XNode > aNode;
-        if (m_pNodeSet != NULL)
-            aNode = Reference< XNode >(DOM::CNode::get(xmlXPathNodeSetItem(m_pNodeSet, index)));
-        return aNode;
+        if (0 == m_pNodeSet) {
+            return 0;
+        }
+        Reference< XNode > const xNode(
+            DOM::CNode::getCNode(xmlXPathNodeSetItem(m_pNodeSet, index)).get());
+        return xNode;
     }
 }
 

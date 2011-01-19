@@ -63,7 +63,8 @@ namespace DOM
     {
         try {
             // get the XNode
-            Reference< XNode > xNode(CNode::get(static_cast<const CNode*>(pElement)->m_aNodePtr));
+            Reference< XNode > const xNode( CNode::getCNode(
+                    static_cast<const CNode*>(pElement)->m_aNodePtr).get() );
             Reference< XEventTarget > xTarget(xNode, UNO_QUERY_THROW);
             OUString aType = OUString::createFromAscii("DOMSubtreeModified");
             sal_Bool capture = sal_False;
@@ -121,7 +122,9 @@ namespace DOM
     {
         if (index < 0) throw RuntimeException();
         buildlist(static_cast<const CNode*>(m_pElement)->m_aNodePtr);
-        return Reference< XNode >(CNode::get(m_nodevector[index]));
+        Reference< XNode > const xRet(
+            CNode::getCNode(m_nodevector[index]).get());
+        return xRet;
     }
 
     // tree mutations can change the list

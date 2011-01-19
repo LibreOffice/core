@@ -28,8 +28,8 @@
 #include "childlist.hxx"
 namespace DOM
 {
-    CChildList::CChildList(const CNode* base)
-        : m_pNode(base->m_aNodePtr)
+    CChildList::CChildList(CNode const& rBase)
+        : m_pNode(rBase.m_aNodePtr)
     {
     }
 
@@ -62,8 +62,10 @@ namespace DOM
             xmlNodePtr cur = m_pNode->children;
             while (cur != NULL)
             {
-                if (index-- == 0)
-                    aNode = Reference< XNode >(CNode::get(cur));
+                if (index-- == 0) {
+                    aNode = Reference< XNode >(CNode::getCNode(cur).get());
+                    break;
+                }
                 cur = cur->next;
             }
         }

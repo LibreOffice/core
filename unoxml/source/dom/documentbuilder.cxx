@@ -184,7 +184,11 @@ namespace DOM
     {
         // create a new document
         xmlDocPtr pDocument = xmlNewDoc((const xmlChar*)"1.0");
-        return Reference< XDocument >(static_cast< CDocument* >(CNode::get((xmlNodePtr)pDocument)));
+        Reference< XDocument > const xRet(
+            static_cast< XNode* >(CNode::getCNode(
+                reinterpret_cast<xmlNodePtr>(pDocument)).get()),
+            UNO_QUERY_THROW);
+        return xRet;
     }
 
     static OUString make_error_message(xmlParserCtxtPtr ctxt)
@@ -356,7 +360,11 @@ namespace DOM
             throwEx(ctxt);
         }
         xmlFreeParserCtxt(ctxt);
-        return Reference< XDocument >(static_cast< CDocument* >(CNode::get((xmlNodePtr)pDoc)));
+        Reference< XDocument > const xRet(
+            static_cast< XNode* >(CNode::getCNode(
+                reinterpret_cast<xmlNodePtr>(pDoc)).get()),
+            UNO_QUERY_THROW);
+        return xRet;
     }
 
     Reference< XDocument > SAL_CALL CDocumentBuilder::parseSource(const InputSource& is)
@@ -405,7 +413,11 @@ namespace DOM
             throwEx(ctxt);
         }
         xmlFreeParserCtxt(ctxt);
-        return Reference< XDocument >(static_cast< CDocument* >(CNode::get((xmlNodePtr)pDoc)));
+        Reference< XDocument > const xRet(
+            static_cast< XNode* >(CNode::getCNode(
+                reinterpret_cast<xmlNodePtr>(pDoc)).get()),
+            UNO_QUERY_THROW);
+        return xRet;
     }
 
     void SAL_CALL CDocumentBuilder::setEntityResolver(const Reference< XEntityResolver >& er)

@@ -76,12 +76,14 @@ namespace DOM
     Reference< XElement > SAL_CALL CAttr::getOwnerElement()
         throw (RuntimeException)
     {
-        Reference< XElement > aElement;
-        if (m_aAttrPtr != NULL && m_aAttrPtr->parent != NULL)
+        if ((m_aAttrPtr == 0) || (m_aAttrPtr->parent == 0))
         {
-            aElement = Reference< XElement >(static_cast< CElement* >(CNode::get(m_aAttrPtr->parent)));
+            return 0;
         }
-        return aElement;
+        Reference< XElement > const xRet(
+            static_cast< XNode* >(CNode::getCNode(m_aAttrPtr->parent).get()),
+            UNO_QUERY_THROW);
+        return xRet;
     }
 
     /**
