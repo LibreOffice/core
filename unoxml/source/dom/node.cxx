@@ -25,9 +25,21 @@
  *
  ************************************************************************/
 
+#include <node.hxx>
+
 #include <stdio.h>
 #include <string.h>
-#include "node.hxx"
+
+#include <algorithm>
+
+#include <boost/bind.hpp>
+
+#include <rtl/uuid.h>
+#include <rtl/instance.hxx>
+#include <osl/mutex.hxx>
+
+#include <com/sun/star/xml/sax/FastToken.hpp>
+
 #include "element.hxx"
 #include "text.hxx"
 #include "cdatasection.hxx"
@@ -42,18 +54,28 @@
 #include "childlist.hxx"
 #include "attr.hxx"
 
-#include <com/sun/star/xml/sax/FastToken.hpp>
-#include "rtl/instance.hxx"
-#include "osl/mutex.hxx"
 #include "../events/eventdispatcher.hxx"
 #include "../events/mutationevent.hxx"
 
-#include <boost/bind.hpp>
-#include <algorithm>
+
+
+using namespace ::com::sun::star;
+
 
 namespace {
 //see CNode::remove
     struct NodeMutex: public ::rtl::Static<osl::Mutex, NodeMutex> {};
+    struct UnoTunnelId
+        : public ::rtl::StaticWithInit< Sequence<sal_Int8>, UnoTunnelId >
+    {
+        Sequence<sal_Int8> operator() ()
+        {
+            Sequence<sal_Int8> ret(16);
+            rtl_createUuid(
+                reinterpret_cast<sal_uInt8*>(ret.getArray()), 0, sal_True);
+            return ret;
+        }
+    };
 }
 
 namespace DOM
@@ -269,7 +291,7 @@ namespace DOM
     xmlNodePtr CNode::getNodePtr(const Reference< XNode >& aNode)
     {
       try {
-          CNode* pNode=dynamic_cast<CNode*>(aNode.get());
+          CNode *const pNode = GetImplementation(aNode);
           if( pNode )
               return pNode->m_aNodePtr;
       }
@@ -306,6 +328,17 @@ namespace DOM
     CNode::~CNode()
     {
         invalidate();
+    }
+
+    CNode *
+    CNode::GetImplementation(uno::Reference<uno::XInterface> const& xNode)
+    {
+        uno::Reference<lang::XUnoTunnel> const xUnoTunnel(xNode, UNO_QUERY);
+        if (!xUnoTunnel.is()) { return 0; }
+        CNode *const pCNode( reinterpret_cast< CNode* >(
+                        ::sal::static_int_cast< sal_IntPtr >(
+                            xUnoTunnel->getSomething(UnoTunnelId::get()))));
+        return pCNode;
     }
 
     ::rtl::Reference< CDocument > CNode::GetOwnerDocument_Impl()
@@ -1044,10 +1077,18 @@ namespace DOM
         return sal_True;
     }
 
-    ::sal_Int64 SAL_CALL CNode::getSomething(const Sequence< ::sal_Int8 >& /*aIdentifier*/)
+    ::sal_Int64 SAL_CALL
+    CNode::getSomething(Sequence< ::sal_Int8 > const& rId)
         throw (RuntimeException)
     {
-        return sal::static_int_cast<sal_Int64>(reinterpret_cast<sal_IntPtr>(m_aNodePtr));
+        if ((rId.getLength() == 16) &&
+            (0 == rtl_compareMemory(UnoTunnelId::get().getConstArray(),
+                                    rId.getConstArray(), 16)))
+        {
+            return ::sal::static_int_cast< sal_Int64 >(
+                    reinterpret_cast< sal_IntPtr >(this) );
+        }
+        return 0;
     }
 }
 

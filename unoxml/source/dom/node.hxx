@@ -156,7 +156,8 @@ namespace DOM
         // get the libxml node implementation
         static xmlNodePtr getNodePtr(const Reference< XNode >& aNode);
 
-        //static Sequence< sal_Int8 >
+        static CNode * GetImplementation(::com::sun::star::uno::Reference<
+                ::com::sun::star::uno::XInterface> const& xNode);
 
         // recursively create SAX events
         virtual void SAL_CALL saxify(
@@ -346,7 +347,8 @@ namespace DOM
             throw(RuntimeException, EventException);
 
         // --- XUnoTunnel
-        virtual ::sal_Int64 SAL_CALL getSomething(const Sequence< ::sal_Int8 >& aIdentifier)
+        virtual ::sal_Int64 SAL_CALL
+            getSomething(Sequence< ::sal_Int8 > const& rId)
             throw (RuntimeException);
     };
 
