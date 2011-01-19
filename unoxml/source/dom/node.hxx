@@ -178,8 +178,8 @@ namespace DOM
             throw (RuntimeException);
 
         /**
-        A NamedNodeMap containing the attributes of this node (if it is an Element)
-        or null otherwise.
+        A NamedNodeMap containing the attributes of this node
+        (if it is an Element) or null otherwise.
         */
         virtual Reference< XNamedNodeMap > SAL_CALL getAttributes()
             throw (RuntimeException);

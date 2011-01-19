@@ -62,7 +62,6 @@ namespace DOM
         sal_Bool m_bRebuild;
         nodevector m_nodevector;
 
-
         void buildlist(xmlNodePtr pNode, sal_Bool start=sal_True);
         void registerListener(const CElement* pElement);
 

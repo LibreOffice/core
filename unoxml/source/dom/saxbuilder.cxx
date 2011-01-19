@@ -241,7 +241,8 @@ namespace DOM
         if ( result != aNSMap.end())
         {
             // found a URI for prefix
-            aElement = m_aDocument->createElementNS( result->second, aName); // qualified name
+            // qualified name
+            aElement = m_aDocument->createElementNS( result->second, aName);
         }
         else
         {

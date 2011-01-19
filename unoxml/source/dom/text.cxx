@@ -58,7 +58,7 @@ namespace DOM
 
     void SAL_CALL CText::fastSaxify( Context& io_rContext )
     {
-        if( io_rContext.mxCurrentHandler.is() )
+        if (io_rContext.mxCurrentHandler.is())
         {
             try
             {

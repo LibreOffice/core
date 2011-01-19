@@ -91,7 +91,8 @@ namespace DOM
 
         while (pNode != NULL )
         {
-            if (pNode->type == XML_ELEMENT_NODE && strcmp((char*)pNode->name, (char*)xName)==0)
+            if (pNode->type == XML_ELEMENT_NODE &&
+                strcmp((char*)pNode->name, (char*)xName)==0)
             {
                 if (xURI == NULL)
                     m_nodevector.push_back(pNode);
