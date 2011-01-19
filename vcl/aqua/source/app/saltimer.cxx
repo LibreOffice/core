@@ -40,7 +40,7 @@ NSTimer* AquaSalTimer::pRunningTimer = nil;
 bool AquaSalTimer::bDispatchTimer = false;
 
 
-void ImplSalStartTimer( ULONG nMS )
+void ImplSalStartTimer( sal_uLong nMS )
 {
     SalData* pSalData = GetSalData();
     if( pSalData->mpFirstInstance->isNSAppThread() )
@@ -108,7 +108,7 @@ void AquaSalTimer::handleStartTimerEvent( NSEvent* pEvent )
             // timer already elapsed since event posted
             pSVData->mpSalTimer->CallCallback();
         }
-        ImplSalStartTimer( ULONG( [pEvent data1] ) );
+        ImplSalStartTimer( sal_uLong( [pEvent data1] ) );
     }
 
 }
@@ -122,7 +122,7 @@ AquaSalTimer::~AquaSalTimer()
     ImplSalStopTimer();
 }
 
-void AquaSalTimer::Start( ULONG nMS )
+void AquaSalTimer::Start( sal_uLong nMS )
 {
     ImplSalStartTimer( nMS );
 }

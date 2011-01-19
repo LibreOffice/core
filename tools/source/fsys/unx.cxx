@@ -95,14 +95,14 @@ struct mymnttab
 
 
 #if defined(NETBSD) || defined(FREEBSD) || defined(MACOSX)
-BOOL GetMountEntry(dev_t /* dev */, struct mymnttab * /* mytab */ )
+sal_Bool GetMountEntry(dev_t /* dev */, struct mymnttab * /* mytab */ )
 {
     DBG_WARNING( "Sorry, not implemented: GetMountEntry" );
     return sal_False;
 }
 
 #elif defined AIX
-BOOL GetMountEntry(dev_t dev, struct mymnttab *mytab)
+sal_Bool GetMountEntry(dev_t dev, struct mymnttab *mytab)
 {
     int bufsize;
     if (mntctl (MCTL_QUERY, sizeof bufsize, (char*) &bufsize))
