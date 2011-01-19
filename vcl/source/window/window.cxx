@@ -9110,6 +9110,7 @@ USHORT Window::GetAccessibleRole() const
 
             case WINDOW_HELPTEXTWINDOW: nRole = accessibility::AccessibleRole::TOOL_TIP; break;
 
+            case WINDOW_RULER:          nRole = accessibility::AccessibleRole::RULER; break;
             case WINDOW_WINDOW:
             case WINDOW_CONTROL:
             case WINDOW_BORDERWINDOW:
