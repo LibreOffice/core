@@ -25,16 +25,16 @@
 #
 #*************************************************************************
 
-$(eval $(call gb_JunitTest_JunitTest,framework_unoapi))
+$(eval $(call gb_JunitTest_JunitTest,svx_unoapi))
 
-$(eval $(call gb_JunitTest_set_defs,framework_unoapi,\
+$(eval $(call gb_JunitTest_set_defs,svx_unoapi,\
     $$(DEFS) \
-    -Dorg.openoffice.test.arg.sce=$(SRCDIR)/framework/qa/unoapi/framework.sce \
-    -Dorg.openoffice.test.arg.xcl=$(SRCDIR)/framework/qa/unoapi/knownissues.xcl \
-    -Dorg.openoffice.test.arg.tdoc=$(SRCDIR)/framework/qa/unoapi/testdocuments \
+    -Dorg.openoffice.test.arg.sce=$(SRCDIR)/svx/qa/unoapi/svx.sce \
+    -Dorg.openoffice.test.arg.xcl=$(SRCDIR)/svx/qa/unoapi/knownissues.xcl \
+    -Dorg.openoffice.test.arg.tdoc=$(SRCDIR)/svx/qa/unoapi/testdocuments \
 ))
 
-$(eval $(call gb_JunitTest_add_jars,framework_unoapi,\
+$(eval $(call gb_JunitTest_add_jars,svx_unoapi,\
     $(OUTDIR)/bin/OOoRunner.jar \
     $(OUTDIR)/bin/ridl.jar \
     $(OUTDIR)/bin/test.jar \
@@ -42,12 +42,12 @@ $(eval $(call gb_JunitTest_add_jars,framework_unoapi,\
     $(OUTDIR)/bin/jurt.jar \
 ))
 
-$(eval $(call gb_JunitTest_add_sourcefiles,framework_unoapi,\
-    framework/qa/unoapi/Test \
+$(eval $(call gb_JunitTest_add_sourcefiles,svx_unoapi,\
+    svx/qa/unoapi/Test \
 ))
 
-$(eval $(call gb_JunitTest_add_classes,framework_unoapi,\
-    org.openoffice.framework.qa.unoapi.Test \
+$(eval $(call gb_JunitTest_add_classes,svx_unoapi,\
+    org.openoffice.svx.qa.unoapi.Test \
 ))
 
 # vim: set noet sw=4 ts=4:

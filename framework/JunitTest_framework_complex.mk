@@ -32,6 +32,14 @@ $(eval $(call gb_JunitTest_set_defs,framework_complex,\
     -Dorg.openoffice.test.arg.tdoc=$(SRCDIR)/framework/qa/complex/broken_document/test_documents \
 ))
 
+$(eval $(call gb_JunitTest_add_jars,framework_complex,\
+    $(OUTDIR)/bin/OOoRunner.jar \
+    $(OUTDIR)/bin/ridl.jar \
+    $(OUTDIR)/bin/test.jar \
+    $(OUTDIR)/bin/unoil.jar \
+    $(OUTDIR)/bin/jurt.jar \
+))
+
 $(eval $(call gb_JunitTest_add_sourcefiles,framework_complex,\
     framework/qa/complex/disposing/GetServiceWhileDisposingOffice \
     framework/qa/complex/path_substitution/PathSubstitutionTest \

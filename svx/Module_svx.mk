@@ -39,10 +39,15 @@ $(eval $(call gb_Module_add_targets,svx,\
     Package_sdi \
 ))
 
-#    Executable_gengal \
+$(eval $(call gb_Module_add_subsequentcheck_targets,svx,\
+    JunitTest_svx_unoapi \
+))
+
+#	 Executable_gengal \
 
 #todo: noopt for EnhanceCustomShapesFunctionParser.cxx on Solaris Sparc and MacOSX
 #todo: -DBOOST_SPIRIT_USE_OLD_NAMESPACE only in CustomShapes ?
 #todo: -DUNICODE and -D_UNICODE on WNT for source/dialog
 #todo: globlmn.hrc
 #todo: component file
+# vim: set noet ts=4 sw=4:
