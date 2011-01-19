@@ -30,7 +30,7 @@
 #include <vos/mutex.hxx>
 #include <tools/debug.hxx>
 #include <tools/rcid.h>
-#include <vcl/wintypes.hxx>
+#include <tools/wintypes.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/svapp.hxx>
 #if defined(OS2)
