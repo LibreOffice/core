@@ -30,6 +30,8 @@
 #include <stdio.h>
 #include <string.h>
 
+#include <libxml/xmlstring.h>
+
 #include <algorithm>
 
 #include <boost/bind.hpp>
@@ -378,6 +380,8 @@ namespace DOM
             pNewChild->invalidate(); // cur has been freed
         }
 
+        if (!res) { return 0; }
+
         // use custom ns cleanup instead of
         // xmlReconciliateNs(m_aNodePtr->doc, m_aNodePtr);
         // because that will not remove unneeded ns decls
@@ -386,7 +390,6 @@ namespace DOM
         ::rtl::Reference<CNode> const pNode = GetOwnerDocument().GetCNode(res);
 
         if (!pNode.is()) { return 0; }
-        //XXX check for errors
 
         // dispatch DOMNodeInserted event, target is the new node
         // this node is the related node
@@ -425,8 +428,8 @@ namespace DOM
         }
         ::rtl::Reference<CNode> const pNode = GetOwnerDocument().GetCNode(
             xmlCopyNode(m_aNodePtr, (bDeep) ? 1 : 0));
+        if (!pNode.is()) { return 0; }
         pNode->m_bUnlinked = true; // not linked yet
-        //XXX check for errors
         return pNode.get();
     }
 
@@ -680,6 +683,8 @@ namespace DOM
             const Reference< XNode >& newChild, const Reference< XNode >& refChild)
         throw (RuntimeException, DOMException)
     {
+        if (!newChild.is() || !refChild.is()) { throw RuntimeException(); }
+
         if (newChild->getOwnerDocument() != getOwnerDocument()) {
             DOMException e;
             e.Code = DOMExceptionType_WRONG_DOCUMENT_ERR;
@@ -698,6 +703,21 @@ namespace DOM
         if (!pNewNode || !pRefNode) { throw RuntimeException(); }
         xmlNodePtr const pNewChild(pNewNode->GetNodePtr());
         xmlNodePtr const pRefChild(pRefNode->GetNodePtr());
+        if (!pNewChild || !pRefChild) { throw RuntimeException(); }
+
+        if (pNewChild == m_aNodePtr) {
+            DOMException e;
+            e.Code = DOMExceptionType_HIERARCHY_REQUEST_ERR;
+            throw e;
+        }
+        // already has parent and is not attribute
+        if (pNewChild->parent != NULL && pNewChild->type != XML_ATTRIBUTE_NODE)
+        {
+            DOMException e;
+            e.Code = DOMExceptionType_HIERARCHY_REQUEST_ERR;
+            throw e;
+        }
+
         xmlNodePtr cur = m_aNodePtr->children;
 
         //search child before which to insert
@@ -745,14 +765,20 @@ namespace DOM
     Removes the child node indicated by oldChild from the list of children,
     and returns it.
     */
-    Reference< XNode > SAL_CALL CNode::removeChild(const Reference< XNode >& oldChild)
+    Reference< XNode > SAL_CALL
+    CNode::removeChild(const Reference< XNode >& xOldChild)
         throw (RuntimeException, DOMException)
     {
-        if (!oldChild.is()) {
+        if (!xOldChild.is()) {
             throw RuntimeException();
         }
 
-        if (oldChild->getParentNode() != Reference< XNode >(this)) {
+        if (xOldChild->getOwnerDocument() != getOwnerDocument()) {
+            DOMException e;
+            e.Code = DOMExceptionType_WRONG_DOCUMENT_ERR;
+            throw e;
+        }
+        if (xOldChild->getParentNode() != Reference< XNode >(this)) {
             DOMException e;
             e.Code = DOMExceptionType_HIERARCHY_REQUEST_ERR;
             throw e;
@@ -760,15 +786,18 @@ namespace DOM
 
         ::osl::ClearableMutexGuard guard(m_rMutex);
 
-        Reference<XNode> xReturn( oldChild );
+        if (!m_aNodePtr) { throw RuntimeException(); }
 
-        ::rtl::Reference<CNode> const pOld(CNode::GetImplementation(oldChild));
+        Reference<XNode> xReturn( xOldChild );
+
+        ::rtl::Reference<CNode> const pOld(CNode::GetImplementation(xOldChild));
+        if (!pOld.is()) { throw RuntimeException(); }
         xmlNodePtr const old = pOld->GetNodePtr();
-        pOld->m_bUnlinked = true;
+        if (!old) { throw RuntimeException(); }
 
         if( old->type == XML_ATTRIBUTE_NODE )
         {
-        xmlAttrPtr pAttr = (xmlAttrPtr) old;
+            xmlAttrPtr pAttr = reinterpret_cast<xmlAttrPtr>(old);
             xmlRemoveProp( pAttr );
             pOld->invalidate(); // freed by xmlRemoveProp
             xReturn.clear();
@@ -776,6 +805,7 @@ namespace DOM
         else
         {
             xmlUnlinkNode(old);
+            pOld->m_bUnlinked = true;
         }
 
         /*DOMNodeRemoved
@@ -800,7 +830,7 @@ namespace DOM
         guard.clear();
 
         dispatchEvent(Reference< XEvent >(event, UNO_QUERY));
-        // subtree modofied for this node
+        // subtree modified for this node
         dispatchSubtreeModified();
 
         return xReturn;
@@ -815,11 +845,16 @@ namespace DOM
             Reference< XNode > const& xOldChild)
         throw (RuntimeException, DOMException)
     {
-        if (!xOldChild.is()) {
+        if (!xOldChild.is() || !xNewChild.is()) {
             throw RuntimeException();
         }
         // XXX check node types
 
+        if (xNewChild->getOwnerDocument() != getOwnerDocument()) {
+            DOMException e;
+            e.Code = DOMExceptionType_WRONG_DOCUMENT_ERR;
+            throw e;
+        }
         if (xOldChild->getParentNode() != Reference< XNode >(this)) {
             DOMException e;
             e.Code = DOMExceptionType_HIERARCHY_REQUEST_ERR;
@@ -836,8 +871,22 @@ namespace DOM
                 CNode::GetImplementation(xOldChild));
         ::rtl::Reference<CNode> const pNewNode(
                 CNode::GetImplementation(xNewChild));
+        if (!pOldNode.is() || !pNewNode.is()) { throw RuntimeException(); }
         xmlNodePtr const pOld = pOldNode->GetNodePtr();
         xmlNodePtr const pNew = pNewNode->GetNodePtr();
+        if (!pOld || !pNew) { throw RuntimeException(); }
+
+        if (pNew == m_aNodePtr) {
+            DOMException e;
+            e.Code = DOMExceptionType_HIERARCHY_REQUEST_ERR;
+            throw e;
+        }
+        // already has parent and is not attribute
+        if (pNew->parent != NULL && pNew->type != XML_ATTRIBUTE_NODE) {
+            DOMException e;
+            e.Code = DOMExceptionType_HIERARCHY_REQUEST_ERR;
+            throw e;
+        }
 
         if( pOld->type == XML_ATTRIBUTE_NODE )
         {
@@ -930,11 +979,10 @@ namespace DOM
 
         OString o1 = OUStringToOString(prefix, RTL_TEXTENCODING_UTF8);
         xmlChar *pBuf = (xmlChar*)o1.getStr();
-        // XXX copy buf?
-        // XXX free old string? (leak?)
         if (m_aNodePtr != NULL && m_aNodePtr->ns != NULL)
         {
-            m_aNodePtr->ns->prefix = pBuf;
+            xmlFree(const_cast<xmlChar *>(m_aNodePtr->ns->prefix));
+            m_aNodePtr->ns->prefix = xmlStrdup(pBuf);
         }
 
     }
