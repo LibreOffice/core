@@ -26,8 +26,8 @@
  ************************************************************************/
 
 
-#define Boolean MacOSBoolean
-#define BOOL MacOSBOOL
+//#define Boolean MacOSBoolean
+//#define BOOL MacOSBOOL
 #define Button MacOSButton
 #define Byte MacOSByte
 #define Control MacOSControl
@@ -46,7 +46,7 @@
 //#define ShowWindow MacOSShowWindow
 #define StringPtr MacOSStringPtr
 #define DirInfo MacOSDirInfo
-#define ULONG MacOSULONG
+//#define ULONG MacOSULONG
 #define Line MacOSLine
 #define TimeValue MacOSTimeValue
 #define Pattern MacOSPattern
