@@ -56,16 +56,16 @@ namespace DOM
         friend class CDocument;
 
     protected:
-        CText(CDocument const& rDocument,
+        CText(CDocument const& rDocument, ::osl::Mutex const& rMutex,
                 NodeType const& reNodeType, xmlNodePtr const& rpNode);
-        CText(CDocument const& rDocument, xmlNodePtr const pNode);
+        CText(CDocument const& rDocument, ::osl::Mutex const& rMutex,
+                xmlNodePtr const pNode);
 
     public:
 
-        virtual void SAL_CALL saxify(
-            const Reference< XDocumentHandler >& i_xHandler);
+        virtual void saxify(const Reference< XDocumentHandler >& i_xHandler);
 
-        virtual void SAL_CALL fastSaxify( Context& io_rContext );
+        virtual void fastSaxify( Context& io_rContext );
 
          // Breaks this node into two nodes at the specified offset, keeping
          // both in the tree as siblings.

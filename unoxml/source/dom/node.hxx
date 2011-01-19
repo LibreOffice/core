@@ -132,9 +132,10 @@ namespace DOM
         xmlNodePtr m_aNodePtr;
 
         ::rtl::Reference< CDocument > const m_xDocument;
+        ::osl::Mutex & m_rMutex;
 
         // for initialization by classes derived through ImplInheritanceHelper
-        CNode(CDocument const& rDocument,
+        CNode(CDocument const& rDocument, ::osl::Mutex const& rMutex,
                 NodeType const& reNodeType, xmlNodePtr const& rpNode);
         void invalidate();
 
@@ -152,18 +153,18 @@ namespace DOM
         virtual CDocument & GetOwnerDocument();
 
         // recursively create SAX events
-        virtual void SAL_CALL saxify(
-            const Reference< XDocumentHandler >& i_xHandler);
+        virtual void saxify(const Reference< XDocumentHandler >& i_xHandler);
 
         // recursively create SAX events
-        virtual void SAL_CALL fastSaxify( Context& io_rContext );
+        virtual void fastSaxify( Context& io_rContext );
 
         // ---- DOM interfaces
 
         /**
         Adds the node newChild to the end of the list of children of this node.
         */
-        virtual Reference< XNode > SAL_CALL appendChild(const Reference< XNode >& newChild)
+        virtual Reference< XNode > SAL_CALL
+            appendChild(Reference< XNode > const& xNewChild)
             throw (RuntimeException, DOMException);
 
         /**

@@ -50,7 +50,8 @@ namespace DOM
         friend class CDocument;
 
     protected:
-        CDocumentFragment(CDocument const& rDocument,
+        CDocumentFragment(
+                CDocument const& rDocument, ::osl::Mutex const& rMutex,
                 xmlNodePtr const pNode);
 
     public:

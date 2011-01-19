@@ -31,14 +31,16 @@
 
 namespace DOM
 {
-    CCDATASection::CCDATASection(CDocument const& rDocument,
+    CCDATASection::CCDATASection(
+            CDocument const& rDocument, ::osl::Mutex const& rMutex,
             xmlNodePtr const pNode)
-        : CCDATASection_Base(rDocument, NodeType_CDATA_SECTION_NODE, pNode)
+        : CCDATASection_Base(rDocument, rMutex,
+                NodeType_CDATA_SECTION_NODE, pNode)
     {
     }
 
-    void SAL_CALL CCDATASection::saxify(
-            const Reference< XDocumentHandler >& i_xHandler) {
+    void CCDATASection::saxify(const Reference< XDocumentHandler >& i_xHandler)
+    {
         if (!i_xHandler.is()) throw RuntimeException();
         Reference< XExtendedDocumentHandler > xExtended(i_xHandler, UNO_QUERY);
         if (xExtended.is()) {

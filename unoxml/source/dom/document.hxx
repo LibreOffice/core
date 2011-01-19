@@ -28,14 +28,16 @@
 #ifndef DOM_DOCUMENT_HXX
 #define DOM_DOCUMENT_HXX
 
-#include <list>
 #include <set>
 #include <memory>
 
+#include <libxml/tree.h>
+
 #include <sal/types.h>
+
 #include <cppuhelper/implbase6.hxx>
+
 #include <com/sun/star/uno/Reference.h>
-#include <com/sun/star/uno/Exception.hpp>
 #include <com/sun/star/beans/StringPair.hpp>
 #include <com/sun/star/xml/dom/XNode.hpp>
 #include <com/sun/star/xml/dom/XAttr.hpp>
@@ -54,7 +56,6 @@
 
 #include "node.hxx"
 
-#include <libxml/tree.h>
 
 using namespace std;
 using ::rtl::OUString;
@@ -84,7 +85,11 @@ namespace DOM
     {
 
     private:
-
+        /// this Mutex is used for synchronization of all UNO wrapper
+        /// objects that belong to this document
+        ::osl::Mutex m_Mutex;
+        /// the libxml document: freed in destructor
+        /// => all UNO wrapper objects must keep the CDocument alive
         xmlDocPtr const m_aDocPtr;
 
         // datacontrol/source state
@@ -119,10 +124,9 @@ namespace DOM
 
         virtual CDocument & GetOwnerDocument();
 
-        virtual void SAL_CALL saxify(
-            const Reference< XDocumentHandler >& i_xHandler);
+        virtual void saxify(const Reference< XDocumentHandler >& i_xHandler);
 
-        virtual void SAL_CALL fastSaxify( Context& rContext );
+        virtual void fastSaxify( Context& rContext );
 
         /**
         Creates an Attr of the given name.

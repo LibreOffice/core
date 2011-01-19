@@ -82,16 +82,14 @@ namespace DOM { namespace events {
         }
     }
 
-    void CEventDispatcher::callListeners(xmlNodePtr const pNode,
-            OUString aType, Reference< XEvent > const& xEvent,
-            sal_Bool const bCapture) const
+    void CEventDispatcher::callListeners(
+            TypeListenerMap const& rTMap,
+            xmlNodePtr const pNode,
+            OUString aType, Reference< XEvent > const& xEvent)
     {
-        TypeListenerMap const*const pTMap = (bCapture)
-            ? (& m_CaptureListeners) : (& m_TargetListeners);
-
         // get the multimap for the specified type
-        TypeListenerMap::const_iterator tIter = pTMap->find(aType);
-        if (tIter != pTMap->end()) {
+        TypeListenerMap::const_iterator tIter = rTMap.find(aType);
+        if (tIter != rTMap.end()) {
             ListenerMap *pMap = tIter->second;
             ListenerMap::const_iterator iter = pMap->lower_bound(pNode);
             ListenerMap::const_iterator ibound = pMap->upper_bound(pNode);
@@ -103,7 +101,8 @@ namespace DOM { namespace events {
         }
     }
 
-    bool CEventDispatcher::dispatchEvent(DOM::CDocument & rDocument,
+    bool CEventDispatcher::dispatchEvent(
+            DOM::CDocument & rDocument, ::osl::Mutex & rMutex,
             xmlNodePtr const pNode, Reference<XNode> const& xNode,
             Reference< XEvent > const& i_xEvent) const
     {
@@ -177,12 +176,24 @@ namespace DOM { namespace events {
         Reference< XEvent > const xEvent(pEvent);
 
         // build the path from target node to the root
-        NodeVector captureVector;
-        xmlNodePtr cur = pNode;
-        while (cur != NULL)
+        typedef std::vector< ::std::pair<Reference<XEventTarget>, xmlNodePtr> >
+            NodeVector_t;
+        NodeVector_t captureVector;
+        TypeListenerMap captureListeners;
+        TypeListenerMap targetListeners;
         {
-            captureVector.push_back(cur);
-            cur = cur->parent;
+            ::osl::MutexGuard g(rMutex);
+
+            xmlNodePtr cur = pNode;
+            while (cur != NULL)
+            {
+                Reference< XEventTarget > const xRef(
+                        rDocument.GetCNode(cur).get());
+                captureVector.push_back(::std::make_pair(xRef, cur));
+                cur = cur->parent;
+            }
+            captureListeners = m_CaptureListeners;
+            targetListeners = m_TargetListeners;
         }
 
         // the caputre vector now holds the node path from target to root
@@ -191,27 +202,27 @@ namespace DOM { namespace events {
         // then bubbeling phase listeners are called in target to root
         // order
         // start at the root
-        NodeVector::const_reverse_iterator rinode =
-            const_cast<const NodeVector&>(captureVector).rbegin();
-        if (rinode != const_cast<const NodeVector&>(captureVector).rend())
+        NodeVector_t::const_reverse_iterator rinode =
+            const_cast<NodeVector_t const&>(captureVector).rbegin();
+        if (rinode != const_cast<NodeVector_t const&>(captureVector).rend())
         {
             // capturing phase:
             pEvent->m_phase = PhaseType_CAPTURING_PHASE;
             while (rinode !=
-                    const_cast<const NodeVector&>(captureVector).rend())
+                    const_cast<NodeVector_t const&>(captureVector).rend())
             {
-                pEvent->m_currentTarget = Reference< XEventTarget >(
-                        rDocument.GetCNode(*rinode).get());
-                callListeners(*rinode, aType, xEvent, sal_True);
+                pEvent->m_currentTarget = rinode->first;
+                callListeners(captureListeners, rinode->second, aType, xEvent);
                 if  (pEvent->m_canceled) return sal_True;
                 rinode++;
             }
 
-            NodeVector::const_iterator inode = captureVector.begin();
+            NodeVector_t::const_iterator inode = captureVector.begin();
 
             // target phase
             pEvent->m_phase = PhaseType_AT_TARGET;
-            callListeners(*inode, aType, xEvent, sal_False);
+            pEvent->m_currentTarget = inode->first;
+            callListeners(targetListeners, inode->second, aType, xEvent);
             if  (pEvent->m_canceled) return sal_True;
             // bubbeling phase
             inode++;
@@ -219,9 +230,9 @@ namespace DOM { namespace events {
                 pEvent->m_phase = PhaseType_BUBBLING_PHASE;
                 while (inode != captureVector.end())
                 {
-                    pEvent->m_currentTarget = Reference< XEventTarget >(
-                            rDocument.GetCNode(*inode).get());
-                    callListeners(*inode, aType, xEvent, sal_False);
+                    pEvent->m_currentTarget = inode->first;
+                    callListeners(targetListeners,
+                            inode->second, aType, xEvent);
                     if  (pEvent->m_canceled) return sal_True;
                     inode++;
                 }

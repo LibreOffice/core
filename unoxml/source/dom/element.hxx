@@ -53,18 +53,19 @@ namespace DOM
     private:
         friend class CDocument;
 
-        Reference< XAttr > _setAttributeNode(const Reference< XAttr >& newAttr, sal_Bool bNS)
+        Reference< XAttr > setAttributeNode_Impl_Lock(
+                Reference< XAttr > const& xNewAttr, bool const bNS)
             throw (RuntimeException);
 
     protected:
-        CElement(CDocument const& rDocument, xmlNodePtr const pNode);
+        CElement(CDocument const& rDocument, ::osl::Mutex const& rMutex,
+                xmlNodePtr const pNode);
 
     public:
 
-        virtual void SAL_CALL saxify(
-            const Reference< XDocumentHandler >& i_xHandler);
+        virtual void saxify(const Reference< XDocumentHandler >& i_xHandler);
 
-        virtual void SAL_CALL fastSaxify( Context& i_rContext );
+        virtual void fastSaxify( Context& i_rContext );
 
         /**
         Retrieves an attribute value by name.

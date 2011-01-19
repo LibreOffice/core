@@ -52,13 +52,13 @@ namespace DOM
         friend class CDocument;
 
     protected:
-        CProcessingInstruction(CDocument const& rDocument,
+        CProcessingInstruction(
+                CDocument const& rDocument, ::osl::Mutex const& rMutex,
                 xmlNodePtr const pNode);
 
     public:
 
-        virtual void SAL_CALL saxify(
-            const Reference< XDocumentHandler >& i_xHandler);
+        virtual void saxify(const Reference< XDocumentHandler >& i_xHandler);
 
         /**
         The content of this processing instruction.

@@ -32,12 +32,13 @@
 
 namespace DOM
 {
-    CComment::CComment(CDocument const& rDocument, xmlNodePtr const pNode)
-        : CComment_Base(rDocument, NodeType_COMMENT_NODE, pNode)
+    CComment::CComment(CDocument const& rDocument, ::osl::Mutex const& rMutex,
+            xmlNodePtr const pNode)
+        : CComment_Base(rDocument, rMutex, NodeType_COMMENT_NODE, pNode)
     {
     }
 
-    void SAL_CALL CComment::saxify(
+    void CComment::saxify(
             const Reference< XDocumentHandler >& i_xHandler) {
         if (!i_xHandler.is()) throw RuntimeException();
         Reference< XExtendedDocumentHandler > xExtended(i_xHandler, UNO_QUERY);

@@ -49,12 +49,12 @@ namespace DOM
         friend class CDocument;
 
     protected:
-        CCDATASection(CDocument const& rDocument, xmlNodePtr const pNode);
+        CCDATASection(CDocument const& rDocument, ::osl::Mutex const& rMutex,
+                xmlNodePtr const pNode);
 
     public:
 
-        virtual void SAL_CALL saxify(
-            const Reference< XDocumentHandler >& i_xHandler);
+        virtual void saxify(const Reference< XDocumentHandler >& i_xHandler);
 
         virtual Reference< XText > SAL_CALL splitText(sal_Int32 offset)
              throw (RuntimeException)

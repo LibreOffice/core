@@ -37,8 +37,9 @@
 
 namespace DOM
 {
-    CAttr::CAttr(CDocument const& rDocument, xmlAttrPtr const pAttr)
-        : CAttr_Base(rDocument,
+    CAttr::CAttr(CDocument const& rDocument, ::osl::Mutex const& rMutex,
+            xmlAttrPtr const pAttr)
+        : CAttr_Base(rDocument, rMutex,
                 NodeType_ATTRIBUTE_NODE, reinterpret_cast<xmlNodePtr>(pAttr))
         , m_aAttrPtr(pAttr)
     {
@@ -66,6 +67,8 @@ namespace DOM
     */
     OUString SAL_CALL CAttr::getName() throw (RuntimeException)
     {
+        ::osl::MutexGuard const g(m_rMutex);
+
         OUString aName;
         if (m_aAttrPtr != NULL)
         {
@@ -81,6 +84,8 @@ namespace DOM
     Reference< XElement > SAL_CALL CAttr::getOwnerElement()
         throw (RuntimeException)
     {
+        ::osl::MutexGuard const g(m_rMutex);
+
         if ((m_aAttrPtr == 0) || (m_aAttrPtr->parent == 0))
         {
             return 0;
@@ -109,6 +114,8 @@ namespace DOM
     OUString SAL_CALL CAttr::getValue()
         throw (RuntimeException)
     {
+        ::osl::MutexGuard const g(m_rMutex);
+
         OUString aName;
         if (m_aAttrPtr != NULL && m_aAttrPtr->children != NULL)
         {
@@ -124,6 +131,8 @@ namespace DOM
     void SAL_CALL CAttr::setValue(const OUString& value)
         throw (RuntimeException, DOMException)
     {
+        ::osl::ClearableMutexGuard guard(m_rMutex);
+
         // remember old value (for mutation event)
         OUString sOldValue = getValue();
 
@@ -153,6 +162,9 @@ namespace DOM
                 sEventName, sal_True, sal_False,
                 Reference<XNode>( static_cast<XAttr*>( this ) ),
                 sOldValue, value, getName(), AttrChangeType_MODIFICATION );
+
+        guard.clear(); // release mutex before calling event handlers
+
         dispatchEvent(Reference< XEvent >(event, UNO_QUERY));
         dispatchSubtreeModified();
         xmlFree(buffer);

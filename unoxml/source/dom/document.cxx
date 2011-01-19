@@ -71,7 +71,7 @@ namespace DOM
     }
 
     CDocument::CDocument(xmlDocPtr const pDoc)
-        : CDocument_Base(*this,
+        : CDocument_Base(*this, m_Mutex,
                 NodeType_DOCUMENT_NODE, reinterpret_cast<xmlNodePtr>(pDoc))
         , m_aDocPtr(pDoc)
         , m_streamListeners()
@@ -93,6 +93,7 @@ namespace DOM
 
     CDocument::~CDocument()
     {
+        ::osl::MutexGuard const g(m_Mutex);
 #ifdef DBG_UTIL
         // node map must be empty now, otherwise CDocument must not die!
         for (nodemap_t::iterator i = m_NodeMap.begin();
@@ -120,14 +121,9 @@ namespace DOM
         return xRet;
     }
 
-    namespace {
-        struct NodeMutex : public ::rtl::Static<osl::Mutex, NodeMutex> {};
-    }
-
     void
     CDocument::RemoveCNode(xmlNodePtr const pNode, CNode const*const pCNode)
     {
-        ::osl::MutexGuard guard(NodeMutex::get());
         nodemap_t::iterator const i = m_NodeMap.find(pNode);
         if (i != m_NodeMap.end()) {
             // #i113681# consider this scenario:
@@ -145,14 +141,16 @@ namespace DOM
         }
     }
 
+    /** NB: this is the CNode factory.
+        it is the only place where CNodes may be instantiated.
+        all CNodes must be registered at the m_NodeMap.
+     */
     ::rtl::Reference<CNode>
     CDocument::GetCNode(xmlNodePtr const pNode, bool const bCreate)
     {
         if (0 == pNode) {
             return 0;
         }
-        //see CNode::remove
-        ::osl::MutexGuard guard(NodeMutex::get());
         //check whether there is already an instance for this node
         nodemap_t::const_iterator const i = m_NodeMap.find(pNode);
         if (i != m_NodeMap.end()) {
@@ -176,34 +174,38 @@ namespace DOM
         {
             case XML_ELEMENT_NODE:
                 // m_aNodeType = NodeType::ELEMENT_NODE;
-                pCNode = static_cast< CNode* >(new CElement(*this, pNode));
+                pCNode = static_cast< CNode* >(
+                        new CElement(*this, m_Mutex, pNode));
             break;
             case XML_TEXT_NODE:
                 // m_aNodeType = NodeType::TEXT_NODE;
-                pCNode = static_cast< CNode* >(new CText(*this, pNode));
+                pCNode = static_cast< CNode* >(
+                        new CText(*this, m_Mutex, pNode));
             break;
             case XML_CDATA_SECTION_NODE:
                 // m_aNodeType = NodeType::CDATA_SECTION_NODE;
-                pCNode = static_cast< CNode* >(new CCDATASection(*this, pNode));
+                pCNode = static_cast< CNode* >(
+                        new CCDATASection(*this, m_Mutex, pNode));
             break;
             case XML_ENTITY_REF_NODE:
                 // m_aNodeType = NodeType::ENTITY_REFERENCE_NODE;
-                pCNode = static_cast< CNode* >(new CEntityReference(*this,
-                            pNode));
+                pCNode = static_cast< CNode* >(
+                        new CEntityReference(*this, m_Mutex, pNode));
             break;
             case XML_ENTITY_NODE:
                 // m_aNodeType = NodeType::ENTITY_NODE;
-                pCNode = static_cast< CNode* >(new CEntity(*this,
+                pCNode = static_cast< CNode* >(new CEntity(*this, m_Mutex,
                             reinterpret_cast<xmlEntityPtr>(pNode)));
             break;
             case XML_PI_NODE:
                 // m_aNodeType = NodeType::PROCESSING_INSTRUCTION_NODE;
                 pCNode = static_cast< CNode* >(
-                            new CProcessingInstruction(*this, pNode));
+                        new CProcessingInstruction(*this, m_Mutex, pNode));
             break;
             case XML_COMMENT_NODE:
                 // m_aNodeType = NodeType::COMMENT_NODE;
-                pCNode = static_cast< CNode* >(new CComment(*this, pNode));
+                pCNode = static_cast< CNode* >(
+                        new CComment(*this, m_Mutex, pNode));
             break;
             case XML_DOCUMENT_NODE:
                 // m_aNodeType = NodeType::DOCUMENT_NODE;
@@ -215,22 +217,22 @@ namespace DOM
             case XML_DOCUMENT_TYPE_NODE:
             case XML_DTD_NODE:
                 // m_aNodeType = NodeType::DOCUMENT_TYPE_NODE;
-                pCNode = static_cast< CNode* >(new CDocumentType(*this,
+                pCNode = static_cast< CNode* >(new CDocumentType(*this, m_Mutex,
                             reinterpret_cast<xmlDtdPtr>(pNode)));
             break;
             case XML_DOCUMENT_FRAG_NODE:
                 // m_aNodeType = NodeType::DOCUMENT_FRAGMENT_NODE;
-                pCNode = static_cast< CNode* >(new CDocumentFragment(*this,
-                            pNode));
+                pCNode = static_cast< CNode* >(
+                        new CDocumentFragment(*this, m_Mutex, pNode));
             break;
             case XML_NOTATION_NODE:
                 // m_aNodeType = NodeType::NOTATION_NODE;
-                pCNode = static_cast< CNode* >(new CNotation(*this,
+                pCNode = static_cast< CNode* >(new CNotation(*this, m_Mutex,
                             reinterpret_cast<xmlNotationPtr>(pNode)));
             break;
             case XML_ATTRIBUTE_NODE:
                 // m_aNodeType = NodeType::ATTRIBUTE_NODE;
-                pCNode = static_cast< CNode* >(new CAttr(*this,
+                pCNode = static_cast< CNode* >(new CAttr(*this, m_Mutex,
                             reinterpret_cast<xmlAttrPtr>(pNode)));
             break;
             // unsupported node types
@@ -266,8 +268,8 @@ namespace DOM
         return *this;
     }
 
-    void SAL_CALL CDocument::saxify(
-            const Reference< XDocumentHandler >& i_xHandler) {
+    void CDocument::saxify(const Reference< XDocumentHandler >& i_xHandler)
+    {
         i_xHandler->startDocument();
         for (xmlNodePtr pChild = m_aNodePtr->children;
                         pChild != 0; pChild = pChild->next) {
@@ -278,7 +280,8 @@ namespace DOM
         i_xHandler->endDocument();
     }
 
-    void SAL_CALL CDocument::fastSaxify( Context& rContext ) {
+    void CDocument::fastSaxify( Context& rContext )
+    {
         rContext.mxDocHandler->startDocument();
         for (xmlNodePtr pChild = m_aNodePtr->children;
                         pChild != 0; pChild = pChild->next) {
@@ -292,12 +295,16 @@ namespace DOM
     void SAL_CALL CDocument::addListener(const Reference< XStreamListener >& aListener )
         throw (RuntimeException)
     {
+        ::osl::MutexGuard const g(m_Mutex);
+
         m_streamListeners.insert(aListener);
     }
 
     void SAL_CALL CDocument::removeListener(const Reference< XStreamListener >& aListener )
         throw (RuntimeException)
     {
+        ::osl::MutexGuard const g(m_Mutex);
+
         m_streamListeners.erase(aListener);
     }
 
@@ -333,30 +340,42 @@ namespace DOM
     void SAL_CALL CDocument::start()
         throw (RuntimeException)
     {
-        if (! m_rOutputStream.is()) return;
+        listenerlist_t streamListeners;
+        {
+            ::osl::MutexGuard const g(m_Mutex);
 
-        // notify listners about start
-        listenerlist_t::const_iterator iter1 = m_streamListeners.begin();
-        while (iter1 != m_streamListeners.end()) {
+            if (! m_rOutputStream.is()) { throw RuntimeException(); }
+            streamListeners = m_streamListeners;
+        }
+
+        // notify listeners about start
+        listenerlist_t::const_iterator iter1 = streamListeners.begin();
+        while (iter1 != streamListeners.end()) {
             Reference< XStreamListener > aListener = *iter1;
             aListener->started();
             iter1++;
         }
 
-        // setup libxml IO and write data to output stream
-        IOContext ioctx = {m_rOutputStream, false};
-        xmlOutputBufferPtr pOut = xmlOutputBufferCreateIO(
-            writeCallback, closeCallback, &ioctx, NULL);
-        xmlSaveFileTo(pOut, m_aNodePtr->doc, NULL);
+        {
+            ::osl::MutexGuard const g(m_Mutex);
+
+            // check again! could have been reset...
+            if (! m_rOutputStream.is()) { throw RuntimeException(); }
+
+            // setup libxml IO and write data to output stream
+            IOContext ioctx = {m_rOutputStream, false};
+            xmlOutputBufferPtr pOut = xmlOutputBufferCreateIO(
+                writeCallback, closeCallback, &ioctx, NULL);
+            xmlSaveFileTo(pOut, m_aNodePtr->doc, NULL);
+        }
 
         // call listeners
-        listenerlist_t::const_iterator iter2 = m_streamListeners.begin();
-        while (iter2 != m_streamListeners.end()) {
+        listenerlist_t::const_iterator iter2 = streamListeners.begin();
+        while (iter2 != streamListeners.end()) {
             Reference< XStreamListener > aListener = *iter2;
             aListener->closed();
             iter2++;
         }
-
     }
 
     void SAL_CALL CDocument::terminate()
@@ -368,11 +387,15 @@ namespace DOM
     void SAL_CALL CDocument::setOutputStream( const Reference< XOutputStream >& aStream )
         throw (RuntimeException)
     {
+        ::osl::MutexGuard const g(m_Mutex);
+
         m_rOutputStream = aStream;
     }
 
     Reference< XOutputStream > SAL_CALL  CDocument::getOutputStream() throw (RuntimeException)
     {
+        ::osl::MutexGuard const g(m_Mutex);
+
         return m_rOutputStream;
     }
 
@@ -380,6 +403,8 @@ namespace DOM
     Reference< XAttr > SAL_CALL CDocument::createAttribute(const OUString& name)
         throw (RuntimeException, DOMException)
     {
+        ::osl::MutexGuard const g(m_Mutex);
+
         OString o1 = OUStringToOString(name, RTL_TEXTENCODING_UTF8);
         xmlChar *xName = (xmlChar*)o1.getStr();
         xmlAttrPtr const pAttr = xmlNewDocProp(m_aDocPtr, xName, NULL);
@@ -395,6 +420,7 @@ namespace DOM
             const OUString& ns, const OUString& qname)
         throw (RuntimeException, DOMException)
     {
+        ::osl::MutexGuard const g(m_Mutex);
 
         // libxml does not allow a NS definition to be attached to an
         // attribute node - which is a good thing, since namespaces are
@@ -435,6 +461,8 @@ namespace DOM
     Reference< XCDATASection > SAL_CALL CDocument::createCDATASection(const OUString& data)
         throw (RuntimeException)
     {
+        ::osl::MutexGuard const g(m_Mutex);
+
         xmlChar *xData = (xmlChar*)OUStringToOString(data, RTL_TEXTENCODING_UTF8).getStr();
         xmlNodePtr pText = xmlNewCDataBlock(m_aDocPtr, xData, strlen((char*)xData));
         Reference< XCDATASection > const xRet(
@@ -447,6 +475,8 @@ namespace DOM
     Reference< XComment > SAL_CALL CDocument::createComment(const OUString& data)
         throw (RuntimeException)
     {
+        ::osl::MutexGuard const g(m_Mutex);
+
         OString o1 = OUStringToOString(data, RTL_TEXTENCODING_UTF8);
         xmlChar *xData = (xmlChar*)o1.getStr();
         xmlNodePtr pComment = xmlNewDocComment(m_aDocPtr, xData);
@@ -460,6 +490,8 @@ namespace DOM
     Reference< XDocumentFragment > SAL_CALL CDocument::createDocumentFragment()
         throw (RuntimeException)
     {
+        ::osl::MutexGuard const g(m_Mutex);
+
         xmlNodePtr pFrag = xmlNewDocFragment(m_aDocPtr);
         Reference< XDocumentFragment > const xRet(
             static_cast< XNode* >(GetCNode(pFrag).get()),
@@ -471,6 +503,8 @@ namespace DOM
     Reference< XElement > SAL_CALL CDocument::createElement(const OUString& tagName)
         throw (RuntimeException, DOMException)
     {
+        ::osl::MutexGuard const g(m_Mutex);
+
         OString o1 = OUStringToOString(tagName, RTL_TEXTENCODING_UTF8);
         xmlChar *xName = (xmlChar*)o1.getStr();
         xmlNodePtr const pNode = xmlNewDocNode(m_aDocPtr, NULL, xName, NULL);
@@ -485,6 +519,8 @@ namespace DOM
             const OUString& ns, const OUString& qname)
         throw (RuntimeException, DOMException)
     {
+        ::osl::MutexGuard const g(m_Mutex);
+
         sal_Int32 i = qname.indexOf(':');
         if (ns.getLength() == 0) throw RuntimeException();
         xmlChar *xPrefix;
@@ -519,6 +555,8 @@ namespace DOM
     Reference< XEntityReference > SAL_CALL CDocument::createEntityReference(const OUString& name)
         throw (RuntimeException, DOMException)
     {
+        ::osl::MutexGuard const g(m_Mutex);
+
         OString o1 = OUStringToOString(name, RTL_TEXTENCODING_UTF8);
         xmlChar *xName = (xmlChar*)o1.getStr();
         xmlNodePtr const pNode = xmlNewReference(m_aDocPtr, xName);
@@ -534,6 +572,8 @@ namespace DOM
             const OUString& target, const OUString& data)
         throw (RuntimeException, DOMException)
     {
+        ::osl::MutexGuard const g(m_Mutex);
+
         OString o1 = OUStringToOString(target, RTL_TEXTENCODING_UTF8);
         xmlChar *xTarget = (xmlChar*)o1.getStr();
         OString o2 = OUStringToOString(data, RTL_TEXTENCODING_UTF8);
@@ -550,6 +590,8 @@ namespace DOM
     Reference< XText > SAL_CALL CDocument::createTextNode(const OUString& data)
         throw (RuntimeException)
     {
+        ::osl::MutexGuard const g(m_Mutex);
+
         OString o1 = OUStringToOString(data, RTL_TEXTENCODING_UTF8);
         xmlChar *xData = (xmlChar*)o1.getStr();
         xmlNodePtr const pNode = xmlNewDocText(m_aDocPtr, xData);
@@ -564,6 +606,8 @@ namespace DOM
     Reference< XDocumentType > SAL_CALL CDocument::getDoctype()
         throw (RuntimeException)
     {
+        ::osl::MutexGuard const g(m_Mutex);
+
         // find the doc type
         xmlNodePtr cur = m_aDocPtr->children;
         while (cur != NULL)
@@ -582,6 +626,8 @@ namespace DOM
     Reference< XElement > SAL_CALL CDocument::getDocumentElement()
         throw (RuntimeException)
     {
+        ::osl::MutexGuard const g(m_Mutex);
+
         xmlNodePtr const pNode = lcl_getDocumentRootPtr(m_aDocPtr);
         Reference< XElement > const xRet(
             static_cast< XNode* >(GetCNode(pNode).get()),
@@ -619,6 +665,8 @@ namespace DOM
     Reference< XElement > SAL_CALL CDocument::getElementById(const OUString& elementId)
         throw (RuntimeException)
     {
+        ::osl::MutexGuard const g(m_Mutex);
+
         // search the tree for an element with the given ID
         OString o1 = OUStringToOString(elementId, RTL_TEXTENCODING_UTF8);
         xmlChar *xId = (xmlChar*)o1.getStr();
@@ -635,6 +683,8 @@ namespace DOM
     CDocument::getElementsByTagName(OUString const& rTagname)
             throw (RuntimeException)
     {
+        ::osl::MutexGuard const g(m_Mutex);
+
         Reference< XNodeList > const xRet(
             new CElementList(this->GetDocumentElement(), rTagname));
         return xRet;
@@ -644,6 +694,8 @@ namespace DOM
             OUString const& rNamespaceURI, OUString const& rLocalName)
         throw (RuntimeException)
     {
+        ::osl::MutexGuard const g(m_Mutex);
+
         Reference< XNodeList > const xRet(
             new CElementList(
                 this->GetDocumentElement(), rLocalName, &rNamespaceURI));
@@ -653,6 +705,7 @@ namespace DOM
     Reference< XDOMImplementation > SAL_CALL CDocument::getImplementation()
         throw (RuntimeException)
     {
+        // does not need mutex currently
         return Reference< XDOMImplementation >(CDOMImplementation::get());
     }
 
@@ -870,15 +923,19 @@ namespace DOM
 
     OUString SAL_CALL CDocument::getNodeName()throw (RuntimeException)
     {
+        // does not need mutex currently
         return OUString::createFromAscii("#document");
     }
+
     OUString SAL_CALL CDocument::getNodeValue() throw (RuntimeException)
     {
+        // does not need mutex currently
         return OUString();
     }
 
     Reference< XEvent > SAL_CALL CDocument::createEvent(const OUString& aType) throw (RuntimeException)
     {
+        // does not need mutex currently
         events::CEvent *pEvent = 0;
         if (
             aType.compareToAscii("DOMSubtreeModified")          == 0||
@@ -920,6 +977,8 @@ namespace DOM
             const Sequence< beans::StringPair >& i_rNamespaces)
         throw (RuntimeException, SAXException)
     {
+        ::osl::MutexGuard const g(m_Mutex);
+
         // add new namespaces to root node
         xmlNodePtr const pRoot = lcl_getDocumentRootPtr(m_aDocPtr);
         if (0 != pRoot) {
@@ -947,6 +1006,8 @@ namespace DOM
                                             const Sequence< beans::Pair< rtl::OUString, sal_Int32 > >& i_rRegisterNamespaces )
         throw (SAXException, RuntimeException)
     {
+        ::osl::MutexGuard const g(m_Mutex);
+
         // add new namespaces to root node
         xmlNodePtr const pRoot = lcl_getDocumentRootPtr(m_aDocPtr);
         if (0 != pRoot) {

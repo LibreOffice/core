@@ -32,14 +32,17 @@
 namespace DOM
 {
     CEntityReference::CEntityReference(
-            CDocument const& rDocument, xmlNodePtr const pNode)
-        : CEntityReference_Base(rDocument,
+            CDocument const& rDocument, ::osl::Mutex const& rMutex,
+            xmlNodePtr const pNode)
+        : CEntityReference_Base(rDocument, rMutex,
                 NodeType_ENTITY_REFERENCE_NODE, pNode)
     {
     }
 
     OUString SAL_CALL CEntityReference::getNodeName()throw (RuntimeException)
     {
+        ::osl::MutexGuard const g(m_rMutex);
+
        OUString aName;
         if (m_aNodePtr != NULL)
         {
@@ -48,6 +51,7 @@ namespace DOM
         }
         return aName;
     }
+
     OUString SAL_CALL CEntityReference::getNodeValue() throw (RuntimeException)
     {
         return OUString();

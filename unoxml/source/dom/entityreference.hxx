@@ -52,7 +52,9 @@ namespace DOM
         friend class CDocument;
 
     protected:
-        CEntityReference(CDocument const& rDocument, xmlNodePtr const pNode);
+        CEntityReference(
+            CDocument const& rDocument, ::osl::Mutex const& rMutex,
+            xmlNodePtr const pNode);
 
     public:
         // ---- resolve uno inheritance problems...

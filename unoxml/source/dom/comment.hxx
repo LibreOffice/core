@@ -50,12 +50,12 @@ namespace DOM
         friend class CDocument;
 
     protected:
-        CComment(CDocument const& rDocument, xmlNodePtr const pNode);
+        CComment(CDocument const& rDocument, ::osl::Mutex const& rMutex,
+                xmlNodePtr const pNode);
 
     public:
 
-        virtual void SAL_CALL saxify(
-            const Reference< XDocumentHandler >& i_xHandler);
+        virtual void saxify(const Reference< XDocumentHandler >& i_xHandler);
 
          // --- delegations for XCharacterData
         virtual void SAL_CALL appendData(const OUString& arg)

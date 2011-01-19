@@ -56,7 +56,8 @@ namespace DOM
         xmlAttrPtr m_aAttrPtr;
 
     protected:
-        CAttr(CDocument const& rDocument, xmlAttrPtr const pAttr);
+        CAttr(CDocument const& rDocument, ::osl::Mutex const& rMutex,
+                xmlAttrPtr const pAttr);
 
     public:
         /**

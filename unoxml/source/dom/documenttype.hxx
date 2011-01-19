@@ -59,7 +59,8 @@ namespace DOM
         xmlDtdPtr m_aDtdPtr;
 
     protected:
-        CDocumentType(CDocument const& rDocument, xmlDtdPtr const pDtd);
+        CDocumentType(CDocument const& rDocument, ::osl::Mutex const& rMutex,
+                xmlDtdPtr const pDtd);
 
     public:
         /**

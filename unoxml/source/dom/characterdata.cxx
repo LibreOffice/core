@@ -37,13 +37,15 @@
 namespace DOM
 {
 
-    CCharacterData::CCharacterData(CDocument const& rDocument,
+    CCharacterData::CCharacterData(
+            CDocument const& rDocument, ::osl::Mutex const& rMutex,
             NodeType const& reNodeType, xmlNodePtr const& rpNode)
-        : CCharacterData_Base(rDocument, reNodeType, rpNode)
+        : CCharacterData_Base(rDocument, rMutex, reNodeType, rpNode)
     {
     }
 
-    void CCharacterData::_dispatchEvent(const OUString& prevValue, const OUString& newValue)
+    void CCharacterData::dispatchEvent_Impl(
+            OUString const& prevValue, OUString const& newValue)
     {
         Reference< XDocumentEvent > docevent(getOwnerDocument(), UNO_QUERY);
         Reference< XMutationEvent > event(docevent->createEvent(
@@ -62,12 +64,16 @@ namespace DOM
     void SAL_CALL CCharacterData::appendData(const OUString& arg)
         throw (RuntimeException, DOMException)
     {
+        ::osl::ClearableMutexGuard guard(m_rMutex);
+
         if (m_aNodePtr != NULL)
         {
             OUString oldValue((char*)m_aNodePtr->content, strlen((char*)m_aNodePtr->content), RTL_TEXTENCODING_UTF8);
             xmlNodeAddContent(m_aNodePtr, (const xmlChar*)(OUStringToOString(arg, RTL_TEXTENCODING_UTF8).getStr()));
             OUString newValue((char*)m_aNodePtr->content, strlen((char*)m_aNodePtr->content), RTL_TEXTENCODING_UTF8);
-            _dispatchEvent(oldValue, newValue);
+
+            guard.clear(); // release mutex before calling event handlers
+            dispatchEvent_Impl(oldValue, newValue);
         }
     }
 
@@ -77,6 +83,8 @@ namespace DOM
     void SAL_CALL CCharacterData::deleteData(sal_Int32 offset, sal_Int32 count)
         throw (RuntimeException, DOMException)
     {
+        ::osl::ClearableMutexGuard guard(m_rMutex);
+
         if (m_aNodePtr != NULL)
         {
             // get current data
@@ -95,8 +103,9 @@ namespace DOM
             OUString oldValue((char*)m_aNodePtr->content, strlen((char*)m_aNodePtr->content), RTL_TEXTENCODING_UTF8);
             xmlNodeSetContent(m_aNodePtr, (const xmlChar*)(OUStringToOString(tmp2, RTL_TEXTENCODING_UTF8).getStr()));
             OUString newValue((char*)m_aNodePtr->content, strlen((char*)m_aNodePtr->content), RTL_TEXTENCODING_UTF8);
-            _dispatchEvent(oldValue, newValue);
 
+            guard.clear(); // release mutex before calling event handlers
+            dispatchEvent_Impl(oldValue, newValue);
         }
     }
 
@@ -106,6 +115,8 @@ namespace DOM
     */
     OUString SAL_CALL CCharacterData::getData() throw (RuntimeException)
     {
+        ::osl::MutexGuard const g(m_rMutex);
+
         OUString aData;
         if (m_aNodePtr != NULL)
         {
@@ -122,8 +133,10 @@ namespace DOM
     The number of 16-bit units that are available through data and the
     substringData method below.
     */
-    sal_Int32 CCharacterData::getLength() throw (RuntimeException)
+    sal_Int32 SAL_CALL CCharacterData::getLength() throw (RuntimeException)
     {
+        ::osl::MutexGuard const g(m_rMutex);
+
         sal_Int32 length = 0;
         if (m_aNodePtr != NULL)
         {
@@ -139,6 +152,8 @@ namespace DOM
     void SAL_CALL CCharacterData::insertData(sal_Int32 offset, const OUString& arg)
         throw (RuntimeException, DOMException)
     {
+        ::osl::ClearableMutexGuard guard(m_rMutex);
+
         if (m_aNodePtr != NULL)
         {
             // get current data
@@ -156,8 +171,9 @@ namespace DOM
             OUString oldValue((char*)m_aNodePtr->content, strlen((char*)m_aNodePtr->content), RTL_TEXTENCODING_UTF8);
             xmlNodeSetContent(m_aNodePtr, (const xmlChar*)(OUStringToOString(tmp2, RTL_TEXTENCODING_UTF8).getStr()));
             OUString newValue((char*)m_aNodePtr->content, strlen((char*)m_aNodePtr->content), RTL_TEXTENCODING_UTF8);
-            _dispatchEvent(oldValue, newValue);
 
+            guard.clear(); // release mutex before calling event handlers
+            dispatchEvent_Impl(oldValue, newValue);
         }
     }
 
@@ -169,6 +185,8 @@ namespace DOM
     void SAL_CALL CCharacterData::replaceData(sal_Int32 offset, sal_Int32 count, const OUString& arg)
         throw (RuntimeException, DOMException)
     {
+        ::osl::ClearableMutexGuard guard(m_rMutex);
+
         if (m_aNodePtr != NULL)
         {
             // get current data
@@ -188,7 +206,9 @@ namespace DOM
             OUString oldValue((char*)m_aNodePtr->content, strlen((char*)m_aNodePtr->content), RTL_TEXTENCODING_UTF8);
             xmlNodeSetContent(m_aNodePtr, (const xmlChar*)(OUStringToOString(tmp2, RTL_TEXTENCODING_UTF8).getStr()));
             OUString newValue((char*)m_aNodePtr->content, strlen((char*)m_aNodePtr->content), RTL_TEXTENCODING_UTF8);
-            _dispatchEvent(oldValue, newValue);
+
+            guard.clear(); // release mutex before calling event handlers
+            dispatchEvent_Impl(oldValue, newValue);
         }
     }
 
@@ -198,13 +218,16 @@ namespace DOM
     void SAL_CALL CCharacterData::setData(const OUString& data)
         throw (RuntimeException, DOMException)
     {
+        ::osl::ClearableMutexGuard guard(m_rMutex);
+
         if (m_aNodePtr != NULL)
         {
             OUString oldValue((char*)m_aNodePtr->content, strlen((char*)m_aNodePtr->content), RTL_TEXTENCODING_UTF8);
             xmlNodeSetContent(m_aNodePtr, (const xmlChar*)(OUStringToOString(data, RTL_TEXTENCODING_UTF8).getStr()));
             OUString newValue((char*)m_aNodePtr->content, strlen((char*)m_aNodePtr->content), RTL_TEXTENCODING_UTF8);
-            _dispatchEvent(oldValue, newValue);
 
+            guard.clear(); // release mutex before calling event handlers
+            dispatchEvent_Impl(oldValue, newValue);
         }
     }
 
@@ -214,6 +237,8 @@ namespace DOM
     OUString SAL_CALL CCharacterData::subStringData(sal_Int32 offset, sal_Int32 count)
         throw (RuntimeException, DOMException)
     {
+        ::osl::MutexGuard const g(m_rMutex);
+
         OUString aStr;
         if (m_aNodePtr != NULL)
         {

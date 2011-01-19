@@ -54,7 +54,8 @@ namespace DOM
         xmlNotationPtr m_aNotationPtr;
 
     protected:
-        CNotation(CDocument const& rDocument, xmlNotationPtr const pNotation);
+        CNotation(CDocument const& rDocument, ::osl::Mutex const& rMutex,
+                xmlNotationPtr const pNotation);
 
         /**
         The public identifier of this notation.

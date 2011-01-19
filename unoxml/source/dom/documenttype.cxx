@@ -37,8 +37,9 @@ namespace DOM
 {
 
     CDocumentType::CDocumentType(
-            CDocument const& rDocument, xmlDtdPtr const pDtd)
-        : CDocumentType_Base(rDocument,
+            CDocument const& rDocument, ::osl::Mutex const& rMutex,
+            xmlDtdPtr const pDtd)
+        : CDocumentType_Base(rDocument, rMutex,
             NodeType_DOCUMENT_TYPE_NODE, reinterpret_cast<xmlNodePtr>(pDtd))
         , m_aDtdPtr(pDtd)
     {
@@ -50,6 +51,8 @@ namespace DOM
     */
     Reference< XNamedNodeMap > SAL_CALL CDocumentType::getEntities() throw (RuntimeException)
     {
+        ::osl::MutexGuard const g(m_rMutex);
+
         Reference< XNamedNodeMap > aMap;
         if (m_aDtdPtr != NULL)
         {
@@ -73,6 +76,8 @@ namespace DOM
     */
     OUString SAL_CALL CDocumentType::getName() throw (RuntimeException)
     {
+        ::osl::MutexGuard const g(m_rMutex);
+
         OUString aName;
         if (m_aDtdPtr != NULL)
         {
@@ -86,6 +91,8 @@ namespace DOM
     */
     Reference< XNamedNodeMap > SAL_CALL CDocumentType::getNotations() throw (RuntimeException)
     {
+        ::osl::MutexGuard const g(m_rMutex);
+
         Reference< XNamedNodeMap > aMap;
         if (m_aDtdPtr != NULL)
         {
@@ -99,6 +106,8 @@ namespace DOM
     */
     OUString SAL_CALL CDocumentType::getPublicId() throw (RuntimeException)
     {
+        ::osl::MutexGuard const g(m_rMutex);
+
         OUString aId;
         if (m_aDtdPtr != NULL)
         {
@@ -112,6 +121,8 @@ namespace DOM
     */
     OUString SAL_CALL CDocumentType::getSystemId() throw (RuntimeException)
     {
+        ::osl::MutexGuard const g(m_rMutex);
+
         OUString aId;
         if (m_aDtdPtr != NULL)
         {
@@ -119,10 +130,12 @@ namespace DOM
         }
         return aId;
     }
+
     OUString SAL_CALL CDocumentType::getNodeName()throw (RuntimeException)
     {
         return getName();
     }
+
     OUString SAL_CALL CDocumentType::getNodeValue() throw (RuntimeException)
     {
         return OUString();

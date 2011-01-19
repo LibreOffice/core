@@ -30,35 +30,25 @@
 
 namespace DOM
 {
-    CText::CText(CDocument const& rDocument,
+    CText::CText(CDocument const& rDocument, ::osl::Mutex const& rMutex,
             NodeType const& reNodeType, xmlNodePtr const& rpNode)
-        : CText_Base(rDocument, reNodeType, rpNode)
+        : CText_Base(rDocument, rMutex, reNodeType, rpNode)
     {
     }
 
-    CText::CText(CDocument const& rDocument, xmlNodePtr const pNode)
-        : CText_Base(rDocument, NodeType_TEXT_NODE, pNode)
+    CText::CText(CDocument const& rDocument, ::osl::Mutex const& rMutex,
+            xmlNodePtr const pNode)
+        : CText_Base(rDocument, rMutex, NodeType_TEXT_NODE, pNode)
     {
     }
 
-    void SAL_CALL CText::saxify(
+    void CText::saxify(
             const Reference< XDocumentHandler >& i_xHandler) {
         if (!i_xHandler.is()) throw RuntimeException();
         i_xHandler->characters(getData());
     }
 
-  Reference< XText > SAL_CALL CText::splitText(sal_Int32 /*offset*/)
-             throw (RuntimeException)
-    {
-        return Reference< XText >(this);
-    }
-
-    OUString SAL_CALL CText::getNodeName()throw (RuntimeException)
-    {
-        return OUString::createFromAscii("#text");
-    }
-
-    void SAL_CALL CText::fastSaxify( Context& io_rContext )
+    void CText::fastSaxify( Context& io_rContext )
     {
         if (io_rContext.mxCurrentHandler.is())
         {
@@ -71,4 +61,14 @@ namespace DOM
         }
     }
 
+    OUString SAL_CALL CText::getNodeName() throw (RuntimeException)
+    {
+        return OUString::createFromAscii("#text");
+    }
+
+    Reference< XText > SAL_CALL CText::splitText(sal_Int32 /*offset*/)
+         throw (RuntimeException)
+    {
+        return Reference< XText >(this);
+    }
 }

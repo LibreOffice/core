@@ -31,9 +31,9 @@
 
 namespace DOM
 {
-    CNotation::CNotation(CDocument const& rDocument,
+    CNotation::CNotation(CDocument const& rDocument, ::osl::Mutex const& rMutex,
             xmlNotationPtr const pNotation)
-        : CNotation_Base(rDocument,
+        : CNotation_Base(rDocument, rMutex,
             NodeType_NOTATION_NODE, reinterpret_cast<xmlNodePtr>(pNotation))
         , m_aNotationPtr(pNotation)
     {
@@ -57,6 +57,8 @@ namespace DOM
 
     OUString SAL_CALL CNotation::getNodeName()throw (RuntimeException)
     {
+        ::osl::MutexGuard const g(m_rMutex);
+
        OUString aName;
         if (m_aNodePtr != NULL)
         {
@@ -65,6 +67,7 @@ namespace DOM
         }
         return aName;
     }
+
     OUString SAL_CALL CNotation::getNodeValue() throw (RuntimeException)
     {
         return OUString();

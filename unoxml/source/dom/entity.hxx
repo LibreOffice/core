@@ -57,7 +57,8 @@ namespace DOM
         xmlEntityPtr m_aEntityPtr;
 
     protected:
-        CEntity(CDocument const& rDocument, xmlEntityPtr const pEntity);
+        CEntity(CDocument const& rDocument, ::osl::Mutex const& rMutex,
+                xmlEntityPtr const pEntity);
 
     public:
 

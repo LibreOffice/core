@@ -55,9 +55,11 @@ namespace DOM
     {
 
     protected:
-        CCharacterData(CDocument const& rDocument,
+        CCharacterData(CDocument const& rDocument, ::osl::Mutex const& rMutex,
                 NodeType const& reNodeType, xmlNodePtr const& rpNode);
-        void _dispatchEvent(const OUString& prevValue, const OUString& newValue);
+
+        void dispatchEvent_Impl(
+                OUString const& prevValue, OUString const& newValue);
 
     public:
         /**

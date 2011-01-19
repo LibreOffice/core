@@ -35,13 +35,14 @@
 namespace DOM
 {
     CProcessingInstruction::CProcessingInstruction(
-            CDocument const& rDocument, xmlNodePtr const pNode)
-        : CProcessingInstruction_Base(rDocument,
+            CDocument const& rDocument, ::osl::Mutex const& rMutex,
+            xmlNodePtr const pNode)
+        : CProcessingInstruction_Base(rDocument, rMutex,
             NodeType_PROCESSING_INSTRUCTION_NODE, pNode)
     {
     }
 
-    void SAL_CALL CProcessingInstruction::saxify(
+    void CProcessingInstruction::saxify(
             const Reference< XDocumentHandler >& i_xHandler) {
         if (!i_xHandler.is()) throw RuntimeException();
         Reference< XExtendedDocumentHandler > xExtended(i_xHandler, UNO_QUERY);
@@ -80,6 +81,8 @@ namespace DOM
 
     OUString SAL_CALL CProcessingInstruction::getNodeName()throw (RuntimeException)
     {
+        ::osl::MutexGuard const g(m_rMutex);
+
        OUString aName;
         if (m_aNodePtr != NULL)
         {

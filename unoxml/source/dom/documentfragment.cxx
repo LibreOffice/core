@@ -30,8 +30,9 @@
 namespace DOM
 {
     CDocumentFragment::CDocumentFragment(
-            CDocument const& rDocument, xmlNodePtr const pNode)
-        : CDocumentFragment_Base(rDocument,
+            CDocument const& rDocument, ::osl::Mutex const& rMutex,
+            xmlNodePtr const pNode)
+        : CDocumentFragment_Base(rDocument, rMutex,
                 NodeType_DOCUMENT_FRAGMENT_NODE, pNode)
     {
     }

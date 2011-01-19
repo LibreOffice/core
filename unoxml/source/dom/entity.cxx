@@ -33,8 +33,9 @@
 namespace DOM
 {
 
-    CEntity::CEntity(CDocument const& rDocument, xmlEntityPtr const pEntity)
-        : CEntity_Base(rDocument,
+    CEntity::CEntity(CDocument const& rDocument, ::osl::Mutex const& rMutex,
+            xmlEntityPtr const pEntity)
+        : CEntity_Base(rDocument, rMutex,
             NodeType_ENTITY_NODE, reinterpret_cast<xmlNodePtr>(pEntity))
         , m_aEntityPtr(pEntity)
     {
@@ -54,6 +55,8 @@ namespace DOM
     */
     OUString SAL_CALL CEntity::getPublicId() throw (RuntimeException)
     {
+        ::osl::MutexGuard const g(m_rMutex);
+
         OUString aID;
         if(m_aEntityPtr != NULL)
         {
@@ -67,6 +70,8 @@ namespace DOM
     */
     OUString SAL_CALL CEntity::getSystemId() throw (RuntimeException)
     {
+        ::osl::MutexGuard const g(m_rMutex);
+
         OUString aID;
         if(m_aEntityPtr != NULL)
         {
@@ -76,6 +81,8 @@ namespace DOM
     }
     OUString SAL_CALL CEntity::getNodeName()throw (RuntimeException)
     {
+        ::osl::MutexGuard const g(m_rMutex);
+
        OUString aName;
         if (m_aNodePtr != NULL)
         {

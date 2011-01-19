@@ -46,13 +46,14 @@
 namespace DOM
 {
 
-    CElement::CElement(CDocument const& rDocument, xmlNodePtr const pNode)
-        : CElement_Base(rDocument, NodeType_ELEMENT_NODE, pNode)
+    CElement::CElement(CDocument const& rDocument, ::osl::Mutex const& rMutex,
+            xmlNodePtr const pNode)
+        : CElement_Base(rDocument, rMutex, NodeType_ELEMENT_NODE, pNode)
     {
     }
 
-    void SAL_CALL CElement::saxify(
-            const Reference< XDocumentHandler >& i_xHandler) {
+    void CElement::saxify(const Reference< XDocumentHandler >& i_xHandler)
+    {
         if (!i_xHandler.is()) throw RuntimeException();
         comphelper::AttributeList *pAttrs =
             new comphelper::AttributeList();
@@ -102,7 +103,8 @@ namespace DOM
         i_xHandler->endElement(name);
     }
 
-    void SAL_CALL CElement::fastSaxify( Context& i_rContext ) {
+    void CElement::fastSaxify( Context& i_rContext )
+    {
         if (!i_rContext.mxDocHandler.is()) throw RuntimeException();
         pushContext(i_rContext);
         addNamespaces(i_rContext,m_aNodePtr);
@@ -207,9 +209,11 @@ namespace DOM
         Retrieves an attribute value by name.
         return empty string if attribute is not set
     */
-    OUString CElement::getAttribute(const OUString& name)
+    OUString SAL_CALL CElement::getAttribute(OUString const& name)
         throw (RuntimeException)
     {
+        ::osl::MutexGuard const g(m_rMutex);
+
         OUString aValue;
         // search properties
         if (m_aNodePtr != NULL)
@@ -226,9 +230,11 @@ namespace DOM
     /**
     Retrieves an attribute node by name.
     */
-    Reference< XAttr > CElement::getAttributeNode(const OUString& name)
+    Reference< XAttr > SAL_CALL CElement::getAttributeNode(OUString const& name)
         throw (RuntimeException)
     {
+        ::osl::MutexGuard const g(m_rMutex);
+
         if (0 == m_aNodePtr) {
             return 0;
         }
@@ -249,10 +255,12 @@ namespace DOM
     /**
     Retrieves an Attr node by local name and namespace URI.
     */
-    Reference< XAttr > CElement::getAttributeNodeNS(
+    Reference< XAttr > SAL_CALL CElement::getAttributeNodeNS(
             const OUString& namespaceURI, const OUString& localName)
         throw (RuntimeException)
     {
+        ::osl::MutexGuard const g(m_rMutex);
+
         if (0 == m_aNodePtr) {
             return 0;
         }
@@ -277,9 +285,13 @@ namespace DOM
     Retrieves an attribute value by local name and namespace URI.
     return empty string if attribute is not set
     */
-    OUString CElement::getAttributeNS(const OUString& namespaceURI, const OUString& localName)
+    OUString SAL_CALL
+    CElement::getAttributeNS(
+            OUString const& namespaceURI, OUString const& localName)
         throw (RuntimeException)
     {
+        ::osl::MutexGuard const g(m_rMutex);
+
         if (0 == m_aNodePtr) {
             return ::rtl::OUString();
         }
@@ -309,6 +321,8 @@ namespace DOM
     CElement::getElementsByTagName(OUString const& rLocalName)
         throw (RuntimeException)
     {
+        ::osl::MutexGuard const g(m_rMutex);
+
         Reference< XNodeList > const xList(new CElementList(this, rLocalName));
         return xList;
     }
@@ -323,6 +337,8 @@ namespace DOM
             OUString const& rNamespaceURI, OUString const& rLocalName)
         throw (RuntimeException)
     {
+        ::osl::MutexGuard const g(m_rMutex);
+
         Reference< XNodeList > const xList(
             new CElementList(this, rLocalName, &rNamespaceURI));
         return xList;
@@ -331,9 +347,11 @@ namespace DOM
     /**
     The name of the element.
     */
-    OUString CElement::getTagName()
+    OUString SAL_CALL CElement::getTagName()
         throw (RuntimeException)
     {
+        ::osl::MutexGuard const g(m_rMutex);
+
         OUString aName;
         if (m_aNodePtr != NULL)
         {
@@ -347,9 +365,11 @@ namespace DOM
     Returns true when an attribute with a given name is specified on this
     element or has a default value, false otherwise.
     */
-    sal_Bool CElement::hasAttribute(const OUString& name)
+    sal_Bool SAL_CALL CElement::hasAttribute(OUString const& name)
         throw (RuntimeException)
     {
+        ::osl::MutexGuard const g(m_rMutex);
+
         OString o1 = OUStringToOString(name, RTL_TEXTENCODING_UTF8);
         xmlChar *xName = (xmlChar*)o1.getStr();
         return (m_aNodePtr != NULL && xmlHasProp(m_aNodePtr, xName) != NULL);
@@ -359,9 +379,12 @@ namespace DOM
     Returns true when an attribute with a given local name and namespace
     URI is specified on this element or has a default value, false otherwise.
     */
-    sal_Bool CElement::hasAttributeNS(const OUString& namespaceURI, const OUString& localName)
+    sal_Bool SAL_CALL CElement::hasAttributeNS(
+            OUString const& namespaceURI, OUString const& localName)
         throw (RuntimeException)
     {
+        ::osl::MutexGuard const g(m_rMutex);
+
         OString o1 = OUStringToOString(localName, RTL_TEXTENCODING_UTF8);
         xmlChar *xName = (xmlChar*)o1.getStr();
         OString o2 = OUStringToOString(namespaceURI, RTL_TEXTENCODING_UTF8);
@@ -372,9 +395,11 @@ namespace DOM
     /**
     Removes an attribute by name.
     */
-    void CElement::removeAttribute(const OUString& name)
+    void SAL_CALL CElement::removeAttribute(OUString const& name)
         throw (RuntimeException, DOMException)
     {
+        ::osl::MutexGuard const g(m_rMutex);
+
         xmlChar *xName = (xmlChar*)OUStringToOString(name, RTL_TEXTENCODING_UTF8).getStr();
         if (m_aNodePtr != NULL) {
             xmlUnsetProp(m_aNodePtr, xName);
@@ -384,9 +409,12 @@ namespace DOM
     /**
     Removes an attribute by local name and namespace URI.
     */
-    void CElement::removeAttributeNS(const OUString& namespaceURI, const OUString& localName)
+    void SAL_CALL CElement::removeAttributeNS(
+            OUString const& namespaceURI, OUString const& localName)
         throw (RuntimeException, DOMException)
     {
+        ::osl::MutexGuard const g(m_rMutex);
+
         OString o1 = OUStringToOString(localName, RTL_TEXTENCODING_UTF8);
         xmlChar *xName = (xmlChar*)o1.getStr();
         OString o2 = OUStringToOString(namespaceURI, RTL_TEXTENCODING_UTF8);
@@ -401,9 +429,12 @@ namespace DOM
     /**
     Removes the specified attribute node.
     */
-    Reference< XAttr > CElement::removeAttributeNode(const Reference< XAttr >& oldAttr)
+    Reference< XAttr > SAL_CALL
+    CElement::removeAttributeNode(Reference< XAttr > const& oldAttr)
         throw (RuntimeException, DOMException)
     {
+        ::osl::MutexGuard const g(m_rMutex);
+
         Reference< XAttr > aAttr;
         if(m_aNodePtr != NULL)
         {
@@ -442,19 +473,23 @@ namespace DOM
     /**
     Adds a new attribute node.
     */
-    Reference< XAttr > CElement::_setAttributeNode(const Reference< XAttr >& newAttr, sal_Bool bNS)
+    Reference< XAttr >
+    CElement::setAttributeNode_Impl_Lock(
+            Reference< XAttr > const& newAttr, bool const bNS)
         throw (RuntimeException)
     {
+        // check whether the attrib belongs to this document
+        Reference< XDocument > newDoc(newAttr->getOwnerDocument(), UNO_QUERY);
+        Reference< XDocument > oldDoc(CNode::getOwnerDocument(), UNO_QUERY);
+        if (newDoc != oldDoc) {
+            throw RuntimeException();
+        }
+
+        ::osl::ClearableMutexGuard guard(m_rMutex);
+
         Reference< XAttr > aAttr;
         if (m_aNodePtr != NULL)
         {
-            // check whether the attrib belongs to this document
-            Reference< XDocument > newDoc(newAttr->getOwnerDocument(), UNO_QUERY);
-            Reference< XDocument > oldDoc(CNode::getOwnerDocument(), UNO_QUERY);
-            if (newDoc != oldDoc) {
-                throw RuntimeException();
-            }
-
             // get the implementation
             CNode *const pCNode = CNode::GetImplementation(newAttr);
             if (!pCNode) { throw RuntimeException(); }
@@ -503,6 +538,9 @@ namespace DOM
             event->initMutationEvent(OUString::createFromAscii("DOMAttrModified"),
                 sal_True, sal_False, Reference< XNode >(aAttr, UNO_QUERY),
                 OUString(), aAttr->getValue(), aAttr->getName(), AttrChangeType_ADDITION);
+
+            guard.clear(); // release mutex before calling event handlers
+
             dispatchEvent(Reference< XEvent >(event, UNO_QUERY));
             dispatchSubtreeModified();
         }
@@ -512,7 +550,7 @@ namespace DOM
     Reference< XAttr > CElement::setAttributeNode(const Reference< XAttr >& newAttr)
         throw (RuntimeException, DOMException)
     {
-        return _setAttributeNode(newAttr, sal_False);
+        return setAttributeNode_Impl_Lock(newAttr, false);
     }
 
     /**
@@ -521,15 +559,18 @@ namespace DOM
     Reference< XAttr > CElement::setAttributeNodeNS(const Reference< XAttr >& newAttr)
         throw (RuntimeException, DOMException)
     {
-        return _setAttributeNode(newAttr, sal_True);
+        return setAttributeNode_Impl_Lock(newAttr, true);
     }
 
     /**
     Adds a new attribute.
     */
-    void CElement::setAttribute(const OUString& name, const OUString& value)
+    void SAL_CALL
+    CElement::setAttribute(OUString const& name, OUString const& value)
         throw (RuntimeException, DOMException)
     {
+        ::osl::ClearableMutexGuard guard(m_rMutex);
+
         OString o1 = OUStringToOString(name, RTL_TEXTENCODING_UTF8);
         xmlChar *xName = (xmlChar*)o1.getStr();
         OString o2 = OUStringToOString(value, RTL_TEXTENCODING_UTF8);
@@ -558,6 +599,8 @@ namespace DOM
             event->initMutationEvent(OUString::createFromAscii("DOMAttrModified"),
                 sal_True, sal_False, Reference< XNode >(getAttributeNode(name), UNO_QUERY),
                 oldValue, value, name, aChangeType);
+
+            guard.clear(); // release mutex before calling event handlers
             dispatchEvent(Reference< XEvent >(event, UNO_QUERY));
             dispatchSubtreeModified();
         }
@@ -566,11 +609,14 @@ namespace DOM
     /**
     Adds a new attribute.
     */
-    void CElement::setAttributeNS(
-            const OUString& namespaceURI, const OUString& qualifiedName, const OUString& value)
+    void SAL_CALL
+    CElement::setAttributeNS(OUString const& namespaceURI,
+            OUString const& qualifiedName, OUString const& value)
         throw (RuntimeException, DOMException)
     {
         if (namespaceURI.getLength() == 0) throw RuntimeException();
+
+        ::osl::ClearableMutexGuard guard(m_rMutex);
 
         OString o1, o2, o3, o4, o5;
         xmlChar *xPrefix = NULL;
@@ -628,6 +674,8 @@ namespace DOM
                 event->initMutationEvent(OUString::createFromAscii("DOMAttrModified"), sal_True, sal_False,
                     Reference< XNode >(getAttributeNodeNS(namespaceURI, OUString((char*)xLName, strlen((char*)xLName), RTL_TEXTENCODING_UTF8)), UNO_QUERY),
                     oldValue, value, qualifiedName, aChangeType);
+
+                guard.clear(); // release mutex before calling event handlers
                 dispatchEvent(Reference< XEvent >(event, UNO_QUERY));
                 dispatchSubtreeModified();
 
@@ -642,6 +690,8 @@ namespace DOM
     Reference< XNamedNodeMap > SAL_CALL
     CElement::getAttributes() throw (RuntimeException)
     {
+        ::osl::MutexGuard const g(m_rMutex);
+
         if (!hasAttributes()) { return 0; }
         Reference< XNamedNodeMap > const xMap(new CAttributesMap(this));
         return xMap;
@@ -651,8 +701,11 @@ namespace DOM
     {
         return getLocalName();
     }
+
     OUString SAL_CALL CElement::getLocalName()throw (RuntimeException)
     {
+        ::osl::MutexGuard const g(m_rMutex);
+
         OUString aName;
         if (m_aNodePtr != NULL)
         {
@@ -661,26 +714,29 @@ namespace DOM
         }
         return aName;
     }
+
     OUString SAL_CALL CElement::getNodeValue() throw (RuntimeException)
     {
         return OUString();
     }
 
-    void SAL_CALL CElement::setElementName(const OUString& aName) throw (RuntimeException, DOMException)
+    void SAL_CALL CElement::setElementName(const OUString& aName)
+        throw (RuntimeException, DOMException)
     {
-        if (aName.getLength() > 0 && aName.indexOf(OUString::createFromAscii(":")) < 0)
-        {
-            OString oName = OUStringToOString(aName, RTL_TEXTENCODING_UTF8);
-            xmlChar *xName = (xmlChar*)oName.getStr();
-            // xmlFree((void*)m_aNodePtr->name);
-            m_aNodePtr->name = xmlStrdup(xName);
-        }
-        else
+        if ((aName.getLength() <= 0) ||
+            (0 <= aName.indexOf(OUString::createFromAscii(":"))))
         {
             DOMException e;
             e.Code = DOMExceptionType_INVALID_CHARACTER_ERR;
             throw e;
         }
+
+        ::osl::MutexGuard const g(m_rMutex);
+
+        OString oName = OUStringToOString(aName, RTL_TEXTENCODING_UTF8);
+        xmlChar *xName = (xmlChar*)oName.getStr();
+        // xmlFree((void*)m_aNodePtr->name);
+        m_aNodePtr->name = xmlStrdup(xName);
     }
 
 }
