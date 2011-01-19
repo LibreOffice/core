@@ -88,6 +88,20 @@ interface XGridColumn
     */
     [attribute, readonly] long Index;
 
+    /** denotes the index of the data column which should be used to fetch this grid column's data
+
+        <p>A grid control has a column model and a data model, both containing a possibly different number of columns.
+        The <code>DataColumnIndex</code> attribute defines the index of the column within the data model, which should
+        be used to retrieve actual data.</p>
+
+        <p>Using this, you can do runtime changes to the column model, i.e. insertion and removal of columns, without
+        necessarily needing to adjust the data model, too.</p>
+
+        <p>If <code>DataColumnIndex</code> is negative, the it will be ignored, then the column's index within its
+        column model, as determined by the <member>Index</member> attribute, will be used.</p>
+    */
+    [attribute] long DataColumnIndex;
+
     /** Adds a listener for the <type>GridColumnEvent</type> posted after the grid changes.
         @param Listener
             the listener to add.
