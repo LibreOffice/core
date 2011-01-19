@@ -186,24 +186,25 @@ namespace DOM { namespace events {
         // to target. after that, any target listeners have to be called
         // then bubbeling phase listeners are called in target to root
         // order
-        NodeVector::const_iterator inode;
-
         // start at the root
-        inode = captureVector.end();
-        inode--;
-        if (inode != captureVector.end())
+        NodeVector::const_reverse_iterator rinode =
+            const_cast<const NodeVector&>(captureVector).rbegin();
+        if (rinode != const_cast<const NodeVector&>(captureVector).rend())
         {
             // capturing phase:
             pEvent->m_phase = PhaseType_CAPTURING_PHASE;
-            while (inode != captureVector.begin())
+            while (rinode !=
+                    const_cast<const NodeVector&>(captureVector).rend())
             {
                 //pEvent->m_currentTarget = *inode;
                 pEvent->m_currentTarget = Reference< XEventTarget >(
-                        DOM::CNode::getCNode(*inode).get());
-                callListeners(*inode, aType, xEvent, sal_True);
+                        DOM::CNode::getCNode(*rinode).get());
+                callListeners(*rinode, aType, xEvent, sal_True);
                 if  (pEvent->m_canceled) return sal_True;
-                inode--;
+                rinode++;
             }
+
+            NodeVector::const_iterator inode = captureVector.begin();
 
             // target phase
             pEvent->m_phase = PhaseType_AT_TARGET;
