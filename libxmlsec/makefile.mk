@@ -95,7 +95,7 @@ xmlsec_CC+=-shared-libgcc
 .ENDIF
 xmlsec_LIBS=
 .IF "$(MINGW_SHARED_GXXLIB)"=="YES"
-xmlsec_LIBS+=-lstdc++_s
+xmlsec_LIBS+=$(MINGW_SHARED_LIBSTDCPP)
 .ENDIF
 CONFIGURE_DIR=
 CONFIGURE_ACTION=.$/configure
