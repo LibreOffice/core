@@ -34,6 +34,14 @@ $(eval $(call gb_JunitTest_set_defs,framework_unoapi,\
     -Dorg.openoffice.test.arg.tdoc=$(SRCDIR)/framework/qa/unoapi/testdocuments \
 ))
 
+$(eval $(call gb_JunitTest_add_jars,framework_unoapi,\
+    $(OUTDIR)/bin/OOoRunner.jar \
+    $(OUTDIR)/bin/ridl.jar \
+    $(OUTDIR)/bin/test.jar \
+    $(OUTDIR)/bin/unoil.jar \
+    $(OUTDIR)/bin/jurt.jar \
+))
+
 $(eval $(call gb_JunitTest_add_sourcefiles,framework_unoapi,\
     framework/qa/unoapi/Test \
 ))

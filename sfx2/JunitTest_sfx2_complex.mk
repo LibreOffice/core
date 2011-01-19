@@ -32,6 +32,14 @@ $(eval $(call gb_JunitTest_set_defs,sfx2_complex,\
     -Dorg.openoffice.test.arg.tdoc=$(SRCDIR)/sfx2/qa/complex/framework/testdocuments \
 ))
 
+$(eval $(call gb_JunitTest_add_jars,sfx2_complex,\
+    $(OUTDIR)/bin/OOoRunner.jar \
+    $(OUTDIR)/bin/ridl.jar \
+    $(OUTDIR)/bin/test.jar \
+    $(OUTDIR)/bin/unoil.jar \
+    $(OUTDIR)/bin/jurt.jar \
+))
+
 $(eval $(call gb_JunitTest_add_sourcefiles,sfx2_complex,\
     sfx2/qa/complex/framework/CheckGlobalEventBroadcaster_writer1 \
     sfx2/qa/complex/framework/DocumentMetadataAccessTest \
