@@ -1,4 +1,4 @@
-ux	unoxml	:	offuh cppuhelper LIBXML2:libxml2 LIBXSLT:libxslt REDLAND:redland tools NULL
+ux	unoxml	:	offuh cppuhelper LIBXML2:libxml2 LIBXSLT:libxslt REDLAND:redland sax comphelper ucbhelper NULL
 ux	unoxml\source\dom			nmake	-	all	ux_dom      NULL
 ux	unoxml\source\xpath			nmake	-	all	ux_xpath    ux_dom NULL
 ux	unoxml\source\events		nmake	-	all	ux_events   ux_dom NULL
