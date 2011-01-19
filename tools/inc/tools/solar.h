@@ -307,18 +307,21 @@ template<typename T> inline T Abs(T a) { return (a>=0?a:-a); }
 #define SYSTEM_OS2GCCI      34
 #define SYSTEM_UNXBSDX      35
 #define SYSTEM_UNXOBSD      36
-#define SYSTEM_WNTGCCI      99
+#define SYSTEM_WNTGCCI      37
+#define SYSTEM_WNTMSCX      38
+#define SYSTEM_WNTGCCX      39
 
-#if defined WNT
-#if defined(__MINGW32__)
-  #define __DLLEXTENSION    "gi"
-#else
+#if defined WNT && defined __MINGW32__ && defined INTEL
+  #define __DLLEXTENSION "gi"
+#elif defined WNT && defined __MINGW32__ && defined X86_64
+  #define __DLLEXTENSION "gx"
+#elif defined WNT && defined _MSC_VER && defined INTEL
   #define __DLLEXTENSION "mi"
-#endif
+#elif defined WNT && defined _MSC_VER && defined X86_64
+  #define __DLLEXTENSION "mx"
 #elif defined OS2
   #define __DLLEXTENSION "go"
-#elif defined UNX
-#ifdef AIX
+#elif defined AIX
   #define __DLLEXTENSION "ap.so"
 #elif defined HPUX
   #define __DLLEXTENSION "hr.sl"
@@ -366,8 +369,6 @@ template<typename T> inline T Abs(T a) { return (a>=0?a:-a); }
   #define __DLLEXTENSION "lh.so"
 #elif defined LINUX && defined AXP
   #define __DLLEXTENSION "ll.so"
-#elif defined LINUX
-  #error unknown plattform
 #elif defined FREEBSD && defined X86
   #define __DLLEXTENSION "fi.so"
 #elif defined FREEBSD && defined X86_64
@@ -379,8 +380,7 @@ template<typename T> inline T Abs(T a) { return (a>=0?a:-a); }
 #elif defined OPENBSD
   #define __DLLEXTENSION "ob.so"
 #else
-  #define __DLLEXTENSION ".so"
-#endif
+  #error unknown plattform
 #endif
 
 // -----------------------------------------------------------------------
