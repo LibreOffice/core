@@ -31,10 +31,13 @@ SOLAR_JAVA*=TRUE
 FULL_DESK=TRUE
 JAVAFLAGSDEBUG=-g
 
-# SOLAR JAva Unterstuetzung nur fuer wntmsci
-
+.IF "$(CL_X64)" == ""
 ASM=ml
 AFLAGS=/c /Cp /coff /safeseh
+.ELSE
+ASM=ml64
+AFLAGS=/c /Cp
+.ENDIF
 
 # architecture dependent flags for the C and C++ compiler that can be changed by
 # exporting the variable ARCH_FLAGS="..." in the shell, which is used to start build
