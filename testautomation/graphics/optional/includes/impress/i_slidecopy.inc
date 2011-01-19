@@ -51,6 +51,7 @@ testcase tiSlideCopyNewPresentation
      sleep 1
      try
         Verbinder.TearOff
+        printlog "Tearing off Connector bar.."
     catch
         warnlog "bug for GH from FHA; .tearoff doesnt tell success"
     endcatch
@@ -93,19 +94,21 @@ testcase tiSlideCopyNewPresentation
     sleep 2
     try
         StarShapes.TearOff
+        printlog "Tearing off StarShapes Bar..."
     catch
         warnlog( "<StarShapes.TearOff> failed" )
         goto endsub
     endcatch
 
     kontext "StarShapes"
+    sleep 2
     if ( StarShapes.exists( 2 ) ) then
         StarShapesDoorplate.click
     else
         warnlog( "<StarShapesDoorplate> could not be clicked" )
     endif
 
-    sleep (3)
+    sleep (5)
     gMouseDown (40,40)
     gMouseMove (40,40,60,60)
     gMouseUp (60,60)
