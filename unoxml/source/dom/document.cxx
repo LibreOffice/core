@@ -617,7 +617,7 @@ namespace DOM
         }
         Reference< XDocumentType > const xRet(
             static_cast< XNode* >(GetCNode(cur).get()),
-            UNO_QUERY_THROW);
+            UNO_QUERY);
         return xRet;
     }
 
@@ -629,15 +629,16 @@ namespace DOM
         ::osl::MutexGuard const g(m_Mutex);
 
         xmlNodePtr const pNode = lcl_getDocumentRootPtr(m_aDocPtr);
+        if (!pNode) { return 0; }
         Reference< XElement > const xRet(
             static_cast< XNode* >(GetCNode(pNode).get()),
-            UNO_QUERY_THROW);
+            UNO_QUERY);
         return xRet;
     }
 
-    static xmlNodePtr _search_element_by_id(const xmlNodePtr cur, const xmlChar* id)
+    static xmlNodePtr
+    lcl_search_element_by_id(const xmlNodePtr cur, const xmlChar* id)
     {
-
         if (cur == NULL)
             return NULL;
         // look in current node
@@ -654,15 +655,16 @@ namespace DOM
             }
         }
         // look in children
-        xmlNodePtr result = _search_element_by_id(cur->children, id);
+        xmlNodePtr result = lcl_search_element_by_id(cur->children, id);
         if (result != NULL)
             return result;
-        result = _search_element_by_id(cur->next, id);
+        result = lcl_search_element_by_id(cur->next, id);
             return result;
     }
 
     // Returns the Element whose ID is given by elementId.
-    Reference< XElement > SAL_CALL CDocument::getElementById(const OUString& elementId)
+    Reference< XElement > SAL_CALL
+    CDocument::getElementById(const OUString& elementId)
         throw (RuntimeException)
     {
         ::osl::MutexGuard const g(m_Mutex);
@@ -671,10 +673,11 @@ namespace DOM
         OString o1 = OUStringToOString(elementId, RTL_TEXTENCODING_UTF8);
         xmlChar *xId = (xmlChar*)o1.getStr();
         xmlNodePtr const pStart = lcl_getDocumentRootPtr(m_aDocPtr);
-        xmlNodePtr const pNode = _search_element_by_id(pStart, xId);
+        if (!pStart) { return 0; }
+        xmlNodePtr const pNode = lcl_search_element_by_id(pStart, xId);
         Reference< XElement > const xRet(
             static_cast< XNode* >(GetCNode(pNode).get()),
-            UNO_QUERY_THROW);
+            UNO_QUERY);
         return xRet;
     }
 
@@ -779,7 +782,6 @@ namespace DOM
             Reference< XElement > xNewElement;
             if (aNsUri.getLength() > 0)
             {
-
                 if (aNsPrefix.getLength() > 0) {
                     aQName = aNsPrefix + OUString::createFromAscii(":")
                                 + aQName;
