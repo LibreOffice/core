@@ -459,8 +459,10 @@ void TestToolObj::LoadIniFile()             // Laden der IniEinstellungen, die d
 
     String aGP;
     ByteString abGP;
-#ifdef WNT
-    abGP.Append( "501" );  // WinXP
+#if defined WNT && defined INTEL
+    abGP.Append( "501" );  // Windows on x86
+#elif defined WNT && defined X86_64
+    abGP.Append( "502" );  // Windows on x64
 #elif defined SOLARIS && defined SPARC
     abGP.Append( "01" );  // Solaris SPARC
 #elif defined SCO
