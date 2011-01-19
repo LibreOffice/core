@@ -179,6 +179,8 @@ void ImplDeInitSVData()
         delete pSVData->maCtrlData.mpFieldUnitStrings, pSVData->maCtrlData.mpFieldUnitStrings = NULL;
     if( pSVData->maCtrlData.mpCleanUnitStrings )
         delete pSVData->maCtrlData.mpCleanUnitStrings, pSVData->maCtrlData.mpCleanUnitStrings = NULL;
+    if( pSVData->mpPaperNames )
+        delete pSVData->mpPaperNames, pSVData->mpPaperNames = NULL;
 }
 
 // -----------------------------------------------------------------------

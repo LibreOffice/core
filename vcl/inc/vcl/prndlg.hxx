@@ -73,7 +73,9 @@ namespace vcl
             virtual void Resize();
             virtual void DataChanged( const DataChangedEvent& );
 
-            void setPreview( const GDIMetaFile&, const Size&, const rtl::OUString&,
+            void setPreview( const GDIMetaFile&, const Size& i_rPaperSize,
+                             const rtl::OUString& i_rPaperName,
+                             const rtl::OUString& i_rNoPageString,
                              sal_Int32 i_nDPIX, sal_Int32 i_nDPIY,
                              bool i_bGreyscale
                             );

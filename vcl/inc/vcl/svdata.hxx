@@ -43,6 +43,8 @@
 #include "com/sun/star/uno/Reference.hxx"
 #include "unotools/options.hxx"
 
+#include <hash_map>
+
 namespace com {
 namespace sun {
 namespace star {
@@ -365,14 +367,15 @@ struct ImplSVData
     com::sun::star::uno::Reference< com::sun::star::frame::XSessionManagerClient > xSMClient;
     ::vcl::SettingsConfigItem*          mpSettingsConfigItem;
     std::list< vcl::DeleteOnDeinitBase* >*   mpDeinitDeleteList;
+    std::hash_map< int, rtl::OUString >*     mpPaperNames;
 };
 
 void        ImplInitSVData();
 void        ImplDeInitSVData();
 void        ImplDestroySVData();
 Window*     ImplGetDefaultWindow();
-VCL_DLLPUBLIC ResMgr*     ImplGetResMgr();
-VCL_DLLPUBLIC ResId VclResId( sal_Int32 nId ); // throws std::bad_alloc if no res mgr
+VCL_PLUGIN_PUBLIC ResMgr*     ImplGetResMgr();
+VCL_PLUGIN_PUBLIC ResId VclResId( sal_Int32 nId ); // throws std::bad_alloc if no res mgr
 DockingManager*     ImplGetDockingManager();
 void        ImplWindowAutoMnemonic( Window* pWindow );
 

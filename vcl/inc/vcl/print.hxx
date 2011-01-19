@@ -340,6 +340,9 @@ public:
     BOOL                        SetPaperSizeUser( const Size& rSize );
     BOOL                        SetPaperSizeUser( const Size& rSize, bool bMatchNearest );
     Paper                   GetPaper() const;
+    static rtl::OUString        GetPaperName( Paper ePaper );
+    // return a UI string for the current paper; i_bPaperUser == false means an empty string for PAPER_USER
+    rtl::OUString               GetPaperName( bool i_bPaperUser = true ) const;
 
     // returns number of available paper formats
     int                         GetPaperInfoCount() const;

@@ -310,6 +310,7 @@ void PrintDialog::PrintPreviewWindow::Command( const CommandEvent& rEvt )
 
 void PrintDialog::PrintPreviewWindow::setPreview( const GDIMetaFile& i_rNewPreview,
                                                   const Size& i_rOrigSize,
+                                                  const rtl::OUString& i_rPaperName,
                                                   const rtl::OUString& i_rReplacement,
                                                   sal_Int32 i_nDPIX,
                                                   sal_Int32 i_nDPIY,
@@ -344,6 +345,12 @@ void PrintDialog::PrintPreviewWindow::setPreview( const GDIMetaFile& i_rNewPrevi
     String aNumText( rLocWrap.getNum( aLogicPaperSize.Width(), nDigits ) );
     aBuf.append( aNumText );
     aBuf.appendAscii( eUnit == MAP_MM ? "mm" : "in" );
+    if( i_rPaperName.getLength() )
+    {
+        aBuf.appendAscii( " (" );
+        aBuf.append( i_rPaperName );
+        aBuf.append( sal_Unicode(')') );
+    }
     maHorzDim.SetText( aBuf.makeStringAndClear() );
 
     aNumText = rLocWrap.getNum( aLogicPaperSize.Height(), nDigits );
@@ -1891,7 +1898,9 @@ void PrintDialog::preparePreview( bool i_bNewPage, bool i_bMayUseCache )
         }
 
         Size aCurPageSize = aPrt->PixelToLogic( aPrt->GetPaperSizePixel(), MapMode( MAP_100TH_MM ) );
-        maPreviewWindow.setPreview( aMtf, aCurPageSize, nPages > 0 ? rtl::OUString() : maNoPageStr,
+        maPreviewWindow.setPreview( aMtf, aCurPageSize,
+                                    aPrt->GetPaperName( false ),
+                                    nPages > 0 ? rtl::OUString() : maNoPageStr,
                                     aPrt->ImplGetDPIX(), aPrt->ImplGetDPIY(),
                                     aPrt->GetPrinterOptions().IsConvertToGreyscales()
                                    );

@@ -58,6 +58,8 @@
 #define SV_DISCLOSURE_PLUS_HC               1062
 #define SV_DISCLOSURE_MINUS_HC              1063
 
+#define RID_STR_PAPERNAMES                  1070
+
 #define SV_RESID_MENU_EDIT                  2000
 #define SV_MENU_EDIT_UNDO                   1
 #define SV_MENU_EDIT_CUT                    2
