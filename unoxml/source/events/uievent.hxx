@@ -44,7 +44,10 @@ using namespace com::sun::star::xml::dom::views;
 
 namespace DOM { namespace events {
 
-class CUIEvent : public cppu::ImplInheritanceHelper1< CEvent, XUIEvent >
+typedef ::cppu::ImplInheritanceHelper1< CEvent, XUIEvent > CUIEvent_Base;
+
+class CUIEvent
+    : public CUIEvent_Base
 {
     friend class CEventDispatcher;
 protected:
@@ -52,6 +55,8 @@ protected:
     Reference< XAbstractView > m_view;
 
 public:
+    explicit CUIEvent();
+
     virtual Reference< XAbstractView > SAL_CALL getView() throw(RuntimeException);
     virtual sal_Int32 SAL_CALL getDetail() throw(RuntimeException);
     virtual void SAL_CALL initUIEvent(const OUString& typeArg,

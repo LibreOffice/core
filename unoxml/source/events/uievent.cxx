@@ -25,18 +25,26 @@
  *
  ************************************************************************/
 
-#include "uievent.hxx"
+#include <uievent.hxx>
 
 namespace DOM { namespace events
 {
-
-    Reference< XAbstractView > SAL_CALL CUIEvent::getView() throw(RuntimeException)
+    CUIEvent::CUIEvent()
+        : CUIEvent_Base()
+        , m_detail(0)
     {
+    }
+
+    Reference< XAbstractView > SAL_CALL
+    CUIEvent::getView() throw(RuntimeException)
+    {
+        ::osl::MutexGuard const g(m_Mutex);
         return m_view;
     }
 
     sal_Int32 SAL_CALL CUIEvent::getDetail() throw(RuntimeException)
     {
+        ::osl::MutexGuard const g(m_Mutex);
         return m_detail;
     }
 
@@ -46,7 +54,9 @@ namespace DOM { namespace events
                      const Reference< XAbstractView >& viewArg,
                      sal_Int32 detailArg) throw(RuntimeException)
     {
-        initEvent(typeArg, canBubbleArg, cancelableArg);
+        ::osl::MutexGuard const g(m_Mutex);
+
+        CEvent::initEvent(typeArg, canBubbleArg, cancelableArg);
         m_view = viewArg;
         m_detail = detailArg;
     }

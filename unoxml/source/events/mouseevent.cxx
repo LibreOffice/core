@@ -25,49 +25,72 @@
  *
  ************************************************************************/
 
-#include "mouseevent.hxx"
+#include <mouseevent.hxx>
 
 namespace DOM { namespace events
 {
+    CMouseEvent::CMouseEvent()
+        : CMouseEvent_Base()
+        , m_screenX(0)
+        , m_screenY(0)
+        , m_clientX(0)
+        , m_clientY(0)
+        , m_ctrlKey(sal_False)
+        , m_shiftKey(sal_False)
+        , m_altKey(sal_False)
+        , m_metaKey(sal_False)
+        , m_button(0)
+    {
+    }
 
     sal_Int32 SAL_CALL CMouseEvent::getScreenX() throw (RuntimeException)
     {
+        ::osl::MutexGuard const g(m_Mutex);
         return m_screenX;
     }
     sal_Int32 SAL_CALL CMouseEvent::getScreenY() throw (RuntimeException)
     {
+        ::osl::MutexGuard const g(m_Mutex);
         return m_screenY;
     }
     sal_Int32 SAL_CALL CMouseEvent::getClientX() throw (RuntimeException)
     {
+        ::osl::MutexGuard const g(m_Mutex);
         return m_clientX;
     }
     sal_Int32 SAL_CALL CMouseEvent::getClientY() throw (RuntimeException)
     {
+        ::osl::MutexGuard const g(m_Mutex);
         return m_clientY;
     }
     sal_Bool SAL_CALL CMouseEvent::getCtrlKey() throw (RuntimeException)
     {
+        ::osl::MutexGuard const g(m_Mutex);
         return m_ctrlKey;
     }
     sal_Bool SAL_CALL CMouseEvent::getShiftKey() throw (RuntimeException)
     {
+        ::osl::MutexGuard const g(m_Mutex);
         return m_shiftKey;
     }
     sal_Bool SAL_CALL CMouseEvent::getAltKey() throw (RuntimeException)
     {
+        ::osl::MutexGuard const g(m_Mutex);
         return m_altKey;
     }
     sal_Bool SAL_CALL CMouseEvent::getMetaKey() throw (RuntimeException)
     {
+        ::osl::MutexGuard const g(m_Mutex);
         return m_metaKey;
     }
     sal_Int16 SAL_CALL CMouseEvent::getButton() throw (RuntimeException)
     {
+        ::osl::MutexGuard const g(m_Mutex);
         return m_button;
     }
     Reference< XEventTarget > SAL_CALL CMouseEvent::getRelatedTarget()  throw(RuntimeException)
     {
+        ::osl::MutexGuard const g(m_Mutex);
         return m_relatedTarget;
     }
 
@@ -89,6 +112,8 @@ namespace DOM { namespace events
                         const Reference< XEventTarget >& /*relatedTargetArg*/)
         throw(RuntimeException)
     {
+        ::osl::MutexGuard const g(m_Mutex);
+
         CUIEvent::initUIEvent(typeArg, canBubbleArg, cancelableArg, viewArg, detailArg);
         m_screenX = screenXArg;
         m_screenY = screenYArg;

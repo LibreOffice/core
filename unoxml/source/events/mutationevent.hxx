@@ -45,7 +45,11 @@ using ::rtl::OUString;
 
 namespace DOM { namespace events {
 
-class CMutationEvent : public cppu::ImplInheritanceHelper1< CEvent, XMutationEvent >
+typedef ::cppu::ImplInheritanceHelper1< CEvent, XMutationEvent >
+    CMutationEvent_Base;
+
+class CMutationEvent
+    : public CMutationEvent_Base
 {
     friend class CEventDispatcher;
 protected:
@@ -56,6 +60,7 @@ protected:
     AttrChangeType m_attrChangeType;
 
 public:
+    explicit CMutationEvent();
 
     virtual ~CMutationEvent();
 

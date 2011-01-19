@@ -40,7 +40,11 @@ using ::rtl::OUString;
 
 namespace DOM { namespace events {
 
-class CMouseEvent : public cppu::ImplInheritanceHelper1< CUIEvent, XMouseEvent >
+typedef ::cppu::ImplInheritanceHelper1< CUIEvent, XMouseEvent >
+    CMouseEvent_Base;
+
+class CMouseEvent
+    : public CMouseEvent_Base
 {
     friend class CEventDispatcher;
 protected:
@@ -56,6 +60,7 @@ protected:
     Reference< XEventTarget > m_relatedTarget;
 
 public:
+    explicit CMouseEvent();
 
     virtual sal_Int32 SAL_CALL getScreenX() throw (RuntimeException);
     virtual sal_Int32 SAL_CALL getScreenY() throw (RuntimeException);

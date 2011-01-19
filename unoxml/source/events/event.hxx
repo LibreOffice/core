@@ -31,6 +31,7 @@
 #include <sal/types.h>
 
 #include <com/sun/star/uno/Reference.h>
+#include <com/sun/star/xml/dom/events/XEvent.hpp>
 #include <com/sun/star/xml/dom/events/XEventTarget.hpp>
 #include <com/sun/star/util/Time.hpp>
 
@@ -56,16 +57,12 @@ friend class CText;
 friend class CCharacterData;
 friend class CAttr;
 
-
-private:
-    sal_Bool m_canceled;
-
 protected:
+    ::osl::Mutex m_Mutex;
+    sal_Bool m_canceled;
     OUString m_eventType;
     Reference< XEventTarget > m_target;
     Reference< XEventTarget > m_currentTarget;
-    //xmlNodePtr m_target;
-    //xmlNodePtr m_currentTarget;
     PhaseType m_phase;
     sal_Bool m_bubbles;
     sal_Bool m_cancelable;
@@ -73,7 +70,7 @@ protected:
 
 public:
 
-    CEvent() : m_canceled(sal_False){}
+    explicit CEvent();
 
     virtual ~CEvent();
     virtual OUString SAL_CALL getType() throw (RuntimeException);

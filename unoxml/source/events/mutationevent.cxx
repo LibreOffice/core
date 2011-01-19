@@ -25,36 +25,47 @@
  *
  ************************************************************************/
 
-#include "mutationevent.hxx"
+#include <mutationevent.hxx>
 
 namespace DOM { namespace events
 {
+    CMutationEvent::CMutationEvent()
+        : CMutationEvent_Base()
+        , m_attrChangeType(AttrChangeType_MODIFICATION)
+    {
+    }
+
     CMutationEvent::~CMutationEvent()
     {
     }
 
     Reference< XNode > SAL_CALL CMutationEvent::getRelatedNode() throw (RuntimeException)
     {
+        ::osl::MutexGuard const g(m_Mutex);
         return m_relatedNode;
     }
 
     OUString SAL_CALL CMutationEvent::getPrevValue() throw (RuntimeException)
     {
+        ::osl::MutexGuard const g(m_Mutex);
         return m_prevValue;
     }
 
     OUString SAL_CALL CMutationEvent::getNewValue() throw (RuntimeException)
     {
+        ::osl::MutexGuard const g(m_Mutex);
         return m_newValue;
     }
 
     OUString SAL_CALL CMutationEvent::getAttrName() throw (RuntimeException)
     {
+        ::osl::MutexGuard const g(m_Mutex);
         return m_attrName;
     }
 
     AttrChangeType SAL_CALL CMutationEvent::getAttrChange() throw (RuntimeException)
     {
+        ::osl::MutexGuard const g(m_Mutex);
         return m_attrChangeType;
     }
 
@@ -64,7 +75,9 @@ namespace DOM { namespace events
         const OUString& newValueArg, const OUString& attrNameArg,
         AttrChangeType attrChangeArg) throw (RuntimeException)
     {
-        initEvent(typeArg, canBubbleArg, cancelableArg);
+        ::osl::MutexGuard const g(m_Mutex);
+
+        CEvent::initEvent(typeArg, canBubbleArg, cancelableArg);
         m_relatedNode = relatedNodeArg;
         m_prevValue = prevValueArg;
         m_newValue = newValueArg;

@@ -25,10 +25,18 @@
  *
  ************************************************************************/
 
-#include "event.hxx"
+#include <event.hxx>
 
 namespace DOM { namespace events
 {
+
+    CEvent::CEvent()
+        : m_canceled(sal_False)
+        , m_phase(PhaseType_CAPTURING_PHASE)
+        , m_bubbles(sal_False)
+        , m_cancelable(sal_True)
+    {
+    }
 
     CEvent::~CEvent()
     {
@@ -36,51 +44,65 @@ namespace DOM { namespace events
 
     OUString SAL_CALL CEvent::getType() throw (RuntimeException)
     {
+        ::osl::MutexGuard const g(m_Mutex);
         return m_eventType;
     }
 
-    Reference< XEventTarget > SAL_CALL CEvent::getTarget() throw (RuntimeException)
+    Reference< XEventTarget > SAL_CALL
+    CEvent::getTarget() throw (RuntimeException)
     {
+        ::osl::MutexGuard const g(m_Mutex);
         return m_target;
     }
 
-    Reference< XEventTarget > SAL_CALL CEvent::getCurrentTarget() throw (RuntimeException)
+    Reference< XEventTarget > SAL_CALL
+    CEvent::getCurrentTarget() throw (RuntimeException)
     {
+        ::osl::MutexGuard const g(m_Mutex);
         return m_currentTarget;
     }
 
     PhaseType SAL_CALL CEvent::getEventPhase() throw (RuntimeException)
     {
+        ::osl::MutexGuard const g(m_Mutex);
         return m_phase;
     }
 
     sal_Bool SAL_CALL CEvent::getBubbles() throw (RuntimeException)
     {
+        ::osl::MutexGuard const g(m_Mutex);
         return m_bubbles;
     }
 
     sal_Bool SAL_CALL CEvent::getCancelable() throw (RuntimeException)
     {
+        ::osl::MutexGuard const g(m_Mutex);
         return m_cancelable;
     }
 
-    com::sun::star::util::Time SAL_CALL CEvent::getTimeStamp() throw (RuntimeException)
+    com::sun::star::util::Time SAL_CALL
+    CEvent::getTimeStamp() throw (RuntimeException)
     {
+        ::osl::MutexGuard const g(m_Mutex);
         return m_time;
     }
 
     void SAL_CALL CEvent::stopPropagation() throw (RuntimeException)
     {
-        if (m_cancelable) m_canceled = sal_True;
+        ::osl::MutexGuard const g(m_Mutex);
+        if (m_cancelable) { m_canceled = sal_True; }
     }
 
     void SAL_CALL CEvent::preventDefault() throw (RuntimeException)
     {
     }
 
-    void SAL_CALL CEvent::initEvent(const OUString& eventTypeArg, sal_Bool canBubbleArg,
+    void SAL_CALL
+    CEvent::initEvent(OUString const& eventTypeArg, sal_Bool canBubbleArg,
         sal_Bool cancelableArg) throw (RuntimeException)
     {
+        ::osl::MutexGuard const g(m_Mutex);
+
         m_eventType = eventTypeArg;
         m_bubbles = canBubbleArg;
         m_cancelable = cancelableArg;
