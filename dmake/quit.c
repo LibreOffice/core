@@ -37,6 +37,8 @@ Quit( sig )/*
 ======== Error or quit */
 int sig;
 {
+   int ret = ERROR_ABORT_VALUE;
+
    if( sig == SIGINT )
       fprintf(stderr, "Caught SIGINT. Trying to quit ...\n");
    else
@@ -48,7 +50,7 @@ int sig;
 #endif
    if( sig == 0 )
       /* Don't be verbose during regular program termination. */
-      ;
+      ret = ERROR_EXIT_VALUE;
    else
       fprintf(stderr, "Caught signal %d. Trying to quit ...\n", sig);
 
@@ -78,7 +80,7 @@ int sig;
    if( _quitting == 0 ) _handle_quit( ".ERROR" );
 
    Set_dir( Makedir );      /* No Error message if we can't do it */
-   Epilog( ERROR_EXIT_VALUE );
+   Epilog( ret );
 }
 
 
