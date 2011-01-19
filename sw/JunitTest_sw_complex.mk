@@ -41,6 +41,14 @@ $(eval $(call gb_JunitTest_add_sourcefiles,sw_complex,\
     sw/qa/complex/accessibility/AccessibleRelationSet \
 ))
 
+$(eval $(call gb_JunitTest_add_jars,sw_complex,\
+    $(OUTDIR)/bin/OOoRunner.jar \
+    $(OUTDIR)/bin/ridl.jar \
+    $(OUTDIR)/bin/test.jar \
+    $(OUTDIR)/bin/unoil.jar \
+    $(OUTDIR)/bin/jurt.jar \
+))
+
 $(eval $(call gb_JunitTest_add_classes,sw_complex,\
     complex.accessibility.AccessibleRelationSet \
     complex.checkColor.CheckChangeColor \
