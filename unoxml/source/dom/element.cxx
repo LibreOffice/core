@@ -380,7 +380,8 @@ namespace DOM
         Reference< XAttr > aAttr;
         if(m_aNodePtr != NULL)
         {
-        xmlAttrPtr pAttr = (xmlAttrPtr) CNode::getNodePtr(oldAttr.get());
+            xmlNodePtr const pNode = CNode::getNodePtr(oldAttr.get());
+            xmlAttrPtr const pAttr = (xmlAttrPtr) pNode;
 
             if (pAttr->parent != m_aNodePtr)
             {
@@ -402,7 +403,8 @@ namespace DOM
                 aAttr = oldAttr->getOwnerDocument()->createAttribute(oldAttr->getName());
             aAttr->setValue(oldAttr->getValue());
             xmlRemoveProp(pAttr);
-
+            CNode *const pCNode( CNode::get(pNode) );
+            pCNode->m_aNodePtr = NULL; // freed by xmlRemoveProp
         }
         return aAttr;
     }

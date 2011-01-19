@@ -831,6 +831,7 @@ namespace DOM
         {
         xmlAttrPtr pAttr = (xmlAttrPtr) old;
             xmlRemoveProp( pAttr );
+            pOld->m_aNodePtr = NULL; // freed by xmlRemoveProp
             xReturn.clear();
         }
         else
@@ -900,6 +901,8 @@ namespace DOM
 
             xmlAttrPtr pAttr = (xmlAttrPtr)pOld;
             xmlRemoveProp( pAttr );
+            CNode *const pOldNode( CNode::get(pOld) );
+            pOldNode->m_aNodePtr = NULL; // freed by xmlRemoveProp
             appendChild( newChild );
         }
         else
