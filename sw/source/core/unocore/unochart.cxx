@@ -605,7 +605,7 @@ uno::Reference< chart2::data::XDataSource > SwChartDataProvider::Impl_createData
     const beans::PropertyValue *pArg = rArguments.getConstArray();
     for (sal_Int32 i = 0;  i < nArgs;  ++i)
     {
-        if (pArg[i].Name.equalsAscii( "DataRowSource" ))
+        if (pArg[i].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("DataRowSource")))
         {
             chart::ChartDataRowSource eSource;
             if (!(pArg[i].Value >>= eSource))
@@ -617,22 +617,22 @@ uno::Reference< chart2::data::XDataSource > SwChartDataProvider::Impl_createData
             }
             bDtaSrcIsColumns = eSource == chart::ChartDataRowSource_COLUMNS;
         }
-        else if (pArg[i].Name.equalsAscii( "FirstCellAsLabel" ))
+        else if (pArg[i].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("FirstCellAsLabel")))
         {
             if (!(pArg[i].Value >>= bFirstIsLabel))
                 throw lang::IllegalArgumentException();
         }
-        else if (pArg[i].Name.equalsAscii( "CellRangeRepresentation" ))
+        else if (pArg[i].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("CellRangeRepresentation")))
         {
             if (!(pArg[i].Value >>= aRangeRepresentation))
                 throw lang::IllegalArgumentException();
         }
-        else if (pArg[i].Name.equalsAscii( "SequenceMapping" ))
+        else if (pArg[i].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("SequenceMapping")))
         {
             if (!(pArg[i].Value >>= aSequenceMapping))
                 throw lang::IllegalArgumentException();
         }
-        else if (pArg[i].Name.equalsAscii( "ChartOleObjectName" ))
+        else if (pArg[i].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("ChartOleObjectName")))
         {
             if (!(pArg[i].Value >>= aChartOleObjectName))
                 throw lang::IllegalArgumentException();

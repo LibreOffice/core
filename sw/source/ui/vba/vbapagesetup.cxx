@@ -145,7 +145,7 @@ void SAL_CALL SwVbaPageSetup::setFooterDistance( double _footerdistance ) throw 
 sal_Bool SAL_CALL SwVbaPageSetup::getDifferentFirstPageHeaderFooter() throw (uno::RuntimeException)
 {
     rtl::OUString pageStyle = getStyleOfFirstPage();
-    if( pageStyle.equalsAscii( "First Page" ) )
+    if( pageStyle.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "First Page" ) ) )
         return sal_True;
 
     return sal_False;
@@ -237,9 +237,9 @@ rtl::OUString SwVbaPageSetup::getStyleOfFirstPage() throw (uno::RuntimeException
     sal_Int32 wdSectionStart = word::WdSectionStart::wdSectionNewPage;
     uno::Reference< container::XNamed > xNamed( mxPageProps, uno::UNO_QUERY_THROW );
     rtl::OUString sStyleName = xNamed->getName();
-    if( sStyleName.equalsAscii("Left Page") )
+    if( sStyleName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Left Page")) )
         wdSectionStart = word::WdSectionStart::wdSectionEvenPage;
-    else if( sStyleName.equalsAscii("Right Page") )
+    else if( sStyleName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Right Page")) )
         wdSectionStart = word::WdSectionStart::wdSectionOddPage;
     else
         wdSectionStart = word::WdSectionStart::wdSectionNewPage;

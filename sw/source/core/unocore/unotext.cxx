@@ -2047,7 +2047,7 @@ lcl_ApplyCellProperties(
     {
         const OUString & rName  = rCellProperties[nProperty].Name;
         const uno::Any & rValue = rCellProperties[nProperty].Value;
-        if (rName.equalsAscii("VerticalMerge"))
+        if (rName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("VerticalMerge")))
         {
             // determine left border position
             // add the cell to a queue of merged cells

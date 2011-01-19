@@ -2637,7 +2637,7 @@ sal_Bool SwUnoCursorHelper::ConvertSortProperties(
         const OUString& rPropName = pProperties[n].Name;
 
         // old and new sortdescriptor
-        if (rPropName.equalsAscii("IsSortInTable"))
+        if (rPropName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("IsSortInTable")))
         {
             if (aValue.getValueType() == ::getBooleanCppuType())
             {
@@ -2648,7 +2648,7 @@ sal_Bool SwUnoCursorHelper::ConvertSortProperties(
                 bRet = sal_False;
             }
         }
-        else if (rPropName.equalsAscii("Delimiter"))
+        else if (rPropName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Delimiter")))
         {
             sal_Unicode uChar = sal_Unicode();
             if (aValue >>= uChar)
@@ -2661,7 +2661,7 @@ sal_Bool SwUnoCursorHelper::ConvertSortProperties(
             }
         }
         // old sortdescriptor
-        else if (rPropName.equalsAscii("SortColumns"))
+        else if (rPropName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("SortColumns")))
         {
             bOldSortdescriptor = sal_True;
             sal_Bool bTemp(sal_False);
@@ -2674,7 +2674,7 @@ sal_Bool SwUnoCursorHelper::ConvertSortProperties(
                 bRet = sal_False;
             }
         }
-        else if ( rPropName.equalsAscii("IsCaseSensitive"))
+        else if ( rPropName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("IsCaseSensitive")))
         {
             bOldSortdescriptor = sal_True;
             sal_Bool bTemp(sal_False);
@@ -2687,7 +2687,7 @@ sal_Bool SwUnoCursorHelper::ConvertSortProperties(
                 bRet = sal_False;
             }
         }
-        else if (rPropName.equalsAscii("CollatorLocale"))
+        else if (rPropName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("CollatorLocale")))
         {
             bOldSortdescriptor = sal_True;
             lang::Locale aLocale;
@@ -2775,7 +2775,7 @@ sal_Bool SwUnoCursorHelper::ConvertSortProperties(
             }
         }
         // new sortdescriptor
-        else if (rPropName.equalsAscii("IsSortColumns"))
+        else if (rPropName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("IsSortColumns")))
         {
             bNewSortdescriptor = sal_True;
             if (aValue.getValueType() == ::getBooleanCppuType())
@@ -2788,7 +2788,7 @@ sal_Bool SwUnoCursorHelper::ConvertSortProperties(
                 bRet = sal_False;
             }
         }
-        else if (rPropName.equalsAscii("SortFields"))
+        else if (rPropName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("SortFields")))
         {
             bNewSortdescriptor = sal_True;
             uno::Sequence < table::TableSortField > aFields;
@@ -2897,7 +2897,7 @@ throw (uno::RuntimeException)
 {
     SolarMutexGuard g;
 
-    if (!rServiceName.equalsAscii("com.sun.star.text.TextContent"))
+    if (!rServiceName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.text.TextContent")))
     {
         throw uno::RuntimeException();
     }

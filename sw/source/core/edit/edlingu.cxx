@@ -1765,7 +1765,7 @@ void SwSpellIter::CreatePortion(uno::Reference< XSpellAlternatives > xAlt,
                 const beans::PropertyValue* pProperties = pGrammarResult->aProperties.getConstArray();
                 for( sal_Int32 nProp = 0; nProp < pGrammarResult->aProperties.getLength(); ++nProp )
                 {
-                    if( pProperties->Name.equalsAscii("DialogTitle") )
+                    if( pProperties->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("DialogTitle") ) )
                     {
                         pProperties->Value >>= aPortion.sDialogTitle;
                         break;

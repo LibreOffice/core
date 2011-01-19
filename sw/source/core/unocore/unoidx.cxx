@@ -462,19 +462,19 @@ throw (uno::RuntimeException)
 
     return C2U("com.sun.star.text.BaseIndex") == rServiceName
         || ((TOX_INDEX == m_pImpl->m_eTOXType) &&
-            rServiceName.equalsAscii("com.sun.star.text.DocumentIndex"))
+            rServiceName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.text.DocumentIndex")))
         || ((TOX_CONTENT == m_pImpl->m_eTOXType) &&
-            rServiceName.equalsAscii("com.sun.star.text.ContentIndex"))
+            rServiceName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.text.ContentIndex")))
         || ((TOX_USER == m_pImpl->m_eTOXType) &&
-            rServiceName.equalsAscii("com.sun.star.text.UserDefinedIndex"))
+            rServiceName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.text.UserDefinedIndex")))
         || ((TOX_ILLUSTRATIONS == m_pImpl->m_eTOXType) &&
-            rServiceName.equalsAscii("com.sun.star.text.IllustrationsIndex"))
+            rServiceName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.text.IllustrationsIndex")))
         || ((TOX_TABLES == m_pImpl->m_eTOXType) &&
-            rServiceName.equalsAscii("com.sun.star.text.TableIndex"))
+            rServiceName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.text.TableIndex")))
         || ((TOX_OBJECTS == m_pImpl->m_eTOXType) &&
-            rServiceName.equalsAscii("com.sun.star.text.ObjectIndex"))
+            rServiceName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.text.ObjectIndex")))
         || ((TOX_AUTHORITIES == m_pImpl->m_eTOXType) &&
-            rServiceName.equalsAscii("com.sun.star.text.Bibliography"));
+            rServiceName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.text.Bibliography")));
 }
 
 uno::Sequence< OUString > SAL_CALL
@@ -2803,7 +2803,8 @@ throw (lang::IllegalArgumentException, lang::IndexOutOfBoundsException,
         SwFormToken aToken(TOKEN_END);
         for(sal_Int32 j = 0; j < nProperties; j++)
         {
-            if (pProperties[j].Name.equalsAscii("TokenType"))
+            if (pProperties[j].Name.equalsAsciiL(
+                        RTL_CONSTASCII_STRINGPARAM("TokenType")))
             {
                 const OUString sTokenType =
                         lcl_AnyToString(pProperties[j].Value);

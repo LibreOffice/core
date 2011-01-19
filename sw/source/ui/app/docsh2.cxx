@@ -1320,11 +1320,11 @@ void SwDocShell::Execute(SfxRequest& rReq)
 
                             sal_Int32 nColonPos = sTmpl.indexOf( sal_Unicode(':') );
                             OUString sPrefix = sTmpl.copy( 0L, nColonPos );
-                            if( sPrefix.equalsAscii("Style"))
+                            if( sPrefix.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Style")))
                             {
                                 aTemplateName = sTmpl.copy( 7L );   //get string behind "Style: "
                             }
-                            else if( sPrefix.equalsAscii("Outline"))
+                            else if( sPrefix.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Outline")))
                             {
                                 nTemplateOutlineLevel = ( sTmpl.copy( 15L )).toInt32(); //get string behind "Outline: Leve  ";
                                 bCreateByOutlineLevel = true;

@@ -1290,11 +1290,11 @@ BOOL SwNewDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
                     const beans::PropertyValue* pPrintOptions = rMergeDescriptor.aPrintOptions.getConstArray();
                     for( sal_Int32 nOption = 0; nOption < rMergeDescriptor.aPrintOptions.getLength(); ++nOption)
                     {
-                        if( pPrintOptions[nOption].Name.equalsAscii( "CopyCount" )
-                            ||( pPrintOptions[nOption].Name.equalsAscii( "FileName" ))
-                            ||( pPrintOptions[nOption].Name.equalsAscii( "Collate" ))
-                            ||( pPrintOptions[nOption].Name.equalsAscii( "Pages" ))
-                            ||( pPrintOptions[nOption].Name.equalsAscii( "Wait" )))
+                        if( pPrintOptions[nOption].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("CopyCount"))
+                            ||( pPrintOptions[nOption].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("FileName")))
+                            ||( pPrintOptions[nOption].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Collate" )))
+                            ||( pPrintOptions[nOption].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Pages")))
+                            ||( pPrintOptions[nOption].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Wait"))))
                         {
                             aOptions.realloc( nOpts + 1 );
                             aOptions[ nOpts ].Name = pPrintOptions[nOption].Name;

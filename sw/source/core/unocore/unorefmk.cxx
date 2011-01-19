@@ -1430,7 +1430,7 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
     if (!pMeta)
         throw lang::DisposedException();
 
-    if (rPropertyName.equalsAscii("NumberFormat"))
+    if (rPropertyName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("NumberFormat")))
     {
         sal_Int32 nNumberFormat(0);
         if (rValue >>= nNumberFormat)
@@ -1438,7 +1438,7 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
             pMeta->SetNumberFormat(static_cast<sal_uInt32>(nNumberFormat));
         }
     }
-    else if (rPropertyName.equalsAscii("IsFixedLanguage"))
+    else if (rPropertyName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("IsFixedLanguage")))
     {
         bool b(false);
         if (rValue >>= b)
@@ -1465,12 +1465,12 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
 
     uno::Any any;
 
-    if (rPropertyName.equalsAscii("NumberFormat"))
+    if (rPropertyName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("NumberFormat")))
     {
         const ::rtl::OUString text( getPresentation(sal_False) );
         any <<= static_cast<sal_Int32>(pMeta->GetNumberFormat(text));
     }
-    else if (rPropertyName.equalsAscii("IsFixedLanguage"))
+    else if (rPropertyName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("IsFixedLanguage")))
     {
         any <<= pMeta->IsFixedLanguage();
     }

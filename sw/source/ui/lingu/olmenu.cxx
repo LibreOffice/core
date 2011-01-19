@@ -365,7 +365,7 @@ OUString RetrieveLabelFromCommand( const OUString& aCmdURL )
                 {
                     for ( sal_Int32 i = 0; i < aPropSeq.getLength(); i++ )
                     {
-                        if ( aPropSeq[i].Name.equalsAscii( "Name" ))
+                        if ( aPropSeq[i].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Name" ) ) )
                         {
                             aPropSeq[i].Value >>= aStr;
                             break;

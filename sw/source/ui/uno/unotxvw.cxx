@@ -1053,8 +1053,8 @@ OUString SwXTextView::getImplementationName(void) throw( RuntimeException )
 
 sal_Bool SwXTextView::supportsService(const OUString& rServiceName) throw( RuntimeException )
 {
-    return rServiceName.equalsAscii("com.sun.star.text.TextDocumentView") ||
-            rServiceName.equalsAscii("com.sun.star.view.OfficeDocumentView");
+    return rServiceName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.text.TextDocumentView")) ||
+            rServiceName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.view.OfficeDocumentView"));
 }
 
 Sequence< OUString > SwXTextView::getSupportedServiceNames(void) throw( RuntimeException )
