@@ -999,7 +999,7 @@ void ScDrawLayer::MoveArea( SCTAB nTab, SCCOL nCol1,SCROW nRow1, SCCOL nCol2,SCR
     MoveCells( nTab, nCol1,nRow1, nCol2,nRow2, nDx,nDy, bUpdateNoteCaptionPos );
 }
 
-BOOL ScDrawLayer::HasObjectsInRows( SCTAB nTab, SCROW nStartRow, SCROW nEndRow, bool bIncludeNotes )
+BOOL ScDrawLayer::HasObjectsInRows( SCTAB nTab, SCROW nStartRow, SCROW nEndRow )
 {
     DBG_ASSERT( pDoc, "ScDrawLayer::HasObjectsInRows without document" );
     if ( !pDoc )
@@ -1040,9 +1040,7 @@ BOOL ScDrawLayer::HasObjectsInRows( SCTAB nTab, SCROW nStartRow, SCROW nEndRow, 
     while ( pObject && !bFound )
     {
         aObjRect = pObject->GetSnapRect();  //! GetLogicRect ?
-        // #i116164# note captions are handled separately, don't have to be included for each single row height change
-        if ( (aTestRect.IsInside(aObjRect.TopLeft()) || aTestRect.IsInside(aObjRect.BottomLeft())) &&
-             (bIncludeNotes || !IsNoteCaption(pObject)) )
+        if (aTestRect.IsInside(aObjRect.TopLeft()) || aTestRect.IsInside(aObjRect.BottomLeft()))
             bFound = TRUE;
 
         pObject = aIter.Next();

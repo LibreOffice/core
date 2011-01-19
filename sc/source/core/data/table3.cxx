@@ -61,7 +61,6 @@
 #include "postit.hxx"
 #include "queryparam.hxx"
 #include "segmenttree.hxx"
-#include "drwlayer.hxx"
 
 #include <vector>
 
@@ -1642,13 +1641,10 @@ SCSIZE ScTable::Query(ScQueryParam& rParamOrg, BOOL bKeepSub)
                             aParam.nDestCol, aParam.nDestRow, aParam.nDestTab );
     }
 
+    InitializeNoteCaptions();
+
     if (aParam.bInplace)
         IncRecalcLevel();       // #i116164# once for all entries
-
-    // #i116164# If there are no drawing objects within the area, call SetRowHidden/SetRowFiltered for all rows at the end
-    std::vector<ScShowRowsEntry> aEntries;
-    ScDrawLayer* pDrawLayer = pDocument->GetDrawLayer();
-    bool bHasObjects = pDrawLayer && pDrawLayer->HasObjectsInRows( nTab, aParam.nRow1 + nHeader, aParam.nRow2, false );
 
     SCROW nRealRow2 = aParam.bUseDynamicRange ? aParam.nDynamicEndRow : aParam.nRow2;
     for (SCROW j = aParam.nRow1 + nHeader; j <= nRealRow2; ++j)
@@ -1706,11 +1702,7 @@ SCSIZE ScTable::Query(ScQueryParam& rParamOrg, BOOL bKeepSub)
             else
             {
                 if (bStarted)
-                {
-                    DBShowRows(nOldStart,nOldEnd, bOldResult, bHasObjects);
-                    if (!bHasObjects)
-                        aEntries.push_back(ScShowRowsEntry(nOldStart, nOldEnd, bOldResult));
-                }
+                    DBShowRows(nOldStart,nOldEnd, bOldResult);
                 nOldStart = nOldEnd = j;
                 bOldResult = bResult;
             }
@@ -1729,49 +1721,10 @@ SCSIZE ScTable::Query(ScQueryParam& rParamOrg, BOOL bKeepSub)
     }
 
     if (aParam.bInplace && bStarted)
-    {
-        DBShowRows(nOldStart,nOldEnd, bOldResult, bHasObjects);
-        if (!bHasObjects)
-            aEntries.push_back(ScShowRowsEntry(nOldStart, nOldEnd, bOldResult));
-    }
-
-    // #i116164# execute the collected SetRowHidden/SetRowFiltered calls
-    if (!bHasObjects)
-    {
-        std::vector<ScShowRowsEntry>::const_iterator aEnd = aEntries.end();
-        std::vector<ScShowRowsEntry>::const_iterator aIter = aEntries.begin();
-        if ( aIter != aEnd )
-        {
-            // clear the range first instead of many changes in the middle of the filled array
-            SetRowHidden(aParam.nRow1 + nHeader, aParam.nRow2, false);
-            SetRowFiltered(aParam.nRow1 + nHeader, aParam.nRow2, false);
-
-            // insert from back, in case the filter range is large
-            mpHiddenRows->setInsertFromBack(true);
-            mpFilteredRows->setInsertFromBack(true);
-
-            while (aIter != aEnd)
-            {
-                if (!aIter->mbShow)
-                {
-                    SCROW nStartRow = aIter->mnRow1;
-                    SCROW nEndRow = aIter->mnRow2;
-                    SetRowHidden(nStartRow, nEndRow, true);
-                    SetRowFiltered(nStartRow, nEndRow, true);
-                }
-                ++aIter;
-            }
-
-            mpHiddenRows->setInsertFromBack(false);
-            mpFilteredRows->setInsertFromBack(false);
-        }
-    }
-
-    if (aParam.bInplace)
-        DecRecalcLevel();
+        DBShowRows(nOldStart,nOldEnd, bOldResult);
 
     delete[] pSpecial;
-
+    SetDrawPageSize();
     return nCount;
 }
 
