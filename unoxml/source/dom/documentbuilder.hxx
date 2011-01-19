@@ -25,16 +25,17 @@
  *
  ************************************************************************/
 
-#ifndef _DOCUMENTBUILDER_HXX
-#define _DOCUMENTBUILDER_HXX
+#ifndef DOM_DOCUMENTBUILDER_HXX
+#define DOM_DOCUMENTBUILDER_HXX
 
 #include <sal/types.h>
+
 #include <cppuhelper/implbase2.hxx>
+
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/Sequence.h>
 
 #include <com/sun/star/uno/XInterface.hpp>
-#include <com/sun/star/uno/Exception.hpp>
 #include <com/sun/star/xml/dom/XDocumentBuilder.hpp>
 #include <com/sun/star/xml/dom/XDocument.hpp>
 #include <com/sun/star/xml/dom/XDOMImplementation.hpp>
@@ -44,10 +45,8 @@
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/io/IOException.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
-#include "libxml/tree.h"
 
 using ::rtl::OUString;
 using namespace com::sun::star::uno;
@@ -67,9 +66,11 @@ namespace DOM
         : public CDocumentBuilder_Base
     {
     private:
-        Reference< ::com::sun::star::lang::XMultiServiceFactory > m_aFactory;
-        Reference< XEntityResolver > m_aEntityResolver;
-        Reference< XErrorHandler > m_aErrorHandler;
+        ::osl::Mutex m_Mutex;
+        Reference< ::com::sun::star::lang::XMultiServiceFactory > const
+            m_xFactory;
+        Reference< XEntityResolver > m_xEntityResolver;
+        Reference< XErrorHandler > m_xErrorHandler;
 
     public:
 
@@ -79,7 +80,9 @@ namespace DOM
                 xFactory);
 
         // call for factory
-        static Reference< XInterface > getInstance(const Reference < ::com::sun::star::lang::XMultiServiceFactory >& xFactory);
+        static Reference< XInterface > getInstance(
+            Reference< ::com::sun::star::lang::XMultiServiceFactory > const&
+                xFactory);
 
         // static helpers for service info and component management
         static const char* aImplementationName;

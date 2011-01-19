@@ -25,9 +25,15 @@
  *
  ************************************************************************/
 
-#include "documentbuilder.hxx"
-#include "node.hxx"
-#include "document.hxx"
+#include <documentbuilder.hxx>
+
+#include <string.h>
+#include <stdio.h>
+#include <stdarg.h>
+
+#include <libxml/xmlerror.h>
+#include <libxml/tree.h>
+
 
 #include <rtl/alloc.h>
 #include <rtl/memory.h>
@@ -35,17 +41,15 @@
 
 #include <cppuhelper/implbase1.hxx>
 
-#include <libxml/xmlerror.h>
-
 #include <com/sun/star/xml/sax/SAXParseException.hpp>
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
 #include <com/sun/star/task/XInteractionHandler.hpp>
+
 #include <ucbhelper/content.hxx>
 #include <ucbhelper/commandenvironment.hxx>
 
-#include <string.h>
-#include <stdio.h>
-#include <stdarg.h>
+#include <node.hxx>
+#include <document.hxx>
 
 
 using ::rtl::OUStringBuffer;
@@ -101,9 +105,10 @@ namespace DOM
 
     };
 
-    CDocumentBuilder::CDocumentBuilder(const Reference< XMultiServiceFactory >& xFactory)
-        : m_aFactory(xFactory)
-        , m_aEntityResolver(Reference< XEntityResolver > (new CDefaultEntityResolver()))
+    CDocumentBuilder::CDocumentBuilder(
+            Reference< XMultiServiceFactory > const& xFactory)
+        : m_xFactory(xFactory)
+        , m_xEntityResolver(new CDefaultEntityResolver())
     {
         // init libxml. libxml will protect itself against multiple
         // initializations so there is no problem here if this gets
@@ -182,6 +187,8 @@ namespace DOM
     Reference< XDocument > SAL_CALL CDocumentBuilder::newDocument()
         throw (RuntimeException)
     {
+        ::osl::MutexGuard const g(m_Mutex);
+
         // create a new document
         xmlDocPtr pDocument = xmlNewDoc((const xmlChar*)"1.0");
         Reference< XDocument > const xRet(
@@ -328,6 +335,7 @@ namespace DOM
     Reference< XDocument > SAL_CALL CDocumentBuilder::parse(const Reference< XInputStream >& is)
         throw (RuntimeException, SAXParseException, IOException)
     {
+        ::osl::MutexGuard const g(m_Mutex);
 
         // encoding...
         /*
@@ -366,6 +374,8 @@ namespace DOM
     Reference< XDocument > SAL_CALL CDocumentBuilder::parseSource(const InputSource& is)
         throw (RuntimeException, SAXParseException, IOException)
     {
+        ::osl::MutexGuard const g(m_Mutex);
+
         // if there is an encoding specified in the input source, use it
         xmlCharEncoding enc = XML_CHAR_ENCODING_NONE;
         if (is.sEncoding.getLength() > 0) {
@@ -396,6 +406,8 @@ namespace DOM
     Reference< XDocument > SAL_CALL CDocumentBuilder::parseURI(const OUString& sUri)
         throw (RuntimeException, SAXParseException, IOException)
     {
+        ::osl::MutexGuard const g(m_Mutex);
+
         xmlParserCtxtPtr ctxt = xmlNewParserCtxt();
         ctxt->_private = this;
         ctxt->sax->error = error_func;
@@ -414,22 +426,29 @@ namespace DOM
         return xRet;
     }
 
-    void SAL_CALL CDocumentBuilder::setEntityResolver(const Reference< XEntityResolver >& er)
+    void SAL_CALL
+    CDocumentBuilder::setEntityResolver(Reference< XEntityResolver > const& xER)
         throw (RuntimeException)
     {
-        m_aEntityResolver = er;
+        ::osl::MutexGuard const g(m_Mutex);
+
+        m_xEntityResolver = xER;
     }
 
     Reference< XEntityResolver > SAL_CALL CDocumentBuilder::getEntityResolver()
         throw (RuntimeException)
     {
-        return m_aEntityResolver;
+        ::osl::MutexGuard const g(m_Mutex);
+
+        return m_xEntityResolver;
     }
 
-
-    void SAL_CALL CDocumentBuilder::setErrorHandler(const Reference< XErrorHandler >& eh)
+    void SAL_CALL
+    CDocumentBuilder::setErrorHandler(Reference< XErrorHandler > const& xEH)
         throw (RuntimeException)
     {
-        m_aErrorHandler = eh;
+        ::osl::MutexGuard const g(m_Mutex);
+
+        m_xErrorHandler = xEH;
     }
 }
