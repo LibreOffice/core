@@ -29,6 +29,8 @@
 
 #include <string.h>
 
+#include <boost/shared_ptr.hpp>
+
 #include <com/sun/star/xml/dom/events/XDocumentEvent.hpp>
 
 #include "../events/mutationevent.hxx"
@@ -88,7 +90,9 @@ namespace DOM
         if (m_aNodePtr != NULL)
         {
             // get current data
-            OString aData((const sal_Char*)xmlNodeGetContent(m_aNodePtr));
+            ::boost::shared_ptr<xmlChar const> const pContent(
+                xmlNodeGetContent(m_aNodePtr), xmlFree);
+            OString aData(reinterpret_cast<sal_Char const*>(pContent.get()));
             OUString tmp(aData, aData.getLength(), RTL_TEXTENCODING_UTF8);
             if (offset > tmp.getLength() || offset < 0 || count < 0) {
                 DOMException e;
@@ -157,7 +161,9 @@ namespace DOM
         if (m_aNodePtr != NULL)
         {
             // get current data
-            OString aData((const sal_Char*)xmlNodeGetContent(m_aNodePtr));
+            ::boost::shared_ptr<xmlChar const> const pContent(
+                xmlNodeGetContent(m_aNodePtr), xmlFree);
+            OString aData(reinterpret_cast<sal_Char const*>(pContent.get()));
             OUString tmp(aData, aData.getLength(), RTL_TEXTENCODING_UTF8);
             if (offset > tmp.getLength() || offset < 0) {
                 DOMException e;
@@ -190,7 +196,9 @@ namespace DOM
         if (m_aNodePtr != NULL)
         {
             // get current data
-            OString aData((const sal_Char*)xmlNodeGetContent(m_aNodePtr));
+            ::boost::shared_ptr<xmlChar const> const pContent(
+                xmlNodeGetContent(m_aNodePtr), xmlFree);
+            OString aData(reinterpret_cast<sal_Char const*>(pContent.get()));
             OUString tmp(aData, aData.getLength(), RTL_TEXTENCODING_UTF8);
             if (offset > tmp.getLength() || offset < 0 || count < 0){
                 DOMException e;
