@@ -65,6 +65,9 @@ my_components = \
     component/svtools/source/hatchwindow/hatchwindowfactory \
     component/svtools/source/productregistration/productregistration.uno \
     component/svtools/util/svt \
+    component/svx/util/svx \
+    component/svx/util/svxcore \
+    component/svx/util/textconversiondlgs \
     component/sw/util/msword \
     component/sw/util/sw \
     component/sw/util/swd \
@@ -109,6 +112,7 @@ my_components = \
     log \
     mcnttype \
     migrationoo2 \
+    msfilter \
     msforms \
     mysql \
     odbc \
@@ -148,11 +152,8 @@ my_components = \
     srtrs1 \
     stringresource \
     svgfilter \
-    svx \
-    svxcore \
     syssh \
     t602filter \
-    textconversiondlgs \
     tvhlp1 \
     ucb1 \
     ucpchelp1 \
