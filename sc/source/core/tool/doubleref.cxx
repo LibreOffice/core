@@ -327,11 +327,13 @@ SCSIZE ScDBInternalRange::getVisibleDataCellCount() const
 
 OUString ScDBInternalRange::getString(SCCOL nCol, SCROW nRow) const
 {
-    String aStr;
+    OUString aStr;
     const ScAddress& s = maRange.aStart;
-    // #i109200# this is used in formula calculation, use GetInputString, not GetString
-    // (consistent with ScDBInternalRange::getCellString)
-    getDoc()->GetInputString(s.Col() + nCol, s.Row() + nRow, maRange.aStart.Tab(), aStr);
+    ScBaseCell* pCell = getDoc()->GetCell(ScAddress(s.Col() + nCol, s.Row() + nRow, maRange.aStart.Tab()));
+    if (!pCell)
+        return aStr;
+
+    getCellString(aStr, pCell);
     return aStr;
 }
 
@@ -344,15 +346,11 @@ SCCOL ScDBInternalRange::findFieldColumn(SCCOL nIndex) const
 {
     const ScRange& rRange = getRange();
     const ScAddress& s = rRange.aStart;
-    const ScAddress& e = rRange.aEnd;
 
     SCCOL nDBCol1 = s.Col();
-    SCCOL nDBCol2 = e.Col();
 
-    if ( nIndex <= 0 || nIndex > (nDBCol2 - nDBCol1 + 1) )
-        return nDBCol1;
-
-    return Min(nDBCol2, static_cast<SCCOL>(nDBCol1 + nIndex - 1));
+    // Don't handle out-of-bound condition here.  We'll do that later.
+    return nIndex + nDBCol1 - 1;
 }
 
 sal_uInt16 ScDBInternalRange::getCellString(OUString& rStr, ScBaseCell* pCell) const
@@ -514,14 +512,6 @@ SCCOL ScDBExternalRange::getFirstFieldColumn() const
 
 SCCOL ScDBExternalRange::findFieldColumn(SCCOL nIndex) const
 {
-    if (nIndex < 1)
-        // 1st field
-        return 0;
-
-    if (nIndex > mnCols)
-        // last field
-        return mnCols - 1;
-
     return nIndex - 1;
 }
 

@@ -51,6 +51,8 @@ struct ScQueryParamBase
 
     virtual ~ScQueryParamBase();
 
+    virtual bool IsValidFieldIndex() const;
+
     SC_DLLPUBLIC SCSIZE GetEntryCount() const;
     SC_DLLPUBLIC ScQueryEntry& GetEntry(SCSIZE n) const;
     void Resize(SCSIZE nNew);
@@ -130,6 +132,8 @@ struct ScDBQueryParamInternal : public ScDBQueryParamBase, public ScQueryParamTa
 {
     ScDBQueryParamInternal();
     virtual ~ScDBQueryParamInternal();
+
+    virtual bool IsValidFieldIndex() const;
 };
 
 // ============================================================================
@@ -140,6 +144,8 @@ struct ScDBQueryParamMatrix : public ScDBQueryParamBase
 
     ScDBQueryParamMatrix();
     virtual ~ScDBQueryParamMatrix();
+
+    virtual bool IsValidFieldIndex() const;
 };
 
 #endif

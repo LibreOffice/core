@@ -6226,6 +6226,11 @@ void ScInterpreter::DBIterator( ScIterFunc eFunc )
     auto_ptr<ScDBQueryParamBase> pQueryParam( GetDBParams(bMissingField) );
     if (pQueryParam.get())
     {
+        if (!pQueryParam->IsValidFieldIndex())
+        {
+            SetError(errNoValue);
+            return;
+        }
         ScDBQueryDataIterator aValIter(pDok, pQueryParam.release());
         ScDBQueryDataIterator::Value aValue;
         if ( aValIter.GetFirst(aValue) && !aValue.mnError )
@@ -6302,6 +6307,7 @@ void ScInterpreter::ScDBCount()
             // return empty cells, which would mean to adapt all callers of
             // iterators.
             ScDBQueryParamInternal* p = static_cast<ScDBQueryParamInternal*>(pQueryParam.get());
+            p->nCol2 = p->nCol1; // Don't forget to select only one column.
             SCTAB nTab = p->nTab;
             // ScQueryCellIterator doesn't make use of ScDBQueryParamBase::mnField,
             // so the source range has to be restricted, like before the introduction
@@ -6318,6 +6324,11 @@ void ScInterpreter::ScDBCount()
         }
         else
         {   // count only matching records with a value in the "result" field
+            if (!pQueryParam->IsValidFieldIndex())
+            {
+                SetError(errNoValue);
+                return;
+            }
             ScDBQueryDataIterator aValIter( pDok, pQueryParam.release());
             ScDBQueryDataIterator::Value aValue;
             if ( aValIter.GetFirst(aValue) && !aValue.mnError )
@@ -6344,6 +6355,11 @@ void ScInterpreter::ScDBCount2()
     auto_ptr<ScDBQueryParamBase> pQueryParam( GetDBParams(bMissingField) );
     if (pQueryParam.get())
     {
+        if (!pQueryParam->IsValidFieldIndex())
+        {
+            SetError(errNoValue);
+            return;
+        }
         ULONG nCount = 0;
         pQueryParam->mbSkipString = false;
         ScDBQueryDataIterator aValIter( pDok, pQueryParam.release());
@@ -6405,6 +6421,11 @@ void ScInterpreter::GetDBStVarParams( double& rVal, double& rValCount )
     auto_ptr<ScDBQueryParamBase> pQueryParam( GetDBParams(bMissingField) );
     if (pQueryParam.get())
     {
+        if (!pQueryParam->IsValidFieldIndex())
+        {
+            SetError(errNoValue);
+            return;
+        }
         ScDBQueryDataIterator aValIter(pDok, pQueryParam.release());
         ScDBQueryDataIterator::Value aValue;
         if (aValIter.GetFirst(aValue) && !aValue.mnError)

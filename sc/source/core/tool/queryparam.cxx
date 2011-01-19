@@ -58,6 +58,11 @@ ScQueryParamBase::~ScQueryParamBase()
 {
 }
 
+bool ScQueryParamBase::IsValidFieldIndex() const
+{
+    return true;
+}
+
 SCSIZE ScQueryParamBase::GetEntryCount() const
 {
     return maEntries.size();
@@ -367,11 +372,23 @@ ScDBQueryParamInternal::~ScDBQueryParamInternal()
 {
 }
 
+bool ScDBQueryParamInternal::IsValidFieldIndex() const
+{
+    return nCol1 <= mnField && mnField <= nCol2;
+}
+
 // ============================================================================
 
 ScDBQueryParamMatrix::ScDBQueryParamMatrix() :
     ScDBQueryParamBase(ScDBQueryParamBase::MATRIX)
 {
+}
+
+bool ScDBQueryParamMatrix::IsValidFieldIndex() const
+{
+    SCSIZE nC, nR;
+    mpMatrix->GetDimensions(nC, nR);
+    return 0 <= mnField && mnField <= static_cast<SCCOL>(nC);
 }
 
 ScDBQueryParamMatrix::~ScDBQueryParamMatrix()
