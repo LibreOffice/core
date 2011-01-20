@@ -54,7 +54,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
         aBootstrap.getFrom(
             OUString(RTL_CONSTASCII_USTRINGPARAM("UNO_SERVICES")),
             suValue );
-        if (suValue.equalsAscii("service.rdb") )
+        if (suValue.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("service.rdb")) )
         {
             return 10;
         }
@@ -65,7 +65,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
         aBootstrap.getFrom(
             OUString(RTL_CONSTASCII_USTRINGPARAM("EXECUTABLE_RC")),
             suValue );
-        if (suValue.equalsAscii("true") )
+        if (suValue.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("true")) )
         {
             return 20;
         }
@@ -76,7 +76,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
         aBootstrap.getFrom(
             OUString(RTL_CONSTASCII_USTRINGPARAM("QADEV_BOOTSTRAP")),
             suValue );
-        if (suValue.equalsAscii("sun&ms") )
+        if (suValue.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("sun&ms")) )
         {
             return 30;
         }
@@ -87,7 +87,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
         aBs_custom.getFrom(
             OUString(RTL_CONSTASCII_USTRINGPARAM("RTLVALUE")),
             suValue );
-        if (suValue.equalsAscii("qadev17") )
+        if (suValue.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("qadev17")) )
         {
             return 40;
         }
@@ -98,7 +98,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
         aBs_custom.getFrom(
             OUString(RTL_CONSTASCII_USTRINGPARAM("EXECUTABLE_RC")),
             suValue );
-        if (suValue.equalsAscii("true") )
+        if (suValue.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("true")) )
         {
             return 50;
         }
@@ -109,7 +109,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
         aBs_custom.getFrom(
             OUString(RTL_CONSTASCII_USTRINGPARAM("ABCDE")),
             suValue, suDefault );
-        if (suValue.equalsAscii("mydefault") )
+        if (suValue.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("mydefault")) )
         {
             return 60;
         }
