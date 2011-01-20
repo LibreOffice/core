@@ -26,9 +26,11 @@
  ************************************************************************/
 package com.sun.star.wizards.db;
 
-
 // import com.sun.star.lang.IllegalArgumentException;
 // import com.sun.star.lang.WrappedTargetException;
+import com.sun.star.container.NoSuchElementException;
+import com.sun.star.container.XNameAccess;
+import com.sun.star.lang.WrappedTargetException;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.beans.*;
 // import com.sun.star.container.NoSuchElementException;
@@ -49,6 +51,8 @@ import com.sun.star.sdb.SQLFilterOperator;
 
 import com.sun.star.wizards.common.*;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class SQLQueryComposer
 {
@@ -188,10 +192,32 @@ public class SQLQueryComposer
     {
         String sSortValue = CurDBMetaData.getSortFieldNames()[_SortIndex][0];
         XPropertySet xColumn = CurDBMetaData.getColumnObjectByFieldName(sSortValue, _baddAliasFieldNames);
+        if (xColumn == null)
+        {
+            XNameAccess columns = UnoRuntime.queryInterface(XColumnsSupplier.class, m_queryComposer).getColumns();
+            if (columns != null && columns.hasByName(sSortValue))
+            {
+                try
+                {
+                    xColumn = UnoRuntime.queryInterface(XPropertySet.class, columns.getByName(sSortValue));
+                }
+                catch (NoSuchElementException ex)
+                {
+                    Logger.getLogger(SQLQueryComposer.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                catch (WrappedTargetException ex)
+                {
+                    Logger.getLogger(SQLQueryComposer.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        }
 
-        String sSort = CurDBMetaData.getSortFieldNames()[_SortIndex][1];
-        boolean bascend = (sSort.equals("ASC"));
-        m_queryComposer.appendOrderByColumn(xColumn, bascend);
+        if (xColumn != null)
+        {
+            String sSort = CurDBMetaData.getSortFieldNames()[_SortIndex][1];
+            boolean bascend = (sSort.equals("ASC"));
+            m_queryComposer.appendOrderByColumn(xColumn, bascend);
+        }
     }
 
     public void appendSortingcriteria(boolean _baddAliasFieldNames) throws SQLException

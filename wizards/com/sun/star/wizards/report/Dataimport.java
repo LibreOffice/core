@@ -34,6 +34,8 @@ import com.sun.star.text.XTextDocument;
 import com.sun.star.wizards.ui.*;
 import com.sun.star.wizards.common.*;
 import com.sun.star.uno.Exception;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class Dataimport extends UnoDialog2 implements com.sun.star.awt.XActionListener
 { // extends ReportWizard
@@ -186,14 +188,14 @@ public class Dataimport extends UnoDialog2 implements com.sun.star.awt.XActionLi
             super.xReschedule.reschedule();
             return;
         }
-        catch (Exception exception)
+        catch (Exception e)
         {
-            exception.printStackTrace(System.out);
+            Logger.getLogger(Dataimport.class.getName()).log(Level.SEVERE, null, e);
         // return;
         }
-        catch (java.lang.Exception jexception)
+        catch (java.lang.Exception e)
         {
-            jexception.printStackTrace(System.out);
+            Logger.getLogger(Dataimport.class.getName()).log(Level.SEVERE, null, e);
         // return;
         }
     }

@@ -202,9 +202,9 @@ public class ReportTextImplementation extends ReportImplementationHelper impleme
                 }
             }
         }
-        catch (Exception exception)
+        catch (Exception ex)
         {
-            exception.printStackTrace(System.out);
+            Logger.getLogger( ReportTextImplementation.class.getName() ).log( Level.SEVERE, null, ex );
         }
         return xNamedTextSection;
     }
@@ -237,6 +237,7 @@ public class ReportTextImplementation extends ReportImplementationHelper impleme
                 String sCommandType = getDoc().oFormHandler.getValueofHiddenControl(xNamedForm, "CommandType", sMsg);
                 String sGroupFieldNames = getDoc().oFormHandler.getValueofHiddenControl(xNamedForm, "GroupFieldNames", sMsg);
                 String sFieldNames = getDoc().oFormHandler.getValueofHiddenControl(xNamedForm, "FieldNames", sMsg);
+                final String sorting = getDoc().oFormHandler.getValueofHiddenControl(xNamedForm, "Sorting", sMsg);
                 String sRecordFieldNames = getDoc().oFormHandler.getValueofHiddenControl(xNamedForm, "RecordFieldNames", sMsg);
                 if (xNamedForm.hasByName("QueryName"))
                 {
@@ -244,16 +245,28 @@ public class ReportTextImplementation extends ReportImplementationHelper impleme
                 }
                 String[] sFieldNameList = JavaTools.ArrayoutofString(sFieldNames, ";");
                 String[] sNewList = JavaTools.ArrayoutofString(sRecordFieldNames, ";");
+                if ( !"".equals(sorting))
+                {
+                    String[] sortList = JavaTools.ArrayoutofString(sorting, ";");
+                    ArrayList<String[]> aSortFields = new ArrayList<String[]>();
+                    for (String sortEntry : sortList)
+                    {
+                        aSortFields.add(JavaTools.ArrayoutofString(sortEntry, ","));
+                    }
+                    String[][] sortFieldNames = new String[aSortFields.size()][2];
+                    aSortFields.toArray(sortFieldNames);
+                    getRecordParser().setSortFieldNames(sortFieldNames);
+                }
                 getRecordParser().setRecordFieldNames(sNewList);
                 getRecordParser().GroupFieldNames = JavaTools.ArrayoutofString(sGroupFieldNames, ";");
                 getRecordParser().setCommandType(Integer.valueOf(sCommandType).intValue());
+
                 sMsgQueryCreationImpossible = JavaTools.replaceSubString(sMsgQueryCreationImpossible, getRecordParser().Command, "<STATEMENT>");
                 bgetConnection = getRecordParser().getConnection(_properties);
                 int nCommandType = com.sun.star.sdb.CommandType.COMMAND;
                 boolean bexecute = false;
                 if (bgetConnection)
                 {
-
                     if ((getRecordParser().getCommandType() == CommandType.QUERY) && (getRecordParser().Command.equals("")))
                     {
                         DBMetaData.CommandObject oCommand = getRecordParser().getQueryByName(sQueryName);
@@ -262,6 +275,7 @@ public class ReportTextImplementation extends ReportImplementationHelper impleme
                             getRecordParser().Command = (String) oCommand.getPropertySet().getPropertyValue("Command");
                             getRecordParser().getSQLQueryComposer().m_xQueryAnalyzer.setQuery(getRecordParser().Command);
                             getRecordParser().getSQLQueryComposer().prependSortingCriteria();
+                            getRecordParser().Command = getRecordParser().getSQLQueryComposer().getQuery();
                         }
                         else
                         {
@@ -293,13 +307,14 @@ public class ReportTextImplementation extends ReportImplementationHelper impleme
         {
             return false;
         }
-        catch (java.lang.Exception javaexception)
+        catch (java.lang.Exception ex)
         {
-            javaexception.printStackTrace(System.out);
+            Logger.getLogger( ReportTextImplementation.class.getName() ).log( Level.SEVERE, null, ex );
             return false;
         }
-        catch (com.sun.star.wizards.document.FormHandler.UnknownHiddenControlException exception)
+        catch (com.sun.star.wizards.document.FormHandler.UnknownHiddenControlException ex)
         {
+            Logger.getLogger( ReportTextImplementation.class.getName() ).log( Level.SEVERE, null, ex );
             return false;
         }
     }
@@ -322,8 +337,6 @@ public class ReportTextImplementation extends ReportImplementationHelper impleme
             Object CurGroupValue;
             String CurGroupTableName;
 //                RecordParser CurDBMetaData = getRecordParser();
-            com.sun.star.style.BreakType CorrBreakValue = null;
-            String CorrPageDescName = "";
             getDoc().oTextFieldHandler.fixDateFields(true);
             getDoc().removeAllVisibleTextSections();
             getDoc().removeNonLayoutTextTables();
@@ -403,8 +416,9 @@ public class ReportTextImplementation extends ReportImplementationHelper impleme
             }
             getDoc().oTextSectionHandler.breakLinkofTextSections();
         }
-        catch (Exception exception)
+        catch (Exception ex)
         {
+            Logger.getLogger( ReportTextImplementation.class.getName() ).log( Level.SEVERE, null, ex );
         }
 //            catch (java.lang.Exception javaexception)
 //            {
@@ -629,6 +643,7 @@ public class ReportTextImplementation extends ReportImplementationHelper impleme
             }
             catch (Exception e)
             {
+                Logger.getLogger( ReportTextImplementation.class.getName() ).log( Level.SEVERE, null, e );
             }
         }
         return m_aReportPath;

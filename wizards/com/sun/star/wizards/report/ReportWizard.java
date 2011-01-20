@@ -457,7 +457,7 @@ public class ReportWizard extends DatabaseObjectWizard implements XTextListener,
             // Get the path to the extension and try to add the path to the class loader
             String sLocation = getPathToExtension(xMSF);
             // TODO: Umlaut in filename!
-            if (sLocation.length() > 0)
+            if (sLocation.length() == 0)
             {
                 try
                 {
