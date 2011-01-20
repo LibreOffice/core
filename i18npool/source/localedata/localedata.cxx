@@ -519,7 +519,7 @@ LocaleData::getAllCalendars( const Locale& rLocale ) throw(RuntimeException)
                 offset++;
                 sal_Bool defaultCalendar = sal::static_int_cast<sal_Bool>( allCalendars[offset][0] );
                 offset++;
-                if (OUString(allCalendars[offset]).equalsAscii("ref")) {
+                if (OUString(allCalendars[offset]).equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("ref"))) {
                     days = getCalendarItemByName(OUString(allCalendars[offset+1]), rLocale, calendarsSeq, i, REF_DAYS);
                     offset += 2;
                 } else {
@@ -530,7 +530,7 @@ LocaleData::getAllCalendars( const Locale& rLocale ) throw(RuntimeException)
                         offset += 3;
                     }
                 }
-                if (OUString(allCalendars[offset]).equalsAscii("ref")) {
+                if (OUString(allCalendars[offset]).equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("ref"))) {
                     months = getCalendarItemByName(OUString(allCalendars[offset+1]), rLocale, calendarsSeq, i, REF_MONTHS);
                     offset += 2;
                 } else {
@@ -541,7 +541,7 @@ LocaleData::getAllCalendars( const Locale& rLocale ) throw(RuntimeException)
                         offset += 3;
                     }
                 }
-                if (OUString(allCalendars[offset]).equalsAscii("ref")) {
+                if (OUString(allCalendars[offset]).equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("ref"))) {
                     eras = getCalendarItemByName(OUString(allCalendars[offset+1]), rLocale, calendarsSeq, i, REF_ERAS);
                     offset += 2;
                 } else {
@@ -1314,9 +1314,9 @@ oslGenericFunction SAL_CALL LocaleData::getFunctionSymbol( const Locale& rLocale
                 // load function with name <ase>_<lang>_<country>
                 (pSymbol = rLookupTable.getFunctionSymbolByName(aBuf.append(rLocale.Language).append(under).append(
                         rLocale.Country).makeStringAndClear(), pFunction, &pCachedItem)) != 0) ||
-            (l > 0 && c > 0 && rLocale.Language.equalsAscii("zh") &&
-                                (rLocale.Country.equalsAscii("HK") ||
-                                rLocale.Country.equalsAscii("MO")) &&
+            (l > 0 && c > 0 && rLocale.Language.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("zh")) &&
+                                (rLocale.Country.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("HK")) ||
+                                rLocale.Country.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("MO"))) &&
                 // if the country code is HK or MO, one more step to try TW.
                 (pSymbol = rLookupTable.getFunctionSymbolByName(aBuf.append(rLocale.Language).append(under).append(tw).makeStringAndClear(),
                         pFunction, &pCachedItem)) != 0) ||

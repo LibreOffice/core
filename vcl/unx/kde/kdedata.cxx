@@ -143,7 +143,7 @@ void KDEXLib::Init()
     for ( nIdx = 0; nIdx < nParams; ++nIdx )
     {
         osl_getCommandArg( nIdx, &aParam.pData );
-        if ( !m_pFreeCmdLineArgs && aParam.equalsAscii( "-display" ) && nIdx + 1 < nParams )
+        if ( !m_pFreeCmdLineArgs && aParam.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "-display" ) ) && nIdx + 1 < nParams )
         {
             osl_getCommandArg( nIdx + 1, &aParam.pData );
             aDisplay = rtl::OUStringToOString( aParam, osl_getThreadTextEncoding() );

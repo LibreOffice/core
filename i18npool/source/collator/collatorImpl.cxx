@@ -148,9 +148,9 @@ CollatorImpl::listCollatorOptions( const OUString& /*collatorAlgorithmName*/ ) t
 
     for (sal_Int32 i = 0; i < option_str.getLength(); i++)
         option_int[i] =
-            option_str[i].equalsAscii("IGNORE_CASE") ?  CollatorOptions::CollatorOptions_IGNORE_CASE :
-            option_str[i].equalsAscii("IGNORE_KANA") ?  CollatorOptions::CollatorOptions_IGNORE_KANA :
-            option_str[i].equalsAscii("IGNORE_WIDTH") ?  CollatorOptions::CollatorOptions_IGNORE_WIDTH : 0;
+            option_str[i].equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("IGNORE_CASE")) ?  CollatorOptions::CollatorOptions_IGNORE_CASE :
+            option_str[i].equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("IGNORE_KANA")) ?  CollatorOptions::CollatorOptions_IGNORE_KANA :
+            option_str[i].equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("IGNORE_WIDTH")) ?  CollatorOptions::CollatorOptions_IGNORE_WIDTH : 0;
 
     return option_int;
 }
@@ -213,9 +213,9 @@ CollatorImpl::loadCachedCollator(const lang::Locale& rLocale, const OUString& rS
              // load service with name <base>_<lang>_<country>_<algorithm>
              createCollator(rLocale, aBuf.append(rLocale.Language).append(under).append(rLocale.Country).append(
                      under).append(rSortAlgorithm).makeStringAndClear(), rSortAlgorithm)) ||
-            (l > 0 && c > 0 && a > 0 && rLocale.Language.equalsAscii("zh") &&
-             (rLocale.Country.equalsAscii("HK") ||
-              rLocale.Country.equalsAscii("MO")) &&
+            (l > 0 && c > 0 && a > 0 && rLocale.Language.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("zh")) &&
+             (rLocale.Country.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("HK")) ||
+              rLocale.Country.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("MO"))) &&
              // if the country code is HK or MO, one more step to try TW.
              createCollator(rLocale, aBuf.append(rLocale.Language).append(under).append(tw).append(under).append(
                      rSortAlgorithm).makeStringAndClear(), rSortAlgorithm)) ||

@@ -327,40 +327,40 @@ OUString DefaultFontConfiguration::getUserInterfaceFont( const Locale& rLocale )
     static const OUString aFallBackKorean( aFallBackKoreanLocalized );
 
     // optimize font list for some locales, as long as Andale Sans UI does not support them
-    if( aLocale.Language.equalsAscii( "ar" ) ||
-        aLocale.Language.equalsAscii( "he" ) ||
-        aLocale.Language.equalsAscii( "iw" ) )
+    if( aLocale.Language.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ar" ) ) ||
+        aLocale.Language.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "he" ) ) ||
+        aLocale.Language.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "iw" ) ) )
     {
         return aFallBackArabic;
     }
-    else if( aLocale.Language.equalsAscii( "th" ) )
+    else if( aLocale.Language.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "th" ) ) )
     {
         return aFallBackThai;
     }
-    else if( aLocale.Language.equalsAscii( "ko" ) )
+    else if( aLocale.Language.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ko" ) ) )
     {
         return aFallBackKorean;
     }
-    else if( aLocale.Language.equalsAscii( "cs" ) ||
-             aLocale.Language.equalsAscii( "hu" ) ||
-             aLocale.Language.equalsAscii( "pl" ) ||
-             aLocale.Language.equalsAscii( "ro" ) ||
-             aLocale.Language.equalsAscii( "rm" ) ||
-             aLocale.Language.equalsAscii( "hr" ) ||
-             aLocale.Language.equalsAscii( "sk" ) ||
-             aLocale.Language.equalsAscii( "sl" ) ||
-             aLocale.Language.equalsAscii( "sb" ) )
+    else if( aLocale.Language.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "cs" ) ) ||
+             aLocale.Language.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "hu" ) ) ||
+             aLocale.Language.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "pl" ) ) ||
+             aLocale.Language.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ro" ) ) ||
+             aLocale.Language.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "rm" ) ) ||
+             aLocale.Language.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "hr" ) ) ||
+             aLocale.Language.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "sk" ) ) ||
+             aLocale.Language.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "sl" ) ) ||
+             aLocale.Language.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "sb" ) ) )
     {
         return aFallbackLatin2;
     }
-    else if( aLocale.Language.equalsAscii( "zh" ) )
+    else if( aLocale.Language.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "zh" ) ) )
     {
-        if( ! aLocale.Country.equalsAscii( "cn" ) )
+        if( ! aLocale.Country.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "cn" ) ) )
             return aFallBackChineseTRD;
         else
             return aFallBackChineseSIM;
     }
-    else if( aLocale.Language.equalsAscii( "ja" ) )
+    else if( aLocale.Language.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ja" ) ) )
     {
         return aFallBackJapanese;
     }
@@ -1216,7 +1216,7 @@ const FontNameAttr* FontSubstConfiguration::getSubstInfo( const String& rFontNam
             aLocale.Variant = OUString();
         else if( aLocale.Country.getLength() )
             aLocale.Country = OUString();
-        else if( ! aLocale.Language.equalsAscii( "en" ) )
+        else if( ! aLocale.Language.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "en" ) ) )
             aLocale.Language = OUString( RTL_CONSTASCII_USTRINGPARAM( "en" ) );
         else
             aLocale.Language = OUString();

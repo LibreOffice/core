@@ -159,7 +159,7 @@ uno::Reference< uno::XInterface > SAL_CALL FSStorageFactory::createInstanceWithA
 
             for ( sal_Int32 nInd = 0, nNumArgs = 1; nInd < aDescr.getLength(); nInd++ )
             {
-                if ( aDescr[nInd].Name.equalsAscii( "InteractionHandler" ) )
+                if ( aDescr[nInd].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "InteractionHandler" ) ) )
                 {
                     aPropsToSet.realloc( ++nNumArgs );
                     aPropsToSet[nNumArgs-1].Name = aDescr[nInd].Name;

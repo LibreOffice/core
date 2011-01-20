@@ -608,7 +608,7 @@ void GtkXLib::Init()
         osl_getCommandArg(i, &aParam.pData );
         OString aBParam( OUStringToOString( aParam, aEnc ) );
 
-        if( aParam.equalsAscii( "-display" ) || aParam.equalsAscii( "--display" ) )
+        if( aParam.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "-display" ) ) || aParam.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "--display" ) ) )
         {
             pCmdLineAry[i+1] = g_strdup( "--display" );
             osl_getCommandArg(i+1, &aParam.pData );

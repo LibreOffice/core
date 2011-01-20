@@ -118,7 +118,7 @@ void ImplInitSVData()
     {
         rtl::OUString aArg;
         osl_getCommandArg( i, &aArg.pData );
-        if( aArg.equalsAscii( "-enableautomation" ) )
+        if( aArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "-enableautomation" ) ) )
         {
             pImplSVData->mbIsTestTool = true;
             break;
@@ -263,7 +263,7 @@ com::sun::star::uno::Any AccessBridgeCurrentContext::getValueByName( const rtl::
     throw (com::sun::star::uno::RuntimeException)
 {
     com::sun::star::uno::Any ret;
-    if( Name.equalsAscii( "java-vm.interaction-handler" ) )
+    if( Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "java-vm.interaction-handler" ) ) )
     {
         // Currently, for accessbility no interaction handler shall be offered.
         // There may be introduced later on a handler using native toolkits

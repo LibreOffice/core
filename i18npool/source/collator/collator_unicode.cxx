@@ -95,7 +95,7 @@ Collator_Unicode::loadCollatorAlgorithm(const OUString& rAlgorithm, const lang::
             if (hModule) {
                 const sal_uInt8* (*func)() = NULL;
                 aBuf.appendAscii("get_").append(rLocale.Language).appendAscii("_");
-                if (rLocale.Language.equalsAscii("zh")) {
+                if (rLocale.Language.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("zh"))) {
                     OUString func_base = aBuf.makeStringAndClear();
                     if (OUString(RTL_CONSTASCII_USTRINGPARAM("TW HK MO")).indexOf(rLocale.Country) >= 0)
                         func=(const sal_uInt8* (*)()) osl_getFunctionSymbol(hModule,
@@ -103,11 +103,11 @@ Collator_Unicode::loadCollatorAlgorithm(const OUString& rAlgorithm, const lang::
                     if (!func)
                         func=(const sal_uInt8* (*)()) osl_getFunctionSymbol(hModule, (func_base + rAlgorithm).pData);
                 } else {
-                    if (rLocale.Language.equalsAscii("ja")) {
+                    if (rLocale.Language.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("ja"))) {
                         // replace algrithm name to implementation name.
-                        if (rAlgorithm.equalsAscii("phonetic (alphanumeric first)") )
+                        if (rAlgorithm.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("phonetic (alphanumeric first)")) )
                             aBuf.appendAscii("phonetic_alphanumeric_first");
-                        else if (rAlgorithm.equalsAscii("phonetic (alphanumeric last)"))
+                        else if (rAlgorithm.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("phonetic (alphanumeric last)")))
                             aBuf.appendAscii("phonetic_alphanumeric_last");
                         else
                             aBuf.append(rAlgorithm);

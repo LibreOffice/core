@@ -948,9 +948,9 @@ Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
                                         const css::beans::NamedValue* pProps = aProps.getConstArray();
                                         for( int i = 0; i < nProps; i++ )
                                         {
-                                            if( pProps[i].Name.equalsAscii( "WINDOW" ) )
+                                            if( pProps[i].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "WINDOW" ) ) )
                                                 pProps[i].Value >>= nWindowHandle;
-                                            else if( pProps[i].Name.equalsAscii( "XEMBED" ) )
+                                            else if( pProps[i].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "XEMBED" ) ) )
                                                 pProps[i].Value >>= bXEmbed;
                                         }
                                     }
@@ -1161,9 +1161,9 @@ css::uno::Reference< css::awt::XWindowPeer > VCLXToolkit::ImplCreateWindow(
                 const css::beans::NamedValue* pProps = aProps.getConstArray();
                 for( int i = 0; i < nProps; i++ )
                 {
-                    if( pProps[i].Name.equalsAscii( "WINDOW" ) )
+                    if( pProps[i].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "WINDOW" ) ) )
                         pProps[i].Value >>= nWindowHandle;
-                    else if( pProps[i].Name.equalsAscii( "XEMBED" ) )
+                    else if( pProps[i].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "XEMBED" ) ) )
                         pProps[i].Value >>= bXEmbed;
                 }
             }

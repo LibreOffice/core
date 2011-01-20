@@ -11673,7 +11673,7 @@ void PDFWriterImpl::ensureUniqueRadioOnValues()
                 int nKidIndex = rGroupWidget.m_aKidsIndex[nKid];
                 PDFWidget& rKid = m_aWidgets[nKidIndex];
                 rKid.m_aOnValue = OUString::valueOf( sal_Int32(nKid+1) );
-                if( ! rKid.m_aValue.equalsAscii( "Off" ) )
+                if( ! rKid.m_aValue.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Off" ) ) )
                     rKid.m_aValue = rKid.m_aOnValue;
             }
         }
@@ -11700,7 +11700,7 @@ void PDFWriterImpl::ensureUniqueRadioOnValues()
                 #endif
             }
             // update selected radio button
-            if( ! rKid.m_aValue.equalsAscii( "Off" ) )
+            if( ! rKid.m_aValue.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Off" ) ) )
             {
                 rGroupWidget.m_aValue = rKid.m_aValue;
             }

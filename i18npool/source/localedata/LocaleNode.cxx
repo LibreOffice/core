@@ -129,31 +129,31 @@ LocaleNode::~LocaleNode()
 
 LocaleNode* LocaleNode::createNode (const OUString& name, const Reference< XAttributeList > & attr)
 {
-    if (name.equalsAscii("LC_INFO"))
+    if (name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("LC_INFO")))
         return new LCInfoNode (name,attr);
-    if (name.equalsAscii("LC_CTYPE"))
+    if (name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("LC_CTYPE")))
         return new LCCTYPENode (name,attr);
-    if (name.equalsAscii("LC_FORMAT"))
+    if (name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("LC_FORMAT")))
         return new LCFormatNode (name,attr);
-    if (name.equalsAscii("LC_FORMAT_1"))
+    if (name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("LC_FORMAT_1")))
         return new LCFormatNode (name,attr);
-    if (name.equalsAscii("LC_CALENDAR"))
+    if (name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("LC_CALENDAR")))
         return new LCCalendarNode (name,attr);
-    if (name.equalsAscii("LC_CURRENCY"))
+    if (name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("LC_CURRENCY")))
         return new LCCurrencyNode (name,attr);
-    if (name.equalsAscii("LC_TRANSLITERATION"))
+    if (name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("LC_TRANSLITERATION")))
         return new LCTransliterationNode (name,attr);
-    if (name.equalsAscii("LC_COLLATION"))
+    if (name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("LC_COLLATION")))
         return new LCCollationNode (name,attr);
-    if (name.equalsAscii("LC_INDEX"))
+    if (name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("LC_INDEX")))
         return new LCIndexNode (name,attr);
-    if (name.equalsAscii("LC_SEARCH"))
+    if (name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("LC_SEARCH")))
         return new LCSearchNode (name,attr);
-    if (name.equalsAscii("LC_MISC"))
+    if (name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("LC_MISC")))
         return new LCMiscNode (name,attr);
-      if (name.equalsAscii("LC_NumberingLevel"))
+      if (name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("LC_NumberingLevel")))
                 return new LCNumberingLevelNode (name, attr);
-      if (name.equalsAscii("LC_OutLineNumberingLevel"))
+      if (name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("LC_OutLineNumberingLevel")))
                 return new LCOutlineNumberingLevelNode (name, attr);
 
     return new LocaleNode(name,attr);
@@ -437,7 +437,7 @@ void LCCTYPENode::generateCode (const OFileWriter &of) const
         incError( "DateSeparator equals TimeSeparator.");
     if (aDecSep == aThoSep)
         incError( "DecimalSeparator equals ThousandSeparator.");
-    if (aThoSep.equalsAscii( " "))
+    if (aThoSep.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM( " ")))
         incError( "ThousandSeparator is an ' ' ordinary space, this should be a non-breaking space U+00A0 instead.");
     if (aListSep == aDecSep)
         fprintf( stderr, "Warning: %s\n",
@@ -579,7 +579,7 @@ void LCFormatNode::generateCode (const OFileWriter &of) const
         of.writeParameter("FormatKey", str, formatCount);
 
         str = currNodeAttr.getValueByName("default");
-        bool bDefault = str.equalsAscii( "true");
+        bool bDefault = str.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM( "true"));
         of.writeDefaultParameter("FormatElement", str, formatCount);
 
         aType = currNodeAttr.getValueByName("type");
@@ -1093,7 +1093,7 @@ void LCCalendarNode::generateCode (const OFileWriter &of) const
         LocaleNode * calNode = getChildAt (i);
         OUString calendarID = calNode -> getAttr().getValueByName("unoid");
         of.writeParameter( "calendarID", calendarID, i);
-        bool bGregorian = calendarID.equalsAscii( "gregorian");
+        bool bGregorian = calendarID.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM( "gregorian"));
         if (!bHasGregorian)
             bHasGregorian = bGregorian;
         str = calNode -> getAttr().getValueByName("default");
@@ -1125,7 +1125,7 @@ void LCCalendarNode::generateCode (const OFileWriter &of) const
                 LocaleNode *currNode = daysNode -> getChildAt(j);
                 OUString dayID( currNode->getChildAt(0)->getValue());
                 of.writeParameter("dayID", dayID, i, j);
-                if (j == 0 && bGregorian && !dayID.equalsAscii( "sun"))
+                if (j == 0 && bGregorian && !dayID.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM( "sun")))
                     incError( "First day of a week of a Gregorian calendar must be <DayID>sun</DayID>");
                 of.writeParameter(elementTag, "DefaultAbbrvName",currNode->getChildAt(1)->getValue() ,i, j);
                 of.writeParameter(elementTag, "DefaultFullName",currNode->getChildAt(2)->getValue() , i, j);
@@ -1157,7 +1157,7 @@ void LCCalendarNode::generateCode (const OFileWriter &of) const
                 LocaleNode *currNode = monthsNode -> getChildAt(j);
                 OUString monthID( currNode->getChildAt(0)->getValue());
                 of.writeParameter("monthID", monthID, i, j);
-                if (j == 0 && bGregorian && !monthID.equalsAscii( "jan"))
+                if (j == 0 && bGregorian && !monthID.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM( "jan")))
                     incError( "First month of a year of a Gregorian calendar must be <MonthID>jan</MonthID>");
                 of.writeParameter(elementTag, "DefaultAbbrvName",currNode->getChildAt(1)->getValue() ,i, j);
                 of.writeParameter(elementTag, "DefaultFullName",currNode->getChildAt(2)->getValue() , i, j);
@@ -1189,9 +1189,9 @@ void LCCalendarNode::generateCode (const OFileWriter &of) const
                 LocaleNode *currNode = erasNode -> getChildAt(j);
                 OUString eraID( currNode->getChildAt(0)->getValue());
                 of.writeParameter("eraID", eraID, i, j);
-                if (j == 0 && bGregorian && !eraID.equalsAscii( "bc"))
+                if (j == 0 && bGregorian && !eraID.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM( "bc")))
                     incError( "First era of a Gregorian calendar must be <EraID>bc</EraID>");
-                if (j == 1 && bGregorian && !eraID.equalsAscii( "ad"))
+                if (j == 1 && bGregorian && !eraID.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM( "ad")))
                     incError( "Second era of a Gregorian calendar must be <EraID>ad</EraID>");
                 of.writeAsciiString("\n");
                 of.writeParameter(elementTag, "DefaultAbbrvName",currNode->getChildAt(1)->getValue() ,i, j);

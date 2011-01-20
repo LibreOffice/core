@@ -75,9 +75,9 @@ void VCLXWindow::SetSystemParent_Impl( const com::sun::star::uno::Any& rHandle )
             const com::sun::star::beans::NamedValue* pProps = aProps.getConstArray();
             for( int i = 0; i < nProps; i++ )
             {
-                if( pProps[i].Name.equalsAscii( "WINDOW" ) )
+                if( pProps[i].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "WINDOW" ) ) )
                     pProps[i].Value >>= nHandle;
-                else if( pProps[i].Name.equalsAscii( "XEMBED" ) )
+                else if( pProps[i].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "XEMBED" ) ) )
                     pProps[i].Value >>= bXEmbed;
             }
         }

@@ -89,21 +89,21 @@ uno::Reference <awt::XLayoutContainer> WidgetFactory::createContainer (OUString 
 {
     uno::Reference< awt::XLayoutContainer > xPeer;
 
-    if ( name.equalsAscii( "hbox" ) )
+    if ( name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "hbox" ) ) )
         xPeer = uno::Reference< awt::XLayoutContainer >( new HBox() );
-    else if ( name.equalsAscii( "vbox" ) )
+    else if ( name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "vbox" ) ) )
         xPeer = uno::Reference< awt::XLayoutContainer >( new VBox() );
-    else if ( name.equalsAscii( "table" ) )
+    else if ( name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "table" ) ) )
         xPeer = uno::Reference< awt::XLayoutContainer >( new Table() );
-    else if ( name.equalsAscii( "flow" ) )
+    else if ( name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "flow" ) ) )
         xPeer = uno::Reference< awt::XLayoutContainer >( new Flow() );
-    else if ( name.equalsAscii( "bin" ) )
+    else if ( name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "bin" ) ) )
         xPeer = uno::Reference< awt::XLayoutContainer >( new Bin() );
-    else if ( name.equalsAscii( "min-size" ) )
+    else if ( name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "min-size" ) ) )
         xPeer = uno::Reference< awt::XLayoutContainer >( new MinSize() );
-    else if ( name.equalsAscii( "align" ) )
+    else if ( name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "align" ) ) )
         xPeer = uno::Reference< awt::XLayoutContainer >( new Align() );
-    else if ( name.equalsAscii( "dialogbuttonhbox" ) )
+    else if ( name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "dialogbuttonhbox" ) ) )
         xPeer = uno::Reference< awt::XLayoutContainer >( new DialogButtonHBox() );
 
     return xPeer;
@@ -191,7 +191,7 @@ WidgetFactory::createWidget (uno::Reference< awt::XToolkit > xToolkit, uno::Refe
 #if FIXED_INFO
     OUString tName = name;
     // FIXME
-    if ( name.equalsAscii( "fixedinfo" ) )
+    if ( name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "fixedinfo" ) ) )
         tName = OUString(RTL_CONSTASCII_USTRINGPARAM("fixedtext"));
     xPeer = toolkitCreateWidget (xToolkit, xParent, tName, properties);
 #else
@@ -388,7 +388,7 @@ Window* WidgetFactory::layoutCreateWindow (VCLXWindow** component, Window *paren
     {
         ;
     }
-    if ( name.equalsAscii( "dialog" ) )
+    if ( name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "dialog" ) ) )
     {
         if ( parent == NULL )
             parent = DIALOG_NO_PARENT;
@@ -397,7 +397,7 @@ Window* WidgetFactory::layoutCreateWindow (VCLXWindow** component, Window *paren
 
         attributes ^= awt::WindowAttribute::SHOW;
     }
-    else if ( name.equalsAscii( "modaldialog" ) )
+    else if ( name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "modaldialog" ) ) )
     {
         if ( parent == NULL )
             parent = DIALOG_NO_PARENT;
@@ -406,7 +406,7 @@ Window* WidgetFactory::layoutCreateWindow (VCLXWindow** component, Window *paren
 
         attributes ^= awt::WindowAttribute::SHOW;
     }
-    else if ( name.equalsAscii( "modelessdialog" ) )
+    else if ( name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "modelessdialog" ) ) )
     {
         if ( parent == NULL )
             parent = DIALOG_NO_PARENT;
@@ -415,7 +415,7 @@ Window* WidgetFactory::layoutCreateWindow (VCLXWindow** component, Window *paren
 
         attributes ^= awt::WindowAttribute::SHOW;
     }
-    else if ( name.equalsAscii( "sfxdialog" ) )
+    else if ( name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "sfxdialog" ) ) )
     {
         if ( parent == NULL )
             parent = DIALOG_NO_PARENT;
@@ -424,7 +424,7 @@ Window* WidgetFactory::layoutCreateWindow (VCLXWindow** component, Window *paren
 
         attributes ^= awt::WindowAttribute::SHOW;
     }
-    else if ( name.equalsAscii( "sfxmodaldialog" ) )
+    else if ( name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "sfxmodaldialog" ) ) )
     {
         if ( parent == NULL )
             parent = DIALOG_NO_PARENT;
@@ -434,7 +434,7 @@ Window* WidgetFactory::layoutCreateWindow (VCLXWindow** component, Window *paren
 
         attributes ^= awt::WindowAttribute::SHOW;
     }
-    else if ( name.equalsAscii( "sfxmodelessdialog" ) )
+    else if ( name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "sfxmodelessdialog" ) ) )
     {
         if ( parent == NULL )
             parent = DIALOG_NO_PARENT;
@@ -443,95 +443,95 @@ Window* WidgetFactory::layoutCreateWindow (VCLXWindow** component, Window *paren
 
         attributes ^= awt::WindowAttribute::SHOW;
     }
-    else if ( name.equalsAscii( "tabcontrol" ) )
+    else if ( name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "tabcontrol" ) ) )
     {
         window = new TabControl( parent, ImplGetWinBits( attributes, WINDOW_TABCONTROL ) );
         *component = new layoutimpl::VCLXTabControl();
     }
-    else if ( name.equalsAscii( "scroller" ) )
+    else if ( name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "scroller" ) ) )
     {
         // used FixedImage because I just want some empty non-intrusive widget
         window = new FixedImage( parent, ImplGetWinBits( attributes, 0 ) );
         *component = new layoutimpl::VCLXScroller();
     }
-    else if ( name.equalsAscii( "hsplitter" ) || name.equalsAscii( "vsplitter" ) )
+    else if ( name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "hsplitter" ) ) || name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "vsplitter" ) ) )
     {
         window = new FixedImage( parent, ImplGetWinBits( attributes, 0 ) );
-        *component = new layoutimpl::VCLXSplitter( name.equalsAscii( "hsplitter" ) );
+        *component = new layoutimpl::VCLXSplitter( name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "hsplitter" ) ) );
     }
-    else if ( name.equalsAscii( "hfixedline" ) || name.equalsAscii( "vfixedline" ) )
+    else if ( name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "hfixedline" ) ) || name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "vfixedline" ) ) )
     {
         WinBits nStyle = ImplGetWinBits( attributes, 0 );
         nStyle ^= WB_HORZ;
-        if ( name.equalsAscii( "hfixedline" ) )
+        if ( name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "hfixedline" ) ) )
             nStyle |= WB_HORZ;
         else
             nStyle |= WB_VERT;
         window = new FixedLine( parent, nStyle );
         *component = new layoutimpl::VCLXFixedLine();
     }
-    else if ( name.equalsAscii( "okbutton" ) )
+    else if ( name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "okbutton" ) ) )
     {
         window = new PushButton( parent, ImplGetWinBits( attributes, 0 ) );
         *component = new layoutimpl::VCLXOKButton( window );
         window->SetType (WINDOW_OKBUTTON);
     }
-    else if ( name.equalsAscii( "cancelbutton" ) )
+    else if ( name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "cancelbutton" ) ) )
     {
         window = new PushButton( parent, ImplGetWinBits( attributes, 0 ) );
         *component = new layoutimpl::VCLXCancelButton( window );
         window->SetType (WINDOW_CANCELBUTTON);
     }
-    else if ( name.equalsAscii( "yesbutton" ) )
+    else if ( name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "yesbutton" ) ) )
     {
         window = new PushButton( parent, ImplGetWinBits( attributes, 0 ) );
         *component = new layoutimpl::VCLXYesButton( window );
         window->SetType (WINDOW_OKBUTTON);
     }
-    else if ( name.equalsAscii( "nobutton" ) )
+    else if ( name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "nobutton" ) ) )
     {
         window = new PushButton( parent, ImplGetWinBits( attributes, 0 ) );
         window->SetType (WINDOW_CANCELBUTTON);
         *component = new layoutimpl::VCLXNoButton( window );
     }
-    else if ( name.equalsAscii( "retrybutton" ) )
+    else if ( name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "retrybutton" ) ) )
     {
         window = new PushButton( parent, ImplGetWinBits( attributes, 0 ) );
         *component = new layoutimpl::VCLXRetryButton( window );
     }
-    else if ( name.equalsAscii( "ignorebutton" ) )
+    else if ( name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ignorebutton" ) ) )
     {
         window = new PushButton( parent, ImplGetWinBits( attributes, 0 ) );
         *component = new layoutimpl::VCLXIgnoreButton( window );
     }
-    else if ( name.equalsAscii( "resetbutton" ) )
+    else if ( name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "resetbutton" ) ) )
     {
         window = new PushButton( parent, ImplGetWinBits( attributes, 0 ) );
         *component = new layoutimpl::VCLXResetButton( window );
     }
-    else if ( name.equalsAscii( "applybutton" ) )
+    else if ( name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "applybutton" ) ) )
     {
         window = new PushButton( parent, ImplGetWinBits( attributes, 0 ) );
         *component = new layoutimpl::VCLXApplyButton( window );
     }
-    else if ( name.equalsAscii( "helpbutton" ) )
+    else if ( name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "helpbutton" ) ) )
     {
         window = new PushButton( parent, ImplGetWinBits( attributes, 0 ) );
         *component = new layoutimpl::VCLXHelpButton( window );
         window->SetType (WINDOW_HELPBUTTON);
     }
-    else if ( name.equalsAscii( "morebutton" ) )
+    else if ( name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "morebutton" ) ) )
     {
         window = new PushButton( parent, ImplGetWinBits( attributes, 0 ) );
         *component = new layoutimpl::VCLXMoreButton( window );
         window->SetType (WINDOW_MOREBUTTON);
     }
-    else if ( name.equalsAscii( "advancedbutton" ) )
+    else if ( name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "advancedbutton" ) ) )
     {
         window = new PushButton( parent, ImplGetWinBits( attributes, 0 ) );
         *component = new layoutimpl::VCLXAdvancedButton( window );
     }
-    else if ( name.equalsAscii( "plugin" ) )
+    else if ( name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "plugin" ) ) )
     {
         window = new Control( parent, ImplGetWinBits( attributes, 0 ) );
 #ifndef __SUNPRO_CC
@@ -539,7 +539,7 @@ Window* WidgetFactory::layoutCreateWindow (VCLXWindow** component, Window *paren
 #endif
         *component = new layoutimpl::VCLXPlugin( window, ImplGetWinBits( attributes, 0 ) );
     }
-    else if ( name.equalsAscii( "tabpage" ) )
+    else if ( name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "tabpage" ) ) )
     {
         if (layout::TabPage::global_parent)
             parent = layout::TabPage::global_parent;
@@ -560,7 +560,7 @@ Window* WidgetFactory::layoutCreateWindow (VCLXWindow** component, Window *paren
             *component = new VCLXTabPage( window );
         }
     }
-    else if ( name.equalsAscii( "string" ) )
+    else if ( name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "string" ) ) )
     {
         // FIXME: move <string>s.text to simple map<string> in root?
         attributes &= ~awt::WindowAttribute::SHOW;

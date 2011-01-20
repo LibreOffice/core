@@ -774,21 +774,21 @@ PrinterController::PageSize vcl::ImplPrinterControllerData::modifyJobSetup( cons
     sal_Int32 nPaperBin = mnDefaultPaperBin;
     for( sal_Int32 nProperty = 0, nPropertyCount = i_rProps.getLength(); nProperty < nPropertyCount; ++nProperty )
     {
-        if( i_rProps[ nProperty ].Name.equalsAscii( "PreferredPageSize" ) )
+        if( i_rProps[ nProperty ].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "PreferredPageSize" ) ) )
         {
             i_rProps[ nProperty ].Value >>= aSetSize;
         }
-        else if( i_rProps[ nProperty ].Name.equalsAscii( "PageSize" ) )
+        else if( i_rProps[ nProperty ].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "PageSize" ) ) )
         {
             i_rProps[ nProperty ].Value >>= aIsSize;
         }
-        else if( i_rProps[ nProperty ].Name.equalsAscii( "PageIncludesNonprintableArea" ) )
+        else if( i_rProps[ nProperty ].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "PageIncludesNonprintableArea" ) ) )
         {
             sal_Bool bVal = sal_False;
             i_rProps[ nProperty ].Value >>= bVal;
             aPageSize.bFullPaper = static_cast<bool>(bVal);
         }
-        else if( i_rProps[ nProperty ].Name.equalsAscii( "PrinterPaperTray" ) )
+        else if( i_rProps[ nProperty ].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "PrinterPaperTray" ) ) )
         {
             sal_Int32 nBin = -1;
             i_rProps[ nProperty ].Value >>= nBin;
@@ -1342,7 +1342,7 @@ void PrinterController::setUIOptions( const Sequence< beans::PropertyValue >& i_
         for( int n = 0; n < aOptProp.getLength(); n++ )
         {
             const beans::PropertyValue& rEntry( aOptProp[ n ] );
-            if( rEntry.Name.equalsAscii( "Property" ) )
+            if( rEntry.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Property" ) ) )
             {
                 PropertyValue aVal;
                 rEntry.Value >>= aVal;
@@ -1352,17 +1352,17 @@ void PrinterController::setUIOptions( const Sequence< beans::PropertyValue >& i_
                 aPropName = aVal.Name;
                 bHaveProperty = true;
             }
-            else if( rEntry.Name.equalsAscii( "Enabled" ) )
+            else if( rEntry.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Enabled" ) ) )
             {
                 sal_Bool bValue = sal_True;
                 rEntry.Value >>= bValue;
                 bIsEnabled = bValue;
             }
-            else if( rEntry.Name.equalsAscii( "DependsOnName" ) )
+            else if( rEntry.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "DependsOnName" ) ) )
             {
                 rEntry.Value >>= aDep.maDependsOnName;
             }
-            else if( rEntry.Name.equalsAscii( "DependsOnEntry" ) )
+            else if( rEntry.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "DependsOnEntry" ) ) )
             {
                 rEntry.Value >>= aDep.mnDependsOnEntry;
             }

@@ -242,7 +242,7 @@ TextConversion_zh::getConversion( const OUString& aText, sal_Int32 nStartPos, sa
     const Locale& rLocale, sal_Int16 nConversionType, sal_Int32 nConversionOptions)
     throw(  RuntimeException, IllegalArgumentException, NoSupportException )
 {
-    if (rLocale.Language.equalsAscii("zh") &&
+    if (rLocale.Language.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("zh")) &&
             ( nConversionType == TextConversionType::TO_SCHINESE ||
             nConversionType == TextConversionType::TO_TCHINESE) ) {
 
@@ -266,7 +266,7 @@ TextConversion_zh::getConversionWithOffset( const OUString& aText, sal_Int32 nSt
     const Locale& rLocale, sal_Int16 nConversionType, sal_Int32 nConversionOptions, Sequence<sal_Int32>& offset)
     throw(  RuntimeException, IllegalArgumentException, NoSupportException )
 {
-    if (rLocale.Language.equalsAscii("zh") &&
+    if (rLocale.Language.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("zh")) &&
             ( nConversionType == TextConversionType::TO_SCHINESE ||
             nConversionType == TextConversionType::TO_TCHINESE) ) {
 

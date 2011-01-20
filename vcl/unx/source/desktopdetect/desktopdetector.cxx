@@ -293,12 +293,12 @@ VCL_DLLPUBLIC rtl::OUString get_desktop_environment()
             for( int i = 0; i < nParams; i++ )
             {
                 osl_getCommandArg( i, &aParam.pData );
-                if( aParam.equalsAscii( "-headless" ) )
+                if( aParam.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "-headless" ) ) )
                 {
                     pDisplayStr = NULL;
                     break;
                 }
-                if( i < nParams-1 && (aParam.equalsAscii( "-display" ) || aParam.equalsAscii( "--display" )) )
+                if( i < nParams-1 && (aParam.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "-display" ) ) || aParam.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "--display" ) )) )
                 {
                     osl_getCommandArg( i+1, &aParam.pData );
                     aBParm = OUStringToOString( aParam, osl_getThreadTextEncoding() );

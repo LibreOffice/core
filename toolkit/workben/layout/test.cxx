@@ -198,22 +198,22 @@ void LayoutTest::ParseCommandLine()
     for ( sal_uInt16 i = 0; i < GetCommandLineParamCount(); i++ )
     {
         OUString aParam = OUString( GetCommandLineParam( i ) );
-        if ( aParam.equalsAscii( "-h" ) || aParam.equalsAscii( "--help" ) )
+        if ( aParam.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "-h" ) ) || aParam.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "--help" ) ) )
             usage();
-        if ( aParam.equalsAscii( "--inst" ) )
+        if ( aParam.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "--inst" ) ) )
         {
             if ( i >= GetCommandLineParamCount() - 1)
                 usage();
             mInstallDir = GetCommandLineParam( ++i );
             setenv( "OOO_INSTALL_PREFIX", OUSTRING_CSTR( mInstallDir ), 1 );
         }
-        else if ( aParam.equalsAscii( "--test" ) )
+        else if ( aParam.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "--test" ) ) )
         {
             mTestDialog = OUString(RTL_CONSTASCII_USTRINGPARAM("zoom"));
             if (i + 1 < GetCommandLineParamCount())
                 mTestDialog = GetCommandLineParam( ++i );
         }
-        else if ( aParam.equalsAscii( "--editor" ) )
+        else if ( aParam.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "--editor" ) ) )
             mEditMode = true;
         else
             mFiles.push_back( aParam );
@@ -264,17 +264,17 @@ void TestDialog( OUString const& name )
 {
     if ( 0 )
         ;
-    else if ( name.equalsAscii( "plugin" ) )
+    else if ( name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "plugin" ) ) )
     {
         PluginDialog plugin ( 0 );
         RunDialog( plugin );
     }
-    else if ( name.equalsAscii( "query" ) )
+    else if ( name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "query" ) ) )
     {
         QueryBox query ( 0, "Do you want to do?", "do");
         RunDialog( query );
     }
-    else if ( name.equalsAscii( "query-compat" ) )
+    else if ( name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "query-compat" ) ) )
     {
         QueryBox query ( 0,
                          WinBits( WB_YES_NO | WB_DEF_YES ),
@@ -282,25 +282,25 @@ void TestDialog( OUString const& name )
                          OUString(RTL_CONSTASCII_USTRINGPARAM ("Do you want to do?")));
         RunDialog( query );
     }
-    else if ( name.equalsAscii( "recover" ) )
+    else if ( name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "recover" ) ) )
     {
         SvxRecoverDialog recover ( 0 );
         RunDialog( recover );
     }
 #if SORT_DLG
-    else if ( name.equalsAscii( "sort" ) )
+    else if ( name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "sort" ) ) )
     {
         LoadSC();
         ScSortDlg sort (0, 0);
         RunDialog( sort );
     }
 #endif /* SORT_DLG */
-    else if ( name.equalsAscii( "wordcount" ) )
+    else if ( name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "wordcount" ) ) )
     {
         SwWordCountDialog words ( 0 );
         RunDialog( words );
     }
-    else if ( name.equalsAscii( "zoom" ) )
+    else if ( name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "zoom" ) ) )
     {
         SvxZoomDialog zoom( 0 );
         RunDialog( zoom );

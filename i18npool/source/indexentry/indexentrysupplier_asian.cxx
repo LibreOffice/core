@@ -68,7 +68,7 @@ IndexEntrySupplier_asian::getIndexCharacter( const OUString& rIndexEntry,
     if (hModule) {
         OUString get(RTL_CONSTASCII_USTRINGPARAM("get_indexdata_"));
         sal_uInt16** (*func)(sal_Int16*)=NULL;
-        if (rLocale.Language.equalsAscii("zh") && OUString(RTL_CONSTASCII_USTRINGPARAM("TW HK MO")).indexOf(rLocale.Country) >= 0)
+        if (rLocale.Language.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("zh")) && OUString(RTL_CONSTASCII_USTRINGPARAM("TW HK MO")).indexOf(rLocale.Country) >= 0)
             func=(sal_uInt16** (*)(sal_Int16*))osl_getFunctionSymbol(hModule, (get+rLocale.Language+OUString(RTL_CONSTASCII_USTRINGPARAM("_TW_"))+rAlgorithm).pData);
         if (!func)
             func=(sal_uInt16** (*)(sal_Int16*))osl_getFunctionSymbol(hModule, (get+rLocale.Language+OUString('_')+rAlgorithm).pData);
@@ -120,9 +120,9 @@ IndexEntrySupplier_asian::getPhoneticCandidate( const OUString& rIndexEntry,
     if (hModule) {
         sal_uInt16 **(*func)(sal_Int16*)=NULL;
         const sal_Char *func_name=NULL;
-        if (rLocale.Language.equalsAscii("zh"))
+        if (rLocale.Language.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("zh")))
             func_name=(OUString(RTL_CONSTASCII_USTRINGPARAM("TW HK MO")).indexOf(rLocale.Country) >= 0) ?  "get_zh_zhuyin" : "get_zh_pinyin";
-        else if (rLocale.Language.equalsAscii("ko"))
+        else if (rLocale.Language.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("ko")))
             func_name="get_ko_phonetic";
         if (func_name)
             func=(sal_uInt16 **(*)(sal_Int16*))osl_getFunctionSymbol(hModule, OUString::createFromAscii(func_name).pData);
@@ -137,7 +137,7 @@ IndexEntrySupplier_asian::getPhoneticCandidate( const OUString& rIndexEntry,
                     sal_uInt16 address = idx[0][ch>>8];
                     if (address != 0xFFFF) {
                         address = idx[1][address + (ch & 0xFF)];
-                        if (i > 0 && rLocale.Language.equalsAscii("zh"))
+                        if (i > 0 && rLocale.Language.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("zh")))
                             candidate.appendAscii(" ");
                         if (idx[2])
                             candidate.append(&idx[2][address]);

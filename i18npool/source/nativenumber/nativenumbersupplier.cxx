@@ -757,7 +757,7 @@ sal_Int16 SAL_CALL NativeNumberSupplier::convertFromXmlAttributes( const NativeN
 
         sal_Int16 num = sal::static_int_cast<sal_Int16>( number.indexOf(aAttr.Format) );
 
-        if (aAttr.Style.equalsAscii("short")) {
+        if (aAttr.Style.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("short"))) {
             if (num == NumberChar_FullWidth)
                 return NativeNumberMode::NATNUM3;
             else if (num == NumberChar_Hangul_ko)
@@ -766,7 +766,7 @@ sal_Int16 SAL_CALL NativeNumberSupplier::convertFromXmlAttributes( const NativeN
                 return NativeNumberMode::NATNUM1;
             else if (natNumIn(num, natnum2, sizeof_natnum2))
                 return NativeNumberMode::NATNUM2;
-        } else if (aAttr.Style.equalsAscii("medium")) {
+        } else if (aAttr.Style.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("medium"))) {
             if (num == NumberChar_Hangul_ko)
                 return NativeNumberMode::NATNUM11;
             else if (num == NumberChar_he)
@@ -775,7 +775,7 @@ sal_Int16 SAL_CALL NativeNumberSupplier::convertFromXmlAttributes( const NativeN
                 return NativeNumberMode::NATNUM7;
             else if (natNumIn(num, natnum2, sizeof_natnum2))
                 return NativeNumberMode::NATNUM8;
-        } else if (aAttr.Style.equalsAscii("long")) {
+        } else if (aAttr.Style.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("long"))) {
             if (num == NumberChar_FullWidth)
                 return NativeNumberMode::NATNUM6;
             else if (num == NumberChar_Hangul_ko)

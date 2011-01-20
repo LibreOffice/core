@@ -407,7 +407,7 @@ void SalXLib::Init()
     for (USHORT i=0; i<nParams; i++)
     {
         osl_getCommandArg(i, &aParam.pData);
-        if (aParam.equalsAscii("-display"))
+        if (aParam.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("-display")))
         {
             osl_getCommandArg(i+1, &aParam.pData);
             aDisplay = rtl::OUStringToOString(

@@ -795,9 +795,9 @@ static sal_Int16 SAL_CALL NatNumForCalendar(const com::sun::star::lang::Locale& 
         nCalendarDisplayCode == CalendarDisplayCode::LONG_YEAR) && value >= 100) ||
         nCalendarDisplayCode == CalendarDisplayCode::SHORT_QUARTER ||
         nCalendarDisplayCode == CalendarDisplayCode::LONG_QUARTER;
-    sal_Bool isChinese = aLocale.Language.equalsAscii("zh");
-    sal_Bool isJapanese = aLocale.Language.equalsAscii("ja");
-    sal_Bool isKorean = aLocale.Language.equalsAscii("ko");
+    sal_Bool isChinese = aLocale.Language.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("zh"));
+    sal_Bool isJapanese = aLocale.Language.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("ja"));
+    sal_Bool isKorean = aLocale.Language.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("ko"));
 
     if (isChinese || isJapanese || isKorean) {
         switch (nNativeNumberMode) {
@@ -983,7 +983,7 @@ Calendar_gregorian::getDisplayString( sal_Int32 nCalendarDisplayCode, sal_Int16 
                 sprintf(aStr, "%d", value);     // #100211# - checked
                 break;
             case CalendarDisplayCode::LONG_YEAR:
-                if (aCalendar.Name.equalsAscii("gengou"))
+                if (aCalendar.Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("gengou")))
                     sprintf(aStr, "%02d", value);     // #100211# - checked
                 else
                     sprintf(aStr, "%d", value);     // #100211# - checked
