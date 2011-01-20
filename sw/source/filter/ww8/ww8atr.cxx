@@ -4032,31 +4032,71 @@ WW8_BRC WW8Export::TranslateBorderLine(const SvxBorderLine& rLine,
     // what SwRTFWriter::OutRTFBorder does in the RTF filter Eventually it
     // would be nice if all this functionality was in the one place
     WW8_BRC aBrc;
-    sal_uInt16 nWidth = rLine.GetInWidth() + rLine.GetOutWidth();
+    sal_uInt16 nWidth = rLine.GetWidth();
     sal_uInt8 brcType = 0, nColCode = 0;
 
     if( nWidth )                                // Linie ?
     {
         // BRC.brcType
-        bool bDouble = 0 != rLine.GetInWidth() && 0 != rLine.GetOutWidth();
-        bool bThick = !bDouble && !bWrtWW8 && nWidth > 75;
-        if( bDouble )
-            brcType = 3;
-        else if( bThick )
+        bool bThick = !rLine.isDouble() && !bWrtWW8 && nWidth > 75;
+        if( bThick )
             brcType = 2;
         else
         {
-
-            brcType = 1;
+            brcType = 0;
             if ( bWrtWW8 )
             {
+                // All the border types values are available on
+                // http://msdn.microsoft.com/en-us/library/dd908142%28v=office.12%29.aspx
                 switch ( rLine.GetStyle( ) )
                 {
+                    case SOLID:
+                        {
+                            if ( rLine.GetWidth( ) == DEF_LINE_WIDTH_0 )
+                                brcType = 5;
+                            else
+                                brcType = 1;
+                        }
+                        break;
                     case DOTTED:
                         brcType = 6;
                         break;
                     case DASHED:
                         brcType = 7;
+                        break;
+                    case DOUBLE:
+                        brcType = 3;
+                        break;
+                    case THINTHICK_SMALLGAP:
+                        brcType = 11;
+                        break;
+                    case THINTHICK_MEDIUMGAP:
+                        brcType = 14;
+                        break;
+                    case THINTHICK_LARGEGAP:
+                        brcType = 17;
+                        break;
+                    case THICKTHIN_SMALLGAP:
+                        brcType = 12;
+                        break;
+                    case THICKTHIN_MEDIUMGAP:
+                        brcType = 15;
+                        break;
+                    case THICKTHIN_LARGEGAP:
+                        brcType = 18;
+                        break;
+                    case EMBOSSED:
+                        brcType = 24;
+                        break;
+                    case ENGRAVED:
+                        brcType = 25;
+                        break;
+                    case OUTSET:
+                        brcType = 26;
+                        break;
+                    case INSET:
+                        brcType = 27;
+                        break;
                     default:
                         break;
                 }

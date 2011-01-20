@@ -1627,26 +1627,22 @@ void SwWW8ImplReader::MatchSdrItemsIntoFlySet( SdrObject* pSdrObj,
     const SvxBorderLine *pLine;
     if (0 != (pLine = aBox.GetLine(BOX_LINE_LEFT)))
     {
-        rInnerDist.Left() -= (pLine->GetOutWidth() + pLine->GetInWidth() +
-            pLine->GetDistance());
+        rInnerDist.Left() -= (pLine->GetScaledWidth());
     }
 
     if (0 != (pLine = aBox.GetLine(BOX_LINE_TOP)))
     {
-        rInnerDist.Top() -= (pLine->GetOutWidth() + pLine->GetInWidth() +
-            pLine->GetDistance());
+        rInnerDist.Top() -= (pLine->GetScaledWidth());
     }
 
     if (0 != (pLine = aBox.GetLine(BOX_LINE_RIGHT)))
     {
-        rInnerDist.Right() -= (pLine->GetOutWidth() + pLine->GetInWidth() +
-            pLine->GetDistance());
+        rInnerDist.Right() -= (pLine->GetScaledWidth());
     }
 
     if (0 != (pLine = aBox.GetLine(BOX_LINE_BOTTOM)))
     {
-        rInnerDist.Bottom() -= (pLine->GetOutWidth() + pLine->GetInWidth() +
-            pLine->GetDistance());
+        rInnerDist.Bottom() -= (pLine->GetScaledWidth());
     }
 
     // set distances from box's border to text contained within the box

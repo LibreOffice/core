@@ -3222,7 +3222,7 @@ void WW8TabDesc::AdjustNewBand()
         const SvxBorderLine *pLeftLine = aCurrentBox.GetLine(BOX_LINE_LEFT);
         int nCurrentRightLineWidth = 0;
         if(pLeftLine)
-            nCurrentRightLineWidth = pLeftLine->GetInWidth() + pLeftLine->GetOutWidth() + pLeftLine->GetDistance();
+            nCurrentRightLineWidth = pLeftLine->GetScaledWidth();
 
         if (i != 0)
         {
@@ -3231,7 +3231,7 @@ void WW8TabDesc::AdjustNewBand()
             const SvxBorderLine *pRightLine = aOldBox.GetLine(BOX_LINE_RIGHT);
             int nOldBoxRightLineWidth = 0;
             if(pRightLine)
-                nOldBoxRightLineWidth = pRightLine->GetInWidth() + pRightLine->GetOutWidth() + pRightLine->GetDistance();
+                nOldBoxRightLineWidth = pRightLine->GetScaledWidth();
 
             if(nOldBoxRightLineWidth>nCurrentRightLineWidth)
                 aCurrentBox.SetLine(aOldBox.GetLine(BOX_LINE_RIGHT), BOX_LINE_LEFT);

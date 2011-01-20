@@ -1657,11 +1657,10 @@ sal_Int32 SwBasicEscherEx::WriteFlyFrameAttr(const SwFrmFmt& rFmt,
                         nLineColor ^ 0xffffff );
 
                     MSO_LineStyle eStyle;
-                    if( pLine->GetInWidth() )
+                    if( pLine->isDouble() )
                     {
                         // double line
-                        nLineWidth = pLine->GetInWidth() + pLine->GetOutWidth()
-                            + pLine->GetDistance();
+                        nLineWidth = pLine->GetWidth();
                         if( pLine->GetInWidth() == pLine->GetOutWidth() )
                             eStyle = mso_lineDouble;
                         else if( pLine->GetInWidth() < pLine->GetOutWidth() )
@@ -1673,7 +1672,7 @@ sal_Int32 SwBasicEscherEx::WriteFlyFrameAttr(const SwFrmFmt& rFmt,
                     {
                         // simple line
                         eStyle = mso_lineSimple;
-                        nLineWidth = pLine->GetOutWidth();
+                        nLineWidth = pLine->GetWidth();
                     }
 
                     rPropOpt.AddOpt( ESCHER_Prop_lineStyle, eStyle );

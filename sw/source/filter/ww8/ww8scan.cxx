@@ -1307,28 +1307,13 @@ short WW8_BRC::DetermineBorderProperties(bool bVer67, short *pSpace,
         {
             //Note that codes over 25 are undocumented, and I can't create
             //these 4 here in the wild.
-            default:
             case 2:
             case 4:
             case 5:
             case 22:
                 DBG_WARNING("Can't create these from the menus, please report");
-            case 1:
-            case 6:
-            case 7:
-            case 8:
-            case 9:
+            default:
             case 23:    //Only 3pt in the menus, but honours the size setting.
-                break;
-            case 3:
-                /*
-                double line is three times the width of an ordinary line,
-                except for the smallest 1/4 point size which appears to have
-                exactly the same total border width as a 1/2 point size
-                ordinary line, i.e. twice the nominal line width
-                */
-                nMSTotalWidth = (nMSTotalWidth == 5) ?
-                    nMSTotalWidth*2 : nMSTotalWidth*3;
                 break;
             case 10:
                 /*
@@ -1345,97 +1330,6 @@ short WW8_BRC::DetermineBorderProperties(bool bVer67, short *pSpace,
                     nMSTotalWidth = nMSTotalWidth*9/2;
                 else
                     nMSTotalWidth*=5;
-                break;
-            case 11:
-            case 12:
-                /*
-                small gap thin thick and thick thin appears to have a 3/4
-                point line, a 3/4 point gap and a thick line of the specified
-                width
-                */
-                nMSTotalWidth = nMSTotalWidth + 15*2;
-                break;
-            case 13:
-                /*
-                thin thick thin appears to have two outside 3/4 point lines,
-                two 3/4 point gaps and a thick line of the specified width
-                */
-                nMSTotalWidth = nMSTotalWidth + 15*4;
-                break;
-            case 14:
-            case 15:
-                /*
-                medium gap thin thick and thick thin appears to have a line
-                50% of the thick line, and an equal sized gap and then the
-                thick line of the specified width. But it appears to only
-                use one of the existing predefined widths for the thin line,
-                so the closest smallest existing border to the halved thick
-                line is used.
-                */
-                switch (nMSTotalWidth)
-                {
-                    case 45:    //2 1/4, closest to half is 1
-                        nMSTotalWidth += 20 + (nMSTotalWidth-1)/2;
-                        break;
-                    case 5:
-                    case 10:
-                        nMSTotalWidth += 5;
-                        break;
-                    case 15:    //3/4, closest to half is 1/4
-                        nMSTotalWidth += 5 + (nMSTotalWidth-1)/2;
-                        break;
-                    default:
-                        nMSTotalWidth*=2;
-                        break;
-                }
-                break;
-            case 16:
-                /*
-                medium gap thin thick thin appears to have a line
-                50% of the thick line, and an equal sized gap and then the
-                thick line of the specified width. But it appears to only
-                use one of the existing predefined widths for the thin
-                line, so the closest smallest existing border to the halved
-                thick line is used. Though some fudging at smaller sizes is
-                still required.
-                */
-                switch (nMSTotalWidth)
-                {
-                    case 45:    //2 1/4, closest to half is 1
-                        nMSTotalWidth += nMSTotalWidth + 20 * 2;
-                        break;
-                    case 20:
-                    case 15:
-                        nMSTotalWidth += nMSTotalWidth + 7 * 2;
-                        break;
-                    case 10:
-                    case 5:
-                        nMSTotalWidth += 5 + 4;
-                        break;
-                    default:
-                        nMSTotalWidth*=3;
-                        break;
-                }
-                break;
-            case 17:
-            case 18:
-                /*
-                large gap thin thick and thick thin appears to have a thick
-                line of 1 1/2 pt and a narrow of 3/4 point, with a distance
-                between the two of the explicitly set line width
-                */
-                nMSTotalWidth+=15+30;
-                break;
-            case 19:
-                /*
-                large gap thin thick thin appears to have a thick line of 1
-                1/2 pt and two narrows of 3/4 point, with a distance between
-                the two of the explicitly set line width, though the narrowest
-                line appears to behave as if it was even smaller
-                */
-                if (nMSTotalWidth == 5)
-                    nMSTotalWidth = 3;
-                nMSTotalWidth = nMSTotalWidth*2 + 15*2 + 30;
                 break;
             case 20:
                 /*
@@ -1454,19 +1348,6 @@ short WW8_BRC::DetermineBorderProperties(bool bVer67, short *pSpace,
                 calculation seems to match well to results.
                 */
                 nMSTotalWidth += 45*2;
-                break;
-            case 24:
-            case 25:
-                /*
-                emboss and engrave consist of a three lines, the central is of
-                the explicit point width, the other two (of equal size to each
-                other are the shadows and are either 3/4 pt of 1 1/2 depending
-                on if the central line is greater of less than 2 1/4 pt
-                */
-                if (nMSTotalWidth <= 45)
-                    nMSTotalWidth += 2*15;
-                else
-                    nMSTotalWidth += 2*30;
                 break;
         }
     }

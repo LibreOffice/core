@@ -1276,37 +1276,11 @@ sal_uInt8 lcl_ReadBorders(bool bVer67, WW8_BRC* brc, WW8PLCFx_Cp_FKP* pPap,
 void GetLineIndex(SvxBoxItem &rBox, short nLineThickness, short nSpace, sal_uInt8 nCol, short nIdx,
     sal_uInt16 nOOIndex, sal_uInt16 nWWIndex, short *pSize=0)
 {
-    //Word mirrors some indexes inside outside depending on its position, we
-    //don't do that, so flip them here
-    if (nWWIndex == WW8_TOP || nWWIndex == WW8_LEFT)
-    {
-        switch (nIdx)
-        {
-            case 11:
-            case 12:
-                nIdx = (nIdx == 11) ? 12 : 11;
-                break;
-            case 14:
-            case 15:
-                nIdx = (nIdx == 14) ? 15 : 14;
-                break;
-            case 17:
-            case 18:
-                nIdx = (nIdx == 17) ? 18 : 17;
-                break;
-            case 24:
-            case 25:
-                nIdx = (nIdx == 24) ? 25 : 24;
-                break;
-        }
-    }
-
     SvxBorderStyle eStyle = SOLID;
     switch (nIdx)
     {
         // First the single lines
         case  1:
-        case  2:
         case  5:
         // and the unsupported special cases which we map to a single line
         case  8:
@@ -1314,6 +1288,12 @@ void GetLineIndex(SvxBoxItem &rBox, short nLineThickness, short nSpace, sal_uInt
         case 20:
         case 22:
             eStyle = SOLID;
+            break;
+        case  2:
+            {
+                eStyle = SOLID;
+                nLineThickness *= 2;
+            }
             break;
         case  6:
             eStyle = DOTTED;
@@ -1358,6 +1338,12 @@ void GetLineIndex(SvxBoxItem &rBox, short nLineThickness, short nSpace, sal_uInt
         case 25:
             eStyle = ENGRAVED;
             break;
+        case 26:
+            eStyle = OUTSET;
+            break;
+        case 27:
+            eStyle = INSET;
+            break;
         default:
             eStyle = SOLID;
             break;
@@ -1365,7 +1351,7 @@ void GetLineIndex(SvxBoxItem &rBox, short nLineThickness, short nSpace, sal_uInt
 
     SvxBorderLine aLine;
     aLine.SetStyle( eStyle );
-    aLine.SetWidth( long( nLineThickness * 2.5 ) );  // Convert 1/8th pt into twips
+    aLine.SetWidth( nLineThickness );
 
     //No AUTO for borders as yet, so if AUTO, use BLACK
     if (nCol == 0)
