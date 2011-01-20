@@ -267,7 +267,7 @@ class MyRtfScannerHandler : public writerfilter::rtftok::RTFScannerHandler
 
 public:
     MyRtfScannerHandler(uno::Reference<lang::XMultiServiceFactory> &xServiceFactory_, uno::Reference<com::sun::star::ucb::XSimpleFileAccess> &xFileAccess_, uno::Reference<embed::XStorage> &xStorage_) :
-    objDataLevel(0), numOfOLEs(0),
+            objDataLevel(0), numOfOLEs(0), hb(' '), numOfOLEChars(0),
     xServiceFactory(xServiceFactory_),
     xFileAccess(xFileAccess_),
     xStorage(xStorage_)

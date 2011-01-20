@@ -122,10 +122,9 @@ WW8Stream::Pointer_t WW8StreamImpl::getSubStream(const ::rtl::OUString & sId)
     }
     catch (...)
     {
+        throw ExceptionNotFound("Stream not found");
     }
 
-    if (pResult.get() == NULL)
-        throw ExceptionNotFound("Stream not found");
 
     return pResult;
 }

@@ -443,6 +443,7 @@ void WW8PropertiesHandler::attribute(Id name, Value & val)
         }
         catch (ExceptionOutOfBounds e)
         {
+            output.addItem("<exception/>");
         }
 
         output.addItem("</properties>");
@@ -460,6 +461,7 @@ void WW8PropertiesHandler::attribute(Id name, Value & val)
         }
         catch (ExceptionOutOfBounds e)
         {
+            output.addItem("<exception>Out Of Bounds</exception>");
         }
     }
 
@@ -475,6 +477,7 @@ void WW8PropertiesHandler::attribute(Id name, Value & val)
         }
         catch (ExceptionOutOfBounds e)
         {
+            output.addItem("<exception>Out Of Bounds</exception>");
         }
     }
 

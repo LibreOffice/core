@@ -192,6 +192,7 @@ void WW8PropertiesReference::resolve(Properties & rHandler)
         }
         catch (ExceptionOutOfBounds e)
         {
+            (void) e;
         }
     }
 }

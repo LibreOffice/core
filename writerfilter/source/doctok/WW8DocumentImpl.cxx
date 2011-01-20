@@ -197,6 +197,7 @@ mbInSection(false), mbInParagraphGroup(false), mbInCharacterGroup(false)
     }
     catch (ExceptionNotFound e)
     {
+        (void) e;
     }
 
     try
@@ -206,6 +207,7 @@ mbInSection(false), mbInParagraphGroup(false), mbInCharacterGroup(false)
     }
     catch (ExceptionNotFound e)
     {
+        (void) e;
     }
 
     mpCHPFKPCache =
@@ -875,6 +877,7 @@ writerfilter::Reference<Properties>::Pointer_t WW8DocumentImpl::getProperties
             }
             catch (ExceptionOutOfBounds e)
             {
+                (void) e;
             }
         }
 
@@ -1013,7 +1016,9 @@ writerfilter::Reference<Table>::Pointer_t WW8DocumentImpl::getListTable() const
 
             pResult = writerfilter::Reference<Table>::Pointer_t(pList);
         }
-        catch (ExceptionOutOfBounds aException) {
+        catch (ExceptionOutOfBounds aException)
+        {
+            (void) aException;
         }
     }
 
