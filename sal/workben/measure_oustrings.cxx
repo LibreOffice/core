@@ -225,7 +225,7 @@ SAL_IMPLEMENT_MAIN()
     TIME
     (
         "rtl::OUString::equalsAscii",
-        sCompare.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("apple"));
+        sCompare.equalsAscii("apple");
     )
 
     //(const sal_Char*, sal_Int32) version has different semantics
@@ -260,7 +260,7 @@ SAL_IMPLEMENT_MAIN()
     TIME
     (
         "rtl::OUString::equalsAscii",
-        sCompare.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("XXXXXXXXXXXXXXX"));
+        sCompare.equalsAscii("XXXXXXXXXXXXXXX");
     )
 
     //(const sal_Char*, sal_Int32) version has different semantics
