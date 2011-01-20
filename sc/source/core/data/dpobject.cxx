@@ -80,6 +80,8 @@
 
 using namespace com::sun::star;
 using ::std::vector;
+using ::std::unary_function;
+using ::std::remove_if;
 using ::boost::shared_ptr;
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::Reference;
@@ -2416,29 +2418,30 @@ ScDPCollection::~ScDPCollection()
     maTables.clear();
 }
 
+namespace {
+
+/**
+ * Unary predicate to match DP objects by the table ID.
+ */
+class MatchByTable : public unary_function<bool, ScDPObject>
+{
+    SCTAB mnTab;
+public:
+    MatchByTable(SCTAB nTab) : mnTab(nTab) {}
+
+    bool operator() (const ScDPObject& rObj) const
+    {
+        return rObj.GetOutRange().aStart.Tab() == mnTab;
+    }
+};
+
+}
+
 void ScDPCollection::DeleteOnTab( SCTAB nTab )
 {
-#ifdef STLPORT_WORKAROUND
-    // We do this only because STLPort crashes when erasing an element when
-    // the container only contains one element.
-    if (maTables.size() == 1)
-    {
-        if (maTables.back().GetOutRange().aStart.Tab() == nTab)
-            maTables.clear();
-        return;
-    }
-#endif
-
-    TablesType::iterator itr = maTables.begin(), itrEnd = maTables.end();
-    while (itr != itrEnd)
-    {
-        const ScDPObject& rObj = *itr;
-        if (rObj.GetOutRange().aStart.Tab() == nTab)
-            // returns the next position after the erased element.
-            itr = maTables.erase(itr);
-        else
-            ++itr;
-    }
+    maTables.erase(
+        remove_if(maTables.begin(), maTables.end(), MatchByTable(nTab)),
+        maTables.end());
 }
 
 void ScDPCollection::UpdateReference( UpdateRefMode eUpdateRefMode,
@@ -2635,16 +2638,6 @@ void ScDPCollection::FreeTable(ScDPObject* pDPObj)
     const ScAddress& s = rOutRange.aStart;
     const ScAddress& e = rOutRange.aEnd;
     pDoc->RemoveFlagsTab(s.Col(), s.Row(), e.Col(), e.Row(), s.Tab(), SC_MF_DP_TABLE);
-#ifdef STLPORT_WORKAROUND
-    // We do this only because STLPort crashes when erasing an element when
-    // the container only contains one element.
-    if (maTables.size() == 1)
-    {
-        if (&maTables.back() == pDPObj)
-            maTables.clear();
-        return;
-    }
-#endif
     TablesType::iterator itr = maTables.begin(), itrEnd = maTables.end();
     for (; itr != itrEnd; ++itr)
     {

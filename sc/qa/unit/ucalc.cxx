@@ -80,8 +80,14 @@
 #include <iostream>
 #include <vector>
 
+#define MDDS_HASH_CONTAINER_STLPORT 1
+#include <mdds/mixed_type_matrix.hpp>
+
+#define UCALC_DEBUG_OUTPUT 0
+
 using namespace ::com::sun::star;
 using ::rtl::OUString;
+using ::rtl::OUStringBuffer;
 using ::std::cout;
 using ::std::endl;
 using ::std::vector;
@@ -92,6 +98,113 @@ namespace {
 {
     return os << ::rtl::OUStringToOString(str, RTL_TEXTENCODING_UTF8).getStr();
 }
+
+/**
+ * Print nicely formatted sheet content to stdout.  Indispensable when
+ * debugging the unit test code involving testing of sheet contents.
+ */
+class SheetPrinter
+{
+    typedef ::mdds::mixed_type_matrix<OUString, bool> MatrixType;
+public:
+    SheetPrinter(size_t rows, size_t cols) :
+        maMatrix(rows, cols, ::mdds::matrix_density_sparse_empty) {}
+
+    void set(size_t row, size_t col, const OUString& aStr)
+    {
+        maMatrix.set_string(row, col, new OUString(aStr));
+    }
+
+#if UCALC_DEBUG_OUTPUT
+    void print(const char* header) const
+    {
+        if (header)
+            cout << header << endl;
+
+        MatrixType::size_pair_type ns = maMatrix.size();
+        vector<sal_Int32> aColWidths(ns.second, 0);
+
+        // Calculate column widths first.
+        for (size_t row = 0; row < ns.first; ++row)
+        {
+            for (size_t col = 0; col < ns.second; ++col)
+            {
+                const OUString* p = maMatrix.get_string(row, col);
+                if (aColWidths[col] < p->getLength())
+                    aColWidths[col] = p->getLength();
+            }
+        }
+
+        // Make the row separator string.
+        OUStringBuffer aBuf;
+        aBuf.appendAscii("+");
+        for (size_t col = 0; col < ns.second; ++col)
+        {
+            aBuf.appendAscii("-");
+            for (sal_Int32 i = 0; i < aColWidths[col]; ++i)
+                aBuf.append(sal_Unicode('-'));
+            aBuf.appendAscii("-+");
+        }
+
+        OUString aSep = aBuf.makeStringAndClear();
+
+        // Now print to stdout.
+        cout << aSep << endl;
+        for (size_t row = 0; row < ns.first; ++row)
+        {
+            cout << "| ";
+            for (size_t col = 0; col < ns.second; ++col)
+            {
+                const OUString* p = maMatrix.get_string(row, col);
+                size_t nPadding = aColWidths[col] - p->getLength();
+                aBuf.append(*p);
+                for (size_t i = 0; i < nPadding; ++i)
+                    aBuf.append(sal_Unicode(' '));
+                cout << aBuf.makeStringAndClear() << " | ";
+            }
+            cout << endl;
+            cout << aSep << endl;
+        }
+    }
+#else
+    void print(const char*) const {}
+#endif
+
+    /**
+     * Print nested string array which can be copy-n-pasted into the test code
+     * for content verification.
+     */
+    void printArray() const
+    {
+#if UCALC_DEBUG_OUTPUT
+        MatrixType::size_pair_type ns = maMatrix.size();
+        for (size_t row = 0; row < ns.first; ++row)
+        {
+            cout << "    { ";
+            for (size_t col = 0; col < ns.second; ++col)
+            {
+                const OUString* p = maMatrix.get_string(row, col);
+                if (p->getLength())
+                    cout << "\"" << *p << "\"";
+                else
+                    cout << "0";
+                if (col < ns.second - 1)
+                    cout << ", ";
+            }
+            cout << " }";
+            if (row < ns.first - 1)
+                cout << ",";
+            cout << endl;
+        }
+#endif
+    }
+
+    void clear() { maMatrix.clear(); }
+    void resize(size_t rows, size_t cols) { maMatrix.resize(rows, cols); }
+
+private:
+    MatrixType maMatrix;
+};
 
 class Test : public CppUnit::TestFixture {
 public:
@@ -386,6 +499,7 @@ void Test::testDataPilot()
     m_pDoc->InsertTab(0, OUString(RTL_CONSTASCII_USTRINGPARAM("Data")));
     m_pDoc->InsertTab(1, OUString(RTL_CONSTASCII_USTRINGPARAM("Table")));
 
+    // Dimension definition
     struct {
         const char* pName; sheet::DataPilotFieldOrientation eOrient;
     } aFields[] = {
@@ -394,6 +508,7 @@ void Test::testDataPilot()
         { "Score", sheet::DataPilotFieldOrientation_DATA }
     };
 
+    // Raw data
     struct {
         const char* pName; const char* pGroup; int nScore;
     } aData[] = {
@@ -403,6 +518,19 @@ void Test::testDataPilot()
         { "David",   "B", 12 },
         { "Edward",  "C",  8 },
         { "Frank",   "C", 15 },
+    };
+
+    // Expected output table content.  0 = empty cell
+    const char* aOutputCheck[][5] = {
+        { "Sum - Score", "Group", 0, 0, 0 },
+        { "Name", "A", "B", "C", "Total Result" },
+        { "Andy", "30", 0, 0, "30" },
+        { "Bruce", "20", 0, 0, "20" },
+        { "Charlie", 0, "45", 0, "45" },
+        { "David", 0, "12", 0, "12" },
+        { "Edward", 0, 0, "8", "8" },
+        { "Frank", 0, 0, "15", "15" },
+        { "Total Result", "50", "57", "23", "130" }
     };
 
     sal_uInt32 nFieldCount = SAL_N_ELEMENTS(aFields);
@@ -428,18 +556,18 @@ void Test::testDataPilot()
     CPPUNIT_ASSERT_MESSAGE("Unexpected data range.",
                            nCol2 == static_cast<SCCOL>(nFieldCount - 1) && nRow2 == static_cast<SCROW>(nDataCount));
 
-#if 0
+    SheetPrinter printer(nRow2 - nRow1 + 1, nCol2 - nCol1 + 1);
     for (SCROW nRow = nRow1; nRow <= nRow2; ++nRow)
     {
         for (SCCOL nCol = nCol1; nCol <= nCol2; ++nCol)
         {
             String aVal;
             m_pDoc->GetString(nCol, nRow, 0, aVal);
-            cout << aVal << " | ";
+            printer.set(nRow, nCol, aVal);
         }
-        cout << endl;
     }
-#endif
+    printer.print("Data sheet content");
+    printer.clear();
 
     ScSheetSourceDesc aSheetDesc;
     aSheetDesc.aSourceRange = ScRange(nCol1, nRow1, 0, nCol2, nRow2, 0);
@@ -536,21 +664,35 @@ void Test::testDataPilot()
     CPPUNIT_ASSERT_MESSAGE("Table overflow!?", !bOverFlow);
 
     pDPObj->Output(aOutRange.aStart);
-#if 0
     aOutRange = pDPObj->GetOutRange();
     const ScAddress& s = aOutRange.aStart;
     const ScAddress& e = aOutRange.aEnd;
-    for (SCROW nRow = s.Row(); nRow <= e.Row(); ++nRow)
+    printer.resize(e.Row() - s.Row() + 1, e.Col() - s.Col() + 1);
+    SCROW nOutRowSize = SAL_N_ELEMENTS(aOutputCheck);
+    SCCOL nOutColSize = SAL_N_ELEMENTS(aOutputCheck[0]);
+    CPPUNIT_ASSERT_MESSAGE("Row size of the table output is not as expected.",
+                           nOutRowSize == (e.Row()-s.Row()+1));
+    CPPUNIT_ASSERT_MESSAGE("Column size of the table output is not as expected.",
+                           nOutColSize == (e.Col()-s.Col()+1));
+    for (SCROW nRow = 0; nRow < nOutRowSize; ++nRow)
     {
-        for (SCCOL nCol = s.Col(); nCol <= e.Col(); ++nCol)
+        for (SCCOL nCol = 0; nCol < nOutColSize; ++nCol)
         {
             String aVal;
-            m_pDoc->GetString(nCol, nRow, s.Tab(), aVal);
-            cout << aVal << " | ";
+            m_pDoc->GetString(nCol + s.Col(), nRow + s.Row(), s.Tab(), aVal);
+            printer.set(nRow, nCol, aVal);
+            const char* p = aOutputCheck[nRow][nCol];
+            if (p)
+            {
+                OUString aCheckVal = OUString::createFromAscii(p);
+                CPPUNIT_ASSERT_MESSAGE("Unexpected cell content.", aCheckVal.equals(aVal));
+            }
+            else
+                CPPUNIT_ASSERT_MESSAGE("Empty cell expected.", aVal.Len() == 0);
         }
-        cout << endl;
     }
-#endif
+    printer.print("DataPilot table output");
+    printer.clear();
 
     // Now, delete the datapilot object.
     pDPs->FreeTable(pDPObj);
