@@ -419,8 +419,6 @@ ScDPTableDataCache::~ScDPTableDataCache()
             for ( ULONG row = 0 ;  row < maTableDataValues[nCol].size(); row++ )
                 delete maTableDataValues[nCol][row];
         }
-        for ( nCol =0; nCol < maLabelNames.size(); nCol++ )
-            delete maLabelNames[nCol];
 
         mnColumnCount = 0;
     }
@@ -477,7 +475,6 @@ bool ScDPTableDataCache::InitFromDoc(ScDocument* pDoc, const ScRange& rRange)
         {
             for ( ULONG row = 0 ;  row < maTableDataValues[nCol].size(); row++ )
                 delete maTableDataValues[nCol][row];
-            delete maLabelNames[nCol];
         }
         maTableDataValues.clear();
         maSourceData.clear();
@@ -531,7 +528,6 @@ bool ScDPTableDataCache::InitFromDataBase (const Reference<sdbc::XRowSet>& xRowS
             {
                 for (ULONG row = 0 ;  row < maTableDataValues[nCol].size(); row++)
                     delete maTableDataValues[nCol][row];
-                delete maLabelNames[nCol];
             }
             maTableDataValues.clear();
             maSourceData.clear();
@@ -862,7 +858,7 @@ String ScDPTableDataCache::GetDimensionName( USHORT nColumn ) const
 
     if ( static_cast<size_t>(nColumn+1) < maLabelNames.size() )
     {
-        return maLabelNames[nColumn+1]->aString;
+        return maLabelNames[nColumn+1].aString;
     }
     else
         return String();
@@ -883,7 +879,7 @@ void ScDPTableDataCache::AddLabel(ScDPItemData *pData)
     {
         for ( long i= maLabelNames.size()-1; i>=0; i-- )
         {
-            if( maLabelNames[i]->aString == strNewName )
+            if( maLabelNames[i].aString == strNewName )
             {
                 strNewName  =  pData->aString;
                 strNewName += String::CreateFromInt32( nIndex );
@@ -993,7 +989,7 @@ SCCOL ScDPTableDataCache::GetDimensionIndex(String sName) const
 {
     for ( size_t n = 1; n < maLabelNames.size(); n ++ )
     {
-        if ( maLabelNames[n]->GetString() == sName )
+        if ( maLabelNames[n].GetString() == sName )
             return (SCCOL)(n-1);
     }
     return -1;

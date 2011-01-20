@@ -47,6 +47,7 @@ struct ScQueryParam;
 
 class SC_DLLPUBLIC ScDPTableDataCache
 {
+    typedef ::boost::ptr_vector<ScDPItemData>                   DataListType;
     typedef ::boost::ptr_vector< ::std::vector<ScDPItemData*> > DataGridType;
     typedef ::boost::ptr_vector< ::std::vector<SCROW> >         RowGridType;
 
@@ -59,7 +60,7 @@ class SC_DLLPUBLIC ScDPTableDataCache
     RowGridType                 maSourceData;      // Data Pilot Table's source data
     RowGridType                 maGlobalOrder;     // Sorted members index
     RowGridType                 maIndexOrder;      // Index the sorted numbers
-    std::vector<ScDPItemData*>  maLabelNames;      //Source Label data
+    DataListType                maLabelNames;      // Source label data
     std::vector<bool>           mbEmptyRow;        //If empty row?
 
     mutable ScDPItemDataPool    maAdditionalData;
