@@ -1068,6 +1068,9 @@ void Content::insert(const uno::Reference< io::XInputStream > &xInputStream,
     }
 }
 
+const GFileCopyFlags DEFAULT_TRANSFER_FLAGS =
+    static_cast<GFileCopyFlags>(G_FILE_COPY_OVERWRITE|G_FILE_COPY_TARGET_DEFAULT_PERMS);
+
 void Content::transfer( const ucb::TransferInfo& aTransferInfo, const uno::Reference< ucb::XCommandEnvironment >& xEnv )
     throw( uno::Exception )
 {
@@ -1083,9 +1086,9 @@ void Content::transfer( const ucb::TransferInfo& aTransferInfo, const uno::Refer
     gboolean bSuccess = false;
     GError *pError = NULL;
     if (aTransferInfo.MoveData)
-        bSuccess = g_file_move(pSource, pDest, G_FILE_COPY_OVERWRITE, NULL, NULL, 0, &pError);
+        bSuccess = g_file_move(pSource, pDest, DEFAULT_TRANSFER_FLAGS, NULL, NULL, 0, &pError);
     else
-        bSuccess = g_file_copy(pSource, pDest, G_FILE_COPY_OVERWRITE, NULL, NULL, 0, &pError);
+        bSuccess = g_file_copy(pSource, pDest, DEFAULT_TRANSFER_FLAGS, NULL, NULL, 0, &pError);
     g_object_unref(pSource);
     g_object_unref(pDest);
     if (!bSuccess)
