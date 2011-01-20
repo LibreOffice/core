@@ -182,6 +182,7 @@ ModalDialog DLG_VECTORIZE
         Border = TRUE ;
         Pos = MAP_APPFONT ( 6, 98 ) ;
         Size = MAP_APPFONT ( 92, 100 ) ;
+        Text [ en-US ] = "Source picture" ;
     };
 
     FixedText FT_VECTORIZED
@@ -196,6 +197,7 @@ ModalDialog DLG_VECTORIZE
         Border = TRUE ;
         Pos = MAP_APPFONT ( 101, 98 ) ;
         Size = MAP_APPFONT ( 93, 100 ) ;
+        Text [ en-US ] = "Vectorized image" ;
     };
 
     FixedText GRP_PRGS
@@ -211,6 +213,7 @@ ModalDialog DLG_VECTORIZE
         SVLook = TRUE ;
         Pos = MAP_APPFONT ( 6, 215 ) ;
         Size = MAP_APPFONT ( 188, 10 ) ;
+        Text [ en-US ] = "Progress" ;
     };
 };
 

@@ -99,6 +99,9 @@ ModalDialog DLG_CUSTOMSHOW
         Pos = MAP_APPFONT ( 6 , 6 ) ;
         Size = MAP_APPFONT ( 102 + DIFF , 86 + DIFF_Y ) ;
         TabStop = TRUE ;
+        //IAccessibility2 Implementation 2009-----
+        QuickHelpText [ en-US ] = "Custom Screen Show" ;
+        //-----IAccessibility2 Implementation 2009
     };
     CheckBox CBX_USE_CUSTOMSHOW
     {

@@ -144,6 +144,9 @@ SdTPAction::SdTPAction( Window* pWindow, const SfxItemSet& rInAttrs ) :
         mpDoc           ( NULL ),
         bTreeUpdated    ( FALSE )
 {
+    aEdtSound.SetAccessibleName(String(SdResId(STR_PATHNAME)));
+    aBtnSeek.SetAccessibleRelationMemberOf( &aFlSeparator );
+
     FreeResource();
 
     aBtnSearch.SetClickHdl( LINK( this, SdTPAction, ClickSearchHdl ) );

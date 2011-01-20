@@ -93,6 +93,8 @@ SdNavigatorWin::SdNavigatorWin(
 
     FreeResource();
 
+    maTlbObjects.SetAccessibleName(String(SdResId(STR_OBJECTS_TREE)));
+
     mpNavigatorCtrlItem = new SdNavigatorControllerItem( SID_NAVIGATOR_STATE, this, mpBindings );
     mpPageNameCtrlItem = new SdPageNameControllerItem( SID_NAVIGATOR_PAGENAME, this, mpBindings );
     mpDocList = new List();

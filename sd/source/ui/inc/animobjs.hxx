@@ -124,21 +124,20 @@ private:
     NumericField    aNumFldBitmap;
     TimeField       aTimeField;
     ListBox         aLbLoopCount;
-
+    FixedLine       aGrpBitmap;
     ImageButton     aBtnGetOneObject;
     ImageButton     aBtnGetAllObjects;
     ImageButton     aBtnRemoveBitmap;
     ImageButton     aBtnRemoveAll;
     FixedText       aFtCount;
     FixedInfo       aFiCount;
-    FixedLine       aGrpBitmap;
+    FixedLine       aGrpAnimation;
 
     RadioButton     aRbtGroup;
     RadioButton     aRbtBitmap;
     FixedText       aFtAdjustment;
     ListBox         aLbAdjustment;
     PushButton      aBtnCreateGroup;
-    FixedLine       aGrpAnimation;
 
     ::Window*       pWin;
     List            aBmpExList;

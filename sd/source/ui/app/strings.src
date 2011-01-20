@@ -1234,10 +1234,17 @@ String STR_SET_BACKGROUND_PICTURE
 {
     Text [ en-US ] = "Set Background Picture for Slide ..." ;
 };
+
+String STR_ACC_DIALOG_DESC
+{
+    Text [ en-US ] = "Select a template from which to import page designs." ;
+};
+
 String RID_ANNOTATIONS_START
 {
      Text [ en-US ] = "Comments";
 };
+
 String STR_RESET_LAYOUT
 {
     Text[ en-US ] = "Reset Slide Layout";
