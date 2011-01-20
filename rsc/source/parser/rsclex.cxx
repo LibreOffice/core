@@ -118,7 +118,6 @@ UINT32 GetNumber(){
 
 int MakeToken( YYSTYPE * pTokenVal ){
     int             c1;
-    char *          pStr;
 
     while( TRUE ){  // Kommentare und Leerzeichen ueberlesen
         while( isspace( c ) )
@@ -195,7 +194,7 @@ int MakeToken( YYSTYPE * pTokenVal ){
             else
                 aBuf.append( sal_Char(c) );
         }
-        pStr = pTokenVal->string = const_cast<char*>(pStringContainer->putString( aBuf.getStr() ));
+        pTokenVal->string = const_cast<char*>(pStringContainer->putString( aBuf.getStr() ));
         return( STRING );
     }
     if (isdigit (c)){
