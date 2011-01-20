@@ -79,6 +79,15 @@ public:
     void        SetEdStartValEnabled(BOOL bFlag=FALSE);
 
 private:
+    FixedText       aFtStartVal;
+    Edit            aEdStartVal;
+    String          aStartStrVal;
+
+    FixedText       aFtEndVal;
+    Edit            aEdEndVal;
+
+    FixedText       aFtIncrement;
+    Edit            aEdIncrement;
     FixedLine       aFlDirection;
     RadioButton     aBtnDown;
     RadioButton     aBtnRight;
@@ -98,17 +107,7 @@ private:
     RadioButton     aBtnDayOfWeek;
     RadioButton     aBtnMonth;
     RadioButton     aBtnYear;
-
     BOOL            bStartValFlag;
-    FixedText       aFtStartVal;
-    Edit            aEdStartVal;
-    String          aStartStrVal;
-
-    FixedText       aFtEndVal;
-    Edit            aEdEndVal;
-
-    FixedText       aFtIncrement;
-    Edit            aEdIncrement;
 
     OKButton        aBtnOk;
     CancelButton    aBtnCancel;

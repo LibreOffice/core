@@ -100,7 +100,7 @@ ModelessDialog RID_SCDLG_HIGHLIGHT_CHANGES
         Hide = TRUE ;
         Pos = MAP_APPFONT ( 142 , 118 ) ;
         Size = MAP_APPFONT ( 13 , 15 ) ;
-        TabStop = FALSE ;
+        TabStop = TRUE;
         QuickHelpText [ en-US ] = "Minimize/Maximize" ;
     };
     Text [ en-US ] = "Show Changes" ;

@@ -117,6 +117,8 @@ ScNewScenarioDlg::ScNewScenarioDlg( Window* pParent, const String& rName, BOOL b
     aBtnOk      .SetClickHdl( LINK( this, ScNewScenarioDlg, OkHdl ) );
     aCbShowFrame.SetClickHdl( LINK( this, ScNewScenarioDlg, EnableHdl ) );
 
+    aLbColor.SetAccessibleName(String(ScResId( STR_COLOR ) ));
+
     FreeResource();
 
     aLbColor.SelectEntry( Color( COL_LIGHTGRAY ) );
@@ -142,6 +144,9 @@ ScNewScenarioDlg::ScNewScenarioDlg( Window* pParent, const String& rName, BOOL b
     aCbAttrib.Enable(FALSE);
     aCbValue.Enable(FALSE);
     */
+
+    aEdComment.SetAccessibleRelationMemberOf(&aFlComment);
+    aLbColor.SetAccessibleRelationLabeledBy(&aCbShowFrame);
 }
 
 //------------------------------------------------------------------------

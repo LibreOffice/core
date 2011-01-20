@@ -523,6 +523,9 @@ ScTpSubTotalOptions::ScTpSubTotalOptions( Window*               pParent,
 {
     Init();
     FreeResource();
+
+    aLbUserDef.SetAccessibleRelationLabeledBy(&aBtnUserDef);
+    aLbUserDef.SetAccessibleName(aBtnUserDef.GetText());
 }
 
 // -----------------------------------------------------------------------

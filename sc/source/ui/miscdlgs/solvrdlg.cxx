@@ -88,6 +88,9 @@ ScSolverDlg::ScSolverDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
 {
     Init();
     FreeResource();
+
+    aRBFormulaCell.SetAccessibleRelationMemberOf(&aFlVariables);
+    aRBVariableCell.SetAccessibleRelationMemberOf(&aFlVariables);
 }
 
 //----------------------------------------------------------------------------

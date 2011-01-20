@@ -872,3 +872,23 @@ ModalDialog RID_SCDLG_PIVOTFILTER
     };
 };
 
+String STR_COPY_AREA_TO
+{
+    Text [ en-US ] = "Copy results to" ;
+};
+String RID_FILTER_OPERATOR
+{
+    Text [ en-US ] = "Operator" ;
+};
+String RID_FILTER_FIELDNAME
+{
+    Text [ en-US ] = "Field Name" ;
+};
+String RID_FILTER_CONDITION
+{
+    Text [ en-US ] = "Condition" ;
+};
+String RID_FILTER_VALUE
+{
+    Text [ en-US ] = "Value" ;
+};

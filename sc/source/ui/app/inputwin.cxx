@@ -223,6 +223,7 @@ ScInputWindow::ScInputWindow( Window* pParent, SfxBindings* pBind ) :
         pViewSh->UpdateInputHandler( TRUE ); // unbedingtes Update
 
     pImgMgr->RegisterToolBox( this );
+    SetAccessibleName(ScResId(STR_ACC_TOOLBAR_FORMULA));
 }
 
 __EXPORT ScInputWindow::~ScInputWindow()

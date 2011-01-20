@@ -55,3 +55,6 @@
 #define STR_CREATEDBY           31
 #define STR_ON                  32
 #define STR_EDIT                33
+//IAccessibility2 Implementation 2009-----
+#define STR_COLOR       34
+//-----IAccessibility2 Implementation 2009

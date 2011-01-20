@@ -3443,8 +3443,13 @@ void ScInputHandler::NotifyChange( const ScInputHdlState* pState,
                             else
                                 aCursorPos.Format( aPosStr, SCA_VALID | nFlags, pDoc, aAddrDetails );
                         }
-
+                        //IAccessibility2 Implementation 2009-----
+                        // Disable the accessible VALUE_CHANGE event
+                        BOOL IsSuppressed = pInputWin->IsAccessibilityEventsSuppressed(FALSE);
+                        pInputWin->SetAccessibilityEventsSuppressed(TRUE);
                         pInputWin->SetPosString(aPosStr);
+                        pInputWin->SetAccessibilityEventsSuppressed(IsSuppressed);
+                        //-----IAccessibility2 Implementation 2009
                         pInputWin->SetSumAssignMode();
                     }
 

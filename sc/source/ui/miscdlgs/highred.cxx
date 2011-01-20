@@ -109,6 +109,7 @@ ScHighlightChgDlg::ScHighlightChgDlg( SfxBindings* pB, SfxChildWindow* pCW, Wind
 
     Init();
 
+    aFilterCtr.SetMemberOf(&aFlFilter);
 }
 ScHighlightChgDlg::~ScHighlightChgDlg()
 {

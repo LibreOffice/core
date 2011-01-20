@@ -410,6 +410,9 @@ ScImportAsciiDlg::ScImportAsciiDlg( Window* pParent,String aDatName,
     UpdateVertical();
 
     maTableBox.Execute( CSVCMD_NEWCELLTEXTS );
+
+    aEdOther.SetAccessibleName(aCkbOther.GetText());
+    aEdOther.SetAccessibleRelationLabeledBy(&aCkbOther);
 }
 
 
