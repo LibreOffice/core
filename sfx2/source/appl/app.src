@@ -962,7 +962,7 @@ String STR_QUICKSTART_RECENTDOC
 
 String STR_QUERY_UPDATE_LINKS
 {
-    Text [ en-US ] = "Update all links?" ;
+    Text [ en-US ] = "This document contains one or more links to external data.\n\nWould you like to change the document, and update all links\nto get the most recent data?" ;
 };
 
 String STR_DDE_ERROR
