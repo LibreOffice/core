@@ -153,6 +153,7 @@ endef
 
 gb_Library_OUTDIRLOCATION = $(OUTDIR)/lib
 gb_Library_DLLDIR = $(WORKDIR)/LinkTarget/Library
+gb_CppunitTest_DLLDIR = $(WORKDIR)/LinkTarget/CppunitTest
 gb_StaticLibrary_OUTDIRLOCATION = $(OUTDIR)/lib
 
 # vim: set noet sw=4 ts=4:

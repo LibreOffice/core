@@ -472,6 +472,17 @@ gb_Library_DLLFILENAMES :=\
     $(foreach lib,$(gb_Library_UNOLIBS_OOO),$(lib):$(lib)$(gb_Library_UNOEXT)) \
     $(foreach lib,$(gb_Library_UNOVERLIBS),$(lib):$(lib)$(gb_Library_UNOVEREXT)) \
 
+define gb_CppunitTest_CppunitTest_platform
+$(call gb_LinkTarget_set_dlltarget,$(2),$(3))
+
+$(call gb_LinkTarget_set_auxtargets,$(2),\
+    $(patsubst %.lib,%.exp,$(call gb_LinkTarget_get_target,$(2))) \
+    $(3).manifest \
+    $(patsubst %.dll,%.pdb,$(3)) \
+    $(patsubst %.dll,%.ilk,$(3)) \
+)
+
+endef
 
 define gb_Library_Library_platform
 $(call gb_LinkTarget_set_dlltarget,$(2),$(3))
@@ -543,6 +554,7 @@ gb_CppunitTest_CPPTESTPRECOMMAND :=
 gb_CppunitTest_SYSPRE := itest_
 gb_CppunitTest_EXT := .lib
 gb_CppunitTest_get_filename = $(gb_CppunitTest_SYSPRE)$(1)$(gb_CppunitTest_EXT)
+gb_CppunitTest_get_libfilename = $(1).dll
 
 # SdiTarget class
 
