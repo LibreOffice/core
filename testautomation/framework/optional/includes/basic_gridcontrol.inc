@@ -32,7 +32,6 @@
 '\******************************************************************************
 
 testcase tGridcontrolLoad
-
     const MACRO_NAME = "Show"
     const FILE_NAME  = "framework/optional/input/gridcontrol.odt"
 
@@ -91,7 +90,58 @@ testcase tGridcontrolLoad
     printlog( "Test exit, cleanup" )
     hFileCloseAll()
     hDeleteFile( gLastWorkFile )
+endcase
 
+
+testcase tTabcontrolLoad
+    const MACRO_NAME = "ShowTab"
+    const FILE_NAME  = "framework/optional/input/gridcontrol.odt"
+
+    dim i as integer
+    dim a as integer
+
+    printlog( "Open the test document: " & FILE_NAME )
+    call hFileOpenLocally( gTestToolPath & FILE_NAME )
+
+    printlog "Start the macro, that performs the test"
+    hExecMacro( MACRO_NAME )
+    
+    Kontext "tabcontroldialog"
+    if tabcontroldialog.exists(5) then
+        if tabcontainer.getPageCount = 2 then
+            printlog "There are 2 tabs"
+        else
+            warnlog "There are NOT 2 tabs, there are: " + tabcontainer.getpagecount
+        endif
+        if tabcontainer.getPage = "tabcontrol_1" then
+            printlog "Default tab page is page 1"
+        else
+            warnlog "Default tab page is NOT page 1"
+        endif
+        tabcontainer.setPage tabcontrol_2
+        wait 1000
+        if tabcontainer.getPage = "tabcontrol_2" then
+            printlog "Switching to tab 2 works"
+        else
+            warnlog "Switching to tab 2 failed"
+        endif
+        tabcontainer.setPage tabcontrol_1
+        wait 1000
+        if tabcontainer.getPage = "tabcontrol_1" then
+            printlog "Switching to tab 1 works"
+        else
+            warnlog "Switching to tab 1 failed"
+        endif
+
+        Kontext "tabcontroldialog"
+        tabcontroldialog.close
+    else
+        warnlog "tabcontrol Dialog did not come up after pressing button"
+    endif
+
+    printlog( "Test exit, cleanup" )
+    hFileCloseAll()
+    hDeleteFile( gLastWorkFile )
 endcase
 
 
