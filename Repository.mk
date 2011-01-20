@@ -38,6 +38,10 @@ $(eval $(call gb_Helper_register_executables,NONE, \
     sspretty \
 ))
 
+$(eval $(call gb_Helper_register_executables,OOO, \
+    spadmin.bin \
+))
+
 $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     avmedia \
     basegfx \
