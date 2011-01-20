@@ -2419,14 +2419,11 @@ ScDPCollection::~ScDPCollection()
 void ScDPCollection::DeleteOnTab( SCTAB nTab )
 {
     TablesType::iterator itr = maTables.begin(), itrEnd = maTables.end();
-    while (itr != itrEnd)
+    for (; itr != itrEnd; ++itr)
     {
         const ScDPObject& rObj = *itr;
         if (rObj.GetOutRange().aStart.Tab() == nTab)
-            // returns the next position after the erased element.
-            itr = maTables.erase(itr);
-        else
-            ++itr;
+            maTables.erase(itr);
     }
 }
 
