@@ -110,10 +110,10 @@ public interface IThreadPool {
 
     /**
      * Disposes this thread pool, thus releasing
-     * all threads by throwing the given
-     * <code>Throwable</code>.
+     * all threads by throwing a <code>DisposedException</code> with the given
+     * <code>Throwable</code> cause.
      * <p>
-     * @param throwing   the Throwable
+     * @param throwing   the cause
      */
     public void dispose(Throwable throwable);
 
