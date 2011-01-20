@@ -173,7 +173,7 @@ Any SAL_CALL PresenterScreenJob::execute(
     const beans::NamedValue* p = Arguments.getConstArray();
     for (i=0; i<c; ++i)
     {
-        if (p[i].Name.equalsAscii("Environment"))
+        if (p[i].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Environment")))
         {
             p[i].Value >>= lEnv;
             break;
@@ -185,7 +185,7 @@ Any SAL_CALL PresenterScreenJob::execute(
     p = lEnv.getConstArray();
     for (i=0; i<c; ++i)
     {
-        if (p[i].Name.equalsAscii("Model"))
+        if (p[i].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Model")))
         {
             p[i].Value >>= xModel;
             break;

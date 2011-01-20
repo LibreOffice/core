@@ -355,13 +355,13 @@ rtl::OUString SAL_CALL PDFDetector::detect( uno::Sequence< beans::PropertyValue 
                    rtl::OUStringToOString( pAttribs[i].Name, RTL_TEXTENCODING_UTF8 ).getStr(),
                    rtl::OUStringToOString( aVal, RTL_TEXTENCODING_UTF8 ).getStr() );
 #endif
-        if( pAttribs[i].Name.equalsAscii( "InputStream" ) )
+        if( pAttribs[i].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "InputStream" ) ) )
             pAttribs[i].Value >>= xInput;
-        else if( pAttribs[i].Name.equalsAscii( "URL" ) )
+        else if( pAttribs[i].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "URL" ) ) )
             pAttribs[i].Value >>= aURL;
-        else if( pAttribs[i].Name.equalsAscii( "FilterName" ) )
+        else if( pAttribs[i].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "FilterName" ) ) )
             nFilterNamePos = i;
-        else if( pAttribs[i].Name.equalsAscii( "Password" ) )
+        else if( pAttribs[i].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Password" ) ) )
         {
             nPwdPos = i;
             pAttribs[i].Value >>= aPwd;
@@ -443,15 +443,15 @@ rtl::OUString SAL_CALL PDFDetector::detect( uno::Sequence< beans::PropertyValue 
             osl_removeFile( aURL.pData );
         if( aEmbedMimetype.getLength() )
         {
-            if( aEmbedMimetype.equalsAscii( "application/vnd.oasis.opendocument.text" )
-                || aEmbedMimetype.equalsAscii( "application/vnd.oasis.opendocument.text-master" ) )
+            if( aEmbedMimetype.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "application/vnd.oasis.opendocument.text" ) )
+                || aEmbedMimetype.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "application/vnd.oasis.opendocument.text-master" ) ) )
                 aOutFilterName = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "writer_pdf_addstream_import" ) );
-            else if( aEmbedMimetype.equalsAscii( "application/vnd.oasis.opendocument.presentation" ) )
+            else if( aEmbedMimetype.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "application/vnd.oasis.opendocument.presentation" ) ) )
                 aOutFilterName = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "impress_pdf_addstream_import" ) );
-            else if( aEmbedMimetype.equalsAscii( "application/vnd.oasis.opendocument.graphics" )
-                     || aEmbedMimetype.equalsAscii( "application/vnd.oasis.opendocument.drawing" ) )
+            else if( aEmbedMimetype.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "application/vnd.oasis.opendocument.graphics" ) )
+                     || aEmbedMimetype.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "application/vnd.oasis.opendocument.drawing" ) ) )
                 aOutFilterName = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "draw_pdf_addstream_import" ) );
-            else if( aEmbedMimetype.equalsAscii( "application/vnd.oasis.opendocument.spreadsheet" ) )
+            else if( aEmbedMimetype.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "application/vnd.oasis.opendocument.spreadsheet" ) ) )
                 aOutFilterName = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "calc_pdf_addstream_import" ) );
         }
     }
@@ -701,7 +701,7 @@ uno::Reference< io::XStream > getAdditionalStream( const rtl::OUString&         
                                     uno::Reference< task::XInteractionHandler > xIntHdl;
                                     for( sal_Int32 i = 0; i < nAttribs; i++ )
                                     {
-                                        if( pAttribs[i].Name.equalsAscii( "InteractionHandler" ) )
+                                        if( pAttribs[i].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "InteractionHandler" ) ) )
                                             pAttribs[i].Value >>= xIntHdl;
                                     }
                                     if( ! bMayUseUI || ! xIntHdl.is() )

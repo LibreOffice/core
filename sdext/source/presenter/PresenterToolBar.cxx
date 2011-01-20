@@ -840,19 +840,19 @@ void PresenterToolBar::ProcessEntry (
 
     // Create new element.
     ::rtl::Reference<Element> pElement;
-    if (sType.equalsAscii("Button"))
+    if (sType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Button")))
         pElement = Button::Create(this);
-    else if (sType.equalsAscii("CurrentTimeLabel"))
+    else if (sType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("CurrentTimeLabel")))
         pElement = CurrentTimeLabel::Create(this);
-    else if (sType.equalsAscii("PresentationTimeLabel"))
+    else if (sType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("PresentationTimeLabel")))
         pElement = PresentationTimeLabel::Create(this);
-    else if (sType.equalsAscii("VerticalSeparator"))
+    else if (sType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("VerticalSeparator")))
         pElement = ::rtl::Reference<Element>(new VerticalSeparator(this));
-    else if (sType.equalsAscii("HorizontalSeparator"))
+    else if (sType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("HorizontalSeparator")))
         pElement = ::rtl::Reference<Element>(new HorizontalSeparator(this));
-    else if (sType.equalsAscii("Label"))
+    else if (sType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Label")))
         pElement = ::rtl::Reference<Element>(new Label(this));
-    else if (sType.equalsAscii("ChangeOrientation"))
+    else if (sType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("ChangeOrientation")))
     {
         mpCurrentContainerPart.reset(new ElementContainerPart());
         maElementContainer.push_back(mpCurrentContainerPart);

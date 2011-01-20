@@ -1253,7 +1253,7 @@ PDFFileImplData* PDFFile::impl_getData() const
                                 m_pData->m_nKeyLength = static_cast<sal_uInt32>(pNum->m_fValue) / 8;
                         }
                         PDFName* pFilter = dynamic_cast<PDFName*>(filter->second);
-                        if( pFilter && pFilter->getFilteredName().equalsAscii( "Standard" ) )
+                        if( pFilter && pFilter->getFilteredName().equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Standard" ) ) )
                             m_pData->m_bStandardHandler = true;
                         if( o_ent != pDict->m_aMap.end() )
                         {

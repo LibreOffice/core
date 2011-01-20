@@ -228,7 +228,7 @@ void StyleContainer::emit( EmitContext&        rContext,
         {
             if( it->second.Name.equals( "style:master-page" ) )
                 aMasterPageSection.push_back( it->first );
-            else if( getStyleName( it->first ).equalsAscii( "standard" ) )
+            else if( getStyleName( it->first ).equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "standard" ) ) )
                 aOfficeStyleSection.push_back( it->first );
             else
                 aAutomaticStyleSection.push_back( it->first );
