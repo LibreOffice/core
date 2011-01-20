@@ -43,6 +43,7 @@ import org.w3c.dom.Document;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.wizards.common.ConfigSet;
 import com.sun.star.wizards.common.FileAccess;
+import com.sun.star.wizards.common.PropertyNames;
 import com.sun.star.wizards.common.UCB;
 import com.sun.star.wizards.ui.event.Task;
 import com.sun.star.wizards.web.data.CGContent;
@@ -240,7 +241,7 @@ public class Process implements WebWizardConst, ProcessErrors
     {
         try
         {
-            String s = FileAccess.getOfficePath(xmsf, "Temp", "", "");
+            String s = FileAccess.getOfficePath(xmsf, "Temp", PropertyNames.EMPTY_STRING, PropertyNames.EMPTY_STRING);
             return s;
         }
         catch (Exception e)
@@ -308,7 +309,7 @@ public class Process implements WebWizardConst, ProcessErrors
 
         //2. background image
         String background = settings.cp_DefaultSession.cp_Design.cp_BackgroundImage;
-        if (background != null && !background.equals(""))
+        if (background != null && !background.equals(PropertyNames.EMPTY_STRING))
         {
             sourceDir = FileAccess.getParentDir(background);
             filename = background.substring(sourceDir.length());
@@ -354,7 +355,7 @@ public class Process implements WebWizardConst, ProcessErrors
         catch (Exception ex)
         {
             //error in copying media
-            error(ex, "", ERROR_PUBLISH_MEDIA, ErrorHandler.ERROR_PROCESS_FATAL);
+            error(ex, PropertyNames.EMPTY_STRING, ERROR_PUBLISH_MEDIA, ErrorHandler.ERROR_PROCESS_FATAL);
             return false;
         }
 
@@ -435,7 +436,7 @@ public class Process implements WebWizardConst, ProcessErrors
         }
         catch (Exception ex)
         {
-            error(ex, "", ERROR_GENERATE_XSLT, ErrorHandler.ERROR_PROCESS_FATAL);
+            error(ex, PropertyNames.EMPTY_STRING, ERROR_GENERATE_XSLT, ErrorHandler.ERROR_PROCESS_FATAL);
             return false;
         }
 
@@ -519,7 +520,7 @@ public class Process implements WebWizardConst, ProcessErrors
         for (Iterator i = templates.keySet().iterator(); i.hasNext();)
         {
 
-            String key = "";
+            String key = PropertyNames.EMPTY_STRING;
 
             key = (String) i.next();
 
@@ -586,7 +587,7 @@ public class Process implements WebWizardConst, ProcessErrors
              * faileure here is fatal.
              */
             contentDir = fileAccess.createNewDir(dir, content.cp_Name);
-            if (contentDir == null || contentDir.equals(""))
+            if (contentDir == null || contentDir.equals(PropertyNames.EMPTY_STRING))
             {
                 throw new IOException("Directory " + dir + " could not be created.");
             }
@@ -697,7 +698,7 @@ public class Process implements WebWizardConst, ProcessErrors
              * the copyExporter does not change
              * the extension of the target...
              */
-            String destExt = (exporter.cp_Extension.equals("")
+            String destExt = (exporter.cp_Extension.equals(PropertyNames.EMPTY_STRING)
                     ? FileAccess.getExtension(docFilename)
                     : exporter.cp_Extension);
 

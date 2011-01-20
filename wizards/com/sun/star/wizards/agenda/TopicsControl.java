@@ -304,7 +304,7 @@ public class TopicsControl extends ControlScroller implements XFocusListener
     }
 
     /**
-     * in order to use the "move up", "down" "insert" and "remove" buttons,
+     * in order to use the "move up", "downPropertyNames.SPACEinsert" and "remove" buttons,
      * we track the last control the gained focus, in order to know which
      * row should be handled.
      * @param fe
@@ -463,9 +463,9 @@ public class TopicsControl extends ControlScroller implements XFocusListener
         // after rotating all the properties from this row on,
         // we clear the row, so it is practically a new one...
         PropertyValue[] pv1 = (PropertyValue[]) scrollfields.get(lastFocusRow);
-        pv1[1].Value = "";
-        pv1[2].Value = "";
-        pv1[3].Value = "";
+        pv1[1].Value = PropertyNames.EMPTY_STRING;
+        pv1[2].Value = PropertyNames.EMPTY_STRING;
+        pv1[3].Value = PropertyNames.EMPTY_STRING;
 
         // update the preview document.
         updateDocumentRow(lastFocusRow);
@@ -487,10 +487,10 @@ public class TopicsControl extends ControlScroller implements XFocusListener
     private PropertyValue[] newRow(int i)
     {
         PropertyValue[] pv = new PropertyValue[4];
-        pv[0] = Properties.createProperty(LABEL + i, "" + (i + 1) + ".");
-        pv[1] = Properties.createProperty(TOPIC + i, "");
-        pv[2] = Properties.createProperty(RESP + i, "");
-        pv[3] = Properties.createProperty(TIME + i, "");
+        pv[0] = Properties.createProperty(LABEL + i, PropertyNames.EMPTY_STRING + (i + 1) + ".");
+        pv[1] = Properties.createProperty(TOPIC + i, PropertyNames.EMPTY_STRING);
+        pv[2] = Properties.createProperty(RESP + i, PropertyNames.EMPTY_STRING);
+        pv[3] = Properties.createProperty(TIME + i, PropertyNames.EMPTY_STRING);
         return pv;
     }
 
@@ -536,9 +536,9 @@ public class TopicsControl extends ControlScroller implements XFocusListener
         PropertyValue[] data = getTopicData(row);
 
         // now - is this row empty?
-        return data[1].Value.equals("") &&
-                data[2].Value.equals("") &&
-                data[3].Value.equals("");
+        return data[1].Value.equals(PropertyNames.EMPTY_STRING) &&
+                data[2].Value.equals(PropertyNames.EMPTY_STRING) &&
+                data[3].Value.equals(PropertyNames.EMPTY_STRING);
 
     }
     /**
@@ -1173,7 +1173,7 @@ public class TopicsControl extends ControlScroller implements XFocusListener
                     LABEL_PROPS,
                     new Object[]
                     {
-                        I_8, "" + (i + 1) + ".", new Integer(x + 4), new Integer(y + 2), IStep, new Short((short) tabindex), 10
+                        I_8, PropertyNames.EMPTY_STRING + (i + 1) + ".", new Integer(x + 4), new Integer(y + 2), IStep, new Short((short) tabindex), 10
                     });
 
             textbox = dialog.insertTextField(TOPIC + i, "topicTextChanged", this,

@@ -145,7 +145,7 @@ public class Control extends Shape
 
     public String getControlName(String _fieldname)
     {
-        String controlname = "";
+        String controlname = PropertyNames.EMPTY_STRING;
         switch (getControlType())
         {
             case FormHandler.SOLABEL:
@@ -338,7 +338,7 @@ public class Control extends Shape
                 }
                 xPropertySet.setPropertyValue("Text", stext);
                 aPreferredSize = getPeer().getPreferredSize();
-                xPropertySet.setPropertyValue("Text", "");
+                xPropertySet.setPropertyValue("Text", PropertyNames.EMPTY_STRING);
             }
             return aPreferredSize;
         }

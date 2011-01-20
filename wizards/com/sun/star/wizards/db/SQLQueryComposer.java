@@ -96,7 +96,8 @@ public class SQLQueryComposer
     public String getSelectClause(boolean _baddAliasFieldNames) throws SQLException
     {
         String sSelectBaseClause = "SELECT ";
-        String sSelectClause = sSelectBaseClause;
+        StringBuilder sSelectClause = new StringBuilder(sSelectBaseClause);
+        boolean removeComma = false;
         for (int i = 0; i < CurDBMetaData.FieldColumns.length; i++)
         {
             if (addtoSelectClause(CurDBMetaData.FieldColumns[i].getDisplayFieldName()))
@@ -104,33 +105,34 @@ public class SQLQueryComposer
                 int iAggregate = CurDBMetaData.getAggregateIndex(CurDBMetaData.FieldColumns[i].getDisplayFieldName());
                 if (iAggregate > -1)
                 {
-                    sSelectClause += CurDBMetaData.AggregateFieldNames[iAggregate][1] + "(" + getComposedAliasFieldName(CurDBMetaData.AggregateFieldNames[iAggregate][0]) + ")";
+                    sSelectClause.append(CurDBMetaData.AggregateFieldNames[iAggregate][1]).append("(").append(getComposedAliasFieldName(CurDBMetaData.AggregateFieldNames[iAggregate][0])).append(")");
                     if (_baddAliasFieldNames)
                     {
-                        sSelectClause += getAliasFieldNameClause(CurDBMetaData.AggregateFieldNames[iAggregate][0]);
+                        sSelectClause.append(getAliasFieldNameClause(CurDBMetaData.AggregateFieldNames[iAggregate][0]));
                     }
                 }
                 else
                 {
-                    sSelectClause += getComposedAliasFieldName(CurDBMetaData.FieldColumns[i].getDisplayFieldName());
+                    sSelectClause.append(getComposedAliasFieldName(CurDBMetaData.FieldColumns[i].getDisplayFieldName()));
                     if (_baddAliasFieldNames)
                     {
-                        sSelectClause += getAliasFieldNameClause(CurDBMetaData.FieldColumns[i].getDisplayFieldName());
+                        sSelectClause.append(getAliasFieldNameClause(CurDBMetaData.FieldColumns[i].getDisplayFieldName()));
                     }
                 }
-                sSelectClause += ", ";
+                sSelectClause.append(", ");
+                removeComma = true;
             }
         }
         // TODO: little bit unhandy version of remove the append 'comma' at the end
-        if (sSelectClause.equals(sSelectBaseClause))
+        if (removeComma)
         {
-            sSelectClause = sSelectClause.substring(0, sSelectClause.length() - 1);
+            sSelectClause.delete(sSelectClause.length() - 2,sSelectClause.length());
         }
         else
         {
-            sSelectClause = sSelectClause.substring(0, sSelectClause.length() - 2);
+            sSelectClause.delete(sSelectClause.length() - 1,sSelectClause.length());
         }
-        return sSelectClause;
+        return sSelectClause.toString();
     }
 
     public String getAliasFieldNameClause(String _FieldName)
@@ -142,7 +144,7 @@ public class SQLQueryComposer
         }
         else
         {
-            return "";
+            return PropertyNames.EMPTY_STRING;
         }
     }
 
@@ -164,7 +166,7 @@ public class SQLQueryComposer
     public void prependSortingCriteria() throws SQLException
     {
         XIndexAccess xColumnIndexAccess = m_xQueryAnalyzer.getOrderColumns();
-        m_queryComposer.setOrder("");
+        m_queryComposer.setOrder(PropertyNames.EMPTY_STRING);
         for (int i = 0; i < CurDBMetaData.getSortFieldNames().length; i++)
         {
             appendSortingCriterion(i, false);
@@ -215,38 +217,37 @@ public class SQLQueryComposer
         if (xColumn != null)
         {
             String sSort = CurDBMetaData.getSortFieldNames()[_SortIndex][1];
-            boolean bascend = (sSort.equals("ASC"));
+            boolean bascend = (sSort.equals(PropertyNames.ASC));
             m_queryComposer.appendOrderByColumn(xColumn, bascend);
         }
     }
 
     public void appendSortingcriteria(boolean _baddAliasFieldNames) throws SQLException
     {
-        String sOrder = "";
-        m_queryComposer.setOrder("");
+        m_queryComposer.setOrder(PropertyNames.EMPTY_STRING);
         for (int i = 0; i < CurDBMetaData.getSortFieldNames().length; i++)
         {
             String sSortValue = CurDBMetaData.getSortFieldNames()[i][0];
             int iAggregate = CurDBMetaData.getAggregateIndex(sSortValue);
             if (iAggregate > -1)
             {
-                sOrder = m_xQueryAnalyzer.getOrder();
+                StringBuilder sOrder = new StringBuilder(m_xQueryAnalyzer.getOrder());
                 if (sOrder.length() > 0)
                 {
-                    sOrder += ", ";
+                    sOrder.append( ", ");
                 }
-                sOrder += CurDBMetaData.AggregateFieldNames[iAggregate][1] + "(" + CurDBMetaData.AggregateFieldNames[iAggregate][0] + ")";
-                sOrder += " " + CurDBMetaData.getSortFieldNames()[i][1];
-                m_queryComposer.setOrder(sOrder);
+                sOrder.append(CurDBMetaData.AggregateFieldNames[iAggregate][1]).append("(").append(CurDBMetaData.AggregateFieldNames[iAggregate][0]).append(")");
+                sOrder.append(PropertyNames.SPACE).append(CurDBMetaData.getSortFieldNames()[i][1]);
+                m_queryComposer.setOrder(sOrder.toString());
             }
             else
             {
                 appendSortingCriterion(i, _baddAliasFieldNames);
             }
-            sOrder = m_xQueryAnalyzer.getOrder();
+            // sOrder = m_xQueryAnalyzer.getOrder();
         }
         // just for debug!
-        sOrder = m_queryComposer.getOrder();
+        // sOrder = m_queryComposer.getOrder();
     }
 
     public void appendGroupByColumns(boolean _baddAliasFieldNames) throws SQLException
@@ -289,7 +290,7 @@ public class SQLQueryComposer
         {
             CommandName curCommandName = new CommandName(CurDBMetaData, sCommandNames[i]); //(setComposedCommandName)
             curCommandName.setAliasName(getuniqueAliasName(curCommandName.getTableName()));
-            sFromClause.append(" ").append(curCommandName.getComposedName()).append(" ").append(quoteName(curCommandName.getAliasName()));
+            sFromClause.append(PropertyNames.SPACE).append(curCommandName.getComposedName()).append(PropertyNames.SPACE).append(quoteName(curCommandName.getAliasName()));
             if (i < sCommandNames.length - 1)
             {
                 sFromClause.append(", ");
@@ -313,7 +314,7 @@ public class SQLQueryComposer
             if (addQuery)
             {
                 String sSelectClause = getSelectClause(_baddAliasFieldNames);
-                StringBuilder queryclause = new StringBuilder(sSelectClause).append(" ").append(getFromClause());
+                StringBuilder queryclause = new StringBuilder(sSelectClause).append(PropertyNames.SPACE).append(getFromClause());
                 m_xQueryAnalyzer.setQuery(queryclause.toString());
                 if (CurDBMetaData.getFilterConditions() != null && CurDBMetaData.getFilterConditions().length > 0)
                 {
@@ -386,7 +387,7 @@ public class SQLQueryComposer
     public String getuniqueAliasName(String _TableName)
     {
         int a = 0;
-        String AliasName = "";
+        String AliasName = PropertyNames.EMPTY_STRING;
         boolean bAliasNameexists = true;
         String locAliasName = _TableName;
         while (bAliasNameexists == true)

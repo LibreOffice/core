@@ -316,7 +316,7 @@ public class FormDocument extends TextDocument
                 ControlForm oSubControlForm = getControlFormByName(SOSUBFORM);
                 oSubControlForm.setFormProperties(aFormProperties, oSubFormDBMetaData);
                 String sRefTableName = _curFormConfiguration.getreferencedTableName();
-                if (sRefTableName.equals(""))
+                if (sRefTableName.equals(PropertyNames.EMPTY_STRING))
                 {
                     LinkFieldNames = _curFieldLinker.getLinkFieldNames();
                 }
@@ -512,8 +512,8 @@ public class FormDocument extends TextDocument
             try
             {
                 xPropertySet.setPropertyValue("DataSourceName", getDataSourceName());
-                xPropertySet.setPropertyValue("Command", _oDBMetaData.getCommandName());
-                xPropertySet.setPropertyValue("CommandType", new Integer(_oDBMetaData.getCommandType()));
+                xPropertySet.setPropertyValue(PropertyNames.COMMAND, _oDBMetaData.getCommandName());
+                xPropertySet.setPropertyValue(PropertyNames.COMMAND_TYPE, new Integer(_oDBMetaData.getCommandType()));
                 for (int i = 0; i < _aPropertySetList.length; i++)
                 {
                     xPropertySet.setPropertyValue(_aPropertySetList[i].Name, _aPropertySetList[i].Value);

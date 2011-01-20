@@ -32,6 +32,7 @@ import com.sun.star.text.XTextDocument;
 import com.sun.star.wizards.common.Properties;
 import com.sun.star.sdb.application.XDatabaseDocumentUI;
 import com.sun.star.wizards.common.NamedValueCollection;
+import com.sun.star.wizards.common.PropertyNames;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -115,7 +116,7 @@ public class CallReportWizard
         {
             try
             {
-                if (sEvent.compareTo("start") == 0)
+                if (sEvent.compareTo(PropertyNames.START) == 0)
                 {
                     if (bWizardstartedalready != true)
                     {
@@ -213,7 +214,7 @@ public class CallReportWizard
 
             try
             {
-                byteReturn = ("" + this.hashCode()).getBytes();
+                byteReturn = (PropertyNames.EMPTY_STRING + this.hashCode()).getBytes();
             }
             catch (Exception e)
             {

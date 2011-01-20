@@ -59,7 +59,6 @@ import java.util.logging.Logger;
 class ReportTextDocument extends com.sun.star.wizards.text.TextDocument implements Comparator
 {
 
-    private static final String COMMAND = "Command";
     private static final String ISLANDSCAPE = "IsLandscape";
     private static final String ISVISIBLE = "IsVisible";
     private static final String QUERYNAME = "QueryName";
@@ -207,18 +206,18 @@ class ReportTextDocument extends com.sun.star.wizards.text.TextDocument implemen
     {
         com.sun.star.container.XNameContainer xNamedForm = oFormHandler.insertFormbyName(SOREPORTFORMNAME);
         XNameAccess xNameAccess = (XNameAccess) UnoRuntime.queryInterface(XNameAccess.class, xNamedForm);
-        oFormHandler.insertHiddenControl(xNameAccess, xNamedForm, "CommandType", Integer.toString(CurDBMetaData.getCommandType()));
+        oFormHandler.insertHiddenControl(xNameAccess, xNamedForm, PropertyNames.COMMAND_TYPE, Integer.toString(CurDBMetaData.getCommandType()));
         if (CurDBMetaData.getCommandType() == CommandType.QUERY)
         {
             oFormHandler.insertHiddenControl(xNameAccess, xNamedForm, QUERYNAME, CurDBMetaData.getCommandName());
-            oFormHandler.insertHiddenControl(xNameAccess, xNamedForm, "Command", "");
+            oFormHandler.insertHiddenControl(xNameAccess, xNamedForm, PropertyNames.COMMAND, "");
             //DBMetaData.CommandObject oCommand = CurDBMetaData.getQueryByName(CurDBMetaData.getCommandName());
             //oFormHandler.insertHiddenControl(xNameAccess, xNamedForm, COMMAND, CurDBMetaData.Command);
         }
         else
         {
             oFormHandler.insertHiddenControl(xNameAccess, xNamedForm, QUERYNAME, "");
-            oFormHandler.insertHiddenControl(xNameAccess, xNamedForm, COMMAND, CurDBMetaData.Command);
+            oFormHandler.insertHiddenControl(xNameAccess, xNamedForm, PropertyNames.COMMAND, CurDBMetaData.Command);
         }
         oFormHandler.insertHiddenControl(xNameAccess, xNamedForm, "GroupFieldNames", JavaTools.ArraytoString(CurDBMetaData.GroupFieldNames));
         oFormHandler.insertHiddenControl(xNameAccess, xNamedForm, "FieldNames", JavaTools.ArraytoString(CurDBMetaData.getFieldNames()));

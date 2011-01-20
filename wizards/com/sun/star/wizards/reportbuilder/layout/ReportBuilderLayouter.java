@@ -42,9 +42,6 @@ import com.sun.star.beans.XPropertySet;
 import com.sun.star.beans.XPropertySetInfo;
 import com.sun.star.container.XEnumeration;
 import com.sun.star.container.XNameAccess;
-import com.sun.star.lang.IllegalArgumentException;
-import com.sun.star.lang.IndexOutOfBoundsException;
-import com.sun.star.lang.WrappedTargetException;
 import com.sun.star.lang.XComponent;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.report.XFixedLine;
@@ -473,7 +470,7 @@ abstract public class ReportBuilderLayouter implements IReportBuilderLayouter
                 {
                     final XGroup xGroup = xGroups.createGroup();
                     xGroup.setExpression(sortFieldName[0]);
-                    xGroup.setSortAscending("ASC".equals(sortFieldName[1]));
+                    xGroup.setSortAscending(PropertyNames.ASC.equals(sortFieldName[1]));
                     xGroup.setHeaderOn(false);
                     int nCount = xGroups.getCount();
                     xGroups.insertByIndex(nCount, xGroup);
@@ -507,7 +504,7 @@ abstract public class ReportBuilderLayouter implements IReportBuilderLayouter
                 return m_aFieldTitleNames[i];
             }
         }
-        return "";
+        return PropertyNames.EMPTY_STRING;
     }
 
     protected int getTypeFromFieldName(String _sField)
@@ -1142,7 +1139,7 @@ abstract public class ReportBuilderLayouter implements IReportBuilderLayouter
 
             final PropertySetHelper aPropertySetHelper = new PropertySetHelper(xFixedTextModel);
 //          aPropertySetHelper.showProperties();
-            aPropertySetHelper.setPropertyValueDontThrow("FontDescriptor", _aFont);
+            aPropertySetHelper.setPropertyValueDontThrow(PropertyNames.FONT_DESCRIPTOR, _aFont);
 
             final Object aUnoCtrlFixedText = getGlobalMSF().createInstance("com.sun.star.awt.UnoControlFixedText");
 //            XServiceInfo xServiceInfo2 = (XServiceInfo)UnoRuntime.queryInterface(XServiceInfo.class, aUnoCtrlFixedText);
@@ -1191,13 +1188,13 @@ abstract public class ReportBuilderLayouter implements IReportBuilderLayouter
         {
             return m_sTableName;
         }
-        return "";
+        return PropertyNames.EMPTY_STRING;
     }
 
     protected String getUserNameFromConfiguration()
     {
-        String sFirstName = "";
-        String sLastName = "";
+        String sFirstName = PropertyNames.EMPTY_STRING;
+        String sLastName = PropertyNames.EMPTY_STRING;
         try
         {
             Object oProdNameAccess = Configuration.getConfigurationRoot(getGlobalMSF(), "org.openoffice.UserProfile/Data", false);
@@ -1208,7 +1205,7 @@ abstract public class ReportBuilderLayouter implements IReportBuilderLayouter
         {
             Logger.getLogger(ReportBuilderLayouter.class.getName()).log(Level.SEVERE, null, e);
         }
-        return sFirstName + " " + sLastName;
+        return sFirstName + PropertyNames.SPACE + sLastName;
     }
 
     /**
@@ -1450,8 +1447,8 @@ abstract public class ReportBuilderLayouter implements IReportBuilderLayouter
             final String sSurroundDoubleQuotes = "\"" + sPageOf + "\"";
             final String sPageNumber = sSurroundDoubleQuotes.replaceAll("#page#", "\" & PageNumber() & \"");
             final String sPageCount = sPageNumber.replaceAll("#count#", "\" & PageCount() & \"");
-            final String sNoLastUnusedQuotes = sPageCount.replaceAll(" & \\\"\\\"", "");
-            final String sNoFirstUnusedQuotes = sNoLastUnusedQuotes.replaceAll("\\\"\\\" & ", "");
+            final String sNoLastUnusedQuotes = sPageCount.replaceAll(" & \\\"\\\"", PropertyNames.EMPTY_STRING);
+            final String sNoFirstUnusedQuotes = sNoLastUnusedQuotes.replaceAll("\\\"\\\" & ", PropertyNames.EMPTY_STRING);
 
             final int nUsablePageWidth = getPageWidth() - getLeftPageIndent() - getRightPageIndent();
 

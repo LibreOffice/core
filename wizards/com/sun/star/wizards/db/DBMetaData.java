@@ -596,9 +596,9 @@ public class DBMetaData
         try
         {
             XConnection xConnection = null;
-            if (Properties.hasPropertyValue(curproperties, "ActiveConnection"))
+            if (Properties.hasPropertyValue(curproperties, PropertyNames.ACTIVE_CONNECTION))
             {
-                xConnection = UnoRuntime.queryInterface( XConnection.class, Properties.getPropertyValue( curproperties, "ActiveConnection" ) );
+                xConnection = UnoRuntime.queryInterface( XConnection.class, Properties.getPropertyValue( curproperties, PropertyNames.ACTIVE_CONNECTION ) );
                 if (xConnection != null)
                 {
                     com.sun.star.container.XChild child = UnoRuntime.queryInterface( com.sun.star.container.XChild.class, xConnection );
@@ -703,7 +703,7 @@ public class DBMetaData
             getDataSourceInterfaces();
             if (bPasswordIsRequired == false)
             {
-                DBConnection = _dataSource.getConnection("", "");
+                DBConnection = _dataSource.getConnection(PropertyNames.EMPTY_STRING, PropertyNames.EMPTY_STRING);
                 bgetConnection = true;
             }
             else
@@ -852,7 +852,7 @@ public class DBMetaData
             XPropertySet xPSet = UnoRuntime.queryInterface( XPropertySet.class, oQuery );
 
             String s = _oSQLQueryComposer.m_xQueryAnalyzer.getQuery();
-            xPSet.setPropertyValue("Command", s);
+            xPSet.setPropertyValue(PropertyNames.COMMAND, s);
 
             XNameContainer xNameCont = UnoRuntime.queryInterface( XNameContainer.class, xQueryDefs );
             m_connectionTools.getObjectNames().checkNameForCreate(com.sun.star.sdb.CommandType.QUERY, _QueryName);
@@ -949,7 +949,7 @@ public class DBMetaData
 
             NamedValueCollection creationArgs = new NamedValueCollection();
             creationArgs.put( PropertyNames.PROPERTY_NAME, basename );
-            creationArgs.put( "URL", documentURL );
+            creationArgs.put( PropertyNames.URL, documentURL );
             creationArgs.put( "AsTemplate", i_createTemplate );
             XMultiServiceFactory xDocMSF = UnoRuntime.queryInterface( XMultiServiceFactory.class, _xDocNameAccess );
             Object oDBDocument = xDocMSF.createInstanceWithArguments( "com.sun.star.sdb.DocumentDefinition", creationArgs.getPropertyValues() );

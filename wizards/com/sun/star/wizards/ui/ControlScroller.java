@@ -26,8 +26,6 @@
  ************************************************************************/
 package com.sun.star.wizards.ui;
 
-import com.sun.star.awt.XScrollBar;
-import com.sun.star.awt.AdjustmentEvent;
 import com.sun.star.beans.*;
 import com.sun.star.awt.*;
 import com.sun.star.lang.XMultiServiceFactory;
@@ -130,7 +128,7 @@ public abstract class ControlScroller
                 new AdjustmentListenerImpl(),
                 new String[]
                 {
-                    PropertyNames.PROPERTY_BORDER, PropertyNames.PROPERTY_ENABLED, PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, "Orientation", PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_WIDTH
+                    PropertyNames.PROPERTY_BORDER, PropertyNames.PROPERTY_ENABLED, PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.ORIENTATION, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
@@ -158,7 +156,7 @@ public abstract class ControlScroller
 
     protected void setScrollBarOrientationHorizontal()
     {
-        Helper.setUnoPropertyValue(xScrollBar, "Orientation", new Integer(ScrollBarOrientation.HORIZONTAL));
+        Helper.setUnoPropertyValue(xScrollBar, PropertyNames.ORIENTATION, new Integer(ScrollBarOrientation.HORIZONTAL));
     }
 
     /**
@@ -453,7 +451,7 @@ public abstract class ControlScroller
     {
         Object oControlModel = UnoDialog.getModel(CurUnoDialog.xDlgContainer.getControl(controlname));
         String propertyname = UnoDialog.getDisplayProperty(oControlModel);
-        if (propertyname != "")
+        if (propertyname != PropertyNames.EMPTY_STRING)
         {
             CurUnoDialog.setControlProperty(controlname, propertyname, newvalue);
         }
@@ -463,7 +461,7 @@ public abstract class ControlScroller
     {
         Object oControlModel = UnoDialog.getModel(CurUnoDialog.xDlgContainer.getControl(controlname));
         String propertyname = UnoDialog.getDisplayProperty(oControlModel);
-        if (propertyname != "")
+        if (propertyname != PropertyNames.EMPTY_STRING)
         {
             return CurUnoDialog.getControlProperty(controlname, propertyname);
         }

@@ -29,6 +29,7 @@ package com.sun.star.wizards.query;
 import com.sun.star.beans.PropertyValue;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.wizards.common.JavaTools;
+import com.sun.star.wizards.common.PropertyNames;
 import com.sun.star.wizards.common.Resource;
 import com.sun.star.wizards.db.FieldColumn;
 import com.sun.star.wizards.db.QueryMetaData;
@@ -62,12 +63,12 @@ public class QuerySummary extends QueryMetaData
     {
         try
         {
-            String sFieldNamesFraction = "";
-            String sSortingFraction = "";
-            String sFilterFraction = "";
-            String sAggregateFraction = "";
-            String sGroupByFraction = "";
-            String sHavingFraction = "";
+            String sFieldNamesFraction = PropertyNames.EMPTY_STRING;
+            String sSortingFraction = PropertyNames.EMPTY_STRING;
+            String sFilterFraction = PropertyNames.EMPTY_STRING;
+            String sAggregateFraction = PropertyNames.EMPTY_STRING;
+            String sGroupByFraction = PropertyNames.EMPTY_STRING;
+            String sHavingFraction = PropertyNames.EMPTY_STRING;
             sFieldNamesFraction = combineFieldNameFraction() + sReturnChar;
             sSortingFraction = combinePartString(RID_QUERY + 51, getSortFieldNames(), RID_QUERY + 52, RID_QUERY + 93, new String[]
                     {
@@ -83,7 +84,7 @@ public class QuerySummary extends QueryMetaData
             }
             // TODO: remove the last return from the string
             sSummary = sFieldNamesFraction + sSortingFraction + sFilterFraction + sAggregateFraction + sGroupByFraction + sHavingFraction;
-            sSummary = JavaTools.replaceSubString(sSummary, "", "~");
+            sSummary = JavaTools.replaceSubString(sSummary, PropertyNames.EMPTY_STRING, "~");
         }
         catch (com.sun.star.uno.Exception exception)
         {
@@ -100,7 +101,7 @@ public class QuerySummary extends QueryMetaData
     {
         if (_filterconditions != null && _filterconditions.length > 0)
         {
-            String sconditions = "";
+            String sconditions = PropertyNames.EMPTY_STRING;
             String sStart = oResource.getResText(_InitResID);
             String BaseString = oResource.getResText(RID_QUERY + 96);
             if (_filterconditions.length == 1)
@@ -109,7 +110,7 @@ public class QuerySummary extends QueryMetaData
                 for (int i = 0; i < curfilterconditions.length; i++)
                 {
                     sconditions += FilterComponent.getDisplayCondition(BaseString, _filterconditions[0][i], this);
-                    sconditions = appendClauseSeparator(sconditions, " " + sAnd + " ", i, curfilterconditions.length);
+                    sconditions = appendClauseSeparator(sconditions, PropertyNames.SPACE + sAnd + PropertyNames.SPACE, i, curfilterconditions.length);
                 }
             }
             else
@@ -118,7 +119,7 @@ public class QuerySummary extends QueryMetaData
                 for (int i = 0; i < _filterconditions.length; i++)
                 {
                     sconditions += FilterComponent.getDisplayCondition(BaseString, _filterconditions[i][0], this);
-                    sconditions = appendClauseSeparator(sconditions, " " + sOr + " ", i, _filterconditions.length);
+                    sconditions = appendClauseSeparator(sconditions, PropertyNames.SPACE + sOr + PropertyNames.SPACE, i, _filterconditions.length);
                 }
             }
             String sreturn = sStart + sconditions;
@@ -129,7 +130,7 @@ public class QuerySummary extends QueryMetaData
 
     private String combineFieldNameFraction()
     {
-        String CurString = "";
+        String CurString = PropertyNames.EMPTY_STRING;
         String sReturn = oResource.getResText(RID_QUERY + 50);
         String BaseString = oResource.getResText(RID_QUERY + 92);
         for (int i = 0; i < FieldColumns.length; i++)
@@ -197,7 +198,7 @@ public class QuerySummary extends QueryMetaData
 
     public String ArrayFieldsToString(int _InitResID, String[][] _FieldNames, int _BaseStringID, String[] _ReplaceTags)
     {
-        String CurString = "";
+        String CurString = PropertyNames.EMPTY_STRING;
         String sReturn = oResource.getResText(_InitResID);
         int FieldCount = _FieldNames.length;
         if (FieldCount > 0)

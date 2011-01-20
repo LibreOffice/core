@@ -59,6 +59,7 @@ import java.util.Set;
 import java.util.Vector;
 import com.sun.star.wizards.common.FileAccess;
 import com.sun.star.wizards.common.NamedValueCollection;
+import com.sun.star.wizards.common.PropertyNames;
 import com.sun.star.wizards.report.IReportBuilderLayouter;
 import com.sun.star.wizards.report.IReportDefinitionReadAccess;
 import com.sun.star.wizards.report.IReportDocument;
@@ -111,7 +112,7 @@ public class ReportBuilderImplementation extends ReportImplementationHelper
     }
     private XFrame m_xFrame = null;
     // private ReportBuilderLayouter m_aReportBuilderLayouter = null;
-    private String m_sReportBuilderLayoutName = "";
+    private String m_sReportBuilderLayoutName = PropertyNames.EMPTY_STRING;
 
     /**
      * Get access to the current ReportLayouter, which depends on the name.
@@ -557,7 +558,7 @@ public class ReportBuilderImplementation extends ReportImplementationHelper
 
     public String getContentPath()
     {
-        return "";
+        return PropertyNames.EMPTY_STRING;
     }
 
     public int getDefaultPageOrientation()
