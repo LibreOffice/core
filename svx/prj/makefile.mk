@@ -2,7 +2,7 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2009 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
 #
@@ -14,41 +14,27 @@
 #
 # OpenOffice.org is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	See the
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU Lesser General Public License version 3 for more details
 # (a copy is included in the LICENSE file that accompanied this code).
 #
 # You should have received a copy of the GNU Lesser General Public License
-# version 3 along with OpenOffice.org.	If not, see
+# version 3 along with OpenOffice.org.  If not, see
 # <http://www.openoffice.org/license.html>
 # for a copy of the LGPLv3 License.
 #
 #*************************************************************************
 
-$(eval $(call gb_Module_Module,svx))
+PRJ=..
+TARGET=prj
 
-$(eval $(call gb_Module_add_targets,svx,\
-    Library_svx \
-    Library_svxcore \
-    Library_textconversiondlgs \
-    AllLangResTarget_svx \
-    AllLangResTarget_ofa \
-    AllLangResTarget_gal \
-    AllLangResTarget_about \
-    AllLangResTarget_textconversiondlgs \
-    Package_inc \
-    Package_sdi \
-))
+.INCLUDE : settings.mk
 
-$(eval $(call gb_Module_add_subsequentcheck_targets,svx,\
-    JunitTest_svx_unoapi \
-))
+.IF "$(VERBOSE)"!=""
+VERBOSEFLAG :=
+.ELSE
+VERBOSEFLAG := -s
+.ENDIF
 
-#	 Executable_gengal \
-
-#todo: noopt for EnhanceCustomShapesFunctionParser.cxx on Solaris Sparc and MacOSX
-#todo: -DBOOST_SPIRIT_USE_OLD_NAMESPACE only in CustomShapes ?
-#todo: -DUNICODE and -D_UNICODE on WNT for source/dialog
-#todo: globlmn.hrc
-#todo: component file
-# vim: set noet ts=4 sw=4:
+all:
+    cd $(PRJ) && $(GNUMAKE) $(VERBOSEFLAG) -r -j$(MAXPROCESS) $(gb_MAKETARGET)

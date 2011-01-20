@@ -78,8 +78,6 @@ $(eval $(call gb_SrsTarget_add_files,svx/res,\
     svx/source/form/fmexpl.src \
     svx/source/form/fmstring.src \
     svx/source/form/formshell.src \
-    svx/source/gallery2/gallery.src \
-    svx/source/gallery2/galtheme.src \
     svx/source/items/svxerr.src \
     svx/source/items/svxitems.src \
     svx/source/mnuctrls/mnuctrls.src \

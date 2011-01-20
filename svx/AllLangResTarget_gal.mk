@@ -25,30 +25,24 @@
 #
 #*************************************************************************
 
-$(eval $(call gb_Module_Module,svx))
+$(eval $(call gb_AllLangResTarget_AllLangResTarget,gal))
 
-$(eval $(call gb_Module_add_targets,svx,\
-    Library_svx \
-    Library_svxcore \
-    Library_textconversiondlgs \
-    AllLangResTarget_svx \
-    AllLangResTarget_ofa \
-    AllLangResTarget_gal \
-    AllLangResTarget_about \
-    AllLangResTarget_textconversiondlgs \
-    Package_inc \
-    Package_sdi \
+$(eval $(call gb_AllLangResTarget_set_reslocation,gal,svx))
+
+$(eval $(call gb_AllLangResTarget_add_srs,gal,svx/gal))
+
+$(eval $(call gb_SrsTarget_SrsTarget,svx/gal))
+
+$(eval $(call gb_SrsTarget_set_include,svx/gal,\
+    $$(INCLUDE) \
+    -I$(OUTDIR)/inc \
+    -I$(SRCDIR)/svx/source/gallery \
+    -I$(SRCDIR)/svx/inc/ \
 ))
 
-$(eval $(call gb_Module_add_subsequentcheck_targets,svx,\
-    JunitTest_svx_unoapi \
+$(eval $(call gb_SrsTarget_add_files,svx/gal,\
+    svx/source/gallery2/gallery.src \
+    svx/source/gallery2/galtheme.src \
 ))
 
-#	 Executable_gengal \
-
-#todo: noopt for EnhanceCustomShapesFunctionParser.cxx on Solaris Sparc and MacOSX
-#todo: -DBOOST_SPIRIT_USE_OLD_NAMESPACE only in CustomShapes ?
-#todo: -DUNICODE and -D_UNICODE on WNT for source/dialog
-#todo: globlmn.hrc
-#todo: component file
-# vim: set noet ts=4 sw=4:
+# vim: set noet sw=4 ts=4:
