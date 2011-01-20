@@ -51,6 +51,8 @@ namespace svt { namespace table
     using ::com::sun::star::uno::Any;
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::UNO_QUERY;
+    using ::com::sun::star::uno::XInterface;
+    using ::com::sun::star::uno::TypeClass_INTERFACE;
     using ::com::sun::star::graphic::XGraphic;
     using ::com::sun::star::style::HorizontalAlignment;
     using ::com::sun::star::style::HorizontalAlignment_LEFT;
@@ -520,9 +522,16 @@ namespace svt { namespace table
         Any aCellContent;
         m_pImpl->rModel.getCellContent( i_context.nColumn, m_pImpl->nCurrentRow, aCellContent );
 
-        const Reference< XGraphic > xGraphic( aCellContent, UNO_QUERY );
-        if ( xGraphic.is() )
+        if ( aCellContent.getValueTypeClass() == TypeClass_INTERFACE )
         {
+            Reference< XInterface > const xContentInterface( aCellContent, UNO_QUERY );
+            if ( !xContentInterface.is() )
+                // allowed. kind of.
+                return;
+
+            Reference< XGraphic > const xGraphic( aCellContent, UNO_QUERY );
+            ENSURE_OR_RETURN_VOID( xGraphic.is(), "GridTableRenderer::impl_paintCellContent: only XGraphic interfaces (or NULL) are supported for painting." );
+
             const Image aImage( xGraphic );
             impl_paintCellImage( i_context, aImage );
             return;
@@ -568,10 +577,20 @@ namespace svt { namespace table
         if ( !i_cellContent.hasValue() )
             return true;
 
-        Reference< XGraphic > const xGraphic( i_cellContent, UNO_QUERY );
-        if ( xGraphic.is() )
-            // for the moment, assume it fits. We can always scale it down during painting ...
+        if ( i_cellContent.getValueTypeClass() == TypeClass_INTERFACE )
+        {
+            Reference< XInterface > const xContentInterface( i_cellContent, UNO_QUERY );
+            if ( !xContentInterface.is() )
+                return true;
+
+            Reference< XGraphic > const xGraphic( i_cellContent, UNO_QUERY );
+            if ( xGraphic.is() )
+                // for the moment, assume it fits. We can always scale it down during painting ...
+                return true;
+
+            OSL_ENSURE( false, "GridTableRenderer::FitsIntoCell: only XGraphic interfaces (or NULL) are supported for painting." );
             return true;
+        }
 
         ::rtl::OUString const sText( CellValueConversion::convertToString( i_cellContent ) );
         if ( sText.getLength() == 0 )
