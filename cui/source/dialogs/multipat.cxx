@@ -220,6 +220,9 @@ SvxMultiPathDialog::SvxMultiPathDialog( Window* pParent, BOOL bEmptyAllowed ) :
     aDelBtn.SetClickHdl( LINK( this, SvxMultiPathDialog, DelHdl_Impl ) );
 
     SelectHdl_Impl( NULL );
+
+    aAddBtn.SetAccessibleRelationMemberOf(&aPathLB);
+    aDelBtn.SetAccessibleRelationMemberOf(&aPathLB);
 }
 
 // -----------------------------------------------------------------------

@@ -71,6 +71,7 @@
 #include <svx/svxdlg.hxx> //CHINA001
 #include <dialmgr.hxx>
 #include "sfx2/opengrf.hxx"
+#include "paragrph.hrc"
 
 #define DLGWIN this->GetParent()->GetParent()
 
@@ -147,6 +148,16 @@ SvxBitmapTabPage::SvxBitmapTabPage
         LINK( this, SvxBitmapTabPage, ChangePixelColorHdl_Impl ) );
     aLbBackgroundColor.SetSelectHdl(
         LINK( this, SvxBitmapTabPage, ChangeBackgrndColorHdl_Impl ) );
+
+    String accName = String(SVX_RES(STR_EXAMPLE));
+    aCtlPreview.SetAccessibleName(accName);
+    aCtlPixel.SetAccessibleRelationMemberOf( &aFlProp );
+    aCtlPixel.SetAccessibleRelationLabeledBy( &aFtPixelEdit );
+    aLbBitmaps.SetAccessibleRelationLabeledBy(&aLbBitmaps);
+    aBtnAdd.SetAccessibleRelationMemberOf( &aFlProp );
+    aBtnModify.SetAccessibleRelationMemberOf( &aFlProp );
+    aBtnImport.SetAccessibleRelationMemberOf( &aFlProp );
+    aBtnDelete.SetAccessibleRelationMemberOf( &aFlProp );
 
 }
 

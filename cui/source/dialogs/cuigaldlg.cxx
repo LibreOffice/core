@@ -662,6 +662,10 @@ TPGalleryThemeGeneral::TPGalleryThemeGeneral( Window* pParent, const SfxItemSet&
             aFtMSShowChangeDate     ( this, CUI_RES( FT_MS_SHOW_CHANGEDATE ) )
 {
     FreeResource();
+
+    aEdtMSName.SetAccessibleName(GAL_RESID(RID_SVXSTR_GALLERY_THEMENAME));
+    aFiMSImage.SetAccessibleName(GAL_RESID(RID_SVXSTR_GALLERY_THEMENAME));
+    aEdtMSName.SetAccessibleRelationLabeledBy( &aFiMSImage );
 }
 
 // ------------------------------------------------------------------------
@@ -748,13 +752,13 @@ SfxTabPage* TPGalleryThemeGeneral::Create( Window* pParent, const SfxItemSet& rS
 
 TPGalleryThemeProperties::TPGalleryThemeProperties( Window* pWindow, const SfxItemSet& rSet ) :
         SfxTabPage          ( pWindow, CUI_RES( RID_SVXTABPAGE_GALLERYTHEME_FILES ), rSet ),
+        aFtFileType         ( this, CUI_RES(FT_FILETYPE ) ),
+        aCbbFileType        ( this, CUI_RES(CBB_FILETYPE ) ),
+        aLbxFound           ( this, CUI_RES(LBX_FOUND ) ),
         aBtnSearch          ( this, CUI_RES(BTN_SEARCH ) ),
         aBtnTake            ( this, CUI_RES(BTN_TAKE ) ),
         aBtnTakeAll         ( this, CUI_RES(BTN_TAKEALL ) ),
         aCbxPreview         ( this, CUI_RES(CBX_PREVIEW ) ),
-        aCbbFileType        ( this, CUI_RES(CBB_FILETYPE ) ),
-        aLbxFound           ( this, CUI_RES(LBX_FOUND ) ),
-        aFtFileType         ( this, CUI_RES(FT_FILETYPE ) ),
         aWndPreview         ( this, CUI_RES( WND_BRSPRV ) ),
         nCurFilterPos       (0),
         nFirstExtFilterPos  (0),
@@ -766,6 +770,9 @@ TPGalleryThemeProperties::TPGalleryThemeProperties( Window* pWindow, const SfxIt
     FreeResource();
 
     xDialogListener->SetDialogClosedLink( LINK( this, TPGalleryThemeProperties, DialogClosedHdl ) );
+    aLbxFound.SetAccessibleName(GAL_RESID(RID_SVXSTR_GALLERY_FILESFOUND));
+    aWndPreview.SetAccessibleName(aCbxPreview.GetText());
+    aLbxFound.SetAccessibleRelationLabeledBy(&aLbxFound);
 }
 
 // ------------------------------------------------------------------------

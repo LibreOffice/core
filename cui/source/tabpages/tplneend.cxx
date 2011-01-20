@@ -135,6 +135,9 @@ SvxLineEndDefTabPage::SvxLineEndDefTabPage
     aLbLineEnds.SetSelectHdl(
         LINK( this, SvxLineEndDefTabPage, SelectLineEndHdl_Impl ) );
 
+    aBtnAdd.SetAccessibleRelationMemberOf(&aFlTip);
+    aBtnModify.SetAccessibleRelationMemberOf(&aFlTip);
+    aBtnDelete.SetAccessibleRelationMemberOf(&aFlTip);
 }
 
 //------------------------------------------------------------------------

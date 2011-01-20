@@ -134,6 +134,8 @@ SvxGrfCropPage::SvxGrfCropPage ( Window *pParent, const SfxItemSet &rSet )
 
     aTimer.SetTimeoutHdl(LINK(this, SvxGrfCropPage, Timeout));
     aTimer.SetTimeout( 1500 );
+
+    aOrigSizePB.SetAccessibleRelationLabeledBy( &aOrigSizeFT );
 }
 
 /*--------------------------------------------------------------------

@@ -89,6 +89,9 @@ SvxHyperlinkMailTp::SvxHyperlinkMailTp ( Window *pParent, const SfxItemSet& rIte
 
     if ( !SvtModuleOptions().IsModuleInstalled( SvtModuleOptions::E_SDATABASE ) )
         maBtAdrBook.Hide();
+
+    maBtAdrBook.SetAccessibleRelationMemberOf( &maGrpMailNews );
+    maBtAdrBook.SetAccessibleRelationLabeledBy( &maFtReceiver );
 }
 
 SvxHyperlinkMailTp::~SvxHyperlinkMailTp ()

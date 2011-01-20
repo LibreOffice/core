@@ -94,10 +94,11 @@ private:
     SvxTabulatorTabPage( Window* pParent, const SfxItemSet& rSet );
 
     // Tabulatoren und Positionen
-    MetricBox       aTabBox;
     FixedLine       aTabLabel;
+    MetricBox       aTabBox;
     FixedLine       aTabLabelVert;
 
+    FixedLine       aTabTypeLabel;
     // TabType
     RadioButton     aLeftTab;
     RadioButton     aRightTab;
@@ -111,8 +112,8 @@ private:
 
     FixedText       aDezCharLabel;
     Edit            aDezChar;
-    FixedLine       aTabTypeLabel;
 
+    FixedLine       aFillLabel;
     // Fuellzeichen
     RadioButton     aNoFillChar;
     RadioButton     aFillPoints;
@@ -120,8 +121,6 @@ private:
     RadioButton     aFillSolidLine;
     RadioButton     aFillSpecial;
     Edit            aFillChar;
-    FixedLine       aFillLabel;
-
     // Buttons
     PushButton      aNewBtn;
     PushButton      aDelAllBtn;

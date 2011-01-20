@@ -77,19 +77,8 @@ String RID_SVXSTR_HYPDLG_ERR_LERR_DOCNOTOPEN
     Text [ en-US ] = "Couldn't open the document." ;
 };
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+String STR_MARK_TREE
+{
+    Text [ en-US ] = "Mark Tree" ;
+};
 

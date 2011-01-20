@@ -85,4 +85,8 @@
 #define CLB_EDIT_MODULES_MODULES            320
 #define FT_EDIT_MODULES_NEWDICTSLINK        321
 #define FL_EDIT_MODULES_BUTTONS             322
-
+// IAccessibility2 implementation 2009. ------
+#define STR_LINGU_MODULES_EDIT          323
+#define STR_LINGU_DICS_EDIT_DIC         324
+#define STR_LINGU_OPTIONS_EDIT          325
+// ------ IAccessibility2 implementation 2009.

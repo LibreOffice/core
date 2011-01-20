@@ -464,6 +464,23 @@ String RID_SVXSTR_GALLERY_ID_EXISTS
 {
     Text [ en-US ] = "This ID already exists..." ;
 };
+String RID_SVXSTR_GALLERY_THEMEITEMS
+{
+    Text [ en-US ] = "Theme Items";
+};
+String RID_SVXSTR_GALLERY_THEMENAME
+{
+    Text [ en-US ] = "Theme Name";
+};
+String RID_SVXSTR_GALLERY_FILESFOUND
+{
+    Text [ en-US ] = "Files Found";
+};
+String RID_SVXSTR_GALLERY_PREVIEW
+{
+    Text [ en-US ] = "Preview";
+};
+
 
 /******************************************************************************/
 

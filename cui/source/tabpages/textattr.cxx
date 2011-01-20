@@ -144,6 +144,8 @@ SvxTextAttrPage::SvxTextAttrPage( Window* pWindow, const SfxItemSet& rInAttrs ) 
 
     aTsbFullWidth.SetClickHdl(
         LINK( this, SvxTextAttrPage, ClickFullWidthHdl_Impl ) );
+
+    aCtlPosition.SetAccessibleRelationMemberOf( &aFlPosition );
 }
 
 /*************************************************************************
