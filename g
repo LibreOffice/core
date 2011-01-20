@@ -234,12 +234,18 @@ for REPO in $DIRS ; do
             case "$COMMAND" in
                 pull|clone)
                     # update links
-                    for link in $(ls) ; do
-                        if [ ! -e "$RAWBUILDDIR/$link" ] ; then
-                            echo "Creating missing link $link"
-                            ln -s "$DIR/$link" "$RAWBUILDDIR/$link"
-                        fi
-                    done
+		    if [ "$DIR" != "$RAWBUILDDIR" ]; then
+			for link in $(ls) ; do
+			    if [ ! -e "$RAWBUILDDIR/$link" ] ; then
+			        if test -h "$RAWBUILDDIR/$link"; then
+				    rm "$RAWBUILDDIR/$link"
+				    echo -n "re-"
+			        fi
+                                echo "creating missing link $link $DIR/$link -> $RAWBUILDDIR/$link"
+                                ln -sf "$DIR/$link" "$RAWBUILDDIR/$link"
+                            fi
+                        done
+		    fi
                     ;;
                 status)
                     # git status returns error in some versions, clear that
