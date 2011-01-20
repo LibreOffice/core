@@ -1352,10 +1352,6 @@ static void impl_borderLine( FSHelperPtr pSerializer, sal_Int32 elementToken, co
 {
     FastAttributeList* pAttr = pSerializer->createAttrList();
 
-    sal_uInt16 inW = pBorderLine->GetInWidth();
-    sal_uInt16 outW = pBorderLine->GetOutWidth();
-    sal_uInt16 nWidth  = inW + outW;
-
     // Compute val attribute value
     // Can be one of:
     //      single, double,
@@ -1363,33 +1359,53 @@ static void impl_borderLine( FSHelperPtr pSerializer, sal_Int32 elementToken, co
     // OOXml also supports those types of borders, but we'll try to play with the first ones.
     //      thickThinMediumGap, thickThinLargeGap, thickThinSmallGap
     //      thinThickLargeGap, thinThickMediumGap, thinThickSmallGap
-    const char* pVal = "single";
-    if ( pBorderLine->isDouble() )
+    const char* pVal = "none";
+    switch ( pBorderLine->GetStyle( ) )
     {
-        if ( inW == outW )
+        case SOLID:
+            pVal = ( sal_Char* )"single";
+        case DOTTED:
+            pVal = ( sal_Char* )"dotted";
+            break;
+        case DASHED:
+            pVal = ( sal_Char* )"dashed";
+            break;
+        case DOUBLE:
             pVal = ( sal_Char* )"double";
-        else if ( inW > outW )
-        {
+            break;
+        case THINTHICK_SMALLGAP:
+            pVal = ( sal_Char* )"thinThickSmallGap";
+            break;
+        case THINTHICK_MEDIUMGAP:
             pVal = ( sal_Char* )"thinThickMediumGap";
-        }
-        else if ( inW < outW )
-        {
+            break;
+        case THINTHICK_LARGEGAP:
+            pVal = ( sal_Char* )"thinThickLargeGap";
+            break;
+        case THICKTHIN_SMALLGAP:
+            pVal = ( sal_Char* )"thickThinSmallGap";
+            break;
+        case THICKTHIN_MEDIUMGAP:
             pVal = ( sal_Char* )"thickThinMediumGap";
-        }
-    }
-    else
-    {
-        switch ( pBorderLine->GetStyle( ) )
-        {
-            case DOTTED:
-                pVal = ( sal_Char* )"dotted";
-                break;
-            case DASHED:
-                pVal = ( sal_Char* )"dashed";
-                break;
-            default:
-                break;
-        }
+            break;
+        case THICKTHIN_LARGEGAP:
+            pVal = ( sal_Char* )"thickThinLargeGap";
+            break;
+        case EMBOSSED:
+            pVal = ( sal_Char* )"embossed";
+            break;
+        case ENGRAVED:
+            pVal = ( sal_Char* )"engraved";
+            break;
+        case OUTSET:
+            pVal = ( sal_Char* )"outset";
+            break;
+        case INSET:
+            pVal = ( sal_Char* )"inset";
+            break;
+        case NO_STYLE:
+        default:
+            break;
     }
 
     pAttr->add( FSNS( XML_w, XML_val ), OString( pVal ) );
@@ -1397,7 +1413,7 @@ static void impl_borderLine( FSHelperPtr pSerializer, sal_Int32 elementToken, co
     // Compute the sz attribute
 
     // The unit is the 8th of point
-    nWidth = sal_Int32( nWidth / 2.5 );
+    sal_Int32 nWidth = sal_Int32( pBorderLine->GetWidth() / 2.5 );
     sal_uInt16 nMinWidth = 2;
     sal_uInt16 nMaxWidth = 96;
 
