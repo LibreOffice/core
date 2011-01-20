@@ -272,6 +272,7 @@ sal_Bool XMLBorderHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue
         aBorderLine.InnerLineWidth = 0;
         aBorderLine.OuterLineWidth = 0;
         aBorderLine.LineDistance   = 0;
+        aBorderLine.LineWidth      = 0;
     }
 
     // first of all, delete an empty line
@@ -281,6 +282,7 @@ sal_Bool XMLBorderHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue
         aBorderLine.InnerLineWidth = 0;
         aBorderLine.OuterLineWidth = 0;
         aBorderLine.LineDistance   = 0;
+        aBorderLine.LineWidth = 0;
     }
     else if( bHasWidth )
     {

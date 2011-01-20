@@ -1736,7 +1736,7 @@ lcl_lineToSvxLine(const table::BorderLine& rLine, SvxBorderLine& rSvxLine, sal_B
                 sal_uInt16( bConvert ? MM100_TO_TWIP(rLine.LineDistance )  : rLine.LineDistance  ));
     }
 
-    sal_Bool bRet = rLine.InnerLineWidth > 0 || rLine.OuterLineWidth > 0;
+    sal_Bool bRet = !rSvxLine.isEmpty();
     return bRet;
 }
 
@@ -1799,11 +1799,11 @@ SvxBoxItem::LineToSvxLine(const ::com::sun::star::table::BorderLine2& rLine, Svx
     }
     rSvxLine.SetStyle( nStyle );
 
-    sal_Bool bGuessWidth = true;
+    sal_Bool bGuessWidth = sal_True;
     if ( rLine->LineWidth )
     {
         rSvxLine.SetWidth( bConvert? MM100_TO_TWIP_UNSIGNED( rLine->LineWidth ) : rLine->LineWidth );
-        bGuessWidth = false;
+        bGuessWidth = sal_False;
     }
 
     return lcl_lineToSvxLine(rLine, rSvxLine, bConvert, bGuessWidth);

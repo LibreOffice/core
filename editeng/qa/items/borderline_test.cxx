@@ -80,7 +80,7 @@ void BorderLineTest::testGuessWidthNoMatch()
 {
     SvxBorderLine line;
     line.GuessLinesWidths( DOUBLE,
-            1, 2, 3 );
+            TEST_WIDTH + 1, TEST_WIDTH + 2, TEST_WIDTH + 3 );
     CPPUNIT_ASSERT_EQUAL( DOUBLE, line.GetStyle() );
     CPPUNIT_ASSERT_EQUAL( long( 0 ), line.GetWidth() );
 }
