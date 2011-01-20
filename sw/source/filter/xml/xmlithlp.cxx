@@ -159,25 +159,6 @@ void lcl_frmitems_setXMLBorderStyle( SvxBorderLine& rLine, sal_uInt16 nStyle )
     rLine.SetStyle( eStyle );
 }
 
-void lcl_frmitems_setXMLBorderWidth( SvxBorderLine& rLine,
-                                     sal_uInt16 nWidth, sal_Bool bDouble )
-{
-    const sal_uInt16 *aWidths;
-    sal_uInt16 nSize;
-
-    sal_uInt16 i = (nSize / sizeof(sal_uInt16)) - 4;
-    while( i>0 &&
-           nWidth <= ((aWidths[i] + aWidths[i-4]) / 2)  )
-    {
-        DBG_ASSERT( aWidths[i] >= aWidths[i-4], "line widths are unordered!" );
-        i -= 4;
-    }
-
-    if ( bDouble )
-        rLine.SetStyle( DOUBLE );
-    rLine.SetWidth( aBorderWidths[i] );
-}
-
 sal_Bool lcl_frmitems_setXMLBorder( SvxBorderLine*& rpLine,
                                     sal_Bool bHasStyle, sal_uInt16 nStyle,
                                     sal_Bool bHasWidth, sal_uInt16 nWidth,
@@ -208,12 +189,10 @@ sal_Bool lcl_frmitems_setXMLBorder( SvxBorderLine*& rpLine,
 
 
     if( ( bHasWidth &&
-          (USHRT_MAX != nNamedWidth || (nWidth != rpLine->GetOutWidth() +
-                                        rpLine->GetInWidth() +
-                                        rpLine->GetDistance()) ) ) ||
+          (USHRT_MAX != nNamedWidth || (nWidth != rpLine->GetWidth() ) ) ) ||
         ( bHasStyle &&
           ((SVX_XML_BORDER_STYLE_SOLID == nStyle && rpLine->GetDistance()) ||
-            (SVX_XML_BORDER_STYLE_DOUBLE == nStyle && !rpLine->GetDistance())) ))
+            (SVX_XML_BORDER_STYLE_DOUBLE == nStyle && !rpLine->GetDistance())) ) )
    {
        sal_Bool bDouble = (bHasWidth && SVX_XML_BORDER_STYLE_DOUBLE == nStyle ) ||
            rpLine->GetDistance();
@@ -231,7 +210,7 @@ sal_Bool lcl_frmitems_setXMLBorder( SvxBorderLine*& rpLine,
                nWidth = rpLine->GetInWidth() + rpLine->GetDistance() +
                    rpLine->GetOutWidth();
 
-           lcl_frmitems_setXMLBorderWidth( *rpLine, nWidth, bDouble );
+           rpLine->SetWidth( nWidth );
        }
        lcl_frmitems_setXMLBorderStyle( *rpLine, nStyle );
    }
@@ -251,7 +230,7 @@ void lcl_frmitems_setXMLBorder( SvxBorderLine*& rpLine,
         rpLine = new SvxBorderLine;
 
     if( nWidth > 0 )
-        lcl_frmitems_setXMLBorderWidth( *rpLine, nWidth, sal_True );
+        rpLine->SetWidth( nWidth );
     else
         rpLine->GuessLinesWidths( DOUBLE, nOutWidth, nInWidth, nDistance );
 }

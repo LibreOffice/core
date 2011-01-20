@@ -505,25 +505,19 @@ sal_Bool SvXMLImportItemMapper::PutXMLValue(
                     if( !aTokenEnum.getNextToken( aToken ) )
                         return sal_False;
 
-                    if( !rUnitConverter.convertMeasure( nInWidth, aToken,
-                                                        DEF_LINE_WIDTH_0,
-                                                        DEF_LINE_WIDTH_4 ) )
+                    if( !rUnitConverter.convertMeasure( nInWidth, aToken ) )
                         return sal_False;
 
                     if( !aTokenEnum.getNextToken( aToken ) )
                         return sal_False;
 
-                    if( !rUnitConverter.convertMeasure( nDistance, aToken,
-                                                        DEF_LINE_WIDTH_0,
-                                                        DEF_LINE_WIDTH_4 ) )
+                    if( !rUnitConverter.convertMeasure( nDistance, aToken ) )
                         return sal_False;
 
                     if( !aTokenEnum.getNextToken( aToken ) )
                         return sal_False;
 
-                    if( !rUnitConverter.convertMeasure( nOutWidth, aToken,
-                                                        DEF_LINE_WIDTH_0,
-                                                        DEF_LINE_WIDTH_4 ) )
+                    if( !rUnitConverter.convertMeasure( nOutWidth, aToken ) )
                         return sal_False;
 
                     // #i61946: accept line style even it's not part of our "normal" set of line styles
