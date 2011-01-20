@@ -47,9 +47,11 @@ struct ScQueryParam;
 
 class SC_DLLPUBLIC ScDPTableDataCache
 {
-    typedef ::boost::ptr_vector<ScDPItemData>                   DataListType;
-    typedef ::boost::ptr_vector< ::std::vector<ScDPItemData*> > DataGridType;
-    typedef ::boost::ptr_vector< ::std::vector<SCROW> >         RowGridType;
+public:
+    typedef ::boost::ptr_vector<ScDPItemData>           DataListType;
+private:
+    typedef ::boost::ptr_vector<DataListType>           DataGridType;
+    typedef ::boost::ptr_vector< ::std::vector<SCROW> > RowGridType;
 
     ScDocument* mpDoc;
 
@@ -82,7 +84,7 @@ public:
     SCROW GetDimMemberCount( SCCOL nDim ) const;
 
     SCROW GetSortedItemDataId( SCCOL nDim, SCROW nOrder ) const;
-    const std::vector<ScDPItemData*>& GetDimMemberValues( SCCOL nDim )const;
+    const DataListType& GetDimMemberValues( SCCOL nDim ) const;
     void SetId( long nId ){ mnID = nId;}
     bool InitFromDoc(ScDocument* pDoc, const ScRange& rRange);
     bool InitFromDataBase(const  ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet>& xRowSet, const Date& rNullDate);

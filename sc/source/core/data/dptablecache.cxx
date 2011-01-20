@@ -68,7 +68,7 @@ bool lcl_isDate( ULONG nNumType )
     return ( (nNumType & NUMBERFORMAT_DATE) != 0 )? 1:0 ;
 }
 
-bool lcl_Search( const std::vector<ScDPItemData*>& list, const ::std::vector<SCROW>& rOrder, const ScDPItemData& item, SCROW& rIndex)
+bool lcl_Search( const ScDPTableDataCache::DataListType& list, const ::std::vector<SCROW>& rOrder, const ScDPItemData& item, SCROW& rIndex)
 {
     rIndex = list.size();
     bool bFound = false;
@@ -79,7 +79,7 @@ bool lcl_Search( const std::vector<ScDPItemData*>& list, const ::std::vector<SCR
     while (nLo <= nHi)
     {
         nIndex = (nLo + nHi) / 2;
-        nCompare = ScDPItemData::Compare( *list[rOrder[nIndex]], item );
+        nCompare = ScDPItemData::Compare( list[rOrder[nIndex]], item );
         if (nCompare < 0)
             nLo = nIndex + 1;
         else
@@ -381,7 +381,7 @@ bool ScDPTableDataCache::operator== ( const ScDPTableDataCache& r ) const
             {
                 for ( size_t j = 0; j < nMembersCount; j++ )
                 {
-                    if ( *( GetDimMemberValues( i )[j] ) == *( r.GetDimMemberValues( i )[j] ) )
+                    if ( GetDimMemberValues(i)[j] == r.GetDimMemberValues(i)[j] )
                         continue;
                     else
                         return false;
@@ -411,17 +411,6 @@ ScDPTableDataCache::ScDPTableDataCache(ScDocument* pDoc) :
 
 ScDPTableDataCache::~ScDPTableDataCache()
 {
-    if ( IsValid() )
-    {
-        USHORT nCol;
-        for (  nCol=0; nCol < GetColumnCount() ; nCol++ )
-        {
-            for ( ULONG row = 0 ;  row < maTableDataValues[nCol].size(); row++ )
-                delete maTableDataValues[nCol][row];
-        }
-
-        mnColumnCount = 0;
-    }
 }
 
 bool ScDPTableDataCache::IsValid() const
@@ -467,15 +456,9 @@ bool ScDPTableDataCache::InitFromDoc(ScDocument* pDoc, const ScRange& rRange)
     USHORT nEndCol = rRange.aEnd.Col();
     USHORT nDocTab = rRange.aStart.Tab();
 
-    long nOldColumCount = mnColumnCount;
     mnColumnCount = nEndCol - nStartCol + 1;
     if ( IsValid() )
     {
-        for ( USHORT nCol=0; nCol < nOldColumCount ; nCol++ )
-        {
-            for ( ULONG row = 0 ;  row < maTableDataValues[nCol].size(); row++ )
-                delete maTableDataValues[nCol][row];
-        }
         maTableDataValues.clear();
         maSourceData.clear();
         maGlobalOrder.clear();
@@ -489,7 +472,7 @@ bool ScDPTableDataCache::InitFromDoc(ScDocument* pDoc, const ScRange& rRange)
     maIndexOrder.reserve(mnColumnCount);
     for (long i = 0; i < mnColumnCount; ++i)
     {
-        maTableDataValues.push_back(new vector<ScDPItemData*>());
+        maTableDataValues.push_back(new DataListType);
         maSourceData.push_back(new vector<SCROW>());
         maGlobalOrder.push_back(new vector<SCROW>());
         maIndexOrder.push_back(new vector<SCROW>());
@@ -520,15 +503,9 @@ bool ScDPTableDataCache::InitFromDataBase (const Reference<sdbc::XRowSet>& xRowS
         if (!xMeta.is())
             return false;
 
-        long nOldColumCount = mnColumnCount;
         mnColumnCount = xMeta->getColumnCount();
         if (IsValid())
         {
-            for (USHORT nCol=0; nCol < nOldColumCount ; nCol++)
-            {
-                for (ULONG row = 0 ;  row < maTableDataValues[nCol].size(); row++)
-                    delete maTableDataValues[nCol][row];
-            }
             maTableDataValues.clear();
             maSourceData.clear();
             maGlobalOrder.clear();
@@ -544,7 +521,7 @@ bool ScDPTableDataCache::InitFromDataBase (const Reference<sdbc::XRowSet>& xRowS
         maIndexOrder.reserve(mnColumnCount);
         for (long i = 0; i < mnColumnCount; ++i)
         {
-            maTableDataValues.push_back(new vector<ScDPItemData*>());
+            maTableDataValues.push_back(new DataListType);
             maSourceData.push_back(new vector<SCROW>());
             maGlobalOrder.push_back(new vector<SCROW>());
             maIndexOrder.push_back(new vector<SCROW>());
@@ -590,7 +567,7 @@ ULONG ScDPTableDataCache::GetDimNumType( SCCOL nDim) const
     if ( maTableDataValues[nDim].size()==0 )
         return NUMBERFORMAT_UNDEFINED;
     else
-        return GetNumType(maTableDataValues[nDim][0]->nNumFormat);
+        return GetNumType(maTableDataValues[nDim][0].nNumFormat);
 }
 
 bool ScDPTableDataCache::ValidQuery( SCROW nRow, const ScQueryParam &rParam, bool *pSpecial)
@@ -902,7 +879,7 @@ SCROW ScDPTableDataCache::GetItemDataId(USHORT nDim, SCROW nRow, bool bRepeatIfE
 
     if ( bRepeatIfEmpty )
     {
-        while ( nRow >0 && !maTableDataValues[nDim][ maSourceData[nDim][nRow] ]->IsHasData() )
+        while ( nRow >0 && !maTableDataValues[nDim][ maSourceData[nDim][nRow] ].IsHasData() )
         --nRow;
     }
 
@@ -917,7 +894,7 @@ const ScDPItemData* ScDPTableDataCache::GetItemDataById(long nDim, SCROW nId) co
     if (  (size_t)nId >= maTableDataValues[nDim].size() || nDim >= mnColumnCount  || nId < 0  )
         return NULL;
     else
-        return maTableDataValues[nDim][nId];
+        return &maTableDataValues[nDim][nId];
 }
 
 SCROW ScDPTableDataCache::GetRowCount() const
@@ -928,7 +905,7 @@ SCROW ScDPTableDataCache::GetRowCount() const
         return 0;
 }
 
-const std::vector<ScDPItemData*>& ScDPTableDataCache::GetDimMemberValues(SCCOL nDim) const
+const ScDPTableDataCache::DataListType& ScDPTableDataCache::GetDimMemberValues(SCCOL nDim) const
 {
     DBG_ASSERT( nDim>=0 && nDim < mnColumnCount ," nDim < mnColumnCount ");
     return maTableDataValues[nDim];
@@ -959,7 +936,7 @@ ULONG ScDPTableDataCache::GetNumberFormat( long nDim ) const
     if ( maTableDataValues[nDim].size()==0 )
         return 0;
     else
-        return maTableDataValues[nDim][0]->nNumFormat;
+        return maTableDataValues[nDim][0].nNumFormat;
 }
 
 bool ScDPTableDataCache::IsDateDimension( long nDim ) const
@@ -969,7 +946,7 @@ bool ScDPTableDataCache::IsDateDimension( long nDim ) const
     else if ( maTableDataValues[nDim].size()==0 )
         return false;
     else
-        return maTableDataValues[nDim][0]->IsDate();
+        return maTableDataValues[nDim][0].IsDate();
 
 }
 
@@ -1001,7 +978,7 @@ SCROW ScDPTableDataCache::GetIdByItemData(long nDim, String sItemData ) const
     {
         for ( size_t n = 0; n< maTableDataValues[nDim].size(); n++ )
         {
-            if ( maTableDataValues[nDim][n]->GetString() == sItemData )
+            if ( maTableDataValues[nDim][n].GetString() == sItemData )
                 return n;
         }
     }
@@ -1016,7 +993,7 @@ SCROW ScDPTableDataCache::GetIdByItemData( long nDim, const ScDPItemData& rData 
     {
         for ( size_t n = 0; n< maTableDataValues[nDim].size(); n++ )
         {
-            if ( *maTableDataValues[nDim][n] == rData )
+            if ( maTableDataValues[nDim][n] == rData )
                 return n;
         }
     }
