@@ -674,22 +674,8 @@ sal_Bool SVGFilter::implExportShape( const Reference< XShape >& rxShape )
 
                     if( rMtf.GetActionCount() )
                     {
-                        if( ( aShapeType.lastIndexOf( B2UCONST( "drawing.OLE2Shape" ) ) != -1 ) ||
-                            ( aShapeType.lastIndexOf( B2UCONST( "drawing.GraphicObjectShape" ) ) != -1 ) )
-                        {
-                            SvXMLElementExport aExp2( *mpSVGExport, XML_NAMESPACE_NONE, "g", TRUE, TRUE );
-                            mpSVGWriter->WriteMetaFile( aTopLeft, aSize, rMtf, SVGWRITER_WRITE_ALL);
-                        }
-                        else
-                        {
-                            // write geometries
-                            SvXMLElementExport aGeometryExp( *mpSVGExport, XML_NAMESPACE_NONE, "g", TRUE, TRUE );
-                            mpSVGWriter->WriteMetaFile( aTopLeft, aSize, rMtf, SVGWRITER_WRITE_FILL );
-
-                            // write text separately
-                            SvXMLElementExport aTextExp( *mpSVGExport, XML_NAMESPACE_NONE, "g", TRUE, TRUE );
-                            mpSVGWriter->WriteMetaFile( aTopLeft, aSize, rMtf, SVGWRITER_WRITE_TEXT );
-                        }
+                        SvXMLElementExport aExp2( *mpSVGExport, XML_NAMESPACE_NONE, "g", TRUE, TRUE );
+                        mpSVGWriter->WriteMetaFile( aTopLeft, aSize, rMtf, SVGWRITER_WRITE_ALL);
                     }
                 }
 
