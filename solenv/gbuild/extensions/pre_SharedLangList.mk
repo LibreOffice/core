@@ -25,11 +25,14 @@
 #
 #*************************************************************************
 
-# Default ISO code used when no languages specified
-# This language will be always included!
-defaultlangiso=en-US
+# share language list with dmake build system
+include $(SOLARENV)/inc/langlist.mk
 
-# Complete list of all supported ISO codes
-.INCLUDE : langlist.mk
+ifneq ($(WITH_LANG),ALL)
+gb_WITH_LANG=$(WITH_LANG)
+else
+# expand ALL based on language list)
+gb_WITH_LANG=$(completelangiso)
+endif
 
-alllangiso=$(strip $(defaultlangiso) $(subst,$(defaultlangiso), $(uniq $(subst,ALL,$(completelangiso) $(WITH_LANG)))))
+# vim: set noet ts=4 sw=4:

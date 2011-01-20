@@ -102,7 +102,7 @@ endif
 
 
 define gb_SrsPartTarget_SrsPartTarget
-ifeq ($(strip $(WITH_LANG)),)
+ifeq ($(strip $(gb_WITH_LANG)),)
 $(call gb_SrsPartTarget_get_target,$(1)) : MERGEDFILE := 
 else
 $(call gb_SrsPartTarget_get_target,$(1)) : MERGEDFILE := $(call gb_SrsPartMergeTarget_get_target,$(1))
@@ -282,7 +282,7 @@ endef
 
 # AllLangResTarget
 
-gb_AllLangResTarget_LANGS := en-US $(WITH_LANG)
+gb_AllLangResTarget_LANGS := en-US $(filter-out en-US,$(gb_WITH_LANG))
 
 define gb_AllLangResTarget_set_langs
 gb_AllLangResTarget_LANGS := $(1)
