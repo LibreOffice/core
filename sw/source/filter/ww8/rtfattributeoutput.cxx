@@ -155,48 +155,68 @@ static OString OutTBLBorderLine(RtfExport &rExport, const SvxBorderLine* pLine, 
 {
     OStringBuffer aRet;
     aRet.append(pStr);
-    if( pLine->GetInWidth() )
+    // single line
+    switch ( pLine->GetStyle( ) )
     {
-        // double line
-        aRet.append(OOO_STRING_SVTOOLS_RTF_BRDRDB);
-        switch( pLine->GetInWidth() )
-        {
-            case DEF_LINE_WIDTH_0:
-                aRet.append(OOO_STRING_SVTOOLS_RTF_BRDRW "15");
-                break;
-            case DEF_LINE_WIDTH_1:
-                aRet.append(OOO_STRING_SVTOOLS_RTF_BRDRW "30");
-                break;
-            case DEF_LINE_WIDTH_2:
-            case DEF_LINE_WIDTH_3:
-                aRet.append(OOO_STRING_SVTOOLS_RTF_BRDRW "45");
-                break;
-        }
-    }
-    else
-    {
-        // single line
-        if( DEF_LINE_WIDTH_0 == pLine->GetOutWidth() )
-            aRet.append(OOO_STRING_SVTOOLS_RTF_BRDRHAIR);
-        else if ( 255 >= pLine->GetOutWidth() ) // That value comes from RTF specs
-        {
-            switch ( pLine->GetStyle( ) )
+        case SOLID:
             {
-                case DOTTED:
-                    aRet.append(OOO_STRING_SVTOOLS_RTF_BRDRDOT);
-                    break;
-                case DASHED:
-                    aRet.append(OOO_STRING_SVTOOLS_RTF_BRDRDASH);
-                    break;
-                case SOLID:
-                default:
+                if( DEF_LINE_WIDTH_0 == pLine->GetWidth() )
+                    aRet.append(OOO_STRING_SVTOOLS_RTF_BRDRHAIR);
+                else
                     aRet.append(OOO_STRING_SVTOOLS_RTF_BRDRS);
             }
-            aRet.append(OOO_STRING_SVTOOLS_RTF_BRDRW).append((sal_Int32)pLine->GetOutWidth());
-        }
-        else
-            aRet.append(OOO_STRING_SVTOOLS_RTF_BRDRTH OOO_STRING_SVTOOLS_RTF_BRDRW).append((sal_Int32)pLine->GetOutWidth() / 2);
+            break;
+        case DOTTED:
+            aRet.append(OOO_STRING_SVTOOLS_RTF_BRDRDOT);
+            break;
+        case DASHED:
+            aRet.append(OOO_STRING_SVTOOLS_RTF_BRDRDASH);
+            break;
+        case DOUBLE:
+            aRet.append(OOO_STRING_SVTOOLS_RTF_BRDRDB);
+            break;
+        case THINTHICK_SMALLGAP:
+            aRet.append(OOO_STRING_SVTOOLS_RTF_BRDRTNTHSG);
+            break;
+        case THINTHICK_MEDIUMGAP:
+            aRet.append(OOO_STRING_SVTOOLS_RTF_BRDRTNTHMG);
+            break;
+        case THINTHICK_LARGEGAP:
+            aRet.append(OOO_STRING_SVTOOLS_RTF_BRDRTNTHLG);
+            break;
+        case THICKTHIN_SMALLGAP:
+            aRet.append(OOO_STRING_SVTOOLS_RTF_BRDRTHTNSG);
+            break;
+        case THICKTHIN_MEDIUMGAP:
+            aRet.append(OOO_STRING_SVTOOLS_RTF_BRDRTHTNMG);
+            break;
+        case THICKTHIN_LARGEGAP:
+            aRet.append(OOO_STRING_SVTOOLS_RTF_BRDRTHTNLG);
+            break;
+        case EMBOSSED:
+            aRet.append(OOO_STRING_SVTOOLS_RTF_BRDREMBOSS);
+            break;
+        case ENGRAVED:
+            aRet.append(OOO_STRING_SVTOOLS_RTF_BRDRENGRAVE);
+            break;
+        case OUTSET:
+            aRet.append(OOO_STRING_SVTOOLS_RTF_BRDROUTSET);
+            break;
+        case INSET:
+            aRet.append(OOO_STRING_SVTOOLS_RTF_BRDRINSET);
+            break;
+        case NO_STYLE:
+        default:
+            aRet.append(OOO_STRING_SVTOOLS_RTF_BRDRNONE);
+            break;
     }
+
+    if ( 255 >= pLine->GetWidth() ) // That value comes from RTF specs
+    {
+        aRet.append(OOO_STRING_SVTOOLS_RTF_BRDRW).append((sal_Int32)pLine->GetWidth());
+    }
+    else
+        aRet.append(OOO_STRING_SVTOOLS_RTF_BRDRTH OOO_STRING_SVTOOLS_RTF_BRDRW).append((sal_Int32)pLine->GetWidth() / 2);
 
     aRet.append(OOO_STRING_SVTOOLS_RTF_BRDRCF);
     aRet.append((sal_Int32)rExport.GetColor(pLine->GetColor()));
