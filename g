@@ -12,6 +12,7 @@ if [ "$#" -eq "0" ] ; then
     echo "Usage: g [options] [git commands]"
     echo "   -f         Force - act on all the repos, not only the changed ones"
     echo "   -s         Silent - do not report the repo names."
+    echo "   --rewrite-account [username] re-write an existing tree's config for a new commit account name"
     exit $?
 fi
 
@@ -52,6 +53,10 @@ while [ "${COMMAND:0:1}" = "-" ] ; do
             ;;
         -s) REPORT_REPOS=0
             ;;
+	--rewrite-account)
+	    shift
+	    REWRITE_ACCOUNT="$1"
+	    ;;
     esac
     shift
     COMMAND="$1"
@@ -143,7 +148,11 @@ for REPO in $DIRS ; do
         HOOKDIR="../../git-hooks"
     fi
 
-    if [ \( -d "$DIR" -a -d "$DIR"/.git \) -o \( "$COMMAND" = "clone" \) ] ; then
+    if [ "$REWRITE_ACCOUNT" != "" ]; then
+       echo "rewrite $DIR/.git/config"
+       sed -i.bak "s|git://anongit.freedesktop.org/git/libreoffice/|ssh://$REWRITE_ACCOUNT@git.freedesktop.org/git/libreoffice/|" "$DIR/.git/config"
+
+    elif [ \( -d "$DIR" -a -d "$DIR"/.git \) -o \( "$COMMAND" = "clone" \) ] ; then
         (
             # executed in a subshell
             if [ "$COMMAND" != "clone" ] ; then
