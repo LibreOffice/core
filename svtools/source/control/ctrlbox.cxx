@@ -329,9 +329,9 @@ long BorderWidthImpl::GetGap( long nWidth ) const
     if ( ( m_nFlags & CHANGE_DIST ) > 0 )
         result = m_nRateGap * nWidth;
 
-    // Avoid having too small distances
-    if ( result < 100 && m_nRate1 > 0 && m_nRate2 > 0 )
-        result = 100;
+    // Avoid having too small distances (less than 1pt)
+    if ( result < 20 && m_nRate1 > 0 && m_nRate2 > 0 )
+        result = 20;
 
     return result;
 }
@@ -371,7 +371,7 @@ long BorderWidthImpl::GuessWidth( long nLine1, long nLine2, long nGap )
 
     bool bGapChange = ( m_nFlags & CHANGE_DIST ) > 0;
     double nWidthGap = lcl_getGuessedWidth( nGap, m_nRateGap, bGapChange );
-    if ( bGapChange )
+    if ( bGapChange && nGap > 20 )
         aToCompare.push_back( nWidthGap );
     else if ( !bGapChange && nWidthGap < 0 )
         bInvalid = true;
