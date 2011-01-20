@@ -2418,17 +2418,6 @@ ScDPCollection::~ScDPCollection()
 
 void ScDPCollection::DeleteOnTab( SCTAB nTab )
 {
-#ifdef STLPORT_WORKAROUND
-    // We do this only because STLPort crashes when erasing an element when
-    // the container only contains one element.
-    if (maTables.size() == 1)
-    {
-        if (maTables.back().GetOutRange().aStart.Tab() == nTab)
-            maTables.clear();
-        return;
-    }
-#endif
-
     TablesType::iterator itr = maTables.begin(), itrEnd = maTables.end();
     while (itr != itrEnd)
     {
@@ -2635,16 +2624,6 @@ void ScDPCollection::FreeTable(ScDPObject* pDPObj)
     const ScAddress& s = rOutRange.aStart;
     const ScAddress& e = rOutRange.aEnd;
     pDoc->RemoveFlagsTab(s.Col(), s.Row(), e.Col(), e.Row(), s.Tab(), SC_MF_DP_TABLE);
-#ifdef STLPORT_WORKAROUND
-    // We do this only because STLPort crashes when erasing an element when
-    // the container only contains one element.
-    if (maTables.size() == 1)
-    {
-        if (&maTables.back() == pDPObj)
-            maTables.clear();
-        return;
-    }
-#endif
     TablesType::iterator itr = maTables.begin(), itrEnd = maTables.end();
     for (; itr != itrEnd; ++itr)
     {
