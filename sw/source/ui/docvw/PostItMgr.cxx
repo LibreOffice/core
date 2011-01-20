@@ -1247,7 +1247,7 @@ void SwPostItMgr::Delete(String aAuthor)
         mpWrtShell->GotoField( *(*i) );
         mpWrtShell->DelRight();
     }
-    mpWrtShell->EndUndo( UNDO_DELETE );
+    mpWrtShell->EndUndo();
     PrepareView();
     mpWrtShell->EndAllAction();
     mbLayout = true;
@@ -1293,7 +1293,7 @@ void SwPostItMgr::Delete()
     mvPostItFlds.clear();
 */
 
-    mpWrtShell->EndUndo( UNDO_DELETE );
+    mpWrtShell->EndUndo();
     PrepareView();
     mpWrtShell->EndAllAction();
     mbLayout = true;

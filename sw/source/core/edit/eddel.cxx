@@ -139,7 +139,7 @@ long SwEditShell::Delete()
         // falls eine Undo-Klammerung, dann hier beenden
         if( bUndo )
         {
-            GetDoc()->GetIDocumentUndoRedo().EndUndo( UNDO_DELETE, NULL );
+            GetDoc()->GetIDocumentUndoRedo().EndUndo(UNDO_END, 0);
         }
         EndAllAction();
         nRet = 1;

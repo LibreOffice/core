@@ -2138,7 +2138,7 @@ bool SwDoc::AcceptRedline( USHORT nPos, bool bCallDelete )
 
         if (GetIDocumentUndoRedo().DoesUndo())
         {
-            GetIDocumentUndoRedo().EndUndo( UNDO_ACCEPT_REDLINE, NULL );
+            GetIDocumentUndoRedo().EndUndo(UNDO_END, 0);
         }
     }
     return bRet;
@@ -2208,7 +2208,7 @@ bool SwDoc::RejectRedline( USHORT nPos, bool bCallDelete )
             SwRewriter aRewriter;
 
             aRewriter.AddRule(UNDO_ARG1, pTmp->GetDescr());
-            GetIDocumentUndoRedo().StartUndo( UNDO_REJECT_REDLINE, NULL );
+            GetIDocumentUndoRedo().StartUndo(UNDO_REJECT_REDLINE, &aRewriter);
         }
 
         int nLoopCnt = 2;
@@ -2251,7 +2251,7 @@ bool SwDoc::RejectRedline( USHORT nPos, bool bCallDelete )
 
         if (GetIDocumentUndoRedo().DoesUndo())
         {
-            GetIDocumentUndoRedo().EndUndo( UNDO_REJECT_REDLINE, NULL );
+            GetIDocumentUndoRedo().EndUndo(UNDO_END, 0);
         }
     }
     return bRet;

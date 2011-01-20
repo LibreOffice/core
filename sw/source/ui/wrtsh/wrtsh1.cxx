@@ -276,7 +276,7 @@ JP 21.01.98: Ueberschreiben ueberschreibt nur die Selektion, nicht das
     if( bStarted )
     {
         EndAllAction();
-        EndUndo(UNDO_REPLACE);
+        EndUndo();
     }
 //    delete pChgFlg;
 }
@@ -376,7 +376,7 @@ void SwWrtShell::Insert( const String &rPath, const String &rFilter,
     if ( bOwnMgr )
         delete pFrmMgr;
 
-    EndUndo(UNDO_INSERT);
+    EndUndo();
     EndAllAction();
 }
 

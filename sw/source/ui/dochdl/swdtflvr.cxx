@@ -228,7 +228,7 @@ public:
     }
     ~SwTrnsfrActionAndUndo()
     {
-        pSh->EndUndo( eUndoId );
+        pSh->EndUndo();
         pSh->EndAllAction();
     }
 };
@@ -3434,7 +3434,7 @@ int SwTransferable::PrivateDrop( SwWrtShell& rSh, const Point& rDragPt,
             {
                 // nicht in sich selbst kopieren/verschieben
                 rSh.DestroyCrsr();
-                rSh.EndUndo( eUndoId );
+                rSh.EndUndo();
                 rSh.EndAction();
                 rSh.EndAction();
                 return 0;
@@ -3542,8 +3542,8 @@ int SwTransferable::PrivateDrop( SwWrtShell& rSh, const Point& rDragPt,
         rSrcSh.LeaveSelFrmMode();
 
     if( rSrcSh.GetDoc() != rSh.GetDoc() )
-        rSrcSh.EndUndo( eUndoId );
-    rSh.EndUndo( eUndoId );
+        rSrcSh.EndUndo();
+    rSh.EndUndo();
 
         // Shell in den richtigen Status versetzen
     if( &rSrcSh != &rSh && ( rSh.IsFrmSelected() || rSh.IsObjSelected() ))

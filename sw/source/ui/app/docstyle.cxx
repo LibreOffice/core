@@ -1409,7 +1409,7 @@ void SwDocStyleSheet::SetItemSet( const SfxItemSet& rSet,
     // --> OD 2008-02-12 #newlistlevelattrs#
     if (rDoc.GetIDocumentUndoRedo().DoesUndo())
     {
-        rDoc.GetIDocumentUndoRedo().EndUndo( UNDO_INSFMTATTR, NULL );
+        rDoc.GetIDocumentUndoRedo().EndUndo(UNDO_END, 0);
     }
     // <--
 }

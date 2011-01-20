@@ -471,7 +471,7 @@ BOOL SwView::InsertGraphicDlg( SfxRequest& rReq )
             rReq.Done();
         }
 
-        rSh.EndUndo(UNDO_INSERT); // wegen moegl. Shellwechsel
+        rSh.EndUndo(); // due to possible change of Shell
     }
 
     delete pFileDlg;

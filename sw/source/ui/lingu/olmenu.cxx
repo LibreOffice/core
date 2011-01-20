@@ -788,7 +788,7 @@ void SwSpellPopup::Execute( USHORT nId )
                of temporary auto correction is now undoable two and
                must reside in the same undo group.*/
             pSh->EndAction();
-            pSh->EndUndo(UNDO_UI_REPLACE);
+            pSh->EndUndo();
 
             pSh->SetInsMode( bOldIns );
         }

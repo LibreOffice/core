@@ -1208,7 +1208,7 @@ void SwTextShell::InsertSymbol( SfxRequest& rReq )
         }
 
         rSh.EndAllAction();
-        rSh.EndUndo( UNDO_INSERT );
+        rSh.EndUndo();
 
         if ( aChars.Len() )
         {

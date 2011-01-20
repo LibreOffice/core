@@ -233,6 +233,8 @@ UndoManager::EndUndo(SwUndoId const i_eUndoId, SwRewriter const*const pRewriter)
 
     SwUndoId const eUndoId( ((0 == i_eUndoId) || (UNDO_START == i_eUndoId))
             ? UNDO_END : i_eUndoId );
+    OSL_ENSURE(!((UNDO_END == eUndoId) && pRewriter),
+                "EndUndo(): no Undo ID, but rewriter given?");
 
     SfxUndoAction *const pLastUndo(
         (0 == SfxUndoManager::GetUndoActionCount(CurrentLevel))
@@ -252,6 +254,8 @@ UndoManager::EndUndo(SwUndoId const i_eUndoId, SwRewriter const*const pRewriter)
         {
             if (UNDO_END != eUndoId)
             {
+                OSL_ENSURE(pListAction->GetId() == eUndoId,
+                        "EndUndo(): given ID different from StartUndo()");
                 // comment set by caller of EndUndo
                 String comment = String(SW_RES(UNDO_BASE + eUndoId));
                 if (pRewriter)

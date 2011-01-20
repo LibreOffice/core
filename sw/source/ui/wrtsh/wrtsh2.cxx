@@ -97,7 +97,7 @@ void SwWrtShell::Insert(SwField &rFld)
     }
 
     SwEditShell::Insert2(rFld, bDeleted);
-    EndUndo(UNDO_INSERT);
+    EndUndo();
     EndAllAction();
 }
 

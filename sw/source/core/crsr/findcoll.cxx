@@ -113,7 +113,7 @@ ULONG SwCursor::Find( const SwTxtFmtColl& rFmtColl,
 
     if (bStartUndo)
     {
-        pDoc->GetIDocumentUndoRedo().EndUndo( UNDO_UI_REPLACE_STYLE, NULL );
+        pDoc->GetIDocumentUndoRedo().EndUndo(UNDO_END, 0);
     }
     return nRet;
 }

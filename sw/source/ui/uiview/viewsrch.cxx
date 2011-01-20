@@ -585,7 +585,7 @@ void SwView::Replace()
                             pSrchItem->GetReplaceString(),
                             SwWrtShell::GETSTYLE_CREATESOME ));
 
-        pWrtShell->EndUndo(UNDO_UI_REPLACE_STYLE); // #111827#
+        pWrtShell->EndUndo(); // #111827#
     }
     else
     {

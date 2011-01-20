@@ -1010,7 +1010,7 @@ USHORT SwDocShell::UpdateStyle(const String &rName, USHORT nFamily, SwWrtShell* 
                     // Vorlage auch anwenden, um harte Attributierung
                     // zu entfernen
                 GetWrtShell()->SetTxtFmtColl( pColl );
-                GetWrtShell()->EndUndo(UNDO_INSFMTATTR, NULL);
+                GetWrtShell()->EndUndo();
                 GetWrtShell()->EndAllAction();
             }
             break;

@@ -960,7 +960,9 @@ void SwRedlineAcceptDlg::CallAcceptReject( BOOL bSelect, BOOL bAccept )
 
     // #111827#
     if (aRedlines.size() > 1)
-        pSh->EndUndo(bAccept? UNDO_ACCEPT_REDLINE : UNDO_REJECT_REDLINE);
+    {
+        pSh->EndUndo();
+    }
 
     pSh->EndAction();
 

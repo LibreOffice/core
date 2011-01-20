@@ -378,7 +378,8 @@ throw (uno::RuntimeException)
     m_pImpl->m_pDoc->GetIDocumentUndoRedo().StartUndo(
             UNDO_BOOKMARK_RENAME, &aRewriter);
     pMarkAccess->renameMark(m_pImpl->m_pRegisteredBookmark, rName);
-    m_pImpl->m_pDoc->GetIDocumentUndoRedo().EndUndo(UNDO_BOOKMARK_RENAME, 0);
+    m_pImpl->m_pDoc->GetIDocumentUndoRedo().EndUndo(
+            UNDO_BOOKMARK_RENAME, &aRewriter);
 }
 
 OUString SAL_CALL

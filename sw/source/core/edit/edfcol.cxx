@@ -88,7 +88,7 @@ void SwEditShell::SetTxtFmtColl( SwTxtFmtColl *pFmt,
             GetDoc()->SetTxtFmtColl( *PCURCRSR, pLocal, true, bResetListAttrs );
 
     FOREACHPAM_END()
-    GetDoc()->GetIDocumentUndoRedo().EndUndo(UNDO_SETFMTCOLL, NULL);
+    GetDoc()->GetIDocumentUndoRedo().EndUndo(UNDO_SETFMTCOLL, &aRewriter);
     EndAllAction();
 }
 // <--

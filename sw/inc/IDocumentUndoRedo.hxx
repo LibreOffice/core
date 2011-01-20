@@ -109,7 +109,7 @@ public:
 
         @remark     StartUndo() and EndUndo() do nothing if !DoesUndo().
 
-        @param nUndoId        undo ID for the start object
+        @param nUndoId        undo ID for the list action
         @param pRewriter      rewriter for comments @see SwUndo::GetComment
 
         If the given nUndoId is equal to zero an undo object with ID
@@ -125,17 +125,16 @@ public:
 
        @remark     StartUndo() and EndUndo() do nothing if !DoesUndo().
 
-       @param nUndoId         undo ID for the closure object
+       @param nUndoId         undo ID for the list action
        @param pRewriter       rewriter for comments @see SwUndo::GetComment
 
-       If the given nUndoId is equal to zero an undo object with ID
-       UNDO_START will be generated.
-
-       If pRewriter is not equal to zero the given rewriter will be
-       set for the generated closure object and the corresponding
-       start object. Otherwise an existent rewriter in the
-       corresponding start object will be propagated to the generated
-       closure object.
+       If the given nUndoId is not UNDO_EMPTY or UNDO_END, the comment of
+       the resulting list action will be set via the nUndoId, applying the
+       given pRewriter (if not 0).  Otherwise the comment of the resulting
+       list action is unchanged if it has an UndoId that is not UNDO_START
+       set by StartUndo, and in case the UndoId is UNDO_START the comment
+       of the list action defaults to the comment of the last action
+       contained in the list action.
     */
     virtual SwUndoId EndUndo(SwUndoId const eUndoId,
                 SwRewriter const*const  pRewriter) = 0;

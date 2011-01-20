@@ -2818,7 +2818,7 @@ void SwContentTree::EditEntry(SvLBoxEntry* pEntry, sal_uInt8 nMode)
                 pActiveShell->StartUndo(UNDO_DELETE, &aRewriter);
                 pActiveShell->GetView().GetViewFrame()->GetDispatcher()->Execute(FN_TABLE_SELECT_ALL);
                 pActiveShell->DeleteRow();
-                pActiveShell->EndUndo(UNDO_DELETE);
+                pActiveShell->EndUndo();
                 pActiveShell->EndAction();
             }
             else if(nMode == EDIT_MODE_RENAME)

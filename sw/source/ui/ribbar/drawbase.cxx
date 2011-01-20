@@ -364,7 +364,9 @@ BOOL SwDrawBase::MouseButtonUp(const MouseEvent& rMEvt)
                 }
             }
             if (m_pWin->GetSdrDrawMode() == OBJ_NONE)
-                m_pSh->EndUndo(UNDO_INSERT);
+            {
+                m_pSh->EndUndo();
+            }
         }
 
         bReturn = TRUE;
