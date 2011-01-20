@@ -87,13 +87,11 @@ static inline typelib_TypeClass cpp2uno_call(
         }
     }
 
-    // stack space
-    OSL_ENSURE( sizeof(void *) == sizeof(sal_Int32), "### unexpected size!" );
     // parameters
     void ** pUnoArgs = (void **)alloca( 4 * sizeof(void *) * nParams );
     void ** pCppArgs = pUnoArgs + nParams;
     // indizes of values this have to be converted (interface conversion cpp<=>uno)
-    sal_Int32 * pTempIndizes = (sal_Int32 *)(pUnoArgs + (2 * nParams));
+    sal_Int64 * pTempIndizes = (sal_Int64 *)(pUnoArgs + (2 * nParams));
     // type descriptions for reconversions
     typelib_TypeDescription ** ppTempParamTypeDescr = (typelib_TypeDescription **)(pUnoArgs + (3 * nParams));
 
@@ -116,7 +114,7 @@ static inline typelib_TypeClass cpp2uno_call(
             case typelib_TypeClass_HYPER:
             case typelib_TypeClass_UNSIGNED_HYPER:
             case typelib_TypeClass_DOUBLE:
-                pCppStack += sizeof(sal_Int32); // extra long
+                pCppStack += sizeof(sal_Int64); // extra qword
                 break;
             default:
                 break;
@@ -155,7 +153,7 @@ static inline typelib_TypeClass cpp2uno_call(
                 TYPELIB_DANGER_RELEASE( pParamTypeDescr );
             }
         }
-        pCppStack += sizeof(sal_Int32); // standard parameter length
+        pCppStack += sizeof(sal_Int64); // standard parameter length
     }
 
     // ExceptionHolder
@@ -240,12 +238,10 @@ static inline typelib_TypeClass cpp2uno_call(
 }
 
 //==================================================================================================
-static typelib_TypeClass __cdecl cpp_mediate(
+typelib_TypeClass __cdecl cpp_mediate(
     void ** pCallStack, sal_Int32 nFunctionIndex, sal_Int32 nVtableOffset,
     sal_Int64 * pRegisterReturn /* space for register return */ )
 {
-    OSL_ENSURE( sizeof(sal_Int32)==sizeof(void *), "### unexpected!" );
-
     // pCallStack: ret adr, this, [ret *], params
     void * pThis = static_cast< char * >(pCallStack[1]) - nVtableOffset;
     bridges::cpp_uno::shared::CppInterfaceProxy * pCppI
@@ -361,74 +357,28 @@ static typelib_TypeClass __cdecl cpp_mediate(
     return eRet;
 }
 
-//==================================================================================================
-/**
- * is called on incoming vtable calls
- * (called by asm snippets)
- */
-static __declspec(naked) void __cdecl cpp_vtable_call(void)
-{
-__asm
-    {
-        sub     esp, 8      // space for immediate return type
-        push    esp
-        push    edx         // vtable offset
-        push    eax         // function index
-        mov     eax, esp
-        add     eax, 20
-        push    eax         // original stack ptr
-
-        call    cpp_mediate
-        add     esp, 16
-
-        cmp     eax, typelib_TypeClass_FLOAT
-        je      Lfloat
-        cmp     eax, typelib_TypeClass_DOUBLE
-        je      Ldouble
-        cmp     eax, typelib_TypeClass_HYPER
-        je      Lhyper
-        cmp     eax, typelib_TypeClass_UNSIGNED_HYPER
-        je      Lhyper
-        // rest is eax
-        pop     eax
-        add     esp, 4
-        ret
-Lhyper:
-        pop     eax
-        pop     edx
-        ret
-Lfloat:
-        fld     dword ptr [esp]
-        add     esp, 8
-        ret
-Ldouble:
-        fld     qword ptr [esp]
-        add     esp, 8
-        ret
-    }
-}
+extern void *cpp_vtable_call;
 
 //==================================================================================================
-int const codeSnippetSize = 16;
+int const codeSnippetSize = 28;
 
 unsigned char * codeSnippet(
     unsigned char * code, sal_Int32 functionIndex, sal_Int32 vtableOffset)
 {
     unsigned char * p = code;
-    OSL_ASSERT(sizeof (sal_Int32) == 4);
-    // mov eax, functionIndex:
+    // mov rax, functionIndex:
     *p++ = 0xB8;
-    *reinterpret_cast< sal_Int32 * >(p) = functionIndex;
-    p += sizeof (sal_Int32);
-    // mov edx, vtableOffset:
+    *reinterpret_cast< sal_Int64 * >(p) = functionIndex;
+    p += sizeof (sal_Int64);
+    // mov rdx, vtableOffset:
     *p++ = 0xBA;
-    *reinterpret_cast< sal_Int32 * >(p) = vtableOffset;
-    p += sizeof (sal_Int32);
-    // jmp rel32 cpp_vtable_call:
+    *reinterpret_cast< sal_Int64 * >(p) = vtableOffset;
+    p += sizeof (sal_Int64);
+    // jmp rel64 cpp_vtable_call:
     *p++ = 0xE9;
-    *reinterpret_cast< sal_Int32 * >(p)
-        = ((unsigned char *) cpp_vtable_call) - p - sizeof (sal_Int32);
-    p += sizeof (sal_Int32);
+    *reinterpret_cast< sal_Int64 * >(p)
+        = ((unsigned char *) cpp_vtable_call) - p - sizeof (sal_Int64);
+    p += sizeof (sal_Int64);
     OSL_ASSERT(p - code <= codeSnippetSize);
     return code + codeSnippetSize;
 }

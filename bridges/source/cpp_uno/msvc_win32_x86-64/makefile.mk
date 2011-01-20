@@ -54,7 +54,8 @@ SLOFILES= \
     $(SLO)$/cpp2uno.obj		\
     $(SLO)$/uno2cpp.obj		\
     $(SLO)$/dllinit.obj		\
-    $(SLO)$/except.obj
+    $(SLO)$/except.obj		\
+    $(SLO)$/asmbits.obj
 
 NOOPTFILES= \
     $(SLO)$/except.obj
@@ -80,4 +81,3 @@ DEF1NAME=$(SHL1TARGET)
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :  target.mk
-

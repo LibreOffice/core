@@ -47,105 +47,51 @@ using namespace ::com::sun::star::uno;
 namespace
 {
 
+// As "long" is 32 bit also in x64 Windows we don't use "longs" in names
+// to indicate pointer-sized stack slots etc like in the other x64 archs,
+// but "qword" as in ml64.
+
 //==================================================================================================
-inline static void callVirtualMethod(
+// In asmbits.asm
+extern void callVirtualMethod(
     void * pAdjustedThisPtr, sal_Int32 nVtableIndex,
-    void * pRegisterReturn, typelib_TypeClass eReturnTypeClass,
-    sal_Int32 * pStackLongs, sal_Int32 nStackLongs )
+    void * pReturn, typelib_TypeClass eReturnTypeClass,
+    sal_Int64 * pStack, sal_Int32 nStack,
+    sal_uInt64 *pGPR,
+    double *pFPR);
+
+#if OSL_DEBUG_LEVEL > 1
+inline void callVirtualMethodwrapper(
+    void * pAdjustedThisPtr, sal_Int32 nVtableIndex,
+    void * pReturn, typelib_TypeDescriptionReference * pReturnTypeRef,
+    sal_Int64 * pStack, sal_Int32 nStack,
+    sal_uInt64 *pGPR, sal_uInt32 nGPR,
+    double *pFPR, sal_uInt32 nFPR)
 {
-    // parameter list is mixed list of * and values
-    // reference parameters are pointers
-
-    OSL_ENSURE( pStackLongs && pAdjustedThisPtr, "### null ptr!" );
-    OSL_ENSURE( (sizeof(void *) == 4) &&
-                 (sizeof(sal_Int32) == 4), "### unexpected size of int!" );
-
-__asm
+    // Let's figure out what is really going on here
     {
-        mov     eax, nStackLongs
-        test    eax, eax
-        je      Lcall
-        // copy values
-        mov     ecx, eax
-        shl     eax, 2           // sizeof(sal_Int32) == 4
-        add     eax, pStackLongs // params stack space
-Lcopy:  sub     eax, 4
-        push    dword ptr [eax]
-        dec     ecx
-        jne     Lcopy
-Lcall:
-        // call
-        mov     ecx, pAdjustedThisPtr
-        push    ecx             // this ptr
-        mov     edx, [ecx]      // pvft
-        mov     eax, nVtableIndex
-        shl     eax, 2          // sizeof(void *) == 4
-        add     edx, eax
-        call    [edx]           // interface method call must be __cdecl!!!
-
-        // register return
-        mov     ecx, eReturnTypeClass
-        cmp     ecx, typelib_TypeClass_VOID
-        je      Lcleanup
-        mov     ebx, pRegisterReturn
-// int32
-        cmp     ecx, typelib_TypeClass_LONG
-        je      Lint32
-        cmp     ecx, typelib_TypeClass_UNSIGNED_LONG
-        je      Lint32
-        cmp     ecx, typelib_TypeClass_ENUM
-        je      Lint32
-// int8
-        cmp     ecx, typelib_TypeClass_BOOLEAN
-        je      Lint8
-        cmp     ecx, typelib_TypeClass_BYTE
-        je      Lint8
-// int16
-        cmp     ecx, typelib_TypeClass_CHAR
-        je      Lint16
-        cmp     ecx, typelib_TypeClass_SHORT
-        je      Lint16
-        cmp     ecx, typelib_TypeClass_UNSIGNED_SHORT
-        je      Lint16
-// float
-        cmp     ecx, typelib_TypeClass_FLOAT
-        je      Lfloat
-// double
-        cmp     ecx, typelib_TypeClass_DOUBLE
-        je      Ldouble
-// int64
-        cmp     ecx, typelib_TypeClass_HYPER
-        je      Lint64
-        cmp     ecx, typelib_TypeClass_UNSIGNED_HYPER
-          je        Lint64
-        jmp     Lcleanup // no simple type
-Lint8:
-        mov     byte ptr [ebx], al
-        jmp     Lcleanup
-Lint16:
-        mov     word ptr [ebx], ax
-        jmp     Lcleanup
-Lfloat:
-        fstp    dword ptr [ebx]
-        jmp     Lcleanup
-Ldouble:
-        fstp    qword ptr [ebx]
-        jmp     Lcleanup
-Lint64:
-        mov     dword ptr [ebx], eax
-        mov     dword ptr [ebx+4], edx
-        jmp     Lcleanup
-Lint32:
-        mov     dword ptr [ebx], eax
-        jmp     Lcleanup
-Lcleanup:
-        // cleanup stack (obsolete though because of function)
-        mov     eax, nStackLongs
-        shl     eax, 2          // sizeof(sal_Int32) == 4
-        add     eax, 4          // this ptr
-        add     esp, eax
+        fprintf( stderr, "= callVirtualMethod() =\nGPR's (%d): ", nGPR );
+        for ( unsigned int i = 0; i < nGPR; ++i )
+            fprintf( stderr, "0x%lx, ", pGPR[i] );
+        fprintf( stderr, "\nFPR's (%d): ", nFPR );
+        for ( unsigned int i = 0; i < nFPR; ++i )
+            fprintf( stderr, "%f, ", pFPR[i] );
+        fprintf( stderr, "\nStack (%d): ", nStack );
+        for ( unsigned int i = 0; i < nStack; ++i )
+            fprintf( stderr, "0x%lx, ", pStack[i] );
+        fprintf( stderr, "\n" );
     }
+
+    callVirtualMethod( pAdjustedThisPtr, nVtableIndex,
+                       pReturn, pReturnTypeRef->eTypeClass,
+                       pStack, nStack,
+                       pGPR,
+                       pFPR);
 }
+
+#define callVirtualMethod callVirtualMethodwrapper
+
+#endif
 
 //==================================================================================================
 static void cpp_call(
@@ -156,16 +102,33 @@ static void cpp_call(
     void * pUnoReturn, void * pUnoArgs[], uno_Any ** ppUnoExc ) throw ()
 {
     // max space for: [complex ret ptr], values|ptr ...
-    char * pCppStack        = (char *)alloca( sizeof(sal_Int32) + (nParams * sizeof(sal_Int64)) );
+    // (but will be used less - some of the values will be in pGPR and pFPR)
+    sal_uInt64 *pStack = (sal_uInt64 *) alloca( (nParams + 3) * sizeof(sal_uInt64) );
+    sal_uInt64 *pStackStart = pStack;
+
+    // Parameters to be passed in registers stored here
+    sal_uInt64 pGPR[4];
+    sal_uInt32 nGPR = 0;
+    double pFPR[4];
+    sal_uInt32 nFPR = 0;
+
+    if (nParams > 20)
+    {
+
+    }
+
+
+    char * pCppStack        = (char *)alloca( sizeof(sal_Int64) + (nParams * sizeof(sal_Int64)) );
     char * pCppStackStart   = pCppStack;
 
-    // return
+    // Return
     typelib_TypeDescription * pReturnTypeDescr = 0;
     TYPELIB_DANGER_GET( &pReturnTypeDescr, pReturnTypeRef );
     OSL_ENSURE( pReturnTypeDescr, "### expected return type description!" );
 
     void * pCppReturn = 0; // if != 0 && != pUnoReturn, needs reconversion
 
+    bool bSimpleReturn = true;
     if (pReturnTypeDescr)
     {
         if (bridges::cpp_uno::shared::isSimpleType( pReturnTypeDescr ))
@@ -186,15 +149,15 @@ static void cpp_call(
 
     // stack space
 
-    OSL_ENSURE( sizeof(void *) == sizeof(sal_Int32), "### unexpected size!" );
+    OSL_ENSURE( sizeof(void *) == sizeof(sal_Int64), "### unexpected size!" );
     // args
-    void ** pCppArgs  = (void **)alloca( 3 * sizeof(void *) * nParams );
+    void ** pCppArgs = (void **)alloca( 3 * sizeof(void *) * nParams );
     // indizes of values this have to be converted (interface conversion cpp<=>uno)
     sal_Int32 * pTempIndizes = (sal_Int32 *)(pCppArgs + nParams);
     // type descriptions for reconversions
     typelib_TypeDescription ** ppTempParamTypeDescr = (typelib_TypeDescription **)(pCppArgs + (2 * nParams));
 
-    sal_Int32 nTempIndizes   = 0;
+    sal_Int32 nTempIndizes = 0;
 
     for ( sal_Int32 nPos = 0; nPos < nParams; ++nPos )
     {
@@ -214,7 +177,7 @@ static void cpp_call(
             case typelib_TypeClass_HYPER:
             case typelib_TypeClass_UNSIGNED_HYPER:
             case typelib_TypeClass_DOUBLE:
-                pCppStack += sizeof(sal_Int32); // extra long
+                pCppStack += sizeof(sal_Int64); // extra qword
                 break;
             default:
                 break;
@@ -254,7 +217,7 @@ static void cpp_call(
                 TYPELIB_DANGER_RELEASE( pParamTypeDescr );
             }
         }
-        pCppStack += sizeof(sal_Int32); // standard parameter length
+        pCppStack += sizeof(sal_Int64); // standard parameter length
     }
 
     __try
@@ -264,8 +227,8 @@ static void cpp_call(
             reinterpret_cast< void ** >(pThis->getCppI()) + aVtableSlot.offset,
             aVtableSlot.index,
             pCppReturn, pReturnTypeDescr->eTypeClass,
-            (sal_Int32 *)pCppStackStart,
-            (pCppStack - pCppStackStart) / sizeof(sal_Int32) );
+            (sal_Int64 *)pCppStackStart,
+            (pCppStack - pCppStackStart) / sizeof(sal_Int64) );
     }
     __except (CPPU_CURRENT_NAMESPACE::mscx_filterCppException(
                   GetExceptionInformation(),
