@@ -154,7 +154,7 @@ void ScDocOptions::ResetFormulaSeparators()
 
     const Locale& rLocale = *ScGlobal::GetLocale();
     const OUString& rLang = rLocale.Language;
-    if (rLang.equalsAscii("ru"))
+    if (rLang.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("ru")))
         // Don't do automatic guess for these languages, and fall back to
         // the old separator set.
         return;

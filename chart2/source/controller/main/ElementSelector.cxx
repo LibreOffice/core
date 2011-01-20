@@ -309,7 +309,7 @@ void SAL_CALL ElementSelectorToolbarController::statusChanged( const frame::Feat
     if( m_apSelectorListBox.get() )
     {
         SolarMutexGuard aSolarMutexGuard;
-        if( rEvent.FeatureURL.Path.equalsAscii( "ChartElementSelector" ) )
+        if( rEvent.FeatureURL.Path.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ChartElementSelector" ) ) )
         {
             Reference< frame::XController > xChartController;
             rEvent.State >>= xChartController;

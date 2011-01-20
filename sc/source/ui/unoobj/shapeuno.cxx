@@ -279,7 +279,7 @@ BOOL lcl_GetCaptionPoint( uno::Reference< drawing::XShape >& xShape, awt::Point&
 {
     BOOL bReturn = FALSE;
     rtl::OUString sType(xShape->getShapeType());
-    sal_Bool bCaptionShape(sType.equalsAscii("com.sun.star.drawing.CaptionShape"));
+    sal_Bool bCaptionShape(sType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.CaptionShape")));
     if (bCaptionShape)
     {
         uno::Reference < beans::XPropertySet > xShapeProp (xShape, uno::UNO_QUERY);

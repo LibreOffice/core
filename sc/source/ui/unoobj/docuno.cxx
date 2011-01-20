@@ -318,17 +318,17 @@ void ScPrintUIOptions::SetDefaults()
             for (sal_Int32 nPropPos=0; nPropPos<aUIProp.getLength(); ++nPropPos)
             {
                 rtl::OUString aName = aUIProp[nPropPos].Name;
-                if ( aName.equalsAscii("Property") )
+                if ( aName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Property" ) ) )
                 {
                     beans::PropertyValue aPropertyValue;
                     if ( aUIProp[nPropPos].Value >>= aPropertyValue )
                     {
-                        if ( aPropertyValue.Name.equalsAscii( "PrintContent" ) )
+                        if ( aPropertyValue.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "PrintContent" ) ) )
                         {
                             aPropertyValue.Value <<= nContent;
                             aUIProp[nPropPos].Value <<= aPropertyValue;
                         }
-                        else if ( aPropertyValue.Name.equalsAscii( "IsIncludeEmptyPages" ) )
+                        else if ( aPropertyValue.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "IsIncludeEmptyPages") ) )
                         {
                             ScUnoHelpFunctions::SetBoolInAny( aPropertyValue.Value, ! bSuppress );
                             aUIProp[nPropPos].Value <<= aPropertyValue;
@@ -758,28 +758,28 @@ BOOL ScModelObj::FillRenderMarkData( const uno::Any& aSelection,
 
     for( sal_Int32 i = 0, nLen = rOptions.getLength(); i < nLen; i++ )
     {
-        if( rOptions[i].Name.equalsAscii( "IsOnlySelectedSheets" ) )
+        if( rOptions[i].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "IsOnlySelectedSheets" ) ) )
         {
             rOptions[i].Value >>= bSelectedSheetsOnly;
         }
-        else if( rOptions[i].Name.equalsAscii( "IsIncludeEmptyPages" ) )
+        else if( rOptions[i].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "IsIncludeEmptyPages" ) ) )
         {
             rOptions[i].Value >>= bIncludeEmptyPages;
         }
-        else if( rOptions[i].Name.equalsAscii( "PageRange" ) )
+    else if( rOptions[i].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "PageRange" ) ) )
         {
             rOptions[i].Value >>= aPageRange;
         }
-        else if( rOptions[i].Name.equalsAscii( "PrintRange" ) )
+        else if( rOptions[i].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "PrintRange" ) ) )
         {
             rOptions[i].Value >>= nPrintRange;
         }
-        else if( rOptions[i].Name.equalsAscii( "PrintContent" ) )
+        else if( rOptions[i].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "PrintContent" ) ) )
         {
             bHasPrintContent = true;
             rOptions[i].Value >>= nPrintContent;
         }
-        else if( rOptions[i].Name.equalsAscii( "View" ) )
+        else if( rOptions[i].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "View" ) ) )
         {
             rOptions[i].Value >>= xView;
         }

@@ -864,8 +864,8 @@ ScBaseCell* ScColumn::CloneCell(SCSIZE nIndex, USHORT nFlags, ScDocument& rDestD
                 // #TODO #FIXME do we have a localisation issue here?
                 rForm.GetFormula( aBuf );
                 rtl::OUString aVal( aBuf.makeStringAndClear() );
-                if ( aVal.equalsAscii( "=TRUE()" )
-                        || aVal.equalsAscii( "=FALSE()" ) )
+                if ( aVal.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "=TRUE()" ) )
+                        || aVal.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "=FALSE()" ) ) )
                     bForceFormula = true;
             }
             if (bForceFormula || bCloneFormula)
