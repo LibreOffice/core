@@ -93,7 +93,8 @@ PATCH_FILES = \
     patches/arm_build_fix.patch \
     patches/link_fontconfig.patch \
     patches/brokenmakefile.patch \
-    patches/aix_build_fix.patch
+    patches/aix_build_fix.patch \
+    patches/libpr0n_build_fix.patch
 
 # This file is needed for the W32 build when BUILD_MOZAB is set
 # (currently only vc8/vs2005 is supported when BUILD_MOZAB is set)
