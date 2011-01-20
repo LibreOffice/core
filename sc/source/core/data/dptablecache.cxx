@@ -300,7 +300,6 @@ TypedStrData*  ScDPItemData::CreateTypeString( )
 
 sal_uInt8 ScDPItemData::GetType() const
 {
-
     if ( IsHasErr() )
         return SC_VALTYPE_ERROR;
     else if ( !IsHasData() )
@@ -309,7 +308,6 @@ sal_uInt8 ScDPItemData::GetType() const
         return SC_VALTYPE_VALUE;
     else
         return SC_VALTYPE_STRING;
-
 }
 
 bool ScDPItemData::IsHasData() const
@@ -329,7 +327,6 @@ bool ScDPItemData::IsValue() const
 
 String ScDPItemData::GetString() const
 {
-
     return aString;
 }
 
@@ -343,18 +340,20 @@ ULONG  ScDPItemData::GetNumFormat() const
 }
 
 bool ScDPItemData::HasStringData() const
-
 {
     return IsHasData()&&!IsHasErr()&&!IsValue();
 }
+
 bool ScDPItemData::IsDate() const
 {
     return !!(mbFlag&MK_DATE);
 }
+
 bool ScDPItemData::HasDatePart() const
 {
     return !!(mbFlag&MK_DATEPART);
 }
+
 void ScDPItemData::SetDate( bool b )
 {
     b ? ( mbFlag |= MK_DATE ) : ( mbFlag &= ~MK_DATE );
