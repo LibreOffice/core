@@ -1870,7 +1870,7 @@ sal_Bool SfxDocTplService_Impl::storeTemplate( const OUString& rGroupName,
         uno::Sequence< beans::PropertyValue > aFilterData;
         xFilterFactory->getByName( aFilterName ) >>= aFilterData;
         for ( sal_Int32 nInd = 0; nInd < aFilterData.getLength(); nInd++ )
-            if ( aFilterData[nInd].Name.equalsAscii( "Type" ) )
+            if ( aFilterData[nInd].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Type" ) ) )
                 aFilterData[nInd].Value >>= aTypeName;
 
         if ( !aTypeName.getLength() )

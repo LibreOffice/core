@@ -171,7 +171,7 @@ void OAdabasUser::getAnyTablePrivileges(const ::rtl::OUString& objName, sal_Int3
                         continue;
 
                     nRights |= privileges[i].nNumericValue;
-                    if ( sPrivs.copy( nIndex + 2, 1 ).equalsAscii( "+" ) )
+                    if ( sPrivs.copy( nIndex + 2, 1 ).equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "+" ) ) )
                         nRightsWithGrant |= privileges[i].nNumericValue;
                 }
             }

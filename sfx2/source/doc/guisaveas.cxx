@@ -141,15 +141,15 @@ static sal_uInt16 getSlotIDFromMode( sal_Int8 nStoreMode )
 static sal_uInt8 getStoreModeFromSlotName( const ::rtl::OUString& aSlotName )
 {
     sal_uInt8 nResult = 0;
-    if ( aSlotName.equalsAscii( "ExportTo" ) )
+    if ( aSlotName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ExportTo" ) ) )
         nResult = EXPORT_REQUESTED;
-    else if ( aSlotName.equalsAscii( "ExportToPDF" ) )
+    else if ( aSlotName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ExportToPDF" ) ) )
         nResult = EXPORT_REQUESTED | PDFEXPORT_REQUESTED;
-    else if ( aSlotName.equalsAscii( "ExportDirectToPDF" ) )
+    else if ( aSlotName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ExportDirectToPDF" ) ) )
         nResult = EXPORT_REQUESTED | PDFEXPORT_REQUESTED | PDFDIRECTEXPORT_REQUESTED;
-    else if ( aSlotName.equalsAscii( "Save" ) )
+    else if ( aSlotName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Save" ) ) )
         nResult = SAVE_REQUESTED;
-    else if ( aSlotName.equalsAscii( "SaveAs" ) )
+    else if ( aSlotName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "SaveAs" ) ) )
         nResult = SAVEAS_REQUESTED;
     else
         throw task::ErrorCodeIOException( ::rtl::OUString(),
@@ -882,11 +882,11 @@ sal_Bool ModelData_Impl::OutputFileDialog( sal_Int8 nStoreMode,
             pFileDlg = new sfx2::FileDialogHelper( aDialogMode, aDialogFlags, aDocServiceName, nDialog, nMust, nDont, rStandardDir, rBlackList );
         }
 
-        if( aDocServiceName.equalsAscii( "com.sun.star.drawing.DrawingDocument" ) )
+        if( aDocServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.drawing.DrawingDocument" ) ) )
                eCtxt = sfx2::FileDialogHelper::SD_EXPORT;
-        if( aDocServiceName.equalsAscii( "com.sun.star.presentation.PresentationDocument" ) )
+        if( aDocServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.presentation.PresentationDocument" ) ) )
                eCtxt = sfx2::FileDialogHelper::SI_EXPORT;
-        if( aDocServiceName.equalsAscii( "com.sun.star.text.TextDocument" ) )
+        if( aDocServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.text.TextDocument" ) ) )
             eCtxt = sfx2::FileDialogHelper::SW_EXPORT;
 
         if ( eCtxt != sfx2::FileDialogHelper::UNKNOWN_CONTEXT )

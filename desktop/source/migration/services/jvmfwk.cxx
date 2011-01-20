@@ -277,7 +277,7 @@ void SAL_CALL JavaMigration::initialize( const css::uno::Sequence< css::uno::Any
     for(;pIter != pEnd;++pIter)
     {
         *pIter >>= aValue;
-        if (aValue.Name.equalsAscii("OldConfiguration"))
+        if (aValue.Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("OldConfiguration")))
         {
             sal_Bool bSuccess = aValue.Value >>= aOldConfigValues;
             OSL_ENSURE(bSuccess == sal_True, "[Service implementation " IMPL_NAME
@@ -288,7 +288,7 @@ void SAL_CALL JavaMigration::initialize( const css::uno::Sequence< css::uno::Any
                 const css::beans::NamedValue* pEnd2 = pIter2 + aOldConfigValues.getLength();
                 for(;pIter2 != pEnd2;++pIter2)
                 {
-                    if ( pIter2->Name.equalsAscii("org.openoffice.Office.Java") )
+                    if ( pIter2->Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("org.openoffice.Office.Java")) )
                     {
                         pIter2->Value >>= m_xLayer;
                         break;
@@ -296,7 +296,7 @@ void SAL_CALL JavaMigration::initialize( const css::uno::Sequence< css::uno::Any
                 }
             }
         }
-        else if (aValue.Name.equalsAscii("UserData"))
+        else if (aValue.Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("UserData")))
         {
             if ( !(aValue.Value >>= m_sUserDir) )
             {
@@ -420,9 +420,9 @@ void SAL_CALL  JavaMigration::overrideProperty(
         MalformedDataException,
         WrappedTargetException )
 {
-    if (aName.equalsAscii("Enable"))
+    if (aName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Enable")))
         m_aStack.push(TElementStack::value_type(aName,ENABLE_JAVA));
-    else if (aName.equalsAscii("UserClassPath"))
+    else if (aName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("UserClassPath")))
         m_aStack.push(TElementStack::value_type(aName, USER_CLASS_PATH));
 }
 // -----------------------------------------------------------------------------

@@ -68,7 +68,7 @@ uno::Any SAL_CALL MainThreadExecutor::execute( const uno::Sequence< beans::Named
     sal_Int32 nValuesSize = 0;
 
     for ( sal_Int32 nInd = 0; nInd < aArguments.getLength(); nInd++ )
-        if ( aArguments[nInd].Name.equalsAscii( "JobToExecute" ) )
+        if ( aArguments[nInd].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "JobToExecute" ) ) )
             aArguments[nInd].Value >>= xJob;
         else
         {

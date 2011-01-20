@@ -339,7 +339,7 @@ void SAL_CALL UnxFilePicker::setValue( sal_Int16 nControlId, sal_Int16 nControlA
         aBuffer.appendAscii( " ", 1 );
         aBuffer.append( aAction );
 
-        if ( aType.equalsAscii( "checkbox" ) )
+        if ( aType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "checkbox" ) ) )
         {
             sal_Bool bControlValue;
             if ( ( rValue >>= bControlValue ) && bControlValue )
@@ -347,7 +347,7 @@ void SAL_CALL UnxFilePicker::setValue( sal_Int16 nControlId, sal_Int16 nControlA
             else
                 aBuffer.appendAscii( " false" );
         }
-        else if ( aType.equalsAscii( "listbox" ) )
+        else if ( aType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "listbox" ) ) )
         {
             switch ( nControlAction )
             {

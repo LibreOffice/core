@@ -238,7 +238,7 @@ void SAL_CALL CloseDispatcher::dispatchWithNotification(const css::util::URL&   
     sal_Bool bIsSynchron = sal_False;
     for (sal_Int32 nArgs=0; nArgs<lArguments.getLength(); nArgs++ )
     {
-        if ( lArguments[nArgs].Name.equalsAscii("SynchronMode") )
+        if ( lArguments[nArgs].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("SynchronMode")) )
         {
             lArguments[nArgs].Value >>= bIsSynchron;
             break;

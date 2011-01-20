@@ -114,9 +114,9 @@ void SAL_CALL EnhancedCustomShapeEngine::initialize( const SEQ( NMSP_UNO::Any )&
     for ( i = 0; i < aParameter.getLength(); i++ )
     {
         const NMSP_BEANS::PropertyValue& rProp = aParameter[ i ];
-        if ( rProp.Name.equalsAscii( "CustomShape" ) )
+        if ( rProp.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "CustomShape" ) ) )
             rProp.Value >>= mxShape;
-        else if ( rProp.Name.equalsAscii( "ForceGroupWithText" ) )
+        else if ( rProp.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ForceGroupWithText" ) ) )
             rProp.Value >>= mbForceGroupWithText;
     }
 }

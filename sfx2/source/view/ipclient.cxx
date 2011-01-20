@@ -219,7 +219,7 @@ void SAL_CALL SfxInPlaceClient_Impl::notifyEvent( const document::EventObject& a
 {
     SolarMutexGuard aGuard;
 
-    if ( m_pClient && aEvent.EventName.equalsAscii("OnVisAreaChanged") && m_nAspect != embed::Aspects::MSOLE_ICON )
+    if ( m_pClient && aEvent.EventName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("OnVisAreaChanged")) && m_nAspect != embed::Aspects::MSOLE_ICON )
     {
         m_pClient->ViewChanged();
         m_pClient->Invalidate();

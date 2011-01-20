@@ -620,7 +620,7 @@ void DocumentHolder::FindConnectPoints(
         xMenu->getByIndex( nInd ) >>= aProps;
         rtl::OUString aCommand;
         for ( sal_Int32 nSeqInd = 0; nSeqInd < aProps.getLength(); nSeqInd++ )
-            if ( aProps[nSeqInd].Name.equalsAscii( "CommandURL" ) )
+            if ( aProps[nSeqInd].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "CommandURL" ) ) )
             {
                 aProps[nSeqInd].Value >>= aCommand;
                 break;
@@ -629,9 +629,9 @@ void DocumentHolder::FindConnectPoints(
         if ( !aCommand.getLength() )
             throw uno::RuntimeException();
 
-        if ( aCommand.equalsAscii( ".uno:PickList" ) )
+        if ( aCommand.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ".uno:PickList" ) ) )
             nConnectPoints[0] = nInd;
-        else if ( aCommand.equalsAscii( ".uno:WindowList" ) )
+        else if ( aCommand.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ".uno:WindowList" ) ) )
             nConnectPoints[1] = nInd;
     }
 }
@@ -1239,11 +1239,11 @@ void SAL_CALL DocumentHolder::notifyEvent( const document::EventObject& Event )
     if( m_pEmbedObj && Event.Source == m_xComponent )
     {
         // for now the ignored events are not forwarded, but sent by the object itself
-        if ( !Event.EventName.equalsAscii( "OnSave" )
-          && !Event.EventName.equalsAscii( "OnSaveDone" )
-          && !Event.EventName.equalsAscii( "OnSaveAs" )
-          && !Event.EventName.equalsAscii( "OnSaveAsDone" )
-          && !( Event.EventName.equalsAscii( "OnVisAreaChanged" ) && m_nNoResizeReact ) )
+        if ( !Event.EventName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "OnSave" ) )
+          && !Event.EventName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "OnSaveDone" ) )
+          && !Event.EventName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "OnSaveAs" ) )
+          && !Event.EventName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "OnSaveAsDone" ) )
+          && !( Event.EventName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "OnVisAreaChanged" ) ) && m_nNoResizeReact ) )
             m_pEmbedObj->PostEvent_Impl( Event.EventName, Event.Source );
     }
 }

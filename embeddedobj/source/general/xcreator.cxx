@@ -369,7 +369,7 @@ uno::Reference< uno::XInterface > SAL_CALL UNOEmbeddedObjectCreator::createInsta
     // check if there is URL, URL must exist
     ::rtl::OUString aURL;
     for ( sal_Int32 nInd = 0; nInd < aTempMedDescr.getLength(); nInd++ )
-        if ( aTempMedDescr[nInd].Name.equalsAscii( "URL" ) )
+        if ( aTempMedDescr[nInd].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "URL" ) ) )
             aTempMedDescr[nInd].Value >>= aURL;
 
     if ( !aURL.getLength() )

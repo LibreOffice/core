@@ -242,7 +242,7 @@ namespace migration
         {
             beans::NamedValue aValue;
             *pIter >>= aValue;
-            if ( aValue.Name.equalsAscii( "UserData" ) )
+            if ( aValue.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "UserData" ) ) )
             {
                 if ( !(aValue.Value >>= m_sSourceDir) )
                 {

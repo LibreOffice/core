@@ -177,13 +177,13 @@ throw ( RuntimeException )
                 Reference<XCloseable> rClose;
                 for (int i=0; i<args.getLength(); i++)
                 {
-                    if (args[i].Name.equalsAscii("EnvType"))
+                    if (args[i].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("EnvType")))
                         args[i].Value >>= aEnvType;
-                    else if (args[i].Name.equalsAscii("Frame")) {
+                    else if (args[i].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Frame"))) {
                         args[i].Value >>= rFrame;
                         rClose = Reference<XCloseable>(rFrame, UNO_QUERY);
                     }
-                    else if (args[i].Name.equalsAscii("Model")) {
+                    else if (args[i].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Model"))) {
                         args[i].Value >>= rModel;
                         rClose = Reference<XCloseable>(rModel, UNO_QUERY);
                     }

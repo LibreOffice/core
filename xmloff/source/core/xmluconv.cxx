@@ -2250,7 +2250,7 @@ sal_Bool SvXMLUnitConverter::convertAny(      com::sun::star::uno::Any& aValue,
 {
     sal_Bool bConverted = sal_False;
 
-    if (sType.equalsAscii("boolean"))
+    if (sType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("boolean")))
     {
         bool bTempValue = false;
         SvXMLUnitConverter::convertBool(bTempValue, sValue);
@@ -2258,7 +2258,7 @@ sal_Bool SvXMLUnitConverter::convertAny(      com::sun::star::uno::Any& aValue,
         bConverted = sal_True;
     }
     else
-    if (sType.equalsAscii("integer"))
+    if (sType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("integer")))
     {
         sal_Int32 nTempValue = 0;
         SvXMLUnitConverter::convertNumber(nTempValue, sValue);
@@ -2266,7 +2266,7 @@ sal_Bool SvXMLUnitConverter::convertAny(      com::sun::star::uno::Any& aValue,
         bConverted = sal_True;
     }
     else
-    if (sType.equalsAscii("float"))
+    if (sType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("float")))
     {
         double fTempValue = 0.0;
         SvXMLUnitConverter::convertDouble(fTempValue, sValue);
@@ -2274,13 +2274,13 @@ sal_Bool SvXMLUnitConverter::convertAny(      com::sun::star::uno::Any& aValue,
         bConverted = sal_True;
     }
     else
-    if (sType.equalsAscii("string"))
+    if (sType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("string")))
     {
         aValue <<= sValue;
         bConverted = sal_True;
     }
     else
-    if (sType.equalsAscii("date"))
+    if (sType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("date")))
     {
         com::sun::star::util::DateTime aTempValue;
         SvXMLUnitConverter::convertDateTime(aTempValue, sValue);
@@ -2288,7 +2288,7 @@ sal_Bool SvXMLUnitConverter::convertAny(      com::sun::star::uno::Any& aValue,
         bConverted = sal_True;
     }
     else
-    if (sType.equalsAscii("time"))
+    if (sType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("time")))
     {
         com::sun::star::util::DateTime aTempValue;
         com::sun::star::util::Time     aConvValue;

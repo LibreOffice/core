@@ -270,7 +270,7 @@ rtl::OUString ToolbarsMenuController::getUINameFromCommand( const rtl::OUString&
             {
                 for ( sal_Int32 i = 0; i < aPropSeq.getLength(); i++ )
                 {
-                    if ( aPropSeq[i].Name.equalsAscii( "Label" ))
+                    if ( aPropSeq[i].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Label" ) ))
                     {
                         aPropSeq[i].Value >>= aStr;
                         break;
@@ -499,18 +499,18 @@ void ToolbarsMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >& r
         }
 
         // Create commands for non-toolbars
-        if ( m_aModuleIdentifier.equalsAscii( "com.sun.star.text.TextDocument" ) ||
-             m_aModuleIdentifier.equalsAscii( "com.sun.star.text.WebDocument" ) ||
-             m_aModuleIdentifier.equalsAscii( "com.sun.star.text.GlobalDocument" ) ||
-             m_aModuleIdentifier.equalsAscii( "com.sun.star.drawing.DrawingDocument" ) ||
-             m_aModuleIdentifier.equalsAscii( "com.sun.star.presentation.PresentationDocument" ) ||
-             m_aModuleIdentifier.equalsAscii( "com.sun.star.sheet.SpreadsheetDocument" ))
+        if ( m_aModuleIdentifier.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.text.TextDocument" ) ) ||
+             m_aModuleIdentifier.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.text.WebDocument" ) ) ||
+             m_aModuleIdentifier.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.text.GlobalDocument" ) ) ||
+             m_aModuleIdentifier.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.drawing.DrawingDocument" ) ) ||
+             m_aModuleIdentifier.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.presentation.PresentationDocument" ) ) ||
+             m_aModuleIdentifier.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.sheet.SpreadsheetDocument" ) ))
         {
             addCommand( m_xPopupMenu, rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( CMD_HYPERLINKBAR )), 10360, aEmptyString );
-            if ( m_aModuleIdentifier.equalsAscii( "com.sun.star.drawing.DrawingDocument" ) ||
-                 m_aModuleIdentifier.equalsAscii( "com.sun.star.presentation.PresentationDocument" ))
+            if ( m_aModuleIdentifier.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.drawing.DrawingDocument" ) ) ||
+                 m_aModuleIdentifier.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.presentation.PresentationDocument" ) ))
                 addCommand( m_xPopupMenu, rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( CMD_COLORBAR )), 10417, aEmptyString );
-            else if ( m_aModuleIdentifier.equalsAscii( "com.sun.star.sheet.SpreadsheetDocument" ))
+            else if ( m_aModuleIdentifier.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.sheet.SpreadsheetDocument" ) ))
                 addCommand( m_xPopupMenu, rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( CMD_INPUTLINEBAR )), 26241, aEmptyString );
             else
                 addCommand( m_xPopupMenu, rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( CMD_FORMULABAR )), 20128, aEmptyString );

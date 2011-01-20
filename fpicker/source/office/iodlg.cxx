@@ -2062,7 +2062,7 @@ short SvtFileDialog::PrepareExecute()
 {
     rtl::OUString aEnvValue;
     if ( getEnvironmentValue( "WorkDirMustContainRemovableMedia", aEnvValue ) &&
-         aEnvValue.equalsAscii( "1" ) )
+         aEnvValue.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "1" ) ) )
     {
         try
         {

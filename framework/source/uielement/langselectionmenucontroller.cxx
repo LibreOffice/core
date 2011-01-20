@@ -335,15 +335,15 @@ void SAL_CALL LanguageSelectionMenuController::updatePopupMenu() throw ( ::com::
 
     // TODO: Fill menu with the information retrieved by the status update
 
-    if( m_aCommandURL.equalsAscii( ".uno:SetLanguageSelectionMenu" ))
+    if( m_aCommandURL.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ".uno:SetLanguageSelectionMenu" ) ))
     {
         fillPopupMenu(m_xPopupMenu, MODE_SetLanguageSelectionMenu );
     }
-    else if( m_aCommandURL.equalsAscii( ".uno:SetLanguageParagraphMenu" ))
+    else if( m_aCommandURL.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ".uno:SetLanguageParagraphMenu" ) ))
     {
         fillPopupMenu(m_xPopupMenu, MODE_SetLanguageParagraphMenu );
     }
-    else if( m_aCommandURL.equalsAscii( ".uno:SetLanguageAllTextMenu" ))
+    else if( m_aCommandURL.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ".uno:SetLanguageAllTextMenu" ) ))
     {
         fillPopupMenu(m_xPopupMenu, MODE_SetLanguageAllTextMenu );
     }

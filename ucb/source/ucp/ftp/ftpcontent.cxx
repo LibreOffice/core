@@ -895,7 +895,7 @@ Sequence<Any> FTPContent::setPropertyValues(
 
     osl::MutexGuard aGuard(m_aMutex);
     for(sal_Int32 i = 0; i < ret.getLength(); ++i) {
-        if(seqPropVal[i].Name.equalsAscii("Title")) {
+        if(seqPropVal[i].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Title"))) {
             rtl::OUString Title;
             if(!(seqPropVal[i].Value >>= Title)) {
                 ret[i] <<= IllegalTypeException();

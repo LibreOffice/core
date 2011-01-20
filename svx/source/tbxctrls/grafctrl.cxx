@@ -148,7 +148,7 @@ ImplGrafMetricField::ImplGrafMetricField( Window* pParent, const rtl::OUString& 
     aSize.Width() += 20, aSize.Height() += 6;
     SetSizePixel( aSize );
 
-    if ( maCommand.equalsAscii( ".uno:GrafGamma" ))
+    if ( maCommand.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ".uno:GrafGamma" ) ))
     {
         SetDecimalDigits( 2 );
 
@@ -160,7 +160,7 @@ ImplGrafMetricField::ImplGrafMetricField( Window* pParent, const rtl::OUString& 
     }
     else
     {
-        const long nMinVal = ( maCommand.equalsAscii( ".uno:GrafTransparence" )) ? 0 : -100;
+        const long nMinVal = ( maCommand.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ".uno:GrafTransparence" ) )) ? 0 : -100;
 
         SetUnit( FUNIT_CUSTOM );
         SetCustomUnitText( String::CreateFromAscii(" %") );
@@ -198,14 +198,14 @@ IMPL_LINK( ImplGrafMetricField, ImplModifyHdl, Timer*, EMPTYARG )
 
     // Convert value to an any to be usable with dispatch API
     Any a;
-    if ( maCommand.equalsAscii( ".uno:GrafRed" ) ||
-         maCommand.equalsAscii( ".uno:GrafGreen" ) ||
-         maCommand.equalsAscii( ".uno:GrafBlue" ) ||
-         maCommand.equalsAscii( ".uno:GrafLuminance" ) ||
-         maCommand.equalsAscii( ".uno:GrafContrast" ))
+    if ( maCommand.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ".uno:GrafRed" ) ) ||
+         maCommand.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ".uno:GrafGreen" ) ) ||
+         maCommand.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ".uno:GrafBlue" ) ) ||
+         maCommand.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ".uno:GrafLuminance" ) ) ||
+         maCommand.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ".uno:GrafContrast" ) ))
         a = makeAny( sal_Int16( nVal ));
-    else if ( maCommand.equalsAscii( ".uno:GrafGamma" ) ||
-              maCommand.equalsAscii( ".uno:GrafTransparence" ))
+    else if ( maCommand.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ".uno:GrafGamma" ) ) ||
+              maCommand.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ".uno:GrafTransparence" ) ))
         a = makeAny( sal_Int32( nVal ));
 
     if ( a.hasValue() )
@@ -232,9 +232,9 @@ void ImplGrafMetricField::Update( const SfxPoolItem* pItem )
     {
         long nValue;
 
-        if ( maCommand.equalsAscii( ".uno:GrafTransparence" ))
+        if ( maCommand.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ".uno:GrafTransparence" ) ))
             nValue = ( (SfxUInt16Item*) pItem )->GetValue();
-        else if ( maCommand.equalsAscii( ".uno:GrafGamma" ))
+        else if ( maCommand.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ".uno:GrafGamma" ) ))
             nValue = ( (SfxUInt32Item*) pItem )->GetValue();
         else
             nValue = ( (SfxInt16Item*) pItem )->GetValue();

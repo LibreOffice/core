@@ -504,7 +504,7 @@ namespace svxform
         // the script to execute
         PScript pScript;
 
-        if ( !_rEvent.ScriptType.equalsAscii( "StarBasic" ) )
+        if ( !_rEvent.ScriptType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "StarBasic" ) ) )
         {
             pScript.reset( new NewStyleUNOScript( *xObjectShell, _rEvent.ScriptCode ) );
         }

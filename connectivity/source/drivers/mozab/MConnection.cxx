@@ -159,7 +159,7 @@ void OConnection::construct(const ::rtl::OUString& url,const Sequence< PropertyV
     //
     sal_Int32 nLen = url.indexOf(':');
     nLen = url.indexOf(':',nLen+1);
-    OSL_ENSURE( url.copy( 0, nLen ).equalsAscii( "sdbc:address" ), "OConnection::construct: invalid start of the URI - should never have survived XDriver::acceptsURL!" );
+    OSL_ENSURE( url.copy( 0, nLen ).equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "sdbc:address" ) ), "OConnection::construct: invalid start of the URI - should never have survived XDriver::acceptsURL!" );
 
     ::rtl::OUString aAddrbookURI(url.copy(nLen+1));
     // Get Scheme

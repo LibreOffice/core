@@ -1205,7 +1205,7 @@ void SfxLibraryContainer::implScanExtensions( void )
     bool bPureDialogLib = false;
     while( (aLibURL = aScriptIt.nextBasicOrDialogLibrary( bPureDialogLib )).getLength() > 0 )
     {
-        if( bPureDialogLib && maInfoFileName.equalsAscii( "script" ) )
+        if( bPureDialogLib && maInfoFileName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "script" ) ) )
             continue;
 
         // Extract lib name
@@ -1772,7 +1772,7 @@ void SfxLibraryContainer::storeLibraries_Impl( const uno::Reference< embed::XSto
     if ( bStorage )
     {
         // Don't write if only empty standard lib exists
-        if ( ( nNameCount == 1 ) && ( aNames[0].equalsAscii( "Standard" ) ) )
+        if ( ( nNameCount == 1 ) && ( aNames[0].equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Standard" ) ) ) )
         {
             Any aLibAny = maNameContainer.getByName( aNames[0] );
             Reference< XNameAccess > xNameAccess;

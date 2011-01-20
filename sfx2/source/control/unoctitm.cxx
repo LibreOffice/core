@@ -449,7 +449,7 @@ sal_Bool SfxOfficeDispatch::IsMasterUnoCommand() const
 // Determine if URL contains a master/slave command which must be handled a little bit different
 sal_Bool SfxOfficeDispatch::IsMasterUnoCommand( const ::com::sun::star::util::URL& aURL )
 {
-    if ( aURL.Protocol.equalsAscii( ".uno:" ) &&
+    if ( aURL.Protocol.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ".uno:" ) ) &&
          ( aURL.Path.indexOf( '.' ) > 0 ))
         return sal_True;
 
@@ -485,7 +485,7 @@ SfxDispatchController_Impl::SfxDispatchController_Impl(
     , bVisible( sal_True )
     , pUnoName( pSlot->pUnoName )
 {
-    if ( aDispatchURL.Protocol.equalsAscii("slot:") && pUnoName )
+    if ( aDispatchURL.Protocol.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("slot:")) && pUnoName )
     {
         ByteString aTmp(".uno:");
         aTmp += pUnoName;

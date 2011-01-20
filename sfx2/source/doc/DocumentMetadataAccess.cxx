@@ -250,8 +250,8 @@ static bool isFileNameValid(const ::rtl::OUString & i_rFileName)
       const ::rtl::OUString segment(
         i_rFileName.getToken(0, static_cast<sal_Unicode> ('/'), idx) );
       if (!segment.getLength()      ||  // no empty segments
-          segment.equalsAscii(".")  ||  // no . segments
-          segment.equalsAscii("..") ||  // no .. segments
+          segment.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("."))  ||  // no . segments
+          segment.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("..")) ||  // no .. segments
           !::comphelper::OStorageHelper::IsValidZipEntryFileName(
               segment, sal_False))      // no invalid characters
                                       return false;

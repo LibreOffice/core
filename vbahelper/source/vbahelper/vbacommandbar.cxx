@@ -56,9 +56,9 @@ ScVbaCommandBar::getName() throw ( uno::RuntimeException )
         {
             if( m_sResourceUrl.equalsAscii( ITEM_MENUBAR_URL ) )
             {
-                if( pCBarHelper->getModuleId().equalsAscii("com.sun.star.sheet.SpreadsheetDocument") )
+                if( pCBarHelper->getModuleId().equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.sheet.SpreadsheetDocument")) )
                     sName = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Worksheet Menu Bar") );
-                else if( pCBarHelper->getModuleId().equalsAscii("com.sun.star.text.TextDocument") )
+                else if( pCBarHelper->getModuleId().equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.text.TextDocument")) )
                     sName = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Menu Bar") );
                 return sName;
             }

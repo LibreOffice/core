@@ -491,9 +491,9 @@ void SchXMLPlotAreaContext::StartElement( const uno::Reference< xml::sax::XAttri
     //
 
     bool bCreateInternalDataProvider = false;
-    if( m_rXLinkHRefAttributeToIndicateDataProvider.equalsAscii( "." ) ) //data comes from the chart itself
+    if( m_rXLinkHRefAttributeToIndicateDataProvider.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "." ) ) ) //data comes from the chart itself
         bCreateInternalDataProvider = true;
-    else if( m_rXLinkHRefAttributeToIndicateDataProvider.equalsAscii( ".." ) ) //data comes from the parent application
+    else if( m_rXLinkHRefAttributeToIndicateDataProvider.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ".." ) ) ) //data comes from the parent application
         bCreateInternalDataProvider = false;
     else if( m_rXLinkHRefAttributeToIndicateDataProvider.getLength() ) //not supported so far to get the data by sibling objects -> fall back to chart itself
         bCreateInternalDataProvider = true;
@@ -716,9 +716,9 @@ void SchXMLPlotAreaContext::CorrectAxisPositions()
 {
     ::rtl::OUString aODFVersionOfFile( GetImport().GetODFVersion() );
 
-    if( ( !aODFVersionOfFile.getLength() || aODFVersionOfFile.equalsAscii("1.0")
-        || aODFVersionOfFile.equalsAscii("1.1")
-        || ( aODFVersionOfFile.equalsAscii("1.2") && !m_bAxisPositionAttributeImported ) ) )
+    if( ( !aODFVersionOfFile.getLength() || aODFVersionOfFile.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("1.0"))
+        || aODFVersionOfFile.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("1.1"))
+        || ( aODFVersionOfFile.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("1.2")) && !m_bAxisPositionAttributeImported ) ) )
     {
         uno::Reference< chart2::XChartDocument > xNewDoc( mrImportHelper.GetChartDocument(), uno::UNO_QUERY );
 

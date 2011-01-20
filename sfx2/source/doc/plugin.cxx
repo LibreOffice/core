@@ -206,15 +206,15 @@ uno::Reference< beans::XPropertySetInfo > SAL_CALL PluginObject::getPropertySetI
 void SAL_CALL PluginObject::setPropertyValue(const ::rtl::OUString& aPropertyName, const uno::Any& aAny)
     throw ( beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException)
 {
-    if ( aPropertyName.equalsAscii("PluginURL") )
+    if ( aPropertyName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("PluginURL")) )
     {
         aAny >>= maURL;
     }
-    else if ( aPropertyName.equalsAscii("PluginMimeType") )
+    else if ( aPropertyName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("PluginMimeType")) )
     {
         aAny >>= maMimeType;
     }
-    else if ( aPropertyName.equalsAscii("PluginCommands") )
+    else if ( aPropertyName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("PluginCommands")) )
     {
         maCmdList.Clear();
         uno::Sequence < beans::PropertyValue > aCommandSequence;
@@ -229,15 +229,15 @@ uno::Any SAL_CALL PluginObject::getPropertyValue(const ::rtl::OUString& aPropert
         throw ( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     uno::Any aAny;
-    if ( aPropertyName.equalsAscii("PluginURL") )
+    if ( aPropertyName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("PluginURL")) )
     {
         aAny <<= maURL;
     }
-    else if ( aPropertyName.equalsAscii("PluginMimeType") )
+    else if ( aPropertyName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("PluginMimeType")) )
     {
         aAny <<= maMimeType;
     }
-    else if ( aPropertyName.equalsAscii("PluginCommands") )
+    else if ( aPropertyName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("PluginCommands")) )
     {
         uno::Sequence< beans::PropertyValue > aCommandSequence;
         maCmdList.FillSequence( aCommandSequence );

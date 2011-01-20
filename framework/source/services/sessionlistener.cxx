@@ -224,11 +224,11 @@ void SAL_CALL SessionListener::initialize(const Sequence< Any  >& args)
         {
             if (args[i] >>= v)
             {
-                if (v.Name.equalsAscii("SessionManagerName"))
+                if (v.Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("SessionManagerName")))
                     v.Value >>= aSMgr;
-                else if (v.Name.equalsAscii("SessionManager"))
+                else if (v.Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("SessionManager")))
                     v.Value >>= m_rSessionManager;
-                else if (v.Name.equalsAscii("AllowUserInteractionOnQuit"))
+                else if (v.Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("AllowUserInteractionOnQuit")))
                     v.Value >>= m_bAllowUserInteractionOnQuit;
             }
         }
@@ -246,14 +246,14 @@ void SAL_CALL SessionListener::initialize(const Sequence< Any  >& args)
 void SAL_CALL SessionListener::statusChanged(const FeatureStateEvent& event)
     throw (css::uno::RuntimeException)
 {
-   if (event.FeatureURL.Complete.equalsAscii("vnd.sun.star.autorecovery:/doSessionRestore"))
+   if (event.FeatureURL.Complete.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("vnd.sun.star.autorecovery:/doSessionRestore")))
     {
         if (event.FeatureDescriptor.compareToAscii("update")==0)
             m_bRestored = sal_True; // a document was restored
         // if (event.FeatureDescriptor.compareToAscii("stop")==0)
 
     }
-    else if (event.FeatureURL.Complete.equalsAscii("vnd.sun.star.autorecovery:/doSessionSave"))
+    else if (event.FeatureURL.Complete.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("vnd.sun.star.autorecovery:/doSessionSave")))
     {
         if (event.FeatureDescriptor.compareToAscii("stop")==0)
         {

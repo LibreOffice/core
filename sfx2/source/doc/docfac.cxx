@@ -254,7 +254,7 @@ void SfxObjectFactory::SetSystemTemplate( const String& rServiceName, const Stri
             uno::Sequence< beans::PropertyValue > aActuralFilterData;
             xFilterFactory->getByName( aActualFilter ) >>= aActuralFilterData;
             for ( sal_Int32 nInd = 0; nInd < aActuralFilterData.getLength(); nInd++ )
-                if ( aActuralFilterData[nInd].Name.equalsAscii( "Type" ) )
+                if ( aActuralFilterData[nInd].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Type" ) ) )
                     aActuralFilterData[nInd].Value >>= aActualFilterTypeName;
             ::comphelper::SequenceAsHashMap aProps1( xTypeDetection->getByName( aActualFilterTypeName ) );
             uno::Sequence< ::rtl::OUString > aAllExt =

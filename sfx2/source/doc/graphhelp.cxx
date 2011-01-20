@@ -504,23 +504,23 @@ sal_uInt16 GraphicHelper::getThumbnailReplacementIDByFactoryName_Impl( const ::r
 {
     sal_uInt16 nResult = 0;
 
-    if ( aFactoryShortName.equalsAscii( "scalc" ) )
+    if ( aFactoryShortName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "scalc" ) ) )
     {
         nResult = BMP_128X128_CALC_DOC;
     }
-    else if ( aFactoryShortName.equalsAscii( "sdraw" ) )
+    else if ( aFactoryShortName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "sdraw" ) ) )
     {
         nResult = BMP_128X128_DRAW_DOC;
     }
-    else if ( aFactoryShortName.equalsAscii( "simpress" ) )
+    else if ( aFactoryShortName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "simpress" ) ) )
     {
         nResult = BMP_128X128_IMPRESS_DOC;
     }
-    else if ( aFactoryShortName.equalsAscii( "smath" ) )
+    else if ( aFactoryShortName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "smath" ) ) )
     {
         nResult = BMP_128X128_MATH_DOC;
     }
-    else if ( aFactoryShortName.equalsAscii( "swriter" ) || aFactoryShortName.compareToAscii( "swriter/", 8 ) == 0 )
+    else if ( aFactoryShortName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "swriter" ) ) || aFactoryShortName.compareToAscii( "swriter/", 8 ) == 0 )
     {
         nResult = BMP_128X128_WRITER_DOC;
     }

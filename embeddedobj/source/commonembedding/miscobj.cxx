@@ -116,15 +116,15 @@ void OCommonEmbeddedObject::CommonInit_Impl( const uno::Sequence< beans::NamedVa
     // TODO/LATER: in future UI names can be also provided here
     for ( sal_Int32 nInd = 0; nInd < aObjectProps.getLength(); nInd++ )
     {
-        if ( aObjectProps[nInd].Name.equalsAscii( "ClassID" ) )
+        if ( aObjectProps[nInd].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ClassID" ) ) )
             aObjectProps[nInd].Value >>= m_aClassID;
-        else if ( aObjectProps[nInd].Name.equalsAscii( "ObjectDocumentServiceName" ) )
+        else if ( aObjectProps[nInd].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ObjectDocumentServiceName" ) ) )
             aObjectProps[nInd].Value >>= m_aDocServiceName;
-        else if ( aObjectProps[nInd].Name.equalsAscii( "ObjectDocumentFilterName" ) )
+        else if ( aObjectProps[nInd].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ObjectDocumentFilterName" ) ) )
             aObjectProps[nInd].Value >>= m_aPresetFilterName;
-        else if ( aObjectProps[nInd].Name.equalsAscii( "ObjectMiscStatus" ) )
+        else if ( aObjectProps[nInd].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ObjectMiscStatus" ) ) )
             aObjectProps[nInd].Value >>= m_nMiscStatus;
-        else if ( aObjectProps[nInd].Name.equalsAscii( "ObjectVerbs" ) )
+        else if ( aObjectProps[nInd].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ObjectVerbs" ) ) )
             aObjectProps[nInd].Value >>= m_aObjectVerbs;
     }
 
@@ -234,9 +234,9 @@ void OCommonEmbeddedObject::LinkInit_Impl(
     // setPersistance has no effect on own links, so the complete initialization must be done here
 
     for ( sal_Int32 nInd = 0; nInd < aMediaDescr.getLength(); nInd++ )
-        if ( aMediaDescr[nInd].Name.equalsAscii( "URL" ) )
+        if ( aMediaDescr[nInd].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "URL" ) ) )
             aMediaDescr[nInd].Value >>= m_aLinkURL;
-        else if ( aMediaDescr[nInd].Name.equalsAscii( "FilterName" ) )
+        else if ( aMediaDescr[nInd].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "FilterName" ) ) )
             aMediaDescr[nInd].Value >>= m_aLinkFilterName;
 
     OSL_ENSURE( m_aLinkURL.getLength() && m_aLinkFilterName.getLength(), "Filter and URL must be provided!\n" );
@@ -245,12 +245,12 @@ void OCommonEmbeddedObject::LinkInit_Impl(
 
     uno::Reference< frame::XDispatchProviderInterceptor > xDispatchInterceptor;
     for ( sal_Int32 nObjInd = 0; nObjInd < aObjectDescr.getLength(); nObjInd++ )
-        if ( aObjectDescr[nObjInd].Name.equalsAscii( "OutplaceDispatchInterceptor" ) )
+        if ( aObjectDescr[nObjInd].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "OutplaceDispatchInterceptor" ) ) )
         {
             aObjectDescr[nObjInd].Value >>= xDispatchInterceptor;
             break;
         }
-        else if ( aObjectDescr[nObjInd].Name.equalsAscii( "Parent" ) )
+        else if ( aObjectDescr[nObjInd].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Parent" ) ) )
         {
             aObjectDescr[nObjInd].Value >>= m_xParent;
         }

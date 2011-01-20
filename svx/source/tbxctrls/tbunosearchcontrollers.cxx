@@ -405,7 +405,7 @@ void SAL_CALL FindTextToolbarController::statusChanged( const css::frame::Featur
         return;
 
     ::rtl::OUString aFeatureURL = rEvent.FeatureURL.Complete;
-    if (aFeatureURL.equalsAscii("AppendSearchHistory"))
+    if (aFeatureURL.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("AppendSearchHistory")))
     {
         m_pFindTextFieldControl->Remember_Impl(m_pFindTextFieldControl->GetText());
     }
@@ -743,8 +743,8 @@ void SAL_CALL FindbarDispatcher::release() throw()
 sal_Bool SAL_CALL FindbarDispatcher::supportsService( const ::rtl::OUString& ServiceName ) throw( css::uno::RuntimeException )
 {
     return (
-        ServiceName.equalsAscii("com.sun.star.comp.svx.FindbarDispatcher") ||
-        ServiceName.equalsAscii("com.sun.star.frame.ProtocolHandler")
+        ServiceName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.comp.svx.FindbarDispatcher")) ||
+        ServiceName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.frame.ProtocolHandler"))
         );
 }
 
@@ -773,7 +773,7 @@ css::uno::Reference< css::frame::XDispatch > SAL_CALL FindbarDispatcher::queryDi
 {
     css::uno::Reference< css::frame::XDispatch > xDispatch;
 
-    if ( aURL.Protocol.equalsAscii("vnd.sun.star.findbar:") )
+    if ( aURL.Protocol.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("vnd.sun.star.findbar:")) )
         xDispatch = this;
 
     return xDispatch;
@@ -794,7 +794,7 @@ css::uno::Sequence < css::uno::Reference< css::frame::XDispatch > > SAL_CALL Fin
 void SAL_CALL FindbarDispatcher::dispatch( const css::util::URL& aURL, const css::uno::Sequence < css::beans::PropertyValue >& /*lArgs*/ ) throw( css::uno::RuntimeException )
 {
     //vnd.sun.star.findbar:FocusToFindbar  - set cursor to the FindTextFieldControl of the findbar
-    if ( aURL.Path.equalsAscii("FocusToFindbar") )
+    if ( aURL.Path.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("FocusToFindbar")) )
     {
         css::uno::Reference< css::beans::XPropertySet > xPropSet(m_xFrame, css::uno::UNO_QUERY);
         if(!xPropSet.is())
@@ -820,7 +820,7 @@ void SAL_CALL FindbarDispatcher::dispatch( const css::util::URL& aURL, const css
             for ( USHORT i=0; i<nItemCount; ++i )
             {
                 ::rtl::OUString sItemCommand = pToolBox->GetItemCommand(i);
-                if ( sItemCommand.equalsAscii(".uno:FindText") )
+                if ( sItemCommand.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(".uno:FindText")) )
                 {
                     Window* pItemWin = pToolBox->GetItemWindow( i );
                     if ( pItemWin )

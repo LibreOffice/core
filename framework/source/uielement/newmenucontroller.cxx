@@ -521,7 +521,7 @@ void NewMenuController::impl_setPopupMenu()
                 {
                     for ( sal_Int32 y = 0; y < aSeq.getLength(); y++ )
                     {
-                        if ( aSeq[y].Name.equalsAscii("ooSetupFactoryEmptyDocumentURL") )
+                        if ( aSeq[y].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("ooSetupFactoryEmptyDocumentURL")) )
                         {
                             aSeq[y].Value >>= m_aEmptyDocURL;
                             break;
@@ -555,7 +555,7 @@ void SAL_CALL NewMenuController::initialize( const Sequence< Any >& aArguments )
             const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
 
             m_bShowImages   = rSettings.GetUseImagesInMenus();
-            m_bNewMenu      = m_aCommandURL.equalsAscii( ".uno:AddDirect" );
+            m_bNewMenu      = m_aCommandURL.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ".uno:AddDirect" ) );
         }
     }
 }

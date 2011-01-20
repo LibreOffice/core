@@ -226,9 +226,9 @@ ScVbaCommandBars::Item( const uno::Any& aIndex, const uno::Any& /*aIndex2*/ ) th
     if( nIndex == 1 )
     {
         uno::Any aSource;
-        if( m_pCBarHelper->getModuleId().equalsAscii( "com.sun.star.sheet.SpreadsheetDocument" ) )
+        if( m_pCBarHelper->getModuleId().equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.sheet.SpreadsheetDocument" ) ) )
             aSource <<= rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Worksheet Menu Bar"));
-        else if( m_pCBarHelper->getModuleId().equalsAscii("com.sun.star.text.TextDocument") )
+        else if( m_pCBarHelper->getModuleId().equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.text.TextDocument")) )
             aSource <<= rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Menu Bar"));
         if( aSource.hasValue() )
             return createCollectionObject( aSource );

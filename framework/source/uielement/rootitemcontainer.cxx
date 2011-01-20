@@ -145,7 +145,7 @@ RootItemContainer::RootItemContainer( const Reference< XIndexAccess >& rSourceCo
                     Reference< XIndexAccess > xIndexAccess;
                     for ( sal_Int32 j = 0; j < aPropSeq.getLength(); j++ )
                     {
-                        if ( aPropSeq[j].Name.equalsAscii( "ItemDescriptorContainer" ))
+                        if ( aPropSeq[j].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ItemDescriptorContainer" ) ))
                         {
                             aPropSeq[j].Value >>= xIndexAccess;
                             nContainerIndex = j;
@@ -182,7 +182,7 @@ void RootItemContainer::copyItemContainer( const std::vector< Sequence< Property
         Reference< XIndexAccess > xIndexAccess;
         for ( sal_Int32 j = 0; j < aPropSeq.getLength(); j++ )
         {
-            if ( aPropSeq[j].Name.equalsAscii( "ItemDescriptorContainer" ))
+            if ( aPropSeq[j].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ItemDescriptorContainer" ) ))
             {
                 aPropSeq[j].Value >>= xIndexAccess;
                 nContainerIndex = j;

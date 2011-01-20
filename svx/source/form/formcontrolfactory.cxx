@@ -546,7 +546,7 @@ namespace svxform
             const PropertyValue* pInfoEnd = pInfo + aInfo.getLength();
             for ( ; pInfo != pInfoEnd; ++pInfo )
             {
-                if ( pInfo->Name.equalsAscii( "PreferDosLikeLineEnds" ) )
+                if ( pInfo->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "PreferDosLikeLineEnds" ) ) )
                 {
                     pInfo->Value >>= bDosLineEnds;
                     break;

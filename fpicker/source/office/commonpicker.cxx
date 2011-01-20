@@ -490,7 +490,7 @@ namespace svt
     sal_Bool OCommonPicker::implHandleInitializationArgument( const ::rtl::OUString& _rName, const Any& _rValue ) SAL_THROW( ( Exception, RuntimeException ) )
     {
         sal_Bool bKnown = sal_True;
-        if ( _rName.equalsAscii( "ParentWindow" ) )
+        if ( _rName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ParentWindow" ) ) )
         {
             m_xDialogParent.clear();
             OSL_VERIFY( _rValue >>= m_xDialogParent );

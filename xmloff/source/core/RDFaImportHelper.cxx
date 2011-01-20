@@ -195,7 +195,7 @@ RDFaReader::ReadCURIE(::rtl::OUString const & i_rCURIE) const
         ::rtl::OUString Namespace;
         sal_uInt16 nKey( GetImport().GetNamespaceMap()._GetKeyByAttrName(
             i_rCURIE, &Prefix, &LocalName, &Namespace) );
-        if (Prefix.equalsAscii("_"))
+        if (Prefix.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("_")))
         {
             // eeek, it's a bnode!
             // "_" is not a valid URI scheme => we can identify bnodes

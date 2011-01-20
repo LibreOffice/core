@@ -415,14 +415,14 @@ void OO3ExtensionMigration::initialize( const Sequence< Any >& aArguments ) thro
     {
         beans::NamedValue aValue;
         *pIter >>= aValue;
-        if ( aValue.Name.equalsAscii( "UserData" ) )
+        if ( aValue.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "UserData" ) ) )
         {
             if ( !(aValue.Value >>= m_sSourceDir) )
             {
                 OSL_ENSURE( false, "ExtensionMigration::initialize: argument UserData has wrong type!" );
             }
         }
-        else if ( aValue.Name.equalsAscii( "ExtensionBlackList" ) )
+        else if ( aValue.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ExtensionBlackList" ) ) )
         {
             Sequence< ::rtl::OUString > aBlackList;
             if ( (aValue.Value >>= aBlackList ) && ( aBlackList.getLength() > 0 ))

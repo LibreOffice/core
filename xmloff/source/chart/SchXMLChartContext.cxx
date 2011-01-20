@@ -836,9 +836,9 @@ void SchXMLChartContext::EndElement()
         return;
 
     bool bHasOwnData = false;
-    if( m_aXLinkHRefAttributeToIndicateDataProvider.equalsAscii( "." ) ) //data comes from the chart itself
+    if( m_aXLinkHRefAttributeToIndicateDataProvider.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "." ) ) ) //data comes from the chart itself
         bHasOwnData = true;
-    else if( m_aXLinkHRefAttributeToIndicateDataProvider.equalsAscii( ".." ) ) //data comes from the parent application
+    else if( m_aXLinkHRefAttributeToIndicateDataProvider.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ".." ) ) ) //data comes from the parent application
         bHasOwnData = false;
     else if( m_aXLinkHRefAttributeToIndicateDataProvider.getLength() ) //not supported so far to get the data by sibling objects -> fall back to chart itself if data are available
         bHasOwnData = m_bHasTableElement;
@@ -847,7 +847,7 @@ void SchXMLChartContext::EndElement()
 
     if( xNewDoc->hasInternalDataProvider())
     {
-        if( !m_bHasTableElement && !m_aXLinkHRefAttributeToIndicateDataProvider.equalsAscii( "." ) )
+        if( !m_bHasTableElement && !m_aXLinkHRefAttributeToIndicateDataProvider.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "." ) ) )
         {
             //#i103147# ODF, workaround broken files with a missing table:cell-range-address at the plot-area
             bool bSwitchSuccessful = SchXMLTools::switchBackToDataProviderFromParent( xNewDoc, maLSequencesPerIndex );

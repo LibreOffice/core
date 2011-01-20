@@ -483,7 +483,7 @@ OfficeIPCThread::Status OfficeIPCThread::EnableOfficeIPCThread()
 
     OUString aUserInstallPathHashCode;
 
-    if ( aPreloadData.equalsAscii( "1" ))
+    if ( aPreloadData.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "1" ) ))
     {
         sal_Char    szBuffer[32];
         sprintf( szBuffer, "%d", SUPD );

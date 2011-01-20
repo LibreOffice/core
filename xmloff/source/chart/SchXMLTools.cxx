@@ -346,28 +346,28 @@ XMLTokenEnum getTokenByChartType(
         {
             OUString aServiceName( rChartTypeService.copy( nSkip, nTypeLength ));
 
-            if( aServiceName.equalsAscii("Line"))
+            if( aServiceName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Line")))
                 eResult = XML_LINE;
-            else if( aServiceName.equalsAscii("Area"))
+            else if( aServiceName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Area")))
                 eResult = XML_AREA;
-            else if( aServiceName.equalsAscii("Bar") ||
-                     (!bUseOldNames && aServiceName.equalsAscii("Column")))
+            else if( aServiceName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Bar")) ||
+                     (!bUseOldNames && aServiceName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Column"))))
                 eResult = XML_BAR;
-            else if( aServiceName.equalsAscii("Pie"))
+            else if( aServiceName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Pie")))
                 eResult = XML_CIRCLE;
-            else if( aServiceName.equalsAscii("Donut"))
+            else if( aServiceName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Donut")))
                 eResult = XML_RING;
-            else if( (bUseOldNames && aServiceName.equalsAscii("XY")) ||
-                     (!bUseOldNames && aServiceName.equalsAscii("Scatter")))
+            else if( (bUseOldNames && aServiceName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("XY"))) ||
+                     (!bUseOldNames && aServiceName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Scatter"))))
                 eResult = XML_SCATTER;
-            else if( aServiceName.equalsAscii("Bubble"))
+            else if( aServiceName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Bubble")))
                 eResult = XML_BUBBLE;
-            else if( aServiceName.equalsAscii("Net"))
+            else if( aServiceName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Net")))
                 eResult = XML_RADAR;
-            else if( aServiceName.equalsAscii("FilledNet"))
+            else if( aServiceName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("FilledNet")))
                 eResult = XML_FILLED_RADAR;
-            else if( (bUseOldNames && aServiceName.equalsAscii("Stock")) ||
-                     (!bUseOldNames && aServiceName.equalsAscii("CandleStick")))
+            else if( (bUseOldNames && aServiceName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Stock"))) ||
+                     (!bUseOldNames && aServiceName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("CandleStick"))))
                 eResult = XML_STOCK;
         }
     }

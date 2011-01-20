@@ -150,7 +150,7 @@ SfxPrinterController::SfxPrinterController( const Any& i_rComplete,
             int nProps = aRenderParms.getLength();
             for( int i = 0; i < nProps; i++ )
             {
-                if( aRenderParms[i].Name.equalsAscii( "ExtraPrintUIOptions" ) )
+                if( aRenderParms[i].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ExtraPrintUIOptions" ) ) )
                 {
                     Sequence< beans::PropertyValue > aUIProps;
                     aRenderParms[i].Value >>= aUIProps;
@@ -749,18 +749,18 @@ void SfxViewShell::ExecPrint_Impl( SfxRequest &rReq )
                 TransformItems( nId, *rReq.GetArgs(), aProps, GetInterface()->GetSlot(nId) );
                 for ( sal_Int32 nProp=0; nProp<aProps.getLength(); nProp++ )
                 {
-                    if ( aProps[nProp].Name.equalsAscii("Copies") )
+                    if ( aProps[nProp].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Copies")) )
                         aProps[nProp]. Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CopyCount"));
-                    else if ( aProps[nProp].Name.equalsAscii("RangeText") )
+                    else if ( aProps[nProp].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("RangeText")) )
                         aProps[nProp]. Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Pages"));
-                    if ( aProps[nProp].Name.equalsAscii("Asynchron") )
+                    if ( aProps[nProp].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Asynchron")) )
                     {
                         aProps[nProp]. Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Wait"));
                         sal_Bool bAsynchron = sal_False;
                         aProps[nProp].Value >>= bAsynchron;
                         aProps[nProp].Value <<= (sal_Bool) (!bAsynchron);
                     }
-                    if ( aProps[nProp].Name.equalsAscii("Silent") )
+                    if ( aProps[nProp].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Silent")) )
                     {
                         aProps[nProp]. Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MonitorVisible"));
                         sal_Bool bPrintSilent = sal_False;

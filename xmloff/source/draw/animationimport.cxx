@@ -1512,7 +1512,7 @@ OUString SAL_CALL AnimationsImport::getImplementationName() throw(RuntimeExcepti
 
 sal_Bool SAL_CALL AnimationsImport::supportsService( const OUString& ServiceName ) throw(RuntimeException)
 {
-    return ServiceName.equalsAscii( "com.sun.star.comp.Xmloff.AnimationsImport" );
+    return ServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.comp.Xmloff.AnimationsImport" ) );
 }
 
 Sequence< OUString > SAL_CALL AnimationsImport::getSupportedServiceNames() throw(RuntimeException)

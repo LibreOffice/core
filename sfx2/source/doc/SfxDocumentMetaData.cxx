@@ -543,9 +543,9 @@ getQualifier(const char* i_name) {
     DBG_ASSERT(i_qname, "SfxDocumentMetaData: getNameSpace: argument is null");
     const char * ns = "";
     ::rtl::OUString n = getQualifier(i_qname).first;
-    if (n.equalsAscii("xlink" )) ns = s_nsXLink;
+    if (n.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("xlink" ) )) ns = s_nsXLink;
     if (n.equalsAscii("dc"    )) ns = s_nsDC;
-    if (n.equalsAscii("office")) ns = s_nsODF;
+    if (n.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("office"))) ns = s_nsODF;
     if (n.equalsAscii("meta"  )) ns = s_nsODFMeta;
     DBG_ASSERT(*ns, "SfxDocumentMetaData: unknown namespace prefix");
     return ::rtl::OUString::createFromAscii(ns);
@@ -1126,7 +1126,7 @@ void SAL_CALL SfxDocumentMetaData::updateUserDefinedAndAttributes()
                 static_cast<const char*>("office:target-frame-name"),
                 m_DefaultTarget));
         // xlink:show: _blank -> new, any other value -> replace
-        const sal_Char* show = m_DefaultTarget.equalsAscii("_blank")
+        const sal_Char* show = m_DefaultTarget.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("_blank"))
             ? "new" : "replace";
         attributes.push_back(std::make_pair(
                 static_cast<const char*>("xlink:show"),
@@ -1316,7 +1316,7 @@ void SAL_CALL SfxDocumentMetaData::init(
                 ::rtl::OUString::createFromAscii(s_nsODFMeta),
                 ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("value-type")));
         ::rtl::OUString text = getNodeText(*it);
-        if (type.equalsAscii("float")) {
+        if (type.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("float"))) {
             double d;
             if (::sax::Converter::convertDouble(d, text)) {
                 any <<= d;
@@ -1325,7 +1325,7 @@ void SAL_CALL SfxDocumentMetaData::init(
                     OUStringToOString(text, RTL_TEXTENCODING_UTF8).getStr());
                 continue;
             }
-        } else if (type.equalsAscii("date")) {
+        } else if (type.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("date"))) {
             bool isDateTime;
             css::util::Date d;
             css::util::DateTime dt;
@@ -1340,7 +1340,7 @@ void SAL_CALL SfxDocumentMetaData::init(
                     OUStringToOString(text, RTL_TEXTENCODING_UTF8).getStr());
                 continue;
             }
-        } else if (type.equalsAscii("time")) {
+        } else if (type.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("time"))) {
             css::util::Duration ud;
             if (textToDuration(ud, text)) {
                 any <<= ud;
@@ -1349,7 +1349,7 @@ void SAL_CALL SfxDocumentMetaData::init(
                     OUStringToOString(text, RTL_TEXTENCODING_UTF8).getStr());
                 continue;
             }
-        } else if (type.equalsAscii("boolean")) {
+        } else if (type.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("boolean"))) {
             bool b;
             if (::sax::Converter::convertBool(b, text)) {
                 any <<= b;
@@ -1358,7 +1358,7 @@ void SAL_CALL SfxDocumentMetaData::init(
                     OUStringToOString(text, RTL_TEXTENCODING_UTF8).getStr());
                 continue;
             }
-        } else if (type.equalsAscii("string") || true) { // default
+        } else if (type.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("string")) || true) { // default
             any <<= text;
         }
         try {

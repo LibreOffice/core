@@ -337,7 +337,7 @@ throw ( uno::RuntimeException )
     if ( m_pBox )
     {
         SolarMutexGuard aSolarMutexGuard;
-        if ( rEvent.FeatureURL.Path.equalsAscii( "FontHeight" ))
+        if ( rEvent.FeatureURL.Path.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "FontHeight" ) ))
         {
             if ( rEvent.IsEnabled )
             {
@@ -351,7 +351,7 @@ throw ( uno::RuntimeException )
             else
                 m_pBox->Disable();
         }
-        else if ( rEvent.FeatureURL.Path.equalsAscii( "CharFontName" ))
+        else if ( rEvent.FeatureURL.Path.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "CharFontName" ) ))
         {
             if ( rEvent.State >>= m_aCurrentFont )
                 m_pBox->UpdateFont( m_aCurrentFont );

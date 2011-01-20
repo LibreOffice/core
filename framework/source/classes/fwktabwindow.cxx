@@ -352,17 +352,17 @@ FwkTabPage* FwkTabWindow::AddTabPage( sal_Int32 nIndex, const uno::Sequence< bea
         beans::NamedValue aValue = rProperties[i];
         ::rtl::OUString sName = aValue.Name;
 
-        if ( sName.equalsAscii("Title") )
+        if ( sName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Title")) )
             aValue.Value >>= sTitle;
-        else if ( sName.equalsAscii("ToolTip") )
+        else if ( sName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("ToolTip")) )
             aValue.Value >>= sToolTip;
-        else if ( sName.equalsAscii("PageURL") )
+        else if ( sName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("PageURL")) )
             aValue.Value >>= sPageURL;
-        else if ( sName.equalsAscii("EventHdl") )
+        else if ( sName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("EventHdl")) )
             aValue.Value >>= xEventHdl;
-        else if ( sName.equalsAscii("Image") )
+        else if ( sName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Image")) )
             aValue.Value >>= xImage;
-        else if ( sName.equalsAscii("Disabled") )
+        else if ( sName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Disabled")) )
             aValue.Value >>= bDisabled;
     }
 

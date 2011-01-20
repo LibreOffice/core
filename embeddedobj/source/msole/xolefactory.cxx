@@ -123,7 +123,7 @@ uno::Reference< uno::XInterface > SAL_CALL OleEmbeddedObjectFactory::createInsta
 
     for ( sal_Int32 nInd = 0; nInd < lObjArgs.getLength(); nInd++ )
     {
-        if ( lObjArgs[nInd].Name.equalsAscii( "CloneFrom" ) )
+        if ( lObjArgs[nInd].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "CloneFrom" ) ) )
         {
             try
             {

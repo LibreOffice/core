@@ -117,7 +117,7 @@ static bool lcl_getWindowState( const uno::Reference< container::XNameAccess >& 
         {
             for ( sal_Int32 n = 0; n < aWindowState.getLength(); n++ )
             {
-                if ( aWindowState[n].Name.equalsAscii( "UIName" ))
+                if ( aWindowState[n].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "UIName" ) ))
                 {
                     aWindowState[n].Value >>= rWindowState.sTitle;
                 }

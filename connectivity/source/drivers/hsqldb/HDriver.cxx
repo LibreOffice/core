@@ -190,11 +190,11 @@ namespace connectivity
 
                 for (;pIter != pEnd; ++pIter)
                 {
-                    if ( pIter->Name.equalsAscii("Storage") )
+                    if ( pIter->Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Storage")) )
                     {
                         xStorage.set(pIter->Value,UNO_QUERY);
                     }
-                    else if ( pIter->Name.equalsAscii("URL") )
+                    else if ( pIter->Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("URL")) )
                     {
                         pIter->Value >>= sURL;
                     }

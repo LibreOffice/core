@@ -145,9 +145,9 @@ rtl::OUString SAL_CALL SOEvaluation::getExactName( const rtl::OUString& rApproxi
             for (int i=0; i<aSeq.getLength(); i++ )
             {
                 NamedValue& rValue = aSeq[i];
-                if ( rValue.Name.equalsAscii("expired") )
+                if ( rValue.Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("expired")) )
                     rValue.Value >>= bExpired;
-                else if (rValue.Name.equalsAscii("title") )
+                else if (rValue.Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("title")) )
                     rValue.Value >>= aEval;
             }
             // append eval string to title

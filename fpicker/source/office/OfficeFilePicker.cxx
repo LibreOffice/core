@@ -1107,19 +1107,19 @@ void SAL_CALL SvtFilePicker::initialize( const Sequence< Any >& _rArguments )
 //-------------------------------------------------------------------------
 sal_Bool SvtFilePicker::implHandleInitializationArgument( const ::rtl::OUString& _rName, const Any& _rValue ) SAL_THROW( ( Exception, RuntimeException ) )
 {
-    if ( _rName.equalsAscii( "TemplateDescription" ) )
+    if ( _rName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "TemplateDescription" ) ) )
     {
         m_nServiceType = TemplateDescription::FILEOPEN_SIMPLE;
         OSL_VERIFY( _rValue >>= m_nServiceType );
         return sal_True;
     }
-    if ( _rName.equalsAscii( "StandardDir" ) )
+    if ( _rName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "StandardDir" ) ) )
     {
         OSL_VERIFY( _rValue >>= m_aStandardDir );
         return sal_True;
     }
 
-    if ( _rName.equalsAscii( "BlackList" ) )
+    if ( _rName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "BlackList" ) ) )
     {
         OSL_VERIFY( _rValue >>= m_aBlackList );
         return sal_True;

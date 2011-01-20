@@ -71,7 +71,7 @@ uno::Any SAL_CALL UNOMainThreadExecutor::execute( const uno::Sequence< beans::Na
 {
     uno::Reference< task::XJob > xJob;
 
-    if ( aArguments.getLength() > 0 && aArguments[0].Name.equalsAscii( "JobToExecute" ) )
+    if ( aArguments.getLength() > 0 && aArguments[0].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "JobToExecute" ) ) )
         aArguments[0].Value >>= xJob;
 
     if ( !xJob.is() )

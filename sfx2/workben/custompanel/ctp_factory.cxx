@@ -95,7 +95,7 @@ namespace sd { namespace colortoolpanel
         const PropertyValue* pArgEnd = i_rArgs.getConstArray() + i_rArgs.getLength();
         for ( ; pArg != pArgEnd; ++pArg )
         {
-            if ( pArg->Name.equalsAscii( "ParentWindow" ) )
+            if ( pArg->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ParentWindow" ) ) )
             {
                 xParentWindow.set( pArg->Value, UNO_QUERY );
                 break;

@@ -2532,7 +2532,7 @@ SvXMLExport::AddAttributeXmlId(uno::Reference<uno::XInterface> const & i_xIfc)
                 // a) just omit styles.xml ids -- they are unlikely anyway...
                 // b) somehow find out whether we are currently exporting styles
                 //    or content, and prefix "s" or "c" => unique
-                if ( mdref.First.equalsAscii("content.xml") )
+                if ( mdref.First.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("content.xml")) )
                 {
                     AddAttribute( XML_NAMESPACE_XML, XML_ID, mdref.Second );
                 }

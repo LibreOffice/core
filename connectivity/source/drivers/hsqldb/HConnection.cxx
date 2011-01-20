@@ -335,7 +335,7 @@ namespace connectivity { namespace hsqldb
             {
                 Reference< XRow > xValueAccess( xTableHsqlType, UNO_QUERY_THROW );
                 ::rtl::OUString sTableType = xValueAccess->getString( 1 );
-                bIsTextTable = sTableType.equalsAscii( "TEXT" );
+                bIsTextTable = sTableType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "TEXT" ) );
             }
         }
         catch( const Exception& )

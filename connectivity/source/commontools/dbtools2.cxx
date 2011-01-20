@@ -821,7 +821,7 @@ bool isEmbeddedInDatabase( const Reference< XInterface >& _rxComponent, Referenc
             const PropertyValue* pEnd  = pIter + aArgs.getLength();
             for(;pIter != pEnd;++pIter)
             {
-                if ( pIter->Name.equalsAscii("ComponentData") )
+                if ( pIter->Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("ComponentData")) )
                 {
                     Sequence<PropertyValue> aDocumentContext;
                     pIter->Value >>= aDocumentContext;
@@ -829,7 +829,7 @@ bool isEmbeddedInDatabase( const Reference< XInterface >& _rxComponent, Referenc
                     const PropertyValue* pContextEnd  = pContextIter + aDocumentContext.getLength();
                     for(;pContextIter != pContextEnd;++pContextIter)
                     {
-                        if (  pContextIter->Name.equalsAscii( "ActiveConnection" )
+                        if (  pContextIter->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ActiveConnection" ) )
                         && ( pContextIter->Value >>= _rxActualConnection )
                         )
                         {

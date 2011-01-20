@@ -251,9 +251,9 @@ namespace svxform
                 OSL_VERIFY( aVisualEffect >>= sVisualEffect );
 
                 sal_Int16 nVisualEffect = VisualEffect::NONE;
-                if ( sVisualEffect.equalsAscii( "flat" ) )
+                if ( sVisualEffect.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "flat" ) ) )
                     nVisualEffect = VisualEffect::FLAT;
-                else if ( sVisualEffect.equalsAscii( "3D" ) )
+                else if ( sVisualEffect.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "3D" ) ) )
                     nVisualEffect = VisualEffect::LOOK3D;
 
                 if ( xPSI->hasPropertyByName( FM_PROP_BORDER ) )

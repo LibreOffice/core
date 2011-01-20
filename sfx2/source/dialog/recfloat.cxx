@@ -129,7 +129,7 @@ static rtl::OUString GetLabelFromCommandURL( const rtl::OUString& rCommandURL, c
                 {
                     for ( sal_Int32 i = 0; i < aPropSeq.getLength(); i++ )
                     {
-                        if ( aPropSeq[i].Name.equalsAscii( "Label" ))
+                        if ( aPropSeq[i].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Label" ) ))
                         {
                             aPropSeq[i].Value >>= aLabel;
                             break;

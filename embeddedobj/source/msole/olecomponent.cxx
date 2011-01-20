@@ -1599,7 +1599,7 @@ uno::Any SAL_CALL OleComponent::getTransferData( const datatransfer::DataFlavor&
     // TODO: Investigate if there is already the format name
     //       and whether this format is really required
     else if ( aFlavor.DataType == getCppuType( ( const uno::Reference< io::XInputStream >* ) 0 )
-            && aFlavor.MimeType.equalsAscii( "application/x-openoffice-contentstream" ) )
+            && aFlavor.MimeType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "application/x-openoffice-contentstream" ) ) )
     {
         // allow to retrieve stream-representation of the object persistence
         bSupportedFlavor = sal_True;

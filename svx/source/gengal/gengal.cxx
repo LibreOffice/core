@@ -287,20 +287,20 @@ int GalApp::Main()
     {
         rtl::OUString aParam = GetCommandLineParam( i );
 
-        if( aParam.equalsAscii( "--help" ) ||
-            aParam.equalsAscii( "-h" ) )
+        if( aParam.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "--help" ) ) ||
+            aParam.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "-h" ) ) )
                 bHelp = true;
 
-        else if ( aParam.equalsAscii( "--name" ) )
+        else if ( aParam.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "--name" ) ) )
             aName = GetCommandLineParam( ++i );
 
-        else if ( aParam.equalsAscii( "--path" ) )
+        else if ( aParam.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "--path" ) ) )
             aPath = Smartify( GetCommandLineParam( ++i ) );
 
-        else if ( aParam.equalsAscii( "--destdir" ) )
+        else if ( aParam.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "--destdir" ) ) )
             aDestDir = GetCommandLineParam( ++i );
 
-        else if ( aParam.equalsAscii( "--number-from" ) )
+        else if ( aParam.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "--number-from" ) ) )
              nNumFrom = GetCommandLineParam( ++i ).ToInt32();
 
         else

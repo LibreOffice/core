@@ -2957,9 +2957,9 @@ sal_Bool SfxObjectShell::IsInformationLost()
     ::rtl::OUString aPreusedFilterName;
     for ( sal_Int32 nInd = 0; nInd < aProps.getLength(); nInd++ )
     {
-        if ( aProps[nInd].Name.equalsAscii( "FilterName" ) )
+        if ( aProps[nInd].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "FilterName" ) ) )
             aProps[nInd].Value >>= aFilterName;
-        else if ( aProps[nInd].Name.equalsAscii( "PreusedFilterName" ) )
+        else if ( aProps[nInd].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "PreusedFilterName" ) ) )
             aProps[nInd].Value >>= aPreusedFilterName;
     }
 
@@ -3559,7 +3559,7 @@ sal_Bool SfxObjectShell::CopyStoragesOfUnknownMediaType( const uno::Reference< e
                         default:
                         {
                             OSL_ENSURE(
-                                aSubElements[nInd].equalsAscii( "Configurations2" ) || !xTarget->hasByName( aSubElements[nInd] ),
+                                aSubElements[nInd].equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Configurations2" ) ) || !xTarget->hasByName( aSubElements[nInd] ),
                                 "The target storage is an output storage, the element should not exist in the target!\n" );
 
                             if ( !xTarget->hasByName( aSubElements[nInd] ) )

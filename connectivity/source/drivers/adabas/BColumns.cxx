@@ -74,7 +74,7 @@ sdbcx::ObjectType OColumns::createObject(const ::rtl::OUString& _rName)
                 sal_Int32 nPrec             = xRow->getInt(7);
                 OAdabasCatalog::correctColumnProperties(nPrec,nType,sTypeName);
                 sal_Bool bAutoIncrement = sal_False;
-                if ( !_rName.equalsAscii("DEFAULT") && !m_pTable->getSchema().equalsAscii("DOMAIN") && !m_pTable->getTableName().equalsAscii("COLUMNS") )
+                if ( !_rName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("DEFAULT")) && !m_pTable->getSchema().equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("DOMAIN")) && !m_pTable->getTableName().equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("COLUMNS")) )
                 {
                     Reference< XStatement > xStmt = m_pTable->getMetaData()->getConnection()->createStatement(  );
                     ::rtl::OUString sQuery(RTL_CONSTASCII_USTRINGPARAM("SELECT \"DEFAULT\" FROM DOMAIN.COLUMNS WHERE OWNER = '"));

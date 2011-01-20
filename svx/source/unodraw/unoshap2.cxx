@@ -843,18 +843,18 @@ void SAL_CALL SvxShapeControl::setPropertyValue( const OUString& aPropertyName, 
             if( xInfo.is() && xInfo->hasPropertyByName( aFormsName ) )
             {
                 uno::Any aConvertedValue( aValue );
-                if ( aFormsName.equalsAscii( "FontSlant" ) )
+                if ( aFormsName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "FontSlant" ) ) )
                 {
                     awt::FontSlant nSlant;
                     if( !(aValue >>= nSlant ) )
                         throw lang::IllegalArgumentException();
                     aConvertedValue <<= (sal_Int16)nSlant;
                 }
-                else if ( aFormsName.equalsAscii( "Align" ) )
+                else if ( aFormsName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Align" ) ) )
                 {
                     lcl_convertParaAdjustmentToTextAlignment( aConvertedValue );
                 }
-                else if ( aFormsName.equalsAscii( "VerticalAlign" ) )
+                else if ( aFormsName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "VerticalAlign" ) ) )
                 {
                     convertVerticalAdjustToVerticalAlign( aConvertedValue );
                 }
@@ -884,7 +884,7 @@ uno::Any SAL_CALL SvxShapeControl::getPropertyValue( const OUString& aPropertyNa
             if( xInfo.is() && xInfo->hasPropertyByName( aFormsName ) )
             {
                 aValue = xControl->getPropertyValue( aFormsName );
-                if ( aFormsName.equalsAscii( "FontSlant" ) )
+                if ( aFormsName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "FontSlant" ) ) )
                 {
                     awt::FontSlant eSlant = awt::FontSlant_NONE;
                     sal_Int16 nSlant = sal_Int16();
@@ -898,11 +898,11 @@ uno::Any SAL_CALL SvxShapeControl::getPropertyValue( const OUString& aPropertyNa
                     }
                     aValue <<= eSlant;
                 }
-                else if ( aFormsName.equalsAscii( "Align" ) )
+                else if ( aFormsName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Align" ) ) )
                 {
                     lcl_convertTextAlignmentToParaAdjustment( aValue );
                 }
-                else if ( aFormsName.equalsAscii( "VerticalAlign" ) )
+                else if ( aFormsName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "VerticalAlign" ) ) )
                 {
                     convertVerticalAlignToVerticalAdjust( aValue );
                 }
@@ -978,17 +978,17 @@ uno::Any SAL_CALL SvxShapeControl::getPropertyDefault( const ::rtl::OUString& aP
         if( xControl.is() )
         {
             Any aDefault( xControl->getPropertyDefault( aFormsName ) );
-            if ( aFormsName.equalsAscii( "FontSlant" ) )
+            if ( aFormsName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "FontSlant" ) ) )
             {
                 sal_Int16 nSlant( 0 );
                 aDefault >>= nSlant;
                 aDefault <<= (awt::FontSlant)nSlant;
             }
-            else if ( aFormsName.equalsAscii( "Align" ) )
+            else if ( aFormsName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Align" ) ) )
             {
                 lcl_convertTextAlignmentToParaAdjustment( aDefault );
             }
-            else if ( aFormsName.equalsAscii( "VerticalAlign" ) )
+            else if ( aFormsName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "VerticalAlign" ) ) )
             {
                 convertVerticalAlignToVerticalAdjust( aDefault );
             }

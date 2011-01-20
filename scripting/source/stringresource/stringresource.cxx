@@ -1770,7 +1770,7 @@ void StringResourcePersistenceImpl::implScanLocaleNames( const Sequence< ::rtl::
             aExtension = aCompleteName.copy( iDot + 1 );
         }
 
-        if( aExtension.equalsAscii( "properties" ) )
+        if( aExtension.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "properties" ) ) )
         {
             //rtl::OUString aName = aInetObj.getBase();
             Locale aLocale;
@@ -1790,7 +1790,7 @@ void StringResourcePersistenceImpl::implScanLocaleNames( const Sequence< ::rtl::
                 }
             }
         }
-        else if( !bDefaultFound && aExtension.equalsAscii( "default" ) )
+        else if( !bDefaultFound && aExtension.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "default" ) ) )
         {
             //rtl::OUString aName = aInetObj.getBase();
             Locale aLocale;

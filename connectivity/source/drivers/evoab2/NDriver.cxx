@@ -182,7 +182,7 @@ sal_Int32 SAL_CALL OEvoabDriver::getMinorVersion(  ) throw(RuntimeException)
 // --------------------------------------------------------------------------------
 sal_Bool OEvoabDriver::acceptsURL_Stat( const ::rtl::OUString& url )
 {
-    return (url.equalsAscii("sdbc:address:evolution:local") || url.equalsAscii("sdbc:address:evolution:groupwise")||url.equalsAscii("sdbc:address:evolution:ldap"))&& EApiInit();
+    return (url.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("sdbc:address:evolution:local")) || url.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("sdbc:address:evolution:groupwise"))||url.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("sdbc:address:evolution:ldap")))&& EApiInit();
 }
 // -----------------------------------------------------------------------------
 

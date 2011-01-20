@@ -783,10 +783,10 @@ void SvxSearchDialog::CalculateDelta_Impl()
         try
         {
             ::rtl::OUString aModuleIdentifier = xModuleManager->identify( xFrame );
-            bCalcApp = aModuleIdentifier.equalsAscii( "com.sun.star.sheet.SpreadsheetDocument" );
-            bDrawApp = aModuleIdentifier.equalsAscii( "com.sun.star.drawing.DrawingDocument" );
-            bImpressApp = aModuleIdentifier.equalsAscii( "com.sun.star.presentation.PresentationDocument" );
-            bWriterApp = aModuleIdentifier.equalsAscii( "com.sun.star.text.TextDocument" );
+            bCalcApp = aModuleIdentifier.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.sheet.SpreadsheetDocument" ) );
+            bDrawApp = aModuleIdentifier.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.drawing.DrawingDocument" ) );
+            bImpressApp = aModuleIdentifier.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.presentation.PresentationDocument" ) );
+            bWriterApp = aModuleIdentifier.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.text.TextDocument" ) );
         }
         catch ( uno::Exception& )
         {

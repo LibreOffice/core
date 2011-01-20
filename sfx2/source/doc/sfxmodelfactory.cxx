@@ -149,9 +149,9 @@ namespace sfx2
         {
             static bool isSpecialArgumentName( const ::rtl::OUString& _rValueName )
             {
-                return  _rValueName.equalsAscii( "EmbeddedObject" )
-                    ||  _rValueName.equalsAscii( "EmbeddedScriptSupport" )
-                    ||  _rValueName.equalsAscii( "DocumentRecoverySupport" );
+                return  _rValueName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "EmbeddedObject" ) )
+                    ||  _rValueName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "EmbeddedScriptSupport" ) )
+                    ||  _rValueName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "DocumentRecoverySupport" ) );
             }
 
             bool operator()( const Any& _rArgument ) const
