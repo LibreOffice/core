@@ -338,7 +338,7 @@ static OUString getMimetypeForDocument( const Reference< XMultiServiceFactory >&
                         Sequence< beans::PropertyValue > aFilterData;
                         xFilterFactory->getByName( aFilterName ) >>= aFilterData;
                         for ( sal_Int32 nInd = 0; nInd < aFilterData.getLength(); nInd++ )
-                            if ( aFilterData[nInd].Name.equalsAscii( "Type" ) )
+                            if ( aFilterData[nInd].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Type" ) ) )
                                 aFilterData[nInd].Value >>= aTypeName;
 
                         if ( aTypeName.getLength() )
@@ -351,7 +351,7 @@ static OUString getMimetypeForDocument( const Reference< XMultiServiceFactory >&
                             Sequence< beans::PropertyValue > aTypeData;
                             xTypeDetection->getByName( aTypeName ) >>= aTypeData;
                             for ( sal_Int32 nInd = 0; nInd < aTypeData.getLength(); nInd++ )
-                                if ( aTypeData[nInd].Name.equalsAscii( "MediaType" ) )
+                                if ( aTypeData[nInd].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "MediaType" ) ) )
                                     aTypeData[nInd].Value >>= aDocMimetype;
                         }
                     }

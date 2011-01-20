@@ -265,13 +265,13 @@ void ShapeTypeContext::setStyle( const OUString& rStyle )
         OUString aName, aValue;
         if( ConversionHelper::separatePair( aName, aValue, rStyle.getToken( 0, ';', nIndex ), ':' ) )
         {
-                 if( aName.equalsAscii( "position" ) )      mrTypeModel.maPosition = aValue;
-            else if( aName.equalsAscii( "left" ) )          mrTypeModel.maLeft = aValue;
-            else if( aName.equalsAscii( "top" ) )           mrTypeModel.maTop = aValue;
-            else if( aName.equalsAscii( "width" ) )         mrTypeModel.maWidth = aValue;
-            else if( aName.equalsAscii( "height" ) )        mrTypeModel.maHeight = aValue;
-            else if( aName.equalsAscii( "margin-left" ) )   mrTypeModel.maMarginLeft = aValue;
-            else if( aName.equalsAscii( "margin-top" ) )    mrTypeModel.maMarginTop = aValue;
+                 if( aName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "position" ) ) )      mrTypeModel.maPosition = aValue;
+            else if( aName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "left" ) ) )          mrTypeModel.maLeft = aValue;
+            else if( aName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "top" ) ) )           mrTypeModel.maTop = aValue;
+            else if( aName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "width" ) ) )         mrTypeModel.maWidth = aValue;
+            else if( aName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "height" ) ) )        mrTypeModel.maHeight = aValue;
+            else if( aName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "margin-left" ) ) )   mrTypeModel.maMarginLeft = aValue;
+            else if( aName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "margin-top" ) ) )    mrTypeModel.maMarginTop = aValue;
         }
     }
 }

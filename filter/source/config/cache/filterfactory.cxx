@@ -351,43 +351,43 @@ OUStringList FilterFactory::impl_queryMatchByDocumentService(const QueryTokenize
 
 #define COMP_HACK
 #ifdef COMP_HACK
-    if (sDocumentService.equalsAscii("writer"))
+    if (sDocumentService.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("writer")))
     {
         OSL_ENSURE(sal_False, "DEPRECATED!\nPlease use right document service for filter query!");
         sDocumentService = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.text.TextDocument" ));
     }
     else
-    if (sDocumentService.equalsAscii("web"))
+    if (sDocumentService.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("web")))
     {
         OSL_ENSURE(sal_False, "DEPRECATED!\nPlease use right document service for filter query!");
         sDocumentService = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.text.WebDocument" ));
     }
     else
-    if (sDocumentService.equalsAscii("global"))
+    if (sDocumentService.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("global")))
     {
         OSL_ENSURE(sal_False, "DEPRECATED!\nPlease use right document service for filter query!");
         sDocumentService = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.text.GlobalDocument" ));
     }
     else
-    if (sDocumentService.equalsAscii("calc"))
+    if (sDocumentService.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("calc")))
     {
         OSL_ENSURE(sal_False, "DEPRECATED!\nPlease use right document service for filter query!");
         sDocumentService = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.sheet.SpreadsheetDocument" ));
     }
     else
-    if (sDocumentService.equalsAscii("draw"))
+    if (sDocumentService.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("draw")))
     {
         OSL_ENSURE(sal_False, "DEPRECATED!\nPlease use right document service for filter query!");
         sDocumentService = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.drawing.DrawingDocument" ));
     }
     else
-    if (sDocumentService.equalsAscii("impress"))
+    if (sDocumentService.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("impress")))
     {
         OSL_ENSURE(sal_False, "DEPRECATED!\nPlease use right document service for filter query!");
         sDocumentService = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.presentation.PresentationDocument" ));
     }
     else
-    if (sDocumentService.equalsAscii("math"))
+    if (sDocumentService.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("math")))
     {
         OSL_ENSURE(sal_False, "DEPRECATED!\nPlease use right document service for filter query!");
         sDocumentService = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.formula.FormulaProperties" ));

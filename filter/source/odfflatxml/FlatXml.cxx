@@ -91,11 +91,11 @@ namespace XFlatXml
         for (sal_Int32 i = 0; i < nLength; i++)
             {
                 aName = aSourceData[i].Name;
-                if (aName.equalsAscii("InputStream"))
+                if (aName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("InputStream")))
                     aSourceData[i].Value >>= xInputStream;
-                else if (aName.equalsAscii("FileName"))
+                else if (aName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("FileName")))
                     aSourceData[i].Value >>= aFileName;
-                else if (aName.equalsAscii("URL"))
+                else if (aName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("URL")))
                     aSourceData[i].Value >>= aURL;
             }
 
@@ -159,9 +159,9 @@ namespace XFlatXml
         for (sal_Int32 i = 0; i < nLength; i++)
             {
                 aName = aSourceData[i].Name;
-                if (aName.equalsAscii("OutputStream"))
+                if (aName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("OutputStream")))
                     aSourceData[i].Value >>= rOutputStream;
-                else if (aName.equalsAscii("URL"))
+                else if (aName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("URL")))
                     aSourceData[i].Value >>= sURL;
             }
 

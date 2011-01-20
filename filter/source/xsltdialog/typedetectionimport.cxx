@@ -255,7 +255,7 @@ void SAL_CALL TypeDetectionImporter::startElement( const OUString& aName, const 
     if( maStack.empty() )
     {
         // #109668# support legacy name as well on import
-        if( aName == sRootNode || aName.equalsAscii("oor:node") )
+        if( aName == sRootNode || aName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("oor:node")) )
         {
             eNewState = e_Root;
         }

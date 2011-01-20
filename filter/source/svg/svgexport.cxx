@@ -132,9 +132,9 @@ sal_Bool SVGFilter::implExport( const Sequence< PropertyValue >& rDescriptor )
 
     for ( sal_Int32 i = 0 ; i < nLength; ++i)
     {
-        if( pValue[ i ].Name.equalsAscii( "OutputStream" ) )
+        if( pValue[ i ].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "OutputStream" ) ) )
             pValue[ i ].Value >>= xOStm;
-        else if( pValue[ i ].Name.equalsAscii( "FileName" ) )
+        else if( pValue[ i ].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "FileName" ) ) )
         {
             ::rtl::OUString aFileName;
 
@@ -144,7 +144,7 @@ sal_Bool SVGFilter::implExport( const Sequence< PropertyValue >& rDescriptor )
             if( pOStm )
                 xOStm = Reference< XOutputStream >( new ::utl::OOutputStreamWrapper ( *pOStm ) );
         }
-        else if( pValue[ i ].Name.equalsAscii( "PagePos" ) )
+        else if( pValue[ i ].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "PagePos" ) ) )
             pValue[ i ].Value >>= nPageToExport;
    }
 

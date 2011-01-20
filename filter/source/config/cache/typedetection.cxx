@@ -259,10 +259,10 @@ void TypeDetection::impl_checkResultsAndAddBestFilter(::comphelper::MediaDescrip
             // But then we loose automatic opening of CSV files in calc instead of opening these files
             // inside writer.
             if (
-                (sDocumentService.equalsAscii("com.sun.star.sheet.SpreadsheetDocument")) &&
+                (sDocumentService.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.sheet.SpreadsheetDocument"))) &&
                 (
                     (sRealType.equalsAscii("writer_Text"        )) ||
-                    (sRealType.equalsAscii("writer_Text_encoded"))
+                    (sRealType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("writer_Text_encoded")))
                 )
                )
             {
@@ -270,7 +270,7 @@ void TypeDetection::impl_checkResultsAndAddBestFilter(::comphelper::MediaDescrip
             }
             else
             if (
-                (sDocumentService.equalsAscii("com.sun.star.text.TextDocument")) &&
+                (sDocumentService.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.text.TextDocument"))) &&
                 (sRealType.equalsAscii("calc_Text_txt_csv_StarCalc"           ))
                )
             {

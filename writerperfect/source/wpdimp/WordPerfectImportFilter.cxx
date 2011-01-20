@@ -377,7 +377,7 @@ void SAL_CALL WordPerfectImportFilterDialog::setPropertyValues( const uno::Seque
 
         if ( aPropName == ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Password")) )
             rProp.Value >>= msPassword;
-        else if ( aPropName.equalsAscii( "InputStream" ) )
+        else if ( aPropName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "InputStream" ) ) )
             rProp.Value >>= mxInputStream;
     }
 }

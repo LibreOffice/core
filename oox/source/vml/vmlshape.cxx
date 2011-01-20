@@ -200,7 +200,7 @@ Reference< XShape > lclCreateAndInsertXShape( const XmlFilterBase& rFilter,
         const Reference< XShapes >& rxShapes, const OUString& rService, const Rectangle& rShapeRect )
 {
     Reference< XShape > xShape = lclCreateXShape( rFilter, rService );
-    if ( rService.equalsAscii( "com.sun.star.text.TextFrame" ) )
+    if ( rService.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.text.TextFrame" ) ) )
         lclInsertTextFrame( rFilter, xShape );
     else
         lclInsertXShape( rxShapes, xShape );

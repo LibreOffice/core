@@ -501,9 +501,9 @@ ShapeExport& ShapeExport::WriteCustomShape( Reference< XShape > xShape )
                 const PropertyValue& rProp = aGeometrySeq[ i ];
                 DBG(printf("geometry property: %s\n", USS( rProp.Name )));
 
-                if( rProp.Name.equalsAscii( "AdjustmentValues" ))
+                if( rProp.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "AdjustmentValues" ) ))
                     nAdjustmentValuesIndex = i;
-                else if( rProp.Name.equalsAscii( "Handles" )) {
+                else if( rProp.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Handles" ) )) {
                     if( !bIsDefaultObject )
                         bPredefinedHandlesUsed = FALSE;
                     // TODO: update nAdjustmentsWhichNeedsToBeConverted here

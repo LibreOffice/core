@@ -83,8 +83,8 @@ void SAL_CALL LateInitListener::notifyEvent(const css::document::EventObject& aE
 {
     // wait for events, which indicates finished open of the first document
     if (
-        (aEvent.EventName.equalsAscii("OnNew") ) ||
-        (aEvent.EventName.equalsAscii("OnLoad"))
+        (aEvent.EventName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("OnNew")) ) ||
+        (aEvent.EventName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("OnLoad")))
        )
     {
         // this thread must be started one times only ...

@@ -174,7 +174,7 @@ Reference< com::sun::star::frame::XModel > xModel;
                 {
                     ::rtl::OUString tmpStr;
                     lProps[j].Value >>=tmpStr;
-                    if((lProps[j].Name.equalsAscii("ClipboardFormat")) && (!tmpStr.equalsAscii("")) )
+                    if((lProps[j].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("ClipboardFormat"))) && (!tmpStr.equalsAscii("")) )
                     {
                         sTypeName = supportedByType(tmpStr,resultString, myTypes[i]);
                     }

@@ -150,7 +150,7 @@ uno::Any SAL_CALL ColorPropertySet::getPropertyValue( const OUString& aPropertyN
            lang::WrappedTargetException,
            uno::RuntimeException)
 {
-    if( aPropertyName.equalsAscii("FillStyle") && m_bIsFillColor )
+    if( aPropertyName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("FillStyle")) && m_bIsFillColor )
     {
         ::com::sun::star::drawing::FillStyle aFillStyle = ::com::sun::star::drawing::FillStyle_SOLID;
         return uno::makeAny(aFillStyle);

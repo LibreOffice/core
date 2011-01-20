@@ -353,22 +353,22 @@ void XMLFilterTestDialog::onExportBrowse()
 
                 for( sal_Int32  nValue = 0; (nValue < aValues.getLength()) && (nFound != 15); nValue++, pValues++ )
                 {
-                    if( pValues->Name.equalsAscii( "Type" ) )
+                    if( pValues->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Type" ) ) )
                     {
                         pValues->Value >>= aType;
                         nFound |= 1;
                     }
-                    else if( pValues->Name.equalsAscii( "DocumentService" ) )
+                    else if( pValues->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "DocumentService" ) ) )
                     {
                         pValues->Value >>= aService;
                         nFound |= 2;
                     }
-                    else if( pValues->Name.equalsAscii( "Flags" ) )
+                    else if( pValues->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Flags" ) ) )
                     {
                         pValues->Value >>= nFlags;
                         nFound |= 4;
                     }
-                    if( pValues->Name.equalsAscii( "UIName" ) )
+                    if( pValues->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "UIName" ) ) )
                     {
                         pValues->Value >>= aInterfaceName;
                         nFound |= 8;
@@ -392,7 +392,7 @@ void XMLFilterTestDialog::onExportBrowse()
                             OUString aExtension;
                             for( nValue = 0; nValue < aValues2.getLength(); nValue++, pValues2++ )
                             {
-                                if( pValues2->Name.equalsAscii( "Extensions" ) )
+                                if( pValues2->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Extensions" ) ) )
                                 {
                                     Sequence< OUString > aExtensions;
                                     if( pValues2->Value >>= aExtensions )

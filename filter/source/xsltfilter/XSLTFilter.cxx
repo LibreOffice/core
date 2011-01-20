@@ -382,11 +382,11 @@ sal_Bool XSLTFilter::importer(
     for ( sal_Int32 i = 0 ; i < nLength; i++)
     {
         aName = aSourceData[i].Name;
-        if (aName.equalsAscii("InputStream"))
+        if (aName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("InputStream")))
             aSourceData[i].Value >>= xInputStream;
-        else if ( aName.equalsAscii("FileName"))
+        else if ( aName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("FileName")))
             aSourceData[i].Value >>= aFileName;
-        else if ( aName.equalsAscii("URL"))
+        else if ( aName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("URL")))
             aSourceData[i].Value >>= aURL;
     }
     OSL_ASSERT(xInputStream.is());
@@ -500,15 +500,15 @@ sal_Bool XSLTFilter::exporter(
     for ( sal_Int32 i = 0 ; i < nLength; i++)
     {
         aName = aSourceData[i].Name;
-        if ( aName.equalsAscii("Indent"))
+        if ( aName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Indent")))
             aSourceData[i].Value >>= bIndent;
-        if ( aName.equalsAscii("DocType_Public"))
+        if ( aName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("DocType_Public")))
             aSourceData[i].Value >>= aDoctypePublic;
-        if ( aName.equalsAscii("DocType_System"))
+        if ( aName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("DocType_System")))
             aSourceData[i].Value >>= aDoctypeSystem;
-        if ( aName.equalsAscii("OutputStream"))
+        if ( aName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("OutputStream")))
             aSourceData[i].Value >>= m_rOutputStream;
-        else if ( aName.equalsAscii("URL" ))
+        else if ( aName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("URL" ) ))
             aSourceData[i].Value >>= sURL;
     }
 

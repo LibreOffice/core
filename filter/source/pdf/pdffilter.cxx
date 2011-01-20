@@ -64,11 +64,11 @@ sal_Bool PDFFilter::implExport( const Sequence< PropertyValue >& rDescriptor )
 
     for ( sal_Int32 i = 0 ; ( i < nLength ) && !xOStm.is(); ++i)
     {
-        if( pValue[ i ].Name.equalsAscii( "OutputStream" ) )
+        if( pValue[ i ].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "OutputStream" ) ) )
             pValue[ i ].Value >>= xOStm;
-        else if( pValue[ i ].Name.equalsAscii( "FilterData" ) )
+        else if( pValue[ i ].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "FilterData" ) ) )
             pValue[ i ].Value >>= aFilterData;
-        else if ( pValue[ i ].Name.equalsAscii( "StatusIndicator" ) )
+        else if ( pValue[ i ].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "StatusIndicator" ) ) )
             pValue[ i ].Value >>= xStatusIndicator;
     }
 

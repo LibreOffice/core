@@ -173,7 +173,7 @@ rtl::OUString SAL_CALL SVGFilter::detect( Sequence< PropertyValue >& io_rDescrip
     const sal_Int32 nAttribs = io_rDescriptor.getLength();
     for( sal_Int32 i = 0; i < nAttribs; i++ )
     {
-        if( pAttribs[i].Name.equalsAscii( "InputStream" ) )
+        if( pAttribs[i].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "InputStream" ) ) )
             pAttribs[i].Value >>= xInput;
     }
 

@@ -117,7 +117,7 @@ OUString WriterFilterDetection::detect( uno::Sequence< beans::PropertyValue >& r
         else
         {
             uno::Reference< embed::XStorage > xDocStorage;
-            if( sURL.equalsAscii( "private:stream" ) )
+            if( sURL.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "private:stream" ) ) )
                 xDocStorage = comphelper::OStorageHelper::GetStorageFromInputStream( xInputStream );
             else
                 xDocStorage = comphelper::OStorageHelper::GetStorageFromURL(

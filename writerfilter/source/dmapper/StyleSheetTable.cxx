@@ -909,25 +909,25 @@ void StyleSheetTable::ApplyStyleSheets( FontTablePtr rFontTable )
                         }
 
                         uno::Reference< beans::XPropertyState >xState( xStyle, uno::UNO_QUERY_THROW );
-                        if( sConvertedStyleName.equalsAscii( "Contents Heading" ) ||
-                            sConvertedStyleName.equalsAscii( "User Index Heading" ) ||
-                            sConvertedStyleName.equalsAscii( "Index Heading" ))
+                        if( sConvertedStyleName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Contents Heading" ) ) ||
+                            sConvertedStyleName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "User Index Heading" ) ) ||
+                            sConvertedStyleName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Index Heading" ) ))
                         {
                             //left margin is set to NULL by default
                             uno::Reference< beans::XPropertyState >xState1( xStyle, uno::UNO_QUERY_THROW );
                             xState1->setPropertyToDefault(rPropNameSupplier.GetName( PROP_PARA_LEFT_MARGIN ));
                         }
-                        else if( sConvertedStyleName.equalsAscii( "Text body" ) )
+                        else if( sConvertedStyleName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Text body" ) ) )
                             xState->setPropertyToDefault(rPropNameSupplier.GetName( PROP_PARA_BOTTOM_MARGIN ));
-                        else if( sConvertedStyleName.equalsAscii( "Heading 1" ) ||
-                                sConvertedStyleName.equalsAscii( "Heading 2" ) ||
-                                sConvertedStyleName.equalsAscii( "Heading 3" ) ||
-                                sConvertedStyleName.equalsAscii( "Heading 4" ) ||
-                                sConvertedStyleName.equalsAscii( "Heading 5" ) ||
-                                sConvertedStyleName.equalsAscii( "Heading 6" ) ||
-                                sConvertedStyleName.equalsAscii( "Heading 7" ) ||
-                                sConvertedStyleName.equalsAscii( "Heading 8" ) ||
-                                sConvertedStyleName.equalsAscii( "Heading 9" ) )
+                        else if( sConvertedStyleName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Heading 1" ) ) ||
+                                sConvertedStyleName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Heading 2" ) ) ||
+                                sConvertedStyleName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Heading 3" ) ) ||
+                                sConvertedStyleName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Heading 4" ) ) ||
+                                sConvertedStyleName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Heading 5" ) ) ||
+                                sConvertedStyleName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Heading 6" ) ) ||
+                                sConvertedStyleName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Heading 7" ) ) ||
+                                sConvertedStyleName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Heading 8" ) ) ||
+                                sConvertedStyleName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Heading 9" ) ) )
                         {
                             xState->setPropertyToDefault(rPropNameSupplier.GetName( PROP_CHAR_WEIGHT ));
                             xState->setPropertyToDefault(rPropNameSupplier.GetName( PROP_CHAR_WEIGHT_ASIAN ));
@@ -953,8 +953,8 @@ void StyleSheetTable::ApplyStyleSheets( FontTablePtr rFontTable )
                             dmapper_logger->attribute("value", aPropValues[nProp].Value);
 #endif
                                 // Don't add the style name properties
-                            bool bIsParaStyleName = aPropValues[nProp].Name.equalsAscii( "ParaStyleName" );
-                            bool bIsCharStyleName = aPropValues[nProp].Name.equalsAscii( "CharStyleName" );
+                            bool bIsParaStyleName = aPropValues[nProp].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ParaStyleName" ) );
+                            bool bIsCharStyleName = aPropValues[nProp].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "CharStyleName" ) );
                             if ( !bIsParaStyleName && !bIsCharStyleName )
                             {
 #ifdef DEBUG_DOMAINMAPPER
