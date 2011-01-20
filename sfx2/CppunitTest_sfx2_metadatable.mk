@@ -34,6 +34,11 @@ $(eval $(call gb_CppunitTest_add_exception_objects,sfx2_metadatable, \
 $(eval $(call gb_CppunitTest_add_linked_libs,sfx2_metadatable, \
     sal \
     sfx \
+    stl \
+    kernel32 \
+    user32 \
+    oldnames \
+    msvcrt \
 ))
 
 $(eval $(call gb_CppunitTest_set_include,sfx2_metadatable,\
