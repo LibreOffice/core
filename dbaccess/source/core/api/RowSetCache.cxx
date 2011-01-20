@@ -741,6 +741,8 @@ sal_Bool ORowSetCache::fillMatrix(sal_Int32& _nNewStartPos,sal_Int32 _nNewEndPos
             if(!aIter->isValid())
                 *aIter = new ORowSetValueVector(m_xMetaData->getColumnCount());
             m_pCacheSet->fillValueRow(*aIter,i);
+            if(!m_bRowCountFinal)
+                ++m_nRowCount;
         }
         else
         {   // there are no more rows found so we can fetch some before start
