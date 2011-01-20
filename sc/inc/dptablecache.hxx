@@ -34,33 +34,38 @@
 
 #include "global.hxx"
 #include <svl/zforlist.hxx>
-#include <vector>
 #include "dpglobal.hxx"
 
 #include <com/sun/star/sdbc/DataType.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/sdbc/XRowSet.hpp>
 
+#include <vector>
+#include <boost/ptr_container/ptr_vector.hpp>
+
 struct ScQueryParam;
 
 class SC_DLLPUBLIC ScDPTableDataCache
 {
+    typedef ::boost::ptr_vector< ::std::vector<ScDPItemData*> > DataGridType;
+    typedef ::boost::ptr_vector< ::std::vector<SCROW> >         RowGridType;
+
     ScDocument* mpDoc;
 
     long    mnID;
     long    mnColumnCount;
 
-    std::vector<ScDPItemData*>* mpTableDataValues; //Data Pilot Table's index - value map
-    std::vector<SCROW>*         mpSourceData;      //Data Pilot Table's Source data
-    std::vector<SCROW>*         mpGlobalOrder;     //Sorted members index
-    std::vector<SCROW>*         mpIndexOrder;      //Index the sorted number
+    DataGridType                maTableDataValues; // Data Pilot Table's index - value map
+    RowGridType                 maSourceData;      // Data Pilot Table's source data
+    RowGridType                 maGlobalOrder;     // Sorted members index
+    RowGridType                 maIndexOrder;      // Index the sorted numbers
     std::vector<ScDPItemData*>  maLabelNames;      //Source Label data
     std::vector<bool>           mbEmptyRow;        //If empty row?
 
     mutable ScDPItemDataPool    maAdditionalData;
 
 public:
-    SCROW GetOrder( long nDim, SCROW nIndex ) const;
+    SCROW GetOrder( long nDim, SCROW nIndex );
     SCROW GetIdByItemData( long nDim,  String sItemData  ) const;
     SCROW GetIdByItemData( long nDim, const ScDPItemData& rData ) const;
 

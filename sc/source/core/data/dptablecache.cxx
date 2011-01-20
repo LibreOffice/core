@@ -59,6 +59,7 @@ using ::com::sun::star::uno::Exception;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::UNO_QUERY;
 using ::com::sun::star::uno::UNO_QUERY_THROW;
+using ::std::vector;
 
 namespace {
 
@@ -404,11 +405,7 @@ bool ScDPTableDataCache::operator== ( const ScDPTableDataCache& r ) const
 ScDPTableDataCache::ScDPTableDataCache(ScDocument* pDoc) :
     mpDoc( pDoc ),
     mnID(-1),
-    mnColumnCount ( 0 ),
-    mpTableDataValues ( NULL ),
-    mpSourceData ( NULL ),
-    mpGlobalOrder( NULL ),
-    mpIndexOrder( NULL)
+    mnColumnCount ( 0 )
 {
 }
 
@@ -419,27 +416,19 @@ ScDPTableDataCache::~ScDPTableDataCache()
         USHORT nCol;
         for (  nCol=0; nCol < GetColumnCount() ; nCol++ )
         {
-            for ( ULONG row = 0 ;  row < mpTableDataValues[nCol].size(); row++ )
-                delete mpTableDataValues[nCol][row];
+            for ( ULONG row = 0 ;  row < maTableDataValues[nCol].size(); row++ )
+                delete maTableDataValues[nCol][row];
         }
         for ( nCol =0; nCol < maLabelNames.size(); nCol++ )
             delete maLabelNames[nCol];
 
         mnColumnCount = 0;
-        delete [] mpTableDataValues;
-        mpTableDataValues = NULL;
-        delete [] mpSourceData;
-        mpSourceData = NULL;
-        delete [] mpGlobalOrder;
-        mpGlobalOrder = NULL;
-        delete [] mpIndexOrder;
-        mpIndexOrder = NULL;
     }
 }
 
 bool ScDPTableDataCache::IsValid() const
 {
-    return mpTableDataValues != NULL && mpSourceData != NULL && mnColumnCount > 0;
+    return !maTableDataValues.empty() && !maSourceData.empty() && mnColumnCount > 0;
 }
 
 namespace {
@@ -486,21 +475,28 @@ bool ScDPTableDataCache::InitFromDoc(ScDocument* pDoc, const ScRange& rRange)
     {
         for ( USHORT nCol=0; nCol < nOldColumCount ; nCol++ )
         {
-            for ( ULONG row = 0 ;  row < mpTableDataValues[nCol].size(); row++ )
-                delete mpTableDataValues[nCol][row];
+            for ( ULONG row = 0 ;  row < maTableDataValues[nCol].size(); row++ )
+                delete maTableDataValues[nCol][row];
             delete maLabelNames[nCol];
         }
-        delete [] mpTableDataValues;
-        delete [] mpSourceData;
-        delete [] mpGlobalOrder;
-        delete [] mpIndexOrder;
+        maTableDataValues.clear();
+        maSourceData.clear();
+        maGlobalOrder.clear();
+        maIndexOrder.clear();
         maLabelNames.clear();
     }
 
-    mpTableDataValues = new std::vector<ScDPItemData*>[ mnColumnCount ];
-    mpSourceData      = new std::vector<SCROW>[ mnColumnCount ];
-    mpGlobalOrder     = new std::vector<SCROW>[ mnColumnCount ];
-    mpIndexOrder      = new std::vector<SCROW>[ mnColumnCount ];
+    maTableDataValues.reserve(mnColumnCount);
+    maSourceData.reserve(mnColumnCount);
+    maGlobalOrder.reserve(mnColumnCount);
+    maIndexOrder.reserve(mnColumnCount);
+    for (long i = 0; i < mnColumnCount; ++i)
+    {
+        maTableDataValues.push_back(new vector<ScDPItemData*>());
+        maSourceData.push_back(new vector<SCROW>());
+        maGlobalOrder.push_back(new vector<SCROW>());
+        maIndexOrder.push_back(new vector<SCROW>());
+    }
     //check valid
     for ( SCROW nRow = nStartRow; nRow <= nEndRow; nRow ++ )
     {
@@ -533,22 +529,30 @@ bool ScDPTableDataCache::InitFromDataBase (const Reference<sdbc::XRowSet>& xRowS
         {
             for (USHORT nCol=0; nCol < nOldColumCount ; nCol++)
             {
-                for (ULONG row = 0 ;  row < mpTableDataValues[nCol].size(); row++)
-                    delete mpTableDataValues[nCol][row];
+                for (ULONG row = 0 ;  row < maTableDataValues[nCol].size(); row++)
+                    delete maTableDataValues[nCol][row];
                 delete maLabelNames[nCol];
             }
-            delete [] mpTableDataValues;
-            delete [] mpSourceData;
-            delete [] mpGlobalOrder;
-            delete [] mpIndexOrder;
+            maTableDataValues.clear();
+            maSourceData.clear();
+            maGlobalOrder.clear();
+            maIndexOrder.clear();
             maLabelNames.clear();
         }
         // Get column titles and types.
         maLabelNames.reserve(mnColumnCount);
-        mpTableDataValues = new std::vector<ScDPItemData*>[ mnColumnCount ];
-        mpSourceData      = new std::vector<SCROW>[ mnColumnCount ];
-        mpGlobalOrder     = new std::vector<SCROW>[ mnColumnCount ];
-        mpIndexOrder      = new std::vector<SCROW>[ mnColumnCount ];
+
+        maTableDataValues.reserve(mnColumnCount);
+        maSourceData.reserve(mnColumnCount);
+        maGlobalOrder.reserve(mnColumnCount);
+        maIndexOrder.reserve(mnColumnCount);
+        for (long i = 0; i < mnColumnCount; ++i)
+        {
+            maTableDataValues.push_back(new vector<ScDPItemData*>());
+            maSourceData.push_back(new vector<SCROW>());
+            maGlobalOrder.push_back(new vector<SCROW>());
+            maIndexOrder.push_back(new vector<SCROW>());
+        }
 
         std::vector<sal_Int32> aColTypes(mnColumnCount);
 
@@ -587,10 +591,10 @@ ULONG ScDPTableDataCache::GetDimNumType( SCCOL nDim) const
 {
     DBG_ASSERT( IsValid(), "  IsValid() == false " );
     DBG_ASSERT( nDim < mnColumnCount && nDim >=0, " dimention out of bound " );
-    if ( mpTableDataValues[nDim].size()==0 )
+    if ( maTableDataValues[nDim].size()==0 )
         return NUMBERFORMAT_UNDEFINED;
     else
-        return GetNumType(mpTableDataValues[nDim][0]->nNumFormat);
+        return GetNumType(maTableDataValues[nDim][0]->nNumFormat);
 }
 
 bool ScDPTableDataCache::ValidQuery( SCROW nRow, const ScQueryParam &rParam, bool *pSpecial)
@@ -825,18 +829,18 @@ bool ScDPTableDataCache::AddData(long nDim, ScDPItemData* pitemData)
 
     pitemData->SetDate( lcl_isDate( GetNumType( pitemData->nNumFormat ) ) );
 
-    if ( !lcl_Search( mpTableDataValues[nDim], mpGlobalOrder[nDim], *pitemData, nIndex ) )
+    if ( !lcl_Search( maTableDataValues[nDim], maGlobalOrder[nDim], *pitemData, nIndex ) )
     {
-        mpTableDataValues[nDim].push_back( pitemData );
-        mpGlobalOrder[nDim].insert( mpGlobalOrder[nDim].begin()+nIndex, mpTableDataValues[nDim].size()-1  );
-        DBG_ASSERT( (size_t) mpGlobalOrder[nDim][nIndex] == mpTableDataValues[nDim].size()-1 ,"ScDPTableDataCache::AddData ");
-        mpSourceData[nDim].push_back( mpTableDataValues[nDim].size()-1 );
+        maTableDataValues[nDim].push_back( pitemData );
+        maGlobalOrder[nDim].insert( maGlobalOrder[nDim].begin()+nIndex, maTableDataValues[nDim].size()-1  );
+        DBG_ASSERT( (size_t) maGlobalOrder[nDim][nIndex] == maTableDataValues[nDim].size()-1 ,"ScDPTableDataCache::AddData ");
+        maSourceData[nDim].push_back( maTableDataValues[nDim].size()-1 );
         bInserted = true;
     }
     else
-        mpSourceData[nDim].push_back( mpGlobalOrder[nDim][nIndex] );
+        maSourceData[nDim].push_back( maGlobalOrder[nDim][nIndex] );
 //init empty row tag
-    size_t  nCurRow = mpSourceData[nDim].size() -1 ;
+    size_t  nCurRow = maSourceData[nDim].size() -1 ;
 
     while ( mbEmptyRow.size() <= nCurRow )
         mbEmptyRow.push_back( true );
@@ -902,11 +906,11 @@ SCROW ScDPTableDataCache::GetItemDataId(USHORT nDim, SCROW nRow, bool bRepeatIfE
 
     if ( bRepeatIfEmpty )
     {
-        while ( nRow >0 && !mpTableDataValues[nDim][ mpSourceData[nDim][nRow] ]->IsHasData() )
+        while ( nRow >0 && !maTableDataValues[nDim][ maSourceData[nDim][nRow] ]->IsHasData() )
         --nRow;
     }
 
-    return mpSourceData[nDim][nRow];
+    return maSourceData[nDim][nRow];
 }
 
 const ScDPItemData* ScDPTableDataCache::GetItemDataById(long nDim, SCROW nId) const
@@ -914,16 +918,16 @@ const ScDPItemData* ScDPTableDataCache::GetItemDataById(long nDim, SCROW nId) co
     if ( nId >= GetRowCount()  )
         return maAdditionalData.getData( nId - GetRowCount() );
 
-    if (  (size_t)nId >= mpTableDataValues[nDim].size() || nDim >= mnColumnCount  || nId < 0  )
+    if (  (size_t)nId >= maTableDataValues[nDim].size() || nDim >= mnColumnCount  || nId < 0  )
         return NULL;
     else
-        return mpTableDataValues[nDim][nId];
+        return maTableDataValues[nDim][nId];
 }
 
 SCROW ScDPTableDataCache::GetRowCount() const
 {
     if ( IsValid() )
-        return mpSourceData[0].size();
+        return maSourceData[0].size();
     else
         return 0;
 }
@@ -931,16 +935,16 @@ SCROW ScDPTableDataCache::GetRowCount() const
 const std::vector<ScDPItemData*>& ScDPTableDataCache::GetDimMemberValues(SCCOL nDim) const
 {
     DBG_ASSERT( nDim>=0 && nDim < mnColumnCount ," nDim < mnColumnCount ");
-    return mpTableDataValues[nDim];
+    return maTableDataValues[nDim];
 }
 
 SCROW ScDPTableDataCache::GetSortedItemDataId(SCCOL nDim, SCROW nOrder) const
 {
     DBG_ASSERT ( IsValid(), "IsValid");
     DBG_ASSERT( nDim>=0 && nDim < mnColumnCount,  "nDim < mnColumnCount");
-    DBG_ASSERT( nOrder >= 0 && (size_t) nOrder < mpGlobalOrder[nDim].size(), "nOrder < mpGlobalOrder[nDim].size()" );
+    DBG_ASSERT( nOrder >= 0 && (size_t) nOrder < maGlobalOrder[nDim].size(), "nOrder < mpGlobalOrder[nDim].size()" );
 
-    return mpGlobalOrder[nDim][nOrder];
+    return maGlobalOrder[nDim][nOrder];
 }
 
 ULONG ScDPTableDataCache::GetNumType(ULONG nFormat) const
@@ -956,27 +960,27 @@ ULONG ScDPTableDataCache::GetNumberFormat( long nDim ) const
 {
     if ( nDim >= mnColumnCount )
         return 0;
-    if ( mpTableDataValues[nDim].size()==0 )
+    if ( maTableDataValues[nDim].size()==0 )
         return 0;
     else
-        return mpTableDataValues[nDim][0]->nNumFormat;
+        return maTableDataValues[nDim][0]->nNumFormat;
 }
 
 bool ScDPTableDataCache::IsDateDimension( long nDim ) const
 {
     if ( nDim >= mnColumnCount )
         return false;
-    else if ( mpTableDataValues[nDim].size()==0 )
+    else if ( maTableDataValues[nDim].size()==0 )
         return false;
     else
-        return mpTableDataValues[nDim][0]->IsDate();
+        return maTableDataValues[nDim][0]->IsDate();
 
 }
 
 SCROW ScDPTableDataCache::GetDimMemberCount( SCCOL nDim ) const
 {
     DBG_ASSERT( nDim>=0 && nDim < mnColumnCount ," ScDPTableDataCache::GetDimMemberCount : out of bound ");
-    return mpTableDataValues[nDim].size();
+    return maTableDataValues[nDim].size();
 }
 
 const ScDPItemData* ScDPTableDataCache::GetSortedItemData(SCCOL nDim, SCROW nOrder) const
@@ -999,9 +1003,9 @@ SCROW ScDPTableDataCache::GetIdByItemData(long nDim, String sItemData ) const
 {
     if ( nDim < mnColumnCount && nDim >=0 )
     {
-        for ( size_t n = 0; n< mpTableDataValues[nDim].size(); n++ )
+        for ( size_t n = 0; n< maTableDataValues[nDim].size(); n++ )
         {
-            if ( mpTableDataValues[nDim][n]->GetString() == sItemData )
+            if ( maTableDataValues[nDim][n]->GetString() == sItemData )
                 return n;
         }
     }
@@ -1014,9 +1018,9 @@ SCROW ScDPTableDataCache::GetIdByItemData( long nDim, const ScDPItemData& rData 
 {
     if ( nDim < mnColumnCount && nDim >=0 )
     {
-        for ( size_t n = 0; n< mpTableDataValues[nDim].size(); n++ )
+        for ( size_t n = 0; n< maTableDataValues[nDim].size(); n++ )
         {
-            if ( *mpTableDataValues[nDim][n] == rData )
+            if ( *maTableDataValues[nDim][n] == rData )
                 return n;
         }
     }
@@ -1035,24 +1039,24 @@ SCROW ScDPTableDataCache::GetAdditionalItemID( const ScDPItemData& rData )
 }
 
 
-SCROW ScDPTableDataCache::GetOrder(long nDim, SCROW nIndex) const
+SCROW ScDPTableDataCache::GetOrder(long nDim, SCROW nIndex)
 {
     DBG_ASSERT( IsValid(), "  IsValid() == false " );
     DBG_ASSERT( nDim >=0 && nDim < mnColumnCount, "ScDPTableDataCache::GetOrder : out of bound" );
 
-    if ( mpIndexOrder[nDim].size() !=  mpGlobalOrder[nDim].size() )
+    if ( maIndexOrder[nDim].size() !=  maGlobalOrder[nDim].size() )
     { //not inited
         SCROW i  = 0;
-        mpIndexOrder[nDim].resize(  mpGlobalOrder[nDim].size(), 0 );
-        for ( size_t n = 0 ; n<  mpGlobalOrder[nDim].size(); n++ )
+        maIndexOrder[nDim].resize(  maGlobalOrder[nDim].size(), 0 );
+        for ( size_t n = 0 ; n<  maGlobalOrder[nDim].size(); n++ )
         {
-            i =  mpGlobalOrder[nDim][n];
-            mpIndexOrder[nDim][ i ] = n;
+            i =  maGlobalOrder[nDim][n];
+            maIndexOrder[nDim][i] = n;
         }
     }
 
-    DBG_ASSERT( nIndex>=0 && (size_t)nIndex < mpIndexOrder[nDim].size() , "ScDPTableDataCache::GetOrder");
-    return  mpIndexOrder[nDim][nIndex];
+    DBG_ASSERT( nIndex>=0 && (size_t)nIndex < maIndexOrder[nDim].size() , "ScDPTableDataCache::GetOrder");
+    return  maIndexOrder[nDim][nIndex];
 }
 
 ScDocument* ScDPTableDataCache::GetDoc() const
