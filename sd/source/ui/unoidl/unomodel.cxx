@@ -1193,15 +1193,15 @@ sal_Bool SAL_CALL SdXImpressDocument::supportsService( const OUString& ServiceNa
 
     if (
         (ServiceName.equalsAscii("com.sun.star.document.OfficeDocument"       )) ||
-        (ServiceName.equalsAscii("com.sun.star.drawing.GenericDrawingDocument")) ||
-        (ServiceName.equalsAscii("com.sun.star.drawing.DrawingDocumentFactory"))
+        (ServiceName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.GenericDrawingDocument"))) ||
+        (ServiceName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.DrawingDocumentFactory")))
        )
     {
         return sal_True;
     }
 
     return (
-            ( mbImpressDoc && ServiceName.equalsAscii("com.sun.star.presentation.PresentationDocument")) ||
+            ( mbImpressDoc && ServiceName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.presentation.PresentationDocument"))) ||
             (!mbImpressDoc && ServiceName.equalsAscii("com.sun.star.drawing.DrawingDocument"          ))
            );
 }
@@ -1471,7 +1471,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SdXImpressDocument::getRenderer( 
     sal_Bool bExportNotesPages = sal_False;
     for( sal_Int32 nProperty = 0, nPropertyCount = rxOptions.getLength(); nProperty < nPropertyCount; ++nProperty )
     {
-        if( rxOptions[ nProperty ].Name.equalsAscii( "ExportNotesPages" ) )
+        if( rxOptions[ nProperty ].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ExportNotesPages" ) ) )
             rxOptions[ nProperty].Value >>= bExportNotesPages;
     }
     uno::Sequence< beans::PropertyValue > aRenderer;

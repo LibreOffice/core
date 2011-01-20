@@ -2350,7 +2350,7 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                 sal_uInt32 nMirrorFlags;
                 rtl::OUString sCustomShapeType;
                 MSO_SPT eShapeType = aPropOpt.GetCustomShapeType( mXShape, nMirrorFlags, sCustomShapeType );
-                if ( sCustomShapeType.equalsAscii( "col-502ad400" ) || sCustomShapeType.equalsAscii( "col-60da8460" ) )
+                if ( sCustomShapeType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "col-502ad400" ) ) || sCustomShapeType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "col-60da8460" ) ) )
                 {   // sj: creating metafile for customshapes that can't be saved to ms format properly
                     ImplCreateShape( ESCHER_ShpInst_PictureFrame, 0xa00, aSolverContainer );
                     if ( aPropOpt.CreateGraphicProperties( mXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "MetaFile" ) ), sal_False ) )

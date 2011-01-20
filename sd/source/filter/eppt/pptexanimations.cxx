@@ -396,7 +396,7 @@ void AnimationExporter::processAfterEffectNodes( const Reference< XAnimationNode
 
                                     while( nLength-- )
                                     {
-                                        if( p->Name.equalsAscii( "master-element" ) )
+                                        if( p->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "master-element" ) ) )
                                         {
                                             p->Value >>= xMaster;
                                             break;

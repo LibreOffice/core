@@ -236,43 +236,43 @@ ShapeExport& PowerPointShapeExport::WriteTextShape( Reference< XShape > xShape )
 
     DBG(printf( "shape(text): %s\n", USS(sShapeType) ));
 
-    if( sShapeType.equalsAscii( "com.sun.star.drawing.TextShape" ) )
+    if( sShapeType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.drawing.TextShape" ) ) )
     {
     ShapeExport::WriteTextShape( xShape );
     }
-    else if( sShapeType.equalsAscii( "com.sun.star.presentation.DateTimeShape" ) )
+    else if( sShapeType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.presentation.DateTimeShape" ) ) )
     {
         if( !WritePlaceholder( xShape, DateAndTime, mbMaster ) )
             ShapeExport::WriteTextShape( xShape );
     }
-    else if( sShapeType.equalsAscii( "com.sun.star.presentation.FooterShape" ) )
+    else if( sShapeType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.presentation.FooterShape" ) ) )
     {
         if( !WritePlaceholder( xShape, Footer, mbMaster ) )
             ShapeExport::WriteTextShape( xShape );
     }
-    else if( sShapeType.equalsAscii( "com.sun.star.presentation.HeaderShape" ) )
+    else if( sShapeType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.presentation.HeaderShape" ) ) )
     {
         if( !WritePlaceholder( xShape, Header, mbMaster ) )
             ShapeExport::WriteTextShape( xShape );
     }
-    else if( sShapeType.equalsAscii( "com.sun.star.presentation.NotesShape" ) )
+    else if( sShapeType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.presentation.NotesShape" ) ) )
     {
         if( mePageType == NOTICE && mrExport.GetPresObj() )
             WritePlaceholderShape( xShape, Notes );
         else
             ShapeExport::WriteTextShape( xShape );
     }
-    else if( sShapeType.equalsAscii( "com.sun.star.presentation.OutlinerShape" ) )
+    else if( sShapeType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.presentation.OutlinerShape" ) ) )
     {
         if( !WritePlaceholder( xShape, Outliner, mbMaster ) )
             ShapeExport::WriteTextShape( xShape );
     }
-    else if( sShapeType.equalsAscii( "com.sun.star.presentation.SlideNumberShape" ) )
+    else if( sShapeType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.presentation.SlideNumberShape" ) ) )
     {
         if( !WritePlaceholder( xShape, SlideNumber, mbMaster ) )
             ShapeExport::WriteTextShape( xShape );
     }
-    else if( sShapeType.equalsAscii( "com.sun.star.presentation.TitleTextShape" ) )
+    else if( sShapeType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.presentation.TitleTextShape" ) ) )
     {
         if( !WritePlaceholder( xShape, Title, mbMaster ) )
             ShapeExport::WriteTextShape( xShape );
@@ -287,18 +287,18 @@ ShapeExport& PowerPointShapeExport::WriteUnknownShape( Reference< XShape > xShap
 
     DBG(printf( "shape(unknown): %s\n", USS(sShapeType) ));
 
-    if( sShapeType.equalsAscii( "com.sun.star.drawing.GroupShape" ) )
+    if( sShapeType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.drawing.GroupShape" ) ) )
     {
         Reference< XIndexAccess > rXIndexAccess( xShape, UNO_QUERY );
 
         mrExport.EnterGroup( rXIndexAccess );
         DBG(printf( "enter group\n" ));
     }
-    else if( sShapeType.equalsAscii( "com.sun.star.drawing.PageShape" ) )
+    else if( sShapeType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.drawing.PageShape" ) ) )
     {
         WritePageShape( xShape, mePageType, mrExport.GetPresObj() );
     }
-    else if( sShapeType.equalsAscii( "com.sun.star.presentation.SubtitleShape" ) )
+    else if( sShapeType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.presentation.SubtitleShape" ) ) )
     {
         if( !WritePlaceholder( xShape, Subtitle, mbMaster ) )
             ShapeExport::WriteTextShape( xShape );
@@ -713,11 +713,11 @@ void PowerPointExport::WriteAnimationAttributeName( FSHelperPtr pFS, const OUStr
     DBG(printf("write attribute name: %s\n", USS( rAttributeName )));
 
     const char* sAttributeName = NULL;
-    if( rAttributeName.equalsAscii( "Visibility" ) ) {
+    if( rAttributeName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Visibility" ) ) ) {
     sAttributeName = "style.visibility";
-    } else if( rAttributeName.equalsAscii( "X" ) ) {
+    } else if( rAttributeName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "X" ) ) ) {
     sAttributeName = "ppt_x";
-    } else if( rAttributeName.equalsAscii( "Y" ) ) {
+    } else if( rAttributeName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Y" ) ) ) {
     sAttributeName = "ppt_y";
     }
 

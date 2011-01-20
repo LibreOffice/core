@@ -269,8 +269,8 @@ namespace {
     {
     public:
         Selection (const OUString& rsSelection, const SdPage* pCurrentPage)
-            : mbAreAllPagesSelected(rsSelection.equalsAscii("all")),
-              mbIsShapeSelection(rsSelection.equalsAscii("selection")),
+            : mbAreAllPagesSelected(rsSelection.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("all"))),
+              mbIsShapeSelection(rsSelection.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("selection"))),
               mnCurrentPageIndex(pCurrentPage!=NULL ? (pCurrentPage->GetPageNum()-1)/2 : -1),
               mpSelectedPages()
         {

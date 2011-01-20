@@ -1777,7 +1777,7 @@ String AssistentDlgImpl::GetUiTextForCommand (const ::rtl::OUString& sCommandURL
                 for (sal_Int32 i=0; i<nCount; i++)
                 {
                     ::rtl::OUString sPropertyName (aProperties[i].Name);
-                    if (sPropertyName.equalsAscii("Label"))
+                    if (sPropertyName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Label")))
                     {
                         aProperties[i].Value >>= sString;
                         break;
