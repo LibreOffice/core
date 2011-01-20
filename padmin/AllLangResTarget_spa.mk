@@ -27,7 +27,7 @@
 
 $(eval $(call gb_AllLangResTarget_AllLangResTarget,spa))
 
-$(eval $(call gb_AllLangResTarget_set_reslocation,spa,padmin/source))
+$(eval $(call gb_AllLangResTarget_set_reslocation,spa,padmin))
 
 $(eval $(call gb_AllLangResTarget_add_srs,spa,\
     padmin/source \
