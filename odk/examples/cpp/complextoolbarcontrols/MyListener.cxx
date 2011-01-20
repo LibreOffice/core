@@ -63,7 +63,7 @@ css::uno::Any SAL_CALL MyListener::execute(const css::uno::Sequence< css::beans:
     const css::beans::NamedValue* p = lArguments.getConstArray();
     for (i=0; i<c; ++i)
     {
-        if (p[i].Name.equalsAscii("Environment"))
+        if (p[i].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Environment")))
         {
             p[i].Value >>= lEnv;
             break;
@@ -76,12 +76,12 @@ css::uno::Any SAL_CALL MyListener::execute(const css::uno::Sequence< css::beans:
     p = lEnv.getConstArray();
     for (i=0; i<c; ++i)
     {
-        if (p[i].Name.equalsAscii("Model"))
+        if (p[i].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Model")))
         {
             p[i].Value >>= xModel;
             break;
         }
-        if (p[i].Name.equalsAscii("Frame"))
+        if (p[i].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Frame")))
         {
             css::uno::Reference< css::frame::XController > xController;
             css::uno::Reference< css::frame::XFrame >      xFrame;

@@ -84,11 +84,11 @@ OUString SAL_CALL FilterDetect::detect(Sequence< PropertyValue >& aArguments )
     for ( sal_Int32 i = 0 ; i < aArguments.getLength(); i++)
     {
         OUString aName = aArguments[i].Name;
-        if (aName.equalsAscii("TypeName" ) )
+        if (aName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("TypeName" ) ) )
             aArguments[i].Value >>= sOriginalTypeName;
-        if (aName.equalsAscii("URL" ) )
+        if (aName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("URL" ) ) )
             aArguments[i].Value >>= sURL;
-        if (aName.equalsAscii("InputStream" ) )
+        if (aName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("InputStream" ) ) )
             aArguments[i].Value >>= xInStream;
     }
 

@@ -170,13 +170,13 @@ Reference< XDispatch > SAL_CALL MyProtocolHandler::queryDispatch(   const URL& a
             // ohne ein entsprechendes Dokument funktioniert der Handler nicht
             return xRet;
 
-        if ( aURL.Path.equalsAscii("Command1" ) ||
-             aURL.Path.equalsAscii("Command2" ) ||
-             aURL.Path.equalsAscii("Command3" ) ||
-             aURL.Path.equalsAscii("Command4" ) ||
-             aURL.Path.equalsAscii("Command5" ) ||
-             aURL.Path.equalsAscii("Command6" ) ||
-             aURL.Path.equalsAscii("Command7" ) )
+        if ( aURL.Path.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("Command1" ) ) ||
+             aURL.Path.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("Command2" ) ) ||
+             aURL.Path.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("Command3" ) ) ||
+             aURL.Path.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("Command4" ) ) ||
+             aURL.Path.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("Command5" ) ) ||
+             aURL.Path.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("Command6" ) ) ||
+             aURL.Path.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("Command7" ) ) )
         {
             xRet = aListenerHelper.GetDispatch( mxFrame, aURL.Path );
             if ( !xRet.is() )
@@ -214,7 +214,7 @@ sal_Bool SAL_CALL MyProtocolHandler_supportsService( const ::rtl::OUString& Serv
 {
     return (
             ServiceName.equalsAscii(MYPROTOCOLHANDLER_SERVICENAME  ) ||
-            ServiceName.equalsAscii("com.sun.star.frame.ProtocolHandler")
+            ServiceName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.frame.ProtocolHandler"))
            );
 }
 
@@ -342,7 +342,7 @@ void SAL_CALL BaseDispatch::dispatch( const URL& aURL, const Sequence < Property
             // just enable this command
 
             // set enable flag according to selection
-            if ( aText.equalsAscii( "Button Disabled" ))
+            if ( aText.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Button Disabled" ) ))
                 mbButtonEnabled = sal_False;
             else
                 mbButtonEnabled = sal_True;
@@ -373,9 +373,9 @@ void SAL_CALL BaseDispatch::dispatch( const URL& aURL, const Sequence < Property
 
 void SAL_CALL BaseDispatch::addStatusListener( const Reference< XStatusListener >& xControl, const URL& aURL ) throw (RuntimeException)
 {
-    if ( aURL.Protocol.equalsAscii("vnd.demo.complextoolbarcontrols.demoaddon:") )
+    if ( aURL.Protocol.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("vnd.demo.complextoolbarcontrols.demoaddon:")) )
     {
-        if ( aURL.Path.equalsAscii("Command1" ) )
+        if ( aURL.Path.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("Command1" ) ) )
         {
             // just enable this command
             ::com::sun::star::frame::FeatureStateEvent aEvent;
@@ -386,7 +386,7 @@ void SAL_CALL BaseDispatch::addStatusListener( const Reference< XStatusListener 
             aEvent.State <<= Any();
             xControl->statusChanged( aEvent );
         }
-        else if ( aURL.Path.equalsAscii("Command2" ) )
+        else if ( aURL.Path.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("Command2" ) ) )
         {
             // just enable this command
             ::com::sun::star::frame::FeatureStateEvent aEvent;
@@ -397,7 +397,7 @@ void SAL_CALL BaseDispatch::addStatusListener( const Reference< XStatusListener 
             aEvent.State <<= Any();
             xControl->statusChanged( aEvent );
         }
-        else if ( aURL.Path.equalsAscii("Command3" ) )
+        else if ( aURL.Path.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("Command3" ) ) )
         {
             // A toggle dropdown box is normally used for a group of commands
             // where the user can select the last issued command easily.
@@ -419,7 +419,7 @@ void SAL_CALL BaseDispatch::addStatusListener( const Reference< XStatusListener 
             aArgs[0].Value <<= sal_Int32( 0 );
             SendCommandTo( xControl, aURL, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CheckItemPos")), aArgs, sal_True );
         }
-        else if ( aURL.Path.equalsAscii("Command4" ) )
+        else if ( aURL.Path.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("Command4" ) ) )
         {
             // A dropdown box is normally used for a group of dependent modes, where
             // the user can only select one. The modes cannot be combined.
@@ -443,7 +443,7 @@ void SAL_CALL BaseDispatch::addStatusListener( const Reference< XStatusListener 
             aArgs[0].Value <<= nPos;
             SendCommandTo( xControl, aURL, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CheckItemPos")), aArgs, sal_True );
         }
-        else if ( aURL.Path.equalsAscii("Command5" ) )
+        else if ( aURL.Path.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("Command5" ) ) )
         {
             // A spin button
             Sequence< NamedValue > aArgs( 5 );
@@ -462,7 +462,7 @@ void SAL_CALL BaseDispatch::addStatusListener( const Reference< XStatusListener 
 
             SendCommandTo( xControl, aURL, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SetValues")), aArgs, sal_True );
         }
-        else if ( aURL.Path.equalsAscii("Command7" ) )
+        else if ( aURL.Path.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("Command7" ) ) )
         {
             // A dropdown box is normally used for a group of commands
             // where the user can select one of a defined set.
@@ -497,13 +497,13 @@ void SAL_CALL BaseDispatch::removeStatusListener( const Reference< XStatusListen
 
 void SAL_CALL BaseDispatch::controlEvent( const ControlEvent& Event ) throw (RuntimeException)
 {
-    if ( Event.aURL.Protocol.equalsAscii("vnd.demo.complextoolbarcontrols.demoaddon:" ))
+    if ( Event.aURL.Protocol.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("vnd.demo.complextoolbarcontrols.demoaddon:" ) ))
     {
-        if ( Event.aURL.Path.equalsAscii( "Command2" ))
+        if ( Event.aURL.Path.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Command2" ) ))
         {
             // We get notifications whenever the text inside the combobox has been changed.
             // We store the new text into a member.
-            if ( Event.Event.equalsAscii( "TextChanged" ))
+            if ( Event.Event.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "TextChanged" ) ))
             {
                 rtl::OUString aNewText;
                 sal_Bool      bHasText( sal_False );
