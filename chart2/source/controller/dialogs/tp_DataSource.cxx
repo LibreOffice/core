@@ -359,6 +359,8 @@ DataSourceTabPage::DataSourceTabPage(
     if( m_apLB_SERIES->First())
         m_apLB_SERIES->Select( m_apLB_SERIES->First());
     m_apLB_SERIES->GrabFocus();
+    m_aBTN_UP.SetAccessibleName(String(SchResId(STR_BUTTON_UP)));
+    m_aBTN_DOWN.SetAccessibleName(String(SchResId(STR_BUTTON_DOWN)));
 }
 
 DataSourceTabPage::~DataSourceTabPage()

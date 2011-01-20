@@ -1173,6 +1173,8 @@ void CombiColumnLineChartDialogController::showExtraControls( Window* pParent, c
 
     m_pFT_NumberOfLines->Show();
     m_pMF_NumberOfLines->Show();
+    m_pMF_NumberOfLines->SetAccessibleName(m_pFT_NumberOfLines->GetText());
+    m_pMF_NumberOfLines->SetAccessibleRelationLabeledBy(m_pFT_NumberOfLines);
 }
 void CombiColumnLineChartDialogController::hideExtraControls() const
 {

@@ -48,6 +48,8 @@ BarGeometryResources::BarGeometryResources( Window* pWindow )
 {
     m_aFT_Geometry.SetText( String( SchResId( STR_BAR_GEOMETRY )) );
     m_aFT_Geometry.SetSizePixel( m_aFT_Geometry.CalcMinimumSize() );
+    m_aLB_Geometry.SetAccessibleName(m_aFT_Geometry.GetText());
+    m_aLB_Geometry.SetAccessibleRelationLabeledBy(&m_aFT_Geometry);
 }
 void BarGeometryResources::SetPosPixel( const Point& rPosition )
 {

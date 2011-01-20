@@ -101,6 +101,15 @@ String STR_PAGE_POSITION
     Text [ en-US ] = "Position" ;
 };
 
+String STR_BUTTON_UP
+{
+    Text [ en-US ] = "Up";
+};
+String STR_BUTTON_DOWN
+{
+    Text [ en-US ] = "Down";
+};
+
 String STR_PAGE_LAYOUT
 {
     Text [ en-US ] = "Layout";
