@@ -110,7 +110,13 @@ class ScTabViewShell;
 class SC_DLLPUBLIC ScDPItemData
 {
 public:
-    enum { MK_VAL = 0x01, MK_DATA = MK_VAL<<1, MK_ERR = MK_DATA<<1, MK_DATE = MK_ERR<<1, MK_DATEPART = MK_DATE<<1 };
+    enum {
+        MK_VAL      = 0x01,
+        MK_DATA     = 0x02,
+        MK_ERR      = 0x04,
+        MK_DATE     = 0x08,
+        MK_DATEPART = 0x10
+    };
 private:
     union
     {
