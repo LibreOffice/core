@@ -202,17 +202,17 @@ uno::Reference< uno::XInterface > SAL_CALL OStorageFactory::createInstanceWithAr
 
             for ( sal_Int32 nInd = 0, nNumArgs = 1; nInd < aDescr.getLength(); nInd++ )
             {
-                if ( aDescr[nInd].Name.equalsAscii( "InteractionHandler" )
-                  || aDescr[nInd].Name.equalsAscii( "Password" )
-                  || aDescr[nInd].Name.equalsAscii( "RepairPackage" )
-                  || aDescr[nInd].Name.equalsAscii( "StatusIndicator" ) )
-                  // || aDescr[nInd].Name.equalsAscii( "Unpacked" ) // TODO:
+                if ( aDescr[nInd].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "InteractionHandler" ) )
+                  || aDescr[nInd].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Password" ) )
+                  || aDescr[nInd].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "RepairPackage" ) )
+                  || aDescr[nInd].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "StatusIndicator" ) ) )
+                  // || aDescr[nInd].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Unpacked" ) ) // TODO:
                 {
                     aPropsToSet.realloc( ++nNumArgs );
                     aPropsToSet[nNumArgs-1].Name = aDescr[nInd].Name;
                     aPropsToSet[nNumArgs-1].Value = aDescr[nInd].Value;
                 }
-                else if ( aDescr[nInd].Name.equalsAscii( "StorageFormat" ) )
+                else if ( aDescr[nInd].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "StorageFormat" ) ) )
                 {
                     ::rtl::OUString aFormatName;
                     sal_Int32 nFormatID = 0;

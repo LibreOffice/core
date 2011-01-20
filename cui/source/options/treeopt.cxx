@@ -1956,14 +1956,14 @@ void OfaTreeOptionsDialog::Initialize( const Reference< XFrame >& _xFrame )
         // Textdokument
         bHasAnyFilter = sal_True;
         ResStringArray& rTextArray = aDlgResource.GetTextArray();
-        if (   aFactory.equalsAscii( "com.sun.star.text.TextDocument" )
-            || aFactory.equalsAscii( "com.sun.star.text.WebDocument" )
-            || aFactory.equalsAscii( "com.sun.star.text.GlobalDocument" ) )
+        if (   aFactory.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.text.TextDocument" ) )
+            || aFactory.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.text.WebDocument" ) )
+            || aFactory.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.text.GlobalDocument" ) ) )
         {
             SfxModule* pSwMod = (*(SfxModule**) GetAppData(SHL_WRITER));
             if ( !lcl_isOptionHidden( SID_SW_EDITOPTIONS, aOptionsDlgOpt ) )
             {
-                if ( aFactory.equalsAscii( "com.sun.star.text.WebDocument" ) )
+                if ( aFactory.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.text.WebDocument" ) ) )
                     setGroupName( C2U("WriterWeb"), rTextArray.GetString(0) );
                 else
                     setGroupName( C2U("Writer"), rTextArray.GetString(0) );
@@ -2005,7 +2005,7 @@ void OfaTreeOptionsDialog::Initialize( const Reference< XFrame >& _xFrame )
     if ( aModuleOpt.IsModuleInstalled( SvtModuleOptions::E_SCALC ) )
     {
         bHasAnyFilter = sal_True;
-        if ( aFactory.equalsAscii( "com.sun.star.sheet.SpreadsheetDocument" ))
+        if ( aFactory.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.sheet.SpreadsheetDocument" ) ))
         {
             if ( !lcl_isOptionHidden( SID_SC_EDITOPTIONS, aOptionsDlgOpt ) )
             {
@@ -2033,7 +2033,7 @@ void OfaTreeOptionsDialog::Initialize( const Reference< XFrame >& _xFrame )
     if ( aModuleOpt.IsModuleInstalled( SvtModuleOptions::E_SIMPRESS ) )
     {
         bHasAnyFilter = sal_True;
-        if ( aFactory.equalsAscii( "com.sun.star.presentation.PresentationDocument" ))
+        if ( aFactory.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.presentation.PresentationDocument" ) ))
         {
             if ( !lcl_isOptionHidden( SID_SD_EDITOPTIONS, aOptionsDlgOpt ) )
             {
@@ -2057,7 +2057,7 @@ void OfaTreeOptionsDialog::Initialize( const Reference< XFrame >& _xFrame )
     // Draw options
     if ( aModuleOpt.IsModuleInstalled( SvtModuleOptions::E_SDRAW ) )
     {
-        if ( aFactory.equalsAscii( "com.sun.star.drawing.DrawingDocument" ))
+        if ( aFactory.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.drawing.DrawingDocument" ) ))
         {
             if ( !lcl_isOptionHidden( SID_SD_GRAPHIC_OPTIONS, aOptionsDlgOpt ) )
             {
@@ -2081,7 +2081,7 @@ void OfaTreeOptionsDialog::Initialize( const Reference< XFrame >& _xFrame )
     // Math options
     if ( aModuleOpt.IsModuleInstalled( SvtModuleOptions::E_SMATH ) )
     {
-        if ( aFactory.equalsAscii( "com.sun.star.formula.FormulaProperties" ))
+        if ( aFactory.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.formula.FormulaProperties" ) ))
         {
             if ( !lcl_isOptionHidden( SID_SM_EDITOPTIONS, aOptionsDlgOpt ) )
             {

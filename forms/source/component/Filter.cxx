@@ -573,14 +573,14 @@ namespace frm
                 if (xVclWindow.is())
                 {
                     Any aValue;
-                    if  (   aText.equalsAscii( "1" )
+                    if  (   aText.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "1" ) )
                         ||  aText.equalsIgnoreAsciiCaseAscii( "TRUE" )
                         ||  aText.equalsIgnoreAsciiCaseAscii( "IS TRUE" )
                         )
                     {
                         aValue <<= (sal_Int32)STATE_CHECK;
                     }
-                    else if (   aText.equalsAscii( "0" )
+                    else if (   aText.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "0" ) )
                             ||  aText.equalsIgnoreAsciiCaseAscii( "FALSE" )
                             )
                     {

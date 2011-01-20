@@ -237,7 +237,7 @@ void SvxHyperlinkNewDocTp::FillDocumentList ()
         // Insert into listbox
         if ( aDocumentUrl.getLength() )
         {
-            if ( aDocumentUrl.equalsAscii( "private:factory/simpress?slot=6686" ) )             // SJ: #106216# do not start
+            if ( aDocumentUrl.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "private:factory/simpress?slot=6686" ) ) )              // SJ: #106216# do not start
                 aDocumentUrl = String( RTL_CONSTASCII_USTRINGPARAM( "private:factory/simpress" ) ); // the AutoPilot for impress
 
             // insert private-url and default-extension as user-data

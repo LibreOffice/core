@@ -1169,7 +1169,7 @@ HRESULT DocumentHolder::SetVisArea( const RECTL *pRect )
     {
         uno::Sequence< beans::PropertyValue > aArgs = m_xDocument->getArgs();
         for ( sal_Int32 nInd = 0; nInd < aArgs.getLength(); nInd++ )
-            if ( aArgs[nInd].Name.equalsAscii( "WinExtent" ) )
+            if ( aArgs[nInd].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "WinExtent" ) ) )
             {
                 // should allways be there
                 uno::Sequence< sal_Int32 > aRect(4);
@@ -1197,7 +1197,7 @@ HRESULT DocumentHolder::GetVisArea( RECTL *pRect )
     {
         uno::Sequence< beans::PropertyValue > aArgs = m_xDocument->getArgs();
         for ( sal_Int32 nInd = 0; nInd < aArgs.getLength(); nInd++ )
-            if ( aArgs[nInd].Name.equalsAscii( "WinExtent" ) )
+            if ( aArgs[nInd].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "WinExtent" ) ) )
             {
                 uno::Sequence< sal_Int32 > aRect;
                 if ( ( aArgs[nInd].Value >>= aRect ) && aRect.getLength() == 4 )
@@ -1224,7 +1224,7 @@ HRESULT DocumentHolder::GetDocumentBorder( RECT *pRect )
     {
         uno::Sequence< beans::PropertyValue > aArgs = m_xDocument->getArgs();
         for ( sal_Int32 nInd = 0; nInd < aArgs.getLength(); nInd++ )
-            if ( aArgs[nInd].Name.equalsAscii( "DocumentBorder" ) )
+            if ( aArgs[nInd].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "DocumentBorder" ) ) )
             {
                 uno::Sequence< sal_Int32 > aRect;
                 if ( ( aArgs[nInd].Value >>= aRect ) && aRect.getLength() == 4 )

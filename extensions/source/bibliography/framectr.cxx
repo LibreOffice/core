@@ -224,8 +224,8 @@ BibFrameController_Impl::~BibFrameController_Impl()
 sal_Bool SAL_CALL BibFrameController_Impl::supportsService( const ::rtl::OUString& sServiceName ) throw (::com::sun::star::uno::RuntimeException)
 {
     return (
-            sServiceName.equalsAscii("com.sun.star.frame.Bibliography") ||
-            sServiceName.equalsAscii("com.sun.star.frame.Controller")
+            sServiceName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.frame.Bibliography")) ||
+            sServiceName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.frame.Controller"))
            );
 }
 
@@ -748,7 +748,7 @@ void BibFrameController_Impl::addStatusListener(
     else if(aURL.Path == C2U("Bib/sdbsource") ||
             aURL.Path == C2U("Bib/Mapping") ||
             aURL.Path == C2U("Bib/autoFilter") ||
-            aURL.Path.equalsAscii("Bib/standardFilter"))
+            aURL.Path.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Bib/standardFilter")))
     {
         aEvent.IsEnabled  = sal_True;
     }

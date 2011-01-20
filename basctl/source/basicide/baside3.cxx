@@ -806,8 +806,8 @@ BOOL DialogWindow::SaveDialog()
                             aExtension = aCompleteName.copy( iDot + 1 );
                         }
 
-                        if( aExtension.equalsAscii( "properties" ) ||
-                            aExtension.equalsAscii( "default" ) )
+                        if( aExtension.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "properties" ) ) ||
+                            aExtension.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "default" ) ) )
                         {
                             if( aPureName.indexOf( aDialogName_ ) == 0 )
                             {

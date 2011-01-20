@@ -355,7 +355,7 @@ void SvxConfigGroupListBox_Impl::fillScriptList( const Reference< browse::XBrows
             Sequence< Reference< browse::XBrowseNode > > children =
                 _rxRootNode->getChildNodes();
 
-            BOOL bIsRootNode = _rxRootNode->getName().equalsAscii("Root");
+            BOOL bIsRootNode = _rxRootNode->getName().equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Root"));
 
             /* To mimic current starbasic behaviour we
             need to make sure that only the current document
@@ -385,12 +385,12 @@ void SvxConfigGroupListBox_Impl::fillScriptList( const Reference< browse::XBrows
                         // then the user & share are added at depth=1
                     )
                 {
-                    if ( sUIName.equalsAscii( "user" ) )
+                    if ( sUIName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "user" ) ) )
                     {
                         sUIName = m_sMyMacros;
                         bIsRootNode = sal_True;
                     }
-                    else if ( sUIName.equalsAscii( "share" ) )
+                    else if ( sUIName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "share" ) ) )
                     {
                         sUIName = m_sProdMacros;
                         bIsRootNode = sal_True;
@@ -626,7 +626,7 @@ Image SvxConfigGroupListBox_Impl::GetImage(
     Image aImage;
     if ( bIsRootNode )
     {
-        if ( node->getName().equalsAscii( "user" ) || node->getName().equalsAscii( "share" ) )
+        if ( node->getName().equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "user" ) ) || node->getName().equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "share" ) ) )
         {
             aImage = m_hdImage;
         }
@@ -783,7 +783,7 @@ void SvxConfigGroupListBox_Impl::GroupSelected()
                         {
                             for ( sal_Int32 k = 0; k < aPropSeq.getLength(); ++k )
                             {
-                                if ( aPropSeq[k].Name.equalsAscii( "Name" ) )
+                                if ( aPropSeq[k].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Name" ) ) )
                                 {
                                     aPropSeq[k].Value >>= aLabel;
                                     break;

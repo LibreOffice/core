@@ -742,13 +742,13 @@ namespace pcr
         ::std::vector< EventTranslation > aEventTranslations;
         aEventTranslations.reserve(2);
 
-        if ( _event.PropertyName.equalsAscii( "Position" ) )
+        if ( _event.PropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Position" ) ) )
         {
             AwtPoint aPos = m_xShape->getPosition();
             aEventTranslations.push_back( EventTranslation( PROPERTY_POSITIONX, makeAny( aPos.X ) ) );
             aEventTranslations.push_back( EventTranslation( PROPERTY_POSITIONY, makeAny( aPos.Y ) ) );
         }
-        else if ( _event.PropertyName.equalsAscii( "Size" ) )
+        else if ( _event.PropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Size" ) ) )
         {
             AwtSize aSize = m_xShape->getSize();
             aEventTranslations.push_back( EventTranslation( PROPERTY_WIDTH, makeAny( aSize.Width ) ) );

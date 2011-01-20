@@ -201,14 +201,14 @@ UpdateCheckJob::execute(const uno::Sequence<beans::NamedValue>& namedValues)
 {
     for ( sal_Int32 n=namedValues.getLength(); n-- > 0; )
     {
-        if ( namedValues[ n ].Name.equalsAscii( "DynamicData" ) )
+        if ( namedValues[ n ].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "DynamicData" ) ) )
         {
             uno::Sequence<beans::NamedValue> aListProp;
             if ( namedValues[n].Value >>= aListProp )
             {
                 for ( sal_Int32 i=aListProp.getLength(); i-- > 0; )
                 {
-                    if ( aListProp[ i ].Name.equalsAscii( "updateList" ) )
+                    if ( aListProp[ i ].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "updateList" ) ) )
                     {
                         handleExtensionUpdates( aListProp );
                         return uno::Any();
@@ -233,7 +233,7 @@ UpdateCheckJob::execute(const uno::Sequence<beans::NamedValue>& namedValues)
     m_pInitThread.reset(
         new InitUpdateCheckJobThread(
             m_xContext, aConfig,
-            !aEventName.equalsAscii("onFirstVisibleTask")));
+            !aEventName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("onFirstVisibleTask"))));
 
     return uno::Any();
 }

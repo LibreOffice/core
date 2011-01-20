@@ -654,9 +654,9 @@ void SAL_CALL ZipPackage::initialize( const Sequence< Any >& aArguments )
             }
             else if ( ( aArguments[ind] >>= aNamedValue ) )
             {
-                if ( aNamedValue.Name.equalsAscii( "RepairPackage" ) )
+                if ( aNamedValue.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "RepairPackage" ) ) )
                     aNamedValue.Value >>= m_bForceRecovery;
-                else if ( aNamedValue.Name.equalsAscii( "PackageFormat" ) )
+                else if ( aNamedValue.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "PackageFormat" ) ) )
                 {
                     // setting this argument to true means Package format
                     // setting it to false means plain Zip format
@@ -668,7 +668,7 @@ void SAL_CALL ZipPackage::initialize( const Sequence< Any >& aArguments )
 
                     m_pRootFolder->setPackageFormat_Impl( m_nFormat );
                 }
-                else if ( aNamedValue.Name.equalsAscii( "StorageFormat" ) )
+                else if ( aNamedValue.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "StorageFormat" ) ) )
                 {
                     ::rtl::OUString aFormatName;
                     sal_Int32 nFormatID = 0;
@@ -697,14 +697,14 @@ void SAL_CALL ZipPackage::initialize( const Sequence< Any >& aArguments )
 
                     m_pRootFolder->setPackageFormat_Impl( m_nFormat );
                 }
-                else if ( aNamedValue.Name.equalsAscii( "AllowRemoveOnInsert" ) )
+                else if ( aNamedValue.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "AllowRemoveOnInsert" ) ) )
                 {
                     aNamedValue.Value >>= m_bAllowRemoveOnInsert;
                     m_pRootFolder->setRemoveOnInsertMode_Impl( m_bAllowRemoveOnInsert );
                 }
 
                 // for now the progress handler is not used, probably it will never be
-                // if ( aNamedValue.Name.equalsAscii( "ProgressHandler" )
+                // if ( aNamedValue.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ProgressHandler" ) )
             }
             else
             {

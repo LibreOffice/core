@@ -413,7 +413,7 @@ static bool checkBlackList( CFBundleRef i_xBundle )
 
     bool bReject = false;
     // #i102735# VLC plugin prior to 1.0 tends to crash
-    if( aBundleName.equalsAscii( "VLC Plug-in" ) )
+    if( aBundleName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "VLC Plug-in" ) ) )
     {
         sal_Int32 nIndex = 0;
         rtl::OUString aMajor( aBundleVersion.getToken( 0, '.', nIndex ) );
@@ -423,7 +423,7 @@ static bool checkBlackList( CFBundleRef i_xBundle )
         }
     }
     // #i103674# Garmin Communicator Plugin crashes
-    else if( aBundleName.equalsAscii( "Garmin Communicator Plugin" ) )
+    else if( aBundleName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Garmin Communicator Plugin" ) ) )
     {
         bReject = true;
     }

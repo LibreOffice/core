@@ -488,15 +488,15 @@ void OStorage_Impl::OpenOwnPackage()
             sal_Int32 nArgNum = 2;
             for ( sal_Int32 aInd = 0; aInd < m_xProperties.getLength(); aInd++ )
             {
-                if ( m_xProperties[aInd].Name.equalsAscii( "RepairPackage" )
-                  || m_xProperties[aInd].Name.equalsAscii( "ProgressHandler" ) )
+                if ( m_xProperties[aInd].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "RepairPackage" ) )
+                  || m_xProperties[aInd].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ProgressHandler" ) ) )
                 {
                     beans::NamedValue aNamedValue( m_xProperties[aInd].Name,
                                                     m_xProperties[aInd].Value );
                     aArguments.realloc( ++nArgNum );
                     aArguments[nArgNum-1] <<= aNamedValue;
                 }
-                else if ( m_xProperties[aInd].Name.equalsAscii( "Password" ) )
+                else if ( m_xProperties[aInd].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Password" ) ) )
                 {
                     // TODO: implement password setting for documents
                     // the password entry must be removed after setting
@@ -4779,7 +4779,7 @@ void SAL_CALL OStorage::setPropertyValue( const ::rtl::OUString& aPropertyName, 
         throw beans::UnknownPropertyException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
     else if ( m_pData->m_nStorageType == embed::StorageFormats::PACKAGE )
     {
-        if ( aPropertyName.equalsAscii( "MediaType" ) )
+        if ( aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "MediaType" ) ) )
         {
             aValue >>= m_pImpl->m_aMediaType;
             m_pImpl->m_bControlMediaType = sal_True;
@@ -4787,7 +4787,7 @@ void SAL_CALL OStorage::setPropertyValue( const ::rtl::OUString& aPropertyName, 
             m_pImpl->m_bBroadcastModified = sal_True;
             m_pImpl->m_bIsModified = sal_True;
         }
-        else if ( aPropertyName.equalsAscii( "Version" ) )
+        else if ( aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Version" ) ) )
         {
             aValue >>= m_pImpl->m_aVersion;
             m_pImpl->m_bControlVersion = sal_True;
@@ -4799,20 +4799,20 @@ void SAL_CALL OStorage::setPropertyValue( const ::rtl::OUString& aPropertyName, 
                 m_pImpl->m_bIsModified = sal_True;
             }
         }
-        else if ( ( m_pData->m_bIsRoot && ( aPropertyName.equalsAscii( "HasEncryptedEntries" )
-                                    || aPropertyName.equalsAscii( "HasNonEncryptedEntries" )
-                                    || aPropertyName.equalsAscii( "IsInconsistent" )
-                                    || aPropertyName.equalsAscii( "URL" )
-                                    || aPropertyName.equalsAscii( "RepairPackage" ) ) )
-           || aPropertyName.equalsAscii( "IsRoot" )
-           || aPropertyName.equalsAscii( "MediaTypeFallbackUsed" ) )
+        else if ( ( m_pData->m_bIsRoot && ( aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "HasEncryptedEntries" ) )
+                                    || aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "HasNonEncryptedEntries" ) )
+                                    || aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "IsInconsistent" ) )
+                                    || aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "URL" ) )
+                                    || aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "RepairPackage" ) ) ) )
+           || aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "IsRoot" ) )
+           || aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "MediaTypeFallbackUsed" ) ) )
             throw beans::PropertyVetoException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
         else
             throw beans::UnknownPropertyException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
     }
     else if ( m_pData->m_nStorageType == embed::StorageFormats::OFOPXML )
     {
-        if ( aPropertyName.equalsAscii( "RelationsInfoStream" ) )
+        if ( aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "RelationsInfoStream" ) ) )
         {
             uno::Reference< io::XInputStream > xInRelStream;
             if ( ( aValue >>= xInRelStream ) && xInRelStream.is() )
@@ -4835,7 +4835,7 @@ void SAL_CALL OStorage::setPropertyValue( const ::rtl::OUString& aPropertyName, 
             else
                 throw lang::IllegalArgumentException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >(), 0 );
         }
-        else if ( aPropertyName.equalsAscii( "RelationsInfo" ) )
+        else if ( aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "RelationsInfo" ) ) )
         {
             if ( aValue >>= m_pImpl->m_aRelInfo )
             {
@@ -4847,9 +4847,9 @@ void SAL_CALL OStorage::setPropertyValue( const ::rtl::OUString& aPropertyName, 
             else
                 throw lang::IllegalArgumentException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >(), 0 );
         }
-        else if ( ( m_pData->m_bIsRoot && ( aPropertyName.equalsAscii( "URL" )
-                                    || aPropertyName.equalsAscii( "RepairPackage" ) ) )
-           || aPropertyName.equalsAscii( "IsRoot" ) )
+        else if ( ( m_pData->m_bIsRoot && ( aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "URL" ) )
+                                    || aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "RepairPackage" ) ) ) )
+           || aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "IsRoot" ) ) )
             throw beans::PropertyVetoException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
         else
             throw beans::UnknownPropertyException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
@@ -4878,9 +4878,9 @@ uno::Any SAL_CALL OStorage::getPropertyValue( const ::rtl::OUString& aPropertyNa
     }
 
     if ( m_pData->m_nStorageType == embed::StorageFormats::PACKAGE
-      && ( aPropertyName.equalsAscii( "MediaType" )
-        || aPropertyName.equalsAscii( "MediaTypeFallbackUsed" )
-        || aPropertyName.equalsAscii( "Version" ) ) )
+      && ( aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "MediaType" ) )
+        || aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "MediaTypeFallbackUsed" ) )
+        || aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Version" ) ) ) )
     {
         try
         {
@@ -4904,25 +4904,25 @@ uno::Any SAL_CALL OStorage::getPropertyValue( const ::rtl::OUString& aPropertyNa
                                         aCaught );
         }
 
-        if ( aPropertyName.equalsAscii( "MediaType" ) )
+        if ( aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "MediaType" ) ) )
             return uno::makeAny( m_pImpl->m_aMediaType );
-        else if ( aPropertyName.equalsAscii( "Version" ) )
+        else if ( aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Version" ) ) )
             return uno::makeAny( m_pImpl->m_aVersion );
         else
             return uno::makeAny( m_pImpl->m_bMTFallbackUsed );
     }
-    else if ( aPropertyName.equalsAscii( "IsRoot" ) )
+    else if ( aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "IsRoot" ) ) )
     {
         return uno::makeAny( m_pData->m_bIsRoot );
     }
-    else if ( aPropertyName.equalsAscii( "OpenMode" ) )
+    else if ( aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "OpenMode" ) ) )
     {
         return uno::makeAny( m_pImpl->m_nStorageMode );
     }
     else if ( m_pData->m_bIsRoot )
     {
-        if ( aPropertyName.equalsAscii( "URL" )
-          || aPropertyName.equalsAscii( "RepairPackage" ) )
+        if ( aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "URL" ) )
+          || aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "RepairPackage" ) ) )
         {
             for ( sal_Int32 aInd = 0; aInd < m_pImpl->m_xProperties.getLength(); aInd++ )
             {
@@ -4930,15 +4930,15 @@ uno::Any SAL_CALL OStorage::getPropertyValue( const ::rtl::OUString& aPropertyNa
                     return m_pImpl->m_xProperties[aInd].Value;
             }
 
-            if ( aPropertyName.equalsAscii( "URL" ) )
+            if ( aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "URL" ) ) )
                 return uno::makeAny( ::rtl::OUString() );
 
             return uno::makeAny( sal_False ); // RepairPackage
         }
         else if ( m_pData->m_nStorageType == embed::StorageFormats::PACKAGE
-          && ( aPropertyName.equalsAscii( "HasEncryptedEntries" )
-            || aPropertyName.equalsAscii( "HasNonEncryptedEntries" )
-            || aPropertyName.equalsAscii( "IsInconsistent" ) ) )
+          && ( aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "HasEncryptedEntries" ) )
+            || aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "HasNonEncryptedEntries" ) )
+            || aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "IsInconsistent" ) ) ) )
         {
             try {
                 m_pImpl->ReadContents();
@@ -5843,7 +5843,7 @@ uno::Any SAL_CALL OStorage::getElementPropertyValue( const ::rtl::OUString& aEle
             throw container::NoSuchElementException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
 
         // TODO/LATER: Currently it is only implemented for MediaType property of substorages, might be changed in future
-        if ( !pElement->m_bIsStorage || m_pData->m_nStorageType != embed::StorageFormats::PACKAGE || !aPropertyName.equalsAscii( "MediaType" ) )
+        if ( !pElement->m_bIsStorage || m_pData->m_nStorageType != embed::StorageFormats::PACKAGE || !aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "MediaType" ) ) )
             throw beans::PropertyVetoException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
 
         if ( !pElement->m_pStorage )

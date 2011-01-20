@@ -79,9 +79,9 @@ void SAL_CALL CLibxml2XFormsExtension::initialize(const Sequence< Any >& aSequen
     {
         if (! (aSequence[i] >>= aValue))
             throw RuntimeException();
-        if (aValue.Name.equalsAscii("Model"))
+        if (aValue.Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Model")))
             aValue.Value >>= m_aModel;
-        else if (aValue.Name.equalsAscii("ContextNode"))
+        else if (aValue.Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("ContextNode")))
             aValue.Value >>= m_aContextNode;
     }
 }

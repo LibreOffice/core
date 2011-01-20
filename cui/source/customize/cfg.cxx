@@ -406,8 +406,8 @@ SvxConfigPage::CanConfig( const OUString& aModuleId )
 {
     OSL_TRACE("SupportsDocumentConfig: %s", PRTSTR(aModuleId));
 
-    if  (  aModuleId.equalsAscii( "com.sun.star.script.BasicIDE" )
-        || aModuleId.equalsAscii( "com.sun.star.frame.Bibliography" )
+    if  (  aModuleId.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.script.BasicIDE" ) )
+        || aModuleId.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.frame.Bibliography" ) )
         )
     {
         return FALSE;
@@ -417,30 +417,30 @@ SvxConfigPage::CanConfig( const OUString& aModuleId )
 
 OUString GetModuleName( const OUString& aModuleId )
 {
-    if ( aModuleId.equalsAscii( "com.sun.star.text.TextDocument" ) ||
-         aModuleId.equalsAscii( "com.sun.star.text.GlobalDocument" ) )
+    if ( aModuleId.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.text.TextDocument" ) ) ||
+         aModuleId.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.text.GlobalDocument" ) ) )
         return OUString(RTL_CONSTASCII_USTRINGPARAM("Writer"));
-    else if ( aModuleId.equalsAscii( "com.sun.star.text.WebDocument" ) )
+    else if ( aModuleId.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.text.WebDocument" ) ) )
         return OUString(RTL_CONSTASCII_USTRINGPARAM("Writer/Web"));
-    else if ( aModuleId.equalsAscii( "com.sun.star.drawing.DrawingDocument" ) )
+    else if ( aModuleId.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.drawing.DrawingDocument" ) ) )
         return OUString(RTL_CONSTASCII_USTRINGPARAM("Draw"));
-    else if ( aModuleId.equalsAscii( "com.sun.star.presentation.PresentationDocument" ) )
+    else if ( aModuleId.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.presentation.PresentationDocument" ) ) )
         return OUString(RTL_CONSTASCII_USTRINGPARAM("Impress"));
-    else if ( aModuleId.equalsAscii( "com.sun.star.sheet.SpreadsheetDocument" ) )
+    else if ( aModuleId.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.sheet.SpreadsheetDocument" ) ) )
         return OUString(RTL_CONSTASCII_USTRINGPARAM("Calc"));
-    else if ( aModuleId.equalsAscii( "com.sun.star.script.BasicIDE" ) )
+    else if ( aModuleId.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.script.BasicIDE" ) ) )
         return OUString(RTL_CONSTASCII_USTRINGPARAM("Basic"));
-    else if ( aModuleId.equalsAscii( "com.sun.star.formula.FormulaProperties" ) )
+    else if ( aModuleId.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.formula.FormulaProperties" ) ) )
         return OUString(RTL_CONSTASCII_USTRINGPARAM("Math"));
-    else if ( aModuleId.equalsAscii( "com.sun.star.sdb.RelationDesign" ) )
+    else if ( aModuleId.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.sdb.RelationDesign" ) ) )
         return OUString(RTL_CONSTASCII_USTRINGPARAM("Relation Design"));
-    else if ( aModuleId.equalsAscii( "com.sun.star.sdb.QueryDesign" ) )
+    else if ( aModuleId.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.sdb.QueryDesign" ) ) )
         return OUString(RTL_CONSTASCII_USTRINGPARAM("Query Design"));
-    else if ( aModuleId.equalsAscii( "com.sun.star.sdb.TableDesign" ) )
+    else if ( aModuleId.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.sdb.TableDesign" ) ) )
         return OUString(RTL_CONSTASCII_USTRINGPARAM("Table Design"));
-    else if ( aModuleId.equalsAscii( "com.sun.star.sdb.DataSourceBrowser" ) )
+    else if ( aModuleId.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.sdb.DataSourceBrowser" ) ) )
         return OUString(RTL_CONSTASCII_USTRINGPARAM("Data Source Browser" ));
-    else if ( aModuleId.equalsAscii( "com.sun.star.sdb.DatabaseDocument" ) )
+    else if ( aModuleId.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.sdb.DatabaseDocument" ) ) )
         return OUString(RTL_CONSTASCII_USTRINGPARAM("Database" ));
 
     return ::rtl::OUString();
@@ -465,7 +465,7 @@ OUString GetUIModuleName( const OUString& aModuleId, const uno::Reference< css::
                     OUString aUIName;
                     for ( sal_Int32 i = 0; i < aSeq.getLength(); ++i )
                     {
-                        if ( aSeq[i].Name.equalsAscii( "ooSetupFactoryUIName" ))
+                        if ( aSeq[i].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ooSetupFactoryUIName" ) ))
                         {
                             aSeq[i].Value >>= aModuleUIName;
                             break;

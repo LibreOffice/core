@@ -388,7 +388,7 @@ sal_Bool OWriteStream_Impl::IsEncrypted()
     sal_Bool bToBeEncr = sal_False;
     for ( sal_Int32 nInd = 0; nInd < m_aProps.getLength(); nInd++ )
     {
-        if ( m_aProps[nInd].Name.equalsAscii( "Encrypted" ) )
+        if ( m_aProps[nInd].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Encrypted" ) ) )
         {
             if ( !( m_aProps[nInd].Value >>= bToBeEncr ) )
             {
@@ -439,7 +439,7 @@ void OWriteStream_Impl::SetDecrypted()
 
     for ( sal_Int32 nInd = 0; nInd < m_aProps.getLength(); nInd++ )
     {
-        if ( m_aProps[nInd].Name.equalsAscii( "Encrypted" ) )
+        if ( m_aProps[nInd].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Encrypted" ) ) )
             m_aProps[nInd].Value <<= sal_False;
     }
 }
@@ -460,7 +460,7 @@ void OWriteStream_Impl::SetEncryptedWithPass( const ::rtl::OUString& aPass )
     // introduce encryption info
     for ( sal_Int32 nInd = 0; nInd < m_aProps.getLength(); nInd++ )
     {
-        if ( m_aProps[nInd].Name.equalsAscii( "Encrypted" ) )
+        if ( m_aProps[nInd].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Encrypted" ) ) )
             m_aProps[nInd].Value <<= sal_True;
     }
 
@@ -797,7 +797,7 @@ void OWriteStream_Impl::InsertStreamDirectly( const uno::Reference< io::XInputSt
         {
             xPropertySet->setPropertyValue( aProps[nInd].Name, aProps[nInd].Value );
         }
-        else if ( m_nStorageType == embed::StorageFormats::PACKAGE && aProps[nInd].Name.equalsAscii( "UseCommonStoragePasswordEncryption" ) )
+        else if ( m_nStorageType == embed::StorageFormats::PACKAGE && aProps[nInd].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "UseCommonStoragePasswordEncryption" ) ) )
             aProps[nInd].Value >>= m_bUseCommonPass;
         else
             throw lang::IllegalArgumentException();
@@ -904,7 +904,7 @@ void OWriteStream_Impl::Commit()
 
     for ( sal_Int32 nInd = 0; nInd < m_aProps.getLength(); nInd++ )
     {
-        if ( m_aProps[nInd].Name.equalsAscii( "Size" ) )
+        if ( m_aProps[nInd].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Size" ) ) )
         {
             if ( m_pAntiImpl && !m_bHasInsertedStreamOptimization && m_pAntiImpl->m_xSeekable.is() )
             {
@@ -1017,7 +1017,7 @@ uno::Sequence< beans::PropertyValue > OWriteStream_Impl::InsertOwnProps(
     if ( m_nStorageType == embed::StorageFormats::PACKAGE )
     {
         for ( sal_Int32 nInd = 0; nInd < nLen; nInd++ )
-            if ( aResult[nInd].Name.equalsAscii( "UseCommonStoragePasswordEncryption" ) )
+            if ( aResult[nInd].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "UseCommonStoragePasswordEncryption" ) ) )
             {
                 aResult[nInd].Value <<= bUseCommonPass;
                 return aResult;
@@ -1041,7 +1041,7 @@ uno::Sequence< beans::PropertyValue > OWriteStream_Impl::InsertOwnProps(
                                     uno::Reference< uno::XInterface >() );
 
         for ( sal_Int32 nInd = 0; nInd < nLen; nInd++ )
-            if ( aResult[nInd].Name.equalsAscii( "RelationsInfo" ) )
+            if ( aResult[nInd].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "RelationsInfo" ) ) )
             {
                 aResult[nInd].Value = aValue;
                 return aResult;
@@ -2458,7 +2458,7 @@ void OWriteStream::CloseOutput_Impl()
 
         for ( sal_Int32 nInd = 0; nInd < m_pImpl->m_aProps.getLength(); nInd++ )
         {
-            if ( m_pImpl->m_aProps[nInd].Name.equalsAscii( "Size" ) )
+            if ( m_pImpl->m_aProps[nInd].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Size" ) ) )
                 m_pImpl->m_aProps[nInd].Value <<= ((sal_Int32)m_xSeekable->getLength());
         }
     }
@@ -3170,7 +3170,7 @@ void SAL_CALL OWriteStream::setPropertyValue( const ::rtl::OUString& aPropertyNa
         }
     }
     else if ( m_pData->m_nStorageType == embed::StorageFormats::PACKAGE
-            && aPropertyName.equalsAscii( "UseCommonStoragePasswordEncryption" ) )
+            && aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "UseCommonStoragePasswordEncryption" ) ) )
     {
         sal_Bool bUseCommonPass = sal_False;
         if ( aValue >>= bUseCommonPass )
@@ -3202,7 +3202,7 @@ void SAL_CALL OWriteStream::setPropertyValue( const ::rtl::OUString& aPropertyNa
                 m_pImpl->m_aProps[nInd].Value = aValue;
         }
     }
-    else if ( m_pData->m_nStorageType == embed::StorageFormats::OFOPXML && aPropertyName.equalsAscii( "RelationsInfoStream" ) )
+    else if ( m_pData->m_nStorageType == embed::StorageFormats::OFOPXML && aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "RelationsInfoStream" ) ) )
     {
         uno::Reference< io::XInputStream > xInRelStream;
         if ( ( aValue >>= xInRelStream ) && xInRelStream.is() )
@@ -3223,7 +3223,7 @@ void SAL_CALL OWriteStream::setPropertyValue( const ::rtl::OUString& aPropertyNa
         else
             throw lang::IllegalArgumentException(); // TODO
     }
-    else if ( m_pData->m_nStorageType == embed::StorageFormats::OFOPXML && aPropertyName.equalsAscii( "RelationsInfo" ) )
+    else if ( m_pData->m_nStorageType == embed::StorageFormats::OFOPXML && aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "RelationsInfo" ) ) )
     {
         if ( aValue >>= m_pImpl->m_aNewRelInfo )
         {
@@ -3231,10 +3231,10 @@ void SAL_CALL OWriteStream::setPropertyValue( const ::rtl::OUString& aPropertyNa
         else
             throw lang::IllegalArgumentException(); // TODO
     }
-    else if ( aPropertyName.equalsAscii( "Size" ) )
+    else if ( aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Size" ) ) )
         throw beans::PropertyVetoException(); // TODO
     else if ( m_pData->m_nStorageType == embed::StorageFormats::PACKAGE
-           && ( aPropertyName.equalsAscii( "IsEncrypted" ) || aPropertyName.equalsAscii( "Encrypted" ) ) )
+           && ( aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "IsEncrypted" ) ) || aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Encrypted" ) ) ) )
         throw beans::PropertyVetoException(); // TODO
     else
         throw beans::UnknownPropertyException(); // TODO
@@ -3258,21 +3258,21 @@ uno::Any SAL_CALL OWriteStream::getPropertyValue( const ::rtl::OUString& aProp )
         throw lang::DisposedException();
     }
 
-    if ( aProp.equalsAscii( "RelId" ) )
+    if ( aProp.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "RelId" ) ) )
     {
         return uno::makeAny( m_pImpl->GetNewRelId() );
     }
 
     ::rtl::OUString aPropertyName;
-    if ( aProp.equalsAscii( "IsEncrypted" ) )
+    if ( aProp.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "IsEncrypted" ) ) )
         aPropertyName = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Encrypted" ) );
     else
         aPropertyName = aProp;
 
     if ( ( ( m_pData->m_nStorageType == embed::StorageFormats::PACKAGE || m_pData->m_nStorageType == embed::StorageFormats::OFOPXML )
-            && aPropertyName.equalsAscii( "MediaType" ) )
-      || ( m_pData->m_nStorageType == embed::StorageFormats::PACKAGE && aPropertyName.equalsAscii( "Encrypted" ) )
-      || aPropertyName.equalsAscii( "Compressed" ) )
+            && aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "MediaType" ) ) )
+      || ( m_pData->m_nStorageType == embed::StorageFormats::PACKAGE && aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Encrypted" ) ) )
+      || aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Compressed" ) ) )
     {
         m_pImpl->GetStreamProperties();
 
@@ -3283,9 +3283,9 @@ uno::Any SAL_CALL OWriteStream::getPropertyValue( const ::rtl::OUString& aProp )
         }
     }
     else if ( m_pData->m_nStorageType == embed::StorageFormats::PACKAGE
-            && aPropertyName.equalsAscii( "UseCommonStoragePasswordEncryption" ) )
+            && aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "UseCommonStoragePasswordEncryption" ) ) )
         return uno::makeAny( m_pImpl->m_bUseCommonPass );
-    else if ( aPropertyName.equalsAscii( "Size" ) )
+    else if ( aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Size" ) ) )
     {
         CheckInitOnDemand();
 

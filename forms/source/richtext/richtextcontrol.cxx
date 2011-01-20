@@ -683,11 +683,11 @@ namespace frm
 
             // some hard-coded slots, which do not have a UNO name at SFX level, but which
             // we nevertheless need to transport via UNO mechanisms, so we need a name
-            if ( _rUnoSlotName.equalsAscii( "AllowHangingPunctuation" ) )
+            if ( _rUnoSlotName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "AllowHangingPunctuation" ) ) )
                 return SID_ATTR_PARA_HANGPUNCTUATION;
-            if ( _rUnoSlotName.equalsAscii( "ApplyForbiddenCharacterRules" ) )
+            if ( _rUnoSlotName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ApplyForbiddenCharacterRules" ) ) )
                 return SID_ATTR_PARA_FORBIDDEN_RULES;
-            if ( _rUnoSlotName.equalsAscii( "UseScriptSpacing" ) )
+            if ( _rUnoSlotName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "UseScriptSpacing" ) ) )
                 return SID_ATTR_PARA_SCRIPTSPACE;
 
             OSL_ENSURE( pSlot, "lcl_getSlotFromUnoName: unknown UNO slot name!" );

@@ -657,12 +657,12 @@ uno::Any SAL_CALL OInputCompStream::getPropertyValue( const ::rtl::OUString& aPr
     }
 
     ::rtl::OUString aPropertyName;
-    if ( aProp.equalsAscii( "IsEncrypted" ) )
+    if ( aProp.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "IsEncrypted" ) ) )
         aPropertyName = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Encrypted" ) );
     else
         aPropertyName = aProp;
 
-    if ( aPropertyName.equalsAscii( "RelationsInfo" ) )
+    if ( aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "RelationsInfo" ) ) )
         throw beans::UnknownPropertyException(); // TODO
 
     // all the provided properties are accessible

@@ -193,7 +193,7 @@
             if ( aAnyProp >>= aProperties ) )
             {
                 for ( sal_Int32 nInd = 0; nInd < aProperties.getLength; nInd++ )
-                if ( aProperties[nInd].Name.equalsAscii( "UIName" )
+                if ( aProperties[nInd].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "UIName" ) )
                 {
                     aProperties[nInd].Value >>= aResult;
                     break;
