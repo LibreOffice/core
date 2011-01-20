@@ -159,42 +159,42 @@ void SAL_CALL OToolboxController::initialize( const Sequence< Any >& _rArguments
                 break;
             }
         }
-        if ( m_aCommandURL.equalsAscii(".uno:BasicShapes") )
+        if ( m_aCommandURL.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(".uno:BasicShapes")) )
         {
             m_aStates.insert(TCommandState::value_type(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:BasicShapes")),sal_True));
             m_pToolbarController = TToolbarHelper::createFromQuery(new SvxTbxCtlCustomShapes(m_nSlotId = SID_DRAWTBX_CS_BASIC,m_nToolBoxId,*pToolBox));
         }
-        else if ( m_aCommandURL.equalsAscii(".uno:SymbolShapes") )
+        else if ( m_aCommandURL.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(".uno:SymbolShapes")) )
         {
             m_aStates.insert(TCommandState::value_type(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:SymbolShapes")),sal_True));
             m_pToolbarController = TToolbarHelper::createFromQuery(new SvxTbxCtlCustomShapes(m_nSlotId = SID_DRAWTBX_CS_SYMBOL,m_nToolBoxId,*pToolBox));
         }
-        else if ( m_aCommandURL.equalsAscii(".uno:ArrowShapes") )
+        else if ( m_aCommandURL.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(".uno:ArrowShapes")) )
         {
             m_aStates.insert(TCommandState::value_type(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:ArrowShapes")),sal_True));
             m_pToolbarController = TToolbarHelper::createFromQuery(new SvxTbxCtlCustomShapes(m_nSlotId = SID_DRAWTBX_CS_ARROW,m_nToolBoxId,*pToolBox));
         }
-        else if ( m_aCommandURL.equalsAscii(".uno:FlowChartShapes") )
+        else if ( m_aCommandURL.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(".uno:FlowChartShapes")) )
         {
             m_aStates.insert(TCommandState::value_type(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:FlowChartShapes")),sal_True));
             m_pToolbarController = TToolbarHelper::createFromQuery(new SvxTbxCtlCustomShapes(m_nSlotId = SID_DRAWTBX_CS_FLOWCHART,m_nToolBoxId,*pToolBox));
         }
-        else if ( m_aCommandURL.equalsAscii(".uno:CalloutShapes") )
+        else if ( m_aCommandURL.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(".uno:CalloutShapes")) )
         {
             m_aStates.insert(TCommandState::value_type(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:CalloutShapes")),sal_True));
             m_pToolbarController = TToolbarHelper::createFromQuery(new SvxTbxCtlCustomShapes(m_nSlotId = SID_DRAWTBX_CS_CALLOUT,m_nToolBoxId,*pToolBox));
         }
-        else if ( m_aCommandURL.equalsAscii(".uno:StarShapes") )
+        else if ( m_aCommandURL.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(".uno:StarShapes")) )
         {
             m_aStates.insert(TCommandState::value_type(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:StarShapes")),sal_True));
             m_pToolbarController = TToolbarHelper::createFromQuery(new SvxTbxCtlCustomShapes(m_nSlotId = SID_DRAWTBX_CS_STAR,m_nToolBoxId,*pToolBox));
         }
-        else if ( m_aCommandURL.equalsAscii(".uno:CharFontName") )
+        else if ( m_aCommandURL.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(".uno:CharFontName")) )
         {
             m_aStates.insert(TCommandState::value_type(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:CharFontName")),sal_True));
             m_pToolbarController = TToolbarHelper::createFromQuery(new SvxFontNameToolBoxControl/*SvxStyleToolBoxControl*/(m_nSlotId = SID_ATTR_CHAR_FONT,m_nToolBoxId,*pToolBox));
         }
-        else if ( m_aCommandURL.equalsAscii(".uno:FontColor") || m_aCommandURL.equalsAscii(".uno:Color") )
+        else if ( m_aCommandURL.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(".uno:FontColor")) || m_aCommandURL.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(".uno:Color")) )
         {
             m_aStates.insert(TCommandState::value_type(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:FontColor")),sal_True));
             m_aStates.insert(TCommandState::value_type(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:Color")),sal_True));

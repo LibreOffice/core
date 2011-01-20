@@ -482,11 +482,11 @@ sal_Bool ORptFilter::implImport( const Sequence< PropertyValue >& rDescriptor )
     const PropertyValue* pEnd   = pIter + rDescriptor.getLength();
     for(;pIter != pEnd;++pIter)
     {
-        if( pIter->Name.equalsAscii( "FileName" ) )
+        if( pIter->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "FileName" ) ) )
             pIter->Value >>= sFileName;
-        else if( pIter->Name.equalsAscii( "Storage" ) )
+        else if( pIter->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Storage" ) ) )
             pIter->Value >>= xStorage;
-        else if( pIter->Name.equalsAscii( "ComponentData" ) )
+        else if( pIter->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ComponentData" ) ) )
         {
             Sequence< PropertyValue > aComponent;
             pIter->Value >>= aComponent;
@@ -494,7 +494,7 @@ sal_Bool ORptFilter::implImport( const Sequence< PropertyValue >& rDescriptor )
             const PropertyValue* pComponentEnd  = pComponentIter + aComponent.getLength();
             for(;pComponentIter != pComponentEnd;++pComponentIter)
             {
-                if( pComponentIter->Name.equalsAscii( "ActiveConnection" ) )
+                if( pComponentIter->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ActiveConnection" ) ) )
                 {
                     uno::Reference<sdbc::XConnection> xCon(pComponentIter->Value,uno::UNO_QUERY);
                     xNumberFormatsSupplier = ::dbtools::getNumberFormats(xCon);

@@ -152,7 +152,7 @@ bool ObjectCopySource::isView() const
         {
             ::rtl::OUString sObjectType;
             OSL_VERIFY( m_xObject->getPropertyValue( PROPERTY_TYPE ) >>= sObjectType );
-            bIsView = sObjectType.equalsAscii( "VIEW" );
+            bIsView = sObjectType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "VIEW" ) );
         }
     }
     catch( const Exception& )
@@ -330,7 +330,7 @@ bool NamedTableCopySource::isView() const
     {
         DBG_UNHANDLED_EXCEPTION();
     }
-    return sTableType.equalsAscii( "VIEW" );
+    return sTableType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "VIEW" ) );
 }
 
 //------------------------------------------------------------------------

@@ -1641,7 +1641,7 @@ void OReportController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >
             {
                 openZoomDialog();
             }
-            else if ( aArgs.getLength() == 1 && aArgs[0].Name.equalsAscii("Zoom") )
+            else if ( aArgs.getLength() == 1 && aArgs[0].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Zoom")) )
             {
                 SvxZoomItem aZoomItem;
                 aZoomItem.PutValue(aArgs[0].Value);
@@ -1651,7 +1651,7 @@ void OReportController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >
             }
             break;
         case SID_ATTR_ZOOMSLIDER:
-            if ( aArgs.getLength() == 1 && aArgs[0].Name.equalsAscii("ZoomSlider") )
+            if ( aArgs.getLength() == 1 && aArgs[0].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("ZoomSlider")) )
             {
                 SvxZoomSliderItem aZoomSlider;
                 aZoomSlider.PutValue(aArgs[0].Value);
@@ -2791,7 +2791,7 @@ void SAL_CALL OReportController::restoreViewData(const uno::Any& Data) throw( un
         const beans::PropertyValue* pPropsEnd = pPropsIter + aProps.getLength();
         for (sal_Int32 i = 0; pPropsIter != pPropsEnd; ++pPropsIter,++i)
         {
-            if ( pPropsIter->Name.equalsAscii("CommandProperties") )
+            if ( pPropsIter->Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("CommandProperties")) )
             {
                 util::URL aCommand;
                 uno::Sequence< beans::PropertyValue> aArgs(1);
@@ -2813,11 +2813,11 @@ void SAL_CALL OReportController::restoreViewData(const uno::Any& Data) throw( un
                     }
                 }
             }
-            else if ( pPropsIter->Name.equalsAscii("CollapsedSections") )
+            else if ( pPropsIter->Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("CollapsedSections")) )
                 pPropsIter->Value >>= m_aCollapsedSections;
-            else if ( pPropsIter->Name.equalsAscii("MarkedSection") )
+            else if ( pPropsIter->Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("MarkedSection")) )
                 pPropsIter->Value >>= m_nPageNum;
-            else if ( pPropsIter->Name.equalsAscii("ZoomFactor") )
+            else if ( pPropsIter->Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("ZoomFactor")) )
                 pPropsIter->Value >>= m_nZoomValue;
         }
     }
@@ -4081,7 +4081,7 @@ void SAL_CALL OReportController::setMode( const ::rtl::OUString& aMode ) throw (
 // -----------------------------------------------------------------------------
 bool OReportController::isUiVisible() const
 {
-    return !m_sMode.equalsAscii("remote");
+    return !m_sMode.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("remote"));
 }
 // -----------------------------------------------------------------------------
 void OReportController::impl_fillState_nothrow(const ::rtl::OUString& _sProperty,dbaui::FeatureState& _rState) const

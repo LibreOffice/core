@@ -82,7 +82,7 @@ OXMLControlProperty::OXMLControlProperty( ORptFilter& rImport
         switch( rTokenMap.Get( nPrefix, sLocalName ) )
         {
             case XML_TOK_LIST_PROPERTY:
-                m_bIsList = sValue.equalsAscii("true");
+                m_bIsList = sValue.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("true"));
                 break;
             case XML_TOK_VALUE_TYPE:
                 {

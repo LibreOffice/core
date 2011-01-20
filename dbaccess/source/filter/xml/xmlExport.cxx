@@ -404,15 +404,15 @@ void ODBExport::exportDataSource()
                 {
                     sal_Int32 nValue = 0;
                     aValue >>= nValue;
-                    if ( sValue.equalsAscii("0") )
+                    if ( sValue.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("0")) )
                         sValue = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("equal-integer"));
-                    else if ( sValue.equalsAscii("1") )
+                    else if ( sValue.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("1")) )
                         sValue = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("is-boolean"));
-                    else if ( sValue.equalsAscii("2") )
+                    else if ( sValue.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("2")) )
                         sValue = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("equal-boolean"));
-                    else if ( sValue.equalsAscii("3") )
+                    else if ( sValue.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("3")) )
                         sValue = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("equal-use-only-zero"));
-                    if ( sValue.equalsAscii("equal-integer") )
+                    if ( sValue.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("equal-integer")) )
                         continue;
                     eToken = XML_BOOLEAN_COMPARISON_MODE;
                 }

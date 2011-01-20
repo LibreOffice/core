@@ -333,7 +333,7 @@ namespace dbmm
                 bool bCausedByNewStyleReport =
                         ( _rDocument.eType == eReport )
                     &&  ( aError.isExtractableTo( ::cppu::UnoType< WrongFormatException >::get() ) )
-                    &&  ( lcl_getMimeType_nothrow( _rDocument.xCommandProcessor ).equalsAscii( "application/vnd.sun.xml.report" ) );
+                    &&  ( lcl_getMimeType_nothrow( _rDocument.xCommandProcessor ).equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "application/vnd.sun.xml.report" ) ) );
 
                 if ( bCausedByNewStyleReport )
                 {
@@ -1668,7 +1668,7 @@ namespace dbmm
 
             ::rtl::OUString sLocation = xUri->getParameter(
                 ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "location" ) ) );
-            if ( !sLocation.equalsAscii( "document" ) )
+            if ( !sLocation.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "document" ) ) )
             {
                 // only document libraries must be migrated, of course
                 return false;

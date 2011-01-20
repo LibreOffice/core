@@ -127,9 +127,9 @@ namespace rptui
     //--------------------------------------------------------------------
     void FormatNormalizer::impl_onDefinitionPropertyChange( const ::rtl::OUString& _rChangedPropName )
     {
-        if  (   !_rChangedPropName.equalsAscii( "Command" )
-            &&  !_rChangedPropName.equalsAscii( "CommandType" )
-            &&  !_rChangedPropName.equalsAscii( "EscapeProcessing" )
+        if  (   !_rChangedPropName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Command" ) )
+            &&  !_rChangedPropName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "CommandType" ) )
+            &&  !_rChangedPropName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "EscapeProcessing" ) )
             )
             // nothing we're interested in
             return;
@@ -139,7 +139,7 @@ namespace rptui
     //--------------------------------------------------------------------
     void FormatNormalizer::impl_onFormattedProperttyChange( const Reference< XFormattedField >& _rxFormatted, const ::rtl::OUString& _rChangedPropName )
     {
-        if  ( !_rChangedPropName.equalsAscii( "DataField" ) )
+        if  ( !_rChangedPropName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "DataField" ) ) )
             // nothing we're interested in
             return;
 

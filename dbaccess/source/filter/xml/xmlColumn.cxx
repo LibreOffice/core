@@ -92,7 +92,7 @@ OXMLColumn::OXMLColumn( ODBFilter& rImport
                 m_sHelpMessage = sValue;
                 break;
             case XML_TOK_COLUMN_VISIBILITY:
-                m_bHidden = !sValue.equalsAscii("visible");
+                m_bHidden = !sValue.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("visible"));
                 break;
             case XML_TOK_COLUMN_TYPE_NAME:
                 sType = sValue;
@@ -103,7 +103,7 @@ OXMLColumn::OXMLColumn( ODBFilter& rImport
                     m_aDefaultValue <<= sValue;
                 break;
             case XML_TOK_COLUMN_VISIBLE:
-                m_bHidden = sValue.equalsAscii("false");
+                m_bHidden = sValue.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("false"));
                 break;
             case XML_TOK_DEFAULT_CELL_STYLE_NAME:
                 m_sCellStyleName = sValue;

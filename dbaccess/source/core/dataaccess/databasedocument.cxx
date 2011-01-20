@@ -1939,7 +1939,7 @@ Reference< XController2 > SAL_CALL ODatabaseDocument::createDefaultViewControlle
 
 Reference< XController2 > SAL_CALL ODatabaseDocument::createViewController( const ::rtl::OUString& _ViewName, const Sequence< PropertyValue >& _Arguments, const Reference< XFrame >& _Frame ) throw (IllegalArgumentException, Exception, RuntimeException)
 {
-    if ( !_ViewName.equalsAscii( "Default" ) && !_ViewName.equalsAscii( "Preview" ) )
+    if ( !_ViewName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Default" ) ) && !_ViewName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Preview" ) ) )
         throw IllegalArgumentException( ::rtl::OUString(), *this, 1 );
     if ( !_Frame.is() )
         throw IllegalArgumentException( ::rtl::OUString(), *this, 3 );
@@ -1953,7 +1953,7 @@ Reference< XController2 > SAL_CALL ODatabaseDocument::createViewController( cons
 
     ::comphelper::NamedValueCollection aInitArgs( _Arguments );
     aInitArgs.put( "Frame", _Frame );
-    if ( _ViewName.equalsAscii( "Preview" ) )
+    if ( _ViewName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Preview" ) ) )
         aInitArgs.put( "Preview", sal_Bool( sal_True ) );
     Reference< XInitialization > xInitController( xController, UNO_QUERY_THROW );
     xInitController->initialize( aInitArgs.getWrappedPropertyValues() );

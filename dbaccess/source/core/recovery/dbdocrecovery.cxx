@@ -232,7 +232,7 @@ namespace dbaccess
                     continue;
 
                 // the only section we support so far is "storages"
-                if ( !sCurrentSection.equalsAscii( "storages" ) )
+                if ( !sCurrentSection.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "storages" ) ) )
                 {
                     bCurrentSectionIsKnownToBeUnsupported = true;
                     continue;

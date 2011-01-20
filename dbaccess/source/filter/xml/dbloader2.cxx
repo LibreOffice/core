@@ -349,7 +349,7 @@ namespace
                 URL aURL;
                 aURL.Complete = _rURL;
                 xTransformer->parseStrict( aURL );
-                bDoesAllow = aURL.Arguments.equalsAscii( "Interactive" );
+                bDoesAllow = aURL.Arguments.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Interactive" ) );
             }
         }
         catch( const Exception& )

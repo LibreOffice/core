@@ -460,13 +460,13 @@ IMPL_LINK( SbaXGridPeer, OnDispatchEvent, void*, /*NOTINTERESTEDIN*/ )
 SbaXGridPeer::DispatchType SbaXGridPeer::classifyDispatchURL( const URL& _rURL )
 {
     DispatchType eURLType = dtUnknown;
-    if ( _rURL.Complete.equalsAscii( ".uno:GridSlots/BrowserAttribs" ) )
+    if ( _rURL.Complete.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ".uno:GridSlots/BrowserAttribs" ) ) )
         eURLType = dtBrowserAttribs;
-    else if ( _rURL.Complete.equalsAscii( ".uno:GridSlots/RowHeight" ) )
+    else if ( _rURL.Complete.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ".uno:GridSlots/RowHeight" ) ) )
         eURLType = dtRowHeight;
-    else if ( _rURL.Complete.equalsAscii( ".uno:GridSlots/ColumnAttribs" ) )
+    else if ( _rURL.Complete.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ".uno:GridSlots/ColumnAttribs" ) ) )
         eURLType = dtColumnAttribs;
-    else if ( _rURL.Complete.equalsAscii( ".uno:GridSlots/ColumnWidth" ) )
+    else if ( _rURL.Complete.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ".uno:GridSlots/ColumnWidth" ) ) )
         eURLType = dtColumnWidth;
     return eURLType;
 }

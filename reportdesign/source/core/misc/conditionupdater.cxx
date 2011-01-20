@@ -70,7 +70,7 @@ namespace rptui
             return;
 
         Reference< XReportControlModel > xRptControlModel( _rEvent.Source, UNO_QUERY );
-        if ( xRptControlModel.is() && _rEvent.PropertyName.equalsAscii( "DataField" ) )
+        if ( xRptControlModel.is() && _rEvent.PropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "DataField" ) ) )
         {
             ::rtl::OUString sOldDataSource, sNewDataSource;
             OSL_VERIFY( _rEvent.OldValue >>= sOldDataSource );

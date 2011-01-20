@@ -150,13 +150,13 @@ void SAL_CALL OCfgImport::initialize( const Sequence< Any >& _aArguments ) throw
     for(;pIter != pEnd;++pIter)
     {
         *pIter >>= aValue;
-        if ( aValue.Name.equalsAscii("OldConfiguration") && (aValue.Value >>= aOldConfigValues) )
+        if ( aValue.Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("OldConfiguration")) && (aValue.Value >>= aOldConfigValues) )
         {
             const NamedValue* configValues      = aOldConfigValues.getConstArray();
             const NamedValue* configValuesEnd   = configValues + aOldConfigValues.getLength();
             for(;configValues != configValuesEnd;++configValues)
             {
-                if ( configValues->Name.equalsAscii("org.openoffice.Office.DataAccess") )
+                if ( configValues->Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("org.openoffice.Office.DataAccess")) )
                 {
                     configValues->Value >>= m_xLayer;
                     break;
@@ -404,7 +404,7 @@ sal_Bool isDocumentReport(const Reference< XMultiServiceFactory >& _xORB,const :
                 ::rtl::OUString aTypeName = xTypeDetection->queryTypeByDescriptor( aMedDescr, sal_True );
                 const PropertyValue* pIter = aMedDescr.getConstArray();
                 const PropertyValue* pEnd     = pIter + aMedDescr.getLength();
-                for( ; pIter != pEnd && !pIter->Name.equalsAscii( "FilterName" ); ++pIter)
+                for( ; pIter != pEnd && !pIter->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "FilterName" ) ); ++pIter)
                     ;
                 if ( aTypeName.getLength() && pIter == pEnd )
                 {
@@ -415,7 +415,7 @@ sal_Bool isDocumentReport(const Reference< XMultiServiceFactory >& _xORB,const :
                         xNameAccess->getByName(aTypeName) >>= aTypes;
                         const PropertyValue* types      = aTypes.getConstArray();
                         const PropertyValue* typesEnd   = types + aTypes.getLength();
-                        for( ; types != typesEnd && !types->Name.equalsAscii( "PreferredFilter" ) ; ++types)
+                        for( ; types != typesEnd && !types->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "PreferredFilter" ) ) ; ++types)
                             ;
                         if ( types != typesEnd )
                         {
@@ -441,10 +441,10 @@ sal_Bool isDocumentReport(const Reference< XMultiServiceFactory >& _xORB,const :
                             ::rtl::OUString sScript;
                             const PropertyValue* events = aEventDesc.getConstArray();
                             const PropertyValue* eventsEnd = events + aEventDesc.getLength();
-                            for( ; events != eventsEnd && !events->Name.equalsAscii( "Script" ) ; ++events)
+                            for( ; events != eventsEnd && !events->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Script" ) ) ; ++events)
                                 ;
                             if ( events != eventsEnd && (events->Value >>= sScript) )
-                                bReport = sScript.equalsAscii("service:com.sun.star.wizards.report.CallReportWizard?fill");
+                                bReport = sScript.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("service:com.sun.star.wizards.report.CallReportWizard?fill"));
                         }
                     }
                     if ( !bReport )
@@ -641,7 +641,7 @@ void SAL_CALL OCfgImport::addOrReplaceNode(
         {
             case DATASOURCES:
                 m_sCurrentDataSourceName = aName;
-                if ( m_sCurrentDataSourceName.equalsAscii("Bibliography") )
+                if ( m_sCurrentDataSourceName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Bibliography")) )
                 {
                     Reference< XNameAccess > xDatabaseContext(m_xORB->createInstance(SERVICE_SDB_DATABASECONTEXT), UNO_QUERY);
                     if ( xDatabaseContext.is() && xDatabaseContext->hasByName(m_sCurrentDataSourceName) )
@@ -693,23 +693,23 @@ void SAL_CALL OCfgImport::addOrReplaceNode(
                 break;
         }
     }
-    if ( aName.equalsAscii("DataSources") )
+    if ( aName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("DataSources")) )
         m_aStack.push(TElementStack::value_type(aName,DATASOURCES));
-    else if ( aName.equalsAscii("DataSourceSettings") )
+    else if ( aName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("DataSourceSettings")) )
         m_aStack.push(TElementStack::value_type(aName,DATASOURCESETTINGS));
-    else if ( aName.equalsAscii("Tables") )
+    else if ( aName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Tables")) )
         m_aStack.push(TElementStack::value_type(aName,TABLES));
-    else if ( aName.equalsAscii("Queries") )
+    else if ( aName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Queries")) )
         m_aStack.push(TElementStack::value_type(aName,QUERIES));
     else if ( aName == CONFIGKEY_DBLINK_BOOKMARKS )
         m_aStack.push(TElementStack::value_type(aName,BOOKMARKS));
     else if ( aName == CONFIGKEY_SETTINGS )
         m_aStack.push(TElementStack::value_type(aName,DATASETTINGS));
-    else if ( aName.equalsAscii("Font") )
+    else if ( aName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Font")) )
         m_aStack.push(TElementStack::value_type(aName,DATASETTINGS));
     else if ( aName == CONFIGKEY_QRYDESCR_COLUMNS )
         m_aStack.push(TElementStack::value_type(aName,COLUMNS));
-    else if ( aName.equalsAscii("Font") )
+    else if ( aName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Font")) )
         m_aStack.push(TElementStack::value_type(aName,DATASETTINGS));
 }
 // -----------------------------------------------------------------------------
@@ -749,7 +749,7 @@ void SAL_CALL  OCfgImport::endNode()
                     }
                     // register the new datbase document
 
-                    if ( !m_sCurrentDataSourceName.equalsAscii("Bibliography") )
+                    if ( !m_sCurrentDataSourceName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Bibliography")) )
                     {
                         // create unique name
                         Reference< XNameAccess > xDatabaseContext(m_xORB->createInstance(SERVICE_SDB_DATABASECONTEXT), UNO_QUERY);

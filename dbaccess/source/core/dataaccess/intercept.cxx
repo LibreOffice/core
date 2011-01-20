@@ -160,7 +160,7 @@ void SAL_CALL OInterceptor::dispatch( const URL& _URL,const Sequence<PropertyVal
 
             while( nInd < aNewArgs.getLength() )
             {
-                if ( aNewArgs[nInd].Name.equalsAscii( "SaveTo" ) )
+                if ( aNewArgs[nInd].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "SaveTo" ) ) )
                 {
                     aNewArgs[nInd].Value <<= sal_True;
                     break;

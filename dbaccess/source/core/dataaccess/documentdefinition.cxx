@@ -852,7 +852,7 @@ Any ODocumentDefinition::onCommandOpenSomething( const Any& _rOpenArgument, cons
                 if ( lcl_extractOpenMode( pIter->Value, nOpenMode ) )
                     continue;
 
-                if ( pIter->Name.equalsAscii( "MacroExecutionMode" ) )
+                if ( pIter->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "MacroExecutionMode" ) ) )
                 {
                     sal_Int16 nMacroExecMode( !aDocumentMacroMode ? MacroExecMode::USE_CONFIG : *aDocumentMacroMode );
                     OSL_VERIFY( pIter->Value >>= nMacroExecMode );
@@ -1002,9 +1002,9 @@ Any SAL_CALL ODocumentDefinition::execute( const Command& aCommand, sal_Int32 Co
 {
     Any aRet;
 
-    sal_Bool bOpen = aCommand.Name.equalsAscii( "open" );
-    sal_Bool bOpenInDesign = aCommand.Name.equalsAscii( "openDesign" );
-    sal_Bool bOpenForMail = aCommand.Name.equalsAscii( "openForMail" );
+    sal_Bool bOpen = aCommand.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "open" ) );
+    sal_Bool bOpenInDesign = aCommand.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "openDesign" ) );
+    sal_Bool bOpenForMail = aCommand.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "openForMail" ) );
     if ( bOpen || bOpenInDesign || bOpenForMail )
     {
         // opening the document involves a lot of VCL code, which is not thread-safe, but needs the SolarMutex locked.
@@ -1650,7 +1650,7 @@ void ODocumentDefinition::loadEmbeddedObject( const Reference< XConnection >& i_
                     sDocumentService = GetDocumentServiceFromMediaType( getContentType(), m_aContext, aClassID );
                     // check if we are not a form and
                     // the com.sun.star.report.pentaho.SOReportJobFactory is not present.
-                    if ( !m_bForm && !sDocumentService.equalsAscii("com.sun.star.text.TextDocument"))
+                    if ( !m_bForm && !sDocumentService.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.text.TextDocument")))
                     {
                         // we seem to be a "new style" report, check if report extension is present.
                         Reference< XContentEnumerationAccess > xEnumAccess( m_aContext.getLegacyServiceFactory(), UNO_QUERY );

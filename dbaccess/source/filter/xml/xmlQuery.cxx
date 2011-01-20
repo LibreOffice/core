@@ -78,7 +78,7 @@ OXMLQuery::OXMLQuery( ODBFilter& rImport
                 m_sCommand = sValue;
                 break;
             case XML_TOK_ESCAPE_PROCESSING:
-                m_bEscapeProcessing = sValue.equalsAscii("true");
+                m_bEscapeProcessing = sValue.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("true"));
                 break;
         }
     }

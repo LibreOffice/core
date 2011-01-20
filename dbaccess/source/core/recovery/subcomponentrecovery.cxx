@@ -335,7 +335,7 @@ namespace dbaccess
 
         if ( m_aStates.empty() )
         {
-            if ( i_Name.equalsAscii( "office:settings" ) )
+            if ( i_Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "office:settings" ) ) )
             {
                 pNewState = new OfficeSettingsImport( m_aSettings );
             }
@@ -496,15 +496,15 @@ namespace dbaccess
         switch ( m_eType )
         {
         case TABLE:
-            m_aCompDesc.bForEditing = sModuleIdentifier.equalsAscii( "com.sun.star.sdb.TableDesign" );
+            m_aCompDesc.bForEditing = sModuleIdentifier.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.sdb.TableDesign" ) );
             break;
 
         case QUERY:
-            m_aCompDesc.bForEditing = sModuleIdentifier.equalsAscii( "com.sun.star.sdb.QueryDesign" );
+            m_aCompDesc.bForEditing = sModuleIdentifier.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.sdb.QueryDesign" ) );
             break;
 
         case REPORT:
-            if ( sModuleIdentifier.equalsAscii( "com.sun.star.report.ReportDefinition" ) )
+            if ( sModuleIdentifier.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.report.ReportDefinition" ) ) )
             {
                 // it's an SRB report designer
                 m_aCompDesc.bForEditing = true;
@@ -517,7 +517,7 @@ namespace dbaccess
             break;
 
         default:
-            if ( sModuleIdentifier.equalsAscii( "com.sun.star.sdb.RelationDesign" ) )
+            if ( sModuleIdentifier.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.sdb.RelationDesign" ) ) )
             {
                 m_eType = RELATION_DESIGN;
                 m_aCompDesc.bForEditing = true;

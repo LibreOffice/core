@@ -73,7 +73,7 @@ OXMLDataSourceSetting::OXMLDataSourceSetting( ODBFilter& rImport
         switch( rTokenMap.Get( nPrefix, sLocalName ) )
         {
             case XML_TOK_DATA_SOURCE_SETTING_IS_LIST:
-                m_bIsList = sValue.equalsAscii("true");
+                m_bIsList = sValue.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("true"));
                 break;
             case XML_TOK_DATA_SOURCE_SETTING_TYPE:
                 {
