@@ -54,6 +54,9 @@
 #include <sfx2/sfxuno.hxx>
 #include "dialmgr.hxx"
 #include "gallery.hrc"
+#include <svx/dialogs.hrc>
+#include <svx/dialmgr.hxx>
+
 
 // --------------
 // - Namespaces -
@@ -663,8 +666,9 @@ TPGalleryThemeGeneral::TPGalleryThemeGeneral( Window* pParent, const SfxItemSet&
 {
     FreeResource();
 
-    aEdtMSName.SetAccessibleName(GAL_RESID(RID_SVXSTR_GALLERY_THEMENAME));
-    aFiMSImage.SetAccessibleName(GAL_RESID(RID_SVXSTR_GALLERY_THEMENAME));
+    String aAccName(SVX_RES(RID_SVXSTR_GALLERY_THEMENAME));
+    aEdtMSName.SetAccessibleName(aAccName);
+    aFiMSImage.SetAccessibleName(aAccName);
     aEdtMSName.SetAccessibleRelationLabeledBy( &aFiMSImage );
 }
 
@@ -770,7 +774,7 @@ TPGalleryThemeProperties::TPGalleryThemeProperties( Window* pWindow, const SfxIt
     FreeResource();
 
     xDialogListener->SetDialogClosedLink( LINK( this, TPGalleryThemeProperties, DialogClosedHdl ) );
-    aLbxFound.SetAccessibleName(GAL_RESID(RID_SVXSTR_GALLERY_FILESFOUND));
+    aLbxFound.SetAccessibleName(String(SVX_RES(RID_SVXSTR_GALLERY_FILESFOUND)));
     aWndPreview.SetAccessibleName(aCbxPreview.GetText());
     aLbxFound.SetAccessibleRelationLabeledBy(&aLbxFound);
 }
