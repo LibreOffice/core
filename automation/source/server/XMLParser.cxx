@@ -671,14 +671,14 @@ void StatementCommand::HandleSAXParser()
             break;
         case RC_SAXGetElementPath:
             {
-                DBG_ASSERT( sizeof( ULONG ) == sizeof ( void* ), "Pointertype has different size than ULONG");
+                DBG_ASSERT( sizeof( sal_uIntPtr ) == sizeof ( void* ), "Pointertype has different size than sal_uIntPtr");
                 String aPath;
                 aPath.AppendAscii( "*:" );
                 aPath.Append( String::CreateFromInt64( pSAXParser->GetTimestamp() ) );
                 aPath.AppendAscii( ":" );
                 NodeRef xNode=pSAXParser->GetCurrentNode();
                 Node* pNode = (Node*)(&xNode);
-                aPath.Append( String::CreateFromInt64( (sal_uLong)pNode ) );
+                aPath.Append( String::CreateFromInt64( (sal_uIntPtr)pNode ) );
                 pRet->GenReturn ( RET_Value, nMethodId, aPath );
             }
             break;

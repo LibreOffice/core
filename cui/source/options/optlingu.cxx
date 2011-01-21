@@ -631,7 +631,7 @@ Sequence< OUString > SvxLinguData_Impl::GetSortedImplNames( sal_Int16 nLang, sal
     if (pTable->count( nLang ))
         aRes = (*pTable)[ nLang ];      // add configured services
     sal_Int32 nIdx = aRes.getLength();
-    DBG_ASSERT( (INT32) nDisplayServices >= nIdx, "size mismatch" );
+    DBG_ASSERT( (sal_Int32) nDisplayServices >= nIdx, "size mismatch" );
     aRes.realloc( nDisplayServices );
     OUString *pRes = aRes.getArray();
 
