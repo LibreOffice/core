@@ -49,13 +49,13 @@ class SwWrtShell;
 
 class SwSplitTableDlg : public SvxStandardDialog
 {
+    FixedLine            aCountFL;
     FixedText           aCountLbl;
     NumericField        aCountEdit;
-    FixedLine            aCountFL;
+    FixedLine            aDirFL;
     ImageRadioButton    aHorzBox;
     ImageRadioButton    aVertBox;
     CheckBox            aPropCB;
-    FixedLine            aDirFL;
     OKButton            aOKBtn;
     CancelButton        aCancelBtn;
     HelpButton          aHelpBtn;

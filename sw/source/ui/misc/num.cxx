@@ -144,6 +144,9 @@ SwNumPositionTabPage::SwNumPositionTabPage(Window* pParent,
     SetExchangeSupport();
     aPreviewWIN.SetBackground(Wallpaper(Color(COL_TRANSPARENT)));
 
+    aStandardPB.SetAccessibleRelationMemberOf(&aPositionFL);
+
+
     aRelativeCB.Check();
     aAlignLB.SetSelectHdl(LINK(this, SwNumPositionTabPage, EditModifyHdl));
     // --> OD 2008-02-01 #newlistlevelattrs#

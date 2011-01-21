@@ -82,13 +82,13 @@ struct SwBmpItemInfo
 --------------------------------------------------*/
 class SwNumPositionTabPage : public SfxTabPage
 {
-    FixedLine       aPositionFL;
-    FixedLine       aLevelFL;
+        FixedLine       aLevelFL;
     MultiListBox    aLevelLB;
 
     // --> OD 2008-02-01 #newlistlevelattrs#
     // former set of controls shown for numbering rules containing list level
     // attributes in SvxNumberFormat::SvxNumPositionAndSpaceMode == LABEL_WIDTH_AND_POSITION
+    FixedLine       aPositionFL;
     FixedText           aDistBorderFT;
     MetricField         aDistBorderMF;
     CheckBox            aRelativeCB;

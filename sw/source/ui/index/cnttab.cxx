@@ -374,6 +374,8 @@ SwMultiTOXTabDialog::SwMultiTOXTabDialog(Window* pParent, const SfxItemSet& rSet
     aShowExampleCB.SetClickHdl(LINK(this, SwMultiTOXTabDialog, ShowPreviewHdl));
 
     aShowExampleCB.Check( SW_MOD()->GetModuleConfig()->IsShowIndexPreview());
+
+    aExampleContainerWIN.SetAccessibleName(aShowExampleCB.GetText());
     SetViewAlign( WINDOWALIGN_LEFT );
     // SetViewWindow does not work if the dialog is visible!
 
@@ -807,6 +809,10 @@ SwAddStylesDlg_Impl::SwAddStylesDlg_Impl(Window* pParent,
 {
     FreeResource();
 
+    aHeaderTree.SetAccessibleRelationMemberOf(&aStylesFL);
+    aLeftPB.SetAccessibleRelationMemberOf(&aStylesFL);
+    aRightPB.SetAccessibleRelationMemberOf(&aStylesFL);
+
     aLeftPB.SetModeImage( Image( SW_RES( IMG_ALL_LEFT_HC ) ), BMP_COLOR_HIGHCONTRAST );
     aRightPB.SetModeImage( Image( SW_RES( IMG_ALL_RIGHT_HC ) ), BMP_COLOR_HIGHCONTRAST );
 
@@ -1017,6 +1023,11 @@ SwTOXSelectTabPage::SwTOXSelectTabPage(Window* pParent, const SfxItemSet& rAttrS
     bFirstCall(sal_True)
 {
     aBracketLB.InsertEntry(String(SW_RES(ST_NO_BRACKET)), 0);
+
+    aAddStylesPB.SetAccessibleRelationMemberOf(&aCreateFromFL);
+    aAddStylesPB.SetAccessibleRelationLabeledBy(&aAddStylesCB);
+    aAddStylesPB.SetAccessibleName(aAddStylesCB.GetText());
+
     FreeResource();
 
     pIndexEntryWrapper = new IndexEntrySupplierWrapper();
@@ -2124,6 +2135,16 @@ SwTOXEntryTabPage::SwTOXEntryTabPage(Window* pParent, const SfxItemSet& rAttrSet
     m_pCurrentForm(0),
     bInLevelHdl(sal_False)
 {
+    aEditStylePB.SetAccessibleRelationMemberOf(&aEntryFL);
+    aHyperLinkPB.SetAccessibleRelationMemberOf(&aEntryFL);
+    aPageNoPB.SetAccessibleRelationMemberOf(&aEntryFL);
+    aTabPB.SetAccessibleRelationMemberOf(&aEntryFL);
+    aEntryPB.SetAccessibleRelationMemberOf(&aEntryFL);
+    aEntryNoPB.SetAccessibleRelationMemberOf(&aEntryFL);
+    aAllLevelsPB.SetAccessibleRelationMemberOf(&aEntryFL);
+    aTokenWIN.SetAccessibleRelationMemberOf(&aEntryFL);
+    aTokenWIN.SetAccessibleRelationLabeledBy(&aTokenFT);
+
     Image aSortUpHC(SW_RES(IMG_SORTUP_HC ));
     aFirstSortUpRB.SetModeRadioImage(aSortUpHC,BMP_COLOR_HIGHCONTRAST);
     aSecondSortUpRB.SetModeRadioImage(aSortUpHC,BMP_COLOR_HIGHCONTRAST);
@@ -3923,6 +3944,7 @@ SwTOXStylesTabPage::SwTOXStylesTabPage(Window* pParent, const SfxItemSet& rAttrS
     m_pCurrentForm(0)
 {
     FreeResource();
+
     SetExchangeSupport( sal_True );
 
     aAssignBT.SetModeImage( Image( SW_RES( IMG_ONE_LEFT_HC ) ), BMP_COLOR_HIGHCONTRAST );
@@ -3933,6 +3955,11 @@ SwTOXStylesTabPage::SwTOXStylesTabPage(Window* pParent, const SfxItemSet& rAttrS
     aParaLayLB.SetSelectHdl    (LINK(   this, SwTOXStylesTabPage, EnableSelectHdl));
     aLevelLB.SetSelectHdl      (LINK(   this, SwTOXStylesTabPage, EnableSelectHdl));
     aParaLayLB.SetDoubleClickHdl(LINK(  this, SwTOXStylesTabPage, DoubleClickHdl));
+
+    aStdBT.SetAccessibleRelationMemberOf(&aFormatFL);
+    aAssignBT.SetAccessibleRelationMemberOf(&aFormatFL);
+    aEditStyleBT.SetAccessibleRelationMemberOf(&aFormatFL);
+
 }
 /* -----------------25.03.99 15:17-------------------
  *

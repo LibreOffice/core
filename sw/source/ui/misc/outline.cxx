@@ -88,6 +88,10 @@
 #include <app.hrc>
 // <--
 
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEROLE_HPP_
+#include <com/sun/star/accessibility/AccessibleRole.hpp>
+#endif
+
 using namespace ::com::sun::star;
 
 /* -----------------------------31.01.01 10:23--------------------------------
@@ -102,9 +106,9 @@ DBG_NAME(outlinehdl)
 
 class SwNumNamesDlg: public ModalDialog
 {
+    FixedLine    aFormFL;
     Edit         aFormEdit;
     ListBox      aFormBox;
-    FixedLine    aFormFL;
     OKButton     aOKBtn;
     CancelButton aCancelBtn;
     HelpButton   aHelpBtn;
@@ -241,6 +245,7 @@ SwOutlineTabDialog::SwOutlineTabDialog(Window* pParent,
     pUserButton->SetText(SW_RES(ST_FORM));
     pUserButton->SetHelpId(HID_OUTLINE_FORM);
     pUserButton->SetClickHdl(LINK(this, SwOutlineTabDialog, FormHdl));
+    pUserButton->SetAccessibleRole( com::sun::star::accessibility::AccessibleRole::BUTTON_MENU );
 
     FreeResource();
     pNumRule = new SwNumRule( *rSh.GetOutlineNumRule() );

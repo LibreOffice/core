@@ -111,6 +111,8 @@ SwParagraphNumTabPage::SwParagraphNumTabPage(Window* pParent,
                     SwParagraphNumTabPage, LineCountHdl_Impl));
     aRestartParaCountCB.SetClickHdl(
                     LINK(this, SwParagraphNumTabPage, LineCountHdl_Impl));
+    aNewStartNF.SetAccessibleName(aNewStartNumberCB.GetText());
+    aNewStartNF.SetAccessibleRelationLabeledBy(&aNewStartNumberCB);
 }
 /*-----------------31.01.98 08:34-------------------
 

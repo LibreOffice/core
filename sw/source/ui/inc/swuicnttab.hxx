@@ -188,6 +188,7 @@ class SwTOXSelectTabPage : public SfxTabPage
     //
 
     //index only
+    FixedLine       aIdxOptionsFL;
     CheckBox        aCollectSameCB;
     CheckBox        aUseFFCB;
     CheckBox        aUseDashCB;
@@ -196,7 +197,6 @@ class SwTOXSelectTabPage : public SfxTabPage
     CheckBox        aKeyAsEntryCB;
     CheckBox        aFromFileCB;
     MenuButton      aAutoMarkPB;
-    FixedLine       aIdxOptionsFL; // index only
 
     // object only
     SwOLENames      aFromNames;
@@ -363,6 +363,7 @@ class SwTOXEntryTabPage : public SfxTabPage
     FixedText           aLevelFT;
     SwIdxTreeListBox    aLevelLB;
 
+    FixedLine       aEntryFL;
     FixedText       aTokenFT;
     SwTokenWindow   aTokenWIN;
     PushButton      aAllLevelsPB;
@@ -395,14 +396,13 @@ class SwTOXEntryTabPage : public SfxTabPage
     FixedText       aTabPosFT;
     MetricField     aTabPosMF;          // tab stop position
     CheckBox        aAutoRightCB;
-    FixedLine       aEntryFL;
+    FixedLine       aFormatFL;
 
     CheckBox        aRelToStyleCB;      // position relative to the right margin of the para style
     FixedText       aMainEntryStyleFT;
     ListBox         aMainEntryStyleLB;  // character style of main entries in indexes
     CheckBox        aAlphaDelimCB;
     CheckBox        aCommaSeparatedCB;
-    FixedLine       aFormatFL;
 
     RadioButton     aSortDocPosRB;
     RadioButton     aSortContentRB;
@@ -492,14 +492,14 @@ public:
  --------------------------------------------------*/
 class SwTOXStylesTabPage : public SfxTabPage
 {
+    FixedLine       aFormatFL;
     FixedText       aLevelFT2;
     ListBox         aLevelLB;
+    ImageButton     aAssignBT;
     FixedText       aTemplateFT;
     ListBox         aParaLayLB;
     PushButton      aStdBT;
-    ImageButton     aAssignBT;
     PushButton      aEditStyleBT;
-    FixedLine       aFormatFL;
 
     SwForm*         m_pCurrentForm;
 //  void            UpdatePattern();

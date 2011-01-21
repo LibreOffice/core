@@ -505,6 +505,15 @@ SwColumnPage::SwColumnPage(Window *pParent, const SfxItemSet &rSet)
     FreeResource();
     SetExchangeSupport();
 
+    aBtnDown.SetAccessibleRelationMemberOf(&aFLLayout);
+    aEd1.SetAccessibleRelationLabeledBy(&aWidthFT);
+    aEd2.SetAccessibleRelationLabeledBy(&aWidthFT);
+    aEd3.SetAccessibleRelationLabeledBy(&aWidthFT);
+    aDistEd1.SetAccessibleRelationLabeledBy(&aDistFT);
+    aDistEd2.SetAccessibleRelationLabeledBy(&aDistFT);
+    aBtnUp.SetAccessibleRelationLabeledBy(&aColumnFT);
+    aBtnDown.SetAccessibleRelationLabeledBy(&aColumnFT);
+
     aDefaultVS.SetHelpId(HID_COLUMN_VALUESET);
     aDefaultVS.SetColCount( 5 );
     aDefaultVS.SetStyle(  aDefaultVS.GetStyle()
@@ -909,16 +918,41 @@ void SwColumnPage::SetLabels( USHORT nVis )
     String sLbl( '~' );
 
     String sLbl2( String::CreateFromInt32( nVis + 1 ));
+    String tmp1(sLbl2);
     sLbl2.Insert(sLbl, sLbl2.Len() - 1);
     aLbl1.SetText(sLbl2);
 
     sLbl2 = String::CreateFromInt32( nVis + 2 );
+    String tmp2(sLbl2);
     sLbl2.Insert(sLbl, sLbl2.Len() - 1);
     aLbl2.SetText(sLbl2);
 
     sLbl2 = String::CreateFromInt32( nVis + 3 );
+    String tmp3(sLbl2);
     sLbl2.Insert(sLbl, sLbl2.Len() - 1);
     aLbl3.SetText(sLbl2);
+    String sColumnWidth = SW_RESSTR( STR_COLUMN_WIDTH ) ;
+    sColumnWidth.SearchAndReplaceAscii("%1", tmp1);
+    aEd1.SetAccessibleName(sColumnWidth);
+
+    sColumnWidth = SW_RESSTR( STR_COLUMN_WIDTH ) ;
+    sColumnWidth.SearchAndReplaceAscii("%1", tmp2);
+    aEd2.SetAccessibleName(sColumnWidth);
+
+    sColumnWidth = SW_RESSTR( STR_COLUMN_WIDTH ) ;
+    sColumnWidth.SearchAndReplaceAscii("%1", tmp3);
+    aEd3.SetAccessibleName(sColumnWidth);
+
+    String sDist = SW_RESSTR( STR_PAGESETUP_SPACING ) ;
+    String sDist1 = sDist;
+    sDist1.SearchAndReplaceAscii("%1", tmp1);
+    sDist1.SearchAndReplaceAscii("%2", tmp2);
+    aDistEd1.SetAccessibleName(sDist1);
+
+    String sDist2 = sDist;
+    sDist2.SearchAndReplaceAscii("%1", tmp2);
+    sDist2.SearchAndReplaceAscii("%2", tmp3);
+    aDistEd2.SetAccessibleName(sDist2);
 }
 
 /*------------------------------------------------------------------------

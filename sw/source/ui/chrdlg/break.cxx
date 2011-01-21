@@ -178,6 +178,9 @@ SwBreakDlg::SwBreakDlg( Window *pParent, SwWrtShell &rS ) :
 
     bHtmlMode(0 != ::GetHtmlMode(rS.GetView().GetDocShell()))
 {
+    aPageNumEdit.SetAccessibleRelationLabeledBy(&aPageNumBox);
+    aPageNumEdit.SetAccessibleName(aPageNumBox.GetText());
+
     Link aLk = LINK(this,SwBreakDlg,ClickHdl);
     aPageBtn.SetClickHdl( aLk );
     aLineBtn.SetClickHdl( aLk );

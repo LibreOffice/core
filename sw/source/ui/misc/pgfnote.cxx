@@ -184,6 +184,7 @@ SwFootNotePage::SwFootNotePage(Window *pParent, const SfxItemSet &rSet) :
     MeasurementSystem eSys = SvtSysLocale().GetLocaleData().getMeasurementSystemEnum();
     long nHeightValue = MEASURE_METRIC != eSys ? 1440 : 1134;
     aMaxHeightEdit.SetValue(aMaxHeightEdit.Normalize(nHeightValue),FUNIT_TWIP);;
+    aMaxHeightEdit.SetAccessibleRelationLabeledBy(&aMaxHeightBtn);
 }
 
 SwFootNotePage::~SwFootNotePage()

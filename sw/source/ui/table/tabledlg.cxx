@@ -852,6 +852,9 @@ SwTableColumnPage::SwTableColumnPage( Window* pParent,
     FreeResource();
     SetExchangeSupport();
 
+    aDownBtn.SetAccessibleRelationMemberOf(&aColFL);
+    aUpBtn.SetAccessibleRelationMemberOf(&aColFL);
+
     pFieldArr[0] = &aMF1;
     pFieldArr[1] = &aMF2;
     pFieldArr[2] = &aMF3;
@@ -986,8 +989,16 @@ IMPL_LINK( SwTableColumnPage, AutoClickHdl, CheckBox *, pBox )
     for( USHORT i = 0; (i < nNoOfVisibleCols ) && ( i < MET_FIELDS); i++ )
     {
         String sEntry('~');
-        sEntry += String::CreateFromInt32( aValueTbl[i] + 1 );
+        String sIndex = String::CreateFromInt32( aValueTbl[i] + 1 );
+        sEntry += sIndex;
         pTextArr[i]->SetText( sEntry );
+//IAccessibility2 Impplementaton 2009-----
+        //added by menghu for SODC_5143,12/12/2006
+        String sColumnWidth = SW_RESSTR( STR_COLUMN_WIDTH );
+        sColumnWidth.SearchAndReplace( DEFINE_CONST_UNICODE("%1"), sIndex );
+        pFieldArr[i]->SetAccessibleName( sColumnWidth );
+        //end of SODC_5143
+//-----IAccessibility2 Impplementaton 2009
     }
 
     aDownBtn.Enable(aValueTbl[0] > 0);
@@ -1457,6 +1468,13 @@ SwTextFlowPage::SwTextFlowPage( Window* pParent,
     bHtmlMode(FALSE)
 {
     FreeResource();
+
+    aPgBrkRB.SetAccessibleRelationMemberOf(&aPgBrkCB);
+    aColBrkRB.SetAccessibleRelationMemberOf(&aPgBrkCB);
+    aPgBrkBeforeRB.SetAccessibleRelationMemberOf(&aPgBrkCB);
+    aPgBrkAfterRB.SetAccessibleRelationMemberOf(&aPgBrkCB);
+    aPageCollLB.SetAccessibleRelationLabeledBy(&aPageCollCB);
+    aPageCollLB.SetAccessibleName(aPageCollCB.GetText());
 
     aPgBrkCB.SetClickHdl(LINK(this, SwTextFlowPage, PageBreakHdl_Impl));
     aPgBrkBeforeRB.SetClickHdl(

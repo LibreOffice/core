@@ -129,6 +129,17 @@ SwLineNumberingPage::SwLineNumberingPage( Window* pParent,
     aCountFL            ( this, SW_RES( FL_COUNT ))
 
 {
+    String sIntervalName = aDivIntervalFT.GetAccessibleName();
+    sIntervalName += String::CreateFromAscii("(");
+    sIntervalName += aDivRowsFT.GetAccessibleName();
+    sIntervalName += String::CreateFromAscii(")");
+    aDivIntervalNF.SetAccessibleName(sIntervalName);
+    sIntervalName = aNumIntervalFT.GetAccessibleName();
+    sIntervalName += String::CreateFromAscii("(");
+    sIntervalName += aNumRowsFT.GetAccessibleName();
+    sIntervalName += String::CreateFromAscii(")");
+    aNumIntervalNF.SetAccessibleName(sIntervalName);
+
     FreeResource();
     SwLineNumberingDlg *pDlg = (SwLineNumberingDlg *)GetParent();
     pSh = pDlg->GetWrtShell();

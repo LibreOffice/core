@@ -152,11 +152,11 @@ class SwNewGlosNameDlg : public ModalDialog
     NoSpaceEdit     aNewShort;
     OKButton        aOk;
     CancelButton    aCancel;
-    FixedLine       aFL;
     FixedText       aONFT;
     Edit            aOldName;
     FixedText       aOSFT;
     Edit            aOldShort;
+    FixedLine       aFL;
 
 protected:
     DECL_LINK( Modify, Edit * );
@@ -298,6 +298,8 @@ SwGlossaryDlg::SwGlossaryDlg(SfxViewFrame* pViewFrame,
     aCategoryBox.GetModel()->SetSortMode(SortAscending);
     aCategoryBox.SetHighlightRange();   // ueber volle Breite selektieren
     aCategoryBox.SetNodeDefaultImages( );
+    aCategoryBox.SetAccessibleName(SW_RES(STR_SW_CATEGORY));
+    aCategoryBox.SetAccessibleRelationLabeledBy(&aInsertTipCB);
 
     Init();
 }

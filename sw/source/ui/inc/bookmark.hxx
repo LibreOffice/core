@@ -65,8 +65,8 @@ public:
 
 class SwInsertBookmarkDlg: public SvxStandardDialog
 {
-    BookmarkCombo   aBookmarkBox;
     FixedLine       aBookmarkFl;
+    BookmarkCombo   aBookmarkBox;
     OKButton        aOkBtn;
     CancelButton    aCancelBtn;
     PushButton      aDeleteBtn;

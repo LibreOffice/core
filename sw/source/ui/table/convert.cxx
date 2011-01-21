@@ -153,6 +153,8 @@ SwConvertTableDlg::SwConvertTableDlg( SwView& rView, bool bToTable )
     pTAutoFmt( 0 ),
     pShell( &rView.GetWrtShell() )
 {
+    aOtherEd.SetAccessibleName(String(SW_RES(STR_SYMBOL)));
+    aOtherEd.SetAccessibleRelationLabeledBy(&aOtherBtn);
     FreeResource();
     if(nSaveButtonState > -1)
     {

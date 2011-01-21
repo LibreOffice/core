@@ -167,6 +167,8 @@ SwIndexMarkDlg::SwIndexMarkDlg(Window *pParent,
     pTOXMgr(0),
     pSh(&rWrtShell)
 {
+    aNewBT.SetAccessibleRelationMemberOf(&aIndexFL);
+
     if( SvtCJKOptions().IsCJKFontEnabled() )
     {
         uno::Reference< lang::XMultiServiceFactory > xMSF = getProcessServiceFactory();

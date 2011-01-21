@@ -50,16 +50,16 @@ class SwInsFootNoteDlg: public SvxStandardDialog
     char            cExtChar;
     BOOL            bExtCharAvailable;
     BOOL            bEdit;
+    FixedLine       aNumberFL;
     RadioButton     aNumberAutoBtn;
     RadioButton     aNumberCharBtn;
     Edit            aNumberCharEdit;
     PushButton      aNumberExtChar;
-    FixedLine       aNumberFL;
 
     //Alles fuer die Auswahl Fussnote/Endnote
+    FixedLine        aTypeFL;
     RadioButton     aFtnBtn;
     RadioButton     aEndNoteBtn;
-    FixedLine        aTypeFL;
 
     OKButton        aOkBtn;
     CancelButton    aCancelBtn;

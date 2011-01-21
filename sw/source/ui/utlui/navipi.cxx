@@ -808,7 +808,7 @@ SwNavigationPI::SwNavigationPI( SfxBindings* _pBindings,
     pEdit->SetActionHdl(LINK(this, SwNavigationPI, EditAction));
     pEdit->SetGetFocusHdl(LINK(this, SwNavigationPI, EditGetFocus));
     pEdit->SetModifyHdl(LINK(this, SwNavigationPI, PageEditModifyHdl));
-
+    pEdit->SetAccessibleName(pEdit->GetQuickHelpText());
     bPageCtrlsVisible = TRUE;
 
 //  Rectangle aFirstRect = aContentToolBox.GetItemRect(FN_SHOW_ROOT);
@@ -933,6 +933,10 @@ SwNavigationPI::SwNavigationPI( SfxBindings* _pBindings,
     UsePage(0);
     aPageChgTimer.SetTimeoutHdl(LINK(this, SwNavigationPI, ChangePageHdl));
     aPageChgTimer.SetTimeout(PAGE_CHANGE_TIMEOUT);
+
+    aContentTree.SetAccessibleName(SW_RESSTR(ST_TL_CONTENT));
+    aGlobalTree.SetAccessibleName(SW_RESSTR(ST_TL_GLOBAL));
+    aDocListBox.SetAccessibleName(aStatusArr[3]);
 }
 
 /*------------------------------------------------------------------------

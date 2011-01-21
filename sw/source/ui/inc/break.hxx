@@ -50,6 +50,7 @@ class SwWrtShell;
 class SwBreakDlg: public SvxStandardDialog
 {
     SwWrtShell     &rSh;
+    FixedLine       aBreakFL;
     RadioButton     aLineBtn;
     RadioButton     aColumnBtn;
     RadioButton     aPageBtn;
@@ -57,7 +58,6 @@ class SwBreakDlg: public SvxStandardDialog
     ListBox         aPageCollBox;
     CheckBox        aPageNumBox;
     NumericField    aPageNumEdit;
-    FixedLine       aBreakFL;
 
     OKButton        aOkBtn;
     CancelButton    aCancelBtn;
