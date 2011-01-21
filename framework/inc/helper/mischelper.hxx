@@ -31,6 +31,7 @@
 
 #include <com/sun/star/linguistic2/XLanguageGuessing.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
+#include <com/sun/star/util/XChangesListener.hpp>
 #include <com/sun/star/container/XContainerListener.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
 
@@ -189,6 +190,44 @@ class WeakContainerListener : public ::cppu::WeakImplHelper1<com::sun::star::con
 
         }
 };
+
+class WeakChangesListener : public ::cppu::WeakImplHelper1<com::sun::star::util::XChangesListener>
+{
+    private:
+        com::sun::star::uno::WeakReference<com::sun::star::util::XChangesListener> mxOwner;
+
+    public:
+        WeakChangesListener(com::sun::star::uno::Reference<com::sun::star::util::XChangesListener> xOwner)
+            : mxOwner(xOwner)
+        {
+        }
+
+        virtual ~WeakChangesListener()
+        {
+        }
+
+        // util.XChangesListener
+        virtual void SAL_CALL changesOccurred(const com::sun::star::util::ChangesEvent& rEvent)
+            throw(com::sun::star::uno::RuntimeException)
+        {
+            com::sun::star::uno::Reference<com::sun::star::util::XChangesListener> xOwner(mxOwner.get(),
+                com::sun::star::uno::UNO_QUERY);
+            if (xOwner.is())
+                xOwner->changesOccurred(rEvent);
+        }
+
+        // lang.XEventListener
+        virtual void SAL_CALL disposing(const com::sun::star::lang::EventObject& rEvent)
+            throw(com::sun::star::uno::RuntimeException)
+        {
+            com::sun::star::uno::Reference<com::sun::star::util::XChangesListener> xOwner(mxOwner.get(),
+                com::sun::star::uno::UNO_QUERY);
+            if (xOwner.is())
+                xOwner->disposing(rEvent);
+
+        }
+};
+
 
 } // namespace framework
 

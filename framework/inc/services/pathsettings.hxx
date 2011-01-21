@@ -47,7 +47,6 @@
 //_________________________________________________________________________________________________________________
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
-#include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/util/XStringSubstitution.hpp>
 #include <com/sun/star/util/XChangesListener.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
@@ -71,7 +70,6 @@ namespace framework
 
 class PathSettings : public  css::lang::XTypeProvider             ,
                      public  css::lang::XServiceInfo              ,
-                     public  css::lang::XComponent                ,
                      public  css::util::XChangesListener          , // => XEventListener
                      // base classes
                      // Order is neccessary for right initialization!
@@ -161,8 +159,8 @@ class PathSettings : public  css::lang::XTypeProvider             ,
         /** provides access to the new configuration schema. */
         css::uno::Reference< css::container::XNameAccess > m_xCfgNew;
 
-        /** container for ALL Listeners. */
-        ::cppu::OMultiTypeInterfaceContainerHelper m_aListenerContainer;
+        /** helper to listen for configuration changes without ownership cycle problems */
+        css::uno::Reference< css::util::XChangesListener > m_xCfgNewListener;
 
         ::cppu::OPropertyArrayHelper* m_pPropHelp;
 
@@ -186,11 +184,6 @@ class PathSettings : public  css::lang::XTypeProvider             ,
         FWK_DECLARE_XINTERFACE
         FWK_DECLARE_XTYPEPROVIDER
         DECLARE_XSERVICEINFO
-
-        // css:lang::XComponent
-        void SAL_CALL dispose() throw ( ::com::sun::star::uno::RuntimeException );
-        void SAL_CALL addEventListener( const com::sun::star::uno::Reference< XEventListener >& xListener ) throw( com::sun::star::uno::RuntimeException );
-        void SAL_CALL removeEventListener( const com::sun::star::uno::Reference< XEventListener >& xListener ) throw( com::sun::star::uno::RuntimeException );
 
         // css::util::XChangesListener
         virtual void SAL_CALL changesOccurred(const css::util::ChangesEvent& aEvent) throw (css::uno::RuntimeException);
