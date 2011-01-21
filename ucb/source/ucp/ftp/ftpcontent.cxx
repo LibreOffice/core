@@ -681,10 +681,10 @@ Reference<XContent > SAL_CALL
 FTPContent::createNewContent( const ContentInfo& Info )
     throw (RuntimeException)
 {
-    if(Info.Type.equalsAscii("application/"
-                             "vnd.sun.staroffice.ftp-file") ||
-       Info.Type.equalsAscii("application/"
-                             "vnd.sun.staroffice.ftp-folder"))
+    if(Info.Type.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("application/"
+                             "vnd.sun.staroffice.ftp-file")) ||
+       Info.Type.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("application/"
+                             "vnd.sun.staroffice.ftp-folder")))
         return new FTPContent(m_xSMgr,
                               m_pFCP,
                               m_xIdentifier,Info);

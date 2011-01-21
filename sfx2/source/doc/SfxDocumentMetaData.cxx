@@ -543,10 +543,10 @@ getQualifier(const char* i_name) {
     DBG_ASSERT(i_qname, "SfxDocumentMetaData: getNameSpace: argument is null");
     const char * ns = "";
     ::rtl::OUString n = getQualifier(i_qname).first;
-    if (n.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("xlink" ) )) ns = s_nsXLink;
-    if (n.equalsAscii("dc"    )) ns = s_nsDC;
+    if (n.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("xlink"))) ns = s_nsXLink;
+    if (n.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("dc"))) ns = s_nsDC;
     if (n.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("office"))) ns = s_nsODF;
-    if (n.equalsAscii("meta"  )) ns = s_nsODFMeta;
+    if (n.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("meta"))) ns = s_nsODFMeta;
     DBG_ASSERT(*ns, "SfxDocumentMetaData: unknown namespace prefix");
     return ::rtl::OUString::createFromAscii(ns);
 }
