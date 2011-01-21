@@ -40,12 +40,12 @@ use strict;
 # ends up in program/ooenv
 ( my $moz_lib = `pkg-config --variable=libdir mozilla-nss` ) =~ tr/\n/:/;
 my $env_script = '
-java_path=`../basis-link/ure-link/bin/javaldx 2>/dev/null`
-export LD_LIBRARY_PATH=".:$java_path:' . $moz_lib . '$LD_LIBRARY_PATH"
+java_path=`$thisdir/../basis-link/ure-link/bin/javaldx 2>/dev/null`
+export LD_LIBRARY_PATH="$thisdir:$java_path:' . $moz_lib . '$LD_LIBRARY_PATH"
 ulimit -c unlimited
-export PATH=".:../basis-link/program:../basis-link/ure-link/bin:$PATH"
+export PATH="$thisdir/:$thisdir/../basis-link/program:$thisdir/../basis-link/ure-link/bin:$PATH"
 export GNOME_DISABLE_CRASH_DIALOG=1
-export STAR_RESOURCEPATH=`pwd`/../basis-link/program/resource
+export STAR_RESOURCEPATH=$thisdir/../basis-link/program/resource
 # debugging assistance
 export G_SLICE=always-malloc
 export MALLOC_CHECK_=2
@@ -384,6 +384,7 @@ if (!-f "$OOO_INSTALL/" . $brand_program_dir . "/ooenv") {
     my $ooenv;
     print "Creating '$OOO_INSTALL/", $brand_program_dir, "/ooenv'\n";
     open ($ooenv, ">$OOO_INSTALL/" . $brand_program_dir . "/ooenv") || die "Can't open $OOO_INSTALL/" . $brand_program_dir . "/ooenv: $!";
+    print $ooenv "thisdir=$OOO_INSTALL/" . $brand_program_dir . "/\n";
     print $ooenv $env_script;
     print $ooenv "# testtool\nexport SRC_ROOT=$OOO_BUILD\n";
     close ($ooenv);
