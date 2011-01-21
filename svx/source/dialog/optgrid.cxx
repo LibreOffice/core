@@ -248,6 +248,17 @@ SvxGridTabPage::SvxGridTabPage( Window* pParent, const SfxItemSet& rCoreSet) :
         LINK( this, SvxGridTabPage, ChangeDivisionHdl_Impl ) );
     aNumFldDivisionY.SetModifyHdl(
         LINK( this, SvxGridTabPage, ChangeDivisionHdl_Impl ) );
+
+    ::rtl::OUString sFlResolution( aFlResolution.GetDisplayText() );
+    ::rtl::OUString sFtDrawX(aFtDrawX.GetDisplayText());
+    ::rtl::OUString sFtDrawY(aFtDrawY.GetDisplayText());
+    aMtrFldDrawX.SetAccessibleName( sFtDrawX + sFlResolution   );
+    aMtrFldDrawY.SetAccessibleName( sFtDrawY + sFlResolution   );
+    ::rtl::OUString sFlDivision( aFlDivision.GetDisplayText() );
+    ::rtl::OUString sFtDivisionX(aFtDivisionX.GetDisplayText());
+    ::rtl::OUString sFtDivisionY(aFtDivisionY.GetDisplayText());
+    aNumFldDivisionX.SetAccessibleName(  sFtDivisionX + sFlDivision );
+    aNumFldDivisionY.SetAccessibleName(  sFtDivisionY + sFlDivision );
 }
 
 //------------------------------------------------------------------------

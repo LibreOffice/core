@@ -70,6 +70,7 @@ protected:
     SvxHFPage( Window* pParent, USHORT nResId, const SfxItemSet& rSet,
                USHORT nSetId );
 
+    FixedLine       aFrm;
     CheckBox        aTurnOnBox;
     CheckBox        aCntSharedBox;
     FixedText       aLMLbl;
@@ -82,7 +83,6 @@ protected:
     FixedText       aHeightFT;
     MetricField     aHeightEdit;
     CheckBox        aHeightDynBtn;
-    FixedLine       aFrm;
     SvxPageWindow   aBspWin;
     PushButton      aBackgroundBtn;
 

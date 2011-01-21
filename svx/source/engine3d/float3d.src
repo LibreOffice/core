@@ -1438,53 +1438,10 @@ String RID_SVXFLOAT3D_FIX_B
     Text [ en-US ] = "B:";
 
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+// IAccessibility2 implementation 2009. ------
+String STR_COLOR_LIGHT_PRE
+{
+    Text [ en-US ] = "Color Light Preview";
+};
+// ------ IAccessibility2 implementation 2009.
 

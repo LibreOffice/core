@@ -53,32 +53,11 @@ DockingWindow RID_SVXCTRL_COLOR
         Border = FALSE ;
     };
 };
- // ********************************************************************** EOF
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+// IAccessibility2 implementation 2009. ------
+String STR_COLORTABLE
+{
+    Text [ en-US ] = "Color Palette" ;
+};
+// ------ IAccessibility2 implementation 2009.
 

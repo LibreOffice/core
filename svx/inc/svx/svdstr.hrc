@@ -185,8 +185,12 @@
 #define STR_ObjNameSingulMEDIA              (STR_ObjNameBegin + 143)
 #define STR_ObjNamePluralMEDIA              (STR_ObjNameBegin + 144)
 
-#define STR_ObjNameEnd               (STR_ObjNamePluralMEDIA)
-
+//#define STR_ObjNameEnd               (STR_ObjNamePluralMEDIA)
+//IAccessibility2 Implementation 2009-----
+#define STR_ObjNameSingulFONTWORK           (STR_ObjNameBegin+145)
+#define STR_ObjNamePluralFONTWORK           (STR_ObjNameBegin+146)
+#define STR_ObjNameEnd                      (STR_ObjNamePluralFONTWORK)
+//-----IAccessibility2 Implementation 2009
 #define STR_EditBegin                (STR_ObjNameEnd+1)
 #define STR_EditWithCopy             (STR_EditBegin  +  0)
 #define STR_EditPosSize              (STR_EditBegin  +  1)

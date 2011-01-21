@@ -277,6 +277,14 @@ SvxRubyDialog::SvxRubyDialog( SfxBindings *pBind, SfxChildWindow *pCW,
     }
 
     UpdateColors();
+
+    String leftLabelName = aLeftFT.GetText(), rightLabelName = aRightFT.GetText();
+    aLeft2ED.SetAccessibleName(leftLabelName);
+    aLeft3ED.SetAccessibleName(leftLabelName);
+    aLeft4ED.SetAccessibleName(leftLabelName);
+    aRight2ED.SetAccessibleName(rightLabelName);
+    aRight3ED.SetAccessibleName(rightLabelName);
+    aRight4ED.SetAccessibleName(rightLabelName);
 }
 /* -----------------------------09.01.01 17:17--------------------------------
 

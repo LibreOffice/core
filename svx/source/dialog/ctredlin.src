@@ -114,7 +114,10 @@ TabPage SID_REDLIN_FILTER_PAGE
             ImageBitmap = Bitmap { File = "time.bmp" ; };
             MASKCOLOR
         };
-        QuickHelpText [ en-US ] = "Set Date/Time" ;
+        // IAccessibility2 implementation 2009. ------
+        //QuickHelpText [ en-US ] = "Set Date/Time" ;
+        QuickHelpText [ en-US ] = "Set Start Date/Time" ;
+        // ------ IAccessibility2 implementation 2009.
     };
     FixedText FT_DATE2
     {
@@ -170,7 +173,10 @@ TabPage SID_REDLIN_FILTER_PAGE
             ImageBitmap = Bitmap { File = "time.bmp" ; };
             MASKCOLOR
         };
-        QuickHelpText [ en-US ] = "Set Date/Time" ;
+        // IAccessibility2 implementation 2009. ------
+        //QuickHelpText [ en-US ] = "Set Date/Time" ;
+        QuickHelpText [ en-US ] = "Set End Date/Time" ;
+        // ------ IAccessibility2 implementation 2009.
     };
     CheckBox CB_AUTOR
     {
@@ -254,6 +260,32 @@ TabPage SID_REDLIN_FILTER_PAGE
         ImageBitmap = Bitmap { File = "time_h.bmp" ; };
         MASKCOLOR
     };
+        /*IAccessibility2 Implementation 2009-----*/
+    String STR_DATE_COMBOX
+    {
+        Text [ en-US ] = "Date Condition" ;
+    };
+    String STR_DATE_SPIN
+    {
+        Text [ en-US ] = "Start Date" ;
+    };
+    String STR_DATE_SPIN1
+    {
+        Text [ en-US ] = "End Date" ;
+    };
+    String STR_DATE_TIME_SPIN
+    {
+        Text [ en-US ] = "Start Time" ;
+    };
+    String STR_DATE_TIME_SPIN1
+    {
+        Text [ en-US ] = "End Time" ;
+    };
+    String STR_TREE
+    {
+        Text [ en-US ] = "Changes" ;
+    };
+    /*-----IAccessibility2 Implementation 2009*/
 };
 TabPage SID_REDLIN_VIEW_PAGE
 {

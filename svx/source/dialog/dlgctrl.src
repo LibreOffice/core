@@ -31,4 +31,9 @@ Bitmap RID_SVXCTRL_RECTBTNS
 {
     File = "rectbtns.bmp" ;
 };
-
+/*IAccessibility2 Implementation 2009-----*/
+String STR_SWITCH
+{
+    Text [ en-US ] = "Switch" ;
+};
+/*-----IAccessibility2 Implementation 2009*/

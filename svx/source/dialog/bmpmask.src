@@ -327,47 +327,16 @@ String RID_SVXDLG_BMPMASK_STR_SOURCECOLOR
     Text [ en-US ] = "Source Color";
 };
 
- // ********************************************************************** EOF
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+String RID_SVXDLG_BMPMASK_STR_PALETTE
+{
+    Text [ en-US ] = "Color Palette";
+};
+String RID_SVXDLG_BMPMASK_STR_TOLERANCE
+{
+    Text [ en-US ] = "Tolerance";
+};
+String RID_SVXDLG_BMPMASK_STR_REPLACEWITH
+{
+    Text [ en-US ] = "Replace with";
+};
 
