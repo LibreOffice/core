@@ -32,7 +32,6 @@
 #include "bib.hrc"
 #include "bibcont.hxx"
 #include "bibbeam.hxx"
-#include "bibmod.hxx"
 #include "general.hxx"
 #include "bibview.hxx"
 #include "datman.hxx"

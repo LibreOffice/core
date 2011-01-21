@@ -34,7 +34,6 @@
 #include "sal/config.h"
 #include "sal/types.h"
 
-
 #include "boost/scoped_array.hpp"
 #include "boost/shared_ptr.hpp"
 
@@ -457,12 +456,7 @@
 #include "cppuhelper/weakagg.hxx"
 #include "cppuhelper/weakref.hxx"
 
-
-
 #include "i18npool/mslangid.hxx"
-
-
-
 
 #include "osl/conditn.h"
 #include "osl/conditn.hxx"
@@ -472,15 +466,12 @@
 #include "osl/getglobalmutex.hxx"
 #include "osl/interlck.h"
 #include "osl/module.h"
-#include "osl/module.hxx"
-#include "osl/mutex.hxx"
 #include "osl/nlsupport.h"
 #include "osl/pipe.hxx"
 #include "osl/process.h"
 #include "osl/security.hxx"
 #include "osl/thread.h"
 #include "osl/time.h"
-
 
 #include "rtl/alloc.h"
 #include "rtl/bootstrap.hxx"
@@ -505,10 +496,6 @@
 
 #include "sane/sane.h"
 
-
-
-
-
 #include "svl/filenotation.hxx"
 #include "svtools/imgdef.hxx"
 #include "svtools/miscopt.hxx"
@@ -520,14 +507,11 @@
 #include "sys/stat.h"
 #include "sys/types.h"
 
-
 #include "tools/diagnose_ex.h"
-
 
 #include "typelib/typeclass.h"
 #include "typelib/typedescription.h"
 #include "typelib/typedescription.hxx"
-
 
 #include "uno/dispatcher.h"
 #include "uno/environment.h"
@@ -536,7 +520,6 @@
 #include "unotools/configitem.hxx"
 #include "unotools/confignode.hxx"
 #include "unotools/processfactory.hxx"
-
 
 #include "vcl/fldunit.hxx"
 

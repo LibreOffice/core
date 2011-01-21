@@ -33,7 +33,6 @@
 #include <osl/mutex.hxx>
 #include <rtl/ustring.hxx>
 #include <cppuhelper/weak.hxx>
-#include <cppuhelper/weak.hxx>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/Sequence.h>
 #include <com/sun/star/awt/XBitmap.hpp>

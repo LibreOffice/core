@@ -51,7 +51,6 @@
 #include "bibtools.hxx"
 #include "bibliography.hrc"
 #include <tools/debug.hxx>
-#include <vcl/mnemonic.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/i18nhelp.hxx>
 #include <vcl/mnemonic.hxx>

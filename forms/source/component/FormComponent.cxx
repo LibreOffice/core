@@ -65,9 +65,6 @@
 #include <functional>
 #include <algorithm>
 
-#include <functional>
-#include <algorithm>
-
 
 //... namespace frm .......................................................
 namespace frm

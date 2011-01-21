@@ -32,7 +32,6 @@
 
 /** === begin UNO includes === **/
 #include <com/sun/star/inspection/PropertyControlType.hpp>
-#include <com/sun/star/inspection/PropertyControlType.hpp>
 /** === end UNO includes === **/
 #include <svl/numuno.hxx>
 #include <rtl/math.hxx>

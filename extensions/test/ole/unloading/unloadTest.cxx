@@ -33,7 +33,6 @@
 #include<osl/module.hxx>
 #include <osl/time.h>
 #include <rtl/ustring.hxx>
-#include <stdio.h>
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/servicefactory.hxx>
 #include <cppuhelper/bootstrap.hxx>

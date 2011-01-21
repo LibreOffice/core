@@ -34,8 +34,6 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
 
-#include <com/sun/star/beans/XPropertyState.hpp>
-
 #include <osl/security.hxx>
 #include <osl/time.h>
 #include <osl/file.hxx>

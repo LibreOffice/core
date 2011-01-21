@@ -52,7 +52,6 @@
 #include <com/sun/star/connection/XConnector.hpp>
 #include <com/sun/star/connection/XConnection.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/uno/XNamingService.hpp>
 
 #include <cppuhelper/servicefactory.hxx>

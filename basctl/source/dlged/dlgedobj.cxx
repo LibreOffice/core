@@ -30,7 +30,6 @@
 #include "precompiled_basctl.hxx"
 
 #include <vector>
-#include <algorithm>
 #include <dlgeddef.hxx>
 #include "dlgedobj.hxx"
 #include "dlged.hxx"

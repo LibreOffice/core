@@ -38,7 +38,6 @@
 #include <ZipFile.hxx>
 #include <PackageConstants.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
-#include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/packages/zip/ZipConstants.hpp>
 #include <com/sun/star/packages/manifest/XManifestReader.hpp>
 #include <com/sun/star/packages/manifest/XManifestWriter.hpp>

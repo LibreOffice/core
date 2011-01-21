@@ -30,7 +30,6 @@
 #if 0
 #ifdef PRECOMPILED_HEADERS
 //---MARKER---
-#include "sal/config.h"
 #include "avmedia/mediaitem.hxx"
 #include "avmedia/mediawindow.hxx"
 #include "basegfx/matrix/b2dhommatrix.hxx"
@@ -639,7 +638,6 @@
 #include "comphelper/sequence.hxx"
 #include "comphelper/sequenceashashmap.hxx"
 #include "comphelper/sequenceasvector.hxx"
-#include "comphelper/servicehelper.hxx"
 #include "comphelper/storagehelper.hxx"
 #include "comphelper/types.hxx"
 #include "comphelper/uno3.hxx"
@@ -687,7 +685,6 @@
 #include "osl/interlck.h"
 #include "osl/module.h"
 #include "osl/module.hxx"
-#include "osl/mutex.hxx"
 #include "osl/nlsupport.h"
 #include "osl/process.h"
 #include "osl/security.hxx"

@@ -30,7 +30,6 @@
 #include <sys/utsname.h>
 #include <_version.h>
 #include <errno.h>
-#include <string>
 #include <string.h>
 #include <assert.h>
 

@@ -28,7 +28,6 @@
 #ifndef ACCESSIBILITY_HELPER_COMBOLISTBOXHELPER_HXX
 #define ACCESSIBILITY_HELPER_COMBOLISTBOXHELPER_HXX
 
-#include <tools/gen.hxx>
 #include <tools/string.hxx>
 #include <vcl/wintypes.hxx>
 #include <tools/gen.hxx>

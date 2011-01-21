@@ -33,10 +33,8 @@
 #include <list>
 #include <map>
 #include <algorithm>
-#include "premac.h"
 #include <Carbon/Carbon.h>
 #include <Security/cssmconfig.h>
-#include "postmac.h"
 #undef uint32
 
 #define XP_MAC

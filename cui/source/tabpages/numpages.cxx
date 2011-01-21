@@ -36,7 +36,6 @@
 #include <numpages.hxx>
 #include <numpages.hrc>
 #include <dialmgr.hxx>
-#include <cuires.hrc>
 #include <tools/shl.hxx>
 #include <i18npool/mslangid.hxx>
 #include <svtools/valueset.hxx>

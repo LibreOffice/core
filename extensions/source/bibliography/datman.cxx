@@ -64,7 +64,6 @@
 #include <svtools/headbar.hxx>
 #include <vcl/dialog.hxx>
 #include <vcl/button.hxx>
-#include <vcl/lstbox.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/group.hxx>
 #include <vcl/lstbox.hxx>
@@ -76,7 +75,6 @@
 #include "bibmod.hxx"
 #include "bibview.hxx"
 // #100312# ---------
-#include "bibbeam.hxx"
 #include "bibprop.hrc"
 #include "toolbar.hxx"
 #include "toolbar.hrc"

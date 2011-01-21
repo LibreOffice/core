@@ -30,8 +30,6 @@
 
 #include <svheader.hxx>
 
-#include <iderid.hxx>
-
 #include "scriptdocument.hxx"
 
 class ModulWindow;

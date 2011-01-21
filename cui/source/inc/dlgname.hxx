@@ -31,7 +31,6 @@
 
 #include <vcl/edit.hxx>
 #include <vcl/button.hxx>
-#include <vcl/fixed.hxx>
 #include <vcl/dialog.hxx>
 #include <vcl/fixed.hxx>
 

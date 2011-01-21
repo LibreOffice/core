@@ -34,7 +34,6 @@
 #include "dbregistersettings.hxx"
 #include "connpooloptions.hxx"
 #include <svl/filenotation.hxx>
-#include <cuires.hrc>
 #include "helpid.hrc"
 #include <svtools/editbrowsebox.hxx>
 #include <cuires.hrc>

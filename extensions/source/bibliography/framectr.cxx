@@ -31,7 +31,6 @@
 #include <vcl/waitobj.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
 #include <com/sun/star/util/URL.hpp>
-#include <osl/mutex.hxx>
 #include <vcl/msgbox.hxx>
 #include <tools/debug.hxx>
 #include <vcl/stdtext.hxx>

@@ -75,7 +75,6 @@
 #include <svx/srchdlg.hxx>
 #include <svx/lboxctrl.hxx>
 #include <svx/tbcontrl.hxx>
-#include <com/sun/star/script/XLibraryContainer.hpp>
 #include <com/sun/star/script/XLibraryContainerPassword.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/container/XContainer.hpp>

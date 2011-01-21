@@ -38,11 +38,9 @@
 #include <tools/debug.hxx>
 #include <vcl/sound.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/msgbox.hxx>
 #include <svtools/colorcfg.hxx>
 #include <svl/eitem.hxx>
 #include <svl/intitem.hxx>
-#include <svl/stritem.hxx>
 #include <svl/itempool.hxx>
 
 #include <rtl/textenc.h>

@@ -29,8 +29,6 @@
 #ifndef _LINKDLG_HXX
 #define _LINKDLG_HXX
 
-#include <vcl/lstbox.hxx>
-
 #include <vcl/dialog.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/button.hxx>

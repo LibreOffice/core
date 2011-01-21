@@ -49,7 +49,6 @@
 #include "dlgname.hxx"
 #include <dialmgr.hxx>
 #include "svx/dlgutil.hxx"
-#include <svx/svdmodel.hxx>
 #include "svx/svxgrahicitem.hxx"
 #include <sfx2/request.hxx>
 #include "svx/ofaitem.hxx"

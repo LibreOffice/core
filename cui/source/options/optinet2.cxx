@@ -72,11 +72,9 @@
 #include <svx/svxids.hrc> // slot ids, mostly for changetracking
 
 // for security TP
-#include <comphelper/processfactory.hxx>
 #include <com/sun/star/security/XDocumentDigitalSignatures.hpp>
 
 #ifdef UNX
-#include <sys/types.h>
 #include <sys/stat.h>
 #include <unistd.h>
 #include <fcntl.h>

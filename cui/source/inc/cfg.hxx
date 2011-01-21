@@ -29,7 +29,6 @@
 #define _SVXCFG_HXX
 
 #include <vcl/lstbox.hxx>
-#include <vcl/toolbox.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/group.hxx>
 #include <vcl/menubtn.hxx>

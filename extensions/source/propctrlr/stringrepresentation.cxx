@@ -44,7 +44,6 @@
 #include <com/sun/star/util/Time.hpp>
 #include <comphelper/sequence.hxx>
 #include <connectivity/dbconversion.hxx>
-#include "modulepcr.hxx"
 #include "formresid.hrc"
 #include <tools/debug.hxx>
 #include <tools/string.hxx>

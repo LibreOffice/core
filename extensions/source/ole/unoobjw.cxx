@@ -36,7 +36,6 @@
 #include <vector>
 #include <list>
 #include <hash_map>
-#include "comifaces.hxx"
 #include <tools/postsys.h>
 
 

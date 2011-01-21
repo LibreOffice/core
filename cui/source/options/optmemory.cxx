@@ -62,7 +62,6 @@
 #include <svx/xpool.hxx>
 #include <svx/dlgutil.hxx>
 #include "cuitabarea.hxx"
-#include <cuires.hrc>
 #include "optmemory.hrc"
 #include "optmemory.hxx"
 #include <svx/ofaitem.hxx>

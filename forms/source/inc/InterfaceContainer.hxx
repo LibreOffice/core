@@ -40,7 +40,6 @@
 #include <com/sun/star/lang/EventObject.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/io/XPersistObject.hpp>
-#include <com/sun/star/form/XFormComponent.hpp>
 #include <com/sun/star/beans/XPropertyChangeListener.hpp>
 #include <com/sun/star/beans/PropertyChangeEvent.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>

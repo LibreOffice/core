@@ -53,7 +53,6 @@
 #include <editeng/udlnitem.hxx>
 #include <editeng/crsditem.hxx>
 #include <editeng/colritem.hxx>
-#include <editeng/flstitem.hxx>
 #include <editeng/langitem.hxx>
 #include <editeng/wrlmitem.hxx>
 #include <editeng/cmapitem.hxx>

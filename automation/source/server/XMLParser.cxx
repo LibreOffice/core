@@ -39,7 +39,6 @@
 #include <com/sun/star/xml/sax/XParser.hpp>
 #include <com/sun/star/xml/sax/SAXException.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
-#include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/util/XCloneable.hpp>
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/implbase2.hxx>

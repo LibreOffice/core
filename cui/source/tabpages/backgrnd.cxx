@@ -31,7 +31,6 @@
 
 // include ---------------------------------------------------------------
 #include <unotools/pathoptions.hxx>
-#include <svl/intitem.hxx>
 #include <vcl/msgbox.hxx>
 #include <tools/urlobj.hxx>
 #include <sfx2/objsh.hxx>

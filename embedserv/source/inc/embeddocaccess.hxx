@@ -29,8 +29,6 @@
 #ifndef _EMBEDDOCACCESS_HXX_
 #define _EMBEDDOCACCESS_HXX_
 
-#include <cppuhelper/weak.hxx>
-
 #define OLESERV_SAVEOBJECT      1
 #define OLESERV_CLOSE           2
 #define OLESERV_NOTIFY          3

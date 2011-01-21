@@ -36,7 +36,6 @@
 #include "cuires.hrc"
 #include "dialmgr.hxx"
 
-#include <editeng/unolingu.hxx>
 #include <tools/shl.hxx>
 #include <svl/lngmisc.hxx>
 #include <svtools/filter.hxx>
@@ -45,8 +44,6 @@
 #include <vcl/wrkwin.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/svapp.hxx>
-#include <com/sun/star/linguistic2/XThesaurus.hpp>
-#include <com/sun/star/linguistic2/XMeaning.hpp>
 #include <thesdlg.hxx>
 #include <svx/dlgutil.hxx>
 #include <svx/dialmgr.hxx>

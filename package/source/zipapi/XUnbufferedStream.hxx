@@ -28,7 +28,6 @@
 #ifndef _XUNBUFFERED_STREAM_HXX
 #define _XUNBUFFERED_STREAM_HXX
 
-#include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/io/XSeekable.hpp>
 #include <com/sun/star/io/XInputStream.hpp>

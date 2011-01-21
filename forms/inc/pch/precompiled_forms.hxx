@@ -311,7 +311,6 @@
 #include "osl/conditn.hxx"
 #include "osl/diagnose.h"
 #include "osl/file.hxx"
-#include "osl/mutex.hxx"
 
 #include "rtl/alloc.h"
 #include "rtl/logfile.hxx"
@@ -329,7 +328,6 @@
 #include "sfx2/imgmgr.hxx"
 #include "sfx2/msgpool.hxx"
 #include "sfx2/sfxuno.hxx"
-
 
 #include "svtools/cliplistener.hxx"
 #include "svtools/imageresourceaccess.hxx"
@@ -375,7 +373,6 @@
 
 #include "ucbhelper/activedatasink.hxx"
 #include "ucbhelper/content.hxx"
-
 
 #include "uno/lbnames.h"
 #include "uno/mapping.hxx"

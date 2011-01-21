@@ -41,14 +41,10 @@
 #include "optsave.hxx"
 #include <dialmgr.hxx>
 #include <comphelper/processfactory.hxx>
-#include <comphelper/sequenceasvector.hxx>
-#include <comphelper/sequenceashashmap.hxx>
 #include <unotools/moduleoptions.hxx>
 #include <unotools/saveopt.hxx>
 #include <comphelper/sequenceasvector.hxx>
 #include <comphelper/sequenceashashmap.hxx>
-#include <com/sun/star/container/XContainerQuery.hpp>
-#include <com/sun/star/container/XEnumeration.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/container/XContainerQuery.hpp>
@@ -58,7 +54,6 @@
 #include <sfx2/docfilt.hxx>
 #include <svtools/stdctrl.hxx>
 #include <vcl/fixed.hxx>
-#include <vcl/msgbox.hxx>
 #include <unotools/configitem.hxx>
 #include <unotools/optionsdlg.hxx>
 

@@ -35,7 +35,6 @@
 #include <tools/shl.hxx>
 #include <svtools/ruler.hxx>
 #include <svx/dialogs.hrc>
-#include <svx/dialogs.hrc>
 
 #define _SVX_TABSTPGE_CXX
 

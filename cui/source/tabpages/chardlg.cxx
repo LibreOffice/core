@@ -48,7 +48,6 @@
 #define _SVX_CHARDLG_CXX
 #include <svl/languageoptions.hxx>
 
-#include <cuires.hrc>
 #include "chardlg.hrc"
 
 #include <svx/xtable.hxx>       // XColorTable
