@@ -188,8 +188,8 @@ ScDPLayoutDlg::ScDPLayoutDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pPar
                                 GetViewData() ),
         pDoc            ( ((ScTabViewShell*)SfxViewShell::Current())->
                                 GetViewData()->GetDocument() ),
-        bRefInputMode   (false),
-        mbValidSrcRange (false)
+        meSrcType(SRC_INVALID),
+        bRefInputMode   (false)
 {
     xDlgDPObject->SetAlive( TRUE );     // needed to get structure information
     xDlgDPObject->FillOldParam( thePivotData, FALSE );
@@ -1419,9 +1419,9 @@ bool ScDPLayoutDlg::GetPivotArrays(
 
 void ScDPLayoutDlg::UpdateSrcRange()
 {
-    StackPrinter __stack_printer__("ScDPLayoutDlg::UpdateSrcRange");
     String  theCurPosStr = aEdInPos.GetText();
     USHORT  nResult = ScRange().Parse(theCurPosStr, pDoc, pDoc->GetAddressConvention());
+    meSrcType = SRC_INVALID;
 
     ScRange aNewRange;
     if (SCA_VALID == (nResult & SCA_VALID))
@@ -1432,6 +1432,7 @@ void ScDPLayoutDlg::UpdateSrcRange()
         aNewRange.aStart = start.GetAddress();
         aNewRange.aEnd = end.GetAddress();
         aEdInPos.SetRefValid(true);
+        meSrcType = SRC_REF;
     }
     else
     {
@@ -1453,17 +1454,16 @@ void ScDPLayoutDlg::UpdateSrcRange()
 
         aEdInPos.SetRefValid(bValid);
         if (!bValid)
+        {
             // All attempts have failed.  Give up.
+            aBtnOk.Disable();
             return;
+        }
+
+        meSrcType = SRC_NAME;
     }
 
-    {
-        String aStr;
-        aNewRange.Format(aStr, SCA_ABS_3D, pDoc);
-        fprintf(stdout, "ScDPLayoutDlg::UpdateSrcRange:   new range = '%s'\n",
-                rtl::OUStringToOString(aStr, RTL_TEXTENCODING_UTF8).getStr());
-    }
-
+    aBtnOk.Enable();
     ScSheetSourceDesc inSheet = *xDlgDPObject->GetSheetDesc();
 
     if (inSheet.aSourceRange == aNewRange)
