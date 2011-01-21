@@ -379,7 +379,7 @@ ObjectWin *SolDep::RemoveObject( sal_uInt16 nId, sal_Bool bDelete )
             delete pPrj;
         }
         else
-            DBG_ASSERT( FALSE, "project not found - write" );
+            DBG_ASSERT( sal_False, "project not found - write" );
 
         mpSolIdMapper->Delete( aBodyText );
         if ( bDelete )
@@ -446,7 +446,7 @@ sal_uInt16 SolDep::AddConnector( ObjectWin* pStartWin, ObjectWin* pEndWin )
     }
     else
     {
-        DBG_ASSERT( FALSE , "non existing Project" );
+        DBG_ASSERT( sal_False , "non existing Project" );
         return 1;
     }
 }
@@ -699,7 +699,7 @@ sal_uInt16 SolDep::WriteSource()
 sal_uInt16 SolDep::Load( const ByteString& rFileName )
 {
 // moved from depper class
-    DBG_ASSERT( FALSE , "you are dead!" );
+    DBG_ASSERT( sal_False , "you are dead!" );
     SvFileStream aInFile( String( rFileName, RTL_TEXTENCODING_UTF8 ), STREAM_READ );
     depper_head dh;
     sal_uIntPtr i;

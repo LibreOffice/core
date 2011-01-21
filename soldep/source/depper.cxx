@@ -152,7 +152,7 @@ void Depper::RemoveAllObjects( ObjectList* pObjLst )
 
 sal_uInt16 Depper::Save( const ByteString& rFileName )
 {
-    DBG_ASSERT( FALSE , "you are dead!" );
+    DBG_ASSERT( sal_False , "you are dead!" );
     SvFileStream aOutFile( String( rFileName, RTL_TEXTENCODING_UTF8 ), STREAM_WRITE );
     depper_head dh;
     sal_uInt16 i;
@@ -183,19 +183,19 @@ sal_uInt16 Depper::Save( const ByteString& rFileName )
 
 sal_uInt16  Depper::WriteSource()
 {
-    DBG_ASSERT( FALSE , "overload it!" );
+    DBG_ASSERT( sal_False , "overload it!" );
     return 0;
 };
 
 sal_uInt16  Depper::ReadSource( sal_Bool bUpdater )
 {
-    DBG_ASSERT( FALSE , "overload it!" );
+    DBG_ASSERT( sal_False , "overload it!" );
     return 0;
 };
 
 sal_uInt16  Depper::OpenSource()
 {
-    DBG_ASSERT( FALSE , "overload it!" );
+    DBG_ASSERT( sal_False , "overload it!" );
     return 0;
 };
 
@@ -680,7 +680,7 @@ IMPL_LINK( Depper, PopupSelected, PopupMenu*, mpPopup )
             maToolBox.Show();
             break;
         default :
-            DBG_ASSERT( FALSE, "default" );
+            DBG_ASSERT( sal_False, "default" );
                 break;
     }
     return 0;

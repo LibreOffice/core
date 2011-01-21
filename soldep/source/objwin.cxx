@@ -659,7 +659,7 @@ IMPL_LINK( ObjectWin, PopupSelected, PopupMenu*, mpPopup_l )
     switch( nItemId )
     {
         case OBJWIN_EDIT_TEXT :
-            DBG_ASSERT( FALSE,"edit");
+            DBG_ASSERT( sal_False,"edit");
                 break;
         case OBJWIN_REMOVE_WIN :
 //          DBG_ASSERT( FALSE,"remove");
