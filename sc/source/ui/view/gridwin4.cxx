@@ -1082,7 +1082,9 @@ void ScGridWindow::DrawPagePreview( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, 
                                     nPageNo += ((long)nColPos)*nRowBreaks+nRowPos;
                                 else
                                     nPageNo += ((long)nRowPos)*nColBreaks+nColPos;
-                                aPageStr.SearchAndReplaceAscii("%1", String::CreateFromInt32(nPageNo));
+
+                                String aThisPageStr = aPageStr; // Don't modify the original string.
+                                aThisPageStr.SearchAndReplaceAscii("%1", String::CreateFromInt32(nPageNo));
 
                                 if ( pEditEng )
                                 {
@@ -1091,7 +1093,7 @@ void ScGridWindow::DrawPagePreview( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, 
                                     pEditEng->SetDefaultItem( SvxFontHeightItem( nHeight, 100, EE_CHAR_FONTHEIGHT ) );
                                     pEditEng->SetDefaultItem( SvxFontHeightItem( nHeight, 100, EE_CHAR_FONTHEIGHT_CJK ) );
                                     pEditEng->SetDefaultItem( SvxFontHeightItem( nHeight, 100, EE_CHAR_FONTHEIGHT_CTL ) );
-                                    pEditEng->SetText( aPageStr );
+                                    pEditEng->SetText( aThisPageStr );
                                     Size aSize100( pEditEng->CalcTextWidth(), pEditEng->GetTextHeight() );
 
                                     //  40% of width or 60% of height
@@ -1113,7 +1115,7 @@ void ScGridWindow::DrawPagePreview( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, 
                                     //  find right font size for DrawText
                                     aFont.SetSize( Size( 0,100 ) );
                                     pContentDev->SetFont( aFont );
-                                    Size aSize100( pContentDev->GetTextWidth( aPageStr ), pContentDev->GetTextHeight() );
+                                    Size aSize100( pContentDev->GetTextWidth( aThisPageStr ), pContentDev->GetTextHeight() );
 
                                     //  40% of width or 60% of height
                                     long nSizeX = 40 * ( aPageEnd.X() - aPageStart.X() ) / aSize100.Width();
@@ -1122,10 +1124,10 @@ void ScGridWindow::DrawPagePreview( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, 
                                     pContentDev->SetFont( aFont );
 
                                     //  centered output with DrawText
-                                    Size aTextSize( pContentDev->GetTextWidth( aPageStr ), pContentDev->GetTextHeight() );
+                                    Size aTextSize( pContentDev->GetTextWidth( aThisPageStr ), pContentDev->GetTextHeight() );
                                     Point aPos( (aPageStart.X()+aPageEnd.X()-aTextSize.Width())/2,
                                                 (aPageStart.Y()+aPageEnd.Y()-aTextSize.Height())/2 );
-                                    pContentDev->DrawText( aPos, aPageStr );
+                                    pContentDev->DrawText( aPos, aThisPageStr );
                                 }
                             }
                             nPrStartX = nPrEndX + 1;
