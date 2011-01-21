@@ -37,6 +37,8 @@
 #include <threadhelp/resetableguard.hxx>
 #include "services.h"
 
+#include "helper/mischelper.hxx"
+
 //_________________________________________________________________________________________________________________
 //  interface includes
 //_________________________________________________________________________________________________________________
@@ -55,6 +57,7 @@
 #include <tools/urlobj.hxx>
 #include <vcl/svapp.hxx>
 #include <rtl/logfile.hxx>
+
 //_________________________________________________________________________________________________________________
 //  Defines
 //_________________________________________________________________________________________________________________
@@ -115,7 +118,7 @@ ConfigurationAccess_FactoryManager::~ConfigurationAccess_FactoryManager()
 
     Reference< XContainer > xContainer( m_xConfigAccess, UNO_QUERY );
     if ( xContainer.is() )
-        xContainer->removeContainerListener( this );
+        xContainer->removeContainerListener(m_xConfigListener);
 }
 
 rtl::OUString ConfigurationAccess_FactoryManager::getFactorySpecifierFromTypeNameModule( const rtl::OUString& rType, const rtl::OUString& rName, const rtl::OUString& rModule ) const
@@ -353,7 +356,10 @@ void ConfigurationAccess_FactoryManager::readConfigurationData()
         aLock.unlock();
         // UNSAFE
         if ( xContainer.is() )
-            xContainer->addContainerListener( this );
+        {
+            m_xConfigListener = new WeakContainerListener(this);
+            xContainer->addContainerListener(m_xConfigListener);
+        }
     }
 }
 

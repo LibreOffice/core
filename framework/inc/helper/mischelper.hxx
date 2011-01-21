@@ -31,7 +31,10 @@
 
 #include <com/sun/star/linguistic2/XLanguageGuessing.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
+#include <com/sun/star/container/XContainerListener.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
+
+#include <cppuhelper/implbase1.hxx>
 
 #include <i18npool/lang.h>
 #include <svl/languageoptions.hxx>
@@ -118,6 +121,74 @@ void FillLangItems( std::set< ::rtl::OUString > &rLangItems,
         const ::rtl::OUString & rCurLang,
         const ::rtl::OUString & rKeyboardLang,
         const ::rtl::OUString & rGuessedTextLang );
+
+//It's common for an object to want to create and own a Broadcaster and set
+//itself as a Listener on its own Broadcaster member.
+//
+//However, calling addListener on a Broadcaster means that the Broadcaster adds
+//a reference to the Listener leading to an ownership cycle where the Listener
+//owns the Broadcaster which "owns" the Listener.
+//
+//The WeakContainerListener allows breaking this cycle and retrofitting
+//afflicted implentations fairly easily.
+//
+//OriginalListener owns the Broadcaster which "owns" the WeakContainerListener
+//which forwards the events to the OriginalListener without taking ownership of
+//it.
+class WeakContainerListener : public ::cppu::WeakImplHelper1<com::sun::star::container::XContainerListener>
+{
+    private:
+        com::sun::star::uno::WeakReference<com::sun::star::container::XContainerListener> mxOwner;
+
+    public:
+        WeakContainerListener(com::sun::star::uno::Reference<com::sun::star::container::XContainerListener> xOwner)
+            : mxOwner(xOwner)
+        {
+        }
+
+        virtual ~WeakContainerListener()
+        {
+        }
+
+        // container.XContainerListener
+        virtual void SAL_CALL elementInserted(const com::sun::star::container::ContainerEvent& rEvent)
+            throw(com::sun::star::uno::RuntimeException)
+        {
+            com::sun::star::uno::Reference<com::sun::star::container::XContainerListener> xOwner(mxOwner.get(),
+                com::sun::star::uno::UNO_QUERY);
+            if (xOwner.is())
+                xOwner->elementInserted(rEvent);
+        }
+
+        virtual void SAL_CALL elementRemoved(const com::sun::star::container::ContainerEvent& rEvent)
+            throw(com::sun::star::uno::RuntimeException)
+        {
+            com::sun::star::uno::Reference<com::sun::star::container::XContainerListener> xOwner(mxOwner.get(),
+                com::sun::star::uno::UNO_QUERY);
+            if (xOwner.is())
+                xOwner->elementRemoved(rEvent);
+        }
+
+        virtual void SAL_CALL elementReplaced(const com::sun::star::container::ContainerEvent& rEvent)
+            throw(com::sun::star::uno::RuntimeException)
+        {
+            com::sun::star::uno::Reference<com::sun::star::container::XContainerListener> xOwner(mxOwner.get(),
+                com::sun::star::uno::UNO_QUERY);
+            if (xOwner.is())
+                xOwner->elementReplaced(rEvent);
+        }
+
+        // lang.XEventListener
+        virtual void SAL_CALL disposing(const com::sun::star::lang::EventObject& rEvent)
+            throw(com::sun::star::uno::RuntimeException)
+        {
+            com::sun::star::uno::Reference<com::sun::star::container::XContainerListener> xOwner(mxOwner.get(),
+                com::sun::star::uno::UNO_QUERY);
+            if (xOwner.is())
+                xOwner->disposing(rEvent);
+
+        }
+};
 
 } // namespace framework
 

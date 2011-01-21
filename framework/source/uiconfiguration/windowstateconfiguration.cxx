@@ -36,6 +36,8 @@
 #include <threadhelp/resetableguard.hxx>
 #include "services.h"
 
+#include "helper/mischelper.hxx"
+
 //_________________________________________________________________________________________________________________
 //  interface includes
 //_________________________________________________________________________________________________________________
@@ -264,6 +266,7 @@ class ConfigurationAccess_WindowState : // interfaces
         Reference< XMultiServiceFactory > m_xServiceManager;
         Reference< XMultiServiceFactory > m_xConfigProvider;
         Reference< XNameAccess >          m_xConfigAccess;
+        Reference< XContainerListener >   m_xConfigListener;
         ResourceURLToInfoCache            m_aResourceURLToInfoCache;
         sal_Bool                          m_bConfigAccessInitialized : 1,
                                           m_bModified : 1;
@@ -321,7 +324,7 @@ ConfigurationAccess_WindowState::~ConfigurationAccess_WindowState()
     ResetableGuard aLock( m_aLock );
     Reference< XContainer > xContainer( m_xConfigAccess, UNO_QUERY );
     if ( xContainer.is() )
-        xContainer->removeContainerListener( this );
+        xContainer->removeContainerListener(m_xConfigListener);
 }
 
 // XNameAccess
@@ -1324,7 +1327,10 @@ sal_Bool ConfigurationAccess_WindowState::impl_initializeConfigAccess()
             // Add as container listener
             Reference< XContainer > xContainer( m_xConfigAccess, UNO_QUERY );
             if ( xContainer.is() )
-                xContainer->addContainerListener( this );
+            {
+                m_xConfigListener = new WeakContainerListener(this);
+                xContainer->addContainerListener(m_xConfigListener);
+            }
         }
 
         return sal_True;

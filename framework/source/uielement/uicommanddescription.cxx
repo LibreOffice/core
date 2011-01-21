@@ -38,6 +38,8 @@
 
 #include "properties.h"
 
+#include "helper/mischelper.hxx"
+
 //_________________________________________________________________________________________________________________
 //  interface includes
 //_________________________________________________________________________________________________________________
@@ -193,9 +195,10 @@ class ConfigurationAccess_UICommand : // Order is neccessary for right initializ
         Reference< XNameAccess >          m_xGenericUICommands;
         Reference< XMultiServiceFactory > m_xServiceManager;
         Reference< XMultiServiceFactory > m_xConfigProvider;
-        //Reference< XMultiServiceFactory > m_xConfigProviderPopups;
         Reference< XNameAccess >          m_xConfigAccess;
+        Reference< XContainerListener >   m_xConfigListener;
         Reference< XNameAccess >          m_xConfigAccessPopups;
+        Reference< XContainerListener >   m_xConfigAccessListener;
         Sequence< rtl::OUString >         m_aCommandImageList;
         Sequence< rtl::OUString >         m_aCommandRotateImageList;
         Sequence< rtl::OUString >         m_aCommandMirrorImageList;
@@ -246,10 +249,10 @@ ConfigurationAccess_UICommand::~ConfigurationAccess_UICommand()
     ResetableGuard aLock( m_aLock );
     Reference< XContainer > xContainer( m_xConfigAccess, UNO_QUERY );
     if ( xContainer.is() )
-        xContainer->removeContainerListener( this );
+        xContainer->removeContainerListener(m_xConfigListener);
     xContainer = Reference< XContainer >( m_xConfigAccessPopups, UNO_QUERY );
     if ( xContainer.is() )
-        xContainer->removeContainerListener( this );
+        xContainer->removeContainerListener(m_xConfigAccessListener);
 }
 
 // XNameAccess
@@ -394,7 +397,7 @@ void ConfigurationAccess_UICommand::impl_fill(const Reference< XNameAccess >& _x
             {
             }
         }
-    } // if ( m_xConfigAccessPopups.is() )
+    }
 }
 sal_Bool ConfigurationAccess_UICommand::fillCache()
 {
@@ -558,7 +561,10 @@ sal_Bool ConfigurationAccess_UICommand::initializeConfigAccess()
             // Add as container listener
             Reference< XContainer > xContainer( m_xConfigAccess, UNO_QUERY );
             if ( xContainer.is() )
-                xContainer->addContainerListener( this );
+            {
+                m_xConfigListener = new WeakContainerListener(this);
+                xContainer->addContainerListener(m_xConfigListener);
+            }
         }
 
         aPropValue.Value <<= m_aConfigPopupAccess;
@@ -569,7 +575,10 @@ sal_Bool ConfigurationAccess_UICommand::initializeConfigAccess()
             // Add as container listener
             Reference< XContainer > xContainer( m_xConfigAccessPopups, UNO_QUERY );
             if ( xContainer.is() )
-                xContainer->addContainerListener( this );
+            {
+                m_xConfigAccessListener = new WeakContainerListener(this);
+                xContainer->addContainerListener(m_xConfigAccessListener);
+            }
         }
 
         return sal_True;
