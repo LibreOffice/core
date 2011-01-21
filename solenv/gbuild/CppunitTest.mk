@@ -38,7 +38,7 @@ gb_CppunitTest__get_linktargetname = CppunitTest/$(call gb_CppunitTest_get_filen
 .PHONY : $(call gb_CppunitTest_get_clean_target,%)
 $(call gb_CppunitTest_get_clean_target,%) :
     $(call gb_Helper_abbreviate_dirs,\
-        rm -f $@ $@.log)
+        rm -f $(call gb_CppunitTest_get_target,$*) $(call gb_CppunitTest_get_target,$*).log)
 
 .PHONY : $(call gb_CppunitTest_get_target,%)
 $(call gb_CppunitTest_get_target,%) : $(gb_CppunitTest_CPPTESTTARGET)
