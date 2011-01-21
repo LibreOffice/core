@@ -45,7 +45,7 @@ $(call gb_CppunitTest_get_target,%) : $(gb_CppunitTest_CPPTESTTARGET)
     $(call gb_Output_announce,$*,$(true),CUT,2)
     $(call gb_Helper_abbreviate_dirs_native,\
         mkdir -p $(dir $@) && \
-        $(gb_CppunitTest_CPPTESTCOMMAND) $(call gb_LinkTarget_get_target,$(call gb_CppunitTest__get_linktargetname,$*)) > $@.log 2>&1 || (cat $@.log && false))
+        $(gb_CppunitTest_CPPTESTCOMMAND) $(call gb_LinkTarget_get_target,CppunitTest/$(call gb_CppunitTest_get_libfilename,$*)) > $@.log 2>&1 || (cat $@.log && false))
 
 define gb_CppunitTest_CppunitTest
 $(call gb_CppunitTest__CppunitTest_impl,$(1),$(call gb_CppunitTest__get_linktargetname,$(1)))
@@ -58,7 +58,7 @@ $(call gb_LinkTarget_set_targettype,$(2),CppunitTest)
 $(call gb_LinkTarget_add_linked_libs,$(2),cppunit)
 $(call gb_CppunitTest_get_target,$(1)) : $(call gb_LinkTarget_get_target,$(2))
 $(call gb_CppunitTest_get_clean_target,$(1)) : $(call gb_LinkTarget_get_clean_target,$(2))
-$(call gb_CppunitTest_CppunitTest_platform,$(1),$(2),$(gb_Library_DLLDIR)/$(call gb_CppunitTest_get_libfilename,$(1)))
+$(call gb_CppunitTest_CppunitTest_platform,$(1),$(2),$(gb_CppunitTest_DLLDIR)/$(call gb_CppunitTest_get_libfilename,$(1)))
 $$(eval $$(call gb_Module_register_target,$(call gb_CppunitTest_get_target,$(1)),$(call gb_CppunitTest_get_clean_target,$(1))))
 
 endef

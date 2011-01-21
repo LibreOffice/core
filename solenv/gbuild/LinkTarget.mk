@@ -262,7 +262,7 @@ $(call gb_LinkTarget_get_headers_target,%) : $(call gb_LinkTarget_get_external_h
 # - gb_LinkTarget_get_target links the objects into a file in WORKDIR.
 # gb_LinkTarget_get_target depends on gb_LinkTarget_get_headers_target which in
 # turn depends gb_LinkTarget_get_external_headers_target.
-# gb_LinkTarget_get_target depends additionally on the objects, which in turn
+    # gb_LinkTarget_get_target depends additionally on the objects, which in turn
 # depend build-order only on the gb_LinkTarget_get_headers_target. The build
 # order-only dependency ensures all headers to be there for compiling and
 # dependency generation without causing all objects to be rebuild when one
@@ -316,6 +316,7 @@ $(call gb_LinkTarget_get_target,$(1)) : LINKED_STATIC_LIBS :=
 $(call gb_LinkTarget_get_target,$(1)) : TARGETTYPE := 
 $(call gb_LinkTarget_get_headers_target,$(1)) \
 $(call gb_LinkTarget_get_target,$(1)) : PCH_NAME :=
+$(call gb_LinkTarget_get_target,$(1)) : PCHOBJS :=
 
 ifeq ($(gb_FULLDEPS),$(true))
 ifneq ($(wildcard $(call gb_LinkTarget_get_dep_target,$(1))),)
@@ -545,6 +546,8 @@ $(call gb_LinkTarget_get_clean_target,$(1)) : $(call gb_NoexPrecompiledHeader_ge
 $(call gb_NoexPrecompiledHeader_get_target,$(3)) : $(2).cxx
 
 $(call gb_LinkTarget_get_target,$(1)) : PCH_NAME := $(3)
+$(call gb_LinkTarget_get_target,$(1)) : PCHOBJS = $(call gb_PrecompiledHeader_get_target,$(3)).obj $(call gb_NoexPrecompiledHeader_get_target,$(3)).obj
+
 $(call gb_LinkTarget_get_headers_target,$(1)) \
 $(call gb_LinkTarget_get_target,$(1)) : DEFS := $$(DEFS) -DPRECOMPILED_HEADERS
 $(call gb_LinkTarget_get_headers_target,$(1)) \

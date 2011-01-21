@@ -243,6 +243,7 @@ $(call gb_Helper_abbreviate_dirs_native,\
     unset INCLUDE && \
     $(gb_CC) \
         $(DEFS) $(CFLAGS) \
+        $(PCHFLAGS) \
         -I$(dir $(3)) \
         $(INCLUDE) \
         -c $(3) \
@@ -281,6 +282,7 @@ $(call gb_Helper_abbreviate_dirs_native,\
     unset INCLUDE && \
     $(gb_CXX) \
         $(DEFS) $(CXXFLAGS) \
+        $(PCHFLAGS) \
         -I$(dir $(3)) \
         $(INCLUDE_STL) $(INCLUDE) \
         -c $(3) \
@@ -328,7 +330,6 @@ $(call gb_Helper_abbreviate_dirs_native,\
         $(6) \
         -c $(3) \
         -Yc$(notdir $(patsubst %.cxx,%.hxx,$(3))) -Fp$(1) -Fd$(1).pdb -Fo$(1).obj)
- rm $(1).obj
 $(call gb_PrecompiledHeader__command_deponcompile,$(1),$(2),$(3),$(4),$(5),$(6))
 endef
 
@@ -371,7 +372,6 @@ $(call gb_Helper_abbreviate_dirs_native,\
         $(6) \
         -c $(3) \
         -Yc$(notdir $(patsubst %.cxx,%.hxx,$(3))) -Fp$(1) -Fd$(1).pdb -Fo$(1).obj)
- rm $(1).obj
 $(call gb_NoexPrecompiledHeader__command_deponcompile,$(1),$(2),$(3),$(4),$(5),$(6))
 endef
 
@@ -387,13 +387,14 @@ gb_LinkTarget_INCLUDE :=\
 
 gb_LinkTarget_INCLUDE_STL := $(filter %/stl, $(subst -I. , ,$(SOLARINC)))
 
+
 define gb_LinkTarget__command
 $(call gb_Output_announce,$(2),$(true),LNK,4)
 $(call gb_Helper_abbreviate_dirs_native,\
     mkdir -p $(dir $(1)) && \
     RESPONSEFILE=$$(mktemp --tmpdir=$(gb_Helper_MISC)) && \
     echo "$(foreach object,$(CXXOBJECTS),$(call gb_CxxObject_get_target,$(object))) \
-        $(foreach object,$(COBJECTS),$(call gb_CObject_get_target,$(object)))" > $${RESPONSEFILE} && \
+        $(foreach object,$(COBJECTS),$(call gb_CObject_get_target,$(object))) $(PCHOBJS)" > $${RESPONSEFILE} && \
     $(gb_LINK) \
         $(if $(filter Library CppunitTest,$(TARGETTYPE)),$(gb_Library_TARGETTYPEFLAGS)) \
         $(if $(filter StaticLibrary,$(TARGETTYPE)),$(gb_StaticLibrary_TARGETTYPEFLAGS)) \
@@ -554,7 +555,7 @@ gb_CppunitTest_CPPTESTPRECOMMAND :=
 gb_CppunitTest_SYSPRE := itest_
 gb_CppunitTest_EXT := .lib
 gb_CppunitTest_get_filename = $(gb_CppunitTest_SYSPRE)$(1)$(gb_CppunitTest_EXT)
-gb_CppunitTest_get_libfilename = $(1).dll
+gb_CppunitTest_get_libfilename = test_$(1).dll
 
 # SdiTarget class
 
@@ -594,7 +595,7 @@ endif
 
 gb_ComponentTarget_XSLTPROCPRECOMMAND := PATH="$${PATH}:$(OUTDIR)/bin"
 gb_Library_COMPONENTPREFIXES := \
-    OOO:vnd.sun.star.expand:\dOOO_BASE_DIR/program/ \
+    OOO:vnd.sun.star.expand:\dBRAND_BASE_DIR/program/ \
     URELIB:vnd.sun.star.expand:\dURE_INTERNAL_LIB_DIR/ \
 
 # vim: set noet sw=4 ts=4:
