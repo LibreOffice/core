@@ -682,7 +682,7 @@ void TPGalleryThemeGeneral::SetXChgData( ExchangeData* _pData )
     String              aOutStr( String::CreateFromInt32( pThm->GetObjectCount() ) );
     String              aObjStr( CUI_RES( RID_SVXSTR_GALLERYPROPS_OBJECT ) );
     String              aAccess;
-    String              aType( CUI_RES( RID_SVXSTR_GALLERYPROPS_GALTHEME ) );
+    String              aType( SVX_RES( RID_SVXSTR_GALLERYPROPS_GALTHEME ) );
     BOOL                bReadOnly = pThm->IsReadOnly() && !pThm->IsImported();
 
     aEdtMSName.SetHelpId( HID_GALLERY_EDIT_MSNAME );

@@ -448,10 +448,6 @@ String RID_SVXSTR_GALLERYPROPS_OBJECT
 {
     Text [ en-US ] = "Object;Objects" ;
 };
-String RID_SVXSTR_GALLERYPROPS_GALTHEME
-{
-    Text [ en-US ] = "Gallery Theme" ;
-};
 String RID_SVXSTR_GALLERY_READONLY
 {
     Text [ en-US ] = " (read-only)" ;
