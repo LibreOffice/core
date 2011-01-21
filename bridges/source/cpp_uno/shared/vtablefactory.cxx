@@ -57,6 +57,7 @@
 #if defined SAL_UNX
 #include <unistd.h>
 #include <string.h>
+#include <errno.h>
 #include <sys/mman.h>
 #elif defined SAL_W32
 #define WIN32_LEAN_AND_MEAN
@@ -270,7 +271,7 @@ bool VtableFactory::createBlock(Block &block, sal_Int32 slotCount) const
         char *tmpfname = new char[aTmpName.getLength()+1];
         strncpy(tmpfname, aTmpName.getStr(), aTmpName.getLength()+1);
         if ((block.fd = mkstemp(tmpfname)) == -1)
-            perror("creation of executable memory area failed");
+            fprintf(stderr, "mkstemp(\"%s\") failed: %s\n", tmpfname, strerror(errno));
         if (block.fd == -1)
         {
             delete[] tmpfname;
