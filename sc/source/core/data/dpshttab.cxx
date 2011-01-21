@@ -273,28 +273,29 @@ bool ScSheetSourceDesc::operator== (const ScSheetSourceDesc& rOther) const
 
 ScDPTableDataCache* ScSheetSourceDesc::CreateCache( ScDocument* pDoc , long nID ) const
 {
-    if ( pDoc )
-    {
-        ScDPTableDataCache* pCache =  GetExistDPObjectCache( pDoc );
-        if ( pCache && ( nID < 0 || nID == pCache->GetId() ) )
-            return pCache;
+    if (!pDoc)
+        return NULL;
 
-        ULONG nErrId = CheckSourceRange( pDoc );
-        if ( !nErrId )
-        {
-            pCache = new ScDPTableDataCache( pDoc );
-
-            pCache->InitFromDoc( pDoc, GetSourceRange() );
-            pCache->SetId( nID );
-            pDoc->GetDPCollection()->AddDPObjectCache( pCache );
-
-            DBG_TRACE1("Create a cache id = %d \n", pCache->GetId() );
-        }
-        else
-            DBG_ERROR( "\n Error Create Cache" );
+    ScDPTableDataCache* pCache = GetExistDPObjectCache( pDoc );
+    if ( pCache && ( nID < 0 || nID == pCache->GetId() ) )
         return pCache;
+
+    ULONG nErrId = CheckSourceRange( pDoc );
+    if (nErrId)
+    {
+        DBG_ERROR( "Error Create Cache\n" );
+        return NULL;
     }
-    return NULL;
+
+    pCache = new ScDPTableDataCache( pDoc );
+
+    pCache->InitFromDoc( pDoc, GetSourceRange() );
+    pCache->SetId( nID );
+    pDoc->GetDPCollection()->AddDPObjectCache( pCache );
+
+    DBG_TRACE1("Create a cache id = %d \n", pCache->GetId() );
+
+    return pCache;
 }
 
 ScDPTableDataCache* ScSheetSourceDesc::GetExistDPObjectCache ( ScDocument* pDoc  ) const
@@ -304,15 +305,20 @@ ScDPTableDataCache* ScSheetSourceDesc::GetExistDPObjectCache ( ScDocument* pDoc 
 
 ScDPTableDataCache* ScSheetSourceDesc::GetCache( ScDocument* pDoc, long nID ) const
 {
+    if (!pDoc)
+        return NULL;
+
     ScDPTableDataCache* pCache = pDoc->GetDPCollection()->GetDPObjectCache( nID );
-    if ( NULL == pCache && pDoc )
+    if (NULL == pCache)
         pCache = GetExistDPObjectCache( pDoc );
-    if ( NULL == pCache )
+
+    if (NULL == pCache)
         pCache = CreateCache( pDoc );
+
     return pCache;
 }
 
-long ScSheetSourceDesc:: GetCacheId( ScDocument* pDoc, long nID ) const
+long ScSheetSourceDesc::GetCacheId( ScDocument* pDoc, long nID ) const
 {
     ScDPTableDataCache* pCache = GetCache( pDoc,  nID);
     if ( NULL == pCache )
@@ -323,10 +329,10 @@ long ScSheetSourceDesc:: GetCacheId( ScDocument* pDoc, long nID ) const
 
 ULONG ScSheetSourceDesc::CheckSourceRange( ScDocument* pDoc ) const
 {
-    const ScRange& aSrcRange = GetSourceRange();
     if (!pDoc)
         return STR_ERR_DATAPILOTSOURCE;
 
+    const ScRange& aSrcRange = GetSourceRange();
     const ScAddress& s = aSrcRange.aStart;
     const ScAddress& e = aSrcRange.aEnd;
     for (SCCOL nCol = aSrcRange.aStart.Col(); nCol <= e.Col(); ++nCol)
