@@ -1,4 +1,4 @@
-﻿/*************************************************************************
+/*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
@@ -56,10 +56,10 @@ const sal_Int32 MAXITER = 100;      // Maximum number of iterations.
     The algorithm follows
     http://www.reference-global.com/isbn/978-3-11-020354-7
     Numerical Mathematics 1 / Numerische Mathematik 1,
-    An algorithm-based introduction / Eine algorithmisch orientierte Einführung
+    An algorithm-based introduction / Eine algorithmisch orientierte Einfuehrung
     Deuflhard, Peter; Hohmann, Andreas
     Berlin, New York (Walter de Gruyter) 2008
-    4. überarb. u. erw. Aufl. 2008
+    4. ueberarb. u. erw. Aufl. 2008
     eBook ISBN: 978-3-11-020355-4
     Chapter 6.3.2 , algorithm 6.24
     The source is in German.
@@ -331,10 +331,10 @@ double BesselK( double fNum, sal_Int32 nOrder ) throw( IllegalArgumentException,
     The algorithm for order 0 and for order 1 follows
     http://www.reference-global.com/isbn/978-3-11-020354-7
     Numerical Mathematics 1 / Numerische Mathematik 1,
-    An algorithm-based introduction / Eine algorithmisch orientierte Einführung
+    An algorithm-based introduction / Eine algorithmisch orientierte Einfuehrung
     Deuflhard, Peter; Hohmann, Andreas
     Berlin, New York (Walter de Gruyter) 2008
-    4. überarb. u. erw. Aufl. 2008
+    4. ueberarb. u. erw. Aufl. 2008
     eBook ISBN: 978-3-11-020355-4
     Chapter 6.3.2 , algorithm 6.24
     The source is in German.
