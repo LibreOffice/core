@@ -129,37 +129,10 @@ ModalDialog DLG_PASSWD
         Pos = MAP_APPFONT( 144, 43 );
         Size = MAP_APPFONT( 50, 14 );
     };
+    String TEXT_PASSWD
+    {
+        Text [ en-US ] = "Password" ;
+    };
+
 };
-
-// ********************************************************************** EOF
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 

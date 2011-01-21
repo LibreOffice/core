@@ -70,9 +70,9 @@ class SfxManageStyleSheetPage : public SfxTabPage
     FixedText aFilterFt;
     ListBox aFilterLb;
 
+    FixedLine aDescGb;
     FixedInfo aDescFt;
     MultiLineEdit aDescED;
-    FixedLine aDescGb;
 
     SfxStyleSheetBase *pStyle;
     SfxStyleFamilies *pFamilies;

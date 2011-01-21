@@ -303,6 +303,10 @@ TabPage TP_DOCINFODOC
     {
         Text [ en-US ] = "unknown" ;
     };
+    String EDIT_FILE_NAME
+    {
+        Text [ en-US ] = "File Name" ;
+    };
 };
 
  // TP_DOCINFOUSER --------------------------------------------------------

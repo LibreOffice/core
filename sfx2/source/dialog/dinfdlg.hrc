@@ -153,6 +153,10 @@
 #define STR_HEADER_VALUE    92
 #define STR_HEADER_ACTION   93
 
+//IAccessibility2 Implementation 2009-----
+#define EDIT_FILE_NAME      94
+//-----IAccessibility2 Implementation 2009
+
 #define PB_OK                   100
 #define PB_CANCEL               101
 #define PB_HELP                 102
