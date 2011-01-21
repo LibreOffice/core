@@ -84,8 +84,7 @@
 
 #include <math.h>
 
-#include <oox/core/tokens.hxx>
-
+using namespace ::oox;
 using ::rtl::OString;
 
 static String lcl_GetVbaTabName( SCTAB n )
@@ -791,7 +790,7 @@ void ExcDocument::WriteXml( SvStream& rStrm )
     {
         InitializeSave();
 
-        XclExpXmlStream aStrm( ::comphelper::getProcessServiceFactory(), rStrm, GetRoot() );
+        XclExpXmlStream aStrm( ::comphelper::getProcessComponentContext(), rStrm, GetRoot() );
 
         sax_fastparser::FSHelperPtr& rWorkbook = aStrm.GetCurrentStream();
         rWorkbook->startElement( XML_workbook,

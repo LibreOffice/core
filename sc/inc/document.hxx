@@ -1513,8 +1513,10 @@ public:
 
     sal_Bool            ContinueOnlineSpelling();   // sal_True = etwas gefunden
 
-    sal_Bool            IsIdleDisabled() const      { return bIdleDisabled; }
-    void            DisableIdle(sal_Bool bDo)       { bIdleDisabled = bDo; }
+    void            RepaintRange( const ScRange& rRange );
+
+    sal_Bool        IsIdleDisabled() const      { return bIdleDisabled; }
+    void            DisableIdle(sal_Bool bDo)   { bIdleDisabled = bDo; }
 
     sal_Bool            IsDetectiveDirty() const     { return bDetectiveDirty; }
     void            SetDetectiveDirty(sal_Bool bSet) { bDetectiveDirty = bSet; }

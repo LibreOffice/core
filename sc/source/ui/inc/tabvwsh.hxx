@@ -369,13 +369,7 @@ public:
     virtual sal_uInt16          SetPrinter( SfxPrinter* pNewPrinter,
                                           sal_uInt16 nDiffFlags = SFX_PRINTER_ALL, bool bIsApi=false );
 
-    virtual PrintDialog*    CreatePrintDialog( Window* pParent );
     virtual SfxTabPage*     CreatePrintOptionsPage( Window *pParent, const SfxItemSet &rOptions );
-    virtual void            PreparePrint( PrintDialog* pPrintDialog = NULL );
-    virtual ErrCode         DoPrint( SfxPrinter *pPrinter,
-                                         PrintDialog *pPrintDialog,
-                                         sal_Bool bSilent, sal_Bool bIsAPI );
-    virtual sal_uInt16          Print( SfxProgress& rProgress, sal_Bool bIsAPI, PrintDialog* pPrintDialog = NULL );
 
     void            ConnectObject( SdrOle2Obj* pObj );
     sal_Bool            ActivateObject( SdrOle2Obj* pObj, long nVerb );

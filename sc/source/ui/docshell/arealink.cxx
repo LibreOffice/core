@@ -270,9 +270,9 @@ sal_Bool ScAreaLink::Refresh( const String& rNewFile, const String& rNewFilter,
 
     SfxMedium* pMed = new SfxMedium(aNewUrl, STREAM_STD_READ, sal_False, pFilter);
 
+    // aRef->DoClose() will be closed explicitly, but it is still more safe to use SfxObjectShellLock here
     ScDocShell* pSrcShell = new ScDocShell(SFX_CREATE_MODE_INTERNAL);
-//REMOVE        SvEmbeddedObjectRef aRef = pSrcShell;
-    SfxObjectShellRef aRef = pSrcShell;
+    SfxObjectShellLock aRef = pSrcShell;
     pSrcShell->DoLoad(pMed);
 
     ScDocument* pSrcDoc = pSrcShell->GetDocument();

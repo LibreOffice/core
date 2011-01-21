@@ -1432,7 +1432,7 @@ void ScConditionalFormat::DoRepaint( const ScRange* pModified )
                     }
                 }
 
-                pSh->Broadcast( ScPaintHint( aRange, PAINT_GRID ) );
+                pDoc->RepaintRange( aRange );
             }
         }
     }

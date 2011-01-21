@@ -392,9 +392,11 @@ void ScViewFunc::DoThesaurus( sal_Bool bRecord )
         if (pCell)
         {
             ((ScEditCell*) pCell)->GetData(pTObject);
-            pOldTObj = pTObject->Clone();
             if (pTObject)
+            {
+                pOldTObj = pTObject->Clone();
                 pThesaurusEngine->SetText(*pTObject);
+            }
         }
     }
     else

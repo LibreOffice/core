@@ -3126,6 +3126,8 @@ sal_Bool ScDocFunc::SetWidthOrHeight( sal_Bool bWidth, SCCOLROW nRangeCnt, SCCOL
                                         ScSizeMode eMode, sal_uInt16 nSizeTwips,
                                         sal_Bool bRecord, sal_Bool bApi )
 {
+    ScDocShellModificator aModificator( rDocShell );
+
     if (!nRangeCnt)
         return sal_True;
 
@@ -3287,6 +3289,7 @@ sal_Bool ScDocFunc::SetWidthOrHeight( sal_Bool bWidth, SCCOLROW nRangeCnt, SCCOL
     pDoc->UpdatePageBreaks( nTab );
 
     rDocShell.PostPaint(0,0,nTab,MAXCOL,MAXROW,nTab,PAINT_ALL);
+    aModificator.SetDocumentModified();
 
     return bSuccess;
 }
@@ -4866,10 +4869,12 @@ sal_Bool ScDocFunc::InsertAreaLink( const String& rFile, const String& rFilter,
     }
 
     //  Update hat sein eigenes Undo
-
-    pLink->SetDoInsert(bFitBlock);  // beim ersten Update ggf. nichts einfuegen
-    pLink->Update();                // kein SetInCreate -> Update ausfuehren
-    pLink->SetDoInsert(sal_True);       // Default = TRUE
+    if (pDoc->IsExecuteLinkEnabled())
+    {
+        pLink->SetDoInsert(bFitBlock);  // beim ersten Update ggf. nichts einfuegen
+        pLink->Update();                // kein SetInCreate -> Update ausfuehren
+    }
+    pLink->SetDoInsert(sal_True);       // Default = sal_True
 
     SfxBindings* pBindings = rDocShell.GetViewBindings();
     if (pBindings)

@@ -219,8 +219,9 @@ sal_Bool ScTableLink::Refresh(const String& rNewFile, const String& rNewFilter,
     if ( bInEdit )                              // only if using the edit dialog,
         pMed->UseInteractionHandler( sal_True );    // enable the filter options dialog
 
+    // aRef->DoClose() will be called explicitly, but it is still more safe to use SfxObjectShellLock here
     ScDocShell* pSrcShell = new ScDocShell(SFX_CREATE_MODE_INTERNAL);
-    SfxObjectShellRef aRef = pSrcShell;
+    SfxObjectShellLock aRef = pSrcShell;
     pSrcShell->DoLoad(pMed);
 
     // Optionen koennten gesetzt worden sein

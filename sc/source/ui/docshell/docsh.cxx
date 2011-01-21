@@ -2605,6 +2605,7 @@ void ScDocShell::SetDocumentModified( sal_Bool bIsModified /* = sal_True */ )
     if ( pPaintLockData && bIsModified )
     {
         //! BCA_BRDCST_ALWAYS etc. also needed here?
+        aDocument.InvalidateTableArea();    // #i105279# needed here
         aDocument.BroadcastUno( SfxSimpleHint( SFX_HINT_DATACHANGED ) );
 
         pPaintLockData->SetModified();          // spaeter...

@@ -1267,11 +1267,7 @@ void ScTable::UpdateReference( UpdateRefMode eUpdateRefMode, SCCOL nCol1, SCROW 
         {
             UpdatePageBreaks(NULL);
 
-            SfxObjectShell* pDocSh = pDocument->GetDocumentShell();
-            if (pDocSh)
-                pDocSh->Broadcast( ScPaintHint(
-                                    ScRange(0,0,nTab,MAXCOL,MAXROW,nTab),
-                                    PAINT_GRID ) );
+            pDocument->RepaintRange( ScRange(0,0,nTab,MAXCOL,MAXROW,nTab) );
         }
     }
 }
