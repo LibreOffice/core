@@ -276,10 +276,11 @@ void ScDPObject::SetSheetDesc(const ScSheetSourceDesc& rDesc)
 
     //  make valid QueryParam
 
-    pSheetDesc->aQueryParam.nCol1 = pSheetDesc->aSourceRange.aStart.Col();
-    pSheetDesc->aQueryParam.nRow1 = pSheetDesc->aSourceRange.aStart.Row();
-    pSheetDesc->aQueryParam.nCol2 = pSheetDesc->aSourceRange.aEnd.Col();
-    pSheetDesc->aQueryParam.nRow2 = pSheetDesc->aSourceRange.aEnd.Row();;
+    const ScRange& rSrcRange = pSheetDesc->GetSourceRange();
+    pSheetDesc->aQueryParam.nCol1 = rSrcRange.aStart.Col();
+    pSheetDesc->aQueryParam.nRow1 = rSrcRange.aStart.Row();
+    pSheetDesc->aQueryParam.nCol2 = rSrcRange.aEnd.Col();
+    pSheetDesc->aQueryParam.nRow2 = rSrcRange.aEnd.Row();;
     pSheetDesc->aQueryParam.bHasHeader = TRUE;
 
     InvalidateSource();     // new source must be created
@@ -695,12 +696,13 @@ void ScDPObject::UpdateReference( UpdateRefMode eUpdateRefMode,
 
     if ( pSheetDesc )
     {
-        nCol1 = pSheetDesc->aSourceRange.aStart.Col();
-        nRow1 = pSheetDesc->aSourceRange.aStart.Row();
-        nTab1 = pSheetDesc->aSourceRange.aStart.Tab();
-        nCol2 = pSheetDesc->aSourceRange.aEnd.Col();
-        nRow2 = pSheetDesc->aSourceRange.aEnd.Row();
-        nTab2 = pSheetDesc->aSourceRange.aEnd.Tab();
+        const ScRange& rSrcRange = pSheetDesc->GetSourceRange();
+        nCol1 = rSrcRange.aStart.Col();
+        nRow1 = rSrcRange.aStart.Row();
+        nTab1 = rSrcRange.aStart.Tab();
+        nCol2 = rSrcRange.aEnd.Col();
+        nRow2 = rSrcRange.aEnd.Row();
+        nTab2 = rSrcRange.aEnd.Tab();
 
         eRes = ScRefUpdate::Update( pDoc, eUpdateRefMode,
                 rRange.aStart.Col(), rRange.aStart.Row(), rRange.aStart.Tab(),
@@ -709,10 +711,10 @@ void ScDPObject::UpdateReference( UpdateRefMode eUpdateRefMode,
         if ( eRes != UR_NOTHING )
         {
             ScSheetSourceDesc aNewDesc;
-            aNewDesc.aSourceRange = ScRange( nCol1, nRow1, nTab1, nCol2, nRow2, nTab2 );
+            aNewDesc.SetSourceRange(ScRange(nCol1, nRow1, nTab1, nCol2, nRow2, nTab2));
 
-            SCsCOL nDiffX = nCol1 - (SCsCOL) pSheetDesc->aSourceRange.aStart.Col();
-            SCsROW nDiffY = nRow1 - (SCsROW) pSheetDesc->aSourceRange.aStart.Row();
+            SCsCOL nDiffX = nCol1 - (SCsCOL) pSheetDesc->GetSourceRange().aStart.Col();
+            SCsROW nDiffY = nRow1 - (SCsROW) pSheetDesc->GetSourceRange().aStart.Row();
 
             aNewDesc.aQueryParam = pSheetDesc->aQueryParam;
             aNewDesc.aQueryParam.nCol1 = sal::static_int_cast<SCCOL>( aNewDesc.aQueryParam.nCol1 + nDiffX );
@@ -736,7 +738,7 @@ BOOL ScDPObject::RefsEqual( const ScDPObject& r ) const
 
     if ( pSheetDesc && r.pSheetDesc )
     {
-        if ( pSheetDesc->aSourceRange != r.pSheetDesc->aSourceRange )
+        if ( pSheetDesc->GetSourceRange() != r.pSheetDesc->GetSourceRange() )
             return FALSE;
     }
     else if ( pSheetDesc || r.pSheetDesc )
@@ -1859,7 +1861,7 @@ BOOL ScDPObject::FillOldParam(ScPivotParam& rParam, BOOL bForFile) const
         // in old file format, columns are within document, not within source range
 
         DBG_ASSERT( pSheetDesc, "FillOldParam: bForFile, !pSheetDesc" );
-        nColAdd = pSheetDesc->aSourceRange.aStart.Col();
+        nColAdd = pSheetDesc->GetSourceRange().aStart.Col();
     }
 
     bool bAddData = ( lcl_GetDataGetOrientation( xSource ) == sheet::DataPilotFieldOrientation_HIDDEN );
@@ -2691,7 +2693,7 @@ ScDPTableDataCache* ScDPCollection::GetUsedDPObjectCache ( const ScRange& rRange
     for (size_t i=maTables.size(); i > 0 ; --i)
     {
         if ( const ScSheetSourceDesc* pUsedSheetDesc = maTables[i-1].GetSheetDesc() )
-            if ( rRange == pUsedSheetDesc->aSourceRange )
+            if ( rRange == pUsedSheetDesc->GetSourceRange() )
             {
                 long nID = maTables[i-1].GetCacheId();
                 if ( nID >= 0 )

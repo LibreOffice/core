@@ -50,14 +50,16 @@ class ScDPItemData;
  * precedence over the source range when it's non-empty.</i>  When the range
  * name is empty, the source range gets used.
  */
-struct ScSheetSourceDesc
+class ScSheetSourceDesc
 {
+private:
     ScRange         aSourceRange;
+public:
     ::rtl::OUString maRangeName;
     ScQueryParam    aQueryParam;
 
-    void SetSourceRange(const ScRange& rRange);
-    const ScRange& GetSourceRange() const;
+    SC_DLLPUBLIC void SetSourceRange(const ScRange& rRange);
+    SC_DLLPUBLIC const ScRange& GetSourceRange() const;
     void SetRangeName(const ::rtl::OUString& rName);
     const ::rtl::OUString& GetRangeName() const;
     void SetQueryParam(const ScQueryParam& rParam);

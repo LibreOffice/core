@@ -850,7 +850,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                                 if (bOK)
                                 {
                                     ScSheetSourceDesc aShtDesc;
-                                    aShtDesc.aSourceRange = aRange;
+                                    aShtDesc.SetSourceRange(aRange);
                                     pNewDPObject = new ScDPObject( pDoc );
                                     pNewDPObject->SetSheetDesc( aShtDesc );
 

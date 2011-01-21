@@ -284,7 +284,7 @@ ScDPTableDataCache* ScSheetSourceDesc::CreateCache( ScDocument* pDoc , long nID 
         {
             pCache = new ScDPTableDataCache( pDoc );
 
-            pCache->InitFromDoc( pDoc, aSourceRange );
+            pCache->InitFromDoc( pDoc, GetSourceRange() );
             pCache->SetId( nID );
             pDoc->GetDPCollection()->AddDPObjectCache( pCache );
 
@@ -299,7 +299,7 @@ ScDPTableDataCache* ScSheetSourceDesc::CreateCache( ScDocument* pDoc , long nID 
 
 ScDPTableDataCache* ScSheetSourceDesc::GetExistDPObjectCache ( ScDocument* pDoc  ) const
 {
-    return pDoc->GetDPCollection()->GetUsedDPObjectCache( aSourceRange );
+    return pDoc->GetDPCollection()->GetUsedDPObjectCache( GetSourceRange() );
 }
 
 ScDPTableDataCache* ScSheetSourceDesc::GetCache( ScDocument* pDoc, long nID ) const
@@ -327,8 +327,8 @@ ULONG ScSheetSourceDesc::CheckSourceRange( ScDocument* pDoc ) const
     if (!pDoc)
         return STR_ERR_DATAPILOTSOURCE;
 
-    const ScAddress& s = aSrcRange.aStart();
-    const ScAddress& e = aSrcRange.aEnd();
+    const ScAddress& s = aSrcRange.aStart;
+    const ScAddress& e = aSrcRange.aEnd;
     for (SCCOL nCol = aSrcRange.aStart.Col(); nCol <= e.Col(); ++nCol)
     {
         if (pDoc->IsBlockEmpty(s.Tab(), nCol, s.Row(), nCol, s.Row()))

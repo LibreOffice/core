@@ -1396,7 +1396,7 @@ void XclImpPivotTable::Convert()
 
     // create source descriptor
     ScSheetSourceDesc aDesc;
-    aDesc.aSourceRange = mxPCache->GetSourceRange();
+    aDesc.SetSourceRange(mxPCache->GetSourceRange());
 
     // adjust output range to include the page fields
     ScRange aOutRange( maOutScRange );

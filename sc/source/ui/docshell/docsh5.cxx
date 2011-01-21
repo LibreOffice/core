@@ -486,7 +486,7 @@ void ScDocShell::RefreshPivotTables( const ScRange& rSource )
             if ( pOld )
             {
                 const ScSheetSourceDesc* pSheetDesc = pOld->GetSheetDesc();
-                if ( pSheetDesc && pSheetDesc->aSourceRange.Intersects( rSource ) )
+                if ( pSheetDesc && pSheetDesc->GetSourceRange().Intersects( rSource ) )
                 {
                     ScDPObject* pNew = new ScDPObject( *pOld );
                     ScDBDocFunc aFunc( *this );

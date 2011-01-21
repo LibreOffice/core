@@ -707,7 +707,7 @@ CellRangeAddress SAL_CALL ScDataPilotDescriptorBase::getSourceRange()
 
     CellRangeAddress aRet;
     if (pDPObject->IsSheetData())
-        ScUnoConversion::FillApiRange( aRet, pDPObject->GetSheetDesc()->aSourceRange );
+        ScUnoConversion::FillApiRange( aRet, pDPObject->GetSheetDesc()->GetSourceRange() );
     return aRet;
 }
 
@@ -722,7 +722,10 @@ void SAL_CALL ScDataPilotDescriptorBase::setSourceRange( const CellRangeAddress&
     ScSheetSourceDesc aSheetDesc;
     if (pDPObject->IsSheetData())
         aSheetDesc = *pDPObject->GetSheetDesc();
-    ScUnoConversion::FillScRange( aSheetDesc.aSourceRange, aSourceRange );
+
+    ScRange aRange;
+    ScUnoConversion::FillScRange(aRange, aSourceRange);
+    aSheetDesc.SetSourceRange(aRange);
     pDPObject->SetSheetDesc( aSheetDesc );
     SetDPObject( pDPObject );
 }

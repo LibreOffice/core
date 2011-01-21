@@ -1355,7 +1355,7 @@ BOOL ScDBDocFunc::DataPilotUpdate( ScDPObject* pOldObj, const ScDPObject* pNewOb
                 if( pOldObj )
                 {
                     const ScSheetSourceDesc* pSheetDesc = pOldObj->GetSheetDesc();
-                    if( pSheetDesc && pSheetDesc->aSourceRange.Intersects( aNewOut ) )
+                    if( pSheetDesc && pSheetDesc->GetSourceRange().Intersects( aNewOut ) )
                     {
                         ScRange aOldRange = pOldObj->GetOutRange();
                         SCsROW nDiff = aOldRange.aStart.Row()-aNewOut.aStart.Row();

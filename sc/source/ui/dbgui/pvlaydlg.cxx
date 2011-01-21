@@ -248,7 +248,7 @@ void ScDPLayoutDlg::Init(bool bNewOutput)
     {
         aEdInPos.Enable();
         aRbInPos.Enable();
-        aOldRange = xDlgDPObject->GetSheetDesc()->aSourceRange;
+        aOldRange = xDlgDPObject->GetSheetDesc()->GetSourceRange();
         aOldRange.Format( inString, SCR_ABS_3D, pDoc, pDoc->GetAddressConvention() );
         aEdInPos.SetText(inString);
     }
@@ -1466,12 +1466,12 @@ void ScDPLayoutDlg::UpdateSrcRange()
     aBtnOk.Enable();
     ScSheetSourceDesc inSheet = *xDlgDPObject->GetSheetDesc();
 
-    if (inSheet.aSourceRange == aNewRange)
+    if (inSheet.GetSourceRange() == aNewRange)
         // new range is identical to the current range.  Nothing to do.
         return;
 
     ScTabViewShell * pTabViewShell = pViewData->GetViewShell();
-    inSheet.aSourceRange = aNewRange;
+    inSheet.SetSourceRange(aNewRange);
     xDlgDPObject->SetSheetDesc(inSheet);
     xDlgDPObject->FillOldParam( thePivotData, FALSE );
     xDlgDPObject->FillLabelData(thePivotData);

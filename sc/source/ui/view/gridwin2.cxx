@@ -211,7 +211,7 @@ void ScGridWindow::DoPushButton( SCCOL nCol, SCROW nRow, const MouseEvent& rMEvt
             if (pDesc)
             {
                 aQueryParam = pDesc->GetQueryParam();
-                nSrcTab = pDesc->aSourceRange.aStart.Tab();
+                nSrcTab = pDesc->GetSourceRange().aStart.Tab();
             }
 
             SfxItemSet aArgSet( pViewData->GetViewShell()->GetPool(),

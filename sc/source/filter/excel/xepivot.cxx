@@ -640,7 +640,7 @@ XclExpPivotCache::XclExpPivotCache( const XclExpRoot& rRoot, const ScDPObject& r
             maDocSrcRange: Range used to get source data from Calc document.
                 This range may be shorter than maExpSrcRange to improve export
                 performance (#i22541#). */
-        maOrigSrcRange = maExpSrcRange = maDocSrcRange = pSrcDesc->aSourceRange;
+        maOrigSrcRange = maExpSrcRange = maDocSrcRange = pSrcDesc->GetSourceRange();
 
         // internal sheet data only
         SCTAB nScTab = maExpSrcRange.aStart.Tab();
@@ -717,7 +717,7 @@ bool XclExpPivotCache::HasEqualDataSource( const ScDPObject& rDPObj ) const
         compare the ScSheetSourceDesc. Later, there should be done more complicated
         comparisons regarding the source type of rDPObj and this cache. */
     if( const ScSheetSourceDesc* pSrcDesc = rDPObj.GetSheetDesc() )
-        return pSrcDesc->aSourceRange == maOrigSrcRange;
+        return pSrcDesc->GetSourceRange() == maOrigSrcRange;
     return false;
 }
 

@@ -570,7 +570,7 @@ void Test::testDataPilot()
     printer.clear();
 
     ScSheetSourceDesc aSheetDesc;
-    aSheetDesc.aSourceRange = ScRange(nCol1, nRow1, 0, nCol2, nRow2, 0);
+    aSheetDesc.SetSourceRange(ScRange(nCol1, nRow1, 0, nCol2, nRow2, 0));
     ScDPObject* pDPObj = new ScDPObject(m_pDoc);
     pDPObj->SetSheetDesc(aSheetDesc);
     pDPObj->SetOutRange(ScAddress(0, 0, 1));
@@ -592,9 +592,10 @@ void Test::testDataPilot()
     aSaveData.SetDrillDown(true);
 
     // Check the sanity of the source range.
-    nCol1 = aSheetDesc.aSourceRange.aStart.Col();
-    nRow1 = aSheetDesc.aSourceRange.aStart.Row();
-    nRow2 = aSheetDesc.aSourceRange.aEnd.Row();
+    const ScRange& rSrcRange = aSheetDesc.GetSourceRange();
+    nCol1 = rSrcRange.aStart.Col();
+    nRow1 = rSrcRange.aStart.Row();
+    nRow2 = rSrcRange.aEnd.Row();
     CPPUNIT_ASSERT_MESSAGE("source range contains no data!", nRow2 - nRow1 > 1);
 
     // Set the dimension information.

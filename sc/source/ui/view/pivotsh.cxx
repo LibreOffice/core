@@ -116,7 +116,7 @@ void ScPivotShell::Execute( SfxRequest& rReq )
                 if( pDesc )
                 {
                     aQueryParam = pDesc->GetQueryParam();
-                    nSrcTab = pDesc->aSourceRange.aStart.Tab();
+                    nSrcTab = pDesc->GetSourceRange().aStart.Tab();
                 }
 
                 ScViewData* pViewData = pViewShell->GetViewData();
