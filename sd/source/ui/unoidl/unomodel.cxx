@@ -1192,7 +1192,7 @@ sal_Bool SAL_CALL SdXImpressDocument::supportsService( const OUString& ServiceNa
     ::SolarMutexGuard aGuard;
 
     if (
-        (ServiceName.equalsAscii("com.sun.star.document.OfficeDocument"       )) ||
+        (ServiceName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.document.OfficeDocument"))) ||
         (ServiceName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.GenericDrawingDocument"))) ||
         (ServiceName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.DrawingDocumentFactory")))
        )
@@ -1202,7 +1202,7 @@ sal_Bool SAL_CALL SdXImpressDocument::supportsService( const OUString& ServiceNa
 
     return (
             ( mbImpressDoc && ServiceName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.presentation.PresentationDocument"))) ||
-            (!mbImpressDoc && ServiceName.equalsAscii("com.sun.star.drawing.DrawingDocument"          ))
+            (!mbImpressDoc && ServiceName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.DrawingDocument")))
            );
 }
 
