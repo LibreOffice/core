@@ -1751,6 +1751,7 @@ sal_Bool SvxBoxItem::LineToSvxLine(const ::com::sun::star::table::BorderLine& rL
 sal_Bool
 SvxBoxItem::LineToSvxLine(const ::com::sun::star::table::BorderLine2& rLine, SvxBorderLine& rSvxLine, sal_Bool bConvert)
 {
+    SvxBorderStyle nStyle = NO_STYLE;
     switch ( rLine.LineStyle )
     {
         default:
@@ -1800,9 +1801,9 @@ SvxBoxItem::LineToSvxLine(const ::com::sun::star::table::BorderLine2& rLine, Svx
     rSvxLine.SetStyle( nStyle );
 
     sal_Bool bGuessWidth = sal_True;
-    if ( rLine->LineWidth )
+    if ( rLine.LineWidth )
     {
-        rSvxLine.SetWidth( bConvert? MM100_TO_TWIP_UNSIGNED( rLine->LineWidth ) : rLine->LineWidth );
+        rSvxLine.SetWidth( bConvert? MM100_TO_TWIP_UNSIGNED( rLine.LineWidth ) : rLine.LineWidth );
         bGuessWidth = sal_False;
     }
 

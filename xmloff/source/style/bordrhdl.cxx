@@ -67,12 +67,6 @@ const sal_uInt16 API_LINE_NONE = USHRT_MAX;
 #define DEF_LINE_WIDTH_1        35
 #define DEF_LINE_WIDTH_2        88
 
-#define SVX_XML_BORDER_STYLE_NONE 0
-#define SVX_XML_BORDER_STYLE_SOLID 1
-#define SVX_XML_BORDER_STYLE_DOUBLE 2
-#define SVX_XML_BORDER_STYLE_DASHED 3
-#define SVX_XML_BORDER_STYLE_DOTTED 4
-
 #define SVX_XML_BORDER_WIDTH_THIN 0
 #define SVX_XML_BORDER_WIDTH_MIDDLE 1
 #define SVX_XML_BORDER_WIDTH_THICK 2
@@ -262,7 +256,7 @@ sal_Bool XMLBorderHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue
 
     // if there is no style or a different style than none but no width,
        // then the declaration is not valid.
-    if( !bHasStyle || (SVX_XML_BORDER_STYLE_NONE != nStyle && !bHasWidth) )
+    if( !bHasStyle || (API_LINE_NONE != nStyle && !bHasWidth) )
         return sal_False;
 
     table::BorderLine2 aBorderLine;
@@ -276,7 +270,7 @@ sal_Bool XMLBorderHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue
     }
 
     // first of all, delete an empty line
-    if( (bHasStyle && SVX_XML_BORDER_STYLE_NONE == nStyle) ||
+    if( (bHasStyle && API_LINE_NONE == nStyle) ||
         (bHasWidth && USHRT_MAX == nNamedWidth && 0 == nWidth) )
     {
         aBorderLine.InnerLineWidth = 0;
