@@ -65,7 +65,7 @@ using namespace ::com::sun::star::uno;
     [ attributeNames addObject: NSAccessibilitySelectedChildrenAttribute ];
 }
 
-+(MacOSBOOL)isAttributeSettable:(NSString *)attribute forElement:(AquaA11yWrapper *)wrapper
++(BOOL)isAttributeSettable:(NSString *)attribute forElement:(AquaA11yWrapper *)wrapper
 {
     if ( [ attribute isEqualToString: NSAccessibilitySelectedChildrenAttribute ] )
     {

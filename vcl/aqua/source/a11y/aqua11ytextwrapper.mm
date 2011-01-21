@@ -273,8 +273,8 @@ using namespace ::rtl;
     return rtfData;
 }
 
-+(MacOSBOOL)isAttributeSettable:(NSString *)attribute forElement:(AquaA11yWrapper *)wrapper {
-    MacOSBOOL isSettable = NO;
++(BOOL)isAttributeSettable:(NSString *)attribute forElement:(AquaA11yWrapper *)wrapper {
+    BOOL isSettable = NO;
     if ( [ attribute isEqualToString: NSAccessibilityValueAttribute ]
       || [ attribute isEqualToString: NSAccessibilitySelectedTextAttribute ]
       || [ attribute isEqualToString: NSAccessibilitySelectedTextRangeAttribute ]
