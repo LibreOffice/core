@@ -1,4 +1,4 @@
-/*************************************************************************
+﻿/*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
@@ -181,31 +181,36 @@ double BesselJ( double x, sal_Int32 N ) throw (IllegalArgumentException, NoConve
         I_n(x)  =  SUM   TERM(n,k)   with   TERM(n,k) := --------------
                      k=0                                   k! (n+k)!
 
-    Approximation for the BESSEL function, first kind, modified, for great x:
-
-        I_n(x)  ~  e^x / sqrt( 2 PI x )  for  x>=0.
+    No asymptotic approximation used, see issue 43040.
  */
 
 // ----------------------------------------------------------------------------
 
 double BesselI( double x, sal_Int32 n ) throw( IllegalArgumentException, NoConvergenceException )
 {
+    const double fEpsilon = 1.0E-15;
+    const sal_Int32 nMaxIteration = 2000;
+    const double fXHalf = x / 2.0;
     if( n < 0 )
         throw IllegalArgumentException();
 
     double fResult = 0.0;
-    if( fabs( x ) <= THRESHOLD )
+
+    /*  Start the iteration without TERM(n,0), which is set here.
+
+            TERM(n,0) = (x/2)^n / n!
+     */
+    sal_Int32 nK = 0;
+    double fTerm = 1.0;
+    // avoid overflow in Fak(n)
+    for( nK = 1; nK <= n; ++nK )
     {
-        /*  Start the iteration without TERM(n,0), which is set here.
-
-                TERM(n,0) = (x/2)^n / n!
-         */
-        double fTerm = pow( x / 2.0, (double)n ) / Fak( n );
-        sal_Int32 nK = 1;   // Start the iteration with k=1.
-        fResult = fTerm;    // Start result with TERM(n,0).
-
-        const double fSqrX = x * x / 4.0;
-
+        fTerm = fTerm / static_cast< double >( nK ) * fXHalf;
+    }
+    fResult = fTerm;    // Start result with TERM(n,0).
+    if( fTerm != 0.0 )
+    {
+        nK = 1;
         do
         {
             /*  Calculation of TERM(n,k) from TERM(n,k-1):
@@ -225,33 +230,13 @@ double BesselI( double x, sal_Int32 n ) throw( IllegalArgumentException, NoConve
                                    x^2/4
                                =  -------- TERM(n,k-1)
                                    k(n+k)
-             */
-            fTerm *= fSqrX;    // defined above as x^2/4
-            fTerm /= (nK * (nK + n));
-            fResult += fTerm;
+            */
+        fTerm = fTerm * fXHalf / static_cast<double>(nK) * fXHalf / static_cast<double>(nK+n);
+        fResult += fTerm;
+        nK++;
         }
-        while( (fabs( fTerm ) > MAXEPSILON) && (++nK < MAXITER) );
-    }
-    else
-    {
-        /*  Approximation for the BESSEL function, first kind, modified:
+        while( (fabs( fTerm ) > fabs(fResult) * fEpsilon) && (nK < nMaxIteration) );
 
-                I_n(x)  ~  e^x / sqrt( 2 PI x )  for  x>=0.
-
-            The BESSEL function I_n with n IN {0,2,4,...} is axially symmetric at
-            x=0, means I_n(x) = I_n(-x). Therefore the approximation for x<0 is:
-
-                I_n(x)  =  I_n(|x|)  for  x<0  and  n IN {0,2,4,...}.
-
-            The BESSEL function I_n with n IN {1,3,5,...} is point-symmetric at
-            x=0, means I_n(x) = -I_n(-x). Therefore the approximation for x<0 is:
-
-                I_n(x)  =  -I_n(|x|)  for  x<0  and  n IN {1,3,5,...}.
-         */
-        double fXAbs = fabs( x );
-        fResult = exp( fXAbs ) / sqrt( f_2_PI * fXAbs );
-        if( (n & 1) && (x < 0.0) )
-            fResult = -fResult;
     }
     return fResult;
 }
