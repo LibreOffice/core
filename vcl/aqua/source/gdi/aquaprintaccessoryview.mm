@@ -811,66 +811,66 @@ static void linebreakCell( NSCell* pBtn, const rtl::OUString& i_rText )
         for( int n = 0; n < aOptProp.getLength(); n++ )
         {
             const beans::PropertyValue& rEntry( aOptProp[ n ] );
-            if( rEntry.Name.equalsAscii( "Text" ) )
+            if( rEntry.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Text" ) ) )
             {
                 rEntry.Value >>= aText;
                 filterAccelerator( aText );
             }
-            else if( rEntry.Name.equalsAscii( "ControlType" ) )
+            else if( rEntry.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ControlType" ) ) )
             {
                 rEntry.Value >>= aCtrlType;
             }
-            else if( rEntry.Name.equalsAscii( "Choices" ) )
+            else if( rEntry.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Choices" ) ) )
             {
                 rEntry.Value >>= aChoices;
             }
-            else if( rEntry.Name.equalsAscii( "Property" ) )
+            else if( rEntry.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Property" ) ) )
             {
                 PropertyValue aVal;
                 rEntry.Value >>= aVal;
                 aPropertyName = aVal.Name;
             }
-            else if( rEntry.Name.equalsAscii( "Enabled" ) )
+            else if( rEntry.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Enabled" ) ) )
             {
                 sal_Bool bValue = sal_True;
                 rEntry.Value >>= bValue;
                 bEnabled = bValue;
             }
-            else if( rEntry.Name.equalsAscii( "MinValue" ) )
+            else if( rEntry.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "MinValue" ) ) )
             {
                 rEntry.Value >>= nMinValue;
             }
-            else if( rEntry.Name.equalsAscii( "MaxValue" ) )
+            else if( rEntry.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "MaxValue" ) ) )
             {
                 rEntry.Value >>= nMaxValue;
             }
-            else if( rEntry.Name.equalsAscii( "AttachToDependency" ) )
+            else if( rEntry.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "AttachToDependency" ) ) )
             {
                 nAttachOffset = 20;
             }
-            else if( rEntry.Name.equalsAscii( "InternalUIOnly" ) )
+            else if( rEntry.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "InternalUIOnly" ) ) )
             {
                 rEntry.Value >>= bIgnore;
             }
         }
 
-        if( aCtrlType.equalsAscii( "Group" ) ||
-            aCtrlType.equalsAscii( "Subgroup" ) ||
-            aCtrlType.equalsAscii( "Radio" ) ||
-            aCtrlType.equalsAscii( "List" )  ||
-            aCtrlType.equalsAscii( "Edit" )  ||
-            aCtrlType.equalsAscii( "Range" )  ||
-            aCtrlType.equalsAscii( "Bool" ) )
+        if( aCtrlType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Group" ) ) ||
+            aCtrlType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Subgroup" ) ) ||
+            aCtrlType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Radio" ) ) ||
+            aCtrlType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "List" ) )  ||
+            aCtrlType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Edit" ) )  ||
+            aCtrlType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Range" ) )  ||
+            aCtrlType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Bool" ) ) )
         {
             // since our build target is MacOSX 10.4 we can have only one accessory view
             // so we have a single accessory view that is tabbed for grouping
-            if( aCtrlType.equalsAscii( "Group" )
+            if( aCtrlType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Group" ) )
                 || ! pCurParent
-                || ( aCtrlType.equalsAscii( "Subgroup" ) && nCurY < -250 && ! bIgnore ) 
+                || ( aCtrlType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Subgroup" ) ) && nCurY < -250 && ! bIgnore ) 
                )
             {
                 rtl::OUString aGroupTitle( aText );
-                if( aCtrlType.equalsAscii( "Subgroup" ) )
+                if( aCtrlType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Subgroup" ) ) )
                     aGroupTitle = pControllerProperties->getMoreString();
                 // set size of current parent
                 if( pCurParent )
@@ -896,7 +896,7 @@ static void linebreakCell( NSCell* pBtn, const rtl::OUString& i_rText )
                 aRightColumn.clear();
             }
             
-            if( aCtrlType.equalsAscii( "Subgroup" ) && pCurParent )
+            if( aCtrlType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Subgroup" ) ) && pCurParent )
             {
                 bIgnoreSubgroup = bIgnore;
                 if( bIgnore )
@@ -919,7 +919,7 @@ static void linebreakCell( NSCell* pBtn, const rtl::OUString& i_rText )
             }
             else if( bIgnoreSubgroup || bIgnore )
                 continue;
-            else if( aCtrlType.equalsAscii( "Bool" ) && pCurParent )
+            else if( aCtrlType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Bool" ) ) && pCurParent )
             {
                 NSRect aCheckRect = { { nCurX + nAttachOffset, 0 }, { 0, 15 } };
                 NSButton* pBtn = [[NSButton alloc] initWithFrame: aCheckRect];
@@ -951,7 +951,7 @@ static void linebreakCell( NSCell* pBtn, const rtl::OUString& i_rText )
                 // update nCurY
                 nCurY = aCheckRect.origin.y - 5;
             }
-            else if( aCtrlType.equalsAscii( "Radio" ) && pCurParent )
+            else if( aCtrlType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Radio" ) ) && pCurParent )
             {
                 sal_Int32 nOff = 0;
                 if( aText.getLength() )
@@ -1026,7 +1026,7 @@ static void linebreakCell( NSCell* pBtn, const rtl::OUString& i_rText )
                 
                 [pProto release];
             }
-            else if( aCtrlType.equalsAscii( "List" ) && pCurParent )
+            else if( aCtrlType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "List" ) ) && pCurParent )
             {
                 // don't indent attached lists, looks bad in the existing cases
                 NSControl* pTextView = createLabel( aText );
@@ -1082,7 +1082,7 @@ static void linebreakCell( NSCell* pBtn, const rtl::OUString& i_rText )
                 // update nCurY
                 nCurY = aBtnRect.origin.y - 5;
             }
-            else if( (aCtrlType.equalsAscii( "Edit" ) || aCtrlType.equalsAscii( "Range" )) && pCurParent )
+            else if( (aCtrlType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Edit" ) ) || aCtrlType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Range" ) )) && pCurParent )
             {
                 sal_Int32 nOff = 0;
                 if( aText.getLength() )
@@ -1129,7 +1129,7 @@ static void linebreakCell( NSCell* pBtn, const rtl::OUString& i_rText )
 
                 // current value
                 PropertyValue* pVal = pController->getValue( aPropertyName );
-                if( aCtrlType.equalsAscii( "Range" ) )
+                if( aCtrlType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Range" ) ) )
                 {
                     // add a stepper control
                     NSRect aStepFrame = { { aFieldRect.origin.x + aFieldRect.size.width + 5,
