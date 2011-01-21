@@ -65,3 +65,5 @@
 #define BTN_CANCEL 1
 #define BTN_HELP 1
 
+//IAccessibility2 Implementation 2009-----
+#define STR_COLORDES 3001

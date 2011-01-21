@@ -277,45 +277,19 @@ ModalDialog DLG_COLOR
         Border = TRUE ;
         Pos = MAP_APPFONT ( 200 , 109 ) ;
         Size = MAP_APPFONT ( 26 , 51 + DIFF ) ;
-        TabStop = TRUE ;
+        TabStop = FALSE ;
     };
     Control CTL_PREVIEW
     {
         Border = TRUE ;
         Pos = MAP_APPFONT ( 229 , 109 ) ;
         Size = MAP_APPFONT ( 26 , 51 + DIFF ) ;
-        TabStop = TRUE ;
+        TabStop = FALSE ;
     };
 };
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+String STR_COLORDES
+{
+    Text [ en-US ] = "RGB(%1, %2, %3) Hue:%4 Saturation:%5 Brightness:%6";
+};
 

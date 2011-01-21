@@ -148,6 +148,11 @@ PrintDialog::PrintDialog( Window* pWindow, bool bWithSheetsAndCells ) :
 
     maRbtAll.Check();
     ImplSetImages();
+
+    maBtnProperties.SetAccessibleRelationMemberOf(&maFlPrinter);
+    maEdtPages.SetAccessibleRelationLabeledBy(&maRbtPages);
+    maEdtPages.SetAccessibleRelationLabeledBy( &maRbtPages );
+    maEdtPages.SetAccessibleName(maRbtPages.GetText());
 }
 
 // -----------------------------------------------------------------------
