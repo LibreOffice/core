@@ -266,12 +266,6 @@ void Application::ShowStatusText( const XubString& )
 
 // -----------------------------------------------------------------------
 
-void Application::ShowHelpStatusText( const XubString& )
-{
-}
-
-// -----------------------------------------------------------------------
-
 void Application::ActivateExtHelp()
 {
 }
@@ -285,12 +279,6 @@ void Application::DeactivateExtHelp()
 // -----------------------------------------------------------------------
 
 void Application::HideStatusText()
-{
-}
-
-// -----------------------------------------------------------------------
-
-void Application::HideHelpStatusText()
 {
 }
 

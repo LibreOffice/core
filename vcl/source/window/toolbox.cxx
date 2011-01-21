@@ -1618,7 +1618,6 @@ void ToolBox::ImplInit( Window* pParent, WinBits nStyle )
     mbCustomize       = FALSE;
     mbCustomizeMode   = FALSE;
     mbDragging        = FALSE;
-    mbHideStatusText  = FALSE;
     mbMenuStrings     = FALSE;
     mbIsShift         = FALSE;
     mbIsKeyEvent = FALSE;

@@ -255,9 +255,6 @@ public:
     virtual void                ShowStatusText( const XubString& rText );
     virtual void                HideStatusText();
 
-    virtual void                ShowHelpStatusText( const XubString& rText );
-    virtual void                HideHelpStatusText();
-
     virtual void                FocusChanged();
     virtual void                DataChanged( const DataChangedEvent& rDCEvt );
 

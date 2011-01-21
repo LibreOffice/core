@@ -230,7 +230,6 @@ private:
                         mbCustomize:1,
                         mbCustomizeMode:1,
                         mbDragging:1,
-                        mbHideStatusText:1,
                         mbMenuStrings:1,
                         mbIsShift:1,
                         mbIsKeyEvent:1,

@@ -1101,9 +1101,6 @@ void Menu::Deactivate()
     if( !aDelData.isDeleted() )
     {
         bInCallback = FALSE;
-
-        if ( this == pStartMenu )
-            GetpApp()->HideHelpStatusText();
     }
 }
 
@@ -1117,9 +1114,6 @@ void Menu::Highlight()
         if ( pStartMenu && ( pStartMenu != this ) )
             pStartMenu->aHighlightHdl.Call( this );
     }
-
-    if ( !aDelData.isDeleted() && GetCurItemId() )
-        GetpApp()->ShowHelpStatusText( GetHelpText( GetCurItemId() ) );
 }
 
 void Menu::ImplSelect()

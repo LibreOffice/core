@@ -372,12 +372,6 @@ HelpTextWindow::~HelpTextWindow()
 
     if( this == ImplGetSVData()->maHelpData.mpHelpWin )
         ImplGetSVData()->maHelpData.mpHelpWin = NULL;
-
-    if ( maStatusText.Len() )
-    {
-        ImplSVData* pSVData = ImplGetSVData();
-        pSVData->mpApp->HideHelpStatusText();
-    }
 }
 
 // -----------------------------------------------------------------------
@@ -426,11 +420,6 @@ void HelpTextWindow::SetHelpText( const String& rHelpText )
 void HelpTextWindow::ImplShow()
 {
     ImplDelData aDogTag( this );
-    if ( maStatusText.Len() )
-    {
-        ImplSVData* pSVData = ImplGetSVData();
-        pSVData->mpApp->ShowHelpStatusText( maStatusText );
-    }
     Show( TRUE, SHOW_NOACTIVATE );
     if( !aDogTag.IsDelete() )
     Update();

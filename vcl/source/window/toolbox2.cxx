@@ -507,12 +507,6 @@ void ToolBox::Deactivate()
     mnActivateCount--;
     ImplCallEventListeners( VCLEVENT_TOOLBOX_DEACTIVATE );
     maDeactivateHdl.Call( this );
-
-    if ( mbHideStatusText )
-    {
-        GetpApp()->HideHelpStatusText();
-        mbHideStatusText = FALSE;
-    }
 }
 
 // -----------------------------------------------------------------------
@@ -521,13 +515,6 @@ void ToolBox::Highlight()
 {
     ImplCallEventListeners( VCLEVENT_TOOLBOX_HIGHLIGHT );
     maHighlightHdl.Call( this );
-
-    XubString aStr = GetHelpText( mnCurItemId );
-    if ( aStr.Len() || mbHideStatusText )
-    {
-        GetpApp()->ShowHelpStatusText( aStr );
-        mbHideStatusText = TRUE;
-    }
 }
 
 // -----------------------------------------------------------------------
