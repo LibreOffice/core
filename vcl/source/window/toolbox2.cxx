@@ -521,13 +521,6 @@ void ToolBox::Highlight()
 {
     ImplCallEventListeners( VCLEVENT_TOOLBOX_HIGHLIGHT );
     maHighlightHdl.Call( this );
-
-    XubString aStr = GetHelpText( mnCurItemId );
-    if ( aStr.Len() || mbHideStatusText )
-    {
-        GetpApp()->ShowHelpStatusText( aStr );
-        mbHideStatusText = TRUE;
-    }
 }
 
 // -----------------------------------------------------------------------
