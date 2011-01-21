@@ -163,40 +163,40 @@ sal_Bool FuDraw::MouseButtonDown(const MouseEvent& rMEvt)
 
         if (!mpView->IsSnapEnabled())
             mpView->SetSnapEnabled(sal_True);
-        sal_Bool bCntrl = rMEvt.IsMod1();
+        sal_Bool bSnapModPressed = rMEvt.IsMod1();
 
         sal_Bool bGridSnap = pFrameView->IsGridSnap();
-        bGridSnap = (bCntrl != bGridSnap);
+        bGridSnap = (bSnapModPressed != bGridSnap);
 
         if (mpView->IsGridSnap() != bGridSnap)
             mpView->SetGridSnap(bGridSnap);
 
         sal_Bool bBordSnap = pFrameView->IsBordSnap();
-        bBordSnap = (bCntrl != bBordSnap);
+        bBordSnap = (bSnapModPressed != bBordSnap);
 
         if (mpView->IsBordSnap() != bBordSnap)
             mpView->SetBordSnap(bBordSnap);
 
         sal_Bool bHlplSnap = pFrameView->IsHlplSnap();
-        bHlplSnap = (bCntrl != bHlplSnap);
+        bHlplSnap = (bSnapModPressed != bHlplSnap);
 
         if (mpView->IsHlplSnap() != bHlplSnap)
             mpView->SetHlplSnap(bHlplSnap);
 
         sal_Bool bOFrmSnap = pFrameView->IsOFrmSnap();
-        bOFrmSnap = (bCntrl != bOFrmSnap);
+        bOFrmSnap = (bSnapModPressed != bOFrmSnap);
 
         if (mpView->IsOFrmSnap() != bOFrmSnap)
             mpView->SetOFrmSnap(bOFrmSnap);
 
         sal_Bool bOPntSnap = pFrameView->IsOPntSnap();
-        bOPntSnap = (bCntrl != bOPntSnap);
+        bOPntSnap = (bSnapModPressed != bOPntSnap);
 
         if (mpView->IsOPntSnap() != bOPntSnap)
             mpView->SetOPntSnap(bOPntSnap);
 
         sal_Bool bOConSnap = pFrameView->IsOConSnap();
-        bOConSnap = (bCntrl != bOConSnap);
+        bOConSnap = (bSnapModPressed != bOConSnap);
 
         if (mpView->IsOConSnap() != bOConSnap)
             mpView->SetOConSnap(bOConSnap);
@@ -229,7 +229,7 @@ sal_Bool FuDraw::MouseButtonDown(const MouseEvent& rMEvt)
 
         if ( bHelpLine
             && !mpView->IsCreateObj()
-            && ((mpView->GetEditMode() == SDREDITMODE_EDIT && !bHitHdl) || (rMEvt.IsShift() && bCntrl)) )
+            && ((mpView->GetEditMode() == SDREDITMODE_EDIT && !bHitHdl) || (rMEvt.IsShift() && bSnapModPressed)) )
         {
             mpWindow->CaptureMouse();
             mpView->BegDragHelpLine(nHelpLine, pPV);
@@ -285,41 +285,41 @@ sal_Bool FuDraw::MouseMove(const MouseEvent& rMEvt)
             bOrtho = rMEvt.IsShift() != pFrameView->IsOrtho();
         }
 
-        sal_Bool bCntrl = rMEvt.IsMod1();
+        sal_Bool bSnapModPressed = rMEvt.IsMod2();
         mpView->SetDragWithCopy(rMEvt.IsMod1() && pFrameView->IsDragWithCopy());
 
         sal_Bool bGridSnap = pFrameView->IsGridSnap();
-        bGridSnap = (bCntrl != bGridSnap);
+        bGridSnap = (bSnapModPressed != bGridSnap);
 
         if (mpView->IsGridSnap() != bGridSnap)
             mpView->SetGridSnap(bGridSnap);
 
         sal_Bool bBordSnap = pFrameView->IsBordSnap();
-        bBordSnap = (bCntrl != bBordSnap);
+        bBordSnap = (bSnapModPressed != bBordSnap);
 
         if (mpView->IsBordSnap() != bBordSnap)
             mpView->SetBordSnap(bBordSnap);
 
         sal_Bool bHlplSnap = pFrameView->IsHlplSnap();
-        bHlplSnap = (bCntrl != bHlplSnap);
+        bHlplSnap = (bSnapModPressed != bHlplSnap);
 
         if (mpView->IsHlplSnap() != bHlplSnap)
             mpView->SetHlplSnap(bHlplSnap);
 
         sal_Bool bOFrmSnap = pFrameView->IsOFrmSnap();
-        bOFrmSnap = (bCntrl != bOFrmSnap);
+        bOFrmSnap = (bSnapModPressed != bOFrmSnap);
 
         if (mpView->IsOFrmSnap() != bOFrmSnap)
             mpView->SetOFrmSnap(bOFrmSnap);
 
         sal_Bool bOPntSnap = pFrameView->IsOPntSnap();
-        bOPntSnap = (bCntrl != bOPntSnap);
+        bOPntSnap = (bSnapModPressed != bOPntSnap);
 
         if (mpView->IsOPntSnap() != bOPntSnap)
             mpView->SetOPntSnap(bOPntSnap);
 
         sal_Bool bOConSnap = pFrameView->IsOConSnap();
-        bOConSnap = (bCntrl != bOConSnap);
+        bOConSnap = (bSnapModPressed != bOConSnap);
 
         if (mpView->IsOConSnap() != bOConSnap)
             mpView->SetOConSnap(bOConSnap);

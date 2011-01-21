@@ -312,40 +312,74 @@ void FuConstruct::SetStyleSheet(SfxItemSet& rAttr, SdrObject* pObj)
     sal_Bool bUseFillStyle, bUseNoFillStyle;
     bUseFillStyle = bUseNoFillStyle = sal_False;
 
-    if (nSlotId == SID_DRAW_RECT         || // Rechteck
-        nSlotId == SID_DRAW_RECT_ROUND   || // Rechteck, rund
-        nSlotId == SID_DRAW_SQUARE       || // Quadrat
-        nSlotId == SID_DRAW_SQUARE_ROUND || // Quadrat, rund
-        nSlotId == SID_DRAW_ELLIPSE      || // Ellipse
-        nSlotId == SID_DRAW_PIE          || // Ellipsensegment
-        nSlotId == SID_DRAW_ELLIPSECUT   || // Ellipsenabschnitt
-        nSlotId == SID_DRAW_CIRCLE       || // Kreis
-        nSlotId == SID_DRAW_CIRCLEPIE    || // Kreissegment
-        nSlotId == SID_DRAW_CIRCLECUT    || // Ellipsenabschnitt
-        nSlotId == SID_DRAW_POLYGON      || // Polygon
-        nSlotId == SID_DRAW_XPOLYGON     || // 45ø-Polygon
-        nSlotId == SID_DRAW_FREELINE     || // Freihandlinie
-        nSlotId == SID_DRAW_BEZIER_FILL)    // Bezier
+    switch( nSlotId )
+    {
+    case SID_DRAW_RECT:
+    case SID_DRAW_RECT_ROUND:
+    case SID_DRAW_SQUARE:
+    case SID_DRAW_SQUARE_ROUND:
+    case SID_DRAW_ELLIPSE:
+    case SID_DRAW_PIE:
+    case SID_DRAW_ELLIPSECUT:
+    case SID_DRAW_CIRCLE:
+    case SID_DRAW_CIRCLEPIE:
+    case SID_DRAW_CIRCLECUT:
+    case SID_DRAW_POLYGON:
+    case SID_DRAW_XPOLYGON:
+    case SID_DRAW_FREELINE:
+    case SID_DRAW_BEZIER_FILL:
     {
         bUseFillStyle = sal_True;
+        break;
     }
-    else if
-       (nSlotId == SID_DRAW_RECT_NOFILL         || // Rechteck
-        nSlotId == SID_DRAW_RECT_ROUND_NOFILL   || // Rechteck, rund
-        nSlotId == SID_DRAW_SQUARE_NOFILL       || // Quadrat
-        nSlotId == SID_DRAW_SQUARE_ROUND_NOFILL || // Quadrat, rund
-        nSlotId == SID_DRAW_ELLIPSE_NOFILL      || // Ellipse
-        nSlotId == SID_DRAW_PIE_NOFILL          || // Ellipsensegment
-        nSlotId == SID_DRAW_ELLIPSECUT_NOFILL   || // Ellipsenabschnitt
-        nSlotId == SID_DRAW_CIRCLE_NOFILL       || // Kreis
-        nSlotId == SID_DRAW_CIRCLEPIE_NOFILL    || // Kreissegment
-        nSlotId == SID_DRAW_CIRCLECUT_NOFILL    || // Ellipsenabschnitt
-        nSlotId == SID_DRAW_POLYGON_NOFILL      || // Polygon
-        nSlotId == SID_DRAW_XPOLYGON_NOFILL     || // 45ø-Polygon
-        nSlotId == SID_DRAW_FREELINE_NOFILL     || // Freihandlinie
-        nSlotId == SID_DRAW_BEZIER_NOFILL)         // Bezier
+    case  SID_DRAW_RECT_NOFILL:
+    case SID_DRAW_RECT_ROUND_NOFILL:
+    case SID_DRAW_SQUARE_NOFILL:
+    case SID_DRAW_SQUARE_ROUND_NOFILL:
+    case SID_DRAW_ELLIPSE_NOFILL:
+    case SID_DRAW_PIE_NOFILL:
+    case SID_DRAW_ELLIPSECUT_NOFILL:
+    case SID_DRAW_CIRCLE_NOFILL:
+    case SID_DRAW_CIRCLEPIE_NOFILL:
+    case SID_DRAW_CIRCLECUT_NOFILL:
+    case SID_DRAW_POLYGON_NOFILL:
+    case SID_DRAW_XPOLYGON_NOFILL:
+    case SID_DRAW_FREELINE_NOFILL:
+    case SID_DRAW_LINE:
+    case SID_DRAW_XLINE:
+    case SID_CONNECTOR_ARROW_START:
+    case SID_CONNECTOR_ARROW_END:
+    case SID_CONNECTOR_ARROWS:
+    case SID_CONNECTOR_CIRCLE_START:
+    case SID_CONNECTOR_CIRCLE_END:
+    case SID_CONNECTOR_CIRCLES:
+    case SID_CONNECTOR_LINE:
+    case SID_CONNECTOR_LINE_ARROW_START:
+    case SID_CONNECTOR_LINE_ARROW_END:
+    case SID_CONNECTOR_LINE_ARROWS:
+    case SID_CONNECTOR_LINE_CIRCLE_START:
+    case SID_CONNECTOR_LINE_CIRCLE_END:
+    case SID_CONNECTOR_LINE_CIRCLES:
+    case SID_CONNECTOR_CURVE:
+    case SID_CONNECTOR_CURVE_ARROW_START:
+    case SID_CONNECTOR_CURVE_ARROW_END:
+    case SID_CONNECTOR_CURVE_ARROWS:
+    case SID_CONNECTOR_CURVE_CIRCLE_START:
+    case SID_CONNECTOR_CURVE_CIRCLE_END:
+    case SID_CONNECTOR_CURVE_CIRCLES:
+    case SID_CONNECTOR_LINES:
+    case SID_CONNECTOR_LINES_ARROW_START:
+    case SID_CONNECTOR_LINES_ARROW_END:
+    case SID_CONNECTOR_LINES_ARROWS:
+    case SID_CONNECTOR_LINES_CIRCLE_START:
+    case SID_CONNECTOR_LINES_CIRCLE_END:
+    case SID_CONNECTOR_LINES_CIRCLES:
+    case SID_DRAW_BEZIER_NOFILL:
+    case SID_LINE_ARROW_END:
     {
         bUseNoFillStyle = sal_True;
+        break;
+    }
     }
     SetStyleSheet( rAttr, pObj, bUseFillStyle, bUseNoFillStyle );
 }

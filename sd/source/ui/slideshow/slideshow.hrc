@@ -37,25 +37,20 @@
 #define CM_ENDSHOW      7
 #define CM_FIRST_SLIDE  8
 #define CM_LAST_SLIDE   9
-#define CM_SLIDES       10
+
 //CM for extra presenter UI
-#define CM_ERASE_ALLINK 11
-#define CM_ERASE_INK    12
-#define CM_ERASE_INK_PEN    13
-#define CM_ERASE_INK_PEN_VERY_THIN  14
-#define CM_ERASE_INK_PEN_THIN   15
-#define CM_ERASE_INK_PEN_NORMAL 16
-#define CM_ERASE_INK_PEN_THICK  17
-#define CM_ERASE_INK_PEN_VERY_THICK 18
-#define CM_COLOR_PEN    19
-#define CM_WIDTH_PEN    20
-#define CM_WIDTH_PEN_VERY_THIN  21
-#define CM_WIDTH_PEN_THIN   22
-#define CM_WIDTH_PEN_NORMAL 23
-#define CM_WIDTH_PEN_THICK  24
-#define CM_WIDTH_PEN_VERY_THICK 25
-#define CM_PEN_MODE 26
-#define CM_ERASE_MODE 27
-#define CM_POINTER_OPTION 28
+#define CM_ERASE_ALLINK 10
+#define CM_COLOR_PEN    11
+#define CM_WIDTH_PEN    12
+#define CM_WIDTH_PEN_VERY_THIN  13
+#define CM_WIDTH_PEN_THIN   14
+#define CM_WIDTH_PEN_NORMAL 15
+#define CM_WIDTH_PEN_THICK  16
+#define CM_WIDTH_PEN_VERY_THICK 17
+#define CM_PEN_MODE 18
+#define CM_ERASE_MODE 19
+#define CM_POINTER_OPTION 20
+
+#define CM_SLIDES       21      // this must be the last id!
 
 #endif

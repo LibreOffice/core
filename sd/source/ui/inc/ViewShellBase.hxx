@@ -144,23 +144,9 @@ public:
         sal_uInt16 nDiffFlags = SFX_PRINTER_ALL, bool bIsApi=false);
 
     /// Forwarded to the print manager.
-    virtual PrintDialog* CreatePrintDialog (::Window *pParent);
-
-    /// Forwarded to the print manager.
     virtual SfxTabPage* CreatePrintOptionsPage (
         ::Window *pParent,
         const SfxItemSet &rOptions);
-
-    /// Forwarded to the print manager.
-    virtual sal_uInt16 Print (SfxProgress& rProgress, sal_Bool bIsAPI, PrintDialog* pDialog);
-
-    /// Forwarded to the print manager.
-    virtual ErrCode DoPrint (
-        SfxPrinter *pPrinter,
-        PrintDialog *pPrintDialog,
-        sal_Bool bSilent, sal_Bool bIsAPI );
-
-    virtual void PreparePrint (PrintDialog* pPrintDialog);
 
     /// Forward methods to main sub shell.
     virtual void WriteUserDataSequence (

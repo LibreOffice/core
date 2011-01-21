@@ -46,6 +46,16 @@ using namespace ::com::sun::star::uno;
 
 #define B2U(_def_aStr) (OUString::createFromAscii(_def_aStr))
 
+template< class T > T getSafeValue( const Any& rAny )
+{
+    T value = T();
+    bool bOk = (rAny >>= value);
+
+    DBG_ASSERT( bOk, "SdOptionsItem, wrong type from configuration!" );
+    (void)bOk;
+
+    return value;
+}
 
 // -----------------
 // - SdOptionsItem -
@@ -503,6 +513,9 @@ SdOptionsMisc::SdOptionsMisc( sal_uInt16 nConfigId, sal_Bool bUseConfig ) :
     bPreviewChangedEffects( sal_False ),
     bPreviewTransitions( sal_True ),
     mnDisplay( 0 ),
+    mnPenColor( 0xff0000 ),
+    mnPenWidth( 150.0 ),
+
     // The default for 6.1-and-above documents is to use printer-independent
     // formatting.
     mnPrinterIndependentLayout (1)
@@ -541,7 +554,9 @@ sal_Bool SdOptionsMisc::operator==( const SdOptionsMisc& rOpt ) const
             IsPreviewChangedEffects() == rOpt.IsPreviewChangedEffects() &&
             IsPreviewTransitions() == rOpt.IsPreviewTransitions() &&
             GetDisplay() == rOpt.GetDisplay() &&
-            IsShowComments() == rOpt.IsShowComments()
+            IsShowComments() == rOpt.IsShowComments() &&
+            GetPresentationPenColor() == rOpt.GetPresentationPenColor() &&
+            GetPresentationPenWidth() == rOpt.GetPresentationPenWidth()
         );
 }
 
@@ -583,10 +598,13 @@ void SdOptionsMisc::GetPropNameArray( const char**& ppNames, sal_uLong& rCount )
         "PreviewChangedEffects",
         "PreviewTransitions",
 
-        "Display"
+        "Display",
+
+        "PenColor",
+        "PenWidth"
     };
 
-    rCount = ( ( GetConfigId() == SDCFG_IMPRESS ) ? 25 : 16 );
+    rCount = ( ( GetConfigId() == SDCFG_IMPRESS ) ? 27 : 16 );
     ppNames = aPropNames;
 }
 
@@ -641,6 +659,12 @@ sal_Bool SdOptionsMisc::ReadData( const Any* pValues )
 
         if( pValues[24].hasValue() )
             SetDisplay(*(sal_Int32*) pValues[ 24 ].getValue());
+
+        if( pValues[25].hasValue() )
+            SetPresentationPenColor( getSafeValue< sal_Int32 >( pValues[ 25 ] ) );
+
+        if( pValues[26].hasValue() )
+            SetPresentationPenWidth( getSafeValue< double >( pValues[ 26 ] ) );
     }
 
     return sal_True;
@@ -684,6 +708,9 @@ sal_Bool SdOptionsMisc::WriteData( Any* pValues ) const
         pValues[ 23 ] <<= IsPreviewTransitions();
 
         pValues[ 24 ] <<= GetDisplay();
+
+        pValues[ 25 ] <<= GetPresentationPenColor();
+        pValues[ 26 ] <<= GetPresentationPenWidth();
     }
 
     return sal_True;
@@ -725,6 +752,9 @@ SdOptionsMiscItem::SdOptionsMiscItem( sal_uInt16 _nWhich, SdOptions* pOpts, ::sd
 
         maOptionsMisc.SetDisplay(pOpts->GetDisplay());
         maOptionsMisc.SetShowComments( pOpts->IsShowComments() );
+
+        maOptionsMisc.SetPresentationPenColor(pOpts->GetPresentationPenColor() );
+        maOptionsMisc.SetPresentationPenWidth(pOpts->GetPresentationPenWidth() );
     }
 
     if( pView )
@@ -813,6 +843,9 @@ void SdOptionsMiscItem::SetOptions( SdOptions* pOpts ) const
         pOpts->SetPreviewTransitions( maOptionsMisc.IsPreviewTransitions() );
 
         pOpts->SetDisplay( maOptionsMisc.GetDisplay() );
+
+        pOpts->SetPresentationPenColor( maOptionsMisc.GetPresentationPenColor() );
+        pOpts->SetPresentationPenWidth( maOptionsMisc.GetPresentationPenWidth() );
     }
 }
 

@@ -219,7 +219,7 @@ void DrawViewShell::SelectionHasChanged (void)
     }
 
     ViewShellBase& rBase = GetViewShellBase();
-    rBase.SetVerbs(0);
+    rBase.SetVerbs( uno::Sequence< embed::VerbDescriptor >() );
 
     try
     {

@@ -121,8 +121,13 @@ namespace slideshow
             ///Draw the slide Polygons
             virtual void drawPolygons() const = 0;
 
-            ///Check if slide is already active
+            ///Check if paint overlay is already active
             virtual bool isPaintOverlayActive() const = 0;
+
+            virtual void enablePaintOverlay() = 0;
+            virtual void disablePaintOverlay() = 0;
+
+            virtual void update_settings( bool bUserPaintEnabled, RGBColor const& aUserPaintColor, double dUserPaintStrokeWidth ) = 0;
 
             // Slide bitmaps
             // -------------------------------------------------------------------

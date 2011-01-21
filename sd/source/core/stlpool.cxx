@@ -519,10 +519,11 @@ void SdStyleSheetPool::CreateLayoutStyleSheets(const String& rLayoutName, sal_Bo
         SfxItemSet& rBackgroundObjectsSet = pSheet->GetItemSet();
         rBackgroundObjectsSet.Put(SdrShadowItem(sal_False));
         rBackgroundObjectsSet.Put(SdrShadowColorItem(String(), Color(COL_GRAY)));
-        rBackgroundObjectsSet.Put(SdrShadowXDistItem(300)); // 3 mm Schattendistanz
-        rBackgroundObjectsSet.Put(SdrShadowYDistItem(300));
+        rBackgroundObjectsSet.Put(SdrShadowXDistItem(200)); // 3 mm Schattendistanz
+        rBackgroundObjectsSet.Put(SdrShadowYDistItem(200));
         // #i16874# enable kerning by default but only for new documents
         rBackgroundObjectsSet.Put( SvxAutoKernItem( sal_True, EE_CHAR_PAIRKERNING ) );
+        rBackgroundObjectsSet.Put(SdrTextHorzAdjustItem(SDRTEXTHORZADJUST_BLOCK));
     }
 
     /**************************************************************************
@@ -1028,13 +1029,9 @@ void SdStyleSheetPool::PutNumBulletItem( SfxStyleSheetBase* pSheet,
             aNumberFormat.SetStart(1);
             aNumberFormat.SetNumAdjust(SVX_ADJUST_LEFT);
 
-            SvxNumRule aNumRule( NUM_BULLET_REL_SIZE|NUM_BULLET_COLOR|NUM_CHAR_TEXT_DISTANCE, 10 , sal_False);
-            aNumberFormat.SetLSpace( 0 );
-            aNumberFormat.SetAbsLSpace( 0 );
-            aNumberFormat.SetFirstLineOffset( 0 );
-            aNumRule.SetLevel( 0, aNumberFormat );
+            SvxNumRule aNumRule( NUM_BULLET_REL_SIZE|NUM_BULLET_COLOR|NUM_CHAR_TEXT_DISTANCE, 10 , FALSE);
 
-            for( sal_uInt16 i = 1; i < aNumRule.GetLevelCount(); i++ )
+            for( sal_uInt16 i = 0; i < aNumRule.GetLevelCount(); i++ )
             {
                 const short nLSpace = (i + 1) * 600;
                 aNumberFormat.SetLSpace(nLSpace);
