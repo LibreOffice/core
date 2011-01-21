@@ -44,6 +44,8 @@
 #include <properties.h>
 #include <services.h>
 
+#include "helper/mischelper.hxx"
+
 //_______________________________________________
 // interface includes
 #include <com/sun/star/ucb/NameClash.hpp>
@@ -1362,7 +1364,8 @@ void AutoRecovery::implts_startListening()
         (! m_bListenForConfigChanges)
        )
     {
-        xCFG->addChangesListener(static_cast< css::util::XChangesListener* >(this));
+        m_xRecoveryCFGListener = new WeakChangesListener(this);
+        xCFG->addChangesListener(m_xRecoveryCFGListener);
         m_bListenForConfigChanges = sal_True;
     }
 
@@ -1381,7 +1384,8 @@ void AutoRecovery::implts_startListening()
         (! bListenForDocEvents)
        )
     {
-        xBroadcaster->addEventListener(static_cast< css::document::XEventListener* >(this));
+        m_xNewDocBroadcasterListener = new WeakDocumentEventListener(this);
+        xBroadcaster->addEventListener(m_xNewDocBroadcasterListener);
         // SAFE ->
         WriteGuard aWriteLock(m_aLock);
         m_bListenForDocEvents = sal_True;
@@ -1408,7 +1412,7 @@ void AutoRecovery::implts_stopListening()
         (m_bListenForDocEvents       )
        )
     {
-        xGlobalEventBroadcaster->removeEventListener(static_cast< css::document::XEventListener* >(this));
+        xGlobalEventBroadcaster->removeEventListener(m_xNewDocBroadcasterListener);
         m_bListenForDocEvents = sal_False;
     }
 
@@ -1417,7 +1421,7 @@ void AutoRecovery::implts_stopListening()
         (m_bListenForConfigChanges)
        )
     {
-        xCFG->removeChangesListener(static_cast< css::util::XChangesListener* >(this));
+        xCFG->removeChangesListener(m_xRecoveryCFGListener);
         m_bListenForConfigChanges = sal_False;
     }
 }

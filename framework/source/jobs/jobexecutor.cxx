@@ -42,6 +42,8 @@
 #include <general.h>
 #include <services.h>
 
+#include "helper/mischelper.hxx"
+
 //________________________________
 //  interface includes
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -118,8 +120,8 @@ DEFINE_INIT_SERVICE( JobExecutor,
                             css::uno::Reference< css::container::XContainer > xNotifier(m_aConfig.cfg(), css::uno::UNO_QUERY);
                             if (xNotifier.is())
                             {
-                                css::uno::Reference< css::container::XContainerListener > xThis(static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY);
-                                xNotifier->addContainerListener(xThis);
+                                m_xConfigListener = new WeakContainerListener(this);
+                                xNotifier->addContainerListener(m_xConfigListener);
                             }
 
                             // don't close cfg here!
@@ -149,6 +151,9 @@ JobExecutor::JobExecutor( /*IN*/ const css::uno::Reference< css::lang::XMultiSer
 
 JobExecutor::~JobExecutor()
 {
+    css::uno::Reference< css::container::XContainer > xNotifier(m_aConfig.cfg(), css::uno::UNO_QUERY);
+    if (xNotifier.is())
+        xNotifier->removeContainerListener(m_xConfigListener);
     LOG_ASSERT(m_aConfig.getMode() == ConfigAccess::E_CLOSED, "JobExecutor::~JobExecutor()\nConfiguration don't send dispoing() message!\n")
 }
 

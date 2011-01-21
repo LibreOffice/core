@@ -335,6 +335,12 @@ class AutoRecovery  : public  css::lang::XTypeProvider
         css::uno::Reference< css::container::XNameAccess > m_xRecoveryCFG;
 
         //---------------------------------------
+        /** @short  proxy weak binding to forward Events to ourself without
+                    an ownership cycle
+          */
+        css::uno::Reference< css::util::XChangesListener > m_xRecoveryCFGListener;
+
+        //---------------------------------------
         /** @short  points to the used configuration package or.openoffice.Setup
             @descr  This instance does not cache - it calls directly the
                     configuration API!
@@ -346,6 +352,12 @@ class AutoRecovery  : public  css::lang::XTypeProvider
                     where we listen for new created documents.
           */
         css::uno::Reference< css::document::XEventBroadcaster > m_xNewDocBroadcaster;
+
+        //---------------------------------------
+        /** @short  proxy weak binding to forward Events to ourself without
+                    an ownership cycle
+          */
+        css::uno::Reference< css::document::XEventListener > m_xNewDocBroadcasterListener;
 
         //---------------------------------------
         /** @short  because we stop/restart listening sometimes, it's a good idea to know

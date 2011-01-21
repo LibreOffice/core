@@ -92,6 +92,9 @@ class JobExecutor : public  css::lang::XTypeProvider
         /** we listen at the configuration for changes at the event list. */
         ConfigAccess m_aConfig;
 
+        /** helper to allow us listen to the configuration without a cyclic dependency */
+        com::sun::star::uno::Reference<com::sun::star::container::XContainerListener> m_xConfigListener;
+
     //___________________________________
     // native interface methods
 
