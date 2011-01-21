@@ -3,12 +3,6 @@
  *
  *  OpenOffice.org - a multi-platform office productivity suite
  *
- *  $RCSfile: sbobjmod.hxx,v $
- *
- *  $Revision: 1.4 $
- *
- *  last change: $Author:  $ $Date: 2007/08/27 16:31:39 $
- *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
  *
