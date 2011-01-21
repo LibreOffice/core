@@ -277,11 +277,13 @@ void ScDPObject::SetSheetDesc(const ScSheetSourceDesc& rDesc)
     //  make valid QueryParam
 
     const ScRange& rSrcRange = pSheetDesc->GetSourceRange();
-    pSheetDesc->aQueryParam.nCol1 = rSrcRange.aStart.Col();
-    pSheetDesc->aQueryParam.nRow1 = rSrcRange.aStart.Row();
-    pSheetDesc->aQueryParam.nCol2 = rSrcRange.aEnd.Col();
-    pSheetDesc->aQueryParam.nRow2 = rSrcRange.aEnd.Row();;
-    pSheetDesc->aQueryParam.bHasHeader = TRUE;
+    ScQueryParam aParam = pSheetDesc->GetQueryParam();
+    aParam.nCol1 = rSrcRange.aStart.Col();
+    aParam.nRow1 = rSrcRange.aStart.Row();
+    aParam.nCol2 = rSrcRange.aEnd.Col();
+    aParam.nRow2 = rSrcRange.aEnd.Row();;
+    aParam.bHasHeader = true;
+    pSheetDesc->SetQueryParam(aParam);
 
     InvalidateSource();     // new source must be created
 }
@@ -716,16 +718,17 @@ void ScDPObject::UpdateReference( UpdateRefMode eUpdateRefMode,
             SCsCOL nDiffX = nCol1 - (SCsCOL) pSheetDesc->GetSourceRange().aStart.Col();
             SCsROW nDiffY = nRow1 - (SCsROW) pSheetDesc->GetSourceRange().aStart.Row();
 
-            aNewDesc.aQueryParam = pSheetDesc->aQueryParam;
-            aNewDesc.aQueryParam.nCol1 = sal::static_int_cast<SCCOL>( aNewDesc.aQueryParam.nCol1 + nDiffX );
-            aNewDesc.aQueryParam.nCol2 = sal::static_int_cast<SCCOL>( aNewDesc.aQueryParam.nCol2 + nDiffX );
-            aNewDesc.aQueryParam.nRow1 += nDiffY;   //! used?
-            aNewDesc.aQueryParam.nRow2 += nDiffY;   //! used?
-            SCSIZE nEC = aNewDesc.aQueryParam.GetEntryCount();
+            ScQueryParam aParam = pSheetDesc->GetQueryParam();
+            aParam.nCol1 = sal::static_int_cast<SCCOL>( aParam.nCol1 + nDiffX );
+            aParam.nCol2 = sal::static_int_cast<SCCOL>( aParam.nCol2 + nDiffX );
+            aParam.nRow1 += nDiffY; //! used?
+            aParam.nRow2 += nDiffY; //! used?
+            SCSIZE nEC = aParam.GetEntryCount();
             for (SCSIZE i=0; i<nEC; i++)
-                if (aNewDesc.aQueryParam.GetEntry(i).bDoQuery)
-                    aNewDesc.aQueryParam.GetEntry(i).nField += nDiffX;
+                if (aParam.GetEntry(i).bDoQuery)
+                    aParam.GetEntry(i).nField += nDiffX;
 
+            aNewDesc.SetQueryParam(aParam);
             SetSheetDesc( aNewDesc );       // allocates new pSheetDesc
         }
     }

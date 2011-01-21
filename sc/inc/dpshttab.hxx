@@ -52,11 +52,7 @@ class ScDPItemData;
  */
 class ScSheetSourceDesc
 {
-private:
-    ScRange         aSourceRange;
-    ::rtl::OUString maRangeName;
 public:
-    ScQueryParam    aQueryParam;
 
     SC_DLLPUBLIC void SetSourceRange(const ScRange& rRange);
     SC_DLLPUBLIC const ScRange& GetSourceRange() const;
@@ -80,6 +76,11 @@ public:
     ScDPTableDataCache* GetCache( ScDocument* pDoc, long nID ) const;
     ScDPTableDataCache* GetExistDPObjectCache ( ScDocument* pDoc ) const;
     long GetCacheId( ScDocument* pDoc, long nID ) const;
+
+private:
+    ScRange         maSourceRange;
+    ::rtl::OUString maRangeName;
+    ScQueryParam    maQueryParam;
 };
 
 // --------------------------------------------------------------------

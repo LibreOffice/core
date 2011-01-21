@@ -235,13 +235,13 @@ const ScDPCacheTable& ScSheetDPData::GetCacheTable() const
 
 void ScSheetSourceDesc::SetSourceRange(const ScRange& rRange)
 {
-    aSourceRange = rRange;
+    maSourceRange = rRange;
     maRangeName = OUString(); // overwrite existing range name if any.
 }
 
 const ScRange& ScSheetSourceDesc::GetSourceRange() const
 {
-    return aSourceRange;
+    return maSourceRange;
 }
 
 void ScSheetSourceDesc::SetRangeName(const OUString& rName)
@@ -256,19 +256,19 @@ const OUString& ScSheetSourceDesc::GetRangeName() const
 
 void ScSheetSourceDesc::SetQueryParam(const ScQueryParam& rParam)
 {
-    aQueryParam = rParam;
+    maQueryParam = rParam;
 }
 
 const ScQueryParam& ScSheetSourceDesc::GetQueryParam() const
 {
-    return aQueryParam;
+    return maQueryParam;
 }
 
 bool ScSheetSourceDesc::operator== (const ScSheetSourceDesc& rOther) const
 {
-    return aSourceRange == rOther.aSourceRange &&
+    return maSourceRange == rOther.maSourceRange &&
         maRangeName == rOther.maRangeName &&
-        aQueryParam  == rOther.aQueryParam;
+        maQueryParam  == rOther.maQueryParam;
 }
 
 ScDPTableDataCache* ScSheetSourceDesc::CreateCache( ScDocument* pDoc , long nID ) const
