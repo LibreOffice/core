@@ -1,3 +1,5 @@
+package com.sun.star.comp.xsltfilter;
+
 /************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
