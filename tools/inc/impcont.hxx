@@ -90,8 +90,6 @@ private:
 |*    CBlock::GetObject()
 |*
 |*    Beschreibung      Gibt einen Pointer aus dem Block zurueck
-|*    Ersterstellung    TH 17.09.91
-|*    Letzte Aenderung  TH 17.09.91
 |*
 *************************************************************************/
 
@@ -107,8 +105,6 @@ inline void* CBlock::GetObject( USHORT nIndex ) const
 |*    Beschreibung      Wir gehen davon aus, das Pointer in der Regel
 |*                      sich im ersten Block befindet und schalten
 |*                      deshalb eine Inline-Methode davor
-|*    Ersterstellung    TH 02.07.93
-|*    Letzte Aenderung  TH 02.07.93
 |*
 *************************************************************************/
 
@@ -127,8 +123,6 @@ inline void* Container::ImpGetObject( ULONG nIndex ) const
 |*
 |*    Beschreibung      Wenn es nur einen Block gibt, wird davon
 |*                      das Daten-Array zurueckgegeben
-|*    Ersterstellung    TH 24.01.96
-|*    Letzte Aenderung  TH 24.01.96
 |*
 *************************************************************************/
 

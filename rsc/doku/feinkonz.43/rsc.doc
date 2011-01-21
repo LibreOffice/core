@@ -1834,8 +1834,6 @@ MyApplication MyApp; // Applikationsinstanz
 |*  Beschreibung:	Virtuelle Methode, die vom System
 |*				gerufen wird, um das Programm zu
 |*				starten.
-|*  Ersterstellung:		MM 01.08.90
-|*  Letzte Aenderung:	MM 03.06.91
 |*
 **********************************************************/
 void MyApplication::Main( int, char* argv[] )
@@ -1870,8 +1868,6 @@ void MyApplication::Main( int, char* argv[] )
 |*				Wurde von keiner abgeleiteten Klasse
 |*				ein Lock ausgefÅhrt, dann wird die
 |*				Resource an dieser Stelle freigegeben.
-|*  Ersterstellung:		MM 01.08.90
-|*  Letzte Aenderung:	MM 03.06.91
 |*
 **********************************************************/
 MyDialog::MyDialog( Window* pParent, ResId & rResId ) :
@@ -1891,8 +1887,7 @@ MyDialog::MyDialog( Window* pParent, ResId & rResId ) :
 |*  MyDialog::CancelBtnHdl()
 |*
 |*  Beschreibung:		Die Dialogbox wird zerstîrt.
-|*  Ersterstellung:		MM 01.08.90
-|*  Letzte Aenderung:	MM 14.08.90
+|*
 *********************************************************/
 void MyDialog::CancelBtnHdl( Button* )
 {
@@ -1908,8 +1903,7 @@ void MyDialog::CancelBtnHdl( Button* )
 |*
 |*  Beschreibung:	Die Titlebar der Dialogbox flackert
 |*				einmal.
-|*  Ersterstellung:		MM 01.08.90
-|*  Letzte Aenderung:	MM 14.08.90
+|*
 **********************************************************/
 void MyDialog::FlashBtnHdl( Button* )
 {

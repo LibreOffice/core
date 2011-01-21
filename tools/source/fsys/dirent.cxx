@@ -242,10 +242,6 @@ DBG_NAME( DirEntry );
 |*
 |*    DirEntry::~DirEntryStack()
 |*
-|*    Beschreibung      FSYS.SDW
-|*    Ersterstellung    MI 26.04.91
-|*    Letzte Aenderung  MI 04.07.91
-|*
 *************************************************************************/
 
 DirEntryStack::~DirEntryStack()
@@ -261,8 +257,6 @@ DirEntryStack::~DirEntryStack()
 |*    Beschreibung      Pruefung eines DirEntry fuer DBG_UTIL
 |*    Parameter         void* p     Zeiger auf den DirEntry
 |*    Return-Wert       char*       Fehlermeldungs-TExtension oder NULL
-|*    Ersterstellung    MI 16.07.91
-|*    Letzte Aenderung  MI 26.05.93
 |*
 *************************************************************************/
 
@@ -283,8 +277,6 @@ const char* ImpCheckDirEntry( const void* p )
 |*    ImplCutPath()
 |*
 |*    Beschreibung      Fuegt ... ein, damit maximal nMaxChars lang
-|*    Ersterstellung    MI 06.04.94
-|*    Letzte Aenderung  DV 24.06.96
 |*
 *************************************************************************/
 
@@ -339,10 +331,6 @@ ByteString ImplCutPath( const ByteString& rStr, USHORT nMax, char cAccDel )
 /*************************************************************************
 |*
 |*    DirEntry::ImpParseOs2Name()
-|*
-|*    Beschreibung      FSYS.SDW
-|*    Ersterstellung    MI 26.04.91
-|*    Letzte Aenderung  MI 23.06.95
 |*
 *************************************************************************/
 
@@ -537,10 +525,6 @@ FSysError DirEntry::ImpParseOs2Name( const ByteString& rPfad, FSysPathStyle eSty
 |*
 |*    DirEntry::ImpParseName()
 |*
-|*    Beschreibung      FSYS.SDW
-|*    Ersterstellung    MI 26.08.91
-|*    Letzte Aenderung  MI 26.05.93
-|*
 *************************************************************************/
 
 FSysError DirEntry::ImpParseName( const ByteString& rbInitName,
@@ -600,10 +584,6 @@ FSysError DirEntry::ImpParseName( const ByteString& rbInitName,
 |*
 |*    GetStyle()
 |*
-|*    Beschreibung      FSYS.SDW
-|*    Ersterstellung    MI 15.11.91
-|*    Letzte Aenderung  MI 15.11.91
-|*
 *************************************************************************/
 
 static FSysPathStyle GetStyle( FSysPathStyle eStyle )
@@ -621,8 +601,6 @@ static FSysPathStyle GetStyle( FSysPathStyle eStyle )
 |*    Beschreibung      bringt den Namen auf Betriebssystem-Norm
 |*                      z.B. 8.3 lower beim MS-DOS Formatter
 |*                      wirkt nicht rekursiv
-|*    Ersterstellung    MI 12.08.91
-|*    Letzte Aenderung  MI 21.05.92
 |*
 *************************************************************************/
 
@@ -727,10 +705,6 @@ void DirEntry::ImpTrim( FSysPathStyle eStyle )
 |*
 |*    DirEntry::DirEntry()
 |*
-|*    Beschreibung      FSYS.SDW
-|*    Ersterstellung    MI 26.04.91
-|*    Letzte Aenderung  MA 02.12.91
-|*
 *************************************************************************/
 
 DirEntry::DirEntry( const ByteString& rName, DirEntryFlag eDirFlag,
@@ -752,10 +726,6 @@ DirEntry::DirEntry( const ByteString& rName, DirEntryFlag eDirFlag,
 /*************************************************************************
 |*
 |*    DirEntry::DirEntry()
-|*
-|*    Beschreibung      FSYS.SDW
-|*    Ersterstellung    MI 26.04.91
-|*    Letzte Aenderung  MA 02.12.91
 |*
 *************************************************************************/
 
@@ -783,10 +753,6 @@ DirEntry::DirEntry( const DirEntry& rOrig ) :
 /*************************************************************************
 |*
 |*    DirEntry::DirEntry()
-|*
-|*    Beschreibung      FSYS.SDW
-|*    Ersterstellung    MI 26.04.91
-|*    Letzte Aenderung  MA 02.12.91
 |*
 *************************************************************************/
 
@@ -894,10 +860,6 @@ DirEntry::DirEntry( const ByteString& rInitName, FSysPathStyle eStyle )
 |*
 |*    DirEntry::DirEntry()
 |*
-|*    Beschreibung      FSYS.SDW
-|*    Ersterstellung    MI 26.04.91
-|*    Letzte Aenderung  MA 02.12.91
-|*
 *************************************************************************/
 
 DirEntry::DirEntry( DirEntryFlag eDirFlag )
@@ -916,10 +878,6 @@ DirEntry::DirEntry( DirEntryFlag eDirFlag )
 |*
 |*    DirEntry::~DirEntry()
 |*
-|*    Beschreibung      FSYS.SDW
-|*    Ersterstellung    MI 26.04.91
-|*    Letzte Aenderung  MA 02.12.91
-|*
 *************************************************************************/
 
 DirEntry::~DirEntry()
@@ -937,10 +895,6 @@ DirEntry::~DirEntry()
 |*
 |*    DirEntry::ImpGetTopPtr() const
 |*
-|*    Beschreibung      FSYS.SDW
-|*    Ersterstellung    MI 26.04.91
-|*    Letzte Aenderung  MA 02.12.91
-|*
 *************************************************************************/
 
 const DirEntry* DirEntry::ImpGetTopPtr() const
@@ -957,10 +911,6 @@ const DirEntry* DirEntry::ImpGetTopPtr() const
 /*************************************************************************
 |*
 |*    DirEntry::ImpGetTopPtr()
-|*
-|*    Beschreibung      FSYS.SDW
-|*    Ersterstellung    MI 13.11.91
-|*    Letzte Aenderung  MA 02.12.91
 |*
 *************************************************************************/
 
@@ -980,8 +930,6 @@ DirEntry* DirEntry::ImpGetTopPtr()
 |*    DirEntry::ImpGetPreTopPtr()
 |*
 |*    Beschreibung      liefert einen Pointer auf den vorletzten Entry
-|*    Ersterstellung    MI 01.11.91
-|*    Letzte Aenderung  MA 02.12.91
 |*
 *************************************************************************/
 
@@ -1002,10 +950,6 @@ DirEntry* DirEntry::ImpGetPreTopPtr()
 /*************************************************************************
 |*
 |*    DirEntry::ImpChangeParent()
-|*
-|*    Beschreibung      FSYS.SDW
-|*    Ersterstellung    MI 26.04.91
-|*    Letzte Aenderung  MI 21.05.92
 |*
 *************************************************************************/
 
@@ -1029,10 +973,6 @@ DirEntry* DirEntry::ImpChangeParent( DirEntry* pNewParent, BOOL bNormalize )
 /*************************************************************************
 |*
 |*    DirEntry::Exists()
-|*
-|*    Beschreibung      FSYS.SDW
-|*    Ersterstellung    MI 26.04.91
-|*    Letzte Aenderung  MI 24.09.91
 |*
 *************************************************************************/
 
@@ -1083,10 +1023,6 @@ BOOL DirEntry::Exists( FSysAccess nAccess ) const
 |*
 |*    DirEntry::First()
 |*
-|*    Beschreibung      FSYS.SDW
-|*    Ersterstellung    MI 26.04.91
-|*    Letzte Aenderung  MA 15.01.92
-|*
 *************************************************************************/
 
 BOOL DirEntry::First()
@@ -1130,10 +1066,6 @@ BOOL DirEntry::First()
 /*************************************************************************
 |*
 |*    DirEntry::GetFull()
-|*
-|*    Beschreibung      FSYS.SDW
-|*    Ersterstellung    MI 26.04.91
-|*    Letzte Aenderung  MA 02.12.91
 |*
 *************************************************************************/
 
@@ -1187,10 +1119,6 @@ String DirEntry::GetFull( FSysPathStyle eStyle, BOOL bWithDelimiter,
 |*
 |*    DirEntry::GetPath()
 |*
-|*    Beschreibung      FSYS.SDW
-|*    Ersterstellung    MI 26.04.91
-|*    Letzte Aenderung  MA 02.12.91
-|*
 *************************************************************************/
 
 DirEntry DirEntry::GetPath() const
@@ -1206,10 +1134,6 @@ DirEntry DirEntry::GetPath() const
 /*************************************************************************
 |*
 |*    DirEntry::GetExtension()
-|*
-|*    Beschreibung      FSYS.SDW
-|*    Ersterstellung    MI 26.04.91
-|*    Letzte Aenderung  MA 02.12.91
 |*
 *************************************************************************/
 
@@ -1233,10 +1157,6 @@ String DirEntry::GetExtension( char cSep ) const
 /*************************************************************************
 |*
 |*    DirEntry::GetBase()
-|*
-|*    Beschreibung      FSYS.SDW
-|*    Ersterstellung    MI 26.04.91
-|*    Letzte Aenderung  MA 02.12.91
 |*
 *************************************************************************/
 
@@ -1263,10 +1183,6 @@ String DirEntry::GetBase( char cSep ) const
 /*************************************************************************
 |*
 |*    DirEntry::GetName()
-|*
-|*    Beschreibung      FSYS.SDW
-|*    Ersterstellung    MI 26.04.91
-|*    Letzte Aenderung  MA 02.12.91 13:47
 |*
 *************************************************************************/
 
@@ -1362,10 +1278,6 @@ String DirEntry::GetName( FSysPathStyle eStyle ) const
 |*
 |*    DirEntry::IsAbs()
 |*
-|*    Beschreibung      FSYS.SDW
-|*    Ersterstellung    MI 26.04.91
-|*    Letzte Aenderung  MA 02.12.91
-|*
 *************************************************************************/
 
 bool DirEntry::IsAbs() const
@@ -1382,10 +1294,6 @@ bool DirEntry::IsAbs() const
 /*************************************************************************
 |*
 |*    DirEntry::CutName()
-|*
-|*    Beschreibung      FSYS.SDW
-|*    Ersterstellung    MI 26.04.91
-|*    Letzte Aenderung  MA 02.12.91
 |*
 *************************************************************************/
 
@@ -1430,8 +1338,6 @@ String DirEntry::CutName( FSysPathStyle eStyle )
 |*    DirEntry::NameCompare
 |*
 |*    Beschreibung      Vergleich nur die Namen (ohne Pfad, aber mit Gross/Klein)
-|*    Ersterstellung    MI 26.04.91
-|*    Letzte Aenderung  MA 02.12.91
 |*
 *************************************************************************/
 
@@ -1455,10 +1361,6 @@ StringCompare DirEntry::NameCompare( const DirEntry &rWith ) const
 /*************************************************************************
 |*
 |*    DirEntry::operator==()
-|*
-|*    Beschreibung      FSYS.SDW
-|*    Ersterstellung    MI 26.04.91
-|*    Letzte Aenderung  MA 02.12.91
 |*
 *************************************************************************/
 
@@ -1498,10 +1400,6 @@ BOOL DirEntry::operator==( const DirEntry& rEntry ) const
 |*
 |*    DirEntry::operator=()
 |*
-|*    Beschreibung      FSYS.SDW
-|*    Ersterstellung    MI 26.04.91
-|*    Letzte Aenderung  MA 02.12.91
-|*
 *************************************************************************/
 
 DirEntry& DirEntry::operator=( const DirEntry& rEntry )
@@ -1535,10 +1433,6 @@ DirEntry& DirEntry::operator=( const DirEntry& rEntry )
 /*************************************************************************
 |*
 |*    DirEntry::operator+()
-|*
-|*    Beschreibung      FSYS.SDW
-|*    Ersterstellung    MI 26.04.91
-|*    Letzte Aenderung  MA 02.12.91
 |*
 *************************************************************************/
 
@@ -1627,10 +1521,6 @@ DirEntry DirEntry::operator+( const DirEntry& rEntry ) const
 |*
 |*    DirEntry::operator+=()
 |*
-|*    Beschreibung      FSYS.SDW
-|*    Ersterstellung    MI 26.04.91
-|*    Letzte Aenderung  MA 02.12.91
-|*
 *************************************************************************/
 
 DirEntry &DirEntry::operator+=( const DirEntry& rEntry )
@@ -1644,10 +1534,6 @@ DirEntry &DirEntry::operator+=( const DirEntry& rEntry )
 |*
 |*    DirEntry::GetAccessDelimiter()
 |*
-|*    Beschreibung      FSYS.SDW
-|*    Ersterstellung    MI 27.05.93
-|*    Letzte Aenderung  MI 10.06.93
-|*
 *************************************************************************/
 
 String DirEntry::GetAccessDelimiter( FSysPathStyle eFormatter )
@@ -1658,10 +1544,6 @@ String DirEntry::GetAccessDelimiter( FSysPathStyle eFormatter )
 /*************************************************************************
 |*
 |*    DirEntry::SetExtension()
-|*
-|*    Beschreibung      FSYS.SDW
-|*    Ersterstellung    MI 02.08.91
-|*    Letzte Aenderung  MA 02.12.91
 |*
 *************************************************************************/
 
@@ -1701,10 +1583,6 @@ void DirEntry::SetExtension( const String& rExtension, char cSep )
 |*
 |*    DirEntry::CutExtension()
 |*
-|*    Beschreibung      FSYS.SDW
-|*    Ersterstellung    MI 23.07.93
-|*    Letzte Aenderung  MI 23.07.93
-|*
 *************************************************************************/
 
 String DirEntry::CutExtension( char cSep )
@@ -1729,10 +1607,6 @@ String DirEntry::CutExtension( char cSep )
 /*************************************************************************
 |*
 |*    DirEntry::SetName()
-|*
-|*    Beschreibung      FSYS.SDW
-|*    Ersterstellung    MI 04.09.93
-|*    Letzte Aenderung  MI 04.09.93
 |*
 *************************************************************************/
 
@@ -1760,10 +1634,6 @@ void DirEntry::SetName( const String& rName, FSysPathStyle eFormatter )
 /*************************************************************************
 |*
 |*    DirEntry::Find()
-|*
-|*    Beschreibung      FSYS.SDW
-|*    Ersterstellung    MI 26.04.91
-|*    Letzte Aenderung  MA 02.12.91
 |*
 *************************************************************************/
 BOOL DirEntry::Find( const String& rPfad, char cDelim )
@@ -1806,10 +1676,6 @@ BOOL DirEntry::Find( const String& rPfad, char cDelim )
 /*************************************************************************
 |*
 |*    DirEntry::ImpToRel()
-|*
-|*    Beschreibung
-|*    Ersterstellung    MI 17.06.93
-|*    Letzte Aenderung  MI 17.06.93
 |*
 *************************************************************************/
 
@@ -1870,10 +1736,6 @@ BOOL DirEntry::ImpToRel( String aCurStr )
 |*
 |*    DirEntry::CutRelParents()
 |*
-|*    Beschreibung
-|*    Ersterstellung    MI 01.08.95
-|*    Letzte Aenderung  MI 01.08.95
-|*
 *************************************************************************/
 
 USHORT DirEntry::CutRelParents()
@@ -1910,10 +1772,6 @@ USHORT DirEntry::CutRelParents()
 |*
 |*    DirEntry::ToRel()
 |*
-|*    Beschreibung      FSYS.SDW
-|*    Ersterstellung    MI 26.06.93
-|*    Letzte Aenderung  MI 17.06.93
-|*
 *************************************************************************/
 
 BOOL DirEntry::ToRel()
@@ -1929,10 +1787,6 @@ BOOL DirEntry::ToRel()
 |*
 |*    DirEntry::ToRel()
 |*
-|*    Beschreibung      FSYS.SDW
-|*    Ersterstellung    MI 26.04.91
-|*    Letzte Aenderung  MA 02.12.91
-|*
 *************************************************************************/
 
 BOOL DirEntry::ToRel( const DirEntry& rStart )
@@ -1947,10 +1801,6 @@ BOOL DirEntry::ToRel( const DirEntry& rStart )
 /*************************************************************************
 |*
 |*    DirEntry::GetDevice()
-|*
-|*    Beschreibung      FSYS.SDW
-|*    Ersterstellung    MI 26.04.91
-|*    Letzte Aenderung  MA 02.12.91
 |*
 *************************************************************************/
 
@@ -1974,10 +1824,6 @@ DirEntry DirEntry::GetDevice() const
 /*************************************************************************
 |*
 |*    DirEntry::SetBase()
-|*
-|*    Beschreibung      FSYS.SDW
-|*    Ersterstellung    MI 23.10.91
-|*    Letzte Aenderung  MA 02.12.91
 |*
 *************************************************************************/
 
@@ -2004,10 +1850,6 @@ void DirEntry::SetBase( const String& rBase, char cSep )
 |*
 |*    DirEntry::GetSearchDelimiter()
 |*
-|*    Beschreibung      FSYS.SDW
-|*    Ersterstellung    MI 10.06.93
-|*    Letzte Aenderung  MI 10.06.93
-|*
 *************************************************************************/
 
 String DirEntry::GetSearchDelimiter( FSysPathStyle eFormatter )
@@ -2024,8 +1866,6 @@ String DirEntry::GetSearchDelimiter( FSysPathStyle eFormatter )
 |*                      fester Extension (FAT) zaehlt diese nicht mit.
 |*                      Bei unbekannten FileSytemen und FSYS_STYLE_URL
 |*                      wird USHRT_MAX zurueckgegeben.
-|*    Ersterstellung    MI 17.06.97
-|*    Letzte Aenderung  MI 17.06.97
 |*
 *************************************************************************/
 
@@ -2058,8 +1898,6 @@ USHORT DirEntry::GetMaxNameLen( FSysPathStyle eFormatter )
 |*    DirEntry::TempName()
 |*
 |*    Beschreibung      FSYS.SDW - Aha, wo?
-|*    Ersterstellung    VB 06.09.93 (im SWG)
-|*    Letzte Aenderung  MI 06.02.98
 |*
 *************************************************************************/
 namespace { struct TempNameBase_Impl : public rtl::Static< DirEntry, TempNameBase_Impl > {}; }
@@ -2249,10 +2087,6 @@ DirEntry DirEntry::TempName( DirEntryKind eKind ) const
 |*
 |*    DirEntry::operator[]()
 |*
-|*    Beschreibung      FSYS.SDW
-|*    Ersterstellung    MI 03.03.92
-|*    Letzte Aenderung  MI 03.03.92
-|*
 *************************************************************************/
 
 const DirEntry &DirEntry::operator[]( USHORT nParentLevel ) const
@@ -2271,10 +2105,6 @@ const DirEntry &DirEntry::operator[]( USHORT nParentLevel ) const
 /*************************************************************************
 |*
 |*    DirEntry::ImpParseUnixName()
-|*
-|*    Beschreibung      FSYS.SDW
-|*    Ersterstellung    MI 26.04.91
-|*    Letzte Aenderung  MI 26.05.93
 |*
 *************************************************************************/
 
@@ -2391,10 +2221,6 @@ FSysError DirEntry::ImpParseUnixName( const ByteString& rPfad, FSysPathStyle eSt
 /*************************************************************************
 |*
 |*    DirEntry::MakeShortName()
-|*
-|*    Beschreibung
-|*    Ersterstellung    TLX
-|*    Letzte Aenderung  PB  21.08.97 (in CreateEntry_Impl())
 |*
 *************************************************************************/
 
@@ -2626,10 +2452,6 @@ BOOL DirEntry::MakeShortName( const String& rLongName, DirEntryKind eKind,
 |*
 |*    DirEntry::CreatePath()
 |*
-|*    Beschreibung      FSYS.SDW
-|*    Ersterstellung    MI 26.04.91
-|*    Letzte Aenderung  MA 02.12.91
-|*
 *************************************************************************/
 
 BOOL DirEntry::MakeDir( BOOL bSloppy ) const
@@ -2695,10 +2517,6 @@ BOOL DirEntry::MakeDir( BOOL bSloppy ) const
 |*
 |*    DirEntry::CopyTo()
 |*
-|*    Beschreibung      FSYS.SDW
-|*    Ersterstellung    MI 26.04.91
-|*    Letzte Aenderung  MI 07.08.96
-|*
 *************************************************************************/
 
 FSysError DirEntry::CopyTo( const DirEntry& rDest, FSysAction nActions ) const
@@ -2728,10 +2546,6 @@ FSysError DirEntry::CopyTo( const DirEntry& rDest, FSysAction nActions ) const
 /*************************************************************************
 |*
 |*    DirEntry::MoveTo()
-|*
-|*    Beschreibung      FSYS.SDW
-|*    Ersterstellung    MI 26.04.91
-|*    Letzte Aenderung  HRO 24.03.99
 |*
 *************************************************************************/
 
@@ -2896,10 +2710,6 @@ FSysError DirEntry::MoveTo( const DirEntry& rNewName ) const
 |*
 |*    DirEntry::Kill()
 |*
-|*    Beschreibung      FSYS.SDW
-|*    Ersterstellung    MI 26.04.91
-|*    Letzte Aenderung  MI 07.08.96
-|*
 *************************************************************************/
 
 FSysError DirEntry::Kill(  FSysAction nActions ) const
@@ -3033,8 +2843,6 @@ FSysError DirEntry::Kill(  FSysAction nActions ) const
 |*    DirEntry::Contains()
 |*
 |*    Beschreibung      ob rSubEntry direkt oder indirect in *this liegt
-|*    Ersterstellung    MI 20.03.97
-|*    Letzte Aenderung  MI 20.03.97
 |*
 *************************************************************************/
 
@@ -3058,10 +2866,6 @@ BOOL DirEntry::Contains( const DirEntry &rSubEntry ) const
 |*
 |*    DirEntry::Level()
 |*
-|*    Beschreibung      FSYS.SDW
-|*    Ersterstellung    MI 03.03.92
-|*    Letzte Aenderung  MI 03.03.92
-|*
 *************************************************************************/
 
 USHORT DirEntry::Level() const
@@ -3083,10 +2887,6 @@ USHORT DirEntry::Level() const
 |*
 |*    DirEntry::ConvertNameToSystem()
 |*
-|*    Beschreibung
-|*    Ersterstellung    DV 29.03.96
-|*    Letzte Aenderung  DV 29.03.96
-|*
 *************************************************************************/
 
 String DirEntry::ConvertNameToSystem( const String &rName )
@@ -3097,10 +2897,6 @@ String DirEntry::ConvertNameToSystem( const String &rName )
 /*************************************************************************
 |*
 |*    DirEntry::ConvertSystemToName()
-|*
-|*    Beschreibung
-|*    Ersterstellung    DV 29.03.96
-|*    Letzte Aenderung  DV 29.03.96
 |*
 *************************************************************************/
 
@@ -3113,10 +2909,6 @@ String DirEntry::ConvertSystemToName( const String &rName )
 |*
 |*    DirEntry::IsValid()
 |*
-|*    Beschreibung
-|*    Ersterstellung    MI  18.09.93
-|*    Letzte Aenderung  TPF 18.09.98
-|*
 *************************************************************************/
 
 BOOL DirEntry::IsValid() const
@@ -3127,10 +2919,6 @@ BOOL DirEntry::IsValid() const
 /*************************************************************************
 |*
 |*    DirEntry::IsRFSAvailable()
-|*
-|*    Beschreibung
-|*    Ersterstellung    TPF 21.10.98
-|*    Letzte Aenderung  TPF 21.10.98
 |*
 *************************************************************************/
 
@@ -3146,8 +2934,6 @@ BOOL DirEntry::IsRFSAvailable()
 |*    Beschreibung      ?berpr?ft , ob das DirEntry einen langen
 |*                      Filenamen auf einer FAT-Partition enth?lt (EAs).
 |*                      (eigentlich nur f?r OS2 interessant)
-|*    Ersterstellung    TPF 02.10.98
-|*    Letzte Aenderung  TPF 01.03.1999
 |*
 *************************************************************************/
 

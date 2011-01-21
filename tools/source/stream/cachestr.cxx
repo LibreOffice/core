@@ -38,10 +38,6 @@
 |*
 |*    SvCacheStream::SvCacheStream()
 |*
-|*    Beschreibung      STREAM.SDW
-|*    Ersterstellung    OV 27.09.94
-|*    Letzte Aenderung  OV 27.09.94
-|*
 *************************************************************************/
 
 SvCacheStream::SvCacheStream( ULONG nMaxMemSize )
@@ -59,10 +55,6 @@ SvCacheStream::SvCacheStream( ULONG nMaxMemSize )
 /*************************************************************************
 |*
 |*    SvCacheStream::SvCacheStream()
-|*
-|*    Beschreibung      STREAM.SDW
-|*    Ersterstellung    OV 27.09.94
-|*    Letzte Aenderung  OV 27.09.94
 |*
 *************************************************************************/
 
@@ -91,10 +83,6 @@ SvCacheStream::SvCacheStream( const String &rFileName,
 |*
 |*    SvCacheStream::~SvCacheStream()
 |*
-|*    Beschreibung      STREAM.SDW
-|*    Ersterstellung    OV 27.09.94
-|*    Letzte Aenderung  OV 27.09.94
-|*
 *************************************************************************/
 
 SvCacheStream::~SvCacheStream()
@@ -115,10 +103,6 @@ SvCacheStream::~SvCacheStream()
 /*************************************************************************
 |*
 |*    SvCacheStream::SwapOut()
-|*
-|*    Beschreibung      STREAM.SDW
-|*    Ersterstellung    OV 27.09.94
-|*    Letzte Aenderung  OV 27.09.94
 |*
 *************************************************************************/
 
@@ -162,10 +146,6 @@ void SvCacheStream::SwapOut()
 |*
 |*    SvCacheStream::GetData()
 |*
-|*    Beschreibung      STREAM.SDW
-|*    Ersterstellung    OV 27.09.94
-|*    Letzte Aenderung  OV 27.09.94
-|*
 *************************************************************************/
 
 ULONG SvCacheStream::GetData( void* pData, ULONG nSize )
@@ -176,10 +156,6 @@ ULONG SvCacheStream::GetData( void* pData, ULONG nSize )
 /*************************************************************************
 |*
 |*    SvCacheStream::PutData()
-|*
-|*    Beschreibung      STREAM.SDW
-|*    Ersterstellung    OV 27.09.94
-|*    Letzte Aenderung  OV 27.09.94
 |*
 *************************************************************************/
 
@@ -196,10 +172,6 @@ ULONG SvCacheStream::PutData( const void* pData, ULONG nSize )
 |*
 |*    SvCacheStream::SeekPos()
 |*
-|*    Beschreibung      STREAM.SDW
-|*    Ersterstellung    OV 27.09.94
-|*    Letzte Aenderung  OV 27.09.94
-|*
 *************************************************************************/
 
 ULONG SvCacheStream::SeekPos( ULONG nPos )
@@ -210,10 +182,6 @@ ULONG SvCacheStream::SeekPos( ULONG nPos )
 /*************************************************************************
 |*
 |*    SvCacheStream::FlushData()
-|*
-|*    Beschreibung      STREAM.SDW
-|*    Ersterstellung    OV 27.09.94
-|*    Letzte Aenderung  OV 27.09.94
 |*
 *************************************************************************/
 
@@ -228,10 +196,6 @@ void SvCacheStream::FlushData()
 /*************************************************************************
 |*
 |*    SvCacheStream::GetStr()
-|*
-|*    Beschreibung      STREAM.SDW
-|*    Ersterstellung    OV 27.09.94
-|*    Letzte Aenderung  OV 27.09.94
 |*
 *************************************************************************/
 
@@ -248,10 +212,6 @@ const void* SvCacheStream::GetBuffer()
 |*
 |*    SvCacheStream::SetSize()
 |*
-|*    Beschreibung      STREAM.SDW
-|*    Ersterstellung    OV 27.09.94
-|*    Letzte Aenderung  OV 27.09.94
-|*
 *************************************************************************/
 
 void SvCacheStream::SetSize( ULONG nSize )
@@ -262,10 +222,6 @@ void SvCacheStream::SetSize( ULONG nSize )
 /*************************************************************************
 |*
 |*    SvCacheStream::GetSize()
-|*
-|*    Beschreibung      STREAM.SDW
-|*    Ersterstellung    OV 27.09.94
-|*    Letzte Aenderung  OV 27.09.94
 |*
 *************************************************************************/
 

@@ -50,10 +50,6 @@ inline BOOL SelectionEngine::ShouldDeselect( BOOL bModifierKey1 ) const
 |*
 |*    SelectionEngine::SelectionEngine()
 |*
-|*    Beschreibung      SELENG.SDW
-|*    Ersterstellung    OV 10.10.94
-|*    Letzte Aenderung  OV 10.10.94
-|*
 *************************************************************************/
 
 SelectionEngine::SelectionEngine( Window* pWindow, FunctionSet* pFuncSet,
@@ -74,10 +70,6 @@ SelectionEngine::SelectionEngine( Window* pWindow, FunctionSet* pFuncSet,
 |*
 |*    SelectionEngine::~SelectionEngine()
 |*
-|*    Beschreibung      SELENG.SDW
-|*    Ersterstellung    OV 10.10.94
-|*    Letzte Aenderung  OV 10.10.94
-|*
 *************************************************************************/
 
 SelectionEngine::~SelectionEngine()
@@ -88,10 +80,6 @@ SelectionEngine::~SelectionEngine()
 /*************************************************************************
 |*
 |*    SelectionEngine::ImpWatchDog()
-|*
-|*    Beschreibung      SELENG.SDW
-|*    Ersterstellung    OV 10.10.94
-|*    Letzte Aenderung  OV 10.10.94
 |*
 *************************************************************************/
 
@@ -106,10 +94,6 @@ IMPL_LINK( SelectionEngine, ImpWatchDog, Timer*, EMPTYARG )
 |*
 |*    SelectionEngine::SetSelectionMode()
 |*
-|*    Beschreibung      SELENG.SDW
-|*    Ersterstellung    OV 10.10.94
-|*    Letzte Aenderung  OV 10.10.94
-|*
 *************************************************************************/
 
 void SelectionEngine::SetSelectionMode( SelectionMode eMode )
@@ -121,10 +105,6 @@ void SelectionEngine::SetSelectionMode( SelectionMode eMode )
 |*
 |*    SelectionEngine::ActivateDragMode()
 |*
-|*    Beschreibung      SELENG.SDW
-|*    Ersterstellung    OV 10.10.94
-|*    Letzte Aenderung  OV 10.10.94
-|*
 *************************************************************************/
 
 void SelectionEngine::ActivateDragMode()
@@ -135,10 +115,6 @@ void SelectionEngine::ActivateDragMode()
 /*************************************************************************
 |*
 |*    SelectionEngine::CursorPosChanging()
-|*
-|*    Beschreibung      SELENG.SDW
-|*    Ersterstellung    OV 10.10.94
-|*    Letzte Aenderung  GT 2002-04-04
 |*
 *************************************************************************/
 
@@ -193,10 +169,6 @@ void SelectionEngine::CursorPosChanging( BOOL bShift, BOOL bMod1 )
 /*************************************************************************
 |*
 |*    SelectionEngine::SelMouseButtonDown()
-|*
-|*    Beschreibung      SELENG.SDW
-|*    Ersterstellung    OV 10.10.94
-|*    Letzte Aenderung  OV 07.06.95
 |*
 *************************************************************************/
 
@@ -331,10 +303,6 @@ BOOL SelectionEngine::SelMouseButtonDown( const MouseEvent& rMEvt )
 |*
 |*    SelectionEngine::SelMouseButtonUp()
 |*
-|*    Beschreibung      SELENG.SDW
-|*    Ersterstellung    OV 10.10.94
-|*    Letzte Aenderung  OV 10.10.94
-|*
 *************************************************************************/
 
 BOOL SelectionEngine::SelMouseButtonUp( const MouseEvent& rMEvt )
@@ -385,10 +353,6 @@ BOOL SelectionEngine::SelMouseButtonUp( const MouseEvent& rMEvt )
 |*
 |*    SelectionEngine::SelMouseMove()
 |*
-|*    Beschreibung      SELENG.SDW
-|*    Ersterstellung    OV 10.10.94
-|*    Letzte Aenderung  OV 10.10.94
-|*
 *************************************************************************/
 
 BOOL SelectionEngine::SelMouseMove( const MouseEvent& rMEvt )
@@ -429,10 +393,6 @@ BOOL SelectionEngine::SelMouseMove( const MouseEvent& rMEvt )
 |*
 |*    SelectionEngine::SetWindow()
 |*
-|*    Beschreibung      SELENG.SDW
-|*    Ersterstellung    OV 10.10.94
-|*    Letzte Aenderung  OV 10.10.94
-|*
 *************************************************************************/
 
 void SelectionEngine::SetWindow( Window* pNewWin )
@@ -451,10 +411,6 @@ void SelectionEngine::SetWindow( Window* pNewWin )
 |*
 |*    SelectionEngine::Reset()
 |*
-|*    Beschreibung      SELENG.SDW
-|*    Ersterstellung    OV 07.07.95
-|*    Letzte Aenderung  OV 07.07.95
-|*
 *************************************************************************/
 
 void SelectionEngine::Reset()
@@ -469,10 +425,6 @@ void SelectionEngine::Reset()
 /*************************************************************************
 |*
 |*    SelectionEngine::Command()
-|*
-|*    Beschreibung      SELENG.SDW
-|*    Ersterstellung    OV 07.07.95
-|*    Letzte Aenderung  OV 07.07.95
 |*
 *************************************************************************/
 

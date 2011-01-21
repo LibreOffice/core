@@ -95,8 +95,6 @@ AtomContainer*  pHS          = NULL;
 |*    RscCmdLine::Init()
 |*
 |*    Beschreibung      Kommandozeile interpretierten
-|*    Ersterstellung    MM 03.05.91
-|*    Letzte Aenderung  MM 03.05.91
 |*
 *************************************************************************/
 void RscCmdLine::Init()
@@ -115,8 +113,6 @@ void RscCmdLine::Init()
 |*    RscCmdLine::RscCmdLine()
 |*
 |*    Beschreibung      Kommandozeile interpretierten
-|*    Ersterstellung    MM 13.02.91
-|*    Letzte Aenderung  MM 13.02.91
 |*
 *************************************************************************/
 RscCmdLine::RscCmdLine()
@@ -129,8 +125,6 @@ RscCmdLine::RscCmdLine()
 |*    RscCmdLine::RscCmdLine()
 |*
 |*    Beschreibung      Kommandozeile interpretierten
-|*    Ersterstellung    MM 13.02.91
-|*    Letzte Aenderung  MM 13.02.91
 |*
 *************************************************************************/
 RscCmdLine::RscCmdLine( int argc, char ** argv, RscError * pEH )
@@ -339,8 +333,6 @@ RscCmdLine::RscCmdLine( int argc, char ** argv, RscError * pEH )
 |*    RscCmdLine::~RscCmdLine()
 |*
 |*    Beschreibung      dtor
-|*    Ersterstellung    MM 13.02.91
-|*    Letzte Aenderung  MM 13.02.91
 |*
 *************************************************************************/
 RscCmdLine::~RscCmdLine()
@@ -423,10 +415,6 @@ RscCompiler::RscCompiler( RscCmdLine * pLine, RscTypCont * pTypCont )
 |*
 |*    RscCompiler :: RscCompiler()
 |*
-|*    Beschreibung
-|*    Ersterstellung    MM 07.02.91
-|*    Letzte Aenderung  MM 07.02.91
-|*
 *************************************************************************/
 RscCompiler::~RscCompiler()
 {
@@ -463,8 +451,6 @@ RscCompiler::~RscCompiler()
 |*    RscCompiler::Start()
 |*
 |*    Beschreibung      Datei in Kommandozeile aendern
-|*    Ersterstellung    MM 13.02.91
-|*    Letzte Aenderung  MM 13.02.91
 |*
 *************************************************************************/
 ERRTYPE RscCompiler::Start()
@@ -547,8 +533,6 @@ printf( "khg\n" );
 |*    RscCmdLine::EndCompile()
 |*
 |*    Beschreibung      Datei in Kommandozeile aendern
-|*    Ersterstellung    MM 13.02.91
-|*    Letzte Aenderung  MM 13.02.91
 |*
 *************************************************************************/
 void RscCompiler::EndCompile()
@@ -652,10 +636,6 @@ void RscCompiler::EndCompile()
 |*
 |*    RscCompiler::IncludeParser()
 |*
-|*    Beschreibung
-|*    Ersterstellung    MM 21.06.91
-|*    Letzte Aenderung  MM 21.06.91
-|*
 *************************************************************************/
 ERRTYPE RscCompiler :: IncludeParser( ULONG lFileKey )
 {
@@ -719,10 +699,6 @@ ERRTYPE RscCompiler :: IncludeParser( ULONG lFileKey )
 /*************************************************************************
 |*
 |*    RscCompiler :: ParseOneFile()
-|*
-|*    Beschreibung
-|*    Ersterstellung    MM 26.06.91
-|*    Letzte Aenderung  MM 26.06.91
 |*
 *************************************************************************/
 ERRTYPE RscCompiler :: ParseOneFile( ULONG lFileKey,
@@ -798,10 +774,6 @@ ERRTYPE RscCompiler :: ParseOneFile( ULONG lFileKey,
 /*************************************************************************
 |*
 |*    RscCompiler :: Link()
-|*
-|*    Beschreibung
-|*    Ersterstellung    MM 07.02.91
-|*    Letzte Aenderung  MM 07.02.91
 |*
 *************************************************************************/
 

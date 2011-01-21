@@ -65,8 +65,6 @@ using namespace rtl;
 |*
 |*    Beschreibung      Vergleicht zwei Strings Case-Unabhaengig bis zu
 |*                      einer bestimmten Laenge
-|*    Ersterstellung    MM 13.02.91
-|*    Letzte Aenderung  MM 13.02.91
 |*
 *************************************************************************/
 int rsc_strnicmp( const char *string1, const char *string2, size_t count )
@@ -94,8 +92,6 @@ int rsc_strnicmp( const char *string1, const char *string2, size_t count )
 |*    rsc_strnicmp()
 |*
 |*    Beschreibung      Vergleicht zwei Strings Case-Unabhaengig
-|*    Ersterstellung    MM 13.02.91
-|*    Letzte Aenderung  MM 13.02.91
 |*
 *************************************************************************/
 int rsc_stricmp( const char *string1, const char *string2 ){
@@ -129,8 +125,6 @@ char* rsc_strdup( const char* pStr )
 |*    Beschreibung      Gibt einen String eines eindeutigen Dateinamens
 |*                      zurueck. Der Speicher fuer den String wird mit
 |*                      malloc allokiert
-|*    Ersterstellung    MM 13.02.91
-|*    Letzte Aenderung  MH 13.10.97
 |*
 *************************************************************************/
 ByteString GetTmpFileName()
@@ -194,8 +188,6 @@ BOOL Append( ByteString aOutputSrs, ByteString aTmpFile )
 |*    Beschreibung      Haengt Extension an, wenn keine da ist
 |*    Parameter:        pInput, der Input-Dateiname.
 |*                      pExt, die Extension des Ausgabenamens
-|*    Ersterstellung    MM 13.02.91
-|*    Letzte Aenderung  MM 28.06.91
 |*
 *************************************************************************/
 ByteString InputFile ( const char * pInput, const char * pExt )
@@ -219,8 +211,6 @@ ByteString InputFile ( const char * pInput, const char * pExt )
 |*    Beschreibung      Ersetzt Extension durch eine andere
 |*    Parameter:        input, der Input-Dateiname.
 |*                      pExt, die Extension des Ausgabenamens
-|*    Ersterstellung    MM 13.02.91
-|*    Letzte Aenderung  MM 28.06.91
 |*
 *************************************************************************/
 ByteString OutputFile ( ByteString aInput, const char * pExt )
@@ -239,8 +229,6 @@ ByteString OutputFile ( ByteString aInput, const char * pExt )
 |*    ::ResonseFile()
 |*
 |*    Beschreibung      Kommandozeile aufbereiten
-|*    Ersterstellung    MM 05.09.91
-|*    Letzte Aenderung  MM 05.09.91
 |*
 *************************************************************************/
 char * ResponseFile( RscPtrPtr * ppCmd, char ** ppArgv, sal_uInt32 nArgc )
@@ -301,8 +289,6 @@ char * ResponseFile( RscPtrPtr * ppCmd, char ** ppArgv, sal_uInt32 nArgc )
 |*    RscPtrPtr :: RscPtrPtr()
 |*
 |*    Beschreibung      Eine Tabelle mit Zeigern
-|*    Ersterstellung    MM 13.02.91
-|*    Letzte Aenderung  MM 13.02.91
 |*
 *************************************************************************/
 RscPtrPtr :: RscPtrPtr(){
@@ -316,8 +302,6 @@ RscPtrPtr :: RscPtrPtr(){
 |*
 |*    Beschreibung      Zerst�rt eine Tabelle mit Zeigern, die Zeiger werde
 |*                      ebenfalls freigegebn
-|*    Ersterstellung    MM 13.02.91
-|*    Letzte Aenderung  MM 13.02.91
 |*
 *************************************************************************/
 RscPtrPtr :: ~RscPtrPtr(){
@@ -327,10 +311,6 @@ RscPtrPtr :: ~RscPtrPtr(){
 /*************************************************************************
 |*
 |*    RscPtrPtr :: Reset()
-|*
-|*    Beschreibung
-|*    Ersterstellung    MM 03.05.91
-|*    Letzte Aenderung  MM 03.05.91
 |*
 *************************************************************************/
 void RscPtrPtr :: Reset(){
@@ -352,8 +332,6 @@ void RscPtrPtr :: Reset(){
 |*    RscPtrPtr :: Append()
 |*
 |*    Beschreibung      Haengt einen Eintrag an.
-|*    Ersterstellung    MM 13.02.91
-|*    Letzte Aenderung  MM 13.02.91
 |*
 *************************************************************************/
 sal_uInt32 RscPtrPtr :: Append( void * pBuffer ){
@@ -372,8 +350,6 @@ sal_uInt32 RscPtrPtr :: Append( void * pBuffer ){
 |*    RscPtrPtr :: GetEntry()
 |*
 |*    Beschreibung      Liefert einen Eintrag, NULL wenn nicht vorhanden.
-|*    Ersterstellung    MM 13.02.91
-|*    Letzte Aenderung  MM 13.02.91
 |*
 *************************************************************************/
 void * RscPtrPtr :: GetEntry( sal_uInt32 nEntry ){
@@ -386,10 +362,6 @@ void * RscPtrPtr :: GetEntry( sal_uInt32 nEntry ){
 /*************************************************************************
 |*
 |*    RscWriteRc :: RscWriteRc()
-|*
-|*    Beschreibung
-|*    Ersterstellung    MM 15.04.91
-|*    Letzte Aenderung  MM 15.04.91
 |*
 *************************************************************************/
 RscWriteRc::RscWriteRc( RSCBYTEORDER_TYPE nOrder )
@@ -415,10 +387,6 @@ RscWriteRc::RscWriteRc( RSCBYTEORDER_TYPE nOrder )
 |*
 |*    RscWriteRc :: ~RscWriteRc()
 |*
-|*    Beschreibung
-|*    Ersterstellung    MM 15.04.91
-|*    Letzte Aenderung  MM 15.04.91
-|*
 *************************************************************************/
 RscWriteRc :: ~RscWriteRc()
 {
@@ -429,10 +397,6 @@ RscWriteRc :: ~RscWriteRc()
 /*************************************************************************
 |*
 |*    RscWriteRc :: IncSize()
-|*
-|*    Beschreibung
-|*    Ersterstellung    MM 15.04.91
-|*    Letzte Aenderung  MM 15.04.91
 |*
 *************************************************************************/
 sal_uInt32 RscWriteRc :: IncSize( sal_uInt32 nSize )
@@ -447,10 +411,6 @@ sal_uInt32 RscWriteRc :: IncSize( sal_uInt32 nSize )
 |*
 |*    RscWriteRc :: GetPointer()
 |*
-|*    Beschreibung
-|*    Ersterstellung    MM 15.04.91
-|*    Letzte Aenderung  MM 15.04.91
-|*
 *************************************************************************/
 char * RscWriteRc :: GetPointer( sal_uInt32 nSize )
 {
@@ -463,10 +423,6 @@ char * RscWriteRc :: GetPointer( sal_uInt32 nSize )
 /*************************************************************************
 |*
 |*    RscWriteRc :: Put()
-|*
-|*    Beschreibung
-|*    Ersterstellung    MM 15.04.91
-|*    Letzte Aenderung  MM 15.04.91
 |*
 *************************************************************************/
 void RscWriteRc :: Put( sal_uInt16 nVal )

@@ -481,8 +481,6 @@ void SotStorage::TestMemberInvariant( BOOL /*bPrint*/ )
 |*                      der RefCounter schon um 1 erhoet.
 |*                      Die Uebergabe erfolgt in pStorageCTor. Die Variable
 |*                      ist NULL, wenn es nicht geklappt hat.
-|*    Ersterstellung    MM 23.06.94
-|*    Letzte Aenderung  MM 23.06.94
 |*
 *************************************************************************/
 #define INIT_SotStorage()                   \

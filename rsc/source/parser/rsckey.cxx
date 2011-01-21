@@ -73,10 +73,6 @@ int KeyCompare( const void * pFirst, const void * pSecond ){
 |*
 |*    RscNameTable::RscNameTable()
 |*
-|*    Beschreibung      RES.DOC
-|*    Ersterstellung    MM 28.02.91
-|*    Letzte Aenderung  MM 28.02.91
-|*
 *************************************************************************/
 RscNameTable::RscNameTable() {
     bSort    = TRUE;
@@ -88,10 +84,6 @@ RscNameTable::RscNameTable() {
 |*
 |*    RscNameTable::~RscNameTable()
 |*
-|*    Beschreibung
-|*    Ersterstellung    MM 15.05.91
-|*    Letzte Aenderung  MM 15.05.91
-|*
 *************************************************************************/
 RscNameTable::~RscNameTable() {
     if( pTable )
@@ -102,10 +94,6 @@ RscNameTable::~RscNameTable() {
 /*************************************************************************
 |*
 |*    RscNameTable::SetSort()
-|*
-|*    Beschreibung      RES.DOC
-|*    Ersterstellung    MM 28.02.91
-|*    Letzte Aenderung  MM 28.02.91
 |*
 *************************************************************************/
 void RscNameTable::SetSort( BOOL bSorted ){
@@ -120,10 +108,6 @@ void RscNameTable::SetSort( BOOL bSorted ){
 /*************************************************************************
 |*
 |*    RscNameTable::Put()
-|*
-|*    Beschreibung      RES.DOC
-|*    Ersterstellung    MM 28.02.91
-|*    Letzte Aenderung  MM 28.02.91
 |*
 *************************************************************************/
 Atom RscNameTable::Put( Atom nName, sal_uInt32 nTyp, long nValue ){
@@ -175,10 +159,6 @@ Atom RscNameTable::Put( const char * pName, sal_uInt32 nTyp, RscTop * pClass )
 /*************************************************************************
 |*
 |*    RscNameTable::Get()
-|*
-|*    Beschreibung      RES.DOC
-|*    Ersterstellung    MM 28.02.91
-|*    Letzte Aenderung  MM 28.02.91
 |*
 *************************************************************************/
 BOOL RscNameTable::Get( Atom nName, KEY_STRUCT * pEle ){

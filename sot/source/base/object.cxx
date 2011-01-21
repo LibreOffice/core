@@ -99,10 +99,6 @@ SotObject::SotObject()
 |*
 |*    SotObject::~SotObject()
 |*
-|*    Beschreibung
-|*    Ersterstellung    MM 05.06.94
-|*    Letzte Aenderung  MM 05.06.94
-|*
 *************************************************************************/
 SotObject::~SotObject()
 {

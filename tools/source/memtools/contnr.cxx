@@ -49,8 +49,6 @@ DBG_NAME( Container )
 |*    DbgCheckCBlock()
 |*
 |*    Beschreibung      Pruefung eines CBlock fuer Debug-Utilities
-|*    Ersterstellung    MI 30.01.92
-|*    Letzte Aenderung  TH 24.01.96
 |*
 *************************************************************************/
 
@@ -74,8 +72,6 @@ const char* CBlock::DbgCheckCBlock( const void* pBlock )
 |*    CBlock::CBlock()
 |*
 |*    Beschreibung      Construktor des Verwaltungsblocks
-|*    Ersterstellung    TH 17.09.91
-|*    Letzte Aenderung  TH 17.09.91
 |*
 *************************************************************************/
 
@@ -97,8 +93,6 @@ CBlock::CBlock( USHORT nInitSize, CBlock* _pPrev, CBlock* _pNext )
 |*    CBlock::CBlock()
 |*
 |*    Beschreibung      Construktor des Verwaltungsblocks
-|*    Ersterstellung    TH 17.09.91
-|*    Letzte Aenderung  TH 17.09.91
 |*
 *************************************************************************/
 
@@ -122,8 +116,6 @@ CBlock::CBlock( USHORT _nSize, CBlock* _pPrev )
 |*    CBlock::CBlock()
 |*
 |*    Beschreibung      Copy-Construktor des Verwaltungsblocks
-|*    Ersterstellung    TH 17.09.91
-|*    Letzte Aenderung  TH 17.09.91
 |*
 *************************************************************************/
 
@@ -147,8 +139,6 @@ CBlock::CBlock( const CBlock& r, CBlock* _pPrev )
 |*    CBlock::~CBlock()
 |*
 |*    Beschreibung      Destruktor des Verwaltungsblocks
-|*    Ersterstellung    TH 17.09.91
-|*    Letzte Aenderung  TH 17.09.91
 |*
 *************************************************************************/
 
@@ -165,8 +155,6 @@ inline CBlock::~CBlock()
 |*    CBlock::Insert()
 |*
 |*    Beschreibung      Fuegt einen Pointer ein
-|*    Ersterstellung    TH 17.09.91
-|*    Letzte Aenderung  TH 17.09.91
 |*
 *************************************************************************/
 
@@ -221,8 +209,6 @@ void CBlock::Insert( void* p, USHORT nIndex, USHORT nReSize )
 |*    CBlock::Split()
 |*
 |*    Beschreibung      Fuegt einen Pointer ein und splittet den Block
-|*    Ersterstellung    TH 17.09.91
-|*    Letzte Aenderung  TH 17.09.91
 |*
 *************************************************************************/
 
@@ -358,8 +344,6 @@ CBlock* CBlock::Split( void* p, USHORT nIndex, USHORT nReSize )
 |*    CBlock::Remove()
 |*
 |*    Beschreibung      Entfernt einen Pointer
-|*    Ersterstellung    TH 17.09.91
-|*    Letzte Aenderung  TH 17.09.91
 |*
 *************************************************************************/
 
@@ -417,8 +401,6 @@ void* CBlock::Remove( USHORT nIndex, USHORT nReSize )
 |*    CBlock::Replace()
 |*
 |*    Beschreibung      Ersetzt einen Pointer
-|*    Ersterstellung    TH 17.09.91
-|*    Letzte Aenderung  TH 17.09.91
 |*
 *************************************************************************/
 
@@ -438,8 +420,6 @@ inline void* CBlock::Replace( void* p, USHORT nIndex )
 |*
 |*    Beschreibung      Gibt einen Pointer auf den Pointer aus dem Block
 |*                      zurueck
-|*    Ersterstellung    TH 26.01.93
-|*    Letzte Aenderung  TH 26.01.93
 |*
 *************************************************************************/
 
@@ -455,8 +435,6 @@ inline void** CBlock::GetObjectPtr( USHORT nIndex )
 |*    CBlock::SetSize()
 |*
 |*    Beschreibung      Aendert die Groesse des Blocks
-|*    Ersterstellung    TH 17.09.91
-|*    Letzte Aenderung  TH 17.09.91
 |*
 *************************************************************************/
 
@@ -497,8 +475,6 @@ void CBlock::SetSize( USHORT nNewSize )
 |*    DbgCheckContainer()
 |*
 |*    Beschreibung      Pruefung eines Container fuer Debug-Utilities
-|*    Ersterstellung    MI 30.01.92
-|*    Letzte Aenderung  TH 24.01.96
 |*
 *************************************************************************/
 
@@ -519,8 +495,6 @@ const char* Container::DbgCheckContainer( const void* pCont )
 |*    ImpCopyContainer()
 |*
 |*    Beschreibung      Kopiert alle Daten des Containers
-|*    Ersterstellung    TH 24.01.96
-|*    Letzte Aenderung  TH 24.01.96
 |*
 *************************************************************************/
 
@@ -577,10 +551,6 @@ void Container::ImpCopyContainer( const Container* pCont2 )
 /*************************************************************************
 |*
 |*    Container::Container()
-|*
-|*    Beschreibung      CONTNR.SDW
-|*    Ersterstellung    TH 17.09.91
-|*    Letzte Aenderung  TH 17.09.91
 |*
 *************************************************************************/
 
@@ -643,10 +613,6 @@ Container::Container( USHORT _nBlockSize, USHORT _nInitSize, USHORT _nReSize )
 |*
 |*    Container::Container()
 |*
-|*    Beschreibung      CONTNR.SDW
-|*    Ersterstellung    TH 17.09.91
-|*    Letzte Aenderung  TH 17.09.91
-|*
 *************************************************************************/
 
 Container::Container( ULONG nSize )
@@ -703,10 +669,6 @@ Container::Container( ULONG nSize )
 |*
 |*    Container::Container()
 |*
-|*    Beschreibung      CONTNR.SDW
-|*    Ersterstellung    TH 17.09.91
-|*    Letzte Aenderung  TH 17.09.91
-|*
 *************************************************************************/
 
 Container::Container( const Container& r )
@@ -720,10 +682,6 @@ Container::Container( const Container& r )
 /*************************************************************************
 |*
 |*    Container::~Container()
-|*
-|*    Beschreibung      CONTNR.SDW
-|*    Ersterstellung    TH 17.09.91
-|*    Letzte Aenderung  TH 17.09.91
 |*
 *************************************************************************/
 
@@ -746,8 +704,6 @@ Container::~Container()
 |*    Container::ImpInsert()
 |*
 |*    Beschreibung      Interne Methode zum Einfuegen eines Pointers
-|*    Ersterstellung    TH 17.09.91
-|*    Letzte Aenderung  DV 01.07.97
 |*
 *************************************************************************/
 
@@ -830,10 +786,6 @@ void Container::ImpInsert( void* p, CBlock* pBlock, USHORT nIndex )
 |*
 |*    Container::Insert()
 |*
-|*    Beschreibung      CONTNR.SDW
-|*    Ersterstellung    TH 17.09.91
-|*    Letzte Aenderung  TH 17.09.91
-|*
 *************************************************************************/
 
 void Container::Insert( void* p )
@@ -844,10 +796,6 @@ void Container::Insert( void* p )
 /*************************************************************************
 |*
 |*    Container::Insert()
-|*
-|*    Beschreibung      CONTNR.SDW
-|*    Ersterstellung    TH 17.09.91
-|*    Letzte Aenderung  TH 17.09.91
 |*
 *************************************************************************/
 
@@ -878,10 +826,6 @@ void Container::Insert( void* p, ULONG nIndex )
 |*
 |*    Container::Insert()
 |*
-|*    Beschreibung      CONTNR.SDW
-|*    Ersterstellung    TH 17.09.91
-|*    Letzte Aenderung  TH 17.09.91
-|*
 *************************************************************************/
 
 void Container::Insert( void* pNew, void* pOld )
@@ -896,8 +840,6 @@ void Container::Insert( void* pNew, void* pOld )
 |*    Container::ImpRemove()
 |*
 |*    Beschreibung      Interne Methode zum Entfernen eines Pointers
-|*    Ersterstellung    TH 17.09.91
-|*    Letzte Aenderung  TH 17.09.91
 |*
 *************************************************************************/
 
@@ -972,10 +914,6 @@ void* Container::ImpRemove( CBlock* pBlock, USHORT nIndex )
 |*
 |*    Container::Remove()
 |*
-|*    Beschreibung      CONTNR.SDW
-|*    Ersterstellung    TH 17.09.91
-|*    Letzte Aenderung  TH 17.09.91
-|*
 *************************************************************************/
 
 void* Container::Remove()
@@ -990,10 +928,6 @@ void* Container::Remove()
 /*************************************************************************
 |*
 |*    Container::Remove()
-|*
-|*    Beschreibung      CONTNR.SDW
-|*    Ersterstellung    TH 17.09.91
-|*    Letzte Aenderung  TH 17.09.91
 |*
 *************************************************************************/
 
@@ -1020,10 +954,6 @@ void* Container::Remove( ULONG nIndex )
 |*
 |*    Container::Replace()
 |*
-|*    Beschreibung      CONTNR.SDW
-|*    Ersterstellung    TH 17.09.91
-|*    Letzte Aenderung  TH 17.09.91
-|*
 *************************************************************************/
 
 void* Container::Replace( void* p )
@@ -1039,10 +969,6 @@ void* Container::Replace( void* p )
 /*************************************************************************
 |*
 |*    Container::Replace()
-|*
-|*    Beschreibung      CONTNR.SDW
-|*    Ersterstellung    TH 17.09.91
-|*    Letzte Aenderung  TH 17.09.91
 |*
 *************************************************************************/
 
@@ -1070,10 +996,6 @@ void* Container::Replace( void* p, ULONG nIndex )
 /*************************************************************************
 |*
 |*    Container::SetSize()
-|*
-|*    Beschreibung      CONTNR.SDW
-|*    Ersterstellung    TH 17.09.91
-|*    Letzte Aenderung  TH 17.09.91
 |*
 *************************************************************************/
 
@@ -1215,10 +1137,6 @@ void Container::SetSize( ULONG nNewSize )
 |*
 |*    Container::Clear()
 |*
-|*    Beschreibung      CONTNR.SDW
-|*    Ersterstellung    TH 17.09.91
-|*    Letzte Aenderung  TH 17.09.91
-|*
 *************************************************************************/
 
 void Container::Clear()
@@ -1246,10 +1164,6 @@ void Container::Clear()
 |*
 |*    Container::GetCurObject()
 |*
-|*    Beschreibung      CONTNR.SDW
-|*    Ersterstellung    TH 17.09.91
-|*    Letzte Aenderung  TH 17.09.91
-|*
 *************************************************************************/
 
 void* Container::GetCurObject() const
@@ -1266,10 +1180,6 @@ void* Container::GetCurObject() const
 /*************************************************************************
 |*
 |*    Container::GetCurPos()
-|*
-|*    Beschreibung      CONTNR.SDW
-|*    Ersterstellung    TH 17.09.91
-|*    Letzte Aenderung  TH 17.09.91
 |*
 *************************************************************************/
 
@@ -1300,8 +1210,6 @@ ULONG Container::GetCurPos() const
 |*    Container::GetObjectPtr()
 |*
 |*    Beschreibung      Interne Methode fuer Referenz-Container
-|*    Ersterstellung    TH 26.01.93
-|*    Letzte Aenderung  TH 26.01.93
 |*
 *************************************************************************/
 
@@ -1331,10 +1239,6 @@ void** Container::GetObjectPtr( ULONG nIndex )
 |*
 |*    Container::GetObject()
 |*
-|*    Beschreibung      CONTNR.SDW
-|*    Ersterstellung    TH 17.09.91
-|*    Letzte Aenderung  TH 17.09.91
-|*
 *************************************************************************/
 
 void* Container::GetObject( ULONG nIndex ) const
@@ -1362,10 +1266,6 @@ void* Container::GetObject( ULONG nIndex ) const
 /*************************************************************************
 |*
 |*    Container::GetPos()
-|*
-|*    Beschreibung      CONTNR.SDW
-|*    Ersterstellung    TH 17.09.91
-|*    Letzte Aenderung  TH 17.09.91
 |*
 *************************************************************************/
 
@@ -1404,10 +1304,6 @@ ULONG Container::GetPos( const void* p ) const
 /*************************************************************************
 |*
 |*    Container::GetPos()
-|*
-|*    Beschreibung      CONTNR.SDW
-|*    Ersterstellung    TH 14.09.94
-|*    Letzte Aenderung  TH 14.09.94
 |*
 *************************************************************************/
 
@@ -1500,10 +1396,6 @@ ULONG Container::GetPos( const void* p, ULONG nStartIndex,
 |*
 |*    Container::Seek()
 |*
-|*    Beschreibung      CONTNR.SDW
-|*    Ersterstellung    TH 17.09.91
-|*    Letzte Aenderung  TH 17.09.91
-|*
 *************************************************************************/
 
 void* Container::Seek( ULONG nIndex )
@@ -1534,10 +1426,6 @@ void* Container::Seek( ULONG nIndex )
 |*
 |*    Container::First()
 |*
-|*    Beschreibung      CONTNR.SDW
-|*    Ersterstellung    TH 17.09.91
-|*    Letzte Aenderung  TH 17.09.91
-|*
 *************************************************************************/
 
 void* Container::First()
@@ -1560,10 +1448,6 @@ void* Container::First()
 |*
 |*    Container::Last()
 |*
-|*    Beschreibung      CONTNR.SDW
-|*    Ersterstellung    TH 17.09.91
-|*    Letzte Aenderung  TH 17.09.91
-|*
 *************************************************************************/
 
 void* Container::Last()
@@ -1585,10 +1469,6 @@ void* Container::Last()
 /*************************************************************************
 |*
 |*    Container::Next()
-|*
-|*    Beschreibung      CONTNR.SDW
-|*    Ersterstellung    TH 17.09.91
-|*    Letzte Aenderung  TH 17.09.91
 |*
 *************************************************************************/
 
@@ -1618,10 +1498,6 @@ void* Container::Next()
 |*
 |*    Container::Prev()
 |*
-|*    Beschreibung      CONTNR.SDW
-|*    Ersterstellung    TH 17.09.91
-|*    Letzte Aenderung  TH 17.09.91
-|*
 *************************************************************************/
 
 void* Container::Prev()
@@ -1650,10 +1526,6 @@ void* Container::Prev()
 |*
 |*    Container::operator =()
 |*
-|*    Beschreibung      CONTNR.SDW
-|*    Ersterstellung    TH 17.09.91
-|*    Letzte Aenderung  TH 17.09.91
-|*
 *************************************************************************/
 
 Container& Container::operator =( const Container& r )
@@ -1677,10 +1549,6 @@ Container& Container::operator =( const Container& r )
 /*************************************************************************
 |*
 |*    Container::operator ==()
-|*
-|*    Beschreibung      CONTNR.SDW
-|*    Ersterstellung    TH 17.09.91
-|*    Letzte Aenderung  TH 17.09.91
 |*
 *************************************************************************/
 

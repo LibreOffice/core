@@ -42,10 +42,6 @@ BOOL RscId::bNames = TRUE;
 |*    static RscId::SetNames
 |*    static RscId::SetNoNames
 |*
-|*    Beschreibung
-|*    Ersterstellung    MM 26.06.91
-|*    Letzte Aenderung  MM 26.06.91
-|*
 *************************************************************************/
 void RscId::SetNames( BOOL bSet )  { bNames = bSet;  }
 BOOL RscId::IsSetNames()           { return bNames;  }
@@ -53,10 +49,6 @@ BOOL RscId::IsSetNames()           { return bNames;  }
 /*************************************************************************
 |*
 |*    RscId::GetNumber
-|*
-|*    Beschreibung
-|*    Ersterstellung    MM 17.05.91
-|*    Letzte Aenderung  MM 17.05.91
 |*
 *************************************************************************/
 INT32 RscId::GetNumber() const{
@@ -68,10 +60,6 @@ INT32 RscId::GetNumber() const{
 /*************************************************************************
 |*
 |*    RscId::Create()
-|*
-|*    Beschreibung
-|*    Ersterstellung    MM 01.11.91
-|*    Letzte Aenderung  MM 01.11.91
 |*
 *************************************************************************/
 void RscId::Create( const RscExpType & rExpType )
@@ -91,10 +79,6 @@ void RscId::Create( const RscExpType & rExpType )
 |*
 |*    RscId::Destroy()
 |*
-|*    Beschreibung
-|*    Ersterstellung    MM 01.11.91
-|*    Letzte Aenderung  MM 01.11.91
-|*
 *************************************************************************/
 void RscId::Destroy(){
     if( aExp.IsDefinition() )
@@ -106,10 +90,6 @@ void RscId::Destroy(){
 |*
 |*    RscId::RscId()
 |*
-|*    Beschreibung
-|*    Ersterstellung    MM 01.11.91
-|*    Letzte Aenderung  MM 01.11.91
-|*
 *************************************************************************/
 RscId::RscId( const RscId& rRscId ){
     aExp = rRscId.aExp;
@@ -120,10 +100,6 @@ RscId::RscId( const RscId& rRscId ){
 /*************************************************************************
 |*
 |*    RscId::RscId()
-|*
-|*    Beschreibung
-|*    Ersterstellung    MM 01.11.91
-|*    Letzte Aenderung  MM 25.11.91
 |*
 *************************************************************************/
 RscId::RscId( RscDefine * pDef ){
@@ -138,10 +114,6 @@ RscId::RscId( RscDefine * pDef ){
 |*
 |*    RscId:: =
 |*
-|*    Beschreibung
-|*    Ersterstellung    MM 01.11.91
-|*    Letzte Aenderung  MM 01.11.91
-|*
 *************************************************************************/
 RscId& RscId::operator = ( const RscId& rRscId ){
     if( rRscId.aExp.IsDefinition() )
@@ -155,10 +127,6 @@ RscId& RscId::operator = ( const RscId& rRscId ){
 |*
 |*    RscId::operator ==
 |*
-|*    Beschreibung
-|*    Ersterstellung    MM 16.05.91
-|*    Letzte Aenderung  MM 16.05.91
-|*
 *************************************************************************/
 BOOL RscId::operator == ( const RscId& rRscId ) const
 {
@@ -168,10 +136,6 @@ BOOL RscId::operator == ( const RscId& rRscId ) const
 /*************************************************************************
 |*
 |*    RscId::operator <
-|*
-|*    Beschreibung
-|*    Ersterstellung    MM 16.05.91
-|*    Letzte Aenderung  MM 16.05.91
 |*
 *************************************************************************/
 BOOL RscId::operator < ( const RscId& rRscId ) const
@@ -183,10 +147,6 @@ BOOL RscId::operator < ( const RscId& rRscId ) const
 |*
 |*    RscId::operator >
 |*
-|*    Beschreibung
-|*    Ersterstellung    MM 16.05.91
-|*    Letzte Aenderung  MM 16.05.91
-|*
 *************************************************************************/
 BOOL RscId::operator > ( const RscId& rRscId ) const
 {
@@ -197,10 +157,6 @@ BOOL RscId::operator > ( const RscId& rRscId ) const
 |*
 |*    RscId::INT32()
 |*
-|*    Beschreibung
-|*    Ersterstellung    MM 16.05.91
-|*    Letzte Aenderung  MM 16.05.91
-|*
 *************************************************************************/
 RscId::operator INT32() const
 {
@@ -210,10 +166,6 @@ RscId::operator INT32() const
 /*************************************************************************
 |*
 |*    RscId::GetNames()
-|*
-|*    Beschreibung
-|*    Ersterstellung    MM 16.05.91
-|*    Letzte Aenderung  MM 25.11.91
 |*
 *************************************************************************/
 ByteString RscId::GetName() const
@@ -235,10 +187,6 @@ ByteString RscId::GetName() const
 |*
 |*    RscId::GetMacro()
 |*
-|*    Beschreibung
-|*    Ersterstellung    MM 01.11.91
-|*    Letzte Aenderung  MM 25.11.91
-|*
 *************************************************************************/
 ByteString RscId::GetMacro() const
 {
@@ -256,10 +204,6 @@ ByteString RscId::GetMacro() const
 /*************************************************************************
 |*
 |*    RscDefine::RscDefine()
-|*
-|*    Beschreibung
-|*    Ersterstellung    MM 01.11.91
-|*    Letzte Aenderung  MM 01.11.91
 |*
 *************************************************************************/
 RscDefine::RscDefine( ULONG lKey, const ByteString & rDefName, INT32 lDefId )
@@ -285,10 +229,6 @@ RscDefine::RscDefine( ULONG lKey, const ByteString & rDefName,
 |*
 |*    RscDefine::~RscDefine()
 |*
-|*    Beschreibung
-|*    Ersterstellung    MM 01.11.91
-|*    Letzte Aenderung  MM 01.11.91
-|*
 *************************************************************************/
 RscDefine::~RscDefine(){
     if( pExp )
@@ -300,10 +240,6 @@ RscDefine::~RscDefine(){
 /*************************************************************************
 |*
 |*    RscDefine::DecRef()
-|*
-|*    Beschreibung
-|*    Ersterstellung    MM 01.11.91
-|*    Letzte Aenderung  MM 01.11.91
 |*
 *************************************************************************/
 void RscDefine::DecRef(){
@@ -317,10 +253,6 @@ void RscDefine::DecRef(){
 |*
 |*    RscDefine::DefineToNumber()
 |*
-|*    Beschreibung
-|*    Ersterstellung    MM 07.11.91
-|*    Letzte Aenderung  MM 07.11.91
-|*
 *************************************************************************/
 void RscDefine::DefineToNumber()
 {
@@ -333,10 +265,6 @@ void RscDefine::DefineToNumber()
 /*************************************************************************
 |*
 |*    RscDefine::ChangeMacro()
-|*
-|*    Beschreibung
-|*    Ersterstellung    MM 04.11.91
-|*    Letzte Aenderung  MM 04.11.91
 |*
 *************************************************************************/
 void RscDefine::ChangeMacro( RscExpression * pExpression ){
@@ -358,10 +286,6 @@ void RscDefine::ChangeMacro( INT32 lIdentifier ){
 |*
 |*    RscDefine::Evaluate()
 |*
-|*    Beschreibung
-|*    Ersterstellung    MM 01.11.91
-|*    Letzte Aenderung  MM 01.11.91
-|*
 *************************************************************************/
 BOOL RscDefine::Evaluate(){
     BOOL    bRet = TRUE;
@@ -376,10 +300,6 @@ BOOL RscDefine::Evaluate(){
 |*
 |*    RscDefine::Search()
 |*
-|*    Beschreibung
-|*    Ersterstellung    MM 11.11.91
-|*    Letzte Aenderung  MM 11.11.91
-|*
 *************************************************************************/
 RscDefine * RscDefine::Search( const char * pStr ){
     return (RscDefine *)StringNode::Search( pStr );
@@ -388,10 +308,6 @@ RscDefine * RscDefine::Search( const char * pStr ){
 /*************************************************************************
 |*
 |*    RscDefine::GetMacro()
-|*
-|*    Beschreibung
-|*    Ersterstellung    MM 01.11.91
-|*    Letzte Aenderung  MM 01.11.91
 |*
 *************************************************************************/
 ByteString RscDefine::GetMacro()
@@ -405,10 +321,6 @@ ByteString RscDefine::GetMacro()
 /*************************************************************************
 |*
 |*    RscDefineList::New()
-|*
-|*    Beschreibung
-|*    Ersterstellung    MM 04.11.91
-|*    Letzte Aenderung  MM 04.11.91
 |*
 *************************************************************************/
 RscDefine * RscDefineList::New( ULONG lFileKey, const ByteString & rDefName,
@@ -437,10 +349,6 @@ RscDefine * RscDefineList::New( ULONG lFileKey, const ByteString & rDefName,
 /*************************************************************************
 |*
 |*    RscDefineList::Remove()
-|*
-|*    Beschreibung
-|*    Ersterstellung    MM 04.11.91
-|*    Letzte Aenderung  MM 04.11.91
 |*
 *************************************************************************/
 BOOL RscDefineList::Remove( RscDefine * pDef ){
@@ -479,10 +387,6 @@ BOOL RscDefineList::Remove(){
 |*
 |*    RscDefineList::Befor()
 |*
-|*    Beschreibung
-|*    Ersterstellung    MM 12.11.91
-|*    Letzte Aenderung  MM 12.11.91
-|*
 *************************************************************************/
 BOOL RscDefineList::Befor( const RscDefine * pFree,
                            const RscDefine * pDepend )
@@ -508,10 +412,6 @@ BOOL RscDefineList::Befor( const RscDefine * pFree,
 |*
 |*    RscDefineList::WriteAll()
 |*
-|*    Beschreibung
-|*    Ersterstellung    MM 28.10.91
-|*    Letzte Aenderung  MM 28.10.91
-|*
 *************************************************************************/
 void RscDefineList::WriteAll( FILE * fOutput )
 {
@@ -530,10 +430,6 @@ void RscDefineList::WriteAll( FILE * fOutput )
 /*************************************************************************
 |*
 |*    RscExpType::Evaluate()
-|*
-|*    Beschreibung
-|*    Ersterstellung    MM 01.11.91
-|*    Letzte Aenderung  MM 01.11.91
 |*
 *************************************************************************/
 BOOL RscExpType::Evaluate( INT32 * plValue ) const{
@@ -556,10 +452,6 @@ BOOL RscExpType::Evaluate( INT32 * plValue ) const{
 |*
 |*    RscExpType::GetMacro()
 |*
-|*    Beschreibung
-|*    Ersterstellung    MM 01.11.91
-|*    Letzte Aenderung  MM 01.11.91
-|*
 *************************************************************************/
 void RscExpType::GetMacro( ByteString & rStr ) const
 {
@@ -581,10 +473,6 @@ void RscExpType::GetMacro( ByteString & rStr ) const
 |*
 |*    RscExpression::RscExpression()
 |*
-|*    Beschreibung
-|*    Ersterstellung    MM 01.11.91
-|*    Letzte Aenderung  MM 01.11.91
-|*
 *************************************************************************/
 RscExpression::RscExpression( RscExpType aLE, char cOp, RscExpType aRE )
 {
@@ -600,10 +488,6 @@ RscExpression::RscExpression( RscExpType aLE, char cOp, RscExpType aRE )
 /*************************************************************************
 |*
 |*    RscExpression::~RscExpression()
-|*
-|*    Beschreibung
-|*    Ersterstellung    MM 01.11.91
-|*    Letzte Aenderung  MM 01.11.91
 |*
 *************************************************************************/
 RscExpression::~RscExpression(){
@@ -621,10 +505,6 @@ RscExpression::~RscExpression(){
 /*************************************************************************
 |*
 |*    RscExpression::Evaluate()
-|*
-|*    Beschreibung
-|*    Ersterstellung    MM 01.11.91
-|*    Letzte Aenderung  MM 01.11.91
 |*
 *************************************************************************/
 BOOL RscExpression::Evaluate( INT32 * plValue ){
@@ -660,10 +540,6 @@ BOOL RscExpression::Evaluate( INT32 * plValue ){
 /*************************************************************************
 |*
 |*    RscExpression::GetMacro()
-|*
-|*    Beschreibung
-|*    Ersterstellung    MM 01.11.91
-|*    Letzte Aenderung  MM 01.11.91
 |*
 *************************************************************************/
 ByteString RscExpression::GetMacro()
@@ -707,10 +583,6 @@ ByteString RscExpression::GetMacro()
 |*
 |*    RscFile::RscFile()
 |*
-|*    Beschreibung
-|*    Ersterstellung    MM 04.11.91
-|*    Letzte Aenderung  MM 04.11.91
-|*
 *************************************************************************/
 RscFile :: RscFile(){
     bLoaded  = FALSE;
@@ -722,10 +594,6 @@ RscFile :: RscFile(){
 /*************************************************************************
 |*
 |*    RscFile::~RscFile()
-|*
-|*    Beschreibung
-|*    Ersterstellung    MM 04.11.91
-|*    Letzte Aenderung  MM 04.11.91
 |*
 *************************************************************************/
 RscFile :: ~RscFile(){
@@ -749,8 +617,6 @@ RscFile :: ~RscFile(){
 |*    Beschreibung      Diese Methode gibt TRUE zurueck, wenn lDepend
 |*                      existiert und hinter lFree steht, oder wenn
 |*                      lDepend nicht existiert.
-|*    Ersterstellung    MM 12.11.91
-|*    Letzte Aenderung  MM 12.11.91
 |*
 *************************************************************************/
 BOOL RscFile::Depend( ULONG lDepend, ULONG lFree ){
@@ -775,10 +641,6 @@ BOOL RscFile::Depend( ULONG lDepend, ULONG lFree ){
 /*************************************************************************
 |*
 |*    RscFile::InsertDependFile()
-|*
-|*    Beschreibung
-|*    Ersterstellung    MM 06.01.92
-|*    Letzte Aenderung  MM 06.01.92
 |*
 *************************************************************************/
 BOOL RscFile :: InsertDependFile( ULONG lIncFile, ULONG lPos )
@@ -807,10 +669,6 @@ BOOL RscFile :: InsertDependFile( ULONG lIncFile, ULONG lPos )
 |*
 |*    RscFile::RemoveDependFile()
 |*
-|*    Beschreibung
-|*    Ersterstellung    MM 18.11.91
-|*    Letzte Aenderung  MM 18.11.91
-|*
 *************************************************************************/
 void RscFile :: RemoveDependFile( ULONG lDepFile )
 {
@@ -831,10 +689,6 @@ void RscFile :: RemoveDependFile( ULONG lDepFile )
 |*
 |*    RscDefTree::~RscDefTree()
 |*
-|*    Beschreibung
-|*    Ersterstellung    MM 12.11.91
-|*    Letzte Aenderung  MM 12.11.91
-|*
 *************************************************************************/
 RscDefTree::~RscDefTree(){
     Remove();
@@ -843,10 +697,6 @@ RscDefTree::~RscDefTree(){
 /*************************************************************************
 |*
 |*    RscDefTree::Remove()
-|*
-|*    Beschreibung
-|*    Ersterstellung    MM 12.11.91
-|*    Letzte Aenderung  MM 12.11.91
 |*
 *************************************************************************/
 void RscDefTree::Remove(){
@@ -862,10 +712,6 @@ void RscDefTree::Remove(){
 |*
 |*    RscDefTree::~Search()
 |*
-|*    Beschreibung
-|*    Ersterstellung    MM 12.11.91
-|*    Letzte Aenderung  MM 12.11.91
-|*
 *************************************************************************/
 RscDefine * RscDefTree::Search( const char * pName ){
     if( pDefRoot )
@@ -876,10 +722,6 @@ RscDefine * RscDefTree::Search( const char * pName ){
 /*************************************************************************
 |*
 |*    RscDefTree::Insert()
-|*
-|*    Beschreibung
-|*    Ersterstellung    MM 12.11.91
-|*    Letzte Aenderung  MM 12.11.91
 |*
 *************************************************************************/
 void RscDefTree::Insert( RscDefine * pDef ){
@@ -894,10 +736,6 @@ void RscDefTree::Insert( RscDefine * pDef ){
 |*
 |*    RscDefTree::Remove()
 |*
-|*    Beschreibung
-|*    Ersterstellung    MM 12.11.91
-|*    Letzte Aenderung  MM 12.11.91
-|*
 *************************************************************************/
 void RscDefTree::Remove( RscDefine * pDef ){
     if( pDefRoot ){
@@ -910,10 +748,6 @@ void RscDefTree::Remove( RscDefine * pDef ){
 /*************************************************************************
 |*
 |*    RscDefTree::Evaluate()
-|*
-|*    Beschreibung
-|*    Ersterstellung    MM 12.11.91
-|*    Letzte Aenderung  MM 12.11.91
 |*
 *************************************************************************/
 BOOL RscDefTree::Evaluate( RscDefine * pDef ){
@@ -935,10 +769,6 @@ BOOL RscDefTree::Evaluate(){
 |*
 |*    RscFileTab::RscFileTab()
 |*
-|*    Beschreibung
-|*    Ersterstellung    MM 07.11.91
-|*    Letzte Aenderung  MM 07.11.91
-|*
 *************************************************************************/
 RscFileTab::RscFileTab(){
 }
@@ -946,10 +776,6 @@ RscFileTab::RscFileTab(){
 /*************************************************************************
 |*
 |*    RscFileTab::~RscFileTab()
-|*
-|*    Beschreibung
-|*    Ersterstellung    MM 04.11.91
-|*    Letzte Aenderung  MM 04.11.91
 |*
 *************************************************************************/
 RscFileTab :: ~RscFileTab(){
@@ -968,10 +794,6 @@ RscFileTab :: ~RscFileTab(){
 /*************************************************************************
 |*
 |*    RscFileTab::Find()
-|*
-|*    Beschreibung
-|*    Ersterstellung    MM 16.05.91
-|*    Letzte Aenderung  MM 16.05.91
 |*
 *************************************************************************/
 ULONG  RscFileTab :: Find( const ByteString & rName )
@@ -992,10 +814,6 @@ ULONG  RscFileTab :: Find( const ByteString & rName )
 |*
 |*    RscFileTab::FindDef()
 |*
-|*    Beschreibung
-|*    Ersterstellung    MM 30.10.91
-|*    Letzte Aenderung  MM 01.11.91
-|*
 *************************************************************************/
 RscDefine * RscFileTab::FindDef( const char * pName ){
     return aDefTree.Search( pName );
@@ -1004,10 +822,6 @@ RscDefine * RscFileTab::FindDef( const char * pName ){
 /*************************************************************************
 |*
 |*    RscFileTab::FindDef()
-|*
-|*    Beschreibung
-|*    Ersterstellung    MM 30.10.91
-|*    Letzte Aenderung  MM 01.11.91
 |*
 *************************************************************************/
 RscDefine * RscFileTab::FindDef( ULONG lFileKey, const ByteString & rName )
@@ -1025,10 +839,6 @@ RscDefine * RscFileTab::FindDef( ULONG lFileKey, const ByteString & rName )
 /*************************************************************************
 |*
 |*    RscFileTab::Depend()
-|*
-|*    Beschreibung
-|*    Ersterstellung    MM 08.11.91
-|*    Letzte Aenderung  MM 08.11.91
 |*
 *************************************************************************/
 BOOL RscFileTab::Depend( ULONG lDepend, ULONG lFree ){
@@ -1051,10 +861,6 @@ BOOL RscFileTab::Depend( ULONG lDepend, ULONG lFree ){
 |*
 |*    RscFileTab::TestDef()
 |*
-|*    Beschreibung
-|*    Ersterstellung    MM 14.01.92
-|*    Letzte Aenderung  MM 14.01.92
-|*
 *************************************************************************/
 BOOL RscFileTab::TestDef( ULONG lFileKey, ULONG lPos,
                           const RscDefine * pDefDec )
@@ -1074,10 +880,6 @@ BOOL RscFileTab::TestDef( ULONG lFileKey, ULONG lPos,
 /*************************************************************************
 |*
 |*    RscFileTab::TestDef()
-|*
-|*    Beschreibung
-|*    Ersterstellung    MM 14.01.92
-|*    Letzte Aenderung  MM 14.01.92
 |*
 *************************************************************************/
 BOOL RscFileTab::TestDef( ULONG lFileKey, ULONG lPos,
@@ -1109,10 +911,6 @@ BOOL RscFileTab::TestDef( ULONG lFileKey, ULONG lPos,
 |*
 |*    RscFileTab::NewDef()
 |*
-|*    Beschreibung
-|*    Ersterstellung    MM 04.11.91
-|*    Letzte Aenderung  MM 04.11.91
-|*
 *************************************************************************/
 RscDefine * RscFileTab::NewDef( ULONG lFileKey, const ByteString & rDefName,
                                 INT32 lId, ULONG lPos )
@@ -1136,10 +934,6 @@ RscDefine * RscFileTab::NewDef( ULONG lFileKey, const ByteString & rDefName,
 /*************************************************************************
 |*
 |*    RscFileTab::NewDef()
-|*
-|*    Beschreibung
-|*    Ersterstellung    MM 04.11.91
-|*    Letzte Aenderung  MM 04.11.91
 |*
 *************************************************************************/
 RscDefine * RscFileTab::NewDef( ULONG lFileKey, const ByteString & rDefName,
@@ -1173,10 +967,6 @@ RscDefine * RscFileTab::NewDef( ULONG lFileKey, const ByteString & rDefName,
 |*
 |*    RscFileTab::IsDefUsed()
 |*
-|*    Beschreibung
-|*    Ersterstellung    MM 22.11.91
-|*    Letzte Aenderung  MM 22.11.91
-|*
 *************************************************************************/
 BOOL RscFileTab::IsDefUsed( const ByteString & rDefName )
 {
@@ -1191,10 +981,6 @@ BOOL RscFileTab::IsDefUsed( const ByteString & rDefName )
 /*************************************************************************
 |*
 |*    RscFileTab::DeleteDef()
-|*
-|*    Beschreibung
-|*    Ersterstellung    MM 11.11.91
-|*    Letzte Aenderung  MM 11.11.91
 |*
 *************************************************************************/
 void RscFileTab::DeleteDef( const ByteString & rDefName )
@@ -1215,10 +1001,6 @@ void RscFileTab::DeleteDef( const ByteString & rDefName )
 |*
 |*    RscFileTab::ChangeDef()
 |*
-|*    Beschreibung
-|*    Ersterstellung    MM 04.11.91
-|*    Letzte Aenderung  MM 11.11.91
-|*
 *************************************************************************/
 BOOL RscFileTab::ChangeDef( const ByteString & rDefName, INT32 lId )
 {
@@ -1235,10 +1017,6 @@ BOOL RscFileTab::ChangeDef( const ByteString & rDefName, INT32 lId )
 /*************************************************************************
 |*
 |*    RscFileTab::ChangeDef()
-|*
-|*    Beschreibung
-|*    Ersterstellung    MM 04.11.91
-|*    Letzte Aenderung  MM 11.11.91
 |*
 *************************************************************************/
 BOOL RscFileTab::ChangeDef( const ByteString & rDefName,
@@ -1271,10 +1049,6 @@ BOOL RscFileTab::ChangeDef( const ByteString & rDefName,
 |*
 |*    RscFileTab::ChangeDefName()
 |*
-|*    Beschreibung
-|*    Ersterstellung    MM 04.11.91
-|*    Letzte Aenderung  MM 04.11.91
-|*
 *************************************************************************/
 BOOL RscFileTab::ChangeDefName( const ByteString & rDefName,
                                 const ByteString & rNewName )
@@ -1299,10 +1073,6 @@ BOOL RscFileTab::ChangeDefName( const ByteString & rDefName,
 |*
 |*    RscFileTab::DeleteFileContext()
 |*
-|*    Beschreibung
-|*    Ersterstellung    MM 09.12.91
-|*    Letzte Aenderung  MM 09.12.91
-|*
 *************************************************************************/
 void RscFileTab :: DeleteFileContext( ULONG lFileKey ){
     RscFile     * pFName;
@@ -1323,10 +1093,6 @@ void RscFileTab :: DeleteFileContext( ULONG lFileKey ){
 /*************************************************************************
 |*
 |*    RscFileTab::DeleteFile()
-|*
-|*    Beschreibung
-|*    Ersterstellung    MM 16.05.91
-|*    Letzte Aenderung  MM 16.05.91
 |*
 *************************************************************************/
 void RscFileTab :: DeleteFile( ULONG lFileKey ){
@@ -1351,10 +1117,6 @@ void RscFileTab :: DeleteFile( ULONG lFileKey ){
 |*
 |*    RscFileTab::NewCodeFile()
 |*
-|*    Beschreibung
-|*    Ersterstellung    MM 16.05.91
-|*    Letzte Aenderung  MM 16.05.91
-|*
 *************************************************************************/
 ULONG  RscFileTab :: NewCodeFile( const ByteString & rName )
 {
@@ -1376,10 +1138,6 @@ ULONG  RscFileTab :: NewCodeFile( const ByteString & rName )
 /*************************************************************************
 |*
 |*    RscFileTab::NewIncFile()
-|*
-|*    Beschreibung
-|*    Ersterstellung    MM 16.05.91
-|*    Letzte Aenderung  MM 16.05.91
 |*
 *************************************************************************/
 ULONG  RscFileTab :: NewIncFile( const ByteString & rName,

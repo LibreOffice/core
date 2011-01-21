@@ -36,10 +36,6 @@
 |*
 |*    DateTime::IsBetween()
 |*
-|*    Beschreibung      DATETIME.SDW
-|*    Ersterstellung    TH 18.05.92
-|*    Letzte Aenderung  TH 18.05.92
-|*
 *************************************************************************/
 
 BOOL DateTime::IsBetween( const DateTime& rFrom,
@@ -54,10 +50,6 @@ BOOL DateTime::IsBetween( const DateTime& rFrom,
 /*************************************************************************
 |*
 |*    DateTime::operator >()
-|*
-|*    Beschreibung      DATETIME.SDW
-|*    Ersterstellung    TH 18.05.92
-|*    Letzte Aenderung  TH 18.05.92
 |*
 *************************************************************************/
 
@@ -74,10 +66,6 @@ BOOL DateTime::operator >( const DateTime& rDateTime ) const
 |*
 |*    DateTime::operator <()
 |*
-|*    Beschreibung      DATETIME.SDW
-|*    Ersterstellung    TH 18.05.92
-|*    Letzte Aenderung  TH 18.05.92
-|*
 *************************************************************************/
 
 BOOL DateTime::operator <( const DateTime& rDateTime ) const
@@ -92,10 +80,6 @@ BOOL DateTime::operator <( const DateTime& rDateTime ) const
 /*************************************************************************
 |*
 |*    DateTime::operator >=()
-|*
-|*    Beschreibung      DATETIME.SDW
-|*    Ersterstellung    TH 18.05.92
-|*    Letzte Aenderung  TH 18.05.92
 |*
 *************************************************************************/
 
@@ -112,10 +96,6 @@ BOOL DateTime::operator >=( const DateTime& rDateTime ) const
 |*
 |*    DateTime::operator <=()
 |*
-|*    Beschreibung      DATETIME.SDW
-|*    Ersterstellung    TH 18.05.92
-|*    Letzte Aenderung  TH 18.05.92
-|*
 *************************************************************************/
 
 BOOL DateTime::operator <=( const DateTime& rDateTime ) const
@@ -130,10 +110,6 @@ BOOL DateTime::operator <=( const DateTime& rDateTime ) const
 /*************************************************************************
 |*
 |*    DateTime::GetSecFromDateTime()
-|*
-|*    Beschreibung      DATETIME.SDW
-|*    Ersterstellung    TH 02.10.96
-|*    Letzte Aenderung  TH 02.10.96
 |*
 *************************************************************************/
 
@@ -156,10 +132,6 @@ long DateTime::GetSecFromDateTime( const Date& rDate ) const
 |*
 |*    DateTime::GetSecFromDateTime()
 |*
-|*    Beschreibung      DATETIME.SDW
-|*    Ersterstellung    TH 02.10.96
-|*    Letzte Aenderung  TH 02.10.96
-|*
 *************************************************************************/
 
 void DateTime::MakeDateTimeFromSec( const Date& rDate, ULONG nSec )
@@ -176,10 +148,6 @@ void DateTime::MakeDateTimeFromSec( const Date& rDate, ULONG nSec )
 /*************************************************************************
 |*
 |*    DateTime::operator +=()
-|*
-|*    Beschreibung      DATETIME.SDW
-|*    Ersterstellung    TH 02.10.96
-|*    Letzte Aenderung  TH 02.10.96
 |*
 *************************************************************************/
 
@@ -216,10 +184,6 @@ DateTime& DateTime::operator +=( const Time& rTime )
 |*
 |*    DateTime::operator -=()
 |*
-|*    Beschreibung      DATETIME.SDW
-|*    Ersterstellung    TH 02.10.96
-|*    Letzte Aenderung  TH 02.10.96
-|*
 *************************************************************************/
 
 DateTime& DateTime::operator -=( const Time& rTime )
@@ -255,10 +219,6 @@ DateTime& DateTime::operator -=( const Time& rTime )
 |*
 |*    DateTime::operator+()
 |*
-|*    Beschreibung      DATETIME.SDW
-|*    Ersterstellung    TH 02.10.96
-|*    Letzte Aenderung  TH 02.10.96
-|*
 *************************************************************************/
 
 DateTime operator +( const DateTime& rDateTime, long nDays )
@@ -271,10 +231,6 @@ DateTime operator +( const DateTime& rDateTime, long nDays )
 /*************************************************************************
 |*
 |*    DateTime::operator-()
-|*
-|*    Beschreibung      DATETIME.SDW
-|*    Ersterstellung    TH 02.10.96
-|*    Letzte Aenderung  TH 02.10.96
 |*
 *************************************************************************/
 
@@ -289,10 +245,6 @@ DateTime operator -( const DateTime& rDateTime, long nDays )
 |*
 |*    DateTime::operator+()
 |*
-|*    Beschreibung      DATETIME.SDW
-|*    Ersterstellung    TH 02.10.96
-|*    Letzte Aenderung  TH 02.10.96
-|*
 *************************************************************************/
 
 DateTime operator +( const DateTime& rDateTime, const Time& rTime )
@@ -305,10 +257,6 @@ DateTime operator +( const DateTime& rDateTime, const Time& rTime )
 /*************************************************************************
 |*
 |*    DateTime::operator-()
-|*
-|*    Beschreibung      DATETIME.SDW
-|*    Ersterstellung    TH 02.10.96
-|*    Letzte Aenderung  TH 02.10.96
 |*
 *************************************************************************/
 

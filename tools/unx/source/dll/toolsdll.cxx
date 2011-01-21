@@ -37,8 +37,6 @@ static void* aAppData[SHL_COUNT];
 |*    GetAppData()
 |*
 |*    Beschreibung      Daten fuer andere Libs abfragen
-|*    Ersterstellung    TH 19.01.95
-|*    Letzte Aenderung  TH 19.01.95
 |*
 ***************************************************************************/
 

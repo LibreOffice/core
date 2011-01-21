@@ -57,8 +57,6 @@ static const short SinTab[16]=
 |*    ImpMultBig2()
 |*
 |*    Beschreibung       Multiplikation fuer FixPoint-Berechnungen
-|*    Ersterstellung     SH 01.07.93
-|*    Letzte Aenderung   SH 01.07.93
 |*
 **************************************************************************/
 
@@ -76,8 +74,6 @@ Fix ImpMultBig2( const Fix& a, const Fix& b )
 |*    ImpMultBig2()
 |*
 |*    Beschreibung       Multiplikation fuer FixPoint-Berechnungen
-|*    Ersterstellung     SH 01.07.93
-|*    Letzte Aenderung   SH 01.07.93
 |*
 **************************************************************************/
 
@@ -95,8 +91,6 @@ FixCpx ImpMultBig2( const FixCpx& ra, const FixCpx& rb )
 |*    ImpSqrt()
 |*
 |*    Beschreibung       Wurzelfunktion fuer FixPoint-Berechnungen
-|*    Ersterstellung     SH 01.07.93
-|*    Letzte Aenderung   SH 01.07.93
 |*
 **************************************************************************/
 
@@ -127,8 +121,6 @@ USHORT ImpSqrt( ULONG nRadi )
 |*    ImpExPI()
 |*
 |*    Beschreibung       EXPI-Funktion fuer FixPoint-Berechnungen
-|*    Ersterstellung     SH 01.07.93
-|*    Letzte Aenderung   SH 01.07.93
 |*
 **************************************************************************/
 
@@ -159,8 +151,6 @@ FixCpx ImpExPI( USHORT nPhi )
 |*    ImpATanx2()
 |*
 |*    Beschreibung       ATANX2-Funktion fuer FixPoint-Berechnungen
-|*    Ersterstellung     SH 01.07.93
-|*    Letzte Aenderung   SH 01.07.93
 |*
 **************************************************************************/
 
@@ -239,8 +229,6 @@ static USHORT ImpATanx2( const Fix& rX, const Fix& rY )
 |*    ImpATan2()
 |*
 |*    Beschreibung       ATAN-Funktion fuer FixPoint-Berechnungen
-|*    Ersterstellung     SH 01.07.93
-|*    Letzte Aenderung   SH 01.07.93
 |*
 **************************************************************************/
 
@@ -263,8 +251,6 @@ USHORT ImpATan2( const short x, const short y )
 |*    ImpCartToPolar()
 |*
 |*    Beschreibung       Koordinaaten-Wandlung
-|*    Ersterstellung     SH 01.07.93
-|*    Letzte Aenderung   SH 01.07.93
 |*
 **************************************************************************/
 
@@ -290,8 +276,6 @@ void ImpCartToPolar( const short x, const short y, Fix& rRad, USHORT& rPhi )
 |*    ImpPolarToCart()
 |*
 |*    Beschreibung       Koordinaaten-Wandlung
-|*    Ersterstellung     SH 01.07.93
-|*    Letzte Aenderung   SH 01.07.93
 |*
 **************************************************************************/
 

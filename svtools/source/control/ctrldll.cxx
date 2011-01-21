@@ -42,8 +42,6 @@ static HINSTANCE hDLLInst = 0;      // HANDLE der DLL
 |*    LibMain()
 |*
 |*    Beschreibung       Initialisierungsfunktion der DLL
-|*    Ersterstellung     TH 05.05.93
-|*    Letzte Aenderung   TH 05.05.93
 |*
 ***************************************************************************/
 
@@ -64,8 +62,6 @@ extern "C" int CALLBACK LibMain( HINSTANCE hDLL, WORD, WORD nHeap, LPSTR )
 |*    WEP()
 |*
 |*    Beschreibung      DLL-Deinitialisierung
-|*    Ersterstellung     TH 05.05.93
-|*    Letzte Aenderung   TH 05.05.93
 |*
 ***************************************************************************/
 

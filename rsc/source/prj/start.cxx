@@ -319,10 +319,6 @@ static BOOL CallRsc2( ByteString aRsc2Name,
 |*
 |*    main()
 |*
-|*    Beschreibung
-|*    Ersterstellung    MM 05.09.91
-|*    Letzte Aenderung  MM 05.09.91
-|*
 *************************************************************************/
 SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
 {

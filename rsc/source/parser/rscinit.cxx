@@ -85,10 +85,6 @@ void NameToVerCtrl( RSCINST & aVersion, RscTop * pClass,
 |*
 |*    RscTypCont::Init()
 |*
-|*    Beschreibung
-|*    Ersterstellung    MM 22.03.91
-|*    Letzte Aenderung  MM 27.06.91
-|*
 *************************************************************************/
 void RscTypCont::Init()
 {

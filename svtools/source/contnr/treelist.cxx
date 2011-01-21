@@ -146,10 +146,6 @@ void SvTreeEntryList::DestroyAll()
 |*
 |*    SvTreeList::
 |*
-|*    Beschreibung
-|*    Ersterstellung    17.08.94
-|*    Letzte Aenderung  17.08.94
-|*
 *************************************************************************/
 
 SvTreeList::SvTreeList()
@@ -166,10 +162,6 @@ SvTreeList::SvTreeList()
 |*
 |*    SvTreeList::~SvTreeList
 |*
-|*    Beschreibung
-|*    Ersterstellung    17.08.94
-|*    Letzte Aenderung  17.08.94
-|*
 *************************************************************************/
 
 SvTreeList::~SvTreeList()
@@ -184,10 +176,6 @@ SvTreeList::~SvTreeList()
 /*************************************************************************
 |*
 |*    SvTreeList::Broadcast
-|*
-|*    Beschreibung
-|*    Ersterstellung    17.08.94
-|*    Letzte Aenderung  17.08.94
 |*
 *************************************************************************/
 
@@ -257,10 +245,6 @@ USHORT SvTreeList::GetDepth( SvListEntry* pEntry ) const
 |*
 |*    SvTreeList::
 |*
-|*    Beschreibung
-|*    Ersterstellung    17.08.94
-|*    Letzte Aenderung  17.08.94
-|*
 *************************************************************************/
 
 void SvTreeList::Clear()
@@ -286,10 +270,6 @@ void SvTreeList::Clear()
 /*************************************************************************
 |*
 |*    SvTreeList::
-|*
-|*    Beschreibung
-|*    Ersterstellung    17.08.94
-|*    Letzte Aenderung  17.08.94
 |*
 *************************************************************************/
 
@@ -408,10 +388,6 @@ CheckIntegrity();
 |*
 |*    SvTreeList::
 |*
-|*    Beschreibung
-|*    Ersterstellung    17.08.94
-|*    Letzte Aenderung  17.08.94
-|*
 *************************************************************************/
 
 void SvTreeList::Move( SvListEntry* pSrcEntry, SvListEntry* pDstEntry )
@@ -437,10 +413,6 @@ void SvTreeList::Move( SvListEntry* pSrcEntry, SvListEntry* pDstEntry )
 |*
 |*    SvTreeList::
 |*
-|*    Beschreibung
-|*    Ersterstellung    17.08.94
-|*    Letzte Aenderung  17.08.94
-|*
 *************************************************************************/
 
 void SvTreeList::Copy( SvListEntry* pSrcEntry, SvListEntry* pDstEntry )
@@ -464,10 +436,6 @@ void SvTreeList::Copy( SvListEntry* pSrcEntry, SvListEntry* pDstEntry )
 /*************************************************************************
 |*
 |*    SvTreeList::
-|*
-|*    Beschreibung
-|*    Ersterstellung    17.08.94
-|*    Letzte Aenderung  17.08.94
 |*
 *************************************************************************/
 void SvTreeList::InsertTree( SvListEntry* pSrcEntry, SvListEntry* pDstEntry)
@@ -537,10 +505,6 @@ SvListEntry* SvTreeList::CreateEntry() const
 |*
 |*    SvTreeList::
 |*
-|*    Beschreibung
-|*    Ersterstellung    17.08.94
-|*    Letzte Aenderung  17.08.94
-|*
 *************************************************************************/
 
 SvListEntry* SvTreeList::Clone( SvListEntry* pEntry, ULONG& nCloneCount ) const
@@ -556,10 +520,6 @@ SvListEntry* SvTreeList::Clone( SvListEntry* pEntry, ULONG& nCloneCount ) const
 /*************************************************************************
 |*
 |*    SvTreeList::
-|*
-|*    Beschreibung
-|*    Ersterstellung    17.08.94
-|*    Letzte Aenderung  17.08.94
 |*
 *************************************************************************/
 
@@ -593,10 +553,6 @@ SvTreeEntryList* SvTreeList::CloneChilds( SvTreeEntryList* pChilds,
 |*
 |*    SvTreeList::GetChildCount
 |*
-|*    Beschreibung
-|*    Ersterstellung    17.08.94
-|*    Letzte Aenderung  17.08.94
-|*
 *************************************************************************/
 
 ULONG SvTreeList::GetChildCount( SvListEntry* pParent ) const
@@ -621,10 +577,6 @@ ULONG SvTreeList::GetChildCount( SvListEntry* pParent ) const
 /*************************************************************************
 |*
 |*    SvTreeList::
-|*
-|*    Beschreibung
-|*    Ersterstellung    17.08.94
-|*    Letzte Aenderung  17.08.94
 |*
 *************************************************************************/
 
@@ -672,10 +624,6 @@ ULONG SvTreeList::GetChildSelectionCount(const SvListView* pView,SvListEntry* pP
 |*
 |*    SvTreeList::
 |*
-|*    Beschreibung
-|*    Ersterstellung    17.08.94
-|*    Letzte Aenderung  17.08.94
-|*
 *************************************************************************/
 
 SvListEntry* SvTreeList::First() const
@@ -689,10 +637,6 @@ SvListEntry* SvTreeList::First() const
 /*************************************************************************
 |*
 |*    SvTreeList::Next
-|*
-|*    Beschreibung
-|*    Ersterstellung    17.08.94
-|*    Letzte Aenderung  17.08.94
 |*
 *************************************************************************/
 SvListEntry* SvTreeList::Next( SvListEntry* pActEntry, USHORT* pDepth ) const
@@ -754,10 +698,6 @@ SvListEntry* SvTreeList::Next( SvListEntry* pActEntry, USHORT* pDepth ) const
 |*
 |*    SvTreeList::Prev
 |*
-|*    Beschreibung
-|*    Ersterstellung    17.08.94
-|*    Letzte Aenderung  17.08.94
-|*
 *************************************************************************/
 SvListEntry* SvTreeList::Prev( SvListEntry* pActEntry, USHORT* pDepth ) const
 {
@@ -806,10 +746,6 @@ SvListEntry* SvTreeList::Prev( SvListEntry* pActEntry, USHORT* pDepth ) const
 |*
 |*    SvTreeList::
 |*
-|*    Beschreibung
-|*    Ersterstellung    17.08.94
-|*    Letzte Aenderung  17.08.94
-|*
 *************************************************************************/
 
 SvListEntry* SvTreeList::Last( USHORT* /* nDepth */ ) const
@@ -832,10 +768,6 @@ SvListEntry* SvTreeList::Last( USHORT* /* nDepth */ ) const
 |*
 |*    SvTreeList::
 |*
-|*    Beschreibung
-|*    Ersterstellung    17.08.94
-|*    Letzte Aenderung  17.08.94
-|*
 *************************************************************************/
 
 ULONG SvTreeList::GetVisiblePos( const SvListView* pView, SvListEntry* pEntry ) const
@@ -855,10 +787,6 @@ ULONG SvTreeList::GetVisiblePos( const SvListView* pView, SvListEntry* pEntry ) 
 /*************************************************************************
 |*
 |*    SvTreeList::
-|*
-|*    Beschreibung
-|*    Ersterstellung    17.08.94
-|*    Letzte Aenderung  17.08.94
 |*
 *************************************************************************/
 
@@ -894,10 +822,6 @@ ULONG SvTreeList::GetVisibleCount( const SvListView* pView ) const
 /*************************************************************************
 |*
 |*    SvTreeList::
-|*
-|*    Beschreibung
-|*    Ersterstellung    17.08.94
-|*    Letzte Aenderung  17.08.94
 |*
 *************************************************************************/
 
@@ -965,10 +889,6 @@ SvListEntry* SvTreeList::NextVisible(const SvListView* pView,SvListEntry* pActEn
 |*
 |*    SvTreeList::
 |*
-|*    Beschreibung
-|*    Ersterstellung    17.08.94
-|*    Letzte Aenderung  17.08.94
-|*
 *************************************************************************/
 
 // Funktion geht aus Geschwindigkeitsgruenden davon aus,
@@ -1021,10 +941,6 @@ SvListEntry* SvTreeList::PrevVisible(const SvListView* pView, SvListEntry* pActE
 |*
 |*    SvTreeList::
 |*
-|*    Beschreibung
-|*    Ersterstellung    17.08.94
-|*    Letzte Aenderung  17.08.94
-|*
 *************************************************************************/
 
 SvListEntry* SvTreeList::LastVisible( const SvListView* pView, USHORT* pDepth) const
@@ -1041,10 +957,6 @@ SvListEntry* SvTreeList::LastVisible( const SvListView* pView, USHORT* pDepth) c
 /*************************************************************************
 |*
 |*    SvTreeList::
-|*
-|*    Beschreibung
-|*    Ersterstellung    17.08.94
-|*    Letzte Aenderung  17.08.94
 |*
 *************************************************************************/
 
@@ -1075,10 +987,6 @@ SvListEntry* SvTreeList::NextVisible(const SvListView* pView,SvListEntry* pEntry
 |*
 |*    SvTreeList::
 |*
-|*    Beschreibung
-|*    Ersterstellung    17.08.94
-|*    Letzte Aenderung  17.08.94
-|*
 *************************************************************************/
 
 SvListEntry* SvTreeList::PrevVisible( const SvListView* pView, SvListEntry* pEntry, USHORT& nDelta ) const
@@ -1104,10 +1012,6 @@ SvListEntry* SvTreeList::PrevVisible( const SvListView* pView, SvListEntry* pEnt
 /*************************************************************************
 |*
 |*    SvTreeList::
-|*
-|*    Beschreibung
-|*    Ersterstellung    17.08.94
-|*    Letzte Aenderung  17.08.94
 |*
 *************************************************************************/
 
@@ -1183,10 +1087,6 @@ SvListEntry* SvTreeList::LastSibling( SvListEntry* pEntry ) const
 |*
 |*    SvTreeList::
 |*
-|*    Beschreibung
-|*    Ersterstellung    17.08.94
-|*    Letzte Aenderung  17.08.94
-|*
 *************************************************************************/
 
 SvListEntry* SvTreeList::NextSelected( const SvListView* pView, SvListEntry* pEntry ) const
@@ -1201,10 +1101,6 @@ SvListEntry* SvTreeList::NextSelected( const SvListView* pView, SvListEntry* pEn
 /*************************************************************************
 |*
 |*    SvTreeList::
-|*
-|*    Beschreibung
-|*    Ersterstellung    17.08.94
-|*    Letzte Aenderung  17.08.94
 |*
 *************************************************************************/
 
@@ -1222,10 +1118,6 @@ SvListEntry* SvTreeList::PrevSelected( const SvListView* pView, SvListEntry* pEn
 |*
 |*    SvTreeList::
 |*
-|*    Beschreibung
-|*    Ersterstellung    17.08.94
-|*    Letzte Aenderung  17.08.94
-|*
 *************************************************************************/
 
 SvListEntry* SvTreeList::LastSelected( const SvListView* pView ) const
@@ -1240,10 +1132,6 @@ SvListEntry* SvTreeList::LastSelected( const SvListView* pView ) const
 /*************************************************************************
 |*
 |*    SvTreeList::Insert
-|*
-|*    Beschreibung
-|*    Ersterstellung    17.08.94
-|*    Letzte Aenderung  17.08.94
 |*
 *************************************************************************/
 ULONG SvTreeList::Insert( SvListEntry* pEntry,SvListEntry* pParent,ULONG nPos )
@@ -1286,10 +1174,6 @@ CheckIntegrity();
 |*
 |*    SvTreeList::
 |*
-|*    Beschreibung
-|*    Ersterstellung    17.08.94
-|*    Letzte Aenderung  17.08.94
-|*
 *************************************************************************/
 
 ULONG SvTreeList::GetAbsPos( SvListEntry* pEntry) const
@@ -1302,10 +1186,6 @@ ULONG SvTreeList::GetAbsPos( SvListEntry* pEntry) const
 /*************************************************************************
 |*
 |*    SvTreeList::
-|*
-|*    Beschreibung
-|*    Ersterstellung    17.08.94
-|*    Letzte Aenderung  17.08.94
 |*
 *************************************************************************/
 
@@ -1329,10 +1209,6 @@ CheckIntegrity();
 /*************************************************************************
 |*
 |*    SvTreeList::Expand
-|*
-|*    Beschreibung
-|*    Ersterstellung    17.08.94
-|*    Letzte Aenderung  17.08.94
 |*
 *************************************************************************/
 
@@ -1362,10 +1238,6 @@ CheckIntegrity();
 |*
 |*    SvTreeList::Collapse
 |*
-|*    Beschreibung
-|*    Ersterstellung    17.08.94
-|*    Letzte Aenderung  17.08.94
-|*
 *************************************************************************/
 
 void SvTreeList::Collapse( SvListView* pView, SvListEntry* pEntry )
@@ -1394,10 +1266,6 @@ CheckIntegrity();
 /*************************************************************************
 |*
 |*    SvTreeList::
-|*
-|*    Beschreibung
-|*    Ersterstellung    17.08.94
-|*    Letzte Aenderung  17.08.94
 |*
 *************************************************************************/
 
@@ -1434,10 +1302,6 @@ CheckIntegrity();
 /*************************************************************************
 |*
 |*    SvTreeList::Remove
-|*
-|*    Beschreibung
-|*    Ersterstellung    17.08.94
-|*    Letzte Aenderung  05.04.01
 |*
 *************************************************************************/
 BOOL SvTreeList::Remove( SvListEntry* pEntry )
@@ -1502,10 +1366,6 @@ CheckIntegrity();
 /*************************************************************************
 |*
 |*    SvTreeList::
-|*
-|*    Beschreibung
-|*    Ersterstellung    17.08.94
-|*    Letzte Aenderung  17.08.94
 |*
 *************************************************************************/
 

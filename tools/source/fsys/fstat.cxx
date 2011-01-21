@@ -48,10 +48,6 @@
 |*
 |*    FileStat::FileStat()
 |*
-|*    Beschreibung      FSYS.SDW
-|*    Ersterstellung    MI 11.06.91
-|*    Letzte Aenderung  MI 11.06.91
-|*
 *************************************************************************/
 
 FileStat::FileStat()
@@ -71,10 +67,6 @@ FileStat::FileStat()
 /*************************************************************************
 |*
 |*    FileStat::FileStat()
-|*
-|*    Beschreibung      FSYS.SDW
-|*    Ersterstellung    MI 11.06.91
-|*    Letzte Aenderung  MI 11.06.91
 |*
 *************************************************************************/
 
@@ -115,10 +107,6 @@ FileStat::FileStat( const DirEntry& rDirEntry, FSysAccess nAccess )
 |*
 |*    FileStat::IsYounger()
 |*
-|*    Beschreibung      FSYS.SDW
-|*    Ersterstellung    MA 11.11.91
-|*    Letzte Aenderung  MA 11.11.91
-|*
 *************************************************************************/
 
 // TRUE  wenn die Instanz j"unger als rIsOlder ist.
@@ -139,9 +127,6 @@ BOOL FileStat::IsYounger( const FileStat& rIsOlder ) const
 |*
 |*    FileStat::IsKind()
 |*
-|*    Ersterstellung    MA 11.11.91 (?)
-|*    Letzte Aenderung  KH 16.01.95
-|*
 *************************************************************************/
 
 BOOL FileStat::IsKind( DirEntryKind nKind ) const
@@ -155,9 +140,6 @@ BOOL FileStat::IsKind( DirEntryKind nKind ) const
 /*************************************************************************
 |*
 |*    FileStat::HasReadOnlyFlag()
-|*
-|*    Ersterstellung    MI 06.03.97
-|*    Letzte Aenderung  UT 01.07.98
 |*
 *************************************************************************/
 
@@ -173,9 +155,6 @@ BOOL FileStat::HasReadOnlyFlag()
 /*************************************************************************
 |*
 |*    FileStat::GetReadOnlyFlag()
-|*
-|*    Ersterstellung    MI 06.03.97
-|*    Letzte Aenderung  UT 02.07.98
 |*
 *************************************************************************/
 
@@ -212,9 +191,6 @@ BOOL FileStat::GetReadOnlyFlag( const DirEntry &rEntry )
 /*************************************************************************
 |*
 |*    FileStat::SetReadOnlyFlag()
-|*
-|*    Ersterstellung    MI 06.03.97
-|*    Letzte Aenderung  UT 01.07.98
 |*
 *************************************************************************/
 
@@ -287,9 +263,6 @@ ULONG FileStat::SetReadOnlyFlag( const DirEntry &rEntry, BOOL bRO )
 /*************************************************************************
 |*
 |*    FileStat::SetDateTime
-|*
-|*    Ersterstellung    PB  27.06.97
-|*    Letzte Aenderung
 |*
 *************************************************************************/
 #if defined WNT || defined OS2

@@ -68,9 +68,6 @@
 |*
 |*  Beschreibung        True, wenn CPU BigEndian ist
 |*
-|*  Ersterstellung      EG 26.06.96
-|*  Letzte Aenderung
-|*
 *************************************************************************/
 int IsBigEndian()
 {
@@ -83,9 +80,6 @@ int IsBigEndian()
 |*  IsStackGrowingDown()
 |*
 |*  Beschreibung        True, wenn der Stack nach unten waechst
-|*
-|*  Ersterstellung      EG 26.06.96
-|*  Letzte Aenderung
 |*
 *************************************************************************/
 int IsStackGrowingDown_2( int * pI )
@@ -106,9 +100,6 @@ int IsStackGrowingDown()
 |*
 |*  Beschreibung        Alignment von char Parametern, die (hoffentlich)
 |*                      ueber den Stack uebergeben werden
-|*
-|*  Ersterstellung      EG 26.06.96
-|*  Letzte Aenderung
 |*
 *************************************************************************/
 int GetStackAlignment_3( char*p, long l, int i, short s, char b, char c, ... )
@@ -151,9 +142,6 @@ typedef int (*TestFunc)( Type, void* );
 |*
 |*  Beschreibung        Testfunktion fuer variable Parameter
 |*
-|*  Ersterstellung      EG 26.06.96
-|*  Letzte Aenderung
-|*
 *************************************************************************/
 #ifdef I_STDARG
 void PrintArgs( int p, ... )
@@ -188,9 +176,6 @@ va_dcl
 |*
 |*  Beschreibung        faengt SIGBUS und SIGSEGV in check() ab
 |*
-|*  Ersterstellung      EG 26.06.96
-|*  Letzte Aenderung
-|*
 *************************************************************************/
 static jmp_buf check_env;
 static int bSignal;
@@ -210,9 +195,6 @@ void SignalHdl( int sig )
 |*  check()
 |*
 |*  Beschreibung        Testet MemoryZugriff (read/write)
-|*
-|*  Ersterstellung      EG 26.06.96
-|*  Letzte Aenderung
 |*
 *************************************************************************/
 int check( TestFunc func, Type eT, void* p )
@@ -259,9 +241,6 @@ int check( TestFunc func, Type eT, void* p )
 |*
 |*  Beschreibung        memory read access
 |*
-|*  Ersterstellung      EG 26.06.96
-|*  Letzte Aenderung
-|*
 *************************************************************************/
 int GetAtAddress( Type eT, void* p )
 {
@@ -281,9 +260,6 @@ int GetAtAddress( Type eT, void* p )
 |*  SetAtAddress()
 |*
 |*  Beschreibung        memory write access
-|*
-|*  Ersterstellung      EG 26.06.96
-|*  Letzte Aenderung
 |*
 *************************************************************************/
 int SetAtAddress( Type eT, void* p )
@@ -319,9 +295,6 @@ char* TypeName( Type eT )
 |*  Beschreibung        Testet MemoryZugriff (read/write)
 |*                      Zugriffsverletzungen werden abgefangen
 |*
-|*  Ersterstellung      EG 26.06.96
-|*  Letzte Aenderung
-|*
 *************************************************************************/
 int CheckGetAccess( Type eT, void* p )
 {
@@ -353,9 +326,6 @@ int CheckSetAccess( Type eT, void* p )
 |*
 |*  Beschreibung        Bestimmt das Alignment verschiedener Typen
 |*
-|*  Ersterstellung      EG 26.06.96
-|*  Letzte Aenderung
-|*
 *************************************************************************/
 int GetAlignment( Type eT )
 {
@@ -380,9 +350,6 @@ int GetAlignment( Type eT )
 |*
 |*  Beschreibung        Beschreibt die Parameter der Architektur
 |*
-|*  Ersterstellung      EG 26.06.96
-|*  Letzte Aenderung
-|*
 *************************************************************************/
 struct Description
 {
@@ -397,9 +364,6 @@ struct Description
 |*  Description_Ctor()
 |*
 |*  Beschreibung        Bestimmt die Parameter der Architektur
-|*
-|*  Ersterstellung      EG 26.06.96
-|*  Letzte Aenderung
 |*
 *************************************************************************/
 void Description_Ctor( struct Description* pThis )
@@ -428,9 +392,6 @@ void Description_Ctor( struct Description* pThis )
 |*  Description_Print()
 |*
 |*  Beschreibung        Schreibt die Parameter der Architektur als Header
-|*
-|*  Ersterstellung      EG 26.06.96
-|*  Letzte Aenderung
 |*
 *************************************************************************/
 void Description_Print( struct Description* pThis, char* name )
@@ -466,9 +427,6 @@ void Description_Print( struct Description* pThis, char* name )
 |*
 |*  Beschreibung        Informeller Bytezugriffstest
 |*
-|*  Ersterstellung      EG 26.06.96
-|*  Letzte Aenderung
-|*
 *************************************************************************/
 void InfoMemoryAccess( char* p )
 {
@@ -488,9 +446,6 @@ void InfoMemoryAccess( char* p )
 |*  InfoMemoryTypeAccess()
 |*
 |*  Beschreibung        Informeller Zugriffstest verschiedener Typen
-|*
-|*  Ersterstellung      EG 15.08.96
-|*  Letzte Aenderung
 |*
 *************************************************************************/
 void InfoMemoryTypeAccess( Type eT )

@@ -54,8 +54,6 @@ DECLARE_LIST( FileStatList, FileStat* )
 |*    Dir::InsertPointReached()
 |*
 |*    Beschreibung      stellt fest, ob eingefuegt werden musz
-|*    Ersterstellung    MA 05.11.91
-|*    Letzte Aenderung  MI 05.02.92
 |*
 *************************************************************************/
 
@@ -209,8 +207,6 @@ BOOL Dir::ImpInsertPointReached( const DirEntry& rNewEntry,
 |*    Dir::ImpSortedInsert()
 |*
 |*    Beschreibung      fuegt sortiert ein
-|*    Ersterstellung    MA 05.11.91
-|*    Letzte Aenderung  MA 03.12.91
 |*
 *************************************************************************/
 
@@ -244,8 +240,6 @@ void Dir::ImpSortedInsert( const DirEntry *pNewEntry, const FileStat *pNewStat )
 |*    Dir::Construct()
 |*
 |*    Beschreibung      gemeinsame Implementation der Ctoren
-|*    Ersterstellung    MI 02.06.93
-|*    Letzte Aenderung  MI 02.06.93
 |*
 *************************************************************************/
 
@@ -278,10 +272,6 @@ void Dir::Construct( DirEntryKind nKindFlags )
 |*
 |*    Dir::Update()
 |*
-|*    Beschreibung      FSYS.SDW
-|*    Ersterstellung    MI 16.05.91
-|*    Letzte Aenderung  MI 19.09.96
-|*
 *************************************************************************/
 
 BOOL Dir::Update()
@@ -293,10 +283,6 @@ BOOL Dir::Update()
 /*************************************************************************
 |*
 |*    Dir::Reset()
-|*
-|*    Beschreibung
-|*    Ersterstellung    MI 22.10.96
-|*    Letzte Aenderung  MI 22.10.96
 |*
 *************************************************************************/
 
@@ -370,10 +356,6 @@ void Dir::Reset()
 |*
 |*    Dir::Scan()
 |*
-|*    Beschreibung      FSYS.SDW
-|*    Ersterstellung    MI 18.09.96
-|*    Letzte Aenderung  MI 19.09.96
-|*
 *************************************************************************/
 
 USHORT Dir::Scan( USHORT nCount )
@@ -410,10 +392,6 @@ USHORT Dir::Scan( USHORT nCount )
 |*
 |*    Dir::Dir()
 |*
-|*    Beschreibung      FSYS.SDW
-|*    Ersterstellung    MI 16.05.91
-|*    Letzte Aenderung  MI 04.03.92
-|*
 *************************************************************************/
 
 Dir::Dir( const DirEntry& rDirEntry, DirEntryKind nKindFlags, FSysSort nSort, ... ):
@@ -435,10 +413,6 @@ Dir::Dir( const DirEntry& rDirEntry, DirEntryKind nKindFlags, FSysSort nSort, ..
 |*
 |*    Dir::Dir()
 |*
-|*    Beschreibung      FSYS.SDW
-|*    Ersterstellung    MI 02.06.93
-|*    Letzte Aenderung  MI 02.06.93
-|*
 *************************************************************************/
 
 Dir::Dir( const DirEntry& rDirEntry, DirEntryKind nKindFlags ):
@@ -454,10 +428,6 @@ Dir::Dir( const DirEntry& rDirEntry, DirEntryKind nKindFlags ):
 /*************************************************************************
 |*
 |*    Dir::Dir()
-|*
-|*    Beschreibung      FSYS.SDW
-|*    Ersterstellung    MI 16.05.91
-|*    Letzte Aenderung  MA 04.11.91
 |*
 *************************************************************************/
 
@@ -476,10 +446,6 @@ Dir::Dir():
 /*************************************************************************
 |*
 |*    Dir::~Dir()
-|*
-|*    Beschreibung      FSYS.SDW
-|*    Ersterstellung    MI 16.05.91
-|*    Letzte Aenderung  MA 04.11.91
 |*
 *************************************************************************/
 
@@ -538,10 +504,6 @@ Dir::~Dir()
 /*************************************************************************
 |*
 |*    Dir::ImpSetSort()
-|*
-|*    Beschreibung      FSYS.SDW
-|*    Ersterstellung    MA 04.11.91
-|*    Letzte Aenderung  MI 05.02.92
 |*
 *************************************************************************/
 
@@ -668,10 +630,6 @@ FSysError Dir::ImpSetSort( std::va_list pArgs, int nFirstSort )
 |*
 |*    Dir::SetSort()
 |*
-|*    Beschreibung      FSYS.SDW
-|*    Ersterstellung    MA 04.11.91
-|*    Letzte Aenderung  MI 05.02.92
-|*
 *************************************************************************/
 
 FSysError Dir::SetSort( FSysSort nSort, ... )
@@ -684,10 +642,6 @@ FSysError Dir::SetSort( FSysSort nSort, ... )
 /*************************************************************************
 |*
 |*    Dir::operator[]()
-|*
-|*    Beschreibung      FSYS.SDW
-|*    Ersterstellung    MI 16.05.91
-|*    Letzte Aenderung  MI 16.05.91
 |*
 *************************************************************************/
 
@@ -702,10 +656,6 @@ DirEntry& Dir::operator[] ( USHORT nIndex ) const
 /*************************************************************************
 |*
 |*    Dir::operator+= ()
-|*
-|*    Beschreibung      FSYS.SDW
-|*    Ersterstellung    MI 16.05.91
-|*    Letzte Aenderung  MI 16.05.91
 |*
 *************************************************************************/
 
@@ -749,10 +699,6 @@ Dir& Dir::operator+=( const Dir& rDir )
 /*************************************************************************
 |*
 |*    Dir::Count()
-|*
-|*    Beschreibung      FSYS.SDW
-|*    Ersterstellung    MI 16.05.91
-|*    Letzte Aenderung  MI 18.09.96
 |*
 *************************************************************************/
 

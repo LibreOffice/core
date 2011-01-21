@@ -34,10 +34,6 @@
 |*
 |*    WildCard::Match()
 |*
-|*    Beschreibung      WLDCRD.SDW
-|*    Ersterstellung    MA 19.06.91
-|*    Letzte Aenderung  MA 03.07.91
-|*
 *************************************************************************/
 
 /* Diese Methode ueberprueft, ob die Wilde Karte in pWild mit dem String
@@ -111,10 +107,6 @@ USHORT WildCard::ImpMatch( const char *pWild, const char *pStr ) const
 /*************************************************************************
 |*
 |*    WildCard::Matches()
-|*
-|*    Beschreibung      WLDCRD.SDW
-|*    Ersterstellung    MA 19.06.91
-|*    Letzte Aenderung  TH 02.02.96
 |*
 *************************************************************************/
 

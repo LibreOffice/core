@@ -1035,10 +1035,6 @@ void DrawChar(OutputDevice& rOut, UCHAR c, ObjTextType T, PointType Pos, USHORT 
 |*
 |*    TextType::Draw()
 |*
-|*    Beschreibung
-|*    Ersterstellung    JOE 09.08.93
-|*    Letzte Aenderung  JOE 09.08.93
-|*
 *************************************************************************/
 void TextType::Draw(OutputDevice& rOut)
 {

@@ -41,10 +41,6 @@
 |*
 |*    RscTypCont::FillNameIdList()
 |*
-|*    Beschreibung
-|*    Ersterstellung    MM 07.05.91
-|*    Letzte Aenderung  MM 30.05.91
-|*
 *************************************************************************/
 REResourceList * InsertList( Atom nClassName, const RscId& rId,
                              REResourceList * pList ){

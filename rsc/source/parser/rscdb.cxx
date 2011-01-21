@@ -54,10 +54,6 @@ using namespace rtl;
 |*
 |*    RscTypCont :: RscTypCont
 |*
-|*    Beschreibung      RES.DOC
-|*    Ersterstellung    MM 22.03.90
-|*    Letzte Aenderung  MM 27.06.90
-|*
 *************************************************************************/
 RscTypCont :: RscTypCont( RscError * pErrHdl,
                           RSCBYTEORDER_TYPE nOrder,
@@ -184,10 +180,6 @@ Atom RscTypCont::AddLanguage( const char* pLang )
 /*************************************************************************
 |*
 |*    RscTypCont :: ~RscTypCont
-|*
-|*    Beschreibung      RES.DOC
-|*    Ersterstellung    MM 22.03.90
-|*    Letzte Aenderung  MM 27.06.90
 |*
 *************************************************************************/
 void DestroyNode( RscTop * pRscTop, ObjNode * pObjNode ){
@@ -331,10 +323,6 @@ RscTop * RscTypCont::SearchType( Atom nId )
 |*
 |*    RscTypCont :: Search
 |*
-|*    Beschreibung      RES.DOC
-|*    Ersterstellung    MM 22.03.90
-|*    Letzte Aenderung  MM 27.06.90
-|*
 *************************************************************************/
 RscTop * RscTypCont :: Search( Atom nRT ){
     return( (RscTop *)pRoot->Search( nRT ) );
@@ -355,10 +343,6 @@ CLASS_DATA RscTypCont :: Search( Atom nRT, const RscId & rId ){
 /*************************************************************************
 |*
 |*    RscTypCont :: Delete()
-|*
-|*    Beschreibung
-|*    Ersterstellung    MM 10.07.91
-|*    Letzte Aenderung  MM 10.07.91
 |*
 *************************************************************************/
 void RscTypCont :: Delete( Atom nRT, const RscId & rId ){
@@ -388,10 +372,6 @@ void RscTypCont :: Delete( Atom nRT, const RscId & rId ){
 /*************************************************************************
 |*
 |*    RscTypCont :: PutSysName()
-|*
-|*    Beschreibung      RES.DOC
-|*    Ersterstellung    MM 22.03.90
-|*    Letzte Aenderung  MM 27.06.90
 |*
 *************************************************************************/
 sal_uInt32 RscTypCont :: PutSysName( sal_uInt32 nRscTyp, char * pFileName,
@@ -436,10 +416,6 @@ sal_uInt32 RscTypCont :: PutSysName( sal_uInt32 nRscTyp, char * pFileName,
 /*************************************************************************
 |*
 |*    RscTypCont :: WriteInc
-|*
-|*    Beschreibung      RES.DOC
-|*    Ersterstellung    MM 21.06.90
-|*    Letzte Aenderung  MM 21.06.90
 |*
 *************************************************************************/
 void RscTypCont :: WriteInc( FILE * fOutput, ULONG lFileKey )
@@ -491,10 +467,6 @@ void RscTypCont :: WriteInc( FILE * fOutput, ULONG lFileKey )
 |*
 |*    RscTypCont :: Methoden die ueber all Knoten laufen
 |*
-|*    Beschreibung      RES.DOC
-|*    Ersterstellung    MM 22.03.90
-|*    Letzte Aenderung  MM 09.12.91
-|*
 *************************************************************************/
 
 class RscEnumerateObj
@@ -545,10 +517,6 @@ public:
 |*
 |*    RscEnumerateObj :: CallBackWriteRc
 |*
-|*    Beschreibung
-|*    Ersterstellung    MM 09.12.91
-|*    Letzte Aenderung  MM 09.12.91
-|*
 *************************************************************************/
 IMPL_LINK( RscEnumerateObj, CallBackWriteRc, ObjNode *, pObjNode )
 {
@@ -568,10 +536,6 @@ IMPL_LINK( RscEnumerateObj, CallBackWriteRc, ObjNode *, pObjNode )
 |*
 |*    RscEnumerateObj :: CallBackWriteSrc
 |*
-|*    Beschreibung
-|*    Ersterstellung    MM 09.12.91
-|*    Letzte Aenderung  MM 09.12.91
-|*
 *************************************************************************/
 IMPL_LINK_INLINE_START( RscEnumerateObj, CallBackWriteSrc, ObjNode *, pObjNode )
 {
@@ -589,10 +553,6 @@ IMPL_LINK_INLINE_END( RscEnumerateObj, CallBackWriteSrc, ObjNode *, pObjNode )
 |*
 |*    RscEnumerateObj :: CallBackWriteCxx
 |*
-|*    Beschreibung
-|*    Ersterstellung    MM 09.12.91
-|*    Letzte Aenderung  MM 09.12.91
-|*
 *************************************************************************/
 IMPL_LINK_INLINE_START( RscEnumerateObj, CallBackWriteCxx, ObjNode *, pObjNode )
 {
@@ -608,10 +568,6 @@ IMPL_LINK_INLINE_END( RscEnumerateObj, CallBackWriteCxx, ObjNode *, pObjNode )
 |*
 |*    RscEnumerateObj :: CallBackWriteHxx
 |*
-|*    Beschreibung
-|*    Ersterstellung    MM 09.12.91
-|*    Letzte Aenderung  MM 09.12.91
-|*
 *************************************************************************/
 IMPL_LINK_INLINE_START( RscEnumerateObj, CallBackWriteHxx, ObjNode *, pObjNode )
 {
@@ -626,10 +582,6 @@ IMPL_LINK_INLINE_END( RscEnumerateObj, CallBackWriteHxx, ObjNode *, pObjNode )
 /*************************************************************************
 |*
 |*    RscEnumerateObj :: WriteRcFile
-|*
-|*    Beschreibung
-|*    Ersterstellung    MM 09.12.91
-|*    Letzte Aenderung  MM 09.12.91
 |*
 *************************************************************************/
 void RscEnumerateObj :: WriteRcFile( RscWriteRc & rMem, FILE * fOut ){
@@ -748,10 +700,6 @@ public:
 |*
 |*    RscRscEnumerateRef :: CallBack...
 |*
-|*    Beschreibung
-|*    Ersterstellung    MM 09.12.91
-|*    Letzte Aenderung  MM 09.12.91
-|*
 *************************************************************************/
 IMPL_LINK_INLINE_START( RscEnumerateRef, CallBackWriteRc, RscTop *, pRef )
 {
@@ -796,10 +744,6 @@ IMPL_LINK_INLINE_END( RscEnumerateRef, CallBackWriteRcCtor, RscTop *, pRef )
 |*
 |*    RscTypCont :: WriteRc
 |*
-|*    Beschreibung      RES.DOC
-|*    Ersterstellung    MM 22.03.90
-|*    Letzte Aenderung  MM 22.07.91
-|*
 *************************************************************************/
 
 ERRTYPE RscTypCont::WriteRc( WriteRcContext& rContext )
@@ -824,10 +768,6 @@ ERRTYPE RscTypCont::WriteRc( WriteRcContext& rContext )
 /*************************************************************************
 |*
 |*    RscTypCont :: WriteSrc
-|*
-|*    Beschreibung      RES.DOC
-|*    Ersterstellung    MM 22.03.90
-|*    Letzte Aenderung  MM 27.06.90
 |*
 *************************************************************************/
 void RscTypCont :: WriteSrc( FILE * fOutput, ULONG nFileKey,
@@ -882,10 +822,6 @@ void RscTypCont :: WriteSrc( FILE * fOutput, ULONG nFileKey,
 /*************************************************************************
 |*
 |*    RscTypCont :: WriteHxx
-|*
-|*    Beschreibung
-|*    Ersterstellung    MM 30.05.91
-|*    Letzte Aenderung  MM 30.05.91
 |*
 *************************************************************************/
 ERRTYPE RscTypCont :: WriteHxx( FILE * fOutput, ULONG nFileKey )
@@ -949,10 +885,6 @@ ERRTYPE RscTypCont :: WriteHxx( FILE * fOutput, ULONG nFileKey )
 |*
 |*    RscTypCont :: WriteCxx
 |*
-|*    Beschreibung
-|*    Ersterstellung    MM 30.05.91
-|*    Letzte Aenderung  MM 30.05.91
-|*
 *************************************************************************/
 ERRTYPE RscTypCont::WriteCxx( FILE * fOutput, ULONG nFileKey,
                               const ByteString & rHxxName )
@@ -986,10 +918,6 @@ ERRTYPE RscTypCont::WriteCxx( FILE * fOutput, ULONG nFileKey,
 |*
 |*    RscTypCont :: WriteSyntax
 |*
-|*    Beschreibung
-|*    Ersterstellung    MM 30.05.91
-|*    Letzte Aenderung  MM 30.05.91
-|*
 *************************************************************************/
 void RscTypCont::WriteSyntax( FILE * fOutput )
 {
@@ -1012,10 +940,6 @@ void RscTypCont::WriteRcCtor
 /*************************************************************************
 |*
 |*    RscTypCont :: Delete()
-|*
-|*    Beschreibung
-|*    Ersterstellung    MM 09.12.91
-|*    Letzte Aenderung  MM 09.12.91
 |*
 *************************************************************************/
 class RscDel
@@ -1051,10 +975,6 @@ void RscTypCont :: Delete( ULONG lFileKey ){
 /*************************************************************************
 |*
 |*    RscTypCont :: MakeConsistent()
-|*
-|*    Beschreibung
-|*    Ersterstellung    MM 23.09.91
-|*    Letzte Aenderung  MM 23.09.91
 |*
 *************************************************************************/
 BOOL IsInstConsistent( ObjNode * pObjNode, RscTop * pRscTop,

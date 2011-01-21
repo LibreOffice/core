@@ -46,10 +46,6 @@
 |*
 |*    RscMgr::RscMgr()
 |*
-|*    Beschreibung
-|*    Ersterstellung    MM 26.04.91
-|*    Letzte Aenderung  MM 26.04.91
-|*
 *************************************************************************/
 RscMgr::RscMgr( Atom nId, sal_uInt32 nTypeId, RscTop * pSuperCl )
             : RscClass( nId, nTypeId, pSuperCl )
@@ -60,10 +56,6 @@ RscMgr::RscMgr( Atom nId, sal_uInt32 nTypeId, RscTop * pSuperCl )
 |*
 |*    RscMgr::Size()
 |*
-|*    Beschreibung
-|*    Ersterstellung    MM 26.04.91
-|*    Letzte Aenderung  MM 26.04.91
-|*
 *************************************************************************/
 sal_uInt32 RscMgr::Size()
 {
@@ -73,10 +65,6 @@ sal_uInt32 RscMgr::Size()
 /*************************************************************************
 |*
 |*    RscMgr::Create()
-|*
-|*    Beschreibung
-|*    Ersterstellung    MM 03.04.91
-|*    Letzte Aenderung  MM 03.04.91
 |*
 *************************************************************************/
 RSCINST RscMgr::Create( RSCINST * pInst, const RSCINST & rDflt, BOOL bOwnClass ){
@@ -109,10 +97,6 @@ RSCINST RscMgr::Create( RSCINST * pInst, const RSCINST & rDflt, BOOL bOwnClass )
 |*
 |*    RscMgr::Destroy()
 |*
-|*    Beschreibung
-|*    Ersterstellung    MM 21.06.91
-|*    Letzte Aenderung  MM 21.06.91
-|*
 *************************************************************************/
 void RscMgr::Destroy( const RSCINST & rInst ){
     RscMgrInst * pClassData;
@@ -126,10 +110,6 @@ void RscMgr::Destroy( const RSCINST & rInst ){
 /*************************************************************************
 |*
 |*    RscMgr::SetToDefault()
-|*
-|*    Beschreibung
-|*    Ersterstellung    MM 12.06.91
-|*    Letzte Aenderung  MM 12.06.91
 |*
 *************************************************************************/
 void RscMgr::SetToDefault( const RSCINST & rInst )
@@ -146,10 +126,6 @@ void RscMgr::SetToDefault( const RSCINST & rInst )
 |*
 |*    RscMgr::IsDefault()
 |*
-|*    Beschreibung
-|*    Ersterstellung    MM 12.06.91
-|*    Letzte Aenderung  MM 12.06.91
-|*
 *************************************************************************/
 BOOL RscMgr::IsDefault( const RSCINST & rInst ){
     RscMgrInst * pClassData;
@@ -164,10 +140,6 @@ BOOL RscMgr::IsDefault( const RSCINST & rInst ){
 /*************************************************************************
 |*
 |*    RscMgr::IsValueDefault()
-|*
-|*    Beschreibung
-|*    Ersterstellung    MM 12.06.91
-|*    Letzte Aenderung  MM 12.06.91
 |*
 *************************************************************************/
 BOOL RscMgr::IsValueDefault( const RSCINST & rInst, CLASS_DATA pDef ){
@@ -193,10 +165,6 @@ BOOL RscMgr::IsValueDefault( const RSCINST & rInst, CLASS_DATA pDef ){
 /*************************************************************************
 |*
 |*    RscMgr::WriteSrcHeader()
-|*
-|*    Beschreibung
-|*    Ersterstellung    MM 08.04.91
-|*    Letzte Aenderung  MM 08.04.91
 |*
 *************************************************************************/
 void RscMgr::WriteSrcHeader( const RSCINST & rInst, FILE * fOutput,
@@ -234,10 +202,6 @@ void RscMgr::WriteSrcHeader( const RSCINST & rInst, FILE * fOutput,
 |*
 |*    RscMgr::WriteSrc()
 |*
-|*    Beschreibung
-|*    Ersterstellung    MM 08.04.91
-|*    Letzte Aenderung  MM 08.04.91
-|*
 *************************************************************************/
 void RscMgr::WriteSrc( const RSCINST &, FILE *, RscTypCont *, sal_uInt32,
                         const char * )
@@ -247,10 +211,6 @@ void RscMgr::WriteSrc( const RSCINST &, FILE *, RscTypCont *, sal_uInt32,
 /*************************************************************************
 |*
 |*    RscMgr::WriteRcHeader()
-|*
-|*    Beschreibung
-|*    Ersterstellung    MM 15.04.91
-|*    Letzte Aenderung  MM 15.04.91
 |*
 *************************************************************************/
 ERRTYPE RscMgr::WriteRcHeader( const RSCINST & rInst, RscWriteRc & rMem,
@@ -345,10 +305,6 @@ ERRTYPE RscMgr::WriteRcHeader( const RSCINST & rInst, RscWriteRc & rMem,
 |*
 |*    RscMgr::WriteRc()
 |*
-|*    Beschreibung
-|*    Ersterstellung    MM 26.04.91
-|*    Letzte Aenderung  MM 26.04.91
-|*
 *************************************************************************/
 ERRTYPE RscMgr::WriteRc( const RSCINST &, RscWriteRc &,
                          RscTypCont *, sal_uInt32, BOOL )
@@ -398,10 +354,6 @@ static ByteString MakeName( RscTypCont * pTypCon, RscTop * pClass,
 /*************************************************************************
 |*
 |*    RscMgr::WriteHxxHeader()
-|*
-|*    Beschreibung
-|*    Ersterstellung    MM 29.05.91
-|*    Letzte Aenderung  MM 29.05.91
 |*
 *************************************************************************/
 ERRTYPE RscMgr::WriteHxxHeader( const RSCINST & rInst, FILE * fOutput,
@@ -468,10 +420,6 @@ ERRTYPE RscMgr::WriteHxxHeader( const RSCINST & rInst, FILE * fOutput,
 |*
 |*    RscMgr::WriteHxx()
 |*
-|*    Beschreibung
-|*    Ersterstellung    MM 29.05.91
-|*    Letzte Aenderung  MM 29.05.91
-|*
 *************************************************************************/
 ERRTYPE RscMgr::WriteHxx( const RSCINST & rInst, FILE * fOutput,
                           RscTypCont * pTC, const RscId & rId )
@@ -486,10 +434,6 @@ ERRTYPE RscMgr::WriteHxx( const RSCINST & rInst, FILE * fOutput,
 /*************************************************************************
 |*
 |*    RscClass::WriteCxxHeader()
-|*
-|*    Beschreibung
-|*    Ersterstellung    MM 29.05.91
-|*    Letzte Aenderung  MM 29.05.91
 |*
 *************************************************************************/
 ERRTYPE RscMgr::WriteCxxHeader( const RSCINST & rInst, FILE * fOutput,
@@ -569,10 +513,6 @@ ERRTYPE RscMgr::WriteCxxHeader( const RSCINST & rInst, FILE * fOutput,
 |*
 |*    RscClass::WriteCxx()
 |*
-|*    Beschreibung
-|*    Ersterstellung    MM 29.05.91
-|*    Letzte Aenderung  MM 29.05.91
-|*
 *************************************************************************/
 ERRTYPE RscMgr::WriteCxx( const RSCINST & rInst, FILE * fOutput,
                           RscTypCont * pTC, const RscId & rId )
@@ -588,10 +528,6 @@ ERRTYPE RscMgr::WriteCxx( const RSCINST & rInst, FILE * fOutput,
 /*************************************************************************
 |*
 |*    RscArray::IsConsistent()
-|*
-|*    Beschreibung
-|*    Ersterstellung    MM 23.09.91
-|*    Letzte Aenderung  MM 23.09.91
 |*
 *************************************************************************/
 BOOL RscMgr::IsConsistent( const RSCINST & rInst, RscInconsList * pList )
@@ -621,10 +557,6 @@ BOOL RscMgr::IsConsistent( const RSCINST & rInst, RscInconsList * pList )
 |*
 |*    RscMgr::GetRef()
 |*
-|*    Beschreibung
-|*    Ersterstellung    MM 15.05.91
-|*    Letzte Aenderung  MM 15.05.91
-|*
 *************************************************************************/
 ERRTYPE RscMgr::GetRef( const RSCINST & rInst, RscId * pRscId ){
     RscMgrInst * pClassData;
@@ -637,10 +569,6 @@ ERRTYPE RscMgr::GetRef( const RSCINST & rInst, RscId * pRscId ){
 /*************************************************************************
 |*
 |*    RscMgr::IsToDeep()
-|*
-|*    Beschreibung
-|*    Ersterstellung    MM 15.05.91
-|*    Letzte Aenderung  MM 15.05.91
 |*
 *************************************************************************/
 ERRTYPE RscMgr::IsToDeep( const RSCINST & rInst, sal_uInt32 nDeep )
@@ -681,10 +609,6 @@ ERRTYPE RscMgr::IsToDeep( const RSCINST & rInst, sal_uInt32 nDeep )
 /*************************************************************************
 |*
 |*    RscMgr::SetRef()
-|*
-|*    Beschreibung
-|*    Ersterstellung    MM 15.05.91
-|*    Letzte Aenderung  MM 15.05.91
 |*
 *************************************************************************/
 ERRTYPE RscMgr::SetRef( const RSCINST & rInst, const RscId & rRefId )

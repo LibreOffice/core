@@ -34,10 +34,6 @@
 |*
 |*    Link::operator==()
 |*
-|*    Beschreibung      LINK.SDW
-|*    Ersterstellung    AM 14.02.91
-|*    Letzte Aenderung  TH 07.11.95
-|*
 *************************************************************************/
 
 BOOL Link::operator==( const Link& rLink ) const

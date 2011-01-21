@@ -117,10 +117,6 @@ int closedir( DIR *pDir )
 |*
 |*    DirEntry::GetPathStyle() const
 |*
-|*    Beschreibung
-|*    Ersterstellung    MI 11.05.95
-|*    Letzte Aenderung  MI 11.05.95
-|*
 *************************************************************************/
 
 ErrCode GetPathStyle_Impl( const String &rDevice, FSysPathStyle &rStyle )
@@ -179,10 +175,6 @@ FSysPathStyle DirEntry::GetPathStyle( const String &rDevice )
 /*************************************************************************
 |*
 |*    DirEntry::IsCaseSensitive()
-|*
-|*    Beschreibung      FSYS.SDW
-|*    Ersterstellung    MI  10.06.93
-|*    Letzte Aenderung  TPF 26.02.1999
 |*
 *************************************************************************/
 
@@ -269,10 +261,6 @@ BOOL DirEntry::IsCaseSensitive( FSysPathStyle eFormatter ) const
 |*
 |*    DirEntry::ToAbs()
 |*
-|*    Beschreibung      FSYS.SDW
-|*    Ersterstellung    MI 26.04.91
-|*    Letzte Aenderung  MA 02.12.91
-|*
 *************************************************************************/
 
 BOOL DirEntry::ToAbs()
@@ -306,10 +294,6 @@ BOOL DirEntry::ToAbs()
 /*************************************************************************
 |*
 |*    DirEntry::GetVolume()
-|*
-|*    Beschreibung      FSYS.SDW
-|*    Ersterstellung    MI 27.08.92
-|*    Letzte Aenderung  MI 28.08.92
 |*
 *************************************************************************/
 
@@ -358,10 +342,6 @@ String DirEntry::GetVolume() const
 /*************************************************************************
 |*
 |*    DirEntry::SetCWD()
-|*
-|*    Beschreibung      FSYS.SDW
-|*    Ersterstellung    MI 26.04.91
-|*    Letzte Aenderung  MI 21.05.92
 |*
 *************************************************************************/
 
@@ -512,8 +492,6 @@ USHORT DirReader_Impl::Read()
 |*    InitFileStat()
 |*
 |*    Beschreibung      gemeinsamer Teil der Ctoren fuer FileStat
-|*    Ersterstellung    MI 28.08.92
-|*    Letzte Aenderung  MI 28.08.92
 |*
 *************************************************************************/
 
@@ -570,10 +548,6 @@ void FileStat::ImpInit( void* p )
 |*
 |*    FileStat::FileStat()
 |*
-|*    Beschreibung      FSYS.SDW
-|*    Ersterstellung    MI 27.08.92
-|*    Letzte Aenderung  MI 28.08.92
-|*
 *************************************************************************/
 
 FileStat::FileStat( const void *pInfo,      // struct dirent
@@ -591,10 +565,6 @@ FileStat::FileStat( const void *pInfo,      // struct dirent
 /*************************************************************************
 |*
 |*    FileStat::Update()
-|*
-|*    Beschreibung      FSYS.SDW
-|*    Ersterstellung    MI 27.08.92
-|*    Letzte Aenderung  MI 28.08.92
 |*
 *************************************************************************/
 
@@ -1027,8 +997,6 @@ BOOL IsRedirectable_Impl( const ByteString &rPath )
 |*
 |*    Beschreibung      liefert den Namens des Directories fuer temporaere
 |*                      Dateien
-|*    Ersterstellung    MI 16.03.94
-|*    Letzte Aenderung  MI 16.03.94
 |*
 *************************************************************************/
 

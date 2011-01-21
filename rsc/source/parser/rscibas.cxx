@@ -216,10 +216,6 @@ RscEnum * RscTypCont::InitLangType()
 |*
 |*    RscTypCont::InitFieldUnitsType()
 |*
-|*    Beschreibung
-|*    Ersterstellung    MM 22.03.91
-|*    Letzte Aenderung  MM 27.06.91
-|*
 *************************************************************************/
 RscEnum * RscTypCont::InitFieldUnitsType()
 {
@@ -250,10 +246,6 @@ RscEnum * RscTypCont::InitFieldUnitsType()
 |*
 |*    RscTypCont::InitTimeFieldFormat()
 |*
-|*    Beschreibung
-|*    Ersterstellung    MM 22.03.91
-|*    Letzte Aenderung  MM 27.06.91
-|*
 *************************************************************************/
 RscEnum * RscTypCont::InitTimeFieldFormat()
 {
@@ -271,10 +263,6 @@ RscEnum * RscTypCont::InitTimeFieldFormat()
 /*************************************************************************
 |*
 |*    RscTypCont::InitColor()
-|*
-|*    Beschreibung
-|*    Ersterstellung    MM 24.05.91
-|*    Letzte Aenderung  MM 24.05.91
 |*
 *************************************************************************/
 RscEnum * RscTypCont::InitColor(){
@@ -305,10 +293,6 @@ RscEnum * RscTypCont::InitColor(){
 |*
 |*    RscTypCont::InitMapUnit()
 |*
-|*    Beschreibung
-|*    Ersterstellung    MM 24.05.91
-|*    Letzte Aenderung  MM 24.05.91
-|*
 *************************************************************************/
 RscEnum * RscTypCont::InitMapUnit(){
     RscEnum * pMapUnit;
@@ -334,10 +318,6 @@ RscEnum * RscTypCont::InitMapUnit(){
 /*************************************************************************
 |*
 |*    RscTypCont::InitKey()
-|*
-|*    Beschreibung
-|*    Ersterstellung    MM 24.05.91
-|*    Letzte Aenderung  MM 24.05.91
 |*
 *************************************************************************/
 RscEnum * RscTypCont::InitKey(){
@@ -459,10 +439,6 @@ RscEnum * RscTypCont::InitKey(){
 |*
 |*    RscTypCont::InitTriState()
 |*
-|*    Beschreibung
-|*    Ersterstellung    MM 26.11.91
-|*    Letzte Aenderung  MM 26.11.91
-|*
 *************************************************************************/
 RscEnum * RscTypCont::InitTriState(){
     RscEnum * pTriState;
@@ -478,10 +454,6 @@ RscEnum * RscTypCont::InitTriState(){
 /*************************************************************************
 |*
 |*    RscTypCont::InitMessButtons()
-|*
-|*    Beschreibung
-|*    Ersterstellung    MM 24.05.91
-|*    Letzte Aenderung  MM 24.05.91
 |*
 *************************************************************************/
 RscEnum * RscTypCont::InitMessButtons()
@@ -501,10 +473,6 @@ RscEnum * RscTypCont::InitMessButtons()
 |*
 |*    RscTypCont::InitMessDefButton()
 |*
-|*    Beschreibung
-|*    Ersterstellung    MM 24.05.91
-|*    Letzte Aenderung  MM 24.05.91
-|*
 *************************************************************************/
 RscEnum * RscTypCont::InitMessDefButton(){
     RscEnum * pMessDefButton;
@@ -523,10 +491,6 @@ RscEnum * RscTypCont::InitMessDefButton(){
 /*************************************************************************
 |*
 |*    RscTypCont::InitGeometry()
-|*
-|*    Beschreibung
-|*    Ersterstellung    MM 24.05.91
-|*    Letzte Aenderung  MM 24.05.91
 |*
 *************************************************************************/
 RscTupel * RscTypCont::InitGeometry()
@@ -553,10 +517,6 @@ RscTupel * RscTypCont::InitGeometry()
 |*
 |*    RscTypCont::InitLangGeometry()
 |*
-|*    Beschreibung
-|*    Ersterstellung    MM 24.05.91
-|*    Letzte Aenderung  MM 24.05.91
-|*
 *************************************************************************/
 RscArray * RscTypCont::InitLangGeometry( RscTupel * pGeo )
 {
@@ -566,10 +526,6 @@ RscArray * RscTypCont::InitLangGeometry( RscTupel * pGeo )
 /*************************************************************************
 |*
 |*    RscTypCont::InitStringList()
-|*
-|*    Beschreibung
-|*    Ersterstellung    MM 24.05.91
-|*    Letzte Aenderung  MM 24.05.91
 |*
 *************************************************************************/
 RscCont * RscTypCont::InitStringList()
@@ -586,10 +542,6 @@ RscCont * RscTypCont::InitStringList()
 |*
 |*    RscTypCont::InitLangStringList()
 |*
-|*    Beschreibung
-|*    Ersterstellung    MM 24.05.91
-|*    Letzte Aenderung  MM 24.05.91
-|*
 *************************************************************************/
 RscArray * RscTypCont::InitLangStringList( RscCont * pStrLst )
 {
@@ -600,10 +552,6 @@ RscArray * RscTypCont::InitLangStringList( RscCont * pStrLst )
 /*************************************************************************
 |*
 |*    RscTypCont::InitStringTupel()
-|*
-|*    Beschreibung
-|*    Ersterstellung    MM 24.05.91
-|*    Letzte Aenderung  MM 24.05.91
 |*
 *************************************************************************/
 RscTupel * RscTypCont::InitStringTupel()
@@ -625,10 +573,6 @@ RscTupel * RscTypCont::InitStringTupel()
 |*
 |*    RscTypCont::InitStringLongTupel()
 |*
-|*    Beschreibung
-|*    Ersterstellung    MM 18.07.94
-|*    Letzte Aenderung  MM 18.07.94
-|*
 *************************************************************************/
 RscTupel * RscTypCont::InitStringLongTupel()
 {
@@ -649,10 +593,6 @@ RscTupel * RscTypCont::InitStringLongTupel()
 |*
 |*    RscTypCont::InitStringTupelList()
 |*
-|*    Beschreibung
-|*    Ersterstellung    MM 24.05.91
-|*    Letzte Aenderung  MM 24.05.91
-|*
 *************************************************************************/
 RscCont * RscTypCont::InitStringTupelList( RscTupel * pTupelString )
 {
@@ -667,10 +607,6 @@ RscCont * RscTypCont::InitStringTupelList( RscTupel * pTupelString )
 /*************************************************************************
 |*
 |*    RscTypCont::InitStringLongTupelList()
-|*
-|*    Beschreibung
-|*    Ersterstellung    MM 24.05.91
-|*    Letzte Aenderung  MM 24.05.91
 |*
 *************************************************************************/
 RscCont * RscTypCont::InitStringLongTupelList( RscTupel * pStringLong )
@@ -687,10 +623,6 @@ RscCont * RscTypCont::InitStringLongTupelList( RscTupel * pStringLong )
 |*
 |*    RscTypCont::InitLangStringTupelList()
 |*
-|*    Beschreibung
-|*    Ersterstellung    MM 24.05.91
-|*    Letzte Aenderung  MM 24.05.91
-|*
 *************************************************************************/
 RscArray * RscTypCont::InitLangStringTupelList( RscCont * pStrTupelLst )
 {
@@ -701,10 +633,6 @@ RscArray * RscTypCont::InitLangStringTupelList( RscCont * pStrTupelLst )
 /*************************************************************************
 |*
 |*    RscTypCont::InitLangStringLongTupelList()
-|*
-|*    Beschreibung
-|*    Ersterstellung    MM 24.05.91
-|*    Letzte Aenderung  MM 24.05.91
 |*
 *************************************************************************/
 RscArray * RscTypCont::InitLangStringLongTupelList( RscCont * pStrLongTupelLst )

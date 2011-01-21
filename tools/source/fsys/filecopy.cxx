@@ -66,10 +66,6 @@ using namespace ::osl;
 |*
 |*    FileCopier::FileCopier()
 |*
-|*    Beschreibung      FSYS.SDW
-|*    Ersterstellung    MI 13.04.94
-|*    Letzte Aenderung  MI 13.04.94
-|*
 *************************************************************************/
 
 FileCopier::FileCopier() :
@@ -115,10 +111,6 @@ FileCopier::FileCopier( const FileCopier& rCopier ) :
 |*
 |*    FileCopier::~FileCopier()
 |*
-|*    Beschreibung      FSYS.SDW
-|*    Ersterstellung    MI 13.04.94
-|*    Letzte Aenderung  MI 13.04.94
-|*
 *************************************************************************/
 
 FileCopier::~FileCopier()
@@ -129,10 +121,6 @@ FileCopier::~FileCopier()
 /*************************************************************************
 |*
 |*    FileCopier::operator =()
-|*
-|*    Beschreibung      FSYS.SDW
-|*    Ersterstellung    MI 13.04.94
-|*    Letzte Aenderung  MI 13.04.94
 |*
 *************************************************************************/
 
@@ -152,10 +140,6 @@ FileCopier& FileCopier::operator = ( const FileCopier &rCopier )
 /*************************************************************************
 |*
 |*    FileCopier::Progress()
-|*
-|*    Beschreibung      FSYS.SDW
-|*    Ersterstellung    MI 13.04.94
-|*    Letzte Aenderung  MI 13.04.94
 |*
 *************************************************************************/
 
@@ -228,10 +212,6 @@ const Link& FileCopier::GetErrorHdl() const
 /*************************************************************************
 |*
 |*    FileCopier::Execute()
-|*
-|*    Beschreibung      FSYS.SDW
-|*    Ersterstellung    MI 13.04.94
-|*    Letzte Aenderung  PB 16.06.00
 |*
 *************************************************************************/
 

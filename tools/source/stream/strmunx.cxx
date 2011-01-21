@@ -256,10 +256,6 @@ static sal_uInt32 GetSvError( int nErrno )
 |*
 |*    SvFileStream::SvFileStream()
 |*
-|*    Beschreibung      STREAM.SDW
-|*    Ersterstellung    OV 08.06.94
-|*    Letzte Aenderung  OV 08.06.94
-|*
 *************************************************************************/
 
 SvFileStream::SvFileStream( const String& rFileName, StreamMode nOpenMode )
@@ -284,10 +280,6 @@ SvFileStream::SvFileStream( const String& rFileName, StreamMode nOpenMode )
 |*
 |*    SvFileStream::SvFileStream()
 |*
-|*    Beschreibung      STREAM.SDW
-|*    Ersterstellung    OV 22.11.94
-|*    Letzte Aenderung  OV 22.11.94
-|*
 *************************************************************************/
 
 SvFileStream::SvFileStream()
@@ -302,10 +294,6 @@ SvFileStream::SvFileStream()
 /*************************************************************************
 |*
 |*    SvFileStream::~SvFileStream()
-|*
-|*    Beschreibung      STREAM.SDW
-|*    Ersterstellung    OV 22.11.94
-|*    Letzte Aenderung  OV 22.11.94
 |*
 *************************************************************************/
 
@@ -323,10 +311,6 @@ SvFileStream::~SvFileStream()
 |*
 |*    SvFileStream::GetFileHandle()
 |*
-|*    Beschreibung      STREAM.SDW
-|*    Ersterstellung    OV 22.11.94
-|*    Letzte Aenderung  OV 22.11.94
-|*
 *************************************************************************/
 
 sal_uInt32 SvFileStream::GetFileHandle() const
@@ -338,10 +322,6 @@ sal_uInt32 SvFileStream::GetFileHandle() const
 |*
 |*    SvFileStream::IsA()
 |*
-|*    Beschreibung      STREAM.SDW
-|*    Ersterstellung    OV 14.06.94
-|*    Letzte Aenderung  OV 14.06.94
-|*
 *************************************************************************/
 
 sal_uInt16 SvFileStream::IsA() const
@@ -352,10 +332,6 @@ sal_uInt16 SvFileStream::IsA() const
 /*************************************************************************
 |*
 |*    SvFileStream::GetData()
-|*
-|*    Beschreibung      STREAM.SDW
-|*    Ersterstellung    OV 15.06.94
-|*    Letzte Aenderung  OV 15.06.94
 |*
 *************************************************************************/
 
@@ -382,10 +358,6 @@ sal_Size SvFileStream::GetData( void* pData, sal_Size nSize )
 /*************************************************************************
 |*
 |*    SvFileStream::PutData()
-|*
-|*    Beschreibung      STREAM.SDW
-|*    Ersterstellung    OV 15.06.94
-|*    Letzte Aenderung  OV 15.06.94
 |*
 *************************************************************************/
 
@@ -414,10 +386,6 @@ sal_Size SvFileStream::PutData( const void* pData, sal_Size nSize )
 /*************************************************************************
 |*
 |*    SvFileStream::SeekPos()
-|*
-|*    Beschreibung      STREAM.SDW
-|*    Ersterstellung    OV 15.06.94
-|*    Letzte Aenderung  OV 15.06.94
 |*
 *************************************************************************/
 
@@ -449,10 +417,6 @@ sal_Size SvFileStream::SeekPos( sal_Size nPos )
 |*
 |*    SvFileStream::FlushData()
 |*
-|*    Beschreibung      STREAM.SDW
-|*    Ersterstellung    OV 15.06.94
-|*    Letzte Aenderung  OV 15.06.94
-|*
 *************************************************************************/
 
 void SvFileStream::FlushData()
@@ -465,10 +429,6 @@ static char *pFileLockEnvVar = (char*)1;
 /*************************************************************************
 |*
 |*    SvFileStream::LockRange()
-|*
-|*    Beschreibung      STREAM.SDW
-|*    Ersterstellung    OV 15.06.94
-|*    Letzte Aenderung  OV 15.06.94
 |*
 *************************************************************************/
 
@@ -577,10 +537,6 @@ sal_Bool SvFileStream::LockRange( sal_Size nByteOffset, sal_Size nBytes )
 |*
 |*    SvFileStream::UnlockRange()
 |*
-|*    Beschreibung      STREAM.SDW
-|*    Ersterstellung    OV 15.06.94
-|*    Letzte Aenderung  OV 15.06.94
-|*
 *************************************************************************/
 
 sal_Bool SvFileStream::UnlockRange( sal_Size nByteOffset, sal_Size nBytes )
@@ -628,10 +584,6 @@ sal_Bool SvFileStream::UnlockRange( sal_Size nByteOffset, sal_Size nBytes )
 |*
 |*    SvFileStream::LockFile()
 |*
-|*    Beschreibung      STREAM.SDW
-|*    Ersterstellung    OV 15.06.94
-|*    Letzte Aenderung  OV 15.06.94
-|*
 *************************************************************************/
 
 sal_Bool SvFileStream::LockFile()
@@ -643,10 +595,6 @@ sal_Bool SvFileStream::LockFile()
 |*
 |*    SvFileStream::UnlockFile()
 |*
-|*    Beschreibung      STREAM.SDW
-|*    Ersterstellung    OV 15.06.94
-|*    Letzte Aenderung  OV 15.06.94
-|*
 *************************************************************************/
 
 sal_Bool SvFileStream::UnlockFile()
@@ -657,10 +605,6 @@ sal_Bool SvFileStream::UnlockFile()
 /*************************************************************************
 |*
 |*    SvFileStream::Open()
-|*
-|*    Beschreibung      STREAM.SDW
-|*    Ersterstellung    OV 15.06.94
-|*    Letzte Aenderung  OV 15.06.94
 |*
 *************************************************************************/
 
@@ -789,10 +733,6 @@ void SvFileStream::Open( const String& rFilename, StreamMode nOpenMode )
 |*
 |*    SvFileStream::ReOpen()
 |*
-|*    Beschreibung      STREAM.SDW
-|*    Ersterstellung    OV 15.06.94
-|*    Letzte Aenderung  OV 15.06.94
-|*
 *************************************************************************/
 
 void SvFileStream::ReOpen()
@@ -804,10 +744,6 @@ void SvFileStream::ReOpen()
 /*************************************************************************
 |*
 |*    SvFileStream::Close()
-|*
-|*    Beschreibung      STREAM.SDW
-|*    Ersterstellung    OV 15.06.94
-|*    Letzte Aenderung  OV 15.06.94
 |*
 *************************************************************************/
 
@@ -839,8 +775,6 @@ void SvFileStream::Close()
 |*    SvFileStream::ResetError()
 |*
 |*    Beschreibung      STREAM.SDW; Setzt Filepointer auf Dateianfang
-|*    Ersterstellung    OV 15.06.94
-|*    Letzte Aenderung  OV 15.06.94
 |*
 *************************************************************************/
 
@@ -855,8 +789,6 @@ void SvFileStream::ResetError()
 |*    SvFileStream::SetSize()
 |*
 |*    Beschreibung      STREAM.SDW;
-|*    Ersterstellung    OV 15.06.94
-|*    Letzte Aenderung  OV 15.06.94
 |*
 *************************************************************************/
 

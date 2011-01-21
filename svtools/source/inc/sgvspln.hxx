@@ -43,8 +43,6 @@
 |*                      ist Speicher fÅr die Koeffizientenarrays
 |*                      allokiert, der dann spÑter vom Aufrufer mittels
 |*                      delete freizugeben ist.
-|*    Ersterstellung    JOE 17-08.93
-|*    Letzte Aenderung  JOE 17-08.93
 |*
 *************************************************************************/
 
@@ -65,8 +63,6 @@ BOOL CalcSpline(Polygon& rPoly, BOOL Periodic, USHORT& n,
 |*                      Fall hat das Polygon 0, im 2. Fall PolyMax Punkte.
 |*                      Um KoordinatenÅberlÑufe zu vermeiden werden diese
 |*                      auf +/-32000 begrenzt.
-|*    Ersterstellung    JOE 23.06.93
-|*    Letzte Aenderung  JOE 23.06.93
 |*
 *************************************************************************/
 BOOL Spline2Poly(Polygon& rSpln, BOOL Periodic, Polygon& rPoly);

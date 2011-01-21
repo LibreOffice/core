@@ -246,9 +246,6 @@ inline String ImpGetExtension( const String &rPath )
 |*                                 dem Format ist, ODER WENN DAS FORMAT
 |*                                 DIESER FUNKTION NICHT BEKANNT IST!
 |*
-|*    Ersterstellung    OH 26.05.95
-|*    Letzte Aenderung  OH 07.08.95
-|*
 *************************************************************************/
 
 static BOOL ImpPeekGraphicFormat( SvStream& rStream, String& rFormatExtension, BOOL bTest )

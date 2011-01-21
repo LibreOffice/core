@@ -44,10 +44,6 @@
 |*
 |*    ERRTYPE::operator = ;
 |*
-|*    Beschreibung
-|*    Ersterstellung    MM 25.09.91
-|*    Letzte Aenderung  MM 25.09.91
-|*
 *************************************************************************/
 ERRTYPE& ERRTYPE::operator = ( const ERRTYPE & rError )
 {
@@ -61,10 +57,6 @@ ERRTYPE& ERRTYPE::operator = ( const ERRTYPE & rError )
 /*************************************************************************
 |*
 |*    RscError::StdOut();
-|*
-|*    Beschreibung
-|*    Ersterstellung    MM 06.05.91
-|*    Letzte Aenderung  MM 06.05.91
 |*
 *************************************************************************/
 void RscError::StdOut( const char * pStr, const RscVerbosity _verbosityLevel )
@@ -99,10 +91,6 @@ void RscError::StdErr( const char * pStr )
 |*
 |*    RscError::LstOut();
 |*
-|*    Beschreibung
-|*    Ersterstellung    MM 06.05.91
-|*    Letzte Aenderung  MM 06.05.91
-|*
 *************************************************************************/
 void RscError::LstOut( const char * pStr ){
     if( fListing && pStr )
@@ -112,10 +100,6 @@ void RscError::LstOut( const char * pStr ){
 /*************************************************************************
 |*
 |*    RscError::StdLstOut();
-|*
-|*    Beschreibung
-|*    Ersterstellung    MM 06.05.91
-|*    Letzte Aenderung  MM 06.05.91
 |*
 *************************************************************************/
 void RscError::StdLstOut( const char * pStr ){
@@ -140,10 +124,6 @@ void RscError::StdLstErr( const char * pStr ){
 /*************************************************************************
 |*
 |*    RscError::WriteError();
-|*
-|*    Beschreibung
-|*    Ersterstellung    MM 06.05.91
-|*    Letzte Aenderung  MM 06.05.91
 |*
 *************************************************************************/
 void RscError::WriteError( const ERRTYPE& rError, const char * pMessage )
@@ -410,10 +390,6 @@ void RscError::WriteError( const ERRTYPE& rError, const char * pMessage )
 |*
 |*    RscErrorFormat()
 |*
-|*    Beschreibung
-|*    Ersterstellung    MM 06.05.91
-|*    Letzte Aenderung  MM 06.05.91
-|*
 *************************************************************************/
 void RscError::ErrorFormat( const ERRTYPE& rError, RscTop * pClass,
                             const RscId & aId ){
@@ -472,10 +448,6 @@ void RscError::ErrorFormat( const ERRTYPE& rError, RscTop * pClass,
 |*
 |*    RscError::Error()
 |*
-|*    Beschreibung
-|*    Ersterstellung    MM 06.05.91
-|*    Letzte Aenderung  MM 06.05.91
-|*
 *************************************************************************/
 void RscError::Error( const ERRTYPE& rError, RscTop * pClass,
                       const RscId & aId, const char * pMessage )
@@ -494,10 +466,6 @@ void RscError::Error( const ERRTYPE& rError, RscTop * pClass,
 /*************************************************************************
 |*
 |*    RscError::FatalError();
-|*
-|*    Beschreibung
-|*    Ersterstellung    MM 06.05.91
-|*    Letzte Aenderung  MM 06.05.91
 |*
 *************************************************************************/
 void RscError::FatalError( const ERRTYPE& rError, const RscId &aId,

@@ -215,10 +215,6 @@ static BOOL GetMountEntry(dev_t dev, struct mymnttab *mytab)
 |*
 |*    DirEntry::IsCaseSensitive()
 |*
-|*    Beschreibung
-|*    Ersterstellung    TPF 25.02.1999
-|*    Letzte Aenderung  TPF 25.02.1999
-|*
 *************************************************************************/
 
 BOOL DirEntry::IsCaseSensitive( FSysPathStyle eFormatter ) const
@@ -295,10 +291,6 @@ BOOL DirEntry::IsCaseSensitive( FSysPathStyle eFormatter ) const
 |*
 |*    DirEntry::ToAbs()
 |*
-|*    Beschreibung      FSYS.SDW
-|*    Ersterstellung    MI 26.04.91
-|*    Letzte Aenderung  MA 02.12.91 13:30
-|*
 *************************************************************************/
 
 BOOL DirEntry::ToAbs()
@@ -320,10 +312,6 @@ BOOL DirEntry::ToAbs()
 /*************************************************************************
 |*
 |*    DirEntry::GetVolume()
-|*
-|*    Beschreibung      FSYS.SDW
-|*    Ersterstellung    MI 04.03.92
-|*    Letzte Aenderung
 |*
 *************************************************************************/
 
@@ -374,10 +362,6 @@ DirEntry DirEntry::GetDevice() const
 /*************************************************************************
 |*
 |*    DirEntry::SetCWD()
-|*
-|*    Beschreibung      FSYS.SDW
-|*    Ersterstellung    MI 26.04.91
-|*    Letzte Aenderung  DV 04.11.92
 |*
 *************************************************************************/
 
@@ -467,10 +451,6 @@ USHORT DirReader_Impl::Read()
 |*
 |*    FileStat::FileStat()
 |*
-|*    Beschreibung      FSYS.SDW
-|*    Ersterstellung    MA 05.11.91
-|*    Letzte Aenderung  MA 07.11.91
-|*
 *************************************************************************/
 
 FileStat::FileStat( const void *, const void * ):
@@ -486,10 +466,6 @@ FileStat::FileStat( const void *, const void * ):
 /*************************************************************************
 |*
 |*    FileStat::Update()
-|*
-|*    Beschreibung      FSYS.SDW
-|*    Ersterstellung    MI 11.06.91
-|*    Letzte Aenderung  MA 07.11.91
 |*
 *************************************************************************/
 BOOL FileStat::Update( const DirEntry& rDirEntry, BOOL )
@@ -595,10 +571,6 @@ const char *TempDirImpl( char *pBuf )
 |*
 |*    DirEntry::GetPathStyle() const
 |*
-|*    Beschreibung
-|*    Ersterstellung    MI 11.05.95
-|*    Letzte Aenderung  MI 11.05.95
-|*
 *************************************************************************/
 
 FSysPathStyle DirEntry::GetPathStyle( const String & )
@@ -609,9 +581,6 @@ FSysPathStyle DirEntry::GetPathStyle( const String & )
 /*************************************************************************
 |*
 |*    FileStat::SetDateTime
-|*
-|*    Ersterstellung    PB  27.06.97
-|*    Letzte Aenderung
 |*
 *************************************************************************/
 

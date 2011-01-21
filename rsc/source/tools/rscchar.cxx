@@ -48,8 +48,6 @@
 |*    RscChar::MakeChar()
 |*
 |*    Beschreibung      Der String wird nach C-Konvention umgesetzt
-|*    Ersterstellung    MM 20.03.91
-|*    Letzte Aenderung  MM 20.03.91
 |*
 *************************************************************************/
 char * RscChar::MakeUTF8( char * pStr, UINT16 nTextEncoding )

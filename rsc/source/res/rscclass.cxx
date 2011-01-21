@@ -49,10 +49,6 @@
 |*
 |*    RscClass::RscClass()
 |*
-|*    Beschreibung
-|*    Ersterstellung    MM 25.05.91
-|*    Letzte Aenderung  MM 25.05.91
-|*
 *************************************************************************/
 RscClass::RscClass( Atom nId, sal_uInt32 nTypeId, RscTop * pSuperCl )
     : RscTop( nId, nTypeId, pSuperCl )
@@ -66,10 +62,6 @@ RscClass::RscClass( Atom nId, sal_uInt32 nTypeId, RscTop * pSuperCl )
 /*************************************************************************
 |*
 |*    RscClass::Pre_dtor()
-|*
-|*    Beschreibung
-|*    Ersterstellung    MM 25.05.91
-|*    Letzte Aenderung  MM 25.05.91
 |*
 *************************************************************************/
 void RscClass::Pre_dtor()
@@ -95,10 +87,6 @@ void RscClass::Pre_dtor()
 |*
 |*    RscClass::~RscClass()
 |*
-|*    Beschreibung
-|*    Ersterstellung    MM 25.05.91
-|*    Letzte Aenderung  MM 25.05.91
-|*
 *************************************************************************/
 RscClass::~RscClass()
 {
@@ -110,10 +98,6 @@ RscClass::~RscClass()
 |*
 |*    RscClass::GetClassType()
 |*
-|*    Beschreibung
-|*    Ersterstellung    MM 25.05.91
-|*    Letzte Aenderung  MM 25.05.91
-|*
 *************************************************************************/
 RSCCLASS_TYPE RscClass::GetClassType() const
 {
@@ -123,10 +107,6 @@ RSCCLASS_TYPE RscClass::GetClassType() const
 /*************************************************************************
 |*
 |*    RscClass::GetInstData()
-|*
-|*    Beschreibung
-|*    Ersterstellung    MM 15.04.91
-|*    Letzte Aenderung  MM 15.04.91
 |*
 *************************************************************************/
 RSCINST RscClass::GetInstData
@@ -193,10 +173,6 @@ CLASS_DATA RscClass::GetDfltData( sal_uInt32 nEle )
 |*
 |*    RscClass::SetVarDflt()
 |*
-|*    Beschreibung
-|*    Ersterstellung    MM 22.07.91
-|*    Letzte Aenderung  MM 22.07.91
-|*
 *************************************************************************/
 void RscClass::SetVarDflt( CLASS_DATA pData, sal_uInt32 nEle, BOOL bSet )
 {
@@ -212,10 +188,6 @@ void RscClass::SetVarDflt( CLASS_DATA pData, sal_uInt32 nEle, BOOL bSet )
 /*************************************************************************
 |*
 |*    RscClass::IsDflt()
-|*
-|*    Beschreibung
-|*    Ersterstellung    MM 22.07.91
-|*    Letzte Aenderung  MM 08.01.92
 |*
 *************************************************************************/
 BOOL RscClass::IsDflt( CLASS_DATA pData, sal_uInt32 nEle )
@@ -243,10 +215,6 @@ BOOL RscClass::IsDflt( CLASS_DATA pData, sal_uInt32 nEle )
 /*************************************************************************
 |*
 |*    RscClass::Create()
-|*
-|*    Beschreibung
-|*    Ersterstellung    MM 03.04.91
-|*    Letzte Aenderung  MM 03.04.91
 |*
 *************************************************************************/
 RSCINST RscClass::Create
