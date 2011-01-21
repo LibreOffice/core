@@ -654,7 +654,10 @@ bool ScDBFunc::MakePivotTable( const ScDPSaveData& rData, const ScRange& rDest, 
     else
         aObj.SetSaveData( rData );
 
-    BOOL bAllowMove = ( pDPObj != NULL );   // allow re-positioning when editing existing table
+    bool bAllowMove = (pDPObj != NULL);   // allow re-positioning when editing existing table
+
+    if (aObj.RefreshCache())
+        return false;
 
     ScDBDocFunc aFunc( *pDocSh );
     bool bSuccess = aFunc.DataPilotUpdate( pDPObj, &aObj, TRUE, FALSE, bAllowMove );
