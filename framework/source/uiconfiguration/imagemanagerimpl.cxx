@@ -752,6 +752,8 @@ void ImageManagerImpl::dispose()
         }
         delete m_pDefaultImageList;
         m_pDefaultImageList = 0;
+
+        m_xOwner.clear();
     }
 
 }
@@ -1455,6 +1457,10 @@ void ImageManagerImpl::implts_notifyContainerListener( const ConfigurationEvent&
 void ImageManagerImpl::clear()
 {
     ResetableGuard aGuard( m_aLock );
+
+    if (!m_pUserImageList)
+        return;
+
     for ( sal_Int32 n = 0; n < ImageType_COUNT; n++ )
     {
         delete m_pUserImageList[n];
