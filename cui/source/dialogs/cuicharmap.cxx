@@ -45,6 +45,9 @@
 
 #include <rtl/textenc.h>
 #include <svx/ucsubset.hxx>
+#include <sfx2/objsh.hxx>
+#include <vcl/msgbox.hxx>
+#include <svl/stritem.hxx>
 
 #include <cuires.hrc>
 #include <dialmgr.hxx>
@@ -558,10 +561,6 @@ IMPL_LINK( SvxCharMapData, DeleteHdl, PushButton *, EMPTYARG )
     aOKBtn.Disable();
     return 0;
 }
-
-#include <sfx2/objsh.hxx>
-#include <vcl/msgbox.hxx>
-#include <svl/stritem.hxx>
 
 IMPL_LINK( SvxCharMapData, AssignHdl, PushButton *, EMPTYARG )
 {
