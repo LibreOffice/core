@@ -402,7 +402,7 @@ $(call gb_Helper_abbreviate_dirs_native,\
         @$${RESPONSEFILE} \
         $(foreach lib,$(LINKED_LIBS),$(call gb_Library_get_filename,$(lib))) \
         $(foreach lib,$(LINKED_STATIC_LIBS),$(call gb_StaticLibrary_get_filename,$(lib))) \
-        $(subst -out: -implib:$(1),-out:$(1),-out:$(DLLTARGET) -implib:$(1)) && rm $${RESPONSEFILE})
+        $(if $(DLLTARGET),-out:$(DLLTARGET) -implib:$(1),-out:$(1)) && rm $${RESPONSEFILE})
 endef
 
 

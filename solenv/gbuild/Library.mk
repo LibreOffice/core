@@ -39,10 +39,11 @@
 #  gb_Library_Library_platform
 #  gb_Library_TARGETS
 
+gb_Library__get_linktargetname = Library/$(call gb_Library_get_filename,$(1))
 
 # EVIL: gb_StaticLibrary and gb_Library need the same deliver rule because they are indistinguishable on windows
 .PHONY : $(WORKDIR)/Clean/OutDir/lib/%$(gb_Library_PLAINEXT)
-$(WORKDIR)/Clean/OutDir/lib/%$(gb_Library_PLAINEXT) : $(call gb_LinkTarget_get_clean_target,$(call gb_Library_get_linktargetname,%$(gb_Library_PLAINEXT)))
+$(WORKDIR)/Clean/OutDir/lib/%$(gb_Library_PLAINEXT) :
     $(call gb_Helper_abbreviate_dirs,\
         rm -f $(OUTDIR)/lib/$*$(gb_Library_PLAINEXT) \
             $(AUXTARGETS))
@@ -59,7 +60,7 @@ $$(eval $$(call gb_Output_info,Currently known libraries are: $(sort $(gb_Librar
 $$(eval $$(call gb_Output_error,Library $(1) must be registered in Repository.mk))
 endif
 $(call gb_Library_get_target,$(1)) : AUXTARGETS :=
-$(call gb_Library__Library_impl,$(1),$(call gb_Library_get_linktargetname,$(call gb_Library_get_filename,$(1))))
+$(call gb_Library__Library_impl,$(1),$(call gb_Library__get_linktargetname,$(1)))
 
 endef
 
@@ -71,6 +72,7 @@ $(call gb_LinkTarget_set_defs,$(2),\
     $(gb_Library_DEFS) \
 )
 $(call gb_Library_get_target,$(1)) : $(call gb_LinkTarget_get_target,$(2))
+$(call gb_Library_get_clean_target,$(1)) : $(call gb_LinkTarget_get_clean_target,$(2))
 $(call gb_Library_Library_platform,$(1),$(2),$(gb_Library_DLLDIR)/$(call gb_Library_get_dllname,$(1)))
 $$(eval $$(call gb_Module_register_target,$(call gb_Library_get_target,$(1)),$(call gb_Library_get_clean_target,$(1))))
 $(call gb_Deliver_add_deliverable,$(call gb_Library_get_target,$(1)),$(call gb_LinkTarget_get_target,$(2)))
@@ -95,7 +97,7 @@ gb_Library__get_layer_componentprefix = \
 
 
 define gb_Library__forward_to_Linktarget
-gb_Library_$(1) = $$(call gb_LinkTarget_$(1),$(call gb_Library_get_linktargetname,$$(call gb_Library_get_filename,$$(1))),$$(2),$$(3))
+gb_Library_$(1) = $$(call gb_LinkTarget_$(1),$$(call gb_Library__get_linktargetname,$$(1)),$$(2),$$(3))
 
 endef
 

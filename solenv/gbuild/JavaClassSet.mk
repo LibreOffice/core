@@ -48,7 +48,7 @@ $$(call gb_JavaClassSet_get_target,%) : $$(call gb_JavaClassSet_get_repo_target,
 endef
 
 $(call gb_JavaClassSet_get_clean_target,%) :
-    $(call gb_Output_announce,$$*,$(false),JCS,3)
+    $(call gb_Output_announce,$*,$(false),JCS,3)
     $(call gb_Helper_abbreviate_dirs,\
         rm -rf $(dir $(call gb_JavaClassSet_get_target,$*)))
 

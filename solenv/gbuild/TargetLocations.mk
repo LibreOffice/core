@@ -128,10 +128,6 @@ $(eval $(call gb_Helper_make_dep_targets,\
 
 # other getters
 
-gb_Library_get_linktargetname = Library/$(1)
-gb_StaticLibrary_get_linktargetname = StaticLibrary/$(1)
-gb_CppunitTest_get_linktargetname = CppunitTest/$(1)
-
 define gb_Library_get_layer
 $(patsubst $(1):%,%,$(filter $(1):%,$(gb_Library_LAYER)))
 endef
