@@ -54,8 +54,8 @@ class ScSheetSourceDesc
 {
 private:
     ScRange         aSourceRange;
-public:
     ::rtl::OUString maRangeName;
+public:
     ScQueryParam    aQueryParam;
 
     SC_DLLPUBLIC void SetSourceRange(const ScRange& rRange);
