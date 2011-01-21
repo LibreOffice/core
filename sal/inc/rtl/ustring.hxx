@@ -278,6 +278,20 @@ public:
     sal_Int32 getLength() const SAL_THROW(()) { return pData->length; }
 
     /**
+      Checks if a string is empty.
+
+      @return   sal_True if the string is empty;
+                sal_False, otherwise.
+    */
+    sal_Bool isEmpty() const SAL_THROW(())
+    {
+        if ( pData->length )
+            return sal_False;
+        else
+            return sal_True;
+    }
+
+    /**
       Returns a pointer to the Unicode character buffer from this string.
 
       It isn't necessarily NULL terminated.
