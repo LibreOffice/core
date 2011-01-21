@@ -227,7 +227,7 @@ void ScGridWindow::DoPushButton( SCCOL nCol, SCROW nRow, const MouseEvent& rMEvt
             DBG_ASSERT(pDlg, "Dialog create fail!");
             if ( pDlg->Execute() == RET_OK )
             {
-                ScSheetSourceDesc aNewDesc;
+                ScSheetSourceDesc aNewDesc(pDoc);
                 if (pDesc)
                     aNewDesc = *pDesc;
 

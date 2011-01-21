@@ -719,7 +719,7 @@ void SAL_CALL ScDataPilotDescriptorBase::setSourceRange( const CellRangeAddress&
     if (!pDPObject)
         throw RuntimeException();
 
-    ScSheetSourceDesc aSheetDesc;
+    ScSheetSourceDesc aSheetDesc(pDocShell->GetDocument());
     if (pDPObject->IsSheetData())
         aSheetDesc = *pDPObject->GetSheetDesc();
 
@@ -1418,7 +1418,7 @@ ScDataPilotDescriptor::ScDataPilotDescriptor(ScDocShell* pDocSh) :
     aSaveData.SetIgnoreEmptyRows( sal_False );
     aSaveData.SetRepeatIfEmpty( sal_False );
     mpDPObject->SetSaveData(aSaveData);
-    ScSheetSourceDesc aSheetDesc;
+    ScSheetSourceDesc aSheetDesc(pDocSh ? pDocSh->GetDocument() : NULL);
     mpDPObject->SetSheetDesc(aSheetDesc);
     mpDPObject->GetSource();
 }

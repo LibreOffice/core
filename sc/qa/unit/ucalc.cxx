@@ -569,7 +569,7 @@ void Test::testDataPilot()
     printer.print("Data sheet content");
     printer.clear();
 
-    ScSheetSourceDesc aSheetDesc;
+    ScSheetSourceDesc aSheetDesc(m_pDoc);
     aSheetDesc.SetSourceRange(ScRange(nCol1, nRow1, 0, nCol2, nRow2, 0));
     ScDPObject* pDPObj = new ScDPObject(m_pDoc);
     pDPObj->SetSheetDesc(aSheetDesc);

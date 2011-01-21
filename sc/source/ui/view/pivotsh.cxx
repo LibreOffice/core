@@ -134,7 +134,7 @@ void ScPivotShell::Execute( SfxRequest& rReq )
 
                 if( pDlg->Execute() == RET_OK )
                 {
-                    ScSheetSourceDesc aNewDesc;
+                    ScSheetSourceDesc aNewDesc(pViewData->GetDocument());
                     if( pDesc )
                         aNewDesc = *pDesc;
 

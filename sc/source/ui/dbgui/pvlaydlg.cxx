@@ -188,7 +188,6 @@ ScDPLayoutDlg::ScDPLayoutDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pPar
                                 GetViewData() ),
         pDoc            ( ((ScTabViewShell*)SfxViewShell::Current())->
                                 GetViewData()->GetDocument() ),
-        meSrcType(SRC_INVALID),
         bRefInputMode   (false)
 {
     xDlgDPObject->SetAlive( TRUE );     // needed to get structure information
@@ -1419,20 +1418,20 @@ bool ScDPLayoutDlg::GetPivotArrays(
 
 void ScDPLayoutDlg::UpdateSrcRange()
 {
-    String  theCurPosStr = aEdInPos.GetText();
-    USHORT  nResult = ScRange().Parse(theCurPosStr, pDoc, pDoc->GetAddressConvention());
-    meSrcType = SRC_INVALID;
-
+    String  aSrcStr = aEdInPos.GetText();
+    USHORT  nResult = ScRange().Parse(aSrcStr, pDoc, pDoc->GetAddressConvention());
+    DataSrcType eSrcType = SRC_INVALID;
     ScRange aNewRange;
+
     if (SCA_VALID == (nResult & SCA_VALID))
     {
         // Valid source range.  Take it.
         ScRefAddress start, end;
-        ConvertDoubleRef(pDoc, theCurPosStr, 1,  start, end, pDoc->GetAddressConvention());
+        ConvertDoubleRef(pDoc, aSrcStr, 1,  start, end, pDoc->GetAddressConvention());
         aNewRange.aStart = start.GetAddress();
         aNewRange.aEnd = end.GetAddress();
         aEdInPos.SetRefValid(true);
-        meSrcType = SRC_REF;
+        eSrcType = SRC_REF;
     }
     else
     {
@@ -1441,7 +1440,7 @@ void ScDPLayoutDlg::UpdateSrcRange()
         ScRangeName* pRangeName = pDoc->GetRangeName();
         if (pRangeName)
         {
-            OUString aUpper = ScGlobal::pCharClass->upper(theCurPosStr);
+            OUString aUpper = ScGlobal::pCharClass->upper(aSrcStr);
             USHORT n;
             bValid = pRangeName->SearchNameUpper(aUpper, n);
             if (bValid)
@@ -1460,22 +1459,37 @@ void ScDPLayoutDlg::UpdateSrcRange()
             return;
         }
 
-        meSrcType = SRC_NAME;
+        eSrcType = SRC_NAME;
     }
 
     aBtnOk.Enable();
+
+    // Now update the data src range or range name with the dp object.
     ScSheetSourceDesc inSheet = *xDlgDPObject->GetSheetDesc();
 
-    if (inSheet.GetSourceRange() == aNewRange)
-        // new range is identical to the current range.  Nothing to do.
-        return;
+    switch (eSrcType)
+    {
+        case SRC_REF:
+            // data source is a range reference.
+            if (inSheet.GetSourceRange() == aNewRange)
+                // new range is identical to the current range.  Nothing to do.
+                return;
+            inSheet.SetSourceRange(aNewRange);
+        break;
+        case SRC_NAME:
+            // data source is a range name.
+            inSheet.SetRangeName(aSrcStr);
+        break;
+        default:
+            OSL_ENSURE(false, "Unknown source type.");
+            return;
+    }
 
-    ScTabViewShell * pTabViewShell = pViewData->GetViewShell();
-    inSheet.SetSourceRange(aNewRange);
     xDlgDPObject->SetSheetDesc(inSheet);
     xDlgDPObject->FillOldParam( thePivotData, FALSE );
     xDlgDPObject->FillLabelData(thePivotData);
 
+    ScTabViewShell* pTabViewShell = pViewData->GetViewShell();
     pTabViewShell->SetDialogDPObject(xDlgDPObject.get());
     aLabelDataArr.clear();
     aWndSelect.ClearFields();

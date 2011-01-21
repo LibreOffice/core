@@ -52,7 +52,10 @@ class ScDPItemData;
  */
 class ScSheetSourceDesc
 {
+    ScSheetSourceDesc(); // disabled
+
 public:
+    SC_DLLPUBLIC ScSheetSourceDesc(ScDocument* pDoc);
 
     SC_DLLPUBLIC void SetSourceRange(const ScRange& rRange);
     SC_DLLPUBLIC const ScRange& GetSourceRange() const;
@@ -81,6 +84,7 @@ private:
     ScRange         maSourceRange;
     ::rtl::OUString maRangeName;
     ScQueryParam    maQueryParam;
+    ScDocument*     mpDoc;
 };
 
 // --------------------------------------------------------------------

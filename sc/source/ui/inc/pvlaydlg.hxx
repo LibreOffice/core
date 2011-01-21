@@ -185,7 +185,6 @@ private:
     ScPivotParam            thePivotData;
     ScViewData*             pViewData;
     ScDocument*             pDoc;
-    DataSrcType             meSrcType;
     bool                    bRefInputMode;
 
 private:

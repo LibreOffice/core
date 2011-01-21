@@ -424,7 +424,7 @@ ScDPTableData* ScDPObject::GetTableData()
             if (!pSheetDesc)
             {
                 DBG_ERROR("no source descriptor");
-                pSheetDesc = new ScSheetSourceDesc;     // dummy defaults
+                pSheetDesc = new ScSheetSourceDesc(pDoc);     // dummy defaults
             }
             pData.reset(new ScSheetDPData(pDoc, *pSheetDesc, GetCacheId()));
         }
@@ -712,7 +712,7 @@ void ScDPObject::UpdateReference( UpdateRefMode eUpdateRefMode,
                 nCol1, nRow1, nTab1, nCol2, nRow2, nTab2 );
         if ( eRes != UR_NOTHING )
         {
-            ScSheetSourceDesc aNewDesc;
+            ScSheetSourceDesc aNewDesc(pDoc);
             aNewDesc.SetSourceRange(ScRange(nCol1, nRow1, nTab1, nCol2, nRow2, nTab2));
 
             SCsCOL nDiffX = nCol1 - (SCsCOL) pSheetDesc->GetSourceRange().aStart.Col();

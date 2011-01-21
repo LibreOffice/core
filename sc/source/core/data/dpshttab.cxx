@@ -233,6 +233,9 @@ const ScDPCacheTable& ScSheetDPData::GetCacheTable() const
     return aCacheTable;
 }
 
+ScSheetSourceDesc::ScSheetSourceDesc(ScDocument* pDoc) :
+    mpDoc(pDoc) {}
+
 void ScSheetSourceDesc::SetSourceRange(const ScRange& rRange)
 {
     maSourceRange = rRange;
@@ -241,6 +244,11 @@ void ScSheetSourceDesc::SetSourceRange(const ScRange& rRange)
 
 const ScRange& ScSheetSourceDesc::GetSourceRange() const
 {
+    if (maRangeName.getLength())
+    {
+        // Obtain the source range from the range name first.
+
+    }
     return maSourceRange;
 }
 

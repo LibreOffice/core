@@ -1395,7 +1395,7 @@ void XclImpPivotTable::Convert()
     // *** insert into Calc document ***
 
     // create source descriptor
-    ScSheetSourceDesc aDesc;
+    ScSheetSourceDesc aDesc(GetDocPtr());
     aDesc.SetSourceRange(mxPCache->GetSourceRange());
 
     // adjust output range to include the page fields

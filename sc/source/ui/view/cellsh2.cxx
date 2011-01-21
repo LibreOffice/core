@@ -849,7 +849,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                                 }
                                 if (bOK)
                                 {
-                                    ScSheetSourceDesc aShtDesc;
+                                    ScSheetSourceDesc aShtDesc(pDoc);
                                     aShtDesc.SetSourceRange(aRange);
                                     pNewDPObject = new ScDPObject( pDoc );
                                     pNewDPObject->SetSheetDesc( aShtDesc );
