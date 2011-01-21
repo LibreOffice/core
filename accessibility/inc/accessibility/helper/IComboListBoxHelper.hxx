@@ -29,8 +29,7 @@
 
 #include <tools/gen.hxx>
 #include <tools/string.hxx>
-#include <vcl/wintypes.hxx>
-#include <tools/gen.hxx>
+#include <tools/wintypes.hxx>
 
 namespace com { namespace sun { namespace star { namespace datatransfer { namespace clipboard {
     class XClipboard;
