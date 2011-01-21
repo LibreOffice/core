@@ -1866,7 +1866,7 @@ void SdrModel::SetStarDrawPreviewMode(sal_Bool bPreview)
     if (!bPreview && bStarDrawPreviewMode && GetPageCount())
     {
         // Das Zuruecksetzen ist nicht erlaubt, da das Model ev. nicht vollstaendig geladen wurde
-        DBG_ASSERT(FALSE,"SdrModel::SetStarDrawPreviewMode(): Zuruecksetzen nicht erlaubt, da Model ev. nicht vollstaendig");
+        DBG_ASSERT(sal_False,"SdrModel::SetStarDrawPreviewMode(): Zuruecksetzen nicht erlaubt, da Model ev. nicht vollstaendig");
     }
     else
     {

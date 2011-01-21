@@ -2257,7 +2257,7 @@ IMPL_LINK( SfxCommonTemplateDialog_Impl, MenuSelectHdl, Menu *, pMenu )
 void SfxCommonTemplateDialog_Impl::ExecuteContextMenu_Impl( const Point& rPos, Window* pWin )
 {
     // Bug# 94152: This part should never be called, because before this happens, the TreeListBox should captured this!
-    DBG_ASSERT( FALSE, "+SfxCommonTemplateDialog_Impl::ExecuteContextMenu_Impl(): How could this happen? Please infirm developer ASAP!" );
+    DBG_ASSERT( sal_False, "+SfxCommonTemplateDialog_Impl::ExecuteContextMenu_Impl(): How could this happen? Please infirm developer ASAP!" );
 
     PopupMenu* pMenu = CreateContextMenu();
     pMenu->Execute( pWin, rPos );

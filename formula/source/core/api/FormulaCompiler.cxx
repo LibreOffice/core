@@ -490,7 +490,7 @@ uno::Sequence< sheet::FormulaOpCodeMapEntry > FormulaCompiler::OpCodeMap::create
 
 void FormulaCompiler::OpCodeMap::putOpCode( const String & rStr, const OpCode eOp )
 {
-    DBG_ASSERT( 0 < eOp && USHORT(eOp) < mnSymbols, "OpCodeMap::putOpCode: OpCode out of range");
+    DBG_ASSERT( 0 < eOp && sal_uInt16(eOp) < mnSymbols, "OpCodeMap::putOpCode: OpCode out of range");
     if (0 < eOp && sal_uInt16(eOp) < mnSymbols)
     {
         DBG_ASSERT( (mpTable[eOp].Len() == 0) || (mpTable[eOp] == rStr) || (eOp == ocCurrency),

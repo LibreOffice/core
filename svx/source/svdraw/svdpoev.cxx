@@ -406,7 +406,7 @@ void SdrPolyEditView::RipUpAtMarkedPoints()
                     if(nNewPt0Idx)
                     {
                         // Korrektur notwendig?
-                        DBG_ASSERT(bKorregFlag==FALSE,"Mehrfache Indexkorrektur bei SdrPolyEditView::RipUp()");
+                        DBG_ASSERT(bKorregFlag==sal_False,"Mehrfache Indexkorrektur bei SdrPolyEditView::RipUp()");
                         if(!bKorregFlag)
                         {
                             bKorregFlag = sal_True;

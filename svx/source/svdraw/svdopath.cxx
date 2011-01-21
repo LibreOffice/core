@@ -2479,7 +2479,7 @@ Point SdrPathObj::GetSnapPoint(sal_uInt32 nSnapPnt) const
     sal_uInt32 nPoly,nPnt;
     if(!PolyPolygonEditor::GetRelativePolyPoint(GetPathPoly(), nSnapPnt, nPoly, nPnt))
     {
-        DBG_ASSERT(FALSE,"SdrPathObj::GetSnapPoint: Punkt nSnapPnt nicht vorhanden!");
+        DBG_ASSERT(sal_False,"SdrPathObj::GetSnapPoint: Punkt nSnapPnt nicht vorhanden!");
     }
 
     const basegfx::B2DPoint aB2DPoint(GetPathPoly().getB2DPolygon(nPoly).getB2DPoint(nPnt));

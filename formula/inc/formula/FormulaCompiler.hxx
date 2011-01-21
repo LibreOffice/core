@@ -135,7 +135,7 @@ public:
         /// Get the symbol string matching an OpCode.
         inline const String& getSymbol( const OpCode eOp ) const
         {
-            DBG_ASSERT( USHORT(eOp) < mnSymbols, "OpCodeMap::getSymbol: OpCode out of range");
+            DBG_ASSERT( sal_uInt16(eOp) < mnSymbols, "OpCodeMap::getSymbol: OpCode out of range");
             if (sal_uInt16(eOp) < mnSymbols)
                 return mpTable[ eOp ];
             static String s_sEmpty;
