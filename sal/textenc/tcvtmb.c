@@ -115,7 +115,6 @@ sal_Size ImplDBCSToUnicode( const ImplTextConverterData* pData, void* pContext,
                     if ( (cLead >= pEUDCTab->mnLeadStart) &&
                          (cLead <= pEUDCTab->mnLeadEnd) )
                     {
-                        sal_uInt16 nTrailCount = 0;
                         if ( (cTrail >= pEUDCTab->mnTrail1Start) &&
                              (cTrail <= pEUDCTab->mnTrail1End) )
                         {
@@ -126,7 +125,7 @@ sal_Size ImplDBCSToUnicode( const ImplTextConverterData* pData, void* pContext,
                         }
                         else
                         {
-                            nTrailCount = pEUDCTab->mnTrail1End-pEUDCTab->mnTrail1Start+1;
+                            sal_uInt16 nTrailCount = pEUDCTab->mnTrail1End-pEUDCTab->mnTrail1Start+1;
                             if ( (pEUDCTab->mnTrailCount >= 2) &&
                                  (cTrail >= pEUDCTab->mnTrail2Start) &&
                                  (cTrail <= pEUDCTab->mnTrail2End) )
