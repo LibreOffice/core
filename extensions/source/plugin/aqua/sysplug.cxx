@@ -67,8 +67,8 @@ struct FakeEventRecord : public EventRecord
 }
 -(id)initWithInstance: (XPlugin_Impl*)i_pImpl pluginComm: (MacPluginComm*)i_pCom frame: (NSRect)i_aRect;
 -(void)drawRect: (NSRect)i_aRect;
--(MacOSBOOL)isOpaque;
--(MacOSBOOL)isFlipped;
+-(BOOL)isOpaque;
+-(BOOL)isFlipped;
 
 // NSResponder
 -(void)mouseMoved:   (NSEvent*)i_pEvent;
@@ -101,12 +101,12 @@ struct FakeEventRecord : public EventRecord
     m_pCom->drawView( m_pImpl );
 }
 
--(MacOSBOOL)isOpaque
+-(BOOL)isOpaque
 {
     return NO;
 }
 
--(MacOSBOOL)isFlipped
+-(BOOL)isFlipped
 {
     return YES;
 }
