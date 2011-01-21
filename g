@@ -251,7 +251,7 @@ for REPO in $DIRS ; do
 				    echo -n "re-"
 			        fi
                                 echo "creating missing link $link $DIR/$link -> $RAWBUILDDIR/$link"
-                                ln -sf "$DIR/$link" "$RAWBUILDDIR/$link"
+                                ln -s "$DIR/$link" "$RAWBUILDDIR/$link"
                             fi
                         done
 		    fi
