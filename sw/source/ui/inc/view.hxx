@@ -32,7 +32,7 @@
 #include <svtools/htmlcfg.hxx>
 #include <sfx2/viewfac.hxx>
 #include <sfx2/viewsh.hxx>
-#include <sfx2/objsh.hxx>   // SfxObjectShellRef <-> SV_DECL_REF(SfxObjectShell)
+#include <sfx2/objsh.hxx>
 #include <editeng/svxenum.hxx>
 #include <svx/zoomitem.hxx>
 #include <editeng/editstat.hxx>
@@ -57,7 +57,6 @@ class SvxRuler;
 class SvxLRSpaceItem;
 class SwDocShell;
 class SwScrollbar;
-class PrintDialog;
 class SvxVCBrowser;
 class SvBorder;
 class Ruler;
@@ -354,8 +353,7 @@ class SW_DLLPUBLIC SwView: public SfxViewShell
                             { bCenterCrsr = bOn; bAllwaysShowSel = bOn; }
 
     // Methoden fuers Printing
-    SW_DLLPRIVATE virtual   SfxPrinter*     GetPrinter( sal_Bool bCreate = sal_False );
-    SW_DLLPRIVATE virtual PrintDialog*  CreatePrintDialog( Window* pParent );
+    SW_DLLPRIVATE virtual   SfxPrinter*     GetPrinter( sal_Bool bCreate = FALSE );
             SfxTabPage*     CreatePrintOptionsPage( Window* pParent,
                                                     const SfxItemSet& rSet);
     // fuer Readonly-Umschaltung
@@ -643,8 +641,8 @@ public:
 
     void NotifyDBChanged();
 
-    SfxObjectShellRef & GetTmpSelectionDoc();
-    SfxObjectShellRef & GetOrCreateTmpSelectionDoc();
+    SfxObjectShellLock & GetTmpSelectionDoc();
+    SfxObjectShellLock & GetOrCreateTmpSelectionDoc();
 
     void        AddTransferable(SwTransferable& rTransferable);
 

@@ -1013,7 +1013,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                 sal_uInt8 nLevel = pDlg->GetLevel();
                 sal_uInt8 nPara = pDlg->GetPara();
                 SwDoc* pSmryDoc = new SwDoc();
-                SfxObjectShellRef xDocSh( new SwDocShell( pSmryDoc, SFX_CREATE_MODE_STANDARD));
+                SfxObjectShellLock xDocSh( new SwDocShell( pSmryDoc, SFX_CREATE_MODE_STANDARD));
                 xDocSh->DoInitNew( 0 );
 
                 sal_Bool bImpress = FN_ABSTRACT_STARIMPRESS == nWhich;

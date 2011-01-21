@@ -54,6 +54,8 @@
 #include <mdiexp.hxx>           // ...Percent()
 #include <poolfmt.hxx>
 
+#include "vcl/metric.hxx"
+
 #define ASC_BUFFLEN 4096
 
 class SwASCIIParser
@@ -129,24 +131,14 @@ SwASCIIParser::SwASCIIParser(SwDoc* pD, const SwPaM& rCrsr, SvStream& rIn,
     }
     if( rOpt.GetFontName().Len() )
     {
-        bool bDelete = false;
-        const SfxFont* pFnt = 0;
+        Font aTextFont( rOpt.GetFontName(), Size( 0, 10 ) );
         if( pDoc->getPrinter( false ) )
-            pFnt = pDoc->getPrinter( false )->GetFontByName( rOpt.GetFontName() );
-
-        if( !pFnt )
-        {
-            pFnt = new SfxFont( FAMILY_DONTKNOW, rOpt.GetFontName() );
-            bDelete = true;
-        }
-        SvxFontItem aFont( pFnt->GetFamily(), pFnt->GetName(),
-                        aEmptyStr, pFnt->GetPitch(), pFnt->GetCharSet(), RES_CHRATR_FONT );
+            aTextFont = pDoc->getPrinter( false )->GetFontMetric( aTextFont );
+        SvxFontItem aFont( aTextFont.GetFamily(), aTextFont.GetName(),
+                           aEmptyStr, aTextFont.GetPitch(), aTextFont.GetCharSet(), RES_CHRATR_FONT );
         pItemSet->Put( aFont );
         pItemSet->Put( aFont, RES_CHRATR_CJK_FONT );
         pItemSet->Put( aFont, RES_CHRATR_CTL_FONT );
-
-        if( bDelete )
-            delete (SfxFont*)pFnt;
     }
 }
 

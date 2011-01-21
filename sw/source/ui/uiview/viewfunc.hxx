@@ -30,7 +30,6 @@
 
 class ImageButton;
 class Point;
-class PrintDialog;
 class SfxItemSet;
 class SfxPrinter;
 class SfxTabPage;
@@ -42,7 +41,6 @@ class Window;
 class SwWrtShell;
 
 // folgende Funktionen stehen im viewprt.cxx
-PrintDialog* CreatePrintDialog( Window* , sal_uInt16, SwWrtShell* );
 void SetPrinter( IDocumentDeviceAccess*, SfxPrinter*, sal_Bool bWeb );
 SfxTabPage* CreatePrintOptionsPage( Window*, const SfxItemSet& );
 void SetAppPrintOptions( ViewShell* pSh, sal_Bool bWeb );

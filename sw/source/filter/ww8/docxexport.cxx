@@ -32,7 +32,7 @@
 #include <com/sun/star/document/XDocumentProperties.hpp>
 #include <com/sun/star/i18n/ScriptType.hdl>
 
-#include <oox/core/tokens.hxx>
+#include <oox/token/tokens.hxx>
 #include <oox/export/drawingml.hxx>
 #include <oox/export/vmlexport.hxx>
 
@@ -62,6 +62,7 @@
 
 using namespace ::comphelper;
 using namespace ::com::sun::star;
+using namespace ::oox;
 
 using oox::vml::VMLExport;
 

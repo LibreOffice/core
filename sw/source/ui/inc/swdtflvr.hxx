@@ -65,7 +65,7 @@ namespace nsTransferBufferType
 class SwTransferable : public TransferableHelper
 {
     friend class SwView_Impl;
-    SfxObjectShellRef             aDocShellRef;
+    SfxObjectShellLock             aDocShellRef;
     TransferableDataHelper          aOleData;
     TransferableObjectDescriptor    aObjDesc;
     ::sfx2::SvBaseLinkRef            refDdeLink;

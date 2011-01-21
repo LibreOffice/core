@@ -254,7 +254,7 @@ sal_Bool SwDoc::SplitDoc( sal_uInt16 eDocType, const String& rPath,
             String sFileName;
             if( pSttNd->GetIndex() + 1 < aEndIdx.GetIndex() )
             {
-                SfxObjectShellRef xDocSh( new SwDocShell( SFX_CREATE_MODE_INTERNAL ));
+                SfxObjectShellLock xDocSh( new SwDocShell( SFX_CREATE_MODE_INTERNAL ));
                 if( xDocSh->DoInitNew( 0 ) )
                 {
                     SwDoc* pDoc = ((SwDocShell*)(&xDocSh))->GetDoc();
@@ -605,7 +605,7 @@ sal_Bool SwDoc::SplitDoc( sal_uInt16 eDocType, const String& rPath, int nOutline
             String sFileName;
             if( pSttNd->GetIndex() + 1 < aEndIdx.GetIndex() )
             {
-                SfxObjectShellRef xDocSh( new SwDocShell( SFX_CREATE_MODE_INTERNAL ));
+                SfxObjectShellLock xDocSh( new SwDocShell( SFX_CREATE_MODE_INTERNAL ));
                 if( xDocSh->DoInitNew( 0 ) )
                 {
                     SwDoc* pDoc = ((SwDocShell*)(&xDocSh))->GetDoc();

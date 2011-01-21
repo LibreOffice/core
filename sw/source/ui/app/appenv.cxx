@@ -189,7 +189,7 @@ static sal_uInt16 nTitleNo = 0;
     pOldSh   = pMyDocSh ? pMyDocSh->GetWrtShell() : 0;
 
     // Neues Dokument erzeugen (kein Show!)
-    SfxObjectShellRef xDocSh( new SwDocShell( SFX_CREATE_MODE_STANDARD ) );
+    SfxObjectShellLock xDocSh( new SwDocShell( SFX_CREATE_MODE_STANDARD ) );
     xDocSh->DoInitNew( 0 );
     pFrame = SfxViewFrame::LoadHiddenDocument( *xDocSh, 0 );
     pNewView = (SwView*) pFrame->GetViewShell();

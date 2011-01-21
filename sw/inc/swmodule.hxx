@@ -28,7 +28,7 @@
 #define _SWMODULE_HXX
 #include <tools/link.hxx>
 #include <tools/string.hxx>
-#include <vcl/fldunit.hxx>
+#include <tools/fldunit.hxx>
 #include <svl/lstner.hxx>
 #include <unotools/options.hxx>
 #include <sfx2/module.hxx>
