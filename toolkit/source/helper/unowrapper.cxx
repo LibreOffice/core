@@ -68,7 +68,6 @@ using namespace ::com::sun::star;
         // instead of only a <VCLXWindow> instance, especially regarding its
         // corresponding accessibility API.
         case WINDOW_METRICBOX:
-        // <--
         case WINDOW_COMBOBOX:       return new VCLXComboBox;
         case WINDOW_SPINFIELD:
         case WINDOW_NUMERICFIELD:
